@@ -31,6 +31,12 @@
 #   wxMaskedNumCtrl is intended to support fixed-point numeric entry, and
 #   is derived from  wxMaskedTextCtrl.  As such, it supports a limited range
 #   of values to comply with a fixed-width entry mask.
+#----------------------------------------------------------------------------
+# 12/09/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
+
 """<html><body>
 <P>
 <B>wxMaskedNumCtrl:</B>
@@ -344,32 +350,32 @@ the field values on entry.
 </body></html>
 """
 
-from wxPython.wx import *
-import types, string, copy
+import  copy
+import  string
+import  types
+
+import  wx
+
 from sys import maxint
 MAXINT = maxint     # (constants should be in upper case)
 MININT = -maxint-1
 
-from wxPython.tools.dbg import Logger
-from wxPython.lib.maskededit import wxMaskedEditMixin, wxMaskedTextCtrl, Field
+from wx.tools.dbg import Logger
+from wx.lib.maskededit import wxMaskedEditMixin, wxMaskedTextCtrl, Field
 
 dbg = Logger()
 dbg(enable=0)
 
 #----------------------------------------------------------------------------
 
-wxEVT_COMMAND_MASKED_NUMBER_UPDATED = wxNewEventType()
+wxEVT_COMMAND_MASKED_NUMBER_UPDATED = wx.NewEventType()
+EVT_MASKEDNUM = wx.PyEventBinder(wxEVT_COMMAND_MASKED_NUMBER_UPDATED, 1)
 
+#----------------------------------------------------------------------------
 
-def EVT_MASKEDNUM(win, id, func):
-    """Used to trap events indicating that the current
-    integer value of the control has been changed."""
-    win.Connect(id, -1, wxEVT_COMMAND_MASKED_NUMBER_UPDATED, func)
-
-
-class wxMaskedNumNumberUpdatedEvent(wxPyCommandEvent):
+class wxMaskedNumNumberUpdatedEvent(wx.PyCommandEvent):
     def __init__(self, id, value = 0, object=None):
-        wxPyCommandEvent.__init__(self, wxEVT_COMMAND_MASKED_NUMBER_UPDATED, id)
+        wx.PyCommandEvent.__init__(self, wxEVT_COMMAND_MASKED_NUMBER_UPDATED, id)
 
         self.__value = value
         self.SetEventObject(object)
@@ -408,8 +414,8 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
 
     def __init__ (
                 self, parent, id=-1, value = 0,
-                pos = wxDefaultPosition, size = wxDefaultSize,
-                style = wxTE_PROCESS_TAB, validator = wxDefaultValidator,
+                pos = wx.DefaultPosition, size = wx.DefaultSize,
+                style = wx.TE_PROCESS_TAB, validator = wx.DefaultValidator,
                 name = "maskednum",
                 **kwargs ):
 
@@ -493,13 +499,13 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
                 validFunc=self.IsInBounds,
                 setupEventHandling = False)
 
-        EVT_SET_FOCUS( self, self._OnFocus )        ## defeat automatic full selection
-        EVT_KILL_FOCUS( self, self._OnKillFocus )   ## run internal validator
-        EVT_LEFT_DCLICK(self, self._OnDoubleClick)  ## select field under cursor on dclick
-        EVT_RIGHT_UP(self, self._OnContextMenu )    ## bring up an appropriate context menu
-        EVT_KEY_DOWN( self, self._OnKeyDown )       ## capture control events not normally seen, eg ctrl-tab.
-        EVT_CHAR( self, self._OnChar )              ## handle each keypress
-        EVT_TEXT( self, self.GetId(), self.OnTextChange )  ## color control appropriately & keep
+        self.Bind(wx.EVT_SET_FOCUS, self._OnFocus )        ## defeat automatic full selection
+        self.Bind(wx.EVT_KILL_FOCUS, self._OnKillFocus )   ## run internal validator
+        self.Bind(wx.EVT_LEFT_DCLICK, self._OnDoubleClick)  ## select field under cursor on dclick
+        self.Bind(wx.EVT_RIGHT_UP, self._OnContextMenu )    ## bring up an appropriate context menu
+        self.Bind(wx.EVT_KEY_DOWN, self._OnKeyDown )       ## capture control events not normally seen, eg ctrl-tab.
+        self.Bind(wx.EVT_CHAR, self._OnChar )              ## handle each keypress
+        self.Bind(wx.EVT_TEXT, self.OnTextChange )      ## color control appropriately & keep
                                                            ## track of previous value for undo
 
         # Establish any additional parameters, with appropriate error checking
@@ -710,7 +716,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         if kwargs.has_key('decimalChar') and text.find(old_decimalchar) != -1:
             text = text.replace(old_decimalchar, self._decimalChar)
         if text != self._GetValue():
-            wxTextCtrl.SetValue(self, text)
+            wx.TextCtrl.SetValue(self, text)
 
         value = self.GetValue()
 
@@ -783,12 +789,12 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         # limited and -1 is out of bounds
         if self._typedSign:
             self._isNeg = False
-        if not wxValidator_IsSilent():
-            wxBell()
+        if not wx.Validator_IsSilent():
+            wx.Bell()
         sel_start, sel_to = self._GetSelection()
         dbg('queuing reselection of (%d, %d)' % (sel_start, sel_to))
-        wxCallAfter(self.SetInsertionPoint, sel_start)      # preserve current selection/position
-        wxCallAfter(self.SetSelection, sel_start, sel_to)
+        wx.CallAfter(self.SetInsertionPoint, sel_start)      # preserve current selection/position
+        wx.CallAfter(self.SetSelection, sel_start, sel_to)
 
     def _SetValue(self, value):
         """
@@ -888,12 +894,12 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
                         # is attempting to insert a digit in the middle of the control
                         # resulting in something like "   3   45". Disallow such actions:
                         dbg('>>>>>>>>>>>>>>>> "%s" does not convert to a long!' % int)
-                        if not wxValidator_IsSilent():
-                            wxBell()
+                        if not wx.Validator_IsSilent():
+                            wx.Bell()
                         sel_start, sel_to = self._GetSelection()
                         dbg('queuing reselection of (%d, %d)' % (sel_start, sel_to))
-                        wxCallAfter(self.SetInsertionPoint, sel_start)      # preserve current selection/position
-                        wxCallAfter(self.SetSelection, sel_start, sel_to)
+                        wx.CallAfter(self.SetInsertionPoint, sel_start)      # preserve current selection/position
+                        wx.CallAfter(self.SetSelection, sel_start, sel_to)
                         dbg(indent=0)
                         return
 
@@ -915,8 +921,8 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
             sel_start = wxMaskedTextCtrl.GetValue(self).find(str(abs(replacement)))   # find where it put the 1, so we can select it
             sel_to = sel_start + len(str(abs(replacement)))
             dbg('queuing selection of (%d, %d)' %(sel_start, sel_to))
-            wxCallAfter(self.SetInsertionPoint, sel_start)
-            wxCallAfter(self.SetSelection, sel_start, sel_to)
+            wx.CallAfter(self.SetInsertionPoint, sel_start)
+            wx.CallAfter(self.SetSelection, sel_start, sel_to)
             dbg(indent=0)
             return
 
@@ -942,7 +948,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         wxMaskedTextCtrl._SetValue(self, adjvalue)
         # After all actions so far scheduled, check that resulting cursor
         # position is appropriate, and move if not:
-        wxCallAfter(self._CheckInsertionPoint)
+        wx.CallAfter(self._CheckInsertionPoint)
 
         dbg('finished wxMaskedNumCtrl::_SetValue', indent=0)
 
@@ -975,7 +981,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
             value = wxMaskedTextCtrl.GetValue(self)
             sel_start, sel_to = self._GetSelection()
 
-            if key == WXK_BACK:
+            if key == wx.WXK_BACK:
                 # if 1st selected char is group char, select to previous digit
                 if sel_start > 0 and sel_start < len(self._mask) and value[sel_start:sel_to] == self._groupChar:
                     self.SetInsertionPoint(sel_start-1)
@@ -986,7 +992,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
                     self.SetInsertionPoint(sel_start-2)
                     self.SetSelection(sel_start-2, sel_to)
 
-            elif key == WXK_DELETE:
+            elif key == wx.WXK_DELETE:
                 if( sel_to < len(self._mask) - 2 + (1 *self._useParens)
                     and sel_start == sel_to
                     and value[sel_to] == self._groupChar ):
@@ -1036,7 +1042,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         Override of wxMaskedTextCtrl to allow amixin to get the raw text value of the
         control with this function.
         """
-        return wxTextCtrl.GetValue(self)
+        return wx.TextCtrl.GetValue(self)
 
 
     def GetValue(self):
@@ -1438,41 +1444,39 @@ if __name__ == '__main__':
 
     import traceback
 
-    class myDialog(wxDialog):
+    class myDialog(wx.Dialog):
         def __init__(self, parent, id, title,
-            pos = wxPyDefaultPosition, size = wxPyDefaultSize,
-            style = wxDEFAULT_DIALOG_STYLE ):
-            wxDialog.__init__(self, parent, id, title, pos, size, style)
+            pos = wx.DefaultPosition, size = wx.DefaultSize,
+            style = wx.DEFAULT_DIALOG_STYLE ):
+            wx.Dialog.__init__(self, parent, id, title, pos, size, style)
 
-            self.int_ctrl = wxMaskedNumCtrl(self, wxNewId(), size=(55,20))
-            self.OK = wxButton( self, wxID_OK, "OK")
-            self.Cancel = wxButton( self, wxID_CANCEL, "Cancel")
+            self.int_ctrl = wxMaskedNumCtrl(self, wx.NewId(), size=(55,20))
+            self.OK = wx.Button( self, wx.ID_OK, "OK")
+            self.Cancel = wx.Button( self, wx.ID_CANCEL, "Cancel")
 
-            vs = wxBoxSizer( wxVERTICAL )
-            vs.AddWindow( self.int_ctrl, 0, wxALIGN_CENTRE|wxALL, 5 )
-            hs = wxBoxSizer( wxHORIZONTAL )
-            hs.AddWindow( self.OK, 0, wxALIGN_CENTRE|wxALL, 5 )
-            hs.AddWindow( self.Cancel, 0, wxALIGN_CENTRE|wxALL, 5 )
-            vs.AddSizer(hs, 0, wxALIGN_CENTRE|wxALL, 5 )
+            vs = wx.BoxSizer( wx.VERTICAL )
+            vs.Add( self.int_ctrl, 0, wx.ALIGN_CENTRE|wx.ALL, 5 )
+            hs = wx.BoxSizer( wx.HORIZONTAL )
+            hs.Add( self.OK, 0, wx.ALIGN_CENTRE|wx.ALL, 5 )
+            hs.Add( self.Cancel, 0, wx.ALIGN_CENTRE|wx.ALL, 5 )
+            vs.Add(hs, 0, wx.ALIGN_CENTRE|wx.ALL, 5 )
 
             self.SetAutoLayout( True )
             self.SetSizer( vs )
             vs.Fit( self )
             vs.SetSizeHints( self )
-            EVT_MASKEDNUM(self, self.int_ctrl.GetId(), self.OnChange)
+            self.Bind(EVT_MASKEDNUM, self.OnChange, self.int_ctrl)
 
         def OnChange(self, event):
             print 'value now', event.GetValue()
 
-    class TestApp(wxApp):
+    class TestApp(wx.App):
         def OnInit(self):
             try:
-                self.frame = wxFrame(NULL, -1, "Test",
-                                     wxPoint(20,20), wxSize(120,100)  )
-                self.panel = wxPanel(self.frame, -1)
-                button = wxButton(self.panel, 10, "Push Me",
-                                  wxPoint(20, 20))
-                EVT_BUTTON(self, 10, self.OnClick)
+                self.frame = wx.Frame(None, -1, "Test", (20,20), (120,100)  )
+                self.panel = wx.Panel(self.frame, -1)
+                button = wx.Button(self.panel, -1, "Push Me", (20, 20))
+                self.Bind(wx.EVT_BUTTON, self.OnClick, button)
             except:
                 traceback.print_exc()
                 return False

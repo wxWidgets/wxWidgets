@@ -6,6 +6,15 @@
 #
 # Created:      10/4/99
 #----------------------------------------------------------------------------
+# 12/02/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o 2.5 Compatability changes
+#
+# 12/07/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Added deprecation warning.
+#
+
 """
 NOTE: This module is *not* supported in any way.  Use it however you
       wish, but be warned that dealing with any consequences is
@@ -13,20 +22,34 @@ NOTE: This module is *not* supported in any way.  Use it however you
       --Robin
 """
 
-from wxPython.wx import *
+import  warnings
+import  wx
 
-if wxPlatform == '__WXGTK__':
+warningmsg = r"""\
+
+################################################\
+# This module is not supported in any way!      |
+#                                               |
+# See cource code for wx.lib.floatbar for more  |
+# information.                                  |
+################################################/
+
+"""
+
+warnings.warn(warningmsg, DeprecationWarning, stacklevel=2)
+    
+if wx.Platform == '__WXGTK__':
     #
     # For wxGTK all we have to do is set the wxTB_DOCKABLE flag
     #
-    class wxFloatBar(wxToolBar):
+    class wxFloatBar(wx.ToolBar):
         def __init__(self, parent, ID,
-                     pos = wxDefaultPosition,
-                     size = wxDefaultSize,
+                     pos = wx.DefaultPosition,
+                     size = wx.DefaultSize,
                      style = 0,
                      name = 'toolbar'):
-            wxToolBar.__init__(self, parent, ID, pos, size,
-                               style|wxTB_DOCKABLE, name)
+            wx.ToolBar.__init__(self, parent, ID, pos, size,
+                               style|wx.TB_DOCKABLE, name)
 
         # these other methods just become no-ops
         def SetFloatable(self, float):
@@ -45,7 +68,7 @@ if wxPlatform == '__WXGTK__':
 else:
     _DOCKTHRESHOLD = 25
 
-    class wxFloatBar(wxToolBar):
+    class wxFloatBar(wx.ToolBar):
         """
         wxToolBar subclass which can be dragged off its frame and later
         replaced there.  Drag on the toolbar to release it, close it like
@@ -62,7 +85,7 @@ else:
             user actions (i.e., dragging) can float the toolbar or not.
             """
             args = (self,) + _args
-            apply(wxToolBar.__init__, args, _kwargs)
+            apply(wx.ToolBar.__init__, args, _kwargs)
             if _kwargs.has_key('floatable'):
                 self.floatable = _kwargs['floatable']
                 assert type(self.floatable) == type(0)
@@ -74,8 +97,8 @@ else:
                 assert type(self.title) == type("")
             else:
                 self.title = ""
-            EVT_MOUSE_EVENTS(self, self.OnMouse)
-            self.parentframe = wxPyTypeCast(args[1], 'wxFrame')
+            self.Bind(wx.EVT_MOUSE_EVENTS, self.OnMouse)
+            self.parentframe = args[1]
 
 
         def IsFloatable(self):
@@ -86,9 +109,9 @@ else:
             self.floatable = float
             #Find the size of a title bar.
             if not hasattr(self, 'titleheight'):
-                test = wxMiniFrame(NULL, -1, "TEST")
-                test.SetClientSize(wxSize(0,0))
-                self.titleheight = test.GetSizeTuple()[1]
+                test = wx.MiniFrame(None, -1, "TEST")
+                test.SetClientSize((0,0))
+                self.titleheight = test.GetSize()[1]
                 test.Destroy()
 
 
@@ -97,7 +120,7 @@ else:
 
 
         def Realize(self):
-            wxToolBar.Realize(self)
+            wx.ToolBar.Realize(self)
 
 
         def GetTitle(self):
@@ -119,7 +142,7 @@ else:
     ##         if hasattr(self, 'parentframe'):
     ##             return self.parentframe
     ##         else:
-    ##             return wxPyTypeCast(self.GetParent(), 'wxFrame')
+    ##             return (self.GetParent())
 
 
     ##     def SetHome(self, frame):
@@ -133,7 +156,7 @@ else:
     ##             self.parentframe = frame
     ##             self.floatframe.Reparent(frame)
     ##         else:
-    ##             parent = wxPyTypeCast(self.GetParent(), 'wxFrame')
+    ##             parent = self.GetParent()
     ##             self.Reparent(frame)
     ##             parent.SetToolBar(None)
     ##             size = parent.GetSize()
@@ -148,37 +171,37 @@ else:
         def Float(self, bool):
             "Floats or docks the toolbar programmatically."
             if bool:
-                self.parentframe = wxPyTypeCast(self.GetParent(), 'wxFrame')
+                self.parentframe = self.GetParent()
                 print self.title
                 if self.title:
-                    useStyle = wxDEFAULT_FRAME_STYLE
+                    useStyle = wx.DEFAULT_FRAME_STYLE
                 else:
-                    useStyle = wxTHICK_FRAME
-                self.floatframe = wxMiniFrame(self.parentframe, -1, self.title,
+                    useStyle = wx.THICK_FRAME
+                self.floatframe = wx.MiniFrame(self.parentframe, -1, self.title,
                                               style = useStyle)
 
                 self.Reparent(self.floatframe)
                 self.parentframe.SetToolBar(None)
                 self.floating = 1
                 psize = self.parentframe.GetSize()
-                self.parentframe.SetSize(wxSize(0,0))
+                self.parentframe.SetSize((0,0))
                 self.parentframe.SetSize(psize)
                 self.floatframe.SetToolBar(self)
                 self.oldcolor = self.GetBackgroundColour()
 
-                w = psize.width
-                h = self.GetSize().height
+                w = psize[0]
+                h = self.GetSize()[1]
                 if self.title:
                     h = h + self.titleheight
-                self.floatframe.SetSize(wxSize(w,h))
+                self.floatframe.SetSize((w,h))
                 self.floatframe.SetClientSize(self.GetSize())
                 newpos = self.parentframe.GetPosition()
                 newpos.y = newpos.y + _DOCKTHRESHOLD * 2
                 self.floatframe.SetPosition(newpos)
                 self.floatframe.Show(True)
 
-                EVT_CLOSE(self.floatframe, self.OnDock)
-                #EVT_MOVE(self.floatframe, self.OnMove)
+                self.floatframe.Bind(wx.EVT_CLOSE, self.OnDock)
+                #self.floatframe.Bind(wx.EVT_MOVE, self.OnMove)
 
             else:
                 self.Reparent(self.parentframe)
@@ -187,7 +210,7 @@ else:
                 self.floatframe.SetToolBar(None)
                 self.floatframe.Destroy()
                 size = self.parentframe.GetSize()
-                self.parentframe.SetSize(wxSize(0,0))
+                self.parentframe.SetSize((0,0))
                 self.parentframe.SetSize(size)
                 self.SetBackgroundColour(self.oldcolor)
 
@@ -199,7 +222,7 @@ else:
 
 
         def OnMove(self, e):
-            homepos = self.parentframe.ClientToScreen(wxPoint(0,0))
+            homepos = self.parentframe.ClientToScreen((0,0))
             floatpos = self.floatframe.GetPosition()
             if (abs(homepos.x - floatpos.x) < _DOCKTHRESHOLD and
                 abs(homepos.y - floatpos.y) < _DOCKTHRESHOLD):
@@ -231,7 +254,7 @@ else:
             if e.ButtonUp():
                 self.ReleaseMouse()
                 if self.IsFloating():
-                    homepos = self.parentframe.ClientToScreen(wxPoint(0,0))
+                    homepos = self.parentframe.ClientToScreen((0,0))
                     floatpos = self.floatframe.GetPosition()
                     if (abs(homepos.x - floatpos.x) < _DOCKTHRESHOLD and
                         abs(homepos.y - floatpos.y) < _DOCKTHRESHOLD):
@@ -245,7 +268,7 @@ else:
                 else:
                     if hasattr(self, 'oldpos'):
                         loc = self.floatframe.GetPosition()
-                        pt = wxPoint(loc.x - (self.oldpos[0]-e.GetX()), loc.y - (self.oldpos[1]-e.GetY()))
+                        pt = (loc.x - (self.oldpos[0]-e.GetX()), loc.y - (self.oldpos[1]-e.GetY()))
                         self.floatframe.Move(pt)
 
 
@@ -255,17 +278,17 @@ else:
             if vis:
                 if self.parentframe.GetToolBar() == None:
                     if not hasattr(self, 'nullbar'):
-                        self.nullbar = wxToolBar(self.parentframe, -1)
+                        self.nullbar = wx.ToolBar(self.parentframe, -1)
                     print "Adding fauxbar."
                     self.nullbar.Reparent(self.parentframe)
                     print "Reparented."
                     self.parentframe.SetToolBar(self.nullbar)
                     print "Set toolbar"
-                    col = wxNamedColour("GREY")
+                    col = wx.NamedColour("GREY")
                     self.nullbar.SetBackgroundColour(col)
                     print "Set color"
                     size = self.parentframe.GetSize()
-                    self.parentframe.SetSize(wxSize(0,0))
+                    self.parentframe.SetSize((0,0))
                     self.parentframe.SetSize(size)
                     print "Set size"
                 else:
@@ -276,7 +299,7 @@ else:
                     self.nullbar.Reparent(self.floatframe)
                     self.parentframe.SetToolBar(None)
                     size = self.parentframe.GetSize()
-                    self.parentframe.SetSize(wxSize(0,0))
+                    self.parentframe.SetSize((0,0))
                     self.parentframe.SetSize(size)
 
 

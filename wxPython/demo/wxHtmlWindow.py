@@ -2,16 +2,19 @@
 #
 # o Updated for wx namespace
 # 
+# 12/13/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o got the wxpTag stuff working right.
+# 
 
 import  os
 import  sys
 
 import  wx
-import  wx.html         as  html
+import  wx.html as  html
+import  wx.lib.wxpTag
 
 from Main import opj
-
-##wxTrap()
 
 #----------------------------------------------------------------------
 

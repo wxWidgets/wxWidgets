@@ -1,3 +1,8 @@
+# 12/02/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for 2.5 compatability.
+#
+
 """<font weight="bold" size="16">FancyText</font> -- <font style="italic" size="16">methods for rendering XML specified text</font>
 <font family="swiss" size="12">
 This module exports four main methods::
@@ -34,11 +39,14 @@ We can use doctest/guitest to display this string in all its marked up glory.
 
 </font></font>
 The End"""
+
 # Copyright 2001-2003 Timothy Hochberg
-# Use as you see fit. No warantees, I cannot be help responsible, etc.
+# Use as you see fit. No warantees, I cannot be held responsible, etc.
+
 import copy
 import math
 import sys
+
 import wx
 import xml.parsers.expat
 
@@ -395,9 +403,9 @@ renderToDC = RenderToDC
 # Test Driver
 
 def test():
-    app = wx.PyApp()
+    app = wx.PySimpleApp()
     box = wx.BoxSizer(wx.VERTICAL)
-    frame = wx.Frame(wx.NULL, -1, "FancyText demo", wx.DefaultPosition)
+    frame = wx.Frame(None, -1, "FancyText demo", wx.DefaultPosition)
     frame.SetBackgroundColour("light grey")
     sft = StaticFancyText(frame, -1, __doc__)
     box.Add(sft, 1, wx.EXPAND)

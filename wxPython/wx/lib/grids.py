@@ -10,6 +10,10 @@
 # Copyright:   (c) 1999 by Total Control Software
 # Licence:     wxWindows license
 #----------------------------------------------------------------------
+# 12/07/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o 2.5 Compatability changes
+#
 
 """
 In this module you will find wxGridSizer and wxFlexGridSizer.  Please
@@ -33,20 +37,17 @@ wxFlexGridSizer: Derives from wxGridSizer and adds the ability for
 particular rows and/or columns to be marked as growable.  This means
 that when the sizer changes size, the growable rows and colums are the
 ones that stretch.  The others remain at their initial size.
-
-See the demo for a couple examples for how to use them.
 """
 
 
-from wxPython.wx import *
-
-import operator
+import  operator
+import  wx
 
 #----------------------------------------------------------------------
 
-class wxGridSizer(wxPySizer):
+class wxGridSizer(wx.PySizer):
     def __init__(self, rows=0, cols=0, hgap=0, vgap=0):
-        wxPySizer.__init__(self)
+        wx.PySizer.__init__(self)
         if rows == 0 and cols == 0:
             raise ValueError, "rows and cols cannot both be zero"
 
@@ -104,8 +105,8 @@ class wxGridSizer(wxPySizer):
             w = max(w, size.width)
             h = max(h, size.height)
 
-        return wxSize(ncols * w + (ncols-1) * self.hgap,
-                      nrows * h + (nrows-1) * self.vgap)
+        return wx.Size(ncols * w + (ncols-1) * self.hgap,
+                       nrows * h + (nrows-1) * self.vgap)
 
 
     #--------------------------------------------------
@@ -136,7 +137,9 @@ class wxGridSizer(wxPySizer):
                 i = r * ncols + c
                 if i < nitems:
                     self.SetItemBounds(items[i], x, y, w, h)
+
                 y = y + h + self.vgap
+
             x = x + w + self.hgap
 
 
@@ -144,21 +147,21 @@ class wxGridSizer(wxPySizer):
     def SetItemBounds(self, item, x, y, w, h):
         # calculate the item's size and position within
         # its grid cell
-        ipt = wxPoint(x, y)
+        ipt = wx.Point(x, y)
         isz = item.CalcMin()
         flag = item.GetFlag()
 
-        if flag & wxEXPAND or flag & wxSHAPED:
-            isz = wxSize(w, h)
+        if flag & wx.EXPAND or flag & wx.SHAPED:
+            isz = (w, h)
         else:
-            if flag & wxALIGN_CENTER_HORIZONTAL:
+            if flag & wx.ALIGN_CENTER_HORIZONTAL:
                 ipt.x = x + (w - isz.width) / 2
-            elif flag & wxALIGN_RIGHT:
+            elif flag & wx.ALIGN_RIGHT:
                 ipt.x = x + (w - isz.width)
 
-            if flag & wxALIGN_CENTER_VERTICAL:
+            if flag & wx.ALIGN_CENTER_VERTICAL:
                 ipt.y = y + (h - isz.height) / 2
-            elif flag & wxALIGN_BOTTOM:
+            elif flag & wx.ALIGN_BOTTOM:
                 ipt.y = y + (h - isz.height)
 
         item.SetDimension(ipt, isz)
@@ -197,6 +200,7 @@ class wxFlexGridSizer(wxGridSizer):
         # Find the max width and height for any component.
         self.rowHeights = [0] * nrows
         self.colWidths  = [0] * ncols
+
         for i in range(len(items)):
             size = items[i].CalcMin()
             row  = i / ncols
@@ -208,8 +212,8 @@ class wxFlexGridSizer(wxGridSizer):
         cellsWidth = reduce(operator.__add__, self.colWidths)
         cellHeight = reduce(operator.__add__, self.rowHeights)
 
-        return wxSize(cellsWidth + (ncols-1) * self.hgap,
-                      cellHeight + (nrows-1) * self.vgap)
+        return wx.Size(cellsWidth + (ncols-1) * self.hgap,
+                       cellHeight + (nrows-1) * self.vgap)
 
 
     #--------------------------------------------------
@@ -243,7 +247,7 @@ class wxFlexGridSizer(wxGridSizer):
                 self.colWidths[idx] = self.colWidths[idx] + delta
 
         # bottom right corner
-        sz = wxSize(pt.x + sz.width, pt.y + sz.height)
+        sz = wx.Size(pt.x + sz.width, pt.y + sz.height)
 
         # Layout each cell
         x = pt.x
@@ -251,11 +255,14 @@ class wxFlexGridSizer(wxGridSizer):
             y = pt.y
             for r in range(nrows):
                 i = r * ncols + c
+
                 if i < nitems:
                     w = max(0, min(self.colWidths[c], sz.width - x))
                     h = max(0, min(self.rowHeights[r], sz.height - y))
                     self.SetItemBounds(items[i], x, y, w, h)
+
                 y = y + self.rowHeights[r] + self.vgap
+
             x = x + self.colWidths[c] + self.hgap
 
 #----------------------------------------------------------------------

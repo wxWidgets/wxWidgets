@@ -8,8 +8,6 @@
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
 
-from wxPython.wx import *
-
 # creates a colour wxButton with selectable color
 # button click provides a colour selection box
 # button colour will change to new colour
@@ -29,26 +27,35 @@ from wxPython.wx import *
 # Cliff Wells, 2002/02/07
 # - Added ColourSelect Event
 
-EVT_COMMAND_COLOURSELECT = wxNewId()
+# 12/01/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for 2.5 compatability.
+#
 
-class ColourSelectEvent(wxPyCommandEvent):
+#----------------------------------------------------------------------------
+
+import  wx
+
+#----------------------------------------------------------------------------
+
+wxEVT_COMMAND_COLOURSELECT = wx.NewEventType()
+
+class ColourSelectEvent(wx.PyCommandEvent):
     def __init__(self, id, value):
-        wxPyCommandEvent.__init__(self, id = id)
-        self.SetEventType(EVT_COMMAND_COLOURSELECT)
+        wx.PyCommandEvent.__init__(self, id = id)
+        self.SetEventType(wxEVT_COMMAND_COLOURSELECT)
         self.value = value
 
     def GetValue(self):
         return self.value
 
-def EVT_COLOURSELECT(win, id, func):
-    win.Connect(id, -1, EVT_COMMAND_COLOURSELECT, func)
+EVT_COLOURSELECT = wx.PyEventBinder(wxEVT_COMMAND_COLOURSELECT, 1)
 
+#----------------------------------------------------------------------------
 
-
-
-class ColourSelect(wxBitmapButton):
-    def __init__(self, parent, id, label="", colour=wxBLACK,
-                 pos=wxDefaultPosition, size=wxDefaultSize,
+class ColourSelect(wx.BitmapButton):
+    def __init__(self, parent, id, label="", colour=wx.BLACK,
+                 pos=wx.DefaultPosition, size=wx.DefaultSize,
                  callback=None, style=0):
         if label:
             w, h = parent.GetTextExtent(label)
@@ -56,33 +63,32 @@ class ColourSelect(wxBitmapButton):
             h += 6
         else:
             w, h = 20, 20
-        wxBitmapButton.__init__(self, parent, id, wxEmptyBitmap(w,h),
-                                pos=pos, size=size, style=style|wxBU_AUTODRAW)
+        wx.BitmapButton.__init__(self, parent, id, wx.EmptyBitmap(w,h),
+                                 pos=pos, size=size, style=style|wx.BU_AUTODRAW)
+
         if type(colour) == type( () ):
-            colour = wxColour(*colour)
+            colour = wx.Colour(*colour)
         self.colour = colour
         self.SetLabel(label)
         self.callback = callback
         bmp = self.MakeBitmap()
         self.SetBitmap(bmp)
-        EVT_BUTTON(parent, self.GetId(), self.OnClick)
+        parent.Bind(wx.EVT_BUTTON, self.OnClick, self)
 
 
     def GetColour(self):
         return self.colour
 
-
     def GetValue(self):
         return self.colour
-
 
     def SetValue(self, colour):
         self.SetColour(colour)
 
-
     def SetColour(self, colour):
         if type(colour) == type( () ):
             colour = wxColour(*colour)
+            
         self.colour = colour
         bmp = self.MakeBitmap()
         self.SetBitmap(bmp)
@@ -90,23 +96,24 @@ class ColourSelect(wxBitmapButton):
 
     def MakeBitmap(self):
         bdr = 10
-        sz = self.GetSize()
-        bmp = wxEmptyBitmap(sz.width-bdr, sz.height-bdr)
-        dc = wxMemoryDC()
+        width, height = self.GetSize()
+        bmp = wx.EmptyBitmap(width-bdr, height-bdr)
+        dc = wx.MemoryDC()
         dc.SelectObject(bmp)
         label = self.GetLabel()
         # Just make a little colored bitmap
-        dc.SetBackground(wxBrush(self.colour))
+        dc.SetBackground(wx.Brush(self.colour))
         dc.Clear()
+
         if label:
             # Add a label to it
             avg = reduce(lambda a, b: a + b, self.colour.Get()) / 3
-            fcolour = avg > 128 and wxBLACK or wxWHITE
+            fcolour = avg > 128 and wx.BLACK or wx.WHITE
             dc.SetTextForeground(fcolour)
-            dc.DrawLabel(label, (0,0, sz.width-bdr, sz.height-bdr),
-                         wxALIGN_CENTER)
+            dc.DrawLabel(label, (0,0, width-bdr, height-bdr),
+                         wx.ALIGN_CENTER)
             
-        dc.SelectObject(wxNullBitmap)
+        dc.SelectObject(wx.NullBitmap)
         return bmp
 
 
@@ -119,21 +126,24 @@ class ColourSelect(wxBitmapButton):
 
 
     def OnChange(self):
-        wxPostEvent(self, ColourSelectEvent(self.GetId(), self.GetValue()))
+        wx.PostEvent(self, ColourSelectEvent(self.GetId(), self.GetValue()))
         if self.callback is not None:
             self.callback()
 
     def OnClick(self, event):
-        data = wxColourData()
+        data = wx.ColourData()
         data.SetChooseFull(True)
         data.SetColour(self.colour)
-        dlg = wxColourDialog(self.GetParent(), data)
-        changed = dlg.ShowModal() == wxID_OK
+        dlg = wx.ColourDialog(self.GetParent(), data)
+        changed = dlg.ShowModal() == wx.ID_OK
+
         if changed:
             data = dlg.GetColourData()
             self.SetColour(data.GetColour())
+
         dlg.Destroy()
 
+        # moved after dlg.Destroy, since who knows what the callback will do...
         if changed:
-            self.OnChange() # moved after dlg.Destroy, since who knows what the callback will do...
+            self.OnChange() 
 

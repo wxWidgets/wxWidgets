@@ -1,4 +1,11 @@
 # shell.py
+#----------------------------------------------------------------------
+# 12/10/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o 2.5 compatability update.
+# o Added deprecation warning.
+#
+
 """wxPython interactive shell
 
 Copyright (c) 1999 SIA "ANK"
@@ -29,12 +36,30 @@ History:
 __version__ ="$Revision$"
 # $RCSfile$
 
-import sys, code, traceback
-from wxPython.wx import *
-from wxPython.html import *
+import  code
+import  sys
+import  traceback
+import  warnings
 
+import  wx
+import  wx.html
 
-class PyShellInput(wxPanel):
+warningmsg = r"""\
+
+########################################\
+# THIS MODULE IS NOW DEPRECATED         |
+#                                       |
+# Please see the most excellent PyCrust |
+# package instead.                      |
+########################################/
+
+"""
+
+warnings.warn(warningmsg, DeprecationWarning, stacklevel=2)
+
+#----------------------------------------------------------------------
+
+class PyShellInput(wx.Panel):
     """PyShell input window
 
     """
@@ -48,22 +73,22 @@ class PyShellInput(wxPanel):
         and shell.output is used for output
         (print's go to overridden stdout)
         """
-        wxPanel.__init__(self, parent, id)
+        wx.Panel.__init__(self, parent, id)
         self.shell =shell
         # make a private copy of class attrs
         self.PS1 =PyShellInput.PS1
         self.PS2 =PyShellInput.PS2
         # create controls
-        self.label =wxStaticText(self, -1, self.PS1)
-        tid =wxNewId()
-        self.entry =wxTextCtrl(self, tid, style = wxTE_MULTILINE)
-        EVT_CHAR(self.entry, self.OnChar)
-        self.entry.SetFont(wxFont(9, wxMODERN, wxNORMAL, wxNORMAL, False))
-        sizer =wxBoxSizer(wxVERTICAL)
-        sizer.AddMany([(self.label, 0, wxEXPAND), (self.entry, 1, wxEXPAND)])
+        self.label =wx.StaticText(self, -1, self.PS1)
+        tid =wx.NewId()
+        self.entry =wx.TextCtrl(self, tid, style = wx.TE_MULTILINE)
+        self.entry.Bind(wx.EVT_CHAR, self.OnChar)
+        self.entry.SetFont(wx.Font(9, wx.MODERN, wx.NORMAL, wx.NORMAL, False))
+        sizer =wx.BoxSizer(wx.VERTICAL)
+        sizer.AddMany([(self.label, 0, wx.EXPAND), (self.entry, 1, wx.EXPAND)])
         self.SetSizer(sizer)
         self.SetAutoLayout(True)
-        EVT_SET_FOCUS(self, self.OnSetFocus)
+        self.Bind(wx.EVT_SET_FOCUS, self.OnSetFocus)
         # when in "continuation" mode,
         # two consecutive newlines are required
         # to avoid execution of unfinished block
@@ -84,7 +109,7 @@ class PyShellInput(wxPanel):
     def OnChar(self, event):
         """called on CHARevent.  executes input on newline"""
         # print "On Char:", event.__dict__.keys()
-        if event.KeyCode() !=WXK_RETURN:
+        if event.KeyCode() !=wx.WXK_RETURN:
             # not of our business
             event.Skip()
             return
@@ -110,7 +135,7 @@ class PyShellInput(wxPanel):
         else:
             self.Clear()
 
-class PyShellOutput(wxPanel):
+class PyShellOutput(wx.Panel):
     """PyShell output window
 
     for now, it is based on simple wxTextCtrl,
@@ -128,7 +153,7 @@ class PyShellOutput(wxPanel):
     # entity references
     erefs =(("&", "&amp;"), (">", "&gt;"), ("<", "&lt;"), ("  ", "&nbsp; "))
     def __init__(self, parent, id=-1):
-        wxPanel.__init__(self, parent, id)
+        wx.Panel.__init__(self, parent, id)
         # make a private copy of class attrs
         self.in_style =PyShellOutput.in_style
         self.out_style =PyShellOutput.out_style
@@ -139,17 +164,17 @@ class PyShellOutput(wxPanel):
         if self.html_debug:
             # this was used in html debugging,
             # but i don't want to delete it; it's funny
-            splitter =wxSplitterWindow(self, -1)
-            self.view =wxTextCtrl(splitter, -1,
-                       style = wxTE_MULTILINE|wxTE_READONLY|wxHSCROLL)
-            self.html =wxHtmlWindow(splitter)
+            splitter =wx.SplitterWindow(self, -1)
+            self.view =wx.TextCtrl(splitter, -1,
+                       style = wx.TE_MULTILINE|wx.TE_READONLY|wx.HSCROLL)
+            self.html =wx.html.HtmlWindow(splitter)
             splitter.SplitVertically(self.view, self.html)
             splitter.SetSashPosition(40)
             splitter.SetMinimumPaneSize(3)
             self.client =splitter
         else:
             self.view =None
-            self.html =wxHtmlWindow(self)
+            self.html =wx.html.HtmlWindow(self)
             self.client =self.html  # used in OnSize()
         self.text =self.intro
         self.html.SetPage(self.text)
@@ -158,8 +183,8 @@ class PyShellOutput(wxPanel):
         # refreshes are annoying
         self.in_batch =0
         self.dirty =0
-        EVT_SIZE(self, self.OnSize)
-        EVT_IDLE(self, self.OnIdle)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
+        self.Bind(wx.EVT_IDLE, self.OnIdle)
 
     def OnSize(self, event):
         self.client.SetSize(self.GetClientSize())
@@ -232,18 +257,18 @@ class PyShellOutput(wxPanel):
         if style ==None: style =self.exc_style
         self.AddText(str, style)
 
-class PyShell(wxPanel):
+class PyShell(wx.Panel):
     """interactive Python shell with wxPython interface
 
     """
     def __init__(self, parent, globals=globals(), locals={},
-                 id=-1, pos=wxDefaultPosition, size=wxDefaultSize,
-                 style=wxTAB_TRAVERSAL, name="shell"):
+                 id=-1, pos=wx.DefaultPosition, size=wx.DefaultSize,
+                 style=wx.TAB_TRAVERSAL, name="shell"):
         """create PyShell window"""
-        wxPanel.__init__(self, parent, id, pos, size, style, name)
+        wx.Panel.__init__(self, parent, id, pos, size, style, name)
         self.globals =globals
         self.locals =locals
-        splitter =wxSplitterWindow(self, -1)
+        splitter =wx.SplitterWindow(self, -1)
         self.output =PyShellOutput(splitter)
         self.input =PyShellInput(splitter, self)
         self.input.SetFocus()
@@ -251,8 +276,8 @@ class PyShell(wxPanel):
         splitter.SetSashPosition(100)
         splitter.SetMinimumPaneSize(20)
         self.splitter =splitter
-        EVT_SET_FOCUS(self, self.OnSetFocus)
-        EVT_SIZE(self, self.OnSize)
+        self.Bind(wx.EVT_SET_FOCUS, self.OnSetFocus)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
 
     def OnSetFocus(self, event):
         self.input.SetFocus()
@@ -317,14 +342,14 @@ class PyShell(wxPanel):
 
 #----------------------------------------------------------------------
 if __name__ == '__main__':
-    class MyFrame(wxFrame):
+    class MyFrame(wx.Frame):
         """Very standard Frame class. Nothing special here!"""
-        def __init__(self, parent=NULL, id =-1,
+        def __init__(self, parent=None, id =-1,
                      title="wxPython Interactive Shell"):
-            wxFrame.__init__(self, parent, id, title)
+            wx.Frame.__init__(self, parent, id, title)
             self.shell =PyShell(self)
 
-    class MyApp(wxApp):
+    class MyApp(wx.App):
         """Demonstrates usage of both default and customized shells"""
         def OnInit(self):
             frame = MyFrame()

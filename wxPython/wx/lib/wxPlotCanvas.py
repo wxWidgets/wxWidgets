@@ -18,8 +18,28 @@ Original comment follows below:
 # Last revision: 1998-7-28
 #
 """
+# 12/13/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for V2.5 compatability
+# o wx.SpinCtl has some issues that cause the control to
+#   lock up. Noted in other places using it too, it's not this module
+#   that's at fault.
+# o Added deprecation warning.
+# 
 
-from wxPython import wx
+import  warnings
+import  wx
+
+warningmsg = r"""\
+
+THIS MODULE IS NOW DEPRECATED
+
+This module has been replaced by wxPyPlot, which in wxPython
+can be found in wx.lib.plot.py.
+
+"""
+
+warnings.warn(warningmsg, DeprecationWarning, stacklevel=2)
 
 # Not everybody will have Numeric, so let's be cool about it...
 try:
@@ -31,10 +51,10 @@ imported.  It probably is not installed (it's not part of the standard
 Python distribution). See the Python site (http://www.python.org) for
 information on downloading source or binaries."""
 
-    if wx.wxPlatform == '__WXMSW__':
-        d = wx.wxMessageDialog(wx.NULL, msg, "Numeric not found")
-        if d.ShowModal() == wx.wxID_CANCEL:
-            d = wx.wxMessageDialog(wx.NULL, "I kid you not! Pressing Cancel won't help you!", "Not a joke", wx.wxOK)
+    if wx.Platform == '__WXMSW__':
+        d = wx.MessageDialog(None, msg, "Numeric not found")
+        if d.ShowModal() == wx.ID_CANCEL:
+            d = wx.MessageDialog(None, "I kid you not! Pressing Cancel won't help you!", "Not a joke", wx.OK)
             d.ShowModal()
     else:
         print msg
@@ -75,7 +95,7 @@ class PolyLine(PolyPoints):
         color = self.attributes['color']
         width = self.attributes['width']
         arguments = []
-        dc.SetPen(wx.wxPen(wx.wxNamedColour(color), width))
+        dc.SetPen(wx.Pen(wx.NamedColour(color), width))
         dc.DrawLines(map(tuple,self.scaled))
 
 
@@ -89,7 +109,7 @@ class PolyMarker(PolyPoints):
                    'width': 1,
                    'fillcolor': None,
                    'size': 2,
-                   'fillstyle': wx.wxSOLID,
+                   'fillstyle': wx.SOLID,
                    'outline': 'black',
                    'marker': 'circle'}
 
@@ -101,11 +121,11 @@ class PolyMarker(PolyPoints):
         fillstyle = self.attributes['fillstyle']
         marker = self.attributes['marker']
 
-        dc.SetPen(wx.wxPen(wx.wxNamedColour(color),width))
+        dc.SetPen(wx.Pen(wx.NamedColour(color),width))
         if fillcolor:
-            dc.SetBrush(wx.wxBrush(wx.wxNamedColour(fillcolor),fillstyle))
+            dc.SetBrush(wx.Brush(wx.NamedColour(fillcolor),fillstyle))
         else:
-            dc.SetBrush(wx.wxBrush(wx.wxNamedColour('black'), wx.wxTRANSPARENT))
+            dc.SetBrush(wx.Brush(wx.NamedColour('black'), wx.TRANSPARENT))
 
         self._drawmarkers(dc, self.scaled, marker, size)
 
@@ -115,7 +135,7 @@ class PolyMarker(PolyPoints):
             f(dc, xc, yc, size)
 
     def _circle(self, dc, xc, yc, size=1):
-        dc.DrawEllipse(xc-2.5*size,yc-2.5*size,5.*size,5.*size)
+        dc.DrawEllipse((xc-2.5*size,yc-2.5*size), (5.*size,5.*size))
 
     def _dot(self, dc, xc, yc, size=1):
         dc.DrawPoint(xc,yc)
@@ -134,12 +154,12 @@ class PolyMarker(PolyPoints):
                        (0.0,0.577350*size*5)],xc,yc)
 
     def _cross(self, dc, xc, yc, size=1):
-        dc.DrawLine(xc-2.5*size,yc-2.5*size,xc+2.5*size,yc+2.5*size)
-        dc.DrawLine(xc-2.5*size,yc+2.5*size,xc+2.5*size,yc-2.5*size)
+        dc.DrawLine((xc-2.5*size, yc-2.5*size), (xc+2.5*size,yc+2.5*size))
+        dc.DrawLine((xc-2.5*size,yc+2.5*size), (xc+2.5*size,yc-2.5*size))
 
     def _plus(self, dc, xc, yc, size=1):
-        dc.DrawLine(xc-2.5*size,yc,xc+2.5*size,yc)
-        dc.DrawLine(xc,yc-2.5*size,xc,yc+2.5*size)
+        dc.DrawLine((xc-2.5*size,yc), (xc+2.5*size,yc))
+        dc.DrawLine((xc,yc-2.5*size,xc), (yc+2.5*size))
 
 class PlotGraphics:
 
@@ -169,29 +189,29 @@ class PlotGraphics:
         return self.objects[item]
 
 
-class PlotCanvas(wx.wxWindow):
+class PlotCanvas(wx.Window):
 
     def __init__(self, parent, id=-1,
-                 pos = wx.wxDefaultPosition, size = wx.wxDefaultSize,
+                 pos = wx.DefaultPosition, size = wx.DefaultSize,
                  style = 0, name = 'plotCanvas'):
-        wx.wxWindow.__init__(self, parent, id, pos, size, style, name)
+        wx.Window.__init__(self, parent, id, pos, size, style, name)
         self.border = (1,1)
-        self.SetClientSizeWH(400,400)
-        self.SetBackgroundColour(wx.wxNamedColour("white"))
+        self.SetClientSize((400,400))
+        self.SetBackgroundColour("white")
 
-        wx.EVT_SIZE(self,self.reconfigure)
-        wx.EVT_PAINT(self, self.OnPaint)
+        self.Bind(wx.EVT_SIZE,self.reconfigure)
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
         self._setsize()
         self.last_draw = None
 #       self.font = self._testFont(font)
 
     def OnPaint(self, event):
-        pdc = wx.wxPaintDC(self)
+        pdc = wx.PaintDC(self)
         if self.last_draw is not None:
             apply(self.draw, self.last_draw + (pdc,))
 
     def reconfigure(self, event):
-        (new_width,new_height) = self.GetClientSizeTuple()
+        (new_width,new_height) = self.GetClientSize()
         if new_width == self.width and new_height == self.height:
             return
         self._setsize()
@@ -209,14 +229,14 @@ class PlotCanvas(wx.wxWindow):
         return font
 
     def _setsize(self):
-        (self.width,self.height) = self.GetClientSizeTuple();
+        (self.width,self.height) = self.GetClientSize();
         self.plotbox_size = 0.97*Numeric.array([self.width, -self.height])
         xo = 0.5*(self.width-self.plotbox_size[0])
         yo = self.height-0.5*(self.height+self.plotbox_size[1])
         self.plotbox_origin = Numeric.array([xo, yo])
 
     def draw(self, graphics, xaxis = None, yaxis = None, dc = None):
-        if dc == None: dc = wx.wxClientDC(self)
+        if dc == None: dc = wx.ClientDC(self)
         dc.BeginDrawing()
         dc.Clear()
         self.last_draw = (graphics, xaxis, yaxis)
@@ -291,19 +311,19 @@ class PlotCanvas(wx.wxWindow):
 
     def _drawAxes(self, dc, xaxis, yaxis,
                   bb1, bb2, scale, shift, xticks, yticks):
-        dc.SetPen(wx.wxPen(wx.wxNamedColour('BLACK'),1))
+        dc.SetPen(wx.Pen(wx.NamedColour('BLACK'),1))
         if xaxis is not None:
             lower, upper = xaxis
             text = 1
             for y, d in [(bb1[1], -3), (bb2[1], 3)]:
                 p1 = scale*Numeric.array([lower, y])+shift
                 p2 = scale*Numeric.array([upper, y])+shift
-                dc.DrawLine(p1[0],p1[1],p2[0],p2[1])
+                dc.DrawLine((p1[0],p1[1]), (p2[0],p2[1]))
                 for x, label in xticks:
                     p = scale*Numeric.array([x, y])+shift
-                    dc.DrawLine(p[0],p[1],p[0],p[1]+d)
+                    dc.DrawLine((p[0],p[1]), (p[0],p[1]+d))
                     if text:
-                        dc.DrawText(label,p[0],p[1])
+                        dc.DrawText(label, (p[0],p[1]))
                 text = 0
 
         if yaxis is not None:
@@ -313,13 +333,13 @@ class PlotCanvas(wx.wxWindow):
             for x, d in [(bb1[0], -3), (bb2[0], 3)]:
                 p1 = scale*Numeric.array([x, lower])+shift
                 p2 = scale*Numeric.array([x, upper])+shift
-                dc.DrawLine(p1[0],p1[1],p2[0],p2[1])
+                dc.DrawLine((p1[0],p1[1]), (p2[0],p2[1]))
                 for y, label in yticks:
                     p = scale*Numeric.array([x, y])+shift
-                    dc.DrawLine(p[0],p[1],p[0]-d,p[1])
+                    dc.DrawLine((p[0],p[1]), (p[0]-d,p[1]))
                     if text:
-                        dc.DrawText(label,p[0]-dc.GetTextExtent(label)[0],
-                                    p[1]-0.5*h)
+                        dc.DrawText(label, 
+                                    (p[0]-dc.GetTextExtent(label)[0], p[1]-0.5*h))
                 text = 0
 
     def _ticks(self, lower, upper):
@@ -389,33 +409,33 @@ if __name__ == '__main__':
         return PlotGraphics([markers1, lines, markers2])
 
 
-    class AppFrame(wx.wxFrame):
+    class AppFrame(wx.Frame):
         def __init__(self, parent, id, title):
-            wx.wxFrame.__init__(self, parent, id, title,
-                                wx.wxPyDefaultPosition, wx.wxSize(400, 400))
+            wx.Frame.__init__(self, parent, id, title,
+                                wx.DefaultPosition, (400, 400))
 
             # Now Create the menu bar and items
-            self.mainmenu = wx.wxMenuBar()
+            self.mainmenu = wx.MenuBar()
 
-            menu = wx.wxMenu()
+            menu = wx.Menu()
             menu.Append(200, '&Print...', 'Print the current plot')
-            wx.EVT_MENU(self, 200, self.OnFilePrint)
+            self.Bind(wx.EVT_MENU, self.OnFilePrint, id=200)
             menu.Append(209, 'E&xit', 'Enough of this already!')
-            wx.EVT_MENU(self, 209, self.OnFileExit)
+            self.Bind(wx.EVT_MENU, self.OnFileExit, id=209)
             self.mainmenu.Append(menu, '&File')
 
-            menu = wx.wxMenu()
+            menu = wx.Menu()
             menu.Append(210, '&Draw', 'Draw plots')
-            wx.EVT_MENU(self,210,self.OnPlotDraw)
+            self.Bind(wx.EVT_MENU,self.OnPlotDraw, id=210)
             menu.Append(211, '&Redraw', 'Redraw plots')
-            wx.EVT_MENU(self,211,self.OnPlotRedraw)
+            self.Bind(wx.EVT_MENU,self.OnPlotRedraw, id=211)
             menu.Append(212, '&Clear', 'Clear canvas')
-            wx.EVT_MENU(self,212,self.OnPlotClear)
+            self.Bind(wx.EVT_MENU,self.OnPlotClear, id=212)
             self.mainmenu.Append(menu, '&Plot')
 
-            menu = wx.wxMenu()
+            menu = wx.Menu()
             menu.Append(220, '&About', 'About this thing...')
-            wx.EVT_MENU(self, 220, self.OnHelpAbout)
+            self.Bind(wx.EVT_MENU, self.OnHelpAbout, id=220)
             self.mainmenu.Append(menu, '&Help')
 
             self.SetMenuBar(self.mainmenu)
@@ -426,11 +446,11 @@ if __name__ == '__main__':
             self.client = PlotCanvas(self)
 
         def OnFilePrint(self, event):
-            d = wx.wxMessageDialog(self,
+            d = wx.MessageDialog(self,
 """As of this writing, printing support in wxPython is shaky at best.
-Are you sure you want to do this?""", "Danger!", wx.wxYES_NO)
-            if d.ShowModal() == wx.wxID_YES:
-                psdc = wx.wxPostScriptDC("out.ps", wx.True, self)
+Are you sure you want to do this?""", "Danger!", wx.YES_NO)
+            if d.ShowModal() == wx.ID_YES:
+                psdc = wx.PostScriptDC("out.ps", True, self)
                 self.client.redraw(psdc)
 
         def OnFileExit(self, event):
@@ -444,21 +464,21 @@ Are you sure you want to do this?""", "Danger!", wx.wxYES_NO)
 
         def OnPlotClear(self,event):
             self.client.last_draw = None
-            dc = wx.wxClientDC(self.client)
+            dc = wx.ClientDC(self.client)
             dc.Clear()
 
         def OnHelpAbout(self, event):
-            about = wx.wxMessageDialog(self, __doc__, "About...", wx.wxOK)
+            about = wx.MessageDialog(self, __doc__, "About...", wx.OK)
             about.ShowModal()
 
 
 
-    class MyApp(wx.wxApp):
+    class MyApp(wx.App):
         def OnInit(self):
-            frame = AppFrame(wx.NULL, -1, "wxPlotCanvas")
-            frame.Show(wx.True)
+            frame = AppFrame(None, -1, "wxPlotCanvas")
+            frame.Show(True)
             self.SetTopWindow(frame)
-            return wx.True
+            return True
 
 
     app = MyApp(0)

@@ -9,22 +9,27 @@
 # Copyright:   (c) 2001 by Total Control Software
 # Licence:     wxWindows license
 #----------------------------------------------------------------------------
+# 12/14/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o 2.5 compatability update.
+# o ListCtrlSelectionManagerMix untested.
+#
 
-from wxPython.wx import *
-import locale
+import  locale
+import  wx
 
 #----------------------------------------------------------------------------
 
 class wxColumnSorterMixin:
     """
-    A mixin class that handles sorting of a wxListCtrl in REPORT mode when
+    A mixin class that handles sorting of a wx.ListCtrl in REPORT mode when
     the column header is clicked on.
 
     There are a few requirments needed in order for this to work genericly:
 
       1. The combined class must have a GetListCtrl method that
-         returns the wxListCtrl to be sorted, and the list control
-         must exist at the time the wxColumnSorterMixin.__init__
+         returns the wx.ListCtrl to be sorted, and the list control
+         must exist at the time the wx.ColumnSorterMixin.__init__
          method is called because it uses GetListCtrl.
 
       2. Items in the list control must have a unique data value set
@@ -43,8 +48,8 @@ class wxColumnSorterMixin:
         self.SetColumnCount(numColumns)
         list = self.GetListCtrl()
         if not list:
-            raise ValueError, "No wxListCtrl available"
-        EVT_LIST_COL_CLICK(list, list.GetId(), self.__OnColClick)
+            raise ValueError, "No wx.ListCtrl available"
+        self.Bind(wx.EVT_LIST_COL_CLICK, self.__OnColClick, list)
 
 
     def SetColumnCount(self, newNumColumns):
@@ -141,15 +146,15 @@ class wxColumnSorterMixin:
 
 class wxListCtrlAutoWidthMixin:
     """ A mix-in class that automatically resizes the last column to take up
-        the remaining width of the wxListCtrl.
+        the remaining width of the wx.ListCtrl.
 
-        This causes the wxListCtrl to automatically take up the full width of
+        This causes the wx.ListCtrl to automatically take up the full width of
         the list, without either a horizontal scroll bar (unless absolutely
         necessary) or empty space to the right of the last column.
 
         NOTE:    This only works for report-style lists.
 
-        WARNING: If you override the EVT_SIZE event in your wxListCtrl, make
+        WARNING: If you override the EVT_SIZE event in your wx.ListCtrl, make
                  sure you call event.Skip() to ensure that the mixin's
                  _OnResize method is called.
 
@@ -160,8 +165,8 @@ class wxListCtrlAutoWidthMixin:
         """
         self._lastColMinWidth = None
 
-        EVT_SIZE(self, self._onResize)
-        EVT_LIST_COL_END_DRAG(self, self.GetId(), self._onResize)
+        self.Bind(wx.EVT_SIZE, self._onResize)
+        self.Bind(wx.EVT_LIST_COL_END_DRAG, self._onResize, self)
 
 
     def resizeLastColumn(self, minWidth):
@@ -171,7 +176,7 @@ class wxListCtrlAutoWidthMixin:
             a horizontal scrollbar.  Otherwise, we expand the right-most column
             to take up the remaining free space in the list.
 
-            This method is called automatically when the wxListCtrl is resized;
+            This method is called automatically when the wx.ListCtrl is resized;
             you can also call it yourself whenever you want the last column to
             be resized appropriately (eg, when adding, removing or resizing
             columns).
@@ -186,11 +191,11 @@ class wxListCtrlAutoWidthMixin:
     # =====================
 
     def _onResize(self, event):
-        """ Respond to the wxListCtrl being resized.
+        """ Respond to the wx.ListCtrl being resized.
 
             We automatically resize the last column in the list.
         """
-        wxCallAfter(self._doResize)
+        wx.CallAfter(self._doResize)
         event.Skip()
 
 
@@ -216,9 +221,9 @@ class wxListCtrlAutoWidthMixin:
         # NOTE: on GTK, the scrollbar is included in the client size, but on
         # Windows it is not included
         listWidth = self.GetClientSize().width
-        if wxPlatform != '__WXMSW__':
+        if wx.Platform != '__WXMSW__':
             if self.GetItemCount() > self.GetCountPerPage():
-                scrollWidth = wxSystemSettings_GetMetric(wxSYS_VSCROLL_X)
+                scrollWidth = wx.SystemSettings_GetMetric(wx.SYS_VSCROLL_X)
                 listWidth = listWidth - scrollWidth
 
         totColWidth = 0 # Width of all columns except last one.
@@ -242,7 +247,7 @@ class wxListCtrlAutoWidthMixin:
 
 #----------------------------------------------------------------------------
 
-SEL_FOC = wxLIST_STATE_SELECTED | wxLIST_STATE_FOCUSED
+SEL_FOC = wx.LIST_STATE_SELECTED | wx.LIST_STATE_FOCUSED
 def selectBeforePopup(event):
     """Ensures the item the mouse is pointing at is selected before a popup.
 
@@ -251,23 +256,26 @@ def selectBeforePopup(event):
     if isinstance(ctrl, wxListCtrl):
         n, flags = ctrl.HitTest(event.GetPosition())
         if n >= 0:
-            if not ctrl.GetItemState(n, wxLIST_STATE_SELECTED):
+            if not ctrl.GetItemState(n, wx.LIST_STATE_SELECTED):
                 for i in range(ctrl.GetItemCount()):
                     ctrl.SetItemState(i, 0, SEL_FOC)
                 #for i in getListCtrlSelection(ctrl, SEL_FOC):
                 #    ctrl.SetItemState(i, 0, SEL_FOC)
                 ctrl.SetItemState(n, SEL_FOC, SEL_FOC)
 
-def getListCtrlSelection(listctrl, state=wxLIST_STATE_SELECTED):
+def getListCtrlSelection(listctrl, state=wx.LIST_STATE_SELECTED):
     """ Returns list of item indexes of given state (selected by defaults) """
     res = []
     idx = -1
     while 1:
-        idx = listctrl.GetNextItem(idx, wxLIST_NEXT_ALL, state)
+        idx = listctrl.GetNextItem(idx, wx.LIST_NEXT_ALL, state)
         if idx == -1:
             break
         res.append(idx)
     return res
+
+wxEVT_DOPOPUPMENU = wx.NewEventType()
+EVT_DOPOPUPMENU = wx.PyEventBinder(wxEVT_DOPOPUPMENU, 0)
 
 class ListCtrlSelectionManagerMix:
     """Mixin that defines a platform independent selection policy
@@ -275,12 +283,12 @@ class ListCtrlSelectionManagerMix:
     As selection single and multi-select list return the item index or a
     list of item indexes respectively.
     """
-    wxEVT_DOPOPUPMENU = wxNewId()
     _menu = None
 
     def __init__(self):
-        EVT_RIGHT_DOWN(self, self.OnLCSMRightDown)
-        self.Connect(-1, -1, self.wxEVT_DOPOPUPMENU, self.OnLCSMDoPopup)
+        self.Bind(wx.EVT_RIGHT_DOWN, self.OnLCSMRightDown)
+        self.Bind(EVT_DOPOPUPMENU, self.OnLCSMDoPopup)
+#        self.Connect(-1, -1, self.wxEVT_DOPOPUPMENU, self.OnLCSMDoPopup)
 
     def getPopupMenu(self):
         """ Override to implement dynamic menus (create) """
@@ -296,7 +304,7 @@ class ListCtrlSelectionManagerMix:
 
     def getSelection(self):
         res = getListCtrlSelection(self)
-        if self.GetWindowStyleFlag() & wxLC_SINGLE_SEL:
+        if self.GetWindowStyleFlag() & wx.LC_SINGLE_SEL:
             if res:
                 return res[0]
             else:
@@ -309,11 +317,11 @@ class ListCtrlSelectionManagerMix:
         event.Skip()
         menu = self.getPopupMenu()
         if menu:
-            evt = wxPyEvent()
-            evt.SetEventType(self.wxEVT_DOPOPUPMENU)
+            evt = wx.PyEvent()
+            evt.SetEventType(wxEVT_DOPOPUPMENU)
             evt.menu = menu
             evt.pos = event.GetPosition()
-            wxPostEvent(self, evt)
+            wx.PostEvent(self, evt)
 
     def OnLCSMDoPopup(self, event):
         self.PopupMenu(event.menu, event.pos)

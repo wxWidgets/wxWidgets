@@ -2,42 +2,48 @@
 # CSheet - A wxPython spreadsheet class.
 # This is free software.  Feel free to adapt it as you like.
 # Author: Mark F. Russo (russomf@hotmail.com) 2002/01/31
+#---------------------------------------------------------------------------
+# 12/11/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o 2.5 compatability update.
+# o Untested.
+#
 
-from wxPython.wx import *
-from wxPython.grid import *
-import string
+import  string
+import  wx
+import  wx.grid
 
 #---------------------------------------------------------------------------
-class CTextCellEditor(wxTextCtrl):
+class CTextCellEditor(wx.TextCtrl):
     """ Custom text control for cell editing """
     def __init__(self, parent, id, grid):
-        wxTextCtrl.__init__(self, parent, id, "", style=wxNO_BORDER)
+        wx.TextCtrl.__init__(self, parent, id, "", style=wx.NO_BORDER)
         self._grid = grid                           # Save grid reference
-        EVT_CHAR(self, self.OnChar)
+        self.Bind(wx.EVT_CHAR, self.OnChar)
 
     def OnChar(self, evt):                          # Hook OnChar for custom behavior
         """Customizes char events """
         key = evt.GetKeyCode()
-        if   key == WXK_DOWN:
+        if   key == wx.WXK_DOWN:
             self._grid.DisableCellEditControl()     # Commit the edit
             self._grid.MoveCursorDown(False)        # Change the current cell
-        elif key == WXK_UP:
+        elif key == wx.WXK_UP:
             self._grid.DisableCellEditControl()     # Commit the edit
             self._grid.MoveCursorUp(False)          # Change the current cell
-        elif key == WXK_LEFT:
+        elif key == wx.WXK_LEFT:
             self._grid.DisableCellEditControl()     # Commit the edit
             self._grid.MoveCursorLeft(False)        # Change the current cell
-        elif key == WXK_RIGHT:
+        elif key == wx.WXK_RIGHT:
             self._grid.DisableCellEditControl()     # Commit the edit
             self._grid.MoveCursorRight(False)       # Change the current cell
 
         evt.Skip()                                  # Continue event
 
 #---------------------------------------------------------------------------
-class CCellEditor(wxPyGridCellEditor):
+class CCellEditor(wx.grid.PyGridCellEditor):
     """ Custom cell editor """
     def __init__(self, grid):
-        wxPyGridCellEditor.__init__(self)
+        wx.grid.PyGridCellEditor.__init__(self)
         self._grid = grid                           # Save a reference to the grid
 
     def Create(self, parent, id, evtHandler):
@@ -106,7 +112,7 @@ class CCellEditor(wxPyGridCellEditor):
             and will always start the editor.
         """
         return (not (evt.ControlDown() or evt.AltDown())
-                and  evt.GetKeyCode() != WXK_SHIFT)
+                and  evt.GetKeyCode() != wx.WXK_SHIFT)
 
     def StartingKey(self, evt):
         """ If the editor is enabled by pressing keys on the grid, this will be
@@ -114,11 +120,12 @@ class CCellEditor(wxPyGridCellEditor):
         """
         key = evt.GetKeyCode()              # Get the key code
         ch = None                           # Handle num pad keys
-        if key in [WXK_NUMPAD0, WXK_NUMPAD1, WXK_NUMPAD2, WXK_NUMPAD3, WXK_NUMPAD4,
-                   WXK_NUMPAD5, WXK_NUMPAD6, WXK_NUMPAD7, WXK_NUMPAD8, WXK_NUMPAD9]:
-            ch = chr(ord('0') + key - WXK_NUMPAD0)
+        if key in [ wx.WXK_NUMPAD0, wx.WXK_NUMPAD1, wx.WXK_NUMPAD2, wx.WXK_NUMPAD3, 
+                    wx.WXK_NUMPAD4, wx.WXK_NUMPAD5, wx.WXK_NUMPAD6, wx.WXK_NUMPAD7, 
+                    wx.WXK_NUMPAD8, wx.WXK_NUMPAD9]:
+            ch = chr(ord('0') + key - wx.WXK_NUMPAD0)
 
-        elif key == WXK_BACK:               # Empty text control when init w/ back key
+        elif key == wx.WXK_BACK:               # Empty text control when init w/ back key
             ch = ""
                                             # Handle normal keys
         elif key < 256 and key >= 0 and chr(key) in string.printable:
@@ -147,36 +154,36 @@ class CCellEditor(wxPyGridCellEditor):
         return CCellEditor()
 
 #---------------------------------------------------------------------------
-class CSheet(wxGrid):
+class CSheet(wx.grid.Grid):
     def __init__(self, parent):
-        wxGrid.__init__(self, parent, -1)
+        wx.grid.Grid.__init__(self, parent, -1)
 
         # Init variables
         self._lastCol = -1              # Init last cell column clicked
         self._lastRow = -1              # Init last cell row clicked
         self._selected = None           # Init range currently selected
                                         # Map string datatype to default renderer/editor
-        self.RegisterDataType(wxGRID_VALUE_STRING,
-                              wxGridCellStringRenderer(),
+        self.RegisterDataType(wx.grid.GRID_VALUE_STRING,
+                              wx.grid.GridCellStringRenderer(),
                               CCellEditor(self))
 
         self.CreateGrid(4, 3)           # By default start with a 4 x 3 grid
         self.SetColLabelSize(18)        # Default sizes and alignment
         self.SetRowLabelSize(50)
-        self.SetRowLabelAlignment(wxALIGN_RIGHT, wxALIGN_BOTTOM)
+        self.SetRowLabelAlignment(wx.ALIGN_RIGHT, wx.ALIGN_BOTTOM)
         self.SetColSize(0, 75)          # Default column sizes
         self.SetColSize(1, 75)
         self.SetColSize(2, 75)
 
         # Sink events
-        EVT_GRID_CELL_LEFT_CLICK(  self, self.OnLeftClick)
-        EVT_GRID_CELL_RIGHT_CLICK( self, self.OnRightClick)
-        EVT_GRID_CELL_LEFT_DCLICK( self, self.OnLeftDoubleClick)
-        EVT_GRID_RANGE_SELECT(     self, self.OnRangeSelect)
-        EVT_GRID_ROW_SIZE(         self, self.OnRowSize)
-        EVT_GRID_COL_SIZE(         self, self.OnColSize)
-        EVT_GRID_CELL_CHANGE(      self, self.OnCellChange)
-        EVT_GRID_SELECT_CELL(      self, self.OnGridSelectCell)
+        self.Bind(wx.grid.EVT_GRID_CELL_LEFT_CLICK, self.OnLeftClick)
+        self.Bind(wx.grid.EVT_GRID_CELL_RIGHT_CLICK, self.OnRightClick)
+        self.Bind(wx.grid.EVT_GRID_CELL_LEFT_DCLICK, self.OnLeftDoubleClick)
+        self.Bind(wx.grid.EVT_GRID_RANGE_SELECT, self.OnRangeSelect)
+        self.Bind(wx.grid.EVT_GRID_ROW_SIZE, self.OnRowSize)
+        self.Bind(wx.grid.EVT_GRID_COL_SIZE, self.OnColSize)
+        self.Bind(wx.grid.EVT_GRID_CELL_CHANGE, self.OnCellChange)
+        self.Bind(wx.grid.EVT_GRID_SELECT_CELL, self.OnGridSelectCell)
 
     def OnGridSelectCell(self, event):
         """ Track cell selections """
@@ -247,18 +254,18 @@ class CSheet(wxGrid):
             s += crlf
 
         # Put the string on the clipboard
-        if wxTheClipboard.Open():
-            wxTheClipboard.Clear()
-            wxTheClipboard.SetData(wxTextDataObject(s))
-            wxTheClipboard.Close()
+        if wx.TheClipboard.Open():
+            wx.TheClipboard.Clear()
+            wx.TheClipboard.SetData(wx.TextDataObject(s))
+            wx.TheClipboard.Close()
 
     def Paste(self):
         """ Paste the contents of the clipboard into the currently selected cells """
         # (Is there a better way to do this?)
-        if wxTheClipboard.Open():
-            td = wxTextDataObject()
-            success = wxTheClipboard.GetData(td)
-            wxTheClipboard.Close()
+        if wx.TheClipboard.Open():
+            td = wx.TextDataObject()
+            success = wx.TheClipboard.GetData(td)
+            wx.TheClipboard.Close()
             if not success: return              # Exit on failure
             s = td.GetText()                    # Get the text
 

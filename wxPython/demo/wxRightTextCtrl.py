@@ -6,6 +6,11 @@
 #
 # o The rightalign library needs converted for this to work correctly.
 # 
+# 12/11/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o All issues resolved.
+# 
+
 
 ############################################################################\
 # Note: this demo has been converted, but the control is deprecated because |

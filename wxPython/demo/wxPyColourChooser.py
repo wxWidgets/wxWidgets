@@ -2,9 +2,9 @@
 #
 # o Updated for wx namespace
 # 
-# 11/30/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+# 12/14/2003 - Jeff Grimmett (grimmtooth@softhome.net)
 #
-# o wx renamer not applied to library.
+# o Updated URL for SF link in overview.
 # 
 
 import  wx
@@ -54,7 +54,7 @@ wxPyColourChooser was written and is maintained by:
     Michael Gilfix <mgilfix@eecs.tufts.edu>
 
 You can find the latest wxPyColourChooser code at
-http://www.sourceforge.net/wxcolourchooser. If you have
+http://sourceforge.net/projects/wxcolourchooser/. If you have
 any suggestions or want to submit a patch, please send
 it my way at: mgilfix@eecs.tufts.edu
 """

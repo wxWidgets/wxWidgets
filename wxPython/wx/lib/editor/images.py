@@ -1,17 +1,22 @@
 
 # images converted with wxPython's img2py.py tool
 
-from wxPython.wx import wxImageFromStream, wxBitmapFromImage
-import cStringIO
+# 12/14/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o 2.5 compatability update.
+#
+
+import  cStringIO
+import  wx
 
 ##----------- Common Functions
 
 def GetBitmap(ImageData):
-    return wxBitmapFromImage(GetImage(ImageData))
+    return wx.BitmapFromImage(GetImage(ImageData))
 
 def GetImage(ImageData):
     stream = cStringIO.StringIO(ImageData)
-    return wxImageFromStream(stream)
+    return wx.ImageFromStream(stream)
 
 ##----------- Image Data
 

@@ -9,6 +9,11 @@
 # Copyright:   (c) 2002 by Total Control Software
 # Licence:     wxWindows license
 #----------------------------------------------------------------------
+# 12/10/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o 2.5 compatability update.
+# o There appears to be a prob with the wx.PySizer.GetSize() method.
+#
 
 """
 A pure-Python wxSizer that lays out items in a grid similar to
@@ -17,24 +22,41 @@ specified by row and col, and row/col spanning is supported.
 
 Adapted from code by Niki Spahiev.
 
-If anyone is interested, it would be nice to have this ported to C++.
+NOTE: There is now a C++ version of this class that has been wrapped
+as wx.GridBagSizer.  It is quicker and more capable so you are
+encouraged to switch.
 """
 
+import  operator
+import  wx
 
 
-from wxPython.wx import *
-import operator
+# After the lib and demo no longer uses this sizer enable this warning...
+
+## import  warnings
+## warningmsg = r"""\
+
+## #####################################################\
+## # THIS MODULE IS NOW DEPRECATED                      |
+## #                                                    |
+## # The core wx library now contains a similar class   |
+## # wrapped as wx.GridBagSizer.                        |
+## #####################################################/
+
+## """
+
+## warnings.warn(warningmsg, DeprecationWarning, stacklevel=2)
 
 #----------------------------------------------------------------------
 
-class RowColSizer(wxPySizer):
+class RowColSizer(wx.PySizer):
 
     # default sizes for cells with no item
     col_w = 10
     row_h = 22
 
     def __init__(self):
-        wxPySizer.__init__(self)
+        wx.PySizer.__init__(self)
         self.growableRows = []
         self.growableCols = []
 
@@ -64,9 +86,9 @@ class RowColSizer(wxPySizer):
 
         # Do I really want to do this?  Probably not...
         #if rowspan > 1 or colspan > 1:
-        #    flag = flag | wxEXPAND
+        #    flag = flag | wx.EXPAND
 
-        wxPySizer.Add(self, item, option, flag, border,
+        wx.PySizer.Add(self, item, option, flag, border,
                       userData=(row, col, row+rowspan, col+colspan))
 
     #AddWindow = Add
@@ -85,7 +107,7 @@ class RowColSizer(wxPySizer):
         assert row != -1, "Row must be specified"
         assert col != -1, "Column must be specified"
 
-        wxPySizer.AddSpacer(self, (width, height), option, flag, border,
+        wx.PySizer.AddSpacer(self, (width, height), option, flag, border,
                             userData=(row, col, row+rowspan, col+colspan))
 
     #--------------------------------------------------
@@ -116,25 +138,22 @@ class RowColSizer(wxPySizer):
 
         items = self.GetChildren()
         if not items:
-            return wxSize(10, 10)
+            return wx.Size(10, 10)
 
         for item in items:
             self._add( item.CalcMin(), item.GetUserData() )
 
-        size = wxSize( reduce( operator.add, self.colWidths),
-                       reduce( operator.add, self.rowHeights) )
+        size = wx.Size( reduce( operator.add, self.colWidths),
+                        reduce( operator.add, self.rowHeights) )
         return size
 
 
     #--------------------------------------------------
     def RecalcSizes( self ):
         # save current dimensions, etc.
-        curWidth  = self.GetSize().width
-        curHeight = self.GetSize().height
-        px = self.GetPosition().x
-        py = self.GetPosition().y
-        minWidth  = self.CalcMin().width
-        minHeight = self.CalcMin().height
+        curWidth, curHeight  = self.GetSize()
+        px, py = self.GetPosition()
+        minWidth, minHeight  = self.CalcMin()
 
         # Check for growables
         if self.growableRows and curHeight > minHeight:
@@ -176,21 +195,21 @@ class RowColSizer(wxPySizer):
     def SetItemBounds(self, item, x, y, w, h):
         # calculate the item's actual size and position within
         # its grid cell
-        ipt = wxPoint(x, y)
+        ipt = wx.Point(x, y)
         isz = item.CalcMin()
         flag = item.GetFlag()
 
-        if flag & wxEXPAND or flag & wxSHAPED:
-            isz = wxSize(w, h)
+        if flag & wx.EXPAND or flag & wx.SHAPED:
+            isz = wx.Size(w, h)
         else:
-            if flag & wxALIGN_CENTER_HORIZONTAL:
+            if flag & wx.ALIGN_CENTER_HORIZONTAL:
                 ipt.x = x + (w - isz.width) / 2
-            elif flag & wxALIGN_RIGHT:
+            elif flag & wx.ALIGN_RIGHT:
                 ipt.x = x + (w - isz.width)
 
-            if flag & wxALIGN_CENTER_VERTICAL:
+            if flag & wx.ALIGN_CENTER_VERTICAL:
                 ipt.y = y + (h - isz.height) / 2
-            elif flag & wxALIGN_BOTTOM:
+            elif flag & wx.ALIGN_BOTTOM:
                 ipt.y = y + (h - isz.height)
 
         item.SetDimension(ipt, isz)

@@ -7,6 +7,10 @@
 # o the three libraries below all have not been hit by the 
 #   wx renamer.
 # 
+# 12/09/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o A few changes to correct my own mistakes earlier :-).
+# 
 
 import  string
 import  sys
@@ -577,9 +581,9 @@ with right-insert for ordinal:""")
                 self.log.write(line)
 
     def OnParensCheck( self, event ):
-        self.intctrl1.SetCtrlParameters(useParensForNegatives=event.Checked())
-        self.intctrl2.SetCtrlParameters(useParensForNegatives=event.Checked())
-        self.floatctrl.SetCtrlParameters(useParensForNegatives=event.Checked())
+        self.intctrl1.SetCtrlParameters(useParensForNegatives=event.IsChecked())
+        self.intctrl2.SetCtrlParameters(useParensForNegatives=event.IsChecked())
+        self.floatctrl.SetCtrlParameters(useParensForNegatives=event.IsChecked())
 
     def OnIpAddrChange( self, event ):
         ipaddr = self.FindWindowById( event.GetId() )
@@ -597,7 +601,7 @@ with right-insert for ordinal:""")
             formatcodes += 'r'
             mask = '###'
         else:
-            choices = states
+            choices = med.states
             mask = 'AA'
             formatcodes += '!'
         self.dynamicbox.SetCtrlParameters( mask = mask,

@@ -1,3 +1,9 @@
+# 12/09/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o 2.5 compatability update.
+# o I'm a little nervous about some of it though.
+#
+
 """
 wxMVCTree is a control which handles hierarchical data. It is constructed
 in model-view-controller architecture, so the display of that data, and
@@ -27,8 +33,26 @@ NOTE: This module is *not* supported in any way.  Use it however you
 """
 
 #------------------------------------------------------------------------
-from wxPython.wx import *
-import os, sys, traceback
+import  os
+import  sys
+import  traceback
+import  warnings
+
+import  wx
+#------------------------------------------------------------------------
+
+warningmsg = r"""\
+
+################################################\
+# This module is not supported in any way!      |
+#                                               |
+# See cource code for wx.lib.mvctree for more   |
+# information.                                  |
+################################################/
+
+"""
+
+warnings.warn(warningmsg, DeprecationWarning, stacklevel=2)
 #------------------------------------------------------------------------
 
 class MVCTreeNode:
@@ -132,11 +156,11 @@ class Painter:
     """
     def __init__(self, tree):
         self.tree = tree
-        self.textcolor = wxNamedColour("BLACK")
-        self.bgcolor = wxNamedColour("WHITE")
-        self.fgcolor = wxNamedColour("BLUE")
-        self.linecolor = wxNamedColour("GREY")
-        self.font = wxFont(9, wxDEFAULT, wxNORMAL, wxNORMAL, False)
+        self.textcolor = wx.NamedColour("BLACK")
+        self.bgcolor = wx.NamedColour("WHITE")
+        self.fgcolor = wx.NamedColour("BLUE")
+        self.linecolor = wx.NamedColour("GREY")
+        self.font = wx.Font(9, wx.DEFAULT, wx.NORMAL, wx.NORMAL, False)
         self.bmp = None
 
     def GetFont(self):
@@ -155,26 +179,26 @@ class Painter:
         return self.textcolor
     def SetTextColour(self, color):
         self.textcolor = color
-        self.textbrush = wxBrush(color)
-        self.textpen = wxPen(color, 1, wxSOLID)
+        self.textbrush = wx.Brush(color)
+        self.textpen = wx.Pen(color, 1, wx.SOLID)
     def GetBackgroundColour(self):
         return self.bgcolor
     def SetBackgroundColour(self, color):
         self.bgcolor = color
-        self.bgbrush = wxBrush(color)
-        self.bgpen = wxPen(color, 1, wxSOLID)
+        self.bgbrush = wx.Brush(color)
+        self.bgpen = wx.Pen(color, 1, wx.SOLID)
     def GetForegroundColour(self):
         return self.fgcolor
     def SetForegroundColour(self, color):
         self.fgcolor = color
-        self.fgbrush = wxBrush(color)
-        self.fgpen = wxPen(color, 1, wxSOLID)
+        self.fgbrush = wx.Brush(color)
+        self.fgpen = wx.Pen(color, 1, wx.SOLID)
     def GetLineColour(self):
         return self.linecolor
     def SetLineColour(self, color):
         self.linecolor = color
-        self.linebrush = wxBrush(color)
-        self.linepen = wxPen( color, 1, wxSOLID)
+        self.linebrush = wx.Brush(color)
+        self.linepen = wx.Pen( color, 1, wx.SOLID)
     def GetForegroundPen(self):
         return self.fgpen
     def GetBackgroundPen(self):
@@ -348,9 +372,9 @@ class FileEditor(Editor):
         self.editcomp.SetSelection(0, len(node.fileName))
         self.editcomp.SetFocus()
         self.treenode = treenode
-#        EVT_KEY_DOWN(self.editcomp, self._key)
-        EVT_KEY_UP(self.editcomp, self._key)
-        EVT_LEFT_DOWN(self.editcomp, self._mdown)
+#        self.editcomp.Bind(wx.EVT_KEY_DOWN, self._key)
+        self.editcomp.Bind(wx.EVT_KEY_UP, self._key)
+        self.editcomp.Bind(wx.EVT_LEFT_DOWN, self._mdown)
         self.editcomp.CaptureMouse()
 
     def CanEdit(self, node):
@@ -373,18 +397,18 @@ class FileEditor(Editor):
 
 
     def _key(self, evt):
-        if evt.KeyCode() == WXK_RETURN:
+        if evt.KeyCode() == wx.WXK_RETURN:
             self.EndEdit(True)
-        elif evt.KeyCode() == WXK_ESCAPE:
+        elif evt.KeyCode() == wx.WXK_ESCAPE:
             self.EndEdit(False)
         else:
             evt.Skip()
 
     def _mdown(self, evt):
         if evt.IsButton():
-            pos = evt.GetPosition()
-            edsize = self.editcomp.GetSize()
-            if pos.x < 0 or pos.y < 0 or pos.x > edsize.width or pos.y > edsize.height:
+            x, y = evt.GetPosition()
+            w, h = self.editcomp.GetSize()
+            if x < 0 or y < 0 or x > w or y > h:
                 self.EndEdit(False)
 
 
@@ -555,36 +579,36 @@ class TreePainter(Painter):
             for i in range(25):
                 self.charWidths.append(dc.GetTextExtent("D")[0] * i)
             self.charHeight = dc.GetTextExtent("D")[1]
-        self.textpen = wxPen(self.GetTextColour(), 1, wxSOLID)
-        self.fgpen = wxPen(self.GetForegroundColour(), 1, wxSOLID)
-        self.bgpen = wxPen(self.GetBackgroundColour(), 1, wxSOLID)
-        self.linepen = wxPen(self.GetLineColour(), 1, wxSOLID)
-        self.dashpen = wxPen(self.GetLineColour(), 1, wxDOT)
-        self.textbrush = wxBrush(self.GetTextColour(), wxSOLID)
-        self.fgbrush = wxBrush(self.GetForegroundColour(), wxSOLID)
-        self.bgbrush = wxBrush(self.GetBackgroundColour(), wxSOLID)
-        self.linebrush = wxPen(self.GetLineColour(), 1, wxSOLID)
+        self.textpen = wx.Pen(self.GetTextColour(), 1, wx.SOLID)
+        self.fgpen = wx.Pen(self.GetForegroundColour(), 1, wx.SOLID)
+        self.bgpen = wx.Pen(self.GetBackgroundColour(), 1, wx.SOLID)
+        self.linepen = wx.Pen(self.GetLineColour(), 1, wx.SOLID)
+        self.dashpen = wx.Pen(self.GetLineColour(), 1, wx.DOT)
+        self.textbrush = wx.Brush(self.GetTextColour(), wx.SOLID)
+        self.fgbrush = wx.Brush(self.GetForegroundColour(), wx.SOLID)
+        self.bgbrush = wx.Brush(self.GetBackgroundColour(), wx.SOLID)
+        self.linebrush = wx.Pen(self.GetLineColour(), 1, wx.SOLID)
         treesize = self.tree.GetSize()
         size = self.tree.transform.GetSize()
         size = (max(treesize.width, size[0]+50), max(treesize.height, size[1]+50))
         dc.BeginDrawing()
         if doubleBuffered:
-            mem_dc = wxMemoryDC()
+            mem_dc = wx.MemoryDC()
             if not self.GetBuffer():
                 self.knobs = []
                 self.rectangles = []
-                self.bmp = wxEmptyBitmap(size[0], size[1])
+                self.bmp = wx.EmptyBitmap(size[0], size[1])
                 mem_dc.SelectObject(self.GetBuffer())
                 mem_dc.SetPen(self.GetBackgroundPen())
                 mem_dc.SetBrush(self.GetBackgroundBrush())
-                mem_dc.DrawRectangle(0, 0, size[0], size[1])
+                mem_dc.DrawRectangle((0, 0), (size[0], size[1]))
                 mem_dc.SetFont(self.tree.GetFont())
                 self.paintWalk(node, mem_dc)
             else:
                 mem_dc.SelectObject(self.GetBuffer())
             xstart, ystart = self.tree.CalcUnscrolledPosition(0,0)
             size = self.tree.GetClientSizeTuple()
-            dc.Blit(xstart, ystart, size[0], size[1], mem_dc, xstart, ystart)
+            dc.Blit((xstart, ystart), (size[0], size[1]), mem_dc, (xstart, ystart))
         else:
             if node == self.tree.currentRoot:
                 self.knobs = []
@@ -593,7 +617,7 @@ class TreePainter(Painter):
             dc.SetBrush(self.GetBackgroundBrush())
             dc.SetFont(self.tree.GetFont())
             if paintBackground:
-                dc.DrawRectangle(0, 0, size[0], size[1])
+                dc.DrawRectangle((0, 0), (size[0], size[1]))
             if node:
                 #Call with not paintBackground because if we are told not to paint the
                 #whole background, we have to paint in parts to undo selection coloring.
@@ -606,7 +630,7 @@ class TreePainter(Painter):
 
     def SetLinePen(self, pen):
         Painter.SetLinePen(self, pen)
-        self.dashpen = wxPen(pen.GetColour(), 1, wxDOT)
+        self.dashpen = wx.Pen(pen.GetColour(), 1, wx.DOT)
 
     def paintWalk(self, node, dc, paintRects=0):
         self.linePainter.Paint(node.parent, node, dc)
@@ -621,23 +645,23 @@ class TreePainter(Painter):
                 if (not self.tree.model.IsLeaf(kid.data)) or ((kid.expanded or self.tree._assumeChildren) and len(kid.kids)):
                     dc.SetPen(self.linepen)
                     dc.SetBrush(self.bgbrush)
-                    dc.DrawRectangle(px -4, py-4, 9, 9)
+                    dc.DrawRectangle((px -4, py-4), (9, 9))
                     self.knobs.append( (kid, Rect(px -4, py -4, 9, 9)) )
                     dc.SetPen(self.textpen)
                     if not kid.expanded:
-                        dc.DrawLine(px, py -2, px, py + 3)
-                    dc.DrawLine(px -2, py, px + 3, py)
+                        dc.DrawLine((px, py -2), (px, py + 3))
+                    dc.DrawLine((px -2, py), (px + 3, py))
         if node == self.tree.currentRoot:
             px = (node.projx - self.tree.layout.NODE_STEP) + 5
             py = node.projy + node.height/2
             dc.SetPen(self.linepen)
             dc.SetBrush(self.bgbrush)
-            dc.DrawRectangle(px -4, py-4, 9, 9)
+            dc.DrawRectangle((px -4, py-4), (9, 9))
             self.knobs.append( (node, Rect(px -4, py -4, 9, 9)) )
             dc.SetPen(self.textpen)
             if not node.expanded:
-                dc.DrawLine(px, py -2, px, py + 3)
-            dc.DrawLine(px -2, py, px + 3, py)
+                dc.DrawLine((px, py -2), (px, py + 3))
+            dc.DrawLine((px -2, py), (px + 3, py))
         return True
 
     def OnMouse(self, evt):
@@ -652,15 +676,15 @@ class TreeNodePainter(NodePainter):
         if node.selected:
             dc.SetPen(self.painter.GetLinePen())
             dc.SetBrush(self.painter.GetForegroundBrush())
-            dc.SetTextForeground(wxNamedColour("WHITE"))
-            dc.DrawRectangle(node.projx -1, node.projy -1, node.width + 3, node.height + 3)
+            dc.SetTextForeground(wx.NamedColour("WHITE"))
+            dc.DrawRectangle((node.projx -1, node.projy -1), (node.width + 3, node.height + 3))
         else:
             if drawRects:
                 dc.SetBrush(self.painter.GetBackgroundBrush())
                 dc.SetPen(self.painter.GetBackgroundPen())
-                dc.DrawRectangle(node.projx -1, node.projy -1, node.width + 3, node.height + 3)
+                dc.DrawRectangle((node.projx -1, node.projy -1), (node.width + 3, node.height + 3))
             dc.SetTextForeground(self.painter.GetTextColour())
-        dc.DrawText(text, node.projx, node.projy)
+        dc.DrawText(text, (node.projx, node.projy))
         self.painter.rectangles.append((node, Rect(node.projx, node.projy, node.width, node.height)))
 
 class TreeLinePainter(LinePainter):
@@ -672,59 +696,41 @@ class TreeLinePainter(LinePainter):
             py = child.projy + self.painter.tree.layout.NODE_HEIGHT/2 -2
             cx = child.projx
             cy = py
-            dc.DrawLine(px, py, cx, cy)
+            dc.DrawLine((px, py), (cx, cy))
         else:
             px = parent.projx + 5
             py = parent.projy + parent.height
             cx = child.projx -5
             cy = child.projy + self.painter.tree.layout.NODE_HEIGHT/2 -3
-            dc.DrawLine(px, py, px, cy)
-            dc.DrawLine(px, cy, cx, cy)
+            dc.DrawLine((px, py), (px, cy))
+            dc.DrawLine((px, cy), (cx, cy))
 
+#>> Event defs
+wxEVT_MVCTREE_BEGIN_EDIT = wx.NewEventType() #Start editing. Vetoable.
+wxEVT_MVCTREE_END_EDIT = wx.NewEventType() #Stop editing. Vetoable.
+wxEVT_MVCTREE_DELETE_ITEM = wx.NewEventType() #Item removed from model.
+wxEVT_MVCTREE_ITEM_EXPANDED = wx.NewEventType()
+wxEVT_MVCTREE_ITEM_EXPANDING = wx.NewEventType()
+wxEVT_MVCTREE_ITEM_COLLAPSED = wx.NewEventType()
+wxEVT_MVCTREE_ITEM_COLLAPSING = wx.NewEventType()
+wxEVT_MVCTREE_SEL_CHANGED = wx.NewEventType()
+wxEVT_MVCTREE_SEL_CHANGING = wx.NewEventType() #Vetoable.
+wxEVT_MVCTREE_KEY_DOWN = wx.NewEventType()
+wxEVT_MVCTREE_ADD_ITEM = wx.NewEventType() #Item added to model.
 
-wxEVT_MVCTREE_BEGIN_EDIT = 20204 #Start editing. Vetoable.
-wxEVT_MVCTREE_END_EDIT = 20205 #Stop editing. Vetoable.
-wxEVT_MVCTREE_DELETE_ITEM = 20206 #Item removed from model.
-wxEVT_MVCTREE_ITEM_EXPANDED = 20209
-wxEVT_MVCTREE_ITEM_EXPANDING = 20210
-wxEVT_MVCTREE_ITEM_COLLAPSED = 20211
-wxEVT_MVCTREE_ITEM_COLLAPSING = 20212
-wxEVT_MVCTREE_SEL_CHANGED = 20213
-wxEVT_MVCTREE_SEL_CHANGING = 20214 #Vetoable.
-wxEVT_MVCTREE_KEY_DOWN = 20215
-wxEVT_MVCTREE_ADD_ITEM = 20216 #Item added to model.
+EVT_MVCTREE_SEL_CHANGED = wx.PyEventBinder(wxEVT_MVCTREE_SEL_CHANGED, 1)
+EVT_MVCTREE_SEL_CHANGING = wx.PyEventBinder(wxEVT_MVCTREE_SEL_CHANGING, 1)
+EVT_MVCTREE_ITEM_EXPANDED = wx.PyEventBinder(wxEVT_MVCTREE_ITEM_EXPANDED, 1)
+EVT_MVCTREE_ITEM_EXPANDING = wx.PyEventBinder(wxEVT_MVCTREE_ITEM_EXPANDING, 1)
+EVT_MVCTREE_ITEM_COLLAPSED = wx.PyEventBinder(wxEVT_MVCTREE_ITEM_COLLAPSED, 1)
+EVT_MVCTREE_ITEM_COLLAPSING = wx.PyEventBinder(wxEVT_MVCTREE_ITEM_COLLAPSING, 1)
+EVT_MVCTREE_ADD_ITEM = wx.PyEventBinder(wxEVT_MVCTREE_ADD_ITEM, 1)
+EVT_MVCTREE_DELETE_ITEM = wx.PyEventBinder(wxEVT_MVCTREE_DELETE_ITEM, 1)
+EVT_MVCTREE_KEY_DOWN = wx.PyEventBinder(wxEVT_MVCTREE_KEY_DOWN, 1)
 
-def EVT_MVCTREE_SEL_CHANGED(win, id, func):
-    win.Connect(id, -1, wxEVT_MVCTREE_SEL_CHANGED, func)
-
-def EVT_MVCTREE_SEL_CHANGING(win, id, func):
-    win.Connect(id, -1, wxEVT_MVCTREE_SEL_CHANGING, func)
-
-def EVT_MVCTREE_ITEM_EXPANDED(win, id, func):
-    win.Connect(id, -1, wxEVT_MVCTREE_ITEM_EXPANDED, func)
-
-def EVT_MVCTREE_ITEM_EXPANDING(win, id, func):
-    win.Connect(id, -1, wxEVT_MVCTREE_ITEM_EXPANDING, func)
-
-def EVT_MVCTREE_ITEM_COLLAPSED(win, id, func):
-    win.Connect(id, -1, wxEVT_MVCTREE_ITEM_COLLAPSED, func)
-
-def EVT_MVCTREE_ITEM_COLLAPSING(win, id, func):
-    win.Connect(id, -1, wxEVT_MVCTREE_ITEM_COLLAPSING, func)
-
-def EVT_MVCTREE_ADD_ITEM(win, id, func):
-    win.Connect(id, -1, wxEVT_MVCTREE_ADD_ITEM, func)
-
-def EVT_MVCTREE_DELETE_ITEM(win, id, func):
-    win.Connect(id, -1, wxEVT_MVCTREE_DELETE_ITEM, func)
-
-def EVT_MVCTREE_KEY_DOWN(win, id, func):
-    win.Connect(id, -1, wxEVT_MVCTREE_KEY_DOWN, func)
-
-
-class wxMVCTreeEvent(wxPyCommandEvent):
+class wxMVCTreeEvent(wx.PyCommandEvent):
     def __init__(self, type, id, node = None, nodes = None, keyEvent = None, **kwargs):
-        apply(wxPyCommandEvent.__init__, (self, type, id), kwargs)
+        apply(wx.PyCommandEvent.__init__, (self, type, id), kwargs)
         self.node = node
         self.nodes = nodes
         self.keyEvent = keyEvent
@@ -738,17 +744,17 @@ class wxMVCTreeEvent(wxPyCommandEvent):
 class wxMVCTreeNotifyEvent(wxMVCTreeEvent):
     def __init__(self, type, id, node = None, nodes = None, **kwargs):
         apply(wxMVCTreeEvent.__init__, (self, type, id, node, nodes), kwargs)
-        self.notify = wxNotifyEvent(type, id)
+        self.notify = wx.NotifyEvent(type, id)
     def getNotifyEvent(self):
         return self.notify
 
-class wxMVCTree(wxScrolledWindow):
+class wxMVCTree(wx.ScrolledWindow):
     """
     The main mvc tree class.
     """
     def __init__(self, parent, id, model = None, layout = None, transform = None,
                  painter = None, *args, **kwargs):
-        apply(wxScrolledWindow.__init__, (self, parent, id), kwargs)
+        apply(wx.ScrolledWindow.__init__, (self, parent, id), kwargs)
         self.nodemap = {}
         self._multiselect = False
         self._selections = []
@@ -771,19 +777,19 @@ class wxMVCTree(wxScrolledWindow):
         if not painter:
             painter = TreePainter(self)
         self.painter = painter
-        self.SetFont(wxFont(9, wxDEFAULT, wxNORMAL, wxNORMAL, False))
-        EVT_MOUSE_EVENTS(self, self.OnMouse)
-        EVT_KEY_DOWN(self, self.OnKeyDown)
+        self.SetFont(wx.Font(9, wx.DEFAULT, wx.NORMAL, wx.NORMAL, False))
+        self.Bind(wx.EVT_MOUSE_EVENTS, self.OnMouse)
+        self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
         self.doubleBuffered = True
-        EVT_SIZE(self, self.OnSize)
-        EVT_ERASE_BACKGROUND(self, self.OnEraseBackground)
-        EVT_PAINT(self, self.OnPaint)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
+        self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
 
 
     def Refresh(self):
         if self.doubleBuffered:
             self.painter.ClearBuffer()
-        wxScrolledWindow.Refresh(self, False)
+        wx.ScrolledWindow.Refresh(self, False)
 
     def GetPainter(self):
         return self.painter
@@ -821,7 +827,7 @@ class wxMVCTree(wxScrolledWindow):
 
     def SetFont(self, font):
         self.painter.SetFont(font)
-        dc = wxClientDC(self)
+        dc = wx.ClientDC(self)
         dc.SetFont(font)
         self.layout.SetHeight(dc.GetTextExtent("")[1] + 18)
         self.painter.ClearBuffer()
@@ -1042,7 +1048,7 @@ class wxMVCTree(wxScrolledWindow):
                         changeparents.append(treenode)
         e = wxMVCTreeEvent(wxEVT_MVCTREE_SEL_CHANGED, self.GetId(), nodeTuple[0], nodes = nodeTuple)
         self.GetEventHandler().ProcessEvent(e)
-        dc = wxClientDC(self)
+        dc = wx.ClientDC(self)
         self.PrepareDC(dc)
         for node in changeparents:
             if node:
@@ -1060,7 +1066,7 @@ class wxMVCTree(wxScrolledWindow):
             treenode.selected = False
         e = wxMVCTreeEvent(wxEVT_MVCTREE_SEL_CHANGED, self.GetId(), node, nodes = nodeTuple)
         self.GetEventHandler().ProcessEvent(e)
-        dc = wxClientDC(self)
+        dc = wx.ClientDC(self)
         self.PrepareDC(dc)
         for node in changeparents:
             if node:
@@ -1072,22 +1078,22 @@ class wxMVCTree(wxScrolledWindow):
         if hasattr(self, 'painter') and self.painter:
             return self.painter.GetBackgroundColour()
         else:
-            return wxWindow.GetBackgroundColour(self)
+            return wx.Window.GetBackgroundColour(self)
     def SetBackgroundColour(self, color):
         if hasattr(self, 'painter') and self.painter:
             self.painter.SetBackgroundColour(color)
         else:
-            wxWindow.SetBackgroundColour(self, color)
+            wx.Window.SetBackgroundColour(self, color)
     def GetForegroundColour(self):
         if hasattr(self, 'painter') and self.painter:
             return self.painter.GetForegroundColour()
         else:
-            return wxWindow.GetBackgroundColour(self)
+            return wx.Window.GetBackgroundColour(self)
     def SetForegroundColour(self, color):
         if hasattr(self, 'painter') and self.painter:
             self.painter.SetForegroundColour(color)
         else:
-            wxWindow.SetBackgroundColour(self, color)
+            wx.Window.SetBackgroundColour(self, color)
 
     def SetAssumeChildren(self, bool):
         self._assumeChildren = bool
@@ -1113,29 +1119,20 @@ class wxMVCTree(wxScrolledWindow):
             tsize = list(self.transform.GetSize())
             tsize[0] = tsize[0] + 50
             tsize[1] = tsize[1] + 50
-            size = self.GetSizeTuple()
-            if tsize[0] > size[0] or tsize[1] > size[1]:
+            w, h = self.GetSize()
+            if tsize[0] > w or tsize[1] > h:
                 if not hasattr(self, '_oldsize') or (tsize[0] > self._oldsize[0] or tsize[1] > self._oldsize[1]):
                     self._oldsize = tsize
-                    oldstart = self.ViewStart()
+                    oldstart = self.GetViewStart()
                     self._lastPhysicalSize = self.GetSize()
                     self.SetScrollbars(10, 10, tsize[0]/10, tsize[1]/10)
                     self.Scroll(oldstart[0], oldstart[1])
-            dc = wxPaintDC(self)
+            dc = wx.PaintDC(self)
             self.PrepareDC(dc)
             dc.SetFont(self.GetFont())
             self.painter.Paint(dc, self.currentRoot, self.doubleBuffered)
         except:
             traceback.print_exc()
-
-
-
-
-
-
-
-
-
 
 
 

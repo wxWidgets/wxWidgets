@@ -22,7 +22,17 @@
 #   and validation is cursor-position specific, so the control intercepts the
 #   key codes before the validator would fire.  However, validators can be
 #   provided to do data transfer to the controls.
-##
+#
+#----------------------------------------------------------------------------
+#
+# 12/09/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace. No guarantees. This is one huge file.
+# 
+# 12/13/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Missed wx.DateTime stuff earlier.
+# 
 
 """\
 <b>Masked Edit Overview:
@@ -683,10 +693,18 @@ Event Handling
 
 """
 
-from wxPython.wx import *
-import string, re, copy, difflib, types
+import  copy
+import  difflib
+import  re
+import  string
+import  types
 
-from wxPython.tools.dbg import Logger
+import  wx
+
+# jmg 12/9/03 - when we cut ties with Py 2.2 and earlier, this would
+# be a good place to implement the 2.3 logger class
+from wx.tools.dbg import Logger 
+
 dbg = Logger()
 dbg(enable=0)
 
@@ -701,8 +719,15 @@ WXK_CTRL_V = (ord('V')+1) - ord('A')
 WXK_CTRL_X = (ord('X')+1) - ord('A')
 WXK_CTRL_Z = (ord('Z')+1) - ord('A')
 
-nav =     (WXK_BACK, WXK_LEFT, WXK_RIGHT, WXK_UP, WXK_DOWN, WXK_TAB, WXK_HOME, WXK_END, WXK_RETURN, WXK_PRIOR, WXK_NEXT)
-control = (WXK_BACK, WXK_DELETE, WXK_CTRL_A, WXK_CTRL_C, WXK_CTRL_S, WXK_CTRL_V, WXK_CTRL_X, WXK_CTRL_Z)
+nav = (
+    wx.WXK_BACK, wx.WXK_LEFT, wx.WXK_RIGHT, wx.WXK_UP, wx.WXK_DOWN, wx.WXK_TAB, 
+    wx.WXK_HOME, wx.WXK_END, wx.WXK_RETURN, wx.WXK_PRIOR, wx.WXK_NEXT
+    )
+
+control = (
+    wx.WXK_BACK, wx.WXK_DELETE, WXK_CTRL_A, WXK_CTRL_C, WXK_CTRL_S, WXK_CTRL_V, 
+    WXK_CTRL_X, WXK_CTRL_Z
+    )
 
 
 ## ---------- ---------- ---------- ---------- ---------- ---------- ----------
@@ -1554,20 +1579,20 @@ class wxMaskedEditMixin:
         ## Initially populated with navigation and function control keys:
         self._keyhandlers = {
             # default navigation keys and handlers:
-            WXK_BACK:   self._OnErase,
-            WXK_LEFT:   self._OnArrow,
-            WXK_RIGHT:  self._OnArrow,
-            WXK_UP:     self._OnAutoCompleteField,
-            WXK_DOWN:   self._OnAutoCompleteField,
-            WXK_TAB:    self._OnChangeField,
-            WXK_HOME:   self._OnHome,
-            WXK_END:    self._OnEnd,
-            WXK_RETURN: self._OnReturn,
-            WXK_PRIOR:  self._OnAutoCompleteField,
-            WXK_NEXT:   self._OnAutoCompleteField,
+            wx.WXK_BACK:   self._OnErase,
+            wx.WXK_LEFT:   self._OnArrow,
+            wx.WXK_RIGHT:  self._OnArrow,
+            wx.WXK_UP:     self._OnAutoCompleteField,
+            wx.WXK_DOWN:   self._OnAutoCompleteField,
+            wx.WXK_TAB:    self._OnChangeField,
+            wx.WXK_HOME:   self._OnHome,
+            wx.WXK_END:    self._OnEnd,
+            wx.WXK_RETURN: self._OnReturn,
+            wx.WXK_PRIOR:  self._OnAutoCompleteField,
+            wx.WXK_NEXT:   self._OnAutoCompleteField,
 
             # default function control keys and handlers:
-            WXK_DELETE: self._OnErase,
+            wx.WXK_DELETE: self._OnErase,
             WXK_CTRL_A: self._OnCtrl_A,
             WXK_CTRL_C: self._OnCtrl_C,
             WXK_CTRL_S: self._OnCtrl_S,
@@ -1723,7 +1748,7 @@ class wxMaskedEditMixin:
                     'foregroundColour', 'signedForegroundColour'):
             if ctrl_kwargs.has_key(key):
                 if type(ctrl_kwargs[key]) in (types.StringType, types.UnicodeType):
-                    c = wxNamedColour(ctrl_kwargs[key])
+                    c = wx.NamedColour(ctrl_kwargs[key])
                     if c.Get() == (-1, -1, -1):
                         raise TypeError('%s not a legal color specification for %s' % (repr(ctrl_kwargs[key]), key))
                     else:
@@ -1732,7 +1757,7 @@ class wxMaskedEditMixin:
                         # attach a python dynamic attribute to wxColour for debug printouts
                         c._name = ctrl_kwargs[key]
 
-                elif type(ctrl_kwargs[key]) != type(wxBLACK):
+                elif type(ctrl_kwargs[key]) != type(wx.BLACK):
                     raise TypeError('%s not a legal color specification for %s' % (repr(ctrl_kwargs[key]), key))
 
 
@@ -2484,10 +2509,10 @@ class wxMaskedEditMixin:
             # make down act like tab, up act like shift-tab:
 
 ##            dbg('Registering numeric navigation and control handlers (if not already set)')
-            if not self._keyhandlers.has_key(WXK_DOWN):
-                self._SetKeycodeHandler(WXK_DOWN, self._OnChangeField)
-            if not self._keyhandlers.has_key(WXK_UP):
-                self._SetKeycodeHandler(WXK_UP, self._OnUpNumeric)  # (adds "shift" to up arrow, and calls _OnChangeField)
+            if not self._keyhandlers.has_key(wx.WXK_DOWN):
+                self._SetKeycodeHandler(wx.WXK_DOWN, self._OnChangeField)
+            if not self._keyhandlers.has_key(wx.WXK_UP):
+                self._SetKeycodeHandler(wx.WXK_UP, self._OnUpNumeric)  # (adds "shift" to up arrow, and calls _OnChangeField)
 
             # On ., truncate contents right of cursor to decimal point (if any)
             # leaves cusor after decimal point if floating point, otherwise at 0.
@@ -2538,13 +2563,13 @@ class wxMaskedEditMixin:
     def _calcSize(self, size=None):
         """ Calculate automatic size if allowed; must be called after the base control is instantiated"""
 ##        dbg('wxMaskedEditMixin::_calcSize', indent=1)
-        cont = (size is None or size == wxDefaultSize)
+        cont = (size is None or size == wx.DefaultSize)
 
         if cont and self._autofit:
             sizing_text = 'M' * self._masklength
-            if wxPlatform != "__WXMSW__":   # give it a little extra space
+            if wx.Platform != "__WXMSW__":   # give it a little extra space
                 sizing_text += 'M'
-            if wxPlatform == "__WXMAC__":   # give it even a little more...
+            if wx.Platform == "__WXMAC__":   # give it even a little more...
                 sizing_text += 'M'
 ##            dbg('len(sizing_text):', len(sizing_text), 'sizing_text: "%s"' % sizing_text)
             w, h = self.GetTextExtent(sizing_text)
@@ -2557,13 +2582,13 @@ class wxMaskedEditMixin:
         """ Set the control's font typeface -- pass the font name as str."""
 ##        dbg('wxMaskedEditMixin::_setFont', indent=1)
         if not self._useFixedWidthFont:
-            self._font = wxSystemSettings_GetFont(wxSYS_DEFAULT_GUI_FONT)
+            self._font = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
         else:
             font = self.GetFont()   # get size, weight, etc from current font
 
             # Set to teletype font (guaranteed to be mappable to all wxWindows
             # platforms:
-            self._font = wxFont( font.GetPointSize(), wxTELETYPE, font.GetStyle(),
+            self._font = wx.Font( font.GetPointSize(), wx.TELETYPE, font.GetStyle(),
                                  font.GetWeight(), font.GetUnderlined())
 ##            dbg('font string: "%s"' % font.GetNativeFontInfo().ToString())
 
@@ -2698,7 +2723,7 @@ class wxMaskedEditMixin:
                 dbg(indent=0)
                 return
             # else skip default processing, but do final formatting
-        if key < WXK_SPACE or key > 255:
+        if key < wx.WXK_SPACE or key > 255:
             dbg('key < WXK_SPACE or key > 255')
             event.Skip()                # non alphanumeric
             keep_processing = False
@@ -2729,11 +2754,11 @@ class wxMaskedEditMixin:
                         if self.IsValid(newstr):
                             dbg("it is!")
                             keep_processing = True
-                            wxCallAfter(self._SetInsertionPoint, self._decimalpos)
+                            wx.CallAfter(self._SetInsertionPoint, self._decimalpos)
                     if not keep_processing:
                         dbg("key disallowed by validation")
-                        if not wxValidator_IsSilent() and orig_pos == pos:
-                            wxBell()
+                        if not wx.Validator_IsSilent() and orig_pos == pos:
+                            wx.Bell()
 
                 if keep_processing:
                     unadjusted = newstr
@@ -2746,7 +2771,7 @@ class wxMaskedEditMixin:
                     if newstr != orig_value:
                         self.modified = True
 
-                    wxCallAfter(self._SetValue, newstr)
+                    wx.CallAfter(self._SetValue, newstr)
 
                     # Adjust insertion point on date if just entered 2 digit year, and there are now 4 digits:
                     if not self.IsDefault() and self._isDate and self._4digityear:
@@ -2754,7 +2779,7 @@ class wxMaskedEditMixin:
                         if pos == year2dig and unadjusted[year2dig] != newstr[year2dig]:
                             newpos = pos+2
 
-                    wxCallAfter(self._SetInsertionPoint, newpos)
+                    wx.CallAfter(self._SetInsertionPoint, newpos)
 
                     if match_field is not None:
                         dbg('matched field')
@@ -2762,19 +2787,19 @@ class wxMaskedEditMixin:
 
                     if new_select_to != newpos:
                         dbg('queuing selection: (%d, %d)' % (newpos, new_select_to))
-                        wxCallAfter(self._SetSelection, newpos, new_select_to)
+                        wx.CallAfter(self._SetSelection, newpos, new_select_to)
                     else:
                         newfield = self._FindField(newpos)
                         if newfield != field and newfield._selectOnFieldEntry:
                             dbg('queuing selection: (%d, %d)' % (newfield._extent[0], newfield._extent[1]))
-                            wxCallAfter(self._SetSelection, newfield._extent[0], newfield._extent[1])
+                            wx.CallAfter(self._SetSelection, newfield._extent[0], newfield._extent[1])
                     keep_processing = False
 
             elif keep_processing:
                 dbg('char not allowed')
                 keep_processing = False
-                if (not wxValidator_IsSilent()) and orig_pos == pos:
-                    wxBell()
+                if (not wx.Validator_IsSilent()) and orig_pos == pos:
+                    wx.Bell()
 
         self._applyFormatting()
 
@@ -2784,7 +2809,7 @@ class wxMaskedEditMixin:
             next_entry = self._findNextEntry( pos )
             if pos != next_entry:
                 dbg("moving from %(pos)d to next valid entry: %(next_entry)d" % locals())
-                wxCallAfter(self._SetInsertionPoint, next_entry )
+                wx.CallAfter(self._SetInsertionPoint, next_entry )
 
             if self._isTemplateChar(pos):
                 self._AdjustField(pos)
@@ -2894,25 +2919,25 @@ class wxMaskedEditMixin:
         keycode = event.GetKeyCode()
         sel_start, sel_to = self._GetSelection()
         entry_end = self._goEnd(getPosOnly=True)
-        if keycode in (WXK_RIGHT, WXK_DOWN):
+        if keycode in (wx.WXK_RIGHT, wx.WXK_DOWN):
             if( ( not self._isTemplateChar(pos) and pos+1 > entry_end)
                 or ( self._isTemplateChar(pos) and pos >= entry_end) ):
                 dbg("can't advance", indent=0)
                 return False
             elif self._isTemplateChar(pos):
                 self._AdjustField(pos)
-        elif keycode in (WXK_LEFT,WXK_UP) and sel_start == sel_to and pos > 0 and self._isTemplateChar(pos-1):
+        elif keycode in (wx.WXK_LEFT,wx.WXK_UP) and sel_start == sel_to and pos > 0 and self._isTemplateChar(pos-1):
             dbg('adjusting field')
             self._AdjustField(pos)
 
         # treat as shifted up/down arrows as tab/reverse tab:
-        if event.ShiftDown() and keycode in (WXK_UP, WXK_DOWN):
+        if event.ShiftDown() and keycode in (wx.WXK_UP, wx.WXK_DOWN):
             # remove "shifting" and treat as (forward) tab:
             event.m_shiftDown = False
             keep_processing = self._OnChangeField(event)
 
         elif self._FindField(pos)._selectOnFieldEntry:
-            if( keycode in (WXK_UP, WXK_LEFT)
+            if( keycode in (wx.WXK_UP, wx.WXK_LEFT)
                 and sel_start != 0
                 and self._isTemplateChar(sel_start-1)
                 and sel_start != self._masklength
@@ -2923,7 +2948,7 @@ class wxMaskedEditMixin:
                 event.m_shiftDown = True
                 event.m_ControlDown = True
                 keep_processing = self._OnChangeField(event)
-            elif( keycode in (WXK_DOWN, WXK_RIGHT)
+            elif( keycode in (wx.WXK_DOWN, wx.WXK_RIGHT)
                   and sel_to != self._masklength
                   and self._isTemplateChar(sel_to)):
 
@@ -2936,10 +2961,10 @@ class wxMaskedEditMixin:
                 dbg('using base ctrl event processing')
                 event.Skip()
         else:
-            if( (sel_to == self._fields[0]._extent[0] and keycode == WXK_LEFT)
-                or (sel_to == self._masklength and keycode == WXK_RIGHT) ):
-                if not wxValidator_IsSilent():
-                    wxBell()
+            if( (sel_to == self._fields[0]._extent[0] and keycode == wx.WXK_LEFT)
+                or (sel_to == self._masklength and keycode == wx.WXK_RIGHT) ):
+                if not wx.Validator_IsSilent():
+                    wx.Bell()
             else:
                 # treat arrows as normal, allowing selection
                 # as appropriate:
@@ -2995,11 +3020,11 @@ class wxMaskedEditMixin:
         """ Handles ctrl-a keypress in control. Should return False to skip other processing. """
         end = self._goEnd(getPosOnly=True)
         if not event or event.ShiftDown():
-            wxCallAfter(self._SetInsertionPoint, 0)
-            wxCallAfter(self._SetSelection, 0, self._masklength)
+            wx.CallAfter(self._SetInsertionPoint, 0)
+            wx.CallAfter(self._SetSelection, 0, self._masklength)
         else:
-            wxCallAfter(self._SetInsertionPoint, 0)
-            wxCallAfter(self._SetSelection, 0, end)
+            wx.CallAfter(self._SetInsertionPoint, 0)
+            wx.CallAfter(self._SetSelection, 0, end)
         return False
 
 
@@ -3009,7 +3034,7 @@ class wxMaskedEditMixin:
         sel_start, sel_to = self._GetSelection()                   ## check for a range of selected text
 
         if event is None:   # called as action routine from Cut() operation.
-            key = WXK_DELETE
+            key = wx.WXK_DELETE
         else:
             key = event.GetKeyCode()
 
@@ -3019,15 +3044,15 @@ class wxMaskedEditMixin:
         oldstart = sel_start
 
         # If trying to erase beyond "legal" bounds, disallow operation:
-        if( (sel_to == 0 and key == WXK_BACK)
-            or (self._signOk and sel_to == 1 and value[0] == ' ' and key == WXK_BACK)
-            or (sel_to == self._masklength and sel_start == sel_to and key == WXK_DELETE and not field._insertRight)
+        if( (sel_to == 0 and key == wx.WXK_BACK)
+            or (self._signOk and sel_to == 1 and value[0] == ' ' and key == wx.WXK_BACK)
+            or (sel_to == self._masklength and sel_start == sel_to and key == wx.WXK_DELETE and not field._insertRight)
             or (self._signOk and self._useParens
                 and sel_start == sel_to
                 and sel_to == self._masklength - 1
-                and value[sel_to] == ' ' and key == WXK_DELETE and not field._insertRight) ):
-            if not wxValidator_IsSilent():
-                wxBell()
+                and value[sel_to] == ' ' and key == wx.WXK_DELETE and not field._insertRight) ):
+            if not wx.Validator_IsSilent():
+                wx.Bell()
             dbg(indent=0)
             return False
 
@@ -3037,15 +3062,15 @@ class wxMaskedEditMixin:
             and sel_start >= start                              # and selection starts in field
             and ((sel_to == sel_start                           # and no selection
                   and sel_to == end                             # and cursor at right edge
-                  and key in (WXK_BACK, WXK_DELETE))            # and either delete or backspace key
+                  and key in (wx.WXK_BACK, wx.WXK_DELETE))            # and either delete or backspace key
                  or                                             # or
-                 (key == WXK_BACK                               # backspacing
+                 (key == wx.WXK_BACK                               # backspacing
                     and (sel_to == end                          # and selection ends at right edge
                          or sel_to < end and field._allowInsert)) ) ):  # or allow right insert at any point in field
 
             dbg('delete left')
             # if backspace but left of cursor is empty, adjust cursor right before deleting
-            while( key == WXK_BACK
+            while( key == wx.WXK_BACK
                    and sel_start == sel_to
                    and sel_start < end
                    and value[start:sel_start] == self._template[start:sel_start]):
@@ -3098,7 +3123,7 @@ class wxMaskedEditMixin:
                 # selection (if any) falls within current insert-capable field:
                 select_len = sel_to - sel_start
                 # determine where cursor should end up:
-                if key == WXK_BACK:
+                if key == wx.WXK_BACK:
                     if select_len == 0:
                         newpos = sel_start -1
                     else:
@@ -3156,7 +3181,7 @@ class wxMaskedEditMixin:
             else:
                 if sel_start == sel_to:
                     dbg("current sel_start, sel_to:", sel_start, sel_to)
-                    if key == WXK_BACK:
+                    if key == wx.WXK_BACK:
                         sel_start, sel_to = sel_to-1, sel_to-1
                         dbg("new sel_start, sel_to:", sel_start, sel_to)
 
@@ -3209,22 +3234,22 @@ class wxMaskedEditMixin:
         dbg('field._validRequired?', field._validRequired)
         dbg('field.IsValid("%s")?' % newstr[start:end], field.IsValid(newstr[start:end]))
         if field._validRequired and not field.IsValid(newstr[start:end]):
-            if not wxValidator_IsSilent():
-                wxBell()
+            if not wx.Validator_IsSilent():
+                wx.Bell()
             dbg(indent=0)
             return False
 
         # if erasure results in an invalid value, disallow it:
         if self._ctrl_constraints._validRequired and not self.IsValid(newstr):
-            if not wxValidator_IsSilent():
-                wxBell()
+            if not wx.Validator_IsSilent():
+                wx.Bell()
             dbg(indent=0)
             return False
 
         dbg('setting value (later) to', newstr)
-        wxCallAfter(self._SetValue, newstr)
+        wx.CallAfter(self._SetValue, newstr)
         dbg('setting insertion point (later) to', pos)
-        wxCallAfter(self._SetInsertionPoint, pos)
+        wx.CallAfter(self._SetInsertionPoint, pos)
         dbg(indent=0)
         return False
 
@@ -3281,13 +3306,13 @@ class wxMaskedEditMixin:
                 dbg("shift-end; select to end of control")
             else:
                 dbg("shift-ctrl-end; select to end of non-whitespace")
-            wxCallAfter(self._SetInsertionPoint, pos)
-            wxCallAfter(self._SetSelection, pos, end)
+            wx.CallAfter(self._SetInsertionPoint, pos)
+            wx.CallAfter(self._SetSelection, pos, end)
         else:
             if not event.ControlDown():
                 dbg('go to end of control:')
-            wxCallAfter(self._SetInsertionPoint, end)
-            wxCallAfter(self._SetSelection, end, end)
+            wx.CallAfter(self._SetInsertionPoint, end)
+            wx.CallAfter(self._SetSelection, end, end)
 
         dbg(indent=0)
         return False
@@ -3299,7 +3324,7 @@ class wxMaskedEditMixin:
          event.Skip() on it, and have the parent form "do the right thing."
          """
          dbg('wxMaskedEditMixin::OnReturn')
-         event.m_keyCode = WXK_TAB
+         event.m_keyCode = wx.WXK_TAB
          event.Skip()
 
 
@@ -3371,8 +3396,8 @@ class wxMaskedEditMixin:
             dbg("shift-ctrl-home; unselect to beginning of field")
 
         dbg('queuing new sel_start, sel_to:', (start, end))
-        wxCallAfter(self._SetInsertionPoint, start)
-        wxCallAfter(self._SetSelection, start, end)
+        wx.CallAfter(self._SetInsertionPoint, start)
+        wx.CallAfter(self._SetSelection, start, end)
         dbg(indent=0)
         return False
 
@@ -3393,7 +3418,7 @@ class wxMaskedEditMixin:
 
         if self._masklength < 0:   # no fields; process tab normally
             self._AdjustField(pos)
-            if event.GetKeyCode() == WXK_TAB:
+            if event.GetKeyCode() == wx.WXK_TAB:
                 dbg('tab to next ctrl')
                 event.Skip()
             #else: do nothing
@@ -3413,26 +3438,26 @@ class wxMaskedEditMixin:
             field_start = field._extent[0]
             if pos < field_start:
                 dbg('cursor before 1st field; cannot change to a previous field')
-                if not wxValidator_IsSilent():
-                    wxBell()
+                if not wx.Validator_IsSilent():
+                    wx.Bell()
                 return False
 
             if event.ControlDown():
                 dbg('queuing select to beginning of field:', field_start, pos)
-                wxCallAfter(self._SetInsertionPoint, field_start)
-                wxCallAfter(self._SetSelection, field_start, pos)
+                wx.CallAfter(self._SetInsertionPoint, field_start)
+                wx.CallAfter(self._SetSelection, field_start, pos)
                 dbg(indent=0)
                 return False
 
             elif index == 0:
                   # We're already in the 1st field; process shift-tab normally:
                 self._AdjustField(pos)
-                if event.GetKeyCode() == WXK_TAB:
+                if event.GetKeyCode() == wx.WXK_TAB:
                     dbg('tab to previous ctrl')
                     event.Skip()
                 else:
                     dbg('position at beginning')
-                    wxCallAfter(self._SetInsertionPoint, field_start)
+                    wx.CallAfter(self._SetInsertionPoint, field_start)
                 dbg(indent=0)
                 return False
             else:
@@ -3440,12 +3465,12 @@ class wxMaskedEditMixin:
                 begin_prev = self._FindField(field_start-1)._extent[0]
                 self._AdjustField(pos)
                 dbg('repositioning to', begin_prev)
-                wxCallAfter(self._SetInsertionPoint, begin_prev)
+                wx.CallAfter(self._SetInsertionPoint, begin_prev)
                 if self._FindField(begin_prev)._selectOnFieldEntry:
                     edit_start, edit_end = self._FindFieldExtent(begin_prev)
                     dbg('queuing selection to (%d, %d)' % (edit_start, edit_end))
-                    wxCallAfter(self._SetInsertionPoint, edit_start)
-                    wxCallAfter(self._SetSelection, edit_start, edit_end)
+                    wx.CallAfter(self._SetInsertionPoint, edit_start)
+                    wx.CallAfter(self._SetSelection, edit_start, edit_end)
                 dbg(indent=0)
                 return False
 
@@ -3455,30 +3480,30 @@ class wxMaskedEditMixin:
             field_start, field_end = field._extent
             if event.ControlDown():
                 dbg('queuing select to end of field:', pos, field_end)
-                wxCallAfter(self._SetInsertionPoint, pos)
-                wxCallAfter(self._SetSelection, pos, field_end)
+                wx.CallAfter(self._SetInsertionPoint, pos)
+                wx.CallAfter(self._SetSelection, pos, field_end)
                 dbg(indent=0)
                 return False
             else:
                 if pos < field_start:
                     dbg('cursor before 1st field; go to start of field')
-                    wxCallAfter(self._SetInsertionPoint, field_start)
+                    wx.CallAfter(self._SetInsertionPoint, field_start)
                     if field._selectOnFieldEntry:
-                        wxCallAfter(self._SetSelection, field_start, field_end)
+                        wx.CallAfter(self._SetSelection, field_start, field_end)
                     else:
-                        wxCallAfter(self._SetSelection, field_start, field_start)
+                        wx.CallAfter(self._SetSelection, field_start, field_start)
                     return False
                 # else...
                 dbg('end of current field:', field_end)
                 dbg('go to next field')
                 if field_end == self._fields[self._field_indices[-1]]._extent[1]:
                     self._AdjustField(pos)
-                    if event.GetKeyCode() == WXK_TAB:
+                    if event.GetKeyCode() == wx.WXK_TAB:
                         dbg('tab to next ctrl')
                         event.Skip()
                     else:
                         dbg('position at end')
-                        wxCallAfter(self._SetInsertionPoint, field_end)
+                        wx.CallAfter(self._SetInsertionPoint, field_end)
                     dbg(indent=0)
                     return False
                 else:
@@ -3487,7 +3512,7 @@ class wxMaskedEditMixin:
                     if next_pos == field_end:
                         dbg('already in last field')
                         self._AdjustField(pos)
-                        if event.GetKeyCode() == WXK_TAB:
+                        if event.GetKeyCode() == wx.WXK_TAB:
                             dbg('tab to next ctrl')
                             event.Skip()
                         #else: do nothing
@@ -3501,15 +3526,15 @@ class wxMaskedEditMixin:
                         edit_start, edit_end = field._extent
                         if field._selectOnFieldEntry:
                             dbg('move to ', next_pos)
-                            wxCallAfter(self._SetInsertionPoint, next_pos)
+                            wx.CallAfter(self._SetInsertionPoint, next_pos)
                             edit_start, edit_end = self._FindFieldExtent(next_pos)
                             dbg('queuing select', edit_start, edit_end)
-                            wxCallAfter(self._SetSelection, edit_start, edit_end)
+                            wx.CallAfter(self._SetSelection, edit_start, edit_end)
                         else:
                             if field._insertRight:
                                 next_pos = field._extent[1]
                             dbg('move to ', next_pos)
-                            wxCallAfter(self._SetInsertionPoint, next_pos)
+                            wx.CallAfter(self._SetInsertionPoint, next_pos)
                         dbg(indent=0)
                         return False
 
@@ -3528,13 +3553,13 @@ class wxMaskedEditMixin:
                 newstr = self._adjustFloat(clipped_text)
             else:
                 newstr = self._adjustFloat(value)
-            wxCallAfter(self._SetValue, newstr)
+            wx.CallAfter(self._SetValue, newstr)
             fraction = self._fields[1]
             start, end = fraction._extent
-            wxCallAfter(self._SetInsertionPoint, start)
+            wx.CallAfter(self._SetInsertionPoint, start)
             if fraction._selectOnFieldEntry:
                 dbg('queuing selection after decimal point to:', (start, end))
-                wxCallAfter(self._SetSelection, start, end)
+                wx.CallAfter(self._SetSelection, start, end)
             keep_processing = False
 
         if self._isInt:      ## handle integer value, truncate from current position
@@ -3544,11 +3569,11 @@ class wxMaskedEditMixin:
             dbg('value: "%s"' % self._GetValue(), "clipped_text:'%s'" % clipped_text)
             newstr = self._adjustInt(clipped_text)
             dbg('newstr: "%s"' % newstr)
-            wxCallAfter(self._SetValue, newstr)
+            wx.CallAfter(self._SetValue, newstr)
             newpos = len(newstr.rstrip())
             if newstr.find(')') != -1:
                 newpos -= 1     # (don't move past right paren)
-            wxCallAfter(self._SetInsertionPoint, newpos)
+            wx.CallAfter(self._SetInsertionPoint, newpos)
             keep_processing = False
         dbg(indent=0)
 
@@ -3590,13 +3615,13 @@ class wxMaskedEditMixin:
                 dbg('clearing self._isNeg')
                 self._isNeg = False
 
-            wxCallAfter(self._SetValue, text)
-            wxCallAfter(self._applyFormatting)
+            wx.CallAfter(self._SetValue, text)
+            wx.CallAfter(self._applyFormatting)
             dbg('pos:', pos, 'signpos:', self._signpos)
             if pos == self._signpos or integer.IsEmpty(text[start:end]):
-                wxCallAfter(self._SetInsertionPoint, self._signpos+1)
+                wx.CallAfter(self._SetInsertionPoint, self._signpos+1)
             else:
-                wxCallAfter(self._SetInsertionPoint, pos)
+                wx.CallAfter(self._SetInsertionPoint, pos)
 
             keep_processing = False
         else:
@@ -3617,20 +3642,20 @@ class wxMaskedEditMixin:
         groupchar = self._fields[0]._groupChar
         if not self._isCharAllowed(groupchar, pos, checkRegex=True):
             keep_processing = False
-            if not wxValidator_IsSilent():
-                wxBell()
+            if not wx.Validator_IsSilent():
+                wx.Bell()
 
         if keep_processing:
             newstr, newpos = self._insertKey(groupchar, pos, sel_start, sel_to, self._GetValue() )
             dbg("str with '%s' inserted:" % groupchar, '"%s"' % newstr)
             if self._ctrl_constraints._validRequired and not self.IsValid(newstr):
                 keep_processing = False
-                if not wxValidator_IsSilent():
-                        wxBell()
+                if not wx.Validator_IsSilent():
+                        wx.Bell()
 
         if keep_processing:
-            wxCallAfter(self._SetValue, newstr)
-            wxCallAfter(self._SetInsertionPoint, newpos)
+            wx.CallAfter(self._SetValue, newstr)
+            wx.CallAfter(self._SetInsertionPoint, newpos)
         keep_processing = False
         dbg(indent=0)
         return keep_processing
@@ -3685,21 +3710,21 @@ class wxMaskedEditMixin:
             dbg('choices:', field._choices)
             dbg('compareChoices:', field._compareChoices)
             choices, choice_required = field._compareChoices, field._choiceRequired
-            if keycode in (WXK_PRIOR, WXK_UP):
+            if keycode in (wx.WXK_PRIOR, wx.WXK_UP):
                 direction = -1
             else:
                 direction = 1
             match_index, partial_match = self._autoComplete(direction, choices, text, compareNoCase=field._compareNoCase, current_index = field._autoCompleteIndex)
             if( match_index is None
-                and (keycode in self._autoCompleteKeycodes + [WXK_PRIOR, WXK_NEXT]
-                     or (keycode in [WXK_UP, WXK_DOWN] and event.ShiftDown() ) ) ):
+                and (keycode in self._autoCompleteKeycodes + [wx.WXK_PRIOR, wx.WXK_NEXT]
+                     or (keycode in [wx.WXK_UP, wx.WXK_DOWN] and event.ShiftDown() ) ) ):
                 # Select the 1st thing from the list:
                 match_index = 0
 
             if( match_index is not None
-                and ( keycode in self._autoCompleteKeycodes + [WXK_PRIOR, WXK_NEXT]
-                      or (keycode in [WXK_UP, WXK_DOWN] and event.ShiftDown())
-                      or (keycode == WXK_DOWN and partial_match) ) ):
+                and ( keycode in self._autoCompleteKeycodes + [wx.WXK_PRIOR, wx.WXK_NEXT]
+                      or (keycode in [wx.WXK_UP, wx.WXK_DOWN] and event.ShiftDown())
+                      or (keycode == wx.WXK_DOWN and partial_match) ) ):
 
                 # We're allowed to auto-complete:
                 dbg('match found')
@@ -3712,10 +3737,10 @@ class wxMaskedEditMixin:
                 self._CheckValid()  # recolor as appopriate
 
 
-        if keycode in (WXK_UP, WXK_DOWN, WXK_LEFT, WXK_RIGHT):
+        if keycode in (wx.WXK_UP, wx.WXK_DOWN, wx.WXK_LEFT, wx.WXK_RIGHT):
             # treat as left right arrow if unshifted, tab/shift tab if shifted.
             if event.ShiftDown():
-                if keycode in (WXK_DOWN, WXK_RIGHT):
+                if keycode in (wx.WXK_DOWN, wx.WXK_RIGHT):
                     # remove "shifting" and treat as (forward) tab:
                     event.m_shiftDown = False
                 keep_processing = self._OnChangeField(event)
@@ -3982,7 +4007,7 @@ class wxMaskedEditMixin:
 
         dbg('newvalue = "%s"' % newvalue)
         if candidate is None:
-            wxCallAfter(self._SetValue, newvalue)
+            wx.CallAfter(self._SetValue, newvalue)
         dbg(indent=0)
         return newvalue
 
@@ -4022,7 +4047,7 @@ class wxMaskedEditMixin:
             intStr = intStr.ljust( lenInt )
 
         if candidate is None:
-            wxCallAfter(self._SetValue, intStr )
+            wx.CallAfter(self._SetValue, intStr )
         return intStr
 
 
@@ -4065,7 +4090,7 @@ class wxMaskedEditMixin:
             if len(year) == 2:
                 # Fix year adjustment to be less "20th century" :-) and to adjust heuristic as the
                 # years pass...
-                now = wxDateTime_Now()
+                now = wx.DateTime_Now()
                 century = (now.GetYear() /100) * 100        # "this century"
                 twodig_year = now.GetYear() - century       # "this year" (2 digits)
                 # if separation between today's 2-digit year and typed value > 50,
@@ -4789,7 +4814,7 @@ class wxMaskedEditMixin:
         we need to pull the following trick:
         """
         dbg('wxMaskedEditMixin::_OnFocus')
-        wxCallAfter(self._fixSelection)
+        wx.CallAfter(self._fixSelection)
         event.Skip()
         self.Refresh()
 
@@ -4967,7 +4992,7 @@ class wxMaskedEditMixin:
                 month -= 1
                 try:
                     dbg("trying to create date from values day=%d, month=%d, year=%d" % (day,month,year))
-                    dateHandler = wxDateTimeFromDMY(day,month,year)
+                    dateHandler = wx.DateTimeFromDMY(day,month,year)
                     dbg("succeeded")
                     dateOk = True
                 except:
@@ -5006,7 +5031,7 @@ class wxMaskedEditMixin:
         dbg('value = "%s"' % value)
         valid = True   # assume True until proven otherwise
 
-        dateHandler = wxDateTime_Today()
+        dateHandler = wx.DateTime_Today()
         try:
             checkTime    = dateHandler.ParseTime(value)
             dbg('checkTime:', checkTime, 'len(value)', len(value))
@@ -5375,8 +5400,8 @@ class wxMaskedEditMixin:
 
             if not valid_paste:
                 dbg('paste text not legal for the selection or portion of the control following the cursor;')
-                if not wxValidator_IsSilent():
-                    wxBell()
+                if not wx.Validator_IsSilent():
+                    wx.Bell()
                 dbg(indent=0)
                 return False
             # else...
@@ -5401,10 +5426,10 @@ class wxMaskedEditMixin:
                 if new_text == '':
                     self.ClearValue()
                 else:
-                    wxCallAfter(self._SetValue, new_text)
+                    wx.CallAfter(self._SetValue, new_text)
                     if new_pos is None:
                         new_pos = sel_start + len(replacement_text)
-                    wxCallAfter(self._SetInsertionPoint, new_pos)
+                    wx.CallAfter(self._SetInsertionPoint, new_pos)
             else:
                 dbg(indent=0)
                 return new_text
@@ -5698,7 +5723,7 @@ class wxMaskedEditMixin:
 
 ## ---------- ---------- ---------- ---------- ---------- ---------- ----------
 
-class wxMaskedTextCtrl( wxTextCtrl, wxMaskedEditMixin ):
+class wxMaskedTextCtrl( wx.TextCtrl, wxMaskedEditMixin ):
     """
     This is the primary derivation from wxMaskedEditMixin.  It provides
     a general masked text control that can be configured with different
@@ -5706,15 +5731,15 @@ class wxMaskedTextCtrl( wxTextCtrl, wxMaskedEditMixin ):
     """
 
     def __init__( self, parent, id=-1, value = '',
-                  pos = wxDefaultPosition,
-                  size = wxDefaultSize,
-                  style = wxTE_PROCESS_TAB,
-                  validator=wxDefaultValidator,     ## placeholder provided for data-transfer logic
+                  pos = wx.DefaultPosition,
+                  size = wx.DefaultSize,
+                  style = wx.TE_PROCESS_TAB,
+                  validator=wx.DefaultValidator,     ## placeholder provided for data-transfer logic
                   name = 'maskedTextCtrl',
                   setupEventHandling = True,        ## setup event handling by default
                   **kwargs):
 
-        wxTextCtrl.__init__(self, parent, id, value='',
+        wx.TextCtrl.__init__(self, parent, id, value='',
                             pos=pos, size = size,
                             style=style, validator=validator,
                             name=name)
@@ -5725,13 +5750,13 @@ class wxMaskedTextCtrl( wxTextCtrl, wxMaskedEditMixin ):
 
         if setupEventHandling:
             ## Setup event handlers
-            EVT_SET_FOCUS( self, self._OnFocus )        ## defeat automatic full selection
-            EVT_KILL_FOCUS( self, self._OnKillFocus )   ## run internal validator
-            EVT_LEFT_DCLICK(self, self._OnDoubleClick)  ## select field under cursor on dclick
-            EVT_RIGHT_UP(self, self._OnContextMenu )    ## bring up an appropriate context menu
-            EVT_KEY_DOWN( self, self._OnKeyDown )       ## capture control events not normally seen, eg ctrl-tab.
-            EVT_CHAR( self, self._OnChar )              ## handle each keypress
-            EVT_TEXT( self, self.GetId(), self._OnTextChange )  ## color control appropriately & keep
+            self.Bind(wx.EVT_SET_FOCUS, self._OnFocus )         ## defeat automatic full selection
+            self.Bind(wx.EVT_KILL_FOCUS, self._OnKillFocus )    ## run internal validator
+            self.Bind(wx.EVT_LEFT_DCLICK, self._OnDoubleClick)  ## select field under cursor on dclick
+            self.Bind(wx.EVT_RIGHT_UP, self._OnContextMenu )    ## bring up an appropriate context menu
+            self.Bind(wx.EVT_KEY_DOWN, self._OnKeyDown )        ## capture control events not normally seen, eg ctrl-tab.
+            self.Bind(wx.EVT_CHAR, self._OnChar )               ## handle each keypress
+            self.Bind(wx.EVT_TEXT, self._OnTextChange )         ## color control appropriately & keep
                                                                 ## track of previous value for undo
 
 
@@ -5759,7 +5784,7 @@ class wxMaskedTextCtrl( wxTextCtrl, wxMaskedEditMixin ):
         This is just for debugging...
         """
         dbg("wxMaskedTextCtrl::SetSelection(%(sel_start)d, %(sel_to)d)" % locals())
-        wxTextCtrl.SetSelection(self, sel_start, sel_to)
+        wx.TextCtrl.SetSelection(self, sel_start, sel_to)
 
 
     def _GetInsertionPoint(self):
@@ -5774,7 +5799,7 @@ class wxMaskedTextCtrl( wxTextCtrl, wxMaskedEditMixin ):
         This is just for debugging...
         """
         dbg("wxMaskedTextCtrl::SetInsertionPoint(%(pos)d)" % locals())
-        wxTextCtrl.SetInsertionPoint(self, pos)
+        wx.TextCtrl.SetInsertionPoint(self, pos)
 
 
     def _GetValue(self):
@@ -5793,7 +5818,7 @@ class wxMaskedTextCtrl( wxTextCtrl, wxMaskedEditMixin ):
         # Record current selection and insertion point, for undo
         self._prevSelection = self._GetSelection()
         self._prevInsertionPoint = self._GetInsertionPoint()
-        wxTextCtrl.SetValue(self, value)
+        wx.TextCtrl.SetValue(self, value)
         dbg(indent=0)
 
     def SetValue(self, value):
@@ -5806,7 +5831,7 @@ class wxMaskedTextCtrl( wxTextCtrl, wxMaskedEditMixin ):
         dbg('wxMaskedTextCtrl::SetValue = "%s"' % value, indent=1)
 
         if not self._mask:
-            wxTextCtrl.SetValue(self, value)    # revert to base control behavior
+            wx.TextCtrl.SetValue(self, value)    # revert to base control behavior
             return
 
         # empty previous contents, replacing entire value:
@@ -5855,8 +5880,8 @@ class wxMaskedTextCtrl( wxTextCtrl, wxMaskedEditMixin ):
 
         self._SetValue(value)
 ##        dbg('queuing insertion after .SetValue', self._masklength)
-        wxCallAfter(self._SetInsertionPoint, self._masklength)
-        wxCallAfter(self._SetSelection, self._masklength, self._masklength)
+        wx.CallAfter(self._SetInsertionPoint, self._masklength)
+        wx.CallAfter(self._SetSelection, self._masklength, self._masklength)
         dbg(indent=0)
 
 
@@ -5866,7 +5891,7 @@ class wxMaskedTextCtrl( wxTextCtrl, wxMaskedEditMixin ):
         if self._mask:
             self.ClearValue()
         else:
-            wxTextCtrl.Clear(self)    # else revert to base control behavior
+            wx.TextCtrl.Clear(self)    # else revert to base control behavior
 
 
     def _Refresh(self):
@@ -5875,7 +5900,7 @@ class wxMaskedTextCtrl( wxTextCtrl, wxMaskedEditMixin ):
         REQUIRED by any class derived from wxMaskedEditMixin.
         """
         dbg('wxMaskedTextCtrl::_Refresh', indent=1)
-        wxTextCtrl.Refresh(self)
+        wx.TextCtrl.Refresh(self)
         dbg(indent=0)
 
 
@@ -5896,7 +5921,7 @@ class wxMaskedTextCtrl( wxTextCtrl, wxMaskedEditMixin ):
         Allow mixin to determine if the base control is editable with this function.
         REQUIRED by any class derived from wxMaskedEditMixin.
         """
-        return wxTextCtrl.IsEditable(self)
+        return wx.TextCtrl.IsEditable(self)
 
 
     def Cut(self):
@@ -5909,7 +5934,7 @@ class wxMaskedTextCtrl( wxTextCtrl, wxMaskedEditMixin ):
         if self._mask:
             self._Cut()             # call the mixin's Cut method
         else:
-            wxTextCtrl.Cut(self)    # else revert to base control behavior
+            wx.TextCtrl.Cut(self)    # else revert to base control behavior
 
 
     def Paste(self):
@@ -5922,7 +5947,7 @@ class wxMaskedTextCtrl( wxTextCtrl, wxMaskedEditMixin ):
         if self._mask:
             self._Paste()                   # call the mixin's Paste method
         else:
-            wxTextCtrl.Paste(self, value)   # else revert to base control behavior
+            wx.TextCtrl.Paste(self, value)   # else revert to base control behavior
 
 
     def Undo(self):
@@ -5933,7 +5958,7 @@ class wxMaskedTextCtrl( wxTextCtrl, wxMaskedEditMixin ):
         if self._mask:
             self._Undo()
         else:
-            wxTextCtrl.Undo(self)   # else revert to base control behavior
+            wx.TextCtrl.Undo(self)   # else revert to base control behavior
 
 
     def IsModified(self):
@@ -5944,7 +5969,7 @@ class wxMaskedTextCtrl( wxTextCtrl, wxMaskedEditMixin ):
         keystroke to see if the value changes, and if so, it's been
         modified.
         """
-        return wxTextCtrl.IsModified(self) or self.modified
+        return wx.TextCtrl.IsModified(self) or self.modified
 
 
     def _CalcSize(self, size=None):
@@ -5957,9 +5982,9 @@ class wxMaskedTextCtrl( wxTextCtrl, wxMaskedEditMixin ):
 ## ---------- ---------- ---------- ---------- ---------- ---------- ----------
 ## Because calling SetSelection programmatically does not fire EVT_COMBOBOX
 ## events, we have to do it ourselves when we auto-complete.
-class wxMaskedComboBoxSelectEvent(wxPyCommandEvent):
+class wxMaskedComboBoxSelectEvent(wx.PyCommandEvent):
     def __init__(self, id, selection = 0, object=None):
-        wxPyCommandEvent.__init__(self, wxEVT_COMMAND_COMBOBOX_SELECTED, id)
+        wx.PyCommandEvent.__init__(self, wx.EVT_COMMAND_COMBOBOX_SELECTED, id)
 
         self.__selection = selection
         self.SetEventObject(object)
@@ -5970,17 +5995,17 @@ class wxMaskedComboBoxSelectEvent(wxPyCommandEvent):
         return self.__selection
 
 
-class wxMaskedComboBox( wxComboBox, wxMaskedEditMixin ):
+class wxMaskedComboBox( wx.ComboBox, wxMaskedEditMixin ):
     """
     This masked edit control adds the ability to use a masked input
     on a combobox, and do auto-complete of such values.
     """
     def __init__( self, parent, id=-1, value = '',
-                  pos = wxDefaultPosition,
-                  size = wxDefaultSize,
+                  pos = wx.DefaultPosition,
+                  size = wx.DefaultSize,
                   choices = [],
-                  style = wxCB_DROPDOWN,
-                  validator = wxDefaultValidator,
+                  style = wx.CB_DROPDOWN,
+                  validator = wx.DefaultValidator,
                   name = "maskedComboBox",
                   setupEventHandling = True,        ## setup event handling by default):
                   **kwargs):
@@ -5989,7 +6014,7 @@ class wxMaskedComboBox( wxComboBox, wxMaskedEditMixin ):
         # This is necessary, because wxComboBox currently provides no
         # method for determining later if this was specified in the
         # constructor for the control...
-        self.__readonly = style & wxCB_READONLY == wxCB_READONLY
+        self.__readonly = style & wx.CB_READONLY == wx.CB_READONLY
 
         kwargs['choices'] = choices                 ## set up maskededit to work with choice list too
 
@@ -6006,9 +6031,9 @@ class wxMaskedComboBox( wxComboBox, wxMaskedEditMixin ):
         else:
             choices = [choice.ljust(self._masklength) for choice in choices]
 
-        wxComboBox.__init__(self, parent, id, value='',
+        wx.ComboBox.__init__(self, parent, id, value='',
                             pos=pos, size = size,
-                            choices=choices, style=style|wxWANTS_CHARS,
+                            choices=choices, style=style|wx.WANTS_CHARS,
                             validator=validator,
                             name=name)
 
@@ -6033,20 +6058,20 @@ class wxMaskedComboBox( wxComboBox, wxMaskedEditMixin ):
             self._SetInitialValue(value)
 
 
-        self._SetKeycodeHandler(WXK_UP, self.OnSelectChoice)
-        self._SetKeycodeHandler(WXK_DOWN, self.OnSelectChoice)
+        self._SetKeycodeHandler(wx.WXK_UP, self.OnSelectChoice)
+        self._SetKeycodeHandler(wx.WXK_DOWN, self.OnSelectChoice)
 
         if setupEventHandling:
             ## Setup event handlers
-            EVT_SET_FOCUS( self, self._OnFocus )        ## defeat automatic full selection
-            EVT_KILL_FOCUS( self, self._OnKillFocus )   ## run internal validator
-            EVT_LEFT_DCLICK(self, self._OnDoubleClick)  ## select field under cursor on dclick
-            EVT_RIGHT_UP(self, self._OnContextMenu )    ## bring up an appropriate context menu
-            EVT_CHAR( self, self._OnChar )              ## handle each keypress
-            EVT_KEY_DOWN( self, self.OnKeyDown )        ## for special processing of up/down keys
-            EVT_KEY_DOWN( self, self._OnKeyDown )       ## for processing the rest of the control keys
-                                                        ## (next in evt chain)
-            EVT_TEXT( self, self.GetId(), self._OnTextChange )  ## color control appropriately & keep
+            self.Bind(wx.EVT_SET_FOCUS, self._OnFocus )         ## defeat automatic full selection
+            self.Bind(wx.EVT_KILL_FOCUS, self._OnKillFocus )    ## run internal validator
+            self.Bind(wx.EVT_LEFT_DCLICK, self._OnDoubleClick)  ## select field under cursor on dclick
+            self.Bind(wx.EVT_RIGHT_UP, self._OnContextMenu )    ## bring up an appropriate context menu
+            self.Bind(wx.EVT_CHAR, self._OnChar )               ## handle each keypress
+            self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown )         ## for special processing of up/down keys
+            self.Bind(wx.EVT_KEY_DOWN, self._OnKeyDown )        ## for processing the rest of the control keys
+                                                                ## (next in evt chain)
+            self.Bind(wx.EVT_TEXT, self._OnTextChange )         ## color control appropriately & keep
                                                                 ## track of previous value for undo
 
 
@@ -6110,7 +6135,7 @@ class wxMaskedComboBox( wxComboBox, wxMaskedEditMixin ):
         # Record current selection and insertion point, for undo
         self._prevSelection = self._GetSelection()
         self._prevInsertionPoint = self._GetInsertionPoint()
-        wxComboBox.SetValue(self, value)
+        wx.ComboBox.SetValue(self, value)
         # text change events don't always fire, so we check validity here
         # to make certain formatting is applied:
         self._CheckValid()
@@ -6123,7 +6148,7 @@ class wxMaskedComboBox( wxComboBox, wxMaskedEditMixin ):
         from the base wx control.
         """
         if not self._mask:
-            wxComboBox.SetValue(value)   # revert to base control behavior
+            wx.ComboBox.SetValue(value)   # revert to base control behavior
             return
         # else...
         # empty previous contents, replacing entire value:
@@ -6171,8 +6196,8 @@ class wxMaskedComboBox( wxComboBox, wxMaskedEditMixin ):
 
         self._SetValue(value)
 ##        dbg('queuing insertion after .SetValue', self._masklength)
-        wxCallAfter(self._SetInsertionPoint, self._masklength)
-        wxCallAfter(self._SetSelection, self._masklength, self._masklength)
+        wx.CallAfter(self._SetInsertionPoint, self._masklength)
+        wx.CallAfter(self._SetSelection, self._masklength, self._masklength)
 
 
     def _Refresh(self):
@@ -6180,7 +6205,7 @@ class wxMaskedComboBox( wxComboBox, wxMaskedEditMixin ):
         Allow mixin to refresh the base control with this function.
         REQUIRED by any class derived from wxMaskedEditMixin.
         """
-        wxComboBox.Refresh(self)
+        wx.ComboBox.Refresh(self)
 
     def Refresh(self):
         """
@@ -6210,7 +6235,7 @@ class wxMaskedComboBox( wxComboBox, wxMaskedEditMixin ):
         if self._mask:
             self._Cut()             # call the mixin's Cut method
         else:
-            wxComboBox.Cut(self)    # else revert to base control behavior
+            wx.ComboBox.Cut(self)    # else revert to base control behavior
 
 
     def Paste(self):
@@ -6223,7 +6248,7 @@ class wxMaskedComboBox( wxComboBox, wxMaskedEditMixin ):
         if self._mask:
             self._Paste()           # call the mixin's Paste method
         else:
-            wxComboBox.Paste(self)  # else revert to base control behavior
+            wx.ComboBox.Paste(self)  # else revert to base control behavior
 
 
     def Undo(self):
@@ -6234,7 +6259,7 @@ class wxMaskedComboBox( wxComboBox, wxMaskedEditMixin ):
         if self._mask:
             self._Undo()
         else:
-            wxComboBox.Undo()       # else revert to base control behavior
+            wx.ComboBox.Undo()       # else revert to base control behavior
 
 
     def Append( self, choice, clientData=None ):
@@ -6279,7 +6304,7 @@ class wxMaskedComboBox( wxComboBox, wxMaskedEditMixin ):
                 (self._ctrl_constraints.IsEmpty(choice) and self._ctrl_constraints._validRequired) ) ):
                 raise ValueError('"%s" is not a valid value for the control "%s" as specified.' % (choice, self.name))
 
-        wxComboBox.Append(self, choice, clientData)
+        wx.ComboBox.Append(self, choice, clientData)
 
 
 
@@ -6293,7 +6318,7 @@ class wxMaskedComboBox( wxComboBox, wxMaskedEditMixin ):
             self._ctrl_constraints._autoCompleteIndex = -1
             if self._ctrl_constraints._choices:
                 self.SetCtrlParameters(choices=[])
-        wxComboBox.Clear(self)
+        wx.ComboBox.Clear(self)
 
 
     def SetCtrlParameters( self, **kwargs ):
@@ -6304,10 +6329,10 @@ class wxMaskedComboBox( wxComboBox, wxMaskedEditMixin ):
         wxMaskedEditMixin.SetCtrlParameters(self, **kwargs )
         if( self.controlInitialized
             and (kwargs.has_key('choices') or self._choices != self._ctrl_constraints._choices) ):
-            wxComboBox.Clear(self)
+            wx.ComboBox.Clear(self)
             self._choices = self._ctrl_constraints._choices
             for choice in self._choices:
-                wxComboBox.Append( self, choice )
+                wx.ComboBox.Append( self, choice )
 
 
     def GetMark(self):
@@ -6330,16 +6355,16 @@ class wxMaskedComboBox( wxComboBox, wxMaskedEditMixin ):
 
         self._ignoreChange = True               # tell _OnTextChange() to ignore next event (if any)
 
-        wxComboBox.Cut(self)
+        wx.ComboBox.Cut(self)
         newvalue = self.GetValue()
         dbg("value after Cut operation:", newvalue)
 
         if newvalue != value:                   # something was selected; calculate extent
             dbg("something selected")
             sel_to = sel_start + len(value) - len(newvalue)
-            wxComboBox.SetValue(self, value)    # restore original value and selection (still ignoring change)
-            wxComboBox.SetInsertionPoint(self, sel_start)
-            wxComboBox.SetMark(self, sel_start, sel_to)
+            wx.ComboBox.SetValue(self, value)    # restore original value and selection (still ignoring change)
+            wx.ComboBox.SetInsertionPoint(self, sel_start)
+            wx.ComboBox.SetMark(self, sel_start, sel_to)
 
         self._ignoreChange = False              # tell _OnTextChange() to pay attn again
 
@@ -6357,7 +6382,7 @@ class wxMaskedComboBox( wxComboBox, wxMaskedEditMixin ):
             self._prevValue = self._curValue
             self._curValue = self._choices[index]
             self._ctrl_constraints._autoCompleteIndex = index
-        wxComboBox.SetSelection(self, index)
+        wx.ComboBox.SetSelection(self, index)
 
 
     def OnKeyDown(self, event):
@@ -6391,7 +6416,7 @@ class wxMaskedComboBox( wxComboBox, wxMaskedEditMixin ):
         if self._ctrl_constraints._compareNoCase:
             value = value.lower()
 
-        if event.GetKeyCode() == WXK_UP:
+        if event.GetKeyCode() == wx.WXK_UP:
             direction = -1
         else:
             direction = 1
@@ -6454,9 +6479,9 @@ class wxMaskedComboBox( wxComboBox, wxMaskedEditMixin ):
         dbg('wxMaskedComboBox::OnReturn', indent=1)
         dbg('current value: "%s"' % self.GetValue(), 'current index:', self.GetSelection())
         if self.GetSelection() == -1 and self.GetValue().lower().strip() in self._ctrl_constraints._compareChoices:
-            wxCallAfter(self.SetSelection, self._ctrl_constraints._autoCompleteIndex)
+            wx.CallAfter(self.SetSelection, self._ctrl_constraints._autoCompleteIndex)
 
-        event.m_keyCode = WXK_TAB
+        event.m_keyCode = wx.WXK_TAB
         event.Skip()
         dbg(indent=0)
 
@@ -6471,10 +6496,10 @@ class wxIpAddrCtrl( wxMaskedTextCtrl ):
     character, so that typing an IP address can be done naturally.
     """
     def __init__( self, parent, id=-1, value = '',
-                  pos = wxDefaultPosition,
-                  size = wxDefaultSize,
-                  style = wxTE_PROCESS_TAB,
-                  validator = wxDefaultValidator,
+                  pos = wx.DefaultPosition,
+                  size = wx.DefaultSize,
+                  style = wx.TE_PROCESS_TAB,
+                  validator = wx.DefaultValidator,
                   name = 'wxIpAddrCtrl',
                   setupEventHandling = True,        ## setup event handling by default
                   **kwargs):
@@ -6695,31 +6720,31 @@ def getDay(dateStr,dateFmt):
     return parts[2]
 
 ## ---------- ---------- ---------- ---------- ---------- ---------- ----------
-class test(wxPySimpleApp):
+class test(wx.PySimpleApp):
         def OnInit(self):
-            from wxPython.lib.rcsizer import RowColSizer
-            self.frame = wxFrame( NULL, -1, "wxMaskedEditMixin 0.0.7 Demo Page #1", size = (700,600))
-            self.panel = wxPanel( self.frame, -1)
+            from wx.lib.rcsizer import RowColSizer
+            self.frame = wx.Frame( None, -1, "wxMaskedEditMixin 0.0.7 Demo Page #1", size = (700,600))
+            self.panel = wx.Panel( self.frame, -1)
             self.sizer = RowColSizer()
             self.labels = []
             self.editList  = []
             rowcount    = 4
 
-            id, id1 = wxNewId(), wxNewId()
-            self.command1  = wxButton( self.panel, id, "&Close" )
-            self.command2  = wxButton( self.panel, id1, "&AutoFormats" )
-            self.sizer.Add(self.command1, row=0, col=0, flag=wxALL, border = 5)
-            self.sizer.Add(self.command2, row=0, col=1, colspan=2, flag=wxALL, border = 5)
-            EVT_BUTTON( self.panel, id, self.onClick )
+            id, id1 = wx.NewId(), wx.NewId()
+            self.command1  = wx.Button( self.panel, id, "&Close" )
+            self.command2  = wx.Button( self.panel, id1, "&AutoFormats" )
+            self.sizer.Add(self.command1, row=0, col=0, flag=wx.ALL, border = 5)
+            self.sizer.Add(self.command2, row=0, col=1, colspan=2, flag=wx.ALL, border = 5)
+            self.panel.Bind(wx.EVT_BUTTON, self.onClick, self.command1 )
 ##            self.panel.SetDefaultItem(self.command1 )
-            EVT_BUTTON( self.panel, id1, self.onClickPage )
+            self.panel.Bind(wx.EVT_BUTTON, self.onClickPage, self.command2)
 
-            self.check1 = wxCheckBox( self.panel, -1, "Disallow Empty" )
-            self.check2 = wxCheckBox( self.panel, -1, "Highlight Empty" )
-            self.sizer.Add( self.check1, row=0,col=3, flag=wxALL,border=5 )
-            self.sizer.Add( self.check2, row=0,col=4, flag=wxALL,border=5 )
-            EVT_CHECKBOX( self.panel, self.check1.GetId(), self._onCheck1 )
-            EVT_CHECKBOX( self.panel, self.check2.GetId(), self._onCheck2 )
+            self.check1 = wx.CheckBox( self.panel, -1, "Disallow Empty" )
+            self.check2 = wx.CheckBox( self.panel, -1, "Highlight Empty" )
+            self.sizer.Add( self.check1, row=0,col=3, flag=wx.ALL,border=5 )
+            self.sizer.Add( self.check2, row=0,col=4, flag=wx.ALL,border=5 )
+            self.panel.Bind(wx.EVT_CHECKBOX, self._onCheck1, self.check1 )
+            self.panel.Bind(wx.EVT_CHECKBOX, self._onCheck2, self.check2 )
 
 
             label = """Press ctrl-s in any field to output the value and plain value. Press ctrl-x to clear and re-set any field.
@@ -6727,28 +6752,28 @@ Note that all controls have been auto-sized by including F in the format code.
 Try entering nonsensical or partial values in validated fields to see what happens (use ctrl-s to test the valid status)."""
             label2 = "\nNote that the State and Last Name fields are list-limited (Name:Smith,Jones,Williams)."
 
-            self.label1 = wxStaticText( self.panel, -1, label)
-            self.label2 = wxStaticText( self.panel, -1, "Description")
-            self.label3 = wxStaticText( self.panel, -1, "Mask Value")
-            self.label4 = wxStaticText( self.panel, -1, "Format")
-            self.label5 = wxStaticText( self.panel, -1, "Reg Expr Val. (opt)")
-            self.label6 = wxStaticText( self.panel, -1, "wxMaskedEdit Ctrl")
-            self.label7 = wxStaticText( self.panel, -1, label2)
+            self.label1 = wx.StaticText( self.panel, -1, label)
+            self.label2 = wx.StaticText( self.panel, -1, "Description")
+            self.label3 = wx.StaticText( self.panel, -1, "Mask Value")
+            self.label4 = wx.StaticText( self.panel, -1, "Format")
+            self.label5 = wx.StaticText( self.panel, -1, "Reg Expr Val. (opt)")
+            self.label6 = wx.StaticText( self.panel, -1, "wxMaskedEdit Ctrl")
+            self.label7 = wx.StaticText( self.panel, -1, label2)
             self.label7.SetForegroundColour("Blue")
             self.label1.SetForegroundColour("Blue")
-            self.label2.SetFont(wxFont(9,wxSWISS,wxNORMAL,wxBOLD))
-            self.label3.SetFont(wxFont(9,wxSWISS,wxNORMAL,wxBOLD))
-            self.label4.SetFont(wxFont(9,wxSWISS,wxNORMAL,wxBOLD))
-            self.label5.SetFont(wxFont(9,wxSWISS,wxNORMAL,wxBOLD))
-            self.label6.SetFont(wxFont(9,wxSWISS,wxNORMAL,wxBOLD))
+            self.label2.SetFont(wx.Font(9,wx.SWISS,wx.NORMAL,wx.BOLD))
+            self.label3.SetFont(wx.Font(9,wx.SWISS,wx.NORMAL,wx.BOLD))
+            self.label4.SetFont(wx.Font(9,wx.SWISS,wx.NORMAL,wx.BOLD))
+            self.label5.SetFont(wx.Font(9,wx.SWISS,wx.NORMAL,wx.BOLD))
+            self.label6.SetFont(wx.Font(9,wx.SWISS,wx.NORMAL,wx.BOLD))
 
-            self.sizer.Add( self.label1, row=1,col=0,colspan=7, flag=wxALL,border=5)
-            self.sizer.Add( self.label7, row=2,col=0,colspan=7, flag=wxALL,border=5)
-            self.sizer.Add( self.label2, row=3,col=0, flag=wxALL,border=5)
-            self.sizer.Add( self.label3, row=3,col=1, flag=wxALL,border=5)
-            self.sizer.Add( self.label4, row=3,col=2, flag=wxALL,border=5)
-            self.sizer.Add( self.label5, row=3,col=3, flag=wxALL,border=5)
-            self.sizer.Add( self.label6, row=3,col=4, flag=wxALL,border=5)
+            self.sizer.Add( self.label1, row=1,col=0,colspan=7, flag=wx.ALL,border=5)
+            self.sizer.Add( self.label7, row=2,col=0,colspan=7, flag=wx.ALL,border=5)
+            self.sizer.Add( self.label2, row=3,col=0, flag=wx.ALL,border=5)
+            self.sizer.Add( self.label3, row=3,col=1, flag=wx.ALL,border=5)
+            self.sizer.Add( self.label4, row=3,col=2, flag=wx.ALL,border=5)
+            self.sizer.Add( self.label5, row=3,col=3, flag=wx.ALL,border=5)
+            self.sizer.Add( self.label6, row=3,col=4, flag=wx.ALL,border=5)
 
             # The following list is of the controls for the demo. Feel free to play around with
             # the options!
@@ -6772,10 +6797,10 @@ Try entering nonsensical or partial values in validated fields to see what happe
            ]
 
             for control in controls:
-                self.sizer.Add( wxStaticText( self.panel, -1, control[0]),row=rowcount, col=0,border=5,flag=wxALL)
-                self.sizer.Add( wxStaticText( self.panel, -1, control[1]),row=rowcount, col=1,border=5, flag=wxALL)
-                self.sizer.Add( wxStaticText( self.panel, -1, control[3]),row=rowcount, col=2,border=5, flag=wxALL)
-                self.sizer.Add( wxStaticText( self.panel, -1, control[4][:20]),row=rowcount, col=3,border=5, flag=wxALL)
+                self.sizer.Add( wx.StaticText( self.panel, -1, control[0]),row=rowcount, col=0,border=5,flag=wx.ALL)
+                self.sizer.Add( wx.StaticText( self.panel, -1, control[1]),row=rowcount, col=1,border=5, flag=wx.ALL)
+                self.sizer.Add( wx.StaticText( self.panel, -1, control[3]),row=rowcount, col=2,border=5, flag=wx.ALL)
+                self.sizer.Add( wx.StaticText( self.panel, -1, control[4][:20]),row=rowcount, col=3,border=5, flag=wx.ALL)
 
                 if control in controls[:]:#-2]:
                     newControl  = wxMaskedTextCtrl( self.panel, -1, "",
@@ -6802,7 +6827,7 @@ Try entering nonsensical or partial values in validated fields to see what happe
                                                     demo         = True)
                 self.editList.append( newControl )
 
-                self.sizer.Add( newControl, row=rowcount,col=4,flag=wxALL,border=5)
+                self.sizer.Add( newControl, row=rowcount,col=4,flag=wx.ALL,border=5)
                 rowcount += 1
 
             self.sizer.AddGrowableCol(4)
@@ -6824,7 +6849,7 @@ Try entering nonsensical or partial values in validated fields to see what happe
 
         def _onCheck1(self,event):
             """ Set required value on/off """
-            value = event.Checked()
+            value = event.IsChecked()
             if value:
                 for control in self.editList:
                     control.SetCtrlParameters(emptyInvalid=True)
@@ -6837,7 +6862,7 @@ Try entering nonsensical or partial values in validated fields to see what happe
 
         def _onCheck2(self,event):
             """ Highlight empty values"""
-            value = event.Checked()
+            value = event.IsChecked()
             if value:
                 for control in self.editList:
                     control.SetCtrlParameters( emptyBackgroundColour = 'Aquamarine')
@@ -6851,11 +6876,11 @@ Try entering nonsensical or partial values in validated fields to see what happe
 
 ## ---------- ---------- ---------- ---------- ---------- ---------- ----------
 
-class test2(wxFrame):
+class test2(wx.Frame):
         def __init__(self, parent, id, caption):
-            wxFrame.__init__( self, parent, id, "wxMaskedEdit control 0.0.7 Demo Page #2 -- AutoFormats", size = (550,600))
-            from wxPython.lib.rcsizer import RowColSizer
-            self.panel = wxPanel( self, -1)
+            wx.Frame.__init__( self, parent, id, "wxMaskedEdit control 0.0.7 Demo Page #2 -- AutoFormats", size = (550,600))
+            from wx.lib.rcsizer import RowColSizer
+            self.panel = wx.Panel( self, -1)
             self.sizer = RowColSizer()
             self.labels = []
             self.texts  = []
@@ -6866,26 +6891,26 @@ All these controls have been created by passing a single parameter, the AutoForm
 The class contains an internal dictionary of types and formats (autoformats).
 To see a great example of validations in action, try entering a bad email address, then tab out."""
 
-            self.label1 = wxStaticText( self.panel, -1, label)
-            self.label2 = wxStaticText( self.panel, -1, "Description")
-            self.label3 = wxStaticText( self.panel, -1, "AutoFormat Code")
-            self.label4 = wxStaticText( self.panel, -1, "wxMaskedEdit Control")
+            self.label1 = wx.StaticText( self.panel, -1, label)
+            self.label2 = wx.StaticText( self.panel, -1, "Description")
+            self.label3 = wx.StaticText( self.panel, -1, "AutoFormat Code")
+            self.label4 = wx.StaticText( self.panel, -1, "wxMaskedEdit Control")
             self.label1.SetForegroundColour("Blue")
-            self.label2.SetFont(wxFont(9,wxSWISS,wxNORMAL,wxBOLD))
-            self.label3.SetFont(wxFont(9,wxSWISS,wxNORMAL,wxBOLD))
-            self.label4.SetFont(wxFont(9,wxSWISS,wxNORMAL,wxBOLD))
+            self.label2.SetFont(wx.Font(9,wx.SWISS,wx.NORMAL,wx.BOLD))
+            self.label3.SetFont(wx.Font(9,wx.SWISS,wx.NORMAL,wx.BOLD))
+            self.label4.SetFont(wx.Font(9,wx.SWISS,wx.NORMAL,wx.BOLD))
 
-            self.sizer.Add( self.label1, row=1,col=0,colspan=3, flag=wxALL,border=5)
-            self.sizer.Add( self.label2, row=3,col=0, flag=wxALL,border=5)
-            self.sizer.Add( self.label3, row=3,col=1, flag=wxALL,border=5)
-            self.sizer.Add( self.label4, row=3,col=2, flag=wxALL,border=5)
+            self.sizer.Add( self.label1, row=1,col=0,colspan=3, flag=wx.ALL,border=5)
+            self.sizer.Add( self.label2, row=3,col=0, flag=wx.ALL,border=5)
+            self.sizer.Add( self.label3, row=3,col=1, flag=wx.ALL,border=5)
+            self.sizer.Add( self.label4, row=3,col=2, flag=wx.ALL,border=5)
 
-            id, id1 = wxNewId(), wxNewId()
-            self.command1  = wxButton( self.panel, id, "&Close")
-            self.command2  = wxButton( self.panel, id1, "&Print Formats")
-            EVT_BUTTON( self.panel, id, self.onClick)
+            id, id1 = wx.NewId(), wx.NewId()
+            self.command1  = wx.Button( self.panel, id, "&Close")
+            self.command2  = wx.Button( self.panel, id1, "&Print Formats")
+            self.panel.Bind(wx.EVT_BUTTON, self.onClick, self.command1)
             self.panel.SetDefaultItem(self.command1)
-            EVT_BUTTON( self.panel, id1, self.onClickPrint)
+            self.panel.Bind(wx.EVT_BUTTON, self.onClickPrint, self.command2)
 
             # The following list is of the controls for the demo. Feel free to play around with
             # the options!
@@ -6907,20 +6932,20 @@ To see a great example of validations in action, try entering a bad email addres
            ]
 
             for control in controls:
-                self.sizer.Add( wxStaticText( self.panel, -1, control[0]),row=rowcount, col=0,border=5,flag=wxALL)
-                self.sizer.Add( wxStaticText( self.panel, -1, control[1]),row=rowcount, col=1,border=5, flag=wxALL)
+                self.sizer.Add( wx.StaticText( self.panel, -1, control[0]),row=rowcount, col=0,border=5,flag=wx.ALL)
+                self.sizer.Add( wx.StaticText( self.panel, -1, control[1]),row=rowcount, col=1,border=5, flag=wx.ALL)
                 if control in controls[:-1]:
                     self.sizer.Add( wxMaskedTextCtrl( self.panel, -1, "",
                                                       autoformat  = control[1],
                                                       demo        = True),
-                                row=rowcount,col=2,flag=wxALL,border=5)
+                                row=rowcount,col=2,flag=wx.ALL,border=5)
                 else:
                     self.sizer.Add( wxIpAddrCtrl( self.panel, -1, "", demo=True ),
-                                    row=rowcount,col=2,flag=wxALL,border=5)
+                                    row=rowcount,col=2,flag=wx.ALL,border=5)
                 rowcount += 1
 
-            self.sizer.Add(self.command1, row=0, col=0, flag=wxALL, border = 5)
-            self.sizer.Add(self.command2, row=0, col=1, flag=wxALL, border = 5)
+            self.sizer.Add(self.command1, row=0, col=0, flag=wx.ALL, border = 5)
+            self.sizer.Add(self.command2, row=0, col=1, flag=wx.ALL, border = 5)
             self.sizer.AddGrowableCol(3)
 
             self.panel.SetSizer(self.sizer)
@@ -6937,7 +6962,7 @@ To see a great example of validations in action, try entering a bad email addres
 ## ---------- ---------- ---------- ---------- ---------- ---------- ----------
 
 if __name__ == "__main__":
-    app = test()
+    app = test(False)
 
 i=1
 ##

@@ -8,8 +8,13 @@
 # Copyright:   (c) 2000 by Total Control Software
 # Licence:     wxWindows license
 #----------------------------------------------------------------------
+# 11/30/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# o Tested with updated demo
+# 
 
-from wxPython.wx import *
+import  wx
 
 try:
     import win32ui
@@ -58,7 +63,7 @@ def MakeActiveXClass(CoClass, eventClass=None, eventObj=None):
 
     # determine the base classes
     axEventClass = CoClass.default_source
-    baseClasses = [wxWindow, pywin.mfc.activex.Control, CoClass, axEventClass]
+    baseClasses = [wx.Window, pywin.mfc.activex.Control, CoClass, axEventClass]
     if eventClass:
         baseClasses.append(eventClass)
     baseClasses = tuple(baseClasses)
@@ -84,10 +89,11 @@ def MakeActiveXClass(CoClass, eventClass=None, eventObj=None):
 
 
 # These functions will be used as methods in the new class
-def axw__init__(self, parent, ID, pos=wxDefaultPosition, size=wxDefaultSize, style=0):
+def axw__init__(self, parent, ID, pos=wx.DefaultPosition, size=wx.DefaultSize, style=0):
+
     # init base classes
     pywin.mfc.activex.Control.__init__(self)
-    wxWindow.__init__(self, parent, -1, pos, size, style|wxNO_FULL_REPAINT_ON_RESIZE)
+    wx.Window.__init__( self, parent, -1, pos, size, style|wx.NO_FULL_REPAINT_ON_RESIZE)
 
     win32ui.EnableControlContainer()
     self._eventObj = self._eventObj  # move from class to instance
@@ -105,8 +111,7 @@ def axw__init__(self, parent, ID, pos=wxDefaultPosition, size=wxDefaultSize, sty
     self._eventBase.__init__(self, self._dispobj_)
 
     # hook some wx events
-    EVT_SIZE(self, self.axw_OnSize)
-    #EVT_ERASE_BACKGROUND(self, self.axw_OEB)
+    self.Bind(wx.EVT_SIZE, self.axw_OnSize)
 
 
 def axw__getattr__(self, attr):
@@ -133,7 +138,6 @@ def axw_Cleanup(self):
     del self._wnd
     self.close()
     pass
-    ## anything else???
 
 
 

@@ -19,6 +19,11 @@
 # o listctrl mixin needs wx renamer.
 # o wx.ListItem.GetText() returns a wxString pointer, not the text.
 # 
+# 12/14/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o ColumnSorterMixin implementation was broke - added event.Skip()
+#   to column click event to allow event to fall through to mixin.
+#
 
 import  wx
 import  wx.lib.mixins.listctrl  as  listmix
@@ -263,6 +268,7 @@ class TestListCtrlPanel(wx.Panel, listmix.wxColumnSorterMixin):
 
     def OnColClick(self, event):
         self.log.WriteText("OnColClick: %d\n" % event.GetColumn())
+        event.Skip()
 
     def OnColRightClick(self, event):
         item = self.list.GetColumn(event.GetColumn())

@@ -12,14 +12,22 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 """
 
-import pycolourbox
-import pypalette
-import pycolourslider
-import colorsys
-from intl import _
-from wxPython.wx import *
+# 12/14/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o 2.5 compatability update.
+#
 
-class wxPyColourChooser(wxPanel):
+import  wx
+
+import  pycolourbox
+import  pypalette
+import  pycolourslider
+import  colorsys
+import  intl
+
+from intl import _ # _
+
+class wxPyColourChooser(wx.Panel):
     """A Pure-Python implementation of the colour chooser dialog.
 
     The PyColourChooser is a pure python implementation of the colour
@@ -88,140 +96,147 @@ class wxPyColourChooser(wxPanel):
     # Generate the custom colours. These colours are shared across
     # all instances of the colour chooser
     NO_CUSTOM_COLOURS = 16
-    custom_colours = [ (wxColour(255, 255, 255),
+    custom_colours = [ (wx.Colour(255, 255, 255),
                         pycolourslider.PyColourSlider.HEIGHT / 2)
                      ] * NO_CUSTOM_COLOURS
     last_custom = 0
 
-    idADD_CUSTOM = wxNewId()
-    idSCROLL     = wxNewId()
+    idADD_CUSTOM = wx.NewId()
+    idSCROLL     = wx.NewId()
 
     def __init__(self, parent, id):
         """Creates an instance of the colour chooser. Note that it is best to
         accept the given size of the colour chooser as it is currently not
         resizeable."""
-        wxPanel.__init__(self, parent, id)
+        wx.Panel.__init__(self, parent, id)
 
-        self.basic_label = wxStaticText(self, -1, _("Basic Colours:"))
-        self.custom_label = wxStaticText(self, -1, _("Custom Colours:"))
-        self.add_button = wxButton(self, self.idADD_CUSTOM, _("Add to Custom Colours"))
+        self.basic_label = wx.StaticText(self, -1, _("Basic Colours:"))
+        self.custom_label = wx.StaticText(self, -1, _("Custom Colours:"))
+        self.add_button = wx.Button(self, self.idADD_CUSTOM, _("Add to Custom Colours"))
 
-        EVT_BUTTON(self, self.idADD_CUSTOM, self.onAddCustom)
+        self.Bind(wx.EVT_BUTTON, self.onAddCustom, self.add_button)
 
         # Since we're going to be constructing widgets that require some serious
         # computation, let's process any events (like redraws) right now
-        wxYield()
+        wx.Yield()
 
         # Create the basic colours palette
         self.colour_boxs = [ ]
-        colour_grid = wxGridSizer(6, 8)
+        colour_grid = wx.GridSizer(6, 8)
         for name in self.colour_names:
-            new_id = wxNewId()
+            new_id = wx.NewId()
             box = pycolourbox.PyColourBox(self, new_id)
-            EVT_LEFT_DOWN(box.GetColourBox(), lambda x, b=box: self.onBasicClick(x, b))
+
+            box.GetColourBox().Bind(wx.EVT_LEFT_DOWN, lambda x, b=box: self.onBasicClick(x, b))
+            
             self.colour_boxs.append(box)
-            colour_grid.Add(box, 0, wxEXPAND)
+            colour_grid.Add(box, 0, wx.EXPAND)
 
         # Create the custom colours palette
         self.custom_boxs = [ ]
-        custom_grid = wxGridSizer(2, 8)
+        custom_grid = wx.GridSizer(2, 8)
         for wxcolour, slidepos in self.custom_colours:
-            new_id = wxNewId()
+            new_id = wx.NewId()
             custom = pycolourbox.PyColourBox(self, new_id)
-            EVT_LEFT_DOWN(custom.GetColourBox(), lambda x, b=custom: self.onCustomClick(x, b))
+
+            custom.GetColourBox().Bind(wx.EVT_LEFT_DOWN, lambda x, b=custom: self.onCustomClick(x, b))
+
             custom.SetColour(wxcolour)
-            custom_grid.Add(custom, 0, wxEXPAND)
+            custom_grid.Add(custom, 0, wx.EXPAND)
             self.custom_boxs.append(custom)
 
-        csizer = wxBoxSizer(wxVERTICAL)
+        csizer = wx.BoxSizer(wx.VERTICAL)
         csizer.Add((1, 25))
-        csizer.Add(self.basic_label, 0, wxEXPAND)
+        csizer.Add(self.basic_label, 0, wx.EXPAND)
         csizer.Add((1, 5))
-        csizer.Add(colour_grid, 0, wxEXPAND)
+        csizer.Add(colour_grid, 0, wx.EXPAND)
         csizer.Add((1, 25))
-        csizer.Add(self.custom_label, 0, wxEXPAND)
+        csizer.Add(self.custom_label, 0, wx.EXPAND)
         csizer.Add((1, 5))
-        csizer.Add(custom_grid, 0, wxEXPAND)
+        csizer.Add(custom_grid, 0, wx.EXPAND)
         csizer.Add((1, 5))
-        csizer.Add(self.add_button, 0, wxEXPAND)
+        csizer.Add(self.add_button, 0, wx.EXPAND)
 
         self.palette = pypalette.PyPalette(self, -1)
         self.colour_slider = pycolourslider.PyColourSlider(self, -1)
-        self.slider = wxSlider(self, self.idSCROLL, 86, 0, self.colour_slider.HEIGHT - 1,
-                                style=wxSL_VERTICAL, size=wxSize(15, self.colour_slider.HEIGHT))
-        EVT_COMMAND_SCROLL(self, self.idSCROLL, self.onScroll)
-        psizer = wxBoxSizer(wxHORIZONTAL)
+        self.slider = wx.Slider(
+                        self, self.idSCROLL, 86, 0, self.colour_slider.HEIGHT - 1,
+                        style=wx.SL_VERTICAL, size=(15, self.colour_slider.HEIGHT)
+                        )
+
+        self.Bind(wx.EVT_COMMAND_SCROLL, self.onScroll, self.slider)
+        psizer = wx.BoxSizer(wx.HORIZONTAL)
         psizer.Add(self.palette, 0, 0)
         psizer.Add((10, 1))
-        psizer.Add(self.colour_slider, 0, wxALIGN_CENTER_VERTICAL)
-        psizer.Add(self.slider, 0, wxALIGN_CENTER_VERTICAL)
+        psizer.Add(self.colour_slider, 0, wx.ALIGN_CENTER_VERTICAL)
+        psizer.Add(self.slider, 0, wx.ALIGN_CENTER_VERTICAL)
 
         # Register mouse events for dragging across the palette
-        EVT_LEFT_DOWN(self.palette, self.onPaletteDown)
-        EVT_LEFT_UP(self.palette, self.onPaletteUp)
-        EVT_MOTION(self.palette, self.onPaletteMotion)
+        self.palette.Bind(wx.EVT_LEFT_DOWN, self.onPaletteDown)
+        self.palette.Bind(wx.EVT_LEFT_UP, self.onPaletteUp)
+        self.palette.Bind(wx.EVT_MOTION, self.onPaletteMotion)
         self.mouse_down = False
 
-        self.solid = pycolourbox.PyColourBox(self, -1, size=wxSize(75, 50))
-        slabel = wxStaticText(self, -1, _("Solid Colour"))
-        ssizer = wxBoxSizer(wxVERTICAL)
+        self.solid = pycolourbox.PyColourBox(self, -1, size=(75, 50))
+        slabel = wx.StaticText(self, -1, _("Solid Colour"))
+        ssizer = wx.BoxSizer(wx.VERTICAL)
         ssizer.Add(self.solid, 0, 0)
         ssizer.Add((1, 2))
-        ssizer.Add(slabel, 0, wxALIGN_CENTER_HORIZONTAL)
+        ssizer.Add(slabel, 0, wx.ALIGN_CENTER_HORIZONTAL)
 
-        hlabel = wxStaticText(self, -1, _("H:"))
-        self.hentry = wxTextCtrl(self, -1)
+        hlabel = wx.StaticText(self, -1, _("H:"))
+        self.hentry = wx.TextCtrl(self, -1)
         self.hentry.SetSize((40, -1))
-        slabel = wxStaticText(self, -1, _("S:"))
-        self.sentry = wxTextCtrl(self, -1)
+        slabel = wx.StaticText(self, -1, _("S:"))
+        self.sentry = wx.TextCtrl(self, -1)
         self.sentry.SetSize((40, -1))
-        vlabel = wxStaticText(self, -1, _("V:"))
-        self.ventry = wxTextCtrl(self, -1)
+        vlabel = wx.StaticText(self, -1, _("V:"))
+        self.ventry = wx.TextCtrl(self, -1)
         self.ventry.SetSize((40, -1))
-        hsvgrid = wxFlexGridSizer(1, 6, 2, 2)
+        hsvgrid = wx.FlexGridSizer(1, 6, 2, 2)
         hsvgrid.AddMany ([
-            (hlabel, 0, wxALIGN_CENTER_VERTICAL), (self.hentry, 0, 0),
-            (slabel, 0, wxALIGN_CENTER_VERTICAL), (self.sentry, 0, 0),
-            (vlabel, 0, wxALIGN_CENTER_VERTICAL), (self.ventry, 0, 0),
+            (hlabel, 0, wx.ALIGN_CENTER_VERTICAL), (self.hentry, 0, 0),
+            (slabel, 0, wx.ALIGN_CENTER_VERTICAL), (self.sentry, 0, 0),
+            (vlabel, 0, wx.ALIGN_CENTER_VERTICAL), (self.ventry, 0, 0),
         ])
 
-        rlabel = wxStaticText(self, -1, _("R:"))
-        self.rentry = wxTextCtrl(self, -1)
+        rlabel = wx.StaticText(self, -1, _("R:"))
+        self.rentry = wx.TextCtrl(self, -1)
         self.rentry.SetSize((40, -1))
-        glabel = wxStaticText(self, -1, _("G:"))
-        self.gentry = wxTextCtrl(self, -1)
+        glabel = wx.StaticText(self, -1, _("G:"))
+        self.gentry = wx.TextCtrl(self, -1)
         self.gentry.SetSize((40, -1))
-        blabel = wxStaticText(self, -1, _("B:"))
-        self.bentry = wxTextCtrl(self, -1)
+        blabel = wx.StaticText(self, -1, _("B:"))
+        self.bentry = wx.TextCtrl(self, -1)
         self.bentry.SetSize((40, -1))
-        lgrid = wxFlexGridSizer(1, 6, 2, 2)
+        lgrid = wx.FlexGridSizer(1, 6, 2, 2)
         lgrid.AddMany([
-            (rlabel, 0, wxALIGN_CENTER_VERTICAL), (self.rentry, 0, 0),
-            (glabel, 0, wxALIGN_CENTER_VERTICAL), (self.gentry, 0, 0),
-            (blabel, 0, wxALIGN_CENTER_VERTICAL), (self.bentry, 0, 0),
+            (rlabel, 0, wx.ALIGN_CENTER_VERTICAL), (self.rentry, 0, 0),
+            (glabel, 0, wx.ALIGN_CENTER_VERTICAL), (self.gentry, 0, 0),
+            (blabel, 0, wx.ALIGN_CENTER_VERTICAL), (self.bentry, 0, 0),
         ])
 
-        gsizer = wxGridSizer(2, 1)
+        gsizer = wx.GridSizer(2, 1)
         gsizer.SetVGap (10)
         gsizer.SetHGap (2)
-        gsizer.Add(hsvgrid, 0, wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL)
-        gsizer.Add(lgrid, 0, wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL)
+        gsizer.Add(hsvgrid, 0, wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER_HORIZONTAL)
+        gsizer.Add(lgrid, 0, wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER_HORIZONTAL)
 
-        hsizer = wxBoxSizer(wxHORIZONTAL)
-        hsizer.Add(ssizer, 0, wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL)
-        hsizer.Add(gsizer, 0, wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL)
+        hsizer = wx.BoxSizer(wx.HORIZONTAL)
+        hsizer.Add(ssizer, 0, wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER_HORIZONTAL)
+        hsizer.Add(gsizer, 0, wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER_HORIZONTAL)
 
-        vsizer = wxBoxSizer(wxVERTICAL)
+        vsizer = wx.BoxSizer(wx.VERTICAL)
         vsizer.Add((1, 5))
         vsizer.Add(psizer, 0, 0)
         vsizer.Add((1, 15))
-        vsizer.Add(hsizer, 0, wxEXPAND)
+        vsizer.Add(hsizer, 0, wx.EXPAND)
 
-        sizer = wxBoxSizer(wxHORIZONTAL)
+        sizer = wx.BoxSizer(wx.HORIZONTAL)
         sizer.Add((5, 1))
-        sizer.Add(csizer, 0, wxEXPAND)
+        sizer.Add(csizer, 0, wx.EXPAND)
         sizer.Add((10, 1))
-        sizer.Add(vsizer, 0, wxEXPAND)
+        sizer.Add(vsizer, 0, wx.EXPAND)
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
         sizer.Fit(self)
@@ -232,7 +247,7 @@ class wxPyColourChooser(wxPanel):
     def InitColours(self):
         """Initializes the pre-set palette colours."""
         for i in range(len(self.colour_names)):
-            colour = wxTheColourDatabase.FindColour(self.colour_names[i])
+            colour = wx.TheColourDatabase.FindColour(self.colour_names[i])
             self.colour_boxs[i].SetColourTuple((colour.Red(),
                                                 colour.Green(),
                                                 colour.Blue()))
@@ -364,12 +379,12 @@ class wxPyColourChooser(wxPanel):
 
 def main():
     """Simple test display."""
-    class App(wxApp):
+    class App(wx.App):
         def OnInit(self):
-            frame = wxFrame(NULL, -1, 'PyColourChooser Test')
+            frame = wx.Frame(None, -1, 'PyColourChooser Test')
 
             chooser = wxPyColourChooser(frame, -1)
-            sizer = wxBoxSizer(wxVERTICAL)
+            sizer = wx.BoxSizer(wx.VERTICAL)
             sizer.Add(chooser, 0, 0)
             frame.SetAutoLayout(True)
             frame.SetSizer(sizer)
@@ -378,7 +393,7 @@ def main():
             frame.Show(True)
             self.SetTopWindow(frame)
             return True
-    app = App()
+    app = App(False)
     app.MainLoop()
 
 if __name__ == '__main__':

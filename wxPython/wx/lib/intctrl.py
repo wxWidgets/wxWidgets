@@ -24,16 +24,31 @@
 #   wxIntCtrl also supports range limits, with the option of either
 #   enforcing them or simply coloring the text of the control if the limits
 #   are exceeded.
+#----------------------------------------------------------------------------
+# 12/08/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o 2.5 Compatability changes
+#
 
-from wxPython.wx import *
-import types, string
+import  string
+import  types
+
+import  wx
+
+#----------------------------------------------------------------------------
+
 from sys import maxint
 MAXINT = maxint     # (constants should be in upper case)
 MININT = -maxint-1
 
 #----------------------------------------------------------------------------
 
-wxEVT_COMMAND_INT_UPDATED = wxNewEventType()
+# Used to trap events indicating that the current
+# integer value of the control has been changed.
+wxEVT_COMMAND_INT_UPDATED = wx.NewEventType()
+EVT_INT = wx.PyEventBinder(wxEVT_COMMAND_INT_UPDATED, 1)
+
+#----------------------------------------------------------------------------
 
 # wxWindows' wxTextCtrl translates Composite "control key"
 # events into single events before returning them to its OnChar
@@ -44,16 +59,9 @@ wxEVT_COMMAND_INT_UPDATED = wxNewEventType()
 WXK_CTRL_X = (ord('X')+1) - ord('A')
 WXK_CTRL_V = (ord('V')+1) - ord('A')
 
-
-def EVT_INT(win, id, func):
-    """Used to trap events indicating that the current
-    integer value of the control has been changed."""
-    win.Connect(id, -1, wxEVT_COMMAND_INT_UPDATED, func)
-
-
-class wxIntUpdatedEvent(wxPyCommandEvent):
+class wxIntUpdatedEvent(wx.PyCommandEvent):
     def __init__(self, id, value = 0, object=None):
-        wxPyCommandEvent.__init__(self, wxEVT_COMMAND_INT_UPDATED, id)
+        wx.PyCommandEvent.__init__(self, wxEVT_COMMAND_INT_UPDATED, id)
 
         self.__value = value
         self.SetEventObject(object)
@@ -66,14 +74,14 @@ class wxIntUpdatedEvent(wxPyCommandEvent):
 
 #----------------------------------------------------------------------------
 
-class wxIntValidator( wxPyValidator ):
+class wxIntValidator( wx.PyValidator ):
     """
     Validator class used with wxIntCtrl; handles all validation of input
-    prior to changing the value of the underlying wxTextCtrl.
+    prior to changing the value of the underlying wx.TextCtrl.
     """
     def __init__(self):
-        wxPyValidator.__init__(self)
-        EVT_CHAR(self, self.OnChar)
+        wx.PyValidator.__init__(self)
+        self.Bind(wx.EVT_CHAR, self.OnChar)
 
     def Clone (self):
         return self.__class__()
@@ -100,7 +108,7 @@ class wxIntValidator( wxPyValidator ):
 
 
         value = ctrl.GetValue()
-        textval = wxTextCtrl.GetValue(ctrl)
+        textval = wx.TextCtrl.GetValue(ctrl)
         allow_none = ctrl.IsNoneAllowed()
 
         pos = ctrl.GetInsertionPoint()
@@ -129,12 +137,12 @@ class wxIntValidator( wxPyValidator ):
         # Validate action, and predict resulting value, so we can
         # range check the result and validate that too.
 
-        if key in (WXK_DELETE, WXK_BACK, WXK_CTRL_X):
+        if key in (wx.WXK_DELETE, wx.WXK_BACK, WXK_CTRL_X):
             if select_len:
                 new_text = textval[:sel_start] + textval[sel_to:]
-            elif key == WXK_DELETE and pos < len(textval):
+            elif key == wx.WXK_DELETE and pos < len(textval):
                 new_text = textval[:pos] + textval[pos+1:]
-            elif key == WXK_BACK and pos > 0:
+            elif key == wx.WXK_BACK and pos > 0:
                 new_text = textval[:pos-1] + textval[pos:]
             # (else value shouldn't change)
 
@@ -167,10 +175,12 @@ class wxIntValidator( wxPyValidator ):
                     # size if ctrl limited to int. (if not,
                     # disallow event.)
                     new_value = ctrl._fromGUI(new_text)
+
                     if paste_text:
                         paste_value = ctrl._fromGUI(paste_text)
                     else:
                         paste_value = 0
+
                     new_pos = sel_start + len(str(paste_value))
 
                     # if resulting value is 0, truncate and highlight value:
@@ -184,13 +194,14 @@ class wxIntValidator( wxPyValidator ):
                             and ( (value >= 0 and pos == 0)
                                   or (value < 0 and pos in [0,1]) ) ):
                             allow_event = 0
+
                     paste = 1
 
                 except ValueError:
                     allow_event = 0
 
 
-        elif key < WXK_SPACE or key > 255:
+        elif key < wx.WXK_SPACE or key > 255:
             pass    # event ok
 
 
@@ -254,19 +265,19 @@ class wxIntValidator( wxPyValidator ):
                         # making this like "remove leading digits"
 
                         # Account for leading zero when positioning cursor:
-                        if( key == WXK_BACK
+                        if( key == wx.WXK_BACK
                             or (paste and paste_value == 0 and new_pos > 0) ):
                             new_pos = new_pos - 1
 
-                        wxCallAfter(ctrl.SetValue, new_value)
-                        wxCallAfter(ctrl.SetInsertionPoint, new_pos)
+                        wx.CallAfter(ctrl.SetValue, new_value)
+                        wx.CallAfter(ctrl.SetInsertionPoint, new_pos)
                         internally_set = 1
 
                     elif paste:
                         # Always do paste numerically, to remove
                         # leading/trailing spaces
-                        wxCallAfter(ctrl.SetValue, new_value)
-                        wxCallAfter(ctrl.SetInsertionPoint, new_pos)
+                        wx.CallAfter(ctrl.SetValue, new_value)
+                        wx.CallAfter(ctrl.SetInsertionPoint, new_pos)
                         internally_set = 1
 
                     elif (new_value == 0 and len(new_text) > 1 ):
@@ -290,24 +301,24 @@ class wxIntValidator( wxPyValidator ):
 
         if allow_event:
             if set_to_none:
-                wxCallAfter(ctrl.SetValue, new_value)
+                wx.CallAfter(ctrl.SetValue, new_value)
 
             elif set_to_zero:
                 # select to "empty" numeric value
-                wxCallAfter(ctrl.SetValue, new_value)
-                wxCallAfter(ctrl.SetInsertionPoint, 0)
-                wxCallAfter(ctrl.SetSelection, 0, 1)
+                wx.CallAfter(ctrl.SetValue, new_value)
+                wx.CallAfter(ctrl.SetInsertionPoint, 0)
+                wx.CallAfter(ctrl.SetSelection, 0, 1)
 
             elif set_to_minus_one:
-                wxCallAfter(ctrl.SetValue, new_value)
-                wxCallAfter(ctrl.SetInsertionPoint, 1)
-                wxCallAfter(ctrl.SetSelection, 1, 2)
+                wx.CallAfter(ctrl.SetValue, new_value)
+                wx.CallAfter(ctrl.SetInsertionPoint, 1)
+                wx.CallAfter(ctrl.SetSelection, 1, 2)
 
             elif not internally_set:
                 event.Skip()    # allow base wxTextCtrl to finish processing
 
-        elif not wxValidator_IsSilent():
-            wxBell()
+        elif not wx.Validator_IsSilent():
+            wx.Bell()
 
 
     def TransferToWindow(self):
@@ -316,7 +327,7 @@ class wxIntValidator( wxPyValidator ):
          The default implementation returns False, indicating that an error
          occurred.  We simply return True, as we don't do any data transfer.
      """
-     return True # Prevent wxDialog from complaining.
+     return True # Prevent wx.Dialog from complaining.
 
 
     def TransferFromWindow(self):
@@ -325,12 +336,12 @@ class wxIntValidator( wxPyValidator ):
          The default implementation returns False, indicating that an error
          occurred.  We simply return True, as we don't do any data transfer.
      """
-     return True # Prevent wxDialog from complaining.
+     return True # Prevent wx.Dialog from complaining.
 
 
 #----------------------------------------------------------------------------
 
-class wxIntCtrl(wxTextCtrl):
+class wxIntCtrl(wx.TextCtrl):
     """
     This class provides a control that takes and returns integers as
     value, and provides bounds support and optional value limiting.
@@ -401,33 +412,33 @@ class wxIntCtrl(wxTextCtrl):
 
     def __init__ (
                 self, parent, id=-1, value = 0,
-                pos = wxDefaultPosition, size = wxDefaultSize,
-                style = 0, validator = wxDefaultValidator,
+                pos = wx.DefaultPosition, size = wx.DefaultSize,
+                style = 0, validator = wx.DefaultValidator,
                 name = "integer",
                 min=None, max=None,
                 limited = 0, allow_none = 0, allow_long = 0,
-                default_color = wxBLACK, oob_color = wxRED,
+                default_color = wx.BLACK, oob_color = wx.RED,
         ):
 
         # Establish attrs required for any operation on value:
         self.__min = None
         self.__max = None
         self.__limited = 0
-        self.__default_color = wxBLACK
-        self.__oob_color = wxRED
+        self.__default_color = wx.BLACK
+        self.__oob_color = wx.RED
         self.__allow_none = 0
         self.__allow_long = 0
         self.__oldvalue = None
 
-        if validator == wxDefaultValidator:
+        if validator == wx.DefaultValidator:
             validator = wxIntValidator()
 
-        wxTextCtrl.__init__(
+        wx.TextCtrl.__init__(
                 self, parent, id, self._toGUI(0),
                 pos, size, style, validator, name )
 
         # The following lets us set out our "integer update" events:
-        EVT_TEXT( self, self.GetId(), self.OnText )
+        self.Bind(wx.EVT_TEXT, self.OnText )
 
         # Establish parameters, with appropriate error checking
 
@@ -444,8 +455,8 @@ class wxIntCtrl(wxTextCtrl):
         """
         Handles an event indicating that the text control's value
         has changed, and issue EVT_INT event.
-        NOTE: using wxTextCtrl.SetValue() to change the control's
-        contents from within a EVT_CHAR handler can cause double
+        NOTE: using wx.TextCtrl.SetValue() to change the control's
+        contents from within a wx.EVT_CHAR handler can cause double
         text events.  So we check for actual changes to the text
         before passing the events on.
         """
@@ -465,7 +476,7 @@ class wxIntCtrl(wxTextCtrl):
         """
         Returns the current integer (long) value of the control.
         """
-        return self._fromGUI( wxTextCtrl.GetValue(self) )
+        return self._fromGUI( wx.TextCtrl.GetValue(self) )
 
     def SetValue(self, value):
         """
@@ -476,7 +487,7 @@ class wxIntCtrl(wxTextCtrl):
         A ValueError exception will be raised if an invalid value
         is specified.
         """
-        wxTextCtrl.SetValue( self, self._toGUI(value) )
+        wx.TextCtrl.SetValue( self, self._toGUI(value) )
         self._colorValue()
 
 
@@ -677,7 +688,7 @@ class wxIntCtrl(wxTextCtrl):
 
 
 
-    def SetColors(self, default_color=wxBLACK, oob_color=wxRED):
+    def SetColors(self, default_color=wx.BLACK, oob_color=wx.RED):
         """
         Tells the control what colors to use for normal and out-of-bounds
         values.  If the value currently exceeds the bounds, it will be
@@ -770,13 +781,13 @@ class wxIntCtrl(wxTextCtrl):
         """
         sel_start, sel_to = self.GetSelection()
         select_len = sel_to - sel_start
-        textval = wxTextCtrl.GetValue(self)
+        textval = wx.TextCtrl.GetValue(self)
 
-        do = wxTextDataObject()
+        do = wx.TextDataObject()
         do.SetText(textval[sel_start:sel_to])
-        wxTheClipboard.Open()
-        wxTheClipboard.SetData(do)
-        wxTheClipboard.Close()
+        wx.TheClipboard.Open()
+        wx.TheClipboard.SetData(do)
+        wx.TheClipboard.Close()
         if select_len == len(wxTextCtrl.GetValue(self)):
             if not self.IsNoneAllowed():
                 self.SetValue(0)
@@ -793,10 +804,10 @@ class wxIntCtrl(wxTextCtrl):
         """
         Subroutine for getting the current contents of the clipboard.
         """
-        do = wxTextDataObject()
-        wxTheClipboard.Open()
-        success = wxTheClipboard.GetData(do)
-        wxTheClipboard.Close()
+        do = wx.TextDataObject()
+        wx.TheClipboard.Open()
+        success = wx.TheClipboard.GetData(do)
+        wx.TheClipboard.Close()
 
         if not success:
             return None
@@ -815,7 +826,7 @@ class wxIntCtrl(wxTextCtrl):
         if paste_text:
             # (conversion will raise ValueError if paste isn't legal)
             sel_start, sel_to = self.GetSelection()
-            text = wxTextCtrl.GetValue( self )
+            text = wx.TextCtrl.GetValue( self )
             new_text = text[:sel_start] + paste_text + text[sel_to:]
             if new_text == '' and self.IsNoneAllowed():
                 self.SetValue(None)
@@ -823,7 +834,7 @@ class wxIntCtrl(wxTextCtrl):
                 value = self._fromGUI(new_text)
                 self.SetValue(value)
                 new_pos = sel_start + len(paste_text)
-                wxCallAfter(self.SetInsertionPoint, new_pos)
+                wx.CallAfter(self.SetInsertionPoint, new_pos)
 
 
 
@@ -833,41 +844,39 @@ if __name__ == '__main__':
 
     import traceback
 
-    class myDialog(wxDialog):
+    class myDialog(wx.Dialog):
         def __init__(self, parent, id, title,
-            pos = wxPyDefaultPosition, size = wxPyDefaultSize,
-            style = wxDEFAULT_DIALOG_STYLE ):
-            wxDialog.__init__(self, parent, id, title, pos, size, style)
+            pos = wx.DefaultPosition, size = wx.DefaultSize,
+            style = wx.DEFAULT_DIALOG_STYLE ):
+            wx.Dialog.__init__(self, parent, id, title, pos, size, style)
 
-            self.int_ctrl = wxIntCtrl(self, wxNewId(), size=(55,20))
-            self.OK = wxButton( self, wxID_OK, "OK")
-            self.Cancel = wxButton( self, wxID_CANCEL, "Cancel")
+            self.int_ctrl = wxIntCtrl(self, wx.NewId(), size=(55,20))
+            self.OK = wx.Button( self, wx.ID_OK, "OK")
+            self.Cancel = wx.Button( self, wx.ID_CANCEL, "Cancel")
 
-            vs = wxBoxSizer( wxVERTICAL )
-            vs.AddWindow( self.int_ctrl, 0, wxALIGN_CENTRE|wxALL, 5 )
-            hs = wxBoxSizer( wxHORIZONTAL )
-            hs.AddWindow( self.OK, 0, wxALIGN_CENTRE|wxALL, 5 )
-            hs.AddWindow( self.Cancel, 0, wxALIGN_CENTRE|wxALL, 5 )
-            vs.AddSizer(hs, 0, wxALIGN_CENTRE|wxALL, 5 )
+            vs = wx.BoxSizer( wx.VERTICAL )
+            vs.Add( self.int_ctrl, 0, wx.ALIGN_CENTRE|wx.ALL, 5 )
+            hs = wx.BoxSizer( wx.HORIZONTAL )
+            hs.Add( self.OK, 0, wx.ALIGN_CENTRE|wx.ALL, 5 )
+            hs.Add( self.Cancel, 0, wx.ALIGN_CENTRE|wx.ALL, 5 )
+            vs.Add(hs, 0, wx.ALIGN_CENTRE|wx.ALL, 5 )
 
             self.SetAutoLayout( True )
             self.SetSizer( vs )
             vs.Fit( self )
             vs.SetSizeHints( self )
-            EVT_INT(self, self.int_ctrl.GetId(), self.OnInt)
+            self.Bind(EVT_INT, self.OnInt, self.int_ctrl)
 
         def OnInt(self, event):
             print 'int now', event.GetValue()
 
-    class TestApp(wxApp):
+    class TestApp(wx.App):
         def OnInit(self):
             try:
-                self.frame = wxFrame(NULL, -1, "Test",
-                                     wxPoint(20,20), wxSize(120,100)  )
-                self.panel = wxPanel(self.frame, -1)
-                button = wxButton(self.panel, 10, "Push Me",
-                                  wxPoint(20, 20))
-                EVT_BUTTON(self, 10, self.OnClick)
+                self.frame = wx.Frame(None, -1, "Test", (20,20), (120,100)  )
+                self.panel = wx.Panel(self.frame, -1)
+                button = wx.Button(self.panel, 10, "Push Me", (20, 20))
+                self.Bind(wx.EVT_BUTTON, self.OnClick, button)
             except:
                 traceback.print_exc()
                 return False

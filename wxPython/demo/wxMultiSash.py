@@ -8,6 +8,10 @@
 # o There appears to be a problem with the image that
 #   the library is trying to use for the alternate cursor
 # 
+# 12/09/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o renamer issue shelved.
+#
 
 import  wx
 import  wx.lib.multisash    as  sash
@@ -38,6 +42,10 @@ returned by GetSaveData, as it is just another object in the dictionary.
 #---------------------------------------------------------------------------
 
 class TestWindow(stc.StyledTextCtrl):
+
+    # shared document reference
+    doc = None
+    
     def __init__(self, parent):
         stc.StyledTextCtrl.__init__(self, parent, -1, style=wx.NO_BORDER)
         self.SetMarginWidth(1,0)
@@ -52,19 +60,18 @@ class TestWindow(stc.StyledTextCtrl):
             wx.Font(fSize, wx.MODERN, wx.NORMAL, wx.NORMAL)
             )
 
-        self.SetText(sampleText)
+        if self.doc:
+            self.SetDocPointer(self.doc)
+        else:
+            self.SetText(sampleText)
+            TestWindow.doc = self.GetDocPointer()
+            
 
-class TestFrame(wx.Frame):
-    def __init__(self, parent, log):
-        wx.Frame.__init__(self, parent, -1, "Multi Sash Demo", size=(640,480))
-        self.multi = sash.wxMultiSash(self,-1,pos=(0,0), size=(640,480))
+    def SutdownDemo(self):
+        # Reset doc reference in case this demo is run again
+        TestWindow.doc = None
 
-        # Use this method to set the default class that will be created when
-        # a new sash is created. The class's constructor needs 1 parameter
-        # which is the parent of the window
-        self.multi.SetDefaultChildClass(TestWindow)
-
-
+        
 #---------------------------------------------------------------------------
 
 
@@ -77,9 +84,6 @@ def runTest(frame, nb, log):
     multi.SetDefaultChildClass(TestWindow)
 
     return multi
-
-#    win = TestPanel(nb, log)
-#    return win
 
 #----------------------------------------------------------------------
 

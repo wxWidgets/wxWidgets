@@ -9,6 +9,10 @@
 # o printout.py is generating a snootful of errors all related to the
 #   requirement for tuples on the base DC calls now
 #
+# 12/10/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Issues corrected.
+#
 
 import  os
 

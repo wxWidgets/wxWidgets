@@ -10,6 +10,10 @@
 # Copyright:   (c) 1999 by Total Control Software
 # Licence:     wxWindows license
 #----------------------------------------------------------------------
+# 12/13/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for V2.5 compatability
+#
 
 '''
 wxPython.lib.wxpTag
@@ -69,9 +73,9 @@ be converted from strings to alternate datatypes.  They are:
 
 An example:
 
-    <wxp module="" class="wxButton">
+    <wxp module="wx" class="Button">
         <param name="label" value="Click here">
-        <param name="id" value="wxID_OK">
+        <param name="id" value="ID_OK">
     </wxp>
 
 Both the begining and ending WXP tags are required.
@@ -85,11 +89,11 @@ server as is done with java applets.
 '''
 #----------------------------------------------------------------------
 
-from wxPython.wx   import *
-from wxPython.html import *
-import wxPython.wx
+import  types
 
-import types
+import  wx
+import  wx.html
+
 
 #----------------------------------------------------------------------
 
@@ -98,9 +102,9 @@ PARAMTAG = 'PARAM'
 
 #----------------------------------------------------------------------
 
-class wxpTagHandler(wxHtmlWinTagHandler):
+class wxpTagHandler(wx.html.HtmlWinTagHandler):
     def __init__(self):
-        wxHtmlWinTagHandler.__init__(self)
+        wx.html.HtmlWinTagHandler.__init__(self)
         self.ctx = None
 
     def GetSupportedTags(self):
@@ -128,7 +132,7 @@ class wxpTagHandler(wxHtmlWinTagHandler):
         if modName:
             self.ctx.classMod = _my_import(modName)
         else:
-            self.ctx.classMod = wxPython.wx
+            self.ctx.classMod = wx
 
         # find and verify the class
         if not tag.HasParam('CLASS'):
@@ -151,7 +155,7 @@ class wxpTagHandler(wxHtmlWinTagHandler):
                 width = int(width)
         if tag.HasParam('HEIGHT'):
             height = int(tag.GetParam('HEIGHT'))
-        self.ctx.kwargs['size'] = wxSize(width, height)
+        self.ctx.kwargs['size'] = wx.Size(width, height)
 
         # parse up to the closing tag, and gather any nested Param tags.
         self.ParseInner(tag)
@@ -165,7 +169,7 @@ class wxpTagHandler(wxHtmlWinTagHandler):
             obj.Show(True)
 
             # add it to the HtmlWindow
-            self.GetParser().GetContainer().InsertCell(wxHtmlWidgetCell(obj, self.ctx.floatWidth))
+            self.GetParser().GetContainer().InsertCell(wx.html.HtmlWidgetCell(obj, self.ctx.floatWidth))
             self.ctx = None
 
         return True
@@ -198,13 +202,13 @@ class wxpTagHandler(wxHtmlWinTagHandler):
             except:
                 value = saveVal
 
-        # convert to wxColour
+        # convert to wx.Colour
         elif value[0] == '#':
             try:
                 red   = int('0x'+value[1:3], 16)
                 green = int('0x'+value[3:5], 16)
                 blue  = int('0x'+value[5:], 16)
-                value = wxColor(red, green, blue)
+                value = wx.Color(red, green, blue)
             except:
                 pass
 
@@ -267,4 +271,4 @@ def _param2dict(param):
 
 
 
-wxHtmlWinParser_AddTagHandler(wxpTagHandler)
+wx.html.HtmlWinParser_AddTagHandler(wxpTagHandler)

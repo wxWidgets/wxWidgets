@@ -6,13 +6,16 @@
 # RCS-ID:       $Id$
 # License:      wxWindows license
 #----------------------------------------------------------------------------
+# 12/11/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o 2.5 compatability update.
 #
 
-from wxPython.wx import *
+import  wx
 
 
-class wxScrolledPanel( wxScrolledWindow ):
-    """
+class wxScrolledPanel( wx.ScrolledWindow ):
+    """\
 wxScrolledPanel fills a "hole" in the implementation of wxScrolledWindow,
 providing automatic scrollbar and scrolling behavior and the tab traversal
 management that wxScrolledWindow lacks.  This code was based on the original
@@ -20,14 +23,14 @@ demo code showing how to do this, but is now available for general use
 as a proper class (and the demo is now converted to just use it.)
 """
     def __init__(self, parent, id=-1,
-                 pos = wxDefaultPosition, size = wxDefaultSize,
-                 style = wxTAB_TRAVERSAL, name = "scrolledpanel"):
+                 pos = wx.DefaultPosition, size = wx.DefaultSize,
+                 style = wx.TAB_TRAVERSAL, name = "scrolledpanel"):
 
-        wxScrolledWindow.__init__(self, parent, -1,
+        wx.ScrolledWindow.__init__(self, parent, -1,
                                   pos=pos, size=size,
                                   style=style, name=name)
 
-        EVT_CHILD_FOCUS(self, self.OnChildFocus)
+        self.Bind(wx.EVT_CHILD_FOCUS, self.OnChildFocus)
 
 
     def SetupScrolling(self, scroll_x=True, scroll_y=True, rate_x=20, rate_y=20):
@@ -56,7 +59,7 @@ as a proper class (and the demo is now converted to just use it.)
             self.SetVirtualSizeHints( w, h )
 
         self.SetScrollRate(rate_x, rate_y)
-        wxCallAfter(self.Scroll, 0, 0) # scroll back to top after initial events
+        wx.CallAfter(self.Scroll, 0, 0) # scroll back to top after initial events
 
 
     def OnChildFocus(self, evt):
@@ -79,15 +82,16 @@ as a proper class (and the demo is now converted to just use it.)
         if cpos.y < 0 and sppu_y > 0:
             new_vs_y = vs_y + (cpos.y / sppu_y)
 
+        clntsz = self.GetClientSize()
 
         # is it past the right edge ?
-        if cpos.x + csz.width > self.GetClientSize().width and sppu_x > 0:
-            diff = (cpos.x + csz.width - self.GetClientSize().width) / sppu_x
+        if cpos.x + csz.width > clntsz.width and sppu_x > 0:
+            diff = (cpos.x + csz.width - clntsz.width) / sppu_x
             new_vs_x = vs_x + diff + 1
 
         # is it below the bottom ?
-        if cpos.y + csz.height > self.GetClientSize().height and sppu_y > 0:
-            diff = (cpos.y + csz.height - self.GetClientSize().height) / sppu_y
+        if cpos.y + csz.height > clntsz.height and sppu_y > 0:
+            diff = (cpos.y + csz.height - clntsz.height) / sppu_y
             new_vs_y = vs_y + diff + 1
 
         # if we need to adjust

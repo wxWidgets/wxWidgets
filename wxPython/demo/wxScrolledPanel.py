@@ -6,6 +6,10 @@
 #
 # o scrolledpanel lib needs wx update
 # 
+# 12/11/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o lib updated, all is well.
+# 
 
 import  wx
 import  wx.lib.scrolledpanel    as  scrolled

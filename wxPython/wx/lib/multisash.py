@@ -9,8 +9,12 @@
 # RCS-ID:       $Id$
 # License:      wxWindows licensie
 #----------------------------------------------------------------------
+# 12/09/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o 2.5 compatability update.
+#
 
-from wxPython.wx import *
+import wx
 
 MV_HOR = 0
 MV_VER = not MV_HOR
@@ -20,12 +24,12 @@ CR_SIZE = SH_SIZE * 3
 
 #----------------------------------------------------------------------
 
-class wxMultiSash(wxWindow):
+class wxMultiSash(wx.Window):
     def __init__(self, *_args,**_kwargs):
-        apply(wxWindow.__init__,(self,) + _args,_kwargs)
+        apply(wx.Window.__init__,(self,) + _args,_kwargs)
         self._defChild = EmptyChild
-        self.child = wxMultiSplit(self,self,wxPoint(0,0),self.GetSize())
-        EVT_SIZE(self,self.OnMultiSize)
+        self.child = wxMultiSplit(self,self,(0,0),self.GetSize())
+        self.Bind(wx.EVT_SIZE,self.OnMultiSize)
 
     def SetDefaultChildClass(self,childCls):
         self._defChild = childCls
@@ -39,7 +43,7 @@ class wxMultiSash(wxWindow):
 
     def Clear(self):
         old = self.child
-        self.child = wxMultiSplit(self,self,wxPoint(0,0),self.GetSize())
+        self.child = wxMultiSplit(self,self,(0,0),self.GetSize())
         old.Destroy()
         self.child.OnSize(None)
 
@@ -65,10 +69,10 @@ class wxMultiSash(wxWindow):
 #----------------------------------------------------------------------
 
 
-class wxMultiSplit(wxWindow):
+class wxMultiSplit(wx.Window):
     def __init__(self,multiView,parent,pos,size,view1 = None):
-        wxWindow.__init__(self,id = -1,parent = parent,pos = pos,size = size,
-                          style = wxCLIP_CHILDREN)
+        wx.Window.__init__(self,id = -1,parent = parent,pos = pos,size = size,
+                          style = wx.CLIP_CHILDREN)
         self.multiView = multiView
         self.view2 = None
         if view1:
@@ -77,10 +81,10 @@ class wxMultiSplit(wxWindow):
             self.view1.MoveXY(0,0)
         else:
             self.view1 = wxMultiViewLeaf(self.multiView,self,
-                                         wxPoint(0,0),self.GetSize())
+                                         (0,0),self.GetSize())
         self.direction = None
 
-        EVT_SIZE(self,self.OnSize)
+        self.Bind(wx.EVT_SIZE,self.OnSize)
 
     def GetSaveData(self):
         saveData = {}
@@ -93,10 +97,10 @@ class wxMultiSplit(wxWindow):
             if isinstance(self.view2,wxMultiSplit):
                 saveData['view2IsSplit'] = 1
         saveData['direction'] = self.direction
-        v1,v2 = self.GetPositionTuple()
+        v1,v2 = self.GetPosition()
         saveData['x'] = v1
         saveData['y'] = v2
-        v1,v2 = self.GetSizeTuple()
+        v1,v2 = self.GetSize()
         saveData['w'] = v1
         saveData['h'] = v2
         return saveData
@@ -110,10 +114,10 @@ class wxMultiSplit(wxWindow):
             old = self.view1
             if isSplit:
                 self.view1 = wxMultiSplit(self.multiView,self,
-                                          wxPoint(0,0),self.GetSize())
+                                          (0,0),self.GetSize())
             else:
                 self.view1 = wxMultiViewLeaf(self.multiView,self,
-                                             wxPoint(0,0),self.GetSize())
+                                             (0,0),self.GetSize())
             self.view1.SetSaveData(v1Data)
             if old:
                 old.Destroy()
@@ -123,10 +127,10 @@ class wxMultiSplit(wxWindow):
             old = self.view2
             if isSplit:
                 self.view2 = wxMultiSplit(self.multiView,self,
-                                          wxPoint(0,0),self.GetSize())
+                                          (0,0),self.GetSize())
             else:
                 self.view2 = wxMultiViewLeaf(self.multiView,self,
-                                             wxPoint(0,0),self.GetSize())
+                                             (0,0),self.GetSize())
             self.view2.SetSaveData(v2Data)
             if old:
                 old.Destroy()
@@ -161,7 +165,7 @@ class wxMultiSplit(wxWindow):
                 self.view2.AddLeaf(direction,caller,pos)
         else:
             self.direction = direction
-            w,h = self.GetSizeTuple()
+            w,h = self.GetSize()
             if direction == MV_HOR:
                 x,y = (pos,0)
                 w1,h1 = (w-pos,h)
@@ -170,9 +174,8 @@ class wxMultiSplit(wxWindow):
                 x,y = (0,pos)
                 w1,h1 = (w,h-pos)
                 w2,h2 = (w,pos)
-            self.view2 = wxMultiViewLeaf(self.multiView,self,
-                                         wxPoint(x,y),wxSize(w1,h1))
-            self.view1.SetSize(wxSize(w2,h2))
+            self.view2 = wxMultiViewLeaf(self.multiView, self, (x,y), (w1,h1))
+            self.view1.SetSize((w2,h2))
             self.view2.OnSize(None)
 
     def DestroyLeaf(self,caller):
@@ -191,8 +194,8 @@ class wxMultiSplit(wxWindow):
             self.view1.SetSize(self.GetSize())
             self.view1.Move(self.GetPosition())
         else:
-            w,h = self.GetSizeTuple()
-            x,y = self.GetPositionTuple()
+            w,h = self.GetSize()
+            x,y = self.GetPosition()
             if caller == self.view1:
                 if self == parent.view1:
                     parent.view1 = self.view2
@@ -230,7 +233,7 @@ class wxMultiSplit(wxWindow):
         if not (self.view1 and self.view2):
             return
         if pos < 10: return
-        w,h = self.GetSizeTuple()
+        w,h = self.GetSize()
         if side == MV_HOR:
             if pos > w - 10: return
         else:
@@ -247,11 +250,11 @@ class wxMultiSplit(wxWindow):
             self.view1.SetSize(self.GetSize())
             self.view1.OnSize(None)
             return
-        v1w,v1h = self.view1.GetSizeTuple()
-        v2w,v2h = self.view2.GetSizeTuple()
-        v1x,v1y = self.view1.GetPositionTuple()
-        v2x,v2y = self.view2.GetPositionTuple()
-        w,h = self.GetSizeTuple()
+        v1w,v1h = self.view1.GetSize()
+        v2w,v2h = self.view2.GetSize()
+        v1x,v1y = self.view1.GetPosition()
+        v2x,v2y = self.view2.GetPosition()
+        w,h = self.GetSize()
 
         if v1x != v2x:
             ratio = float(w) / float((v1w + v2w))
@@ -278,10 +281,10 @@ class wxMultiSplit(wxWindow):
 #----------------------------------------------------------------------
 
 
-class wxMultiViewLeaf(wxWindow):
+class wxMultiViewLeaf(wx.Window):
     def __init__(self,multiView,parent,pos,size):
-        wxWindow.__init__(self,id = -1,parent = parent,pos = pos,size = size,
-                          style = wxCLIP_CHILDREN)
+        wx.Window.__init__(self,id = -1,parent = parent,pos = pos,size = size,
+                          style = wx.CLIP_CHILDREN)
         self.multiView = multiView
 
         self.sizerHor = MultiSizer(self,MV_HOR)
@@ -291,7 +294,7 @@ class wxMultiViewLeaf(wxWindow):
         self.detail = MultiClient(self,multiView._defChild)
         self.closer = MultiCloser(self)
 
-        EVT_SIZE(self,self.OnSize)
+        self.Bind(wx.EVT_SIZE,self.OnSize)
 
     def GetSaveData(self):
         saveData = {}
@@ -302,10 +305,10 @@ class wxMultiViewLeaf(wxWindow):
                 dData = attr()
                 if dData:
                     saveData['detail'] = dData
-        v1,v2 = self.GetPositionTuple()
+        v1,v2 = self.GetPosition()
         saveData['x'] = v1
         saveData['y'] = v2
-        v1,v2 = self.GetSizeTuple()
+        v1,v2 = self.GetSize()
         saveData['w'] = v1
         saveData['h'] = v2
         return saveData
@@ -335,7 +338,7 @@ class wxMultiViewLeaf(wxWindow):
 
     def AddLeaf(self,direction,pos):
         if pos < 10: return
-        w,h = self.GetSizeTuple()
+        w,h = self.GetSize()
         if direction == MV_VER:
             if pos > h - 10: return
         else:
@@ -362,20 +365,20 @@ class wxMultiViewLeaf(wxWindow):
 #----------------------------------------------------------------------
 
 
-class MultiClient(wxWindow):
+class MultiClient(wx.Window):
     def __init__(self,parent,childCls):
         w,h = self.CalcSize(parent)
-        wxWindow.__init__(self,id = -1,parent = parent,
-                          pos = wxPoint(0,0),
-                          size = wxSize(w,h),
-                          style = wxCLIP_CHILDREN | wxSUNKEN_BORDER)
+        wx.Window.__init__(self,id = -1,parent = parent,
+                          pos = (0,0),
+                          size = (w,h),
+                          style = wx.CLIP_CHILDREN | wx.SUNKEN_BORDER)
         self.child = childCls(self)
         self.child.MoveXY(2,2)
         self.normalColour = self.GetBackgroundColour()
         self.selected = False
 
-        EVT_SET_FOCUS(self,self.OnSetFocus)
-        EVT_CHILD_FOCUS(self,self.OnChildFocus)
+        self.Bind(wx.EVT_SET_FOCUS,self.OnSetFocus)
+        self.Bind(wx.EVT_CHILD_FOCUS,self.OnChildFocus)
 
     def UnSelect(self):
         if self.selected:
@@ -386,11 +389,11 @@ class MultiClient(wxWindow):
     def Select(self):
         self.GetParent().multiView.UnSelect()
         self.selected = True
-        self.SetBackgroundColour(wxColour(255,255,0)) # Yellow
+        self.SetBackgroundColour(wx.Colour(255,255,0)) # Yellow
         self.Refresh()
 
     def CalcSize(self,parent):
-        w,h = parent.GetSizeTuple()
+        w,h = parent.GetSize()
         w -= SH_SIZE
         h -= SH_SIZE
         return (w,h)
@@ -398,8 +401,8 @@ class MultiClient(wxWindow):
     def OnSize(self,evt):
         w,h = self.CalcSize(self.GetParent())
         self.SetDimensions(0,0,w,h)
-        w,h = self.GetClientSizeTuple()
-        self.child.SetSize(wxSize(w-4,h-4))
+        w,h = self.GetClientSize()
+        self.child.SetSize((w-4,h-4))
 
     def SetNewChildCls(self,childCls):
         if self.child:
@@ -415,34 +418,34 @@ class MultiClient(wxWindow):
         self.OnSetFocus(evt)
 ##        from Funcs import FindFocusedChild
 ##        child = FindFocusedChild(self)
-##        EVT_KILL_FOCUS(child,self.OnChildKillFocus)
+##        child.Bind(wx.EVT_KILL_FOCUS,self.OnChildKillFocus)
 
 
 #----------------------------------------------------------------------
 
 
-class MultiSizer(wxWindow):
+class MultiSizer(wx.Window):
     def __init__(self,parent,side):
         self.side = side
         x,y,w,h = self.CalcSizePos(parent)
-        wxWindow.__init__(self,id = -1,parent = parent,
-                          pos = wxPoint(x,y),
-                          size = wxSize(w,h),
-                          style = wxCLIP_CHILDREN)
+        wx.Window.__init__(self,id = -1,parent = parent,
+                          pos = (x,y),
+                          size = (w,h),
+                          style = wx.CLIP_CHILDREN)
 
         self.px = None                  # Previous X
         self.py = None                  # Previous Y
         self.isDrag = False             # In Dragging
         self.dragTarget = None          # View being sized
 
-        EVT_LEAVE_WINDOW(self,self.OnLeave)
-        EVT_ENTER_WINDOW(self,self.OnEnter)
-        EVT_MOTION(self,self.OnMouseMove)
-        EVT_LEFT_DOWN(self,self.OnPress)
-        EVT_LEFT_UP(self,self.OnRelease)
+        self.Bind(wx.EVT_LEAVE_WINDOW,self.OnLeave)
+        self.Bind(wx.EVT_ENTER_WINDOW,self.OnEnter)
+        self.Bind(wx.EVT_MOTION,self.OnMouseMove)
+        self.Bind(wx.EVT_LEFT_DOWN,self.OnPress)
+        self.Bind(wx.EVT_LEFT_UP,self.OnRelease)
 
     def CalcSizePos(self,parent):
-        pw,ph = parent.GetSizeTuple()
+        pw,ph = parent.GetSize()
         if self.side == MV_HOR:
             x = CR_SIZE + 2
             y = ph - SH_SIZE
@@ -460,15 +463,15 @@ class MultiSizer(wxWindow):
         self.SetDimensions(x,y,w,h)
 
     def OnLeave(self,evt):
-        self.SetCursor(wxStockCursor(wxCURSOR_ARROW))
+        self.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
 
     def OnEnter(self,evt):
         if not self.GetParent().CanSize(not self.side):
             return
         if self.side == MV_HOR:
-            self.SetCursor(wxStockCursor(wxCURSOR_SIZENS))
+            self.SetCursor(wx.StockCursor(wx.CURSOR_SIZENS))
         else:
-            self.SetCursor(wxStockCursor(wxCURSOR_SIZEWE))
+            self.SetCursor(wx.StockCursor(wx.CURSOR_SIZEWE))
 
     def OnMouseMove(self,evt):
         if self.isDrag:
@@ -508,28 +511,28 @@ class MultiSizer(wxWindow):
 #----------------------------------------------------------------------
 
 
-class MultiCreator(wxWindow):
+class MultiCreator(wx.Window):
     def __init__(self,parent,side):
         self.side = side
         x,y,w,h = self.CalcSizePos(parent)
-        wxWindow.__init__(self,id = -1,parent = parent,
-                          pos = wxPoint(x,y),
-                          size = wxSize(w,h),
-                          style = wxCLIP_CHILDREN)
+        wx.Window.__init__(self,id = -1,parent = parent,
+                          pos = (x,y),
+                          size = (w,h),
+                          style = wx.CLIP_CHILDREN)
 
         self.px = None                  # Previous X
         self.py = None                  # Previous Y
         self.isDrag = False           # In Dragging
 
-        EVT_LEAVE_WINDOW(self,self.OnLeave)
-        EVT_ENTER_WINDOW(self,self.OnEnter)
-        EVT_MOTION(self,self.OnMouseMove)
-        EVT_LEFT_DOWN(self,self.OnPress)
-        EVT_LEFT_UP(self,self.OnRelease)
-        EVT_PAINT(self,self.OnPaint)
+        self.Bind(wx.EVT_LEAVE_WINDOW,self.OnLeave)
+        self.Bind(wx.EVT_ENTER_WINDOW,self.OnEnter)
+        self.Bind(wx.EVT_MOTION,self.OnMouseMove)
+        self.Bind(wx.EVT_LEFT_DOWN,self.OnPress)
+        self.Bind(wx.EVT_LEFT_UP,self.OnRelease)
+        self.Bind(wx.EVT_PAINT,self.OnPaint)
 
     def CalcSizePos(self,parent):
-        pw,ph = parent.GetSizeTuple()
+        pw,ph = parent.GetSize()
         if self.side == MV_HOR:
             x = 2
             y = ph - SH_SIZE
@@ -547,13 +550,13 @@ class MultiCreator(wxWindow):
         self.SetDimensions(x,y,w,h)
 
     def OnLeave(self,evt):
-        self.SetCursor(wxStockCursor(wxCURSOR_ARROW))
+        self.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
 
     def OnEnter(self,evt):
         if self.side == MV_HOR:
-            self.SetCursor(wxStockCursor(wxCURSOR_HAND))
+            self.SetCursor(wx.StockCursor(wx.CURSOR_HAND))
         else:
-            self.SetCursor(wxStockCursor(wxCURSOR_POINT_LEFT))
+            self.SetCursor(wx.StockCursor(wx.CURSOR_POINT_LEFT))
 
     def OnMouseMove(self,evt):
         if self.isDrag:
@@ -588,14 +591,14 @@ class MultiCreator(wxWindow):
             evt.Skip()
 
     def OnPaint(self,evt):
-        dc = wxPaintDC(self)
-        dc.SetBackground(wxBrush(self.GetBackgroundColour(),wxSOLID))
+        dc = wx.PaintDC(self)
+        dc.SetBackground(wx.Brush(self.GetBackgroundColour(),wx.SOLID))
         dc.Clear()
 
-        highlight = wxPen(wxSystemSettings_GetColour(wxSYS_COLOUR_BTNHIGHLIGHT), 1, wxSOLID)
-        shadow = wxPen(wxSystemSettings_GetColour(wxSYS_COLOUR_BTNSHADOW), 1, wxSOLID)
-        black = wxPen(wxBLACK,1,wxSOLID)
-        w,h = self.GetSizeTuple()
+        highlight = wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNHIGHLIGHT), 1, wx.SOLID)
+        shadow = wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNSHADOW), 1, wx.SOLID)
+        black = wx.Pen(wx.BLACK,1,wx.SOLID)
+        w,h = self.GetSize()
         w -= 1
         h -= 1
 
@@ -612,29 +615,29 @@ class MultiCreator(wxWindow):
 #----------------------------------------------------------------------
 
 
-class MultiCloser(wxWindow):
+class MultiCloser(wx.Window):
     def __init__(self,parent):
         x,y,w,h = self.CalcSizePos(parent)
-        wxWindow.__init__(self,id = -1,parent = parent,
-                          pos = wxPoint(x,y),
-                          size = wxSize(w,h),
-                          style = wxCLIP_CHILDREN)
+        wx.Window.__init__(self,id = -1,parent = parent,
+                          pos = (x,y),
+                          size = (w,h),
+                          style = wx.CLIP_CHILDREN)
 
         self.down = False
         self.entered = False
 
-        EVT_LEFT_DOWN(self,self.OnPress)
-        EVT_LEFT_UP(self,self.OnRelease)
-        EVT_PAINT(self,self.OnPaint)
-        EVT_LEAVE_WINDOW(self,self.OnLeave)
-        EVT_ENTER_WINDOW(self,self.OnEnter)
+        self.Bind(wx.EVT_LEFT_DOWN,self.OnPress)
+        self.Bind(wx.EVT_LEFT_UP,self.OnRelease)
+        self.Bind(wx.EVT_PAINT,self.OnPaint)
+        self.Bind(wx.EVT_LEAVE_WINDOW,self.OnLeave)
+        self.Bind(wx.EVT_ENTER_WINDOW,self.OnEnter)
 
     def OnLeave(self,evt):
-        self.SetCursor(wxStockCursor(wxCURSOR_ARROW))
+        self.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
         self.entered = False
 
     def OnEnter(self,evt):
-        self.SetCursor(wxStockCursor(wxCURSOR_BULLSEYE))
+        self.SetCursor(wx.StockCursor(wx.CURSOR_BULLSEYE))
         self.entered = True
 
     def OnPress(self,evt):
@@ -649,12 +652,12 @@ class MultiCloser(wxWindow):
         self.down = False
 
     def OnPaint(self,evt):
-        dc = wxPaintDC(self)
-        dc.SetBackground(wxBrush(wxRED,wxSOLID))
+        dc = wx.PaintDC(self)
+        dc.SetBackground(wx.Brush(wx.RED,wx.SOLID))
         dc.Clear()
 
     def CalcSizePos(self,parent):
-        pw,ph = parent.GetSizeTuple()
+        pw,ph = parent.GetSize()
         x = pw - SH_SIZE
         w = SH_SIZE
         h = SH_SIZE + 2
@@ -669,19 +672,19 @@ class MultiCloser(wxWindow):
 #----------------------------------------------------------------------
 
 
-class EmptyChild(wxWindow):
+class EmptyChild(wx.Window):
     def __init__(self,parent):
-        wxWindow.__init__(self,parent,-1, style = wxCLIP_CHILDREN)
+        wx.Window.__init__(self,parent,-1, style = wx.CLIP_CHILDREN)
 
 
 #----------------------------------------------------------------------
 
 
 def DrawSash(win,x,y,direction):
-    dc = wxScreenDC()
+    dc = wx.ScreenDC()
     dc.StartDrawingOnTopWin(win)
-    bmp = wxEmptyBitmap(8,8)
-    bdc = wxMemoryDC()
+    bmp = wx.EmptyBitmap(8,8)
+    bdc = wx.MemoryDC()
     bdc.SelectObject(bmp)
     bdc.DrawRectangle((-1,-1), (10,10))
     for i in range(8):
@@ -689,13 +692,13 @@ def DrawSash(win,x,y,direction):
             if ((i + j) & 1):
                 bdc.DrawPoint((i,j))
 
-    brush = wxBrush(wxColour(0,0,0))
+    brush = wx.Brush(wx.Colour(0,0,0))
     brush.SetStipple(bmp)
 
     dc.SetBrush(brush)
-    dc.SetLogicalFunction(wxXOR)
+    dc.SetLogicalFunction(wx.XOR)
 
-    body_w,body_h = win.GetClientSizeTuple()
+    body_w,body_h = win.GetClientSize()
 
     if y < 0:
         y = 0

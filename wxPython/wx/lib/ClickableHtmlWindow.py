@@ -1,3 +1,7 @@
+# 12/01/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace. Not tested though.
+#
 
 """
 sorry no documentation...
@@ -5,28 +9,27 @@ Christopher J. Fama
 """
 
 
+import  wx
+import  wx.html as  html
 
-from wxPython.wx import *
-from wxPython.html import *
-
-class wxPyClickableHtmlWindow(wxHtmlWindow):
+class wxPyClickableHtmlWindow(html.HtmlWindow):
     """
     Class for a wxHtmlWindow which responds to clicks on links by opening a
     browser pointed at that link, and to shift-clicks by copying the link
     to the clipboard.
     """
     def __init__(self,parent,ID,**kw):
-        apply(wxHtmlWindow.__init__,(self,parent,ID),kw)
+        apply(html.HtmlWindow.__init__,(self,parent,ID),kw)
 
     def OnLinkClicked(self,link):
-        self.link = wxTextDataObject(link.GetHref())
+        self.link = wx.TextDataObject(link.GetHref())
         if link.GetEvent().ShiftDown():
-            if wxTheClipboard.Open():
-                wxTheClipboard.SetData(self.link)
-                wxTheClipboard.Close()
+            if wx.TheClipboard.Open():
+                wx.TheClipboard.SetData(self.link)
+                wx.TheClipboard.Close()
             else:
-                dlg = wxMessageDialog(self,"Couldn't open clipboard!\n",wxOK)
-                wxBell()
+                dlg = wx.MessageDialog(self,"Couldn't open clipboard!\n",wx.OK)
+                wx.Bell()
                 dlg.ShowModal()
                 dlg.Destroy()
         else:

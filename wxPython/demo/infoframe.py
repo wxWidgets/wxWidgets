@@ -57,7 +57,7 @@ class MyFrame(wx.Frame):
 
         # Get a copy of stdout and set it aside. We'll use it later.
         self.save_stdout = sys.stdout
-        
+
         # Now point to the output object for stdout
         sys.stdout = self.output = output
         # ... and use it.
@@ -117,9 +117,10 @@ if __name__ == "__main__":
 ##                 sys.stdout.close()
 ##             self.Destroy()
 
+    class MyApp(wx.App):
+        
         # Override the default output window and point it to the
         # custom class.
-        #>>Todo: wx renamer didn't get this
         outputWindowClass = infoframe.wxPyInformationalMessagesFrame
         
         def OnInit(self):
@@ -141,7 +142,6 @@ if __name__ == "__main__":
             self.SetTopWindow(frame)
             
             # Associate the frame with stdout.
-            #>>Todo: wx renamer didn't get this
             if isinstance(sys.stdout, infoframe.wxPyInformationalMessagesFrame):
                 sys.stdout.SetParent(frame)
 

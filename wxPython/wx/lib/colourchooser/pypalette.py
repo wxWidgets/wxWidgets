@@ -15,11 +15,19 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 """
+# 12/14/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o 2.5 compatability update.
+#
 
-import canvas
-import colorsys
-import cStringIO, zlib
-from wxPython.wx import *
+import  cStringIO
+import  zlib
+
+import  wx
+
+import  canvas
+import  colorsys
+
 
 # Bitmap functions generated from img2py
 def getData():
@@ -128,11 +136,11 @@ L\x1a\xc5\x9c\x88U\xde\xc7\x9d\xd04\x04\x8en\x11\x8112\xbd\xf6J\x96wP\x06\
 \xc5\x8e\x1a\xd5\x84\x8b\x7f\x8f\x01\x0e6\x8e\xd6eV~W\xff\x01[x\x1b=' )
 
 def getBitmap():
-    return wxBitmapFromImage(getImage())
+    return wx.BitmapFromImage(getImage())
 
 def getImage():
     stream = cStringIO.StringIO(getData())
-    return wxImageFromStream(stream)
+    return wx.ImageFromStream(stream)
 
 class PyPalette(canvas.Canvas):
     """The Pure-Python Palette
@@ -156,8 +164,9 @@ class PyPalette(canvas.Canvas):
     def __init__(self, parent, id):
         """Creates a palette object."""
         # Load the pre-generated palette XPM
+        wx.InitAllImageHandlers()
         self.palette = getBitmap ()
-        canvas.Canvas.__init__ (self, parent, id, size=wxSize(200, 192))
+        canvas.Canvas.__init__ (self, parent, id, size=(200, 192))
 
     def GetValue(self, x, y):
         """Returns a colour value at a specific x, y coordinate pair. This
@@ -173,9 +182,9 @@ class PyPalette(canvas.Canvas):
     def HighlightPoint(self, x, y):
         """Highlights an area of the palette with a little circle around
         the coordinate point"""
-        colour = wxColour(0, 0, 0)
-        self.buffer.SetPen(wxPen(colour, 1, wxSOLID))
-        self.buffer.SetBrush(wxBrush(colour, wxTRANSPARENT))
+        colour = wx.Colour(0, 0, 0)
+        self.buffer.SetPen(wx.Pen(colour, 1, wx.SOLID))
+        self.buffer.SetBrush(wx.Brush(colour, wx.TRANSPARENT))
         self.buffer.DrawCircle((x, y), 3)
         self.Refresh()
 
@@ -201,13 +210,13 @@ class PyPalette(canvas.Canvas):
             for x in range(0, width, self.HORIZONTAL_STEP):
                 hue = float(x) / float(width)
                 r,g,b = colorsys.hsv_to_rgb(hue, saturation, value)
-                colour = wxColour(int(r * 255.0), int(g * 255.0), int(b * 255.0))
-                self.buffer.SetPen(wxPen(colour, 1, wxSOLID))
-                self.buffer.SetBrush(wxBrush(colour, wxSOLID))
+                colour = wx.Colour(int(r * 255.0), int(g * 255.0), int(b * 255.0))
+                self.buffer.SetPen(wx.Pen(colour, 1, wx.SOLID))
+                self.buffer.SetBrush(wx.Brush(colour, wx.SOLID))
                 self.buffer.DrawRectangle((x, y),
                                           (self.HORIZONTAL_STEP, self.vertical_step))
 
         # this code is now simpler (and works)
         bitmap = self.buffer.GetBitmap()
-        image = wxImageFromBitmap(bitmap)
-        image.SaveFile (file_name, wxBITMAP_TYPE_XPM)
+        image = wx.ImageFromBitmap(bitmap)
+        image.SaveFile (file_name, wx.BITMAP_TYPE_XPM)

@@ -11,9 +11,11 @@
 # Copyright:   (c) 2002 by Total Control Software
 # Licence:     wxWindows license
 #----------------------------------------------------------------------
-
-"""
-"""
+# 12/12/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o 2.5 compatability update.
+# o Untested.
+#
 
 import wx
 
@@ -52,8 +54,8 @@ class GenStaticText(wx.PyControl):
         if rh == -1: rh = bh
         self.SetSize(wx.Size(rw, rh))
 
-        wx.EVT_ERASE_BACKGROUND(self, self.OnEraseBackground)
-        wx.EVT_PAINT(self,            self.OnPaint)
+        self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
+        self.Bind(wx.EVT_PAINT,            self.OnPaint)
 
 
     def SetLabel(self, label):

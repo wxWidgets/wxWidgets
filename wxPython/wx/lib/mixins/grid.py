@@ -9,8 +9,14 @@
 # Copyright:   (c) 2001 by Total Control Software
 # Licence:     wxWindows license
 #----------------------------------------------------------------------------
+# 12/14/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o 2.5 compatability update.
+# o Untested
+#
 
-from wxPython import wx, grid
+import  wx
+import  wx.grid
 
 #----------------------------------------------------------------------------
 
@@ -25,8 +31,8 @@ class wxGridAutoEditMixin:
 
     def __init__(self):
         self.__enableEdit = 0
-        wx.EVT_IDLE(self, self.__OnIdle)
-        grid.EVT_GRID_SELECT_CELL(self, self.__OnSelectCell)
+        self.Bind(wx.EVT_IDLE, self.__OnIdle)
+        self.Bind(wx.grid.EVT_GRID_SELECT_CELL, self.__OnSelectCell)
 
 
     def __OnIdle(self, evt):

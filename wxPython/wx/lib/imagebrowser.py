@@ -8,17 +8,28 @@
 # Date:         January 29, 2002
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
-
 # 1.0 Release
 # Create list of all available image file types
 # View "All Image" File Types as default filter
 # Sort the file list
 # Use newer "re" function for patterns
+#
+#----------------------------------------------------------------------------
+#
+# 12/08/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# o Corrected a nasty bug or two - see comments below.
+# o There was a duplicate ImageView.DrawImage() method. Que?
+# 
 
 #---------------------------------------------------------------------------
 
-import os, sys
-from wxPython.wx import *
+import  os
+import  sys
+
+import  wx
+
 dir_path = os.getcwd()
 
 #---------------------------------------------------------------------------
@@ -30,24 +41,10 @@ def ConvertBMP(file_nm):
     fl_fld = os.path.splitext(file_nm)
     ext = fl_fld[1]
     ext = ext[1:].lower()
-    if ext == 'bmp':
-        image = wxImage(file_nm, wxBITMAP_TYPE_BMP)
-    elif ext == 'gif':
-        image = wxImage(file_nm, wxBITMAP_TYPE_GIF)
-    elif ext == 'png':
-        image = wxImage(file_nm, wxBITMAP_TYPE_PNG)
-    elif ext == 'jpg':
-        image = wxImage(file_nm, wxBITMAP_TYPE_JPEG)
-    elif ext == 'pcx':
-        image = wxImage(file_nm, wxBITMAP_TYPE_PCX)
-    elif ext == 'tif':
-        image = wxImage(file_nm, wxBITMAP_TYPE_TIF)
-    elif ext == 'pnm':
-        image = wxImage(file_nm, wxBITMAP_TYPE_PNM)
-    else:
-        image = wxImage(file_nm, wxBITMAP_TYPE_ANY)
 
+    image = wx.Image(file_nm, wx.BITMAP_TYPE_ANY)
     return image
+
 
 def GetSize(file_nm):       # for scaling image values
     image = ConvertBMP(file_nm)
@@ -55,30 +52,26 @@ def GetSize(file_nm):       # for scaling image values
     size = bmp.GetWidth(), bmp.GetHeight()
     return size
 
-class ImageView(wxWindow):
-    def __init__(self, parent, id=-1, pos=wxDefaultPosition, size=wxDefaultSize):
-        wxWindow.__init__(self, parent, id, pos, size)
+
+class ImageView(wx.Window):
+    def __init__(self, parent, id=-1, pos=wx.DefaultPosition, size=wx.DefaultSize):
+        wx.Window.__init__(self, parent, id, pos, size)
         self.win = parent
         self.image = None
         self.back_color = 'WHITE'
         self.border_color = 'BLACK'
 
-        self.image_sizex = size.width
-        self.image_sizey = size.height
-        self.image_posx = pos.x
-        self.image_posy = pos.y
-        EVT_PAINT(self, self.OnPaint)
-
-        wxInitAllImageHandlers()
+        # Changed API of wx uses tuples for size and pos now.
+        self.image_sizex = size[0]
+        self.image_sizey = size[1]
+        self.image_posx = pos[0]
+        self.image_posy = pos[1]
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
 
     def OnPaint(self, event):
-        dc = wxPaintDC(self)
+        dc = wx.PaintDC(self)
         self.DrawImage(dc)
 
-    def DrawImage(self, dc):
-        dc.BeginDrawing()
-        self.DrawImage(dc)
-        dc.EndDrawing()
 
     def SetValue(self, file_nm):    # display the selected file in the panel
         image = ConvertBMP(file_nm)
@@ -86,10 +79,10 @@ class ImageView(wxWindow):
         self.Refresh()
 
     def DrawBorder(self, dc):
-        brush = wxBrush(wxNamedColour(self.back_color), wxSOLID)
+        brush = wx.Brush(wx.NamedColour(self.back_color), wx.SOLID)
         dc.SetBrush(brush)
-        dc.SetPen(wxPen(wxNamedColour(self.border_color), 1))
-        dc.DrawRectangle(0, 0, self.image_sizex, self.image_sizey)
+        dc.SetPen(wx.Pen(wx.NamedColour(self.border_color), 1))
+        dc.DrawRectangle((0, 0), (self.image_sizex, self.image_sizey))
 
     def DrawImage(self, dc):
         try:
@@ -98,6 +91,7 @@ class ImageView(wxWindow):
             return
 
         self.DrawBorder(dc)
+
         if image is None:
             return
 
@@ -119,12 +113,12 @@ class ImageView(wxWindow):
         image.Rescale(iwidth, iheight)      # rescale to fit the window
         image.ConvertToBitmap()
         bmp = image.ConvertToBitmap()
-        dc.DrawBitmap(bmp, diffx, diffy)        # draw the image to window
+        dc.DrawBitmap(bmp, (diffx, diffy))        # draw the image to window
 
 
-class ImageDialog(wxDialog):
+class ImageDialog(wx.Dialog):
     def __init__(self, parent, set_dir = None):
-        wxDialog.__init__(self, parent, -1, "Image Browser", wxPyDefaultPosition, wxSize(400, 400))
+        wx.Dialog.__init__(self, parent, -1, "Image Browser", wx.DefaultPosition, (400, 400))
 
         self.x_pos = 30     # initial display positions
         self.y_pos = 20
@@ -145,9 +139,8 @@ class ImageDialog(wxDialog):
 
         self.y_pos = self.y_pos + self.delta
 
-        mID = wxNewId()
-        wxButton(self, mID, ' Set Directory ', wxPoint(self.x_pos, self.y_pos), size).SetDefault()
-        EVT_BUTTON(self, mID, self.SetDirect)
+        btn = wx.Button(self, -1, ' Set Directory ', (self.x_pos, self.y_pos), size).SetDefault()
+        self.Bind(wx.EVT_BUTTON, self.SetDirect, btn)
 
         self.type_posy = self.y_pos     # save the y position for the image type combo
 
@@ -159,40 +152,55 @@ class ImageDialog(wxDialog):
         self.list_height = 150
 
     # List of Labels
-        mID = wxNewId()
-        self.tb = tb = wxListBox(self, mID, wxPoint(self.x_pos, self.y_pos), wxSize(160, self.list_height), self.fl_list, wxLB_SINGLE)
-        EVT_LISTBOX(self, mID, self.OnListClick)
-        EVT_LISTBOX_DCLICK(self, mID, self.OnListDClick)
+        self.tb = tb = wx.ListBox(self, -1, (self.x_pos, self.y_pos), 
+                                  (160, self.list_height), self.fl_list, 
+                                  wx.LB_SINGLE )
+        self.Bind(wx.EVT_LISTBOX, self.OnListClick, tb)
+        self.Bind(wx.EVT_LISTBOX_DCLICK, self.OnListDClick, tb)
 
-        width, height = self.tb.GetSizeTuple()
+        width, height = self.tb.GetSize()
         image_posx = self.x_pos + width + 20       # positions for setting the image window
         image_posy = self.y_pos
         image_sizex = 150
         image_sizey = self.list_height
 
-        self.fl_types = ["All Images", "Bmp", "Gif", "Png", "Jpg", "Ico", "Pnm", "Pcx", "Tif", "All Files"]
-        self.fl_ext_types = { "All Images": "All", "Bmp": "*.bmp", "Gif": "*.gif", "Png": "*.png", "Jpg": "*.jpg",
-                        "Ico": "*.ico", "Pnm": "*.pnm", "Pcx": "*.pcx", "Tif": "*.tif", "All Files": "*.*" }
+        self.fl_types = [
+                    "All Images", "Bmp", "Gif", "Png", "Jpg", "Ico", "Pnm", 
+                    "Pcx", "Tif", "All Files"
+                    ]
+
+        self.fl_ext_types = {
+                "All Images": "All", 
+                "Bmp": "*.bmp", 
+                "Gif": "*.gif", 
+                "Png": "*.png", 
+                "Jpg": "*.jpg",
+                "Ico": "*.ico", 
+                "Pnm": "*.pnm", 
+                "Pcx": "*.pcx", 
+                "Tif": "*.tif", 
+                "All Files": "*.*" 
+                }
 
         self.set_type = self.fl_types[0]    # initial file filter setting
         self.fl_ext = self.fl_ext_types[self.set_type]
 
-        mID = wxNewId()
-        self.sel_type = wxComboBox(self, mID, self.set_type, wxPoint(image_posx , self.type_posy), wxSize(150, -1), self.fl_types, wxCB_DROPDOWN)
-        EVT_COMBOBOX(self, mID, self.OnSetType)
+        self.sel_type = wx.ComboBox(self, -1, self.set_type, (image_posx , self.type_posy), 
+                                    (150, -1), self.fl_types, wx.CB_DROPDOWN)
+        self.Bind(wx.EVT_COMBOBOX, self.OnSetType, self.sel_type)
 
-        self.image_view = ImageView(self, pos=wxPoint(image_posx, image_posy), size=wxSize(image_sizex, image_sizey))
+        self.image_view = ImageView( self, pos=(image_posx, image_posy), 
+                                     size=(image_sizex, image_sizey))
 
         self.y_pos = self.y_pos + height + 20
 
-        mID = wxNewId()
-        wxButton(self, mID, ' Select ', wxPoint(100, self.y_pos), size).SetDefault()
-        EVT_BUTTON(self, mID, self.OnOk)
+        btn = wx.Button(self, -1, ' Select ', (100, self.y_pos), size).SetDefault()
+        self.Bind(wx.EVT_BUTTON, self.OnOk, btn)
 
-        wxButton(self, wxID_CANCEL, 'Cancel', wxPoint(250, self.y_pos), size)
+        wx.Button(self, wx.ID_CANCEL, 'Cancel', (250, self.y_pos), size)
 
         self.y_pos = self.y_pos + self.delta
-        fsize = wxSize(400, self.y_pos + 50)    # resize dialog for final vertical position
+        fsize = (400, self.y_pos + 50)    # resize dialog for final vertical position
         self.SetSize(fsize)
 
         self.ResetFiles()
@@ -200,11 +208,13 @@ class ImageDialog(wxDialog):
     def GetFiles(self):     # get the file list using directory and extension values
         if self.fl_ext == "All":
             all_files = []
+
             for ftypes in self.fl_types[1:-1]:    # get list of all available image types
                 filter = self.fl_ext_types[ftypes]
-                print "filter = ", filter
+                #print "filter = ", filter
                 self.fl_val = FindFiles(self, self.set_dir, filter)
                 all_files = all_files + self.fl_val.files   # add to list of files
+
             self.fl_list = all_files
         else:
             self.fl_val = FindFiles(self, self.set_dir, self.fl_ext)
@@ -213,7 +223,7 @@ class ImageDialog(wxDialog):
         self.fl_list.sort()     # sort the file list
 
     def DisplayDir(self):       # display the working directory
-        wxStaticText(self, -1, self.set_dir, wxPoint(self.dir_x, self.dir_y), wxSize(250, -1))
+        wx.StaticText(self, -1, self.set_dir, (self.dir_x, self.dir_y), (250, -1))
 
     def OnSetType(self, event):
         val = event.GetString()      # get file type value
@@ -233,21 +243,44 @@ class ImageDialog(wxDialog):
         self.image_view.SetValue(file_val)
 
     def SetDirect(self, event):     # set the new directory
-        dlg = wxDirDialog(self)
+        dlg = wx.DirDialog(self)
         dlg.SetPath(self.set_dir)
-        if dlg.ShowModal() == wxID_OK:
+
+        if dlg.ShowModal() == wx.ID_OK:
             self.set_dir = dlg.GetPath()
             self.ResetFiles()
+
         dlg.Destroy()
 
     def ResetFiles(self):   # refresh the display with files and initial image
         self.DisplayDir()
         self.GetFiles()
-        self.tb.Set(self.fl_list)
-        try:
-            self.tb.SetSelection(0)
-            self.SetListValue(0)
-        except:
+
+        # Changed 12/8/03 jmg
+        #
+        # o Clear listbox first
+        # o THEN check to see if there are any valid files of the selected
+        #   type, 
+        # o THEN if we have any files to display, set the listbox up,
+        #
+        # OTHERWISE
+        #
+        # o Leave it cleared
+        # o Clear the image viewer.
+        #
+        # This avoids a nasty assert error.
+        #
+        self.tb.Clear()
+        
+        if len(self.fl_list):
+            self.tb.Set(self.fl_list)
+
+            try:
+                self.tb.SetSelection(0)
+                self.SetListValue(0)
+            except:
+                self.image_view.SetValue(None)
+        else:
             self.image_view.SetValue(None)
 
     def GetFile(self):
@@ -258,19 +291,22 @@ class ImageDialog(wxDialog):
 
     def OnCancel(self, event):
         self.result = None
-        self.EndModal(wxID_CANCEL)
+        self.EndModal(wx.ID_CANCEL)
 
     def OnOk(self, event):
         self.result = self.set_file
-        self.EndModal(wxID_OK)
+        self.EndModal(wx.ID_OK)
 
 
 def OnFileDlg(self):
-    dlg = wxFileDialog(self, "Choose an Image File", ".", "", "Bmp (*.bmp)|*.bmp|JPEG (*.jpg)|*.jpg", wxOPEN)
-    if dlg.ShowModal() == wxID_OK:
+    dlg = wx.FileDialog(self, "Choose an Image File", ".", "", 
+                        "Bmp (*.bmp)|*.bmp|JPEG (*.jpg)|*.jpg", wx.OPEN)
+
+    if dlg.ShowModal() == wx.ID_OK:
         path = dlg.GetPath()
     else:
         path = None
+
     dlg.Destroy()
     return path
 
@@ -282,9 +318,11 @@ class FindFiles:
         self.file = ""
         mask = mask.upper()
         pattern = self.MakeRegex(mask)
+
         for i in os.listdir(dir):
             if i == "." or i == "..":
                 continue
+
             path = os.path.join(dir, i)
             path = path.upper()
             value = i.upper()
@@ -297,6 +335,7 @@ class FindFiles:
     def MakeRegex(self, pattern):
         import re
         f = ""  # Set up a regex for file names
+
         for ch in pattern:
             if ch == "*":
                 f = f + ".*"
@@ -306,6 +345,7 @@ class FindFiles:
                 f = f + "."
             else:
                 f = f + ch
+
         return re.compile(f+'$')
 
     def StripExt(self, file_nm):

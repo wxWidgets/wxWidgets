@@ -1,4 +1,10 @@
 <html>
+
+<!--	12/13/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+
+		o Updated for wx namespace.
+-->
+
 <head>
 <title>wxHTML does wxPython!</title>
 </head>
@@ -13,18 +19,18 @@ sources and doc-string <a href="../../lib/wxpTag.py">here</a>.
 The button below is added to the page like this:
 
 <pre>
-&lt;center>&lt;wxp class="wxButton" width="50%">
+&lt;center>&lt;wxp module="wx" class="Button" width="50%">
     &lt;param name="label" value="It works!">
-    &lt;param name="id"    value="wxID_OK">
+    &lt;param name="id"    value="ID_OK">
 &lt;/wxp>&lt;/center>
 </pre>
 
 <hr>
 
 <center>
-<wxp class="wxButton" width="50%">
+<wxp module="wx" class="Button" width="50%">
     <param name="label" value="It works!">
-    <param name="id"    value="wxID_OK">
+    <param name="id"    value="ID_OK">
 </wxp>
 </center>
 

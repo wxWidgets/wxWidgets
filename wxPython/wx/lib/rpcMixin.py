@@ -17,6 +17,11 @@
 # Copyright:   (c) 2000, 2001 by Greg Landrum and Rational Discovery LLC
 # Licence:     wxWindows license
 #----------------------------------------------------------------------
+# 12/11/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o 2.5 compatability update.
+# o xmlrpcserver not available.
+#
 
 """provides xmlrpc server functionality for wxPython applications via a mixin class
 
@@ -68,12 +73,14 @@
 
 """
 
-from wxPython.wx import *
-import xmlrpcserver,xmlrpclib
-import threading
-import SocketServer
-import new
-import sys
+import  new
+import  SocketServer
+import  sys
+import  threading
+import  xmlrpclib
+import  xmlrpcserver
+
+import  wx
 
 rpcPENDING = 0
 rpcDONE = 1
@@ -85,14 +92,16 @@ class RPCRequest:
   result = None
 
 # here's the ID for external events
-wxEVT_EXTERNAL_EVENT = 25015
-class ExternalEvent(wxPyEvent):
+wxEVT_EXTERNAL_EVENT = wx.NewEventType()
+EVT_EXTERNAL_EVENT = wx.PyEventBinder(wxEVT_EXTERNAL_EVENT, 0)
+
+class ExternalEvent(wx.PyEvent):
   """The custom event class used to pass xmlrpc calls from
      the server thread into the GUI thread
 
   """
   def __init__(self,method,args):
-    wxPyEvent.__init__(self)
+    wx.PyEvent.__init__(self)
     self.SetEventType(wxEVT_EXTERNAL_EVENT)
     self.method = method
     self.args = args
@@ -106,9 +115,6 @@ class ExternalEvent(wxPyEvent):
     self.rpcStatus = None
     self.rpcStatusLock = None
     self.rpcondVar = None
-
-def EVT_EXTERNAL_EVENT(win,func):
-  win.Connect(-1,-1,wxEVT_EXTERNAL_EVENT,func)
 
 class Handler(xmlrpcserver.RequestHandler):
   """The handler class that the xmlrpcserver actually calls
@@ -145,7 +151,7 @@ class Handler(xmlrpcserver.RequestHandler):
 
     evt.rpcCondVar.acquire()
     # dispatch the event to the GUI
-    wxPostEvent(self._app,evt)
+    wx.PostEvent(self._app,evt)
 
     # wait for the GUI to finish
     while evt.rpcStatus.status == rpcPENDING:
@@ -227,14 +233,14 @@ class rpcMixin:
     if port == -1:
       port = self.defPort
     self.verbose=verbose
-    EVT_EXTERNAL_EVENT(self,self.OnExternal)
+    self.Bind(EVT_EXTERNAL_EVENT,self.OnExternal)
     if hasattr(self,'OnClose'):
       self._origOnClose = self.OnClose
-      self.Disconnect(-1,-1,wxEVT_CLOSE_WINDOW)
+      self.Disconnect(-1,-1,wx.EVT_CLOSE_WINDOW)
     else:
       self._origOnClose = None
     self.OnClose = self.RPCOnClose
-    EVT_CLOSE(self,self.RPCOnClose)
+    self.Bind(wx.EVT_CLOSE,self.RPCOnClose)
 
     tClass = new.classobj('Handler%d'%(port),(Handler,),{})
     tClass._app = self
@@ -342,7 +348,7 @@ if __name__ == '__main__':
   else:
     port = 8023
 
-  class rpcFrame(wxFrame,rpcMixin):
+  class rpcFrame(wx.Frame,rpcMixin):
     """A simple wxFrame with the rpcMixin functionality added
     """
     def __init__(self,*args,**kwargs):
@@ -360,10 +366,10 @@ if __name__ == '__main__':
         mixinArgs['portScan'] = kwargs['rpcPortScan']
         del kwargs['rpcPortScan']
 
-      apply(wxFrame.__init__,(self,)+args,kwargs)
+      apply(wx.Frame.__init__,(self,)+args,kwargs)
       apply(rpcMixin.__init__,(self,),mixinArgs)
 
-      EVT_CHAR(self,self.OnChar)
+      self.Bind(wx.EVT_CHAR,self.OnChar)
 
     def TestFunc(self,args):
       """a demo method"""
@@ -382,11 +388,10 @@ if __name__ == '__main__':
 
 
 
-  class MyApp(wxApp):
+  class MyApp(wx.App):
     def OnInit(self):
-      self.frame = rpcFrame(NULL, -1, "wxPython RPCDemo", wxDefaultPosition,
-                            wxSize(300,300),
-                            rpcHost='localhost',rpcPort=port)
+      self.frame = rpcFrame(None, -1, "wxPython RPCDemo", wx.DefaultPosition,
+                            (300,300), rpcHost='localhost',rpcPort=port)
       self.frame.Show(True)
       return True
 

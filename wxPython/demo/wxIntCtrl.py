@@ -7,6 +7,10 @@
 # o intctrl needs the renamer applied.
 # o intctrl needs new event binders.
 # 
+# 12/08/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o All issues corrected
+#
 
 import  wx
 import  wx.lib.intctrl  as  intctrl
@@ -70,10 +74,9 @@ class TestPanel( wx.Panel ):
         self.Bind(wx.EVT_CHECKBOX, self.OnSetAllowNone, self.allow_none)
         self.Bind(wx.EVT_CHECKBOX, self.OnSetAllowLong, self.allow_long)
 
-        # Once the intctrl library is updated, this should be too.
-        intctrl.EVT_INT(self, self.min.GetId(), self.SetTargetMinMax)
-        intctrl.EVT_INT(self, self.max.GetId(), self.SetTargetMinMax)
-        intctrl.EVT_INT(self, self.target_ctl.GetId(), self.OnTargetChange)
+        self.Bind(intctrl.EVT_INT, self.SetTargetMinMax, self.min)
+        self.Bind(intctrl.EVT_INT, self.SetTargetMinMax, self.max)
+        self.Bind(intctrl.EVT_INT, self.OnTargetChange, self.target_ctl)
 
 
     def OnSetMin( self, event ):

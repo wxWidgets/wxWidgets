@@ -664,7 +664,9 @@ def updateColourDB():
         import wx
         assert wx.GetApp() is not None, "You must have a wx.App object before you can use the colour database."
         cl = getColourInfoList()
+        
         for info in cl:
             wx.TheColourDatabase.Append(*info)
-
+            
+         _haveUpdated = True
 

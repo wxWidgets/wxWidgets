@@ -1,9 +1,12 @@
-from wxPython.wx import wxLayoutConstraints,\
-                wxTop, wxLeft, wxBottom, wxRight, \
-                wxHeight, wxWidth, wxCentreX, wxCentreY
-import re
+# 12/09/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-class Layoutf(wxLayoutConstraints):
+import  re
+import  wx
+
+class Layoutf(wx.LayoutConstraints):
     """
 The class Layoutf(wxLayoutConstraints) presents a simplification
 of the wxLayoutConstraints syntax. The name Layoutf is choosen
@@ -117,15 +120,15 @@ time of this writing not documented.
     op_d = { '=': 'SameAs', '%': 'PercentOf', '<': 'LeftOf',
               '>': 'RightOf', '^': 'Above', '_': 'Below',
                '!': 'Absolute', '?': 'Unconstrained', '*': 'AsIs' }
-    cmp_d = { 't': 'wxTop', 'l': 'wxLeft', 'b': 'wxBottom',
-             'r': 'wxRight', 'h': 'wxHeight', 'w': 'wxWidth',
-             'x': 'wxCentreX', 'y': 'wxCentreY' }
+    cmp_d = { 't': 'wx.Top', 'l': 'wx.Left', 'b': 'wx.Bottom',
+             'r': 'wx.Right', 'h': 'wx.Height', 'w': 'wx.Width',
+             'x': 'wx.CentreX', 'y': 'wx.CentreY' }
 
     rexp1 = re.compile('^\s*([tlrbhwxy])\s*([!\?\*])\s*(\d*)\s*$')
     rexp2 = re.compile('^\s*([tlrbhwxy])\s*([=%<>^_])\s*([tlrbhwxy]?)\s*(\d*)\s*#(\d+)\s*$')
 
     def __init__(self,pstr=None,winlist=None):
-        wxLayoutConstraints.__init__(self)
+        wx.LayoutConstraints.__init__(self)
         if pstr:
             self.pack(pstr,winlist)
 
@@ -194,62 +197,59 @@ time of this writing not documented.
                   self.cmp_d[g[2]])
 
 if __name__=='__main__':
-    from wxPython.wx import *
 
-    class TestLayoutf(wxFrame):
+    class TestLayoutf(wx.Frame):
         def __init__(self, parent):
-            wxFrame.__init__(self, parent, -1, 'Test Layout Constraints',
-                             wxPyDefaultPosition, wxSize(500, 300))
-            EVT_CLOSE(self, self.OnCloseWindow)
+            wx.Frame.__init__(self, parent, -1, 'Test Layout Constraints',
+                              wx.DefaultPosition, (500, 300))
+            self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
             self.SetAutoLayout(True)
-            EVT_BUTTON(self, 100, self.OnButton)
-            EVT_BUTTON(self, 101, self.OnAbout)
 
-            self.panelA = wxWindow(self, -1, wxPyDefaultPosition, wxPyDefaultSize, wxSIMPLE_BORDER)
-            self.panelA.SetBackgroundColour(wxBLUE)
+            self.panelA = wx.Window(self, -1, style=wx.SIMPLE_BORDER)
+            self.panelA.SetBackgroundColour(wx.BLUE)
             self.panelA.SetConstraints(Layoutf('t=t10#1;l=l10#1;b=b10#1;r%r50#1',(self,)))
 
-            self.panelB = wxWindow(self, -1, wxPyDefaultPosition, wxPyDefaultSize, wxSIMPLE_BORDER)
-            self.panelB.SetBackgroundColour(wxRED)
+            self.panelB = wx.Window(self, -1, style=wx.SIMPLE_BORDER)
+            self.panelB.SetBackgroundColour(wx.RED)
             self.panelB.SetConstraints(Layoutf('t=t10#1;r=r10#1;b%b30#1;l>10#2', (self,self.panelA)))
 
-            self.panelC = wxWindow(self, -1, wxPyDefaultPosition, wxPyDefaultSize, wxSIMPLE_BORDER)
-            self.panelC.SetBackgroundColour(wxWHITE)
+            self.panelC = wx.Window(self, -1, style=wx.SIMPLE_BORDER)
+            self.panelC.SetBackgroundColour(wx.WHITE)
             self.panelC.SetConstraints(Layoutf('t_10#3;r=r10#1;b=b10#1;l>10#2', (self,self.panelA,self.panelB)))
 
-            b = wxButton(self.panelA, 101, ' About: ')
+            b = wx.Button(self.panelA, -1, ' About: ')
             b.SetConstraints(Layoutf('X=X#1;Y=Y#1;h*;w%w50#1', (self.panelA,)))
+            self.Bind(wx.EVT_BUTTON, self.OnAbout, b)
 
-            b = wxButton(self.panelB, 100, ' Panel B ')
+            b = wx.Button(self.panelB, 100, ' Panel B ')
             b.SetConstraints(Layoutf('t=t2#1;r=r4#1;h*;w*', (self.panelB,)))
 
-            self.panelD = wxWindow(self.panelC, -1, wxPyDefaultPosition, wxPyDefaultSize, wxSIMPLE_BORDER)
-            self.panelD.SetBackgroundColour(wxGREEN)
+            self.panelD = wx.Window(self.panelC, -1, style=wx.SIMPLE_BORDER)
+            self.panelD.SetBackgroundColour(wx.GREEN)
             self.panelD.SetConstraints(Layoutf('b%h50#1;r%w50#1;h=h#2;w=w#2', (self.panelC, b)))
 
-            b = wxButton(self.panelC, 100, ' Panel C ')
+            b = wx.Button(self.panelC, -1, ' Panel C ')
             b.SetConstraints(Layoutf('t_#1;l>#1;h*;w*', (self.panelD,)))
+            self.Bind(wx.EVT_BUTTON, self.OnButton, b)
 
-            wxStaticText(self.panelD, -1, "Panel D", wxPoint(4, 4)).SetBackgroundColour(wxGREEN)
+            wx.StaticText(self.panelD, -1, "Panel D", (4, 4)).SetBackgroundColour(wx.GREEN)
 
         def OnButton(self, event):
             self.Close(True)
 
         def OnAbout(self, event):
-            try:
-                from dialogs import wxScrolledMessageDialog
-                msg = wxScrolledMessageDialog(self, Layoutf.__doc__, "about")
-                msg.ShowModal()
-            except:
-                print msg
+            import  wx.lib.dialogs
+            msg = wx.lib.dialogs.wxScrolledMessageDialog(self, Layoutf.__doc__, "about")
+            msg.ShowModal()
+            msg.Destroy()
 
         def OnCloseWindow(self, event):
             self.Destroy()
 
-    class TestApp(wxApp):
+    class TestApp(wx.App):
         def OnInit(self):
-            frame = TestLayoutf(NULL)
+            frame = TestLayoutf(None)
             frame.Show(1)
             self.SetTopWindow(frame)
             return 1

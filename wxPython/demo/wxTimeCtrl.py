@@ -7,6 +7,10 @@
 # o wx renamer needed for timectrl lib
 # o presense of spin control causing probs (see spin ctrl demo for details)
 # 
+# 12/13/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o New binders applied. Issues still exist.
+#
 
 import  wx
 import  wx.lib.timectrl         as  timectl
@@ -146,17 +150,14 @@ class TestPanel( scrolled.wxScrolledPanel ):
         self.SetupScrolling()
 
         self.Bind(wx.EVT_BUTTON, self.OnButtonClick, buttonChange )
-        timectl.EVT_TIMEUPDATE( self, self.time12.GetId(), self.OnTimeChange )
-        timectl.EVT_TIMEUPDATE( self, self.time24.GetId(), self.OnTimeChange )
-        timectl.EVT_TIMEUPDATE( self, self.spinless_ctrl.GetId(), self.OnTimeChange )
-
-
+        self.Bind(timectl.EVT_TIMEUPDATE, self.OnTimeChange, self.time12 )
+        self.Bind(timectl.EVT_TIMEUPDATE, self.OnTimeChange, self.time24 )
+        self.Bind(timectl.EVT_TIMEUPDATE, self.OnTimeChange, self.spinless_ctrl )
         self.Bind(wx.EVT_CHECKBOX, self.OnBoundsCheck, self.set_bounds )
         self.Bind(wx.EVT_CHECKBOX, self.SetTargetMinMax, self.limit_check )
-        timectl.EVT_TIMEUPDATE( self, self.min.GetId(), self.SetTargetMinMax )
-        timectl.EVT_TIMEUPDATE( self, self.max.GetId(), self.SetTargetMinMax )
-        timectl.EVT_TIMEUPDATE( self, self.target_ctrl.GetId(), self.OnTimeChange )
-
+        self.Bind(timectl.EVT_TIMEUPDATE, self.SetTargetMinMax, self.min )
+        self.Bind(timectl.EVT_TIMEUPDATE, self.SetTargetMinMax, self.max )
+        self.Bind(timectl.EVT_TIMEUPDATE, self.OnTimeChange, self.target_ctrl )
 
 
     def OnTimeChange( self, event ):

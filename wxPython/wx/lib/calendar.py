@@ -9,11 +9,34 @@
 # Date:         Nov 26, 2001
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
+# 12/01/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# o Tested with updated demo
+# o Added new event type EVT_CALENDAR. The reason for this is that the original
+#   library used a hardcoded ID of 2100 for generating events. This makes it
+#   very difficult to fathom when trying to decode the code since there's no
+#   published API. Creating the new event binder might seem like overkill - 
+#   after all, you might ask, why not just use a new event ID and be done with
+#   it? However, a consistent interface is very useful at times; also it makes
+#   it clear that we're not just hunting for mouse clicks -- we're hunting
+#   wabbit^H^H^H^H (sorry bout that) for calender-driven mouse clicks. So
+#   that's my sad story. Shoot me if you must :-)
+# o There's still one deprecation warning buried in here somewhere, but I 
+#   haven't been able to find it yet. It only occurs when displaying a 
+#   print preview, and only the first time. It *could* be an error in the
+#   demo, I suppose.
+#
+#   Here's the traceback:
+#
+#   C:\Python\lib\site-packages\wx\core.py:949: DeprecationWarning: 
+#       integer argument expected, got float
+#   newobj = _core.new_Rect(*args, **kwargs)
+# 
 
-from wxPython.wx import *
+import  wx
 
 from CDate import *
-
 
 CalDays = [6, 0, 1, 2, 3, 4, 5]
 AbrWeekday = {6:"Sun", 0:"Mon", 1:"Tue", 2:"Wed", 3:"Thu", 4:"Fri", 5:"Sat"}
@@ -21,7 +44,9 @@ _MIDSIZE = 180
 
 BusCalDays = [0, 1, 2, 3, 4, 5, 6]
 
-# calendar drawing routing
+# Calendar click event - added 12/1/03 by jmg (see above)
+wxEVT_COMMAND_PYCALENDAR_DAY_CLICKED = wx.NewEventType()
+EVT_CALENDAR = wx.PyEventBinder(wxEVT_COMMAND_PYCALENDAR_DAY_CLICKED, 1)
 
 def GetMonthList():
     monthlist = []
@@ -30,6 +55,8 @@ def GetMonthList():
         if name != None:
             monthlist.append(name)
     return monthlist
+
+# calendar drawing routing
 
 class CalDraw:
     def __init__(self, parent):
@@ -47,8 +74,8 @@ class CalDraw:
         self.num_size = 12          # default size of calendar if no auto size
         self.max_num_size = 12     # maximum size for calendar number
 
-        self.num_align_horz = wxALIGN_CENTRE    # alignment of numbers
-        self.num_align_vert = wxALIGN_CENTRE
+        self.num_align_horz = wx.ALIGN_CENTRE    # alignment of numbers
+        self.num_align_vert = wx.ALIGN_CENTRE
         self.num_indent_horz = 0     # points indent from position, used to offset if not centered
         self.num_indent_vert = 0
 
@@ -67,8 +94,8 @@ class CalDraw:
         self.week_font_color = 'BLACK'      # font colors
         self.day_font_color = 'BLACK'
 
-        self.font = wxSWISS
-        self.bold = wxNORMAL
+        self.font = wx.SWISS
+        self.bold = wx.NORMAL
 
         self.hide_title = False
         self.hide_grid = False
@@ -84,8 +111,8 @@ class CalDraw:
         self.week_color = week_color
 
     def SetSize(self, size):
-        self.set_sizew = size.width
-        self.set_sizeh = size.height
+        self.set_sizew = size[0]
+        self.set_sizeh = size[1]
 
     def InitValues(self):       # default dimensions of various elements of the calendar
         self.rg = {}
@@ -122,6 +149,7 @@ class CalDraw:
         self.InitScale()
 
         self.DrawBorder()
+
         if self.hide_title is False:
             self.DrawMonth()
 
@@ -142,19 +170,22 @@ class CalDraw:
     def AddSelect(self, list, cfont=None, cbackgrd = None):
         if cfont is None:
             cfont = self.sel_color      # font digit color
+
         if cbackgrd is None:
             cbackgrd = self.high_color     # select background color
 
         for val in list:
             self.cal_sel[val] = (cfont, cbackgrd)
 
-    def DrawBorder(self):   # draw border around the outside of the main display rectangle
-        brush = wxBrush(wxNamedColour(self.back_color), wxSOLID)
+    # draw border around the outside of the main display rectangle
+    def DrawBorder(self):   
+        brush = wx.Brush(wx.NamedColour(self.back_color), wx.SOLID)
         self.DC.SetBrush(brush)
-        self.DC.SetPen(wxPen(wxNamedColour(self.border_color), 1))
+        self.DC.SetPen(wx.Pen(wx.NamedColour(self.border_color), 1))
 
         if self.outer_border is True:
-            rect = wxRect(self.cx_st, self.cy_st, self.sizew, self.sizeh)  # full display window area
+            # full display window area
+            rect = wx.Rect(self.cx_st, self.cy_st, self.sizew, self.sizeh)  
             self.DC.DrawRectangleRect(rect)
 
     def DrawNumVal(self):
@@ -172,6 +203,7 @@ class CalDraw:
         t = Date(year, month, day)
         dow = self.dow = t.day_of_week     # start day in month
         dim = self.dim = t.days_in_month   # number of days in month
+
         if self.cal_type == "NORMAL":
             start_pos = dow+1
         else:
@@ -182,17 +214,21 @@ class CalDraw:
         self.cal = []
         for i in range(start_pos):
             self.cal.append('')
+
         i = 1
         while i <= dim:
             self.cal.append(str(i))
             i = i + 1
+
         return start_pos
 
     def SetWeekEnd(self, font_color='BLACK', backgrd = 'LIGHT GREY'):
         date = 6 - int(self.dow)     # start day of first saturday
+
         while date <= self.dim:
             self.cal_sel[date] = (font_color, backgrd)  # Saturday
             date = date + 1
+
             if date <= self.dim:
                 self.cal_sel[date] = (font_color, backgrd)      # Sunday
                 date = date + 6
@@ -203,9 +239,10 @@ class CalDraw:
         cnt = 0
         for y in self.gridy[1:-1]:
             for x in self.gridx[:-1]:
-                rect = wxRect(x, y, self.dl_w, self.dl_h)  # create rect region
+                rect = wx.Rect(x, y, self.dl_w, self.dl_h)  # create rect region
                 self.rg[cnt] = rect
                 cnt = cnt + 1
+
         return self.rg
 
     def GetCal(self):
@@ -221,7 +258,7 @@ class CalDraw:
         if self.sizeh < _MIDSIZE:
             sizef = 10
 
-        f = wxFont(sizef, self.font, wxNORMAL, self.bold)
+        f = wx.Font(sizef, self.font, wx.NORMAL, self.bold)
         self.DC.SetFont(f)
 
         tw,th = self.DC.GetTextExtent(month)
@@ -234,7 +271,7 @@ class CalDraw:
 
         self.title_offset = th * 2
 
-        f = wxFont(sizef, self.font, wxNORMAL, self.bold)
+        f = wx.Font(sizef, self.font, wx.NORMAL, self.bold)
         self.DC.SetFont(f)
         self.DC.DrawText(year, (self.cx_st + adjust, self.cy_st + th))
 
@@ -243,7 +280,8 @@ class CalDraw:
         height = self.gridy[1] - self.gridy[0]
         rect_w = self.gridx[7]-self.gridx[0]
 
-        f = wxFont(10, self.font, wxNORMAL, self.bold)      # initial font setting
+        f = wx.Font(10, self.font, wx.NORMAL, self.bold)      # initial font setting
+
         if self.week_auto == True:
             test_size = self.max_week_size      # max size
             test_day = ' Sun '
@@ -251,21 +289,23 @@ class CalDraw:
                 f.SetPointSize(test_size)
                 self.DC.SetFont(f)
                 tw,th = self.DC.GetTextExtent(test_day)
+
                 if tw < width and th < height:
                     break
+
                 test_size = test_size - 1
         else:
             f.SetPointSize(self.week_size)   # set fixed size
             self.DC.SetFont(f)
 
-        self.DC.SetTextForeground(wxNamedColour(self.week_font_color))
+        self.DC.SetTextForeground(wx.NamedColour(self.week_font_color))
 
         cnt_x = 0
         cnt_y = 0
 
-        brush = wxBrush(wxNamedColour(self.week_color), wxSOLID)
+        brush = wx.Brush(wx.NamedColour(self.week_color), wx.SOLID)
         self.DC.SetBrush(brush)
-#        self.DC.DrawRectangle((self.gridx[0], self.gridy[0]), (rect_w+1, height))
+        self.DC.DrawRectangle((self.gridx[0], self.gridy[0]), (rect_w+1, height))
 
         if self.cal_type == "NORMAL":
             cal_days = CalDays
@@ -274,8 +314,10 @@ class CalDraw:
 
         for val in cal_days:
             day = AbrWeekday[val]
+
             if self.sizew < 200:
                 day = day[0]
+
             dw,dh = self.DC.GetTextExtent(day)
             diffx = (width-dw)/2
             diffy = (height-dh)/2
@@ -287,14 +329,17 @@ class CalDraw:
             cnt_x = cnt_x + 1
 
     def DrawNum(self):      # draw the day numbers
-        f = wxFont(10, self.font, wxNORMAL, self.bold)      # initial font setting
+        f = wx.Font(10, self.font, wx.NORMAL, self.bold)      # initial font setting
+
         if self.num_auto == True:
             test_size = self.max_num_size      # max size
             test_day = ' 99 '
+
             while test_size > 2:
                 f.SetPointSize(test_size)
                 self.DC.SetFont(f)
                 tw,th = self.DC.GetTextExtent(test_day)
+
                 if tw < self.dl_w and th < self.dl_h:
                     sizef = test_size
                     break
@@ -315,22 +360,23 @@ class CalDraw:
             except:
                 num_color = self.day_font_color
 
-            self.DC.SetTextForeground(wxNamedColour(num_color))
+            self.DC.SetTextForeground(wx.NamedColour(num_color))
             self.DC.SetFont(f)
 
             tw,th = self.DC.GetTextExtent(val)
-            if self.num_align_horz == wxALIGN_CENTRE:
+
+            if self.num_align_horz == wx.ALIGN_CENTRE:
                 adj_h = (self.dl_w - tw)/2
-            elif self.num_align_horz == wxALIGN_RIGHT:
+            elif self.num_align_horz == wx.ALIGN_RIGHT:
                 adj_h = self.dl_w - tw
             else:
                 adj_h = 0   # left alignment
 
             adj_h = adj_h + self.num_indent_horz
 
-            if self.num_align_vert == wxALIGN_CENTRE:
+            if self.num_align_vert == wx.ALIGN_CENTRE:
                 adj_v = (self.dl_h - th)/2
-            elif self.num_align_horz == wxALIGN_RIGHT:
+            elif self.num_align_horz == wx.ALIGN_RIGHT:
                 adj_v = self.dl_h - th
             else:
                 adj_v = 0   # left alignment
@@ -338,6 +384,7 @@ class CalDraw:
             adj_v = adj_v + self.num_indent_vert
 
             self.DC.DrawText(val, (x+adj_h, y+adj_v))
+
             if cnt_x < 6:
                 cnt_x = cnt_x + 1
             else:
@@ -358,19 +405,20 @@ class CalDraw:
     def DrawSel(self):         # highlighted selected days
         for key in self.cal_sel.keys():
             sel_color = self.cal_sel[key][1]
-            brush = wxBrush(wxNamedColour(sel_color), wxSOLID)
+            brush = wx.Brush(wx.NamedColour(sel_color), wx.SOLID)
             self.DC.SetBrush(brush)
 
             if self.hide_grid is False:
-                self.DC.SetPen(wxPen(wxNamedColour(self.grid_color), 0))
+                self.DC.SetPen(wx.Pen(wx.NamedColour(self.grid_color), 0))
             else:
-                self.DC.SetPen(wxPen(wxNamedColour(self.back_color), 0))
+                self.DC.SetPen(wx.Pen(wx.NamedColour(self.back_color), 0))
+
             nkey = key + self.st_pos -1
             rect = self.rg[nkey]
             self.DC.DrawRectangle((rect.x, rect.y), (rect.width+1, rect.height+1))
 
     def DrawGrid(self):         # calculate and draw the grid lines
-        self.DC.SetPen(wxPen(wxNamedColour(self.grid_color), 0))
+        self.DC.SetPen(wx.Pen(wx.NamedColour(self.grid_color), 0))
 
         self.gridx = []
         self.gridy = []
@@ -380,8 +428,8 @@ class CalDraw:
 
         x1 = self.x_st
         y1 = self.y_st
-
         y2 = y1 + self.cheight
+
         for i in range(8):
             if self.hide_grid is False:
                 self.DC.DrawLine((x1, y1), (x1, y2))
@@ -390,12 +438,14 @@ class CalDraw:
 
         x1 = self.x_st
         y1 = self.y_st
-
         x2 = x1 + self.cwidth
+
         for i in range(8):
             if self.hide_grid is False:
                 self.DC.DrawLine((x1, y1), (x2, y1))
+
             self.gridy.append(y1)
+
             if i == 0:
                 y1 = y1 + self.dl_th
             else:
@@ -413,16 +463,17 @@ class PrtCalDraw(CalDraw):
         self.set_x_mrg = 0.2
         self.set_y_end = 0.2
 
-    def SetPSize(self, pwidth, pheight):    # calculate the dimensions in the center of the drawing area
+    # calculate the dimensions in the center of the drawing area
+    def SetPSize(self, pwidth, pheight):    
         self.pwidth = int(pwidth)/self.scale
         self.pheight = int(pheight)/self.scale
 
     def SetPreview(self, preview):
         self.preview = preview
 
-class wxCalendar(wxWindow):
-    def __init__(self, parent, id, pos=wxDefaultPosition, size=wxDefaultSize):
-        wxWindow.__init__(self, parent, id, pos, size)
+class wxCalendar(wx.Window):
+    def __init__(self, parent, id, pos=wx.DefaultPosition, size=wx.DefaultSize):
+        wx.Window.__init__(self, parent, id, pos, size)
 
     # set the calendar control attributes
 
@@ -439,11 +490,11 @@ class wxCalendar(wxWindow):
 
         self.select_list = []
 
-        self.SetBackgroundColour(wxNamedColour(self.back_color))
-        self.Connect(-1, -1, wxEVT_LEFT_DOWN, self.OnLeftEvent)
-        self.Connect(-1, -1, wxEVT_LEFT_DCLICK, self.OnLeftDEvent)
-        self.Connect(-1, -1, wxEVT_RIGHT_DOWN, self.OnRightEvent)
-        self.Connect(-1, -1, wxEVT_RIGHT_DCLICK, self.OnRightDEvent)
+        self.SetBackgroundColour(self.back_color)
+        self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftEvent)
+        self.Bind(wx.EVT_LEFT_DCLICK, self.OnLeftDEvent)
+        self.Bind(wx.EVT_RIGHT_DOWN, self.OnRightEvent)
+        self.Bind(wx.EVT_RIGHT_DCLICK, self.OnRightDEvent)
 
         self.sel_key = None      #  last used by
         self.sel_lst = []        # highlighted selected days
@@ -453,8 +504,8 @@ class wxCalendar(wxWindow):
         self.size = None
         self.set_day = None
 
-        EVT_PAINT(self, self.OnPaint)
-        EVT_SIZE(self, self.OnSize)
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
 
 # control some of the main calendar attributes
 
@@ -574,7 +625,8 @@ class wxCalendar(wxWindow):
         if self.day == "":
             return None
         else:
-            evt = wxPyCommandEvent(2100, self.GetId())
+            # Changed 12/1/03 by jmg (see above) to support 2.5 event binding
+            evt = wx.PyCommandEvent(wxEVT_COMMAND_PYCALENDAR_DAY_CLICKED, self.GetId())
             evt.click, evt.day, evt.month, evt.year = self.click, self.day, self.month, self.year
             evt.shiftkey = self.shiftkey
             evt.ctrlkey = self.ctrlkey
@@ -588,10 +640,11 @@ class wxCalendar(wxWindow):
     def GetDayHit(self, mx, my):
         for key in self.rg.keys():
             val = self.rg[key]
-            ms_rect = wxRect(mx, my, 1, 1)
-            if wxIntersectRect(ms_rect, val) is not None:
+            ms_rect = wx.Rect(mx, my, 1, 1)
+            if wx.IntersectRect(ms_rect, val) is not None:
                 result = self.TestDay(key)
                 return result
+
         return None
 
 # calendar drawing
@@ -615,11 +668,11 @@ class wxCalendar(wxWindow):
         evt.Skip()
 
     def OnPaint(self, event):
-        DC = wxPaintDC(self)
+        DC = wx.PaintDC(self)
         self.DoDrawing(DC)
 
     def DoDrawing(self, DC):
-        DC = wxPaintDC(self)
+        DC = wx.PaintDC(self)
         DC.BeginDrawing()
 
         self.cal = cal = CalDraw(self)
@@ -644,6 +697,7 @@ class wxCalendar(wxWindow):
 
         cal.SetSize(size)
         cal.SetCal(self.year, self.month)
+
         for val in self.select_list:
             cal.AddSelect(val[0], val[1], val[2])
 
@@ -656,6 +710,7 @@ class wxCalendar(wxWindow):
 
         if self.set_day != None:
             self.SetDay(self.set_day)
+
         DC.EndDrawing()
 
 # draw the selection rectangle
@@ -663,12 +718,13 @@ class wxCalendar(wxWindow):
     def DrawRect(self, key, color = 'BLACK', width = 0):
         if key == None:
             return
-        DC = wxClientDC(self)
+
+        DC = wx.ClientDC(self)
         DC.BeginDrawing()
 
-        brush = wxBrush(wxColour(0, 0xFF, 0x80), wxTRANSPARENT)
+        brush = wx.Brush(wx.Colour(0, 0xFF, 0x80), wx.TRANSPARENT)
         DC.SetBrush(brush)
-        DC.SetPen(wxPen(wxNamedColour(color), width))
+        DC.SetPen(wx.Pen(wx.NamedColour(color), width))
 
         rect = self.rg[key]
         DC.DrawRectangle((rect.x, rect.y), (rect.width+1, rect.height+1))
@@ -684,6 +740,7 @@ class wxCalendar(wxWindow):
     def SelectDay(self, key):
         sel_size = 1
         self.DrawRect(self.sel_key, self.back_color, sel_size)     # clear large selection
+
         if self.hide_grid is False:
             self.DrawRect(self.sel_key, self.grid_color)
 
@@ -694,12 +751,13 @@ class wxCalendar(wxWindow):
     def ClearDsp(self):
         self.Clear()
 
-class CalenDlg(wxDialog):
+class CalenDlg(wx.Dialog):
     def __init__(self, parent, month=None, day = None, year=None):
-        wxDialog.__init__(self, parent, -1, "Event Calendar", wxDefaultPosition, wxSize(280, 360))
+        wx.Dialog.__init__(self, parent, -1, "Event Calendar", wx.DefaultPosition, (280, 360))
 
     # set the calendar and attributes
-        self.calend = wxCalendar(self, -1, wxPoint(20, 60), wxSize(240, 200))
+        self.calend = wxCalendar(self, -1, (20, 60), (240, 200))
+
         if month == None:
             self.calend.SetCurrentDay()
             start_month = self.calend.GetMonth()
@@ -716,49 +774,43 @@ class CalenDlg(wxDialog):
         monthlist = GetMonthList()
 
     # select the month
-        mID = wxNewId()
-        self.date = wxComboBox(self, mID, Month[start_month], wxPoint(20, 20), wxSize(90, -1), monthlist, wxCB_DROPDOWN)
-        EVT_COMBOBOX(self, mID, self.EvtComboBox)
+        self.date = wx.ComboBox(self, -1, Month[start_month], (20, 20), (90, -1), 
+                                monthlist, wx.CB_DROPDOWN)
+        self.Bind(wx.EVT_COMBOBOX, self.EvtComboBox, self.date)
 
     # alternate spin button to control the month
-        mID = wxNewId()
         h = self.date.GetSize().height
-        self.m_spin = wxSpinButton(self, mID, wxPoint(130, 20), wxSize(h*2, h), wxSP_VERTICAL)
+        self.m_spin = wx.SpinButton(self, -1, (130, 20), (h*2, h), wx.SP_VERTICAL)
         self.m_spin.SetRange(1, 12)
         self.m_spin.SetValue(start_month)
-
-        EVT_SPIN(self, mID, self.OnMonthSpin)
+        self.Bind(wx.EVT_SPIN, self.OnMonthSpin, self.m_spin)
 
     # spin button to control the year
-        mID = wxNewId()
-        self.dtext = wxTextCtrl(self, -1, str(start_year), wxPoint(160, 20), wxSize(60, -1))
+        self.dtext = wx.TextCtrl(self, -1, str(start_year), (160, 20), (60, -1))
         h = self.dtext.GetSize().height
 
-        self.y_spin = wxSpinButton(self, mID, wxPoint(220, 20), wxSize(h*2, h), wxSP_VERTICAL)
+        self.y_spin = wx.SpinButton(self, -1, (220, 20), (h*2, h), wx.SP_VERTICAL)
         self.y_spin.SetRange(1980, 2010)
         self.y_spin.SetValue(start_year)
 
-        EVT_SPIN(self, mID, self.OnYrSpin)
-
-        self.Connect(self.calend.GetId(), -1, 2100, self.MouseClick)
+        self.Bind(wx.EVT_SPIN, self.OnYrSpin, self.y_spin)
+        self.Bind(EVT_CALENDAR, self.MouseClick, self.calend)
 
         x_pos = 50
         y_pos = 280
-        but_size = wxSize(60, 25)
+        but_size = (60, 25)
 
-        mID = wxNewId()
-        wxButton(self, mID, ' Ok ', wxPoint(x_pos, y_pos), but_size)
-        EVT_BUTTON(self, mID, self.OnOk)
+        btn = wx.Button(self, -1, ' Ok ', (x_pos, y_pos), but_size)
+        self.Bind(wx.EVT_BUTTON, self.OnOk, btn)
 
-        mID = wxNewId()
-        wxButton(self, mID, ' Close ', wxPoint(x_pos + 120, y_pos), but_size)
-        EVT_BUTTON(self, mID, self.OnCancel)
+        btn = wx.Button(self, mID, ' Close ', (x_pos + 120, y_pos), but_size)
+        self.Bind(wx.EVT_BUTTON, self.OnCancel, btn)
 
     def OnOk(self, event):
-        self.EndModal(wxID_OK)
+        self.EndModal(wx.ID_OK)
 
     def OnCancel(self, event):
-        self.EndModal(wxID_CANCEL)
+        self.EndModal(wx.ID_CANCEL)
 
 # log the mouse clicks
     def MouseClick(self, evt):
@@ -766,7 +818,7 @@ class CalenDlg(wxDialog):
         self.result = [evt.click, str(evt.day), Month[evt.month], str(evt.year)]  # result click type and date
 
         if evt.click == 'DLEFT':
-            self.EndModal(wxID_OK)
+            self.EndModal(wx.ID_OK)
 
 # month and year spin selection routines
     def OnMonthSpin(self, event):

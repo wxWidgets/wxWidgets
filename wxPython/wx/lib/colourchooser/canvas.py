@@ -12,9 +12,14 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 """
 
-from wxPython.wx import *
+# 12/14/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o 2.5 compatability update.
+#
 
-class BitmapBuffer(wxMemoryDC):
+import  wx
+
+class BitmapBuffer(wx.MemoryDC):
     """A screen buffer class.
 
     This class implements a screen output buffer. Data is meant to
@@ -23,27 +28,27 @@ class BitmapBuffer(wxMemoryDC):
     """
     def __init__(self, width, height, colour):
         """Initialize the empty buffer object."""
-        wxMemoryDC.__init__(self)
+        wx.MemoryDC.__init__(self)
 
         self.width = width
         self.height = height
         self.colour = colour
 
-        self.bitmap = wxEmptyBitmap(self.width, self.height)
+        self.bitmap = wx.EmptyBitmap(self.width, self.height)
         self.SelectObject(self.bitmap)
 
         # Initialize the buffer to the background colour
-        self.SetBackground(wxBrush(self.colour, wxSOLID))
+        self.SetBackground(wx.Brush(self.colour, wx.SOLID))
         self.Clear()
 
         # Make each logical unit of the buffer equal to 1 pixel
-        self.SetMapMode(wxMM_TEXT)
+        self.SetMapMode(wx.MM_TEXT)
 
     def GetBitmap(self):
         """Returns the internal bitmap for direct drawing."""
         return self.bitmap
 
-class Canvas(wxWindow):
+class Canvas(wx.Window):
     """A canvas class for arbitrary drawing.
 
     The Canvas class implements a window that allows for drawing
@@ -55,24 +60,24 @@ class Canvas(wxWindow):
     are also provided.
     """
     def __init__(self, parent, id,
-                 pos=wxDefaultPosition,
-                 size=wxDefaultSize,
-                 style=wxSIMPLE_BORDER):
+                 pos=wx.DefaultPosition,
+                 size=wx.DefaultSize,
+                 style=wx.SIMPLE_BORDER):
         """Creates a canvas instance and initializes the off-screen
         buffer. Also sets the handler for rendering the canvas
         automatically via size and paint calls from the windowing
         system."""
-        wxWindow.__init__(self, parent, id, pos, size, style)
+        wx.Window.__init__(self, parent, id, pos, size, style)
 
         # Perform an intial sizing
         self.ReDraw()
 
         # Register event handlers
-        EVT_SIZE(self, self.onSize)
-        EVT_PAINT(self, self.onPaint)
+        self.Bind(wx.EVT_SIZE, self.onSize)
+        self.Bind(wx.EVT_PAINT, self.onPaint)
 
     def MakeNewBuffer(self):
-        size = self.GetSizeTuple()
+        size = self.GetSize()
         self.buffer = BitmapBuffer(size[0], size[1],
                                    self.GetBackgroundColour())
 
@@ -91,12 +96,12 @@ class Canvas(wxWindow):
 
     def Refresh(self):
         """Re-draws the buffer contents on-screen."""
-        dc = wxClientDC(self)
+        dc = wx.ClientDC(self)
         self.Blit(dc)
 
     def onPaint(self, event):
         """Renders the off-screen buffer on-screen."""
-        dc = wxPaintDC(self)
+        dc = wx.PaintDC(self)
         self.Blit(dc)
 
     def Blit(self, dc):
@@ -109,7 +114,7 @@ class Canvas(wxWindow):
     def GetBoundingRect(self):
         """Returns a tuple that contains the co-ordinates of the
         top-left and bottom-right corners of the canvas."""
-        x, y = self.GetPositionTuple()
+        x, y = self.GetPosition()
         w, h = self.GetSize()
         return(x, y + h, x + w, y)
 

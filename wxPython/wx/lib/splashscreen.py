@@ -10,6 +10,11 @@
 # Copyright:   (c) 1999 by Total Control Software
 # Licence:     wxWindows license
 #----------------------------------------------------------------------
+# 12/11/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o 2.5 compatability update.
+# o Untested.
+#
 
 """
 A Splash Screen implemented in Python.
@@ -18,52 +23,67 @@ NOTE: Now that wxWindows has a wxSplashScrren class and it is wrapped
 in wxPython this class is deprecated.  See the docs for more details.
 """
 
-from wxPython.wx import *
+import  warnings
+import  wx
+
+warningmsg = r"""\
+
+#####################################################\
+# THIS MODULE IS NOW DEPRECATED                      |
+#                                                    |
+# The core wx library now contains an implementation |
+# of the 'real' wx.SpashScreen.                      |
+#####################################################/
+
+"""
+
+warnings.warn(warningmsg, DeprecationWarning, stacklevel=2)
+
 
 #----------------------------------------------------------------------
 
-class SplashScreen(wxFrame):
+class SplashScreen(wx.Frame):
     def __init__(self, parent, ID=-1, title="SplashScreen",
-                 style=wxSIMPLE_BORDER|wxSTAY_ON_TOP,
+                 style=wx.SIMPLE_BORDER|wx.STAY_ON_TOP,
                  duration=1500, bitmapfile="bitmaps/splashscreen.bmp",
                  callback = None):
         '''
-        parent, ID, title, style -- see wxFrame
+        parent, ID, title, style -- see wx.Frame
         duration -- milliseconds to display the splash screen
         bitmapfile -- absolute or relative pathname to image file
         callback -- if specified, is called when timer completes, callback is
                     responsible for closing the splash screen
         '''
         ### Loading bitmap
-        self.bitmap = bmp = wxImage(bitmapfile, wxBITMAP_TYPE_ANY).ConvertToBitmap()
+        self.bitmap = bmp = wx.Image(bitmapfile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
 
         ### Determine size of bitmap to size window...
         size = (bmp.GetWidth(), bmp.GetHeight())
 
         # size of screen
-        width = wxSystemSettings_GetSystemMetric(wxSYS_SCREEN_X)
-        height = wxSystemSettings_GetSystemMetric(wxSYS_SCREEN_Y)
+        width = wx.SystemSettings_GetMetric(wx.SYS_SCREEN_X)
+        height = wx.SystemSettings_GetMetric(wx.SYS_SCREEN_Y)
         pos = ((width-size[0])/2, (height-size[1])/2)
 
         # check for overflow...
         if pos[0] < 0:
-            size = (wxSystemSettings_GetSystemMetric(wxSYS_SCREEN_X), size[1])
+            size = (wx.SystemSettings_GetSystemMetric(wx.SYS_SCREEN_X), size[1])
         if pos[1] < 0:
-            size = (size[0], wxSystemSettings_GetSystemMetric(wxSYS_SCREEN_Y))
+            size = (size[0], wx.SystemSettings_GetSystemMetric(wx.SYS_SCREEN_Y))
 
-        wxFrame.__init__(self, parent, ID, title, pos, size, style)
-        EVT_LEFT_DOWN(self, self.OnMouseClick)
-        EVT_CLOSE(self, self.OnCloseWindow)
-        EVT_PAINT(self, self.OnPaint)
-        EVT_ERASE_BACKGROUND(self, self.OnEraseBG)
+        wx.Frame.__init__(self, parent, ID, title, pos, size, style)
+        self.Bind(wx.EVT_LEFT_DOWN, self.OnMouseClick)
+        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBG)
 
         self.Show(True)
 
 
-        class SplashTimer(wxTimer):
+        class SplashTimer(wx.Timer):
             def __init__(self, targetFunction):
                 self.Notify = targetFunction
-                wxTimer.__init__(self)
+                wx.Timer.__init__(self)
 
         if callback is None:
             callback = self.OnSplashExitDefault
@@ -72,8 +92,8 @@ class SplashScreen(wxFrame):
         self.timer.Start(duration, 1) # one-shot only
 
     def OnPaint(self, event):
-        dc = wxPaintDC(self)
-        dc.DrawBitmap(self.bitmap, 0,0, False)
+        dc = wx.PaintDC(self)
+        dc.DrawBitmap(self.bitmap, (0,0), False)
 
     def OnEraseBG(self, event):
         pass
@@ -94,12 +114,10 @@ class SplashScreen(wxFrame):
 
 
 if __name__ == "__main__":
-    class DemoApp(wxApp):
+    class DemoApp(wx.App):
         def OnInit(self):
-            wxImage_AddHandler(wxJPEGHandler())
-            wxImage_AddHandler(wxPNGHandler())
-            wxImage_AddHandler(wxGIFHandler())
-            self.splash = SplashScreen(NULL, bitmapfile="splashscreen.jpg", callback=self.OnSplashExit)
+            wx.InitAllImageHandlers()
+            self.splash = SplashScreen(None, bitmapfile="splashscreen.jpg", callback=self.OnSplashExit)
             self.splash.Show(True)
             self.SetTopWindow(self.splash)
             return True

@@ -16,9 +16,15 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 """
 
-import canvas
-import colorsys
-from wxPython.wx import *
+# 12/14/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o 2.5 compatability update.
+#
+
+import  wx
+
+import  canvas
+import  colorsys
 
 class PyColourSlider(canvas.Canvas):
     """A Pure-Python Colour Slider
@@ -41,8 +47,7 @@ class PyColourSlider(canvas.Canvas):
         # drawing function
         self.SetBaseColour(colour)
 
-        canvas.Canvas.__init__(self, parent, id,
-                                size=wxSize(self.WIDTH, self.HEIGHT))
+        canvas.Canvas.__init__(self, parent, id, size=(self.WIDTH, self.HEIGHT))
 
     def SetBaseColour(self, colour):
         """Sets the base, or target colour, to use as the central colour
@@ -76,7 +81,7 @@ class PyColourSlider(canvas.Canvas):
         vstep = 1.0 / self.HEIGHT
         for y_pos in range(0, self.HEIGHT):
             r,g,b = [c * 255.0 for c in colorsys.hsv_to_rgb(h,s,v)]
-            colour = wxColour(int(r), int(g), int(b))
-            self.buffer.SetPen(wxPen(colour, 1, wxSOLID))
+            colour = wx.Colour(int(r), int(g), int(b))
+            self.buffer.SetPen(wx.Pen(colour, 1, wx.SOLID))
             self.buffer.DrawRectangle((0, y_pos), (15, 1))
             v = v - vstep

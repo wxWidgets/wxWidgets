@@ -11,6 +11,11 @@
 # Copyright:   (c) 2001 by Total Control Software
 # Licence:     wxWindows license
 #----------------------------------------------------------------------
+# 12/11/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o 2.5 compatability update.
+# o Added deprecation warning.
+#
 
 """
 Some time ago, I asked about how to right-align
@@ -34,23 +39,40 @@ Ubera Servicios Informáticos.
 P.S.  This only works well on wxMSW.
 """
 
-from wxPython.wx import *
+import  warnings
+import  wx
 
 #----------------------------------------------------------------------
 
-class wxRightTextCtrl(wxTextCtrl):
+warningmsg = r"""\
+
+##############################################################\
+# THIS MODULE IS DEPRECATED                                   |
+#                                                             |
+# This control still functions, but it is deprecated because  |
+# wx.TextCtrl now supports the wx.TE_RIGHT style flag         |
+##############################################################/
+
+
+"""
+
+warnings.warn(warningmsg, DeprecationWarning, stacklevel=2)
+
+#----------------------------------------------------------------------
+
+class wxRightTextCtrl(wx.TextCtrl):
     def __init__(self, parent, id, *args, **kwargs):
-        wxTextCtrl.__init__(self, parent, id, *args, **kwargs)
-        EVT_KILL_FOCUS(self, self.OnKillFocus)
-        EVT_PAINT(self, self.OnPaint)
+        wx.TextCtrl.__init__(self, parent, id, *args, **kwargs)
+        self.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
 
     def OnPaint(self, event):
-        dc = wxPaintDC(self)
+        dc = wx.PaintDC(self)
         dc.SetFont(self.GetFont())
         dc.Clear()
         text = self.GetValue()
         textwidth, textheight = dc.GetTextExtent(text)
-        dcwidth, dcheight = self.GetClientSizeTuple()
+        dcwidth, dcheight = self.GetClientSize()
 
         y = (dcheight - textheight) / 2
         x = dcwidth - textwidth - 2
@@ -58,21 +80,22 @@ class wxRightTextCtrl(wxTextCtrl):
         if self.IsEnabled():
             fclr = self.GetForegroundColour()
         else:
-            fclr = wxSystemSettings_GetColour(wxSYS_COLOUR_GRAYTEXT)
+            fclr = wx.SystemSettings_GetColour(wx.SYS_COLOUR_GRAYTEXT)
+
         dc.SetTextForeground(fclr)
 
-        dc.SetClippingRegionXY(0, 0, dcwidth, dcheight)
-        dc.DrawText(text, x, y)
+        dc.SetClippingRegion(0, 0, dcwidth, dcheight)
+        dc.DrawText(text, (x, y))
 
         if x < 0:
             toofat = '...'
             markwidth = dc.GetTextExtent(toofat)[0]
-            dc.SetPen(wxPen(dc.GetBackground().GetColour(), 1, wxSOLID ))
-            dc.DrawRectangle(0,0, markwidth, dcheight)
-            dc.SetPen(wxPen(wxRED, 1, wxSOLID ))
-            dc.SetBrush(wxTRANSPARENT_BRUSH)
-            dc.DrawRectangle(1, 1, dcwidth-2, dcheight-2)
-            dc.DrawText(toofat, 1, y)
+            dc.SetPen(wx.Pen(dc.GetBackground().GetColour(), 1, wx.SOLID ))
+            dc.DrawRectangle((0,0), (markwidth, dcheight))
+            dc.SetPen(wx.Pen(wx.RED, 1, wx.SOLID ))
+            dc.SetBrush(wx.TRANSPARENT_BRUSH)
+            dc.DrawRectangle((1, 1), (dcwidth-2, dcheight-2))
+            dc.DrawText(toofat, (1, y))
 
 
     def OnKillFocus(self, event):

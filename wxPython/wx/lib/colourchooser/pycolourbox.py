@@ -11,10 +11,14 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 """
+# 12/14/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o 2.5 compatability update.
+#
 
-from wxPython.wx import *
+import  wx
 
-class PyColourBox(wxPanel):
+class PyColourBox(wx.Panel):
     """A Colour Selection Box
 
     The Colour selection box implements button like behavior but contains
@@ -24,13 +28,12 @@ class PyColourBox(wxPanel):
     def __init__(self, parent, id, colour=(0, 0, 0), size=(25, 20)):
         """Creates a new colour box instance and initializes the colour
         content."""
-        wxPanel.__init__(self, parent, id,
-                          size=wxSize(size[0], size[1]))
+        wx.Panel.__init__(self, parent, id, size=size)
 
-        self.colour_box = wxPanel(self, -1, style=wxSIMPLE_BORDER)
+        self.colour_box = wx.Panel(self, -1, style=wx.SIMPLE_BORDER)
 
-        sizer = wxGridSizer(1, 1)
-        sizer.Add(self.colour_box, 0, wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL)
+        sizer = wx.GridSizer(1, 1)
+        sizer.Add(self.colour_box, 0, wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER_HORIZONTAL)
         sizer.SetItemMinSize(self.colour_box, size[0] - 5, size[1] - 5)
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
@@ -57,10 +60,10 @@ class PyColourBox(wxPanel):
     def SetColourTuple(self, colour):
         """Sets the box's current couple to the given tuple."""
         self.colour = colour
-        self.colour_box.SetBackgroundColour(wxColour(*self.colour))
+        self.colour_box.SetBackgroundColour(wx.Colour(*self.colour))
 
     def Update(self):
-        wxPanel.Update(self)
+        wx.Panel.Update(self)
         self.colour_box.Update()
 
     def SetHighlight(self, val):
@@ -72,7 +75,7 @@ class PyColourBox(wxPanel):
             red =(self.real_bg.Red() - 45) % 255
             green =(self.real_bg.Green() - 45) % 255
             blue =(self.real_bg.Blue() - 45) % 255
-            new_colour = wxColour(red, green, blue)
+            new_colour = wx.Colour(red, green, blue)
             self.SetBackgroundColour(new_colour)
         else:
             self.SetBackgroundColour(self.real_bg)

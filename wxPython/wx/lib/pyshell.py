@@ -10,6 +10,11 @@
 # Copyright:   (c) 2000 by Total Control Software
 # Licence:     wxWindows license
 #----------------------------------------------------------------------
+# 12/10/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o 2.5 compatability update.
+# o Added deprecation warning.
+#
 
 """
 PyShellWindow is a class that provides an Interactive Interpreter running
@@ -26,17 +31,32 @@ etc...  But it's a good start.
 
 """
 
+import  keyword
+import  sys
+import  warnings
 
-from wxPython.wx  import *
-from wxPython.stc import *
-
-import sys, keyword
 from code import InteractiveInterpreter
+
+import  wx
+import  wx.stc as stc
+
+warningmsg = r"""\
+
+########################################\
+# THIS MODULE IS NOW DEPRECATED         |
+#                                       |
+# Please see the most excellent PyCrust |
+# package instead.                      |
+########################################/
+
+"""
+
+warnings.warn(warningmsg, DeprecationWarning, stacklevel=2)
 
 #----------------------------------------------------------------------
 # default styles, etc. to use for the STC
 
-if wxPlatform == '__WXMSW__':
+if wx.Platform == '__WXMSW__':
     _defaultSize = 8
 else:
     _defaultSize = 10
@@ -77,11 +97,11 @@ _trace_style = 17
 
 #----------------------------------------------------------------------
 
-class PyShellWindow(wxStyledTextCtrl, InteractiveInterpreter):
-    def __init__(self, parent, ID, pos=wxDefaultPosition,
-                 size=wxDefaultSize, style=0,
+class PyShellWindow(stc.StyledTextCtrl, InteractiveInterpreter):
+    def __init__(self, parent, ID, pos=wx.DefaultPosition,
+                 size=wx.DefaultSize, style=0,
                  locals=None, properties=None, banner=None):
-        wxStyledTextCtrl.__init__(self, parent, ID, pos, size, style)
+        stc.StyledTextCtrl.__init__(self, parent, ID, pos, size, style)
         InteractiveInterpreter.__init__(self, locals)
 
         self.lastPromptPos = 0
@@ -110,9 +130,9 @@ class PyShellWindow(wxStyledTextCtrl, InteractiveInterpreter):
         self.Prompt()
 
         # Event handlers
-        EVT_KEY_DOWN(self, self.OnKey)
-        EVT_STC_UPDATEUI(self, ID, self.OnUpdateUI)
-        #EVT_STC_STYLENEEDED(self, ID, self.OnStyle)
+        self.Bind(wx.EVT_KEY_DOWN, self.OnKey)
+        self.Bind(stc.EVT_STC_UPDATEUI, self.OnUpdateUI, id=ID)
+        #self.Bind(stc.EVT_STC_STYLENEEDED, self.OnStyle, id=ID)
 
 
     def GetLocals(self): return self.locals
@@ -131,7 +151,7 @@ class PyShellWindow(wxStyledTextCtrl, InteractiveInterpreter):
         """
         p = self.props
 
-        #self.SetEdgeMode(wxSTC_EDGE_LINE)
+        #self.SetEdgeMode(stc.STC_EDGE_LINE)
         #self.SetEdgeColumn(80)
 
 
@@ -140,25 +160,25 @@ class PyShellWindow(wxStyledTextCtrl, InteractiveInterpreter):
         self.SetMargins(p['marginWidth'], p['marginWidth'])
 
         # styles
-        self.StyleSetSpec(wxSTC_STYLE_DEFAULT, p['default'])
+        self.StyleSetSpec(stc.STC_STYLE_DEFAULT, p['default'])
         self.StyleClearAll()
         self.StyleSetSpec(_stdout_style, p['stdout'])
         self.StyleSetSpec(_stderr_style, p['stderr'])
         self.StyleSetSpec(_trace_style, p['trace'])
 
-        self.StyleSetSpec(wxSTC_STYLE_BRACELIGHT, p['bracegood'])
-        self.StyleSetSpec(wxSTC_STYLE_BRACEBAD, p['bracebad'])
-        self.StyleSetSpec(wxSTC_P_COMMENTLINE, p['comment'])
-        self.StyleSetSpec(wxSTC_P_NUMBER, p['number'])
-        self.StyleSetSpec(wxSTC_P_STRING, p['string'])
-        self.StyleSetSpec(wxSTC_P_CHARACTER, p['char'])
-        self.StyleSetSpec(wxSTC_P_WORD, p['keyword'])
-        self.StyleSetSpec(wxSTC_P_TRIPLE, p['triple'])
-        self.StyleSetSpec(wxSTC_P_TRIPLEDOUBLE, p['tripledouble'])
-        self.StyleSetSpec(wxSTC_P_CLASSNAME, p['class'])
-        self.StyleSetSpec(wxSTC_P_DEFNAME, p['def'])
-        self.StyleSetSpec(wxSTC_P_OPERATOR, p['operator'])
-        self.StyleSetSpec(wxSTC_P_COMMENTBLOCK, p['comment'])
+        self.StyleSetSpec(stc.STC_STYLE_BRACELIGHT, p['bracegood'])
+        self.StyleSetSpec(stc.STC_STYLE_BRACEBAD, p['bracebad'])
+        self.StyleSetSpec(stc.STC_P_COMMENTLINE, p['comment'])
+        self.StyleSetSpec(stc.STC_P_NUMBER, p['number'])
+        self.StyleSetSpec(stc.STC_P_STRING, p['string'])
+        self.StyleSetSpec(stc.STC_P_CHARACTER, p['char'])
+        self.StyleSetSpec(stc.STC_P_WORD, p['keyword'])
+        self.StyleSetSpec(stc.STC_P_TRIPLE, p['triple'])
+        self.StyleSetSpec(stc.STC_P_TRIPLEDOUBLE, p['tripledouble'])
+        self.StyleSetSpec(stc.STC_P_CLASSNAME, p['class'])
+        self.StyleSetSpec(stc.STC_P_DEFNAME, p['def'])
+        self.StyleSetSpec(stc.STC_P_OPERATOR, p['operator'])
+        self.StyleSetSpec(stc.STC_P_COMMENTBLOCK, p['comment'])
 
 
     # used for writing to stdout, etc.
@@ -169,7 +189,7 @@ class PyShellWindow(wxStyledTextCtrl, InteractiveInterpreter):
         self.StartStyling(pos, 0xFF)
         self.SetStyling(len(text), style)
         self.EnsureCaretVisible()
-        wxYield()
+        wx.Yield()
 
     write = _write
 
@@ -197,7 +217,7 @@ class PyShellWindow(wxStyledTextCtrl, InteractiveInterpreter):
 
     def OnKey(self, evt):
         key = evt.KeyCode()
-        if key == WXK_RETURN:
+        if key == wx.WXK_RETURN:
             pos = self.GetCurrentPos()
             lastPos = self.GetTextLength()
 
@@ -237,7 +257,7 @@ class PyShellWindow(wxStyledTextCtrl, InteractiveInterpreter):
         # Only style from the prompt pos to the end
         lastPos = self.GetTextLength()
         if self.lastPromptPos and self.lastPromptPos != lastPos:
-            self.SetLexer(wxSTC_LEX_PYTHON)
+            self.SetLexer(stc.STC_LEX_PYTHON)
             self.SetKeywords(0, ' '.join(keyword.kwlist))
 
             self.Colourise(self.lastPromptPos, lastPos)
@@ -256,14 +276,14 @@ class PyShellWindow(wxStyledTextCtrl, InteractiveInterpreter):
             styleBefore = self.GetStyleAt(caretPos - 1)
 
         # check before
-        if charBefore and chr(charBefore) in "[]{}()" and styleBefore == wxSTC_P_OPERATOR:
+        if charBefore and chr(charBefore) in "[]{}()" and styleBefore == stc.STC_P_OPERATOR:
             braceAtCaret = caretPos - 1
 
         # check after
         if braceAtCaret < 0:
             charAfter = self.GetCharAt(caretPos)
             styleAfter = self.GetStyleAt(caretPos)
-            if charAfter and chr(charAfter) in "[]{}()" and styleAfter == wxSTC_P_OPERATOR:
+            if charAfter and chr(charAfter) in "[]{}()" and styleAfter == stc.STC_P_OPERATOR:
                 braceAtCaret = caretPos
 
         if braceAtCaret >= 0:
@@ -319,7 +339,7 @@ class FauxFile:
 # test code
 
 if __name__ == '__main__':
-    app = wxPyWidgetTester(size = (640, 480))
+    app = wx.PyWidgetTester(size = (640, 480))
     app.SetWidget(PyShellWindow, -1)
     app.MainLoop()
 

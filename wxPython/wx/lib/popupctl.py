@@ -9,38 +9,42 @@
 # RCS-ID:       $Id$
 # License:      wxWindows license
 #----------------------------------------------------------------------
+# 12/09/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o 2.5 compatability update.
+#
 
-from wxPython.wx import *
-from wxPython.lib.buttons import wxGenButtonEvent
+import  wx
+from wx.lib.buttons import GenButtonEvent
 
 
-class PopButton(wxPyControl):
+class PopButton(wx.PyControl):
     def __init__(self,*_args,**_kwargs):
-        apply(wxPyControl.__init__,(self,) + _args,_kwargs)
+        apply(wx.PyControl.__init__,(self,) + _args,_kwargs)
 
         self.up = True
         self.didDown = False
 
         self.InitColours()
 
-        EVT_LEFT_DOWN(self,             self.OnLeftDown)
-        EVT_LEFT_UP(self,               self.OnLeftUp)
-        EVT_MOTION(self,                self.OnMotion)
-        EVT_PAINT(self,                 self.OnPaint)
+        self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
+        self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
+        self.Bind(wx.EVT_MOTION, self.OnMotion)
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
 
     def InitColours(self):
-        faceClr      = wxSystemSettings_GetColour(wxSYS_COLOUR_BTNFACE)
+        faceClr = wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNFACE)
         self.faceDnClr = faceClr
         self.SetBackgroundColour(faceClr)
 
-        shadowClr    = wxSystemSettings_GetColour(wxSYS_COLOUR_BTNSHADOW)
-        highlightClr = wxSystemSettings_GetColour(wxSYS_COLOUR_BTNHIGHLIGHT)
-        self.shadowPen    = wxPen(shadowClr, 1, wxSOLID)
-        self.highlightPen = wxPen(highlightClr, 1, wxSOLID)
-        self.blackPen     = wxPen(wxBLACK, 1, wxSOLID)
+        shadowClr    = wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNSHADOW)
+        highlightClr = wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNHIGHLIGHT)
+        self.shadowPen    = wx.Pen(shadowClr, 1, wx.SOLID)
+        self.highlightPen = wx.Pen(highlightClr, 1, wx.SOLID)
+        self.blackPen     = wx.Pen(wx.BLACK, 1, wx.SOLID)
 
     def Notify(self):
-        evt = wxGenButtonEvent(wxEVT_COMMAND_BUTTON_CLICKED, self.GetId())
+        evt = GenButtonEvent(wx.wxEVT_COMMAND_BUTTON_CLICKED, self.GetId())
         evt.SetIsDown(not self.up)
         evt.SetButtonObj(self)
         evt.SetEventObject(self)
@@ -76,8 +80,8 @@ class PopButton(wxPyControl):
             return
         if event.LeftIsDown():
             if self.didDown:
-                x,y = event.GetPositionTuple()
-                w,h = self.GetClientSizeTuple()
+                x,y = event.GetPosition()
+                w,h = self.GetClientSize()
                 if self.up and x<w and x>=0 and y<h and y>=0:
                     self.up = False
                     self.Refresh()
@@ -108,9 +112,9 @@ class PopButton(wxPyControl):
             dc.DrawLine((x2-i, y1+i), (x2-i, y2))
 
     def DrawArrow(self,dc):
-        size = self.GetSize()
-        mx = size.width / 2
-        my = size.height / 2
+        w, h = self.GetSize()
+        mx = w / 2
+        my = h / 2
         dc.SetPen(self.highlightPen)
         dc.DrawLine((mx-5,my-5), (mx+5,my-5))
         dc.DrawLine((mx-5,my-5), (mx,my+5))
@@ -120,15 +124,15 @@ class PopButton(wxPyControl):
         dc.DrawLine((mx+5,my-5), (mx,my+5))
 
     def OnPaint(self, event):
-        width, height = self.GetClientSizeTuple()
+        width, height = self.GetClientSize()
         x1 = y1 = 0
         x2 = width - 1
         y2 = height - 1
-        dc = wxBufferedPaintDC(self)
+        dc = wx.BufferedPaintDC(self)
         if self.up:
-            dc.SetBackground(wxBrush(self.GetBackgroundColour(), wxSOLID))
+            dc.SetBackground(wx.Brush(self.GetBackgroundColour(), wx.SOLID))
         else:
-            dc.SetBackground(wxBrush(self.faceDnClr, wxSOLID))
+            dc.SetBackground(wx.Brush(self.faceDnClr, wx.SOLID))
         dc.Clear()
         self.DrawBezel(dc, x1, y1, x2, y2)
         self.DrawArrow(dc)
@@ -138,12 +142,12 @@ class PopButton(wxPyControl):
 
 
 # Tried to use wxPopupWindow but the control misbehaves on MSW
-class wxPopupDialog(wxDialog):
+class wxPopupDialog(wx.Dialog):
     def __init__(self,parent,content = None):
-        wxDialog.__init__(self,parent,-1,'', style = wxBORDER_SIMPLE|wxSTAY_ON_TOP)
+        wx.Dialog.__init__(self,parent,-1,'', style = wx.BORDER_SIMPLE|wx.STAY_ON_TOP)
 
         self.ctrl = parent
-        self.win = wxWindow(self,-1,pos = wxPoint(0,0),style = 0)
+        self.win = wx.Window(self,-1,pos = (0,0),style = 0)
 
         if content:
             self.SetContent(content)
@@ -157,7 +161,7 @@ class wxPopupDialog(wxDialog):
 
     def Display(self):
         pos = self.ctrl.ClientToScreen( (0,0) )
-        dSize = wxGetDisplaySize()
+        dSize = wx.GetDisplaySize()
         selfSize = self.GetSize()
         tcSize = self.ctrl.GetSize()
 
@@ -173,7 +177,7 @@ class wxPopupDialog(wxDialog):
         if pos.y < 0:
             pos.y = 0
 
-        self.MoveXY(pos.x,pos.y)
+        self.Move(pos)
 
         self.ctrl.FormatContent()
 
@@ -183,29 +187,29 @@ class wxPopupDialog(wxDialog):
 #---------------------------------------------------------------------------
 
 
-class wxPopupControl(wxPyControl):
+class wxPopupControl(wx.PyControl):
     def __init__(self,*_args,**_kwargs):
         if _kwargs.has_key('value'):
             del _kwargs['value']
-        apply(wxPyControl.__init__,(self,) + _args,_kwargs)
+        apply(wx.PyControl.__init__,(self,) + _args,_kwargs)
 
-        self.textCtrl = wxTextCtrl(self,-1,'',pos = wxPoint(0,0))
+        self.textCtrl = wx.TextCtrl(self,-1,'',pos = (0,0))
         self.bCtrl = PopButton(self,-1)
         self.pop = None
         self.content = None
         self.OnSize(None)
 
-        EVT_SIZE(self,self.OnSize)
-        EVT_BUTTON(self.bCtrl,self.bCtrl.GetId(),self.OnButton)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
+        self.bCtrl.Bind(wx.EVT_BUTTON, self.OnButton, self.bCtrl)
         # embedded control should get focus on TAB keypress
-        EVT_SET_FOCUS(self,self.OnFocus)
+        self.Bind(wx.EVT_SET_FOCUS, self.OnFocus)
 
     def OnFocus(self,evt):
         self.textCtrl.SetFocus()
         evt.Skip()
 
     def OnSize(self,evt):
-        w,h = self.GetClientSizeTuple()
+        w,h = self.GetClientSize()
         self.textCtrl.SetDimensions(0,0,w-17,h)
         self.bCtrl.SetDimensions(w-17,0,17,h)
 
@@ -220,7 +224,7 @@ class wxPopupControl(wxPyControl):
             self.pop.Display()
 
     def Enable(self,flag):
-        wxPyControl.Enable(self,flag)
+        wx.PyControl.Enable(self,flag)
         self.textCtrl.Enable(flag)
         self.bCtrl.Enable(flag)
 

@@ -10,6 +10,11 @@
 # Copyright:   (c) 1999 by Total Control Software
 # Licence:     wxWindows license
 #----------------------------------------------------------------------
+# 11/30/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# o Tested with updated demo
+# 
 
 """
 This module implements various forms of generic buttons, meaning that

@@ -16,6 +16,11 @@ can continue unencumbered.
 #
 # $Id$
 #
+# 12/12/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o 2.5 compatability update.
+#
+
 
 import os
 import wx
@@ -23,8 +28,7 @@ import wx
 # ------------------------------------------------------------------------------
 
 THROBBER_EVENT = wx.NewEventType()
-def EVT_UPDATE_THROBBER(win, func):
-    win.Connect(-1, -1, THROBBER_EVENT, func)
+EVT_UPDATE_THROBBER = wx.PyEventBinder(THROBBER_EVENT, 0)
 
 class UpdateThrobberEvent(wx.PyEvent):
     def __init__(self):
@@ -119,10 +123,10 @@ class Throbber(wx.Panel):
         timerID  = wx.NewId()
         self.timer = wx.Timer(self, timerID)
 
-        EVT_UPDATE_THROBBER(self, self.Rotate)
-        wx.EVT_PAINT(self, self.OnPaint)
-        wx.EVT_TIMER(self, timerID, self.OnTimer)
-        wx.EVT_WINDOW_DESTROY(self, self.OnDestroyWindow)
+        self.Bind(EVT_UPDATE_THROBBER, self.Rotate)
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.Bind(wx.EVT_TIMER, self.OnTimer, self.timer)
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroyWindow)
             
 
     def OnTimer(self, event):

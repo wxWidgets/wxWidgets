@@ -14,36 +14,41 @@
 # fixed bug for string wider than print region
 # add index to data list after parsing total pages for paging
 #----------------------------------------------------------------------------
+# 12/10/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o 2.5 compatability update.
+#
 
-import os, sys, copy
+import  copy
+import  os
+import  sys
 
-from wxPython.wx import *
-import copy
+import  wx
 
 class PrintBase:
     def SetPrintFont(self, font):      # set the DC font parameters
         fattr = font["Attr"]
         if fattr[0] == 1:
-            weight = wxBOLD
+            weight = wx.BOLD
         else:
-            weight = wxNORMAL
+            weight = wx.NORMAL
 
         if fattr[1] == 1:
-            set_style = wxITALIC
+            set_style = wx.ITALIC
         else:
-            set_style = wxNORMAL
+            set_style = wx.NORMAL
 
         underline = fattr[2]
         fcolour = self.GetFontColour(font)
         self.DC.SetTextForeground(fcolour)
 
-        setfont = wxFont(font["Size"], wxSWISS, set_style, weight, underline)
+        setfont = wx.Font(font["Size"], wx.SWISS, set_style, weight, underline)
         setfont.SetFaceName(font["Name"])
         self.DC.SetFont(setfont)
 
     def GetFontColour(self, font):
         fcolour = font["Colour"]
-        return wxColour(fcolour[0], fcolour[1], fcolour[2])
+        return wx.Colour(fcolour[0], fcolour[1], fcolour[2])
 
     def OutTextRegion(self, textout, txtdraw = True):
         textlines = textout.split('\n')
@@ -54,19 +59,19 @@ class PrintBase:
                 vout, remain = self.SetFlow(text, self.region)
                 if self.draw == True and txtdraw == True:
                     test_out = self.TestFull(vout)
-                    if self.align == wxALIGN_LEFT:
-                        self.DC.DrawText(test_out, self.indent+self.pcell_left_margin, y)
+                    if self.align == wx.ALIGN_LEFT:
+                        self.DC.DrawText(test_out, (self.indent+self.pcell_left_margin, y))
 
-                    elif self.align == wxALIGN_CENTRE:
+                    elif self.align == wx.ALIGN_CENTRE:
                         diff = self.GetCellDiff(test_out, self.region)
-                        self.DC.DrawText(test_out, self.indent+diff/2, y)
+                        self.DC.DrawText(test_out, (self.indent+diff/2, y))
 
-                    elif self.align == wxALIGN_RIGHT:
+                    elif self.align == wx.ALIGN_RIGHT:
                         diff = self.GetCellDiff(test_out, self.region)
-                        self.DC.DrawText(test_out, self.indent+diff, y)
+                        self.DC.DrawText(test_out, (self.indent+diff, y))
 
                     else:
-                        self.DC.DrawText(test_out, self.indent+self.pcell_left_margin, y)
+                        self.DC.DrawText(test_out, (self.indent+self.pcell_left_margin, y))
                 text = remain
                 y = y + self.space
         return y - self.space + self.pt_space_after
@@ -142,19 +147,19 @@ class PrintBase:
                 vout, remain = self.SetFlow(text, pagew)
                 if self.draw == True and txtdraw == True:
                     test_out = vout
-                    if align == wxALIGN_LEFT:
-                        self.DC.DrawText(test_out, indent, y)
+                    if align == wx.ALIGN_LEFT:
+                        self.DC.DrawText(test_out, (indent, y))
 
-                    elif align == wxALIGN_CENTRE:
+                    elif align == wx.ALIGN_CENTRE:
                         diff = self.GetCellDiff(test_out, pagew)
-                        self.DC.DrawText(test_out, indent+diff/2, y)
+                        self.DC.DrawText(test_out, (indent+diff/2, y))
 
-                    elif align == wxALIGN_RIGHT:
+                    elif align == wx.ALIGN_RIGHT:
                         diff = self.GetCellDiff(test_out, pagew)
-                        self.DC.DrawText(test_out, indent+diff, y)
+                        self.DC.DrawText(test_out, (indent+diff, y))
 
                     else:
-                        self.DC.DrawText(test_out, indent, y_out)
+                        self.DC.DrawText(test_out, (indent, y_out))
                 text = remain
                 y = y + y_line
         return y - y_line
@@ -168,7 +173,7 @@ class PrintBase:
         return date + ' ' + time
 
     def GetNow(self):
-        full = str(wxDateTime_Now())        # get the current date and time in print format
+        full = str(wx.DateTime_Now())        # get the current date and time in print format
         flds = full.split()
         date = flds[0]
         time = flds[1]
@@ -195,7 +200,7 @@ class PrintBase:
         return self.sizeh
 
 
-class PrintTableDraw(wxScrolledWindow, PrintBase):
+class PrintTableDraw(wx.ScrolledWindow, PrintBase):
     def __init__(self, parent, DC, size):
         self.parent = parent
         self.DC = DC
@@ -297,7 +302,7 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
             try:
                 align = set_column_align[col]       # check if custom column alignment
             except:
-                align = wxALIGN_LEFT
+                align = wx.ALIGN_LEFT
             self.column_align.append(align)
 
             try:
@@ -316,7 +321,7 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
             col = col + 1
 
     def SetPointAdjust(self):
-        f = wxFont(10, wxSWISS, wxNORMAL, wxNORMAL)     # setup using 10 point
+        f = wx.Font(10, wx.SWISS, wx.NORMAL, wx.NORMAL)     # setup using 10 point
         self.DC.SetFont(f)
         f.SetFaceName(self.text_font["Name"])
         x, y = self.DC.GetTextExtent("W")
@@ -429,7 +434,7 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
             self.region = self.column[self.col+1] - self.column[self.col]
             self.indent = self.column[self.col]
 
-            self.align = wxALIGN_LEFT
+            self.align = wx.ALIGN_LEFT
 
             max_out = self.OutTextRegion(vtxt, True)
             if max_out > max_y:
@@ -488,10 +493,11 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
 
 
     def LabelColorRow(self, colour):
-        brush = wxBrush(colour, wxSOLID)
+        brush = wx.Brush(colour, wx.SOLID)
         self.DC.SetBrush(brush)
         height = self.label_space + self.label_pt_space_before + self.label_pt_space_after
-        self.DC.DrawRectangle(self.column[0], self.y, self.end_x-self.column[0]+1, height)
+        self.DC.DrawRectangle((self.column[0], self.y),
+                              (self.end_x-self.column[0]+1, height))
 
     def ColourRowCells(self, height):
         if self.draw == False:
@@ -503,16 +509,16 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
             if cellcolour is not None:
                 colour = cellcolour
 
-            brush = wxBrush(colour, wxSOLID)
+            brush = wx.Brush(colour, wx.SOLID)
             self.DC.SetBrush(brush)
-            self.DC.SetPen(wxPen(wxNamedColour('WHITE'), 0))
+            self.DC.SetPen(wx.Pen(wx.NamedColour('WHITE'), 0))
 
             start_x = self.column[col]
             width = self.column[col+1] - start_x + 2
-            self.DC.DrawRectangle(start_x, self.y, width, height)
+            self.DC.DrawRectangle((start_x, self.y), (width, height))
             col = col + 1
 
-    def PrintRow(self, row_val, draw = True, align = wxALIGN_LEFT):
+    def PrintRow(self, row_val, draw = True, align = wx.ALIGN_LEFT):
         self.SetPrintFont(self.text_font)
 
         self.pt_space_before = self.text_pt_space_before   # set the point spacing
@@ -576,11 +582,11 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
             except:
                 colour = self.row_def_line_colour
 
-            self.DC.SetPen(wxPen(colour, size))
+            self.DC.SetPen(wx.Pen(colour, size))
 
             y_out = self.y
 #            y_out = self.y + self.pt_space_before + self.pt_space_after     # adjust for extra spacing
-            self.DC.DrawLine(self.column[0], y_out, self.end_x, y_out)
+            self.DC.DrawLine((self.column[0], y_out), (self.end_x, y_out))
 
     def DrawColumns(self):
         if self.draw == True:
@@ -598,15 +604,15 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
 
                 indent = val
 
-                self.DC.SetPen(wxPen(colour, size))
-                self.DC.DrawLine(indent, self.y_start, indent, self.y)
+                self.DC.SetPen(wx.Pen(colour, size))
+                self.DC.DrawLine((indent, self.y_start), (indent, self.y))
                 col = col + 1
 
     def DrawText(self):
         self.DoRefresh()
 
     def DoDrawing(self, DC):
-        size = DC.GetSizeTuple()
+        size = DC.GetSize()
         self.DC = DC
 
         DC.BeginDrawing()
@@ -638,7 +644,7 @@ class PrintTable:
         self.parentFrame = parentFrame
         self.SetPreviewSize()
 
-        self.printData = wxPrintData()
+        self.printData = wx.PrintData()
         self.scale = 1.0
 
         self.SetParms()
@@ -652,11 +658,11 @@ class PrintTable:
         self.SetMargins()
         self.SetPortrait()
 
-    def SetPreviewSize(self, position = wxPoint(0, 0), size="Full"):
+    def SetPreviewSize(self, position = wx.Point(0, 0), size="Full"):
         if size == "Full":
-            r = wxGetClientDisplayRect()
-            self.preview_frame_size = wxSize(r.width, r.height)
-            self.preview_frame_pos = wxPoint(r.x, r.y)
+            r = wx.GetClientDisplayRect()
+            self.preview_frame_size = r.GetSize()
+            self.preview_frame_pos = r.GetPosition()
         else:
             self.preview_frame_size = size
             self.preview_frame_pos = position
@@ -668,14 +674,14 @@ class PrintTable:
         self.printData.SetOrientation(orient)
 
     def SetColors(self):
-        self.row_def_line_colour = wxNamedColour('BLACK')
+        self.row_def_line_colour = wx.NamedColour('BLACK')
         self.row_def_line_size = 1
 
-        self.column_def_line_colour = wxNamedColour('BLACK')
+        self.column_def_line_colour = wx.NamedColour('BLACK')
         self.column_def_line_size = 1
-        self.column_colour = wxNamedColour('WHITE')
+        self.column_colour = wx.NamedColour('WHITE')
 
-        self.label_colour = wxNamedColour('LIGHT GREY')
+        self.label_colour = wx.NamedColour('LIGHT GREY')
 
     def SetFonts(self):
         self.label_font = { "Name": self.default_font_name, "Size": 12, "Colour": [0, 0, 0], "Attr": [0, 0, 0] }
@@ -703,14 +709,14 @@ class PrintTable:
     def SetHeaderValue(self):
         self.header_margin = 0.25
         self.header_font = { "Name": self.default_font_name, "Size": 11, "Colour": [0, 0, 0], "Attr": [0, 0, 0] }
-        self.header_align = wxALIGN_CENTRE
+        self.header_align = wx.ALIGN_CENTRE
         self.header_indent = 0
         self.header_type = "Text"
 
     def SetFooterValue(self):
         self.footer_margin = 0.7
         self.footer_font = { "Name": self.default_font_name, "Size": 11, "Colour": [0, 0, 0], "Attr": [0, 0, 0] }
-        self.footer_align = wxALIGN_CENTRE
+        self.footer_align = wx.ALIGN_CENTRE
         self.footer_indent = 0
         self.footer_type = "Pageof"
 
@@ -724,13 +730,13 @@ class PrintTable:
         self.cell_right_margin = 0.1
 
     def SetPortrait(self):
-        self.printData.SetPaperId(wxPAPER_LETTER)
-        self.printData.SetOrientation(wxPORTRAIT)
+        self.printData.SetPaperId(wx.PAPER_LETTER)
+        self.printData.SetOrientation(wx.PORTRAIT)
         self.page_width = 8.5
         self.page_height = 11.0
 
     def SetLandscape(self):
-        self.printData.SetOrientation(wxLANDSCAPE)
+        self.printData.SetOrientation(wx.LANDSCAPE)
         self.page_width = 11.0
         self.page_height = 8.5
 
@@ -746,7 +752,7 @@ class PrintTable:
         self.default_font_name = "Arial"
         self.default_font = { "Name": self.default_font_name, "Size": 10, "Colour": [0, 0, 0], "Attr": [0, 0, 0] }
 
-    def SetColAlignment(self, col, align=wxALIGN_LEFT):
+    def SetColAlignment(self, col, align=wx.ALIGN_LEFT):
         self.set_column_align[col] = align
 
     def SetColBackgroundColour(self, col, colour):
@@ -866,14 +872,14 @@ class PrintTable:
     def Preview(self):
         printout = SetPrintout(self)
         printout2 = SetPrintout(self)
-        self.preview = wxPrintPreview(printout, printout2, self.printData)
+        self.preview = wx.PrintPreview(printout, printout2, self.printData)
         if not self.preview.Ok():
-            wxMessageBox("There was a problem printing!", "Printing", wxOK)
+            wxMessageBox("There was a problem printing!", "Printing", wx.OK)
             return
 
         self.preview.SetZoom(60)        # initial zoom value
 
-        frame = wxPreviewFrame(self.preview, self.parentFrame, "Print preview")
+        frame = wx.PreviewFrame(self.preview, self.parentFrame, "Print preview")
 
         frame.Initialize()
         if self.parentFrame:
@@ -882,18 +888,18 @@ class PrintTable:
         frame.Show(True)
 
     def Print(self):
-        pdd = wxPrintDialogData()
+        pdd = wx.PrintDialogData()
         pdd.SetPrintData(self.printData)
-        printer = wxPrinter(pdd)
+        printer = wx.Printer(pdd)
         printout = SetPrintout(self)
         if not printer.Print(self.parentFrame, printout):
-            wxMessageBox("There was a problem printing.\nPerhaps your current printer is not set correctly?", "Printing", wxOK)
+            wx.MessageBox("There was a problem printing.\nPerhaps your current printer is not set correctly?", "Printing", wx.OK)
         else:
             self.printData = printer.GetPrintDialogData().GetPrintData()
         printout.Destroy()
 
     def DoDrawing(self, DC):
-        size = DC.GetSizeTuple()
+        size = DC.GetSize()
         DC.BeginDrawing()
 
         table = PrintTableDraw(self, DC, size)
@@ -1008,9 +1014,9 @@ class PrintGrid:
         self.table.Print()
 
 
-class SetPrintout(wxPrintout):
+class SetPrintout(wx.Printout):
     def __init__(self, canvas):
-        wxPrintout.__init__(self)
+        wx.Printout.__init__(self)
         self.canvas = canvas
         self.end_pg = 1000
 
@@ -1049,7 +1055,7 @@ class SetPrintout(wxPrintout):
         else:
             self.pixelsPerInch = self.GetPPIPrinter()
 
-        (w, h) = dc.GetSizeTuple()
+        (w, h) = dc.GetSize()
         scaleX = float(w) / 1000
         scaleY = float(h) / 1000
         self.printUserScale = min(scaleX, scaleY)
@@ -1066,7 +1072,7 @@ class SetPrintout(wxPrintout):
 
     def OnPrintPage(self, page):
         dc = self.GetDC()
-        (w, h) = dc.GetSizeTuple()
+        (w, h) = dc.GetSize()
         scaleX = float(w) / 1000
         scaleY = float(h) / 1000
         self.printUserScale = min(scaleX, scaleY)

@@ -11,6 +11,10 @@
 # Copyright:   (c) 2003 by db-X Corporation
 # Licence:     wxWindows license
 #---------------------------------------------------------------------------
+# 12/02/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for 2.5 compatability.
+#
 
 """
 A module that allows multiple handlers to respond to single wxWindows
@@ -33,8 +37,8 @@ programmer to declare or track control ids or parent containers:
 This module is Python 2.1+ compatible.
 
 """
-from wxPython import wx
-import pubsub
+import  wx
+import  pubsub # publish / subscribe library
 
 #---------------------------------------------------------------------------
 
@@ -84,9 +88,11 @@ class EventManager:
         # the natural way of doing things.)
         if source is not None:
             id  = source.GetId()
+            
         if win is None:
             # Some widgets do not function as their own windows.
             win = self._determineWindow(source)
+            
         topic = (event, win, id)
 
         #  Create an adapter from the PS system back to wxEvents, and
@@ -143,9 +149,11 @@ class EventManager:
         """
         win    = self._determineWindow(win)
         topics = self.__getTopics(win)
+
         if topics:
             for aTopic in topics:
                 self.__deregisterTopic(aTopic)
+
             del self.windowTopicLookup[win]
 
 
@@ -160,13 +168,16 @@ class EventManager:
 
         for topic in topicList:
             topicDict = self.messageAdapterDict[topic]
+
             if topicDict.has_key(listener):
                 topicDict[listener].Destroy()
                 del topicDict[listener]
+
                 if len(topicDict) == 0:
                     self.eventAdapterDict[topic].Destroy()
                     del self.eventAdapterDict[topic]
                     del self.messageAdapterDict[topic]
+
         del self.listenerTopicLookup[listener]
 
 
@@ -211,8 +222,8 @@ class EventManager:
             name = aWin.GetClassName()
             i    = id(aWin)
             return '%s #%d' % (name, i)
-        except wx.wxPyDeadObjectError:
-            return '(dead wxObject)'
+        except wx.PyDeadObjectError:
+            return '(dead wx.Object)'
 
 
     def __topicString(self, aTopic):
@@ -239,8 +250,10 @@ class EventManager:
             # This topic isn't valid.  Probably because it was deleted
             # by listener.
             return
+
         for messageAdapter in messageAdapterList:
             messageAdapter.Destroy()
+
         self.eventAdapterDict[aTopic].Destroy()
         del self.messageAdapterDict[aTopic]
         del self.eventAdapterDict[aTopic]
@@ -249,6 +262,7 @@ class EventManager:
     def __getTopics(self, win=None):
         if win is None:
             return self.messageAdapterDict.keys()
+
         if win is not None:
             try:
                 return self.windowTopicLookup[win]
@@ -284,7 +298,7 @@ class EventManager:
         discovered, the implementation can be changed to a dictionary
         lookup along the lines of class : function-to-get-window.
         """
-        if isinstance(aComponent, wx.wxMenuItem):
+        if isinstance(aComponent, wx.MenuItem):
             return aComponent.GetMenu()
         else:
             return aComponent
@@ -429,7 +443,7 @@ class EventAdapter:
         try:
             if not self.disconnect():
                 print 'disconnect failed'
-        except wx.wxPyDeadObjectError:
+        except wx.PyDeadObjectError:
             print 'disconnect failed: dead object'              ##????
 
 
@@ -481,12 +495,11 @@ eventManager  = EventManager()
 
 
 if __name__ == '__main__':
-    from wxPython.wx import wxPySimpleApp, wxFrame, wxToggleButton, wxBoxSizer, wxHORIZONTAL, EVT_MOTION, EVT_LEFT_DOWN, EVT_TOGGLEBUTTON, wxALL
-    app    = wxPySimpleApp()
-    frame  = wxFrame(None, -1, 'Event Test', size=(300,300))
-    button = wxToggleButton(frame, -1, 'Listen for Mouse Events')
-    sizer  = wxBoxSizer(wxHORIZONTAL)
-    sizer.Add(button, 0, 0 | wxALL, 10)
+    app    = wx.PySimpleApp()
+    frame  = wx.Frame(None, -1, 'Event Test', size=(300,300))
+    button = wx.ToggleButton(frame, -1, 'Listen for Mouse Events')
+    sizer  = wx.BoxSizer(wx.HORIZONTAL)
+    sizer.Add(button, 0, 0 | wx.ALL, 10)
     frame.SetAutoLayout(1)
     frame.SetSizer(sizer)
 
@@ -502,16 +515,16 @@ if __name__ == '__main__':
         # Turn the output of mouse events on and off
         if event.IsChecked():
             print '\nEnabling mouse events...'
-            eventManager.Register(printEvent, EVT_MOTION,    frame)
-            eventManager.Register(printEvent, EVT_LEFT_DOWN, frame)
+            eventManager.Register(printEvent, wx.EVT_MOTION,    frame)
+            eventManager.Register(printEvent, wx.EVT_LEFT_DOWN, frame)
         else:
             print '\nDisabling mouse events...'
             eventManager.DeregisterWindow(frame)
 
     # Send togglebutton events to both the on/off code as well
     # as the function that prints to stdout.
-    eventManager.Register(printEvent,        EVT_TOGGLEBUTTON, button)
-    eventManager.Register(enableFrameEvents, EVT_TOGGLEBUTTON, button)
+    eventManager.Register(printEvent,        wx.EVT_TOGGLEBUTTON, button)
+    eventManager.Register(enableFrameEvents, wx.EVT_TOGGLEBUTTON, button)
 
     frame.CenterOnScreen()
     frame.Show(1)

@@ -117,61 +117,60 @@ write() which displays it's argument.
 All (well, most) of this is made clear by the example code at the end
 of this file, which is run if the file is run by itself; otherwise,
 see the appropriate "stub" file in the wxPython demo.
-
+ 
 """
 
-from wxPython.wx import *
-import sys, tempfile, os
+import  os
+import  sys
+import  tempfile
 
-class _MyStatusBar(wxStatusBar):
-    def __init__(self, parent,callbacks=None,useopenbutton=0):
-        wxStatusBar.__init__(self, parent, -1, style=wxTAB_TRAVERSAL)
+import  wx
+
+class _MyStatusBar(wx.StatusBar):
+    def __init__(self, parent, callbacks=None, useopenbutton=0):
+        wx.StatusBar.__init__(self, parent, -1, style=wx.TAB_TRAVERSAL)
         self.SetFieldsCount(3)
 
         self.SetStatusText("",0)
 
-        ID = wxNewId()
-        self.button1 = wxButton(self,ID,"Dismiss",
-                               style=wxTAB_TRAVERSAL)
-        EVT_BUTTON(self,ID,self.OnButton1)
+        self.button1 = wx.Button(self, -1, "Dismiss", style=wx.TAB_TRAVERSAL)
+        self.Bind(wx.EVT_BUTTON, self.OnButton1, self.button1)
 
-        ID = wxNewId()
         if not useopenbutton:
-            self.button2 = wxButton(self,ID,"Close File",
-                                   style=wxTAB_TRAVERSAL)
+            self.button2 = wx.Button(self, -1, "Close File", style=wx.TAB_TRAVERSAL)
         else:
-            self.button2 = wxButton(self,ID,"Open New File",
-                                   style=wxTAB_TRAVERSAL)
-        EVT_BUTTON(self,ID,self.OnButton2)
+            self.button2 = wx.Button(self, -1, "Open New File", style=wx.TAB_TRAVERSAL)
+
+        self.Bind(wx.EVT_BUTTON, self.OnButton2, self.button2)
         self.useopenbutton = useopenbutton
         self.callbacks = callbacks
 
         # figure out how tall to make the status bar
-        dc = wxClientDC(self)
+        dc = wx.ClientDC(self)
         dc.SetFont(self.GetFont())
         (w,h) = dc.GetTextExtent('X')
         h = int(h * 1.8)
-        self.SetSize(wxSize(100, h))
+        self.SetSize((100, h))
         self.OnSize("dummy")
-        EVT_SIZE(self,self.OnSize)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
 
     # reposition things...
     def OnSize(self, event):
         self.CalculateSizes()
         rect = self.GetFieldRect(1)
-        self.button1.SetPosition(wxPoint(rect.x+5, rect.y+2))
-        self.button1.SetSize(wxSize(rect.width-10, rect.height-4))
+        self.button1.SetPosition((rect.x+5, rect.y+2))
+        self.button1.SetSize((rect.width-10, rect.height-4))
         rect = self.GetFieldRect(2)
-        self.button2.SetPosition(wxPoint(rect.x+5, rect.y+2))
-        self.button2.SetSize(wxSize(rect.width-10, rect.height-4))
+        self.button2.SetPosition((rect.x+5, rect.y+2))
+        self.button2.SetSize((rect.width-10, rect.height-4))
 
     # widths........
     def CalculateSizes(self):
-        dc = wxClientDC(self.button1)
+        dc = wx.ClientDC(self.button1)
         dc.SetFont(self.button1.GetFont())
         (w1,h) = dc.GetTextExtent(self.button1.GetLabel())
 
-        dc = wxClientDC(self.button2)
+        dc = wx.ClientDC(self.button2)
         dc.SetFont(self.button2.GetFont())
         (w2,h) = dc.GetTextExtent(self.button2.GetLabel())
 
@@ -185,6 +184,7 @@ class _MyStatusBar(wxStatusBar):
                 self.button2.SetLabel ("Close File")
         elif self.callbacks[1] ():
                 self.button2.SetLabel ("Open New File")
+
         self.useopenbutton = 1 - self.useopenbutton
         self.OnSize("")
         self.button2.Refresh(True)
@@ -217,6 +217,7 @@ class wxPyInformationalMessagesFrame:
         self.title  = "%s %s" % (progname,text)
         self.parent = None # use the SetParent method if desired...
         self.softspace = 1 # of rather limited use
+
         if dir:
             self.SetOutputDirectory(dir)
 
@@ -239,11 +240,15 @@ class wxPyInformationalMessagesFrame:
     f = None
 
 
-    def write(self,string):
-        if not wxThread_IsMain():
+    def write(self, string):
+        if not wx.Thread_IsMain():
             # Aquire the GUI mutex before making GUI calls.  Mutex is released
             # when locker is deleted at the end of this function.
-            locker = wxMutexGuiLocker()
+            #
+            # TODO: This should be updated to use wx.CallAfter similarly to how
+            # PyOnDemandOutputWindow.write was so it is not necessary
+            # to get the gui mutex
+            locker = wx.MutexGuiLocker()
 
         if self.Enabled:
             if self.f:
@@ -257,10 +262,11 @@ class wxPyInformationalMessagesFrame:
                 move = 0
 
             if not self.frame:
-                self.frame = wxFrame(self.parent, -1, self.title, size=(450, 300),
-                                     style=wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE)
-                self.text  = wxTextCtrl(self.frame, -1, "",
-                                        style = wxTE_MULTILINE|wxTE_READONLY|wxTE_RICH)
+                self.frame = wx.Frame(self.parent, -1, self.title, size=(450, 300),
+                                     style=wx.DEFAULT_FRAME_STYLE|wx.NO_FULL_REPAINT_ON_RESIZE)
+
+                self.text  = wx.TextCtrl(self.frame, -1, "",
+                                        style = wx.TE_MULTILINE|wx.TE_READONLY|wx.TE_RICH)
 
                 self.frame.sb = _MyStatusBar(self.frame,
                                              callbacks=[self.DisableOutput,
@@ -270,7 +276,7 @@ class wxPyInformationalMessagesFrame:
                                                                   "nofile"))
                 self.frame.SetStatusBar(self.frame.sb)
                 self.frame.Show(True)
-                EVT_CLOSE(self.frame, self.OnCloseWindow)
+                self.frame.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
                 if hasattr(self,"nofile"):
                     self.text.AppendText(
@@ -284,6 +290,7 @@ class wxPyInformationalMessagesFrame:
                 else:
                     tempfile.tempdir = self.dir
                     filename = os.path.abspath(tempfile.mktemp ())
+
                     self.text.AppendText(
                         "Please close this window (or select the "
                         "'Dismiss' button below) when desired.  By "
@@ -389,10 +396,10 @@ class wxPyInformationalMessagesFrame:
 
     def OpenNewFile(self):
         self.CloseFile()
-        dlg = wxFileDialog(self.frame,
+        dlg = wx.FileDialog(self.frame,
                           "Choose a new log file", self.dir,"","*",
-                           wxSAVE | wxHIDE_READONLY | wxOVERWRITE_PROMPT)
-        if dlg.ShowModal() == wxID_CANCEL:
+                           wx.SAVE | wx.HIDE_READONLY | wx.OVERWRITE_PROMPT)
+        if dlg.ShowModal() == wx.ID_CANCEL:
             dlg.Destroy()
             return 0
         else:
@@ -434,7 +441,7 @@ class wxPyInformationalMessagesFrame:
     def flush(self):
         if self.text:
             self.text.SetInsertionPointEnd()
-        wxYield()
+        wx.Yield()
 
 
     def __call__(self,* args):

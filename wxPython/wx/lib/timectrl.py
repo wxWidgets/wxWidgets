@@ -29,7 +29,14 @@
 #   or be counted twice (1 day each per year, for DST adjustments), the date
 #   portion of all wxDateTimes used/returned have their date portion set to
 #   Jan 1, 1970 (the "epoch.")
+#----------------------------------------------------------------------------
+# 12/13/2003 - Jeff Grimmett (grimmtooth@softhome.net)
 #
+# o Updated for V2.5 compatability
+# o wx.SpinCtl has some issues that cause the control to
+#   lock up. Noted in other places using it too, it's not this module
+#   that's at fault.
+# 
 
 """<html><body>
 <P>
@@ -239,10 +246,14 @@ value to fall within the current bounds.
 </body></html>
 """
 
-import string, copy, types
-from wxPython.wx import *
-from wxPython.tools.dbg import Logger
-from wxPython.lib.maskededit import wxMaskedTextCtrl, Field
+import  copy
+import  string
+import  types
+
+import  wx
+
+from wx.tools.dbg import Logger
+from wx.lib.maskededit import wxMaskedTextCtrl, Field
 
 dbg = Logger()
 dbg(enable=0)
@@ -254,14 +265,12 @@ except ImportError:
     accept_mx = False
 
 # This class of event fires whenever the value of the time changes in the control:
-wxEVT_TIMEVAL_UPDATED = wxNewId()
-def EVT_TIMEUPDATE(win, id, func):
-    """Used to trap events indicating that the current time has been changed."""
-    win.Connect(id, -1, wxEVT_TIMEVAL_UPDATED, func)
+wxEVT_TIMEVAL_UPDATED = wx.NewEventType()
+EVT_TIMEUPDATE = wx.PyEventBinder(wxEVT_TIMEVAL_UPDATED, 1)
 
-class TimeUpdatedEvent(wxPyCommandEvent):
+class TimeUpdatedEvent(wx.PyCommandEvent):
     def __init__(self, id, value ='12:00:00 AM'):
-        wxPyCommandEvent.__init__(self, wxEVT_TIMEVAL_UPDATED, id)
+        wx.PyCommandEvent.__init__(self, wxEVT_TIMEVAL_UPDATED, id)
         self.value = value
     def GetValue(self):
         """Retrieve the value of the time control at the time this event was generated"""
@@ -281,11 +290,11 @@ class wxTimeCtrl(wxMaskedTextCtrl):
 
     def __init__ (
                 self, parent, id=-1, value = '12:00:00 AM',
-                pos = wxDefaultPosition, size = wxDefaultSize,
+                pos = wx.DefaultPosition, size = wx.DefaultSize,
                 fmt24hr=False,
                 spinButton = None,
-                style = wxTE_PROCESS_TAB,
-                validator = wxDefaultValidator,
+                style = wx.TE_PROCESS_TAB,
+                validator = wx.DefaultValidator,
                 name = "time",
                 **kwargs ):
 
@@ -369,7 +378,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
         maskededit_kwargs['useFixedWidthFont'] = self.__useFixedWidthFont
 
         # allow for explicit size specification:
-        if size != wxDefaultSize:
+        if size != wx.DefaultSize:
             # override (and remove) "autofit" autoformat code in standard time formats:
             maskededit_kwargs['formatcodes'] = 'T!'
 
@@ -389,8 +398,8 @@ class wxTimeCtrl(wxMaskedTextCtrl):
 
 
         # This makes the up/down keys act like spin button controls:
-        self._SetKeycodeHandler(WXK_UP, self.__OnSpinUp)
-        self._SetKeycodeHandler(WXK_DOWN, self.__OnSpinDown)
+        self._SetKeycodeHandler(wx.WXK_UP, self.__OnSpinUp)
+        self._SetKeycodeHandler(wx.WXK_DOWN, self.__OnSpinDown)
 
 
         # This allows ! and c/C to set the control to the current time:
@@ -405,15 +414,15 @@ class wxTimeCtrl(wxMaskedTextCtrl):
         # that : takes you forward, not back, and so we can issue
         # EVT_TIMEUPDATE events on changes:
 
-        EVT_SET_FOCUS( self, self._OnFocus )        ## defeat automatic full selection
-        EVT_KILL_FOCUS( self, self._OnKillFocus )   ## run internal validator
-        EVT_LEFT_UP(self, self.__LimitSelection)    ## limit selections to single field
-        EVT_LEFT_DCLICK(self, self._OnDoubleClick ) ## select field under cursor on dclick
-        EVT_KEY_DOWN( self, self._OnKeyDown )       ## capture control events not normally seen, eg ctrl-tab.
-        EVT_CHAR( self, self.__OnChar )             ## remove "shift" attribute from colon key event,
-                                                    ## then call wxMaskedTextCtrl._OnChar with
-                                                    ## the possibly modified event.
-        EVT_TEXT( self, self.GetId(), self.__OnTextChange ) ## color control appropriately and EVT_TIMEUPDATE events
+        self.Bind(wx.EVT_SET_FOCUS, self._OnFocus )         ## defeat automatic full selection
+        self.Bind(wx.EVT_KILL_FOCUS, self._OnKillFocus )    ## run internal validator
+        self.Bind(wx.EVT_LEFT_UP, self.__LimitSelection)    ## limit selections to single field
+        self.Bind(wx.EVT_LEFT_DCLICK, self._OnDoubleClick ) ## select field under cursor on dclick
+        self.Bind(wx.EVT_KEY_DOWN, self._OnKeyDown )        ## capture control events not normally seen, eg ctrl-tab.
+        self.Bind(wx.EVT_CHAR, self.__OnChar )              ## remove "shift" attribute from colon key event,
+                                                            ## then call wxMaskedTextCtrl._OnChar with
+                                                            ## the possibly modified event.
+        self.Bind(wx.EVT_TEXT, self.__OnTextChange, self )  ## color control appropriately and EVT_TIMEUPDATE events
 
 
         # Validate initial value and set if appropriate
@@ -438,8 +447,8 @@ class wxTimeCtrl(wxMaskedTextCtrl):
         self.__spinButton = sb
         if self.__spinButton:
             # bind event handlers to spin ctrl
-            EVT_SPIN_UP(self.__spinButton, self.__spinButton.GetId(), self.__OnSpinUp)
-            EVT_SPIN_DOWN(self.__spinButton, self.__spinButton.GetId(), self.__OnSpinDown)
+            self.__spinButton.Bind(wx.EVT_SPIN_UP, self.__OnSpinUp, self.__spinButton)
+            self.__spinButton.Bind(wx.EVT_SPIN_DOWN, self.__OnSpinDown, self.__spinButton)
 
 
     def __repr__(self):
@@ -478,7 +487,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
             elif as_mxDateTime:
                 value = DateTime.DateTime(1970, 1, 1, value.GetHour(), value.GetMinute(), value.GetSecond())
             elif as_wxTimeSpan:
-                value = wxTimeSpan(value.GetHour(), value.GetMinute(), value.GetSecond())
+                value = wx.TimeSpan(value.GetHour(), value.GetMinute(), value.GetSecond())
             elif as_mxDateTimeDelta:
                 value = DateTime.DateTimeDelta(0, value.GetHour(), value.GetMinute(), value.GetSecond())
         else:
@@ -524,7 +533,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
         if type(value) == types.StringType:
 
             # Construct constant wxDateTime, then try to parse the string:
-            wxdt = wxDateTimeFromDMY(1, 0, 1970)
+            wxdt = wx.DateTimeFromDMY(1, 0, 1970)
             dbg('attempting conversion')
             value = value.strip()    # (parser doesn't like leading spaces)
             checkTime    = wxdt.ParseTime(value)
@@ -536,9 +545,9 @@ class wxTimeCtrl(wxMaskedTextCtrl):
                 raise ValueError('cannot convert string "%s" to valid time' % value)
 
         else:
-            if isinstance(value, wxDateTime):
+            if isinstance(value, wx.DateTime):
                 hour, minute, second = value.GetHour(), value.GetMinute(), value.GetSecond()
-            elif isinstance(value, wxTimeSpan):
+            elif isinstance(value, wx.TimeSpan):
                 totalseconds = value.GetSeconds()
                 hour = totalseconds / 3600
                 minute = totalseconds / 60 - (hour * 60)
@@ -557,7 +566,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
                 dbg(indent=0, suspend=0)
                 raise ValueError(error)
 
-            wxdt = wxDateTimeFromDMY(1, 0, 1970)
+            wxdt = wx.DateTimeFromDMY(1, 0, 1970)
             wxdt.SetHour(hour)
             wxdt.SetMinute(minute)
             wxdt.SetSecond(second)
@@ -772,9 +781,9 @@ class wxTimeCtrl(wxMaskedTextCtrl):
 
                 # Note: relies on min and max and value date portions
                 # always being the same.
-                interval = (min + wxTimeSpan(24, 0, 0, 0)) - max
+                interval = (min + wx.TimeSpan(24, 0, 0, 0)) - max
 
-                half_interval = wxTimeSpan(
+                half_interval = wx.TimeSpan(
                                     0,      # hours
                                     0,      # minutes
                                     interval.GetSeconds() / 2,  # seconds
@@ -782,7 +791,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
 
                 if value < min: # min is on next day, so use value on
                     # "next day" for "nearest" interval calculation:
-                    cmp_value = value + wxTimeSpan(24, 0, 0, 0)
+                    cmp_value = value + wx.TimeSpan(24, 0, 0, 0)
                 else:   # "before midnight; ok
                     cmp_value = value
 
@@ -850,7 +859,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
         min = self.GetMin()
         max = self.GetMax()
 
-        midnight = wxDateTimeFromDMY(1, 0, 1970)
+        midnight = wx.DateTimeFromDMY(1, 0, 1970)
         if min <= max:   # they don't span midnight
             ret = min <= value <= max
 
@@ -993,7 +1002,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
         This is the key handler for '!' and 'c'; this allows the user to
         quickly set the value of the control to the current time.
         """
-        self.SetValue(wxDateTime_Now().FormatTime())
+        self.SetValue(wx.DateTime_Now().FormatTime())
         keep_processing = False
         return keep_processing
 
@@ -1028,7 +1037,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
         dbg('field: ', field._index)
         start, end = field._extent
         slice = text[start:end]
-        if key == WXK_UP: increment = 1
+        if key == wx.WXK_UP: increment = 1
         else:             increment = -1
 
         if slice in ('A', 'P'):
@@ -1040,7 +1049,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
             # adjusting this field is trickier, as its value can affect the
             # am/pm setting.  So, we use wxDateTime to generate a new value for us:
             # (Use a fixed date not subject to DST variations:)
-            converter = wxDateTimeFromDMY(1, 0, 1970)
+            converter = wx.DateTimeFromDMY(1, 0, 1970)
             dbg('text: "%s"' % text)
             converter.ParseTime(text.strip())
             currenthour = converter.GetHour()
@@ -1059,8 +1068,8 @@ class wxTimeCtrl(wxMaskedTextCtrl):
             self.SetValue(newvalue)
 
         except ValueError:  # must not be in bounds:
-            if not wxValidator_IsSilent():
-                wxBell()
+            if not wx.Validator_IsSilent():
+                wx.Bell()
         dbg(indent=0)
 
 
@@ -1111,30 +1120,30 @@ class wxTimeCtrl(wxMaskedTextCtrl):
 if __name__ == '__main__':
     import traceback
 
-    class TestPanel(wxPanel):
+    class TestPanel(wx.Panel):
         def __init__(self, parent, id,
-                     pos = wxPyDefaultPosition, size = wxPyDefaultSize,
+                     pos = wx.DefaultPosition, size = wx.DefaultSize,
                      fmt24hr = 0, test_mx = 0,
-                     style = wxTAB_TRAVERSAL ):
+                     style = wx.TAB_TRAVERSAL ):
 
-            wxPanel.__init__(self, parent, id, pos, size, style)
+            wx.Panel.__init__(self, parent, id, pos, size, style)
 
             self.test_mx = test_mx
 
             self.tc = wxTimeCtrl(self, 10, fmt24hr = fmt24hr)
-            sb = wxSpinButton( self, 20, wxDefaultPosition, wxSize(-1,20), 0 )
+            sb = wx.SpinButton( self, 20, wx.DefaultPosition, (-1,20), 0 )
             self.tc.BindSpinButton(sb)
 
-            sizer = wxBoxSizer( wxHORIZONTAL )
-            sizer.AddWindow( self.tc, 0, wxALIGN_CENTRE|wxLEFT|wxTOP|wxBOTTOM, 5 )
-            sizer.AddWindow( sb, 0, wxALIGN_CENTRE|wxRIGHT|wxTOP|wxBOTTOM, 5 )
+            sizer = wx.BoxSizer( wx.HORIZONTAL )
+            sizer.Add( self.tc, 0, wx.ALIGN_CENTRE|wx.LEFT|wx.TOP|wx.BOTTOM, 5 )
+            sizer.Add( sb, 0, wx.ALIGN_CENTRE|wx.RIGHT|wx.TOP|wx.BOTTOM, 5 )
 
             self.SetAutoLayout( True )
             self.SetSizer( sizer )
             sizer.Fit( self )
             sizer.SetSizeHints( self )
 
-            EVT_TIMEUPDATE(self, self.tc.GetId(), self.OnTimeChange)
+            self.Bind(EVT_TIMEUPDATE, self.OnTimeChange, self.tc)
 
         def OnTimeChange(self, event):
             dbg('OnTimeChange: value = ', event.GetValue())
@@ -1145,14 +1154,14 @@ if __name__ == '__main__':
                 dbg('mxdt =', mxdt.hour, mxdt.minute, mxdt.second)
 
 
-    class MyApp(wxApp):
+    class MyApp(wx.App):
         def OnInit(self):
             import sys
             fmt24hr = '24' in sys.argv
             test_mx = 'mx' in sys.argv
             try:
-                frame = wxFrame(NULL, -1, "wxTimeCtrl Test", wxPoint(20,20), wxSize(100,100) )
-                panel = TestPanel(frame, -1, wxPoint(-1,-1), fmt24hr=fmt24hr, test_mx = test_mx)
+                frame = wx.Frame(None, -1, "wxTimeCtrl Test", (20,20), (100,100) )
+                panel = TestPanel(frame, -1, (-1,-1), fmt24hr=fmt24hr, test_mx = test_mx)
                 frame.Show(True)
             except:
                 traceback.print_exc()

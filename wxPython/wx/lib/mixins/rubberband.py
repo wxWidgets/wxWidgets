@@ -9,13 +9,19 @@
 # Copyright:   (c) 2002 by db-X Corporation
 # Licence:     wxWindows license
 #---------------------------------------------------------------------------
+# 12/14/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o 2.5 compatability update.
+# o Tested, but there is an anomaly between first use and subsequent uses.
+#   First use is odd, subsequent uses seem to be OK. Init error?
+#   -- No, the first time it uses an aspect ratio, but after the reset it doesn't.
+#
 
 """
 A mixin class for doing "RubberBand"-ing on a window.
 """
 
-from wxPython.wx import *
-
+import  wx
 
 #
 # Some miscellaneous mathematical and geometrical functions
@@ -125,8 +131,9 @@ class RubberBand:
         self.currentBox      = None
         self.__enabled       = 1
         self.__currentCursor = None
-        EVT_MOUSE_EVENTS(drawingSurface, self.__handleMouseEvents)
-        EVT_PAINT(drawingSurface, self.__handleOnPaint)
+
+        drawingSurface.Bind(wx.EVT_MOUSE_EVENTS, self.__handleMouseEvents)
+        drawingSurface.Bind(wx.EVT_PAINT, self.__handleOnPaint)
 
     def __setEnabled(self, enabled):
         self.__enabled = enabled
@@ -143,19 +150,19 @@ class RubberBand:
         Return True if the current cursor is one used to
         mean moving the rubberband.
         """
-        return self.__currentCursor == wxCURSOR_HAND
+        return self.__currentCursor == wx.CURSOR_HAND
 
     def __isSizingCursor(self):
         """
         Return True if the current cursor is one of the ones
         I may use to signify sizing.
         """
-        sizingCursors = [wxCURSOR_SIZENESW,
-                         wxCURSOR_SIZENS,
-                         wxCURSOR_SIZENWSE,
-                         wxCURSOR_SIZEWE,
-                         wxCURSOR_SIZING,
-                         wxCURSOR_CROSS]
+        sizingCursors = [wx.CURSOR_SIZENESW,
+                         wx.CURSOR_SIZENS,
+                         wx.CURSOR_SIZENWSE,
+                         wx.CURSOR_SIZEWE,
+                         wx.CURSOR_SIZING,
+                         wx.CURSOR_CROSS]
         try:
             sizingCursors.index(self.__currentCursor)
             return 1
@@ -177,7 +184,7 @@ class RubberBand:
         # First make sure we have started a box.
         if self.currentBox == None and not event.LeftDown():
             # No box started yet.  Set cursor to the initial kind.
-            self.__setCursor(wxCURSOR_CROSS)
+            self.__setCursor(wx.CURSOR_CROSS)
             return
 
         if event.LeftDown():
@@ -228,9 +235,9 @@ class RubberBand:
         # Implement the correct behavior for dragging a side
         # of the box:  Only change one dimension.
         if not self.aspectRatio:
-            if self.__currentCursor == wxCURSOR_SIZENS:
+            if self.__currentCursor == wx.CURSOR_SIZENS:
                 x = None
-            elif self.__currentCursor == wxCURSOR_SIZEWE:
+            elif self.__currentCursor == wx.CURSOR_SIZEWE:
                 y = None
 
         x0,y0,w0,h0 = self.currentBox
@@ -274,18 +281,18 @@ class RubberBand:
         if pointOnBox(x, y, self.currentBox, thickness=self.__THICKNESS):
             position = getCursorPosition(x, y, self.currentBox, thickness=self.__THICKNESS)
             cursor   = [
-                wxCURSOR_SIZENWSE,
-                wxCURSOR_SIZENS,
-                wxCURSOR_SIZENESW,
-                wxCURSOR_SIZEWE,
-                wxCURSOR_SIZENWSE,
-                wxCURSOR_SIZENS,
-                wxCURSOR_SIZENESW,
-                wxCURSOR_SIZEWE
+                wx.CURSOR_SIZENWSE,
+                wx.CURSOR_SIZENS,
+                wx.CURSOR_SIZENESW,
+                wx.CURSOR_SIZEWE,
+                wx.CURSOR_SIZENWSE,
+                wx.CURSOR_SIZENS,
+                wx.CURSOR_SIZENESW,
+                wx.CURSOR_SIZEWE
                 ] [position]
             self.__setCursor(cursor)
         elif pointInBox(x, y, self.currentBox):
-            self.__setCursor(wxCURSOR_HAND)
+            self.__setCursor(wx.CURSOR_HAND)
         else:
             self.__setCursor()
 
@@ -295,9 +302,9 @@ class RubberBand:
         """
         if self.__currentCursor != id:  # Avoid redundant calls
             if id:
-                self.drawingSurface.SetCursor(wxStockCursor(id))
+                self.drawingSurface.SetCursor(wx.StockCursor(id))
             else:
-                self.drawingSurface.SetCursor(wxNullCursor)
+                self.drawingSurface.SetCursor(wx.NullCursor)
             self.__currentCursor = id
 
     def __moveCenterTo(self, x, y):
@@ -320,14 +327,17 @@ class RubberBand:
         """
         Draw one box shape and possibly erase another.
         """
-        dc = wxClientDC(self.drawingSurface)
+        dc = wx.ClientDC(self.drawingSurface)
         dc.BeginDrawing()
-        dc.SetPen(wxPen(wxWHITE, 1, wxDOT))
-        dc.SetBrush(wxTRANSPARENT_BRUSH)
-        dc.SetLogicalFunction(wxXOR)
+        dc.SetPen(wx.Pen(wx.WHITE, 1, wx.DOT))
+        dc.SetBrush(wx.TRANSPARENT_BRUSH)
+        dc.SetLogicalFunction(wx.XOR)
         if boxToErase:
-            dc.DrawRectangle(*boxToErase)
-        dc.DrawRectangle(*boxToDraw)
+            r = wx.Rect(*boxToErase)
+            dc.DrawRectangleRect(r)
+
+        r = wx.Rect(*boxToDraw)
+        dc.DrawRectangleRect(r)
         dc.EndDrawing()
 
     def __dumpMouseEvent(self, event):
@@ -369,12 +379,12 @@ class RubberBand:
 
 
 if __name__ == '__main__':
-    app   = wxPySimpleApp()
-    frame = wxFrame(None, -1, title='RubberBand Test', size=(300,300))
+    app   = wx.PySimpleApp()
+    frame = wx.Frame(None, -1, title='RubberBand Test', size=(300,300))
 
     # Add a panel that the rubberband will work on.
-    panel = wxPanel(frame, -1)
-    panel.SetBackgroundColour(wxBLUE)
+    panel = wx.Panel(frame, -1)
+    panel.SetBackgroundColour(wx.BLUE)
 
     # Create the rubberband
     frame.rubberBand = RubberBand(drawingSurface=panel)
@@ -383,13 +393,13 @@ if __name__ == '__main__':
     # Add a button that creates a new rubberband
     def __newRubberBand(event):
         frame.rubberBand.reset()
-    button = wxButton(frame, 100, 'Reset Rubberband')
-    EVT_BUTTON(frame, 100, __newRubberBand)
+    button = wx.Button(frame, 100, 'Reset Rubberband')
+    frame.Bind(wx.EVT_BUTTON, __newRubberBand, button)
 
     # Layout the frame
-    sizer = wxBoxSizer(wxVERTICAL)
-    sizer.Add(panel,  1, wxEXPAND | wxALL, 5)
-    sizer.Add(button, 0, wxALIGN_CENTER | wxALL, 5)
+    sizer = wx.BoxSizer(wx.VERTICAL)
+    sizer.Add(panel,  1, wx.EXPAND | wx.ALL, 5)
+    sizer.Add(button, 0, wx.ALIGN_CENTER | wx.ALL, 5)
     frame.SetAutoLayout(1)
     frame.SetSizer(sizer)
     frame.Show(1)

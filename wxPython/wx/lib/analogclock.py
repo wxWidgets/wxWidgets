@@ -9,23 +9,31 @@
 # Copyright:   (c) 2003 by Total Control Software
 # Licence:     wxWindows license
 #----------------------------------------------------------------------
+# 11/30/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# o Tested with updated demo and with builtin test.
+# 
 
-import math, sys, string, time
-from wxPython.wx import *
+import  math
+import  string
+import  sys
+import  time
 
+import  wx
 
-
-class AnalogClockWindow(wxWindow):
+class AnalogClockWindow(wx.Window):
     """A simple analog clock window"""
 
     TICKS_NONE   = 0
     TICKS_SQUARE = 1
     TICKS_CIRCLE = 2
 
-    def __init__(self, parent, ID=-1, pos=wxDefaultPosition, size=wxDefaultSize,
+    def __init__(self, parent, ID=-1, pos=wx.DefaultPosition, size=wx.DefaultSize,
                  style=0, name="clock"):
+
         # Initialize the wxWindow...
-        wxWindow.__init__(self, parent, ID, pos, size, style, name)
+        wx.Window.__init__(self, parent, ID, pos, size, style, name)
 
         # Initialize the default clock settings...
         self.minuteMarks = 60
@@ -37,20 +45,20 @@ class AnalogClockWindow(wxWindow):
         # Make an initial bitmap for the face, it will be updated and
         # painted at the first EVT_SIZE event.
         W, H = size
-        self.faceBitmap = wxEmptyBitmap(max(W,1), max(H,1))
+        self.faceBitmap = wx.EmptyBitmap(max(W,1), max(H,1))
 
         # Initialize the timer that drives the update of the clock
         # face.  Update every half second to ensure that there is at
         # least one true update during each realtime second.
-        self.timer = wxTimer(self)
+        self.timer = wx.Timer(self)
         self.timer.Start(500)
 
         # Set event handlers...
-        EVT_PAINT(self, self.OnPaint)
-        EVT_ERASE_BACKGROUND(self, lambda x: None)
-        EVT_SIZE(self, self.OnSize)
-        EVT_TIMER(self, -1, self.OnTimerExpire)
-        EVT_WINDOW_DESTROY(self, self.OnQuit)
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.Bind(wx.EVT_ERASE_BACKGROUND, lambda x: None)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
+        self.Bind(wx.EVT_TIMER, self.OnTimerExpire)
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnQuit)
 
 
     def SetTickMarkStyle(self, style):
@@ -77,7 +85,6 @@ class AnalogClockWindow(wxWindow):
         self.SetForegroundColour(c)  # the hands just use the foreground colour
 
 
-
     # Using the current settings, render the points and line endings for the
     # circle inside the specified device context.  In this case, the DC is
     # a memory based device context that will be blitted to the actual
@@ -86,12 +93,12 @@ class AnalogClockWindow(wxWindow):
         # The faceBitmap init is done here, to make sure the buffer is always
         # the same size as the Window
         size  = self.GetClientSize()
-        self.faceBitmap = wxEmptyBitmap(size.width, size.height)
+        self.faceBitmap = wx.EmptyBitmap(size.width, size.height)
         self.DrawFace()
 
 
     def OnPaint(self, event):
-        self.DrawHands(wxPaintDC(self))
+        self.DrawHands(wx.PaintDC(self))
 
 
     def OnQuit(self, event):
@@ -100,7 +107,7 @@ class AnalogClockWindow(wxWindow):
 
 
     def OnTimerExpire(self, event):
-        self.DrawHands(wxClientDC(self))
+        self.DrawHands(wx.ClientDC(self))
 
 
     def DrawHands(self, drawDC):
@@ -124,23 +131,23 @@ class AnalogClockWindow(wxWindow):
         secondsX, secondsY = (x + centerX), (centerY - y)
 
         # Draw the hour hand...
-        drawDC.SetPen(wxPen(self.GetForegroundColour(), 5, wxSOLID))
+        drawDC.SetPen(wx.Pen(self.GetForegroundColour(), 5, wx.SOLID))
         drawDC.DrawLine((centerX, centerY), (hourX, hourY))
 
         # Draw the minutes hand...
-        drawDC.SetPen(wxPen(self.GetForegroundColour(), 3, wxSOLID))
+        drawDC.SetPen(wx.Pen(self.GetForegroundColour(), 3, wx.SOLID))
         drawDC.DrawLine((centerX, centerY), (minutesX, minutesY))
 
         # Draw the seconds hand...
-        drawDC.SetPen(wxPen(self.GetForegroundColour(), 1, wxSOLID))
+        drawDC.SetPen(wx.Pen(self.GetForegroundColour(), 1, wx.SOLID))
         drawDC.DrawLine((centerX, centerY), (secondsX, secondsY))
 
 
     # Draw the specified set of line marks inside the clock face for the
     # hours or minutes...
     def DrawFace(self):
-        backgroundBrush = wxBrush(self.GetBackgroundColour(), wxSOLID)
-        drawDC = wxMemoryDC()
+        backgroundBrush = wx.Brush(self.GetBackgroundColour(), wx.SOLID)
+        drawDC = wx.MemoryDC()
         drawDC.SelectObject(self.faceBitmap)
         drawDC.SetBackground(backgroundBrush)
         drawDC.Clear()
@@ -160,8 +167,9 @@ class AnalogClockWindow(wxWindow):
             scaledX = x + centerX - markSize/2
             scaledY = centerY - y - markSize/2
 
-            drawDC.SetBrush(wxBrush(self.tickMarksBrushC, wxSOLID))
-            drawDC.SetPen(wxPen(self.tickMarksPenC, 1, wxSOLID))
+            drawDC.SetBrush(wx.Brush(self.tickMarksBrushC, wx.SOLID))
+            drawDC.SetPen(wx.Pen(self.tickMarksPenC, 1, wx.SOLID))
+
             if self.tickMarkStyle != self.TICKS_NONE:
                 if self.tickMarkStyle == self.TICKS_CIRCLE:
                     drawDC.DrawEllipse((scaledX - 2, scaledY), (markSize, markSize))
@@ -174,25 +182,25 @@ class AnalogClockWindow(wxWindow):
         radiansPerDegree = math.pi / 180
         pointX = int(round(radius * math.sin(angle * radiansPerDegree)))
         pointY = int(round(radius * math.cos(angle * radiansPerDegree)))
-        return wxPoint(pointX, pointY)
+        return wx.Point(pointX, pointY)
 
 
 
 
 if __name__ == "__main__":
-    class App(wxApp):
+    class App(wx.App):
         def OnInit(self):
-            frame = wxFrame(None, -1, "AnalogClockWindow Test", size=(375,375))
+            frame = wx.Frame(None, -1, "AnalogClockWindow Test", size=(375,375))
 
             clock = AnalogClockWindow(frame)
             clock.SetTickMarkColours("RED")
             clock.SetHandsColour("WHITE")
             clock.SetBackgroundColour("BLUE")
 
-            frame.Centre(wxBOTH)
+            frame.Centre(wx.BOTH)
             frame.Show(True)
             self.SetTopWindow(frame)
-            return true
+            return True
 
     theApp = App(0)
     theApp.MainLoop()

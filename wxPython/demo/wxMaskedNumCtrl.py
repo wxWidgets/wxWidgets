@@ -6,6 +6,10 @@
 #
 # o wx.lib.maskednumctrl needs hit up with the renamer and new binders
 # 
+# 12/09/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Issues with lib corrected.
+# 
 
 import  string
 import  sys
@@ -148,15 +152,15 @@ value entry ctrl:""")
         panel.Move( (50,10) )
         self.panel = panel
 
-        mnum.EVT_MASKEDNUM( self, self.integerwidth.GetId(), self.OnSetIntWidth )
-        mnum.EVT_MASKEDNUM( self, self.fractionwidth.GetId(), self.OnSetFractionWidth )
+        self.Bind(mnum.EVT_MASKEDNUM, self.OnSetIntWidth, self.integerwidth )
+        self.Bind(mnum.EVT_MASKEDNUM, self.OnSetFractionWidth, self.fractionwidth )
         self.Bind(wx.EVT_TEXT, self.OnSetGroupChar, self.groupchar )
         self.Bind(wx.EVT_TEXT, self.OnSetDecimalChar, self.decimalchar )
 
         self.Bind(wx.EVT_CHECKBOX, self.OnSetMin, self.set_min )
         self.Bind(wx.EVT_CHECKBOX, self.OnSetMax, self.set_max )
-        mnum.EVT_MASKEDNUM( self, self.min.GetId(), self.SetTargetMinMax )
-        mnum.EVT_MASKEDNUM( self, self.max.GetId(), self.SetTargetMinMax )
+        self.Bind(mnum.EVT_MASKEDNUM, self.SetTargetMinMax, self.min )
+        self.Bind(mnum.EVT_MASKEDNUM, self.SetTargetMinMax, self.max )
 
         self.Bind(wx.EVT_CHECKBOX, self.SetTargetMinMax, self.limit_target )
         self.Bind(wx.EVT_CHECKBOX, self.OnSetAllowNone, self.allow_none )
@@ -165,7 +169,7 @@ value entry ctrl:""")
         self.Bind(wx.EVT_CHECKBOX, self.OnSetUseParens, self.use_parens )
         self.Bind(wx.EVT_CHECKBOX, self.OnSetSelectOnEntry, self.select_on_entry )
 
-        mnum.EVT_MASKEDNUM( self, self.target_ctl.GetId(), self.OnTargetChange )
+        self.Bind(mnum.EVT_MASKEDNUM, self.OnTargetChange, self.target_ctl )
         self.Bind(wx.EVT_COMBOBOX, self.OnNumberSelect, self.numselect )
 
 

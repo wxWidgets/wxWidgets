@@ -6,6 +6,10 @@
 # RCS-ID:      $Id$
 # License:     wxWindows license
 #----------------------------------------------------------------------------
+# 12/09/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace (minor)
+# 
 
 """<html><body>
 <P>
@@ -47,9 +51,9 @@ their own demo pages and interface descriptions.
 </body></html>
 """
 
-from wxPython.lib.maskededit import wxMaskedTextCtrl, wxMaskedComboBox, wxIpAddrCtrl
-from wxPython.lib.maskednumctrl import wxMaskedNumCtrl
-from wxPython.lib.timectrl import wxTimeCtrl
+from wx.lib.maskededit      import wxMaskedTextCtrl, wxMaskedComboBox, wxIpAddrCtrl
+from wx.lib.maskednumctrl   import wxMaskedNumCtrl
+from wx.lib.timectrl        import wxTimeCtrl
 
 
 # "type" enumeration for class instance factory function
