@@ -37,7 +37,7 @@ class WXDLLEXPORT wxHtmlParser : public wxObject
     DECLARE_ABSTRACT_CLASS(wxHtmlParser)
 
     public:
-        wxHtmlParser() : wxObject(), m_HandlersHash(wxKEY_STRING) {m_FS = NULL; m_Cache = NULL;}
+        wxHtmlParser() : wxObject(), m_HandlersHash(wxKEY_STRING) {m_FS = NULL; m_Cache = NULL; m_HandlersStack = NULL;}
         virtual ~wxHtmlParser();
 
         void SetFS(wxFileSystem *fs) {m_FS = fs;}
@@ -70,6 +70,22 @@ class WXDLLEXPORT wxHtmlParser : public wxObject
 
         virtual void AddTagHandler(wxHtmlTagHandler *handler);
                 // adds handler to the list & hash table of handlers.
+                
+        void PushTagHandler(wxHtmlTagHandler *handler, wxString tags);
+                // Forces the handler to handle additional tags (not returned by GetSupportedTags). 
+                // The handler should already be in use by this parser.
+                // Example: you want to parse following pseudo-html structure:
+                //   <myitems>
+                //     <it name="one" value="1">
+                //     <it name="two" value="2">
+                //   </myitems>
+                //   <it> This last it has different meaning, we don't want it to be parsed by myitems handler!
+                // handler can handle only 'myitems' (e.g. it's GetSupportedTags returns "MYITEMS")
+                // you can call PushTagHandler(handler, "IT") when you find <myitems>
+                // and call PopTagHandler() when you find </myitems>
+                
+        void PopTagHandler();
+                // Restores state before last call to PushTagHandler
 
         wxString* GetSource() {return &m_Source;}
 
@@ -117,6 +133,8 @@ class WXDLLEXPORT wxHtmlParser : public wxObject
                 //      only one reference to each handler instance.
         wxFileSystem *m_FS;
                 // class for opening files (file system)
+        wxList *m_HandlersStack;
+                // handlers stack used by PushTagHandler and PopTagHandler
 
 };
 

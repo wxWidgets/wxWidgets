@@ -148,8 +148,41 @@ void wxHtmlParser::AddTagHandler(wxHtmlTagHandler *handler)
 
 
 
+void wxHtmlParser::PushTagHandler(wxHtmlTagHandler *handler, wxString tags)
+{
+    wxStringTokenizer tokenizer(tags, ", ");
+    wxString key;
+
+    if (m_HandlersStack == NULL) {
+        m_HandlersStack = new wxList;
+        m_HandlersStack -> DeleteContents(TRUE);
+    }
+
+    m_HandlersStack -> Insert(new wxHashTable(m_HandlersHash));
+
+    while (tokenizer.HasMoreTokens()) {
+        key = tokenizer.NextToken();
+        m_HandlersHash.Delete(key);
+        m_HandlersHash.Put(key, handler);
+    }
+}
+
+
+
+void wxHtmlParser::PopTagHandler()
+{
+    wxNode *first;
+    
+    if (m_HandlersStack == NULL || (first = m_HandlersStack -> GetFirst()) == NULL) return;
+    m_HandlersHash = *((wxHashTable*) first -> GetData());
+    m_HandlersStack -> DeleteNode(first);
+}
+
+
+
 wxHtmlParser::~wxHtmlParser()
 {
+    if (m_HandlersStack) delete m_HandlersStack;
     m_HandlersHash.Clear();
     m_HandlersList.DeleteContents(TRUE);
     m_HandlersList.Clear();
