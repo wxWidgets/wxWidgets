@@ -816,33 +816,24 @@ int wxEntry( int argc, char *argv[] )
 
     if ( retValue == 0 )
     {
-        /* delete pending toplevel windows (typically a single
-           dialog) so that, if there isn't any left, we don't
-           call OnRun() */
+        // Delete pending toplevel windows
         wxTheApp->DeletePendingObjects();
 
-        wxTheApp->m_initialized = wxTopLevelWindows.GetCount() != 0;
+        // When is the app not initialized ?
+        wxTheApp->m_initialized = TRUE;
 
         if (wxTheApp->Initialized())
         {
             wxTheApp->OnRun();
 
             wxWindow *topWindow = wxTheApp->GetTopWindow();
+            
+            // Delete all pending windows if any
+            wxTheApp->DeletePendingObjects();
+    
+            // Reset top window 
             if (topWindow)
-            {
-                /* Forcibly delete the window. */
-                if (topWindow->IsKindOf(CLASSINFO(wxFrame)) ||
-                    topWindow->IsKindOf(CLASSINFO(wxDialog)) )
-                {
-                    topWindow->Close( TRUE );
-                    wxTheApp->DeletePendingObjects();
-                }
-                else
-                {
-                    delete topWindow;
-                    wxTheApp->SetTopWindow( (wxWindow*) NULL );
-                }
-            }
+                wxTheApp->SetTopWindow( (wxWindow*) NULL );
 
             retValue = wxTheApp->OnExit();
         }
