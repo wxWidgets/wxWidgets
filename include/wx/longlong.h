@@ -107,10 +107,10 @@ public:
     // accessors
         // get high part
     long GetHi() const
-        { return (long)((m_ll & 0xFFFFFFFF00000000ll) >> 32); }
+        { return (long)((m_ll & 0xFFFFFFFF00000000l) >> 32); }
         // get low part
     unsigned long GetLo() const
-        { return (unsigned long) (m_ll & 0x00000000FFFFFFFFll); }
+        { return (unsigned long) (m_ll & 0x00000000FFFFFFFFl); }
 
         // convert to native long long
     wxLongLong_t GetValue() const { return m_ll; }
@@ -222,7 +222,7 @@ public:
     void *asArray() const;
 
         // input/output
-    friend std::ostream& operator<<(ostream&, const wxLongLongNative&);
+    friend ostream& operator<<(ostream&, const wxLongLongNative&);
 
 private:
     wxLongLong_t  m_ll;
@@ -324,7 +324,7 @@ public:
                 wxLongLongWx& remainder) const;
 
     // input/output
-    friend ostream& operator<<(std::ostream&, const wxLongLongWx&);
+    friend ostream& operator<<(ostream&, const wxLongLongWx&);
 
 private:
     // long is at least 32 bits, so represent our 64bit number as 2 longs

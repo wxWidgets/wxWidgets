@@ -1,3 +1,5 @@
+#include "wx/wxprec.h"
+
 #include "wx/longlong.h"
 
 #include <time.h>
@@ -7,7 +9,7 @@
 #include <Events.h>
 #endif
 
-static const unsigned long long NumberOfTests = 100000ll;
+static const unsigned wxLongLong_t NumberOfTests = 100000l;
 
 //using namespace std;
 int oddbits(unsigned int number);
@@ -41,7 +43,7 @@ int shifttest();
 
 int shifttest()
 {
-    std::cout << std::endl << "Starting shift tests." << endl;
+    cout << endl << "Starting shift tests." << endl;
 
     long hi = 0;
     unsigned long lo = 0;
@@ -52,7 +54,7 @@ int shifttest()
     {
         if ((counter % 1000) == 999)
         {
-            std::cerr << "+";
+            cerr << "+";
 #if defined(__MWERKS__) && macintosh
             GetNextEvent(0, NULL);
 #endif
@@ -91,24 +93,24 @@ int shifttest()
 
         if ((memcmp(oneb, twob, 8) != 0) || (memcmp(onec, twoc, 8) != 0) || (memcmp(oneb, onec, 8) != 0))
         {
-            std::cout << std::endl << "After " << counter << " successful trials: " << std::endl;
-            std::cout << l1a << std::endl;
-            std::cout << l2a << std::endl;
+            cout << endl << "After " << wxLongLongNative(counter) << " successful trials: " << endl;
+            cout << l1a << endl;
+            cout << l2a << endl;
             if (leftshift)
-                std::cout << "<< ";
+                cout << "<< ";
             else
-                std::cout << ">> ";
-            std::cout << shift << std::endl;
-            std::cout << l1b << std::endl;
-            std::cout << l2b << std::endl;
-            std::cout << l1c << std::endl;
-            std::cout << l2c << std::endl;
+                cout << ">> ";
+            cout << shift << endl;
+            cout << l1b << endl;
+            cout << l2b << endl;
+            cout << l1c << endl;
+            cout << l2c << endl;
             return 0;
         }
         counter++;
     }
 
-    std::cout << std::endl << counter << " successful trial" << (counter == 1 ? "." : "s.") << std::endl;
+    cout << endl << wxLongLongNative(counter) << " successful trial" << (counter == 1 ? "." : "s.") << endl;
 
     return 1;
 }
@@ -117,7 +119,7 @@ int add1test();
 
 int add1test()
 {
-    std::cout << std::endl << "Starting first addition tests." << endl;
+    cout << endl << "Starting first addition tests." << endl;
 
     long hi = 0;
     unsigned long lo = 0;
@@ -128,7 +130,7 @@ int add1test()
     {
         if ((counter % 1000) == 999)
         {
-            std::cerr << "+";
+            cerr << "+";
 #if defined(__MWERKS__) && macintosh
             GetNextEvent(0, NULL);
 #endif
@@ -157,19 +159,19 @@ int add1test()
 
         if ((memcmp(onec, twoc, 8) != 0) || (memcmp(oned, twod, 8) != 0) || (memcmp(onec, oned, 8) != 0))
         {
-            std::cout << std::endl << "After " << counter << " successful trials: " << std::endl;
-            std::cout << l1a << std::endl;
-            std::cout << l2a << std::endl;
-            std::cout << l1b << std::endl;
-            std::cout << l2b << std::endl;
-            std::cout << l1c << std::endl;
-            std::cout << l2c << std::endl;
+            cout << endl << "After " << wxLongLongNative(counter) << " successful trials: " << endl;
+            cout << l1a << endl;
+            cout << l2a << endl;
+            cout << l1b << endl;
+            cout << l2b << endl;
+            cout << l1c << endl;
+            cout << l2c << endl;
             return 0;
         }
         counter++;
     }
 
-    std::cout << std::endl << counter << " successful trial" << (counter == 1 ? "." : "s.") << std::endl;
+    cout << endl << wxLongLongNative(counter) << " successful trial" << (counter == 1 ? "." : "s.") << endl;
 
     return 1;
 }
@@ -179,7 +181,7 @@ int add2test();
 
 int add2test()
 {
-    std::cout << std::endl << "Starting second addition tests." << endl;
+    cout << endl << "Starting second addition tests." << endl;
 
     long hi = 0;
     unsigned long lo = 0;
@@ -190,7 +192,7 @@ int add2test()
     {
         if ((counter % 1000) == 999)
         {
-            std::cerr << "+";
+            cerr << "+";
 #if defined(__MWERKS__) && macintosh
             GetNextEvent(0, NULL);
 #endif
@@ -213,19 +215,19 @@ int add2test()
 
         if (memcmp(one, two, 8) != 0)
         {
-            std::cout << std::endl << "After " << counter << " successful trials: " << std::endl;
-            std::cout << l1c << std::endl;
-            std::cout << l2c << std::endl;
-            std::cout << l1a << std::endl;
-            std::cout << l2a << std::endl;
-            std::cout << l1b << std::endl;
-            std::cout << l2b << std::endl;
+            cout << endl << "After " << counter << " successful trials: " << endl;
+            cout << l1c << endl;
+            cout << l2c << endl;
+            cout << l1a << endl;
+            cout << l2a << endl;
+            cout << l1b << endl;
+            cout << l2b << endl;
             return 0;
         }
         counter++;
     }
 
-    std::cout << std::endl << counter << " successful trial" << (counter == 1 ? "." : "s.") << std::endl;
+    cout << endl << counter << " successful trial" << (counter == 1 ? "." : "s.") << endl;
 
     return 1;
 }
@@ -235,7 +237,7 @@ int sub1test();
 
 int sub1test()
 {
-    std::cout << std::endl << "Starting first subtraction tests." << endl;
+    cout << endl << "Starting first subtraction tests." << endl;
 
     long hi = 0;
     unsigned long lo = 0;
@@ -246,7 +248,7 @@ int sub1test()
     {
         if ((counter % 1000) == 999)
         {
-            std::cerr << "+";
+            cerr << "+";
 #if defined(__MWERKS__) && macintosh
             GetNextEvent(0, NULL);
 #endif
@@ -275,21 +277,21 @@ int sub1test()
 
         if ((memcmp(onec, twoc, 8) != 0) || (memcmp(oned, twod, 8) != 0) || (memcmp(onec, oned, 8) != 0))
         {
-            std::cout << std::endl << "After " << counter << " successful trials: " << std::endl;
-            std::cout << l1a << std::endl;
-            std::cout << l2a << std::endl;
-            std::cout << l1b << std::endl;
-            std::cout << l2b << std::endl;
-            std::cout << l1c << std::endl;
-            std::cout << l2c << std::endl;
-            std::cout << l1d << std::endl;
-            std::cout << l2d << std::endl;
+            cout << endl << "After " << wxLongLongNative(counter) << " successful trials: " << endl;
+            cout << l1a << endl;
+            cout << l2a << endl;
+            cout << l1b << endl;
+            cout << l2b << endl;
+            cout << l1c << endl;
+            cout << l2c << endl;
+            cout << l1d << endl;
+            cout << l2d << endl;
             return 0;
         }
         counter++;
     }
 
-    std::cout << std::endl << counter << " successful trial" << (counter == 1 ? "." : "s.") << std::endl;
+    cout << endl << wxLongLongNative(counter) << " successful trial" << (counter == 1 ? "." : "s.") << endl;
 
     return 1;
 }
@@ -299,7 +301,7 @@ int sub2test();
 
 int sub2test()
 {
-    std::cout << std::endl << "Starting second subtraction tests." << endl;
+    cout << endl << "Starting second subtraction tests." << endl;
 
     long hi = 0;
     unsigned long lo = 0;
@@ -310,7 +312,7 @@ int sub2test()
     {
         if ((counter % 1000) == 999)
         {
-            std::cerr << "+";
+            cerr << "+";
 #if defined(__MWERKS__) && macintosh
             GetNextEvent(0, NULL);
 #endif
@@ -333,19 +335,19 @@ int sub2test()
 
         if (memcmp(one, two, 8) != 0)
         {
-            std::cout << std::endl << "After " << counter << " successful trials: " << std::endl;
-            std::cout << l1c << std::endl;
-            std::cout << l2c << std::endl;
-            std::cout << l1a << std::endl;
-            std::cout << l2a << std::endl;
-            std::cout << l1b << std::endl;
-            std::cout << l2b << std::endl;
+            cout << endl << "After " << counter << " successful trials: " << endl;
+            cout << l1c << endl;
+            cout << l2c << endl;
+            cout << l1a << endl;
+            cout << l2a << endl;
+            cout << l1b << endl;
+            cout << l2b << endl;
             return 0;
         }
         counter++;
     }
 
-    std::cout << std::endl << counter << " successful trial" << (counter == 1 ? "." : "s.") << std::endl;
+    cout << endl << counter << " successful trial" << (counter == 1 ? "." : "s.") << endl;
 
     return 1;
 }
@@ -356,7 +358,7 @@ int incdectest();
 
 int incdectest()
 {
-    std::cout << std::endl << "Starting pre/post increment/decrement tests." << endl;
+    cout << endl << "Starting pre/post increment/decrement tests." << endl;
 
     long hi = 0;
     unsigned long lo = 0;
@@ -367,7 +369,7 @@ int incdectest()
     {
         if ((counter % 1000) == 999)
         {
-            std::cerr << "+";
+            cerr << "+";
 #if defined(__MWERKS__) && macintosh
             GetNextEvent(0, NULL);
 #endif
@@ -410,18 +412,18 @@ int incdectest()
 
         if (memcmp(one, two, 8) != 0)
         {
-            std::cout << std::endl << "After " << counter << " successful trials: " << std::endl;
-            std::cout << l1a << std::endl;
-            std::cout << l2a << std::endl;
-            std::cout << (pre ? "pre" : "post") << (increment ? "increment" : "decrement") << std::endl;
-            std::cout << l1b << std::endl;
-            std::cout << l2b << std::endl;
+            cout << endl << "After " << wxLongLongNative(counter) << " successful trials: " << endl;
+            cout << l1a << endl;
+            cout << l2a << endl;
+            cout << (pre ? "pre" : "post") << (increment ? "increment" : "decrement") << endl;
+            cout << l1b << endl;
+            cout << l2b << endl;
             return 0;
         }
         counter++;
     }
 
-    std::cout << std::endl << counter << " successful trial" << (counter == 1 ? "." : "s.") << std::endl;
+    cout << endl << wxLongLongNative(counter) << " successful trial" << (counter == 1 ? "." : "s.") << endl;
 
     return 1;
 }
@@ -430,7 +432,7 @@ int negationtest();
 
 int negationtest()
 {
-    std::cout << std::endl << "Starting negation tests." << endl;
+    cout << endl << "Starting negation tests." << endl;
 
     long hi = 0;
     unsigned long lo = 0;
@@ -441,7 +443,7 @@ int negationtest()
     {
         if ((counter % 1000) == 999)
         {
-            std::cerr << "+";
+            cerr << "+";
 #if defined(__MWERKS__) && macintosh
             GetNextEvent(0, NULL);
 #endif
@@ -458,17 +460,17 @@ int negationtest()
 
         if (memcmp(one, two, 8) != 0)
         {
-            std::cout << std::endl << "After " << counter << " successful trials: " << std::endl;
-            std::cout << l1a << std::endl;
-            std::cout << l2a << std::endl;
-            std::cout << l1b << std::endl;
-            std::cout << l2b << std::endl;
+            cout << endl << "After " << wxLongLongNative(counter) << " successful trials: " << endl;
+            cout << l1a << endl;
+            cout << l2a << endl;
+            cout << l1b << endl;
+            cout << l2b << endl;
             return 0;
         }
         counter++;
     }
 
-    std::cout << std::endl << counter << " successful trial" << (counter == 1 ? "." : "s.") << std::endl;
+    cout << endl << wxLongLongNative(counter) << " successful trial" << (counter == 1 ? "." : "s.") << endl;
 
     return 1;
 }
@@ -477,7 +479,7 @@ int multiplicationtest();
 
 int multiplicationtest()
 {
-    std::cout << std::endl << "Starting multiplication tests." << endl;
+    cout << endl << "Starting multiplication tests." << endl;
 
     long hi = 0;
     unsigned long lo = 0;
@@ -488,7 +490,7 @@ int multiplicationtest()
     {
         if ((counter % 1000) == 999)
         {
-            std::cerr << "+";
+            cerr << "+";
 #if defined(__MWERKS__) && macintosh
             GetNextEvent(0, NULL);
 #endif
@@ -516,21 +518,21 @@ int multiplicationtest()
 
         if ((memcmp(onec, twoc, 8) != 0) || (memcmp(oned, twod, 8) != 0) || (memcmp(onec, oned, 8) != 0))
         {
-            std::cout << std::endl << "After " << counter << " successful trials: " << std::endl;
-            std::cout << l1a << std::endl;
-            std::cout << l2a << std::endl;
-            std::cout << l1b << std::endl;
-            std::cout << l2b << std::endl;
-            std::cout << l1c << std::endl;
-            std::cout << l2c << std::endl;
-            std::cout << l1d << std::endl;
-            std::cout << l2d << std::endl;
+            cout << endl << "After " << wxLongLongNative(counter) << " successful trials: " << endl;
+            cout << l1a << endl;
+            cout << l2a << endl;
+            cout << l1b << endl;
+            cout << l2b << endl;
+            cout << l1c << endl;
+            cout << l2c << endl;
+            cout << l1d << endl;
+            cout << l2d << endl;
             return 0;
         }
         counter++;
     }
 
-    std::cout << std::endl << counter << " successful trial" << (counter == 1 ? "." : "s.") << std::endl;
+    cout << endl << wxLongLongNative(counter) << " successful trial" << (counter == 1 ? "." : "s.") << endl;
 
     return 1;
 }
@@ -539,7 +541,7 @@ int bitwisetest();
 
 int bitwisetest()
 {
-    std::cout << std::endl << "Starting bitwise tests." << endl;
+    cout << endl << "Starting bitwise tests." << endl;
 
     long hi = 0;
     unsigned long lo = 0;
@@ -550,7 +552,7 @@ int bitwisetest()
     {
         if ((counter % 1000) == 999)
         {
-            std::cerr << "+";
+            cerr << "+";
 #if defined(__MWERKS__) && macintosh
             GetNextEvent(0, NULL);
 #endif
@@ -578,21 +580,21 @@ int bitwisetest()
 
         if ((memcmp(onec, twoc, 8) != 0) || (memcmp(oned, twod, 8) != 0) || (memcmp(onec, oned, 8) != 0))
         {
-            std::cout << std::endl << "After " << counter << " successful trials: " << std::endl;
-            std::cout << l1a << std::endl;
-            std::cout << l2a << std::endl;
-            std::cout << l1b << std::endl;
-            std::cout << l2b << std::endl;
-            std::cout << l1c << std::endl;
-            std::cout << l2c << std::endl;
-            std::cout << l1d << std::endl;
-            std::cout << l2d << std::endl;
+            cout << endl << "After " << wxLongLongNative(counter) << " successful trials: " << endl;
+            cout << l1a << endl;
+            cout << l2a << endl;
+            cout << l1b << endl;
+            cout << l2b << endl;
+            cout << l1c << endl;
+            cout << l2c << endl;
+            cout << l1d << endl;
+            cout << l2d << endl;
             return 0;
         }
         counter++;
     }
 
-    std::cout << std::endl << counter << " successful trial" << (counter == 1 ? "." : "s.") << std::endl;
+    cout << endl << wxLongLongNative(counter) << " successful trial" << (counter == 1 ? "." : "s.") << endl;
 
     return 1;
 }
@@ -605,7 +607,7 @@ int main()
     SIOUXSettings.autocloseonquit = 0;
 #endif
 
-    std::cout << "Starting tests." << endl;
+    cout << "Starting tests." << endl;
 
 #if defined(__MWERKS__) && macintosh
     GetNextEvent(0, NULL);
@@ -637,7 +639,7 @@ int main()
     if (!negationtest())
         return 1;
 
-    std::cout << std::endl << "The tests are finished." << std::endl;
+    cout << endl << "The tests are finished." << endl;
 
     return 0;
 }

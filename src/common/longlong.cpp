@@ -56,7 +56,7 @@ void *wxLongLongNative::asArray(void) const
 }
 
 // input/output
-std::ostream& operator<< (std::ostream& o, const wxLongLongNative& ll)
+ostream& operator<< (ostream& o, const wxLongLongNative& ll)
 {
     char result[65];
 
@@ -449,7 +449,7 @@ void *wxLongLongWx::asArray(void) const
 
 // input/output
 
-std::ostream& operator<< (std::ostream& o, const wxLongLongWx& ll)
+ostream& operator<< (ostream& o, const wxLongLongWx& ll)
 {
     char result[65];
 
