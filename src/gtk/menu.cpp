@@ -667,7 +667,7 @@ static void gtk_menu_nolight_callback( GtkWidget *widget, wxMenu *menu )
 // wxMenuItem
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxMenuItemBase)
+IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxMenuObject)
 
 wxMenuItem *wxMenuItemBase::New(wxMenu *parentMenu,
                                 int id,

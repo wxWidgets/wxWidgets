@@ -72,11 +72,7 @@
 // dynamic classes implementation
 // ----------------------------------------------------------------------------
 
-#if wxUSE_OWNER_DRAWN
-    IMPLEMENT_DYNAMIC_CLASS2(wxMenuItem, wxMenuItemBase, wxOwnerDrawn)
-#else   //!USE_OWNER_DRAWN
-    IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxMenuItemBase)
-#endif  //USE_OWNER_DRAWN
+IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
 
 // ----------------------------------------------------------------------------
 // wxMenuItem

@@ -52,7 +52,7 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxCursorBase)
+IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxGDIObject)
 
 // ----------------------------------------------------------------------------
 // globals
