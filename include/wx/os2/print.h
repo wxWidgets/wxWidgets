@@ -18,13 +18,13 @@
  * Represents the printer: manages printing a wxPrintout object
  */
 
-class WXDLLEXPORT wxPrinter: public wxPrinterBase
+class WXDLLEXPORT wxOS2Printer: public wxPrinterBase
 {
   DECLARE_DYNAMIC_CLASS(wxPrinter)
 
  public:
-  wxPrinter(wxPrintData *data = NULL);
-  ~wxPrinter();
+  wxOS2Printer(wxPrintData *data = NULL);
+  ~wxOS2Printer();
 
   virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = TRUE);
   virtual wxDC* PrintDialog(wxWindow *parent);
@@ -37,13 +37,13 @@ private:
  * Programmer creates an object of this class to preview a wxPrintout.
  */
 
-class WXDLLEXPORT wxPrintPreview: public wxPrintPreviewBase
+class WXDLLEXPORT wxOS2PrintPreview: public wxPrintPreviewBase
 {
   DECLARE_CLASS(wxPrintPreview)
 
  public:
-  wxPrintPreview(wxPrintout *printout, wxPrintout *printoutForPrinting = NULL, wxPrintData *data = NULL);
-  ~wxPrintPreview();
+  wxOS2PrintPreview(wxPrintout *printout, wxPrintout *printoutForPrinting = NULL, wxPrintData *data = NULL);
+  ~wxOS2PrintPreview();
 
   virtual bool Print(bool interactive);
   virtual void DetermineScaling();
