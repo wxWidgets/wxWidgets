@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 // Name:        grid.cpp
 // Purpose:     wxGrid and related classes
 // Author:      Michael Bedward (based on code by Julian Smart, Robin Dunn)
@@ -740,20 +740,24 @@ void wxGrid::Init()
 
     m_rowHeights.Alloc( m_numRows );
     m_rowBottoms.Alloc( m_numRows );
+    m_sumRowHeights = 0;
     for ( i = 0;  i < m_numRows;  i++ )
     {
         m_rowHeights.Add( m_defaultRowHeight );
         m_rowBottoms.Add( 0 );  // set by CalcDimensions()
     }
-
+    m_sumRowHeights = m_defaultRowHeight * m_numRows;
+        
     m_colWidths.Alloc( m_numCols );
     m_colRights.Alloc( m_numRows );
+    m_sumColWidths = 0;
     for ( i = 0;  i < m_numCols;  i++ )
     {
         m_colWidths.Add( m_defaultColWidth );
         m_colRights.Add( 0 );  // set by CalcDimensions()
     }
-
+    m_sumColWidths = m_defaultColWidth * m_numCols;
+        
     // TODO: improve this ?
     //
     m_defaultCellFont = this->GetFont();
@@ -839,23 +843,8 @@ void wxGrid::CalcDimensions()
         m_top = 0;
     }
 
-    int bottom =  m_top + m_colLabelHeight;
-    for ( i = m_scrollPosY;  i < m_numRows;  i++ )
-    {
-        bottom += m_rowHeights[i];
-        m_rowBottoms[i] = bottom;
-    }
-
-    int right = m_left + m_rowLabelWidth;
-    for ( i = m_scrollPosX;  i < m_numCols;  i++ )
-    {
-        right += m_colWidths[i];
-        m_colRights[i] = right;
-    }    
-
-    // adjust the scroll bars
+    // check to see if either of the scroll bars are required
     //
-    
     int cw, ch;
     GetClientSize(&cw, &ch);
 
@@ -871,58 +860,84 @@ void wxGrid::CalcDimensions()
     int check;
     for ( check = 0;  check < 2;  check++ )
     {
-        if ( m_numRows > 0  &&
-             m_rowBottoms[m_numRows-1] + horizScrollBarHeight > ch )
+        if ( m_top + m_colLabelHeight + m_sumRowHeights + horizScrollBarHeight > ch )
         {
             vertScrollBarWidth = m_scrollBarWidth;
-
-            m_wholeRowsVisible = 0;
-            for ( i = m_scrollPosY; i < m_numRows; i++ )
-            {
-                // A partial row doesn't count, we still have to scroll to
-                // see the rest of it
-                if ( m_rowBottoms[i] + horizScrollBarHeight > ch ) break;
-
-                m_wholeRowsVisible++ ;
-            }
         }
-        else  
-        {
-            m_wholeRowsVisible = m_numRows - m_scrollPosY;
-            if ( m_scrollPosY )
-            {
-                vertScrollBarWidth = m_scrollBarWidth;
-            }
-        }
-        
 
-        if ( m_numCols  &&
-             m_colRights[m_numCols-1] + vertScrollBarWidth > cw)
+        if ( m_left + m_rowLabelWidth + m_sumColWidths + vertScrollBarWidth > cw)
         {
             horizScrollBarHeight = m_scrollBarWidth;
-
-            m_wholeColsVisible = 0;
-            for ( i = m_scrollPosX; i < m_numCols; i++ )
-            {
-                // A partial col doesn't count, we still have to scroll to
-                // see the rest of it
-                if ( m_colRights[i] + vertScrollBarWidth > cw ) break;
-                
-                m_wholeColsVisible++ ;
-            }
-        }
-        else
-        {
-            // we can see the right-most column
-            //
-            m_wholeColsVisible = m_numCols - m_scrollPosX;
-            if ( m_scrollPosX )
-            {
-                horizScrollBarHeight = m_scrollBarWidth;
-            }
         }
     }
 
+
+    // if the window has been resized while scrolled then the scroll
+    // position might need to be adjusted...
+    //
+    bool adjustScrollPos = FALSE;
+    if ( !vertScrollBarWidth )
+    {
+        if ( m_scrollPosY )
+        {
+            adjustScrollPos = TRUE;
+            m_scrollPosY = 0;
+        }
+    }
+    if ( !horizScrollBarHeight )
+    {
+        if ( m_scrollPosX )
+        {
+            adjustScrollPos = TRUE;
+            m_scrollPosX = 0;
+        }
+    }
+
+    
+    // calculate the coords of row bottom edges and col right edges
+    //
+    int bottom =  m_top + m_colLabelHeight;
+    for ( i = m_scrollPosY;  i < m_numRows;  i++ )
+    {
+        bottom += m_rowHeights[i];
+        m_rowBottoms[i] = bottom;
+    }
+
+    int right = m_left + m_rowLabelWidth;
+    for ( i = m_scrollPosX;  i < m_numCols;  i++ )
+    {
+        right += m_colWidths[i];
+        m_colRights[i] = right;
+    }    
+
+    
+    // check how many rows and cols are visible
+    //
+    m_wholeRowsVisible = 0;
+    if ( m_numRows > 0 )
+    {
+        for ( i = m_scrollPosY; i < m_numRows; i++ )
+        {
+            // A partial row doesn't count, we still have to scroll to
+            // see the rest of it
+            if ( m_rowBottoms[i] + horizScrollBarHeight > ch ) break;
+
+            m_wholeRowsVisible++ ;
+        }
+    }
+
+    m_wholeColsVisible = 0;
+    if ( m_numCols )
+    {
+        for ( i = m_scrollPosX; i < m_numCols; i++ )
+        {
+            // A partial col doesn't count, we still have to scroll to
+            // see the rest of it
+            if ( m_colRights[i] + vertScrollBarWidth > cw ) break;
+                
+            m_wholeColsVisible++ ;
+        }
+    }
     
     if ( m_vertScrollBar )
     {
@@ -980,6 +995,12 @@ void wxGrid::CalcDimensions()
         m_right = wxMin( m_colRights[m_numCols-1],
                          cw - vertScrollBarWidth );
     }
+
+    // if the scroll position was adjusted (due to a window resize)
+    // ensure that the cell highlight and edit control are displayed
+    // correctly
+    //
+    if ( adjustScrollPos ) SelectCell( m_currentCellCoords );
 }
 
 
@@ -1008,6 +1029,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             {
                 m_rowHeights.Insert( m_defaultRowHeight, pos );
                 m_rowBottoms.Insert( 0, pos );
+                m_sumRowHeights += m_defaultRowHeight;
             }
             m_numRows += numRows;
             CalcDimensions();
@@ -1021,6 +1043,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             {
                 m_rowHeights.Add( m_defaultRowHeight );
                 m_rowBottoms.Add( 0 );
+                m_sumRowHeights += m_defaultRowHeight;
             }
             m_numRows += numRows;
             CalcDimensions();
@@ -1033,6 +1056,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             int numRows = msg.GetCommandInt2();
             for ( i = 0;  i < numRows;  i++ )
             {
+                m_sumRowHeights -= m_rowHeights[ pos ];
                 m_rowHeights.Remove( pos );
                 m_rowBottoms.Remove( pos );
             }
@@ -1066,6 +1090,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             {
                 m_colWidths.Insert( m_defaultColWidth, pos );
                 m_colRights.Insert( 0, pos );
+                m_sumColWidths += m_defaultColWidth;
             }
             m_numCols += numCols;
             CalcDimensions();
@@ -1079,6 +1104,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             {
                 m_colWidths.Add( m_defaultColWidth );
                 m_colRights.Add( 0 );
+                m_sumColWidths += m_defaultColWidth;
             }
             m_numCols += numCols;
             CalcDimensions();
@@ -1091,6 +1117,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             int numCols = msg.GetCommandInt2();
             for ( i = 0;  i < numCols;  i++ )
             {
+                m_sumColWidths -= m_colWidths[ pos ];
                 m_colWidths.Remove( pos );
                 m_colRights.Remove( pos );
             }
@@ -1547,8 +1574,11 @@ void wxGrid::OnMouse( wxMouseEvent& ev )
 		    int top = m_top + m_colLabelHeight;
 		    if ( m_dragRowOrCol > 0 )
 			top = m_rowBottoms[m_dragRowOrCol-1];
+
+                    m_sumRowHeights -= m_rowHeights[ m_dragRowOrCol ];
 		    m_rowHeights[m_dragRowOrCol] = wxMax( ev.GetY() - top,
 							  WXGRID_MIN_ROW_HEIGHT );
+                    m_sumRowHeights += m_rowHeights[ m_dragRowOrCol ];
 		    CalcDimensions();
 		    ShowCellEditControl();
 		    Refresh();
@@ -1575,8 +1605,12 @@ void wxGrid::OnMouse( wxMouseEvent& ev )
 		    int left = m_left + m_rowLabelWidth;
 		    if ( m_dragRowOrCol > 0 )
 			left = m_colRights[m_dragRowOrCol-1];
+
+                    m_sumColWidths -= m_colWidths[m_dragRowOrCol];
 		    m_colWidths[m_dragRowOrCol] = wxMax( ev.GetX() - left,
 							 WXGRID_MIN_COL_WIDTH );
+                    m_sumColWidths += m_colWidths[m_dragRowOrCol];
+
 		    CalcDimensions();
 		    ShowCellEditControl();
 		    Refresh();
@@ -3930,6 +3964,7 @@ void wxGrid::SetDefaultRowSize( int height, bool resizeExistingRows )
         {
             m_rowHeights[row] = m_defaultRowHeight;
         }
+        m_sumRowHeights = m_defaultRowHeight * m_numRows;
         CalcDimensions();
         if ( !GetBatchCount() ) Refresh();
     }
@@ -3939,7 +3974,9 @@ void wxGrid::SetRowSize( int row, int height )
 {
     if ( row >= 0  &&  row < m_numRows )
     {
+        m_sumRowHeights -= m_rowHeights[row];
         m_rowHeights[row] = wxMax( 0, height );
+        m_sumRowHeights += m_rowHeights[row];
         CalcDimensions();
         if ( !GetBatchCount() ) Refresh();
 
@@ -3969,6 +4006,7 @@ void wxGrid::SetDefaultColSize( int width, bool resizeExistingCols )
         {
             m_colWidths[col] = m_defaultColWidth;
         }
+        m_sumColWidths = m_defaultColWidth * m_numCols;
         CalcDimensions();
         if ( !GetBatchCount() ) Refresh();
     }
@@ -3978,7 +4016,9 @@ void wxGrid::SetColSize( int col, int width )
 {
     if ( col >= 0  &&  col < m_numCols )
     {
+        m_sumColWidths -= m_colWidths[col];
         m_colWidths[col] = wxMax( 0, width );
+        m_sumColWidths += m_colWidths[col];
         CalcDimensions();
         if ( !GetBatchCount() ) Refresh();
 

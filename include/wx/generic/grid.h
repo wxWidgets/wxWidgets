@@ -309,10 +309,12 @@ class wxGrid : public wxPanel
     int        m_defaultRowHeight;
     wxArrayInt m_rowHeights;
     wxArrayInt m_rowBottoms;
+    int        m_sumRowHeights;
 
     int        m_defaultColWidth;
     wxArrayInt m_colWidths;
     wxArrayInt m_colRights;
+    int        m_sumColWidths;
 
     int m_rowLabelWidth;
     int m_colLabelHeight;
