@@ -98,3 +98,11 @@ Log: 1) fixed compilation of wxBitmap, wxIcon toplevel nodes
 
 http://sourceforge.net/tracker/index.php?func=detail&aid=648659&group_id=9863&atid=309863
 
+
+9 Use ES_DISABLENOSCROLL to work around the vertical scrollbar bug
+
+Checking in src/msw/textctrl.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/msw/textctrl.cpp,v  <--  textctrl.cpp
+new revision: 1.157; previous revision: 1.156
+done
+

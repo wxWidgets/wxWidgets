@@ -277,8 +277,6 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         // have we managed to load any richedit version?
         if ( !s_errorGiven )
         {
-            msStyle |= ES_AUTOVSCROLL;
-
             m_verRichEdit = verRichEdit;
             if ( m_verRichEdit == 1 )
             {
@@ -397,9 +395,7 @@ WXDWORD wxTextCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 
     long msStyle = wxControl::MSWGetStyle(style, exstyle);
 
-    // default styles
-    msStyle |= ES_LEFT;
-
+    // styles which we alaways add by default
     if ( style & wxTE_MULTILINE )
     {
         wxASSERT_MSG( !(style & wxTE_PROCESS_ENTER),
@@ -407,7 +403,18 @@ WXDWORD wxTextCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 
         msStyle |= ES_MULTILINE | ES_WANTRETURN;
         if ( !(style & wxTE_NO_VSCROLL) )
-            msStyle |= WS_VSCROLL;
+        {
+            // always adjust the vertical scrollbar automatically if we have it
+            msStyle |= WS_VSCROLL | ES_AUTOVSCROLL;
+
+            // we have to use this style for the rich edit controls because
+            // without it the vertical scrollbar never appears at all in
+            // richedit 3.0 because of our ECO_NOHIDESEL hack (search for it)
+            if ( style & wxTE_RICH2 )
+            {
+                msStyle |= ES_DISABLENOSCROLL;
+            }
+        }
 
         style |= wxTE_PROCESS_ENTER;
     }
@@ -418,8 +425,12 @@ WXDWORD wxTextCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
         msStyle |= ES_AUTOHSCROLL;
     }
 
+    // styles which we add depending on the specified wxWindows styles
     if ( style & wxHSCROLL )
-        msStyle |= WS_HSCROLL | ES_AUTOHSCROLL;
+    {
+        // automatically scroll the control horizontally as necessary
+        msStyle |= WS_HSCROLL;// | ES_AUTOHSCROLL;
+    }
 
     if ( style & wxTE_READONLY )
         msStyle |= ES_READONLY;
@@ -427,17 +438,16 @@ WXDWORD wxTextCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
     if ( style & wxTE_PASSWORD )
         msStyle |= ES_PASSWORD;
 
-    if ( style & wxTE_AUTO_SCROLL )
-        msStyle |= ES_AUTOHSCROLL;
-
     if ( style & wxTE_NOHIDESEL )
         msStyle |= ES_NOHIDESEL;
 
+    // note that we can't do do "& wxTE_LEFT" as wxTE_LEFT == 0
     if ( style & wxTE_CENTRE )
         msStyle |= ES_CENTER;
-
-    if ( style & wxTE_RIGHT )
+    else if ( style & wxTE_RIGHT )
         msStyle |= ES_RIGHT;
+    else
+        msStyle |= ES_LEFT; // ES_LEFT if 0 as well but for consistency...
 
     return msStyle;
 }
@@ -1013,26 +1023,6 @@ void wxTextCtrl::DoSetSelection(long from, long to, bool scrollCaret)
 #if wxUSE_RICHEDIT
     if ( IsRich() )
     {
-        // richedit 3.0 (i.e. the version living in riched20.dll distributed
-        // with Windows 2000 and beyond) doesn't honour EM_SCROLLCARET when
-        // emulating richedit 2.0 unless the control has focus or ECO_NOHIDESEL
-        // option is set (but it does work ok in richedit 1.0 mode...)
-        //
-        // so to make it work we either need to give focus to it here which
-        // will probably create many problems (dummy focus events; window
-        // containing the text control being brought to foreground
-        // unexpectedly; ...) or to temporarily set ECO_NOHIDESEL which may
-        // create other problems too -- or it might not, so let's try to do it
-        if ( GetRichVersion() > 1 )
-        {
-            if ( !HasFlag(wxTE_NOHIDESEL) )
-            {
-                ::SendMessage(GetHwnd(), EM_SETOPTIONS,
-                              ECOOP_OR, ECO_NOHIDESEL);
-            }
-            //else: everything is already ok
-        }
-
         CHARRANGE range;
         range.cpMin = from;
         range.cpMax = to;
@@ -1046,18 +1036,45 @@ void wxTextCtrl::DoSetSelection(long from, long to, bool scrollCaret)
 
     if ( scrollCaret )
     {
-        SendMessage(hWnd, EM_SCROLLCARET, (WPARAM)0, (LPARAM)0);
-    }
-
 #if wxUSE_RICHEDIT
-    // restore ECO_NOHIDESEL if we changed it
-    if ( GetRichVersion() > 1 && !HasFlag(wxTE_NOHIDESEL) )
-    {
-        ::SendMessage(GetHwnd(), EM_SETOPTIONS,
-                      ECOOP_AND, ~ECO_NOHIDESEL);
-    }
+        // richedit 3.0 (i.e. the version living in riched20.dll distributed
+        // with Windows 2000 and beyond) doesn't honour EM_SCROLLCARET when
+        // emulating richedit 2.0 unless the control has focus or ECO_NOHIDESEL
+        // option is set (but it does work ok in richedit 1.0 mode...)
+        //
+        // so to make it work we either need to give focus to it here which
+        // will probably create many problems (dummy focus events; window
+        // containing the text control being brought to foreground
+        // unexpectedly; ...) or to temporarily set ECO_NOHIDESEL which may
+        // create other problems too -- and in fact it does because if we turn
+        // on/off this style while appending the text to the control, the
+        // vertical scrollbar never appears in it even if we append tons of
+        // text and to work around this the only solution I found was to use
+        // ES_DISABLENOSCROLL
+        //
+        // this is very ugly but I don't see any other way to make this work
+        if ( GetRichVersion() > 1 )
+        {
+            if ( !HasFlag(wxTE_NOHIDESEL) )
+            {
+                ::SendMessage(GetHwnd(), EM_SETOPTIONS,
+                              ECOOP_OR, ECO_NOHIDESEL);
+            }
+            //else: everything is already ok
+        }
 #endif // wxUSE_RICHEDIT
 
+        SendMessage(hWnd, EM_SCROLLCARET, (WPARAM)0, (LPARAM)0);
+
+#if wxUSE_RICHEDIT
+        // restore ECO_NOHIDESEL if we changed it
+        if ( GetRichVersion() > 1 && !HasFlag(wxTE_NOHIDESEL) )
+        {
+            ::SendMessage(GetHwnd(), EM_SETOPTIONS,
+                          ECOOP_AND, ~ECO_NOHIDESEL);
+        }
+#endif // wxUSE_RICHEDIT
+    }
 #else // Win16
     // WPARAM is 0: selection is scrolled into view
     SendMessage(hWnd, EM_SETSEL, (WPARAM)0, (LPARAM)MAKELONG(from, to));
