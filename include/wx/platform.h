@@ -280,6 +280,14 @@
     #define __X__
 #endif
 
+#ifdef __SC__
+    #ifdef __DMC__
+         #define __DIGITALMARS__
+    #else
+         #define __SYMANTEC__
+    #endif
+#endif
+
 /*
    This macro can be used to test the gcc version and can be used like this:
 
@@ -305,14 +313,6 @@
 #else
     #undef wxCHECK_W32API_VERSION
     #define wxCHECK_W32API_VERSION(maj, min) (0)
-#endif
-
-#ifdef __SC__
-    #ifdef __DMC__
-         #define __DIGITALMARS__
-    #else
-         #define __SYMANTEC__
-    #endif
 #endif
 
 #if defined (__WXMSW__)
