@@ -1133,7 +1133,7 @@ void wxGrid::CalcDimensions()
         GetViewStart( &x, &y );
         SetScrollbars( GRID_SCROLL_LINE, GRID_SCROLL_LINE,
                        right/GRID_SCROLL_LINE, bottom/GRID_SCROLL_LINE,
-                       x, y, TRUE );
+                       x, y );
     }
 }
 
