@@ -1464,6 +1464,16 @@ AC_DEFUN(AC_BAKEFILE_DEPS,
     if test "x$GCC" = "xyes"; then
         DEPSMODE=gcc
         DEPS_TRACKING=1
+        case "${host}" in
+            powerpc-*-darwin* )
+                dnl -cpp-precomp (the default) conflicts with -MMD option
+                dnl used by bk-deps (see also http://developer.apple.com/documentation/Darwin/Conceptual/PortingUnix/compiling/chapter_4_section_3.html)
+                DEPSFLAG_GCC="-no-cpp-precomp -MMD"
+            ;;
+            * )
+                DEPSFLAG_GCC="-MMD"
+            ;;
+        esac
         AC_MSG_RESULT([gcc])
     else
         AC_MSG_RESULT([none])
@@ -1480,11 +1490,12 @@ AC_DEFUN(AC_BAKEFILE_DEPS,
 
 DEPSMODE=$DEPSMODE
 DEPSDIR=.deps
+DEPSFLAG_GCC="$DEPSFLAG_GCC"
 
 mkdir -p \$DEPSDIR
 
 if test \$DEPSMODE = gcc ; then
-    \${*} -MMD
+    \${*} \${DEPSFLAG_GCC}
     status=\${?}
     if test \${status} != 0 ; then
         exit \${status}

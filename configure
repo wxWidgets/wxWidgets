@@ -33910,6 +33910,14 @@ echo $ECHO_N "checking for dependency tracking method... $ECHO_C" >&6
     if test "x$GCC" = "xyes"; then
         DEPSMODE=gcc
         DEPS_TRACKING=1
+        case "${host}" in
+            powerpc-*-darwin* )
+                                                DEPSFLAG_GCC="-no-cpp-precomp -MMD"
+            ;;
+            * )
+                DEPSFLAG_GCC="-MMD"
+            ;;
+        esac
         echo "$as_me:$LINENO: result: gcc" >&5
 echo "${ECHO_T}gcc" >&6
     else
@@ -33928,11 +33936,12 @@ echo "${ECHO_T}none" >&6
 
 DEPSMODE=$DEPSMODE
 DEPSDIR=.deps
+DEPSFLAG_GCC="$DEPSFLAG_GCC"
 
 mkdir -p \$DEPSDIR
 
 if test \$DEPSMODE = gcc ; then
-    \${*} -MMD
+    \${*} \${DEPSFLAG_GCC}
     status=\${?}
     if test \${status} != 0 ; then
         exit \${status}
