@@ -35,6 +35,11 @@
     #include "wx/radiobox.h"
 #endif // WXPRECOMP
 
+#ifdef __WXMAC__
+    #include "wx/menu.h"
+    #include "wx/msgdlg.h"
+#endif
+
 #include "wx/html/helpfrm.h"
 #include "wx/html/helpctrl.h"
 #include "wx/textctrl.h"
@@ -267,7 +272,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
 //    wxMenu* helpMenu = new wxMenu;
 //    helpMenu->Append(wxID_ABOUT, _("&About..."));
 
-    menuBar->Append(fileMenu);
+    menuBar->Append(fileMenu,_("File"));
     SetMenuBar(menuBar);
 #endif
 
