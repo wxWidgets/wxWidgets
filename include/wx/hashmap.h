@@ -218,7 +218,12 @@ public: \
  \
     /* removes all elements from the hash table, but does not */ \
     /* shrink it ( perhaps it should ) */ \
-    void clear() { DeleteNodes( m_tableBuckets, (_wxHashTable_NodeBase**)m_table, DeleteNode ); } \
+    void clear() \
+    { \
+        DeleteNodes( m_tableBuckets, (_wxHashTable_NodeBase**)m_table, \
+                     DeleteNode ); \
+        m_items = 0; \
+    } \
  \
     size_type size() const { return m_items; } \
     size_type max_size() const { return size_type(-1); } \
