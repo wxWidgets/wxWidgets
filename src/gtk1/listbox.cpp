@@ -92,8 +92,9 @@ struct wxlistbox_idle_struct
     gint         m_tag;
 };
 
-static gint wxlistbox_idle_callback( wxlistbox_idle_struct *data )
+static gint wxlistbox_idle_callback( gpointer gdata )
 {
+    wxlistbox_idle_struct* data = (wxlistbox_idle_struct*) gdata;
     gdk_threads_enter();
 
     gtk_idle_remove( data->m_tag );
