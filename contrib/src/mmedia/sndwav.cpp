@@ -313,15 +313,7 @@ FAIL_WITH(s->Write(&signature, 4).LastWrite() != 4, wxSOUND_INVSTRM);
         delete frmt;
     }
 
-#ifdef wxSIZE_T_IS_ULONG
-    // FIXME (maybe):
-    // This is a bandaid for 2.2 to avoid changing the API for wxString
-
-    data << (unsigned int)( fmt_data.GetSize() +
-                            m_sndformat->GetBytesFromTime(time) );
-#else
     data << (fmt_data.GetSize() + m_sndformat->GetBytesFromTime(time));
-#endif
 
     // We, finally, copy the header block to the output stream 
     {
