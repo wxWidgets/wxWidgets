@@ -136,7 +136,7 @@ wxRendererGeneric::DrawTreeItemButton(wxWindow *win,
 
     dc.SetPen(*wxBLACK_PEN);
     dc.DrawLine(xMiddle - 2, yMiddle, xMiddle + 3, yMiddle);
-    if ( flags & wxCONTROL_EXPANDED )
+    if ( !(flags & wxCONTROL_EXPANDED) )
     {
         // turn "-" into "+"
         dc.DrawLine(xMiddle, yMiddle - 2, xMiddle, yMiddle + 3);
