@@ -294,8 +294,10 @@ void WXDLLEXPORT wxLogSysError(long lErrCode, wxTString strFormat, ...);
   extern void WXDLLEXPORT wxLogTrace(wxTraceMask mask,
                                      const char *szFormat, ...);
 #else   //!debug
-  #define wxLogDebug
-  #define wxLogTrace
+  // these functions do nothing
+  inline void wxLogDebug(const char *, ...) { }
+  inline void wxLogTrace(const char *, ...) { }
+  inline void wxLogTrace(wxTraceMask, const char *, ...) { }
 #endif
 
 
@@ -328,8 +330,8 @@ const char* WXDLLEXPORT wxSysErrorMsg(unsigned long nErrCode = 0);
                                rc, wxSysErrorMsg(rc))
   #define wxLogLastError(api) wxLogApiError(api, wxSysErrorCode())
 #else   //!debug
-  #define wxLogApiError(api, rc)
-  #define wxLogLastError(api)
+  inline void wxLogApiError(const char *, long) { }
+  inline void wxLogLastErrror(const char *) { }
 #endif  //debug/!debug
 
 #endif  //__LOGH__
