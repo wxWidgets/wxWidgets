@@ -219,6 +219,8 @@ public:
         return wxPoint(w, h);
     }
 
+	void SetPosition( const wxPoint& pt ) { Move( pt ) ; }
+
     void GetSize( int *w, int *h ) const { DoGetSize(w, h); }
     wxSize GetSize() const
     {
