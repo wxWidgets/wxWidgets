@@ -48,7 +48,7 @@ function usage {
     echo "build types:"
     echo "   dryrun       Do the build, but don't copy anywhere (default)"
     echo "   daily        Do a daily build, copy to starship"
-    echo "   release      Do a normal release build, copy to starship"
+    echo "   release      Do a normal release (cantidate) build, copy to starship"
     echo ""
     echo "optional command flags:"
     echo "   2.2          Build for Python 2.2 (default=off)"
@@ -63,6 +63,7 @@ function usage {
     echo "   skiposx      Don't do the remote OSX build"
     echo "   skiplinux    Don't do the remote Linux build"
     echo "   skipclean    Don't do the cleanup step on the remote builds"
+    echo "   skipupload   Don't upload the builds to starship"
     echo ""
 
 
@@ -90,6 +91,7 @@ skipwin=no
 skiposx=no
 skiplinux=no
 skipclean=no
+skipupload=no
 
 for flag in $*; do
     case $flag in 
@@ -108,6 +110,7 @@ for flag in $*; do
 	skiposx)     skiposx=yes                 ;;
 	skiplinux)   skiplinux=yes               ;;
 	skipclean)   skipclean=yes               ;;
+	skipupload)  skipupload=yes              ;;
 
 	help) usage; exit 1                      ;;
 	*)    echo "Unknown flag \"$flag\""
@@ -327,25 +330,22 @@ if [ $KIND = daily ]; then
     mkdir -p $destdir
     cp $STAGING_DIR/* $destdir
 
-    destdir=$UPLOAD_DAILY_ROOT/$DAILY
-    echo "Copying to the starship at $destdir..."
-    ssh $UPLOAD_HOST "mkdir -p $destdir"
-    scp $STAGING_DIR/* $UPLOAD_HOST:/$destdir
-    ssh $UPLOAD_HOST "cd $destdir && ls -al"
+    if [ skipupload != yes ]; then 
+	destdir=$UPLOAD_DAILY_ROOT/$DAILY
+	echo "Copying to the starship at $destdir..."
+	ssh $UPLOAD_HOST "mkdir -p $destdir"
+	scp $STAGING_DIR/* $UPLOAD_HOST:/$destdir
+	ssh $UPLOAD_HOST "cd $destdir && ls -al"
 
 
-    echo "Cleaning up staging dir..."
-    rm $STAGING_DIR/*
-    rmdir $STAGING_DIR
+        # TODO: something to remove old builds from starship, keeping 
+        # only N days worth
 
-    # TODO: something to remove old builds from starship, keeping 
-    # only N days worth
+        # Send email to wxPython-dev
+	DATE=`date`
+	TO=wxPython-dev@lists.wxwidgets.org
 
-    # Send email to wxPython-dev
-    DATE=`date`
-    TO=wxPython-dev@lists.wxwidgets.org
-
-    cat <<EOF  | /usr/sbin/sendmail  $TO
+	cat <<EOF  | /usr/sbin/sendmail  $TO
 From: R'bot <rbot@wxpython.org>
 To: $TO
 Subject: $DAILY test build uploaded
@@ -363,6 +363,11 @@ Have fun!
 R'bot
 
 EOF
+    fi
+
+    echo "Cleaning up staging dir..."
+    rm $STAGING_DIR/*
+    rmdir $STAGING_DIR
 
     echo "Finished at " `date`
     exit 0
@@ -376,20 +381,17 @@ if [ $KIND = release ]; then
     mkdir -p $destdir
     cp $STAGING_DIR/* $destdir
 
-    echo "Copying to the starship..."
-    destdir=$UPLOAD_PREVIEW_ROOT/$VERSION
-    ssh $UPLOAD_HOST "mkdir -p $destdir"
-    scp $STAGING_DIR/* $UPLOAD_HOST:/$destdir
+    if [ skipupload != yes ]; then 
+	echo "Copying to the starship..."
+	destdir=$UPLOAD_PREVIEW_ROOT/$VERSION
+	ssh $UPLOAD_HOST "mkdir -p $destdir"
+	scp $STAGING_DIR/* $UPLOAD_HOST:/$destdir
 
-    echo "Cleaning up staging dir..."
-    rm $STAGING_DIR/*
-    rmdir $STAGING_DIR
+        # Send email to wxPython-dev
+	DATE=`date`
+	TO=wxPython-dev@lists.wxwidgets.org
 
-    # Send email to wxPython-dev
-    DATE=`date`
-    TO=wxPython-dev@lists.wxwidgets.org
-
-    cat <<EOF  | /usr/sbin/sendmail  $TO
+	cat <<EOF  | /usr/sbin/sendmail  $TO
 From: R'bot <rbot@wxpython.org>
 To: $TO
 Subject: $VERSION release candidate build uploaded
@@ -407,6 +409,12 @@ Have fun!
 R'bot
 
 EOF
+
+    fi
+
+    echo "Cleaning up staging dir..."
+    rm $STAGING_DIR/*
+    rmdir $STAGING_DIR
 
     echo "Finished at " `date`
     exit 0
