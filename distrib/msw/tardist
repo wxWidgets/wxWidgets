@@ -95,6 +95,11 @@ gzip $2/wxX11-${WXVER}.tar
 # tar cvf $2/wxMSW-${WXVER}.tar -T /tmp/wxmsw.txt
 # gzip $2/wxMSW-${WXVER}.tar
 
+### wxMac
+ls `cat $1/distrib/msw/mac.rsp $1/distrib/msw/cw.rsp $1/distrib/msw/tex2rtf.rsp $1/distrib/msw/dialoged.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp` | uniq > /tmp/wxmac.txt
+tar cvf $2/wxMac-${WXVER}.tar -T /tmp/wxmac.txt
+gzip $2/wxMac-${WXVER}.tar
+
 ### Doc sources
 ls `cat $1/distrib/msw/docsrc.rsp` > /tmp/docsrc.txt
 tar cvf $2/wxWindows-${WXVER}-doc.tar -T /tmp/docsrc.txt

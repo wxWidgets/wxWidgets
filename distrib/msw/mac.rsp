@@ -6,6 +6,7 @@ docs/mac/*.hqx
 
 distrib/msw/*.rsp
 distrib/msw/*.bat
+distrib/mac/*
 
 src/*.mcp
 src/jpeg/*.mcp
