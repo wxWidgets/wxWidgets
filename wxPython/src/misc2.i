@@ -48,9 +48,6 @@
 %import streams.i
 %import utils.i
 
-%{
-    static wxString wxPyEmptyStr("");
-%}
 
 //---------------------------------------------------------------------------
 // Dialog Functions
@@ -65,15 +62,15 @@ wxString wxFileSelector(char* message,
                         int x = -1, int y = -1);
 
 wxString wxGetTextFromUser(const wxString& message,
-                           const wxString& caption = wxPyEmptyStr,
-                           const wxString& default_value = wxPyEmptyStr,
+                           const wxString& caption = wxEmptyString,
+                           const wxString& default_value = wxEmptyString,
                            wxWindow *parent = NULL,
                            int x = -1, int y = -1,
                            bool centre = TRUE);
 
 wxString wxGetPasswordFromUser(const wxString& message,
-                               const wxString& caption = wxPyEmptyStr,
-                               const wxString& default_value = wxPyEmptyStr,
+                               const wxString& caption = wxEmptyString,
+                               const wxString& default_value = wxEmptyString,
                                wxWindow *parent = NULL);
 
 
@@ -101,7 +98,7 @@ int wxGetSingleChoiceIndex(const wxString& message, const wxString& caption,
 
 
 int wxMessageBox(const wxString& message,
-                 const wxString& caption = wxPyEmptyStr,
+                 const wxString& caption = wxEmptyString,
                  int style = wxOK | wxCENTRE,
                  wxWindow *parent = NULL,
                  int x = -1, int y = -1);
@@ -1039,8 +1036,8 @@ public:
     {
     public:
         // ctors
-        MessageParameters(const wxString& filename=wxPyEmptyStr,
-                          const wxString& mimetype=wxPyEmptyStr);
+        MessageParameters(const wxString& filename=wxEmptyString,
+                          const wxString& mimetype=wxEmptyString);
 
         // accessors (called by GetOpenCommand)
             // filename
@@ -1136,7 +1133,7 @@ public:
     // get the command to open/execute the file of given type
     %addmethods {
         PyObject* GetOpenCommand(const wxString& filename,
-                                 const wxString& mimetype=wxPyEmptyStr) {
+                                 const wxString& mimetype=wxEmptyString) {
             wxString str;
             if (self->GetOpenCommand(&str, wxFileType::MessageParameters(filename, mimetype)))
                 return PyString_FromString(str.c_str());
@@ -1149,7 +1146,7 @@ public:
     // get the command to print the file of given type
     %addmethods {
         PyObject* GetPrintCommand(const wxString& filename,
-                                  const wxString& mimetype=wxPyEmptyStr) {
+                                  const wxString& mimetype=wxEmptyString) {
             wxString str;
             if (self->GetPrintCommand(&str, wxFileType::MessageParameters(filename, mimetype)))
                 return PyString_FromString(str.c_str());
@@ -1162,7 +1159,7 @@ public:
     // Get all commands defined for this file type
     %addmethods {
         PyObject* GetAllCommands(const wxString& filename,
-                                 const wxString& mimetype=wxPyEmptyStr) {
+                                 const wxString& mimetype=wxEmptyString) {
             wxArrayString verbs;
             wxArrayString commands;
             if (self->GetAllCommands(&verbs, &commands,

@@ -91,8 +91,6 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #else
     static char* wxStringErrorMsg = "String type required";
 #endif
-
-    static wxString wxPyEmptyStr("");
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -1472,8 +1470,8 @@ static PyObject *_wrap_wxToolBarBase_AddTool(PyObject *self, PyObject *args, PyO
     wxBitmap * _arg3 = (wxBitmap *) &wxNullBitmap;
     int  _arg4 = (int ) FALSE;
     PyObject * _arg5 = (PyObject *) NULL;
-    wxString * _arg6 = (wxString *) &wxPyEmptyStr;
-    wxString * _arg7 = (wxString *) &wxPyEmptyStr;
+    wxString * _arg6 = (wxString *) &wxEmptyString;
+    wxString * _arg7 = (wxString *) &wxEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _argo2 = 0;
     PyObject * _argo3 = 0;
@@ -1576,8 +1574,8 @@ static PyObject *_wrap_wxToolBarBase_AddSimpleTool(PyObject *self, PyObject *arg
     wxToolBarBase * _arg0;
     int  _arg1;
     wxBitmap * _arg2;
-    wxString * _arg3 = (wxString *) &wxPyEmptyStr;
-    wxString * _arg4 = (wxString *) &wxPyEmptyStr;
+    wxString * _arg3 = (wxString *) &wxEmptyString;
+    wxString * _arg4 = (wxString *) &wxEmptyString;
     int  _arg5 = (int ) FALSE;
     PyObject * _argo0 = 0;
     PyObject * _argo2 = 0;
@@ -1675,8 +1673,8 @@ static PyObject *_wrap_wxToolBarBase_InsertTool(PyObject *self, PyObject *args, 
     wxBitmap * _arg4 = (wxBitmap *) &wxNullBitmap;
     int  _arg5 = (int ) FALSE;
     PyObject * _arg6 = (PyObject *) NULL;
-    wxString * _arg7 = (wxString *) &wxPyEmptyStr;
-    wxString * _arg8 = (wxString *) &wxPyEmptyStr;
+    wxString * _arg7 = (wxString *) &wxEmptyString;
+    wxString * _arg8 = (wxString *) &wxEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _argo3 = 0;
     PyObject * _argo4 = 0;
@@ -1780,8 +1778,8 @@ static PyObject *_wrap_wxToolBarBase_InsertSimpleTool(PyObject *self, PyObject *
     size_t  _arg1;
     int  _arg2;
     wxBitmap * _arg3;
-    wxString * _arg4 = (wxString *) &wxPyEmptyStr;
-    wxString * _arg5 = (wxString *) &wxPyEmptyStr;
+    wxString * _arg4 = (wxString *) &wxEmptyString;
+    wxString * _arg5 = (wxString *) &wxEmptyString;
     int  _arg6 = (int ) FALSE;
     PyObject * _argo0 = 0;
     PyObject * _argo3 = 0;

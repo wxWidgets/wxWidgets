@@ -179,6 +179,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
         val = apply(windowsc.wxWindow_GetBackgroundColour,(self,) + _args, _kwargs)
         if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
+    def GetBorder(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_GetBorder,(self,) + _args, _kwargs)
+        return val
     def GetChildren(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetChildren,(self,) + _args, _kwargs)
         return val
@@ -194,6 +197,14 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def GetClientSize(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetClientSize,(self,) + _args, _kwargs)
         if val: val = wxSizePtr(val) ; val.thisown = 1
+        return val
+    def GetClientAreaOrigin(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_GetClientAreaOrigin,(self,) + _args, _kwargs)
+        if val: val = wxPointPtr(val) ; val.thisown = 1
+        return val
+    def GetClientRect(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_GetClientRect,(self,) + _args, _kwargs)
+        if val: val = wxRectPtr(val) ; val.thisown = 1
         return val
     def GetConstraints(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetConstraints,(self,) + _args, _kwargs)
@@ -280,8 +291,14 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def SetWindowStyle(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetWindowStyle,(self,) + _args, _kwargs)
         return val
+    def HasScrollbar(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_HasScrollbar,(self,) + _args, _kwargs)
+        return val
     def Hide(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_Hide,(self,) + _args, _kwargs)
+        return val
+    def HitTest(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_HitTest,(self,) + _args, _kwargs)
         return val
     def InitDialog(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_InitDialog,(self,) + _args, _kwargs)
@@ -449,6 +466,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def TransferDataToWindow(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_TransferDataToWindow,(self,) + _args, _kwargs)
         return val
+    def UpdateWindowUI(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_UpdateWindowUI,(self,) + _args, _kwargs)
+        return val
     def Validate(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_Validate,(self,) + _args, _kwargs)
         return val
@@ -533,6 +553,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def SetHelpText(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetHelpText,(self,) + _args, _kwargs)
+        return val
+    def SetHelpTextForId(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_SetHelpTextForId,(self,) + _args, _kwargs)
         return val
     def ScrollLines(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_ScrollLines,(self,) + _args, _kwargs)

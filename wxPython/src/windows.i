@@ -33,10 +33,6 @@
 %pragma(python) code = "import wx"
 
 
-%{
-    static wxString wxPyEmptyStr("");
-%}
-
 //---------------------------------------------------------------------------
 
 class wxEvtHandler : public wxObject {
@@ -218,6 +214,7 @@ public:
     %name(FindWindowByName) wxWindow* FindWindow(const wxString& name);
     void Fit();
     wxColour GetBackgroundColour();
+    wxBorder GetBorder() const;
 
     //wxList& GetChildren();
     %addmethods {
@@ -231,6 +228,15 @@ public:
     int  GetCharWidth();
     %name(GetClientSizeTuple) void GetClientSize(int *OUTPUT, int *OUTPUT);
     wxSize GetClientSize();
+
+    // get the origin of the client area of the window relative to the
+    // window top left corner (the client area may be shifted because of
+    // the borders, scrollbars, other decorations...)
+    wxPoint GetClientAreaOrigin() const;
+
+    // get the client rectangle in window (i.e. client) coordinates
+    wxRect GetClientRect() const;
+
     wxLayoutConstraints * GetConstraints();
     wxEvtHandler* GetEventHandler();
 
@@ -264,7 +270,9 @@ public:
     long GetWindowStyleFlag();
     void SetWindowStyleFlag(long style);
     void SetWindowStyle(long style);
+    bool HasScrollbar(int orient) const;
     bool Hide();
+    wxHitTest HitTest(const wxPoint& pt);
     void InitDialog();
     bool IsEnabled();
     bool IsExposed( int x, int y, int w=0, int h=0 );
@@ -277,8 +285,8 @@ public:
     bool LoadFromResource(wxWindow* parent, const wxString& resourceName, const wxResourceTable* resourceTable = NULL);
     void Lower();
     void MakeModal(bool flag=TRUE);
-    %name(MoveXY)void Move(int x, int y);
-    void Move(const wxPoint& point);
+    %name(MoveXY)void Move(int x, int y, int flags = wxSIZE_USE_EXISTING);
+    void Move(const wxPoint& point, int flags = wxSIZE_USE_EXISTING);
 
     wxEvtHandler* PopEventHandler(bool deleteHandler = FALSE);
     void PushEventHandler(wxEvtHandler* handler);
@@ -326,8 +334,8 @@ public:
             self->SetSize(size);
         }
 
-        void SetPosition(const wxPoint& pos) {
-            self->Move(pos);
+        void SetPosition(const wxPoint& pos, int flags = wxSIZE_USE_EXISTING) {
+            self->Move(pos, flags);
         }
 
         void SetRect(const wxRect& rect, int sizeFlags=wxSIZE_AUTO) {
@@ -346,6 +354,7 @@ public:
     bool Show(bool show=TRUE);
     bool TransferDataFromWindow();
     bool TransferDataToWindow();
+    void UpdateWindowUI();
     bool Validate();
     void WarpPointer(int x, int y);
 
@@ -392,6 +401,7 @@ public:
 
     wxString GetHelpText();
     void SetHelpText(const wxString& helpText);
+    void SetHelpTextForId(const wxString& text);
 
     bool ScrollLines(int lines);
     bool ScrollPages(int pages);
@@ -531,15 +541,15 @@ public:
 
 class wxMenu : public wxEvtHandler {
 public:
-    wxMenu(const wxString& title = wxPyEmptyStr, long style = 0);
+    wxMenu(const wxString& title = wxEmptyString, long style = 0);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     void Append(int id, const wxString& item,
-                const wxString& helpString = wxPyEmptyStr,
+                const wxString& helpString = wxEmptyString,
                 int checkable = FALSE);
     %name(AppendMenu)void Append(int id, const wxString& item, wxMenu *subMenu,
-                const wxString& helpString = wxPyEmptyStr);
+                const wxString& helpString = wxEmptyString);
     %name(AppendItem)void Append(const wxMenuItem* item);
 
     void AppendSeparator();
@@ -637,8 +647,8 @@ public:
 class wxMenuItem : public wxObject {
 public:
     wxMenuItem(wxMenu* parentMenu=NULL, int id=wxID_SEPARATOR,
-               const wxString& text = wxPyEmptyStr,
-               const wxString& help = wxPyEmptyStr,
+               const wxString& text = wxEmptyString,
+               const wxString& help = wxEmptyString,
                bool isCheckable = FALSE, wxMenu* subMenu = NULL);
 
 

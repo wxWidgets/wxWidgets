@@ -28,10 +28,6 @@
 %import _defs.i
 
 
-%{
-    static wxString wxPyEmptyStr("");
-%}
-
 //---------------------------------------------------------------------------
 
 
@@ -349,7 +345,7 @@ long wxGetFreeMemory();
 void wxGetMousePosition(int* OUTPUT, int* OUTPUT);
 bool wxIsBusy();
 wxString wxNow();
-bool wxShell(const wxString& command = wxPyEmptyStr);
+bool wxShell(const wxString& command = wxEmptyString);
 void wxStartTimer();
 int wxGetOsVersion(int *OUTPUT, int *OUTPUT);
 wxString wxGetOsDescription();

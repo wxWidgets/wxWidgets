@@ -93,8 +93,6 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     static char* wxStringErrorMsg = "String type required";
 #endif
 
-    static wxString wxPyEmptyStr("");
-
     static PyObject* __EnumerationHelper(bool flag, wxString& str, long index) {
         PyObject* ret = PyTuple_New(3);
         if (ret) {
@@ -1018,7 +1016,7 @@ static PyObject *_wrap_wxConfigBase_Read(PyObject *self, PyObject *args, PyObjec
     wxString * _result;
     wxConfigBase * _arg0;
     wxString * _arg1;
-    wxString * _arg2 = (wxString *) &wxPyEmptyStr;
+    wxString * _arg2 = (wxString *) &wxEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
     PyObject * _obj2 = 0;
@@ -2052,10 +2050,10 @@ static void *SwigwxConfigTowxConfigBase(void *ptr) {
 static PyObject *_wrap_new_wxConfig(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxConfig * _result;
-    wxString * _arg0 = (wxString *) &wxPyEmptyStr;
-    wxString * _arg1 = (wxString *) &wxPyEmptyStr;
-    wxString * _arg2 = (wxString *) &wxPyEmptyStr;
-    wxString * _arg3 = (wxString *) &wxPyEmptyStr;
+    wxString * _arg0 = (wxString *) &wxEmptyString;
+    wxString * _arg1 = (wxString *) &wxEmptyString;
+    wxString * _arg2 = (wxString *) &wxEmptyString;
+    wxString * _arg3 = (wxString *) &wxEmptyString;
     long  _arg4 = (long ) 0;
     PyObject * _obj0 = 0;
     PyObject * _obj1 = 0;
@@ -2215,10 +2213,10 @@ static void *SwigwxFileConfigTowxConfigBase(void *ptr) {
 static PyObject *_wrap_new_wxFileConfig(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFileConfig * _result;
-    wxString * _arg0 = (wxString *) &wxPyEmptyStr;
-    wxString * _arg1 = (wxString *) &wxPyEmptyStr;
-    wxString * _arg2 = (wxString *) &wxPyEmptyStr;
-    wxString * _arg3 = (wxString *) &wxPyEmptyStr;
+    wxString * _arg0 = (wxString *) &wxEmptyString;
+    wxString * _arg1 = (wxString *) &wxEmptyString;
+    wxString * _arg2 = (wxString *) &wxEmptyString;
+    wxString * _arg3 = (wxString *) &wxEmptyString;
     long  _arg4 = (long ) 0;
     PyObject * _obj0 = 0;
     PyObject * _obj1 = 0;

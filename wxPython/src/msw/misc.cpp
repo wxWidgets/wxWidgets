@@ -93,8 +93,6 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     static char* wxStringErrorMsg = "String type required";
 #endif
 
-    static wxString wxPyEmptyStr("");
-
     PyObject* wxIntersectRect(wxRect* r1, wxRect* r2) {
         wxRegion  reg1(*r1);
         wxRegion  reg2(*r2);
@@ -417,7 +415,7 @@ static PyObject *_wrap_wxNow(PyObject *self, PyObject *args, PyObject *kwargs) {
 static PyObject *_wrap_wxShell(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
-    wxString * _arg0 = (wxString *) &wxPyEmptyStr;
+    wxString * _arg0 = (wxString *) &wxEmptyString;
     PyObject * _obj0 = 0;
     char *_kwnames[] = { "command", NULL };
 

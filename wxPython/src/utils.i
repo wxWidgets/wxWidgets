@@ -34,8 +34,6 @@
 //---------------------------------------------------------------------------
 
 %{
-    static wxString wxPyEmptyStr("");
-
     static PyObject* __EnumerationHelper(bool flag, wxString& str, long index) {
         PyObject* ret = PyTuple_New(3);
         if (ret) {
@@ -60,10 +58,10 @@ enum
 
 class wxConfigBase {
 public:
-//      wxConfigBase(const wxString& appName = wxPyEmptyStr,       **** An ABC
-//                   const wxString& vendorName = wxPyEmptyStr,
-//                   const wxString& localFilename = wxPyEmptyStr,
-//                   const wxString& globalFilename = wxPyEmptyStr,
+//      wxConfigBase(const wxString& appName = wxEmptyString,       **** An ABC
+//                   const wxString& vendorName = wxEmptyString,
+//                   const wxString& localFilename = wxEmptyString,
+//                   const wxString& globalFilename = wxEmptyString,
 //                   long style = 0);
     ~wxConfigBase();
 
@@ -148,7 +146,7 @@ public:
     bool IsExpandingEnvVars();
     bool IsRecordingDefaults();
 
-    wxString Read(const wxString& key, const wxString& defaultVal = wxPyEmptyStr);
+    wxString Read(const wxString& key, const wxString& defaultVal = wxEmptyString);
 
     %addmethods {
         long ReadInt(const wxString& key, long defaultVal = 0) {
@@ -198,10 +196,10 @@ public:
 // This will be a wxRegConfig on Win32 and wxFileConfig otherwise.
 class wxConfig : public wxConfigBase {
 public:
-    wxConfig(const wxString& appName = wxPyEmptyStr,
-             const wxString& vendorName = wxPyEmptyStr,
-             const wxString& localFilename = wxPyEmptyStr,
-             const wxString& globalFilename = wxPyEmptyStr,
+    wxConfig(const wxString& appName = wxEmptyString,
+             const wxString& vendorName = wxEmptyString,
+             const wxString& localFilename = wxEmptyString,
+             const wxString& globalFilename = wxEmptyString,
              long style = 0);
     ~wxConfig();
 };
@@ -210,10 +208,10 @@ public:
 // Sometimes it's nice to explicitly have a wxFileConfig too.
 class wxFileConfig : public wxConfigBase {
 public:
-    wxFileConfig(const wxString& appName = wxPyEmptyStr,
-                 const wxString& vendorName = wxPyEmptyStr,
-                 const wxString& localFilename = wxPyEmptyStr,
-                 const wxString& globalFilename = wxPyEmptyStr,
+    wxFileConfig(const wxString& appName = wxEmptyString,
+                 const wxString& vendorName = wxEmptyString,
+                 const wxString& localFilename = wxEmptyString,
+                 const wxString& globalFilename = wxEmptyString,
                  long style = 0);
     ~wxFileConfig();
 };

@@ -33,10 +33,6 @@
 %pragma(python) code = "import wx"
 
 
-%{
-    static wxString wxPyEmptyStr("");
-%}
-
 //---------------------------------------------------------------------------
 
 class wxStatusBar : public wxWindow {
@@ -159,8 +155,8 @@ public:
                                    const wxBitmap& pushedBitmap = wxNullBitmap,
                                    int isToggle = FALSE,
                                    PyObject *clientData = NULL,
-                                   const wxString& shortHelpString = wxPyEmptyStr,
-                                   const wxString& longHelpString = wxPyEmptyStr) {
+                                   const wxString& shortHelpString = wxEmptyString,
+                                   const wxString& longHelpString = wxEmptyString) {
             wxPyUserData* udata = NULL;
             if (clientData)
                 udata = new wxPyUserData(clientData);
@@ -171,8 +167,8 @@ public:
         // This one is easier to use...
         wxToolBarToolBase *AddSimpleTool(int id,
                                          const wxBitmap& bitmap,
-                                         const wxString& shortHelpString = wxPyEmptyStr,
-                                         const wxString& longHelpString = wxPyEmptyStr,
+                                         const wxString& shortHelpString = wxEmptyString,
+                                         const wxString& longHelpString = wxEmptyString,
                                          int isToggle = FALSE) {
             return self->AddTool(id, bitmap, wxNullBitmap, isToggle, NULL,
                                  shortHelpString, longHelpString);
@@ -186,8 +182,8 @@ public:
                                       const wxBitmap& pushedBitmap = wxNullBitmap,
                                       int isToggle = FALSE,
                                       PyObject *clientData = NULL,
-                                      const wxString& shortHelpString = wxPyEmptyStr,
-                                      const wxString& longHelpString = wxPyEmptyStr) {
+                                      const wxString& shortHelpString = wxEmptyString,
+                                      const wxString& longHelpString = wxEmptyString) {
             wxPyUserData* udata = NULL;
             if (clientData)
                 udata = new wxPyUserData(clientData);
@@ -199,8 +195,8 @@ public:
         wxToolBarToolBase *InsertSimpleTool(size_t pos,
                                             int id,
                                             const wxBitmap& bitmap,
-                                            const wxString& shortHelpString = wxPyEmptyStr,
-                                            const wxString& longHelpString = wxPyEmptyStr,
+                                            const wxString& shortHelpString = wxEmptyString,
+                                            const wxString& longHelpString = wxEmptyString,
                                             int isToggle = FALSE) {
             return self->InsertTool(pos, id, bitmap, wxNullBitmap, isToggle, NULL,
                                     shortHelpString, longHelpString);

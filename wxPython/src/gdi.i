@@ -31,9 +31,6 @@
 %import _defs.i
 %import misc.i
 
-%{
-    static wxString wxPyEmptyStr("");
-%}
 
 //---------------------------------------------------------------------------
 
@@ -797,6 +794,23 @@ public:
     void DrawEllipse(long x, long y, long width, long height);
     void DrawEllipticArc(long x, long y, long width, long height, long start, long end);
     void DrawIcon(const wxIcon& icon, long x, long y);
+
+    void DrawLabel(const wxString& text, const wxRect& rect,
+                   int alignment = wxALIGN_LEFT | wxALIGN_TOP,
+                   int indexAccel = -1);
+
+    %addmethods {
+        wxRect DrawImageLabel(const wxString& text,
+                              const wxBitmap& image,
+                              const wxRect& rect,
+                              int alignment = wxALIGN_LEFT | wxALIGN_TOP,
+                              int indexAccel = -1) {
+            wxRect rv;
+            self->DrawLabel(text, image, rect, alignment, indexAccel, &rv);
+            return rv;
+        }
+    }
+
     void DrawLine(long x1, long y1, long x2, long y2);
     void DrawLines(int PCOUNT, wxPoint* points, long xoffset=0, long yoffset=0);
     void DrawPolygon(int PCOUNT, wxPoint* points, long xoffset=0, long yoffset=0,
@@ -1142,7 +1156,7 @@ public:
 
 class wxMetaFile : public wxObject {
 public:
-    wxMetaFile(const wxString& filename = wxPyEmptyStr);
+    wxMetaFile(const wxString& filename = wxEmptyString);
     ~wxMetaFile();
 
     bool Ok();
@@ -1162,9 +1176,9 @@ public:
 
 class wxMetaFileDC : public wxDC {
 public:
-    wxMetaFileDC(const wxString& filename = wxPyEmptyStr,
+    wxMetaFileDC(const wxString& filename = wxEmptyString,
                  int width = 0, int height = 0,
-                 const wxString& description = wxPyEmptyStr);
+                 const wxString& description = wxEmptyString);
     wxMetaFile* Close();
 };
 
@@ -1234,6 +1248,8 @@ public:
     ~wxRegion();
 
     void Clear();
+    bool Offset(wxCoord x, wxCoord y);
+
     wxRegionContain Contains(long x, long y);
     %name(ContainsPoint)wxRegionContain Contains(const wxPoint& pt);
     %name(ContainsRect)wxRegionContain Contains(const wxRect& rect);

@@ -106,8 +106,6 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     static char* wxStringErrorMsg = "String type required";
 #endif
 
-    static wxString wxPyEmptyStr("");
-
     int wxCaret_GetBlinkTime() {
         return wxCaret::GetBlinkTime();
     }
@@ -335,8 +333,8 @@ static PyObject *_wrap_wxGetTextFromUser(PyObject *self, PyObject *args, PyObjec
     PyObject * _resultobj;
     wxString * _result;
     wxString * _arg0;
-    wxString * _arg1 = (wxString *) &wxPyEmptyStr;
-    wxString * _arg2 = (wxString *) &wxPyEmptyStr;
+    wxString * _arg1 = (wxString *) &wxEmptyString;
+    wxString * _arg2 = (wxString *) &wxEmptyString;
     wxWindow * _arg3 = (wxWindow *) NULL;
     int  _arg4 = (int ) -1;
     int  _arg5 = (int ) -1;
@@ -446,8 +444,8 @@ static PyObject *_wrap_wxGetPasswordFromUser(PyObject *self, PyObject *args, PyO
     PyObject * _resultobj;
     wxString * _result;
     wxString * _arg0;
-    wxString * _arg1 = (wxString *) &wxPyEmptyStr;
-    wxString * _arg2 = (wxString *) &wxPyEmptyStr;
+    wxString * _arg1 = (wxString *) &wxEmptyString;
+    wxString * _arg2 = (wxString *) &wxEmptyString;
     wxWindow * _arg3 = (wxWindow *) NULL;
     PyObject * _obj0 = 0;
     PyObject * _obj1 = 0;
@@ -763,7 +761,7 @@ static PyObject *_wrap_wxMessageBox(PyObject *self, PyObject *args, PyObject *kw
     PyObject * _resultobj;
     int  _result;
     wxString * _arg0;
-    wxString * _arg1 = (wxString *) &wxPyEmptyStr;
+    wxString * _arg1 = (wxString *) &wxEmptyString;
     int  _arg2 = (int ) wxOK|wxCENTRE;
     wxWindow * _arg3 = (wxWindow *) NULL;
     int  _arg4 = (int ) -1;
@@ -8633,7 +8631,7 @@ static PyObject *_wrap_wxFileType_GetOpenCommand(PyObject *self, PyObject *args,
     PyObject * _result;
     wxFileType * _arg0;
     wxString * _arg1;
-    wxString * _arg2 = (wxString *) &wxPyEmptyStr;
+    wxString * _arg2 = (wxString *) &wxEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
     PyObject * _obj2 = 0;
@@ -8718,7 +8716,7 @@ static PyObject *_wrap_wxFileType_GetPrintCommand(PyObject *self, PyObject *args
     PyObject * _result;
     wxFileType * _arg0;
     wxString * _arg1;
-    wxString * _arg2 = (wxString *) &wxPyEmptyStr;
+    wxString * _arg2 = (wxString *) &wxEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
     PyObject * _obj2 = 0;
@@ -8811,7 +8809,7 @@ static PyObject *_wrap_wxFileType_GetAllCommands(PyObject *self, PyObject *args,
     PyObject * _result;
     wxFileType * _arg0;
     wxString * _arg1;
-    wxString * _arg2 = (wxString *) &wxPyEmptyStr;
+    wxString * _arg2 = (wxString *) &wxEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
     PyObject * _obj2 = 0;

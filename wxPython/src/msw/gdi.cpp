@@ -94,8 +94,6 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #else
     static char* wxStringErrorMsg = "String type required";
 #endif
-
-    static wxString wxPyEmptyStr("");
  // Implementations of some alternate "constructors"
 
     wxBitmap* wxEmptyBitmap(int width, int height, int depth=-1) {
@@ -7585,6 +7583,145 @@ static PyObject *_wrap_wxDC_DrawIcon(PyObject *self, PyObject *args, PyObject *k
     return _resultobj;
 }
 
+#define wxDC_DrawLabel(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->DrawLabel(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
+static PyObject *_wrap_wxDC_DrawLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxDC * _arg0;
+    wxString * _arg1;
+    wxRect * _arg2;
+    int  _arg3 = (int ) wxALIGN_LEFT|wxALIGN_TOP;
+    int  _arg4 = (int ) -1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    wxRect  temp;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","text","rect","alignment","indexAccel", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO|ii:wxDC_DrawLabel",_kwnames,&_argo0,&_obj1,&_obj2,&_arg3,&_arg4)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDC_DrawLabel. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    _arg2 = &temp;
+    if (! wxRect_helper(_obj2, &_arg2))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxDC_DrawLabel(_arg0,*_arg1,*_arg2,_arg3,_arg4);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+static wxRect  wxDC_DrawImageLabel(wxDC *self,const wxString & text,const wxBitmap & image,const wxRect & rect,int  alignment,int  indexAccel) {
+            wxRect rv;
+            self->DrawLabel(text, image, rect, alignment, indexAccel, &rv);
+            return rv;
+        }
+static PyObject *_wrap_wxDC_DrawImageLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxRect * _result;
+    wxDC * _arg0;
+    wxString * _arg1;
+    wxBitmap * _arg2;
+    wxRect * _arg3;
+    int  _arg4 = (int ) wxALIGN_LEFT|wxALIGN_TOP;
+    int  _arg5 = (int ) -1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _argo2 = 0;
+    wxRect  temp;
+    PyObject * _obj3 = 0;
+    char *_kwnames[] = { "self","text","image","rect","alignment","indexAccel", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOOO|ii:wxDC_DrawImageLabel",_kwnames,&_argo0,&_obj1,&_argo2,&_obj3,&_arg4,&_arg5)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDC_DrawImageLabel. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+    if (_argo2) {
+        if (_argo2 == Py_None) { _arg2 = NULL; }
+        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxDC_DrawImageLabel. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+{
+    _arg3 = &temp;
+    if (! wxRect_helper(_obj3, &_arg3))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = new wxRect (wxDC_DrawImageLabel(_arg0,*_arg1,*_arg2,*_arg3,_arg4,_arg5));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxRect_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
 #define wxDC_DrawLine(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->DrawLine(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
 static PyObject *_wrap_wxDC_DrawLine(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -10831,7 +10968,7 @@ static void *SwigwxMetaFileTowxObject(void *ptr) {
 static PyObject *_wrap_new_wxMetaFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxMetaFile * _result;
-    wxString * _arg0 = (wxString *) &wxPyEmptyStr;
+    wxString * _arg0 = (wxString *) &wxEmptyString;
     PyObject * _obj0 = 0;
     char *_kwnames[] = { "filename", NULL };
     char _ptemp[128];
@@ -11101,10 +11238,10 @@ static void *SwigwxMetaFileDCTowxObject(void *ptr) {
 static PyObject *_wrap_new_wxMetaFileDC(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxMetaFileDC * _result;
-    wxString * _arg0 = (wxString *) &wxPyEmptyStr;
+    wxString * _arg0 = (wxString *) &wxEmptyString;
     int  _arg1 = (int ) 0;
     int  _arg2 = (int ) 0;
-    wxString * _arg3 = (wxString *) &wxPyEmptyStr;
+    wxString * _arg3 = (wxString *) &wxEmptyString;
     PyObject * _obj0 = 0;
     PyObject * _obj3 = 0;
     char *_kwnames[] = { "filename","width","height","description", NULL };
@@ -11956,6 +12093,36 @@ static PyObject *_wrap_wxRegion_Clear(PyObject *self, PyObject *args, PyObject *
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxRegion_Offset(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Offset(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxRegion_Offset(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxRegion * _arg0;
+    wxCoord  _arg1;
+    wxCoord  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x","y", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxRegion_Offset",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxRegion_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRegion_Offset. Expected _wxRegion_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (bool )wxRegion_Offset(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -12957,6 +13124,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxRegion_ContainsRect", (PyCFunction) _wrap_wxRegion_ContainsRect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRegion_ContainsPoint", (PyCFunction) _wrap_wxRegion_ContainsPoint, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRegion_Contains", (PyCFunction) _wrap_wxRegion_Contains, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRegion_Offset", (PyCFunction) _wrap_wxRegion_Offset, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRegion_Clear", (PyCFunction) _wrap_wxRegion_Clear, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxRegion", (PyCFunction) _wrap_delete_wxRegion, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxRegion", (PyCFunction) _wrap_new_wxRegion, METH_VARARGS | METH_KEYWORDS },
@@ -13070,6 +13238,8 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxDC_DrawPolygon", (PyCFunction) _wrap_wxDC_DrawPolygon, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_DrawLines", (PyCFunction) _wrap_wxDC_DrawLines, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_DrawLine", (PyCFunction) _wrap_wxDC_DrawLine, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_DrawImageLabel", (PyCFunction) _wrap_wxDC_DrawImageLabel, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_DrawLabel", (PyCFunction) _wrap_wxDC_DrawLabel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_DrawIcon", (PyCFunction) _wrap_wxDC_DrawIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_DrawEllipticArc", (PyCFunction) _wrap_wxDC_DrawEllipticArc, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_DrawEllipse", (PyCFunction) _wrap_wxDC_DrawEllipse, METH_VARARGS | METH_KEYWORDS },
