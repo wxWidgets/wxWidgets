@@ -102,7 +102,32 @@ ULONG lastTableID = 0;
 #endif
 
 
-/********** wxDbTable::wxDbTable() **********/
+/********** wxDbColDef::wxDbColDef() Constructor **********/
+wxDbColDef::wxDbColDef()
+{
+    Initialize();
+}  // Constructor
+
+
+bool wxDbColDef::Initialize()
+{
+    ColName[0]      = 0;
+    DbDataType      = DB_DATA_TYPE_INTEGER;
+    SqlCtype        = SQL_C_LONG;
+    PtrDataObj      = NULL;
+    SzDataObj       = 0;
+    KeyField        = FALSE;
+    Updateable      = FALSE;
+    InsertAllowed   = FALSE;
+    DerivedCol      = FALSE;
+    CbValue         = 0;
+    Null = FALSE;
+
+    return TRUE;
+}  // wxDbColDef::Initialize()
+
+
+/********** wxDbTable::wxDbTable() Constructor **********/
 wxDbTable::wxDbTable(wxDb *pwxDb, const wxString &tblName, const int nCols,
                     const wxString &qryTblName, bool qryOnly, const wxString &tblPath)
 {

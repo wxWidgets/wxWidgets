@@ -284,9 +284,9 @@ class wxDbConnectInf
     public:
 
         wxDbConnectInf();
-        wxDbConnectInf(HENV henv, const wxString &dsn, const wxString &userID=wxT(""), 
-                       const wxString &password=wxT(""), const wxString &defaultDir=wxT(""), 
-                       const wxString &description=wxT(""), const wxString &fileType=wxT(""));
+        wxDbConnectInf(HENV henv, const wxString &dsn, const wxString &userID=wxEmptyString, 
+                       const wxString &password=wxEmptyString, const wxString &defaultDir=wxEmptyString, 
+                       const wxString &description=wxEmptyString, const wxString &fileType=wxEmptyString);
 
         ~wxDbConnectInf();
 
@@ -381,6 +381,8 @@ public:
 
     wxDbColInf();
     ~wxDbColInf();
+
+    bool Initialize();
 };
 
 
@@ -394,8 +396,11 @@ public:
     wxChar      tableRemarks[254+1];
     int         numCols;                    // How many Columns does this Table have: GetColumnCount(..);
     wxDbColInf *pColInf;                    // pColInf = NULL ; User can later call GetColumns(..);
+
     wxDbTableInf();
     ~wxDbTableInf();
+
+    bool             Initialize();
 };
 
 
@@ -410,7 +415,7 @@ public:
     wxDbInf();
     ~wxDbInf();
 
-    void          Initialize();
+    bool          Initialize();
 };
 
 
@@ -469,6 +474,7 @@ private:
     bool             setConnectionOptions(void);
     void             logError(const wxString &errMsg, const wxString &SQLState);
     const wxChar    *convertUserID(const wxChar *userID, wxString &UserID);
+    void             initialize();
 
 #if !wxODBC_BACKWARD_COMPATABILITY
     // ODBC handles
@@ -568,7 +574,6 @@ public:
 
     // Public member functions
     wxDb(const HENV &aHenv, bool FwdOnlyCursors=(bool)wxODBC_FWD_ONLY_CURSORS);
-    void         Initialize();
 
     bool         Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthStr);  // Data Source Name, User ID, Password
     bool         Open(wxDbConnectInf *dbConnectInf);
@@ -609,16 +614,16 @@ public:
     wxDbSqlTypeInfo GetTypeInfFloat()   {return typeInfFloat;}
     wxDbSqlTypeInfo GetTypeInfDate()    {return typeInfDate;}
 
-    bool         TableExists(const wxString &tableName, const wxChar *userID=NULL, const wxString &tablePath=wxT(""));  // tableName can refer to a table, view, alias or synonym
-    bool         TablePrivileges(const wxString &tableName, const wxString &priv, const wxChar *userID=NULL, const wxChar *schema=NULL, const wxString &path=wxT(""));  // tableName can refer to a table, view, alias or synonym
-    void         LogError(const wxString &errMsg, const wxString &SQLState = wxT("")) { logError(errMsg, SQLState); }
+    bool         TableExists(const wxString &tableName, const wxChar *userID=NULL, const wxString &tablePath=wxEmptyString);  // tableName can refer to a table, view, alias or synonym
+    bool         TablePrivileges(const wxString &tableName, const wxString &priv, const wxChar *userID=NULL, const wxChar *schema=NULL, const wxString &path=wxEmptyString);  // tableName can refer to a table, view, alias or synonym
+    void         LogError(const wxString &errMsg, const wxString &SQLState = wxEmptyString) { logError(errMsg, SQLState); }
     void         SetDebugErrorMessages(bool state) { silent = !state; }
     bool         SetSqlLogging(wxDbSqlLogState state, const wxString &filename = SQL_LOG_FILENAME, bool append = FALSE);
     bool         WriteSqlLog(const wxString &logMsg);
     wxDBMS       Dbms(void);
     bool         ModifyColumn(const wxString &tableName, const wxString &columnName,
                               int dataType, ULONG columnLength=0,
-                              const wxString &optionalParam=wxT(""));
+                              const wxString &optionalParam=wxEmptyString);
 
     bool         FwdOnlyCursors(void)  {return fwdOnlyCursors;}
 
@@ -673,8 +678,8 @@ bool wxDbSqlLog(wxDbSqlLogState state, const wxString &filename = SQL_LOG_FILENA
 
 #if 0
 // MSW/VC6 ONLY!!!  Experimental
-int WXDLLEXPORT wxDbCreateDataSource(const wxString &driverName, const wxString &dsn, const wxString &description=wxT(""),
-                                     bool sysDSN=FALSE, const wxString &defDir=wxT(""), wxWindow *parent=NULL);
+int WXDLLEXPORT wxDbCreateDataSource(const wxString &driverName, const wxString &dsn, const wxString &description=wxEmptyString,
+                                     bool sysDSN=FALSE, const wxString &defDir=wxEmptyString, wxWindow *parent=NULL);
 #endif
 
 // This routine allows you to query a driver manager

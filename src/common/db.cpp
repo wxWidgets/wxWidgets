@@ -138,30 +138,36 @@ typedef struct
 /********** wxDbConnectInf Constructor - form 1 **********/
 wxDbConnectInf::wxDbConnectInf()
 {
+    Henv = 0;
+    freeHenvOnDestroy = FALSE;
+
     Initialize();
 }  // Constructor
 
 
 /********** wxDbConnectInf Constructor - form 2 **********/
-wxDbConnectInf::wxDbConnectInf(HENV Henv, const wxString &Dsn, const wxString &UserID, 
-                       const wxString &Password, const wxString &DefaultDir,
-                       const wxString &FileType, const wxString &Description)
+wxDbConnectInf::wxDbConnectInf(HENV henv, const wxString &dsn, const wxString &userID, 
+                       const wxString &password, const wxString &defaultDir,
+                       const wxString &fileType, const wxString &description)
 {
-    wxASSERT(Dsn.Length());
+    wxASSERT(dsn.Length());
+
+    Henv = 0;
+    freeHenvOnDestroy = FALSE;
 
     Initialize();
 
-    if (Henv)
-        SetHenv(Henv);
+    if (henv)
+        SetHenv(henv);
     else
         AllocHenv();
 
-    SetDsn(Dsn);
-    SetUserID(UserID);
-    SetPassword(Password);
-    SetDescription(Description);
-    SetFileType(FileType);
-    SetDefaultDir(DefaultDir);
+    SetDsn(dsn);
+    SetUserID(userID);
+    SetPassword(password);
+    SetDescription(description);
+    SetFileType(fileType);
+    SetDefaultDir(defaultDir);
 }  // wxDbConnectInf Constructor
 
 
@@ -179,6 +185,9 @@ wxDbConnectInf::~wxDbConnectInf()
 bool wxDbConnectInf::Initialize()
 {
     freeHenvOnDestroy = FALSE;
+
+    if (freeHenvOnDestroy && Henv)
+        FreeHenv();
 
     Henv = 0;
     Dsn[0] = 0;
@@ -369,6 +378,21 @@ int wxDbColFor::Format(int Nation, int dbDataType, SWORD sqlDataType,
 /********** wxDbColInf Constructor **********/
 wxDbColInf::wxDbColInf()
 {
+    Initialize();
+}  // wxDbColInf::wxDbColInf()
+
+
+/********** wxDbColInf Destructor ********/
+wxDbColInf::~wxDbColInf()
+{
+    if (pColFor)
+        delete pColFor;
+    pColFor = NULL;
+}  // wxDbColInf::~wxDbColInf()
+
+
+bool wxDbColInf::Initialize()
+{
     catalog[0]      = 0;
     schema[0]       = 0;
     tableName[0]    = 0;
@@ -387,26 +411,15 @@ wxDbColInf::wxDbColInf()
     FkCol           = 0;
     FkTableName[0]  = 0;
     pColFor         = NULL;
-}  // wxDbColInf::wxDbColInf()
 
-
-/********** wxDbColInf Destructor ********/
-wxDbColInf::~wxDbColInf()
-{
-    if (pColFor)
-        delete pColFor;
-    pColFor = NULL;
-}  // wxDbColInf::~wxDbColInf()
+    return TRUE;
+}  // wxDbColInf::Initialize()
 
 
 /********** wxDbTableInf Constructor ********/
 wxDbTableInf::wxDbTableInf()
 {
-    tableName[0]    = 0;
-    tableType[0]    = 0;
-    tableRemarks[0] = 0;
-    numCols         = 0;
-    pColInf         = NULL;
+    Initialize();
 }  // wxDbTableInf::wxDbTableInf()
 
 
@@ -417,6 +430,18 @@ wxDbTableInf::~wxDbTableInf()
         delete [] pColInf;
     pColInf = NULL;
 }  // wxDbTableInf::~wxDbTableInf()
+
+
+bool wxDbTableInf::Initialize()
+{
+    tableName[0]    = 0;
+    tableType[0]    = 0;
+    tableRemarks[0] = 0;
+    numCols         = 0;
+    pColInf         = NULL;
+
+    return TRUE;
+}  // wxDbTableInf::Initialize()
 
 
 /********** wxDbInf Constructor *************/
@@ -436,12 +461,14 @@ wxDbInf::~wxDbInf()
 
 
 /********** wxDbInf::Initialize() *************/
-void wxDbInf::Initialize()
+bool wxDbInf::Initialize()
 {
     catalog[0]      = 0;
     schema[0]       = 0;
     numTables       = 0;
     pTableInf       = NULL;
+
+    return TRUE;
 }  // wxDbInf::Initialize()
 
 
@@ -451,12 +478,14 @@ wxDb::wxDb(const HENV &aHenv, bool FwdOnlyCursors)
     // Copy the HENV into the db class
     henv = aHenv;
     fwdOnlyCursors = FwdOnlyCursors;
-    Initialize();
+
+    initialize();
 } // wxDb::wxDb()
 
 
-/********** wxDb::Initialize() **********/
-void wxDb::Initialize()
+/********** PRIVATE! wxDb::initialize PRIVATE! **********/
+/********** wxDb::initialize() **********/
+void wxDb::initialize()
 /*
  * Private member function that sets all wxDb member variables to
  * known values at creation of the wxDb
@@ -469,11 +498,11 @@ void wxDb::Initialize()
     nTables       = 0;
     dbmsType      = dbmsUNIDENTIFIED;
 
-    wxStrcpy(sqlState,wxT(""));
-    wxStrcpy(errorMsg,wxT(""));
+    wxStrcpy(sqlState,wxEmptyString);
+    wxStrcpy(errorMsg,wxEmptyString);
     nativeError = cbErrorMsg = 0;
     for (i = 0; i < DB_MAX_ERROR_HISTORY; i++)
-        wxStrcpy(errorList[i], wxT(""));
+        wxStrcpy(errorList[i], wxEmptyString);
 
     // Init typeInf structures
     typeInfVarchar.TypeName.Empty();
@@ -512,7 +541,7 @@ void wxDb::Initialize()
 
     // Mark database as not open as of yet
     dbIsOpen = FALSE;
-}  // wxDb::Initialize()
+}  // wxDb::initialize()
 
 
 /********** PRIVATE! wxDb::convertUserID PRIVATE! **********/
@@ -592,8 +621,8 @@ bool wxDb::Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthSt
     If using Intersolv branded ODBC drivers, this is the place where you would substitute
     your branded driver license information
 
-    SQLSetConnectOption(hdbc, 1041, (UDWORD) wxT(""));
-    SQLSetConnectOption(hdbc, 1042, (UDWORD) wxT(""));
+    SQLSetConnectOption(hdbc, 1041, (UDWORD) wxEmptyString);
+    SQLSetConnectOption(hdbc, 1042, (UDWORD) wxEmptyString);
 */
 
     // Mark database as open
@@ -764,8 +793,8 @@ bool wxDb::Open(wxDb *copyDb)
     If using Intersolv branded ODBC drivers, this is the place where you would substitute
     your branded driver license information
 
-    SQLSetConnectOption(hdbc, 1041, (UDWORD) wxT(""));
-    SQLSetConnectOption(hdbc, 1042, (UDWORD) wxT(""));
+    SQLSetConnectOption(hdbc, 1041, (UDWORD) wxEmptyString);
+    SQLSetConnectOption(hdbc, 1042, (UDWORD) wxEmptyString);
 */
 
     // Mark database as open
@@ -2073,8 +2102,8 @@ wxDbColInf *wxDb::GetColumns(wxChar *tableName[], const wxChar *userID)
             if (!colInf)
                 break;
             // Mark the end of the array
-            wxStrcpy(colInf[noCols].tableName,wxT(""));
-            wxStrcpy(colInf[noCols].colName,wxT(""));
+            wxStrcpy(colInf[noCols].tableName,wxEmptyString);
+            wxStrcpy(colInf[noCols].colName,wxEmptyString);
             colInf[noCols].sqlDataType = 0;
         }
         // Loop through each table name
@@ -2230,8 +2259,8 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, int *numCols, const wxCh
             if (!colInf)
                 break;
             // Mark the end of the array
-            wxStrcpy(colInf[noCols].tableName, wxT(""));
-            wxStrcpy(colInf[noCols].colName, wxT(""));
+            wxStrcpy(colInf[noCols].tableName, wxEmptyString);
+            wxStrcpy(colInf[noCols].colName, wxEmptyString);
             colInf[noCols].sqlDataType  = 0;
         }
 
@@ -2420,8 +2449,8 @@ wxDbColInf *wxDb::GetColumns(wxChar *tableName[], const wxChar *userID)
     wxDbColInf *colInf = new wxDbColInf[noCols+1];
 
     // Mark the end of the array
-    wxStrcpy(colInf[noCols].tableName, wxT(""));
-    wxStrcpy(colInf[noCols].colName, wxT(""));
+    wxStrcpy(colInf[noCols].tableName, wxEmptyString);
+    wxStrcpy(colInf[noCols].colName, wxEmptyString);
     colInf[noCols].sqlDataType  = 0;
 
     // Merge ...
@@ -2483,8 +2512,8 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, int *numCols, const wxCh
             if (!colInf)
                 break;
             // Mark the end of the array
-            wxStrcpy(colInf[noCols].tableName, wxT(""));
-            wxStrcpy(colInf[noCols].colName, wxT(""));
+            wxStrcpy(colInf[noCols].tableName, wxEmptyString);
+            wxStrcpy(colInf[noCols].colName, wxEmptyString);
             colInf[noCols].sqlDataType = 0;
         }
 

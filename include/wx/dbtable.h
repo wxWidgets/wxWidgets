@@ -76,6 +76,10 @@ public:
     bool    DerivedCol;                         // Specifies whether this column is a derived value
     SDWORD  CbValue;                            // Internal use only!!!
     bool    Null;                               // NOT FULLY IMPLEMENTED - Allows NULL values in Inserts and Updates
+
+    wxDbColDef();
+
+    bool    Initialize();
 };  // wxDbColDef
 
 
@@ -119,7 +123,7 @@ private:
     bool        getRec(UWORD fetchType);
     bool        execDelete(const wxString &pSqlStmt);
     bool        execUpdate(const wxString &pSqlStmt);
-    bool        query(int queryType, bool forUpdate, bool distinct, const wxString &pSqlStmt=wxT(""));
+    bool        query(int queryType, bool forUpdate, bool distinct, const wxString &pSqlStmt=wxEmptyString);
 
 #if !wxODBC_BACKWARD_COMPATABILITY
 // these were public
