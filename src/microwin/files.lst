@@ -345,6 +345,7 @@ ALL_HEADERS = \
 		imagxpm.h \
 		intl.h \
 		ioswrap.h \
+		ipc.h \
 		ipcbase.h \
 		isql.h \
 		isqlext.h \
@@ -521,6 +522,7 @@ ALL_HEADERS = \
 		msw/metafile.h \
 		msw/mimetype.h \
 		msw/minifram.h \
+		msw/missing.h \
 		msw/msgdlg.h \
 		msw/mslu.h \
 		msw/msvcrt.h \

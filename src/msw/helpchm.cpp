@@ -33,63 +33,7 @@
 #endif
 
 #include "wx/msw/private.h"
-
-// instead of including htmlhelp.h, duplicate the things from it we need here
-
-enum
-{
-    HH_DISPLAY_TOPIC,
-    HH_DISPLAY_TOC,
-    HH_DISPLAY_INDEX,
-    HH_DISPLAY_SEARCH,
-    HH_SET_WIN_TYPE,
-    HH_GET_WIN_TYPE,
-    HH_GET_WIN_HANDLE,
-    HH_ENUM_INFO_TYPE,
-    HH_SET_INFO_TYPE,
-    HH_SYNC,
-    HH_RESERVED1,
-    HH_RESERVED2,
-    HH_RESERVED3,
-    HH_KEYWORD_LOOKUP,
-    HH_DISPLAY_TEXT_POPUP,
-    HH_HELP_CONTEXT,
-    HH_TP_HELP_CONTEXTMENU,
-    HH_TP_HELP_WM_HELP,
-    HH_CLOSE_ALL,
-    HH_ALINK_LOOKUP,
-    HH_GET_LAST_ERROR,
-    HH_ENUM_CATEGORY,
-    HH_ENUM_CATEGORY_IT,
-    HH_RESET_IT_FILTER,
-    HH_SET_INCLUSIVE_FILTER,
-    HH_SET_EXCLUSIVE_FILTER
-};
-
-struct HH_POPUP
-{
-    int       cbStruct;
-    HINSTANCE hinst;
-    UINT      idString;
-    LPCTSTR   pszText;
-    POINT     pt;
-    COLORREF  clrForeground;
-    COLORREF  clrBackground;
-    RECT      rcMargins;
-    LPCTSTR   pszFont;
-};
-
-struct HH_AKLINK
-{
-    int       cbStruct;
-    BOOL      fReserved;
-    LPCTSTR   pszKeywords;
-    LPCTSTR   pszUrl;
-    LPCTSTR   pszMsgText;
-    LPCTSTR   pszMsgTitle;
-    LPCTSTR   pszWindow;
-    BOOL      fIndexOnFail;
-};
+#include "wx/msw/missing.h"
 
 // ----------------------------------------------------------------------------
 // utility functions to manage the loading/unloading

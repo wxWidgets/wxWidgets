@@ -813,6 +813,10 @@ SOURCE=..\include\wx\ioswrap.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\ipc.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\ipcbase.h
 # End Source File
 # Begin Source File

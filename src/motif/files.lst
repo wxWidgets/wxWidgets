@@ -375,6 +375,7 @@ ALL_HEADERS = \
 		imagxpm.h \
 		intl.h \
 		ioswrap.h \
+		ipc.h \
 		ipcbase.h \
 		isql.h \
 		isqlext.h \

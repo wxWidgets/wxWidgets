@@ -1974,6 +1974,10 @@ SOURCE=..\include\wx\ioswrap.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\ipc.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\ipcbase.h
 # End Source File
 # Begin Source File
@@ -2676,6 +2680,10 @@ SOURCE=..\include\wx\msw\mimetype.h
 # Begin Source File
 
 SOURCE=..\include\wx\msw\minifram.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\missing.h
 # End Source File
 # Begin Source File
 
