@@ -194,6 +194,9 @@
     #ifndef __POWERPC__
         #define __POWERPC__ 1
     #endif
+    #ifndef TARGET_CARBON
+        #define TARGET_CARBON 1
+    #endif
 
     #if !defined(wxSIZE_T_IS_UINT) && !defined(wxSIZE_T_IS_ULONG)
         #define wxSIZE_T_IS_ULONG
