@@ -2013,6 +2013,7 @@ fi
 if test "$wxUSE_HTML" = "yes"; then
     AC_DEFINE(wxUSE_HTML)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html"
+    INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS html"
 fi
 
 if test "$wxUSE_VALIDATORS" = "yes"; then
@@ -2147,6 +2148,7 @@ dnl             samples/Makefile samples/minimal/Makefile
             include/wx/msw/Makefile
             include/wx/protocol/Makefile
             include/wx/unix/Makefile
+            include/wx/html/Makefile
             misc/Makefile
             misc/afm/Makefile
             misc/gs_afm/Makefile
