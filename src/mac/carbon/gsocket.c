@@ -76,6 +76,13 @@
 
 #endif /* __GSOCKET_STANDALONE__ */
 
+#ifndef ntohl
+#define	ntohl(x)	(x)
+#define	ntohs(x)	(x)
+#define	htonl(x)	(x)
+#define	htons(x)	(x)
+#endif
+
 void wxCYield() ;
 #ifdef __WXDEBUG__
 #define qDebug 1
