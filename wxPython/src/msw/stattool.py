@@ -477,33 +477,6 @@ def wxPreToolBar(*_args,**_kwargs):
     return val
 
 
-class wxToolBarSimplePtr(wxToolBarBasePtr):
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def Create(self, *_args, **_kwargs):
-        val = stattoolc.wxToolBarSimple_Create(self, *_args, **_kwargs)
-        return val
-    def FindToolForPosition(self, *_args, **_kwargs):
-        val = stattoolc.wxToolBarSimple_FindToolForPosition(self, *_args, **_kwargs)
-        return val
-    def __repr__(self):
-        return "<%s.%s instance; proxy of C++ wxToolBarSimple instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
-class wxToolBarSimple(wxToolBarSimplePtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = stattoolc.new_wxToolBarSimple(*_args,**_kwargs)
-        self.thisown = 1
-        self._setOORInfo(self)
-
-
-
-def wxPreToolBarSimple(*_args,**_kwargs):
-    val = wxToolBarSimplePtr(stattoolc.new_wxPreToolBarSimple(*_args,**_kwargs))
-    val.thisown = 1
-    val._setOORInfo(val)
-    return val
-
-
 
 
 #-------------- FUNCTION WRAPPERS ------------------

@@ -4884,6 +4884,11 @@ SWIGEXPORT(void) initwindows3c() {
 	 PyDict_SetItemString(d,"wxLAYOUT_BOTTOM", PyInt_FromLong((long) wxLAYOUT_BOTTOM));
 	 PyDict_SetItemString(d,"wxEVT_QUERY_LAYOUT_INFO", PyInt_FromLong((long) wxEVT_QUERY_LAYOUT_INFO));
 	 PyDict_SetItemString(d,"wxEVT_CALCULATE_LAYOUT", PyInt_FromLong((long) wxEVT_CALCULATE_LAYOUT));
+
+    // Map renamed classes back to their common name for OOR
+    wxPyPtrTypeMap_Add("wxHtmlListBox", "wxPyHtmlListBox");
+    wxPyPtrTypeMap_Add("wxVListBox", "wxPyVListBox");
+    wxPyPtrTypeMap_Add("wxVScrolledWindow", "wxPyVScrolledWindow");
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)
