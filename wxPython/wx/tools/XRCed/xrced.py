@@ -872,21 +872,10 @@ Homepage: http://xrced.sourceforge.net\
         try:
             f = open(path)
             self.Clear()
-            # Parse first line to get encoding (!! hack, I don't know a better way)
-            line = f.readline()
-            mo = re.match(r'^<\?xml ([^<>]* )?encoding="(?P<encd>[^<>].*)"\?>', line)
-            # Build wx tree
-            f.seek(0)
             dom = minidom.parse(f)
-            # Set encoding global variable and document encoding property
-            if mo:
-                dom.encoding = g.currentEncoding = mo.group('encd')
-                if dom.encoding not in ['ascii', sys.getdefaultencoding()]:
-                    wxLogWarning('Encoding is different from system default')
-            else:
-                g.currentEncoding = 'ascii'
-                dom.encoding = ''
             f.close()
+            # Set encoding global variable
+            g.currentEncoding = dom.encoding
             # Change dir
             dir = os.path.dirname(path)
             if dir: os.chdir(dir)
@@ -920,17 +909,18 @@ Homepage: http://xrced.sourceforge.net\
 
     def Save(self, path):
         try:
+            import codecs
             # Apply changes
             if tree.selection and panel.IsModified():
                 self.OnRefresh(wxCommandEvent())
-            f = open(path, 'w')
+            f = codecs.open(path, 'w', g.currentEncoding)
             # Make temporary copy for formatting it
             # !!! We can't clone dom node, it works only once
             #self.domCopy = tree.dom.cloneNode(True)
             self.domCopy = MyDocument()
             mainNode = self.domCopy.appendChild(tree.mainNode.cloneNode(True))
             self.Indent(mainNode)
-            self.domCopy.writexml(f, encoding=tree.rootObj.params['encoding'].value())
+            self.domCopy.writexml(f, encoding = g.currentEncoding)
             f.close()
             self.domCopy.unlink()
             self.domCopy = None

@@ -19,7 +19,7 @@ class MemoryFile:
         self.name = name
         self.buffer = ''
     def write(self, data):
-        self.buffer += data.encode()
+        self.buffer += data.encode(g.currentEncoding)
     def close(self):
         wxMemoryFSHandler_AddFile(self.name, self.buffer)
 

@@ -336,12 +336,10 @@ class xxxContainer(xxxObject):
 
 # Simulate normal parameter for encoding
 class xxxEncoding:
-    def __init__(self, val):
-        self.encd = val
     def value(self):
-        return self.encd
+        return g.currentEncoding
     def update(self, val):
-        self.encd = val
+        g.currentEncoding = val
 
 # Special class for root node
 class xxxMainNode(xxxContainer):
@@ -353,7 +351,7 @@ class xxxMainNode(xxxContainer):
         # Reset required parameters after processing XML, because encoding is
         # a little special
         self.required = ['encoding']
-        self.params['encoding'] = xxxEncoding(dom.encoding)
+        self.params['encoding'] = xxxEncoding()
 
 ################################################################################
 # Top-level windwows
