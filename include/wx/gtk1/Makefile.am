@@ -40,7 +40,7 @@ wx_gtk_include_HEADERS = \
  mdi.h \
  menu.h \
  menuitem.h \
- mesdlg.h \
+ msgdlg.h \
  minifram.h \
  notebook.h \
  palette.h \
