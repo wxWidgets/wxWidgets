@@ -42,6 +42,7 @@
 #endif
 
 #if wxUSE_GUI
+    #include "wx/fontutil.h"
     #include "wx/msgdlg.h"
     #include "wx/fontdlg.h"
     #include "wx/choicdlg.h"
