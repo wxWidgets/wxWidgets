@@ -20,7 +20,7 @@
 #define HAVE_FNMATCH 1
 #define HAVE_FNMATCH_H 1
 #define HAVE_GETTIMEOFDAY 1
-#define HAVE_ICONV 0
+#define HAVE_ICONV 1
 #define HAVE_INET_ADDR 1
 #define HAVE_INET_ADDR 1
 #define HAVE_INET_ATON 1
@@ -98,32 +98,10 @@
 #define wxSIZE_T_IS_ULONG 1
 #define wxTYPE_SA_HANDLER int
 
+// end from config.log confdefs
+
 #define WX_PRECOMP 1
 
-/*
- the official precomp does not work yet
- */
 #ifdef WX_PRECOMP
 #include "wx/wxprec.h"
-#else
-/*
- we try as good as we can
- */
-#include "wx/defs.h"
-#include "wx/wxchar.h"
-
-#include "wx/buffer.h"
-/*
-#include "wx/object.h"
-#include "wx/dynarray.h"
-#include "wx/list.h"
-#include "wx/hash.h"
-#include "wx/string.h"
-#include "wx/intl.h"
-#include "wx/log.h"
-#include "wx/event.h"
-#include "wx/app.h"
-#include "wx/utils.h"
-#include "wx/stream.h"
- */
 #endif
