@@ -48,7 +48,7 @@ class PythonSTC(wxStyledTextCtrl):
         ##self.SetProperty("tab.timmy.whinge.level", "4")
 
         # Setup a margin to hold fold markers
-        self.SetFoldFlags(16)  ###  WHAT IS THIS VALUE?  WHAT ARE THE OTHER FLAGS?
+        #self.SetFoldFlags(16)  ###  WHAT IS THIS VALUE?  WHAT ARE THE OTHER FLAGS?  DOES IT MATTER?
         self.SetMarginType(2, wxSTC_MARGIN_SYMBOL)
         self.SetMarginMask(2, wxSTC_MASK_FOLDERS)
         self.SetMarginSensitive(2, true)
@@ -147,8 +147,91 @@ class PythonSTC(wxStyledTextCtrl):
     def OnMarginClick(self, evt):
         # fold and unfold as needed
         if evt.GetMargin() == 2:
-            lineClicked = self.GetLineFromPos(evt.GetPosition())
-            print lineClicked
+            if evt.GetShift() and evt.GetControl():
+                self.FoldAll()
+            else:
+                lineClicked = self.GetLineFromPos(evt.GetPosition())
+                if self.GetFoldLevel(lineClicked) & wxSTC_FOLDLEVELHEADERFLAG:
+                    if evt.GetShift():
+                        self.SetFoldExpanded(lineClicked, true)
+                        self.Expand(lineClicked, true, true, 1)
+                    elif evt.GetControl():
+                        if self.GetFoldExpanded(lineClicked):
+                            self.SetFoldExpanded(lineClicked, false)
+                            self.Expand(lineClicked, false, true, 0)
+                        else:
+                            self.SetFoldExpanded(lineClicked, true)
+                            self.Expand(lineClicked, true, true, 100)
+                    else:
+                        self.ToggleFold(lineClicked)
+
+
+    def FoldAll(self):
+        lineCount = self.GetLineCount()
+        expanding = true
+
+        # find out if we are folding or unfolding
+        for lineNum in range(lineCount):
+            if self.GetFoldLevel(lineNum) & wxSTC_FOLDLEVELHEADERFLAG:
+                expanding = not self.GetFoldExpanded(lineNum)
+                break;
+
+        lineNum = 0
+        while lineNum < lineCount:
+            level = self.GetFoldLevel(lineNum)
+            if level & wxSTC_FOLDLEVELHEADERFLAG and \
+               (level & wxSTC_FOLDLEVELNUMBERMASK) == wxSTC_FOLDLEVELBASE:
+
+                if expanding:
+                    self.SetFoldExpanded(lineNum, true)
+                    print lineNum,
+                    lineNum = self.Expand(lineNum, true)
+                    print lineNum,
+                    lineNum = lineNum - 1
+                    print lineNum
+                else:
+                    lastChild = self.GetLastChild(lineNum, -1)
+                    self.SetFoldExpanded(lineNum, false)
+                    if lastChild > lineNum:
+                        self.HideLines(lineNum+1, lastChild)
+
+            lineNum = lineNum + 1
+
+
+
+    def Expand(self, line, doExpand, force=false, visLevels=0, level=-1):
+        lastChild = self.GetLastChild(line, level)
+	line = line + 1
+        while line <= lastChild:
+            if force:
+                if visLevels > 0:
+                    self.ShowLines(line, line)
+                else:
+                    self.HideLines(line, line)
+            else:
+                if doExpand:
+                    self.ShowLines(line, line)
+
+            if level == -1:
+                level = self.GetFoldLevel(line)
+
+            if level & wxSTC_FOLDLEVELHEADERFLAG:
+                if force:
+                    if visLevels > 1:
+                        self.SetFoldExpanded(line, true)
+                    else:
+                        self.SetFoldExpanded(line, false)
+                    line = self.Expand(line, doExpand, force, visLevels-1)
+
+                else:
+                    if doExpand and self.GetFoldExpanded(line):
+                        line = self.Expand(line, true, force, visLevels-1)
+                    else:
+                        line = self.Expand(line, false, force, visLevels-1)
+            else:
+                line = line + 1;
+
+        return line
 
 
 #----------------------------------------------------------------------
@@ -158,12 +241,6 @@ def runTest(frame, nb, log):
 
     ed.SetText(demoText + open('Main.py').read())
     ed.EmptyUndoBuffer()
-
-
-    ### Braces are only matched in operator style
-    ##braces.python.style, "10
-
-
 
 
     # line numbers in the margin

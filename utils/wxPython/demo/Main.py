@@ -3,9 +3,9 @@
 # Name:         Main.py
 # Purpose:      Testing lots of stuff, controls, window types, etc.
 #
-# Author:       Robin Dunn & Gary Dumer
+# Author:       Robin Dunn
 #
-# Created:
+# Created:      A long time ago, in a galaxy far, far away...
 # RCS-ID:       $Id$
 # Copyright:    (c) 1999 by Total Control Software
 # Licence:      wxWindows license
