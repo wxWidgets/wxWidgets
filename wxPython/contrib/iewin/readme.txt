@@ -30,7 +30,14 @@ Source Files:
 
 Event Handling:
 ---------------
-- None currently
+- EVT_ACTIVEX(id, eventName, handler) (handler = void OnActiveX(wxActiveXEvent& event))
+class wxActiveXEvent : public wxNotifyEvent
+    int ParamCount() const;
+    wxVariant  operator[] (int idx) const;	// parameter by index
+    wxVariant& operator[] (int idx);
+    wxVariant  operator[] (wxString name) const; // named parameters
+    wxVariant& operator[] (wxString name);
+
 
 Members:
 --------
@@ -60,6 +67,19 @@ e.g.
     delete events;
 
 
+Sample Events:
+--------------
+EVT_ACTIVEX(ID_MSHTML, "BeforeNavigate2",   OnMSHTMLBeforeNavigate2X)
+
+void wxIEFrame::OnMSHTMLBeforeNavigate2X(wxActiveXEvent& event)
+{
+  wxString url = event["Url"];
+
+  int rc = wxMessageBox(url, "Allow open url ?", wxYES_NO);
+
+  if (rc != wxYES)
+    event["Cancel"] = true;
+};
 
 
 wxIEHtmlWin:
