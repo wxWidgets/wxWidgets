@@ -740,6 +740,24 @@ typedef wxUint32 wxDword;
     #error "Pointers can't be stored inside integer types."
 #endif
 
+/* And also define a simple function to cast pointer to it. */
+inline wxUIntPtr wxPtrToUInt(void *p)
+{
+    // VC++ 7.1 gives warnings about casts such as below even when they're
+    // explicit with /Wp64 option, suppress them as we really know what we're
+    // doing here
+#ifdef __VISUALC__
+    #pragma warning(disable: 4311) /* pointer truncation from '' to '' */
+#endif
+
+    return wx_reinterpret_cast(wxUIntPtr, p);
+
+#ifdef __VISUALC__
+    #pragma warning(default: 4311)
+#endif
+}
+
+
 /*  64 bit */
 
 /*  NB: we #define and not typedef wxLongLong_t because we want to be able to */
