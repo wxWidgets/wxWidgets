@@ -113,13 +113,12 @@ bool wxFFile::ReadAll(wxString *str, wxMBConv& conv)
 
     clearerr(m_fp);
 
-    const size_t fileLen = Length();
-    wxCharBuffer buf(fileLen + 1);
+    wxCharBuffer buf(length + 1);
 
-    // note that realLen may be less than fileLen for text files with DOS EOLs
+    // note that real length may be less than file length for text files with DOS EOLs
     // ('\r's get dropped by CRT when reading which means that we have
     // realLen = fileLen - numOfLinesInTheFile)
-    size_t realLen = fread(buf.data(), sizeof(char), fileLen, m_fp);
+    length = fread(buf.data(), sizeof(char), length, m_fp);
 
     if ( Error() ) 
     {
@@ -128,7 +127,7 @@ bool wxFFile::ReadAll(wxString *str, wxMBConv& conv)
         return false;
     }
 
-    buf.data()[realLen] = 0;
+    buf.data()[length] = 0;
     *str = wxString(buf, conv);
 
     return true;
@@ -136,8 +135,8 @@ bool wxFFile::ReadAll(wxString *str, wxMBConv& conv)
 
 size_t wxFFile::Read(void *pBuf, size_t nCount)
 {
-    wxCHECK_MSG( pBuf, FALSE, wxT("invalid parameter") );
-    wxCHECK_MSG( IsOpened(), FALSE, wxT("can't read from closed file") );
+    wxCHECK_MSG( pBuf, 0, wxT("invalid parameter") );
+    wxCHECK_MSG( IsOpened(), 0, wxT("can't read from closed file") );
 
     size_t nRead = fread(pBuf, 1, nCount, m_fp);
     if ( (nRead < nCount) && Error() )
@@ -150,8 +149,8 @@ size_t wxFFile::Read(void *pBuf, size_t nCount)
 
 size_t wxFFile::Write(const void *pBuf, size_t nCount)
 {
-    wxCHECK_MSG( pBuf, FALSE, wxT("invalid parameter") );
-    wxCHECK_MSG( IsOpened(), FALSE, wxT("can't write to closed file") );
+    wxCHECK_MSG( pBuf, 0, wxT("invalid parameter") );
+    wxCHECK_MSG( IsOpened(), 0, wxT("can't write to closed file") );
 
     size_t nWritten = fwrite(pBuf, 1, nCount, m_fp);
     if ( nWritten < nCount )
