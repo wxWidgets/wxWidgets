@@ -756,10 +756,10 @@ static const wxChar* severities[] =
 static struct BugsGridData
 {
     int id;
-    const wxChar *summary;
+    wxString summary;
     Severity severity;
     int prio;
-    const wxChar *platform;
+    wxString platform;
     bool opened;
 } gs_dataBugsGrid [] =
 {
@@ -874,6 +874,7 @@ void BugsGridTable::SetValue( int row, int col, const wxString& value )
                     gd.severity = Sev_Normal;
                 }
             }
+            break;
 
         case Col_Summary:
             gd.summary = value;
