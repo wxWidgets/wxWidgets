@@ -128,9 +128,9 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
        here in order to make repositioning after resizing to take effect. */
     if ((gtk_major_version == 1) &&
         (gtk_minor_version == 2) &&
-	(gtk_micro_version < 6) &&
+	    (gtk_micro_version < 6) &&
         (win->m_wxwindow) && 
-	(GTK_WIDGET_REALIZED(win->m_wxwindow)))
+	    (GTK_WIDGET_REALIZED(win->m_wxwindow)))
     {
         gtk_widget_size_allocate( win->m_wxwindow, alloc );
     }

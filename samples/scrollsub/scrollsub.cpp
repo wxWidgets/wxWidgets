@@ -210,9 +210,9 @@ void MyTopLabels::OnPaint( wxPaintEvent &event )
 {
     wxPaintDC dc(this);
     m_owner->PrepareDC( dc );
-    dc.DrawText( "Colummn 1", 5, 5 );
-    dc.DrawText( "Colummn 2", 105, 5 );
-    dc.DrawText( "Colummn 3", 205, 5 );
+    dc.DrawText( "Column 1", 5, 5 );
+    dc.DrawText( "Column 2", 105, 5 );
+    dc.DrawText( "Column 3", 205, 5 );
 }
 
 // MyRightLabels

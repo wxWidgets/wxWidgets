@@ -1707,6 +1707,20 @@ gtk_window_realized_callback( GtkWidget *WXUNUSED(m_widget), wxWindow *win )
 // "size_allocate"
 //-----------------------------------------------------------------------------
 
+static
+void gtk_window_size_callback( GtkWidget *widget,
+                               GtkAllocation *alloc,
+                               wxWindow *win )
+{
+    if (g_isIdle)
+        wxapp_install_idle_handler();
+    
+    wxSizeEvent event( win->GetSize(), win->GetId() );
+    event.SetEventObject( win );
+    win->GetEventHandler()->ProcessEvent( event );
+}
+
+
 #ifdef HAVE_XIM
     #define WXUNUSED_UNLESS_XIM(param)  param
 #else
@@ -1716,13 +1730,13 @@ gtk_window_realized_callback( GtkWidget *WXUNUSED(m_widget), wxWindow *win )
 /* Resize XIM window */
 
 static
-void gtk_wxwindow_size_callback( GtkWidget * WXUNUSED_UNLESS_XIM(widget),
-                                 GtkAllocation * WXUNUSED_UNLESS_XIM(alloc),
-                                 wxFrame * WXUNUSED_UNLESS_XIM(win) )
+void gtk_wxwindow_size_callback( GtkWidget* WXUNUSED_UNLESS_XIM(widget),
+                                 GtkAllocation* WXUNUSED_UNLESS_XIM(alloc),
+                                 wxWindow* WXUNUSED_UNLESS_XIM(win) )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
-
+        
 #ifdef HAVE_XIM
     if (!win->m_ic)
         return;
@@ -2211,11 +2225,15 @@ void wxWindow::PostCreation()
  
     if (m_wxwindow)
     {
-        /* Initialize XIM support.  */
+        /* Catch native resize events. */
+        gtk_signal_connect( GTK_OBJECT(m_wxwindow), "size_allocate",
+                            GTK_SIGNAL_FUNC(gtk_window_size_callback), (gpointer)this );
+                            
+        /* Initialize XIM support. */
         gtk_signal_connect( GTK_OBJECT(m_wxwindow), "realize",
                             GTK_SIGNAL_FUNC(gtk_wxwindow_realized_callback), (gpointer) this );
-			    
-        /* And resize XIM window.  */
+
+        /* And resize XIM window. */
         gtk_signal_connect( GTK_OBJECT(m_wxwindow), "size_allocate",
                             GTK_SIGNAL_FUNC(gtk_wxwindow_size_callback), (gpointer)this );
     }

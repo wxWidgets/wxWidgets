@@ -558,7 +558,17 @@ void wxApp::CleanUp()
 int wxEntry( int argc, char *argv[] )
 {
 #if wxUSE_THREADS
-    g_thread_init(NULL);
+    /* GTK 1.2 up to version 1.2.3 has broken threads */
+    if ((gtk_major_version == 1) &&
+        (gtk_minor_version == 2) &&
+	    (gtk_micro_version < 4))
+    {
+        printf( "wxWindows warning: Disabled GUI threading due to outdated GTK version\n" );
+    }
+    else
+    {
+        g_thread_init(NULL);
+    }
 #endif
     
     gtk_set_locale();
