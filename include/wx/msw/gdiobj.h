@@ -36,15 +36,15 @@ class WXDLLEXPORT wxGDIRefData : public wxObjectRefData
 class WXDLLEXPORT wxGDIObject : public wxObject
 {
 public:
-    wxGDIObject() { m_visible = FALSE; };
+    wxGDIObject() { m_visible = false; };
 
     // Creates the resource
-    virtual bool RealizeResource() { return FALSE; };
+    virtual bool RealizeResource() { return false; };
 
     // Frees the resource
-    virtual bool FreeResource(bool WXUNUSED(force) = FALSE) { return FALSE; }
+    virtual bool FreeResource(bool WXUNUSED(force) = false) { return false; }
 
-    virtual bool IsFree() const { return FALSE; }
+    virtual bool IsFree() const { return false; }
 
     bool IsNull() const { return (m_refData == 0); }
 
@@ -55,7 +55,7 @@ public:
     virtual void SetVisible(bool v) { m_visible = v; }
 
 protected:
-    bool m_visible; // TRUE only if we should delete this object ourselves
+    bool m_visible; // true only if we should delete this object ourselves
 
 private:
     DECLARE_DYNAMIC_CLASS(wxGDIObject)

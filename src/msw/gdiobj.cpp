@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -36,8 +36,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxGDIObject, wxObject)
 /*
 void wxGDIObject::IncrementResourceUsage(void)
 {
-	if ( !M_GDIDATA )
-		return;
+    if ( !M_GDIDATA )
+        return;
 
 //  wxDebugMsg("Object %ld about to be incremented: %d\n", (long)this, m_usageCount);
   M_GDIDATA->m_usageCount ++;
@@ -45,12 +45,12 @@ void wxGDIObject::IncrementResourceUsage(void)
 
 void wxGDIObject::DecrementResourceUsage(void)
 {
-	if ( !M_GDIDATA )
-		return;
+    if ( !M_GDIDATA )
+        return;
 
   M_GDIDATA->m_usageCount --;
   if (wxTheApp)
-    wxTheApp->SetPendingCleanup(TRUE);
+    wxTheApp->SetPendingCleanup(true);
 //  wxDebugMsg("Object %ld decremented: %d\n", (long)this, M_GDIDATA->m_usageCount);
   if (M_GDIDATA->m_usageCount < 0)
   {

@@ -16,12 +16,12 @@
         #endif
     #endif
 #elif defined( __CYGWIN__ ) && !defined( HAVE_W32API_H )
-    #if ( __GNUC__ > 2 ) 
+    #if ( __GNUC__ > 2 )
         #define HAVE_W32API_H
     #endif
 #endif
 
-#if (defined(__WATCOMC__) && __WATCOMC__ >= 1200) 
+#if (defined(__WATCOMC__) && __WATCOMC__ >= 1200)
     #define HAVE_W32API_H
 #endif
 

@@ -508,7 +508,7 @@ GSocket *GSocket::WaitConnection()
 *  make the appropriate setsockopt() call.
 *  Implemented as a GSocket function because clients (ie, wxSocketServer)
 *  don't have access to the GSocket struct information.
-*  Returns TRUE if the flag was set correctly, FALSE if an error occured
+*  Returns true if the flag was set correctly, false if an error occured
 *  (ie, if the parameter was NULL)
 */
 bool GSocket::SetReusable()
