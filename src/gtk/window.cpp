@@ -26,6 +26,8 @@
 #include "wx/dnd.h"
 #include "wx/mdi.h"
 #include "wx/notebook.h"
+#include "wx/statusbr.h"
+#include "wx/treectrl.h"
 #include "gdk/gdkkeysyms.h"
 #include <math.h>
 #include "wx/gtk/win_gtk.h"
@@ -52,7 +54,9 @@ void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExpose *gd
   if (g_blockEventsOnDrag) return;
   
 /*
-  printf( "OnExpose from " );
+ if (IS_KIND_OF(win,wxTreeCtrl))
+ {
+    printf( "OnExpose from " );
   if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
     printf( win->GetClassInfo()->GetClassName() );
   printf( ".\n" );
@@ -61,6 +65,7 @@ void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExpose *gd
   printf( "y: %d \n", gdk_event->area.y );
   printf( "w: %d \n", gdk_event->area.width );
   printf( "h: %d \n", gdk_event->area.height );
+}
 */
 
   win->m_updateRegion.Union( gdk_event->area.x,
@@ -1319,14 +1324,11 @@ void wxWindow::ScreenToClient( int *x, int *y )
 
 void wxWindow::Centre( int direction )
 {
-  int x = 0;
-  int y = 0;
-  GetPosition( &x, &y );
   if (this->IsKindOf(CLASSINFO(wxDialog)) || this->IsKindOf(CLASSINFO(wxFrame)))
   {
-    if (direction & wxHORIZONTAL == wxHORIZONTAL) x = (gdk_screen_width () - m_width) / 2;
-    if (direction & wxVERTICAL == wxVERTICAL) y = (gdk_screen_height () - m_height) / 2;
-    gtk_widget_set_uposition( m_widget, x, y );
+    if (direction & wxHORIZONTAL == wxHORIZONTAL) m_x = (gdk_screen_width () - m_width) / 2;
+    if (direction & wxVERTICAL == wxVERTICAL) m_y = (gdk_screen_height () - m_height) / 2;
+    ImplementSetPosition();
   }
   else
   {
@@ -1335,9 +1337,9 @@ void wxWindow::Centre( int direction )
       int p_w = 0;
       int p_h = 0;
       m_parent->GetSize( &p_w, &p_h );
-      if (direction & wxHORIZONTAL == wxHORIZONTAL) x = (p_w - m_width) / 2;
-      if (direction & wxVERTICAL == wxVERTICAL) y = (p_h - m_height) / 2;
-      gtk_widget_set_uposition( m_widget, x, y );
+      if (direction & wxHORIZONTAL == wxHORIZONTAL) m_x = (p_w - m_width) / 2;
+      if (direction & wxVERTICAL == wxVERTICAL) m_y = (p_h - m_height) / 2;
+      ImplementSetPosition();
     };
   }
 };
@@ -1433,7 +1435,8 @@ void wxWindow::AddChild( wxWindow *child )
 
   // wxFrame and wxDialog as children aren't placed into the parents
   
-  if (child->IsKindOf(CLASSINFO(wxFrame)) || child->IsKindOf(CLASSINFO(wxDialog)))
+  if (( IS_KIND_OF(child,wxFrame) || IS_KIND_OF(child,wxDialog) ) &&
+      (!IS_KIND_OF(child,wxMDIChildFrame)))
   {
     m_children.Append( child );
     
@@ -1446,9 +1449,9 @@ void wxWindow::AddChild( wxWindow *child )
   // In the case of an wxMDIChildFrame descendant, we use the 
   // client windows's AddChild()
   
-  if (IsKindOf(CLASSINFO(wxMDIParentFrame)))
+  if (IS_KIND_OF(this,wxMDIParentFrame))
   {
-    if (child->IsKindOf(CLASSINFO(wxMDIChildFrame)))
+    if (IS_KIND_OF(child,wxMDIChildFrame))
     {
       wxMDIClientWindow *client = ((wxMDIParentFrame*)this)->GetClientWindow();
       if (client)
@@ -1461,7 +1464,7 @@ void wxWindow::AddChild( wxWindow *child )
   
   // wxNotebook is very special, so it has a private AddChild()
   
-  if (IsKindOf(CLASSINFO(wxNotebook)))
+  if (IS_KIND_OF(this,wxNotebook))
   {
     wxNotebook *tab = (wxNotebook*)this;
     tab->AddChild( child );
@@ -1470,7 +1473,7 @@ void wxWindow::AddChild( wxWindow *child )
   
   // wxFrame has a private AddChild
   
-  if (IsKindOf(CLASSINFO(wxFrame)))
+  if (IS_KIND_OF(this,wxFrame))
   {
     wxFrame *frame = (wxFrame*)this;
     frame->AddChild( child );
@@ -1480,7 +1483,8 @@ void wxWindow::AddChild( wxWindow *child )
   // All the rest
   
   m_children.Append( child );
-  if (m_wxwindow) gtk_myfixed_put( GTK_MYFIXED(m_wxwindow), child->m_widget, child->m_x, child->m_y );
+  if (m_wxwindow) gtk_myfixed_put( GTK_MYFIXED(m_wxwindow), child->m_widget, 
+    child->m_x, child->m_y );
   
   gtk_widget_set_usize( child->m_widget, child->m_width, child->m_height );
 };
@@ -1564,9 +1568,9 @@ void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
     if (rect)
       gdk_window_clear_area( m_wxwindow->window, 
         rect->x, 
-  rect->y, 
-  rect->width, 
-  rect->height );
+        rect->y, 
+        rect->width, 
+        rect->height );
     else
       Clear();
   };
@@ -1599,6 +1603,13 @@ void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
     gdk_rect.y = rect->y;
     gdk_rect.width = rect->width;
     gdk_rect.height = rect->height;
+    
+    if (IS_KIND_OF(this,wxTreeCtrl))
+    {
+      printf( "x: %d y: %d w: %d h: %d .\n",
+        gdk_rect.x, gdk_rect.y, gdk_rect.width, gdk_rect.height );
+    }
+    
     if (m_wxwindow)
       gtk_widget_draw( m_wxwindow, &gdk_rect );
     else
@@ -1885,11 +1896,25 @@ void wxWindow::SetScrollbar( int orient, int pos, int thumbVisible,
   };
   
   if (m_wxwindow->window)
-  {  
+  {
     if (orient == wxHORIZONTAL)
+    {
+/*
+      m_drawingOffsetX = -16000;
+  
+      gtk_myfixed_set_offset( GTK_MYFIXED(m_wxwindow), m_drawingOffsetX, m_drawingOffsetY );
+*/  
       gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "changed" );
-    else  
+    }
+    else
+    { 
+/*
+      m_drawingOffsetY = -16000;
+  
+      gtk_myfixed_set_offset( GTK_MYFIXED(m_wxwindow), m_drawingOffsetX, m_drawingOffsetY );
+*/      
       gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "changed" );
+    }
       
     gtk_widget_set_usize( m_widget, m_width, m_height );
   };
@@ -1958,12 +1983,25 @@ void wxWindow::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 {
   if (!m_wxwindow) return;
   
-  m_drawingOffsetX += dx;
-  m_drawingOffsetY += dy;
+  bool refresh = FALSE;
+    
+  if ((m_drawingOffsetX == 0) && (m_drawingOffsetY == 0))
+  {
+    m_drawingOffsetX = -16000;
+    m_drawingOffsetY = -16000;
+    refresh = TRUE;
+  }
+  else
+  {
+    m_drawingOffsetX += dx;
+    m_drawingOffsetY += dy;
+  }
   
 //  printf( "X: %d  Y: %d  \n", (int)m_drawingOffsetX, (int)m_drawingOffsetY );
   
   gtk_myfixed_set_offset( GTK_MYFIXED(m_wxwindow), m_drawingOffsetX, m_drawingOffsetY );
+  
+  if (refresh) Refresh();
   
 /*
     The code here is very nifty, but it doesn't work with

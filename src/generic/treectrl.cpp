@@ -354,7 +354,6 @@ wxTreeCtrl::wxTreeCtrl()
   m_lineHeight = 10;
   m_indent = 15;
   m_isCreated = FALSE;
-  m_dc = NULL;
   m_hilightBrush = new wxBrush( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHT), wxSOLID );
   m_imageList = NULL;
   m_smallImageList = NULL;
@@ -373,7 +372,6 @@ wxTreeCtrl::wxTreeCtrl(wxWindow *parent, wxWindowID id,
   m_lineHeight = 10;
   m_indent = 15;
   m_isCreated = FALSE;
-  m_dc = NULL;
   m_hilightBrush = new wxBrush( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHT), wxSOLID );
   m_imageList = NULL;
   m_smallImageList = NULL;
@@ -382,7 +380,6 @@ wxTreeCtrl::wxTreeCtrl(wxWindow *parent, wxWindowID id,
 
 wxTreeCtrl::~wxTreeCtrl()
 {
-  if (m_dc) delete m_dc;
 };
 
 bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
@@ -450,11 +447,14 @@ long wxTreeCtrl::InsertItem( long parent, const wxString& label, int image,
     int ch = 0;
     GetClientSize( NULL, &ch );
 
-    wxRectangle rect;
-    rect.x = 0; rect.y = 0;
-    rect.width = 10000; rect.height = ch;
-
     PrepareDC( dc );
+    
+    wxRectangle rect;
+    rect.x = dc.LogicalToDeviceX( 0 ); 
+    rect.y = 0;
+    rect.width = 10000; 
+    rect.height = ch;
+
     if (p->m_children.Number() == 1)
     {
       rect.y = dc.LogicalToDeviceY( p->m_y );
@@ -465,11 +465,6 @@ long wxTreeCtrl::InsertItem( long parent, const wxString& label, int image,
       wxGenericTreeItem* last_child = (wxGenericTreeItem*)node->Data();
       rect.y = dc.LogicalToDeviceY( last_child->m_y );
     };
-
-    long doX = 0;
-    long doY = 0;
-    dc.GetDeviceOrigin( &doX, &doY );
-    rect.height = ch-rect.y-doY;
 
     AdjustMyScrollbars();
 
@@ -531,11 +526,14 @@ long wxTreeCtrl::InsertItem( long parent, wxTreeItem &info, long WXUNUSED(insert
     int ch = 0;
     GetClientSize( NULL, &ch );
 
-    wxRectangle rect;
-    rect.x = 0; rect.y = 0;
-    rect.width = 10000; rect.height = ch;
-
     PrepareDC( dc );
+    
+    wxRectangle rect;
+    rect.x = dc.LogicalToDeviceX( 0 ); 
+    rect.y = 0;
+    rect.width = 10000; 
+    rect.height = ch;
+
     if (p->m_children.Number() == 1)
     {
       rect.y = dc.LogicalToDeviceY( p->m_y );
@@ -546,11 +544,6 @@ long wxTreeCtrl::InsertItem( long parent, wxTreeItem &info, long WXUNUSED(insert
       wxGenericTreeItem* last_child = (wxGenericTreeItem*)node->Data();
       rect.y = dc.LogicalToDeviceY( last_child->m_y );
     };
-
-    long doX = 0;
-    long doY = 0;
-    dc.GetDeviceOrigin( &doX, &doY );
-    rect.height = ch-rect.y-doY;
 
     AdjustMyScrollbars();
 
@@ -609,19 +602,18 @@ bool wxTreeCtrl::ExpandItem( long item, int action )
     }
   };
 
+  wxClientDC dc(this);
+  PrepareDC(dc);
+  
   int cw = 0;
   int ch = 0;
   GetClientSize( &cw, &ch );
+  
   wxRect rect;
-  rect.x = 0;
+  rect.x = dc.LogicalToDeviceX( 0 );
   rect.width = cw;
-  wxClientDC dc(this);
-  PrepareDC(dc);
   rect.y = dc.LogicalToDeviceY( i->m_y );
-
-  long doY = 0;
-  dc.GetDeviceOrigin( NULL, &doY );
-  rect.height = ch-rect.y-doY;
+  rect.height = ch;
   Refresh( TRUE, &rect );
 
   AdjustMyScrollbars();
@@ -847,12 +839,16 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxPaintDC &dc, int level, 
 
   int oldY = y;
 
-  if (IsExposed( 0, item->m_y-2, 10000, m_lineHeight+4 ))
+  int exposed_x = dc.LogicalToDeviceX( 0 );
+  int exposed_y = dc.LogicalToDeviceY( item->m_y-2 );
+  
+  if (IsExposed( exposed_x, exposed_y, 1000, m_lineHeight+4 ))
   {
     int startX = horizX;
     int endX = horizX + 10;
 
     if (!item->HasChildren()) endX += 20;
+    
     dc.DrawLine( startX, y, endX, y );
 
       if (item->HasChildren())
@@ -890,6 +886,7 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxPaintDC &dc, int level, 
       }
       else
       {
+        dc.SetBrush( *wxWHITE_BRUSH );
         dc.SetPen( *wxTRANSPARENT_PEN );
         long tw, th;
         dc.GetTextExtent( item->m_text, &tw, &th );
@@ -923,19 +920,16 @@ void wxTreeCtrl::OnPaint( const wxPaintEvent &WXUNUSED(event) )
 {
   if (!m_anchor) return;
 
-  if (!m_dc)
-  {
-    m_dc = new wxPaintDC(this);
-    PrepareDC( *m_dc );
-  };
+  wxPaintDC dc(this);
+  PrepareDC( dc );
 
-  m_dc->SetFont( wxSystemSettings::GetSystemFont( wxSYS_SYSTEM_FONT ) );
+  dc.SetFont( wxSystemSettings::GetSystemFont( wxSYS_SYSTEM_FONT ) );
 
-  m_dc->SetPen( m_dottedPen );
-  m_lineHeight = (int)(m_dc->GetCharHeight() + 4);
+  dc.SetPen( m_dottedPen );
+  m_lineHeight = (int)(dc.GetCharHeight() + 4);
 
   int y = m_lineHeight / 2 + 2;
-  PaintLevel( m_anchor, *m_dc, 0, y );
+  PaintLevel( m_anchor, dc, 0, y );
 };
 
 void wxTreeCtrl::OnSetFocus( const wxFocusEvent &WXUNUSED(event) )
@@ -1041,7 +1035,7 @@ void wxTreeCtrl::RefreshLine( wxGenericTreeItem *item )
   rect.x = dc.LogicalToDeviceX( item->m_x-2 );
   rect.y = dc.LogicalToDeviceY( item->m_y-2 );
   rect.width = 1000;
-  rect.height = dc.GetCharHeight()+4;
+  rect.height = dc.GetCharHeight()+6;
   Refresh( TRUE, &rect );
 };
 

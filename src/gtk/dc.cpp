@@ -293,8 +293,10 @@ void wxDC::SetDeviceOrigin( long x, long y )
 
 void wxDC::GetDeviceOrigin( long *x, long *y )
 {
-  if (x) *x = m_externalDeviceOriginX;
-  if (y) *y = m_externalDeviceOriginY;
+//  if (x) *x = m_externalDeviceOriginX;
+//  if (y) *y = m_externalDeviceOriginY;
+  if (x) *x = m_deviceOriginX;
+  if (y) *y = m_deviceOriginY;
 };
 
 void wxDC::SetInternalDeviceOrigin( long x, long y )

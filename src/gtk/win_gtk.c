@@ -150,9 +150,9 @@ gtk_myfixed_put (GtkMyFixed       *myfixed,
 
   child_info = g_new (GtkMyFixedChild, 1);
   child_info->widget = widget;
-  child_info->x = x;
-  child_info->y = y;
-
+  child_info->x = x - myfixed->scroll_offset_x;
+  child_info->y = y - myfixed->scroll_offset_y;
+  
   gtk_widget_set_parent (widget, GTK_WIDGET (myfixed));
 
   myfixed->children = g_list_append (myfixed->children, child_info); 
@@ -188,8 +188,8 @@ gtk_myfixed_move (GtkMyFixed       *myfixed,
 
       if (child->widget == widget)
         {
-          child->x = x;
-          child->y = y;
+          child->x = x - myfixed->scroll_offset_x;
+          child->y = y - myfixed->scroll_offset_y;
 
           if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (myfixed))
             gtk_widget_queue_resize (GTK_WIDGET (myfixed));
@@ -238,17 +238,20 @@ gtk_myfixed_unmap (GtkWidget *widget)
 static void
 gtk_myfixed_realize (GtkWidget *widget)
 {
+  GtkMyFixed *myfixed;
   GdkWindowAttr attributes;
   gint attributes_mask;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MYFIXED (widget));
 
+  myfixed = GTK_MYFIXED (widget);
+  
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
 
   attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = widget->allocation.x;
-  attributes.y = widget->allocation.y;
+  attributes.x = widget->allocation.x + myfixed->scroll_offset_x;
+  attributes.y = widget->allocation.y + myfixed->scroll_offset_x;
   attributes.width = 32000;
   attributes.height = 32000;
   attributes.wclass = GDK_INPUT_OUTPUT;

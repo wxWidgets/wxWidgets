@@ -19,6 +19,7 @@
 #include "wx/menu.h"
 #include "wx/toolbar.h"
 #include "wx/statusbr.h"
+#include "wx/mdi.h"
 #include "wx/gtk/win_gtk.h"
 
 const wxMENU_HEIGHT    = 28;
@@ -253,18 +254,18 @@ void wxFrame::GtkOnSize( int x, int y, int width, int height )
   main_y += toolbar_height;
   main_height -= toolbar_height;
   
-  gtk_widget_set_uposition( GTK_WIDGET(m_wxwindow), main_x, main_y );
-  gtk_widget_set_usize( GTK_WIDGET(m_wxwindow), main_width, main_height );
+  gtk_myfixed_move( GTK_MYFIXED(m_mainWindow), m_wxwindow, main_x, main_y );
+  gtk_widget_set_usize( m_wxwindow, main_width, main_height );
 
   if (m_frameMenuBar)
   {
-    gtk_widget_set_uposition( m_frameMenuBar->m_widget, 1, 1 );
+    gtk_myfixed_move( GTK_MYFIXED(m_mainWindow), m_frameMenuBar->m_widget, 1, 1 );
     gtk_widget_set_usize( m_frameMenuBar->m_widget, width-2, wxMENU_HEIGHT-2 );
   };
 
   if (m_frameToolBar)
   {
-    gtk_widget_set_uposition( m_frameToolBar->m_widget, 1, wxMENU_HEIGHT );
+    gtk_myfixed_move( GTK_MYFIXED(m_mainWindow), m_frameToolBar->m_widget, 1, wxMENU_HEIGHT );
     gtk_widget_set_usize( m_frameToolBar->m_widget, width-2, toolbar_height );
   };
   
@@ -320,7 +321,9 @@ void wxFrame::AddChild( wxWindow *child )
 {
   // wxFrame and wxDialog as children aren't placed into the parents
   
-  if (child->IsKindOf(CLASSINFO(wxFrame)) || child->IsKindOf(CLASSINFO(wxDialog)))
+  if (IS_KIND_OF(child,wxMDIChildFrame)) printf( "wxFrame::AddChild error.\n" );
+  
+  if ( IS_KIND_OF(child,wxFrame) || IS_KIND_OF(child,wxDialog))
   {
     m_children.Append( child );
     

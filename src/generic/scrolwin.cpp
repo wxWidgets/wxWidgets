@@ -100,7 +100,7 @@ void wxScrolledWindow::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
       m_yScrollPosition = yPos;
       m_xScrollLines = noUnitsX;
       m_yScrollLines = noUnitsY;
-
+      
    AdjustScrollbars();
    
    if (do_refresh && !noRefresh) Refresh();

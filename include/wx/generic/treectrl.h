@@ -330,7 +330,6 @@ private:
   int                  m_lineHeight;
   wxPen                m_dottedPen;
   bool                 m_isCreated;
-  wxPaintDC           *m_dc;
   wxBrush             *m_hilightBrush;
   wxImageList         *m_imageList;
   wxImageList         *m_smallImageList;
