@@ -86,7 +86,12 @@ int wxSpinButton::GetMax() const
 
 int wxSpinButton::GetValue() const
 {
-    return m_value;
+    int n = m_value;
+
+    if (n < m_min) n = m_min;
+    if (n > m_max) n = m_max;
+
+    return n;
 }
 
 void wxSpinButton::SetValue(int val)
