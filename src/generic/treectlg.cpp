@@ -762,11 +762,13 @@ void wxGenericTreeCtrl::Init()
     m_lastOnSame = FALSE;
 
     m_normalFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    m_boldFont = wxFont( m_normalFont.GetPointSize(),
-                         m_normalFont.GetFamily(),
-                         m_normalFont.GetStyle(),
-                         wxBOLD,
-                         m_normalFont.GetUnderlined());
+    m_boldFont = wxFont(m_normalFont.GetPointSize(),
+                        m_normalFont.GetFamily(),
+                        m_normalFont.GetStyle(),
+                        wxBOLD,
+                        m_normalFont.GetUnderlined(),
+                        m_normalFont.GetFaceName(),
+                        m_normalFont.GetEncoding());
 }
 
 bool wxGenericTreeCtrl::Create(wxWindow *parent,
@@ -1007,11 +1009,13 @@ bool wxGenericTreeCtrl::SetFont( const wxFont &font )
     wxScrolledWindow::SetFont(font);
 
     m_normalFont = font ;
-    m_boldFont = wxFont( m_normalFont.GetPointSize(),
-                            m_normalFont.GetFamily(),
-                            m_normalFont.GetStyle(),
-                            wxBOLD,
-                            m_normalFont.GetUnderlined());
+    m_boldFont = wxFont(m_normalFont.GetPointSize(),
+                        m_normalFont.GetFamily(),
+                        m_normalFont.GetStyle(),
+                        wxBOLD,
+                        m_normalFont.GetUnderlined(),
+                        m_normalFont.GetFaceName(),
+                        m_normalFont.GetEncoding());
 
     return TRUE;
 }
