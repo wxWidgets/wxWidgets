@@ -77,7 +77,7 @@ wxFont *wxFontBase::New(const wxString& strNativeFontDesc)
 
 wxNativeFontInfo *wxFontBase::GetNativeFontInfo() const
 {
-#if !defined(__WXGTK__) && !defined(__WXMSW__) && !defined(__WXMGL__)
+#if !defined(__WXGTK__) && !defined(__WXMSW__)
     wxNativeFontInfo *fontInfo = new wxNativeFontInfo;
 
     fontInfo->pointSize = GetPointSize();
@@ -96,7 +96,7 @@ wxNativeFontInfo *wxFontBase::GetNativeFontInfo() const
 
 void wxFontBase::SetNativeFontInfo(const wxNativeFontInfo& info)
 {
-#if !defined(__WXGTK__) && !defined(__WXMSW__) && !defined(__WXMGL__)
+#if !defined(__WXGTK__) && !defined(__WXMSW__)
     SetPointSize(info.pointSize);
     SetFamily(info.family);
     SetStyle(info.style);
@@ -193,7 +193,7 @@ wxString wxFontBase::GetWeightString() const
     }
 }
 
-#if !defined(__WXGTK__) && !defined(__WXMSW__) && !defined(__WXMGL__)
+#if !defined(__WXGTK__) && !defined(__WXMSW__)
 
 // ----------------------------------------------------------------------------
 // wxNativeFontInfo
