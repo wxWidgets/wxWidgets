@@ -297,6 +297,7 @@ OS2OBJS = \
   ..\os2\$D\colour.obj \
   ..\os2\$D\combobox.obj \
   ..\os2\$D\control.obj \
+  ..\os2\$D\cursor.obj \
   ..\os2\$D\dc.obj \
   ..\os2\$D\dialog.obj \
   ..\os2\$D\frame.obj \
@@ -317,6 +318,7 @@ OS2LIBOBJS = \
   colour.obj \
   combobox.obj \
   control.obj \
+  cursor.obj \
   dc.obj \
   dialog.obj \
   frame.obj \
@@ -481,6 +483,7 @@ $(OS2LIBOBJS):
   copy ..\os2\$D\colour.obj
   copy ..\os2\$D\combobox.obj
   copy ..\os2\$D\control.obj
+  copy ..\os2\$D\cursor.obj
   copy ..\os2\$D\dc.obj
   copy ..\os2\$D\dialog.obj
   copy ..\os2\$D\frame.obj
