@@ -1160,11 +1160,11 @@ bool wxDirExists(const wxString& dir)
 // does the path exists? (may have or not '/' or '\\' at the end)
 bool wxPathExists(const wxChar *pszPathName)
 {
+    wxString strPath(pszPathName);
 #ifdef __WINDOWS__
     // Windows fails to find directory named "c:\dir\" even if "c:\dir" exists,
     // so remove all trailing backslashes from the path - but don't do this for
     // the pathes "d:\" (which are different from "d:") nor for just "\"
-    wxString strPath(pszPathName);
     while ( wxEndsWithPathSeparator(strPath) )
     {
         size_t len = strPath.length();
