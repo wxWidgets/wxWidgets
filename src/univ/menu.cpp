@@ -662,7 +662,7 @@ bool wxPopupMenuWindow::ProcessLeftDown(wxMouseEvent& event)
             wxPopupMenuWindow *win = menu->m_popupMenu;
 
             wxCHECK_MSG( win, FALSE, _T("parent menu not shown?") );
-
+            
             pos = ClientToScreen(pos);
             if ( win->GetMenuItemFromPoint(win->ScreenToClient(pos)) )
             {

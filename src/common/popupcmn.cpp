@@ -354,6 +354,7 @@ void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
     wxWindow *sbar = NULL;
 
     wxWindow *win = (wxWindow *)event.GetEventObject();
+    
     switch ( win->HitTest(pos.x, pos.y) )
     {
         case wxHT_WINDOW_OUTSIDE:
@@ -425,6 +426,7 @@ void wxPopupFocusHandler::OnKillFocus(wxFocusEvent& event)
             return;
         win = win->GetParent();
     }
+    
     m_popup->DismissAndNotify();
 }
 

@@ -791,9 +791,19 @@ void wxTextCtrl::SetSelection( long from, long to )
     gtk_editable_select_region( GTK_EDITABLE(m_text), (gint)from, (gint)to );
 }
 
-void wxTextCtrl::ShowPosition( long WXUNUSED(pos) )
+void wxTextCtrl::ShowPosition( long pos )
 {
-//    SetInsertionPoint( pos );
+    if (m_windowStyle & wxTE_MULTILINE)
+    {
+        GtkAdjustment *vp = GTK_TEXT(m_text)->vadj;
+        float totalLines =  (float) GetNumberOfLines();
+        long posX;
+        long posY;
+        PositionToXY(pos, &posX, &posY);
+        float posLine = (float) posY;
+        float p = (posLine/totalLines)*(vp->upper - vp->lower) + vp->lower;
+        gtk_adjustment_set_value(GTK_TEXT(m_text)->vadj, p);
+    }
 }
 
 long wxTextCtrl::GetInsertionPoint() const

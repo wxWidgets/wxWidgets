@@ -1212,20 +1212,15 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
 
     if (!win->IsOwnGtkWindow( gdk_event->window )) return FALSE;
 
-    if (win->m_wxwindow)
+    if (win->m_wxwindow && (g_focusWindow != win) && win->AcceptsFocus())
     {
-        if (GTK_WIDGET_CAN_FOCUS(win->m_wxwindow) && !GTK_WIDGET_HAS_FOCUS (win->m_wxwindow) )
-        {
-            gtk_widget_grab_focus (win->m_wxwindow);
-
+        gtk_widget_grab_focus( win->m_wxwindow );
 /*
-            wxPrintf( wxT("GrabFocus from ") );
-            if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-                wxPrintf( win->GetClassInfo()->GetClassName() );
-            wxPrintf( wxT(".\n") );
+        wxPrintf( wxT("GrabFocus from ") );
+        if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
+            wxPrintf( win->GetClassInfo()->GetClassName() );
+        wxPrintf( wxT(".\n") );
 */
-
-        }
     }
 
     wxEventType event_type = wxEVT_NULL;
@@ -1648,10 +1643,7 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
     g_focusWindow = win;
 
 #if 0
-    wxPrintf( "OnSetFocus from " );
-    if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-        wxPrintf( win->GetClassInfo()->GetClassName() );
-    wxPrintf( ".\n" );
+    wxLogDebug( wxT("OnSetFocus from %s\n"), win->GetName().c_str() );
 #endif
 
     // notify the parent keeping track of focus for the kbd navigation
@@ -1710,9 +1702,7 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
 // "focus_out_event"
 //-----------------------------------------------------------------------------
 
-static GtkWidget *gs_widgetLastFocus = NULL;
-
-static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED(event), wxWindowGTK *win )
+static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEventFocus *gdk_event, wxWindowGTK *win )
 {
     DEBUG_MAIN_THREAD
 
@@ -1722,17 +1712,9 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
     if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
 
-    // VZ: this is really weird but GTK+ seems to call us from inside
-    //     gtk_widget_grab_focus(), i.e. it first sends "focus_out" signal to
-    //     this widget and then "focus_in". This is totally unexpected and
-    //     completely breaks wxUniv code so ignore this dummy event (we can't
-    //     be losing focus if we're about to acquire it!)
-    if ( widget == gs_widgetLastFocus )
-    {
-        gs_widgetLastFocus = NULL;
-
-        return FALSE;
-    }
+#if 0
+    wxLogDebug( wxT("OnKillFocus from %s"), win->GetName().c_str() );
+#endif
 
     if ( !g_activeFrameLostFocus && g_activeFrame )
     {
@@ -1757,13 +1739,6 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
         win = winFocus;
 
     g_focusWindow = (wxWindowGTK *)NULL;
-
-#if 0
-    wxPrintf( "OnKillFocus from " );
-    if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-        wxPrintf( win->GetClassInfo()->GetClassName() );
-    wxPrintf( ".\n" );
-#endif
 
 #ifdef HAVE_XIM
     if (win->m_ic)
@@ -3181,8 +3156,6 @@ void wxWindowGTK::SetFocus()
     {
         if (!GTK_WIDGET_HAS_FOCUS (m_wxwindow))
         {
-            // see comment in gtk_window_focus_out_callback()
-            gs_widgetLastFocus = m_wxwindow;
             gtk_widget_grab_focus (m_wxwindow);
         }
     }
@@ -3201,14 +3174,6 @@ void wxWindowGTK::SetFocus()
            // ?
         }
     }
-
-#if 0
-    wxPrintf( "SetFocus finished in " );
-    if (GetClassInfo() && GetClassInfo()->GetClassName())
-        wxPrintf( GetClassInfo()->GetClassName() );
-    wxPrintf( ".\n" );
-#endif
-
 }
 
 bool wxWindowGTK::AcceptsFocus() const

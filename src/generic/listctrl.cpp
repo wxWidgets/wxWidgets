@@ -2662,14 +2662,6 @@ void wxListMainWindow::RefreshSelected()
         to = GetItemCount() - 1;
     }
 
-    // VZ: this code would work fine if wxGTK wxWindow::Refresh() were
-    //     reasonable, i.e. if it only generated one expose event for
-    //     several calls to it - as it is, each Refresh() results in a
-    //     repaint which provokes flicker too horrible to be seen
-    //
-    //     when/if wxGTK is fixed, this code should be restored as normally it
-    //     should generate _less_ flicker than the version below
-#ifndef __WXGTK__
     if ( HasCurrent() && m_current >= from && m_current <= to )
     {
         RefreshLine(m_current);
@@ -2683,26 +2675,6 @@ void wxListMainWindow::RefreshSelected()
             RefreshLine(line);
         }
     }
-#else // __WXGTK__
-    size_t selMin = (size_t)-1,
-           selMax = 0;
-
-    for ( size_t line = from; line <= to; line++ )
-    {
-        if ( IsHighlighted(line) || (line == m_current) )
-        {
-            if ( line < selMin )
-                selMin = line;
-            if ( line > selMax )
-                selMax = line;
-        }
-    }
-
-    if ( selMin != (size_t)-1 )
-    {
-        RefreshLines(selMin, selMax);
-    }
-#endif // !__WXGTK__/__WXGTK__
 }
 
 void wxListMainWindow::Freeze()
@@ -3426,10 +3398,6 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
 // focus handling
 // ----------------------------------------------------------------------------
 
-#ifdef __WXGTK__
-extern wxWindow *g_focusWindow;
-#endif
-
 void wxListMainWindow::SetFocus()
 {
     // VS: wxListMainWindow derives from wxPanel (via wxScrolledWindow) and wxPanel
@@ -3465,10 +3433,6 @@ void wxListMainWindow::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
 
     if ( !GetParent() )
         return;
-
-#ifdef __WXGTK__
-    g_focusWindow = GetParent();
-#endif
 
     wxFocusEvent event( wxEVT_SET_FOCUS, GetParent()->GetId() );
     event.SetEventObject( GetParent() );
@@ -4437,10 +4401,8 @@ void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
         wxListCtrl* lc = GetListCtrl();
         wxCHECK_RET( lc, _T("no listctrl window?") );
 
-        lc->m_headerWin->Refresh() ;
-#ifdef __WXMAC__
-        lc->m_headerWin->MacUpdateImmediately() ;
-#endif
+        lc->m_headerWin->Refresh();
+        lc->m_headerWin->Update();
     }
 }
 
