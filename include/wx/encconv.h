@@ -16,8 +16,6 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_FONTMAP
-
 #include "wx/object.h"
 #include "wx/fontenc.h"
 #include "wx/dynarray.h"
@@ -161,7 +159,5 @@ class WXDLLIMPEXP_BASE wxEncodingConverter : public wxObject
 
     DECLARE_NO_COPY_CLASS(wxEncodingConverter)
 };
-
-#endif // wxUSE_FONTMAP
 
 #endif  // _WX_ENCCONV_H_
