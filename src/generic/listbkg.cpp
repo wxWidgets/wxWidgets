@@ -145,7 +145,7 @@ wxSize wxListbook::GetListSize() const
 
 wxRect wxListbook::GetPageRect() const
 {
-    const wxSize sizeList = GetListSize();
+    const wxSize sizeList = m_list->GetSize();
 
     wxRect rectPage(wxPoint(0, 0), GetClientSize());
     switch ( GetWindowStyle() & wxLB_ALIGN_MASK )
@@ -209,7 +209,8 @@ void wxListbook::OnSize(wxSizeEvent& event)
             break;
     }
 
-    m_list->SetSize(posList.x, posList.y, sizeList.x, sizeList.y);
+    m_list->Move(posList.x, posList.y);
+    m_list->SetClientSize(sizeList.x, sizeList.y);
 
     if ( m_line )
     {
