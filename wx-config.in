@@ -47,7 +47,7 @@ while test $# -gt 0; do
 
       ;;
     --libs)
-      echo -L@libdir@ @THREADS_LINK@ @WX_LINK@ @DL_LIBRARY@ @GUI_TK_LIBRARY@ @EXTRA_LINK@
+      echo -L@libdir@ @THREADS_LINK@ @WX_LINK@ @DL_LIBRARY@ @GUI_TK_LIBRARY@ @EXTRA_LINK@ @JPEG_LINK@
       ;;
     *)
       echo "${usage}" 1>&2

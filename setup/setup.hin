@@ -48,6 +48,10 @@
  */
 #define wxUSE_LIBPNG 0
 /*
+ * Use libjpeg
+ */
+#define wxUSE_LIBJPEG 0
+/*
  * Use iODBC
  */
 #define wxUSE_ODBC 0

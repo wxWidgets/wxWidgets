@@ -749,6 +749,7 @@ DEFAULT_wxUSE_IOSTREAMH=1
 
 DEFAULT_wxUSE_ZLIB=1
 DEFAULT_wxUSE_LIBPNG=1
+DEFAULT_wxUSE_LIBJPEG=1
 DEFAULT_wxUSE_ODBC=1
 
 DEFAULT_wxUSE_TIMEDATE=1
@@ -850,6 +851,10 @@ wxUSE_ZLIB)
 AC_OVERRIDES(libpng,libpng,
 **--with-libpng           use libpng (PNG image format),
 wxUSE_LIBPNG)
+
+AC_OVERRIDES(libjpeg,libjpeg,
+**--with-libjpeg          use libjpeg (JPEG image format),
+wxUSE_LIBJPEG)
 
 AC_OVERRIDES(odbc,odbc,
 **--with-odbc             use iODBC and wxODBC classes,
@@ -1183,6 +1188,14 @@ if test "$wxUSE_LIBPNG" = 1 ; then
   PNG_C_SRC="\$(PNG_C_SRC)"
 fi
 AC_SUBST(PNG_C_SRC)
+
+JPEG_LINK=""
+if test "$wxUSE_LIBJPEG" = 1 ; then
+  AC_DEFINE_UNQUOTED(wxUSE_LIBJPEG,$wxUSE_LIBJPEG)
+  AC_HAVE_LIBRARY(jpeg) 
+  JPEG_LINK="-ljpeg"
+fi
+AC_SUBST(JPEG_LINK)
 
 IODBC_C_SRC=""
 if test "$wxUSE_ODBC" = 1 ; then
