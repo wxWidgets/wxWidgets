@@ -69,16 +69,19 @@ static pascal void wxMacCheckListDefinition( short message, Boolean isSelected, 
                                      Cell cell, short dataOffset, short dataLength,
                                      ListHandle listHandle )
 {
+    wxCheckListBox*          list;
+    list = (wxCheckListBox*) GetControlReference( (ControlHandle) GetListRefCon(listHandle) );
+    if ( list == NULL )
+        return ;
+    
     GrafPtr savePort;
     GrafPtr grafPtr;
     RgnHandle savedClipRegion;
     SInt32 savedPenMode;
-    wxCheckListBox*          list;
     GetPort(&savePort);
     SetPort((**listHandle).port);
     grafPtr = (**listHandle).port ;
     // typecast our refCon
-    list = (wxCheckListBox*) GetControlReference( (ControlHandle) GetListRefCon(listHandle) );
     
     //  Calculate the cell rect.
     
