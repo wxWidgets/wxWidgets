@@ -2029,7 +2029,7 @@ static void wxCanvasInputEvent(Widget drawingArea,
             wxevent.m_metaDown = local_event.xbutton.state & Mod1Mask;
             wxevent.SetTimestamp(local_event.xbutton.time);
 
-           if (eventType = wxEVT_MOTION)
+           if ( eventType == wxEVT_MOTION )
            {
                 if (local_event.xmotion.is_hint == NotifyHint)
                 {
