@@ -293,7 +293,7 @@ wxClientData* wxComboBox::GetClientObject( int n )
 {
     wxCHECK_MSG( m_widget != NULL, (wxClientData*)NULL, wxT("invalid combobox") );
 
-    wxNode *node = m_clientDataList.Nth( n );
+    wxNode *node = m_clientObjectList.Nth( n );
     if (!node) return (wxClientData*) NULL;
 
     return (wxClientData*) node->Data();
