@@ -1892,6 +1892,21 @@ _ACEOF
     DEFAULT_DEFAULT_wxUSE_PM=1
         CXX=gcc
         LIBS="$LIBS -lstdcpp"
+                        ac_executable_extensions=".exe"
+    export ac_executable_extensions
+            ac_save_IFS="$IFS"
+    IFS="\\"
+    ac_TEMP_PATH=
+    for ac_dir in $PATH; do
+      IFS=$ac_save_IFS
+      if test -z "$ac_TEMP_PATH"; then
+        ac_TEMP_PATH="$ac_dir"
+      else
+        ac_TEMP_PATH="$ac_TEMP_PATH/$ac_dir"
+      fi
+    done
+    export PATH="$ac_TEMP_PATH"
+    unset ac_TEMP_PATH
   ;;
 
   powerpc-*-darwin* )
@@ -34335,6 +34350,7 @@ fi
       *-*-sunos4* | \
       *-*-osf* | \
       *-*-dgux5* | \
+      *-pc-os2-emx | \
       *-*-sysv5* )
               ;;
 
