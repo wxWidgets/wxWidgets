@@ -689,11 +689,19 @@ class wxScrolledWindowPtr(wxPanelPtr):
     def GetViewStart(self, *_args, **_kwargs):
         val = apply(windowsc.wxScrolledWindow_GetViewStart,(self,) + _args, _kwargs)
         return val
-    def CalcScrolledPosition(self, *_args, **_kwargs):
-        val = apply(windowsc.wxScrolledWindow_CalcScrolledPosition,(self,) + _args, _kwargs)
+    def CalcScrolledPosition1(self, *_args, **_kwargs):
+        val = apply(windowsc.wxScrolledWindow_CalcScrolledPosition1,(self,) + _args, _kwargs)
+        if val: val = wxPointPtr(val) ; val.thisown = 1
         return val
-    def CalcUnscrolledPosition(self, *_args, **_kwargs):
-        val = apply(windowsc.wxScrolledWindow_CalcUnscrolledPosition,(self,) + _args, _kwargs)
+    def CalcScrolledPosition2(self, *_args, **_kwargs):
+        val = apply(windowsc.wxScrolledWindow_CalcScrolledPosition2,(self,) + _args, _kwargs)
+        return val
+    def CalcUnscrolledPosition1(self, *_args, **_kwargs):
+        val = apply(windowsc.wxScrolledWindow_CalcUnscrolledPosition1,(self,) + _args, _kwargs)
+        if val: val = wxPointPtr(val) ; val.thisown = 1
+        return val
+    def CalcUnscrolledPosition2(self, *_args, **_kwargs):
+        val = apply(windowsc.wxScrolledWindow_CalcUnscrolledPosition2,(self,) + _args, _kwargs)
         return val
     def SetScale(self, *_args, **_kwargs):
         val = apply(windowsc.wxScrolledWindow_SetScale,(self,) + _args, _kwargs)
@@ -713,6 +721,23 @@ class wxScrolledWindowPtr(wxPanelPtr):
     def __repr__(self):
         return "<C wxScrolledWindow instance at %s>" % (self.this,)
     ViewStart = GetViewStart
+    
+    def CalcScrolledPosition(self, *args):
+        if len(args) == 1:
+            return apply(self.CalcScrolledPosition1, args)
+        elif len(args) == 2:
+            return apply(self.CalcScrolledPosition2, args)
+        else:
+            raise TypeError, 'Invalid parameters: only (x,y) or (point) allowed'
+
+    def CalcUnscrolledPosition(self, *args):
+        if len(args) == 1:
+            return apply(self.CalcUnscrolledPosition1, args)
+        elif len(args) == 2:
+            return apply(self.CalcUnscrolledPosition2, args)
+        else:
+            raise TypeError, 'Invalid parameters: only (x,y) or (point) allowed'
+
 class wxScrolledWindow(wxScrolledWindowPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxScrolledWindow,_args,_kwargs)
@@ -741,8 +766,50 @@ class wxMenuPtr(wxEvtHandlerPtr):
     def AppendItem(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenu_AppendItem,(self,) + _args, _kwargs)
         return val
+    def AppendCheckItem(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenu_AppendCheckItem,(self,) + _args, _kwargs)
+        return val
+    def AppendRadioItem(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenu_AppendRadioItem,(self,) + _args, _kwargs)
+        return val
     def AppendSeparator(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenu_AppendSeparator,(self,) + _args, _kwargs)
+        return val
+    def Insert(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenu_Insert,(self,) + _args, _kwargs)
+        return val
+    def InsertSeparator(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenu_InsertSeparator,(self,) + _args, _kwargs)
+        return val
+    def InsertCheckItem(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenu_InsertCheckItem,(self,) + _args, _kwargs)
+        return val
+    def InsertRadioItem(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenu_InsertRadioItem,(self,) + _args, _kwargs)
+        return val
+    def InsertMenu(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenu_InsertMenu,(self,) + _args, _kwargs)
+        return val
+    def InsertItem(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenu_InsertItem,(self,) + _args, _kwargs)
+        return val
+    def Prepend(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenu_Prepend,(self,) + _args, _kwargs)
+        return val
+    def PrependSeparator(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenu_PrependSeparator,(self,) + _args, _kwargs)
+        return val
+    def PrependCheckItem(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenu_PrependCheckItem,(self,) + _args, _kwargs)
+        return val
+    def PrependRadioItem(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenu_PrependRadioItem,(self,) + _args, _kwargs)
+        return val
+    def PrependMenu(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenu_PrependMenu,(self,) + _args, _kwargs)
+        return val
+    def PrependItem(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenu_PrependItem,(self,) + _args, _kwargs)
         return val
     def Break(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenu_Break,(self,) + _args, _kwargs)
@@ -791,9 +858,6 @@ class wxMenuPtr(wxEvtHandlerPtr):
         return val
     def DeleteItem(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenu_DeleteItem,(self,) + _args, _kwargs)
-        return val
-    def Insert(self, *_args, **_kwargs):
-        val = apply(windowsc.wxMenu_Insert,(self,) + _args, _kwargs)
         return val
     def Remove(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenu_Remove,(self,) + _args, _kwargs)
@@ -950,6 +1014,9 @@ class wxMenuItemPtr(wxObjectPtr):
         return val
     def GetText(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuItem_GetText,(self,) + _args, _kwargs)
+        return val
+    def GetKind(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuItem_GetKind,(self,) + _args, _kwargs)
         return val
     def SetCheckable(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuItem_SetCheckable,(self,) + _args, _kwargs)

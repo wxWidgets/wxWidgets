@@ -2332,6 +2332,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxBITMAP_TYPE_ANY", PyInt_FromLong((long) wxBITMAP_TYPE_ANY));
 	 PyDict_SetItemString(d,"wxCURSOR_NONE", PyInt_FromLong((long) wxCURSOR_NONE));
 	 PyDict_SetItemString(d,"wxCURSOR_ARROW", PyInt_FromLong((long) wxCURSOR_ARROW));
+	 PyDict_SetItemString(d,"wxCURSOR_RIGHT_ARROW", PyInt_FromLong((long) wxCURSOR_RIGHT_ARROW));
 	 PyDict_SetItemString(d,"wxCURSOR_BULLSEYE", PyInt_FromLong((long) wxCURSOR_BULLSEYE));
 	 PyDict_SetItemString(d,"wxCURSOR_CHAR", PyInt_FromLong((long) wxCURSOR_CHAR));
 	 PyDict_SetItemString(d,"wxCURSOR_CROSS", PyInt_FromLong((long) wxCURSOR_CROSS));
@@ -2429,6 +2430,11 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxDUPLEX_SIMPLEX", PyInt_FromLong((long) wxDUPLEX_SIMPLEX));
 	 PyDict_SetItemString(d,"wxDUPLEX_HORIZONTAL", PyInt_FromLong((long) wxDUPLEX_HORIZONTAL));
 	 PyDict_SetItemString(d,"wxDUPLEX_VERTICAL", PyInt_FromLong((long) wxDUPLEX_VERTICAL));
+	 PyDict_SetItemString(d,"wxItem_Separator", PyInt_FromLong((long) wxItem_Separator));
+	 PyDict_SetItemString(d,"wxItem_Normal", PyInt_FromLong((long) wxItem_Normal));
+	 PyDict_SetItemString(d,"wxItem_Check", PyInt_FromLong((long) wxItem_Check));
+	 PyDict_SetItemString(d,"wxItem_Radio", PyInt_FromLong((long) wxItem_Radio));
+	 PyDict_SetItemString(d,"wxItem_Max", PyInt_FromLong((long) wxItem_Max));
 	 PyDict_SetItemString(d,"wxHT_NOWHERE", PyInt_FromLong((long) wxHT_NOWHERE));
 	 PyDict_SetItemString(d,"wxHT_SCROLLBAR_FIRST", PyInt_FromLong((long) wxHT_SCROLLBAR_FIRST));
 	 PyDict_SetItemString(d,"wxHT_SCROLLBAR_ARROW_LINE_1", PyInt_FromLong((long) wxHT_SCROLLBAR_ARROW_LINE_1));
