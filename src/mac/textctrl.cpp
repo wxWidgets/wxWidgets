@@ -1217,8 +1217,8 @@ void wxTextCtrl::Clear()
   }
   else
   {
-            ClearCurrentScrap();
-            TXNClear((TXNObject)m_macTXN); 
+        TXNSetSelection( (TXNObject)m_macTXN , kTXNStartOffset , kTXNEndOffset ) ;
+        TXNClear((TXNObject)m_macTXN); 
   }
     Refresh() ;
 }
