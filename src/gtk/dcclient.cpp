@@ -969,26 +969,34 @@ void wxWindowDC::SetLogicalFunction( int function )
     wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     if (m_logicalFunction == function) return;
-    
+
     GdkFunction mode = GDK_COPY;
     switch (function)
     {
         case wxXOR:          mode = GDK_XOR;           break;
         case wxINVERT:       mode = GDK_INVERT;        break;
-#if (GDK_MINOR_VERSION > 0)
+#if (GTK_MINOR_VERSION > 0)
         case wxOR_REVERSE:   mode = GDK_OR_REVERSE;    break;
         case wxAND_REVERSE:  mode = GDK_AND_REVERSE;   break;
         case wxCLEAR:        mode = GDK_CLEAR;         break;
         case wxSET:          mode = GDK_SET;           break;
         case wxOR_INVERT:    mode = GDK_OR_INVERT;     break;
+	case wxSRC_AND:
         case wxAND:          mode = GDK_AND;           break;
+	case wxSRC_OR:
         case wxOR:           mode = GDK_OR;            break;
         case wxEQUIV:        mode = GDK_EQUIV;         break;
         case wxNAND:         mode = GDK_NAND;          break;
         case wxAND_INVERT:   mode = GDK_AND_INVERT;    break;
-/*   ?   wxSRC_INVERT   GDK_AND_REVERSE, GDK_OR_REVERSE, GDK_OR_INVERT */
+	case wxCOPY:         mode = GDK_COPY;          break;
+	case wxNO_OP:        mode = GDK_NOOP;          break;
+	case wxSRC_INVERT:   mode = GDK_COPY_INVERT;   break;
 #endif
-        default:       break;
+        default:
+	{
+	   wxFAIL_MSG( "unsupported logical function" );
+	   break;
+	}
     }
     
     m_logicalFunction = function;
