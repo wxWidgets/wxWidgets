@@ -57,6 +57,7 @@ IMP_PYCALLBACK_BOOL_DR(wxPyDropSource, wxDropSource, GiveFeedback);
 
 %name(DropSource) class wxPyDropSource {
 public:
+    %pythonAppend wxPyDropSource "self._setCallbackInfo(self, DropSource, 0)"
 #ifndef __WXGTK__
      wxPyDropSource(wxWindow *win,
                     const wxCursor &copy = wxNullCursor,
@@ -70,14 +71,13 @@ public:
 #endif
 
     void _setCallbackInfo(PyObject* self, PyObject* _class, int incref);
-    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxDropSource, 0)"
     ~wxPyDropSource();
 
     // set the data which is transfered by drag and drop
     void SetData(wxDataObject& data);
-    
+
     wxDataObject *GetDataObject();
-    
+
     // set the icon corresponding to given drag result
     void SetCursor(wxDragResult res, const wxCursor& cursor);
 
