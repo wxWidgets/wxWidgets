@@ -253,6 +253,7 @@ def Verify_WX_CONFIG():
     # if WX_CONFIG hasn't been set to an explicit value then construct one.
     global WX_CONFIG
     if WX_CONFIG is None:
+        WX_CONFIG='wx-config'
         port = WXPORT
         if port == "x11":
             port = "x11univ"
