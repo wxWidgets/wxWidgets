@@ -313,7 +313,13 @@ FAIL_WITH(s->Write(&signature, 4).LastWrite() != 4, wxSOUND_INVSTRM);
         delete frmt;
     }
 
+#ifdef wxSIZE_T_IS_ULONG
+    // FIXME: we still need this horrible cast until wxDataOutputStream
+    // is made 64 bit friendly.
+    data << (unsigned int)(fmt_data.GetSize() + m_sndformat->GetBytesFromTime(time));
+#else
     data << (fmt_data.GetSize() + m_sndformat->GetBytesFromTime(time));
+#endif
 
     // We, finally, copy the header block to the output stream 
     {
