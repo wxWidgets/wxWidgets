@@ -11,67 +11,68 @@
 #ifndef __WXMMSTREAM_H__
 #define __WXMMSTREAM_H__
 
-#include "wx/object.h"
-#include "wx/stream.h"
+#include <wx/stream.h>
 
-class wxMemoryStreamBase: public wxStream {
-  DECLARE_CLASS(wxMemoryStreamBase)
- public:
-  wxMemoryStreamBase(char *data, size_t length, int iolimit);
+class wxMemoryStreamBase {
+ protected:
+  wxMemoryStreamBase();
   virtual ~wxMemoryStreamBase();
 
-  // Input part
-  wxInputStream& Read(void *buffer, size_t size);
-  size_t SeekI(int pos, wxWhenceType whence = wxBeginPosition);
-  size_t TellI() const { return m_position_i; }
-
-  bool Eof() const { return m_eof; }
-  size_t LastRead() const { return m_lastread; }
-
-  // Output part
-  wxOutputStream& Write(const void *buffer, size_t size);
-  size_t SeekO(int pos, wxWhenceType whence = wxBeginPosition);
-  size_t TellO() const { return m_position_o; }
-
-  bool Bad() const { return m_bad; }
-  size_t LastWrite() const { return m_lastwrite; }
-  void Sync() {}
-
- protected:
   bool ChangeBufferSize(size_t new_length);
 
  protected:
-  bool m_bad, m_eof, m_persistent;
-  size_t m_lastread, m_lastwrite;
+  bool m_persistent;
   size_t m_length;
-  size_t m_position_i, m_position_o;
   char *m_buffer;
   int m_iolimit;
 };
 
-
-class wxMemoryInputStream: public wxMemoryStreamBase {
+class wxMemoryInputStream: virtual public wxMemoryStreamBase, public wxInputStream {
   DECLARE_CLASS(wxMemoryInputStream)
  public:
-  wxMemoryInputStream(char *data, size_t length)
-     : wxMemoryStreamBase(data, length, 1)
-    {}
+  wxMemoryInputStream(const char *data, size_t length);
+  virtual ~wxMemoryInputStream();
+ 
+  wxInputStream& Read(void *buffer, size_t size);
+  off_t SeekI(off_t pos, wxSeekMode mode);
+  off_t TellI() const { return m_position_i; }
+
+  bool Eof() const { return m_eof; }
+  size_t LastRead() const { return m_lastread; }
+
+ protected:
+  bool m_eof;
+  off_t m_position_i;
+  size_t m_lastread;
 };
 
-class wxMemoryOutputStream: public wxMemoryStreamBase {
-  DECLARE_DYNAMIC_CLASS(wxMemoryOutputStream)
+class wxMemoryOutputStream: virtual public wxMemoryStreamBase, public wxOutputStream {
+  DECLARE_CLASS(wxMemoryOutputStream)
  public:
-  wxMemoryOutputStream(char *data = NULL, size_t length = 0)
-     : wxMemoryStreamBase(data, length, 2)
-   {}
+  wxMemoryOutputStream(char *data = NULL, size_t length = 0);
+  virtual ~wxMemoryOutputStream();
+
+  wxOutputStream& Write(const void *buffer, size_t size);
+  off_t SeekO(off_t pos, wxSeekMode mode);
+  off_t TellO() const { return m_position_o; }
+
+  bool Bad() const { return m_bad; }
+  size_t LastWrite() const { return m_lastwrite; }
+
+  char *GetData() { return m_buffer; }
+  size_t GetLength() { return m_length; }
+
+ protected:
+  bool m_bad;
+  off_t m_position_o;
+  size_t m_lastwrite;
 };
 
-class wxMemoryStream: public wxMemoryStreamBase {
-  DECLARE_DYNAMIC_CLASS(wxMemoryStream)
+class wxMemoryStream: public wxMemoryInputStream, public wxMemoryOutputStream {
+  DECLARE_CLASS(wxMemoryStream)
  public:
-  wxMemoryStream(char *data = NULL, size_t length = 0)
-     : wxMemoryStreamBase(data, length, 0)
-   {}
+  wxMemoryStream(char *data = NULL, size_t length = 0);
+  virtual ~wxMemoryStream();
 };
 
 #endif

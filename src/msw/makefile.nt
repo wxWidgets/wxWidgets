@@ -109,11 +109,11 @@ COMMONOBJS = \
   $(COMMDIR)\y_tab.obj \
   $(COMMDIR)\extended.obj \
   $(COMMDIR)\process.obj
-
-# $(COMMDIR)\fstream.obj \
-#  $(COMMDIR)\mstream.obj \
-#  $(COMMDIR)\datstrm.obj \
-#  $(COMMDIR)\stream.obj \
+  $(COMMDIR)\fstream.obj \
+  $(COMMDIR)\mstream.obj \
+  $(COMMDIR)\zstream.obj \
+  $(COMMDIR)\stream.obj \
+  $(COMMDIR)\datstrm.obj
 
 MSWOBJS = \
   $(MSWDIR)\app.obj \
@@ -885,6 +885,26 @@ $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 #<<
 
 $(COMMDIR)/time.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)\stream.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)\fstream.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)\mstream.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)\zstream.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<

@@ -15,22 +15,15 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
+#include <wx/stream.h>
 
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-#include "wx/setup.h"
-#endif
-
-#include "wx/object.h"
-#include "wx/stream.h"
-
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_ABSTRACT_CLASS(wxInputStream, wxObject)
 IMPLEMENT_ABSTRACT_CLASS(wxOutputStream, wxObject)
-IMPLEMENT_ABSTRACT_CLASS2(wxStream, wxInputStream, wxOutputStream)
 IMPLEMENT_CLASS(wxFilterInputStream, wxInputStream)
 IMPLEMENT_CLASS(wxFilterOutputStream, wxOutputStream)
 #endif

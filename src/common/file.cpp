@@ -105,6 +105,7 @@ bool wxFile::Exists(const char *sz)
 wxFile::wxFile(const char *szFileName, OpenMode mode)
 {
   m_fd = fd_invalid;
+  m_error = FALSE;
 
   Open(szFileName, mode);
 }
@@ -202,17 +203,18 @@ off_t wxFile::Read(void *pBuf, off_t nCount)
 }
 
 // write
-bool wxFile::Write(const void *pBuf, uint nCount)
+uint wxFile::Write(const void *pBuf, uint nCount)
 {
   wxCHECK( (pBuf != NULL) && IsOpened(), 0 );
 
   int iRc = ::write(m_fd, pBuf, nCount);
   if ( iRc == -1 ) {
     wxLogSysError("can't write to file descriptor %d", m_fd);
-    return FALSE;
+    m_error = TRUE;
+    return 0;
   }
   else
-    return TRUE;
+    return iRc;
 }
 
 // flush
@@ -235,21 +237,21 @@ bool wxFile::Flush()
 // ----------------------------------------------------------------------------
 
 // seek
-off_t wxFile::Seek(off_t ofs, SeekMode mode)
+off_t wxFile::Seek(off_t ofs, wxSeekMode mode)
 {
   wxASSERT( IsOpened() );
 
   int flag = -1;
   switch ( mode ) {
-    case FromStart:
+    case wxFromStart:
       flag = SEEK_SET;
       break;
 
-    case FromCurrent:
+    case wxFromCurrent:
       flag = SEEK_CUR;
       break;
 
-    case FromEnd:
+    case wxFromEnd:
       flag = SEEK_END;
       break;
 

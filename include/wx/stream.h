@@ -13,7 +13,7 @@
 #define __WXSTREAM_H__
 
 #ifdef __GNUG__
-#pragma interface "stream.h"
+#pragma interface
 #endif
 
 #include <stdio.h>
@@ -25,11 +25,11 @@
  */
 
 typedef enum {
-  wxBeginPosition = 0, wxCurrentPosition = 1, wxEndPosition = 2
-} wxWhenceType;
+  wxFromStart, wxFromCurrent, wxFromEnd
+} wxSeekMode;
 
 class wxOutputStream;
-class wxInputStream: public wxObject {
+class wxInputStream: virtual public wxObject {
   DECLARE_ABSTRACT_CLASS(wxInputStream)
  public:
   wxInputStream();
@@ -38,14 +38,14 @@ class wxInputStream: public wxObject {
   virtual wxInputStream& Read(void *buffer, size_t size) = 0;
   wxInputStream& Read(wxOutputStream& stream_out);
 
-  virtual size_t SeekI(int pos, wxWhenceType whence = wxBeginPosition) = 0;
-  virtual size_t TellI() const = 0;
+  virtual off_t SeekI(off_t pos, wxSeekMode mode = wxFromStart) = 0;
+  virtual off_t TellI() const = 0;
 
   virtual bool Eof() const = 0;
   virtual size_t LastRead() const = 0;
 };
 
-class wxOutputStream: public wxObject {
+class wxOutputStream: virtual public wxObject {
   DECLARE_ABSTRACT_CLASS(wxOutputStream)
  public:
   wxOutputStream();
@@ -54,8 +54,8 @@ class wxOutputStream: public wxObject {
   virtual wxOutputStream& Write(const void *buffer, size_t size) = 0;
   wxOutputStream& Write(wxInputStream& stream_in);
 
-  virtual size_t SeekO(int pos, wxWhenceType whence = wxBeginPosition) = 0;
-  virtual size_t TellO() const = 0;
+  virtual off_t SeekO(off_t pos, wxSeekMode mode = wxFromStart) = 0;
+  virtual off_t TellO() const = 0;
 
   virtual bool Bad() const = 0;
   virtual size_t LastWrite() const = 0;
@@ -63,11 +63,10 @@ class wxOutputStream: public wxObject {
   virtual void Sync() {}
 };
 
-class wxStream: public wxInputStream, public wxOutputStream {
-  DECLARE_ABSTRACT_CLASS(wxStream)
+class wxStream: virtual public wxInputStream, virtual public wxOutputStream {
  public:
-  wxStream() : wxInputStream(), wxOutputStream() {}
-  virtual ~wxStream() {}
+  wxStream() {}
+  virtual ~wxStream() { }
 };
 
 /*
@@ -82,11 +81,12 @@ class wxFilterInputStream: public wxInputStream {
 
   virtual wxInputStream& Read(void *buffer, size_t size)
      { return m_parent_i_stream->Read(buffer, size); }
-  virtual size_t SeekI(int pos, wxWhenceType whence = wxBeginPosition)
-     { return m_parent_i_stream->SeekI(pos, whence); }
+  virtual off_t SeekI(off_t pos, wxSeekMode mode = wxFromStart)
+     { return m_parent_i_stream->SeekI(pos, mode); }
 
   virtual bool Eof() const { return m_parent_i_stream->Eof(); } 
   virtual size_t LastRead() const { return m_parent_i_stream->LastRead(); } 
+
  protected:
   wxInputStream *m_parent_i_stream;
 };
@@ -99,8 +99,8 @@ class wxFilterOutputStream: public wxOutputStream {
 
   virtual wxOutputStream& Write(const void *buffer, size_t size)
      { return m_parent_o_stream->Write(buffer, size); }
-  virtual size_t SeekO(int pos, wxWhenceType whence = wxBeginPosition)
-     { return m_parent_o_stream->SeekO(pos, whence); }
+  virtual off_t SeekO(off_t pos, wxSeekMode mode = wxFromStart)
+     { return m_parent_o_stream->SeekO(pos, mode); }
 
   virtual bool Bad() const { return m_parent_o_stream->Bad(); }
   virtual size_t LastWrite() const { return m_parent_o_stream->LastWrite(); }

@@ -114,6 +114,7 @@ COMMONOBJS = \
   $(COMMDIR)/stream.$(OBJSUFF) \
   $(COMMDIR)/fstream.$(OBJSUFF) \
   $(COMMDIR)/mstream.$(OBJSUFF) \
+  $(COMMDIR)/zstream.$(OBJSUFF) \
   $(COMMDIR)/datstrm.$(OBJSUFF) \
   $(COMMDIR)/extended.$(OBJSUFF)
 

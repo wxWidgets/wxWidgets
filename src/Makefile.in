@@ -58,6 +58,7 @@ LIB_CPP_SRC=\
  common/stream.cpp \
  common/fstream.cpp \
  common/mstream.cpp \
+ common/zstream.cpp \
  common/datstrm.cpp \
 \
  gtk/app.cpp \

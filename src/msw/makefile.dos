@@ -109,6 +109,7 @@ COMMONOBJS = \
   $(COMMDIR)\stream.obj \
   $(COMMDIR)\fstream.obj \
   $(COMMDIR)\mstream.obj \
+  $(COMMDIR)\zstream.obj \
   $(COMMDIR)\datstrm.obj \
   $(COMMDIR)\extended.obj
 

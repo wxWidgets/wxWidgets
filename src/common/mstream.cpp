@@ -13,32 +13,69 @@
 #pragma implementation "mstream.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
 #include <stdlib.h>
-#include "wx/stream.h"
-#include "wx/mstream.h"
+#include <wx/stream.h>
+#include <wx/mstream.h>
 
-#if !USE_SHARED_LIBRARY
-IMPLEMENT_CLASS(wxMemoryStreamBase, wxStream)
-IMPLEMENT_CLASS(wxMemoryInputStream, wxMemoryStreamBase)
-//IMPLEMENT_DYNAMIC_CLASS(wxMemoryOutputStream, wxMemoryStreamBase)
-//IMPLEMENT_DYNAMIC_CLASS(wxMemoryStream, wxMemoryStreamBase)
+#ifdef __BORLANDC__
+#pragma hdrstop
 #endif
 
-wxMemoryStreamBase::wxMemoryStreamBase(char *data, size_t length, int iolimit)
+#if !USE_SHARED_LIBRARY
+IMPLEMENT_CLASS(wxMemoryInputStream, wxInputStream)
+IMPLEMENT_CLASS(wxMemoryOutputStream, wxOutputStream)
+IMPLEMENT_CLASS2(wxMemoryStream, wxInputStream, wxOutputStream)
+#endif
+
+// ----------------------------------------------------------------------------
+// wxMemoryStreamBase
+// ----------------------------------------------------------------------------
+wxMemoryStreamBase::wxMemoryStreamBase()
 {
-  m_buffer = data;
-  m_iolimit = iolimit;
+  m_buffer = NULL;
+  m_iolimit = 0;
   m_persistent = FALSE;
-  m_length = length;
-  m_position_i = m_position_o = 0;
+  m_length = 0;
 }
 
 wxMemoryStreamBase::~wxMemoryStreamBase()
 {
-  free(m_buffer);
+  if (!m_persistent && m_buffer)
+   free(m_buffer);
 }
 
-wxInputStream& wxMemoryStreamBase::Read(void *buffer, size_t size)
+bool wxMemoryStreamBase::ChangeBufferSize(size_t new_size)
+{
+  if (m_iolimit == 1)
+    return FALSE;
+
+  m_length = new_size;
+  if (!m_buffer)
+    m_buffer = (char *)malloc(m_length);
+  else
+    m_buffer = (char *)realloc(m_buffer, m_length);
+
+  return (m_buffer != NULL);
+}
+
+// ----------------------------------------------------------------------------
+// wxMemoryInputStream
+// ----------------------------------------------------------------------------
+
+wxMemoryInputStream::wxMemoryInputStream(const char *data, size_t len)
+{
+  m_persistent = TRUE;
+  m_length = len;
+  m_buffer = (char *)data; // It's bad.
+  m_position_i = 0;
+  m_lastread = 0;
+  m_eof = FALSE;
+  m_iolimit = 1;
+}
+
+wxInputStream& wxMemoryInputStream::Read(void *buffer, size_t size)
 {
   if (m_iolimit == 2) {
     m_eof = TRUE;
@@ -54,24 +91,24 @@ wxInputStream& wxMemoryStreamBase::Read(void *buffer, size_t size)
   return *this;
 }
 
-size_t wxMemoryStreamBase::SeekI(int pos, wxWhenceType whence)
+off_t wxMemoryInputStream::SeekI(off_t pos, wxSeekMode mode)
 {
   if (m_iolimit == 2)
     return 0;
 
-  switch (whence) {
-  case wxBeginPosition:
+  switch (mode) {
+  case wxFromStart:
     if ((size_t)pos > m_length)
       return m_position_i;
     return (m_position_i = pos);
 
-  case wxCurrentPosition:
+  case wxFromCurrent:
     if ((size_t)(m_position_i+pos) > m_length)
       return m_position_i;
 
     return (m_position_i += pos);
 
-  case wxEndPosition:
+  case wxFromEnd:
     if ((size_t)(m_length-pos) > m_length)
       return m_position_i;
 
@@ -81,7 +118,22 @@ size_t wxMemoryStreamBase::SeekI(int pos, wxWhenceType whence)
   return m_position_i;
 }
 
-wxOutputStream& wxMemoryStreamBase::Write(const void *buffer, size_t size)
+// ----------------------------------------------------------------------------
+// wxMemoryOutputStream
+// ----------------------------------------------------------------------------
+
+wxMemoryOutputStream::wxMemoryOutputStream(char *data, size_t len)
+{
+  m_persistent = FALSE;
+  m_buffer = data;
+  m_length = len;
+  m_position_o = 0;
+  m_lastwrite = 0;
+  m_bad = FALSE;
+  m_iolimit = 2;
+}
+
+wxOutputStream& wxMemoryOutputStream::Write(const void *buffer, size_t size)
 {
   if (m_iolimit == 1) {
     m_bad = TRUE;
@@ -101,24 +153,24 @@ wxOutputStream& wxMemoryStreamBase::Write(const void *buffer, size_t size)
   return *this;
 }
 
-size_t wxMemoryStreamBase::SeekO(int pos, wxWhenceType whence)
+off_t wxMemoryOutputStream::SeekO(off_t pos, wxSeekMode mode)
 {
-  if (m_iolimit == 2)
+  if (m_iolimit == 1)
     return 0;
 
-  switch (whence) {
-  case wxBeginPosition:
+  switch (mode) {
+  case wxFromStart:
     if ((size_t)pos > m_length)
       return m_position_o;
     return (m_position_o = pos);
 
-  case wxCurrentPosition:
+  case wxFromCurrent:
     if ((size_t)(m_position_o+pos) > m_length)
       return m_position_o;
 
     return (m_position_o += pos);
 
-  case wxEndPosition:
+  case wxFromEnd:
     if ((size_t)(m_length-pos) > m_length)
       return m_position_o;
 
@@ -128,13 +180,19 @@ size_t wxMemoryStreamBase::SeekO(int pos, wxWhenceType whence)
   return m_position_o;
 }
 
-bool wxMemoryStreamBase::ChangeBufferSize(size_t new_size)
-{
-  m_length = new_size;
-  if (!m_buffer)
-    m_buffer = (char *)malloc(m_length);
-  else
-    m_buffer = (char *)realloc(m_buffer, m_length);
+// ----------------------------------------------------------------------------
+// wxMemoryStream
+// ----------------------------------------------------------------------------
 
-  return (m_buffer != NULL);
+wxMemoryStream::wxMemoryStream(char *data, size_t len)
+  : wxMemoryInputStream(NULL, 0), wxMemoryOutputStream(NULL, 0)
+{
+  m_persistent = FALSE;
+  m_buffer = data;
+  m_length = len;
+  m_iolimit = 0;
+}
+
+wxMemoryStream::~wxMemoryStream()
+{
 }

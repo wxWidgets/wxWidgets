@@ -108,6 +108,7 @@ COMMONOBJS = \
   $(MSWDIR)\stream.obj \
   $(MSWDIR)\fstream.obj \
   $(MSWDIR)\mstream.obj \
+  $(MSWDIR)\zstream.obj \
   $(MSWDIR)\datstrm.obj \
   $(MSWDIR)\extended.obj
 
@@ -469,6 +470,8 @@ $(MSWDIR)\time.obj:     $(COMMDIR)\time.$(SRCSUFF)
 $(MSWDIR)\datstrm.obj:	$(COMMDIR)\datstrm.$(SRCSUFF)
 
 $(MSWDIR)\mstream.obj:	$(COMMDIR)\mstream.$(SRCSUFF)
+
+$(MSWDIR)\zstream.obj:	$(COMMDIR)\zstream.$(SRCSUFF)
 
 $(MSWDIR)\fstream.obj:	$(COMMDIR)\fstream.$(SRCSUFF)
 

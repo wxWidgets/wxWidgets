@@ -11,58 +11,65 @@
 #ifndef __WXFSTREAM_H__
 #define __WXFSTREAM_H__
 
-#include <stdio.h>
 #include <wx/object.h>
 #include <wx/string.h>
 #include <wx/stream.h>
+#include <wx/file.h>
 
-class wxFileStreamBase: public wxStream {
-  DECLARE_CLASS(wxFileStreamBase)
+class wxFileInputStream: virtual public wxFile, public wxInputStream {
+  DECLARE_CLASS(wxFileInputStream)
  public:
-  wxFileStreamBase(const wxString& fileName, int iolimit);
-  virtual ~wxFileStreamBase();
+  wxFileInputStream(const wxString& fileName);
+  virtual ~wxFileInputStream();
 
   wxInputStream& Read(void *buffer, size_t size);
-  size_t SeekI(int pos, wxWhenceType whence = wxBeginPosition);
-  size_t TellI() const;
+  off_t SeekI(off_t pos, wxSeekMode mode = wxFromStart);
+  off_t TellI() const;
 
   bool Eof() const { return m_eof; }
   size_t LastRead() const { return m_lastread; }
 
+  bool Ok() const { return wxFile::IsOpened(); }
+
+ protected:
+  wxFileInputStream() {}
+
+ protected:
+  bool m_eof;
+  bool m_ok_i;
+  size_t m_lastread;
+};
+
+class wxFileOutputStream: virtual wxFile, public wxOutputStream {
+  DECLARE_CLASS(wxFileOutputStream)
+ public:
+  wxFileOutputStream(const wxString& fileName);
+  virtual ~wxFileOutputStream();
+
   wxOutputStream& Write(const void *buffer, size_t size);
-  size_t SeekO(int pos, wxWhenceType whence = wxBeginPosition);
-  size_t TellO() const;
+  off_t SeekO(off_t pos, wxSeekMode mode = wxFromStart);
+  off_t TellO() const;
 
   bool Bad() const { return m_bad; }
   size_t LastWrite() const { return m_lastwrite; }
 
   void Sync();
 
+  bool IsOpened() const { return wxFile::IsOpened(); }
+
  protected:
-  size_t m_lastread, m_lastwrite;
-  bool m_eof, m_bad;
-  FILE *m_file;
+  wxFileOutputStream() {}
+
+ protected:
+  bool m_bad;
+  size_t m_lastwrite;
 };
 
-class wxFileInputStream: public wxFileStreamBase {
-  DECLARE_CLASS(wxFileInputStream)
- public:
-  wxFileInputStream(const wxString& fileName) : wxFileStreamBase(fileName, 1) {}
-  virtual ~wxFileInputStream() {}
-};
-
-class wxFileOutputStream: public wxFileStreamBase {
-  DECLARE_CLASS(wxFileOutputStream)
- public:
-  wxFileOutputStream(const wxString& fileName) : wxFileStreamBase(fileName, 2) {}
-  virtual ~wxFileOutputStream() {}
-};
-
-class wxFileStream: public wxFileStreamBase {
+class wxFileStream: public wxFileInputStream, public wxFileOutputStream {
   DECLARE_CLASS(wxFileStream)
  public:
-  wxFileStream(const wxString& fileName) : wxFileStreamBase(fileName, 0) {}
-  virtual ~wxFileStream() {}
+  wxFileStream(const wxString& fileName);
+  virtual ~wxFileStream();
 };
 
 #endif

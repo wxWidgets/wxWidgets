@@ -23,6 +23,7 @@
 
 #include  "wx/string.h"
 #include  "wx/filefn.h"
+#include  "wx/stream.h" // for wxSeekMode
 
 // define off_t
 #include  <sys/types.h>
@@ -54,8 +55,6 @@ public:
   enum OpenMode { read, write, read_write, write_append };
     // standard values for file descriptor
   enum { fd_invalid = -1, fd_stdin, fd_stdout, fd_stderr };
-    // seek type
-  enum SeekMode { FromStart, FromEnd, FromCurrent };
 
   // static functions
   // ----------------
@@ -84,7 +83,7 @@ public:
     // returns number of bytes read or ofsInvalid on error
   off_t Read(void *pBuf, off_t nCount);
     // returns true on success
-  bool Write(const void *pBuf, uint nCount);
+  uint Write(const void *pBuf, uint nCount);
     // returns true on success
   bool Write(const wxString& str) { return Write(str.c_str(), str.Len()); }
     // flush data not yet written
@@ -92,9 +91,9 @@ public:
 
   // file pointer operations (return ofsInvalid on failure)
     // move ptr ofs bytes related to start/current off_t/end of file
-  off_t Seek(off_t ofs, SeekMode mode = FromStart);
+  off_t Seek(off_t ofs, wxSeekMode mode = wxFromStart);
     // move ptr to ofs bytes before the end
-  off_t SeekEnd(off_t ofs = 0) { return Seek(ofs, FromEnd); }
+  off_t SeekEnd(off_t ofs = 0) { return Seek(ofs, wxFromEnd); }
     // get current off_t
   off_t Tell() const;
     // get current file length
@@ -105,6 +104,8 @@ public:
   bool IsOpened() const { return m_fd != fd_invalid; }
     // is end of file reached?
   bool Eof() const;
+    // is an error occured?
+  bool Error() const { return m_error; }
     
   // dtor closes the file if opened
  ~wxFile();
@@ -117,6 +118,7 @@ private:
   wxFile& operator=(const wxFile&);
 
   int m_fd; // file descriptor or INVALID_FD if not opened
+  bool m_error; // error memory
 };
 
 // ----------------------------------------------------------------------------
