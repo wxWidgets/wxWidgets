@@ -754,7 +754,11 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
             break;
 
         case WXK_F6:
-            SetValue("SetValue() has been called");
+            wxLogMessage(_T("IsModified() before SetValue(): %d"),
+                         IsModified());
+            SetValue(_T("SetValue() has been called"));
+            wxLogMessage(_T("IsModified() after SetValue(): %d"),
+                         IsModified());
             break;
 
         case WXK_F7:
