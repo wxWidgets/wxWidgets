@@ -5,7 +5,22 @@ wxWindows 2.5/2.6 Change Log
 INCOMPATIBLE CHANGES SINCE 2.4.x
 ================================
 
+
+DEPRECATED METHOD SINCE 2.4.x
+=============================
+
+Deprecated methods may still be used but will disappear in future wxWindows
+versions, please update your code to not use them.
+
 - wxDocManager::GetNoHistoryFiles() renamed to GetHistoryFilesCount()
+- wxSizer::Remove(wxWindow *), use Detach() instead [it is more clear]
+- wxSizer::Set/GetOption(): use Set/GetProportion() instead
+- wxKeyEvent::KeyCode(): use GetKeyCode instead
+- wxList::Number, First, Last, Nth: use GetCount, GetFirst/Last, Item instead
+- wxNode::Next, Previous, Data: use GetNext, GetPrevious, GetData instead
+- wxListBase::operator wxList&(): use typesafe lists instead
+- wxTheFontMapper, use wxFontMapper::Get() instead
+
 
 OTHER CHANGES
 =============
@@ -51,23 +66,6 @@ All GUI ports:
 - WXR resources can now be used in Unicode builds
 - it is now possible to use several wxFileHistory objects in the same menu
   by giving them different base IDs (Dimitri Schoolwerth)
-- changed to type-safe wxSizerItemList for wxSizer child items
-    Deprecated:
-        wxSizer::Remove( wxWindow* )
-            - it does not function as Remove would usually be expected to
-              and destroy the window, use Detach instead
-        wxSizer::GetOption(),
-        wxSizer::SetOption()
-            - wxSizer 'option' parameter was renamed 'proportion' to better
-              reflect its action, use Get/SetProportion instead
-        wxKeyEvent::KeyCode()
-            - use GetKeyCode instead
-        wxList:: Number, First, Last, Nth
-            - use typesafe GetCount, GetFirst, GetLast, Item instead
-        wxNode:: Next, Previous, Data
-            - use typesafe Get* instead
-        wxListBase::operator wxList&()
-            - use typesafe lists instead
 - Added wxTLW::SetShape with implementations for wxMSW and wxGTK (so far)
 - FL: rmoved const from EnableTool parameters
 - FL: signal child window when toolbar is closed
@@ -448,8 +446,7 @@ All (GUI):
   (Rene Rivera).
 - Added wxTreeEvent::IsEditCancelled so the application can tell
   whether a label edit was cancelled.
-- added static wxFontMapper::Get() accessor (use of wxTheFontMapper is now
-  deprecated)
+- added static wxFontMapper::Get() accessor
 
 wxMSW:
 
