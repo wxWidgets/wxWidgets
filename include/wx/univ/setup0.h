@@ -831,7 +831,7 @@
 // Default is 1.
 //
 // Recommended setting: 1
-#define wxUSE_CLIPBOARD 0 //? needs wxUSE_OLE
+#define wxUSE_CLIPBOARD 1
 
 // Use wxDataObject and related classes. Needed for clipboard and OLE drag and
 // drop
@@ -849,7 +849,7 @@
 //
 // Recommended setting: 1
 #if defined(__WIN32__)
-    #define wxUSE_DRAG_AND_DROP 0 //? needs wxUSE_OLE
+    #define wxUSE_DRAG_AND_DROP 0
 #else
     #define wxUSE_DRAG_AND_DROP 0
 #endif
