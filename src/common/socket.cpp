@@ -29,6 +29,7 @@
 #include <wx/string.h>
 #include <wx/timer.h>
 #include <wx/utils.h>
+#include <wx/module.h>
 #include <wx/log.h>
 
 #include <stdlib.h>
@@ -38,7 +39,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // wxSocket headers
 /////////////////////////////////////////////////////////////////////////////
-#include <wx/module.h>
 #include <wx/sckaddr.h>
 #include <wx/socket.h>
 
@@ -375,7 +375,7 @@ wxSocketBase& wxSocketBase::WriteMsg(const char *buffer, wxUint32 nbytes)
   msg.sig[2] = (char) 0xed;
   msg.sig[3] = (char) 0xfe;
 
-    msg.len[0] = (char) nbytes & 0xff;
+  msg.len[0] = (char) nbytes & 0xff;
   msg.len[1] = (char) (nbytes >> 8) & 0xff;
   msg.len[2] = (char) (nbytes >> 16) & 0xff;
   msg.len[3] = (char) (nbytes >> 24) & 0xff;
@@ -871,8 +871,10 @@ wxSocketClient::~wxSocketClient()
 // --------------------------------------------------------------
 // --------- wxSocketClient Connect functions -------------------
 // --------------------------------------------------------------
-bool wxSocketClient::Connect(wxSockAddress& addr_man, bool WXUNUSED(wait) )
+bool wxSocketClient::Connect(wxSockAddress& addr_man, bool wait)
 {
+  GSocketError err;
+
   if (IsConnected())
     Close();
 
@@ -889,10 +891,26 @@ bool wxSocketClient::Connect(wxSockAddress& addr_man, bool WXUNUSED(wait) )
 
   m_connected = FALSE;
 
+  // GRG: If wait == FALSE, then set the socket to
+  // nonblocking. I will set it back to blocking later,
+  // but I am not sure if this is really a good idea.
+  // IMO, all GSockets objects used in wxSocket should
+  // be non-blocking.
+  // --------------------------------
+  if (!wait)
+    GSocket_SetNonBlocking(m_socket, TRUE);
+
   // Update the flags of m_socket.
   SetFlags(m_flags);
+
+  // Try to connect
   GSocket_SetPeer(m_socket, addr_man.GetAddress());
-  if (GSocket_Connect(m_socket, GSOCK_STREAMED) != GSOCK_NOERROR)
+  err = GSocket_Connect(m_socket, GSOCK_STREAMED);
+
+  if (!wait)
+    GSocket_SetNonBlocking(m_socket, FALSE);
+
+  if (err != GSOCK_NOERROR)
     return FALSE;
 
   // Enables bg events.
