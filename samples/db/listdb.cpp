@@ -56,7 +56,7 @@
 
 #include <wx/dbtable.h>
 
-extern DbList* WXDLLEXPORT PtrBegDbList;    /* from db.cpp, used in getting back error results from db connections */
+extern DbList WXDLLEXPORT *PtrBegDbList;    /* from db.cpp, used in getting back error results from db connections */
 
 #include "listdb.h"
 
