@@ -268,7 +268,7 @@ protected:
 
     // refresh the text from in the given line range (inclusive), if lineLast
     // is -1, refresh all [visible] text after the lineFirst
-    void RefreshLineRange(long lineFirst, long lineLast = 0);
+    void RefreshLineRange(long lineFirst, long lineLast = -1);
 
     // refresh the text in the given range which can span multiple lines
     // (this method accepts arguments in any order)

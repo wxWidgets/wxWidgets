@@ -11,6 +11,12 @@
 
 /*
    Search for "OPT" for possible optimizations
+
+   Possible optimization would be to always store the coords in the text in
+   triplets (pos, col, line) and update them simultaneously instead of
+   recalculating col and line from pos each time it is needed. Currently we
+   only do it for the current position but we might also do it for the
+   selection start and end.
  */
 
 // ============================================================================
@@ -41,9 +47,9 @@
     #include "wx/textctrl.h"
 #endif
 
-#include "wx/tokenzr.h"
-
 #include "wx/clipbrd.h"
+#include "wx/textfile.h"
+#include "wx/tokenzr.h"
 
 #include "wx/caret.h"
 
@@ -201,29 +207,6 @@ void wxTextCtrl::Clear()
     SetValue(_T(""));
 }
 
-/*
-   The algorithm of Replace():
-
-    1. change the line where replacement starts
-        a) keep the text in the beginning of it unchanged
-        b) replace the middle (if lineEnd == lineStart) or everything to the
-           end with the first line of replacement text
-
-    2. delete all lines between lineStart and lineEnd (excluding)
-
-    3. insert the lines of the replacement text
-
-    4. change the line where replacement ends:
-        a) remove the part which is in replacement range
-        b) insert the last line of replacement text
-        c) insert the end of the first line if lineEnd == lineStart
-        d) keep the end unchanged
-
-   In the code below the steps 2 and 3 are merged and are done in parallel for
-   efficiency reasons (it is better to change lines in place rather than
-   remove/insert them from a potentially huge array)
- */
-
 void wxTextCtrl::Replace(long from, long to, const wxString& text)
 {
     long colStart, colEnd,
@@ -247,6 +230,35 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
     if ( (size_t)to < textTotal.length() )
         textTotalNew += textTotal.c_str() + (size_t)to;
 #endif // WXDEBUG_TEXT_REPLACE
+
+    // the first attempt at implementing Replace() - it was meant to be more
+    // efficient than the current code but it also is much more complicated
+    // and, worse, still has a few bugs and so as I'm not even sure any more
+    // that it is really more efficient, I'm dropping it in favour of much
+    // simpler code below
+#if 0
+/*
+   The algorithm of Replace():
+
+    1. change the line where replacement starts
+        a) keep the text in the beginning of it unchanged
+        b) replace the middle (if lineEnd == lineStart) or everything to the
+           end with the first line of replacement text
+
+    2. delete all lines between lineStart and lineEnd (excluding)
+
+    3. insert the lines of the replacement text
+
+    4. change the line where replacement ends:
+        a) remove the part which is in replacement range
+        b) insert the last line of replacement text
+        c) insert the end of the first line if lineEnd == lineStart
+        d) keep the end unchanged
+
+   In the code below the steps 2 and 3 are merged and are done in parallel for
+   efficiency reasons (it is better to change lines in place rather than
+   remove/insert them from a potentially huge array)
+ */
 
     // break the replacement text into lines
     wxArrayString lines = wxStringTokenize(text, _T("\n"),
@@ -372,71 +384,181 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
         }
     }
 
-    // (3) if there are still lines left in the replacement text, insert them
-    //     before modifying the last line
-    if ( nReplaceLine < nReplaceCount - 1 )
+    // all the rest is only necessary if there is more than one line of
+    // replacement text
+    if ( nReplaceCount > 1 )
     {
-        // the lines below will scroll down
-        refreshAllBelow = TRUE;
-
-        while ( nReplaceLine < nReplaceCount - 1 ) // OPT: insert all at once?
+        // (3) if there are still lines left in the replacement text, insert
+        //     them before modifying the last line
+        if ( nReplaceLine < nReplaceCount - 1 )
         {
-            // insert line and adjust for index change by incrementing lineEnd
-            m_lines.Insert(lines[nReplaceLine++], lineEnd++);
+            // the lines below will scroll down
+            refreshAllBelow = TRUE;
+
+            while ( nReplaceLine < nReplaceCount - 1 ) // OPT: insert all at once?
+            {
+                // insert line and adjust for index change by incrementing lineEnd
+                m_lines.Insert(lines[nReplaceLine++], lineEnd++);
+            }
+        }
+
+        // (4) refresh the lines: if we had replaced exactly the same number of
+        //     lines that we had before, we can just refresh these lines,
+        //     otherwise the lines below will change as well, so we have to
+        //     refresh them too (by passing -1 as RefreshLineRange() argument)
+        if ( refreshAllBelow || (lineStart < lineEnd - 1) )
+        {
+            RefreshLineRange(lineStart + 1, refreshAllBelow ? -1 : lineEnd - 1);
+        }
+
+        // now deal with the last line: (1) replace its beginning with the end
+        // of the replacement text
+        wxString lineLast;
+        if ( nReplaceLine < nReplaceCount )
+        {
+            wxASSERT_MSG(nReplaceLine == nReplaceCount - 1, _T("logic error"));
+
+            lineLast = lines[nReplaceLine];
+        }
+
+        // (2) add the text which was at the end of first line if we replaced
+        //     its middle with multiline text
+        if ( lineEnd == lineStart )
+        {
+            lineLast += lineFirstEnd;
+        }
+
+        // (3) add the tail of the old last line if anything is left
+        if ( (size_t)lineEnd < m_lines.GetCount() )
+        {
+            wxString lineLastOrig = GetLineText(lineEnd);
+            if ( (size_t)colEnd < lineLastOrig.length() )
+            {
+                lineLast += lineLastOrig.c_str() + (size_t)colEnd;
+            }
+
+            m_lines[lineEnd] = lineLast;
+        }
+        else // the number of lines increased, just append the new one
+        {
+            m_lines.Add(lineLast);
+        }
+
+        // (4) always refresh the last line entirely if it hadn't been already
+        //     refreshed above
+        if ( !refreshAllBelow )
+        {
+            RefreshPixelRange(lineEnd, 0, 0); // entire line
+        }
+    }
+    //else: only one line of replacement text
+
+#else // 1 (new replacement code)
+
+    /*
+       Join all the lines in the replacement range into one string, then
+       replace a part of it with the new text and break it into lines again.
+    */
+
+    // (1) join lines
+    wxString textOrig;
+    long line;
+    for ( line = lineStart; line <= lineEnd; line++ )
+    {
+        if ( line > lineStart )
+        {
+            // from previous line
+            textOrig += _T('\n');
+        }
+
+        textOrig += m_lines[line];
+    }
+
+    // (2) replace text in the combined string
+    wxString textNew(textOrig, colStart);
+
+    // these values will be used to refresh the changed area below
+    wxCoord widthNewText, startNewText = GetTextWidth(textNew);
+    if ( (size_t)colStart == m_lines[lineStart].length() )
+    {
+        // text appended, refresh just enough to show the new text
+        widthNewText = GetTextWidth(text.BeforeFirst(_T('\n')));
+    }
+    else // text inserted, refresh till the end of line
+    {
+        widthNewText = 0;
+    }
+
+    textNew += text;
+    size_t toRel = (size_t)((to - from) + colStart); // adjust for index shift
+    if ( toRel < textOrig.length() )
+        textNew += textOrig.c_str() + toRel;
+
+    // (3) break it into lines
+    wxArrayString lines;
+    if ( textNew.empty() )
+    {
+        // special case: if the replacement string is empty we still want to
+        // have one (empty) string in the lines array but wxStringTokenize()
+        // won't put anything in it in this case, so do it ourselves
+        lines.Add(wxEmptyString);
+    }
+    else // break into lines normally
+    {
+       lines = wxStringTokenize(textNew, _T("\n"), wxTOKEN_RET_EMPTY_ALL);
+    }
+
+    size_t nReplaceCount = lines.GetCount(),
+           nReplaceLine = 0;
+
+    // (4) merge into the array
+
+    size_t countOld = m_lines.GetCount();
+
+    // (4a) replace
+    for ( line = lineStart; line <= lineEnd; line++, nReplaceLine++ )
+    {
+        if ( nReplaceLine < nReplaceCount )
+        {
+            // we have the replacement line for this one
+            m_lines[line] = lines[nReplaceLine];
+        }
+        else // no more replacement lines
+        {
+            // (4b) delete all extra lines
+            while ( line <= lineEnd )
+            {
+                m_lines.RemoveAt(line++);
+            }
         }
     }
 
-    // (4) refresh the lines: if we had replaced exactly the same number of
-    //     lines that we had before, we can just refresh these lines,
-    //     otherwise the lines below will change as well, so we have to
-    //     refresh them too (by passing -1 as RefreshLineRange() argument)
-    if ( refreshAllBelow || (lineStart < lineEnd - 1) )
+    // (4c) insert the new lines
+    while ( nReplaceLine < nReplaceCount )
     {
-        RefreshLineRange(lineStart + 1, refreshAllBelow ? -1 : lineEnd - 1);
+        m_lines.Insert(lines[nReplaceLine++], ++lineEnd);
     }
 
-    // now deal with the last line: (1) replace its beginning with the end of
-    // the replacement text
-    wxString lineLast;
-    if ( nReplaceLine < nReplaceCount )
+    // (5) now refresh the changed area
+    RefreshPixelRange(lineStart, startNewText, widthNewText);
+    if ( m_lines.GetCount() == countOld )
     {
-        wxASSERT_MSG(nReplaceLine == nReplaceCount - 1, _T("logic error"));
-
-        lineLast = lines[nReplaceLine];
+        // number of lines didn't change, refresh the updated lines and the
+        // last one
+        if ( lineStart < lineEnd )
+            RefreshLineRange(lineStart + 1, lineEnd);
     }
-
-    // (2) add the text which was at the end of first line if we replaced its
-    //     middle with multiline text
-    if ( lineEnd == lineStart )
+    else
     {
-        lineLast += lineFirstEnd;
+        // number of lines did change, we need to refresh everything below the
+        // start line
+        RefreshLineRange(lineStart + 1);
     }
+#endif // 0/1
 
-    // (3) add the tail of the old last line if anything is left
-    if ( (size_t)lineEnd < m_lines.GetCount() )
-    {
-        wxString lineLastOrig = GetLineText(lineEnd);
-        if ( (size_t)colEnd < lineLastOrig.length() )
-        {
-            lineLast += lineLastOrig.c_str() + (size_t)colEnd;
-        }
-
-        m_lines[lineEnd] = lineLast;
-    }
-    else // the number of lines increased, just append the new one
-    {
-        m_lines.Add(lineLast);
-    }
-
-    // (4) always refresh the last line entirely if it hadn't been already
-    //     refreshed above
-    if ( !refreshAllBelow )
-    {
-        RefreshPixelRange(lineEnd, 0, 0); // entire line
-    }
-
-    // update the current position
-    SetInsertionPoint(to);
+    // update the current position: note that we always put the cursor at the
+    // end of the replacement text
+    SetInsertionPoint(from + text.length());
 
     // and the selection (do it after setting the cursor to have correct value
     // for selection anchor)
@@ -496,13 +618,10 @@ void wxTextCtrl::InitInsertionPoint()
 
 void wxTextCtrl::DoSetInsertionPoint(long pos)
 {
-    HideCaret();
-
     m_curPos = pos;
     PositionToXY(m_curPos, &m_curCol, &m_curRow);
-    ShowPosition(m_curPos);
 
-    ShowCaret();
+    ShowPosition(m_curPos);
 }
 
 void wxTextCtrl::SetInsertionPointEnd()
@@ -907,6 +1026,8 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
 
 void wxTextCtrl::ShowPosition(long pos)
 {
+    HideCaret();
+
     if ( IsSingleLine() )
     {
         ShowHorzPosition(GetCaretPosition(pos));
@@ -915,6 +1036,8 @@ void wxTextCtrl::ShowPosition(long pos)
     {
         // TODO
     }
+
+    ShowCaret();
 }
 
 // ----------------------------------------------------------------------------
@@ -1020,7 +1143,8 @@ void wxTextCtrl::Copy()
     {
         wxClipboardLocker clipLock;
 
-        wxString text = GetTextToShow(GetSelectionText());
+        // wxTextFile::Translate() is needed to transform all '\n' into "\r\n"
+        wxString text = wxTextFile::Translate(GetTextToShow(GetSelectionText()));
         wxTextDataObject *data = new wxTextDataObject(text);
         wxTheClipboard->SetData(data);
     }
@@ -1046,7 +1170,8 @@ void wxTextCtrl::Paste()
     if ( wxTheClipboard->IsSupported(data.GetFormat())
             && wxTheClipboard->GetData(data) )
     {
-        WriteText(data.GetText());
+        // reverse transformation: '\r\n\" -> '\n'
+        WriteText(wxTextFile::Translate(data.GetText(), wxTextFileType_Unix));
     }
 #endif // wxUSE_CLIPBOARD
 }
@@ -1886,7 +2011,6 @@ void wxTextCtrl::DoDraw(wxControlRenderer *renderer)
 
         m_hasCaret = TRUE;
     }
-
 }
 
 // ----------------------------------------------------------------------------
@@ -2104,10 +2228,17 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
         int keycode = event.GetKeyCode();
         if ( keycode == WXK_RETURN )
         {
-            wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, GetId());
-            InitCommandEvent(event);
-            event.SetString(GetValue());
-            GetEventHandler()->ProcessEvent(event);
+            if ( IsSingleLine() || (GetWindowStyle() & wxTE_PROCESS_ENTER) )
+            {
+                wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, GetId());
+                InitCommandEvent(event);
+                event.SetString(GetValue());
+                GetEventHandler()->ProcessEvent(event);
+            }
+            else // interpret <Enter> normally: insert new line
+            {
+                PerformAction(wxACTION_TEXT_INSERT, -1, _T('\n'));
+            }
         }
         else if ( keycode < 255 &&
                   keycode != WXK_DELETE &&
