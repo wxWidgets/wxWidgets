@@ -159,7 +159,7 @@ bool wxListBox::Create(wxWindow *parent,
     wstyle |= LBS_NOINTEGRALHEIGHT;
 
     WXDWORD exStyle = 0;
-    (void) MSWGetStyle(style, & exStyle) ;
+    (void) MSWGetStyle(m_windowStyle, & exStyle) ;
 
     m_hWnd = (WXHWND)::CreateWindowEx(exStyle, wxT("LISTBOX"), NULL,
             wstyle ,
