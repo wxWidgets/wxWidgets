@@ -1121,24 +1121,10 @@ static wxString GetLongOptionName(const wxChar *p)
 
 /*
    This function is mainly used under Windows (as under Unix we always get the
-   command line arguments as argc/argv anyhow) and so it tries to handle the
-   Windows path names (separated by backslashes) correctly. For this it only
-   considers that a backslash may be used to escape another backslash (but
-   normally this is _not_ needed) or a quote but nothing else.
-
-   In particular, to pass a single argument containing a space to the program
-   it should be quoted:
-
-   myprog.exe foo bar       -> argc = 3, argv[1] = "foo", argv[2] = "bar"
-   myprog.exe "foo bar"     -> argc = 2, argv[1] = "foo bar"
-
-   To pass an argument containing spaces and quotes, the latter should be
-   escaped with a backslash:
-
-   myprog.exe "foo \"bar\"" -> argc = 2, argv[1] = "foo "bar""
-
-   This hopefully matches the conventions used by Explorer/command line
-   interpreter under Windows. If not, this function should be fixed.
+   command line arguments as argc/argv anyhow) and so it tries to follow
+   Windows conventions for the command line handling, not Unix ones. For
+   instance, backslash is not special except when it precedes double quote when
+   it does quote it.
  */
 
 /* static */
@@ -1149,7 +1135,7 @@ wxArrayString wxCmdLineParser::ConvertStringToArgs(const wxChar *p)
     wxString arg;
     arg.reserve(1024);
 
-    bool isInsideQuotes = FALSE;
+    bool isInsideQuotes = false;
     for ( ;; )
     {
         // skip white space
@@ -1161,80 +1147,43 @@ wxArrayString wxCmdLineParser::ConvertStringToArgs(const wxChar *p)
             break;
 
         // parse this parameter
-        arg.clear();
-        for ( ;; p++ )
+        bool endParam = false;
+        bool lastBS = false;
+        for ( arg.clear(); !endParam; p++ )
         {
-            // do we have a (lone) backslash?
-            bool isQuotedByBS = FALSE;
-            while ( *p == _T('\\') )
-            {
-                p++;
-
-                // if we have 2 backslashes in a row, output one
-                // unless it looks like a UNC path \\machine\dir\file.ext
-                if ( isQuotedByBS || arg.Len() == 0 )
-                {
-                    arg += _T('\\');
-                    isQuotedByBS = FALSE;
-                }
-                else // the next char is quoted
-                {
-                    isQuotedByBS = TRUE;
-                }
-            }
-
-            bool skipChar = FALSE,
-                 endParam = FALSE;
             switch ( *p )
             {
-                case _T('"'):
-                    if ( !isQuotedByBS )
+            case _T('"'):
+                    if ( !lastBS )
                     {
-                        // don't put the quote itself in the arg
-                        skipChar = TRUE;
-
                         isInsideQuotes = !isInsideQuotes;
-                    }
-                    //else: insert a literal quote
 
+                        // don't put quote in arg
+                        continue;
+                    }
+                    //else: quote has no special meaning but the backslash
+                    //      still remains -- makes no sense but this is what
+                    //      Windows does
                     break;
 
                 case _T(' '):
                 case _T('\t'):
-                    // we intentionally don't check for preceding backslash
-                    // here as if we allowed it to be used to escape spaces the
-                    // cmd line of the form "foo.exe a:\ c:\bar" wouldn't be
-                    // parsed correctly
+                    // backslash does *not* quote the space, only quotes do
                     if ( isInsideQuotes )
                     {
-                        // preserve it, skip endParam below
+                        // skip assignment below
                         break;
                     }
-                    //else: fall through
+                    // fall through
 
                 case _T('\0'):
                     endParam = TRUE;
                     break;
-
-                default:
-                    if ( isQuotedByBS )
-                    {
-                        // ignore backslash before an ordinary character - this
-                        // is needed to properly handle the file names under
-                        // Windows appearing in the command line
-                        arg += _T('\\');
-                    }
             }
 
-            // end of argument?
-            if ( endParam )
-                break;
+            lastBS = *p == _T('\\');
 
-            // otherwise copy this char to arg
-            if ( !skipChar )
-            {
-                arg += *p;
-            }
+            arg += *p;
         }
 
         args.push_back(arg);
