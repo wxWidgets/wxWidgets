@@ -1,8 +1,8 @@
-Title wxMacPython
+Title wxPythonOSX
 Version 2.3.3
-Description wxMac and wxPython
+Description wxMac and wxPython for OSX
 DefaultLocation /
-DeleteWarning 
+DeleteWarning
 
 ### Package Flags
 

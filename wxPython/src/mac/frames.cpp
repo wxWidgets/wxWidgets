@@ -1529,6 +1529,34 @@ static PyObject *_wrap_wxFrame_SetToolBar(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
+#define wxFrame_SendSizeEvent(_swigobj)  (_swigobj->SendSizeEvent())
+static PyObject *_wrap_wxFrame_SendSizeEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFrame * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFrame_SendSizeEvent",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFrame_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFrame_SendSizeEvent. Expected _wxFrame_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxFrame_SendSizeEvent(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static void *SwigwxDialogTowxTopLevelWindow(void *ptr) {
     wxDialog *src;
     wxTopLevelWindow *dest;
@@ -2620,6 +2648,7 @@ static PyMethodDef framescMethods[] = {
 	 { "wxDialog_Create", (PyCFunction) _wrap_wxDialog_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreDialog", (PyCFunction) _wrap_new_wxPreDialog, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxDialog", (PyCFunction) _wrap_new_wxDialog, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_SendSizeEvent", (PyCFunction) _wrap_wxFrame_SendSizeEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_SetToolBar", (PyCFunction) _wrap_wxFrame_SetToolBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_GetToolBar", (PyCFunction) _wrap_wxFrame_GetToolBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_CreateToolBar", (PyCFunction) _wrap_wxFrame_CreateToolBar, METH_VARARGS | METH_KEYWORDS },

@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------
-# Name:         CreateMacScriptspy
+# Name:         CreateMacScripts.py
 # Purpose:	Massages the scripts to be usable with MachoPython
 #
 # Author:       Robin Dunn
@@ -16,6 +16,9 @@ destdir = os.path.split(python)[0]
 pythonw = os.path.join(destdir, 'pythonw')
 scriptdir = os.getcwd()
 
+if len(sys.argv) > 1:
+    destdir = sys.argv[1]
+
 from CreateBatchFiles import scripts
 repltxt = "#!/usr/bin/env python"
 
@@ -27,19 +30,21 @@ exec /Applications/Python.app/Contents/MacOS/python %s.py
 def main():
     for script, usegui in scripts:
         destfile = os.path.join(destdir, script)
-        print "Creating", destfile
         thescript = open(script).read()
         if usegui:
             f = open(destfile+'.py', 'w')
+            print destfile+'.py'
             f.write(thescript.replace(repltxt, ''))
             f.close()
             f = open(destfile, 'w')
+            print destfile
             f.write(gui_template % destfile)
             f.close()
 
         else:
             thescript = thescript.replace(repltxt, '#!'+python)
             f = open(destfile, 'w')
+            print destfile
             f.write(thescript)
             f.close()
 

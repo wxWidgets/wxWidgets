@@ -1,9 +1,9 @@
 #!/usr/bin/perl -w
-# 
+#
 # make disk image from folder
-# 
+#
 # usage: makedmg src dst name
-# 
+#
 # (C)opyright 2002 Frank Vercruesse
 
 
@@ -25,12 +25,12 @@ sub make_dmg
 	my $src = $_[0];
 	my $dst = $_[1];
 	my $name = $_[2];
-	
+
 	# check dirs
 	if( not -d $dst && -d $src ) {
 		die "src and dst must be directories\n";
 	}
-	
+
 	# calc disk image size
 	if( not open( MYPIPE, "$duExec -sk \"${src}\" |") ) {
 		die "couldn't open pipe\n";
@@ -38,15 +38,15 @@ sub make_dmg
 	(my $dmgsize) = split( /\s+/, <MYPIPE>);
 	close( MYPIPE);
 	$dmgsize /= 1024;
-	$dmgsize = int($dmgsize + 2);
+	$dmgsize = int($dmgsize + 4);
 	if( $dmgsize < 5 ) {
 		$dmgsize = 5
 	}
-	
+
 	# create disk image
 	system "cd \"$dst\"; $hdiUtilExec create -megabytes $dmgsize -ov \"_${name}\"";
 	if( $? ) { die "couldn't create disk image\n"; }
-	
+
 	# format disk image
 	if( not open( MYPIPE, "cd \"$dst\"; $hdiDrvExec -nomount \"_${name}.dmg\" |") ) {
 		die "couldn't open pipe\n";
@@ -68,7 +68,7 @@ sub make_dmg
 	if( $? ) { system "$hdiUtilExec eject $dev"; die "couldn't format disk image\n"; }
 	system "$hdiUtilExec eject $dev";
 	if( $? ) { die "couldn't eject disk image\n"; }
-	
+
 	# copy files
 	if( not open( MYPIPE, "cd \"$dst\"; $hdiDrvExec \"_${name}.dmg\" |") ) {
 		die "couldn't open pipe\n";
@@ -88,7 +88,7 @@ sub make_dmg
 	if( $? ) { system "$hdiUtilExec eject $dev"; die "couldn't copy files\n"; }
 	system "$hdiUtilExec eject $dev";
 	if( $? ) { die "couldn't eject disk image\n"; }
-	
+
 	# convert disk image
 	system "cd \"$dst\"; $hdiUtilExec convert \"_${name}.dmg\" -format UDCO -o \"${name}\"";
 	if( $? ) { die "couldn't convert disk image\n"; }

@@ -127,7 +127,7 @@ fi
 #-----------------------------------
 msg configuring wxWindows
 buildDir="$srcPath/build-pkg"
-dFlag=
+dFlag="--enable-optimise --enable-debug_flag"
 if [ $debug ]; then
     buildDir="$srcPath/build-pkg-debug"
     dFlag="--enable-debug"
@@ -141,7 +141,7 @@ if [ $force ]; then
     fi
     msgdo mkdir -m 775 "$buildDir"
     msgdo cd "$buildDir"
-    msgdo ../configure --with-mac --with-opengl $dFlag
+    msgdo ../configure --with-mac --with-opengl --enable-precomp=no $dFlag
     cd $curDir
 
 else
@@ -153,12 +153,14 @@ fi
 msg building wxWindows
 msgdo cd $buildDir
 msgdo make
+msgdo cd ../locale
+msgdo make allmo
 cd $curDir
 
 
 #-----------------------------------
 msg installing wxWindows
-msgdo mkdir -p -m 755 "$dstPath/$temp/$wxWindowsInst"
+msgdo mkdir -p -m 1755 "$dstPath/$temp/$wxWindowsInst"
 msgdo cd "$buildDir"
 
 # install once to the package directory, and once to the
@@ -207,13 +209,20 @@ msg copying additional wxPython files
 msgdo cp -pR "$srcPath/wxPython/samples"  "$dstPath/$temp/$dmgRoot"
 msgdo cp -pR "$srcPath/wxPython/demo"     "$dstPath/$temp/$dmgRoot"
 msgdo cp -pR "$srcPath/wxPython/licence"  "$dstPath/$temp/$dmgRoot"
-msgdo cp -pR "$srcPath/wxPython/tools"    "$dstPath/$temp/$dmgRoot"
 find "$dstPath/$temp/$dmgRoot" -name "CVS" -type d -print0 | xargs -0 rm -rf
 find "$dstPath/$temp/$dmgRoot" -name ".DS_Store" -type f -print0 | xargs -0 rm
 find "$dstPath/$temp/$dmgRoot" -name ".cvsignore" -type f -print0 | xargs -0 rm
 find "$dstPath/$temp/$dmgRoot" -name ".#*" -type f -print0 | xargs -0 rm
 find "$dstPath/$temp/$dmgRoot" -name "b" -type f -print0 | xargs -0 rm
 find "$dstPath/$temp/$dmgRoot" -name "*~*~" -type f -print0 | xargs -0 rm
+
+msgdo cd "$srcPath/wxPython/scripts"
+sFiles=`$pythonExec CreateMacScripts.py`
+for f in $sFiles; do
+    msgdo cp $f "$dstPath/$temp/$wxWindowsInst/bin"
+done
+cd $curDir
+
 msgdo chown -R ${user}:staff "$dstPath/$temp/$dmgRoot"
 
 
