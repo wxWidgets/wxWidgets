@@ -219,7 +219,11 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
                          bool showAtStartup)
            : wxDialog(parent, wxID_ANY, _("Tip of the Day"),
                       wxDefaultPosition, wxDefaultSize,
-                      wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+                      wxDEFAULT_DIALOG_STYLE
+#if !defined(__SMARTPHONE__) && !defined(__POCKETPC__)
+                      | wxRESIZE_BORDER
+#endif                      
+                      )
 {
     m_tipProvider = tipProvider;
     bool isPda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
@@ -255,7 +259,8 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
                             wxTE_READONLY |
                             wxTE_NO_VSCROLL |
                             wxTE_RICH | // a hack to get rid of vert scrollbar
-                            wxSUNKEN_BORDER);
+                            wxDEFAULT_CONTROL_BORDER
+                            );
 #if defined(__WXMSW__)
     m_text->SetFont(wxFont(12, wxSWISS, wxNORMAL, wxNORMAL));
 #endif
@@ -315,10 +320,12 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
 
     SetSizer( topsizer );
 
+#if !defined(__SMARTPHONE__) && !defined(__POCKETPC__)
     topsizer->SetSizeHints( this );
     topsizer->Fit( this );
 
     Centre(wxBOTH | wxCENTER_FRAME);
+#endif
 }
 
 // ----------------------------------------------------------------------------

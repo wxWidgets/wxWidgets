@@ -93,7 +93,11 @@ bool wxGenericFindReplaceDialog::Create(wxWindow *parent,
 {
     if ( !wxDialog::Create(parent, wxID_ANY, title,
                            wxDefaultPosition, wxDefaultSize,
-                           wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | style) )
+                           wxDEFAULT_DIALOG_STYLE
+#if !defined(__SMARTPHONE__) && !defined(__POCKETPC__)
+                           | wxRESIZE_BORDER
+#endif                           
+                           | style) )
     {
         return false;
     }
@@ -210,10 +214,12 @@ bool wxGenericFindReplaceDialog::Create(wxWindow *parent,
     SetAutoLayout( true );
     SetSizer( topsizer );
 
+#if !defined(__SMARTPHONE__) && !defined(__POCKETPC__)
     topsizer->SetSizeHints( this );
     topsizer->Fit( this );
 
     Centre( wxBOTH );
+#endif
 
     m_textFind->SetFocus();
 

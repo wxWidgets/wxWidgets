@@ -106,7 +106,7 @@ wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent,
     m_textctrl = new wxTextCtrl(this, wxID_TEXT, value,
                                 wxDefaultPosition, wxSize(300, wxDefaultCoord),
                                 style & ~wxTextEntryDialogStyle);
-    topsizer->Add( m_textctrl, 1, wxEXPAND | wxLEFT|wxRIGHT, wxLARGESMALL(15,0) );
+    topsizer->Add( m_textctrl, style & wxTE_MULTILINE ? 1 : 0, wxEXPAND | wxLEFT|wxRIGHT, wxLARGESMALL(15,0) );
 
 #if wxUSE_VALIDATORS
     wxTextValidator validator( wxFILTER_NONE, &m_value );
@@ -134,11 +134,13 @@ wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent,
     SetAutoLayout( true );
     SetSizer( topsizer );
 
+#if !defined(__SMARTPHONE__) && !defined(__POCKETPC__)
     topsizer->SetSizeHints( this );
     topsizer->Fit( this );
 
     if ( style & wxCENTRE )
         Centre( wxBOTH );
+#endif
 
     m_textctrl->SetSelection(-1, -1);
     m_textctrl->SetFocus();
