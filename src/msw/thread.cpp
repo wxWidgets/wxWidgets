@@ -440,7 +440,7 @@ private:
     DWORD         m_tid;        // thread id
 };
 
-THREAD_RETVAL wxThreadInternal::WinThreadStart(void *param)
+THREAD_RETVAL THREAD_CALLCONV wxThreadInternal::WinThreadStart(void *param)
 {
     THREAD_RETVAL rc;
     bool wasCancelled;
