@@ -9,7 +9,8 @@
 
 
 #ifdef __GNUG__
-#pragma implementation
+#pragma implementation "htmlwin.h"
+#pragma implementation "htmlproc.h"
 #endif
 
 #include "wx/wxprec.h"
@@ -27,17 +28,46 @@
 
 #include "wx/html/htmlwin.h"
 #include "wx/html/forcelnk.h"
+#include "wx/html/htmlproc.h"
 #include "wx/log.h"
+#include "wx/arrimpl.cpp"
+#include "wx/list.h"
+#include "wx/listimpl.cpp"
 
+//-----------------------------------------------------------------------------
+// wxHtmlHistoryItem
+//-----------------------------------------------------------------------------
+
+// item of history list
+class WXDLLEXPORT wxHtmlHistoryItem : public wxObject
+{
+public:
+    wxHtmlHistoryItem(const wxString& p, const wxString& a) {m_Page = p, m_Anchor = a, m_Pos = 0;}
+    int GetPos() const {return m_Pos;}
+    void SetPos(int p) {m_Pos = p;}
+    const wxString& GetPage() const {return m_Page;}
+    const wxString& GetAnchor() const {return m_Anchor;}
+
+private:
+    wxString m_Page;
+    wxString m_Anchor;
+    int m_Pos;
+};
+
+
+//-----------------------------------------------------------------------------
+// our private arrays:
+//-----------------------------------------------------------------------------
+
+WX_DECLARE_OBJARRAY(wxHtmlHistoryItem, wxHtmlHistoryArray);
+WX_DEFINE_OBJARRAY(wxHtmlHistoryArray);
+
+WX_DECLARE_LIST(wxHtmlProcessor, wxHtmlProcessorList);
+WX_DEFINE_LIST(wxHtmlProcessorList);
 
 //-----------------------------------------------------------------------------
 // wxHtmlWindow
 //-----------------------------------------------------------------------------
-
-
-
-#include "wx/arrimpl.cpp"
-WX_DEFINE_OBJARRAY(HtmlHistoryArray)
 
 
 wxHtmlWindow::wxHtmlWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
@@ -49,7 +79,7 @@ wxHtmlWindow::wxHtmlWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos, 
     m_FS = new wxFileSystem();
     m_RelatedStatusBar = -1;
     m_RelatedFrame = NULL;
-    m_TitleFormat = "%s";
+    m_TitleFormat = wxT("%s");
     m_OpenedPage = m_OpenedAnchor = m_OpenedPageTitle = wxEmptyString;
     m_Cell = NULL;
     m_Parser = new wxHtmlWinParser(this);
@@ -57,6 +87,8 @@ wxHtmlWindow::wxHtmlWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos, 
     SetBorders(10);
     m_HistoryPos = -1;
     m_HistoryOn = TRUE;
+    m_History = new wxHtmlHistoryArray;
+    m_Processors = NULL;
     m_Style = style;
     SetPage(wxT("<html><body></body></html>"));
 }
@@ -71,6 +103,8 @@ wxHtmlWindow::~wxHtmlWindow()
 
     delete m_Parser;
     delete m_FS;
+    delete m_History;
+    delete m_Processors;
 }
 
 
@@ -95,7 +129,8 @@ void wxHtmlWindow::SetFonts(wxString normal_face, wxString fixed_face, const int
     wxString op = m_OpenedPage;
 
     m_Parser->SetFonts(normal_face, fixed_face, sizes);
-    SetPage(wxT("<html><body></body></html>")); // fonts changed => contents invalid
+    // fonts changed => contents invalid, so reload the page:
+    SetPage(wxT("<html><body></body></html>")); 
     if (!op.IsEmpty()) LoadPage(op);
 }
 
@@ -103,8 +138,36 @@ void wxHtmlWindow::SetFonts(wxString normal_face, wxString fixed_face, const int
 
 bool wxHtmlWindow::SetPage(const wxString& source)
 {
-    wxClientDC *dc = new wxClientDC(this);
+    wxString newsrc(source);
 
+    // pass HTML through registered processors:
+    if (m_Processors || m_SharedProcessors)
+    {
+        wxHtmlProcessorList::Node *nodeL, *nodeS;
+        int prL, prS;
+
+        nodeL = (m_Processors) ? m_Processors->GetFirst() : NULL;
+        nodeS = (m_SharedProcessors) ? m_SharedProcessors->GetFirst() : NULL;
+
+        while (nodeL || nodeS)
+        {
+            prL = (nodeL) ? nodeL->GetData()->GetPriority() : -1;
+            prS = (nodeS) ? nodeS->GetData()->GetPriority() : -1;
+            if (prL > prS)
+            {
+                newsrc = nodeL->GetData()->Process(newsrc);
+                nodeL = nodeL->GetNext();
+            }
+            else // prL <= prS
+            {
+                newsrc = nodeS->GetData()->Process(newsrc);
+                nodeS = nodeS->GetNext();
+            }
+        }
+    }
+
+    // ...and run the parser on it:
+    wxClientDC *dc = new wxClientDC(this);
     dc->SetMapMode(wxMM_TEXT);
     SetBackgroundColour(wxColour(0xFF, 0xFF, 0xFF));
     m_OpenedPage = m_OpenedAnchor = m_OpenedPageTitle = wxEmptyString;
@@ -114,12 +177,13 @@ bool wxHtmlWindow::SetPage(const wxString& source)
         delete m_Cell;
         m_Cell = NULL;
     }
-    m_Cell = (wxHtmlContainerCell*) m_Parser->Parse(source);
+    m_Cell = (wxHtmlContainerCell*) m_Parser->Parse(newsrc);
     delete dc;
     m_Cell->SetIndent(m_Borders, wxHTML_INDENT_ALL, wxHTML_UNITS_PIXELS);
     m_Cell->SetAlignHor(wxHTML_ALIGN_CENTER);
     CreateLayout();
-    if (m_tmpCanDrawLocks == 0) Refresh();
+    if (m_tmpCanDrawLocks == 0) 
+        Refresh();
     return TRUE;
 }
 
@@ -138,7 +202,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
     {
         int x, y;
         ViewStart(&x, &y);
-        m_History[m_HistoryPos].SetPos(y);
+        (*m_History)[m_HistoryPos].SetPos(y);
     }
 
     if (location[0] == wxT('#')) // local anchor
@@ -233,12 +297,12 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
 
     if (m_HistoryOn) // add this page to history there:
     {
-        int c = m_History.GetCount() - (m_HistoryPos + 1);
+        int c = m_History->GetCount() - (m_HistoryPos + 1);
 
         m_HistoryPos++;
         for (int i = 0; i < c; i++)
-            m_History.Remove(m_HistoryPos);
-        m_History.Add(new HtmlHistoryItem(m_OpenedPage, m_OpenedAnchor));
+            m_History->Remove(m_HistoryPos);
+        m_History->Add(new wxHtmlHistoryItem(m_OpenedPage, m_OpenedAnchor));
     }
 
     if (m_OpenedPageTitle == wxEmptyString)
@@ -342,10 +406,10 @@ void wxHtmlWindow::ReadCustomization(wxConfigBase *cfg, wxString path)
         cfg->SetPath(path);
     }
 
-    m_Borders = cfg->Read("wxHtmlWindow/Borders", m_Borders);
-    p_fff = cfg->Read("wxHtmlWindow/FontFaceFixed", m_Parser->m_FontFaceFixed);
-    p_ffn = cfg->Read("wxHtmlWindow/FontFaceNormal", m_Parser->m_FontFaceNormal);
-    for (int i = 0; i < 7; i++)
+    m_Borders = cfg->Read(wxT("wxHtmlWindow/Borders"), m_Borders);
+    p_fff = cfg->Read(wxT("wxHtmlWindow/FontFaceFixed"), m_Parser->m_FontFaceFixed);
+    p_ffn = cfg->Read(wxT("wxHtmlWindow/FontFaceNormal"), m_Parser->m_FontFaceNormal);
+    for (int i = 0; i < 7; i++) 
     {
         tmp.Printf(wxT("wxHtmlWindow/FontsSize%i"), i);
         p_fontsizes[i] = cfg->Read(tmp, m_Parser->m_FontsSizes[i]);
@@ -369,10 +433,10 @@ void wxHtmlWindow::WriteCustomization(wxConfigBase *cfg, wxString path)
         cfg->SetPath(path);
     }
 
-    cfg->Write("wxHtmlWindow/Borders", (long) m_Borders);
-    cfg->Write("wxHtmlWindow/FontFaceFixed", m_Parser->m_FontFaceFixed);
-    cfg->Write("wxHtmlWindow/FontFaceNormal", m_Parser->m_FontFaceNormal);
-    for (int i = 0; i < 7; i++)
+    cfg->Write(wxT("wxHtmlWindow/Borders"), (long) m_Borders);
+    cfg->Write(wxT("wxHtmlWindow/FontFaceFixed"), m_Parser->m_FontFaceFixed);
+    cfg->Write(wxT("wxHtmlWindow/FontFaceNormal"), m_Parser->m_FontFaceNormal);
+    for (int i = 0; i < 7; i++) 
     {
         tmp.Printf(wxT("wxHtmlWindow/FontsSize%i"), i);
         cfg->Write(tmp, (long) m_Parser->m_FontsSizes[i]);
@@ -393,13 +457,13 @@ bool wxHtmlWindow::HistoryBack()
     // store scroll position into history item:
     int x, y;
     ViewStart(&x, &y);
-    m_History[m_HistoryPos].SetPos(y);
+    (*m_History)[m_HistoryPos].SetPos(y);
 
     // go to previous position:
     m_HistoryPos--;
 
-    l = m_History[m_HistoryPos].GetPage();
-    a = m_History[m_HistoryPos].GetAnchor();
+    l = (*m_History)[m_HistoryPos].GetPage();
+    a = (*m_History)[m_HistoryPos].GetAnchor();
     m_HistoryOn = FALSE;
     m_tmpCanDrawLocks++;
     if (a == wxEmptyString) LoadPage(l);
@@ -407,7 +471,7 @@ bool wxHtmlWindow::HistoryBack()
     m_HistoryOn = TRUE;
     wxYield();
     m_tmpCanDrawLocks--;
-    Scroll(0, m_History[m_HistoryPos].GetPos());
+    Scroll(0, (*m_History)[m_HistoryPos].GetPos());
     Refresh();
     return TRUE;
 }
@@ -424,13 +488,13 @@ bool wxHtmlWindow::HistoryForward()
     wxString a, l;
 
     if (m_HistoryPos == -1) return FALSE;
-    if (m_HistoryPos >= (int)m_History.GetCount() - 1)return FALSE;
+    if (m_HistoryPos >= (int)m_History->GetCount() - 1)return FALSE;
 
     m_OpenedPage = wxEmptyString; // this will disable adding new entry into history in LoadPage()
 
     m_HistoryPos++;
-    l = m_History[m_HistoryPos].GetPage();
-    a = m_History[m_HistoryPos].GetAnchor();
+    l = (*m_History)[m_HistoryPos].GetPage();
+    a = (*m_History)[m_HistoryPos].GetAnchor();
     m_HistoryOn = FALSE;
     m_tmpCanDrawLocks++;
     if (a == wxEmptyString) LoadPage(l);
@@ -438,7 +502,7 @@ bool wxHtmlWindow::HistoryForward()
     m_HistoryOn = TRUE;
     wxYield();
     m_tmpCanDrawLocks--;
-    Scroll(0, m_History[m_HistoryPos].GetPos());
+    Scroll(0, (*m_History)[m_HistoryPos].GetPos());
     Refresh();
     return TRUE;
 }
@@ -446,15 +510,53 @@ bool wxHtmlWindow::HistoryForward()
 bool wxHtmlWindow::HistoryCanForward()
 {
     if (m_HistoryPos == -1) return FALSE;
-    if (m_HistoryPos >= (int)m_History.GetCount() - 1)return FALSE;
+    if (m_HistoryPos >= (int)m_History->GetCount() - 1)return FALSE;
     return TRUE ;
 }
 
 
 void wxHtmlWindow::HistoryClear()
 {
-    m_History.Empty();
+    m_History->Empty();
     m_HistoryPos = -1;
+}
+
+void wxHtmlWindow::AddProcessor(wxHtmlProcessor *processor)
+{
+    if (!m_Processors)
+    {
+        m_Processors = new wxHtmlProcessorList;
+        m_Processors->DeleteContents(TRUE);
+    }
+    wxHtmlProcessorList::Node *node;
+    
+    for (node = m_Processors->GetFirst(); node; node = node->GetNext())
+    {
+        if (processor->GetPriority() > node->GetData()->GetPriority()) 
+        {
+            m_Processors->Insert(node, processor);
+            break;
+        }
+    }
+}
+
+/*static */ void wxHtmlWindow::AddSharedProcessor(wxHtmlProcessor *processor)
+{
+    if (!m_SharedProcessors)
+    {
+        m_SharedProcessors = new wxHtmlProcessorList;
+        m_SharedProcessors->DeleteContents(TRUE);
+    }
+    wxHtmlProcessorList::Node *node;
+    
+    for (node = m_SharedProcessors->GetFirst(); node; node = node->GetNext())
+    {
+        if (processor->GetPriority() > node->GetData()->GetPriority()) 
+        {
+            m_SharedProcessors->Insert(node, processor);
+            break;
+        }
+    }
 }
 
 
@@ -463,15 +565,20 @@ wxList wxHtmlWindow::m_Filters;
 wxHtmlFilter *wxHtmlWindow::m_DefaultFilter = NULL;
 wxCursor *wxHtmlWindow::s_cur_hand = NULL;
 wxCursor *wxHtmlWindow::s_cur_arrow = NULL;
+wxHtmlProcessorList *wxHtmlWindow::m_SharedProcessors = NULL;
 
 void wxHtmlWindow::CleanUpStatics()
 {
-    if (m_DefaultFilter) delete m_DefaultFilter;
+    delete m_DefaultFilter;
     m_DefaultFilter = NULL;
     m_Filters.DeleteContents(TRUE);
     m_Filters.Clear();
-    if (s_cur_hand) delete s_cur_hand;
-    if (s_cur_arrow) delete s_cur_arrow;
+    
+    delete m_SharedProcessors;
+    m_SharedProcessors = NULL;
+    
+    delete s_cur_hand;
+    delete s_cur_arrow;
 }
 
 

@@ -27,6 +27,11 @@
 #include "wx/filesys.h"
 #include "wx/html/htmlfilt.h"
 
+class WXDLLEXPORT wxHtmlProcessor;
+
+class wxHtmlWinModule;
+class wxHtmlHistoryArray;
+class wxHtmlProcessorList;
 
 //--------------------------------------------------------------------------------
 // wxHtmlWindow
@@ -38,28 +43,6 @@
 //                  Once the window is created you can set it's content by calling
 //                  SetPage(text) or LoadPage(filename).
 //--------------------------------------------------------------------------------
-
-
-// item of history list
-class WXDLLEXPORT HtmlHistoryItem : public wxObject
-{
-public:
-    HtmlHistoryItem(const wxString& p, const wxString& a) {m_Page = p, m_Anchor = a, m_Pos = 0;}
-    int GetPos() const {return m_Pos;}
-    void SetPos(int p) {m_Pos = p;}
-    const wxString& GetPage() const {return m_Page;}
-    const wxString& GetAnchor() const {return m_Anchor;}
-
-private:
-    wxString m_Page;
-    wxString m_Anchor;
-    int m_Pos;
-};
-
-
-WX_DECLARE_EXPORTED_OBJARRAY(HtmlHistoryItem, HtmlHistoryArray);
-
-class wxHtmlWinModule;
 
 class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
 {
@@ -147,6 +130,11 @@ public:
 
     // Returns a pointer to the parser.
     wxHtmlWinParser *GetParser() const { return m_Parser; }
+    
+    // Adds HTML processor to this instance of wxHtmlWindow:
+    void AddProcessor(wxHtmlProcessor *processor);
+    // Adds HTML processor to wxHtmlWindow class as whole:
+    static void AddSharedProcessor(wxHtmlProcessor *processor);
 
 protected:
     // Scrolls to anchor of this name. (Anchor is #news
@@ -167,63 +155,65 @@ protected:
     // Returns new filter (will be stored into m_DefaultFilter variable)
     virtual wxHtmlFilter *GetDefaultFilter() {return new wxHtmlFilterPlainText;}
 
+    // cleans static variables
     static void CleanUpStatics();
-        // cleans static variables
-
 
 protected:
+    // This is pointer to the first cell in parsed data.
+    // (Note: the first cell is usually top one = all other cells are sub-cells of this one)
     wxHtmlContainerCell *m_Cell;
-            // This is pointer to the first cell in parsed data.
-            // (Note: the first cell is usually top one = all other cells are sub-cells of this one)
+    // parser which is used to parse HTML input.
+    // Each wxHtmlWindow has it's own parser because sharing one global
+    // parser would be problematic (because of reentrancy)
     wxHtmlWinParser *m_Parser;
-            // parser which is used to parse HTML input.
-            // Each wxHtmlWindow has it's own parser because sharing one global
-            // parser would be problematic (because of reentrancy)
+    // contains name of actualy opened page or empty string if no page opened
     wxString m_OpenedPage;
-            // contains name of actualy opened page or empty string if no page opened
+    // contains name of current anchor within m_OpenedPage
     wxString m_OpenedAnchor;
-            // contains name of current anchor within m_OpenedPage
+    // contains title of actualy opened page or empty string if no <TITLE> tag
     wxString m_OpenedPageTitle;
-            // contains title of actualy opened page or empty string if no <TITLE> tag
+    // class for opening files (file system)
     wxFileSystem* m_FS;
-            // class for opening files (file system)
 
     wxFrame *m_RelatedFrame;
     wxString m_TitleFormat;
+    // frame in which page title should be displayed & number of it's statusbar
+    // reserved for usage with this html window
     int m_RelatedStatusBar;
-            // frame in which page title should be displayed & number of it's statusbar
-            // reserved for usage with this html window
 
+    // borders (free space between text and window borders)
+    // defaults to 10 pixels.
     int m_Borders;
-            // borders (free space between text and window borders)
-            // defaults to 10 pixels.
 
     int m_Style;
 
 private:
+    // a flag indicated if mouse moved
+    // (if TRUE we will try to change cursor in last call to OnIdle)
     bool m_tmpMouseMoved;
-            // a flag indicated if mouse moved
-            // (if TRUE we will try to change cursor in last call to OnIdle)
+    // contains last link name
     wxHtmlLinkInfo *m_tmpLastLink;
-            // contains last link name
+    // if >0 contents of the window is not redrawn
+    // (in order to avoid ugly blinking)
     int m_tmpCanDrawLocks;
-            // if >0 contents of the window is not redrawn
-            // (in order to avoid ugly blinking)
 
+    // list of HTML filters
     static wxList m_Filters;
-            // list of HTML filters
+    // this filter is used when no filter is able to read some file
     static wxHtmlFilter *m_DefaultFilter;
-            // this filter is used when no filter is able to read some file
 
     static wxCursor *s_cur_hand;
     static wxCursor *s_cur_arrow;
 
-    HtmlHistoryArray m_History;
+    wxHtmlHistoryArray *m_History;
+    // browser history
     int m_HistoryPos;
-            // browser history
+    // if this FLAG is false, items are not added to history
     bool m_HistoryOn;
-            // if this FLAG is false, items are not added to history
-
+    
+    // html processors array:
+    wxHtmlProcessorList *m_Processors;
+    static wxHtmlProcessorList *m_SharedProcessors;    
 
     DECLARE_EVENT_TABLE()
 };
