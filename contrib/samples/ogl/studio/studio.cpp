@@ -119,7 +119,7 @@ bool csApp::OnInit(void)
   // area doesn't refresh properly when we change its position, under Windows.
 
 #define wxDEFAULT_FRAME_STYLE_NO_CLIP \
-  (wxSYSTEM_MENU | wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxTHICK_FRAME | wxSYSTEM_MENU | wxCAPTION)
+  (wxDEFAULT_FRAME_STYLE & ~wxCLIP_CHILDREN)
 
   csFrame* frame = new csFrame(m_docManager, NULL, -1, _T("OGL Studio"), m_mainFramePos, m_mainFrameSize,
    wxDEFAULT_FRAME_STYLE_NO_CLIP | wxHSCROLL | wxVSCROLL);

@@ -1769,7 +1769,7 @@ wxShapeRegion::wxShapeRegion()
   m_textColour = wxT("BLACK");
   m_penColour = wxT("BLACK");
   m_penStyle = wxSOLID;
-  m_actualColourObject = NULL;
+  m_actualColourObject = wxTheColourDatabase->Find(wxT("BLACK"));
   m_actualPenObject = NULL;
 }
 
@@ -1790,7 +1790,7 @@ wxShapeRegion::wxShapeRegion(wxShapeRegion& region)
   m_regionProportionX = region.m_regionProportionX;
   m_regionProportionY = region.m_regionProportionY;
   m_formatMode = region.m_formatMode;
-  m_actualColourObject = NULL;
+  m_actualColourObject = region.m_actualColourObject;
   m_actualPenObject = NULL;
   m_penStyle = region.m_penStyle;
   m_penColour = region.m_penColour;
@@ -1862,15 +1862,12 @@ void wxShapeRegion::SetFormatMode(int mode)
 void wxShapeRegion::SetColour(const wxString& col)
 {
   m_textColour = col;
-  m_actualColourObject = NULL;
+  m_actualColourObject = col;
 }
 
-wxColour *wxShapeRegion::GetActualColourObject()
+wxColour wxShapeRegion::GetActualColourObject()
 {
-  if (!m_actualColourObject)
-    m_actualColourObject = wxTheColourDatabase->FindColour(GetColour());
-  if (!m_actualColourObject)
-    m_actualColourObject = wxBLACK;
+  m_actualColourObject = wxTheColourDatabase->Find(GetColour());
   return m_actualColourObject;
 }
 

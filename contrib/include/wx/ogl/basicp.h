@@ -157,7 +157,7 @@ class WXDLLIMPEXP_OGL wxShapeRegion: public wxObject
   inline int GetFormatMode() const { return m_formatMode; }
   inline wxString GetName() const { return m_regionName; }
   inline wxString GetColour() const { return m_textColour; }
-  wxColour *GetActualColourObject();
+  wxColour GetActualColourObject();
   inline wxList& GetFormattedText() { return m_formattedText; }
   inline wxString GetPenColour() const { return m_penColour; }
   inline int GetPenStyle() const { return m_penStyle; }
@@ -188,7 +188,7 @@ public:
   int                   m_formatMode;        // FORMAT_CENTRE_HORIZ | FORMAT_CENTRE_VERT | FORMAT_NONE
   wxString              m_regionName;
   wxString              m_textColour;
-  wxColour*             m_actualColourObject; // For speed purposes
+  wxColour              m_actualColourObject; // For speed purposes
 
   // New members for specifying divided rectangle division colour/style 30/6/94
   wxString              m_penColour;

@@ -81,7 +81,7 @@ void wxDividedShape::OnDrawContents(wxDC& dc)
 
   if (m_pen) dc.SetPen(* m_pen);
 
-  if (m_textColour) dc.SetTextForeground(* m_textColour);
+  dc.SetTextForeground(m_textColour);
 
 #ifdef __WXMSW__
   // For efficiency, don't do this under X - doesn't make
@@ -107,7 +107,7 @@ void wxDividedShape::OnDrawContents(wxDC& dc)
   {
     wxShapeRegion *region = (wxShapeRegion *)node->GetData();
     dc.SetFont(* region->GetFont());
-    dc.SetTextForeground(* region->GetActualColourObject());
+    dc.SetTextForeground(region->GetActualColourObject());
 
     double proportion =
       region->m_regionProportionY < 0.0 ? defaultProportion : region->m_regionProportionY;

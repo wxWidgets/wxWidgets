@@ -169,6 +169,7 @@ bool wxDiagramClipboard::DoCopy(wxDiagram* diagramFrom, wxDiagram* diagramTo, bo
 // these to the Windows clipboard
 bool wxDiagramClipboard::CopyToClipboard(double scale)
 {
+#if wxUSE_METAFILE
   // Make a metafile DC
   wxMetaFileDC mfDC;
   if (mfDC.Ok())
@@ -230,7 +231,11 @@ bool wxDiagramClipboard::CopyToClipboard(double scale)
     delete mf;
 
   }
-  return TRUE;
+  return true;
+#else
+  wxMessageBox("wxUSE_METAFILE in build required to use Clipboard", _T("Clipboard copy problem"));
+  return false;
+#endif
 }
 #endif
     // __WXMSW__

@@ -530,7 +530,7 @@ class WXDLLIMPEXP_OGL wxShape: public wxShapeEvtHandler
   wxPen*                m_pen;
   wxBrush*              m_brush;
   wxFont*               m_font;
-  wxColour*             m_textColour;
+  wxColour              m_textColour;
   wxString              m_textColourName;
   wxShapeCanvas*        m_canvas;
   wxList                m_lines;

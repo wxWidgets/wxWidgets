@@ -287,7 +287,7 @@ void wxLineShape::DrawRegion(wxDC& dc, wxShapeRegion *region, double x, double y
       dc.DrawRectangle((long)(xp - w/2.0), (long)(yp - h/2.0), (long)w, (long)h);
 
       if (m_pen) dc.SetPen(* m_pen);
-      dc.SetTextForeground(* region->GetActualColourObject());
+      dc.SetTextForeground(region->GetActualColourObject());
 
 #ifdef __WXMSW__
       dc.SetTextBackground(GetBackgroundBrush().GetColour());

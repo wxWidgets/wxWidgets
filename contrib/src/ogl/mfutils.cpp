@@ -653,18 +653,26 @@ bool wxXMetaFile::ReadFile(const wxChar *file)
             }
             break;
           }
+#if PS_DOT != BS_HATCHED
+          /* ABX 30.12.2003                                   */
+          /* in microsoft/include/wingdi.h  both are the same */
+          /* in fact I'm not sure  why pen related PS_XXX and */
+          /* BS_XXX constants are all mixed into single style */
+          case PS_DOT:
+            style = wxDOT;
+            break;
+#endif
+          case PS_DASH:
+            style = wxSHORT_DASH;
+            break;
+          case PS_NULL:
+            style = wxTRANSPARENT;
+            break;
           case BS_SOLID:
           default:
             style = wxSOLID;
             break;
         }
-        if (msStyle == PS_DOT)
-          style = wxDOT;
-        else if (msStyle == PS_DASH)
-          style = wxSHORT_DASH;
-        else if (msStyle == PS_NULL)
-          style = wxTRANSPARENT;
-        else style = wxSOLID;
 
         wxColour colour(GetRValue(colorref), GetGValue(colorref), GetBValue(colorref));
         rec->param1 = (long)wxTheBrushList->FindOrCreateBrush(colour, style);

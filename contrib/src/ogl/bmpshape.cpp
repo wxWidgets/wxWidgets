@@ -52,7 +52,7 @@ void wxBitmapShape::OnDraw(wxDC& dc)
   if (!m_bitmap.Ok())
     return;
 
-  double x, y;
+  int x, y;
   x = WXROUND(m_xpos - m_bitmap.GetWidth() / 2.0);
   y = WXROUND(m_ypos - m_bitmap.GetHeight() / 2.0);
   dc.DrawBitmap(m_bitmap, x, y, true);

@@ -276,7 +276,7 @@ wxShape::wxShape(wxShapeCanvas *can)
   m_pen = g_oglBlackPen;
   m_brush = wxWHITE_BRUSH;
   m_font = g_oglNormalFont;
-  m_textColour = wxBLACK;
+  m_textColour = wxT("BLACK");
   m_textColourName = wxT("BLACK");
   m_visible = FALSE;
   m_selected = FALSE;
@@ -753,8 +753,7 @@ int wxShape::GetFormatMode(int regionId) const
 
 void wxShape::SetTextColour(const wxString& the_colour, int regionId)
 {
-  wxColour *wxcolour = wxTheColourDatabase->FindColour(the_colour);
-  m_textColour = wxcolour;
+  m_textColour = wxTheColourDatabase->Find(the_colour);
   m_textColourName = the_colour;
 
   wxNode *node = m_regions.Item(regionId);
@@ -920,7 +919,7 @@ void wxShape::OnDrawContents(wxDC& dc)
     wxShapeRegion *region = (wxShapeRegion *)m_regions.GetFirst()->GetData();
     if (region->GetFont()) dc.SetFont(* region->GetFont());
 
-    dc.SetTextForeground(* (region->GetActualColourObject()));
+    dc.SetTextForeground(region->GetActualColourObject());
     dc.SetBackgroundMode(wxTRANSPARENT);
     if (!m_formatted)
     {

@@ -411,6 +411,7 @@ wxStringList *oglFormatText(wxDC& dc, const wxString& text, double width, double
       case 13:
       {
         new_line = TRUE; end_word = TRUE; i++;
+        break;
       }
       case wxT(' '):
       {
