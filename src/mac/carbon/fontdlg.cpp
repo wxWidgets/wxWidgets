@@ -9,12 +9,29 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// ===========================================================================
+// declarations
+// ===========================================================================
+
+// ---------------------------------------------------------------------------
+// headers
+// ---------------------------------------------------------------------------
+
 #ifdef __GNUG__
 #pragma implementation "fontdlg.h"
 #endif
 
-#include "wx/mac/fontdlg.h"
-#include "wx/cmndata.h"
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+    #include "wx/mac/fontdlg.h"
+    #include "wx/cmndata.h"
+#endif
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
@@ -22,11 +39,20 @@ IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
 
 #include "wx/mac/private.h"
 
+//Mac OSX 10.2+ only
 #if defined( __WXMAC__ ) && TARGET_API_MAC_OSX && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_2 )
 
 #include <ATSUnicode.h>
 
 #include "wx/msgdlg.h"
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ---------------------------------------------------------------------------
+// Carbon event callback(s)
+// ---------------------------------------------------------------------------
 
 pascal OSStatus wxFontDialogEventHandler(	EventHandlerCallRef inHandlerCallRef,
 									EventRef event, void* pData)
@@ -99,9 +125,9 @@ pascal OSStatus wxFontDialogEventHandler(	EventHandlerCallRef inHandlerCallRef,
 
 DEFINE_ONE_SHOT_HANDLER_GETTER( wxFontDialogEventHandler );
 
-//---------------------------
-//	Class implementation
-//---------------------------
+// ---------------------------------------------------------------------------
+// wxFontDialog
+// ---------------------------------------------------------------------------
 
 wxFontDialog::wxFontDialog() :
     m_dialogParent(NULL), m_pEventHandlerRef(NULL)
@@ -221,10 +247,9 @@ int wxFontDialog::ShowModal()
 #else
    //10.2+ only
    
-   
-//
-//	no native implementation
-//
+// ---------------------------------------------------------------------------
+// wxFontDialog stub for mac OS's without a native font dialog
+// ---------------------------------------------------------------------------
 
 wxFontDialog::wxFontDialog()
 {

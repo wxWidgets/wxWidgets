@@ -9,7 +9,29 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/defs.h"
+// ===========================================================================
+// declarations
+// ===========================================================================
+
+// ---------------------------------------------------------------------------
+// headers
+// ---------------------------------------------------------------------------
+
+#ifdef __GNUG__
+#pragma implementation "hid.h"
+#endif
+
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+    #include "wx/defs.h"
+#endif
+
 
 //DARWIN _ONLY_
 #ifdef __DARWIN__
@@ -17,6 +39,11 @@
 #include "wx/mac/carbon/private/hid.h"
 #include "wx/string.h"
 #include "wx/log.h"
+
+
+// ---------------------------------------------------------------------------
+// assertion macros
+// ---------------------------------------------------------------------------
 
 #define wxFORCECHECK_MSG(arg, msg)  \
 {\
@@ -57,6 +84,9 @@ void CFShowTypeIDDescription(CFTypeRef pData)
 // implementation
 // ============================================================================
 
+// ---------------------------------------------------------------------------
+// wxHIDDevice
+// ---------------------------------------------------------------------------
 
 bool wxHIDDevice::Create (const int& nClass, const int& nType)
 {
@@ -207,6 +237,10 @@ wxHIDDevice::~wxHIDDevice()
 		}
 	}
 }
+
+// ---------------------------------------------------------------------------
+// wxHIDKeyboard
+// ---------------------------------------------------------------------------
 
 enum
 {
