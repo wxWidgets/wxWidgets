@@ -41,7 +41,14 @@ extern wxCursor   g_globalCursor;
 
 static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget), wxToolBarTool *tool )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
+    if (g_isIdle) 
+        wxapp_install_idle_handler();
+
+    if (tool->m_owner->m_blockNextEvent)
+    { 
+        tool->m_owner->m_blockNextEvent = FALSE;
+        return;
+    }
 
     if (g_blockEventsOnDrag) return;
     if (!tool->m_enabled) return;
@@ -147,6 +154,7 @@ bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
   long style, const wxString& name )
 {
     m_needParent = TRUE;
+    m_blockNextEvent = FALSE;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
@@ -409,13 +417,9 @@ void wxToolBar::ToggleTool( int toolIndex, bool toggle )
                     gtk_pixmap_set( pixmap, bitmap.GetPixmap(), mask );
 	        }
 		
-                gtk_signal_disconnect_by_func( GTK_OBJECT(tool->m_item), 
-                  GTK_SIGNAL_FUNC(gtk_toolbar_callback), (gpointer*)tool );
+                m_blockNextEvent = TRUE;  // we cannot use gtk_signal_disconnect here
 		
                 gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(tool->m_item), toggle );
-		
-                gtk_signal_connect( GTK_OBJECT(tool->m_item), "clicked",
-                  GTK_SIGNAL_FUNC(gtk_toolbar_callback), (gpointer*)tool );
 	    }
 
             return;

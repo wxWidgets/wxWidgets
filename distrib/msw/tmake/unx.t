@@ -984,7 +984,6 @@ SAMPLES_DIST:
 	mkdir $(DISTDIR)/samples/toolbar
 	cp $(SAMPDIR)/toolbar/Makefile.in $(DISTDIR)/samples/toolbar
 	cp $(SAMPDIR)/toolbar/*.cpp $(DISTDIR)/samples/toolbar
-	cp $(SAMPDIR)/toolbar/*.h $(DISTDIR)/samples/toolbar
 	cp $(SAMPDIR)/toolbar/*.xpm $(DISTDIR)/samples/toolbar
 	mkdir $(DISTDIR)/samples/toolbar/bitmaps
 	cp $(SAMPDIR)/toolbar/bitmaps/*.xpm $(DISTDIR)/samples/toolbar/bitmaps

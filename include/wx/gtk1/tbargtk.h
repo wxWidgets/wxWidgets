@@ -116,6 +116,7 @@ public:
     int           m_xMargin;
     int           m_yMargin;
     bool          m_hasToolAlready;
+    bool          m_blockNextEvent;
     
     void OnInternalIdle();
     
