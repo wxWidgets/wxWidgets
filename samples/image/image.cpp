@@ -142,7 +142,7 @@ class MyImageFrame : public wxFrame
 {
 public:
     MyImageFrame(wxFrame *parent, const wxBitmap& bitmap)
-        : wxFrame(parent, -1, _T("Double click to save"),
+        : wxFrame(parent, wxID_ANY, _T("Double click to save"),
                   wxDefaultPosition, wxDefaultSize,
                   wxCAPTION | wxSYSTEM_MENU | wxCLOSE_BOX),
                   m_bitmap(bitmap)
@@ -158,7 +158,7 @@ public:
     void OnPaint(wxPaintEvent& WXUNUSED(event))
     {
         wxPaintDC dc( this );
-        dc.DrawBitmap( m_bitmap, 0, 0, TRUE /* use mask */ );
+        dc.DrawBitmap( m_bitmap, 0, 0, true /* use mask */ );
     }
 
     void OnSave(wxMouseEvent& WXUNUSED(event))
@@ -193,7 +193,8 @@ public:
                                             wxT("PCX files (*.pcx)|*.pcx|")
                                             wxT("ICO files (*.ico)|*.ico|")
                                             wxT("CUR files (*.cur)|*.cur"),
-                                                wxSAVE);
+                                                wxSAVE,
+                                                this);
 
         if ( savefilename.empty() )
             return;
@@ -254,7 +255,7 @@ public:
     };
 
     MyRawBitmapFrame(wxFrame *parent)
-        : wxFrame(parent, -1, _T("Raw bitmaps (how exciting)")),
+        : wxFrame(parent, wxID_ANY, _T("Raw bitmaps (how exciting)")),
           m_bitmap(SIZE, SIZE, 32)
     {
         SetClientSize(SIZE, SIZE);
@@ -303,7 +304,7 @@ public:
         dc.DrawText(_T("This is alpha and raw bitmap test"), 0, BORDER);
         dc.DrawText(_T("This is alpha and raw bitmap test"), 0, SIZE/2 - BORDER);
         dc.DrawText(_T("This is alpha and raw bitmap test"), 0, SIZE - 2*BORDER);
-        dc.DrawBitmap( m_bitmap, 0, 0, TRUE /* use mask */ );
+        dc.DrawBitmap( m_bitmap, 0, 0, true /* use mask */ );
     }
 
 private:
@@ -665,7 +666,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
                wxRED_PEN->GetColour().Red(),
                wxRED_PEN->GetColour().Green(),
                wxRED_PEN->GetColour().Blue() );
-        dc.DrawBitmap( wxBitmap(i), 150, 2010, TRUE );
+        dc.DrawBitmap( wxBitmap(i), 150, 2010, true );
         dc.SetTextForeground( wxT("BLACK") );
     }
 
@@ -705,7 +706,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
                wxRED_PEN->GetColour().Red(),
                wxRED_PEN->GetColour().Green(),
                wxRED_PEN->GetColour().Blue() );
-        dc.DrawBitmap( wxBitmap(i), 150, 2130, TRUE );
+        dc.DrawBitmap( wxBitmap(i), 150, 2130, true );
         dc.SetTextForeground( wxT("BLACK") );
     }
 
@@ -715,7 +716,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     
     dc.DrawText(_T("XPM bitmap"), 30, 2230 );
     if ( m_bmpSmileXpm.Ok() )
-        dc.DrawBitmap(m_bmpSmileXpm, 30, 2250, TRUE);
+        dc.DrawBitmap(m_bmpSmileXpm, 30, 2250, true);
 
     dc.DrawText(_T("XPM icon"), 110, 2230 );
     if ( m_iconSmileXpm.Ok() )
@@ -728,42 +729,42 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.DrawText( _T("SubBitmap"), 170, 2230 );
         wxBitmap sub = to_blit.GetSubBitmap( wxRect(0,0,15,15) );
         if (sub.Ok())
-            dc.DrawBitmap( sub, 170, 2250, TRUE );
+            dc.DrawBitmap( sub, 170, 2250, true );
 
         dc.DrawText( _T("Enlarged"), 250, 2230 );
         dc.SetUserScale( 1.5, 1.5 );
-        dc.DrawBitmap( to_blit, (int)(250/1.5), (int)(2250/1.5), TRUE );
+        dc.DrawBitmap( to_blit, (int)(250/1.5), (int)(2250/1.5), true );
         dc.SetUserScale( 2, 2 );
-        dc.DrawBitmap( to_blit, (int)(300/2), (int)(2250/2), TRUE );
+        dc.DrawBitmap( to_blit, (int)(300/2), (int)(2250/2), true );
         dc.SetUserScale( 1.0, 1.0 );
         
         dc.DrawText( _T("Blit"), 400, 2230);
         wxMemoryDC blit_dc;
         blit_dc.SelectObject( to_blit );
-        dc.Blit( 400, 2250, to_blit.GetWidth(), to_blit.GetHeight(), &blit_dc, 0, 0, wxCOPY, TRUE );
+        dc.Blit( 400, 2250, to_blit.GetWidth(), to_blit.GetHeight(), &blit_dc, 0, 0, wxCOPY, true );
         dc.SetUserScale( 1.5, 1.5 );
-        dc.Blit( (int)(450/1.5), (int)(2250/1.5), to_blit.GetWidth(), to_blit.GetHeight(), &blit_dc, 0, 0, wxCOPY, TRUE );
+        dc.Blit( (int)(450/1.5), (int)(2250/1.5), to_blit.GetWidth(), to_blit.GetHeight(), &blit_dc, 0, 0, wxCOPY, true );
         dc.SetUserScale( 2, 2 );
-        dc.Blit( (int)(500/2), (int)(2250/2), to_blit.GetWidth(), to_blit.GetHeight(), &blit_dc, 0, 0, wxCOPY, TRUE );
+        dc.Blit( (int)(500/2), (int)(2250/2), to_blit.GetWidth(), to_blit.GetHeight(), &blit_dc, 0, 0, wxCOPY, true );
         dc.SetUserScale( 1.0, 1.0 );
     }
 
     dc.DrawText( _T("ICO handler (1st image)"), 30, 2290 );
     if (my_horse_ico32 && my_horse_ico32->Ok())
-        dc.DrawBitmap( *my_horse_ico32, 30, 2330, TRUE );
+        dc.DrawBitmap( *my_horse_ico32, 30, 2330, true );
 
     dc.DrawText( _T("ICO handler (2nd image)"), 230, 2290 );
     if (my_horse_ico16 && my_horse_ico16->Ok())
-        dc.DrawBitmap( *my_horse_ico16, 230, 2330, TRUE );
+        dc.DrawBitmap( *my_horse_ico16, 230, 2330, true );
 
     dc.DrawText( _T("ICO handler (best image)"), 430, 2290 );
     if (my_horse_ico && my_horse_ico->Ok())
-        dc.DrawBitmap( *my_horse_ico, 430, 2330, TRUE );
+        dc.DrawBitmap( *my_horse_ico, 430, 2330, true );
 
     dc.DrawText( _T("CUR handler"), 30, 2390 );
     if (my_horse_cur && my_horse_cur->Ok())
     {
-        dc.DrawBitmap( *my_horse_cur, 30, 2420, TRUE );
+        dc.DrawBitmap( *my_horse_cur, 30, 2420, true );
         dc.SetPen (*wxRED_PEN);
         dc.DrawLine (xH-10,yH,xH+10,yH);
         dc.DrawLine (xH,yH-10,xH,yH+10);
@@ -773,7 +774,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     for (i=0; i < m_ani_images; i ++)
         if (my_horse_ani[i].Ok())
         {
-            dc.DrawBitmap( my_horse_ani[i], 230 + i * 2 * my_horse_ani[i].GetWidth() , 2420, TRUE );
+            dc.DrawBitmap( my_horse_ani[i], 230 + i * 2 * my_horse_ani[i].GetWidth() , 2420, true );
         }
 }
 
@@ -853,7 +854,7 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame()
-       : wxFrame( (wxFrame *)NULL, -1, _T("wxImage sample"),
+       : wxFrame( (wxFrame *)NULL, wxID_ANY, _T("wxImage sample"),
                   wxPoint(20,20), wxSize(470,360) )
 {
   wxMenuBar *menu_bar = new wxMenuBar();
@@ -883,7 +884,7 @@ MyFrame::MyFrame()
   int widths[] = { -1, 100 };
   SetStatusWidths( 2, widths );
 
-  m_canvas = new MyCanvas( this, -1, wxPoint(0,0), wxSize(10,10) );
+  m_canvas = new MyCanvas( this, wxID_ANY, wxPoint(0,0), wxSize(10,10) );
 
   // 500 width * 2500 height
   m_canvas->SetScrollbars( 10, 10, 50, 250 );
@@ -891,7 +892,7 @@ MyFrame::MyFrame()
 
 void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
 {
-  Close( TRUE );
+  Close( true );
 }
 
 void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
@@ -1003,8 +1004,8 @@ bool MyApp::OnInit()
 #endif
 
   wxFrame *frame = new MyFrame();
-  frame->Show( TRUE );
+  frame->Show( true );
 
-  return TRUE;
+  return true;
 }
 
