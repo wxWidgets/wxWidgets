@@ -30,10 +30,14 @@
 #include <w32api.h>
 #endif
 
-#define wxCHECK_W32API_VERSION( major, minor ) \
- ( defined( __W32API_MAJOR_VERSION ) && defined( __W32API_MINOR_VERSION ) \
- && ( ( __W32API_MAJOR_VERSION > (major) ) \
+/* Watcom can't handle defined(xxx) here: */
+#if defined(__W32API_MAJOR_VERSION) && defined(__W32API_MINOR_VERSION)
+    #define wxCHECK_W32API_VERSION( major, minor ) \
+ ( ( ( __W32API_MAJOR_VERSION > (major) ) \
       || ( __W32API_MAJOR_VERSION == (major) && __W32API_MINOR_VERSION >= (minor) ) ) )
+#else
+    #define wxCHECK_W32API_VERSION( major, minor ) (0)
+#endif
 
 /* Cygwin / Mingw32 with gcc >= 2.95 use new windows headers which
    are more ms-like (header author is Anders Norlander, hence the name) */
@@ -59,7 +63,6 @@
     #define __CYGWIN10__
 #endif
 
-#ifndef __WATCOMC__ /* this workarounds a bug in Watcom's parser */
 /* Mingw runtime 1.0-20010604 has some missing _tXXXX functions,
    so let's define them ourselves: */
 #if defined(__GNUWIN32__) && wxCHECK_W32API_VERSION( 1, 0 ) \
@@ -86,7 +89,6 @@
       #endif
     #endif
 #endif
-#endif /* __WATCOMC__ */
 
 
 #endif
