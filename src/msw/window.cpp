@@ -98,7 +98,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxEvtHandler)
 
 BEGIN_EVENT_TABLE(wxWindow, wxEvtHandler)
   EVT_CHAR(wxWindow::OnChar)
-  EVT_SIZE(wxWindow::OnSize)
   EVT_ERASE_BACKGROUND(wxWindow::OnEraseBackground)
   EVT_SYS_COLOUR_CHANGED(wxWindow::OnSysColourChanged)
   EVT_INIT_DIALOG(wxWindow::OnInitDialog)
@@ -3445,15 +3444,6 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRectangle *rect)
 		::ScrollWindow((HWND) GetHWND(), dx, dy, &rect2, NULL);
 	else
 		::ScrollWindow((HWND) GetHWND(), dx, dy, NULL, NULL);
-}
-
-void wxWindow::OnSize(wxSizeEvent& event)
-{
-	Default();
-#if USE_CONSTRAINTS
-  if (GetAutoLayout())
-    Layout();
-#endif
 }
 
 /*
