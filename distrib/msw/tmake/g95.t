@@ -318,20 +318,12 @@ ifeq ($(wxUSE_GUI),0)
   OBJECTS = $(MSWOBJS_BASE) $(COMMONOBJS_BASE) $(COMMONOBJS_BASEONLY) $(GENERICOBJS_BASE)
 endif
 
-# MBN: if anyone has a better solution for this kludge, step
-#      forward, *please*
-# this tests is we are on cygwin or not ( will _not_ work if you are using
-# ZSH on plain Win32, tought ); it uses the presence of "/"
-# in the PATH variable
-
 # how do you do "VAR=\" ? BLEAGH!
 BACKSLASH=$(subst a,\,a)
-ifeq (,$(findstring /,$(PATH)))
-  IS_CYGWIN=0
+ifeq (,$(findstring $(OSTYPE),"cygwin!msys"))
   PATH_SEPARATOR:=$(BACKSLASH)
   PATH_SUBST=/
 else
-  IS_CYGWIN=1
   PATH_SEPARATOR=/
   PATH_SUBST:=$(BACKSLASH)
 endif
