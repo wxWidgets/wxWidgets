@@ -215,28 +215,37 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* win,
 // splitter sash drawing
 // ----------------------------------------------------------------------------
 
-// all this should probably be read from the current theme settings somehow?
-#ifdef __WXGTK20__
-    // the full sash size
-    static const wxCoord SASH_FULL_SIZE = 5;
-#else // GTK+ 1.x
+#ifndef __WXGTK20__
     // the full sash width (should be even)
     static const wxCoord SASH_SIZE = 8;
 
     // margin around the sash
     static const wxCoord SASH_MARGIN = 2;
-
-    // the full sash size
-    static const wxCoord SASH_FULL_SIZE = SASH_SIZE + SASH_MARGIN;
 #endif // GTK+ 2.x/1.x
 
+static int GetGtkSplitterFullSize()
+{
+#ifdef __WXGTK20__
+    static GtkWidget *s_paned = NULL;
+    if (s_paned == NULL)
+        s_paned = gtk_vpaned_new();
+
+    gint handle_size;
+    gtk_widget_style_get (s_paned, "handle_size", &handle_size, NULL);
+      
+    return handle_size;
+#else
+    return SASH_SIZE + SASH_MARGIN;
+#endif
+}
+
 wxSplitterRenderParams
-wxRendererGTK::GetSplitterParams(const wxWindow * WXUNUSED(win))
+wxRendererGTK::GetSplitterParams(const wxWindow *WXUNUSED(win))
 {
     // we don't draw any border, hence 0 for the second field
     return wxSplitterRenderParams
            (
-               SASH_FULL_SIZE,
+               GetGtkSplitterFullSize(),
                0,
 #ifdef __WXGTK20__
                true     // hot sensitive
@@ -268,6 +277,8 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
         // window not realized yet
         return;
     }
+    
+    wxCoord full_size = GetGtkSplitterFullSize();
 
     // are we drawing vertical or horizontal splitter?
     const bool isVert = orient == wxVERTICAL;
@@ -280,12 +291,12 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
 
         rect.x = position;
         rect.y = 0;
-        rect.width = SASH_FULL_SIZE;
+        rect.width = full_size;
         rect.height = h;
 
         erase_rect.x = position;
         erase_rect.y = 0;
-        erase_rect.width = SASH_FULL_SIZE;
+        erase_rect.width = full_size;
         erase_rect.height = h;
     }
     else // horz
@@ -294,12 +305,12 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
 
         rect.x = 0;
         rect.y = position;
-        rect.height = SASH_FULL_SIZE;
+        rect.height = full_size;
         rect.width = w;
 
         erase_rect.y = position;
         erase_rect.x = 0;
-        erase_rect.height = SASH_FULL_SIZE;
+        erase_rect.height = full_size;
         erase_rect.width = w;
     }
 
@@ -340,7 +351,7 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
         rect.y,
         rect.width,
         rect.height,
-        !isVert ? GTK_ORIENTATION_VERTICAL : GTK_ORIENTATION_HORIZONTAL
+        isVert ? GTK_ORIENTATION_VERTICAL : GTK_ORIENTATION_HORIZONTAL
     );
 #else // GTK+ 1.x
 
