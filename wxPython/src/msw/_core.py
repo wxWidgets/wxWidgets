@@ -10883,7 +10883,6 @@ class _wxPyUnbornObject(object):
 
 
 #----------------------------------------------------------------------------
-_wxPyCallAfterId = None
 
 def CallAfter(callable, *args, **kw):
     """
@@ -10897,18 +10896,16 @@ def CallAfter(callable, *args, **kw):
     app = wx.GetApp()
     assert app is not None, 'No wx.App created yet'
 
-    global _wxPyCallAfterId
-    if _wxPyCallAfterId is None:
-        _wxPyCallAfterId = wx.NewEventType()
-        app.Connect(-1, -1, _wxPyCallAfterId,
-              lambda event: event.callable(*event.args, **event.kw) )
+    if not hasattr(app, "_CallAfterId"):
+        app._CallAfterId = wx.NewEventType()
+        app.Connect(-1, -1, app._CallAfterId,
+                    lambda event: event.callable(*event.args, **event.kw) )
     evt = wx.PyEvent()
-    evt.SetEventType(_wxPyCallAfterId)
+    evt.SetEventType(app._CallAfterId)
     evt.callable = callable
     evt.args = args
     evt.kw = kw
     wx.PostEvent(app, evt)
-
 
 #----------------------------------------------------------------------------
 
