@@ -570,9 +570,9 @@ source_drag_data_get  (GtkWidget          *WXUNUSED(widget),
 // "drag_data_delete"
 //----------------------------------------------------------------------------
 
-static void source_drag_data_delete( GtkWidget          *WXUNUSED(widget),
-                                     GdkDragContext     *WXUNUSED(context),
-                                     wxDropSource       *WXUNUSED(drop_source) )
+static void source_drag_data_delete( GtkWidget *WXUNUSED(widget),
+                                     GdkDragContext *context,
+                                     wxDropSource *WXUNUSED(drop_source) )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -800,8 +800,9 @@ wxDragResult wxDropSource::DoDragDrop( bool allowMove )
     /* don't start dragging if no button is down */
     if (button_number)
     {
-        GdkDragAction action = GDK_ACTION_COPY;
-        if (allowMove) action = (GdkDragAction)(GDK_ACTION_MOVE|GDK_ACTION_COPY);
+        int action = GDK_ACTION_COPY;
+        if ( allowMove )
+            action |= GDK_ACTION_MOVE;
         GdkDragContext *context = gtk_drag_begin( m_widget,
                 target_list,
                 action,
