@@ -2266,7 +2266,7 @@ void wxGTKRenderer::InitComboBitmaps()
         wxCONTROL_DISABLED,
     };
 
-    wxRect rect(wxPoint(0, 0), sizeArrow);
+    wxRect rect(sizeArrow);
 
     wxMemoryDC dc;
     for ( n = ComboState_Normal; n < ComboState_Max; n++ )

@@ -125,6 +125,12 @@ wxRect::wxRect(const wxPoint& point, const wxSize& size)
     width = size.x; height = size.y;
 }
 
+wxRect::wxRect(const wxSize& size)
+{
+    x = 0; y = 0;
+    width = size.x; height = size.y;
+}
+
 bool wxRect::operator==(const wxRect& rect) const
 {
     return ((x == rect.x) &&
@@ -854,7 +860,7 @@ wxFont *wxFontList::FindOrCreateFont(int pointSize,
             // a different font if we create it with empty facename, but it is
             // still better than never matching anything in the cache at all
             // in this case
-            if ( same && !facename.IsEmpty() )
+            if ( same && !facename.empty() )
             {
                 const wxString& fontFace = font->GetFaceName();
 
