@@ -1163,6 +1163,11 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
                 *exstyle |= WS_EX_DLGMODALFRAME;
                 break;
         }
+
+        if ( flags & wxTAB_TRAVERSAL )
+        {
+            *exstyle |= WS_EX_CONTROLPARENT;
+        }
     }
 
     return style;
