@@ -23,7 +23,7 @@
 /* use wxWidgets' configure */
 #include "wx/setup.h"
 
-// If using Metrowerks and not using configure-generated setup
+/* If using Metrowerks and not using configure-generated setup */
 #if defined(__MWERKS__) && !defined(__WX_SETUP_H__)
 #if (__MWERKS__ < 0x0900) || macintosh || defined ( __MACH__ )
 
@@ -37,7 +37,7 @@
 #       include <machine/ansi.h>
 #   endif
 
-// automatically includes MacHeaders
+/* automatically includes MacHeaders */
 #elif (__MWERKS__ >= 0x0900) && __INTEL__
     #define __WXMSW__
 #endif

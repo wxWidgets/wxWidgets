@@ -26,7 +26,7 @@
     #define M_PI 3.1415926535897932384626433832795
 #endif
 
-// Scaling factors for various unit conversions
+/* Scaling factors for various unit conversions */
 #ifndef METRIC_CONVERSION_CONSTANT
     #define METRIC_CONVERSION_CONSTANT 0.0393700787
 #endif
@@ -81,5 +81,4 @@
 #endif
 
 
-#endif
-       /* _WX_MATH_H_ */
+#endif /* _WX_MATH_H_ */
