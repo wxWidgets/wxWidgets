@@ -300,17 +300,23 @@ class Frame(wx.Frame):
             elif id == ID_OPEN:
                 event.Enable(hasattr(self, 'bufferOpen'))
             elif id == ID_REVERT:
-                event.Enable(hasattr(self, 'bufferRevert') and self.hasBuffer())
+                event.Enable(hasattr(self, 'bufferRevert')
+                             and self.hasBuffer())
             elif id == ID_CLOSE:
-                event.Enable(hasattr(self, 'bufferClose') and self.hasBuffer())
+                event.Enable(hasattr(self, 'bufferClose')
+                             and self.hasBuffer())
             elif id == ID_SAVE:
-                event.Enable(hasattr(self, 'bufferSave') and self.bufferHasChanged())
+                event.Enable(hasattr(self, 'bufferSave')
+                             and self.bufferHasChanged())
             elif id == ID_SAVEAS:
-                event.Enable(hasattr(self, 'bufferSaveAs') and self.hasBuffer())
+                event.Enable(hasattr(self, 'bufferSaveAs')
+                             and self.hasBuffer())
             elif id == ID_NAMESPACE:
-                event.Enable(hasattr(self, 'updateNamespace') and self.hasBuffer())
+                event.Enable(hasattr(self, 'updateNamespace')
+                             and self.hasBuffer())
             elif id == ID_PRINT:
-                event.Enable(hasattr(self, 'bufferPrint') and self.hasBuffer())
+                event.Enable(hasattr(self, 'bufferPrint')
+                             and self.hasBuffer())
             elif id == ID_UNDO:
                 event.Enable(win.CanUndo())
             elif id == ID_REDO:
