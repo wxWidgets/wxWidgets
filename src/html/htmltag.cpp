@@ -62,14 +62,14 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
     const wxChar *src = source.c_str();
     int i, tg, pos, stpos;
     int lng = source.Length();
-    wxChar dummy[256];
+    wxChar tagBuffer[256];
 
     m_Cache = NULL;
     m_CacheSize = 0;
     m_CachePos = 0;
 
     pos = 0;
-    while (pos < lng) 
+    while (pos < lng)
     {
         if (src[pos] == wxT('<'))   // tag found:
         {
@@ -77,19 +77,18 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
                 m_Cache = (wxHtmlCacheItem*) realloc(m_Cache, (m_CacheSize + CACHE_INCREMENT) * sizeof(wxHtmlCacheItem));
             tg = m_CacheSize++;
             m_Cache[tg].Key = stpos = pos++;
-            dummy[0] = 0; i = 0;
-            while (pos < lng && 
-                   src[pos] != wxT('>') &&
-                   src[pos] != wxT(' ') && src[pos] != wxT('\r') && 
-                   src[pos] != wxT('\n') && src[pos] != wxT('\t')) 
+
+            for ( i = 0;
+                  pos < lng && i < WXSIZEOF(tagBuffer) - 1 &&
+                  src[pos] != wxT('>') && !wxIsspace(src[pos]);
+                  i++, pos++ )
             {
-                dummy[i] = src[pos++];
-                if ((dummy[i] >= wxT('a')) && (dummy[i] <= wxT('z'))) dummy[i] -= (wxT('a') - wxT('A'));
-                i++;
+                tagBuffer[i] = wxToupper(src[pos]);
             }
-            dummy[i] = 0;
+            tagBuffer[i] = _T('\0');
+
             m_Cache[tg].Name = new wxChar[i+1];
-            memcpy(m_Cache[tg].Name, dummy, (i+1)*sizeof(wxChar));
+            memcpy(m_Cache[tg].Name, tagBuffer, (i+1)*sizeof(wxChar));
 
             while (pos < lng && src[pos] != wxT('>')) pos++;
 
@@ -98,14 +97,14 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
                 m_Cache[tg].End1 = m_Cache[tg].End2 = -2;
                 // find matching begin tag:
                 for (i = tg; i >= 0; i--)
-                    if ((m_Cache[i].End1 == -1) && (wxStrcmp(m_Cache[i].Name, dummy+1) == 0)) 
+                    if ((m_Cache[i].End1 == -1) && (wxStrcmp(m_Cache[i].Name, tagBuffer+1) == 0))
                     {
                         m_Cache[i].End1 = stpos;
                         m_Cache[i].End2 = pos + 1;
                         break;
                     }
             }
-            else 
+            else
             {
                 m_Cache[tg].End1 = m_Cache[tg].End2 = -1;
             }
@@ -115,7 +114,7 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
     }
 
     // ok, we're done, now we'll free .Name members of cache - we don't need it anymore:
-    for (i = 0; i < m_CacheSize; i++) 
+    for (i = 0; i < m_CacheSize; i++)
     {
         delete[] m_Cache[i].Name;
         m_Cache[i].Name = NULL;
@@ -125,12 +124,12 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
 void wxHtmlTagsCache::QueryTag(int at, int* end1, int* end2)
 {
     if (m_Cache == NULL) return;
-    if (m_Cache[m_CachePos].Key != at) 
+    if (m_Cache[m_CachePos].Key != at)
     {
         int delta = (at < m_Cache[m_CachePos].Key) ? -1 : 1;
-        do 
-        { 
-            m_CachePos += delta; 
+        do
+        {
+            m_CachePos += delta;
         }
         while (m_Cache[m_CachePos].Key != at);
     }
@@ -148,7 +147,7 @@ void wxHtmlTagsCache::QueryTag(int at, int* end1, int* end2)
 IMPLEMENT_CLASS(wxHtmlTag,wxObject)
 
 wxHtmlTag::wxHtmlTag(wxHtmlTag *parent,
-                     const wxString& source, int pos, int end_pos, 
+                     const wxString& source, int pos, int end_pos,
                      wxHtmlTagsCache *cache,
                      wxHtmlEntitiesParser *entParser) : wxObject()
 {
@@ -170,7 +169,7 @@ wxHtmlTag::wxHtmlTag(wxHtmlTag *parent,
         m_Prev = NULL;
 
     /* Find parameters and their values: */
-    
+
     int i;
     wxChar c;
 
@@ -178,18 +177,18 @@ wxHtmlTag::wxHtmlTag(wxHtmlTag *parent,
     i = pos+1;
 
     // find tag's name and convert it to uppercase:
-    while ((i < end_pos) && 
-           ((c = source[i++]) != wxT(' ') && c != wxT('\r') && 
+    while ((i < end_pos) &&
+           ((c = source[i++]) != wxT(' ') && c != wxT('\r') &&
              c != wxT('\n') && c != wxT('\t') &&
-             c != wxT('>'))) 
+             c != wxT('>')))
     {
-        if ((c >= wxT('a')) && (c <= wxT('z'))) 
+        if ((c >= wxT('a')) && (c <= wxT('z')))
             c -= (wxT('a') - wxT('A'));
         m_Name << c;
     }
 
     // if the tag has parameters, read them and "normalize" them,
-    // i.e. convert to uppercase, replace whitespaces by spaces and 
+    // i.e. convert to uppercase, replace whitespaces by spaces and
     // remove whitespaces around '=':
     if (source[i-1] != wxT('>'))
     {
@@ -197,22 +196,22 @@ wxHtmlTag::wxHtmlTag(wxHtmlTag *parent,
                              c == wxT('\n') || c == wxT('\t'))
         wxString pname, pvalue;
         wxChar quote;
-        enum 
+        enum
         {
-            ST_BEFORE_NAME = 1, 
+            ST_BEFORE_NAME = 1,
             ST_NAME,
             ST_BEFORE_EQ,
             ST_BEFORE_VALUE,
             ST_VALUE
         } state;
-    
+
         quote = 0;
         state = ST_BEFORE_NAME;
         while (i < end_pos)
         {
             c = source[i++];
 
-            if (c == wxT('>') && !(state == ST_VALUE && quote != 0)) 
+            if (c == wxT('>') && !(state == ST_VALUE && quote != 0))
             {
                 if (state == ST_BEFORE_EQ || state == ST_NAME)
                 {
@@ -289,7 +288,7 @@ wxHtmlTag::wxHtmlTag(wxHtmlTag *parent,
                     break;
             }
         }
-        
+
         #undef IS_WHITE
    }
    m_Begin = i;
@@ -343,7 +342,7 @@ int wxHtmlTag::ScanParam(const wxString& par,
 bool wxHtmlTag::GetParamAsColour(const wxString& par, wxColour *clr) const
 {
     wxString str = GetParam(par);
-    
+
     if (str.IsEmpty()) return FALSE;
     if (str.GetChar(0) == wxT('#'))
     {
@@ -394,7 +393,7 @@ bool wxHtmlTag::GetParamAsInt(const wxString& par, int *clr) const
 
 wxString wxHtmlTag::GetAllParams() const
 {
-    // VS: this function is for backward compatiblity only, 
+    // VS: this function is for backward compatiblity only,
     //     never used by wxHTML
     wxString s;
     size_t cnt = m_ParamNames.GetCount();
@@ -417,7 +416,7 @@ wxHtmlTag *wxHtmlTag::GetFirstSibling() const
     else
     {
         wxHtmlTag *cur = (wxHtmlTag*)this;
-        while (cur->m_Prev) 
+        while (cur->m_Prev)
             cur = cur->m_Prev;
         return cur;
     }
@@ -430,7 +429,7 @@ wxHtmlTag *wxHtmlTag::GetLastSibling() const
     else
     {
         wxHtmlTag *cur = (wxHtmlTag*)this;
-        while (cur->m_Next) 
+        while (cur->m_Next)
             cur = cur->m_Next;
         return cur;
     }
@@ -442,7 +441,7 @@ wxHtmlTag *wxHtmlTag::GetNextTag() const
     if (m_Next) return m_Next;
     wxHtmlTag *cur = m_Parent;
     if (!cur) return NULL;
-    while (cur->m_Parent && !cur->m_Next) 
+    while (cur->m_Parent && !cur->m_Next)
         cur = cur->m_Parent;
     return cur->m_Next;
 }
