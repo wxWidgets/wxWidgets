@@ -26,9 +26,12 @@
 // classes
 //---------------------------------------------------------------------------
 
+class wxStaticBox;
+
 class wxSizerItem;
 class wxSizer;
 class wxBoxSizer;
+class wxStaticBoxSizer;
 
 //---------------------------------------------------------------------------
 // wxSizerItem
@@ -138,5 +141,24 @@ protected:
     int m_fixedHeight;
 };
   
+//---------------------------------------------------------------------------
+// wxStaticBoxSizer
+//---------------------------------------------------------------------------
+
+class WXDLLEXPORT wxStaticBoxSizer: public wxBoxSizer
+{
+public:
+   wxStaticBoxSizer( wxStaticBox *box, int orient );
+   
+   void RecalcSizes();
+   wxSize CalcMin();
+   
+   wxStaticBox *GetStaticBox()
+     { return m_staticBox; }
+   
+protected:
+   wxStaticBox   *m_staticBox;
+};
+
 #endif
   // __WXSIZER_H__

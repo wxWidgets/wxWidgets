@@ -2703,6 +2703,7 @@ AC_OUTPUT([
             samples/checklst/Makefile
             samples/config/Makefile
             samples/controls/Makefile
+            samples/printing/Makefile
           ],
           [
             chmod +x wx-config

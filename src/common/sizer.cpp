@@ -22,6 +22,7 @@
 
 #include "wx/sizer.h"
 #include "wx/utils.h"
+#include "wx/statbox.h"
 
 //---------------------------------------------------------------------------
 // wxSizerItem
@@ -383,4 +384,56 @@ wxSize wxBoxSizer::CalcMin()
     }
 	
     return wxSize( m_minWidth, m_minHeight );
+}
+
+//---------------------------------------------------------------------------
+// wxStaticBoxSizer
+//---------------------------------------------------------------------------
+
+wxStaticBoxSizer::wxStaticBoxSizer( wxStaticBox *box, int orient )
+  : wxBoxSizer( orient )
+{
+    wxASSERT_MSG( box, _T("wxStaticBoxSizer needs a static box") );
+    
+    m_staticBox = box;
+}
+   
+void wxStaticBoxSizer::RecalcSizes()
+{
+    // this will have to be done platform by platform
+    // as there is no way to guess the thickness of
+    // a wxStaticBox border
+    int top_border = 15;
+    if (m_staticBox->GetLabel().IsEmpty()) top_border = 5;
+    int other_border = 5;
+
+    m_staticBox->SetSize( m_position.x, m_position.y, m_size.x, m_size.y );
+    
+    wxPoint old_pos( m_position );
+    m_position.x += other_border;
+    m_position.y += top_border;
+    wxSize old_size( m_size );
+    m_size.x -= 2*other_border;
+    m_size.y -= top_border + other_border;
+    
+    wxBoxSizer::RecalcSizes();
+    
+    m_position = old_pos;
+    m_size = old_size;
+}
+
+wxSize wxStaticBoxSizer::CalcMin()
+{
+    // this will have to be done platform by platform
+    // as there is no way to guess the thickness of
+    // a wxStaticBox border
+    int top_border = 15;
+    if (m_staticBox->GetLabel().IsEmpty()) top_border = 5;
+    int other_border = 5;
+    
+    wxSize ret( wxBoxSizer::CalcMin() );
+    ret.x += 2*top_border;
+    ret.y += other_border + top_border;
+    
+    return ret;
 }

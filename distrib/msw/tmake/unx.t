@@ -658,6 +658,12 @@ SAMPLES_DIST:
 	cp $(SAMPDIR)/checklst/Makefile.in $(DISTDIR)/samples/checklst
 	cp $(SAMPDIR)/checklst/*.cpp $(DISTDIR)/samples/checklst
 	cp $(SAMPDIR)/checklst/*.xpm $(DISTDIR)/samples/checklst
+	mkdir $(DISTDIR)/samples/checkls
+	cp $(SAMPDIR)/printing/Makefile.in $(DISTDIR)/samples/printing
+	cp $(SAMPDIR)/printing/*.cpp $(DISTDIR)/samples/printing
+	cp $(SAMPDIR)/printing/*.h $(DISTDIR)/samples/printing
+	cp $(SAMPDIR)/printing/*.xpm $(DISTDIR)/samples/printing
+	cp $(SAMPDIR)/printing/*.xbm $(DISTDIR)/samples/printing
 
 dist: ALL_DIST @GUIDIST@ SAMPLES_DIST
 	cd _dist_dir; tar ch wx$(TOOLKIT) | gzip -f9 > $(WXARCHIVE); mv $(WXARCHIVE) ..
