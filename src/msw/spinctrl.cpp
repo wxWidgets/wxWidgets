@@ -248,6 +248,8 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     if ( style & wxCLIP_SIBLINGS )
         msStyle |= WS_CLIPSIBLINGS;
 
+    // we want to get WXK_RETURN in order to generate the event for it
+    m_lDlgCode = DLGC_WANTCHARS;
 
     // create the text window
     m_hwndBuddy = (WXHWND)::CreateWindowEx
