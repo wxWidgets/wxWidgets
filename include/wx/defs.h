@@ -518,9 +518,13 @@ class WXDLLEXPORT wxEvent;
 // where should i put this? we need to make sure of this as it breaks
 // the <iostream> code.
 #if !wxUSE_IOSTREAMH && defined(__WXDEBUG__)
-#ifndef __MWERKS__
-#undef __WXDEBUG__
-#endif
+#  ifndef __MWERKS__
+// #undef __WXDEBUG__
+#    ifdef wxUSE_DEBUG_NEW_ALWAYS
+#    undef wxUSE_DEBUG_NEW_ALWAYS
+#    define wxUSE_DEBUG_NEW_ALWAYS 0
+#    endif
+#  endif
 #endif
 
 // Callback function type definition
