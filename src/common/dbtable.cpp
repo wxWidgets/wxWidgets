@@ -1853,6 +1853,7 @@ bool wxDbTable::DropIndex(const wxString &indexName)
                   (pDb->Dbms() == dbmsSYBASE_ASE    && !wxStrcmp(pDb->sqlState,wxT("37000"))) ||
                   (pDb->Dbms() == dbmsMS_SQL_SERVER && !wxStrcmp(pDb->sqlState,wxT("S1000"))) ||
                   (pDb->Dbms() == dbmsINTERBASE     && !wxStrcmp(pDb->sqlState,wxT("S1000"))) ||
+                  (pDb->Dbms() == dbmsMAXDB         && !wxStrcmp(pDb->sqlState,wxT("S1000"))) ||
                   (pDb->Dbms() == dbmsFIREBIRD      && !wxStrcmp(pDb->sqlState,wxT("HY000"))) ||
                   (pDb->Dbms() == dbmsSYBASE_ASE    && !wxStrcmp(pDb->sqlState,wxT("S0002"))) ||  // Base table not found
                   (pDb->Dbms() == dbmsMY_SQL        && !wxStrcmp(pDb->sqlState,wxT("42S12"))) ||  // tested by Christopher Ludwik Marino-Cebulski using v3.23.21beta

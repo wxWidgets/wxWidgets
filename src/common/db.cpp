@@ -576,9 +576,10 @@ const wxChar *wxDb::convertUserID(const wxChar *userID, wxString &UserID)
          || Dbms() == dbmsXBASE_SEQUITER )
         UserID.Empty();
 
-    // Oracle user names may only be in uppercase, so force
-    // the name to uppercase
-    if (Dbms() == dbmsORACLE)
+    // Some databases require user names to be specified in uppercase,
+    // so force the name to uppercase
+    if ((Dbms() == dbmsORACLE) ||
+        (Dbms() == dbmsMAXDB))
         UserID = UserID.Upper();
 
     return UserID.c_str();
@@ -3949,6 +3950,8 @@ wxDBMS wxDb::Dbms(void)
         return((wxDBMS)(dbmsType = dbmsXBASE_SEQUITER));
     if (!wxStricmp(baseName,wxT("MySQL")))
         return((wxDBMS)(dbmsType = dbmsMY_SQL));
+    if (!wxStricmp(baseName,wxT("MaxDB")))
+        return((wxDBMS)(dbmsType = dbmsMAXDB));
 
     baseName[3] = 0;
     if (!wxStricmp(baseName,wxT("DB2")))
