@@ -149,17 +149,25 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_CHAR(wxTextCtrl::OnChar)
     EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
 
+#if wxUSE_RICHEDIT
+    EVT_RIGHT_UP(wxTextCtrl::OnRightClick)
+#endif
+
     EVT_MENU(wxID_CUT, wxTextCtrl::OnCut)
     EVT_MENU(wxID_COPY, wxTextCtrl::OnCopy)
     EVT_MENU(wxID_PASTE, wxTextCtrl::OnPaste)
     EVT_MENU(wxID_UNDO, wxTextCtrl::OnUndo)
     EVT_MENU(wxID_REDO, wxTextCtrl::OnRedo)
+    EVT_MENU(wxID_CLEAR, wxTextCtrl::OnDelete)
+    EVT_MENU(wxID_SELECTALL, wxTextCtrl::OnSelectAll)
 
     EVT_UPDATE_UI(wxID_CUT, wxTextCtrl::OnUpdateCut)
     EVT_UPDATE_UI(wxID_COPY, wxTextCtrl::OnUpdateCopy)
     EVT_UPDATE_UI(wxID_PASTE, wxTextCtrl::OnUpdatePaste)
     EVT_UPDATE_UI(wxID_UNDO, wxTextCtrl::OnUpdateUndo)
     EVT_UPDATE_UI(wxID_REDO, wxTextCtrl::OnUpdateRedo)
+    EVT_UPDATE_UI(wxID_CLEAR, wxTextCtrl::OnUpdateDelete)
+    EVT_UPDATE_UI(wxID_SELECTALL, wxTextCtrl::OnUpdateSelectAll)
 #ifdef __WIN16__
     EVT_ERASE_BACKGROUND(wxTextCtrl::OnEraseBackground)
 #endif
@@ -179,7 +187,17 @@ void wxTextCtrl::Init()
     m_verRichEdit = 0;
 #endif // wxUSE_RICHEDIT
 
+    m_privateContextMenu = NULL;
     m_suppressNextUpdate = FALSE;
+}
+
+wxTextCtrl::~wxTextCtrl()
+{
+    if (m_privateContextMenu)
+    {
+        delete m_privateContextMenu;
+        m_privateContextMenu = NULL;
+    }
 }
 
 bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
@@ -1595,6 +1613,19 @@ void wxTextCtrl::OnRedo(wxCommandEvent& WXUNUSED(event))
     Redo();
 }
 
+void wxTextCtrl::OnDelete(wxCommandEvent& event)
+{
+    long from, to;
+    GetSelection(& from, & to);
+    if (from != -1 && to != -1)
+        Remove(from, to);
+}
+
+void wxTextCtrl::OnSelectAll(wxCommandEvent& event)
+{
+    SetSelection(-1, -1);
+}
+
 void wxTextCtrl::OnUpdateCut(wxUpdateUIEvent& event)
 {
     event.Enable( CanCut() );
@@ -1618,6 +1649,44 @@ void wxTextCtrl::OnUpdateUndo(wxUpdateUIEvent& event)
 void wxTextCtrl::OnUpdateRedo(wxUpdateUIEvent& event)
 {
     event.Enable( CanRedo() );
+}
+
+void wxTextCtrl::OnUpdateDelete(wxUpdateUIEvent& event)
+{
+    long from, to;
+    GetSelection(& from, & to);
+    event.Enable(from != -1 && to != -1 && from != to && IsEditable()) ;
+}
+
+void wxTextCtrl::OnUpdateSelectAll(wxUpdateUIEvent& event)
+{
+    event.Enable(GetLastPosition() > 0);
+}
+
+void wxTextCtrl::OnRightClick(wxMouseEvent& event)
+{
+#if wxUSE_RICHEDIT
+    if (IsRich())
+    {
+        if (!m_privateContextMenu)
+        {
+            m_privateContextMenu = new wxMenu;
+            m_privateContextMenu->Append(wxID_UNDO, _("&Undo"));
+            m_privateContextMenu->Append(wxID_REDO, _("&Redo"));
+            m_privateContextMenu->AppendSeparator();
+            m_privateContextMenu->Append(wxID_CUT, _("Cu&t"));
+            m_privateContextMenu->Append(wxID_COPY, _("&Copy"));
+            m_privateContextMenu->Append(wxID_PASTE, _("&Paste"));
+            m_privateContextMenu->Append(wxID_CLEAR, _("&Delete"));
+            m_privateContextMenu->AppendSeparator();
+            m_privateContextMenu->Append(wxID_SELECTALL, _("Select &All"));
+        }
+        PopupMenu(m_privateContextMenu, event.GetPosition());
+        return;
+    }
+    else
+#endif
+    event.Skip();
 }
 
 // the rest of the file only deals with the rich edit controls

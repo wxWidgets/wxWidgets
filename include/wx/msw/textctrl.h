@@ -35,6 +35,7 @@ public:
 
         Create(parent, id, value, pos, size, style, validator, name);
     }
+    ~wxTextCtrl();
 
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxString& value = wxEmptyString,
@@ -167,12 +168,20 @@ public:
     void OnPaste(wxCommandEvent& event);
     void OnUndo(wxCommandEvent& event);
     void OnRedo(wxCommandEvent& event);
+    void OnDelete(wxCommandEvent& event);
+    void OnSelectAll(wxCommandEvent& event);
 
     void OnUpdateCut(wxUpdateUIEvent& event);
     void OnUpdateCopy(wxUpdateUIEvent& event);
     void OnUpdatePaste(wxUpdateUIEvent& event);
     void OnUpdateUndo(wxUpdateUIEvent& event);
     void OnUpdateRedo(wxUpdateUIEvent& event);
+    void OnUpdateDelete(wxUpdateUIEvent& event);
+    void OnUpdateSelectAll(wxUpdateUIEvent& event);
+
+    // Show a context menu for Rich Edit controls (the standard
+    // EDIT control has one already)
+    void OnRightClick(wxMouseEvent& event);
 
 protected:
     // common part of all ctors
@@ -233,6 +242,8 @@ protected:
 private:
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxTextCtrl)
+
+    wxMenu* m_privateContextMenu;
 };
 
 #endif
