@@ -679,45 +679,69 @@ void wxKDEIconHandler::LoadLinksForMimeSubtype(const wxString& dirbase,
     if ( !file.ReadAll(&text) )
         return;
 
-    int pos;
-    const wxChar *pc;
+    // first find the description string: it is the value in either "Comment="
+    // line or "Comment[<locale_name>]=" one
+    int posComment = wxNOT_FOUND;
 
-    // before trying to find an icon, grab mimetype information
-    // (because BFU's machine would hardly have well-edited mime.types but (s)he might
-    // have edited it in control panel...)
-
-    wxString mime_extension, mime_desc;
-
-    pos = wxNOT_FOUND;
-    if (wxGetLocale() != NULL)
-        mime_desc = _T("Comment[") + wxGetLocale()->GetName() + _T("]=");
-    if (pos == wxNOT_FOUND) mime_desc = _T("Comment=");
-    pos = text.Find(mime_desc);
-    if (pos == wxNOT_FOUND) mime_desc = wxEmptyString;
-    else
+    wxString comment;
+#if wxUSE_INTL
+    wxLocale *locale = wxGetLocale();
+    if ( locale )
     {
-        pc = text.c_str() + pos + mime_desc.Length();
-        mime_desc = wxEmptyString;
-        while ( *pc && *pc != _T('\n') ) mime_desc += *pc++;
+        // try "Comment[locale name]" first
+        comment << _T("Comment[") + locale->GetName() + _T("]=");
+
+        posComment = text.Find(comment);
+    }
+#endif // wxUSE_INTL
+
+    if ( posComment == wxNOT_FOUND )
+    {
+        comment = _T("Comment=");
+
+        posComment = text.Find(comment);
     }
 
-    pos = text.Find(_T("Patterns="));
-    if (pos != wxNOT_FOUND)
+    wxString mime_desc;
+    if ( posComment != wxNOT_FOUND )
+    {
+        // found desc: it follows the comment until the end of line
+        const wxChar *pc = text.c_str() + posComment + comment.length();
+        while ( *pc && *pc != _T('\n') )
+        {
+            mime_desc += *pc++;
+        }
+    }
+    //else: no description
+
+    // next find the extensions
+    wxString mime_extension;
+
+    int posExts = text.Find(_T("Patterns="));
+    if ( posExts != wxNOT_FOUND )
     {
         wxString exts;
-        pc = text.c_str() + pos + 9;
-        while ( *pc && *pc != _T('\n') ) exts += *pc++;
-        wxStringTokenizer tokenizer(exts, _T(";"));
-        wxString e;
-
-        while (tokenizer.HasMoreTokens())
+        const wxChar *pc = text.c_str() + posExts + 9; // strlen("Patterns=")
+        while ( *pc && *pc != _T('\n') )
         {
-            e = tokenizer.GetNextToken();
-            if (e.Left(2) != _T("*.")) continue; // don't support too difficult patterns
-            mime_extension << e.Mid(2);
-            mime_extension << _T(' ');
+            exts += *pc++;
         }
-        mime_extension.RemoveLast();
+
+        wxStringTokenizer tokenizer(exts, _T(";"));
+        while ( tokenizer.HasMoreTokens() )
+        {
+            wxString e = tokenizer.GetNextToken();
+            if ( e.Left(2) != _T("*.") )
+                continue; // don't support too difficult patterns
+
+            if ( !mime_extension.empty() )
+            {
+                // separate from the previous ext
+                mime_extension << _T(' ');
+            }
+
+            mime_extension << e.Mid(2);
+        }
     }
 
     ms_infoTypes.Add(mimetype);
@@ -726,8 +750,8 @@ void wxKDEIconHandler::LoadLinksForMimeSubtype(const wxString& dirbase,
 
     // ok, now we can take care of icon:
 
-    pos = text.Find(_T("Icon="));
-    if ( pos == wxNOT_FOUND )
+    int posIcon = text.Find(_T("Icon="));
+    if ( posIcon == wxNOT_FOUND )
     {
         // no icon info
         return;
@@ -735,7 +759,7 @@ void wxKDEIconHandler::LoadLinksForMimeSubtype(const wxString& dirbase,
 
     wxString icon;
 
-    pc = text.c_str() + pos + 5;  // 5 == strlen("Icon=")
+    const wxChar *pc = text.c_str() + posIcon + 5;  // 5 == strlen("Icon=")
     while ( *pc && *pc != _T('\n') )
     {
         icon += *pc++;
