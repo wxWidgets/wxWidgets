@@ -552,20 +552,14 @@ bool wxWindowMSW::SetCursor(const wxCursor& cursor)
     return TRUE;
 }
 
-void wxWindowMSW::WarpPointer (int x_pos, int y_pos)
+void wxWindowMSW::WarpPointer (int x, int y)
 {
-    // Move the pointer to (x_pos,y_pos) coordinates. They are expressed in
-    // pixel coordinates, relatives to the canvas -- So, we first need to
-    // substract origin of the window, then convert to screen position
+    ClientToScreen(&x, &y);
 
-    int x = x_pos; int y = y_pos;
-    RECT rect;
-    GetWindowRect (GetHwnd(), &rect);
-
-    x += rect.left;
-    y += rect.top;
-
-    SetCursorPos (x, y);
+    if ( !::SetCursorPos(x, y) )
+    {
+        wxLogLastError(_T("SetCursorPos"));
+    }
 }
 
 #if WXWIN_COMPATIBILITY
@@ -1145,7 +1139,7 @@ void wxWindowMSW::Update()
 
 #ifdef __WIN32__
     // just calling UpdateWindow() is not enough, what we did in our WM_PAINT
-    // handler needs to be realyl drawn right now
+    // handler needs to be really drawn right now
     (void)::GdiFlush();
 #endif // __WIN32__
 }

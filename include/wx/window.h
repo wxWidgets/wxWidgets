@@ -209,11 +209,11 @@ public:
     void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
         { DoSetSize(rect.x, rect.y, rect.width, rect.height, sizeFlags); }
 
-    void Move( int x, int y )
-        { DoSetSize( x, y, -1, -1, wxSIZE_USE_EXISTING ); }
+    void Move(int x, int y, int flags = wxSIZE_USE_EXISTING)
+        { DoSetSize(x, y, -1, -1, flags); }
 
-    void Move(const wxPoint& pt)
-        { Move(pt.x, pt.y); }
+    void Move(const wxPoint& pt, int flags = wxSIZE_USE_EXISTING)
+        { Move(pt.x, pt.y, flags); }
 
         // Z-order
     virtual void Raise() = 0;

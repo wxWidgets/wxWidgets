@@ -110,8 +110,7 @@ protected:
     void InvalidateGeometryInfo();
 
     // return either the menubar or the invoking window, normally never NULL
-    wxWindow *GetRootWindow() const
-        { return m_menuBar ? (wxWindow *)m_menuBar : m_invokingWindow; }
+    wxWindow *GetRootWindow() const;
 
     // get the renderer we use for drawing: either the one of the menu bar or
     // the one of the window if we're a popup menu

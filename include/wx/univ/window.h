@@ -21,6 +21,7 @@
 #include "wx/bitmap.h"      // for m_bitmapBg
 
 class WXDLLEXPORT wxControlRenderer;
+class WXDLLEXPORT wxEventLoop;
 class WXDLLEXPORT wxMenu;
 class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxRenderer;
@@ -110,9 +111,13 @@ public:
     // popup menu support
     // ------------------
 
+    // NB: all menu related functions are implemented in menu.cpp
+
 #if wxUSE_MENUS
-    // implemented in menu.cpp
     virtual bool DoPopupMenu(wxMenu *menu, int x, int y);
+
+    // this is wxUniv-specific private method to be used only by wxMenu
+    void DismissPopupMenu();
 #endif // wxUSE_MENUS
 
     // miscellaneous other methods
@@ -272,6 +277,9 @@ private:
     static struct WXDLLEXPORT wxWindowNext *ms_winCaptureNext;
 
 #if wxUSE_MENUS
+    // the current modal event loop for the popup menu we show or NULL
+    static wxEventLoop *ms_evtLoopPopup;
+
     // the last window over which Alt was pressed (used by OnKeyUp)
     static wxWindow *ms_winLastAltPress;
 #endif // wxUSE_MENUS
