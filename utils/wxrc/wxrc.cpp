@@ -399,6 +399,9 @@ static bool NodeContainsFilename(wxXmlNode *node)
    // Any bitmaps:
    if (node->GetName() == _T("bitmap"))
        return true;
+   
+   if (node->GetName() == _T("icon"))
+       return true;
 
    // URLs in wxHtmlWindow:
    if (node->GetName() == _T("url"))

@@ -301,11 +301,39 @@ Example:
 </object>
 
 
+wxDialog
+--------
+position                   Position                -1,-1
+size                       Size                    -1,-1
+style                      Style[wxDialog]         wxDEFAULT_DIALOG_STYLE
+title                      I18nString              ""
+icon                       Bitmap                  (empty)
+centered                   Boolean                 false
+
+wxDialog may have children objects.
+
+
+wxFrame
+--------
+position                   Position                -1,-1
+size                       Size                    -1,-1
+style                      Style[wxDialog]         wxDEFAULT_FRAME_STYLE
+title                      I18nString              ""
+icon                       Bitmap                  (empty)
+centered                   Boolean                 false
+
+wxFrame may have children objects. There can be at most one wxToolBar,
+wxMenuBar and wxStatusBar children; objects of these types are automatically
+set as frame's tool-, menu- and statusbar respectively.
+
+
 wxScrolledWindow
 ----------------
 position                   Position                -1,-1
 size                       Size                    -1,-1
 style                      Style[wxScrolledWindow] wxHSCROLL | wxVSCROLL
+
+wxScolledWindow may have children objects.
 
 
 wxSplitterWindow
@@ -325,10 +353,12 @@ and the splitter is created unsplit. If there are two children, the
 splitter is created split, either horizontally or vertically depending
 on the value of "orientation" attribute.
 
+
 wxStatusBar
 -----------
 fields                     Integer number of fields
 widths                     Width1, Width2, Width3, ...
+
 
 wxToolBar
 ---------
