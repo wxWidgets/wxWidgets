@@ -116,8 +116,8 @@ ctrlcmn.cpp	C
 ctrlsub.cpp	C
 datetime.cpp	C	B
 datstrm.cpp	C	B
-db.cpp	C
-dbtable.cpp	C
+db.cpp	C	32,B
+dbtable.cpp	C	32,B
 dcbase.cpp	C
 dlgcmn.cpp	C
 dobjcmn.cpp	C
@@ -167,7 +167,7 @@ list.cpp	C	B
 log.cpp	C	B
 longlong.cpp	C	B
 matrix.cpp	C
-memory.cpp	C
+memory.cpp	C	B
 menucmn.cpp	C
 mimecmn.cpp	C	32,B
 module.cpp	C	B
@@ -576,8 +576,8 @@ date.h	W	B
 datetime.h	W	B
 datetime.inl	W	B
 datstrm.h	W	B
-db.h	W
-dbtable.h	W
+db.h	W	32,B
+dbtable.h	W	32,B
 dc.h	W
 dcclient.h	W
 dcmemory.h	W
