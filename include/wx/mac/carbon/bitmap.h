@@ -103,27 +103,17 @@ public:
 
 class WXDLLEXPORT wxBitmapHandler: public wxBitmapHandlerBase
 {
-  DECLARE_DYNAMIC_CLASS(wxBitmapHandler)
 public:
-  wxBitmapHandler() : m_name(), m_extension(), m_type(0) { }
-  virtual ~wxBitmapHandler();
+    wxBitmapHandler() { }
+    virtual ~wxBitmapHandler();
 
-  virtual bool Create(wxBitmap *bitmap, void *data, long flags, int width, int height, int depth = 1);
-  virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-      int desiredWidth, int desiredHeight);
-  virtual bool SaveFile(const wxBitmap *bitmap, const wxString& name, int type, const wxPalette *palette = NULL);
+    virtual bool Create(wxBitmap *bitmap, void *data, long flags, int width, int height, int depth = 1);
+    virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
+        int desiredWidth, int desiredHeight);
+    virtual bool SaveFile(const wxBitmap *bitmap, const wxString& name, int type, const wxPalette *palette = NULL);
 
-  void SetName(const wxString& name) { m_name = name; }
-  void SetExtension(const wxString& ext) { m_extension = ext; }
-  void SetType(long type) { m_type = type; }
-  wxString GetName() const { return m_name; }
-  wxString GetExtension() const { return m_extension; }
-  long GetType() const { return m_type; }
-
-protected:
-  wxString  m_name;
-  wxString  m_extension;
-  long      m_type;
+private:
+    DECLARE_DYNAMIC_CLASS(wxBitmapHandler)
 };
 
 #define M_BITMAPHANDLERDATA ((wxBitmapRefData *)bitmap->GetRefData())

@@ -64,18 +64,19 @@ public:
     virtual bool SaveFile(const wxBitmap *bitmap, const wxString& name,
                           int type, const wxPalette *palette = NULL) = 0;
 
-    void SetName(const wxString& name) { m_name = name; }
-    void SetExtension(const wxString& ext) { m_extension = ext; }
-    void SetType(wxBitmapType type) { m_type = type; }
-    wxString GetName() const { return m_name; }
-    wxString GetExtension() const { return m_extension; }
-    wxBitmapType GetType() const { return m_type; }
+    void SetName(const wxString& name)      { m_name = name; }
+    void SetExtension(const wxString& ext)  { m_extension = ext; }
+    void SetType(wxBitmapType type)         { m_type = type; }
+    wxString GetName() const                { return m_name; }
+    wxString GetExtension() const           { return m_extension; }
+    wxBitmapType GetType() const            { return m_type; }
 
-protected:
+private:
     wxString      m_name;
     wxString      m_extension;
     wxBitmapType  m_type;
 
+private:
     DECLARE_ABSTRACT_CLASS(wxBitmapHandlerBase)
 };
 

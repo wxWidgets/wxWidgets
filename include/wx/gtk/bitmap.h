@@ -106,7 +106,7 @@ public:
     wxPalette *GetColourMap() const { return GetPalette(); };
 #endif // wxUSE_PALETTE
 
-    static void InitStandardHandlers() { }
+    static void InitStandardHandlers();
 
     // implementation
     // --------------
@@ -153,8 +153,30 @@ private:
 
     friend class wxMemoryDC;
 #endif
-    
+    friend class wxBitmapHandler;
+
+private:    
     DECLARE_DYNAMIC_CLASS(wxBitmap)
 };
+
+//-----------------------------------------------------------------------------
+// wxBitmapHandler
+//-----------------------------------------------------------------------------
+
+class wxBitmapHandler: public wxBitmapHandlerBase
+{
+public:
+    wxBitmapHandler() { }
+    virtual ~wxBitmapHandler();
+
+    virtual bool Create(wxBitmap *bitmap, void *data, long flags, int width, int height, int depth = 1);
+    virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
+        int desiredWidth, int desiredHeight);
+    virtual bool SaveFile(const wxBitmap *bitmap, const wxString& name, int type, const wxPalette *palette = NULL);
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxBitmapHandler)
+};
+
 
 #endif // __GTKBITMAPH__

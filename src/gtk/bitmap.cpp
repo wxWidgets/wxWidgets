@@ -1555,4 +1555,36 @@ void wxBitmap::PurgeOtherRepresentations(wxBitmap::Representation keep)
     }
 }
 
+//-----------------------------------------------------------------------------
+// wxBitmapHandler
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler,wxBitmapHandlerBase)
+
+wxBitmapHandler::~wxBitmapHandler()
+{
+}
+
+bool wxBitmapHandler::Create(wxBitmap *bitmap, void *data, long type, int width, int height, int depth)
+{
+    return FALSE;
+}
+
+bool wxBitmapHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
+        int desiredWidth, int desiredHeight)
+{
+    return FALSE;
+}
+
+bool wxBitmapHandler::SaveFile(const wxBitmap *bitmap, const wxString& name, int type, const wxPalette *palette)
+{
+    return FALSE;
+}
+
+/* static */ void wxBitmap::InitStandardHandlers()
+{
+    // TODO: Insert handler based on GdkPixbufs handler later
+}
+
+
 #endif // __WXGTK20__
