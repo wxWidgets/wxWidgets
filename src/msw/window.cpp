@@ -1146,9 +1146,11 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
 
     // using this flag results in very significant reduction in flicker,
     // especially with controls inside the static boxes (as the interior of the
-    // box is not redrawn twice).
-    // wxCLIP_CHILDREN support is for compatibility with old applications only.
-    if ((!wxSystemOptions::GetOptionInt(wxT("msw.window.no-clip-children")) == 1) || (flags & wxCLIP_CHILDREN))
+    // box is not redrawn twice).but sometimes results in redraw problems, so
+    // optionally allow the old code to continue to use it provided a special
+    // system option is turned on
+    if ( !wxSystemOptions::GetOptionInt(wxT("msw.window.no-clip-children"))
+            || (flags & wxCLIP_CHILDREN) )
         style |= WS_CLIPCHILDREN;
 
     // it doesn't seem useful to use WS_CLIPSIBLINGS here as we officially
@@ -2200,7 +2202,6 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
     {
         bool        allow;
         WXLRESULT   result;
-        WXHICON     hIcon;
         WXHBRUSH    hBrush;
     } rc;
 
