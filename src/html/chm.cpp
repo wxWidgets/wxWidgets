@@ -636,7 +636,7 @@ wxChmInputStream::CreateHHPStream()
                         wxUint32 dummy = *((wxUint32 *)(structptr+0)) ;
                         wxUint32 lcid = wxUINT32_SWAP_ON_BE( dummy ) ;
                         wxString msg ;
-                        msg.Printf("Language=0x%X\r\n",lcid) ;
+                        msg.Printf(_T("Language=0x%X\r\n"),lcid) ;
                         out->Write(msg.c_str() , msg.Length() ) ;
                     }
                     break ;
