@@ -14,7 +14,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_FILEDLG && defined(__WXGTK24__)
+#if wxUSE_FILEDLG
 
 #include "wx/filedlg.h"
 #include "wx/utils.h"
@@ -23,6 +23,8 @@
 #include "wx/msgdlg.h"
 
 #include <gtk/gtk.h>
+
+#ifdef __WXGTK24__
 #include "wx/gtk/private.h"
 
 //-----------------------------------------------------------------------------
@@ -118,21 +120,27 @@ static void gtk_filedialog_response_callback(GtkWidget *w,
         dialog->m_destroyed_by_delete = TRUE;
     }
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // wxFileDialog
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxFileDialog,wxFileDialogBase)
+IMPLEMENT_DYNAMIC_CLASS(wxFileDialog,wxGenericFileDialog)
+
+BEGIN_EVENT_TABLE(wxFileDialog,wxGenericFileDialog)
+        EVT_BUTTON(wxID_OK, wxFileDialog::OnFakeOk)
+END_EVENT_TABLE()
 
 wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
                            const wxString& defaultDir,
                            const wxString& defaultFileName,
                            const wxString& wildCard,
                            long style, const wxPoint& pos)
-    : wxFileDialogBase(parent, message, defaultDir, defaultFileName,
-                       wildCard, style, pos)
+    : wxGenericFileDialog(parent, message, defaultDir, defaultFileName,
+                       wildCard, style, pos, true )
 {
+#ifdef __WXGTK24__
     m_needParent = FALSE;
     m_destroyed_by_delete = FALSE;
 
@@ -184,16 +192,49 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
     
     SetWildcard(wildCard);
     SetFilterIndex(0);
+#else
+    wxGenericFileDialog::Create( parent, message, defaultDir, defaultFileName, wildCard, style, pos );
+#endif
 }
 
 wxFileDialog::~wxFileDialog()
 {
+#ifdef __WXGTK24__
     if (m_destroyed_by_delete)
         m_widget = NULL;
+#endif
+}
+
+void wxFileDialog::OnFakeOk( wxCommandEvent &event )
+{
+#ifdef __WXGTK24__
+    wxDialog::OnOK( event );
+#else
+    wxGenericFileDialog::OnListOk( event );
+#endif
+}
+
+int wxFileDialog::ShowModal()
+{
+#ifdef __WXGTK24__
+    return wxDialog::ShowModal();
+#else
+    return wxGenericFileDialog::ShowModal();
+#endif
+}
+
+bool wxFileDialog::Show( bool show )
+{
+#ifdef __WXGTK24__
+    return wxDialog::Show( show );
+#else
+    return wxGenericFileDialog::Show( show );
+#endif
 }
 
 void wxFileDialog::GetFilenames(wxArrayString& files) const 
 {
+#ifdef __WXGTK24__
     GetPaths(files);
     for (size_t n = 0; n < files.GetCount(); n++ )
     {
@@ -206,10 +247,14 @@ void wxFileDialog::GetFilenames(wxArrayString& files) const
         }
         files[n] = name;
     }
+#else
+    wxGenericFileDialog::GetFilenames( files );
+#endif
 }
 
 void wxFileDialog::GetPaths(wxArrayString& paths) const 
 {
+#ifdef __WXGTK24__
     paths.Empty(); 
     if (GetWindowStyle() & wxMULTIPLE)
     {
@@ -230,16 +275,24 @@ void wxFileDialog::GetPaths(wxArrayString& paths) const
     {
         paths.Add(m_fileName);
     }
+#else
+    wxGenericFileDialog::GetPaths( paths );
+#endif
 }
 
 void wxFileDialog::SetMessage(const wxString& message)
 {
+#ifdef __WXGTK24__
     m_message = message;
     SetTitle(message);
+#else
+    wxGenericFileDialog::SetMessage( message );
+#endif    
 }
 
 void wxFileDialog::SetPath(const wxString& path)
 {
+#ifdef __WXGTK24__
     if (path.empty()) return;
 
     wxFileName fn(path);
@@ -247,68 +300,39 @@ void wxFileDialog::SetPath(const wxString& path)
     m_dir = fn.GetPath();
     m_fileName = fn.GetFullName();
     UpdateDialog();
+#else
+    wxGenericFileDialog::SetPath( path );
+#endif    
 }
 
 void wxFileDialog::SetDirectory(const wxString& dir)
 {
+#ifdef __WXGTK24__
     if (wxDirExists(dir))
     {
         m_dir = dir;
         m_path = wxFileName(m_dir, m_fileName).GetFullPath();
         UpdateDialog();
     }
+#else
+    wxGenericFileDialog::SetDirectory( dir );
+#endif    
 }
 
 void wxFileDialog::SetFilename(const wxString& name)
 {
+#ifdef __WXGTK24__
     m_fileName = name;
     m_path = wxFileName(m_dir, m_fileName).GetFullPath();
     UpdateDialog();
-}
-
-void wxFileDialog::UpdateDialog()
-{
-    // set currently selected directory to match the path:
-    if (!m_dir.empty() && wxDirExists(m_dir))
-    {
-        // NB: This is important -- if we set directory only and not the path,
-        //     then dialog will still remember old path set using previous
-        //     call to gtk_chooser_set_filename. If the previous directory
-        //     was a subdirectory of the directory we want to select now,
-        //     the dialog would still contain directory selector controls
-        //     for the subdirectory (with the parent directory selected),
-        //     instead of showing only the parent directory as expected.
-        //     This way, we force GtkFileChooser to really change the
-        //     directory. Finally, it doesn't have to be done if filename
-        //     is not empty because of the code that sets the filename below.
-        if (m_fileName.empty())
-            gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(m_widget),
-                                          wxGTK_CONV(m_dir));
-        
-        gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget),
-                                            wxGTK_CONV(m_dir));
-    }
-    
-    // if the user set only the directory (e.g. by calling SetDirectory)
-    // and not the default filename, then we don't want to set the filename:
-    if (!m_fileName.empty())
-    {
-        gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(m_widget),
-                                      wxGTK_CONV(m_path));
-                                          
-        // pre-fill the filename when saving, too (there's no text entry
-        // control when opening a file, so it doesn't make sense to
-        // do this when opening files):
-        if (GetWindowStyle() & wxSAVE)
-        {
-            gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget),
-                                              wxGTK_CONV(m_fileName));
-        }
-    }
+#else
+    wxGenericFileDialog::SetFilename( name );
+#endif
 }
 
 void wxFileDialog::SetWildcard(const wxString& wildCard)
 {
+#ifdef __WXGTK24__
     m_wildCard = wildCard;
     
     GtkFileChooser* chooser = GTK_FILE_CHOOSER(m_widget);
@@ -350,10 +374,14 @@ void wxFileDialog::SetWildcard(const wxString& wildCard)
             gtk_file_chooser_add_filter(chooser, filter);
         }
     }
+#else
+    wxGenericFileDialog::SetWildcard( wildCard );
+#endif
 }
 
 void wxFileDialog::SetFilterIndex(int filterIndex)
 {
+#ifdef __WXGTK24__
     m_filterIndex = filterIndex;
 
     GtkFileChooser *chooser = GTK_FILE_CHOOSER(m_widget);
@@ -372,10 +400,57 @@ void wxFileDialog::SetFilterIndex(int filterIndex)
         fnode = fnode->next;
     }
     g_slist_free(filters);
+#else
+    wxGenericFileDialog::SetFilterIndex( filterIndex );
+#endif
+}
+
+void wxFileDialog::UpdateDialog()
+{
+#ifdef __WXGTK24__
+    // set currently selected directory to match the path:
+    if (!m_dir.empty() && wxDirExists(m_dir))
+    {
+        // NB: This is important -- if we set directory only and not the path,
+        //     then dialog will still remember old path set using previous
+        //     call to gtk_chooser_set_filename. If the previous directory
+        //     was a subdirectory of the directory we want to select now,
+        //     the dialog would still contain directory selector controls
+        //     for the subdirectory (with the parent directory selected),
+        //     instead of showing only the parent directory as expected.
+        //     This way, we force GtkFileChooser to really change the
+        //     directory. Finally, it doesn't have to be done if filename
+        //     is not empty because of the code that sets the filename below.
+        if (m_fileName.empty())
+            gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(m_widget),
+                                          wxGTK_CONV(m_dir));
+        
+        gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget),
+                                            wxGTK_CONV(m_dir));
+    }
+    
+    // if the user set only the directory (e.g. by calling SetDirectory)
+    // and not the default filename, then we don't want to set the filename:
+    if (!m_fileName.empty())
+    {
+        gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(m_widget),
+                                      wxGTK_CONV(m_path));
+                                          
+        // pre-fill the filename when saving, too (there's no text entry
+        // control when opening a file, so it doesn't make sense to
+        // do this when opening files):
+        if (GetWindowStyle() & wxSAVE)
+        {
+            gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget),
+                                              wxGTK_CONV(m_fileName));
+        }
+    }
+#endif
 }
 
 void wxFileDialog::UpdateFromDialog()
 {
+#ifdef __WXGTK24__
     // update filterIndex
     GSList *fnode = gtk_file_chooser_list_filters(GTK_FILE_CHOOSER(m_widget));
     GSList *filters = fnode;
@@ -395,6 +470,7 @@ void wxFileDialog::UpdateFromDialog()
         fnode = fnode->next;
     }
     g_slist_free(filters);
+#endif
 }
 
-#endif // wxUSE_FILEDLG && defined(__WXGTK24__)
+#endif // wxUSE_FILEDLG

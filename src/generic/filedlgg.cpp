@@ -20,7 +20,7 @@
 #pragma hdrstop
 #endif
 
-#if wxUSE_FILEDLG && !defined(__WXGTK24__)
+#if wxUSE_FILEDLG
 
 // NOTE : it probably also supports MAC, untested
 #if !defined(__UNIX__) && !defined(__DOS__) && !defined(__WIN32__) && !defined(__OS2__)
@@ -876,11 +876,29 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
                            const wxString& defaultFile,
                            const wxString& wildCard,
                            long style,
-                           const wxPoint& pos )
+                           const wxPoint& pos,
+                           bool bypassGenericImpl )
                     :wxFileDialogBase(parent, message, defaultDir, defaultFile, wildCard, style, pos)
 {
-    wxDialog::Create( parent, wxID_ANY, message, pos, wxDefaultSize,
-                      wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER );
+    m_bypassGenericImpl = bypassGenericImpl;
+    
+    if (!m_bypassGenericImpl)
+        Create( parent, message, defaultDir, defaultFile, wildCard, style, pos );
+}
+
+bool wxGenericFileDialog::Create( wxWindow *parent,
+                           const wxString& message,
+                           const wxString& defaultDir,
+                           const wxString& defaultFile,
+                           const wxString& wildCard,
+                           long style,
+                           const wxPoint& pos )
+{
+    if (!wxDialog::Create( parent, wxID_ANY, message, pos, wxDefaultSize,
+                      wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ))
+    {
+        return false;
+    }
 
     if (wxConfig::Get(false))
     {
@@ -1031,22 +1049,27 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
     Centre( wxBOTH );
 
     m_text->SetFocus();
+    
+    return true;
 }
 
 wxGenericFileDialog::~wxGenericFileDialog()
 {
-    if (wxConfig::Get(false))
+    if (!m_bypassGenericImpl)
     {
-        wxConfig::Get()->Write(wxT("/wxWindows/wxFileDialog/ViewStyle"),
-                               ms_lastViewStyle);
-        wxConfig::Get()->Write(wxT("/wxWindows/wxFileDialog/ShowHidden"),
-                               ms_lastShowHidden);
-    }
+        if (wxConfig::Get(false))
+        {
+            wxConfig::Get()->Write(wxT("/wxWindows/wxFileDialog/ViewStyle"),
+                                   ms_lastViewStyle);
+            wxConfig::Get()->Write(wxT("/wxWindows/wxFileDialog/ShowHidden"),
+                                   ms_lastShowHidden);
+        }
 
-    const int count = m_choice->GetCount();
-    for ( int i = 0; i < count; i++ )
-    {
-        delete (wxString *)m_choice->GetClientData(i);
+        const int count = m_choice->GetCount();
+        for ( int i = 0; i < count; i++ )
+        {
+            delete (wxString *)m_choice->GetClientData(i);
+        }
     }
 }
 
@@ -1416,5 +1439,5 @@ IMPLEMENT_DYNAMIC_CLASS(wxFileDialog, wxGenericFileDialog);
 
 #endif // USE_GENERIC_FILEDIALOG
 
-#endif // wxUSE_FILEDLG && !defined(__WXGTK24__)
+#endif // wxUSE_FILEDLG
 

@@ -15,11 +15,13 @@
 #pragma interface
 #endif
 
+#include "wx/generic/filedlgg.h"
+
 //-------------------------------------------------------------------------
 // wxFileDialog
 //-------------------------------------------------------------------------
 
-class wxFileDialog: public wxFileDialogBase
+class wxFileDialog: public wxGenericFileDialog
 {
 public:
     wxFileDialog() { }
@@ -44,13 +46,20 @@ public:
     virtual void SetWildcard(const wxString& wildCard);
     virtual void SetFilterIndex(int filterIndex);
             
+    virtual int ShowModal();
+    virtual bool Show( bool show = true );
+
+    void OnFakeOk( wxCommandEvent &event );
+
 //private:
     bool m_destroyed_by_delete;
     
     void UpdateFromDialog();
     void UpdateDialog();
-    
+
+private:    
     DECLARE_DYNAMIC_CLASS(wxFileDialog)
+    DECLARE_EVENT_TABLE()
 };
 
 #endif // __GTKFILEDLGH__

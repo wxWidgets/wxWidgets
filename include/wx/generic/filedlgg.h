@@ -34,7 +34,7 @@ class WXDLLEXPORT wxListItem;
 class WXDLLEXPORT wxStaticText;
 class WXDLLEXPORT wxTextCtrl;
 
-#if defined(__WXUNIVERSAL__)||defined(__WXGTK__)||defined(__WXX11__)||defined(__WXMGL__)||defined(__WXCOCOA__)
+#if defined(__WXUNIVERSAL__)||defined(__WXX11__)||defined(__WXMGL__)||defined(__WXCOCOA__)
     #define USE_GENERIC_FILEDIALOG
 #endif
 
@@ -53,7 +53,15 @@ public:
                         const wxString& defaultFile = wxEmptyString,
                  const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
                  long style = 0,
-                 const wxPoint& pos = wxDefaultPosition);
+                 const wxPoint& pos = wxDefaultPosition,
+                 bool bypassGenericImpl = false );
+    bool Create( wxWindow *parent,
+                 const wxString& message = wxFileSelectorPromptStr,
+                        const wxString& defaultDir = wxEmptyString,
+                        const wxString& defaultFile = wxEmptyString,
+                 const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
+                 long style = 0,
+                 const wxPoint& pos = wxDefaultPosition );
     virtual ~wxGenericFileDialog();
 
     virtual void SetMessage(const wxString& message) { SetTitle(message); }
@@ -87,6 +95,10 @@ public:
     virtual void HandleAction( const wxString &fn );
 
     virtual void UpdateControls();
+    
+private:
+    // Don't use this implementation at all :-)
+    bool m_bypassGenericImpl;
 
 protected:
     // use the filter with the given index
@@ -114,8 +126,6 @@ private:
 
 class WXDLLEXPORT wxFileDialog: public wxGenericFileDialog
 {
-     DECLARE_DYNAMIC_CLASS(wxFileDialog)
-
 public:
      wxFileDialog() {}
 
@@ -129,6 +139,9 @@ public:
           :wxGenericFileDialog(parent, message, defaultDir, defaultFile, wildCard, style, pos)
      {
      }
+     
+private:
+     DECLARE_DYNAMIC_CLASS(wxFileDialog)
 };
 
 #endif // USE_GENERIC_FILEDIALOG

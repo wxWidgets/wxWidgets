@@ -159,11 +159,7 @@ wxSaveFileSelector(const wxChar *what,
 #elif defined(__WXMOTIF__)
 #include "wx/motif/filedlg.h"
 #elif defined(__WXGTK__)
-#ifdef __WXGTK24__
 #include "wx/gtk/filedlg.h"
-#else
-#include "wx/generic/filedlgg.h"
-#endif
 #elif defined(__WXX11__)
 #include "wx/generic/filedlgg.h"
 #elif defined(__WXMGL__)
