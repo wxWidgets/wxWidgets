@@ -453,6 +453,18 @@ void wxFileName::Assign(const wxString& fullpathOrig,
     Assign(volume, path, name, ext, format);
 }
 
+void wxFileName::Assign(const wxString& pathOrig,
+                        const wxString& name,
+                        const wxString& ext,
+                        wxPathFormat format)
+{
+    wxString volume,
+             path;
+    SplitVolume(pathOrig, &volume, &path, format);
+
+    Assign(volume, path, name, ext, format);
+}
+
 void wxFileName::AssignDir(const wxString& dir, wxPathFormat format)
 {
     Assign(dir, _T(""), format);

@@ -116,6 +116,20 @@ void FileNameTestCase::TestConstruction()
         CPPUNIT_ASSERT( fullname == fni.fullname );
 
         CPPUNIT_ASSERT( fn.Normalize(wxPATH_NORM_ALL, _T(""), fni.format) );
+
+        if ( *fni.volume && *fni.path )
+        {
+            // check that specifying the volume separately or as part of the
+            // path doesn't make any difference
+            wxString pathWithVolume = fni.volume;
+            pathWithVolume += wxFileName::GetVolumeSeparator(fni.format);
+            pathWithVolume += fni.path;
+
+            CPPUNIT_ASSERT( fn == wxFileName(pathWithVolume,
+                                             fni.name,
+                                             fni.ext,
+                                             fni.format) );
+        }
     }
 }
 
