@@ -1659,10 +1659,11 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             // work around is to simply catch both versions and hope that it
             // works (why should this message exist in ANSI and Unicode is
             // beyond me as it doesn't deal with strings at all...)
-
-			// Tip from www.deja.com: can use CCM_SETUNICODE to set
-			// Unicode or ANSI mode. We might consider doing that for
-			// consistency in ANSI mode.
+            //
+            // note that fr HDN_TRACK another possibility could be to use
+            // HDN_ITEMCHANGING but it is sent even after HDN_ENDTRACK and when
+            // something other than the item width changes so we'd have to
+            // filter out the unwanted events then
             case HDN_BEGINTRACKA:
             case HDN_BEGINTRACKW:
                 eventType = wxEVT_COMMAND_LIST_COL_BEGIN_DRAG;
@@ -1678,6 +1679,8 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             case HDN_ENDTRACKW:
                 if ( eventType == wxEVT_NULL )
                     eventType = wxEVT_COMMAND_LIST_COL_END_DRAG;
+
+                event.m_item.m_width = nmHDR->pitem->cxy;
                 event.m_col = nmHDR->iItem;
                 break;
 
@@ -1721,49 +1724,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     }
                 }
                 break;
-#if 0
-            case HDN_ITEMCHANGINGW:
-                {
-                    return wxControl::MSWOnNotify(idCtrl, lParam, result);
-                }
-            case HDN_ITEMCHANGEDA:
-                {
-                    return wxControl::MSWOnNotify(idCtrl, lParam, result);
-                }
-            case HDN_ITEMCHANGEDW:
-                {
-                    return wxControl::MSWOnNotify(idCtrl, lParam, result);
-                }
-            case HDN_ITEMCLICKA:
-                {
-                    return wxControl::MSWOnNotify(idCtrl, lParam, result);
-                }
-            case HDN_ITEMCLICKW:
-                {
-                    return wxControl::MSWOnNotify(idCtrl, lParam, result);
-                }
-            case HDN_ITEMDBLCLICKA:
-                {
-                    return wxControl::MSWOnNotify(idCtrl, lParam, result);
-                }
-            case HDN_ITEMDBLCLICKW:
-                {
-                    return wxControl::MSWOnNotify(idCtrl, lParam, result);
-                }
-            case HDN_DIVIDERDBLCLICKA:
-                {
-                    return wxControl::MSWOnNotify(idCtrl, lParam, result);
-                }
-            case HDN_DIVIDERDBLCLICKW:
-                {
-                    return wxControl::MSWOnNotify(idCtrl, lParam, result);
-                }
-            case HDN_GETDISPINFOA:
-                {
-                    return wxControl::MSWOnNotify(idCtrl, lParam, result);
-                }
-#endif
-                
+
             case HDN_GETDISPINFOW:
                 {
                     LPNMHDDISPINFOW info = (LPNMHDDISPINFOW) lParam;
@@ -1777,9 +1738,9 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     // of this strange message.
                     if (info->iItem > GetColumnCount())
                         return TRUE;
-                    else
-                        return wxControl::MSWOnNotify(idCtrl, lParam, result);
                 }
+                // fall through
+
             default:
                 return wxControl::MSWOnNotify(idCtrl, lParam, result);
         }
