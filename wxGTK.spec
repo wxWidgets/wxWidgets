@@ -57,6 +57,7 @@ else
   export MAKE="make"
 fi
 $MAKE
+(cd locale ; make allmo)
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -68,23 +69,47 @@ make prefix=$RPM_BUILD_ROOT%{pref} install
 %postun
 /sbin/ldconfig
 
+%post gl
+/sbin/ldconfig
+
+%postun gl
+/sbin/ldconfig
+
+%post devel
+# Install wx-config if there isn't any
+if test ! -f %{_bindir}/wx-config ; then
+    ln -sf wxgtk-%{ver2}-config %{_bindir}/wx-config
+fi
+
+%preun devel
+# Remove wx-config if it points to this package
+if test -f %{_bindir}/wx-config -a -f /usr/bin/md5sum ; then
+  SUM1=`md5sum %{_bindir}/wxgtk-%{ver2}-config | cut -c 0-32`
+  SUM2=`md5sum %{_bindir}/wx-config | cut -c 0-32`
+  if test "x$SUM1" = "x$SUM2" ; then
+    rm -f %{_bindir}/wx-config
+  fi
+fi
+
+
 %files
-%defattr(-, root, root)
-%doc COPYING.LIB INSTALL.txt LICENCE.txt README.txt SYMBOLS.txt TODO.txt
-%dir %{pref}/share/wx
-%{pref}/share/wx/*
-%attr(755, root, root) %{pref}/lib/libwx_gtk-%{ver2}.*
+%defattr(-,root,root)
+%doc COPYING.LIB *.txt
+%dir %{_datadir}/wx
+%{_datadir}/wx/*
+%{_datadir}/locale/*/*/*.mo
+%{_libdir}/libwx_gtk-%{ver2}*.so.*
 
 %files devel
 %defattr(-,root,root)
-%dir %{pref}/include/wx
-%{pref}/include/wx/*
-%dir %{pref}/lib/wx
-%{pref}/lib/wx/*
-%attr(755, root, root) %{pref}/bin/wxgtk-%{ver2}-config
-%attr(755, root, root) %{pref}/bin/wx-config
+%{_libdir}/libwx_gtk-%{ver2}*.so
+%dir %{_includedir}/wx
+%{_includedir}/wx/*
+%dir %{_libdir}/wx
+%{_libdir}/wx/*
+%{_bindir}/wxgtk-%{ver2}-config
 
 %files gl
-%attr(755, root, root) %{pref}/lib/libwx_gtk_gl*
-
+%defattr(-,root,root)
+%{_libdir}/libwx_gtk_gl*
 
