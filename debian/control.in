@@ -5,11 +5,10 @@ Build-Depends: debhelper (>=4.0), flex, bison, gettext, libgtk2.0-dev, =PY, =PY-
 Maintainer: Ron Lee <ron@debian.org>
 Standards-Version: 3.6.1.1
 
-Package: libwxgtk=V
+Package: libwxgtk=V.=SO
 Architecture: any
 Section: libs
 Depends: ${shlibs:Depends}
-Replaces: wxgtk2.1
 Description: wxWidgets Cross-platform C++ GUI toolkit (GTK+ runtime)
  wxWidgets (formerly known as wxWindows) is a class library for C++ providing
  GUI components and other facilities on several popular platforms (and some
@@ -22,8 +21,8 @@ Description: wxWidgets Cross-platform C++ GUI toolkit (GTK+ runtime)
 Package: libwxgtk=V-dev
 Architecture: any
 Section: libdevel
-Depends: wx=V-headers (= ${Source-Version}), libwxgtk=V (= ${Source-Version}), libc6-dev
-Suggests: wxwin=V-doc, libstdc++-dev, gettext, xlibmesa-gl-dev | libgl-dev, xlibmesa-glu-dev | libglu-dev
+Depends: wx=V-headers (= ${Source-Version}), libwxgtk=V.=SO (= ${Source-Version}), libc6-dev
+Suggests: wx=V-common | wx-common, wx=V-doc, libstdc++-dev, gettext, xlibmesa-gl-dev | libgl-dev, xlibmesa-glu-dev | libglu-dev
 Description: wxWidgets Cross-platform C++ GUI toolkit (GTK+ development)
  wxWidgets (formerly known as wxWindows) is a class library for C++ providing
  GUI components and other facilities on several popular platforms (and some
@@ -48,13 +47,13 @@ Description: wxWidgets Cross-platform C++ GUI toolkit (GTK+ development)
  provides many internal checks by wxWidgets itself that are not performed on
  apps compiled with the 'release version' libs in the -dev package.
 
-Package: libwxgtk=V-python
+Package: libwxgtk=V.=SO-python
 Architecture: any
 Section: python
 Depends: =PY, ${shlibs:Depends}
 Suggests: wx=V-doc, wx=V-examples, =PY-xml
-Conflicts: libwxgtk-python, libwxgtk=V-dbg-python, python-wxwin, libwxgtk2.2-python-contrib, libwxgtk2.2-python, libwxgtk2.3-python
-Replaces: libwxgtk-python, libwxgtk=V-dbg-python, python-wxwin, libwxgtk2.2-python-contrib, libwxgtk2.2-python, libwxgtk2.3-python
+Conflicts: libwxgtk-python
+Replaces: libwxgtk-python
 Provides: libwxgtk-python
 Description: wxWidgets Cross-platform C++ GUI toolkit (wxPython binding)
  wxWidgets (formerly known as wxWindows) is a class library for C++ providing
@@ -64,6 +63,22 @@ Description: wxWidgets Cross-platform C++ GUI toolkit (wxPython binding)
  This package provides a Python binding to the wxGTK library and its
  contrib libs.  If you wish to use xrced you'll also need the python-xml
  package installed.
+
+Package: wx=V-common
+Architecture: any
+Section: libs
+Depends: ${shlibs:Depends}
+Conflicts: wx-common
+Replaces: wx-common
+Provides: wx-common
+Description: wxWidgets Cross-platform C++ GUI toolkit (common support files)
+ wxWidgets (formerly known as wxWindows) is a class library for C++ providing
+ GUI components and other facilities on several popular platforms (and some
+ unpopular ones as well).  For more information see http://wxwidgets.org
+ .
+ This package provides common support files not bound to any
+ particular wxWidgets release, such as font metrics required by some
+ ports, and miscellaneous developer aids and binary utilities.
 
 Package: wx=V-headers
 Architecture: any
@@ -113,14 +128,14 @@ Description: wxWidgets Cross-platform C++ GUI toolkit (examples)
  This package contains examples of using the wxWidgets toolkit in
  C++ and with the wxPython language binding.
 
-Package: libwxgtk=V-dbg-python
+Package: libwxgtk=V.=SO-dbg-python
 Architecture: any
 Section: python
 Depends: =PY, ${shlibs:Depends}
 Suggests: wxwin=V-doc, wxwin=V-examples, =PY-xml
-Conflicts: libwxgtk=V-python
-Replaces: libwxgtk=V-python
-Provides: libwxgtk=V-python
+Conflicts: libwxgtk-python
+Replaces: libwxgtk-python
+Provides: libwxgtk-python
 Description: wxWindows Cross-platform C++ GUI toolkit (wxPython binding)
  wxWindows is a class library for C++ providing GUI (Graphical User
  Interface) and other facilities on more than one platform.  Version =V
@@ -131,7 +146,7 @@ Description: wxWindows Cross-platform C++ GUI toolkit (wxPython binding)
  Unfortunately it cannot be installed at the same time as the release
  packages, but it will replace them for other applications that require
  wxPython.  You should _never_ upload packages to Debian that depend upon
- this package explicitly, use the libwxgtk=V-python package instead.
+ this package explicitly, use the libwxgtk=V.=SO-python package instead.
  .
  If you wish to use xrced you'll also need the python-xml package installed.
 

@@ -3237,6 +3237,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 	monodll_choicece.o \
 	monodll_crt.o \
 	monodll_filedlgwce.o \
+	monodll_filefnwce.o \
 	monodll_helpwce.o \
 	monodll_menuce.o \
 	monodll_tbarwce.o \
@@ -4163,6 +4164,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 	monolib_choicece.o \
 	monolib_crt.o \
 	monolib_filedlgwce.o \
+	monolib_filefnwce.o \
 	monolib_helpwce.o \
 	monolib_menuce.o \
 	monolib_tbarwce.o \
@@ -5236,6 +5238,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 	coredll_choicece.o \
 	coredll_crt.o \
 	coredll_filedlgwce.o \
+	coredll_filefnwce.o \
 	coredll_helpwce.o \
 	coredll_menuce.o \
 	coredll_tbarwce.o \
@@ -5971,6 +5974,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 	corelib_choicece.o \
 	corelib_crt.o \
 	corelib_filedlgwce.o \
+	corelib_filefnwce.o \
 	corelib_helpwce.o \
 	corelib_menuce.o \
 	corelib_tbarwce.o \
@@ -7820,12 +7824,12 @@ samples:
 	(cd samples && $(MAKE) all)
 
 @COND_USE_GUI_1@install-afm: 
-@COND_USE_GUI_1@	$(INSTALL_DIR) $(DESTDIR)$(datadir)/wx/$(WX_RELEASE)$(WX_FLAVOUR)/afm
-@COND_USE_GUI_1@	(cd $(srcdir) ; $(INSTALL_DATA)  misc/afm/*.afm $(DESTDIR)$(datadir)/wx/$(WX_RELEASE)$(WX_FLAVOUR)/afm)
+@COND_USE_GUI_1@	$(INSTALL_DIR) $(DESTDIR)$(datadir)/wx/afm
+@COND_USE_GUI_1@	(cd $(srcdir) ; $(INSTALL_DATA)  misc/afm/*.afm $(DESTDIR)$(datadir)/wx/afm)
 
 @COND_USE_GUI_1@install-gsafm: 
-@COND_USE_GUI_1@	$(INSTALL_DIR) $(DESTDIR)$(datadir)/wx/$(WX_RELEASE)$(WX_FLAVOUR)/gs_afm
-@COND_USE_GUI_1@	(cd $(srcdir) ; $(INSTALL_DATA)  misc/gs_afm/*.afm $(DESTDIR)$(datadir)/wx/$(WX_RELEASE)$(WX_FLAVOUR)/gs_afm)
+@COND_USE_GUI_1@	$(INSTALL_DIR) $(DESTDIR)$(datadir)/wx/gs_afm
+@COND_USE_GUI_1@	(cd $(srcdir) ; $(INSTALL_DATA)  misc/gs_afm/*.afm $(DESTDIR)$(datadir)/wx/gs_afm)
 
 install-wxconfig: 
 	$(INSTALL_DIR) $(DESTDIR)$(bindir)
@@ -8535,6 +8539,9 @@ monodll_crt.o: $(srcdir)/src/msw/wince/crt.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monodll_filedlgwce.o: $(srcdir)/src/msw/wince/filedlgwce.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_filefnwce.o: $(srcdir)/src/msw/wince/filefnwce.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monodll_helpwce.o: $(srcdir)/src/msw/wince/helpwce.cpp $(MONODLL_ODEP)
@@ -11664,6 +11671,9 @@ monolib_crt.o: $(srcdir)/src/msw/wince/crt.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_filedlgwce.o: $(srcdir)/src/msw/wince/filedlgwce.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_filefnwce.o: $(srcdir)/src/msw/wince/filefnwce.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_helpwce.o: $(srcdir)/src/msw/wince/helpwce.cpp $(MONOLIB_ODEP)
@@ -15344,6 +15354,9 @@ coredll_crt.o: $(srcdir)/src/msw/wince/crt.cpp $(COREDLL_ODEP)
 coredll_filedlgwce.o: $(srcdir)/src/msw/wince/filedlgwce.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
+coredll_filefnwce.o: $(srcdir)/src/msw/wince/filefnwce.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
 coredll_helpwce.o: $(srcdir)/src/msw/wince/helpwce.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -17796,6 +17809,9 @@ corelib_crt.o: $(srcdir)/src/msw/wince/crt.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 corelib_filedlgwce.o: $(srcdir)/src/msw/wince/filedlgwce.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
+corelib_filefnwce.o: $(srcdir)/src/msw/wince/filefnwce.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 corelib_helpwce.o: $(srcdir)/src/msw/wince/helpwce.cpp $(CORELIB_ODEP)

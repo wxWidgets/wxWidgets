@@ -44,13 +44,12 @@ usage()
    on your system.  It may be used to retrieve the information you require
    to build applications using these libraries.
 
-    If alternative builds of wxWidgets exist on the system, you can  use the
-  options: --prefix, --host, --toolkit,  --unicode, --debug, --universal and
-  --version, to select from them.  Use the --list option  to show all builds
-  which  match any  specified criteria.   The unicode, universal,  and debug
-  options take an optional yes or no argument, while host and version accept
-  posix extended regex.  eg. wx-config --unicode=n --debug --host=?.* --list
-  will show all ansi-debug libraries installed, including cross libraries.
+    If alternative builds of wxWidgets exist on the system, you can use the
+  options:  --prefix,  --host,  --toolkit,  --unicode,  --debug,  --static,
+  --version and --universal, to select from them.  Use the --list option to
+  show alternatives available which match specified criteria.   The unicode,
+  debug, and universal options  take an  optional yes or no  argument, while
+  host and version accept posix extended regex.
 
     Optional LIB arguments (comma or space separated) may be used to specify
   the wxWidgets libraries that  you wish  to use.  The magic "std" label may
