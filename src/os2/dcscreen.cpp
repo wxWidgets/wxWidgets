@@ -40,4 +40,17 @@ wxScreenDC::wxScreenDC()
     ::GpiSetBackMix(m_hPS, BM_LEAVEALONE);
 } // end of wxScreenDC::wxScreenDC()
 
+void wxScreenDC::DoGetSize(
+  int*                              pnWidth
+, int*                              pnHeight
+) const
+{
+    //
+    // Skip wxWindowDC version because it doesn't work without a valid m_canvas
+    // (which we don't have)
+    //
+    wxDC::DoGetSize( pnWidth
+                    ,pnHeight
+                   );
+} // end of wxScreenDC::DoGetSize
 

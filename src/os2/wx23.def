@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\Dev\wx2\wxwindows\lib\wx.lib
+;From library:  H:\dev\wx2\wxwindows\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1347,40 +1347,142 @@ EXPORTS
       wxDirSelectorPromptStr
   ;From object file:  ..\common\dynarray.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxBaseArray::Add(long)
-      Add__11wxBaseArrayFl
-      ;wxBaseArray::Remove(long)
-      Remove__11wxBaseArrayFl
-      ;wxBaseArray::~wxBaseArray()
-      __dt__11wxBaseArrayFv
-      ;wxBaseArray::Sort(int(*)(const void*,const void*))
-      Sort__11wxBaseArrayFPFPCvT1_i
-      ;wxBaseArray::IndexForInsert(long,int(*)(const void*,const void*)) const
-      IndexForInsert__11wxBaseArrayCFlPFPCvT1_i
-      ;wxBaseArray::wxBaseArray()
-      __ct__11wxBaseArrayFv
-      ;wxBaseArray::Clear()
-      Clear__11wxBaseArrayFv
-      ;wxBaseArray::Insert(long,unsigned int)
-      Insert__11wxBaseArrayFlUi
-      ;wxBaseArray::wxBaseArray(const wxBaseArray&)
-      __ct__11wxBaseArrayFRC11wxBaseArray
-      ;wxBaseArray::Add(long,int(*)(const void*,const void*))
-      Add__11wxBaseArrayFlPFPCvT1_i
-      ;wxBaseArray::Shrink()
-      Shrink__11wxBaseArrayFv
-      ;wxBaseArray::operator=(const wxBaseArray&)
-      __as__11wxBaseArrayFRC11wxBaseArray
-      ;wxBaseArray::RemoveAt(unsigned int)
-      RemoveAt__11wxBaseArrayFUi
-      ;wxBaseArray::Index(long,int(*)(const void*,const void*)) const
-      Index__11wxBaseArrayCFlPFPCvT1_i
-      ;wxBaseArray::Grow()
-      Grow__11wxBaseArrayFv
-      ;wxBaseArray::Index(long,unsigned long) const
-      Index__11wxBaseArrayCFlUl
-      ;wxBaseArray::Alloc(unsigned int)
-      Alloc__11wxBaseArrayFUi
+      ;wxBaseArrayPtrVoid::Index(const void*,unsigned long) const
+      Index__18wxBaseArrayPtrVoidCFPCvUl
+      ;wxBaseArrayInt::Add(int)
+      Add__14wxBaseArrayIntFi
+      ;wxBaseArrayLong::Insert(long,unsigned int)
+      Insert__15wxBaseArrayLongFlUi
+      ;wxBaseArrayInt::Insert(int,unsigned int)
+      Insert__14wxBaseArrayIntFiUi
+      ;wxBaseArrayLong::Index(long,int(*)(const void*,const void*)) const
+      Index__15wxBaseArrayLongCFlPFPCvT1_i
+      ;wxBaseArrayInt::Index(int,int(*)(const void*,const void*)) const
+      Index__14wxBaseArrayIntCFiPFPCvT1_i
+      ;wxBaseArrayPtrVoid::Alloc(unsigned int)
+      Alloc__18wxBaseArrayPtrVoidFUi
+      ;wxBaseArrayPtrVoid::Add(const void*,int(*)(const void*,const void*))
+      Add__18wxBaseArrayPtrVoidFPCvPFPCvT1_i
+      ;wxBaseArrayShort::~wxBaseArrayShort()
+      __dt__16wxBaseArrayShortFv
+      ;wxBaseArrayPtrVoid::~wxBaseArrayPtrVoid()
+      __dt__18wxBaseArrayPtrVoidFv
+      ;wxBaseArrayInt::~wxBaseArrayInt()
+      __dt__14wxBaseArrayIntFv
+      ;wxBaseArrayShort::Shrink()
+      Shrink__16wxBaseArrayShortFv
+      ;wxBaseArrayInt::Shrink()
+      Shrink__14wxBaseArrayIntFv
+      ;wxBaseArrayPtrVoid::Grow()
+      Grow__18wxBaseArrayPtrVoidFv
+      ;wxBaseArrayPtrVoid::Clear()
+      Clear__18wxBaseArrayPtrVoidFv
+      ;wxBaseArrayShort::Remove(short)
+      Remove__16wxBaseArrayShortFs
+      ;wxBaseArrayPtrVoid::operator=(const wxBaseArrayPtrVoid&)
+      __as__18wxBaseArrayPtrVoidFRC18wxBaseArrayPtrVoid
+      ;wxBaseArrayShort::Insert(short,unsigned int)
+      Insert__16wxBaseArrayShortFsUi
+      ;wxBaseArrayPtrVoid::RemoveAt(unsigned int)
+      RemoveAt__18wxBaseArrayPtrVoidFUi
+      ;wxBaseArrayShort::Index(short,int(*)(const void*,const void*)) const
+      Index__16wxBaseArrayShortCFsPFPCvT1_i
+      ;wxBaseArrayShort::IndexForInsert(short,int(*)(const void*,const void*)) const
+      IndexForInsert__16wxBaseArrayShortCFsPFPCvT1_i
+      ;wxBaseArrayLong::IndexForInsert(long,int(*)(const void*,const void*)) const
+      IndexForInsert__15wxBaseArrayLongCFlPFPCvT1_i
+      ;wxBaseArrayLong::Alloc(unsigned int)
+      Alloc__15wxBaseArrayLongFUi
+      ;wxBaseArrayInt::Add(int,int(*)(const void*,const void*))
+      Add__14wxBaseArrayIntFiPFPCvT1_i
+      ;wxBaseArrayShort::wxBaseArrayShort()
+      __ct__16wxBaseArrayShortFv
+      ;wxBaseArrayPtrVoid::wxBaseArrayPtrVoid()
+      __ct__18wxBaseArrayPtrVoidFv
+      ;wxBaseArrayInt::Clear()
+      Clear__14wxBaseArrayIntFv
+      ;wxBaseArrayShort::Add(short)
+      Add__16wxBaseArrayShortFs
+      ;wxBaseArrayInt::operator=(const wxBaseArrayInt&)
+      __as__14wxBaseArrayIntFRC14wxBaseArrayInt
+      ;wxBaseArrayInt::wxBaseArrayInt(const wxBaseArrayInt&)
+      __ct__14wxBaseArrayIntFRC14wxBaseArrayInt
+      ;wxBaseArrayLong::Remove(long)
+      Remove__15wxBaseArrayLongFl
+      ;wxBaseArrayShort::Sort(int(*)(const void*,const void*))
+      Sort__16wxBaseArrayShortFPFPCvT1_i
+      ;wxBaseArrayPtrVoid::Sort(int(*)(const void*,const void*))
+      Sort__18wxBaseArrayPtrVoidFPFPCvT1_i
+      ;wxBaseArrayInt::IndexForInsert(int,int(*)(const void*,const void*)) const
+      IndexForInsert__14wxBaseArrayIntCFiPFPCvT1_i
+      ;wxBaseArrayShort::Alloc(unsigned int)
+      Alloc__16wxBaseArrayShortFUi
+      ;wxBaseArrayPtrVoid::Shrink()
+      Shrink__18wxBaseArrayPtrVoidFv
+      ;wxBaseArrayPtrVoid::Remove(const void*)
+      Remove__18wxBaseArrayPtrVoidFPCv
+      ;wxBaseArrayShort::Grow()
+      Grow__16wxBaseArrayShortFv
+      ;wxBaseArrayShort::operator=(const wxBaseArrayShort&)
+      __as__16wxBaseArrayShortFRC16wxBaseArrayShort
+      ;wxBaseArrayPtrVoid::wxBaseArrayPtrVoid(const wxBaseArrayPtrVoid&)
+      __ct__18wxBaseArrayPtrVoidFRC18wxBaseArrayPtrVoid
+      ;wxBaseArrayShort::Index(short,unsigned long) const
+      Index__16wxBaseArrayShortCFsUl
+      ;wxBaseArrayInt::Index(int,unsigned long) const
+      Index__14wxBaseArrayIntCFiUl
+      ;wxBaseArrayLong::Add(long)
+      Add__15wxBaseArrayLongFl
+      ;wxBaseArrayInt::Sort(int(*)(const void*,const void*))
+      Sort__14wxBaseArrayIntFPFPCvT1_i
+      ;wxBaseArrayLong::Sort(int(*)(const void*,const void*))
+      Sort__15wxBaseArrayLongFPFPCvT1_i
+      ;wxBaseArrayLong::RemoveAt(unsigned int)
+      RemoveAt__15wxBaseArrayLongFUi
+      ;wxBaseArrayPtrVoid::Insert(const void*,unsigned int)
+      Insert__18wxBaseArrayPtrVoidFPCvUi
+      ;wxBaseArrayPtrVoid::Index(const void*,int(*)(const void*,const void*)) const
+      Index__18wxBaseArrayPtrVoidCFPCvPFPCvT1_i
+      ;wxBaseArrayPtrVoid::IndexForInsert(const void*,int(*)(const void*,const void*)) const
+      IndexForInsert__18wxBaseArrayPtrVoidCFPCvPFPCvT1_i
+      ;wxBaseArrayInt::Alloc(unsigned int)
+      Alloc__14wxBaseArrayIntFUi
+      ;wxBaseArrayLong::Add(long,int(*)(const void*,const void*))
+      Add__15wxBaseArrayLongFlPFPCvT1_i
+      ;wxBaseArrayLong::wxBaseArrayLong()
+      __ct__15wxBaseArrayLongFv
+      ;wxBaseArrayLong::Grow()
+      Grow__15wxBaseArrayLongFv
+      ;wxBaseArrayInt::Grow()
+      Grow__14wxBaseArrayIntFv
+      ;wxBaseArrayShort::Clear()
+      Clear__16wxBaseArrayShortFv
+      ;wxBaseArrayPtrVoid::Add(const void*)
+      Add__18wxBaseArrayPtrVoidFPCv
+      ;wxBaseArrayLong::Index(long,unsigned long) const
+      Index__15wxBaseArrayLongCFlUl
+      ;wxBaseArrayShort::wxBaseArrayShort(const wxBaseArrayShort&)
+      __ct__16wxBaseArrayShortFRC16wxBaseArrayShort
+      ;wxBaseArrayShort::RemoveAt(unsigned int)
+      RemoveAt__16wxBaseArrayShortFUi
+      ;wxBaseArrayInt::Remove(int)
+      Remove__14wxBaseArrayIntFi
+      ;wxBaseArrayInt::RemoveAt(unsigned int)
+      RemoveAt__14wxBaseArrayIntFUi
+      ;wxBaseArrayShort::Add(short,int(*)(const void*,const void*))
+      Add__16wxBaseArrayShortFsPFPCvT1_i
+      ;wxBaseArrayInt::wxBaseArrayInt()
+      __ct__14wxBaseArrayIntFv
+      ;wxBaseArrayLong::~wxBaseArrayLong()
+      __dt__15wxBaseArrayLongFv
+      ;wxBaseArrayLong::Shrink()
+      Shrink__15wxBaseArrayLongFv
+      ;wxBaseArrayLong::Clear()
+      Clear__15wxBaseArrayLongFv
+      ;wxBaseArrayLong::operator=(const wxBaseArrayLong&)
+      __as__15wxBaseArrayLongFRC15wxBaseArrayLong
+      ;wxBaseArrayLong::wxBaseArrayLong(const wxBaseArrayLong&)
+      __ct__15wxBaseArrayLongFRC15wxBaseArrayLong
   ;From object file:  ..\common\dynlib.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxLibrary::wxLibrary(unsigned long)
@@ -3539,6 +3641,8 @@ EXPORTS
       wxLogSysError__FlPCce
       ;wxLogStream::wxLogStream(ostream*)
       __ct__11wxLogStreamFP7ostream
+      ;wxLog::SetLogBuffer(char*,unsigned int)
+      SetLogBuffer__5wxLogFPcUi
       ;wxLogPassThrough::wxLogPassThrough()
       __ct__16wxLogPassThroughFv
       ;wxVLogInfo(const char*,char*)
@@ -5716,6 +5820,8 @@ EXPORTS
       DoScreenToClient__20wxTopLevelWindowBaseCFPiT1
       ;wxTopLevelWindowBase::Destroy()
       Destroy__20wxTopLevelWindowBaseFv
+      ;wxTopLevelWindowBase::GetMaxSize() const
+      GetMaxSize__20wxTopLevelWindowBaseCFv
       ;wxTopLevelWindow::sm_classwxTopLevelWindow
       sm_classwxTopLevelWindow__16wxTopLevelWindow
   ;From object file:  ..\common\treebase.cpp
@@ -6666,6 +6772,8 @@ EXPORTS
       SetToolTip__12wxWindowBaseFRC8wxString
       ;wxWindowBase::ConvertPixelsToDialog(const wxPoint&)
       ConvertPixelsToDialog__12wxWindowBaseFRC7wxPoint
+      ;wxWindowBase::SetSizer(wxSizer*,unsigned long)
+      SetSizer__12wxWindowBaseFP7wxSizerUl
       ;wxWindowBase::FindWindow(long)
       FindWindow__12wxWindowBaseFl
       ;wxWindowBase::IsExposed(int,int) const
@@ -6717,8 +6825,6 @@ EXPORTS
       DoGetBestSize__12wxWindowBaseCFv
       ;wxWindowBase::TransferDataFromWindow()
       TransferDataFromWindow__12wxWindowBaseFv
-      ;wxWindowBase::SetSizer(wxSizer*)
-      SetSizer__12wxWindowBaseFP7wxSizer
       ;wxWindowBase::IsTopLevel() const
       IsTopLevel__12wxWindowBaseCFv
       ;wxWindowBase::GetUpdateClientRect() const
@@ -9686,6 +9792,8 @@ EXPORTS
       ;wxScrollHelper::GetTargetWindow() const
       GetTargetWindow__14wxScrollHelperCFv
       __vft14wxScrollHelper
+      ;wxGenericScrolledWindow::Layout()
+      Layout__23wxGenericScrolledWindowFv
       ;wxGenericScrolledWindow::GetEventTable() const
       GetEventTable__23wxGenericScrolledWindowCFv
       ;wxGenericScrolledWindow::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
@@ -11395,6 +11503,8 @@ EXPORTS
       MakeOwnerDrawn__8wxButtonFv
       ;wxButton::WindowProc(unsigned int,void*,void*)
       WindowProc__8wxButtonFUiPvT2
+      ;wxButton::OS2GetStyle(long,unsigned long*) const
+      OS2GetStyle__8wxButtonCFlPUl
       ;wxButton::OnCtlColor(unsigned long,unsigned long,unsigned int,unsigned int,void*,void*)
       OnCtlColor__8wxButtonFUlT1UiT3PvT5
       ;wxButton::~wxButton()
@@ -12121,6 +12231,9 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxConstructorForwxScreenDC()
       wxConstructorForwxScreenDC__Fv
+      __vft10wxScreenDC8wxObject
+      ;wxScreenDC::DoGetSize(int*,int*) const
+      DoGetSize__10wxScreenDCCFPiT1
       ;wxScreenDC::sm_classwxScreenDC
       sm_classwxScreenDC__10wxScreenDC
       ;wxScreenDC::wxScreenDC()

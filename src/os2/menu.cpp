@@ -1022,7 +1022,6 @@ void wxMenuBar::Attach(
 )
 {
     wxASSERT_MSG( !IsAttached(), wxT("menubar already attached!") );
-    m_menuBarFrame = pFrame;
 
 #if wxUSE_ACCEL
     RebuildAccelTable();
