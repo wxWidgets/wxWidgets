@@ -218,8 +218,8 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     GtkRadioButton *m_radio = (GtkRadioButton*) NULL;
 
     GtkWidget *table = gtk_table_new( num_of_rows, num_of_cols, FALSE );
-    gtk_table_set_col_spacings( GTK_TABLE(table), 2 );
-    gtk_table_set_row_spacings( GTK_TABLE(table), 2 );
+    gtk_table_set_col_spacings( GTK_TABLE(table), 1 );
+    gtk_table_set_row_spacings( GTK_TABLE(table), 1 );
     gtk_widget_show( table );
     gtk_container_add( GTK_CONTAINER(m_widget), table );
     
@@ -251,7 +251,8 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
             int right = (i%num_of_cols) + 1;
             int top = i/num_of_cols;
             int bottom = (i/num_of_cols)+1;
-            gtk_table_attach_defaults( GTK_TABLE(table), GTK_WIDGET(m_radio), left, right, top, bottom ); 
+            gtk_table_attach( GTK_TABLE(table), GTK_WIDGET(m_radio), left, right, top, bottom, 
+                  GTK_FILL, GTK_FILL, 1, 1 ); 
         }
         else
         {
@@ -259,7 +260,8 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
             int right = (i/num_of_rows) + 1;
             int top = i%num_of_rows;
             int bottom = (i%num_of_rows)+1;
-            gtk_table_attach_defaults( GTK_TABLE(table), GTK_WIDGET(m_radio), left, right, top, bottom ); 
+            gtk_table_attach( GTK_TABLE(table), GTK_WIDGET(m_radio), left, right, top, bottom, 
+                  GTK_FILL, GTK_FILL, 1, 1 ); 
         }
 
         ConnectWidget( GTK_WIDGET(m_radio) );
