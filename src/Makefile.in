@@ -48,25 +48,31 @@ install::
 	@echo " "
 	@echo "  Creating directories.."
 	@$(WXBASEDIR)/mkinstalldirs \
-	   /usr/local/include/wx \
-	   /usr/local/include/wx/gtk \
-	   /usr/local/include/wx/common \
-	   /usr/local/include/wx/protocol \
-	   /usr/local/include/wx/generic
+	   @prefix@/include/wx \
+	   @prefix@/include/wx/gtk \
+	   @prefix@/include/wx/common \
+	   @prefix@/include/wx/generic \
+	   @prefix@/include/wx/protocol \
 	@echo "  Copying headers from /include/wx"
 	@cd $(WXBASEDIR)/include/wx ; \
+	$(INSTALL) -d $(includedir)/wx ; \
 	for f in *.h ; do \
 	  rm -f $(includedir)/wx/$$f ; \
 	  $(INSTALL_DATA) $$f $(includedir)/wx/$$f ; \
 	done
 	@echo "  Copying headers from /include/wx/gtk"
 	@cd $(WXBASEDIR)/include/wx/gtk ; \
+	$(INSTALL) -d $(includedir)/wx/gtk ; \
 	for f in *.h ; do \
 	  rm -f $(includedir)/wx/gtk/$$f ; \
 	  $(INSTALL_DATA) $$f $(includedir)/wx/gtk/$$f ; \
-	done
+	done ; \
+	$(INSTALL) -d $(libdir) ;\
+	mv $(includedir)/wx/gtk/setup.h $(libdir)/wxsetup.h ;\
+	ln -s $(libdir)/wxsetup.h $(includedir)/wx/gtk/setup.h
 	@echo "  Copying headers from /include/wx/generic"
 	@cd $(WXBASEDIR)/include/wx/generic ; \
+	$(INSTALL) -d $(includedir)/wx/generic ; \
 	for f in *.h ; do \
 	  rm -f $(includedir)/wx/generic/$$f ; \
 	  $(INSTALL_DATA) $$f $(includedir)/wx/generic/$$f ; \
@@ -79,6 +85,7 @@ install::
 	done
 	@echo "  Copying wx-config"
 	@cd $(WXBASEDIR) ; \
+	  $(INSTALL) -d $(bindir) ;\
 	  rm -f $(bindir)/wx-config ; \
 	  $(INSTALL_PROGRAM) wx-config $(bindir)/wx-config
 	@echo "  Copying static library"
