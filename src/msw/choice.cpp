@@ -333,10 +333,26 @@ int wxChoice::FindString(const wxString& s) const
 
     return wxNOT_FOUND;
 #else // !Watcom
-    int pos = (int)SendMessage(GetHwnd(), CB_FINDSTRINGEXACT,
-                               (WPARAM)-1, (LPARAM)s.c_str());
+   //TODO:  Evidently some MSW versions (all?) don't like empty strings
+   //passed to SendMessage, so we have to do it ourselves in that case
+   if ( s.size() == 0 )
+   {
+     int count = GetCount();
+     for ( int i = 0; i < count; i++ )
+     {
+       if ( GetString(i).size() == 0 )
+           return i;
+     }
 
-    return pos == LB_ERR ? wxNOT_FOUND : pos;
+     return wxNOT_FOUND;
+   }
+   else
+   {
+     int pos = (int)SendMessage(GetHwnd(), CB_FINDSTRINGEXACT,
+                                (WPARAM)-1, (LPARAM)s.c_str());
+ 
+     return pos == LB_ERR ? wxNOT_FOUND : pos;
+   }
 #endif // Watcom/!Watcom
 }
 
