@@ -58,6 +58,9 @@ public:
     virtual bool MSWOnScroll(int orientation, WXWORD wParam,
                              WXWORD pos, WXHWND control);
 
+    // a wxSpinButton can't do anything useful with focus, only wxSpinCtrl can
+    virtual bool AcceptsFocus() const { return FALSE; }
+
 protected:
    virtual wxSize DoGetBestSize() const;
 

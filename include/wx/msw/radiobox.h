@@ -89,6 +89,7 @@ public:
     int GetNumVer() const;
     int GetNumHor() const;
 
+    // compatibility ctor
 #if WXWIN_COMPATIBILITY
     wxRadioBox(wxWindow *parent, wxFunction func, const char *title,
             int x = -1, int y = -1, int width = -1, int height = -1,

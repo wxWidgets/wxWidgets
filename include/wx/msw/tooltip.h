@@ -31,14 +31,19 @@ public:
         // set the delay after which the tooltip appears
     static void SetDelay(long milliseconds);
 
-    // implementation
+    // implementation only from now on
+    // -------------------------------
+
+    // should be called in responde to WM_MOUSEMOVE
     void RelayEvent(WXMSG *msg);
 
 private:
+    // the one and only one tooltip control we use - never access it directly
+    // but use GetToolTipCtrl() which will create it when needed
     static WXHWND ms_hwndTT;
 
     // create the tooltip ctrl if it doesn't exist yet and return its HWND
-    WXHWND GetToolTipCtrl();
+    static WXHWND GetToolTipCtrl();
 
     // remove this tooltip from the tooltip control
     void Remove();

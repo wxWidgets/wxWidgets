@@ -235,6 +235,15 @@ extern void PixelToHIMETRIC(LONG *x, LONG *y);
 // to invert the mask each time we pass one/get one to/from Windows
 extern HBITMAP wxInvertMask(HBITMAP hbmpMask, int w = 0, int h = 0);
 
+// get (x, y) from DWORD - notice that HI/LOWORD can *not* be used because they
+// will fail on system with multiple monitors where the coords may be negative
+//
+// these macros are standard now (Win98) but some older headers don't have them
+#ifndef GET_X_LPARAM
+    #define GET_X_LPARAM(lp) ((int)(short)LOWORD(lp))
+    #define GET_Y_LPARAM(lp) ((int)(short)HIWORD(lp))
+#endif // GET_X_LPARAM
+
 // ---------------------------------------------------------------------------
 // small helper classes
 // ---------------------------------------------------------------------------
@@ -336,6 +345,12 @@ inline bool wxStyleHasBorder(long style)
   return (style & (wxSIMPLE_BORDER | wxRAISED_BORDER |
                    wxSUNKEN_BORDER | wxDOUBLE_BORDER)) != 0;
 }
+
+// find the window for HWND which is part of some wxWindow, returns just the
+// corresponding wxWindow for HWND which just is one
+//
+// may return NULL
+extern wxWindow *wxGetWindowFromHWND(WXHWND hwnd);
 
 #endif // wxUSE_GUI
 

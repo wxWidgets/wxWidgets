@@ -893,30 +893,19 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
             // ourselves the fact that we got here means that the user code
             // decided to skip processing of this TAB - probably to let it
             // do its default job.
-            //
-            // NB: Notice that Ctrl-Tab is handled elsewhere and Alt-Tab is
-            //     handled by Windows
             {
                 wxNavigationKeyEvent eventNav;
                 eventNav.SetDirection(!event.ShiftDown());
-                eventNav.SetWindowChange(FALSE);
+                eventNav.SetWindowChange(event.ControlDown());
                 eventNav.SetEventObject(this);
 
                 if ( GetParent()->GetEventHandler()->ProcessEvent(eventNav) )
                     return;
             }
             break;
-
-        default:
-            event.Skip();
-            return;
     }
 
-    // don't just call event.Skip() because this will cause TABs and ENTERs
-    // be passed upwards and we don't always want this - instead process it
-    // right here
-
-    // FIXME
+    // no, we didn't process it
     event.Skip();
 }
 

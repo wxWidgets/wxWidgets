@@ -101,16 +101,6 @@
 #endif
 
 // ---------------------------------------------------------------------------
-// macros
-// ---------------------------------------------------------------------------
-
-// standard macros missing from some compilers headers
-#ifndef GET_X_LPARAM
-    #define GET_X_LPARAM(lp) ((int)(short)LOWORD(lp))
-    #define GET_Y_LPARAM(lp) ((int)(short)HIWORD(lp))
-#endif // GET_X_LPARAM
-
-// ---------------------------------------------------------------------------
 // global variables
 // ---------------------------------------------------------------------------
 
@@ -2293,6 +2283,13 @@ bool wxWindow::MSWCreate(int id,
     if ( width > -1 ) width1 = width;
     if ( height > -1 ) height1 = height;
 
+    // if we have wxTAB_TRAVERSAL style, we want WS_EX_CONTROLPARENT or
+    // IsDialogMessage() won't work for us
+    if ( GetWindowStyleFlag() & wxTAB_TRAVERSAL )
+    {
+        extendedStyle |= WS_EX_CONTROLPARENT;
+    }
+
     HWND hParent = (HWND)NULL;
     if ( parent )
         hParent = (HWND) parent->GetHWND();
@@ -3631,6 +3628,45 @@ wxWindow *wxGetActiveWindow()
     return NULL;
 }
 
+extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
+{
+    HWND hwnd = (HWND)hWnd;
+
+    // For a radiobutton, we get the radiobox from GWL_USERDATA (which is set
+    // by code in msw/radiobox.cpp), for all the others we just search up the
+    // window hierarchy
+    wxWindow *win = (wxWindow *)NULL;
+    if ( hwnd )
+    {
+        win = wxFindWinFromHandle((WXHWND)hwnd);
+        if ( !win )
+        {
+            // native radiobuttons return DLGC_RADIOBUTTON here and for any
+            // wxWindow class which overrides WM_GETDLGCODE processing to
+            // do it as well, win would be already non NULL
+            if ( ::SendMessage((HWND)hwnd, WM_GETDLGCODE,
+                               0, 0) & DLGC_RADIOBUTTON )
+            {
+                win = (wxWindow *)::GetWindowLong(hwnd, GWL_USERDATA);
+            }
+            else
+            {
+                // hwnd is not a wxWindow, try its parent next below
+                hwnd = ::GetParent(hwnd);
+            }
+        }
+        //else: it's a wxRadioButton, not a radiobutton from wxRadioBox
+    }
+
+    while ( hwnd && !win )
+    {
+        win = wxFindWinFromHandle((WXHWND)hwnd);
+        hwnd = ::GetParent(hwnd);
+    }
+
+    return win;
+}
+
 // Windows keyboard hook. Allows interception of e.g. F1, ESCAPE
 // in active frames and dialogs, regardless of where the focus is.
 static HHOOK wxTheKeyboardHook = 0;
@@ -3646,11 +3682,12 @@ void wxSetKeyboardHook(bool doIt)
         wxTheKeyboardHook = SetWindowsHookEx(WH_KEYBOARD, (HOOKPROC) wxTheKeyboardHookProc, wxGetInstance(),
 
 #if defined(__WIN32__) && !defined(__TWIN32__)
-            GetCurrentThreadId());
+            GetCurrentThreadId()
         //      (DWORD)GetCurrentProcess()); // This is another possibility. Which is right?
 #else
-            GetCurrentTask());
+            GetCurrentTask()
 #endif
+            );
     }
     else
     {

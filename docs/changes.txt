@@ -56,6 +56,8 @@ wxMSW:
 - wxTreeCtrl::IsVisible() bug fixed (thanks to Gary Chessun)
 - loading/saving big (> 32K) files in wxTextCtrl works
 - tooltips work with wxRadioBox
+- wxBitmap/wxIcon may be constructed from XPM included into a program, as in
+  Unix ports
 - returning FALSE from OnPrintPage() aborts printing
 
 wxGTK:

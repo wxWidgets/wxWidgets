@@ -38,24 +38,36 @@
 #include "wx/msw/private.h"
 
 #if wxUSE_TOOLTIPS
-
-#ifndef __GNUWIN32__
-    #include <commctrl.h>
-#endif
+    #ifndef __GNUWIN32__
+        #include <commctrl.h>
+    #endif
 
     #include "wx/tooltip.h"
 #endif // wxUSE_TOOLTIPS
 
 IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
 
-// VZ: the new behaviour is to create the radio buttons as children of the
-//     radiobox instead of creating them as children of the radiobox' parent.
+// there are two possible ways to create the radio buttons: either as children
+// of the radiobox or as siblings of it - allow playing with both variants for
+// now, eventually we will choose the best one for our purposes
 //
-//     This seems more logical, more consistent with what other frameworks do
-//     and allows tooltips to work with radioboxes, so there should be no
-//     reason to revert to the backward compatible behaviour - but I still
-//     leave this possibility just in case.
-
+// two main problems are the keyboard navigation inside the radiobox (arrows
+// should switch between buttons, not pass focus to the next control) and the
+// tooltips - a tooltip is associated with the radiobox itself, not the
+// children...
+//
+// the problems with setting this to 1:
+// a) Alt-<mnemonic of radiobox> isn't handled properly by IsDialogMessage()
+//    because it sets focus to the next control accepting it which is not a
+//    radio button but a radiobox sibling in this case - the only solution to
+//    this would be to handle Alt-<mnemonic> ourselves
+// b) the problems with setting radiobox colours under Win98/2K were reported
+//    but I couldn't reproduce it so I have no idea about what causes it
+//
+// the problems with setting this to 0:
+// a) the tooltips are not shown for the radiobox - possible solution: make
+//    TTM_WINDOWFROMPOS handling code in msw/tooltip.cpp work (easier said than
+//    done because I don't know why it doesn't work)
 #define RADIOBTN_PARENT_IS_RADIOBOX 0
 
 // ---------------------------------------------------------------------------
@@ -74,7 +86,7 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hWnd,
 // ---------------------------------------------------------------------------
 
 // the pointer to standard radio button wnd proc
-static WXFARPROC s_wndprocRadioBtn = (WXFARPROC)NULL;
+static WNDPROC s_wndprocRadioBtn = (WNDPROC)NULL;
 
 #endif // __WIN32__
 
@@ -668,15 +680,17 @@ void wxRadioBox::Command(wxCommandEvent & event)
     ProcessCommand (event);
 }
 
+// NB: if this code is changed, wxGetWindowForHWND() which relies on having the
+//     radiobox pointer in GWL_USERDATA for radio buttons must be updated too!
 void wxRadioBox::SubclassRadioButton(WXHWND hWndBtn)
 {
+    // No GWL_USERDATA in Win16, so omit this subclassing.
 #ifdef __WIN32__
     HWND hwndBtn = (HWND)hWndBtn;
 
     if ( !s_wndprocRadioBtn )
-        s_wndprocRadioBtn = (WXFARPROC)::GetWindowLong(hwndBtn, GWL_WNDPROC);
+        s_wndprocRadioBtn = (WNDPROC)::GetWindowLong(hwndBtn, GWL_WNDPROC);
 
-    // No GWL_USERDATA in Win16, so omit this subclassing.
     ::SetWindowLong(hwndBtn, GWL_WNDPROC, (long)wxRadioBtnWndProc);
     ::SetWindowLong(hwndBtn, GWL_USERDATA, (long)this);
 #endif // __WIN32__
@@ -706,14 +720,21 @@ bool wxRadioBox::SetFont(const wxFont& font)
         ::SendMessage((HWND)m_radioButtons[n], WM_SETFONT, (WPARAM)hfont, 0L);
     }
 
+    // this is needed because otherwise the buttons are not redrawn correctly
+    Refresh();
+
     return TRUE;
 }
+
+// ----------------------------------------------------------------------------
+// our window proc
+// ----------------------------------------------------------------------------
 
 long wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
     switch ( nMsg )
     {
-#ifndef __WIN16__
+#ifdef __WIN32__
         case WM_CTLCOLORSTATIC:
             // set the colour of the radio buttons to be the same as ours
             {
@@ -727,7 +748,7 @@ long wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
                 return (WXHBRUSH)brush->GetResourceHandle();
             }
-#endif
+#endif // Win32
 
         // This is required for the radiobox to be sensitive to mouse input,
         // e.g. for Dialog Editor.
@@ -743,11 +764,10 @@ long wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                 if (yPos < 10)
                     return (long)HTCLIENT;
             }
-            // fall through
-
-        default:
-            return wxControl::MSWWindowProc(nMsg, wParam, lParam);
+            break;
     }
+
+    return wxControl::MSWWindowProc(nMsg, wParam, lParam);
 }
 
 // ---------------------------------------------------------------------------
@@ -757,95 +777,103 @@ long wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 #ifdef __WIN32__
 
 LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
-                                           UINT msg,
+                                           UINT message,
                                            WPARAM wParam,
                                            LPARAM lParam)
 {
-    bool processed = FALSE;
-    if ( msg == WM_KEYDOWN
-#if wxUSE_TOOLTIPS
-         || msg == WM_NOTIFY
-#endif // wxUSE_TOOLTIPS
-       )
+    switch ( message )
     {
-        wxRadioBox *radiobox = (wxRadioBox *)::GetWindowLong(hwnd, GWL_USERDATA);
-
-        wxCHECK_MSG( radiobox, 0, wxT("radio button without radio box?") );
-
-#if wxUSE_TOOLTIPS && !defined(__GNUWIN32__)
-        if ( msg == WM_NOTIFY )
-        {
-            NMHDR* hdr = (NMHDR *)lParam;
-            if ( (int)hdr->code == TTN_NEEDTEXT )
+        case WM_GETDLGCODE:
+            // we must tell IsDialogMessage()/our kbd processing code that we
+            // want to process arrows ourselves because neither of them is
+            // smart enough to handle arrows properly for us
             {
-                wxToolTip *tt = radiobox->GetToolTip();
-                if ( tt )
-                {
-                    TOOLTIPTEXT *ttt = (TOOLTIPTEXT *)lParam;
-                    ttt->lpszText = (wxChar *)tt->GetTip().c_str();
-
-                    processed = TRUE;
-                }
+                long lDlgCode = ::CallWindowProc(s_wndprocRadioBtn, hwnd,
+                                                 message, wParam, lParam);
+                return lDlgCode | DLGC_WANTARROWS;
             }
-        }
-        else // msg == WM_KEYDOWN
-#endif // wxUSE_TOOLTIPS
-        {
-            processed = TRUE;
 
-            int sel = radiobox->GetSelection();
-
-            switch ( wParam )
+#if wxUSE_TOOLTIPS
+        case WM_NOTIFY:
             {
-                case VK_UP:
-                    sel--;
-                    break;
+                NMHDR* hdr = (NMHDR *)lParam;
+                if ( (int)hdr->code == TTN_NEEDTEXT )
+                {
+                    wxRadioBox *radiobox = (wxRadioBox *)
+                        ::GetWindowLong(hwnd, GWL_USERDATA);
 
-                case VK_LEFT:
-                    sel -= radiobox->GetNumVer();
-                    break;
+                    wxCHECK_MSG( radiobox, 0,
+                                 wxT("radio button without radio box?") );
 
-                case VK_DOWN:
-                    sel++;
-                    break;
-
-                case VK_RIGHT:
-                    sel += radiobox->GetNumVer();
-                    break;
-
-                case VK_TAB:
+                    wxToolTip *tooltip = radiobox->GetToolTip();
+                    if ( tooltip )
                     {
-                        wxNavigationKeyEvent event;
-                        event.SetDirection(!(::GetKeyState(VK_SHIFT) & 0x100));
-                        event.SetWindowChange(FALSE);
-                        event.SetEventObject(radiobox);
-
-                        if ( radiobox->GetEventHandler()->ProcessEvent(event) )
-                            return 0;
+                        TOOLTIPTEXT *ttt = (TOOLTIPTEXT *)lParam;
+                        ttt->lpszText = (wxChar *)tooltip->GetTip().c_str();
                     }
-                    // fall through
 
-                default:
-                    processed = FALSE;
-            }
-
-            if ( processed )
-            {
-                if ( sel >= 0 && sel < radiobox->Number() )
-                {
-                    radiobox->SetSelection(sel);
-
-                    // emulate the button click
-                    radiobox->SendNotificationEvent();
+                    // processed
+                    return 0;
                 }
             }
-        }
+            break;
+#endif // wxUSE_TOOLTIPS
+
+        case WM_KEYDOWN:
+            {
+                wxRadioBox *radiobox = (wxRadioBox *)
+                    ::GetWindowLong(hwnd, GWL_USERDATA);
+
+                wxCHECK_MSG( radiobox, 0, wxT("radio button without radio box?") );
+
+                bool processed = TRUE;
+
+                int selOld = radiobox->GetSelection();
+                int selNew = selOld;
+
+                switch ( wParam )
+                {
+                    case VK_UP:
+                        selNew--;
+                        break;
+
+                    case VK_LEFT:
+                        selNew -= radiobox->GetNumVer();
+                        break;
+
+                    case VK_DOWN:
+                        selNew++;
+                        break;
+
+                    case VK_RIGHT:
+                        selNew += radiobox->GetNumVer();
+                        break;
+
+                    default:
+                        processed = FALSE;
+                }
+
+                if ( processed )
+                {
+                    // ensure that selNew is in range [0..num)
+                    int num = radiobox->Number();
+                    selNew += num;
+                    selNew %= num;
+
+                    if ( selNew != selOld )
+                    {
+                        radiobox->SetSelection(selNew);
+
+                        // emulate the button click
+                        radiobox->SendNotificationEvent();
+
+                        return 0;
+                    }
+                }
+            }
     }
 
-    if ( processed )
-        return 0;
-
-    return ::CallWindowProc(CASTWNDPROC s_wndprocRadioBtn, hwnd, msg, wParam, lParam);
+    return ::CallWindowProc(s_wndprocRadioBtn, hwnd, message, wParam, lParam);
 }
 
 #endif // __WIN32__

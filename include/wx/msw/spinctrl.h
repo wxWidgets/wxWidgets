@@ -65,6 +65,8 @@ public:
     virtual bool Enable(bool enable = TRUE);
     virtual bool Show(bool show = TRUE);
 
+    virtual bool AcceptsFocus() const { return TRUE; }
+
 protected:
     virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual wxSize DoGetBestSize() const;

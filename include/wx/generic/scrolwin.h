@@ -1,52 +1,65 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        scrolwin.h
+// Name:        wx/generic/scrolwin.h
 // Purpose:     wxScrolledWindow class
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __SCROLWINH_G__
-#define __SCROLWINH_G__
+#ifndef _WX_GENERIC_SCROLLWIN_H_
+#define _WX_GENERIC_SCROLLWIN_H_
 
 #ifdef __GNUG__
-#pragma interface "scrolwin.h"
+    #pragma interface "scrolwin.h"
 #endif
+
+// ----------------------------------------------------------------------------
+// headers and constants
+// ----------------------------------------------------------------------------
 
 #include "wx/window.h"
 #include "wx/panel.h"
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxPanelNameStr;
 
+// default scrolled window style
+#define wxScrolledWindowStyle (wxHSCROLL | wxVSCROLL | wxTAB_TRAVERSAL)
+
+// ----------------------------------------------------------------------------
+// wxScrolledWindow
+// ----------------------------------------------------------------------------
+
 class WXDLLEXPORT wxScrolledWindow : public wxPanel
 {
 public:
     wxScrolledWindow();
-    inline wxScrolledWindow(wxWindow *parent, wxWindowID id = -1,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           long style = wxHSCROLL|wxVSCROLL,
-           const wxString& name = wxPanelNameStr)
+    wxScrolledWindow(wxWindow *parent,
+                     wxWindowID id = -1,
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize& size = wxDefaultSize,
+                     long style = wxScrolledWindowStyle,
+                     const wxString& name = wxPanelNameStr)
     {
-      Create(parent, id, pos, size, style, name);
+        Create(parent, id, pos, size, style, name);
     }
 
     ~wxScrolledWindow();
 
-    bool Create(wxWindow *parent, wxWindowID id,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           long style = wxHSCROLL|wxVSCROLL,
-           const wxString& name = wxPanelNameStr);
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxScrolledWindowStyle,
+                const wxString& name = wxPanelNameStr);
 
-    // Normally the wxScrolledWindow will scroll itself, but in 
-    // some rare occasions you might want it to scroll another 
-    // window (e.g. a child of it in order to scroll only a portion 
+    // Normally the wxScrolledWindow will scroll itself, but in
+    // some rare occasions you might want it to scroll another
+    // window (e.g. a child of it in order to scroll only a portion
     // the area between the scrollbars (spreadsheet: only cell area
-    // will move). 
+    // will move).
     virtual void SetTargetWindow( wxWindow *target );
     virtual wxWindow *GetTargetWindow();
 
@@ -56,21 +69,21 @@ public:
     virtual void SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
                              int noUnitsX, int noUnitsY,
                              int xPos = 0, int yPos = 0,
-			     bool noRefresh = FALSE );
+                             bool noRefresh = FALSE );
 
     // Physically scroll the window
     virtual void Scroll(int x_pos, int y_pos);
 
 #if WXWIN_COMPATIBILITY
     virtual void GetScrollUnitsPerPage(int *x_page, int *y_page) const;
-    virtual void CalcUnscrolledPosition(int x, int y, float *xx, float *yy) const ;
+    virtual void CalcUnscrolledPosition(int x, int y, float *xx, float *yy) const;
 #endif
 
-    int GetScrollPageSize(int orient) const ;
+    int GetScrollPageSize(int orient) const;
     void SetScrollPageSize(int orient, int pageSize);
 
     virtual void GetScrollPixelsPerUnit(int *x_unit, int *y_unit) const;
-    
+
     // Enable/disable Windows scrolling in either direction.
     // If TRUE, wxWindows scrolls the canvas and only a bit of
     // the canvas is invalidated; no Clear() is necessary.
@@ -93,8 +106,8 @@ public:
     double GetScaleX() const { return m_scaleX; }
     double GetScaleY() const { return m_scaleY; }
 
-    virtual void CalcScrolledPosition(int x, int y, int *xx, int *yy) const ;
-    virtual void CalcUnscrolledPosition(int x, int y, int *xx, int *yy) const ;
+    virtual void CalcScrolledPosition(int x, int y, int *xx, int *yy) const;
+    virtual void CalcUnscrolledPosition(int x, int y, int *xx, int *yy) const;
 
     // Adjust the scrollbars
     virtual void AdjustScrollbars(void);
@@ -135,4 +148,4 @@ private:
 };
 
 #endif
-    // __SCROLWINH_G__
+    // _WX_GENERIC_SCROLLWIN_H_

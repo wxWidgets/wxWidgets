@@ -36,14 +36,20 @@
     #include <commctrl.h>
 #endif
 
+#ifndef _WIN32_IE
+    // minimal set of features by default
+    #define _WIN32_IE 0x0200
+#endif
+
 // VZ: normally, the trick with subclassing the tooltip control and processing
 //     TTM_WINDOWFROMPOINT should work but, somehow, it doesn't. I leave the
 //     code here for now (but it's not compiled) in case we need it later.
 //
-//     For now, instead of this, we just add all radiobox buttons to the
-//     tooltip control as well (see SetWindow) - this is probably less
-//     efficient, but it works.
-#define wxUSE_TTM_WINDOWFROMPOINT   1
+//     For now I use an ugly workaround and process TTN_NEEDTEXT directly in
+//     radio button wnd proc - fixing TTM_WINDOWFROMPOINT code would be nice
+//     because it would then work for all controls, not only radioboxes but for
+//     now I don't understand what's wrong with it...
+#define wxUSE_TTM_WINDOWFROMPOINT   0
 
 // ----------------------------------------------------------------------------
 // global variables
@@ -83,7 +89,7 @@ public:
         // version of it. So we always use the old size - if we ever start
         // using our lParam member, we'd have to check for comctl32 version
         // during run-time
-#if defined(_WIN32_IE) && (_WIN32_IE >= 0x0300)
+#if _WIN32_IE >= 0x0300
         cbSize = sizeof(TOOLINFO) - sizeof(LPARAM);
 #else // old headers
         cbSize = sizeof(TOOLINFO);
@@ -139,26 +145,35 @@ LRESULT APIENTRY wxToolTipWndProc(HWND hwndTT,
     if ( msg == TTM_WINDOWFROMPOINT )
     {
         LPPOINT ppt = (LPPOINT)lParam;
-        // is the window under control a wxWindow?
+
+        // the window on which event occured
         HWND hwnd = ::WindowFromPoint(*ppt);
 
-        // return a HWND correspondign to wxWindow because only wxWindows are
-        // associated with tooltips using TTM_ADDTOOL
-        while ( hwnd && !wxFindWinFromHandle((WXHWND)hwnd) )
-        {
-            hwnd = ::GetParent(hwnd);
-        }
+        OutputDebugString("TTM_WINDOWFROMPOINT: ");
+        OutputDebugString(wxString::Format("0x%08x => ", hwnd));
 
-        if ( hwnd )
+        // return a HWND corresponding to a wxWindow because only wxWindows are
+        // associated with tooltips using TTM_ADDTOOL
+        wxWindow *win = wxGetWindowFromHWND((WXHWND)hwnd);
+
+        if ( win )
         {
+            hwnd = GetHwndOf(win);
+            OutputDebugString(wxString::Format("0x%08x\r\n", hwnd));
+
+#if 0
             // modify the point too!
             RECT rect;
             GetWindowRect(hwnd, &rect);
 
-            ppt->x = rect.left;
-            ppt->y = rect.top;
-
+            ppt->x = (rect.right - rect.left) / 2;
+            ppt->y = (rect.bottom - rect.top) / 2;
+#endif // 0
             return (LRESULT)hwnd;
+        }
+        else
+        {
+            OutputDebugString("no window\r\n");
         }
     }
 
@@ -268,6 +283,59 @@ void wxToolTip::Add(WXHWND hWnd)
     {
         wxLogDebug(_T("Failed to create the tooltip '%s'"), m_text.c_str());
     }
+    else
+    {
+        // check for multiline toopltip
+        int index = m_text.Find(_T('\n'));
+
+        if ( index != wxNOT_FOUND )
+        {
+#if _WIN32_IE >= 0x0300
+            if ( wxTheApp->GetComCtl32Version() >= 470 )
+            {
+                // use TTM_SETMAXWIDTH to make tooltip multiline using the
+                // extent of its first line as max value
+                HFONT hfont = (HFONT)SendTooltipMessage(GetToolTipCtrl(),
+                                                        WM_GETFONT,
+                                                        0, 0);
+                if ( !hfont )
+                {
+                    hfont = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
+                    if ( !hfont )
+                    {
+                        wxLogLastError("GetStockObject(DEFAULT_GUI_FONT)");
+                    }
+                }
+
+                HDC hdc = CreateCompatibleDC(NULL);
+                if ( !hdc )
+                {
+                    wxLogLastError("CreateCompatibleDC(NULL)");
+                }
+
+                if ( !SelectObject(hdc, hfont) )
+                {
+                    wxLogLastError("SelectObject(hfont)");
+                }
+
+                SIZE sz;
+                if ( !GetTextExtentPoint(hdc, m_text, index, &sz) )
+                {
+                    wxLogLastError("GetTextExtentPoint");
+                }
+
+                DeleteDC(hdc);
+
+                SendTooltipMessage(GetToolTipCtrl(), TTM_SETMAXTIPWIDTH,
+                                   0, (void *)sz.cx);
+            }
+#endif // comctl32.dll >= 4.70
+
+            // replace the '\n's with spaces because otherwise they appear as
+            // unprintable characters in the tooltip string
+            m_text.Replace(_T("\n"), _T(" "));
+        }
+    }
 }
 
 void wxToolTip::SetWindow(wxWindow *win)
@@ -282,24 +350,30 @@ void wxToolTip::SetWindow(wxWindow *win)
         Add(m_window->GetHWND());
     }
 
-#if 1 //!wxUSE_TTM_WINDOWFROMPOINT
     // and all of its subcontrols (e.g. radiobuttons in a radiobox) as well
     wxControl *control = wxDynamicCast(m_window, wxControl);
     if ( control )
     {
-        size_t count = control->GetSubcontrols().GetCount();
+        const wxArrayLong& subcontrols = control->GetSubcontrols();
+        size_t count = subcontrols.GetCount();
         for ( size_t n = 0; n < count; n++ )
         {
-            wxWindowID id = control->GetSubcontrols()[n];
+            int id = subcontrols[n];
             HWND hwnd = GetDlgItem(GetHwndOf(m_window), id);
-
-            if ( hwnd )
+            if ( !hwnd )
             {
-                Add((WXHWND)hwnd);
+                // may be it's a child of parent of the control, in fact?
+                // (radiobuttons are subcontrols, i.e. children of the radiobox
+                // for wxWindows but are its siblings at Windows level)
+                hwnd = GetDlgItem(GetHwndOf(m_window->GetParent()), id);
             }
+
+            // must have it by now!
+            wxASSERT_MSG( hwnd, _T("no hwnd for subcontrol?") );
+
+            Add((WXHWND)hwnd);
         }
     }
-#endif // !wxUSE_TTM_WINDOWFROMPOINT
 }
 
 void wxToolTip::SetTip(const wxString& tip)

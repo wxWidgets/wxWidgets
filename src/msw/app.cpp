@@ -67,6 +67,10 @@
     #include "wx/resource.h"
 #endif
 
+#if wxUSE_TOOLTIPS
+    #include "wx/tooltip.h"
+#endif // wxUSE_TOOLTIPS
+
 // OLE is used for drag-and-drop, clipboard, OLE Automation...
 #ifndef wxUSE_NORLANDER_HEADERS
 #if defined(__GNUWIN32__) || defined(__SC__) || defined(__SALFORDC__)
@@ -959,19 +963,24 @@ bool wxApp::ProcessMessage(WXMSG *wxmsg)
 {
     MSG *msg = (MSG *)wxmsg;
     HWND hWnd = msg->hwnd;
-    wxWindow *wndThis = wxFindWinFromHandle((WXHWND)hWnd), *wnd;
+    wxWindow *wndThis = wxGetWindowFromHWND((WXHWND)hWnd);
 
-    // for some composite controls (like a combobox), wndThis might be NULL
-    // because the subcontrol is not a wxWindow, but only the control itself
-    // is - try to catch this case
-    while ( hWnd && !wndThis )
+#if wxUSE_TOOLTIPS
+    // we must relay WM_MOUSEMOVE events to the tooltip ctrl if we want it to
+    // popup the tooltip bubbles
+    if ( wndThis && (msg->message == WM_MOUSEMOVE) )
     {
-        hWnd = ::GetParent(hWnd);
-        wndThis = wxFindWinFromHandle((WXHWND)hWnd);
+        wxToolTip *tt = wndThis->GetToolTip();
+        if ( tt )
+        {
+            tt->RelayEvent(wxmsg);
+        }
     }
+#endif // wxUSE_TOOLTIPS
 
     // Try translations first; find the youngest window with
     // a translation table.
+    wxWindow *wnd;
     for ( wnd = wndThis; wnd; wnd = wnd->GetParent() )
     {
         if ( wnd->MSWTranslateMessage(wxmsg) )
