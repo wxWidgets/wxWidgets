@@ -172,6 +172,12 @@ wxGTK:
 - wxButton now honours wxBU_EXACTFIT
 - wxStaticBox now honours wxALIGN_XXX styles
 - added support for non alphanumeric simple character accelerators ('-', '=')
+- new behaviour for wxWindow::Refresh() as it now produces a delayed refresh. 
+  Call the new wxWindow::Update() to force an immediate update
+- support for more SGI hardware (12-bit mode among others)
+- fixed wxDC::Blit() to honour source DC's logical coordinates
+- implemented wxIdleEvent::RequestMore() for simple background tasks
+  (unlike thread work)
 
 wxHTML:
 
