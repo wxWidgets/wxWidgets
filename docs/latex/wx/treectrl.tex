@@ -159,7 +159,7 @@ EVT\_TREE\_BEGIN\_LABEL\_EDIT event which can be vetoed so that no
 text control will appear for in-place editing.
 
 If the user changed the label (i.e. s/he does not press ESC or leave
-the text control without changes, a EVT\_TREE\_END\_LABEL\_EDIT event 
+the text control without changes, a EVT\_TREE\_END\_LABEL\_EDIT event
 will be sent which can be vetoed as well.
 
 \wxheading{See also}
@@ -202,6 +202,10 @@ items image is also taken into account.
 The return value is TRUE if the rectangle was successfully retrieved or FALSE
 if it was not (in this case {\it rect} is not changed) - for example, if the
 item is currently invisible.
+
+\pythonnote{The wxPython version of this method requires only the
+\tt{item} and \tt{textOnly} parameters.  The return value is either a
+\tt{wxRect} object or \tt{None}.}
 
 \membersection{wxTreeCtrl::GetChildrenCount}\label{wxtreectrlgetchildrencount}
 
@@ -392,7 +396,7 @@ Returns the root item for the tree control.
 
 \constfunc{int}{GetItemSelectedImage}{\param{const wxTreeItemId\& }{item}}
 
-Gets the selected item image (this function is obsolete, use 
+Gets the selected item image (this function is obsolete, use
 {\tt GetItemImage(item, wxTreeItemIcon\_Selected} instead).
 
 \membersection{wxTreeCtrl::GetSelection}\label{wxtreectrlgetselection}
@@ -400,7 +404,7 @@ Gets the selected item image (this function is obsolete, use
 \constfunc{wxTreeItemId}{GetSelection}{\void}
 
 Returns the selection, or an invalid item if there is no selection.
-This function only works with the controls without wxTR\_MULTIPLE style, use 
+This function only works with the controls without wxTR\_MULTIPLE style, use
 \helpref{GetSelections}{wxtreectrlgetselections} for the controls which do have
 this style.
 
@@ -412,6 +416,9 @@ Fills the array of tree items passed in with the currently selected items. This
 function can be called only if the control has the wxTR\_MULTIPLE style.
 
 Returns the number of selected items.
+
+\pythonnote{The wxPython version of this method accepts no parameters
+and returns a Python list of \tt{wxTreeItemId}'s.}
 
 \membersection{wxTreeCtrl::HitTest}\label{wxtreectrlhittest}
 
@@ -562,14 +569,14 @@ usage and loading time.
 \param{int }{image},
 \param{wxTreeItemIcon }{which = wxTreeItemIcon\_Normal}}
 
-Sets the specified item image. See \helpref{GetItemImage}{wxtreectrlgetitemimage} 
+Sets the specified item image. See \helpref{GetItemImage}{wxtreectrlgetitemimage}
 for the description of {\it which} parameter.
 
 \membersection{wxTreeCtrl::SetItemSelectedImage}\label{wxtreectrlsetitemselectedimage}
 
 \func{void}{SetItemSelectedImage}{\param{const wxTreeItemId\&}{ item}, \param{int }{selImage}}
 
-Sets the selected item image (this function is obsolete, use 
+Sets the selected item image (this function is obsolete, use
 {\tt SetItemImage(item, wxTreeItemIcon\_Selected} instead).
 
 \membersection{wxTreeCtrl::SetItemText}\label{wxtreectrlsetitemtext}
@@ -607,7 +614,7 @@ Removes the selection from the currently selected item (if any).
 
 \func{void}{UnselectAll}{\void}
 
-This function either behaves the same as \helpref{Unselect}{wxtreectrlunselect} 
+This function either behaves the same as \helpref{Unselect}{wxtreectrlunselect}
 if the control doesn't have wxTR\_MULTIPLE style, or removes the selection from
 all items if it does have this style.
 

@@ -18,6 +18,10 @@ To specify a default, `null' validator, use the symbol {\bf wxDefaultValidator}.
 
 For more information, please see \helpref{Validator overview}{validatoroverview}.
 
+\pythonnote{If you wish to create a validator class in wxPython you should
+derive the class from \tt{wxPyValidator} in order to get Python-aware
+capabilities for the various virtual methods.}
+
 \wxheading{Derived from}
 
 \helpref{wxEvtHandler}{wxevthandler}\\
@@ -29,9 +33,9 @@ For more information, please see \helpref{Validator overview}{validatoroverview}
 
 \wxheading{See also}
 
-\helpref{Validator overview}{validatoroverview}, 
+\helpref{Validator overview}{validatoroverview},
 \helpref{wxTextValidator}{wxtextvalidator},
-\helpref{wxTextValidator}{wxgenericvalidator},
+\helpref{wxGenericValidator}{wxgenericvalidator},
 
 
 \latexignore{\rtfignore{\wxheading{Members}}}
@@ -82,14 +86,14 @@ Associates a window with the validator.
 
 \membersection{wxValidator::TransferFromWindow}\label{wxvalidatortransferfromwindow}
 
-\func{virtual bool}{TransferToWindow}{\param{wxWindow*}{ parent}}
+\func{virtual bool}{TransferToWindow}{}
 
 This overridable function is called when the value in the window must be
 transferred to the validator. Return FALSE if there is a problem.
 
 \membersection{wxValidator::TransferToWindow}\label{wxvalidatortransfertowindow}
 
-\func{virtual bool}{TransferToWindow}{\param{wxWindow*}{ parent}}
+\func{virtual bool}{TransferToWindow}{}
 
 This overridable function is called when the value associated with the validator must be
 transferred to the window. Return FALSE if there is a problem.
