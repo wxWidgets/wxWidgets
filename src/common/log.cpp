@@ -983,7 +983,16 @@ void wxOnAssert(const char *szFile, int nLine, const char *szMsg)
   s_bInAssert = TRUE;
 
   char szBuf[LOG_BUFFER_SIZE];
+
+  // make life easier for people using VC++ IDE: clicking on the message will
+  // take us immediately to the place of the failed assert
+#ifdef _MSC_VER
+  sprintf(szBuf, _("%s(%d): assert failed"), szFile, nLine);
+#else  // !VC++
+  // make the error message more clear for all the others
   sprintf(szBuf, _("Assert failed in file %s at line %d"), szFile, nLine);
+#endif // VC/!VC
+
   if ( szMsg != NULL ) {
     strcat(szBuf, ": ");
     strcat(szBuf, szMsg);
