@@ -1347,39 +1347,36 @@ static gint gtk_window_key_release_callback( GtkWidget *widget,
 // mouse event processing helpers
 // ----------------------------------------------------------------------------
 
-// init wxMouseEvent with the info from gdk_event
-//
-// NB: this has to be a macro as gdk_event type is different for different
-//     events we're used with
-#define InitMouseEvent(/* wxWindowGTK * */ win,                               \
-                       /* wxMouseEvent& */ event,                             \
-                       /* GdkEventXXX * */ gdk_event)                         \
-{                                                                             \
-    event.SetTimestamp( gdk_event->time );                                    \
-    event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);                  \
-    event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK);              \
-    event.m_altDown = (gdk_event->state & GDK_MOD1_MASK);                     \
-    event.m_metaDown = (gdk_event->state & GDK_MOD2_MASK);                    \
-    event.m_leftDown = (gdk_event->state & GDK_BUTTON1_MASK);                 \
-    event.m_middleDown = (gdk_event->state & GDK_BUTTON2_MASK);               \
-    event.m_rightDown = (gdk_event->state & GDK_BUTTON3_MASK);                \
-    if (event.GetEventType()==wxEVT_MOUSEWHEEL)                               \
-    {                                                                         \
-       event.m_linesPerAction = 3;                                            \
-       if (((GdkEventButton*)gdk_event)->button == 4)                         \
-           event.m_wheelRotation = 120;                                       \
-       else if (((GdkEventButton*)gdk_event)->button == 5)                    \
-           event.m_wheelRotation = -120;                                      \
-    }                                                                         \
-                                                                              \
-    wxPoint pt = win->GetClientAreaOrigin();                                  \
-    event.m_x = (wxCoord)gdk_event->x - pt.x;                                 \
-    event.m_y = (wxCoord)gdk_event->y - pt.y;                                 \
-                                                                              \
-    event.SetEventObject( win );                                              \
-    event.SetId( win->GetId() );                                              \
-    event.SetTimestamp( gdk_event->time );                                    \
-}                                                                             \
+// init wxMouseEvent with the info from GdkEventXXX struct
+template<typename T> void InitMouseEvent(wxWindowGTK *win,
+                                         wxMouseEvent& event,
+                                         T *gdk_event)
+{
+    event.SetTimestamp( gdk_event->time );
+    event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);
+    event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK);
+    event.m_altDown = (gdk_event->state & GDK_MOD1_MASK);
+    event.m_metaDown = (gdk_event->state & GDK_MOD2_MASK);
+    event.m_leftDown = (gdk_event->state & GDK_BUTTON1_MASK);
+    event.m_middleDown = (gdk_event->state & GDK_BUTTON2_MASK);
+    event.m_rightDown = (gdk_event->state & GDK_BUTTON3_MASK);
+    if (event.GetEventType() == wxEVT_MOUSEWHEEL)
+    {
+       event.m_linesPerAction = 3;
+       if (((GdkEventButton*)gdk_event)->button == 4)
+           event.m_wheelRotation = 120;
+       else if (((GdkEventButton*)gdk_event)->button == 5)
+           event.m_wheelRotation = -120;
+    }
+
+    wxPoint pt = win->GetClientAreaOrigin();
+    event.m_x = (wxCoord)gdk_event->x - pt.x;
+    event.m_y = (wxCoord)gdk_event->y - pt.y;
+
+    event.SetEventObject( win );
+    event.SetId( win->GetId() );
+    event.SetTimestamp( gdk_event->time );
+}
 
 static void AdjustEventButtonState(wxMouseEvent& event)
 {
