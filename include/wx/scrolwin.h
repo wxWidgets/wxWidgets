@@ -22,6 +22,7 @@ class WXDLLEXPORT wxTimer;
 // wxScrolledWindow and wxScrolledControl. It is a mix-in: just derive from it
 // to implement scrolling in your class.
 // ----------------------------------------------------------------------------
+#if !defined(__WXGTK__) || defined(__WXUNIVERSAL__)
 
 class WXDLLEXPORT wxScrollHelper
 {
@@ -204,6 +205,8 @@ protected:
 
     DECLARE_NO_COPY_CLASS(wxScrollHelper)
 };
+
+#endif
 
 // ----------------------------------------------------------------------------
 // wxScrolledWindow: a wxWindow which knows how to scroll
