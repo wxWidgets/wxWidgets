@@ -1831,7 +1831,7 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget,
     wxMouseEvent event( wxEVT_MOTION );
     InitMouseEvent(win, event, gdk_event);
 
-    if ( g_captureWindow )
+    if ( !g_captureWindow )
     {
         // synthetize a mouse enter or leave event if needed
         GdkWindow *winUnderMouse = gdk_window_at_pointer(NULL, NULL);
