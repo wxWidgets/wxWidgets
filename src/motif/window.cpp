@@ -1378,9 +1378,9 @@ void wxWindow::SetSizeHints(int minW, int minH, int maxW, int maxH, int incW, in
 
 void wxWindow::DoMoveWindow(int x, int y, int width, int height)
 {
-    XtVaSetValues(GetWidget(),
-                  XmNx, xx,
-                  XmNy, yy,
+    XtVaSetValues((Widget)GetTopWidget(),
+                  XmNx, x,
+                  XmNy, y,
                   XmNwidth, width,
                   XmNheight, height,
                   NULL);

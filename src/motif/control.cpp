@@ -43,6 +43,30 @@ wxControl::wxControl()
     m_inSetValue = FALSE;
 }
 
+wxControl::wxControl( wxWindow *parent,
+                      wxWindowID id,
+                      const wxPoint &pos,
+                      const wxSize &size,
+                      long style,
+                      const wxString &name )
+{
+    (void)Create(parent, id, pos, size, style, name);
+}
+
+#if wxUSE_VALIDATORS
+wxControl::wxControl( wxWindow *parent,
+                      wxWindowID id,
+                      const wxPoint &pos,
+                      const wxSize &size,
+                      long style,
+                      const wxValidator& validator,
+                      const wxString &name)
+{
+    (void)Create(parent, id, pos, size, style, name);
+    SetValidator(validator);
+}
+#endif
+
 wxControl::~wxControl()
 {
     // If we delete an item, we should initialize the parent panel,
