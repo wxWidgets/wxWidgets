@@ -43,9 +43,9 @@
 //---------------------------------------------------------------------------
 extern "C" WXDLLIMPEXP_BASE HINSTANCE wxGetInstance(void);
 #ifdef __WXWINCE__
-extern       wxChar *wxCanvasClassName;
+extern WXDLLIMPEXP_CORE      wxChar *wxCanvasClassName;
 #else
-extern const wxChar *wxCanvasClassName;
+extern WXDLLIMPEXP_CORE const wxChar *wxCanvasClassName;
 #endif
 
 //===========================================================================
