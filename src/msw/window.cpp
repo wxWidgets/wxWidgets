@@ -221,6 +221,38 @@ static inline void wxBringWindowToTop(HWND hwnd)
     }
 }
 
+// ensure that all our parent windows have WS_EX_CONTROLPARENT style
+static void EnsureParentHasControlParentStyle(wxWindow *parent)
+{
+    /*
+       If we have WS_EX_CONTROLPARENT flag we absolutely *must* set it for our
+       parent as well as otherwise several Win32 functions using
+       GetNextDlgTabItem() to iterate over all controls such as
+       IsDialogMessage() or DefDlgProc() would enter an infinite loop: indeed,
+       all of them iterate over all the controls starting from the currently
+       focused one and stop iterating when they get back to the focus but
+       unless all parents have WS_EX_CONTROLPARENT bit set, they would never
+       get back to the initial (focused) window: as we do have this style,
+       GetNextDlgTabItem() will leave this window and continue in its parent,
+       but if the parent doesn't have it, it wouldn't recurse inside it later
+       on and so wouldn't have a chance of getting back to this window neither.
+     */
+#ifndef __WXWINCE__
+    while ( parent && !parent->IsTopLevel() )
+    {
+        LONG exStyle = ::GetWindowLong(GetHwndOf(parent), GWL_EXSTYLE);
+        if ( !(exStyle & WS_EX_CONTROLPARENT) )
+        {
+            // force the parent to have this style
+            ::SetWindowLong(GetHwndOf(parent), GWL_EXSTYLE,
+                            exStyle | WS_EX_CONTROLPARENT);
+        }
+
+        parent = parent->GetParent();
+    }
+#endif // !__WXWINCE__
+}
+
 // ---------------------------------------------------------------------------
 // event tables
 // ---------------------------------------------------------------------------
@@ -1289,6 +1321,13 @@ bool wxWindowMSW::Reparent(wxWindowBase *parent)
     HWND hWndParent = GetParent() ? GetWinHwnd(GetParent()) : (HWND)0;
 
     ::SetParent(hWndChild, hWndParent);
+
+#ifndef __WXWINCE__
+    if ( ::GetWindowLong(hWndChild, GWL_EXSTYLE) & WS_EX_CONTROLPARENT )
+    {
+        EnsureParentHasControlParentStyle(GetParent());
+    }
+#endif // !__WXWINCE__
 
     return TRUE;
 }
@@ -3229,32 +3268,13 @@ bool wxWindowMSW::HandleEndSession(bool endSession, long logOff)
 
 bool wxWindowMSW::HandleCreate(WXLPCREATESTRUCT cs, bool *mayCreate)
 {
-    // if we have WS_EX_CONTROLPARENT flag we absolutely *must* set it for our
-    // parent as well as otherwise several Win32 functions using
-    // GetNextDlgTabItem() to iterate over all controls such as
-    // IsDialogMessage() or DefDlgProc() would enter an infinite loop: indeed,
-    // all of them iterate over all the controls starting from the focus and
-    // stop iterating when they get back to the focus but unless all parents
-    // have WS_EX_CONTROLPARENT bit set, they would never get back to focus
+    // VZ: why is this commented out for WinCE? If it doesn't support
+    //     WS_EX_CONTROLPARENT at all it should be somehow handled globally,
+    //     not with multiple #ifdef's!
 #ifndef __WXWINCE__
     if ( ((CREATESTRUCT *)cs)->dwExStyle & WS_EX_CONTROLPARENT )
-    {
-        // there is no need to do anything for the top level windows
-        const wxWindow *parent = GetParent();
-        while ( parent && !parent->IsTopLevel() )
-        {
-            LONG exStyle = ::GetWindowLong(GetHwndOf(parent), GWL_EXSTYLE);
-            if ( !(exStyle & WS_EX_CONTROLPARENT) )
-            {
-                // force the parent to have this style
-                ::SetWindowLong(GetHwndOf(parent), GWL_EXSTYLE,
-                                exStyle | WS_EX_CONTROLPARENT);
-            }
-
-            parent = parent->GetParent();
-        }
-    }
-#endif
+        EnsureParentHasControlParentStyle(GetParent());
+#endif // !__WXWINCE__
 
     // TODO: should generate this event from WM_NCCREATE
     wxWindowCreateEvent event((wxWindow *)this);
