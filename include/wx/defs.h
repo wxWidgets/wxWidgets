@@ -167,6 +167,7 @@
         // VisualAge is the only thing that understands _Optlink
         #define LINKAGEMODE _Optlink
     #endif
+    #define wxSIZE_T_IS_UINT
 #else   // Windows
     #ifndef __WINDOWS__
         #define __WINDOWS__
