@@ -447,21 +447,27 @@ void wxTreeCtrl::SetItemText(const wxTreeItemId& item, const wxString& text)
   wxCHECK_RET( item.IsOk(), "invalid tree item" );
 
   wxClientDC dc(this);
-  item.m_pItem->SetText(text, dc);
+  wxGenericTreeItem *pItem = item.m_pItem;
+  pItem->SetText(text, dc);
+  RefreshLine(pItem);
 }
 
 void wxTreeCtrl::SetItemImage(const wxTreeItemId& item, int image)
 {
   wxCHECK_RET( item.IsOk(), "invalid tree item" );
 
-  item.m_pItem->SetImage(image);
+  wxGenericTreeItem *pItem = item.m_pItem;
+  pItem->SetImage(image);
+  RefreshLine(pItem);
 }
 
 void wxTreeCtrl::SetItemSelectedImage(const wxTreeItemId& item, int image)
 {
   wxCHECK_RET( item.IsOk(), "invalid tree item" );
 
-  item.m_pItem->SetSelectedImage(image);
+  wxGenericTreeItem *pItem = item.m_pItem;
+  pItem->SetSelectedImage(image);
+  RefreshLine(pItem);
 }
 
 void wxTreeCtrl::SetItemData(const wxTreeItemId& item, wxTreeItemData *data)
@@ -475,7 +481,9 @@ void wxTreeCtrl::SetItemHasChildren(const wxTreeItemId& item, bool has)
 {
   wxCHECK_RET( item.IsOk(), "invalid tree item" );
 
-  item.m_pItem->SetHasPlus(has);
+  wxGenericTreeItem *pItem = item.m_pItem;
+  pItem->SetHasPlus(has);
+  RefreshLine(pItem);
 }
 
 void wxTreeCtrl::SetItemBold(const wxTreeItemId& item, bool bold)
