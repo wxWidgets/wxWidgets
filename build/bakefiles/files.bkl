@@ -481,6 +481,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/dialog.h
     wx/dirdlg.h
     wx/dragimag.h
+    wx/encinfo.h
     wx/filedlg.h
     wx/frame.h
     wx/gauge.h
