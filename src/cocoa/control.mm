@@ -19,6 +19,10 @@
 #include "wx/cocoa/autorelease.h"
 
 #import <AppKit/NSControl.h>
+#import <AppKit/NSCell.h>
+#import <Foundation/NSException.h>
+
+#include <math.h>
 
 @interface wxNonControlNSControl : NSControl
 {
@@ -72,14 +76,42 @@ wxControl::~wxControl()
 wxSize wxControl::DoGetBestSize() const
 {
     wxAutoNSAutoreleasePool pool;
-    wxASSERT(m_cocoaNSView);
+    wxASSERT(GetNSControl());
+    /* We can ask single-celled controls for their cell and get its size */
+    NSCell *cell = nil;
+NS_DURING
+    cell = [GetNSControl() cell];
+NS_HANDLER
+    // TODO: if anything other than method not implemented, re-raise
+NS_ENDHANDLER
+    if(cell)
+    {
+        NSSize cellSize = [cell cellSize];
+        wxSize size((int)ceilf(cellSize.width),(int)ceilf(cellSize.height));
+        wxLogTrace(wxTRACE_COCOA_Window_Size,wxT("wxControl=%p::DoGetBestSize()==(%d,%d) from NSCell"),this,size.x,size.y);
+        return size;
+    }
+
+    /* multi-celled control? size to fit, get the size, then set it back */
     NSRect storedRect = [m_cocoaNSView frame];
+    bool didFit = false;
+NS_DURING
     [GetNSControl() sizeToFit];
-    NSRect cocoaRect = [m_cocoaNSView frame];
-    wxSize size((int)cocoaRect.size.width+10,(int)cocoaRect.size.height);
-    [m_cocoaNSView setFrame: storedRect];
-    wxLogTrace(wxTRACE_COCOA_Window_Size,wxT("wxControl=%p::DoGetBestSize()==(%d,%d)"),this,size.x,size.y);
-    return size;
+    didFit = true;
+NS_HANDLER
+    // TODO: if anything other than method not implemented, re-raise
+NS_ENDHANDLER
+    if(didFit)
+    {
+        NSRect cocoaRect = [m_cocoaNSView frame];
+        wxSize size((int)ceilf(cocoaRect.size.width),(int)ceilf(cocoaRect.size.height));
+        [m_cocoaNSView setFrame: storedRect];
+        wxLogTrace(wxTRACE_COCOA_Window_Size,wxT("wxControl=%p::DoGetBestSize()==(%d,%d) from sizeToFit"),this,size.x,size.y);
+        return size;
+    }
+    // Cocoa can't tell us the size, probably not an NSControl.
+    wxLogDebug(wxT("Class %s (or superclass still below wxControl) should implement DoGetBestSize()"),GetClassInfo()->GetClassName());
+    return wxControlBase::DoGetBestSize();
 }
 
 bool wxControl::ProcessCommand(wxCommandEvent& event)
