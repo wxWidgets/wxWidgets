@@ -21,7 +21,7 @@
 #  pragma hdrstop
 #endif
 
-#if wxUSE_LIBPNG
+#if 0 // wxUSE_LIBPNG
 
 #include <stdlib.h>
 #include <stdio.h>

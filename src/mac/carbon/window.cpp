@@ -218,9 +218,9 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
 #if 0
               // in case we would need a coregraphics compliant background erase first
                 // now usable to track redraws
-                CGContextRef cgContext = cEvent.GetParameter<CGContextRef>(kEventParamCGContextRef) ;
                 if ( thisWindow->MacIsUserPane() )
                 {
+                    CGContextRef cgContext = cEvent.GetParameter<CGContextRef>(kEventParamCGContextRef) ;
                     static float color = 0.5 ;
                     static channel = 0 ;
                      HIRect bounds;
@@ -238,8 +238,15 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                     }
                 }
 #endif
+#if wxMAC_USE_CORE_GRAPHICS
+                CGContextRef cgContext = cEvent.GetParameter<CGContextRef>(kEventParamCGContextRef) ;
+                thisWindow->MacSetCGContextRef( cgContext ) ;
+#endif
                 if ( thisWindow->MacDoRedraw( updateRgn , cEvent.GetTicks() ) )
                     result = noErr ;
+#if wxMAC_USE_CORE_GRAPHICS
+                thisWindow->MacSetCGContextRef( NULL ) ;
+#endif
                 if ( allocatedRgn )
                     DisposeRgn( allocatedRgn ) ;
             }
@@ -406,6 +413,8 @@ pascal OSStatus wxMacWindowEventHandler( EventHandlerCallRef handler , EventRef 
 
 DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacWindowEventHandler )
 
+#if !TARGET_API_MAC_OSX
+
 // ---------------------------------------------------------------------------
 // UserPane events for non OSX builds
 // ---------------------------------------------------------------------------
@@ -516,6 +525,8 @@ ControlUserPaneKeyDownUPP gControlUserPaneKeyDownUPP = NULL ;
 ControlUserPaneActivateUPP gControlUserPaneActivateUPP = NULL ;
 ControlUserPaneFocusUPP gControlUserPaneFocusUPP = NULL ;
 ControlUserPaneBackgroundUPP gControlUserPaneBackgroundUPP = NULL ;
+
+#endif
 
 // ===========================================================================
 // implementation
@@ -690,9 +701,12 @@ void wxWindowMac::Init()
     m_macBackgroundBrush = wxNullBrush ;
 
     m_macIsUserPane = TRUE;
-
+#if wxMAC_USE_CORE_GRAPHICS
+    m_cgContextRef = NULL ;
+#endif
     // make sure all proc ptrs are available
 
+#if !TARGET_API_MAC_OSX
     if ( gControlUserPaneDrawUPP == NULL )
     {
         gControlUserPaneDrawUPP = NewControlUserPaneDrawUPP( wxMacControlUserPaneDrawProc ) ;
@@ -704,6 +718,7 @@ void wxWindowMac::Init()
         gControlUserPaneFocusUPP = NewControlUserPaneFocusUPP( wxMacControlUserPaneFocusProc ) ;
         gControlUserPaneBackgroundUPP = NewControlUserPaneBackgroundUPP( wxMacControlUserPaneBackgroundProc ) ;
     }
+#endif
     if ( wxMacLiveScrollbarActionUPP == NULL )
     {
         wxMacLiveScrollbarActionUPP = NewControlActionUPP( wxMacLiveScrollbarActionProc );
@@ -2210,24 +2225,6 @@ void wxWindowMac::Thaw()
 #endif
 }
 
-void wxWindowMac::MacRedrawControl()
-{
-/*
-    if ( *m_peer && MacGetTopLevelWindowRef() && m_peer->IsVisible())
-    {
-#if TARGET_API_MAC_CARBON
-        Update() ;
-#else
-        wxClientDC dc(this) ;
-        wxMacPortSetter helper(&dc) ;
-        wxMacWindowClipper clipper(this) ;
-        wxDC::MacSetupBackgroundForCurrentPort( MacGetBackgroundBrush() ) ;
-        UMADrawControl( *m_peer ) ;
-#endif
-    }
-*/
-}
-
 /* TODO
 void wxWindowMac::OnPaint(wxPaintEvent& event)
 {
@@ -2482,8 +2479,29 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
                 SectRect( &scrollrect , &r , &scrollrect ) ;
             }
             ScrollRect( &scrollrect , dx , dy , updateRgn ) ;
+
+            // now scroll the former update region as well and add the new update region
+            
+            WindowRef rootWindow = (WindowRef) MacGetTopLevelWindowRef() ;
+            RgnHandle formerUpdateRgn = NewRgn() ;
+            RgnHandle scrollRgn = NewRgn() ;
+            RectRgn( scrollRgn , &scrollrect ) ;
+            GetWindowUpdateRgn( rootWindow , formerUpdateRgn ) ;
+            Point pt = {0,0} ;
+            LocalToGlobal( &pt ) ;
+            OffsetRgn( formerUpdateRgn , -pt.h , -pt.v ) ;
+            SectRgn( formerUpdateRgn , scrollRgn , formerUpdateRgn ) ;
+            if ( !EmptyRgn( formerUpdateRgn ) )
+            {
+                MacOffsetRgn( formerUpdateRgn , dx , dy ) ;
+                SectRgn( formerUpdateRgn , scrollRgn , formerUpdateRgn ) ;
+                InvalWindowRgn(rootWindow  ,  formerUpdateRgn ) ;
+            }
+            InvalWindowRgn(rootWindow  ,  updateRgn ) ;
+            DisposeRgn( updateRgn ) ;
+            DisposeRgn( formerUpdateRgn ) ;
+            DisposeRgn( scrollRgn ) ;
         }
-        // ScrollWindowRect( (WindowRef) MacGetTopLevelWindowRef() , &scrollrect , dx , dy ,  kScrollWindowInvalidate, updateRgn ) ;
 #endif
     }
 
@@ -2819,6 +2837,7 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
     bool handled = false ;
     Rect updatebounds ;
     GetRegionBounds( updatergn , &updatebounds ) ;
+
 //    wxLogDebug("update for %s bounds %d , %d , %d , %d",typeid(*this).name() , updatebounds.left , updatebounds.top , updatebounds.right , updatebounds.bottom ) ;
     if ( !EmptyRgn(updatergn) )
     {
@@ -2886,6 +2905,8 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
             {
                 if ( RectInRgn( &childRect , updatergn ) )
                 {
+#if wxMAC_USE_CORE_GRAPHICS
+#else
                     // paint custom borders
                     wxNcPaintEvent eventNc( child->GetId() );
                     eventNc.SetEventObject( child );
@@ -2896,54 +2917,26 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
                         wxMacPortSetter helper(&dc) ;
                         child->MacPaintBorders( dc.m_macLocalOrigin.x + childRect.left , dc.m_macLocalOrigin.y + childRect.top)  ;
                     }
+#endif
                 }
             }
             if ( child->m_peer->NeedsFocusRect() && child->m_peer->HasFocus() )
             {
+#if wxMAC_USE_CORE_GRAPHICS
+#else
                 wxWindowDC dc(this) ;
                 dc.SetClippingRegion(wxRegion(updatergn));
                 wxMacPortSetter helper(&dc) ;
                 Rect r = childRect ;
                 OffsetRect( &r , dc.m_macLocalOrigin.x , dc.m_macLocalOrigin.y ) ;
                 DrawThemeFocusRect( &r , true ) ;
+#endif
             }
         }
     }
     return handled ;
 }
 
-void wxWindowMac::MacRedraw( WXHRGN updatergnr , long time, bool erase)
-{
-    RgnHandle updatergn = (RgnHandle) updatergnr ;
-    // updatergn is always already clipped to our boundaries
-    // if we are in compositing mode then it is in relative to the upper left of the control
-    // if we are in non-compositing, then it is relatvie to the uppder left of the content area
-    // of the toplevel window
-    // it is in window coordinates, not in client coordinates
-
-    // ownUpdateRgn is the area that this window has to repaint, it is in window coordinates
-    RgnHandle ownUpdateRgn = NewRgn() ;
-    CopyRgn( updatergn , ownUpdateRgn ) ;
-
-    if ( MacGetTopLevelWindow()->MacUsesCompositing() == false )
-    {
-        Rect bounds;
-        m_peer->GetRectInWindowCoords( &bounds );
-        RgnHandle controlRgn = NewRgn();
-        RectRgn( controlRgn, &bounds );
-        //KO: This sets the ownUpdateRgn to the area of this control that is inside
-        // the window update region
-        SectRgn( ownUpdateRgn, controlRgn, ownUpdateRgn );
-        DisposeRgn( controlRgn );
-
-        //KO: convert ownUpdateRgn to local coordinates
-        OffsetRgn( ownUpdateRgn, -bounds.left, -bounds.top );
-    }
-
-    MacDoRedraw( ownUpdateRgn , time ) ;
-    DisposeRgn( ownUpdateRgn ) ;
-
-}
 
 WXWindow wxWindowMac::MacGetTopLevelWindowRef() const
 {

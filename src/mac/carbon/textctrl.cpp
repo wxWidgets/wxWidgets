@@ -967,7 +967,7 @@ bool wxTextCtrl::MacSetupCursor( const wxPoint& pt )
 {
     return true ;
 }
-
+#if !TARGET_API_MAC_OSX
 // user pane implementation
 
 void wxTextCtrl::MacControlUserPaneDrawProc(wxInt16 part)
@@ -1005,7 +1005,7 @@ wxInt16 wxTextCtrl::MacControlUserPaneFocusProc(wxInt16 action)
 void wxTextCtrl::MacControlUserPaneBackgroundProc(void* info)
 {
 }
-
+#endif
 // ----------------------------------------------------------------------------
 // implementation base class
 // ----------------------------------------------------------------------------

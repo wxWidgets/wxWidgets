@@ -25,6 +25,14 @@
     #define wxUSE_DEBUG_NEW_ALWAYS      0
 #endif
 
+/*
+ * use OS X CoreGraphics (1) or QuickDraw (0) for rendering
+ */
+
+#ifndef wxMAC_USE_CORE_GRAPHICS
+#define wxMAC_USE_CORE_GRAPHICS 0
+#endif
+
 #endif
     /* _WX_MAC_CHKCONF_H_ */
 

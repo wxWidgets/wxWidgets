@@ -270,6 +270,8 @@ wxRendererMac::DrawSplitterSash(wxWindow *win,
         }
         else
         {
+#if wxMAC_USE_CORE_GRAPHICS
+#else
             CGContextRef cgContext ;
             Rect bounds ;
             GetPortBounds( (CGrafPtr) dc.m_macPort , &bounds ) ;
@@ -285,6 +287,7 @@ wxRendererMac::DrawSplitterSash(wxWindow *win,
                 HIThemeDrawPaneSplitter( &splitterRect , &drawInfo , cgContext , kHIThemeOrientationNormal ) ;    
             }
             QDEndCGContext( (CGrafPtr) dc.m_macPort , &cgContext ) ;
+#endif
         }
     }
     else

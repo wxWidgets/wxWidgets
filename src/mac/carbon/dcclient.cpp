@@ -109,9 +109,20 @@ wxWindowDC::wxWindowDC()
 wxWindowDC::wxWindowDC(wxWindow *window) 
 {
     m_window = window ;
+#if wxMAC_USE_CORE_GRAPHICS
+    if ( window->MacGetCGContextRef() )
+    {
+        m_graphicContext = new wxMacCGContext( (CGContextRef) window->MacGetCGContextRef() ) ;
+        m_graphicContext->SetPen( m_pen ) ;
+        m_graphicContext->SetBrush( m_brush ) ;
+        SetBackground(MacGetBackgroundBrush(window));
+    }
+    else
+        m_graphicContext = NULL ;
+    // there is no out-of-order drawing on OSX
+#else
     wxTopLevelWindowMac* rootwindow = window->MacGetTopLevelWindow() ;
     WindowRef windowref = (WindowRef) rootwindow->MacGetWindowRef() ;
-    
     int x , y ;
     x = y = 0 ;
     window->MacWindowToRootWindow( &x , &y ) ;
@@ -121,9 +132,10 @@ wxWindowDC::wxWindowDC(wxWindow *window)
     OffsetRgn( (RgnHandle) m_macBoundaryClipRgn , m_macLocalOrigin.x , m_macLocalOrigin.y ) ;
     CopyRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
     m_macPort = UMAGetWindowPort( windowref ) ;
-    m_ok = TRUE ;
-    MacSetupGraphicContext() ;
     SetBackground(MacGetBackgroundBrush(window));
+#endif
+    m_ok = TRUE ;
+    SetFont( window->GetFont() ) ;
 }
 
 wxWindowDC::~wxWindowDC()
@@ -149,6 +161,41 @@ wxClientDC::wxClientDC()
 wxClientDC::wxClientDC(wxWindow *window)
 {
     m_window = window ;
+#if wxMAC_USE_CORE_GRAPHICS
+    m_graphicContext = NULL ;
+    if ( window->MacGetCGContextRef() )
+    {
+        m_graphicContext = new wxMacCGContext( (CGContextRef) window->MacGetCGContextRef() ) ;
+        m_graphicContext->SetPen( m_pen ) ;
+        m_graphicContext->SetBrush( m_brush ) ;
+        SetBackground(MacGetBackgroundBrush(window));
+    }
+    else
+    {
+    /*
+        wxTopLevelWindowMac* rootwindow = window->MacGetTopLevelWindow() ;
+        if (!rootwindow)
+            return;
+        WindowRef windowref = (WindowRef) rootwindow->MacGetWindowRef() ;
+        wxPoint origin = window->GetClientAreaOrigin() ;
+        wxSize size = window->GetClientSize() ;
+        int x , y ;
+        x = origin.x ;
+        y = origin.y ;
+        window->MacWindowToRootWindow( &x , &y ) ;
+        m_macLocalOrigin.x = x ;
+        m_macLocalOrigin.y = y ;
+        CGrafPtr port = UMAGetWindowPort( windowref ) ;
+        
+        m_graphicContext = new wxMacCGContext( port ) ;
+        m_graphicContext->SetPen( m_pen ) ;
+        m_graphicContext->SetBrush( m_brush ) ;
+        SetBackground(MacGetBackgroundBrush(window));
+        m_ok = TRUE ;
+    */
+    }
+    m_ok = TRUE ;    
+#else
     wxTopLevelWindowMac* rootwindow = window->MacGetTopLevelWindow() ;
     if (!rootwindow)
         return;
@@ -167,9 +214,8 @@ wxClientDC::wxClientDC(wxWindow *window)
     OffsetRgn( (RgnHandle) m_macBoundaryClipRgn , m_macLocalOrigin.x , m_macLocalOrigin.y ) ;
     CopyRgn( (RgnHandle) m_macBoundaryClipRgn ,(RgnHandle)  m_macCurrentClipRgn ) ;
     m_macPort = UMAGetWindowPort( windowref ) ;
-
     m_ok = TRUE ;
-    MacSetupGraphicContext() ;
+#endif
     SetBackground(MacGetBackgroundBrush(window));
     SetFont( window->GetFont() ) ;
 }
@@ -198,6 +244,23 @@ wxPaintDC::wxPaintDC()
 wxPaintDC::wxPaintDC(wxWindow *window)
 {
     m_window = window ;
+#if wxMAC_USE_CORE_GRAPHICS
+    if ( window->MacGetCGContextRef() )
+    {
+        m_graphicContext = new wxMacCGContext( (CGContextRef) window->MacGetCGContextRef() ) ;
+        m_graphicContext->SetPen( m_pen ) ;
+        m_graphicContext->SetBrush( m_brush ) ;
+        SetBackground(MacGetBackgroundBrush(window));
+        m_ok = TRUE ;
+    }
+    else
+    {
+        wxLogDebug(wxT("You cannot create a wxPaintDC outside an OS-draw event") ) ;
+        m_graphicContext = NULL ;
+        m_ok = TRUE ;
+    }
+    // there is no out-of-order drawing on OSX
+#else
     wxTopLevelWindowMac* rootwindow = window->MacGetTopLevelWindow() ;
     WindowRef windowref = (WindowRef) rootwindow->MacGetWindowRef() ;
     wxPoint origin = window->GetClientAreaOrigin() ;
@@ -215,10 +278,9 @@ wxPaintDC::wxPaintDC(wxWindow *window)
     OffsetRgn( (RgnHandle) m_macBoundaryClipRgn , m_macLocalOrigin.x , m_macLocalOrigin.y ) ;
     CopyRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
     m_macPort = UMAGetWindowPort( windowref ) ;
-
-    m_ok = TRUE ;
-    MacSetupGraphicContext() ;
     SetBackground(MacGetBackgroundBrush(window));
+    m_ok = TRUE ;
+#endif
     SetFont( window->GetFont() ) ;
 }
 

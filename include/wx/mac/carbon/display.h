@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        display.h
 // Purpose:     wxDisplay class customization for Mac
-// Author:      Brian Victor
-// Modified by: Royce Mitchell III
+// Author:      Brian Victor/Royce Mitchel for non OSX / Ryan Norton for OS X
+// Modified by: 
 // Created:     06/21/02
 // RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team

@@ -94,6 +94,7 @@ void wxMenuItem::UpdateItemBitmap()
                 SetMenuItemIconHandle( mhandle , index , 
                     kMenuColorIconType , (Handle) info.u.cIconHandle ) ;
         }
+        wxMacReleaseBitmapButton( &info ) ;
             
     }
 }

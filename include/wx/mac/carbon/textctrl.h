@@ -163,7 +163,7 @@ public:
 
     virtual void         MacVisibilityChanged() ;
     virtual void         MacEnabledStateChanged() ;
-
+#ifndef __WXMAC_OSX__
     virtual void            MacControlUserPaneDrawProc(wxInt16 part) ;
     virtual wxInt16         MacControlUserPaneHitTestProc(wxInt16 x, wxInt16 y) ;
     virtual wxInt16         MacControlUserPaneTrackingProc(wxInt16 x, wxInt16 y, void* actionProc) ;
@@ -172,6 +172,7 @@ public:
     virtual void            MacControlUserPaneActivateProc(bool activating) ;
     virtual wxInt16         MacControlUserPaneFocusProc(wxInt16 action) ;
     virtual void            MacControlUserPaneBackgroundProc(void* info) ;
+#endif
 
   wxMacTextControl*         GetPeer() const { return (wxMacTextControl*) m_peer ; }
 protected:

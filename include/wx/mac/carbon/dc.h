@@ -44,7 +44,43 @@
 extern int wxPageNumber;
 
 class wxMacPortStateHelper ;
-class wxMacCGContext ;
+
+class WXDLLEXPORT wxGraphicPath
+{
+public :
+    virtual ~wxGraphicPath() {} 
+    
+    virtual void MoveToPoint( wxCoord x1 , wxCoord y1 ) = 0 ;
+    
+    virtual void AddLineToPoint( wxCoord x1 , wxCoord y1 ) = 0 ;
+    
+    virtual void AddRectangle( wxCoord x, wxCoord y, wxCoord w, wxCoord h ) = 0 ;
+    
+    virtual void AddCircle( wxCoord x, wxCoord y , wxCoord r ) = 0 ;
+
+    virtual void CloseSubpath() = 0 ;
+} ;
+
+class WXDLLEXPORT wxGraphicContext
+{
+public:
+    virtual ~wxGraphicContext() {}
+
+    virtual void Clip( const wxRegion &region ) = 0 ;
+
+    virtual void StrokePath( const wxGraphicPath *path ) = 0 ;
+
+    virtual void DrawPath( const wxGraphicPath *path , int fillStyle = wxWINDING_RULE ) = 0 ;
+    
+    virtual void FillPath( const wxGraphicPath *path , const wxColor &fillColor , int fillStyle = wxWINDING_RULE ) = 0 ;
+        
+    virtual void SetPen( const wxPen &pen ) = 0 ;
+    
+    virtual void SetBrush( const wxBrush &brush ) = 0 ;
+    
+    virtual wxGraphicPath* CreatePath() = 0 ;
+} ;
+
 //-----------------------------------------------------------------------------
 // wxDC
 //-----------------------------------------------------------------------------
@@ -186,9 +222,10 @@ class WXDLLEXPORT wxDC: public wxDCBase
       else
         return (wxCoord)((double)(new_y) * m_scaleY - 0.5) * m_signY + m_deviceOriginY + m_macLocalOrigin.y ;
     }
-
+#if !wxMAC_USE_CORE_GRAPHICS
     WXHRGN MacGetCurrentClipRgn() { return m_macCurrentClipRgn ; }
     static void MacSetupBackgroundForCurrentPort(const wxBrush& background ) ;
+#endif
 //
 
 protected:
@@ -257,37 +294,45 @@ protected:
     // Begin implementation for Mac
     public:
 
-    WXHDC                m_macPort ;
+#if !wxMAC_USE_CORE_GRAPHICS
     WXHBITMAP            m_macMask ;
+#endif
 
     // in order to preserve the const inheritance of the virtual functions, we have to
     // use mutable variables starting from CWPro 5
 
     void                    MacInstallFont() const ;
+#if !wxMAC_USE_CORE_GRAPHICS
     void                    MacInstallPen() const ;
     void                    MacInstallBrush() const ;
+#endif
 
+    wxPoint                    m_macLocalOrigin ;
+    mutable void*                   m_macATSUIStyle ;
+
+#if wxMAC_USE_CORE_GRAPHICS
+    // CoreGraphics
+    wxGraphicContext                * m_graphicContext ;
+#else
+    WXHDC                           m_macPort ;
     mutable bool    m_macFontInstalled ;
     mutable bool    m_macPenInstalled ;
     mutable bool    m_macBrushInstalled ;
 
     WXHRGN                    m_macBoundaryClipRgn ;
     WXHRGN                  m_macCurrentClipRgn ;
-    wxPoint                    m_macLocalOrigin ;
     void                    MacSetupPort( wxMacPortStateHelper* ph ) const ;
     void                    MacCleanupPort( wxMacPortStateHelper* ph ) const ;
-    mutable void*                   m_macATSUIStyle ;
     mutable wxMacPortStateHelper*   m_macCurrentPortStateHelper ;
     mutable bool                    m_macFormerAliasState ;
     mutable short                   m_macFormerAliasSize ;
     mutable bool                    m_macAliasWasEnabled ;
     mutable void*                   m_macForegroundPixMap ;
     mutable void*                   m_macBackgroundPixMap ;
+#endif
     
-    // CoreGraphics
-    
-    wxMacCGContext      * m_macGraphicContext ;
-    void                MacSetupGraphicContext() ;
+#if wxMAC_USE_CORE_GRAPHICS
+#endif
 };
 
 #endif

@@ -20,6 +20,7 @@
 
 // Bitmap
 class WXDLLEXPORT wxBitmap;
+class wxBitmapRefData ;
 class WXDLLEXPORT wxBitmapHandler;
 class WXDLLEXPORT wxControl;
 class WXDLLEXPORT wxCursor;
@@ -29,77 +30,57 @@ class WXDLLEXPORT wxImage;
 class WXDLLEXPORT wxPixelDataBase;
 
 // A mask is a bitmap used for drawing bitmaps
-// it can be a monochrome bitmap or a multi-bit bitmap which transfers to alpha channels
-// transparently.
+// Internally it is stored as a 8 bit deep memory chunk, 0 = black means the source will be drawn
+// 255 = white means the source will not be drawn, no other values will be present
+// 8 bit is chosen only for performance reasons, note also that this is the inverse value range
+// from alpha, where 0 = invisible , 255 = fully drawn
+
 class WXDLLEXPORT wxMask: public wxObject
 {
     DECLARE_DYNAMIC_CLASS(wxMask)
     DECLARE_NO_COPY_CLASS(wxMask)
 
 public:
-  wxMask();
+    wxMask();
 
-  // Construct a mask from a bitmap and a colour indicating
-  // the transparent area
-  wxMask(const wxBitmap& bitmap, const wxColour& colour);
+    // Construct a mask from a bitmap and a colour indicating
+    // the transparent area
+    wxMask(const wxBitmap& bitmap, const wxColour& colour);
 
-  // Construct a mask from a bitmap and a palette index indicating
-  // the transparent area
-  wxMask(const wxBitmap& bitmap, int paletteIndex);
+    // Construct a mask from a mono bitmap (black meaning show pixels, white meaning transparent)
+    wxMask(const wxBitmap& bitmap);
+    
+    // implementation helper only : construct a mask from a 8 bit memory buffer
+    wxMask(const wxMemoryBuffer& buf, int width , int height , int bytesPerRow ) ;
 
-  // Construct a mask from a mono bitmap (copies the bitmap).
-  wxMask(const wxBitmap& bitmap);
+    ~wxMask();
 
-  ~wxMask();
+    bool Create(const wxBitmap& bitmap, const wxColour& colour);
+    bool Create(const wxBitmap& bitmap);
+    bool Create(const wxMemoryBuffer& buf, int width , int height , int bytesPerRow ) ;
 
-  bool Create(const wxBitmap& bitmap, const wxColour& colour);
-  bool Create(const wxBitmap& bitmap, int paletteIndex);
-  bool Create(const wxBitmap& bitmap);
+    // Implementation below
 
-  // Implementation
-  bool PointMasked(int x, int y);
-  inline WXHBITMAP GetMaskBitmap() const { return m_maskBitmap; }
-  inline void SetMaskBitmap(WXHBITMAP bmp) { m_maskBitmap = bmp; }
-  int GetDepth() const { return m_depth ; }
-  void SetDepth( int depth ) { m_depth = depth ; }
-protected:
-  WXHBITMAP m_maskBitmap;
-  int m_depth ;
+    void Init() ;
+
+    // a 8 bit depth mask 
+    void* GetRawAccess() const;
+    int GetBytesPerRow() const { return m_bytesPerRow ; }
+    // renders/updates native representation when necessary 
+    void RealizeNative() ;
+#if !wxMAC_USE_CORE_GRAPHICS
+    WXHBITMAP GetHBITMAP() const ;
+#endif
+
+private:
+    wxMemoryBuffer m_memBuf ;
+    int m_bytesPerRow ;
+    int m_width ;
+    int m_height ;
+#if !wxMAC_USE_CORE_GRAPHICS
+    WXHBITMAP m_maskBitmap ;
+#endif
 };
-
-enum { kMacBitmapTypeUnknownType , kMacBitmapTypeGrafWorld, kMacBitmapTypePict , kMacBitmapTypeIcon } ;
-
-class WXDLLEXPORT wxBitmapRefData: public wxGDIRefData
-{
-    DECLARE_NO_COPY_CLASS(wxBitmapRefData)
-        
-    friend class WXDLLEXPORT wxBitmap;
-    friend class WXDLLEXPORT wxIcon;
-    friend class WXDLLEXPORT wxCursor;
-public:
-    wxBitmapRefData();
-    ~wxBitmapRefData();
-
-public:
-  int           m_width;
-  int           m_height;
-  int           m_depth;
-  bool          m_ok;
-  int           m_numColors;
-#if wxUSE_PALETTE
-  wxPalette     m_bitmapPalette;
-#endif // wxUSE_PALETTE
-  int           m_quality;
-
-  int            m_bitmapType ;
-  WXHMETAFILE    m_hPict ;
-  WXHBITMAP     m_hBitmap;
-  WXHICON       m_hIcon ;
-  wxMask *      m_bitmapMask; // Optional mask
-  bool          m_hasAlpha;
-};
-
-#define M_BITMAPDATA ((wxBitmapRefData *)m_refData)
 
 class WXDLLEXPORT wxBitmapHandler: public wxBitmapHandlerBase
 {
@@ -120,96 +101,113 @@ private:
 
 class WXDLLEXPORT wxBitmap: public wxBitmapBase
 {
-  DECLARE_DYNAMIC_CLASS(wxBitmap)
+    DECLARE_DYNAMIC_CLASS(wxBitmap)
 
-  friend class WXDLLEXPORT wxBitmapHandler;
+    friend class WXDLLEXPORT wxBitmapHandler;
 
 public:
-  wxBitmap(); // Platform-specific
+    wxBitmap(); // Platform-specific
 
-  // Copy constructors
-  wxBitmap(const wxBitmap& bitmap)
-      : wxBitmapBase()
-  { Ref(bitmap); }
+    // Copy constructors
+    wxBitmap(const wxBitmap& bitmap)
+    { Ref(bitmap); }
 
-  // Initialize with raw data.
-  wxBitmap(const char bits[], int width, int height, int depth = 1);
+    // Initialize with raw data.
+    wxBitmap(const char bits[], int width, int height, int depth = 1);
 
-  // Initialize with XPM data
-  bool CreateFromXpm(const char **bits);
-  wxBitmap(const char **bits);
-  wxBitmap(char **bits);
+    // Initialize with XPM data
+    bool CreateFromXpm(const char **bits);
+    wxBitmap(const char **bits);
+    wxBitmap(char **bits);
 
-  // Load a file or resource
-  wxBitmap(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_PICT_RESOURCE);
+    // Load a file or resource
+    wxBitmap(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_PICT_RESOURCE);
 
-  // Constructor for generalised creation from data
-  wxBitmap(void *data, wxBitmapType type, int width, int height, int depth = 1);
+    // Constructor for generalised creation from data
+    wxBitmap(void *data, wxBitmapType type, int width, int height, int depth = 1);
 
-  // If depth is omitted, will create a bitmap compatible with the display
-  wxBitmap(int width, int height, int depth = -1);
-  
-  // Convert from wxImage:
-  wxBitmap(const wxImage& image, int depth = -1);
-  
-  ~wxBitmap();
-  
-  wxImage ConvertToImage() const;
+    // If depth is omitted, will create a bitmap compatible with the display
+    wxBitmap(int width, int height, int depth = -1);
 
-  // get the given part of bitmap
-  wxBitmap GetSubBitmap( const wxRect& rect ) const;
+    // Convert from wxImage:
+    wxBitmap(const wxImage& image, int depth = -1);
 
-  virtual bool Create(int width, int height, int depth = -1);
-  virtual bool Create(void *data, wxBitmapType type, int width, int height, int depth = 1);
-  virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_BMP_RESOURCE);
-  virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = NULL) const;
+    // Convert from wxIcon
+    wxBitmap(const wxIcon& icon) { CopyFromIcon(icon); }
 
-  // copies the contents and mask of the given (colour) icon to the bitmap
-  virtual bool CopyFromIcon(const wxIcon& icon);
+    ~wxBitmap();
 
-  bool Ok() const;
-  int GetWidth() const;
-  int GetHeight() const;
-  int GetDepth() const;
-  int GetQuality() const;
-  void SetWidth(int w);
-  void SetHeight(int h);
-  void SetDepth(int d);
-  void SetQuality(int q);
-  void SetOk(bool isOk);
+    wxImage ConvertToImage() const;
+
+    // get the given part of bitmap
+    wxBitmap GetSubBitmap( const wxRect& rect ) const;
+
+    virtual bool Create(int width, int height, int depth = -1);
+    virtual bool Create(void *data, wxBitmapType type, int width, int height, int depth = 1);
+    // virtual bool Create( WXHICON icon) ;
+    virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_BMP_RESOURCE);
+    virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = NULL) const;
+
+    wxBitmapRefData *GetBitmapData() const
+        { return (wxBitmapRefData *)m_refData; }
+
+    // copies the contents and mask of the given (colour) icon to the bitmap
+    virtual bool CopyFromIcon(const wxIcon& icon);
+
+    bool Ok() const;
+    int GetWidth() const;
+    int GetHeight() const;
+    int GetDepth() const;
+    void SetWidth(int w);
+    void SetHeight(int h);
+    void SetDepth(int d);
+    void SetOk(bool isOk);
+
+#if WXWIN_COMPATIBILITY_2_4
+    // these functions do nothing and are only there for backwards
+    // compatibility
+    wxDEPRECATED( int GetQuality() const );
+    wxDEPRECATED( void SetQuality(int quality) );
+#endif // WXWIN_COMPATIBILITY_2_4
 
 #if wxUSE_PALETTE
-   wxPalette* GetPalette() const;
-   void SetPalette(const wxPalette& palette);
+    wxPalette* GetPalette() const;
+    void SetPalette(const wxPalette& palette);
 #endif // wxUSE_PALETTE
 
-  wxMask *GetMask() const;
-  void SetMask(wxMask *mask) ;
+    wxMask *GetMask() const;
+    void SetMask(wxMask *mask) ;
 
-  int GetBitmapType() const;
-  
-  inline wxBitmap& operator = (const wxBitmap& bitmap) { if (*this == bitmap) return (*this); Ref(bitmap); return *this; }
-  inline bool operator == (const wxBitmap& bitmap) const { return m_refData == bitmap.m_refData; }
-  inline bool operator != (const wxBitmap& bitmap) const { return m_refData != bitmap.m_refData; }
+    inline wxBitmap& operator = (const wxBitmap& bitmap) { if (*this == bitmap) return (*this); Ref(bitmap); return *this; }
+    inline bool operator == (const wxBitmap& bitmap) const { return m_refData == bitmap.m_refData; }
+    inline bool operator != (const wxBitmap& bitmap) const { return m_refData != bitmap.m_refData; }
 
-  static void InitStandardHandlers();
+    static void InitStandardHandlers();
 
     // raw bitmap access support functions, for internal use only
     void *GetRawData(wxPixelDataBase& data, int bpp);
     void UngetRawData(wxPixelDataBase& data);
 
+    // these functions are internal and shouldn't be used, they risk to
+    // disappear in the future
+    bool HasAlpha() const;
     void UseAlpha();
 
-public:
-  WXHBITMAP GetHBITMAP() const;
-  inline WXHICON GetHICON() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_hIcon : 0); }
-  WXHMETAFILE GetPict(bool *created = NULL ) const;
+#if !wxMAC_USE_CORE_GRAPHICS
+    // returns the 'native' implementation, a GWorldPtr for the content and one for the mask 
+    WXHBITMAP GetHBITMAP( WXHBITMAP * mask = NULL ) const;
+#endif
 
-  void SetHBITMAP(WXHBITMAP bmp);
-  void SetHICON(WXHICON ico);
-  void SetPict( WXHMETAFILE pict ) ;
-
-  bool FreeResource(bool force = FALSE);
+#if wxMAC_USE_CORE_GRAPHICS
+    // returns a CGImageRef which must released after usage with CGImageRelease
+    WXCGIMAGEREF CGImageCreate() const ;
+#endif
+    // get read only access to the underlying buffer
+    void *GetRawAccess() const ;
+    // brackets to the underlying OS structure for read/write access
+    // makes sure that no cached images will be constructed until terminated
+    void *BeginRawAccess() ;
+    void EndRawAccess() ;
 };
 #endif
   // _WX_BITMAP_H_

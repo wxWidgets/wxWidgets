@@ -37,7 +37,9 @@ class WXDLLEXPORT wxPrinterDC: public wxDC
     virtual void EndPage(void) ;
     wxPrintData& GetPrintData() { return m_printData; }
     virtual void DoGetSize( int *width, int *height ) const;
-    
+#if wxMAC_USE_CORE_GRAPHICS
+    void MacSetCGContext( void * cg ) ;
+#endif    
  protected:
     wxPrintData   m_printData ;
     wxNativePrinterDC* m_nativePrinterDC ;

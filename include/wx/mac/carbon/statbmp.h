@@ -22,9 +22,9 @@ class WXDLLEXPORT wxStaticBitmap: public wxStaticBitmapBase
 {
   DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
  public:
-  inline wxStaticBitmap() { }
+  wxStaticBitmap() { }
 
-  inline wxStaticBitmap(wxWindow *parent, wxWindowID id,
+  wxStaticBitmap(wxWindow *parent, wxWindowID id,
            const wxBitmap& label,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
@@ -60,7 +60,7 @@ class WXDLLEXPORT wxStaticBitmap: public wxStaticBitmapBase
   virtual  wxSize DoGetBestSize() const ;
 
  protected:
-  wxBitmap m_bitmap;
+    wxBitmap m_bitmap;
     DECLARE_EVENT_TABLE() 
 };
 

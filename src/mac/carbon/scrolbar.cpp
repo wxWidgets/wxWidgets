@@ -84,9 +84,6 @@ void wxScrollBar::SetScrollbar(int position, int thumbSize, int range, int pageS
     m_peer->SetMinimum( 0 ) ;
     m_peer->SetValue( position ) ;
     m_peer->SetViewSize( m_viewSize ) ;
-
-    if ( refresh )
-      MacRedrawControl() ;
 }
 
 

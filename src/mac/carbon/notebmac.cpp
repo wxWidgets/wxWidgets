@@ -346,46 +346,21 @@ void wxNotebook::MacSetupTabs()
         wxMacStringToPascal( page->GetLabel() , info.name ) ;
         m_peer->SetData<ControlTabInfoRec>( ii+1, kControlTabInfoTag, &info ) ;
         m_peer->SetTabEnabled( ii + 1 , true ) ;
-#if TARGET_CARBON
+
         if ( GetImageList() && GetPageImage(ii) >= 0 && UMAGetSystemVersion() >= 0x1020 )
         {
-            // tab controls only support very specific types of images, therefore we are doing an odyssee
-            // accross the icon worlds (even Apple DTS did not find a shorter path)
-            // in order not to pollute the icon registry we put every icon into (OSType) 1 and immediately
-            // afterwards Unregister it (IconRef is ref counted, so it will stay on the tab even if we
-            // unregister it) in case this will ever lead to having the same icon everywhere add some kind
-            // of static counter
             const wxBitmap* bmap = GetImageList()->GetBitmap( GetPageImage(ii ) ) ;
             if ( bmap )
             {
-                wxBitmap scaledBitmap ;
-                if ( bmap->GetWidth() != 16 || bmap->GetHeight() != 16 )
-                {
-                    scaledBitmap = wxBitmap( bmap->ConvertToImage().Scale(16,16) ) ;
-                    bmap = &scaledBitmap ;
-                }
                 ControlButtonContentInfo info ;
-                wxMacCreateBitmapButton( &info , *bmap , kControlContentPictHandle) ;
-                IconFamilyHandle iconFamily = (IconFamilyHandle) NewHandle(0) ;
-                OSErr err = SetIconFamilyData( iconFamily, 'PICT' , (Handle) info.u.picture ) ;
-                wxASSERT_MSG( err == noErr , wxT("Error when adding bitmap") ) ;
-                IconRef iconRef ;
-                err = RegisterIconRefFromIconFamily( 'WXNG' , (OSType) 1, iconFamily, &iconRef ) ;
-                wxASSERT_MSG( err == noErr , wxT("Error when adding bitmap") ) ;
-                info.contentType = kControlContentIconRef ;
-                info.u.iconRef = iconRef ;
-                m_peer->SetData<ControlButtonContentInfo>( ii+1,kControlTabImageContentTag, &info );
+
+                wxMacCreateBitmapButton( &info , *bmap ) ;
+                OSStatus err = m_peer->SetData<ControlButtonContentInfo>( ii+1,kControlTabImageContentTag, &info );
                 wxASSERT_MSG( err == noErr , wxT("Error when setting icon on tab") ) ;
-                if ( UMAGetSystemVersion() < 0x1030 )
-                {              	
-                	UnregisterIconRef( 'WXNG' , (OSType) 1 ) ;
-                }
-       
-                ReleaseIconRef( iconRef ) ;
-                DisposeHandle( (Handle) iconFamily ) ;
+                wxMacReleaseBitmapButton( &info ) ;
             }
         }
-#endif
+
     }
     Rect bounds;
     m_peer->GetRectInWindowCoords( &bounds ) ;

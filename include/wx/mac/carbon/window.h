@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/brush.h"
+#include "wx/dc.h"
 
 // ---------------------------------------------------------------------------
 // forward declarations
@@ -161,7 +162,6 @@ public:
 public:
     virtual void        MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
     virtual bool        MacDoRedraw( WXHRGN updatergn , long time ) ;
-    virtual void        MacRedraw( WXHRGN updatergn , long time , bool erase) ;
     virtual bool        MacCanFocus() const ;
     
     // this should not be overriden in classes above wxWindowMac because it is called from its destructor via DeleteChildren
@@ -212,10 +212,9 @@ public:
 
     wxList&             GetSubcontrols() { return m_subControls; }
     virtual void		MacInstallEventHandler(WXWidget native) ;
-	virtual void		MacRedrawControl();
     WXEVENTHANDLERREF   MacGetControlEventHandler() { return m_macControlEventHandler ; }
     void                MacPostControlCreate(const wxPoint& pos, const wxSize& size) ;
-
+#ifndef __WXMAC_OSX__
     virtual void            MacControlUserPaneDrawProc(wxInt16 part) ;
     virtual wxInt16         MacControlUserPaneHitTestProc(wxInt16 x, wxInt16 y) ;
     virtual wxInt16         MacControlUserPaneTrackingProc(wxInt16 x, wxInt16 y, void* actionProc) ;
@@ -224,7 +223,7 @@ public:
     virtual void            MacControlUserPaneActivateProc(bool activating) ;
     virtual wxInt16         MacControlUserPaneFocusProc(wxInt16 action) ;
     virtual void            MacControlUserPaneBackgroundProc(void* info) ;
-
+#endif
     // translate wxWidgets coords into ones suitable to be passed to
     // the CreateControl calls
     //
@@ -241,7 +240,10 @@ public:
 
     // flash the current invalid area, useful for debugging in OSX double buffered situation
     void                MacFlashInvalidAreas() ;
-
+#if wxMAC_USE_CORE_GRAPHICS
+    void *              MacGetCGContextRef() { return m_cgContextRef ; }
+    void                MacSetCGContextRef(void * cg) { m_cgContextRef = cg ; }
+#endif
 protected:
     // For controls like radiobuttons which are really composite
     wxList              m_subControls;
@@ -249,6 +251,9 @@ protected:
     unsigned int        m_frozenness;
     // the peer object, allowing for cleaner API support
     wxMacControl*       m_peer ;
+#if wxMAC_USE_CORE_GRAPHICS
+    void *              m_cgContextRef ;
+#endif
     // true if is is not a native control but a wxWindow control
 	bool				m_macIsUserPane ;
     wxBrush             m_macBackgroundBrush ;

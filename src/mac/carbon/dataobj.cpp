@@ -250,7 +250,9 @@ wxBitmapDataObject::wxBitmapDataObject(
     Init();
     if ( m_bitmap.Ok() )
     {
-        m_pictHandle = m_bitmap.GetPict( &m_pictCreated ) ;
+    /*
+        m_pictHandle = m_bitmap.GetBitmapData()->GetPict( &m_pictCreated ) ;
+    */
     }
 }
 
@@ -267,7 +269,9 @@ void wxBitmapDataObject::SetBitmap(
     wxBitmapDataObjectBase::SetBitmap(rBitmap);
     if ( m_bitmap.Ok() )
     {
-        m_pictHandle = m_bitmap.GetPict( &m_pictCreated ) ;
+    /*
+        m_pictHandle = m_bitmap.GetBitmapData()->GetPict( &m_pictCreated ) ;
+    */
     }
 }
 
@@ -313,11 +317,13 @@ bool wxBitmapDataObject::SetData(
     PicHandle picHandle = (PicHandle) NewHandle( nSize ) ;
     memcpy( *picHandle , pBuf , nSize ) ;
     m_pictHandle = picHandle ;
+    // ownership is transferred to the bitmap
     m_pictCreated = false ;
     Rect frame = (**picHandle).picFrame ;
-    
-    m_bitmap.SetPict( picHandle ) ;
+    /*
+    m_bitmap.GetBitmapData()->SetPict( (WXHMETAFILE) picHandle ) ;
     m_bitmap.SetWidth( frame.right - frame.left ) ;
     m_bitmap.SetHeight( frame.bottom - frame.top ) ;
+    */
     return m_bitmap.Ok();
 }

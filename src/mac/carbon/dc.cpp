@@ -16,6 +16,8 @@
 #include "wx/wxprec.h"
 
 #include "wx/dc.h"
+
+#if !wxMAC_USE_CORE_GRAPHICS
 #include "wx/app.h"
 #include "wx/mac/uma.h"
 #include "wx/dcmemory.h"
@@ -285,11 +287,6 @@ wxDC::~wxDC(void)
     DisposeRgn( (RgnHandle) m_macCurrentClipRgn ) ;
 }
 
-void wxDC::MacSetupGraphicContext() 
-{
-    // no-op for QuickDraw
-}
-
 void wxDC::MacSetupPort(wxMacPortStateHelper* help) const
 {
 #ifdef __WXDEBUG__
@@ -360,62 +357,51 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
                     //m_logicalFunction == wxSRC_OR ? srcOr :
                     //m_logicalFunction == wxSRC_AND ? SRCAND :
                     srcCopy );
-     if ( bmp.GetBitmapType() == kMacBitmapTypePict ) {
-         Rect bitmaprect = { 0 , 0 , hh, ww };
-         ::OffsetRect( &bitmaprect, xx, yy ) ;
-         ::DrawPicture( (PicHandle) bmp.GetPict(), &bitmaprect ) ;
-    }
-     else if ( bmp.GetBitmapType() == kMacBitmapTypeGrafWorld )
-     {
-         GWorldPtr    bmapworld = MAC_WXHBITMAP( bmp.GetHBITMAP() );
-         PixMapHandle bmappixels ;
-         // Set foreground and background colours (for bitmaps depth = 1)
-         if(bmp.GetDepth() == 1)
-        {
-             RGBColor fore = MAC_WXCOLORREF(m_textForegroundColour.GetPixel());
-             RGBColor back = MAC_WXCOLORREF(m_textBackgroundColour.GetPixel());
-             RGBForeColor(&fore);
-             RGBBackColor(&back);
-         }
-         else
-         {
-             RGBColor white = { 0xFFFF, 0xFFFF,0xFFFF} ;
-             RGBColor black = { 0,0,0} ;
-             RGBForeColor( &black ) ;
-             RGBBackColor( &white ) ;
-         }
-         bmappixels = GetGWorldPixMap( bmapworld ) ;
-         wxCHECK_RET(LockPixels(bmappixels),
-                     wxT("DoDrawBitmap:  Unable to lock pixels"));
-         Rect source = { 0, 0, h, w };
-         Rect dest   = { yy, xx, yy + hh, xx + ww };
-         if ( useMask && bmp.GetMask() )
-         {
-             if( LockPixels(GetGWorldPixMap(MAC_WXHBITMAP(bmp.GetMask()->GetMaskBitmap()))))
-             {
-                 CopyDeepMask
-                     (
-                      GetPortBitMapForCopyBits(bmapworld),
-                      GetPortBitMapForCopyBits(MAC_WXHBITMAP(bmp.GetMask()->GetMaskBitmap())),
-                      GetPortBitMapForCopyBits( MAC_WXHBITMAP(m_macPort) ),
-                      &source, &source, &dest, mode, NULL
-                      );
-                 UnlockPixels(GetGWorldPixMap(MAC_WXHBITMAP(bmp.GetMask()->GetMaskBitmap())));
-             }
-         }
-         else {
-             CopyBits( GetPortBitMapForCopyBits( bmapworld ),
-                       GetPortBitMapForCopyBits( MAC_WXHBITMAP(m_macPort) ),
-                       &source, &dest, mode, NULL ) ;
-         }
-         UnlockPixels( bmappixels ) ;
+
+     GWorldPtr    maskworld = NULL ;
+     GWorldPtr    bmapworld = MAC_WXHBITMAP( bmp.GetHBITMAP((WXHBITMAP*)&maskworld) );
+     PixMapHandle bmappixels ;
+     // Set foreground and background colours (for bitmaps depth = 1)
+     if(bmp.GetDepth() == 1)
+    {
+         RGBColor fore = MAC_WXCOLORREF(m_textForegroundColour.GetPixel());
+         RGBColor back = MAC_WXCOLORREF(m_textBackgroundColour.GetPixel());
+         RGBForeColor(&fore);
+         RGBBackColor(&back);
      }
-     else if ( bmp.GetBitmapType() == kMacBitmapTypeIcon )
+     else
      {
-        Rect bitmaprect = { 0 , 0 , bmp.GetHeight(), bmp.GetWidth() } ;
-        OffsetRect( &bitmaprect, xx, yy ) ;
-        PlotCIconHandle( &bitmaprect , atNone , ttNone , MAC_WXHICON(bmp.GetHICON()) ) ;
+         RGBColor white = { 0xFFFF, 0xFFFF,0xFFFF} ;
+         RGBColor black = { 0,0,0} ;
+         RGBForeColor( &black ) ;
+         RGBBackColor( &white ) ;
      }
+     bmappixels = GetGWorldPixMap( bmapworld ) ;
+     wxCHECK_RET(LockPixels(bmappixels),
+                 wxT("DoDrawBitmap:  Unable to lock pixels"));
+     Rect source = { 0, 0, h, w };
+     Rect dest   = { yy, xx, yy + hh, xx + ww };
+     if ( useMask && maskworld )
+     {
+         if( LockPixels(GetGWorldPixMap(MAC_WXHBITMAP(maskworld))))
+         {
+             CopyDeepMask
+                 (
+                  GetPortBitMapForCopyBits(bmapworld),
+                  GetPortBitMapForCopyBits(MAC_WXHBITMAP(maskworld)),
+                  GetPortBitMapForCopyBits( MAC_WXHBITMAP(m_macPort) ),
+                  &source, &source, &dest, mode, NULL
+                  );
+             UnlockPixels(GetGWorldPixMap(MAC_WXHBITMAP(maskworld)));
+         }
+     }
+     else {
+         CopyBits( GetPortBitMapForCopyBits( bmapworld ),
+                   GetPortBitMapForCopyBits( MAC_WXHBITMAP(m_macPort) ),
+                   &source, &dest, mode, NULL ) ;
+     }
+     UnlockPixels( bmappixels ) ;
+
      m_macPenInstalled = false ;
      m_macBrushInstalled = false ;
      m_macFontInstalled = false ;
@@ -425,7 +411,13 @@ void wxDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
 {
     wxCHECK_RET(Ok(), wxT("Invalid dc  wxDC::DoDrawIcon"));
     wxCHECK_RET(icon.Ok(), wxT("Invalid icon wxDC::DoDrawIcon"));
-    DoDrawBitmap( icon , x , y , icon.GetMask() != NULL ) ;
+    wxMacFastPortSetter helper(this) ;
+
+    wxCoord xx = XLOG2DEVMAC(x);
+    wxCoord yy = YLOG2DEVMAC(y);
+
+    Rect r = { yy , xx, yy + 32  , xx + 32 } ;
+    PlotIconRef( &r , kAlignNone , kTransformNone , kPlotIconRefNormalFlags , MAC_WXHICON( icon.GetHICON() ) ) ;
 }
 
 void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
@@ -1942,9 +1934,9 @@ void wxDC::MacInstallBrush() const
         int height = bitmap->GetHeight() ;
         GWorldPtr gw = NULL ;
         if ( m_brush.GetStyle() == wxSTIPPLE )
-            gw = MAC_WXHBITMAP(bitmap->GetHBITMAP())  ;
+            gw = MAC_WXHBITMAP(bitmap->GetHBITMAP(NULL))  ;
         else
-            gw = MAC_WXHBITMAP(bitmap->GetMask()->GetMaskBitmap()) ;
+            gw = MAC_WXHBITMAP(bitmap->GetMask()->GetHBITMAP()) ;
         PixMapHandle gwpixmaphandle = GetGWorldPixMap( gw ) ;
         LockPixels( gwpixmaphandle ) ;
         bool isMonochrome = !IsPortColor( gw ) ;
@@ -2098,3 +2090,5 @@ wxCoord wxDCBase::LogicalToDeviceYRel(wxCoord y) const
 {
     return ((wxDC *)this)->YLOG2DEVREL(y);
 }
+
+#endif // !wxMAC_USE_CORE_GRAPHICS

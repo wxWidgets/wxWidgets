@@ -176,39 +176,45 @@ wxMenu* wxTaskBarIcon::DoCreatePopupMenu()
 // Operations:
 bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
 {
-    wxMask* mask = icon.GetMask();
+    wxBitmap bmp( icon ) ;
+    OSStatus err = noErr ;
+
+    CGImageRef pImage;
+    
+#if wxMAC_USE_CORE_GRAPHICS        
+    pImage = bmp.CGImageCreate() ;
+#else
+    wxMask* mask = bmp.GetMask();
     if (!mask)
     {
         // Make a mask with no transparent pixels
-        wxBitmap   bmp(icon.GetWidth(), icon.GetHeight());
+        wxBitmap   mbmp(icon.GetWidth(), icon.GetHeight());
         wxMemoryDC dc;
-        dc.SelectObject(bmp);
+        dc.SelectObject(mbmp);
         dc.SetBackground(*wxBLACK_BRUSH);
         dc.Clear();
         dc.SelectObject(wxNullBitmap);
-        mask = new wxMask(bmp, *wxWHITE);
+        bmp.SetMask( new wxMask(mbmp, *wxWHITE) ) ;
     } 
-        
-    CGImageRef pImage;
     
     //create the icon from the bitmap and mask bitmap contained within
-    OSStatus err = CreateCGImageFromPixMaps(
-        GetGWorldPixMap(MAC_WXHBITMAP(icon.GetHBITMAP())),
-        GetGWorldPixMap(MAC_WXHBITMAP(mask->GetMaskBitmap())),
-        &pImage
-        );
-        
+    WXHBITMAP iconport ;
+    WXHBITMAP maskport ;
+    iconport = bmp.GetHBITMAP( &maskport ) ;
+    err = CreateCGImageFromPixMaps(
+                                            GetGWorldPixMap(MAC_WXHBITMAP(iconport)),
+                                            GetGWorldPixMap(MAC_WXHBITMAP(maskport)),
+                                            &pImage
+                                            );    
     wxASSERT(err == 0);
-    
+#endif
+    wxASSERT(pImage != NULL );
     err = SetApplicationDockTileImage(pImage);
-        
+    
     wxASSERT(err == 0);
     
     if (pImage != NULL)
         CGImageRelease(pImage);
-
-    if (!icon.GetMask())
-        delete mask;
     
     return m_iconAdded = err == noErr;
 }

@@ -19,6 +19,7 @@
 #include "wx/icon.h"
 #include "wx/log.h"
 #include "wx/image.h"
+#include "wx/metafile.h"
 #include "wx/xpmdecod.h"
 
 #include "wx/rawbmp.h"
@@ -35,271 +36,137 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler, wxObject )
 
 #include "wx/mac/uma.h"
 
-CTabHandle wxMacCreateColorTable( int numColors )
-{
-    CTabHandle newColors; /* Handle to the new color table */
+// Implementation Notes
+// -------------------- 
+//
+// we are always working with a 32 bit deep pixel buffer 
+// under QuickDraw its alpha parts are going to be ignored in the GWorld, 
+// therefore we have a separate GWorld there for blitting the mask in
 
-    /* Allocate memory for the color table */
-    newColors = (CTabHandle)NewHandleClear( sizeof (ColorTable) +
-    sizeof (ColorSpec) * (numColors - 1) );
-    if (newColors != nil)
+// under Quartz then content is transformed into a CGImageRef representing the same data
+// which can be transferred to the GPU by the OS for fast rendering
+
+// we don't dare premultiplied alpha yet
+#define wxMAC_USE_PREMULTIPLIED_ALPHA 0
+
+IconRef wxMacCreateIconRef(const wxBitmap& bmp)
+{
+    // setup the header properly
+    
+    IconFamilyHandle iconFamily = (IconFamilyHandle) NewHandle(8) ;
+    (**iconFamily).resourceType = kIconFamilyType ;
+    (**iconFamily).resourceSize = sizeof(OSType) + sizeof(Size);
+    
+    int w = bmp.GetWidth() ;
+    int h = bmp.GetHeight() ;
+    int sz = wxMax( w , h ) ;
+    if ( sz > 128 )
     {
-        /* Initialize the fields */
-        (**newColors).ctSeed = GetCTSeed();
-        (**newColors).ctFlags = 0;
-        (**newColors).ctSize = numColors - 1;
-        /* Initialize the table of colors */
+        wxFAIL_MSG( wxT("Currently only 128 pixels wide images are supported") ) ;
     }
-    return newColors ;
-}
+    
+    Handle data = NULL ; 
+    Handle maskdata = NULL ;
+    unsigned char * maskptr = NULL ;
+    unsigned char * ptr = NULL ;
+    size_t size ;
+    size_t masksize ;
+    OSType dataType ;
+    OSType maskType ;
 
-void wxMacDestroyColorTable( CTabHandle colors )
-{
-    DisposeHandle( (Handle) colors ) ;
-}
-
-void wxMacSetColorTableEntry( CTabHandle newColors , int index , int red , int green ,  int blue )
-{
-    (**newColors).ctTable[index].value = index;
-    (**newColors).ctTable[index].rgb.red = red ; // someRedValue;
-    (**newColors).ctTable[index].rgb.green = green ; // someGreenValue;
-    (**newColors).ctTable[index].rgb.blue = blue ; // someBlueValue;
-}
-
-GWorldPtr wxMacCreateGWorld( int width , int height , int depth )
-{
-    OSErr err = noErr ;
-    GWorldPtr port ;
-    Rect rect = { 0 , 0 , height , width } ;
-
-    if ( depth < 0 )
+    bool hasAlpha = bmp.HasAlpha() ;
+    wxMask *mask = bmp.GetMask() ;
+    // thumbnail is 128 x 128 with 32 bits per pixel
+    
+    if ( sz > 48 )
     {
-        depth = wxDisplayDepth() ;
+        sz = 128 ;
+        dataType = kThumbnail32BitData ;
+        maskType = kThumbnail8BitMask ;
     }
-
-    err = NewGWorld( &port , depth , &rect , NULL , NULL , 0 ) ;
-    if ( err == noErr )
+    else if ( sz > 32 )
     {
-        return port ;
+        sz = 48 ;
+        dataType = kHuge32BitData ;
+        maskType = kHuge8BitMask ;
     }
-    return NULL ;
-}
+    else if ( sz > 16 )
+    {
+        sz = 32 ;
+        dataType = kLarge32BitData ;
+        maskType = kLarge8BitMask ;
+    }
+    else 
+    {
+        sz = 16 ;
+        dataType = kSmall32BitData ;
+        maskType = kSmall8BitMask ;
+    }
 
-void wxMacDestroyGWorld( GWorldPtr gw )
-{
-    if ( gw )
-        DisposeGWorld( gw ) ;
-}
+    size = sz * sz * 4 ;
+    data = NewHandle( size) ;    
+    HLock( data ) ;
+    ptr = (unsigned char*) *data ;
+    memset( ptr , 0, size ) ;
 
-#define kDefaultRes 0x00480000 /* Default resolution is 72 DPI; Fixed type */
+    masksize = sz * sz ;
+    maskdata = NewHandle( masksize ) ;    
+    HLock( maskdata ) ;
+    maskptr = (unsigned char*) *maskdata ;
+    memset( maskptr , 0 , masksize ) ;
 
-OSErr SetupCIconHandlePixMap( CIconHandle icon , short depth , Rect  *bounds , CTabHandle colors )
-{
-    CTabHandle newColors;       /* Color table used for the off-screen PixMap */
-    Ptr        offBaseAddr;     /* Pointer to the off-screen pixel image */
-    OSErr      error;           /* Returns error code */
-    short      bytesPerRow;     /* Number of bytes per row in the PixMap */
-
-
-    error = noErr;
-    newColors = nil;
-    offBaseAddr = nil;
-
-    bytesPerRow = ((depth * (bounds->right - bounds->left) + 31) / 32) * 4;
-
-   /* Clone the clut if indexed color; allocate a dummy clut if direct color*/
-    if (depth <= 8)
+    unsigned char * source = (unsigned char*) bmp.GetRawAccess() ;
+    unsigned char * masksource = mask ? (unsigned char*) mask->GetRawAccess() : NULL ;
+    for ( int y = 0 ; y < h ; ++y )
+    {
+        unsigned char * dest = ptr + y * sz * 4 ;
+        unsigned char * maskdest = maskptr + y * sz ;
+        for ( int x = 0 ; x < w ; ++x )
         {
-        newColors = colors;
-        error = HandToHand((Handle *) &newColors);
-        }
-    else
-        {
-        newColors = (CTabHandle) NewHandle(sizeof(ColorTable) -
-                sizeof(CSpecArray));
-        error = MemError();
-        }
-    if (error == noErr)
-        {
-        /* Allocate pixel image; long integer multiplication avoids overflow */
-        (**icon).iconData = NewHandle((unsigned long) bytesPerRow * (bounds->bottom -
-                bounds->top));
-        if ((**icon).iconData != nil)
-            {
-            /* Initialize fields common to indexed and direct PixMaps */
-            (**icon).iconPMap.baseAddr = 0;  /* Point to image */
-            (**icon).iconPMap.rowBytes = bytesPerRow | /* MSB set for PixMap */
-                    0x8000;
-            (**icon).iconPMap.bounds = *bounds;        /* Use given bounds */
-            (**icon).iconPMap.pmVersion = 0;           /* No special stuff */
-            (**icon).iconPMap.packType = 0;            /* Default PICT pack */
-            (**icon).iconPMap.packSize = 0;            /* Always zero in mem */
-            (**icon).iconPMap.hRes = kDefaultRes;      /* 72 DPI default res */
-            (**icon).iconPMap.vRes = kDefaultRes;      /* 72 DPI default res */
-            (**icon).iconPMap.pixelSize = depth;       /* Set # bits/pixel */
-
-            /* Initialize fields specific to indexed and direct PixMaps */
-            if (depth <= 8)
-                {
-                /* PixMap is indexed */
-                (**icon).iconPMap.pixelType = 0;       /* Indicates indexed */
-                (**icon).iconPMap.cmpCount = 1;        /* Have 1 component */
-                (**icon).iconPMap.cmpSize = depth;     /* Component size=depth */
-                (**icon).iconPMap.pmTable = newColors; /* Handle to CLUT */
-                }
+            unsigned char a = *source ++ ;
+            unsigned char r = *source ++ ;
+            unsigned char g = *source ++ ;
+            unsigned char b = *source ++ ;
+            
+            *dest++ = 0 ;
+            *dest++ = r ;
+            *dest++ = g ;
+            *dest++ = b ;
+            
+            if ( mask )
+                *maskdest++ = *masksource++ ;
+            else if ( hasAlpha )
+                *maskdest++ = a ;
             else
-                {
-                /* PixMap is direct */
-                (**icon).iconPMap.pixelType = RGBDirect; /* Indicates direct */
-                (**icon).iconPMap.cmpCount = 3;          /* Have 3 components */
-                if (depth == 16)
-                    (**icon).iconPMap.cmpSize = 5;       /* 5 bits/component */
-                else
-                    (**icon).iconPMap.cmpSize = 8;       /* 8 bits/component */
-                (**newColors).ctSeed = 3 * (**icon).iconPMap.cmpSize;
-                (**newColors).ctFlags = 0;
-                (**newColors).ctSize = 0;
-                (**icon).iconPMap.pmTable = newColors;
-                }
-            }
-        else
-            error = MemError();
+                *maskdest++ = 0xFF ;
         }
-    else
-        newColors = nil;
-
-    /* If no errors occured, return a handle to the new off-screen PixMap */
-    if (error != noErr)
-        {
-        if (newColors != nil)
-            DisposeCTable(newColors);
-        }
-
-    /* Return the error code */
-    return error;
-}
-
-CIconHandle wxMacCreateCIcon(GWorldPtr image , GWorldPtr mask , short dstDepth , short iconSize  )
-{
-    GWorldPtr       saveWorld;
-    GDHandle        saveHandle;
-
-    GetGWorld(&saveWorld,&saveHandle);      // save Graphics env state
-    SetGWorld(image,nil);
-
-    Rect frame = { 0 , 0 , iconSize , iconSize } ;
-    Rect imageBounds = frame ;
-    GetPortBounds( image , &imageBounds ) ;
-
-    int bwSize = iconSize / 8 * iconSize ;
-    CIconHandle icon = (CIconHandle) NewHandleClear( sizeof ( CIcon ) + 2 * bwSize) ;
-    HLock((Handle)icon) ;
-    SetupCIconHandlePixMap( icon , dstDepth , &frame,GetCTable(dstDepth)) ;
-    HLock( (**icon).iconData ) ;
-    (**icon).iconPMap.baseAddr = *(**icon).iconData ;
-
-    LockPixels(GetGWorldPixMap(image));
-
-    CopyBits(GetPortBitMapForCopyBits(image),
-                (BitMapPtr)&((**icon).iconPMap),
-                &imageBounds,
-                &imageBounds,
-                srcCopy | ditherCopy, nil);
-
-
-    UnlockPixels(GetGWorldPixMap(image));
-    HUnlock( (**icon).iconData ) ;
-
-    (**icon).iconMask.rowBytes = iconSize / 8 ;
-    (**icon).iconMask.bounds = frame ;
-
-    (**icon).iconBMap.rowBytes = iconSize / 8 ;
-    (**icon).iconBMap.bounds = frame ;
-    (**icon).iconMask.baseAddr = (char*) &(**icon).iconMaskData ;
-    (**icon).iconBMap.baseAddr = (char*) &(**icon).iconMaskData + bwSize ;
-
-    if ( mask )
-    {
-        Rect r ;
-        GetPortBounds( image , &r ) ;
-      LockPixels(GetGWorldPixMap(mask) ) ;
-      CopyBits(GetPortBitMapForCopyBits(mask) ,
-          &(**icon).iconBMap , &r , &r, srcCopy , nil ) ;
-      CopyBits(GetPortBitMapForCopyBits(mask) ,
-          &(**icon).iconMask , &r , &r, srcCopy , nil ) ;
-      UnlockPixels(GetGWorldPixMap( mask ) ) ;
     }
-    else
-    {
-        Rect r ;
-        GetPortBounds( image , &r ) ;
-        LockPixels(GetGWorldPixMap(image));
-      CopyBits(GetPortBitMapForCopyBits(image) ,
-          &(**icon).iconBMap , &r , &r, srcCopy , nil ) ;
-      CopyBits(GetPortBitMapForCopyBits(image) ,
-          &(**icon).iconMask , &r , &r, srcCopy , nil ) ;
-        UnlockPixels(GetGWorldPixMap(image));
-    }
+    
+    OSStatus err = SetIconFamilyData( iconFamily, dataType , data ) ;
+    wxASSERT_MSG( err == noErr , wxT("Error when adding bitmap") ) ;
 
-    (**icon).iconMask.baseAddr = NULL ;
-    (**icon).iconBMap.baseAddr = NULL ;
-    (**icon).iconPMap.baseAddr = NULL ;
-    HUnlock((Handle)icon) ;
-    SetGWorld(saveWorld,saveHandle);
+    err = SetIconFamilyData( iconFamily, maskType , maskdata ) ;
+    wxASSERT_MSG( err == noErr , wxT("Error when adding mask") ) ;
+    HUnlock( data ) ;
+    HUnlock( maskdata ) ;
+    DisposeHandle( data ) ;
+    DisposeHandle( maskdata ) ;
 
-    return icon;
-}
+    IconRef iconRef ;
+    static int iconCounter = 2 ;
+    
+    err = RegisterIconRefFromIconFamily( 'WXNG' , (OSType) iconCounter, iconFamily, &iconRef ) ;
+    UInt16 owners ;
+    err = GetIconRefOwners(iconRef , &owners ) ;
 
-PicHandle wxMacCreatePict(GWorldPtr wp, GWorldPtr mask)
-{
-  CGrafPtr       origPort ;
-  GDHandle       origDev ;
-
-  PicHandle      pict;
-
-  RGBColor       white = { 0xffff ,0xffff , 0xffff } ;
-  RGBColor       black = { 0x0000 ,0x0000 , 0x0000 } ;
-
-  GetGWorld( &origPort , &origDev ) ;
-
-  RgnHandle clipRgn = NULL ;
-
-  if ( mask )
-  {
-    clipRgn = NewRgn() ;
-    LockPixels( GetGWorldPixMap( mask ) ) ;
-    BitMapToRegion( clipRgn , (BitMap*) *GetGWorldPixMap( mask ) ) ;
-    UnlockPixels( GetGWorldPixMap( mask ) ) ;
-  }
-
-  SetGWorld( wp , NULL ) ;
-  Rect portRect ;
-  if ( clipRgn )
-    GetRegionBounds( clipRgn , &portRect ) ;
-  else
-      GetPortBounds( wp , &portRect ) ;
-  pict = OpenPicture(&portRect);
-  if(pict)
-  {
-    RGBForeColor( &black ) ;
-    RGBBackColor( &white ) ;
-
-    if ( clipRgn )
-        SetClip( clipRgn ) ;
-
-    LockPixels( GetGWorldPixMap( wp ) ) ;
-    CopyBits(GetPortBitMapForCopyBits(wp),
-            GetPortBitMapForCopyBits(wp),
-            &portRect,
-            &portRect,
-            srcCopy,clipRgn);
-    UnlockPixels( GetGWorldPixMap( wp ) ) ;
-    ClosePicture();
-  }
-  SetGWorld( origPort , origDev ) ;
-  if ( clipRgn )
-      DisposeRgn( clipRgn ) ;
-  return pict;
+    wxASSERT_MSG( err == noErr , wxT("Error when adding bitmap") ) ;
+    // we have to retain a reference, as Unregister will decrement it 
+    AcquireIconRef( iconRef ) ;
+    UnregisterIconRef( 'WXNG' , (OSType) iconCounter ) ;
+    DisposeHandle( (Handle) iconFamily ) ;
+    ++iconCounter ;
+    
+    return iconRef ;
 }
 
 void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bitmap , int forceType )
@@ -310,124 +177,356 @@ void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bi
         wxBitmapRefData * bmap = (wxBitmapRefData*) ( bitmap.GetRefData()) ;
         if ( bmap == NULL )
             return ;
-
-        if ( bmap->m_bitmapType == kMacBitmapTypePict )
-        {
-            info->contentType = kControlContentPictHandle ;
-            info->u.picture = MAC_WXHMETAFILE(bmap->m_hPict) ;
-        }
-        else if ( bmap->m_bitmapType == kMacBitmapTypeGrafWorld )
-        {
-            if ( (forceType == kControlContentCIconHandle || ( bmap->m_width == bmap->m_height && forceType != kControlContentPictHandle ) ) && ((bmap->m_width & 0x3) == 0) )
-            {
-                info->contentType = kControlContentCIconHandle ;
-                if ( bitmap.GetMask() )
-                {
-                    info->u.cIconHandle = wxMacCreateCIcon( MAC_WXHBITMAP(bmap->m_hBitmap) , MAC_WXHBITMAP(bitmap.GetMask()->GetMaskBitmap()) ,
-                                                           8 , bmap->m_width ) ;
-                }
-                else
-                {
-                    info->u.cIconHandle = wxMacCreateCIcon( MAC_WXHBITMAP(bmap->m_hBitmap) , NULL ,
-                                                           8 , bmap->m_width ) ;
-                }
-            }
-            else
-            {
-                info->contentType = kControlContentPictHandle ;
-                if ( bitmap.GetMask() )
-                {
-                    info->u.picture = wxMacCreatePict( MAC_WXHBITMAP(bmap->m_hBitmap) , MAC_WXHBITMAP(bitmap.GetMask()->GetMaskBitmap() ) ) ;
-               }
-                else
-                {
-                    info->u.picture = wxMacCreatePict( MAC_WXHBITMAP(bmap->m_hBitmap) , NULL ) ;
-                }
-            }
-        }
-        else if ( bmap->m_bitmapType == kMacBitmapTypeIcon )
-        {
-            info->contentType = kControlContentCIconHandle ;
-            info->u.cIconHandle = MAC_WXHICON(bmap->m_hIcon) ;
-        }
+        info->contentType = kControlContentIconRef ;
+        info->u.iconRef = wxMacCreateIconRef( bitmap ) ;  
+         
+#if wxMAC_USE_CORE_GRAPHICS              
+        /*
+            // only on 10.4 more controls will accept a CGImage
+        
+            info->contentType = kControlContentCGImageRef ;
+            info->u.imageRef = (CGImageRef) bmap->CGImageCreate() ;
+        */
+#endif
     }
 }
 
-wxBitmapRefData::wxBitmapRefData()
-    : m_width(0)
-    , m_height(0)
-    , m_depth(0)
-    , m_ok(FALSE)
-    , m_numColors(0)
-    , m_quality(0)
+void wxMacReleaseBitmapButton( ControlButtonContentInfo*info )
 {
-    m_bitmapMask = NULL;
+    if ( info->contentType == kControlContentIconRef )
+    {
+        ReleaseIconRef(info->u.iconRef) ;
+    }
+#if wxMAC_USE_CORE_GRAPHICS
+    else if ( info->contentType == kControlContentCGImageRef )
+    {
+        CGImageRelease( info->u.imageRef ) ;
+    }
+#endif
+    else
+    {
+        wxFAIL_MSG(wxT("Unexpected bitmap type") ) ;
+    }
+}
+
+
+void wxBitmapRefData::Init()
+{
+    m_width = 0 ;
+    m_height = 0 ;
+    m_depth = 0 ;
+    m_ok = false ;
+    m_bitmapMask = NULL ;
+#if wxMAC_USE_CORE_GRAPHICS
+    m_cgImageRef = NULL ;
+#else
     m_hBitmap = NULL ;
-    m_hPict = NULL ;
-    m_hIcon = NULL ;
-    m_bitmapType = kMacBitmapTypeUnknownType ;
+    m_hMaskBitmap = NULL;
+    m_maskBytesPerRow = NULL ;
+#endif
+    m_rawAccessCount = 0 ;
     m_hasAlpha = false;
 }
 
-// TODO move this to a public function of Bitmap Ref
-static void DisposeBitmapRefData(wxBitmapRefData *data)
+wxBitmapRefData::wxBitmapRefData()
 {
-    if ( !data )
+    Init() ;
+}
+
+wxBitmapRefData::wxBitmapRefData( int w , int h , int d ) 
+{
+    Init() ;
+    Create( w , h , d ) ;
+}
+
+bool wxBitmapRefData::Create( int w , int h , int d ) 
+{
+    m_width = w ;
+    m_height = h ; 
+    m_depth = d ;
+
+    m_bytesPerRow = w * 4 ;
+    size_t size = m_bytesPerRow * h ;
+    void*  data = m_memBuf.GetWriteBuf(size) ;
+    memset( data ,  0 , size) ;
+    m_memBuf.UngetWriteBuf(size) ;
+#if wxMAC_USE_CORE_GRAPHICS
+    m_ok = true ;
+#else
+    m_hBitmap = NULL ;
+    Rect rect = { 0 , 0 , m_height , m_width } ;
+    verify_noerr( NewGWorldFromPtr( (GWorldPtr*) &m_hBitmap , k32ARGBPixelFormat , &rect , NULL , NULL , 0 ,
+        (char*) data , m_bytesPerRow ) ) ; 
+    wxASSERT_MSG( m_hBitmap , wxT("Unable to create GWorld context") ) ;
+    m_ok = ( m_hBitmap != NULL ) ;
+#endif 
+    return m_ok ;   
+}
+
+void wxBitmapRefData::UseAlpha( bool use )
+{
+    if ( m_hasAlpha == use )
         return ;
-
-    switch (data->m_bitmapType)
+        
+    m_hasAlpha = use ;
+#if !wxMAC_USE_CORE_GRAPHICS
+    if ( m_hasAlpha )
     {
-        case kMacBitmapTypePict :
-            {
-                if ( data->m_hPict )
-                {
-                    KillPicture( MAC_WXHMETAFILE( data->m_hPict ) ) ;
-                    data->m_hPict = NULL ;
-                }
-            }
-            break ;
-        case kMacBitmapTypeGrafWorld :
-            {
-                if ( data->m_hBitmap )
-                {
-                    wxMacDestroyGWorld( MAC_WXHBITMAP(data->m_hBitmap) ) ;
-                    data->m_hBitmap = NULL ;
-                }
-            }
-            break ;
-        case kMacBitmapTypeIcon :
-            if ( data->m_hIcon )
-            {
-                DisposeCIcon( MAC_WXHICON(data->m_hIcon) ) ;
-                data->m_hIcon = NULL ;
-            }
-
-        default :
-            // unkown type ?
-            break ;
+        int width = GetWidth() ;
+        int height = GetHeight() ;
+        m_maskBytesPerRow = ( width + 3 ) & 0xFFFFFFC ;
+        size_t size = height * m_maskBytesPerRow ;
+        unsigned char * data = (unsigned char * ) m_maskMemBuf.GetWriteBuf( size ) ;
+        memset( data , 0 , size ) ;
+        wxASSERT( m_hMaskBitmap == NULL ) ;
+        Rect rect = { 0 , 0 , height , width } ;
+        verify_noerr( NewGWorldFromPtr( (GWorldPtr*) &m_hMaskBitmap , k8IndexedGrayPixelFormat , &rect , NULL , NULL , 0 ,
+            (char*) data , m_maskBytesPerRow ) ) ; 
+        wxASSERT_MSG( m_hMaskBitmap , wxT("Unable to create GWorld context for alpha mask") ) ;
+        m_maskMemBuf.UngetWriteBuf(size) ;
+        UpdateAlphaMask() ;
     }
-
-    if (data->m_bitmapMask)
+    else
     {
-        delete data->m_bitmapMask;
-        data->m_bitmapMask = NULL;
+        DisposeGWorld( m_hMaskBitmap ) ;
+        m_hMaskBitmap = NULL ;
+        m_maskBytesPerRow = 0 ;
+    }
+#endif
+}
+
+void *wxBitmapRefData::GetRawAccess() const
+{
+    wxCHECK_MSG( Ok(), NULL , wxT("invalid bitmap") ) ;
+    return m_memBuf.GetData() ;
+}
+
+void *wxBitmapRefData::BeginRawAccess() 
+{
+    wxCHECK_MSG( Ok(), NULL, wxT("invalid bitmap") ) ;
+    wxASSERT( m_rawAccessCount == 0 ) ;
+    ++m_rawAccessCount ;
+#if wxMAC_USE_CORE_GRAPHICS
+     // we must destroy an existing cached image, as
+    // the bitmap data may change now
+    if ( m_cgImageRef )
+    {
+        CGImageRelease( m_cgImageRef ) ;
+        m_cgImageRef = NULL ;
+    }
+#endif
+    return m_memBuf.GetData() ;
+}
+
+void wxBitmapRefData::EndRawAccess()
+{
+    wxCHECK_RET( Ok() , wxT("invalid bitmap") ) ;
+    wxASSERT( m_rawAccessCount == 1 ) ;
+    --m_rawAccessCount ;
+#if !wxMAC_USE_CORE_GRAPHICS
+    UpdateAlphaMask() ;
+#endif
+}
+
+
+#if wxMAC_USE_CORE_GRAPHICS
+static void FreeImageMemoryBufferInstance(void *info, const void *data, size_t size)
+{
+    delete ((wxMemoryBuffer*)info) ;
+}
+
+CGImageRef wxBitmapRefData::CGImageCreate() const
+{
+    wxASSERT( m_ok ) ;
+    wxASSERT( m_rawAccessCount >= 0 ) ;
+    CGImageRef image ;
+    if ( m_rawAccessCount > 0 || m_cgImageRef == NULL )
+    {
+        size_t imageSize = m_width * m_height * 4 ;
+        void * dataBuffer = m_memBuf.GetData() ;
+        int w = m_width ;
+        int h = m_height ;
+        CGImageAlphaInfo alphaInfo = kCGImageAlphaNoneSkipFirst ;
+        wxMemoryBuffer* membuf = NULL ;
+       
+        if ( m_bitmapMask )
+        {
+            membuf = new wxMemoryBuffer( imageSize ) ;
+            memcpy( membuf->GetData() , dataBuffer , imageSize ) ;
+            unsigned char *sourcemaskstart = (unsigned char *) m_bitmapMask->GetRawAccess() ;
+            int maskrowbytes = m_bitmapMask->GetBytesPerRow() ;
+            unsigned char *destalpha = (unsigned char *) membuf->GetData() ;
+            alphaInfo = kCGImageAlphaFirst ;
+            for ( int y = 0 ; y < h ; ++y , sourcemaskstart += maskrowbytes)
+            {
+                unsigned char *sourcemask = sourcemaskstart ;
+                for( int x = 0 ; x < w ; ++x , sourcemask++ , destalpha += 4 )
+                {
+                    *destalpha = *sourcemask ;
+                }
+            }
+        }
+        else if ( m_hasAlpha )
+        {
+#if wxMAC_USE_PREMULTIPLIED_ALPHA
+            alphaInfo = kCGImageAlphaPremultipliedFirst ;
+#else
+            alphaInfo = kCGImageAlphaFirst ;
+#endif
+            membuf = new wxMemoryBuffer( m_memBuf ) ;
+        }
+        else
+        {
+            membuf = new wxMemoryBuffer( m_memBuf ) ;
+        }
+        CGColorSpaceRef colorSpace = wxMacGetGenericRGBColorSpace();
+    	CGDataProviderRef dataProvider = 
+    	    CGDataProviderCreateWithData( membuf , (const void *)membuf->GetData() , imageSize, FreeImageMemoryBufferInstance );
+        image = 
+    	    ::CGImageCreate( w, h, 8 , 32 , 4 * m_width , colorSpace, alphaInfo , 
+    			dataProvider, NULL , false , kCGRenderingIntentDefault );
+      	CGDataProviderRelease( dataProvider);
+    }
+    else
+    {
+        image = m_cgImageRef ;
+        CGImageRetain( image ) ;
+    }
+    if ( m_rawAccessCount == 0 && m_cgImageRef == NULL)
+    {
+        // we keep it for later use
+        m_cgImageRef = image ;
+        CGImageRetain( image ) ;
+    } 
+    return image ;
+}
+#endif
+
+#if !wxMAC_USE_CORE_GRAPHICS
+GWorldPtr wxBitmapRefData::GetHBITMAP(GWorldPtr* mask) const
+{
+    wxCHECK_MSG( Ok(), NULL, wxT("invalid bitmap") );
+    if ( mask )
+    {
+        *mask = NULL ;
+        if ( m_bitmapMask )
+            *mask = (GWorldPtr) m_bitmapMask->GetHBITMAP() ;        
+        else if ( m_hasAlpha )
+        {
+            if ( m_rawAccessCount > 0 )
+                UpdateAlphaMask() ;
+            *mask = m_hMaskBitmap ;
+        }
+    }
+    return m_hBitmap ;
+}
+
+void wxBitmapRefData::UpdateAlphaMask() const 
+{
+    if ( m_hasAlpha )
+    {
+        unsigned char *sourcemask = (unsigned char *) GetRawAccess() ;
+        unsigned char *destalphabase = (unsigned char *) m_maskMemBuf.GetData() ;
+     
+        int h = GetHeight() ;
+        int w = GetWidth() ;
+     
+        for ( int y = 0 ; y < h ; ++y , destalphabase += m_maskBytesPerRow )
+        {
+            unsigned char* destalpha = destalphabase ;
+            for( int x = 0 ; x < w ; ++x , sourcemask += 4, ++destalpha )
+            {
+                *destalpha = *sourcemask ;
+            }
+        }
+    }
+}
+
+#endif
+
+void wxBitmapRefData::Free()
+{
+    wxASSERT_MSG( m_rawAccessCount == 0 , wxT("Bitmap still selected when destroyed") ) ;
+
+#if wxMAC_USE_CORE_GRAPHICS
+    if ( m_cgImageRef )
+    {
+        CGImageRelease( m_cgImageRef ) ;
+        m_cgImageRef = NULL ;
+    }
+#else
+    if ( m_hBitmap )
+    {
+        DisposeGWorld( MAC_WXHBITMAP(m_hBitmap) ) ;
+        m_hBitmap = NULL ;
+    }
+    if ( m_hMaskBitmap )
+    {
+        DisposeGWorld( MAC_WXHBITMAP(m_hMaskBitmap) ) ;
+        m_hMaskBitmap = NULL ;
+    }
+#endif
+
+    if (m_bitmapMask)
+    {
+        delete m_bitmapMask;
+        m_bitmapMask = NULL;
     }
 }
 
 wxBitmapRefData::~wxBitmapRefData()
 {
-  DisposeBitmapRefData( this ) ;
+    Free() ;
 }
 
 bool wxBitmap::CopyFromIcon(const wxIcon& icon)
 {
-    Ref(icon) ;
+    int w = icon.GetWidth() ;
+    int h = icon.GetHeight() ;
+    Create( icon.GetWidth() , icon.GetHeight() ) ;
+
+    if ( w == h && w == 32 )
+    {
+        IconFamilyHandle iconFamily = NULL ;
+        Handle imagehandle = NewHandle(0) ;
+        Handle maskhandle = NewHandle(0) ;
+        OSStatus err = ( IconRefToIconFamily( MAC_WXHICON(icon.GetHICON()) , kSelectorLarge32Bit | kSelectorLarge8BitMask , &iconFamily ) ) ;
+        err =( GetIconFamilyData( iconFamily , kLarge32BitData , imagehandle ) ) ;
+        err =( GetIconFamilyData( iconFamily , kLarge8BitMask , maskhandle ) ) ;
+        wxASSERT( GetHandleSize( imagehandle ) == w * 4 * h ) ;
+        wxASSERT( GetHandleSize( maskhandle ) == w * h ) ;
+        UseAlpha() ;
+        unsigned char *source = (unsigned char *) *imagehandle ;
+        unsigned char *sourcemask = (unsigned char *) *maskhandle ;
+        
+        unsigned char* destination = (unsigned char*) BeginRawAccess() ;
+        for ( int y = 0 ; y < h ; ++y )
+        {
+            for ( int x = 0 ; x < w ; ++x )
+            {
+                *destination++ = *sourcemask++ ;
+                source++ ;
+                *destination++ = *source++ ;
+                *destination++ = *source++ ;
+                *destination++ = *source++ ;
+            }
+        }
+        EndRawAccess() ;
+        DisposeHandle( imagehandle ) ;
+        DisposeHandle( maskhandle ) ;
+    }
+    else
+    {            
+        wxMemoryDC dc ;
+        dc.SelectObject( *this ) ;
+        dc.DrawIcon( icon , 0 , 0 ) ;
+        dc.SelectObject( wxNullBitmap ) ;
+    }
     return true;
 }
 
 wxBitmap::wxBitmap()
 {
-    m_refData = NULL;
 }
 
 wxBitmap::~wxBitmap()
@@ -436,38 +535,16 @@ wxBitmap::~wxBitmap()
 
 wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits)
 {
-    m_refData = new wxBitmapRefData;
+    m_refData = new wxBitmapRefData( the_width , the_height , no_bits ) ;
 
-    M_BITMAPDATA->m_width = the_width ;
-    M_BITMAPDATA->m_height = the_height ;
-    M_BITMAPDATA->m_depth = no_bits ;
-    M_BITMAPDATA->m_numColors = 0;
     if ( no_bits == 1 )
     {
-        M_BITMAPDATA->m_bitmapType = kMacBitmapTypeGrafWorld ;
-        M_BITMAPDATA->m_hBitmap = wxMacCreateGWorld( the_width , the_height , no_bits ) ;
-        M_BITMAPDATA->m_ok = (MAC_WXHBITMAP(M_BITMAPDATA->m_hBitmap) != NULL ) ;
-
-        CGrafPtr    origPort ;
-        GDHandle    origDevice ;
-
-        GetGWorld( &origPort , &origDevice ) ;
-        SetGWorld( MAC_WXHBITMAP(M_BITMAPDATA->m_hBitmap) , NULL ) ;
-        LockPixels( GetGWorldPixMap( MAC_WXHBITMAP(M_BITMAPDATA->m_hBitmap) ) ) ;
-
-        // bits is a char array
-
-        unsigned char* linestart = (unsigned char*) bits ;
         int linesize = ( the_width / (sizeof(unsigned char) * 8)) ;
         if ( the_width % (sizeof(unsigned char) * 8) ) {
             linesize += sizeof(unsigned char);
         }
-
-        RGBColor colors[2] = {
-            { 0xFFFF , 0xFFFF , 0xFFFF } ,
-            { 0, 0 , 0 }
-        } ;
-
+        unsigned char* linestart = (unsigned char*) bits ;
+        unsigned char* destination = (unsigned char*) BeginRawAccess() ;
         for ( int y = 0 ; y < the_height ; ++y , linestart += linesize )
         {
             for ( int x = 0 ; x < the_width ; ++x )
@@ -477,17 +554,21 @@ wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits
                 int mask = 1 << bit ;
                 if ( linestart[index] & mask )
                 {
-                    SetCPixel( x , y , &colors[1] ) ;
+                    *destination++ = 0xFF ;
+                    *destination++ = 0 ;
+                    *destination++ = 0 ;
+                    *destination++ = 0 ;
                 }
                 else
                 {
-                    SetCPixel( x , y , &colors[0] ) ;
+                    *destination++ = 0xFF ;
+                    *destination++ = 0xFF ;
+                    *destination++ = 0xFF ;
+                    *destination++ = 0xFF ;
                 }
             }
         }
-        UnlockPixels( GetGWorldPixMap( MAC_WXHBITMAP(M_BITMAPDATA->m_hBitmap) ) ) ;
-
-        SetGWorld( origPort , origDevice ) ;
+        EndRawAccess() ;
     }
     else
     {
@@ -510,16 +591,6 @@ wxBitmap::wxBitmap(const wxString& filename, wxBitmapType type)
     LoadFile(filename, type);
 }
 
-bool wxBitmap::CreateFromXpm(const char **bits)
-{
-    wxCHECK_MSG( bits != NULL, FALSE, wxT("invalid bitmap data") )
-    wxXPMDecoder decoder;
-    wxImage img = decoder.ReadData(bits);
-    wxCHECK_MSG( img.Ok(), FALSE, wxT("invalid bitmap data") )
-    *this = wxBitmap(img);
-    return TRUE;
-}
-
 wxBitmap::wxBitmap(const char **bits)
 {
     (void) CreateFromXpm(bits);
@@ -530,153 +601,108 @@ wxBitmap::wxBitmap(char **bits)
     (void) CreateFromXpm((const char **)bits);
 }
 
+void* wxBitmap::GetRawAccess() const
+{
+    wxCHECK_MSG( Ok() , NULL , wxT("invalid bitmap") ) ;
+    return M_BITMAPDATA->GetRawAccess() ;
+}
+
+void* wxBitmap::BeginRawAccess() 
+{
+    wxCHECK_MSG( Ok() , NULL , wxT("invalid bitmap") ) ;
+    return M_BITMAPDATA->BeginRawAccess() ;
+}
+
+void wxBitmap::EndRawAccess()
+{
+    wxCHECK_RET( Ok() , wxT("invalid bitmap") ) ;
+    M_BITMAPDATA->EndRawAccess() ;
+}
+
+bool wxBitmap::CreateFromXpm(const char **bits)
+{
+    wxCHECK_MSG( bits != NULL, FALSE, wxT("invalid bitmap data") )
+    wxXPMDecoder decoder;
+    wxImage img = decoder.ReadData(bits);
+    wxCHECK_MSG( img.Ok(), FALSE, wxT("invalid bitmap data") )
+    *this = wxBitmap(img);
+    return TRUE;
+}
+
+#if wxMAC_USE_CORE_GRAPHICS
+WXCGIMAGEREF wxBitmap::CGImageCreate() const
+{
+    wxCHECK_MSG( Ok(), NULL , wxT("invalid bitmap") ) ;
+    return M_BITMAPDATA->CGImageCreate() ;
+}
+#endif
+
 wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
 {
-   wxCHECK_MSG( Ok() &&
+    wxCHECK_MSG( Ok() &&
                 (rect.x >= 0) && (rect.y >= 0) &&
                 (rect.x+rect.width <= GetWidth()) &&
                 (rect.y+rect.height <= GetHeight()),
                 wxNullBitmap, wxT("invalid bitmap or bitmap region") );
 
 
-   wxBitmap ret( rect.width, rect.height, GetDepth() );
-   wxASSERT_MSG( ret.Ok(), wxT("GetSubBitmap error") );
+    wxBitmap ret( rect.width, rect.height, GetDepth() );
+    wxASSERT_MSG( ret.Ok(), wxT("GetSubBitmap error") );
 
-   GWorldPtr origPort;
-   GDHandle  origDevice;
 
-   GetGWorld( &origPort, &origDevice );
+    int sourcewidth = GetWidth() ;
+    int destwidth = rect.width ;
+    int destheight = rect.height ;
+    {
+        unsigned char * sourcedata = (unsigned char*) GetRawAccess() ;
+        unsigned char * destdata = (unsigned char*) ret.BeginRawAccess() ;
+        int sourcelinesize = sourcewidth * 4 ;
+        int destlinesize = destwidth * 4 ;
+        unsigned char *source = sourcedata + rect.x * 4 + rect.y * sourcelinesize ;
+        unsigned char *dest = destdata ;
+        for(int yy = 0; yy < destheight; ++yy, source += sourcelinesize , dest += destlinesize)
+        {
+            memcpy( dest , source , destlinesize ) ;
+        }
+    }
+    ret.EndRawAccess() ;
+  
+    if ( M_BITMAPDATA->m_bitmapMask )
+    {
+        wxMemoryBuffer maskbuf ;
+        int rowBytes = ( destwidth + 3 ) & 0xFFFFFFC ;
+        size_t maskbufsize = rowBytes * destheight ;
+        unsigned char * destdata = (unsigned char * ) maskbuf.GetWriteBuf( maskbufsize ) ;
 
-   // Update the subbitmaps reference data
-   wxBitmapRefData *ref = (wxBitmapRefData *)ret.GetRefData();
+        int sourcelinesize = M_BITMAPDATA->m_bitmapMask->GetBytesPerRow()  ;
+        int destlinesize = rowBytes ;
+        unsigned char *source = (unsigned char *) M_BITMAPDATA->m_bitmapMask->GetRawAccess() ;
+        source += rect.x + rect.y * sourcelinesize ;
+        unsigned char *dest = destdata ;
 
-   ref->m_numColors     = M_BITMAPDATA->m_numColors;
-#if wxUSE_PALETTE
-    ref->m_bitmapPalette = M_BITMAPDATA->m_bitmapPalette;
-#endif // wxUSE_PALETTE
-   ref->m_bitmapType    = M_BITMAPDATA->m_bitmapType;
+        for(int yy = 0; yy < destheight; ++yy, source += sourcelinesize , dest += destlinesize)
+        {
+            memcpy( dest , source , destlinesize ) ;
+        }
+        maskbuf.UngetWriteBuf( maskbufsize ) ;
+        ret.SetMask( new wxMask( maskbuf , destwidth , destheight , rowBytes ) ) ;
+    }
+    else if ( HasAlpha() )
+        ret.UseAlpha() ;
 
-   // Copy sub region of this bitmap
-   if(M_BITMAPDATA->m_bitmapType == kMacBitmapTypePict)
-   {
-       printf("GetSubBitmap:  Copy a region of a Pict structure - TODO\n");
-   }
-   else if(M_BITMAPDATA->m_bitmapType == kMacBitmapTypeGrafWorld)
-   {
-       // Copy mask
-       if(GetMask())
-       {
-           GWorldPtr submask, mask;
-           RGBColor  color;
-
-           mask = (GWorldPtr) GetMask()->GetMaskBitmap();
-           submask = wxMacCreateGWorld(rect.width, rect.height, GetMask()->GetDepth() );
-           LockPixels(GetGWorldPixMap(mask));
-           LockPixels(GetGWorldPixMap(submask));
-
-           for(int yy = 0; yy < rect.height; yy++)
-           {
-               for(int xx = 0; xx < rect.width; xx++)
-               {
-                   SetGWorld(mask, NULL);
-                   GetCPixel(rect.x + xx, rect.y + yy, &color);
-                   SetGWorld(submask, NULL);
-                   SetCPixel(xx,yy, &color);
-               }
-           }
-           UnlockPixels(GetGWorldPixMap(mask));
-           UnlockPixels(GetGWorldPixMap(submask));
-           ref->m_bitmapMask = new wxMask;
-           ref->m_bitmapMask->SetMaskBitmap(submask);
-       }
-
-       // Copy bitmap
-       if(GetHBITMAP())
-       {
-           GWorldPtr subbitmap, bitmap;
-           RGBColor  color;
-
-           bitmap = (GWorldPtr) GetHBITMAP();
-           subbitmap = (GWorldPtr) ref->m_hBitmap ;
-           LockPixels(GetGWorldPixMap(bitmap));
-           LockPixels(GetGWorldPixMap(subbitmap));
-
-           for(int yy = 0; yy < rect.height; yy++)
-           {
-               for(int xx = 0; xx < rect.width; xx++)
-               {
-                   SetGWorld(bitmap, NULL);
-                   GetCPixel(rect.x + xx, rect.y + yy, &color);
-                   SetGWorld(subbitmap, NULL);
-                   SetCPixel(xx, yy, &color);
-               }
-           }
-           UnlockPixels(GetGWorldPixMap(bitmap));
-           UnlockPixels(GetGWorldPixMap(subbitmap));
-       }
-   }
-   SetGWorld( origPort, origDevice );
-
-   return ret;
+    return ret;
 }
 
 bool wxBitmap::Create(int w, int h, int d)
 {
     UnRef();
 
-    m_refData = new wxBitmapRefData;
+    if ( d < 0 )
+        d = wxDisplayDepth() ;
 
-    M_BITMAPDATA->m_width = w;
-    M_BITMAPDATA->m_height = h;
-    M_BITMAPDATA->m_depth = d;
+    m_refData = new wxBitmapRefData( w , h , d );
 
-    M_BITMAPDATA->m_bitmapType = kMacBitmapTypeGrafWorld ;
-    M_BITMAPDATA->m_hBitmap = wxMacCreateGWorld( w , h , d ) ;
-    M_BITMAPDATA->m_ok = ( M_BITMAPDATA->m_hBitmap != NULL ) ;
-    return M_BITMAPDATA->m_ok;
-}
-
-int wxBitmap::GetBitmapType() const
-{
-   wxCHECK_MSG( Ok(), kMacBitmapTypeUnknownType, wxT("invalid bitmap") );
-
-   return M_BITMAPDATA->m_bitmapType;
-}
-
-void wxBitmap::SetHBITMAP(WXHBITMAP bmp)
-{
-    if (!M_BITMAPDATA)
-        m_refData = new wxBitmapRefData;
-    else
-        DisposeBitmapRefData( M_BITMAPDATA ) ;
-
-    M_BITMAPDATA->m_bitmapType = kMacBitmapTypeGrafWorld ;
-    M_BITMAPDATA->m_hBitmap = bmp ;
-    M_BITMAPDATA->m_ok = ( M_BITMAPDATA->m_hBitmap != NULL ) ;
-}
-
-void wxBitmap::SetHICON(WXHICON ico)
-{
-    if (!M_BITMAPDATA)
-        m_refData = new wxBitmapRefData;
-    else
-        DisposeBitmapRefData( M_BITMAPDATA ) ;
-
-    M_BITMAPDATA->m_bitmapType = kMacBitmapTypeIcon ;
-    M_BITMAPDATA->m_hIcon = ico ;
-    M_BITMAPDATA->m_ok = ( M_BITMAPDATA->m_hIcon != NULL ) ;
-}
-
-void wxBitmap::SetPict(WXHMETAFILE pict)
-{
-    if (!M_BITMAPDATA)
-        m_refData = new wxBitmapRefData;
-    else
-        DisposeBitmapRefData( M_BITMAPDATA ) ;
-
-    M_BITMAPDATA->m_bitmapType = kMacBitmapTypePict ;
-    M_BITMAPDATA->m_hPict = pict ;
-    M_BITMAPDATA->m_ok = ( M_BITMAPDATA->m_hPict != NULL ) ;
+    return M_BITMAPDATA->Ok() ;
 }
 
 bool wxBitmap::LoadFile(const wxString& filename, wxBitmapType type)
@@ -724,101 +750,64 @@ wxBitmap::wxBitmap(const wxImage& image, int depth)
 {
     wxCHECK_RET( image.Ok(), wxT("invalid image") )
 
-    m_refData = new wxBitmapRefData();
-
     // width and height of the device-dependent bitmap
     int width = image.GetWidth();
     int height = image.GetHeight();
 
+    m_refData = new wxBitmapRefData( width , height , depth ) ;;
+
     // Create picture
 
-    Create( width , height , 32 ) ;
+    bool hasAlpha = false ;
+    
+    if ( image.HasMask() )
+    {
+        // takes precedence, don't mix with alpha info
+    }
+    else
+    {
+        hasAlpha = image.HasAlpha() ;
+    }
+    
+    if ( hasAlpha )
+        UseAlpha() ;
+        
+    unsigned char* destination = (unsigned char*) BeginRawAccess() ;
 
-    CGrafPtr origPort ;
-    GDHandle origDevice ;
-
-    PixMapHandle pixMap = GetGWorldPixMap((GWorldPtr)GetHBITMAP()) ;
-    LockPixels( pixMap );
-
-    GetGWorld( &origPort , &origDevice ) ;
-    SetGWorld( (GWorldPtr) GetHBITMAP() , NULL ) ;
-
-    // Render image
     register unsigned char* data = image.GetData();
-    char* destinationBase = GetPixBaseAddr( pixMap );
-    register unsigned char* destination = (unsigned char*) destinationBase ;
+    const unsigned char *alpha = hasAlpha ? image.GetAlpha() : NULL ;
     for (int y = 0; y < height; y++)
     {
         for (int x = 0; x < width; x++)
         {
-            *destination++ = 0 ;
-            *destination++ = *data++ ;
-            *destination++ = *data++ ;
-            *destination++ = *data++ ;
+            if ( hasAlpha )
+            {
+                const unsigned char a = *alpha++;
+                *destination++ = a ;
+#if wxMAC_USE_PREMULTIPLIED_ALPHA
+                *destination++ = ((*data++) * a + 127 ) / 255 ;
+                *destination++ = ((*data++) * a + 127 ) / 255 ;
+                *destination++ = ((*data++) * a + 127 ) / 255 ;
+#else
+                *destination++ = *data++ ;
+                *destination++ = *data++ ;
+                *destination++ = *data++ ;
+#endif
+            }
+            else
+            {
+                *destination++ = 0xFF ;
+                *destination++ = *data++ ;
+                *destination++ = *data++ ;
+                *destination++ = *data++ ;
+            }
         }
-        destinationBase += ((**pixMap).rowBytes & 0x7fff);
-        destination = (unsigned char*) destinationBase ;
     }
-    if ( image.HasAlpha() )
+    EndRawAccess() ;
+    if ( image.HasMask() )
     {
-      unsigned char *alpha = image.GetAlpha();
-
-      wxColour maskcolor(image.GetMaskRed(), image.GetMaskGreen(), image.GetMaskBlue());
-      RGBColor color ;
-      wxBitmap maskBitmap ;
-
-      maskBitmap.Create( width, height, 24);
-      LockPixels( GetGWorldPixMap( (GWorldPtr) maskBitmap.GetHBITMAP()) );
-      SetGWorld( (GWorldPtr) maskBitmap.GetHBITMAP(), NULL);
-
-      for (int y = 0; y < height; y++)
-      {
-          for (int x = 0; x < width; x++)
-          {
-              memset( &color , 255 - *alpha , sizeof( color ) );
-              SetCPixel(x,y, &color);
-
-              alpha += 1 ;
-          }
-      }  // for height
-      SetGWorld( (GWorldPtr) GetHBITMAP(), NULL);
-      SetMask(new wxMask( maskBitmap ));
-      UnlockPixels( GetGWorldPixMap( (GWorldPtr) maskBitmap.GetHBITMAP()) );
+        SetMask( new wxMask( *this , wxColour( image.GetMaskRed() , image.GetMaskGreen() , image.GetMaskBlue() ) ) ) ;
     }
-    else if ( image.HasMask() )
-    {
-      data = image.GetData();
-
-      wxColour maskcolor(image.GetMaskRed(), image.GetMaskGreen(), image.GetMaskBlue());
-      RGBColor white = { 0xffff, 0xffff, 0xffff };
-      RGBColor black = { 0     , 0     , 0      };
-      wxBitmap maskBitmap ;
-
-      maskBitmap.Create( width, height, 1);
-      LockPixels( GetGWorldPixMap( (GWorldPtr) maskBitmap.GetHBITMAP()) );
-      SetGWorld( (GWorldPtr) maskBitmap.GetHBITMAP(), NULL);
-
-      for (int y = 0; y < height; y++)
-      {
-          for (int x = 0; x < width; x++)
-          {
-              if ( data[0] == image.GetMaskRed() && data[1] == image.GetMaskGreen() && data[2] == image.GetMaskBlue() )
-              {
-                SetCPixel(x,y, &white);
-              }
-              else {
-                SetCPixel(x,y, &black);
-              }
-              data += 3 ;
-          }
-      }  // for height
-      SetGWorld( (GWorldPtr) GetHBITMAP(), NULL);
-      SetMask(new wxMask( maskBitmap ));
-      UnlockPixels( GetGWorldPixMap( (GWorldPtr) maskBitmap.GetHBITMAP()) );
-    }
-
-    UnlockPixels( GetGWorldPixMap( (GWorldPtr) GetHBITMAP()) );
-    SetGWorld( origPort, origDevice );
 }
 
 wxImage wxBitmap::ConvertToImage() const
@@ -833,101 +822,75 @@ wxImage wxBitmap::ConvertToImage() const
     image.Create( width, height );
 
     unsigned char *data = image.GetData();
-
     wxCHECK_MSG( data, wxNullImage, wxT("Could not allocate data for image") );
 
-    GWorldPtr origPort;
-    GDHandle  origDevice;
-    RgnHandle maskRgn = NULL ;
-    GWorldPtr tempPort = NULL ;
-    int      index;
-    RGBColor color;
-    // background color set to RGB(16,16,16) in consistent with wxGTK
-    unsigned char mask_r=16, mask_g=16, mask_b=16;
-    SInt16   r,g,b;
-    wxMask  *mask = GetMask();
+    unsigned char* source = (unsigned char*) GetRawAccess() ;
 
-    GetGWorld( &origPort, &origDevice );
-    if ( GetBitmapType() != kMacBitmapTypeGrafWorld )
+    bool hasAlpha = false ;
+    bool hasMask = false ;
+    unsigned char *alpha = NULL ;
+    unsigned char *mask = NULL ;
+    if ( HasAlpha() )
     {
-        tempPort = wxMacCreateGWorld( width , height , -1) ;
+        hasAlpha = true ;
     }
-    else
+
+    if ( GetMask() )
     {
-        tempPort =  (GWorldPtr) GetHBITMAP() ;
+        hasMask = true ;
+        mask = (unsigned char*) GetMask()->GetRawAccess() ;
     }
-    LockPixels(GetGWorldPixMap(tempPort));
-    SetGWorld( tempPort, NULL);
-    if ( GetBitmapType() == kMacBitmapTypePict || GetBitmapType() == kMacBitmapTypeIcon )
+
+    if ( hasAlpha )
     {
-        Rect bitmaprect = { 0 , 0 , height, width };
-        if ( GetBitmapType() == kMacBitmapTypeIcon )
-        {
-            ::PlotCIconHandle( &bitmaprect , atNone , ttNone , MAC_WXHICON(GetHICON()) ) ;
-            maskRgn = NewRgn() ;
-            BitMapToRegion( maskRgn , &(**(MAC_WXHICON(GetHICON()))).iconMask ) ;
-        }
-         else
-             ::DrawPicture( (PicHandle) GetPict(), &bitmaprect ) ;
+        image.SetAlpha() ;
+        alpha = image.GetAlpha() ;
     }
-    // Copy data into image
-    index = 0;
+    int index = 0;
+    
+    // The following masking algorithm is the same as well in msw/gtk:
+    // the colour used as transparent one in wxImage and the one it is
+    // replaced with when it really occurs in the bitmap
+    static const int MASK_RED = 1;
+    static const int MASK_GREEN = 2;
+    static const int MASK_BLUE = 3;
+    static const int MASK_BLUE_REPLACEMENT = 2;
+
     for (int yy = 0; yy < height; yy++)
     {
         for (int xx = 0; xx < width; xx++)
         {
-            GetCPixel(xx,yy, &color);
-            r = ((color.red ) >> 8);
-            g = ((color.green ) >> 8);
-            b = ((color.blue ) >> 8);
-            data[index    ] = r;
-            data[index + 1] = g;
-            data[index + 2] = b;
-            if ( maskRgn )
+            long color = *((long*) source) ;
+            unsigned char a = ((color&0xFF000000) >> 24) ;
+            unsigned char r = ((color&0x00FF0000) >> 16) ;
+            unsigned char g = ((color&0x0000FF00) >> 8) ;
+            unsigned char b = (color&0x000000FF);
+            if ( hasMask )
             {
-                Point pt ;
-                pt.h = xx ;
-                pt.v = yy ;
-                if ( !PtInRgn( pt , maskRgn ) )
+                if ( *mask++ == 0 )
                 {
-                    data[index    ] = mask_r;
-                    data[index + 1] = mask_g;
-                    data[index + 2] = mask_b;
+                    if ( r == MASK_RED && g == MASK_GREEN && b == MASK_BLUE )
+                        b = MASK_BLUE_REPLACEMENT ;
+                }
+                else
+                {
+                    r = MASK_RED ;
+                    g = MASK_GREEN ;
+                    b = MASK_BLUE ;
                 }
             }
-            else
-            {
-                if (mask)
-                {
-                    if (mask->PointMasked(xx,yy))
-                    {
-                        data[index    ] = mask_r;
-                        data[index + 1] = mask_g;
-                        data[index + 2] = mask_b;
-                    }
-                }
-            }
+            else if ( hasAlpha )
+                *alpha++ = a ;
+
+            data[index    ] = r ;
+            data[index + 1] = g ;
+            data[index + 2] = b ;
             index += 3;
+            source += 4 ;
         }
     }
-    if (mask || maskRgn )
-    {
-        image.SetMaskColour( mask_r, mask_g, mask_b );
-        image.SetMask( true );
-    }
-
-    // Free resources
-    UnlockPixels(GetGWorldPixMap( tempPort ));
-    SetGWorld(origPort, origDevice);
-    if ( GetBitmapType() != kMacBitmapTypeGrafWorld )
-    {
-        wxMacDestroyGWorld( tempPort ) ;
-    }
-    if ( maskRgn )
-    {
-        DisposeRgn( maskRgn ) ;
-    }
-
+    if ( hasMask )
+        image.SetMaskColour( MASK_RED, MASK_GREEN, MASK_BLUE );
     return image;
 }
 
@@ -954,35 +917,33 @@ bool wxBitmap::SaveFile(const wxString& filename, wxBitmapType type,
 
 bool wxBitmap::Ok() const
 {
-   return (M_BITMAPDATA && M_BITMAPDATA->m_ok);
+   return (M_BITMAPDATA && M_BITMAPDATA->Ok());
 }
 
 int wxBitmap::GetHeight() const
 {
    wxCHECK_MSG( Ok(), -1, wxT("invalid bitmap") );
 
-   return M_BITMAPDATA->m_height;
+   return M_BITMAPDATA->GetHeight();
 }
 
 int wxBitmap::GetWidth() const
 {
    wxCHECK_MSG( Ok(), -1, wxT("invalid bitmap") );
 
-   return M_BITMAPDATA->m_width;
+   return M_BITMAPDATA->GetWidth() ;
 }
 
 int wxBitmap::GetDepth() const
 {
    wxCHECK_MSG( Ok(), -1, wxT("invalid bitmap") );
 
-   return M_BITMAPDATA->m_depth;
+   return M_BITMAPDATA->GetDepth();
 }
 
 int wxBitmap::GetQuality() const
 {
-   wxCHECK_MSG( Ok(), -1, wxT("invalid bitmap") );
-
-   return M_BITMAPDATA->m_quality;
+    return 0;
 }
 
 wxMask *wxBitmap::GetMask() const
@@ -992,12 +953,19 @@ wxMask *wxBitmap::GetMask() const
    return M_BITMAPDATA->m_bitmapMask;
 }
 
+bool wxBitmap::HasAlpha() const
+{
+   wxCHECK_MSG( Ok(), false , wxT("invalid bitmap") );
+
+   return M_BITMAPDATA->HasAlpha() ;
+}
+
 void wxBitmap::SetWidth(int w)
 {
     if (!M_BITMAPDATA)
         m_refData = new wxBitmapRefData;
 
-    M_BITMAPDATA->m_width = w;
+    M_BITMAPDATA->SetWidth(w);
 }
 
 void wxBitmap::SetHeight(int h)
@@ -1005,7 +973,7 @@ void wxBitmap::SetHeight(int h)
     if (!M_BITMAPDATA)
         m_refData = new wxBitmapRefData;
 
-    M_BITMAPDATA->m_height = h;
+    M_BITMAPDATA->SetHeight(h);
 }
 
 void wxBitmap::SetDepth(int d)
@@ -1013,15 +981,11 @@ void wxBitmap::SetDepth(int d)
     if (!M_BITMAPDATA)
         m_refData = new wxBitmapRefData;
 
-    M_BITMAPDATA->m_depth = d;
+    M_BITMAPDATA->SetDepth(d);
 }
 
-void wxBitmap::SetQuality(int q)
+void wxBitmap::SetQuality(int WXUNUSED(quality))
 {
-    if (!M_BITMAPDATA)
-        m_refData = new wxBitmapRefData;
-
-    M_BITMAPDATA->m_quality = q;
 }
 
 void wxBitmap::SetOk(bool isOk)
@@ -1029,7 +993,7 @@ void wxBitmap::SetOk(bool isOk)
     if (!M_BITMAPDATA)
         m_refData = new wxBitmapRefData;
 
-    M_BITMAPDATA->m_ok = isOk;
+    M_BITMAPDATA->SetOk(isOk);
 }
 
 #if wxUSE_PALETTE
@@ -1060,202 +1024,167 @@ void wxBitmap::SetMask(wxMask *mask)
     M_BITMAPDATA->m_bitmapMask = mask ;
 }
 
-WXHBITMAP wxBitmap::GetHBITMAP() const
+#if !wxMAC_USE_CORE_GRAPHICS
+WXHBITMAP wxBitmap::GetHBITMAP(WXHBITMAP* mask) const
 {
-   wxCHECK_MSG( Ok(), NULL, wxT("invalid bitmap") );
-
-   return MAC_WXHBITMAP(M_BITMAPDATA->m_hBitmap);
+    return WXHBITMAP(M_BITMAPDATA->GetHBITMAP((GWorldPtr*)mask));
 }
+#endif
 
-WXHMETAFILE wxBitmap::GetPict( bool *created ) const
-{
-    wxCHECK_MSG( Ok(), NULL, wxT("invalid bitmap") );
-
-    PicHandle picture = NULL ;       // This is the returned picture
-    if ( created )
-        (*created) = false ;
-    // If bitmap already in Pict format return pointer
-    if(M_BITMAPDATA->m_bitmapType == kMacBitmapTypePict) {
-       return M_BITMAPDATA->m_hPict;
-    }
-    else if(M_BITMAPDATA->m_bitmapType != kMacBitmapTypeGrafWorld) {
-       // Invalid bitmap
-       return NULL;
-    }
-    else
-    {
-        if ( GetMask() )
-        {
-            picture = wxMacCreatePict( MAC_WXHBITMAP(M_BITMAPDATA->m_hBitmap) , MAC_WXHBITMAP(GetMask()->GetMaskBitmap() ) ) ;
-        }
-        else
-        {
-            picture = wxMacCreatePict( MAC_WXHBITMAP(M_BITMAPDATA->m_hBitmap) , NULL ) ;
-        }
-        if ( created && picture )
-            (*created) = true ;
-    }
-     return picture ;
-}
-
-/*
- * wxMask
- */
+// ----------------------------------------------------------------------------
+// wxMask
+// ----------------------------------------------------------------------------
 
 wxMask::wxMask()
-    : m_maskBitmap(NULL)
 {
+    Init() ;
 }
 
 // Construct a mask from a bitmap and a colour indicating
 // the transparent area
 wxMask::wxMask(const wxBitmap& bitmap, const wxColour& colour)
-    : m_maskBitmap(NULL)
 {
+    Init() ;
     Create(bitmap, colour);
-}
-
-// Construct a mask from a bitmap and a palette index indicating
-// the transparent area
-wxMask::wxMask(const wxBitmap& bitmap, int paletteIndex)
-    : m_maskBitmap(NULL)
-{
-    Create(bitmap, paletteIndex);
 }
 
 // Construct a mask from a mono bitmap (copies the bitmap).
 wxMask::wxMask(const wxBitmap& bitmap)
-    : m_maskBitmap(NULL)
 {
+    Init() ;
     Create(bitmap);
+}
+
+// Construct a mask from a mono bitmap (copies the bitmap).
+wxMask::wxMask(const wxMemoryBuffer& data, int width , int height , int bytesPerRow )
+{
+    Init() ;
+    Create(data, width , height , bytesPerRow );
 }
 
 wxMask::~wxMask()
 {
+#if !wxMAC_USE_CORE_GRAPHICS
     if ( m_maskBitmap )
     {
-        wxMacDestroyGWorld(  (GWorldPtr) m_maskBitmap ) ;
+        DisposeGWorld( (GWorldPtr) m_maskBitmap ) ;
         m_maskBitmap = NULL ;
     }
+#endif
+}
+
+void wxMask::Init() 
+{
+    m_width = m_height = m_bytesPerRow = 0 ;
+#if !wxMAC_USE_CORE_GRAPHICS
+    m_maskBitmap = NULL ;
+#endif
+    
+}
+
+void *wxMask::GetRawAccess() const
+{
+    return m_memBuf.GetData() ;
+}
+
+void wxMask::RealizeNative() 
+{
+#if !wxMAC_USE_CORE_GRAPHICS
+    if ( m_maskBitmap )
+    {
+       DisposeGWorld(  (GWorldPtr) m_maskBitmap ) ;
+       m_maskBitmap = NULL ;
+    }
+    Rect rect = { 0 , 0 , m_height , m_width } ;
+    verify_noerr( NewGWorldFromPtr( (GWorldPtr*) &m_maskBitmap , k8IndexedGrayPixelFormat , &rect , NULL , NULL , 0 ,
+        (char*) m_memBuf.GetData() , m_bytesPerRow ) ) ; 
+#endif
+}
+
+// Create a mask from a mono bitmap (copies the bitmap).
+bool wxMask::Create(const wxMemoryBuffer& data,int width , int height , int bytesPerRow)
+{
+    m_memBuf = data ;
+    m_width = width ;
+    m_height = height ;
+    m_bytesPerRow = bytesPerRow ;
+    wxASSERT( data.GetDataLen() == (size_t)(height * bytesPerRow) ) ;
+    RealizeNative() ;
+    return true ;
 }
 
 // Create a mask from a mono bitmap (copies the bitmap).
 bool wxMask::Create(const wxBitmap& bitmap)
 {
-   if ( m_maskBitmap )
-   {
-       wxMacDestroyGWorld(  (GWorldPtr) m_maskBitmap ) ;
-       m_maskBitmap = NULL ;
-   }
-   wxCHECK_MSG( bitmap.GetBitmapType() == kMacBitmapTypeGrafWorld, false,
-                wxT("Cannot create mask from this bitmap type (TODO)"));
-   // other types would require a temporary bitmap. not yet implemented
-
-   wxCHECK_MSG( bitmap.Ok(), false, wxT("Invalid bitmap"));
-
-   m_depth = bitmap.GetDepth() ;
-   m_maskBitmap = wxMacCreateGWorld(bitmap.GetWidth(), bitmap.GetHeight(), bitmap.GetDepth() );
-   Rect rect = { 0,0, bitmap.GetHeight(), bitmap.GetWidth() };
-
-   LockPixels( GetGWorldPixMap( (GWorldPtr) m_maskBitmap) );
-   LockPixels( GetGWorldPixMap( (GWorldPtr) bitmap.GetHBITMAP()) );
-   CopyBits(GetPortBitMapForCopyBits( (GWorldPtr) bitmap.GetHBITMAP()),
-            GetPortBitMapForCopyBits( (GWorldPtr) m_maskBitmap),
-            &rect, &rect, srcCopy, 0);
-   UnlockPixels( GetGWorldPixMap( (GWorldPtr) m_maskBitmap) );
-   UnlockPixels( GetGWorldPixMap( (GWorldPtr) bitmap.GetHBITMAP()) );
-
-   return FALSE;
-}
-
-// Create a mask from a bitmap and a palette index indicating
-// the transparent area
-bool wxMask::Create(const wxBitmap& bitmap, int paletteIndex)
-{
-    // TODO
-    wxCHECK_MSG( 0, false, wxT("wxMask::Create not yet implemented"));
-    return FALSE;
+    m_width = bitmap.GetWidth() ;
+    m_height = bitmap.GetHeight() ;
+    m_bytesPerRow = ( m_width + 3 ) & 0xFFFFFFC ;
+    size_t size = m_bytesPerRow * m_height ;
+    unsigned char * destdatabase = (unsigned char*) m_memBuf.GetWriteBuf( size ) ;
+    memset( destdatabase , 0 , size ) ;
+    unsigned char * srcdata = (unsigned char*) bitmap.GetRawAccess() ;
+    for ( int y = 0 ; y < m_height ; ++y , destdatabase += m_bytesPerRow )
+    {
+        unsigned char *destdata= destdatabase ;
+        for( int x = 0 ; x < m_width ; ++x )
+        {
+            srcdata++ ;
+            unsigned char r = *srcdata++ ;
+            unsigned char g = *srcdata++ ;
+            unsigned char b = *srcdata++ ;
+            if ( ( r + g + b ) > 0x10 )
+                *destdata++ = 0x00 ;
+            else
+                *destdata++ = 0xFF ;
+        }
+    }
+    m_memBuf.UngetWriteBuf( size ) ;
+    RealizeNative() ;
+    return TRUE;
 }
 
 // Create a mask from a bitmap and a colour indicating
 // the transparent area
 bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
 {
-    if ( m_maskBitmap )
+    m_width = bitmap.GetWidth() ;
+    m_height = bitmap.GetHeight() ;
+    m_bytesPerRow = ( m_width + 3 ) & 0xFFFFFFC ;
+    size_t size = m_bytesPerRow * m_height ;
+
+    unsigned char * destdatabase = (unsigned char*) m_memBuf.GetWriteBuf( size ) ;
+    memset( destdatabase , 0 , size ) ;
+    unsigned char * srcdata = (unsigned char*) bitmap.GetRawAccess() ;
+    for ( int y = 0 ; y < m_height ; ++y , destdatabase += m_bytesPerRow)
     {
-        wxMacDestroyGWorld(  (GWorldPtr) m_maskBitmap ) ;
-        m_maskBitmap = NULL ;
-    }
-    wxCHECK_MSG( bitmap.GetBitmapType() == kMacBitmapTypeGrafWorld, false,
-                 wxT("Cannot create mask from this bitmap type (TODO)"));
-    // other types would require a temporary bitmap. not yet implemented
-
-    wxCHECK_MSG( bitmap.Ok(), false, wxT("Illigal bitmap"));
-
-    m_maskBitmap = wxMacCreateGWorld( bitmap.GetWidth() , bitmap.GetHeight() , 1 );
-    m_depth = 1 ;
-    LockPixels( GetGWorldPixMap(  (GWorldPtr) m_maskBitmap ) );
-    LockPixels( GetGWorldPixMap(  (GWorldPtr) bitmap.GetHBITMAP() ) );
-    RGBColor maskColor = MAC_WXCOLORREF(colour.GetPixel());
-
-    // this is not very efficient, but I can't think
-    // of a better way of doing it
-    CGrafPtr    origPort ;
-    GDHandle    origDevice ;
-    RGBColor  col;
-    RGBColor  colors[2] = {
-        { 0xFFFF, 0xFFFF, 0xFFFF },
-        { 0,      0,      0 }};
-
-    GetGWorld( &origPort , &origDevice ) ;
-    for (int w = 0; w < bitmap.GetWidth(); w++)
-    {
-        for (int h = 0; h < bitmap.GetHeight(); h++)
+        unsigned char *destdata= destdatabase ;
+        for( int x = 0 ; x < m_width ; ++x )
         {
-            SetGWorld(  (GWorldPtr) bitmap.GetHBITMAP(), NULL ) ;
-            GetCPixel( w , h , &col ) ;
-            SetGWorld(  (GWorldPtr) m_maskBitmap , NULL ) ;
-            if (col.red == maskColor.red && col.green == maskColor.green && col.blue == maskColor.blue)
-            {
-                SetCPixel( w , h , &colors[0] ) ;
-            }
+            srcdata++ ;
+            unsigned char r = *srcdata++ ;
+            unsigned char g = *srcdata++ ;
+            unsigned char b = *srcdata++ ;
+            if ( colour == wxColour( r , g , b) )
+                *destdata++ = 0x00 ;
             else
-            {
-                SetCPixel( w , h , &colors[1] ) ;
-            }
+                *destdata++ = 0xFF ;
         }
     }
-    UnlockPixels( GetGWorldPixMap( (CGrafPtr) m_maskBitmap ) ) ;
-    UnlockPixels( GetGWorldPixMap(  (GWorldPtr) bitmap.GetHBITMAP() ) ) ;
-    SetGWorld( origPort , origDevice ) ;
-
+    m_memBuf.UngetWriteBuf( size ) ;
+    RealizeNative() ;
     return TRUE;
 }
 
-bool wxMask::PointMasked(int x, int y)
+#if !wxMAC_USE_CORE_GRAPHICS
+WXHBITMAP wxMask::GetHBITMAP() const
 {
-   GWorldPtr origPort;
-   GDHandle  origDevice;
-   RGBColor  color;
-   bool masked = true;
-
-   GetGWorld( &origPort, &origDevice);
-
-   //Set port to mask and see if it masked (1) or not ( 0 )
-   SetGWorld( (GWorldPtr) m_maskBitmap, NULL);
-   LockPixels(GetGWorldPixMap( (GWorldPtr) m_maskBitmap));
-   GetCPixel(x,y, &color);
-   masked = !(color.red == 0 && color.green == 0 && color.blue == 0);
-   UnlockPixels(GetGWorldPixMap( (GWorldPtr) m_maskBitmap));
-
-   SetGWorld( origPort, origDevice);
-
-   return masked;
+    return m_maskBitmap ;
 }
+#endif
 
-/*
- * wxBitmapHandler
- */
+// ----------------------------------------------------------------------------
+// wxBitmapHandler
+// ----------------------------------------------------------------------------
 
 wxBitmapHandler::~wxBitmapHandler()
 {
@@ -1277,9 +1206,9 @@ bool wxBitmapHandler::SaveFile(const wxBitmap *bitmap, const wxString& name, int
     return FALSE;
 }
 
-/*
- * Standard handlers
- */
+// ----------------------------------------------------------------------------
+// Standard Handlers
+// ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxPICTResourceHandler: public wxBitmapHandler
 {
@@ -1306,20 +1235,13 @@ bool  wxPICTResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, lo
     PicHandle thePict = (PicHandle ) GetNamedResource( 'PICT' , theName ) ;
     if ( thePict )
     {
-        PictInfo theInfo ;
-
-        GetPictInfo( thePict , &theInfo , 0 , 0 , systemMethod , 0 ) ;
-        DetachResource( (Handle) thePict ) ;
-        M_BITMAPHANDLERDATA->m_bitmapType = kMacBitmapTypePict ;
-        M_BITMAPHANDLERDATA->m_hPict = thePict ;
-        M_BITMAPHANDLERDATA->m_width =  theInfo.sourceRect.right - theInfo.sourceRect.left ;
-        M_BITMAPHANDLERDATA->m_height = theInfo.sourceRect.bottom - theInfo.sourceRect.top ;
-
-        M_BITMAPHANDLERDATA->m_depth = theInfo.depth ;
-        M_BITMAPHANDLERDATA->m_ok = true ;
-        M_BITMAPHANDLERDATA->m_numColors = theInfo.uniqueColors ;
-//      M_BITMAPHANDLERDATA->m_bitmapPalette;
-//      M_BITMAPHANDLERDATA->m_quality;
+        wxMetafile mf ;
+        mf.SetHMETAFILE((WXHMETAFILE) thePict ) ;
+        bitmap->Create( mf.GetWidth() , mf.GetHeight() ) ;
+        wxMemoryDC dc ;
+        dc.SelectObject( *bitmap ) ;
+        mf.Play( &dc ) ;
+        dc.SelectObject( wxNullBitmap ) ;
         return TRUE ;
     }
     return FALSE ;
@@ -1343,35 +1265,10 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
         return NULL;
     }
 
-   if ( M_BITMAPDATA->m_bitmapType != kMacBitmapTypeGrafWorld )
-   {
-       wxFAIL_MSG( _T("GetRawData() only supported for GWorlds") );
-
-       return NULL;
-   }
-
-   GWorldPtr gworld = MAC_WXHBITMAP(M_BITMAPDATA->m_hBitmap);
-   PixMapHandle hPixMap = GetGWorldPixMap(gworld);
-   wxCHECK_MSG( hPixMap && *hPixMap, NULL,
-                    _T("GetRawData(): failed to get PixMap from GWorld?") );
-
-   wxCHECK_MSG( (*hPixMap)->pixelSize == bpp, NULL,
-                    _T("GetRawData(): pixel format mismatch") );
-
-   if ( !LockPixels(hPixMap) )
-   {
-       wxFAIL_MSG( _T("failed to lock PixMap in GetRawData()") );
-
-       return NULL;
-   }
-
-   data.m_width = GetWidth();
-   data.m_height = GetHeight();
-   data.m_stride = (*hPixMap)->rowBytes & 0x7fff;
-
-   M_BITMAPDATA->m_hasAlpha = false;
-
-   return GetPixBaseAddr(hPixMap);
+    data.m_width = GetWidth() ;
+    data.m_height = GetHeight() ;
+    data.m_stride = GetWidth() * 4 ;
+    return GetRawAccess() ;
 }
 
 void wxBitmap::UngetRawData(wxPixelDataBase& dataBase)
@@ -1379,7 +1276,10 @@ void wxBitmap::UngetRawData(wxPixelDataBase& dataBase)
     if ( !Ok() )
         return;
 
-    if ( M_BITMAPDATA->m_hasAlpha )
+    // TODO : if we have some information about the API we should check
+    // this code looks strange...
+
+    if ( M_BITMAPDATA->HasAlpha() )
     {
         wxAlphaPixelData& data = (wxAlphaPixelData&)dataBase;
 
@@ -1417,19 +1317,11 @@ void wxBitmap::UngetRawData(wxPixelDataBase& dataBase)
 
         SetMask(new wxMask(bmpMask));
     }
-
-    GWorldPtr gworld = MAC_WXHBITMAP(M_BITMAPDATA->m_hBitmap);
-    PixMapHandle hPixMap = GetGWorldPixMap(gworld);
-    if ( hPixMap )
-    {
-        UnlockPixels(hPixMap);
-    }
 }
 
 void wxBitmap::UseAlpha()
 {
     // remember that we are using alpha channel, we'll need to create a proper
     // mask in UngetRawData()
-    M_BITMAPDATA->m_hasAlpha = true;
+    M_BITMAPDATA->UseAlpha( true );
 }
-

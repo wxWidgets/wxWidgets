@@ -65,12 +65,7 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
     }
 
     m_bmpNormal = bitmap;
-    
-    wxBitmapRefData * bmap = NULL ;
-    
-    if ( m_bmpNormal.Ok() )
-        bmap = (wxBitmapRefData*) ( m_bmpNormal.GetRefData()) ;
-    
+        
     ControlButtonContentInfo info ;
     wxMacCreateBitmapButton( &info , m_bmpNormal ) ;
 
@@ -80,7 +75,7 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
         (( style & wxBU_AUTODRAW ) ? kControlBevelButtonSmallBevel : kControlBevelButtonNormalBevel )  , 
         kControlBehaviorOffsetContents , &info , 0 , 0 , 0 , m_peer->GetControlRefAddr() ) );
     
-    
+    wxMacReleaseBitmapButton( &info ) ;
     wxASSERT_MSG( m_peer != NULL && m_peer->Ok() , wxT("No valid mac control") ) ;
     
     MacPostControlCreate(pos,size) ;
@@ -99,6 +94,7 @@ void wxBitmapButton::SetBitmapLabel(const wxBitmap& bitmap)
     {
         m_peer->SetData( kControlButtonPart , kControlBevelButtonContentTag , info ) ;
     }
+    wxMacReleaseBitmapButton( &info ) ;
 }
 
 

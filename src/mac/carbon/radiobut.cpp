@@ -75,21 +75,22 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 void wxRadioButton::SetValue(bool val)
 {
     wxRadioButton *cycle;
-      if ( m_peer->GetValue() == val )
+    if ( m_peer->GetValue() == val )
         return ;
         
-   m_peer->SetValue( val ) ;
-   if (val) 
-   {
-           cycle=this->NextInCycle();
-          if (cycle!=NULL) {
-               while (cycle!=this) {
-                   cycle->SetValue(false);
-                   cycle=cycle->NextInCycle();
-                   }
-               }
+    m_peer->SetValue( val ) ;
+    if (val) 
+    {
+        cycle=this->NextInCycle();
+        if (cycle!=NULL) 
+        {
+           while (cycle!=this) 
+           {
+               cycle->SetValue(false);
+               cycle=cycle->NextInCycle();
            }
-   MacRedrawControl() ;
+       }
+    }
 }
 
 bool wxRadioButton::GetValue() const

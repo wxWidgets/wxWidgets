@@ -106,6 +106,15 @@ bool wxMacCarbonPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& WXUNUSED
 
     wxMacCarbonPrintData *native = (wxMacCarbonPrintData*) dc->GetPrintData().m_nativePrintData ;
 
+#if wxMAC_USE_CORE_GRAPHICS
+    {
+        CFStringRef s[1] = { kPMGraphicsContextCoreGraphics };
+        CFArrayRef  graphicsContextsArray = CFArrayCreate(NULL, (const void**)s, 1, &kCFTypeArrayCallBacks);
+        PMSessionSetDocumentFormatGeneration(native->m_macPrintSession, kPMDocumentFormatPDF, graphicsContextsArray, NULL);
+        CFRelease(graphicsContextsArray);
+    }
+#endif
+
     m_err = PMSessionBeginDocument(native->m_macPrintSession,
               native->m_macPrintSettings,
               native->m_macPageFormat);
@@ -143,11 +152,21 @@ void wxMacCarbonPrinterDC::StartPage( wxPrinterDC* dc )
                  native->m_macPageFormat,
                  nil);
 
+#if wxMAC_USE_CORE_GRAPHICS
+    CGContextRef pageContext;
+#endif
     if ( m_err == noErr )
     {
+#if wxMAC_USE_CORE_GRAPHICS
         m_err = PMSessionGetGraphicsContext(native->m_macPrintSession,
-                                            nil,
+                                            kPMGraphicsContextCoreGraphics,
+                                            (void**) &pageContext );
+        dc->MacSetCGContext(pageContext) ;
+#else
+        m_err = PMSessionGetGraphicsContext(native->m_macPrintSession,
+                                            kPMGraphicsContextQuickdraw,
                                             (void**) &dc->m_macPort );
+#endif
     }
 
     if ( m_err != noErr )
@@ -162,8 +181,13 @@ void wxMacCarbonPrinterDC::StartPage( wxPrinterDC* dc )
         m_err = PMGetAdjustedPageRect(native->m_macPageFormat, &rPage);
         if ( !m_err )
         {
+#if wxMAC_USE_CORE_GRAPHICS
+            CGContextTranslateCTM( pageContext , 0 , rPage.bottom - rPage.top ) ;
+            CGContextScaleCTM( pageContext , 1 , -1 ) ;
+#else
             dc->m_macLocalOrigin.x = (int) rPage.left;
             dc->m_macLocalOrigin.y = (int) rPage.top;
+#endif
         }
         // since this is a non-critical error, we set the flag back
         m_err = noErr ;
@@ -313,7 +337,6 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
     if ( m_nativePrinterDC )
     {
         m_ok = m_nativePrinterDC->Ok() ;
-
         if ( !m_ok )
         {
             wxString message ;
@@ -321,6 +344,10 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
             wxMessageDialog dialog( NULL , message , wxEmptyString, wxICON_HAND | wxOK) ;
             dialog.ShowModal();
         }
+#if wxMAC_USE_CORE_GRAPHICS
+        // the cgContext will only be handed over page by page
+        m_graphicContext = new wxMacCGContext() ;
+#endif
     }
 }
 
@@ -329,6 +356,14 @@ wxPrinterDC::~wxPrinterDC(void)
     delete m_nativePrinterDC ;
 }
 
+#if wxMAC_USE_CORE_GRAPHICS
+void wxPrinterDC::MacSetCGContext( void * cg ) 
+{
+    dynamic_cast<wxMacCGContext*>(m_graphicContext)->SetNativeContext( (CGContextRef) cg ) ;
+    m_graphicContext->SetPen( m_pen ) ;
+    m_graphicContext->SetBrush( m_brush ) ;
+}
+#endif
 bool wxPrinterDC::StartDoc( const wxString& message )
 {
     wxASSERT_MSG( Ok() , wxT("Called wxPrinterDC::StartDoc from an invalid object") ) ;
@@ -384,10 +419,11 @@ void wxPrinterDC::StartPage(void)
     m_font = *wxNORMAL_FONT;
     m_brush = *wxTRANSPARENT_BRUSH;
     m_backgroundBrush = *wxWHITE_BRUSH;
-
+#if !wxMAC_USE_CORE_GRAPHICS
     m_macFontInstalled = false ;
     m_macBrushInstalled = false ;
     m_macPenInstalled = false ;
+#endif
 
     m_nativePrinterDC->StartPage(this) ;
     m_ok = m_nativePrinterDC->Ok() ;

@@ -121,9 +121,12 @@ bool wxMetaFile::Play(wxDC *dc)
         return FALSE;
         
     {
+#if wxMAC_USE_CORE_GRAPHICS
+#else
         wxMacPortSetter helper( dc ) ;
         PicHandle pict = (PicHandle) GetHMETAFILE() ;
         DrawPicture( pict , &(**pict).picFrame ) ;
+#endif
     }
     return TRUE;
 }
@@ -158,15 +161,17 @@ wxMetaFileDC::wxMetaFileDC(const wxString& filename ,
     wxASSERT_MSG( filename.IsEmpty() , _T("no file based metafile support yet")) ;
     
     m_metaFile = new wxMetaFile(filename) ;
+#if wxMAC_USE_CORE_GRAPHICS
+#else
     Rect r={0,0,height,width} ;
     
     RectRgn( (RgnHandle) m_macBoundaryClipRgn , &r ) ;
     CopyRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
 
-    m_metaFile->SetHMETAFILE( OpenPicture( &r ) ) ;
+    m_metaFile->SetHMETAFILE( (WXHMETAFILE) OpenPicture( &r ) ) ;
     ::GetPort( (GrafPtr*) &m_macPort ) ;    
     m_ok = TRUE ;
-    
+#endif
     SetMapMode(wxMM_TEXT); 
 }
 
@@ -207,7 +212,7 @@ bool wxMetafileDataObject::SetData(size_t len, const void *buf)
     Handle handle = NewHandle( len ) ;
     SetHandleSize( handle , len ) ;
     memcpy( *handle , buf , len ) ;
-    m_metafile.SetHMETAFILE( handle ) ;
+    m_metafile.SetHMETAFILE( (WXHMETAFILE) handle ) ;
     return true ;
 }
 #endif

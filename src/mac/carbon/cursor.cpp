@@ -27,6 +27,27 @@
 IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxBitmap)
 #endif
 
+class WXDLLEXPORT wxCursorRefData: public wxBitmapRefData
+{
+    DECLARE_NO_COPY_CLASS(wxCursorRefData)
+        
+    friend class WXDLLEXPORT wxBitmap;
+    friend class WXDLLEXPORT wxCursor;
+public:
+    wxCursorRefData();
+    ~wxCursorRefData();
+
+protected:
+    WXHCURSOR     m_hCursor;
+    bool        m_disposeHandle;
+    bool        m_releaseHandle;
+    bool        m_isColorCursor ;
+    long        m_themeCursor ;
+};
+
+#define M_CURSORDATA ((wxCursorRefData *)m_refData)
+#define M_CURSORHANDLERDATA ((wxCursorRefData *)bitmap->m_refData)
+
 const short kwxCursorBullseye = 0 ;
 const short kwxCursorBlank = 1 ;
 const short kwxCursorPencil = 2 ;
@@ -181,8 +202,8 @@ CursHandle wxGetStockCursor( int number )
 
 wxCursorRefData::wxCursorRefData()
 {
-    m_width = 16; 
-    m_height = 16;
+    SetWidth( 16 ); 
+    SetHeight( 16 );
     m_hCursor = NULL ;
     m_disposeHandle = false ;
     m_releaseHandle = false ;
@@ -240,6 +261,16 @@ bool wxCursor::CreateFromXpm(const char **bits)
     wxCHECK_MSG( img.Ok(), FALSE, wxT("invalid cursor data") )    
 	CreateFromImage( img ) ;
     return TRUE;
+}
+
+WXHCURSOR wxCursor::GetHCURSOR() const 
+{ 
+    return (M_CURSORDATA ? M_CURSORDATA->m_hCursor : 0); 
+}
+
+bool wxCursor::Ok() const 
+{ 
+    return (m_refData != NULL && ( M_CURSORDATA->m_hCursor != NULL || M_CURSORDATA->m_themeCursor != -1 ) ) ; 
 }
 
 short GetCTabIndex( CTabHandle colors , RGBColor *col )

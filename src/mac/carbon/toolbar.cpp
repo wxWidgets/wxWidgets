@@ -260,6 +260,8 @@ wxToolBarTool::wxToolBarTool(wxToolBar *tbar,
     CreateBevelButtonControl( window , &toolrect , CFSTR("") , kControlBevelButtonNormalBevel , behaviour , &info , 
         0 , 0 , 0 , &m_controlHandle ) ;
         
+    wxMacReleaseBitmapButton( &info ) ;
+
     InstallControlEventHandler( (ControlRef) m_controlHandle, GetwxMacToolBarToolEventHandlerUPP(),
         GetEventTypeCount(eventList), eventList, this,NULL);
         
@@ -555,6 +557,8 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *tool)
 void wxToolBar::OnPaint(wxPaintEvent& event)
 {
     wxPaintDC dc(this) ;
+#if wxMAC_USE_CORE_GRAPHICS
+#else
     wxMacPortSetter helper(&dc) ;
     int w, h ;
     GetSize( &w , &h ) ;
@@ -575,33 +579,35 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
     {
 #if TARGET_API_MAC_OSX
 #if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
-    if ( UMAGetSystemVersion() >= 0x1030 )
-    {
-        HIRect hiToolbarrect = CGRectMake( dc.YLOG2DEVMAC(0) , dc.XLOG2DEVMAC(0) , 
-        dc.YLOG2DEVREL(h) , dc.XLOG2DEVREL(w) );
-        CGContextRef cgContext ;
-        Rect bounds ;
-        GetPortBounds( (CGrafPtr) dc.m_macPort , &bounds ) ;
-        QDBeginCGContext( (CGrafPtr) dc.m_macPort , &cgContext ) ;
-        CGContextTranslateCTM( cgContext , 0 , bounds.bottom - bounds.top ) ;
-        CGContextScaleCTM( cgContext , 1 , -1 ) ;
-
+        if ( UMAGetSystemVersion() >= 0x1030 )
         {
-            HIThemeBackgroundDrawInfo drawInfo ;
-            drawInfo.version = 0 ;
-            drawInfo.state = kThemeStateActive ;
-            drawInfo.kind = kThemeBackgroundMetal ;
-            HIThemeApplyBackground( &hiToolbarrect, &drawInfo , cgContext,kHIThemeOrientationNormal) ;
+            HIRect hiToolbarrect = CGRectMake( dc.YLOG2DEVMAC(0) , dc.XLOG2DEVMAC(0) , 
+            dc.YLOG2DEVREL(h) , dc.XLOG2DEVREL(w) );
+            CGContextRef cgContext ;
+            Rect bounds ;
+            GetPortBounds( (CGrafPtr) dc.m_macPort , &bounds ) ;
+            QDBeginCGContext( (CGrafPtr) dc.m_macPort , &cgContext ) ;
+            CGContextTranslateCTM( cgContext , 0 , bounds.bottom - bounds.top ) ;
+            CGContextScaleCTM( cgContext , 1 , -1 ) ;
+
+            {
+                HIThemeBackgroundDrawInfo drawInfo ;
+                drawInfo.version = 0 ;
+                drawInfo.state = kThemeStateActive ;
+                drawInfo.kind = kThemeBackgroundMetal ;
+                HIThemeApplyBackground( &hiToolbarrect, &drawInfo , cgContext,kHIThemeOrientationNormal) ;
+            }
+            QDEndCGContext( (CGrafPtr) dc.m_macPort , &cgContext ) ;
         }
-        QDEndCGContext( (CGrafPtr) dc.m_macPort , &cgContext ) ;
-    }
-    else
+        else
 #endif
-    {
-        UMADrawThemePlacard( &toolbarrect , IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
-    }
+        {
+            UMADrawThemePlacard( &toolbarrect , IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
+        }
 #endif
     }
+#endif
+
     event.Skip() ;
 }
 

@@ -118,7 +118,11 @@ public:
     void FinishLoad();
 
     wxSize m_bestSize;              //Original movie size
+#ifdef __WXMAC_OSX__
     struct MovieType** m_movie;     //QT Movie handle/instance
+#else
+    Movie m_movie ;
+#endif
     wxControl* m_ctrl;              //Parent control
     bool m_bVideo;                  //Whether or not we have video
     class _wxQTTimer* m_timer;      //Timer for streaming the movie

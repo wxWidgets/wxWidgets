@@ -58,6 +58,7 @@ inline int    FixedToInt( Fixed inFixed )
 
 #if wxUSE_GUI
 
+#include "wx/dc.h"
 #include "wx/window.h"
 
 class wxMacPortStateHelper 
@@ -345,19 +346,22 @@ private :
 typedef wxMacUPP<NMProcPtr,NMUPP,NewNMUPP,DisposeNMUPP> wxMacNMUPP ;
 
 #if wxUSE_GUI
-
+/*
 GWorldPtr         wxMacCreateGWorld( int width , int height , int depth ) ;
 void                 wxMacDestroyGWorld( GWorldPtr gw ) ;
 PicHandle         wxMacCreatePict( GWorldPtr gw , GWorldPtr mask = NULL ) ;
 CIconHandle     wxMacCreateCIcon(GWorldPtr image , GWorldPtr mask , short dstDepth , short iconSize  ) ;
 void                 wxMacSetColorTableEntry( CTabHandle newColors , int index , int red , int green ,  int blue ) ;
 CTabHandle         wxMacCreateColorTable( int numColors ) ;
+*/
+IconRef wxMacCreateIconRef(const wxBitmap& bmp) ;
 void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bitmap , int forceType = 0 ) ;
+void wxMacReleaseBitmapButton( ControlButtonContentInfo*info ) ;
 
 #define MAC_WXCOLORREF(a) (*((RGBColor*)&(a)))
 #define MAC_WXHBITMAP(a) (GWorldPtr(a))
 #define MAC_WXHMETAFILE(a) (PicHandle(a))
-#define MAC_WXHICON(a) (CIconHandle(a))
+#define MAC_WXHICON(a) (IconRef(a))
 #define MAC_WXHCURSOR(a) (CursHandle(a))
 #define MAC_WXHRGN(a) (RgnHandle(a))
 #define MAC_WXHWND(a) (WindowPtr(a))
@@ -539,6 +543,142 @@ protected :
     wxFont      m_font ;
     long        m_windowStyle ; 
 } ;
+
+#if wxMAC_USE_CORE_GRAPHICS
+
+class WXDLLEXPORT wxMacCGPath : public wxGraphicPath 
+{
+    DECLARE_NO_COPY_CLASS(wxMacCGPath)
+public :
+    wxMacCGPath() ;
+    ~wxMacCGPath() ;
+    
+    //  Starts a new subpath at
+    void MoveToPoint( wxCoord x1 , wxCoord y1 ) ;
+    void AddLineToPoint( wxCoord x1 , wxCoord y1 ) ;
+    void AddRectangle( wxCoord x, wxCoord y, wxCoord w, wxCoord h ) ;
+    void AddCircle( wxCoord x, wxCoord y , wxCoord r ) ;
+    
+    // closes the current subpath
+    void CloseSubpath() ;
+    
+    CGPathRef GetPath() const ;
+private :
+    CGMutablePathRef m_path ;
+} ;
+
+class WXDLLEXPORT wxMacCGContext : public wxGraphicContext
+{
+    DECLARE_NO_COPY_CLASS(wxMacCGContext)
+        
+public:
+    wxMacCGContext( CGrafPtr port ) ;
+    wxMacCGContext( CGContextRef cgcontext ) ;
+    wxMacCGContext() ;
+    ~wxMacCGContext() ;
+
+    virtual void Clip( const wxRegion &region ) ;
+    virtual void StrokePath( const wxGraphicPath *p ) ;
+    virtual void DrawPath( const wxGraphicPath *p , int fillStyle = wxWINDING_RULE ) ;
+    virtual void FillPath( const wxGraphicPath *p , const wxColor &fillColor , int fillStyle = wxWINDING_RULE ) ;
+     
+    virtual wxGraphicPath* CreatePath() ;
+    virtual void SetPen( const wxPen &pen )  ;    
+    virtual void SetBrush( const wxBrush &brush ) ;
+    CGContextRef GetNativeContext() ;
+    void SetNativeContext( CGContextRef cg ) ;
+    CGPathDrawingMode GetDrawingMode() const { return m_mode ; }
+private:
+    CGContextRef m_cgContext ;
+    CGrafPtr m_qdPort ;
+    CGPathDrawingMode m_mode ;
+    wxPen m_pen ;
+    wxBrush m_brush ;
+} ;
+
+CGColorSpaceRef wxMacGetGenericRGBColorSpace(void) ;
+
+#endif // wxMAC_USE_CORE_GRAPHICS
+
+class WXDLLEXPORT wxBitmapRefData: public wxGDIRefData
+{
+    DECLARE_NO_COPY_CLASS(wxBitmapRefData)
+        
+    friend class WXDLLEXPORT wxIcon;
+    friend class WXDLLEXPORT wxCursor;
+public:
+    wxBitmapRefData(int width , int height , int depth);
+    wxBitmapRefData();
+    ~wxBitmapRefData();
+
+    void Free() ;
+    bool Ok() const { return m_ok ; }
+    void SetOk( bool isOk) { m_ok = isOk ; }
+    
+    void SetWidth( int width ) { m_width = width ; }
+    void SetHeight( int height ) { m_height = height ; }
+    void SetDepth( int depth ) { m_depth = depth ; }
+
+    int GetWidth() const { return m_width ; }
+    int GetHeight() const { return m_height ; }
+    int GetDepth() const { return m_depth ; }
+    
+    void *GetRawAccess() const ;
+    void *BeginRawAccess() ;
+    void EndRawAccess() ;
+
+    bool HasAlpha() const { return m_hasAlpha ; }
+    void UseAlpha( bool useAlpha ) ;
+
+public:
+#if wxUSE_PALETTE
+    wxPalette     m_bitmapPalette;
+#endif // wxUSE_PALETTE
+    
+    wxMask *      m_bitmapMask; // Optional mask
+#if wxMAC_USE_CORE_GRAPHICS
+    CGImageRef    CGImageCreate() const ;
+#else
+    GWorldPtr     GetHBITMAP(GWorldPtr * mask = NULL ) const ;
+    void          UpdateAlphaMask() const ;
+#endif
+private :
+    bool Create(int width , int height , int depth) ;
+    void Init() ;
+
+    int           m_width;
+    int           m_height;
+    int           m_bytesPerRow ;
+    int           m_depth;
+    bool          m_hasAlpha;
+    wxMemoryBuffer m_memBuf ;
+    int           m_rawAccessCount ;
+    bool          m_ok;
+#if wxMAC_USE_CORE_GRAPHICS
+    mutable CGImageRef    m_cgImageRef ;
+#else
+    GWorldPtr     m_hBitmap;
+    GWorldPtr     m_hMaskBitmap ;
+    wxMemoryBuffer m_maskMemBuf ;
+    int            m_maskBytesPerRow ;
+#endif
+};
+
+#define M_BITMAPDATA ((wxBitmapRefData *)m_refData)
+
+class WXDLLEXPORT wxIconRefData : public wxGDIRefData
+{
+public:
+    wxIconRefData() ;
+    wxIconRefData( WXHICON ) ;
+    virtual ~wxIconRefData() { Free(); }
+
+    void Init() ;
+    virtual void Free();
+    WXHICON GetHICON() const { return (WXHICON) m_iconRef ; }
+private :
+    IconRef m_iconRef ;
+};
 
 #endif // wxUSE_GUI
 

@@ -609,7 +609,6 @@ int wxListBox::GetCount() const
 void wxListBox::Refresh(bool eraseBack, const wxRect *rect)
 {
     wxControl::Refresh( eraseBack , rect ) ;
-    //    MacRedrawControl() ;
 }
 
 #if wxUSE_OWNER_DRAWN
