@@ -212,6 +212,7 @@ class wxFontPtr(wxObjectPtr):
         return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxFont instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+    def __nonzero__(self): return self.Ok()
 class wxFont(wxFontPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = fontsc.new_wxFont(*_args,**_kwargs)
@@ -398,6 +399,7 @@ class wxEncodingConverterPtr(wxObjectPtr):
         return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxEncodingConverter instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+    def __nonzero__(self): return self.IsOk()
 class wxEncodingConverter(wxEncodingConverterPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = fontsc.new_wxEncodingConverter(*_args,**_kwargs)
