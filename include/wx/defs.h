@@ -427,6 +427,27 @@ class WXDLLEXPORT wxEvent;
 typedef void (*wxFunction) (wxObject&, wxEvent&);
 #endif
 
+// Printf-like attribute definitions to obtain warnings with GNU C/C++
+#if defined(__GNUC__)
+#  ifndef ATTRIBUTE_PRINTF
+#    define ATTRIBUTE_PRINTF(m, n) __attribute__ ((__format__ (__printf__, m, n)))
+#    define ATTRIBUTE_PRINTF_1 ATTRIBUTE_PRINTF(1, 2)
+#    define ATTRIBUTE_PRINTF_2 ATTRIBUTE_PRINTF(2, 3)
+#    define ATTRIBUTE_PRINTF_3 ATTRIBUTE_PRINTF(3, 4)
+#    define ATTRIBUTE_PRINTF_4 ATTRIBUTE_PRINTF(4, 5)
+#    define ATTRIBUTE_PRINTF_5 ATTRIBUTE_PRINTF(5, 6)
+#  endif /* ATTRIBUTE_PRINTF */
+#else
+#  ifndef ATTRIBUTE_PRINTF
+#    define ATTRIBUTE_PRINTF
+#    define ATTRIBUTE_PRINTF_1
+#    define ATTRIBUTE_PRINTF_2
+#    define ATTRIBUTE_PRINTF_3
+#    define ATTRIBUTE_PRINTF_4
+#    define ATTRIBUTE_PRINTF_5
+#  endif /* ATTRIBUTE_PRINTF */
+#endif
+
 // ----------------------------------------------------------------------------
 // OS mnemonics -- Identify the running OS (useful for Windows)
 // ----------------------------------------------------------------------------
