@@ -28,9 +28,6 @@
 IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
 #endif
 
-#pragma mark -
-#pragma mark ### Constructors & destructor ###
-
 //-------------------------------------------------------------------------------------
 //         ¥ wxRadioBox()
 //-------------------------------------------------------------------------------------
@@ -147,9 +144,6 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     return TRUE;
 }
 
-
-#pragma mark -
-#pragma mark ### Specific functions (reference v2) ###
 
 //-------------------------------------------------------------------------------------
 //         ¥ Enable(bool)
@@ -349,9 +343,6 @@ void wxRadioBox::Show(int item, bool show)
     current->Show(show);
 }
 
-#pragma mark -
-#pragma mark ### Other external functions ###
-
 //-------------------------------------------------------------------------------------
 //         ¥ Command
 //-------------------------------------------------------------------------------------
@@ -382,9 +373,6 @@ void wxRadioBox::SetFocus()
     current->SetFocus();
 }
 
-
-#pragma mark -
-#pragma mark ### Internal functions ###
 
 //-------------------------------------------------------------------------------------
 //         ¥ DoSetSize
