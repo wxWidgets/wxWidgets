@@ -13,6 +13,8 @@
 
 #include "wx/bmpbuttn.h"
 
+#if wxUSE_BMPBUTTON
+
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
 
@@ -309,3 +311,5 @@ void wxBitmapButton::EndSelect()
     m_isSelected = FALSE;
     SetBitmap();
 }
+
+#endif

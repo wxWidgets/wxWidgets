@@ -1332,7 +1332,7 @@ void wxPostScriptDC::EndDoc ()
 
     wxChar *header_file = wxGetTempFileName("ps");
 
-    m_pstream = new ofstream( wxConv_file.cWX2MB(header_file) );
+    m_pstream = new ofstream( wxConvCurrent->cWX2MB(header_file) );
 
     *m_pstream << "%!PS-Adobe-2.0\n";   /* PostScript magic strings */
     *m_pstream << "%%Title: " << m_title.mb_str() << "\n";
@@ -1342,15 +1342,15 @@ void wxPostScriptDC::EndDoc ()
     wxChar userID[256];
     if ( wxGetEmailAddress(userID, sizeof(userID)) )
     {
-        *m_pstream << "%%For: " << MBSTRINGCAST wxConv_libc.cWX2MB(userID);
+        *m_pstream << "%%For: " << MBSTRINGCAST wxConvCurrent->cWX2MB(userID);
         wxChar userName[245];
         if (wxGetUserName(userName, sizeof(userName)))
-            *m_pstream << " (" << MBSTRINGCAST wxConv_libc.cWX2MB(userName) << ")";
+            *m_pstream << " (" << MBSTRINGCAST wxConvCurrent->cWX2MB(userName) << ")";
         *m_pstream << "\n";
     }
     else if ( wxGetUserName(userID, sizeof(userID)) )
     {
-        *m_pstream << "%%For: " << MBSTRINGCAST wxConv_libc.cWX2MB(userID) << "\n";
+        *m_pstream << "%%For: " << MBSTRINGCAST wxConvCurrent->cWX2MB(userID) << "\n";
     }
 
     // THE FOLLOWING HAS BEEN CONTRIBUTED BY Andy Fyfe <andy@hyperparallel.com>

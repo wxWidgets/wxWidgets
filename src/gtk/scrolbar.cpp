@@ -13,6 +13,9 @@
 #endif
 
 #include "wx/scrolbar.h"
+
+#if wxUSE_SCROLLBAR
+
 #include "wx/utils.h"
 #include <math.h>
 
@@ -307,3 +310,4 @@ void wxScrollBar::ApplyWidgetStyle()
     gtk_widget_set_style( m_widget, m_widgetStyle );
 }
 
+#endif

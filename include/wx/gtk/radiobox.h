@@ -16,6 +16,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_RADIOBOX
+
 #include "wx/object.h"
 #include "wx/list.h"
 #include "wx/control.h"
@@ -103,5 +106,7 @@ public:
     
   DECLARE_EVENT_TABLE()    
 };
+
+#endif
 
 #endif // __GTKRADIOBOXH__

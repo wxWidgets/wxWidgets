@@ -16,6 +16,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_CHECKBOX
+
 #include "wx/object.h"
 #include "wx/list.h"
 #include "wx/control.h"
@@ -72,5 +75,7 @@ public:
     GtkWidget *m_widgetCheckbox;
     GtkWidget *m_widgetLabel;
 };
+
+#endif
 
 #endif // __GTKCHECKBOXH__

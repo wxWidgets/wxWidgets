@@ -13,6 +13,9 @@
 #endif
 
 #include "wx/radiobut.h"
+
+#if wxUSE_RADIOBOX
+
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
 
@@ -152,3 +155,5 @@ void wxRadioButton::ApplyWidgetStyle()
     gtk_widget_set_style( m_widget, m_widgetStyle );
     gtk_widget_set_style( GTK_BUTTON(m_widget)->child, m_widgetStyle );
 }
+
+#endif

@@ -16,6 +16,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_STATBMP
+
 #include "wx/object.h"
 #include "wx/control.h"
 #include "wx/bitmap.h"
@@ -56,5 +59,7 @@ class wxStaticBitmap: public wxControl
  
    wxBitmap   m_bitmap;
 };
+
+#endif
 
 #endif // __GTKSTATICBITMAPH__

@@ -15,6 +15,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_MINIFRAME
+
 #include "wx/object.h"
 #include "wx/frame.h"
 
@@ -59,6 +62,8 @@ public:
     int    m_oldX,m_oldY;
     int    m_diffX,m_diffY;
 };
+
+#endif
 
 #endif
   //  __GTKMINIFRAMEH__

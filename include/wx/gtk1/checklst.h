@@ -16,6 +16,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_CHECKLISTBOX
+
 #include "wx/object.h"
 #include "wx/list.h"
 #include "wx/control.h"
@@ -53,4 +56,5 @@ public:
 };
 
 #endif
-        //__GTKCHECKLISTH__
+
+#endif   //__GTKCHECKLISTH__

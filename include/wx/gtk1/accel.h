@@ -15,6 +15,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_ACCEL
+
 #include "wx/object.h"
 #include "wx/event.h"
 
@@ -101,5 +104,7 @@ class wxAcceleratorTable: public wxObject
     int GetCommand( wxKeyEvent &event ); 
     
 };
+
+#endif
 
 #endif

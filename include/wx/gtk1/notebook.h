@@ -16,6 +16,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_NOTEBOOK
+
 #include "wx/object.h"
 #include "wx/string.h"
 #include "wx/control.h"
@@ -149,6 +152,8 @@ public:
   DECLARE_DYNAMIC_CLASS(wxNotebook)
   DECLARE_EVENT_TABLE()
 };
+
+#endif
 
 #endif
     // __GTKNOTEBOOKH__

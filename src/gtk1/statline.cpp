@@ -13,6 +13,8 @@
 
 #include "wx/statline.h"
 
+#if wxUSE_STATLINE
+
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
 
@@ -55,3 +57,4 @@ bool wxStaticLine::Create( wxWindow *parent, wxWindowID id,
     return TRUE;
 }
 
+#endif

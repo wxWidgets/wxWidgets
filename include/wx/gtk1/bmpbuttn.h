@@ -16,6 +16,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_BMPBUTTON
+
 #include "wx/object.h"
 #include "wx/list.h"
 #include "wx/control.h"
@@ -90,5 +93,7 @@ public:
   wxBitmap     m_focus;
   wxBitmap     m_selected;   
 };
+
+#endif
 
 #endif // __BMPBUTTONH__

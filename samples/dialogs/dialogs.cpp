@@ -48,7 +48,7 @@ MyCanvas *myCanvas = (MyCanvas *) NULL;
 bool MyApp::OnInit(void)
 {
 #if defined(__WXGTK__) && defined(wxUSE_UNICODE)
-  wxConvCurrent = &wxConvLocal;
+  wxConvCurrent = &wxConvLibc;
 #endif
 
   m_canvasTextColour = wxColour("BLACK");

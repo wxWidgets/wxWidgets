@@ -12,8 +12,11 @@
 #pragma implementation "listbox.h"
 #endif
 
-#include "wx/dynarray.h"
 #include "wx/listbox.h"
+
+#if wxUSE_LISTBOX
+
+#include "wx/dynarray.h"
 #include "wx/utils.h"
 #include "wx/intl.h"
 #include "wx/checklst.h"
@@ -159,6 +162,7 @@ gtk_listbox_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_event,
 // "key_press_event"
 //-----------------------------------------------------------------------------
 
+#if wxUSE_CHECKLISTBOX
 static gint
 gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxListBox *listbox )
 {
@@ -170,7 +174,6 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
 
     if (gdk_event->keyval != ' ') return FALSE;
 
-#if wxUSE_CHECKLISTBOX
     int sel = listbox->GetIndex( widget );
 
     wxCheckListBox *clb = (wxCheckListBox *)listbox;
@@ -181,10 +184,10 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
     event.SetEventObject( listbox );
     event.SetInt( sel );
     listbox->GetEventHandler()->ProcessEvent( event );
-#endif // wxUSE_CHECKLISTBOX
 
     return FALSE;
 }
+#endif // wxUSE_CHECKLISTBOX
 
 //-----------------------------------------------------------------------------
 // "select" and "deselect"
@@ -854,7 +857,7 @@ void wxListBox::ApplyToolTip( GtkTooltips *tips, const wxChar *tip )
     GList *child = m_list->children;
     while (child)
     {
-        gtk_tooltips_set_tip( tips, GTK_WIDGET( child->data ), wxConv_local.cWX2MB(tip), (gchar*) NULL );
+        gtk_tooltips_set_tip( tips, GTK_WIDGET( child->data ), wxConvLocal.cWX2MB(tip), (gchar*) NULL );
         child = child->next;
     }
 }
@@ -940,3 +943,5 @@ void wxListBox::ApplyWidgetStyle()
         child = child->next;
     }
 }
+
+#endif

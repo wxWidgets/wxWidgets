@@ -1621,9 +1621,9 @@ bool wxResourceReadOneResource(FILE *fd, wxExprDatabase& db, bool *eof, wxResour
   if (strcmp(wxResourceBuffer, "#define") == 0)
   {
     wxGetResourceToken(fd);
-    wxChar *name = copystring(wxConv_libc.cMB2WX(wxResourceBuffer));
+    wxChar *name = copystring(wxConvCurrent->cMB2WX(wxResourceBuffer));
     wxGetResourceToken(fd);
-    wxChar *value = copystring(wxConv_libc.cMB2WX(wxResourceBuffer));
+    wxChar *value = copystring(wxConvCurrent->cMB2WX(wxResourceBuffer));
     if (wxIsalpha(value[0]))
     {
       int val = (int)wxAtol(value);
@@ -1644,7 +1644,7 @@ bool wxResourceReadOneResource(FILE *fd, wxExprDatabase& db, bool *eof, wxResour
   else if (strcmp(wxResourceBuffer, "#include") == 0)
   {
     wxGetResourceToken(fd);
-    wxChar *name = copystring(wxConv_libc.cMB2WX(wxResourceBuffer));
+    wxChar *name = copystring(wxConvCurrent->cMB2WX(wxResourceBuffer));
     wxChar *actualName = name;
     if (name[0] == _T('"'))
       actualName = name + 1;
@@ -1662,7 +1662,7 @@ bool wxResourceReadOneResource(FILE *fd, wxExprDatabase& db, bool *eof, wxResour
   {
     wxChar buf[300];
     wxStrcpy(buf, _("Found "));
-    wxStrncat(buf, wxConv_libc.cMB2WX(wxResourceBuffer), 30);
+    wxStrncat(buf, wxConvCurrent->cMB2WX(wxResourceBuffer), 30);
     wxStrcat(buf, _(", expected static, #include or #define\nwhilst parsing resource."));
     wxLogWarning(buf);
     return FALSE;
@@ -2525,9 +2525,9 @@ bool wxResourceParseIncludeFile(const wxString& f, wxResourceTable *table)
     if (strcmp(wxResourceBuffer, "#define") == 0)
     {
       wxGetResourceToken(fd);
-      wxChar *name = copystring(wxConv_libc.cMB2WX(wxResourceBuffer));
+      wxChar *name = copystring(wxConvCurrent->cMB2WX(wxResourceBuffer));
       wxGetResourceToken(fd);
-      wxChar *value = copystring(wxConv_libc.cMB2WX(wxResourceBuffer));
+      wxChar *value = copystring(wxConvCurrent->cMB2WX(wxResourceBuffer));
       if (wxIsdigit(value[0]))
       {
         int val = (int)wxAtol(value);
@@ -2698,9 +2698,9 @@ bool wxResourceReadOneResourceString(char *s, wxExprDatabase& db, bool *eof, wxR
   if (strcmp(wxResourceBuffer, "#define") == 0)
   {
     wxGetResourceTokenString(s);
-    wxChar *name = copystring(wxConv_libc.cMB2WX(wxResourceBuffer));
+    wxChar *name = copystring(wxConvCurrent->cMB2WX(wxResourceBuffer));
     wxGetResourceTokenString(s);
-    wxChar *value = copystring(wxConv_libc.cMB2WX(wxResourceBuffer));
+    wxChar *value = copystring(wxConvCurrent->cMB2WX(wxResourceBuffer));
     if (wxIsalpha(value[0]))
     {
       int val = (int)wxAtol(value);
@@ -2743,7 +2743,7 @@ bool wxResourceReadOneResourceString(char *s, wxExprDatabase& db, bool *eof, wxR
   {
     wxChar buf[300];
     wxStrcpy(buf, _("Found "));
-    wxStrncat(buf, wxConv_libc.cMB2WX(wxResourceBuffer), 30);
+    wxStrncat(buf, wxConvCurrent->cMB2WX(wxResourceBuffer), 30);
     wxStrcat(buf, _(", expected static, #include or #define\nwhilst parsing resource."));
     wxLogWarning(buf);
     return FALSE;

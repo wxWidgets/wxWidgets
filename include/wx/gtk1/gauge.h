@@ -16,6 +16,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_GAUGE
+
 #include "wx/object.h"
 #include "wx/list.h"
 #include "wx/control.h"
@@ -78,5 +81,7 @@ class wxGauge: public wxControl
    int      m_gaugePos;
    bool     m_useProgressBar;
 };
+
+#endif
 
 #endif // __GTKGAUGEH__

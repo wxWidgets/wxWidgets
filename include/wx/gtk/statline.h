@@ -16,6 +16,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_STATLINE
+
 #include "wx/object.h"
 #include "wx/list.h"
 #include "wx/control.h"
@@ -51,5 +54,7 @@ class wxStaticLine: public wxControl
       long style = wxLI_HORIZONTAL, const wxString &name = wxStaticTextNameStr );
     
 };
+
+#endif
 
 #endif // __GTKSTATICLINEH__

@@ -14,6 +14,8 @@
 
 #include "wx/checkbox.h"
 
+#if wxUSE_CHECKBOX
+
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
 
@@ -184,3 +186,4 @@ void wxCheckBox::ApplyWidgetStyle()
     gtk_widget_set_style( m_widgetLabel, m_widgetStyle );
 }
 
+#endif

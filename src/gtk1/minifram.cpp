@@ -12,6 +12,9 @@
 #endif
 
 #include "wx/minifram.h"
+
+#if wxUSE_MINIFRAME
+
 #include "wx/dcscreen.h"
 
 #include "gtk/gtk.h"
@@ -318,3 +321,5 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
 
     return TRUE;
 }
+
+#endif

@@ -16,6 +16,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_LISTBOX
+
 #include "wx/object.h"
 #include "wx/list.h"
 #include "wx/control.h"
@@ -124,5 +127,7 @@ public:
     bool       m_hasCheckBoxes;
 #endif // wxUSE_CHECKLISTBOX
 };
+
+#endif
 
 #endif // __GTKLISTBOXH__

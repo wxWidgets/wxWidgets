@@ -13,6 +13,8 @@
 
 #include "wx/statbox.h"
 
+#if wxUSE_STATBOX
+
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
 
@@ -72,3 +74,5 @@ void wxStaticBox::ApplyWidgetStyle()
     SetWidgetStyle();
     gtk_widget_set_style( m_widget, m_widgetStyle );
 }
+
+#endif

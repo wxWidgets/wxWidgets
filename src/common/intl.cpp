@@ -517,7 +517,7 @@ const wxMB2WXbuf wxLocale::GetString(const wxChar *szOrigString,
       return szDomain;
 
   const char *pszTrans = NULL;
-  const wxWX2MBbuf szOrgString = wxConv_libc.cWX2MB(szOrigString);
+  const wxWX2MBbuf szOrgString = wxConvCurrent->cWX2MB(szOrigString);
 
   wxMsgCatalog *pMsgCat;
   if ( szDomain != NULL ) {
@@ -564,7 +564,7 @@ const wxMB2WXbuf wxLocale::GetString(const wxChar *szOrigString,
     return (wxMB2WXbuf)(szOrigString);
   }
   else
-    return (wxMB2WXbuf)(wxConv_libc.cMB2WX(pszTrans));
+    return (wxMB2WXbuf)(wxConvCurrent->cMB2WX(pszTrans));
 }
 
 // find catalog by name in a linked list, return NULL if !found

@@ -2,7 +2,7 @@
 // Name:        accel.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $id$
+// Id:          $id:$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -13,14 +13,9 @@
 
 #include "wx/accel.h"
 
-#include <ctype.h>
+#if wxUSE_ACCEL
 
-#ifdef __WXDEBUG__
-#ifdef NULL
-#undef NULL
-#endif
-#define NULL ((void*)0L)
-#endif
+#include <ctype.h>
 
 //-----------------------------------------------------------------------------
 // wxAcceleratorTable
@@ -94,3 +89,4 @@ int wxAcceleratorTable::GetCommand( wxKeyEvent &event )
     return -1;
 }
 
+#endif

@@ -15,6 +15,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_TOOLBAR
+
 #include "wx/control.h"
 #include "wx/bitmap.h"
 #include "wx/tbarbase.h"
@@ -118,6 +121,8 @@ class wxToolBar: public wxControl
     int           m_yMargin;
     bool          m_hasToolAlready;
 };
+
+#endif
 
 #endif
     // __TBARGTKH__

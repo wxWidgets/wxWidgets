@@ -16,8 +16,12 @@
 #include "wx/control.h"
 #include "wx/app.h"
 #include "wx/menu.h"
+#if wxUSE_TOOLBAR
 #include "wx/toolbar.h"
+#endif
+#if wxUSE_STATUSBAR
 #include "wx/statusbr.h"
+#endif
 #include "wx/dcclient.h"
 
 #include "glib.h"
@@ -560,9 +564,12 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
                 (*height) -= wxPLACE_HOLDER;
         }
 
+#if wxUSE_STATUSBAR
         /* status bar */
         if (m_frameStatusBar) (*height) -= wxSTATUS_HEIGHT;
+#endif
 
+#if wxUSE_TOOLBAR
         /* tool bar */
         if (m_frameToolBar)
         {
@@ -575,6 +582,7 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
             else
                 (*height) -= wxPLACE_HOLDER;
         }
+#endif
 
         /* mini edge */
         (*height) -= m_miniEdge*2 + m_miniTitle;
@@ -598,9 +606,12 @@ void wxFrame::DoSetClientSize( int width, int height )
                 height += wxPLACE_HOLDER;
         }
 
+#if wxUSE_STATUSBAR
         /* status bar */
         if (m_frameStatusBar) height += wxSTATUS_HEIGHT;
+#endif
 
+#if wxUSE_TOOLBAR
         /* tool bar */
         if (m_frameToolBar)
         {
@@ -613,6 +624,7 @@ void wxFrame::DoSetClientSize( int width, int height )
             else
                 height += wxPLACE_HOLDER;
         }
+#endif
 
     wxWindow::DoSetClientSize( width + m_miniEdge*2, height  + m_miniEdge*2 + m_miniTitle );
 }
@@ -674,6 +686,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
             client_area_y_offset += hh;
         }
 
+#if wxUSE_TOOLBAR
         if (m_frameToolBar)
         {
             int xx = m_miniEdge;
@@ -697,6 +710,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
                                   xx, yy, ww, hh );
             client_area_y_offset += hh;
         }
+#endif
 
         int client_x = m_miniEdge;
         int client_y = client_area_y_offset + m_miniEdge + m_miniTitle;
@@ -712,6 +726,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
            is no need to set the size or position of m_wxwindow. */
     }
 
+#if wxUSE_STATUSBAR
     if (m_frameStatusBar)
     {
         int xx = 0 + m_miniEdge;
@@ -726,6 +741,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
                               m_frameStatusBar->m_widget,
                               xx, yy, ww, hh );
     }
+#endif
 
     /* we actually set the size of a frame here and no-where else */
     gtk_widget_set_usize( m_widget, m_width, m_height );
@@ -764,8 +780,12 @@ void wxFrame::OnInternalIdle()
     DoMenuUpdates();
 
     if (m_frameMenuBar) m_frameMenuBar->OnInternalIdle();
+#if wxUSE_TOOLBAR
     if (m_frameToolBar) m_frameToolBar->OnInternalIdle();
+#endif
+#if wxUSE_STATUSBAR
     if (m_frameStatusBar) m_frameStatusBar->OnInternalIdle();
+#endif
 }
 
 void wxFrame::OnCloseWindow( wxCloseEvent& WXUNUSED(event) )

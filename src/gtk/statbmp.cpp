@@ -13,6 +13,8 @@
 
 #include "wx/statbmp.h"
 
+#if wxUSE_STATBMP
+
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
 
@@ -80,3 +82,5 @@ void wxStaticBitmap::SetBitmap( const wxBitmap &bitmap )
         gtk_pixmap_set( GTK_PIXMAP(m_widget), m_bitmap.GetPixmap(), mask );
     }
 }
+
+#endif

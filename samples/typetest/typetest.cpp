@@ -40,10 +40,13 @@ IMPLEMENT_APP	(MyApp)
 IMPLEMENT_DYNAMIC_CLASS	(MyApp, wxApp)
 
 BEGIN_EVENT_TABLE(MyApp, wxApp)
-	EVT_MENU(TYPES_DATE, MyApp::DoDateDemo)
-	EVT_MENU(TYPES_TIME, MyApp::DoTimeDemo)
-	EVT_MENU(TYPES_VARIANT, MyApp::DoVariantDemo)
+	EVT_MENU(TYPES_DATE,      MyApp::DoDateDemo)
+	EVT_MENU(TYPES_TIME,      MyApp::DoTimeDemo)
+	EVT_MENU(TYPES_VARIANT,   MyApp::DoVariantDemo)
 	EVT_MENU(TYPES_BYTEORDER, MyApp::DoByteOrderDemo)
+#if wxUSE_UNICODE
+	EVT_MENU(TYPES_UNICODE,   MyApp::DoUnicodeDemo)
+#endif
 END_EVENT_TABLE()
 
 bool MyApp::OnInit(void)
@@ -64,6 +67,9 @@ bool MyApp::OnInit(void)
   file_menu->Append(TYPES_TIME, "&Time test");
   file_menu->Append(TYPES_VARIANT, "&Variant test");
   file_menu->Append(TYPES_BYTEORDER, "&Byteorder test");
+#if wxUSE_UNICODE
+  file_menu->Append(TYPES_UNICODE, "&Unicode test");
+#endif
   file_menu->AppendSeparator();
   file_menu->Append(TYPES_QUIT, "E&xit");
   wxMenuBar *menu_bar = new wxMenuBar;
@@ -79,6 +85,32 @@ bool MyApp::OnInit(void)
 
   return TRUE;
 }
+
+#if wxUSE_UNICODE
+void MyApp::DoUnicodeDemo(wxCommandEvent& WXUNUSED(event))
+{
+    wxTextCtrl& textCtrl = * GetTextCtrl();
+    
+    textCtrl.Clear();
+    textCtrl << "\nTest wchar_t to char (Unicode to ANSI/Multibyte) converions:";
+
+    wxString str;
+    str = _T("Robert Röbling\n");
+    
+    printf( "\n\nConversion with wxConvLocal:\n" );
+    wxConvCurrent = &wxConvLocal;
+    printf( (const char*) str.mbc_str() );
+    
+    printf( "\n\nConversion with wxConvGdk:\n" );
+    wxConvCurrent = &wxConvGdk;
+    printf( (const char*) str.mbc_str() );
+    
+    printf( "\n\nConversion with wxConvLibc:\n" );
+    wxConvCurrent = &wxConvLibc;
+    printf( (const char*) str.mbc_str() );
+    
+}
+#endif
 
 void MyApp::DoByteOrderDemo(wxCommandEvent& WXUNUSED(event))
 {
@@ -96,19 +128,19 @@ void MyApp::DoByteOrderDemo(wxCommandEvent& WXUNUSED(event))
     
     wxInt32 var = 0xF1F2F3F4;
     text = "";
-    text.Printf( "Value of wxInt32 is now: %#x.\n\n", var );
+    text.Printf( _T("Value of wxInt32 is now: %#x.\n\n"), var );
     textCtrl.WriteText( text );
     
     text = "";
-    text.Printf( "Value of swapped wxInt32 is: %#x.\n\n", wxINT32_SWAP_ALWAYS( var ) );
+    text.Printf( _T("Value of swapped wxInt32 is: %#x.\n\n"), wxINT32_SWAP_ALWAYS( var ) );
     textCtrl.WriteText( text );
     
     text = "";
-    text.Printf( "Value of wxInt32 swapped on little endian is: %#x.\n\n", wxINT32_SWAP_ON_LE( var ) );
+    text.Printf( _T("Value of wxInt32 swapped on little endian is: %#x.\n\n"), wxINT32_SWAP_ON_LE( var ) );
     textCtrl.WriteText( text );
     
     text = "";
-    text.Printf( "Value of wxInt32 swapped on big endian is: %#x.\n\n", wxINT32_SWAP_ON_BE( var ) );
+    text.Printf( _T("Value of wxInt32 swapped on big endian is: %#x.\n\n"), wxINT32_SWAP_ON_BE( var ) );
     textCtrl.WriteText( text );
 }
 
@@ -287,7 +319,7 @@ void MyApp::DoVariantDemo(wxCommandEvent& WXUNUSED(event) )
     long l = var1;
 
     wxStringList stringList;
-    stringList.Add("one"); stringList.Add("two"); stringList.Add("three");
+    stringList.Add(_T("one")); stringList.Add(_T("two")); stringList.Add(_T("three"));
     var1 = stringList;
     textCtrl << "var1 = " << var1.MakeString() << "\n";
 

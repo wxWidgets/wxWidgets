@@ -301,12 +301,12 @@ wxString wxTextCtrl::GetValue() const
     {
         gint len = gtk_text_get_length( GTK_TEXT(m_text) );
         char *text = gtk_editable_get_chars( GTK_EDITABLE(m_text), 0, len );
-        tmp = wxString(text,*wxConv_current);
+        tmp = wxString(text,*wxConvCurrent);
         g_free( text );
     }
     else
     {
-        tmp = wxString(gtk_entry_get_text( GTK_ENTRY(m_text) ),*wxConv_current);
+        tmp = wxString(gtk_entry_get_text( GTK_ENTRY(m_text) ),*wxConvCurrent);
     }
     return tmp;
 }

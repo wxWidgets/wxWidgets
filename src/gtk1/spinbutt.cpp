@@ -13,6 +13,9 @@
 #endif
 
 #include "wx/spinbutt.h"
+
+#ifdef wxUSE_SPINBTN
+
 #include "wx/utils.h"
 #include <math.h>
 
@@ -208,3 +211,5 @@ wxSpinEvent::wxSpinEvent(wxEventType commandType, int id):
   wxScrollEvent(commandType, id)
 {
 }
+
+#endif

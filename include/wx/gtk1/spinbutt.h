@@ -16,6 +16,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#ifdef wxUSE_SPINBTN
+
 #include "wx/object.h"
 #include "wx/control.h"
 
@@ -93,6 +96,8 @@ typedef void (wxEvtHandler::*wxSpinEventFunction)(wxSpinEvent&);
   { wxEVT_SCROLL_PAGEUP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxSpinEventFunction) & func },\
   { wxEVT_SCROLL_PAGEDOWN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxSpinEventFunction) & func },\
   { wxEVT_SCROLL_THUMBTRACK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxSpinEventFunction) & func },
+
+#endif
 
 #endif
     // __GTKSPINBUTTH__

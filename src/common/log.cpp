@@ -405,7 +405,7 @@ wxLogStream::wxLogStream(ostream *ostr)
 
 void wxLogStream::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 {
-    (*m_ostr) << wxConv_libc.cWX2MB(szString) << endl << flush;
+    (*m_ostr) << wxConvCurrent->cWX2MB(szString) << endl << flush;
 }
 #endif // wxUSE_STD_IOSTREAM
 
@@ -972,7 +972,7 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
 #else   // Unix
 #if wxUSE_UNICODE
     static wxChar s_szBuf[LOG_BUFFER_SIZE / 2];
-    wxConv_libc.MB2WC(s_szBuf, strerror(nErrCode), WXSIZEOF(s_szBuf) -1);
+    wxConvCurrent->MB2WC(s_szBuf, strerror(nErrCode), WXSIZEOF(s_szBuf) -1);
     return s_szBuf;
 #else
     return strerror(nErrCode);

@@ -662,7 +662,7 @@ int wxEntry( int argc, char *argv[] )
 {
     gtk_set_locale();
 
-    if (!wxOKlibc()) wxConv_current = &wxConv_local;
+    if (!wxOKlibc()) wxConvCurrent = &wxConvLocal;
 
     gtk_init( &argc, &argv );
 

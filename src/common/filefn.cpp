@@ -1076,8 +1076,8 @@ bool wxDirExists(const wxString& dir)
 // does the path exists? (may have or not '/' or '\\' at the end)
 bool wxPathExists(const wxChar *pszPathName)
 {
-  // Windows API returns -1 from stat for "c:\dir\" if "c:\dir" exists
-  // OTOH, we should change "d:" to "d:\" and leave "\" as is.
+  /* Windows API returns -1 from stat for "c:\dir\" if "c:\dir" exists
+   * OTOH, we should change "d:" to "d:\" and leave "\" as is. */
   wxString strPath(pszPathName);
   if ( wxEndsWithPathSeparator(pszPathName) && pszPathName[1] != _T('\0') )
     strPath.Last() = _T('\0');
@@ -1444,7 +1444,7 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
   }
 #if wxUSE_UNICODE
   else {
-    wxConv_file.MB2WC(buf, cbuf, sz);
+    wxConvFile.MB2WC(buf, cbuf, sz);
     delete [] cbuf;
   }
 #endif

@@ -190,7 +190,7 @@ WXDLLEXPORT wxChar * wxStrtok(wxChar *psz, const wxChar *delim, wxChar **save_pt
 #ifndef wxSetlocale
 wxChar * WXDLLEXPORT wxSetlocale(int category, const wxChar *locale)
 {
-  setlocale(category, wxConv_libc.cWX2MB(locale));
+  setlocale(category, wxConvLibc.cWX2MB(locale));
   // FIXME
   return (wxChar *)NULL;
 }
@@ -272,7 +272,7 @@ int WXDLLEXPORT wxVsscanf(const wxChar *buf, const wxChar *fmt, va_list argptr)
   int ret;
   // this will work only for numeric conversion! Strings will not be converted correctly
   // hopefully this is all we'll need
-  ret = vsscanf(wxConv_libc.cWX2MB(buf), wxConv_libc.cWX2MB(fmt), argptr);
+  ret = vsscanf(wxConvLibc.cWX2MB(buf), wxConvLibc.cWX2MB(fmt), argptr);
   return ret;
 }
 #endif
@@ -280,19 +280,19 @@ int WXDLLEXPORT wxVsscanf(const wxChar *buf, const wxChar *fmt, va_list argptr)
 #ifndef wxAtof
 double   WXDLLEXPORT wxAtof(const wxChar *psz)
 {
-  return atof(wxConv_libc.cWX2MB(psz));
+  return atof(wxConvLibc.cWX2MB(psz));
 }
 #endif
 
 #ifdef wxNEED_WX_STDLIB_H
 int      WXDLLEXPORT wxAtoi(const wxChar *psz)
 {
-  return atoi(wxConv_libc.cWX2MB(psz));
+  return atoi(wxConvLibc.cWX2MB(psz));
 }
 
 long     WXDLLEXPORT wxAtol(const wxChar *psz)
 {
-  return atol(wxConv_libc.cWX2MB(psz));
+  return atol(wxConvLibc.cWX2MB(psz));
 }
 
 wxChar * WXDLLEXPORT wxGetenv(const wxChar *name)
@@ -302,7 +302,7 @@ wxChar * WXDLLEXPORT wxGetenv(const wxChar *name)
   wxObject *data = env.Get(name);
   if (!data) {
     // nope, retrieve it,
-    const char *val = getenv(wxConv_libc.cWX2MB(name));
+    const char *val = getenv(wxConvLibc.cWX2MB(name));
     if (!val) return (wxChar *)NULL;
     // convert it,
     data = (wxObject *)new wxString(val);
@@ -315,7 +315,7 @@ wxChar * WXDLLEXPORT wxGetenv(const wxChar *name)
 
 int      WXDLLEXPORT wxSystem(const wxChar *psz)
 {
-  return system(wxConv_libc.cWX2MB(psz));
+  return system(wxConvLibc.cWX2MB(psz));
 }
 
 #endif

@@ -113,8 +113,12 @@ public:
     virtual void OnInternalIdle();
 
     wxMenuBar    *m_frameMenuBar;
+#if wxUSE_STATUSBAR
     wxStatusBar  *m_frameStatusBar;
+#endif
+#if wxUSE_TOOLBAR
     wxToolBar    *m_frameToolBar;
+#endif
     wxString      m_title;
     wxIcon        m_icon;
     int           m_miniEdge,m_miniTitle;

@@ -21,13 +21,11 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/utils.h"
-#include "wx/dialog.h"
-#include "wx/listbox.h"
-#include "wx/button.h"
-#include "wx/stattext.h"
-#include "wx/layout.h"
-#include "wx/intl.h"
+  #include "wx/utils.h"
+  #include "wx/dialog.h"
+  #include "wx/button.h"
+  #include "wx/stattext.h"
+  #include "wx/intl.h"
 #endif
 
 #include <stdio.h>
@@ -35,15 +33,12 @@
 
 #include "wx/generic/msgdlgg.h"
 
-#ifdef __WXGTK__
-#include "wx/statline.h"
+#if wxUSE_STATLINE
+  #include "wx/statline.h"
 #endif
 
-///////////////////////////////////////////////////////////////////
-// New dialog box implementations
-
-// Split message, using constraints to position controls
-wxSize wxSplitMessage2( const wxString &message, wxWindow *parent )
+/* Split message, using constraints to position controls */
+static wxSize wxSplitMessage2( const wxString &message, wxWindow *parent )
 {
     int y = 10;
     int w = 50;
@@ -94,6 +89,8 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent, const wxString
   wxDialog( parent, -1, caption, pos, wxDefaultSize, wxDEFAULT_DIALOG_STYLE )
 {
     m_dialogStyle = style;
+
+    wxBeginBusyCursor();
 
     wxSize message_size( wxSplitMessage2( message, this ) );
 
@@ -158,13 +155,15 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent, const wxString
         n++;
     }
     
-#if wxUSE_STATICLINE
+#if wxUSE_STATLINE
     (void) new wxStaticLine( this, -1, wxPoint(0,y-20), wxSize(w+30, 5) );
 #endif
     
     SetSize( w+30, y+40 );
 
     Centre( wxBOTH );
+    
+    wxEndBusyCursor();
 }
 
 void wxGenericMessageDialog::OnYes(wxCommandEvent& WXUNUSED(event))

@@ -401,7 +401,7 @@ static GdkFont*wxLoadQueryFont( int pointSize, int family, int style, int weight
     if (!facename.IsEmpty())
     {
         wxSprintf( wxBuffer, _T("-*-%s-*-*-normal-*-*-*-*-*-*-*-*-*"), facename.c_str() );
-        GdkFont *test = gdk_font_load( wxConv_libc.cWX2MB(wxBuffer) );
+        GdkFont *test = gdk_font_load( wxConvCurrent->cWX2MB(wxBuffer) );
         if (test)
 	{
 	    gdk_font_unref( test );
@@ -427,7 +427,7 @@ static GdkFont*wxLoadQueryFont( int pointSize, int family, int style, int weight
     wxSprintf( wxBuffer, _T("-*-%s-%s-%s-normal-*-*-%d-*-*-*-*-*-*"),
         xfamily, xweight, xstyle, pointSize);
     
-    return gdk_font_load( wxConv_libc.cWX2MB(wxBuffer) );
+    return gdk_font_load( wxConvCurrent->cWX2MB(wxBuffer) );
 }
 
 static GdkFont *wxLoadQueryNearestFont( int point_size, int family, int style, int weight, 

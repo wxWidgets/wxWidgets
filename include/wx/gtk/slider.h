@@ -15,6 +15,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_SLIDER
+
 #include "wx/object.h"
 #include "wx/list.h"
 #include "wx/control.h"
@@ -88,5 +91,7 @@ class wxSlider: public wxControl
     float           m_oldPos;
     
 };
+
+#endif
 
 #endif // __GTKSLIDERH__

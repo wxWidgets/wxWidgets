@@ -94,6 +94,13 @@ extern const wxChar WXDLLEXPORT *g_szNul = &g_strEmpty.dummy;
 // conditional compilation
 // ----------------------------------------------------------------------------
 
+#if !defined(__WXSW__) && wxUSE_UNICODE
+  #ifdef wxUSE_EXPERIMENTAL_PRINTF
+    #undef wxUSE_EXPERIMENTAL_PRINTF
+  #endif
+  #define wxUSE_EXPERIMENTAL_PRINTF 1
+#endif
+
 // we want to find out if the current platform supports vsnprintf()-like
 // function: for Unix this is done with configure, for Windows we test the
 // compiler explicitly.
@@ -2189,7 +2196,6 @@ static void wxLoadCharacterSets(void)
 	  wxString uni = token.GetNextToken();
 	  // skip whitespace again
 	  while (wxIsEmpty(uni) && token.HasMoreTokens()) uni = token.GetNextToken();
-
 	  if ((hex.Len() > 2) && (wxString(hex.GetChar(0)) == escchar) && (hex.GetChar(1) == _T('x')) &&
 	      (uni.Left(2) == _T("<U"))) {
 	    hex.MakeUpper(); uni.MakeUpper();

@@ -59,7 +59,7 @@ bool wxMask::Create( const wxBitmap& bitmap, const wxColour& colour )
 	m_bitmap = (GdkBitmap*) NULL;
     }
     
-    wxFAIL_MSG( "TODO" );
+    wxFAIL_MSG( _T("TODO") );
     
     return FALSE;
 }
@@ -72,7 +72,7 @@ bool wxMask::Create( const wxBitmap& WXUNUSED(bitmap), int WXUNUSED(paletteIndex
 	m_bitmap = (GdkBitmap*) NULL;
     }
     
-    wxFAIL_MSG( "not implemented" );
+    wxFAIL_MSG( _T("not implemented") );
     
     return FALSE;
 }
@@ -87,7 +87,7 @@ bool wxMask::Create( const wxBitmap& bitmap )
     
     if (!bitmap.Ok()) return FALSE;
     
-    wxCHECK_MSG( bitmap.GetBitmap(), FALSE, "Cannot create mask from colour bitmap" );
+    wxCHECK_MSG( bitmap.GetBitmap(), FALSE, _T("Cannot create mask from colour bitmap") );
     
     m_bitmap = gdk_pixmap_new( (GdkWindow*) &gdk_root_parent, bitmap.GetWidth(), bitmap.GetHeight(), 1 );
     

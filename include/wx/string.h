@@ -198,7 +198,6 @@ class WXDLLEXPORT wxMBConv
 #endif
 };
 WXDLLEXPORT_DATA(extern wxMBConv) wxConvLibc;
-#define wxConv_libc wxConvLibc
 
 #define wxANOTHER_MBCONV(type) \
 class type : public wxMBConv { \
@@ -208,14 +207,11 @@ class type : public wxMBConv { \
 }
 
 WXDLLEXPORT_DATA(extern wxANOTHER_MBCONV(wxMBConvFile)) wxConvFile;
-#define wxConv_file wxConvFile
 WXDLLEXPORT_DATA(extern wxANOTHER_MBCONV(wxMBConvUTF7)) wxConvUTF7;
 WXDLLEXPORT_DATA(extern wxANOTHER_MBCONV(wxMBConvUTF8)) wxConvUTF8;
-#define wxConv_UTF8 wxConvUTF8
-#if defined(__WXGTK12__)
+#ifdef __WXGTK12__
     WXDLLEXPORT_DATA(extern wxANOTHER_MBCONV(wxMBConvGdk)) wxConvGdk;
-    #define wxConv_gdk wxConvGdk
-#endif // GTK > 1.0
+#endif
 
 class wxCharacterSet;
 class WXDLLEXPORT wxCSConv : public wxMBConv
@@ -260,10 +256,7 @@ public:
   const char* cWX2MB(const char *psz) const { return psz; }
 };
 WXDLLEXPORT_DATA(extern wxMBConv) wxConvLibc, wxConvFile;
-#define wxConv_libc wxConvLibc
-#define wxConv_file wxConvFile
 WXDLLEXPORT_DATA(extern wxMBConv *) wxConvCurrent;
-#define wxConv_current wxConvCurrent
 #define wxFNCONV(name) name
 #define FNSTRINGCAST WXSTRINGCAST
 #endif//wxUSE_WCHAR_T

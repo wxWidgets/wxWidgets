@@ -12,6 +12,9 @@
 #endif
 
 #include "wx/gauge.h"
+
+#if wxUSE_GAUGE
+
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
 
@@ -78,3 +81,4 @@ void wxGauge::ApplyWidgetStyle()
   gtk_widget_set_style( m_widget, m_widgetStyle );
 }
 
+#endif

@@ -12,6 +12,9 @@
 #endif
 
 #include "wx/slider.h"
+
+#if wxUSE_SLIDER
+
 #include "wx/utils.h"
 #include <math.h>
 
@@ -289,3 +292,5 @@ void wxSlider::ApplyWidgetStyle()
     SetWidgetStyle();
     gtk_widget_set_style( m_widget, m_widgetStyle );
 }
+
+#endif

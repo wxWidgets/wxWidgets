@@ -26,6 +26,9 @@ public:
     void DoTimeDemo(wxCommandEvent& event);
     void DoVariantDemo(wxCommandEvent& event);
     void DoByteOrderDemo(wxCommandEvent& event);
+#if wxUSE_UNICODE
+    void DoUnicodeDemo(wxCommandEvent& event);
+#endif
 
     wxTextCtrl*     GetTextCtrl() const { return m_textCtrl; }
 
@@ -62,6 +65,7 @@ public:
 #define TYPES_TIME      104
 #define TYPES_VARIANT   105
 #define TYPES_BYTEORDER 106
+#define TYPES_UNICODE   107
 
 #endif
     // _WX_TYPETEST_H_

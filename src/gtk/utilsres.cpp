@@ -74,7 +74,7 @@ static wxChar *GetResourcePath(wxChar *buf, wxChar *name, bool create)
     if (create) 
     {
         // Touch the file to create it
-        FILE *fd = fopen(wxConv_file.cWX2MB(buf), "w");
+        FILE *fd = fopen(wxConvCurrent->cWX2MB(buf), "w");
         if (fd) fclose(fd);
     }
     return buf;
@@ -139,7 +139,7 @@ static void wxXMergeDatabases()
     else 
     {
         (void)GetIniFile(filename, (wxChar *) NULL);
-        serverDB = XrmGetFileDatabase(wxConv_file.cWX2MB(filename));
+        serverDB = XrmGetFileDatabase(wxConvCurrent->cWX2MB(filename));
     }
     if (serverDB)
         XrmMergeDatabases(serverDB, &wxResourceDatabase);
@@ -169,10 +169,10 @@ static void wxXMergeDatabases()
 #endif
 #endif
 #if wxUSE_UNICODE
-	wxStrcat(environment, wxConv_libc.cMB2WX(hostbuf));
+	wxStrcat(environment, wxConvCurrent->cMB2WX(hostbuf));
 #endif
     }
-    if ((homeDB = XrmGetFileDatabase(wxConv_file.cWX2MB(environment))))
+    if ((homeDB = XrmGetFileDatabase(wxConvCurrent->cWX2MB(environment))))
         XrmMergeDatabases(homeDB, &wxResourceDatabase);
 }
 
@@ -192,7 +192,7 @@ void wxFlushResources()
         (void)GetResourcePath(nameBuffer, file, TRUE);
 
         XrmDatabase database = (XrmDatabase)node->Data();
-        XrmPutFileDatabase(database, wxConv_file.cWX2MB(nameBuffer));
+        XrmPutFileDatabase(database, wxConvCurrent->cWX2MB(nameBuffer));
         XrmDestroyDatabase(database);
         wxNode *next = node->Next();
 //        delete node;
@@ -231,7 +231,7 @@ bool wxWriteResource(const wxString& section, const wxString& entry, const wxStr
     if (node)
         database = (XrmDatabase)node->Data();
     else {
-        database = XrmGetFileDatabase(wxConv_file.cWX2MB(buffer));
+        database = XrmGetFileDatabase(wxConvCurrent->cWX2MB(buffer));
         wxLogTrace(wxTraceResAlloc, _T("Write: Number = %d"), wxTheResourceCache->Number());
         wxTheResourceCache->Append(buffer, (wxObject *)database);
     }
@@ -285,7 +285,7 @@ bool wxGetResource(const wxString& section, const wxString& entry, char **value,
         }
         else
         {
-            database = XrmGetFileDatabase(wxConv_file.cWX2MB(buffer));
+            database = XrmGetFileDatabase(wxConvCurrent->cWX2MB(buffer));
             wxLogTrace(wxTraceResAlloc, _T("Get: Number = %d"), wxTheResourceCache->Number());
             wxTheResourceCache->Append(buffer, (wxObject *)database);
         }

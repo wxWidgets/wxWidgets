@@ -103,5 +103,6 @@ void wxToolTip::SetDelay( long msecs )
 
     gtk_tooltips_set_delay( ss_tooltips, msecs );
 }
+
 #endif
 

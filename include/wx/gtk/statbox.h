@@ -16,6 +16,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_STATBOX
+
 #include "wx/object.h"
 #include "wx/list.h"
 #include "wx/control.h"
@@ -55,5 +58,7 @@ class wxStaticBox: public wxControl
     
     void ApplyWidgetStyle();
 };
+
+#endif
 
 #endif // __GTKSTATICBOXH__

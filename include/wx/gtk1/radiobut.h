@@ -16,6 +16,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_RADIOBOX
+
 #include "wx/object.h"
 #include "wx/list.h"
 #include "wx/control.h"
@@ -69,5 +72,7 @@ class wxRadioButton: public wxControl
     bool        m_blockFirstEvent;
     GtkWidget*  m_theOtherRadioButtton;
 };
+
+#endif
 
 #endif // __GTKRADIOBUTTONH__

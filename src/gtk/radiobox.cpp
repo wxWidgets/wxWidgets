@@ -12,6 +12,9 @@
 #endif
 
 #include "wx/radiobox.h"
+
+#if wxUSE_RADIOBOX
+
 #include "wx/dialog.h"
 #include "wx/frame.h"
 
@@ -180,7 +183,7 @@ wxSize wxRadioBox::LayoutItems()
                 if (len > max_len) max_len = len;
 
                 gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), button, m_x+x, m_y+y );
-                y += 20;
+                y += 22;
 
                 node = node->Next();
                 if (!node) break;
@@ -516,3 +519,5 @@ bool wxRadioBox::IsOwnGtkWindow( GdkWindow *window )
 
     return FALSE;
 }
+
+#endif

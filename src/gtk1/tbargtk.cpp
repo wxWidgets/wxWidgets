@@ -12,6 +12,9 @@
 #endif
 
 #include "wx/toolbar.h"
+
+#if wxUSE_TOOLBAR
+
 #include "wx/frame.h"
 
 #include "glib.h"
@@ -584,3 +587,4 @@ void wxToolBar::OnIdle( wxIdleEvent &WXUNUSED(ievent) )
     }
 }
 
+#endif

@@ -173,8 +173,8 @@ void wxGenericPrintDialog::Init(wxWindow * WXUNUSED(parent))
 
     m_noCopiesText = new wxTextCtrl(this, wxPRINTID_COPIES, "", wxPoint(252, 130), wxSize(40, -1));
 
-    wxButton *okButton = new wxButton(this, wxID_OK, _("OK"), wxPoint(40, 180), wxSize(100, -1));
-    (void) new wxButton(this, wxID_CANCEL, _("Cancel"), wxPoint(180, 180), wxSize(100, -1));
+    wxButton *okButton = new wxButton(this, wxID_OK, _("OK"), wxPoint(40, 180), wxSize(80, -1));
+    (void) new wxButton(this, wxID_CANCEL, _("Cancel"), wxPoint(180, 180), wxSize(80, -1));
 
     okButton->SetDefault();
     okButton->SetFocus();
@@ -431,8 +431,8 @@ void wxGenericPrintSetupDialog::Init(wxPrintData* data)
 
     m_printerOptionsText = new wxTextCtrl(this, wxPRINTID_OPTIONS, "", wxPoint(360, 135), wxSize(150, -1));
 
-    wxButton *okButton = new wxButton(this, wxID_OK, _("OK"), wxPoint(130, 200), wxSize(100, -1));
-    (void) new wxButton(this, wxID_CANCEL, _("Cancel"), wxPoint(320, 200), wxSize(100, -1));
+    wxButton *okButton = new wxButton(this, wxID_OK, _("OK"), wxPoint(130, 200), wxSize(80, -1));
+    (void) new wxButton(this, wxID_CANCEL, _("Cancel"), wxPoint(320, 200), wxSize(80, -1));
 
     okButton->SetDefault();
     okButton->SetFocus();

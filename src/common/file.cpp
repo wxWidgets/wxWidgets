@@ -160,7 +160,7 @@ bool wxFile::Exists(const wxChar *name)
 {
     struct stat st;
 #if wxUSE_UNICODE && wxMBFILES
-    wxCharBuffer fname = wxConv_file.cWC2MB(name);
+    wxCharBuffer fname = wxConvFile.cWC2MB(name);
 
     return !access(fname, 0) &&
            !stat(MBSTRINGCAST fname, &st) &&

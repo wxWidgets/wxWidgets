@@ -12,6 +12,9 @@
 #endif
 
 #include "wx/notebook.h"
+
+#if wxUSE_NOTEBOOK
+
 #include "wx/panel.h"
 #include "wx/utils.h"
 #include "wx/imaglist.h"
@@ -623,3 +626,4 @@ bool wxNotebook::IsOwnGtkWindow( GdkWindow *window )
 
 IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxNotifyEvent)
 
+#endif

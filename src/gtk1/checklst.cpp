@@ -13,6 +13,8 @@
 
 #include "wx/checklst.h"
 
+#if wxUSE_CHECKLISTBOX
+
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
 
@@ -69,7 +71,7 @@ void wxCheckListBox::Check( int index, bool check )
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
 
-        wxString str = wxString(label->label,*wxConv_current);
+        wxString str = wxString(label->label,*wxConvCurrent);
 
         if (check == (str[1] == _T('X'))) return;
 
@@ -91,3 +93,5 @@ int wxCheckListBox::GetItemHeight() const
     // FIXME
     return 22;
 }
+
+#endif

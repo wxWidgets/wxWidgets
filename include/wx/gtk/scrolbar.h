@@ -16,6 +16,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_SCROLLBAR
+
 #include "wx/object.h"
 #include "wx/control.h"
 
@@ -85,6 +88,8 @@ class wxScrollBar: public wxControl
     GtkAdjustment  *m_adjust;
     float           m_oldPos;
 };
+
+#endif
 
 #endif
     // __GTKSCROLLBARH__

@@ -119,22 +119,26 @@ class wxMDIChildFrame: public wxFrame
 
   virtual void Activate();
     
+#if wxUSE_STATUSBAR
     // no status bars
   virtual wxStatusBar* CreateStatusBar( int WXUNUSED(number)=1, long WXUNUSED(style)=1, 
     wxWindowID WXUNUSED(id)=1, const wxString& WXUNUSED(name)=WXSTRINGCAST NULL ) {return (wxStatusBar*)NULL; }
   virtual wxStatusBar *GetStatusBar() const { return (wxStatusBar*)NULL; }
   virtual void SetStatusText( const wxString &WXUNUSED(text), int WXUNUSED(number)=0 ) {}
   virtual void SetStatusWidths( int WXUNUSED(n), const int WXUNUSED(widths_field)[] ) {}
+#endif
 
     // no size hints
   virtual void SetSizeHints( int WXUNUSED(minW), int WXUNUSED(minH),
                                int WXUNUSED(maxW), int WXUNUSED(maxH),
                                int WXUNUSED(incW), int WXUNUSED(incH) ) {}
   
+#if wxUSE_TOOLBAR
     // no toolbar bars
   virtual wxToolBar* CreateToolBar( long WXUNUSED(style), wxWindowID WXUNUSED(id), 
     const wxString& WXUNUSED(name) ) { return (wxToolBar*)NULL; }
   virtual wxToolBar *GetToolBar() const { return (wxToolBar*)NULL; }
+#endif
   
     // no icon
   void SetIcon( const wxIcon &icon ) { m_icon = icon; }

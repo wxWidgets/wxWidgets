@@ -12,6 +12,9 @@
 #endif
 
 #include "wx/mdi.h"
+
+#if wxUSE_MDI_ARCHITECTURE
+
 #include "wx/dialog.h"
 #include "wx/menu.h"
 #include <wx/intl.h>
@@ -421,3 +424,4 @@ bool wxMDIClientWindow::CreateClient( wxMDIParentFrame *parent, long style )
     return TRUE;
 }
 
+#endif
