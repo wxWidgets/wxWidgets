@@ -38,26 +38,24 @@ class wxNotebookPage;
 class wxNotebook : public wxControl
 {
 public:
-  // ctors
-  // -----
-    // default for dynamic class
-  wxNotebook();
-    // the same arguments as for wxControl (@@@ any special styles?)
-  wxNotebook(wxWindow *parent,
+      // default for dynamic class
+    wxNotebook();
+      // the same arguments as for wxControl
+    wxNotebook(wxWindow *parent,
              wxWindowID id,
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = 0,
              const wxString& name = "notebook");
-    // Create() function
-  bool Create(wxWindow *parent,
+      // Create() function
+    bool Create(wxWindow *parent,
               wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               long style = 0,
               const wxString& name = "notebook");
-    // dtor
-  ~wxNotebook();
+      // dtor
+    ~wxNotebook();
 
   // accessors
   // ---------
@@ -128,10 +126,9 @@ public:
     // get the panel which represents the given page
   wxWindow *GetPage(int nPage) const;
 
-  void OnNavigationKey(wxNavigationKeyEvent& event);
-
-    // overridden from wxWindow to make tabbing work  
-  void SetFocus();
+    // handler for tab navigation
+    // --------------------------
+    void OnNavigationKey(wxNavigationKeyEvent& event);
 
     // implementation
     // --------------

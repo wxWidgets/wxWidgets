@@ -154,6 +154,44 @@ gtk_notebook_realized_callback( GtkWidget * WXUNUSED(widget), wxWindow *win )
 }
 
 //-----------------------------------------------------------------------------
+// "key_press_event" 
+//-----------------------------------------------------------------------------
+
+static gint gtk_notebook_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxNotebook *win )
+{
+    if (g_isIdle)
+        wxapp_install_idle_handler();
+
+    if (!win->m_hasVMT) return FALSE;
+    if (g_blockEventsOnDrag) return FALSE;
+
+    /* win is a control: tab can be propagated up */
+    if ((gdk_event->keyval == GDK_Tab) || (gdk_event->keyval == GDK_ISO_Left_Tab))
+    {
+        wxNode *node = win->m_pages.Nth( win->GetSelection() );
+        if (!node) return FALSE;
+
+        wxNotebookPage *page = (wxNotebookPage*) node->Data();
+
+        wxNavigationKeyEvent event;
+        event.SetEventObject( win );
+        /* GDK reports GDK_ISO_Left_Tab for SHIFT-TAB */
+        event.SetDirection( (gdk_event->keyval == GDK_Tab) );
+        /* CTRL-TAB changes the (parent) window, i.e. switch notebook page */
+        event.SetCurrentFocus( win );
+        if (!page->m_client->GetEventHandler()->ProcessEvent( event ))
+        {
+             page->m_client->SetFocus();
+        }
+     
+        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_press_event" );
+        return TRUE;
+    }
+    
+    return FALSE;
+}
+
+//-----------------------------------------------------------------------------
 // InsertChild callback for wxNotebook
 //-----------------------------------------------------------------------------
 
@@ -237,6 +275,9 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
 	if (m_windowStyle & wxNB_BOTTOM)
 		gtk_notebook_set_tab_pos( GTK_NOTEBOOK(m_widget), GTK_POS_BOTTOM );
 
+    gtk_signal_connect( GTK_OBJECT(m_widget), "key_press_event",
+      GTK_SIGNAL_FUNC(gtk_notebook_key_press_callback), (gpointer)this );
+
     PostCreation();
 
     SetFont( parent->GetFont() );
@@ -247,19 +288,6 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
     Show( TRUE );
 
     return TRUE;
-}
-
-void wxNotebook::SetFocus()
-{
-    if (m_pages.GetCount() == 0) return;
-
-    wxNode *node = m_pages.Nth( GetSelection() );
-
-    if (!node) return;
-
-    wxNotebookPage *page = (wxNotebookPage*) node->Data();
-
-    page->m_client->SetFocus();
 }
 
 int wxNotebook::GetSelection() const

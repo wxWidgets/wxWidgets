@@ -1622,8 +1622,9 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
     {
         wxNavigationKeyEvent nevent;
         nevent.SetDirection( !event.ShiftDown() );
+        nevent.SetEventObject( GetParent()->GetParent() );
         nevent.SetCurrentFocus( m_parent );
-        if (m_parent->GetEventHandler()->ProcessEvent( nevent )) return;
+        if (GetParent()->GetParent()->GetEventHandler()->ProcessEvent( nevent )) return;
     }
 
     /* no item -> nothing to do */

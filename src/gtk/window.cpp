@@ -778,13 +778,13 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
          (win->GetParent()->HasFlag( wxTAB_TRAVERSAL)) )
     {
         wxNavigationKeyEvent new_event;
-        new_event.SetEventObject( win );
+        new_event.SetEventObject( win->GetParent() );
         /* GDK reports GDK_ISO_Left_Tab for SHIFT-TAB */
         new_event.SetDirection( (gdk_event->keyval == GDK_Tab) );
         /* CTRL-TAB changes the (parent) window, i.e. switch notebook page */
         new_event.SetWindowChange( (gdk_event->state & GDK_CONTROL_MASK) );
         new_event.SetCurrentFocus( win );
-        ret = win->GetEventHandler()->ProcessEvent( new_event );
+        ret = win->GetParent()->GetEventHandler()->ProcessEvent( new_event );
     }
 
     /* generate wxID_CANCEL if <esc> has been pressed (typically in dialogs) */

@@ -227,14 +227,9 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
                     if ( focussed_child_of_parent->IsTopLevel() )
                         break;
 
-                    // is the parent a panel?
-                    wxPanel *panel = wxDynamicCast(parent, wxPanel);
-                    if (panel)
-                    {
-                        event.SetCurrentFocus( focussed_child_of_parent );
-                        if (parent->GetEventHandler()->ProcessEvent( event ))
-                            return;
-                    }
+                    event.SetCurrentFocus( focussed_child_of_parent );
+                    if (parent->GetEventHandler()->ProcessEvent( event ))
+                        return;
 
                     focussed_child_of_parent = parent;
                 }
@@ -318,10 +313,7 @@ void wxPanel::SetFocus()
     //     think my addition to OnNavigationKey() above takes care of it.
     //     Keeping #ifdef __WXGTK__ for now, but please try removing it and see
     //     what happens.
-
-#ifdef __WXGTK__
-    m_winLastFocused = (wxWindow *)NULL;
-#endif // 0
+    // RR: Removed for now.
 
     if ( !SetFocusToChild() )
     {
@@ -331,7 +323,7 @@ void wxPanel::SetFocus()
 
 void wxPanel::OnFocus(wxFocusEvent& event)
 {
-    wxLogTrace(_T("focus"), _T("OnFocus on wxPanel 0x%08x."), GetHandle());
+    wxLogTrace(_T("focus"), _T("OnFocus on wxPanel 0x%08x, name: %s"), GetHandle(), GetName().c_str() );
 
     // If the panel gets the focus *by way of getting clicked on*
     // we move the focus to either the last window that had the
