@@ -30,11 +30,12 @@ public:
                             const wxPoint& pos = wxDefaultPosition,
                             const wxSize& size = wxDefaultSize,
                             long style = wxDP_DEFAULT | wxDP_SHOWCENTURY,
+                            const wxValidator& validator = wxDefaultValidator,
                             const wxString& name = wxDatePickerCtrlNameStr)
     {
         Init();
 
-        (void)Create(parent, id, date, pos, size, style, name);
+        (void)Create(parent, id, date, pos, size, style, validator, name);
     }
 
     bool Create(wxWindow *parent,
@@ -43,6 +44,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDP_DEFAULT | wxDP_SHOWCENTURY,
+                const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxDatePickerCtrlNameStr);
 
     // wxDatePickerCtrl methods

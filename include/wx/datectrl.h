@@ -87,8 +87,9 @@ public:
                          const wxPoint& pos = wxDefaultPosition,
                          const wxSize& size = wxDefaultSize,
                          long style = wxDP_DEFAULT | wxDP_SHOWCENTURY,
+                         const wxValidator& validator = wxDefaultValidator,
                          const wxString& name = wxDatePickerCtrlNameStr)
-            : wxDatePickerCtrlGeneric(parent, id, date, pos, size, style, name)
+            : wxDatePickerCtrlGeneric(parent, id, date, pos, size, style, validator, name)
         {
         }
 

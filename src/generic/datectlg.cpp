@@ -92,6 +92,7 @@ bool wxDatePickerCtrlGeneric::Create(wxWindow *parent,
                                      const wxPoint& pos,
                                      const wxSize& size,
                                      long style,
+                                     const wxValidator& validator,
                                      const wxString& name)
 {
     wxASSERT_MSG( !(style & wxDP_SPIN),
@@ -99,7 +100,7 @@ bool wxDatePickerCtrlGeneric::Create(wxWindow *parent,
 
     if ( !wxControl::Create(parent, id, pos, size,
                             style | wxCLIP_CHILDREN | wxWANTS_CHARS,
-                            wxDefaultValidator, name) )
+                            validator, name) )
 
     {
         return false;
