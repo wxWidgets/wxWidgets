@@ -26,12 +26,14 @@
 #endif
 
 // ----------------------------------------------------------------------------
-// forward decl for handle type
+// types used in this module
 // ----------------------------------------------------------------------------
 #ifndef   HKEY_DEFINED
   #define HKEY_DEFINED
   #define HKEY unsigned long
 #endif
+
+typedef unsigned long ulong;
 
 // ----------------------------------------------------------------------------
 // class wxRegKey encapsulates window HKEY handle
@@ -117,9 +119,14 @@ public:
     // get the (full) key name. Abbreviate std root keys if bShortPrefix.
   wxString GetName(bool bShortPrefix = TRUE) const;
     // return true if the key exists
-  bool  Exists()   const;
+  bool  Exists() const;
+    // get the info about key (any number of these pointers may be NULL)
+  bool  GetKeyInfo(ulong *pnSubKeys,      // number of subkeys
+                   ulong *pnMaxKeyLen,    // max len of subkey name
+                   ulong *pnValues,       // number of values
+                   ulong *pnMaxValueLen) const;
     // return true if the key is opened
-  bool  IsOpened() const { return m_hKey != 0;        }
+  bool  IsOpened() const { return m_hKey != 0; }
     // for "if ( !key ) wxLogError(...)" kind of expressions
   operator bool()  const { return m_dwLastError == 0; }
 

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        msw/regconf.h  
-// Purpose:     Registry based implementation of wxConfig
+// Purpose:     Registry based implementation of wxConfigBase
 // Author:      Vadim Zeitlin
 // Modified by: 
 // Created:     27.04.98
@@ -16,11 +16,15 @@
 #pragma interface "regconf.h"
 #endif
 
+#ifndef   _REGISTRY_H
+  #include <wx/msw/registry.h>
+#endif
+
 // ----------------------------------------------------------------------------
 // wxRegConfig
 // ----------------------------------------------------------------------------
 
-class wxRegConfig : public wxConfig
+class wxRegConfig : public wxConfigBase
 {
 public:
   // ctor & dtor
@@ -36,24 +40,26 @@ public:
   virtual void SetPath(const wxString& strPath);
   virtual const wxString& GetPath() const { return m_strPath; }
 
-  // enum
-  virtual bool GetFirstGroup(wxString& str, long& lIndex);
-  virtual bool GetNextGroup (wxString& str, long& lIndex);
-  virtual bool GetFirstEntry(wxString& str, long& lIndex);
-  virtual bool GetNextEntry (wxString& str, long& lIndex);
+  // entry/subgroup info
+    // enumerate all of them
+  virtual bool GetFirstGroup(wxString& str, long& lIndex) const;
+  virtual bool GetNextGroup (wxString& str, long& lIndex) const;
+  virtual bool GetFirstEntry(wxString& str, long& lIndex) const;
+  virtual bool GetNextEntry (wxString& str, long& lIndex) const;
 
-  // tests for existence
+    // tests for existence
   virtual bool HasGroup(const wxString& strName) const;
   virtual bool HasEntry(const wxString& strName) const;
 
     // get number of entries/subgroups in the current group, with or without
     // it's subgroups
-  virtual uint GetNumberOfEntries(bool bRecursive = FALSE) const = 0;
-  virtual uint GetNumberOfGroups(bool bRecursive = FALSE) const = 0;
+  virtual uint GetNumberOfEntries(bool bRecursive = FALSE) const;
+  virtual uint GetNumberOfGroups(bool bRecursive = FALSE) const;
 
   // read/write
-  virtual bool Read(wxString&, const char *, const char * = 0) const;
-  virtual bool Read(long&, const char *, long = 0) const;
+  virtual bool Read(wxString *pStr, const char *szKey,
+                    const char *szDefault = 0) const;
+  virtual bool Read(long *result, const char *szKey, long lDefault = 0) const;
   virtual bool Write(const char *szKey, const char *szValue);
   virtual bool Write(const char *szKey, long Value);
   virtual bool Flush(bool /* bCurrentOnly = FALSE */ ) { return TRUE; }
