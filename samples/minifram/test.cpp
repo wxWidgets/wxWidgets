@@ -44,6 +44,7 @@ IMPLEMENT_APP(MyApp)
 
 MyMainFrame   *main_frame = (MyMainFrame*) NULL;
 MyMiniFrame   *mini_frame = (MyMiniFrame*) NULL;
+bool           mini_frame_exists = FALSE;
 wxButton      *button     = (wxButton*) NULL;
 
 // The `main program' equivalent, creating the windows and returning the
@@ -53,6 +54,7 @@ bool MyApp::OnInit(void)
   // Create the mini frame window
   mini_frame = new MyMiniFrame((wxFrame *) NULL, -1, "wxMiniFrame sample",
      wxPoint(100, 100), wxSize(205, 100));
+  mini_frame_exists = TRUE;
 
   mini_frame->CreateToolBar(wxNO_BORDER|wxHORIZONTAL|wxTB_FLAT, ID_TOOLBAR);
   InitToolbar(mini_frame->GetToolBar());
@@ -163,6 +165,8 @@ MyMiniFrame::MyMiniFrame(wxFrame* parent, wxWindowID id, const wxString& title, 
 
 void MyMiniFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
+  // make it known that the miniframe is no more
+  mini_frame_exists = FALSE;
   Destroy();
 }
 
@@ -191,7 +195,14 @@ void MyMainFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 
 void MyMainFrame::OnReparent(wxCommandEvent& WXUNUSED(event))
 {
-  button->Reparent( mini_frame );
+  // practical jokers might find satisfaction in reparenting the button
+  // after closing the mini_frame. We'll have the last laugh.
+  if (! mini_frame_exists)
+    wxMessageBox("The miniframe no longer exists.\n"
+	"You don't want to make this button an orphan, do you?",
+	"You got to be kidding");
+  else
+    button->Reparent( mini_frame );
 }
 
 
