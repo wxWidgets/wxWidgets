@@ -29,6 +29,7 @@ import os, sys, getopt, re, traceback
 # Local modules
 from tree import *                      # imports xxx which imports params
 from panel import *
+from tools import *
 # Cleanup recursive import sideeffects, otherwise we can't create undoMan
 import undo
 undo.ParamPage = ParamPage
@@ -82,7 +83,8 @@ class Frame(wxFrame):
         wxFrame.__init__(self, None, -1, '', pos, size)
         global frame
         frame = g.frame = self
-        self.CreateStatusBar()
+        bar = self.CreateStatusBar(2)
+        bar.SetStatusWidths([-1, 40])
         self.SetIcon(images.getIconIcon())
 
         # Idle flag
@@ -119,6 +121,9 @@ class Frame(wxFrame):
         menu.Append(self.ID_EMBED_PANEL, '&Embed Panel',
                     'Toggle embedding properties panel in the main window', True)
         menu.Check(self.ID_EMBED_PANEL, conf.embedPanel)
+        self.ID_SHOW_TOOLS = wxNewId()
+        menu.Append(self.ID_SHOW_TOOLS, 'Show &Tools', 'Toggle tools', True)
+        menu.Check(self.ID_SHOW_TOOLS, conf.showTools)
         menu.AppendSeparator()
         self.ID_TEST = wxNewId()
         menu.Append(self.ID_TEST, '&Test\tF5', 'Test window')
@@ -185,6 +190,7 @@ class Frame(wxFrame):
         EVT_MENU(self, ID_SELECT, self.OnSelect)
         # View
         EVT_MENU(self, self.ID_EMBED_PANEL, self.OnEmbedPanel)
+        EVT_MENU(self, self.ID_SHOW_TOOLS, self.OnShowTools)
         EVT_MENU(self, self.ID_TEST, self.OnTest)
         EVT_MENU(self, self.ID_REFRESH, self.OnRefresh)
         EVT_MENU(self, self.ID_AUTO_REFRESH, self.OnAutoRefresh)
@@ -205,12 +211,25 @@ class Frame(wxFrame):
         # Build interface
         sizer = wxBoxSizer(wxVERTICAL)
         sizer.Add(wxStaticLine(self, -1), 0, wxEXPAND)
+        # Horizontal sizer for toolbar and splitter
+        self.toolsSizer = sizer1 = wxBoxSizer()
         splitter = wxSplitterWindow(self, -1, style=wxSP_3DSASH)
         self.splitter = splitter
         splitter.SetMinimumPaneSize(100)
         # Create tree
         global tree
         g.tree = tree = XML_Tree(splitter, -1)
+
+        # Init pull-down menu data
+        global pullDownMenu
+        g.pullDownMenu = pullDownMenu = PullDownMenu(self)
+
+        # Vertical toolbar for GUI buttons
+        g.tools = tools = Tools(self)
+        tools.Show(conf.showTools)
+        if conf.showTools: sizer1.Add(tools, 0, wxEXPAND)
+
+        tree.RegisterKeyEvents()
 
         # !!! frame styles are broken
         # Miniframe for not embedded mode
@@ -233,141 +252,10 @@ class Frame(wxFrame):
             sizer2.Add(panel, 1, wxEXPAND)
             miniFrame.Show(True)
             splitter.Initialize(tree)
-        sizer.Add(splitter, 1, wxEXPAND)
+        sizer1.Add(splitter, 1, wxEXPAND)
+        sizer.Add(sizer1, 1, wxEXPAND)
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
-
-        # Init pull-down menu data
-        global pullDownMenu
-        pullDownMenu = g.pullDownMenu = PullDownMenu(self)
-        # Mapping from IDs to element names
-        self.createMap = {
-            pullDownMenu.ID_NEW_PANEL: 'wxPanel',
-            pullDownMenu.ID_NEW_DIALOG: 'wxDialog',
-            pullDownMenu.ID_NEW_FRAME: 'wxFrame',
-            pullDownMenu.ID_NEW_TOOL_BAR: 'wxToolBar',
-            pullDownMenu.ID_NEW_TOOL: 'tool',
-            pullDownMenu.ID_NEW_MENU_BAR: 'wxMenuBar',
-            pullDownMenu.ID_NEW_MENU: 'wxMenu',
-            pullDownMenu.ID_NEW_MENU_ITEM: 'wxMenuItem',
-            pullDownMenu.ID_NEW_SEPARATOR: 'separator',
-
-            pullDownMenu.ID_NEW_STATIC_TEXT: 'wxStaticText',
-            pullDownMenu.ID_NEW_TEXT_CTRL: 'wxTextCtrl',
-
-            pullDownMenu.ID_NEW_BUTTON: 'wxButton',
-            pullDownMenu.ID_NEW_BITMAP_BUTTON: 'wxBitmapButton',
-            pullDownMenu.ID_NEW_RADIO_BUTTON: 'wxRadioButton',
-            pullDownMenu.ID_NEW_SPIN_BUTTON: 'wxSpinButton',
-
-            pullDownMenu.ID_NEW_STATIC_BOX: 'wxStaticBox',
-            pullDownMenu.ID_NEW_CHECK_BOX: 'wxCheckBox',
-            pullDownMenu.ID_NEW_RADIO_BOX: 'wxRadioBox',
-            pullDownMenu.ID_NEW_COMBO_BOX: 'wxComboBox',
-            pullDownMenu.ID_NEW_LIST_BOX: 'wxListBox',
-
-            pullDownMenu.ID_NEW_STATIC_LINE: 'wxStaticLine',
-            pullDownMenu.ID_NEW_STATIC_BITMAP: 'wxStaticBitmap',
-            pullDownMenu.ID_NEW_CHOICE: 'wxChoice',
-            pullDownMenu.ID_NEW_SLIDER: 'wxSlider',
-            pullDownMenu.ID_NEW_GAUGE: 'wxGauge',
-            pullDownMenu.ID_NEW_SCROLL_BAR: 'wxScrollBar',
-            pullDownMenu.ID_NEW_TREE_CTRL: 'wxTreeCtrl',
-            pullDownMenu.ID_NEW_LIST_CTRL: 'wxListCtrl',
-            pullDownMenu.ID_NEW_CHECK_LIST: 'wxCheckList',
-            pullDownMenu.ID_NEW_NOTEBOOK: 'wxNotebook',
-            pullDownMenu.ID_NEW_HTML_WINDOW: 'wxHtmlWindow',
-            pullDownMenu.ID_NEW_CALENDAR_CTRL: 'wxCalendarCtrl',
-            pullDownMenu.ID_NEW_GENERIC_DIR_CTRL: 'wxGenericDirCtrl',
-            pullDownMenu.ID_NEW_SPIN_CTRL: 'wxSpinCtrl',
-
-            pullDownMenu.ID_NEW_BOX_SIZER: 'wxBoxSizer',
-            pullDownMenu.ID_NEW_STATIC_BOX_SIZER: 'wxStaticBoxSizer',
-            pullDownMenu.ID_NEW_GRID_SIZER: 'wxGridSizer',
-            pullDownMenu.ID_NEW_FLEX_GRID_SIZER: 'wxFlexGridSizer',
-            pullDownMenu.ID_NEW_SPACER: 'spacer',
-            pullDownMenu.ID_NEW_UNKNOWN: 'unknown',
-            }
-        pullDownMenu.controls = [
-            ['control', 'Various controls',
-             (pullDownMenu.ID_NEW_STATIC_TEXT, 'Label', 'Create static label'),
-             (pullDownMenu.ID_NEW_STATIC_LINE, 'Line', 'Create static line'),
-             (pullDownMenu.ID_NEW_TEXT_CTRL, 'TextBox', 'Create text box control'),
-             (pullDownMenu.ID_NEW_CHOICE, 'Choice', 'Create choice control'),
-             (pullDownMenu.ID_NEW_SLIDER, 'Slider', 'Create slider control'),
-             (pullDownMenu.ID_NEW_GAUGE, 'Gauge', 'Create gauge control'),
-             (pullDownMenu.ID_NEW_SPIN_CTRL, 'SpinCtrl', 'Create spin control'),
-             (pullDownMenu.ID_NEW_SCROLL_BAR, 'ScrollBar', 'Create scroll bar'),
-             (pullDownMenu.ID_NEW_TREE_CTRL, 'TreeCtrl', 'Create tree control'),
-             (pullDownMenu.ID_NEW_LIST_CTRL, 'ListCtrl', 'Create list control'),
-             (pullDownMenu.ID_NEW_HTML_WINDOW, 'HtmlWindow', 'Create HTML window'),
-             (pullDownMenu.ID_NEW_CALENDAR_CTRL, 'CalendarCtrl', 'Create calendar control'),
-             (pullDownMenu.ID_NEW_GENERIC_DIR_CTRL, 'GenericDirCtrl', 'Create generic dir control'),
-             (pullDownMenu.ID_NEW_UNKNOWN, 'Unknown', 'Create custom control placeholder'),
-             ],
-            ['button', 'Buttons',
-             (pullDownMenu.ID_NEW_BUTTON, 'Button', 'Create button'),
-             (pullDownMenu.ID_NEW_BITMAP_BUTTON, 'BitmapButton', 'Create bitmap button'),
-             (pullDownMenu.ID_NEW_RADIO_BUTTON, 'RadioButton', 'Create radio button'),
-             (pullDownMenu.ID_NEW_SPIN_BUTTON, 'SpinButton', 'Create spin button'),
-             ],
-            ['box', 'Boxes',
-             (pullDownMenu.ID_NEW_STATIC_BOX, 'StaticBox', 'Create static box'),
-             (pullDownMenu.ID_NEW_CHECK_BOX, 'CheckBox', 'Create check box'),
-             (pullDownMenu.ID_NEW_RADIO_BOX, 'RadioBox', 'Create radio box'),
-             (pullDownMenu.ID_NEW_COMBO_BOX, 'ComboBox', 'Create combo box'),
-             (pullDownMenu.ID_NEW_LIST_BOX, 'ListBox', 'Create list box'),
-             (pullDownMenu.ID_NEW_CHECK_LIST, 'CheckListBox', 'Create check list control'),
-             ],
-            ['container', 'Containers',
-             (pullDownMenu.ID_NEW_PANEL, 'Panel', 'Create panel'),
-             (pullDownMenu.ID_NEW_NOTEBOOK, 'Notebook', 'Create notebook control'),
-             (pullDownMenu.ID_NEW_TOOL_BAR, 'ToolBar', 'Create toolbar'),
-             ],
-            ['sizer', 'Sizers',
-             (pullDownMenu.ID_NEW_BOX_SIZER, 'BoxSizer', 'Create box sizer'),
-             (pullDownMenu.ID_NEW_STATIC_BOX_SIZER, 'StaticBoxSizer',
-              'Create static box sizer'),
-             (pullDownMenu.ID_NEW_GRID_SIZER, 'GridSizer', 'Create grid sizer'),
-             (pullDownMenu.ID_NEW_FLEX_GRID_SIZER, 'FlexGridSizer',
-              'Create flexgrid sizer'),
-             (pullDownMenu.ID_NEW_SPACER, 'Spacer', 'Create spacer'),
-             ]
-            ]
-        pullDownMenu.menuControls = [
-            (pullDownMenu.ID_NEW_MENU, 'Menu', 'Create menu'),
-            (pullDownMenu.ID_NEW_MENU_ITEM, 'MenuItem', 'Create menu item'),
-            (pullDownMenu.ID_NEW_SEPARATOR, 'Separator', 'Create separator'),
-            ]
-        pullDownMenu.toolBarControls = [
-            (pullDownMenu.ID_NEW_TOOL, 'Tool', 'Create tool'),
-            (pullDownMenu.ID_NEW_SEPARATOR, 'Separator', 'Create separator'),
-            ['control', 'Various controls',
-             (pullDownMenu.ID_NEW_STATIC_TEXT, 'Label', 'Create static label'),
-             (pullDownMenu.ID_NEW_STATIC_LINE, 'Line', 'Create static line'),
-             (pullDownMenu.ID_NEW_TEXT_CTRL, 'TextBox', 'Create text box control'),
-             (pullDownMenu.ID_NEW_CHOICE, 'Choice', 'Create choice control'),
-             (pullDownMenu.ID_NEW_SLIDER, 'Slider', 'Create slider control'),
-             (pullDownMenu.ID_NEW_GAUGE, 'Gauge', 'Create gauge control'),
-             (pullDownMenu.ID_NEW_SCROLL_BAR, 'ScrollBar', 'Create scroll bar'),
-             (pullDownMenu.ID_NEW_LIST_CTRL, 'ListCtrl', 'Create list control'),
-             ],
-            ['button', 'Buttons',
-             (pullDownMenu.ID_NEW_BUTTON, 'Button', 'Create button'),
-             (pullDownMenu.ID_NEW_BITMAP_BUTTON, 'BitmapButton', 'Create bitmap button'),
-             (pullDownMenu.ID_NEW_RADIO_BUTTON, 'RadioButton', 'Create radio button'),
-             (pullDownMenu.ID_NEW_SPIN_BUTTON, 'SpinButton', 'Create spin button'),
-             ],
-            ['box', 'Boxes',
-             (pullDownMenu.ID_NEW_STATIC_BOX, 'StaticBox', 'Create static box'),
-             (pullDownMenu.ID_NEW_CHECK_BOX, 'CheckBox', 'Create check box'),
-             (pullDownMenu.ID_NEW_RADIO_BOX, 'RadioBox', 'Create radio box'),
-             (pullDownMenu.ID_NEW_COMBO_BOX, 'ComboBox', 'Create combo box'),
-             (pullDownMenu.ID_NEW_LIST_BOX, 'ListBox', 'Create list box'),
-             (pullDownMenu.ID_NEW_CHECK_LIST, 'CheckListBox',
-              'Create check list control'),
-             ],
-            ]
 
         # Initialize
         self.clipboard = None
@@ -377,6 +265,8 @@ class Frame(wxFrame):
         EVT_IDLE(self, self.OnIdle)
         EVT_CLOSE(self, self.OnCloseWindow)
         EVT_LEFT_DOWN(self, self.OnLeftDown)
+        EVT_KEY_DOWN(self, tools.OnKeyDown)
+        EVT_KEY_UP(self, tools.OnKeyUp)
 
     def OnNew(self, evt):
         self.Clear()
@@ -626,6 +516,15 @@ class Frame(wxFrame):
             self.SetDimensions(pos.x, pos.y,
                                max(size.x - sizePanel.x, self.minWidth), size.y)
 
+    def OnShowTools(self, evt):
+        conf.showTools = evt.IsChecked()
+        g.tools.Show(conf.showTools)
+        if conf.showTools:
+            self.toolsSizer.Prepend(g.tools, 0, wxEXPAND)
+        else:
+            self.toolsSizer.Remove(g.tools)
+        self.toolsSizer.Layout()
+        
     def OnTest(self, evt):
         if not tree.selection: return   # key pressed event
         tree.ShowTestWindow(tree.selection)
@@ -640,6 +539,7 @@ class Frame(wxFrame):
         if g.testWin:
             # (re)create
             tree.CreateTestWin(g.testWin.item)
+        panel.modified = False
         tree.needUpdate = False
 
     def OnAutoRefresh(self, evt):
@@ -707,7 +607,7 @@ Homepage: http://xrced.sourceforge.net\
         if parent.hasChild: parent = parent.child
 
         # Create element
-        className = self.createMap[evt.GetId()]
+        className = pullDownMenu.createMap[evt.GetId()]
         xxx = MakeEmptyXXX(parent, className)
 
         # Set default name for top-level windows
@@ -733,6 +633,7 @@ Homepage: http://xrced.sourceforge.net\
                 tree.pendingHighLight = newItem
             else:
                 tree.pendingHighLight = None
+        tree.SetFocus()
 
     # Expand/collapse subtree
     def OnExpand(self, evt):
@@ -948,6 +849,7 @@ class App(wxApp):
         pos = conf.ReadInt('x', -1), conf.ReadInt('y', -1)
         size = conf.ReadInt('width', 800), conf.ReadInt('height', 600)
         conf.embedPanel = conf.ReadInt('embedPanel', True)
+        conf.showTools = conf.ReadInt('showTools', True)
         conf.sashPos = conf.ReadInt('sashPos', 200)
         if not conf.embedPanel:
             conf.panelX = conf.ReadInt('panelX', -1)
@@ -984,6 +886,7 @@ class App(wxApp):
         wc.WriteInt('width', conf.width)
         wc.WriteInt('height', conf.height)
         wc.WriteInt('embedPanel', conf.embedPanel)
+        wc.WriteInt('showTools', conf.showTools)
         if not conf.embedPanel:
             wc.WriteInt('panelX', conf.panelX)
             wc.WriteInt('panelY', conf.panelY)

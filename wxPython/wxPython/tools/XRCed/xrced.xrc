@@ -23,13 +23,14 @@
                 <object class="wxButton" name="BUTTON_UP">
                   <label>Move Up</label>
                 </object>
-                <flag>wxBOTTOM</flag>
+                <flag>wxBOTTOM|wxEXPAND</flag>
                 <border>5</border>
               </object>
               <object class="sizeritem">
                 <object class="wxButton" name="BUTTON_DOWN">
                   <label>Move Down</label>
                 </object>
+                <flag>wxEXPAND</flag>
               </object>
               <object class="spacer">
                 <size>10,20</size>
@@ -39,13 +40,14 @@
                 <object class="wxButton" name="BUTTON_APPEND">
                   <label>Append...</label>
                 </object>
-                <flag>wxBOTTOM</flag>
+                <flag>wxBOTTOM|wxEXPAND</flag>
                 <border>5</border>
               </object>
               <object class="sizeritem">
                 <object class="wxButton" name="BUTTON_REMOVE">
                   <label>Remove</label>
                 </object>
+                <flag>wxEXPAND</flag>
               </object>
             </object>
             <flag>wxALL|wxEXPAND</flag>
@@ -105,13 +107,14 @@
                 <object class="wxButton" name="BUTTON_UP">
                   <label>Move Up</label>
                 </object>
-                <flag>wxBOTTOM</flag>
+                <flag>wxBOTTOM|wxEXPAND</flag>
                 <border>5</border>
               </object>
               <object class="sizeritem">
                 <object class="wxButton" name="BUTTON_DOWN">
                   <label>Move Down</label>
                 </object>
+                <flag>wxEXPAND</flag>
               </object>
               <object class="spacer">
                 <size>10,20</size>
@@ -121,13 +124,14 @@
                 <object class="wxButton" name="BUTTON_APPEND">
                   <label>Append...</label>
                 </object>
-                <flag>wxBOTTOM</flag>
+                <flag>wxBOTTOM|wxEXPAND</flag>
                 <border>5</border>
               </object>
               <object class="sizeritem">
                 <object class="wxButton" name="BUTTON_REMOVE">
                   <label>Remove</label>
                 </object>
+                <flag>wxEXPAND</flag>
               </object>
             </object>
             <flag>wxALL|wxEXPAND</flag>
@@ -251,34 +255,34 @@
                 <item>wxART_ADD_BOOKMARK</item>
                 <item>wxART_DEL_BOOKMARK</item>
                 <item>wxART_HELP_SIDE_PANEL</item>
-		<item>wxART_HELP_SETTINGS</item>
-		<item>wxART_HELP_BOOK</item>
-		<item>wxART_HELP_FOLDER</item>
-		<item>wxART_HELP_PAGE</item>
-		<item>wxART_GO_BACK</item>
-		<item>wxART_GO_FORWARD</item>
-		<item>wxART_GO_UP</item>
-		<item>wxART_GO_DOWN</item>
-		<item>wxART_GO_TO_PARENT</item>
-		<item>wxART_GO_HOME</item>
-		<item>wxART_FILE_OPEN</item>
-		<item>wxART_PRINT</item>
-		<item>wxART_HELP</item>
-		<item>wxART_TIP</item>
-		<item>wxART_REPORT_VIEW</item>
-		<item>wxART_LIST_VIEW</item>
-		<item>wxART_NEW_DIR</item>
-		<item>wxART_FOLDER</item>
-		<item>wxART_GO_DIR_UP</item>
-		<item>wxART_EXECUTABLE_FILE</item>
-		<item>wxART_NORMAL_FILE</item>
-		<item>wxART_TICK_MARK</item>
-		<item>wxART_CROSS_MARK</item>
-		<item>wxART_ERROR</item>
-		<item>wxART_QUESTION</item>
-		<item>wxART_WARNING</item>
-		<item>wxART_INFORMATION</item>
-		<item>wxART_MISSING_IMAGE</item>
+                <item>wxART_HELP_SETTINGS</item>
+                <item>wxART_HELP_BOOK</item>
+                <item>wxART_HELP_FOLDER</item>
+                <item>wxART_HELP_PAGE</item>
+                <item>wxART_GO_BACK</item>
+                <item>wxART_GO_FORWARD</item>
+                <item>wxART_GO_UP</item>
+                <item>wxART_GO_DOWN</item>
+                <item>wxART_GO_TO_PARENT</item>
+                <item>wxART_GO_HOME</item>
+                <item>wxART_FILE_OPEN</item>
+                <item>wxART_PRINT</item>
+                <item>wxART_HELP</item>
+                <item>wxART_TIP</item>
+                <item>wxART_REPORT_VIEW</item>
+                <item>wxART_LIST_VIEW</item>
+                <item>wxART_NEW_DIR</item>
+                <item>wxART_FOLDER</item>
+                <item>wxART_GO_DIR_UP</item>
+                <item>wxART_EXECUTABLE_FILE</item>
+                <item>wxART_NORMAL_FILE</item>
+                <item>wxART_TICK_MARK</item>
+                <item>wxART_CROSS_MARK</item>
+                <item>wxART_ERROR</item>
+                <item>wxART_QUESTION</item>
+                <item>wxART_WARNING</item>
+                <item>wxART_INFORMATION</item>
+                <item>wxART_MISSING_IMAGE</item>
               </content>
             </object>
             <flag>wxRIGHT|wxEXPAND</flag>
@@ -301,7 +305,7 @@
               <object class="sizeritem">
                 <object class="wxButton" name="BUTTON_BROWSE">
                   <label>Browse...</label>
-                  <size>55,-1</size>
+                  <size>30,-1d</size>
                 </object>
               </object>
             </object>

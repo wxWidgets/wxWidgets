@@ -9,15 +9,18 @@ from wxPython.xrc import *
 
 # Global constants
 
+sysFont = wxSystemSettings_GetFont(wxSYS_SYSTEM_FONT)
 if wxPlatform == '__WXGTK__':
-    labelFont = wxFont(12, wxDEFAULT, wxNORMAL, wxBOLD)
-    modernFont = wxFont(12, wxMODERN, wxNORMAL, wxNORMAL)
+    labelFont = wxFont(sysFont.GetPointSize(), wxDEFAULT, wxNORMAL, wxBOLD)
+    modernFont = wxFont(sysFont.GetPointSize(), wxMODERN, wxNORMAL, wxNORMAL)
+    smallerFont = wxFont(sysFont.GetPointSize() - 2, wxDEFAULT, wxNORMAL, wxNORMAL)
 else:
     labelFont = wxFont(10, wxDEFAULT, wxNORMAL, wxBOLD)
     modernFont = wxFont(10, wxMODERN, wxNORMAL, wxNORMAL)
+    smallerFont = wxFont(8, wxDEFAULT, wxNORMAL, wxNORMAL)
 
 progname = 'XRCed'
-version = '0.0.9-6'
+version = '0.1.0'
 
 # Global variables
 
@@ -25,6 +28,7 @@ class Globals:
     panel = None
     tree = None
     frame = None
+    tools = None
     undoMan = None
     testWin = None
     testWinPos = wxDefaultPosition

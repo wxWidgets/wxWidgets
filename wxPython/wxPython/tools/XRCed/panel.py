@@ -19,6 +19,10 @@ class Panel(wxNotebook):
         g.panel = panel = self
         self.modified = False
 
+        # Set common button size for parameter buttons
+        import params
+        params.buttonSize = self.DLG_SZE(buttonSize)
+
         # List of child windows
         self.pages = []
         # Create scrolled windows for pages
@@ -160,6 +164,7 @@ class ParamPage(wxPanel):
         self.checks = {}
         self.controls = {}              # save python objects
         self.controlName = None
+        
     def OnCheckParams(self, evt):
         xxx = self.xxx
         param = evt.GetEventObject().GetName()
@@ -249,11 +254,12 @@ class PropPage(ParamPage):
         box.SetFont(labelFont)
         topSizer = wxStaticBoxSizer(box, wxVERTICAL)
         sizer = wxFlexGridSizer(len(xxx.allParams), 2, 1, 1)
+        sizer.AddGrowableCol(1)
         if xxx.hasName:
             label = wxStaticText(self, -1, 'XML ID:', size=(100,-1))
-            control = ParamText(self, name='XML_name')
+            control = ParamText(self, 'XML_name', 200)
             sizer.AddMany([ (label, 0, wxALIGN_CENTER_VERTICAL),
-                            (control, 0, wxALIGN_CENTER_VERTICAL | wxBOTTOM, 5) ])
+                            (control, 0, wxALIGN_CENTER_VERTICAL | wxBOTTOM | wxGROW, 5) ])
             self.controlName = control
         for param in xxx.allParams:
             present = xxx.params.has_key(param)
@@ -279,7 +285,7 @@ class PropPage(ParamPage):
             control = typeClass(self, param)
             control.Enable(present)
             sizer.AddMany([ (label, 0, wxALIGN_CENTER_VERTICAL),
-                            (control, 0, wxALIGN_CENTER_VERTICAL) ])
+                            (control, 0, wxALIGN_CENTER_VERTICAL | wxGROW) ])
             self.controls[param] = control
         topSizer.Add(sizer, 1, wxALL | wxEXPAND, 3)
         self.SetAutoLayout(True)
@@ -321,6 +327,7 @@ class StylePage(ParamPage):
         box.SetFont(labelFont)
         topSizer = wxStaticBoxSizer(box, wxVERTICAL)
         sizer = wxFlexGridSizer(len(xxx.styles), 2, 1, 1)
+        sizer.AddGrowableCol(1)
         for param in xxx.styles:
             present = xxx.params.has_key(param)
             check = wxCheckBox(self, paramIDs[param],
@@ -329,7 +336,7 @@ class StylePage(ParamPage):
             control = paramDict[param](self, name = param)
             control.Enable(present)
             sizer.AddMany([ (check, 0, wxALIGN_CENTER_VERTICAL),
-                            (control, 0, wxALIGN_CENTER_VERTICAL) ])
+                            (control, 0, wxALIGN_CENTER_VERTICAL | wxGROW) ])
             self.checks[param] = check
             self.controls[param] = control
         topSizer.Add(sizer, 1, wxALL | wxEXPAND, 3)

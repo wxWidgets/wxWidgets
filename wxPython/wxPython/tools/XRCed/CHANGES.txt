@@ -1,3 +1,16 @@
+0.1.0
+-----
+
+Finally implemented tools panel for almost all controls (except
+wxHtmlWindow, wxCalendarCtrl and wxGenericDirCtrl - they are too
+rarely used).
+
+Changed some sizes in panel to better work with different fonts.
+
+Fixed double-refreshing after Ctrl+R.
+
+Maybe something else that I've forgot. It's been a looong day... :)
+
 0.0.9-6
 -------
 

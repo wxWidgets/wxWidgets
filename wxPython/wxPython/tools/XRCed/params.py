@@ -16,7 +16,7 @@ genericStyles = ['wxSIMPLE_BORDER', 'wxDOUBLE_BORDER',
                  'wxTRANSPARENT_WINDOW', 'wxWANTS_CHARS',
                  'wxNO_FULL_REPAINT_ON_RESIZE']
 
-buttonSize = (55,-1)
+buttonSize = (30,-1)    # in dialog units, transformed to pixels in panel ctor
 
 # Class that can properly disable children
 class PPanel(wxPanel):
@@ -351,14 +351,16 @@ class ParamUnit(PPanel):
         self.Change(-1)
 
 class ParamText(PPanel):
-    def __init__(self, parent, name, textWidth=260):
+    def __init__(self, parent, name, textWidth=-1):
         PPanel.__init__(self, parent, name)
         self.ID_TEXT_CTRL = wxNewId()
         # We use sizer even here to have the same size of text control
         sizer = wxBoxSizer()
         self.SetBackgroundColour(g.panel.GetBackgroundColour())
         self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=wxSize(textWidth,-1))
-        sizer.Add(self.text, 0, wxALIGN_CENTER_VERTICAL)
+        if textWidth == -1: option = 1
+        else: option = 0
+        sizer.Add(self.text, option, wxALIGN_CENTER_VERTICAL)
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
         sizer.Fit(self)
@@ -372,11 +374,19 @@ class ParamText(PPanel):
 
 class ParamAccel(ParamText):
     def __init__(self, parent, name):
-        ParamText.__init__(self, parent, name, 50)
+        ParamText.__init__(self, parent, name, 100)
 
 class ParamPosSize(ParamText):
     def __init__(self, parent, name):
         ParamText.__init__(self, parent, name, 80)
+
+class ParamLabel(ParamText):
+    def __init__(self, parent, name):
+        ParamText.__init__(self, parent, name, 200)
+
+class ParamEncoding(ParamText):
+    def __init__(self, parent, name):
+        ParamText.__init__(self, parent, name, 100)
 
 class ContentDialog(wxDialogPtr):
     def __init__(self, parent, value):
@@ -815,12 +825,13 @@ paramDict = {
     'pos': ParamPosSize, 'size': ParamPosSize,
     'border': ParamUnit, 'cols': ParamInt, 'rows': ParamInt,
     'vgap': ParamUnit, 'hgap': ParamUnit,
-    'checkable': ParamBool, 'accel': ParamAccel,
+    'checkable': ParamBool, 'checked': ParamBool, 'radio': ParamBool,
+    'accel': ParamAccel,
     'label': ParamText, 'title': ParamText, 'value': ParamText,
     'content': ParamContent, 'selection': ParamInt,
     'min': ParamInt, 'max': ParamInt,
     'fg': ParamColour, 'bg': ParamColour, 'font': ParamFont,
     'enabled': ParamBool, 'focused': ParamBool, 'hidden': ParamBool,
     'tooltip': ParamText, 'bitmap': ParamBitmap, 'icon': ParamBitmap,
+    'label': ParamLabel, 'encoding': ParamEncoding
     }
-
