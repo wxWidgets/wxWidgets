@@ -3117,6 +3117,13 @@ cursors, (insert/select and update if connection is not wxDB\_QUERY\_ONLY) and
 constructs the insert statement that is to be used for inserting data as a new
 row in the datasource.
 
+NOTE: To retrieve data into an opened table, the of the table must be bound
+to the variables in the program via call(s) to 
+\helpref{wxDbTable::SetColDefs}{wxdbtablesetcoldefs} before calling Open().
+
+See the \helpref{database classes overview}{odbcoverview} for
+an introduction to using the ODBC classes.
+
 \wxheading{Parameters}
 
 \docparam{checkPrivileges}{Indicates whether the Open() function should check
@@ -3150,6 +3157,7 @@ function can significantly speed up the privileges checks.
 
 \helpref{wxDb::TableExists}{wxdbtableexists},
 \helpref{wxDb::TablePrivileges}{wxdbtableprivileges}
+\helpref{wxDbTable::SetColDefs}{wxdbtablesetcoldefs}
 
 \membersection{wxDbTable::OrderBy}\label{wxdbtableorderby}
 
@@ -3297,7 +3305,7 @@ wxDbTable constructor, it is specified how many columns are in
 the wxDbTable object. The SELECT statement must return exactly
 that many columns.
 \item The columns must be returned in the same sequence as specified
-when defining the bounds columns using wxDbTable::SetColDefs(),
+when defining the bounds columns \helpref{wxDbTable::SetColDefs}{wxdbtablesetcoldefs},
 and the columns returned must be of the proper data type.  For
 example, if column 3 is defined in the wxDbTable bound column
 definitions to be a float, the SELECT statement must return a
