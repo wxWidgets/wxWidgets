@@ -500,7 +500,7 @@
                 #define wxPuts      putws
             #else
                 #define wxNEED_PUTS
-                int wxPuts(const wxChar *ws)
+                int wxPuts(const wxChar *ws);
             #endif
 
             /* we need %s to %ls conversion for printf and scanf etc */
