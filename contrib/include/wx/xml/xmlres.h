@@ -128,6 +128,10 @@ class WXDLLEXPORT wxXmlResource : public wxObject
         // Creates resource from info in given node:
         wxObject *CreateResFromNode(wxXmlNode *node, wxObject *parent, wxObject *instance = NULL);
 
+        // Remove nodes with property "platform" that does not
+        // match current platform
+        void ProcessPlatformProperty(wxXmlNode *node);
+
     private:
         wxList m_Handlers;
         wxXmlResourceDataRecords m_Data;
@@ -190,10 +194,6 @@ class WXDLLEXPORT wxXmlResourceHandler : public wxObject
         // resource from it, FALSE otherwise.
         virtual bool CanHandle(wxXmlNode *node) = 0;
 
-        // Check "platform" property if it matches this platform
-        // that is, if this node 'exists' under this platform
-        static bool CheckPlatform(wxXmlNode *node);
-        
         void SetParentResource(wxXmlResource *res) { m_Resource = res; }
 
 
