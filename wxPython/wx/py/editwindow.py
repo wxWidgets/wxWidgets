@@ -23,7 +23,7 @@ if 'wxMSW' in wx.PlatformInfo:
               'lucida'    : 'Lucida Console',
               'other'     : 'Comic Sans MS',
               'size'      : 10,
-              'lnsize'    : 9,
+              'lnsize'    : 8,
               'backcol'   : '#FFFFFF',
               'calltipbg' : '#FFFFB8',
               'calltipfg' : '#404040',
