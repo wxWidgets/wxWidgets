@@ -291,8 +291,8 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
 #else
     #error "Unsupported platform in wxGenericDirCtrl!"
 #endif
-    wxASSERT_MSG( (paths.GetCount() != names.GetCount()), wxT("Wrong number of paths or names."));
-    wxASSERT_MSG( (paths.GetCount() != icon_ids.GetCount()), wxT("Wrong number of icons for available drives."));
+    wxASSERT_MSG( (paths.GetCount() == names.GetCount()), wxT("The number of paths and their human readable names should be equal in number."));
+    wxASSERT_MSG( (paths.GetCount() == icon_ids.GetCount()), wxT("Wrong number of icons for available drives."));
     return paths.GetCount();
 }
 
