@@ -697,7 +697,9 @@ int wxSplitterWindow::AdjustSashPosition(int sashPos) const
 {
     int window_size = GetWindowSize();
 
-    if ( !window_size )
+    // VZ: dirty fix, 20 is the initial window size under wxGTK, this is
+    //     going to be replaced with the correct Vaclav's code soon (FIXME)
+    if ( window_size <= 20 )
     {
         // don't do anything before the window has a valid size, otherwise we
         // put the sash to 0 at the very beginning and it doesn't move from
