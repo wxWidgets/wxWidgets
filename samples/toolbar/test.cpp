@@ -61,7 +61,7 @@ bool MyApp::OnInit(void)
   wxMenu *helpMenu = new wxMenu;
   helpMenu->Append(wxID_HELP, "&About", "About toolbar sample");
 
-  wxMenuBar* menuBar = new wxMenuBar;
+  wxMenuBar* menuBar = new wxMenuBar( wxMB_DOCKABLE );
 
   menuBar->Append(fileMenu, "&File");
   menuBar->Append(helpMenu, "&Help");
@@ -70,7 +70,7 @@ bool MyApp::OnInit(void)
   frame->SetMenuBar(menuBar);
 
   // Create the toolbar
-  frame->CreateToolBar(wxNO_BORDER|wxHORIZONTAL|wxTB_FLAT, ID_TOOLBAR);
+  frame->CreateToolBar(wxNO_BORDER|wxHORIZONTAL|wxTB_FLAT|wxTB_DOCKABLE, ID_TOOLBAR);
   
   frame->GetToolBar()->SetMargins( 2, 2 );
 

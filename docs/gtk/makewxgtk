@@ -6,6 +6,6 @@
 # if you're feeling brave, you may wish to compile with threads.
 # -- Julian Smart
 chmod a+x configure config.sub config.guess setup/general/* setup/shared/*
-./configure --with-shared --with-gtk --with-debug_flag --with-debug_info --without-threads -without-odbc
+./configure --with-shared --with-gtk --with-debug_flag --with-debug_info --without-threads
 make makefiles
 make

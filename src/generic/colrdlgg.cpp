@@ -228,11 +228,11 @@ void wxGenericColourDialog::CreateWidgets(void)
 {
   wxBeginBusyCursor();
   
-  wxButton *okButton = new wxButton(this, wxID_OK, _("OK"), wxPoint(okButtonX, buttonY));
+  wxButton *okButton = new wxButton(this, wxID_OK, _("OK"), wxPoint(okButtonX, buttonY), wxSize(75,-1) );
   int bw, bh;
   okButton->GetSize(&bw, &bh);
 
-  (void) new wxButton(this, wxID_CANCEL, _("Cancel"), wxPoint(okButtonX + bw + 20, buttonY));
+  (void) new wxButton(this, wxID_CANCEL, _("Cancel"), wxPoint(okButtonX + bw + 20, buttonY), wxSize(75,-1));
   (void) new wxButton(this, wxID_ADD_CUSTOM, _("Add to custom colours"),
      wxPoint(customButtonX, buttonY));
 

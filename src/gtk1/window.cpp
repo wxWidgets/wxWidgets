@@ -1828,11 +1828,24 @@ void wxWindow::SetSize( int x, int y, int width, int height, int sizeFlags )
         if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_maxWidth;
         if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_maxHeight;
 
-        wxPoint pt( m_parent->GetClientAreaOrigin() );
-        gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), m_widget, m_x+pt.x, m_y+pt.y );
+        if (GTK_WIDGET_HAS_DEFAULT(m_widget))
+	{
+	    /* the default button has a border around it */
+	    int border = 5;
+	
+            wxPoint pt( m_parent->GetClientAreaOrigin() );
+            gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), m_widget, m_x+pt.x-border, m_y+pt.y-border );
 
-        if ((old_width != m_width) || (old_height != m_height))
-             gtk_widget_set_usize( m_widget, m_width, m_height );
+            gtk_widget_set_usize( m_widget, m_width+2*border, m_height+2*border );
+	}
+	else
+	{
+            wxPoint pt( m_parent->GetClientAreaOrigin() );
+            gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), m_widget, m_x+pt.x, m_y+pt.y );
+
+            if ((old_width != m_width) || (old_height != m_height))
+              gtk_widget_set_usize( m_widget, m_width, m_height );
+	}
     }
 
     m_sizeSet = TRUE;

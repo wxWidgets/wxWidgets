@@ -316,14 +316,14 @@ void wxListBox::AppendCommon( const wxString &item )
         list_item = gtk_list_item_new_with_label( item );
     }
 
+    gtk_container_add( GTK_CONTAINER(m_list), list_item );
+
     gtk_signal_connect( GTK_OBJECT(list_item), "select",
       GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
 
     if (GetWindowStyleFlag() & wxLB_MULTIPLE)
         gtk_signal_connect( GTK_OBJECT(list_item), "deselect",
           GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
-
-    gtk_container_add( GTK_CONTAINER(m_list), list_item );
 
     if (m_widgetStyle) ApplyWidgetStyle();
 

@@ -123,8 +123,17 @@ bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
     m_separation = 5;
     gtk_toolbar_set_space_size( m_toolbar, m_separation );
     m_hasToolAlready = FALSE;
-					      
-    m_widget = GTK_WIDGET(m_toolbar);					    
+
+    if (style & wxTB_DOCKABLE)
+    {
+        m_widget = gtk_handle_box_new();
+	gtk_container_add( GTK_CONTAINER(m_widget), GTK_WIDGET(m_toolbar) );
+	gtk_widget_show( GTK_WIDGET(m_toolbar) );
+    }
+    else
+    {     
+        m_widget = GTK_WIDGET(m_toolbar);
+    }
 					    
     gtk_toolbar_set_tooltips( GTK_TOOLBAR(m_toolbar), TRUE );
 

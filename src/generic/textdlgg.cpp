@@ -127,17 +127,18 @@ wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent, const wxString& message, 
 	c->top.Below		(spacingSizer2);
 	c->centreX.SameAs	(textSizer, wxCentreX);
   	buttonSizer->SetConstraints(c);
+	buttonSizer->SetSpacing(12,0);
 
     wxButton *ok = NULL;
   	wxButton *cancel = NULL;
 
   if (style & wxOK) {
-    ok = new wxButton(this, wxID_OK, _("OK"));
+    ok = new wxButton(this, wxID_OK, _("OK"), wxDefaultPosition, wxSize(75,-1));
 	buttonSizer->AddSizerChild(ok);
   }
 
   if (style & wxCANCEL) {
-    cancel = new wxButton(this, wxID_CANCEL, _("Cancel"));
+    cancel = new wxButton(this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxSize(75,-1));
 	buttonSizer->AddSizerChild(cancel);
   }
 

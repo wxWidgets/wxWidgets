@@ -20,7 +20,7 @@ include/install-sh
 
 src/Makefile
 src/Makefile.in
-src/*.inc
+src/gtk.inc
 src/make.env
 src/makelib.env
 src/makeprog.env

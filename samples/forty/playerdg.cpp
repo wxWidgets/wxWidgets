@@ -153,9 +153,7 @@ void PlayerSelectionDialog::SelectCallback(wxCommandEvent& event)
 {
 	if (event.GetEventType() == wxEVT_COMMAND_LISTBOX_SELECTED)
 	{
-#ifdef __WXGTK__
-		if (event.IsSelection())
-#endif
+//	    if (event.IsSelection())
 		m_textField->SetValue(event.GetString());
 	}
 }

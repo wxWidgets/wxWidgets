@@ -26,6 +26,32 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxMenuBar,wxWindow)
 
+wxMenuBar::wxMenuBar( long style )
+{
+    m_needParent = FALSE; // hmmm
+
+    PreCreation( (wxWindow *) NULL, -1, wxDefaultPosition, wxDefaultSize, 0, "menu" );
+
+    m_menus.DeleteContents( TRUE );
+
+    m_menubar = gtk_menu_bar_new();
+
+    if (style & wxMB_DOCKABLE)
+    {
+        m_widget = gtk_handle_box_new();
+	gtk_container_add( GTK_CONTAINER(m_widget), GTK_WIDGET(m_menubar) );
+	gtk_widget_show( GTK_WIDGET(m_menubar) );
+    }
+    else
+    {
+        m_widget = GTK_WIDGET(m_menubar);
+    }
+
+    PostCreation();
+
+    Show( TRUE );
+}
+
 wxMenuBar::wxMenuBar()
 {
     m_needParent = FALSE; // hmmm
@@ -36,7 +62,7 @@ wxMenuBar::wxMenuBar()
 
     m_menubar = gtk_menu_bar_new();
 
-    m_widget = GTK_WIDGET(m_menubar);
+        m_widget = GTK_WIDGET(m_menubar);
 
     PostCreation();
 

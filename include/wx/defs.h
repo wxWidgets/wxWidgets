@@ -437,17 +437,24 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 /*
  * wxToolBar style flags
  */
-
 #define wxTB_3DBUTTONS      0x8000
 #define wxTB_HORIZONTAL     0x0002
 #define wxTB_VERTICAL       0x0004
 // Flatbar/Coolbar under Win98
 #define wxTB_FLAT           0x0008
+// use native docking
+#define wxTB_DOCKABLE       0x0010
+
+/*
+ * wxMenuBar style flags
+ */
+// use native docking
+#define wxMB_DOCKABLE       0x0001
+
 
 /*
  * Apply to all panel items
  */
-
 #define wxCOLOURED          0x0800
 // Alignment for panel item labels: replaces characters with zeros
 // when creating label, so spaces can be included in string for alignment.
@@ -460,7 +467,6 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 /*
  * Styles for wxListBox
  */
-
 #define wxLB_SORT           0x0010
 #define wxLB_SINGLE         0x0020
 #define wxLB_MULTIPLE       0x0040
@@ -516,7 +522,6 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 /*
  * wxSlider flags
  */
-
 #define wxSL_HORIZONTAL      wxHORIZONTAL
 #define wxSL_VERTICAL        wxVERTICAL
 // The next one is obsolete - use scroll events instead
@@ -534,21 +539,18 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 /*
  * wxScrollBar flags
  */
-
 #define wxSB_HORIZONTAL      wxHORIZONTAL
 #define wxSB_VERTICAL        wxVERTICAL
 
 /*
  * wxButton flags
  */
-
 #define wxBU_AUTODRAW        0x0004
 #define wxBU_NOAUTODRAW      0x0000
 
 /*
  * wxTreeCtrl flags
  */
-
 #define wxTR_HAS_BUTTONS     0x0004
 #define wxTR_EDIT_LABELS     0x0008
 #define wxTR_LINES_AT_ROOT   0x0010
@@ -556,7 +558,6 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 /*
  * wxListCtrl flags
  */
-
 #define wxLC_ICON            0x0004
 #define wxLC_SMALL_ICON      0x0008
 #define wxLC_LIST            0x0010

@@ -284,6 +284,7 @@ bool wxSingleChoiceDialog::Create( wxWindow *WXUNUSED(parent), const wxString& m
 	// Insert a sizer for the buttons
 	wxRowColSizer *buttonSizer = new wxRowColSizer(topSizer, wxSIZER_ROWS);
 	buttonSizer->SetName("buttonSizer");
+	buttonSizer->SetSpacing(12,0);
 
   	// Specify constraints for the button sizer
   	wxLayoutConstraints *c = new wxLayoutConstraints;
@@ -297,12 +298,12 @@ bool wxSingleChoiceDialog::Create( wxWindow *WXUNUSED(parent), const wxString& m
   	wxButton *cancel = NULL;
 
   if (style & wxOK) {
-    ok = new wxButton(this, wxID_OK, _("OK"));
+    ok = new wxButton(this, wxID_OK, _("OK"), wxDefaultPosition, wxSize(75,-1) );
 	buttonSizer->AddSizerChild(ok);
   }
 
   if (style & wxCANCEL) {
-    cancel = new wxButton(this, wxID_CANCEL, _("Cancel"));
+    cancel = new wxButton(this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxSize(75,-1));
 	buttonSizer->AddSizerChild(cancel);
   }
 

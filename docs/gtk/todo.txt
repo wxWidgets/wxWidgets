@@ -7,7 +7,7 @@ OwnerDraw for wxListCtrl and others
   -> Postponed.
   
 DnD
-  -> Must be rewritten for GTK+ 1.1.3  
+  -> Must be rewritten for GTK+ 1.2
  
 wxDebugContext <-> wxLogXXX functions
   -> Remove either
@@ -15,8 +15,11 @@ wxDebugContext <-> wxLogXXX functions
 Implement wxPalette
   -> I never understood that. Postponed.
   
+Implement different visuals and displays
+  -> I never understood that. Postponed.
+  
 Show accelerator in menus
-  -> Changed in GTK 1.1.X. Postponed.
+  -> Changed in GTK 1.2. Postponed.
   
 Cooperation with Qt
   -> Would be nice.

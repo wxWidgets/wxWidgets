@@ -338,7 +338,7 @@ wxDirDialog::wxDirDialog(wxWindow *parent, const wxString& message,
   m_input = new wxTextCtrl( this, ID_TEXTCTRL, m_path, wxDefaultPosition ); 
   // m_check = new wxCheckBox( this, ID_CHECK, _("Show hidden") );
   m_ok = new wxButton( this, ID_OK, _("OK") );
-  m_cancel = new wxButton( this, ID_CANCEL, _("Cancel") );
+  m_cancel = new wxButton( this, ID_CANCEL, _("Cancel"), wxDefaultPosition, wxSize(75,-1) );
   m_new = new wxButton( this, ID_NEW, _("New...") );
 
   // m_check->SetValue(TRUE);
@@ -364,7 +364,7 @@ void wxDirDialog::doSize()
   m_input->GetSize(&w,&h2); h -= h2;
   m_ok->GetSize(&w, &h2); h -= h2;
   //m_check->GetSize(&w, &h2); h -= h2;
-  h -= 20;
+  h -= 30;
 
   wxLayoutConstraints *c = new wxLayoutConstraints;
   c->left.SameAs	(this, wxLeft,5);
@@ -390,14 +390,14 @@ void wxDirDialog::doSize()
   c = new wxLayoutConstraints;
   c->width.SameAs	(m_cancel, wxWidth);
   c->height.AsIs	();
-  c->top.Below		(m_input,5);
-  c->centreX.PercentOf	(this, wxWidth, 25);
+  c->top.Below		(m_input,10);
+  c->centreX.PercentOf	(this, wxWidth, 20);
   m_ok->SetConstraints(c);
 
   c = new wxLayoutConstraints;
   c->width.SameAs	(m_cancel, wxWidth);
   c->height.AsIs	();
-  c->top.Below		(m_input,5);
+  c->top.Below		(m_input,10);
   c->bottom.SameAs      (this, wxBottom, 5);
   c->centreX.PercentOf	(this, wxWidth, 50);
   m_new->SetConstraints(c);
@@ -405,8 +405,8 @@ void wxDirDialog::doSize()
   c = new wxLayoutConstraints;
   c->width.AsIs	        ();
   c->height.AsIs	();
-  c->top.Below		(m_input,5);
-  c->centreX.PercentOf	(this, wxWidth, 75);
+  c->top.Below		(m_input,10);
+  c->centreX.PercentOf	(this, wxWidth, 80);
   m_cancel->SetConstraints(c);
 
   Layout();

@@ -97,10 +97,10 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
 
 void wxButton::SetDefault(void)
 {
-/*
-  GTK_WIDGET_SET_FLAGS( m_widget, GTK_CAN_DEFAULT );
-  gtk_widget_grab_default( m_widget );
-*/
+    GTK_WIDGET_SET_FLAGS( m_widget, GTK_CAN_DEFAULT );
+    gtk_widget_grab_default( m_widget );
+    
+    SetSize( m_x, m_y, m_width, m_height );
 }
 
 void wxButton::SetLabel( const wxString &label )

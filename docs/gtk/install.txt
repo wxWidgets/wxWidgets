@@ -17,6 +17,12 @@ installed it, but you also have another version of the
 GTK installed, which you may need to removed including
 other versions of glib (and its headers).
 
+You get errors during compilation. The reason is that you
+probably have a broken compiler, which includes almost
+everything that is called gcc. If there is just any way
+for you to use egcs, use egcs. We are sorry, but we cannot
+fix gcc for the moment.
+
 * The most simple program
 -------------------------
 
@@ -48,7 +54,7 @@ this has no effect, but I tried...
 
 wxWindows/GTK requires the GTK+ library to be installed on your system.
 It has to be a stable version, preferebly version 1.0.6. When using
-a version previous to 1.0.6 you'll get crashes here and there.
+a version previous to 1.0.6 you'll might get crashes here and there.
 
 wxWindows/GTK does NOT work with the 1.1.X versions of the GTK+ library
 and we will wait until the 1.2 version comes out and has stabilized
@@ -92,6 +98,10 @@ NB: I included thread support in wxWindows/Gtk, as this
 problem will disappear in the near future when all major 
 Linux Variants have moved to glibc 2. Also, the Linux
 Base Standard will include glibc 2 and Posix threads.
+
+NB: DO NOT COMPILE WXGTK WITH GCC AND THREADS, SINCE
+ALL PROGRAMS WILL CRASH UPON START-UP. Just always
+use egcs and be happy.
 
 * Create your configuration
 -----------------------------

@@ -44,6 +44,7 @@ class wxMenuBar: public wxWindow
 DECLARE_DYNAMIC_CLASS(wxMenuBar)
 
 public:
+  wxMenuBar( long style );
   wxMenuBar();
   void Append( wxMenu *menu, const wxString &title );
 

@@ -111,6 +111,7 @@ wxGenericMessageDialog::wxGenericMessageDialog(wxWindow *parent, const wxString&
 
     wxRowColSizer *buttonSizer = new wxRowColSizer(topSizer, wxSIZER_ROWS);
     buttonSizer->SetName("buttonSizer");
+    buttonSizer->SetSpacing(12,0);
 
     // Specify constraints for the button sizer
     wxLayoutConstraints *c = new wxLayoutConstraints;
@@ -126,20 +127,20 @@ wxGenericMessageDialog::wxGenericMessageDialog(wxWindow *parent, const wxString&
     wxButton *no = (wxButton *) NULL;
 
     if (style & wxYES_NO) {
-       yes = new wxButton(this, wxID_YES, _("Yes"));
-       no = new wxButton(this, wxID_NO, _("No"));
+       yes = new wxButton(this, wxID_YES, _("Yes"), wxDefaultPosition, wxSize(75,-1) );
+       no = new wxButton(this, wxID_NO, _("No"), wxDefaultPosition, wxSize(75,-1) );
 
        buttonSizer->AddSizerChild(yes);
        buttonSizer->AddSizerChild(no);
     }
 
     if (style & wxOK) {
-        ok = new wxButton(this, wxID_OK, _("OK"));
+        ok = new wxButton(this, wxID_OK, _("OK"), wxDefaultPosition, wxSize(75,-1) );
         buttonSizer->AddSizerChild(ok);
     }
 
     if (style & wxCANCEL) {
-        cancel = new wxButton(this, wxID_CANCEL, _("Cancel"));
+        cancel = new wxButton(this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxSize(75,-1) );
         buttonSizer->AddSizerChild(cancel);
     }
 
