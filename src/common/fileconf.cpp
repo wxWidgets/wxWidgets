@@ -431,8 +431,15 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
       pEnd = pStart;
 
       while ( *++pEnd != wxT(']') ) {
-        if ( *pEnd == wxT('\n') || *pEnd == wxT('\0') )
+        if ( *pEnd == wxT('\\') ) {
+            // the next char is escaped, so skip it even if it is ']'
+            pEnd++;
+        }
+
+        if ( *pEnd == wxT('\n') || *pEnd == wxT('\0') ) {
+            // we reached the end of line, break out of the loop
             break;
+        }
       }
 
       if ( *pEnd != wxT(']') ) {
