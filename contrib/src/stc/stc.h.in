@@ -250,43 +250,61 @@ private:
 #endif
 };
 
+#ifndef SWIG
+BEGIN_DECLARE_EVENT_TYPES()
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_CHANGE, 1650)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_STYLENEEDED, 1651)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_CHARADDED, 1652)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_UPDATEUI, 1653)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_SAVEPOINTREACHED, 1654)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_SAVEPOINTLEFT, 1655)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_ROMODIFYATTEMPT, 1656)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_DOUBLECLICK, 1657)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_MODIFIED, 1658)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_KEY, 1659)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_MACRORECORD, 1660)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_MARGINCLICK, 1661)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_NEEDSHOWN, 1662)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_POSCHANGED, 1663)
+END_DECLARE_EVENT_TYPES()
+#else
+    enum {
+        wxEVT_STC_CHANGE,
+        wxEVT_STC_STYLENEEDED,
+        wxEVT_STC_CHARADDED,
+        wxEVT_STC_UPDATEUI,
+        wxEVT_STC_SAVEPOINTREACHED,
+        wxEVT_STC_SAVEPOINTLEFT,
+        wxEVT_STC_ROMODIFYATTEMPT,
+        wxEVT_STC_DOUBLECLICK,
+        wxEVT_STC_MODIFIED,
+        wxEVT_STC_KEY,
+        wxEVT_STC_MACRORECORD,
+        wxEVT_STC_MARGINCLICK,
+        wxEVT_STC_NEEDSHOWN,
+        wxEVT_STC_POSCHANGED
+    };
+#endif
 
-// Event types
-enum {
-    wxEVT_STC_CHANGE = 1650,
-    wxEVT_STC_STYLENEEDED,
-    wxEVT_STC_CHARADDED,
-    wxEVT_STC_UPDATEUI,
-    wxEVT_STC_SAVEPOINTREACHED,
-    wxEVT_STC_SAVEPOINTLEFT,
-    wxEVT_STC_ROMODIFYATTEMPT,
-    wxEVT_STC_DOUBLECLICK,
-    wxEVT_STC_MODIFIED,
-    wxEVT_STC_KEY,
-    wxEVT_STC_MACRORECORD,
-    wxEVT_STC_MARGINCLICK,
-    wxEVT_STC_NEEDSHOWN,
-    wxEVT_STC_POSCHANGED
-};
 
 
 #ifndef SWIG
 typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 
-#define EVT_STC_CHANGE(id, fn) { wxEVT_STC_CHANGE, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
-#define EVT_STC_STYLENEEDED(id, fn) { wxEVT_STC_STYLENEEDED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
-#define EVT_STC_CHARADDED(id, fn) { wxEVT_STC_CHARADDED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
-#define EVT_STC_UPDATEUI(id, fn) { wxEVT_STC_UPDATEUI, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
-#define EVT_STC_SAVEPOINTREACHED(id, fn) { wxEVT_STC_SAVEPOINTREACHED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
-#define EVT_STC_SAVEPOINTLEFT(id, fn) { wxEVT_STC_SAVEPOINTLEFT, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
-#define EVT_STC_ROMODIFYATTEMPT(id, fn) { wxEVT_STC_ROMODIFYATTEMPT, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
-#define EVT_STC_DOUBLECLICK(id, fn) { wxEVT_STC_DOUBLECLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
-#define EVT_STC_MODIFIED(id, fn) { wxEVT_STC_MODIFIED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
-#define EVT_STC_KEY(id, fn) { wxEVT_STC_KEY, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
-#define EVT_STC_MACRORECORD(id, fn) { wxEVT_STC_MACRORECORD, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
-#define EVT_STC_MARGINCLICK(id, fn) { wxEVT_STC_MARGINCLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
-#define EVT_STC_NEEDSHOWN(id, fn) { wxEVT_STC_NEEDSHOWN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
-#define EVT_STC_POSCHANGED(id, fn) { wxEVT_STC_POSCHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
+#define EVT_STC_CHANGE(id, fn)           DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_CHANGE, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_STC_STYLENEEDED(id, fn)      DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_STYLENEEDED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_STC_CHARADDED(id, fn)        DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_CHARADDED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_STC_UPDATEUI(id, fn)         DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_UPDATEUI, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_STC_SAVEPOINTREACHED(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_SAVEPOINTREACHED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_STC_SAVEPOINTLEFT(id, fn)    DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_SAVEPOINTLEFT, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_STC_ROMODIFYATTEMPT(id, fn)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_ROMODIFYATTEMPT, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_STC_DOUBLECLICK(id, fn)      DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DOUBLECLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_STC_MODIFIED(id, fn)         DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_MODIFIED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_STC_KEY(id, fn)              DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_KEY, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_STC_MACRORECORD(id, fn)      DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_MACRORECORD, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_STC_MARGINCLICK(id, fn)      DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_MARGINCLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_STC_NEEDSHOWN(id, fn)        DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_NEEDSHOWN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_STC_POSCHANGED(id, fn)       DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_POSCHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
 
 #endif
 

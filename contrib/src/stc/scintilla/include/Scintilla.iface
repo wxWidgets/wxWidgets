@@ -4,7 +4,7 @@
 
 ## A line starting with ## is a pure comment and should be stripped by readers.
 ## A line starting with #! is for future shbang use
-## A line starting with # followed by a space is a documentation comment and refers 
+## A line starting with # followed by a space is a documentation comment and refers
 ## to the next feature definition.
 
 ## Each feature is defined by a line starting with fun, get, set, val or evt.
@@ -46,10 +46,10 @@
 ##     point -> x,y
 ##     pointresult  -> like point, but output param
 ##     rectangle -> left,top,right,bottom
-## Client code should ignore definitions containing types it does not understand, except 
+## Client code should ignore definitions containing types it does not understand, except
 ## for possibly #defining the constants
 
-cat Basics 
+cat Basics
 
 ################################################
 ## For Scintilla.h
@@ -93,14 +93,14 @@ get int GetStyleAt=2010(position pos,)
 # Redoes the next action on the undo history
 fun void Redo=2011(,)
 
-# Choose between collecting actions into the undo 
+# Choose between collecting actions into the undo
 # history and discarding them.
 set void SetUndoCollection=2012(bool collectUndo,)
 
 # Select all the text in the document.
 fun void SelectAll=2013(,)
 
-# Remember the current position in the undo history as the position 
+# Remember the current position in the undo history as the position
 # at which the document was saved.
 fun void SetSavePoint=2014(,)
 
@@ -165,7 +165,7 @@ get int GetEOLMode=2030(,)
 set void SetEOLMode=2031(int eolMode,)
 
 # Set the current styling position to pos and the styling mask to mask.
-# The styling mask can be used to protect some bits in each styling byte from 
+# The styling mask can be used to protect some bits in each styling byte from
 # modification.
 fun void StartStyling=2032(position pos, int mask)
 
@@ -180,11 +180,11 @@ get bool GetBufferedDraw=2034(,)
 # before drawing it to the screen to avoid flicker.
 set void SetBufferedDraw=2035(bool buffered,)
 
-# Change the visible size of a tab to be a multiple of the width of a space 
+# Change the visible size of a tab to be a multiple of the width of a space
 # character.
 set void SetTabWidth=2036(int tabWidth,)
 
-# Retrieve the visible size of a tab. 
+# Retrieve the visible size of a tab.
 get int GetTabWidth=2121(,)
 
 # The SC_CP_UTF8 value can be used to enter Unicode mode.
@@ -354,13 +354,13 @@ fun void SetStylingEx=2073(int length, string styles)
 # Set a style to be visible or not.
 set void StyleSetVisible=2074(int style, bool visible)
 
-# Get the time in milliseconds that the caret is on and off. 
+# Get the time in milliseconds that the caret is on and off.
 get int GetCaretPeriod=2075(,)
 
 # Get the time in milliseconds that the caret is on and off. 0 = steady on.
 set void SetCaretPeriod=2076(int periodMilliseconds,)
 
-# Set the set of characters making up words for when moving or selecting 
+# Set the set of characters making up words for when moving or selecting
 # by word.
 set void SetWordChars=2077(, string characters)
 
@@ -380,7 +380,8 @@ val INDIC_STRIKE=4
 val INDIC0_MASK=32
 val INDIC1_MASK=64
 val INDIC2_MASK=128
-val INDICS_MASK=INDIC0_MASK | INDIC1_MASK | INDIC2_MASK 
+val INDICS_MASK=224
+##INDIC0_MASK | INDIC1_MASK | INDIC2_MASK
 
 # Set an indicator to plain, squiggle or TT.
 set void IndicSetStyle=2080(int indic, int style)
@@ -408,7 +409,7 @@ set void SetLineState=2092(int line, int state)
 # Retrieve the extra styling information for a line.
 get int GetLineState=2093(int line,)
 
-# Retrieve the last line number that has line state. 
+# Retrieve the last line number that has line state.
 get int GetMaxLineState=2094(,)
 
 # Display a auto-completion list.
@@ -422,7 +423,7 @@ fun void AutoCCancel=2101(,)
 # Is there an auto-completion list visible?
 fun bool AutoCActive=2102(,)
 
-# Retrieve the position of the caret when the auto-completion list was 
+# Retrieve the position of the caret when the auto-completion list was
 # displayed.
 fun position AutoCPosStart=2103(,)
 
@@ -432,7 +433,7 @@ fun void AutoCComplete=2104(,)
 # Define a set of character that when typed cancel the auto-completion list.
 fun void AutoCStops=2105(, string characterSet)
 
-# Change the separator character in the string setting up an auto-completion 
+# Change the separator character in the string setting up an auto-completion
 # list. Default is space but can be changed if items contain space.
 set void AutoCSetSeparator=2106(int separatorCharacter,)
 
@@ -442,8 +443,8 @@ get int AutoCGetSeparator=2107(,)
 # Select the item in the auto-completion list that starts with a string.
 fun void AutoCSelect=2108(, string text)
 
-# Should the auto-completion list be cancelled if the user backspaces to a 
-# position before where the box was created. 
+# Should the auto-completion list be cancelled if the user backspaces to a
+# position before where the box was created.
 set void AutoCSetCancelAtStart=2110(bool cancel,)
 
 # Retrieve whether auto-completion cancelled by backspacing before start.
@@ -452,16 +453,16 @@ get bool AutoCGetCancelAtStart=2111(,)
 # Define a set of character that when typed fills up the selected word.
 set void AutoCSetFillUps=2112(, string characterSet)
 
-# Should a single item auto-completion list automatically choose the item. 
+# Should a single item auto-completion list automatically choose the item.
 set void AutoCSetChooseSingle=2113(bool chooseSingle,)
 
-# Retrieve whether a single item auto-completion list automatically choose the item. 
+# Retrieve whether a single item auto-completion list automatically choose the item.
 get bool AutoCGetChooseSingle=2114(,)
 
 # Set whether case is significant when performing auto-completion searches.
 set void AutoCSetIgnoreCase=2115(bool ignoreCase,)
 
-# Retrieve state of ignore case flag. 
+# Retrieve state of ignore case flag.
 get bool AutoCGetIgnoreCase=2116(,)
 
 # Set the number of spaces used for one level of indentation.
@@ -832,7 +833,7 @@ fun void Cancel=2325(,)
 # Delete the selection or if no selection, the character before the caret.
 fun void DeleteBack=2326(,)
 
-# If selection is empty or all on one line replace the selection with a tab 
+# If selection is empty or all on one line replace the selection with a tab
 # character.
 # If more than one line selected, indent the lines.
 fun void Tab=2327(,)
@@ -846,7 +847,7 @@ fun void NewLine=2329(,)
 # Insert a Form Feed character.
 fun void FormFeed=2330(,)
 
-# Move caret to before first visible character on line. 
+# Move caret to before first visible character on line.
 # If already there move to first character on line.
 fun void VCHome=2331(,)
 
@@ -920,8 +921,8 @@ val EDGE_BACKGROUND=2
 # Retrieve the column number which text should be kept within.
 get int GetEdgeColumn=2360(,)
 
-# Set the column number of the edge. 
-# If text goes past the edge then it is highlighted. 
+# Set the column number of the edge.
+# If text goes past the edge then it is highlighted.
 set void SetEdgeColumn=2361(int column,)
 
 # Retrieve the edge highlight mode.
@@ -966,13 +967,13 @@ fun void UsePopUp=2371(bool allowPopUp,)
 # Is the selection a rectangular. The alternative is the more common stream selection.
 get bool SelectionIsRectangle=2372(,)
 
-# Set the zoom level. This number of points is added to the size of all fonts. 
+# Set the zoom level. This number of points is added to the size of all fonts.
 # It may be positive to magnify or negative to reduce.
 set void SetZoom=2373(int zoom,)
 # Retrieve the zoom level.
 get int GetZoom=2374(,)
 
-# Create a new document object. 
+# Create a new document object.
 # Starts with reference count of 1 and not selected into editor.
 fun int CreateDocument=2375(,)
 # Extend life of document.
@@ -993,10 +994,10 @@ fun void StartRecord=3001(,)
 # Stop notifying the container of all key presses and commands.
 fun void StopRecord=3002(,)
 
-# Set the lexing language of the document. 
+# Set the lexing language of the document.
 set void SetLexer=4001(int lexer,)
 
-# Retrieve the lexing language of the document. 
+# Retrieve the lexing language of the document.
 get int GetLexer=4002(,)
 
 # Colourise a segment of the document using the current lexing language.
@@ -1282,7 +1283,7 @@ evt void MarginClick=2010(int modifiers, int position, int margin)
 evt void NeedShown=2011(int position, int length)
 evt void PosChanged=2012(int position)
 
-cat Deprecated 
+cat Deprecated
 
 ################################################
 # From WinDefs.h
@@ -1424,9 +1425,9 @@ fun void WM_SetText=12(, string text)
 fun void WM_Undo=772(,)
 
 # Notification codes
-val EN_CHANGE=768 
-val EN_KILLFOCUS=512 
-val EN_SETFOCUS=256 
+val EN_CHANGE=768
+val EN_KILLFOCUS=512
+val EN_SETFOCUS=256
 
 # Flags for setting margins.
 val EC_LEFTMARGIN=1
@@ -1434,13 +1435,13 @@ val EC_RIGHTMARGIN=2
 val EC_USEFONTINFO=0xffff
 
 # Selection type.
-val SEL_EMPTY=0 
-val SEL_TEXT=1 
+val SEL_EMPTY=0
+val SEL_TEXT=1
 
 # Find replace mask constants
-val FR_MATCHCASE=0x4 
-val FR_WHOLEWORD=0x2 
-val FR_DOWN=0x1 
+val FR_MATCHCASE=0x4
+val FR_WHOLEWORD=0x2
+val FR_DOWN=0x1
 
 # Key modifier flag.
 val SHIFT_PRESSED=1
