@@ -9,7 +9,7 @@ the \helpref{wxGridSizer}{wxgridsizer}.
 Since wxWindows 2.5.0, wxFlexGridSizer can also size items equally in one
 direction but unequally ("flexibly") in the other. If the sizer is only
 flexible in one direction (this can be changed using 
-\helpref{SetFlexibleDrection}{wxflexgridsizersetflexibledrection}),
+\helpref{SetFlexibleDrection}{wxflexgridsizersetflexibledirection}),
 it needs to be decided how the sizer should grow in the other ("non flexible")
 direction in order to fill the available space. The 
 \helpref{SetNonFlexibleGrowMode}{wxflexgridsizersetnonflexiblegrowmode} method
@@ -72,7 +72,7 @@ One of the following values:
 
 \wxheading{See also}
 
-\helpref{SetFlexibleDrection}{wxflexgridsizersetflexibledrection}
+\helpref{SetFlexibleDrection}{wxflexgridsizersetflexibledirection}
 
 
 \membersection{wxFlexGridSizer::GetNonFlexibleGrowMode}\label{wxflexgridsizergetnonflexiblegrowmode}
@@ -100,7 +100,7 @@ direction.}
 
 \wxheading{See also}
 
-\helpref{SetFlexibleDrection}{wxflexgridsizersetflexibledrection}, 
+\helpref{SetFlexibleDrection}{wxflexgridsizersetflexibledirection}, 
 \helpref{SetNonFlexibleGrowMode}{wxflexgridsizersetnonflexiblegrowmode}
 
 
@@ -118,7 +118,7 @@ Specifies that column idx is no longer growable.
 Specifies that row idx is no longer growable.
 
 
-\membersection{wxFlexGridSizer::SetFlexibleDirection}{wxflexgridsizersetflexibledrection}
+\membersection{wxFlexGridSizer::SetFlexibleDirection}\label{wxflexgridsizersetflexibledirection}
 
 \func{void}{SetFlexibleDirections}{\param{int }{direction}}
 
@@ -131,13 +131,13 @@ explanation of these values.
 Note that this method does not trigger relayout.
 
 
-\membersection{wxFlexGridSizer::SetNonFlexibleGrowMode}{wxflexgridsizersetnonflexiblegrowmode}
+\membersection{wxFlexGridSizer::SetNonFlexibleGrowMode}\label{wxflexgridsizersetnonflexiblegrowmode}
 
 \func{void}{SetNonFlexibleGrowMode}{\param{int }{mode}}
 
 Specifies how the sizer should grow in the non flexible direction if
 there is one (so
-\helpref{SetFlexibleDirections()}{wxflexgridsizersetflexibledrection} must have
+\helpref{SetFlexibleDirections()}{wxflexgridsizersetflexibledirection} must have
 been called previously). Argument {\it mode} can be one of those documented in
 \helpref{GetNonFlexibleGrowMode}{wxflexgridsizergetnonflexiblegrowmode}, please
 see there for their explanation.
