@@ -2798,21 +2798,6 @@ bool wxWindowGTK::PreCreation( wxWindowGTK *parent, const wxPoint &pos,  const w
     m_x = (int)pos.x;
     m_y = (int)pos.y;
 
-    // some reasonable defaults
-    if (!parent)
-    {
-        if (m_x == -1)
-        {
-            m_x = (gdk_screen_width () - m_width) / 2;
-            if (m_x < 10) m_x = 10;
-        }
-        if (m_y == -1)
-        {
-            m_y = (gdk_screen_height () - m_height) / 2;
-            if (m_y < 10) m_y = 10;
-        }
-    }
-
     return TRUE;
 }
 
