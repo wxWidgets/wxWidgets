@@ -275,12 +275,8 @@ void wxTextCtrl::SetValue(const wxString& value)
 {
     m_modified = FALSE;
 
-    if ((GetWindowStyle() & wxTE_MULTILINE) == 0)
-    {
-        if (value == GetValue())
-            return;
-    }
-    
+    wxString oldValue = GetValue();
+
     m_cursorX = 0;
     m_cursorY = 0;
     ClearSelection();
@@ -329,6 +325,13 @@ void wxTextCtrl::SetValue(const wxString& value)
                 begin = pos+1;
             }
         }
+    }
+
+    // Don't need to refresh if the value hasn't changed
+    if ((GetWindowStyle() & wxTE_MULTILINE) == 0)
+    {
+        if (value == oldValue)
+            return;
     }
     
     MyAdjustScrollbars();
