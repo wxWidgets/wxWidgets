@@ -29,6 +29,7 @@
 #include "wx/cmdline.h"
 #include "wx/xrc/xml.h"
 #include "wx/ffile.h"
+#include "wx/filename.h"
 #include "wx/wfstream.h"
 
 
@@ -158,6 +159,9 @@ void XmlResApp::ParseParams(const wxCmdLineParser& cmdline)
                 parOutput = _T("resource.xrs");
         }
     }
+    wxFileName fn(parOutput);
+    fn.Normalize();
+    parOutput = fn.GetFullPath();
     parOutputPath = wxPathOnly(parOutput);
     if (!parOutputPath) parOutputPath = _T(".");
 
@@ -239,13 +243,43 @@ wxArrayString XmlResApp::PrepareTempFiles()
 
         wxString internalName = GetInternalFileName(parFiles[i], flist);
         
-        doc.Save(parOutputPath + _T("/") + internalName);
+        doc.Save(parOutputPath + wxFILE_SEP_PATH + internalName);
         flist.Add(internalName);
     }
     
     return flist;
 }
 
+// Does 'node' contain filename information at all?
+static bool NodeContainsFilename(wxXmlNode *node)
+{
+   // Any bitmaps:
+   if (node->GetName() == _T("bitmap"))
+       return TRUE;
+
+   // URLs in wxHtmlWindow:
+   if (node->GetName() == _T("url"))
+       return TRUE;
+   
+   // wxBitmapButton:
+   wxXmlNode *parent = node->GetParent();
+   if (parent != NULL && 
+       parent->GetPropVal(_T("class"), _T("")) == _T("wxBitmapButton") &&
+       (node->GetName() == _T("focus") || 
+        node->GetName() == _T("disabled") ||
+        node->GetName() == _T("selected")))
+       return TRUE;
+   
+   // wxBitmap or wxIcon toplevel resources:
+   if (node->GetName() == _T("object"))
+   {
+       wxString klass = node->GetPropVal(_T("class"), wxEmptyString);
+       if (klass == _T("wxBitmap") || klass == _T("wxIcon"))
+           return TRUE;
+   }
+   
+   return FALSE;
+}
 
 
 // find all files mentioned in structure, e.g. <bitmap>filename</bitmap>
@@ -255,19 +289,7 @@ void XmlResApp::FindFilesInXML(wxXmlNode *node, wxArrayString& flist, const wxSt
     if (node == NULL) return;
     if (node->GetType() != wxXML_ELEMENT_NODE) return;
 
-    // Does 'node' contain filename information at all?
-    bool containsFilename = (
-        // Any bitmaps:
-        (node->GetName() == _T("bitmap")) ||
-        // URLs in wxHtmlWindow:
-        (node->GetName() == _T("url")) ||
-        // wxBitmapButton:
-        (node->GetParent() != NULL && 
-         node->GetParent()->GetPropVal(_T("class"), _T("")) == _T("wxBitmapButton") &&
-           (node->GetName() == _T("focus") || 
-            node->GetName() == _T("disabled") ||
-            node->GetName() == _T("selected")))
-        );
+    bool containsFilename = NodeContainsFilename(node);
 
     wxXmlNode *n = node->GetChildren();
     while (n)
@@ -280,7 +302,7 @@ void XmlResApp::FindFilesInXML(wxXmlNode *node, wxArrayString& flist, const wxSt
             if (wxIsAbsolutePath(n->GetContent()) || inputPath.empty())
                 fullname = n->GetContent();
             else
-                fullname = inputPath + _T("/") + n->GetContent();
+                fullname = inputPath + wxFILE_SEP_PATH + n->GetContent();
 
             if (flagVerbose) 
                 wxPrintf(_T("adding     ") + fullname +  _T("...\n"));
@@ -292,7 +314,7 @@ void XmlResApp::FindFilesInXML(wxXmlNode *node, wxArrayString& flist, const wxSt
                 flist.Add(filename);
 
             wxFileInputStream sin(fullname);
-            wxFileOutputStream sout(parOutputPath + _T("/") + filename);
+            wxFileOutputStream sout(parOutputPath + wxFILE_SEP_PATH + filename);
             sin.Read(sout); // copy the stream
         }
 
@@ -309,7 +331,7 @@ void XmlResApp::FindFilesInXML(wxXmlNode *node, wxArrayString& flist, const wxSt
 void XmlResApp::DeleteTempFiles(const wxArrayString& flist)
 {
     for (size_t i = 0; i < flist.Count(); i++)
-        wxRemoveFile(parOutputPath + _T("/") + flist[i]);
+        wxRemoveFile(parOutputPath + wxFILE_SEP_PATH + flist[i]);
 }
 
 
@@ -325,8 +347,13 @@ void XmlResApp::MakePackageZIP(const wxArrayString& flist)
     if (flagVerbose) 
         wxPrintf(_T("compressing ") + parOutput +  _T("...\n"));
 
-    if (wxExecute(_T("zip -9 -j ") + wxString(flagVerbose ? _T("") : _T("-q ")) + 
-                  parOutput + _T(" ") + files, TRUE) == -1)
+    wxString cwd = wxGetCwd();
+    wxSetWorkingDirectory(parOutputPath);
+    int execres = wxExecute(_T("zip -9 -j ") + 
+                            wxString(flagVerbose ? _T("") : _T("-q ")) + 
+                            parOutput + _T(" ") + files, TRUE);
+    wxSetWorkingDirectory(cwd);
+    if (execres == -1)
     {
         wxLogError(_T("Unable to execute zip program. Make sure it is in the path."));
         wxLogError(_T("You can download it at http://www.cdrom.com/pub/infozip/"));
@@ -405,7 +432,8 @@ _T("#include <wx/xrc/xh_all.h>\n")
 _T("\n"));
 
     for (i = 0; i < flist.Count(); i++)
-        file.Write(FileToCppArray(flist[i], i));
+        file.Write(
+              FileToCppArray(parOutputPath + wxFILE_SEP_PATH + flist[i], i));
     
     file.Write(_T("")
 _T("void ") + parFuncname + wxT("()\n")
@@ -506,7 +534,8 @@ void XmlResApp::MakePackagePython(const wxArrayString& flist)
     file.Write(_T("def ") + parFuncname + _T("():\n"));
 
     for (i = 0; i < flist.Count(); i++)
-        file.Write(FileToPythonArray(flist[i], i));
+        file.Write(
+          FileToPythonArray(parOutputPath + wxFILE_SEP_PATH + flist[i], i));
 
     for (i = 0; i < flist.Count(); i++)
     {

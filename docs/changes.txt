@@ -183,6 +183,8 @@ All:
 - wxStopWatch::Start() didn't resume it contrary to the docs
 - accept '\r' as delimiter when parsing dates
 - fixed duplicate wxFontEncoding values
+- wxrc fixes: fixed compilation of wxBitmap, wxIcon toplevel
+  nodes; fixed wxrc when using -o dirname/filename
 
 Unix (GUI):
 
