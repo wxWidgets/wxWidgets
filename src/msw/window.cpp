@@ -303,8 +303,6 @@ wxWindow::~wxWindow(void)
   // wxWnd
   MSWDetachWindowMenu();
 
-  wxRemoveHandleAssociation(this);
-
   // TODO for backward compatibility
 #if 0
   // WX_CANVAS
@@ -325,6 +323,8 @@ wxWindow::~wxWindow(void)
 
   if (m_hWnd)
     ::DestroyWindow((HWND)m_hWnd);
+
+  wxRemoveHandleAssociation(this);
   m_hWnd = 0;
 #ifndef __WIN32__
   if (m_globalHandle)
@@ -566,7 +566,11 @@ wxEvtHandler *wxWindow::PopEventHandler(bool deleteHandler)
 
 void wxWindow::SetDropTarget(wxDropTarget *pDropTarget)
 {
-  DELETEP(m_pDropTarget);
+  if ( m_pDropTarget != 0 ) {
+    m_pDropTarget->Revoke(m_hWnd);
+    delete m_pDropTarget;
+  }
+
   m_pDropTarget = pDropTarget;
   if ( m_pDropTarget != 0 )
     m_pDropTarget->Register(m_hWnd);
@@ -1538,6 +1542,10 @@ wxWindow *wxFindWinFromHandle(WXHWND hWnd)
 
 void wxAssociateWinWithHandle(HWND hWnd, wxWindow *win)
 {
+  // adding NULL hWnd is (first) surely a result of an error and
+  // (secondly) breaks menu command processing
+  wxCHECK( hWnd != NULL );
+
   if ( !wxWinHandleList->Find((long)hWnd) )
     wxWinHandleList->Append((long)hWnd, win);
 }
@@ -1680,15 +1688,15 @@ bool wxWindow::MSWOnDestroy(void)
 #if DEBUG > 1
   wxDebugMsg("wxWindow::MSWOnDestroy %d\n", handle);
 #endif
-  // delete our log target if we've got one
-#if USE_DRAG_AND_DROP
-    if ( m_pDropTarget != 0 ) {
+  // delete our drop target if we've got one
+  #if USE_DRAG_AND_DROP
+    if ( m_pDropTarget != NULL ) {
       m_pDropTarget->Revoke(m_hWnd);
 
       delete m_pDropTarget;
       m_pDropTarget = NULL;
     }
-#endif
+  #endif
 
   return TRUE;
 }
