@@ -221,7 +221,11 @@ void wxRegConfig::SetPath(const wxString& strPath)
         {
             strFullPath.reserve(2*m_strPath.length());
 
-            strFullPath << m_strPath << wxCONFIG_PATH_SEPARATOR << strPath;
+            strFullPath << m_strPath;
+            if ( strFullPath.Len() == 0 || 
+                 strFullPath.Last() != wxCONFIG_PATH_SEPARATOR )
+                strFullPath << wxCONFIG_PATH_SEPARATOR; 
+            strFullPath << strPath;
         }
 
         // simplify it: we need to handle ".." here

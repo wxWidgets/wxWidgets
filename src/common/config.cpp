@@ -246,7 +246,9 @@ wxConfigPathChanger::wxConfigPathChanger(const wxConfigBase *pContainer,
     m_bChanged = TRUE;
     m_strName = strEntry.AfterLast(wxCONFIG_PATH_SEPARATOR);
     m_strOldPath = m_pContainer->GetPath();
-    m_strOldPath += wxCONFIG_PATH_SEPARATOR;
+    if ( m_strOldPath.Len() == 0 || 
+         m_strOldPath.Last() != wxCONFIG_PATH_SEPARATOR )
+        m_strOldPath += wxCONFIG_PATH_SEPARATOR;
     m_pContainer->SetPath(strPath);
   }
   else {
