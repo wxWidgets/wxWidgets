@@ -49,7 +49,7 @@
  */
 
 // what to test (in alphabetic order)? uncomment the line below to do all tests
-//#define TEST_ALL
+#define TEST_ALL
 #ifdef TEST_ALL
     #define TEST_ARRAYS
     #define TEST_CHARSET
@@ -3171,7 +3171,7 @@ static void TestFtpWuFtpd()
         }
         else
         {
-            size_t size = in->StreamSize();
+            size_t size = in->GetSize();
             wxPrintf(_T("Reading file %s (%u bytes)..."), filename, size);
 
             wxChar *data = new wxChar[size];
@@ -3254,7 +3254,7 @@ static void TestFtpDownload()
     }
     else
     {
-        size_t size = in->StreamSize();
+        size_t size = in->GetSize();
         wxPrintf(_T("Reading file %s (%u bytes)..."), filename, size);
         fflush(stdout);
 
