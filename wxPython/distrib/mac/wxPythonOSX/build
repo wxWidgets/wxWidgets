@@ -150,14 +150,36 @@ fi
 # Build wxWindows and wxPython
 if [ -z "$skipbuild" ]; then
     make
-    cd $WXDIR/locale
-    make allmo
 
     cd $WXDIR/wxPython
     python$PYVER setup.py \
 	IN_CVS_TREE=1 \
 	WX_CONFIG="$WXDIR/build/wx-config --prefix=$WXDIR --exec-prefix=$WXDIR/build" \
 	build
+
+
+    # Build wxrc (XRC resource tool) but don't use the makefiles since they expect
+    # a shared version of the xrc lib to have been built...
+    cd $WXDIR/contrib/utils/wxrc
+    WX_CONFIG="$WXDIR/build/wx-config --prefix=$WXDIR --exec-prefix=$WXDIR/build"
+    wCC=`$WX_CONFIG --cc`
+    wCXX=`$WX_CONFIG --cxx`
+
+    for f in wxrc.cpp ../../src/xrc/*.cpp; do
+	echo $f
+	$wCXX `$WX_CONFIG --cxxflags` -I ../../include -I ../../src/xrc/expat/xmlparse -I ../../src/xrc/expat/xmltok -c $f
+    done
+    for f in ../../src/xrc/expat/xmlparse/xmlparse.c ../../src/xrc/expat/xmltok/xmlrole.c ../../src/xrc/expat/xmltok/xmltok.c; do
+	echo $f
+	$wCC `$WX_CONFIG --cxxflags` -I ../../include -I ../../src/xrc/expat/xmlparse -I ../../src/xrc/expat/xmltok -c $f
+    done
+
+    # the handlers are not needed
+    rm xh_*.o xmlrsall.o
+
+    $wCXX `$WX_CONFIG --libs` *.o -o wxrc
+    strip wxrc
+
 fi
 
 #----------------------------------------------------------------------
@@ -179,6 +201,9 @@ if [ -z "$skipinstall" ]; then
     # install wxPython's tool scripts
     cd $WXDIR/wxPython/scripts
     python$PYVER CreateMacScripts.py $INSTALLROOT $PREFIX/bin
+
+    # Install wxrc
+    cp $WXDIR/contrib/utils/wxrc/wxrc $INSTALLROOT$PREFIX/bin
 
 
     # Move wxWindows devel files and save for a separate installer package
