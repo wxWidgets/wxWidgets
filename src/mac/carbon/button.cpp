@@ -98,7 +98,8 @@ wxSize wxButton::DoGetBestSize() const
   
   int wBtn = m_label.Length() * charspace + 12 ;
  
-  if (wBtn > sz.x) sz.x = wBtn;
+  if (wBtn > sz.x || ( GetWindowStyle() & wxBU_EXACTFIT) ) 
+    sz.x = wBtn;
   
   return sz ;
 }
