@@ -9,7 +9,7 @@ PROGRAM=wxrc
 OBJECTS=wxrc.o
 
 
-APPEXTRALIBS=$(top_builddir)/lib/libwxxml.@WX_TARGET_LIBRARY_TYPE@
+APPEXTRALIBS=-lwxxml
 APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 
 include $(top_builddir)/src/makeprog.env
