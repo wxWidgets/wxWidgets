@@ -42,11 +42,14 @@ public:
   void SetAddress(GAddress *address);
 
   // we need to be able to create copies of the addresses polymorphically (i.e.
-  // wihtout knowing the exact address class)
+  // without knowing the exact address class)
   virtual wxSockAddress *Clone() const = 0;
 
 protected:
   GAddress *m_address;
+
+private:
+  void Init();
 };
 
 class WXDLLEXPORT wxIPV4address : public wxSockAddress {

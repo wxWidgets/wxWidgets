@@ -111,6 +111,44 @@ public:
 // ==========================================================================
 
 // --------------------------------------------------------------------------
+// Initialization and shutdown
+// --------------------------------------------------------------------------
+
+// FIXME-MT: all this is MT-unsafe, of course, we should protect all accesses
+//           to m_countInit with a crit section
+size_t wxSocketBase::m_countInit = 0;
+
+bool wxSocketBase::IsInitialized()
+{
+    return m_countInit > 0;
+}
+
+bool wxSocketBase::Initialize()
+{
+    if ( !m_countInit++ )
+    {
+        if ( !GSocket_Init() )
+        {
+            m_countInit--;
+
+            return FALSE;
+        }
+    }
+
+    return TRUE;
+}
+
+void wxSocketBase::Shutdown()
+{
+    // we should be initialized
+    wxASSERT_MSG( m_countInit, _T("extra call to Shutdown()") );
+    if ( !--m_countInit )
+    {
+        GSocket_Cleanup();
+    }
+}
+
+// --------------------------------------------------------------------------
 // Ctor and dtor
 // --------------------------------------------------------------------------
 
@@ -145,6 +183,13 @@ void wxSocketBase::Init()
   m_cbk          = NULL;
   m_cdata        = NULL;
 #endif // WXWIN_COMPATIBILITY
+
+  if ( !IsInitialized() )
+  {
+      // this Initialize() will be undone by wxSocketModule::OnExit(), all the
+      // other calls to it should be matched by a call to Shutdown()
+      Initialize();
+  }
 }
 
 wxSocketBase::wxSocketBase()
@@ -1242,11 +1287,21 @@ wxDatagramSocket& wxDatagramSocket::SendTo( wxSockAddress& addr,
 
 class WXDLLEXPORT wxSocketModule : public wxModule
 {
-  DECLARE_DYNAMIC_CLASS(wxSocketModule)
-
 public:
-  bool OnInit() { return GSocket_Init() != 0; }
-  void OnExit() { GSocket_Cleanup(); }
+    virtual bool OnInit()
+    {
+        // wxSocketBase will call GSocket_Init() itself when/if needed
+        return TRUE;
+    }
+
+    virtual void OnExit()
+    {
+        if ( wxSocketBase::IsInitialized() )
+            wxSocketBase::Shutdown();
+    }
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxSocketModule)
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxSocketModule, wxModule)

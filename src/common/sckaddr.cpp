@@ -22,19 +22,23 @@
 
 #if wxUSE_SOCKETS
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
+#ifndef WX_PRECOMP
+    #include "wx/defs.h"
+    #include "wx/object.h"
+    #include "wx/log.h"
+    #include "wx/intl.h"
 
-#if !defined(__MWERKS__) && !defined(__SALFORDC__)
-#include <memory.h>
-#endif
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <ctype.h>
 
-#include "wx/defs.h"
-#include "wx/object.h"
-#include "wx/log.h"
-#include "wx/intl.h"
+    #if !defined(__MWERKS__) && !defined(__SALFORDC__)
+        #include <memory.h>
+    #endif
+#endif // !WX_PRECOMP
+
 #include "wx/gsocket.h"
+#include "wx/socket.h"
 #include "wx/sckaddr.h"
 
 IMPLEMENT_ABSTRACT_CLASS(wxSockAddress, wxObject)
@@ -50,13 +54,26 @@ IMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress)
 // wxIPV4address
 // ---------------------------------------------------------------------------
 
+void wxSockAddress::Init()
+{
+    if ( !wxSocketBase::IsInitialized() )
+    {
+        // we must do it before using GAddress_XXX functions
+        (void)wxSocketBase::Initialize();
+    }
+}
+
 wxSockAddress::wxSockAddress()
 {
-  m_address = GAddress_new();
+    Init();
+
+    m_address = GAddress_new();
 }
 
 wxSockAddress::wxSockAddress(const wxSockAddress& other)
 {
+    Init();
+
     m_address = GAddress_copy(other.m_address);
 }
 

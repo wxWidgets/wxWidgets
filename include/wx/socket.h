@@ -185,6 +185,11 @@ public:
   void SetNotify(wxSocketEventFlags flags);
   void Notify(bool notify);
 
+  // initialize/shutdown the sockets (usually called automatically)
+  static bool IsInitialized();
+  static bool Initialize();
+  static void Shutdown();
+
   // callbacks are deprecated, use events instead
 #if WXWIN_COMPATIBILITY
   wxSockCbk Callback(wxSockCbk cbk_);
@@ -246,6 +251,9 @@ private:
   void         *m_clientData;       // client data for events
   bool          m_notify;           // notify events to users?
   wxSocketEventFlags  m_eventmask;  // which events to notify?
+
+  // the initialization count, GSocket is initialized if > 0
+  static size_t m_countInit;
 
   // callbacks are deprecated, use events instead
 #if WXWIN_COMPATIBILITY
