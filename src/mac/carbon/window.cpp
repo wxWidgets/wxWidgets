@@ -2564,7 +2564,6 @@ void wxWindowMac::OnMouseEvent( wxMouseEvent &event )
             x += origin.x ;
             y += origin.y ;
         }
-        ControlRef   control ;
         Point       localwhere ;
         SInt16      controlpart ;
         
@@ -2587,20 +2586,21 @@ void wxWindowMac::OnMouseEvent( wxMouseEvent &event )
     
         if ( event.m_metaDown )
             modifiers |= cmdKey ;
+
+        bool handled = false ;
+
+        if ( ::IsControlActive( (ControlRef) m_macControl ) )
         {
-            control = (ControlRef) m_macControl ;
-            if ( control && ::IsControlActive( control ) )
+            controlpart = ::HandleControlClick( (ControlRef) m_macControl , localwhere , modifiers , (ControlActionUPP) -1 ) ;
+            wxTheApp->s_lastMouseDown = 0 ;
+            if ( controlpart != kControlNoPart ) 
             {
-                {
-                    controlpart = ::HandleControlClick( control , localwhere , modifiers , (ControlActionUPP) -1 ) ;
-                    wxTheApp->s_lastMouseDown = 0 ;
-                    if ( control && controlpart != kControlNoPart ) 
-                    {
-                        MacHandleControlClick((WXWidget)  control , controlpart , false /* mouse not down anymore */ ) ;
-                    }
-                }
+                MacHandleControlClick((WXWidget)  (ControlRef) m_macControl , controlpart , false /* mouse not down anymore */ ) ;
+                handled = true ;
             }
         }
+        if ( !handled )
+            event.Skip() ;
     }
     else
     {
