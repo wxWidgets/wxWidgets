@@ -99,7 +99,7 @@ void rc2wxr::Convert(wxString wxrfile, wxString rcfile)
 {
     m_rc.Open(rcfile);
     m_filesize=m_rc.Length();
-    if( (m_wxr  = wxFopen( wxrfile.fn_str(), _T("wt") )) == NULL )
+    if( (m_wxr  = wxFopen( wxrfile, _T("wt") )) == NULL )
     {
         return;
     }
