@@ -79,8 +79,11 @@ private:
 // wxToolBarTool
 // ----------------------------------------------------------------------------
 
-const short defwidth = 24 ;
-const short defheight = 22 ;
+const short kwxMacToolBarToolDefaultWidth = 24 ;
+const short kwxMacToolBarToolDefaultHeight = 22 ;
+const short kwxMacToolBarTopMargin = 2 ;
+const short kwxMacToolBarLeftMargin = 2 ;
+
 
 wxToolBarToolBase *wxToolBar::CreateTool(int id,
                                          const wxBitmap& bitmap1,
@@ -103,17 +106,13 @@ void wxToolBar::Init()
 {
   m_maxWidth = -1;
   m_maxHeight = -1;
-  m_defaultWidth = defwidth;
-  m_defaultHeight = defheight;
-  // TODO
+  m_defaultWidth = kwxMacToolBarToolDefaultWidth;
+  m_defaultHeight = kwxMacToolBarToolDefaultHeight;
 }
 
 bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
             long style, const wxString& name)
 {
-
-  m_defaultWidth = defwidth;
-  m_defaultHeight = defheight;
   
   int x = pos.x;
   int y = pos.y;
@@ -128,40 +127,30 @@ bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
     x = 0;
   if (y < 0)
     y = 0;
-#if 1
-	{
-	  SetName(name);
 
-	  m_windowStyle = style;
-	  parent->AddChild(this);
+  SetName(name);
 
-	  m_backgroundColour = parent->GetBackgroundColour() ;
-	  m_foregroundColour = parent->GetForegroundColour() ;
+  m_windowStyle = style;
+  parent->AddChild(this);
 
-	  if (id == -1)
-	      m_windowId = NewControlId();
-	  else
-	      m_windowId = id;
+  m_backgroundColour = parent->GetBackgroundColour() ;
+  m_foregroundColour = parent->GetForegroundColour() ;
 
-		m_width = size.x ;
-		m_height = size.y ;
-		int x = pos.x ;
-		int y = pos.y ;
-		AdjustForParentClientOrigin(x, y, wxSIZE_USE_EXISTING);
-		m_x = x ;
-		m_y = y ;
-	}
-#else
-	Rect bounds ;
-	Str255 title ;
-	
-	MacPreControlCreate( parent , id ,  "" , wxPoint( x , y ) , wxSize( width , height ) ,style, wxDefaultValidator , name , &bounds , title ) ;
+  if (id == -1)
+      m_windowId = NewControlId();
+  else
+      m_windowId = id;
 
-	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , "\p" , true , 0 , 0 , 1, 
-	  	kControlPlacardProc , (long) this ) ;
-	MacPostControlCreate() ;
-#endif
-  return TRUE;
+  {
+	m_width = size.x ;
+	m_height = size.y ;
+	int x = pos.x ;
+	int y = pos.y ;
+	AdjustForParentClientOrigin(x, y, wxSIZE_USE_EXISTING);
+	m_x = x ;
+	m_y = y ;
+  }
+
 }
 
 wxToolBar::~wxToolBar()
@@ -254,9 +243,6 @@ PicHandle MakePict(GWorldPtr wp, GWorldPtr mask )
 	return pict;						// return our groovy pict handle
 }
 
-const short kwxMacToolBarTopMargin = 2 ;
-const short kwxMacToolBarLeftMargin = 2 ;
-
 bool wxToolBar::Realize()
 {
   if (m_tools.Number() == 0)
@@ -282,7 +268,10 @@ bool wxToolBar::Realize()
 	wxSize toolSize = GetToolSize() ;
     int tw, th;
     GetSize(& tw, & th);
-    m_maxWidth = m_maxHeight = 0 ;
+    
+    int maxWidth = 0 ;
+    int maxHeight = 0 ;
+    
 	while (node)
 	{
 		wxToolBarTool *tool = (wxToolBarTool *)node->Data();
@@ -290,7 +279,7 @@ bool wxToolBar::Realize()
 		
 		if(  !tool->IsSeparator()  )
 		{
-			Rect toolrect = { toolbarrect.top + kwxMacToolBarTopMargin , toolbarrect.left + x + kwxMacToolBarLeftMargin , 0 , 0 } ;
+			Rect toolrect = { toolbarrect.top + m_yMargin + kwxMacToolBarTopMargin, toolbarrect.left + x + m_xMargin + kwxMacToolBarLeftMargin , 0 , 0 } ;
 			toolrect.right = toolrect.left + toolSize.x ;
 			toolrect.bottom = toolrect.top + toolSize.y ;
 			
@@ -357,10 +346,10 @@ bool wxToolBar::Realize()
 			m_macToolHandles.Add( NULL ) ;
 			x += (int)toolSize.x / 4;
 		}
-	    if ( toolbarrect.left + x + kwxMacToolBarLeftMargin - m_x - localOrigin.h > m_maxWidth)
-    	  	m_maxWidth = toolbarrect.left + x + kwxMacToolBarLeftMargin - m_x - localOrigin.h;
-    	if (toolbarrect.top + kwxMacToolBarTopMargin  - m_y - localOrigin.v > m_maxHeight)
-      		m_maxHeight = toolbarrect.top + kwxMacToolBarTopMargin - m_y - localOrigin.v ;
+	    if ( toolbarrect.left + x + m_xMargin  + kwxMacToolBarLeftMargin- m_x - localOrigin.h > maxWidth)
+    	  	maxWidth = toolbarrect.left + x  + kwxMacToolBarLeftMargin+ m_xMargin - m_x - localOrigin.h;
+    	if (toolbarrect.top + m_yMargin  + kwxMacToolBarTopMargin - m_y - localOrigin.v > maxHeight)
+      		maxHeight = toolbarrect.top  + kwxMacToolBarTopMargin + m_yMargin - m_y - localOrigin.v ;
 
 		node = node->Next();
 	}
@@ -372,11 +361,10 @@ bool wxToolBar::Realize()
         // if not set yet, only one row
         SetRows(1);
     }
-    m_maxWidth = clipRect.right - m_x ;
-   	//m_maxWidth = tw ; // +=toolSize.x;
-   	//m_maxWidth += m_xMargin ;
-    m_maxHeight += toolSize.y;
-  	m_maxHeight += m_yMargin;
+   	maxWidth = tw ; 
+    maxHeight += toolSize.y;
+  	maxHeight += m_yMargin + kwxMacToolBarTopMargin;
+  	m_maxHeight = maxHeight ;
   }
   else
   {
@@ -385,13 +373,13 @@ bool wxToolBar::Realize()
         // if not set yet, have one column
         SetRows(noButtons);
     }
-    m_maxHeight = clipRect.bottom - m_y ;
-    //m_maxHeight += m_yMargin ;
-    m_maxWidth += toolSize.x;
-  	m_maxWidth += m_xMargin;
+    maxHeight = th ;
+    maxWidth += toolSize.x;
+  	maxWidth += m_xMargin + kwxMacToolBarLeftMargin;
+  	m_maxWidth = maxWidth ;
   }
 
-  SetSize(m_maxWidth, m_maxHeight);
+  SetSize(maxWidth, maxHeight);
 
   return TRUE;
 }
@@ -546,20 +534,9 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
 			
 			parent = parent->GetParent() ;
 		} 
-		int w = m_width ;
-		int h = m_height ;
-		
-		if ( GetWindowStyleFlag() & wxTB_HORIZONTAL )
-		{
-	    	w = clipRect.right - m_x ;
-		}
-  		else
-  		{
-    		h = clipRect.bottom - m_y ;
-		}
-		
+
 		Rect toolbarrect = { m_y + localOrigin.v , m_x + localOrigin.h , 
-			m_y  + localOrigin.v + h , m_x + localOrigin.h + w } ;
+			m_y  + localOrigin.v + m_height , m_x + localOrigin.h + m_width } ;
 
 		UMADrawThemePlacard( &toolbarrect , IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
 		{
@@ -575,55 +552,8 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
 		UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
 		wxDC::MacInvalidateSetup() ;
 	}
-	/*
-	WindowRef window = GetMacRootWindow() ;
-	if ( window )
-	{
-		wxWindow* win = wxFindWinFromMacWindow( window ) ;
-		if ( win )
-		{
-			wxMacDrawingHelper help( win ) ;
-			// the mac control manager always assumes to have the origin at 0,0
-			SetOrigin( 0 , 0 ) ;
-			
-			bool			hasTabBehind = false ;
-			wxWindow* parent = GetParent() ;
-			while ( parent )
-			{
-				if( parent->MacGetWindowData() )
-				{
-					UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , kThemeBrushDialogBackgroundActive , false ) ;
-					break ;
-				}
-				
-				if( parent->IsKindOf( CLASSINFO( wxNotebook ) ) ||  parent->IsKindOf( CLASSINFO( wxTabCtrl ) ))
-				{
-					if ( ((wxControl*)parent)->GetMacControl() )
-						SetUpControlBackground( ((wxControl*)parent)->GetMacControl() , -1 , true ) ;
-					break ;
-				}
-				
-				parent = parent->GetParent() ;
-			} 
-			Rect toolbarrect = { m_y , m_x , m_y + m_height , m_x + m_width } ;
-
-			UMADrawThemePlacard( &toolbarrect , IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
-			{
-				int index = 0 ;
-				for ( index = 0 ; index < m_macToolHandles.Count() ; ++index )
-				{
-					if ( m_macToolHandles[index] )
-					{
-						UMADrawControl( (ControlHandle) m_macToolHandles[index] ) ;
- 					}
-				}
-			}
-			UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
-			wxDC::MacInvalidateSetup() ;
-		}
-	}
-	*/
 }
+
 void  wxToolBar::OnMouse( wxMouseEvent &event ) 
 {
 		
@@ -663,10 +593,6 @@ void  wxToolBar::OnMouse( wxMouseEvent &event )
 	
 		controlpart = FindControl( localwhere , window , &control ) ;
 		{
-			if ( AcceptsFocus() && FindFocus() != this )
-			{
-				SetFocus() ;
-			}
 			if ( control && UMAIsControlActive( control ) )
 			{
 				{
