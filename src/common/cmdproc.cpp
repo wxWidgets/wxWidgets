@@ -69,6 +69,9 @@ wxCommandProcessor::wxCommandProcessor(int maxCommands)
 #endif // wxUSE_MENUS
     m_undoAccelerator = wxT("\tCtrl+Z");
     m_redoAccelerator = wxT("\tCtrl+Y");
+#if !wxUSE_STL
+    m_currentCommand = NULL;
+#endif
 }
 
 wxCommandProcessor::~wxCommandProcessor()
