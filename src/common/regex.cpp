@@ -188,7 +188,7 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
 
     // compile it
 #ifdef wx_wchar
-    int errorcode = wx_regcomp(&m_RegEx, expr, expr.Length(), REG_ADVANCED);
+    int errorcode = wx_regcomp(&m_RegEx, expr, expr.Length(), flagsRE);
 #else
     int errorcode = regcomp(&m_RegEx, expr.mb_str(), flagsRE);
 #endif
