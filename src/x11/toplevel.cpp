@@ -111,20 +111,6 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     // I think we set this to True to remove decorations
     xattributes.override_redirect = False;
     
-    Window xwindow = XCreateWindow( xdisplay, xparent, pos.x, pos.y, size.x, size.y, 
-       0, DefaultDepth(xdisplay,xscreen), InputOutput, xvisual, xattributes_mask, &xattributes );
-    m_mainWidget = (WXWindow) xwindow;
-
-    XSelectInput( xdisplay, xwindow,
-        ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
-        ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask |
-        KeymapStateMask | FocusChangeMask | ColormapChangeMask | StructureNotifyMask |
-        PropertyChangeMask );
-
-    wxAddWindowToTable( xwindow, (wxWindow*) this );
-    
-    XSetTransientForHint( xdisplay, xwindow, xparent );
-
     wxSize size2(size);
     if (size2.x == -1)
 	size2.x = 100;
@@ -137,6 +123,21 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     if (pos2.y == -1)
 	pos2.y = 100;
     
+    Window xwindow = XCreateWindow( xdisplay, xparent, pos2.x, pos2.y, size2.x, size2.y, 
+       0, DefaultDepth(xdisplay,xscreen), InputOutput, xvisual, xattributes_mask, &xattributes );
+    m_mainWidget = (WXWindow) xwindow;
+
+    XSelectInput( xdisplay, xwindow,
+        ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
+        ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask |
+        KeymapStateMask | FocusChangeMask | ColormapChangeMask | StructureNotifyMask |
+        PropertyChangeMask );
+
+    wxAddWindowToTable( xwindow, (wxWindow*) this );
+
+    // Messes up window management
+    //    XSetTransientForHint( xdisplay, xwindow, xparent );
+
     size_hints.flags = PSize;
     size_hints.width = size2.x;
     size_hints.height = size2.y;
@@ -153,7 +154,6 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     wxSetWMDecorations((Window) GetMainWindow(), style);
 
     SetTitle(title);
-    SetSize(pos2.x, pos2.y, size2.x, size2.y);
     
     return TRUE;
 }
@@ -370,7 +370,7 @@ bool wxSetWMDecorations(Window w, long style)
         hints.decorations |= MWM_DECOR_TITLE;
     }
 
-    if (style & wxTHICK_FRAME)
+    if ((style & wxTHICK_FRAME) || (style & wxSIMPLE_BORDER) || (style & wxCAPTION))
     {
 	wxLogDebug("MWM_DECOR_BORDER");
         hints.flags |= MWM_HINTS_DECORATIONS;
