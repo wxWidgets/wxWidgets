@@ -327,7 +327,7 @@ protected:
 	// return FALSE, if something has gone wrong and
 	// document cannot be saved now
 
-	virtual bool OnSaveDocument( ScriptStream& stm ) 
+	virtual bool OnSaveDocument( ScriptStream& WXUNUSED(stm) ) 
 		{ return 1; }
 
 	// override this method to provide reference to

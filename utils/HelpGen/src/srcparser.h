@@ -202,25 +202,25 @@ public:
     //        multiple times by variouse visitors (there can
     //        be more the one visitor visiting content at a time)
 
-    virtual void VisitFile( spFile& fl ) {}
+    virtual void VisitFile( spFile& WXUNUSED(fl) ) {}
 
-    virtual void VisitNameSpace( spNameSpace& ns ) {}
+    virtual void VisitNameSpace( spNameSpace& WXUNUSED(ns) ) {}
 
-    virtual void VisitClass( spClass& cl ) {}
+    virtual void VisitClass( spClass& WXUNUSED(cl) ) {}
 
-    virtual void VisitEnumeration( spEnumeration& en ) {}
+    virtual void VisitEnumeration( spEnumeration& WXUNUSED(en) ) {}
 
-    virtual void VisitTypeDef( spTypeDef& td ) {}
+    virtual void VisitTypeDef( spTypeDef& WXUNUSED(td) ) {}
 
-    virtual void VisitPreprocessorLine( spPreprocessorLine& pd ) {}
+    virtual void VisitPreprocessorLine( spPreprocessorLine& WXUNUSED(pd) ) {}
 
-    virtual void VisitAttribute( spAttribute& attr ) {}
+    virtual void VisitAttribute( spAttribute& WXUNUSED(attr) ) {}
 
-    virtual void VisitOperation( spOperation& op ) {}
+    virtual void VisitOperation( spOperation& WXUNUSED(op) ) {}
 
-    virtual void VisitParameter( spParameter& param ) {}
+    virtual void VisitParameter( spParameter& WXUNUSED(param) ) {}
 
-    virtual void VisitCustomContext( spContext& ctx ) {}
+    virtual void VisitCustomContext( spContext& WXUNUSED(ctx) ) {}
 };
 
 // stores one section of comments,
