@@ -345,7 +345,7 @@ void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
   m_text->AppendText(_("\n=== Test 1 begins ===\n"));
 
   // Tell the server which test we are running
-  int c = 0xBE;
+  unsigned char c = 0xBE;
   m_sock->Write(&c, 1);
 
   // Send some data and read it back. We know the size of the
@@ -406,7 +406,7 @@ void MyFrame::OnTest2(wxCommandEvent& WXUNUSED(event))
   m_text->AppendText(_("\n=== Test 2 begins ===\n"));
 
   // Tell the server which test we are running
-  int c = 0xCE;
+  unsigned char c = 0xCE;
   m_sock->Write(&c, 1);
 
   // Here we use ReadMsg and WriteMsg to send messages with
@@ -475,7 +475,7 @@ void MyFrame::OnTest3(wxCommandEvent& WXUNUSED(event))
   m_text->AppendText(_("\n=== Test 3 begins ===\n"));
 
   // Tell the server which test we are running
-  int c = 0xDE;
+  unsigned char c = 0xDE;
   m_sock->Write(&c, 1);
 
   // This test also is similar to the first one but it sends a
@@ -487,7 +487,7 @@ void MyFrame::OnTest3(wxCommandEvent& WXUNUSED(event))
 
   // Note that len is in kbytes here!
   // Also note that Linux kernel 2.0.36 gives up at len > 27.
-  len  = 28;
+  len  = 32;
   buf1 = new char[len * 1024];
   buf2 = new char[len * 1024];
 

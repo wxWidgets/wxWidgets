@@ -334,6 +334,7 @@ void MyFrame::OnServerEvent(wxSocketEvent& event)
   else
   {
     m_text->AppendText(_("Error: couldn't accept a new connection\n\n"));
+    sock->Destroy();
     return;
   }
 
@@ -347,15 +348,15 @@ void MyFrame::OnServerEvent(wxSocketEvent& event)
 
 void MyFrame::OnSocketEvent(wxSocketEvent& event)
 {
-  wxSocketBase *sock = event.GetSocket();
   wxString s = _("OnSocketEvent: ");
+  wxSocketBase *sock = event.GetSocket();
 
-  // We first print a msg
+  // First, print a message
   switch(event.GetSocketEvent())
   {
-    case wxSOCKET_INPUT: s.Append(_("wxSOCKET_INPUT\n")); break;
-    case wxSOCKET_LOST:  s.Append(_("wxSOCKET_LOST\n")); break;
-    default:             s.Append(_("unexpected event !\n"));
+    case wxSOCKET_INPUT : s.Append(_("wxSOCKET_INPUT\n")); break;
+    case wxSOCKET_LOST  : s.Append(_("wxSOCKET_LOST\n")); break;
+    default             : s.Append(_("Unexpected event !\n")); break;
   }
 
   m_text->AppendText(s);
@@ -369,16 +370,19 @@ void MyFrame::OnSocketEvent(wxSocketEvent& event)
       // wxSocketEvent again.
       sock->SetNotify(wxSOCKET_LOST_FLAG);
 
+      m_text->AppendText();
+
       // Which test are we going to run?
       unsigned char c;
-      sock->Read(&c ,1);
+      sock->Read(&c, 1);
 
       switch (c)
       {
         case 0xBE: Test1(sock); break;
         case 0xCE: Test2(sock); break;
         case 0xDE: Test3(sock); break;
-        default: s.Append(_("Unknown test id received from client\n\n"));
+        default:
+          m_text->AppendText(_("Unknown test id received from client\n\n"));
       }
 
       // Enable input events again.
