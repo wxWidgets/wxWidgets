@@ -176,7 +176,7 @@ $(ARCHINCDIR)\wx:
     mkdir $(ARCHINCDIR)
     mkdir $(ARCHINCDIR)\wx
 
-$(SETUP_H):
+$(SETUP_H): $(WXDIR)\include\wx\msw\setup.h
     copy $(WXDIR)\include\wx\msw\setup.h $@
 
 dirs: $(MSWDIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(OLEDIR)\$D $(HTMLDIR)\$D $(JPEGDIR)\$D $(TIFFDIR)\$D $(REGEXDIR)\$D $(ARCHINCDIR)\wx $(WXDIR)\$D
