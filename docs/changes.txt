@@ -128,6 +128,8 @@ All (GUI):
 - added EVT_MENU_OPEN and EVT_MENU_CLOSE events
 - added Hungarian translations (Janos Vegh)
 - added wxImage::SaveFile(filename) method (Chris Elliott)
+- added wxImage::FloodFill and implemented wxWindowDC::DoFloodFill method
+  for GTK+, Mac, MGL, X11, Motif ports (Chris Elliott)
 
 wxMSW:
 
