@@ -791,7 +791,8 @@ void MyCanvas::DrawWithLogicalOps(wxDC& dc)
     dc.SetPen(wxPen(m_owner->m_colourForeground, 1, wxSOLID));
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
-    for ( size_t n = 0; n < WXSIZEOF(rasterOperations); n++ )
+    size_t n;
+    for ( n = 0; n < WXSIZEOF(rasterOperations); n++ )
     {
         wxCoord x = 20 + 150*(n%4),
                 y = 20 + 100*(n/4);
@@ -806,7 +807,7 @@ void MyCanvas::DrawWithLogicalOps(wxDC& dc)
     // now some filled rectangles
     dc.SetBrush(wxBrush(m_owner->m_colourForeground, wxSOLID));
 
-    for ( size_t n = 0; n < WXSIZEOF(rasterOperations); n++ )
+    for ( n = 0; n < WXSIZEOF(rasterOperations); n++ )
     {
         wxCoord x = 20 + 150*(n%4),
                 y = 500 + 100*(n/4);

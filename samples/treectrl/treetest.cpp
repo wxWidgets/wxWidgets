@@ -96,6 +96,7 @@ END_EVENT_TABLE()
 BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
     EVT_TREE_BEGIN_DRAG(TreeTest_Ctrl, MyTreeCtrl::OnBeginDrag)
     EVT_TREE_BEGIN_RDRAG(TreeTest_Ctrl, MyTreeCtrl::OnBeginRDrag)
+    EVT_TREE_END_DRAG(TreeTest_Ctrl, MyTreeCtrl::OnEndDrag)
     EVT_TREE_BEGIN_LABEL_EDIT(TreeTest_Ctrl, MyTreeCtrl::OnBeginLabelEdit)
     EVT_TREE_END_LABEL_EDIT(TreeTest_Ctrl, MyTreeCtrl::OnEndLabelEdit)
     EVT_TREE_DELETE_ITEM(TreeTest_Ctrl, MyTreeCtrl::OnDeleteItem)
@@ -626,7 +627,6 @@ void MyTreeCtrl::name(wxTreeEvent& WXUNUSED(event))         \
     wxLogMessage(#name);                                    \
 }
 
-TREE_EVENT_HANDLER(OnBeginDrag)
 TREE_EVENT_HANDLER(OnBeginRDrag)
 TREE_EVENT_HANDLER(OnDeleteItem)
 TREE_EVENT_HANDLER(OnGetInfo)
@@ -638,6 +638,58 @@ TREE_EVENT_HANDLER(OnSelChanged)
 TREE_EVENT_HANDLER(OnSelChanging)
 
 #undef TREE_EVENT_HANDLER
+
+void MyTreeCtrl::OnBeginDrag(wxTreeEvent& event)
+{
+    // need to explicitly allow drag
+    if ( event.GetItem() != GetRootItem() )
+    {
+        m_draggedItem = event.GetItem();
+
+        wxLogMessage("OnBeginDrag: started dragging %s",
+                     GetItemText(m_draggedItem).c_str());
+
+        event.Allow();
+    }
+    else
+    {
+        wxLogMessage("OnBeginDrag: this item can't be dragged.");
+    }
+}
+
+void MyTreeCtrl::OnEndDrag(wxTreeEvent& event)
+{
+    wxTreeItemId itemSrc = m_draggedItem,
+                 itemDst = event.GetItem();
+    m_draggedItem = 0;
+
+    // where to copy the item?
+    if ( itemDst.IsOk() && !ItemHasChildren(itemDst) )
+    {
+        // copy to the parent then
+        itemDst = GetParent(itemDst);
+    }
+
+    if ( !itemDst.IsOk() )
+    {
+        wxLogMessage("OnEndDrag: can't drop here.");
+
+        return;
+    }
+
+    wxString text = GetItemText(itemSrc);
+    wxLogMessage("OnEndDrag: '%s' copied to '%s'.",
+                 text.c_str(), GetItemText(itemDst).c_str());
+
+    // just do append here - we could also insert it just before/after the item
+    // on which it was dropped, but this requires slightly more work... we also
+    // completely ignore the client data and icon of the old item but could
+    // copy them as well.
+    //
+    // Finally, we only copy one item here but we might copy the entire tree if
+    // we were dragging a folder.
+    AppendItem(itemDst, text);
+}
 
 void MyTreeCtrl::OnBeginLabelEdit(wxTreeEvent& event)
 {

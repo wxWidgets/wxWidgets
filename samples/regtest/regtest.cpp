@@ -84,6 +84,7 @@ public:
   void OnMenuTest();
 
   // operations
+  void Refresh();
   void DeleteSelected();
   void ShowProperties();
   void CreateNewKey(const wxString& strName);
@@ -174,6 +175,7 @@ public:
   void OnExpand  (wxCommandEvent& event);
   void OnCollapse(wxCommandEvent& event);
   void OnToggle  (wxCommandEvent& event);
+  void OnRefresh (wxCommandEvent& event);
 
   void OnDelete   (wxCommandEvent& event);
   void OnNewKey   (wxCommandEvent& event);
@@ -200,6 +202,7 @@ enum
   Menu_Expand,
   Menu_Collapse,
   Menu_Toggle,
+  Menu_Refresh,
   Menu_New,
   Menu_NewKey,
   Menu_NewText,
@@ -221,6 +224,7 @@ BEGIN_EVENT_TABLE(RegFrame, wxFrame)
   EVT_MENU(Menu_Expand,   RegFrame::OnExpand)
   EVT_MENU(Menu_Collapse, RegFrame::OnCollapse)
   EVT_MENU(Menu_Toggle,   RegFrame::OnToggle)
+  EVT_MENU(Menu_Refresh,  RegFrame::OnRefresh)
   EVT_MENU(Menu_Delete,   RegFrame::OnDelete)
   EVT_MENU(Menu_NewKey,   RegFrame::OnNewKey)
   EVT_MENU(Menu_NewText,  RegFrame::OnNewText)
@@ -265,6 +269,8 @@ wxMenu *CreateRegistryMenu()
   pMenuReg->Append(Menu_Expand,   "&Expand",    "Expand current key");
   pMenuReg->Append(Menu_Collapse, "&Collapse",  "Collapse current key");
   pMenuReg->Append(Menu_Toggle,   "&Toggle",    "Toggle current key");
+  pMenuReg->AppendSeparator();
+  pMenuReg->Append(Menu_Refresh,  "&Refresh",   "Refresh the subtree");
   pMenuReg->AppendSeparator();
   pMenuReg->Append(Menu_Info,     "&Properties","Information about current selection");
 
@@ -322,11 +328,7 @@ RegFrame::RegFrame(wxFrame *parent, char *title, int x, int y, int w, int h)
 
   // create the status line
   // ----------------------
-  int aWidths[2];
-  aWidths[0] = 200;
-  aWidths[1] = -1;
   CreateStatusBar(2);
-  SetStatusWidths(2, aWidths);
 }
 
 RegFrame::~RegFrame()
@@ -368,6 +370,11 @@ void RegFrame::OnCollapse(wxCommandEvent& event)
 void RegFrame::OnToggle(wxCommandEvent& event)
 {
   m_treeCtrl->ExpandItem(m_treeCtrl->GetSelection(), wxTREE_EXPAND_TOGGLE);
+}
+
+void RegFrame::OnRefresh(wxCommandEvent& event)
+{
+  m_treeCtrl->Refresh();
 }
 
 void RegFrame::OnDelete(wxCommandEvent& event)
@@ -517,13 +524,11 @@ void RegTreeCtrl::OnRightClick(wxMouseEvent& event)
 {
   int iFlags;
   long lId = HitTest(wxPoint(event.GetX(), event.GetY()), iFlags);
-  if ( !(iFlags & wxTREE_HITTEST_ONITEMLABEL) ) {
-    // take the currently selected item if click not on item
-    lId = GetSelection();
-  }
-  else {
+  if ( iFlags & wxTREE_HITTEST_ONITEMLABEL ) {
+    // select the item first
     SelectItem(lId);
   }
+  //else: take the currently selected item if click not on item
 
   PopupMenu(m_pMenuPopup, event.GetX(), event.GetY());
 }
@@ -664,7 +669,7 @@ void RegTreeCtrl::OnEndDrag(wxTreeEvent& event)
 
     bool isKey = src->IsKey();
     if ( (isKey && (src == dst)) ||
-         (!isKey && (src->Parent() == dst)) ) {
+         (!isKey && (dst->Parent() == src)) ) {
         wxLogStatus("Can't copy something on itself");
 
         return;
@@ -697,7 +702,14 @@ void RegTreeCtrl::OnEndDrag(wxTreeEvent& event)
     bool ok;
     if ( isKey ) {
         wxRegKey& key = src->Key();
-        ok = key.Copy(dst->Key());
+        wxRegKey keyDst(dst->Key(), src->m_strName);
+        ok = keyDst.Create(FALSE);
+        if ( !ok ) {
+            wxLogError("Key '%s' already exists");
+        }
+        else {
+            ok = key.Copy(keyDst);
+        }
         if ( ok && dstExpanded ) {
             dst->OnCollapse();
             dst->OnExpand();
@@ -715,7 +727,7 @@ void RegTreeCtrl::OnEndDrag(wxTreeEvent& event)
         wxRegKey& key = src->Parent()->Key();
         ok = key.CopyValue(src->m_strName, dst->Key());
         if ( ok && !m_copyOnDrop ) {
-            // we move it, so delete the old one
+            // we moved it, so delete the old one
             ok = key.DeleteValue(src->m_strName);
             if ( ok ) {
                 // reexpand the key
@@ -848,11 +860,19 @@ void RegTreeCtrl::TreeNode::OnCollapse()
 
 void RegTreeCtrl::TreeNode::Refresh()
 {
-    if ( m_pTree->IsExpanded(Id()) )
-    {
+    if ( !IsKey() )
+        return;
+
+    if ( m_pTree->IsExpanded(Id()) ) {
         m_pTree->Collapse(Id());
+        OnCollapse();
         m_pTree->SetItemHasChildren(Id());
         m_pTree->Expand(Id());
+        OnExpand();
+    }
+    else {
+        // just allow it to be expanded
+        m_pTree->SetItemHasChildren(Id());
     }
 }
 
@@ -1065,3 +1085,17 @@ bool RegTreeCtrl::IsKeySelected() const
 
   return pCurrent->IsKey();
 }
+
+void RegTreeCtrl::Refresh()
+{
+    long lId = GetSelection();
+    if ( !lId )
+        return;
+
+    TreeNode *pNode = (TreeNode *)GetItemData(lId);
+
+    wxCHECK_RET( pNode != NULL, "tree item without data?" );
+
+    pNode->Refresh();
+}
+

@@ -48,6 +48,7 @@ public:
 
     void OnBeginDrag(wxTreeEvent& event);
     void OnBeginRDrag(wxTreeEvent& event);
+    void OnEndDrag(wxTreeEvent& event);
     void OnBeginLabelEdit(wxTreeEvent& event);
     void OnEndLabelEdit(wxTreeEvent& event);
     void OnDeleteItem(wxTreeEvent& event);
@@ -90,8 +91,9 @@ private:
                              size_t folder);
 
     wxImageList *m_imageListNormal;
-    bool         m_reverseSort;           // flag for OnCompareItems
-    wxTreeItemId m_lastItem;              // for OnEnsureVisible()
+    bool         m_reverseSort;             // flag for OnCompareItems
+    wxTreeItemId m_lastItem,                // for OnEnsureVisible()
+                 m_draggedItem;             // item being dragged right now
 
     // NB: due to an ugly wxMSW hack you _must_ use DECLARE_DYNAMIC_CLASS()
     //     if you want your overloaded OnCompareItems() to be called.
