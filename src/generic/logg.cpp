@@ -177,22 +177,27 @@ static wxFrame *gs_pFrame = NULL; // FIXME MT-unsafe
 
 // accepts an additional argument which tells to which frame the output should
 // be directed
-void wxLogStatus(wxFrame *pFrame, const wxChar *szFormat, ...)
+void wxLogStatus(wxFrame *pFrame, const wxChar *szFormat, va_list argptr)
 {
   wxString msg;
 
   wxLog *pLog = wxLog::GetActiveTarget();
   if ( pLog != NULL ) {
-    va_list argptr;
-    va_start(argptr, szFormat);
     msg.PrintfV(szFormat, argptr);
-    va_end(argptr);
 
     wxASSERT( gs_pFrame == NULL ); // should be reset!
     gs_pFrame = pFrame;
     wxLog::OnLog(wxLOG_Status, msg, time(NULL));
     gs_pFrame = (wxFrame *) NULL;
   }
+}
+
+void wxLogStatus(wxFrame *pFrame, const wxChar *szFormat, ...)
+{
+    va_list argptr;
+    va_start(argptr, szFormat);
+    wxLogStatus(pFrame, szFormat, argptr);
+    va_end(argptr);
 }
 
 // ----------------------------------------------------------------------------
