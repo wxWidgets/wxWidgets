@@ -84,8 +84,10 @@ public:
     // interface to native frame structure
     FormType *GetForm() const;
 
-    // handle controls
+    // handle native events
     bool HandleControlSelect(EventType* event);
+    bool HandleControlRepeat(EventType* event);
+    bool HandleSize(EventType* event);
 
 protected:
     // common part of all ctors

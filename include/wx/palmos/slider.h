@@ -20,7 +20,10 @@
 class WXDLLEXPORT wxSlider : public wxSliderBase
 {
 public:
-    wxSlider();
+    wxSlider()
+    {
+        Init();
+    }
 
     wxSlider(wxWindow *parent, wxWindowID id,
             int value, int minValue, int maxValue,
@@ -30,6 +33,7 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxSliderNameStr)
     {
+        Init();
         Create(parent, id, value, minValue, maxValue, pos, size, style, validator, name);
     }
 
@@ -53,7 +57,7 @@ public:
 
     // For trackbars only
     void SetTickFreq(int n, int pos);
-    int GetTickFreq() const { return GetPageSize(); }
+    int GetTickFreq() const;
     void SetPageSize(int pageSize);
     int GetPageSize() const;
     void ClearSel();
@@ -72,9 +76,17 @@ public:
 
     // send a notification event, return true if processed
     bool SendUpdatedEvent();
+    bool SendScrollEvent(EventType* event);
 
 protected:
+
     virtual wxSize DoGetBestSize() const;
+
+private:
+
+    void Init();
+    int m_oldPos;
+    int m_lineSize;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxSlider)
 };

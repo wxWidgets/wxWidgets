@@ -243,12 +243,13 @@ bool wxTopLevelWindowPalm::SetShape(const wxRegion& region)
 #endif // !__WXWINCE__
 
 // ----------------------------------------------------------------------------
-// wxTopLevelWindow event handling
+// wxTopLevelWindow native event handling
 // ----------------------------------------------------------------------------
 
 bool wxTopLevelWindowPalm::HandleControlSelect(EventType* event)
 {
     int id = event->data.ctlSelect.controlID;
+
     wxWindow* win = FindWindowById(id,this);
     if(win==NULL)
         return false;
@@ -276,6 +277,30 @@ bool wxTopLevelWindowPalm::HandleControlSelect(EventType* event)
     return false;
 }
 
+bool wxTopLevelWindowPalm::HandleControlRepeat(EventType* event)
+{
+    int id = event->data.ctlRepeat.controlID;
+
+    wxWindow* win = FindWindowById(id,this);
+    if(win==NULL)
+        return false;
+
+    wxSlider* slider = wxDynamicCast(win,wxSlider);
+    if(slider)
+        return slider->SendScrollEvent(event);
+
+    return false;
+}
+
+bool wxTopLevelWindowPalm::HandleSize(EventType* event)
+{
+    wxSize newSize(event->data.winResized.newBounds.extent.x,
+                   event->data.winResized.newBounds.extent.y);
+    wxSizeEvent eventWx(newSize,GetId());
+    eventWx.SetEventObject(this);
+    return GetEventHandler()->ProcessEvent(eventWx);
+}
+
 void wxTopLevelWindowPalm::OnActivate(wxActivateEvent& event)
 {
 }
@@ -296,12 +321,21 @@ void wxTopLevelWindowPalm::OnActivate(wxActivateEvent& event)
  */
 static Boolean FrameFormHandleEvent(EventType* event)
 {
-    wxFrame*    frame = wxDynamicCast(ActiveParentFrame,wxFrame);
+    // frame and tlw point to the same object but they are for convenience
+    // of calling proper structure withiout later dynamic typcasting
+    wxFrame* frame = wxDynamicCast(ActiveParentFrame,wxFrame);
+    wxTopLevelWindowPalm* tlw = ActiveParentFrame;
     Boolean     handled = false;
 
     switch (event->eType) {
         case ctlSelectEvent:
-            handled = frame->HandleControlSelect(event);
+            handled = tlw->HandleControlSelect(event);
+            break;
+        case ctlRepeatEvent:
+            handled = tlw->HandleControlRepeat(event);
+            break;
+        case winResizedEvent:
+            handled = tlw->HandleSize(event);
             break;
 #if wxUSE_MENUS_NATIVE
         case menuOpenEvent:

@@ -98,8 +98,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxSlider, wxControl)
 #endif
 
 // Slider
-wxSlider::wxSlider()
+void wxSlider::Init()
 {
+    m_oldPos = 0;
+    m_lineSize = 1;
 }
 
 bool wxSlider::Create(wxWindow *parent, wxWindowID id,
@@ -109,12 +111,24 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
+    // wxSL_AUTOTICKS is ignored - always on
+    // wxSL_LABELS is ignored - always off
+    // wxSL_LEFT is ignored - always off
+    // wxSL_RIGHT is ignored - always off
+    // wxSL_TOP is ignored - always off
+    // wxSL_SELRANGE is ignored - always off
+    // wxSL_INVERSE is ignored - always off
+    // wxSL_VERTICAL is impossible in native form
+    wxCHECK_MSG(!(style & wxSL_VERTICAL), false, _T("non vertical slider on PalmOS"));
+     
     if(!wxControl::Create(parent, id, pos, size, style, validator, name))
         return false;
 
     FormType* form = GetParentForm();
     if(form==NULL)
         return false;
+
+    m_oldPos = value;
 
     SliderControlType *slider = CtlNewSliderControl (
                                    (void **)&form,
@@ -187,68 +201,93 @@ int wxSlider::GetValue() const
 void wxSlider::SetValue(int value)
 {
     SetIntValue(value);
+    m_oldPos = value;
 }
 
 wxSize wxSlider::DoGetBestSize() const
 {
-    return wxSize(0,0);
+    // 15 is taken as used in one of official samples
+    // 45 is dummy height tripled, any idea what's better ?
+    return wxSize(45,15);
 }
 
 
-void wxSlider::SetRange(int minValue, int maxValue)
+void wxSlider::SetRange(int WXUNUSED(minValue), int WXUNUSED(maxValue))
 {
+    // unsupported feature
 }
 
-void wxSlider::SetTickFreq(int n, int pos)
+void wxSlider::SetTickFreq(int WXUNUSED(n), int WXUNUSED(pos))
 {
+    // unsupported feature
 }
 
 void wxSlider::SetPageSize(int pageSize)
 {
+    ControlType *control = (ControlType *)GetObjectPtr();
+    if(control==NULL)
+        return;
+    uint16_t val = pageSize;
+    CtlSetSliderValues(control, NULL, NULL, &val, NULL);
 }
 
 void wxSlider::ClearSel()
 {
+    // unsupported feature
 }
 
 void wxSlider::ClearTicks()
 {
+    // unsupported feature
 }
 
 void wxSlider::SetLineSize(int lineSize)
 {
+    m_lineSize = lineSize;
 }
 
 int wxSlider::GetLineSize() const
 {
-    return 0;
+    return m_lineSize;
 }
 
 int wxSlider::GetSelEnd() const
 {
-    return 0;
+    // unsupported feature
+    return GetValue();
 }
 
 int wxSlider::GetSelStart() const
 {
-    return 0;
+    // unsupported feature
+    return GetValue();
 }
 
-void wxSlider::SetSelection(int minPos, int maxPos)
+void wxSlider::SetSelection(int WXUNUSED(minPos), int WXUNUSED(maxPos))
 {
+    // unsupported feature
 }
 
-void wxSlider::SetThumbLength(int len)
+void wxSlider::SetThumbLength(int WXUNUSED(len))
 {
+    // unsupported feature
 }
 
 int wxSlider::GetThumbLength() const
 {
+    // unsupported feature
     return 0;
 }
 
-void wxSlider::SetTick(int tickPos)
+int wxSlider::GetTickFreq() const
 {
+    // unsupported feature
+    return GetPageSize();
+}
+
+void wxSlider::SetTick(int WXUNUSED(tickPos))
+{
+    // unsupported feature
 }
 
 // ----------------------------------------------------------------------------
@@ -257,10 +296,67 @@ void wxSlider::SetTick(int tickPos)
 
 bool wxSlider::SendUpdatedEvent()
 {
+    m_oldPos = GetValue();
+
+    // first track event
+    wxScrollEvent eventWxTrack(wxEVT_SCROLL_THUMBRELEASE, GetId());
+    eventWxTrack.SetPosition(m_oldPos);
+    eventWxTrack.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(eventWxTrack);
+
+    // then scroll event
     wxCommandEvent event(wxEVT_COMMAND_SLIDER_UPDATED, GetId());
     event.SetEventObject(this);
-    event.SetInt(GetValue());
+    event.SetInt(m_oldPos);
     return ProcessCommand(event);
+}
+
+bool wxSlider::SendScrollEvent(EventType* event)
+{
+    wxEventType scrollEvent;
+    int newPos = event->data.ctlRepeat.value;
+    if ( newPos == GetMax() )
+    {
+        scrollEvent = wxEVT_SCROLL_TOP;
+    }
+    else if ( newPos == GetMin() )
+    {
+        scrollEvent = wxEVT_SCROLL_BOTTOM;
+    }
+    else if ( newPos == ( m_oldPos + GetLineSize() ) )
+    {
+        scrollEvent = wxEVT_SCROLL_LINEUP;
+    }
+    else if ( newPos == ( m_oldPos - GetLineSize() ) )
+    {
+        scrollEvent = wxEVT_SCROLL_LINEDOWN;
+    }
+    else if ( newPos == ( m_oldPos + GetPageSize() ) )
+    {
+        scrollEvent = wxEVT_SCROLL_PAGEUP;
+    }
+    else if ( newPos == ( m_oldPos - GetPageSize() ) )
+    {
+        scrollEvent = wxEVT_SCROLL_PAGEDOWN;
+    }
+    else
+    {
+        return false;
+    }
+
+    m_oldPos = newPos;
+
+    // first track event
+    wxScrollEvent eventWxTrack(wxEVT_SCROLL_THUMBTRACK, GetId());
+    eventWxTrack.SetPosition(newPos);
+    eventWxTrack.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(eventWxTrack);
+
+    // then scroll event
+    wxScrollEvent eventWxScroll(scrollEvent, GetId());
+    eventWxScroll.SetPosition(newPos);
+    eventWxScroll.SetEventObject(this);
+    return GetEventHandler()->ProcessEvent(eventWxScroll);
 }
 
 void wxSlider::Command (wxCommandEvent & event)
