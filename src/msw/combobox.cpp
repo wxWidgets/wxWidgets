@@ -190,7 +190,7 @@ bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
     {
         case WM_CHAR:
             return HandleChar(wParam, lParam, TRUE /* isASCII */);
-			
+
         case WM_KEYDOWN:
             return HandleKeyDown(wParam, lParam);
 
@@ -485,19 +485,6 @@ void wxComboBox::SetSelection(long from, long to)
     {
         wxLogDebug(_T("CB_SETEDITSEL failed"));
     }
-}
-
-wxSize wxComboBox::DoGetBestSize() const
-{
-    // the choice calculates the horz size correctly, but not the vertical
-    // component: correct it
-    wxSize size = wxChoice::DoGetBestSize();
-
-    int cx, cy;
-    wxGetCharSize(GetHWND(), &cx, &cy, &GetFont());
-    size.y = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
-
-    return size;
 }
 
 #endif

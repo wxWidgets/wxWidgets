@@ -84,9 +84,6 @@ public:
             WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
     WXHWND GetEditHWND() const;
-
-protected:
-    virtual wxSize DoGetBestSize() const;
 };
 
 #endif // wxUSE_COMBOBOX
