@@ -641,7 +641,7 @@ static wxString FileToPythonArray(wxString filename, int num)
     size_t lng = file.Length();
 
     snum.Printf(_T("%i"), num);
-    output = _T("    xml_res_file_") + snum + _T(" = \"\"\"\\\n");
+    output = _T("    xml_res_file_") + snum + _T(" = '''\\\n");
 
     unsigned char *buffer = new unsigned char[lng];
     file.Read(buffer, lng);
@@ -654,7 +654,7 @@ static wxString FileToPythonArray(wxString filename, int num)
             tmp = (wxChar)c;
             linelng = 0;
         }
-        else if (c < 32 || c > 127 || c == '"')
+        else if (c < 32 || c > 127 || c == '\'')
             tmp.Printf(_T("\\x%02x"), c);
         else if (c == '\\')
             tmp = _T("\\\\");
@@ -671,7 +671,7 @@ static wxString FileToPythonArray(wxString filename, int num)
 
     delete[] buffer;
 
-    output += _T("\"\"\"\n\n");
+    output += _T("'''\n\n");
 
     return output;
 }
