@@ -209,7 +209,6 @@ _treeList = [
         'OGL',
         'PrintFramework',
         'ShapedWindow',
-        'Throbber',
         'Unicode',
         'Wave',
         ]),
