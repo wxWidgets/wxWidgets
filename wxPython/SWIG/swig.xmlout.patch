@@ -1,10 +1,10 @@
-Index: Source/Swig/swig.h
+Index: Source/Swig/swig.h
 ===================================================================
 RCS file: /cvsroot/SWIG/Source/Swig/swig.h,v
 retrieving revision 1.76
 diff -u -4 -r1.76 swig.h
 --- Source/Swig/swig.h	11 Nov 2003 20:16:35 -0000	1.76
-+++ Source/Swig/swig.h	11 Dec 2003 19:24:42 -0000
++++ Source/Swig/swig.h	11 Dec 2003 19:45:06 -0000
 @@ -350,8 +350,10 @@
  extern void Swig_print_tags(File *obj, Node *root);
  extern void Swig_print_tree(Node *obj);
@@ -22,7 +22,7 @@ RCS file: /cvsroot/SWIG/Source/Modules/main.cxx,v
 retrieving revision 1.23
 diff -u -4 -r1.23 main.cxx
 --- Source/Modules/main.cxx	8 Dec 2003 23:42:37 -0000	1.23
-+++ Source/Modules/main.cxx	11 Dec 2003 19:24:42 -0000
++++ Source/Modules/main.cxx	11 Dec 2003 19:45:07 -0000
 @@ -85,15 +85,17 @@
       -v              - Run in verbose mode\n\
       -version        - Print SWIG version number\n\
@@ -90,29 +90,19 @@ RCS file: /cvsroot/SWIG/Source/Modules/xml.cxx,v
 retrieving revision 1.8
 diff -u -4 -r1.8 xml.cxx
 --- Source/Modules/xml.cxx	31 Oct 2003 17:42:40 -0000	1.8
-+++ Source/Modules/xml.cxx	11 Dec 2003 19:24:42 -0000
-@@ -24,9 +24,8 @@
- //static Node *view_top = 0;
- static File *out = 0;
- static int xmllite = 0;
- 
--
- class XML
- : public Language
- {
- 
-@@ -109,9 +108,9 @@
++++ Source/Modules/xml.cxx	11 Dec 2003 19:45:07 -0000
+@@ -109,9 +109,9 @@
  				Printf(stderr,"*** Can't open '%s'\n", outfile);
  				SWIG_exit(EXIT_FAILURE);
  			}
  		}
 -		Printf( out, "<?xml version=\"1.0\" ?> \n" );
-+		Printf( out, "<?xml version=\"1.0\" ?> \n" );
++                Printf( out, "<?xml version=\"1.0\" ?> \n" );    
  		Xml_print_tree(n);
      	return SWIG_OK;
    	}
  
-@@ -197,18 +196,19 @@
+@@ -197,18 +197,19 @@
  					Replaceall( o, "&", "&amp;" );
  					Replaceall( o, "<", "&lt;" );
  					Replaceall( o, "\"", "&quot;" );
@@ -134,7 +124,7 @@ diff -u -4 -r1.8 xml.cxx
  				}
  			}
  			ki = Next(ki);
-@@ -318,11 +318,10 @@
+@@ -318,11 +319,10 @@
  		{
  			print_indent(0);
  			Printf( out, "<%ssitem id=\"%ld\" addr=\"%x\" >\n", markup, ++id, n.item );
@@ -147,7 +137,7 @@ diff -u -4 -r1.8 xml.cxx
  		}
  		indent_level -= 4;
  		print_indent(0);
-@@ -337,5 +336,36 @@
+@@ -337,5 +337,36 @@
  	Language * swig_xml( void )
  	{
  		return new XML();
