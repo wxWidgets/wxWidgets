@@ -101,6 +101,8 @@ long      wxApp::s_lastModifiers = 0 ;
 bool      wxApp::s_macDefaultEncodingIsPC = true ;
 bool      wxApp::s_macSupportPCMenuShortcuts = true ;
 long      wxApp::s_macAboutMenuItemId = wxID_ABOUT ;
+long      wxApp::s_macPreferencesMenuItemId = 0 ;
+long      wxApp::s_macExitMenuItemId = wxID_EXIT ;
 wxString  wxApp::s_macHelpMenuTitleName = "&Help" ;
 
 pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , long refcon ) ;
@@ -2314,35 +2316,14 @@ void wxApp::MacHandleMenuSelect( int macMenuId , int macMenuItemNum )
     }
     else
     {
+        MenuCommand id ;
+        GetMenuItemCommandID( GetMenuHandle(macMenuId) , macMenuItemNum , &id ) ;
         wxWindow* frontwindow = wxFindWinFromMacWindow( ::FrontWindow() )  ;
-        if ( frontwindow && wxMenuBar::MacGetInstalledMenuBar() )
-            wxMenuBar::MacGetInstalledMenuBar()->MacMenuSelect( frontwindow->GetEventHandler() , 0 , macMenuId , macMenuItemNum ) ;
+        wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, id );
+        event.m_timeStamp =  ((EventRecord*) MacGetCurrentEvent())->when ;
+        event.SetEventObject(frontwindow->GetEventHandler());
+        event.SetInt( id );
+        frontwindow->GetEventHandler()->ProcessEvent(event);
     }
     HiliteMenu(0);
 }
-
-/*
-long wxApp::MacTranslateKey(char key, int mods)
-{
-}
-
-void wxApp::MacAdjustCursor()
-{
-}
-
-*/
-/*
-void
-wxApp::macAdjustCursor()
-{
-  if (ev->what != kHighLevelEvent)
-  {
-    wxWindow* theMacWxFrame = wxFrame::MacFindFrameOrDialog(::FrontWindow());
-    if (theMacWxFrame)
-    {
-        if (!theMacWxFrame->MacAdjustCursor(ev->where))
-        ::SetCursor(&(qd.arrow));
-      }
-  }
-}
-*/

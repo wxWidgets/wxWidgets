@@ -353,7 +353,17 @@ bool wxWindowMac::DoPopupMenu(wxMenu *menu, int x, int y)
 
     ::InsertMenu( (MenuHandle) menu->GetHMenu() , -1 ) ;
     long menuResult = ::PopUpMenuSelect((MenuHandle) menu->GetHMenu() ,y,x, 0) ;
-    menu->MacMenuSelect( this , TickCount() , HiWord(menuResult) , LoWord(menuResult) ) ;
+    if ( HiWord(menuResult) != 0 )
+    {
+        MenuCommand id ;
+        GetMenuItemCommandID( GetMenuHandle(HiWord(menuResult)) , LoWord(menuResult) , &id ) ;
+
+        wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, id );
+        event.m_timeStamp =  TickCount() ;
+        event.SetEventObject(this->GetEventHandler());
+        event.SetInt( id );
+        GetEventHandler()->ProcessEvent(event);
+    }
     ::DeleteMenu( menu->MacGetMenuId() ) ;
     menu->SetInvokingWindow(NULL);
 
