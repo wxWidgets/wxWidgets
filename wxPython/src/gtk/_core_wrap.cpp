@@ -1256,6 +1256,23 @@ wxImage *new_wxImage(int width,int height,unsigned char *data){
             memcpy(copy, data, width*height*3);
             return new wxImage(width, height, copy, false);
         }
+wxImage *new_wxImage(int width,int height,unsigned char *data,unsigned char *alpha){
+            // Copy the source data so the wxImage can clean it up later
+            unsigned char* dcopy = (unsigned char*)malloc(width*height*3);
+            if (dcopy == NULL) {
+                PyErr_NoMemory();
+                return NULL;
+            }
+            memcpy(dcopy, data, width*height*3);
+            unsigned char* acopy = (unsigned char*)malloc(width*height);
+            if (acopy == NULL) {
+                PyErr_NoMemory();
+                return NULL;
+            }
+            memcpy(acopy, alpha, width*height);
+            
+            return new wxImage(width, height, dcopy, acopy, false);
+        }
 wxSize wxImage_GetSize(wxImage *self){
             wxSize size(self->GetWidth(), self->GetHeight());
             return size;
@@ -9267,6 +9284,44 @@ static PyObject *_wrap_new_ImageFromData(PyObject *, PyObject *args, PyObject *k
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxImage *)new_wxImage(arg1,arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxImage, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_new_ImageFromDataWithAlpha(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 ;
+    int arg2 ;
+    unsigned char *arg3 = (unsigned char *) 0 ;
+    unsigned char *arg4 = (unsigned char *) 0 ;
+    wxImage *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    char *kwnames[] = {
+        (char *) "width",(char *) "height",(char *) "data",(char *) "alpha", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:new_ImageFromDataWithAlpha",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    arg1 = (int)SWIG_As_int(obj0); 
+    if (PyErr_Occurred()) SWIG_fail;
+    arg2 = (int)SWIG_As_int(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_unsigned_char,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj3,(void **)(&arg4),SWIGTYPE_p_unsigned_char,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxImage *)new_wxImage(arg1,arg2,arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -41072,6 +41127,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_EmptyImage", (PyCFunction) _wrap_new_EmptyImage, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"new_ImageFromBitmap", (PyCFunction) _wrap_new_ImageFromBitmap, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"new_ImageFromData", (PyCFunction) _wrap_new_ImageFromData, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"new_ImageFromDataWithAlpha", (PyCFunction) _wrap_new_ImageFromDataWithAlpha, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Image_Create", (PyCFunction) _wrap_Image_Create, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Image_Destroy", (PyCFunction) _wrap_Image_Destroy, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Image_Scale", (PyCFunction) _wrap_Image_Scale, METH_VARARGS | METH_KEYWORDS, NULL },

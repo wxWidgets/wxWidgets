@@ -113,6 +113,7 @@
 %rename(CHOICEDLG_STYLE)                    wxCHOICEDLG_STYLE;
 %rename(MultiChoiceDialog)                  wxMultiChoiceDialog;
 %rename(SingleChoiceDialog)                 wxSingleChoiceDialog;
+%rename(TextEntryDialogStyle)               wxTextEntryDialogStyle;
 %rename(TextEntryDialog)                    wxTextEntryDialog;
 %rename(PasswordEntryDialog)                wxPasswordEntryDialog;
 %rename(FontData)                           wxFontData;

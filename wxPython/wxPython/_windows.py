@@ -213,6 +213,7 @@ wxMultiChoiceDialog = wx._windows.MultiChoiceDialog
 wxMultiChoiceDialogPtr = wx._windows.MultiChoiceDialogPtr
 wxSingleChoiceDialog = wx._windows.SingleChoiceDialog
 wxSingleChoiceDialogPtr = wx._windows.SingleChoiceDialogPtr
+wxTextEntryDialogStyle = wx._windows.TextEntryDialogStyle
 wxTextEntryDialog = wx._windows.TextEntryDialog
 wxTextEntryDialogPtr = wx._windows.TextEntryDialogPtr
 wxGetPasswordFromUserPromptStr = wx._windows.GetPasswordFromUserPromptStr
