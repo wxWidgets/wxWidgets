@@ -95,7 +95,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
 
-  SetForegroundColour(parent->GetDefaultForegroundColour()) ;
+  SetForegroundColour(parent->GetForegroundColour()) ;
 
   if ( id == -1 )
   	m_windowId = (int)NewControlId();
@@ -254,7 +254,7 @@ void wxTextCtrl::AdoptAttributesFromHWND(void)
 void wxTextCtrl::SetupColours(void)
 {
   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
-  SetForegroundColour(GetParent()->GetDefaultForegroundColour());
+  SetForegroundColour(GetParent()->GetForegroundColour());
 }
 
 wxString wxTextCtrl::GetValue(void) const

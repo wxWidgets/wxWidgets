@@ -44,8 +44,8 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
 
   parent->AddChild(this);
 
-  m_backgroundColour = parent->GetDefaultBackgroundColour() ;
-  m_foregroundColour = parent->GetDefaultForegroundColour() ;
+  m_backgroundColour = parent->GetBackgroundColour() ;
+  m_foregroundColour = parent->GetForegroundColour() ;
   m_windowStyle = style;
   m_marginX = 0;
   m_marginY = 0;

@@ -330,15 +330,6 @@ public:
   inline virtual void SetForegroundColour(const wxColour& col);
   inline virtual wxColour GetForegroundColour(void) const;
 
-  // TODO: are these really necessary???
-  // Set/get window default background colour (for children to inherit)
-  inline virtual void SetDefaultBackgroundColour(const wxColour& col);
-  inline virtual wxColour GetDefaultBackgroundColour(void) const;
-
-  // Set/get window default foreground colour (for children to inherit)
-  inline virtual void SetDefaultForegroundColour(const wxColour& col);
-  inline virtual wxColour GetDefaultForegroundColour(void) const;
-
   // For backward compatibility
   inline virtual void SetButtonFont(const wxFont& font) { SetFont(font); }
   inline virtual void SetLabelFont(const wxFont& font) { SetFont(font); }
@@ -359,7 +350,7 @@ public:
   // Resource loading
 #if wxUSE_WX_RESOURCES
   virtual bool LoadFromResource(wxWindow *parent, const wxString& resourceName, const wxResourceTable *table = NULL);
-  virtual wxControl *CreateItem(const wxItemResource *childResource, const wxResourceTable *table = NULL);
+  virtual wxControl *CreateItem(const wxItemResource* childResource, const wxItemResource* parentResource, const wxResourceTable *table = NULL);
 #endif
 
   // Native resource loading
@@ -473,6 +464,14 @@ public:
   virtual void GetSizeConstraint(int *w, int *h) const ;
   virtual void GetClientSizeConstraint(int *w, int *h) const ;
   virtual void GetPositionConstraint(int *x, int *y) const ;
+
+  // Dialog units translations. Implemented in wincmn.cpp.
+  wxPoint ConvertPixelsToDialog(const wxPoint& pt) ;
+  wxPoint ConvertDialogToPixels(const wxPoint& pt) ;
+  inline wxSize ConvertPixelsToDialog(const wxSize& sz)
+  { wxPoint pt(ConvertPixelsToDialog(wxPoint(sz.x, sz.y))); return wxSize(pt.x, pt.y); }
+  inline wxSize ConvertDialogToPixels(const wxSize& sz)
+  { wxPoint pt(ConvertDialogToPixels(wxPoint(sz.x, sz.y))); return wxSize(pt.x, pt.y); }
 
   wxObject *GetChild(int number) const ;
 
@@ -638,13 +637,8 @@ protected:
 #endif
 
   wxButton *            m_defaultItem;
-
   wxColour              m_backgroundColour ;
-  wxColour              m_defaultBackgroundColour;
-
   wxColour              m_foregroundColour ;
-  wxColour              m_defaultForegroundColour;
-
   bool                  m_backgroundTransparent;
 
   int                   m_xThumbSize;
@@ -710,10 +704,6 @@ inline void wxWindow::SetBackgroundColour(const wxColour& col) { m_backgroundCol
 inline wxColour wxWindow::GetBackgroundColour(void) const { return m_backgroundColour; };
 inline void wxWindow::SetForegroundColour(const wxColour& col) { m_foregroundColour = col; };
 inline wxColour wxWindow::GetForegroundColour(void) const { return m_foregroundColour; };
-inline void wxWindow::SetDefaultForegroundColour(const wxColour& col) { m_defaultForegroundColour = col; };
-inline wxColour wxWindow::GetDefaultForegroundColour(void) const { return m_defaultForegroundColour; };
-inline void wxWindow::SetDefaultBackgroundColour(const wxColour& col) { m_defaultBackgroundColour = col; };
-inline wxColour wxWindow::GetDefaultBackgroundColour(void) const { return m_defaultBackgroundColour; };
 
 inline wxButton *wxWindow::GetDefaultItem(void) const { return m_defaultItem; }
 inline void wxWindow::SetDefaultItem(wxButton *but) { m_defaultItem = but; }

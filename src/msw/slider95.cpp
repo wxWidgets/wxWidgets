@@ -68,8 +68,8 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
   SetValidator(validator);
 
   if (parent) parent->AddChild(this);
-  SetBackgroundColour(parent->GetDefaultBackgroundColour()) ;
-  SetForegroundColour(parent->GetDefaultForegroundColour()) ;
+  SetBackgroundColour(parent->GetBackgroundColour()) ;
+  SetForegroundColour(parent->GetForegroundColour()) ;
 
   m_staticValue = 0;
   m_staticMin = 0;

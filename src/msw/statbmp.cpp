@@ -46,8 +46,8 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
   SetName(name);
   if (parent) parent->AddChild(this);
 
-  m_backgroundColour = parent->GetDefaultBackgroundColour() ;
-  m_foregroundColour = parent->GetDefaultForegroundColour() ;
+  m_backgroundColour = parent->GetBackgroundColour() ;
+  m_foregroundColour = parent->GetForegroundColour() ;
 
   if ( id == -1 )
   	m_windowId = (int)NewControlId();

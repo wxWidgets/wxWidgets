@@ -45,8 +45,8 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 
   if (parent) parent->AddChild(this);
 
-  SetBackgroundColour(parent->GetDefaultBackgroundColour());
-  SetForegroundColour(parent->GetDefaultForegroundColour());
+  SetBackgroundColour(parent->GetBackgroundColour());
+  SetForegroundColour(parent->GetForegroundColour());
 
   if ( id == -1 )
   	m_windowId = (int)NewControlId();
@@ -187,8 +187,8 @@ bool wxBitmapRadioButton::Create(wxWindow *parent, wxWindowID id,
   SetValidator(validator);
 
   if (parent) parent->AddChild(this);
-  SetBackgroundColour(parent->GetDefaultBackgroundColour());
-  SetForegroundColour(parent->GetDefaultForegroundColour());
+  SetBackgroundColour(parent->GetBackgroundColour());
+  SetForegroundColour(parent->GetForegroundColour());
 
   if ( id == -1 )
   	m_windowId = (int)NewControlId();

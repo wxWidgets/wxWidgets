@@ -55,7 +55,6 @@ bool wxToolBarSimple::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos
   // Set it to grey (or other 3D face colour)
   wxSystemSettings settings;
   SetBackgroundColour(settings.GetSystemColour(wxSYS_COLOUR_3DFACE));
-  SetDefaultBackgroundColour(settings.GetSystemColour(wxSYS_COLOUR_3DFACE));
 
   if ( GetWindowStyleFlag() & wxTB_VERTICAL )
     { m_lastX = 7; m_lastY = 3; }

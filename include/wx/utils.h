@@ -91,10 +91,11 @@ bool WXDLLEXPORT StringMatch(char *one, char *two, bool subString = TRUE, bool e
 #define wxStringEq(s1, s2) (s1 && s2 && (strcmp(s1, s2) == 0))
 
 // Convert 2-digit hex number to decimal
-int WXDLLEXPORT wxHexToDec(char *buf);
+int WXDLLEXPORT wxHexToDec(const wxString& buf);
 
 // Convert decimal integer to 2-character hex string
 void WXDLLEXPORT wxDecToHex(int dec, char *buf);
+wxString WXDLLEXPORT wxDecToHex(int dec);
 
 // Execute another program. Returns 0 if there was an error, a PID otherwise.
 long WXDLLEXPORT wxExecute(char **argv, bool sync = FALSE,

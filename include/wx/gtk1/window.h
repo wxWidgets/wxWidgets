@@ -82,7 +82,7 @@ public:
 
   virtual bool LoadFromResource( wxWindow *parent, const wxString& resourceName, 
                                  const wxResourceTable *table = (const wxResourceTable *) NULL);
-  virtual wxControl *CreateItem( const wxItemResource *childResource, 
+  virtual wxControl *CreateItem(const wxItemResource* childResource, const wxItemResource* parentResource,
                                  const wxResourceTable *table = (const wxResourceTable *) NULL);
 
   bool Close( bool force = FALSE );
@@ -104,6 +104,14 @@ public:
   virtual void Fit();
 
   virtual void SetSizeHints( int minW, int minH, int maxW = -1, int maxH = -1, int incW = -1, int incH = -1 );
+
+  // Dialog units translations. Implemented in wincmn.cpp.
+  wxPoint ConvertPixelsToDialog(const wxPoint& pt) ;
+  wxPoint ConvertDialogToPixels(const wxPoint& pt) ;
+  inline wxSize ConvertPixelsToDialog(const wxSize& sz)
+  { wxPoint pt(ConvertPixelsToDialog(wxPoint(sz.x, sz.y))); return wxSize(pt.x, pt.y); }
+  inline wxSize ConvertDialogToPixels(const wxSize& sz)
+  { wxPoint pt(ConvertDialogToPixels(wxPoint(sz.x, sz.y))); return wxSize(pt.x, pt.y); }
 
   void OnSize( wxSizeEvent &event );
   void OnIdle( wxIdleEvent& event );
@@ -166,15 +174,6 @@ public:
                              int *descent = (int *) NULL,
                              int *externalLeading = (int *) NULL,
                              const wxFont *theFont = (const wxFont *) NULL, bool use16 = FALSE) const;
-
-  virtual void SetDefaultBackgroundColour( const wxColour& col )
-    { m_defaultBackgroundColour = col; }
-  virtual wxColour GetDefaultBackgroundColour() const
-    { return m_defaultBackgroundColour; }
-  virtual void SetDefaultForegroundColour( const wxColour& col )
-    { m_defaultForegroundColour = col; }
-  virtual wxColour GetDefaultForegroundColour() const
-    { return m_defaultForegroundColour; }
 
   virtual void SetFont( const wxFont &font );
   virtual wxFont *GetFont();
@@ -259,9 +258,7 @@ public:
   wxCursor            *m_cursor;
   wxFont               m_font;
   wxColour             m_backgroundColour;
-  wxColour             m_defaultBackgroundColour;
   wxColour             m_foregroundColour ;
-  wxColour             m_defaultForegroundColour;
   wxRegion             m_updateRegion;
   long                 m_windowStyle;
   bool                 m_isShown;

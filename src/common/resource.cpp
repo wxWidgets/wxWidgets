@@ -70,19 +70,19 @@
 #include "wx/wxexpr.h"
 
 // Forward (private) declarations
-bool wxResourceInterpretResources(wxResourceTable& table, PrologDatabase& db);
-wxItemResource *wxResourceInterpretDialog(wxResourceTable& table, PrologExpr *expr, bool isPanel = FALSE);
-wxItemResource *wxResourceInterpretControl(wxResourceTable& table, PrologExpr *expr);
-wxItemResource *wxResourceInterpretMenu(wxResourceTable& table, PrologExpr *expr);
-wxItemResource *wxResourceInterpretMenuBar(wxResourceTable& table, PrologExpr *expr);
-wxItemResource *wxResourceInterpretString(wxResourceTable& table, PrologExpr *expr);
-wxItemResource *wxResourceInterpretBitmap(wxResourceTable& table, PrologExpr *expr);
-wxItemResource *wxResourceInterpretIcon(wxResourceTable& table, PrologExpr *expr);
+bool wxResourceInterpretResources(wxResourceTable& table, wxExprDatabase& db);
+wxItemResource *wxResourceInterpretDialog(wxResourceTable& table, wxExpr *expr, bool isPanel = FALSE);
+wxItemResource *wxResourceInterpretControl(wxResourceTable& table, wxExpr *expr);
+wxItemResource *wxResourceInterpretMenu(wxResourceTable& table, wxExpr *expr);
+wxItemResource *wxResourceInterpretMenuBar(wxResourceTable& table, wxExpr *expr);
+wxItemResource *wxResourceInterpretString(wxResourceTable& table, wxExpr *expr);
+wxItemResource *wxResourceInterpretBitmap(wxResourceTable& table, wxExpr *expr);
+wxItemResource *wxResourceInterpretIcon(wxResourceTable& table, wxExpr *expr);
 // Interpret list expression
-wxFont *wxResourceInterpretFontSpec(PrologExpr *expr);
+wxFont wxResourceInterpretFontSpec(wxExpr *expr);
 
-bool wxResourceReadOneResource(FILE *fd, PrologDatabase& db, bool *eof, wxResourceTable *table = (wxResourceTable *) NULL);
-bool wxResourceParseIncludeFile(char *f, wxResourceTable *table = (wxResourceTable *) NULL);
+bool wxResourceReadOneResource(FILE *fd, wxExprDatabase& db, bool *eof, wxResourceTable *table = (wxResourceTable *) NULL);
+bool wxResourceParseIncludeFile(const wxString& f, wxResourceTable *table = (wxResourceTable *) NULL);
 
 wxResourceTable *wxDefaultResourceTable = (wxResourceTable *) NULL;
 
@@ -91,12 +91,12 @@ static long wxResourceBufferSize = 0;
 static long wxResourceBufferCount = 0;
 static int wxResourceStringPtr = 0;
 
-void wxInitializeResourceSystem(void)
+void wxInitializeResourceSystem()
 {
     wxDefaultResourceTable = new wxResourceTable;
 }
 
-void wxCleanUpResourceSystem(void)
+void wxCleanUpResourceSystem()
 {
     delete wxDefaultResourceTable;
     if (wxResourceBuffer)
@@ -113,115 +113,40 @@ IMPLEMENT_DYNAMIC_CLASS(wxItemResource, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxResourceTable, wxHashTable)
 #endif
 
-wxItemResource::wxItemResource(void)
+wxItemResource::wxItemResource()
 {
-  itemType = (char *) NULL;
-  title = (char *) NULL;
-  name = (char *) NULL;
-  windowStyle = 0;
-  x = y = width = height = 0;
-  value1 = value2 = value3 = value5 = 0;
-  value4 = (char *) NULL;
-  stringValues = (wxStringList *) NULL;
-  bitmap = (wxBitmap *) NULL;
-  backgroundColour = labelColour = buttonColour = (wxColour *) NULL;
-  windowFont = (wxFont *) NULL;
+  m_itemType = "";
+  m_title = "";
+  m_name = "";
+  m_windowStyle = 0;
+  m_x = m_y = m_width = m_height = 0;
+  m_value1 = m_value2 = m_value3 = m_value5 = 0;
+  m_value4 = "";
   m_windowId = 0;
+  m_exStyle = 0;
 }
 
-wxItemResource::~wxItemResource(void)
+wxItemResource::~wxItemResource()
 {
-  if (itemType) delete[] itemType;
-  if (title) delete[] title;
-  if (name) delete[] name;
-  if (value4) delete[] value4;
-  if (stringValues)
-    delete stringValues;
-  if (bitmap)
-    delete bitmap;
-  if (backgroundColour)
-    delete backgroundColour;
-  if (labelColour)
-    delete labelColour;
-  if (buttonColour)
-    delete buttonColour;
-  wxNode *node = children.First();
+  wxNode *node = m_children.First();
   while (node)
   {
     wxItemResource *item = (wxItemResource *)node->Data();
     delete item;
     delete node;
-    node = children.First();
+    node = m_children.First();
   }
-}
-
-void wxItemResource::SetTitle(char *t)
-{
-  if (t == title)
-    return;
-    
-  if (title) delete[] title;
-  if (t)
-    title = copystring(t);
-  else
-    title = (char *) NULL;
-}
-
-void wxItemResource::SetType(char *t)
-{
-  if (itemType == t)
-    return;
-    
-  if (itemType) delete[] itemType;
-  if (t)
-    itemType = copystring(t);
-  else
-    itemType = (char *) NULL;
-}
-
-void wxItemResource::SetName(char *n)
-{
-  if (n == name)
-    return;
-    
-  if (name) delete[] name;
-  if (n)
-    name = copystring(n);
-  else
-    name = (char *) NULL;
-}
-
-void wxItemResource::SetStringValues(wxStringList *svalues)
-{
-  if (stringValues)
-    delete stringValues;
-  if (svalues)
-    stringValues = svalues;
-  else
-    stringValues = (wxStringList *) NULL;
-}
-
-void wxItemResource::SetValue4(char *v)
-{
-  if (value4 == v)
-    return;
-
-  if (value4) delete[] value4;
-  if (v)
-    value4 = copystring(v);
-  else
-    value4 = (char *) NULL;
 }
 
 /*
  * Resource table
  */
  
-wxResourceTable::wxResourceTable(void):wxHashTable(wxKEY_STRING), identifiers(wxKEY_STRING)
+wxResourceTable::wxResourceTable():wxHashTable(wxKEY_STRING), identifiers(wxKEY_STRING)
 {
 }
 
-wxResourceTable::~wxResourceTable(void)
+wxResourceTable::~wxResourceTable()
 {
   ClearTable();
 }
@@ -234,10 +159,10 @@ wxItemResource *wxResourceTable::FindResource(const wxString& name) const
 
 void wxResourceTable::AddResource(wxItemResource *item)
 {
-  char *name = item->GetName();
-  if (!name)
+  wxString name = item->GetName();
+  if (name == "")
     name = item->GetTitle();
-  if (!name)
+  if (name == "")
     name = "no name";
 
   // Delete existing resource, if any.
@@ -272,11 +197,11 @@ bool wxResourceTable::DeleteResource(const wxString& name)
     return FALSE;
 }
 
-bool wxResourceTable::ParseResourceFile(char *filename)
+bool wxResourceTable::ParseResourceFile(const wxString& filename)
 {
-  PrologDatabase db;
+  wxExprDatabase db;
 
-  FILE *fd = fopen(filename, "r");
+  FILE *fd = fopen((const char*) filename, "r");
   if (!fd)
     return FALSE;
   bool eof = FALSE;
@@ -288,10 +213,10 @@ bool wxResourceTable::ParseResourceFile(char *filename)
   return wxResourceInterpretResources(*this, db);
 }
 
-bool wxResourceTable::ParseResourceData(char *data)
+bool wxResourceTable::ParseResourceData(const wxString& data)
 {
-  PrologDatabase db;
-  if (!db.ReadPrologFromString(data))
+  wxExprDatabase db;
+  if (!db.ReadFromString(data))
   {
     wxLogWarning(_("Ill-formed resource file syntax."));
     return FALSE;
@@ -300,7 +225,7 @@ bool wxResourceTable::ParseResourceData(char *data)
   return wxResourceInterpretResources(*this, db);
 }
 
-bool wxResourceTable::RegisterResourceBitmapData(char *name, char bits[], int width, int height)
+bool wxResourceTable::RegisterResourceBitmapData(const wxString& name, char bits[], int width, int height)
 {
   // Register pre-loaded bitmap data
   wxItemResource *item = new wxItemResource;
@@ -314,7 +239,7 @@ bool wxResourceTable::RegisterResourceBitmapData(char *name, char bits[], int wi
   return TRUE;
 }
 
-bool wxResourceTable::RegisterResourceBitmapData(char *name, char **data)
+bool wxResourceTable::RegisterResourceBitmapData(const wxString& name, char **data)
 {
   // Register pre-loaded bitmap data
   wxItemResource *item = new wxItemResource;
@@ -326,12 +251,12 @@ bool wxResourceTable::RegisterResourceBitmapData(char *name, char **data)
   return TRUE;
 }
 
-bool wxResourceTable::SaveResource(char *WXUNUSED(filename))
+bool wxResourceTable::SaveResource(const wxString& WXUNUSED(filename))
 {
   return FALSE;
 }
 
-void wxResourceTable::ClearTable(void)
+void wxResourceTable::ClearTable()
 {
   BeginFind();
   wxNode *node = Next();
@@ -345,78 +270,82 @@ void wxResourceTable::ClearTable(void)
   }
 }
 
-wxControl *wxResourceTable::CreateItem(wxWindow *parent, wxItemResource *childResource) const
+wxControl *wxResourceTable::CreateItem(wxWindow *parent, const wxItemResource* childResource, const wxItemResource* parentResource) const
 {
   int id = childResource->GetId();
   if ( id == 0 )
    id = -1;
 
+  bool dlgUnits = ((parentResource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS) != 0);
+
   wxControl *control = (wxControl *) NULL;
   wxString itemType(childResource->GetType());
+
+  wxPoint pos;
+  wxSize size;
+  if (dlgUnits)
+  {
+    pos = parent->ConvertDialogToPixels(wxPoint(childResource->GetX(), childResource->GetY()));
+    size = parent->ConvertDialogToPixels(wxSize(childResource->GetWidth(), childResource->GetHeight()));
+  }
+  else
+  {
+    pos = wxPoint(childResource->GetX(), childResource->GetY());
+    size = wxSize(childResource->GetWidth(), childResource->GetHeight());
+  }
+
   if (itemType == wxString("wxButton") || itemType == wxString("wxBitmapButton"))
       {
-        if (childResource->GetValue4())
+        if (childResource->GetValue4() != "")
         {
           // Bitmap button
-          wxBitmap *bitmap = childResource->GetBitmap();
-          if (!bitmap)
+          wxBitmap bitmap = childResource->GetBitmap();
+          if (!bitmap.Ok())
           {
             bitmap = wxResourceCreateBitmap(childResource->GetValue4(), (wxResourceTable *)this);
-            childResource->SetBitmap(bitmap);
+            ((wxItemResource*) childResource)->SetBitmap(bitmap);
           }
-          if (bitmap)
-           control = new wxBitmapButton(parent, id, *bitmap,
-             wxPoint(childResource->GetX(), childResource->GetY()),
-          wxSize(childResource->GetWidth(), childResource->GetHeight()),
+          if (bitmap.Ok())
+           control = new wxBitmapButton(parent, id, bitmap, pos, size,
                childResource->GetStyle(), wxDefaultValidator, childResource->GetName());
         }
         else
           // Normal, text button
-          control = new wxButton(parent, id, childResource->GetTitle(),
-           wxPoint(childResource->GetX(), childResource->GetY()),
-         wxSize(childResource->GetWidth(), childResource->GetHeight()),
+          control = new wxButton(parent, id, childResource->GetTitle(), pos, size,
            childResource->GetStyle(), wxDefaultValidator, childResource->GetName());
       }
    else if (itemType == wxString("wxMessage") || itemType == wxString("wxStaticText") ||
          itemType == wxString("wxStaticBitmap"))
       {
-        if (childResource->GetValue4())
+        if (childResource->GetValue4() != "")
         {
           // Bitmap message
-          wxBitmap *bitmap = childResource->GetBitmap();
-          if (!bitmap)
+          wxBitmap bitmap = childResource->GetBitmap();
+          if (!bitmap.Ok())
           {
             bitmap = wxResourceCreateBitmap(childResource->GetValue4(), (wxResourceTable *)this);
-            childResource->SetBitmap(bitmap);
+            ((wxItemResource*) childResource)->SetBitmap(bitmap);
           }
 #if wxUSE_BITMAP_MESSAGE
-          if (bitmap)
-           control = new wxStaticBitmap(parent, id, *bitmap,
-             wxPoint(childResource->GetX(), childResource->GetY()),
-          wxSize(childResource->GetWidth(), childResource->GetHeight()),
+          if (bitmap.Ok())
+           control = new wxStaticBitmap(parent, id, bitmap, pos, size,
              childResource->GetStyle(), childResource->GetName());
 #endif
         }
         else
         {
-           control = new wxStaticText(parent, id, childResource->GetTitle(),
-             wxPoint(childResource->GetX(), childResource->GetY()),
-          wxSize(childResource->GetWidth(), childResource->GetHeight()),
+           control = new wxStaticText(parent, id, childResource->GetTitle(), pos, size,
              childResource->GetStyle(), childResource->GetName());
         }
       }
    else if (itemType == wxString("wxText") || itemType == wxString("wxTextCtrl") || itemType == wxString("wxMultiText"))
       {
-        control = new wxTextCtrl(parent, id, childResource->GetValue4(),
-           wxPoint(childResource->GetX(), childResource->GetY()),
-         wxSize(childResource->GetWidth(), childResource->GetHeight()),
+        control = new wxTextCtrl(parent, id, childResource->GetValue4(), pos, size,
            childResource->GetStyle(), wxDefaultValidator, childResource->GetName());
       }
    else if (itemType == wxString("wxCheckBox"))
       {
-        control = new wxCheckBox(parent, id, childResource->GetTitle(),
-           wxPoint(childResource->GetX(), childResource->GetY()),
-         wxSize(childResource->GetWidth(), childResource->GetHeight()),
+        control = new wxCheckBox(parent, id, childResource->GetTitle(), pos, size,
            childResource->GetStyle(), wxDefaultValidator, childResource->GetName());
 
         ((wxCheckBox *)control)->SetValue((childResource->GetValue1() != 0));
@@ -424,9 +353,7 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, wxItemResource *childRe
 #if wxUSE_GAUGE
    else if (itemType == wxString("wxGauge"))
       {
-        control = new wxGauge(parent, id, (int)childResource->GetValue2(),
-           wxPoint(childResource->GetX(), childResource->GetY()),
-         wxSize(childResource->GetWidth(), childResource->GetHeight()),
+        control = new wxGauge(parent, id, (int)childResource->GetValue2(), pos, size,
            childResource->GetStyle(), wxDefaultValidator, childResource->GetName());
 
         ((wxGauge *)control)->SetValue((int)childResource->GetValue1());
@@ -436,17 +363,14 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, wxItemResource *childRe
    else if (itemType == wxString("wxRadioButton"))
       {
         control = new wxRadioButton(parent, id, childResource->GetTitle(), // (int)childResource->GetValue1(),
-           wxPoint(childResource->GetX(), childResource->GetY()),
-         wxSize(childResource->GetWidth(), childResource->GetHeight()),
+           pos, size,
            childResource->GetStyle(), wxDefaultValidator, childResource->GetName());
       }
 #endif
 #if wxUSE_SCROLLBAR
    else if (itemType == wxString("wxScrollBar"))
       {
-        control = new wxScrollBar(parent, id,
-           wxPoint(childResource->GetX(), childResource->GetY()),
-           wxSize(childResource->GetWidth(), childResource->GetHeight()),
+        control = new wxScrollBar(parent, id, pos, size,
            childResource->GetStyle(), wxDefaultValidator, childResource->GetName());
         ((wxScrollBar *)control)->SetValue((int)childResource->GetValue1());
         ((wxScrollBar *)control)->SetPageSize((int)childResource->GetValue2());
@@ -457,28 +381,24 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, wxItemResource *childRe
    else if (itemType == wxString("wxSlider"))
       {
         control = new wxSlider(parent, id, (int)childResource->GetValue1(),
-           (int)childResource->GetValue2(), (int)childResource->GetValue3(),
-           wxPoint(childResource->GetX(), childResource->GetY()),
-           wxSize(childResource->GetWidth(), childResource->GetHeight()),
+           (int)childResource->GetValue2(), (int)childResource->GetValue3(), pos, size,
            childResource->GetStyle(), wxDefaultValidator, childResource->GetName());
       }
    else if (itemType == wxString("wxGroupBox") || itemType == wxString("wxStaticBox"))
       {
-        control = new wxStaticBox(parent, id, childResource->GetTitle(),
-           wxPoint(childResource->GetX(), childResource->GetY()),
-         wxSize(childResource->GetWidth(), childResource->GetHeight()),
+        control = new wxStaticBox(parent, id, childResource->GetTitle(), pos, size,
            childResource->GetStyle(), childResource->GetName());
       }
    else if (itemType == wxString("wxListBox"))
       {
-        wxStringList *stringList = childResource->GetStringValues();
+        wxStringList& stringList = childResource->GetStringValues();
         wxString *strings = (wxString *) NULL;
         int noStrings = 0;
-        if (stringList && (stringList->Number() > 0))
+        if (stringList.Number() > 0)
         {
-          noStrings = stringList->Number();
+          noStrings = stringList.Number();
           strings = new wxString[noStrings];
-          wxNode *node = stringList->First();
+          wxNode *node = stringList.First();
           int i = 0;
           while (node)
           {
@@ -487,9 +407,7 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, wxItemResource *childRe
             node = node->Next();
           }
         }
-        control = new wxListBox(parent, id,
-           wxPoint(childResource->GetX(), childResource->GetY()),
-         wxSize(childResource->GetWidth(), childResource->GetHeight()),
+        control = new wxListBox(parent, id, pos, size,
            noStrings, strings, childResource->GetStyle(), wxDefaultValidator, childResource->GetName());
 
         if (strings)
@@ -497,14 +415,14 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, wxItemResource *childRe
       }
    else if (itemType == wxString("wxChoice"))
       {
-        wxStringList *stringList = childResource->GetStringValues();
+        wxStringList& stringList = childResource->GetStringValues();
         wxString *strings = (wxString *) NULL;
         int noStrings = 0;
-        if (stringList && (stringList->Number() > 0))
+        if (stringList.Number() > 0)
         {
-          noStrings = stringList->Number();
+          noStrings = stringList.Number();
           strings = new wxString[noStrings];
-          wxNode *node = stringList->First();
+          wxNode *node = stringList.First();
           int i = 0;
           while (node)
           {
@@ -513,9 +431,7 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, wxItemResource *childRe
             node = node->Next();
           }
         }
-        control = new wxChoice(parent, id,
-           wxPoint(childResource->GetX(), childResource->GetY()),
-         wxSize(childResource->GetWidth(), childResource->GetHeight()),
+        control = new wxChoice(parent, id, pos, size,
            noStrings, strings, childResource->GetStyle(), wxDefaultValidator, childResource->GetName());
 
         if (strings)
@@ -524,14 +440,14 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, wxItemResource *childRe
 #if wxUSE_COMBOBOX
    else if (itemType == wxString("wxComboBox"))
       {
-        wxStringList *stringList = childResource->GetStringValues();
+        wxStringList& stringList = childResource->GetStringValues();
         wxString *strings = (wxString *) NULL;
         int noStrings = 0;
-        if (stringList && (stringList->Number() > 0))
+        if (stringList.Number() > 0)
         {
-          noStrings = stringList->Number();
+          noStrings = stringList.Number();
           strings = new wxString[noStrings];
-          wxNode *node = stringList->First();
+          wxNode *node = stringList.First();
           int i = 0;
           while (node)
           {
@@ -540,9 +456,7 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, wxItemResource *childRe
             node = node->Next();
           }
         }
-        control = new wxComboBox(parent, id, childResource->GetValue4(),
-           wxPoint(childResource->GetX(), childResource->GetY()),
-         wxSize(childResource->GetWidth(), childResource->GetHeight()),
+        control = new wxComboBox(parent, id, childResource->GetValue4(), pos, size,
            noStrings, strings, childResource->GetStyle(), wxDefaultValidator, childResource->GetName());
 
         if (strings)
@@ -551,14 +465,14 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, wxItemResource *childRe
 #endif
    else if (itemType == wxString("wxRadioBox"))
       {
-        wxStringList *stringList = childResource->GetStringValues();
+        wxStringList& stringList = childResource->GetStringValues();
         wxString *strings = (wxString *) NULL;
         int noStrings = 0;
-        if (stringList && (stringList->Number() > 0))
+        if (stringList.Number() > 0)
         {
-          noStrings = stringList->Number();
+          noStrings = stringList.Number();
           strings = new wxString[noStrings];
-          wxNode *node = stringList->First();
+          wxNode *node = stringList.First();
           int i = 0;
           while (node)
           {
@@ -567,9 +481,7 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, wxItemResource *childRe
             node = node->Next();
           }
         }
-        control = new wxRadioBox(parent, (wxWindowID) id, wxString(childResource->GetTitle()),
-           wxPoint(childResource->GetX(), childResource->GetY()),
-         wxSize(childResource->GetWidth(), childResource->GetHeight()),
+        control = new wxRadioBox(parent, (wxWindowID) id, wxString(childResource->GetTitle()), pos, size,
            noStrings, strings, (int)childResource->GetValue1(), childResource->GetStyle(), wxDefaultValidator,
          childResource->GetName());
 
@@ -577,8 +489,15 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, wxItemResource *childRe
           delete[] strings;
       }
 
-  if (control && childResource->GetFont())
-    control->SetFont(*childResource->GetFont());
+  if ((parentResource->GetResourceStyle() & wxRESOURCE_USE_DEFAULTS) != 0)
+  {
+    // Don't set font; will be inherited from parent.
+  }
+  else
+  {
+    if (control && childResource->GetFont().Ok())
+      control->SetFont(childResource->GetFont());
+  }
   return control;
 }
 
@@ -586,12 +505,12 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, wxItemResource *childRe
  * Interpret database as a series of resources
  */
 
-bool wxResourceInterpretResources(wxResourceTable& table, PrologDatabase& db)
+bool wxResourceInterpretResources(wxResourceTable& table, wxExprDatabase& db)
 {
   wxNode *node = db.First();
   while (node)
   {
-    PrologExpr *clause = (PrologExpr *)node->Data();
+    wxExpr *clause = (wxExpr *)node->Data();
    wxString functor(clause->Functor());
 
     wxItemResource *item = (wxItemResource *) NULL;
@@ -613,7 +532,7 @@ bool wxResourceInterpretResources(wxResourceTable& table, PrologDatabase& db)
     if (item)
     {
       // Remove any existing resource of same name
-      if (item->GetName())
+      if (item->GetName() != "")
         table.DeleteResource(item->GetName());
       table.AddResource(item);
     }
@@ -640,19 +559,19 @@ static bool wxIsValidControlClass(const wxString& c)
    return FALSE;
 }
 
-wxItemResource *wxResourceInterpretDialog(wxResourceTable& table, PrologExpr *expr, bool isPanel)
+wxItemResource *wxResourceInterpretDialog(wxResourceTable& table, wxExpr *expr, bool isPanel)
 {
   wxItemResource *dialogItem = new wxItemResource;
   if (isPanel)
     dialogItem->SetType("wxPanel");
   else
     dialogItem->SetType("wxDialog");
-  char *style = (char *) NULL;
-  char *title = (char *) NULL;
-  char *name = (char *) NULL;
-  char *backColourHex = (char *) NULL;
-  char *labelColourHex = (char *) NULL;
-  char *buttonColourHex = (char *) NULL;
+  wxString style = "";
+  wxString title = "";
+  wxString name = "";
+  wxString backColourHex = "";
+  wxString labelColourHex = "";
+  wxString buttonColourHex = "";
 
   long windowStyle = wxDEFAULT_DIALOG_STYLE;
   if (isPanel)
@@ -660,80 +579,78 @@ wxItemResource *wxResourceInterpretDialog(wxResourceTable& table, PrologExpr *ex
     
   int x = 0; int y = 0; int width = -1; int height = -1;
   int isModal = 0;
-  PrologExpr *labelFontExpr = (PrologExpr *) NULL;
-  PrologExpr *buttonFontExpr = (PrologExpr *) NULL;
-  PrologExpr *fontExpr = (PrologExpr *) NULL;
-  expr->AssignAttributeValue("style", &style);
-  expr->AssignAttributeValue("name", &name);
-  expr->AssignAttributeValue("title", &title);
-  expr->AssignAttributeValue("x", &x);
-  expr->AssignAttributeValue("y", &y);
-  expr->AssignAttributeValue("width", &width);
-  expr->AssignAttributeValue("height", &height);
-  expr->AssignAttributeValue("modal", &isModal);
-  expr->AssignAttributeValue("label_font", &labelFontExpr);
-  expr->AssignAttributeValue("button_font", &buttonFontExpr);
-  expr->AssignAttributeValue("font", &fontExpr);
-  expr->AssignAttributeValue("background_colour", &backColourHex);
-  expr->AssignAttributeValue("label_colour", &labelColourHex);
-  expr->AssignAttributeValue("button_colour", &buttonColourHex);
+  wxExpr *labelFontExpr = (wxExpr *) NULL;
+  wxExpr *buttonFontExpr = (wxExpr *) NULL;
+  wxExpr *fontExpr = (wxExpr *) NULL;
+  expr->GetAttributeValue("style", style);
+  expr->GetAttributeValue("name", name);
+  expr->GetAttributeValue("title", title);
+  expr->GetAttributeValue("x", x);
+  expr->GetAttributeValue("y", y);
+  expr->GetAttributeValue("width", width);
+  expr->GetAttributeValue("height", height);
+  expr->GetAttributeValue("modal", isModal);
+  expr->GetAttributeValue("label_font", &labelFontExpr);
+  expr->GetAttributeValue("button_font", &buttonFontExpr);
+  expr->GetAttributeValue("font", &fontExpr);
+  expr->GetAttributeValue("background_colour", backColourHex);
+  expr->GetAttributeValue("label_colour", labelColourHex);
+  expr->GetAttributeValue("button_colour", buttonColourHex);
+
+  int useDialogUnits = 0;
+  expr->GetAttributeValue("use_dialog_units", useDialogUnits);
+  if (useDialogUnits != 0)
+    dialogItem->SetResourceStyle(dialogItem->GetResourceStyle() | wxRESOURCE_DIALOG_UNITS);
+
+  int useDefaults = 0;
+  expr->GetAttributeValue("use_system_defaults", useDefaults);
+  if (useDefaults != 0)
+    dialogItem->SetResourceStyle(dialogItem->GetResourceStyle() | wxRESOURCE_USE_DEFAULTS);
 
   long id = 0;
   expr->GetAttributeValue("id", id);
   dialogItem->SetId(id);
 
-  if (style)
+  if (style != "")
   {
     windowStyle = wxParseWindowStyle(style);
   }
   dialogItem->SetStyle(windowStyle);
   dialogItem->SetValue1(isModal);
-  if (name)
-    dialogItem->SetName(name);
-  if (title)
-    dialogItem->SetTitle(title);
+  dialogItem->SetName(name);
+  dialogItem->SetTitle(title);
   dialogItem->SetSize(x, y, width, height);
   
-  if (backColourHex)
+  if (backColourHex != "")
   {
     int r = 0;
     int g = 0;
     int b = 0;
-    r = wxHexToDec(backColourHex);
-    g = wxHexToDec(backColourHex+2);
-    b = wxHexToDec(backColourHex+4);
-    dialogItem->SetBackgroundColour(new wxColour((unsigned char)r,(unsigned char)g,(unsigned char)b));
-    delete[] backColourHex;
+    r = wxHexToDec(backColourHex.Mid(0, 2));
+    g = wxHexToDec(backColourHex.Mid(2, 2));
+    b = wxHexToDec(backColourHex.Mid(4, 2));
+    dialogItem->SetBackgroundColour(wxColour((unsigned char)r,(unsigned char)g,(unsigned char)b));
   }
-  if (labelColourHex)
+  if (labelColourHex != "")
   {
     int r = 0;
     int g = 0;
     int b = 0;
-    r = wxHexToDec(labelColourHex);
-    g = wxHexToDec(labelColourHex+2);
-    b = wxHexToDec(labelColourHex+4);
-    dialogItem->SetLabelColour(new wxColour((unsigned char)r,(unsigned char)g,(unsigned char)b));
-    delete[] labelColourHex;
+    r = wxHexToDec(labelColourHex.Mid(0, 2));
+    g = wxHexToDec(labelColourHex.Mid(2, 2));
+    b = wxHexToDec(labelColourHex.Mid(4, 2));
+    dialogItem->SetLabelColour(wxColour((unsigned char)r,(unsigned char)g,(unsigned char)b));
   }
-  if (buttonColourHex)
+  if (buttonColourHex != "")
   {
     int r = 0;
     int g = 0;
     int b = 0;
-    r = wxHexToDec(buttonColourHex);
-    g = wxHexToDec(buttonColourHex+2);
-    b = wxHexToDec(buttonColourHex+4);
-    dialogItem->SetButtonColour(new wxColour((unsigned char)r,(unsigned char)g,(unsigned char)b));
-    delete[] buttonColourHex;
+    r = wxHexToDec(buttonColourHex.Mid(0, 2));
+    g = wxHexToDec(buttonColourHex.Mid(2, 2));
+    b = wxHexToDec(buttonColourHex.Mid(4, 2));
+    dialogItem->SetButtonColour(wxColour((unsigned char)r,(unsigned char)g,(unsigned char)b));
   }
-
-  if (name)
-    delete[] name;
-  if (title)
-    delete[] title;
-  if (style)
-    delete[] style;
 
   if (fontExpr)
     dialogItem->SetFont(wxResourceInterpretFontSpec(fontExpr));
@@ -743,7 +660,7 @@ wxItemResource *wxResourceInterpretDialog(wxResourceTable& table, PrologExpr *ex
     dialogItem->SetFont(wxResourceInterpretFontSpec(labelFontExpr));
 
   // Now parse all controls
-  PrologExpr *controlExpr = expr->GetFirst();
+  wxExpr *controlExpr = expr->GetFirst();
   while (controlExpr)
   {
     if (controlExpr->Number() == 3)
@@ -752,7 +669,7 @@ wxItemResource *wxResourceInterpretDialog(wxResourceTable& table, PrologExpr *ex
       if (controlKeyword != "" && controlKeyword == "control")
       {
         // The value part: always a list.
-        PrologExpr *listExpr = controlExpr->Nth(2);
+        wxExpr *listExpr = controlExpr->Nth(2);
         if (listExpr->Type() == PrologList)
         {
           wxItemResource *controlItem = wxResourceInterpretControl(table, listExpr);
@@ -768,7 +685,7 @@ wxItemResource *wxResourceInterpretDialog(wxResourceTable& table, PrologExpr *ex
   return dialogItem;
 }
 
-wxItemResource *wxResourceInterpretControl(wxResourceTable& table, PrologExpr *expr)
+wxItemResource *wxResourceInterpretControl(wxResourceTable& table, wxExpr *expr)
 {
   wxItemResource *controlItem = new wxItemResource;
 
@@ -784,7 +701,7 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, PrologExpr *e
   int x = 0; int y = 0; int width = -1; int height = -1;
   int count = 0;
 
-  PrologExpr *expr1 = expr->Nth(0);
+  wxExpr *expr1 = expr->Nth(0);
 
   if ( expr1->Type() == PrologString || expr1->Type() == PrologWord )
   {
@@ -796,7 +713,7 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, PrologExpr *e
    else
    {
         wxString str(expr1->StringValue());
-        id = wxResourceGetIdentifier(WXSTRINGCAST str, &table);
+        id = wxResourceGetIdentifier(str, &table);
         if (id == 0)
         {
           wxLogWarning(_("Could not resolve control class or id '%s'. "
@@ -832,7 +749,7 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, PrologExpr *e
   if (expr1)
   {
     style = expr1->StringValue();
-    windowStyle = wxParseWindowStyle(WXSTRINGCAST style);
+    windowStyle = wxParseWindowStyle(style);
   }
 
   expr1 = expr->Nth(count);
@@ -861,10 +778,10 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, PrologExpr *e
     height = (int)expr1->IntegerValue();
 
   controlItem->SetStyle(windowStyle);
-  controlItem->SetName(WXSTRINGCAST name);
-  controlItem->SetTitle(WXSTRINGCAST title);
+  controlItem->SetName(name);
+  controlItem->SetTitle(title);
   controlItem->SetSize(x, y, width, height);
-  controlItem->SetType(WXSTRINGCAST controlType);
+  controlItem->SetType(controlType);
   controlItem->SetId(id);
 
   if (controlType == "wxButton")
@@ -873,7 +790,7 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, PrologExpr *e
     if (expr->Nth(count) && ((expr->Nth(count)->Type() == PrologString) || (expr->Nth(count)->Type() == PrologWord)))
     {
         wxString str(expr->Nth(count)->StringValue());
-        controlItem->SetValue4(WXSTRINGCAST str);
+        controlItem->SetValue4(str);
         count ++;
         if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
           controlItem->SetFont(wxResourceInterpretFontSpec(expr->Nth(count)));
@@ -909,7 +826,7 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, PrologExpr *e
     if (expr->Nth(count) && ((expr->Nth(count)->Type() == PrologString) || (expr->Nth(count)->Type() == PrologWord)))
    {
       wxString str(expr->Nth(count)->StringValue());
-      controlItem->SetValue4(WXSTRINGCAST str);
+      controlItem->SetValue4(str);
      count ++;
 
       if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
@@ -928,7 +845,7 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, PrologExpr *e
     if (expr->Nth(count) && ((expr->Nth(count)->Type() == PrologString) || (expr->Nth(count)->Type() == PrologWord)))
     {
       wxString str(expr->Nth(count)->StringValue());
-      controlItem->SetValue4(WXSTRINGCAST str);
+      controlItem->SetValue4(str);
       count ++;
       if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
         controlItem->SetFont(wxResourceInterpretFontSpec(expr->Nth(count)));
@@ -1027,22 +944,22 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, PrologExpr *e
   }
   else if (controlType == "wxListBox")
   {
-    PrologExpr *valueList = (PrologExpr *) NULL;
+    wxExpr *valueList = (wxExpr *) NULL;
 
     if ((valueList = expr->Nth(count)) && (valueList->Type() == PrologList))
     {
-      wxStringList *stringList = new wxStringList;
-      PrologExpr *stringExpr = valueList->GetFirst();
+      wxStringList stringList;
+      wxExpr *stringExpr = valueList->GetFirst();
       while (stringExpr)
       {
-        stringList->Add(stringExpr->StringValue());
+        stringList.Add(stringExpr->StringValue());
         stringExpr = stringExpr->GetNext();
       }
       controlItem->SetStringValues(stringList);
      count ++;
 
       // Check for wxSINGLE/wxMULTIPLE
-      PrologExpr *mult = (PrologExpr *) NULL;
+      wxExpr *mult = (wxExpr *) NULL;
       controlItem->SetValue1(wxLB_SINGLE);
       if ((mult = expr->Nth(count)) && ((mult->Type() == PrologString)||(mult->Type() == PrologWord)))
       {
@@ -1064,15 +981,15 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, PrologExpr *e
   }
   else if (controlType == "wxChoice")
   {
-    PrologExpr *valueList = (PrologExpr *) NULL;
+    wxExpr *valueList = (wxExpr *) NULL;
     // Check for default value list
     if ((valueList = expr->Nth(count)) && (valueList->Type() == PrologList))
     {
-      wxStringList *stringList = new wxStringList;
-      PrologExpr *stringExpr = valueList->GetFirst();
+      wxStringList stringList;
+      wxExpr *stringExpr = valueList->GetFirst();
       while (stringExpr)
       {
-        stringList->Add(stringExpr->StringValue());
+        stringList.Add(stringExpr->StringValue());
         stringExpr = stringExpr->GetNext();
       }
       controlItem->SetStringValues(stringList);
@@ -1092,23 +1009,23 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, PrologExpr *e
 #if wxUSE_COMBOBOX
   else if (controlType == "wxComboBox")
   {
-    PrologExpr *textValue = expr->Nth(count);
+    wxExpr *textValue = expr->Nth(count);
     if (textValue && (textValue->Type() == PrologString || textValue->Type() == PrologWord))
    {
       wxString str(textValue->StringValue());
-      controlItem->SetValue4(WXSTRINGCAST str);
+      controlItem->SetValue4(str);
 
      count ++;
       
-      PrologExpr *valueList = (PrologExpr *) NULL;
+      wxExpr *valueList = (wxExpr *) NULL;
       // Check for default value list
       if ((valueList = expr->Nth(count)) && (valueList->Type() == PrologList))
       {
-        wxStringList *stringList = new wxStringList;
-        PrologExpr *stringExpr = valueList->GetFirst();
+        wxStringList stringList;
+        wxExpr *stringExpr = valueList->GetFirst();
         while (stringExpr)
         {
-          stringList->Add(stringExpr->StringValue());
+          stringList.Add(stringExpr->StringValue());
           stringExpr = stringExpr->GetNext();
         }
         controlItem->SetStringValues(stringList);
@@ -1130,15 +1047,15 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, PrologExpr *e
 #if 1
   else if (controlType == "wxRadioBox")
   {
-    PrologExpr *valueList = (PrologExpr *) NULL;
+    wxExpr *valueList = (wxExpr *) NULL;
     // Check for default value list
     if ((valueList = expr->Nth(count)) && (valueList->Type() == PrologList))
     {
-      wxStringList *stringList = new wxStringList;
-      PrologExpr *stringExpr = valueList->GetFirst();
+      wxStringList stringList;
+      wxExpr *stringExpr = valueList->GetFirst();
       while (stringExpr)
       {
-        stringList->Add(stringExpr->StringValue());
+        stringList.Add(stringExpr->StringValue());
         stringExpr = stringExpr->GetNext();
       }
       controlItem->SetStringValues(stringList);
@@ -1173,20 +1090,20 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, PrologExpr *e
 }
 
 // Forward declaration 
-wxItemResource *wxResourceInterpretMenu1(wxResourceTable& table, PrologExpr *expr);
+wxItemResource *wxResourceInterpretMenu1(wxResourceTable& table, wxExpr *expr);
 
 /*
  * Interpet a menu item
  */
 
-wxItemResource *wxResourceInterpretMenuItem(wxResourceTable& table, PrologExpr *expr)
+wxItemResource *wxResourceInterpretMenuItem(wxResourceTable& table, wxExpr *expr)
 {
   wxItemResource *item = new wxItemResource;
   
-  PrologExpr *labelExpr = expr->Nth(0);
-  PrologExpr *idExpr = expr->Nth(1);
-  PrologExpr *helpExpr = expr->Nth(2);
-  PrologExpr *checkableExpr = expr->Nth(3);
+  wxExpr *labelExpr = expr->Nth(0);
+  wxExpr *idExpr = expr->Nth(1);
+  wxExpr *helpExpr = expr->Nth(2);
+  wxExpr *checkableExpr = expr->Nth(3);
 
   // Further keywords/attributes to follow sometime...
   if (expr->Number() == 0)
@@ -1202,7 +1119,7 @@ wxItemResource *wxResourceInterpretMenuItem(wxResourceTable& table, PrologExpr *
     if (labelExpr)
     {
       wxString str(labelExpr->StringValue());
-      item->SetTitle(WXSTRINGCAST str);
+      item->SetTitle(str);
     }
     if (idExpr)
     {
@@ -1211,7 +1128,7 @@ wxItemResource *wxResourceInterpretMenuItem(wxResourceTable& table, PrologExpr *
       if ((idExpr->Type() == PrologString) || (idExpr->Type() == PrologWord))
       {
         wxString str(idExpr->StringValue());
-        id = wxResourceGetIdentifier(WXSTRINGCAST str, &table);
+        id = wxResourceGetIdentifier(str, &table);
         if (id == 0)
         {
           wxLogWarning(_("Could not resolve menu id '%s'. "
@@ -1227,13 +1144,13 @@ wxItemResource *wxResourceInterpretMenuItem(wxResourceTable& table, PrologExpr *
     if (helpExpr)
     {
       wxString str(helpExpr->StringValue());
-      item->SetValue4(WXSTRINGCAST str);
+      item->SetValue4(str);
     }
     if (checkableExpr)
       item->SetValue2(checkableExpr->IntegerValue());
 
     // Find the first expression that's a list, for submenu
-    PrologExpr *subMenuExpr = expr->GetFirst();
+    wxExpr *subMenuExpr = expr->GetFirst();
     while (subMenuExpr && (subMenuExpr->Type() != PrologList))
       subMenuExpr = subMenuExpr->GetNext();
       
@@ -1251,12 +1168,12 @@ wxItemResource *wxResourceInterpretMenuItem(wxResourceTable& table, PrologExpr *
  * Interpret a nested list as a menu
  */
 /*
-wxItemResource *wxResourceInterpretMenu1(wxResourceTable& table, PrologExpr *expr)
+wxItemResource *wxResourceInterpretMenu1(wxResourceTable& table, wxExpr *expr)
 {
   wxItemResource *menu = new wxItemResource;
 //  menu->SetType(wxTYPE_MENU);
   menu->SetType("wxMenu");
-  PrologExpr *element = expr->GetFirst();
+  wxExpr *element = expr->GetFirst();
   while (element)
   {
     wxItemResource *item = wxResourceInterpretMenuItem(table, element);
@@ -1268,10 +1185,10 @@ wxItemResource *wxResourceInterpretMenu1(wxResourceTable& table, PrologExpr *exp
 }
 */
 
-wxItemResource *wxResourceInterpretMenu(wxResourceTable& table, PrologExpr *expr)
+wxItemResource *wxResourceInterpretMenu(wxResourceTable& table, wxExpr *expr)
 {
-  PrologExpr *listExpr = (PrologExpr *) NULL;
-  expr->AssignAttributeValue("menu", &listExpr);
+  wxExpr *listExpr = (wxExpr *) NULL;
+  expr->GetAttributeValue("menu", &listExpr);
   if (!listExpr)
     return (wxItemResource *) NULL;
   
@@ -1279,22 +1196,20 @@ wxItemResource *wxResourceInterpretMenu(wxResourceTable& table, PrologExpr *expr
 
   if (!menuResource)
     return (wxItemResource *) NULL;
-    
-  char *name = (char *) NULL;
-  expr->AssignAttributeValue("name", &name);
-  if (name)
+
+  wxString name;
+  if (expr->GetAttributeValue("name", name))
   {
     menuResource->SetName(name);
-    delete[] name;
   }
   
   return menuResource;
 }
 
-wxItemResource *wxResourceInterpretMenuBar(wxResourceTable& table, PrologExpr *expr)
+wxItemResource *wxResourceInterpretMenuBar(wxResourceTable& table, wxExpr *expr)
 {
-  PrologExpr *listExpr = (PrologExpr *) NULL;
-  expr->AssignAttributeValue("menu", &listExpr);
+  wxExpr *listExpr = (wxExpr *) NULL;
+  expr->GetAttributeValue("menu", &listExpr);
   if (!listExpr)
     return (wxItemResource *) NULL;
 
@@ -1302,7 +1217,7 @@ wxItemResource *wxResourceInterpretMenuBar(wxResourceTable& table, PrologExpr *e
   resource->SetType("wxMenu");
 //  resource->SetType(wxTYPE_MENU);
   
-  PrologExpr *element = listExpr->GetFirst();
+  wxExpr *element = listExpr->GetFirst();
   while (element)
   {
     wxItemResource *menuResource = wxResourceInterpretMenuItem(table, listExpr);
@@ -1310,36 +1225,32 @@ wxItemResource *wxResourceInterpretMenuBar(wxResourceTable& table, PrologExpr *e
     element = element->GetNext();
   }
 
-  char *name = (char *) NULL;
-  expr->AssignAttributeValue("name", &name);
-  if (name)
+  wxString name;
+  if (expr->GetAttributeValue("name", name))
   {
     resource->SetName(name);
-    delete[] name;
   }
   
   return resource;
 }
 
-wxItemResource *wxResourceInterpretString(wxResourceTable& WXUNUSED(table), PrologExpr *WXUNUSED(expr))
+wxItemResource *wxResourceInterpretString(wxResourceTable& WXUNUSED(table), wxExpr *WXUNUSED(expr))
 {
   return (wxItemResource *) NULL;
 }
 
-wxItemResource *wxResourceInterpretBitmap(wxResourceTable& WXUNUSED(table), PrologExpr *expr)
+wxItemResource *wxResourceInterpretBitmap(wxResourceTable& WXUNUSED(table), wxExpr *expr)
 {
   wxItemResource *bitmapItem = new wxItemResource;
 //  bitmapItem->SetType(wxTYPE_BITMAP);
   bitmapItem->SetType("wxBitmap");
-  char *name = (char *) NULL;
-  expr->AssignAttributeValue("name", &name);
-  if (name)
+  wxString name;
+  if (expr->GetAttributeValue("name", name))
   {
     bitmapItem->SetName(name);
-    delete[] name;
   }
   // Now parse all bitmap specifications
-  PrologExpr *bitmapExpr = expr->GetFirst();
+  wxExpr *bitmapExpr = expr->GetFirst();
   while (bitmapExpr)
   {
     if (bitmapExpr->Number() == 3)
@@ -1348,7 +1259,7 @@ wxItemResource *wxResourceInterpretBitmap(wxResourceTable& WXUNUSED(table), Prol
       if (bitmapKeyword == "bitmap" || bitmapKeyword == "icon")
       {
         // The value part: always a list.
-        PrologExpr *listExpr = bitmapExpr->Nth(2);
+        wxExpr *listExpr = bitmapExpr->Nth(2);
         if (listExpr->Type() == PrologList)
         {
           wxItemResource *bitmapSpec = new wxItemResource;
@@ -1357,21 +1268,19 @@ wxItemResource *wxResourceInterpretBitmap(wxResourceTable& WXUNUSED(table), Prol
 
           // List is of form: [filename, bitmaptype, platform, colours, xresolution, yresolution]
           // where everything after 'filename' is optional.
-          PrologExpr *nameExpr = listExpr->Nth(0);
-          PrologExpr *typeExpr = listExpr->Nth(1);
-          PrologExpr *platformExpr = listExpr->Nth(2);
-          PrologExpr *coloursExpr = listExpr->Nth(3);
-          PrologExpr *xresExpr = listExpr->Nth(4);
-          PrologExpr *yresExpr = listExpr->Nth(5);
+          wxExpr *nameExpr = listExpr->Nth(0);
+          wxExpr *typeExpr = listExpr->Nth(1);
+          wxExpr *platformExpr = listExpr->Nth(2);
+          wxExpr *coloursExpr = listExpr->Nth(3);
+          wxExpr *xresExpr = listExpr->Nth(4);
+          wxExpr *yresExpr = listExpr->Nth(5);
           if (nameExpr && nameExpr->StringValue())
           {
-            wxString str(nameExpr->StringValue());
-            bitmapSpec->SetName(WXSTRINGCAST str);
+            bitmapSpec->SetName(nameExpr->StringValue());
           }
           if (typeExpr && typeExpr->StringValue())
           {
-            wxString str(typeExpr->StringValue());
-            bitmapSpec->SetValue1(wxParseWindowStyle(WXSTRINGCAST str));
+            bitmapSpec->SetValue1(wxParseWindowStyle(typeExpr->StringValue()));
           }
           else
             bitmapSpec->SetValue1(0);
@@ -1411,7 +1320,7 @@ wxItemResource *wxResourceInterpretBitmap(wxResourceTable& WXUNUSED(table), Prol
   return bitmapItem;
 }
 
-wxItemResource *wxResourceInterpretIcon(wxResourceTable& table, PrologExpr *expr)
+wxItemResource *wxResourceInterpretIcon(wxResourceTable& table, wxExpr *expr)
 {
   wxItemResource *item = wxResourceInterpretBitmap(table, expr);
   if (item)
@@ -1425,10 +1334,10 @@ wxItemResource *wxResourceInterpretIcon(wxResourceTable& table, PrologExpr *expr
 }
 
 // Interpret list expression as a font
-wxFont *wxResourceInterpretFontSpec(PrologExpr *expr)
+wxFont wxResourceInterpretFontSpec(wxExpr *expr)
 {
   if (expr->Type() != PrologList)
-    return (wxFont *) NULL;
+    return wxNullFont;
 
   int point = 10;
   int family = wxSWISS;
@@ -1437,12 +1346,12 @@ wxFont *wxResourceInterpretFontSpec(PrologExpr *expr)
   int underline = 0;
   wxString faceName("");
   
-  PrologExpr *pointExpr = expr->Nth(0);
-  PrologExpr *familyExpr = expr->Nth(1);
-  PrologExpr *styleExpr = expr->Nth(2);
-  PrologExpr *weightExpr = expr->Nth(3);
-  PrologExpr *underlineExpr = expr->Nth(4);
-  PrologExpr *faceNameExpr = expr->Nth(5);
+  wxExpr *pointExpr = expr->Nth(0);
+  wxExpr *familyExpr = expr->Nth(1);
+  wxExpr *styleExpr = expr->Nth(2);
+  wxExpr *weightExpr = expr->Nth(3);
+  wxExpr *underlineExpr = expr->Nth(4);
+  wxExpr *faceNameExpr = expr->Nth(5);
   if (pointExpr)
     point = (int)pointExpr->IntegerValue();
 
@@ -1450,27 +1359,24 @@ wxFont *wxResourceInterpretFontSpec(PrologExpr *expr)
   if (familyExpr)
   {
     str = familyExpr->StringValue();
-    family = (int)wxParseWindowStyle(WXSTRINGCAST str);
+    family = (int)wxParseWindowStyle(str);
   }
   if (styleExpr)
   {
     str = styleExpr->StringValue();
-    style = (int)wxParseWindowStyle(WXSTRINGCAST str);
+    style = (int)wxParseWindowStyle(str);
   }
   if (weightExpr)
   {
     str = weightExpr->StringValue();
-    weight = (int)wxParseWindowStyle(WXSTRINGCAST str);
+    weight = (int)wxParseWindowStyle(str);
   }
   if (underlineExpr)
     underline = (int)underlineExpr->IntegerValue();
   if (faceNameExpr)
     faceName = faceNameExpr->StringValue();
 
-  char *faceName1 = (char *) NULL;
-  if (faceName != "")
-    faceName1 = WXSTRINGCAST faceName;
-  wxFont *font = wxTheFontList->FindOrCreateFont(point, family, style, weight, (underline != 0), faceName1);
+  wxFont font(point, family, style, weight, (underline != 0), faceName);
   return font;
 }
 
@@ -1478,7 +1384,7 @@ wxFont *wxResourceInterpretFontSpec(PrologExpr *expr)
  * (Re)allocate buffer for reading in from resource file
  */
 
-bool wxReallocateResourceBuffer(void)
+bool wxReallocateResourceBuffer()
 {
   if (!wxResourceBuffer)
   {
@@ -1611,7 +1517,7 @@ bool wxGetResourceToken(FILE *fd)
   with possible comments.
  */
  
-bool wxResourceReadOneResource(FILE *fd, PrologDatabase& db, bool *eof, wxResourceTable *table)
+bool wxResourceReadOneResource(FILE *fd, wxExprDatabase& db, bool *eof, wxResourceTable *table)
 {
   if (!table)
     table = wxDefaultResourceTable;
@@ -1749,10 +1655,10 @@ bool wxResourceReadOneResource(FILE *fd, PrologDatabase& db, bool *eof, wxResour
  * "wxSYSTEM_MENU | wxBORDER" -> integer
  */
 
-char *wxResourceParseWord(char *s, int *i)
+char* wxResourceParseWord(char*s, int *i)
 {
   if (!s)
-    return (char *) NULL;
+    return (char*) NULL;
 
   static char buf[150];
   int len = strlen(s);
@@ -1774,7 +1680,7 @@ char *wxResourceParseWord(char *s, int *i)
   }
   *i = ii;
   if (j == 0)
-    return (char *) NULL;
+    return (char*) NULL;
   else
     return buf;
 }
@@ -2037,12 +1943,12 @@ static wxResourceBitListStruct wxResourceBitListTable[] =
 
 static int wxResourceBitListCount = (sizeof(wxResourceBitListTable)/sizeof(wxResourceBitListStruct));
 
-long wxParseWindowStyle(char *bitListString)
+long wxParseWindowStyle(const wxString& bitListString)
 {
   int i = 0;
   char *word;
   long bitList = 0;
-  while ((word = wxResourceParseWord(bitListString, &i)))
+  while ((word = wxResourceParseWord((char*) (const char*) bitListString, &i)))
   {
     bool found = FALSE;
     int j;
@@ -2067,7 +1973,7 @@ long wxParseWindowStyle(char *bitListString)
  * depth and appropriate type.
  */
  
-wxBitmap *wxResourceCreateBitmap(char *resource, wxResourceTable *table)
+wxBitmap wxResourceCreateBitmap(const wxString& resource, wxResourceTable *table)
 {
   if (!table)
     table = wxDefaultResourceTable;
@@ -2077,8 +1983,8 @@ wxBitmap *wxResourceCreateBitmap(char *resource, wxResourceTable *table)
   {
     if (!item->GetType() || strcmp(item->GetType(), "wxBitmap") != 0)
     {
-      wxLogWarning(_("%s not a bitmap resource specification."), resource);
-      return (wxBitmap *) NULL;
+      wxLogWarning(_("%s not a bitmap resource specification."), (const char*) resource);
+      return wxNullBitmap;
     }
     int thisDepth = wxDisplayDepth();
     long thisNoColours = (long)pow(2.0, (double)thisDepth);
@@ -2164,11 +2070,10 @@ wxBitmap *wxResourceCreateBitmap(char *resource, wxResourceTable *table)
     }
     // If no matching resource, fail.
     if (!optResource)
-      return (wxBitmap *) NULL;
+      return wxNullBitmap;
 
-    char *name = optResource->GetName();
+    wxString name = optResource->GetName();
     int bitmapType = (int)optResource->GetValue1();
-    wxBitmap *bitmap = (wxBitmap *) NULL;
     switch (bitmapType)
     {
       case wxBITMAP_TYPE_XBM_DATA:
@@ -2178,10 +2083,10 @@ wxBitmap *wxResourceCreateBitmap(char *resource, wxResourceTable *table)
         if (!item)
         {
           wxLogWarning(_("Failed to find XBM resource %s.\n"
-                         "Forgot to use wxResourceLoadBitmapData?"), name);
+                         "Forgot to use wxResourceLoadBitmapData?"), (const char*) name);
           return (wxBitmap *) NULL;
         }
-        bitmap = new wxBitmap((char *)item->GetValue1(), (int)item->GetValue2(), (int)item->GetValue3()); 
+        return wxBitmap(item->GetValue1(), (int)item->GetValue2(), (int)item->GetValue3()) ;
 #else
         wxLogWarning(_("No XBM facility available!"));
 #endif
@@ -2194,10 +2099,10 @@ wxBitmap *wxResourceCreateBitmap(char *resource, wxResourceTable *table)
         if (!item)
         {
           wxLogWarning(_("Failed to find XPM resource %s.\n"
-                         "Forgot to use wxResourceLoadBitmapData?"), name);
+                         "Forgot to use wxResourceLoadBitmapData?"), (const char*) name);
           return (wxBitmap *) NULL;
         }
-        bitmap = new wxBitmap(item->GetValue1());
+        return wxBitmap(item->GetValue1());
 #else
         wxLogWarning(_("No XPM facility available!"));
 #endif
@@ -2205,27 +2110,16 @@ wxBitmap *wxResourceCreateBitmap(char *resource, wxResourceTable *table)
       }
       default:
       {
-        bitmap = new wxBitmap(name, bitmapType);
+        return wxBitmap(name, bitmapType);
         break;
       }
     }
-    if (!bitmap)
-      return (wxBitmap *) NULL;
-      
-    if (bitmap->Ok())
-    {
-      return bitmap;
-    }
-    else
-    {
-      delete bitmap;
-      return (wxBitmap *) NULL;
-    }
+    return wxNullBitmap;
   }
   else
   {
-    wxLogWarning(_("Bitmap resource specification %s not found."), resource);
-    return (wxBitmap *) NULL;
+    wxLogWarning(_("Bitmap resource specification %s not found."), (const char*) resource);
+    return wxNullBitmap;
   }
 }
 
@@ -2234,18 +2128,18 @@ wxBitmap *wxResourceCreateBitmap(char *resource, wxResourceTable *table)
  * depth and appropriate type.
  */
  
-wxIcon *wxResourceCreateIcon(char *resource, wxResourceTable *table)
+wxIcon wxResourceCreateIcon(const wxString& resource, wxResourceTable *table)
 {
   if (!table)
-  table = wxDefaultResourceTable;
+    table = wxDefaultResourceTable;
   
   wxItemResource *item = table->FindResource(resource);
   if (item)
   {
-    if (!item->GetType() || strcmp(item->GetType(), "wxIcon") != 0)
+    if ((item->GetType() == "") || strcmp(item->GetType(), "wxIcon") != 0)
     {
-      wxLogWarning(_("%s not an icon resource specification."), resource);
-      return (wxIcon *) NULL;
+      wxLogWarning(_("%s not an icon resource specification."), (const char*) resource);
+      return wxNullIcon;
     }
     int thisDepth = wxDisplayDepth();
     long thisNoColours = (long)pow(2.0, (double)thisDepth);
@@ -2331,11 +2225,10 @@ wxIcon *wxResourceCreateIcon(char *resource, wxResourceTable *table)
     }
     // If no matching resource, fail.
     if (!optResource)
-      return (wxIcon *) NULL;
+      return wxNullIcon;
 
-    char *name = optResource->GetName();
+    wxString name = optResource->GetName();
     int bitmapType = (int)optResource->GetValue1();
-    wxIcon *icon = (wxIcon *) NULL;
     switch (bitmapType)
     {
       case wxBITMAP_TYPE_XBM_DATA:
@@ -2345,10 +2238,10 @@ wxIcon *wxResourceCreateIcon(char *resource, wxResourceTable *table)
         if (!item)
         {
           wxLogWarning(_("Failed to find XBM resource %s.\n"
-                         "Forgot to use wxResourceLoadIconData?"), name);
+                         "Forgot to use wxResourceLoadIconData?"), (const char*) name);
           return (wxIcon *) NULL;
         }
-        icon = new wxIcon((char **)item->GetValue1(), (int)item->GetValue2(), (int)item->GetValue3()); 
+        return wxIcon((char **)item->GetValue1(), (int)item->GetValue2(), (int)item->GetValue3());
 #else
         wxLogWarning(_("No XBM facility available!"));
 #endif
@@ -2367,7 +2260,7 @@ wxIcon *wxResourceCreateIcon(char *resource, wxResourceTable *table)
           wxLogWarning(buf);
           return NULL;
         }
-        icon = new wxIcon((char **)item->GetValue1());
+        return wxIcon((char **)item->GetValue1());
 #else
         wxLogWarning(_("No XPM facility available!"));
 #endif
@@ -2378,29 +2271,18 @@ wxIcon *wxResourceCreateIcon(char *resource, wxResourceTable *table)
       default:
       {
 #ifdef __WXGTK__
-        wxLogWarning(_("Icon resource specification %s not found."), resource);
+        wxLogWarning(_("Icon resource specification %s not found."), (const char*) resource);
 #else
-        icon = new wxIcon(name, bitmapType);
+        return wxIcon(name, bitmapType);
 #endif
         break;
       }
     }
-    if (!icon)
-      return (wxIcon *) NULL;
-      
-    if (icon->Ok())
-    {
-      return icon;
-    }
-    else
-    {
-      delete icon;
-      return (wxIcon *) NULL;
-    }
+    return wxNullIcon;
   }
   else
   {
-    wxLogWarning(_("Icon resource specification %s not found."), resource);
+    wxLogWarning(_("Icon resource specification %s not found."), (const char*) resource);
     return (wxIcon *) NULL;
   }
 }
@@ -2412,7 +2294,7 @@ wxMenu *wxResourceCreateMenu(wxItemResource *item)
   while (node)
   {
     wxItemResource *child = (wxItemResource *)node->Data();
-    if (child->GetType() && strcmp(child->GetType(), "wxMenuSeparator") == 0)
+    if ((child->GetType() != "") && (child->GetType() == "wxMenuSeparator"))
       menu->AppendSeparator();
     else if (child->GetChildren().Number() > 0)
     {
@@ -2429,13 +2311,13 @@ wxMenu *wxResourceCreateMenu(wxItemResource *item)
   return menu;
 }
 
-wxMenuBar *wxResourceCreateMenuBar(char *resource, wxResourceTable *table, wxMenuBar *menuBar)
+wxMenuBar *wxResourceCreateMenuBar(const wxString& resource, wxResourceTable *table, wxMenuBar *menuBar)
 {
   if (!table)
     table = wxDefaultResourceTable;
     
   wxItemResource *menuResource = table->FindResource(resource);
-  if (menuResource && menuResource->GetType() && strcmp(menuResource->GetType(), "wxMenu") == 0)
+  if (menuResource && (menuResource->GetType() != "") && (menuResource->GetType() == "wxMenu"))
   {
     if (!menuBar)
       menuBar = new wxMenuBar;
@@ -2453,20 +2335,20 @@ wxMenuBar *wxResourceCreateMenuBar(char *resource, wxResourceTable *table, wxMen
   return (wxMenuBar *) NULL;
 }
 
-wxMenu *wxResourceCreateMenu(char *resource, wxResourceTable *table)
+wxMenu *wxResourceCreateMenu(const wxString& resource, wxResourceTable *table)
 {
   if (!table)
     table = wxDefaultResourceTable;
     
   wxItemResource *menuResource = table->FindResource(resource);
-  if (menuResource && menuResource->GetType() && strcmp(menuResource->GetType(), "wxMenu") == 0)
+  if (menuResource && (menuResource->GetType() != "") && (menuResource->GetType() == "wxMenu"))
 //  if (menuResource && (menuResource->GetType() == wxTYPE_MENU))
     return wxResourceCreateMenu(menuResource);
   return (wxMenu *) NULL;
 }
 
 // Global equivalents (so don't have to refer to default table explicitly)
-bool wxResourceParseData(char *resource, wxResourceTable *table)
+bool wxResourceParseData(const wxString& resource, wxResourceTable *table)
 {
   if (!table)
     table = wxDefaultResourceTable;
@@ -2474,7 +2356,7 @@ bool wxResourceParseData(char *resource, wxResourceTable *table)
   return table->ParseResourceData(resource);
 }
 
-bool wxResourceParseFile(char *filename, wxResourceTable *table)
+bool wxResourceParseFile(const wxString& filename, wxResourceTable *table)
 {
   if (!table)
     table = wxDefaultResourceTable;
@@ -2483,7 +2365,7 @@ bool wxResourceParseFile(char *filename, wxResourceTable *table)
 }
 
 // Register XBM/XPM data
-bool wxResourceRegisterBitmapData(char *name, char bits[], int width, int height, wxResourceTable *table)
+bool wxResourceRegisterBitmapData(const wxString& name, char bits[], int width, int height, wxResourceTable *table)
 {
   if (!table)
     table = wxDefaultResourceTable;
@@ -2491,7 +2373,7 @@ bool wxResourceRegisterBitmapData(char *name, char bits[], int width, int height
   return table->RegisterResourceBitmapData(name, bits, width, height);
 }
 
-bool wxResourceRegisterBitmapData(char *name, char **data, wxResourceTable *table)
+bool wxResourceRegisterBitmapData(const wxString& name, char **data, wxResourceTable *table)
 {
   if (!table)
     table = wxDefaultResourceTable;
@@ -2511,7 +2393,7 @@ void wxResourceClear(wxResourceTable *table)
  * Identifiers
  */
 
-bool wxResourceAddIdentifier(char *name, int value, wxResourceTable *table)
+bool wxResourceAddIdentifier(const wxString& name, int value, wxResourceTable *table)
 {
   if (!table)
     table = wxDefaultResourceTable;
@@ -2520,7 +2402,7 @@ bool wxResourceAddIdentifier(char *name, int value, wxResourceTable *table)
   return TRUE;
 }
 
-int wxResourceGetIdentifier(char *name, wxResourceTable *table)
+int wxResourceGetIdentifier(const wxString& name, wxResourceTable *table)
 {
   if (!table)
     table = wxDefaultResourceTable;
@@ -2532,7 +2414,7 @@ int wxResourceGetIdentifier(char *name, wxResourceTable *table)
  * Parse #include file for #defines (only)
  */
 
-bool wxResourceParseIncludeFile(char *f, wxResourceTable *table)
+bool wxResourceParseIncludeFile(const wxString& f, wxResourceTable *table)
 {
   if (!table)
     table = wxDefaultResourceTable;
@@ -2579,7 +2461,7 @@ static int getc_string(char *s)
   }
 }
 
-static int ungetc_string(void)
+static int ungetc_string()
 {
   wxResourceStringPtr --;
   return 0;
@@ -2701,7 +2583,7 @@ bool wxGetResourceTokenString(char *s)
   with possible comments.
  */
  
-bool wxResourceReadOneResourceString(char *s, PrologDatabase& db, bool *eof, wxResourceTable *table)
+bool wxResourceReadOneResourceString(char *s, wxExprDatabase& db, bool *eof, wxResourceTable *table)
 {
   if (!table)
     table = wxDefaultResourceTable;
@@ -2855,7 +2737,7 @@ bool wxResourceParseString(char *s, wxResourceTable *table)
       }
   }
 
-  PrologDatabase db;
+  wxExprDatabase db;
   wxResourceStringPtr = 0;
 
   bool eof = FALSE;
@@ -2881,61 +2763,86 @@ bool wxWindow::LoadFromResource(wxWindow *parent, const wxString& resourceName, 
     ! ((strcmp(resource->GetType(), "wxDialog") == 0) || (strcmp(resource->GetType(), "wxPanel") == 0)))
     return FALSE;
 
-  char *title = resource->GetTitle();
+  wxString title(resource->GetTitle());
   long theWindowStyle = resource->GetStyle();
   bool isModal = (resource->GetValue1() != 0);
   int x = resource->GetX();
   int y = resource->GetY();
   int width = resource->GetWidth();
   int height = resource->GetHeight();
-  char *name = resource->GetName();
-
-  wxFont *theFont = resource->GetFont();
+  wxString name = resource->GetName();
 
   if (IsKindOf(CLASSINFO(wxDialog)))
   {
     wxDialog *dialogBox = (wxDialog *)this;
-   long modalStyle = isModal ? wxDIALOG_MODAL : 0;
+    long modalStyle = isModal ? wxDIALOG_MODAL : 0;
     if (!dialogBox->Create(parent, -1, title, wxPoint(x, y), wxSize(width, height), theWindowStyle|modalStyle, name))
       return FALSE;
-    dialogBox->SetClientSize(width, height);
+
+    // Only reset the client size if we know we're not going to do it again below.
+    if ((resource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS) == 0)
+      dialogBox->SetClientSize(width, height);
+  }
+  else if (IsKindOf(CLASSINFO(wxPanel)))
+  {
+    wxPanel* panel = (wxPanel *)this;
+    if (!panel->Create(parent, -1, wxPoint(x, y), wxSize(width, height), theWindowStyle, name))
+      return FALSE;
   }
   else
   {
-    if (!((wxWindow *)this)->Create(parent, -1, wxPoint(x, y), wxSize(width, height), theWindowStyle, name))
+    if (!this->Create(parent, -1, wxPoint(x, y), wxSize(width, height), theWindowStyle, name))
       return FALSE;
   }
 
-  if (theFont)
-    SetFont(*theFont);
+  if ((resource->GetResourceStyle() & wxRESOURCE_USE_DEFAULTS) != 0)
+  {
+    // No need to do this since it's done in wxPanel or wxDialog constructor.
+    // SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+  }
+  else
+  {
+    if (resource->GetFont().Ok())
+      SetFont(resource->GetFont());
+    if (resource->GetBackgroundColour().Ok())
+      SetBackgroundColour(resource->GetBackgroundColour());
+  }
 
-  if (resource->GetBackgroundColour())
-    SetBackgroundColour(*resource->GetBackgroundColour());
+  // Should have some kind of font at this point
+  if (!GetFont()->Ok())
+      SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+  if (!GetBackgroundColour().Ok())
+      SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
 
-   // TODO
-  if (resource->GetLabelColour())
-    SetForegroundColour(*resource->GetLabelColour());
-  else if (resource->GetButtonColour())
-    SetForegroundColour(*resource->GetButtonColour());
-    
+  // Only when we've created the window and set the font can we set the correct size,
+  // if based on dialog units.
+  if ((resource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS) != 0)
+  {
+    wxSize sz = ConvertDialogToPixels(wxSize(width, height));
+    SetClientSize(sz.x, sz.y);
+
+    wxPoint pt = ConvertDialogToPixels(wxPoint(x, y));
+    Move(pt.x, pt.y);
+  }
+
   // Now create children
   wxNode *node = resource->GetChildren().First();
   while (node)
   {
     wxItemResource *childResource = (wxItemResource *)node->Data();
     
-    (void) CreateItem(childResource, table);
+    (void) CreateItem(childResource, resource, table);
 
     node = node->Next();
   }
   return TRUE;
 }
 
-wxControl *wxWindow::CreateItem(const wxItemResource *resource, const wxResourceTable *table)
+wxControl *wxWindow::CreateItem(const wxItemResource *resource, const wxItemResource* parentResource, const wxResourceTable *table)
 {
   if (!table)
     table = wxDefaultResourceTable;
-  return table->CreateItem((wxWindow *)this, (wxItemResource *)resource);
+  return table->CreateItem((wxWindow *)this, resource, parentResource);
 }
 
 #endif // wxUSE_WX_RESOURCES

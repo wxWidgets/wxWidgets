@@ -46,6 +46,7 @@ IMPLEMENT_CLASS(wxResourceEditorControlHandler, wxEvtHandler)
 BEGIN_EVENT_TABLE(wxResourceEditorDialogHandler, wxEvtHandler)
 	EVT_PAINT(wxResourceEditorDialogHandler::OnPaint)
 	EVT_MOUSE_EVENTS(wxResourceEditorDialogHandler::OnMouseEvent)
+	EVT_SIZE(wxResourceEditorDialogHandler::OnSize)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxResourceEditorControlHandler, wxEvtHandler)
@@ -292,6 +293,23 @@ void wxResourceEditorDialogHandler::OnItemRightClick(wxControl *item, int x, int
   handlerDialog->PopupMenu(menu, x, y);
 }
 
+// Under Windows 95, you can resize a panel interactively depending on
+// window styles.
+void wxResourceEditorDialogHandler::OnSize(wxSizeEvent& event)
+{
+    // Update the associated resource
+    int w, h;
+    handlerDialog->GetClientSize(& w, & h);
+
+    wxItemResource* resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(handlerDialog);
+    if (resource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS)
+    {
+        wxSize sz = handlerDialog->ConvertPixelsToDialog(wxSize(w, h));
+        w = sz.x; h = sz.y;
+    }
+    resource->SetSize(resource->GetX(), resource->GetY(), w, h);
+}
+
 // An event outside any items: may be a drag event.
 void wxResourceEditorDialogHandler::OnMouseEvent(wxMouseEvent& event)
 {
@@ -353,6 +371,15 @@ void wxResourceEditorDialogHandler::OnMouseEvent(wxMouseEvent& event)
         }
 
         OnRightClick(x, y, keys);
+    }
+    else if (event.LeftDClick())
+    {
+        if (m_mouseCaptured)
+        {
+            handlerDialog->ReleaseMouse();
+            m_mouseCaptured = FALSE;
+        }
+        wxResourceManager::GetCurrentResourceManager()->EditWindow(handlerDialog);
     }
   }
   else
@@ -911,6 +938,9 @@ void wxResourceEditorControlHandler::OnDragEnd(int x, int y, int WXUNUSED(keys),
   handlerControl->GetPosition(&xpos, &ypos);
   handlerControl->GetSize(&width, &height);
 
+  wxItemResource* resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(handlerControl);
+  wxItemResource* parentResource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(handlerControl->GetParent());
+
   if (selectionHandle > 0)
   {
     int x1, y1, width1, height1;
@@ -967,11 +997,33 @@ void wxResourceEditorControlHandler::OnDragEnd(int x, int y, int WXUNUSED(keys),
         break;
     }
     handlerControl->SetSize(x1, y1, width1, height1);
+
+    // Also update the associated resource
+    // We need to convert to dialog units if this is not a dialog or panel, but
+    // the parent resource specifies dialog units.
+    if (parentResource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS)
+    {
+        wxPoint pt = handlerControl->GetParent()->ConvertPixelsToDialog(wxPoint(x1, y1));
+        x1 = pt.x; y1 = pt.y;
+        wxSize sz = handlerControl->GetParent()->ConvertPixelsToDialog(wxSize(width1, height1));
+        width1 = sz.x; height1 = sz.y;
+    }
+    resource->SetSize(x1, y1, width1, height1);
   }
   else
   {
-    handlerControl->Move((int)(x - dragOffsetX), (int)(y - dragOffsetY));
-    OldOnMove((int)(x - dragOffsetX), (int)(y - dragOffsetY));
+    int newX = (int)(x - dragOffsetX);
+    int newY = (int)(y - dragOffsetY);
+    handlerControl->Move(newX, newY);
+    OldOnMove(newX, newY);
+
+    // Also update the associated resource
+    if (parentResource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS)
+    {
+        wxPoint pt = handlerControl->GetParent()->ConvertPixelsToDialog(wxPoint(newX, newY));
+        newX = pt.x; newY = pt.y;
+    }
+    resource->SetSize(newX, newY, resource->GetWidth(), resource->GetHeight());
 
     // Also move other selected items
     wxNode *node = panel->GetChildren()->First();
@@ -991,6 +1043,16 @@ void wxResourceEditorControlHandler::OnDragEnd(int x, int y, int WXUNUSED(keys),
           item->Move(x2, y2);
           ((wxResourceEditorControlHandler *)item->GetEventHandler())->OldOnMove(x2, y2);
           ((wxResourceEditorControlHandler *)item->GetEventHandler())->DrawSelectionHandles(dc);
+
+          // Also update the associated resource
+          resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(item);
+          if (parentResource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS)
+          {
+            wxPoint pt = item->GetParent()->ConvertPixelsToDialog(wxPoint(newX, newY));
+            x2 = pt.x; y2 = pt.y;
+          }
+          resource->SetSize(x2, y2, resource->GetWidth(), resource->GetHeight());
+
         }
       }
       node = node->Next();

@@ -130,9 +130,6 @@ bool wxNotebook::Create(wxWindow *parent,
   m_backgroundColour = wxColour(GetSysColor(COLOR_BTNFACE));
   m_foregroundColour = *wxBLACK ;
 
-  m_defaultForegroundColour = *wxBLACK ;
-  m_defaultBackgroundColour = wxColour(GetSysColor(COLOR_BTNFACE));
-
   // style
   m_windowStyle = style | wxTAB_TRAVERSAL;
 

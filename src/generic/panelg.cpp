@@ -50,7 +50,6 @@ bool wxPanel::Create(wxWindow *parent, wxWindowID id,
 
   if ( ret ) {
     SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
-    SetDefaultBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
     SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
   }
 
@@ -73,7 +72,6 @@ void wxPanel::SetFocus()
 void wxPanel::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
-    SetDefaultBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
     Refresh();
 
     // Propagate the event to the non-top-level children

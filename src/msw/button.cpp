@@ -56,8 +56,8 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
   SetValidator(validator);
 
   parent->AddChild((wxButton *)this);
-  m_backgroundColour = parent->GetDefaultBackgroundColour() ;
-  m_foregroundColour = parent->GetDefaultForegroundColour() ;
+  m_backgroundColour = parent->GetBackgroundColour() ;
+  m_foregroundColour = parent->GetForegroundColour() ;
 
   m_windowStyle = (long&)style;
 

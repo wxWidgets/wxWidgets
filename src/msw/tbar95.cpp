@@ -100,10 +100,6 @@ bool wxToolBar95::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, co
   	GetGValue(GetSysColor(COLOR_BTNFACE)), GetBValue(GetSysColor(COLOR_BTNFACE)));
   m_foregroundColour = *wxBLACK ;
 
-  m_defaultForegroundColour = *wxBLACK ;
-  m_defaultBackgroundColour = wxColour(GetRValue(GetSysColor(COLOR_BTNFACE)),
-  	GetGValue(GetSysColor(COLOR_BTNFACE)), GetBValue(GetSysColor(COLOR_BTNFACE)));
-
   if (style & wxTB_VERTICAL)
     wxMessageBox("Sorry, wxToolBar95 under Windows 95 only supports horizontal orientation.", "wxToolBar95 usage", wxOK);
   m_maxWidth = -1;
@@ -474,8 +470,6 @@ wxToolBarTool *wxToolBar95::AddTool(int index, const wxBitmap& bitmap, const wxB
 void wxToolBar95::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     m_backgroundColour = wxColour(GetRValue(GetSysColor(COLOR_BTNFACE)),
-  	    GetGValue(GetSysColor(COLOR_BTNFACE)), GetBValue(GetSysColor(COLOR_BTNFACE)));
-    m_defaultBackgroundColour = wxColour(GetRValue(GetSysColor(COLOR_BTNFACE)),
   	    GetGValue(GetSysColor(COLOR_BTNFACE)), GetBValue(GetSysColor(COLOR_BTNFACE)));
 
     // Remap the buttons

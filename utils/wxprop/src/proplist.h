@@ -74,28 +74,7 @@
 class wxPropertyListView: public wxPropertyView
 {
  DECLARE_DYNAMIC_CLASS(wxPropertyListView)
- protected:
-  wxListBox *propertyScrollingList;
-  wxListBox *valueList;     // Should really be a combobox, but we don't have one.
-  wxTextCtrl *valueText;
-  wxButton *confirmButton;  // A tick, as in VB
-  wxButton *cancelButton;   // A cross, as in VB
-  wxButton *editButton;     // Invokes the custom validator, if any
-
-  bool detailedEditing;     // E.g. using listbox for choices
-
-  static wxBitmap *tickBitmap;
-  static wxBitmap *crossBitmap;
-  
-  wxPanel *propertyWindow; // Panel that the controls will appear on
-  wxWindow *managedWindow; // Frame or dialog
-  
-  wxButton *windowCloseButton; // Or OK
-  wxButton *windowCancelButton;
-  wxButton *windowHelpButton;
  public:
-  static bool dialogCancelled;
-
   wxPropertyListView(wxPanel *propPanel = NULL, long flags = wxPROP_BUTTON_DEFAULT);
   ~wxPropertyListView(void);
 
@@ -161,25 +140,48 @@ class wxPropertyListView: public wxPropertyView
   void OnEdit(wxCommandEvent& event);
   void OnText(wxCommandEvent& event);
 
-  inline virtual wxListBox *GetPropertyScrollingList() { return propertyScrollingList; }
-  inline virtual wxListBox *GetValueList() { return valueList; }
-  inline virtual wxTextCtrl *GetValueText() { return valueText; }
-  inline virtual wxButton *GetConfirmButton() { return confirmButton; }
-  inline virtual wxButton *GetCancelButton() { return cancelButton; }
-  inline virtual wxButton *GetEditButton() { return editButton; }
-  inline virtual bool GetDetailedEditing(void) { return detailedEditing; }
+  inline virtual wxListBox *GetPropertyScrollingList() const { return m_propertyScrollingList; }
+  inline virtual wxListBox *GetValueList() const { return m_valueList; }
+  inline virtual wxTextCtrl *GetValueText() const { return m_valueText; }
+  inline virtual wxButton *GetConfirmButton() const { return m_confirmButton; }
+  inline virtual wxButton *GetCancelButton() const { return m_cancelButton; }
+  inline virtual wxButton *GetEditButton() const { return m_editButton; }
+  inline virtual bool GetDetailedEditing(void) const { return m_detailedEditing; }
 
-  inline virtual void AssociatePanel(wxPanel *win) { propertyWindow = win; }
-  inline virtual wxPanel *GetPanel(void) { return propertyWindow; }
+  inline virtual void AssociatePanel(wxPanel *win) { m_propertyWindow = win; }
+  inline virtual wxPanel *GetPanel(void) const { return m_propertyWindow; }
 
-  inline virtual void SetManagedWindow(wxWindow *win) { managedWindow = win; }
-  inline virtual wxWindow *GetManagedWindow(void) { return managedWindow; }
+  inline virtual void SetManagedWindow(wxWindow *win) { m_managedWindow = win; }
+  inline virtual wxWindow *GetManagedWindow(void) const { return m_managedWindow; }
 
-  inline virtual wxButton *GetWindowCloseButton() { return windowCloseButton; }
-  inline virtual wxButton *GetWindowCancelButton() { return windowCancelButton; }
-  inline virtual wxButton *GetHelpButton() { return windowHelpButton; }
+  inline virtual wxButton *GetWindowCloseButton() const { return m_windowCloseButton; }
+  inline virtual wxButton *GetWindowCancelButton() const { return m_windowCancelButton; }
+  inline virtual wxButton *GetHelpButton() const { return m_windowHelpButton; }
   
   bool OnClose(void);
+
+public:
+  static bool       sm_dialogCancelled;
+
+ protected:
+  wxListBox*        m_propertyScrollingList;
+  wxListBox*        m_valueList;     // Should really be a combobox, but we don't have one.
+  wxTextCtrl*       m_valueText;
+  wxButton*         m_confirmButton;  // A tick, as in VB
+  wxButton*         m_cancelButton;   // A cross, as in VB
+  wxButton*         m_editButton;     // Invokes the custom validator, if any
+
+  bool              m_detailedEditing;     // E.g. using listbox for choices
+
+  static wxBitmap*  sm_tickBitmap;
+  static wxBitmap*  sm_crossBitmap;
+  
+  wxPanel*          m_propertyWindow; // Panel that the controls will appear on
+  wxWindow*         m_managedWindow; // Frame or dialog
+  
+  wxButton*         m_windowCloseButton; // Or OK
+  wxButton*         m_windowCancelButton;
+  wxButton*         m_windowHelpButton;
 
 DECLARE_EVENT_TABLE()
 };
@@ -188,12 +190,13 @@ class wxPropertyTextEdit: public wxTextCtrl
 {
  DECLARE_CLASS(wxPropertyTextEdit)
  public:
-  wxPropertyListView *view;
   wxPropertyTextEdit(wxPropertyListView *v, wxWindow *parent, const wxWindowID id,
     const wxString& value, const wxPoint& pos = wxDefaultPosition,
     const wxSize& size = wxDefaultSize, long style = 0, const wxString& name = "text");
   void OnSetFocus(void);
   void OnKillFocus(void);
+
+  wxPropertyListView*   m_view;
 };
 
 #define wxPROP_ALLOW_TEXT_EDITING           1
@@ -267,8 +270,6 @@ class wxPropertyListValidator: public wxPropertyValidator
 class wxPropertyListDialog: public wxDialog
 {
   DECLARE_CLASS(wxPropertyListDialog)
- private:
-  wxPropertyListView *view;
  public:
   wxPropertyListDialog(wxPropertyListView *v, wxWindow *parent, const wxString& title,
     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
@@ -280,6 +281,9 @@ class wxPropertyListDialog: public wxDialog
   // Extend event processing to search the view's event table
   virtual bool ProcessEvent(wxEvent& event);
 
+ private:
+  wxPropertyListView*   m_view;
+
 DECLARE_EVENT_TABLE()
 };
 
@@ -290,27 +294,28 @@ DECLARE_EVENT_TABLE()
 class wxPropertyListPanel: public wxPanel
 {
   DECLARE_CLASS(wxPropertyListPanel)
- private:
-  wxPropertyListView *view;
  public:
   wxPropertyListPanel(wxPropertyListView *v, wxWindow *parent, const wxPoint& pos = wxDefaultPosition,
     const wxSize& size = wxDefaultSize,
     long style = 0, const wxString& name = "panel"):
      wxPanel(parent, -1, pos, size, style, name)
   {
-    view = v;
+    m_view = v;
   }
   ~wxPropertyListPanel();
   void OnDefaultAction(wxControl *item);
 
-  inline void SetView(wxPropertyListView* v) { view = v; }
-  inline wxPropertyListView* GetView() const { return view; }
+  inline void SetView(wxPropertyListView* v) { m_view = v; }
+  inline wxPropertyListView* GetView() const { return m_view; }
 
   // Extend event processing to search the view's event table
   virtual bool ProcessEvent(wxEvent& event);
 
   // Call Layout()
   void OnSize(wxSizeEvent& event);
+
+ private:
+  wxPropertyListView*   m_view;
 
 DECLARE_EVENT_TABLE()
 };
@@ -322,24 +327,25 @@ DECLARE_EVENT_TABLE()
 class wxPropertyListFrame: public wxFrame
 {
   DECLARE_CLASS(wxPropertyListFrame)
- private:
-  wxPropertyListView *view;
-  wxPropertyListPanel *propertyPanel;
  public:
   wxPropertyListFrame(wxPropertyListView *v, wxFrame *parent, const wxString& title,
     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
     long style = wxDEFAULT_FRAME, const wxString& name = "frame"):
      wxFrame(parent, -1, title, pos, size, style, name)
   {
-    view = v;
-    propertyPanel = NULL;
+    m_view = v;
+    m_propertyPanel = NULL;
   }
   bool OnClose(void);
 
   // Must call this to create panel and associate view
   virtual bool Initialize(void);
   virtual wxPropertyListPanel *OnCreatePanel(wxFrame *parent, wxPropertyListView *v);
-  inline virtual wxPropertyListPanel *GetPropertyPanel(void) { return propertyPanel; }
+  inline virtual wxPropertyListPanel *GetPropertyPanel(void) const { return m_propertyPanel; }
+
+ private:
+  wxPropertyListView*       m_view;
+  wxPropertyListPanel*      m_propertyPanel;
 };
 
 /*
@@ -349,14 +355,11 @@ class wxPropertyListFrame: public wxFrame
 class wxRealListValidator: public wxPropertyListValidator
 {
   DECLARE_DYNAMIC_CLASS(wxRealListValidator)
- protected:
-  float realMin;
-  float realMax;
  public:
    // 0.0, 0.0 means no range
    wxRealListValidator(float min = 0.0, float max = 0.0, long flags = wxPROP_ALLOW_TEXT_EDITING):wxPropertyListValidator(flags)
    {
-     realMin = min; realMax = max;
+     m_realMin = min; m_realMax = max;
    }
    ~wxRealListValidator(void) {}
 
@@ -370,19 +373,20 @@ class wxRealListValidator: public wxPropertyListValidator
    // the property list.
    // Does the transfer from the property editing area to the property itself
    bool OnRetrieveValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+
+ protected:
+  float     m_realMin;
+  float     m_realMax;
 };
 
 class wxIntegerListValidator: public wxPropertyListValidator
 {
   DECLARE_DYNAMIC_CLASS(wxIntegerListValidator)
- protected:
-  long integerMin;
-  long integerMax;
  public:
    // 0, 0 means no range
    wxIntegerListValidator(long min = 0, long max = 0, long flags = wxPROP_ALLOW_TEXT_EDITING):wxPropertyListValidator(flags)
    {
-     integerMin = min; integerMax = max;
+     m_integerMin = min; m_integerMax = max;
    }
    ~wxIntegerListValidator(void) {}
 
@@ -396,6 +400,10 @@ class wxIntegerListValidator: public wxPropertyListValidator
    // the property list.
    // Does the transfer from the property editing area to the property itself
    bool OnRetrieveValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+
+ protected:
+  long m_integerMin;
+  long m_integerMax;
 };
 
 class wxBoolListValidator: public wxPropertyListValidator
@@ -430,15 +438,13 @@ class wxBoolListValidator: public wxPropertyListValidator
 class wxStringListValidator: public wxPropertyListValidator
 {
   DECLARE_DYNAMIC_CLASS(wxStringListValidator)
- protected:
-  wxStringList *strings;
  public:
    wxStringListValidator(wxStringList *list = NULL, long flags = 0);
 
    ~wxStringListValidator(void)
    {
-     if (strings)
-       delete strings;
+     if (m_strings)
+       delete m_strings;
    }
 
    bool OnPrepareControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
@@ -458,15 +464,14 @@ class wxStringListValidator: public wxPropertyListValidator
    // Called when the property is double clicked. Extra functionality can be provided,
    // cycling through possible values.
    bool OnDoubleClick(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+
+ protected:
+  wxStringList*     m_strings;
 };
  
 class wxFilenameListValidator: public wxPropertyListValidator
 {
   DECLARE_DYNAMIC_CLASS(wxFilenameListValidator)
- protected:
-  wxString filenameWildCard;
-  wxString filenameMessage;
-  
  public:
    wxFilenameListValidator(wxString message = "Select a file", wxString wildcard = "*.*", long flags = 0);
 
@@ -488,6 +493,11 @@ class wxFilenameListValidator: public wxPropertyListValidator
 
    // Called when the edit (...) button is pressed.
    void OnEdit(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+
+ protected:
+  wxString  m_filenameWildCard;
+  wxString  m_filenameMessage;
+  
 };
 
 class wxColourListValidator: public wxPropertyListValidator

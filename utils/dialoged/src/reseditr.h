@@ -117,7 +117,7 @@ class wxResourceTableWithSaving: public wxResourceTable
     m_styleTable.Init();
   }
   virtual bool Save(const wxString& filename);
-  virtual bool SaveResource(ostream& stream, wxItemResource *item);
+  virtual bool SaveResource(ostream& stream, wxItemResource* item, wxItemResource* parentItem);
 
   void GeneratePanelStyleString(long windowStyle, char *buf);
   void GenerateDialogStyleString(long windowStyle, char *buf);
@@ -144,8 +144,8 @@ class wxResourceTableWithSaving: public wxResourceTable
   bool GenerateStyle(char *buf, long windowStyle, long flag, char *strStyle);
 */
 
-  void OutputFont(ostream& stream, wxFont *font);
-  wxControl *CreateItem(wxPanel *panel, wxItemResource *childResource);
+  void OutputFont(ostream& stream, const wxFont& font);
+  wxControl *CreateItem(wxPanel *panel, const wxItemResource *childResource, const wxItemResource* parentResource);
 
 protected:
   wxWindowStyleTable    m_styleTable;
@@ -219,17 +219,17 @@ public:
    virtual bool DeleteResource(wxWindow *win);
 
    // Add bitmap resource if there isn't already one with this filename.
-   virtual char *AddBitmapResource(char *filename);
+   virtual wxString AddBitmapResource(const wxString& filename);
 
    // Delete the bitmap resource if it isn't being used by another resource.
-   virtual void PossiblyDeleteBitmapResource(char *resourceName);
+   virtual void PossiblyDeleteBitmapResource(const wxString& resourceName);
 
    // Helper function for above
-   virtual bool IsBitmapResourceUsed(char *resourceName);
+   virtual bool IsBitmapResourceUsed(const wxString& resourceName);
 
-   wxItemResource *FindBitmapResourceByFilename(char *filename);
+   wxItemResource *FindBitmapResourceByFilename(const wxString& filename);
 
-   char *FindBitmapFilenameForResource(wxItemResource *resource);
+   wxString FindBitmapFilenameForResource(wxItemResource *resource);
 
    // Is this window identifier in use?
    bool IsSymbolUsed(wxItemResource* thisResource, wxWindowID id) ;

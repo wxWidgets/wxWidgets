@@ -51,8 +51,8 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
   SetValidator(validator);
   if (parent) parent->AddChild(this);
 
-  SetBackgroundColour(parent->GetDefaultBackgroundColour()) ;
-  SetForegroundColour(parent->GetDefaultForegroundColour()) ;
+  SetBackgroundColour(parent->GetBackgroundColour()) ;
+  SetForegroundColour(parent->GetForegroundColour()) ;
 
   m_windowStyle = style;
 
@@ -221,8 +221,8 @@ bool wxBitmapCheckBox::Create(wxWindow *parent, wxWindowID id, const wxBitmap *l
   SetValidator(validator);
   if (parent) parent->AddChild(this);
 
-  SetBackgroundColour(parent->GetDefaultBackgroundColour()) ;
-  SetForegroundColour(parent->GetDefaultForegroundColour()) ;
+  SetBackgroundColour(parent->GetBackgroundColour()) ;
+  SetForegroundColour(parent->GetForegroundColour()) ;
   m_windowStyle = style;
 
 	if ( id == -1 )

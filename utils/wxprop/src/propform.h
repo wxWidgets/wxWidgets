@@ -29,18 +29,7 @@
 class wxPropertyFormView: public wxPropertyView
 {
  DECLARE_DYNAMIC_CLASS(wxPropertyFormView)
- protected:
-  bool detailedEditing;     // E.g. using listbox for choices
-
-  wxWindow *propertyWindow; // Panel that the controls will appear on
-  wxWindow *managedWindow; // Frame or dialog
-  
-  wxButton *windowCloseButton; // Or OK
-  wxButton *windowCancelButton;
-  wxButton *windowHelpButton;
  public:
-  static bool dialogCancelled;
-
   wxPropertyFormView(wxWindow *propPanel = NULL, long flags = 0);
   ~wxPropertyFormView(void);
 
@@ -78,15 +67,28 @@ class wxPropertyFormView: public wxPropertyView
   // TODO: does OnCommand still get called...???
   virtual void OnCommand(wxWindow& win, wxCommandEvent& event);
 
-  inline virtual void AssociatePanel(wxWindow *win) { propertyWindow = win; }
-  inline virtual wxWindow *GetPanel(void) { return propertyWindow; }
+  inline virtual void AssociatePanel(wxWindow *win) { m_propertyWindow = win; }
+  inline virtual wxWindow *GetPanel(void) const { return m_propertyWindow; }
 
-  inline virtual void SetManagedWindow(wxWindow *win) { managedWindow = win; }
-  inline virtual wxWindow *GetManagedWindow(void) { return managedWindow; }
+  inline virtual void SetManagedWindow(wxWindow *win) { m_managedWindow = win; }
+  inline virtual wxWindow *GetManagedWindow(void) const { return m_managedWindow; }
 
-  inline virtual wxButton *GetWindowCloseButton() { return windowCloseButton; }
-  inline virtual wxButton *GetWindowCancelButton() { return windowCancelButton; }
-  inline virtual wxButton *GetHelpButton() { return windowHelpButton; }
+  inline virtual wxButton *GetWindowCloseButton() const { return m_windowCloseButton; }
+  inline virtual wxButton *GetWindowCancelButton() const { return m_windowCancelButton; }
+  inline virtual wxButton *GetHelpButton() const { return m_windowHelpButton; }
+
+public:
+  static bool sm_dialogCancelled;
+
+ protected:
+  bool              m_detailedEditing;     // E.g. using listbox for choices
+
+  wxWindow*         m_propertyWindow; // Panel that the controls will appear on
+  wxWindow*         m_managedWindow; // Frame or dialog
+  
+  wxButton*         m_windowCloseButton; // Or OK
+  wxButton*         m_windowCancelButton;
+  wxButton*         m_windowHelpButton;
 
 DECLARE_EVENT_TABLE()
 
@@ -144,14 +146,11 @@ class wxPropertyFormValidator: public wxPropertyValidator
 class wxRealFormValidator: public wxPropertyFormValidator
 {
   DECLARE_DYNAMIC_CLASS(wxRealFormValidator)
- protected:
-  float realMin;
-  float realMax;
  public:
    // 0.0, 0.0 means no range
    wxRealFormValidator(float min = 0.0, float max = 0.0, long flags = 0):wxPropertyFormValidator(flags)
    {
-     realMin = min; realMax = max;
+     m_realMin = min; m_realMax = max;
    }
    ~wxRealFormValidator(void) {}
 
@@ -159,25 +158,30 @@ class wxRealFormValidator: public wxPropertyFormValidator
    bool OnRetrieveValue(wxProperty *property, wxPropertyFormView *view, wxWindow *parentWindow);
    // Called by the view to transfer the property to the window.
    bool OnDisplayValue(wxProperty *property, wxPropertyFormView *view, wxWindow *parentWindow);
+
+ protected:
+  float         m_realMin;
+  float         m_realMax;
 };
 
 class wxIntegerFormValidator: public wxPropertyFormValidator
 {
   DECLARE_DYNAMIC_CLASS(wxIntegerFormValidator)
- protected:
-  long integerMin;
-  long integerMax;
  public:
    // 0, 0 means no range
    wxIntegerFormValidator(long min = 0, long max = 0, long flags = 0):wxPropertyFormValidator(flags)
    {
-     integerMin = min; integerMax = max;
+     m_integerMin = min; m_integerMax = max;
    }
    ~wxIntegerFormValidator(void) {}
 
    bool OnCheckValue(wxProperty *property, wxPropertyFormView *view, wxWindow *parentWindow);
    bool OnRetrieveValue(wxProperty *property, wxPropertyFormView *view, wxWindow *parentWindow);
    bool OnDisplayValue(wxProperty *property, wxPropertyFormView *view, wxWindow *parentWindow);
+
+ protected:
+  long          m_integerMin;
+  long          m_integerMax;
 };
 
 class wxBoolFormValidator: public wxPropertyFormValidator
@@ -198,20 +202,21 @@ class wxBoolFormValidator: public wxPropertyFormValidator
 class wxStringFormValidator: public wxPropertyFormValidator
 {
   DECLARE_DYNAMIC_CLASS(wxStringFormValidator)
- protected:
-  wxStringList *strings;
  public:
    wxStringFormValidator(wxStringList *list = NULL, long flags = 0);
 
    ~wxStringFormValidator(void)
    {
-     if (strings)
-       delete strings;
+     if (m_strings)
+       delete m_strings;
    }
 
    bool OnCheckValue(wxProperty *property, wxPropertyFormView *view, wxWindow *parentWindow);
    bool OnRetrieveValue(wxProperty *property, wxPropertyFormView *view, wxWindow *parentWindow);
    bool OnDisplayValue(wxProperty *property, wxPropertyFormView *view, wxWindow *parentWindow);
+
+ protected:
+  wxStringList*     m_strings;
 };
 
 /*
@@ -221,8 +226,6 @@ class wxStringFormValidator: public wxPropertyFormValidator
 class wxPropertyFormDialog: public wxDialog
 {
   DECLARE_CLASS(wxPropertyFormDialog)
- private:
-  wxPropertyFormView *view;
  public:
   wxPropertyFormDialog(wxPropertyFormView *v, wxWindow *parent, const wxString& title,
     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
@@ -233,6 +236,9 @@ class wxPropertyFormDialog: public wxDialog
 
   // Extend event processing to search the view's event table
   virtual bool ProcessEvent(wxEvent& event);
+
+ private:
+  wxPropertyFormView*       m_view;
 };
 
 /*
@@ -242,20 +248,21 @@ class wxPropertyFormDialog: public wxDialog
 class wxPropertyFormPanel: public wxPanel
 {
   DECLARE_CLASS(wxPropertyFormPanel)
- private:
-  wxPropertyFormView *view;
  public:
   wxPropertyFormPanel(wxPropertyFormView *v, wxWindow *parent, const wxPoint& pos = wxDefaultPosition,
     const wxSize& size = wxDefaultSize, long style = 0, const wxString& name = "panel"):
      wxPanel(parent, -1, pos, size, style, name)
   {
-    view = v;
+    m_view = v;
   }
   void OnDefaultAction(wxControl *item);
   void OnCommand(wxWindow& win, wxCommandEvent& event);
 
   // Extend event processing to search the view's event table
   virtual bool ProcessEvent(wxEvent& event);
+
+ private:
+  wxPropertyFormView*       m_view;
 };
 
 /*
@@ -265,24 +272,25 @@ class wxPropertyFormPanel: public wxPanel
 class wxPropertyFormFrame: public wxFrame
 {
   DECLARE_CLASS(wxPropertyFormFrame)
- private:
-  wxPropertyFormView *view;
-  wxPanel *propertyPanel;
  public:
   wxPropertyFormFrame(wxPropertyFormView *v, wxFrame *parent, const wxString& title,
     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
     long style = wxDEFAULT_FRAME, const wxString& name = "frame"):
      wxFrame(parent, -1, title, pos, size, style, name)
   {
-    view = v;
-    propertyPanel = NULL;
+    m_view = v;
+    m_propertyPanel = NULL;
   }
   bool OnClose(void);
 
   // Must call this to create panel and associate view
   virtual bool Initialize(void);
   virtual wxPanel *OnCreatePanel(wxFrame *parent, wxPropertyFormView *v);
-  inline virtual wxPanel *GetPropertyPanel(void) { return propertyPanel; }
+  inline virtual wxPanel *GetPropertyPanel(void) const { return m_propertyPanel; }
+
+ private:
+  wxPropertyFormView*       m_view;
+  wxPanel*                  m_propertyPanel;
 };
 
 #endif

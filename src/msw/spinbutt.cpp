@@ -47,8 +47,8 @@ bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, c
             long style, const wxString& name)
 {
   wxSystemSettings settings;
-  m_backgroundColour = parent->GetDefaultBackgroundColour() ;
-  m_foregroundColour = parent->GetDefaultForegroundColour() ;
+  m_backgroundColour = parent->GetBackgroundColour() ;
+  m_foregroundColour = parent->GetForegroundColour() ;
 
   SetName(name);
 

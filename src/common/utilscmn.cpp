@@ -240,19 +240,19 @@ static char hexArray[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A'
   'C', 'D', 'E', 'F' };
 
 // Convert 2-digit hex number to decimal
-int wxHexToDec(char *buf)
+int wxHexToDec(const wxString& buf)
 {
   int firstDigit, secondDigit;
   
-  if (buf[0] >= 'A')
-    firstDigit = buf[0] - 'A' + 10;
+  if (buf.GetChar(0) >= 'A')
+    firstDigit = buf.GetChar(0) - 'A' + 10;
   else
-    firstDigit = buf[0] - '0';
+    firstDigit = buf.GetChar(0) - '0';
 
-  if (buf[1] >= 'A')
-    secondDigit = buf[1] - 'A' + 10;
+  if (buf.GetChar(1) >= 'A')
+    secondDigit = buf.GetChar(1) - 'A' + 10;
   else
-    secondDigit = buf[1] - '0';
+    secondDigit = buf.GetChar(1) - '0';
     
   return firstDigit * 16 + secondDigit;
 }
@@ -265,6 +265,14 @@ void wxDecToHex(int dec, char *buf)
   buf[0] = hexArray[firstDigit];
   buf[1] = hexArray[secondDigit];
   buf[2] = 0;
+}
+
+// Convert decimal integer to 2-character hex string
+wxString wxDecToHex(int dec)
+{
+    char buf[3];
+    wxDecToHex(dec, buf);
+    return wxString(buf);
 }
 
 // Match a string INDEPENDENT OF CASE

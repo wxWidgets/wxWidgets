@@ -98,8 +98,8 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
   SetValidator(val);
 
   parent->AddChild(this);
-  m_backgroundColour = parent->GetDefaultBackgroundColour() ;
-  m_foregroundColour = parent->GetDefaultForegroundColour() ;
+  m_backgroundColour = parent->GetBackgroundColour() ;
+  m_foregroundColour = parent->GetForegroundColour() ;
 
   m_windowStyle = (long&)style;
 
@@ -207,8 +207,8 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
   SetValidator(val);
 
   parent->AddChild(this);
-  m_backgroundColour = parent->GetDefaultBackgroundColour() ;
-  m_foregroundColour = parent->GetDefaultForegroundColour() ;
+  m_backgroundColour = parent->GetBackgroundColour() ;
+  m_foregroundColour = parent->GetForegroundColour() ;
 
   m_windowStyle = (long&)style;
 

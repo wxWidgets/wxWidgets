@@ -48,7 +48,7 @@ wxResourceEditorProjectTree::wxResourceEditorProjectTree(wxWindow* parent, wxWin
 {
 }
 
-void wxResourceEditorProjectTree::LeftDClick(wxMouseEvent& event)
+void wxResourceEditorProjectTree::LeftDClick(wxMouseEvent& WXUNUSED(event))
 {
 #if 0
     long sel = GetSelection();
@@ -70,7 +70,7 @@ void wxResourceEditorProjectTree::LeftDClick(wxMouseEvent& event)
 #endif
 }
 
-void wxResourceEditorProjectTree::OnSelChanged(wxTreeEvent& event)
+void wxResourceEditorProjectTree::OnSelChanged(wxTreeEvent& WXUNUSED(event))
 {
     long sel = GetSelection();
     if (sel == -1)

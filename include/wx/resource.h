@@ -31,6 +31,17 @@
 #define RESOURCE_PLATFORM_MAC       3
 #define RESOURCE_PLATFORM_ANY       4
 
+// Extended styles: for resource usage only
+
+// Use dialog units instead of pixels
+#define wxRESOURCE_DIALOG_UNITS 1
+// Use default system colour and font
+#define wxRESOURCE_USE_DEFAULTS 2
+
+// Macros to help use dialog units
+#define wxDLG_POINT(x, y, parent, useDlgUnits) (useDlgUnits ? parent->ConvertDialogToPixel(wxPoint(x, y)) : wxPoint(x, y))
+#define wxDLG_SIZE(x, y, parent, useDlgUnits) (useDlgUnits ? parent->ConvertDialogToPixel(wxSize(x, y)) : wxSize(x, y))
+
 /*
  * Internal format for control/panel item
  */
@@ -39,71 +50,76 @@ class WXDLLEXPORT wxItemResource: public wxObject
 {
   DECLARE_DYNAMIC_CLASS(wxItemResource)
 
- protected:
-  wxList children;
-  char *itemType;
-  int x, y, width, height;
-  char *title;
-  char *name;
-  long windowStyle;
-  long value1, value2, value3, value5;
-  char *value4;
-  int   m_windowId;
-  wxStringList *stringValues; // Optional string values
-  wxBitmap *bitmap;
-  wxColour *backgroundColour;
-  wxColour *labelColour;
-  wxColour *buttonColour;
-  wxFont *windowFont;
  public:
  
-  wxItemResource(void);
-  ~wxItemResource(void);
+  wxItemResource();
+  ~wxItemResource();
 
-  void SetType(char *typ);
-  inline void SetStyle(long styl) { windowStyle = styl; }
+  inline void SetType(const wxString& type) { m_itemType = type; }
+  inline void SetStyle(long styl) { m_windowStyle = styl; }
   inline void SetId(int id) { m_windowId = id; }
-  inline void SetBitmap(wxBitmap *bm) { bitmap = bm; }
-  inline wxBitmap *GetBitmap(void) { return bitmap; }
-  inline void SetFont(wxFont *font) { windowFont = font; }
-  inline wxFont *GetFont(void) { return windowFont; }
+  inline void SetBitmap(const wxBitmap& bm) { m_bitmap = bm; }
+  inline wxBitmap& GetBitmap() const { return (wxBitmap&) m_bitmap; }
+  inline void SetFont(const wxFont& font) { m_windowFont = font; }
+  inline wxFont& GetFont() const { return (wxFont&) m_windowFont; }
   inline void SetSize(int xx, int yy, int ww, int hh)
-  {  x = xx; y = yy; width = ww; height = hh; }
-  void SetTitle(char *t);
-  void SetName(char *n);
-  inline void SetValue1(long v) { value1 = v; }
-  inline void SetValue2(long v) { value2 = v; }
-  inline void SetValue3(long v) { value3 = v; }
-  inline void SetValue5(long v) { value5 = v; }
-  void SetValue4(char *v);
-  void SetStringValues(wxStringList *svalues);
+  {  m_x = xx; m_y = yy; m_width = ww; m_height = hh; }
+  inline void SetTitle(const wxString& title) { m_title = title; }
+  inline void SetName(const wxString& name) { m_name = name; }
+  inline void SetValue1(long v) { m_value1 = v; }
+  inline void SetValue2(long v) { m_value2 = v; }
+  inline void SetValue3(long v) { m_value3 = v; }
+  inline void SetValue5(long v) { m_value5 = v; }
+  inline void SetValue4(const wxString& v) { m_value4 = v; }
+  inline void SetStringValues(const wxStringList& svalues) { m_stringValues = svalues; }
 
-  inline char *GetType(void) { return itemType; }
-  inline int GetX(void) { return x; }
-  inline int GetY(void) { return y; }
-  inline int GetWidth(void) { return width; }
-  inline int GetHeight(void) { return height; }
+  inline wxString GetType() const { return m_itemType; }
+  inline int GetX() const { return m_x; }
+  inline int GetY() const { return m_y; }
+  inline int GetWidth() const { return m_width; }
+  inline int GetHeight() const { return m_height; }
 
-  inline char *GetTitle(void) { return title; }
-  inline char *GetName(void) { return name; }
-  inline long GetStyle(void) { return windowStyle; }
-  inline int GetId(void) { return m_windowId; }
+  inline wxString GetTitle() const { return m_title; }
+  inline wxString GetName() const { return m_name; }
+  inline long GetStyle() const { return m_windowStyle; }
+  inline int GetId() const { return m_windowId; }
 
-  inline long GetValue1(void) { return value1; }
-  inline long GetValue2(void) { return value2; }
-  inline long GetValue3(void) { return value3; }
-  inline long GetValue5(void) { return value5; }
-  inline char *GetValue4(void) { return value4; }
-  inline wxList& GetChildren(void) { return children; }
-  inline wxStringList *GetStringValues(void) { return stringValues; }
+  inline long GetValue1() const { return m_value1; }
+  inline long GetValue2() const { return m_value2; }
+  inline long GetValue3() const { return m_value3; }
+  inline long GetValue5() const { return m_value5; }
+  inline wxString GetValue4() const { return m_value4; }
+  inline wxList& GetChildren() const { return (wxList&) m_children; }
+  inline wxStringList& GetStringValues() const { return (wxStringList&) m_stringValues; }
+
+  inline void SetBackgroundColour(const wxColour& col) { m_backgroundColour = col; }
+  inline void SetLabelColour(const wxColour& col) { m_labelColour = col; }
+  inline void SetButtonColour(const wxColour& col) { m_buttonColour = col; }
   
-  inline void SetBackgroundColour(wxColour *col) { if (backgroundColour) delete backgroundColour; backgroundColour = col; }
-  inline void SetLabelColour(wxColour *col) { if (labelColour) delete labelColour; labelColour = col; }
-  inline void SetButtonColour(wxColour *col) { if (buttonColour) delete buttonColour; buttonColour = col; }
-  
-  inline wxColour *GetBackgroundColour(void) { return backgroundColour; }
-  inline wxColour *GetLabelColour(void) { return labelColour; }
-  inline wxColour *GetButtonColour(void) { return buttonColour; }
+  inline wxColour& GetBackgroundColour() const { return (wxColour&) m_backgroundColour; }
+  inline wxColour& GetLabelColour() const { return (wxColour&) m_labelColour; }
+  inline wxColour& GetButtonColour() const { return (wxColour&) m_buttonColour; }
+
+  inline void SetResourceStyle(long style) { m_exStyle = style; }
+  inline long GetResourceStyle() const { return m_exStyle; }
+
+ protected:
+  wxList        m_children;
+  wxString      m_itemType;
+  int           m_x, m_y, m_width, m_height;
+  wxString      m_title;
+  wxString      m_name;
+  long          m_windowStyle;
+  long          m_value1, m_value2, m_value3, m_value5;
+  wxString      m_value4;
+  int           m_windowId;
+  wxStringList  m_stringValues; // Optional string values
+  wxBitmap      m_bitmap;
+  wxColour      m_backgroundColour;
+  wxColour      m_labelColour;
+  wxColour      m_buttonColour;
+  wxFont        m_windowFont;
+  long          m_exStyle; // Extended, resource-specific styles
 };
 
 /*
@@ -119,55 +135,55 @@ class WXDLLEXPORT wxResourceTable: public wxHashTable
   public:
     wxHashTable identifiers;
     
-    wxResourceTable(void);
-    ~wxResourceTable(void);
-    
+    wxResourceTable();
+    ~wxResourceTable();
+
     virtual wxItemResource *FindResource(const wxString& name) const;
     virtual void AddResource(wxItemResource *item);
     virtual bool DeleteResource(const wxString& name);
 
-    virtual bool ParseResourceFile(char *filename);
-    virtual bool ParseResourceData(char *data);
-    virtual bool SaveResource(char *filename);
+    virtual bool ParseResourceFile(const wxString& filename);
+    virtual bool ParseResourceData(const wxString& data);
+    virtual bool SaveResource(const wxString& filename);
 
     // Register XBM/XPM data
-    virtual bool RegisterResourceBitmapData(char *name, char bits[], int width, int height);
-    virtual bool RegisterResourceBitmapData(char *name, char **data);
+    virtual bool RegisterResourceBitmapData(const wxString& name, char bits[], int width, int height);
+    virtual bool RegisterResourceBitmapData(const wxString& name, char **data);
 
-    virtual wxControl *CreateItem(wxWindow *panel, wxItemResource *childResource) const;
+    virtual wxControl *CreateItem(wxWindow *panel, const wxItemResource* childResource, const wxItemResource* parentResource) const;
 
-    virtual void ClearTable(void);
+    virtual void ClearTable();
 };
 
-extern void WXDLLEXPORT wxInitializeResourceSystem(void);
-extern void WXDLLEXPORT wxCleanUpResourceSystem(void);
+extern void WXDLLEXPORT wxInitializeResourceSystem();
+extern void WXDLLEXPORT wxCleanUpResourceSystem();
 
 WXDLLEXPORT_DATA(extern wxResourceTable*) wxDefaultResourceTable;
-extern long WXDLLEXPORT wxParseWindowStyle(char *style);
+extern long WXDLLEXPORT wxParseWindowStyle(const wxString& style);
 
 class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxMenu;
 class WXDLLEXPORT wxBitmap;
 class WXDLLEXPORT wxIcon;
-extern wxBitmap* WXDLLEXPORT wxResourceCreateBitmap(char *resource, wxResourceTable *table = (wxResourceTable *) NULL);
-extern wxIcon* WXDLLEXPORT wxResourceCreateIcon(char *resource, wxResourceTable *table = (wxResourceTable *) NULL);
-extern wxMenuBar* WXDLLEXPORT wxResourceCreateMenuBar(char *resource, wxResourceTable *table = (wxResourceTable *) NULL, wxMenuBar *menuBar = (wxMenuBar *) NULL);
-extern wxMenu* WXDLLEXPORT wxResourceCreateMenu(char *resource, wxResourceTable *table = (wxResourceTable *) NULL);
-extern bool WXDLLEXPORT wxResourceParseData(char *resource, wxResourceTable *table = (wxResourceTable *) NULL);
-extern bool WXDLLEXPORT wxResourceParseFile(char *filename, wxResourceTable *table = (wxResourceTable *) NULL);
-extern bool WXDLLEXPORT wxResourceParseString(char *s, wxResourceTable *table = (wxResourceTable *) NULL);
+extern wxBitmap WXDLLEXPORT wxResourceCreateBitmap(const wxString& resource, wxResourceTable *table = (wxResourceTable *) NULL);
+extern wxIcon WXDLLEXPORT wxResourceCreateIcon(const wxString& resource, wxResourceTable *table = (wxResourceTable *) NULL);
+extern wxMenuBar* WXDLLEXPORT wxResourceCreateMenuBar(const wxString& resource, wxResourceTable *table = (wxResourceTable *) NULL, wxMenuBar *menuBar = (wxMenuBar *) NULL);
+extern wxMenu* WXDLLEXPORT wxResourceCreateMenu(const wxString& resource, wxResourceTable *table = (wxResourceTable *) NULL);
+extern bool WXDLLEXPORT wxResourceParseData(const wxString& resource, wxResourceTable *table = (wxResourceTable *) NULL);
+extern bool WXDLLEXPORT wxResourceParseFile(const wxString& filename, wxResourceTable *table = (wxResourceTable *) NULL);
+extern bool WXDLLEXPORT wxResourceParseString(const wxString& s, wxResourceTable *table = (wxResourceTable *) NULL);
 extern void WXDLLEXPORT wxResourceClear(wxResourceTable *table = (wxResourceTable *) NULL);
 // Register XBM/XPM data
-extern bool WXDLLEXPORT wxResourceRegisterBitmapData(char *name, char bits[], int width, int height, wxResourceTable *table = (wxResourceTable *) NULL);
-extern bool WXDLLEXPORT wxResourceRegisterBitmapData(char *name, char **data, wxResourceTable *table = (wxResourceTable *) NULL);
+extern bool WXDLLEXPORT wxResourceRegisterBitmapData(const wxString& name, char bits[], int width, int height, wxResourceTable *table = (wxResourceTable *) NULL);
+extern bool WXDLLEXPORT wxResourceRegisterBitmapData(const wxString& name, char **data, wxResourceTable *table = (wxResourceTable *) NULL);
 #define wxResourceRegisterIconData wxResourceRegisterBitmapData
 
 /*
  * Resource identifer code: #define storage
  */
 
-extern bool WXDLLEXPORT wxResourceAddIdentifier(char *name, int value, wxResourceTable *table = (wxResourceTable *) NULL);
-extern int WXDLLEXPORT wxResourceGetIdentifier(char *name, wxResourceTable *table = (wxResourceTable *) NULL);
+extern bool WXDLLEXPORT wxResourceAddIdentifier(const wxString& name, int value, wxResourceTable *table = (wxResourceTable *) NULL);
+extern int WXDLLEXPORT wxResourceGetIdentifier(const wxString& name, wxResourceTable *table = (wxResourceTable *) NULL);
 
 #endif
 #endif

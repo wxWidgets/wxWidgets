@@ -70,8 +70,8 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
   SetName(name);
   SetValidator(validator);
   if (parent) parent->AddChild(this);
-  SetBackgroundColour(parent->GetDefaultBackgroundColour()) ;
-  SetForegroundColour(parent->GetDefaultForegroundColour()) ;
+  SetBackgroundColour(parent->GetBackgroundColour()) ;
+  SetForegroundColour(parent->GetForegroundColour()) ;
   m_noStrings = n;
 
   m_windowStyle = style;

@@ -318,15 +318,6 @@ public:
   inline virtual void SetForegroundColour(const wxColour& col);
   inline virtual wxColour GetForegroundColour() const;
 
-  // Set/get window default background colour (for children to inherit).
-  // NOTE: these may be removed in later revisions.
-  inline virtual void SetDefaultBackgroundColour(const wxColour& col);
-  inline virtual wxColour GetDefaultBackgroundColour(void) const;
-
-  // Set/get window default foreground colour (for children to inherit)
-  inline virtual void SetDefaultForegroundColour(const wxColour& col);
-  inline virtual wxColour GetDefaultForegroundColour(void) const;
-
   // Get the default button, if there is one
   inline virtual wxButton *GetDefaultItem() const;
   inline virtual void SetDefaultItem(wxButton *but);
@@ -338,7 +329,8 @@ public:
   // Resource loading
 #if wxUSE_WX_RESOURCES
   virtual bool LoadFromResource(wxWindow *parent, const wxString& resourceName, const wxResourceTable *table = NULL);
-  virtual wxControl *CreateItem(const wxItemResource *childResource, const wxResourceTable *table = NULL);
+  virtual wxControl *CreateItem(const wxItemResource* childResource, const wxItemResource* parentResource,
+                                 const wxResourceTable *table = (const wxResourceTable *) NULL);
 #endif
 
   virtual void GetTextExtent(const wxString& string, int *x, int *y,
@@ -436,6 +428,14 @@ public:
   virtual void GetClientSizeConstraint(int *w, int *h) const ;
   virtual void GetPositionConstraint(int *x, int *y) const ;
 
+  // Dialog units translations. Implemented in wincmn.cpp.
+  wxPoint ConvertPixelsToDialog(const wxPoint& pt) ;
+  wxPoint ConvertDialogToPixels(const wxPoint& pt) ;
+  inline wxSize ConvertPixelsToDialog(const wxSize& sz)
+  { wxPoint pt(ConvertPixelsToDialog(wxPoint(sz.x, sz.y))); return wxSize(pt.x, pt.y); }
+  inline wxSize ConvertDialogToPixels(const wxSize& sz)
+  { wxPoint pt(ConvertDialogToPixels(wxPoint(sz.x, sz.y))); return wxSize(pt.x, pt.y); }
+
   wxObject *GetChild(int number) const ;
 
   // Generates a new id for controls
@@ -528,8 +528,6 @@ protected:
 
   wxColour              m_backgroundColour ;
   wxColour              m_foregroundColour ;
-  wxColour              m_defaultBackgroundColour;
-  wxColour              m_defaultForegroundColour;
   wxAcceleratorTable    m_acceleratorTable;
 
 #if wxUSE_DRAG_AND_DROP
@@ -598,10 +596,6 @@ inline void wxWindow::SetBackgroundColour(const wxColour& col) { m_backgroundCol
 inline wxColour wxWindow::GetBackgroundColour() const { return m_backgroundColour; };
 inline void wxWindow::SetForegroundColour(const wxColour& col) { m_foregroundColour = col; };
 inline wxColour wxWindow::GetForegroundColour() const { return m_foregroundColour; };
-inline void wxWindow::SetDefaultForegroundColour(const wxColour& col) { m_defaultForegroundColour = col; };
-inline wxColour wxWindow::GetDefaultForegroundColour(void) const { return m_defaultForegroundColour; };
-inline void wxWindow::SetDefaultBackgroundColour(const wxColour& col) { m_defaultBackgroundColour = col; };
-inline wxColour wxWindow::GetDefaultBackgroundColour(void) const { return m_defaultBackgroundColour; };
 
 inline wxButton *wxWindow::GetDefaultItem() const { return m_defaultItem; }
 inline void wxWindow::SetDefaultItem(wxButton *but) { m_defaultItem = but; }

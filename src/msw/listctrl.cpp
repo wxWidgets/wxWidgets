@@ -126,7 +126,7 @@ bool wxListCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, con
 
   wxSystemSettings settings;
   SetBackgroundColour(settings.GetSystemColour(wxSYS_COLOUR_WINDOW));
-  SetForegroundColour(parent->GetDefaultForegroundColour());
+  SetForegroundColour(parent->GetForegroundColour());
 
   if (parent) parent->AddChild(this);
   

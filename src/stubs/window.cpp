@@ -75,10 +75,9 @@ wxWindow::wxWindow()
     m_caretWidth = 0; m_caretHeight = 0;
     m_caretEnabled = FALSE;
     m_caretShown = FALSE;
-    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW) ; ;
+    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE) ;
+    // m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW) ; ;
     m_foregroundColour = *wxBLACK;
-    m_defaultForegroundColour = *wxBLACK ;
-    m_defaultBackgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE) ;
 
 #if  wxUSE_DRAG_AND_DROP
     m_pDropTarget = NULL;
@@ -185,10 +184,9 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     else
 	m_windowId = id;
 
-    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW) ; ;
+    // m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW) ; ;
+    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE) ;
     m_foregroundColour = *wxBLACK;
-    m_defaultForegroundColour = *wxBLACK ;
-    m_defaultBackgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE) ;
 
     m_windowStyle = style;
 

@@ -70,7 +70,7 @@ bool wxResourceSymbolTable::ReadIncludeFile(const wxString& filename)
     str.UngetWriteBuf();
 
     // Look for #define occurrences
-    size_t pos = str.Find("#define");
+    int pos = str.Find("#define");
     while (pos != -1)
     {
         size_t len = str.Length();

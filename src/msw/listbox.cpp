@@ -160,7 +160,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 
   wxSystemSettings settings;
   SetBackgroundColour(settings.GetSystemColour(wxSYS_COLOUR_WINDOW));
-  SetForegroundColour(parent->GetDefaultForegroundColour());
+  SetForegroundColour(parent->GetForegroundColour());
 
   m_windowId = ( id == -1 ) ? (int)NewControlId() : id;
 
@@ -266,7 +266,7 @@ wxListBox::~wxListBox(void)
 void wxListBox::SetupColours(void)
 {
   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
-  SetForegroundColour(GetParent()->GetDefaultForegroundColour());
+  SetForegroundColour(GetParent()->GetForegroundColour());
 }
 
 void wxListBox::SetFirstItem(int N)

@@ -52,8 +52,8 @@ bool wxGauge95::Create(wxWindow *parent, wxWindowID id,
   m_rangeMax = range;
   m_gaugePos = 0;
 
-  SetBackgroundColour(parent->GetDefaultBackgroundColour()) ;
-  SetForegroundColour(parent->GetDefaultForegroundColour()) ;
+  SetBackgroundColour(parent->GetBackgroundColour()) ;
+  SetForegroundColour(parent->GetForegroundColour()) ;
 
   m_windowStyle = style;
 

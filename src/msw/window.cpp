@@ -238,10 +238,9 @@ wxWindow::wxWindow(void)
 
   wxSystemSettings settings;
 
-  m_backgroundColour = settings.GetSystemColour(wxSYS_COLOUR_WINDOW) ; ;
+  m_backgroundColour = settings.GetSystemColour(wxSYS_COLOUR_3DFACE) ;
+  // m_backgroundColour = settings.GetSystemColour(wxSYS_COLOUR_WINDOW) ; ;
   m_foregroundColour = *wxBLACK;
-  m_defaultForegroundColour = *wxBLACK ;
-  m_defaultBackgroundColour = settings.GetSystemColour(wxSYS_COLOUR_3DFACE) ;
 
 /*
     wxColour(GetRValue(GetSysColor(COLOR_WINDOW)),
@@ -437,9 +436,8 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
   wxSystemSettings settings;
 
   m_backgroundColour = settings.GetSystemColour(wxSYS_COLOUR_WINDOW) ; ;
+  // m_backgroundColour = settings.GetSystemColour(wxSYS_COLOUR_3DFACE) ;
   m_foregroundColour = *wxBLACK;
-  m_defaultForegroundColour = *wxBLACK ;
-  m_defaultBackgroundColour = settings.GetSystemColour(wxSYS_COLOUR_3DFACE) ;
 
   m_windowStyle = style;
 

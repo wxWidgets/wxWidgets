@@ -40,15 +40,16 @@ private:
 class wxResourcePropertyListView: public wxPropertyListView
 {
  public:
-   wxPropertyInfo *propertyInfo;
-   
    wxResourcePropertyListView(wxPropertyInfo *info, wxPanel *propPanel = NULL, long flags = wxPROP_BUTTON_DEFAULT):
      wxPropertyListView(propPanel, flags)
    {
-     propertyInfo = info;
+     m_propertyInfo = info;
    }
    void OnPropertyChanged(wxProperty *property);
    bool OnClose(void);
+
+   wxPropertyInfo*      m_propertyInfo;
+
 };
 
 // Generic class for relating an object to a collection of properties.
@@ -76,9 +77,6 @@ class wxPropertyInfo: public wxObject
 // For all windows
 class wxWindowPropertyInfo: public wxPropertyInfo
 {
- protected:
-  wxWindow *propertyWindow;
-  wxItemResource *propertyResource;
  public:
   wxWindowPropertyInfo(wxWindow *win, wxItemResource *res = NULL);
   ~wxWindowPropertyInfo(void);
@@ -86,9 +84,9 @@ class wxWindowPropertyInfo: public wxPropertyInfo
   bool SetProperty(wxString& name, wxProperty *property);
   void GetPropertyNames(wxStringList& names);
   
-  inline void SetPropertyWindow(wxWindow *win) { propertyWindow = win; }
+  inline void SetPropertyWindow(wxWindow *win) { m_propertyWindow = win; }
   
-  inline void SetResource(wxItemResource *res) { propertyResource = res; }
+  inline void SetResource(wxItemResource *res) { m_propertyResource = res; }
   
   // Helper functions for font properties
   
@@ -100,6 +98,10 @@ class wxWindowPropertyInfo: public wxPropertyInfo
 
   // Set the window style
   void SetWindowStyle(wxWindow* win, long style, bool set);
+
+ protected:
+  wxWindow*         m_propertyWindow;
+  wxItemResource*   m_propertyResource;
 };
 
 // For panel items
@@ -338,6 +340,9 @@ class wxPanelPropertyInfo: public wxWindowPropertyInfo
   bool SetProperty(wxString& name, wxProperty *property);
   void GetPropertyNames(wxStringList& names);
   bool InstantiateResource(wxItemResource *resource);
+
+  // Convert this dialog, and its children, to or from dialog units
+  void ConvertDialogUnits(bool toDialogUnits);
 };
 
 int wxStringToFontWeight(wxString& val);

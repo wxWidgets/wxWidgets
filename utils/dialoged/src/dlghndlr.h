@@ -50,6 +50,7 @@ DECLARE_CLASS(wxResourceEditorDialogHandler)
 
   void OnPaint(wxPaintEvent& event);
   void OnMouseEvent(wxMouseEvent& event);
+  void OnSize(wxSizeEvent& event);
 
   virtual void OnItemEvent(wxControl *win, wxMouseEvent& event);
   virtual void OnLeftClick(int x, int y, int keys);

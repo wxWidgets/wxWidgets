@@ -43,27 +43,27 @@
 #include "reseditr.h"
 
 char *SafeString(char *s);
-char *SafeWord(char *s);
+char *SafeWord(const wxString& s);
 
 // Save an association between the child resource and the panel item, to allow
 // us not to require unique window names.
-wxControl *wxResourceTableWithSaving::CreateItem(wxPanel *panel, wxItemResource *childResource)
+wxControl *wxResourceTableWithSaving::CreateItem(wxPanel *panel, const wxItemResource *childResource, const wxItemResource* parentResource)
 {
-  wxControl *item = wxResourceTable::CreateItem(panel, childResource);
+  wxControl *item = wxResourceTable::CreateItem(panel, childResource, parentResource);
   if (item)
     wxResourceManager::GetCurrentResourceManager()->GetResourceAssociations().Put((long)childResource, item);
   return item;
 }
 
-void wxResourceTableWithSaving::OutputFont(ostream& stream, wxFont *font)
+void wxResourceTableWithSaving::OutputFont(ostream& stream, const wxFont& font)
 {
-  stream << "[" << font->GetPointSize() << ", '";
-  stream << font->GetFamilyString() << "', '";
-  stream << font->GetStyleString() << "', '";
-  stream << font->GetWeightString() << "', ";
-  stream << (int)font->GetUnderlined();
-  if (font->GetFaceName() != "")
-    stream << ", '" << font->GetFaceName() << "'";
+  stream << "[" << font.GetPointSize() << ", '";
+  stream << font.GetFamilyString() << "', '";
+  stream << font.GetStyleString() << "', '";
+  stream << font.GetWeightString() << "', ";
+  stream << (int)font.GetUnderlined();
+  if (font.GetFaceName() != "")
+    stream << ", '" << font.GetFaceName() << "'";
   stream << "]";
 }
 
@@ -79,21 +79,21 @@ bool wxResourceTableWithSaving::Save(const wxString& filename)
     
   BeginFind();
   wxNode *node = NULL;
-  while (node = Next())
+  while ((node = Next()))
   {
     wxItemResource *item = (wxItemResource *)node->Data();
     wxString resType(item->GetType());
     
     if (resType == "wxDialogBox" || resType == "wxDialog" || resType == "wxPanel" || resType == "wxBitmap")
     {
-      if (!SaveResource(stream, item))
+      if (!SaveResource(stream, item, (wxItemResource*) NULL))
         return FALSE;
     }
   }
   return TRUE;
 }
 
-bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *item)
+bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource* item, wxItemResource* parentItem)
 {
   char styleBuf[400];
   wxString itemType(item->GetType());
@@ -110,6 +110,7 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
         stream << "static char *" << item->GetName() << " = \"panel(name = '" << item->GetName() << "',\\\n";
         GenerateDialogStyleString(item->GetStyle(), styleBuf);
       }
+
       stream << "  style = '" << styleBuf << "',\\\n";
       stream << "  title = '" << item->GetTitle() << "',\\\n";
       stream << "  id = " << item->GetId() << ",\\\n";
@@ -118,19 +119,29 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
 
       if (1) // item->GetStyle() & wxNO_3D)
       {
-        if (item->GetBackgroundColour())
+        if (item->GetBackgroundColour().Ok())
         {
           char buf[7];
-          wxDecToHex(item->GetBackgroundColour()->Red(), buf);
-          wxDecToHex(item->GetBackgroundColour()->Green(), buf+2);
-          wxDecToHex(item->GetBackgroundColour()->Blue(), buf+4);
+          wxDecToHex(item->GetBackgroundColour().Red(), buf);
+          wxDecToHex(item->GetBackgroundColour().Green(), buf+2);
+          wxDecToHex(item->GetBackgroundColour().Blue(), buf+4);
           buf[6] = 0;
 
           stream << ",\\\n  " << "background_colour = '" << buf << "'";
         }
       }
+
+      int dialogUnits = 0;
+      int useDefaults = 0;
+      if ((item->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS) != 0)
+        dialogUnits = 1;
+      if ((item->GetResourceStyle() & wxRESOURCE_USE_DEFAULTS) != 0)
+        useDefaults = 1;
+
+      stream << ",\\\n  " << "use_dialog_units = " << dialogUnits;
+      stream << ",\\\n  " << "use_system_defaults = " << useDefaults;
       
-      if (item->GetFont() && item->GetFont()->Ok())
+      if (item->GetFont().Ok())
       {
         stream << ",\\\n  font = ";
         OutputFont(stream, item->GetFont());
@@ -147,7 +158,7 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
         
         stream << "  control = [";
         
-        SaveResource(stream, child);
+        SaveResource(stream, child, item);
 
         stream << "]";
 
@@ -165,7 +176,7 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
       stream << item->GetWidth() << ", " << item->GetHeight();
       if (item->GetValue4())
         stream << ", '" << item->GetValue4() << "'";
-      if (item->GetFont())
+      if (item->GetFont().Ok())
       {
         stream << ",\\\n      ";
         OutputFont(stream, item->GetFont());
@@ -179,7 +190,7 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
       stream << item->GetWidth() << ", " << item->GetHeight();
       if (item->GetValue4())
         stream << ", '" << item->GetValue4() << "'";
-      if (item->GetFont())
+      if (item->GetFont().Ok())
       {
         stream << ",\\\n      ";
         OutputFont(stream, item->GetFont());
@@ -192,7 +203,7 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
       stream << SafeWord(item->GetName()) << ", " << item->GetX() << ", " << item->GetY() << ", ";
       stream << item->GetWidth() << ", " << item->GetHeight();
       stream << ", " << item->GetValue1();
-      if (item->GetFont())
+      if (item->GetFont().Ok())
       {
         stream << ",\\\n      ";
         OutputFont(stream, item->GetFont());
@@ -205,7 +216,7 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
       stream << SafeWord(item->GetName()) << ", " << item->GetX() << ", " << item->GetY() << ", ";
       stream << item->GetWidth() << ", " << item->GetHeight();
       stream << ", " << item->GetValue1();
-      if (item->GetFont())
+      if (item->GetFont().Ok())
       {
         stream << ",\\\n      ";
         OutputFont(stream, item->GetFont());
@@ -217,7 +228,7 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
       stream << item->GetId() << ", " << "wxStaticBox, " << SafeWord(item->GetTitle()) << ", '" << styleBuf << "', ";
       stream << SafeWord(item->GetName()) << ", " << item->GetX() << ", " << item->GetY() << ", ";
       stream << item->GetWidth() << ", " << item->GetHeight();
-      if (item->GetFont())
+      if (item->GetFont().Ok())
       {
         stream << ",\\\n      ";
         OutputFont(stream, item->GetFont());
@@ -231,7 +242,7 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
       stream << SafeWord(item->GetName()) << ", " << item->GetX() << ", " << item->GetY() << ", ";
       stream << item->GetWidth() << ", " << item->GetHeight();
       stream << ", " << SafeWord(item->GetValue4());
-      if (item->GetFont())
+      if (item->GetFont().Ok())
       {
         stream << ",\\\n      ";
         OutputFont(stream, item->GetFont());
@@ -244,7 +255,7 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
       stream << SafeWord(item->GetName()) << ", " << item->GetX() << ", " << item->GetY() << ", ";
       stream << item->GetWidth() << ", " << item->GetHeight();
       stream << ", " << item->GetValue1() << ", " << item->GetValue2();
-      if (item->GetFont())
+      if (item->GetFont().Ok())
       {
         stream << ",\\\n      ";
         OutputFont(stream, item->GetFont());
@@ -257,7 +268,7 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
       stream << SafeWord(item->GetName()) << ", " << item->GetX() << ", " << item->GetY() << ", ";
       stream << item->GetWidth() << ", " << item->GetHeight();
       stream << ", " << item->GetValue1() << ", " << item->GetValue2() << ", " << item->GetValue3();
-      if (item->GetFont())
+      if (item->GetFont().Ok())
       {
         stream << ",\\\n      ";
         OutputFont(stream, item->GetFont());
@@ -282,9 +293,9 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
       // Default list of values
 
       stream << ", [";
-      if (item->GetStringValues())
+      if (item->GetStringValues().Number() > 0)
       {
-        wxNode *node = item->GetStringValues()->First();
+        wxNode *node = item->GetStringValues().First();
         while (node)
         {
           char *s = (char *)node->Data();
@@ -314,7 +325,7 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
           break;
         }
       }
-      if (item->GetFont())
+      if (item->GetFont().Ok())
       {
         stream << ",\\\n      ";
         OutputFont(stream, item->GetFont());
@@ -334,9 +345,9 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
       // Default list of values
 
       stream << ", [";
-      if (item->GetStringValues())
+      if (item->GetStringValues().Number() > 0)
       {
-        wxNode *node = item->GetStringValues()->First();
+        wxNode *node = item->GetStringValues().First();
         while (node)
         {
           char *s = (char *)node->Data();
@@ -347,7 +358,7 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
         }
       }
       stream << "]";
-      if (item->GetFont())
+      if (item->GetFont().Ok())
       {
         stream << ",\\\n      ";
         OutputFont(stream, item->GetFont());
@@ -364,9 +375,9 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
       // Default list of values
 
       stream << ", [";
-      if (item->GetStringValues())
+      if (item->GetStringValues().Number() > 0)
       {
-        wxNode *node = item->GetStringValues()->First();
+        wxNode *node = item->GetStringValues().First();
         while (node)
         {
           char *s = (char *)node->Data();
@@ -377,7 +388,7 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
         }
       }
       stream << "], " << item->GetValue1();
-      if (item->GetFont())
+      if (item->GetFont().Ok())
       {
         stream << ",\\\n      ";
         OutputFont(stream, item->GetFont());
@@ -552,9 +563,9 @@ void wxResourceTableWithSaving::GenerateControlStyleString(const wxString& windo
 }
 
 // Returns quoted string or "NULL"
-char *SafeString(char *s)
+char *SafeString(const wxString& s)
 {
-  if (!s)
+  if (s == "")
     return "NULL";
   else
   {
@@ -566,14 +577,14 @@ char *SafeString(char *s)
 }
 
 // Returns quoted string or ''
-char *SafeWord(char *s)
+char *SafeWord(const wxString& s)
 {
-  if (!s)
+  if (s == "")
     return "''";
   else
   {
     strcpy(wxBuffer, "'");
-    strcat(wxBuffer, s);
+    strcat(wxBuffer, (const char*) s);
     strcat(wxBuffer, "'");
     return wxBuffer;
   }

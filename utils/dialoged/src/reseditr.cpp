@@ -515,7 +515,7 @@ bool wxResourceManager::DisassociateWindows()
 {
   m_resourceTable.BeginFind();
   wxNode *node;
-  while (node = m_resourceTable.Next())
+  while ((node = m_resourceTable.Next()))
   {
     wxItemResource *res = (wxItemResource *)node->Data();
     DisassociateResource(res);
@@ -541,7 +541,7 @@ void wxResourceManager::AssociateResource(wxItemResource *resource, wxWindow *wi
     else
     {
       char buf[200];
-      sprintf(buf, "AssociateResource: cannot find child window %s", child->GetName() ? child->GetName() : "(unnamed)");
+      sprintf(buf, "AssociateResource: cannot find child window %s", child->GetName() ? (const char*) child->GetName() : "(unnamed)");
       wxMessageBox(buf, "Dialog Editor problem", wxOK);
     }
 
@@ -644,7 +644,7 @@ wxItemResource *wxResourceManager::FindResourceForWindow(wxWindow *win)
 {
   m_resourceAssociations.BeginFind();
   wxNode *node;
-  while (node = m_resourceAssociations.Next())
+  while ((node = m_resourceAssociations.Next()))
   {
     wxWindow *w = (wxWindow *)node->Data();
     if (w == win)
@@ -675,8 +675,10 @@ void wxResourceManager::MakeUniqueName(char *prefix, char *buf)
 
 wxFrame *wxResourceManager::OnCreateEditorFrame(const char *title)
 {
+  /*
   int frameWidth = 420;
   int frameHeight = 300;
+  */
   
   wxResourceEditorFrame *frame = new wxResourceEditorFrame(this, NULL, title,
     wxPoint(m_resourceEditorWindowSize.x, m_resourceEditorWindowSize.y),
@@ -849,7 +851,7 @@ void wxResourceManager::UpdateResourceList()
 
   m_resourceTable.BeginFind();
   wxNode *node;
-  while (node = m_resourceTable.Next())
+  while ((node = m_resourceTable.Next()))
   {
     wxItemResource *res = (wxItemResource *)node->Data();
     wxString resType(res->GetType());
@@ -956,6 +958,8 @@ bool wxResourceManager::CreateNewPanel()
   resource->SetType("wxDialog");
   resource->SetName(buf);
   resource->SetTitle(buf);
+  resource->SetResourceStyle(wxRESOURCE_USE_DEFAULTS);
+  resource->SetResourceStyle(wxRESOURCE_DIALOG_UNITS);
 
   wxString newIdName;
   int id = GenerateWindowId("ID_DIALOG", newIdName);
@@ -966,13 +970,19 @@ bool wxResourceManager::CreateNewPanel()
 
   m_resourceTable.AddResource(resource);
 
+  wxSize size(400, 300);
+
   wxPanel *panel = new wxPanel(m_editorPanel, -1,
      wxPoint(m_editorPanel->GetMarginX(), m_editorPanel->GetMarginY()),
-     wxSize(400, 300), wxRAISED_BORDER|wxDEFAULT_DIALOG_STYLE, buf);
+     size, wxRAISED_BORDER|wxDEFAULT_DIALOG_STYLE, buf);
   m_editorPanel->m_childWindow = panel;
 
   resource->SetStyle(panel->GetWindowStyleFlag());
-  resource->SetSize(10, 10, 400, 300);
+
+  // Store dialog units in resource
+  size = panel->ConvertPixelsToDialog(size);
+
+  resource->SetSize(10, 10, size.x, size.y);
 
   // For editing in situ we will need to use the hash table to ensure
   // we don't dereference invalid pointers.
@@ -1006,7 +1016,14 @@ bool wxResourceManager::CreatePanelItem(wxItemResource *panelResource, wxPanel *
   
   wxItemResource *res = new wxItemResource;
   wxControl *newItem = NULL;
-  res->SetSize(x, y, -1, -1);
+
+  if ((panelResource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS) != 0)
+  {
+    wxPoint pt = panel->ConvertPixelsToDialog(pt);
+    res->SetSize(pt.x, pt.y, -1, -1);
+  }
+  else res->SetSize(x, y, -1, -1);
+
   res->SetType(iType);
 
   wxString prefix;
@@ -1069,7 +1086,7 @@ bool wxResourceManager::CreatePanelItem(wxItemResource *panelResource, wxPanel *
       wxString names[] = { "One", "Two" };
       newItem = new wxRadioBox(panel, -1, "Radiobox", wxPoint(x, y), wxSize(-1, -1), 2, names, 2,
 	     wxHORIZONTAL, wxDefaultValidator, buf);
-      res->SetStringValues(new wxStringList("One", "Two", NULL));
+      res->SetStringValues(wxStringList("One", "Two", NULL));
     }
   else if (itemType == "wxRadioButton")
     {
@@ -1183,16 +1200,13 @@ bool wxResourceManager::TestCurrentDialog(wxWindow* parent)
     InstantiateResourceFromWindow(item, m_editorPanel->m_childWindow, TRUE);
 
     wxDialog* dialog = new wxDialog;
-    long oldStyle = item->GetStyle();
     bool success = FALSE;
-//    item->SetStyle(wxDEFAULT_DIALOG_STYLE);
     if (dialog->LoadFromResource(parent, item->GetName(), & m_resourceTable))
     {
         dialog->Centre();
         dialog->ShowModal();
         success = TRUE;
     }
-//    item->SetStyle(oldStyle);
     return success;
   }
   return FALSE;
@@ -1204,7 +1218,7 @@ wxWindow *wxResourceManager::FindParentOfSelection()
 {
   m_resourceTable.BeginFind();
   wxNode *node;
-  while (node = m_resourceTable.Next())
+  while ((node = m_resourceTable.Next()))
   {
     wxItemResource *res = (wxItemResource *)node->Data();
     wxWindow *win = FindWindowForResource(res);
@@ -1246,7 +1260,7 @@ void wxResourceManager::AlignItems(int flag)
   int centreX = (int)(firstX + (firstW / 2));
   int centreY = (int)(firstY + (firstH / 2));
 
-  while (node = node->Next())
+  while ((node = node->Next()))
   {
     wxControl *item = (wxControl *)node->Data();
     if (item->GetParent() == win)
@@ -1325,10 +1339,8 @@ void wxResourceManager::CopySize()
   int firstW, firstH;
   firstSelection->GetPosition(&firstX, &firstY);
   firstSelection->GetSize(&firstW, &firstH);
-  int centreX = (int)(firstX + (firstW / 2));
-  int centreY = (int)(firstY + (firstH / 2));
 
-  while (node = node->Next())
+  while ((node = node->Next()))
   {
     wxControl *item = (wxControl *)node->Data();
     if (item->GetParent() == win)
@@ -1389,7 +1401,7 @@ bool wxResourceManager::RemoveResourceFromParent(wxItemResource *res)
 {
   m_resourceTable.BeginFind();
   wxNode *node;
-  while (node = m_resourceTable.Next())
+  while ((node = m_resourceTable.Next()))
   {
     wxItemResource *thisRes = (wxItemResource *)node->Data();
     if (thisRes->GetChildren().Member(res))
@@ -1420,11 +1432,13 @@ bool wxResourceManager::DeleteResource(wxItemResource *res)
   // If this is a button or message resource, delete the
   // associate bitmap resource if not being used.
   wxString resType(res->GetType());
-  
+
+/* shouldn't have to do this now bitmaps are ref-counted
   if ((resType == "wxMessage" || resType == "wxStaticBitmap" || resType == "wxButton" || resType == "wxBitmapButton") && res->GetValue4())
   {
     PossiblyDeleteBitmapResource(res->GetValue4());
   }
+*/
 
   // Remove symbol from table if appropriate
   if (!IsSymbolUsed(res, res->GetId()))
@@ -1467,7 +1481,7 @@ bool wxResourceManager::DeleteResource(wxWindow *win)
 
 // Will eventually have bitmap type information, for different
 // kinds of bitmap.
-char *wxResourceManager::AddBitmapResource(char *filename)
+wxString wxResourceManager::AddBitmapResource(const wxString& filename)
 {
   wxItemResource *resource = FindBitmapResourceByFilename(filename);
   if (!resource)
@@ -1496,11 +1510,11 @@ char *wxResourceManager::AddBitmapResource(char *filename)
   if (resource)
     return resource->GetName();
   else
-    return NULL;
+    return wxEmptyString;
 }
 
  // Delete the bitmap resource if it isn't being used by another resource.
-void wxResourceManager::PossiblyDeleteBitmapResource(char *resourceName)
+void wxResourceManager::PossiblyDeleteBitmapResource(const wxString& resourceName)
 {
   if (!IsBitmapResourceUsed(resourceName))
   {
@@ -1510,11 +1524,11 @@ void wxResourceManager::PossiblyDeleteBitmapResource(char *resourceName)
   }
 }
 
-bool wxResourceManager::IsBitmapResourceUsed(char *resourceName)
+bool wxResourceManager::IsBitmapResourceUsed(const wxString& resourceName)
 {
   m_resourceTable.BeginFind();
   wxNode *node;
-  while (node = m_resourceTable.Next())
+  while ((node = m_resourceTable.Next()))
   {
     wxItemResource *res = (wxItemResource *)node->Data();
     wxString resType(res->GetType());
@@ -1538,13 +1552,13 @@ bool wxResourceManager::IsBitmapResourceUsed(char *resourceName)
 }
 
 // Given a wxButton or wxMessage, find the corresponding bitmap filename.
-char *wxResourceManager::FindBitmapFilenameForResource(wxItemResource *resource)
+wxString wxResourceManager::FindBitmapFilenameForResource(wxItemResource *resource)
 {
-  if (!resource || !resource->GetValue4())
-    return NULL;
+  if (!resource || (resource->GetValue4() == ""))
+    return wxEmptyString;
   wxItemResource *bitmapResource = m_resourceTable.FindResource(resource->GetValue4());
   if (!bitmapResource)
-    return NULL;
+    return wxEmptyString;
 
   wxNode *node = bitmapResource->GetChildren().First();
   while (node)
@@ -1557,14 +1571,14 @@ char *wxResourceManager::FindBitmapFilenameForResource(wxItemResource *resource)
     
     node = node->Next();
   }
-  return NULL;
+  return wxEmptyString;
 }
 
-wxItemResource *wxResourceManager::FindBitmapResourceByFilename(char *filename)
+wxItemResource *wxResourceManager::FindBitmapResourceByFilename(const wxString& filename)
 {
   m_resourceTable.BeginFind();
   wxNode *node;
-  while (node = m_resourceTable.Next())
+  while ((node = m_resourceTable.Next()))
   {
     wxItemResource *res = (wxItemResource *)node->Data();
     wxString resType(res->GetType());
@@ -1591,7 +1605,7 @@ bool wxResourceManager::IsSymbolUsed(wxItemResource* thisResource, wxWindowID id
 {
   m_resourceTable.BeginFind();
   wxNode *node;
-  while (node = m_resourceTable.Next())
+  while ((node = m_resourceTable.Next()))
   {
     wxItemResource *res = (wxItemResource *)node->Data();
 
@@ -1634,7 +1648,7 @@ void wxResourceManager::ChangeIds(int oldId, int newId)
 {
   m_resourceTable.BeginFind();
   wxNode *node;
-  while (node = m_resourceTable.Next())
+  while ((node = m_resourceTable.Next()))
   {
     wxItemResource *res = (wxItemResource *)node->Data();
 
@@ -1666,7 +1680,7 @@ bool wxResourceManager::RepairResourceIds()
 
   m_resourceTable.BeginFind();
   wxNode *node;
-  while (node = m_resourceTable.Next())
+  while ((node = m_resourceTable.Next()))
   {
     wxItemResource *res = (wxItemResource *)node->Data();
     wxString resType(res->GetType());
@@ -1742,6 +1756,9 @@ wxWindow *wxResourceManager::RecreateWindowFromResource(wxWindow *win, wxWindowP
 
   wxWindow *newWin = NULL;
   wxWindow *parent = win->GetParent();
+  wxItemResource* parentResource = NULL;
+  if (parent)
+    FindResourceForWindow(parent);
   
   if (win->IsKindOf(CLASSINFO(wxPanel)))
   {
@@ -1755,7 +1772,7 @@ wxWindow *wxResourceManager::RecreateWindowFromResource(wxWindow *win, wxWindowP
         win->PopEventHandler(TRUE);
 
     DeleteWindow(win);
-    newWin = m_resourceTable.CreateItem((wxPanel *)parent, resource);
+    newWin = m_resourceTable.CreateItem((wxPanel *)parent, resource, parentResource);
     newWin->PushEventHandler(new wxResourceEditorControlHandler((wxControl*) newWin, (wxControl*) newWin));
     AssociateResource(resource, newWin);
     UpdateResourceList();
@@ -1811,7 +1828,7 @@ bool wxResourceManager::RecreateSelection()
   return TRUE;
 }
 
-bool wxResourceManager::EditDialog(wxDialog *dialog, wxWindow *parent)
+bool wxResourceManager::EditDialog(wxDialog *WXUNUSED(dialog), wxWindow *WXUNUSED(parent))
 {
   return FALSE;
 }
@@ -1822,7 +1839,7 @@ bool wxResourceManager::InstantiateAllResourcesFromWindows()
 {
   m_resourceTable.BeginFind();
   wxNode *node;
-  while (node = m_resourceTable.Next())
+  while ((node = m_resourceTable.Next()))
   {
     wxItemResource *res = (wxItemResource *)node->Data();
     wxString resType(res->GetType());
@@ -1861,7 +1878,7 @@ bool wxResourceManager::InstantiateResourceFromWindow(wxItemResource *resource, 
       if (!childWindow)
       {
         char buf[200];
-        sprintf(buf, "Could not find window %s", child->GetName());
+        sprintf(buf, "Could not find window %s", (const char*) child->GetName());
         wxMessageBox(buf, "Dialog Editor problem", wxOK);
       }
       else
@@ -2231,7 +2248,7 @@ EditorToolBar::EditorToolBar(wxFrame *frame, const wxPoint& pos, const wxSize& s
 {
 }
 
-bool EditorToolBar::OnLeftClick(int toolIndex, bool toggled)
+bool EditorToolBar::OnLeftClick(int toolIndex, bool WXUNUSED(toggled))
 {
   wxResourceManager *manager = wxResourceManager::GetCurrentResourceManager();
 

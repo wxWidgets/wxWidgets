@@ -44,124 +44,124 @@ IMPLEMENT_DYNAMIC_CLASS(wxPropertyValue, wxObject)
 
 wxPropertyValue::wxPropertyValue(void)
 {
-  type = wxPropertyValueNull;
-  next = NULL;
-  last = NULL;
-  value.first = NULL;
-  client_data = NULL;
-  modifiedFlag = FALSE;
+  m_type = wxPropertyValueNull;
+  m_next = NULL;
+  m_last = NULL;
+  m_value.first = NULL;
+  m_clientData = NULL;
+  m_modifiedFlag = FALSE;
 }
 
 wxPropertyValue::wxPropertyValue(const wxPropertyValue& copyFrom)
 {
-  modifiedFlag = FALSE;
+  m_modifiedFlag = FALSE;
   Copy((wxPropertyValue& )copyFrom);
 }
 
 wxPropertyValue::wxPropertyValue(const char *val)
 {
-  modifiedFlag = FALSE;
-  type = wxPropertyValueString;
+  m_modifiedFlag = FALSE;
+  m_type = wxPropertyValueString;
 
-  value.string = copystring(val);
-  client_data = NULL;
-  next = NULL;
-  last = NULL;
+  m_value.string = copystring(val);
+  m_clientData = NULL;
+  m_next = NULL;
+  m_last = NULL;
 }
 
 wxPropertyValue::wxPropertyValue(const wxString& val)
 {
-  modifiedFlag = FALSE;
-  type = wxPropertyValueString;
+  m_modifiedFlag = FALSE;
+  m_type = wxPropertyValueString;
 
-  value.string = copystring((const char *)val);
-  client_data = NULL;
-  next = NULL;
-  last = NULL;
+  m_value.string = copystring((const char *)val);
+  m_clientData = NULL;
+  m_next = NULL;
+  m_last = NULL;
 }
 
 wxPropertyValue::wxPropertyValue(long the_integer)
 {
-  modifiedFlag = FALSE;
-  type = wxPropertyValueInteger;
-  value.integer = the_integer;
-  client_data = NULL;
-  next = NULL;
+  m_modifiedFlag = FALSE;
+  m_type = wxPropertyValueInteger;
+  m_value.integer = the_integer;
+  m_clientData = NULL;
+  m_next = NULL;
 }
 
 wxPropertyValue::wxPropertyValue(bool val)
 {
-  modifiedFlag = FALSE;
-  type = wxPropertyValuebool;
-  value.integer = val;
-  client_data = NULL;
-  next = NULL;
+  m_modifiedFlag = FALSE;
+  m_type = wxPropertyValuebool;
+  m_value.integer = val;
+  m_clientData = NULL;
+  m_next = NULL;
 }
 
 wxPropertyValue::wxPropertyValue(float the_real)
 {
-  modifiedFlag = FALSE;
-  type = wxPropertyValueReal;
-  value.real = the_real;
-  client_data = NULL;
-  next = NULL;
+  m_modifiedFlag = FALSE;
+  m_type = wxPropertyValueReal;
+  m_value.real = the_real;
+  m_clientData = NULL;
+  m_next = NULL;
 }
 
 wxPropertyValue::wxPropertyValue(double the_real)
 {
-  modifiedFlag = FALSE;
-  type = wxPropertyValueReal;
-  value.real = (float)the_real;
-  client_data = NULL;
-  next = NULL;
+  m_modifiedFlag = FALSE;
+  m_type = wxPropertyValueReal;
+  m_value.real = (float)the_real;
+  m_clientData = NULL;
+  m_next = NULL;
 }
 
 // Pointer versions: we have a pointer to the real C++ value.
 wxPropertyValue::wxPropertyValue(char **val)
 {
-  modifiedFlag = FALSE;
-  type = wxPropertyValueStringPtr;
+  m_modifiedFlag = FALSE;
+  m_type = wxPropertyValueStringPtr;
 
-  value.stringPtr = val;
-  client_data = NULL;
-  next = NULL;
-  last = NULL;
+  m_value.stringPtr = val;
+  m_clientData = NULL;
+  m_next = NULL;
+  m_last = NULL;
 }
 
 wxPropertyValue::wxPropertyValue(long *val)
 {
-  modifiedFlag = FALSE;
-  type = wxPropertyValueIntegerPtr;
-  value.integerPtr = val;
-  client_data = NULL;
-  next = NULL;
+  m_modifiedFlag = FALSE;
+  m_type = wxPropertyValueIntegerPtr;
+  m_value.integerPtr = val;
+  m_clientData = NULL;
+  m_next = NULL;
 }
 
 wxPropertyValue::wxPropertyValue(bool *val)
 {
-  modifiedFlag = FALSE;
-  type = wxPropertyValueboolPtr;
-  value.boolPtr = val;
-  client_data = NULL;
-  next = NULL;
+  m_modifiedFlag = FALSE;
+  m_type = wxPropertyValueboolPtr;
+  m_value.boolPtr = val;
+  m_clientData = NULL;
+  m_next = NULL;
 }
 
 wxPropertyValue::wxPropertyValue(float *val)
 {
-  modifiedFlag = FALSE;
-  type = wxPropertyValueRealPtr;
-  value.realPtr = val;
-  client_data = NULL;
-  next = NULL;
+  m_modifiedFlag = FALSE;
+  m_type = wxPropertyValueRealPtr;
+  m_value.realPtr = val;
+  m_clientData = NULL;
+  m_next = NULL;
 }
 
 wxPropertyValue::wxPropertyValue(wxList *the_list)
 {
-  modifiedFlag = FALSE;
-  type = wxPropertyValueList;
-  client_data = NULL;
-  last = NULL;
-  value.first = NULL;
+  m_modifiedFlag = FALSE;
+  m_type = wxPropertyValueList;
+  m_clientData = NULL;
+  m_last = NULL;
+  m_value.first = NULL;
 
   wxNode *node = the_list->First();
   while (node)
@@ -176,11 +176,11 @@ wxPropertyValue::wxPropertyValue(wxList *the_list)
 
 wxPropertyValue::wxPropertyValue(wxStringList *the_list)
 {
-  modifiedFlag = FALSE;
-  type = wxPropertyValueList;
-  client_data = NULL;
-  last = NULL;
-  value.first = NULL;
+  m_modifiedFlag = FALSE;
+  m_type = wxPropertyValueList;
+  m_clientData = NULL;
+  m_last = NULL;
+  m_value.first = NULL;
 
   wxNode *node = the_list->First();
   while (node)
@@ -194,7 +194,7 @@ wxPropertyValue::wxPropertyValue(wxStringList *the_list)
 
 wxPropertyValue::~wxPropertyValue(void)
 {
-  switch (type)
+  switch (m_type)
   {
     case wxPropertyValueInteger:
     case wxPropertyValuebool:
@@ -204,15 +204,15 @@ wxPropertyValue::~wxPropertyValue(void)
     }
    case wxPropertyValueString:
    {
-     delete value.string;
+     delete m_value.string;
      break;
    }
    case wxPropertyValueList:
    {
-     wxPropertyValue *expr = value.first;
+     wxPropertyValue *expr = m_value.first;
      while (expr)
      {
-       wxPropertyValue *expr1 = expr->next;
+       wxPropertyValue *expr1 = expr->m_next;
 
        delete expr;
        expr = expr1;
@@ -226,23 +226,23 @@ wxPropertyValue::~wxPropertyValue(void)
 
 void wxPropertyValue::Append(wxPropertyValue *expr)
 {
-  modifiedFlag = TRUE;
-  if (!value.first)
-    value.first = expr;
+  m_modifiedFlag = TRUE;
+  if (!m_value.first)
+    m_value.first = expr;
 
-  if (last)
-    last->next = expr;
-  last = expr;
+  if (m_last)
+    m_last->m_next = expr;
+  m_last = expr;
 }
 
 void wxPropertyValue::Insert(wxPropertyValue *expr)
 {
-  modifiedFlag = TRUE;
-  expr->next = value.first;
-  value.first = expr;
+  m_modifiedFlag = TRUE;
+  expr->m_next = m_value.first;
+  m_value.first = expr;
 
-  if (!last)
-    last = expr;
+  if (!m_last)
+    m_last = expr;
 }
 
 // Delete from list
@@ -260,13 +260,13 @@ void wxPropertyValue::Delete(wxPropertyValue *node)
   if (expr)
   {
     if (previous)
-      previous->next = expr->next;
+      previous->m_next = expr->m_next;
       
     // If node was the first in the list,
     // make the list point to the NEXT one.
     if (GetFirst() == expr)
     {
-      value.first = expr->next;
+      m_value.first = expr->m_next;
     }
 
     // If node was the last in the list,
@@ -274,11 +274,11 @@ void wxPropertyValue::Delete(wxPropertyValue *node)
     if (GetLast() == expr)
     {
       if (previous)
-        last = previous;
+        m_last = previous;
       else
-        last = NULL;
+        m_last = NULL;
     }
-    modifiedFlag = TRUE;
+    m_modifiedFlag = TRUE;
     delete expr;
   }
 
@@ -288,51 +288,51 @@ void wxPropertyValue::ClearList(void)
 {
   wxPropertyValue *val = GetFirst();
   if (val)
-    modifiedFlag = TRUE;
-  
+    m_modifiedFlag = TRUE;
+
   while (val)
   {
     wxPropertyValue *next = val->GetNext();
     delete val;
     val = next;
   }
-  value.first = NULL;
-  last = NULL;
+  m_value.first = NULL;
+  m_last = NULL;
 }
 
-wxPropertyValue *wxPropertyValue::NewCopy(void)
+wxPropertyValue *wxPropertyValue::NewCopy(void) const
 {
-  switch (type)
+  switch (m_type)
   {
     case wxPropertyValueInteger:
-      return new wxPropertyValue(value.integer);
+      return new wxPropertyValue(m_value.integer);
     case wxPropertyValuebool:
-      return new wxPropertyValue((bool) (value.integer != 0));
+      return new wxPropertyValue((bool) (m_value.integer != 0));
     case wxPropertyValueReal:
-      return new wxPropertyValue(value.real);
+      return new wxPropertyValue(m_value.real);
     case wxPropertyValueString:
-      return new wxPropertyValue(value.string);
+      return new wxPropertyValue(m_value.string);
     case wxPropertyValueList:
     {
-      wxPropertyValue *expr = value.first;
+      wxPropertyValue *expr = m_value.first;
       wxPropertyValue *new_list = new wxPropertyValue;
       new_list->SetType(wxPropertyValueList);
       while (expr)
       {
         wxPropertyValue *expr2 = expr->NewCopy();
         new_list->Append(expr2);
-        expr = expr->next;
+        expr = expr->m_next;
       }
       return new_list;
     }
    case wxPropertyValueIntegerPtr:
-     return new wxPropertyValue(value.integerPtr);
+     return new wxPropertyValue(m_value.integerPtr);
    case wxPropertyValueRealPtr:
-     return new wxPropertyValue(value.realPtr);
+     return new wxPropertyValue(m_value.realPtr);
    case wxPropertyValueboolPtr:
-     return new wxPropertyValue(value.boolPtr);
+     return new wxPropertyValue(m_value.boolPtr);
    case wxPropertyValueStringPtr:
-     return new wxPropertyValue(value.stringPtr);
+     return new wxPropertyValue(m_value.stringPtr);
 
    case wxPropertyValueNull: 
 #ifdef __X__
@@ -345,9 +345,9 @@ wxPropertyValue *wxPropertyValue::NewCopy(void)
 
 void wxPropertyValue::Copy(wxPropertyValue& copyFrom)
 {
-  type = copyFrom.Type();
-  
-  switch (type)
+  m_type = copyFrom.Type();
+
+  switch (m_type)
   {
     case wxPropertyValueInteger:
       (*this) = copyFrom.IntegerValue();
@@ -384,15 +384,15 @@ void wxPropertyValue::Copy(wxPropertyValue& copyFrom)
       
     case wxPropertyValueList:
     {
-      value.first = NULL;
-      next = NULL;
-      last = NULL;
-      wxPropertyValue *expr = copyFrom.value.first;
+      m_value.first = NULL;
+      m_next = NULL;
+      m_last = NULL;
+      wxPropertyValue *expr = copyFrom.m_value.first;
       while (expr)
       {
         wxPropertyValue *expr2 = expr->NewCopy();
         Append(expr2);
-        expr = expr->next;
+        expr = expr->m_next;
       }
       return;
     }
@@ -405,29 +405,29 @@ void wxPropertyValue::Copy(wxPropertyValue& copyFrom)
 }
 
 // Return nth argument of a clause (starting from 1)
-wxPropertyValue *wxPropertyValue::Arg(wxPropertyValueType type, int arg)
+wxPropertyValue *wxPropertyValue::Arg(wxPropertyValueType type, int arg) const
 {
-  wxPropertyValue *expr = value.first;
+  wxPropertyValue *expr = m_value.first;
   for (int i = 1; i < arg; i++)
     if (expr)
-      expr = expr->next;
+      expr = expr->m_next;
 
-  if (expr && (expr->type == type))
+  if (expr && (expr->m_type == type))
     return expr;
   else
     return NULL;
 }
 
 // Return nth argument of a list expression (starting from zero)
-wxPropertyValue *wxPropertyValue::Nth(int arg)
+wxPropertyValue *wxPropertyValue::Nth(int arg) const
 {
-  if (type != wxPropertyValueList)
+  if (m_type != wxPropertyValueList)
     return NULL;
 
-  wxPropertyValue *expr = value.first;
+  wxPropertyValue *expr = m_value.first;
   for (int i = 0; i < arg; i++)
     if (expr)
-      expr = expr->next;
+      expr = expr->m_next;
     else return NULL;
 
   if (expr)
@@ -437,16 +437,16 @@ wxPropertyValue *wxPropertyValue::Nth(int arg)
 }
 
   // Returns the number of elements in a list expression
-int wxPropertyValue::Number(void)
+int wxPropertyValue::Number(void) const
 {
-  if (type != wxPropertyValueList)
+  if (m_type != wxPropertyValueList)
     return 0;
 
   int i = 0;
-  wxPropertyValue *expr = value.first;
+  wxPropertyValue *expr = m_value.first;
   while (expr)
   {
-    expr = expr->next;
+    expr = expr->m_next;
     i ++;
   }
   return i;
@@ -454,22 +454,22 @@ int wxPropertyValue::Number(void)
 
 void wxPropertyValue::WritePropertyClause(ostream& stream)  // Write this expression as a top-level clause
 {
-  if (type != wxPropertyValueList)
+  if (m_type != wxPropertyValueList)
     return;
 
-  wxPropertyValue *node = value.first;
+  wxPropertyValue *node = m_value.first;
   if (node)
   {
     node->WritePropertyType(stream);
     stream << "(";
-    node = node->next;
+    node = node->m_next;
     bool first = TRUE;
     while (node)
     {
       if (!first)
         stream << "  ";
       node->WritePropertyType(stream);
-      node = node->next;
+      node = node->m_next;
       if (node) stream << ",\n";
       first = FALSE;
     }
@@ -479,21 +479,21 @@ void wxPropertyValue::WritePropertyClause(ostream& stream)  // Write this expres
 
 void wxPropertyValue::WritePropertyType(ostream& stream)    // Write as any other subexpression
 {
-  switch (type)
+  switch (m_type)
   {
     case wxPropertyValueInteger:
     {
-      stream << value.integer;
+      stream << m_value.integer;
       break;
     }
     case wxPropertyValueIntegerPtr:
     {
-      stream << *value.integerPtr;
+      stream << *m_value.integerPtr;
       break;
     }
     case wxPropertyValuebool:
     {
-      if (value.integer)
+      if (m_value.integer)
         stream << "True";
       else
         stream << "False";
@@ -501,7 +501,7 @@ void wxPropertyValue::WritePropertyType(ostream& stream)    // Write as any othe
     }
     case wxPropertyValueboolPtr:
     {
-      if (*value.integerPtr)
+      if (*m_value.integerPtr)
         stream << "True";
       else
         stream << "False";
@@ -509,14 +509,14 @@ void wxPropertyValue::WritePropertyType(ostream& stream)    // Write as any othe
     }
     case wxPropertyValueReal:
     {
-      float f = value.real;
+      float f = m_value.real;
       sprintf(wxBuffer, "%.6g", (double)f);
       stream << wxBuffer;
       break;
     }
     case wxPropertyValueRealPtr:
     {
-      float f = *value.realPtr;
+      float f = *m_value.realPtr;
 /* Now the parser can cope with this.
       // Prevent printing in 'e' notation. Any better way?
       if (fabs(f) < 0.00001)
@@ -530,10 +530,10 @@ void wxPropertyValue::WritePropertyType(ostream& stream)    // Write as any othe
     {
 //      stream << "\"";
       int i;
-      int len = strlen(value.string);
+      int len = strlen(m_value.string);
       for (i = 0; i < len; i++)
       {
-        char ch = value.string[i];
+        char ch = m_value.string[i];
 //        if (ch == '"' || ch == '\\')
 //          stream << "\\";
         stream << ch;
@@ -545,27 +545,27 @@ void wxPropertyValue::WritePropertyType(ostream& stream)    // Write as any othe
     case wxPropertyValueStringPtr:
     {
       int i;
-      int len = strlen(*(value.stringPtr));
+      int len = strlen(*(m_value.stringPtr));
       for (i = 0; i < len; i++)
       {
-        char ch = *(value.stringPtr)[i];
+        char ch = *(m_value.stringPtr)[i];
 
       }
       break;
     }
     case wxPropertyValueList:
     {
-      if (!value.first)
+      if (!m_value.first)
         stream << "[]";
       else
       {
-        wxPropertyValue *expr = value.first;
+        wxPropertyValue *expr = m_value.first;
 
         stream << "[";
         while (expr)
         {
           expr->WritePropertyType(stream);
-          expr = expr->next;
+          expr = expr->m_next;
           if (expr) stream << ", ";
         }
         stream << "]";
@@ -592,7 +592,7 @@ wxString wxPropertyValue::GetStringRepresentation(void)
 
 void wxPropertyValue::operator=(const wxPropertyValue& val)
 {
-  modifiedFlag = TRUE;
+  m_modifiedFlag = TRUE;
   Copy((wxPropertyValue&)val);
 }
 
@@ -601,195 +601,195 @@ void wxPropertyValue::operator=(const wxString& val1)
 {
   const char *val = (const char *)val1;
 
-  modifiedFlag = TRUE;
-  if (type == wxPropertyValueNull)
-    type = wxPropertyValueString;
+  m_modifiedFlag = TRUE;
+  if (m_type == wxPropertyValueNull)
+    m_type = wxPropertyValueString;
 
-  if (type == wxPropertyValueString)
+  if (m_type == wxPropertyValueString)
   {
     if (val)
-      value.string = copystring(val);
+      m_value.string = copystring(val);
     else
-      value.string = NULL;
+      m_value.string = NULL;
   }
-  else if (type == wxPropertyValueStringPtr)
+  else if (m_type == wxPropertyValueStringPtr)
   {
-    if (*value.stringPtr)
-      delete[] *value.stringPtr;
+    if (*m_value.stringPtr)
+      delete[] *m_value.stringPtr;
     if (val)
-      *value.stringPtr = copystring(val);
+      *m_value.stringPtr = copystring(val);
     else
-      *value.stringPtr = NULL;
+      *m_value.stringPtr = NULL;
   }
   
-  client_data = NULL;
-  next = NULL;
-  last = NULL;
+  m_clientData = NULL;
+  m_next = NULL;
+  m_last = NULL;
 
 }
 
 void wxPropertyValue::operator=(const long val)
 {
-  modifiedFlag = TRUE;
-  if (type == wxPropertyValueNull)
-    type = wxPropertyValueInteger;
+  m_modifiedFlag = TRUE;
+  if (m_type == wxPropertyValueNull)
+    m_type = wxPropertyValueInteger;
 
-  if (type == wxPropertyValueInteger)
-    value.integer = val;
-  else if (type == wxPropertyValueIntegerPtr)
-    *value.integerPtr = val;
-  else if (type == wxPropertyValueReal)
-    value.real = (float)val;
-  else if (type == wxPropertyValueRealPtr)
-    *value.realPtr = (float)val;
-  
-  client_data = NULL;
-  next = NULL;
+  if (m_type == wxPropertyValueInteger)
+    m_value.integer = val;
+  else if (m_type == wxPropertyValueIntegerPtr)
+    *m_value.integerPtr = val;
+  else if (m_type == wxPropertyValueReal)
+    m_value.real = (float)val;
+  else if (m_type == wxPropertyValueRealPtr)
+    *m_value.realPtr = (float)val;
+
+  m_clientData = NULL;
+  m_next = NULL;
 }
 
 void wxPropertyValue::operator=(const bool val)
 {
-  modifiedFlag = TRUE;
-  if (type == wxPropertyValueNull)
-    type = wxPropertyValuebool;
+  m_modifiedFlag = TRUE;
+  if (m_type == wxPropertyValueNull)
+    m_type = wxPropertyValuebool;
 
-  if (type == wxPropertyValuebool)
-    value.integer = (long)val;
-  else if (type == wxPropertyValueboolPtr)
-    *value.boolPtr = val;
+  if (m_type == wxPropertyValuebool)
+    m_value.integer = (long)val;
+  else if (m_type == wxPropertyValueboolPtr)
+    *m_value.boolPtr = val;
 
-  client_data = NULL;
-  next = NULL;
+  m_clientData = NULL;
+  m_next = NULL;
 }
 
 void wxPropertyValue::operator=(const float val)
 {
-  modifiedFlag = TRUE;
-  if (type == wxPropertyValueNull)
-    type = wxPropertyValueReal;
+  m_modifiedFlag = TRUE;
+  if (m_type == wxPropertyValueNull)
+    m_type = wxPropertyValueReal;
 
-  if (type == wxPropertyValueInteger)
-    value.integer = (long)val;
-  else if (type == wxPropertyValueIntegerPtr)
-    *value.integerPtr = (long)val;
-  else if (type == wxPropertyValueReal)
-    value.real = val;
-  else if (type == wxPropertyValueRealPtr)
-    *value.realPtr = val;
-    
-  client_data = NULL;
-  next = NULL;
+  if (m_type == wxPropertyValueInteger)
+    m_value.integer = (long)val;
+  else if (m_type == wxPropertyValueIntegerPtr)
+    *m_value.integerPtr = (long)val;
+  else if (m_type == wxPropertyValueReal)
+    m_value.real = val;
+  else if (m_type == wxPropertyValueRealPtr)
+    *m_value.realPtr = val;
+
+  m_clientData = NULL;
+  m_next = NULL;
 }
 
 void wxPropertyValue::operator=(const char **val)
 {
-  modifiedFlag = TRUE;
-  type = wxPropertyValueStringPtr;
+  m_modifiedFlag = TRUE;
+  m_type = wxPropertyValueStringPtr;
 
   if (val)
-    value.stringPtr = (char **)val;
+    m_value.stringPtr = (char **)val;
   else
-    value.stringPtr = NULL;
-  client_data = NULL;
-  next = NULL;
-  last = NULL;
+    m_value.stringPtr = NULL;
+  m_clientData = NULL;
+  m_next = NULL;
+  m_last = NULL;
 
 }
 
 void wxPropertyValue::operator=(const long *val)
 {
-  modifiedFlag = TRUE;
-  type = wxPropertyValueIntegerPtr;
-  value.integerPtr = (long *)val;
-  client_data = NULL;
-  next = NULL;
+  m_modifiedFlag = TRUE;
+  m_type = wxPropertyValueIntegerPtr;
+  m_value.integerPtr = (long *)val;
+  m_clientData = NULL;
+  m_next = NULL;
 }
 
 void wxPropertyValue::operator=(const bool *val)
 {
-  modifiedFlag = TRUE;
-  type = wxPropertyValueboolPtr;
-  value.boolPtr = (bool *)val;
-  client_data = NULL;
-  next = NULL;
+  m_modifiedFlag = TRUE;
+  m_type = wxPropertyValueboolPtr;
+  m_value.boolPtr = (bool *)val;
+  m_clientData = NULL;
+  m_next = NULL;
 }
 
 void wxPropertyValue::operator=(const float *val)
 {
-  modifiedFlag = TRUE;
-  type = wxPropertyValueRealPtr;
-  value.realPtr = (float *)val;
-  client_data = NULL;
-  next = NULL;
+  m_modifiedFlag = TRUE;
+  m_type = wxPropertyValueRealPtr;
+  m_value.realPtr = (float *)val;
+  m_clientData = NULL;
+  m_next = NULL;
 }
 
-long wxPropertyValue::IntegerValue(void)
+long wxPropertyValue::IntegerValue(void) const
   {
-    if (type == wxPropertyValueInteger)
-      return value.integer;
-    else if (type == wxPropertyValueReal)
-      return (long)value.real;
-    else if (type == wxPropertyValueIntegerPtr)
-      return *value.integerPtr;
-    else if (type == wxPropertyValueRealPtr)
-      return (long)(*value.realPtr);
+    if (m_type == wxPropertyValueInteger)
+      return m_value.integer;
+    else if (m_type == wxPropertyValueReal)
+      return (long)m_value.real;
+    else if (m_type == wxPropertyValueIntegerPtr)
+      return *m_value.integerPtr;
+    else if (m_type == wxPropertyValueRealPtr)
+      return (long)(*m_value.realPtr);
     else return 0;
   }
 
-long *wxPropertyValue::IntegerValuePtr(void)
+long *wxPropertyValue::IntegerValuePtr(void) const
 {
-  return value.integerPtr;
+  return m_value.integerPtr;
 }
 
-float wxPropertyValue::RealValue(void) {
-    if (type == wxPropertyValueReal)
-      return value.real;
-    else if (type == wxPropertyValueRealPtr)
-      return *value.realPtr;
-    else if (type == wxPropertyValueInteger)
-      return (float)value.integer;
-    else if (type == wxPropertyValueIntegerPtr)
-      return (float)*(value.integerPtr);
+float wxPropertyValue::RealValue(void) const {
+    if (m_type == wxPropertyValueReal)
+      return m_value.real;
+    else if (m_type == wxPropertyValueRealPtr)
+      return *m_value.realPtr;
+    else if (m_type == wxPropertyValueInteger)
+      return (float)m_value.integer;
+    else if (m_type == wxPropertyValueIntegerPtr)
+      return (float)*(m_value.integerPtr);
     else return 0.0;
   }
 
-float *wxPropertyValue::RealValuePtr(void)
+float *wxPropertyValue::RealValuePtr(void) const
 {
-  return value.realPtr;
+  return m_value.realPtr;
 }
 
-bool wxPropertyValue::BoolValue(void) {
-    if (type == wxPropertyValueReal)
-      return (value.real != 0.0);
-    if (type == wxPropertyValueRealPtr)
-      return (*(value.realPtr) != 0.0);
-    else if (type == wxPropertyValueInteger)
-      return (value.integer != 0);
-    else if (type == wxPropertyValueIntegerPtr)
-      return (*(value.integerPtr) != 0);
-    else if (type == wxPropertyValuebool)
-      return (value.integer != 0);
-    else if (type == wxPropertyValueboolPtr)
-      return (*(value.boolPtr) != 0);
+bool wxPropertyValue::BoolValue(void) const {
+    if (m_type == wxPropertyValueReal)
+      return (m_value.real != 0.0);
+    if (m_type == wxPropertyValueRealPtr)
+      return (*(m_value.realPtr) != 0.0);
+    else if (m_type == wxPropertyValueInteger)
+      return (m_value.integer != 0);
+    else if (m_type == wxPropertyValueIntegerPtr)
+      return (*(m_value.integerPtr) != 0);
+    else if (m_type == wxPropertyValuebool)
+      return (m_value.integer != 0);
+    else if (m_type == wxPropertyValueboolPtr)
+      return (*(m_value.boolPtr) != 0);
     else return FALSE;
   }
 
-bool *wxPropertyValue::BoolValuePtr(void)
+bool *wxPropertyValue::BoolValuePtr(void) const
 {
-  return value.boolPtr;
+  return m_value.boolPtr;
 }
 
-char *wxPropertyValue::StringValue(void) {
-    if (type == wxPropertyValueString)
-      return value.string;
-    else if (type == wxPropertyValueStringPtr)
-      return *(value.stringPtr);
+char *wxPropertyValue::StringValue(void) const {
+    if (m_type == wxPropertyValueString)
+      return m_value.string;
+    else if (m_type == wxPropertyValueStringPtr)
+      return *(m_value.stringPtr);
     else return NULL;
   }
 
-char **wxPropertyValue::StringValuePtr(void)
+char **wxPropertyValue::StringValuePtr(void) const
 {
-  return value.stringPtr;
+  return m_value.stringPtr;
 }
 
 /*
@@ -800,86 +800,86 @@ IMPLEMENT_DYNAMIC_CLASS(wxProperty, wxObject)
 
 wxProperty::wxProperty(void)
 {
-  propertyRole = (char *)NULL;
-  propertyValidator = NULL;
-  propertyWindow = NULL;
-  enabled = TRUE;
+  m_propertyRole = (char *)NULL;
+  m_propertyValidator = NULL;
+  m_propertyWindow = NULL;
+  m_enabled = TRUE;
 }
 
 wxProperty::wxProperty(wxProperty& copyFrom)
 {
-  value = copyFrom.GetValue();
-  name = copyFrom.GetName();
-  propertyRole = copyFrom.GetRole();
-  propertyValidator = copyFrom.GetValidator();
-  enabled = copyFrom.IsEnabled();
-  propertyWindow = NULL;
+  m_value = copyFrom.GetValue();
+  m_name = copyFrom.GetName();
+  m_propertyRole = copyFrom.GetRole();
+  m_propertyValidator = copyFrom.GetValidator();
+  m_enabled = copyFrom.IsEnabled();
+  m_propertyWindow = NULL;
 }
 
-wxProperty::wxProperty(wxString nm, wxString role, wxPropertyValidator *ed):name(nm), propertyRole(role)
+wxProperty::wxProperty(wxString nm, wxString role, wxPropertyValidator *ed):m_name(nm), m_propertyRole(role)
 {
-  propertyValidator = ed;
-  propertyWindow = NULL;
-  enabled = TRUE;
+  m_propertyValidator = ed;
+  m_propertyWindow = NULL;
+  m_enabled = TRUE;
 }
 
 wxProperty::wxProperty(wxString nm, const wxPropertyValue& val, wxString role, wxPropertyValidator *ed):
-  name(nm), value(val), propertyRole(role)
+  m_name(nm), m_value(val), m_propertyRole(role)
 {
-  propertyValidator = ed;
-  propertyWindow = NULL;
-  enabled = TRUE;
+  m_propertyValidator = ed;
+  m_propertyWindow = NULL;
+  m_enabled = TRUE;
 }
 
 wxProperty::~wxProperty(void)
 {
-  if (propertyValidator)
-    delete propertyValidator;
+  if (m_propertyValidator)
+    delete m_propertyValidator;
 }
 
-wxPropertyValue& wxProperty::GetValue(void)
+wxPropertyValue& wxProperty::GetValue(void) const
 {
-  return value;
+  return (wxPropertyValue&) m_value;
 }
 
-wxPropertyValidator *wxProperty::GetValidator(void)
+wxPropertyValidator *wxProperty::GetValidator(void) const
 {
-  return propertyValidator;
+  return m_propertyValidator;
 }
 
-wxString& wxProperty::GetName(void)
+wxString& wxProperty::GetName(void) const
 {
-  return name;
+  return (wxString&) m_name;
 }
 
-wxString& wxProperty::GetRole(void)
+wxString& wxProperty::GetRole(void) const
 {
-  return propertyRole;
+  return (wxString&) m_propertyRole;
 }
 
 void wxProperty::SetValue(const wxPropertyValue& val)
 {
-  value = val;
+  m_value = val;
 }
 
 void wxProperty::SetValidator(wxPropertyValidator *ed)
 {
-  propertyValidator = ed;
+  m_propertyValidator = ed;
 }
 
 void wxProperty::SetRole(wxString& role)
 {
-  propertyRole = role;
+  m_propertyRole = role;
 }
 
 void wxProperty::SetName(wxString& nm)
 {
-  name = nm;
+  m_name = nm;
 }
 
 void wxProperty::operator=(const wxPropertyValue& val)
 {
-  value = val;
+  m_value = val;
 }
 
 /*
@@ -890,10 +890,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxPropertyView, wxEvtHandler)
 
 wxPropertyView::wxPropertyView(long flags)
 {
-  buttonFlags = flags;
-  propertySheet = NULL;
-  currentValidator = NULL;
-  currentProperty = NULL;
+  m_buttonFlags = flags;
+  m_propertySheet = NULL;
+  m_currentValidator = NULL;
+  m_currentProperty = NULL;
 }
 
 wxPropertyView::~wxPropertyView(void)
@@ -902,7 +902,7 @@ wxPropertyView::~wxPropertyView(void)
 
 void wxPropertyView::AddRegistry(wxPropertyValidatorRegistry *registry)
 {
-  validatorRegistryList.Append(registry);
+  m_validatorRegistryList.Append(registry);
 }
 
 wxPropertyValidator *wxPropertyView::FindPropertyValidator(wxProperty *property)
@@ -910,7 +910,7 @@ wxPropertyValidator *wxPropertyView::FindPropertyValidator(wxProperty *property)
   if (property->GetValidator())
     return property->GetValidator();
     
-  wxNode *node = validatorRegistryList.First();
+  wxNode *node = m_validatorRegistryList.First();
   while (node)
   {
     wxPropertyValidatorRegistry *registry = (wxPropertyValidatorRegistry *)node->Data();
@@ -933,7 +933,7 @@ wxPropertyValidator *wxPropertyView::FindPropertyValidator(wxProperty *property)
 
 IMPLEMENT_DYNAMIC_CLASS(wxPropertySheet, wxObject)
 
-wxPropertySheet::wxPropertySheet(void):properties(wxKEY_STRING)
+wxPropertySheet::wxPropertySheet(void):m_properties(wxKEY_STRING)
 {
 }
 
@@ -959,13 +959,13 @@ void wxPropertySheet::UpdateAllViews( wxPropertyView *WXUNUSED(thisView) )
 // Add a property
 void wxPropertySheet::AddProperty(wxProperty *property)
 {
-  properties.Append(property->GetName().GetData(), property);
+  m_properties.Append(property->GetName().GetData(), property);
 }
 
 // Get property by name
 wxProperty *wxPropertySheet::GetProperty(wxString name)
 {
-  wxNode *node = properties.Find(name.GetData());
+  wxNode *node = m_properties.Find(name.GetData());
   if (!node)
     return NULL;
   else
@@ -975,7 +975,7 @@ wxProperty *wxPropertySheet::GetProperty(wxString name)
 // Clear all properties
 void wxPropertySheet::Clear(void)
 {
-  wxNode *node = properties.First();
+  wxNode *node = m_properties.First();
   while (node)
   {
     wxProperty *prop = (wxProperty *)node->Data();
@@ -989,7 +989,7 @@ void wxPropertySheet::Clear(void)
 // Sets/clears the modified flag for each property value
 void wxPropertySheet::SetAllModified(bool flag)
 {
-  wxNode *node = properties.First();
+  wxNode *node = m_properties.First();
   while (node)
   {
     wxProperty *prop = (wxProperty *)node->Data();
@@ -1043,8 +1043,8 @@ IMPLEMENT_ABSTRACT_CLASS(wxPropertyValidator, wxEvtHandler)
 
 wxPropertyValidator::wxPropertyValidator(long flags)
 {
-  validatorFlags = flags;
-  validatorProperty = NULL;
+  m_validatorFlags = flags;
+  m_validatorProperty = NULL;
 }
 
 wxPropertyValidator::~wxPropertyValidator(void)

@@ -78,7 +78,6 @@ wxDialog::wxDialog(void)
   m_modalShowing = FALSE;
 
   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
-  SetDefaultBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
 }
 
 bool wxDialog::Create(wxWindow *parent, wxWindowID id,
@@ -89,7 +88,6 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
            const wxString& name)
 {
   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
-  SetDefaultBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
   SetName(name);
   
   if (!parent)
@@ -592,7 +590,6 @@ void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& event)
   Ctl3dColorChange();
 #else
   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
-  SetDefaultBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
   Refresh();
 #endif
 }
