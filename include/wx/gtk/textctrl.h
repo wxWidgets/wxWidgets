@@ -131,7 +131,6 @@ public:
     void OnUpdateRedo(wxUpdateUIEvent& event);
 
     bool SetFont( const wxFont &font );
-    bool SetForegroundColour(const wxColour &colour);
     bool SetBackgroundColour(const wxColour &colour);
 
     GtkWidget* GetConnectWidget();

@@ -1072,14 +1072,6 @@ void wxTextCtrl::UpdateFontIfNeeded()
         ChangeFontGlobally();
 }
 
-bool wxTextCtrl::SetForegroundColour( const wxColour &WXUNUSED(colour) )
-{
-    wxCHECK_MSG( m_text != NULL, FALSE, wxT("invalid text ctrl") );
-
-    // doesn't work
-    return FALSE;
-}
-
 bool wxTextCtrl::SetBackgroundColour( const wxColour &colour )
 {
     wxCHECK_MSG( m_text != NULL, FALSE, wxT("invalid text ctrl") );
