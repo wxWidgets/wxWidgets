@@ -114,8 +114,10 @@ class WXDLLEXPORT wxStreamBuffer {
 // ---------------------------------------------------------------------------
 
 typedef enum {
-  wxStream_NOERROR,
-  wxStream_EOF
+  wxStream_NOERROR = 0,
+  wxStream_EOF,
+  wxStream_WRITE_ERR,
+  wxStream_READ_ERR
 } wxStreamError;
 
 class WXDLLEXPORT wxStreamBase {

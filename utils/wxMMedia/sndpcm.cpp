@@ -3,7 +3,6 @@
 #endif
 #include "sndsnd.h"
 #include "sndpcm.h"
-#include <dmalloc.h>
 
 #define WX_BIG_ENDIAN 0
 
@@ -11,8 +10,7 @@ wxSoundPcmCodec::wxSoundPcmCodec()
   : wxSoundCodec()
 {
   m_orig_format.SetCodecCreate(FALSE);
-  m_orig_format.SetCodecNo(1);
-  m_char_bool = FALSE;
+  m_orig_format.SetCodecNo(WXSOUND_PCM);
 }
 
 wxSoundPcmCodec::~wxSoundPcmCodec()
@@ -31,7 +29,6 @@ wxSoundDataFormat wxSoundPcmCodec::GetPreferredFormat(int codec) const
   wxSoundDataFormat prefFormat;
 
   prefFormat = m_orig_format;
-  prefFormat.SetCodecNo(WXSOUND_PCM);
   return prefFormat;
 }
 
@@ -69,20 +66,16 @@ void wxSoundPcmCodec::Decode()
 
 #define GET() (m_in_sound->GetChar())
 #define PUT(c) (m_out_sound->PutChar(c))
-#define OUT_ERROR() (out->LastError() == wxStream_NOERROR)
-#define IN_ERROR() (in->LastError() == wxStream_NOERROR)
 
 void wxSoundPcmCodec::InputSign8()
 {
   unsigned char signer = 0;
-  wxStreamBase *in = m_out_sound->Stream(), *out = m_in_sound->Stream();
 
   if (m_io_format.GetSign() != m_orig_format.GetSign())
     signer = 128;
 
-  while (IN_ERROR() && OUT_ERROR())
+  while (StreamOk())
     PUT(GET() + signer);
-
 }
 
 // ---------------------------------------------------------------------------
@@ -91,9 +84,8 @@ void wxSoundPcmCodec::InputSign8()
 void wxSoundPcmCodec::InputSwapAndSign16()
 {
   unsigned short signer1 = 0, signer2 = 0;
-  wxStreamBase *in = m_out_sound->Stream(), *out = m_in_sound->Stream();
   bool swap = (m_io_format.GetByteOrder() != m_orig_format.GetByteOrder());
-  char temp;
+  register char temp, temp2;
 
   if (m_io_format.GetSign() != m_orig_format.GetSign()) {
     if (m_io_format.GetByteOrder() == wxSND_SAMPLE_LE)
@@ -103,22 +95,23 @@ void wxSoundPcmCodec::InputSwapAndSign16()
   }
 
   if (swap) {
-    while (IN_ERROR() && OUT_ERROR()) {
-      temp = GET() ^ signer1;
-      PUT(GET() ^ signer2);
-      if (OUT_ERROR()) {
-        m_char_bool = TRUE;
-        m_char_stack = temp;
+    while (StreamOk()) {
+      temp = GET();
+      temp2 = GET();
+      PUT(temp2 ^ signer2);
+      if (!StreamOk()) {
+        m_in_sound->WriteBack(temp);
+        m_in_sound->WriteBack(temp2);
         break;
       }
-      PUT(temp);
+      PUT(temp ^ signer1);
     }
   } else {
-    while (IN_ERROR() && OUT_ERROR()) {
-      PUT(GET() ^ signer1);
-      if (OUT_ERROR()) {
-        m_char_bool = TRUE;
-        m_char_stack = temp;
+    while (StreamOk()) {
+      temp = GET();
+      PUT(temp ^ signer1);
+      if (!StreamOk()) {
+        m_in_sound->WriteBack(temp);
         break;
       }
       PUT(GET() ^ signer2);
@@ -132,13 +125,12 @@ void wxSoundPcmCodec::InputSwapAndSign16()
 
 void wxSoundPcmCodec::OutputSign8()
 {
-  wxStreamBase *in = m_out_sound->Stream(), *out = m_in_sound->Stream();
   unsigned char signer = 0;
 
   if (m_io_format.GetSign() != m_orig_format.GetSign())
     signer = 128;
 
-  while (IN_ERROR() && OUT_ERROR())
+  while (StreamOk())
     PUT((char)(GET() + signer));
 }
 
@@ -148,14 +140,7 @@ void wxSoundPcmCodec::OutputSwapAndSign16()
 {
   bool swap = (m_io_format.GetByteOrder() != m_orig_format.GetByteOrder());
   unsigned short signer1 = 0, signer2 = 0;
-  char temp;
-  wxStreamBase *in = m_out_sound->Stream(), *out = m_in_sound->Stream();
-
-  if (m_char_bool) {
-    PUT(GET());
-    PUT(m_char_stack);
-    m_char_bool = FALSE;
-  }
+  register char temp, temp2;
 
   if (m_io_format.GetSign() != m_orig_format.GetSign())
     if (m_io_format.GetByteOrder() == wxSND_SAMPLE_LE)
@@ -164,25 +149,27 @@ void wxSoundPcmCodec::OutputSwapAndSign16()
       signer2 = 0x80;
 
   if (swap) {
-    while (IN_ERROR()) {
+    while (StreamOk()) {
       temp = GET();
-      PUT(GET() ^ signer1);
-      if (OUT_ERROR()) {
-        m_char_stack = temp ^ signer2;
-        m_char_bool = TRUE;
+      temp2 = GET();
+      PUT(temp2 ^ signer1);
+      if (!StreamOk()) {
+        m_in_sound->WriteBack(temp);
+        m_in_sound->WriteBack(temp2);
         break;
       }
       PUT(temp ^ signer2);
     }
   } else {
-    while (IN_ERROR()) {
-      PUT(GET() ^ signer1);
-      if (!OUT_ERROR()) {
-        m_char_stack = GET() ^ signer2;
-        m_char_bool = TRUE;
+    while (StreamOk()) {
+      temp = GET();
+      temp2 = GET();
+      PUT(temp ^ signer1);
+      if (!StreamOk()) {
+        m_in_sound->WriteBack(temp);
         break;
       }
-      PUT(GET() ^ signer2);
+      PUT(temp2 ^ signer2);
     }
   }
 

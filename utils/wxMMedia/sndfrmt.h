@@ -6,6 +6,7 @@
 #endif
 
 #include <wx/object.h>
+#include <wx/stream.h>
 
 class wxSndBuffer;
 
@@ -19,6 +20,7 @@ class wxSoundCodec;
 class wxSoundDataFormat {
  public:
   wxSoundDataFormat();
+  wxSoundDataFormat(const wxSoundDataFormat& format);
   ~wxSoundDataFormat();
 
   void SetSampleRate(int srate) { m_srate = srate; }
@@ -78,7 +80,9 @@ class wxSoundCodec : public wxObject, public wxStreamBase {
   inline wxStreamBuffer *GetInStream() const { return m_in_sound; }
   inline wxStreamBuffer *GetOutStream() const { return m_out_sound; }
 
-  inline bool Good() const { return (m_in_sound->Stream()->LastError() == wxStream_NOERROR) && (m_out_sound->Stream()->LastError() == wxStream_NOERROR); }
+  inline bool StreamOk() const
+       { return (m_in_sound->Stream()->LastError() == wxStream_NOERROR) &&
+                (m_out_sound->Stream()->LastError() == wxStream_NOERROR); }
 
   virtual size_t GetByteRate() const = 0; 
   virtual wxSoundDataFormat GetPreferredFormat(int codec = 0) const = 0; 

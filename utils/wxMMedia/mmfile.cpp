@@ -16,7 +16,7 @@
 #include "wx/wx.h"
 #endif
 #include <wx/stream.h>
-#include <wx/fstream.h>
+#include <wx/wfstream.h>
 #include <wx/mstream.h>
 
 #include "mmfile.h"

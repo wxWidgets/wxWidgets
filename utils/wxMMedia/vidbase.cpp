@@ -10,7 +10,7 @@
 #ifdef __GNUG__
 #pragma implementation "vidbase.h"
 #endif
-#include <wx/fstream.h>
+#include <wx/wfstream.h>
 #include "vidbase.h"
 #ifdef WX_PRECOMP
 #include "wx_prec.h"

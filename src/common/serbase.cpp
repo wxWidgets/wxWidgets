@@ -13,6 +13,8 @@
 #pragma implementation "serbase.h"
 #endif
 
+#ifdef wxUSE_SERIAL
+
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -118,3 +120,5 @@ void WXSERIAL(wxHashTable)::LoadObject(wxObjectInputStream& s)
   for (i=0;i<n;i++)
     table->hash_table[i] = (wxList *)s.GetChild();
 }
+
+#endif

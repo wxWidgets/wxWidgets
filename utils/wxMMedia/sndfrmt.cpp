@@ -4,7 +4,6 @@
 #include "sndsnd.h"
 #include "sndfrmt.h"
 #include "sndpcm.h"
-#include <dmalloc.h>
 
 // ----------------------------------------------------------------------------
 // wxSoundDataFormat
@@ -19,6 +18,19 @@ wxSoundDataFormat::wxSoundDataFormat()
   m_codec = NULL;
   m_codchange = FALSE;
   m_codcreate = TRUE;
+}
+
+wxSoundDataFormat::wxSoundDataFormat(const wxSoundDataFormat& format)
+{
+  m_srate = format.m_srate;
+  m_bps = format.m_bps;
+  m_channels = format.m_channels;
+  m_codno = format.m_codno;
+  m_sign = format.m_sign;
+  m_byteorder = format.m_byteorder;
+  m_codchange = FALSE;
+  m_codcreate = TRUE;
+  m_codec = NULL;
 }
 
 wxSoundDataFormat::~wxSoundDataFormat()
@@ -62,7 +74,7 @@ wxSoundCodec *wxSoundDataFormat::GetCodec()
     return NULL;
 
   if (m_codchange) 
-    wxDELETEA(m_codec);
+    wxDELETE(m_codec);
   
   if (m_codec)
     return m_codec;
@@ -148,6 +160,7 @@ wxSoundCodec::wxSoundCodec()
   m_in_sound = NULL;
   m_out_sound = NULL;
   m_init = TRUE;
+  m_chain_codec = NULL;
 }
 
 wxSoundCodec::~wxSoundCodec()

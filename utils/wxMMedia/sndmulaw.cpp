@@ -27,7 +27,7 @@ void wxSoundMulawCodec::Decode()
 
   InitMode(DECODING);
 
-  while (!Good()) {
+  while (!StreamOk()) {
       smp = ulaw2linear(m_in_sound->GetChar());
 #ifdef USE_BE_MACH
       m_out_sound->PutChar((smp & 0xff00) >> 8);
@@ -50,7 +50,7 @@ void wxSoundMulawCodec::Encode()
 
   InitMode(ENCODING);
 
-  while (!Good()) {
+  while (!StreamOk()) {
 #ifdef USE_BE_MACH
       smp = ((unsigned short)m_in_sound->GetChar()) << 8;
       smp |= m_in_sound->GetChar() & 0xff;

@@ -12,7 +12,7 @@
 #pragma implementation "wave.h"
 #endif
 
-#include <wx/fstream.h>
+#include <wx/wfstream.h>
 #include "wave.h"
 
 wxWave::wxWave()

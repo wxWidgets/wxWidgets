@@ -1417,35 +1417,49 @@ AC_OVERRIDES(threads,threads,
 **--without-threads       Force disabling threads,
 wxUSE_THREADS)
 
-dnl AC_ARG_WITH(threads,
-dnl [**--without-threads       Force disabling threads ],
-dnl [wxUSE_THREADS="$withval"])
-
 if test "$wxUSE_THREADS" = "1"; then
-  UNIX_THREAD="gtk/threadno.cpp"
 
-  dnl For glibc 2 users who have the old libc 5 too
+  case "$os" in
+   solaris*)
 
-  AC_CHECK_LIB(pthread-0.7, pthread_create, [
-     UNIX_THREAD="gtk/threadpsx.cpp"
-     THREADS_LINK="-lpthread-0.7"
-  ],[
-    AC_CHECK_HEADER(sys/prctl.h, [
-        UNIX_THREAD="gtk/threadsgi.cpp"
-    ])
+      AC_CHECK_LIB(thread, thr_create, [
+        UNIX_THREAD="gtk/threadsol.cpp"
+        THREADS_LINK="-lthread"
+      ])
+      ;;
 
-    dnl pthread_create is always available in pthread but it seems not to be
-    dnl the case for pthread_setcanceltype.
+   *)
+  
+     UNIX_THREAD="gtk/threadno.cpp"
 
-    AC_CHECK_LIB(pthread, pthread_setcanceltype, [
+     dnl For glibc 2 users who have the old libc 5 too
+
+     AC_CHECK_LIB(pthread-0.7, pthread_create, [
+       UNIX_THREAD="gtk/threadpsx.cpp"
+       THREADS_LINK="-lpthread-0.7"
+     ],[
+       AC_CHECK_HEADER(sys/prctl.h, [
+          UNIX_THREAD="gtk/threadsgi.cpp"
+     ])
+
+     dnl pthread_create is always available in pthread but it seems not to be
+     dnl the case for pthread_setcanceltype.
+
+     AC_CHECK_LIB(pthread, pthread_setcanceltype, [
        UNIX_THREAD="gtk/threadpsx.cpp"
        THREADS_LINK="-lpthread"
+     ])
     ])
-  ])
-  AC_CHECK_LIB(pthreads, pthread_setcanceltype, [
-     UNIX_THREAD="gtk/threadpsx.cpp"
-     THREADS_LINK="-lpthreads"
-  ])
+    AC_CHECK_LIB(pthreads, pthread_setcanceltype, [
+      UNIX_THREAD="gtk/threadpsx.cpp"
+      THREADS_LINK="-lpthreads"
+    ])
+
+    AC_CHECK_LIB(posix4, printf, [
+      THREADS_LINK="$THREADS_LINK -lposix4"
+    ]);;
+
+  esac
 fi
 
 if test "$wxUSE_MOTIF" = "1"; then

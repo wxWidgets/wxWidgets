@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        thread.cpp
-// Purpose:     No thread support
-// Author:      Original from Wolfram Gloger/Guilhem Lavaux
+// Purpose:     Solaris thread support
+// Author:      Guilhem Lavaux
 // Modified by:
 // Created:     04/22/98
 // RCS-ID:      $Id$

@@ -53,7 +53,7 @@ void wxFragmentBuffer::AbortBuffer(wxSndBuffer *buf)
 }
 
 wxFragmentBuffer::wxFragBufPtr *wxFragmentBuffer::FindFreeBuffer(
-                         wxFragBufPtr *list, wxUint8 max_queue)
+				                   xFragBufPtr *list, wxUint8 max_queue)
 {
   if (!list)
     return NULL;
@@ -71,6 +71,7 @@ bool wxFragmentBuffer::NotifyOutputBuffer(wxSndBuffer *buf)
   wxFragBufPtr *ptr;
   char *raw_buf;
   wxUint32 rawbuf_size;
+  wxSoundCodec *codec = buf->GetCurrentCodec();
 
   if (!m_iodrv->OnSetupDriver(*buf, wxSND_OUTPUT))
     return FALSE;
@@ -82,15 +83,14 @@ bool wxFragmentBuffer::NotifyOutputBuffer(wxSndBuffer *buf)
     if (!ptr)
       return FALSE;
     
-    // Find the end of the buffer
-    raw_buf = ptr->data + ptr->ptr;
-    rawbuf_size = ptr->size - ptr->ptr;
+    codec->SetOutStream(ptr->sndbuf);
+    codec->InitIO(m_drvformat);
     
     // Fill it up
-    buf->OnNeedOutputData(raw_buf, rawbuf_size);
+    codec->Decode();
 
     // No data to fill the buffer: dequeue the current wxSndBuffer
-    if (!rawbuf_size) {
+    if (!codec->Available()) {
       if (buf->IsNotSet(wxSND_KEEPQUEUED)) {
         buf->Set(wxSND_UNQUEUEING);
         m_iodrv->m_buffers.DeleteObject(buf);
@@ -101,10 +101,8 @@ bool wxFragmentBuffer::NotifyOutputBuffer(wxSndBuffer *buf)
     // Data: append it to the list
     ptr->buffers->Append(buf);
 
-    ptr->ptr += rawbuf_size;
-
     // Output buffer full: send it to the driver
-    if (ptr->ptr == ptr->size) {
+    if (ptr->sndbuf->GetDataLeft()) {
       ptr->state = wxBUFFER_FFILLED;
       OnBufferFilled(ptr, wxSND_OUTPUT);
     }
@@ -113,17 +111,18 @@ bool wxFragmentBuffer::NotifyOutputBuffer(wxSndBuffer *buf)
 
 bool wxFragmentBuffer::NotifyInputBuffer(wxSndBuffer *buf)
 {
-  wxFragBufPtr *ptr;
-  char *raw_buf;
-  wxUint32 rawbuf_size;
-
-  if (!m_iodrv->OnSetupDriver(*buf, wxSND_INPUT))
-    return FALSE;
-
-  while (1) {
-    ptr = FindFreeBuffer(m_lstiptrs, m_maxiq);
-    if (!ptr)
+  /*
+    wxFragBufPtr *ptr;
+    char *raw_buf;
+    wxUint32 rawbuf_size;
+    
+    if (!m_iodrv->OnSetupDriver(*buf, wxSND_INPUT))
       return FALSE;
+    
+    while (1) {
+      ptr = FindFreeBuffer(m_lstiptrs, m_maxiq);
+      if (!ptr)
+        return FALSE;
     
     raw_buf = ptr->data + ptr->ptr;
     rawbuf_size = ptr->size - ptr->ptr;
@@ -137,7 +136,6 @@ bool wxFragmentBuffer::NotifyInputBuffer(wxSndBuffer *buf)
         m_iodrv->m_buffers.DeleteObject(buf);
       }
 
-      // Get data now when there isn't anymore buffer in the queue
       if (!LastBuffer() && ptr->ptr) {
         ptr->state = wxBUFFER_FFILLED;
         if (!OnBufferFilled(ptr, wxSND_INPUT))
@@ -149,13 +147,15 @@ bool wxFragmentBuffer::NotifyInputBuffer(wxSndBuffer *buf)
 
     ptr->ptr += rawbuf_size;
 
-    // Input buffer full => get data
+
     if (ptr->ptr == ptr->size) {
       ptr->state = wxBUFFER_FFILLED;
       if (!OnBufferFilled(ptr, wxSND_INPUT))
         return FALSE;
     }
   }
+  */
+
   return TRUE;
 }
 
@@ -213,7 +213,7 @@ void wxFragmentBuffer::ClearBuffer(wxFragBufPtr *ptr)
     node = ptr->buffers->First();
   }
 
-  ptr->ptr = 0;
+  ptr->sndbuf->ResetBuffer();
   ptr->state = wxBUFFER_FREE;
 }
 

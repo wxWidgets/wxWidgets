@@ -30,6 +30,10 @@
 // wxStreamBuffer
 // ----------------------------------------------------------------------------
 
+#define CHECK_ERROR(err) \
+   if (m_stream->m_lasterror == wxStream_NOERROR) \
+     m_stream->m_lasterror = err
+
 wxStreamBuffer::wxStreamBuffer(wxStreamBase& stream, BufMode mode)
   : m_buffer_start(NULL), m_buffer_end(NULL), m_buffer_pos(NULL),
     m_buffer_size(0), m_fixed(TRUE), m_flushable(TRUE), m_stream(&stream),
@@ -107,7 +111,8 @@ void wxStreamBuffer::SetBufferIO(size_t bufsize)
 {
   char *b_start;
 
-  wxDELETE(m_buffer_start);
+  if (m_destroybuf)
+    wxDELETEA(m_buffer_start);
 
   if (!bufsize) {
     m_buffer_start = NULL;
@@ -233,7 +238,7 @@ void wxStreamBuffer::PutChar(char c)
   }
 
   if (!GetDataLeft() && !FlushBuffer()) {
-    m_stream->m_lasterror = wxStream_EOF;
+    CHECK_ERROR(wxStream_READ_ERR);
     return;
   }
 
@@ -253,7 +258,7 @@ char wxStreamBuffer::GetChar()
   }
 
   if (!GetDataLeft()) {
-    m_stream->m_lasterror = wxStream_EOF;
+    CHECK_ERROR(wxStream_READ_ERR);
     return 0;
   }
 
@@ -277,9 +282,8 @@ size_t wxStreamBuffer::Read(void *buffer, size_t size)
 
   buffer = (void *)((char *)buffer+m_stream->m_lastcount);
 
-  if (!m_buffer_size) {
+  if (!m_buffer_size)
     return (m_stream->m_lastcount += m_stream->OnSysRead(buffer, size));
-  }
 
   // -----------------
   // Buffering enabled
@@ -297,8 +301,7 @@ size_t wxStreamBuffer::Read(void *buffer, size_t size)
       buffer = (char *)buffer + buf_left; // ANSI C++ violation.
 
       if (!FillBuffer()) {
-        if (m_stream->m_lasterror == wxStream_NOERROR)
-          m_stream->m_lasterror = wxStream_EOF;
+        CHECK_ERROR(wxStream_READ_ERR);
         return (m_stream->m_lastcount = orig_size-size);
       }
     } else {
@@ -352,8 +355,7 @@ size_t wxStreamBuffer::Write(const void *buffer, size_t size)
       buffer = (char *)buffer + buf_left; // ANSI C++ violation.
 
       if (!FlushBuffer()) {
-        if (m_stream->m_lasterror == wxStream_NOERROR)
-          m_stream->m_lasterror = wxStream_EOF;
+	CHECK_ERROR(wxStream_WRITE_ERR);
         return (m_stream->m_lastcount = orig_size-size);
       }
 
@@ -373,10 +375,12 @@ size_t wxStreamBuffer::Write(wxStreamBuffer *sbuf)
 {
   char buf[BUF_TEMP_SIZE];
   size_t s = 0, bytes_count = BUF_TEMP_SIZE;
+  size_t s_size;
 
   while (bytes_count == BUF_TEMP_SIZE) {
-    if (m_stream->StreamSize() < bytes_count)
-      bytes_count = m_stream->StreamSize();
+    s_size = (sbuf->GetDataLeft() < GetDataLeft()) ? sbuf->GetDataLeft() : GetDataLeft();
+    if (s_size < bytes_count)
+      bytes_count = s_size;
     bytes_count = sbuf->Read(buf, bytes_count);
     bytes_count = Write(buf, bytes_count);
     s += bytes_count;

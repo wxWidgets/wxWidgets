@@ -16,7 +16,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <time.h>
-#include <dmalloc.h>
 
 #include "wx/app.h"
 #include "wx/utils.h"

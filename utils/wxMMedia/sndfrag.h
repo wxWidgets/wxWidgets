@@ -54,6 +54,8 @@ protected:
   wxFragBufPtr *m_lstoptrs, *m_lstiptrs;
   ///
   bool m_buf2free, m_dontq, m_freeing;
+  ///
+  wxSoundDataFormat m_drvformat;
 public:
   ///
   wxFragmentBuffer(wxSound& io_drv);

@@ -86,9 +86,6 @@ wxUint32 wxSndWavCodec::PrepareToPlay()
   if (!riff_codec.FindChunk("data"))
     return 0;
 
-  m_sndformat.SetSampleRate(wav_hdr.sample_fq);
-  m_sndformat.SetBps(wav_hdr.bits_p_spl);
-  m_sndformat.SetChannels(wav_hdr.channels);
   m_sndmode = wxSND_OUTPUT;
   ChangeCodec(wav_hdr.format);
 
