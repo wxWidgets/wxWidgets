@@ -70,7 +70,7 @@ static bool gs_waitingForThread = FALSE ;
 class wxMacStCritical
 {
 public :
-    wxMacStCritical() 
+    wxMacStCritical()
     {
         if ( UMASystemIsInitialized() )
             ThreadBeginCritical() ;
@@ -94,7 +94,7 @@ public:
         m_owner = kNoThreadID ;
     }
 
-    ~wxMutexInternal() 
+    ~wxMutexInternal()
     {
     }
 
@@ -130,7 +130,7 @@ wxMutexError wxMutex::Lock()
         err = ::MacGetCurrentThread(&current);
         // if we are not the owner, add this thread to the list of waiting threads, stop this thread
         // and invoke the scheduler to continue executing the owner's thread
-        while ( m_internal->m_owner != kNoThreadID && m_internal->m_owner != current) 
+        while ( m_internal->m_owner != kNoThreadID && m_internal->m_owner != current)
         {
             m_internal->m_waiters.Add(current);
             err = ::SetThreadStateEndCritical(kCurrentThreadID, kStoppedThreadState, m_internal->m_owner);
@@ -147,14 +147,14 @@ wxMutexError wxMutex::TryLock()
 {
     wxMacStCritical critical ;
     if ( UMASystemIsInitialized() )
-    {    
+    {
         OSErr err ;
         ThreadID current = kNoThreadID;
         ::MacGetCurrentThread(&current);
         // if we are not the owner, give an error back
-        if ( m_internal->m_owner != kNoThreadID && m_internal->m_owner != current ) 
+        if ( m_internal->m_owner != kNoThreadID && m_internal->m_owner != current )
             return wxMUTEX_BUSY;
-            
+
         m_internal->m_owner = current;
     }
     m_locked++;
@@ -165,10 +165,10 @@ wxMutexError wxMutex::TryLock()
 wxMutexError wxMutex::Unlock()
 {
     if ( UMASystemIsInitialized() )
-    {    
+    {
         OSErr err;
         err = ::ThreadBeginCritical();
-        
+
         if (m_locked > 0)
             m_locked--;
 
@@ -178,12 +178,12 @@ wxMutexError wxMutex::Unlock()
         // now pass on to the first waiting thread
         ThreadID firstWaiting = kNoThreadID;
         bool found = false;
-        while (!m_internal->m_waiters.IsEmpty() && !found) 
+        while (!m_internal->m_waiters.IsEmpty() && !found)
         {
             firstWaiting = m_internal->m_waiters[0];
             err = ::SetThreadState(firstWaiting, kReadyThreadState, kNoThreadID);
             // in case this was not successful (dead thread), we just loop on and reset the id
-            found = (err != threadNotFoundErr);    
+            found = (err != threadNotFoundErr);
             if ( !found )
                 firstWaiting = kNoThreadID ;
             m_internal->m_waiters.RemoveAt(0) ;
@@ -339,7 +339,7 @@ public:
     // thread priority
     void SetPriority(unsigned int priority);
     unsigned int GetPriority() const { return m_priority; }
-    
+
     void SetResult( void *res ) { m_result = res ; }
     void *GetResult() { return m_result ; }
 
@@ -425,7 +425,7 @@ bool wxThreadInternal::Create(wxThread *thread, unsigned int stackSize)
 bool wxThreadInternal::Suspend()
 {
     OSErr err ;
-    
+
     ::ThreadBeginCritical();
 
     if ( m_state != STATE_RUNNING )
@@ -450,18 +450,18 @@ bool wxThreadInternal::Resume()
 
     wxASSERT( err == noErr ) ;
     wxASSERT( current != m_tid ) ;
-        
+
     ::ThreadBeginCritical();
     if ( m_state != STATE_PAUSED && m_state != STATE_NEW )
     {
         ::ThreadEndCritical() ;
         wxLogSysError(_("Can not resume thread %x"), m_tid);
         return FALSE;
-        
+
     }
     err = ::SetThreadStateEndCritical(m_tid, kReadyThreadState, kNoThreadID);
     wxASSERT( err == noErr ) ;
-    
+
     m_state = STATE_RUNNING;
     ::ThreadEndCritical() ;
     ::YieldToAnyThread() ;
@@ -473,12 +473,12 @@ bool wxThreadInternal::Resume()
 wxThread *wxThread::This()
 {
     wxMacStCritical critical ;
-    
+
     ThreadID current ;
     OSErr err ;
-    
+
     err = MacGetCurrentThread( &current ) ;
-    
+
     for ( int i = 0 ; i < s_threads.Count() ; ++i )
     {
         if ( ( (wxThread*) s_threads[i] )->GetId() == current )
@@ -493,7 +493,7 @@ bool wxThread::IsMain()
 {
     ThreadID current ;
     OSErr err ;
-    
+
     err = MacGetCurrentThread( &current ) ;
     return current == gs_idMainThread;
 }
@@ -510,7 +510,7 @@ void wxThread::Yield()
 void wxThread::Sleep(unsigned long milliseconds)
 {
         clock_t start = clock() ;
-        do 
+        do
         {
             YieldToAnyThread() ;
         } while( clock() - start < milliseconds / CLOCKS_PER_SEC ) ;
@@ -520,6 +520,13 @@ int wxThread::GetCPUCount()
 {
     // we will use whatever MP API will be used for the new MP Macs
     return 1;
+}
+
+unsigned long wxThread::GetCurrentId()
+{
+    ThreadID current ;
+    MacGetCurrentThread( &current ) ;
+    return (unsigned long)current;
 }
 
 bool wxThread::SetConcurrency(size_t level)
@@ -537,7 +544,7 @@ bool wxThread::SetConcurrency(size_t level)
         // processor system it doesn't make much sense anyhow
         return level == 1;
     }
-    
+
     return TRUE ;
 }
 
@@ -748,7 +755,7 @@ void wxThread::Exit(ExitCode status)
 
     m_internal->SetResult( status ) ;
 
-/*    
+/*
 #if defined(__VISUALC__) || (defined(__BORLANDC__) && (__BORLANDC__ >= 0x500))
     _endthreadex((unsigned)status);
 #else // !VC++
@@ -864,7 +871,7 @@ bool WXDLLEXPORT wxGuiOwnedByMainThread()
     return false ;
 }
 
-// wake up the main thread 
+// wake up the main thread
 void WXDLLEXPORT wxWakeUpMainThread()
 {
     wxMacWakeUp() ;
