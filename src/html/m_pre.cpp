@@ -29,6 +29,7 @@
 
 #include "wx/html/htmlcell.h"
 #include "wx/tokenzr.h"
+#include "wx/encconv.h"
 
 FORCE_LINK_ME(m_pre)
 
@@ -138,8 +139,11 @@ TAG_HANDLER_BEGIN(PRE, "PRE")
 
         {
             wxString cit;
+            wxEncodingConverter *encconv = m_WParser -> GetEncodingConverter();
             cit = m_WParser -> GetSource() -> Mid(tag.GetBeginPos(), tag.GetEndPos1() - tag.GetBeginPos());
-            c -> InsertCell(new wxHtmlPRECell(cit, *(m_WParser -> GetDC())));
+            c -> InsertCell(new wxHtmlPRECell(
+                                encconv ? encconv -> Convert(cit) : cit,
+                                *(m_WParser -> GetDC())));
         }
 
         m_WParser -> SetFontUnderlined(underlined);
