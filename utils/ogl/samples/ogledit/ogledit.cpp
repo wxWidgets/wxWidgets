@@ -177,13 +177,11 @@ void MyFrame::OnSize(wxSizeEvent& event)
 
 void MyFrame::OnCloseWindow(wxCloseEvent& event)
 {
-  if (wxDocParentFrame::OnClose())
+  wxDocParentFrame::OnCloseWindow(event);
+  if (!event.GetVeto())
   {
     wxOGLCleanUp();
-    this->Destroy();
   }
-  else
-    event.Veto();
 }
 
 // Intercept menu commands

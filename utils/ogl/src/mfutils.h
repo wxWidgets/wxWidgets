@@ -27,7 +27,7 @@
 
 /* Metafile Functions */
 /* Win32s/Borland need these macros, although META_SETBKCOLOR is defined */
-#if !defined(META_SETBKCOLOR) // || defined(WIN32)
+#if 1 // !defined(META_SETBKCOLOR) // || defined(WIN32)
 
 #define META_SETBKCOLOR		     0x0201
 #define META_SETBKMODE		     0x0102
