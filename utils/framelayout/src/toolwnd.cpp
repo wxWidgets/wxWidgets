@@ -160,6 +160,7 @@ void wxToolWindow::AddMiniButton( cbMiniButton* pBtn )
 
 void wxToolWindow::OnPaint( wxPaintEvent& event )
 {
+    wxPaintDC pdc( this );
 	wxWindowDC dc( this );
 
 	int w,h;

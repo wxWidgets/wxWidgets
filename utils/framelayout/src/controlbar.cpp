@@ -331,6 +331,7 @@ bool wxFrameLayout::CanReparent()
 void wxFrameLayout::ReparentWindow( wxWindow* pChild, wxWindow* pNewParent )
 {
 #ifdef __WXMSW__
+#if 0
 
 	if ( pChild->GetParent() )
 	{
@@ -344,6 +345,8 @@ void wxFrameLayout::ReparentWindow( wxWindow* pChild, wxWindow* pNewParent )
 	pNewParent->GetChildren().Append( pChild );
 
 	pChild->SetParent( pNewParent );
+#endif
+    pChild->Reparent(pNewParent);
 
 	return;
 #endif
@@ -795,7 +798,7 @@ void wxFrameLayout::DoSetBarState( cbBarInfo* pBar )
 		pMiniFrm->Create( &GetParentFrame(), -1, pBar->mName, 
 						  wxPoint( 50,50 ),
 						  wxSize ( 0, 0  ),
-						  wxSTAY_ON_TOP //| wxTHICK_FRAME 
+                          wxFRAME_FLOAT_ON_PARENT  |  wxFRAME_TOOL_WINDOW
 						);
 
 		pMiniFrm->SetClient( pBar->mpBarWnd );
