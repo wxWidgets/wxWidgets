@@ -35,8 +35,6 @@
 }
 
 
-
-
 //---------------------------------------------------------------------------
 // wxString typemaps
 
@@ -97,34 +95,6 @@
 }
     
    
-
-// //---------------------------------------------------------------------------
-
-
-// %typemap(python, in) wxMemoryBuffer& {
-//     if (!PyString_Check($source)) {
-//         PyErr_SetString(PyExc_TypeError, "String buffer expected");
-//         return NULL;
-//     }
-//     char* str = PyString_AS_STRING($source);
-//     int   len = PyString_GET_SIZE($source);
-//     $target = new wxMemoryBuffer(len);
-//     memcpy($target->GetData(), str, len);
-// }
-
-// %typemap(python, freearg) wxMemoryBuffer& {
-//     if ($target)
-//         delete $source;
-// }
-
-// %typemap(python, out) wxMemoryBuffer {
-//     $target = PyString_FromStringAndSize((char*)$source->GetData(), $source->GetDataLen());
-// }
-
-// %typemap(python, ret) wxMemoryBuffer {
-//     delete $source;
-// }
-
 
 //---------------------------------------------------------------------------
 // Typemaps to convert Python sequence objects (tuples, etc.) to
@@ -274,62 +244,6 @@
     $result = wxArrayString2PyList_helper($1);
 }
 
-
-// //---------------------------------------------------------------------------
-// // Map T_OUTPUTs for floats to return ints.
-
-
-// %typemap(python,ignore) float          *T_OUTPUT_TOINT(float temp),
-//                         double         *T_OUTPUT_TOINT(double temp)
-// {
-//   $target = &temp;
-// }
-
-
-// %typemap(python,argout) float          *T_OUTPUT_TOINT,
-//                         double         *T_OUTPUT_TOINT
-// {
-//     PyObject *o;
-//     o = PyInt_FromLong((long) (*$source));
-//     $target = t_output_helper($target, o);
-// }
-
-
-// %typemap(python,ignore) bool *T_OUTPUT(int temp)
-// {
-//   $target = (bool*)&temp;
-// }
-
-// %typemap(python,argout) bool *T_OUTPUT
-// {
-//     PyObject *o;
-//     o = PyInt_FromLong((long) (*$source));
-//     $target = t_output_helper($target, o);
-// }
-
-// %typemap(python,ignore) bool  *OUTPUT = bool *T_OUTPUT;
-// %typemap(python,argout) bool  *OUTPUT = bool *T_OUTPUT;
-
-
-
-// %typemap(python,ignore) byte *T_OUTPUT(int temp)
-// {
-//   $target = (byte*)&temp;
-// }
-
-// %typemap(python,argout) byte *T_OUTPUT
-// {
-//     PyObject *o;
-//     o = PyInt_FromLong((long) (*$source));
-//     $target = t_output_helper($target, o);
-// }
-
-// %typemap(python,ignore) byte  *OUTPUT = byte *T_OUTPUT;
-// %typemap(python,argout) byte  *OUTPUT = byte *T_OUTPUT;
-
-
-// %typemap(python,ignore) wxCoord *OUTPUT = int *OUTPUT;
-// %typemap(python,argout) wxCoord *OUTPUT = int *OUTPUT;
 
 
 //---------------------------------------------------------------------------
