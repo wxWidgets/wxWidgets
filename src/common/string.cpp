@@ -1410,7 +1410,7 @@ size_t wxString::rfind(const wxString& str, size_t nStart) const
   wxASSERT( str.GetStringData()->IsValid() );
   wxASSERT( nStart <= Len() );
 
-  // # could be quicker than that
+  // TODO could be made much quicker than that
   const wxChar *p = c_str() + (nStart == npos ? Len() : nStart);
   while ( p >= c_str() + str.Len() ) {
     if ( wxStrncmp(p - str.Len(), str, str.Len()) == 0 )
@@ -1425,18 +1425,130 @@ size_t wxString::rfind(const wxString& str, size_t nStart) const
 #if !defined(__VISUALC__) || defined(__WIN32__)
 size_t wxString::rfind(const wxChar* sz, size_t nStart, size_t n) const
 {
-  return rfind(wxString(sz, n == npos ? 0 : n), nStart);
+    return rfind(wxString(sz, n == npos ? 0 : n), nStart);
 }
 
 size_t wxString::rfind(wxChar ch, size_t nStart) const
 {
-  wxASSERT( nStart <= Len() );
+    if ( nStart == npos )
+    {
+        nStart = Len();
+    }
+    else
+    {
+        wxASSERT( nStart <= Len() );
+    }
 
-  const wxChar *p = wxStrrchr(c_str() + nStart, ch);
+    const wxChar *p = wxStrrchr(c_str(), ch);
 
-  return p == NULL ? npos : p - c_str();
+    if ( p == NULL )
+        return npos;
+
+    size_t result = p - c_str();
+    return ( result > nStart ) ? npos : result;
 }
 #endif // VC++ 1.5
+
+size_t wxString::find_first_of(const wxChar* sz, size_t nStart) const
+{
+    const char *start = c_str() + nStart;
+    char *firstOf = strpbrk(start, sz);
+    if ( firstOf )
+        return firstOf - start;
+    else
+        return npos;
+}
+
+size_t wxString::find_last_of(const wxChar* sz, size_t nStart) const
+{
+    if ( nStart == npos )
+    {
+        nStart = Len();
+    }
+    else
+    {
+        wxASSERT( nStart <= Len() );
+    }
+
+    for ( const char *p = c_str() + length() - 1; p >= c_str(); p-- )
+    {
+        if ( wxStrchr(sz, *p) )
+            return p - c_str();
+    }
+
+    return npos;
+}
+
+size_t wxString::find_first_not_of(const wxChar* sz, size_t nStart) const
+{
+    if ( nStart == npos )
+    {
+        nStart = Len();
+    }
+    else
+    {
+        wxASSERT( nStart <= Len() );
+    }
+
+    size_t nAccept = strspn(c_str() + nStart, sz);
+    if ( nAccept >= length() - nStart )
+        return npos;
+    else
+        return nAccept;
+}
+
+size_t wxString::find_first_not_of(wxChar ch, size_t nStart) const
+{
+    wxASSERT( nStart <= Len() );
+
+    for ( const char *p = c_str() + nStart; *p; p++ )
+    {
+        if ( *p != ch )
+            return p - c_str();
+    }
+
+    return npos;
+}
+
+size_t wxString::find_last_not_of(const wxChar* sz, size_t nStart) const
+{
+    if ( nStart == npos )
+    {
+        nStart = Len();
+    }
+    else
+    {
+        wxASSERT( nStart <= Len() );
+    }
+
+    for ( const char *p = c_str() + nStart - 1; p >= c_str(); p-- )
+    {
+        if ( !wxStrchr(sz, *p) )
+            return p - c_str();
+    }
+
+    return npos;
+}
+
+size_t wxString::find_last_not_of(wxChar ch, size_t nStart) const
+{
+    if ( nStart == npos )
+    {
+        nStart = Len();
+    }
+    else
+    {
+        wxASSERT( nStart <= Len() );
+    }
+
+    for ( const char *p = c_str() + nStart - 1; p >= c_str(); p-- )
+    {
+        if ( *p != ch )
+            return p - c_str();
+    }
+
+    return npos;
+}
 
 wxString wxString::substr(size_t nStart, size_t nLen) const
 {

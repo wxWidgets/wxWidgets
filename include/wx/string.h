@@ -836,32 +836,37 @@ public:
 
     // find first/last occurence of any character in the set
 
-    //
-  size_t find_first_of(const wxString& str, size_t nStart = 0) const;
-    //
+    // as strpbrk() but starts at nStart, returns npos if not found
+  size_t find_first_of(const wxString& str, size_t nStart = 0) const
+    { return find_first_of(str.c_str(), nStart); }
+    // same as above
   size_t find_first_of(const wxChar* sz, size_t nStart = 0) const;
     // same as find(char, size_t)
-  size_t find_first_of(wxChar c, size_t nStart = 0) const;
-    //
-  size_t find_last_of (const wxString& str, size_t nStart = npos) const;
-    //
-  size_t find_last_of (const wxChar* s, size_t nStart = npos) const;
-    // same as rfind(char, size_t)
-  size_t find_last_of (wxChar c, size_t nStart = npos) const;
+  size_t find_first_of(wxChar c, size_t nStart = 0) const
+    { return find(c, nStart); }
+    // find the last (starting from nStart) char from str in this string
+  size_t find_last_of (const wxString& str, size_t nStart = npos) const
+    { return find_last_of(str.c_str(), nStart); }
+    // same as above
+  size_t find_last_of (const wxChar* sz, size_t nStart = npos) const;
+    // same as above
+  size_t find_last_of(wxChar c, size_t nStart = npos) const
+    { return rfind(c, nStart); }
 
     // find first/last occurence of any character not in the set
 
-    //
-  size_t find_first_not_of(const wxString& str, size_t nStart = 0) const;
-    //
-  size_t find_first_not_of(const wxChar* s, size_t nStart = 0) const;
-    //
+    // as strspn() (starting from nStart), returns npos on failure
+  size_t find_first_not_of(const wxString& str, size_t nStart = 0) const
+    { return find_first_not_of(str.c_str(), nStart); }
+    // same as above
+  size_t find_first_not_of(const wxChar* sz, size_t nStart = 0) const;
+    // same as above
   size_t find_first_not_of(wxChar ch, size_t nStart = 0) const;
-    //
+    //  as strcspn()
   size_t find_last_not_of(const wxString& str, size_t nStart=npos) const;
-    //
-  size_t find_last_not_of(const wxChar* s, size_t nStart = npos) const;
-    //
+    // same as above
+  size_t find_last_not_of(const wxChar* sz, size_t nStart = npos) const;
+    // same as above
   size_t find_last_not_of(wxChar ch, size_t nStart = npos) const;
 
     // All compare functions return -1, 0 or 1 if the [sub]string is less,
