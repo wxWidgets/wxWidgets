@@ -122,8 +122,6 @@ public:
     // Creates the actual edit control
     virtual void Create(wxWindow* parent,
                         wxWindowID id,
-                        const wxPoint& pos,
-                        const wxSize& size,
                         wxEvtHandler* evtHandler) = 0;
 
     // Size and position the edit control
@@ -147,6 +145,11 @@ public:
     // Reset the value in the control back to its starting value
     virtual void Reset() = 0;
 
+    // If the editor is enabled by pressing keys on the grid, this
+    // will be called to let the editor do something about that key
+    // if desired.
+    virtual void StartingKey(wxKeyEvent& event);
+
     // Some types of controls on some platforms may need some help
     // with the Return key.
     virtual void HandleReturn(wxKeyEvent& event);
@@ -166,8 +169,6 @@ public:
 
     virtual void Create(wxWindow* parent,
                         wxWindowID id,
-                        const wxPoint& pos,
-                        const wxSize& size,
                         wxEvtHandler* evtHandler);
 
     virtual void BeginEdit(int row, int col, wxGrid* grid,
@@ -177,6 +178,7 @@ public:
                          wxGrid* grid, wxGridCellAttr* attr);
 
     virtual void Reset();
+    virtual void StartingKey(wxKeyEvent& event);
     virtual void HandleReturn(wxKeyEvent& event);
 
 
@@ -590,12 +592,7 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
 public:
     wxGrid()
         {
-            m_table          = (wxGridTableBase *) NULL;
-            m_gridWin        = (wxGridWindow *) NULL;
-            m_rowLabelWin    = (wxGridRowLabelWindow *) NULL;
-            m_colLabelWin    = (wxGridColLabelWindow *) NULL;
-            m_cornerLabelWin = (wxGridCornerLabelWindow *) NULL;
-            m_cellEditCtrl   = (wxWindow *) NULL;
+            Create();
         }
 
     wxGrid( wxWindow *parent,
@@ -693,7 +690,7 @@ public:
     void     EnableCellEditControl( bool enable );
 
     bool     IsCellEditControlEnabled()
-             { return (m_cellEditCtrl && m_cellEditCtrlEnabled); }
+             { return m_cellEditCtrlEnabled; }
 
     void ShowCellEditControl();
     void HideCellEditControl();
@@ -1154,6 +1151,8 @@ protected:
     // looks for the attr in cache, if not found asks the table and caches the
     // result
     wxGridCellAttr *GetCellAttr(int row, int col) const;
+    wxGridCellAttr *GetCellAttr(const wxGridCellCoords& coords )
+        { return GetCellAttr( coords.GetRow(), coords.GetCol() ); }
 
     // the default cell attr object for cells that don't have their own
     wxGridCellAttr*     m_defaultCellAttr;
@@ -1204,8 +1203,6 @@ protected:
     wxCursor m_colResizeCursor;
 
     bool       m_editable;  // applies to whole grid
-    int        m_editCtrlType;  // for current cell
-    wxWindow*  m_cellEditCtrl;
     bool       m_cellEditCtrlEnabled;
 
 

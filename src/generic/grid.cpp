@@ -314,19 +314,24 @@ void wxGridCellEditor::HandleReturn(wxKeyEvent& event)
 }
 
 
+void wxGridCellEditor::StartingKey(wxKeyEvent& event)
+{
+}
+
+
+
 wxGridCellTextEditor::wxGridCellTextEditor()
 {
 }
 
 void wxGridCellTextEditor::Create(wxWindow* parent,
                                   wxWindowID id,
-                                  const wxPoint& pos,
-                                  const wxSize& size,
                                   wxEvtHandler* evtHandler)
 {
-    m_control = new wxTextCtrl(parent, -1, "", pos, size
+    m_control = new wxTextCtrl(parent, -1, "",
+                               wxDefaultPosition, wxDefaultSize
 #if defined(__WXMSW__)
-                           , wxTE_MULTILINE | wxTE_NO_VSCROLL
+                               , wxTE_MULTILINE | wxTE_NO_VSCROLL // necessary ???
 #endif
         );
 
@@ -364,7 +369,9 @@ bool wxGridCellTextEditor::EndEdit(int row, int col, bool saveValue,
 
     if (changed)
         grid->GetTable()->SetValue(row, col, value);
+
     m_startValue = "";
+    ((wxTextCtrl*)m_control)->SetValue(m_startValue);
 
     return changed;
 }
@@ -378,6 +385,22 @@ void wxGridCellTextEditor::Reset()
     ((wxTextCtrl*)m_control)->SetValue(m_startValue);
     ((wxTextCtrl*)m_control)->SetInsertionPointEnd();
 }
+
+
+void wxGridCellTextEditor::StartingKey(wxKeyEvent& event)
+{
+    wxASSERT_MSG(m_control,
+                 wxT("The wxGridCellEditor must be Created first!"));
+
+    int code = event.KeyCode();
+    if (code >= 32 && code < 255) {
+        wxString st((char)code);
+        if (! event.ShiftDown())
+            st.LowerCase();
+        ((wxTextCtrl*)m_control)->AppendText(st);
+    }
+}
+
 
 void wxGridCellTextEditor::HandleReturn(wxKeyEvent& event)
 {
@@ -402,33 +425,30 @@ void wxGridCellEditorEvtHandler::OnKeyDown(wxKeyEvent& event)
     {
         case WXK_ESCAPE:
             m_editor->Reset();
+            m_grid->EnableCellEditControl(FALSE);
             break;
 
-        case WXK_UP:
-        case WXK_DOWN:
-        case WXK_LEFT:
-        case WXK_RIGHT:
-        case WXK_PRIOR:
-        case WXK_NEXT:
-        case WXK_SPACE:
-            // send the event to the parent grid, skipping the
-            // event if nothing happens
-            //
-            event.Skip( m_grid->ProcessEvent( event ) );
-            break;
+//          case WXK_UP:
+//          case WXK_DOWN:
+//          case WXK_LEFT:
+//          case WXK_RIGHT:
+//          case WXK_PRIOR:
+//          case WXK_NEXT:
+//          case WXK_SPACE:
+//          case WXK_HOME:
+//          case WXK_END:
+//              // send the event to the parent grid, skipping the
+//              // event if nothing happens
+//              //
+//              event.Skip( m_grid->ProcessEvent( event ) );
+//              break;
 
+        case WXK_TAB:
         case WXK_RETURN:
             if (!m_grid->ProcessEvent(event))
                 m_editor->HandleReturn(event);
             break;
 
-        case WXK_HOME:
-        case WXK_END:
-            // send the event to the parent grid, skipping the
-            // event if nothing happens
-            //
-            event.Skip( m_grid->ProcessEvent( event ) );
-            break;
 
         default:
             event.Skip();
@@ -1729,7 +1749,8 @@ void wxGrid::Create()
 
     m_table        = (wxGridTableBase *) NULL;
     m_ownTable     = FALSE;
-    m_cellEditCtrl = (wxWindow *) NULL;
+
+    m_cellEditCtrlEnabled = FALSE;
 
     m_defaultCellAttr = new wxGridCellAttr;
     m_defaultCellAttr->SetDefAttr(m_defaultCellAttr);
@@ -1921,23 +1942,6 @@ void wxGrid::Init()
     m_inOnKeyDown = FALSE;
     m_batchCount = 0;
 
-    // TODO: extend this to other types of controls
-    //
-    m_cellEditCtrl = new wxGridTextCtrl( m_gridWin,
-                                         this,
-                                         FALSE,
-                                         wxGRID_CELLCTRL,
-                                         "",
-                                         wxPoint(1,1),
-                                         wxSize(1,1)
-#if defined(__WXMSW__)
-                                         , wxTE_MULTILINE | wxTE_NO_VSCROLL
-#endif
-                                         );
-
-    m_cellEditCtrl->Show( FALSE );
-    m_cellEditCtrlEnabled = FALSE;
-    m_editCtrlType = wxGRID_TEXTCTRL;
 }
 
 
@@ -3582,6 +3586,13 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 }
                 break;
 
+            case WXK_TAB:
+                if (event.ShiftDown())
+                    MoveCursorLeft();
+                else
+                    MoveCursorRight();
+                break;
+
             case WXK_HOME:
                 if ( event.ControlDown() )
                 {
@@ -3618,6 +3629,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
             case WXK_SHIFT:
             case WXK_ALT:
             case WXK_CONTROL:
+            case WXK_CAPITAL:
                 event.Skip();
                 break;
 
@@ -3634,9 +3646,11 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 //
                 if ( !IsCellEditControlEnabled() )
                     EnableCellEditControl( TRUE );
-                wxKeyEvent evt(event);
-                evt.SetEventObject( m_cellEditCtrl );
-                m_cellEditCtrl->GetEventHandler()->ProcessEvent( evt );
+                if (IsCellEditControlEnabled()) {
+                    wxGridCellAttr* attr = GetCellAttr(m_currentCellCoords);
+                    attr->GetEditor()->StartingKey(event);
+                    attr->DecRef();
+                }
                 break;
         }
     }
@@ -3669,6 +3683,7 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
     {
         HideCellEditControl();
         SaveEditControlValue();
+        EnableCellEditControl(FALSE);
 
         // Clear the old current cell highlight
         wxRect r = BlockToDeviceRect(m_currentCellCoords, m_currentCellCoords);
@@ -4125,35 +4140,30 @@ void wxGrid::EnableEditing( bool edit )
     {
         m_editable = edit;
 
-        // TODO: extend this for other edit control types
-        //
-        if ( m_editCtrlType == wxGRID_TEXTCTRL )
-        {
-            ((wxTextCtrl *)m_cellEditCtrl)->SetEditable( m_editable );
-        }
+        EnableCellEditControl(m_editable);
     }
 }
 
 
 void wxGrid::EnableCellEditControl( bool enable )
 {
+    if (! m_editable)
+        return;
+
     if ( m_currentCellCoords == wxGridNoCellCoords )
         SetCurrentCell( 0, 0 );
-    if ( m_cellEditCtrl &&
-         enable != m_cellEditCtrlEnabled )
-    {
 
+    if ( enable != m_cellEditCtrlEnabled )
+    {
         if ( enable )
         {
             m_cellEditCtrlEnabled = enable;
             SetEditControlValue();
-                 // requires m_cellEditCtrlEnabled to be already true
             ShowCellEditControl();
         }
         else
         {
             HideCellEditControl();
-                 // requires m_cellEditCtrlEnabled to be still true
             SaveEditControlValue();
             m_cellEditCtrlEnabled = enable;
         }
@@ -4163,8 +4173,6 @@ void wxGrid::EnableCellEditControl( bool enable )
 
 void wxGrid::ShowCellEditControl()
 {
-    wxRect rect;
-
     if ( IsCellEditControlEnabled() )
     {
         if ( !IsVisible( m_currentCellCoords ) )
@@ -4173,7 +4181,9 @@ void wxGrid::ShowCellEditControl()
         }
         else
         {
-            rect = CellToRect( m_currentCellCoords );
+            wxRect rect = CellToRect( m_currentCellCoords );
+            int row = m_currentCellCoords.GetRow();
+            int col = m_currentCellCoords.GetCol();
 
             // convert to scrolled coords
             //
@@ -4189,8 +4199,7 @@ void wxGrid::ShowCellEditControl()
             //
             int extra;
 #if defined(__WXMOTIF__)
-            if ( m_currentCellCoords.GetRow() == 0  ||
-                 m_currentCellCoords.GetCol() == 0 )
+            if ( row == 0  || col == 0 )
             {
                 extra = 2;
             }
@@ -4199,8 +4208,7 @@ void wxGrid::ShowCellEditControl()
                 extra = 4;
             }
 #else
-            if ( m_currentCellCoords.GetRow() == 0  ||
-                 m_currentCellCoords.GetCol() == 0 )
+            if ( row == 0  || col == 0 )
             {
                 extra = 1;
             }
@@ -4226,33 +4234,18 @@ void wxGrid::ShowCellEditControl()
             rect.SetBottom( rect.GetBottom() + 2*extra );
 #endif
 
-            m_cellEditCtrl->SetSize( rect );
-            m_cellEditCtrl->Show( TRUE );
-
-            switch ( m_editCtrlType )
-            {
-                case wxGRID_TEXTCTRL:
-                    ((wxTextCtrl *) m_cellEditCtrl)->SetInsertionPointEnd();
-                    break;
-
-                case wxGRID_CHECKBOX:
-                    // TODO: anything ???
-                    //
-                    break;
-
-                case wxGRID_CHOICE:
-                    // TODO: anything ???
-                    //
-                    break;
-
-                case wxGRID_COMBOBOX:
-                    // TODO: anything ???
-                    //
-                    break;
+            wxGridCellAttr*   attr = GetCellAttr(row, col);
+            wxGridCellEditor* editor = attr->GetEditor();
+            if (! editor->IsCreated()) {
+                editor->Create(m_gridWin, -1,
+                               new wxGridCellEditorEvtHandler(this, editor));
             }
 
-            m_cellEditCtrl->SetFocus();
-        }
+            editor->SetSize( rect );
+            editor->Show( TRUE );
+            editor->BeginEdit(row, col, this, attr);
+            attr->DecRef();
+         }
     }
 }
 
@@ -4261,94 +4254,34 @@ void wxGrid::HideCellEditControl()
 {
     if ( IsCellEditControlEnabled() )
     {
-        m_cellEditCtrl->Show( FALSE );
-        SetFocus();
+        int row = m_currentCellCoords.GetRow();
+        int col = m_currentCellCoords.GetCol();
+
+        wxGridCellAttr*   attr = GetCellAttr(row, col);
+        attr->GetEditor()->Show( FALSE );
+        attr->DecRef();
+        m_gridWin->SetFocus();
     }
 }
 
 
 void wxGrid::SetEditControlValue( const wxString& value )
 {
-    if ( m_table )
-    {
-        wxString s;
-        if ( !value )
-            s = GetCellValue(m_currentCellCoords);
-        else
-            s = value;
-
-        if ( IsCellEditControlEnabled() )
-        {
-            switch ( m_editCtrlType )
-            {
-                case wxGRID_TEXTCTRL:
-                    ((wxGridTextCtrl *)m_cellEditCtrl)->SetStartValue(s);
-                    break;
-
-                case wxGRID_CHECKBOX:
-                    // TODO: implement this
-                    //
-                    break;
-
-                case wxGRID_CHOICE:
-                    // TODO: implement this
-                    //
-                    break;
-
-                case wxGRID_COMBOBOX:
-                    // TODO: implement this
-                    //
-                    break;
-            }
-        }
-    }
 }
 
 
 void wxGrid::SaveEditControlValue()
 {
-    if ( m_table )
-    {
-        wxWindow *ctrl = (wxWindow *)NULL;
+    if (IsCellEditControlEnabled()) {
+        int row = m_currentCellCoords.GetRow();
+        int col = m_currentCellCoords.GetCol();
 
-        if ( IsCellEditControlEnabled() )
-        {
-            ctrl = m_cellEditCtrl;
-        }
-        else
-        {
-            return;
-        }
+        wxGridCellAttr*   attr = GetCellAttr(row, col);
+        bool changed = attr->GetEditor()->EndEdit(row, col, TRUE, this, attr);
 
-        bool valueChanged = FALSE;
+        attr->DecRef();
 
-        switch ( m_editCtrlType )
-        {
-            case wxGRID_TEXTCTRL:
-                valueChanged = (((wxGridTextCtrl *)ctrl)->GetValue() !=
-                                ((wxGridTextCtrl *)ctrl)->GetStartValue());
-                SetCellValue( m_currentCellCoords,
-                              ((wxTextCtrl *) ctrl)->GetValue() );
-                break;
-
-            case wxGRID_CHECKBOX:
-                // TODO: implement this
-                //
-                break;
-
-            case wxGRID_CHOICE:
-                // TODO: implement this
-                //
-                break;
-
-            case wxGRID_COMBOBOX:
-                // TODO: implement this
-                //
-                break;
-        }
-
-        if ( valueChanged )
-        {
+        if (changed) {
             SendEvent( EVT_GRID_CELL_CHANGE,
                        m_currentCellCoords.GetRow(),
                        m_currentCellCoords.GetCol() );
