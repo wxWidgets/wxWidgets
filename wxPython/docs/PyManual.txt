@@ -43,8 +43,7 @@ Besides being `a delicious dessert`_, Py is the name for a collection
 of whimsically-named Python programs and modules that began as the
 PyCrust project.  So Py is really several things: a set of standalone
 programs, including the original PyCrust program, a library of Python
-source code modules that can be used in your own programs, a set of
-decorator classes that enhance the wxPython class library, and as many
+source code modules that can be used in your own programs, and as many
 examples of bad "pie" puns as I can come up with.  (If you're going to
 do something, you might as well do it all the way, right?)  Py uses
 Python and wxPython, so it works equally well on Windows, Linux and
@@ -97,10 +96,7 @@ program, and without having to alter one line of your source code.
 Py also contains a collection of modules that you can use in your own
 wxPython applications to provide similar services, either for your own
 use during development, or as an interface for users of your programs.
-These modules are the same ones used by all the Py programs.  In
-addition, Py contains a set of decorator classes that enhance the
-wxPython class library, by dynamically attaching docstrings and call
-signatures at runtime.
+These modules are the same ones used by all the Py programs.  
 
 
 Py standalone programs
@@ -168,9 +164,7 @@ program with a PyCrust frame at the same time.  Inside the PyCrust
 shell namespace, the local variable ``app`` is assigned to your
 application instance.  In this way you can introspect your entire
 application within the PyCrust shell, as well as the PyFilling
-namespace viewer.  And through the use of the Py decorator classes,
-PyCrust can display wxPython function and method signatures as well as
-docstrings for the entire wxPython library.
+namespace viewer.  
 
 
 Py modules
@@ -184,14 +178,6 @@ interpreter module and plug it in to the PyCrust standalone
 application.  As long as it supports the minimum functionality
 required, PyCrust will work just as well with your interpreter as with
 its default interpreter.
-
-
-Decorator classes
-=================
-
-Py contains a set of decorator classes that enhance the wxPython class
-library, by dynamically attaching docstrings and call signatures at
-runtime.
 
 
 Projects using Py
