@@ -65,8 +65,6 @@
     #include "wx/spinctrl.h"
 #endif // wxUSE_SPINCTRL
 
-#include "wx/calctrl.h"
-
 //----------------------------------------------------------------------
 // class definitions
 //----------------------------------------------------------------------
@@ -113,10 +111,6 @@ public:
     void OnEnableAll(wxCommandEvent& event);
     void OnChangeColour(wxCommandEvent& event);
 
-    void OnCalendar(wxCalendarEvent& event);
-    void OnCalendarWeekDayClick(wxCalendarEvent& event);
-    void OnCalendarChange(wxCalendarEvent& event);
-
     wxListBox     *m_listbox,
                   *m_listboxSorted;
     wxChoice      *m_choice,
@@ -144,9 +138,6 @@ public:
     wxNotebook    *m_notebook;
 
     wxStaticText  *m_label;
-
-    wxCalendarCtrl *m_calendar;
-    wxStaticText   *m_date;
 
 private:
     DECLARE_EVENT_TABLE()
@@ -330,8 +321,6 @@ const int  ID_SPINCTRL          = 185;
 
 const int  ID_CHANGE_COLOUR     = 200;
 
-const int  ID_CALENDAR          = 210;
-
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
 EVT_SIZE      (                         MyPanel::OnSize)
 EVT_NOTEBOOK_PAGE_CHANGING(ID_NOTEBOOK, MyPanel::OnPageChanging)
@@ -382,11 +371,6 @@ EVT_SPINCTRL  (ID_SPINCTRL,             MyPanel::OnSpinCtrl)
 #endif // wxUSE_SPINCTRL
 EVT_BUTTON    (ID_BUTTON_LABEL,         MyPanel::OnUpdateLabel)
 EVT_CHECKBOX  (ID_CHANGE_COLOUR,        MyPanel::OnChangeColour)
-
-EVT_CALENDAR            (ID_CALENDAR,   MyPanel::OnCalendar)
-EVT_CALENDAR_SEL_CHANGED(ID_CALENDAR,   MyPanel::OnCalendarChange)
-EVT_CALENDAR_WEEKDAY_CLICKED(ID_CALENDAR, MyPanel::OnCalendarWeekDayClick)
-
 END_EVENT_TABLE()
 
 MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
@@ -659,35 +643,6 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_notebook->AddPage(panel, "wxBitmapXXX");
 
-    // wxCalendarCtrl
-
-    panel = new wxPanel(m_notebook);
-    panel->SetAutoLayout( TRUE );
-
-    wxString date;
-    date.Printf("Selected date: %s",
-                wxDateTime::Today().FormatISODate().c_str());
-    m_date = new wxStaticText(panel, -1, date);
-    m_calendar = new wxCalendarCtrl(panel, ID_CALENDAR);
-
-    c = new wxLayoutConstraints;
-    c->left.SameAs( panel, wxLeft, 10 );
-    c->centreY.SameAs( m_calendar, wxCentreY );
-    c->height.AsIs();
-    c->width.AsIs();
-
-    m_date->SetConstraints(c);
-
-    c = new wxLayoutConstraints;
-    c->left.SameAs( m_date, wxRight, 10 );
-    c->top.SameAs( panel, wxTop, 10 );
-    c->height.AsIs();
-    c->width.AsIs();
-
-    m_calendar->SetConstraints(c);
-
-    m_notebook->AddPage(panel, "wxCalendar");
-
     // layout constraints
 
     panel = new wxPanel(m_notebook);
@@ -764,27 +719,6 @@ void MyPanel::OnPageChanged( wxNotebookEvent &event )
     *m_text << "Notebook selection is " << event.GetSelection() << "\n";
 }
 
-void MyPanel::OnCalendar(wxCalendarEvent& event)
-{
-    *m_text << "Selected " << event.GetDate().FormatISODate() <<
-               " from calendar\n";
-}
-
-void MyPanel::OnCalendarChange(wxCalendarEvent& event)
-{
-    wxString s;
-    s.Printf("Selected date: %s", event.GetDate().FormatISODate().c_str());
-
-    m_date->SetLabel(s);
-}
-
-void MyPanel::OnCalendarWeekDayClick(wxCalendarEvent& event)
-{
-    *m_text << "Clicked on "
-            << wxDateTime::GetWeekDayName(event.GetWeekDay())
-            << "\n";
-}
-
 void MyPanel::OnChangeColour(wxCommandEvent& WXUNUSED(event))
 {
     static wxColour s_colOld;
@@ -828,17 +762,17 @@ void MyPanel::OnListBox( wxCommandEvent &event )
     wxStringClientData *obj = ((wxStringClientData *)event.GetClientObject());
     m_text->AppendText( "ListBox event client data string is: '" );
     if (obj) // BC++ doesn't like use of '? .. : .. ' in this context
-    	m_text->AppendText( obj->GetData() );
+        m_text->AppendText( obj->GetData() );
     else
-    	m_text->AppendText( wxString("none") );
+        m_text->AppendText( wxString("none") );
 
     m_text->AppendText( "'\n" );
     m_text->AppendText( "ListBox control client data string is: '" );
     obj = (wxStringClientData *)listbox->GetClientObject(listbox->GetSelection());
     if (obj)
-    	m_text->AppendText( obj->GetData() );
+        m_text->AppendText( obj->GetData() );
     else
-    	m_text->AppendText( wxString("none") );
+        m_text->AppendText( wxString("none") );
     m_text->AppendText( "'\n" );
 }
 
