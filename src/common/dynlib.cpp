@@ -153,9 +153,13 @@ void *dlsym(void *handle, const char *symbol)
 
 #if defined(__WINDOWS__) || defined(__WXPM__) || defined(__EMX__)
     const wxChar *wxDynamicLibrary::ms_dllext = _T(".dll");
+#elif defined(__WXMAC__) && !defined(__DARWIN__)
+    const wxChar *wxDynamicLibrary::ms_dllext = _T("");
 #elif defined(__UNIX__)
     #if defined(__HPUX__)
         const wxChar *wxDynamicLibrary::ms_dllext = _T(".sl");
+    #elif defined(__DARWIN__)
+        const wxChar *wxDynamicLibrary::ms_dllext = _T(".dylib");
     #else
         const wxChar *wxDynamicLibrary::ms_dllext = _T(".so");
     #endif
@@ -405,7 +409,7 @@ wxDynamicLibrary::CanonicalizeName(const wxString& name,
 {
     wxString nameCanonic;
 
-    // under Unix the library names usualyl start with "lib" prefix, add it
+    // under Unix the library names usually start with "lib" prefix, add it
 #ifdef __UNIX__
     switch ( cat )
     {
