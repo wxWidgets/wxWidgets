@@ -518,5 +518,14 @@
 #    define wxUSE_WXDIB 1
 #endif
 
+/*
+    We need AvailabilityMacros.h for ifdefing out things that don't exist on 
+    OSX 10.2 and lower
+    FIXME:  We need a better way to detect for 10.3 then including a system header
+*/
+#ifdef __DARWIN__
+    #include <AvailabilityMacros.h>
+#endif
+
 #endif /* _WX_PLATFORM_H_ */
 
