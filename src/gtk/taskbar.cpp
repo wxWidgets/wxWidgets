@@ -19,12 +19,15 @@
 #include "wx/gtk/taskbarpriv.h"
 #include "wx/log.h"
 #include "wx/frame.h"
+#include "wx/menu.h"
 
 #include <gdk/gdkx.h>
 
 #ifdef __WXGTK20__
 #include <gtk/gtkversion.h>
 #if GTK_CHECK_VERSION(2, 1, 0)
+
+#include "gtk/gtk.h"
 
 #include "eggtrayicon.h"
 
@@ -44,6 +47,8 @@ wxTaskBarIconAreaBase::wxTaskBarIconAreaBase()
             wxDEFAULT_FRAME_STYLE | wxFRAME_NO_TASKBAR | wxSIMPLE_BORDER |
             wxFRAME_SHAPED,
             wxEmptyString /*eggtray doesn't like setting wmclass*/);
+            
+    m_invokingWindow = NULL;
 }
 
 bool wxTaskBarIconAreaBase::IsProtocolSupported()
@@ -64,6 +69,76 @@ bool wxTaskBarIconAreaBase::IsProtocolSupported()
     }
     
     return (bool)s_supported;
+}
+
+//-----------------------------------------------------------------------------
+// Pop-up menu stuff
+//-----------------------------------------------------------------------------
+
+extern "C" void gtk_pop_hide_callback( GtkWidget *widget, bool* is_waiting  );
+
+extern void SetInvokingWindow( wxMenu *menu, wxWindow* win );
+
+extern "C" void wxPopupMenuPositionCallback( GtkMenu *menu,
+                                             gint *x, gint *y,
+                                             gboolean * WXUNUSED(whatever),
+                                             gpointer user_data );
+
+bool wxTaskBarIconAreaBase::DoPopupMenu( wxMenu *menu, int x, int y )
+{
+    wxCHECK_MSG( m_widget != NULL, false, wxT("invalid window") );
+
+    wxCHECK_MSG( menu != NULL, false, wxT("invalid popup-menu") );
+
+    // NOTE: if you change this code, you need to update
+    //       the same code in window.cpp as well. This
+    //       is ugly code duplication, I know,
+
+    SetInvokingWindow( menu, this );
+
+    menu->UpdateUI( m_invokingWindow );
+
+    bool is_waiting = true;
+
+    gulong handler = gtk_signal_connect( GTK_OBJECT(menu->m_menu),
+                                         "hide",
+                                         GTK_SIGNAL_FUNC(gtk_pop_hide_callback),
+                                         (gpointer)&is_waiting );
+
+    wxPoint pos;
+    gpointer userdata;
+    GtkMenuPositionFunc posfunc;
+    if ( x == -1 && y == -1 )
+    {
+        // use GTK's default positioning algorithm
+        userdata = NULL;
+        posfunc = NULL;
+    }
+    else
+    {
+        pos = ClientToScreen(wxPoint(x, y));
+        userdata = &pos;
+        posfunc = wxPopupMenuPositionCallback;
+    }
+
+    gtk_menu_popup(
+                  GTK_MENU(menu->m_menu),
+                  (GtkWidget *) NULL,           // parent menu shell
+                  (GtkWidget *) NULL,           // parent menu item
+                  posfunc,                      // function to position it
+                  userdata,                     // client data
+                  0,                            // button used to activate it
+                  gtk_get_current_event_time()
+                );
+
+    while (is_waiting)
+    {
+        gtk_main_iteration();
+    }
+
+    gtk_signal_disconnect(GTK_OBJECT(menu->m_menu), handler);
+
+    return true;
 }
 
 #endif // __WXGTK20__

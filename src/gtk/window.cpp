@@ -4237,9 +4237,10 @@ void gtk_pop_hide_callback( GtkWidget *WXUNUSED(widget), bool* is_waiting  )
     *is_waiting = FALSE;
 }
 
-static void SetInvokingWindow( wxMenu *menu, wxWindowGTK *win )
+void SetInvokingWindow( wxMenu *menu, wxWindow* win )
 {
     menu->SetInvokingWindow( win );
+    
     wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
     while (node)
     {
@@ -4279,6 +4280,10 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
     wxCHECK_MSG( m_widget != NULL, false, wxT("invalid window") );
 
     wxCHECK_MSG( menu != NULL, false, wxT("invalid popup-menu") );
+
+    // NOTE: if you change this code, you need to update
+    //       the same code in taskbar.cpp as well. This
+    //       is ugly code duplication, I know,
 
     SetInvokingWindow( menu, this );
 
