@@ -266,7 +266,7 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
    {
       //WXLO_DEBUG(("selecting at : %d/%d", (int) event.GetX(), (int)event.GetY()));
       int left, top;
-      ViewStart(&left, &top);
+      GetViewStart(&left, &top);
       wxSize size = GetClientSize();
       int xdelta, ydelta;
       
@@ -373,7 +373,7 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
             
       // Calculate where the top of the visible area is:
       int x0, y0;
-      ViewStart(&x0,&y0);
+      GetViewStart(&x0,&y0);
       int dx, dy;
       GetScrollPixelsPerUnit(&dx, &dy);
       x0 *= dx; y0 *= dy;
@@ -793,11 +793,11 @@ wxLayoutWindow::ScrollToCursor(void)
    int x0,y0,x1,y1, dx, dy;
 
    // Calculate where the top of the visible area is:
-   ViewStart(&x0,&y0);
+   GetViewStart(&x0,&y0);
    GetScrollPixelsPerUnit(&dx, &dy);
    x0 *= dx; y0 *= dy;
 
-   WXLO_DEBUG(("ScrollToCursor: ViewStart is %d/%d", x0, y0));
+   WXLO_DEBUG(("ScrollToCursor: GetViewStart is %d/%d", x0, y0));
 
    // Get the size of the visible window:
    GetClientSize(&x1, &y1);
@@ -871,7 +871,7 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
    int x0,y0,x1,y1, dx, dy;
 
    // Calculate where the top of the visible area is:
-   ViewStart(&x0,&y0);
+   GetViewStart(&x0,&y0);
    GetScrollPixelsPerUnit(&dx, &dy);
    x0 *= dx; y0 *= dy;
 
@@ -1093,7 +1093,7 @@ wxLayoutWindow::ResizeScrollbars(bool exact)
          (max.x > size.x - X_SCROLL_PAGE|| max.y > size.y - Y_SCROLL_PAGE)
          )
       {
-         ViewStart(&m_ViewStartX, &m_ViewStartY);
+         GetViewStart(&m_ViewStartX, &m_ViewStartY);
          SetScrollbars(X_SCROLL_PAGE,
                        Y_SCROLL_PAGE,
                        max.x / X_SCROLL_PAGE + 2,
