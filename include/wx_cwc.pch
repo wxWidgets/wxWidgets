@@ -1,0 +1,20 @@
+#if __option (profile)
+#if __POWERPC__
+	#pragma precompile_target "wx_Carbon_prof.mch"
+#else
+	#error "illegal processor for carbon"
+#endif
+#else
+#if __POWERPC__
+	#pragma precompile_target "wx_Carbon.mch"
+#else
+	#error "illegal processor for carbon"
+#endif
+#endif
+
+#pragma once on
+#undef WX_PRECOMP
+#define wxUSE_GUI 1
+#define TARGET_CARBON 1
+#define OLDP2C 1
+#include "wx/wx_cw_cm.h"
