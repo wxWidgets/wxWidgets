@@ -186,15 +186,15 @@ static void gtk_window_draw_callback( GtkWidget *WXUNUSED(widget), GdkRectangle 
 
 static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxWindow *win )
 {
-    printf( "OnKeyPress.\n " );
-    
     if (!win->HasVMT()) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
 
+/*
     printf( "OnKeyPress from " );
     if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
         printf( win->GetClassInfo()->GetClassName() );
     printf( ".\n" );
+*/
 
     long key_code = 0;
     switch (gdk_event->keyval)
@@ -286,19 +286,13 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
     event.m_y = 0;
     event.SetEventObject( win );
 
-    printf( "process key.\n" );
-    
     bool ret = win->GetEventHandler()->ProcessEvent( event );
 
-    printf( "no handler.\n" );
-    
     if (!ret)
     {
         wxWindow *ancestor = win;
         while (ancestor)
         {
-            printf( "check accel in %s .\n", WXSTRINGCAST ancestor->GetName() );
-	    
             int command = ancestor->GetAcceleratorTable()->GetCommand( event );
             if (command != -1)
             {

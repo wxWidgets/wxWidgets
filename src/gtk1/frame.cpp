@@ -285,8 +285,6 @@ void wxFrame::SetSize( int x, int y, int width, int height, int sizeFlags )
         gtk_widget_set_usize( m_widget, m_width, m_height );
     }
   
-    m_sizeSet = TRUE;
-
     wxSizeEvent event( wxSize(m_width,m_height), GetId() );
     event.SetEventObject( this );
     GetEventHandler()->ProcessEvent( event );
@@ -368,7 +366,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
     gtk_widget_set_usize( m_widget, m_width, m_height );
     
     // This emulates the new wxMSW behaviour
-
+    
     if (m_frameMenuBar)
     {
         m_frameMenuBar->m_x = 1;  
@@ -454,7 +452,7 @@ void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
         // yes: set it's size to fill all the frame
         int client_x, client_y;
         GetClientSize( &client_x, &client_y );
-        child->SetSize( 1, 1, client_x-2, client_y);
+        child->SetSize( 1, 1, client_x-2, client_y-2 );
     }
 }
 
@@ -495,6 +493,8 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
                 m_frameMenuBar->m_widget, m_frameMenuBar->m_x, m_frameMenuBar->m_y );
         }
     }
+    
+    if (m_sizeSet) GtkOnSize( m_x, m_y, m_width, m_height );
 }
 
 wxMenuBar *wxFrame::GetMenuBar(void) const
@@ -511,6 +511,8 @@ wxToolBar* wxFrame::CreateToolBar(long style, wxWindowID id, const wxString& nam
     m_frameToolBar = OnCreateToolBar( style, id, name );
   
     GetChildren()->DeleteObject( m_frameToolBar );
+    
+    if (m_sizeSet) GtkOnSize( m_x, m_y, m_width, m_height );
   
     return m_frameToolBar;
 }
@@ -532,6 +534,8 @@ wxStatusBar* wxFrame::CreateStatusBar( int number, long style, wxWindowID id, co
     wxCHECK_MSG( m_frameStatusBar == NULL, FALSE, "recreating status bar in wxFrame" );
 
     m_frameStatusBar = OnCreateStatusBar( number, style, id, name );
+  
+    if (m_sizeSet) GtkOnSize( m_x, m_y, m_width, m_height );
   
     return m_frameStatusBar;
 }

@@ -380,7 +380,7 @@ public:
     wxMainMutex = new wxMutex();
     wxThreadGuiInit();
     p_mainid = pthread_self();
-    p_threads_list = wxList(wxKEY_INTEGER);
+//    p_threads_list = wxList(wxKEY_INTEGER);
     wxMainMutex->Lock();
 
     return TRUE;
