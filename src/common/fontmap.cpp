@@ -557,6 +557,27 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
                 }
             }
         }
+        else if ( cs.Left(4) == wxT("8859") )
+        {
+            const wxChar *p = cs.c_str();
+            
+            unsigned int value;
+            if ( wxSscanf(p, wxT("8859-%u"), &value) == 1 )
+            {
+                // printf( "value %d\n", (int)value );
+   
+                // make it 0 based and check that it is strictly positive in
+                // the process (no such thing as iso8859-0 encoding)
+                if ( (value-- > 0) &&
+                     (value < wxFONTENCODING_ISO8859_MAX -
+                              wxFONTENCODING_ISO8859_1) )
+                {
+                    // it's a valid ISO8859 encoding
+                    value += wxFONTENCODING_ISO8859_1;
+                    encoding = (wxFontEncoding)value;
+                }
+            }
+        }
         else // check for Windows charsets
         {
             size_t len;
