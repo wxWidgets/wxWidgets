@@ -72,7 +72,6 @@
 /usr/include/wx/wxprec.h
 /usr/include/wx/zipstrm.h
 /usr/include/wx/zstream.h
-/usr/include/wx/unix/execute.h
 /usr/include/wx/unix/gsockunx.h
 /usr/include/wx/unix/mimetype.h
 /usr/include/wx/protocol/file.h
