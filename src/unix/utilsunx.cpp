@@ -15,6 +15,8 @@
 // headers
 // ----------------------------------------------------------------------------
 
+#include <pwd.h>
+
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -44,10 +46,24 @@
 
 #if wxUSE_BASE
 
-#if defined( __MWERKS__ ) && defined(__MACH__)
-#define WXWIN_OS_DESCRIPTION "MacOS X"
-#define HAVE_NANOSLEEP
-#define HAVE_UNAME
+#if defined(__MWERKS__) && defined(__MACH__)
+    #ifndef WXWIN_OS_DESCRIPTION
+        #define WXWIN_OS_DESCRIPTION "MacOS X"
+    #endif
+    #ifndef HAVE_NANOSLEEP
+        #define HAVE_NANOSLEEP
+    #endif
+    #ifndef HAVE_UNAME
+        #define HAVE_UNAME
+    #endif
+
+    // our configure test believes we can use sigaction() if the function is
+    // available but Metrowekrs with MSL run-time does have the function but
+    // doesn't have sigaction struct so finally we can't use it...
+    #ifdef __MSL__
+        #undef wxUSE_ON_FATAL_EXCEPTION
+        #define wxUSE_ON_FATAL_EXCEPTION 0
+    #endif
 #endif
 
 // not only the statfs syscall is called differently depending on platform, but
@@ -90,7 +106,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include <pwd.h>
 #include <errno.h>
 #include <netdb.h>
 #include <signal.h>
