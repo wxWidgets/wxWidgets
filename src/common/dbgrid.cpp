@@ -276,37 +276,26 @@ wxString wxDbGridTableBase::GetTypeName(int row, int col)
             {
                 case SQL_C_CHAR:
                     return wxGRID_VALUE_STRING;
-                    break;
                 case SQL_C_SSHORT:
                     return wxGRID_VALUE_NUMBER;
-                    break;
                 case SQL_C_USHORT:
                     return wxGRID_VALUE_NUMBER;
-                    break;
                 case SQL_C_SLONG:
                     return wxGRID_VALUE_NUMBER;
-                    break;
                 case SQL_C_ULONG:
                     return wxGRID_VALUE_NUMBER;
-                    break;
                 case SQL_C_FLOAT:
                     return wxGRID_VALUE_FLOAT;
-                    break;
                 case SQL_C_DOUBLE:
                     return wxGRID_VALUE_FLOAT;
-                    break;
                 case SQL_C_DATE:
                     return wxGRID_VALUE_DATETIME;
-                    break;
                 case SQL_C_TIME:
                     return wxGRID_VALUE_DATETIME;
-                    break;
                 case SQL_C_TIMESTAMP:
                     return wxGRID_VALUE_DATETIME;
-                    break;
                 default:
                     return wxGRID_VALUE_STRING;
-                    break;
             }
         }
         else
