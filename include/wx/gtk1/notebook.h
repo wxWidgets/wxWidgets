@@ -70,12 +70,12 @@ class wxNotebook: public wxControl
     bool DeletePage( const int page );
     bool AddPage(wxWindow* win, const wxString& text, const int imageId = -1, void* data = NULL );
     wxWindow *GetPageWindow( const int page ) const;
-    
-    // overriden to do nothing
     virtual void AddChild( wxWindow *win );
-    
+
   protected:
-  
+    // wxWin callbacks
+    void OnSize(wxSizeEvent& event);
+
     wxImageList*    m_imageList;
     wxList          m_pages;
 

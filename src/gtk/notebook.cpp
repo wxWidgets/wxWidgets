@@ -52,6 +52,7 @@ class wxNotebookPage: public wxObject
 //-----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(wxNotebook, wxControl)
+  EVT_SIZE(wxNotebook::OnSize)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxNotebook,wxControl)
@@ -327,6 +328,10 @@ wxWindow *wxNotebook::GetPageWindow( const int page ) const
 
 void wxNotebook::AddChild( wxWindow *win )
 {
+  // @@@ normally done in wxWindow::AddChild but for some reason wxNotebook
+  // case is speicla there (Robert?)
+  m_children.Append(win);
+
   wxNotebookPage *page = new wxNotebookPage();
 
   page->m_id = GetPageCount();
@@ -349,6 +354,19 @@ void wxNotebook::AddChild( wxWindow *win )
 
   m_pages.Append( page );
 };
+
+void wxNotebook::OnSize(wxSizeEvent& event)
+{
+  // forward this event to all pages
+  wxNode *node = m_pages.First();
+  while (node)
+  {
+    wxNotebookPage *page = (wxNotebookPage*)node->Data();
+    page->m_clientPanel->ProcessEvent(event);
+
+    node = node->Next();
+  };
+}
 
 //-----------------------------------------------------------------------------
 // wxTabEvent
