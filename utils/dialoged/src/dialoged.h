@@ -33,7 +33,7 @@ class MyApp: public wxApp
 
     void OnObjectPopupMenu(wxCommandEvent& event)
     {
-        return ObjectMenuProc((wxMenu *)event.GetEventObject(), event);
+        ObjectMenuProc((wxMenu *)event.GetEventObject(), event);
     }
 
 private:

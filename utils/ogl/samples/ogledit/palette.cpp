@@ -105,11 +105,6 @@ EditorToolPalette *MyApp::CreatePalette(wxFrame *parent)
 
   palette->SetMargins(2, 2);
 
-#ifdef __WXMSW__
-  if (palette->IsKindOf(CLASSINFO(wxToolBar95)))
-    ((wxToolBar95 *)palette)->SetToolBitmapSize(wxSize(22, 22));
-#endif
-
   palette->AddTool(PALETTE_ARROW, PaletteArrow, wxNullBitmap, TRUE, 0, -1, NULL, "Pointer");
   palette->AddTool(PALETTE_TOOL1, PaletteTool1, wxNullBitmap, TRUE, 0, -1, NULL, "Tool 1");
   palette->AddTool(PALETTE_TOOL2, PaletteTool2, wxNullBitmap, TRUE, 0, -1, NULL, "Tool 2");

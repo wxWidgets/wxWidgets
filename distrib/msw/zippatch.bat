@@ -1,11 +1,12 @@
 @echo off
 rem Zip up a patch file
-set src=%wxwin
-set dest=%src\deliver
+Rem m:\wx2 contains the latest version + any crucial patches
+set src=m:\wx2
+set dest=%wxwin\deliver
 set wise=0
 
 Rem Set this to the required patch version
-set version=02
+set version=03
 
 if "%src" == "" goto usage
 if "%dest" == "" goto usage
@@ -21,7 +22,7 @@ erase %dest\patch*.zip
 cd %src
 echo Zipping...
 
-zip32 -@ %dest\patch%version%.zip < %src\distrib\msw\patch.rsp
+zip32 -@ %dest\patch%version%.zip < %wxwin\distrib\msw\patch.rsp
 echo wxWindows patch archived.
 
 cd %dest

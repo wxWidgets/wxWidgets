@@ -252,6 +252,16 @@ public:
   wxString m_label;
 };
 
+class ShapeEditMenu: public wxMenu
+{
+public:
+    ShapeEditMenu() {}
+
+    void OnCommand(wxCommandEvent& event);
+
+DECLARE_EVENT_TABLE()
+};
+
 extern void studioShapeEditProc(wxMenu& menu, wxCommandEvent& event);
 
 #endif

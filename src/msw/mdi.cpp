@@ -212,7 +212,6 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
 wxMDIParentFrame::~wxMDIParentFrame()
 {
     DestroyChildren();
-
     // already delete by DestroyChildren()
     m_frameToolBar = NULL;
 

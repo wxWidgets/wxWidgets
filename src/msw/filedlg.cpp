@@ -185,7 +185,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
     m_fileName = defaultFileName;
     m_dir = defaultDir;
     m_wildCard = wildCard;
-    m_filterIndex = 1;
+    m_filterIndex = 0;
 }
 
 int wxFileDialog::ShowModal(void)
@@ -274,7 +274,7 @@ int wxFileDialog::ShowModal(void)
     }
 
     of.lpstrFilter  = (LPTSTR)(const wxChar *)filterBuffer;
-    of.nFilterIndex = m_filterIndex;
+    of.nFilterIndex = m_filterIndex + 1; // m_filterIndex is zero-based, but nFilterIndex is 1-based
 
     //=== Setting defaultFileName >>=========================================
 
@@ -295,7 +295,7 @@ int wxFileDialog::ShowModal(void)
 
         //=== Adding the correct extension >>=================================
 
-        m_filterIndex = (int)of.nFilterIndex;
+        m_filterIndex = wxMax((int)of.nFilterIndex - 1, 0);
 
         if ( of.nFileExtension && fileNameBuffer[ of.nFileExtension-1] != wxT('.') )
         {                                    // user has typed an filename

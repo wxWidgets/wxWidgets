@@ -167,7 +167,7 @@ bool csApp::OnInit(void)
   FillProjectTreeCtrl();
 
   // Create the shape editing menu
-  m_shapeEditMenu = new wxMenu("", (wxFunction)studioShapeEditProc);
+  m_shapeEditMenu = new ShapeEditMenu;
   m_shapeEditMenu->Append(ID_CS_EDIT_PROPERTIES, "Edit properties");
   m_shapeEditMenu->AppendSeparator();
   m_shapeEditMenu->Append(ID_CS_ROTATE_CLOCKWISE, "Rotate clockwise");

@@ -1183,3 +1183,12 @@ void studioShapeEditProc(wxMenu& menu, wxCommandEvent& event)
     }
 }
 
+BEGIN_EVENT_TABLE(ShapeEditMenu, wxMenu)
+    EVT_COMMAND_RANGE(1, 65000, wxEVT_COMMAND_MENU_SELECTED, ShapeEditMenu::OnCommand)
+END_EVENT_TABLE()
+
+void ShapeEditMenu::OnCommand(wxCommandEvent& event)
+{
+    studioShapeEditProc(*this, event);
+}
+
