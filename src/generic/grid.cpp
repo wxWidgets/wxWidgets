@@ -424,6 +424,7 @@ static inline int GetScrollY(int y)
 wxGridCellEditor::wxGridCellEditor()
 {
     m_control = NULL;
+    m_attr = NULL;
 }
 
 
@@ -1216,7 +1217,32 @@ void wxGridCellBoolEditor::SetSize(const wxRect& r)
     size.y -= 2;
 #endif
 
-    m_control->Move(r.x + r.width/2 - size.x/2, r.y + r.height/2 - size.y/2);
+    int hAlign = wxALIGN_CENTRE;
+    int vAlign = wxALIGN_CENTRE;
+    if (GetCellAttr())
+        GetCellAttr()->GetAlignment(& hAlign, & vAlign);
+    
+    int x = 0, y = 0;
+    if (hAlign == wxALIGN_LEFT)
+    {
+        x = r.x + 2;
+#ifdef __WXMSW__
+        x += 2;
+#endif        
+        y = r.y + r.height/2 - size.y/2;
+    }
+    else if (hAlign == wxALIGN_RIGHT)
+    {
+        x = r.x + r.width - size.x - 2;
+        y = r.y + r.height/2 - size.y/2;
+    }
+    else if (hAlign == wxALIGN_CENTRE)
+    {
+        x = r.x + r.width/2 - size.x/2;
+        y = r.y + r.height/2 - size.y/2;
+    }
+    
+    m_control->Move(x, y);
 }
 
 void wxGridCellBoolEditor::Show(bool show, wxGridCellAttr *attr)
@@ -1950,11 +1976,31 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
     }
 
     // draw a border around checkmark
+    int vAlign, hAlign;
+    attr.GetAlignment(& hAlign, &vAlign);
+    
     wxRect rectBorder;
-    rectBorder.x = rect.x + rect.width/2 - size.x/2;
-    rectBorder.y = rect.y + rect.height/2 - size.y/2;
-    rectBorder.width = size.x;
-    rectBorder.height = size.y;
+    if (hAlign == wxALIGN_CENTRE)
+    {
+        rectBorder.x = rect.x + rect.width/2 - size.x/2;
+        rectBorder.y = rect.y + rect.height/2 - size.y/2;
+        rectBorder.width = size.x;
+        rectBorder.height = size.y;
+    }
+    else if (hAlign == wxALIGN_LEFT)
+    {
+        rectBorder.x = rect.x + 2;
+        rectBorder.y = rect.y + rect.height/2 - size.y/2;
+        rectBorder.width = size.x;
+        rectBorder.height = size.y;        
+    }
+    else if (hAlign == wxALIGN_RIGHT)
+    {
+        rectBorder.x = rect.x + rect.width - size.x - 2;
+        rectBorder.y = rect.y + rect.height/2 - size.y/2;
+        rectBorder.width = size.x;
+        rectBorder.height = size.y;        
+    }
 
     bool value;
     if ( grid.GetTable()->CanGetValueAs(row, col, wxGRID_VALUE_BOOL) )
@@ -7388,6 +7434,7 @@ void wxGrid::ShowCellEditControl()
                     rect.SetRight(client_right-1);
             }
 
+            editor->SetCellAttr(attr);
             editor->SetSize( rect );
             editor->Show( TRUE, attr );
 
@@ -7396,6 +7443,7 @@ void wxGrid::ShowCellEditControl()
             CalcDimensions();
 
             editor->BeginEdit(row, col, this);
+            editor->SetCellAttr(NULL);
 
             editor->DecRef();
             attr->DecRef();

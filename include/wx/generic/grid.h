@@ -302,6 +302,9 @@ public:
     wxControl* GetControl() { return m_control; }
     void SetControl(wxControl* control) { m_control = control; }
 
+    wxGridCellAttr* GetCellAttr() { return m_attr; }
+    void SetCellAttr(wxGridCellAttr* attr) { m_attr = attr; }
+
     // Creates the actual edit control
     virtual void Create(wxWindow* parent,
                         wxWindowID id,
@@ -367,6 +370,9 @@ protected:
 
     // the control we show on screen
     wxControl*  m_control;
+
+    // a temporary pointer to the attribute being edited
+    wxGridCellAttr* m_attr;
 
     // if we change the colours/font of the control from the default ones, we
     // must restore the default later and we save them here between calls to
