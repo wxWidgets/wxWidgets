@@ -2,10 +2,18 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
-?????
+2.4.0.8
 -------
 
 Added wxScrolledPanel from Wil Sadkin
+
+Added SetShape method to top level windows (e.g. wxFrame.)
+
+Changed wxSWIG to not generate Python code using apply, (since it will
+be deprecated in the future) wxSWIG will use spam(*args, **kw) syntax
+instead.  Also changed the generated __repr__ methods to be a bit more
+informative.
+
 
 
 

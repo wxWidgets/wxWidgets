@@ -732,7 +732,7 @@ def wxCallAfter(callable, *args, **kw):
     if _wxCallAfterId is None:
         _wxCallAfterId = wxNewEventType()
         app.Connect(-1, -1, _wxCallAfterId,
-              lambda event: apply(event.callable, event.args, event.kw) )
+              lambda event: event.callable(*event.args, **event.kw) )
     evt = wxPyEvent()
     evt.SetEventType(_wxCallAfterId)
     evt.callable = callable
@@ -904,7 +904,7 @@ class wxPyWidgetTester(wxApp):
         return True
 
     def SetWidget(self, widgetClass, *args):
-        w = apply(widgetClass, (self.frame,) + args)
+        w = widgetClass(self.frame, *args)
         self.frame.Show(True)
 
 #----------------------------------------------------------------------------

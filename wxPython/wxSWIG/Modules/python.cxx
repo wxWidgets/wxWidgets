@@ -1071,7 +1071,7 @@ void PYTHON::create_function(char *name, char *iname, DataType *d, ParmList *l)
 	func << tab4 << "\"\"\"" << add_docstring(doc_entry) << "\"\"\"\n";
       }
 
-      func << tab4 << "val = apply(" << module << "." << iname << ",_args,_kwargs)\n";
+      func << tab4 << "val = " << module << "." << iname << "(*_args,**_kwargs)\n";
 
       if (munge_return) {
 	//  If the output of this object has been remapped in any way, we're

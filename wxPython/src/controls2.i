@@ -454,7 +454,7 @@ public:
     } // The OOR typemaps don't know what to do with the %new, so fix it up.
     %pragma(python) addtoclass = "
     def GetColumn(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_GetColumn,(self,) + _args, _kwargs)
+        val = ontrols2c.wxListCtrl_GetColumn(self, *_args, **_kwargs)
         if val is not None: val.thisown = 1
         return val
     "
@@ -493,7 +493,7 @@ public:
     }  // The OOR typemaps don't know what to do with the %new, so fix it up.
     %pragma(python) addtoclass = "
     def GetItem(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_GetItem,(self,) + _args, _kwargs)
+        val = controls2c.wxListCtrl_GetItem(self, *_args, **_kwargs)
         if val is not None: val.thisown = 1
         return val
     "
@@ -1355,17 +1355,17 @@ public:
 %pragma(python) addtoclass = "
     # Redefine some methods that SWIG gets a bit confused on...
     def GetFirstChild(self, *_args, **_kwargs):
-        val1,val2 = apply(controls2c.wxTreeCtrl_GetFirstChild,(self,) + _args, _kwargs)
+        val1,val2 = controls2c.wxTreeCtrl_GetFirstChild(self, *_args, **_kwargs)
         val1 = wxTreeItemIdPtr(val1)
         val1.thisown = 1
         return (val1,val2)
     def GetNextChild(self, *_args, **_kwargs):
-        val1,val2 = apply(controls2c.wxTreeCtrl_GetNextChild,(self,) + _args, _kwargs)
+        val1,val2 = controls2c.wxTreeCtrl_GetNextChild(self, *_args, **_kwargs)
         val1 = wxTreeItemIdPtr(val1)
         val1.thisown = 1
         return (val1,val2)
     def HitTest(self, *_args, **_kwargs):
-        val1, val2 = apply(controls2c.wxTreeCtrl_HitTest,(self,) + _args, _kwargs)
+        val1, val2 = controls2c.wxTreeCtrl_HitTest(self, *_args, **_kwargs)
         val1 = wxTreeItemIdPtr(val1)
         val1.thisown = 1
         return (val1,val2)
@@ -1457,6 +1457,9 @@ public:
 
     wxTreeCtrl* GetTreeCtrl() const;
     wxDirFilterListCtrl* GetFilterListCtrl() const;
+
+    // Collapse & expand the tree, thus re-creating it from scratch:
+    void ReCreateTree();
 
 //  //// Helpers
 //      void SetupSections();

@@ -173,41 +173,41 @@ public:
     %pragma(python) addtoclass = "
     def Add(self, *args, **kw):
         if type(args[0]) == type(1):
-            apply(self.AddSpacer, args, kw)
+            self.AddSpacer(*args, **kw)
         elif isinstance(args[0], wxSizerPtr):
-            apply(self.AddSizer, args, kw)
+            self.AddSizer(*args, **kw)
         elif isinstance(args[0], wxWindowPtr):
-            apply(self.AddWindow, args, kw)
+            self.AddWindow(*args, **kw)
         else:
             raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
 
     def Insert(self, *args, **kw):
         if type(args[1]) == type(1):
-            apply(self.InsertSpacer, args, kw)
+            self.InsertSpacer(*args, **kw)
         elif isinstance(args[1], wxSizerPtr):
-            apply(self.InsertSizer, args, kw)
+            self.InsertSizer(*args, **kw)
         elif isinstance(args[1], wxWindowPtr):
-            apply(self.InsertWindow, args, kw)
+            self.InsertWindow(*args, **kw)
         else:
             raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
 
     def Prepend(self, *args, **kw):
         if type(args[0]) == type(1):
-            apply(self.PrependSpacer, args, kw)
+            self.PrependSpacer(*args, **kw)
         elif isinstance(args[0], wxSizerPtr):
-            apply(self.PrependSizer, args, kw)
+            self.PrependSizer(*args, **kw)
         elif isinstance(args[0], wxWindowPtr):
-            apply(self.PrependWindow, args, kw)
+            self.PrependWindow(*args, **kw)
         else:
             raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
 
     def Remove(self, *args, **kw):
         if type(args[0]) == type(1):
-            return apply(self.RemovePos, args, kw)
+            return self.RemovePos(*args, **kw)
         elif isinstance(args[0], wxSizerPtr):
-            return apply(self.RemoveSizer, args, kw)
+            return self.RemoveSizer(*args, **kw)
         elif isinstance(args[0], wxWindowPtr):
-            return apply(self.RemoveWindow, args, kw)
+            return self.RemoveWindow(*args, **kw)
         else:
             raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
 
@@ -215,7 +215,7 @@ public:
         for childinfo in widgets:
             if type(childinfo) != type(()):
                 childinfo = (childinfo, )
-            apply(self.Add, childinfo)
+            self.Add(*childinfo)
 "
 
 
@@ -229,11 +229,11 @@ public:
     %pragma(python) addtoclass = "
     def SetItemMinSize(self, *args):
         if type(args[0]) == type(1):
-            apply(self.SetItemMinSizePos, args)
+            self.SetItemMinSizePos(*args)
         elif isinstance(args[0], wxSizerPtr):
-            apply(self.SetItemMinSizeSizer, args)
+            self.SetItemMinSizeSizer(*args)
         elif isinstance(args[0], wxWindowPtr):
-            apply(self.SetItemMinSizeWindow, args)
+            self.SetItemMinSizeWindow(*args)
         else:
             raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
      "
@@ -287,25 +287,25 @@ public:
     %pragma(python) addtoclass = "
     def Show(self, *args):
         if isinstance(args[0], wxSizerPtr):
-            apply(self.ShowSizer, args)
+            self.ShowSizer(*args)
         elif isinstance(args[0], wxWindowPtr):
-            apply(self.ShowWindow, args)
+            self.ShowWindow(*args)
         else:
             raise TypeError, 'Expected wxSizer or wxWindow parameter'
 
     def Hide(self, *args):
         if isinstance(args[0], wxSizerPtr):
-            apply(self.HideSizer, args)
+            self.HideSizer(*args)
         elif isinstance(args[0], wxWindowPtr):
-            apply(self.HideWindow, args)
+            self.HideWindow(*args)
         else:
             raise TypeError, 'Expected wxSizer or wxWindow parameter'
 
     def IsShown(self, *args):
         if isinstance(args[0], wxSizerPtr):
-            return apply(self.IsShownSizer, args)
+            return self.IsShownSizer(*args)
         elif isinstance(args[0], wxWindowPtr):
-            return apply(self.IsShownWindow, args)
+            return self.IsShownWindow(*args)
         else:
             raise TypeError, 'Expected wxSizer or wxWindow parameter'
 "
