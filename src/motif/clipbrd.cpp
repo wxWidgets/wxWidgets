@@ -366,10 +366,14 @@ bool wxClipboard::GetData( wxDataObject& data )
 */
         default:
         {
-            return FALSE;
+#ifndef __VMS
+	   // VMS complains that this statement is/causes unreachability
+	   return FALSE;
+#endif
         }
     }
-    return FALSE;
+   
+   return FALSE;
 }
 
 #if 0

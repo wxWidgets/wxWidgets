@@ -135,6 +135,7 @@ OBJECTS1=fs_inet.obj,\
 		sckstrm.obj,\
 		sizer.obj,\
 		socket.obj,\
+		settcmn.obj,\
 		statbar.obj,\
 		strconv.obj,\
 		stream.obj,\
@@ -255,6 +256,7 @@ SOURCES = \
 		sckstrm.cpp,\
 		sizer.cpp,\
 		socket.cpp,\
+		settcmn.cpp,\
 		statbar.cpp,\
 		strconv.cpp,\
 		stream.cpp,\
@@ -413,6 +415,7 @@ sckipc.obj : sckipc.cpp
 sckstrm.obj : sckstrm.cpp
 sizer.obj : sizer.cpp
 socket.obj : socket.cpp
+settcmn.obj : settcmn.cpp
 statbar.obj : statbar.cpp
 strconv.obj : strconv.cpp
 stream.obj : stream.cpp
