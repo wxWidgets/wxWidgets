@@ -228,10 +228,14 @@ public:
       {
          m_DupMan = dupman;
       }
+   void Disconnect(void) { m_DupMan = NULL; }
    void OnTerminate(int WXUNUSED(pid), int WXUNUSED(status)) const
       {
-         m_DupMan->m_DialProcess = NULL;
-         m_DupMan->CheckStatus(TRUE);
+         if(m_DupMan)
+         {
+            m_DupMan->m_DialProcess = NULL;
+            m_DupMan->CheckStatus(TRUE);
+         }
       }
 private:
       wxDialUpManagerImpl *m_DupMan;
@@ -240,7 +244,7 @@ private:
 
 wxDialUpManagerImpl::wxDialUpManagerImpl()
 {
-   m_IsOnline = -1; // unknown
+   m_IsOnline = -2; // -1 or -2, unknown
    m_DialProcess = NULL;
    m_timer = NULL;
    m_CanUseIfconfig = -1; // unknown
@@ -257,7 +261,11 @@ wxDialUpManagerImpl::wxDialUpManagerImpl()
 wxDialUpManagerImpl::~wxDialUpManagerImpl()
 {
    if(m_timer) delete m_timer;
-   if(m_DialProcess) m_DialProcess->Detach();
+   if(m_DialProcess)
+   {
+      m_DialProcess->Disconnect();
+      m_DialProcess->Detach();
+   }
 }
 
 bool
@@ -373,7 +381,7 @@ wxDialUpManagerImpl::CheckStatus(bool fromAsync) const
    ( /* non-const */ (wxDialUpManagerImpl *)this)->CheckStatusInternal();
 
    // now send the events as appropriate:
-   if(m_IsOnline != oldIsOnline && oldIsOnline != -1)
+   if(m_IsOnline != oldIsOnline && m_IsOnline != -1 && oldIsOnline != -2) // -2: first time!
    {
       wxDialUpEvent event(m_IsOnline, ! fromAsync);
       (void)wxTheApp->ProcessEvent(event);
