@@ -807,7 +807,16 @@ int wxTextCtrl::GetLineLength(long lineNo) const
 
 wxString wxTextCtrl::GetLineText(long lineNo) const
 {
+    // TODO this should probably be optimized by using GetWriteBuf()
+
     size_t len = (size_t)GetLineLength(lineNo) + 1;
+    if ( len < sizeof(WORD) )
+    {
+        // there must be at least enough place for the length WORD in the
+        // buffer
+        len += sizeof(WORD);
+    }
+
     char *buf = (char *)malloc(len);
     *(WORD *)buf = len;
     int noChars = (int)SendMessage(GetHwnd(), EM_GETLINE, lineNo, (LPARAM)buf);
