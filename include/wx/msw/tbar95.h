@@ -78,8 +78,14 @@ protected:
     virtual void DoToggleTool(wxToolBarTool *tool, bool toggle);
     virtual void DoSetToggle(wxToolBarTool *tool, bool toggle);
 
+    // override WndProc to process WM_SIZE
+    virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+
     // the big bitmap containing all bitmaps of the toolbar buttons
     WXHBITMAP m_hBitmap;
+
+    // the total number of toolbar elements
+    size_t m_nButtons;
 
 private:
     DECLARE_EVENT_TABLE()

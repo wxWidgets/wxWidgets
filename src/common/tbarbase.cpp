@@ -484,13 +484,23 @@ void wxToolBarBase::OnRightClick(int id,
 // Note that for this event, the id of the window is used,
 // and the integer parameter of wxCommandEvent is used to retrieve
 // the tool id.
-void wxToolBarBase::OnMouseEnter (int id)
+void wxToolBarBase::OnMouseEnter(int id)
 {
     wxCommandEvent event(wxEVT_COMMAND_TOOL_ENTER, GetId());
     event.SetEventObject(this);
     event.SetInt(id);
 
-    GetEventHandler()->ProcessEvent(event);
+    (void)GetEventHandler()->ProcessEvent(event);
+
+    wxToolBarToolBase *tool = FindById(id);
+    if ( !tool || !tool->GetLongHelp() )
+        return;
+
+    wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
+    if ( !frame )
+        return;
+
+    frame->SetStatusText(tool->GetLongHelp());
 }
 
 // ----------------------------------------------------------------------------

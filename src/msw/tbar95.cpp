@@ -80,7 +80,7 @@
 #endif
 
 #ifndef TB_HITTEST
-    #define TB_HITTEST              (WM_USER + 0xff)    // FIXME
+    #define TB_HITTEST              (WM_USER + 69)
 #endif
 
 // these values correspond to those used by comctl32.dll
@@ -171,21 +171,20 @@ wxToolBarToolBase *wxToolBarToolBase::New(wxToolBar *tbar, wxControl *control)
 void wxToolBar::Init()
 {
     m_hBitmap = 0;
+
+    m_nButtons = 0;
+
     m_defaultWidth = DEFAULTBITMAPX;
     m_defaultHeight = DEFAULTBITMAPY;
 }
 
 bool wxToolBar::Create(wxWindow *parent,
-                         wxWindowID id,
-                         const wxPoint& pos,
-                         const wxSize& size,
-                         long style,
-                         const wxString& name)
+                       wxWindowID id,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style,
+                       const wxString& name)
 {
-    wxASSERT_MSG( (style & wxTB_VERTICAL) == 0,
-                  wxT("Sorry, wxToolBar under Windows 95 only "
-                      "supports horizontal orientation.") );
-
     // common initialisation
     if ( !CreateControl(parent, id, pos, size, style, name) )
         return FALSE;
@@ -237,8 +236,6 @@ bool wxToolBar::Create(wxWindow *parent,
 
 wxToolBar::~wxToolBar()
 {
-    UnsubclassWin();
-
     if (m_hBitmap)
     {
         ::DeleteObject((HBITMAP) m_hBitmap);
@@ -282,6 +279,8 @@ bool wxToolBar::Realize()
         return TRUE;
     }
 
+    bool isVertical = (GetWindowStyle() & wxTB_VERTICAL) != 0;
+
     // First, add the bitmap: we use one bitmap for all toolbar buttons
     // ----------------------------------------------------------------
 
@@ -296,7 +295,7 @@ bool wxToolBar::Realize()
     HBITMAP hBitmap = ::CreateCompatibleBitmap(ScreenHDC(),
                                                totalBitmapWidth,
                                                totalBitmapHeight);
-    if ( !m_hBitmap )
+    if ( !hBitmap )
     {
         wxLogLastError(_T("CreateCompatibleBitmap"));
 
@@ -315,7 +314,7 @@ bool wxToolBar::Realize()
     wxCoord x = 0;
 
     // the number of buttons (not separators)
-    int noButtons = 0;
+    int nButtons = 0;
 
     wxToolBarToolsList::Node *node = m_tools.GetFirst();
     while ( node )
@@ -334,14 +333,17 @@ bool wxToolBar::Realize()
                 }
 
                 ::SelectObject(memoryDC2, oldBitmap2);
-
-                x += m_defaultWidth;
-                noButtons++;
             }
             else
             {
                 wxFAIL_MSG( _T("invalid tool button bitmap") );
             }
+
+            // still inc width and number of buttons because otherwise the
+            // subsequent buttons will all be shifted which is rather confusing
+            // (and like this you'd see immediately which bitmap was bad)
+            x += m_defaultWidth;
+            nButtons++;
         }
 
         node = node->GetNext();
@@ -361,9 +363,9 @@ bool wxToolBar::Realize()
         replaceBitmap.hInstNew = NULL;
         replaceBitmap.nIDOld = (UINT) oldToolBarBitmap;
         replaceBitmap.nIDNew = (UINT) hBitmap;
-        replaceBitmap.nButtons = noButtons;
-        if ( ::SendMessage(GetHwnd(), TB_REPLACEBITMAP,
-                           0, (LPARAM) &replaceBitmap) == -1 )
+        replaceBitmap.nButtons = nButtons;
+        if ( !::SendMessage(GetHwnd(), TB_REPLACEBITMAP,
+                            0, (LPARAM) &replaceBitmap) )
         {
             wxFAIL_MSG(wxT("Could not add bitmap to toolbar"));
         }
@@ -371,12 +373,12 @@ bool wxToolBar::Realize()
         ::DeleteObject(oldToolBarBitmap);
 
         // Now delete all the buttons
-        int i = 0;
-        while ( TRUE )
+        for ( size_t pos = 0; pos < m_nButtons; pos++ )
         {
-            // TODO: What about separators???? They don't have an id!
-            if ( ! ::SendMessage( GetHwnd(), TB_DELETEBUTTON, i, 0 ) )
-                break;
+            if ( !::SendMessage(GetHwnd(), TB_DELETEBUTTON, 0, 0) )
+            {
+                wxLogLastError("TB_DELETEBUTTON");
+            }
         }
     }
     else // no old bitmap
@@ -385,7 +387,7 @@ bool wxToolBar::Realize()
         addBitmap.hInst = 0;
         addBitmap.nID = (UINT) hBitmap;
         if ( ::SendMessage(GetHwnd(), TB_ADDBITMAP,
-                           (WPARAM) noButtons, (LPARAM)&addBitmap) == -1 )
+                           (WPARAM) nButtons, (LPARAM)&addBitmap) == -1 )
         {
             wxFAIL_MSG(wxT("Could not add bitmap to toolbar"));
         }
@@ -402,10 +404,14 @@ bool wxToolBar::Realize()
     int i = 0;
     int bitmapId = 0;
 
-    node = m_tools.GetFirst();
-    while ( node )
+    for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
     {
         wxToolBarToolBase *tool = node->GetData();
+
+        // don't add separators to the vertical toolbar - looks ugly
+        if ( isVertical && tool->IsSeparator() )
+            continue;
+
         TBBUTTON& button = buttons[i];
 
         wxZeroMemory(button);
@@ -413,6 +419,7 @@ bool wxToolBar::Realize()
         switch ( tool->GetStyle() )
         {
             case wxTOOL_STYLE_CONTROL:
+                button.idCommand = tool->GetId();
                 // fall through: create just a separator too
 
             case wxTOOL_STYLE_SEPARATOR:
@@ -437,8 +444,6 @@ bool wxToolBar::Realize()
         }
 
         i++;
-
-        node = node->GetNext();
     }
 
     if ( !::SendMessage(GetHwnd(), TB_ADDBUTTONS,
@@ -467,6 +472,15 @@ bool wxToolBar::Realize()
         // the position of the leftmost controls corner
         int left = -1;
 
+        // note that we use TB_GETITEMRECT and not TB_GETRECT because the
+        // latter only appeared in v4.70 of comctl32.dll
+        RECT r;
+        if ( !SendMessage(GetHwnd(), TB_GETITEMRECT,
+                          index, (LPARAM)(LPRECT)&r) )
+        {
+            wxLogLastError("TB_GETITEMRECT");
+        }
+
         // TB_SETBUTTONINFO message is only supported by comctl32.dll 4.71+
         #if defined(_WIN32_IE) && (_WIN32_IE >= 0x400 )
             // available in headers, now check whether it is available now
@@ -492,13 +506,6 @@ bool wxToolBar::Realize()
             // TB_SETBUTTONINFO unavailable
             {
                 // try adding several separators to fit the controls width
-                RECT r;
-                if ( !SendMessage(GetHwnd(), TB_GETITEMRECT,
-                                  tool->GetId(), (LPARAM)(LPRECT)&r) )
-                {
-                    wxLogLastError("TB_GETITEMRECT");
-                }
-
                 int widthSep = r.right - r.left;
                 left = r.left;
 
@@ -516,6 +523,8 @@ bool wxToolBar::Realize()
                     {
                         wxLogLastError("TB_INSERTBUTTON");
                     }
+
+                    index++;
                 }
 
                 // adjust the controls width to exactly cover the separators
@@ -523,13 +532,6 @@ bool wxToolBar::Realize()
             }
 
         // and position the control itself correctly vertically
-        RECT r;
-        if ( !SendMessage(GetHwnd(), TB_GETITEMRECT,
-                          tool->GetId(), (LPARAM)(LPRECT)&r) )
-        {
-            wxLogLastError("TB_GETRECT");
-        }
-
         int height = r.bottom - r.top;
         int diff = height - size.y;
         if ( diff < 0 )
@@ -540,12 +542,44 @@ bool wxToolBar::Realize()
             diff = 2;
         }
 
-        control->Move(left == -1 ? r.left : left, r.top + diff / 2);
+        control->Move(left == -1 ? r.left : left, r.top + (diff + 1) / 2);
     }
 
-    (void)::SendMessage(GetHwnd(), TB_AUTOSIZE, (WPARAM)0, (LPARAM) 0);
+    // the max index is the "real" number of buttons - i.e. counting even the
+    // separators which we added just for aligning the controls
+    m_nButtons = index;
 
-    SetRows(m_maxRows);
+    if ( !isVertical )
+    {
+        (void)::SendMessage(GetHwnd(), TB_AUTOSIZE, (WPARAM)0, (LPARAM) 0);
+
+        SetRows(1);
+    }
+    else // vertical toolbar
+    {
+        // can't use TB_AUTOSIZE here, so calculate the total size ourselves
+        int w = 0,
+            h = 0;
+        for ( size_t pos = 0; pos < m_nButtons; pos++ )
+        {
+            RECT r;
+            if ( !::SendMessage(GetHwnd(), TB_GETITEMRECT, pos, (LPARAM)&r) )
+            {
+                wxLogLastError("TB_GETITEMRECT");
+            }
+
+            if ( r.right - r.left > w )
+            {
+                w = r.right - r.left;
+            }
+
+            h += r.bottom - r.top;
+        }
+
+        SetSize(w, h);
+
+        SetRows(m_nButtons);
+    }
 
     return TRUE;
 }
@@ -748,6 +782,27 @@ void wxToolBar::OnMouseEvent(wxMouseEvent& event)
     }
 }
 
+long wxToolBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+{
+    if ( (GetWindowStyle() & wxTB_VERTICAL) && (nMsg == WM_SIZE) )
+    {
+        // we never change width, so restore it if the def window proc changed
+        // it
+        RECT r;
+        if ( ::SendMessage(GetHwnd(), TB_GETITEMRECT, 0, (LPARAM)&r) )
+        {
+            int w = r.right - r.left;
+            if ( LOWORD(lParam) != w )
+            {
+                SetSize(w, HIWORD(lParam));
+            }
+
+            return 0;
+        }
+    }
+
+    return wxControl::MSWWindowProc(nMsg, wParam, lParam);
+}
 
 // ----------------------------------------------------------------------------
 // private functions
