@@ -308,32 +308,32 @@ void MyFrame::OnCommand( wxCommandEvent &event )
 #endif
    case ID_HTML:
    {
-      wxLayoutExportObject *export;
+      wxLayoutExportObject *export0;
       wxLayoutExportStatus status(m_lwin->GetLayoutList());
 
-      while((export = wxLayoutExport( &status,
+      while((export0 = wxLayoutExport( &status,
                                       WXLO_EXPORT_AS_HTML)) != NULL)
       {
-         if(export->type == WXLO_EXPORT_HTML)
-            cout << *(export->content.text);
+         if(export0->type == WXLO_EXPORT_HTML)
+            cout << *(export0->content.text);
          else
             cout << "<!--UNKNOWN OBJECT>";
-         delete export;
+         delete export0;
       }
    }
    break;
    case ID_TEXT:
    {
-      wxLayoutExportObject *export;
+      wxLayoutExportObject *export0;
       wxLayoutExportStatus status(m_lwin->GetLayoutList());
 
-      while((export = wxLayoutExport( &status, WXLO_EXPORT_AS_TEXT)) != NULL)
+      while((export0 = wxLayoutExport( &status, WXLO_EXPORT_AS_TEXT)) != NULL)
       {
-         if(export->type == WXLO_EXPORT_TEXT)
-            cout << *(export->content.text);
+         if(export0->type == WXLO_EXPORT_TEXT)
+            cout << *(export0->content.text);
          else
             cout << "<!--UNKNOWN OBJECT>";
-         delete export;
+         delete export0;
       }
    }
    break;
