@@ -52,6 +52,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_SORT, MyFrame::OnSort)
     EVT_MENU(LIST_SET_FG_COL, MyFrame::OnSetFgColour)
     EVT_MENU(LIST_SET_BG_COL, MyFrame::OnSetBgColour)
+    EVT_MENU(LIST_TOGGLE_MULTI_SEL, MyFrame::OnToggleMultiSel)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
@@ -156,6 +157,9 @@ bool MyApp::OnInit()
   menuList->Append(LIST_SORT, "&Sort\tCtrl-S");
   menuList->AppendSeparator();
   menuList->Append(LIST_DELETE_ALL, "Delete &all items");
+  menuList->AppendSeparator();
+  menuList->Append(LIST_TOGGLE_MULTI_SEL, "&Multiple selection\tCtrl-M",
+                   "Toggle multiple selection", TRUE);
 
   wxMenu *menuCol = new wxMenu;
   menuCol->Append(LIST_SET_FG_COL, "&Foreground colour...");
@@ -168,9 +172,15 @@ bool MyApp::OnInit()
   menubar->Append(menuCol, "&Colour");
   frame->SetMenuBar(menubar);
 
-  frame->m_listCtrl = new MyListCtrl(frame, LIST_CTRL, wxPoint(0, 0), wxSize(400, 200),
-          wxLC_LIST|wxSUNKEN_BORDER|wxLC_EDIT_LABELS );
-//          wxLC_LIST|wxLC_USER_TEXT|wxSUNKEN_BORDER); // wxLC_USER_TEXT requires app to supply all text on demand
+  frame->m_listCtrl = new MyListCtrl(frame, LIST_CTRL,
+                                     wxPoint(0, 0), wxSize(400, 200),
+                                     wxLC_LIST |
+                                     wxSUNKEN_BORDER |
+                                     wxLC_EDIT_LABELS |
+  // wxLC_USER_TEXT requires app to supply all text on demand
+                                     // wxLC_USER_TEXT |
+                                     wxLC_SINGLE_SEL
+                                     );
 
   frame->m_logWindow = new wxTextCtrl(frame, -1, "", wxPoint(0, 0), wxSize(400, 200), wxTE_MULTILINE|wxSUNKEN_BORDER);
 
@@ -406,6 +416,25 @@ void MyFrame::OnSort(wxCommandEvent& WXUNUSED(event))
     m_logWindow->WriteText(wxString::Format(_T("Sorting %d items took %ld ms\n"),
                                             m_listCtrl->GetItemCount(),
                                             sw.Time()));
+}
+
+void MyFrame::OnToggleMultiSel(wxCommandEvent& WXUNUSED(event))
+{
+    m_logWindow->WriteText("Current selection mode: ");
+
+    long flags = m_listCtrl->GetWindowStyleFlag();
+    if ( flags & wxLC_SINGLE_SEL )
+    {
+        m_listCtrl->SetWindowStyleFlag(flags & ~wxLC_SINGLE_SEL);
+        m_logWindow->WriteText("multiple");
+    }
+    else
+    {
+        m_listCtrl->SetWindowStyleFlag(flags | wxLC_SINGLE_SEL);
+        m_logWindow->WriteText("single");
+    }
+
+    m_logWindow->WriteText("\nRecreate the control now\n");
 }
 
 void MyFrame::OnSetFgColour(wxCommandEvent& WXUNUSED(event))

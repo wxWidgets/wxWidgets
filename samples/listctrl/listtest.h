@@ -72,6 +72,7 @@ public:
     void OnSort(wxCommandEvent& event);
     void OnSetFgColour(wxCommandEvent& event);
     void OnSetBgColour(wxCommandEvent& event);
+    void OnToggleMultiSel(wxCommandEvent& event);
 
     void BusyOn(wxCommandEvent& event);
     void BusyOff(wxCommandEvent& event);
@@ -99,6 +100,7 @@ enum
     LIST_SORT,
     LIST_SET_FG_COL,
     LIST_SET_BG_COL,
+    LIST_TOGGLE_MULTI_SEL,
 
     LIST_CTRL                   = 1000
 };
