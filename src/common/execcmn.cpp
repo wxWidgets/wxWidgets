@@ -16,7 +16,7 @@
 
 // this file should never be compiled directly, just included by other code
 #ifndef _WX_USED_BY_WXEXECUTE_
-    #error "Please don't exclude this file from build!"
+    #error "You should never directly build this file!"
 #endif
 
 // ----------------------------------------------------------------------------
