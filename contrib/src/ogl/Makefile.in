@@ -3,9 +3,7 @@
 top_srcdir = @top_srcdir@/..
 top_builddir = ../../..
 
-VPATH= $(top_srcdir)/ogl
-
-LIBTARGET=$(top_builddir)/contrib/lib/libogl
+LIBTARGET=libogl
 
 OBJECTS=basic.o   bmpshape.o  composit.o  divided.o  lines.o    misc.o \
         basic2.o  canvas.o    constrnt.o  drawn.o    mfutils.o  ogldiag.o
@@ -14,5 +12,7 @@ OBJECTS=basic.o   bmpshape.o  composit.o  divided.o  lines.o    misc.o \
 # would remove this line completely - it contains a built-in hack to remove
 # any VPATH assignment not containing ':'
 VPATH = :$(top_srcdir)/contrib/src/ogl # ':' for autoconf
+
+APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 
 include $(top_builddir)/src/makelib.env

@@ -3,9 +3,7 @@
 top_srcdir = @top_srcdir@/..
 top_builddir = ../../..
 
-VPATH= $(top_srcdir)/mmedia
-
-LIBTARGET=$(top_builddir)/contrib/lib/libmmedia
+LIBTARGET=libmmedia
 
 OBJECTS=cdbase.o cdwin.o g711.o g721.o g723_24.o \
   g723_40.o g72x.o sndaiff.o sndbase.o sndcodec.o \
@@ -16,6 +14,8 @@ OBJECTS=cdbase.o cdwin.o g711.o g721.o g723_24.o \
 # would remove this line completely - it contains a built-in hack to remove
 # any VPATH assignment not containing ':'
 VPATH = :$(top_srcdir)/contrib/src/mmedia # ':' for autoconf
+
+APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 
 include $(top_builddir)/src/makelib.env
 
