@@ -481,7 +481,7 @@ wxUint32 wxSocketBase::_Write(const void *buffer, wxUint32 nbytes)
   {
     bool more = TRUE;
 
-    while (more)            
+    while (more)
     {
       if ( !(m_flags & wxSOCKET_BLOCK) && !WaitForWrite() )
         break;
@@ -1010,7 +1010,7 @@ wxUint32 wxSocketBase::GetPushback(void *buffer, wxUint32 size, bool peek)
 
 
 // ==========================================================================
-// wxSocketServer                             
+// wxSocketServer
 // ==========================================================================
 
 // --------------------------------------------------------------------------
@@ -1088,7 +1088,10 @@ wxSocketBase *wxSocketServer::Accept(bool wait)
   sock->SetFlags(m_flags);
 
   if (!AcceptWith(*sock, wait))
-    return NULL;
+  {
+    sock->Destroy();
+    sock = NULL;
+  }
 
   return sock;
 }
