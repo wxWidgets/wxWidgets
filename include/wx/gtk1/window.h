@@ -172,14 +172,9 @@ public:
     float                m_oldHorizontalPos;
     float                m_oldVerticalPos;
 
-    // we need an extra XGC flag set to get exposed
-    // events from overlapping children upon moving
-    // them. this flag will be set in this GC and
-    // the GC will be used in wxWindow::ScrollWindow().
-    GdkGC               *m_scrollGC;
-
     // extra (wxGTK-specific) flags
     bool                 m_needParent:1;    /* ! wxFrame, wxDialog, wxNotebookPage ?  */
+    bool                 m_noExpose:1;      /* wxGLCanvas has its own redrawing */
     bool                 m_hasScrolling:1;
     bool                 m_isScrolling:1;
     bool                 m_hasVMT:1;
@@ -188,7 +183,7 @@ public:
     bool                 m_isStaticBox:1;   /* faster than IS_KIND_OF */
     bool                 m_isRadioButton:1; /* faster than IS_KIND_OF */
     bool                 m_isFrame:1;       /* faster than IS_KIND_OF */
-    bool                 m_acceptsFocus:1;  /* ! wxStaticBox etc.  */
+    bool                 m_acceptsFocus:1;  /* not wxStaticBox, not wxStaticBitmap etc.  */
 
     // these are true if the style were set before the widget was realized
     // (typcally in the constructor) but the actual GTK style must not be set

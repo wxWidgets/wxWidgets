@@ -27,6 +27,7 @@
 
 #include "penguin.h"
 #include <GL/glu.h>
+#include "wx/gtk/win_gtk.h"
 
 #define VIEW_ASPECT 1.3
 
@@ -105,6 +106,14 @@ void TestGLCanvas::OnPaint( wxPaintEvent& event )
     if (!GetContext()) return;
 #endif
 
+    printf( "on refresh.\n" );
+    int x,y;
+    GtkMyFixed *fixed = GTK_MYFIXED(m_wxwindow);
+    gdk_window_get_size( m_wxwindow->window, &x, &y );
+    printf( "-> window %d %d.\n", x, y );
+    gdk_window_get_size( fixed->bin_window, &x, &y );
+    printf( "-> bin_window %d %d.\n", x, y );
+    
     SetCurrent();
     
     /* initialize OpenGL */
@@ -145,6 +154,8 @@ void TestGLCanvas::OnSize(wxSizeEvent& event)
 {
     int width, height;
     GetClientSize(& width, & height);
+    
+    printf( "onsize %d %d.\n", width, height );
     
 #ifndef __WXMOTIF__
     if (GetContext())

@@ -55,6 +55,8 @@ struct _GtkMyFixed
   gulong configure_serial;
   gint scroll_x;
   gint scroll_y;
+  
+  gboolean clear_on_draw;
 };
 
 struct _GtkMyFixedClass
@@ -68,8 +70,12 @@ struct _GtkMyFixedClass
 
 guint      gtk_myfixed_get_type        (void);
 GtkWidget* gtk_myfixed_new             (void);
+
 void       gtk_myfixed_set_shadow_type (GtkMyFixed     *myfixed,
 				        GtkMyShadowType  type);
+					
+void       gtk_my_fixed_set_clear      (GtkMyFixed     *myfixed,
+                                        gboolean        clear);		
 					
 void       gtk_myfixed_scroll          	(GtkMyFixed     *myfixed,	
                                          gint         dx,

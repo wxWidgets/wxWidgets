@@ -123,16 +123,17 @@ public:
    void SwapBuffers();
 
    void OnSize(wxSizeEvent& event);
+   
+   void OnInternalIdle();
 
    inline wxGLContext* GetContext() const { return m_glContext; } 
 
  // implementation
   
-    virtual GtkWidget *GetConnectWidget();
-    bool IsOwnGtkWindow( GdkWindow *window );
-  
-    wxGLContext      *m_glContext; 
+    wxGLContext      *m_glContext,
+                     *m_sharedContext;
     GtkWidget        *m_glWidget;
+    bool              m_exposed;
 
 private:
     DECLARE_EVENT_TABLE()

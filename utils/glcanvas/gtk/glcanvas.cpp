@@ -88,7 +88,8 @@ void wxGLContext::SwapBuffers()
 {
     if (m_glContext)
     {
-        glXSwapBuffers( GDK_DISPLAY(), GDK_WINDOW_XWINDOW( m_widget->window ) );
+        GdkWindow *window = GTK_MYFIXED(m_widget)->bin_window;
+        glXSwapBuffers( GDK_DISPLAY(), GDK_WINDOW_XWINDOW( window ) );
     }
 }
 
@@ -96,7 +97,8 @@ void wxGLContext::SetCurrent()
 {
     if (m_glContext) 
     { 
-        glXMakeCurrent( GDK_DISPLAY(), GDK_WINDOW_XWINDOW(m_widget->window), m_glContext );
+        GdkWindow *window = GTK_MYFIXED(m_widget)->bin_window;
+        glXMakeCurrent( GDK_DISPLAY(), GDK_WINDOW_XWINDOW(window), m_glContext );
     }
 }
 
@@ -135,12 +137,40 @@ wxPalette wxGLContext::CreateDefaultPalette()
 static gint
 gtk_glwindow_realized_callback( GtkWidget * WXUNUSED(widget), wxGLCanvas *win )
 {
-    win->m_glContext = new wxGLContext( TRUE, win, wxNullPalette, win->m_glContext );
+    win->m_glContext = new wxGLContext( TRUE, win, wxNullPalette, win->m_sharedContext );
 
     XFree( g_vi );
     g_vi = (XVisualInfo*) NULL;
 
     return FALSE;
+}
+
+//-----------------------------------------------------------------------------
+// "expose_event" of m_wxwindow
+//-----------------------------------------------------------------------------
+
+static void 
+gtk_glwindow_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExpose *gdk_event, wxGLCanvas *win )
+{
+    win->m_exposed = TRUE;
+
+    win->GetUpdateRegion().Union( gdk_event->area.x,
+                                  gdk_event->area.y,
+                                  gdk_event->area.width,
+                                  gdk_event->area.height );
+}
+
+//-----------------------------------------------------------------------------
+// "draw" of m_wxwindow
+//-----------------------------------------------------------------------------
+
+static void 
+gtk_glwindow_draw_callback( GtkWidget *WXUNUSED(widget), GdkRectangle *rect, wxGLCanvas *win )
+{
+    win->m_exposed = TRUE;
+
+    win->GetUpdateRegion().Union( rect->x, rect->y,
+                                  rect->width, rect->height );
 }
 
 //---------------------------------------------------------------------------
@@ -181,7 +211,10 @@ bool wxGLCanvas::Create( wxWindow *parent,
                          int *attribList, 
 			 const wxPalette& palette)
 {
-    m_glContext = (wxGLContext*)shared;  // const_cast
+    m_sharedContext = (wxGLContext*)shared;  // const_cast
+    
+    m_exposed = FALSE;
+    m_noExpose = TRUE;
     
     if (!attribList)
     {
@@ -239,8 +272,17 @@ bool wxGLCanvas::Create( wxWindow *parent,
 
     m_glWidget = m_wxwindow;
     
-    gtk_signal_connect( GTK_OBJECT(m_glWidget), "realize",
+    gtk_my_fixed_set_clear( GTK_MYFIXED(m_wxwindow), FALSE );
+    
+    gtk_signal_connect( GTK_OBJECT(m_wxwindow), "realize",
                             GTK_SIGNAL_FUNC(gtk_glwindow_realized_callback), (gpointer) this );
+
+    gtk_signal_connect( GTK_OBJECT(m_wxwindow), "expose_event",
+        GTK_SIGNAL_FUNC(gtk_glwindow_expose_callback), (gpointer)this );
+
+    gtk_signal_connect( GTK_OBJECT(m_wxwindow), "draw",
+        GTK_SIGNAL_FUNC(gtk_glwindow_draw_callback), (gpointer)this );
+	
     gtk_widget_pop_visual();
     gtk_widget_pop_colormap();
     
@@ -284,12 +326,15 @@ void wxGLCanvas::SetColour( const char *colour )
     if (m_glContext) m_glContext->SetColour( colour );
 }
 
-GtkWidget *wxGLCanvas::GetConnectWidget()
+void wxGLCanvas::OnInternalIdle()
 {
-    return m_wxwindow;
-}
+    if (m_glContext && m_exposed)
+    {
+        wxPaintEvent event( GetId() );
+        event.SetEventObject( this );
+        GetEventHandler()->ProcessEvent( event );
 
-bool wxGLCanvas::IsOwnGtkWindow( GdkWindow *window )
-{
-    return (window == m_wxwindow->window);
+        m_exposed = FALSE;
+        GetUpdateRegion().Clear();
+    }
 }

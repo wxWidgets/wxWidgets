@@ -303,7 +303,7 @@ static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *g
 }
 
 //-----------------------------------------------------------------------------
-// "draw" of m_wxwindow
+// "draw" of m_widget
 //-----------------------------------------------------------------------------
 
 static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNUSED(rect), wxWindow *win )
@@ -1766,6 +1766,8 @@ void wxWindow::Init()
     m_hasVMT = FALSE;
     m_needParent = TRUE;
     m_isBeingDeleted = FALSE;
+    
+    m_noExpose = FALSE;
 
     m_hasScrolling = FALSE;
     m_isScrolling = FALSE;
@@ -1776,7 +1778,6 @@ void wxWindow::Init()
     m_oldVerticalPos = 0.0;
 
     m_resizing = FALSE;
-    m_scrollGC = (GdkGC*) NULL;
     m_widgetStyle = (GtkStyle*) NULL;
 
     m_insertCallback = (wxInsertChildFunction) NULL;
@@ -1977,12 +1978,6 @@ wxWindow::~wxWindow()
         m_widgetStyle = (GtkStyle*) NULL;
     }
 
-    if (m_scrollGC)
-    {
-        gdk_gc_unref( m_scrollGC );
-        m_scrollGC = (GdkGC*) NULL;
-    }
-
     if (m_wxwindow)
     {
         gtk_widget_destroy( m_wxwindow );
@@ -2034,12 +2029,15 @@ void wxWindow::PostCreation()
 
     if (m_wxwindow)
     {
-        /* these get reported to wxWindows -> wxPaintEvent */
-        gtk_signal_connect( GTK_OBJECT(m_wxwindow), "expose_event",
-          GTK_SIGNAL_FUNC(gtk_window_expose_callback), (gpointer)this );
+        if (!m_noExpose)
+	{
+            /* these get reported to wxWindows -> wxPaintEvent */
+            gtk_signal_connect( GTK_OBJECT(m_wxwindow), "expose_event",
+                GTK_SIGNAL_FUNC(gtk_window_expose_callback), (gpointer)this );
 
-       gtk_signal_connect( GTK_OBJECT(m_wxwindow), "draw",
-          GTK_SIGNAL_FUNC(gtk_window_draw_callback), (gpointer)this );
+            gtk_signal_connect( GTK_OBJECT(m_wxwindow), "draw",
+                GTK_SIGNAL_FUNC(gtk_window_draw_callback), (gpointer)this );
+	}
 	  
 #if (GTK_MINOR_VERSION > 0)
         /* these are called when the "sunken" or "raised" borders are drawn */

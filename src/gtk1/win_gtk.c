@@ -187,6 +187,8 @@ gtk_myfixed_init (GtkMyFixed *myfixed)
     myfixed->scroll_x = 0;
     myfixed->scroll_y = 0;
     myfixed->visibility = GDK_VISIBILITY_PARTIAL;
+    
+    myfixed->clear_on_draw = TRUE;
 }
 
 GtkWidget*
@@ -226,6 +228,16 @@ gtk_myfixed_set_shadow_type (GtkMyFixed      *myfixed,
     }
 }
 
+void       
+gtk_my_fixed_set_clear (GtkMyFixed     *myfixed,
+                        gboolean        clear)
+{
+    g_return_if_fail (myfixed != NULL);
+    g_return_if_fail (GTK_IS_MYFIXED (myfixed));
+    
+    myfixed->clear_on_draw = clear;
+}	
+					
 void
 gtk_myfixed_put (GtkMyFixed    *myfixed,
                  GtkWidget     *widget,
@@ -637,7 +649,8 @@ gtk_myfixed_draw (GtkWidget    *widget,
     myfixed = GTK_MYFIXED (widget);
       
     children = myfixed->children;
-    if ( !(GTK_WIDGET_APP_PAINTABLE (widget)) )
+    if ( !(GTK_WIDGET_APP_PAINTABLE (widget)) &&
+         (myfixed->clear_on_draw))
     {
         gdk_window_clear_area( myfixed->bin_window,
 			        area->x, area->y, area->width, area->height);
