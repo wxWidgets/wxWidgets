@@ -57,10 +57,12 @@
 #define SHIFT (8*(sizeof(short int)-sizeof(char)))
 
 //wxColour *g_systemWinColour          = (wxColour *) NULL;
-wxColour *g_systemBtnFaceColour      = (wxColour *) NULL;
-wxColour *g_systemBtnShadowColour    = (wxColour *) NULL;
-wxColour *g_systemBtnHighlightColour = (wxColour *) NULL;
-wxColour *g_systemHighlightColour    = (wxColour *) NULL;
+wxColour *g_systemBtnFaceColour       = (wxColour *) NULL;
+wxColour *g_systemBtnShadowColour     = (wxColour *) NULL;
+wxColour *g_systemBtnHighlightColour  = (wxColour *) NULL;
+wxColour *g_systemHighlightColour     = (wxColour *) NULL;
+wxColour *g_systemHighlightTextColour = (wxColour *) NULL;
+wxColour *g_systemListBoxColour       = (wxColour *) NULL;
 
 wxFont *g_systemFont = (wxFont *) NULL;
 
@@ -71,6 +73,8 @@ void wxSystemSettings::Done()
     delete g_systemBtnShadowColour;
     delete g_systemBtnHighlightColour;
     delete g_systemHighlightColour;
+    delete g_systemHighlightTextColour;
+    delete g_systemListBoxColour;
     delete g_systemFont;
 }
 
@@ -154,6 +158,31 @@ wxColour wxSystemSettings::GetSystemColour( int index )
             }
             return *g_systemHighlightColour;
         }
+        case wxSYS_COLOUR_LISTBOX:
+        {
+            if (!g_systemListBoxColour)
+            {
+                GtkWidget *widget = gtk_list_new();
+                GtkStyle *def = gtk_rc_get_style( widget );
+                if (!def)
+                    def = gtk_widget_get_default_style();
+                if (def)
+                {
+                    int red = def->bg[GTK_STATE_NORMAL].red;
+                    int green = def->bg[GTK_STATE_NORMAL].green;
+                    int blue = def->bg[GTK_STATE_NORMAL].blue;
+                    g_systemListBoxColour = 
+	                    new wxColour( red    >> SHIFT,
+	                                  green  >> SHIFT,
+			                          blue   >> SHIFT );
+                }
+                else
+                    g_systemListBoxColour = new wxColour(*wxWHITE);
+                gtk_widget_destroy( widget );
+
+            }
+            return *g_systemListBoxColour;
+        }
     case wxSYS_COLOUR_MENUTEXT:
     case wxSYS_COLOUR_WINDOWTEXT:
     case wxSYS_COLOUR_CAPTIONTEXT:
@@ -165,7 +194,15 @@ wxColour wxSystemSettings::GetSystemColour( int index )
     }
     case wxSYS_COLOUR_HIGHLIGHTTEXT:
     {
-      return *wxWHITE;
+        if (!g_systemHighlightTextColour)
+		{
+		    wxColour hclr = GetSystemColour(wxSYS_COLOUR_HIGHLIGHT);
+			if (hclr.Red() > 200 && hclr.Green() > 200 && hclr.Blue() > 200)
+			    g_systemHighlightTextColour = new wxColour(*wxBLACK);
+			else
+			    g_systemHighlightTextColour = new wxColour(*wxWHITE);
+        }
+        return *g_systemHighlightTextColour;
     }
     case wxSYS_COLOUR_INFOBK:
     case wxSYS_COLOUR_APPWORKSPACE:
