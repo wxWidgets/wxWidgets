@@ -4,6 +4,7 @@
 # Set WXDIR for your system
 WXDIR = $(WXWIN)
 wxUSE_GUI = 0
+EXTRAFLAGS=/DwxUSE_GUI=0
 
 PROGRAM=console 
 OBJECTS = $(PROGRAM).obj
