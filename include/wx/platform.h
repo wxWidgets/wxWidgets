@@ -95,12 +95,15 @@
 #    endif
 
     /*
-       see MSDN for the description of possible WINVER values, this one is a
-       good default and, anyhow, we check for most of the features we use
-       during run-time.
+       see MSDN for the description of possible WINVER values, this one is the
+       highest one defined right now (Windows Server 2003) and we use it unless
+       it was explicitly overridden by the user to disable recent features
+       support as we check for all of the features we use which could be not
+       available on earlier Windows systems during run-time anyhow, so there is
+       almost no disadvantage in using it.
      */
 #    ifndef WINVER
-#        define WINVER  0x0400
+#        define WINVER 0x0502
 #    endif
 
     /* Win95 means Win95-style UI, i.e. Win9x/NT 4+ */
