@@ -72,7 +72,7 @@ PgmCtrl::PgmCtrl(wxWindow *parent, const wxWindowID id,const wxPoint& pos, const
 {
     const int image_size = 16;
     // Make an image list containing small icons
-    p_imageListNormal = new wxImageList(image_size, image_size, TRUE);
+    p_imageListNormal = new wxImageList(image_size, image_size, true);
     // should correspond to TreeIc_xxx enum
     p_imageListNormal->Add(wxBitmap(wxBitmap(wxICON(aLogo)).ConvertToImage().Rescale(image_size, image_size)));
     p_imageListNormal->Add(wxBitmap(wxBitmap(wxICON(DsnClosed)).ConvertToImage().Rescale(image_size, image_size)));
@@ -276,14 +276,14 @@ void PgmCtrl::OnUserPassword(wxCommandEvent& WXUNUSED(event))
             //--------------------
             // Temp0.Printf("i(%d) ; s_DSN(%s) ; s_User(%s) ; s_Password(%s)",i,p_Dlg.s_DSN,p_Dlg.s_User,p_Dlg.s_Password);
             // wxMessageBox(Temp0);
-            bool OK = FALSE;
+            bool OK = false;
             if (p_Dlg->ShowModal() == wxID_OK)
             {
                 (pDoc->p_DSN+i)->Usr = p_Dlg->s_User;
                 (pDoc->p_DSN+i)->Pas = p_Dlg->s_Password;
                 (pDoc->db_Br+i)->UserName  = (pDoc->p_DSN+i)->Usr;
                 (pDoc->db_Br+i)->Password  = (pDoc->p_DSN+i)->Pas;
-                OK = TRUE;
+                OK = true;
             }
             delete p_Dlg;
             if (!OK)

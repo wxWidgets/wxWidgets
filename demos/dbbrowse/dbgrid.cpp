@@ -56,7 +56,7 @@ END_EVENT_TABLE()
 
 //----------------------------------------------------------------------------------------
 //           wxListCtrl(parent, id, pos, size, style)
-//           wxGrid(parent,-1,wxPoint( 0, 0 ), wxSize( 400, 300 ) );
+//           wxGrid(parent,wxID_ANY,wxPoint( 0, 0 ), wxSize( 400, 300 ) );
 //----------------------------------------------------------------------------------------
 // DBGrid
 //----------------------------------------------------------------------------------------
@@ -65,7 +65,7 @@ END_EVENT_TABLE()
 DBGrid::DBGrid(wxWindow *parent, const wxWindowID id,const wxPoint& pos,const wxSize& size, long style):
 wxGrid(parent, id, pos, size, style)
 {
-    b_EditModus = FALSE;
+    b_EditModus = false;
     //---------------------------------------------------------------------------------------
     popupMenu1 = new wxMenu(_T(""));
     popupMenu1->Append(GRID_EDIT, _("Edit Modus"));
@@ -99,7 +99,7 @@ int  DBGrid::OnTableView(wxString Table)
             if (!wxStrcmp((ct_BrowserDB->pTableInf+x)->tableName,Table))      // is this our Table ?
             {    // Yes, the Data of this Table shall be put into the Grid
                 int ValidTable = x;                                              // Save the Tablenumber
-                (db_Br+i_Which)->OnSelect(Table,FALSE);                          // Select * from "table"
+                (db_Br+i_Which)->OnSelect(Table,false);                          // Select * from "table"
                 // Set the local Pointer to the Column Information we are going to use
                 (db_Br+i_Which)->cl_BrowserDB = (ct_BrowserDB->pTableInf+x)->pColInf;
                 if ((ct_BrowserDB->pTableInf+x)->pColInf)                        // Valid pointer (!= NULL) ?
@@ -120,7 +120,7 @@ int  DBGrid::OnTableView(wxString Table)
                     for (z=0;z<(db_Br+i_Which)->i_Records;z++)                      // Loop through the Records
                     {
                         Temp0.Printf(_T("%06d"),z+1);  SetRowLabelValue(z,Temp0);          // Set Row Lable Value
-                        (db_Br+i_Which)->OnGetNext((ct_BrowserDB->pTableInf+ValidTable)->numCols,FALSE);
+                        (db_Br+i_Which)->OnGetNext((ct_BrowserDB->pTableInf+ValidTable)->numCols,false);
                         for (y=0;y<(ct_BrowserDB->pTableInf+ValidTable)->numCols;y++) // Loop through the Fields
                         { // BrowserDB::OnGetNext Formats the field Value into tablename
                             SetCellValue(z, y,((db_Br+i_Which)->cl_BrowserDB+y)->tableName);
@@ -156,7 +156,7 @@ Weiter:
 //----------------------------------------------------------------------------------------
 void DBGrid::OnModusEdit(wxCommandEvent& WXUNUSED(event))
 {
-    b_EditModus = TRUE;             // Needed by PopupMenu
+    b_EditModus = true;             // Needed by PopupMenu
     EnableEditing(b_EditModus);     // Activate in-place Editing
     UpdateDimensions();             // Redraw the Grid
     // wxLogMessage(_("-I-> DBGrid::OnModusEdit() - End"));
@@ -165,7 +165,7 @@ void DBGrid::OnModusEdit(wxCommandEvent& WXUNUSED(event))
 //----------------------------------------------------------------------------------------
 void DBGrid::OnModusBrowse(wxCommandEvent& WXUNUSED(event))
 {
-    b_EditModus = FALSE;            // Needed by PopupMenu
+    b_EditModus = false;            // Needed by PopupMenu
     EnableEditing(b_EditModus);     // Deactivate in-place Editing
     UpdateDimensions();             // Redraw the Grid
     // wxLogMessage(_("-I-> DBGrid::OnModusBrowse() - End"));

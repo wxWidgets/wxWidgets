@@ -223,7 +223,7 @@ bool MainApp::OnInit(void)  // Does everything needed for a program start
     int width, height;
     frame->GetClientSize(&width, &height);
     //---------------------------------------------------------------------------------------
-    frame->p_Splitter = new DocSplitterWindow(frame,-1);
+    frame->p_Splitter = new DocSplitterWindow(frame,wxID_ANY);
     // p_Splitter->SetCursor(wxCursor(wxCURSOR_PENCIL));
     frame->pDoc                       = new MainDoc();
     frame->pDoc->p_MainFrame          = frame;
@@ -248,23 +248,23 @@ bool MainApp::OnInit(void)  // Does everything needed for a program start
     }
     frame->pDoc->p_Help = frame->p_Help;          // Save the information to the document
     //---------------------------------------------------------------------------------------
-    frame->Show(TRUE);                            // Show the frame
+    frame->Show(true);                            // Show the frame
     SetTopWindow(frame);                          // At this point the frame can be seen
     //---------------------------------------------------------------------------------------
     // If you need a "Splash Screen" because of a long OnNewDocument, do it here
     if (!frame->pDoc->OnNewDocument())
-        frame->Close(TRUE);
+        frame->Close(true);
     // Kill a "Splash Screen" because OnNewDocument, if you have one
     //---------------------------------------------------------------------------------------
-    p_ProgramCfg->Flush(TRUE);        // save the configuration
-    return TRUE;
+    p_ProgramCfg->Flush(true);        // save the configuration
+    return true;
 } // bool MainApp::OnInit(void)
 
 //----------------------------------------------------------------------------------------
 // My frame constructor
 //----------------------------------------------------------------------------------------
 MainFrame::MainFrame(wxFrame *frame, wxChar *title,  const wxPoint& pos, const wxSize& size):
-wxFrame(frame, -1, title,  pos, size)
+wxFrame(frame, wxID_ANY, title,  pos, size)
 {
     p_Splitter = NULL; pDoc = NULL; p_Help = NULL;    // Keep the Pointers clean !
     //--- Everything else is done in MainApp::OnInit() --------------------------------------
@@ -275,7 +275,7 @@ MainFrame::~MainFrame(void)
 {
     // Close the help frame; this will cause the config data to get written.
     if (p_Help->GetFrame()) // returns NULL if no help frame active
-        p_Help->GetFrame()->Close(TRUE);
+        p_Help->GetFrame()->Close(true);
     delete p_Help;  // Memory Leak
     p_Help = NULL;
     // save the control's values to the config
@@ -294,7 +294,7 @@ MainFrame::~MainFrame(void)
     // Get() it doesn't try to create one if there is none (definitely not what
     // we want here!)
     // delete wxConfigBase::Set((wxConfigBase *) NULL);
-    p_ProgramCfg->Flush(TRUE);        // saves   Objekt
+    p_ProgramCfg->Flush(true);        // saves   Objekt
     if (pDoc)                         // If we have a Valid Document
         delete pDoc;                     // Cleanup (MainDoc::~MainDoc)
 } // MainFrame::~MainFrame(void)
@@ -302,7 +302,7 @@ MainFrame::~MainFrame(void)
 //----------------------------------------------------------------------------------------
 void MainFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    Close(TRUE);
+    Close(true);
 }
 
 //----------------------------------------------------------------------------------------

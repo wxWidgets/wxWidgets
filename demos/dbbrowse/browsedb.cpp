@@ -102,9 +102,9 @@ bool BrowserDB::Initialize(int Quiet)
     if (!OnStartDB(Quiet))
     {
         wxLogMessage(_("\n\n-E-> BrowserDB::OnStartDB(%s) : Failed ! "),ODBCSource.c_str());
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }  // BrowserDB:Initialize
 
 //----------------------------------------------------------------------------------------
@@ -117,7 +117,7 @@ bool BrowserDB::OnStartDB(int Quiet)
     {
         if (!Quiet)
             wxLogMessage(_("\n-I-> BrowserDB::OnStartDB() : DB is already open."));
-        return TRUE;
+        return true;
     }
 
     DbConnectInf.AllocHenv();
@@ -133,14 +133,14 @@ bool BrowserDB::OnStartDB(int Quiet)
     p_Dlg->OnInit();
     p_Dlg->Fit();
     
-    bool OK = FALSE;
+    bool OK = false;
     if (p_Dlg->ShowModal() == wxID_OK)
     {
         (pDoc->p_DSN+i_Which)->Usr = p_Dlg->s_User;
         (pDoc->p_DSN+i_Which)->Pas = p_Dlg->s_Password;
         UserName  = p_Dlg->s_User;
         Password  = p_Dlg->s_Password;
-        OK = TRUE;
+        OK = true;
     }
     delete p_Dlg;
     if (OK)
@@ -162,7 +162,7 @@ bool BrowserDB::OnStartDB(int Quiet)
                 wxLogMessage(_("-I-> BrowserDB::OnStartDB(%s) : End - Time needed : %ld ms"),ODBCSource.c_str(),sw.Time());
             }
             DbConnectInf.FreeHenv();
-            return FALSE;
+            return false;
         }
         //--------------------------------------------------------------------------------------
         if (!Quiet)
@@ -172,12 +172,12 @@ bool BrowserDB::OnStartDB(int Quiet)
             wxLogMessage(_("-I-> BrowserDB::OnGetDataSourceODBC() - DatabaseName(%s) ; DataSource(%s)"),Temp1.c_str(),Temp2.c_str());
             wxLogMessage(_("-I-> BrowserDB::OnStartDB(%s) : End - Time needed : %ld ms"),ODBCSource.c_str(),sw.Time());
         }
-        return TRUE;
+        return true;
     }
     else
     {
         DbConnectInf.FreeHenv();
-        return FALSE;
+        return false;
     }
 }
 
@@ -197,7 +197,7 @@ bool BrowserDB::OnCloseDB(int Quiet)
     }
     if (!Quiet)
         wxLogMessage(_("\n-I-> BrowserDB::OnCloseDB() : End "));
-    return TRUE;
+    return true;
 }
 
 //----------------------------------------------------------------------------------------
@@ -220,7 +220,7 @@ bool BrowserDB::OnGetNext(int Cols,int WXUNUSED(Quiet))
         wxLogMessage(Temp0);
         wxMessageBox(Temp0);
 #endif
-        return FALSE;
+        return false;
     }
     else
     {
@@ -328,7 +328,7 @@ bool BrowserDB::OnGetNext(int Cols,int WXUNUSED(Quiet))
                     wxLogMessage(_("-E-> BrowserDB::OnGetNext - DB_DATA_TYPE_?? (%d) in Col(%s)"),(cl_BrowserDB+i)->pColFor->i_dbDataType,Temp0.c_str());
                 }
                 else
-                    return TRUE;
+                    return true;
                 Temp0.Printf(_("-E-> unknown Format(%d) - sql(%d)"),(cl_BrowserDB+i)->pColFor->i_dbDataType,(cl_BrowserDB+i)->pColFor->i_sqlDataType);
                 wxStrcpy((cl_BrowserDB+i)->tableName,Temp0.c_str());
                 break;
@@ -336,7 +336,7 @@ bool BrowserDB::OnGetNext(int Cols,int WXUNUSED(Quiet))
         }  // for
     }  // else
 
-    return TRUE;
+    return true;
 }
 
 //----------------------------------------------------------------------------------------
@@ -354,7 +354,7 @@ bool BrowserDB::OnSelect(wxString tb_Name, int Quiet)
         Temp0 += GetExtendedDBErrorMsg(__TFILE__,__LINE__);
         wxLogMessage(Temp0);
         wxMessageBox(_T("-E-> BrowserDB::OnSelect - GetData()"));
-        return FALSE;
+        return false;
     }
     //---------------------------------------------------------------------------------------
     while (db_BrowserDB->GetNext())
@@ -367,16 +367,16 @@ bool BrowserDB::OnSelect(wxString tb_Name, int Quiet)
         Temp0.Printf(_("\n-E-> BrowserDB::OnSelect - ODBC-Error with ExecSql of >%s<.\n-E-> "),tb_Name.c_str());
         Temp0 += GetExtendedDBErrorMsg(__TFILE__,__LINE__);
         wxLogMessage(Temp0);
-        return FALSE;
+        return false;
     }
     //---------------------------------------------------------------------------------------
-    // SetColDefs ( 0,"NAME",	  DB_DATA_TYPE_VARCHAR,  Name,	   SQL_C_CHAR,		sizeof(Name),	 TRUE, TRUE);  // Primary index
+    // SetColDefs ( 0,"NAME",DB_DATA_TYPE_VARCHAR,Name,SQL_C_CHAR,sizeof(Name),true,true);  // Primary index
     //---------------------------------------------------------------------------------------
     if (!Quiet)
     {
         wxLogMessage(_("\n-I-> BrowserDB::OnSelect(%s) Records(%d): End - Time needed : %ld ms"),tb_Name.c_str(),i_Records,sw.Time());
     }
-    return TRUE;
+    return true;
 }
 
 //----------------------------------------------------------------------------------------
@@ -391,13 +391,13 @@ bool BrowserDB::OnExecSql(wxString SQLStmt, int Quiet)
             wxLogMessage(Temp0);
         else
             wxMessageBox(_T("-E-> BrowserDB::OnExecSql - ExecSql()"));
-        return FALSE;
+        return false;
     }
     if (!Quiet)
     {
         // wxLogMessage(_("\n-I-> BrowserDB::OnExecSql(%s) - End - Time needed : %ld ms"),SQLStmt.c_str(),sw.Time());
     }
-    return TRUE;
+    return true;
 }
 
 //----------------------------------------------------------------------------------------

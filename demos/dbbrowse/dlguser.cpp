@@ -46,9 +46,9 @@ DlgUser::DlgUser(wxWindow *parent, MainDoc *p_Doc, const wxString& title) :
     SetBackgroundColour(_T("wheat"));
     pDoc = p_Doc;
     wxLayoutConstraints* layout;
-    SetAutoLayout(TRUE);
+    SetAutoLayout(true);
     
-    m_Label1 = new wxStaticText(this, -1, _("User ID:"));
+    m_Label1 = new wxStaticText(this, wxID_ANY, _("User ID:"));
     m_Label1->SetFont(* pDoc->ft_Doc);
     layout = new wxLayoutConstraints;
     layout->left.SameAs(this, wxLeft, 10);
@@ -60,7 +60,7 @@ DlgUser::DlgUser(wxWindow *parent, MainDoc *p_Doc, const wxString& title) :
     int w;
     m_Label1->GetSize(&w, &chSize); 
     
-    m_UserName = new wxTextCtrl(this, -1, _T(""));
+    m_UserName = new wxTextCtrl(this, wxID_ANY, _T(""));
     m_UserName->SetFont(* pDoc->ft_Doc);
     chSize = (int) (m_UserName->GetCharHeight()*ratio);
     
@@ -73,7 +73,7 @@ DlgUser::DlgUser(wxWindow *parent, MainDoc *p_Doc, const wxString& title) :
     m_UserName->SetConstraints(layout);
     
     
-    m_Label2 = new wxStaticText(this, -1, _("Password:"));
+    m_Label2 = new wxStaticText(this, wxID_ANY, _("Password:"));
     m_Label2->SetFont(* pDoc->ft_Doc);
     layout = new wxLayoutConstraints;
     layout->left.SameAs(m_Label1, wxLeft);
@@ -82,7 +82,7 @@ DlgUser::DlgUser(wxWindow *parent, MainDoc *p_Doc, const wxString& title) :
     layout->width.SameAs(m_Label1, wxWidth);
     m_Label2->SetConstraints(layout);
     
-    m_Password = new wxTextCtrl(this, -1, _T(""), wxDefaultPosition, wxDefaultSize, wxTE_PASSWORD);
+    m_Password = new wxTextCtrl(this, wxID_ANY, _T(""), wxDefaultPosition, wxDefaultSize, wxTE_PASSWORD);
     m_Password->SetFont(* pDoc->ft_Doc);
     layout = new wxLayoutConstraints;
     layout->left.SameAs(m_UserName, wxLeft);
@@ -136,7 +136,7 @@ END_EVENT_TABLE()
 //----------------------------------------------------------------------------------------
 void DlgUser::OnOk(wxCommandEvent& WXUNUSED(event) )
 {
-    //canceled = FALSE;
+    //canceled = false;
     s_User    = m_UserName->GetValue();
     s_Password = m_Password->GetValue();
     EndModal(wxID_OK);
@@ -145,7 +145,7 @@ void DlgUser::OnOk(wxCommandEvent& WXUNUSED(event) )
 //----------------------------------------------------------------------------------------
 //void DlgUser::OnCancel(wxCommandEvent& WXUNUSED(event) )
 // {
-//   canceled = TRUE;
+//   canceled = true;
 //   EndModal(wxID_CANCEL);
 // }
 //----------------------------------------------------------------------------------------

@@ -63,8 +63,8 @@ MainDoc::MainDoc()
 //----------------------------------------------------------------------------------------
 MainDoc::~MainDoc()
 {
-    p_TabArea->Show(FALSE);    // Deactivate the Window
-    p_PageArea->Show(FALSE);    // Deactivate the Window
+    p_TabArea->Show(false);    // Deactivate the Window
+    p_PageArea->Show(false);    // Deactivate the Window
 
     // ----------------------------------------------------------
     // -E-> The Tree Controls take to long to close : Why ??
@@ -86,11 +86,11 @@ bool MainDoc::OnNewDocument()
     wxStopWatch sw;
     //---------------------------------------------------------------------------------------
     if (!OnInitView())
-        return FALSE;
+        return false;
     p_PgmCtrl->OnPopulate();
     //---------------------------------------------------------------------------------------
     wxLogMessage(_("-I-> MainDoc::OnNewDocument() - End - Time needed : %ld ms"),sw.Time());
-    return TRUE;
+    return true;
 }
 
 //----------------------------------------------------------------------------------------
@@ -102,7 +102,7 @@ bool MainDoc::OnInitView()
     // create "workplace" window
     //---------------------------------------------------------------------------------------
     p_TabArea = new wxTabbedWindow(); // Init the Pointer
-    p_TabArea->Create(p_Splitter, -1);
+    p_TabArea->Create(p_Splitter, wxID_ANY);
     //---------------------------------------------------------------------------------------
     p_PgmCtrl = new PgmCtrl(p_TabArea, TREE_CTRL_PGM,wxDefaultPosition, wxDefaultSize,
         wxTR_HAS_BUTTONS | wxSUNKEN_BORDER);
@@ -119,9 +119,9 @@ bool MainDoc::OnInitView()
     // now create "output" window
     //---------------------------------------------------------------------------------------
     p_PageArea = new wxPagedWindow();  // Init the Pointer
-    p_PageArea->Create(p_Splitter, -1);
+    p_PageArea->Create(p_Splitter, wxID_ANY);
     //---------------------------------------------------------------------------------------
-    p_LogWin = new wxTextCtrl(p_PageArea,-1,wxEmptyString,
+    p_LogWin = new wxTextCtrl(p_PageArea,wxID_ANY,wxEmptyString,
         wxDefaultPosition, wxDefaultSize,wxTE_MULTILINE );
     p_LogWin->SetFont(* ft_Doc);
     // Don't forget ! This is always : i_TabArt = 0 ; i_ViewNr = 1;
@@ -141,13 +141,13 @@ bool MainDoc::OnInitView()
     p_Splitter->SplitHorizontally(p_TabArea,p_PageArea,Sash);
     //---------------------------------------------------------------------------------------
     // if (!OnInitODBC())
-    //  return FALSE;
+    //  return false;
     OnInitODBC();
     //---------------------------------------------------------------------------------------
     Temp0.Printf(_("-I-> MainDoc::OnInitView() - End - %d DSN's found"),i_DSN);
     p_MainFrame->SetStatusText(Temp0, 0);
     wxLogMessage(Temp0);
-    return TRUE;
+    return true;
 }
 
 //----------------------------------------------------------------------------------------
@@ -163,7 +163,7 @@ bool MainDoc::OnInitODBC()
 
     if (!DbConnectInf.AllocHenv())
     {
-        return FALSE;
+        return false;
     }
 
     //---------------------------------------------------------------------------------------
@@ -225,10 +225,10 @@ bool MainDoc::OnInitODBC()
         message += _("           Program will exit!\n\n");
         message += _("                       Ciao");
         wxMessageBox( message,_("-E-> Fatal situation"));
-        return FALSE;
+        return false;
     }
     //---------------------------------------------------------------------------------------
-    return TRUE;
+    return true;
 }
 
 //----------------------------------------------------------------------------------------
@@ -238,18 +238,18 @@ bool MainDoc::OnChosenDSN(int Which)
     //---------------------------------------------------------------------------------------
     if (p_DBTree != NULL)
     {
-        p_TabArea->Show(FALSE);    // Deactivate the Window
+        p_TabArea->Show(false);    // Deactivate the Window
         p_TabArea->RemoveTab(p_DBTree->i_ViewNr);
-        p_TabArea->Show(TRUE);     // Activate the Window
+        p_TabArea->Show(true);     // Activate the Window
         OnChosenTbl(77,_T(""));
     }
     //-------------------------
-    p_TabArea->Show(FALSE);    // Deactivate the Window
+    p_TabArea->Show(false);    // Deactivate the Window
     p_DBTree = new DBTree(p_TabArea, TREE_CTRL_DB,wxDefaultPosition, wxDefaultSize,
         wxTR_HAS_BUTTONS | wxSUNKEN_BORDER);
     p_TabArea->AddTab(p_DBTree,(p_DSN+Which)->Dsn,_T(" ? "));
     p_DBTree->i_ViewNr = p_TabArea->GetTabCount()-1;
-    p_TabArea->Show(TRUE);    // Deactivate the Window
+    p_TabArea->Show(true);    // Deactivate the Window
     p_DBTree->i_Which  = Which;
     p_DBTree->s_DSN    = (p_DSN+Which)->Dsn;
     p_DBTree->i_TabArt = 0;
@@ -258,7 +258,7 @@ bool MainDoc::OnChosenDSN(int Which)
     p_TabArea->SetActiveTab(p_DBTree->i_ViewNr);
     //---------------------------------------------------------------------------------------
     // wxLogMessage("OnChosenDSN(%d) - End",Which);
-    return TRUE;
+    return true;
 }
 
 //----------------------------------------------------------------------------------------
@@ -270,25 +270,25 @@ bool MainDoc::OnChosenTbl(int Tab,wxString Table)
     {
         if (p_DBGrid->i_TabArt == 0)
         {
-            p_TabArea->Show(FALSE);    // Deactivate the Window
+            p_TabArea->Show(false);    // Deactivate the Window
             p_TabArea->RemoveTab(p_DBGrid->i_ViewNr);
-            p_TabArea->Show(TRUE);     // Activate the Window
+            p_TabArea->Show(true);     // Activate the Window
         }
         if (p_DBGrid->i_TabArt == 1)
         {
-            p_PageArea->Show(FALSE);   // Deactivate the Window
+            p_PageArea->Show(false);   // Deactivate the Window
             p_PageArea->RemoveTab(p_DBGrid->i_ViewNr);
-            p_PageArea->Show(TRUE);    // Activate the Window
+            p_PageArea->Show(true);    // Activate the Window
         }
         p_DBGrid = NULL;
         delete p_DBGrid;
     }
     if (Tab == 77)               // Delete only
-        return TRUE;
+        return true;
     //-------------------------
     if (Tab == 0)  // Tabview
     {
-        p_TabArea->Show(FALSE);    // Deactivate the Window
+        p_TabArea->Show(false);    // Deactivate the Window
         p_DBGrid = new DBGrid(p_TabArea,GRID_CTRL_DB,wxDefaultPosition, wxDefaultSize,
             wxSUNKEN_BORDER);
         p_TabArea->AddTab(p_DBGrid, Table, _T(""));
@@ -297,11 +297,11 @@ bool MainDoc::OnChosenTbl(int Tab,wxString Table)
         p_DBGrid->db_Br      = db_Br;
         p_DBGrid->OnTableView(Table);
         p_TabArea->SetActiveTab(p_DBGrid->i_ViewNr);
-        p_TabArea->Show(TRUE);     // Activate the Window
+        p_TabArea->Show(true);     // Activate the Window
     }
     if (Tab == 1)  // Pageview
     {
-        p_PageArea->Show(FALSE);   // Deactivate the Window
+        p_PageArea->Show(false);   // Deactivate the Window
         p_DBGrid = new DBGrid(p_PageArea,GRID_CTRL_DB,wxDefaultPosition, wxDefaultSize,
             wxSUNKEN_BORDER);
         p_PageArea->AddTab(p_DBGrid, Table, _T(""));
@@ -309,13 +309,13 @@ bool MainDoc::OnChosenTbl(int Tab,wxString Table)
         p_DBGrid->pDoc       = this;
         p_DBGrid->db_Br      = db_Br;
         p_DBGrid->i_Which    = p_DBTree->i_Which;
-        p_PageArea->Show(TRUE);    // Activate the Window
+        p_PageArea->Show(true);    // Activate the Window
         p_DBGrid->OnTableView(Table);
         p_PageArea->SetActiveTab(p_DBGrid->i_ViewNr);
     }
     p_DBGrid->i_TabArt = Tab;
     //--------------------------
-    return TRUE;;
+    return true;
 }
 
 //----------------------------------------------------------------------------------------

@@ -8,9 +8,9 @@
 //              - restruction of Variable declaration
 //              - to prevent Warnings under MingGW32
 // Modified by: 19990909 : mj
-//              - mNoVertScroll TRUE = no / FALSE = Original Code
+//              - mNoVertScroll true = no / false = Original Code
 //                the Original Code Paints a Vertical Scroll in wxPagedWindow
-//                which is not needed in this Version. Use TRUE for this.
+//                which is not needed in this Version. Use true for this.
 // Created:     07/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleksandras Gluchovas
@@ -68,7 +68,7 @@ public:
 
 public:
 
- // public properties (invoke ReclaclLayout(TRUE) to apply changes)
+ // public properties (invoke ReclaclLayout(true) to apply changes)
 
  int    mVertGap;         // default: 3
  int    mHorizGap;        // default: 5
@@ -135,7 +135,7 @@ public:
 
  // should be invoked to redisplay window with changed properties
 
- virtual void RecalcLayout( bool andRepaint = TRUE );
+ virtual void RecalcLayout( bool andRepaint = true );
 
  // event handlers
 
@@ -180,7 +180,7 @@ public:
  int          mTitleRowStart;
  int          mResizeNailGap;
  int          mTitleRowLen;               // actual title row length
- int          mNoVertScroll;              // No Vertical Scroll  TRUE/FALSE
+ int          mNoVertScroll;              // No Vertical Scroll  true/false
 
  void DrawPaperBar( twTabInfo& tab, int x, int y,
                                     wxBrush& brush, wxPen& pen, wxDC& dc );
@@ -222,7 +222,7 @@ public:
 
  virtual int HitTest( const wxPoint& pos );
 
- virtual void RecalcLayout( bool andRepaint = TRUE );
+ virtual void RecalcLayout( bool andRepaint = true );
 
  // event handlers
 

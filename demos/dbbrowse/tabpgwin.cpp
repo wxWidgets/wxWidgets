@@ -7,9 +7,9 @@
 //              - restruction of Variable declaration
 //              - to prevent Warnings under MingW32
 // Modified by: 19990909 : mj
-//              - mNoVertScroll TRUE = no / FALSE = Original Code
+//              - mNoVertScroll true = no / false = Original Code
 //                the Original Code Paints a Vertical Scroll in wxPagedWindow
-//                which is not needed in this Version. Use TRUE for this.
+//                which is not needed in this Version. Use true for this.
 // Created:     07/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleksandras Gluchovas
@@ -182,13 +182,13 @@ void wxTabbedWindow::SizeTabs(int x,int y, int width, int height, bool WXUNUSED(
             //info.mpContent->GetEventHandler()->ProcessEvent( evt );
             
             info.mpContent->SetSize( x, y, width, height, 0 );
-            info.mpContent->Show(TRUE);
+            info.mpContent->Show(true);
             info.mpContent->Refresh();
             
         }
         else
         {
-            info.mpContent->Show(FALSE);
+            info.mpContent->Show(false);
         }
         
         pTabNode = pTabNode->GetNext();
@@ -217,11 +217,11 @@ void wxTabbedWindow::AddTab( wxWindow*   pContent,
     
     
     if ( pContent->GetParent() == NULL )
-        pContent->Create( this, -1 );
+        pContent->Create( this, wxID_ANY );
     
     mTabs.Append( (wxObject*)pTab );
     
-    RecalcLayout(TRUE);
+    RecalcLayout(true);
     
     OnTabAdded( pTab );
 }
@@ -239,10 +239,10 @@ void wxTabbedWindow::AddTab( wxWindow* pContent,
         pTab->mBitMap = *pImage;
     
     if ( pContent->GetParent() == NULL )
-        pContent->Create( this, -1 );
+        pContent->Create( this, wxID_ANY );
     
     mTabs.Append( (wxObject*)pTab );
-    RecalcLayout(TRUE);
+    RecalcLayout(true);
     OnTabAdded( pTab );
 }
 
@@ -282,7 +282,7 @@ wxWindow* wxTabbedWindow::GetActiveTab()
 void wxTabbedWindow::SetActiveTab( int tabNo )
 {
     mActiveTab = tabNo;
-    RecalcLayout(TRUE);
+    RecalcLayout(true);
     Refresh();
 }
 
@@ -490,7 +490,7 @@ void wxTabbedWindow::HideInactiveTabs( bool andRepaint )
         if ( tabNo != mActiveTab )
         {
             twTabInfo& tab = *((twTabInfo*)(pNode->GetData()));
-            tab.mpContent->Show(FALSE);
+            tab.mpContent->Show(false);
         }
         
         pNode = pNode->GetNext();
@@ -656,7 +656,7 @@ void wxTabbedWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
 void wxTabbedWindow::OnSize ( wxSizeEvent& WXUNUSED(event) )
 {
     SetBackgroundColour( wxColour( 192,192,192 ) );
-    RecalcLayout(TRUE);
+    RecalcLayout(true);
 }
 
 //---------------------------------------------------------------------------
@@ -704,21 +704,21 @@ END_EVENT_TABLE()
 //---------------------------------------------------------------------------
 wxPagedWindow::wxPagedWindow()
 
-:   mScrollEventInProgress( FALSE ),
+:   mScrollEventInProgress( false ),
     mTabTrianGap(4),
     mWhiteBrush( wxColour(255,255,255), wxSOLID ),
     mGrayBrush ( wxColour(192,192,192), wxSOLID ),
     mCurentRowOfs( 0 ),
     mAdjustableTitleRowLen( 300 ),
-    mIsDragged    ( FALSE ),
+    mIsDragged    ( false ),
     mDagOrigin    ( 0 ),
-    mCursorChanged( FALSE ),
+    mCursorChanged( false ),
     mResizeCursor ( wxCURSOR_SIZEWE ),
     mNormalCursor ( wxCURSOR_ARROW  )
 {
     mTitleVertGap = 2;
     mTitleHorizGap = 10;
-    mNoVertScroll = TRUE;       // Horizontale Scroll abschalten
+    mNoVertScroll = true;       // Horizontale Scroll abschalten
 }
 
 //---------------------------------------------------------------------------
@@ -750,7 +750,7 @@ void wxPagedWindow::OnTabAdded( twTabInfo* WXUNUSED(pInfo) )
 {
     int units = GetWholeTabRowLen() / 20;
     
-    mpTabScroll->SetScrollbar( 0, 1, units, 1, FALSE );
+    mpTabScroll->SetScrollbar( 0, 1, units, 1, false );
 }
 
 //---------------------------------------------------------------------------
@@ -964,18 +964,18 @@ void wxPagedWindow::RecalcLayout(bool andRepaint)
     if ( !mpTabScroll )
     {
         mpTabScroll   =
-            new wxScrollBar( this, -1, wxDefaultPosition, wxDefaultSize, wxSB_HORIZONTAL );
+            new wxScrollBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSB_HORIZONTAL );
         
         mpHorizScroll =
-            new wxScrollBar( this, -1, wxDefaultPosition, wxDefaultSize, wxSB_HORIZONTAL );
+            new wxScrollBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSB_HORIZONTAL );
         if (!mNoVertScroll)       // Vertical Scroll (Original)
-            mpVertScroll = new wxScrollBar( this, -1, wxDefaultPosition, wxDefaultSize, wxSB_VERTICAL );
+            mpVertScroll = new wxScrollBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSB_VERTICAL );
     }
     
     {
         int units = GetWholeTabRowLen() / 20;
         
-        mpTabScroll->SetScrollbar( 0, 1, units, 1, FALSE );
+        mpTabScroll->SetScrollbar( 0, 1, units, 1, false );
     }
     
     // resetup position of the active tab
@@ -1080,7 +1080,7 @@ void wxPagedWindow::OnLButtonDown( wxMouseEvent& event )
 {
     if ( mCursorChanged )
     {
-        mIsDragged = TRUE;
+        mIsDragged = true;
         mDagOrigin = event.m_x;
         
         mOriginalTitleRowLen = mAdjustableTitleRowLen;
@@ -1098,8 +1098,8 @@ void wxPagedWindow::OnLButtonUp( wxMouseEvent& WXUNUSED(event) )
 {
     if ( mIsDragged )
     {
-        mIsDragged     = FALSE;
-        mCursorChanged = FALSE;
+        mIsDragged     = false;
+        mCursorChanged = false;
         SetCursor( mNormalCursor );
         
         ReleaseMouse();
@@ -1126,7 +1126,7 @@ void wxPagedWindow::OnMouseMove( wxMouseEvent& event )
             {
                 SetCursor( mResizeCursor );
                 
-                mCursorChanged = TRUE;
+                mCursorChanged = true;
             }
         }
         else
@@ -1134,7 +1134,7 @@ void wxPagedWindow::OnMouseMove( wxMouseEvent& event )
             {
                 SetCursor( mNormalCursor );
                 
-                mCursorChanged = FALSE;
+                mCursorChanged = false;
             }
     }
     else
@@ -1149,7 +1149,7 @@ void wxPagedWindow::OnMouseMove( wxMouseEvent& event )
             wxWindowDC dc(this);
             DrawDecorations( dc );
             
-            RecalcLayout(FALSE);
+            RecalcLayout(false);
             
             //Refresh();
         }
@@ -1181,7 +1181,7 @@ void wxPagedWindow::OnScroll( wxScrollEvent& event )
     {
         if ( !mScrollEventInProgress )
         {
-            mScrollEventInProgress = TRUE;
+            mScrollEventInProgress = true;
             
             GetActiveTab()->GetEventHandler()->ProcessEvent( event );
         }
@@ -1190,7 +1190,7 @@ void wxPagedWindow::OnScroll( wxScrollEvent& event )
             // event bounced back to us, from here we
             // know that it has traveled the loop - thus it's processed!
             
-            mScrollEventInProgress = FALSE;
+            mScrollEventInProgress = false;
         }
     }
 }  // wxPagedWindow::OnScroll()

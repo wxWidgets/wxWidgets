@@ -84,9 +84,9 @@ public:
     virtual bool OnSashPositionChange(int newSashPosition)
     {
         if ( !wxSplitterWindow::OnSashPositionChange(newSashPosition) )
-            return FALSE;
+            return false;
         pDoc->Sash = newSashPosition;
-        return TRUE;
+        return true;
     }
     DECLARE_EVENT_TABLE()
 };

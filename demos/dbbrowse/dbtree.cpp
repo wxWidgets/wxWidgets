@@ -67,7 +67,7 @@ DBTree::DBTree(wxWindow *parent, const wxWindowID id,const wxPoint& pos, const w
 {
     const int image_size = 16;
     // Make an image list containing small icons
-    p_imageListNormal = new wxImageList(image_size, image_size, TRUE);
+    p_imageListNormal = new wxImageList(image_size, image_size, true);
     // should correspond to TreeIc_xxx enum
 #if !defined(__WXMSW__)
 #include "bitmaps/logo.xpm"
@@ -104,7 +104,7 @@ DBTree::~DBTree()
 
     //  delete (pDoc->db_Br+i_Which);
     // wxLogMessage("DBTree::~DBTree() - Vor  OnCloseDB()");
-    (pDoc->db_Br+i_Which)->OnCloseDB(FALSE);
+    (pDoc->db_Br+i_Which)->OnCloseDB(false);
     // wxLogMessage("DBTree::~DBTree() - Nach OnCloseDB()");
     (pDoc->db_Br+i_Which)->db_BrowserDB = NULL;
     (pDoc->db_Br+i_Which)->ct_BrowserDB = NULL;
@@ -128,11 +128,11 @@ int DBTree::OnPopulate()
     wxString SQL_TYPE, DB_TYPE;
     SetFont(* pDoc->ft_Doc);
     //---------------------------------------------------------------------------------------
-    if ((pDoc->db_Br+i_Which)->Initialize(FALSE))
+    if ((pDoc->db_Br+i_Which)->Initialize(false))
     {
         wxStopWatch sw;
         wxBeginBusyCursor();
-        ct_BrowserDB = (pDoc->db_Br+i_Which)->OnGetCatalog(FALSE);
+        ct_BrowserDB = (pDoc->db_Br+i_Which)->OnGetCatalog(false);
         if (ct_BrowserDB)
         { // Use the wxDatabase Information
             Temp0.Printf(_T("%s - (%s) (%s)"), s_DSN.c_str(),ct_BrowserDB->catalog, ct_BrowserDB->schema);
@@ -149,7 +149,7 @@ int DBTree::OnPopulate()
                 {
                     Temp1.Printf(_T("TN(%s"),(ct_BrowserDB->pTableInf+x)->tableName);
                     //----
-                    (ct_BrowserDB->pTableInf+x)->pColInf = (pDoc->db_Br+i_Which)->OnGetColumns((ct_BrowserDB->pTableInf+x)->tableName,(ct_BrowserDB->pTableInf+x)->numCols,FALSE);
+                    (ct_BrowserDB->pTableInf+x)->pColInf = (pDoc->db_Br+i_Which)->OnGetColumns((ct_BrowserDB->pTableInf+x)->tableName,(ct_BrowserDB->pTableInf+x)->numCols,false);
                     //----
                     if ((ct_BrowserDB->pTableInf+x)->pColInf)
                     {
@@ -236,7 +236,7 @@ int DBTree::OnPopulate()
         Temp0.Printf(_("-I-> DBTree::OnPopulate() - %6d Tables have been read. - Time needed : %ld ms"),z,sw.Time());
         wxLogMessage(Temp0);
         pDoc->p_MainFrame->SetStatusText(Temp0, 0);
-    }       // if((pDoc->db_Br+i_Which)->Initialize(FALSE))
+    }       // if((pDoc->db_Br+i_Which)->Initialize(false))
     else
     {
         wxLogMessage(_("\n-E-> DBTree::OnPopulate() : A valid Pointer could not be created : Failed"));
