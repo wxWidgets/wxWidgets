@@ -6,6 +6,7 @@
     <exe id="minimal" template="wx_sample">
         <sources>minimal.cpp</sources>
         <wx-lib>core</wx-lib>
+        <rc-file>minimal.rc</rc-file>
     </exe>
 
 </makefile>

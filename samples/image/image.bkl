@@ -8,6 +8,7 @@
     <exe id="image" template="wx_sample">
         <sources>image.cpp</sources>
         <wx-lib>core</wx-lib>
+        <rc-file>image.rc</rc-file>
     </exe>
 
     <wx-data id="data">

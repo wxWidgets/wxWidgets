@@ -6,6 +6,7 @@
     <exe id="arttest" template="wx_sample">
         <sources>arttest.cpp artbrows.cpp</sources>
         <wx-lib>core</wx-lib>
+        <rc-file>arttest.rc</rc-file>
     </exe>
 
 </makefile>

@@ -6,6 +6,7 @@
     <exe id="dialogs" template="wx_sample">
         <sources>dialogs.cpp</sources>
         <wx-lib>core</wx-lib>
+        <rc-file>dialogs.rc</rc-file>
     </exe>
 
 </makefile>
