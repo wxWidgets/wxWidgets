@@ -161,9 +161,12 @@ with wildcard characters. See \helpref{wxIsWild}{wxiswild}.
 
 \membersection{::wxMkdir}
 
-\func{bool}{wxMkdir}{\param{const wxString\& }{dir}}
+\func{bool}{wxMkdir}{\param{const wxString\& }{dir}, \param{int }{perm = 0777}}
 
 Makes the directory {\it dir}, returning TRUE if successful.
+
+{\it perm} is the access mask for the directory for the systems on which it is
+supported (Unix) and doesn't have effect for the other ones.
 
 \membersection{::wxRemoveFile}
 

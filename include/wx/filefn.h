@@ -153,7 +153,7 @@ WXDLLEXPORT wxString wxGetCwd();
 WXDLLEXPORT bool wxSetWorkingDirectory(const wxString& d);
 
 // Make directory
-WXDLLEXPORT bool wxMkdir(const wxString& dir);
+WXDLLEXPORT bool wxMkdir(const wxString& dir, int perm = 0777);
 
 // Remove directory. Flags reserved for future use.
 WXDLLEXPORT bool wxRmdir(const wxString& dir, int flags = 0);
