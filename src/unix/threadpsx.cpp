@@ -166,10 +166,23 @@ wxMutex::wxMutex()
 
     // support recursive locks like Win32, i.e. a thread can lock a mutex which
     // it had itself already locked
+    //
+    // but initialization of recursive mutexes is non portable <sigh>, so try
+    // several methods
+#ifdef HAVE_PTHREAD_MUTEXATTR_T
     pthread_mutexattr_t attr;
     pthread_mutexattr_init(&attr);
     pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+
     pthread_mutex_init(&(m_internal->m_mutex), &attr);
+#elif defined(HAVE_PTHREAD_RECURSIVE_MUTEX_INITIALIZER)
+    // we can use this only as initializer so we have to assign it first to a
+    // temp var - assigning directly to m_mutex wouldn't even compile
+    pthread_mutex_t mutex = PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP;
+    m_internal->m_mutex = mutex;
+#else // no recursive mutexes
+    pthread_mutex_init(&(m_internal->m_mutex), NULL);
+#endif // HAVE_PTHREAD_MUTEXATTR_T/...
 
     m_locked = 0;
 }

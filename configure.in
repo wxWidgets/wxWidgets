@@ -2698,11 +2698,65 @@ if test "$wxUSE_THREADS" = "yes" ; then
                     pthread_cleanup_pop(0);
                  ], [
                     wx_cv_func_pthread_cleanup_push=yes
-                    AC_DEFINE(HAVE_THREAD_CLEANUP_FUNCTIONS)
                  ], [
                     wx_cv_func_pthread_cleanup_push=no
                  ])
   ])
+
+  if test "$wx_cv_func_pthread_cleanup_push" = "yes"; then
+      AC_DEFINE(HAVE_THREAD_CLEANUP_FUNCTIONS)
+  fi
+
+  dnl mutexattr_t initialization is done in quite different ways on different
+  dnl platforms, so check for a few things:
+  dnl
+  dnl HAVE_MUTEX_RECURSIVE means that we can create recursive mutexes
+  dnl HAVE_MUTEXATTR_SETTYPE means that we do it using
+  dnl pthread_mutexattr_settype(PTHREAD_MUTEX_RECURSIVE) and if it is not
+  dnl defined, we do it by directly assigned
+  dnl PTHREAD_MUTEX_RECURSIVE_MUTEX_INITIALIZER_NP to attr
+
+#ifdef HAVE_PTHREAD_MUTEXATTR_T
+#elif defined(HAVE_PTHREAD_RECURSIVE_MUTEX_INITIALIZER)
+
+  AC_CACHE_CHECK([for pthread_mutexattr_t], wx_cv_type_pthread_mutexattr_t,
+  [
+    AC_TRY_COMPILE([#include <pthread.h>],
+        [
+           pthread_mutexattr_t attr;
+           pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+        ], [
+           wx_cv_type_pthread_mutexattr_t=yes
+        ], [
+           wx_cv_type_pthread_mutexattr_t=no
+        ]
+    )
+  ])
+
+  if test "$wx_cv_type_pthread_mutexattr_t" = "yes"; then
+    AC_DEFINE(HAVE_PTHREAD_MUTEXATTR_T)
+  else
+    dnl don't despair, there may be another way to do it
+    AC_CACHE_CHECK([for PTHREAD_RECURSIVE_MUTEX_INITIALIZER],
+                   wx_cv_type_pthread_rec_mutex_init,
+    [
+        AC_TRY_COMPILE([#include <pthread.h>],
+            [
+                pthread_mutex_t attr = PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP;
+            ], [
+                wx_cv_type_pthread_rec_mutex_init=yes
+            ], [
+                wx_cv_type_pthread_rec_mutex_init=no
+            ]
+        )
+    ])
+    if test "$wx_cv_type_pthread_rec_mutex_init"="yes"; then
+      AC_DEFINE(HAVE_PTHREAD_RECURSIVE_MUTEX_INITIALIZER)
+    else
+      dnl this may break code working elsewhere, so at least warn about it
+      AC_MSG_WARN([wxMutex won't be recursive on this platform])
+    fi
+  fi
 
   THREADS_LINK="-l$THREADS_LINK"
 
