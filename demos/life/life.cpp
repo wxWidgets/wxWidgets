@@ -634,11 +634,14 @@ LifeNavigator::LifeNavigator(wxWindow *parent)
     sizer1->Add( sizer2 );
     sizer1->Add( bs, 0, wxCENTRE | wxSOUTH, 4 );
 
-    // set the miniframe size
+    // set the panel and miniframe size
     panel->SetSizer(sizer1);
     panel->SetAutoLayout(TRUE);
-    sizer1->Fit(this);
-    sizer1->SetSizeHints(this);
+
+    sizer1->Fit(panel);
+    SetClientSize(panel->GetSize());
+    wxSize sz = GetSize();
+    SetSizeHints(sz.x, sz.y, sz.x, sz.y);
 
     // move it to a sensible position
     wxRect parentRect = parent->GetRect();
