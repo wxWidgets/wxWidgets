@@ -16,6 +16,25 @@
     #pragma interface "log.h"
 #endif
 
+// ----------------------------------------------------------------------------
+// forward declarations
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxTextCtrl;
+class WXDLLEXPORT wxLogFrame;
+class WXDLLEXPORT wxFrame;
+
+// ----------------------------------------------------------------------------
+// types
+// ----------------------------------------------------------------------------
+
+typedef unsigned long wxTraceMask;
+typedef unsigned long wxLogLevel;
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #if wxUSE_LOG
 
 #include <time.h>   // for time_t
@@ -67,17 +86,6 @@ enum
 #ifdef  __WXMSW__
     #define wxTraceOleCalls 0x0100  // OLE interface calls
 #endif
-
-typedef unsigned long wxTraceMask;
-typedef unsigned long wxLogLevel;
-
-// ----------------------------------------------------------------------------
-// forward declarations
-// ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxTextCtrl;
-class WXDLLEXPORT wxLogFrame;
-class WXDLLEXPORT wxFrame;
 
 #if wxUSE_IOSTREAMH
 // N.B. BC++ doesn't have istream.h, ostream.h
@@ -376,10 +384,9 @@ extern void WXDLLEXPORT wxLog##level(arg1, const wxChar *szFormat, ...)
 
 // log functions do nothing at all
 #define DECLARE_LOG_FUNCTION(level)                                 \
-inline void WXDLLEXPORT wxLog##level(const wxChar * WXUNUSED(szFormat), ...) {}
+inline void WXDLLEXPORT wxLog##level(const wxChar *szFormat, ...) {}
 #define DECLARE_LOG_FUNCTION2(level, arg1)                          \
-inline void WXDLLEXPORT wxLog##level(WXUNUSED(arg1),                \
-                                     const wxChar *WXUNUSED(szFormat), ...) {}
+inline void WXDLLEXPORT wxLog##level(arg1, const wxChar *szFormat, ...) {}
 
 #endif // wxUSE_LOG/!wxUSE_LOG
 

@@ -416,6 +416,7 @@ void wxApp::CleanUp()
 {
     //// COMMON CLEANUP
 
+#if wxUSE_LOG
     // flush the logged messages if any and install a 'safer' log target: the
     // default one (wxLogGui) can't be used after the resources are freed just
     // below and the user suppliedo ne might be even more unsafe (using any
@@ -424,6 +425,7 @@ void wxApp::CleanUp()
 
     // this will flush the old messages if any
     delete wxLog::SetActiveTarget(new wxLogStderr);
+#endif // wxUSE_LOG
 
     // One last chance for pending objects to be cleaned up
     wxTheApp->DeletePendingObjects();
@@ -529,8 +531,10 @@ void wxApp::CleanUp()
     //  wxDebugContext::SetStream(NULL, NULL);
 #endif
 
+#if wxUSE_LOG
     // do it as the very last thing because everything else can log messages
     delete wxLog::SetActiveTarget(NULL);
+#endif // wxUSE_LOG
 }
 
 #if !defined(_WINDLL) || (defined(_WINDLL) && defined(WXMAKINGDLL))
@@ -944,10 +948,12 @@ void wxApp::OnIdle(wxIdleEvent& event)
     // 'Garbage' collection of windows deleted with Close().
     DeletePendingObjects();
 
+#if wxUSE_LOG
     // flush the logged messages if any
     wxLog *pLog = wxLog::GetActiveTarget();
     if ( pLog != NULL && pLog->HasPendingMessages() )
         pLog->Flush();
+#endif // wxUSE_LOG
 
     // Send OnIdle events to all windows
     if ( SendIdleEvents() )

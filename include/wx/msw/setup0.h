@@ -172,6 +172,13 @@
 #define wxUSE_SOCKETS       0
                                   // Set to 1 to use socket classes
 
+// these settings can't be set to 0 for now
+#define wxUSE_INTL 1
+#define wxUSE_LOG 1
+#define wxUSE_VALIDATORS 1
+#define wxUSE_ACCEL 1
+#define wxUSE_SASH 1
+
 /*
  * Finer detail
  *
