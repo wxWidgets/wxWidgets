@@ -156,7 +156,13 @@ void wxMenuItem::UpdateItemText()
 
 void wxMenuItem::Enable(bool bDoEnable)
 {
-    if ( m_isEnabled != bDoEnable ) 
+    if ( m_isEnabled != bDoEnable
+#if TARGET_CARBON
+         || GetId() == wxApp::s_macPreferencesMenuItemId
+         || GetId() == wxApp::s_macExitMenuItemId
+         || GetId() == wxApp::s_macAboutMenuItemId
+#endif
+         ) 
     {
         wxMenuItemBase::Enable( bDoEnable ) ;
         UpdateItemStatus() ;
