@@ -1596,6 +1596,8 @@ if test "$wxUSE_GUI" = "yes"; then
                 AC_MSG_ERROR(please set CFLAGS to contain the location of windows.h)
             fi
         fi
+        
+        AC_CHECK_HEADERS(w32api.h)
 
         INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS msw"
         dnl --- Quick & Dirty ; link against most/all libraries
