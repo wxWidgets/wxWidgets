@@ -1342,11 +1342,6 @@ bool wxDC::DoBlit(
     CHARBUNDLE                      vCbnd;
     COLORREF                        vOldTextColor;
     COLORREF                        vOldBackground = ::GpiQueryBackColor(m_hPS);
-    POINTL                          aPoint[4] = { vXdest, vYdest
-                                                 ,vXdest + vWidth, vYdest + vHeight
-                                                 ,vXsrc, vYsrc
-                                                 ,vXsrc + vWidth, vYsrc + vHeight
-                                                };
 
     if (bUseMask)
     {
@@ -1407,7 +1402,7 @@ bool wxDC::DoBlit(
     }
 
     bool                            bSuccess;
-#if 0
+
     if (bUseMask)
     {
         //
@@ -1415,68 +1410,158 @@ bool wxDC::DoBlit(
         //
 
         //
-        // Create a temp buffer bitmap and DCs to access it and the mask
+        // Create a temp buffer bitmap and DCs/PSs to access it and the mask
         //
-            HDC dc_mask = ::CreateCompatibleDC(GetHdcOf(*source));
-            HDC dc_buffer = ::CreateCompatibleDC(GetHdc());
-            HBITMAP buffer_bmap = ::CreateCompatibleBitmap(GetHdc(), width, height);
-            ::SelectObject(dc_mask, (HBITMAP) mask->GetMaskBitmap());
-            ::SelectObject(dc_buffer, buffer_bmap);
+        HDC                             hDCMask;
+        HDC                             hDCBuffer;
+        HPS                             hPSMask;
+        HPS                             hPSBuffer;
+        DEVOPENSTRUC                    vDOP = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
+        BITMAPINFOHEADER2               vBmpHdr;
+        SIZEL                           vSize = {0, 0};
+        LONG                            rc;
 
-            // copy dest to buffer
-            if ( !::BitBlt(dc_buffer, 0, 0, (int)width, (int)height,
-                           GetHdc(), xdest, ydest, SRCCOPY) )
-            {
-                wxLogLastError(wxT("BitBlt"));
-            }
+        hDCMask = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDOP, NULLHANDLE);
+        hDCBuffer = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDOP, NULLHANDLE);
+        hPSMask = ::GpiCreatePS(vHabmain, hDCMask, &vSize, PU_PELS | GPIT_MICRO | GPIA_ASSOC);
+        hPSBuffer = ::GpiCreatePS(vHabmain, hDCBuffer, &vSize, PU_PELS | GPIT_MICRO | GPIA_ASSOC);
 
-            // copy src to buffer using selected raster op
-            if ( !::BitBlt(dc_buffer, 0, 0, (int)width, (int)height,
-                           GetHdcOf(*source), xsrc, ysrc, dwRop) )
-            {
-                wxLogLastError(wxT("BitBlt"));
-            }
+        memset(&vBmpHdr, 0, sizeof(BITMAPINFOHEADER2));
+        vBmpHdr.cbFix     = sizeof(BITMAPINFOHEADER2);
+        vBmpHdr.cx        = vWidth;
+        vBmpHdr.cy        = vHeight;
+        vBmpHdr.cPlanes   = 1;
+        vBmpHdr.cBitCount = 24;
 
-            // set masked area in buffer to BLACK (pixel value 0)
-            COLORREF prevBkCol = ::SetBkColor(GetHdc(), RGB(255, 255, 255));
-            COLORREF prevCol = ::SetTextColor(GetHdc(), RGB(0, 0, 0));
-            if ( !::BitBlt(dc_buffer, 0, 0, (int)width, (int)height,
-                           dc_mask, xsrc, ysrc, SRCAND) )
-            {
-                wxLogLastError(wxT("BitBlt"));
-            }
+        HBITMAP                         hBufBitmap = ::GpiCreateBitmap(GetHPS(), &vBmpHdr, 0L, NULL, NULL);
+        POINTL                          aPoint1[4] = { 0, 0
+                                                      ,vWidth, vHeight
+                                                      ,vXdest, vYdest
+                                                      ,vXdest + vWidth, vYdest + vHeight
+                                                     };
+        POINTL                          aPoint2[4] = { 0, 0
+                                                      ,vWidth, vHeight
+                                                      ,vXsrc, vYsrc
+                                                      ,vXsrc + vWidth, vYsrc + vHeight
+                                                     };
+        POINTL                          aPoint3[4] = { vXdest, vYdest
+                                                      ,vXdest + vWidth, vYdest + vHeight
+                                                      ,0, 0
+                                                      ,vWidth, vHeight
+                                                     };
+        ::GpiSetBitmap(hPSMask, (HBITMAP) pMask->GetMaskBitmap());
+        ::GpiSetBitmap(hPSBuffer, (HBITMAP) hBufBitmap);
 
-            // set unmasked area in dest to BLACK
-            ::SetBkColor(GetHdc(), RGB(0, 0, 0));
-            ::SetTextColor(GetHdc(), RGB(255, 255, 255));
-            if ( !::BitBlt(GetHdc(), xdest, ydest, (int)width, (int)height,
-                           dc_mask, xsrc, ysrc, SRCAND) )
-            {
-                wxLogLastError(wxT("BitBlt"));
-            }
-            ::SetBkColor(GetHdc(), prevBkCol);   // restore colours to original values
-            ::SetTextColor(GetHdc(), prevCol);
-
-            // OR buffer to dest
-            success = ::BitBlt(GetHdc(), xdest, ydest,
-                               (int)width, (int)height,
-                               dc_buffer, 0, 0, SRCPAINT) != 0;
-            if ( !success )
-            {
-                wxLogLastError(wxT("BitBlt"));
-            }
-
-            // tidy up temporary DCs and bitmap
-            ::SelectObject(dc_mask, 0);
-            ::DeleteDC(dc_mask);
-            ::SelectObject(dc_buffer, 0);
-            ::DeleteDC(dc_buffer);
-            ::DeleteObject(buffer_bmap);
+        //
+        // Copy dest to buffer
+        //
+        rc = ::GpiBitBlt( hPSBuffer
+                         ,GetHPS()
+                         ,4L
+                         ,aPoint1
+                         ,ROP_SRCCOPY
+                         ,BBO_IGNORE
+                        );
+        if (rc == GPI_ERROR)
+        {
+            wxLogLastError(wxT("BitBlt"));
         }
+
+        //
+        // Copy src to buffer using selected raster op
+        //
+        rc = ::GpiBitBlt( hPSBuffer
+                         ,GetHPS()
+                         ,4L
+                         ,aPoint2
+                         ,lRop
+                         ,BBO_IGNORE
+                        );
+        if (rc == GPI_ERROR)
+        {
+            wxLogLastError(wxT("BitBlt"));
+        }
+
+        //
+        // Set masked area in buffer to BLACK (pixel value 0)
+        //
+        COLORREF                        vPrevBkCol = ::GpiQueryBackColor(GetHPS());
+        COLORREF                        vPrevCol = ::GpiQueryColor(GetHPS());
+
+        ::GpiSetBackColor(GetHPS(), OS2RGB(255, 255, 255));
+        ::GpiSetColor(GetHPS(), OS2RGB(0, 0, 0));
+
+        rc = ::GpiBitBlt( hPSBuffer
+                         ,hPSMask
+                         ,4L
+                         ,aPoint2
+                         ,ROP_SRCAND
+                         ,BBO_IGNORE
+                        );
+        if (rc == GPI_ERROR)
+        {
+            wxLogLastError(wxT("BitBlt"));
+        }
+
+        //
+        // Set unmasked area in dest to BLACK
+        //
+        ::GpiSetBackColor(GetHPS(), OS2RGB(0, 0, 0));
+        ::GpiSetColor(GetHPS(), OS2RGB(255, 255, 255));
+        rc = ::GpiBitBlt( GetHPS()
+                         ,hPSMask
+                         ,4L
+                         ,aPoint2
+                         ,ROP_SRCAND
+                         ,BBO_IGNORE
+                        );
+        if (rc == GPI_ERROR)
+        {
+            wxLogLastError(wxT("BitBlt"));
+        }
+
+        //
+        // Restore colours to original values
+        //
+        ::GpiSetBackColor(GetHPS(), vPrevBkCol);
+        ::GpiSetColor(GetHPS(), vPrevCol);
+
+        //
+        // OR buffer to dest
+        //
+        rc = ::GpiBitBlt( GetHPS()
+                         ,hPSMask
+                         ,4L
+                         ,aPoint2
+                         ,ROP_SRCPAINT
+                         ,BBO_IGNORE
+                        );
+        if (rc == GPI_ERROR)
+        {
+            bSuccess = FALSE;
+            wxLogLastError(wxT("BitBlt"));
+        }
+
+        //
+        // Tidy up temporary DCs and bitmap
+        //
+        ::GpiSetBitmap(hPSMask, NULLHANDLE);
+        ::GpiSetBitmap(hPSBuffer, NULLHANDLE);
+        ::GpiDestroyPS(hPSMask);
+        ::GpiDestroyPS(hPSBuffer);
+        ::DevCloseDC(hDCMask);
+        ::DevCloseDC(hDCBuffer);
+        ::GpiDeleteBitmap(hBufBitmap);
+        bSuccess = TRUE;
     }
-#endif
-//    else // no mask, just BitBlt() it
-//    {
+    else // no mask, just BitBlt() it
+    {
+        POINTL                          aPoint[4] = { vXdest, vYdest
+                                                     ,vXdest + vWidth, vYdest + vHeight
+                                                     ,vXsrc, vYsrc
+                                                     ,vXsrc + vWidth, vYsrc + vHeight
+                                                    };
+
         bSuccess = (::GpiBitBlt( m_hPS
                                 ,pSource->GetHPS()
                                 ,4L
@@ -1488,7 +1573,7 @@ bool wxDC::DoBlit(
         {
             wxLogLastError(wxT("BitBlt"));
         }
-//    }
+    }
     vCbnd.lColor = (LONG)vOldTextColor;
     ::GpiSetAttrs( m_hPS           // presentation-space handle
                   ,PRIM_CHAR       // Char primitive.
