@@ -372,6 +372,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_NO_DEPS=no
   DEFAULT_wxUSE_NO_RTTI=no
   DEFAULT_wxUSE_NO_EXCEPTIONS=no
+  DEFAULT_wxUSE_RPATH=yes
   DEFAULT_wxUSE_PERMISSIVE=no
   DEFAULT_wxUSE_DEBUG_FLAG=yes
   DEFAULT_wxUSE_DEBUG_INFO=yes
@@ -559,6 +560,7 @@ else
   DEFAULT_wxUSE_NO_DEPS=no
   DEFAULT_wxUSE_NO_RTTI=no
   DEFAULT_wxUSE_NO_EXCEPTIONS=no
+  DEFAULT_wxUSE_RPATH=yes
   DEFAULT_wxUSE_PERMISSIVE=no
   DEFAULT_wxUSE_DEBUG_FLAG=no
   DEFAULT_wxUSE_DEBUG_INFO=no
@@ -838,11 +840,7 @@ WX_ARG_ENABLE(no_deps,       [  --enable-no_deps        create code without depe
 WX_ARG_ENABLE(compat22,      [  --enable-compat22       enable wxWidgets 2.2 compatibility], WXWIN_COMPATIBILITY_2_2)
 WX_ARG_ENABLE(compat24,      [  --disable-compat24      disable wxWidgets 2.4 compatibility], WXWIN_COMPATIBILITY_2_4, disable)
 
-AC_ARG_ENABLE(rpath,         [  --enable-rpath=DIR      output the rpath flag from wx-config], [wxRPATH_DIR="$enableval"])
-
-if test "$wxRPATH_DIR" != "" -a "$wxRPATH_DIR" != "disable" -a "$wxRPATH_DIR" != "no"; then
-   WXCONFIG_RPATH="-Wl,-rpath -Wl,$wxRPATH_DIR"
-fi
+WX_ARG_ENABLE(rpath,         [  --disable-rpath         disable use of rpath for uninstalled builds], wxUSE_RPATH)
 
 
 dnl ---------------------------------------------------------------------------
@@ -3286,6 +3284,7 @@ if test "$wxUSE_SHARED" = "yes"; then
     case "${host}" in
       *-*-linux* | *-*-gnu* )
         SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(top_builddir)lib"
+        WXCONFIG_RPATH="-Wl,-rpath,\$libdir"
 	;;
 
       *-*-solaris2* )
@@ -3304,23 +3303,25 @@ if test "$wxUSE_SHARED" = "yes"; then
                 [
                     AC_MSG_RESULT([yes])
                     SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(top_builddir)lib"
-                ],
-                [
+                    WXCONFIG_RPATH="-Wl,-rpath,\$libdir"
+                ],[
                     AC_MSG_RESULT([no])
                     AC_MSG_CHECKING([if the linker accepts -R])
                     LDFLAGS="$saveLdflags -Wl,-R,/"
                     AC_TRY_LINK(
                         [],[],
                         [
-                             AC_MSG_RESULT([yes])
-                             SAMPLES_RPATH_FLAG="-Wl,-R,\$(top_builddir)lib"],
-                        [
+                            AC_MSG_RESULT([yes])
+                            SAMPLES_RPATH_FLAG="-Wl,-R,\$(top_builddir)lib"
+                            WXCONFIG_RPATH="-Wl,-R,\$libdir"
+                        ],[
                             AC_MSG_RESULT([no])
                         ])                    
                 ])
             LDFLAGS="$saveLdflags"
         else
             SAMPLES_RPATH_FLAG="-R\$(top_builddir)lib"
+            WXCONFIG_RPATH="-R\$libdir"
         fi
       ;;
       
@@ -3343,14 +3344,20 @@ EOF
 	;;
       
     esac
-fi
 
-dnl do not 'else' this, it may be changed in the above conditional.
-if test "$wxUSE_SHARED" = "no"; then
+    if test $wxUSE_RPATH = "no"; then
+        SAMPLES_RPATH_FLAG=''
+        SAMPLES_RPATH_POSTLINK=''
+        WXCONFIG_RPATH=''
+    fi
+
+    SHARED=1
+
+else
+
     config_linkage_component="-static"
     SHARED=0
-else
-    SHARED=1
+
 fi
 
 

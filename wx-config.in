@@ -122,7 +122,7 @@ wxconfig_input_options="prefix exec_prefix utility $wxconfig_schema"
 wxconfig_yesno_options="universal unicode debug static"
 
 # Boolean options that do something or not.
-wxconfig_flag_options="$wxconfig_yesno_options inplace"
+wxconfig_flag_options="$wxconfig_yesno_options no_rpath inplace"
 
 
 
@@ -340,7 +340,7 @@ this_chartype="@WX_CHARTYPE@"
 this_debugtype="@WX_DEBUGTYPE@"
 this_flavour="@WX_FLAVOUR@"
 this_version="@WX_RELEASE@"
-this_linkage=$( [ @SHARED@ -eq 1 ] || echo '-static' )
+this_linkage=$( [ "x@SHARED@" = "x1" ] || echo '-static' )
 
 this_config=$(get_mask this)
 
@@ -841,6 +841,7 @@ exec_prefix=${this_exec_prefix-$exec_prefix}
 
 includedir="@includedir@"
 libdir="@libdir@"
+bindir="@bindir@"
 
 # Trivial queries we can answer now.
 [ -z "$output_option_prefix"       ] || echo $prefix
@@ -853,15 +854,64 @@ libdir="@libdir@"
 [ -z "$output_option_cc"           ] || echo "@CC@"
 [ -z "$output_option_cxx"          ] || echo "@CXX@"
 [ -z "$output_option_ld"           ] || echo "@EXE_LINKER@"
-[ -z "$input_option_utility"       ] || echo "${input_option_utility}-@WX_RELEASE@@WX_FLAVOUR@"
 
 
 # The rest are going to need a little more work.
 # --------------------------------------------------------------
 
 is_cross()      { [ "x@cross_compiling@" = "xyes" ]; }
-is_monolithic() { [ @MONOLITHIC@ -eq 1 ]; }
+is_monolithic() { [ "x@MONOLITHIC@" = "x1" ]; }
+is_static()     { [ -n "$this_linkage" ]; }
+is_installed()  { [ -z "$this_prefix" ]; }
 
+
+# Is the user after a support utility?
+# If this is a cross build, we need to find and return a suitable
+# native utility for the job, so we search:
+#
+#   1. local build dir (for native uninstalled builds only).
+#   2. (optional) user supplied prefix.
+#   3. configured install prefix.
+#   4. environment $PATH.
+#
+# and if such a thing still cannot be found, exit signalling an error.
+if [ -n "$input_option_utility" ]; then
+
+    # This is dumb, in tree binaries should be in a standard location
+    # like the libs, but work with what we've got for now.
+    is_cross || _util="$exec_prefix/utils/$input_option_utility/$input_option_utility"
+
+    if ! is_installed && [ -x "$_util" ]; then
+        is_static || _preload="eval LD_LIBRARY_PATH=$exec_prefix/lib"
+        echo $_preload $_util
+        exit
+    fi
+
+    IFS=':'
+    _user_prefix=${input_option_exec_prefix:-$input_option_prefix}
+
+    for _util in "${input_option_utility}-@WX_RELEASE@@WX_FLAVOUR@" \
+                 "${input_option_utility}-@WX_RELEASE@"             \
+                 "${input_option_utility}";
+    do
+        for p in ${_user_prefix:+$_user_prefix/bin} $bindir $PATH; do
+
+            [ -z "$WXDEBUG" ] || decho "  checking for: '$p/$_util'"
+
+            if [ -x "$p/$_util" ]; then
+                echo "$p/$_util"
+                exit
+            fi
+
+        done
+    done
+    exit 1
+
+fi
+
+
+# Still here?  Then get the options together for building an app.
+# ----------------------------------------------------------------
 
 # Additional configuration for individual library components.
 ldflags_gl="@LDFLAGS_GL@"
@@ -873,6 +923,7 @@ ldlibs_html="@EXTRALIBS_HTML@"
 ldlibs_xml="@EXTRALIBS_XML@"
 ldlibs_odbc="@EXTRALIBS_ODBC@"
 ldlibs_adv="@EXTRALIBS_SDL@"
+
 
 # lib_flags_for _liblist
 # This function returns a list of flags suitable to return with the
@@ -919,7 +970,7 @@ lib_flags_for()
         [ $lib = base ] || _libname="${_libname}_$lib"
         _libname="${_libname}-@WX_RELEASE@$_target"
 
-        if [ "x$this_linkage" = "x-static" ]; then
+        if is_static; then
             _wxlibs="$_wxlibs ${libdir}/lib${_libname}.a"
             for f in $(eval echo \"\$ldlibs_$lib\"); do
                 _all_libs="$(remove_field $f $_all_libs) $f"
@@ -980,10 +1031,10 @@ if is_monolithic; then
         wx_libs=$(remove_field $i $wx_libs)
     done
 
-    wx_libs="@WXCONFIG_LDFLAGS_GUI@ @WXCONFIG_RPATH@ $(lib_flags_for $wx_libs)"
+    wx_libs="@WXCONFIG_LDFLAGS_GUI@ $(lib_flags_for $wx_libs)"
 
     # We still need the core lib deps for a static build though
-    if [ "x$this_linkage" = "x-static" ]; then
+    if is_static; then
         link_deps="${libdir}/libwx_@TOOLCHAIN_NAME@.a" 
         wx_libs="$wx_libs $link_deps $ldlibs_core @LIBS@"
     else
@@ -1018,10 +1069,10 @@ else    # MONOLITHIC = 0
         match_field "$i" @CORE_BASE_LIBS@ || using_gui=yes
     done
 
-    if [ "x$this_linkage" = "x-static" ]; then
+    if is_static; then
         link_deps=$(link_deps_for $wx_libs)
     fi
-    wx_libs="$_guildflags @WXCONFIG_RPATH@ $(lib_flags_for $wx_libs)"
+    wx_libs="$_guildflags $(lib_flags_for $wx_libs)"
 fi
 
 
@@ -1036,16 +1087,15 @@ fi
 # Endgame.  Nothing left to discover now.
 # --------------------------------------------------------------
 
-[ -n "$this_linkage"   ] || _static_cppflags="@TOOLCHAIN_DLL_DEFS@"
 [ "$using_gui" = "yes" ] || _gui_cppflags="-DwxUSE_GUI=0"
 
-if [ -n "$this_prefix" ]; then
-    _include_cppflags="-I${includedir} -I${prefix}/contrib/include"
-else
+if is_installed; then
     _include_cppflags="-I${includedir}/wx-@WX_RELEASE@@WX_FLAVOUR@"
+else
+    _include_cppflags="-I${includedir} -I${prefix}/contrib/include"
 fi
 
-_cppflags=$(echo "-I${libdir}/wx/include/@TOOLCHAIN_FULLNAME@" $_include_cppflags "@WXDEBUG_DEFINE@" "@TOOLCHAIN_DEFS@" $_static_cppflags $_gui_cppflags "@WXCONFIG_INCLUDE@" "@WX_LARGEFILE_FLAGS@" "@GCC_PRAGMA_FLAGS@")  
+_cppflags=$(echo "-I${libdir}/wx/include/@TOOLCHAIN_FULLNAME@" $_include_cppflags "@WXDEBUG_DEFINE@" "@TOOLCHAIN_DEFS@" "@TOOLCHAIN_DLL_DEFS@" $_gui_cppflags "@WXCONFIG_INCLUDE@" "@WX_LARGEFILE_FLAGS@" "@GCC_PRAGMA_FLAGS@")  
 
 # now without further ado, we can answer these too.
 [ -z "$output_option_cppflags" ] || echo $_cppflags
@@ -1060,7 +1110,9 @@ if [ -n "$output_option_libs" ]; then
     || [ "x$libdir" = "x/usr/lib" ]                                         \
     || _ldflags="-L$libdir"
 
-    echo $_ldflags "@LDFLAGS@" $wx_libs "@DMALLOC_LIBS@"
+    is_installed || [ -n "$flag_option_no_rpath" ] || _rpath="@WXCONFIG_RPATH@"
+
+    echo $_ldflags "@LDFLAGS@" $_rpath $wx_libs "@DMALLOC_LIBS@"
 fi
 
 # And so that's it, we're done.  Have a nice build.
