@@ -627,6 +627,12 @@ void MyFrame::OnIdle( wxIdleEvent& WXUNUSED(event) )
     }
 }
 
+#if USE_LOG
+    #define BOOKEVENT_LOG m_text->SetInsertionPointEnd();
+#else
+    #define BOOKEVENT_LOG
+#endif
+
 #define BOOKEVENT(OnBook,wxBookEvent,bookStr,wxEVT_PAGE_CHANGED,wxEVT_PAGE_CHANGING,s_num) \
 void MyFrame::OnBook(wxBookEvent& event)                                                   \
 {                                                                                          \
@@ -671,7 +677,7 @@ void MyFrame::OnBook(wxBookEvent& event)                                        
                                                                                            \
     wxLogMessage(logMsg.c_str());                                                          \
                                                                                            \
-    m_text->SetInsertionPointEnd();                                                        \
+    BOOKEVENT_LOG                                                                          \
 }
 
 #if wxUSE_NOTEBOOK
