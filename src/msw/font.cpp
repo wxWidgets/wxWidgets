@@ -37,10 +37,11 @@
     #include "wx/log.h"
 #endif // WX_PRECOMP
 
-#include "wx/fontutil.h"
-#include "wx/tokenzr.h"
-
 #include "wx/msw/private.h"
+
+#include "wx/fontutil.h"
+#include "wx/fontmap.h"
+
 #include "wx/tokenzr.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
@@ -463,8 +464,20 @@ void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding)
     wxNativeEncodingInfo info;
     if ( !wxGetNativeFontEncoding(encoding, &info) )
     {
-        // unsupported encoding, replace with the default
-        info.charset = ANSI_CHARSET;
+#if wxUSE_FONTMAP
+        if ( !wxTheFontMapper->GetAltForEncoding(encoding, &info) )
+#endif // wxUSE_FONTMAP
+        {
+            // unsupported encoding, replace with the default
+            info.charset = ANSI_CHARSET;
+        }
+        else if ( !info.facename.empty() )
+        {
+            // if we have this encoding only in some particular facename, use
+            // the facename - it is better to show the correct characters in a
+            // wrong facename than unreadable text in a correct one
+            SetFaceName(info.facename);
+        }
     }
 
     lf.lfCharSet = info.charset;
