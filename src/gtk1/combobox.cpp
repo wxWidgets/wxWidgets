@@ -733,6 +733,7 @@ void wxComboBox::OnSize( wxSizeEvent &event )
 void wxComboBox::DoApplyWidgetStyle(GtkRcStyle *style)
 {
 //    gtk_widget_modify_style( GTK_COMBO(m_widget)->button, syle );
+
     gtk_widget_modify_style( GTK_COMBO(m_widget)->entry, style );
     gtk_widget_modify_style( GTK_COMBO(m_widget)->list, style );
 

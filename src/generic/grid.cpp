@@ -502,9 +502,11 @@ void wxGridCellEditor::Show(bool show, wxGridCellAttr *attr)
             m_colBgOld = m_control->GetBackgroundColour();
             m_control->SetBackgroundColour(attr->GetBackgroundColour());
 
+	    // Workaround for GTK+1 font setting problem on some platforms
+#if !defined(__WXGTK__) || defined(__WXGTK20__)
             m_fontOld = m_control->GetFont();
             m_control->SetFont(attr->GetFont());
-
+#endif
             // can't do anything more in the base class version, the other
             // attributes may only be used by the derived classes
         }
@@ -523,12 +525,14 @@ void wxGridCellEditor::Show(bool show, wxGridCellAttr *attr)
             m_control->SetBackgroundColour(m_colBgOld);
             m_colBgOld = wxNullColour;
         }
-
+	// Workaround for GTK+1 font setting problem on some platforms
+#if !defined(__WXGTK__) || defined(__WXGTK20__)
         if ( m_fontOld.Ok() )
         {
             m_control->SetFont(m_fontOld);
             m_fontOld = wxNullFont;
         }
+#endif
     }
 }
 
