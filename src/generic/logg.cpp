@@ -249,6 +249,10 @@ void wxLogGui::Flush()
 
     size_t nMsgCount = m_aMessages.Count();
 
+    // avoid showing other log dialogs until we're done with the dialog we're
+    // showing right now: nested modal dialogs make for really bad UI!
+    Suspend();
+
     wxString str;
     if ( nMsgCount == 1 )
     {
@@ -295,6 +299,9 @@ void wxLogGui::Flush()
         // no undisplayed messages whatsoever
         Clear();
     }
+
+    // allow flushing the logs again
+    Resume();
 }
 
 // log all kinds of messages
