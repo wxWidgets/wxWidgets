@@ -924,279 +924,279 @@ void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
         }
     }
 #elif defined(__WXMAC__)
-    const char* lc = NULL ;
+    const wxChar * lc = NULL ;
     long lang = GetScriptVariable( smSystemScript, smScriptLang) ;
     switch( GetScriptManagerVariable( smRegionCode ) ) {
       case verUS :
-        lc = "en_US" ;
+        lc = wxT("en_US") ;
         break ;
       case verFrance :
-        lc = "fr_FR" ;
+        lc = wxT("fr_FR") ;
         break ;
       case verBritain :
-        lc = "en_GB" ;
+        lc = wxT("en_GB") ;
         break ;
       case verGermany :
-        lc = "de_DE" ;
+        lc = wxT("de_DE") ;
         break ;
       case verItaly :
-        lc = "it_IT" ;
+        lc = wxT("it_IT") ;
         break ;
       case verNetherlands :
-        lc = "nl_NL" ;
+        lc = wxT("nl_NL") ;
         break ;
       case verFlemish :
-        lc = "nl_BE" ;
+        lc = wxT("nl_BE") ;
         break ;
       case verSweden :
-        lc = "sv_SE" ;
+        lc = wxT("sv_SE" );
         break ;
       case verSpain :
-        lc = "es_ES" ;
+        lc = wxT("es_ES" );
         break ;
       case verDenmark :
-        lc = "da_DK" ;
+        lc = wxT("da_DK") ;
         break ;
       case verPortugal :
-        lc = "pt_PT" ;
+        lc = wxT("pt_PT") ;
         break ;
       case verFrCanada:
-        lc = "fr_CA" ;
+        lc = wxT("fr_CA") ;
         break ;
       case verNorway:
-        lc = "no_NO" ;
+        lc = wxT("no_NO") ;
         break ;
       case verIsrael:
-        lc = "iw_IL" ;
+        lc = wxT("iw_IL") ;
         break ;
       case verJapan:
-        lc = "ja_JP" ;
+        lc = wxT("ja_JP") ;
         break ;
       case verAustralia:
-        lc = "en_AU" ;
+        lc = wxT("en_AU") ;
         break ;
       case verArabic:
-        lc = "ar" ;
+        lc = wxT("ar") ;
         break ;
       case verFinland:
-        lc = "fi_FI" ;
+        lc = wxT("fi_FI") ;
         break ;
       case verFrSwiss:
-        lc = "fr_CH" ;
+        lc = wxT("fr_CH") ;
         break ;
       case verGrSwiss:
-        lc = "de_CH" ;
+        lc = wxT("de_CH") ;
         break ;
       case verGreece:
-        lc = "el_GR" ;
+        lc = wxT("el_GR") ;
         break ;
       case verIceland:
-        lc = "is_IS" ;
+        lc = wxT("is_IS") ;
         break ;
       case verMalta:
-        lc = "mt_MT" ;
+        lc = wxT("mt_MT") ;
         break ;
       case verCyprus:
       // _CY is not part of wx, so we have to translate according to the system language
         if ( lang == langGreek ) {
-          lc = "el_GR" ;
+          lc = wxT("el_GR") ;
         }
         else if ( lang == langTurkish ) {
-          lc = "tr_TR" ;
+          lc = wxT("tr_TR") ;
         }
         break ;
       case verTurkey:
-        lc = "tr_TR" ;
+        lc = wxT("tr_TR") ;
         break ;
       case verYugoCroatian:
-        lc = "hr_HR" ;
+        lc = wxT("hr_HR") ;
         break ;
       case verIndiaHindi:
-        lc = "hi_IN" ;
+        lc = wxT("hi_IN") ;
         break ;
       case verPakistanUrdu:
-        lc = "ur_PK" ;
+        lc = wxT("ur_PK") ;
         break ;
       case verTurkishModified:
-        lc = "tr_TR" ;
+        lc = wxT("tr_TR") ;
         break ;
       case verItalianSwiss:
-        lc = "it_CH" ;
+        lc = wxT("it_CH") ;
         break ;
       case verInternational:
-        lc = "en" ;
+        lc = wxT("en") ;
         break ;
       case verRomania:
-        lc = "ro_RO" ;
+        lc = wxT("ro_RO") ;
         break ;
       case verGreecePoly:
-        lc = "el_GR" ;
+        lc = wxT("el_GR") ;
         break ;
       case verLithuania:
-        lc = "lt_LT" ;
+        lc = wxT("lt_LT") ;
         break ;
       case verPoland:
-        lc = "pl_PL" ;
+        lc = wxT("pl_PL") ;
         break ;
       case verMagyar :
       case verHungary:
-        lc = "hu_HU" ;
+        lc = wxT("hu_HU") ;
         break ;
       case verEstonia:
-        lc = "et_EE" ;
+        lc = wxT("et_EE") ;
         break ;
       case verLatvia:
-        lc = "lv_LV" ;
+        lc = wxT("lv_LV") ;
         break ;
       case verSami:
         // not known
         break ;
       case verFaroeIsl:
-        lc = "fo_FO" ;
+        lc = wxT("fo_FO") ;
         break ;
       case verIran:
-        lc = "fa_IR" ;
+        lc = wxT("fa_IR") ;
         break ;
       case verRussia:
-        lc = "ru_RU" ;
+        lc = wxT("ru_RU") ;
         break ;
        case verIreland:
-        lc = "ga_IE" ;
+        lc = wxT("ga_IE") ;
         break ;
       case verKorea:
-        lc = "ko_KR" ;
+        lc = wxT("ko_KR") ;
         break ;
       case verChina:
-        lc = "zh_CN" ;
+        lc = wxT("zh_CN") ;
         break ;
       case verTaiwan:
-        lc = "zh_TW" ;
+        lc = wxT("zh_TW") ;
         break ;
       case verThailand:
-        lc = "th_TH" ;
+        lc = wxT("th_TH") ;
         break ;
       case verCzech:
-        lc = "cs_CZ" ;
+        lc = wxT("cs_CZ") ;
         break ;
       case verSlovak:
-        lc = "sk_SK" ;
+        lc = wxT("sk_SK") ;
         break ;
       case verBengali:
-        lc = "bn" ;
+        lc = wxT("bn") ;
         break ;
       case verByeloRussian:
-        lc = "be_BY" ;
+        lc = wxT("be_BY") ;
         break ;
       case verUkraine:
-        lc = "uk_UA" ;
+        lc = wxT("uk_UA") ;
         break ;
       case verGreeceAlt:
-        lc = "el_GR" ;
+        lc = wxT("el_GR") ;
         break ;
       case verSerbian:
-        lc = "sr_YU" ;
+        lc = wxT("sr_YU") ;
         break ;
       case verSlovenian:
-        lc = "sl_SI" ;
+        lc = wxT("sl_SI") ;
         break ;
       case verMacedonian:
-        lc = "mk_MK" ;
+        lc = wxT("mk_MK") ;
         break ;
       case verCroatia:
-        lc = "hr_HR" ;
+        lc = wxT("hr_HR") ;
         break ;
       case verBrazil:
-        lc = "pt_BR " ;
+        lc = wxT("pt_BR ") ;
         break ;
       case verBulgaria:
-        lc = "bg_BG" ;
+        lc = wxT("bg_BG") ;
         break ;
       case verCatalonia:
-        lc = "ca_ES" ;
+        lc = wxT("ca_ES") ;
         break ;
       case verScottishGaelic:
-        lc = "gd" ;
+        lc = wxT("gd") ;
         break ;
       case verManxGaelic:
-        lc = "gv" ;
+        lc = wxT("gv") ;
         break ;
       case verBreton:
-        lc = "br" ;
+        lc = wxT("br") ;
         break ;
       case verNunavut:
-        lc = "iu_CA" ;
+        lc = wxT("iu_CA") ;
         break ;
       case verWelsh:
-        lc = "cy" ;
+        lc = wxT("cy") ;
         break ;
       case verIrishGaelicScript:
-        lc = "ga_IE" ;
+        lc = wxT("ga_IE") ;
         break ;
       case verEngCanada:
-        lc = "en_CA" ;
+        lc = wxT("en_CA") ;
         break ;
       case verBhutan:
-        lc = "dz_BT" ;
+        lc = wxT("dz_BT") ;
         break ;
       case verArmenian:
-        lc = "hy_AM" ;
+        lc = wxT("hy_AM") ;
         break ;
       case verGeorgian:
-        lc = "ka_GE" ;
+        lc = wxT("ka_GE") ;
         break ;
       case verSpLatinAmerica:
-        lc = "es_AR" ;
+        lc = wxT("es_AR") ;
         break ;
       case verTonga:
-        lc = "to_TO" ;
+        lc = wxT("to_TO" );
         break ;
       case verFrenchUniversal:
-        lc = "fr_FR" ;
+        lc = wxT("fr_FR") ;
         break ;
       case verAustria:
-        lc = "de_AT" ;
+        lc = wxT("de_AT") ;
         break ;
       case verGujarati:
-        lc = "gu_IN" ;
+        lc = wxT("gu_IN") ;
         break ;
       case verPunjabi:
-        lc = "pa" ;
+        lc = wxT("pa") ;
         break ;
       case verIndiaUrdu:
-        lc = "ur_IN" ;
+        lc = wxT("ur_IN") ;
         break ;
       case verVietnam:
-        lc = "vi_VN" ;
+        lc = wxT("vi_VN") ;
         break ;
       case verFrBelgium:
-        lc = "fr_BE" ;
+        lc = wxT("fr_BE") ;
         break ;
       case verUzbek:
-        lc = "uz_UZ" ;
+        lc = wxT("uz_UZ") ;
         break ;
       case verSingapore:
-        lc = "zh_SG" ;
+        lc = wxT("zh_SG") ;
         break ;
       case verNynorsk:
-        lc = "nn_NO" ;
+        lc = wxT("nn_NO") ;
         break ;
       case verAfrikaans:
-        lc = "af_ZA" ;
+        lc = wxT("af_ZA") ;
         break ;
       case verEsperanto:
-        lc = "eo" ;
+        lc = wxT("eo") ;
         break ;
       case verMarathi:
-        lc = "mr_IN" ;
+        lc = wxT("mr_IN") ;
         break ;
       case verTibetan:
-        lc = "bo" ;
+        lc = wxT("bo") ;
         break ;
       case verNepal:
-        lc = "ne_NP" ;
+        lc = wxT("ne_NP") ;
         break ;
       case verGreenland:
-        lc = "kl_GL" ;
+        lc = wxT("kl_GL") ;
         break ;
       default :
         break ;

@@ -848,8 +848,11 @@ int wxFscanf( FILE *stream, const wxChar *format, ... )
 {
     va_list argptr;
     va_start(argptr, format);
-
+#ifdef __WXMAC__ 
+    int ret = ::vfwscanf(stream, wxFormatConverter(format), argptr);
+#else
     int ret = vfwscanf(stream, wxFormatConverter(format), argptr);
+#endif
 
     va_end(argptr);
 

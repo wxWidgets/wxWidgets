@@ -1784,18 +1784,18 @@ public :
   }
   MacDefaultExtensionRecord( const MacDefaultExtensionRecord& from )
   {
-    strcpy( m_ext , from.m_ext ) ;
+    wxStrcpy( m_ext , from.m_ext ) ;
     m_type = from.m_type ;
     m_creator = from.m_creator ;
   }
-  MacDefaultExtensionRecord( const char * extension , OSType type , OSType creator )
+  MacDefaultExtensionRecord( const wxChar * extension , OSType type , OSType creator )
   {
-    strncpy( m_ext , extension , kMacExtensionMaxLength ) ;
+    wxStrncpy( m_ext , extension , kMacExtensionMaxLength ) ;
     m_ext[kMacExtensionMaxLength] = 0 ;
     m_type = type ;
     m_creator = creator ;
   }
-  char m_ext[kMacExtensionMaxLength] ;
+  wxChar m_ext[kMacExtensionMaxLength] ;
   OSType m_type ;
   OSType m_creator ;
 }  ;
@@ -1819,7 +1819,7 @@ static void MacEnsureDefaultExtensionsLoaded()
     // load the default extensions
     MacDefaultExtensionRecord defaults[1] =
     {
-      MacDefaultExtensionRecord( "txt" , 'TEXT' , 'ttxt' ) ,
+      MacDefaultExtensionRecord( wxT("txt") , 'TEXT' , 'ttxt' ) ,
 
     } ;
     // we could load the pc exchange prefs here too
@@ -1891,7 +1891,7 @@ void wxFileName::MacRegisterDefaultTypeAndCreator( const wxString& ext , wxUint3
   MacDefaultExtensionRecord rec ;
   rec.m_type = type ;
   rec.m_creator = creator ;
-  strncpy( rec.m_ext , ext.Lower().c_str() , kMacExtensionMaxLength ) ;
+  wxStrncpy( rec.m_ext , ext.Lower().c_str() , kMacExtensionMaxLength ) ;
   gMacDefaultExtensions.Add( rec ) ;
 }
 #endif

@@ -717,9 +717,8 @@ void wxLogStderr::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 
 #if defined(__WXMAC__) && !defined(__DARWIN__) && wxUSE_GUI
     Str255 pstr ;
-    strcpy( (char*) pstr , str.c_str() ) ;
-    strcat( (char*) pstr , ";g" ) ;
-    c2pstr( (char*) pstr ) ;
+    wxString output = str + wxT(";g") ;
+    wxMacStringToPascal( output.c_str() , pstr ) ;
 
     Boolean running = false ;
 

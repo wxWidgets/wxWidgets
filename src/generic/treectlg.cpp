@@ -38,6 +38,10 @@
 #include "wx/settings.h"
 #include "wx/dcclient.h"
 
+#ifdef __WXMAC__
+    #include "wx/mac/private.h"
+#endif
+
 // -----------------------------------------------------------------------------
 // array types
 // -----------------------------------------------------------------------------
@@ -2128,7 +2132,20 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 
     if ( item->IsSelected() )
     {
+// under mac selections are only a rectangle in case they don't have the focus
+#ifdef __WXMAC__
+        if ( !m_hasFocus )
+        {
+            dc.SetBrush( *wxTRANSPARENT_BRUSH ) ;
+            dc.SetPen( wxPen( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) , 1 , wxSOLID ) ) ;
+        }
+        else
+        {
+            dc.SetBrush( *m_hilightBrush ) ;
+        }
+#else
         dc.SetBrush(*(m_hasFocus ? m_hilightBrush : m_hilightUnfocusedBrush));
+#endif
     }
     else
     {
@@ -2309,10 +2326,25 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
 
                 if (HasFlag(wxTR_AQUA_BUTTONS))
                 {
+#ifdef __WXMAC__
+                    wxMacPortSetter helper(&dc) ;
+                    wxMacWindowClipper clipper(this) ;
+                    wxDC::MacSetupBackgroundForCurrentPort( MacGetBackgroundBrush() ) ;
+
+                    int loc_x = x - 5 ;
+                    int loc_y = y_mid - 6 ;
+                    MacWindowToRootWindow( & loc_x , & loc_y ) ;
+                    Rect bounds = { loc_y , loc_x , loc_y + 18 , loc_x + 12 } ;
+                    ThemeButtonDrawInfo info = { kThemeStateActive , item->IsExpanded() ? kThemeDisclosureDown : kThemeDisclosureRight ,
+                        kThemeAdornmentNone }; 
+                    DrawThemeButton( &bounds, kThemeDisclosureButton , 
+                        &info , NULL , NULL , NULL , NULL ) ;
+#else
                     if (item->IsExpanded())
                         dc.DrawBitmap( *m_arrowDown, x-5, y_mid-6, TRUE );
                     else
                         dc.DrawBitmap( *m_arrowRight, x-5, y_mid-6, TRUE );
+#endif
                 }
                 else
                 {
