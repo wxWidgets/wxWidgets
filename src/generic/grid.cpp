@@ -7888,7 +7888,7 @@ bool wxGrid::MovePageUp()
 
         int y = GetRowTop(row);
         int newRow = YToRow( y - ch + 1 );
-        if ( newRow == -1 )
+        if ( newRow < 0 )
         {
             newRow = 0;
         }
