@@ -2952,15 +2952,17 @@ bool wxWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
                                            int& x, int& y,
                                            int& w, int& h) const
 {
+    // yes, those are just some arbitrary hardcoded numbers
     static const int DEFAULT_Y = 200;
+    static const int DEFAULT_W = 400;
     static const int DEFAULT_H = 250;
 
     bool nonDefault = FALSE;
 
     if ( pos.x == -1 )
     {
-        // if set x to CW_USEDEFAULT, y parameter is ignored anyhow so we can
-        // just as well set it to CW_USEDEFAULT as well
+        // if x is set to CW_USEDEFAULT, y parameter is ignored anyhow so we
+        // can just as well set it to CW_USEDEFAULT as well
         x =
         y = CW_USEDEFAULT;
     }
@@ -2993,9 +2995,25 @@ bool wxWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
      */
     if ( size.x == -1 )
     {
-        // as above, h is not used at all in this case anyhow
-        w =
-        h = CW_USEDEFAULT;
+        // we don't use CW_USEDEFAULT here for several reasons:
+        //
+        //  1. it results in huge frames on modern screens (1000*800 is not
+        //     uncommon on my 1280*1024 screen) which is way too big for a half
+        //     empty frame of most of wxWindows samples for example)
+        //
+        //  2. it is buggy for frames with wxFRAME_TOOL_WINDOW style for which
+        //     the default is for whatever reason 8*8 which breaks client <->
+        //     window size calculations (it would be nice if it didn't, but it
+        //     does and the simplest way to fix it seemed to change the broken
+        //     default size anyhow)
+        //
+        //  3. there is just no advantage in doing it: with x and y it is
+        //     possible that [future versions of] Windows position the new top
+        //     level window in some smart way which we can't do, but we can
+        //     guess a reasonably good size for a new window just as well
+        //     ourselves
+        w = DEFAULT_W;
+        h = DEFAULT_H;
     }
     else
     {
