@@ -1048,6 +1048,7 @@ bool wxTreeCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result)
         NM_TREEVIEW* tv = (NM_TREEVIEW *)lParam;
         wxTreeItemData *data = (wxTreeItemData *)tv->itemOld.lParam;
         delete data; // may be NULL, ok
+        processed = TRUE; // Make sure we don't get called twice
     }
 
     *result = !event.IsAllowed();
