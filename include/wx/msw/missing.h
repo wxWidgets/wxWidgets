@@ -560,6 +560,21 @@ typedef struct {
     #define VK_OEM_PERIOD   0xBE
 #endif
 
+#ifndef WM_UPDATEUISTATE
+    #define WM_UPDATEUISTATE    0x128
+#endif
+
+#ifndef UIS_INITIALIZE
+    #define UIS_INITIALIZE  3
+#endif
+
+#ifndef UISF_HIDEFOCUS
+    #define UISF_HIDEFOCUS  1
+#endif
+
+#ifndef UISF_HIDEACCEL
+    #define UISF_HIDEACCEL 2
+#endif
 
 #endif
     // _WX_MISSING_H_
