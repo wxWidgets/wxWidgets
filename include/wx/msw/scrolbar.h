@@ -60,6 +60,7 @@ public:
 protected:
 
     wxSize DoGetBestSize() const;
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
     int m_pageSize;
     int m_viewSize;

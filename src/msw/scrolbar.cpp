@@ -90,74 +90,16 @@ IMPLEMENT_DYNAMIC_CLASS(wxScrollBar, wxControl)
 bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos,
            const wxSize& size, long style,
-           const wxValidator& wxVALIDATOR_PARAM(validator),
+           const wxValidator& validator,
            const wxString& name)
 {
-    if (!parent)
+    if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return false;
-    parent->AddChild(this);
-    SetName(name);
-#if wxUSE_VALIDATORS
-    SetValidator(validator);
-#endif // wxUSE_VALIDATORS
 
-    if ((style & wxBORDER_MASK) == wxBORDER_DEFAULT)
-        style |= wxNO_BORDER;
+    if (!MSWCreateControl(wxT("ScrollBar"), wxEmptyString, pos, size))
+        return false;
 
-    SetBackgroundColour(parent->GetBackgroundColour()) ;
-    SetForegroundColour(parent->GetForegroundColour()) ;
-    m_windowStyle = style;
-
-    if ( id == wxID_ANY )
-        m_windowId = (int)NewControlId();
-    else
-      m_windowId = id;
-
-    int x = pos.x;
-    int y = pos.y;
-    int width = size.x;
-    int height = size.y;
-
-    if (width == wxDefaultCoord)
-    {
-      if (style & wxHORIZONTAL)
-        width = 140;
-      else
-        width = 14;
-    }
-    if (height == wxDefaultCoord)
-    {
-      if (style & wxVERTICAL)
-        height = 140;
-      else
-        height = 14;
-    }
-
-    WXDWORD exStyle = 0;
-    WXDWORD wstyle = MSWGetStyle(style, & exStyle) ;
-
-    // Now create scrollbar
-    DWORD _direction = (style & wxHORIZONTAL) ?
-                        SBS_HORZ: SBS_VERT;
-    HWND scroll_bar = CreateWindowEx(exStyle, wxT("SCROLLBAR"), wxT("scrollbar"),
-                         _direction | wstyle,
-                         0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
-                         wxGetInstance(), NULL);
-
-    m_pageSize = 1;
-    m_viewSize = 1;
-    m_objectSize = 1;
-
-    ::SetScrollRange(scroll_bar, SB_CTL, 0, 1, FALSE);
-    ::SetScrollPos(scroll_bar, SB_CTL, 0, FALSE);
-    ShowWindow(scroll_bar, SW_SHOW);
-
-    m_hWnd = (WXHWND)scroll_bar;
-
-    // Subclass again for purposes of dialog editing mode
-    SubclassWin((WXHWND) scroll_bar);
-
-    SetSize(x, y, width, height);
+    SetScrollbar(0, 1, 2, 1, false);
 
     return true;
 }
@@ -358,8 +300,8 @@ void wxScrollBar::SetScrollbar(int position, int thumbSize, int range, int pageS
 
   ::SetScrollInfo((HWND) GetHWND(), SB_CTL, &info, refresh);
 #else
-  ::SetScrollPos((HWND)m_hWnd, SB_CTL, position, TRUE);
-  ::SetScrollRange((HWND)m_hWnd, SB_CTL, 0, range1, TRUE);
+  ::SetScrollPos((HWND)m_hWnd, SB_CTL, position, refresh);
+  ::SetScrollRange((HWND)m_hWnd, SB_CTL, 0, range1, refresh);
 #endif
 }
 
@@ -384,6 +326,20 @@ wxSize wxScrollBar::DoGetBestSize() const
     }
 
     return wxSize(w, h);
+}
+
+WXDWORD wxScrollBar::MSWGetStyle(long style, WXDWORD *exstyle) const
+{
+    // we never have an external border
+    WXDWORD msStyle = wxControl::MSWGetStyle
+                      (
+                        (style & ~wxBORDER_MASK) | wxBORDER_NONE, exstyle
+                      );
+
+    // SBS_HORZ is 0 anyhow, but do mention it explicitly for clarity
+    msStyle |= style & wxSB_HORIZONTAL ? SBS_HORZ : SBS_VERT;
+
+    return msStyle;
 }
 
 #endif // wxUSE_SCROLLBAR
