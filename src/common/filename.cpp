@@ -27,21 +27,29 @@
 
 #include "wx/filename.h"
 #include "wx/tokenzr.h"
-#include "wx/filefn.h"
+#include "wx/utils.h"
 
 //----------------------------------------------------------------------------
 // wxFileName
 //----------------------------------------------------------------------------
 
-wxFileName::wxFileName( const wxFileName &filename )
+wxFileName::wxFileName( const wxFileName &filepath )
 {
-    m_ext = filename.GetExt();
-    m_name = filename.GetName();
-    const wxArrayString &dirs = filename.GetDirs();
+    m_ext = filepath.GetExt();
+    m_name = filepath.GetName();
+    const wxArrayString &dirs = filepath.GetDirs();
     for (size_t i = 0; i < dirs.GetCount(); i++)
-    {
         m_dirs.Add( dirs[i] );
-    }
+}
+
+void wxFileName::Assign( const wxFileName &filepath )
+{
+    m_dirs.Clear();
+    m_ext = filepath.GetExt();
+    m_name = filepath.GetName();
+    const wxArrayString &dirs = filepath.GetDirs();
+    for (size_t i = 0; i < dirs.GetCount(); i++)
+        m_dirs.Add( dirs[i] );
 }
 
 void wxFileName::Assign( const wxString &path, bool dir_only, wxPathFormat format )
@@ -64,7 +72,7 @@ void wxFileName::Assign( const wxString &path, bool dir_only, wxPathFormat forma
     }
     else
     {
-        seps = "/";  // or maybe ":" or both ?
+        seps = ":";
     }
     
     wxStringTokenizer tn( path, seps );
@@ -92,7 +100,7 @@ void wxFileName::Assign( const wxString &path, bool dir_only, wxPathFormat forma
         if (pos == -1) return;
         
         bool has_starting_dot = (pos == 0);
-        if (has_starting_dot)
+        if (has_starting_dot && (format == wxPATH_UNIX))
         {
             // remove dot
             m_name.Remove(0,1);  
@@ -111,7 +119,7 @@ void wxFileName::Assign( const wxString &path, bool dir_only, wxPathFormat forma
         
         m_name.Remove( pos, m_name.Len()-pos );
         
-        if (has_starting_dot)
+        if (has_starting_dot && (format == wxPATH_UNIX))
         {
             // add dot back
             m_name.Prepend( "." );
@@ -122,54 +130,147 @@ void wxFileName::Assign( const wxString &path, bool dir_only, wxPathFormat forma
 
 bool wxFileName::FileExists()
 {
-    return ::wxFileExists( GetFullPath() );
+    return wxFileName::FileExists( GetFullPath() );
+}
+
+bool wxFileName::FileExists( const wxString &file )
+{
+    return ::wxFileExists( file );
 }
 
 bool wxFileName::DirExists()
 {
-    return ::wxDirExists( GetFullPath() );
+    return wxFileName::DirExists( GetFullPath() );
+}
+
+bool wxFileName::DirExists( const wxString &dir )
+{
+    return ::wxDirExists( dir );
 }
 
 void wxFileName::AssignCwd()
 {
-    Assign( wxGetCwd(), TRUE );
+    Assign( wxFileName::GetCwd(), TRUE );
 }
 
-void wxFileName::SetCwd()
+wxString wxFileName::GetCwd()
 {
-    wxSetWorkingDirectory( GetFullPath() );
+    return ::wxGetCwd();
 }
 
+bool wxFileName::SetCwd()
+{
+    return wxFileName::SetCwd( GetFullPath() );
+}
+
+bool wxFileName::SetCwd( const wxString &cwd )
+{
+    return ::wxSetWorkingDirectory( cwd );
+}
+
+void wxFileName::AssignHomeDir()
+{
+    Assign( wxFileName::GetHomeDir(), TRUE );
+}
+    
+wxString wxFileName::GetHomeDir()
+{
+    return ::wxGetHomeDir();
+}
+    
 void wxFileName::AssignTempFileName( const wxString &prefix )
 {
 }
 
-void wxFileName::Mkdir( int perm )
+bool wxFileName::Mkdir( int perm )
 {
-    wxMkdir( GetFullPath(), perm );
+    return wxFileName::Mkdir( GetFullPath(), perm );
 }
 
-void wxFileName::Rmdir()
+bool wxFileName::Mkdir( const wxString &dir, int perm )
 {
-    wxRmdir( GetFullPath() );
+    return ::wxMkdir( dir, perm );
 }
 
-void wxFileName::MakeAbsolute()
+bool wxFileName::Rmdir()
 {
+    return wxFileName::Rmdir( GetFullPath() );
 }
 
-bool wxFileName::SameAs( const wxFileName &filename, bool upper_on_dos )
+bool wxFileName::Rmdir( const wxString &dir )
+{
+    return ::wxRmdir( dir );
+}
+
+bool wxFileName::Normalize( const wxString &cwd, const wxString &home )
+{
+    wxFileName tmp( *this );
+    m_dirs.Clear();
+    const wxArrayString &dirs = tmp.GetDirs();
+    
+    if (dirs.GetCount() == 0) return FALSE;
+    
+    size_t start = 0;
+    
+    if (dirs[0] == wxT("."))
+    {
+        if (cwd == wxEmptyString)
+            Assign( wxFileName::GetCwd(), TRUE );
+        else
+            Assign( cwd );
+        start = 1;
+    }
+    else
+    if (dirs[0] == wxT(".."))
+    {
+        if (cwd == wxEmptyString)
+            Assign( wxFileName::GetCwd(), TRUE );
+        else
+            Assign( cwd );
+        m_dirs.Remove( m_dirs.GetCount()-1 );
+        start = 1;
+    }
+    else
+    if (dirs[0] == wxT("~"))
+    {
+        if (home == wxEmptyString)
+            Assign( wxFileName::GetHomeDir(), TRUE );
+        else
+            Assign( home );
+        start = 1;
+    }
+    
+    for (size_t i = start; i < dirs.GetCount(); i++)
+    {
+        if (dirs[i] == wxT(".")) continue;
+        
+        if (dirs[i] == wxT(".."))
+        {
+            m_dirs.Remove( m_dirs.GetCount()-1 );
+            continue;
+        }
+        
+        // expand env vars here ?
+        
+        m_dirs.Add( dirs[i] );
+    }
+    
+    m_name = tmp.GetName();
+    m_ext = tmp.GetExt();
+    
+    return TRUE;
+}
+
+bool wxFileName::SameAs( const wxFileName &filepath, bool upper_case )
 {
     wxString file1( GetFullPath() );
-    wxString file2( filename.GetFullPath() );
+    wxString file2( filepath.GetFullPath() );
    
-#ifdef __WXMSW__
-    if (upper_on_dos)
+    if (upper_case)
     {
-        file1.MakeUpper();
+        file1.MakeUpper();  // what does MSW do to non-ascii chars etc? native funcs?
         file2.MakeUpper();
     }
-#endif
    
     return (file1 == file2);
 }
@@ -238,7 +339,60 @@ void wxFileName::RemoveDir( int pos )
     m_dirs.Remove( (size_t)pos );
 }
 
-wxString wxFileName::GetPath( wxPathFormat format ) const
+void wxFileName::SetFullName( const wxString name, wxPathFormat format )
+{
+    format = GetFormat( format );
+    
+    m_name = name;
+    
+    if (m_name == wxT(".")) return;
+    if (m_name == wxT("..")) return;
+        
+    // ext?
+    int pos = m_name.Find( wxT('.') );
+    if (pos == -1) return;
+        
+    bool has_starting_dot = (pos == 0);
+    if (has_starting_dot && (format == wxPATH_UNIX))
+    {
+            // remove dot
+            m_name.Remove(0,1);  
+            
+            // search again
+            pos = m_name.Find( wxT('.') );
+            if (pos == -1)
+            {
+                // add dot back
+                m_name.Prepend( "." );
+                return;
+            }
+    }
+    
+    m_ext = m_name;
+    m_ext.Remove( 0, pos+1 );
+        
+    m_name.Remove( pos, m_name.Len()-pos );
+       
+    if (has_starting_dot && (format == wxPATH_UNIX))
+    {
+            // add dot back
+            m_name.Prepend( "." );
+            return;
+    }
+}
+
+wxString wxFileName::GetFullName()
+{
+    wxString ret( m_name );
+    if (!m_ext.IsEmpty())
+    { 
+        ret += '.';
+        ret += m_ext;
+    }
+    return ret;
+}
+
+wxString wxFileName::GetPath( bool add_separator, wxPathFormat format ) const
 {
     format = GetFormat( format );
     
@@ -248,24 +402,28 @@ wxString wxFileName::GetPath( wxPathFormat format ) const
         for (size_t i = 0; i < m_dirs.GetCount(); i++)
         {
             ret += m_dirs[i];
-            if (i != m_dirs.GetCount()-1) ret += '\\';
+            if (add_separator || (i != m_dirs.GetCount()-1))
+                ret += '\\';
         }
     }
     else
-    if (format == wxPATH_DOS)
+    if (format == wxPATH_UNIX)
+    {
+        ret = '/'; // FIXME: must be absolute
+        for (size_t i = 0; i < m_dirs.GetCount(); i++)
+        {
+            ret += m_dirs[i];
+            if (add_separator || (i != m_dirs.GetCount()-1))
+                ret += '/';
+        }
+    }
+    else
     {
         for (size_t i = 0; i < m_dirs.GetCount(); i++)
         {
             ret += m_dirs[i];
-            if (i != m_dirs.GetCount()-1) ret += '/';
-        }
-    }
-    else
-    {
-        for (size_t i = 0; i < m_dirs.GetCount(); i++)
-        {
-            ret += m_dirs[i];
-            if (i != m_dirs.GetCount()-1) ret += "//";  // or maybe ":" ?
+            if (add_separator || (i != m_dirs.GetCount()-1))
+                ret += ":";
         }
     }
     
@@ -286,8 +444,9 @@ wxString wxFileName::GetFullPath( wxPathFormat format ) const
         }
     }
     else
-    if (format == wxPATH_DOS)
+    if (format == wxPATH_UNIX)
     {
+        ret = '/'; // FIXME: must be absolute
         for (size_t i = 0; i < m_dirs.GetCount(); i++)
         {
             ret += m_dirs[i];
@@ -299,7 +458,7 @@ wxString wxFileName::GetFullPath( wxPathFormat format ) const
         for (size_t i = 0; i < m_dirs.GetCount(); i++)
         {
             ret += m_dirs[i];
-            ret += '/';  // or maybe ":" ?
+            ret += ':';
         }
     }
     
@@ -330,3 +489,4 @@ wxPathFormat wxFileName::GetFormat( wxPathFormat format )
     }
     return format;
 }
+

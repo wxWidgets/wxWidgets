@@ -40,64 +40,81 @@ class WXDLLEXPORT wxFileName
 {
 public:
     // constructors and assignment
-    wxFileName()
+    wxFileName() 
         { }
-    wxFileName( const wxFileName &filename );
+    wxFileName( const wxFileName &filepath );
     wxFileName( const wxString &path, bool dir_only = FALSE, wxPathFormat format = wxPATH_NATIVE )
         { Assign( path, dir_only, format ); }
     void Assign( const wxString &path, bool dir_only = FALSE, wxPathFormat format = wxPATH_NATIVE );
-
+    void Assign( const wxFileName &filepath );
+    
     // Only native form
     bool FileExists();
+    static bool FileExists( const wxString &file );
+    
     bool DirExists();
-
+    static bool DirExists( const wxString &dir );
+    
     void AssignCwd();
-    void SetCwd();
-
+    static wxString GetCwd();
+    
+    bool SetCwd();
+    static bool SetCwd( const wxString &cwd );
+    
+    void AssignHomeDir();
+    static wxString GetHomeDir();
+    
     void AssignTempFileName( const wxString &prefix );
-
-    void Mkdir( int perm = 0777 );
-    void Rmdir();
-
+    
+    bool Mkdir( int perm = 0777 );
+    static bool Mkdir( const wxString &dir, int perm = 0777 );
+    
+    bool Rmdir();
+    static bool Rmdir( const wxString &dir );
+    
     // Remove . and .. (under Unix ~ as well)
-    void MakeAbsolute();
-
+    bool Normalize( const wxString &cwd = wxEmptyString, const wxString &home = wxEmptyString );
+    
     // Comparison
-    bool SameAs( const wxFileName &filename, bool upper_on_dos = TRUE );
-
+    bool SameAs( const wxFileName &filepath, bool upper_case = TRUE );
+    
     // Tests
     bool IsCaseSensitive( wxPathFormat format = wxPATH_NATIVE );
     bool IsRelative( wxPathFormat format = wxPATH_NATIVE );
     bool IsAbsolute( wxPathFormat format = wxPATH_NATIVE );
     bool IsWild( wxPathFormat format = wxPATH_NATIVE );
-
+    
     // Dir accessors
     void AppendDir( const wxString &dir );
     void PrependDir( const wxString &dir );
     void InsertDir( int before, const wxString &dir );
     void RemoveDir( int pos );
     size_t GetDirCount()             { return m_dirs.GetCount(); }
-
+    
     // Other accessors
     void SetExt( const wxString &ext )          { m_ext = ext; }
     wxString GetExt() const                     { return m_ext; }
     bool HasExt() const                         { return !m_ext.IsEmpty(); }
-
+    
     void SetName( const wxString &name )        { m_name = name; }
     wxString GetName() const                    { return m_name; }
     bool HasName() const                        { return !m_name.IsEmpty(); }
-
+    
+    // name and ext
+    void SetFullName( const wxString name, wxPathFormat format = wxPATH_NATIVE );
+    wxString GetFullName();
+    
     const wxArrayString &GetDirs() const        { return m_dirs; }
-
+    
     // Construct path only
-    wxString GetPath( wxPathFormat format = wxPATH_NATIVE ) const;
-
+    wxString GetPath( bool add_separator = FALSE, wxPathFormat format = wxPATH_NATIVE ) const;
+    
     // Construct full path with name and ext
     wxString GetFullPath( wxPathFormat format = wxPATH_NATIVE ) const;
-
-
+    
+    
     static wxPathFormat GetFormat( wxPathFormat format = wxPATH_NATIVE );
-
+    
 private:
     wxArrayString   m_dirs;
     wxString        m_name;
