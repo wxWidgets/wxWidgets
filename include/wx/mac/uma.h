@@ -29,6 +29,7 @@ bool UMAHasAppearance() ;
 long UMAGetAppearanceVersion() ;
 bool UMAHasWindowManager() ;
 long UMAGetWindowManagerAttr() ;
+bool UMAHasAquaLayout() ;
 
 // process manager
 
