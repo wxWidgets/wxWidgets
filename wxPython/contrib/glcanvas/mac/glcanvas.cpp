@@ -55,7 +55,7 @@ extern PyObject *SWIG_newvarlink(void);
 
 #define SWIG_name    "glcanvasc"
 
-#include "export.h"
+#include "wxPython.h"
 #ifdef __WXMSW__
 #include "myglcanvas.h"
 #else

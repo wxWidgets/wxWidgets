@@ -55,7 +55,7 @@ extern PyObject *SWIG_newvarlink(void);
 
 #define SWIG_name    "htmlc"
 
-#include "export.h"
+#include "wxPython.h"
 #include <wx/html/htmlwin.h>
 #include <wx/html/htmprint.h>
 #include <wx/image.h>
