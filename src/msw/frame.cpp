@@ -64,7 +64,6 @@
 // ----------------------------------------------------------------------------
 
 extern wxWindowList wxModelessWindows;
-extern wxList WXDLLEXPORT wxPendingDelete;
 extern const wxChar *wxFrameClassName;
 
 #if wxUSE_MENUS_NATIVE

@@ -131,7 +131,6 @@ extern MSG s_currentMsg;
 wxMenu *wxCurrentPopupMenu = NULL;
 #endif // wxUSE_MENUS_NATIVE
 
-extern wxList WXDLLEXPORT wxPendingDelete;
 extern const wxChar *wxCanvasClassName;
 
 // ---------------------------------------------------------------------------
@@ -4394,19 +4393,27 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
 #endif // wxUSE_SPINCTRL
 
 #endif // Win32
-
-            if ( !win )
-            {
-                // hwnd is not a wxWindow, try its parent next below
-                hwnd = ::GetParent(hwnd);
-            }
         }
     }
 
     while ( hwnd && !win )
     {
-        win = wxFindWinFromHandle((WXHWND)hwnd);
+        // this is a really ugly hack needed to avoid mistakenly returning the
+        // parent frame wxWindow for the find/replace modeless dialog HWND -
+        // this, in turn, is needed to call IsDialogMessage() from
+        // wxApp::ProcessMessage() as for this we must return NULL from here
+        //
+        // FIXME: this is clearly not the best way to do it but I think we'll
+        //        need to change HWND <-> wxWindow code more heavily than I can
+        //        do it now to fix it
+        if ( ::GetWindow(hwnd, GW_OWNER) )
+        {
+            // it's a dialog box, don't go upwards
+            break;
+        }
+
         hwnd = ::GetParent(hwnd);
+        win = wxFindWinFromHandle((WXHWND)hwnd);
     }
 
     return win;

@@ -1050,10 +1050,18 @@ bool wxApp::ProcessMessage(WXMSG *wxmsg)
     HWND hWnd = msg->hwnd;
     wxWindow *wndThis = wxGetWindowFromHWND((WXHWND)hWnd);
 
+    // this may happen if the event occured in a standard modeless dialog (the
+    // only example of which I know of is the find/replace dialog) - then call
+    // IsDialogMessage() to make TAB navigation in it work
+    if ( !wndThis )
+    {
+        return ::IsDialogMessage(hWnd, msg) != 0;
+    }
+
 #if wxUSE_TOOLTIPS
     // we must relay WM_MOUSEMOVE events to the tooltip ctrl if we want it to
     // popup the tooltip bubbles
-    if ( wndThis && (msg->message == WM_MOUSEMOVE) )
+    if ( (msg->message == WM_MOUSEMOVE) )
     {
         wxToolTip *tt = wndThis->GetToolTip();
         if ( tt )

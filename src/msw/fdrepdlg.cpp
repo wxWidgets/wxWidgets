@@ -47,7 +47,7 @@
 // functions prototypes
 // ----------------------------------------------------------------------------
 
-LRESULT APIENTRY FindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
+LRESULT APIENTRY wxFindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
                                        WPARAM wParam, LPARAM lParam);
 
 UINT CALLBACK wxFindReplaceDialogHookProc(HWND hwnd,
@@ -62,6 +62,12 @@ UINT CALLBACK wxFindReplaceDialogHookProc(HWND hwnd,
 IMPLEMENT_DYNAMIC_CLASS(wxFindReplaceDialog, wxDialog)
 
 IMPLEMENT_DYNAMIC_CLASS(wxFindDialogEvent, wxCommandEvent)
+
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_FIND)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_FIND_NEXT)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_FIND_REPLACE)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_FIND_REPLACE_ALL)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_FIND_CLOSE)
 
 // ----------------------------------------------------------------------------
 // wxFindReplaceDialogImpl: the internals of wxFindReplaceDialog
@@ -128,19 +134,26 @@ wxFindReplaceDialogImpl::wxFindReplaceDialogImpl(wxFindReplaceDialog *dialog,
 
     wxZeroMemory(m_findReplace);
 
-    // translate the flags
+    // translate the flags: first the dialog creation flags
 
     // always set this to be able to set the title
     int flags = FR_ENABLEHOOK;
 
-    if ( flagsWX & wxFR_NOMATCHCASE)
+    int flagsDialog = dialog->GetWindowStyle();
+    if ( flagsDialog & wxFR_NOMATCHCASE)
         flags |= FR_NOMATCHCASE;
-    if ( flagsWX & wxFR_NOWHOLEWORD)
+    if ( flagsDialog & wxFR_NOWHOLEWORD)
         flags |= FR_NOWHOLEWORD;
-    if ( flagsWX & wxFR_NOUPDOWN)
+    if ( flagsDialog & wxFR_NOUPDOWN)
         flags |= FR_NOUPDOWN;
+
+    // and now the flags governing the initial values of the dialogs controls
     if ( flagsWX & wxFR_DOWN)
         flags |= FR_DOWN;
+    if ( flagsWX & wxFR_MATCHCASE)
+        flags |= FR_MATCHCASE;
+    if ( flagsWX & wxFR_WHOLEWORD )
+        flags |= FR_WHOLEWORD;
 
     m_findReplace.lStructSize = sizeof(FINDREPLACE);
     m_findReplace.hwndOwner = GetHwndOf(dialog->GetParent());
@@ -180,15 +193,21 @@ void wxFindReplaceDialogImpl::InitReplaceWith(const wxString& str)
 void wxFindReplaceDialogImpl::SubclassDialog(HWND hwnd)
 {
     m_hwndOwner = hwnd;
-    m_oldParentWndProc = (WNDPROC)::SetWindowLong
-                                    (
-                                        hwnd,
-                                        GWL_WNDPROC,
-                                        (LONG)FindReplaceWindowProc
-                                    );
 
-    // save it elsewhere to access it from FindReplaceWindowProc()
-    (void)::SetWindowLong(hwnd, GWL_USERDATA, (LONG)m_oldParentWndProc);
+    // check that we don't subclass the parent twice: this would be a bad idea
+    // as then we'd have infinite recursion in wxFindReplaceWindowProc
+    WNDPROC oldParentWndProc = (WNDPROC)::GetWindowLong(hwnd, GWL_WNDPROC);
+
+    if ( oldParentWndProc != wxFindReplaceWindowProc )
+    {
+        // save old wnd proc elsewhere to access it from
+        // wxFindReplaceWindowProc
+        m_oldParentWndProc = oldParentWndProc;
+        (void)::SetWindowLong(hwnd, GWL_USERDATA, (LONG)oldParentWndProc);
+
+        // and set the new one
+        (void)::SetWindowLong(hwnd, GWL_WNDPROC, (LONG)wxFindReplaceWindowProc);
+    }
 }
 
 wxFindReplaceDialogImpl::~wxFindReplaceDialogImpl()
@@ -206,8 +225,8 @@ wxFindReplaceDialogImpl::~wxFindReplaceDialogImpl()
 // Window Proc for handling RegisterWindowMessage(FINDMSGSTRING)
 // ----------------------------------------------------------------------------
 
-LRESULT APIENTRY FindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
-                                       WPARAM wParam, LPARAM lParam)
+LRESULT APIENTRY wxFindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
+                                         WPARAM wParam, LPARAM lParam)
 {
     if ( nMsg == wxFindReplaceDialogImpl::GetFindDialogMessage() )
     {
@@ -228,13 +247,13 @@ LRESULT APIENTRY FindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
         }
         else if ( pFR->Flags & FR_REPLACE )
         {
-            evtType = wxEVT_COMMAND_REPLACE;
+            evtType = wxEVT_COMMAND_FIND_REPLACE;
 
             replace = TRUE;
         }
         else if ( pFR->Flags & FR_REPLACEALL )
         {
-            evtType = wxEVT_COMMAND_REPLACE_ALL;
+            evtType = wxEVT_COMMAND_FIND_REPLACE_ALL;
 
             replace = TRUE;
         }
@@ -254,6 +273,7 @@ LRESULT APIENTRY FindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
             flags |= wxFR_MATCHCASE;
 
         wxFindDialogEvent event(evtType, dialog->GetId());
+        event.SetEventObject(dialog);
         event.SetFlags(flags);
         event.SetFindString(pFR->lpstrFindWhat);
         if ( replace )
@@ -261,13 +281,26 @@ LRESULT APIENTRY FindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
             event.SetReplaceString(pFR->lpstrReplaceWith);
         }
 
-        (void)dialog->GetEventHandler()->ProcessEvent(event);
+        // TODO: should we copy the strings to dialog->GetData() as well?
+
+        if ( !dialog->GetEventHandler()->ProcessEvent(event) )
+        {
+            // the event is not propagated upwards to the parent automatically
+            // because the dialog is a top level window, so do it manually as
+            // in 9 cases of 10 the message must be processed by the dialog
+            // owner and not the dialog itself
+            (void)dialog->GetParent()->GetEventHandler()->ProcessEvent(event);
+        }
     }
 
     WNDPROC wndProc = (WNDPROC)::GetWindowLong(hwnd, GWL_USERDATA);
 
+    // sanity check
+    wxASSERT_MSG( wndProc != wxFindReplaceWindowProc,
+                  _T("infinite recursion detected") );
+
     return ::CallWindowProc(wndProc, hwnd, nMsg, wParam, lParam);
-};
+}
 
 // ----------------------------------------------------------------------------
 // Find/replace dialog hook proc
@@ -292,6 +325,15 @@ UINT CALLBACK wxFindReplaceDialogHookProc(HWND hwnd,
     return 0;
 }
 
+// ----------------------------------------------------------------------------
+// wxFindReplaceData
+// ----------------------------------------------------------------------------
+
+void wxFindReplaceData::Init()
+{
+    m_Flags = 0;
+}
+
 // ============================================================================
 // wxFindReplaceDialog implementation
 // ============================================================================
@@ -311,23 +353,33 @@ void wxFindReplaceDialog::Init()
 
 wxFindReplaceDialog::wxFindReplaceDialog(wxWindow *parent,
                                          wxFindReplaceData *data,
-                                         const wxString &title)
+                                         const wxString &title,
+                                         int flags)
                    : m_FindReplaceData(data)
 {
     Init();
 
-    (void)Create(parent, data, title);
+    (void)Create(parent, data, title, flags);
 }
 
 wxFindReplaceDialog::~wxFindReplaceDialog()
 {
+    // unsubclass the parent
     delete m_impl;
+
+    // prevent the base class dtor from trying to hide us!
+    m_isShown = FALSE;
+
+    // and from destroying our window
+    m_hWnd = NULL;
 }
 
 bool wxFindReplaceDialog::Create(wxWindow *parent,
                                  wxFindReplaceData *data,
-                                 const wxString &title)
+                                 const wxString &title,
+                                 int flags)
 {
+    m_windowStyle = flags;
     m_FindReplaceData = data;
     m_parent = parent;
 
@@ -363,7 +415,9 @@ bool wxFindReplaceDialog::Show(bool show)
     if ( m_hWnd )
     {
         // yes, just use it
-        return ::ShowWindow(GetHwnd(), show ? SW_SHOW : SW_HIDE);
+        (void)::ShowWindow(GetHwnd(), show ? SW_SHOW : SW_HIDE);
+
+        return TRUE;
     }
 
     if ( !show )
@@ -376,22 +430,25 @@ bool wxFindReplaceDialog::Show(bool show)
 
     wxASSERT_MSG( !m_impl, _T("why don't we have the window then?") );
 
-    int flagsWX = m_FindReplaceData->GetFlags();
-
-    m_impl = new wxFindReplaceDialogImpl(this, flagsWX);
+    m_impl = new wxFindReplaceDialogImpl(this, m_FindReplaceData->GetFlags());
 
     m_impl->InitFindWhat(m_FindReplaceData->GetFindString());
 
-    if ( flagsWX & wxFR_REPLACEDIALOG)
+    bool replace = HasFlag(wxFR_REPLACEDIALOG);
+    if ( replace )
     {
-        m_impl->InitFindWhat(m_FindReplaceData->GetReplaceString());
+        m_impl->InitReplaceWith(m_FindReplaceData->GetReplaceString());
     }
 
     // call the right function to show the dialog which does what we want
-    HWND (*pfn)(FINDREPLACE *) = flagsWX & wxFR_REPLACEDIALOG ? ::ReplaceText
-                                                              : ::FindText;
-    m_hWnd = (WXHWND)(*pfn)(m_impl->GetPtrFindReplace());
-    if ( !m_hWnd )
+    FINDREPLACE *pFR = m_impl->GetPtrFindReplace();
+    HWND hwnd;
+    if ( replace )
+        hwnd = ::ReplaceText(pFR);
+    else
+        hwnd = ::FindText(pFR);
+
+    if ( !hwnd )
     {
         wxLogError(_("Failed to create the standard find/replace dialog (error code %d)"),
                    ::CommDlgExtendedError());
@@ -405,10 +462,12 @@ bool wxFindReplaceDialog::Show(bool show)
     // subclass parent window in order to get FINDMSGSTRING message
     m_impl->SubclassDialog(GetHwndOf(m_parent));
 
-    if ( !::ShowWindow((HWND)m_hWnd, SW_SHOW) )
+    if ( !::ShowWindow(hwnd, SW_SHOW) )
     {
         wxLogLastError(_T("ShowWindow(find dialog)"));
     }
+
+    m_hWnd = (WXHWND)hwnd;
 
     return TRUE;
 }

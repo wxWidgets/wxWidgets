@@ -74,7 +74,15 @@ public:
     void ShowTip(wxCommandEvent& event);
     void ModalDlg(wxCommandEvent& event);
     void ModelessDlg(wxCommandEvent& event);
+#if wxUSE_PROGRESSDLG
     void ShowProgress(wxCommandEvent& event);
+#endif // wxUSE_PROGRESSDLG
+#if wxUSE_FINDREPLDLG
+    void ShowFindDialog(wxCommandEvent& event);
+    void ShowReplaceDialog(wxCommandEvent& event);
+
+    void OnFindDialog(wxFindDialogEvent& event);
+#endif // wxUSE_FINDREPLDLG
 
 #if !defined(__WXMSW__) || wxTEST_GENERIC_DIALOGS_IN_MSW
     void ChooseColourGeneric(wxCommandEvent& event);
@@ -87,6 +95,10 @@ public:
 
 private:
     MyModelessDialog *m_dialog;
+
+#if wxUSE_FINDREPLDLG
+    wxFindReplaceData m_findData;
+#endif // wxUSE_FINDREPLDLG
 
     DECLARE_EVENT_TABLE()
 };
@@ -126,7 +138,9 @@ enum
     DIALOGS_MODAL,
     DIALOGS_MODELESS,
     DIALOGS_MODELESS_BTN,
-    DIALOGS_PROGRESS
+    DIALOGS_PROGRESS,
+    DIALOGS_FIND,
+    DIALOGS_REPLACE
 };
 
 #endif

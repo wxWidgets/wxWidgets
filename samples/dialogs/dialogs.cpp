@@ -32,6 +32,7 @@
 #include "wx/choicdlg.h"
 #include "wx/tipdlg.h"
 #include "wx/progdlg.h"
+#include "wx/fdrepdlg.h"
 
 #define wxTEST_GENERIC_DIALOGS_IN_MSW 0
 
@@ -78,7 +79,17 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #endif
 #if wxUSE_PROGRESSDLG
     EVT_MENU(DIALOGS_PROGRESS,                      MyFrame::ShowProgress)
-#endif
+#endif // wxUSE_PROGRESSDLG
+#if wxUSE_FINDREPLDLG
+    EVT_MENU(DIALOGS_FIND,                          MyFrame::ShowFindDialog)
+    EVT_MENU(DIALOGS_REPLACE,                       MyFrame::ShowReplaceDialog)
+
+    EVT_FIND(-1, MyFrame::OnFindDialog)
+    EVT_FIND_NEXT(-1, MyFrame::OnFindDialog)
+    EVT_FIND_REPLACE(-1, MyFrame::OnFindDialog)
+    EVT_FIND_REPLACE_ALL(-1, MyFrame::OnFindDialog)
+    EVT_FIND_CLOSE(-1, MyFrame::OnFindDialog)
+#endif // wxUSE_FINDREPLDLG
     EVT_MENU(wxID_EXIT,                             MyFrame::OnExit)
 
     EVT_BUTTON(DIALOGS_MODELESS_BTN,                MyFrame::OnButton)
@@ -143,8 +154,12 @@ bool MyApp::OnInit()
 #if wxUSE_PROGRESSDLG
   file_menu->Append(DIALOGS_PROGRESS, "Pro&gress dialog\tCtrl-G");
 #endif // wxUSE_PROGRESSDLG
+#if wxUSE_FINDREPLDLG
+  file_menu->Append(DIALOGS_FIND, "&Find dialog\tCtrl-F");
+  file_menu->Append(DIALOGS_REPLACE, "Find and &replace dialog\tShift-Ctrl-F");
+#endif // wxUSE_FINDREPLDLG
   file_menu->AppendSeparator();
-  file_menu->Append(DIALOGS_MODAL, "Mo&dal dialog\tCtrl-F");
+  file_menu->Append(DIALOGS_MODAL, "Mo&dal dialog\tCtrl-D");
   file_menu->Append(DIALOGS_MODELESS, "Modeless &dialog\tCtrl-Z", "", TRUE);
   file_menu->AppendSeparator();
   file_menu->Append(wxID_EXIT, "E&xit\tAlt-X");
@@ -613,6 +628,78 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
 }
 
 #endif // wxUSE_PROGRESSDLG
+
+#if wxUSE_FINDREPLDLG
+
+void MyFrame::ShowReplaceDialog( wxCommandEvent& WXUNUSED(event) )
+{
+    wxFindReplaceDialog *dialog = new wxFindReplaceDialog
+                                      (
+                                        this,
+                                        &m_findData,
+                                        "Find and replace dialog",
+                                        wxFR_REPLACEDIALOG
+                                      );
+    dialog->Show();
+}
+
+void MyFrame::ShowFindDialog( wxCommandEvent& WXUNUSED(event) )
+{
+    wxFindReplaceDialog *dialog = new wxFindReplaceDialog
+                                      (
+                                        this,
+                                        &m_findData,
+                                        "Find dialog",
+                                        // just for testing
+                                        wxFR_NOWHOLEWORD
+                                      );
+    dialog->Show();
+}
+
+static wxString DecodeFindDialogEventFlags(int flags)
+{
+    wxString str;
+    str << (flags & wxFR_DOWN ? "down" : "up") << ", "
+        << (flags & wxFR_WHOLEWORD ? "whole words only, " : "")
+        << (flags & wxFR_MATCHCASE ? "" : "not ")
+        << "case sensitive";
+
+    return str;
+}
+
+void MyFrame::OnFindDialog(wxFindDialogEvent& event)
+{
+    wxEventType type = event.GetEventType();
+
+    if ( type == wxEVT_COMMAND_FIND || type == wxEVT_COMMAND_FIND_NEXT )
+    {
+        wxLogMessage("Find %s'%s' (flags: %s)",
+                     type == wxEVT_COMMAND_FIND_NEXT ? "next " : "",
+                     event.GetFindString().c_str(),
+                     DecodeFindDialogEventFlags(event.GetFlags()).c_str());
+    }
+    else if ( type == wxEVT_COMMAND_FIND_REPLACE ||
+                type == wxEVT_COMMAND_FIND_REPLACE_ALL )
+    {
+        wxLogMessage("Replace %s'%s' with '%s' (flags: %s)",
+                     type == wxEVT_COMMAND_FIND_REPLACE_ALL ? "all " : "",
+                     event.GetFindString().c_str(),
+                     event.GetReplaceString().c_str(),
+                     DecodeFindDialogEventFlags(event.GetFlags()).c_str());
+    }
+    else if ( type == wxEVT_COMMAND_FIND_CLOSE )
+    {
+        wxLogMessage("Find dialog is being closed.");
+
+        event.GetDialog()->Destroy();
+    }
+    else
+    {
+        wxLogError("Unknown find dialog event!");
+    }
+}
+
+#endif // wxUSE_FINDREPLDLG
 
 // ----------------------------------------------------------------------------
 // MyCanvas
