@@ -25,9 +25,7 @@
 #include <string.h>
 #include <windows.h>
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
-#endif
 
 // Colour
 

@@ -33,7 +33,6 @@
 #include "wx/dcscreen.h"
 #include "wx/settings.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxSplitterWindow, wxWindow)
 IMPLEMENT_DYNAMIC_CLASS(wxSplitterEvent, wxCommandEvent)
 
@@ -50,7 +49,6 @@ BEGIN_EVENT_TABLE(wxSplitterWindow, wxWindow)
     EVT_SPLITTER_DCLICK(-1,           wxSplitterWindow::OnDoubleClick)
     EVT_SPLITTER_UNSPLIT(-1,          wxSplitterWindow::OnUnsplitEvent)
 END_EVENT_TABLE()
-#endif
 
 wxSplitterWindow::wxSplitterWindow()
 {

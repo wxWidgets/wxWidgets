@@ -54,7 +54,6 @@
 extern wxList wxPendingDelete;
 wxWindow* gFocusWindow = NULL ;
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxEvtHandler)
 
 BEGIN_EVENT_TABLE(wxWindow, wxEvtHandler)
@@ -65,7 +64,6 @@ BEGIN_EVENT_TABLE(wxWindow, wxEvtHandler)
 //  EVT_SCROLL(wxWindow::OnScroll)
 END_EVENT_TABLE()
 
-#endif
 
 
 

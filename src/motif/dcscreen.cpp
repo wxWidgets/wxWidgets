@@ -27,9 +27,7 @@
 
 #include "wx/motif/private.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxWindowDC)
-#endif
 
 WXWindow wxScreenDC::sm_overlayWindow = 0;
 int wxScreenDC::sm_overlayWindowX = 0;

@@ -55,7 +55,6 @@
     #endif
 #endif // __WXMSW__
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxPrinterBase, wxObject)
 IMPLEMENT_ABSTRACT_CLASS(wxPrintout, wxObject)
 IMPLEMENT_CLASS(wxPreviewCanvas, wxWindow)
@@ -71,7 +70,6 @@ BEGIN_EVENT_TABLE(wxPreviewCanvas, wxScrolledWindow)
     EVT_PAINT(wxPreviewCanvas::OnPaint)
     EVT_SYS_COLOUR_CHANGED(wxPreviewCanvas::OnSysColourChanged)
 END_EVENT_TABLE()
-#endif
 
 /*
 * Printer

@@ -60,13 +60,11 @@ static const int wxID_TEXT = 3000;
 // wxTextEntryDialog
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
 BEGIN_EVENT_TABLE(wxTextEntryDialog, wxDialog)
     EVT_BUTTON(wxID_OK, wxTextEntryDialog::OnOK)
 END_EVENT_TABLE()
 
 IMPLEMENT_CLASS(wxTextEntryDialog, wxDialog)
-#endif
 
 wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent,
                                      const wxString& message,

@@ -32,10 +32,8 @@
 #include "wx/protocol/http.h"
 #include "wx/sckstrm.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxHTTP, wxProtocol)
 IMPLEMENT_PROTOCOL(wxHTTP, wxT("http"), wxT("80"), TRUE)
-#endif
 
 #define HTTP_BSIZE 2048
 

@@ -66,10 +66,8 @@ LONG APIENTRY _EXPORT wxAbortProc(HDC hPr, int Code);
 // wxWin macros
 // ---------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxWindowsPrinter, wxPrinterBase)
     IMPLEMENT_CLASS(wxWindowsPrintPreview, wxPrintPreviewBase)
-#endif
 
 // ===========================================================================
 // implementation

@@ -36,9 +36,7 @@
 #include "wx/utils.h"       // for wxGetDisplay()
 #include "wx/fontutil.h"
 
-#if !USE_SHARED_LIBRARIES
     IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
-#endif
 
 // ----------------------------------------------------------------------------
 // private classes

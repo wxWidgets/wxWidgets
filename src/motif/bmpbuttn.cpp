@@ -31,9 +31,7 @@ void wxButtonCallback (Widget w, XtPointer clientData, XtPointer ptr);
 
 Pixmap XCreateInsensitivePixmap( Display *display, Pixmap pixmap );
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
-#endif
 
 wxBitmapButton::wxBitmapButton()
 {

@@ -28,9 +28,7 @@
 // MAX length of Help descriptor
 #define _MAX_HELP_LEN 500
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxWinHelpController, wxHelpControllerBase)
-#endif
 
 wxWinHelpController::wxWinHelpController()
 {

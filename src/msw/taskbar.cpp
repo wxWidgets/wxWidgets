@@ -58,7 +58,6 @@ bool   wxTaskBarIcon::sm_registeredClass = FALSE;
 UINT   wxTaskBarIcon::sm_taskbarMsg = 0;
 
 
-#if !USE_SHARED_LIBRARY
 BEGIN_EVENT_TABLE(wxTaskBarIcon, wxEvtHandler)
     EVT_TASKBAR_MOVE         (wxTaskBarIcon::_OnMouseMove)
     EVT_TASKBAR_LEFT_DOWN    (wxTaskBarIcon::_OnLButtonDown)
@@ -71,7 +70,6 @@ END_EVENT_TABLE()
 
 
 IMPLEMENT_DYNAMIC_CLASS(wxTaskBarIcon, wxEvtHandler)
-#endif
 
 
 wxTaskBarIcon::wxTaskBarIcon(void)

@@ -16,9 +16,7 @@
 #include "wx/msgdlg.h"
 #include "wx/mac/uma.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxMessageDialog, wxDialog)
-#endif
 
 #define kMacOKAlertResourceID 128
 #define kMacYesNoAlertResourceID 129

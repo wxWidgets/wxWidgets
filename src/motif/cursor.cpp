@@ -30,10 +30,8 @@
 
 #include "wx/motif/private.h"
 
-#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxBitmap)
 IMPLEMENT_DYNAMIC_CLASS(wxXCursor, wxObject)
-#endif
 
 wxCursorRefData::wxCursorRefData()
 {

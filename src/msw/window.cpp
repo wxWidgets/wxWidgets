@@ -141,9 +141,7 @@ wxWindow *wxFindWinFromHandle(WXHWND hWnd);
 // event tables
 // ---------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
-#endif
 
 BEGIN_EVENT_TABLE(wxWindow, wxWindowBase)
     EVT_ERASE_BACKGROUND(wxWindow::OnEraseBackground)

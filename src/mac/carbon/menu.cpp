@@ -33,10 +33,8 @@
 // ----------------------
 #include <string.h>
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxMenu, wxEvtHandler)
 IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxEvtHandler)
-#endif
 
 // the (popup) menu title has this special id
 static const int idMenuTitle = -2;

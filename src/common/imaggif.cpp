@@ -31,9 +31,7 @@
 #include "wx/log.h"
 #include "wx/intl.h"
 
-#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxGIFHandler,wxImageHandler)
-#endif
 
 //-----------------------------------------------------------------------------
 // wxGIFHandler

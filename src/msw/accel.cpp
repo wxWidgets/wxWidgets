@@ -30,9 +30,7 @@
 
 #include "wx/msw/private.h"
 
-#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxAcceleratorTable, wxObject)
-#endif
 
 class WXDLLEXPORT wxAcceleratorRefData: public wxObjectRefData
 {

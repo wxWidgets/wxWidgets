@@ -72,7 +72,6 @@
     #endif
 #endif // MSW
 
-#if !USE_SHARED_LIBRARY
     #if wxUSE_PRINTING_ARCHITECTURE
         IMPLEMENT_DYNAMIC_CLASS(wxPrintData, wxObject)
         IMPLEMENT_DYNAMIC_CLASS(wxPrintDialogData, wxObject)
@@ -80,7 +79,6 @@
     #endif // wxUSE_PRINTING_ARCHITECTURE
     IMPLEMENT_DYNAMIC_CLASS(wxFontData, wxObject)
     IMPLEMENT_DYNAMIC_CLASS(wxColourData, wxObject)
-#endif
 
 #ifdef __WXMAC__
 #define mm2pt			2.83464566929

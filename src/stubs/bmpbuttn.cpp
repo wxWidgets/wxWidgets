@@ -15,9 +15,7 @@
 
 #include "wx/bmpbuttn.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
-#endif
 
 bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
            const wxPoint& pos,

@@ -28,7 +28,6 @@
 #endif
 #endif
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxControl)
 
 BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
@@ -36,7 +35,6 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
 	EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
 	EVT_ERASE_BACKGROUND(wxTextCtrl::OnEraseBackground)
 END_EVENT_TABLE()
-#endif
 
 // Text item
 wxTextCtrl::wxTextCtrl()

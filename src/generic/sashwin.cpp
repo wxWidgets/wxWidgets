@@ -36,7 +36,6 @@
 #include "wx/sashwin.h"
 #include "wx/laywin.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxSashWindow, wxWindow)
 IMPLEMENT_DYNAMIC_CLASS(wxSashEvent, wxCommandEvent)
 
@@ -45,7 +44,6 @@ BEGIN_EVENT_TABLE(wxSashWindow, wxWindow)
     EVT_SIZE(wxSashWindow::OnSize)
     EVT_MOUSE_EVENTS(wxSashWindow::OnMouseEvent)
 END_EVENT_TABLE()
-#endif
 
 wxSashWindow::wxSashWindow()
 {

@@ -25,9 +25,7 @@
 // dynamic classes implementation
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
   IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
-#endif  //USE_SHARED_LIBRARY
 
 void wxMacBuildMenuString(StringPtr outMacItemText, char *outMacShortcutChar , short *outMacModifiers , const char *inItemName , bool useShortcuts ) ;
 // ----------------------------------------------------------------------------

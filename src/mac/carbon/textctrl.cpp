@@ -38,14 +38,12 @@
 
 #include "wx/mac/uma.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxControl)
 
 BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
 	EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
 	EVT_CHAR(wxTextCtrl::OnChar)
 END_EVENT_TABLE()
-#endif
 
 // Text item
 wxTextCtrl::wxTextCtrl()

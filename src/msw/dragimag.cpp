@@ -42,9 +42,7 @@
 #include <commctrl.h>
 #endif
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxDragImage, wxObject)
-#endif
 
 wxDragImage::wxDragImage()
 {

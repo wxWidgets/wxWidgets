@@ -15,9 +15,7 @@
 
 #include "wx/stubs/msgdlg.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxMessageDialog, wxDialog)
-#endif
 
 wxMessageDialog::wxMessageDialog(wxWindow *parent, const wxString& message, const wxString& caption,
         long style, const wxPoint& pos)

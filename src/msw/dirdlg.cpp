@@ -58,9 +58,7 @@
 // wxWindows macros
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_CLASS(wxDirDialog, wxDialog)
-#endif
 
 // ----------------------------------------------------------------------------
 // private functions prototypes

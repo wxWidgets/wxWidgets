@@ -17,9 +17,7 @@
 #include "wx/dcmemory.h"
 #include "wx/defs.h"
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
-#endif
 
 //-----------------------------------------------------------------------------
 // constants

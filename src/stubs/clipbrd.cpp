@@ -23,10 +23,8 @@
 
 #include <string.h>
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxClipboard, wxObject)
 IMPLEMENT_ABSTRACT_CLASS(wxClipboardClient, wxObject)
-#endif
 
 bool wxOpenClipboard()
 {

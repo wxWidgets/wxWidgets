@@ -75,10 +75,8 @@ static void gtk_treeitem_select_callback(GtkWidget *widget, wxTreeItemId *treeit
   owner->SendSelChanged(GTK_TREE_ITEM(widget));
 }
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxTreeCtrl, wxControl)
 
-#endif
 
 void wxTreeCtrl::Init() {
   m_imageListNormal = NULL;

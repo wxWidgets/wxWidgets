@@ -50,7 +50,6 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxEvtHandler, wxObject)
     IMPLEMENT_ABSTRACT_CLASS(wxEvent, wxObject)
     IMPLEMENT_DYNAMIC_CLASS(wxIdleEvent, wxEvent)
@@ -94,7 +93,6 @@
     const wxEventTableEntry wxEvtHandler::sm_eventTableEntries[] =
         { { 0, 0, 0, (wxObjectEventFunction) NULL, (wxObject*) NULL } };
 
-#endif // !USE_SHARED_LIBRARY
 
 // ----------------------------------------------------------------------------
 // global variables

@@ -54,9 +54,7 @@ static const wxChar *mname[] = {
 
 static int GauDays[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxDate, wxObject)
-#endif
 
     ////////////////////////////////////////////////////////////
     // Constructors

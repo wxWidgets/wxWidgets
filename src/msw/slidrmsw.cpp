@@ -29,9 +29,7 @@
 #include "wx/msw/slidrmsw.h"
 #include "wx/msw/private.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxSliderMSW, wxControl)
-#endif
 
 // Slider
 wxSliderMSW::wxSliderMSW()

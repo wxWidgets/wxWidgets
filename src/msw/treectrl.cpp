@@ -230,9 +230,7 @@ private:
 // macros
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxTreeCtrl, wxControl)
-#endif
 
 // ----------------------------------------------------------------------------
 // variables

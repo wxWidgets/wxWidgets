@@ -380,9 +380,7 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
 // wxPCXHandler
 //-----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxPCXHandler,wxImageHandler)
-#endif
 
 bool wxPCXHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose, int WXUNUSED(index) )
 {

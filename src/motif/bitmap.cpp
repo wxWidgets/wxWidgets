@@ -37,10 +37,8 @@
     #include <X11/xpm.h>
 #endif
 
-#if !USE_SHARED_LIBRARIES
     IMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxGDIObject)
     IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
-#endif
 
 wxBitmapRefData::wxBitmapRefData()
 {

@@ -49,9 +49,7 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARIES
     IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxCursorBase)
-#endif
 
 // ----------------------------------------------------------------------------
 // wxCursorRefData

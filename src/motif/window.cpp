@@ -120,14 +120,12 @@ static int str16len(const char *s)
 // event tables
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
 
     BEGIN_EVENT_TABLE(wxWindow, wxWindowBase)
         EVT_SYS_COLOUR_CHANGED(wxWindow::OnSysColourChanged)
         EVT_IDLE(wxWindow::OnIdle)
     END_EVENT_TABLE()
-#endif // USE_SHARED_LIBRARY
 
 // ============================================================================
 // implementation

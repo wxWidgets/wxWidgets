@@ -54,11 +54,9 @@
 #define _EXPORT _export
 #endif
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxDDEServer, wxServerBase)
 IMPLEMENT_DYNAMIC_CLASS(wxDDEClient, wxClientBase)
 IMPLEMENT_CLASS(wxDDEConnection, wxConnectionBase)
-#endif
 
 static wxDDEConnection *DDEFindConnection(HCONV hConv);
 static void DDEDeleteConnection(HCONV hConv);

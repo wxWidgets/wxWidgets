@@ -24,9 +24,7 @@
 #endif
 #include "wx/motif/private.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxGauge, wxControl)
-#endif
 
 // XmGauge copyright notice:
 

@@ -24,10 +24,8 @@
 #pragma hdrstop
 #endif
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_ABSTRACT_CLASS(wxVideoBaseDriver, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxVideoOutput, wxWindow)
-#endif
 
 wxVideoOutput::wxVideoOutput()
   : wxWindow()

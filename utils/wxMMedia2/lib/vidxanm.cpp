@@ -31,9 +31,7 @@
 #include "vidbase.h"
 #include "vidxanm.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxVideoXANIM, wxVideoBaseDriver)
-#endif
 
 wxVideoXANIM::wxVideoXANIM()
  : wxVideoBaseDriver()

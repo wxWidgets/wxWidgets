@@ -41,9 +41,7 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxDC)
-#endif
 
 // ============================================================================
 // implementation

@@ -31,7 +31,6 @@
 
 #include "wx/tbarsmpl.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxToolBarSimple, wxToolBarBase)
 
 BEGIN_EVENT_TABLE(wxToolBarSimple, wxToolBarBase)
@@ -40,7 +39,6 @@ BEGIN_EVENT_TABLE(wxToolBarSimple, wxToolBarBase)
 	EVT_KILL_FOCUS(wxToolBarSimple::OnKillFocus)
 	EVT_MOUSE_EVENTS(wxToolBarSimple::OnMouseEvent)
 END_EVENT_TABLE()
-#endif
 
 wxToolBarSimple::wxToolBarSimple(void)
 {

@@ -43,7 +43,6 @@
 #   include <fstream>
 #endif
 
-#if !USE_SHARED_LIBRARY
 
 // ----------------------------------------------------------------------------
 // event tables and other macros
@@ -68,7 +67,6 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_UPDATE_UI(wxID_REDO, wxTextCtrl::OnUpdateRedo)
 END_EVENT_TABLE()
 
-#endif // USE_SHARED_LIBRARY
 
 // ============================================================================
 // implementation

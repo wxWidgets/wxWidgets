@@ -50,7 +50,6 @@
 #endif
 #endif
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_CLASS(wxColourDatabase, wxList)
     IMPLEMENT_DYNAMIC_CLASS(wxFontList, wxList)
     IMPLEMENT_DYNAMIC_CLASS(wxPenList, wxList)
@@ -59,7 +58,6 @@
     IMPLEMENT_DYNAMIC_CLASS(wxResourceCache, wxList)
 
     IMPLEMENT_ABSTRACT_CLASS(wxDCBase, wxObject)
-#endif
 
 wxRect::wxRect(const wxPoint& topLeft, const wxPoint& bottomRight)
 {

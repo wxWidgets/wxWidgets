@@ -15,12 +15,10 @@
 
 #include "wx/control.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)
 
 BEGIN_EVENT_TABLE(wxControl, wxWindow)
 END_EVENT_TABLE()
-#endif
 
 // Item members
 wxControl::wxControl()

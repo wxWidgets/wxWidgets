@@ -29,9 +29,7 @@
 #include <string.h>
 #include <stdarg.h>
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxHashTable, wxObject)
-#endif
 
 wxHashTable::wxHashTable (int the_key_type, int size)
 {

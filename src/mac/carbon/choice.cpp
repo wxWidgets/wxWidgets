@@ -17,9 +17,7 @@
 #include "wx/choice.h"
 #include "wx/mac/uma.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
-#endif
 
 bool wxChoice::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos,

@@ -82,9 +82,7 @@
   #endif
 #endif
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
-#endif
 
 // ============================================================================
 // list box item declaration and implementation

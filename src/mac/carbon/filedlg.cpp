@@ -19,9 +19,7 @@
 #include "wx/filedlg.h"
 #include "wx/intl.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxFileDialog, wxDialog)
-#endif
 
 // begin wxmac
 

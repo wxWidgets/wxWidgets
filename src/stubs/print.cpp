@@ -16,10 +16,8 @@
 #include "wx/stubs/print.h"
 #include "wx/stubs/printdlg.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxPrinter, wxPrinterBase)
 IMPLEMENT_CLASS(wxPrintPreview, wxPrintPreviewBase)
-#endif
 
 /*
  * Printer

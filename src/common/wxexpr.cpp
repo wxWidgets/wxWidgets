@@ -800,9 +800,7 @@ void wxExpr::WriteExpr(FILE* stream)    // Write as any other subexpression
  * wxExpr 'database' (list of expressions)
  */
  
-#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxExprDatabase, wxList)
-#endif
 
 wxExprDatabase::wxExprDatabase(wxExprErrorHandler handler)
 {

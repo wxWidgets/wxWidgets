@@ -28,10 +28,8 @@
 #include "wx/utils.h"
 #include "wx/url.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxProtoInfo, wxObject)
 IMPLEMENT_CLASS(wxURL, wxObject)
-#endif
 
 // Protocols list
 wxProtoInfo *wxURL::g_protocols = NULL;

@@ -27,12 +27,10 @@
 #include "wx/os2/private.h"
 #include "wx/generic/imaglist.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxTabCtrl, wxControl)
 
 BEGIN_EVENT_TABLE(wxTabCtrl, wxControl)
 END_EVENT_TABLE()
-#endif
 
 wxTabCtrl::wxTabCtrl()
 {

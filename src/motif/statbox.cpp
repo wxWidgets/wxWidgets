@@ -29,14 +29,12 @@
 
 #include "wx/motif/private.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
 
 BEGIN_EVENT_TABLE(wxStaticBox, wxControl)
 //EVT_ERASE_BACKGROUND(wxStaticBox::OnEraseBackground)
 END_EVENT_TABLE()
 
-#endif
 
 /*
  * Static box

@@ -18,7 +18,6 @@
 #include "wx/tabctrl.h"
 #include "wx/spinbutt.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)
 
 BEGIN_EVENT_TABLE(wxControl, wxWindow)
@@ -26,7 +25,6 @@ BEGIN_EVENT_TABLE(wxControl, wxWindow)
 	EVT_CHAR( wxControl::OnKeyDown ) 
 	EVT_PAINT( wxControl::OnPaint ) 
 END_EVENT_TABLE()
-#endif
 
 #include <wx/mac/uma.h>
 

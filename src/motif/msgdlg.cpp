@@ -41,9 +41,7 @@
 // macros
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_CLASS(wxMessageDialog, wxDialog)
-#endif
 
 // ============================================================================
 // implementation

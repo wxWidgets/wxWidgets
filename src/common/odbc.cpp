@@ -51,12 +51,10 @@
 HENV wxDatabase::hEnv = 0;
 int wxDatabase::refCount = 0;
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxDatabase, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxQueryCol, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxQueryField, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxRecordSet, wxObject)
-#endif
 
 wxDatabase::wxDatabase(void)
 {

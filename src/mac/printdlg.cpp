@@ -19,10 +19,8 @@
 
 // Use generic page setup dialog: use your own native one if one exists.
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxPrintDialog, wxDialog)
 IMPLEMENT_CLASS(wxPageSetupDialog, wxDialog)
-#endif
 
 wxPrintDialog::wxPrintDialog()
 {

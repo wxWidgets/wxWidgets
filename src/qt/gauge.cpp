@@ -15,9 +15,7 @@
 
 #include "wx/gauge.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxGauge, wxControl)
-#endif
 
 bool wxGauge::Create(wxWindow *parent, wxWindowID id,
            int range,

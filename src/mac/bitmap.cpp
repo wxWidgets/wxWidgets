@@ -25,10 +25,8 @@ extern "C"
 	#include "xpm.h"
 } ;
 
-#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxGDIObject)
 IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
-#endif
 
 #include <PictUtils.h>
 

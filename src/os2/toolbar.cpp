@@ -51,9 +51,7 @@ NM_CUSTOMDRAW message and do your custom drawing.
 #define DEFAULTBUTTONY   24
 #define DEFAULTBARHEIGHT 27
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxToolBarBase)
-#endif
 
 BEGIN_EVENT_TABLE(wxToolBar, wxToolBarBase)
     EVT_MOUSE_EVENTS(wxToolBar::OnMouseEvent)

@@ -15,8 +15,6 @@
 
 #include "wx/gdiobj.h"
 
-#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxGDIObject, wxObject)
-#endif
 
 // TODO: Nothing to do, unless you want to.

@@ -29,7 +29,6 @@
 
 #include "wx/generic/panelg.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxPanel, wxWindow)
 
 BEGIN_EVENT_TABLE(wxPanel, wxWindow)
@@ -39,7 +38,6 @@ BEGIN_EVENT_TABLE(wxPanel, wxWindow)
   EVT_SIZE(wxPanel::OnSize)
 END_EVENT_TABLE()
 
-#endif
 
 void wxPanel::Init()
 {

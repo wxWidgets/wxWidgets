@@ -23,10 +23,8 @@
 #include "wx/os2/print.h"
 #include "wx/generic/prntdlgg.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxPrinter, wxPrinterBase)
 IMPLEMENT_CLASS(wxPrintPreview, wxPrintPreviewBase)
-#endif
 
 /*
  * Printer

@@ -33,9 +33,7 @@
 #include "cdbase.h"
 #include "cdunix.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxCDAudioLinux, wxCDAudio)
-#endif
 
 wxCDAudioLinux::wxCDAudioLinux()
   : wxCDAudio(), m_fd(-1)

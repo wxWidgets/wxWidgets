@@ -43,9 +43,7 @@
     #include "wx/tooltip.h"
 #endif // wxUSE_TOOLTIPS
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
-#endif
 
 // VZ: the new behaviour is to create the radio buttons as children of the
 //     radiobox instead of creating them as children of the radiobox' parent.

@@ -48,9 +48,7 @@
 /* public function prototypes */
 // BOOL _Optlink gaugeInit(HINSTANCE hInstance);
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxGauge, wxControl)
-#endif
 
 bool wxGauge::Create(wxWindow *parent, wxWindowID id,
            int range,

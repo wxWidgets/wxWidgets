@@ -29,9 +29,7 @@
 void  wxComboBoxCallback (Widget w, XtPointer clientData,
                           XmComboBoxSelectionCallbackStruct * cbs);
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
-#endif
 
 bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
                         const wxString& value,

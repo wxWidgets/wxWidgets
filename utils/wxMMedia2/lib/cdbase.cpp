@@ -17,9 +17,7 @@
 #pragma hdrstop
 #endif
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_ABSTRACT_CLASS(wxCDAudio, wxObject)
-#endif
 
 wxCDtime wxCDAudio::CDtoc::GetTrackTime(wxUint8 track) const
 {

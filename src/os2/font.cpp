@@ -31,13 +31,11 @@
 
 #include "wx/os2/private.h"
 
-#if !USE_SHARED_LIBRARIES
     IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
 
     #if wxUSE_PORTABLE_FONTS_IN_MSW
         IMPLEMENT_DYNAMIC_CLASS(wxFontNameDirectory, wxObject)
     #endif
-#endif
 
 // ----------------------------------------------------------------------------
 // wxFontRefData - the internal description of the font

@@ -35,9 +35,7 @@
 
 #include "wx/minifram.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxMiniFrame, wxFrame)
-#endif
 
 
 #else
@@ -55,9 +53,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxMiniFrame, wxFrame)
 #endif
 #endif
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxMiniFrame, wxFrame)
-#endif
 
 long wxMiniFrame::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {

@@ -52,10 +52,8 @@ not the functionality that wxPalette::Create() aims to provide.
 #endif
 #include "wx/motif/private.h"
 
-#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxPalette, wxGDIObject)
 IMPLEMENT_DYNAMIC_CLASS(wxXPalette, wxObject)
-#endif
 
 /*
 * Palette

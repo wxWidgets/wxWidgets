@@ -359,11 +359,7 @@ void wxDirCtrl::OnCollapseItem(wxTreeEvent &event )
 //-----------------------------------------------------------------------------
 
 
-#if !USE_SHARED_LIBRARY
-IMPLEMENT_CLASS(wxDirDialog, wxDialog)
-#else
 IMPLEMENT_DYNAMIC_CLASS( wxDirDialog, wxDialog )
-#endif
 
 BEGIN_EVENT_TABLE( wxDirDialog, wxDialog )
   EVT_TREE_KEY_DOWN        (ID_DIRCTRL,   wxDirDialog::OnTreeKeyDown)

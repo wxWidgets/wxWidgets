@@ -156,14 +156,12 @@ int wxGetMultipleChoice(const wxString& message, const wxString& caption,
 
 // wxSingleChoiceDialog
 
-#if !USE_SHARED_LIBRARY
 BEGIN_EVENT_TABLE(wxSingleChoiceDialog, wxDialog)
     EVT_BUTTON(wxID_OK, wxSingleChoiceDialog::OnOK)
     EVT_LISTBOX_DCLICK(wxID_LISTBOX, wxSingleChoiceDialog::OnListBoxDClick)
 END_EVENT_TABLE()
 
 IMPLEMENT_CLASS(wxSingleChoiceDialog, wxDialog)
-#endif
 
 #if defined(__WXMSW__) || defined(__WXMAC__)
 #define wxCHOICEDLG_DIALOG_STYLE (wxDEFAULT_DIALOG_STYLE | \

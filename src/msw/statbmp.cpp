@@ -42,9 +42,7 @@
 // macors
 // ---------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap, wxControl)
-#endif
 
 // ===========================================================================
 // implementation

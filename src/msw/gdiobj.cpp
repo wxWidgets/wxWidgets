@@ -32,9 +32,7 @@
 #include "wx/msw/private.h"
 #include "assert.h"
 
-#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxGDIObject, wxObject)
-#endif
 
 /*
 void wxGDIObject::IncrementResourceUsage(void)

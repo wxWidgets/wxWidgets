@@ -34,7 +34,6 @@ wxWindowList wxModalDialogs;
 wxWindowList wxModelessWindows;  // Frames and modeless dialogs
 extern wxList WXDLLEXPORT wxPendingDelete;
 
-#if !USE_SHARED_LIBRARY
    IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxPanel)
 
    BEGIN_EVENT_TABLE(wxDialog, wxPanel)
@@ -46,7 +45,6 @@ extern wxList WXDLLEXPORT wxPendingDelete;
       EVT_SYS_COLOUR_CHANGED(wxDialog::OnSysColourChanged)
       EVT_CLOSE(wxDialog::OnCloseWindow)
    END_EVENT_TABLE()
-#endif
 
 wxDialog::wxDialog()
 {

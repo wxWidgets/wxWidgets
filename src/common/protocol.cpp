@@ -128,9 +128,7 @@ public:
   void OnExit();
 };
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxProtocolModule, wxModule)
-#endif
 
 bool wxProtocolModule::OnInit()
 {

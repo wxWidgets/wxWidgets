@@ -107,7 +107,6 @@ MRESULT wxWndProc( HWND
 // wxApp
 // ---------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
 
     BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
@@ -115,7 +114,6 @@ MRESULT wxWndProc( HWND
         EVT_END_SESSION(wxApp::OnEndSession)
         EVT_QUERY_END_SESSION(wxApp::OnQueryEndSession)
     END_EVENT_TABLE()
-#endif
 
 //// Initialize
 bool wxApp::Initialize(

@@ -23,9 +23,7 @@
 
 #include "wx/os2/private.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
-#endif
 
 // Button
 

@@ -20,9 +20,7 @@
 
 #include "wx/cmndata.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxDirDialog, wxDialog)
-#endif
 
 enum {
 	kSelectItem = 10, 			// select button item number

@@ -81,9 +81,7 @@ wxList wxImage::sm_handlers;
 
 #define M_IMGDATA ((wxImageRefData *)m_refData)
 
-#if !USE_SHARED_LIBRARIES
     IMPLEMENT_DYNAMIC_CLASS(wxImage, wxObject)
-#endif
 
 wxImage::wxImage()
 {
@@ -659,9 +657,7 @@ void wxImage::CleanUpHandlers()
 // wxImageHandler
 //-----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARIES
 IMPLEMENT_ABSTRACT_CLASS(wxImageHandler,wxObject)
-#endif
 
 #if wxUSE_STREAMS
 bool wxImageHandler::LoadFile( wxImage *WXUNUSED(image), wxInputStream& WXUNUSED(stream), bool WXUNUSED(verbose), int WXUNUSED(index) )

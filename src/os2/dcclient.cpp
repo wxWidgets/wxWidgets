@@ -54,11 +54,9 @@ WX_DEFINE_OBJARRAY(wxArrayDCInfo);
 // macros
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
     IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxWindowDC)
     IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxWindowDC)
-#endif
 
 // ----------------------------------------------------------------------------
 // global variables

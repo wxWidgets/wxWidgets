@@ -51,10 +51,8 @@
 // other standard headers
 #include <string.h>
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxMenu, wxEvtHandler)
 IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxEvtHandler)
-#endif
 
 // ============================================================================
 // implementation

@@ -15,9 +15,7 @@
 
 #include "wx/timer.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxObject)
-#endif
 
 wxTimer::wxTimer()
 {

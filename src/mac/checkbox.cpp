@@ -15,10 +15,8 @@
 
 #include "wx/checkbox.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxCheckBox, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapCheckBox, wxCheckBox)
-#endif
 
 #include <wx/mac/uma.h>
 

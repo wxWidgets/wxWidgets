@@ -68,7 +68,6 @@ extern wxList wxPendingDelete;
 
 #define wxUSE_INVISIBLE_RESIZE 1
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxPanel)
 
 BEGIN_EVENT_TABLE(wxDialog, wxPanel)
@@ -81,7 +80,6 @@ BEGIN_EVENT_TABLE(wxDialog, wxPanel)
   EVT_CLOSE(wxDialog::OnCloseWindow)
 END_EVENT_TABLE()
 
-#endif
 
 wxDialog::wxDialog()
 {

@@ -27,10 +27,8 @@
 #include "wx/wfstream.h"
 #include "wx/protocol/file.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxFileProto, wxProtocol)
 IMPLEMENT_PROTOCOL(wxFileProto, wxT("file"), NULL, FALSE)
-#endif
 
 wxFileProto::wxFileProto()
   : wxProtocol()

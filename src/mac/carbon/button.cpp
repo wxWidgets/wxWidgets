@@ -15,9 +15,7 @@
 
 #include "wx/button.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
-#endif
 
 #include <wx/mac/uma.h>
 // Button

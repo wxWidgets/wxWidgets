@@ -24,9 +24,7 @@
 
 #include "assert.h"
 
-#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxPalette, wxGDIObject)
-#endif
 
 /*
  * Palette

@@ -26,10 +26,8 @@
 
 #include "wx/ipcbase.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxServerBase, wxObject)
 IMPLEMENT_CLASS(wxClientBase, wxObject)
 IMPLEMENT_CLASS(wxConnectionBase, wxObject)
-#endif
 
 

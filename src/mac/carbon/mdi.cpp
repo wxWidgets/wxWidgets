@@ -19,7 +19,6 @@
 
 extern wxList wxModelessWindows;
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxMDIParentFrame, wxFrame)
 IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame, wxFrame)
 IMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow, wxWindow)
@@ -34,7 +33,6 @@ BEGIN_EVENT_TABLE(wxMDIClientWindow, wxWindow)
   EVT_SCROLL(wxMDIClientWindow::OnScroll)
 END_EVENT_TABLE()
 
-#endif
 
 // Parent frame
 

@@ -30,9 +30,7 @@
 #define wxDIALOG_DEFAULT_X 300
 #define wxDIALOG_DEFAULT_Y 300
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxDirDialog, wxDialog)
-#endif
 
 wxDirDialog::wxDirDialog(wxWindow *parent, const wxString& message,
         const wxString& defaultPath,

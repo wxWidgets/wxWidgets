@@ -50,12 +50,10 @@
 // macros
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARIES
     IMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxGDIObject)
     IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
 
     IMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler, wxObject)
-#endif
 
 // ============================================================================
 // implementation

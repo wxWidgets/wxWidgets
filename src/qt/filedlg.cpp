@@ -18,9 +18,7 @@
 #include "wx/dialog.h"
 #include "wx/filedlg.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxFileDialog, wxDialog)
-#endif
 
 char *wxFileSelector(const char *title,
                      const char *defaultDir, const char *defaultFileName,

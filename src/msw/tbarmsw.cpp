@@ -55,7 +55,6 @@
 #error If wxUSE_IMAGE_LOADING_IN_MSW is set to 0, then wxUSE_BUTTONBAR must be set to 0 too.
 #endif
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxToolBarBase)
 
 BEGIN_EVENT_TABLE(wxToolBarMSW, wxToolBarBase)
@@ -63,7 +62,6 @@ BEGIN_EVENT_TABLE(wxToolBarMSW, wxToolBarBase)
 	EVT_PAINT(wxToolBarMSW::OnPaint)
 	EVT_MOUSE_EVENTS(wxToolBarMSW::OnMouseEvent)
 END_EVENT_TABLE()
-#endif
 
 wxToolBarMSW::wxToolBarMSW(void)
 {
@@ -858,7 +856,7 @@ typedef struct tagCOLORMAP2
 #define BGR_BUTTONSHADOW    (RGB(128,128,128))  // dark grey
 #define BGR_BUTTONFACE      (RGB(192,192,192))  // bright grey
 #define BGR_BUTTONHILIGHT   (RGB(255,255,255))  // white
-#define BGR_BACKGROUNDSEL   (RGB(255,000,000))  // blue
+#define BGR_BACKGROUNDSEL   (RGB(000,000,255))  // blue
 #define BGR_BACKGROUND      (RGB(255,000,255))  // magenta
 #define FlipColor(rgb)      (RGB(GetBValue(rgb), GetGValue(rgb), GetRValue(rgb)))
 

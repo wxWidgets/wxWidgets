@@ -40,10 +40,8 @@
 
 extern bool wxClipboardIsOpen;
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxMetafile, wxObject)
 IMPLEMENT_ABSTRACT_CLASS(wxMetafileDC, wxDC)
-#endif
 
 /*
  * Metafiles

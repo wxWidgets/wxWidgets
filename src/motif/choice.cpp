@@ -30,9 +30,7 @@
 
 #include "wx/motif/private.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
-#endif
 
 void wxChoiceCallback (Widget w, XtPointer clientData,
                        XtPointer ptr);

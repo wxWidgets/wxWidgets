@@ -17,9 +17,7 @@
 #include "wx/stubs/fontdlg.h"
 #include "wx/cmndata.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
-#endif
 
 /*
  * wxFontDialog

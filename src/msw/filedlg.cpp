@@ -43,9 +43,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_CLASS(wxFileDialog, wxDialog)
-#endif
 
 wxString wxFileSelector(const wxChar *title,
                         const wxChar *defaultDir,

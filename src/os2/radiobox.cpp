@@ -22,9 +22,7 @@
 
 #include "wx/os2/private.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
-#endif
 
 // ---------------------------------------------------------------------------
 // private functions

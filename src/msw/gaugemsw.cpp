@@ -60,9 +60,7 @@
 /* public function prototypes */
 BOOL FAR PASCAL gaugeInit(HINSTANCE hInstance);
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxGaugeMSW, wxControl)
-#endif
 
 bool wxGaugeMSW::Create(wxWindow *parent, wxWindowID id,
            int range,

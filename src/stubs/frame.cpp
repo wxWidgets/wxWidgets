@@ -26,7 +26,6 @@
 extern wxList wxModelessWindows;
 extern wxList wxPendingDelete;
 
-#if !USE_SHARED_LIBRARY
 BEGIN_EVENT_TABLE(wxFrame, wxWindow)
   EVT_SIZE(wxFrame::OnSize)
   EVT_ACTIVATE(wxFrame::OnActivate)
@@ -37,7 +36,6 @@ BEGIN_EVENT_TABLE(wxFrame, wxWindow)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
-#endif
 
 #if wxUSE_NATIVE_STATUSBAR
 bool wxFrame::m_useNativeStatusBar = TRUE;

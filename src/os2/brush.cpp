@@ -25,9 +25,7 @@
 
 #include "assert.h"
 
-#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxBrush, wxGDIObject)
-#endif
 
 wxBrushRefData::wxBrushRefData()
 {

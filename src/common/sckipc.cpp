@@ -35,11 +35,9 @@
 #pragma hdrstop
 #endif
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxTCPServer, wxServerBase)
 IMPLEMENT_DYNAMIC_CLASS(wxTCPClient, wxClientBase)
 IMPLEMENT_DYNAMIC_CLASS(wxTCPConnection, wxConnectionBase)
-#endif
 
 // It seems to be already defined somewhere in the Xt includes.
 #ifndef __XT__

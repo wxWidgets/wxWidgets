@@ -48,10 +48,8 @@
 
 #define FTP_BSIZE 1024
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxFTP, wxProtocol)
 IMPLEMENT_PROTOCOL(wxFTP, wxT("ftp"), wxT("ftp"), TRUE)
-#endif
 
 ////////////////////////////////////////////////////////////////
 ////// wxFTP constructor and destructor ////////////////////////

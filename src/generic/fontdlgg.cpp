@@ -40,7 +40,6 @@
 #include "wx/cmndata.h"
 #include "wx/generic/fontdlgg.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxGenericFontDialog, wxDialog)
 
 BEGIN_EVENT_TABLE(wxGenericFontDialog, wxDialog)
@@ -54,7 +53,6 @@ BEGIN_EVENT_TABLE(wxGenericFontDialog, wxDialog)
     EVT_CLOSE(wxGenericFontDialog::OnCloseWindow)
 END_EVENT_TABLE()
 
-#endif
 
 #define NUM_COLS 48
 static wxString wxColourDialogNames[NUM_COLS]={wxT("ORANGE"),

@@ -20,9 +20,7 @@
 
 #include "wx/os2/private.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
-#endif
 
 bool wxChoice::Create(wxWindow *parent,
                       wxWindowID id,

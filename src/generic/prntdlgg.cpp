@@ -73,7 +73,6 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
 
 #if wxUSE_POSTSCRIPT
 
@@ -92,7 +91,6 @@
     BEGIN_EVENT_TABLE(wxGenericPageSetupDialog, wxDialog)
         EVT_BUTTON(wxPRINTID_SETUP, wxGenericPageSetupDialog::OnPrinter)
     END_EVENT_TABLE()
-#endif // USE_SHARED_LIBRARY
 
 // ----------------------------------------------------------------------------
 // global vars

@@ -40,12 +40,10 @@ extern wxList wxPendingDelete;
 
 wxApp *wxTheApp = NULL;
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
 BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
     EVT_IDLE(wxApp::OnIdle)
 END_EVENT_TABLE()
-#endif
 
 long wxApp::sm_lastMessageTime = 0;
 

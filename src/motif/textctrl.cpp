@@ -57,7 +57,6 @@ static void wxTextWindowGainFocusProc(Widget w, XtPointer clientData, XmAnyCallb
 static void wxTextWindowLoseFocusProc(Widget w, XtPointer clientData, XmAnyCallbackStruct *cbs);
 static void wxTextWindowActivateProc(Widget w, XtPointer clientData, XmAnyCallbackStruct *ptr);
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxControl)
 
     BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
@@ -77,7 +76,6 @@ static void wxTextWindowActivateProc(Widget w, XtPointer clientData, XmAnyCallba
     EVT_UPDATE_UI(wxID_REDO, wxTextCtrl::OnUpdateRedo)
 
     END_EVENT_TABLE()
-#endif
 
 // ============================================================================
 // implementation

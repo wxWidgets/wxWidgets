@@ -56,7 +56,6 @@
 // event table
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARIES
   BEGIN_EVENT_TABLE(wxNotebook, wxControl)
     EVT_NOTEBOOK_PAGE_CHANGED(-1, wxNotebook::OnSelChange)
     EVT_SIZE(wxNotebook::OnSize)
@@ -66,7 +65,6 @@
 
   IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxControl)
   IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxNotifyEvent)
-#endif
 
 // ============================================================================
 // implementation

@@ -20,7 +20,6 @@
 #include "wx/scrolbar.h"
 #include "wx/os2/private.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxScrollBar, wxControl)
 
 BEGIN_EVENT_TABLE(wxScrollBar, wxControl)
@@ -29,7 +28,6 @@ BEGIN_EVENT_TABLE(wxScrollBar, wxControl)
 #endif
 END_EVENT_TABLE()
 
-#endif
 
 // Scrollbar
 bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,

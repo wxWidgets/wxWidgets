@@ -21,10 +21,8 @@
 
 extern bool wxClipboardIsOpen;
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxMetaFile, wxObject)
 IMPLEMENT_ABSTRACT_CLASS(wxMetaFileDC, wxDC)
-#endif
 
 wxMetaFile::wxMetaFile(const wxString& file)
 {

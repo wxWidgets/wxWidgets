@@ -35,7 +35,6 @@
 
 #include "wx/tbarbase.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_ABSTRACT_CLASS(wxToolBarBase, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxToolBarTool, wxObject)
 
@@ -44,7 +43,6 @@ BEGIN_EVENT_TABLE(wxToolBarBase, wxControl)
   EVT_SIZE(wxToolBarBase::OnSize)
   EVT_IDLE(wxToolBarBase::OnIdle)
 END_EVENT_TABLE()
-#endif
 
 // Keep a list of all toolbars created, so you can tell whether a toolbar
 // is still valid: a tool may have quit the toolbar.

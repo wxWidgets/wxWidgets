@@ -61,10 +61,8 @@ static void wxConvertFromMSWListItem(const wxListCtrl *ctrl, wxListItem& info, L
 // macros
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxControl)
     IMPLEMENT_DYNAMIC_CLASS(wxListItem, wxObject)
-#endif // USE_SHARED_LIBRARY
 
 // ============================================================================
 // implementation

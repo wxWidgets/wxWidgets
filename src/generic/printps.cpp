@@ -54,10 +54,8 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxPostScriptPrinter, wxPrinterBase)
     IMPLEMENT_CLASS(wxPostScriptPrintPreview, wxPrintPreviewBase)
-#endif
 
 // ============================================================================
 // implementation

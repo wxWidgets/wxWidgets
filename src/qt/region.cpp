@@ -23,10 +23,8 @@
 
 #include <windows.h>
 
-#if !USE_SHARED_LIBRARY
 	IMPLEMENT_DYNAMIC_CLASS(wxRegion, wxGDIObject)
 	IMPLEMENT_DYNAMIC_CLASS(wxRegionIterator, wxObject)
-#endif
 
 //-----------------------------------------------------------------------------
 // wxRegionRefData implementation

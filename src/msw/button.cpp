@@ -42,9 +42,7 @@
 // macros
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
-#endif
 
 // this macro tries to adjust the default button height to a reasonable value
 // using the char height as the base

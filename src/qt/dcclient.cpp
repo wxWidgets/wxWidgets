@@ -27,11 +27,9 @@
 // wxPaintDC
 //-----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
 //IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxDC)
 //IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
 IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxDC)
-#endif
 
 
 wxPaintDC::wxPaintDC(void)

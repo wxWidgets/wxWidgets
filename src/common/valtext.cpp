@@ -40,13 +40,11 @@
     #include <clib.h>
 #endif
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxTextValidator, wxValidator)
 
 BEGIN_EVENT_TABLE(wxTextValidator, wxValidator)
     EVT_CHAR(wxTextValidator::OnChar)
 END_EVENT_TABLE()
-#endif
 
 static bool wxIsNumeric(const wxString& val);
 

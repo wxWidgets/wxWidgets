@@ -16,9 +16,7 @@
 #include "wx/cursor.h"
 #include "wx/icon.h"
 
-#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxBitmap)
-#endif
 
 const short kwxCursorHandId = 9 ;
 const short kwxCursorSizeWEId = 10 ;

@@ -18,9 +18,7 @@
 
 #include <stdio.h>
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxStaticText, wxControl)
-#endif
 
 bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
            const wxString& label,

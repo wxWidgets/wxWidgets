@@ -51,9 +51,7 @@ UINT WINAPI _EXPORT wxTimerProc(HWND hwnd, WORD, int idTimer, DWORD);
     #define _EXPORT _export
 #endif
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxObject)
-#endif
 
 // ============================================================================
 // implementation

@@ -16,13 +16,11 @@
 #include "wx/scrolbar.h"
 #include "wx/mac/uma.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxScrollBar, wxControl)
 
 BEGIN_EVENT_TABLE(wxScrollBar, wxControl)
 END_EVENT_TABLE()
 
-#endif
 
 extern ControlActionUPP wxMacLiveScrollbarActionUPP ;
 

@@ -44,9 +44,7 @@
 // implementation
 // ============================================================================
 
-#if !USE_SHARED_LIBRARY
   IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox, wxListBox)
-#endif
 
 // ----------------------------------------------------------------------------
 // declaration and implementation of wxCheckListBoxItem class

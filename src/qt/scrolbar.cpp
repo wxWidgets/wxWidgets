@@ -15,10 +15,8 @@
 
 #include "wx/scrolbar.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxScrollBar, wxControl)
 
-#endif
 
 // Scrollbar
 bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,

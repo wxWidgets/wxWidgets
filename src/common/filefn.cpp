@@ -122,9 +122,7 @@ extern wxChar *wxBuffer;
 #include "fspcompa.h"
 #endif
 
-#if !USE_SHARED_LIBRARIES
     IMPLEMENT_DYNAMIC_CLASS(wxPathList, wxStringList)
-#endif
 
 // ----------------------------------------------------------------------------
 // private globals

@@ -34,14 +34,12 @@
 #include "wx/msw/winundef.h"
 #endif
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxStatusBar, wxWindow)
 
 BEGIN_EVENT_TABLE(wxStatusBar, wxWindow)
     EVT_PAINT(wxStatusBar::OnPaint)
     EVT_SYS_COLOUR_CHANGED(wxStatusBar::OnSysColourChanged)
 END_EVENT_TABLE()
-#endif
 
 // Default status border dimensions
 #define         wxTHICK_LINE_BORDER 2

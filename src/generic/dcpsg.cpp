@@ -2156,10 +2156,8 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
 
 wxPrintSetupData *wxThePrintSetupData = (wxPrintSetupData *) NULL;
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxPostScriptDC, wxDC)
 IMPLEMENT_DYNAMIC_CLASS(wxPrintSetupData, wxObject)
-#endif
 
 // Redundant now I think
 #if 1

@@ -46,7 +46,6 @@
 // icons
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
 BEGIN_EVENT_TABLE(wxGenericMessageDialog, wxDialog)
         EVT_BUTTON(wxID_YES, wxGenericMessageDialog::OnYes)
         EVT_BUTTON(wxID_NO, wxGenericMessageDialog::OnNo)
@@ -54,7 +53,6 @@ BEGIN_EVENT_TABLE(wxGenericMessageDialog, wxDialog)
 END_EVENT_TABLE()
 
 IMPLEMENT_CLASS(wxGenericMessageDialog, wxDialog)
-#endif
 
 wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
                                                 const wxString& message,

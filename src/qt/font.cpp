@@ -15,9 +15,7 @@
 
 #include "wx/font.h"
 
-#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
-#endif
 
 wxFontRefData::wxFontRefData()
 {

@@ -119,10 +119,8 @@ void wxLogWarning(char *msg)
   wxMessageBox(msg, _("Warning"), wxOK);
 }
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxItemResource, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxResourceTable, wxHashTable)
-#endif
 
 wxItemResource::wxItemResource()
 {

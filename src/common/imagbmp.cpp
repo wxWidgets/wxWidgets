@@ -46,9 +46,7 @@
 // wxBMPHandler
 //-----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxBMPHandler,wxImageHandler)
-#endif
 
 #if wxUSE_STREAMS
 

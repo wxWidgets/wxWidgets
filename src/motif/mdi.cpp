@@ -44,7 +44,6 @@ extern void wxFrameFocusProc(Widget workArea, XtPointer clientData,
 
 #define wxID_NOTEBOOK_CLIENT_AREA wxID_HIGHEST + 100
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxMDIParentFrame, wxFrame)
 IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame, wxFrame)
 IMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow, wxNotebook)
@@ -61,7 +60,6 @@ BEGIN_EVENT_TABLE(wxMDIClientWindow, wxNotebook)
     EVT_NOTEBOOK_PAGE_CHANGED(wxID_NOTEBOOK_CLIENT_AREA, wxMDIClientWindow::OnPageChanged)
 END_EVENT_TABLE()
 
-#endif // USE_SHARED_LIBRARY
 
 // Parent frame
 

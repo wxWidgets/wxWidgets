@@ -35,9 +35,7 @@
 void wxRadioBoxCallback (Widget w, XtPointer clientData,
                     XmToggleButtonCallbackStruct * cbs);
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
-#endif
 
 // Radio box item
 wxRadioBox::wxRadioBox()

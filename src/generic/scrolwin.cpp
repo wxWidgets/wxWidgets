@@ -27,7 +27,6 @@
 #include "wx/generic/scrolwin.h"
 #include "wx/panel.h"
 
-#if !USE_SHARED_LIBRARY
 BEGIN_EVENT_TABLE(wxScrolledWindow, wxPanel)
     EVT_SCROLLWIN(wxScrolledWindow::OnScroll)
     EVT_SIZE(wxScrolledWindow::OnSize)
@@ -35,7 +34,6 @@ BEGIN_EVENT_TABLE(wxScrolledWindow, wxPanel)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxScrolledWindow, wxPanel)
-#endif
 
 #ifdef __WXMSW__
 #include "windows.h"

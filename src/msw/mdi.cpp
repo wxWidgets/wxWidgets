@@ -119,11 +119,9 @@ static void UnpackMDIActivate(WXWPARAM wParam, WXLPARAM lParam,
 // wxWin macros
 // ---------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxMDIParentFrame, wxFrame)
     IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame, wxFrame)
     IMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow, wxWindow)
-#endif // USE_SHARED_LIBRARY
 
 BEGIN_EVENT_TABLE(wxMDIParentFrame, wxFrame)
     EVT_SIZE(wxMDIParentFrame::OnSize)

@@ -41,9 +41,7 @@
 #include <commctrl.h>
 #endif
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxImageList, wxObject)
-#endif
 
 wxImageList::wxImageList(void)
 {

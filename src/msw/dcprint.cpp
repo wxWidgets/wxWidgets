@@ -38,9 +38,7 @@
 #include <print.h>
 #endif
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxPrinterDC, wxDC)
-#endif
 
 // This form is deprecated
 wxPrinterDC::wxPrinterDC(const wxString& driver_name, const wxString& device_name, const wxString& file, bool interactive, int orientation)

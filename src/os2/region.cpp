@@ -18,10 +18,8 @@
 #include "wx/window.h"
 #include "wx/os2/private.h"
 
-#if !USE_SHARED_LIBRARY
 	IMPLEMENT_DYNAMIC_CLASS(wxRegion, wxGDIObject)
 	IMPLEMENT_DYNAMIC_CLASS(wxRegionIterator, wxObject)
-#endif
 
 //-----------------------------------------------------------------------------
 // wxRegionRefData implementation

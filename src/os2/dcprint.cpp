@@ -27,9 +27,7 @@
 #include "wx/dcprint.h"
 #include "math.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxPrinterDC, wxDC)
-#endif
 
 
 // This form is deprecated

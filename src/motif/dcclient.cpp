@@ -82,11 +82,9 @@ static Pixmap bdiag, cdiag, fdiag, cross, horiz, verti;
 // macros
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxWindowDC)
     IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxWindowDC)
     IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
-#endif
 
 // ----------------------------------------------------------------------------
 // prototypes

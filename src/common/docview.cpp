@@ -76,7 +76,6 @@
 // wxWindows macros
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_ABSTRACT_CLASS(wxDocument, wxEvtHandler)
     IMPLEMENT_ABSTRACT_CLASS(wxView, wxEvtHandler)
     IMPLEMENT_ABSTRACT_CLASS(wxDocTemplate, wxObject)
@@ -91,7 +90,6 @@
     IMPLEMENT_CLASS(wxCommand, wxObject)
     IMPLEMENT_DYNAMIC_CLASS(wxCommandProcessor, wxObject)
     IMPLEMENT_DYNAMIC_CLASS(wxFileHistory, wxObject)
-#endif
 
 // ----------------------------------------------------------------------------
 // function prototypes

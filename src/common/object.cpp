@@ -44,11 +44,9 @@
     #include "wx/ioswrap.h"
 #endif
 
-#if !USE_SHARED_LIBRARY
 wxClassInfo wxObject::sm_classwxObject((wxChar *) wxT("wxObject"), (wxChar *) NULL, (wxChar *) NULL, (int ) sizeof(wxObject), (wxObjectConstructorFn) NULL);
 wxClassInfo* wxClassInfo::sm_first = (wxClassInfo *) NULL;
 wxHashTable* wxClassInfo::sm_classTable = (wxHashTable*) NULL;
-#endif
 
 /*
  * wxWindows root object.

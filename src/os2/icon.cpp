@@ -29,9 +29,7 @@
 
 #include "wx/icon.h"
 
-#if !USE_SHARED_LIBRARIES
     IMPLEMENT_DYNAMIC_CLASS(wxIcon, wxIconBase)
-#endif
 
 // ============================================================================
 // implementation

@@ -45,10 +45,8 @@
 #endif
  // End __WXMSW__
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxPrintPaperType, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxPrintPaperDatabase, wxList)
-#endif
 
 /*
  * Paper size database for all platforms

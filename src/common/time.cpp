@@ -45,9 +45,7 @@ seconds since January 1, 1901, GMT.
 
 #include <string.h>
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxTime, wxObject)
-#endif
 
 
 extern bool wxGetLocalTime(long *timeZone, int *dstObserved);

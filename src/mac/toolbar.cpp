@@ -19,12 +19,10 @@
 
 #include "wx/toolbar.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxToolBarBase)
 
 BEGIN_EVENT_TABLE(wxToolBar, wxToolBarBase)
 END_EVENT_TABLE()
-#endif
 
 #include <wx/mac/uma.h>
 

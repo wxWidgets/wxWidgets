@@ -35,9 +35,7 @@
 #include <commctrl.h>
 #endif
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxSlider95, wxControl)
-#endif
 
 // Slider
 wxSlider95::wxSlider95()

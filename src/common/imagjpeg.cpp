@@ -56,9 +56,7 @@ extern "C"
 // wxJPEGHandler
 //-----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxJPEGHandler,wxImageHandler)
-#endif
 
 #if wxUSE_STREAMS
 

@@ -27,9 +27,7 @@
 
 #include "wx/motif/private.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxObject)
-#endif
 
 static wxList wxTimerList(wxKEY_INTEGER);
 

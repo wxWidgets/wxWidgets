@@ -15,9 +15,7 @@
 
 #include "wx/cursor.h"
 
-#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxBitmap)
-#endif
 
 wxCursorRefData::wxCursorRefData()
 {

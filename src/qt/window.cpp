@@ -38,7 +38,6 @@
 
 extern wxList wxPendingDelete;
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxEvtHandler)
 
 BEGIN_EVENT_TABLE(wxWindow, wxEvtHandler)
@@ -49,7 +48,6 @@ BEGIN_EVENT_TABLE(wxWindow, wxEvtHandler)
   EVT_IDLE(wxWindow::OnIdle)
 END_EVENT_TABLE()
 
-#endif
 
 
 // Constructor

@@ -53,7 +53,6 @@
 
 #include "wx/generic/helpxlp.h"
 
-#if !USE_SHARED_LIBRARY
 
 #ifdef __WXMSW__
 IMPLEMENT_CLASS(wxXLPHelpClient, wxDDEClient)
@@ -64,7 +63,6 @@ IMPLEMENT_CLASS(wxXLPHelpConnection, wxTCPConnection)
 #endif
 
 IMPLEMENT_CLASS(wxXLPHelpController, wxHelpControllerBase)
-#endif
 
 // suppress annoying warning "'this' used in base member init list" (so what?)
 #ifdef __VISUALC__

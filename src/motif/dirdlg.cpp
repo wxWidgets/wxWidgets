@@ -20,9 +20,7 @@
 
 #include "wx/cmndata.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxDirDialog, wxDialog)
-#endif
 
 wxDirDialog::wxDirDialog(wxWindow *parent, const wxString& message,
         const wxString& defaultPath,

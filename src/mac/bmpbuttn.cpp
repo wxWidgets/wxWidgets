@@ -15,9 +15,7 @@
 
 #include "wx/bmpbuttn.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
-#endif
 
 #include <wx/mac/uma.h>
 

@@ -57,12 +57,10 @@
 // --------------------------------------------------------------
 // ClassInfos
 // --------------------------------------------------------------
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxSocketBase, wxObject)
 IMPLEMENT_CLASS(wxSocketServer, wxSocketBase)
 IMPLEMENT_CLASS(wxSocketClient, wxSocketBase)
 IMPLEMENT_DYNAMIC_CLASS(wxSocketEvent, wxEvent)
-#endif
 
 class wxSocketState : public wxObject
 {

@@ -16,9 +16,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/choice.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
-#endif
 
 bool wxChoice::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos,

@@ -28,9 +28,7 @@
 #endif
 #include "wx/motif/private.h"
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
-#endif
 
 static void wxListBoxCallback(Widget w,
                               XtPointer clientData,

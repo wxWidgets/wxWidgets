@@ -20,10 +20,8 @@
 #include "wx/icon.h"
 #include "wx/log.h"
 
-#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxGDIObject)
 IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
-#endif
 
 wxBitmapRefData::wxBitmapRefData()
 {

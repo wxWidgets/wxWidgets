@@ -24,10 +24,8 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
     IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent);
-#endif
 
 bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
             long style, const wxString& name)

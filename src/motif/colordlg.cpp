@@ -16,9 +16,7 @@
 
 #include "wx/motif/colordlg.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog)
-#endif
 
 /*
  * wxColourDialog

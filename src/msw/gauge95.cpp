@@ -33,9 +33,7 @@
 #include <commctrl.h>
 #endif
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxGauge95, wxControl)
-#endif
 
 bool wxGauge95::Create(wxWindow *parent, wxWindowID id,
            int range,

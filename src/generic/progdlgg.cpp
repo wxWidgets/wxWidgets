@@ -64,14 +64,12 @@ static void SetTimeLabel(unsigned long val, wxStaticText *label);
 // event tables
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
     BEGIN_EVENT_TABLE(wxProgressDialog, wxDialog)
        EVT_BUTTON(wxID_CANCEL, wxProgressDialog::OnCancel)
        EVT_CLOSE(wxProgressDialog::OnClose)
     END_EVENT_TABLE()
 
     IMPLEMENT_CLASS(wxProgressDialog, wxDialog)
-#endif
 
 // ============================================================================
 // implementation

@@ -50,13 +50,11 @@
 #include "wx/msw/private.h"
 #include "wx/msw/imaglist.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxTabCtrl, wxControl)
 
 BEGIN_EVENT_TABLE(wxTabCtrl, wxControl)
     EVT_SYS_COLOUR_CHANGED(wxTabCtrl::OnSysColourChanged)
 END_EVENT_TABLE()
-#endif
 
 wxTabCtrl::wxTabCtrl()
 {

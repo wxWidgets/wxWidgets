@@ -95,9 +95,7 @@ static void wxMapBitmap(HBITMAP hBitmap, int width, int height);
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxToolBarBase)
-#endif
 
 BEGIN_EVENT_TABLE(wxToolBar95, wxToolBarBase)
     EVT_MOUSE_EVENTS(wxToolBar95::OnMouseEvent)
@@ -768,7 +766,7 @@ int wxToolBar95::GetIndexFromId(int id) const
 #define BGR_BUTTONSHADOW    (RGB(128,128,128))  // dark grey
 #define BGR_BUTTONFACE      (RGB(192,192,192))  // bright grey
 #define BGR_BUTTONHILIGHT   (RGB(255,255,255))  // white
-#define BGR_BACKGROUNDSEL   (RGB(255,000,000))  // blue
+#define BGR_BACKGROUNDSEL   (RGB(000,000,255))  // blue
 #define BGR_BACKGROUND      (RGB(255,000,255))  // magenta
 
 void wxMapBitmap(HBITMAP hBitmap, int width, int height)

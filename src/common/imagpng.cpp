@@ -53,9 +53,7 @@
 // wxPNGHandler
 //-----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxPNGHandler,wxImageHandler)
-#endif
 
 #if wxUSE_LIBPNG
 

@@ -69,14 +69,12 @@ extern wxMenu *wxCurrentPopupMenu;
 // event tables
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
 BEGIN_EVENT_TABLE(wxFrame, wxFrameBase)
     EVT_ACTIVATE(wxFrame::OnActivate)
     EVT_SYS_COLOUR_CHANGED(wxFrame::OnSysColourChanged)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
-#endif
 
 // ============================================================================
 // implementation

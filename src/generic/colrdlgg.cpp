@@ -41,7 +41,6 @@
 
 #include "wx/generic/colrdlgg.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxGenericColourDialog, wxDialog)
 
 BEGIN_EVENT_TABLE(wxGenericColourDialog, wxDialog)
@@ -54,7 +53,6 @@ BEGIN_EVENT_TABLE(wxGenericColourDialog, wxDialog)
     EVT_CLOSE(wxGenericColourDialog::OnCloseWindow)
 END_EVENT_TABLE()
 
-#endif
 
 /*
  * Generic wxColourDialog

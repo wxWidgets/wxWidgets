@@ -19,9 +19,7 @@
 #include "wx/os2/private.h"
 
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
-#endif
 
 #define BUTTON_HEIGHT_FACTOR (EDIT_CONTROL_FACTOR * 1.1)
 

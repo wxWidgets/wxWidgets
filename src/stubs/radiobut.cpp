@@ -15,9 +15,7 @@
 
 #include "wx/radiobut.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
-#endif
 
 bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 		   const wxString& label,

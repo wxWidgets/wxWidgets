@@ -35,9 +35,7 @@
 #define wxDIALOG_DEFAULT_X 300
 #define wxDIALOG_DEFAULT_Y 300
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
-#endif
 
 /*
  * wxFontDialog

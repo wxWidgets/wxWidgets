@@ -43,9 +43,7 @@ extern "C"
 // wxTIFFHandler
 //-----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxTIFFHandler,wxImageHandler)
-#endif
 
 static tsize_t
 _tiffReadProc(thandle_t handle, tdata_t buf, tsize_t size)
