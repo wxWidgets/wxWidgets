@@ -117,7 +117,7 @@ int _System soclose(int);
 #  endif
 #endif
 
-#else 
+#else
    /* undefine for OSX - its really an int */
 #  ifdef __DARWIN__
 #    undef SOCKLEN_T
@@ -1709,7 +1709,11 @@ GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
     return GSOCK_INVPORT;
   }
 
+#if defined(__WXPM__) && defined(__EMX__)
+  se = getservbyname(port, (char*)protocol);
+#else
   se = getservbyname(port, protocol);
+#endif
   if (!se)
   {
     /* the cast to int suppresses compiler warnings about subscript having the
