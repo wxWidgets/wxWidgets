@@ -197,7 +197,7 @@ wxControl::~wxControl()
     if ( (ControlHandle) m_macControl )
     {
         // in case the callback might be called during destruction
-        ::SetControlColorProc( m_macControl , NULL ) ;
+        ::SetControlColorProc( (ControlHandle) m_macControl , NULL ) ;
         ::DisposeControl( (ControlHandle) m_macControl ) ;
         m_macControl = NULL ;
     }
