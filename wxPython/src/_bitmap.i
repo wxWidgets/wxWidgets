@@ -53,12 +53,12 @@ public:
         
     ~wxBitmap();
 
-    DocCtorStrName(
-        wxBitmap(int width, int height, int depth=-1),
-        "Creates a new bitmap of the given size.  A depth of -1 indicates the depth of\n"
-        "the current screen or visual. Some platforms only support 1 for monochrome and\n"
-        "-1 for the current colour setting.",
-        EmptyBitmap);
+//     DocCtorStrName(
+//         wxBitmap(int width, int height, int depth=-1),
+//         "Creates a new bitmap of the given size.  A depth of -1 indicates the depth of\n"
+//         "the current screen or visual. Some platforms only support 1 for monochrome and\n"
+//         "-1 for the current colour setting.",
+//         EmptyBitmap);
 
     DocCtorStrName(
         wxBitmap(const wxIcon& icon),
@@ -100,6 +100,21 @@ public:
             PyString_AsStringAndSize(bits, &buf, &length);
             return new wxBitmap(buf, width, height, depth);
         }
+
+
+        DocStr(wxBitmap(const wxSize& size, int depth=-1), 
+               "Creates a new bitmap of the given size.  A depth of -1 indicates
+the depth of the current screen or visual. Some platforms only
+support 1 for monochrome and -1 for the current colour setting.");
+
+        %nokwargs wxBitmap(int width, int height, int depth=-1);
+        %nokwargs wxBitmap(const wxSize& size, int depth=-1);
+        %name(EmptyBitmap)wxBitmap(int width, int height, int depth=-1) {
+            return new wxBitmap(width, height, depth);
+        }
+        %name(EmptyBitmap)wxBitmap(const wxSize& size, int depth=-1) {
+            return new wxBitmap(size.x, size.y, depth);
+        }
     }    
 
     
@@ -128,6 +143,16 @@ public:
            "monochrome bitmap.");
     int GetDepth();
 
+
+    %extend {
+        DocStr(GetSize, "Get the size of the bitmap.");
+        wxSize GetSize() {
+            wxSize size(self->GetWidth(), self->GetHeight());
+            return size;
+        }
+    }
+
+    
     DocStr(ConvertToImage,
            "Creates a platform-independent image from a platform-dependent bitmap. This\n"
            "preserves mask information so that bitmaps and images can be converted back\n"
@@ -182,6 +207,13 @@ public:
     DocStr(SetDepth, "Set the depth property (does not affect the bitmap data).")
     virtual void SetDepth(int depth);
 
+    %extend {
+        DocStr(SetSize, "Set the bitmap size");
+        void SetSize(const wxSize& size) {
+            self->SetWidth(size.x);
+            self->SetHeight(size.y);
+        }
+    }
     
 #ifdef __WXMSW__
     bool CopyFromCursor(const wxCursor& cursor);

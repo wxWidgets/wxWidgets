@@ -13,6 +13,12 @@ size is smaller than the item's GetBestSize.  When a window is added
 to a sizer it's initial size, if any, is set as the window's minimal
 size using SetSizeHints if there isn't already a minimal size.
 
+Added some convenience methods to wx.Bitmap: SetSize, GetSize, and
+wx.EmptyBitmap can be called with a wx.Size (or a 2-element sequence)
+object too.  Similar changes were done for wx.Image as well.
+
+
+
 
 2.5.1.5
 -------
