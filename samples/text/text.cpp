@@ -531,9 +531,12 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
             WriteText("\n");
             break;
 
-        default:
-            LogEvent( wxT("Key down"), event);
+        case WXK_F6:
+            SetValue("F6 was just pressed.");
+            break;
     }
+
+    LogEvent( wxT("Key down"), event);
 
     event.Skip();
 }

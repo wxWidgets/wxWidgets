@@ -917,9 +917,11 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
             {
                 int idx;
                 idx = m_listbox->GetSelection();
-                m_listbox->Delete( idx );
+                if ( idx != wxNOT_FOUND )
+                    m_listbox->Delete( idx );
                 idx = m_listboxSorted->GetSelection();
-                m_listboxSorted->Delete( idx );
+                if ( idx != wxNOT_FOUND )
+                    m_listboxSorted->Delete( idx );
                 break;
             }
         case ID_LISTBOX_FONT:
@@ -1000,9 +1002,11 @@ void MyPanel::OnChoiceButtons( wxCommandEvent &event )
         case ID_CHOICE_DELETE:
             {
                 int idx = m_choice->GetSelection();
-                m_choice->Delete( idx );
+                if ( idx != wxNOT_FOUND )
+                    m_choice->Delete( idx );
                 idx = m_choiceSorted->GetSelection();
-                m_choiceSorted->Delete( idx );
+                if ( idx != wxNOT_FOUND )
+                    m_choiceSorted->Delete( idx );
                 break;
             }
         case ID_CHOICE_FONT:
