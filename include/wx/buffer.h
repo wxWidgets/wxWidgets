@@ -30,7 +30,7 @@ public:
     {
         wxASSERT_MSG( str, wxT("NULL string in wxCharBuffer") );
 
-        m_str = str ? wxStrdup(str) : (char *)NULL;
+        m_str = str ? strdup(str) : (char *)NULL;
     }
     wxCharBuffer(size_t len)
     {
