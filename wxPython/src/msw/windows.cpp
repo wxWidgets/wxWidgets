@@ -6322,6 +6322,43 @@ static PyObject *_wrap_wxWindow_SetDefaultItem(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
+#define wxWindow_SetTmpDefaultItem(_swigobj,_swigarg0)  (_swigobj->SetTmpDefaultItem(_swigarg0))
+static PyObject *_wrap_wxWindow_SetTmpDefaultItem(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _arg0;
+    wxWindow * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","win", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxWindow_SetTmpDefaultItem",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_SetTmpDefaultItem. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWindow_SetTmpDefaultItem. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxWindow_SetTmpDefaultItem(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxWindow_WarpPointer(_swigobj,_swigarg0,_swigarg1)  (_swigobj->WarpPointer(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxWindow_WarpPointer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -11719,6 +11756,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_ReleaseMouse", (PyCFunction) _wrap_wxWindow_ReleaseMouse, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_CaptureMouse", (PyCFunction) _wrap_wxWindow_CaptureMouse, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_WarpPointer", (PyCFunction) _wrap_wxWindow_WarpPointer, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_SetTmpDefaultItem", (PyCFunction) _wrap_wxWindow_SetTmpDefaultItem, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetDefaultItem", (PyCFunction) _wrap_wxWindow_SetDefaultItem, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetDefaultItem", (PyCFunction) _wrap_wxWindow_GetDefaultItem, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_OnPaint", (PyCFunction) _wrap_wxWindow_OnPaint, METH_VARARGS | METH_KEYWORDS },

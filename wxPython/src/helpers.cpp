@@ -182,6 +182,8 @@ void __wxPreStart()
     wxPyTMutex = new wxMutex;
 #endif
 
+    wxApp::CheckBuildOptions(wxBuildOptions());
+
     // Bail out if there is already a wxApp created.  This means that the
     // toolkit has already been initialized, as in embedding wxPython in
     // a C++ wxWindows app, so we don't need to call wxEntryStart.

@@ -68,6 +68,7 @@ extern PyObject *SWIG_newvarlink(void);
 
     // Put some wx default wxChar* values into wxStrings.
     DECLARE_DEF_STRING(NOTEBOOK_NAME);
+    DECLARE_DEF_STRING(PanelNameStr);
 
     static const wxChar* wxSplitterNameStr = wxT("splitter");
     DECLARE_DEF_STRING(SplitterNameStr);

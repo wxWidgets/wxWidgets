@@ -1064,8 +1064,9 @@ wxLongLong wxGetLocalTimeMillis();
 //---------------------------------------------------------------------------
 
 %init %{
-    wxClassInfo::CleanUpClasses();
-    wxClassInfo::InitializeClasses();
+    // These are no longer needed since utils is back in the core
+//      wxClassInfo::CleanUpClasses();
+//      wxClassInfo::InitializeClasses();
 %}
 
 //---------------------------------------------------------------------------

@@ -30,6 +30,7 @@
 %{
     // Put some wx default wxChar* values into wxStrings.
     DECLARE_DEF_STRING(NOTEBOOK_NAME);
+    DECLARE_DEF_STRING(PanelNameStr);
 
     static const wxChar* wxSplitterNameStr = wxT("splitter");
     DECLARE_DEF_STRING(SplitterNameStr);
@@ -297,5 +298,75 @@ public:
     bool IsOK();
 };
 #endif
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// wxPyWindow derives from wxWindow and adds support for overriding many of
+// the virtual methods in Python derived classes.
+
+// Do wxPyControl too.
+
+//  %{
+//  class wxPyWindow : public wxWindow
+//  {
+//      DECLARE_DYNAMIC_CLASS(wxPyWindow)
+//  public:
+//      wxPyWindow(wxWindow* parent, const wxWindowID id,
+//                 const wxPoint& pos = wxDefaultPosition,
+//                 const wxSize& size = wxDefaultSize,
+//                 long style = 0,
+//                 const wxString& name = wxPyPanelNameStr)
+//          : wxWindow(parent, id, pos, size, style, name) {}
+
+
+//      // Which of these should be done???
+//      DoSetSize
+//      DoGetSize
+//      DoSetClientSize
+//      DoGetClientSize
+//      DoGetPosition
+//      DoSetVirtualSize
+//      DoGetVirtualSize
+
+//      GetClientAreaOrigin
+//      Fit
+//      SetSizeHints
+//      SetVirtualSizeHints
+//      GetMaxSize
+//      Show
+//      Enable
+//      SetFocus
+//      SetFocusFromKbd
+//      AcceptsFocus
+//      AcceptsFocusFromKeyboard
+//      GetDefaultItem
+//      SetDefaultItem
+//      IsTopLevel
+//      AddChild
+//      RemoveChild
+//      Validate
+//      TransferDataToWindow
+//      TransferDataFromWindow
+//      InitDialog
+//      SetBackgroundColour
+//      SetForegroundColour
+//      GetCharHeight
+//      GetCharWidth
+//      DoClientToScreen
+//      DoScreenToClient
+//      DoHitTest
+//      DoPopupMenu
+//      DoSetToolTip
+//      DoCaptureMouse
+//      DoReleaseMouse
+//      DoMoveWindow
+
+
+//      PYPRIVATE;
+//  };
+
+
+//  %}
+
 
 //---------------------------------------------------------------------------

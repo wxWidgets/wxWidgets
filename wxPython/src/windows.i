@@ -448,7 +448,7 @@ public:
 
     wxWindow* GetDefaultItem();
     wxWindow* SetDefaultItem(wxWindow *btn);
-
+    void SetTmpDefaultItem(wxWindow *win);
 
     // move the mouse to the specified position
     void WarpPointer(int x, int y);

@@ -166,11 +166,7 @@ class TestWindow(wxShapeCanvas):
             # for some reason, the shapes have to be moved for the line to show up...
             fromShape.Move(dc, fromShape.GetX(), fromShape.GetY())
 
-##         EVT_PAINT(self, self.OnPaint)
-
-##     def OnPaint(self, evt):
-##         evt.Skip()
-##         print "TheLists:", wxThePenList.GetCount(), wxTheBrushList.GetCount(), wxTheFontList.GetCount()
+            EVT_WINDOW_DESTROY(self, self.OnDestroy)
 
 
     def MyAddShape(self, shape, x, y, pen, brush, text):
@@ -194,7 +190,8 @@ class TestWindow(wxShapeCanvas):
 
 
 
-    def __del__(self):
+    def OnDestroy(self, evt):
+        # Do some cleanup
         for shape in self.diagram.GetShapeList():
             if shape.GetParent() == None:
                 shape.SetCanvas(None)

@@ -328,12 +328,12 @@ public:
     // return true if the port has certain feature
     static bool HasFeature(wxSystemFeature index);
 
-//     // Get system screen design (desktop, pda, ..) used for
-//     // laying out various dialogs.
-//     static wxSystemScreen GetScreen();
+   // Get system screen design (desktop, pda, ..) used for
+   // laying out various dialogs.
+   static wxSystemScreen GetScreen();
 
-//     // Override default.
-//     static void SetScreen( wxSystemScreen screen );
+   // Override default.
+   static void SetScreen( wxSystemScreen screen );
 
 };
 
@@ -673,12 +673,9 @@ void wxLogStatus(const wxString& szFormat);
 %name(wxLogStatusFrame)void wxLogStatus(wxFrame *pFrame, const wxString& szFormat);
 void wxLogSysError(const wxString& szFormat);
 
-
 // wxLogFatalError helper: show the (fatal) error to the user in a safe way,
 // i.e. without using wxMessageBox() for example because it could crash
-
-// TODO:  Why am I getting a link error on this???
-// void wxSafeShowMessage(const wxString& title, const wxString& text);
+void wxSafeShowMessage(const wxString& title, const wxString& text);
 
 
 

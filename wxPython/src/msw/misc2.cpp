@@ -2324,6 +2324,46 @@ static PyObject *_wrap_wxLogSysError(PyObject *self, PyObject *args, PyObject *k
     return _resultobj;
 }
 
+static PyObject *_wrap_wxSafeShowMessage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _arg0;
+    wxString * _arg1;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "title","text", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxSafeShowMessage",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
+        return NULL;
+}
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSafeShowMessage(*_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj0)
+        delete _arg0;
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
 static PyObject *_wrap_wxExecute(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     long  _result;
@@ -2491,6 +2531,43 @@ static PyObject *_wrap_wxSystemSettings_HasFeature(PyObject *self, PyObject *arg
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxSystemSettings_GetScreen(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSystemScreen  _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxSystemSettings_GetScreen",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxSystemScreen )wxSystemSettings::GetScreen();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxSystemSettings_SetScreen(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSystemScreen  _arg0;
+    char *_kwnames[] = { "screen", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxSystemSettings_SetScreen",_kwnames,&_arg0)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSystemSettings::SetScreen(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -10092,12 +10169,15 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxToolTip_GetTip", (PyCFunction) _wrap_wxToolTip_GetTip, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolTip_SetTip", (PyCFunction) _wrap_wxToolTip_SetTip, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxToolTip", (PyCFunction) _wrap_new_wxToolTip, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSystemSettings_SetScreen", (PyCFunction) _wrap_wxSystemSettings_SetScreen, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSystemSettings_GetScreen", (PyCFunction) _wrap_wxSystemSettings_GetScreen, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSystemSettings_HasFeature", (PyCFunction) _wrap_wxSystemSettings_HasFeature, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSystemSettings_GetMetric", (PyCFunction) _wrap_wxSystemSettings_GetMetric, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSystemSettings_GetFont", (PyCFunction) _wrap_wxSystemSettings_GetFont, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSystemSettings_GetColour", (PyCFunction) _wrap_wxSystemSettings_GetColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWaveData", (PyCFunction) _wrap_wxWaveData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxExecute", (PyCFunction) _wrap_wxExecute, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSafeShowMessage", (PyCFunction) _wrap_wxSafeShowMessage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogSysError", (PyCFunction) _wrap_wxLogSysError, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogStatusFrame", (PyCFunction) _wrap_wxLogStatusFrame, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogStatus", (PyCFunction) _wrap_wxLogStatus, METH_VARARGS | METH_KEYWORDS },
