@@ -3277,15 +3277,19 @@ fi
 
 UNICODE=0
 lib_unicode_suffix=
+wxconfig_filename_unicode="ansi"
 if test "$wxUSE_UNICODE" = "yes"; then
     lib_unicode_suffix=u
+    wxconfig_filename_unicode="unicode"
     UNICODE=1
 fi
 
 lib_debug_suffix=
+wxconfig_filename_debug="release"
 DEBUG_FLAG=0
 if test "$wxUSE_DEBUG_FLAG" = "yes"; then
     lib_debug_suffix=d
+    wxconfig_filename_debug="debug"
     DEBUG_FLAG=1
 fi
 
@@ -3299,9 +3303,12 @@ WX_VERSION_TAG=`echo WX${lib_unicode_suffix}${lib_debug_suffix}_${WX_RELEASE} | 
 TOOLCHAIN_NAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}-${WX_RELEASE}"
 TOOLCHAIN_NAME_GL="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}_gl-${WX_RELEASE}"
 
+WXCONFIG_DATA_FILE="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}-${wxconfig_filename_unicode}-${wxconfig_filename_debug}-${WX_RELEASE}"
+
 if test "$cross_compiling" = "yes"; then
     TOOLCHAIN_NAME="${TOOLCHAIN_NAME}-${host_alias}"
     TOOLCHAIN_NAME_GL="${TOOLCHAIN_NAME_GL}-${host_alias}"
+    WXCONFIG_DATA_FILE="${WXCONFIG_DATA_FILE}-${host_alias}"
     HOST_SUFFIX="-${host_alias}"
 fi
 
@@ -6174,6 +6181,7 @@ AC_SUBST(WXCONFIG_LIBS_STATIC_GL)
 AC_SUBST(WXCONFIG_INCLUDE)
 AC_SUBST(WXCONFIG_RPATH)
 AC_SUBST(WXCONFIG_LDFLAGS_GUI)
+AC_SUBST(WXCONFIG_DATA_FILE)
 AC_SUBST(WX_LARGEFILE_FLAGS)
 AC_SUBST(GCC_PRAGMA_FLAGS)
 AC_SUBST(CODE_GEN_FLAGS)
@@ -6275,11 +6283,11 @@ AC_CONFIG_COMMANDS([default],
             
             if test -f wx-config; then
                 chmod +x wx-config
-                mv -f wx-config lib/wx/config/${TOOLCHAIN_NAME}
+                mv -f wx-config lib/wx/config/${WXCONFIG_DATA_FILE}
+                ( cd lib/wx/config ; ${LN_S} ${WXCONFIG_DATA_FILE} ${TOOLCHAIN_NAME} )
                 rm -f wx${TOOLCHAIN_NAME}-config
                 ${LN_S} wx-config wx${TOOLCHAIN_NAME}-config
             fi
-            
             if test -f wx-config-wrapper; then
                 chmod +x wx-config-wrapper
                 mv -f wx-config-wrapper wx-config
@@ -6287,6 +6295,7 @@ AC_CONFIG_COMMANDS([default],
           ],
           [
             TOOLCHAIN_NAME="${TOOLCHAIN_NAME}"
+            WXCONFIG_DATA_FILE="${WXCONFIG_DATA_FILE}"
             LN_S="${LN_S}"
           ]
          )

@@ -41,17 +41,18 @@ makeabs()
 }
 
 # these determine wx-config script to use:
-m_toolkit='.*[^u][^d]'
+m_toolkit='.*'
 m_univ='\(univ\)\?'
-m_unicode='u\?'
-m_debug='d\?'
+m_unicode='\(unicode\|ansi\)'
+m_debug='\(debug\|release\)'
 m_version='[0-9]\+\.[0-9]\+'
+m_host=''
 
 # lists all wx-config scripts that match criteria specified above
 list_wx_config_scripts()
 {
-    mask="${m_toolkit}${m_univ}${m_unicode}${m_debug}-${m_version}"
-        
+    mask="^${m_toolkit}${m_univ}-${m_unicode}-${m_debug}-${m_version}${m_host}$"
+
     # if wx-config was called via wx$TOOLCHAIN_NAME-config symlink,
     # try to extract the mask from it:
     myname=`basename $0`
@@ -136,23 +137,23 @@ for i in $*; do
             ;;
         --unicode=*)
             if test "x$optarg" = "xyes" ; then
-                m_unicode="u"
+                m_unicode="unicode"
             else
-                m_unicode=""
+                m_unicode="ansi"
             fi
             ;;
         --unicode)
-            m_unicode="u"
+            m_unicode="unicode"
             ;;
         --debug=*)
             if test "x$optarg" = "xyes" ; then
-                m_debug="d"
+                m_debug="debug"
             else
-                m_debug=""
+                m_debug="release"
             fi
             ;;
         --debug)
-            m_debug="d"
+            m_debug="debug"
             ;;
         --universal=*)
             if test "x$optarg" = "xyes" ; then
@@ -163,6 +164,9 @@ for i in $*; do
             ;;
         --universal)
             m_univ="univ"
+            ;;
+        --host=*)
+            m_host="-$optarg"
             ;;
         *)
             args="$args $i"

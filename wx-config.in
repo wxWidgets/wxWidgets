@@ -149,7 +149,8 @@ usage()
     cat <<EOF
 Usage: wx-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--inplace]
                  [--toolkit=TOOLKIT] [--unicode[=yes|no]] [--debug[=yes|no]]
-                 [--universal[=yes|no]] [--version[=VERSION]] [--release]
+                 [--universal[=yes|no]] [--host=HOST]
+                 [--version[=VERSION]] [--release]
                  [--list] [--basename] [--static] [--libs] [--gl-libs]
                  [--cppflags] [--cflags] [--cxxflags] [--ldflags] [--rezflags]
                  [--cc] [--cxx] [--ld] [LIBRARIES]
@@ -182,9 +183,9 @@ in by default.
 --gl-libs option is deprecated, use "--libs gl" instead.
 
 If there are several different builds of wxWidgets installed in same prefix,
-you can use --toolkit, --unicode, --debug, --universal and --version options
-to select one of them. Use --list option to show all available builds that
-match given criteria.
+you can use --host, --toolkit, --unicode, --debug, --universal and --version
+options to select one of them. Use --list option to show all available builds
+that match given criteria.
 
 EOF
 
