@@ -191,9 +191,9 @@ class wxSizerPtr :
             apply(self.AddWindow, args)
 
     def Insert(self, *args):
-        if type(args[0]) == type(1):
+        if type(args[1]) == type(1):
             apply(self.InsertSpacer, args)
-        elif string.find(args[0].this, 'Sizer') != -1:
+        elif string.find(args[1].this, 'Sizer') != -1:
             apply(self.InsertSizer, args)
         else:
             apply(self.InsertWindow, args)

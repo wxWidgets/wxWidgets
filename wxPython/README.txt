@@ -46,16 +46,15 @@ Getting Help
 ------------
 
 Since wxPython is a blending of multiple technologies, help comes from
-multiple sources.  See the http://alldunn.com/wxPython for details on
-various sources of help, but probably the best source is the
-wxPython-users mail list.  You can view the archive or subscribe by
-going to
+multiple sources.  See the http://wxPython.org/ for details on various
+sources of help, but probably the best source is the wxPython-users
+mail list.  You can view the archive or subscribe by going to
 
-       http://wxwindows.org/mailman/listinfo/wxpython-users
+       http://lists.sourceforge.net/mailman/listinfo/wxpython-users
 
 Or you can send mail directly to the list using this address:
 
-       wxpython-users@wxwindows.org
+       wxpython-users@lists.sourceforge.net
 
 
 Other Info
@@ -66,13 +65,15 @@ Please also see the following files in this directory:
        CHANGES.txt     Information about new features, fixes, etc. in
                        each release.
 
-       BUILD.txt       Instructions for building wxPython on various
-		       platforms.
+       BUILD.unix.txt  Instructions for building wxPython on various
+		       Unix-like platforms.
 
-       licence.txt     Text of the wxWindows license.
+       BUILD.win32.txt Instructions for building wxPython on Windows.
+
+       licence/*       Text of the wxWindows license.
 
 
-----------------
+-----------------
 Robin Dunn
 robin@alldunn.com
 

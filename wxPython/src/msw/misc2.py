@@ -10,6 +10,8 @@ from gdi import *
 from clip_dnd import *
 
 from events import *
+
+from streams import *
 class wxToolTipPtr :
     def __init__(self,this):
         self.this = this
@@ -138,6 +140,23 @@ class wxBusyCursorPtr :
 class wxBusyCursor(wxBusyCursorPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(misc2c.new_wxBusyCursor,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxWindowDisablerPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self,misc2c=misc2c):
+        if self.thisown == 1 :
+            misc2c.delete_wxWindowDisabler(self)
+    def __repr__(self):
+        return "<C wxWindowDisabler instance at %s>" % (self.this,)
+class wxWindowDisabler(wxWindowDisablerPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxWindowDisabler,_args,_kwargs)
         self.thisown = 1
 
 
@@ -372,6 +391,86 @@ class wxLogNull(wxLogNullPtr):
 
 
 
+class wxProcessEventPtr(wxEventPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def GetPid(self, *_args, **_kwargs):
+        val = apply(misc2c.wxProcessEvent_GetPid,(self,) + _args, _kwargs)
+        return val
+    def GetExitCode(self, *_args, **_kwargs):
+        val = apply(misc2c.wxProcessEvent_GetExitCode,(self,) + _args, _kwargs)
+        return val
+    def __setattr__(self,name,value):
+        if name == "m_pid" :
+            misc2c.wxProcessEvent_m_pid_set(self,value)
+            return
+        if name == "m_exitcode" :
+            misc2c.wxProcessEvent_m_exitcode_set(self,value)
+            return
+        self.__dict__[name] = value
+    def __getattr__(self,name):
+        if name == "m_pid" : 
+            return misc2c.wxProcessEvent_m_pid_get(self)
+        if name == "m_exitcode" : 
+            return misc2c.wxProcessEvent_m_exitcode_get(self)
+        raise AttributeError,name
+    def __repr__(self):
+        return "<C wxProcessEvent instance at %s>" % (self.this,)
+class wxProcessEvent(wxProcessEventPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxProcessEvent,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxProcessPtr(wxEvtHandlerPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def Destroy(self, *_args, **_kwargs):
+        val = apply(misc2c.wxProcess_Destroy,(self,) + _args, _kwargs)
+        return val
+    def _setSelf(self, *_args, **_kwargs):
+        val = apply(misc2c.wxProcess__setSelf,(self,) + _args, _kwargs)
+        return val
+    def base_OnTerminate(self, *_args, **_kwargs):
+        val = apply(misc2c.wxProcess_base_OnTerminate,(self,) + _args, _kwargs)
+        return val
+    def Redirect(self, *_args, **_kwargs):
+        val = apply(misc2c.wxProcess_Redirect,(self,) + _args, _kwargs)
+        return val
+    def IsRedirected(self, *_args, **_kwargs):
+        val = apply(misc2c.wxProcess_IsRedirected,(self,) + _args, _kwargs)
+        return val
+    def Detach(self, *_args, **_kwargs):
+        val = apply(misc2c.wxProcess_Detach,(self,) + _args, _kwargs)
+        return val
+    def GetInputStream(self, *_args, **_kwargs):
+        val = apply(misc2c.wxProcess_GetInputStream,(self,) + _args, _kwargs)
+        return val
+    def GetErrorStream(self, *_args, **_kwargs):
+        val = apply(misc2c.wxProcess_GetErrorStream,(self,) + _args, _kwargs)
+        return val
+    def GetOutputStream(self, *_args, **_kwargs):
+        val = apply(misc2c.wxProcess_GetOutputStream,(self,) + _args, _kwargs)
+        if val: val = wxOutputStreamPtr(val) 
+        return val
+    def CloseOutput(self, *_args, **_kwargs):
+        val = apply(misc2c.wxProcess_CloseOutput,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxProcess instance at %s>" % (self.this,)
+class wxProcess(wxProcessPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxProcess,_args,_kwargs)
+        self.thisown = 1
+        self._setSelf(self, wxProcess)
+
+
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------
@@ -462,6 +561,8 @@ wxPostEvent = misc2c.wxPostEvent
 
 wxWakeUpIdle = misc2c.wxWakeUpIdle
 
+wxSafeYield = misc2c.wxSafeYield
+
 wxShowTip = misc2c.wxShowTip
 
 def wxCreateFileTipProvider(*_args, **_kwargs):
@@ -510,6 +611,8 @@ wxLogStatus = misc2c.wxLogStatus
 wxLogStatusFrame = misc2c.wxLogStatusFrame
 
 wxLogSysError = misc2c.wxLogSysError
+
+wxExecute = misc2c.wxExecute
 
 wxLog_IsEnabled = misc2c.wxLog_IsEnabled
 

@@ -80,6 +80,17 @@ class wxRealPointPtr :
     def asTuple(self, *_args, **_kwargs):
         val = apply(miscc.wxRealPoint_asTuple,(self,) + _args, _kwargs)
         return val
+    def __add__(self, *_args, **_kwargs):
+        val = apply(miscc.wxRealPoint___add__,(self,) + _args, _kwargs)
+        if val: val = wxRealPointPtr(val) ; val.thisown = 1
+        return val
+    def __sub__(self, *_args, **_kwargs):
+        val = apply(miscc.wxRealPoint___sub__,(self,) + _args, _kwargs)
+        if val: val = wxRealPointPtr(val) ; val.thisown = 1
+        return val
+    def __cmp__(self, *_args, **_kwargs):
+        val = apply(miscc.wxRealPoint___cmp__,(self,) + _args, _kwargs)
+        return val
     def __setattr__(self,name,value):
         if name == "x" :
             miscc.wxRealPoint_x_set(self,value)
@@ -118,6 +129,17 @@ class wxPointPtr :
         return val
     def asTuple(self, *_args, **_kwargs):
         val = apply(miscc.wxPoint_asTuple,(self,) + _args, _kwargs)
+        return val
+    def __add__(self, *_args, **_kwargs):
+        val = apply(miscc.wxPoint___add__,(self,) + _args, _kwargs)
+        if val: val = wxPointPtr(val) ; val.thisown = 1
+        return val
+    def __sub__(self, *_args, **_kwargs):
+        val = apply(miscc.wxPoint___sub__,(self,) + _args, _kwargs)
+        if val: val = wxPointPtr(val) ; val.thisown = 1
+        return val
+    def __cmp__(self, *_args, **_kwargs):
+        val = apply(miscc.wxPoint___cmp__,(self,) + _args, _kwargs)
         return val
     def __setattr__(self,name,value):
         if name == "x" :
@@ -605,8 +627,6 @@ wxDisplaySize = miscc.wxDisplaySize
 
 wxEndBusyCursor = miscc.wxEndBusyCursor
 
-wxExecute = miscc.wxExecute
-
 wxGetElapsedTime = miscc.wxGetElapsedTime
 
 wxGetMousePosition = miscc.wxGetMousePosition
@@ -621,17 +641,36 @@ wxStartTimer = miscc.wxStartTimer
 
 wxGetOsVersion = miscc.wxGetOsVersion
 
+wxGetOsDescription = miscc.wxGetOsDescription
+
 wxSleep = miscc.wxSleep
 
-wxYield = miscc.wxYield
+wxUsleep = miscc.wxUsleep
 
-wxSafeYield = miscc.wxSafeYield
+wxYield = miscc.wxYield
 
 wxEnableTopLevelWindows = miscc.wxEnableTopLevelWindows
 
 wxGetResource = miscc.wxGetResource
 
 wxStripMenuCodes = miscc.wxStripMenuCodes
+
+wxGetEmailAddress = miscc.wxGetEmailAddress
+
+wxGetHostName = miscc.wxGetHostName
+
+wxGetFullHostName = miscc.wxGetFullHostName
+
+wxGetUserId = miscc.wxGetUserId
+
+wxGetUserName = miscc.wxGetUserName
+
+wxGetHomeDir = miscc.wxGetHomeDir
+
+def wxGetAccelFromString(*_args, **_kwargs):
+    val = apply(miscc.wxGetAccelFromString,_args,_kwargs)
+    if val: val = wxAcceleratorEntryPtr(val)
+    return val
 
 
 

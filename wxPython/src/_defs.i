@@ -157,6 +157,7 @@ typedef int             wxWindowID;
 typedef unsigned int    uint;
 typedef signed   int    EBool;
 typedef unsigned int    size_t
+typedef unsigned int    time_t
 typedef int             wxPrintQuality;
 typedef int             wxCoord;
 typedef char            wxChar;
@@ -954,6 +955,8 @@ enum wxEventType {
  wxEVT_NAVIGATION_KEY,
 
  wxEVT_TIMER,
+
+ wxEVT_END_PROCESS,
 
 };
 

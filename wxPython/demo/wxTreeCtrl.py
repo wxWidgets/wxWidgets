@@ -21,7 +21,8 @@ class MyTreeCtrl(wxTreeCtrl):
 
 class TestTreeCtrlPanel(wxPanel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        # Use the WANTS_CHARS style so the panel doesn't eat the Return key.
+        wxPanel.__init__(self, parent, -1, style=wxWANTS_CHARS)
         EVT_SIZE(self, self.OnSize)
 
         self.log = log
@@ -68,6 +69,7 @@ class TestTreeCtrlPanel(wxPanel):
         EVT_TREE_SEL_CHANGED    (self, tID, self.OnSelChanged)
         EVT_TREE_BEGIN_LABEL_EDIT(self, tID, self.OnBeginEdit)
         EVT_TREE_END_LABEL_EDIT (self, tID, self.OnEndEdit)
+        EVT_TREE_ITEM_ACTIVATED (self, tID, self.OnActivate)
 
         EVT_LEFT_DCLICK(self.tree, self.OnLeftDClick)
         EVT_RIGHT_DOWN(self.tree, self.OnRightClick)
@@ -135,9 +137,16 @@ class TestTreeCtrlPanel(wxPanel):
     def OnSelChanged(self, event):
         self.item = event.GetItem()
         self.log.WriteText("OnSelChanged: %s\n" % self.tree.GetItemText(self.item))
-        self.log.WriteText("BoundingRect: %s\n" %
-                           self.tree.GetBoundingRect(self.item, true))
+        if wxPlatform == '__WXMSW__':
+            self.log.WriteText("BoundingRect: %s\n" %
+                               self.tree.GetBoundingRect(self.item, true))
+        #items = self.tree.GetSelections()
+        #print map(self.tree.GetItemText, items)
+        event.Skip()
 
+
+    def OnActivate(self, evt):
+        self.log.WriteText("OnActivate: %s\n" % self.tree.GetItemText(self.item))
 
 
 #---------------------------------------------------------------------------
@@ -147,11 +156,6 @@ def runTest(frame, nb, log):
     return win
 
 #---------------------------------------------------------------------------
-
-
-
-
-
 
 
 

@@ -275,8 +275,8 @@ public:
     bool SetPageImage(int nPage, int nImage);
     int GetRowCount();
 
-    // LINK ERROR: void SetPageSize(const wxSize& size);
-    // LINK ERROR: void SetPadding(const wxSize& padding);
+    void SetPageSize(const wxSize& size);
+    void SetPadding(const wxSize& padding);
     bool DeletePage(int nPage);
     bool RemovePage(int nPage);
     bool DeleteAllPages();
@@ -284,13 +284,11 @@ public:
                  const wxString& strText,
                  int bSelect = FALSE,
                  int imageId = -1);
-#ifdef __WXMSW__
     bool InsertPage(int nPage,
                     /*wxNotebookPage*/ wxWindow *pPage,
                     const wxString& strText,
                     bool bSelect = FALSE,
                     int imageId = -1);
-#endif
     /*wxNotebookPage*/ wxWindow *GetPage(int nPage);
 
     %addmethods {
@@ -380,6 +378,7 @@ public:
     wxTaskBarIcon();
     ~wxTaskBarIcon();
 
+    // We still use the magic methods here since that is the way it is documented...
     %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnMouseMove',    wxEVT_TASKBAR_MOVE)"
     %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnLButtonDown',  wxEVT_TASKBAR_LEFT_DOWN)"
     %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnLButtonUp',    wxEVT_TASKBAR_LEFT_UP)"
@@ -391,7 +390,8 @@ public:
     bool SetIcon(const wxIcon& icon, const char* tooltip = "");
     bool RemoveIcon(void);
     bool PopupMenu(wxMenu *menu);
-
+    bool IsIconInstalled();
+    bool IsOK();
 };
 #endif
 

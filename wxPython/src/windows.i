@@ -35,6 +35,8 @@
 
 class wxEvtHandler {
 public:
+    wxEvtHandler();
+
     bool ProcessEvent(wxEvent& event);
     void AddPendingEvent(wxEvent& event);
     //bool SearchEventTable(wxEventTable& table, wxEvent& event);
@@ -105,13 +107,13 @@ public:
     wxWindow* GetWindow();
     void SetWindow(wxWindow* window);
 
-    // Properties list
-    %pragma(python) addtoclass = "
-    _prop_list_ = {
-        'window' : ('GetWindow', 'SetWindow'),
-    }
-    _prop_list_.update(wxEvtHandler._prop_list_)
-    "
+//      // Properties list
+//      %pragma(python) addtoclass = "
+//      _prop_list_ = {
+//          'window' : ('GetWindow', 'SetWindow'),
+//      }
+//      _prop_list_.update(wxEvtHandler._prop_list_)
+//      "
 };
 
 %inline %{
@@ -371,50 +373,61 @@ public:
 
     void SetCaret(wxCaret *caret);
     wxCaret *GetCaret();
-    %pragma(python) addtoclass = "# replaces broken shadow method
+    %pragma(python) addtoclass = "# replaces broken shadow methods
     def GetCaret(self, *_args, **_kwargs):
         from misc2 import wxCaretPtr
         val = apply(windowsc.wxWindow_GetCaret,(self,) + _args, _kwargs)
         if val: val = wxCaretPtr(val)
         return val
+
+    def GetSizer(self, *_args, **_kwargs):
+        from sizers import wxSizerPtr
+        val = apply(windowsc.wxWindow_GetSizer,(self,) + _args, _kwargs)
+        if val: val = wxSizerPtr(val)
+        return val
+
+    def GetToolTip(self, *_args, **_kwargs):
+        from misc2 import wxToolTipPtr
+        val = apply(windowsc.wxWindow_GetToolTip,(self,) + _args, _kwargs)
+        if val: val = wxToolTipPtr(val)
+        return val
     "
 
 
-    // Properties list
-    %pragma(python) addtoclass = "
-    _prop_list_ = {
-        'size'          : ('GetSize',                  'SetSize'),
-        'enabled'       : ('IsEnabled',                'Enable'),
-        'background'    : ('GetBackgroundColour',      'SetBackgroundColour'),
-        'foreground'    : ('GetForegroundColour',      'SetForegroundColour'),
-        'children'      : ('GetChildren',              None),
-        'charHeight'    : ('GetCharHeight',            None),
-        'charWidth'     : ('GetCharWidth',             None),
-        'clientSize'    : ('GetClientSize',            'SetClientSize'),
-        'font'          : ('GetFont',                  'SetFont'),
-        'grandParent'   : ('GetGrandParent',           None),
-        'handle'        : ('GetHandle',                None),
-        'label'         : ('GetLabel',                 'SetLabel'),
-        'name'          : ('GetName',                  'SetName'),
-        'parent'        : ('GetParent',                None),
-        'position'      : ('GetPosition',              'SetPosition'),
-        'title'         : ('GetTitle',                 'SetTitle'),
-        'style'         : ('GetWindowStyleFlag',       'SetWindowStyleFlag'),
-        'visible'       : ('IsShown',                  'Show'),
-        'toolTip'       : ('GetToolTip',               'SetToolTip'),
-        'sizer'         : ('GetSizer',                 'SetSizer'),
-        'validator'     : ('GetValidator',             'SetValidator'),
-        'dropTarget'    : ('GetDropTarget',            'SetDropTarget'),
-        'caret'         : ('GetCaret',                 'SetCaret'),
-        'autoLayout'    : ('GetAutoLayout',            'SetAutoLayout'),
-        'constraints'   : ('GetConstraints',           'SetConstraints'),
+//      // Properties list
+//      %pragma(python) addtoclass = "
+//      _prop_list_ = {
+//          'size'          : ('GetSize',                  'SetSize'),
+//          'enabled'       : ('IsEnabled',                'Enable'),
+//          'background'    : ('GetBackgroundColour',      'SetBackgroundColour'),
+//          'foreground'    : ('GetForegroundColour',      'SetForegroundColour'),
+//          'children'      : ('GetChildren',              None),
+//          'charHeight'    : ('GetCharHeight',            None),
+//          'charWidth'     : ('GetCharWidth',             None),
+//          'clientSize'    : ('GetClientSize',            'SetClientSize'),
+//          'font'          : ('GetFont',                  'SetFont'),
+//          'grandParent'   : ('GetGrandParent',           None),
+//          'handle'        : ('GetHandle',                None),
+//          'label'         : ('GetLabel',                 'SetLabel'),
+//          'name'          : ('GetName',                  'SetName'),
+//          'parent'        : ('GetParent',                None),
+//          'position'      : ('GetPosition',              'SetPosition'),
+//          'title'         : ('GetTitle',                 'SetTitle'),
+//          'style'         : ('GetWindowStyleFlag',       'SetWindowStyleFlag'),
+//          'visible'       : ('IsShown',                  'Show'),
+//          'toolTip'       : ('GetToolTip',               'SetToolTip'),
+//          'sizer'         : ('GetSizer',                 'SetSizer'),
+//          'validator'     : ('GetValidator',             'SetValidator'),
+//          'dropTarget'    : ('GetDropTarget',            'SetDropTarget'),
+//          'caret'         : ('GetCaret',                 'SetCaret'),
+//          'autoLayout'    : ('GetAutoLayout',            'SetAutoLayout'),
+//          'constraints'   : ('GetConstraints',           'SetConstraints'),
 
-    }
-    _prop_list_.update(wxEvtHandler._prop_list_)
-    "
+//      }
+//      _prop_list_.update(wxEvtHandler._prop_list_)
+//      "
 };
 
-//%clear int* x, int* y;
 
 
 
@@ -432,7 +445,6 @@ def wxDLG_SZE(win, size_width, height=None):
         return win.ConvertDialogSizeToPixels(wxSize(size_width, height))
 "
 
-#ifdef __WXMSW__
 %inline %{
     wxWindow* wxWindow_FindFocus() {
         return wxWindow::FindFocus();
@@ -440,6 +452,7 @@ def wxDLG_SZE(win, size_width, height=None):
 %}
 
 
+#ifdef __WXMSW__
 %inline %{
 wxWindow* wxWindow_FromHWND(unsigned long hWnd) {
     wxWindow* win = new wxWindow;
@@ -628,7 +641,7 @@ public:
 
 class wxMenuBar : public wxWindow {
 public:
-    wxMenuBar();
+    wxMenuBar(long style = 0);
 
     bool Append(wxMenu *menu, const wxString& title);
     bool Insert(size_t pos, wxMenu *menu, const wxString& title);

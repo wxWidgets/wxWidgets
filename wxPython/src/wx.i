@@ -43,7 +43,8 @@
 %import image.i
 %import printfw.i
 %import sizers.i
-
+%import streams.i
+%import filesys.i
 
 %native(_wxStart)           __wxStart;
 %native(_wxSetDictionary)   __wxSetDictionary;
@@ -103,6 +104,11 @@ public:
 
 };
 
+%inline %{
+    wxPyApp* wxGetApp() {
+        return wxPythonApp;
+    }
+%}
 
 //----------------------------------------------------------------------
 // this is used to cleanup after wxWindows when Python shuts down.
@@ -140,6 +146,12 @@ extern "C" SWIGEXPORT(void) initutilsc();
 extern "C" SWIGEXPORT(void) inithtmlc();
 extern "C" SWIGEXPORT(void) inithtmlhelpc();
 extern "C" SWIGEXPORT(void) initcalendarc();
+extern "C" SWIGEXPORT(void) initstreamsc();
+extern "C" SWIGEXPORT(void) initfilesysc();
+
+extern "C" SWIGEXPORT(void) initglcanvasc();
+extern "C" SWIGEXPORT(void) initoglc();
+extern "C" SWIGEXPORT(void) initstc_c();
 %}
 
 
@@ -169,12 +181,18 @@ extern "C" SWIGEXPORT(void) initcalendarc();
     initprintfwc();
     initsizersc();
     initclip_dndc();
+    initstreamsc();
+    initfilesysc();
 
     initgridc();
     initutilsc();
     inithtmlc();
     inithtmlhelpc();
     initcalendarc();
+
+    initglcanvasc();
+    initoglc();
+    initstc_c();
 %}
 
 //----------------------------------------------------------------------

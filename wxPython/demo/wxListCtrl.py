@@ -60,7 +60,7 @@ musicdata = {
 
 class TestListCtrlPanel(wxPanel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        wxPanel.__init__(self, parent, -1, style=wxWANTS_CHARS)
 
         self.log = log
         tID = wxNewId()
@@ -68,15 +68,15 @@ class TestListCtrlPanel(wxPanel):
         self.il = wxImageList(16, 16)
         idx1 = self.il.Add(wxBitmap('bitmaps/smiles.bmp', wxBITMAP_TYPE_BMP))
 
-        self.list = wxListCtrl(self, tID, wxDefaultPosition, wxDefaultSize,
-                               wxLC_REPORT|wxSUNKEN_BORDER)
+        self.list = wxListCtrl(self, tID,
+                               style=wxLC_REPORT|wxSUNKEN_BORDER)
         self.list.SetImageList(self.il, wxIMAGE_LIST_SMALL)
 
         self.list.SetToolTip(wxToolTip("This is a ToolTip!"))
         wxToolTip_Enable(true)
 
         self.list.InsertColumn(0, "Artist")
-        self.list.InsertColumn(1, "Title")
+        self.list.InsertColumn(1, "Title", wxLIST_FORMAT_RIGHT)
         self.list.InsertColumn(2, "Genre")
         items = musicdata.items()
         for x in range(len(items)):
@@ -90,11 +90,20 @@ class TestListCtrlPanel(wxPanel):
         self.list.SetColumnWidth(1, wxLIST_AUTOSIZE)
         ##self.list.SetColumnWidth(2, wxLIST_AUTOSIZE)
 
-        self.list.SetItemState(5, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
+        self.list.SetItemState(25, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
+
+        #self.list.SetItemState(25, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
+        #self.list.EnsureVisible(25)
+
+        # show how to change the colour of an item
+        item = self.list.GetItem(1)
+        item.SetTextColour(wxBLUE)
+        self.list.SetItem(item)
 
         self.currentItem = 0
         EVT_SIZE(self, self.OnSize)
         EVT_LIST_ITEM_SELECTED(self, tID, self.OnItemSelected)
+        EVT_LIST_ITEM_ACTIVATED(self, tID, self.OnItemActivated)
         EVT_LIST_DELETE_ITEM(self, tID, self.OnItemDelete)
         EVT_LIST_COL_CLICK(self, tID, self.OnColClick)
         EVT_LEFT_DCLICK(self.list, self.OnDoubleClick)
@@ -116,6 +125,10 @@ class TestListCtrlPanel(wxPanel):
     def OnItemSelected(self, event):
         self.currentItem = event.m_itemIndex
         self.log.WriteText("OnItemSelected: %s\n" % self.list.GetItemText(self.currentItem))
+
+    def OnItemActivated(self, event):
+        self.currentItem = event.m_itemIndex
+        self.log.WriteText("OnItemActivated: %s\n" % self.list.GetItemText(self.currentItem))
 
     def OnItemDelete(self, event):
         self.log.WriteText("OnItemDelete\n")

@@ -76,6 +76,12 @@ class wxNotebookPtr(wxControlPtr):
     def GetRowCount(self, *_args, **_kwargs):
         val = apply(windows2c.wxNotebook_GetRowCount,(self,) + _args, _kwargs)
         return val
+    def SetPageSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebook_SetPageSize,(self,) + _args, _kwargs)
+        return val
+    def SetPadding(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebook_SetPadding,(self,) + _args, _kwargs)
+        return val
     def DeletePage(self, *_args, **_kwargs):
         val = apply(windows2c.wxNotebook_DeletePage,(self,) + _args, _kwargs)
         return val
@@ -87,6 +93,9 @@ class wxNotebookPtr(wxControlPtr):
         return val
     def AddPage(self, *_args, **_kwargs):
         val = apply(windows2c.wxNotebook_AddPage,(self,) + _args, _kwargs)
+        return val
+    def InsertPage(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebook_InsertPage,(self,) + _args, _kwargs)
         return val
     def GetPage(self, *_args, **_kwargs):
         val = apply(windows2c.wxNotebook_GetPage,(self,) + _args, _kwargs)

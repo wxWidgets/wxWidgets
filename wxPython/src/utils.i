@@ -4,7 +4,7 @@
 //
 // Author:      Robin Dunn
 //
-// Created:     25-nov-1998
+// Created:     25-Nov-1998
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 by Total Control Software
 // Licence:     wxWindows license
@@ -24,6 +24,9 @@
 
 %include typemaps.i
 %include my_typemaps.i
+
+// Import some definitions of other classes, etc.
+%import _defs.i
 
 %pragma(python) code = "import string"
 

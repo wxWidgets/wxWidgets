@@ -62,8 +62,9 @@ class wxEvtHandlerPtr :
     _prop_list_ = {}
     
 class wxEvtHandler(wxEvtHandlerPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(windowsc.new_wxEvtHandler,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -85,12 +86,6 @@ class wxValidatorPtr(wxEvtHandlerPtr):
         return val
     def __repr__(self):
         return "<C wxValidator instance at %s>" % (self.this,)
-    
-    _prop_list_ = {
-        'window' : ('GetWindow', 'SetWindow'),
-    }
-    _prop_list_.update(wxEvtHandler._prop_list_)
-    
 class wxValidator(wxValidatorPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxValidator,_args,_kwargs)
@@ -522,43 +517,24 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def __repr__(self):
         return "<C wxWindow instance at %s>" % (self.this,)
-    # replaces broken shadow method
+    # replaces broken shadow methods
     def GetCaret(self, *_args, **_kwargs):
         from misc2 import wxCaretPtr
         val = apply(windowsc.wxWindow_GetCaret,(self,) + _args, _kwargs)
         if val: val = wxCaretPtr(val)
         return val
-    
-    
-    _prop_list_ = {
-        'size'          : ('GetSize',                  'SetSize'),
-        'enabled'       : ('IsEnabled',                'Enable'),
-        'background'    : ('GetBackgroundColour',      'SetBackgroundColour'),
-        'foreground'    : ('GetForegroundColour',      'SetForegroundColour'),
-        'children'      : ('GetChildren',              None),
-        'charHeight'    : ('GetCharHeight',            None),
-        'charWidth'     : ('GetCharWidth',             None),
-        'clientSize'    : ('GetClientSize',            'SetClientSize'),
-        'font'          : ('GetFont',                  'SetFont'),
-        'grandParent'   : ('GetGrandParent',           None),
-        'handle'        : ('GetHandle',                None),
-        'label'         : ('GetLabel',                 'SetLabel'),
-        'name'          : ('GetName',                  'SetName'),
-        'parent'        : ('GetParent',                None),
-        'position'      : ('GetPosition',              'SetPosition'),
-        'title'         : ('GetTitle',                 'SetTitle'),
-        'style'         : ('GetWindowStyleFlag',       'SetWindowStyleFlag'),
-        'visible'       : ('IsShown',                  'Show'),
-        'toolTip'       : ('GetToolTip',               'SetToolTip'),
-        'sizer'         : ('GetSizer',                 'SetSizer'),
-        'validator'     : ('GetValidator',             'SetValidator'),
-        'dropTarget'    : ('GetDropTarget',            'SetDropTarget'),
-        'caret'         : ('GetCaret',                 'SetCaret'),
-        'autoLayout'    : ('GetAutoLayout',            'SetAutoLayout'),
-        'constraints'   : ('GetConstraints',           'SetConstraints'),
 
-    }
-    _prop_list_.update(wxEvtHandler._prop_list_)
+    def GetSizer(self, *_args, **_kwargs):
+        from sizers import wxSizerPtr
+        val = apply(windowsc.wxWindow_GetSizer,(self,) + _args, _kwargs)
+        if val: val = wxSizerPtr(val)
+        return val
+
+    def GetToolTip(self, *_args, **_kwargs):
+        from misc2 import wxToolTipPtr
+        val = apply(windowsc.wxWindow_GetToolTip,(self,) + _args, _kwargs)
+        if val: val = wxToolTipPtr(val)
+        return val
     
 class wxWindow(wxWindowPtr):
     def __init__(self,*_args,**_kwargs):

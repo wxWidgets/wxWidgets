@@ -7,8 +7,8 @@ cwd = os.getcwd()
 
 logfile = 'c:\\temp\\autobuild.log'
 WXDIR   = os.environ['WXWIN']
-dllVer  = '22_0'
-wxpVer  = '2.2.0'
+dllVer  = '22_1'
+wxpVer  = '2.2.1'
 dateSt  = time.strftime("%Y%m%d", time.localtime(time.time()))
 
 base = os.path.split(sys.argv[0])[0]
@@ -149,7 +149,7 @@ FINAL=1
 
         logSeparator("Uploading to website...")
         do('python c:\\utils\\sendwxp.py %s' % destName)
-        do('python c:\\utils\\sendwxp.py %s' % destZName)
+        #do('python c:\\utils\\sendwxp.py %s' % destZName)
         do('python c:\\utils\\sendwxp.py %s' % destDName)
 
 

@@ -346,6 +346,7 @@ public:
     }
 
     size_t GetSize();
+
     //void *GetData();
     %addmethods {
         PyObject* GetData() {

@@ -298,6 +298,55 @@ class wxMouseEventPtr(wxEventPtr):
     def GetY(self, *_args, **_kwargs):
         val = apply(eventsc.wxMouseEvent_GetY,(self,) + _args, _kwargs)
         return val
+    def __setattr__(self,name,value):
+        if name == "m_x" :
+            eventsc.wxMouseEvent_m_x_set(self,value)
+            return
+        if name == "m_y" :
+            eventsc.wxMouseEvent_m_y_set(self,value)
+            return
+        if name == "m_leftDown" :
+            eventsc.wxMouseEvent_m_leftDown_set(self,value)
+            return
+        if name == "m_middleDown" :
+            eventsc.wxMouseEvent_m_middleDown_set(self,value)
+            return
+        if name == "m_rightDown" :
+            eventsc.wxMouseEvent_m_rightDown_set(self,value)
+            return
+        if name == "m_controlDown" :
+            eventsc.wxMouseEvent_m_controlDown_set(self,value)
+            return
+        if name == "m_shiftDown" :
+            eventsc.wxMouseEvent_m_shiftDown_set(self,value)
+            return
+        if name == "m_altDown" :
+            eventsc.wxMouseEvent_m_altDown_set(self,value)
+            return
+        if name == "m_metaDown" :
+            eventsc.wxMouseEvent_m_metaDown_set(self,value)
+            return
+        self.__dict__[name] = value
+    def __getattr__(self,name):
+        if name == "m_x" : 
+            return eventsc.wxMouseEvent_m_x_get(self)
+        if name == "m_y" : 
+            return eventsc.wxMouseEvent_m_y_get(self)
+        if name == "m_leftDown" : 
+            return eventsc.wxMouseEvent_m_leftDown_get(self)
+        if name == "m_middleDown" : 
+            return eventsc.wxMouseEvent_m_middleDown_get(self)
+        if name == "m_rightDown" : 
+            return eventsc.wxMouseEvent_m_rightDown_get(self)
+        if name == "m_controlDown" : 
+            return eventsc.wxMouseEvent_m_controlDown_get(self)
+        if name == "m_shiftDown" : 
+            return eventsc.wxMouseEvent_m_shiftDown_get(self)
+        if name == "m_altDown" : 
+            return eventsc.wxMouseEvent_m_altDown_get(self)
+        if name == "m_metaDown" : 
+            return eventsc.wxMouseEvent_m_metaDown_get(self)
+        raise AttributeError,name
     def __repr__(self):
         return "<C wxMouseEvent instance at %s>" % (self.this,)
 class wxMouseEvent(wxMouseEventPtr):
@@ -346,6 +395,50 @@ class wxKeyEventPtr(wxEventPtr):
     def GetPositionTuple(self, *_args, **_kwargs):
         val = apply(eventsc.wxKeyEvent_GetPositionTuple,(self,) + _args, _kwargs)
         return val
+    def __setattr__(self,name,value):
+        if name == "m_x" :
+            eventsc.wxKeyEvent_m_x_set(self,value)
+            return
+        if name == "m_y" :
+            eventsc.wxKeyEvent_m_y_set(self,value)
+            return
+        if name == "m_keyCode" :
+            eventsc.wxKeyEvent_m_keyCode_set(self,value)
+            return
+        if name == "m_controlDown" :
+            eventsc.wxKeyEvent_m_controlDown_set(self,value)
+            return
+        if name == "m_shiftDown" :
+            eventsc.wxKeyEvent_m_shiftDown_set(self,value)
+            return
+        if name == "m_altDown" :
+            eventsc.wxKeyEvent_m_altDown_set(self,value)
+            return
+        if name == "m_metaDown" :
+            eventsc.wxKeyEvent_m_metaDown_set(self,value)
+            return
+        if name == "m_scanCode" :
+            eventsc.wxKeyEvent_m_scanCode_set(self,value)
+            return
+        self.__dict__[name] = value
+    def __getattr__(self,name):
+        if name == "m_x" : 
+            return eventsc.wxKeyEvent_m_x_get(self)
+        if name == "m_y" : 
+            return eventsc.wxKeyEvent_m_y_get(self)
+        if name == "m_keyCode" : 
+            return eventsc.wxKeyEvent_m_keyCode_get(self)
+        if name == "m_controlDown" : 
+            return eventsc.wxKeyEvent_m_controlDown_get(self)
+        if name == "m_shiftDown" : 
+            return eventsc.wxKeyEvent_m_shiftDown_get(self)
+        if name == "m_altDown" : 
+            return eventsc.wxKeyEvent_m_altDown_get(self)
+        if name == "m_metaDown" : 
+            return eventsc.wxKeyEvent_m_metaDown_get(self)
+        if name == "m_scanCode" : 
+            return eventsc.wxKeyEvent_m_scanCode_get(self)
+        raise AttributeError,name
     def __repr__(self):
         return "<C wxKeyEvent instance at %s>" % (self.this,)
 class wxKeyEvent(wxKeyEventPtr):

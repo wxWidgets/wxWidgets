@@ -81,6 +81,9 @@ class MyCanvas(wxScrolledWindow):
         dc.DrawRectangle(50,500,50,50)
         dc.DrawRectangle(100,500,50,50)
 
+        dc.SetPen(pen1)
+        dc.DrawEllipticArc(200, 500, 50, 75, 0, 90)
+
         #from wxPython import dch
         #dch.FillRect(dc, wxRect(50, 400, 50, 50), wxBLACK)
 

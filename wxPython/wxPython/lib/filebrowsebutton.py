@@ -65,6 +65,12 @@ class FileBrowseButton(wxPanel):
         self.fileMode = fileMode
         self.changeCallback = changeCallback
 
+        # get background to match it
+        try:
+            self._bc = parent.GetBackgroundColour()
+        except:
+            pass
+
         # create the dialog
         self.createDialog(parent, id, pos, size, style )
         # Setting a value causes the changeCallback to be called.
@@ -76,7 +82,11 @@ class FileBrowseButton(wxPanel):
     def createDialog( self, parent, id, pos, size, style ):
         """Setup the graphic representation of the dialog"""
         wxPanel.__init__ (self, parent, id, pos, size, style)
-
+        # try to set the background colour
+        try:
+            self.SetBackgroundColour(self._bc)
+        except:
+            pass
         box = wxBoxSizer(wxHORIZONTAL)
 
         self.label = self.createLabel( )
@@ -98,6 +108,10 @@ class FileBrowseButton(wxPanel):
         self.Layout()
         if size.width != -1 or size.height != -1:
             self.SetSize(size)
+
+    def SetBackgroundColour(self,color):
+        wxPanel.SetBackgroundColour(self,color)
+        self.label.SetBackgroundColour(color)
 
     def createLabel( self ):
         """Create the label/caption"""
@@ -125,20 +139,26 @@ class FileBrowseButton(wxPanel):
         EVT_BUTTON(button, ID, self.OnBrowse)
         return button
 
+
     def OnBrowse (self, event = None):
         """ Going to browse for file... """
-        current = self.GetValue ()
+        current = self.GetValue()
         directory = os.path.split(current)
         if os.path.isdir( current):
             directory = current
+            current = ''
         elif directory and os.path.isdir( directory[0] ):
+            current = directory[1]
             directory = directory [0]
         else:
             directory = self.startDirectory
         dlg = wxFileDialog(self, self.dialogTitle, directory, current, self.fileMask, self.fileMode)
+
         if dlg.ShowModal() == wxID_OK:
             self.SetValue (dlg.GetPath())
         dlg.Destroy()
+
+
 
     def GetValue (self):
         """ Convenient access to text control value """

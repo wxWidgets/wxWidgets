@@ -156,6 +156,15 @@ public:
     wxPoint GetLogicalPosition(const wxDC& dc);
     long GetX();
     long GetY();
+
+    long          m_x, m_y;
+    bool          m_leftDown;
+    bool          m_middleDown;
+    bool          m_rightDown;
+    bool          m_controlDown;
+    bool          m_shiftDown;
+    bool          m_altDown;
+    bool          m_metaDown;
 };
 
 //---------------------------------------------------------------------------
@@ -177,6 +186,15 @@ public:
     long GetY();
     wxPoint GetPosition();
     %name(GetPositionTuple) void GetPosition(long* OUTPUT, long* OUTPUT);
+
+    long          m_x, m_y;
+    long          m_keyCode;
+    bool          m_controlDown;
+    bool          m_shiftDown;
+    bool          m_altDown;
+    bool          m_metaDown;
+    bool          m_scanCode;
+
 };
 
 //---------------------------------------------------------------------------

@@ -7,12 +7,16 @@ Setup.save
 Setup.save
 Setup.test
 _make.bat
+b.bat
 build.local
 compile.py
 config.c
 glcanvas.h
 glcanvasc.exp
 libwxPyHelpers.2.1.so.16.0.0
+libwxPyHelpers.2.2.so.0.0.0
+libwxPyHelpers.2.2.so.1.0.0
+libwxPyHelpers.2.2.so.2.0.0
 make.bat
 makefile.test
 sedscript

@@ -998,8 +998,8 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------
 #
 # $Log$
-# Revision 1.2  2000/07/15 19:51:33  cvsuser
-# merged 2.2 branch
+# Revision 1.3  2000/10/30 21:05:22  robind
+# Merged wxPython 2.2.2 over to the main branch
 #
 # Revision 1.1.2.1  2000/05/16 02:07:02  RD
 #

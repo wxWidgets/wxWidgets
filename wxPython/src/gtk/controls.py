@@ -806,6 +806,21 @@ class wxSpinCtrlPtr(wxSpinButtonPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def GetMax(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSpinCtrl_GetMax,(self,) + _args, _kwargs)
+        return val
+    def GetMin(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSpinCtrl_GetMin,(self,) + _args, _kwargs)
+        return val
+    def GetValue(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSpinCtrl_GetValue,(self,) + _args, _kwargs)
+        return val
+    def SetRange(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSpinCtrl_SetRange,(self,) + _args, _kwargs)
+        return val
+    def SetValue(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSpinCtrl_SetValue,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxSpinCtrl instance at %s>" % (self.this,)
 class wxSpinCtrl(wxSpinCtrlPtr):

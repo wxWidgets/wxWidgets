@@ -76,13 +76,33 @@ public:
 
 //---------------------------------------------------------------------------
 
+%typemap(python, in) int *attribList (int *temp) {
+    int i;
+    if (PySequence_Check($source)) {
+        int size = PyObject_Length($source);
+        temp = new int[size+1]; // (int*)malloc((size + 1) * sizeof(int));
+        for (i = 0; i < size; i++) {
+            temp[i] = PyInt_AsLong(PySequence_GetItem($source, i));
+        }
+        temp[size] = 0;
+        $target = temp;
+    }
+}
+
+%typemap(python, freearg) int *attribList
+{
+    delete [] $source;
+}
+
+
+
 class wxGLCanvas : public wxScrolledWindow {
 public:
     wxGLCanvas(wxWindow *parent, wxWindowID id = -1,
                const wxPoint& pos = wxPyDefaultPosition,
                const wxSize& size = wxPyDefaultSize, long style = 0,
                const char* name = "GLCanvas",
-               int *attribList = 0,
+               int *attribList = NULL,
                const wxPalette& palette = wxNullPalette);
 
     %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"

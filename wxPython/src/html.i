@@ -579,16 +579,9 @@ public:
 
     inithtmlhelpc();
 
-    wxClassInfo::CleanUpClasses();
-    wxClassInfo::InitializeClasses();
+    //wxClassInfo::CleanUpClasses();
+    //wxClassInfo::InitializeClasses();
 
-    // Until wxFileSystem is wrapped...
-    #if wxUSE_FS_ZIP
-       wxFileSystem::AddHandler(new wxZipFSHandler);
-    #endif
-    #if wxUSE_FS_INET
-//       wxFileSystem::AddHandler(new wxInternetFSHandler);
-    #endif
 %}
 
 //----------------------------------------------------------------------

@@ -13,6 +13,8 @@ from clip_dnd import *
 
 from events import *
 
+from streams import *
+
 from mdi import *
 
 from frames import *
@@ -34,6 +36,10 @@ from image import *
 from printfw import *
 
 from sizers import *
+
+from filesys import *
+
+from utils import *
 class wxPyAppPtr(wxEvtHandlerPtr):
     def __init__(self,this):
         self.this = this
@@ -143,6 +149,11 @@ ptrmap = wxc.ptrmap
 _wxStart = wxc._wxStart
 
 _wxSetDictionary = wxc._wxSetDictionary
+
+def wxGetApp(*_args, **_kwargs):
+    val = apply(wxc.wxGetApp,_args,_kwargs)
+    if val: val = wxPyAppPtr(val)
+    return val
 
 wxApp_CleanUp = wxc.wxApp_CleanUp
 
@@ -824,6 +835,7 @@ wxEVT_COMMAND_SPLITTER_UNSPLIT = wxc.wxEVT_COMMAND_SPLITTER_UNSPLIT
 wxEVT_COMMAND_SPLITTER_DOUBLECLICKED = wxc.wxEVT_COMMAND_SPLITTER_DOUBLECLICKED
 wxEVT_NAVIGATION_KEY = wxc.wxEVT_NAVIGATION_KEY
 wxEVT_TIMER = wxc.wxEVT_TIMER
+wxEVT_END_PROCESS = wxc.wxEVT_END_PROCESS
 __version__ = wxc.__version__
 cvar = wxc.cvar
 wxPyDefaultPosition = wxPointPtr(wxc.cvar.wxPyDefaultPosition)
@@ -858,10 +870,10 @@ _wxSetDictionary(vars())
 # Helper function to link python methods to wxWindows virtual
 # functions by name.
 
-## def _checkForCallback(obj, name, event, theID=-1):
-##     try:    cb = getattr(obj, name)
-##     except: pass
-##     else:   obj.Connect(theID, -1, event, cb)
+def _checkForCallback(obj, name, event, theID=-1):
+    try:    cb = getattr(obj, name)
+    except: pass
+    else:   obj.Connect(theID, -1, event, cb)
 
 ## def _StdWindowCallbacks(win):
 ##     _checkForCallback(win, "OnChar",               wxEVT_CHAR)
@@ -1462,9 +1474,6 @@ def EVT_LIST_SET_INFO(win, id, func):
 def EVT_LIST_ITEM_SELECTED(win, id, func):
     win.Connect(id, -1,  wxEVT_COMMAND_LIST_ITEM_SELECTED, func)
 
-def EVT_LIST_ITEM_ACTIVATED(win, id, func):
-    win.Connect(id, -1,  wxEVT_COMMAND_LIST_ITEM_ACTIVATED, func)
-
 def EVT_LIST_ITEM_DESELECTED(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_LIST_ITEM_DESELECTED, func)
 
@@ -1482,6 +1491,10 @@ def EVT_LIST_ITEM_RIGHT_CLICK(win, id, func):
 
 def EVT_LIST_ITEM_MIDDLE_CLICK(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK, func)
+
+def EVT_LIST_ITEM_ACTIVATED(win, id, func):
+    win.Connect(id, -1,  wxEVT_COMMAND_LIST_ITEM_ACTIVATED, func)
+
 
 
 
@@ -1503,7 +1516,9 @@ def EVT_SPLITTER_DOUBLECLICKED(win, id, func):
 def EVT_TIMER(win, id, func):
     win.Connect(id, -1, wxEVT_TIMER, func)
 
-
+# wxProcess
+def EVT_END_PROCESS(eh, id, func):
+    eh.Connect(id, -1, wxEVT_END_PROCESS, func)
 
 #----------------------------------------------------------------------
 

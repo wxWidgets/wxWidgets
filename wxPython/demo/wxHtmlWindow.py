@@ -13,6 +13,12 @@ class MyHtmlWindow(wxHtmlWindow):
     def __init__(self, parent, id, log):
         wxHtmlWindow.__init__(self, parent, id)
         self.log = log
+        EVT_SCROLLWIN( self, self.OnScroll )
+
+    def OnScroll( self, event ):
+        print 'event.GetOrientation()',event.GetOrientation()
+        print 'event.GetPosition()',event.GetPosition()
+        event.Skip()
 
 
     def OnLinkClicked(self, linkinfo):

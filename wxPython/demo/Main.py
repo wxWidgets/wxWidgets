@@ -20,7 +20,7 @@ from   wxPython.html import wxHtmlWindow
 
 
 _treeList = [
-    ('New since last release', ['PyShellWindow',
+    ('New since last release', ['wxProcess',
                                 ]),
 
     ('Managed Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame']),
@@ -43,20 +43,22 @@ _treeList = [
                   'wxCalendarCtrl',
                   ]),
 
-    ('Window Layout', ['wxLayoutConstraints', 'Sizers', 'OldSizers']),
+    ('Window Layout', ['wxLayoutConstraints', 'Sizers', ]),
 
     ('Miscellaneous', [ 'DragAndDrop', 'CustomDragAndDrop', 'FontEnumerator',
                         'wxTimer', 'wxValidator', 'wxGLCanvas', 'DialogUnits',
                         'wxImage', 'wxMask', 'PrintFramework', 'wxOGL',
                         'PythonEvents', 'Threads',
                         'ActiveXWrapper_Acrobat', 'ActiveXWrapper_IE',
-                        'wxDragImage', 'PyShellWindow',
+                        'wxDragImage',
                         ]),
 
     ('wxPython Library', ['Layoutf', 'wxScrolledMessageDialog',
                           'wxMultipleChoiceDialog', 'wxPlotCanvas', 'wxFloatBar',
                           'PyShell', 'wxCalendar', 'wxMVCTree', 'wxVTKRenderWindow',
-                          'FileBrowseButton', 'GenericButtons', 'wxEditor']),
+                          'FileBrowseButton', 'GenericButtons', 'wxEditor',
+                          'PyShellWindow',
+                          ]),
 
     ('Cool Contribs', ['pyTree', 'hangman', 'SlashDot', 'XMLtreeview']),
 
@@ -65,6 +67,7 @@ _treeList = [
 #---------------------------------------------------------------------------
 
 class wxPythonDemo(wxFrame):
+
     def __init__(self, parent, id, title):
         wxFrame.__init__(self, parent, -1, title, size = (800, 600),
                          style=wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE)
@@ -73,8 +76,17 @@ class wxPythonDemo(wxFrame):
         self.curOverview = ""
 
         if wxPlatform == '__WXMSW__':
-            self.icon = wxIcon('bitmaps/mondrian.ico', wxBITMAP_TYPE_ICO)
-            self.SetIcon(self.icon)
+            icon = wxIcon('bitmaps/mondrian.ico', wxBITMAP_TYPE_ICO)
+            self.SetIcon(icon)
+
+            # setup a taskbar icon, and catch some events from it
+            self.tbicon = wxTaskBarIcon()
+            self.tbicon.SetIcon(icon, "wxPython Demo")
+            EVT_TASKBAR_LEFT_DCLICK(self.tbicon, self.OnTaskBarActivate)
+            EVT_TASKBAR_RIGHT_UP(self.tbicon, self.OnTaskBarMenu)
+            EVT_MENU(self.tbicon, self.TBMENU_RESTORE, self.OnTaskBarActivate)
+            EVT_MENU(self.tbicon, self.TBMENU_CLOSE, self.OnTaskBarClose)
+
 
         self.otherWin = None
         EVT_IDLE(self, self.OnIdle)
@@ -152,9 +164,25 @@ class wxPythonDemo(wxFrame):
         # Create a Notebook
         self.nb = wxNotebook(splitter2, -1)
 
-        # Set up a TextCtrl on the Overview Notebook page
-        self.ovr = wxHtmlWindow(self.nb, -1)
-        self.nb.AddPage(self.ovr, "Overview")
+        # Set up a wxHtmlWindow on the Overview Notebook page
+        # we put it in a panel first because there seems to be a
+        # refresh bug of some sort (wxGTK) when it is directly in
+        # the notebook...
+        if 0:  # the old way
+            self.ovr = wxHtmlWindow(self.nb, -1, size=(400, 400))
+            self.nb.AddPage(self.ovr, "Overview")
+
+        else:  # hopefully I can remove this hacky code soon
+            panel = wxPanel(self.nb, -1)
+            self.ovr = wxHtmlWindow(panel, -1, size=(400, 400))
+            self.nb.AddPage(panel, "Overview")
+
+            def OnOvrSize(evt, ovr=self.ovr):
+                ovr.SetSize(evt.GetSize())
+
+            EVT_SIZE(panel, OnOvrSize)
+
+        self.SetOverview("Overview", overview)
 
 
         # Set up a TextCtrl on the Demo Code Notebook page
@@ -215,12 +243,13 @@ class wxPythonDemo(wxFrame):
     def OnItemExpanded(self, event):
         item = event.GetItem()
         wxLogMessage("OnItemExpanded: %s" % self.tree.GetItemText(item))
+        event.Skip()
 
     #---------------------------------------------
     def OnItemCollapsed(self, event):
         item = event.GetItem()
         wxLogMessage("OnItemCollapsed: %s" % self.tree.GetItemText(item))
-
+        event.Skip()
 
     #---------------------------------------------
     def OnTreeLeftDown(self, event):
@@ -307,7 +336,7 @@ class wxPythonDemo(wxFrame):
 
     #---------------------------------------------
     # Menu methods
-    def OnFileExit(self, event):
+    def OnFileExit(self, *event):
         self.Close()
 
 
@@ -323,7 +352,10 @@ class wxPythonDemo(wxFrame):
         self.dying = true
         self.window = None
         self.mainmenu = None
+        if hasattr(self, "tbicon"):
+            del self.tbicon
         self.Destroy()
+
 
     #---------------------------------------------
     def OnIdle(self, event):
@@ -341,6 +373,36 @@ class wxPythonDemo(wxFrame):
         if selectedDemo:
             self.tree.SelectItem(selectedDemo)
             self.tree.EnsureVisible(selectedDemo)
+
+
+    #---------------------------------------------
+    def OnTaskBarActivate(self, evt):
+        if self.IsIconized():
+            self.Iconize(false)
+        if not self.IsShown():
+            self.Show(true)
+        self.Raise()
+
+    #---------------------------------------------
+
+    TBMENU_RESTORE = 1000
+    TBMENU_CLOSE   = 1001
+
+    def OnTaskBarMenu(self, evt):
+        menu = wxMenu()
+        menu.Append(self.TBMENU_RESTORE, "Restore wxPython Demo")
+        menu.Append(self.TBMENU_CLOSE,   "Close")
+        self.tbicon.PopupMenu(menu)
+        menu.Destroy()
+
+    #---------------------------------------------
+    def OnTaskBarClose(self, evt):
+        self.Close()
+
+        # because of the way wxTaskBarIcon.PopupMenu is implemented we have to
+        # prod the main idle handler a bit to get the window to actually close
+        wxGetApp().ProcessIdle()
+
 
 #---------------------------------------------------------------------------
 #---------------------------------------------------------------------------
@@ -370,7 +432,7 @@ class MyApp(wxApp):
             showTip, index = eval(showTipText)
         except IOError:
             showTip, index = (1, 0)
-        print showTip, index
+        #print showTip, index
         if showTip:
             tp = wxCreateFileTipProvider("data/tips.txt", index)
             showTip = wxShowTip(frame, tp)

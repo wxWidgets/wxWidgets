@@ -13,6 +13,8 @@ from clip_dnd import *
 
 from events import *
 
+from streams import *
+
 from mdi import *
 
 from frames import *
@@ -34,6 +36,10 @@ from image import *
 from printfw import *
 
 from sizers import *
+
+from filesys import *
+
+from utils import *
 import wx
 class wxHtmlLinkInfoPtr :
     def __init__(self,this):
@@ -112,6 +118,7 @@ class wxHtmlParserPtr :
         return val
     def GetFS(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlParser_GetFS,(self,) + _args, _kwargs)
+        if val: val = wxFileSystemPtr(val) 
         return val
     def Parse(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlParser_Parse,(self,) + _args, _kwargs)

@@ -616,7 +616,7 @@ class TreePainter(Painter):
                     dc.SetPen(self.linepen)
                     dc.SetBrush(self.bgbrush)
                     dc.DrawRectangle(px -4, py-4, 9, 9)
-                    self.knobs.append(kid, Rect(px -4, py -4, 9, 9))
+                    self.knobs.append( (kid, Rect(px -4, py -4, 9, 9)) )
                     dc.SetPen(self.textpen)
                     if not kid.expanded:
                         dc.DrawLine(px, py -2, px, py + 3)
@@ -627,7 +627,7 @@ class TreePainter(Painter):
             dc.SetPen(self.linepen)
             dc.SetBrush(self.bgbrush)
             dc.DrawRectangle(px -4, py-4, 9, 9)
-            self.knobs.append(node, Rect(px -4, py -4, 9, 9))
+            self.knobs.append( (node, Rect(px -4, py -4, 9, 9)) )
             dc.SetPen(self.textpen)
             if not node.expanded:
                 dc.DrawLine(px, py -2, px, py + 3)

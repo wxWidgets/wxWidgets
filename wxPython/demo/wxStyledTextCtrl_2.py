@@ -41,13 +41,13 @@ class PythonSTC(wxStyledTextCtrl):
         wxStyledTextCtrl.__init__(self, parent, ID)
 
         self.SetLexer(wxSTC_LEX_PYTHON)
-        self.SetKeywords(0, string.join(keyword.kwlist))
+        self.SetKeyWords(0, string.join(keyword.kwlist))
 
         self.SetProperty("fold", "1")
         self.SetProperty("tab.timmy.whinge.level", "1")
         self.SetMargins(0,0)
 
-        self.SetViewWhitespace(false)
+        self.SetViewWhiteSpace(false)
         #self.SetBufferedDraw(false)
 
         self.SetEdgeMode(wxSTC_EDGE_BACKGROUND)
@@ -82,33 +82,33 @@ class PythonSTC(wxStyledTextCtrl):
 
         # Python styles
         # White space
-        self.StyleSetSpec(SCE_P_DEFAULT, "fore:#808080")
+        self.StyleSetSpec(wxSTC_P_DEFAULT, "fore:#808080")
         # Comment
-        self.StyleSetSpec(SCE_P_COMMENTLINE, "fore:#007F00,face:%(other)s" % faces)
+        self.StyleSetSpec(wxSTC_P_COMMENTLINE, "fore:#007F00,face:%(other)s" % faces)
         # Number
-        self.StyleSetSpec(SCE_P_NUMBER, "fore:#007F7F")
+        self.StyleSetSpec(wxSTC_P_NUMBER, "fore:#007F7F")
         # String
-        self.StyleSetSpec(SCE_P_STRING, "fore:#7F007F,italic,face:%(times)s" % faces)
+        self.StyleSetSpec(wxSTC_P_STRING, "fore:#7F007F,italic,face:%(times)s" % faces)
         # Single quoted string
-        self.StyleSetSpec(SCE_P_CHARACTER, "fore:#7F007F,italic,face:%(times)s" % faces)
+        self.StyleSetSpec(wxSTC_P_CHARACTER, "fore:#7F007F,italic,face:%(times)s" % faces)
         # Keyword
-        self.StyleSetSpec(SCE_P_WORD, "fore:#00007F,bold")
+        self.StyleSetSpec(wxSTC_P_WORD, "fore:#00007F,bold")
         # Triple quotes
-        self.StyleSetSpec(SCE_P_TRIPLE, "fore:#7F0000")
+        self.StyleSetSpec(wxSTC_P_TRIPLE, "fore:#7F0000")
         # Triple double quotes
-        self.StyleSetSpec(SCE_P_TRIPLEDOUBLE, "fore:#7F0000")
+        self.StyleSetSpec(wxSTC_P_TRIPLEDOUBLE, "fore:#7F0000")
         # Class name definition
-        self.StyleSetSpec(SCE_P_CLASSNAME, "fore:#0000FF,bold,underline")
+        self.StyleSetSpec(wxSTC_P_CLASSNAME, "fore:#0000FF,bold,underline")
         # Function or method name definition
-        self.StyleSetSpec(SCE_P_DEFNAME, "fore:#007F7F,bold")
+        self.StyleSetSpec(wxSTC_P_DEFNAME, "fore:#007F7F,bold")
         # Operators
-        self.StyleSetSpec(SCE_P_OPERATOR, "bold")
+        self.StyleSetSpec(wxSTC_P_OPERATOR, "bold")
         # Identifiers
-        #self.StyleSetSpec(SCE_P_IDENTIFIER, "bold")#,fore:#FF00FF")
+        #self.StyleSetSpec(wxSTC_P_IDENTIFIER, "bold")#,fore:#FF00FF")
         # Comment-blocks
-        self.StyleSetSpec(SCE_P_COMMENTBLOCK, "fore:#7F7F7F")
+        self.StyleSetSpec(wxSTC_P_COMMENTBLOCK, "fore:#7F7F7F")
         # End of line where string is not closed
-        self.StyleSetSpec(SCE_P_STRINGEOL, "fore:#000000,face:%(mono)s,back:#E0C0E0,eolfilled" % faces)
+        self.StyleSetSpec(wxSTC_P_STRINGEOL, "fore:#000000,face:%(mono)s,back:#E0C0E0,eolfilled" % faces)
 
 
         self.SetCaretForeground("BLUE")
@@ -126,8 +126,17 @@ class PythonSTC(wxStyledTextCtrl):
                 self.CallTipShow(pos, 'param1, param2')
             # Code completion
             else:
-                self.AutoCompShow('I love wxPython a b c')
-
+                #lst = []
+                #for x in range(50000):
+                #    lst.append('%05d' % x)
+                #st = string.join(lst)
+                #print len(st)
+                #self.AutoCompShow(0, st)
+                self.AutoCompSetIgnoreCase(true)
+                self.AutoCompShow(0, string.join(keyword.kwlist))
+                self.AutoCompSelect('br')
+        else:
+            event.Skip()
 
 
     def OnUpdateUI(self, evt):
@@ -141,21 +150,21 @@ class PythonSTC(wxStyledTextCtrl):
             styleBefore = self.GetStyleAt(caretPos - 1)
 
         # check before
-        if charBefore and charBefore in "[]{}()" and ord(styleBefore) == SCE_P_OPERATOR:
+        if charBefore and chr(charBefore) in "[]{}()" and styleBefore == wxSTC_P_OPERATOR:
             braceAtCaret = caretPos - 1
 
         # check after
         if braceAtCaret < 0:
             charAfter = self.GetCharAt(caretPos)
             styleAfter = self.GetStyleAt(caretPos)
-            if charAfter and charAfter in "[]{}()" and ord(styleAfter) == SCE_P_OPERATOR:
+            if charAfter and chr(charAfter) in "[]{}()" and styleAfter == wxSTC_P_OPERATOR:
                 braceAtCaret = caretPos
 
         if braceAtCaret >= 0:
             braceOpposite = self.BraceMatch(braceAtCaret)
 
         if braceAtCaret != -1  and braceOpposite == -1:
-            self.BraceBadlight(braceAtCaret)
+            self.BraceBadLight(braceAtCaret)
         else:
             self.BraceHighlight(braceAtCaret, braceOpposite)
             #pt = self.PointFromPosition(braceOpposite)
@@ -170,7 +179,7 @@ class PythonSTC(wxStyledTextCtrl):
             if evt.GetShift() and evt.GetControl():
                 self.FoldAll()
             else:
-                lineClicked = self.GetLineFromPos(evt.GetPosition())
+                lineClicked = self.LineFromPosition(evt.GetPosition())
                 if self.GetFoldLevel(lineClicked) & wxSTC_FOLDLEVELHEADERFLAG:
                     if evt.GetShift():
                         self.SetFoldExpanded(lineClicked, true)

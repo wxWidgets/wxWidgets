@@ -39,20 +39,22 @@ class TestToolBar(wxFrame):
         tb.AddSeparator()
 
         tool = tb.AddTool(50, wxBitmap('bitmaps/tog1.bmp', wxBITMAP_TYPE_BMP),
-                          shortHelpString="Toggle this", toggle=true)
+                          shortHelpString="Toggle this", isToggle=true)
         EVT_TOOL(self, 50, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 50, self.OnToolRClick)
 
         tb.AddTool(60, wxBitmap('bitmaps/tog1.bmp', wxBITMAP_TYPE_BMP),
                    wxBitmap('bitmaps/tog2.bmp', wxBITMAP_TYPE_BMP),
-                   shortHelpString="Toggle with 2 bitmaps", toggle=true)
+                   shortHelpString="Toggle with 2 bitmaps", isToggle=true)
         EVT_TOOL(self, 60, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 60, self.OnToolRClick)
 
 
         tb.AddSeparator()
-        tb.AddControl(wxComboBox(tb, -1, "", choices=["", "This", "is a", "wxComboBox"],
+        cbID = wxNewId()
+        tb.AddControl(wxComboBox(tb, cbID, "", choices=["", "This", "is a", "wxComboBox"],
                                  size=(150,-1), style=wxCB_DROPDOWN))
+        EVT_COMBOBOX(self, cbID, self.OnCombo)
 
         tb.Realize()
         EVT_CLOSE(self, self.OnCloseWindow)
@@ -66,6 +68,10 @@ class TestToolBar(wxFrame):
 
     def OnToolRClick(self, event):
         self.log.WriteText("tool %s right-clicked\n" % event.GetId())
+
+    def OnCombo(self, event):
+        self.log.WriteText("combobox item selected: %s\n" % event.GetString())
+
 
 #---------------------------------------------------------------------------
 

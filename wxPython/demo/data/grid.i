@@ -6,7 +6,7 @@
 //
 // Created:     17-March-2000
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998 by Total Control Software
+// Copyright:   (c) 2000 by Total Control Software
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
@@ -74,7 +74,7 @@
         if (m_myInst.findCallback(#CBNAME))                             \
             m_myInst.callCallback(                                      \
                 Py_BuildValue("(Oii)",                                  \
-                              wxPyConstructObject((void*)attr, "_wxGridCellAttr_p"),    \
+                              wxPyConstructObject((void*)attr, "wxGridCellAttr"),    \
                               a, b));                                   \
         else                                                            \
             PCLASS::CBNAME(attr, a, b);                                 \
@@ -92,7 +92,7 @@
         if (m_myInst.findCallback(#CBNAME))                             \
             m_myInst.callCallback(                                      \
                 Py_BuildValue("(Oi)",                                   \
-                              wxPyConstructObject((void*)attr, "_wxGridCellAttr_p"),    \
+                              wxPyConstructObject((void*)attr, "wxGridCellAttr"),    \
                               val));                                    \
         else                                                            \
             PCLASS::CBNAME(attr, val);                                  \
@@ -451,6 +451,8 @@ class wxGridCellRenderer
 {
 public:
     void SetParameters(const wxString& params);
+    void IncRef();
+    void DecRef();
 
     virtual void Draw(wxGrid& grid,
                       wxGridCellAttr& attr,
@@ -600,6 +602,8 @@ public:
     void SetControl(wxControl* control);
 
     void SetParameters(const wxString& params);
+    void IncRef();
+    void DecRef();
 
     virtual void Create(wxWindow* parent,
                         wxWindowID id,
@@ -612,6 +616,7 @@ public:
     virtual void SetSize(const wxRect& rect);
     virtual void Show(bool show, wxGridCellAttr *attr = NULL);
     virtual void PaintBackground(const wxRect& rectCell, wxGridCellAttr *attr);
+    virtual bool IsAcceptedKey(wxKeyEvent& event);
     virtual void StartingKey(wxKeyEvent& event);
     virtual void StartingClick();
     virtual void HandleReturn(wxKeyEvent& event);
@@ -687,7 +692,7 @@ public:
         if (m_myInst.findCallback("Show"))
             m_myInst.callCallback(
                 Py_BuildValue("(iO)", show,
-                              wxPyConstructObject((void*)attr, "_wxGridCellAttr_p")));
+                              wxPyConstructObject((void*)attr, "wxGridCellAttr")));
         else
             wxGridCellEditor::Show(show, attr);
         wxPySaveThread(doSave);
@@ -702,8 +707,8 @@ public:
         if (m_myInst.findCallback("PaintBackground"))
             m_myInst.callCallback(
                 Py_BuildValue("(OO)",
-                              wxPyConstructObject((void*)&rectCell, "_wxRect_p"),
-                              wxPyConstructObject((void*)attr, "_wxGridCellAttr_p")));
+                              wxPyConstructObject((void*)&rectCell, "wxRect"),
+                              wxPyConstructObject((void*)attr, "wxGridCellAttr")));
         else
             wxGridCellEditor::PaintBackground(rectCell, attr);
         wxPySaveThread(doSave);
@@ -715,6 +720,7 @@ public:
 
     DEC_PYCALLBACK___pure(Reset);
     DEC_PYCALLBACK__constany(SetSize, wxRect);
+    DEC_PYCALLBACK_bool_any(IsAcceptedKey, wxKeyEvent);
     DEC_PYCALLBACK__any(StartingKey, wxKeyEvent);
     DEC_PYCALLBACK__any(HandleReturn, wxKeyEvent);
     DEC_PYCALLBACK__(StartingClick);
@@ -728,6 +734,7 @@ public:
 IMP_PYCALLBACK__STRING( wxPyGridCellEditor, wxGridCellEditor, SetParameters);
 IMP_PYCALLBACK___pure(wxPyGridCellEditor, wxGridCellEditor, Reset);
 IMP_PYCALLBACK__constany(wxPyGridCellEditor, wxGridCellEditor, SetSize, wxRect);
+IMP_PYCALLBACK_bool_any(wxPyGridCellEditor, wxGridCellEditor, IsAcceptedKey, wxKeyEvent);
 IMP_PYCALLBACK__any(wxPyGridCellEditor, wxGridCellEditor, StartingKey, wxKeyEvent);
 IMP_PYCALLBACK__any(wxPyGridCellEditor, wxGridCellEditor, HandleReturn, wxKeyEvent);
 IMP_PYCALLBACK__(wxPyGridCellEditor, wxGridCellEditor, StartingClick);
@@ -1269,15 +1276,14 @@ public:
     int      GetNumberCols();
 
 
+
+#ifdef NOTNEEDED // ????
     // ------ display update functions
     //
     void CalcRowLabelsExposed( wxRegion& reg );
-
     void CalcColLabelsExposed( wxRegion& reg );
     void CalcCellsExposed( wxRegion& reg );
 
-
-#ifdef NOTNEEDED // ????
     // ------ event handlers
     //
     void ProcessRowLabelMouseEvent( wxMouseEvent& event );
@@ -1338,7 +1344,7 @@ public:
 
     void GetTextBoxSize( wxDC& dc,
                          wxArrayString& lines,
-                         long *width, long *height );
+                         long *OUTPUT, long *OUTPUT );
 
 
     // ------
@@ -1559,7 +1565,8 @@ public:
     void SelectRow( int row, bool addToSelected = FALSE );
     void SelectCol( int col, bool addToSelected = FALSE );
 
-    void SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol );
+    void SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol,
+                      bool addToSelected = FALSE );
     // TODO: ??? void SelectBlock( const wxGridCellCoords& topLeft,
     // TODO: ???                   const wxGridCellCoords& bottomRight )
 
@@ -1577,10 +1584,6 @@ public:
     wxRect BlockToDeviceRect( const wxGridCellCoords & topLeft,
                               const wxGridCellCoords & bottomRight );
 
-    // This function returns the rectangle that encloses the selected cells
-    // in device coords and clipped to the client size of the grid window.
-    //
-    wxRect SelectionToDeviceRect();
 
     // Access or update the selection fore/back colours
     wxColour GetSelectionBackground() const;

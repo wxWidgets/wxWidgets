@@ -170,7 +170,7 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
     char** argv = new char*[argc+1];
     int x;
     for(x=0; x<argc; x++)
-        argv[x] = PyString_AsString(PyList_GetItem(sysargv, x));
+        argv[x] = copystring(PyString_AsString(PyList_GetItem(sysargv, x)));
     argv[argc] = NULL;
 
     wxPythonApp->argc = argc;
@@ -245,7 +245,9 @@ PyObject* __wxSetDictionary(PyObject* /* self */, PyObject* args)
 
 //---------------------------------------------------------------------------
 
-PyObject* wxPyConstructObject(void* ptr, const char* className) {
+PyObject* wxPyConstructObject(void* ptr,
+                              const char* className,
+                              int setThisOwn) {
     char    buff[64];               // should always be big enough...
     char    swigptr[64];
 
@@ -262,6 +264,10 @@ PyObject* wxPyConstructObject(void* ptr, const char* className) {
     PyObject* arg = Py_BuildValue("(s)", swigptr);
     PyObject* obj = PyInstance_New(classobj, arg, NULL);
     Py_DECREF(arg);
+
+    if (setThisOwn) {
+        PyObject_SetAttrString(obj, "thisown", PyInt_FromLong(1));
+    }
 
     return obj;
 }
@@ -456,7 +462,7 @@ PyObject* wxPyCallbackHelper::callCallbackObj(PyObject* argTuple) const {
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 // These classes can be derived from in Python and passed through the event
-// system without loosing anything.  They do this by keeping a reference to
+// system without losing anything.  They do this by keeping a reference to
 // themselves and some special case handling in wxPyCallback::EventThunker.
 
 

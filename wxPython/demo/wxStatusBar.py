@@ -10,7 +10,9 @@ class CustomStatusBar(wxStatusBar):
         wxStatusBar.__init__(self, parent, -1)
         self.SetFieldsCount(3)
         self.log = log
+        self.sizeChanged = false
         EVT_SIZE(self, self.OnSize)
+        EVT_IDLE(self, self.OnIdle)
 
         self.SetStatusText("A Custom StatusBar...", 0)
 
@@ -18,12 +20,8 @@ class CustomStatusBar(wxStatusBar):
         EVT_CHECKBOX(self, 1001, self.OnToggleClock)
         self.cb.SetValue(true)
 
-        # figure out how tall to make it.
-        dc = wxClientDC(self)
-        dc.SetFont(self.GetFont())
-        (w,h) = dc.GetTextExtent('X')
-        h = int(h * 1.8)
-        self.SetSize(wxSize(100, h))
+        # set the initial position of the checkbox
+        self.Reposition()
 
         # start our timer
         self.timer = wxPyTimer(self.Notify)
@@ -38,6 +36,7 @@ class CustomStatusBar(wxStatusBar):
         self.SetStatusText(st, 2)
         self.log.WriteText("tick...\n")
 
+
     # the checkbox was clicked
     def OnToggleClock(self, event):
         if self.cb.GetValue():
@@ -47,11 +46,26 @@ class CustomStatusBar(wxStatusBar):
             self.timer.Stop()
 
 
+    def OnSize(self, evt):
+        self.Reposition()  # for normal size events
+
+        # Set a flag so the idle time handler will also do the repositioning.
+        # It is done this way to get around a buglet where GetFieldRect is not
+        # accurate during the EVT_SIZE resulting from a frame maximize.
+        self.sizeChanged = true
+
+
+    def OnIdle(self, evt):
+        if self.sizeChanged:
+            self.Reposition()
+
+
     # reposition the checkbox
-    def OnSize(self, event):
+    def Reposition(self):
         rect = self.GetFieldRect(1)
         self.cb.SetPosition(wxPoint(rect.x+2, rect.y+2))
         self.cb.SetSize(wxSize(rect.width-4, rect.height-4))
+        self.sizeChanged = false
 
 
 
@@ -89,28 +103,4 @@ def runTest(frame, nb, log):
 
 overview = """\
 A status bar is a narrow window that can be placed along the bottom of a frame to give small amounts of status information. It can contain one or more fields, one or more of which can be variable length according to the size of the window.
-
-wxStatusBar()
-----------------------------
-
-Default constructor.
-
-wxStatusBar(wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0, const wxString& name = "statusBar")
-
-Constructor, creating the window.
-
-Parameters
--------------------
-
-parent = The window parent, usually a frame.
-
-id = The window identifier. It may take a value of -1 to indicate a default value.
-
-pos = The window position. A value of (-1, -1) indicates a default position, chosen by either the windowing system or wxWindows, depending on platform.
-
-size = The window size. A value of (-1, -1) indicates a default size, chosen by either the windowing system or wxWindows, depending on platform.
-
-style = The window style. See wxStatusBar.
-
-name = The name of the window. This parameter is used to associate a name with the item, allowing the application user to set Motif resource values for individual windows.
 """

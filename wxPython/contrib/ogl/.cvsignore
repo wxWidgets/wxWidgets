@@ -1,4 +1,5 @@
 Makefile
+contrib
 oglc.exp
 oglc.ilk
 oglc.pch

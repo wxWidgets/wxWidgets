@@ -76,6 +76,12 @@ class wxNotebookPtr(wxControlPtr):
     def GetRowCount(self, *_args, **_kwargs):
         val = apply(windows2c.wxNotebook_GetRowCount,(self,) + _args, _kwargs)
         return val
+    def SetPageSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebook_SetPageSize,(self,) + _args, _kwargs)
+        return val
+    def SetPadding(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebook_SetPadding,(self,) + _args, _kwargs)
+        return val
     def DeletePage(self, *_args, **_kwargs):
         val = apply(windows2c.wxNotebook_DeletePage,(self,) + _args, _kwargs)
         return val
@@ -224,6 +230,12 @@ class wxTaskBarIconPtr(wxEvtHandlerPtr):
         return val
     def PopupMenu(self, *_args, **_kwargs):
         val = apply(windows2c.wxTaskBarIcon_PopupMenu,(self,) + _args, _kwargs)
+        return val
+    def IsIconInstalled(self, *_args, **_kwargs):
+        val = apply(windows2c.wxTaskBarIcon_IsIconInstalled,(self,) + _args, _kwargs)
+        return val
+    def IsOK(self, *_args, **_kwargs):
+        val = apply(windows2c.wxTaskBarIcon_IsOK,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxTaskBarIcon instance at %s>" % (self.this,)

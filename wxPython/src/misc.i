@@ -81,6 +81,21 @@ public:
             PyTuple_SET_ITEM(tup, 1, PyFloat_FromDouble(self->y));
             return tup;
         }
+
+        wxRealPoint __add__(const wxRealPoint* p) {
+            if (! p) return *self;
+            return *self + *p;
+        }
+
+        wxRealPoint __sub__(const wxRealPoint* p) {
+            if (! p) return *self;
+            return *self - *p;
+        }
+
+        int __cmp__(const wxRealPoint* p) {
+            if (! p) return 0;
+            return *self == *p;
+        }
     }
     %pragma(python) addtoclass = "def __str__(self): return str(self.asTuple())"
     %pragma(python) addtoclass = "def __repr__(self): return str(self.asTuple())"
@@ -104,6 +119,21 @@ public:
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
             return tup;
+        }
+
+        wxPoint __add__(const wxPoint* p) {
+            if (! p) return *self;
+            return *self + *p;
+        }
+
+        wxPoint __sub__(const wxPoint* p) {
+            if (! p) return *self;
+            return *self - *p;
+        }
+
+        int __cmp__(const wxPoint* p) {
+            if (! p) return 0;
+            return *self == *p;
         }
     }
     %pragma(python) addtoclass = "def __str__(self): return str(self.asTuple())"
@@ -246,7 +276,7 @@ void wxRegisterId(long id);
 void wxBell();
 void wxDisplaySize(int *OUTPUT, int *OUTPUT);
 void wxEndBusyCursor();
-long wxExecute(const wxString& command, int sync = FALSE);
+
 long wxGetElapsedTime(bool resetTimer = TRUE);
 #ifdef __WXMSW__
 long wxGetFreeMemory();
@@ -257,10 +287,11 @@ wxString wxNow();
 bool wxShell(const wxString& command = wxPyEmptyStr);
 void wxStartTimer();
 int wxGetOsVersion(int *OUTPUT, int *OUTPUT);
+wxString wxGetOsDescription();
 
 void wxSleep(int secs);
+void wxUsleep(unsigned long milliseconds);
 bool wxYield();
-bool wxSafeYield();
 void wxEnableTopLevelWindows(bool enable);
 
 %inline %{
@@ -272,6 +303,15 @@ void wxEnableTopLevelWindows(bool enable);
 %}
 
 wxString wxStripMenuCodes(const wxString& in);
+
+
+wxString wxGetEmailAddress();
+wxString wxGetHostName();
+wxString wxGetFullHostName();
+wxString wxGetUserId();
+wxString wxGetUserName();
+wxString wxGetHomeDir();
+
 
 //----------------------------------------------------------------------
 
@@ -333,7 +373,7 @@ enum wxRegionContain {
 
 class wxRegion {
 public:
-    wxRegion();
+    wxRegion(long x=0, long y=0, long width=0, long height=0);
     ~wxRegion();
 
     void Clear();
@@ -412,6 +452,7 @@ public:
 
 };
 
+wxAcceleratorEntry *wxGetAccelFromString(const wxString& label);
 
 %readonly
 %{
@@ -432,8 +473,7 @@ public:
     ~wxBusyInfo();
 };
 
-
-
 //---------------------------------------------------------------------------
+
 
 

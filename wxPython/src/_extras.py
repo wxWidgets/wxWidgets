@@ -628,9 +628,6 @@ def EVT_LIST_SET_INFO(win, id, func):
 def EVT_LIST_ITEM_SELECTED(win, id, func):
     win.Connect(id, -1,  wxEVT_COMMAND_LIST_ITEM_SELECTED, func)
 
-def EVT_LIST_ITEM_ACTIVATED(win, id, func):
-    win.Connect(id, -1,  wxEVT_COMMAND_LIST_ITEM_ACTIVATED, func)
-
 def EVT_LIST_ITEM_DESELECTED(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_LIST_ITEM_DESELECTED, func)
 
@@ -648,6 +645,10 @@ def EVT_LIST_ITEM_RIGHT_CLICK(win, id, func):
 
 def EVT_LIST_ITEM_MIDDLE_CLICK(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK, func)
+
+def EVT_LIST_ITEM_ACTIVATED(win, id, func):
+    win.Connect(id, -1,  wxEVT_COMMAND_LIST_ITEM_ACTIVATED, func)
+
 
 
 
@@ -669,7 +670,9 @@ def EVT_SPLITTER_DOUBLECLICKED(win, id, func):
 def EVT_TIMER(win, id, func):
     win.Connect(id, -1, wxEVT_TIMER, func)
 
-
+# wxProcess
+def EVT_END_PROCESS(eh, id, func):
+    eh.Connect(id, -1, wxEVT_END_PROCESS, func)
 
 #----------------------------------------------------------------------
 

@@ -669,7 +669,7 @@ public:
     }
 
 
-    wxGridCellEditor *Clone() const {
+    wxGridCellEditor*Clone() const {
         wxGridCellEditor* rval = NULL;
         bool doSave = wxPyRestoreThread();
         if (m_myInst.findCallback("Clone")) {
@@ -796,23 +796,6 @@ public:
     wxGridCellChoiceEditor(int LCOUNT = 0,
                            const wxString* choices = NULL,
                            bool allowOthers = FALSE);
-#ifdef PRE2115
-    %addmethods {
-        wxGridCellChoiceEditor(PyObject* choices,
-                                bool allowOthers = FALSE) {
-
-            const char** temp = string_LIST_helper(choices);
-            if (temp) {
-                int count = PyList_Size(choices);
-                wxGridCellChoiceEditor* ret;
-                ret = new wxGridCellChoiceEditor(count, temp, allowOthers);
-                delete [] temp;
-                return ret;
-            }
-            return NULL;
-        }
-    }
-#endif
 };
 
 //---------------------------------------------------------------------------
@@ -1565,7 +1548,8 @@ public:
     void SelectRow( int row, bool addToSelected = FALSE );
     void SelectCol( int col, bool addToSelected = FALSE );
 
-    void SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol );
+    void SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol,
+                      bool addToSelected = FALSE );
     // TODO: ??? void SelectBlock( const wxGridCellCoords& topLeft,
     // TODO: ???                   const wxGridCellCoords& bottomRight )
 

@@ -113,15 +113,15 @@ def runTest(frame, nb, log):
     # now set some text to those styles...  Normally this would be
     # done in an event handler that happens when text needs displayed.
     ed.StartStyling(98, 0xff)
-    ed.SetStyleFor(6, 1)  # set style for 6 characters using style 1
+    ed.SetStyling(6, 1)  # set style for 6 characters using style 1
 
     ed.StartStyling(190, 0xff)
-    ed.SetStyleFor(20, 2)
+    ed.SetStyling(20, 2)
 
     ed.StartStyling(310, 0xff)
-    ed.SetStyleFor(4, 3)
-    ed.SetStyleFor(2, 0)
-    ed.SetStyleFor(10, 4)
+    ed.SetStyling(4, 3)
+    ed.SetStyling(2, 0)
+    ed.SetStyling(10, 4)
 
 
     # line numbers in the margin
@@ -146,16 +146,16 @@ def runTest(frame, nb, log):
 
     # and finally, an indicator or two
     ed.IndicatorSetStyle(0, wxSTC_INDIC_SQUIGGLE)
-    ed.IndicatorSetColour(0, wxRED)
+    ed.IndicatorSetForeground(0, wxRED)
     ed.IndicatorSetStyle(1, wxSTC_INDIC_DIAGONAL)
-    ed.IndicatorSetColour(1, wxBLUE)
+    ed.IndicatorSetForeground(1, wxBLUE)
     ed.IndicatorSetStyle(2, wxSTC_INDIC_STRIKE)
-    ed.IndicatorSetColour(2, wxRED)
+    ed.IndicatorSetForeground(2, wxRED)
 
     ed.StartStyling(836, wxSTC_INDICS_MASK)
-    ed.SetStyleFor(10, wxSTC_INDIC0_MASK)
-    ed.SetStyleFor(10, wxSTC_INDIC1_MASK)
-    ed.SetStyleFor(10, wxSTC_INDIC2_MASK | wxSTC_INDIC1_MASK)
+    ed.SetStyling(10, wxSTC_INDIC0_MASK)
+    ed.SetStyling(10, wxSTC_INDIC1_MASK)
+    ed.SetStyling(10, wxSTC_INDIC2_MASK | wxSTC_INDIC1_MASK)
 
 
     return ed
