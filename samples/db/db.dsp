@@ -144,11 +144,15 @@ LINK32=link.exe
 # Name "db - Win32 Debug"
 # Begin Source File
 
-SOURCE=.\db.cpp
+SOURCE=.\dbtest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\db.rc
+SOURCE=.\dbtest.rc
+# End Source File
+# Begin Source File
+
+SOURCE=.\listdb.cpp
 # End Source File
 # End Target
 # End Project

@@ -12,6 +12,6 @@ CONFIG  = wx
 #WXCONFIGS = Debug Release DebugDll ReleaseDll
 
 # project files
-SOURCES = db.cpp
-RC_FILE = db.rc
+SOURCES = dbtest.cpp listdb.cpp
+RC_FILE = dbtest.rc
 TARGET  = db
