@@ -22,19 +22,22 @@
 
 #include "wx/module.h"
 #include "wx/hash.h"
+#include "wx/listimpl.cpp"
+
+WX_DEFINE_LIST(wxModuleList);
 
 IMPLEMENT_CLASS(wxModule, wxObject)
 
-wxList wxModule::m_modules;
+wxModuleList wxModule::m_modules;
 
 void wxModule::RegisterModule(wxModule* module)
 {
-  m_modules.Append(module);
+    m_modules.Append(module);
 }
 
 // Collect up all module-derived classes, create an instance of each,
 // and register them.
-bool wxModule::RegisterModules(void)
+void wxModule::RegisterModules()
 {
     wxNode *node;
     wxClassInfo* classInfo;
@@ -44,36 +47,48 @@ bool wxModule::RegisterModules(void)
     while (node)
     {
         classInfo = (wxClassInfo *)node->Data();
-        if ((classInfo != (& (wxModule::sm_classwxModule))) &&
-            classInfo->IsKindOf(CLASSINFO(wxModule)))
+        if ( classInfo->IsKindOf(CLASSINFO(wxModule)) &&
+            (classInfo != (& (wxModule::sm_classwxModule))) )
         {
-            wxModule* module = (wxModule*) classInfo->CreateObject();
+            wxModule* module = (wxModule *)classInfo->CreateObject();
             RegisterModule(module);
         }
         node = wxClassInfo::sm_classTable->Next();
     }
+}
+
+bool wxModule::InitializeModules()
+{
+    // Initialize user-defined modules
+    wxModuleList::Node *node;
+    for ( node = m_modules.GetFirst(); node; node = node->GetNext() )
+    {
+        if ( !node->GetData()->Init() )
+        {
+            // clean up already initialized modules - process in reverse order
+            wxModuleList::Node *n;
+            for ( n = node->GetPrevious(); n; n = n->GetPrevious() )
+            {
+                n->GetData()->OnExit();
+            }
+
+            return FALSE;
+        }
+    }
+
     return TRUE;
 }
 
-bool wxModule::InitializeModules(void)
+void wxModule::CleanUpModules()
 {
-  // Initialize user-defined modules
-    for (wxNode *node = m_modules.First(); node; node = node->Next())
+    // Cleanup user-defined modules
+    wxModuleList::Node *node;
+    for ( node = m_modules.GetFirst(); node; node = node->GetNext() )
     {
-      if (!((wxModule*)(node->Data()))->Init())
-        return FALSE;
+        node->GetData()->Exit();
     }
-    return TRUE;
-}
 
-void wxModule::CleanUpModules(void)
-{
-  // Cleanup user-defined modules
-    for(wxNode* node = m_modules.Last(); node; node = node->Previous())
-    {
-      ((wxModule*)(node->Data()))->Exit();
-      delete (wxModule*)(node->Data());
-    }
+    m_modules.DeleteContents(TRUE);
     m_modules.Clear();
 }
 

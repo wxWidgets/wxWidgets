@@ -13,37 +13,46 @@
 #define _WX_MODULEH__
 
 #ifdef __GNUG__
-#pragma interface "module.h"
+    #pragma interface "module.h"
 #endif
 
 #include "wx/object.h"
 #include "wx/list.h"
-#include "wx/setup.h"
 
-class WXDLLEXPORT wxModule: public wxObject
+// declare a linked list of modules
+class wxModule;
+WX_DECLARE_LIST(wxModule, wxModuleList);
+
+// declaring a class derived from wxModule will automatically create an
+// instance of this class on program startup, call its OnInit() method and call
+// OnExit() on program termination (but only if OnInit() succeeded)
+class WXDLLEXPORT wxModule : public wxObject
 {
 public:
-    wxModule(void) {}
-    ~wxModule(void) {}
+    wxModule() {}
+    virtual ~wxModule() {}
 
-    // If returns FALSE, quits the application immediately.
-    bool Init(void) { return OnInit(); }
-    void Exit(void) { OnExit(); }
+    // if module init routine returns FALSE application will fail to startup
+    bool Init() { return OnInit(); }
+    void Exit() { OnExit(); }
 
     // Override both of these
-    virtual bool OnInit(void) = 0;
-    virtual void OnExit(void) = 0;
+        // called on program startup
+    virtual bool OnInit() = 0;
+        // called just before program termination, but only if OnInit()
+        // succeeded
+    virtual void OnExit() = 0;
 
     static void RegisterModule(wxModule* module);
-    static bool RegisterModules(void);
-    static bool InitializeModules(void);
-    static void CleanUpModules(void);
+    static void RegisterModules();
+    static bool InitializeModules();
+    static void CleanUpModules();
 
 protected:
-    static wxList   m_modules;
+    static wxModuleList m_modules;
 
-DECLARE_CLASS(wxModule)
+    DECLARE_CLASS(wxModule)
 };
 
-#endif
+#endif // _WX_MODULEH__
 
