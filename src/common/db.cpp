@@ -575,7 +575,7 @@ const wxChar *wxDb::convertUserID(const wxChar *userID, wxString &UserID)
 
 
 /********** wxDb::Open() **********/
-bool wxDb::Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthStr)
+bool wxDb::Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthStr, bool failOnDataTypeUnsupported)
 {
     wxASSERT(Dsn.Length());
     dsn        = Dsn;
@@ -686,7 +686,10 @@ bool wxDb::Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthSt
             if (!getDataTypeInfo(SQL_FLOAT,typeInfFloat))
                 if (!getDataTypeInfo(SQL_DECIMAL,typeInfFloat))
                     if (!getDataTypeInfo(SQL_NUMERIC,typeInfFloat))
-                        return(FALSE);
+                    {
+                        if (failOnDataTypeUnsupported)
+                            return(FALSE);
+                    }
                     else
                         typeInfFloat.FsqlType = SQL_NUMERIC;
                 else
@@ -704,7 +707,10 @@ bool wxDb::Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthSt
         // If SQL_INTEGER is not supported, use the floating point
         // data type to store integers as well as floats
         if (!getDataTypeInfo(typeInfFloat.FsqlType, typeInfInteger))
-            return(FALSE);
+        {
+            if (failOnDataTypeUnsupported)
+                return(FALSE);
+        }
         else
             typeInfInteger.FsqlType = typeInfFloat.FsqlType;
     }
@@ -712,25 +718,32 @@ bool wxDb::Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthSt
         typeInfInteger.FsqlType = SQL_INTEGER;
 
     // Date/Time
-    if (Dbms() != dbmsDBASE)
-    {
-        if (!getDataTypeInfo(SQL_TIMESTAMP,typeInfDate))
-            return(FALSE);
-        else
-            typeInfDate.FsqlType = SQL_TIMESTAMP;
-    }
-    else
+    if (!getDataTypeInfo(SQL_TIMESTAMP,typeInfDate))
     {
         if (!getDataTypeInfo(SQL_DATE,typeInfDate))
-            return(FALSE);
+        {
+            if (!getDataTypeInfo(SQL_DATETIME,typeInfDate))
+            {
+                if (failOnDataTypeUnsupported)
+                    return(FALSE);
+            }
+            else
+                typeInfDate.FsqlType = SQL_TIME;
+        }
         else
             typeInfDate.FsqlType = SQL_DATE;
     }
+    else
+        typeInfDate.FsqlType = SQL_TIMESTAMP;
+
 
     if (!getDataTypeInfo(SQL_LONGVARBINARY, typeInfBlob))
     {
         if (!getDataTypeInfo(SQL_VARBINARY,typeInfBlob))
-            return(FALSE);
+        {
+            if (failOnDataTypeUnsupported)
+                return(FALSE);
+        }
         else
             typeInfBlob.FsqlType = SQL_VARBINARY;
     }
@@ -1286,8 +1299,10 @@ bool wxDb::getDataTypeInfo(SWORD fSqlType, wxDbSqlTypeInfo &structSQLTypeInfo)
     // Get information about the data type specified
     if (SQLGetTypeInfo(hstmt, fSqlType) != SQL_SUCCESS)
         return(DispAllErrors(henv, hdbc, hstmt));
+
     // Fetch the record
-    if ((retcode = SQLFetch(hstmt)) != SQL_SUCCESS)
+    retcode = SQLFetch(hstmt);
+    if (retcode != SQL_SUCCESS)
     {
 #ifdef DBDEBUG_CONSOLE
         if (retcode == SQL_NO_DATA_FOUND)
@@ -1299,6 +1314,7 @@ bool wxDb::getDataTypeInfo(SWORD fSqlType, wxDbSqlTypeInfo &structSQLTypeInfo)
     }
 
     wxChar typeName[DB_TYPE_NAME_LEN+1];
+
     // Obtain columns from the record
     if (SQLGetData(hstmt, 1, SQL_C_CHAR, (UCHAR*) typeName, DB_TYPE_NAME_LEN, &cbRet) != SQL_SUCCESS)
         return(DispAllErrors(henv, hdbc, hstmt));
@@ -3478,6 +3494,9 @@ wxDBMS wxDb::Dbms(void)
     if (!wxStricmp(baseName,wxT("DBASE")))
         return((wxDBMS)(dbmsType = dbmsDBASE));
 
+    if (!wxStricmp(baseName,wxT("MySQL")))
+        return((wxDBMS)(dbmsType = dbmsMY_SQL));
+
     baseName[3] = 0;
     if (!wxStricmp(baseName,wxT("DB2")))
         return((wxDBMS)(dbmsType = dbmsDBASE));
@@ -3552,7 +3571,8 @@ bool wxDb::ModifyColumn(const wxString &tableName, const wxString &columnName,
               columnName.c_str(), dataTypeName.c_str());
 
     // For varchars only, append the size of the column
-    if (dataType == DB_DATA_TYPE_VARCHAR)
+    if (dataType == DB_DATA_TYPE_VARCHAR &&
+        (Dbms() != dbmsMY_SQL || dataTypeName != "text"))
     {
         wxString s;
         s.Printf(wxT("(%d)"), columnLength);

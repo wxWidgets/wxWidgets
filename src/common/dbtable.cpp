@@ -1384,7 +1384,8 @@ bool wxDbTable::CreateTable(bool attemptDrop)
                 break;
         }
         // For varchars, append the size of the string
-        if (colDefs[i].DbDataType == DB_DATA_TYPE_VARCHAR)// ||
+        if (colDefs[i].DbDataType == DB_DATA_TYPE_VARCHAR &&
+            (pDb->Dbms() != dbmsMY_SQL || pDb->GetTypeInfVarchar().TypeName != "text"))// ||
 //            colDefs[i].DbDataType == DB_DATA_TYPE_BLOB)
         {
             wxString s;
@@ -1456,7 +1457,14 @@ bool wxDbTable::CreateTable(bool attemptDrop)
                 if (j++) // Multi part key, comma separate names
                     sqlStmt += wxT(",");
                 sqlStmt += pDb->SQLColumnName(colDefs[i].ColName);
-//                sqlStmt += colDefs[i].ColName;
+
+                if (pDb->Dbms() == dbmsMY_SQL &&
+                    colDefs[i].DbDataType ==  DB_DATA_TYPE_VARCHAR)
+                {
+                    wxString s;
+                    s.Printf(wxT("(%d)"), colDefs[i].SzDataObj);
+                    sqlStmt += s;
+                }
             }
         }
         sqlStmt += wxT(")");

@@ -591,7 +591,8 @@ public:
     wxDb(const HENV &aHenv, bool FwdOnlyCursors=(bool)wxODBC_FWD_ONLY_CURSORS);
     ~wxDb();
 
-    bool         Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthStr);  // Data Source Name, User ID, Password
+    // Data Source Name, User ID, Password and whether open should fail on data type not supported
+    bool         Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthStr, bool failOnDataTypeUnsupported=TRUE);
     bool         Open(wxDbConnectInf *dbConnectInf);
     bool         Open(wxDb *copyDb);  // pointer to a wxDb whose connection info should be copied rather than re-queried
     void         Close(void);
