@@ -1012,10 +1012,7 @@ bool wxGridCellFloatEditor::EndEdit(int row, int col,
 
         return TRUE;
     }
-    else
-    {
-        return FALSE;
-    }
+    return FALSE;
 }
 
 void wxGridCellFloatEditor::Reset()
