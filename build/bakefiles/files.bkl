@@ -53,7 +53,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/utilsunx.cpp
 </set>
 <set var="BASE_UNIX_HDR" hints="files">
+    wx/unix/apptbase.h
+    wx/unix/apptrait.h
+    wx/unix/execute.h
     wx/unix/mimetype.h
+    wx/unix/pipe.h
 </set>
 
 <set var="BASE_WIN32_SRC" hints="files">
@@ -75,6 +79,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/volume.cpp
 </set>
 <set var="BASE_WIN32_HDR" hints="files">
+    wx/msw/apptrait.h
+    wx/msw/apptbase.h
     wx/msw/chkconf.h
     wx/msw/crashrpt.h
     wx/msw/dde.h
@@ -219,6 +225,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/fs_zip.h
     wx/hash.h
     wx/hashmap.h
+    wx/hashset.h
     wx/iconloc.h
     wx/init.h
     wx/intl.h
@@ -244,7 +251,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/object.h
     wx/platform.h
     wx/process.h
+    wx/ptr_scpd.h
     wx/regex.h
+    wx/scopeguard.h
     wx/snglinst.h
     wx/stopwatch.h
     wx/strconv.h
@@ -255,6 +264,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/textfile.h
     wx/thread.h
     wx/thrimpl.cpp
+    wx/timer.h
     wx/tokenzr.h
     wx/txtstrm.h
     wx/types.h
@@ -506,7 +516,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/statusbr.h
     wx/textctrl.h
     wx/textdlg.h
-    wx/timer.h
     wx/toolbar.h
     wx/validate.h
     wx/valtext.h
@@ -2235,14 +2244,21 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 
 
+    <set var="GUI_CORE_HEADERS" hints="files">
+        <if cond="USE_GUI=='1' and WXUNIV=='0'">$(GUI_HDR)</if>
+        <if cond="USE_GUI=='1' and WXUNIV=='1'">$(UNIV_HDR)</if>
+    </set>
+
     <set var="ALL_GUI_HEADERS" hints="files">
-        <if cond="USE_GUI=='1' and WXUNIV=='0'">
-            $(GUI_CMN_HDR) $(LOWLEVEL_HDR) $(GUI_HDR)
-        </if>
-        <if cond="USE_GUI=='1' and WXUNIV=='1'">
-            $(GUI_CMN_HDR) $(LOWLEVEL_HDR) $(UNIV_HDR)
+        <if cond="USE_GUI=='1'">
+            $(GUI_CMN_HDR)
+            $(LOWLEVEL_HDR)
+            $(GUI_CORE_HEADERS)
+            $(ADVANCED_HDR) $(HTML_HDR)
+            $(OPENGL_HDR) $(ODBC_HDR) $(DBGRID_HDR)
         </if>
     </set>
+        
 
     <set var="ALL_BASE_HEADERS" make_var="1" hints="files">
         $(BASE_CMN_HDR) $(BASE_PLATFORM_HDR)
@@ -2251,10 +2267,20 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     </set>
 
     <set var="ALL_HEADERS" make_var="1" hints="files">
-        $(ALL_BASE_HEADERS)
-        $(ALL_GUI_HEADERS) $(ADVANCED_HDR)
-        $(HTML_HDR)
-        $(OPENGL_HDR) $(ODBC_HDR) $(DBGRID_HDR)
+        $(ALL_BASE_HEADERS) $(ALL_GUI_HEADERS)
+    </set>
+
+    <set var="ALL_BASE_SOURCES" make_var="1" hints="files">
+        $(BASE_CMN_SRC)
+        $(BASE_UNIX_SRC) $(BASE_WIN32_SRC) $(BASE_MAC_SRC) $(BASE_DARWIN_SRC)
+        $(BASE_OS2_SRC)
+        $(BASE_AND_GUI_CMN_SRC)
+        $(BASE_AND_GUI_UNIX_SRC)
+        $(BASE_AND_GUI_MAC_SRC)
+        $(BASE_AND_GUI_DARWIN_SRC)
+        $(BASE_AND_GUI_WIN32_SRC)
+        $(NET_CMN_SRC) $(NET_UNIX_SRC) $(NET_WIN32_SRC) $(NET_MAC_SRC)
+        $(XML_SRC)
     </set>
 
 </makefile>

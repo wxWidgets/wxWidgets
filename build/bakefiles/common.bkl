@@ -19,7 +19,9 @@
     <set var="WXVER_MAJOR">$(wxwin.getVersionMajor())</set>
     <set var="WXVER_MINOR">$(wxwin.getVersionMinor())</set>
     <set var="WXVER_RELEASE">$(wxwin.getVersionRelease())</set>
-    <set var="WX_VERSION">$(WXVER_MAJOR).$(WXVER_MINOR).$(WXVER_RELEASE)</set>
+    <set var="WX_VERSION" make_var="1">
+        $(WXVER_MAJOR).$(WXVER_MINOR).$(WXVER_RELEASE)
+    </set>
 
     <set var="WX_STABLE_BRANCH">$(int(int(WXVER_MINOR) % 2 == 0))</set>
 
