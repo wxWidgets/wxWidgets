@@ -70,8 +70,6 @@ protected:
     bool      mDragStarted;
     bool      mIsPressed;
     bool      mIsInFocus;
-    bool      mPrevPressedState;
-    bool      mPrevInFocusState;
 
     bool      mHasFocusedBmp;
 
@@ -166,14 +164,23 @@ public:
         // Renders label images.
     virtual void RenderAllLabelImages();
 
+        // Enables/disables button
+    virtual bool Enable(bool enable);
+
         // Responds to a left mouse button down event.
     void OnLButtonDown( wxMouseEvent& event );
 
         // Responds to a left mouse button up event.
     void OnLButtonUp( wxMouseEvent& event );
 
-        // Responds to a mouse move event.
-    void OnMouseMove( wxMouseEvent& event );
+        // Responds to a left mouse button double click.
+    void OnLButtonDClick( wxMouseEvent& event );
+
+        // Responds to mouse enter to window.
+    void OnMouseEnter( wxMouseEvent& event );
+
+        // Responds to mouse leave from window.
+    void OnMouseLeave( wxMouseEvent& event );
 
         // Responds to a size event.
     void OnSize( wxSizeEvent& event );

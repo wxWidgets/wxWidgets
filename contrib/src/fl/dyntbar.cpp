@@ -185,6 +185,10 @@ wxToolBarToolBase*
 
     pBmpBtn->Reshape();
 
+#if wxUSE_TOOLTIPS
+    pBmpBtn->SetToolTip( helpString1 );
+#endif  // wxUSE_TOOLTIPS
+
     AddTool( toolIndex, pBmpBtn );
 
     return NULL;

@@ -204,9 +204,11 @@ IMPLEMENT_DYNAMIC_CLASS(wxNewBitmapButton, wxPanel)
 
 BEGIN_EVENT_TABLE( wxNewBitmapButton, wxPanel )
 
-    EVT_LEFT_DOWN( wxNewBitmapButton::OnLButtonDown )
-    EVT_LEFT_UP  ( wxNewBitmapButton::OnLButtonUp   )
-    EVT_MOTION   ( wxNewBitmapButton::OnMouseMove   )
+    EVT_LEFT_DOWN   ( wxNewBitmapButton::OnLButtonDown   )
+    EVT_LEFT_UP     ( wxNewBitmapButton::OnLButtonUp     )
+    EVT_LEFT_DCLICK ( wxNewBitmapButton::OnLButtonDClick )
+    EVT_ENTER_WINDOW( wxNewBitmapButton::OnMouseEnter    )
+    EVT_LEAVE_WINDOW( wxNewBitmapButton::OnMouseLeave    )
 
     EVT_SIZE ( wxNewBitmapButton::OnSize  )
     EVT_PAINT( wxNewBitmapButton::OnPaint )
@@ -245,8 +247,6 @@ wxNewBitmapButton::wxNewBitmapButton( const wxBitmap& labelBitmap,
         mDragStarted     ( FALSE ),
         mIsPressed       ( FALSE ),
         mIsInFocus( FALSE ),
-        mPrevPressedState( FALSE ),
-        mPrevInFocusState( FALSE ),
         mHasFocusedBmp( FALSE ),
         mFiredEventType( firedEventType ),
 
@@ -290,8 +290,6 @@ wxNewBitmapButton::wxNewBitmapButton( const wxString& bitmapFileName,
         mDragStarted     ( FALSE ),
         mIsPressed       ( FALSE ),
         mIsInFocus       ( FALSE ),
-        mPrevPressedState( FALSE ),
-        mPrevInFocusState( FALSE ),
         mHasFocusedBmp( FALSE ),
         mFiredEventType( wxEVT_COMMAND_MENU_SELECTED ),
 
@@ -498,56 +496,6 @@ void wxNewBitmapButton::RenderLabelImage( wxBitmap*& destBmp, wxBitmap* srcBmp,
         destDc.DrawText( mLabelText, txtPos.x, txtPos.y );
     }
 
-
-    destDc.SetBrush( grayBrush );
-    destDc.SetPen( nullPen );
-
-    destDc.DrawRectangle( 0,0, destDim.x+1, destDim.y+1 );
-
-    if ( isPressed )
-    {
-        ++imgPos.x; ++imgPos.y;
-        ++txtPos.x; ++txtPos.y;
-    }
-
-    if ( hasImage )
-    {
-
-        destDc.Blit( imgPos.x, imgPos.y, 
-                 srcBmp->GetWidth()+1,
-                 srcBmp->GetHeight()+1,
-                 &srcDc, 0,0, wxCOPY,TRUE );
-    }
-
-    if ( hasText )
-    {
-        wxWindow* pTopWnd = this;
-
-        do
-        {
-            wxWindow* pParent = pTopWnd->GetParent();
-
-            if ( pParent == 0 )
-                break;
-
-            pTopWnd = pParent;
-        } while (1);
-
-        destDc.SetFont( wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT) );
-
-        if ( isEnabled )
-        {
-            destDc.SetTextForeground( wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT) );
-        }
-        else
-        {
-            destDc.SetTextForeground( wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW) );
-        }
-        destDc.SetTextBackground( wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE) );
-
-        destDc.DrawText( mLabelText, txtPos.x, txtPos.y );
-    }
-
     if ( !isEnabled ){
     
 #ifdef __WXMSW__ // This is currently MSW specific
@@ -609,6 +557,26 @@ void wxNewBitmapButton::RenderLabelImages()
         else
             RenderLabelImage( mpDepressedImg, &mDepressedBmp, TRUE, FALSE );
     }
+}
+
+bool wxNewBitmapButton::Enable(bool enable)
+{
+    if ( enable != m_isEnabled )
+    {
+        if ( mIsInFocus )
+        {
+            mIsInFocus = FALSE;
+        }
+
+        if ( mIsPressed )
+        {
+            mIsPressed = FALSE;
+        }
+
+        Refresh();
+    }
+
+    return wxPanel::Enable( enable );
 }
 
 void wxNewBitmapButton::DrawDecorations( wxDC& dc )
@@ -674,13 +642,9 @@ void wxNewBitmapButton::SetAlignments( int alignText,
 
 void wxNewBitmapButton::OnLButtonDown( wxMouseEvent& event )
 {
-    mPrevPressedState = FALSE;   
     mDragStarted      = TRUE;
     mIsPressed        = TRUE;
     Refresh();
-
-    if ( !mIsInFocus )
-            CaptureMouse();
 }
 
 void wxNewBitmapButton::OnLButtonUp( wxMouseEvent& event )
@@ -690,10 +654,7 @@ void wxNewBitmapButton::OnLButtonUp( wxMouseEvent& event )
 
     mDragStarted = FALSE;
     mIsPressed   = FALSE;
-    mIsInFocus   = FALSE;
     Refresh();
-
-    ReleaseMouse();
 
     if ( IsInWindow( event.m_x, event.m_y ) ) 
     {
@@ -701,6 +662,21 @@ void wxNewBitmapButton::OnLButtonUp( wxMouseEvent& event )
         // within the bounds of button
         wxCommandEvent cmd( mFiredEventType, GetId() );
         GetParent()->ProcessEvent( cmd );
+    }
+}
+
+void wxNewBitmapButton::OnLButtonDClick( wxMouseEvent& event )
+{
+    if ( IsInWindow( event.m_x, event.m_y ) ) 
+    {
+        // fire event, if mouse was released
+        // within the bounds of button
+        wxCommandEvent cmd( mFiredEventType, GetId() );
+        GetParent()->ProcessEvent( cmd );
+
+        mDragStarted = FALSE;
+        mIsPressed   = FALSE;
+        Refresh();
     }
 }
 
@@ -714,37 +690,30 @@ bool wxNewBitmapButton::IsInWindow( int x, int y )
              y < height );
 }
 
-void wxNewBitmapButton::OnMouseMove( wxMouseEvent& event )
+void wxNewBitmapButton::OnMouseEnter( wxMouseEvent& event )
 {
-    mPrevPressedState=mIsPressed;
-    mPrevInFocusState=mIsInFocus;
-    if ( !mIsInFocus && IsInWindow( event.m_x, event.m_y ) )
-    {
-        if ( !mDragStarted )
-            CaptureMouse();
+    bool prevIsInFocus = mIsInFocus;
 
+    if ( !mIsInFocus )
+    {
         mIsInFocus = TRUE;
     }
-    else
-    if ( mIsInFocus && !IsInWindow( event.m_x, event.m_y ) )
+    if ( prevIsInFocus != mIsInFocus )
+    {
+        Refresh();
+    }
+}
+
+void wxNewBitmapButton::OnMouseLeave( wxMouseEvent& event )
+{
+    bool prevIsInFocus = mIsInFocus;
+    bool prevIsPressed = mIsPressed;
+    if ( mIsInFocus )
     {
         mIsInFocus = FALSE;
-
-        if ( !mDragStarted )
-            ReleaseMouse();
+        mIsPressed = FALSE;
     }
-
-    if ( mDragStarted )
-    {
-        if ( IsInWindow( event.m_x, event.m_y ) )
-
-            mIsPressed = TRUE;
-        else
-            mIsPressed = FALSE;
-    }
-
-    if ((mIsPressed != mPrevPressedState) ||
-        (mIsInFocus!=mPrevInFocusState))
+    if ( prevIsInFocus != mIsInFocus || prevIsPressed != mIsPressed )
     {
         Refresh();
     }
