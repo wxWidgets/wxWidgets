@@ -278,7 +278,7 @@ class wxGenButton(wxPyControl):
 
 
     def OnLeftUp(self, event):
-        if not self.IsEnabled():
+        if not self.IsEnabled() or not self.HasCapture():
             return
         self.ReleaseMouse()
         if not self.up:    # if the button was down when the mouse was released...
@@ -289,7 +289,7 @@ class wxGenButton(wxPyControl):
 
 
     def OnMotion(self, event):
-        if not self.IsEnabled():
+        if not self.IsEnabled() or not self.HasCapture():
             return
         if event.LeftIsDown():
             x,y = event.GetPositionTuple()
@@ -468,9 +468,12 @@ class wxGenBitmapTextButton(wxGenBitmapButton):     # generic bitmapped button w
 class __ToggleMixin:
     def SetToggle(self, flag):
         self.up = not flag
+        self.Refresh()
+    SetValue = SetToggle
 
     def GetToggle(self):
         return not self.up
+    GetValue = GetToggle
 
     def OnLeftDown(self, event):
         if not self.IsEnabled():
@@ -482,7 +485,7 @@ class __ToggleMixin:
         self.Refresh()
 
     def OnLeftUp(self, event):
-        if not self.IsEnabled():
+        if not self.IsEnabled() or not self.HasCapture():
             return
         if self.up != self.saveUp:
             self.Notify()
