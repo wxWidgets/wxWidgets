@@ -43,14 +43,10 @@
 #endif // __WINDOWS__
 
 #if defined(__UNIX__)
-
 #ifdef VMS
 #include <socket.h>
 #include <in.h>
 #else
-#if defined(__FreeBSD__) || defined (__NetBSD__) || defined(__SUN__)
-#include <sys/types.h>
-#endif
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -77,8 +73,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress)
 #endif
 
 wxIPV4address::wxIPV4address()
-  m_addr = new sockaddr_in;
 {
+  m_addr = new sockaddr_in;
   Clear();
 }
 
