@@ -47,8 +47,6 @@
     typedef long off_t;
 #endif
 
-#endif
-
 #if defined(__VISAGECPP__) && __IBMCPP__ >= 400
 //
 // VisualAge C++ V4.0 cannot have any external linkage const decs
@@ -92,11 +90,8 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 
     #if wxUSE_UNICODE
         #if wxUSE_UNICODE_MSLU
-#ifdef __BORLANDC__
-            #define   wxOpen       open
-#else
-            #define   wxOpen       _open
-#endif 
+            #define   wxOpen       wxMSLU__wopen
+ 
             #define   wxAccess     wxMSLU__waccess
             #define   wxMkDir      wxMSLU__wmkdir
             #define   wxRmDir      wxMSLU__wrmdir
@@ -109,7 +104,11 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
             #define   wxStat       _wstat
         #endif
     #else // !wxUSE_UNICODE
+#ifdef __BORLANDC__
+        #define   wxOpen       open
+#else
         #define   wxOpen       _open
+#endif
         #define   wxAccess     _access
         #define   wxMkDir      _mkdir
         #define   wxRmDir      _rmdir
