@@ -2648,7 +2648,7 @@ GetTempBuffer(
 		
 		buffReqSize = MaxBlock() & 0xfffff000;
 		
-		if ( buffReqSize > freeMemory )
+		if ( (long)buffReqSize > freeMemory )
 		{
 			buffReqSize = freeMemory;
 		}

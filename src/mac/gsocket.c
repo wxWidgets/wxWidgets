@@ -1071,7 +1071,7 @@ int _GSocket_Recv_Stream(GSocket *socket, char *buffer, int size)
 	OTByteCount sz = 0 ;
 
   	OTCountDataBytes( socket->m_endpoint , &sz ) ;
-  	if ( size > sz )
+  	if ( size > (int)sz )
   	  size = sz ;
 	res = OTRcv( socket->m_endpoint , buffer , size , &flags ) ;
 	if ( res < 0 )
@@ -1344,7 +1344,7 @@ service_entry gServices[] =
 GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
                                        const char *protocol)
 {
-  int i ;
+  size_t i ;
 
   assert(address != NULL);
   CHECK_ADDRESS(address, INET, GSOCK_INVADDR);
