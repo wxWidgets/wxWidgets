@@ -380,15 +380,35 @@ public:
         #define WXAPIENTRY WXFAR wxSTDCALL
     #endif
 
-    #define IMPLEMENT_WXWIN_MAIN \
-        int WXAPIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,\
-                               LPSTR m_lpCmdLine, int nCmdShow )\
-        {\
-            return wxEntry((WXHINSTANCE) hInstance, \
-                           (WXHINSTANCE) hPrevInstance,\
-                           m_lpCmdLine, nCmdShow);\
-        }
+    // Patch from Mumit Khan to allow DLL compilation under mingw. Note that
+    // this includes <windows.h> which is a bad thing because it prevents
+    // wxWindows to work with MFC, so for now I'm making this change for
+    // mingw/cygwin only (these don't work with MFC yet). GRG Mar/2000
+    #ifdef(__GNUWIN32__)
+        #include <windows.h>
+        #include "wx/msw/winundef.h"
 
+        #define IMPLEMENT_WXWIN_MAIN \
+            extern "C" int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int);\
+            int WINAPI WinMain(HINSTANCE hInstance, \
+                               HINSTANCE hPrevInstance,\
+                               LPSTR m_lpCmdLine, int nCmdShow )\
+            {\
+                return wxEntry((WXHINSTANCE) hInstance, \
+                               (WXHINSTANCE) hPrevInstance,\
+                               m_lpCmdLine, nCmdShow);\
+            }
+    #else
+        #define IMPLEMENT_WXWIN_MAIN \
+            int WXAPIENTRY WinMain(HINSTANCE hInstance, \
+                                   HINSTANCE hPrevInstance,\
+                                   LPSTR m_lpCmdLine, int nCmdShow )\
+            {\
+                return wxEntry((WXHINSTANCE) hInstance, \
+                               (WXHINSTANCE) hPrevInstance,\
+                               m_lpCmdLine, nCmdShow);\
+            }
+    #endif
 #else
     #define IMPLEMENT_WXWIN_MAIN
 #endif
