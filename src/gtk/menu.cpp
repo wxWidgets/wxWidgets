@@ -1268,7 +1268,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
 
             case wxITEM_NORMAL:
                 item_type = "<Item>";
-#ifdef __WXGTK20__                
+#if defined(__WXGTK20__) && wxUSE_IMAGE
                 if (mitem->GetBitmap().Ok())
                 {
                     item_type = "<ImageItem>";
@@ -1276,7 +1276,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
                     // get a GdkPixbuf structure, which we need to create on the fly.
                     // This Pixbuf structure needs to be static so we create it and
                     // just make it a memory leak...
-                    wxImage image( mitem->GetBitmap() );
+                    wxImage image( mitem->GetBitmap().ConvertToImage() );
                     size_t size = 4 +   // magic
                                   20 +  // header
                                   image.GetHeight() * image.GetWidth() * 4; // RGBA
@@ -1324,7 +1324,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
                     }
                     break;
                 }
-#endif
+#endif // GTK 2.0+
                 break;
         }
 

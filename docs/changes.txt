@@ -195,6 +195,10 @@ Unix:
 - added --basename and --release flags to wx-config (Robert O'Connor)
 - added support for GNU/Hurd in configure
 
+wxGTK
+
+- fixed compilation with --disable-compat-22
+
 wxMSW:
 
 - compilation fix for VC++ command line build (missing version.mak)
