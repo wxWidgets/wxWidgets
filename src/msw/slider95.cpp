@@ -49,7 +49,7 @@ wxBEGIN_FLAGS( wxSliderStyle )
     wxFLAGS_MEMBER(wxBORDER_RAISED)
     wxFLAGS_MEMBER(wxBORDER_STATIC)
     wxFLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     wxFLAGS_MEMBER(wxSIMPLE_BORDER)
     wxFLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -578,7 +578,7 @@ void wxSlider95::DoSetSize(int x, int y, int width, int height, int sizeFlags)
                 (int) min_len, cy, TRUE);
             y_offset += cy;
 
-            //  slider_length = (total height available) - (height used so far) 
+            //  slider_length = (total height available) - (height used so far)
             //                              - (height of max label) - (border)
             int slider_length = (int)(h1 - (y_offset-y) - cy - cy);
 
@@ -628,18 +628,18 @@ wxSize wxSlider95::DoGetBestSize() const
 {
     wxSize rv;
     wxChar buf[300];
-    int cx;    
+    int cx;
     int cy;
     int cyf;
     int min_len = 0;
     int max_len = 0;
-    
+
     wxGetCharSize(GetHWND(), &cx, &cy, this->GetFont());
-    
+
     if ( !HasFlag(wxSL_VERTICAL))
     {
         rv = wxSize(100, 20);  // default size for the slider itself
-        
+
         if (HasFlag(wxSL_LABELS))  // do we need to add more for the labels?
         {
             ::GetWindowText((HWND) m_staticMin, buf, 300);
@@ -654,7 +654,7 @@ wxSize wxSlider95::DoGetBestSize() const
             {
                 int new_width = (int)(wxMax(min_len, max_len));
                 int valueHeight = (int)cyf;
-            
+
 #ifdef __WIN32__
                 // For some reason, under Win95, the text edit control has
                 // a lot of space before the first character
@@ -682,7 +682,7 @@ wxSize wxSlider95::DoGetBestSize() const
             ::GetWindowText((HWND) m_staticMax, buf, 300);
             GetTextExtent(buf, &max_len, &cyf);
             rv.y += cy;
-            
+
             if (m_staticValue)
             {
                 int new_width = (int)(wxMax(min_len, max_len));
@@ -694,7 +694,7 @@ wxSize wxSlider95::DoGetBestSize() const
                 valueHeight = (int) (valueHeight * 1.5) ;
                 rv.y += valueHeight;
                 rv.x = wxMax(new_width, rv.x);
-            }            
+            }
         }
     }
     return rv;

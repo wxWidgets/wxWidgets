@@ -55,7 +55,7 @@ wxBEGIN_FLAGS( wxStaticBoxStyle )
     wxFLAGS_MEMBER(wxBORDER_RAISED)
     wxFLAGS_MEMBER(wxBORDER_STATIC)
     wxFLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     wxFLAGS_MEMBER(wxSIMPLE_BORDER)
     wxFLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -79,18 +79,18 @@ wxEND_FLAGS( wxStaticBoxStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxStaticBox, wxControl,"wx/statbox.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxStaticBox)
-	wxPROPERTY( Label,wxString, SetLabel, GetLabel, wxString() , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    wxPROPERTY( Label,wxString, SetLabel, GetLabel, wxString() , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
     wxPROPERTY_FLAGS( WindowStyle , wxStaticBoxStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE, 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 /*
-	TODO PROPERTIES :
-		label
+    TODO PROPERTIES :
+        label
 */
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxStaticBox)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_6( wxStaticBox , wxWindow* , Parent , wxWindowID , Id , wxString , Label , wxPoint , Position , wxSize , Size , long , WindowStyle ) 
+wxCONSTRUCTOR_6( wxStaticBox , wxWindow* , Parent , wxWindowID , Id , wxString , Label , wxPoint , Position , wxSize , Size , long , WindowStyle )
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
 #endif
@@ -112,7 +112,7 @@ bool wxStaticBox::Create(wxWindow *parent,
                          const wxString& name)
 {
     if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
-        return FALSE;
+        return false;
 
     // as wxStaticBox doesn't draw its own background, we make it transparent
     // to force redrawing its background which could have been overwritten by
@@ -132,12 +132,12 @@ bool wxStaticBox::Create(wxWindow *parent,
         WS_EX_TRANSPARENT
 #endif
                            ) )
-        return FALSE;
+        return false;
 
     // to be transparent we should have the same colour as the parent as well
     SetBackgroundColour(GetParent()->GetBackgroundColour());
 
-    return TRUE;
+    return true;
 }
 
 wxSize wxStaticBox::DoGetBestSize() const

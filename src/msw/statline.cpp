@@ -58,7 +58,7 @@ wxBEGIN_FLAGS( wxStaticLineStyle )
     wxFLAGS_MEMBER(wxBORDER_RAISED)
     wxFLAGS_MEMBER(wxBORDER_STATIC)
     wxFLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     wxFLAGS_MEMBER(wxSIMPLE_BORDER)
     wxFLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -98,8 +98,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxStaticLine, wxControl)
 #endif
 
 /*
-	TODO PROPERTIES :
-		style (wxLI_HORIZONTAL)
+    TODO PROPERTIES :
+        style (wxLI_HORIZONTAL)
 */
 
 // ----------------------------------------------------------------------------
@@ -116,7 +116,7 @@ bool wxStaticLine::Create(wxWindow *parent,
     wxSize size = AdjustSize(sizeOrig);
 
     if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
-        return FALSE;
+        return false;
 
     return MSWCreateControl(_T("STATIC"), wxEmptyString, pos, size);
 }

@@ -69,7 +69,7 @@ bool wxSliderMSW::Create(wxWindow *parent, wxWindowID id,
   m_lineSize = 1;
   m_windowStyle = style;
 
-  if ( id == -1 )
+  if ( id == wxID_ANY )
       m_windowId = (int)NewControlId();
   else
     m_windowId = id;
@@ -158,7 +158,7 @@ bool wxSliderMSW::Create(wxWindow *parent, wxWindowID id,
   SetSize(x, y, width, height);
   SetValue(value);
 
-  return TRUE;
+  return true;
 }
 
 bool wxSliderMSW::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
@@ -217,7 +217,7 @@ bool wxSliderMSW::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
     if (nScrollInc == 0)
     {
         // no event...
-        return FALSE;
+        return false;
     }
 
     int newPos = position + nScrollInc;
@@ -225,7 +225,7 @@ bool wxSliderMSW::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
     if ( (newPos < GetMin()) || (newPos > GetMax()) )
     {
         // out of range - but we did process it
-        return TRUE;
+        return true;
     }
 
     SetValue(newPos);
@@ -333,9 +333,9 @@ void wxSliderMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
   int currentX, currentY;
   GetPosition(&currentX, &currentY);
-  if (x == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+  if (x == wxDefaultCoord && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     x1 = currentX;
-  if (y == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+  if (y == wxDefaultCoord && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     y1 = currentY;
 
   AdjustForParentClientOrigin(x1, y1, sizeFlags);
@@ -373,11 +373,11 @@ void wxSliderMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
       // a lot of space before the first character
       new_width += 3*cx;
 #endif
-      MoveWindow((HWND) m_staticValue, x_offset, y_offset, new_width, valueHeight, TRUE);
+      ::MoveWindow((HWND) m_staticValue, x_offset, y_offset, new_width, valueHeight, TRUE);
       x_offset += new_width + cx;
     }
 
-    MoveWindow((HWND) m_staticMin, x_offset, y_offset, (int)min_len, cy, TRUE);
+    ::MoveWindow((HWND) m_staticMin, x_offset, y_offset, (int)min_len, cy, TRUE);
     x_offset += (int)(min_len + cx);
 
     int slider_length = (int)(w1 - x_offset - max_len - cx);
@@ -388,10 +388,10 @@ void wxSliderMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     if (slider_length < 100)
       slider_length = 100;
 
-    MoveWindow(GetHwnd(), x_offset, y_offset, slider_length, slider_height, TRUE);
+    ::MoveWindow(GetHwnd(), x_offset, y_offset, slider_length, slider_height, TRUE);
     x_offset += slider_length + cx;
 
-    MoveWindow((HWND) m_staticMax, x_offset, y_offset, (int)max_len, cy, TRUE);
+    ::MoveWindow((HWND) m_staticMax, x_offset, y_offset, (int)max_len, cy, TRUE);
     }
     else
     {
@@ -400,7 +400,7 @@ void wxSliderMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
             w1 = 200;
         if ( h1 < 0 )
             h1 = 20;
-        MoveWindow(GetHwnd(), x1, y1, w1, h1, TRUE);
+        ::MoveWindow(GetHwnd(), x1, y1, w1, h1, TRUE);
     }
   }
   else
@@ -428,11 +428,11 @@ void wxSliderMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
  ... and replace with following line: */
       new_width += cx;
 
-      MoveWindow((HWND) m_staticValue, x_offset, y_offset, new_width, valueHeight, TRUE);
+      ::MoveWindow((HWND) m_staticValue, x_offset, y_offset, new_width, valueHeight, TRUE);
       y_offset += valueHeight;
     }
 
-    MoveWindow((HWND) m_staticMin, x_offset, y_offset, (int)min_len, cy, TRUE);
+    ::MoveWindow((HWND) m_staticMin, x_offset, y_offset, (int)min_len, cy, TRUE);
     y_offset += cy;
 
     int slider_length = (int)(h1 - y_offset - cy - cy);
@@ -444,10 +444,10 @@ void wxSliderMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     if (slider_length < 100)
       slider_length = 100;
 
-    MoveWindow(GetHwnd(), x_offset, y_offset, slider_width, slider_length, TRUE);
+    ::MoveWindow(GetHwnd(), x_offset, y_offset, slider_width, slider_length, TRUE);
     y_offset += slider_length;
 
-    MoveWindow((HWND) m_staticMax, x_offset, y_offset, (int)max_len, cy, TRUE);
+    ::MoveWindow((HWND) m_staticMax, x_offset, y_offset, (int)max_len, cy, TRUE);
     }
     else
     {
@@ -456,7 +456,7 @@ void wxSliderMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
             w1 = 20;
         if ( h1 < 0 )
             h1 = 200;
-        MoveWindow(GetHwnd(), x1, y1, w1, h1, TRUE);
+        ::MoveWindow(GetHwnd(), x1, y1, w1, h1, TRUE);
     }
   }
 }
@@ -549,7 +549,7 @@ bool wxSliderMSW::Show(bool show)
         ShowWindow((HWND) m_staticMin, (BOOL)cshow);
     if(m_staticMax)
         ShowWindow((HWND) m_staticMax, (BOOL)cshow);
-    return TRUE;
+    return true;
 }
 
 

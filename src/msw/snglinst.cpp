@@ -61,18 +61,18 @@ public:
         {
             wxLogLastError(_T("CreateMutex"));
 
-            return FALSE;
+            return false;
         }
 
         // mutex was either created or opened - see what really happened
         m_wasOpened = ::GetLastError() == ERROR_ALREADY_EXISTS;
 
-        return TRUE;
+        return true;
     }
 
     bool WasOpened() const
     {
-        wxCHECK_MSG( m_hMutex, FALSE,
+        wxCHECK_MSG( m_hMutex, false,
                      _T("can't be called if mutex creation failed") );
 
         return m_wasOpened;
@@ -119,7 +119,7 @@ bool wxSingleInstanceChecker::Create(const wxString& name,
 
 bool wxSingleInstanceChecker::IsAnotherRunning() const
 {
-    wxCHECK_MSG( m_impl, FALSE, _T("must call Create() first") );
+    wxCHECK_MSG( m_impl, false, _T("must call Create() first") );
 
     // if the mutex had been opened, another instance is running - otherwise we
     // would have created it

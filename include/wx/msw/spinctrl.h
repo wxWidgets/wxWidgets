@@ -35,7 +35,7 @@ public:
     wxSpinCtrl() { }
 
     wxSpinCtrl(wxWindow *parent,
-               wxWindowID id = -1,
+               wxWindowID id = wxID_ANY,
                const wxString& value = wxEmptyString,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
@@ -47,7 +47,7 @@ public:
     }
 
     bool Create(wxWindow *parent,
-                wxWindowID id = -1,
+                wxWindowID id = wxID_ANY,
                 const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
@@ -72,8 +72,8 @@ public:
     virtual bool SetFont(const wxFont &font);
     virtual void SetFocus();
 
-    virtual bool Enable(bool enable = TRUE);
-    virtual bool Show(bool show = TRUE);
+    virtual bool Enable(bool enable = true);
+    virtual bool Show(bool show = true);
 
     // wxSpinButton doesn't accept focus, but we do
     virtual bool AcceptsFocus() const { return wxWindow::AcceptsFocus(); }

@@ -87,7 +87,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxSystemSettingsModule, wxModule)
 
 bool wxSystemSettingsModule::OnInit()
 {
-    return TRUE;
+    return true;
 }
 
 void wxSystemSettingsModule::OnExit()
@@ -110,7 +110,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
     // is no invalid colour value we use hasCol as the real indicator of
     // whether colSys was initialized or not
     COLORREF colSys = 0;
-    bool hasCol = FALSE;
+    bool hasCol = false;
 
     // the default colours for the entries after BTNHIGHLIGHT
     static const COLORREF s_defaultSysColors[] =
@@ -146,7 +146,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         if ( verMaj < 4 )
         {
             // NT 3.5
-            useDefault = TRUE;
+            useDefault = true;
         }
         else if ( verMaj == 4 )
         {
@@ -161,17 +161,17 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         else // >= 5.1
         {
             // 5.1 is Windows XP
-            useDefault = FALSE;
- 			// Determine if we are using flat menus, only then allow wxSYS_COLOUR_MENUBAR
-			if ( index == wxSYS_COLOUR_MENUBAR )
-			{
-				BOOL isFlat ;
-				if ( SystemParametersInfo( SPI_GETFLATMENU , 0 ,&isFlat, 0 ) )
-				{
-					if ( !isFlat )
-						index = wxSYS_COLOUR_MENU ;
-				}
-			}
+            useDefault = false;
+            // Determine if we are using flat menus, only then allow wxSYS_COLOUR_MENUBAR
+            if ( index == wxSYS_COLOUR_MENUBAR )
+            {
+                BOOL isFlat ;
+                if ( SystemParametersInfo( SPI_GETFLATMENU , 0 ,&isFlat, 0 ) )
+                {
+                    if ( !isFlat )
+                        index = wxSYS_COLOUR_MENU ;
+                }
+            }
        }
 
         if ( useDefault )
@@ -192,7 +192,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
                               _T("forgot tp update the default colours array") );
 
                 colSys = s_defaultSysColors[n];
-                hasCol = TRUE;
+                hasCol = true;
             }
         }
     }
@@ -410,12 +410,12 @@ bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
     {
         case wxSYS_CAN_ICONIZE_FRAME:
         case wxSYS_CAN_DRAW_FRAME_DECORATIONS:
-            return TRUE;
+            return true;
 
         default:
             wxFAIL_MSG( _T("unknown system feature") );
 
-            return FALSE;
+            return false;
     }
 }
 

@@ -42,7 +42,7 @@ wxBEGIN_FLAGS( wxScrollBarStyle )
     wxFLAGS_MEMBER(wxBORDER_RAISED)
     wxFLAGS_MEMBER(wxBORDER_STATIC)
     wxFLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     wxFLAGS_MEMBER(wxSIMPLE_BORDER)
     wxFLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -72,9 +72,9 @@ wxBEGIN_PROPERTIES_TABLE(wxScrollBar)
     wxEVENT_RANGE_PROPERTY( Scroll , wxEVT_SCROLL_TOP , wxEVT_SCROLL_ENDSCROLL , wxScrollEvent )
 
     wxPROPERTY( ThumbPosition , int , SetThumbPosition, GetThumbPosition, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-	wxPROPERTY( Range , int , SetRange, GetRange, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-	wxPROPERTY( ThumbSize , int , SetThumbSize, GetThumbSize, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-	wxPROPERTY( PageSize , int , SetPageSize, GetPageSize, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    wxPROPERTY( Range , int , SetRange, GetRange, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    wxPROPERTY( ThumbSize , int , SetThumbSize, GetThumbSize, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    wxPROPERTY( PageSize , int , SetPageSize, GetPageSize, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
     wxPROPERTY_FLAGS( WindowStyle , wxScrollBarStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
@@ -94,7 +94,7 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
            const wxString& name)
 {
     if (!parent)
-        return FALSE;
+        return false;
     parent->AddChild(this);
     SetName(name);
 #if wxUSE_VALIDATORS
@@ -108,24 +108,24 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
     SetForegroundColour(parent->GetForegroundColour()) ;
     m_windowStyle = style;
 
-  if ( id == -1 )
-      m_windowId = (int)NewControlId();
-  else
-    m_windowId = id;
+    if ( id == wxID_ANY )
+        m_windowId = (int)NewControlId();
+    else
+      m_windowId = id;
 
-  int x = pos.x;
-  int y = pos.y;
-  int width = size.x;
-  int height = size.y;
+    int x = pos.x;
+    int y = pos.y;
+    int width = size.x;
+    int height = size.y;
 
-    if (width == -1)
+    if (width == wxDefaultCoord)
     {
       if (style & wxHORIZONTAL)
         width = 140;
       else
         width = 14;
     }
-    if (height == -1)
+    if (height == wxDefaultCoord)
     {
       if (style & wxVERTICAL)
         height = 140;
@@ -159,7 +159,7 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
 
     SetSize(x, y, width, height);
 
-    return TRUE;
+    return true;
 }
 
 wxScrollBar::~wxScrollBar(void)
@@ -286,7 +286,7 @@ bool wxScrollBar::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
     {
         // don't process the event if there is no displacement,
         // unless this is a thumb release or end scroll event.
-        return FALSE;
+        return false;
     }
 
     wxScrollEvent event(scrollEvent, m_windowId);

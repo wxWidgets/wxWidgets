@@ -70,7 +70,7 @@ bool wxStatusBar95::Create(wxWindow *parent,
                            long style,
                            const wxString& name)
 {
-    wxCHECK_MSG( parent, FALSE, wxT("status bar must have a parent") );
+    wxCHECK_MSG( parent, false, wxT("status bar must have a parent") );
 
     SetName(name);
     SetWindowStyleFlag(style);
@@ -78,7 +78,7 @@ bool wxStatusBar95::Create(wxWindow *parent,
 
     parent->AddChild(this);
 
-    m_windowId = id == -1 ? NewControlId() : id;
+    m_windowId = id == wxID_ANY ? NewControlId() : id;
 
     DWORD wstyle = WS_CHILD | WS_VISIBLE;
 
@@ -111,7 +111,7 @@ bool wxStatusBar95::Create(wxWindow *parent,
     {
         wxLogSysError(_("Failed to create a status bar."));
 
-        return FALSE;
+        return false;
     }
 
     SetFieldsCount(1);
@@ -120,7 +120,7 @@ bool wxStatusBar95::Create(wxWindow *parent,
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR));
 
-    return TRUE;
+    return true;
 }
 
 wxStatusBar95::~wxStatusBar95()
@@ -247,7 +247,7 @@ void wxStatusBar95::SetMinHeight(int height)
 
 bool wxStatusBar95::GetFieldRect(int i, wxRect& rect) const
 {
-    wxCHECK_MSG( (i >= 0) && (i < m_nFields), FALSE,
+    wxCHECK_MSG( (i >= 0) && (i < m_nFields), false,
                  _T("invalid statusbar field index") );
 
     RECT r;
@@ -258,7 +258,7 @@ bool wxStatusBar95::GetFieldRect(int i, wxRect& rect) const
 
     wxCopyRECTToRect(r, rect);
 
-    return TRUE;
+    return true;
 }
 
 void wxStatusBar95::DoMoveWindow(int x, int y, int width, int height)
@@ -279,7 +279,7 @@ void wxStatusBar95::DoMoveWindow(int x, int y, int width, int height)
     // adjust fields widths to the new size
     SetFieldsWidth();
 
-    // we have to trigger wxSizeEvent if there are children window in status 
+    // we have to trigger wxSizeEvent if there are children window in status
     // bar because GetFieldRect returned incorrect (not updated) values up to
     // here, which almost certainly resulted in incorrectly redrawn statusbar
     if ( m_children.GetCount() > 0 )

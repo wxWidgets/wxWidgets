@@ -66,7 +66,7 @@ bool wxSound::Create(const wxString& fileName, bool isResource)
 
   if (isResource)
   {
-    m_isResource = TRUE;
+    m_isResource = true;
 
     HRSRC hresInfo;
     hresInfo = ::FindResource((HMODULE) wxhInstance, fileName, wxT("WAVE"));

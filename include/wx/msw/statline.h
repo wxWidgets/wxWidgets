@@ -43,7 +43,7 @@ public:
                  const wxString &name = wxStaticTextNameStr );
 
     // overriden base class virtuals
-    virtual bool AcceptsFocus() const { return FALSE; }
+    virtual bool AcceptsFocus() const { return false; }
 
 protected:
     // usually overridden base class virtuals

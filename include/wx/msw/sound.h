@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_SOUND_H_
@@ -35,12 +35,12 @@ public:
   bool Create(int size, const wxByte* data);
 
   bool  IsOk() const { return (m_waveData ? true : false); };
-    
+
   static void Stop();
 
 protected:
   bool  Free();
-    
+
   bool DoPlay(unsigned flags) const;
 
 private:

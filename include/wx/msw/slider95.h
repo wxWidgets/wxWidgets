@@ -48,7 +48,7 @@ public:
 
     void GetPosition(int *x, int *y) const;
 
-    bool Show(bool show = TRUE);
+    bool Show(bool show = true);
 
     void SetRange(int minValue, int maxValue);
 
@@ -100,7 +100,7 @@ protected:
                            int sizeFlags = wxSIZE_AUTO);
 
     virtual wxSize DoGetBestSize() const;
-    
+
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxSlider95)
 };
 

@@ -56,7 +56,7 @@ wxBEGIN_FLAGS( wxStaticBitmapStyle )
     wxFLAGS_MEMBER(wxBORDER_RAISED)
     wxFLAGS_MEMBER(wxBORDER_STATIC)
     wxFLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     wxFLAGS_MEMBER(wxSIMPLE_BORDER)
     wxFLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -93,8 +93,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap, wxControl)
 #endif
 
 /*
-	TODO PROPERTIES :
-		bitmap
+    TODO PROPERTIES :
+        bitmap
 */
 
 // ===========================================================================
@@ -146,7 +146,7 @@ bool wxStaticBitmap::Create(wxWindow *parent,
                             const wxString& name)
 {
     if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
-        return FALSE;
+        return false;
 
     // we may have either bitmap or icon: if a bitmap with mask is passed, we
     // will transform it to an icon ourselves because otherwise the mask will
@@ -168,8 +168,8 @@ bool wxStaticBitmap::Create(wxWindow *parent,
 
     // GetBestSize will work properly now, so set the best size if needed
     SetBestSize(size);
-    
-    return TRUE;
+
+    return true;
 }
 
 wxBorder wxStaticBitmap::GetDefaultBorder() const
@@ -259,7 +259,7 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
     rect.top    = y;
     rect.right  = x + w;
     rect.bottom = y + h;
-    InvalidateRect(GetHwndOf(GetParent()), &rect, TRUE);
+    ::InvalidateRect(GetHwndOf(GetParent()), &rect, TRUE);
 }
 
 // We need this or the control can never be moved e.g. in Dialog Editor.

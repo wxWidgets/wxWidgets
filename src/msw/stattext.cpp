@@ -44,7 +44,7 @@ wxBEGIN_FLAGS( wxStaticTextStyle )
     wxFLAGS_MEMBER(wxBORDER_RAISED)
     wxFLAGS_MEMBER(wxBORDER_STATIC)
     wxFLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     wxFLAGS_MEMBER(wxSIMPLE_BORDER)
     wxFLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -73,14 +73,14 @@ wxEND_FLAGS( wxStaticTextStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxStaticText, wxControl,"wx/stattext.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxStaticText)
-	wxPROPERTY( Label,wxString, SetLabel, GetLabel, wxString() , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    wxPROPERTY( Label,wxString, SetLabel, GetLabel, wxString() , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
     wxPROPERTY_FLAGS( WindowStyle , wxStaticTextStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE, 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxStaticText)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_6( wxStaticText , wxWindow* , Parent , wxWindowID , Id , wxString , Label , wxPoint , Position , wxSize , Size , long , WindowStyle ) 
+wxCONSTRUCTOR_6( wxStaticText , wxWindow* , Parent , wxWindowID , Id , wxString , Label , wxPoint , Position , wxSize , Size , long , WindowStyle )
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxStaticText, wxControl)
 #endif
@@ -94,12 +94,12 @@ bool wxStaticText::Create(wxWindow *parent,
                           const wxString& name)
 {
     if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
-        return FALSE;
+        return false;
 
     if ( !MSWCreateControl(wxT("STATIC"), label, pos, size) )
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 wxBorder wxStaticText::GetDefaultBorder() const
@@ -132,7 +132,7 @@ wxSize wxStaticText::DoGetBestSize() const
     int widthTextMax = 0, widthLine,
         heightTextTotal = 0, heightLineDefault = 0, heightLine = 0;
 
-    bool lastWasAmpersand = FALSE;
+    bool lastWasAmpersand = false;
 
     wxString curLine;
     for ( const wxChar *pc = text; ; pc++ )
@@ -179,14 +179,14 @@ wxSize wxStaticText::DoGetBestSize() const
             {
                 if ( !lastWasAmpersand )
                 {
-                    lastWasAmpersand = TRUE;
+                    lastWasAmpersand = true;
 
                     // skip the statement adding pc to curLine below
                     continue;
                 }
 
                 // it is a literal ampersand
-                lastWasAmpersand = FALSE;
+                lastWasAmpersand = false;
             }
 
             curLine += *pc;
@@ -216,7 +216,8 @@ void wxStaticText::SetLabel(const wxString& label)
     if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
     {
         InvalidateBestSize();
-        DoSetSize(-1, -1, -1, -1, wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
+        DoSetSize(wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, wxDefaultCoord,
+                  wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
     }
 }
 
@@ -230,7 +231,8 @@ bool wxStaticText::SetFont(const wxFont& font)
     if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
     {
         InvalidateBestSize();
-        DoSetSize(-1, -1, -1, -1, wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
+        DoSetSize(wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, wxDefaultCoord,
+                  wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
     }
 
     return ret;

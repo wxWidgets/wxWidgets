@@ -24,7 +24,7 @@ public:
     // ctors and such
     wxStatusBar95();
     wxStatusBar95(wxWindow *parent,
-                  wxWindowID id = -1,
+                  wxWindowID id = wxID_ANY,
                   long style = wxST_SIZEGRIP,
                   const wxString& name = wxEmptyString)
     {
@@ -32,7 +32,7 @@ public:
     }
 
     bool Create(wxWindow *parent,
-                wxWindowID id = -1,
+                wxWindowID id = wxID_ANY,
                 long style = wxST_SIZEGRIP,
                 const wxString& name = wxEmptyString);
 

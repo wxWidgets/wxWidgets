@@ -68,7 +68,7 @@ wxBEGIN_FLAGS( wxSpinButtonStyle )
     wxFLAGS_MEMBER(wxBORDER_RAISED)
     wxFLAGS_MEMBER(wxBORDER_STATIC)
     wxFLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     wxFLAGS_MEMBER(wxSIMPLE_BORDER)
     wxFLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -108,7 +108,7 @@ wxEND_PROPERTIES_TABLE()
 wxBEGIN_HANDLERS_TABLE(wxSpinButton)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_5( wxSpinButton , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle ) 
+wxCONSTRUCTOR_5( wxSpinButton , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle )
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
 #endif
@@ -270,7 +270,7 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
 bool wxSpinButton::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
                                WXWORD pos, WXHWND control)
 {
-    wxCHECK_MSG( control, FALSE, wxT("scrolling what?") )
+    wxCHECK_MSG( control, false, wxT("scrolling what?") )
 
     if ( wParam != SB_THUMBPOSITION )
     {
