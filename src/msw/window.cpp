@@ -2483,14 +2483,6 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                     break;
 
 #endif // __WXMICROWIN__
-                // VZ: if you find a situation when this is needed, tell
-                //     me about it, do *not* uncomment this code as it
-                //     causes other strange problems
-#if 0
-                if ( message == WM_LBUTTONDOWN && AcceptsFocus() )
-                    SetFocus();
-#endif // 0
-
                 int x = GET_X_LPARAM(lParam),
                     y = GET_Y_LPARAM(lParam);
 
@@ -2506,6 +2498,20 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                 else
                 {
                     win = FindWindowForMouseEvent(this, &x, &y);
+
+                    // this should never happen
+                    wxCHECK_MSG( win, 0,
+                                 _T("FindWindowForMouseEvent() returned NULL") );
+
+                    // for the standard classes their WndProc sets the focus to
+                    // them anyhow and doing it from here results in some weird
+                    // problems, but for our windows we want them to acquire
+                    // focus when clicked
+                    if ( !win->IsOfStandardClass() )
+                    {
+                        if ( message == WM_LBUTTONDOWN && win->AcceptsFocus() )
+                            win->SetFocus();
+                    }
                 }
 
                 processed = win->HandleMouseEvent(message, x, y, wParam);
