@@ -874,7 +874,7 @@ new Navigate method in the wx.Window class to help send the event and
 it is used something like this::
 
 	flags = wx.NavigationKeyEvent.IsForward
-	if event.ShiftDown:
+	if event.ShiftDown():
 	    flags = wx.NavigationKeyEvent.IsBackward
 	if event.ControlDown():
 	    flags |= wx.NavigationKeyEvent.WinChange
