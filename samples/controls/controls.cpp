@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Modified by:
 // RCS-ID:      $Id$
-// Copyright:   (c) Robert Roebling, Julian Smart and Markus Holzem
+// Copyright:   (c) Robert Roebling, Julian Smart
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
@@ -33,6 +33,7 @@
 #include "icons/list.xpm"
 #include "icons/radio.xpm"
 #include "icons/text.xpm"
+#include "icons/stattext.xpm"
 #endif
 
 //----------------------------------------------------------------------
@@ -223,22 +224,23 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   wxString choices[] =
   {
     "This",
-    "is a",
+    "is one of my",
+    "really",
     "wonderful",
-    "example.",
+    "examples.",
   };
   
   // image ids and names
   enum
   {
-    Image_List, Image_Choice, Image_Combo, Image_Text, Image_Radio, Image_Max
+    Image_List, Image_Choice, Image_Combo, Image_Text, Image_Radio, Image_Static, Image_Max
   };
   
   // fill the image list
 #ifdef __WXMSW__
   const char *aIconNames[] =
   {
-    "list.xpm", "choice.xpm", "combo.xpm", "text.xpm", "radio.xpm"
+    "list.xpm", "choice.xpm", "combo.xpm", "text.xpm", "radio.xpm", "stattext.xpm"
   };
   
   wxASSERT( WXSIZEOF(aIconNames) == Image_Max ); // keep in sync
@@ -258,6 +260,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   imagelist-> Add( wxBitmap( combo_xpm ));
   imagelist-> Add( wxBitmap( text_xpm ));
   imagelist-> Add( wxBitmap( radio_xpm ));
+  imagelist-> Add( wxBitmap( stattext_xpm ));
 #endif
 
   wxButton *button = (wxButton*)NULL;
@@ -267,7 +270,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
 
   wxPanel *panel = new wxPanel(m_notebook);
   panel->SetBackgroundColour("cadet blue");
-  m_listbox = new wxListBox( panel, ID_LISTBOX, wxPoint(10,10), wxSize(120,70), 4, choices );
+  m_listbox = new wxListBox( panel, ID_LISTBOX, wxPoint(10,10), wxSize(120,70), 5, choices );
   m_listbox->SetBackgroundColour("wheat");
   (void)new wxButton( panel, ID_LISTBOX_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_LISTBOX_SEL_STR, "Select 'This'", wxPoint(340,30), wxSize(140,30) );
@@ -281,7 +284,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   
   panel = new wxPanel(m_notebook);
   panel->SetBackgroundColour("cadet blue");
-  m_choice = new wxChoice( panel, ID_CHOICE, wxPoint(10,10), wxSize(120,-1), 4, choices );
+  m_choice = new wxChoice( panel, ID_CHOICE, wxPoint(10,10), wxSize(120,-1), 5, choices );
   m_choice->SetBackgroundColour("wheat");
   (void)new wxButton( panel, ID_CHOICE_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_CHOICE_SEL_STR, "Select 'This'", wxPoint(340,30), wxSize(140,30) );
@@ -294,7 +297,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   
   panel = new wxPanel(m_notebook);
   panel->SetBackgroundColour("cadet blue");
-  m_combo = new wxComboBox( panel, ID_COMBO, "This", wxPoint(10,10), wxSize(120,-1), 4, choices );
+  m_combo = new wxComboBox( panel, ID_COMBO, "This", wxPoint(10,10), wxSize(120,-1), 5, choices );
   m_combo->SetBackgroundColour("wheat");
   (void)new wxButton( panel, ID_COMBO_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_COMBO_SEL_STR, "Select 'This'", wxPoint(340,30), wxSize(140,30) );
@@ -315,7 +318,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   
   panel = new wxPanel(m_notebook);
   panel->SetBackgroundColour("cadet blue");
-  m_radio = new wxRadioBox( panel, ID_RADIOBOX, "This", wxPoint(10,10), wxSize(-1,-1), 4, choices );
+  m_radio = new wxRadioBox( panel, ID_RADIOBOX, "This", wxPoint(10,10), wxSize(-1,-1), 5, choices );
   m_radio->SetBackgroundColour("wheat");
   (void)new wxButton( panel, ID_RADIOBOX_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_RADIOBOX_SEL_STR, "Select 'This'", wxPoint(180,80), wxSize(140,30) );
@@ -323,6 +326,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   (void)new wxCheckBox( panel, ID_RADIOBOX_ENABLE, "Disable", wxPoint(20,130), wxSize(140,30) );
   m_fontButton = new wxButton( panel, ID_SET_FONT, "Set more Italic font", wxPoint(340,30), wxSize(160,30) );
   m_notebook->AddPage(panel, "wxRadioBox", FALSE, Image_Radio);
+  
+  panel = new wxPanel(m_notebook);
+  panel->SetBackgroundColour("cadet blue");
+  (void)new wxStaticBox( panel, -1, "StaticBox", wxPoint(10,10), wxSize(160,130) );
+  m_notebook->AddPage(panel, "wxStaticBox", FALSE, Image_Static);
 }
 
 void MyPanel::OnSize( wxSizeEvent& WXUNUSED(event) )

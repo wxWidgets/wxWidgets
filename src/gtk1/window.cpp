@@ -2,7 +2,7 @@
 // Name:        window.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $id$
+// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -2071,7 +2071,7 @@ void wxWindow::OnInitDialog( wxInitDialogEvent &WXUNUSED(event) )
 
 void wxWindow::InitDialog()
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+  wxCHECK_RET( m_widget != NULL, "invalid window" );
 
   wxInitDialogEvent event(GetId());
   event.SetEventObject( this );
@@ -2093,8 +2093,10 @@ static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
 
 bool wxWindow::PopupMenu( wxMenu *menu, int WXUNUSED(x), int WXUNUSED(y) )
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+  wxCHECK_MSG( m_widget != NULL, FALSE, "invalid window" );
 
+  wxCHECK_MSG( menu != NULL, FALSE, "invalid popup-menu" );
+  
   SetInvokingWindow( menu, this );
   gtk_menu_popup(
                   GTK_MENU(menu->m_menu),
@@ -2110,7 +2112,7 @@ bool wxWindow::PopupMenu( wxMenu *menu, int WXUNUSED(x), int WXUNUSED(y) )
 
 void wxWindow::SetDropTarget( wxDropTarget *dropTarget )
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+  wxCHECK_RET( m_widget != NULL, "invalid window" );
 
   GtkWidget *dnd_widget = GetConnectWidget();
 
@@ -2163,7 +2165,7 @@ bool wxWindow::IsOwnGtkWindow( GdkWindow *window )
 
 void wxWindow::SetFont( const wxFont &font )
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+  wxCHECK_RET( m_widget != NULL, "invalid window" );
 
   if (((wxFont*)&font)->Ok())
     m_font = font;
@@ -2192,9 +2194,9 @@ long wxWindow::GetWindowStyleFlag() const
 
 void wxWindow::CaptureMouse()
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+  wxCHECK_RET( m_widget != NULL, "invalid window" );
 
-  wxASSERT_MSG( (g_capturing == FALSE), "CaptureMouse called twice" );
+  wxCHECK_RET( g_capturing == FALSE, "CaptureMouse called twice" );
 
   GtkWidget *connect_widget = GetConnectWidget();
   gtk_grab_add( connect_widget );
@@ -2209,9 +2211,9 @@ void wxWindow::CaptureMouse()
 
 void wxWindow::ReleaseMouse()
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+  wxCHECK_RET( m_widget != NULL, "invalid window" );
 
-  wxASSERT_MSG( (g_capturing == TRUE), "ReleaseMouse called twice" );
+  wxCHECK_RET( g_capturing == TRUE, "ReleaseMouse called twice" );
 
   GtkWidget *connect_widget = GetConnectWidget();
   gtk_grab_remove( connect_widget );

@@ -4,7 +4,7 @@ NONE =
 # define library name
 LIB_TARGET=wx_gtk
 LIB_MAJOR=1
-LIB_MINOR=94
+LIB_MINOR=96
 
 # define library sources
 
@@ -109,7 +109,6 @@ LIB_CPP_SRC=\
  gtk/tbargtk.cpp \
  gtk/textctrl.cpp \
  gtk/timer.cpp \
- generic/treectrl.cpp \
  gtk/utilsgtk.cpp \
  gtk/utilsres.cpp \
  gtk/window.cpp \

@@ -114,6 +114,8 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
       gtk_signal_connect( GTK_OBJECT(list_item), "deselect",
         GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
 
+    ConnectWidget( list_item );	
+	
     m_clientData.Append( (wxObject*)NULL );
 
     gtk_widget_show( list_item );
@@ -154,6 +156,8 @@ void wxListBox::Append( const wxString &item, char *clientData )
     gtk_signal_connect( GTK_OBJECT(list_item), "deselect",
       GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
 
+  ConnectWidget( list_item );	
+	
   m_clientData.Append( (wxObject*)clientData );
 
   gtk_container_add( GTK_CONTAINER(m_list), list_item );
@@ -454,8 +458,8 @@ bool wxListBox::IsOwnGtkWindow( GdkWindow *window )
   GList *child = m_list->children;
   while (child)
   {
-    GtkBin *bin = GTK_BIN( child->data );
-    if (bin->child->window == window) return TRUE;
+    GtkWidget *bin = GTK_WIDGET( child->data );
+    if (bin->window == window) return TRUE;
     child = child->next;
   }
 
@@ -472,7 +476,6 @@ void wxListBox::SetFont( const wxFont &font )
   while (child)
   {
     gtk_widget_set_style( GTK_BIN(child->data)->child, m_widgetStyle );
-	
     child = child->next;
   }
 }
@@ -485,19 +488,15 @@ void wxListBox::SetBackgroundColour( const wxColour &colour )
   
   if (!m_backgroundColour.Ok()) return;
   
-//  gtk_widget_set_style( GTK_WIDGET(m_list), m_widgetStyle );
-
-    GdkWindow *window = GTK_WIDGET(m_list)->window;
-    m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
-    gdk_window_set_background( window, m_backgroundColour.GetColor() );
-    gdk_window_clear( window );
+  GdkWindow *window = GTK_WIDGET(m_list)->window;
+  m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
+  gdk_window_set_background( window, m_backgroundColour.GetColor() );
+  gdk_window_clear( window );
       
   GList *child = m_list->children;
   while (child)
   {
     gtk_widget_set_style( GTK_WIDGET(child->data), m_widgetStyle );
-//    gtk_widget_set_style( GTK_BIN(child->data)->child, m_widgetStyle );
-	
     child = child->next;
   }
 }

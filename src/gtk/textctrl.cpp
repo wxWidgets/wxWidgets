@@ -339,7 +339,7 @@ wxString wxTextCtrl::GetLineText( long lineNo ) const
 
 void wxTextCtrl::OnDropFiles( wxDropFilesEvent &WXUNUSED(event) )
 {
-  wxFAIL_MSG( "wxTextCtrl::GetLineText( lineNo ) not implemented" );
+  wxFAIL_MSG( "wxTextCtrl::OnDropFiles not implemented" );
 }
 
 long wxTextCtrl::PositionToXY( long WXUNUSED(pos), long *WXUNUSED(x), long *WXUNUSED(y) ) const

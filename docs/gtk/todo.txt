@@ -2,7 +2,7 @@
 -------------------- High priority ---------------------
 
 wxTreeCtrl
-  -> Keyboard handling, icon support and new API.
+  -> Keyboard handling, icon support.
 
 wxListCtrl
   -> Icon support in list mode.
@@ -20,13 +20,19 @@ Implement wxRadioBox layout
   -> I'm so lazy.
   
 Fix printing of bitmaps
-  -> No idea. Postponed.
+  -> No idea.
 
 Add support SetForegroundColour in GTK widgets
   -> On the way.
-  
+
+wxBitmapCheckBox
+  -> Interface same as checkbox?
+    
 -------------------- Low priority ---------------------
     
+wxDebugContext <-> wxLogXXX functions
+  -> Remove either
+
 Implement wxPalette
   -> I never understood that. Postponed.
   
@@ -38,4 +44,7 @@ Show accelerator in menus
   
 Correct tab navigation
   -> seems to be broken in GTK. Postponed.
+  
+Cooperation with Qt
+  
   

@@ -1,8 +1,8 @@
 /* ///////////////////////////////////////////////////////////////////////////
-// Name:        wx_gtk.h
+// Name:        win_gtk.c
 // Purpose:     native GTK+ widget for wxWindows
 // Author:      Robert Roebling
-// Id:          $id$
+// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////// */

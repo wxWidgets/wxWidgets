@@ -12,8 +12,8 @@ and drink 10 coffees. Then you may log in as root and type
 make install
 
 You can leave out the --without-threads option if you have a NEW
-Linux distribution based on glibc (e.g. RedHat 5.1) or any other
-Unix that comes with Posix threads or SGI threads.
+Linux distribution based on glibc (e.g. RedHat 5.1 or Debian 2.0) 
+or any other Unix that comes with Posix threads or SGI threads.
 
 Now create your super-application myfoo.app and compile anywhere with
 
@@ -34,27 +34,13 @@ for newest information.
 * GUI libraries
 -----------------------
 
-wxWindows requires a GUI toolkit to be installed. Does that make
-sense? So far only the GTK is supported, but we hope to provide
-the choice between GTK, Qt, Motif/Lesstif in the not so distant 
-future.
+wxWindows/GTK requires the GTK+ library to be installed on your system.
+It has to be a stable version, preferebly version 1.0.6.
 
-You can get the newest version of the GTK from the GTK homepage
+You can get the newest version of the GTK+ from the GTK homepage
 at
   http://www.gtk.org
   
-The newest versin of Qt can be downloaded for free from the Trolltec's 
-site at
-  http://www.troll.no
-
-Lesstif can be downloaded from their site
-at
-  http://www.lesstif.org
-
-If you want to develop using Motif, you need to buy it, unless it comes
-with your operating system such as all commercial Unices, as well as
-RedHat's, SuSe's and probably other's Linux Motif editions.
-
 * Additional libraries
 -----------------------
 
@@ -81,26 +67,6 @@ Thread support:
   On SGI Irix we first look for sprocs, then pthreads and
   use the last one found.
   
-Python scripting language support:
-
-  Requires Python. Soon to come.
-  
-* Other things to do
------------------------------
-
-wxGTK and wxMotif/wxLesstif require the built-in
-ImLib/GdkImlib to be configured. For that purpose
-copy the two files from /misc/imlib to your
-home directory and rename "imrc" -> ".imrc".
-You may also edit imrc by hand as you like. 
-The palette file is required when using
-wxWindows in 256-colour mode.
-
-If you want to use wxWindows's ODBC support, you'll have
-to create a .odbc.ini file. The readme file in 
-~/src/iodbc tells you what to do.
-
-
 * Create your configuration
 -----------------------------
 
@@ -212,10 +178,9 @@ a few warning messages.
 if you want to be more selective:
 
 	make src	will build only the base libraries
-	make utils	will build the utils
 	make samples	will build the samples
-	make other	will build the other samples
-	make user	will build the files in the directory other
+	make other	will build everything in other
+	make user	will build everything in user
 
 Then you may install the library and it's header files under
 /usr/local/include/wx and /usr/local/lib respectively. You
