@@ -89,9 +89,15 @@ bool wxChoice::Create(wxWindow *parent,
 // adding/deleting items to/from the list
 // ----------------------------------------------------------------------------
 
-void wxChoice::DoAppend(const wxString& item)
+int wxChoice::DoAppend(const wxString& item)
 {
-    SendMessage(GetHwnd(), CB_ADDSTRING, 0, (LONG)item.c_str());
+    int n = (int)SendMessage(GetHwnd(), CB_ADDSTRING, 0, (LONG)item.c_str());
+    if ( n == CB_ERR )
+    {
+        wxLogLastError("SendMessage(CB_ADDSTRING)");
+    }
+
+    return n;
 }
 
 void wxChoice::Delete(int n)
