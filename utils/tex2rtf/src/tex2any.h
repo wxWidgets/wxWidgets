@@ -36,9 +36,9 @@
 
 
 #ifdef __WXMSW__
-  const int MAX_LINE_BUFFER_SIZE = 600;
+  const unsigned long MAX_LINE_BUFFER_SIZE = 600;
 #else
-  const int MAX_LINE_BUFFER_SIZE = 11000;
+  const unsigned long MAX_LINE_BUFFER_SIZE = 11000;
 #endif
 
 class TexMacroDef: public wxObject

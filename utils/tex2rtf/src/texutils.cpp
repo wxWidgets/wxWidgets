@@ -1580,24 +1580,24 @@ void InitialiseColourTable(void)
  * The purpose of this is to reduce the number of times wxYield is
  * called, since under Windows this can slow things down.
  */
- 
-static int yieldCount = 0;
 
 void Tex2RTFYield(bool force)
 {
 #ifdef __WXMSW__
-  if (isSync)
-    return;
+    static int yieldCount = 0;
     
-  if (force)
-    yieldCount = 0;
-  if (yieldCount == 0)
-  {
-    if (wxTheApp)
-        wxYield();
-    yieldCount = 10;
-  }
-  yieldCount --;
+    if (isSync)
+	return;
+    
+    if (force)
+	yieldCount = 0;
+    if (yieldCount == 0)
+    {
+	if (wxTheApp)
+	    wxYield();
+	yieldCount = 10;
+    }
+    yieldCount --;
 #endif
 }
 

@@ -192,7 +192,7 @@ int             tableNo = 0;
 FILE *CurrentOutput1 = NULL;
 FILE *CurrentOutput2 = NULL;
 FILE *Inputs[15];
-int LineNumbers[15];
+unsigned long LineNumbers[15];
 char *FileNames[15];
 int CurrentInputIndex = 0;
 
@@ -436,7 +436,7 @@ bool read_a_line(char *buf)
   }
 
   int ch = -2;
-  int bufIndex = 0;
+  unsigned long bufIndex = 0;
   buf[0] = 0;
 
   while (ch != EOF && ch != 10)
@@ -445,7 +445,7 @@ bool read_a_line(char *buf)
     {
        wxString errBuf;
        errBuf.Printf("Line %lu of file %s is too long.  Lines can be no longer than %lu characters.  Truncated.",
-           LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str(),MAX_LINE_BUFFER_SIZE);
+           LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str(), MAX_LINE_BUFFER_SIZE);
        OnError((char *)errBuf.c_str());
        return FALSE;
     }
@@ -466,7 +466,7 @@ bool read_a_line(char *buf)
            if (rightCurley > leftCurley)
            {
                wxString errBuf;
-               errBuf.Printf("An extra right Curley brace ('}') was detected at line %lu inside file %s",LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str());
+               errBuf.Printf("An extra right Curley brace ('}') was detected at line %lu inside file %s", LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str());
                OnError((char *)errBuf.c_str());
 
                // Reduce the count of right Curley braces, so the mismatched count
