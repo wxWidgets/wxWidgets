@@ -123,11 +123,6 @@ public:
     void ApplyToolTip( GtkTooltips *tips, const wxChar *tip );
 #endif // wxUSE_TOOLTIPS
 
-    // reposition the radio buttons correctly unless justCalc == true and
-    // return the total size needed to accommodate them
-    wxSize LayoutItems(bool justCalc) const;
-
-    virtual void DoSetSize( int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO );
     virtual void OnInternalIdle();
 
     bool             m_hasFocus,
@@ -136,9 +131,6 @@ public:
     wxList           m_boxes;
 
 protected:
-    // implement some base class methods
-    virtual wxSize DoGetBestSize() const;
-
     // common part of all ctors
     void Init();
 

@@ -200,8 +200,29 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     // assert here but just use the correct value for it
     m_majorDim = majorDim == 0 ? n : majorDim;
 
+    int num_per_major = (n - 1) / m_majorDim +1;
+
+    int num_of_cols = 0;
+    int num_of_rows = 0;
+    if (HasFlag(wxRA_SPECIFY_COLS))
+    {
+        num_of_cols = m_majorDim;
+        num_of_rows = num_per_major;
+    }
+    else
+    {
+        num_of_cols = num_per_major;
+        num_of_rows = m_majorDim;
+    }
+    
     GtkRadioButton *m_radio = (GtkRadioButton*) NULL;
 
+    GtkWidget *table = gtk_table_new( num_of_rows, num_of_cols, FALSE );
+    gtk_table_set_col_spacings( GTK_TABLE(table), 2 );
+    gtk_table_set_row_spacings( GTK_TABLE(table), 2 );
+    gtk_widget_show( table );
+    gtk_container_add( GTK_CONTAINER(m_widget), table );
+    
     wxString label;
     GSList *radio_button_group = (GSList *) NULL;
     for (int i = 0; i < n; i++)
@@ -217,11 +238,29 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
         }
 
         m_radio = GTK_RADIO_BUTTON( gtk_radio_button_new_with_label( radio_button_group, wxGTK_CONV( label ) ) );
+        gtk_widget_show( GTK_WIDGET(m_radio) );
 
         gtk_signal_connect( GTK_OBJECT(m_radio), "key_press_event",
            GTK_SIGNAL_FUNC(gtk_radiobox_keypress_callback), (gpointer)this );
 
         m_boxes.Append( (wxObject*) m_radio );
+
+        if (HasFlag(wxRA_SPECIFY_COLS))
+        {
+            int left = i%num_of_cols;
+            int right = (i%num_of_cols) + 1;
+            int top = i/num_of_cols;
+            int bottom = (i/num_of_cols)+1;
+            gtk_table_attach_defaults( GTK_TABLE(table), GTK_WIDGET(m_radio), left, right, top, bottom ); 
+        }
+        else
+        {
+            int left = i/num_of_rows;
+            int right = (i/num_of_rows) + 1;
+            int top = i%num_of_rows;
+            int bottom = (i%num_of_rows)+1;
+            gtk_table_attach_defaults( GTK_TABLE(table), GTK_WIDGET(m_radio), left, right, top, bottom ); 
+        }
 
         ConnectWidget( GTK_WIDGET(m_radio) );
 
@@ -235,24 +274,13 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
         gtk_signal_connect( GTK_OBJECT(m_radio), "focus_out_event",
             GTK_SIGNAL_FUNC(gtk_radiobutton_focus_out), (gpointer)this );
-
-        gtk_pizza_put( GTK_PIZZA(m_parent->m_wxwindow),
-                         GTK_WIDGET(m_radio),
-                         m_x+10, m_y+10+(i*24), 10, 10 );
     }
 
     m_parent->DoAddChild( this );
 
-    bool wasShown = IsShown();
-    if ( wasShown )
-        Hide(); // prevent PostCreation() from showing us
-
     SetLabel( title );
 
     PostCreation(size);
-
-    if ( wasShown )
-        Show();
 
     return true;
 }
@@ -266,145 +294,6 @@ wxRadioBox::~wxRadioBox()
         gtk_widget_destroy( button );
         node = node->GetNext();
     }
-}
-
-void wxRadioBox::DoSetSize( int x, int y, int width, int height, int sizeFlags )
-{
-    wxWindow::DoSetSize( x, y, width, height, sizeFlags );
-
-    LayoutItems(false);
-}
-
-wxSize wxRadioBox::DoGetBestSize() const
-{
-    wxSize size = LayoutItems(true);
-
-    GtkRequisition req;
-    req.width = 2;
-    req.height = 2;
-    (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(m_widget) )->size_request ) (m_widget, &req );
-    if (req.width > size.x)
-        size.x = req.width;
-
-    CacheBestSize(size);
-    return size;
-}
-
-wxSize wxRadioBox::LayoutItems(bool justCalc) const
-{
-    wxSize res( 0, 0 );
-
-    // avoid dividing by 0 below
-    wxCHECK_MSG( m_majorDim, res, wxT("dimension of radiobox should not be 0!") );
-
-    int num_per_major = (m_boxes.GetCount() - 1) / m_majorDim +1;
-
-    int x = 7;
-    int y = 15;
-
-    int num_of_cols = 0;
-    int num_of_rows = 0;
-    if (HasFlag(wxRA_SPECIFY_COLS))
-    {
-        num_of_cols = m_majorDim;
-        num_of_rows = num_per_major;
-    }
-    else
-    {
-        num_of_cols = num_per_major;
-        num_of_rows = m_majorDim;
-    }
-
-    int lineheight = GetCharHeight()+2;
-
-    if ( HasFlag(wxRA_SPECIFY_COLS) ||
-         (HasFlag(wxRA_SPECIFY_ROWS) && (num_of_cols > 1)) )
-    {
-        for (int j = 0; j < num_of_cols; j++)
-        {
-            y = 3;
-            y += lineheight;
-
-            int max_len = 0;
-            wxList::compatibility_iterator node = m_boxes.Item( j*num_of_rows );
-            for (int i1 = 0; i1< num_of_rows; i1++)
-            {
-                GtkWidget *button = GTK_WIDGET( node->GetData() );
-
-                GtkRequisition req;
-                req.width = 2;
-                req.height = 2;
-                (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(button) )->size_request )
-                      (button, &req );
-
-                if (req.width > max_len) max_len = req.width;
-
-                if ( !justCalc )
-                    gtk_pizza_move( GTK_PIZZA(m_parent->m_wxwindow), button, m_x+x, m_y+y );
-                y += req.height;
-
-                node = node->GetNext();
-                if (!node) break;
-            }
-
-            // we don't know the max_len before
-
-            node = m_boxes.Item( j*num_of_rows );
-            for (int i2 = 0; i2< num_of_rows; i2++)
-            {
-                GtkWidget *button = GTK_WIDGET( node->GetData() );
-
-                if ( !justCalc )
-                    gtk_pizza_resize( GTK_PIZZA(m_parent->m_wxwindow), button, max_len, lineheight );
-
-                node = node->GetNext();
-                if (!node) break;
-            }
-
-            if (y > res.y) res.y = y;
-
-            x += max_len + 2;
-        }
-
-        res.x = x+4;
-        res.y += 4;
-    }
-    else
-    {
-        int max = 0;
-
-        wxList::compatibility_iterator node = m_boxes.GetFirst();
-        while (node)
-        {
-            GtkWidget *button = GTK_WIDGET( node->GetData() );
-
-            GtkRequisition req;
-            req.width = 2;
-            req.height = 2;
-            (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(button) )->size_request )
-                  (button, &req );
-
-            if (req.width > max) max = req.width;
-
-            node = node->GetNext();
-        }
-
-        node = m_boxes.GetFirst();
-        while (node)
-        {
-            GtkWidget *button = GTK_WIDGET( node->GetData() );
-
-            if ( !justCalc )
-                gtk_pizza_set_size( GTK_PIZZA(m_parent->m_wxwindow), button, m_x+x, m_y+y, max, lineheight );
-            x += max;
-
-            node = node->GetNext();
-        }
-        res.x = x+4;
-        res.y = 40;
-    }
-
-    return res;
 }
 
 bool wxRadioBox::Show( bool show )
