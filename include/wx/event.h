@@ -2417,8 +2417,14 @@ protected:
 
 #if wxUSE_THREADS
 #if defined (__VISAGECPP__)
+    const wxCriticalSection& Lock() const { return m_eventsLocker; }
+    wxCriticalSection& Lock() { return m_eventsLocker; }
+
     wxCriticalSection   m_eventsLocker;
 #  else
+    const wxCriticalSection& Lock() const { return *m_eventsLocker; }
+    wxCriticalSection& Lock() { return *m_eventsLocker; }
+
     wxCriticalSection*  m_eventsLocker;
 #  endif
 #endif

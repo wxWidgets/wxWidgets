@@ -1089,22 +1089,14 @@ void wxEvtHandler::AddPendingEvent(wxEvent& event)
     wxCHECK_RET( eventCopy,
                  _T("events of this type aren't supposed to be posted") );
 
-#if defined(__VISAGECPP__)
-    wxENTER_CRIT_SECT( m_eventsLocker);
-#else
-    wxENTER_CRIT_SECT( *m_eventsLocker);
-#endif
+    wxENTER_CRIT_SECT( Lock() );
 
     if ( !m_pendingEvents )
       m_pendingEvents = new wxList;
 
     m_pendingEvents->Append(eventCopy);
 
-#if defined(__VISAGECPP__)
-    wxLEAVE_CRIT_SECT( m_eventsLocker);
-#else
-    wxLEAVE_CRIT_SECT( *m_eventsLocker);
-#endif
+    wxLEAVE_CRIT_SECT( Lock() );
 
     // 2) Add this event handler to list of event handlers that
     //    have pending events.
@@ -1129,11 +1121,7 @@ void wxEvtHandler::ProcessPendingEvents()
     wxCHECK_RET( m_pendingEvents,
                  wxT("Please call wxApp::ProcessPendingEvents() instead") );
 
-#if defined(__VISAGECPP__)
-    wxENTER_CRIT_SECT( m_eventsLocker);
-#else
-    wxENTER_CRIT_SECT( *m_eventsLocker);
-#endif
+    wxENTER_CRIT_SECT( Lock() );
 
     // remember last event to process during this iteration
     wxList::compatibility_iterator lastPendingNode = m_pendingEvents->GetLast();
@@ -1146,18 +1134,10 @@ void wxEvtHandler::ProcessPendingEvents()
 
         // In ProcessEvent, new events might get added and
         // we can safely leave the crtical section here.
-#if defined(__VISAGECPP__)
-        wxLEAVE_CRIT_SECT( m_eventsLocker);
-#else
-        wxLEAVE_CRIT_SECT( *m_eventsLocker);
-#endif
+        wxLEAVE_CRIT_SECT( Lock() );
         ProcessEvent(*event);
         delete event;
-#if defined(__VISAGECPP__)
-        wxENTER_CRIT_SECT( m_eventsLocker);
-#else
-        wxENTER_CRIT_SECT( *m_eventsLocker);
-#endif
+        wxENTER_CRIT_SECT( Lock() );
 
         // leave the loop once we have processed all events that were present
         // at the start of ProcessPendingEvents because otherwise we could get
@@ -1169,11 +1149,7 @@ void wxEvtHandler::ProcessPendingEvents()
         node = m_pendingEvents->GetFirst();
     }
 
-#if defined(__VISAGECPP__)
-    wxLEAVE_CRIT_SECT( m_eventsLocker);
-#else
-    wxLEAVE_CRIT_SECT( *m_eventsLocker);
-#endif
+    wxLEAVE_CRIT_SECT( Lock() );
 }
 
 /*
