@@ -146,8 +146,6 @@ public:
         // Override: rarely.
     virtual void OnFatalException() { }
 
-    virtual bool ProcessIdle() = 0;
-
     // the worker functions - usually not used directly by the user code
     // -----------------------------------------------------------------
 
@@ -179,6 +177,13 @@ public:
         //          may result in calling the same event handler again), use
         //          with _extreme_ care or, better, don't use at all!
     virtual bool Yield(bool onlyIfNeeded = FALSE) = 0;
+
+        // this virtual function is called in the GUI mode when the application
+        // becomes idle and normally just sends wxIdleEvent to all interested
+        // parties
+        //
+        // it should return TRUE if more idle events are needed, FALSE if not
+    virtual bool ProcessIdle() = 0;
 #endif // wxUSE_GUI
 
     // application info: name, description, vendor
