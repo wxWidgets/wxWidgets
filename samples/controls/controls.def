@@ -1,5 +1,5 @@
-NAME         Minimal
-DESCRIPTION  'Minimal wxWindows application'
+NAME         Controls
+DESCRIPTION  'wxWindows controls sample'
 EXETYPE      WINDOWS
 STUB         'WINSTUB.EXE'
 CODE         PRELOAD MOVEABLE DISCARDABLE

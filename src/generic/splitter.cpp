@@ -173,7 +173,6 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
         m_dragMode = wxSPLIT_DRAG_NONE;
 
         SetCursor(*wxSTANDARD_CURSOR);
-        wxSetCursor(*wxSTANDARD_CURSOR);
     }
 	else if (event.LeftUp() && m_dragMode == wxSPLIT_DRAG_DRAGGING)
 	{
@@ -259,19 +258,15 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
             	if ( m_splitMode == wxSPLIT_VERTICAL )
                 {
 	                SetCursor(*m_sashCursorWE);
-                    // Windows needs the following
-	                wxSetCursor(*m_sashCursorWE);
                 }
                 else
                 {
 	                SetCursor(*m_sashCursorNS);
-	                wxSetCursor(*m_sashCursorNS);
                 }
         }
         else
         {
     	    SetCursor(*wxSTANDARD_CURSOR);
-    	    wxSetCursor(*wxSTANDARD_CURSOR);
         }
 	}
 	else if ( (event.Dragging() && (m_dragMode == wxSPLIT_DRAG_DRAGGING)) ||
@@ -280,12 +275,10 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
          if ( m_splitMode == wxSPLIT_VERTICAL )
          {
 	        SetCursor(*m_sashCursorWE);
-	        wxSetCursor(*m_sashCursorWE);
          }
          else
          {
 	        SetCursor(*m_sashCursorNS);
-	        wxSetCursor(*m_sashCursorNS);
          }
 
         // Detect that this is really a drag: we've moved more than 1 pixel either way
@@ -316,8 +309,6 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
     }
     else
     {
-        SetCursor(*wxSTANDARD_CURSOR);
-        wxSetCursor(*wxSTANDARD_CURSOR);
     }
 }
 

@@ -24,8 +24,6 @@ samples/ogledit/bitmaps/*.bmp
 samples/ogledit/bitmaps/*.gif
 samples/ogledit/bitmaps/*.xbm
 
-lib/dummy
-
 distrib/*.rsp
 distrib/*.bat
 
