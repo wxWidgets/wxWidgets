@@ -326,6 +326,7 @@ wxKeyEvent::wxKeyEvent(wxEventType type)
     m_metaDown = FALSE;
     m_altDown = FALSE;
     m_keyCode = 0;
+    m_scanCode = 0;
 }
 
 void wxKeyEvent::CopyObject(wxObject& obj_d) const

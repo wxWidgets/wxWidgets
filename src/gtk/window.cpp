@@ -353,6 +353,12 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
     long key_code = 0;
     switch (gdk_event->keyval)
     {
+        case GDK_Shift_L:
+	case GDK_Shift_R:       key_code = WXK_SHIFT;       break;
+        case GDK_Control_L:
+	case GDK_Control_R:     key_code = WXK_CONTROL;     break;
+	case GDK_Menu:          key_code = WXK_MENU;        break;
+	case GDK_Help:          key_code = WXK_HELP;        break;
         case GDK_BackSpace:     key_code = WXK_BACK;        break;
         case GDK_ISO_Left_Tab:
         case GDK_KP_Tab:
@@ -429,7 +435,10 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
         }
     }
 
-    if (!key_code) return FALSE;
+    int x = 0;
+    int y = 0;
+    GdkModifierType state;
+    if (gdk_event->window) gdk_window_get_pointer(gdk_event->window, &x, &y, &state);
 
     wxKeyEvent event( wxEVT_KEY_DOWN );
     event.SetTimestamp( gdk_event->time );
@@ -438,8 +447,9 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
     event.m_altDown = (gdk_event->state & GDK_MOD1_MASK);
     event.m_metaDown = (gdk_event->state & GDK_MOD2_MASK);
     event.m_keyCode = key_code;
-    event.m_x = 0;
-    event.m_y = 0;
+    event.m_scanCode = gdk_event->keyval;
+    event.m_x = x;
+    event.m_y = y;
     event.SetEventObject( win );
 
     bool ret = win->GetEventHandler()->ProcessEvent( event );
@@ -542,6 +552,12 @@ static gint gtk_window_key_release_callback( GtkWidget *widget, GdkEventKey *gdk
     long key_code = 0;
     switch (gdk_event->keyval)
     {
+        case GDK_Shift_L:
+	case GDK_Shift_R:       key_code = WXK_SHIFT;       break;
+        case GDK_Control_L:
+	case GDK_Control_R:     key_code = WXK_CONTROL;     break;
+	case GDK_Menu:          key_code = WXK_MENU;        break;
+	case GDK_Help:          key_code = WXK_HELP;        break;
         case GDK_BackSpace:     key_code = WXK_BACK;        break;
         case GDK_ISO_Left_Tab:
         case GDK_KP_Tab:
@@ -618,7 +634,10 @@ static gint gtk_window_key_release_callback( GtkWidget *widget, GdkEventKey *gdk
         }
     }
 
-    if (!key_code) return FALSE;
+    int x = 0;
+    int y = 0;
+    GdkModifierType state;
+    if (gdk_event->window) gdk_window_get_pointer(gdk_event->window, &x, &y, &state);
 
     wxKeyEvent event( wxEVT_KEY_UP );
     event.SetTimestamp( gdk_event->time );
@@ -627,8 +646,9 @@ static gint gtk_window_key_release_callback( GtkWidget *widget, GdkEventKey *gdk
     event.m_altDown = (gdk_event->state & GDK_MOD1_MASK);
     event.m_metaDown = (gdk_event->state & GDK_MOD2_MASK);
     event.m_keyCode = key_code;
-    event.m_x = 0;
-    event.m_y = 0;
+    event.m_scanCode = gdk_event->keyval;
+    event.m_x = x;
+    event.m_y = y;
     event.SetEventObject( win );
 
     if (win->GetEventHandler()->ProcessEvent( event ))

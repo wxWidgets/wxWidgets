@@ -658,6 +658,7 @@ public:
     bool          m_shiftDown;
     bool          m_altDown;
     bool          m_metaDown;
+    bool          m_scanCode;
 };
 
 // Size event class
