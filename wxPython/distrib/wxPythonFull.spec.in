@@ -182,7 +182,6 @@ $GFL    $RPM_BUILD_ROOT %{wxpref}                  >> FILELIST
 $GFL    $RPM_BUILD_ROOT %{wxpref}/lib              >> FILELIST
 $GFL    $RPM_BUILD_ROOT "%{wxpref}/lib/libwx*"     >> FILELIST
 $GFL -r $RPM_BUILD_ROOT %{wxpref}/share            >> FILELIST
-$GFL -r $RPM_BUILD_ROOT %{pref}/share              >> FILELIST
 
 $GFL    $RPM_BUILD_ROOT %{wxpref}/include           > DEVELLIST
 $GFL -r $RPM_BUILD_ROOT %{wxpref}/include/wx       >> DEVELLIST
