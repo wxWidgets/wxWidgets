@@ -992,8 +992,8 @@ void wxDC::DoDrawRectangle(
 
     vPoint[0].x = vX;
     vPoint[0].y = vY;
-    vPoint[1].x = vX + vWidth;
-    vPoint[1].y = vY + vHeight;
+    vPoint[1].x = vX + vWidth - 1;
+    vPoint[1].y = vY + vHeight - 1;
     ::GpiMove(m_hPS, &vPoint[0]);
     lColor       = m_brush.GetColour().GetPixel();
     lBorderColor = m_pen.GetColour().GetPixel();
@@ -1031,8 +1031,8 @@ void wxDC::DoDrawRectangle(
                      );
         vPoint[0].x = vX + 1;
         vPoint[0].y = vY + 1;
-        vPoint[1].x = vX + vWidth - 1;
-        vPoint[1].y = vY + vHeight - 1;
+        vPoint[1].x = vX + vWidth - 2;
+        vPoint[1].y = vY + vHeight - 2;
         ::GpiMove(m_hPS, &vPoint[0]);
         ::GpiBox( m_hPS
                  ,lControl
@@ -1209,7 +1209,7 @@ void wxDC::DoDrawBitmap(
 , bool                              bUseMask
 )
 {
-    if (!bUseMask && !IsKindOf(CLASSINFO(wxPrinterDC)))
+    if (!IsKindOf(CLASSINFO(wxPrinterDC)))
     {
         HBITMAP                         hBitmap =  (HBITMAP)rBmp.GetHBITMAP();
         wxBitmap                        vNewBitmap( rBmp.GetWidth()
@@ -1219,6 +1219,17 @@ void wxDC::DoDrawBitmap(
         HBITMAP                         hBitmapOld = ::GpiSetBitmap((HPS)GetHPS(), vNewBitmap.GetHBITMAP());
         LONG                            lOldTextground = ::GpiQueryColor((HPS)GetHPS());
         LONG                            lOldBackground = ::GpiQueryBackColor((HPS)GetHPS());
+
+        vY = OS2Y(vY,rBmp.GetHeight());
+
+        //
+        // Flip the picture as OS/2 is upside-down
+        //
+        POINTL                      vPoint[4] = { vX, vY + rBmp.GetHeight()
+                                                 ,vX + rBmp.GetWidth(), vY
+                                                 ,0, 0
+                                                 ,rBmp.GetWidth(), rBmp.GetHeight()
+                                                };
 
         if (m_textForegroundColour.Ok())
         {
@@ -1232,24 +1243,119 @@ void wxDC::DoDrawBitmap(
                               ,m_textBackgroundColour.GetPixel()
                              );
         }
+        if (bUseMask)
+        {
+            wxMask*                     pMask = rBmp.GetMask();
+            HPS                         hPS;
+            HDC                         hDC;
 
-        vY = OS2Y(vY,rBmp.GetHeight());
+            if (!IsKindOf(CLASSINFO(wxMemoryDC)))
+            {
+                DEVOPENSTRUC                    vDop  = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
+                SIZEL                           vSize = {0, 0};
 
-        //
-        // Flip the picture as OS/2 is upside-down
-        //
-        POINTL                      vPoint[4] = { vX, vY + rBmp.GetHeight()
-                                                 ,vX + rBmp.GetWidth(), vY
-                                                 ,0, 0
-                                                 ,rBmp.GetWidth(), rBmp.GetHeight()
-                                                };
-        ::GpiWCBitBlt( (HPS)GetHPS()
-                      ,hBitmap
-                      ,4
-                      ,vPoint
-                      ,ROP_SRCCOPY
-                      ,BBO_IGNORE
-                     );
+                hDC   = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDop, NULLHANDLE);
+                hPS   = ::GpiCreatePS(vHabmain, hDC, &vSize, PU_PELS | GPIA_ASSOC);
+            }
+            else
+                hPS = m_hPS;
+
+            if (pMask)
+            {
+                BITMAPINFOHEADER2           vHeader;
+                BITMAPINFO2                 vInfo;
+                int                         nBytesPerLine = rBmp.GetWidth() * 3;
+                unsigned char*              pucData;
+                LONG                        lScans = 0L;
+                LONG                        alFormats[24]; // Max formats OS/2 PM supports
+                ULONG                       ulBitcount;
+                HBITMAP                     hMask = (HBITMAP)pMask->GetMaskBitmap();
+                POINTL                      vPointMask[4] = { 0, 0, rBmp.GetWidth(), rBmp.GetHeight()
+                                                             ,0, 0, rBmp.GetWidth(), rBmp.GetHeight()
+                                                            };
+
+                ::GpiSetBitmap(hPS, hMask);
+
+                ::GpiQueryDeviceBitmapFormats(hPS, 24, alFormats);
+                ulBitcount = alFormats[1]; // the best one
+                if (ulBitcount > 24) // PM supports a max of 24
+                    ulBitcount = 24;
+
+                vInfo.cbFix     = 16;
+                vInfo.cx        = rBmp.GetWidth();
+                vInfo.cy        = rBmp.GetHeight();
+                vInfo.cPlanes   = 1;
+                vInfo.cBitCount = ulBitcount;
+                pucData = (unsigned char*)malloc(nBytesPerLine * rBmp.GetHeight());
+                if ((lScans = ::GpiQueryBitmapBits( hPS
+                                                   ,0L
+                                                   ,(LONG)rBmp.GetHeight()
+                                                   ,(PBYTE)pucData
+                                                   ,&vInfo
+                                                  )) == GPI_ALTERROR)
+                {
+                    ERRORID                     vError;
+                    wxString                    sError;
+
+                    vError = ::WinGetLastError(vHabmain);
+                    sError = wxPMErrorToStr(vError);
+                }
+                if ((hBitmapOld = ::GpiSetBitmap(hPS, (HBITMAP)vNewBitmap.GetHBITMAP())) == HBM_ERROR)
+                {
+                    ERRORID                     vError;
+                    wxString                    sError;
+
+                    vError = ::WinGetLastError(vHabmain);
+                    sError = wxPMErrorToStr(vError);
+                }
+                if ((lScans = ::GpiSetBitmapBits( hPS
+                                                 ,0
+                                                 ,(LONG)rBmp.GetHeight()
+                                                 ,(PBYTE)pucData
+                                                 ,&vInfo
+                                                )) == GPI_ALTERROR)
+                {
+                    ERRORID                 vError;
+                    wxString                sError;
+
+                    vError = ::WinGetLastError(vHabmain);
+                    sError = wxPMErrorToStr(vError);
+                }
+                if ((hBitmapOld = ::GpiSetBitmap(hPS, NULLHANDLE)) == HBM_ERROR)
+                {
+                    ERRORID                     vError;
+                    wxString                    sError;
+
+                    vError = ::WinGetLastError(vHabmain);
+                    sError = wxPMErrorToStr(vError);
+                }
+                if ((hBitmapOld = ::GpiSetBitmap((HPS)GetHPS(), vNewBitmap.GetHBITMAP())) == HBM_ERROR)
+                {
+                    ERRORID                     vError;
+                    wxString                    sError;
+
+                    vError = ::WinGetLastError(vHabmain);
+                    sError = wxPMErrorToStr(vError);
+                }
+                ::GpiWCBitBlt( (HPS)GetHPS()
+                              ,hBitmap
+                              ,4
+                              ,vPoint
+                              ,ROP_SRCAND
+                              ,BBO_IGNORE
+                             );
+            }
+        }
+        else
+        {
+            ::GpiWCBitBlt( (HPS)GetHPS()
+                          ,hBitmap
+                          ,4
+                          ,vPoint
+                          ,ROP_SRCCOPY
+                          ,BBO_IGNORE
+                         );
+        }
         ::GpiSetBitmap((HPS)GetHPS(), hBitmapOld);
         ::GpiSetColor((HPS)GetHPS(), lOldTextground);
         ::GpiSetBackColor((HPS)GetHPS(), lOldBackground);

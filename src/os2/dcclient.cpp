@@ -319,12 +319,14 @@ wxPaintDC::wxPaintDC(
     {
         HPS                         hPS;
 
+        m_hDC = (WXHDC)::WinOpenWindowDC(GetWinHwnd(m_pCanvas));
         hPS = ::WinBeginPaint( GetWinHwnd(m_pCanvas)
                               ,NULLHANDLE
                               ,&g_paintStruct
                              );
         if(hPS)
         {
+            ::GpiAssociate(hPS, m_hDC);
             m_hOldPS = m_hPS;
             m_hPS = hPS;
             ::GpiCreateLogColorTable( m_hPS
@@ -349,7 +351,6 @@ wxPaintDC::wxPaintDC(
         }
 
         m_bIsPaintTime   = TRUE;
-        m_hDC = (WXHDC) -1; // to satisfy those anonizmous efforts
         ms_cache.Add(new wxPaintDCInfo(m_pCanvas, this));
     }
     InitDC();
