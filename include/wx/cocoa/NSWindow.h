@@ -29,7 +29,7 @@ public:
     virtual void CocoaNotification_DidBecomeKey(void) { }
     virtual void CocoaNotification_DidResignKey(void) { }
 protected:
-    static void *sm_cocoaObserver;
+    static struct objc_object *sm_cocoaDelegate;
 };
 
 #endif // _WX_COCOA_NSWINDOW_H_
