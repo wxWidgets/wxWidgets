@@ -80,8 +80,8 @@ EXPORTS
       __ct__9wxAppBaseFv
       ;wxAppBase::OnInit()
       OnInit__9wxAppBaseFv
-      ;wxAppBase::DoInit()
-      DoInit__9wxAppBaseFv
+      ;wxAppBase::CreateMessageOutput()
+      CreateMessageOutput__9wxAppBaseFv
       ;wxOnAssert(const char*,int,const char*,const char*)
       wxOnAssert__FPCciN21
       ;wxAppBase::~wxAppBase()
@@ -90,6 +90,8 @@ EXPORTS
       ProcessPendingEvents__9wxAppBaseFv
       ;wxAppBase::OnCmdLineError(wxCmdLineParser&)
       OnCmdLineError__9wxAppBaseFR15wxCmdLineParser
+      ;wxAppBase::CreateLogTarget()
+      CreateLogTarget__9wxAppBaseFv
       ;wxAppBase::SetActive(unsigned long,wxWindow*)
       SetActive__9wxAppBaseFUlP8wxWindow
   ;From object file:  ..\common\choiccmn.cpp
@@ -4705,11 +4707,15 @@ EXPORTS
       __vft9wxProcess8wxObject
       ;wxProcess::Open(const wxString&,int)
       Open__9wxProcessFRC8wxStringi
+      ;wxProcess::IsErrorAvailable() const
+      IsErrorAvailable__9wxProcessCFv
       wxEVT_END_PROCESS
       ;wxProcess::Init(wxEvtHandler*,int,int)
       Init__9wxProcessFP12wxEvtHandleriT2
       ;wxProcess::~wxProcess()
       __dt__9wxProcessFv
+      ;wxProcess::IsInputOpened() const
+      IsInputOpened__9wxProcessCFv
       ;wxConstructorForwxProcessEvent()
       wxConstructorForwxProcessEvent__Fv
       ;wxProcess::sm_classwxProcess
@@ -4720,6 +4726,8 @@ EXPORTS
       OnTerminate__9wxProcessFiT1
       ;wxProcess::Detach()
       Detach__9wxProcessFv
+      ;wxProcess::IsInputAvailable() const
+      IsInputAvailable__9wxProcessCFv
   ;From object file:  ..\common\protocol.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxProtocol::wxProtocol()
@@ -5212,10 +5220,12 @@ EXPORTS
       Add__7wxSizerFP7wxSizeriN22P8wxObject
       ;wxSizer::Prepend(int,int,int,int,int,wxObject*)
       Prepend__7wxSizerFiN41P8wxObject
-      ;wxFlexGridSizer::AddGrowableCol(unsigned int)
-      AddGrowableCol__15wxFlexGridSizerFUi
+      ;wxGridSizer::CalcRowsCols(int&,int&) const
+      CalcRowsCols__11wxGridSizerCFRiT1
       ;wxBoxSizer::wxBoxSizer(int)
       __ct__10wxBoxSizerFi
+      ;wxFlexGridSizer::AddGrowableCol(unsigned int)
+      AddGrowableCol__15wxFlexGridSizerFUi
       ;wxSizerItem::IsSizer()
       IsSizer__11wxSizerItemFv
       ;wxNotebookSizer::sm_classwxNotebookSizer
@@ -7196,15 +7206,15 @@ EXPORTS
       wxGetTopLevelParent__FP8wxWindow
   ;From object file:  ..\common\wxchar.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxVsnprintf_(char*,unsigned int,const char*,char*)
+      wxVsnprintf___FPcUiPCcT1
       wcslen
       ;wxMB2WC(wchar_t*,const char*,unsigned int)
       wxMB2WC__FPwPCcUi
-      ;wxVsnprintf(char*,unsigned int,const char*,char*)
-      wxVsnprintf__FPcUiPCcT1
+      ;wxSnprintf_(char*,unsigned int,const char*,...)
+      wxSnprintf___FPcUiPCce
       ;wxWC2MB(char*,const wchar_t*,unsigned int)
       wxWC2MB__FPcPCwUi
-      ;wxSnprintf(char*,unsigned int,const char*,...)
-      wxSnprintf__FPcUiPCce
       ;wxOKlibc()
       wxOKlibc__Fv
   ;From object file:  ..\common\wxexpr.cpp
@@ -9129,8 +9139,6 @@ EXPORTS
       SetItem__17wxGenericListCtrlFR10wxListItem
       ;wxListLineData::SetItem(int,const wxListItem&)
       SetItem__14wxListLineDataFiRC10wxListItem
-      ;wxGenericListCtrl::SetImageList(wxGenericImageList*,int)
-      SetImageList__17wxGenericListCtrlFP18wxGenericImageListi
       ;wxGenericListCtrl::SetColumnWidth(int,int)
       SetColumnWidth__17wxGenericListCtrlFiT1
       ;wxGenericListCtrl::ScrollList(int,int)
@@ -9223,8 +9231,8 @@ EXPORTS
       SetItem__16wxListHeaderDataFRC10wxListItem
       ;wxListMainWindow::SetItemState(long,long,long)
       SetItemState__16wxListMainWindowFlN21
-      ;wxListMainWindow::SetImageList(wxGenericImageList*,int)
-      SetImageList__16wxListMainWindowFP18wxGenericImageListi
+      ;wxListMainWindow::SetImageList(wxImageList*,int)
+      SetImageList__16wxListMainWindowFP11wxImageListi
       ;wxGenericListCtrl::SetColumn(int,wxListItem&)
       SetColumn__17wxGenericListCtrlFiR10wxListItem
       ;wxListMainWindow::SetColumnWidth(int,int)
@@ -9253,6 +9261,8 @@ EXPORTS
       DeleteColumn__17wxGenericListCtrlFi
       ;wxListMainWindow::CacheLineData(unsigned int)
       CacheLineData__16wxListMainWindowFUi
+      ;wxGenericListCtrl::AssignImageList(wxImageList*,int)
+      AssignImageList__17wxGenericListCtrlFP11wxImageListi
       ;wxGenericListCtrl::GetNextItem(long,int,int) const
       GetNextItem__17wxGenericListCtrlCFliT2
       ;wxConstructorForwxListCtrl()
@@ -9374,8 +9384,6 @@ EXPORTS
       DrawImage__16wxListMainWindowFiP4wxDCN21
       ;wxListMainWindow::ChangeCurrent(unsigned int)
       ChangeCurrent__16wxListMainWindowFUi
-      ;wxGenericListCtrl::AssignImageList(wxGenericImageList*,int)
-      AssignImageList__17wxGenericListCtrlFP18wxGenericImageListi
       ;wxGenericListCtrl::~wxGenericListCtrl()
       __dt__17wxGenericListCtrlFv
       wxEVT_COMMAND_LIST_KEY_DOWN
@@ -9590,6 +9598,8 @@ EXPORTS
       SetItem__16wxListMainWindowFR10wxListItem
       ;wxListItemData::SetItem(const wxListItem&)
       SetItem__14wxListItemDataFRC10wxListItem
+      ;wxGenericListCtrl::SetImageList(wxImageList*,int)
+      SetImageList__17wxGenericListCtrlFP11wxImageListi
       ;wxListMainWindow::SetColumn(int,wxListItem&)
       SetColumn__16wxListMainWindowFiR10wxListItem
       ;wxListLineDataArray::RemoveAt(unsigned int,unsigned int)
@@ -11788,6 +11798,8 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxButton::Command(wxCommandEvent&)
       Command__8wxButtonFR14wxCommandEvent
+      ;wxButton::SetDefaultStyle(wxButton*,unsigned long)
+      SetDefaultStyle__8wxButtonFP8wxButtonUl
       ;wxButton::SetTmpDefault()
       SetTmpDefault__8wxButtonFv
       ;wxButton::WindowProc(unsigned int,void*,void*)
@@ -11804,8 +11816,6 @@ EXPORTS
       __dt__8wxButtonFv
       ;wxButton::SendClickEvent()
       SendClickEvent__8wxButtonFv
-      ;wxButton::UpdateDefaultStyle(wxWindow*,wxWindow*)
-      UpdateDefaultStyle__8wxButtonFP8wxWindowT1
       ;wxConstructorForwxButton()
       wxConstructorForwxButton__Fv
       ;wxButton::GetDefaultSize()
@@ -12817,6 +12827,8 @@ EXPORTS
       HandleMenuSelect__7wxFrameFUsT1Ul
       ;wxFrame::OS2TranslateMessage(void**)
       OS2TranslateMessage__7wxFrameFPPv
+      ;wxFrame::SendSizeEvent()
+      SendSizeEvent__7wxFrameFv
       ;wxFrame::HandlePaint()
       HandlePaint__7wxFrameFv
       ;wxFrame::OnCreateStatusBar(int,long,int,const wxString&)
@@ -13577,14 +13589,14 @@ EXPORTS
       GetDescription__14wxFileTypeImplCFP8wxString
       ;wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString&)
       EnumAllFileTypes__22wxMimeTypesManagerImplFR13wxArrayString
+      ;wxFileTypeImpl::GetIcon(wxIcon*,wxString*,int*) const
+      GetIcon__14wxFileTypeImplCFP6wxIconP8wxStringPi
       ;wxFileTypeImpl::GetOpenCommand(wxString*,const wxFileType::MessageParameters&) const
       GetOpenCommand__14wxFileTypeImplCFP8wxStringRCQ2_10wxFileType17MessageParameters
       ;wxFileTypeImpl::GetPrintCommand(wxString*,const wxFileType::MessageParameters&) const
       GetPrintCommand__14wxFileTypeImplCFP8wxStringRCQ2_10wxFileType17MessageParameters
       ;wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString&)
       GetFileTypeFromExtension__22wxMimeTypesManagerImplFRC8wxString
-      ;wxFileTypeImpl::GetIcon(wxIcon*) const
-      GetIcon__14wxFileTypeImplCFP6wxIcon
       ;wxFileTypeImpl::GetCommand(const char*) const
       GetCommand__14wxFileTypeImplCFPCc
       ;wxFileTypeImpl::GetMimeTypes(wxArrayString&) const
@@ -14183,6 +14195,8 @@ EXPORTS
       m_svAllSpins__10wxSpinCtrl
       ;wxSpinCtrl::DoGetPosition(int*,int*) const
       DoGetPosition__10wxSpinCtrlCFPiT1
+      ;wxSpinCtrl::SetSelection(long,long)
+      SetSelection__10wxSpinCtrlFlT1
       ;wxSpinCtrl::DoMoveWindow(int,int,int,int)
       DoMoveWindow__10wxSpinCtrlFiN31
       wxSpinCtrlWndProc

@@ -101,6 +101,7 @@ bool wxComboBox::Create(
 , const wxString&                   rsName
 )
 {
+    m_isShown = FALSE;
 
     if (!CreateControl( pParent
                        ,vId
@@ -143,12 +144,7 @@ bool wxComboBox::Create(
     //
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 
-    wxFont*                          pTextFont = new wxFont( 10
-                                                            ,wxMODERN
-                                                            ,wxNORMAL
-                                                            ,wxNORMAL
-                                                           );
-    SetFont(*pTextFont);
+    SetFont(*wxSMALL_FONT);
 
     int                             i;
     for (i = 0; i < n; i++)
@@ -169,7 +165,7 @@ bool wxComboBox::Create(
                                                     ,(PFNWP)wxComboEditWndProc
                                                    );
     ::WinSetWindowULong(GetHwnd(), QWL_USER, (ULONG)this);
-    delete pTextFont;
+    Show(TRUE);
     return TRUE;
 } // end of wxComboBox::Create
 

@@ -101,6 +101,7 @@ bool wxTextCtrl::Create(
 {
     HWND                            hParent;
     int                             nTempy;
+
     //
     // Base initialization
     //

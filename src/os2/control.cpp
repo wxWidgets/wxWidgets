@@ -117,7 +117,8 @@ bool wxControl::OS2CreateControl(
     // All controls should have these styles (wxWindows creates all controls
     // visible by default)
     //
-    dwStyle |= WS_VISIBLE;
+    if (m_isShown )
+        dwStyle |= WS_VISIBLE;
 
     wxWindow*                       pParent = GetParent();
     PSZ                             zClass;

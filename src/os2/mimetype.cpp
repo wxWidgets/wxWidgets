@@ -245,7 +245,7 @@ bool wxFileTypeImpl::GetMimeTypes(wxArrayString& mimeTypes) const
         return FALSE;
 }
 
-bool wxFileTypeImpl::GetIcon(wxIcon *icon) const
+bool wxFileTypeImpl::GetIcon(wxIcon *icon, wxString* psCommand, int* pnIndex) const
 {
 #if wxUSE_GUI
     if ( m_info ) {

@@ -488,4 +488,20 @@ bool wxSpinCtrl::Show(
     return TRUE;
 } // end of wxSpinCtrl::Show
 
+void wxSpinCtrl::SetSelection (
+  long                              lFrom
+, long                              lTo
+)
+{
+    //
+    // If from and to are both -1, it means (in wxWindows) that all text should
+    // be selected - translate into Windows convention
+    //
+    if ((lFrom == -1) && (lTo == -1))
+    {
+        lFrom = 0;
+    }
+    ::WinSendMsg(m_hWnd, EM_SETSEL, MPFROM2SHORT((USHORT)lFrom, (USHORT)lTo), (MPARAM)0);
+} // end of wxSpinCtrl::SetSelection
+
 #endif //wxUSE_SPINBTN

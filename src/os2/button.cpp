@@ -234,9 +234,13 @@ void wxButton::SetDefault()
     // Set this one as the default button both for wxWindows and Windows
     //
     wxWindow*                       pWinOldDefault = pParent->SetDefaultItem(this);
-    UpdateDefaultStyle( this
-                       ,pWinOldDefault
-                      );
+
+    SetDefaultStyle( wxDynamicCast(pWinOldDefault, wxButton)
+                    ,FALSE
+                   );
+    SetDefaultStyle( this
+                    ,TRUE
+                   );
 } // end of wxButton::SetDefault
 
 void wxButton::SetTmpDefault()
@@ -246,14 +250,14 @@ void wxButton::SetTmpDefault()
     wxCHECK_RET( pParent, _T("button without parent?") );
 
     wxWindow*                       pWinOldDefault = pParent->GetDefaultItem();
+
     pParent->SetTmpDefaultItem(this);
-    if (pWinOldDefault != this)
-    {
-        UpdateDefaultStyle( this
-                           ,pWinOldDefault
-                          );
-    }
-    //else: no styles to update
+    SetDefaultStyle( wxDynamicCast(pWinOldDefault, wxButton)
+                    ,FALSE
+                   );
+    SetDefaultStyle( this
+                    ,TRUE
+                   );
 } // end of wxButton::SetTmpDefault
 
 void wxButton::UnsetTmpDefault()
@@ -266,47 +270,60 @@ void wxButton::UnsetTmpDefault()
 
     wxWindow*                       pWinOldDefault = pParent->GetDefaultItem();
 
-    if (pWinOldDefault != this)
-    {
-        UpdateDefaultStyle( pWinOldDefault
-                           ,this
-                          );
-    }
-    //else: we had been default before anyhow
+    SetDefaultStyle( this
+                    ,FALSE
+                   );
+    SetDefaultStyle( wxDynamicCast(pWinOldDefault, wxButton)
+                    ,TRUE
+                   );
 } // end of wxButton::UnsetTmpDefault
 
-void wxButton::UpdateDefaultStyle(
-  wxWindow*                         pWinDefault
-, wxWindow*                         pWinOldDefault)
+void wxButton::SetDefaultStyle(
+  wxButton*                         pBtn
+, bool                              bOn
+)
 {
-    wxButton*                       pBtnOldDefault = wxDynamicCast(pWinOldDefault, wxButton);
     long                            lStyle;
+    //
+    // We may be called with NULL pointer -- simpler to do the check here than
+    // in the caller which does wxDynamicCast()
+    //
+    if (!pBtn)
+        return;
 
-    if ( pBtnOldDefault && pBtnOldDefault != pWinDefault )
+    //
+    // First, let DefDlgProc() know about the new default button
+    //
+    if (bOn)
     {
-        lStyle = ::WinQueryWindowULong(GetHwndOf(pBtnOldDefault), QWL_STYLE);
+        if (!wxTheApp->IsActive())
+            return;
+
+        //
+        // In OS/2 the dialog/panel doesn't really know it has a default
+        // button, the default button simply has that style.  We'll just
+        // simulate by setting focus to it
+        //
+        pBtn->SetFocus();
+    }
+    lStyle = ::WinQueryWindowULong(GetHwndOf(pBtn), QWL_STYLE);
+    if (!(lStyle & BS_DEFAULT) == bOn)
+    {
         if ((lStyle & BS_USERBUTTON) != BS_USERBUTTON)
         {
-            lStyle &= ~BS_DEFAULT;
-            ::WinSetWindowULong(GetHwndOf(pBtnOldDefault), QWL_STYLE, lStyle);
+            if (bOn)
+                lStyle | BS_DEFAULT;
+            else
+                lStyle &= ~BS_DEFAULT;
+            ::WinSetWindowULong(GetHwndOf(pBtn), QWL_STYLE, lStyle);
         }
         else
         {
-            // redraw the button - it will notice itself that it's not the
+            //
+            // Redraw the button - it will notice itself that it's not the
             // default one any longer
-            pBtnOldDefault->Refresh();
-        }
-    }
-
-    wxButton*                       pBtnDefault = wxDynamicCast(pWinDefault, wxButton);
-
-    if (pBtnDefault)
-    {
-        lStyle = ::WinQueryWindowULong(GetHwndOf(pBtnDefault), QWL_STYLE);
-        if ((lStyle & BS_USERBUTTON) != BS_USERBUTTON)
-        {
-            lStyle != BS_DEFAULT;
-            ::WinSetWindowULong(GetHwndOf(pBtnDefault), QWL_STYLE, lStyle);
+            //
+            pBtn->Refresh();
         }
     }
 } // end of wxButton::UpdateDefaultStyle

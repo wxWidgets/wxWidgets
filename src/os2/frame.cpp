@@ -1420,3 +1420,22 @@ wxWindow* wxFrame::GetClient()
 {
     return wxFindWinFromHandle((WXHWND)::WinWindowFromID(m_hFrame, FID_CLIENT));
 }
+
+void wxFrame::SendSizeEvent()
+{
+    if (!m_bIconized)
+    {
+        RECTL                       vRect = wxGetWindowRect(GetHwnd());
+
+        ::WinPostMsg( GetHwnd()
+                     ,WM_SIZE
+                     ,MPFROM2SHORT( vRect.xRight - vRect.xLeft
+                                   ,vRect.xRight - vRect.xLeft
+                                  )
+                     ,MPFROM2SHORT( vRect.yTop - vRect.yBottom
+                                   ,vRect.yTop - vRect.yBottom
+                                  )
+                    );
+    }
+}
+

@@ -302,6 +302,7 @@ void wxWindowOS2::Init()
     m_bMouseInWindow        = FALSE;
     m_bLastKeydownProcessed = FALSE;
     m_bIsActivePage         = TRUE;
+    m_pChildrenDisabled     = NULL;
 
     //
     // wxWnd
@@ -366,6 +367,7 @@ wxWindowOS2::~wxWindowOS2()
         //
         wxRemoveHandleAssociation(this);
     }
+    delete m_pChildrenDisabled;
 } // end of wxWindowOS2::~wxWindowOS2
 
 // real construction (Init() must have been called before!)
@@ -425,7 +427,7 @@ bool wxWindowOS2::Create(
     // set in those class create procs.  PM's basic windows styles are
     // very limited.
     //
-    ulCreateFlags |=  WS_VISIBLE | OS2GetCreateWindowFlags(&dwExStyle);
+    ulCreateFlags |=  OS2GetCreateWindowFlags(&dwExStyle);
 
 
 #ifdef __WXUNIVERSAL__
@@ -434,10 +436,12 @@ bool wxWindowOS2::Create(
 #endif // !wxUniversal
     if (lStyle & wxPOPUP_WINDOW)
     {
-        // a popup window floats on top of everything
-        // it is also created hidden as other top level windows
         ulCreateFlags &= ~WS_VISIBLE;
         m_isShown = FALSE;
+    }
+    else
+    {
+        ulCreateFlags |= WS_VISIBLE;
     }
 
     //
@@ -505,8 +509,43 @@ bool wxWindowOS2::Enable(
     {
         wxWindow*                   pChild = pNode->GetData();
 
-        pChild->Enable(bEnable);
+        if (bEnable)
+        {
+            //
+            // Enable the child back unless it had been disabled before us
+            //
+            if (!m_pChildrenDisabled || !m_pChildrenDisabled->Find(pChild))
+                pChild->Enable();
+        }
+        else // we're being disabled
+        {
+            if (pChild->IsEnabled())
+            {
+                //
+                // Disable it as children shouldn't stay enabled while the
+                // parent is not
+                //
+                pChild->Disable();
+            }
+            else // child already disabled, remember it
+            {
+                //
+                // Have we created the list of disabled children already?
+                //
+                if (!m_pChildrenDisabled)
+                    m_pChildrenDisabled = new wxWindowList;
+                m_pChildrenDisabled->Append(pChild);
+            }
+        }
         pNode = pNode->GetNext();
+    }
+    if (bEnable && m_pChildrenDisabled)
+    {
+        //
+        // We don't need this list any more, don't keep unused memory
+        //
+        delete m_pChildrenDisabled;
+        m_pChildrenDisabled = NULL;
     }
     return TRUE;
 } // end of wxWindowOS2::Enable

@@ -212,7 +212,7 @@ wxString wxChoice::GetString(
     char*                           zBuf;
 
     nLen = (size_t)LONGFROMMR(::WinSendMsg(GetHwnd(), LM_QUERYITEMTEXTLENGTH, (MPARAM)n, (MPARAM)0));
-    if (nLen)
+    if (nLen != LIT_ERROR && nLen > 0)
     {
         zBuf = new char[nLen + 1];
         ::WinSendMsg( GetHwnd()
