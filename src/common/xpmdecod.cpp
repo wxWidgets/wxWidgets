@@ -702,7 +702,7 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
     {
         for (i_key = 0; i_key < chars_per_pixel; i_key++)
             key[i_key] = (wxChar)xpm_data[1 + i][i_key];
-        clr_def = ParseColor(xpm_data[1 + i]);
+        clr_def = ParseColor(xpm_data[1 + i] + chars_per_pixel);
         clr_data = new wxXPMColourMapData;
 
         if ( clr_def == NULL )
