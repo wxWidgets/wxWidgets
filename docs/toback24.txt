@@ -405,6 +405,23 @@ CVS: [VS] wxWindows/src/common fileconf.cpp,1.93,1.94
 CVS: [VS] wxWindows/include/wx strconv.h,1.12,1.13
 CVS: [VS] wxWindows/src/common strconv.cpp,1.71,1.72
 
+33. Fix memory leak in wxMimeTypesManager
+
+http://sf.net/tracker/index.php?func=detail&aid=685580&group_id=9863&atid=309863
+
+Checking in src/unix/mimetype.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/unix/mimetype.cpp,v  <--  mimetype.cpp
+new revision: 1.32; previous revision: 1.31
+done
+
+34. Fix memory leak in generic wxFileDialog
+
+http://sf.net/tracker/index.php?func=detail&aid=696164&group_id=9863&atid=309863
+
+Checking in src/generic/filedlgg.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/generic/filedlgg.cpp,v  <--  filedlgg.cpp
+new revision: 1.84; previous revision: 1.83
+done
 
 33. Add support for GTK2 label mnemonics (patch #689573)
 
