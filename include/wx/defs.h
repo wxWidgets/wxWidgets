@@ -428,7 +428,7 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 #endif
 
 // Printf-like attribute definitions to obtain warnings with GNU C/C++
-#if defined(__GNUC__)
+#if defined(__GNUC__) && !wxUSE_UNICODE
 #  ifndef ATTRIBUTE_PRINTF
 #    define ATTRIBUTE_PRINTF(m, n) __attribute__ ((__format__ (__printf__, m, n)))
 #    define ATTRIBUTE_PRINTF_1 ATTRIBUTE_PRINTF(1, 2)
