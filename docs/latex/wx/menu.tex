@@ -145,6 +145,31 @@ is called, so do not delete it yourself.}
 This command can be used after the menu has been shown, as well as on initial
 creation of a menu or menubar.
 
+The {\it item} string for the normal menu items (not submenus or separators)
+may include the accelerator which can be used to activate the menu item
+from keyboard. The accelerator string follows the item label and is separated
+from it by a {\tt TAB} character ({\tt '$\backslash$t'}). Its general syntax is
+any combination of {\tt "CTRL"}, {\tt "ALT"} and {\tt "SHIFT"} strings (case
+doesn't matter) separated by either {\tt '-'} or {\tt '+'} characters and
+followed by the accelerator itself. The accelerator may be any alphanumeric
+character, any function key (from {\tt F1} to {\tt F12}) or one of the special
+characters listed in the table below (again, case doesn't matter):
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\tt DEL} or {\tt DELETE}}{Delete key}
+\twocolitem{{\tt INS} or {\tt INSERT}}{Insert key}
+\twocolitem{{\tt ENTER} or {\tt RETURN}}{Enter key}
+\twocolitem{{\tt PGUP}}{PageUp key}
+\twocolitem{{\tt PGDN}}{PageDown key}
+\twocolitem{{\tt LEFT}}{Left cursor arrow key}
+\twocolitem{{\tt RIGHT}}{Right cursor arrow key}
+\twocolitem{{\tt UP}}{Up cursor arrow key}
+\twocolitem{{\tt DOWN}}{Down cursor arrow key}
+\twocolitem{{\tt HOME}}{Home key}
+\twocolitem{{\tt END}}{End key}
+\twocolitem{{\tt SPACE}}{Space}
+\twocolitem{{\tt TAB}}{Tab key}
+\end{twocollist}
+
 \wxheading{See also}
 
 \helpref{wxMenu::AppendSeparator}{wxmenuappendseparator},\rtfsp
