@@ -199,7 +199,7 @@ public:
                      const wxString& title = wxEmptyString,
                      const wxBitmap& bitmap = wxNullBitmap,
                      const wxPoint& pos = wxDefaultPosition,
-                     const wxSize& size = wxDefaultSize)
+                     const wxSize& size = wxDefaultSize);
 #endif // WXWIN_COMPATIBILITY_2_2
 };
 
