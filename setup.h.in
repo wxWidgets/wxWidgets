@@ -509,6 +509,11 @@
  */
 #define wxUSE_FFILE 0
 /*
+ * Use wxFSVolume class
+ */
+#define wxUSE_FSVOLUME 1
+
+/*
  * Use wxTextBuffer class
  */
 #define wxUSE_TEXTBUFFER 0

@@ -27,9 +27,11 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_FSVOLUME
+
 #ifndef WX_PRECOMP
-#include <wx/icon.h>
-#include <wx/intl.h>
+    #include "wx/icon.h"
+    #include "wx/intl.h"
 #endif // WX_PRECOMP
 
 #include "wx/dir.h"
@@ -585,4 +587,6 @@ wxIcon wxFSVolume::GetIcon(wxFSIconType type) const
 } // GetIcon
 
 #endif // wxUSE_GUI
+
+#endif // wxUSE_FSVOLUME
 

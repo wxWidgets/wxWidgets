@@ -267,6 +267,13 @@
 #define wxUSE_FILE          1
 #define wxUSE_FFILE         1
 
+// Use wxFSVolume class providing access to the configured/active mount points
+//
+// Default is 1
+//
+// Recommended setting: 1 (but may be safely disabled if you don't use it)
+#define wxUSE_FSVOLUME      1
+
 // use wxTextBuffer class: required by wxTextFile
 #define wxUSE_TEXTBUFFER    1
 

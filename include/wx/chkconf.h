@@ -50,6 +50,14 @@
 #   endif
 #endif /* !defined(wxUSE_DYNLIB_CLASS) */
 
+#ifndef wxUSE_FSVOLUME
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_FSVOLUME
+#   else
+#       define wxUSE_FSVOLUME 0
+#   endif
+#endif /* !defined(wxUSE_FSVOLUME) */
+
 #ifndef wxUSE_DYNAMIC_LOADER
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_DYNAMIC_LOADER must be defined."

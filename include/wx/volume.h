@@ -20,6 +20,10 @@
     #pragma interface "fsvolume.h"
 #endif
 
+#include "wx/defs.h"
+
+#if wxUSE_FSVOLUME
+
 // the volume flags
 enum
 {
@@ -49,6 +53,9 @@ enum wxFSVolumeKind
 };
 
 #if wxUSE_GUI
+
+#include "wx/icon.h"
+
 enum wxFSIconType
 {
     wxFS_VOL_ICO_SMALL = 0,
@@ -57,9 +64,10 @@ enum wxFSIconType
     wxFS_VOL_ICO_SEL_LARGE,
     wxFS_VOL_ICO_MAX
 };
-#endif // wxUSE_GUI
 
 WX_DECLARE_OBJARRAY(wxIcon, wxIconArray);
+
+#endif // wxUSE_GUI
 
 class WXDLLEXPORT wxFSVolume
 {
@@ -117,6 +125,8 @@ private:
     bool m_isOk;
 
 };
+
+#endif // wxUSE_FSVOLUME
 
 #endif // _WX_FSVOLUME_H_
 
