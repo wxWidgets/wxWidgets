@@ -872,7 +872,9 @@ void wxListBox::OnChar(wxKeyEvent& event)
 	}
 	else if ( event.KeyCode() == WXK_DOWN || event.KeyCode() == WXK_UP )
 	{
-	  ::HandleControlKey( (ControlHandle) m_macControl , keycode , keychar , ev->modifiers ) ;
+	    // default handling
+	    event.Skip() ;
+//	  ::HandleControlKey( (ControlHandle) m_macControl , keycode , keychar , ev->modifiers ) ;
 	} 
 	else
 	{
