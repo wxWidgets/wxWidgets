@@ -523,6 +523,10 @@ fi
 
 
 
+if test "x$wx_cv_path_samplesubdirs" = "x"; then
+    { echo "configure: error: Please run configure from the top level directory." 1>&2; exit 1; }
+fi
+
 SAMPLES_SUBDIRS=$wx_cv_path_samplesubdirs
 
 
