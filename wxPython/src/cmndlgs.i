@@ -132,7 +132,30 @@ public:
 
 //----------------------------------------------------------------------
 
-//TODO: wxMultipleChoiceDialog
+enum { wxCHOICEDLG_STYLE };
+
+class wxMultiChoiceDialog : public wxDialog
+{
+public:
+    wxMultiChoiceDialog(wxWindow *parent,
+                        const wxString& message,
+                        const wxString& caption,
+                        int LCOUNT, wxString *choices,
+                        long style = wxCHOICEDLG_STYLE,
+                        const wxPoint& pos = wxDefaultPosition);
+
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+
+    void SetSelections(const wxArrayInt& selections);
+
+    // wxArrayInt GetSelections() const;
+    %addmethods {
+        PyObject* GetSelections() {
+            return wxArrayInt2PyList_helper(self->GetSelections());
+        }
+    }
+};
+
 
 //----------------------------------------------------------------------
 
@@ -146,7 +169,7 @@ public:
                              wxString* caption,
                              int LCOUNT, wxString* choices,
                              //char** clientData = NULL,
-                             long style = wxOK | wxCANCEL | wxCENTRE,
+                             long style = wxCHOICEDLG_STYLE,
                              wxPoint* pos = &wxDefaultPosition) {
             return new wxSingleChoiceDialog(parent, *message, *caption,
                                             LCOUNT, choices, NULL, style, *pos);

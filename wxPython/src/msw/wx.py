@@ -1453,6 +1453,8 @@ class wxTimer(wxPyTimer):
 wxColor      = wxColour
 wxNamedColor = wxNamedColour
 wxPen        = wxPyPen
+wxScrollbar  = wxScrollBar
+
 
 # backwards compatibility
 wxNoRefBitmap       = wxBitmap
@@ -1466,11 +1468,12 @@ wxSystemSettings_GetSystemMetric = wxSystemSettings_GetMetric
 #----------------------------------------------------------------------
 # wxGTK sets the locale when initialized.  Doing this at the Python
 # level should set it up to match what GTK is doing at the C level.
-try:
-    import locale
-    locale.setlocale(locale.LC_ALL, "")
-except:
-    pass
+if wxPlatform == "__WXGTK__":
+    try:
+        import locale
+        locale.setlocale(locale.LC_ALL, "")
+    except:
+        pass
 
 
 

@@ -67,7 +67,7 @@ static void wxPyCoreAPI_IMPORT() {
 #define wxPyMake_wxSizer(a)             (wxPyCoreAPIPtr->p_wxPyMake_wxSizer(a))
 #define wxPyPtrTypeMap_Add(a, b)        (wxPyCoreAPIPtr->p_wxPyPtrTypeMap_Add(a, b))
 #define wxArrayString2PyList_helper(a)  (wxPyCoreAPIPtr->p_wxArrayString2PyList_helper(a))
-
+#define wxArrayInt2PyList_helper(a)     (wxPyCoreAPIPtr->p_wxArrayInt2PyList_helper(a))
 
 
 // This one is special.  It's the first function called in SWIG generated

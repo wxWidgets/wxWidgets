@@ -143,6 +143,7 @@ bool _4int_seq_helper(PyObject* source, int* i1, int* i2, int* i3, int* i4);
 
 
 PyObject* wxArrayString2PyList_helper(const wxArrayString& arr);
+PyObject* wxArrayInt2PyList_helper(const wxArrayInt& arr);
 
 
 #define RETURN_NONE()   { Py_INCREF(Py_None); return Py_None; }
@@ -281,6 +282,7 @@ struct wxPyCoreAPI {
     PyObject*   (*p_wxPyMake_wxSizer)(wxSizer* source);
     void        (*p_wxPyPtrTypeMap_Add)(const char* commonName, const char* ptrName);
     PyObject*   (*p_wxArrayString2PyList_helper)(const wxArrayString& arr);
+    PyObject*   (*p_wxArrayInt2PyList_helper)(const wxArrayInt& arr);
 };
 
 #ifdef wxPyUSE_EXPORT

@@ -199,7 +199,8 @@ static wxPyCoreAPI API = {
     wxPyMake_wxObject,
     wxPyMake_wxSizer,
     wxPyPtrTypeMap_Add,
-    wxArrayString2PyList_helper
+    wxArrayString2PyList_helper,
+    wxArrayInt2PyList_helper
 };
 
 

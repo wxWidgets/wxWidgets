@@ -1490,6 +1490,18 @@ PyObject* wxArrayString2PyList_helper(const wxArrayString& arr) {
 }
 
 
+PyObject* wxArrayInt2PyList_helper(const wxArrayInt& arr) {
+
+    PyObject* list = PyList_New(0);
+    for (size_t i=0; i < arr.GetCount(); i++) {
+        PyObject* number = PyInt_FromLong(arr[i]);
+        PyList_Append(list, number);
+        Py_DECREF(number);
+    }
+    return list;
+}
+
+
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
 

@@ -638,7 +638,7 @@ static PyObject *_wrap_wxEditableListBox_SetStrings(PyObject *self, PyObject *ar
     for (i=0; i<len; i++) {
         PyObject* item = PySequence_GetItem(_obj1, i);
         PyObject* str  = PyObject_Str(item);
-        _arg1->Add(PyString_AsString(item));
+        _arg1->Add(PyString_AsString(str));
         Py_DECREF(item);
         Py_DECREF(str);
     }

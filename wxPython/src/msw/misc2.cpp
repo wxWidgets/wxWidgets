@@ -7896,7 +7896,7 @@ static PyObject *_wrap_new_wxFileTypeInfoSequence(PyObject *self, PyObject *args
     for (i=0; i<len; i++) {
         PyObject* item = PySequence_GetItem(_obj0, i);
         PyObject* str  = PyObject_Str(item);
-        _arg0->Add(PyString_AsString(item));
+        _arg0->Add(PyString_AsString(str));
         Py_DECREF(item);
         Py_DECREF(str);
     }

@@ -7861,7 +7861,7 @@ static PyObject *_wrap_wxGrid_GetTextBoxSize(PyObject *self, PyObject *args, PyO
     for (i=0; i<len; i++) {
         PyObject* item = PySequence_GetItem(_obj2, i);
         PyObject* str  = PyObject_Str(item);
-        _arg2->Add(PyString_AsString(item));
+        _arg2->Add(PyString_AsString(str));
         Py_DECREF(item);
         Py_DECREF(str);
     }

@@ -72,6 +72,9 @@ elseiff "%1" == "a" then
 
 	call b.bat 15 c
 	call b.bat 15 f
+	cd demo
+	p15 encode_bitmaps.py
+	cd -
 	call b.bat 15 r
 	call b.bat 15 c
 	call b.bat 15 h
