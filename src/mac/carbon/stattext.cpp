@@ -55,7 +55,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
     bool ret = wxControl::Create( parent, id, pos, size, style , wxDefaultValidator , name );
     SetBestSize( size ) ;
-    
+
     return ret;
 }
 
@@ -71,19 +71,19 @@ void wxStaticText::DrawParagraph(wxDC &dc, wxString paragraph, int &y)
   while( paragraph.Length() > 0 )
   {
         dc.GetTextExtent( paragraph , &width , &height ) ;
-                    
+
         if ( width > m_width )
         {
             for ( int p = paragraph.Length() -1 ; p > 0 ; --p )
-            {                     
+            {
               if ((punct.Find(paragraph[p]) != wxNOT_FOUND) || !linedrawn)
                 {
                   int blank = (paragraph[p] == ' ') ? 0 : 1;
-                  
+
                     dc.GetTextExtent( paragraph.Left(p + blank) , &width , &height ) ;
-                    
+
                     if ( width <= m_width )
-                    {   
+                    {
                         int pos = x ;
                         if ( HasFlag( wxALIGN_CENTER ) )
                         {
@@ -93,7 +93,7 @@ void wxStaticText::DrawParagraph(wxDC &dc, wxString paragraph, int &y)
                         {
                             pos += ( m_width - width ) ;
                       }
-                            
+
                     dc.DrawText( paragraph.Left(p + blank), pos , y) ;
                     y += height ;
                         paragraph = paragraph.Mid(p+1) ;
@@ -102,7 +102,7 @@ void wxStaticText::DrawParagraph(wxDC &dc, wxString paragraph, int &y)
                     }
                 }
             }
-            
+
             linedrawn = false;
         }
         else
@@ -116,7 +116,7 @@ void wxStaticText::DrawParagraph(wxDC &dc, wxString paragraph, int &y)
             {
                 pos += ( m_width - width ) ;
           }
-                
+
         dc.DrawText( paragraph, pos , y) ;
         paragraph="";
         y += height ;
@@ -132,11 +132,11 @@ void wxStaticText::OnDraw( wxDC &dc )
     dc.Clear() ;
     wxRect rect(0,0,m_width,m_height) ;
     dc.SetFont(*wxSMALL_FONT) ;
-    
+
     dc.DrawRectangle(rect) ;
 */
-  if ( !IsWindowHilited( (WindowRef) MacGetRootWindow() ) && 
-    ( GetBackgroundColour() == wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE ) 
+  if ( !IsWindowHilited( (WindowRef) MacGetRootWindow() ) &&
+    ( GetBackgroundColour() == wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE )
       || GetBackgroundColour() == wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE) ) )
   {
     dc.SetTextForeground( wxColour( 0x80 , 0x80 , 0x80 ) ) ;
@@ -145,19 +145,19 @@ void wxStaticText::OnDraw( wxDC &dc )
   {
     dc.SetTextForeground( GetForegroundColour() ) ;
   }
-  
+
   wxString paragraph;
   int i = 0 ;
   wxString text = m_label;
   int y = 0 ;
   while (i < text.Length())
   {
-	  
+
   	if (text[i] == 13 || text[i] == 10)
   	{
 	    DrawParagraph(dc, paragraph,y);
 	    paragraph = "" ;
-	}    
+	}
 	else
 	{
         paragraph += text[i];
@@ -168,7 +168,7 @@ void wxStaticText::OnDraw( wxDC &dc )
 	  DrawParagraph(dc, paragraph,y);
 }
 
-void wxStaticText::OnPaint( wxPaintEvent &event ) 
+void wxStaticText::OnPaint( wxPaintEvent &event )
 {
     wxPaintDC dc(this);
     OnDraw( dc ) ;
@@ -178,7 +178,7 @@ wxSize wxStaticText::DoGetBestSize() const
 {
     int widthTextMax = 0, widthLine,
         heightTextTotal = 0, heightLineDefault = 0, heightLine = 0;
-        
+
     wxString curLine;
     for ( const wxChar *pc = m_label; ; pc++ )
     {
@@ -195,7 +195,7 @@ wxSize wxStaticText::DoGetBestSize() const
                     GetTextExtent(_T("W"), NULL, &heightLineDefault);
 
                 heightTextTotal += heightLineDefault;
-                
+
                 heightTextTotal++;  // FIXME: why is this necessary?
             }
             else
@@ -204,7 +204,7 @@ wxSize wxStaticText::DoGetBestSize() const
                 if ( widthLine > widthTextMax )
                     widthTextMax = widthLine;
                 heightTextTotal += heightLine;
-                
+
                 heightTextTotal++;  // FIXME: why is this necessary?
             }
 
@@ -226,11 +226,23 @@ wxSize wxStaticText::DoGetBestSize() const
 
 void wxStaticText::SetLabel(const wxString& st )
 {
-	SetTitle( st ) ;
-	m_label = st ;
-	if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
-		SetSize( GetBestSize() ) ;
+    SetTitle( st ) ;
+    m_label = st ;
+    if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
+        SetSize( GetBestSize() ) ;
 
-	Refresh() ;	
-	Update() ;
+    Refresh() ;
+    Update() ;
+}
+
+bool wxStaticText::SetFont(const wxFont& font)
+{
+    bool ret = wxControl::SetFont(font);
+
+    // adjust the size of the window to fit to the label unless autoresizing is
+    // disabled
+    if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
+        SetSize( GetBestSize() );
+
+    return ret;
 }
