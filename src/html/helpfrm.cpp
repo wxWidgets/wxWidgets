@@ -761,6 +761,9 @@ void wxHtmlHelpFrame::CreateContents()
             imaged[it->m_Level] = TRUE;
         }
     }
+#if wxUSE_PRINTING_ARCHITECTURE
+    if (m_Printer) delete m_Printer;
+#endif
 }
 
 
