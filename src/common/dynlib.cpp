@@ -99,7 +99,11 @@ const char *dlerror(void);
     // using LoadLibraryEx under Win32 to avoid name clash with LoadLibrary
 #   ifdef __WIN32__
 #ifdef _UNICODE
+#ifdef __WXWINCE__
+#      define wxDllOpen(lib)                  ::LoadLibrary(lib)
+#else
 #      define wxDllOpen(lib)                  ::LoadLibraryExW(lib, 0, 0)
+#endif
 #else
 #      define wxDllOpen(lib)                  ::LoadLibraryExA(lib, 0, 0)
 #endif
@@ -323,7 +327,11 @@ void *wxDllLoader::GetSymbol(wxDllType dllHandle, const wxString &name, bool *su
     // mb_str() is necessary in Unicode build
     //
     // "void *" cast is needed by gcc 3.1 + w32api 1.4, don't ask me why
-    symbol = (void *)wxDllGetSymbol(dllHandle, name.mb_str());
+#ifdef __WXWINCE__
+    symbol = (void *) wxDllGetSymbol(dllHandle, name.c_str());
+#else
+    symbol = (void *) wxDllGetSymbol(dllHandle, name.mb_str());
+#endif
 
 #endif // OS
 

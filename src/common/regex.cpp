@@ -43,7 +43,9 @@
     #include <sys/types.h>
 #endif
 
+#ifndef __WXWINCE__
 #include <regex.h>
+#endif
 
 #include "wx/regex.h"
 

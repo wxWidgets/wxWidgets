@@ -151,9 +151,9 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
             }
             else {
                 // is it a function key?
-                if ( current[0U] == 'f' && isdigit(current[1U]) &&
+                if ( current[0U] == 'f' && wxIsdigit(current[1U]) &&
                      (current.Len() == 2 ||
-                     (current.Len() == 3 && isdigit(current[2U]))) ) {
+                     (current.Len() == 3 && wxIsdigit(current[2U]))) ) {
                     int n;
                     wxSscanf(current.c_str() + 1, wxT("%d"), &n);
 

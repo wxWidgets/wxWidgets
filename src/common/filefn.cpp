@@ -54,9 +54,16 @@
   #include  "wx/mac/private.h"  // includes mac headers
 #endif
 
+#ifdef __WXWINCE__
+#include "wx/msw/wince/time.h"
+#include "wx/msw/private.h"
+#else
 #include <time.h>
+#endif
 
-#ifndef __MWERKS__
+#ifdef __WXWINCE__
+// Nothing
+#elif !defined(__MWERKS__)
     #include <sys/types.h>
     #include <sys/stat.h>
 #else
@@ -84,7 +91,7 @@
     #include "wx/os2/private.h"
 #endif
 #if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
-#if !defined( __GNUWIN32__ ) && !defined( __MWERKS__ ) && !defined(__SALFORDC__)
+#if !defined( __GNUWIN32__ ) && !defined( __MWERKS__ ) && !defined(__SALFORDC__) && !defined(__WXWINCE__)
     #include <direct.h>
     #include <dos.h>
     #include <io.h>
@@ -254,6 +261,8 @@ void wxPathList::Add (const wxString& path)
 // Add paths e.g. from the PATH environment variable
 void wxPathList::AddEnvList (const wxString& envVariable)
 {
+    // No environment variables on WinCE
+#ifndef __WXWINCE__
     static const wxChar PATH_TOKS[] =
 #ifdef __WINDOWS__
         /*
@@ -292,6 +301,7 @@ void wxPathList::AddEnvList (const wxString& envVariable)
 
         delete [] s;
     }
+#endif
 }
 
 // Given a full filename (with path), ensure that that file can
@@ -632,6 +642,8 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
         } else
 #  endif
 #endif
+            // No env variables on WinCE
+#ifndef __WXWINCE__
 #ifdef __WXMSW__
         if (*s++ == wxT('$') && (*s == wxT('{') || *s == wxT(')')))
 #else
@@ -659,6 +671,8 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
                     s++;
             }
         }
+#endif
+        // __WXWINCE__
     }
 
     /* Expand ~ and ~user */
@@ -738,6 +752,7 @@ wxContractPath (const wxString& filename, const wxString& envname, const wxStrin
 
   // Handle environment
   const wxChar *val = (const wxChar *) NULL;
+#ifndef __WXWINCE__
   wxChar *tcp = (wxChar *) NULL;
   if (envname != WXSTRINGCAST NULL && (val = wxGetenv (WXSTRINGCAST envname)) != NULL &&
      (tcp = wxStrstr (dest, val)) != NULL)
@@ -749,6 +764,7 @@ wxContractPath (const wxString& filename, const wxString& envname, const wxStrin
         wxStrcat (tcp, wxT("}"));
         wxStrcat (tcp, wxFileFunctionsBuffer);
     }
+#endif
 
   // Handle User's home (ignore root homes!)
   size_t len = 0;
@@ -1283,9 +1299,11 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
 bool
 wxRenameFile (const wxString& file1, const wxString& file2)
 {
-  // Normal system call
+#ifndef __WXWINCE__
+    // Normal system call
   if ( wxRename (file1, file2) == 0 )
     return TRUE;
+#endif
 
   // Try to copy
   if (wxCopyFile(file1, file2)) {
@@ -1340,7 +1358,11 @@ bool wxMkdir(const wxString& dir, int perm)
   #endif
 #else  // !MSW, !DOS and !OS/2 VAC++
     (void)perm;
+#ifdef __WXWINCE__
+    if ( !CreateDirectory(dirname, NULL) )
+#else
     if ( wxMkDir(wxFNSTRINGCAST wxFNCONV(dirname)) != 0 )
+#endif
 #endif // !MSW/MSW
     {
         wxLogSysError(_("Directory '%s' couldn't be created"), dirname);
@@ -1355,15 +1377,15 @@ bool wxMkdir(const wxString& dir, int perm)
 bool wxRmdir(const wxString& dir, int WXUNUSED(flags))
 {
 #ifdef __VMS__
-  return FALSE; //to be changed since rmdir exists in VMS7.x
+    return FALSE; //to be changed since rmdir exists in VMS7.x
 #elif defined(__WXPM__)
-  return (::DosDeleteDir((PSZ)dir.c_str()) == 0);
+    return (::DosDeleteDir((PSZ)dir.c_str()) == 0);
 #else
 
-#ifdef __SALFORDC__
-  return FALSE; // What to do?
+#ifdef __WXWINCE__
+    return (CreateDirectory(dir, NULL) != 0);
 #else
-  return (wxRmDir(OS_FILENAME(dir)) == 0);
+    return (wxRmDir(OS_FILENAME(dir)) == 0);
 #endif
 
 #endif
@@ -1492,6 +1514,9 @@ wxString wxFindNextFile()
 // copies into buf.
 wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
 {
+#ifdef __WXWINCE__
+    return NULL;
+#else
     if ( !buf )
     {
         buf = new wxChar[sz + 1];
@@ -1607,6 +1632,9 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
 #if !wxUSE_UNICODE
     #undef cbuf
 #endif
+
+#endif
+    // __WXWINCE__
 }
 
 wxString wxGetCwd()
@@ -1622,37 +1650,42 @@ wxString wxGetCwd()
 bool wxSetWorkingDirectory(const wxString& d)
 {
 #if defined(__UNIX__) || defined(__WXMAC__) || defined(__DOS__)
-  return (chdir(wxFNSTRINGCAST d.fn_str()) == 0);
+    return (chdir(wxFNSTRINGCAST d.fn_str()) == 0);
 #elif defined(__WXPM__)
-  return (::DosSetCurrentDir((PSZ)d.c_str()) == 0);
+    return (::DosSetCurrentDir((PSZ)d.c_str()) == 0);
 #elif defined(__WINDOWS__)
-
+    
 #ifdef __WIN32__
-  return (bool)(SetCurrentDirectory(d) != 0);
+#ifdef __WXWINCE__
+    // No equivalent in WinCE
+    return FALSE;
 #else
-  // Must change drive, too.
-  bool isDriveSpec = ((strlen(d) > 1) && (d[1] == ':'));
-  if (isDriveSpec)
-  {
-    wxChar firstChar = d[0];
-
-    // To upper case
-    if (firstChar > 90)
-      firstChar = firstChar - 32;
-
-    // To a drive number
-    unsigned int driveNo = firstChar - 64;
-    if (driveNo > 0)
-    {
-       unsigned int noDrives;
-       _dos_setdrive(driveNo, &noDrives);
-    }
-  }
-  bool success = (chdir(WXSTRINGCAST d) == 0);
-
-  return success;
+    return (bool)(SetCurrentDirectory(d) != 0);
 #endif
-
+#else
+    // Must change drive, too.
+    bool isDriveSpec = ((strlen(d) > 1) && (d[1] == ':'));
+    if (isDriveSpec)
+    {
+        wxChar firstChar = d[0];
+        
+        // To upper case
+        if (firstChar > 90)
+            firstChar = firstChar - 32;
+        
+        // To a drive number
+        unsigned int driveNo = firstChar - 64;
+        if (driveNo > 0)
+        {
+            unsigned int noDrives;
+            _dos_setdrive(driveNo, &noDrives);
+        }
+    }
+    bool success = (chdir(WXSTRINGCAST d) == 0);
+    
+    return success;
+#endif
+    
 #endif
 }
 
@@ -1660,7 +1693,9 @@ bool wxSetWorkingDirectory(const wxString& d)
 // On non-Windows platform, probably just return the empty string.
 wxString wxGetOSDirectory()
 {
-#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
+#ifdef __WXWINCE__
+    return wxString(wxT("\\Windows"));
+#elif defined(__WINDOWS__) && !defined(__WXMICROWIN__)
     wxChar buf[256];
     GetWindowsDirectory(buf, 256);
     return wxString(buf);
@@ -1733,10 +1768,44 @@ void WXDLLEXPORT wxSplitPath(const wxChar *pszFileName,
 
 time_t WXDLLEXPORT wxFileModificationTime(const wxString& filename)
 {
+#ifdef __WXWINCE__
+    FILETIME creationTime, lastAccessTime, lastWriteTime;
+    HANDLE fileHandle = ::CreateFile(filename, GENERIC_READ, FILE_SHARE_READ, NULL,
+        0, FILE_ATTRIBUTE_NORMAL, 0);
+    if (fileHandle == INVALID_HANDLE_VALUE)
+        return 0;
+    else
+    {
+        if (GetFileTime(fileHandle, & creationTime, & lastAccessTime, & lastWriteTime))
+        {
+            CloseHandle(fileHandle);
+
+            wxDateTime dateTime;
+            FILETIME ftLocal;
+            if ( !::FileTimeToLocalFileTime(&lastWriteTime, &ftLocal) )
+            {
+                wxLogLastError(_T("FileTimeToLocalFileTime"));
+            }
+            
+            SYSTEMTIME st;
+            if ( !::FileTimeToSystemTime(&ftLocal, &st) )
+            {
+                wxLogLastError(_T("FileTimeToSystemTime"));
+            }
+            
+            dateTime.Set(st.wDay, wxDateTime::Month(st.wMonth - 1), st.wYear,
+                st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
+            return dateTime.GetTicks();
+        }
+        else
+            return 0;
+    }
+#else
     wxStructStat buf;
     wxStat( filename, &buf);
 
     return buf.st_mtime;
+#endif
 }
 
 

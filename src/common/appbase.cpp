@@ -40,9 +40,6 @@
 #if wxUSE_FILENAME
     #include "wx/filename.h"
 #endif // wxUSE_FILENAME
-#if wxUSE_FONTMAP
-    #include "wx/fontmap.h"
-#endif // wxUSE_FONTMAP
 #include "wx/msgout.h"
 #include "wx/tokenzr.h"
 
@@ -53,6 +50,10 @@
 #if defined(__WXMSW__)
   #include  "wx/msw/private.h"  // includes windows.h for MessageBox()
 #endif
+
+#if wxUSE_FONTMAP
+    #include "wx/fontmap.h"
+#endif // wxUSE_FONTMAP
 
 #if defined(__WXMAC__)
     // VZ: MacTypes.h is enough under Mac OS X (where I could test it) but

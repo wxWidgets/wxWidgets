@@ -717,7 +717,7 @@ bool wxGridCellTextEditor::IsAcceptedKey(wxKeyEvent& event)
 
             default:
                 // accept 8 bit chars too if isprint() agrees
-                if ( (keycode < 255) && (isprint(keycode)) )
+                if ( (keycode < 255) && (wxIsprint(keycode)) )
                     return TRUE;
         }
     }

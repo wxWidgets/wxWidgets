@@ -30,8 +30,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <locale.h>
+
+#ifndef __WXWINCE__
 #include <time.h>
+#include <locale.h>
+#else
+#include "wx/msw/wince/time.h"
+#endif
 
 #ifndef WX_PRECOMP
   #include "wx/defs.h"

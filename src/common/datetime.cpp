@@ -2668,7 +2668,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
 
         // parse the optional width
         size_t width = 0;
-        while ( isdigit(*++fmt) )
+        while ( wxIsdigit(*++fmt) )
         {
             width *= 10;
             width += *fmt - _T('0');

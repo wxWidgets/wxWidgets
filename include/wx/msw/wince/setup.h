@@ -350,6 +350,10 @@
 // Recommended setting: 1
 #define wxUSE_CONFIG_NATIVE   1
 
+// Use wxFileConfig.
+// Recommended setting: 1
+#define wxUSE_FILECONFIG       0
+
 // If wxUSE_DIALUP_MANAGER is 1, compile in wxDialUpManager class which allows
 // to connect/disconnect from the network and be notified whenever the dial-up
 // network connection is established/terminated. Requires wxUSE_DYNAMIC_LOADER.
@@ -357,7 +361,7 @@
 // Default is 1.
 //
 // Recommended setting: 1
-#define wxUSE_DIALUP_MANAGER   1
+#define wxUSE_DIALUP_MANAGER   0
 
 // Compile in classes for run-time DLL loading and function calling.
 // Required by wxUSE_DIALUP_MANAGER.
@@ -370,22 +374,22 @@
 #define wxUSE_DYNLIB_CLASS    1
 
 // experimental, don't use for now
-#define wxUSE_DYNAMIC_LOADER  1
+#define wxUSE_DYNAMIC_LOADER  0
 
 // Set to 1 to use socket classes
-#define wxUSE_SOCKETS       1
+#define wxUSE_SOCKETS       0
 
 // Set to 1 to enable virtual file systems (required by wxHTML)
-#define wxUSE_FILESYSTEM    1
+#define wxUSE_FILESYSTEM    0
 
 // Set to 1 to enable virtual ZIP filesystem (requires wxUSE_FILESYSTEM)
-#define wxUSE_FS_ZIP        1
+#define wxUSE_FS_ZIP        0
 
 // Set to 1 to enable virtual Internet filesystem (requires wxUSE_FILESYSTEM)
-#define wxUSE_FS_INET       1
+#define wxUSE_FS_INET       0
 
 // Set to 1 to compile wxZipInput/OutputStream classes.
-#define wxUSE_ZIPSTREAM     1
+#define wxUSE_ZIPSTREAM     0
 
 // Set to 1 to compile wxZlibInput/OutputStream classes. Also required by
 // wxUSE_LIBPNG.
@@ -415,7 +419,7 @@
 // Default is 1.
 //
 // Recommended setting: 1
-#define wxUSE_PROTOCOL 1
+#define wxUSE_PROTOCOL 0
 
 // The settings for the individual URL schemes
 #define wxUSE_PROTOCOL_FILE 1
@@ -423,7 +427,7 @@
 #define wxUSE_PROTOCOL_HTTP 1
 
 // Define this to use wxURL class.
-#define wxUSE_URL 1
+#define wxUSE_URL 0
 
 // Support for regular expression matching via wxRegEx class: enable this to
 // use POSIX regular expressions in your code. You need to compile regex
@@ -433,7 +437,7 @@
 //
 // Recommended setting: 1 if your compiler supports it, if it doesn't please
 // contribute us a makefile for src/regex for it
-#define wxUSE_REGEX       1
+#define wxUSE_REGEX       0
 
 // wxSystemOptions class
 #define wxUSE_SYSTEM_OPTIONS 1
@@ -658,7 +662,7 @@
 // Default is 1
 //
 // Recommended setting: 1 (unless it really doesn't work)
-#define wxUSE_COMMON_DIALOGS 1
+#define wxUSE_COMMON_DIALOGS 0
 
 // wxBusyInfo displays window with message when app is busy. Works in same way
 // as wxBusyCursor
@@ -761,7 +765,7 @@
 #define wxUSE_MDI_ARCHITECTURE    1
 
 // Set to 0 to disable print/preview architecture code
-#define wxUSE_PRINTING_ARCHITECTURE  1
+#define wxUSE_PRINTING_ARCHITECTURE  0
 
 // wxHTML sublibrary allows to display HTML in wxWindow programs and much,
 // much more.
@@ -770,7 +774,7 @@
 //
 // Recommended setting: 1 (wxHTML is great!), set to 0 if you want compile a
 // smaller library.
-#define wxUSE_HTML          1
+#define wxUSE_HTML          0
 
 // Setting wxUSE_GLCANVAS to 1 enables OpenGL support. You need to have OpenGL
 // headers and libraries to be able to compile the library with wxUSE_GLCANVAS
@@ -838,13 +842,13 @@
                                 // 0 for no interprocess comms
 #define wxUSE_HELP        0
                                 // 0 for no help facility
-#define wxUSE_MS_HTML_HELP 1
+#define wxUSE_MS_HTML_HELP 0
                                 // 0 for no MS HTML Help
 
 // Use wxHTML-based help controller?
 #define wxUSE_WXHTML_HELP 0
 
-#define wxUSE_RESOURCES   1
+#define wxUSE_RESOURCES   0
                                 // 0 for no wxGetResource/wxWriteResource
 #define wxUSE_CONSTRAINTS 1
                                 // 0 for no window layout constraint system
@@ -867,7 +871,7 @@
 
 // Set to 0 to disable PostScript print/preview architecture code under Windows
 // (just use Windows printing).
-#define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 1
+#define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 0
 
 // ----------------------------------------------------------------------------
 // database classes
@@ -930,22 +934,22 @@
 #define wxUSE_IMAGE         1
 
 // Set to 1 for PNG format support (requires libpng). Also requires wxUSE_ZLIB.
-#define wxUSE_LIBPNG        1
+#define wxUSE_LIBPNG        0
 
 // Set to 1 for JPEG format support (requires libjpeg)
-#define wxUSE_LIBJPEG       1
+#define wxUSE_LIBJPEG       0
 
 // Set to 1 for TIFF format support (requires libtiff)
-#define wxUSE_LIBTIFF       1
+#define wxUSE_LIBTIFF       0
 
 // Set to 1 for GIF format support
-#define wxUSE_GIF           1
+#define wxUSE_GIF           0
 
 // Set to 1 for PNM format support
-#define wxUSE_PNM           1
+#define wxUSE_PNM           0
 
 // Set to 1 for PCX format support
-#define wxUSE_PCX           1
+#define wxUSE_PCX           0
 
 // Set to 1 for IFF format support (Amiga format)
 #define wxUSE_IFF           0
@@ -954,7 +958,7 @@
 #define wxUSE_XPM           1
 
 // Set to 1 for MS Icons and Cursors format support
-#define wxUSE_ICO_CUR       1
+#define wxUSE_ICO_CUR       0
 
 // Set to 1 to compile in wxPalette class
 #define wxUSE_PALETTE       1
@@ -1034,11 +1038,11 @@
 #define wxUSE_OWNER_DRAWN 1
 
 // Set to 1 to compile MS Windows XP theme engine support
-#define wxUSE_UXTHEME           1
+#define wxUSE_UXTHEME           0
 
 // Set to 1 to auto-adapt to MS Windows XP themes where possible
 // (notably, wxNotebook pages)
-#define wxUSE_UXTHEME_AUTO      1
+#define wxUSE_UXTHEME_AUTO      0
 
 // ----------------------------------------------------------------------------
 // obsolete settings

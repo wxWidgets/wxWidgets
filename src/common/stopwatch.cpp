@@ -44,7 +44,7 @@
     #include <windows.h>
 #endif
 
-#if defined(__WIN32__) && !defined(HAVE_FTIME) && !defined(__MWERKS__)
+#if defined(__WIN32__) && !defined(HAVE_FTIME) && !defined(__MWERKS__) && !defined(__WXWINCE__)
     #define HAVE_FTIME
 #endif
 
@@ -60,8 +60,14 @@
 #   undef HAVE_GETTIMEOFDAY
 #endif
 
+#ifndef __WXWINCE__
 #include <time.h>
-#ifndef __WXMAC__
+#else
+#include "wx/msw/private.h"
+#include "wx/msw/wince/time.h"
+#endif
+
+#if !defined(__WXMAC__) && !defined(__WXWINCE__)
     #include <sys/types.h>      // for time_t
 #endif
 
@@ -313,11 +319,16 @@ wxLongLong wxGetLocalTimeMillis()
     val *= wxGetLocalTime();
 
 // GRG: This will go soon as all WIN32 seem to have ftime
+// JACS: unfortunately not. WinCE doesn't have it.
 #if defined (__WIN32__)
     // If your platform/compiler needs to use two different functions
     // to get ms resolution, please do NOT just shut off these warnings,
     // drop me a line instead at <guille@iies.es>
+
+    // FIXME
+#ifndef __WXWINCE__
     #warning "Possible clock skew bug in wxGetLocalTimeMillis()!"
+#endif
 
     SYSTEMTIME st;
     ::GetLocalTime(&st);

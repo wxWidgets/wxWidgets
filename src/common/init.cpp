@@ -426,6 +426,11 @@ int wxEntryReal(int& argc, wxChar **argv)
 // OnFatalException() if necessary
 #if defined(__WXMSW__) && wxUSE_ON_FATAL_EXCEPTION
 
+#ifdef __WXWINCE__
+// For ExitThread
+#include "wx/msw/private.h"
+#endif
+
 extern unsigned long wxGlobalSEHandler();
 
 int wxEntry(int& argc, wxChar **argv)
@@ -436,7 +441,11 @@ int wxEntry(int& argc, wxChar **argv)
     }
     __except ( wxGlobalSEHandler() )
     {
+#ifdef __WXWINCE__
+        ::ExitThread(3); // the same exit code as abort()
+#else
         ::ExitProcess(3); // the same exit code as abort()
+#endif
 
 #if !defined(_MSC_VER) || _MSC_VER < 1300
         // this code is unreachable but put it here to suppress warnings

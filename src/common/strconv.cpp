@@ -37,7 +37,10 @@
     #include "wx/msw/private.h"
 #endif
 
+#ifndef __WXWINCE__
 #include <errno.h>
+#endif
+
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>

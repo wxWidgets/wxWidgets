@@ -24,7 +24,7 @@
   #pragma hdrstop
 #endif  //__BORLANDC__
 
-#if wxUSE_CONFIG
+#if wxUSE_CONFIG && wxUSE_FILECONFIG
 
 #ifndef   WX_PRECOMP
   #include  "wx/string.h"

@@ -551,7 +551,7 @@ static bool GetRGBFromName(const char *inname, bool *isNone,
         return TRUE;
     }
 
-    name = strdup(inname);
+    name = wxStrdup(inname);
 
     // theRGBRecords[] has no names with spaces, and no grey, but a
     // lot of gray...
@@ -638,7 +638,7 @@ static const char *ParseColor(const char *data)
         {
             if ( *r != *q )
                 continue;
-            if ( !isspace((int) (*(r - 1))) )
+            if ( !wxIsspace((int) (*(r - 1))) )
                 continue;
             p = r;
             for (;;)

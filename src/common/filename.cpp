@@ -90,6 +90,10 @@
 #include "wx/msw/winundef.h"
 #endif
 
+#ifdef __WXWINCE__
+#include "wx/msw/private.h"
+#endif
+
 #if defined(__WXMAC__)
   #include  "wx/mac/private.h"  // includes mac headers
 #endif
@@ -564,8 +568,22 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     // use the directory specified by the prefix
     SplitPath(prefix, &dir, &name, NULL /* extension */);
 
-#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
+#if defined(__WXWINCE__)
+    if (dir.empty())
+    {
+        // FIXME. Create \temp dir?
+        dir = wxT("\\");
+    }
+    path = dir + wxT("\\") + prefix;
+    int i = 1;
+    while (wxFileExists(path))
+    {
+        path = dir + wxT("\\") + prefix ;
+        path << i;
+        i ++;
+    }
 
+#elif defined(__WINDOWS__) && !defined(__WXMICROWIN__)
 #ifdef __WIN32__
     if ( dir.empty() )
     {
@@ -1284,7 +1302,7 @@ wxString wxFileName::GetFullPath( wxPathFormat format ) const
 // Return the short form of the path (returns identity on non-Windows platforms)
 wxString wxFileName::GetShortPath() const
 {
-#if defined(__WXMSW__) && defined(__WIN32__) && !defined(__WXMICROWIN__)
+#if defined(__WXMSW__) && defined(__WIN32__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
     wxString path(GetFullPath());
     wxString pathOut;
     DWORD sz = ::GetShortPathName(path, NULL, 0);

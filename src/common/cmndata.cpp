@@ -48,13 +48,12 @@
 #endif // wxUSE_PRINTING_ARCHITECTURE
 
 #ifdef __WXMSW__
-    #include <windows.h>
+    #include <windowsx.h>
     #include "wx/msw/private.h"
 
-    #if !defined(__WIN32__)
-        #include <print.h>
+    #ifdef __WXWINCE__
         #include <commdlg.h>
-    #endif // Win16
+    #endif
 
     #if defined(__WATCOMC__) || defined(__SYMANTEC__) || defined(__SALFORDC__)
         #include <windowsx.h>
@@ -327,7 +326,11 @@ void wxPrintData::ConvertToNative()
         pd.lStructSize    = 66;
 #else
         memset(&pd, 0, sizeof(PRINTDLG));
+#ifdef __WXWINCE__
+        pd.cbStruct    = sizeof(PRINTDLG);
+#else
         pd.lStructSize    = sizeof(PRINTDLG);
+#endif
 #endif
 
         pd.hwndOwner      = (HWND)NULL;

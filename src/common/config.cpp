@@ -335,7 +335,11 @@ wxString wxExpandEnvVars(const wxString& str)
 
           wxString strVarName(str.c_str() + n + 1, m - n - 1);
 
+#ifdef __WXWINCE__
+          const wxChar *pszValue = NULL;
+#else
           const wxChar *pszValue = wxGetenv(strVarName);
+#endif
           if ( pszValue != NULL ) {
             strResult += pszValue;
           }

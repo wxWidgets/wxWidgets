@@ -73,7 +73,11 @@
     #include "wx/statusbr.h"
 #endif // wxUSE_GUI
 
+#ifndef __WXWINCE__
 #include <time.h>
+#else
+#include "wx/msw/wince/time.h"
+#endif
 
 #ifndef __MWERKS__
     #include <sys/types.h>

@@ -36,13 +36,17 @@
     #include "wx/intl.h"
 #endif // PCH
 
-#include "wx/fontmap.h"
-#include "wx/fmappriv.h"
-
 #if wxUSE_CONFIG
     #include "wx/config.h"
 #endif // wxUSE_CONFIG
 
+#if defined(__WXMSW__)
+  #include  "wx/msw/private.h"  // includes windows.h for LOGFONT
+  #include  "wx/msw/winundef.h"
+#endif
+
+#include "wx/fontmap.h"
+#include "wx/fmappriv.h"
 #include "wx/fontutil.h"
 #include "wx/msgdlg.h"
 #include "wx/fontdlg.h"

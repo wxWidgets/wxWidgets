@@ -40,12 +40,17 @@
 #endif
 
 #include "wx/apptrait.h"
-#if wxUSE_FONTMAP
-    #include "wx/fontmap.h"
-#endif // wxUSE_FONTMAP
 #include "wx/msgout.h"
 #include "wx/thread.h"
 #include "wx/utils.h"
+
+#if defined(__WXMSW__)
+  #include  "wx/msw/private.h"  // includes windows.h for LOGFONT
+#endif
+
+#if wxUSE_FONTMAP
+    #include "wx/fontmap.h"
+#endif // wxUSE_FONTMAP
 
 // ============================================================================
 // wxAppBase implementation
@@ -84,9 +89,6 @@ bool wxAppBase::Initialize(int& argc, wxChar **argv)
 #if wxUSE_THREADS
     wxPendingEventsLocker = new wxCriticalSection;
 #endif
-
-    wxTheColourDatabase = new wxColourDatabase;
-    wxTheColourDatabase->Initialize();
 
     wxInitializeStockLists();
     wxInitializeStockObjects();

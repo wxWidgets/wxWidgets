@@ -1017,7 +1017,7 @@ bool wxString::IsAscii() const
 {
   const wxChar *s = (const wxChar*) *this;
   while(*s){
-    if(!isascii(*s)) return(FALSE);
+    if(!wxIsascii(*s)) return(FALSE);
     s++;
   }
   return(TRUE);

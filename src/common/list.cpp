@@ -519,7 +519,11 @@ void wxListBase::Sort(const wxSortCompareFunction compfunc)
     }
 
     // sort the array
-    qsort((void *)objArray,num,sizeof(wxObject *),compfunc);
+    qsort((void *)objArray,num,sizeof(wxObject *),
+#ifdef __WXWINCE__
+        (int (__cdecl *)(const void *,const void *))
+#endif
+        compfunc);
 
     // put the sorted pointers back into the list
     objPtr = objArray;
@@ -722,7 +726,12 @@ bool wxStringList::Member(const wxChar *s) const
     return FALSE;
 }
 
+#ifdef __WXWINCE__
+extern "C" int __cdecl
+#else
 extern "C" int LINKAGEMODE
+#endif
+
 wx_comparestrings(const void *arg1, const void *arg2)
 {
   wxChar **s1 = (wxChar **) arg1;

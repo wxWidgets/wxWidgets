@@ -436,10 +436,13 @@ wxString wxColourDatabase::FindName (const wxColour& colour) const
 
 void wxInitializeStockLists()
 {
-  wxTheBrushList = new wxBrushList;
-  wxThePenList = new wxPenList;
-  wxTheFontList = new wxFontList;
-  wxTheBitmapList = new wxBitmapList;
+    wxTheColourDatabase = new wxColourDatabase;
+    wxTheColourDatabase->Initialize();
+
+    wxTheBrushList = new wxBrushList;
+    wxThePenList = new wxPenList;
+    wxTheFontList = new wxFontList;
+    wxTheBitmapList = new wxBitmapList;
 }
 
 void wxInitializeStockObjects ()

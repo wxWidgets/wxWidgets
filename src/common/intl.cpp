@@ -31,7 +31,11 @@
 #if wxUSE_INTL
 
 // standard headers
+
+#ifndef __WXWINCE__
 #include <locale.h>
+#endif
+
 #include <ctype.h>
 #include <stdlib.h>
 #ifdef HAVE_LANGINFO_H
@@ -48,18 +52,18 @@
     #include "wx/dynarray.h"
 #endif // WX_PRECOMP
 
+#ifdef __WIN32__
+    #include "wx/msw/private.h"
+#elif defined(__UNIX_LIKE__)
+    #include "wx/fontmap.h"         // for CharsetToEncoding()
+#endif
+
 #include "wx/file.h"
 #include "wx/tokenzr.h"
 #include "wx/module.h"
 #include "wx/fontmap.h"
 #include "wx/encconv.h"
 #include "wx/hashmap.h"
-
-#ifdef __WIN32__
-    #include "wx/msw/private.h"
-#elif defined(__UNIX_LIKE__)
-    #include "wx/fontmap.h"         // for CharsetToEncoding()
-#endif
 
 #if defined(__WXMAC__)
   #include  "wx/mac/private.h"  // includes mac headers
@@ -308,9 +312,11 @@ static wxString GetFullSearchPath(const wxChar *lang)
 
     // LC_PATH is a standard env var containing the search path for the .mo
     // files
+#ifndef __WXWINCE__
     const wxChar *pszLcPath = wxGetenv(wxT("LC_PATH"));
     if ( pszLcPath != NULL )
         searchPath << GetAllMsgCatalogSubdirs(pszLcPath, lang);
+#endif
 
 #ifdef __UNIX__
     // add some standard ones and the one in the tree where wxWin was installed:
@@ -626,7 +632,24 @@ bool wxLocale::Init(const wxChar *szName,
     wxCHECK_MSG( szLocale, FALSE, _T("no locale to set in wxLocale::Init()") );
   }
 
+#ifdef __WXWINCE__
+  // FIXME: I'm guessing here
+  wxChar localeName[256];
+  int ret = GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SLANGUAGE, localeName,
+      256);
+  if (ret != 0)
+  {
+    m_pszOldLocale = wxStrdup(localeName);      
+  }
+  else
+    m_pszOldLocale = NULL;
+
+  // TODO: how to find languageId
+  // SetLocaleInfo(languageId, SORT_DEFAULT, localeName);
+#else
   m_pszOldLocale = wxStrdup(wxSetlocale(LC_ALL, szLocale));
+#endif
+
   if ( m_pszOldLocale == NULL )
     wxLogError(_("locale '%s' can not be set."), szLocale);
 
@@ -768,7 +791,10 @@ bool wxLocale::Init(int language, int flags)
             int codepage = -1;
             wxUint32 lcid = MAKELCID(MAKELANGID(info->WinLang, info->WinSublang),
                                      SORT_DEFAULT);
+            // FIXME
+#ifndef __WXWINCE__
             SetThreadLocale(lcid);
+#endif
             // NB: we must translate LCID to CRT's setlocale string ourselves,
             //     because SetThreadLocale does not modify change the
             //     interpretation of setlocale(LC_ALL, "") call:
@@ -792,7 +818,10 @@ bool wxLocale::Init(int language, int flags)
             }
             else
             {
+            // FIXME
+#ifndef __WXWINCE__
                 retloc = wxSetlocale(LC_ALL, locale);
+#endif
 #ifdef SETLOCALE_FAILS_ON_UNICODE_LANGS
                 if (codepage == 0 && (const wxChar*)retloc == NULL)
                 {
@@ -804,7 +833,12 @@ bool wxLocale::Init(int language, int flags)
     }
     else
     {
+            // FIXME
+#ifndef __WXWINCE__
         retloc = wxSetlocale(LC_ALL, wxEmptyString);
+#else
+        retloc = NULL;
+#endif
 #ifdef SETLOCALE_FAILS_ON_UNICODE_LANGS
         if ((const wxChar*)retloc == NULL)
         {
@@ -1524,7 +1558,12 @@ const wxLanguageInfo *wxLocale::FindLanguageInfo(const wxString& locale)
 
 wxString wxLocale::GetSysName() const
 {
+            // FIXME
+#ifndef __WXWINCE__
     return wxSetlocale(LC_ALL, NULL);
+#else
+    return wxEmptyString;
+#endif
 }
 
 // clean up
@@ -1540,7 +1579,10 @@ wxLocale::~wxLocale()
 
     // restore old locale
     wxSetLocale(m_pOldLocale);
+    // FIXME
+#ifndef __WXWINCE__
     wxSetlocale(LC_ALL, m_pszOldLocale);
+#endif
     free((wxChar *)m_pszOldLocale);     // const_cast
 }
 

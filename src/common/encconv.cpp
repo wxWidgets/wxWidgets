@@ -37,6 +37,11 @@ typedef wchar_t tchar;
 typedef char tchar;
 #endif
 
+#ifdef __WXWINCE__
+#undef LINKAGEMODE
+#define LINKAGEMODE __cdecl
+#endif
+
 static wxUint16* LINKAGEMODE GetEncTable(wxFontEncoding enc)
 {
     for (int i = 0; encodings_list[i].table != NULL; i++)
@@ -51,8 +56,6 @@ typedef struct {
     wxUint16 u;
     wxUint8  c;
 } CharsetItem;
-
-
 
 extern "C" int LINKAGEMODE CompareCharsetItems(const void *i1, const void *i2)
 {
@@ -137,6 +140,8 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
             for (i = 0; i < 128; i++)  m_Table[128 + i] = (tchar)in_tbl[i];
             return TRUE;
         }
+        // FIXME: write a substitute for bsearch
+#ifndef __WXWINCE__
         else
         {
             CharsetItem *rev = BuildReverseTable(out_tbl);
@@ -163,6 +168,8 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
             delete[] rev;
             return TRUE;
         }
+#endif
+        return TRUE;
     }
 }
 

@@ -48,9 +48,17 @@
 #include "wx/wxchar.h"
 
 // other standard headers
+#ifndef __WXWINCE__
 #include <errno.h>
+#endif
+
 #include <stdlib.h>
+
+#ifndef __WXWINCE__
 #include <time.h>
+#else
+#include "wx/msw/wince/time.h"
+#endif
 
 #if defined(__WINDOWS__)
     #include "wx/msw/private.h" // includes windows.h
@@ -179,7 +187,11 @@ void wxVLogFatalError(const wxChar *szFormat, va_list argptr)
 
     wxSafeShowMessage(_T("Fatal Error"), s_szBuf);
 
+#ifdef __WXWINCE__
+    ExitThread(3);
+#else
     abort();
+#endif
 }
 
 void wxLogFatalError(const wxChar *szFormat, ...)
@@ -455,7 +467,11 @@ void wxLog::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
             DoLogString(wxString(_("Fatal error: ")) + szString, t);
             DoLogString(_("Program aborted."), t);
             Flush();
+#ifdef __WXWINCE__
+            ExitThread(3);
+#else
             abort();
+#endif
             break;
 
         case wxLOG_Error:

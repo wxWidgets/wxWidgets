@@ -63,7 +63,9 @@
 //         older releases don't, but it should be verified and the checks modified
 //         accordingly.
 #if !defined(__GNUWIN32__) || (defined(__MINGW32_MAJOR_VERSION) && __MINGW32_MAJOR_VERSION >= 1)
+#if !defined(__WXWINCE__)
   #include <direct.h>
+#endif
   #include <stdlib.h>
   #include <ctype.h>
 #endif
