@@ -269,6 +269,7 @@ wxMSW:
 - fixed wxTextCtrl::SetMaxLength for rich edit controls
 - fixed flat style for toolbars under XP, Windows Classic style
 - fixed truncation of transferred data in wxConnection under unicode build
+- wxChoice and wxComboBox dropdown background can be set now too (Adrian Lupei)
 
 wxUniv/X11:
 

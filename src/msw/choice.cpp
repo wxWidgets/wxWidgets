@@ -539,18 +539,37 @@ wxSize wxChoice::DoGetBestSize() const
 
 WXLRESULT wxChoice::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
-    if ( nMsg == WM_LBUTTONUP )
+    switch ( nMsg )
     {
-        int x = (int)LOWORD(lParam);
-        int y = (int)HIWORD(lParam);
+        case WM_LBUTTONUP:
+            {
+                int x = (int)LOWORD(lParam);
+                int y = (int)HIWORD(lParam);
 
-        // Ok, this is truly weird, but if a panel with a wxChoice loses the
-        // focus, then you get a *fake* WM_LBUTTONUP message with x = 65535 and
-        // y = 65535. Filter out this nonsense.
-        //
-        // VZ: I'd like to know how to reproduce this please...
-        if ( x == 65535 && y == 65535 )
-            return 0;
+                // Ok, this is truly weird, but if a panel with a wxChoice
+                // loses the focus, then you get a *fake* WM_LBUTTONUP message
+                // with x = 65535 and y = 65535. Filter out this nonsense.
+                //
+                // VZ: I'd like to know how to reproduce this please...
+                if ( x == 65535 && y == 65535 )
+                    return 0;
+            }
+            break;
+
+            // we have to handle both: one for the normal case and the other
+            // for readonly
+        case WM_CTLCOLOREDIT:
+        case WM_CTLCOLORLISTBOX:
+        case WM_CTLCOLORSTATIC:
+            {
+                WXWORD nCtlColor;
+                WXHDC hdc;
+                WXHWND hwnd;
+                UnpackCtlColor(wParam, lParam, &nCtlColor, &hdc, &hwnd);
+
+                return (WXLRESULT)OnCtlColor(hdc, hwnd, nCtlColor,
+                                             nMsg, wParam, lParam);
+            }
     }
 
     return wxWindow::MSWWindowProc(nMsg, wParam, lParam);
