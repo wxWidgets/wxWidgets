@@ -91,6 +91,7 @@ option ProjectOptions = lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfunc
       source type(cpp) "COMMON\\IMAGPNG.CPP"
       source type(cpp) "COMMON\\IMAGPNM.CPP"
       source type(cpp) "COMMON\\IMAGTIFF.CPP"
+      source type(cpp) "COMMON\\IMAGXPM.CPP"
       source type(cpp) "COMMON\\INTL.CPP"
       source type(cpp) "COMMON\\IPCBASE.CPP"
       source type(cpp) "COMMON\\LAYOUT.CPP"

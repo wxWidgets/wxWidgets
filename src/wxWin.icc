@@ -75,6 +75,7 @@ option ProjectOptions = gen(arch, "pentium2"), lang(longlong, "yes"),  gen(mangl
       source "COMMON\\imagpng.cpp"
       source "COMMON\\imagpnm.cpp"
       source "COMMON\\imagtiff.cpp"
+      source "COMMON\\imagxpm.cpp"
       source "COMMON\\intl.cpp"
       source "COMMON\\ipcbase.cpp"
       source "COMMON\\layout.cpp"
