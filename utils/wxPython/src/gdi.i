@@ -524,9 +524,16 @@ public:
     wxImageList(int width, int height, const bool mask=TRUE, int initialCount=1);
     ~wxImageList();
 
+#ifdef __WXMSW__
     int Add(const wxBitmap& bitmap, const wxBitmap& mask = wxNullBitmap);
     %name(AddWithColourMask)int Add(const wxBitmap& bitmap, const wxColour& maskColour);
     %name(AddIcon)int Add(const wxIcon& icon);
+    bool Replace(int index, const wxBitmap& bitmap, const wxBitmap& mask = wxNullBitmap);
+    %name(ReplaceIcon)bool Replace(int index, const wxIcon& icon);
+#else
+    int Add(const wxBitmap& bitmap);
+    bool Replace(int index, const wxBitmap& bitmap);
+#endif
 
     bool Draw(int index, wxDC& dc, int x, int x, int flags = wxIMAGELIST_DRAW_NORMAL,
               const bool solidBackground = FALSE);
@@ -534,8 +541,6 @@ public:
     int GetImageCount();
     bool Remove(int index);
     bool RemoveAll();
-    bool Replace(int index, const wxBitmap& bitmap, const wxBitmap& mask = wxNullBitmap);
-    %name(ReplaceIcon)bool Replace(int index, const wxIcon& icon);
 };
 
 
@@ -544,6 +549,9 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.14  1999/02/20 10:02:36  RD
+// Changes needed to enable wxGTK compatibility.
+//
 // Revision 1.13  1999/02/20 09:02:58  RD
 // Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
 // window handle.  If you can get the window handle into the python code,

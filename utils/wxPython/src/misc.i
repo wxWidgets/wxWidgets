@@ -388,7 +388,9 @@ public:
 
     void SetTip(const wxString& tip);
     wxString GetTip();
+#ifndef __WXGTK__
     void SetWindow(wxWindow *win);
+#endif
     wxWindow *GetWindow();
 };
 
@@ -407,6 +409,9 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.12  1999/02/20 10:02:37  RD
+// Changes needed to enable wxGTK compatibility.
+//
 // Revision 1.11  1999/02/20 09:03:01  RD
 // Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
 // window handle.  If you can get the window handle into the python code,

@@ -64,7 +64,9 @@ public:
     void Center(int direction = wxHORIZONTAL);
     void Centre(int direction = wxHORIZONTAL);
     %name(ClientToScreenXY)void ClientToScreen(int *BOTH, int *BOTH);
+#ifndef __WXGTK__
     wxPoint ClientToScreen(const wxPoint& pt);
+#endif
     bool Close(int force = FALSE);
     bool Destroy();
     void DestroyChildren();
@@ -118,7 +120,9 @@ public:
     void Lower();
     void MakeModal(bool flag);
     %name(MoveXY)void Move(int x, int y);
+#ifndef __WXGTK__
     void Move(const wxPoint& point);
+#endif
 
     //wxEvtHandler* PopEventHandler(bool deleteHandler = FALSE);
     bool PopupMenu(wxMenu *menu, int x, int y);
@@ -128,7 +132,9 @@ public:
     void Refresh(bool eraseBackground = TRUE, const wxRect* rect = NULL);
     void ReleaseMouse();
     %name(ScreenToClientXY)void ScreenToClient(int *BOTH, int *BOTH);
+#ifndef __WXGTK__
     wxPoint ScreenToClient(const wxPoint& pt);
+#endif
 
     void ScrollWindow(int dx, int dy, const wxRect* rect = NULL);
     void SetAcceleratorTable(const wxAcceleratorTable& accel);
@@ -158,7 +164,9 @@ public:
 
     void SetSizeHints(int minW=-1, int minH=-1, int maxW=-1, int maxH=-1, int incW=-1, int incH=-1);
     %name(SetClientSizeWH)void SetClientSize(int width, int height);
+#ifndef __WXGTK__
     void SetClientSize(const wxSize& size);
+#endif
     //void SetPalette(wxPalette* palette);
     void SetCursor(const wxCursor&cursor);
     //void SetEventHandler(wxEvtHandler* handler);
@@ -287,7 +295,9 @@ public:
                 int checkable = FALSE);
     %name(AppendMenu)void Append(int id, const wxString& item, wxMenu *subMenu,
                 const wxString& helpString = wxPyEmptyStr);
+#ifndef __WXGTK__
     %name(AppendItem)void Append(const wxMenuItem* item);
+#endif
 
     void AppendSeparator();
     void Break();
@@ -370,6 +380,9 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.13  1999/02/20 10:02:38  RD
+// Changes needed to enable wxGTK compatibility.
+//
 // Revision 1.12  1999/02/20 09:03:03  RD
 // Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
 // window handle.  If you can get the window handle into the python code,
