@@ -36,7 +36,7 @@ struct wxLayoutExportObject
    wxLayoutExportType type;
    union
    {
-      wxString           *text;
+      String           *text;
       wxLayoutObjectBase *object;
    }content;
    ~wxLayoutExportObject()
@@ -47,7 +47,7 @@ struct wxLayoutExportObject
 };
 
 /// import text into a wxLayoutList (including linefeeds):
-void wxLayoutImportText(wxLayoutList &list, wxString const &str);
+void wxLayoutImportText(wxLayoutList &list, String const &str);
 
 
 wxLayoutExportObject *wxLayoutExport(wxLayoutList &list,

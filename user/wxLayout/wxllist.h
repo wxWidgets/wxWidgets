@@ -16,10 +16,21 @@
 
 #include   <wx/wx.h>
 
-#ifndef   WXDEBUG
-#   define WXDEBUG
+// skip the following defines if embedded in M application
+#ifndef   MCONFIG_H
+// for testing only:
+#   define WXLAYOUT_DEBUG
+#   cdefine USE_STD_STRING
 #endif
 
+#ifdef USE_STD_STRING
+#   include   <string>
+    typedef   std::string String;
+#   define    Str(str)(str.c_str())
+#else
+    typedef   wxString String;
+#   define    Str(str) str
+#endif
 
 enum wxLayoutObjectType { WXLO_TYPE_INVALID, WXLO_TYPE_TEXT, WXLO_TYPE_CMD, WXLO_TYPE_ICON, WXLO_TYPE_LINEBREAK };
 
@@ -51,8 +62,8 @@ public:
    virtual CoordType CountPositions(void) const { return 1; }
 
    wxLayoutObjectBase() { m_UserData = NULL; }
-   virtual ~wxLayoutObjectBase() {}
-#ifdef WXDEBUG
+   virtual ~wxLayoutObjectBase() { if(m_UserData) delete m_UserData; }
+#ifdef WXLAYOUT_DEBUG
    virtual void Debug(void);
 #endif
 
@@ -75,18 +86,18 @@ public:
        align text objects.
    */
    virtual wxPoint GetSize(CoordType *baseLine) const;
-#ifdef WXDEBUG
+#ifdef WXLAYOUT_DEBUG
    virtual void Debug(void);
 #endif
 
-   wxLayoutObjectText(const wxString &txt);
+   wxLayoutObjectText(const String &txt);
    virtual CoordType CountPositions(void) const { return strlen(m_Text.c_str()); }
 
    // for editing:
-   wxString & GetText(void) { return m_Text; }
-   void SetText(wxString const &text) { m_Text = text; }
+   String & GetText(void) { return m_Text; }
+   void SetText(String const &text) { m_Text = text; }
 private:
-   wxString m_Text;
+   String m_Text;
    /// size of the box containing text
    long   m_Width, m_Height;
    /// the position of the baseline counted from the top of the box
@@ -162,7 +173,7 @@ public:
 
    /// adds an object:
    void AddObject(wxLayoutObjectBase *obj);
-   void AddText(wxString const &txt);
+   void AddText(String const &txt);
 
    void LineBreak(void);
    void SetFont(int family, int size, int style,
@@ -173,6 +184,14 @@ public:
                 int weight=-1, int underline = -1,
                 char const *fg = NULL,
                 char const *bg = NULL);
+   inline void SetFontFamily(int family) { SetFont(family); }
+   inline void SetFontSize(int size) { SetFont(-1,size); }
+   inline void SetFontStyle(int style) { SetFont(-1,-1,style); }
+   inline void SetFontWeight(int weight) { SetFont(-1,-1,-1,weight); }
+   inline void SetFontUnderline(bool ul) { SetFont(-1,-1,-1,-1,(int)ul); }
+   inline void SetFontColour(char const *fg, char const *bg = NULL) { SetFont(-1,-1,-1,-1,-1,fg,bg); }
+      
+   
    /** Draw the list on a given DC.
        @param findObject if true, return the object occupying the
        position specified by coords
@@ -182,7 +201,7 @@ public:
    wxLayoutObjectBase *Draw(wxDC &dc, bool findObject = false,
                        wxPoint const &coords = wxPoint(0,0));
 
-#ifdef WXDEBUG
+#ifdef WXLAYOUT_DEBUG
    void Debug(void);
 #endif
 
@@ -200,9 +219,10 @@ public:
    void SetCursor(wxPoint const &p) { m_CursorPosition = p; }
    /// delete one or more cursor positions
    void Delete(CoordType count = 1);
-   void Insert(wxString const &text);
+   void Insert(String const &text);
    void Insert(wxLayoutObjectBase *obj);
-   void Clear(void);
+   void Clear(int family = wxROMAN, int size=12, int style=wxNORMAL, int weight=wxNORMAL,
+                    int underline=0, char const *fg="black", char const *bg="white");
 
    //@}
 protected:
@@ -213,6 +233,8 @@ protected:
    /// colours:
    wxColour const * m_ColourFG;
    wxColour const * m_ColourBG;
+   /// the default setting:
+   wxLayoutObjectCmd *m_DefaultSetting;
    
    /// needs recalculation?
    bool m_dirty;

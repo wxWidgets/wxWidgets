@@ -37,7 +37,7 @@ wxLayoutWindow::OnMouse(wxMouseEvent& event)
    m_FindPos.y = event.GetY();
    m_FoundObject = NULL;
 
-#ifdef   WXDEBUG
+#ifdef   WXLAYOUT_DEBUG
    cerr << "OnMouse: " << m_FindPos.x << ',' << m_FindPos.y << endl;
 #endif
    Refresh();
@@ -47,6 +47,8 @@ wxLayoutWindow::OnMouse(wxMouseEvent& event)
       {
          wxCommandEvent commandEvent(wxEVENT_TYPE_MENU_COMMAND, m_EventId);
          commandEvent.SetEventObject( this );
+         commandEvent.SetClientData((char *)m_FoundObject);
+         m_ClickPosition = wxPoint(event.GetX(), event.GetY());
          GetEventHandler()->ProcessEvent(commandEvent);
       }
    }
@@ -90,7 +92,7 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
    case WXK_RETURN:
       m_llist.LineBreak();
       break;
-#ifdef WXDEBUG   
+#ifdef WXLAYOUT_DEBUG   
    case WXK_F1:
       m_llist.Debug();
       break;
@@ -98,7 +100,7 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
    default:
       if(keyCode < 256 && keyCode >= 32)
       {
-         wxString tmp;
+         String tmp;
          tmp += keyCode;
          m_llist.Insert(tmp);
       }

@@ -31,7 +31,7 @@ IMPLEMENT_APP(MyApp)
 //-----------------------------------------------------------------------------
 
    enum ids{ ID_EDIT = 1, ID_ADD_SAMPLE, ID_CLEAR, ID_PRINT, ID_DPRINT,
-             ID_DEBUG, ID_QUIT, ID_CLICK, ID_HTML, ID_TEXT };
+             ID_WXLAYOUT_DEBUG, ID_QUIT, ID_CLICK, ID_HTML, ID_TEXT };
 
 
 IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
@@ -53,7 +53,7 @@ IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
    file_menu->Append( ID_CLEAR, "Clear");
    file_menu->Append( ID_ADD_SAMPLE, "Example");
    file_menu->Append( ID_EDIT, "Edit");
-   file_menu->Append( ID_DEBUG, "Debug");
+   file_menu->Append( ID_WXLAYOUT_DEBUG, "Debug");
    file_menu->Append( ID_PRINT, "Print");
    file_menu->Append( ID_DPRINT, "Direct Print");
    file_menu->Append( ID_TEXT, "Export Text");
@@ -76,16 +76,16 @@ void
 MyFrame::AddSampleText(wxLayoutList &llist)
 {
 
-   llist.SetFont(wxROMAN,24,wxNORMAL,wxNORMAL, false);
+   llist.Clear(wxROMAN,16,wxNORMAL,wxNORMAL, false);
 
    llist.Insert("The quick brown fox jumps over the lazy dog.");
    llist.LineBreak();
-
    llist.Insert("Hello ");
    llist.Insert(new wxLayoutObjectIcon(new wxIcon(Micon_xpm,-1,-1)));
-   llist.Insert("World!");
-
-
+   llist.LineBreak();
+   llist.SetFontWeight(wxBOLD);
+   llist.Insert("World! ");
+   llist.SetFontWeight(wxNORMAL);
    llist.Insert("The quick brown fox jumps...");
    llist.LineBreak();
 
@@ -113,7 +113,7 @@ MyFrame::AddSampleText(wxLayoutList &llist)
    llist.SetFont(-1,-1,-1,-1,-1,"blue");
    llist.Insert("blue");
    llist.SetFont(-1,-1,-1,-1,-1,"black");
-   llist.Insert("and ");
+   llist.Insert(" and ");
    llist.SetFont(-1,-1,-1,-1,-1,"red","black");
    llist.Insert("red on black");
    llist.SetFont(-1,-1,-1,-1,-1,"black");
@@ -194,7 +194,7 @@ void MyFrame::OnCommand( wxCommandEvent &event )
       if (dc.Ok() && dc.StartDoc((char *)_("Printing message...")))
       {
          //dc.SetUserScale(1.0, 1.0);
-         llist.Draw(dc);
+         llist.Draw(dc); //,false,wxPoint(0,0),true);
          dc.EndDoc();
       }
    }
@@ -208,7 +208,7 @@ void MyFrame::OnCommand( wxCommandEvent &event )
    case ID_CLEAR:
       Clear();
       break;
-   case ID_DEBUG:
+   case ID_WXLAYOUT_DEBUG:
       m_lwin->GetLayoutList().Debug();
       break;
    case ID_CLICK:

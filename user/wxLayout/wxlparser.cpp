@@ -15,7 +15,7 @@
 
 #define   BASE_SIZE 12
 
-void wxLayoutImportText(wxLayoutList &list, wxString const &str)
+void wxLayoutImportText(wxLayoutList &list, String const &str)
 {
    char * cptr = (char *)str.c_str(); // string gets changed only temporarily
    const char * begin = cptr;
@@ -39,11 +39,11 @@ void wxLayoutImportText(wxLayoutList &list, wxString const &str)
 }
 
 static
-wxString wxLayoutExportCmdAsHTML(wxLayoutObjectCmd const & cmd,
+String wxLayoutExportCmdAsHTML(wxLayoutObjectCmd const & cmd,
                                  wxLayoutStyleInfo **lastStylePtr)
 {
    static char buffer[20];
-   wxString html;
+   String html;
    
    wxLayoutStyleInfo *si = cmd.GetStyle();
    wxLayoutStyleInfo *last_si = NULL;
@@ -152,7 +152,7 @@ wxString wxLayoutExportCmdAsHTML(wxLayoutObjectCmd const & cmd,
       return export;
    }
 
-   wxString *str = new wxString();
+   String *str = new String();
    
    // text must be concatenated
    while(from != list.end() && WXLO_IS_TEXT(type))

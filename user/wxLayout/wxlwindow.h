@@ -32,7 +32,11 @@ public:
    void Erase(void)
       { m_llist.Clear(); Clear(); }
    void SetEventId(int id) { m_EventId = id; }
+   wxPoint const &GetClickPosition(void) const { return
+                                                    m_ClickPosition; }
 private:
+   /// for sending events
+   wxWindow *m_Parent;
    int m_EventId;
    /// the layout list to be displayed
    wxLayoutList m_llist;
@@ -41,7 +45,7 @@ private:
    /// if we want to find an object:
    wxPoint m_FindPos;
    wxLayoutObjectBase *m_FoundObject;
-
+   wxPoint m_ClickPosition;
    DECLARE_EVENT_TABLE()
 };
 
