@@ -12,7 +12,10 @@
 // ============================================================================
 // declarations
 // ============================================================================
-
+#ifdef __GNUG__
+    #pragma implementation "textctrlbase.h"
+#endif
+        
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 

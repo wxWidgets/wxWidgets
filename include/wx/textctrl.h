@@ -15,6 +15,9 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
+#ifdef __GNUG__
+    #pragma interface "textctrlbase.h"
+#endif   
 
 #include "wx/defs.h"
 #include "wx/control.h"         // the base class

@@ -12,7 +12,7 @@
 #define __GTKTEXTCTRLH__
 
 #ifdef __GNUG__
-    #pragma interface
+    #pragma interface "textctrl.h"
 #endif
 
 //-----------------------------------------------------------------------------
