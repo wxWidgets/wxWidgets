@@ -619,7 +619,6 @@ hash.h	W	B
 help.h	W
 helpbase.h	W
 helphtml.h	W
-helpchm.h	W
 helpwin.h	W
 helpxlp.h	W
 icon.h	W
@@ -939,6 +938,7 @@ slider.h	9
 slider95.h	9
 slidrmsw.h	9
 spinbutt.h	9
+spinctrl.h	9
 statbmp.h	9
 statbox.h	9
 statbr95.h	9
@@ -981,6 +981,15 @@ xpmhand.h	9
 # watch1.cur	9
 # disable.bmp	9
 # wx.rc	9
+
+automtn.h	9	O
+dataform.h	9	O
+dataobj.h	9	O
+dataobj2.h	9	O
+dropsrc.h	9	O
+droptgt.h	9	O
+oleutils.h	9	O
+uuid.h	9	O
 
 accel.h	2
 dataobj.h	2

@@ -638,7 +638,7 @@ case "${host}" in
     DEFAULT_DEFAULT_wxUSE_MOTIF=1
   ;;
 
-  *-*-cygwin32* | *-*-mingw32* )
+  *-*-cygwin* | *-*-mingw32* )
     USE_UNIX=0
     USE_WIN32=1
     AC_DEFINE(__WIN32__)
@@ -1543,7 +1543,12 @@ dnl are we building for a win32 target environment?
 dnl If so, setup common stuff needed for both GUI and Base libs.
 
 if test "$USE_WIN32" = 1 ; then
-    if test "$cross_compiling" = "yes" ; then
+    dnd cygwin-cross-mingw is detected as non-cross
+    dnl but it really is
+    if test "$cross_compiling" = "no" -a "$build" != "$host"; then
+        dnl mingw32 will find them even if they're not in one of standard paths
+        AC_MSG_WARN(skipping windows.h check for cross-compilation)        
+    elif test "$cross_compiling" = "yes" ; then
         dnl mingw32 will find them even if they're not in one of standard paths
         AC_MSG_WARN(skipping windows.h check for cross-compilation)
     else
@@ -1562,6 +1567,11 @@ if test "$USE_WIN32" = 1 ; then
     dnl --- This will bloat the executable, but it'll work for now...
     dnl --- FIXME: trim this list for wxBase
     LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lctl3d32 -ladvapi32 -lwsock32"
+
+    # cygwin linker does not provide these
+    if test "$wxUSE_CYGWIN" = 1; then
+        LIBS="$LIBS -lkernel32 -luser32 -lgdi32 -lcomdlg32"
+    fi
 
     # This is the original list of libs we were linking with.
     # Some of them needed to be pruned, eg. -lcrtdll would cause
@@ -2094,10 +2104,15 @@ if test "$wxUSE_SHARED" = "yes"; then
         SHARED_LD="/usr/lpp/xlC/bin/makeC++SharedLib -p 0 -o"
         WX_ALL=${WX_LIBRARY_NAME_SHARED}
       ;;
-      *-*-cygwin32* | *-*-mingw32* )
-        dnl only static for now
-        AC_MSG_WARN(Shared libs unsupported for $host_alias -- forcing static build.)
-        wxUSE_SHARED=no
+      *-*-cygwin* | *-*-mingw32* )
+        RESCOMP=${RESCOMP:-windres}
+        WX_LIBRARY_NAME_SHARED="${WX_LIBRARY}.dll"
+        WX_LIBRARY_NAME_SHARED_GL="${WX_LIBRARY_GL}.dll"
+        SHARED_LD="${CC} -shared -Wl,--out-implib,lib/${WX_LIBRARY_NAME_STATIC} -o"
+        TOOLKIT_DEF="${TOOLKIT_DEF} -DWXUSINGDLL=1"
+        WXMSW_DLL_DEFINES="-UWXUSINGDLL -DWXMAKINGDLL=1 -D_DLL=1 -D_WINDLL=1"
+        WX_ALL="${WX_LIBRARY_NAME_SHARED}"
+        WX_ALL_INSTALLED="${WX_ALL_INSTALLED} preinstall"
       ;;
       *-pc-os2_emx )
         dnl only static for now
@@ -3412,7 +3427,7 @@ if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
                 ALL_OBJECTS="$ALL_OBJECTS \$(OLEOBJS)"
                 ALL_DEPFILES="$ALL_DEPFILES \$(OLEDEPS)"
                 CODE_GEN_FLAGS_CXX="$CODE_GEN_FLAGS_CXX -fvtable-thunks"
-                LIBS="$LIBS -lole32 -luuid"
+                LIBS="$LIBS -lole32 -luuid -lrpcrt4 -loleaut32"
 
                 dnl metafiles need the ole code, right??  if not this
                 dnl doesn't need to be in here.
@@ -3839,6 +3854,7 @@ AC_SUBST(OPENGL_LIBS)
 AC_SUBST(EXTRADEFS)
 AC_SUBST(LIBS)
 AC_SUBST(LD_LIBS)
+AC_SUBST(WXMSW_DLL_DEFINES)
 
 dnl additional resurces settings
 AC_SUBST(RESCOMP)

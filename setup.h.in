@@ -99,7 +99,9 @@
 #endif
 
 #undef __WIN95__
+#ifndef __WIN32__
 #undef __WIN32__
+#endif
 #undef __GNUWIN32__
 #undef STRICT
 #undef WINVER

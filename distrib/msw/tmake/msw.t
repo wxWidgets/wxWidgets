@@ -72,6 +72,10 @@
         $project{"MSW_HEADERS"} .= "msw/" . $file . " "
     }
 
+    foreach $file (sort keys %wxOLEINCLUDE) {
+        $project{"MSW_HEADERS"} .= "msw/ole/" . $file . " ";
+    }
+
     foreach $file (sort keys %wxGENERICINCLUDE) {
         $project{"MSW_HEADERS"} .= "generic/" . $file . " "
     }

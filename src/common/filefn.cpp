@@ -1076,7 +1076,7 @@ bool wxMkdir(const wxString& dir, int perm)
     // assume mkdir() has 2 args on non Windows-OS/2 platforms
 #if defined(__WXPM__)
     if (::DosCreateDir((PSZ)dirname, NULL) != 0) // enhance for EAB's??
-#elif !defined(__WXMSW__) || defined(__WXWINE__)
+#elif !defined(__WXMSW__) || defined(__WXWINE__) || defined(__CYGWIN__)
     if ( mkdir(wxFNCONV(dirname), perm) != 0 )
 #else  // !MSW and !OS/2 VAC++
     if ( wxMkDir(wxFNSTRINGCAST wxFNCONV(dirname)) != 0 )
