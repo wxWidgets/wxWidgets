@@ -1125,7 +1125,7 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
             default:
                 // additionally accept 'e' as in '1e+6'
                 if ( (keycode < 128) &&
-                     (isdigit(keycode) || tolower(keycode) == wxT('e')) )
+                     (isdigit(keycode) || tolower(keycode) == 'e') )
                     return TRUE;
         }
     }
@@ -6264,6 +6264,9 @@ void wxGrid::HighlightBlock( int topRow, int leftCol, int bottomRow, int rightCo
 
 bool wxGrid::GetModelValues()
 {
+    // Disable the editor, so it won't hide a changed value.
+    DisableCellEditControl();
+
     if ( m_table )
     {
         // all we need to do is repaint the grid
@@ -6279,6 +6282,12 @@ bool wxGrid::GetModelValues()
 bool wxGrid::SetModelValues()
 {
     int row, col;
+
+    // Disable the editor, so it won't hide a changed value.
+    // Do we also want to save the current value of the editor first?
+    // I think so ...
+    SaveEditControlValue();
+    DisableCellEditControl();
 
     if ( m_table )
     {
