@@ -19289,7 +19289,7 @@ fi
 
 
 if test "$wxUSE_EXPAT" != "no"; then
-    wxUSE_XML=1
+    wxUSE_XML=yes
     cat >>confdefs.h <<\_ACEOF
 #define wxUSE_EXPAT 1
 _ACEOF
@@ -34872,6 +34872,8 @@ fi
 
         ;;
     esac
+
+
 
 
 

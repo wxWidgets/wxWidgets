@@ -1653,9 +1653,16 @@ AC_DEFUN(AC_BAKEFILE_PRECOMP_HEADERS,
             AC_MSG_CHECKING([if the compiler supports precompiled headers])
             AC_TRY_COMPILE([],
                 [
-                    #if !defined(__GNUC__) || !defined(__GNUC_MINOR__) || \
-                        (__GNUC__ < 3) || (__GNUC__ == 3 && __GNUC_MINOR__ < 4)
-                            #error "no pch support"
+                    #if !defined(__GNUC__) || !defined(__GNUC_MINOR__)
+                        #error "no pch support"
+                    #endif
+                    #if (__GNUC__ < 3)
+                        #error "no pch support"
+                    #endif
+                    #if (__GNUC__ == 3) && \
+                       ((!defined(__APPLE_CC__) && (__GNUC_MINOR__ < 4)) || \
+                       ( defined(__APPLE_CC__) && (__GNUC_MINOR__ < 3)))
+                        #error "no pch support"
                     #endif
                 ],
                 [
