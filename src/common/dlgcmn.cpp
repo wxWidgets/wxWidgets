@@ -181,27 +181,27 @@ wxStdDialogButtonSizer *wxDialogBase::CreateStdDialogButtonSizer( long flags )
     wxButton *no = NULL;
 
     if (flags & wxOK){
-        ok = new wxButton(this, wxID_OK, _("OK"));
+        ok = new wxButton(this, wxID_OK);
         sizer->AddButton(ok);
     }
 
     if (flags & wxCANCEL){
-        wxButton *cancel = new wxButton(this, wxID_CANCEL, _("Cancel"));
+        wxButton *cancel = new wxButton(this, wxID_CANCEL);
         sizer->AddButton(cancel);
     }
 
     if (flags & wxYES){
-        yes = new wxButton(this, wxID_YES, _("Yes"));
+        yes = new wxButton(this, wxID_YES);
         sizer->AddButton(yes);
     }
 
     if (flags & wxNO){
-        no = new wxButton(this, wxID_NO, _("No"));
+        no = new wxButton(this, wxID_NO);
         sizer->AddButton(no);
     }
 
     if (flags & wxHELP){
-        wxButton *help = new wxButton(this, wxID_HELP, _("Help"));
+        wxButton *help = new wxButton(this, wxID_HELP);
         sizer->AddButton(help);
     }
 
