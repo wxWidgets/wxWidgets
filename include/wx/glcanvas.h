@@ -22,7 +22,7 @@
 #endif
 
 #include "wx/app.h"
-class WXDLLEXPORT wxGLApp : public wxApp
+class WXDLLIMPEXP_GL wxGLApp : public wxApp
 {
 public:
     wxGLApp() : wxApp() { }
