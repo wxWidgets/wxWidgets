@@ -21,10 +21,13 @@
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
-    #include "wx/image.h"
     #include "wx/icon.h"
     #include "wx/log.h"
     #include "wx/intl.h"
+#endif
+
+#ifndef _WX_IMAGE_H_
+    #include "wx/image.h"
 #endif
 
 #include "wx/iconbndl.h"
