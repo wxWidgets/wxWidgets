@@ -205,6 +205,13 @@ public:
         event.Skip();
     }
 
+    void OnButton(wxMouseEvent& event)
+    {
+        wxLogMessage(_T("MyButton::OnButton"));
+
+        event.Skip();
+    }
+
 private:
     DECLARE_EVENT_TABLE()
 };
@@ -483,6 +490,7 @@ END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyButton, wxButton)
     EVT_LEFT_DCLICK(MyButton::OnDClick)
+    EVT_BUTTON(-1, MyButton::OnButton)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyComboBox, wxComboBox)
@@ -659,17 +667,26 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxCheckBox( panel, ID_COMBO_ENABLE, "&Disable", wxPoint(20,130), wxSize(140,30) );
     m_notebook->AddPage(panel, "wxComboBox", FALSE, Image_Combo);
 
-    wxString choices2[] =
+    static const wxString choices2[] =
     {
         "First", "Second",
-        /* "Third",
-        "Fourth", "Fifth", "Sixth",
-        "Seventh", "Eighth", "Nineth", "Tenth" */
+    };
+
+    static const wxString choices10[] =
+    {
+        "First", "Second", "Third", "Fourth", "Fifth",
+         "Sixth", "Seventh", "Eighth", "Nineth", "Tenth"
     };
 
     panel = new wxPanel(m_notebook);
-    (void)new MyRadioBox( panel, ID_RADIOBOX, "&That", wxPoint(10,160), wxSize(-1,-1), WXSIZEOF(choices2), choices2, 1, wxRA_SPECIFY_ROWS );
     m_radio = new wxRadioBox( panel, ID_RADIOBOX, "T&his", wxPoint(10,10), wxSize(-1,-1), WXSIZEOF(choices), choices, 1, wxRA_SPECIFY_COLS );
+    (void)new MyRadioBox( panel, ID_RADIOBOX, "&That", wxPoint(10,160), wxSize(-1,-1), WXSIZEOF(choices2), choices2, 1, wxRA_SPECIFY_ROWS );
+
+    wxRadioBox *radio2 = new wxRadioBox(panel, -1, "And another one with very very long title",
+                                        wxPoint(165, 115), wxDefaultSize,
+                                        WXSIZEOF(choices10), choices10,
+                                        3, wxRA_SPECIFY_COLS);
+    radio2->SetToolTip("Test tooltip");
 
 #if wxUSE_TOOLTIPS
     m_combo->SetToolTip("This is a natural\ncombobox - can you believe me?");
@@ -680,10 +697,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxButton( panel, ID_RADIOBOX_SEL_STR, "&Select 'This'", wxPoint(180,80), wxSize(140,30) );
     m_fontButton = new wxButton( panel, ID_SET_FONT, "Set &more Italic font", wxPoint(340,30), wxSize(140,30) );
     (void)new wxButton( panel, ID_RADIOBOX_FONT, "Set &Italic font", wxPoint(340,80), wxSize(140,30) );
-    (void)new wxCheckBox( panel, ID_RADIOBOX_ENABLE, "&Disable", wxPoint(340,130), wxDefaultSize );
-    wxRadioButton *rb = new wxRadioButton( panel, ID_RADIOBUTTON_1, "Radiobutton1", wxPoint(210,170), wxDefaultSize, wxRB_GROUP );
-    rb->SetValue( FALSE );
-    (void)new wxRadioButton( panel, ID_RADIOBUTTON_2, "&Radiobutton2", wxPoint(340,170), wxDefaultSize );
+    (void)new wxCheckBox( panel, ID_RADIOBOX_ENABLE, "&Disable", wxPoint(400,130), wxDefaultSize );
+    wxRadioButton *rb = new wxRadioButton( panel, ID_RADIOBUTTON_1, "Radio&1",
+                                           wxPoint(400,170), wxDefaultSize, wxRB_GROUP );
+    rb->SetValue( TRUE );
+    (void)new wxRadioButton( panel, ID_RADIOBUTTON_2, "Radio&2", wxPoint(460,170), wxDefaultSize );
     m_notebook->AddPage(panel, "wxRadioBox", FALSE, Image_Radio);
 
     panel = new wxPanel(m_notebook);
