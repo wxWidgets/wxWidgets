@@ -107,12 +107,10 @@ public:
     bool GetNext(wxString *filename) const;
 
     // return true if this directory has any files in it
-    bool HasFiles(const wxString& spec = wxEmptyString)
-        { wxString s; return GetFirst(&s, spec, wxDIR_FILES | wxDIR_HIDDEN); }
+    bool HasFiles(const wxString& spec = wxEmptyString);
 
     // return true if this directory has any subdirectories
-    bool HasSubDirs(const wxString& spec = wxEmptyString)
-        { wxString s; return GetFirst(&s, spec, wxDIR_DIRS | wxDIR_HIDDEN); }
+    bool HasSubDirs(const wxString& spec = wxEmptyString);
 
     // enumerate all files in this directory and its subdirectories
     //

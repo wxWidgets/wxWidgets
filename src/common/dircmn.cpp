@@ -44,6 +44,29 @@
 // ============================================================================
 
 // ----------------------------------------------------------------------------
+// wxDir::HasFiles() and HasSubDirs()
+// ----------------------------------------------------------------------------
+
+// dumb generic implementation
+
+bool wxDir::HasFiles(const wxString& spec)
+{
+    wxString s;
+    return GetFirst(&s, spec, wxDIR_FILES | wxDIR_HIDDEN);
+}
+
+// we have a (much) faster version for Unix
+#ifndef __UNIX_LIKE__
+
+bool wxDir::HasSubDirs(const wxString& spec)
+{
+    wxString s;
+    return GetFirst(&s, spec, wxDIR_DIRS | wxDIR_HIDDEN);
+}
+
+#endif // !Unix
+
+// ----------------------------------------------------------------------------
 // wxDir::Traverse()
 // ----------------------------------------------------------------------------
 

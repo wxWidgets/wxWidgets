@@ -37,6 +37,8 @@
 #include "wx/filefn.h"          // for wxMatchWild
 
 #include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #include <dirent.h>
 
@@ -283,3 +285,49 @@ bool wxDir::GetNext(wxString *filename) const
 
     return M_DIR->Read(filename);
 }
+
+bool wxDir::HasSubDirs(const wxString& spec)
+{
+    wxCHECK_MSG( IsOpened(), FALSE, _T("must wxDir::Open() first") );
+
+    if ( spec.empty() )
+    {
+        // faster check for presence of any subdirectory: normally each subdir
+        // has a hard link to the parent directory and so, knowing that there
+        // are at least "." and "..", we have a subdirectory if and only if
+        // links number is > 2 - this is just a guess but it works fairly well
+        // in practice
+        //
+        // note that we may guess wrongly in one direction only: i.e. we may
+        // return true when there are no subdirectories but this is ok as the
+        // caller will learn it soon enough when it calls GetFirst(wxDIR)
+        // anyhow
+        wxStructStat stBuf;
+        if ( wxStat(M_DIR->GetName(), &stBuf) == 0 )
+        {
+            switch ( stBuf.st_nlink )
+            {
+                case 2:
+                    // just "." and ".."
+                    return FALSE;
+
+                case 0:
+                case 1:
+                    // weird filesystem, don't try to guess for it, use dumb
+                    // method below
+                    break;
+
+                default:
+                    // assume we have subdirs - may turn out to be wrong if we
+                    // have other hard links to this directory but it's not
+                    // that bad as explained above
+                    return TRUE;
+            }
+        }
+    }
+
+    // just try to find first directory
+    wxString s;
+    return GetFirst(&s, spec, wxDIR_DIRS | wxDIR_HIDDEN);
+}
+
