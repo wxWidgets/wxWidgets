@@ -154,7 +154,7 @@ void wxControlContainer::SetLastFocus(wxWindow *win)
 }
 
 // --------------------------------------------------------------------
-// The following four functions are used to find other radio buttons 
+// The following four functions are used to find other radio buttons
 // within the same group. Used by wxSetFocusToChild on wxMSW
 // --------------------------------------------------------------------
 
@@ -180,7 +180,7 @@ wxRadioButton* wxGetPreviousButtonInGroup(wxRadioButton *btn)
 
         nodeBefore = nodeBefore->GetPrevious();
     }
-    
+
     if (!prevBtn || prevBtn->HasFlag(wxRB_SINGLE))
     {
         // no more buttons in group
@@ -227,7 +227,7 @@ wxRadioButton* wxGetFirstButtonInGroup(wxRadioButton *btn)
         wxRadioButton* prevBtn = wxGetPreviousButtonInGroup(btn);
         if (!prevBtn)
             return btn;
-        
+
         btn = prevBtn;
     }
 }
@@ -256,7 +256,7 @@ wxRadioButton* wxGetSelectedButtonInGroup(wxRadioButton *btn)
     return NULL;
 }
 
-#endif __WXMSW__
+#endif // __WXMSW__
 
 // ----------------------------------------------------------------------------
 // Keyboard handling - this is the place where the TAB traversal logic is
@@ -330,7 +330,7 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
         if ( winFocus )
         {
 #ifdef __WXMSW__
-            // If we are in a radio button group, start from the first item in the 
+            // If we are in a radio button group, start from the first item in the
             // group
             if ( event.IsFromTab() && wxIsKindOf(winFocus, wxRadioButton ) )
                 winFocus = wxGetFirstButtonInGroup((wxRadioButton*)winFocus);
@@ -411,8 +411,8 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
             {
                 if (!wxIsKindOf(child, wxRadioButton))
                 {
-                    child = forward ? 
-                                wxGetNextButtonInGroup((wxRadioButton*)m_winLastFocused) : 
+                    child = forward ?
+                                wxGetNextButtonInGroup((wxRadioButton*)m_winLastFocused) :
                                 wxGetPreviousButtonInGroup((wxRadioButton*)m_winLastFocused);
                     if (!child)
                     {
@@ -596,7 +596,7 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
         if ( child->AcceptsFocusFromKeyboard() && !child->IsTopLevel() )
         {
 #ifdef __WXMSW__
-            // If a radiobutton is the first focusable child, search for the 
+            // If a radiobutton is the first focusable child, search for the
             // selected radiobutton in the same group
             wxRadioButton* btn = wxDynamicCast(child, wxRadioButton);
             if (btn)
