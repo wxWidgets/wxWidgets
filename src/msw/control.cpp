@@ -78,11 +78,10 @@ bool wxControl::Create(wxWindow *parent,
 bool wxControl::MSWCreateControl(const wxChar *classname,
                                  const wxString& label,
                                  const wxPoint& pos,
-                                 const wxSize& size,
-                                 long style)
+                                 const wxSize& size)
 {
     WXDWORD exstyle;
-    WXDWORD msStyle = MSWGetStyle(style, &exstyle);
+    WXDWORD msStyle = MSWGetStyle(GetWindowStyle(), &exstyle);
 
     return MSWCreateControl(classname, msStyle, pos, size, label, exstyle);
 }

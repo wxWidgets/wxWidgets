@@ -92,12 +92,15 @@ protected:
 
     virtual wxSize DoGetBestSize() const;
 
-    // create the control of the given Window class
+    // create the control of the given Windows class: this is typically called
+    // from Create() method of the derived class passing its label, pos and
+    // size parameter (style parameter is not needed because m_windowStyle is
+    // supposed to had been already set and so is used instead when this
+    // function is called)
     bool MSWCreateControl(const wxChar *classname,
                           const wxString& label,
                           const wxPoint& pos,
-                          const wxSize& size,
-                          long style);
+                          const wxSize& size);
 
     // NB: the method below is deprecated now, with MSWGetStyle() the method
     //     above should be used instead! Once all the controls are updated to

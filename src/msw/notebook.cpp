@@ -142,12 +142,11 @@ bool wxNotebook::Create(wxWindow *parent,
                         const wxString& name)
 {
     // base init
-    if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
+    if ( !CreateControl(parent, id, pos, size, style | wxTAB_TRAVERSAL,
+                        wxDefaultValidator, name) )
         return FALSE;
 
-    // notebook, so explicitly specify 0 as last parameter
-    if ( !MSWCreateControl(WC_TABCONTROL, _T(""), pos, size,
-                style | wxTAB_TRAVERSAL) )
+    if ( !MSWCreateControl(WC_TABCONTROL, _T(""), pos, size) )
         return FALSE;
 
     SetBackgroundColour(wxColour(::GetSysColor(COLOR_BTNFACE)));
