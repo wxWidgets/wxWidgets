@@ -805,6 +805,29 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
     }
 #endif // wxUSE_CONFIG
 
+    // now try to map this encoding to a compatible one which we have on this
+    // system
+    wxFontEncodingArray equiv = wxEncodingConverter::GetAllEquivalents(encoding);
+    size_t count = equiv.GetCount();
+    bool foundEquivEncoding = FALSE;
+    wxFontEncoding equivEncoding;
+    if ( count )
+    {
+        for ( size_t i = 0; i < count && !foundEquivEncoding; i++ )
+        {
+            // don't test for encoding itself, we already know we don't have it
+            if ( equiv[i] == encoding )
+                continue;
+
+            if ( TestAltEncoding(configEntry, equiv[i], info) )
+            {
+                equivEncoding = equiv[i];
+
+                foundEquivEncoding = TRUE;
+            }
+        }
+    }
+
     // ask the user
 #if wxUSE_FONTDLG
     if ( interactive )
@@ -813,29 +836,40 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
         if ( !title )
             title << wxTheApp->GetAppName() << _(": unknown encoding");
 
-        // the message
-        wxString msg;
-        msg.Printf(_("No font for displaying text in encoding '%s' found.\nWould you like to select a font to be used for this encoding\n(otherwise the text in this encoding will not be shown correctly)?"),
-                     GetEncodingDescription(encoding).c_str());
+        // built the message
+        wxString encDesc = GetEncodingDescription(encoding),
+                 msg;
+        if ( foundEquivEncoding )
+        {
+            // ask the user if he wants to override found alternative encoding
+            msg.Printf(_("No font for displaying text in encoding '%s' found,\nbut an alternative encoding '%s' is available.\nDo you want to use this encoding (otherwise you will have to choose another one)?"),
+                       encDesc.c_str(), GetEncodingDescription(equivEncoding).c_str());
+        }
+        else
+        {
+            msg.Printf(_("No font for displaying text in encoding '%s' found.\nWould you like to select a font to be used for this encoding\n(otherwise the text in this encoding will not be shown correctly)?"),
+                       encDesc.c_str());
+        }
 
-        wxWindow *parent = m_windowParent;
-        if ( !parent )
-            parent = wxTheApp->GetTopWindow();
+        // the question is different in 2 cases so the answer has to be
+        // interpreted differently as well
+        int answer = foundEquivEncoding ? wxNO : wxYES;
 
         if ( wxMessageBox(msg, title,
-                          wxICON_QUESTION | wxYES_NO, parent) == wxYES )
+                          wxICON_QUESTION | wxYES_NO,
+                          m_windowParent) == answer )
         {
             wxFontData data;
             data.SetEncoding(encoding);
             data.EncodingInfo() = *info;
-            wxFontDialog dialog(parent, &data);
+            wxFontDialog dialog(m_windowParent, &data);
             if ( dialog.ShowModal() == wxID_OK )
             {
                 wxFontData retData = dialog.GetFontData();
                 wxFont font = retData.GetChosenFont();
 
                 *info = retData.EncodingInfo();
-                info -> encoding = retData.GetEncoding();
+                info->encoding = retData.GetEncoding();
 
 #if wxUSE_CONFIG
                 // remember this in the config
@@ -853,12 +887,19 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
         }
         else
         {
-            // the user doesn't want to select a font for this encoding,
+            // the user doesn't want to select a font for this encoding
+            // or selected to use equivalent encoding
+            //
             // remember it to avoid asking the same question again later
 #if wxUSE_CONFIG
             if ( ChangePath(FONTMAPPER_FONT_FROM_ENCODING_PATH, &pathOld) )
             {
-                GetConfig()->Write(configEntry, FONTMAPPER_FONT_DONT_ASK);
+                GetConfig()->Write
+                             (
+                                configEntry,
+                                foundEquivEncoding ? info->ToString().c_str()
+                                                   : FONTMAPPER_FONT_DONT_ASK
+                             );
 
                 RestorePath(pathOld);
             }
@@ -868,19 +909,7 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
     //else: we're in non-interactive mode
 #endif // wxUSE_FONTDLG
 
-    // now try the default mappings:
-    wxFontEncodingArray equiv = wxEncodingConverter::GetAllEquivalents(encoding);
-    size_t count = equiv.GetCount();
-    if ( count )
-    {
-        for ( size_t i = (equiv[0] == encoding) ? 1 : 0; i < count; i++ )
-        {
-            if ( TestAltEncoding(configEntry, equiv[i], info) )
-                return TRUE;
-        }
-    }
-
-    return FALSE;
+    return foundEquivEncoding;
 }
 
 bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
