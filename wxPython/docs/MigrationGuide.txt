@@ -747,7 +747,7 @@ Because of the above and also because of the way the new SWIG works,
 the "internal" module names have changed, but you shouldn't have been
 using them anyway so it shouldn't bother you. ;-) In case you were
 erroneously using them in 2.4, here are the internal extension modules
-no longer exist:
+that no longer exist:
 
     * clip_dnd
     * cmndlgs
@@ -784,6 +784,40 @@ the objects in these modules only via the wx or wxPython.wx packages:
 
 The help module no longer exists and the classes therein are now part
 of the core module imported with wxPython.wx or the wx package.
+
+
+wx.TaskBarIcon
+--------------
+
+**[Changed in 2.5.3.x]** 
+
+wx.TaskbarIcon now works on all three platforms, although for wxGTK it
+depends on support from the Window Manager.  On OS X the icon replaces
+the application's icon on the dock and when you right click on it the
+app's default popup menu is merged with the wx.TaskBarIcon's menu.
+Because of how it is implemented on the Mac using the Dock most of the
+TaskBarIcon events will _not_ be emitted on that platform, but since
+98% of the time you simply want to display an icon and have a popup
+menu it shouldn't be much of a problem.  You can still use the other
+events on the other platforms, you'll just want to be sure that you
+can do everything you want via the menu too.
+
+Since popping up a menu is the most common thing to do with a
+TaskBarIcon the class has some new built in functionality to
+facilitate that.  To use the TaskBarIcon in this new way, simply
+derive a new class from TaskBarIcon and implement a CreatePopupMenu
+method that creates and returns the menu.  That's all there is to it,
+besides binding event handlers for the menu items of course.  Take a
+look at the DemoTaskBarIcon class in the demo/Main.py module for an
+example.
+
+**NOTE**:  Unfortunately due to being able to support virtualizing
+CreatePopupMenu the C++ TaskBarIcon instance now holds a reference to
+the Python instance, and so you will need to explicitly Destroy() your
+TaskBarIcon instance when you are done with it.  (Like you do with
+wx.Dialogs.)  If you don't destroy it then wxWidgets will assume that
+you want the app to keep running with just the icon in the task bar
+and the MainLoop will not exit.
 
 
 
@@ -824,16 +858,6 @@ there are compatibility aliases for much of the above items.
 
 The wxWave class has been renamed to wxSound, and now has a slightly
 different API.
-
-wx.TaskbarIcon works on wxGTK-based platforms (for some window
-managers,) however you have to manage it a little bit more than you
-did before.  Basically, the app will treat it like a top-level frame
-in that if the wx.TaskBarIcon still exists when all the frames are
-closed then the app will still not exit.  You need to ensure that the
-wx.TaskBarIcon is destroyed when your last Frame is closed.  For
-wxPython apps it is usually enough if your main frame object holds the
-only reference to the wx.TaskBarIcon, then when the frame is closed
-Python reference counting takes care of the rest.
 
 Before Python 2.3 it was possible to pass a floating point object as a
 parameter to a function that expected an integer, and the

@@ -1,7 +1,7 @@
 Recent Changes for wxPython
 =====================================================================
 
-2.5.2.9
+2.5.3.0
 -------
 
 wxMac focus and border refreshes corrected.
@@ -118,6 +118,34 @@ accordingly and will build the xrc module as part of the core set of
 modules built by default.  If you were axplicitly using BUILD_XRC then
 it will no longer be recognized as a build option, otherwise you
 should notice no difference.
+
+wxMac: Fixed radio toolbar buttons to correctly untoggle the others
+when a new one is selected.
+
+wxMac: Fixed GetLineLength and GetLineText for MLTE text controls
+
+wxMac: wx.TaskBarIcon is implemented by allowing you to change the
+app's icon on the Dock and also specifying a menu that should be
+merged with the normal dock popup menu.  See the MigrationGuide for
+more details and a warning.
+
+Added wx.TopLevelWindow.IsActive() which tells you if the frame or
+dialog is or containts the active window with the keyboard focus.
+
+Added ability to create a font based on pixel size rather than point
+size via the FontFromPixelSize constructor.
+
+Updated the Scintilla used by StyledTextCtrl to version 1.61
+
+Improved image HitTest for TreeListCtrl.
+
+Added wx.App.IsMainLoopRunning.
+
+wxGTK: Make wxComboBox spit out a bit fewer surplus events when
+holding down the mouse button.
+
+wxGTK: Enable key based navigation through notebook tabs as in the
+native control with Left and right keys. Support for vetoing.
 
 
 
@@ -1776,7 +1804,6 @@ Fixes for the wxGLCanvas demo to work around a strange bug in gtk.
 
 SWIG support routines now compiled separately instead of being bundled
 in wx.cpp.
-
 
 
 
