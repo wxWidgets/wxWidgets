@@ -18,14 +18,14 @@ LIBS=
 
 # Internal stuff, should not need changing.
 OBJPRODN=regcomp.o regexec.o regerror.o regfree.o
-OBJS=$(OBJPRODN) split.o debug.o main.o
+OBJS=$(OBJPRODN) split.o debug.o re_main.o
 H=cclass.h cname.h regex2.h utils.h
 REGSRC=regcomp.c regerror.c regexec.c regfree.c
-ALLSRC=$(REGSRC) engine.c debug.c main.c split.c
+ALLSRC=$(REGSRC) engine.c debug.c re_main.c split.c
 
 # Stuff that matters only if you're trying to lint the package.
 LINTFLAGS=-I. -Dstatic= -Dconst= -DREDEBUG
-LINTC=regcomp.c regexec.c regerror.c regfree.c debug.c main.c
+LINTC=regcomp.c regexec.c regerror.c regfree.c debug.c re_main.c
 JUNKLINT=possible pointer alignment|null effect
 
 # arrangements to build forward-reference header files
@@ -56,7 +56,7 @@ regcomp.o:	cclass.h cname.h regcomp.ih
 regexec.o:	engine.c engine.ih
 regerror.o:	regerror.ih
 debug.o:	debug.ih
-main.o:	main.ih
+re_main.o:	re_main.ih
 
 # tester
 re:	$(OBJS)
