@@ -690,10 +690,13 @@ void wxTextCtrl::Replace(long from, long to, const wxString& value)
     SendMessage(hWnd, WM_CUT, (WPARAM)0, (LPARAM)0);
 
     // Now replace with 'value', by pasting.
-    wxSetClipboardData(wxDF_TEXT, (wxObject *) (const wxChar *)value, 0, 0);
+    if (wxOpenClipboard()) {
+        wxSetClipboardData(wxDF_TEXT, (wxObject *) (const wxChar *)value, 0, 0);
+        wxCloseClipboard();
 
-    // Paste into edit control
-    SendMessage(hWnd, WM_PASTE, (WPARAM)0, (LPARAM)0L);
+        // Paste into edit control
+        SendMessage(hWnd, WM_PASTE, (WPARAM)0, (LPARAM)0L);
+    }
 #else
     wxFAIL_MSG("wxTextCtrl::Replace not implemented if wxUSE_CLIPBOARD is 0.");
 #endif
