@@ -2112,11 +2112,11 @@ The background colour is usually painted by the default\rtfsp
 under Windows and automatically under GTK.
 
 Note that setting the background colour does not cause an immediate refresh, so you
-may wish to call \helpref{wxWindow::Clear}{wxwindowclear} or \helpref{wxWindow::Refresh}{wxwindowrefresh} after
+may wish to call \helpref{wxWindow::ClearBackground}{wxwindowclearbackground} or \helpref{wxWindow::Refresh}{wxwindowrefresh} after
 calling this function.
 
-Use this function with care under GTK as the new appearance of the window might
-not look equally well when used with "Themes", i.e GTK's ability to change its
+Use this function with care under GTK+ as the new appearance of the window might
+not look equally well when used with "Themes", i.e GTK+'s ability to change its
 look as the user wishes with run-time loadable modules.
 
 \wxheading{See also}
@@ -2124,7 +2124,7 @@ look as the user wishes with run-time loadable modules.
 \helpref{wxWindow::GetBackgroundColour}{wxwindowgetbackgroundcolour},\rtfsp
 \helpref{wxWindow::SetForegroundColour}{wxwindowsetforegroundcolour},\rtfsp
 \helpref{wxWindow::GetForegroundColour}{wxwindowgetforegroundcolour},\rtfsp
-\helpref{wxWindow::Clear}{wxwindowclear},\rtfsp
+\helpref{wxWindow::ClearBackground}{wxwindowclearbackground},\rtfsp
 \helpref{wxWindow::Refresh}{wxwindowrefresh},\rtfsp
 \helpref{wxEraseEvent}{wxeraseevent}
 

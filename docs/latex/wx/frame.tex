@@ -512,10 +512,10 @@ menu bar and its menus will be destroyed also, so do not delete the menu
 bar explicitly (except by resetting the frame's menu bar to another
 frame or NULL).
 
-Under Windows, a call to \helpref{wxFrame::OnSize}{wxframeonsize} is generated, so be sure to initialize
+Under Windows, a size event is generated, so be sure to initialize
 data members properly before calling {\bf SetMenuBar}.
 
-Note that it is not possible to call this function twice for the same frame object.
+Note that on some platforms, it is not possible to call this function twice for the same frame object.
 
 \wxheading{See also}
 

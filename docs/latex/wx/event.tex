@@ -185,14 +185,13 @@ Called by an event handler to tell the event system that the
 event handler should be skipped, and the next valid handler used
 instead.
 
-\membersection{wxEvent::StopPropagation}
+\membersection{wxEvent::StopPropagation}\label{wxeventstoppropagation}
 
-\func{int}{StopPropagation}{\void}\label{wxeventstoppropagation}
+\func{int}{StopPropagation}{\void}
 
 Stop the event from propagating to its parent window.
 
 Returns the old propagation level value which may be later passed to 
 \helpref{ResumePropagation}{wxeventresumepropagation} to allow propagating the
 event again.
-
 

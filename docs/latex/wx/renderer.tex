@@ -11,7 +11,7 @@
 
 \section{\class{wxRendererNative}}\label{wxrenderernative}
 
-First, a brief introduction into what is wxRenderer and why is it needed.
+First, a brief introduction to wxRenderer and why it is needed.
 
 Usually wxWindows uses the underlying low level GUI system to draw all the
 controls -- this is what we mean when we say that it is a ``native'' framework.
@@ -19,38 +19,37 @@ However not all controls exist under all (or even any) platforms and in this
 case wxWindows provides a default, generic, implementation of them written in
 wxWindows itself.
 
-These controls however don't have the native appearance if only the standard
-line drawing and other graphics primitives are used if only because the native
+These controls don't have the native appearance if only the standard
+line drawing and other graphics primitives are used, because the native
 appearance is different under different platforms while the lines are always
 drawn in the same way.
 
 This is why we have renderers: wxRenderer is a class which virtualizes the
-drawing, i.e. it abstracts the drawing operations and allows you to draw a,
-say, button, without caring about how exactly this is done. Of course, as we
+drawing, i.e. it abstracts the drawing operations and allows you to draw say, a
+button, without caring about exactly how this is done. Of course, as we
 can draw the button differently in different renderers, this also allows us to
 emulate the native look and feel.
 
-
-So the renderers work by exposing a big set of high-level drawing functions
+So the renderers work by exposing a large set of high-level drawing functions
 which are used by the generic controls. There is always a default global
 renderer but it may be changed or extended by the user, see 
 \helpref{Render sample}{samplerender}.
 
 All drawing functions take some standard parameters:
 \begin{itemize}
-    \item \arg{win} is the window being drawn. it is normally not used and when
+    \item \arg{win} is the window being drawn. It is normally not used and when
           it is it should only be used as a generic \helpref{wxWindow}{wxwindow} 
           (in order to get its low level handle, for example), but you should
           \emph{not} assume that it is of some given type as the same renderer
           function may be reused for drawing different kinds of control.
-    \item \arg{dc} is the \helpref{wxDC}{wxdc} to draw on, only this device
+    \item \arg{dc} is the \helpref{wxDC}{wxdc} to draw on. Only this device
           context should be used for drawing. It is not necessary to restore
           pens and brushes for it on function exit but, on the other hand, you
-          shouldn't assume that it is in any specific state on function entry
-          neither: the rendering functions should always prepare it.
-    \item \arg{rect} the bounding rectangle for the element to be drawn
+          shouldn't assume that it is in any specific state on function entry:
+          the rendering functions should always prepare it.
+    \item \arg{rect} the bounding rectangle for the element to be drawn.
     \item \arg{flags} the optional flags (none by default) which can be a
-          combination of the \texttt{wxCONTROL\_XXX} constants below
+          combination of the \texttt{wxCONTROL\_XXX} constants below.
 \end{itemize}
 
 \wxheading{Constants}

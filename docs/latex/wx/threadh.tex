@@ -63,7 +63,7 @@ The destructor frees the resources associated with the thread.
 \func{wxThreadError}{Create}{\param{unsigned int }{stackSize = 0}}
 
 Creates a new thread. The thread object is created in the suspended state, and you
-should call \helpref{GetThread()->Run()}{wxthreadhelperthreadrun} to start running
+should call \helpref{GetThread()->Run()}{wxthreadrun} to start running
 it.  You may optionally specify the stack size to be allocated to it (Ignored on
 platforms that don't support setting it explicitly, eg. Unix).
 
@@ -98,3 +98,4 @@ directly.
 
 This is a public function that returns the \helpref{wxThread}{wxthread} object
 associated with the thread.
+

@@ -16,7 +16,7 @@ problems in a function. It is not thread-safe and so should be used only in the
 single-threaded programs or in combination with some thread synchronization
 mechanisms.
 
-wxRecursionGuard is always used together with 
+wxRecursionGuard is always used together with the 
 \helpref{wxRecursionGuardFlag}{wxrecursionguardflag} like in this example:
 \begin{verbatim}
     void Foo()
@@ -35,7 +35,7 @@ wxRecursionGuard is always used together with
 
 As you can see, wxRecursionGuard simply tests the flag value and sets it to
 true if it hadn't been already set. 
-\helpref{IsInside()}{wxrecursionguardisinside} allows to test the old flag
+\helpref{IsInside()}{wxrecursionguardisinside} allows testing the old flag
 value. The advantage of using this class compared to directly manipulating the
 flag is that the flag is always reset in the wxRecursionGuard destructor and so
 you don't risk to forget to do it even if the function returns in an unexpected
