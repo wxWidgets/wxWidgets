@@ -31,6 +31,55 @@ IODBC_C_SRC=\
   iodbc/prepare.c \
   iodbc/result.c
 
+# define source file for jpeg
+JPEG_C_SRC=\
+  jpeg/jcapimin.c \
+  jpeg/jcapistd.c \
+  jpeg/jccoefct.c \
+  jpeg/jccolor.c \
+  jpeg/jcdctmgr.c \
+  jpeg/jchuff.c \
+  jpeg/jcinit.c \
+  jpeg/jcmainct.c \
+  jpeg/jcmarker.c \
+  jpeg/jcmaster.c \
+  jpeg/jcomapi.c \
+  jpeg/jcparam.c \
+  jpeg/jcphuff.c \
+  jpeg/jcprepct.c \
+  jpeg/jcsample.c \
+  jpeg/jctrans.c \
+  jpeg/jdapimin.c \
+  jpeg/jdapistd.c \
+  jpeg/jdatadst.c \
+  jpeg/jdatasrc.c \
+  jpeg/jdcoefct.c \
+  jpeg/jdcolor.c \
+  jpeg/jddctmgr.c \
+  jpeg/jdhuff.c \
+  jpeg/jdinput.c \
+  jpeg/jdmainct.c \
+  jpeg/jdmarker.c \
+  jpeg/jdmaster.c \
+  jpeg/jdmerge.c \
+  jpeg/jdphuff.c \
+  jpeg/jdpostct.c \
+  jpeg/jdsample.c \
+  jpeg/jdtrans.c \
+  jpeg/jerror.c \
+  jpeg/jfdctflt.c \
+  jpeg/jfdctfst.c \
+  jpeg/jfdctint.c \
+  jpeg/jidctflt.c \
+  jpeg/jidctfst.c \
+  jpeg/jidctint.c \
+  jpeg/jidctred.c \
+  jpeg/jquant1.c \
+  jpeg/jquant2.c \
+  jpeg/jutils.c \
+  jpeg/jmemmgr.c \
+  jpeg/jmemnobs.c 
+
 # define source file for png
 PNG_C_SRC=\
  png/png.c \
@@ -76,7 +125,7 @@ SHARED_LIBRARY=lib$(LIB_TARGET).so.$(LIB_MAJOR).$(LIB_MINOR)
 LIB_CPP_ALL_SRC=$(LIB_CPP_SRC) @UNIX_THREAD@
 # @GTK_JOYSTICK@
 
-LIB_C_ALL_SRC=$(LIB_C_SRC) @IODBC_C_SRC@ @PNG_C_SRC@ @Z_C_SRC@ parser.c
+LIB_C_ALL_SRC=$(LIB_C_SRC) @IODBC_C_SRC@ @PNG_C_SRC@ @Z_C_SRC@ @JPEG_C_SRC@ parser.c
 
 #define library objects
 LIB_OBJ=\
@@ -92,6 +141,7 @@ all::
 	@if test ! -d unix; then mkdir unix; fi
 	@if test ! -d generic; then mkdir generic; fi
 	@if test ! -d png; then mkdir png; fi
+	@if test ! -d jpeg; then mkdir jpeg; fi
 	@if test ! -d zlib; then mkdir zlib; fi
 	@if test ! -d iodbc; then mkdir iodbc; fi
 
@@ -201,6 +251,7 @@ clean::
 	$(RM) -rf unix
 	$(RM) -rf generic
 	$(RM) -rf png
+	$(RM) -rf jpeg
 	$(RM) -rf zlib
 	$(RM) -rf iodbc
 	@$(RM) lexer.c parser.c

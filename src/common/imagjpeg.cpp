@@ -30,7 +30,7 @@
 #include "wx/app.h"
 #if wxUSE_LIBJPEG
 extern "C" {
-#include <jpeglib.h>
+#include "../jpeg/jpeglib.h"
 }
 #endif
 #include "wx/filefn.h"

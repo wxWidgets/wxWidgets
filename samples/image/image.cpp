@@ -36,7 +36,9 @@ public:
     void OnPaint( wxPaintEvent &event );
     void CreateAntiAliasedBitmap();
 
-    wxBitmap  *my_horse;
+    wxBitmap  *my_horse_png;
+    wxBitmap  *my_horse_jpeg;
+    wxBitmap  *my_horse_gif;
     wxBitmap  *my_square;
     wxBitmap  *my_anti;
 
@@ -84,7 +86,9 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
                     const wxPoint &pos, const wxSize &size )
         : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER )
 {
-  my_horse = (wxBitmap*) NULL;
+  my_horse_png = (wxBitmap*) NULL;
+  my_horse_jpeg = (wxBitmap*) NULL;
+  my_horse_gif = (wxBitmap*) NULL;
   my_square = (wxBitmap*) NULL;
   my_anti = (wxBitmap*) NULL;
 
@@ -109,7 +113,13 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
   image.SaveFile( dir + wxString("test.png"), wxBITMAP_TYPE_PNG );
   
   image.LoadFile( dir + wxString("horse.png"), wxBITMAP_TYPE_PNG );
-  my_horse = new wxBitmap( image.ConvertToBitmap() );
+  my_horse_png = new wxBitmap( image.ConvertToBitmap() );
+  
+  image.LoadFile( dir + wxString("horse.jpg"), wxBITMAP_TYPE_JPEG );
+  my_horse_jpeg = new wxBitmap( image.ConvertToBitmap() );
+  
+  image.LoadFile( dir + wxString("horse.gif"), wxBITMAP_TYPE_GIF );
+  my_horse_gif = new wxBitmap( image.ConvertToBitmap() );
   
   image.LoadFile( dir + wxString("test.png"), wxBITMAP_TYPE_PNG );
   my_square = new wxBitmap( image.ConvertToBitmap() );
@@ -119,7 +129,9 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 
 MyCanvas::~MyCanvas()
 {
-  delete my_horse;
+  delete my_horse_png;
+  delete my_horse_jpeg;
+  delete my_horse_gif;
   delete my_square;
   delete my_anti;
 }
@@ -139,7 +151,14 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
   if (my_anti && my_anti->Ok()) dc.DrawBitmap( *my_anti, 250, 140 );
   
-  if (my_horse && my_horse->Ok()) dc.DrawBitmap( *my_horse, 30, 140 );
+  dc.DrawText( "PNG handler", 30, 135 );
+  if (my_horse_png && my_horse_png->Ok()) dc.DrawBitmap( *my_horse_png, 30, 150 );
+  
+  dc.DrawText( "JPEG handler", 30, 365 );
+  if (my_horse_jpeg && my_horse_jpeg->Ok()) dc.DrawBitmap( *my_horse_jpeg, 30, 380 );
+  
+  dc.DrawText( "GIF handler", 30, 595 );
+  if (my_horse_gif && my_horse_gif->Ok()) dc.DrawBitmap( *my_horse_gif, 30, 610 );
 }
 
 void MyCanvas::CreateAntiAliasedBitmap()
@@ -220,7 +239,7 @@ MyFrame::MyFrame()
   SetStatusWidths( 2, widths );
 
   m_canvas = new MyCanvas( this, -1, wxPoint(0,0), wxSize(10,10) );
-  m_canvas->SetScrollbars( 10, 10, 50, 50 );
+  m_canvas->SetScrollbars( 10, 10, 50, 100 );
 }
 
 void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
@@ -248,6 +267,8 @@ bool MyApp::OnInit()
 #if wxUSE_LIBJPEG
   wxImage::AddHandler( new wxJPEGHandler );
 #endif
+
+  wxImage::AddHandler( new wxGIFHandler );
 
   wxFrame *frame = new MyFrame();
   frame->Show( TRUE );

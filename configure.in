@@ -837,7 +837,7 @@ DEFAULT_wxUSE_IOSTREAMH=1
 
 DEFAULT_wxUSE_ZLIB=1
 DEFAULT_wxUSE_LIBPNG=1
-DEFAULT_wxUSE_LIBJPEG=0
+DEFAULT_wxUSE_LIBJPEG=1
 DEFAULT_wxUSE_ODBC=1
 
 DEFAULT_wxUSE_TIMEDATE=1
@@ -939,15 +939,15 @@ dnl user options for libraries
 dnl ----------------------------------------------------------------
 
 AC_OVERRIDES(zlib,zlib,
-**--with-zlib             use zlib for LZW comression,
+**--without-zlib             don't use zlib for LZW comression,
 wxUSE_ZLIB)
 
 AC_OVERRIDES(libpng,libpng,
-**--with-libpng           use libpng (PNG image format),
+**--without-libpng           don't use libpng (PNG image format),
 wxUSE_LIBPNG)
 
 AC_OVERRIDES(libjpeg,libjpeg,
-**--with-libjpeg          use libjpeg (JPEG image format),
+**--without-libjpeg          don't use libjpeg (JPEG image format),
 wxUSE_LIBJPEG)
 
 AC_OVERRIDES(odbc,odbc,
@@ -1296,12 +1296,18 @@ if test "$wxUSE_LIBPNG" = 1 ; then
 fi
 AC_SUBST(PNG_C_SRC)
 
-JPEG_LINK=""
 if test "$wxUSE_LIBJPEG" = 1 ; then
   AC_DEFINE_UNQUOTED(wxUSE_LIBJPEG,$wxUSE_LIBJPEG)
-  AC_CHECK_LIB(jpeg,main,,AC_MSG_ERROR("libjpeg is not available.")) 
-  JPEG_LINK="-ljpeg"
+  JPEG_C_SRC="\$(JPEG_C_SRC)"
 fi
+AC_SUBST(JPEG_C_SRC)
+
+JPEG_LINK=""
+dnl if test "$wxUSE_LIBJPEG" = 1 ; then
+dnl  AC_DEFINE_UNQUOTED(wxUSE_LIBJPEG,$wxUSE_LIBJPEG)
+dnl  AC_CHECK_LIB(jpeg,main,,AC_MSG_ERROR("libjpeg is not available.")) 
+dnl  JPEG_LINK="-ljpeg"
+dnl fi
 AC_SUBST(JPEG_LINK)
 
 IODBC_C_SRC=""
