@@ -121,6 +121,19 @@ system.
 This sample shows how to use the common dialogs available from wxWindows. These
 dialogs are described in details in the \helpref{Common dialogs overview}{commondialogsoverview}.
 
+\subsection{Dialup sample}\label{sampledialup}
+
+This sample shows \helpref{wxDialUpManager}{wxdialupmanagerwxdialupmanager}
+class. It displays in the status bar the information gathered through itsi
+nterface: in particular, the current connection status (online or offline) and
+whether the connection is permanent (in which case a string `LAN' appears in
+the thrid status bar field - but note that you may have be on a LAN not
+connected to the Internet, in which case you will not see this) or not.
+
+Using the menu entries, you may also dial or hang up the line if you have a
+modem attached and (this only makes sense for Windows) list the available
+connections.
+
 \subsection{Dynamic sample}\label{sampledynamic}
 
 This sample is a very small sample that demonstrates the use of the
