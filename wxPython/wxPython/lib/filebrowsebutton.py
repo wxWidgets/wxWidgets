@@ -64,6 +64,8 @@ class FileBrowseButton(wxPanel):
         self.fileMask = fileMask
         self.fileMode = fileMode
         self.changeCallback = changeCallback
+        self.callCallback = true
+
 
         # get background to match it
         try:
@@ -127,9 +129,13 @@ class FileBrowseButton(wxPanel):
         textControl = wxTextCtrl(self, ID)
         textControl.SetToolTipString( self.toolTip )
         if self.changeCallback:
-            EVT_TEXT(textControl, ID, self.changeCallback)
-            EVT_COMBOBOX(textControl, ID, self.changeCallback)
+            EVT_TEXT(textControl, ID, self.OnChanged)
+            EVT_COMBOBOX(textControl, ID, self.OnChanged)
         return textControl
+
+    def OnChanged(self, evt):
+        if self.callCallback:
+            self.changeCallback(evt)
 
     def createBrowseButton( self):
         """Create the browse-button control"""
@@ -166,8 +172,11 @@ class FileBrowseButton(wxPanel):
 
     def SetValue (self, value, callBack=1):
         """ Convenient setting of text control value """
-        # Removed the return from here because SetValue doesn't return anything.
-        self.textControl.SetValue (value)
+        save = self.callCallback
+        self.callCallback = callBack
+        self.textControl.SetValue(value)
+        self.callCallback =  save
+
 
     def Enable (self, value):
         """ Convenient enabling/disabling of entire control """
@@ -282,8 +291,11 @@ class FileBrowseButtonWithHistory( FileBrowseButton ):
         def SetValue (self, value, callBack=1):
             """ Convenient setting of text control value, works
                 around limitation of wxComboBox """
-            # Removed the return from here because SetValue doesn't return anything.
-            self.textControl.SetValue (value)
+            save = self.callCallback
+            self.callCallback = callBack
+            self.textControl.SetValue(value)
+            self.callCallback =  save
+
             # Hack to call an event handler
             class LocalEvent:
                 def __init__(self, string):
