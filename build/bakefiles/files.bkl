@@ -332,6 +332,7 @@
     src/generic/spinctlg.cpp
     src/generic/splash.cpp
     src/generic/splitter.cpp
+    src/generic/statusbr.cpp
     src/generic/tbarsmpl.cpp
     src/generic/textdlgg.cpp
     src/generic/tipdlg.cpp
@@ -503,7 +504,6 @@
     src/generic/printps.cpp
     src/generic/prntdlgg.cpp
     src/generic/accel.cpp
-    src/generic/statusbr.cpp
     src/generic/msgdlgg.cpp
     src/generic/fdrepdlg.cpp
     <!-- GTK+ specific files: -->
@@ -610,7 +610,6 @@
 </set>
 <set var="MSW_LOWLEVEL_SRC">
     src/msw/app.cpp
-    src/msw/automtn.cpp
     src/msw/bitmap.cpp
     src/msw/brush.cpp
     src/msw/caret.cpp
@@ -618,7 +617,6 @@
     src/msw/colour.cpp
     src/msw/cursor.cpp
     src/msw/data.cpp
-    src/msw/dataobj.cpp
     src/msw/dc.cpp
     src/msw/dcclient.cpp
     src/msw/dcmemory.cpp
@@ -628,8 +626,6 @@
     src/msw/dib.cpp
     src/msw/dirdlg.cpp
     src/msw/display.cpp
-    src/msw/dropsrc.cpp
-    src/msw/droptgt.cpp
     src/msw/enhmeta.cpp
     src/msw/helpbest.cpp
     src/msw/evtloop.cpp
@@ -644,7 +640,6 @@
     src/msw/icon.cpp
     src/msw/joystick.cpp
     src/msw/minifram.cpp
-    src/msw/oleutils.cpp
     src/msw/palette.cpp
     src/msw/pen.cpp
     src/msw/popupwin.cpp
@@ -654,16 +649,20 @@
     src/msw/timer.cpp
     src/msw/tooltip.cpp
     src/msw/toplevel.cpp
-    src/msw/uuid.cpp
     src/msw/wave.cpp
     src/msw/window.cpp
+    src/msw/ole/automtn.cpp
+    src/msw/ole/dataobj.cpp
+    src/msw/ole/dropsrc.cpp
+    src/msw/ole/droptgt.cpp
+    src/msw/ole/oleutils.cpp
+    src/msw/ole/uuid.cpp
 </set>
 <set var="MSW_LOWLEVEL_HDR">
 </set>
 <set var="MSW_SRC">
-    src/msw/access.cpp
+    src/msw/ole/access.cpp
     src/msw/accel.cpp
-    src/msw/access.cpp
     src/msw/bmpbuttn.cpp
     src/msw/button.cpp
     src/msw/checkbox.cpp
@@ -699,7 +698,6 @@
     src/msw/radiobut.cpp
     src/msw/scrolbar.cpp
     src/msw/slider95.cpp
-    src/msw/slidrmsw.cpp
     src/msw/spinbutt.cpp
     src/msw/spinctrl.cpp
     src/msw/statbmp.cpp
@@ -709,7 +707,6 @@
     src/msw/stattext.cpp
     src/msw/tabctrl.cpp
     src/msw/tbar95.cpp
-    src/msw/tbarmsw.cpp
     src/msw/textctrl.cpp
     src/msw/tglbtn.cpp
     src/msw/treectrl.cpp
