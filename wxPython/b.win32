@@ -5,14 +5,17 @@
 FLAGS="USE_SWIG=1 SWIG=e:/projects/SWIG-cvs/swig.exe"
 
 #  Use non-default python?
-if [[ "$1" = "15" || "$1" = "20" || "$1" = "21" || "$1" = "22" || "$1" = "23" ]]; then
-    VER=$1
-    PYTHON=$TOOLS/python$1/python.exe
-    shift
-else
-    echo You must specify the Python version as first parameter.
-    exit -1
-fi
+case $1 in
+    21 | 2.1) VER=21 ;;
+    22 | 2.2) VER=22 ;;
+    23 | 2.3) VER=23 ;;
+
+    *) 	echo You must specify the Python version as first parameter.
+	exit -1
+esac
+
+PYTHON=$TOOLS/python$VER/python.exe
+shift
 
 SETUP="$PYTHON -u setup.py"
 $PYTHON -c "import sys;print '\n', sys.version, '\n'"
