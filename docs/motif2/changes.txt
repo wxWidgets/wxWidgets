@@ -1,4 +1,0 @@
-
-22th June '99: First wxMotif 2.1 snapshot released
-  
-Initial release
