@@ -40,11 +40,7 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
     m_message = message;
     m_dialogStyle = style;
     m_parent = wxGetTopLevelParent(parent);
-}
 
-int wxMessageDialog::ShowModal()
-{
-    GtkWidget *dlg;
     GtkMessageType type = GTK_MESSAGE_ERROR;
     GtkButtonsType buttons = GTK_BUTTONS_OK;
 
@@ -75,27 +71,31 @@ int wxMessageDialog::ShowModal()
         type = m_dialogStyle & wxYES ? GTK_MESSAGE_QUESTION : GTK_MESSAGE_INFO;
     }
 
-    dlg = gtk_message_dialog_new(m_parent ?
-                                    GTK_WINDOW(m_parent->m_widget) : NULL,
-                                 GTK_DIALOG_MODAL,
-                                 type, buttons,
-                                 "%s", (const char*)wxGTK_CONV(m_message));
+    m_widget = gtk_message_dialog_new(m_parent ?
+                                          GTK_WINDOW(m_parent->m_widget) : NULL,
+                                      GTK_DIALOG_MODAL,
+                                      type, buttons,
+                                      "%s", (const char*)wxGTK_CONV(m_message));
     if (m_caption != wxMessageBoxCaptionStr)
-        gtk_window_set_title(GTK_WINDOW(dlg), wxGTK_CONV(m_caption));
+        gtk_window_set_title(GTK_WINDOW(m_widget), wxGTK_CONV(m_caption));
 
     if (m_dialogStyle & wxYES_NO)
     {
         if (m_dialogStyle & wxCANCEL)
-            gtk_dialog_add_button(GTK_DIALOG(dlg), GTK_STOCK_CANCEL,
+            gtk_dialog_add_button(GTK_DIALOG(m_widget), GTK_STOCK_CANCEL,
                                   GTK_RESPONSE_CANCEL);
         if (m_dialogStyle & wxNO_DEFAULT)
-            gtk_dialog_set_default_response(GTK_DIALOG(dlg), GTK_RESPONSE_NO);
+            gtk_dialog_set_default_response(GTK_DIALOG(m_widget), GTK_RESPONSE_NO);
         else
-            gtk_dialog_set_default_response(GTK_DIALOG(dlg), GTK_RESPONSE_YES);
+            gtk_dialog_set_default_response(GTK_DIALOG(m_widget), GTK_RESPONSE_YES);
     }
-
-    gint result = gtk_dialog_run(GTK_DIALOG(dlg));
-    gtk_widget_destroy(dlg);
+}
+ 
+int wxMessageDialog::ShowModal()
+{
+    gint result = gtk_dialog_run(GTK_DIALOG(m_widget));
+    gtk_widget_destroy(m_widget);
+    m_widget = NULL;
 
     switch (result)
     {
@@ -113,6 +113,7 @@ int wxMessageDialog::ShowModal()
             return wxID_NO;
     }
 }
+
 
 #endif // wxUSE_MSGDLG && defined(__WXGTK20__)
 
