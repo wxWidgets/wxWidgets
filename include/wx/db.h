@@ -103,10 +103,19 @@ typedef unsigned int UINT;
 
 enum enumDummy {enumDum1};
 
+#ifndef SQL_C_BOOLEAN
 #define SQL_C_BOOLEAN(datatype) (sizeof(datatype) == 1 ? SQL_C_UTINYINT : (sizeof(datatype) == 2 ? SQL_C_USHORT : SQL_C_ULONG))
-//    #define SQL_C_BOOLEAN (sizeof(Bool) == 2 ? SQL_C_USHORT : SQL_C_ULONG)
-
+#endif
+#ifndef SQL_C_ENUM
 #define SQL_C_ENUM (sizeof(enumDummy) == 2 ? SQL_C_USHORT : SQL_C_ULONG)
+#endif
+#ifndef SQL_C_BLOB
+    #ifdef SQL_LONGVARBINARY
+        #define SQL_C_BLOB SQL_LONGVARBINARY
+    #elif SQL_VARBINARY
+        #define SQL_C_BLOB SQL_VARBINARY
+    #endif
+#endif
 
 #ifndef TRUE
 #define TRUE 1
@@ -135,6 +144,7 @@ const int DB_DATA_TYPE_VARCHAR        = 1;
 const int DB_DATA_TYPE_INTEGER        = 2;
 const int DB_DATA_TYPE_FLOAT          = 3;
 const int DB_DATA_TYPE_DATE           = 4;
+const int DB_DATA_TYPE_BLOB           = 5;
 
 const int DB_SELECT_KEYFIELDS         = 1;
 const int DB_SELECT_WHERE             = 2;
@@ -498,9 +508,14 @@ private:
     wxDbSqlTypeInfo typeInfInteger;
     wxDbSqlTypeInfo typeInfFloat;
     wxDbSqlTypeInfo typeInfDate;
+    wxDbSqlTypeInfo typeInfBlob;
 #endif
 
 public:
+
+    bool             GetDataTypeInfo(SWORD fSqlType, wxDbSqlTypeInfo &structSQLTypeInfo)
+                            { return getDataTypeInfo(fSqlType, structSQLTypeInfo); }
+
 #if wxODBC_BACKWARD_COMPATABILITY
     // ODBC handles
     HENV  henv;        // ODBC Environment handle
@@ -570,6 +585,7 @@ public:
     wxDbSqlTypeInfo typeInfInteger;
     wxDbSqlTypeInfo typeInfFloat;
     wxDbSqlTypeInfo typeInfDate;
+    wxDbSqlTypeInfo typeInfBlob;
 #endif
 
     // Public member functions
@@ -598,28 +614,37 @@ public:
     wxDbColInf  *GetColumns(wxChar *tableName[], const wxChar *userID=NULL);
     wxDbColInf  *GetColumns(const wxString &tableName, int *numCols, const wxChar *userID=NULL); 
 
-    int          GetColumnCount(const wxString &tableName, const wxChar *userID=NULL);
-    const wxChar *GetDatabaseName(void)  {return dbInf.dbmsName;}
+    int             GetColumnCount(const wxString &tableName, const wxChar *userID=NULL);
+    const wxChar   *GetDatabaseName(void)  {return dbInf.dbmsName;}
     const wxString &GetDataSource(void)    {return dsn;}
     const wxString &GetDatasourceName(void){return dsn;}
     const wxString &GetUsername(void)      {return uid;}
     const wxString &GetPassword(void)      {return authStr;}
-    bool         IsOpen(void)           {return dbIsOpen;}
-    HENV         GetHENV(void)          {return henv;}
-    HDBC         GetHDBC(void)          {return hdbc;}
-    HSTMT        GetHSTMT(void)         {return hstmt;}
-    int          GetTableCount()        {return nTables;};  // number of tables using this connection
-    wxDbSqlTypeInfo GetTypeInfVarchar() {return typeInfVarchar;}
-    wxDbSqlTypeInfo GetTypeInfInteger() {return typeInfInteger;}
-    wxDbSqlTypeInfo GetTypeInfFloat()   {return typeInfFloat;}
-    wxDbSqlTypeInfo GetTypeInfDate()    {return typeInfDate;}
+    bool            IsOpen(void)           {return dbIsOpen;}
+    HENV            GetHENV(void)          {return henv;}
+    HDBC            GetHDBC(void)          {return hdbc;}
+    HSTMT           GetHSTMT(void)         {return hstmt;}
+    int             GetTableCount()        {return nTables;}  // number of tables using this connection
+    wxDbSqlTypeInfo GetTypeInfVarchar()    {return typeInfVarchar;}
+    wxDbSqlTypeInfo GetTypeInfInteger()    {return typeInfInteger;}
+    wxDbSqlTypeInfo GetTypeInfFloat()      {return typeInfFloat;}
+    wxDbSqlTypeInfo GetTypeInfDate()       {return typeInfDate;}
+    wxDbSqlTypeInfo GetTypeInfBlob()       {return typeInfBlob;}
 
-    bool         TableExists(const wxString &tableName, const wxChar *userID=NULL, const wxString &tablePath=wxEmptyString);  // tableName can refer to a table, view, alias or synonym
-    bool         TablePrivileges(const wxString &tableName, const wxString &priv, const wxChar *userID=NULL, const wxChar *schema=NULL, const wxString &path=wxEmptyString);  // tableName can refer to a table, view, alias or synonym
-    void         LogError(const wxString &errMsg, const wxString &SQLState = wxEmptyString) { logError(errMsg, SQLState); }
+    // tableName can refer to a table, view, alias or synonym
+    bool         TableExists(const wxString &tableName, const wxChar *userID=NULL, 
+                             const wxString &tablePath=wxEmptyString);
+    bool         TablePrivileges(const wxString &tableName, const wxString &priv, 
+                                 const wxChar *userID=NULL, const wxChar *schema=NULL, 
+                                 const wxString &path=wxEmptyString);
+
+    void         LogError(const wxString &errMsg, const wxString &SQLState = wxEmptyString) 
+                        { logError(errMsg, SQLState); }
     void         SetDebugErrorMessages(bool state) { silent = !state; }
-    bool         SetSqlLogging(wxDbSqlLogState state, const wxString &filename = SQL_LOG_FILENAME, bool append = FALSE);
+    bool         SetSqlLogging(wxDbSqlLogState state, const wxString &filename = SQL_LOG_FILENAME, 
+                               bool append = FALSE);
     bool         WriteSqlLog(const wxString &logMsg);
+
     wxDBMS       Dbms(void);
     bool         ModifyColumn(const wxString &tableName, const wxString &columnName,
                               int dataType, ULONG columnLength=0,
