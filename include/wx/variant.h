@@ -282,7 +282,7 @@ protected:
 //a dynamic_cast /wxDynamicCast analogue.
 
 #define wxGetVariantCast(var,classname) \
-	((classname*)(var.IsValueKindOf(&classname::sm_class##classname) ?\
+	((classname*)(var.IsValueKindOf(&classname::ms_classInfo) ?\
 		      var.GetWxObjectPtr() : NULL));
 
 extern wxVariant WXDLLIMPEXP_BASE wxNullVariant;
