@@ -117,8 +117,18 @@ public:
                           const wxPalette *palette = (wxPalette *)NULL) const = 0;
     virtual bool LoadFile(const wxString &name, wxBitmapType type) = 0;
 
+    /*
+       If raw bitmap access is supported (see wx/rawbmp.h), the following
+       methods should be implemented:
+
+       virtual bool GetRawData(wxRawBitmapData *data) = 0;
+       virtual void UngetRawData(wxRawBitmapData *data) = 0;
+     */
+
+#if wxUSE_PALETTE
     virtual wxPalette *GetPalette() const = 0;
     virtual void SetPalette(const wxPalette& palette) = 0;
+#endif // wxUSE_PALETTE
 
 #if WXWIN_COMPATIBILITY
     wxPalette *GetColourMap() const { return GetPalette(); }
