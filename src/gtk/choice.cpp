@@ -114,14 +114,7 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
 
     SetFont( parent->GetFont() );
 
-    wxSize size_best( DoGetBestSize() );
-    wxSize new_size( size );
-    if (new_size.x == -1)
-        new_size.x = size_best.x;
-    if (new_size.y == -1)
-        new_size.y = size_best.y;
-    if ((new_size.x != size.x) || (new_size.y != size.y))
-        SetSize( new_size.x, new_size.y );
+    SetBestSize(size);
 
     SetBackgroundColour( parent->GetBackgroundColour() );
     SetForegroundColour( parent->GetForegroundColour() );
@@ -424,8 +417,17 @@ wxSize wxChoice::DoGetBestSize() const
                 ret.x = width;
         }
 
-        // for the choice "=" button
-        ret.x += 20;
+        // add extra for the choice "=" button
+
+        // VZ: I don't know how to get the right value, it seems to be in
+        //     GtkOptionMenuProps struct from gtkoptionmenu.c but we can't get
+        //     to it - maybe we can use gtk_option_menu_size_request() for this
+        //     somehow?
+        //
+        //     This default value works only for the default GTK+ theme (i.e.
+        //     no theme at all) (FIXME)
+        static const int widthChoiceIndicator = 35;
+        ret.x += widthChoiceIndicator;
     }
 
     // but not less than the minimal width
@@ -436,4 +438,5 @@ wxSize wxChoice::DoGetBestSize() const
     return ret;
 }
 
-#endif
+#endif // wxUSE_CHOICE
+
