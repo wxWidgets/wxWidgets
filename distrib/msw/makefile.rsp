@@ -54,7 +54,6 @@ samples/notebook/Makefile.in
 samples/printing/Makefile.in
 samples/proplist/Makefile.in
 samples/propsize/Makefile.in
-samples/richedit/Makefile.in
 samples/rotate/Makefile.in
 samples/sashtest/Makefile.in
 samples/scroll/Makefile.in

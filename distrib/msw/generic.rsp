@@ -552,6 +552,7 @@ samples/html/printing/*.xpm
 samples/html/printing/*.xbm
 samples/html/printing/*.png
 samples/html/printing/*.ico
+samples/html/printing/*.gif
 samples/html/printing/*.htm
 
 samples/html/test/*.cpp
@@ -641,6 +642,7 @@ samples/image/*.jpg
 samples/image/*.gif
 samples/image/*.tif
 samples/image/*.ico
+samples/image/*.cur
 samples/image/*.txt
 samples/image/*.pro
 
@@ -661,6 +663,8 @@ samples/internat/fr/*.mo
 samples/internat/fr/*.po
 samples/internat/de/*.mo
 samples/internat/de/*.po
+samples/internat/ru/*.mo
+samples/internat/ru/*.po
 
 samples/ipc/*.cpp
 samples/ipc/*.h
