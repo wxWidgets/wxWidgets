@@ -54,7 +54,7 @@
 #undef size_t
 
 /* Define if ssize_t type is available.  */
-#undef HAVE_SSIZE_T
+#define HAVE_SSIZE_T 1
 
 /* Define if you have the ANSI C header files.  */
 #define STDC_HEADERS
@@ -680,7 +680,11 @@
 /*
  * Use wxMediaCtrl class
  */
-#define wxUSE_MEDIACTRL 0
+#define wxUSE_MEDIACTRL 1
+/*
+ * Use DirectShow
+ */
+#define wxUSE_DIRECTSHOW 1
 /*
  * Use config system
  */

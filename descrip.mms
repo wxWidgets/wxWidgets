@@ -79,7 +79,7 @@ gtk : [.include.wx]setup.h
 	set default [-.minimal]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.richedit]
-	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+#	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [--]
 
 x11 : [.include.wx]setup.h

@@ -142,6 +142,7 @@ OBJECTS1=fs_inet.obj,\
 		socket.obj,\
 		settcmn.obj,\
 		statbar.obj,\
+		stdpbase.obj,\
 		stockitem.obj,\
 		stopwatch.obj,\
 		strconv.obj,\
@@ -157,7 +158,6 @@ OBJECTS1=fs_inet.obj,\
 		toplvcmn.obj,\
 		treebase.obj,\
 		txtstrm.obj,\
-		unzip.obj,\
 		url.obj
 
 OBJECTS2=utilscmn.obj,\
@@ -282,6 +282,7 @@ SOURCES = \
 		socket.cpp,\
 		settcmn.cpp,\
 		statbar.cpp,\
+		stdpbase.cpp,\
 		stockitem.cpp,\
 		stopwatch.cpp,\
 		strconv.cpp,\
@@ -297,7 +298,6 @@ SOURCES = \
 		toplvcmn.cpp,\
 		treebase.cpp,\
 		txtstrm.cpp,\
-		unzip.c,\
 		url.cpp,\
 		utilscmn.cpp,\
 		valgen.cpp,\
@@ -455,6 +455,7 @@ sizer.obj : sizer.cpp
 socket.obj : socket.cpp
 settcmn.obj : settcmn.cpp
 statbar.obj : statbar.cpp
+stdpbase.obj : stdpbase.cpp
 stockitem.obj : stockitem.cpp
 stopwatch.obj : stopwatch.cpp
 strconv.obj : strconv.cpp
@@ -470,7 +471,6 @@ tokenzr.obj : tokenzr.cpp
 toplvcmn.obj : toplvcmn.cpp
 treebase.obj : treebase.cpp
 txtstrm.obj : txtstrm.cpp
-unzip.obj : unzip.c
 url.obj : url.cpp
 utilscmn.obj : utilscmn.cpp
 valgen.obj : valgen.cpp

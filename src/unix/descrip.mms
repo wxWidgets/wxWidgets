@@ -51,6 +51,7 @@ OBJECTS =       baseunix.obj,\
 		snglinst.obj,\
 		sound.obj,\
 		sound_sdl.obj,\
+		stdpaths.obj,\
 		taskbarx11.obj
 
 SOURCES =       baseunix.cpp,\
@@ -67,6 +68,7 @@ SOURCES =       baseunix.cpp,\
 		snglinst.cpp,\
 		sound.cpp,\
 		sound_sdl.cpp,\
+		stdpaths.cpp,\
 		taskbarx11.cpp
 
 all : $(SOURCES)
@@ -98,4 +100,5 @@ joystick.obj : joystick.cpp
 snglinst.obj : snglinst.cpp
 sound.obj : sound.cpp
 sound_sdl.obj : sound_sdl.cpp
+stdpaths.obj : stdpaths.cpp
 taskbarx11.obj : taskbarx11.cpp
