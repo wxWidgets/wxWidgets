@@ -313,7 +313,7 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
 
         if ( tool2->IsControl() )
         {
-            pos += ((wxToolBarTool *)tool2)->GetSeparatorsCount();
+            pos += ((wxToolBarTool *)tool2)->GetSeparatorsCount() - 1;
         }
     }
 
@@ -518,7 +518,7 @@ bool wxToolBar::Realize()
         {
             if ( !::SendMessage(GetHwnd(), TB_DELETEBUTTON, 0, 0) )
             {
-                wxLogLastError(wxT("TB_DELETEBUTTON"));
+                wxLogDebug(wxT("TB_DELETEBUTTON failed"));
             }
         }
 
@@ -783,7 +783,7 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
             ttText->lpszText = (wxChar *)help.c_str();
 #else
             // VZ: I don't know why it happens, but the versions of
-            //     comctl32.dll starting from 4.70 sometimes send TTN_NEEDTEXTW 
+            //     comctl32.dll starting from 4.70 sometimes send TTN_NEEDTEXTW
             //     even to ANSI programs (normally, this message is supposed
             //     to be sent to Unicode programs only) - hence we need to
             //     handle it as well, otherwise no tooltips will be shown in
@@ -927,15 +927,21 @@ void wxToolBar::DoSetToggle(wxToolBarToolBase *tool, bool toggle)
 void wxToolBar::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     m_backgroundColour = wxColour(GetRValue(GetSysColor(COLOR_BTNFACE)),
-          GetGValue(GetSysColor(COLOR_BTNFACE)), GetBValue(GetSysColor(COLOR_BTNFACE)));
+                                  GetGValue(GetSysColor(COLOR_BTNFACE)),
+                                  GetBValue(GetSysColor(COLOR_BTNFACE)));
 
     // Remap the buttons
     Realize();
 
+    // Relayout the toolbar
+    int nrows = m_maxRows;
+    m_maxRows = 0;      // otherwise SetRows() wouldn't do anything
+    SetRows(nrows);
+
     Refresh();
 
-    // Propagate the event to the non-top-level children
-    wxWindow::OnSysColourChanged(event);
+    // let the event propagate further
+    event.Skip();
 }
 
 void wxToolBar::OnMouseEvent(wxMouseEvent& event)
@@ -1051,18 +1057,18 @@ void wxToolBar::MapBitmap(WXHBITMAP bitmap, int width, int height)
             sm_coloursInit = TRUE;
         }
     }
-    
+
     HBITMAP hBitmap = (HBITMAP) bitmap;
-    
+
     COLORMAP ColorMap[5];
-    
+
     ColorMap[0].from = sm_stdColours[0]; ColorMap[0].to = COLOR_BTNTEXT;      // black        (0, 0 0)
     ColorMap[1].from = sm_stdColours[1]; ColorMap[1].to = COLOR_BTNSHADOW;    // dark grey    (128, 128, 128)
     ColorMap[2].from = sm_stdColours[2]; ColorMap[2].to = COLOR_BTNFACE;      // bright grey  (192, 192, 192)
     ColorMap[3].from = sm_stdColours[3]; ColorMap[3].to = COLOR_BTNHIGHLIGHT; // white        (255, 255, 255)
     //  ColorMap[4].from = sm_stdColours[4]; ColorMap[4].to = COLOR_HIGHLIGHT;  // blue         (0, 0, 255)
     ColorMap[4].from = sm_stdColours[5]; ColorMap[4].to = COLOR_WINDOW;       // magenta      (255, 0, 255)
-    
+
 #if 0
     {
         {BGR_BUTTONTEXT,    COLOR_BTNTEXT},     // black
@@ -1073,21 +1079,21 @@ void wxToolBar::MapBitmap(WXHBITMAP bitmap, int width, int height)
         {BGR_BACKGROUND,    COLOR_WINDOW}       // magenta
     };
 #endif
-    
+
     int NUM_MAPS = (sizeof(ColorMap)/sizeof(COLORMAP));
     int n;
     for ( n = 0; n < NUM_MAPS; n++)
     {
         ColorMap[n].to = ::GetSysColor(ColorMap[n].to);
     }
-    
+
     HBITMAP hbmOld;
     HDC hdcMem = CreateCompatibleDC(NULL);
-    
+
     if (hdcMem)
     {
         hbmOld = (HBITMAP) SelectObject(hdcMem, hBitmap);
-        
+
         int i, j, k;
         for ( i = 0; i < width; i++)
         {
@@ -1099,7 +1105,7 @@ void wxToolBar::MapBitmap(WXHBITMAP bitmap, int width, int height)
                 BYTE green = GetGValue(pixel);
                 BYTE blue = GetBValue(pixel);
                 */
-                
+
                 for ( k = 0; k < NUM_MAPS; k ++)
                 {
                     if ( ColorMap[k].from == pixel )
@@ -1110,12 +1116,11 @@ void wxToolBar::MapBitmap(WXHBITMAP bitmap, int width, int height)
                 }
             }
         }
-        
-        
+
+
         SelectObject(hdcMem, hbmOld);
         DeleteObject(hdcMem);
     }
-    
 }
 
 // Some experiments...
