@@ -134,6 +134,12 @@ recursively unless the value of ``onlyIfNeeded`` is True.
         "Make sure that idle events are sent again.
 :see: `wx.WakeUpIdle`", "");
 
+    
+    DocDeclStr(
+        static bool , IsMainLoopRunning() const,
+        "Returns True if we're running the main loop, i.e. if the events can
+currently be dispatched.", "");
+    
 
     DocDeclStr(
         virtual int, MainLoop(),
