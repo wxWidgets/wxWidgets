@@ -280,10 +280,10 @@ class WXDLLEXPORT wxDbConnectInf
         bool freeHenvOnDestroy;
 
     public:
-	    HENV Henv;
-	    wxChar Dsn[SQL_MAX_DSN_LENGTH+1];                  // Data Source Name
-	    wxChar Uid[SQL_MAX_USER_NAME_LEN+1];               // User ID
-	    wxChar AuthStr[SQL_MAX_AUTHSTR_LEN+1];             // Authorization string (password)
+        HENV Henv;
+        wxChar Dsn[SQL_MAX_DSN_LENGTH+1];                  // Data Source Name
+        wxChar Uid[SQL_MAX_USER_NAME_LEN+1];               // User ID
+        wxChar AuthStr[SQL_MAX_AUTHSTR_LEN+1];             // Authorization string (password)
 
         wxString Description;                              // Not sure what the max length is
         wxString FileType;                                 // Not sure what the max length is
