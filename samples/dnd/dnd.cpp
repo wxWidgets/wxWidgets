@@ -1024,7 +1024,7 @@ void DnDFrame::OnPaint(wxPaintEvent& WXUNUSED(event))
     GetClientSize( &w, &h );
 
     wxPaintDC dc(this);
-    dc.Clear();
+    // dc.Clear(); -- this kills wxGTK
     dc.SetFont( wxFont( 24, wxDECORATIVE, wxNORMAL, wxNORMAL, FALSE, "charter" ) );
     dc.DrawText( "Drag text from here!", 100, h-50 );
 }
