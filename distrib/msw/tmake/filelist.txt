@@ -109,6 +109,7 @@ file.cpp	C
 fileconf.cpp	C
 filefn.cpp	C
 filesys.cpp	C
+fontcmn.cpp	C
 framecmn.cpp	C
 fs_inet.cpp	C
 fs_zip.cpp	C
