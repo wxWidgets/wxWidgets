@@ -389,7 +389,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             break;
 
         case wxTOOL_STYLE_SEPARATOR:
-            gtk_toolbar_append_space( m_toolbar );
+            gtk_toolbar_insert_space( m_toolbar, pos );
 
             // skip the rest
             return TRUE;

@@ -36,6 +36,10 @@ wxMSW:
 - wxListCtrl attributes are handled correctly when inserting/deleting/sorting
 - wxPrinterDC resource leak fixed
 
+wxGTK:
+
+- wxToolbar::InsertSeparator() fixed
+
 2.2.6
 -----
 
