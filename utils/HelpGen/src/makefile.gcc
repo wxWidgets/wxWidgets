@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-include ../../build/msw/config.gcc
+include ../../../build/msw/config.gcc
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -14,7 +14,7 @@ include ../../build/msw/config.gcc
 
 HELPGEN_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I.\..\..\include -I$(SETUPHDIR) -I. $(__DLLFLAG_p) \
+	$(__UNICODE_DEFINE_p) -I.\..\..\..\include -I$(SETUPHDIR) -I. $(__DLLFLAG_p) \
 	$(CXXFLAGS)
 HELPGEN_OBJECTS =  \
 	$(OBJS)\HelpGen_HelpGen.o \
@@ -36,10 +36,10 @@ ifeq ($(GCC_VERSION),2.95)
 GCCFLAGS = -fvtable-thunks
 endif
 ifeq ($(SHARED),0)
-LIBDIRNAME = .\..\..\lib\gcc_lib$(CFG)
+LIBDIRNAME = .\..\..\..\lib\gcc_lib$(CFG)
 endif
 ifeq ($(SHARED),1)
-LIBDIRNAME = .\..\..\lib\gcc_dll$(CFG)
+LIBDIRNAME = .\..\..\..\lib\gcc_dll$(CFG)
 endif
 ifeq ($(USE_GUI),0)
 PORTNAME = base
@@ -107,7 +107,7 @@ ifeq ($(BUILD),release)
 __OPTIMIZEFLAG_2 = -O2
 endif
 ifeq ($(UNICODE),1)
-__UNICODE_DEFINE_p = -DwxUSE_UNICODE=1
+__UNICODE_DEFINE_p = -D_UNICODE
 endif
 ifeq ($(MSLU),1)
 __UNICOWS_LIB_p = -lunicows

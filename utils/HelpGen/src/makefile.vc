@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-!include <../../build/msw/config.vc>
+!include <../../../build/msw/config.vc>
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -15,7 +15,7 @@
 HELPGEN_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS_7)$(__DEBUGRUNTIME_3) \
 	/DWIN32 $(__DEBUGINFO_0) /Fd$(OBJS)\HelpGen.pdb $(____DEBUGRUNTIME_2_p) \
 	$(__OPTIMIZEFLAG_4) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I.\..\..\include /I$(SETUPHDIR) /I. $(__DLLFLAG_p) \
+	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(SETUPHDIR) /I. $(__DLLFLAG_p) \
 	/D_CONSOLE $(CXXFLAGS) /GR /GX
 HELPGEN_OBJECTS =  \
 	$(OBJS)\HelpGen_HelpGen.obj \
@@ -34,10 +34,10 @@ SETUPHDIR = \
 ### Conditionally set variables: ###
 
 !if "$(SHARED)" == "0"
-LIBDIRNAME = .\..\..\lib\vc_lib$(CFG)
+LIBDIRNAME = .\..\..\..\lib\vc_lib$(CFG)
 !endif
 !if "$(SHARED)" == "1"
-LIBDIRNAME = .\..\..\lib\vc_dll$(CFG)
+LIBDIRNAME = .\..\..\..\lib\vc_dll$(CFG)
 !endif
 !if "$(USE_GUI)" == "0"
 PORTNAME = base
@@ -136,7 +136,7 @@ __RUNTIME_LIBS_7 = D
 __RUNTIME_LIBS_7 = T
 !endif
 !if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p = /DwxUSE_UNICODE=1
+__UNICODE_DEFINE_p = /D_UNICODE
 !endif
 !if "$(MSLU)" == "1"
 __UNICOWS_LIB_p = unicows.lib
@@ -215,3 +215,5 @@ clean:
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\HelpGen.exe del $(OBJS)\HelpGen.exe
+	-if exist $(OBJS)\HelpGen.ilk del $(OBJS)\HelpGen.ilk
+	-if exist $(OBJS)\HelpGen.pdb del $(OBJS)\HelpGen.pdb

@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-!include ../../build/msw/config.wat
+!include ../../../build/msw/config.wat
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -29,10 +29,10 @@ WATCOM_CWD = $+ $(%cdrive):$(%cwd) $-
 
 LIBDIRNAME =
 !ifeq SHARED 0
-LIBDIRNAME = .\..\..\lib\wat_lib$(CFG)
+LIBDIRNAME = .\..\..\..\lib\wat_lib$(CFG)
 !endif
 !ifeq SHARED 1
-LIBDIRNAME = .\..\..\lib\wat_dll$(CFG)
+LIBDIRNAME = .\..\..\..\lib\wat_dll$(CFG)
 !endif
 PORTNAME =
 !ifeq USE_GUI 0
@@ -137,7 +137,7 @@ __RUNTIME_LIBS_5 =
 !endif
 __UNICODE_DEFINE_p =
 !ifeq UNICODE 1
-__UNICODE_DEFINE_p = -dwxUSE_UNICODE=1
+__UNICODE_DEFINE_p = -d_UNICODE
 !endif
 __WXLIB_BASE_p =
 !ifeq MONOLITHIC 0
@@ -157,8 +157,8 @@ __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
 
 HELPGEN_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
 	$(__RUNTIME_LIBS_5) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) &
-	$(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. &
+	$(__DLLFLAG_p) $(CXXFLAGS)
 HELPGEN_OBJECTS =  &
 	$(OBJS)\HelpGen_HelpGen.obj &
 	$(OBJS)\HelpGen_cjparser.obj &
