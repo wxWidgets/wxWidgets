@@ -54,6 +54,12 @@ typedef struct {
     #pragma pack()
 #endif
 
+#if TARGET_CARBON
+const short kwxMacListItemHeight = 19 ;
+#else
+const short kwxMacListItemHeight = 14 ;
+#endif
+
 extern "C"
 {
 static pascal void wxMacListDefinition( short message, Boolean isSelected, Rect *drawRect,
@@ -98,12 +104,33 @@ static pascal void wxMacListDefinition( short message, Boolean isSelected, Rect 
             ClipRect( drawRect );
             EraseRect( drawRect );
             
-        MoveTo(drawRect->left + 4 , drawRect->top + 10 );
-        ::TextFont( kFontIDMonaco ) ;
-        ::TextSize( 9  );
-        ::TextFace( 0 ) ;
+#if TARGET_CARBON
+	        bool useDrawThemeText = ( DrawThemeTextBox != (void*) kUnresolvedCFragSymbolAddress ) ;
+
+           	if ( useDrawThemeText )
+           	{
+	            Rect frame = { drawRect->top, drawRect->left + 4,
+	                           drawRect->top + kwxMacListItemHeight, drawRect->right} ;
+                CFStringRef mString = CFStringCreateWithBytes( NULL , (UInt8*) text.c_str(), text.Length(), CFStringGetSystemEncoding(), false ) ;
+        		::DrawThemeTextBox( mString,
+        							kThemeViewsFont,
+        							kThemeStateActive,
+        							false,
+        							&frame,
+        							teJustLeft,
+        							nil );
+        	    CFRelease( mString ) ;
+            }
+   		    else
+#endif
+   		    {
+		        MoveTo(drawRect->left + 4 , drawRect->top + 10 );
+		        ::TextFont( kFontIDMonaco ) ;
+		        ::TextSize( 9  );
+		        ::TextFace( 0 ) ;
+        		DrawText(text, 0 , text.Length());
+		    }
  
-        DrawText(text, 0 , text.Length());
             //  If the cell is hilited, do the hilite now. Paint the cell contents with the
             //  appropriate QuickDraw transform mode.
             
@@ -139,7 +166,6 @@ static pascal void wxMacListDefinition( short message, Boolean isSelected, Rect 
 
 extern "C" void MacDrawStringCell(Rect *cellRect, Cell lCell, ListHandle theList, long refCon) ;
 const short kwxMacListWithVerticalScrollbar = 128 ;
-const short kwxMacListItemHeight = 14 ;
 
 // ============================================================================
 // list box control implementation
@@ -881,11 +907,10 @@ void wxListBox::OnChar(wxKeyEvent& event)
         if ( !GetEventHandler()->ProcessEvent( new_event ) )
         	event.Skip() ;
     }
-	else if ( event.KeyCode() == WXK_SPACE || event.KeyCode() == WXK_DOWN || event.KeyCode() == WXK_UP )
+	else if ( event.KeyCode() == WXK_DOWN || event.KeyCode() == WXK_UP )
 	{
 		// perform the default key handling first
-		if ( event.KeyCode() == WXK_DOWN || event.KeyCode() == WXK_UP )
-			wxControl::OnKeyDown( event ) ;
+		wxControl::OnKeyDown( event ) ;
 			
         wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, m_windowId);
         event.SetEventObject( this );
