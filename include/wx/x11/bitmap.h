@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        bitmap.h
+// Name:        x11/bitmap.h
 // Purpose:     wxBitmap class
 // Author:      Julian Smart, Robert Roebling
 // Modified by:
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart, Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_BITMAP_H_
@@ -42,7 +42,7 @@ public:
     wxMask( const wxBitmap& bitmap, int paletteIndex );
     wxMask( const wxBitmap& bitmap );
     ~wxMask();
-  
+
     bool Create( const wxBitmap& bitmap, const wxColour& colour );
     bool Create( const wxBitmap& bitmap, int paletteIndex );
     bool Create( const wxBitmap& bitmap );
@@ -50,14 +50,14 @@ public:
     // implementation
     WXPixmap GetBitmap() const              { return m_bitmap; }
     void SetBitmap( WXPixmap bitmap )       { m_bitmap = bitmap; }
-    
+
     WXDisplay *GetDisplay() const           { return m_display; }
     void SetDisplay( WXDisplay *display )   { m_display = display; }
-    
+
 private:
     WXPixmap    m_bitmap;
     WXDisplay  *m_display;
-  
+
 private:
     DECLARE_DYNAMIC_CLASS(wxMask)
 };
@@ -84,8 +84,8 @@ public:
     wxBitmap( char **bits ) { (void)CreateFromXpm((const char **)bits); }
     wxBitmap( const wxBitmap& bmp );
     wxBitmap( const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_XPM );
-    wxBitmap( const wxImage& image, int depth = -1 ) { (void)CreateFromImage(image, depth); }
-    ~wxBitmap();
+    virtual ~wxBitmap();
+
     wxBitmap& operator = ( const wxBitmap& bmp );
     bool operator == ( const wxBitmap& bmp ) const;
     bool operator != ( const wxBitmap& bmp ) const;
@@ -100,15 +100,19 @@ public:
     int GetHeight() const;
     int GetWidth() const;
     int GetDepth() const;
-    
+
+#if wxUSE_IMAGE
+    wxBitmap( const wxImage& image, int depth = -1 ) { (void)CreateFromImage(image, depth); }
     wxImage ConvertToImage() const;
+    bool CreateFromImage(const wxImage& image, int depth = -1);
+#endif // wxUSE_IMAGE
 
     // copies the contents and mask of the given (colour) icon to the bitmap
     virtual bool CopyFromIcon(const wxIcon& icon);
 
     wxMask *GetMask() const;
     void SetMask( wxMask *mask );
-    
+
     wxBitmap GetSubBitmap( const wxRect& rect ) const;
 
     bool SaveFile( const wxString &name, wxBitmapType type, const wxPalette *palette = (wxPalette *) NULL ) const;
@@ -134,10 +138,9 @@ public:
     WXPixmap GetDrawable() const;
 
     WXDisplay *GetDisplay() const;
-    
+
 protected:
     bool CreateFromXpm(const char **bits);
-    bool CreateFromImage(const wxImage& image, int depth = -1);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxBitmap)
