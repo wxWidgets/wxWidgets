@@ -209,7 +209,7 @@ class WizardPageSimple(WizardPage):
         return _wizard.WizardPageSimple_SetNext(*args, **kwargs)
 
     def Chain(*args, **kwargs):
-        """WizardPageSimple.Chain(WizardPageSimple first, WizardPageSimple second)"""
+        """Chain(WizardPageSimple first, WizardPageSimple second)"""
         return _wizard.WizardPageSimple_Chain(*args, **kwargs)
 
     Chain = staticmethod(Chain)
