@@ -530,6 +530,35 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     new wxButton(panel, -1, "Another button", wxPoint(250, 20));
 
     m_notebook->AddPage(panel, "wxBitmapXXX");
+
+// --------------- TEST CODE ----------------------
+
+  panel = new wxPanel(m_notebook);
+  panel->SetAutoLayout( true );
+
+  wxLayoutConstraints *c;
+  c = new wxLayoutConstraints;
+  c->top.SameAs( panel, wxTop, 10 );
+  c->height.AsIs( );
+  c->left.SameAs( panel, wxLeft, 10 );
+  c->width.PercentOf( panel, wxWidth, 40 );
+
+  wxButton *pMyButton = new wxButton(panel, -1, "Test Button" );
+  pMyButton->SetConstraints( c );
+
+  c = new wxLayoutConstraints;
+  c->top.SameAs( panel, wxTop, 10 );
+  c->bottom.SameAs( panel, wxBottom, 10 );
+  c->right.SameAs( panel, wxRight, 10 );
+  c->width.PercentOf( panel, wxWidth, 40 );
+
+  wxButton *pMyButton2 = new wxButton(panel, -1, "Test Button 2" );
+  pMyButton2->SetConstraints( c );
+
+  m_notebook->AddPage(panel, "test layout");
+
+// --------------- TEST CODE ----------------------
+
 }
 
 void MyPanel::OnSize( wxSizeEvent& WXUNUSED(event) )
