@@ -30,6 +30,7 @@ public:
   // creation
   // --------
   wxTextCtrl();
+  ~wxTextCtrl();
   inline wxTextCtrl(wxWindow *parent, wxWindowID id,
                     const wxString& value = wxEmptyString,
                     const wxPoint& pos = wxDefaultPosition,
@@ -144,6 +145,13 @@ public:
     
 protected:
   virtual wxSize DoGetBestSize() const;
+
+  bool  m_editable ;
+  // one of the following objects is used for representation, the other one is NULL
+  void*  m_macTE ;
+  void*  m_macTXN ;
+  void*  m_macTXNvars ;
+  bool  m_macUsesTXN ;
   
   DECLARE_EVENT_TABLE()
 };
