@@ -24,11 +24,21 @@ struct Property {
 /**
  */
 class PropSet {
-private:
+protected:
 	enum { hashRoots=31 };
 	Property *props[hashRoots];
 	Property *enumnext;
 	int enumhash;
+	static unsigned int HashString(const char *s, size_t len) {
+		unsigned int ret = 0;
+		while (len--) {
+			ret <<= 4;
+			ret ^= *s;
+			s++;
+		}
+		return ret;
+	}
+	static bool IncludesVar(const char *value, const char *key);
 public:
 	PropSet *superPS;
 	PropSet();

@@ -130,8 +130,8 @@ void DocumentAccessor::Flush() {
 	lenDoc = -1;
 	if (validLen > 0) {
 		pdoc->SetStyles(validLen, styleBuf);
-		validLen = 0;
 		startPosStyling += validLen;
+		validLen = 0;
 	}
 }
 
