@@ -29,7 +29,7 @@
     #include "wx/textctrl.h"
 #endif // WX_PRECOMP
 
-#if wxUSE_DEBUGREPORT && wxUSE_CHECKLISTBOX
+#if wxUSE_DEBUGREPORT
 
 #include "wx/debugrpt.h"
 
