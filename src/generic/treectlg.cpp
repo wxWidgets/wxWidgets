@@ -84,7 +84,7 @@ public:
                     const wxString &value = wxEmptyString,
                     const wxPoint &pos = wxDefaultPosition,
                     const wxSize &size = wxDefaultSize,
-                    int style = 0,
+                    int style = wxSIMPLE_BORDER,
                     const wxValidator& validator = wxDefaultValidator,
                     const wxString &name = wxTextCtrlNameStr );
 
