@@ -202,13 +202,8 @@ protected:
   void AdjustPageSize(wxNotebookPage *page);
 
 #if wxUSE_UXTHEME
-  // this is a slightly ugly function which gets the bitmap of notebook
-  // background and either returns the colour under the specified window in it
-  // or creates a brush from it
-  //
-  // so if win == NULL, a brush is created and returned
-  //       win != NULL, returns COLORREF of the pixel under its top left corner
-  WXHANDLE QueryBgBitmap(wxWindow *win = NULL);
+  // gets the bitmap of notebook background and returns a brush from it
+  WXHBRUSH QueryBgBitmap();
 
   // creates the brush to be used for drawing the tab control background
   void UpdateBgBrush();

@@ -180,6 +180,23 @@ IMPLEMENT_DYNAMIC_CLASS(wxNotebookPageInfo, wxObject )
 #endif
 IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxNotifyEvent)
 
+// ----------------------------------------------------------------------------
+// local functions
+// ----------------------------------------------------------------------------
+
+// apparently DrawThemeBackground() modifies the rect passed to it and if we
+// don't call this function there are some drawing artifacts which are only
+// visible with some non default themes; so modify the rect here so that it
+// still paints the correct area
+static void AdjustRectForThemeBg(RECT& rc)
+{
+    // magic numbers needed to compensate for DrawThemeBackground()
+    rc.left   -= 2;
+    rc.top    -= 2;
+    rc.right  += 4;
+    rc.bottom += 5;
+}
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -945,33 +962,37 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
 
 #if wxUSE_UXTHEME
 
-WXHANDLE wxNotebook::QueryBgBitmap(wxWindow *win)
+WXHBRUSH wxNotebook::QueryBgBitmap()
 {
     RECT rc;
-    GetWindowRect(GetHwnd(), &rc);
+    ::GetClientRect(GetHwnd(), &rc);
+
+    // adjust position
+    TabCtrl_AdjustRect(GetHwnd(), false, &rc);
 
     WindowHDC hDC(GetHwnd());
     MemoryHDC hDCMem(hDC);
-    CompatibleBitmap hBmp(hDC, rc.right - rc.left, rc.bottom - rc.top);
+    CompatibleBitmap hBmp(hDC, rc.right, rc.bottom);
 
     SelectInHDC selectBmp(hDCMem, hBmp);
 
-    ::SendMessage(GetHwnd(), WM_PRINTCLIENT,
-                  (WPARAM)(HDC)hDCMem,
-                  PRF_ERASEBKGND | PRF_CLIENT | PRF_NONCLIENT);
-
-    if ( win )
+    wxUxThemeHandle theme(this, L"TAB");
+    if ( theme )
     {
-        RECT rc2;
-        ::GetWindowRect(GetHwndOf(win), &rc2);
+        AdjustRectForThemeBg(rc);
 
-        COLORREF c = ::GetPixel(hDCMem, rc2.left - rc.left, rc2.top - rc.top);
-
-        return (WXHANDLE)c;
+        wxUxThemeEngine::Get()->DrawThemeBackground
+        (
+            theme,
+            (WXHDC)hDCMem,
+            9 /* TABP_PANE */,
+            0,
+            &rc,
+            NULL
+        );
     }
-    //else: we are asked to create the brush
 
-    return (WXHANDLE)::CreatePatternBrush(hBmp);
+    return (WXHBRUSH)::CreatePatternBrush(hBmp);
 }
 
 void wxNotebook::UpdateBgBrush()
@@ -981,7 +1002,7 @@ void wxNotebook::UpdateBgBrush()
 
     if ( !m_hasBgCol && wxUxThemeEngine::GetIfActive() )
     {
-        m_hbrBackground = (WXHBRUSH)QueryBgBitmap();
+        m_hbrBackground = QueryBgBitmap();
     }
     else // no themes
     {
@@ -1011,7 +1032,7 @@ WXHBRUSH wxNotebook::MSWGetBgBrushForChild(WXHDC hDC, wxWindow *win)
     return wxNotebookBase::MSWGetBgBrushForChild(hDC, win);
 }
 
-wxColour wxNotebook::MSWGetBgColourForChild(wxWindow *win)
+wxColour wxNotebook::MSWGetBgColourForChild(wxWindow *WXUNUSED(win))
 {
     if ( m_hasBgCol )
         return GetBackgroundColour();
@@ -1030,9 +1051,7 @@ wxColour wxNotebook::MSWGetBgColourForChild(wxWindow *win)
     if ( !wxUxThemeEngine::GetIfActive() )
         return wxNullColour;
 
-    COLORREF c = (COLORREF)QueryBgBitmap(win);
-
-    return c == CLR_INVALID ? wxNullColour : wxRGBToColour(c);
+    return GetThemeBackgroundColour();
 }
 
 bool
@@ -1040,20 +1059,28 @@ wxNotebook::MSWPrintChild(wxWindow *win,
                           WXWPARAM wParam,
                           WXLPARAM WXUNUSED(lParam))
 {
-    // Don't paint the theme for the child if we have a solid
-    // background
-    if (m_hasBgCol || HasFlag(wxNB_NOPAGETHEME) || (wxSystemOptions::HasOption(wxT("msw.notebook.themed-background")) &&
-                                      wxSystemOptions::GetOptionInt(wxT("msw.notebook.themed-background")) == 0))
+    // Don't paint the theme for the child if we have a solid background
+    if ( m_hasBgCol ||
+            wxSystemOptions::IsFalse(wxT("msw.notebook.themed-background")) ||
+                HasFlag(wxNB_NOPAGETHEME) )
+    {
         return false;
-    
+    }
+
+
     RECT rc;
     ::GetClientRect(GetHwnd(), &rc);
-    TabCtrl_AdjustRect(GetHwnd(), true, &rc);
-    ::MapWindowPoints(GetHwnd(), GetHwndOf(win), (POINT *)&rc, 2);
+
+    // adjust position
+    TabCtrl_AdjustRect(GetHwnd(), false, &rc);
 
     wxUxThemeHandle theme(win, L"TAB");
     if ( theme )
     {
+        // map from this client to win client coords
+        ::MapWindowPoints(GetHwnd(), GetHwndOf(win), (POINT *)&rc, 2);
+
+        AdjustRectForThemeBg(rc);
         wxUxThemeEngine::Get()->DrawThemeBackground
         (
             theme,
