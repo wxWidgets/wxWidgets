@@ -68,6 +68,11 @@ public:
     bool LoadFile(const wxString& name, wxBitmapType type=wxBITMAP_TYPE_ANY);
     bool SaveFile(const wxString& name, wxBitmapType type, wxPalette* palette = NULL);
     void SetMask(wxMask* mask);
+    %pragma(python) addtoclass = "
+    def SetMaskColour(self, colour):
+        mask = wxMaskColour(self, colour)
+        self.SetMask(mask)
+    "
 #ifdef __WXMSW__
     void SetPalette(wxPalette& palette);
 #endif
