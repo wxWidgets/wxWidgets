@@ -320,7 +320,7 @@ bool wxGLCanvas::Show(bool show)
 {
     if ( !wxWindow::Show( show ) )
         return FALSE ;
-        
+/*        
     if ( !show )
     {
         if ( m_macCanvasIsShown )
@@ -337,12 +337,13 @@ bool wxGLCanvas::Show(bool show)
             SetViewport() ;
         }
     }
+*/
     return TRUE ;
 }
 
-void wxGLCanvas::MacSuperShown( bool show ) 
+void wxGLCanvas::MacVisibilityChanged() 
 {
-    if ( !show )
+    if ( !IsControlVisible( (ControlRef) m_macControl ) )
     {
         if ( m_macCanvasIsShown )
         {
@@ -352,14 +353,13 @@ void wxGLCanvas::MacSuperShown( bool show )
     }
     else
     {
-        if ( IsControlVisible( (ControlRef) m_macControl ) && !m_macCanvasIsShown )
+        if ( !m_macCanvasIsShown )
         {
             m_macCanvasIsShown = true ;
             SetViewport() ;
         }
     }
-        
-    wxWindow::MacSuperShown( show ) ;
+    wxWindowMac::MacVisibilityChanged() ;
 }
 
 //---------------------------------------------------------------------------
