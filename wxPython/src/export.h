@@ -58,6 +58,10 @@ static void wxPyCoreAPI_IMPORT() {
 #define wxPyCBH_callCallbackObj(a, b)   (wxPyCoreAPIPtr->p_wxPyCBH_callCallbackObj(a, b))
 #define wxPyCBH_delete(a)               (wxPyCoreAPIPtr->p_wxPyCBH_delete(a))
 
+#define wxPyClassExists(a)              (wxPyCoreAPIPtr->p_wxPyClassExists(a))
+#define wxPyMake_wxObject(a)            (wxPyCoreAPIPtr->p_wxPyMake_wxObject(a))
+#define wxPyPtrTypeMap_Add(a, b)        (wxPyCoreAPIPtr->p_wxPyPtrTypeMap_Add(a, b))
+
 
 // This one is special.  It's the first function called in SWIG generated
 // modules, so we'll use it to also import the API.

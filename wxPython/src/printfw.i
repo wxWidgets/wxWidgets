@@ -41,7 +41,7 @@
 
 
 
-class wxPrintData {
+class wxPrintData : public wxObject {
 public:
     wxPrintData();
     ~wxPrintData();
@@ -112,7 +112,7 @@ public:
 
 //---------------------------------------------------------------------------
 
-class wxPageSetupDialogData {
+class wxPageSetupDialogData : public wxObject {
 public:
     wxPageSetupDialogData();
     ~wxPageSetupDialogData();
@@ -165,7 +165,7 @@ public:
 //----------------------------------------------------------------------
 
 
-class wxPrintDialogData {
+class wxPrintDialogData : public wxObject {
 public:
     wxPrintDialogData();
     ~wxPrintDialogData();
@@ -275,7 +275,7 @@ IMP_PYCALLBACK_BOOL_INT(wxPyPrintout, wxPrintout, HasPage);
 
 
 // Now define the custom class for SWIGging
-%name(wxPrintout) class wxPyPrintout {
+%name(wxPrintout) class wxPyPrintout  : public wxObject {
 public:
     wxPyPrintout(const char* title = "Printout");
 
@@ -304,7 +304,7 @@ public:
 
 //----------------------------------------------------------------------
 
-class wxPrinter {
+class wxPrinter : public wxObject {
 public:
     wxPrinter(wxPrintDialogData* data = NULL);
     ~wxPrinter();
@@ -320,7 +320,7 @@ public:
 
 //----------------------------------------------------------------------
 
-class wxPrintPreview {
+class wxPrintPreview : public wxObject {
 public:
     wxPrintPreview(wxPyPrintout* printout, wxPyPrintout* printoutForPrinting, wxPrintData* data=NULL);
 //    ~wxPrintPreview();   **** ????
@@ -364,6 +364,11 @@ public:
 };
 
 //----------------------------------------------------------------------
+
+%init %{
+    wxPyPtrTypeMap_Add("wxPrintout", "wxPyPrintout");
+%}
+
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
 

@@ -214,6 +214,23 @@ wxList* wxPy_wxRealPoint_ListHelper(PyObject* pyList) {
 
 //---------------------------------------------------------------------------
 
+IMPLEMENT_DYNAMIC_CLASS(wxPyShapeCanvas, wxShapeCanvas);
+IMPLEMENT_DYNAMIC_CLASS(wxPyShapeEvtHandler, wxShapeEvtHandler);
+IMPLEMENT_ABSTRACT_CLASS(wxPyShape, wxShape);
+IMPLEMENT_DYNAMIC_CLASS(wxPyRectangleShape, wxRectangleShape);
+IMPLEMENT_DYNAMIC_CLASS(wxPyControlPoint, wxControlPoint);
+IMPLEMENT_DYNAMIC_CLASS(wxPyBitmapShape, wxBitmapShape);
+IMPLEMENT_DYNAMIC_CLASS(wxPyDrawnShape, wxDrawnShape);
+IMPLEMENT_DYNAMIC_CLASS(wxPyCompositeShape, wxCompositeShape);
+IMPLEMENT_DYNAMIC_CLASS(wxPyDividedShape, wxDividedShape);
+IMPLEMENT_DYNAMIC_CLASS(wxPyDivisionShape, wxDivisionShape);
+IMPLEMENT_DYNAMIC_CLASS(wxPyEllipseShape, wxEllipseShape);
+IMPLEMENT_DYNAMIC_CLASS(wxPyCircleShape, wxCircleShape);
+IMPLEMENT_DYNAMIC_CLASS(wxPyLineShape, wxLineShape);
+IMPLEMENT_DYNAMIC_CLASS(wxPyPolygonShape, wxPolygonShape);
+IMPLEMENT_DYNAMIC_CLASS(wxPyTextShape, wxTextShape);
+
+//---------------------------------------------------------------------------
 
 extern "C" SWIGEXPORT(void) initoglbasicc();
 extern "C" SWIGEXPORT(void) initoglshapesc();

@@ -40,10 +40,10 @@
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 
-class wxDiagram {
+class wxDiagram : public wxObject {
 public:
     wxDiagram();
-    ~wxDiagram();
+    //~wxDiagram();
 
     void AddShape(wxPyShape*shape, wxPyShape *addAfter = NULL);
     void Clear(wxDC& dc);

@@ -125,7 +125,7 @@ public:
 };
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
-class wxArrowHead {
+class wxArrowHead : public wxObject {
 public:
     wxArrowHead(int type = 0,
                 int end = 0,
@@ -207,8 +207,13 @@ public:
     bool IsSpline();
     void MakeLineControlPoints(int n);
 
-    // TODO:
     //   inline wxList *GetLineControlPoints() { return m_lineControlPoints; }
+    %addmethods {
+        PyObject* GetLineControlPoints() {
+            wxList* list = self->GetLineControlPoints();
+            return wxPy_ConvertList(list, "wxPyControlPoint");
+        }
+    }
 
     void SetAttachmentFrom(int fromAttach);
     void SetAttachments(int fromAttach, int toAttach);

@@ -35,6 +35,22 @@
 //---------------------------------------------------------------------------
 
 
+class wxObject {
+public:
+
+    %addmethods {
+        const char* GetClassName() {
+            return self->GetClassInfo()->GetClassName();
+        }
+
+        void Destroy() {
+            delete self;
+        }
+    }
+};
+
+//---------------------------------------------------------------------------
+
 class wxSize {
 public:
     long x;
@@ -369,7 +385,7 @@ enum wxRelationship { wxUnconstrained = 0,
                       wxAbsolute };
 
 
-class wxIndividualLayoutConstraint {
+class wxIndividualLayoutConstraint : public wxObject {
 public:
 //    wxIndividualLayoutConstraint();
 //    ~wxIndividualLayoutConstraint();
@@ -387,7 +403,7 @@ public:
 };
 
 
-class wxLayoutConstraints {
+class wxLayoutConstraints : public wxObject {
 public:
     wxLayoutConstraints();
 
@@ -402,71 +418,6 @@ public:
     wxIndividualLayoutConstraint width;
 %readwrite
 }
-
-
-//---------------------------------------------------------------------------
-// Regions, etc.
-
-enum wxRegionContain {
-	wxOutRegion, wxPartRegion, wxInRegion
-};
-
-
-class wxRegion {
-public:
-    wxRegion(long x=0, long y=0, long width=0, long height=0);
-    ~wxRegion();
-
-    void Clear();
-    wxRegionContain Contains(long x, long y);
-    %name(ContainsPoint)wxRegionContain Contains(const wxPoint& pt);
-    %name(ContainsRect)wxRegionContain Contains(const wxRect& rect);
-    %name(ContainsRectDim)wxRegionContain Contains(long x, long y, long w, long h);
-
-    wxRect GetBox();
-
-    bool Intersect(long x, long y, long width, long height);
-    %name(IntersectRect)bool Intersect(const wxRect& rect);
-    %name(IntersectRegion)bool Intersect(const wxRegion& region);
-
-    bool IsEmpty();
-
-    bool Union(long x, long y, long width, long height);
-    %name(UnionRect)bool Union(const wxRect& rect);
-    %name(UnionRegion)bool Union(const wxRegion& region);
-
-    bool Subtract(long x, long y, long width, long height);
-    %name(SubtractRect)bool Subtract(const wxRect& rect);
-    %name(SubtractRegion)bool Subtract(const wxRegion& region);
-
-    bool Xor(long x, long y, long width, long height);
-    %name(XorRect)bool Xor(const wxRect& rect);
-    %name(XorRegion)bool Xor(const wxRegion& region);
-};
-
-
-
-class wxRegionIterator {
-public:
-    wxRegionIterator(const wxRegion& region);
-    ~wxRegionIterator();
-
-    long GetX();
-    long GetY();
-    long GetW();
-    long GetWidth();
-    long GetH();
-    long GetHeight();
-    wxRect GetRect();
-    bool HaveRects();
-    void Reset();
-
-    %addmethods {
-        void Next() {
-            (*self) ++;
-        }
-    };
-};
 
 
 
@@ -485,7 +436,7 @@ public:
 };
 
 
-class wxAcceleratorTable {
+class wxAcceleratorTable : public wxObject {
 public:
     // Can also accept a list of 3-tuples
     wxAcceleratorTable(int LCOUNT, wxAcceleratorEntry* choices);
@@ -508,7 +459,7 @@ extern wxAcceleratorTable wxNullAcceleratorTable;
 
 //---------------------------------------------------------------------------
 
-class wxBusyInfo {
+class wxBusyInfo : public wxObject {
 public:
     wxBusyInfo(const wxString& message);
     ~wxBusyInfo();

@@ -36,7 +36,7 @@
 
 //----------------------------------------------------------------------
 
-class wxColourData {
+class wxColourData : public wxObject {
 public:
     wxColourData();
     ~wxColourData();
@@ -191,7 +191,7 @@ public:
 
 //----------------------------------------------------------------------
 
-class wxFontData {
+class wxFontData : public wxObject {
 public:
     wxFontData();
     ~wxFontData();

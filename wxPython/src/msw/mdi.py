@@ -35,19 +35,15 @@ class wxMDIParentFramePtr(wxFramePtr):
         return val
     def GetActiveChild(self, *_args, **_kwargs):
         val = apply(mdic.wxMDIParentFrame_GetActiveChild,(self,) + _args, _kwargs)
-        if val: val = wxMDIChildFramePtr(val) 
         return val
     def GetClientWindow(self, *_args, **_kwargs):
         val = apply(mdic.wxMDIParentFrame_GetClientWindow,(self,) + _args, _kwargs)
-        if val: val = wxMDIClientWindowPtr(val) 
         return val
     def GetToolBar(self, *_args, **_kwargs):
         val = apply(mdic.wxMDIParentFrame_GetToolBar,(self,) + _args, _kwargs)
-        if val: val = wxWindowPtr(val) 
         return val
     def GetWindowMenu(self, *_args, **_kwargs):
         val = apply(mdic.wxMDIParentFrame_GetWindowMenu,(self,) + _args, _kwargs)
-        if val: val = wxMenuPtr(val) 
         return val
     def SetWindowMenu(self, *_args, **_kwargs):
         val = apply(mdic.wxMDIParentFrame_SetWindowMenu,(self,) + _args, _kwargs)

@@ -52,7 +52,7 @@ class wxGLCanvas;
 
 //---------------------------------------------------------------------------
 
-class wxGLContext {
+class wxGLContext : public wxObject {
 public:
     wxGLContext(bool isRGB, wxGLCanvas *win, const wxPalette& palette = wxNullPalette);
     ~wxGLContext();

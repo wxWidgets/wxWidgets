@@ -249,7 +249,7 @@ class wxPyCircleShape(wxPyCircleShapePtr):
 
 
 
-class wxArrowHeadPtr :
+class wxArrowHeadPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -288,7 +288,6 @@ class wxArrowHeadPtr :
         return val
     def GetMetaFile(self, *_args, **_kwargs):
         val = apply(oglshapes2c.wxArrowHead_GetMetaFile,(self,) + _args, _kwargs)
-        if val: val = wxPseudoMetaFilePtr(val) 
         return val
     def GetId(self, *_args, **_kwargs):
         val = apply(oglshapes2c.wxArrowHead_GetId,(self,) + _args, _kwargs)
@@ -357,11 +356,9 @@ class wxPyLineShapePtr(wxPyShapePtr):
         return val
     def FindArrowHeadId(self, *_args, **_kwargs):
         val = apply(oglshapes2c.wxPyLineShape_FindArrowHeadId,(self,) + _args, _kwargs)
-        if val: val = wxArrowHeadPtr(val) 
         return val
     def FindArrowHead(self, *_args, **_kwargs):
         val = apply(oglshapes2c.wxPyLineShape_FindArrowHead,(self,) + _args, _kwargs)
-        if val: val = wxArrowHeadPtr(val) 
         return val
     def FindLineEndPoints(self, *_args, **_kwargs):
         val = apply(oglshapes2c.wxPyLineShape_FindLineEndPoints,(self,) + _args, _kwargs)
@@ -386,7 +383,6 @@ class wxPyLineShapePtr(wxPyShapePtr):
         return val
     def GetFrom(self, *_args, **_kwargs):
         val = apply(oglshapes2c.wxPyLineShape_GetFrom,(self,) + _args, _kwargs)
-        if val: val = wxPyShapePtr(val) 
         return val
     def GetLabelPosition(self, *_args, **_kwargs):
         val = apply(oglshapes2c.wxPyLineShape_GetLabelPosition,(self,) + _args, _kwargs)
@@ -397,7 +393,6 @@ class wxPyLineShapePtr(wxPyShapePtr):
         return val
     def GetTo(self, *_args, **_kwargs):
         val = apply(oglshapes2c.wxPyLineShape_GetTo,(self,) + _args, _kwargs)
-        if val: val = wxPyShapePtr(val) 
         return val
     def Initialise(self, *_args, **_kwargs):
         val = apply(oglshapes2c.wxPyLineShape_Initialise,(self,) + _args, _kwargs)
@@ -413,6 +408,9 @@ class wxPyLineShapePtr(wxPyShapePtr):
         return val
     def MakeLineControlPoints(self, *_args, **_kwargs):
         val = apply(oglshapes2c.wxPyLineShape_MakeLineControlPoints,(self,) + _args, _kwargs)
+        return val
+    def GetLineControlPoints(self, *_args, **_kwargs):
+        val = apply(oglshapes2c.wxPyLineShape_GetLineControlPoints,(self,) + _args, _kwargs)
         return val
     def SetAttachmentFrom(self, *_args, **_kwargs):
         val = apply(oglshapes2c.wxPyLineShape_SetAttachmentFrom,(self,) + _args, _kwargs)

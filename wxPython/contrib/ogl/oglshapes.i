@@ -40,7 +40,7 @@
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 
-class wxPseudoMetaFile {
+class wxPseudoMetaFile : public wxObject {
 public:
   wxPseudoMetaFile();
   ~wxPseudoMetaFile();
@@ -326,7 +326,7 @@ public:
 
 //---------------------------------------------------------------------------
 
-class wxOGLConstraint  {
+class wxOGLConstraint : public wxObject {
 public:
     //wxOGLConstraint(int type, wxPyShape *constraining, wxList& constrained);
     %addmethods {

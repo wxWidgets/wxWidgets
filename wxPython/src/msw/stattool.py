@@ -56,7 +56,7 @@ class wxStatusBar(wxStatusBarPtr):
 
 
 
-class wxToolBarToolBasePtr :
+class wxToolBarToolBasePtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -68,11 +68,9 @@ class wxToolBarToolBasePtr :
         return val
     def GetControl(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarToolBase_GetControl,(self,) + _args, _kwargs)
-        if val: val = wxControlPtr(val) 
         return val
     def GetToolBar(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarToolBase_GetToolBar,(self,) + _args, _kwargs)
-        if val: val = wxToolBarBasePtr(val) 
         return val
     def IsButton(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarToolBase_IsButton,(self,) + _args, _kwargs)
@@ -161,39 +159,30 @@ class wxToolBarBasePtr(wxControlPtr):
         self.thisown = 0
     def AddTool(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarBase_AddTool,(self,) + _args, _kwargs)
-        if val: val = wxToolBarToolBasePtr(val) 
         return val
     def AddSimpleTool(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarBase_AddSimpleTool,(self,) + _args, _kwargs)
-        if val: val = wxToolBarToolBasePtr(val) 
         return val
     def InsertTool(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarBase_InsertTool,(self,) + _args, _kwargs)
-        if val: val = wxToolBarToolBasePtr(val) 
         return val
     def InsertSimpleTool(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarBase_InsertSimpleTool,(self,) + _args, _kwargs)
-        if val: val = wxToolBarToolBasePtr(val) 
         return val
     def AddControl(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarBase_AddControl,(self,) + _args, _kwargs)
-        if val: val = wxToolBarToolBasePtr(val) 
         return val
     def InsertControl(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarBase_InsertControl,(self,) + _args, _kwargs)
-        if val: val = wxToolBarToolBasePtr(val) 
         return val
     def AddSeparator(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarBase_AddSeparator,(self,) + _args, _kwargs)
-        if val: val = wxToolBarToolBasePtr(val) 
         return val
     def InsertSeparator(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarBase_InsertSeparator,(self,) + _args, _kwargs)
-        if val: val = wxToolBarToolBasePtr(val) 
         return val
     def RemoveTool(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarBase_RemoveTool,(self,) + _args, _kwargs)
-        if val: val = wxToolBarToolBasePtr(val) 
         return val
     def DeleteToolByPos(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarBase_DeleteToolByPos,(self,) + _args, _kwargs)
@@ -304,7 +293,6 @@ class wxToolBarPtr(wxToolBarBasePtr):
         self.thisown = 0
     def FindToolForPosition(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBar_FindToolForPosition,(self,) + _args, _kwargs)
-        if val: val = wxToolBarToolBasePtr(val) 
         return val
     def __repr__(self):
         return "<C wxToolBar instance at %s>" % (self.this,)
@@ -323,7 +311,6 @@ class wxToolBarSimplePtr(wxToolBarBasePtr):
         self.thisown = 0
     def FindToolForPosition(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarSimple_FindToolForPosition,(self,) + _args, _kwargs)
-        if val: val = wxToolBarToolBasePtr(val) 
         return val
     def __repr__(self):
         return "<C wxToolBarSimple instance at %s>" % (self.this,)

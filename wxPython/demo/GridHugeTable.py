@@ -56,7 +56,7 @@ class TestFrame(wxFrame):
         wxFrame.__init__(self, parent, -1, "Huge (virtual) Table Demo", size=(640,480))
         grid = HugeTableGrid(self, log)
 
-
+        grid.SetReadOnly(5,5, true)
 
 #---------------------------------------------------------------------------
 

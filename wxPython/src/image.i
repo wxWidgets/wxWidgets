@@ -30,7 +30,7 @@
 
 //---------------------------------------------------------------------------
 
-class wxImageHandler {
+class wxImageHandler : public wxObject {
 public:
     // wxImageHandler();    Abstract Base Class
     wxString GetName();
@@ -90,7 +90,7 @@ public:
 
 //---------------------------------------------------------------------------
 
-class wxImage {
+class wxImage : public wxObject {
 public:
     wxImage( const wxString& name, long type = wxBITMAP_TYPE_ANY );
     ~wxImage();

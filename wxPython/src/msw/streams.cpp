@@ -432,6 +432,7 @@ static PyObject *_wrap_new_wxInputStream(PyObject *self, PyObject *args, PyObjec
     PyObject * _arg0;
     PyObject * _obj0 = 0;
     char *_kwnames[] = { "p", NULL };
+    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxInputStream",_kwnames,&_obj0)) 
@@ -442,15 +443,13 @@ static PyObject *_wrap_new_wxInputStream(PyObject *self, PyObject *args, PyObjec
 {
         _result = (wxPyInputStream *)new_wxPyInputStream(_arg0);
 
-}{
-    char _ptemp[128];
-    if (_result) {
+}    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyInputStream_p");
         _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
     }
-    else
-        _resultobj=0;
-}
     return _resultobj;
 }
 
@@ -865,6 +864,8 @@ SWIGEXPORT(void) initstreamsc() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("streamsc", streamscMethods);
 	 d = PyModule_GetDict(m);
+
+    wxPyPtrTypeMap_Add("wxInputStream", "wxPyInputStream");
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

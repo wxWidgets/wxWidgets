@@ -19,6 +19,7 @@
 #endif
 #include <wx/listctrl.h>
 #include <wx/treectrl.h>
+#include <wx/imaglist.h>
 %}
 
 //----------------------------------------------------------------------
@@ -139,7 +140,7 @@ public:
 };
 
 
-class wxListItem {
+class wxListItem : public wxObject {
 public:
     wxListItem();
     ~wxListItem();
@@ -241,6 +242,7 @@ public:
 
     bool Arrange(int flag = wxLIST_ALIGN_DEFAULT);
     void AssignImageList(wxImageList* imageList, int which);
+    %pragma(python) addtomethod = "AssignImageList:_args[0].thisown = 0"
     bool DeleteItem(long item);
     bool DeleteAllItems();
     bool DeleteColumn(int col);
@@ -464,7 +466,7 @@ public:
 
 
 
-%name(wxTreeItemData) class wxPyTreeItemData {
+%name(wxTreeItemData) class wxPyTreeItemData : public wxObject {
 public:
     wxPyTreeItemData(PyObject* obj = NULL);
 
@@ -540,6 +542,7 @@ public:
     %pragma(python) addtomethod = "__init__:self._setSelf(self, wxTreeCtrl)"
 
     void AssignImageList(wxImageList* imageList);
+    %pragma(python) addtomethod = "AssignImageList:_args[0].thisown = 0"
     size_t GetCount();
     unsigned int GetIndent();
     void SetIndent(unsigned int indent);
@@ -807,6 +810,13 @@ public:
 
 #endif
 #endif
+
+//----------------------------------------------------------------------
+
+%init %{
+    wxPyPtrTypeMap_Add("wxTreeItemData", "wxPyTreeItemData");
+    wxPyPtrTypeMap_Add("wxTreeCtrl", "wxPyTreeCtrl");
+%}
 
 //----------------------------------------------------------------------
 

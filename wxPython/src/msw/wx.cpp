@@ -687,7 +687,12 @@ static wxPyCoreAPI API = {
     wxPyCBH_callCallback,
     wxPyCBH_callCallbackObj,
     wxPyCBH_delete,
+
+    wxPyClassExists,
+    wxPyMake_wxObject,
+    wxPyPtrTypeMap_Add,
 };
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -948,6 +953,14 @@ static void *SwigwxPyAppTowxEvtHandler(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxPyAppTowxObject(void *ptr) {
+    wxPyApp *src;
+    wxObject *dest;
+    src = (wxPyApp *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 static wxPyApp *new_wxPyApp() {
             wxPythonApp = new wxPyApp();
             return wxPythonApp;
@@ -1156,7 +1169,6 @@ static PyObject *_wrap_wxPyApp_GetTopWindow(PyObject *self, PyObject *args, PyOb
     wxPyApp * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyApp_GetTopWindow",_kwnames,&_argo0)) 
@@ -1173,13 +1185,7 @@ static PyObject *_wrap_wxPyApp_GetTopWindow(PyObject *self, PyObject *args, PyOb
         _result = (wxWindow *)wxPyApp_GetTopWindow(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxWindow_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -1871,6 +1877,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxClipboard","_wxClipboard",0},
     { "_class_wxGauge","_wxGauge",0},
     { "_class_wxSashEvent","_wxSashEvent",0},
+    { "_wxGDIObject","_class_wxGDIObject",0},
     { "_wxDC","_class_wxDC",0},
     { "_wxSizerItem","_class_wxSizerItem",0},
     { "_class_wxBitmapDataObject","_wxBitmapDataObject",0},
@@ -1880,6 +1887,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxBMPHandler","_wxBMPHandler",0},
     { "_wxPrintPreview","_class_wxPrintPreview",0},
     { "_class_wxFlexGridSizer","_wxFlexGridSizer",0},
+    { "_class_wxObject","_class_wxPyApp",SwigwxPyAppTowxObject},
+    { "_class_wxObject","_wxPyApp",SwigwxPyAppTowxObject},
+    { "_class_wxObject","_wxObject",0},
     { "_wxSpinEvent","_class_wxSpinEvent",0},
     { "_wxSashLayoutWindow","_class_wxSashLayoutWindow",0},
     { "_size_t","_wxCoord",0},
@@ -2096,6 +2106,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxGenericDragImage","_wxGenericDragImage",0},
     { "_wxListCtrl","_class_wxListCtrl",0},
     { "_wxSingleChoiceDialog","_class_wxSingleChoiceDialog",0},
+    { "_wxObject","_class_wxPyApp",SwigwxPyAppTowxObject},
+    { "_wxObject","_wxPyApp",SwigwxPyAppTowxObject},
+    { "_wxObject","_class_wxObject",0},
     { "_class_wxPoint","_wxPoint",0},
     { "_class_wxPyInputStream","_wxPyInputStream",0},
     { "_wxRealPoint","_class_wxRealPoint",0},
@@ -2172,6 +2185,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxWindowID","_int",0},
     { "_wxWindowID","_signed_int",0},
     { "_wxWindowID","_unsigned_int",0},
+    { "_class_wxGDIObject","_wxGDIObject",0},
     { "_class_wxScrollWinEvent","_wxScrollWinEvent",0},
     { "_class_wxSizerItem","_wxSizerItem",0},
     { "_int","_wxCoord",0},

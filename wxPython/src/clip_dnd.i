@@ -363,7 +363,7 @@ public:
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
 
-class wxClipboard {
+class wxClipboard : public wxObject {
 public:
     wxClipboard();
 
@@ -629,7 +629,9 @@ public:
 %init %{
 
     wxPyTheClipboard = wxTheClipboard;
-
+    wxPyPtrTypeMap_Add("wxDropSource", "wxPyDropSource");
+    wxPyPtrTypeMap_Add("wxTextDropTarget", "wxPyTextDropTarget");
+    wxPyPtrTypeMap_Add("wxFileDropTarget", "wxPyFileDropTarget");
 %}
 
 //----------------------------------------------------------------------

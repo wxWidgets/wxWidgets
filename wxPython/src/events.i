@@ -33,7 +33,7 @@
 
 int wxNewEventType();
 
-class wxEvent {
+class wxEvent : public wxObject {
 public:
     wxEvent(int id = 0);
     ~wxEvent();

@@ -42,7 +42,7 @@
 //---------------------------------------------------------------------------
 
 
-class wxShapeRegion {
+class wxShapeRegion : public wxObject {
 public:
     wxShapeRegion();
     //~wxShapeRegion();
@@ -87,7 +87,7 @@ public:
 %}
 
 
-class wxPyShapeEvtHandler {
+class wxPyShapeEvtHandler : public wxObject {
 public:
     wxPyShapeEvtHandler(wxPyShapeEvtHandler *prev = NULL,
                         wxPyShape *shape = NULL);
@@ -95,9 +95,7 @@ public:
     void _setSelf(PyObject* self, PyObject* _class);
     %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyShapeEvtHandler)"
 
-    %addmethods {
-        void Destroy() { delete self; }
-    }
+    %addmethods { void Destroy() { delete self; } }
 
     void SetShape(wxPyShape *sh);
     wxPyShape *GetShape();

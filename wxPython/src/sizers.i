@@ -14,6 +14,8 @@
 
 %{
 #include "helpers.h"
+
+#include <wx/notebook.h>
 %}
 
 //----------------------------------------------------------------------
@@ -33,7 +35,7 @@
 //---------------------------------------------------------------------------
 
 
-class wxSizerItem {
+class wxSizerItem : public wxObject {
 public:
     // No need to ever create one directly in Python...
 
@@ -85,7 +87,7 @@ public:
 
 //---------------------------------------------------------------------------
 
-class wxSizer {
+class wxSizer : public wxObject {
 public:
     // wxSizer();      ****  abstract, can't instantiate
     // ~wxSizer();

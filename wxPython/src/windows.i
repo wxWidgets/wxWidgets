@@ -16,6 +16,7 @@
 %{
 #include "helpers.h"
 #include <wx/menuitem.h>
+#include <wx/tooltip.h>
 %}
 
 //----------------------------------------------------------------------
@@ -38,7 +39,7 @@
 
 //---------------------------------------------------------------------------
 
-class wxEvtHandler {
+class wxEvtHandler : public wxObject {
 public:
     wxEvtHandler();
 
@@ -69,12 +70,6 @@ public:
             return self->Disconnect(id, lastId, eventType,
                                    (wxObjectEventFunction)
                                     &wxPyCallback::EventThunker);
-        }
-
-        // This really belongs in the wxObject base class.  It's probably
-        // time to actually add it...
-        const char* GetClassName() {
-            return self->GetClassInfo()->GetClassName();
         }
     }
 
@@ -116,6 +111,9 @@ public:
     wxWindow* GetWindow();
     void SetWindow(wxWindow* window);
 
+    static bool IsSilent();
+    static void SetBellOnError(int doIt = TRUE);
+
 //      // Properties list
 //      %pragma(python) addtoclass = "
 //      _prop_list_ = {
@@ -125,15 +123,6 @@ public:
 //      "
 };
 
-%inline %{
-    bool wxValidator_IsSilent() {
-        return wxValidator::IsSilent();
-    }
-
-    void wxValidator_SetBellOnError(int doIt = TRUE) {
-        wxValidator::SetBellOnError(doIt);
-    }
-%}
 
 //----------------------------------------------------------------------
 %{
@@ -142,7 +131,6 @@ class wxPyValidator : public wxValidator {
 public:
     wxPyValidator() {
     }
-//    wxPyValidator(const wxPyValidator& other);
 
     ~wxPyValidator() {
     }
@@ -170,12 +158,12 @@ public:
         return ptr;
     }
 
+
     DEC_PYCALLBACK_BOOL_WXWIN(Validate);
     DEC_PYCALLBACK_BOOL_(TransferToWindow);
     DEC_PYCALLBACK_BOOL_(TransferFromWindow);
 
     PYPRIVATE;
-//    PyObject*   m_data;
 };
 
 IMP_PYCALLBACK_BOOL_WXWIN(wxPyValidator, wxValidator, Validate);
@@ -189,12 +177,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxPyValidator, wxValidator);
 class wxPyValidator : public wxValidator {
 public:
     wxPyValidator();
-//    ~wxPyValidator();
-
-    %addmethods { void Destroy() { delete self; } }
 
     void _setSelf(PyObject* self, PyObject* _class, int incref=TRUE);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyValidator, 0)"
+    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyValidator, 1)"
 
 };
 
@@ -387,23 +372,11 @@ public:
 
     void SetCaret(wxCaret *caret);
     wxCaret *GetCaret();
-    %pragma(python) addtoclass = "# replaces broken shadow methods
+    %pragma(python) addtoclass = "# replaces broken shadow method
     def GetCaret(self, *_args, **_kwargs):
         from misc2 import wxCaretPtr
         val = apply(windowsc.wxWindow_GetCaret,(self,) + _args, _kwargs)
         if val: val = wxCaretPtr(val)
-        return val
-
-    def GetSizer(self, *_args, **_kwargs):
-        from sizers import wxSizerPtr
-        val = apply(windowsc.wxWindow_GetSizer,(self,) + _args, _kwargs)
-        if val: val = wxSizerPtr(val)
-        return val
-
-    def GetToolTip(self, *_args, **_kwargs):
-        from misc2 import wxToolTipPtr
-        val = apply(windowsc.wxWindow_GetToolTip,(self,) + _args, _kwargs)
-        if val: val = wxToolTipPtr(val)
         return val
     "
 
@@ -507,14 +480,6 @@ public:
     wxButton* GetDefaultItem();
     void SetDefaultItem(wxButton *btn);
 
-    // fix some SWIG trouble...
-    %pragma(python) addtoclass = "
-    def GetDefaultItem(self):
-        import controls
-        val = windowsc.wxPanel_GetDefaultItem(self.this)
-        val = controls.wxButtonPtr(val)
-        return val
-"
 };
 
 //---------------------------------------------------------------------------
@@ -547,20 +512,6 @@ public:
 
     wxSizer* CreateTextSizer( const wxString &message );
     wxSizer* CreateButtonSizer( long flags );
-
-    %pragma(python) addtoclass = "
-    # replace swig generated shadow methods to resolve import issues
-    def CreateTextSizer(self, *_args, **_kwargs):
-        import sizers
-        val = apply(windowsc.wxDialog_CreateTextSizer,(self,) + _args, _kwargs)
-        if val: val = sizers.wxSizerPtr(val)
-        return val
-    def CreateButtonSizer(self, *_args, **_kwargs):
-        import sizers
-        val = apply(windowsc.wxDialog_CreateButtonSizer,(self,) + _args, _kwargs)
-        if val: val = sizers.wxSizerPtr(val)
-        return val
-"
 
 };
 
@@ -707,7 +658,7 @@ public:
 
 //----------------------------------------------------------------------
 
-class wxMenuItem {
+class wxMenuItem : public wxObject {
 public:
     wxMenuItem(wxMenu* parentMenu=NULL, int id=wxID_SEPARATOR,
                const wxString& text = wxPyEmptyStr,

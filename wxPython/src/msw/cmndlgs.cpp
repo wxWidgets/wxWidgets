@@ -115,6 +115,14 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #ifdef __cplusplus
 extern "C" {
 #endif
+static void *SwigwxColourDataTowxObject(void *ptr) {
+    wxColourData *src;
+    wxObject *dest;
+    src = (wxColourData *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxColourData() (new wxColourData())
 static PyObject *_wrap_new_wxColourData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -390,6 +398,14 @@ static void *SwigwxColourDialogTowxEvtHandler(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxColourDialogTowxObject(void *ptr) {
+    wxColourDialog *src;
+    wxObject *dest;
+    src = (wxColourDialog *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxColourDialog(_swigarg0,_swigarg1) (new wxColourDialog(_swigarg0,_swigarg1))
 static PyObject *_wrap_new_wxColourDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -524,6 +540,14 @@ static void *SwigwxDirDialogTowxEvtHandler(void *ptr) {
     wxEvtHandler *dest;
     src = (wxDirDialog *) ptr;
     dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxDirDialogTowxObject(void *ptr) {
+    wxDirDialog *src;
+    wxObject *dest;
+    src = (wxDirDialog *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -822,6 +846,14 @@ static void *SwigwxFileDialogTowxEvtHandler(void *ptr) {
     wxEvtHandler *dest;
     src = (wxFileDialog *) ptr;
     dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxFileDialogTowxObject(void *ptr) {
+    wxFileDialog *src;
+    wxObject *dest;
+    src = (wxFileDialog *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -1535,6 +1567,14 @@ static void *SwigwxSingleChoiceDialogTowxEvtHandler(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxSingleChoiceDialogTowxObject(void *ptr) {
+    wxSingleChoiceDialog *src;
+    wxObject *dest;
+    src = (wxSingleChoiceDialog *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 static wxSingleChoiceDialog *new_wxSingleChoiceDialog(wxWindow *parent,wxString *message,wxString *caption,int LCOUNT,wxString *choices,long style,wxPoint *pos) {
             return new wxSingleChoiceDialog(parent, *message, *caption,
                                             LCOUNT, choices, NULL, style, *pos);
@@ -1798,6 +1838,14 @@ static void *SwigwxTextEntryDialogTowxEvtHandler(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxTextEntryDialogTowxObject(void *ptr) {
+    wxTextEntryDialog *src;
+    wxObject *dest;
+    src = (wxTextEntryDialog *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxTextEntryDialog(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5) (new wxTextEntryDialog(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
 static PyObject *_wrap_new_wxTextEntryDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1953,6 +2001,14 @@ static PyObject *_wrap_wxTextEntryDialog_ShowModal(PyObject *self, PyObject *arg
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
+}
+
+static void *SwigwxFontDataTowxObject(void *ptr) {
+    wxFontData *src;
+    wxObject *dest;
+    src = (wxFontData *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
 }
 
 #define new_wxFontData() (new wxFontData())
@@ -2439,6 +2495,14 @@ static void *SwigwxFontDialogTowxEvtHandler(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxFontDialogTowxObject(void *ptr) {
+    wxFontDialog *src;
+    wxObject *dest;
+    src = (wxFontDialog *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxFontDialog(_swigarg0,_swigarg1) (new wxFontDialog(_swigarg0,_swigarg1))
 static PyObject *_wrap_new_wxFontDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2576,6 +2640,14 @@ static void *SwigwxMessageDialogTowxEvtHandler(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxMessageDialogTowxObject(void *ptr) {
+    wxMessageDialog *src;
+    wxObject *dest;
+    src = (wxMessageDialog *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxMessageDialog(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4) (new wxMessageDialog(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
 static PyObject *_wrap_new_wxMessageDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2670,6 +2742,14 @@ static void *SwigwxProgressDialogTowxEvtHandler(void *ptr) {
     wxEvtHandler *dest;
     src = (wxProgressDialog *) ptr;
     dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxProgressDialogTowxObject(void *ptr) {
+    wxProgressDialog *src;
+    wxObject *dest;
+    src = (wxProgressDialog *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -2957,10 +3037,32 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxAcceleratorTable","_wxAcceleratorTable",0},
     { "_class_wxClipboard","_wxClipboard",0},
     { "_class_wxGauge","_wxGauge",0},
+    { "_wxGDIObject","_class_wxGDIObject",0},
     { "_wxDC","_class_wxDC",0},
     { "_class_wxBitmapDataObject","_wxBitmapDataObject",0},
     { "_class_wxSingleChoiceDialog","_wxSingleChoiceDialog",0},
     { "_wxProgressDialog","_class_wxProgressDialog",0},
+    { "_class_wxObject","_class_wxProgressDialog",SwigwxProgressDialogTowxObject},
+    { "_class_wxObject","_wxProgressDialog",SwigwxProgressDialogTowxObject},
+    { "_class_wxObject","_class_wxMessageDialog",SwigwxMessageDialogTowxObject},
+    { "_class_wxObject","_wxMessageDialog",SwigwxMessageDialogTowxObject},
+    { "_class_wxObject","_class_wxFontDialog",SwigwxFontDialogTowxObject},
+    { "_class_wxObject","_wxFontDialog",SwigwxFontDialogTowxObject},
+    { "_class_wxObject","_class_wxFontData",SwigwxFontDataTowxObject},
+    { "_class_wxObject","_wxFontData",SwigwxFontDataTowxObject},
+    { "_class_wxObject","_class_wxTextEntryDialog",SwigwxTextEntryDialogTowxObject},
+    { "_class_wxObject","_wxTextEntryDialog",SwigwxTextEntryDialogTowxObject},
+    { "_class_wxObject","_class_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxObject},
+    { "_class_wxObject","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxObject},
+    { "_class_wxObject","_class_wxFileDialog",SwigwxFileDialogTowxObject},
+    { "_class_wxObject","_wxFileDialog",SwigwxFileDialogTowxObject},
+    { "_class_wxObject","_class_wxDirDialog",SwigwxDirDialogTowxObject},
+    { "_class_wxObject","_wxDirDialog",SwigwxDirDialogTowxObject},
+    { "_class_wxObject","_class_wxColourDialog",SwigwxColourDialogTowxObject},
+    { "_class_wxObject","_wxColourDialog",SwigwxColourDialogTowxObject},
+    { "_class_wxObject","_class_wxColourData",SwigwxColourDataTowxObject},
+    { "_class_wxObject","_wxColourData",SwigwxColourDataTowxObject},
+    { "_class_wxObject","_wxObject",0},
     { "_wxSpinEvent","_class_wxSpinEvent",0},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
@@ -3167,6 +3269,27 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxClientDC","_class_wxClientDC",0},
     { "_wxMouseEvent","_class_wxMouseEvent",0},
     { "_wxSingleChoiceDialog","_class_wxSingleChoiceDialog",0},
+    { "_wxObject","_class_wxProgressDialog",SwigwxProgressDialogTowxObject},
+    { "_wxObject","_wxProgressDialog",SwigwxProgressDialogTowxObject},
+    { "_wxObject","_class_wxMessageDialog",SwigwxMessageDialogTowxObject},
+    { "_wxObject","_wxMessageDialog",SwigwxMessageDialogTowxObject},
+    { "_wxObject","_class_wxFontDialog",SwigwxFontDialogTowxObject},
+    { "_wxObject","_wxFontDialog",SwigwxFontDialogTowxObject},
+    { "_wxObject","_class_wxFontData",SwigwxFontDataTowxObject},
+    { "_wxObject","_wxFontData",SwigwxFontDataTowxObject},
+    { "_wxObject","_class_wxTextEntryDialog",SwigwxTextEntryDialogTowxObject},
+    { "_wxObject","_wxTextEntryDialog",SwigwxTextEntryDialogTowxObject},
+    { "_wxObject","_class_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxObject},
+    { "_wxObject","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxObject},
+    { "_wxObject","_class_wxFileDialog",SwigwxFileDialogTowxObject},
+    { "_wxObject","_wxFileDialog",SwigwxFileDialogTowxObject},
+    { "_wxObject","_class_wxDirDialog",SwigwxDirDialogTowxObject},
+    { "_wxObject","_wxDirDialog",SwigwxDirDialogTowxObject},
+    { "_wxObject","_class_wxColourDialog",SwigwxColourDialogTowxObject},
+    { "_wxObject","_wxColourDialog",SwigwxColourDialogTowxObject},
+    { "_wxObject","_class_wxColourData",SwigwxColourDataTowxObject},
+    { "_wxObject","_wxColourData",SwigwxColourDataTowxObject},
+    { "_wxObject","_class_wxObject",0},
     { "_class_wxPoint","_wxPoint",0},
     { "_wxRealPoint","_class_wxRealPoint",0},
     { "_class_wxRadioBox","_wxRadioBox",0},
@@ -3238,6 +3361,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxWindowID","_int",0},
     { "_wxWindowID","_signed_int",0},
     { "_wxWindowID","_unsigned_int",0},
+    { "_class_wxGDIObject","_wxGDIObject",0},
     { "_class_wxScrollWinEvent","_wxScrollWinEvent",0},
     { "_int","_wxCoord",0},
     { "_int","_wxPrintQuality",0},

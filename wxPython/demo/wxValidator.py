@@ -19,8 +19,7 @@ class MyValidator(wxPyValidator):
         return MyValidator(self.flag)
 
     def Validate(self, win):
-        print 'validate'
-        tc = wxPyTypeCast(win, "wxTextCtrl")
+        tc = self.GetWindow()
         val = tc.GetValue()
         if self.flag == ALPHA_ONLY:
             for x in val:
@@ -81,9 +80,116 @@ class TestValidatorPanel(wxPanel):
         fgs.Add(label, 0, wxALIGN_RIGHT|wxCENTER)
         fgs.Add(wxTextCtrl(self, -1, "", validator = MyValidator(DIGIT_ONLY)))
 
+        fgs.Add(1,VSPACE); fgs.Add(1,VSPACE)
+        fgs.Add(1,VSPACE); fgs.Add(1,VSPACE)
+        fgs.Add(0,0)
+        b = wxButton(self, -1, "Test Dialog Validation")
+        EVT_BUTTON(self, b.GetId(), self.OnDoDialog)
+        fgs.Add(b)
+
         border = wxBoxSizer()
         border.Add(fgs, 1, wxGROW|wxALL, 25)
         self.SetSizer(border)
+        self.Layout()
+
+    def OnDoDialog(self, evt):
+        dlg = TestValidateDialog(self)
+        dlg.ShowModal()
+        dlg.Destroy()
+
+
+#----------------------------------------------------------------------
+
+class TextObjectValidator(wxPyValidator):
+     """ This validator is used to ensure that the user has entered something
+         into the text object editor dialog's text field.
+     """
+     def __init__(self):
+         """ Standard constructor.
+         """
+         wxPyValidator.__init__(self)
+
+
+
+     def Clone(self):
+         """ Standard cloner.
+
+             Note that every validator must implement the Clone() method.
+         """
+         return TextObjectValidator()
+
+
+     def Validate(self, win):
+         """ Validate the contents of the given text control.
+         """
+         textCtrl = self.GetWindow()
+         text = textCtrl.GetValue()
+
+         if len(text) == 0:
+             wxMessageBox("A text object must contain some text!", "Error")
+             textCtrl.SetFocus()
+             return false
+         else:
+             return true
+
+
+     def TransferToWindow(self):
+         """ Transfer data from validator to window.
+
+             The default implementation returns false, indicating that an error
+             occurred.  We simply return true, as we don't do any data transfer.
+         """
+         return true # Prevent wxDialog from complaining.
+
+
+     def TransferFromWindow(self):
+         """ Transfer data from window to validator.
+
+             The default implementation returns false, indicating that an error
+             occurred.  We simply return true, as we don't do any data transfer.
+         """
+         return true # Prevent wxDialog from complaining.
+
+#----------------------------------------------------------------------
+
+class TestValidateDialog(wxDialog):
+    def __init__(self, parent):
+        wxDialog.__init__(self, parent, -1, "Validated Dialog")
+
+        self.SetAutoLayout(true)
+        VSPACE = 10
+
+        fgs = wxFlexGridSizer(0, 2)
+
+        fgs.Add(1,1);
+        fgs.Add(wxStaticText(self, -1,
+                             "These controls must have text entered into them.  Each\n"
+                             "one has a validator that is checked when the Okay\n"
+                             "button is clicked."))
+
+        fgs.Add(1,VSPACE); fgs.Add(1,VSPACE)
+
+        label = wxStaticText(self, -1, "First: ")
+        fgs.Add(label, 0, wxALIGN_RIGHT|wxCENTER)
+
+        fgs.Add(wxTextCtrl(self, -1, "", validator = TextObjectValidator()))
+
+        fgs.Add(1,VSPACE); fgs.Add(1,VSPACE)
+
+        label = wxStaticText(self, -1, "Second: ")
+        fgs.Add(label, 0, wxALIGN_RIGHT|wxCENTER)
+        fgs.Add(wxTextCtrl(self, -1, "", validator = TextObjectValidator()))
+
+
+        buttons = wxBoxSizer(wxHORIZONTAL)
+        buttons.Add(wxButton(self, wxID_OK, "Okay"), 0, wxALL, 10)
+        buttons.Add(wxButton(self, wxID_CANCEL, "Cancel"), 0, wxALL, 10)
+
+        border = wxBoxSizer(wxVERTICAL)
+        border.Add(fgs, 1, wxGROW|wxALL, 25)
+        border.Add(buttons)
+        self.SetSizer(border)
+        border.Fit(self)
         self.Layout()
 
 

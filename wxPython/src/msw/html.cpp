@@ -118,6 +118,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #endif
 
 class wxPyHtmlTagHandler : public wxHtmlTagHandler {
+    DECLARE_DYNAMIC_CLASS(wxPyHtmlTagHandler);
 public:
     wxPyHtmlTagHandler() : wxHtmlTagHandler() {};
 
@@ -130,10 +131,13 @@ public:
     PYPRIVATE;
 };
 
+IMPLEMENT_DYNAMIC_CLASS(wxPyHtmlTagHandler, wxHtmlTagHandler);
+
 IMP_PYCALLBACK_STRING__pure(wxPyHtmlTagHandler, wxHtmlTagHandler, GetSupportedTags);
 IMP_PYCALLBACK_BOOL_TAG_pure(wxPyHtmlTagHandler, wxHtmlTagHandler, HandleTag);
 
 class wxPyHtmlWinTagHandler : public wxHtmlWinTagHandler {
+    DECLARE_DYNAMIC_CLASS(wxPyHtmlWinTagHandler);
 public:
     wxPyHtmlWinTagHandler() : wxHtmlWinTagHandler() {};
 
@@ -146,6 +150,8 @@ public:
 
     PYPRIVATE;
 };
+
+IMPLEMENT_DYNAMIC_CLASS( wxPyHtmlWinTagHandler, wxHtmlWinTagHandler);
 
 IMP_PYCALLBACK_STRING__pure(wxPyHtmlWinTagHandler, wxHtmlWinTagHandler, GetSupportedTags);
 IMP_PYCALLBACK_BOOL_TAG_pure(wxPyHtmlWinTagHandler, wxHtmlWinTagHandler, HandleTag);
@@ -224,7 +230,7 @@ public:
 
 IMP_PYCALLBACK__STRING(wxPyHtmlWindow, wxHtmlWindow, OnSetTitle);
 
- void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
+void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
     bool doSave = wxPyRestoreThread();
     if (wxPyCBH_findCallback(m_myInst, "OnLinkClicked")) {
         PyObject* obj = wxPyConstructObject((void*)&link, "wxHtmlLinkInfo", 0);
@@ -293,6 +299,14 @@ static PyObject *_wrap_wxHtmlWindow_AddFilter(PyObject *self, PyObject *args, Py
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
+}
+
+static void *SwigwxHtmlLinkInfoTowxObject(void *ptr) {
+    wxHtmlLinkInfo *src;
+    wxObject *dest;
+    src = (wxHtmlLinkInfo *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
 }
 
 #define new_wxHtmlLinkInfo(_swigarg0,_swigarg1) (new wxHtmlLinkInfo(_swigarg0,_swigarg1))
@@ -440,7 +454,6 @@ static PyObject *_wrap_wxHtmlLinkInfo_GetEvent(PyObject *self, PyObject *args, P
     wxHtmlLinkInfo * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlLinkInfo_GetEvent",_kwnames,&_argo0)) 
@@ -457,13 +470,7 @@ static PyObject *_wrap_wxHtmlLinkInfo_GetEvent(PyObject *self, PyObject *args, P
         _result = (wxMouseEvent *)wxHtmlLinkInfo_GetEvent(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxMouseEvent_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -571,6 +578,14 @@ static PyObject *_wrap_wxHtmlLinkInfo_SetHtmlCell(PyObject *self, PyObject *args
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
+}
+
+static void *SwigwxHtmlTagTowxObject(void *ptr) {
+    wxHtmlTag *src;
+    wxObject *dest;
+    src = (wxHtmlTag *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
 }
 
 #define wxHtmlTag_GetName(_swigobj)  (_swigobj->GetName())
@@ -880,6 +895,14 @@ static PyObject *_wrap_wxHtmlTag_GetEndPos2(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
+static void *SwigwxHtmlParserTowxObject(void *ptr) {
+    wxHtmlParser *src;
+    wxObject *dest;
+    src = (wxHtmlParser *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define wxHtmlParser_SetFS(_swigobj,_swigarg0)  (_swigobj->SetFS(_swigarg0))
 static PyObject *_wrap_wxHtmlParser_SetFS(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -923,7 +946,6 @@ static PyObject *_wrap_wxHtmlParser_GetFS(PyObject *self, PyObject *args, PyObje
     wxHtmlParser * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlParser_GetFS",_kwnames,&_argo0)) 
@@ -940,13 +962,7 @@ static PyObject *_wrap_wxHtmlParser_GetFS(PyObject *self, PyObject *args, PyObje
         _result = (wxFileSystem *)wxHtmlParser_GetFS(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFileSystem_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -959,7 +975,6 @@ static PyObject *_wrap_wxHtmlParser_Parse(PyObject *self, PyObject *args, PyObje
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","source", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlParser_Parse",_kwnames,&_argo0,&_obj1)) 
@@ -994,13 +1009,7 @@ static PyObject *_wrap_wxHtmlParser_Parse(PyObject *self, PyObject *args, PyObje
         _result = (wxObject *)wxHtmlParser_Parse(_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxObject_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
 {
     if (_obj1)
         delete _arg1;
@@ -1275,6 +1284,14 @@ static void *SwigwxHtmlWinParserTowxHtmlParser(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxHtmlWinParserTowxObject(void *ptr) {
+    wxHtmlWinParser *src;
+    wxObject *dest;
+    src = (wxHtmlWinParser *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxHtmlWinParser(_swigarg0) (new wxHtmlWinParser(_swigarg0))
 static PyObject *_wrap_new_wxHtmlWinParser(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1352,7 +1369,6 @@ static PyObject *_wrap_wxHtmlWinParser_GetDC(PyObject *self, PyObject *args, PyO
     wxHtmlWinParser * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlWinParser_GetDC",_kwnames,&_argo0)) 
@@ -1369,13 +1385,7 @@ static PyObject *_wrap_wxHtmlWinParser_GetDC(PyObject *self, PyObject *args, PyO
         _result = (wxDC *)wxHtmlWinParser_GetDC(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxDC_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -1440,7 +1450,6 @@ static PyObject *_wrap_wxHtmlWinParser_GetWindow(PyObject *self, PyObject *args,
     wxHtmlWinParser * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlWinParser_GetWindow",_kwnames,&_argo0)) 
@@ -1457,13 +1466,7 @@ static PyObject *_wrap_wxHtmlWinParser_GetWindow(PyObject *self, PyObject *args,
         _result = (wxWindow *)wxHtmlWinParser_GetWindow(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxWindow_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -2282,6 +2285,14 @@ static PyObject *_wrap_wxHtmlWinParser_GetLink(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
+static void *SwigwxPyHtmlTagHandlerTowxObject(void *ptr) {
+    wxPyHtmlTagHandler *src;
+    wxObject *dest;
+    src = (wxPyHtmlTagHandler *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxHtmlTagHandler() (new wxPyHtmlTagHandler())
 static PyObject *_wrap_new_wxHtmlTagHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2458,6 +2469,14 @@ static void *SwigwxPyHtmlWinTagHandlerTowxPyHtmlTagHandler(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxPyHtmlWinTagHandlerTowxObject(void *ptr) {
+    wxPyHtmlWinTagHandler *src;
+    wxObject *dest;
+    src = (wxPyHtmlWinTagHandler *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxHtmlWinTagHandler() (new wxPyHtmlWinTagHandler())
 static PyObject *_wrap_new_wxHtmlWinTagHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2624,6 +2643,14 @@ static PyObject *_wrap_wxHtmlWinTagHandler_ParseInner(PyObject *self, PyObject *
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
+}
+
+static void *SwigwxHtmlCellTowxObject(void *ptr) {
+    wxHtmlCell *src;
+    wxObject *dest;
+    src = (wxHtmlCell *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
 }
 
 #define new_wxHtmlCell() (new wxHtmlCell())
@@ -3243,11 +3270,93 @@ static PyObject *_wrap_wxHtmlCell_SetCanLiveOnPagebreak(PyObject *self, PyObject
     return _resultobj;
 }
 
+static void *SwigwxHtmlWordCellTowxHtmlCell(void *ptr) {
+    wxHtmlWordCell *src;
+    wxHtmlCell *dest;
+    src = (wxHtmlWordCell *) ptr;
+    dest = (wxHtmlCell *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxHtmlWordCellTowxObject(void *ptr) {
+    wxHtmlWordCell *src;
+    wxObject *dest;
+    src = (wxHtmlWordCell *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxHtmlWordCell(_swigarg0,_swigarg1) (new wxHtmlWordCell(_swigarg0,_swigarg1))
+static PyObject *_wrap_new_wxHtmlWordCell(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlWordCell * _result;
+    wxString * _arg0;
+    wxDC * _arg1;
+    PyObject * _obj0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "word","dc", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:new_wxHtmlWordCell",_kwnames,&_obj0,&_argo1)) 
+        return NULL;
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg0 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg0 = new wxString(PyString_AS_STRING(_obj0), PyString_GET_SIZE(_obj0));
+#endif
+}
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxHtmlWordCell. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxHtmlWordCell *)new_wxHtmlWordCell(*_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxHtmlWordCell_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj0)
+        delete _arg0;
+}
+    return _resultobj;
+}
+
 static void *SwigwxHtmlContainerCellTowxHtmlCell(void *ptr) {
     wxHtmlContainerCell *src;
     wxHtmlCell *dest;
     src = (wxHtmlContainerCell *) ptr;
     dest = (wxHtmlCell *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxHtmlContainerCellTowxObject(void *ptr) {
+    wxHtmlContainerCell *src;
+    wxObject *dest;
+    src = (wxHtmlContainerCell *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -3767,6 +3876,14 @@ static void *SwigwxHtmlColourCellTowxHtmlCell(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxHtmlColourCellTowxObject(void *ptr) {
+    wxHtmlColourCell *src;
+    wxObject *dest;
+    src = (wxHtmlColourCell *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxHtmlColourCell(_swigarg0,_swigarg1) (new wxHtmlColourCell(_swigarg0,_swigarg1))
 static PyObject *_wrap_new_wxHtmlColourCell(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -3801,11 +3918,69 @@ static PyObject *_wrap_new_wxHtmlColourCell(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
+static void *SwigwxHtmlFontCellTowxHtmlCell(void *ptr) {
+    wxHtmlFontCell *src;
+    wxHtmlCell *dest;
+    src = (wxHtmlFontCell *) ptr;
+    dest = (wxHtmlCell *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxHtmlFontCellTowxObject(void *ptr) {
+    wxHtmlFontCell *src;
+    wxObject *dest;
+    src = (wxHtmlFontCell *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxHtmlFontCell(_swigarg0) (new wxHtmlFontCell(_swigarg0))
+static PyObject *_wrap_new_wxHtmlFontCell(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlFontCell * _result;
+    wxFont * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "font", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxHtmlFontCell",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFont_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxHtmlFontCell. Expected _wxFont_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxHtmlFontCell *)new_wxHtmlFontCell(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxHtmlFontCell_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
 static void *SwigwxHtmlWidgetCellTowxHtmlCell(void *ptr) {
     wxHtmlWidgetCell *src;
     wxHtmlCell *dest;
     src = (wxHtmlWidgetCell *) ptr;
     dest = (wxHtmlCell *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxHtmlWidgetCellTowxObject(void *ptr) {
+    wxHtmlWidgetCell *src;
+    wxObject *dest;
+    src = (wxHtmlWidgetCell *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -3873,6 +4048,14 @@ static void *SwigwxPyHtmlWindowTowxEvtHandler(void *ptr) {
     wxEvtHandler *dest;
     src = (wxPyHtmlWindow *) ptr;
     dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPyHtmlWindowTowxObject(void *ptr) {
+    wxPyHtmlWindow *src;
+    wxObject *dest;
+    src = (wxPyHtmlWindow *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -4210,7 +4393,6 @@ static PyObject *_wrap_wxHtmlWindow_GetRelatedFrame(PyObject *self, PyObject *ar
     wxPyHtmlWindow * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlWindow_GetRelatedFrame",_kwnames,&_argo0)) 
@@ -4227,13 +4409,7 @@ static PyObject *_wrap_wxHtmlWindow_GetRelatedFrame(PyObject *self, PyObject *ar
         _result = (wxFrame *)wxHtmlWindow_GetRelatedFrame(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFrame_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -4819,6 +4995,14 @@ static PyObject *_wrap_wxHtmlWindow_base_OnSetTitle(PyObject *self, PyObject *ar
     return _resultobj;
 }
 
+static void *SwigwxHtmlDCRendererTowxObject(void *ptr) {
+    wxHtmlDCRenderer *src;
+    wxObject *dest;
+    src = (wxHtmlDCRenderer *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxHtmlDCRenderer() (new wxHtmlDCRenderer())
 static PyObject *_wrap_new_wxHtmlDCRenderer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -5079,6 +5263,14 @@ static void *SwigwxHtmlPrintoutTowxPyPrintout(void *ptr) {
     wxPyPrintout *dest;
     src = (wxHtmlPrintout *) ptr;
     dest = (wxPyPrintout *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxHtmlPrintoutTowxObject(void *ptr) {
+    wxHtmlPrintout *src;
+    wxObject *dest;
+    src = (wxHtmlPrintout *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -5372,6 +5564,14 @@ static PyObject *_wrap_wxHtmlPrintout_SetMargins(PyObject *self, PyObject *args,
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
+}
+
+static void *SwigwxHtmlEasyPrintingTowxObject(void *ptr) {
+    wxHtmlEasyPrinting *src;
+    wxObject *dest;
+    src = (wxHtmlEasyPrinting *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
 }
 
 #define new_wxHtmlEasyPrinting(_swigarg0,_swigarg1) (new wxHtmlEasyPrinting(_swigarg0,_swigarg1))
@@ -5967,6 +6167,7 @@ static PyMethodDef htmlcMethods[] = {
 	 { "wxHtmlWindow__setSelf", (PyCFunction) _wrap_wxHtmlWindow__setSelf, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxHtmlWindow", (PyCFunction) _wrap_new_wxHtmlWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxHtmlWidgetCell", (PyCFunction) _wrap_new_wxHtmlWidgetCell, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxHtmlFontCell", (PyCFunction) _wrap_new_wxHtmlFontCell, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxHtmlColourCell", (PyCFunction) _wrap_new_wxHtmlColourCell, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlContainerCell_GetFirstCell", (PyCFunction) _wrap_wxHtmlContainerCell_GetFirstCell, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlContainerCell_SetBorder", (PyCFunction) _wrap_wxHtmlContainerCell_SetBorder, METH_VARARGS | METH_KEYWORDS },
@@ -5984,6 +6185,7 @@ static PyMethodDef htmlcMethods[] = {
 	 { "wxHtmlContainerCell_SetAlignHor", (PyCFunction) _wrap_wxHtmlContainerCell_SetAlignHor, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlContainerCell_InsertCell", (PyCFunction) _wrap_wxHtmlContainerCell_InsertCell, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxHtmlContainerCell", (PyCFunction) _wrap_new_wxHtmlContainerCell, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxHtmlWordCell", (PyCFunction) _wrap_new_wxHtmlWordCell, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlCell_SetCanLiveOnPagebreak", (PyCFunction) _wrap_wxHtmlCell_SetCanLiveOnPagebreak, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlCell_AdjustPagebreak", (PyCFunction) _wrap_wxHtmlCell_AdjustPagebreak, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlCell_Find", (PyCFunction) _wrap_wxHtmlCell_Find, METH_VARARGS | METH_KEYWORDS },
@@ -6173,6 +6375,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxClipboard","_wxClipboard",0},
     { "_class_wxGauge","_wxGauge",0},
     { "_class_wxSashEvent","_wxSashEvent",0},
+    { "_wxGDIObject","_class_wxGDIObject",0},
     { "_wxDC","_class_wxDC",0},
     { "_wxSizerItem","_class_wxSizerItem",0},
     { "_class_wxBitmapDataObject","_wxBitmapDataObject",0},
@@ -6182,6 +6385,39 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxBMPHandler","_wxBMPHandler",0},
     { "_wxPrintPreview","_class_wxPrintPreview",0},
     { "_class_wxFlexGridSizer","_wxFlexGridSizer",0},
+    { "_class_wxObject","_class_wxHtmlEasyPrinting",SwigwxHtmlEasyPrintingTowxObject},
+    { "_class_wxObject","_wxHtmlEasyPrinting",SwigwxHtmlEasyPrintingTowxObject},
+    { "_class_wxObject","_class_wxHtmlPrintout",SwigwxHtmlPrintoutTowxObject},
+    { "_class_wxObject","_wxHtmlPrintout",SwigwxHtmlPrintoutTowxObject},
+    { "_class_wxObject","_class_wxHtmlDCRenderer",SwigwxHtmlDCRendererTowxObject},
+    { "_class_wxObject","_wxHtmlDCRenderer",SwigwxHtmlDCRendererTowxObject},
+    { "_class_wxObject","_class_wxPyHtmlWindow",SwigwxPyHtmlWindowTowxObject},
+    { "_class_wxObject","_wxPyHtmlWindow",SwigwxPyHtmlWindowTowxObject},
+    { "_class_wxObject","_class_wxHtmlWidgetCell",SwigwxHtmlWidgetCellTowxObject},
+    { "_class_wxObject","_wxHtmlWidgetCell",SwigwxHtmlWidgetCellTowxObject},
+    { "_class_wxObject","_class_wxHtmlFontCell",SwigwxHtmlFontCellTowxObject},
+    { "_class_wxObject","_wxHtmlFontCell",SwigwxHtmlFontCellTowxObject},
+    { "_class_wxObject","_class_wxHtmlColourCell",SwigwxHtmlColourCellTowxObject},
+    { "_class_wxObject","_wxHtmlColourCell",SwigwxHtmlColourCellTowxObject},
+    { "_class_wxObject","_class_wxHtmlContainerCell",SwigwxHtmlContainerCellTowxObject},
+    { "_class_wxObject","_wxHtmlContainerCell",SwigwxHtmlContainerCellTowxObject},
+    { "_class_wxObject","_class_wxHtmlWordCell",SwigwxHtmlWordCellTowxObject},
+    { "_class_wxObject","_wxHtmlWordCell",SwigwxHtmlWordCellTowxObject},
+    { "_class_wxObject","_class_wxHtmlCell",SwigwxHtmlCellTowxObject},
+    { "_class_wxObject","_wxHtmlCell",SwigwxHtmlCellTowxObject},
+    { "_class_wxObject","_class_wxPyHtmlWinTagHandler",SwigwxPyHtmlWinTagHandlerTowxObject},
+    { "_class_wxObject","_wxPyHtmlWinTagHandler",SwigwxPyHtmlWinTagHandlerTowxObject},
+    { "_class_wxObject","_class_wxPyHtmlTagHandler",SwigwxPyHtmlTagHandlerTowxObject},
+    { "_class_wxObject","_wxPyHtmlTagHandler",SwigwxPyHtmlTagHandlerTowxObject},
+    { "_class_wxObject","_class_wxHtmlWinParser",SwigwxHtmlWinParserTowxObject},
+    { "_class_wxObject","_wxHtmlWinParser",SwigwxHtmlWinParserTowxObject},
+    { "_class_wxObject","_class_wxHtmlParser",SwigwxHtmlParserTowxObject},
+    { "_class_wxObject","_wxHtmlParser",SwigwxHtmlParserTowxObject},
+    { "_class_wxObject","_class_wxHtmlTag",SwigwxHtmlTagTowxObject},
+    { "_class_wxObject","_wxHtmlTag",SwigwxHtmlTagTowxObject},
+    { "_class_wxObject","_class_wxHtmlLinkInfo",SwigwxHtmlLinkInfoTowxObject},
+    { "_class_wxObject","_wxHtmlLinkInfo",SwigwxHtmlLinkInfoTowxObject},
+    { "_class_wxObject","_wxObject",0},
     { "_wxSpinEvent","_class_wxSpinEvent",0},
     { "_wxSashLayoutWindow","_class_wxSashLayoutWindow",0},
     { "_size_t","_wxCoord",0},
@@ -6271,10 +6507,14 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxZipFSHandler","_wxZipFSHandler",0},
     { "_wxHtmlCell","_class_wxHtmlWidgetCell",SwigwxHtmlWidgetCellTowxHtmlCell},
     { "_wxHtmlCell","_wxHtmlWidgetCell",SwigwxHtmlWidgetCellTowxHtmlCell},
+    { "_wxHtmlCell","_class_wxHtmlFontCell",SwigwxHtmlFontCellTowxHtmlCell},
+    { "_wxHtmlCell","_wxHtmlFontCell",SwigwxHtmlFontCellTowxHtmlCell},
     { "_wxHtmlCell","_class_wxHtmlColourCell",SwigwxHtmlColourCellTowxHtmlCell},
     { "_wxHtmlCell","_wxHtmlColourCell",SwigwxHtmlColourCellTowxHtmlCell},
     { "_wxHtmlCell","_class_wxHtmlContainerCell",SwigwxHtmlContainerCellTowxHtmlCell},
     { "_wxHtmlCell","_wxHtmlContainerCell",SwigwxHtmlContainerCellTowxHtmlCell},
+    { "_wxHtmlCell","_class_wxHtmlWordCell",SwigwxHtmlWordCellTowxHtmlCell},
+    { "_wxHtmlCell","_wxHtmlWordCell",SwigwxHtmlWordCellTowxHtmlCell},
     { "_wxHtmlCell","_class_wxHtmlCell",0},
     { "_char","_wxChar",0},
     { "_wxBitmap","_class_wxBitmap",0},
@@ -6382,6 +6622,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxMenu","_class_wxMenu",0},
     { "_class_wxMoveEvent","_wxMoveEvent",0},
     { "_wxListBox","_class_wxListBox",0},
+    { "_class_wxHtmlWordCell","_wxHtmlWordCell",0},
     { "_wxScreenDC","_class_wxScreenDC",0},
     { "_class_wxToolBarSimple","_wxToolBarSimple",0},
     { "_class_wxMDIChildFrame","_wxMDIChildFrame",0},
@@ -6395,6 +6636,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxCaret","_wxCaret",0},
     { "_class_wxMDIClientWindow","_wxMDIClientWindow",0},
     { "_class_wxHtmlLinkInfo","_wxHtmlLinkInfo",0},
+    { "_class_wxHtmlFontCell","_wxHtmlFontCell",0},
     { "_class_wxBrush","_wxBrush",0},
     { "_wxTipProvider","_class_wxTipProvider",0},
     { "_class_wxPyHtmlTagHandler","_class_wxPyHtmlWinTagHandler",SwigwxPyHtmlWinTagHandlerTowxPyHtmlTagHandler},
@@ -6427,6 +6669,39 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxGenericDragImage","_wxGenericDragImage",0},
     { "_wxListCtrl","_class_wxListCtrl",0},
     { "_wxSingleChoiceDialog","_class_wxSingleChoiceDialog",0},
+    { "_wxObject","_class_wxHtmlEasyPrinting",SwigwxHtmlEasyPrintingTowxObject},
+    { "_wxObject","_wxHtmlEasyPrinting",SwigwxHtmlEasyPrintingTowxObject},
+    { "_wxObject","_class_wxHtmlPrintout",SwigwxHtmlPrintoutTowxObject},
+    { "_wxObject","_wxHtmlPrintout",SwigwxHtmlPrintoutTowxObject},
+    { "_wxObject","_class_wxHtmlDCRenderer",SwigwxHtmlDCRendererTowxObject},
+    { "_wxObject","_wxHtmlDCRenderer",SwigwxHtmlDCRendererTowxObject},
+    { "_wxObject","_class_wxPyHtmlWindow",SwigwxPyHtmlWindowTowxObject},
+    { "_wxObject","_wxPyHtmlWindow",SwigwxPyHtmlWindowTowxObject},
+    { "_wxObject","_class_wxHtmlWidgetCell",SwigwxHtmlWidgetCellTowxObject},
+    { "_wxObject","_wxHtmlWidgetCell",SwigwxHtmlWidgetCellTowxObject},
+    { "_wxObject","_class_wxHtmlFontCell",SwigwxHtmlFontCellTowxObject},
+    { "_wxObject","_wxHtmlFontCell",SwigwxHtmlFontCellTowxObject},
+    { "_wxObject","_class_wxHtmlColourCell",SwigwxHtmlColourCellTowxObject},
+    { "_wxObject","_wxHtmlColourCell",SwigwxHtmlColourCellTowxObject},
+    { "_wxObject","_class_wxHtmlContainerCell",SwigwxHtmlContainerCellTowxObject},
+    { "_wxObject","_wxHtmlContainerCell",SwigwxHtmlContainerCellTowxObject},
+    { "_wxObject","_class_wxHtmlWordCell",SwigwxHtmlWordCellTowxObject},
+    { "_wxObject","_wxHtmlWordCell",SwigwxHtmlWordCellTowxObject},
+    { "_wxObject","_class_wxHtmlCell",SwigwxHtmlCellTowxObject},
+    { "_wxObject","_wxHtmlCell",SwigwxHtmlCellTowxObject},
+    { "_wxObject","_class_wxPyHtmlWinTagHandler",SwigwxPyHtmlWinTagHandlerTowxObject},
+    { "_wxObject","_wxPyHtmlWinTagHandler",SwigwxPyHtmlWinTagHandlerTowxObject},
+    { "_wxObject","_class_wxPyHtmlTagHandler",SwigwxPyHtmlTagHandlerTowxObject},
+    { "_wxObject","_wxPyHtmlTagHandler",SwigwxPyHtmlTagHandlerTowxObject},
+    { "_wxObject","_class_wxHtmlWinParser",SwigwxHtmlWinParserTowxObject},
+    { "_wxObject","_wxHtmlWinParser",SwigwxHtmlWinParserTowxObject},
+    { "_wxObject","_class_wxHtmlParser",SwigwxHtmlParserTowxObject},
+    { "_wxObject","_wxHtmlParser",SwigwxHtmlParserTowxObject},
+    { "_wxObject","_class_wxHtmlTag",SwigwxHtmlTagTowxObject},
+    { "_wxObject","_wxHtmlTag",SwigwxHtmlTagTowxObject},
+    { "_wxObject","_class_wxHtmlLinkInfo",SwigwxHtmlLinkInfoTowxObject},
+    { "_wxObject","_wxHtmlLinkInfo",SwigwxHtmlLinkInfoTowxObject},
+    { "_wxObject","_class_wxObject",0},
     { "_class_wxPoint","_wxPoint",0},
     { "_class_wxPyInputStream","_wxPyInputStream",0},
     { "_wxRealPoint","_class_wxRealPoint",0},
@@ -6435,10 +6710,14 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxHtmlWinParser","_wxHtmlWinParser",0},
     { "_class_wxHtmlCell","_class_wxHtmlWidgetCell",SwigwxHtmlWidgetCellTowxHtmlCell},
     { "_class_wxHtmlCell","_wxHtmlWidgetCell",SwigwxHtmlWidgetCellTowxHtmlCell},
+    { "_class_wxHtmlCell","_class_wxHtmlFontCell",SwigwxHtmlFontCellTowxHtmlCell},
+    { "_class_wxHtmlCell","_wxHtmlFontCell",SwigwxHtmlFontCellTowxHtmlCell},
     { "_class_wxHtmlCell","_class_wxHtmlColourCell",SwigwxHtmlColourCellTowxHtmlCell},
     { "_class_wxHtmlCell","_wxHtmlColourCell",SwigwxHtmlColourCellTowxHtmlCell},
     { "_class_wxHtmlCell","_class_wxHtmlContainerCell",SwigwxHtmlContainerCellTowxHtmlCell},
     { "_class_wxHtmlCell","_wxHtmlContainerCell",SwigwxHtmlContainerCellTowxHtmlCell},
+    { "_class_wxHtmlCell","_class_wxHtmlWordCell",SwigwxHtmlWordCellTowxHtmlCell},
+    { "_class_wxHtmlCell","_wxHtmlWordCell",SwigwxHtmlWordCellTowxHtmlCell},
     { "_class_wxHtmlCell","_wxHtmlCell",0},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
@@ -6516,6 +6795,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxWindowID","_int",0},
     { "_wxWindowID","_signed_int",0},
     { "_wxWindowID","_unsigned_int",0},
+    { "_class_wxGDIObject","_wxGDIObject",0},
     { "_class_wxScrollWinEvent","_wxScrollWinEvent",0},
     { "_class_wxSizerItem","_wxSizerItem",0},
     { "_int","_wxCoord",0},
@@ -6651,6 +6931,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxConfig","_wxConfig",0},
     { "_wxKeyEvent","_class_wxKeyEvent",0},
     { "_wxMoveEvent","_class_wxMoveEvent",0},
+    { "_wxHtmlWordCell","_class_wxHtmlWordCell",0},
     { "_wxHtmlEasyPrinting","_class_wxHtmlEasyPrinting",0},
     { "_wxColourData","_class_wxColourData",0},
     { "_wxPageSetupDialogData","_class_wxPageSetupDialogData",0},
@@ -6663,6 +6944,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPyFontEnumerator","_class_wxPyFontEnumerator",0},
     { "_wxMDIClientWindow","_class_wxMDIClientWindow",0},
     { "_wxHtmlLinkInfo","_class_wxHtmlLinkInfo",0},
+    { "_wxHtmlFontCell","_class_wxHtmlFontCell",0},
     { "_class_wxDataObjectComposite","_wxDataObjectComposite",0},
     { "_class_wxToolBarToolBase","_wxToolBarToolBase",0},
     { "_class_wxFontDialog","_wxFontDialog",0},
@@ -6713,6 +6995,10 @@ SWIGEXPORT(void) inithtmlc() {
 
     wxClassInfo::CleanUpClasses();
     wxClassInfo::InitializeClasses();
+
+    wxPyPtrTypeMap_Add("wxHtmlTagHandler", "wxPyHtmlTagHandler");
+    wxPyPtrTypeMap_Add("wxHtmlWinTagHandler", "wxPyHtmlWinTagHandler");
+    wxPyPtrTypeMap_Add("wxHtmlWindow", "wxPyHtmlWindow");
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

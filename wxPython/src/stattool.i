@@ -85,7 +85,7 @@ enum wxToolBarToolStyle
 
 
 
-class wxToolBarToolBase {
+class wxToolBarToolBase : public wxObject {
 public:
 //      wxToolBarToolBase(wxToolBarBase *tbar = (wxToolBarBase *)NULL,
 //                        int id = wxID_SEPARATOR,
@@ -307,120 +307,5 @@ public:
 };
 
 //---------------------------------------------------------------------------
-
-
-
-#ifdef THE_OLD_ONE
-
-class wxToolBarTool {
-public:
-    wxToolBarTool();
-    ~wxToolBarTool();
-    void SetSize( long w, long h )
-    long GetWidth ();
-    long GetHeight ();
-    wxControl *GetControl();
-
-public:
-    int                   m_toolStyle;
-    wxObject *            m_clientData;
-    int                   m_index;
-    long                  m_x;
-    long                  m_y;
-    long                  m_width;
-    long                  m_height;
-    bool                  m_toggleState;
-    bool                  m_isToggle;
-    bool                  m_deleteSecondBitmap;
-    bool                  m_enabled;
-    wxBitmap              m_bitmap1;
-    wxBitmap              m_bitmap2;
-    bool                  m_isMenuCommand;
-    wxString              m_shortHelpString;
-    wxString              m_longHelpString;
-};
-
-
-
-//  class wxToolBarBase : public wxControl {
-//  public:
-
-class wxToolBar : public wxControl {
-public:
-    wxToolBar(wxWindow* parent, wxWindowID id,
-              const wxPoint& pos = wxDefaultPosition,
-              const wxSize& size = wxDefaultSize,
-              long style = wxTB_HORIZONTAL | wxNO_BORDER,
-              char* name = "toolBar");
-
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
-
-
-    bool AddControl(wxControl * control);
-    void AddSeparator();
-    void ClearTools();
-
-    // Ignoge the clientData for now...
-    %addmethods {
-        wxToolBarTool* AddTool(int toolIndex,
-                               const wxBitmap& bitmap1,
-                               const wxBitmap& bitmap2 = wxNullBitmap,
-                               int  isToggle = FALSE,
-                               long xPos = -1,
-                               long yPos = -1,
-                               //wxObject* clientData = NULL,
-                               const wxString& shortHelpString = wxPyEmptyStr,
-                               const wxString& longHelpString = wxPyEmptyStr) {
-            return self->AddTool(toolIndex, bitmap1, bitmap2,
-                                 isToggle, xPos, yPos, NULL,
-                                 shortHelpString, longHelpString);
-        }
-
-        wxToolBarTool* AddSimpleTool(int toolIndex,
-                               const wxBitmap& bitmap,
-                               const wxString& shortHelpString = wxPyEmptyStr,
-                               const wxString& longHelpString = wxPyEmptyStr) {
-            return self->AddTool(toolIndex, bitmap, wxNullBitmap,
-                                 FALSE, -1, -1, NULL,
-                                 shortHelpString, longHelpString);
-        }
-    }
-
-
-    void EnableTool(int toolIndex, bool enable);
-#ifdef __WXMSW__
-    wxToolBarTool* FindToolForPosition(long x, long y);
-    wxSize GetToolSize();
-    wxSize GetToolBitmapSize();
-    void SetToolBitmapSize(const wxSize& size);
-    wxSize GetMaxSize();
-#endif
-    wxSize GetToolMargins();
-//    wxObject* GetToolClientData(int toolIndex);
-    bool GetToolEnabled(int toolIndex);
-    wxString GetToolLongHelp(int toolIndex);
-    int GetToolPacking();
-    int GetToolSeparation();
-    wxString GetToolShortHelp(int toolIndex);
-    bool GetToolState(int toolIndex);
-
-
-    bool Realize();
-
-    void SetToolLongHelp(int toolIndex, const wxString& helpString);
-    void SetToolShortHelp(int toolIndex, const wxString& helpString);
-    void SetMargins(const wxSize& size);
-    void SetToolPacking(int packing);
-    void SetToolSeparation(int separation);
-    void ToggleTool(int toolIndex, const bool toggle);
-    void SetToggle(int toolIndex, bool toggle);
-    void SetMaxRowsCols(int rows, int cols);
-    int GetMaxRows();
-    int GetMaxCols();
-};
-
-
-#endif
-
 //---------------------------------------------------------------------------
 

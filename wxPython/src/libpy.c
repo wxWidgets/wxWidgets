@@ -362,7 +362,7 @@ SWIG_GetPtr(char *c, void **ptr, char *t)
   sp = &SwigPtrTable[start];
 
   /* Try to find a match */
-  while (start <= end) {
+  while (start < end) {               /* was "<="     --robin */
     if (strncmp(t,sp->name,sp->len) == 0) {
       name = sp->name;
       len = sp->len;

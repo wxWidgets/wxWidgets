@@ -17,7 +17,7 @@ from controls import *
 
 from events import *
 import wx
-class wxColourDataPtr :
+class wxColourDataPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -226,7 +226,7 @@ class wxTextEntryDialog(wxTextEntryDialogPtr):
 
 
 
-class wxFontDataPtr :
+class wxFontDataPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0

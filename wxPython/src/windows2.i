@@ -19,6 +19,7 @@
 #endif
 #include <wx/notebook.h>
 #include <wx/splitter.h>
+#include <wx/imaglist.h>
 #ifdef __WXMSW__
 #include <wx/msw/taskbar.h>
 #endif

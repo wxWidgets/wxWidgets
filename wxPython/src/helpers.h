@@ -52,7 +52,7 @@ void      __wxPreStart();
 PyObject* __wxStart(PyObject*, PyObject* args);
 void      __wxCleanup();
 
-extern PyObject* wxPython_dict;
+//extern PyObject* wxPython_dict;
 PyObject* __wxSetDictionary(PyObject*, PyObject* args);
 
 void wxPyEventThunker(wxObject*, wxEvent& event);
@@ -60,6 +60,14 @@ void wxPyEventThunker(wxObject*, wxEvent& event);
 PyObject* wxPyConstructObject(void* ptr,
                               const char* className,
                               int setThisOwn=0);
+PyObject* wxPyConstructObject(void* ptr,
+                              const char* className,
+                              PyObject* klass,
+                              int setThisOwn=0);
+PyObject*  wxPyClassExists(const char* className);
+PyObject*  wxPyMake_wxObject(wxObject* source);
+void       wxPyPtrTypeMap_Add(const char* commonName, const char* ptrName);
+
 bool wxPyRestoreThread();
 void wxPySaveThread(bool doSave);
 PyObject* wxPy_ConvertList(wxListBase* list, const char* className);
@@ -246,6 +254,10 @@ struct wxPyCoreAPI {
     int         (*p_wxPyCBH_callCallback)(const wxPyCallbackHelper& cbh, PyObject* argTuple);
     PyObject*   (*p_wxPyCBH_callCallbackObj)(const wxPyCallbackHelper& cbh, PyObject* argTuple);
     void        (*p_wxPyCBH_delete)(wxPyCallbackHelper* cbh);
+
+    PyObject*   (*p_wxPyClassExists)(const char* className);
+    PyObject*   (*p_wxPyMake_wxObject)(wxObject* source);
+    void        (*p_wxPyPtrTypeMap_Add)(const char* commonName, const char* ptrName);
 
 };
 
@@ -454,7 +466,7 @@ public:
     void CLASS::CBNAME(wxDC& a) {                               \
         bool doSave = wxPyRestoreThread();                      \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                   \
-            PyObject* obj = wxPyConstructObject(&a, "wxDC", 0); \
+            PyObject* obj = wxPyMake_wxObject(&a); \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));   \
             Py_DECREF(obj);                                     \
         }                                                       \
@@ -479,7 +491,7 @@ public:
     void CLASS::CBNAME(wxDC& a, bool b) {                               \
         bool doSave = wxPyRestoreThread();                              \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                           \
-            PyObject* obj = wxPyConstructObject(&a, "wxDC", 0);         \
+            PyObject* obj = wxPyMake_wxObject(&a); \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Oi)", obj, (int)b));  \
             Py_DECREF(obj);                                             \
         }                                                               \
@@ -502,7 +514,7 @@ public:
     void CLASS::CBNAME(wxDC& a, bool b) {                               \
         bool doSave = wxPyRestoreThread();                              \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                           \
-            PyObject* obj = wxPyConstructObject(&a, "wxDC", 0);         \
+            PyObject* obj = wxPyMake_wxObject(&a); \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Oi)", obj, (int)b));  \
             Py_DECREF(obj);                                             \
         }                                                               \
@@ -566,7 +578,7 @@ public:
     void CLASS::CBNAME(wxDC& a, double b, double c, double d, double e, bool f) {       \
         bool doSave = wxPyRestoreThread();                                              \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                                           \
-            PyObject* obj = wxPyConstructObject(&a, "wxDC", 0);                         \
+            PyObject* obj = wxPyMake_wxObject(&a); \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Oddddi)", obj, b, c, d, e, (int)f));  \
             Py_DECREF(obj);                                                             \
         }                                                                               \
@@ -590,7 +602,7 @@ public:
         bool doSave = wxPyRestoreThread();                                              \
         bool rval;                                                                      \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                                           \
-            PyObject* obj = wxPyConstructObject(&a, "wxDC", 0);                         \
+            PyObject* obj = wxPyMake_wxObject(&a); \
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Oddddi)", obj, b, c, d, e, (int)f));\
             Py_DECREF(obj);                                                             \
         }                                                                               \
@@ -635,7 +647,7 @@ public:
     void CLASS::CBNAME(wxDC& a, double b, double c, double d, double e) {       \
         bool doSave = wxPyRestoreThread();                                      \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                                   \
-            PyObject* obj = wxPyConstructObject(&a, "wxDC", 0);                 \
+            PyObject* obj = wxPyMake_wxObject(&a); \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Odddd)", obj, b, c, d, e));   \
             Py_DECREF(obj);                                                     \
         }                                                                       \
@@ -658,7 +670,7 @@ public:
     void CLASS::CBNAME(wxDC& a, bool b) {                               \
         bool doSave = wxPyRestoreThread();                              \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                           \
-            PyObject* obj = wxPyConstructObject(&a, "wxDC", 0);         \
+            PyObject* obj = wxPyMake_wxObject(&a); \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Oi)", obj, (int)b));  \
             Py_DECREF(obj);                                             \
         }                                                               \
@@ -682,7 +694,7 @@ public:
                 int e, int f) {                                                 \
         bool doSave = wxPyRestoreThread();                                      \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                                   \
-            PyObject* obj = wxPyConstructObject(a, "wxPyControlPoint", 0);      \
+            PyObject* obj = wxPyMake_wxObject(a); \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Oiddii)", obj, (int)b, c, d, e, f));\
             Py_DECREF(obj);                                                     \
         }                                                                       \
@@ -706,7 +718,7 @@ public:
     void CLASS::CBNAME(wxControlPoint* a, double b, double c, int d, int e) {   \
         bool doSave = wxPyRestoreThread();                                      \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                                   \
-            PyObject* obj = wxPyConstructObject(a, "wxPyControlPoint", 0);      \
+            PyObject* obj = wxPyMake_wxObject(a); \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Oddii)", obj, b, c, d, e));   \
             Py_DECREF(obj);                                                     \
         }                                                                       \
@@ -947,7 +959,7 @@ public:
         bool rval = FALSE;                                                      \
         bool doSave = wxPyRestoreThread();                                      \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                                   \
-            PyObject* obj = wxPyConstructObject((void*)&a,"wxHtmlTag", 0);      \
+            PyObject* obj = wxPyConstructObject((void*)&a, "wxHtmlTag", 0); \
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));            \
             Py_DECREF(obj);                                                     \
         }                                                                       \
@@ -1005,7 +1017,7 @@ public:
         bool rval;                                                      \
         bool doSave = wxPyRestoreThread();                              \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                           \
-            PyObject* obj = wxPyConstructObject((void*)a,"wxWindow", 0);\
+            PyObject* obj = wxPyMake_wxObject(a); \
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));    \
             Py_DECREF(obj);                                             \
         }                                                               \
@@ -1073,7 +1085,7 @@ public:
         wxFSFile* rval=0;                                               \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                           \
             PyObject* ro;                                               \
-            PyObject* obj = wxPyConstructObject(&a, "wxFileSystem", 0); \
+            PyObject* obj = wxPyMake_wxObject(&a); \
             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(Os)",         \
                                           obj, b.c_str()));             \
             if (ro) {                                                   \

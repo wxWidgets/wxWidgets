@@ -1960,6 +1960,14 @@ static PyObject *_wrap_wxCustomDataObject_GetData(PyObject *self, PyObject *args
     return _resultobj;
 }
 
+static void *SwigwxClipboardTowxObject(void *ptr) {
+    wxClipboard *src;
+    wxObject *dest;
+    src = (wxClipboard *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxClipboard() (new wxClipboard())
 static PyObject *_wrap_new_wxClipboard(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -3508,10 +3516,14 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxDataObjectSimple","_class_wxDataObjectSimple",0},
     { "_class_wxAcceleratorTable","_wxAcceleratorTable",0},
     { "_class_wxClipboard","_wxClipboard",0},
+    { "_wxGDIObject","_class_wxGDIObject",0},
     { "_wxDC","_class_wxDC",0},
     { "_class_wxBitmapDataObject","_class_wxPyBitmapDataObject",SwigwxPyBitmapDataObjectTowxBitmapDataObject},
     { "_class_wxBitmapDataObject","_wxPyBitmapDataObject",SwigwxPyBitmapDataObjectTowxBitmapDataObject},
     { "_class_wxBitmapDataObject","_wxBitmapDataObject",0},
+    { "_class_wxObject","_class_wxClipboard",SwigwxClipboardTowxObject},
+    { "_class_wxObject","_wxClipboard",SwigwxClipboardTowxObject},
+    { "_class_wxObject","_wxObject",0},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
     { "_size_t","_time_t",0},
@@ -3634,6 +3646,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxFontList","_class_wxFontList",0},
     { "_class_wxPyBitmapDataObject","_wxPyBitmapDataObject",0},
     { "_wxClientDC","_class_wxClientDC",0},
+    { "_wxObject","_class_wxClipboard",SwigwxClipboardTowxObject},
+    { "_wxObject","_wxClipboard",SwigwxClipboardTowxObject},
+    { "_wxObject","_class_wxObject",0},
     { "_class_wxPoint","_wxPoint",0},
     { "_wxRealPoint","_class_wxRealPoint",0},
     { "_signed_short","_WXTYPE",0},
@@ -3671,6 +3686,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxWindowID","_int",0},
     { "_wxWindowID","_signed_int",0},
     { "_wxWindowID","_unsigned_int",0},
+    { "_class_wxGDIObject","_wxGDIObject",0},
     { "_int","_wxCoord",0},
     { "_int","_wxPrintQuality",0},
     { "_int","_time_t",0},
@@ -3766,7 +3782,9 @@ SWIGEXPORT(void) initclip_dndc() {
 
 
     wxPyTheClipboard = wxTheClipboard;
-
+    wxPyPtrTypeMap_Add("wxDropSource", "wxPyDropSource");
+    wxPyPtrTypeMap_Add("wxTextDropTarget", "wxPyTextDropTarget");
+    wxPyPtrTypeMap_Add("wxFileDropTarget", "wxPyFileDropTarget");
 	 PyDict_SetItemString(d,"wxDataObject_Get", PyInt_FromLong((long) wxDataObject::Get));
 	 PyDict_SetItemString(d,"wxDataObject_Set", PyInt_FromLong((long) wxDataObject::Set));
 	 PyDict_SetItemString(d,"wxDataObject_Both", PyInt_FromLong((long) wxDataObject::Both));

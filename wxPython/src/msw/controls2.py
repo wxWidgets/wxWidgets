@@ -57,7 +57,7 @@ class wxListItemAttr(wxListItemAttrPtr):
 
 
 
-class wxListItemPtr :
+class wxListItemPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -262,7 +262,6 @@ class wxListEventPtr(wxNotifyEventPtr):
         return val
     def GetItem(self, *_args, **_kwargs):
         val = apply(controls2c.wxListEvent_GetItem,(self,) + _args, _kwargs)
-        if val: val = wxListItemPtr(val) 
         return val
     def __setattr__(self,name,value):
         if name == "m_code" :
@@ -321,6 +320,7 @@ class wxListCtrlPtr(wxControlPtr):
         return val
     def AssignImageList(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_AssignImageList,(self,) + _args, _kwargs)
+        _args[0].thisown = 0
         return val
     def DeleteItem(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_DeleteItem,(self,) + _args, _kwargs)
@@ -339,14 +339,12 @@ class wxListCtrlPtr(wxControlPtr):
         return val
     def EditLabel(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_EditLabel,(self,) + _args, _kwargs)
-        if val: val = wxTextCtrlPtr(val) 
         return val
     def EndEditLabel(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_EndEditLabel,(self,) + _args, _kwargs)
         return val
     def GetEditControl(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_GetEditControl,(self,) + _args, _kwargs)
-        if val: val = wxTextCtrlPtr(val) 
         return val
     def EnsureVisible(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_EnsureVisible,(self,) + _args, _kwargs)
@@ -371,14 +369,12 @@ class wxListCtrlPtr(wxControlPtr):
         return val
     def GetImageList(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_GetImageList,(self,) + _args, _kwargs)
-        if val: val = wxImageListPtr(val) 
         return val
     def GetItemData(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_GetItemData,(self,) + _args, _kwargs)
         return val
     def GetItem(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_GetItem,(self,) + _args, _kwargs)
-        if val: val = wxListItemPtr(val) ; val.thisown = 1
         return val
     def GetItemPosition(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_GetItemPosition,(self,) + _args, _kwargs)
@@ -516,7 +512,7 @@ class wxTreeItemId(wxTreeItemIdPtr):
 
 
 
-class wxTreeItemDataPtr :
+class wxTreeItemDataPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -583,6 +579,7 @@ class wxTreeCtrlPtr(wxControlPtr):
         return val
     def AssignImageList(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_AssignImageList,(self,) + _args, _kwargs)
+        _args[0].thisown = 0
         return val
     def GetCount(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_GetCount,(self,) + _args, _kwargs)
@@ -595,11 +592,9 @@ class wxTreeCtrlPtr(wxControlPtr):
         return val
     def GetImageList(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_GetImageList,(self,) + _args, _kwargs)
-        if val: val = wxImageListPtr(val) 
         return val
     def GetStateImageList(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_GetStateImageList,(self,) + _args, _kwargs)
-        if val: val = wxImageListPtr(val) 
         return val
     def SetImageList(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_SetImageList,(self,) + _args, _kwargs)
@@ -765,11 +760,9 @@ class wxTreeCtrlPtr(wxControlPtr):
         return val
     def EditLabel(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_EditLabel,(self,) + _args, _kwargs)
-        if val: val = wxTextCtrlPtr(val) 
         return val
     def GetEditControl(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_GetEditControl,(self,) + _args, _kwargs)
-        if val: val = wxTextCtrlPtr(val) 
         return val
     def EndEditLabel(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_EndEditLabel,(self,) + _args, _kwargs)

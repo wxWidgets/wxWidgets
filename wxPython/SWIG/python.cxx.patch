@@ -1,0 +1,20 @@
+*** Modules\python.cxx.orig	Fri May 11 16:04:01 2001
+--- Modules\python.cxx	Fri May 11 16:14:08 2001
+***************
+*** 879,885 ****
+    // If there was a result, it was saved in _result.
+    // If the function is a void type, don't do anything.
+  
+!   if ((tm = typemap_lookup("out","python",d,iname,"_result","_resultobj"))) {
+      // Yep.  Use it instead of the default
+      f.code << tm << "\n";
+    } else {
+--- 879,886 ----
+    // If there was a result, it was saved in _result.
+    // If the function is a void type, don't do anything.
+  
+!   if ((strncmp(name, "new_", 4) != 0) &&  // don't use the out typemap for constructors
+!       (tm = typemap_lookup("out","python",d,iname,"_result","_resultobj"))) {
+      // Yep.  Use it instead of the default
+      f.code << tm << "\n";
+    } else {

@@ -57,9 +57,21 @@ class wxPyControlPoint;
 // Typemaps just for OGL
 
 
+// OOR Support
+%typemap(python, out) wxPyShape*                { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxPyShapeEvtHandler*      { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxPyShapeCanvas*          { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxDiagram*                { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxOGLConstraint*          { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxPyDivisionShape*        { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxPseudoMetaFile*         { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxArrowHead*              { $target = wxPyMake_wxObject($source); }
+
+
+
+
 // wxOGL doesn't use a ref-counted copy of pens and brushes, so we'll
 // use the pen and brush lists to simulate that...
-
 
 %typemap(python, in) wxPen* {
     wxPen* temp;

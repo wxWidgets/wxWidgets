@@ -4,7 +4,7 @@ import imagec
 from misc import *
 
 from gdi import *
-class wxImageHandlerPtr :
+class wxImageHandlerPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -139,7 +139,7 @@ class wxTIFFHandler(wxTIFFHandlerPtr):
 
 
 
-class wxImagePtr :
+class wxImagePtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0

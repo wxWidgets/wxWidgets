@@ -264,7 +264,7 @@ enum {
 //---------------------------------------------------------------------------
 // wxToolTip
 
-class wxToolTip {
+class wxToolTip : public wxObject {
 public:
     wxToolTip(const wxString &tip);
 
@@ -464,7 +464,7 @@ bool wxShowTip(wxWindow *parent, wxTipProvider *tipProvider, bool showAtStartup 
 static wxPoint wxPyNullPoint;
 %}
 
-%name (wxDragImage) class wxGenericDragImage
+%name (wxDragImage) class wxGenericDragImage : public wxObject
 {
 public:
 
@@ -532,7 +532,7 @@ wxGenericDragImage* wxDragListItem(const wxListCtrl& listCtrl, long id) {
 
 //----------------------------------------------------------------------
 
-class wxPyTimer {
+class wxPyTimer : public wxObject {
 public:
     wxPyTimer(PyObject* notify);
     ~wxPyTimer();
@@ -722,7 +722,7 @@ long wxExecute(const wxString& command,
 //----------------------------------------------------------------------
 
 #ifdef __WXMSW__
-class wxJoystick {
+class wxJoystick : public wxObject {
 public:
     wxJoystick(int joystick = wxJOYSTICK1);
     wxPoint GetPosition();
@@ -774,5 +774,12 @@ public:
 #endif
 
 //----------------------------------------------------------------------
+
+%init %{
+    wxPyPtrTypeMap_Add("wxFontEnumerator", "wxPyFontEnumerator");
+    wxPyPtrTypeMap_Add("wxDragImage", "wxGenericDragImage");
+    wxPyPtrTypeMap_Add("wxProcess", "wxPyProcess");
+%}
+
 //----------------------------------------------------------------------
 

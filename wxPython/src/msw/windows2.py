@@ -65,7 +65,6 @@ class wxNotebookPtr(wxControlPtr):
         return val
     def GetImageList(self, *_args, **_kwargs):
         val = apply(windows2c.wxNotebook_GetImageList,(self,) + _args, _kwargs)
-        if val: val = wxImageListPtr(val) 
         return val
     def GetPageImage(self, *_args, **_kwargs):
         val = apply(windows2c.wxNotebook_GetPageImage,(self,) + _args, _kwargs)
@@ -99,7 +98,6 @@ class wxNotebookPtr(wxControlPtr):
         return val
     def GetPage(self, *_args, **_kwargs):
         val = apply(windows2c.wxNotebook_GetPage,(self,) + _args, _kwargs)
-        if val: val = wxWindowPtr(val) 
         return val
     def ResizeChildren(self, *_args, **_kwargs):
         val = apply(windows2c.wxNotebook_ResizeChildren,(self,) + _args, _kwargs)
@@ -130,7 +128,6 @@ class wxSplitterEventPtr(wxCommandEventPtr):
         return val
     def GetWindowBeingRemoved(self, *_args, **_kwargs):
         val = apply(windows2c.wxSplitterEvent_GetWindowBeingRemoved,(self,) + _args, _kwargs)
-        if val: val = wxWindowPtr(val) 
         return val
     def SetSashPosition(self, *_args, **_kwargs):
         val = apply(windows2c.wxSplitterEvent_SetSashPosition,(self,) + _args, _kwargs)
@@ -165,11 +162,9 @@ class wxSplitterWindowPtr(wxWindowPtr):
         return val
     def GetWindow1(self, *_args, **_kwargs):
         val = apply(windows2c.wxSplitterWindow_GetWindow1,(self,) + _args, _kwargs)
-        if val: val = wxWindowPtr(val) 
         return val
     def GetWindow2(self, *_args, **_kwargs):
         val = apply(windows2c.wxSplitterWindow_GetWindow2,(self,) + _args, _kwargs)
-        if val: val = wxWindowPtr(val) 
         return val
     def Initialize(self, *_args, **_kwargs):
         val = apply(windows2c.wxSplitterWindow_Initialize,(self,) + _args, _kwargs)

@@ -11,4 +11,3 @@ wx.wxHtmlContainerCellPtr   = wxHtmlContainerCellPtr
 wx.wxHtmlWidgetCellPtr      = wxHtmlWidgetCellPtr
 wx.wxHtmlWindowPtr          = wxHtmlWindowPtr
 wx.wxHtmlLinkInfoPtr        = wxHtmlLinkInfoPtr
-

@@ -128,6 +128,14 @@ static void *SwigwxFrameTowxEvtHandler(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxFrameTowxObject(void *ptr) {
+    wxFrame *src;
+    wxObject *dest;
+    src = (wxFrame *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxFrame(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6) (new wxFrame(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6))
 static PyObject *_wrap_new_wxFrame(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -246,7 +254,6 @@ static PyObject *_wrap_wxFrame_CreateStatusBar(PyObject *self, PyObject *args, P
     char * _arg4 = (char *) "statusBar";
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self","number","style","id","name", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|ilis:wxFrame_CreateStatusBar",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4)) 
@@ -263,13 +270,7 @@ static PyObject *_wrap_wxFrame_CreateStatusBar(PyObject *self, PyObject *args, P
         _result = (wxStatusBar *)wxFrame_CreateStatusBar(_arg0,_arg1,_arg2,_arg3,_arg4);
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxStatusBar_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -283,7 +284,6 @@ static PyObject *_wrap_wxFrame_CreateToolBar(PyObject *self, PyObject *args, PyO
     char * _arg3 = (char *) "toolBar";
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self","style","id","name", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|lis:wxFrame_CreateToolBar",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3)) 
@@ -300,13 +300,7 @@ static PyObject *_wrap_wxFrame_CreateToolBar(PyObject *self, PyObject *args, PyO
         _result = (wxToolBar *)wxFrame_CreateToolBar(_arg0,_arg1,_arg2,_arg3);
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxToolBar_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -352,7 +346,6 @@ static PyObject *_wrap_wxFrame_GetMenuBar(PyObject *self, PyObject *args, PyObje
     wxFrame * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFrame_GetMenuBar",_kwnames,&_argo0)) 
@@ -369,13 +362,7 @@ static PyObject *_wrap_wxFrame_GetMenuBar(PyObject *self, PyObject *args, PyObje
         _result = (wxMenuBar *)wxFrame_GetMenuBar(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxMenuBar_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -386,7 +373,6 @@ static PyObject *_wrap_wxFrame_GetStatusBar(PyObject *self, PyObject *args, PyOb
     wxFrame * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFrame_GetStatusBar",_kwnames,&_argo0)) 
@@ -403,13 +389,7 @@ static PyObject *_wrap_wxFrame_GetStatusBar(PyObject *self, PyObject *args, PyOb
         _result = (wxStatusBar *)wxFrame_GetStatusBar(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxStatusBar_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -452,7 +432,6 @@ static PyObject *_wrap_wxFrame_GetToolBar(PyObject *self, PyObject *args, PyObje
     wxFrame * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFrame_GetToolBar",_kwnames,&_argo0)) 
@@ -469,13 +448,7 @@ static PyObject *_wrap_wxFrame_GetToolBar(PyObject *self, PyObject *args, PyObje
         _result = (wxToolBar *)wxFrame_GetToolBar(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxToolBar_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -1121,6 +1094,14 @@ static void *SwigwxMiniFrameTowxEvtHandler(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxMiniFrameTowxObject(void *ptr) {
+    wxMiniFrame *src;
+    wxObject *dest;
+    src = (wxMiniFrame *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxMiniFrame(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6) (new wxMiniFrame(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6))
 static PyObject *_wrap_new_wxMiniFrame(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1290,8 +1271,14 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxAcceleratorTable","_wxAcceleratorTable",0},
     { "_class_wxClipboard","_wxClipboard",0},
     { "_class_wxGauge","_wxGauge",0},
+    { "_wxGDIObject","_class_wxGDIObject",0},
     { "_wxDC","_class_wxDC",0},
     { "_class_wxBitmapDataObject","_wxBitmapDataObject",0},
+    { "_class_wxObject","_class_wxMiniFrame",SwigwxMiniFrameTowxObject},
+    { "_class_wxObject","_wxMiniFrame",SwigwxMiniFrameTowxObject},
+    { "_class_wxObject","_class_wxFrame",SwigwxFrameTowxObject},
+    { "_class_wxObject","_wxFrame",SwigwxFrameTowxObject},
+    { "_class_wxObject","_wxObject",0},
     { "_wxSpinEvent","_class_wxSpinEvent",0},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
@@ -1435,6 +1422,11 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxPyBitmapDataObject","_wxPyBitmapDataObject",0},
     { "_wxClientDC","_class_wxClientDC",0},
     { "_wxMouseEvent","_class_wxMouseEvent",0},
+    { "_wxObject","_class_wxMiniFrame",SwigwxMiniFrameTowxObject},
+    { "_wxObject","_wxMiniFrame",SwigwxMiniFrameTowxObject},
+    { "_wxObject","_class_wxFrame",SwigwxFrameTowxObject},
+    { "_wxObject","_wxFrame",SwigwxFrameTowxObject},
+    { "_wxObject","_class_wxObject",0},
     { "_class_wxPoint","_wxPoint",0},
     { "_wxRealPoint","_class_wxRealPoint",0},
     { "_class_wxRadioBox","_wxRadioBox",0},
@@ -1491,6 +1483,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxWindowID","_int",0},
     { "_wxWindowID","_signed_int",0},
     { "_wxWindowID","_unsigned_int",0},
+    { "_class_wxGDIObject","_wxGDIObject",0},
     { "_class_wxScrollWinEvent","_wxScrollWinEvent",0},
     { "_int","_wxCoord",0},
     { "_int","_wxPrintQuality",0},

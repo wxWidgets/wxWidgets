@@ -92,7 +92,7 @@ class TestListCtrlPanel(wxPanel):
         self.list.SetColumnWidth(1, wxLIST_AUTOSIZE)
         ##self.list.SetColumnWidth(2, wxLIST_AUTOSIZE)
 
-        self.list.SetItemState(25, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
+        self.list.SetItemState(5, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
 
         #self.list.SetItemState(25, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
         #self.list.EnsureVisible(25)
@@ -132,10 +132,16 @@ class TestListCtrlPanel(wxPanel):
 
     def OnItemSelected(self, event):
         self.currentItem = event.m_itemIndex
-        self.log.WriteText("OnItemSelected: %s, %s, %s\n" %
-                           (self.list.GetItemText(self.currentItem),
+        self.log.WriteText("OnItemSelected: %s, %s, %s, %s\n" %
+                           (self.currentItem,
+                            self.list.GetItemText(self.currentItem),
                             self.getColumnText(self.currentItem, 1),
                             self.getColumnText(self.currentItem, 2)))
+        if self.currentItem == 10:
+            self.log.WriteText("OnItemSelected: Veto'd selection\n")
+            #event.Veto()  # doesn't work
+            # this does
+            self.list.SetItemState(10, 0, wxLIST_STATE_SELECTED)
 
 
     def OnItemActivated(self, event):

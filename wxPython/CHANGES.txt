@@ -2,14 +2,15 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
-?????
+
+2.3.0
 -----
 Removed initial startup dependency on the OpenGL DLLs so only the
-glcanvasc.pyd depends on them.
+glcanvasc.pyd depends on them, (on wxMSW.)
 
 Changed wxFont, wxPen, wxBrush to not implicitly use the
-wxThe[Font|Pen|Brush]List behind the scenes, but to use normal ctor
-and dtors.
+wxThe[Font|Pen|Brush]List objects behind the scenes, but to use normal
+ctor and dtors.
 
 Exposed the wxThe[Font|Pen|Brush]List to wxPython.
 
@@ -37,12 +38,14 @@ it gobs faster in certain situations.
 
 Added tools that will take an image file in a wx supported format and
 convert it to data embedded in a Python source file.  The image is
-converted to XPM format (with its transparency mask intact, if there
-is one) which is essentially a list of strings containing info about
-each pixel.  It is then pickled and optionally compressed and written
-to a Python source file along with functions to convert it to either a
-wxBitmap or a wxImage.  See wxPython/demo/images.py for examples, and
-wxPython/Tools/img2py.py for the implementation.
+converted to XPM format which is essentially a list of strings
+containing info about each pixel.  The image's transparency mask is
+included, if there is one, or a mask can be added if a mask colour is
+specified on the command line.  It is then pickled and optionally
+compressed and written to a Python source file along with functions to
+convert it to either a wxBitmap or a wxImage.  See
+wxPython/demo/images.py for examples, and wxPython/Tools/img2py.py for
+the implementation.
 
 Fixed wxStyledTextCtrl to be much faster on wxGTK.  There was some
 experimental code that got left in place that ended up causing way too
@@ -59,6 +62,50 @@ Added wxToggleButton.
 
 Fixed bug that prevented wxTreeCtrl.OnCompareItems from being called.
 
+Added some methods to wxGrid:
+      GetCellHighlightPenWidth
+      GetCellHighlightROPenWidth
+      SetCellHighlightPenWidth
+      SetCellHighlightROPenWidth
+      GetGridWindow
+      GetGridRowLabelWindow
+      GetGridColLabelWindow
+      GetGridCornerLabelWindow
+
+Added wxGetClientDisplayRect which on wxMSW returns a wxRect
+representing the area on screen not occupied by the taskbar and such.
+On other platforms it is equivallent to wxGetDisplaySize.
+
+
+***---***---***---***---***---***---***---***---***---***---***---
+   Implemented the first phase of OOR (Original Object Return).  See
+   the text in the demo for more details of what this means, but in a
+   nutshell methods such as wxWindow.GetParent or FindWindowById will
+   now return a shadow object of the proper type if it can.  By
+   "proper type" I mean that if the wxWindow pointer returned from
+   FindWindowById really points to a wxButton then the Python object
+   constructed will be of a wxButtonPtr class instead of wxWindowPtr
+   as before.  This should reduce or eliminiate the need for
+   wxPyTypeCast.  (Woo Hoo!)  The objects returned are still not the
+   original Python object, but that is the next step.  (Although it
+   will probably only work on Python 2.1 and beyond because it will
+   use weak references.)
+
+   This first phase of the OOR plan is fairly significant and has
+   required a lot of changes all over wxPython, most of which should
+   be transparent to you, however I'm not 100% sure that it didn't
+   introduce any new bugs that are hiding somewhere and didn't get
+   stomped on during my testing.  So please be sure to test everything
+   thoroughly when you install this version and be sure to report any
+   object-type related oddities to me.
+***---***---***---***---***---***---***---***---***---***---***---
+
+There is now a wxObject class that most other classes derive from like
+in C++, but the methods provided don't really match but are wxPython
+specific.  It could have been added long ago but OOR required it.
+
+Finally added wxPyLineShape.GetLineControlPoints, which has been on my
+list for a while.  The above OOR modification made this easier.
 
 
 

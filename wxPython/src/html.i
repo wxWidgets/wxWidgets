@@ -75,7 +75,7 @@ enum {
 
 //---------------------------------------------------------------------------
 
-class wxHtmlLinkInfo {
+class wxHtmlLinkInfo : public wxObject {
 public:
     wxHtmlLinkInfo(const wxString& href, const wxString& target = wxEmptyString);
     wxString GetHref();
@@ -89,7 +89,7 @@ public:
 
 //---------------------------------------------------------------------------
 
-class wxHtmlTag {
+class wxHtmlTag : public wxObject {
 public:
     // Never need to create a new tag from Python...
     //wxHtmlTag(const wxString& source, int pos, int end_pos, wxHtmlTagsCache* cache);
@@ -112,7 +112,7 @@ public:
 
 //---------------------------------------------------------------------------
 
-class wxHtmlParser {
+class wxHtmlParser : public wxObject {
 public:
     // wxHtmlParser();  This is an abstract base class...
 
@@ -189,6 +189,7 @@ public:
 
 %{
 class wxPyHtmlTagHandler : public wxHtmlTagHandler {
+    DECLARE_DYNAMIC_CLASS(wxPyHtmlTagHandler);
 public:
     wxPyHtmlTagHandler() : wxHtmlTagHandler() {};
 
@@ -201,12 +202,14 @@ public:
     PYPRIVATE;
 };
 
+IMPLEMENT_DYNAMIC_CLASS(wxPyHtmlTagHandler, wxHtmlTagHandler);
+
 IMP_PYCALLBACK_STRING__pure(wxPyHtmlTagHandler, wxHtmlTagHandler, GetSupportedTags);
 IMP_PYCALLBACK_BOOL_TAG_pure(wxPyHtmlTagHandler, wxHtmlTagHandler, HandleTag);
 %}
 
 
-%name(wxHtmlTagHandler) class wxPyHtmlTagHandler {
+%name(wxHtmlTagHandler) class wxPyHtmlTagHandler : public wxObject {
 public:
     wxPyHtmlTagHandler();
 
@@ -223,6 +226,7 @@ public:
 
 %{
 class wxPyHtmlWinTagHandler : public wxHtmlWinTagHandler {
+    DECLARE_DYNAMIC_CLASS(wxPyHtmlWinTagHandler);
 public:
     wxPyHtmlWinTagHandler() : wxHtmlWinTagHandler() {};
 
@@ -235,6 +239,8 @@ public:
 
     PYPRIVATE;
 };
+
+IMPLEMENT_DYNAMIC_CLASS( wxPyHtmlWinTagHandler, wxHtmlWinTagHandler);
 
 IMP_PYCALLBACK_STRING__pure(wxPyHtmlWinTagHandler, wxHtmlWinTagHandler, GetSupportedTags);
 IMP_PYCALLBACK_BOOL_TAG_pure(wxPyHtmlWinTagHandler, wxHtmlWinTagHandler, HandleTag);
@@ -321,7 +327,7 @@ private:
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 
-class wxHtmlCell {
+class wxHtmlCell : public wxObject {
 public:
     wxHtmlCell();
 
@@ -345,6 +351,13 @@ public:
     bool AdjustPagebreak(int * pagebreak);
     void SetCanLiveOnPagebreak(bool can);
 
+};
+
+
+class  wxHtmlWordCell : public wxHtmlCell
+{
+public:
+    wxHtmlWordCell(const wxString& word, wxDC& dc);
 };
 
 
@@ -377,6 +390,12 @@ public:
 
 };
 
+
+class  wxHtmlFontCell : public wxHtmlCell
+{
+public:
+    wxHtmlFontCell(wxFont *font);
+};
 
 
 class wxHtmlWidgetCell : public wxHtmlCell {
@@ -411,7 +430,7 @@ public:
 
 IMP_PYCALLBACK__STRING(wxPyHtmlWindow, wxHtmlWindow, OnSetTitle);
 
- void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
+void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
     bool doSave = wxPyRestoreThread();
     if (wxPyCBH_findCallback(m_myInst, "OnLinkClicked")) {
         PyObject* obj = wxPyConstructObject((void*)&link, "wxHtmlLinkInfo", 0);
@@ -492,7 +511,7 @@ public:
 //---------------------------------------------------------------------------
 
 
-class wxHtmlDCRenderer {
+class wxHtmlDCRenderer : public wxObject {
 public:
     wxHtmlDCRenderer();
     ~wxHtmlDCRenderer();
@@ -533,7 +552,7 @@ public:
 
 
 
-class wxHtmlEasyPrinting {
+class wxHtmlEasyPrinting : public wxObject {
 public:
     wxHtmlEasyPrinting(const char* name = "Printing",
                        wxFrame *parent_frame = NULL);
@@ -569,6 +588,10 @@ public:
 
     wxClassInfo::CleanUpClasses();
     wxClassInfo::InitializeClasses();
+
+    wxPyPtrTypeMap_Add("wxHtmlTagHandler", "wxPyHtmlTagHandler");
+    wxPyPtrTypeMap_Add("wxHtmlWinTagHandler", "wxPyHtmlWinTagHandler");
+    wxPyPtrTypeMap_Add("wxHtmlWindow", "wxPyHtmlWindow");
 %}
 
 //----------------------------------------------------------------------

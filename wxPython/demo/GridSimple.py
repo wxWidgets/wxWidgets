@@ -19,9 +19,12 @@ class SimpleGrid(wxGrid):
         self.SetCellValue(0, 0, "First cell")
         self.SetCellValue(1, 1, "Another cell")
         self.SetCellValue(2, 2, "Yet another cell")
+        self.SetCellValue(3, 3, "This cell is read-only")
         self.SetCellFont(0, 0, wxFont(12, wxROMAN, wxITALIC, wxNORMAL))
         self.SetCellTextColour(1, 1, wxRED)
         self.SetCellBackgroundColour(2, 2, wxCYAN)
+        self.SetReadOnly(3, 3, true)
+
 
         # attribute objects let you keep a set of formatting values
         # in one spot, and reuse them if needed

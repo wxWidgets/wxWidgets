@@ -9,7 +9,9 @@ iff "%1" == "15" .or. "%1" == "20" .or. "%1" == "21" then
 	set PYTHON=c:\tools\python%1%\python.exe
 	shift
 else
-	set PYTHON=python
+	beep
+	echo You must specify Python version as first parameter.
+	quit
 endiff
 set SETUP=%PYTHON% -u setup.py
 

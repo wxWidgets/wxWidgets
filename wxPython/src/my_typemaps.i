@@ -289,5 +289,54 @@
 }
 
 //---------------------------------------------------------------------------
+// Typemaps to convert return values that are base class pointers
+// to the real derived type, if possible.  See wxPyMake_wxObject in
+// helpers.cpp
+
+
+%typemap(python, out) wxButton*                 { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxControl*                { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxDC*                     { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxEvtHandler*             { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxFSFile*                 { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxFileSystem*             { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxFrame*                  { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxGrid*                   { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxGridTableBase*          { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxImageList*              { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxListItem*               { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxMDIChildFrame*          { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxMDIClientWindow*        { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxMenu*                   { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxMenuBar*                { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxMenuItem*               { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxMouseEvent*             { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxNotebook*               { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxObject*                 { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxPyPrintout*             { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxSizer*                  { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxSizer*                  { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxStaticBox*              { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxStatusBar*              { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxTextCtrl*               { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxToolBar*                { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxToolBarBase*            { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxToolBarToolBase*        { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxToolTip*                { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxValidator*              { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxWindow*                 { $target = wxPyMake_wxObject($source); }
+
+
+//%typemap(python, out) wxHtmlCell*               { $target = wxPyMake_wxObject($source); }
+//%typemap(python, out) wxHtmlContainerCell*      { $target = wxPyMake_wxObject($source); }
+//%typemap(python, out) wxHtmlParser*             { $target = wxPyMake_wxObject($source); }
+//%typemap(python, out) wxHtmlWinParser*          { $target = wxPyMake_wxObject($source); }
+
 //---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+
+
+
+
+
 

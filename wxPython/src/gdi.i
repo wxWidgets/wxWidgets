@@ -37,24 +37,21 @@
 
 //---------------------------------------------------------------------------
 
-//  class wxGDIImage {
-//  public:
-//      long GetHandle();
-//      void SetHandle(long handle);
-//      bool Ok();
-//      int GetWidth();
-//      int GetHeight();
-//      int GetDepth();
-//      void SetWidth(int w);
-//      void SetHeight(int h);
-//      void SetDepth(int d);
-//      void SetSize(const wxSize& size);
-//  };
+class wxGDIObject : public wxObject {
+public:
+    wxGDIObject();
+    ~wxGDIObject();
+
+    bool GetVisible();
+    void SetVisible( bool visible );
+
+    bool IsNull();
+
+};
 
 //---------------------------------------------------------------------------
 
-class wxBitmap
-//: public wxGDIImage
+class wxBitmap : public wxGDIObject
 {
 public:
     wxBitmap(const wxString& name, wxBitmapType type);
@@ -174,7 +171,7 @@ public:
 
 //---------------------------------------------------------------------------
 
-class wxMask {
+class wxMask : public wxObject {
 public:
     wxMask(const wxBitmap& bitmap);
     //~wxMask();
@@ -193,8 +190,7 @@ public:
 //---------------------------------------------------------------------------
 
 
-class wxIcon
-//: public wxGDIImage
+class wxIcon : public wxGDIObject
 {
 public:
     wxIcon(const wxString& name, long flags,
@@ -255,8 +251,7 @@ public:
 
 //---------------------------------------------------------------------------
 
-class wxCursor
-//: public wxGDIImage
+class wxCursor : public wxGDIObject
 {
 public:
 #ifdef __WXMSW__
@@ -336,7 +331,7 @@ enum wxFontEncoding
 };
 
 
-class wxFont {
+class wxFont : public wxGDIObject {
 public:
     wxFont( int pointSize, int family, int style, int weight,
             int underline=FALSE, char* faceName = "",
@@ -377,7 +372,7 @@ public:
 %}
 
 
-class wxFontList {
+class wxFontList : public wxObject {
 public:
 
     void AddFont(wxFont* font);
@@ -390,7 +385,7 @@ public:
 
 //----------------------------------------------------------------------
 
-class wxColour {
+class wxColour : public wxObject {
 public:
     wxColour(unsigned char red=0, unsigned char green=0, unsigned char blue=0);
     ~wxColour();
@@ -424,7 +419,7 @@ public:
 
 
 
-class wxColourDatabase {
+class wxColourDatabase : public wxObject {
 public:
 
     wxColour *FindColour(const wxString& colour);
@@ -441,7 +436,7 @@ public:
 //----------------------------------------------------------------------
 
 
-class wxPen {
+class wxPen : public wxGDIObject {
 public:
     wxPen(wxColour& colour, int width=1, int style=wxSOLID);
     ~wxPen();
@@ -470,7 +465,7 @@ public:
 };
 
 
-class wxPenList {
+class wxPenList : public wxObject {
 public:
 
     void AddPen(wxPen* pen);
@@ -482,7 +477,7 @@ public:
 
 //----------------------------------------------------------------------
 
-class wxBrush {
+class wxBrush : public wxGDIObject {
 public:
     wxBrush(const wxColour& colour, int style=wxSOLID);
     ~wxBrush();
@@ -509,7 +504,7 @@ public:
 
 
 
-class wxDC {
+class wxDC : public wxObject {
 public:
 //    wxDC(); **** abstract base class, can't instantiate.
     ~wxDC();
@@ -765,7 +760,7 @@ extern wxColourDatabase* wxTheColourDatabase;
 
 //---------------------------------------------------------------------------
 
-class wxPalette {
+class wxPalette : public wxGDIObject {
 public:
     wxPalette(int LCOUNT, byte* choices, byte* choices, byte* choices);
     ~wxPalette();
@@ -787,7 +782,7 @@ enum {
     wxIMAGE_LIST_STATE
 };
 
-class wxImageList {
+class wxImageList : public wxObject {
 public:
     wxImageList(int width, int height, int mask=TRUE, int initialCount=1);
     ~wxImageList();
@@ -810,6 +805,71 @@ public:
     bool Remove(int index);
     bool RemoveAll();
     void GetSize(int index, int& OUTPUT, int& OUTPUT);
+};
+
+
+//---------------------------------------------------------------------------
+// Regions, etc.
+
+enum wxRegionContain {
+	wxOutRegion, wxPartRegion, wxInRegion
+};
+
+
+class wxRegion : public wxGDIObject {
+public:
+    wxRegion(long x=0, long y=0, long width=0, long height=0);
+    ~wxRegion();
+
+    void Clear();
+    wxRegionContain Contains(long x, long y);
+    %name(ContainsPoint)wxRegionContain Contains(const wxPoint& pt);
+    %name(ContainsRect)wxRegionContain Contains(const wxRect& rect);
+    %name(ContainsRectDim)wxRegionContain Contains(long x, long y, long w, long h);
+
+    wxRect GetBox();
+
+    bool Intersect(long x, long y, long width, long height);
+    %name(IntersectRect)bool Intersect(const wxRect& rect);
+    %name(IntersectRegion)bool Intersect(const wxRegion& region);
+
+    bool IsEmpty();
+
+    bool Union(long x, long y, long width, long height);
+    %name(UnionRect)bool Union(const wxRect& rect);
+    %name(UnionRegion)bool Union(const wxRegion& region);
+
+    bool Subtract(long x, long y, long width, long height);
+    %name(SubtractRect)bool Subtract(const wxRect& rect);
+    %name(SubtractRegion)bool Subtract(const wxRegion& region);
+
+    bool Xor(long x, long y, long width, long height);
+    %name(XorRect)bool Xor(const wxRect& rect);
+    %name(XorRegion)bool Xor(const wxRegion& region);
+};
+
+
+
+class wxRegionIterator : public wxObject {
+public:
+    wxRegionIterator(const wxRegion& region);
+    ~wxRegionIterator();
+
+    long GetX();
+    long GetY();
+    long GetW();
+    long GetWidth();
+    long GetH();
+    long GetHeight();
+    wxRect GetRect();
+    bool HaveRects();
+    void Reset();
+
+    %addmethods {
+        void Next() {
+            (*self) ++;
+        }
+    };
 };
 
 
