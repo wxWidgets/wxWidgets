@@ -1,3 +1,5 @@
+
+from wxPython.wx import wxSplitterWindow
 from wxPython.lib.PyCrust import shell, version, filling
 
 

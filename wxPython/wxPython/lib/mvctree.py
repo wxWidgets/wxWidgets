@@ -731,7 +731,7 @@ class wxMVCTreeEvent(wxPyCommandEvent):
 
 class wxMVCTreeNotifyEvent(wxMVCTreeEvent):
     def __init__(self, type, id, node = None, nodes = None, **kwargs):
-        apply(wxMVCTreeEvent.__init__, (self, type, id), kwargs)
+        apply(wxMVCTreeEvent.__init__, (self, type, id, node, nodes), kwargs)
         self.notify = wxNotifyEvent(type, id)
     def getNotifyEvent(self):
         return self.notify
