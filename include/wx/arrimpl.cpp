@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        listimpl.cpp
+// Name:        wx/arrimpl.cpp
 // Purpose:     helper file for implementation of dynamic lists
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -112,4 +112,4 @@ int name::Index(const T& Item, bool bFromEnd) const                           \
 // redefine the macro so that now it will generate the class implementation
 // old value would provoke a compile-time error if this file is not included
 #undef  WX_DEFINE_OBJARRAY
-#define WX_DEFINE_OBJARRAY(name) _DEFINE_OBJARRAY(_L##name, name)
+#define WX_DEFINE_OBJARRAY(name) _DEFINE_OBJARRAY(_wxObjArray##name, name)

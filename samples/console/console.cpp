@@ -90,7 +90,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
-    #define TEST_THREADS
+    #define TEST_ARRAYS
 
     static const bool TEST_ALL = FALSE;
 #endif
@@ -4852,6 +4852,38 @@ static void TestThreadConditions()
 
 #ifdef TEST_ARRAYS
 
+#include "wx/dynarray.h"
+
+#define DefineCompare(name, T)                                                \
+                                                                              \
+int wxCMPFUNC_CONV name ## CompareValues(T first, T second)                   \
+{                                                                             \
+    return first - second;                                                    \
+}                                                                             \
+                                                                              \
+int wxCMPFUNC_CONV name ## Compare(T* first, T* second)                       \
+{                                                                             \
+    return *first - *second;                                                  \
+}                                                                             \
+                                                                              \
+int wxCMPFUNC_CONV name ## RevCompare(T* first, T* second)                    \
+{                                                                             \
+    return *second - *first;                                                  \
+}                                                                             \
+
+DefineCompare(Short, short);
+DefineCompare(Int, int);
+
+// test compilation of all macros
+WX_DEFINE_ARRAY(short, wxArrayShort);
+WX_DEFINE_SORTED_ARRAY(short, wxSortedArrayShortNoCmp);
+WX_DEFINE_SORTED_ARRAY_CMP(short, ShortCompareValues, wxSortedArrayShort);
+WX_DEFINE_SORTED_ARRAY_CMP(int, IntCompareValues, wxSortedArrayInt);
+
+WX_DECLARE_OBJARRAY(Bar, ArrayBars);
+#include "wx/arrimpl.cpp"
+WX_DEFINE_OBJARRAY(ArrayBars);
+
 static void PrintArray(const char* name, const wxArrayString& array)
 {
     printf("Dump of the array '%s'\n", name);
@@ -4863,62 +4895,69 @@ static void PrintArray(const char* name, const wxArrayString& array)
     }
 }
 
-static void PrintArray(const char* name, const wxArrayInt& array)
-{
-    printf("Dump of the array '%s'\n", name);
-
-    size_t nCount = array.GetCount();
-    for ( size_t n = 0; n < nCount; n++ )
-    {
-        printf("\t%s[%u] = %d\n", name, n, array[n]);
-    }
-}
-
 int wxCMPFUNC_CONV StringLenCompare(const wxString& first,
                                     const wxString& second)
 {
     return first.length() - second.length();
 }
 
-int wxCMPFUNC_CONV IntCompare(int *first,
-                              int *second)
-{
-    return *first - *second;
+#define TestArrayOf(name)                                                     \
+                                                                              \
+static void PrintArray(const char* name, const wxSortedArray##name & array)   \
+{                                                                             \
+    printf("Dump of the array '%s'\n", name);                                 \
+                                                                              \
+    size_t nCount = array.GetCount();                                         \
+    for ( size_t n = 0; n < nCount; n++ )                                     \
+    {                                                                         \
+        printf("\t%s[%u] = %d\n", name, n, array[n]);                         \
+    }                                                                         \
+}                                                                             \
+                                                                              \
+static void PrintArray(const char* name, const wxArray##name & array)         \
+{                                                                             \
+    printf("Dump of the array '%s'\n", name);                                 \
+                                                                              \
+    size_t nCount = array.GetCount();                                         \
+    for ( size_t n = 0; n < nCount; n++ )                                     \
+    {                                                                         \
+        printf("\t%s[%u] = %d\n", name, n, array[n]);                         \
+    }                                                                         \
+}                                                                             \
+                                                                              \
+static void TestArrayOf ## name ## s()                                        \
+{                                                                             \
+    printf("*** Testing wxArray%s ***\n", #name);                             \
+                                                                              \
+    wxArray##name a;                                                          \
+    a.Add(1);                                                                 \
+    a.Add(17);                                                                \
+    a.Add(5);                                                                 \
+    a.Add(3);                                                                 \
+                                                                              \
+    puts("Initially:");                                                       \
+    PrintArray("a", a);                                                       \
+                                                                              \
+    puts("After sort:");                                                      \
+    a.Sort(name ## Compare);                                                  \
+    PrintArray("a", a);                                                       \
+                                                                              \
+    puts("After reverse sort:");                                              \
+    a.Sort(name ## RevCompare);                                               \
+    PrintArray("a", a);                                                       \
+                                                                              \
+    wxSortedArray##name b;                                                    \
+    b.Add(1);                                                                 \
+    b.Add(17);                                                                \
+    b.Add(5);                                                                 \
+    b.Add(3);                                                                 \
+                                                                              \
+    puts("Sorted array initially:");                                          \
+    PrintArray("b", b);                                                       \
 }
 
-int wxCMPFUNC_CONV IntRevCompare(int *first,
-                              int *second)
-{
-    return *second - *first;
-}
-
-static void TestArrayOfInts()
-{
-    puts("*** Testing wxArrayInt ***\n");
-
-    wxArrayInt a;
-    a.Add(1);
-    a.Add(17);
-    a.Add(5);
-    a.Add(3);
-
-    puts("Initially:");
-    PrintArray("a", a);
-
-    puts("After sort:");
-    a.Sort(IntCompare);
-    PrintArray("a", a);
-
-    puts("After reverse sort:");
-    a.Sort(IntRevCompare);
-    PrintArray("a", a);
-}
-
-#include "wx/dynarray.h"
-
-WX_DECLARE_OBJARRAY(Bar, ArrayBars);
-#include "wx/arrimpl.cpp"
-WX_DEFINE_OBJARRAY(ArrayBars);
+TestArrayOf(Short);
+TestArrayOf(Int);
 
 static void TestArrayOfObjects()
 {
@@ -5493,11 +5532,10 @@ int main(int argc, char **argv)
         PrintArray("a1", a1);
 
         TestArrayOfObjects();
+        TestArrayOfShorts();
     }
-    else
-    {
-        TestArrayOfInts();
-    }
+
+    TestArrayOfInts();
 #endif // TEST_ARRAYS
 
 #ifdef TEST_DIR
