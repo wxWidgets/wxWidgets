@@ -126,21 +126,54 @@ void wxMDIParentFrame::OnInternalIdle()
     while (node)
     {
         wxMDIChildFrame *child_frame = (wxMDIChildFrame *)node->Data();
+	wxMenuBar *menu_bar = child_frame->m_menuBar;
         if (child_frame->m_menuBar)
         {
             if (child_frame == active_child_frame)
             {
-               gtk_widget_show( child_frame->m_menuBar->m_widget );
-               visible_child_menu = TRUE;
+		if (menu_bar->Show(TRUE))
+		{
+		    menu_bar->m_width = m_width;
+		    menu_bar->m_height = wxMENU_HEIGHT;
+                    gtk_myfixed_set_size( GTK_MYFIXED(m_mainWidget), 
+		                          menu_bar->m_widget, 
+			                  0, 0, m_width, wxMENU_HEIGHT );
+		    menu_bar->SetInvokingWindow( child_frame );
+		}
+                visible_child_menu = TRUE;
             }
             else
-               gtk_widget_hide( child_frame->m_menuBar->m_widget );
+	    {
+		if (menu_bar->Show(FALSE))
+		{
+		    menu_bar->UnsetInvokingWindow( child_frame );
+		}
+	    }
         }
         node = node->Next();
     }
 
     /* show/hide parent menu bar as required */
-    if (m_frameMenuBar) m_frameMenuBar->Show( !visible_child_menu );
+    if ((m_frameMenuBar) &&
+        (m_frameMenuBar->IsShown() == visible_child_menu))
+    {
+        if (visible_child_menu)
+	{
+            m_frameMenuBar->Show( FALSE );
+	    m_frameMenuBar->UnsetInvokingWindow( this );
+	}
+	else
+	{
+            m_frameMenuBar->Show( TRUE );
+	    m_frameMenuBar->SetInvokingWindow( this );
+	    
+	    m_frameMenuBar->m_width = m_width;
+	    m_frameMenuBar->m_height = wxMENU_HEIGHT;
+            gtk_myfixed_set_size( GTK_MYFIXED(m_mainWidget), 
+	                          m_frameMenuBar->m_widget, 
+			          0, 0, m_width, wxMENU_HEIGHT );
+	}
+    }
 }
 
 void wxMDIParentFrame::GetClientSize(int *width, int *height ) const
@@ -260,42 +293,17 @@ void wxMDIChildFrame::AddChild( wxWindow *child )
     wxWindow::AddChild( child );
 }
 
-static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
-{
-    menu->SetInvokingWindow( win );
-    wxNode *node = menu->GetItems().First();
-    while (node)
-    {
-        wxMenuItem *menuitem = (wxMenuItem*)node->Data();
-        if (menuitem->IsSubMenu())
-            SetInvokingWindow( menuitem->GetSubMenu(), win );
-        node = node->Next();
-    }
-}
-
 void wxMDIChildFrame::SetMenuBar( wxMenuBar *menu_bar )
 {
+    wxASSERT_MSG( m_menuBar == NULL, _T("Only one menubar allowed") );
+
     m_menuBar = menu_bar;
 
     if (m_menuBar)
     {
         wxMDIParentFrame *mdi_frame = (wxMDIParentFrame*)m_parent->GetParent();
 
-       if (m_menuBar->GetParent() != this)
-       {
-            wxNode *node = m_menuBar->GetMenus().First();
-            while (node)
-            {
-                wxMenu *menu = (wxMenu*)node->Data();
-                SetInvokingWindow( menu, this );
-                node = node->Next();
-            }
-
-            m_menuBar->SetParent( mdi_frame );
-        }
-
-        /* the menu bar of the child window is shown in idle time as needed */
-        gtk_widget_hide( m_menuBar->m_widget );
+        m_menuBar->SetParent( mdi_frame );
 
         /* insert the invisible menu bar into the _parent_ mdi frame */
         gtk_myfixed_put( GTK_MYFIXED(mdi_frame->m_mainWidget), 

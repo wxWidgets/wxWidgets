@@ -813,25 +813,6 @@ void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
     }
 }
 
-static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
-{
-    menu->SetInvokingWindow( win );
-
-#if (GTK_MINOR_VERSION > 0)
-    /* support for native hot keys  */
-    gtk_accel_group_attach( menu->m_accel, GTK_OBJECT(win->m_widget));
-#endif
-
-    wxNode *node = menu->GetItems().First();
-    while (node)
-    {
-        wxMenuItem *menuitem = (wxMenuItem*)node->Data();
-        if (menuitem->IsSubMenu())
-            SetInvokingWindow( menuitem->GetSubMenu(), win );
-        node = node->Next();
-    }
-}
-
 void wxFrame::SetMenuBar( wxMenuBar *menuBar )
 {
     wxASSERT_MSG( (m_widget != NULL), _T("invalid frame") );
@@ -841,18 +822,7 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
 
     if (m_frameMenuBar)
     {
-#if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
-        /* support for native key accelerators indicated by underscroes */
-         gtk_accel_group_attach( m_frameMenuBar->m_accel, GTK_OBJECT(m_widget));
-#endif
-
-        wxNode *node = m_frameMenuBar->GetMenus().First();
-        while (node)
-        {
-            wxMenu *menu = (wxMenu*)node->Data();
-            SetInvokingWindow( menu, this );
-            node = node->Next();
-        }
+        m_frameMenuBar->SetInvokingWindow( this );
 
         if (m_frameMenuBar->GetParent() != this)
         {
@@ -872,6 +842,8 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
                 gtk_signal_connect( GTK_OBJECT(menuBar->m_widget), "child_detached",
                     GTK_SIGNAL_FUNC(gtk_menu_detached_callback), (gpointer)this );
             }
+	    
+	    m_frameMenuBar->Show( TRUE );
         }
     }
 

@@ -15,15 +15,17 @@ echo Base dir..
 
 cd ../..
 cp wxGTK.spec ~/wxgtk_dist/wxGTK
-cp Makefile ~/wxgtk_dist/wxGTK
+cp Makefile.in ~/wxgtk_dist/wxGTK
 cp configure ~/wxgtk_dist/wxGTK
-cp configure.in ~/wxgtk_dist/wxGTK
 cp config.sub ~/wxgtk_dist/wxGTK
 cp config.guess ~/wxgtk_dist/wxGTK
 cp install-sh ~/wxgtk_dist/wxGTK
+cp ltconfig ~/wxgtk_dist/wxGTK
+cp ltmain.sh ~/wxgtk_dist/wxGTK
+cp missing ~/wxgtk_dist/wxGTK
 cp mkinstalldirs ~/wxgtk_dist/wxGTK
-cp template.mak ~/wxgtk_dist/wxGTK
 cp wx-config.in ~/wxgtk_dist/wxGTK
+cp setup.h.in ~/wxgtk_dist/wxGTK
 
 echo Docs..
 
@@ -41,42 +43,41 @@ echo Include dir..
 
 mkdir ~/wxgtk_dist/wxGTK/include
 cd include
-cp install-sh ~/wxgtk_dist/wxGTK/include
+cp Makefile.in ~/wxgtk_dist/wxGTK/include
 
 mkdir ~/wxgtk_dist/wxGTK/include/wx
 cd wx
-cp install-sh ~/wxgtk_dist/wxGTK/include/wx
 cp *.h ~/wxgtk_dist/wxGTK/include/wx
 cp *.cpp ~/wxgtk_dist/wxGTK/include/wx
+cp Makefile.in ~/wxgtk_dist/wxGTK/include/wx
 
 mkdir ~/wxgtk_dist/wxGTK/include/wx/generic
 cd generic
 cp *.h ~/wxgtk_dist/wxGTK/include/wx/generic
+cp Makefile.in ~/wxgtk_dist/wxGTK/include/wx/generic
 cd ..
 
 mkdir ~/wxgtk_dist/wxGTK/include/wx/unix
 cd unix
 cp *.h ~/wxgtk_dist/wxGTK/include/wx/unix
+cp Makefile.in ~/wxgtk_dist/wxGTK/include/wx/unix
 cd ..
 
 mkdir ~/wxgtk_dist/wxGTK/include/wx/gtk
 cd gtk
 cp *.h ~/wxgtk_dist/wxGTK/include/wx/gtk
 rm ~/wxgtk_dist/wxGTK/include/wx/gtk/setup.h
+cp Makefile.in ~/wxgtk_dist/wxGTK/include/wx/gtk
 cd ..
 
 mkdir ~/wxgtk_dist/wxGTK/include/wx/protocol
 cd protocol
 cp *.h ~/wxgtk_dist/wxGTK/include/wx/protocol
+cp Makefile.in ~/wxgtk_dist/wxGTK/include/wx/protocol
 cd ..
 
 cd ..
 cd ..
-
-echo Base lib..
-
-mkdir ~/wxgtk_dist/wxGTK/lib
-cp ./lib/dummy ~/wxgtk_dist/wxGTK/lib
 
 echo Misc dir..
 
@@ -87,74 +88,28 @@ mkdir ~/wxgtk_dist/wxGTK/misc/gs_afm
 cp ./misc/afm/*.afm ~/wxgtk_dist/wxGTK/misc/afm
 cp ./misc/gs_afm/*.afm ~/wxgtk_dist/wxGTK/misc/gs_afm
 
-echo Setup dir..
-
-cd setup
-mkdir ~/wxgtk_dist/wxGTK/setup
-cp maketmpl.in ~/wxgtk_dist/wxGTK/setup
-cp setup.hin ~/wxgtk_dist/wxGTK/setup
-cp substit.in ~/wxgtk_dist/wxGTK/setup
-
-cd general
-mkdir ~/wxgtk_dist/wxGTK/setup/general
-cp createall ~/wxgtk_dist/wxGTK/setup/general
-cp jointar ~/wxgtk_dist/wxGTK/setup/general
-cp makeapp ~/wxgtk_dist/wxGTK/setup/general
-cp makedirs ~/wxgtk_dist/wxGTK/setup/general
-cp makedoc ~/wxgtk_dist/wxGTK/setup/general
-cp mygrep ~/wxgtk_dist/wxGTK/setup/general
-cp needed ~/wxgtk_dist/wxGTK/setup/general
-cd ..
-
-cd rules
-mkdir ~/wxgtk_dist/wxGTK/setup/rules
-cp * ~/wxgtk_dist/wxGTK/setup/rules
-
-cd generic
-mkdir ~/wxgtk_dist/wxGTK/setup/rules/generic
-cp * ~/wxgtk_dist/wxGTK/setup/rules/generic
-cd ..
-
-cd ..
-
-cd shared
-mkdir ~/wxgtk_dist/wxGTK/setup/shared
-cp * ~/wxgtk_dist/wxGTK/setup/shared
-cd ..
-
-cd ..
-
-echo User dir..
-
-cd src
-mkdir ~/wxgtk_dist/wxGTK/user
-cp Makefile ~/wxgtk_dist/wxGTK/user
-cd ..
-
 echo Src dir..
 
 cd src
 mkdir ~/wxgtk_dist/wxGTK/src
-cp Makefile ~/wxgtk_dist/wxGTK/src
 cp Makefile.in ~/wxgtk_dist/wxGTK/src
-cp gtk.inc ~/wxgtk_dist/wxGTK/src
+
+cd gtk
+mkdir ~/wxgtk_dist/wxGTK/src/gtk
+cp Makefile.in ~/wxgtk_dist/wxGTK/src/gtk
+cp *.xbm ~/wxgtk_dist/wxGTK/src/gtk
+cp *.c ~/wxgtk_dist/wxGTK/src/gtk
+cp *.inc ~/wxgtk_dist/wxGTK/src/gtk
+cp *.cpp ~/wxgtk_dist/wxGTK/src/gtk
+cd ..
 
 cd common
 mkdir ~/wxgtk_dist/wxGTK/src/common
 cp glob.inc ~/wxgtk_dist/wxGTK/src/common
 cp lexer.l ~/wxgtk_dist/wxGTK/src/common
 cp parser.y ~/wxgtk_dist/wxGTK/src/common
-cp y_tab.c ~/wxgtk_dist/wxGTK/src/common
 cp extended.c ~/wxgtk_dist/wxGTK/src/common
 cp *.cpp ~/wxgtk_dist/wxGTK/src/common
-cd ..
-
-cd gtk
-mkdir ~/wxgtk_dist/wxGTK/src/gtk
-cp *.xbm ~/wxgtk_dist/wxGTK/src/gtk
-cp *.c ~/wxgtk_dist/wxGTK/src/gtk
-cp *.inc ~/wxgtk_dist/wxGTK/src/gtk
-cp *.cpp ~/wxgtk_dist/wxGTK/src/gtk
 cd ..
 
 cd unix
@@ -193,7 +148,7 @@ echo Utils dir..
 
 cd utils
 mkdir ~/wxgtk_dist/wxGTK/utils
-cp Makefile ~/wxgtk_dist/wxGTK/utils
+cp Makefile.in ~/wxgtk_dist/wxGTK/utils
 
 echo wxGLCanvas..
 
@@ -312,13 +267,12 @@ echo Samples dir..
 
 cd samples
 mkdir ~/wxgtk_dist/wxGTK/samples
-cp Makefile ~/wxgtk_dist/wxGTK/samples
+cp Makefile.in ~/wxgtk_dist/wxGTK/samples
 
 echo Minimal sample..
 
 cd minimal
 mkdir ~/wxgtk_dist/wxGTK/samples/minimal
-cp Makefile ~/wxgtk_dist/wxGTK/samples/minimal
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/minimal
 cp minimal.cpp ~/wxgtk_dist/wxGTK/samples/minimal
 cp mondrian.xpm ~/wxgtk_dist/wxGTK/samples/minimal
@@ -328,7 +282,6 @@ echo Bombs sample..
 
 cd bombs
 mkdir ~/wxgtk_dist/wxGTK/samples/bombs
-cp Makefile ~/wxgtk_dist/wxGTK/samples/bombs
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/bombs
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/bombs
 cp *.h ~/wxgtk_dist/wxGTK/samples/bombs
@@ -339,7 +292,6 @@ echo Checklst sample..
 
 cd checklst
 mkdir ~/wxgtk_dist/wxGTK/samples/checklst
-cp Makefile ~/wxgtk_dist/wxGTK/samples/checklst
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/checklst
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/checklst
 cp *.xpm ~/wxgtk_dist/wxGTK/samples/checklst
@@ -349,7 +301,6 @@ echo Config sample..
 
 cd config
 mkdir ~/wxgtk_dist/wxGTK/samples/config
-cp Makefile ~/wxgtk_dist/wxGTK/samples/config
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/config
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/config
 cd ..
@@ -358,7 +309,6 @@ echo Controls sample..
 
 cd controls
 mkdir ~/wxgtk_dist/wxGTK/samples/controls
-cp Makefile ~/wxgtk_dist/wxGTK/samples/controls
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/controls
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/controls
 cp *.xpm ~/wxgtk_dist/wxGTK/samples/controls
@@ -371,7 +321,6 @@ echo Db sample..
 
 cd db
 mkdir ~/wxgtk_dist/wxGTK/samples/db
-cp Makefile ~/wxgtk_dist/wxGTK/samples/db
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/db
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/db
 cp *.h ~/wxgtk_dist/wxGTK/samples/db
@@ -382,7 +331,6 @@ echo DDE sample..
 
 cd dde
 mkdir ~/wxgtk_dist/wxGTK/samples/dde
-cp Makefile ~/wxgtk_dist/wxGTK/samples/dde
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/dde
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/dde
 cp *.h ~/wxgtk_dist/wxGTK/samples/dde
@@ -393,7 +341,6 @@ echo Dialogs sample..
 
 cd dialogs
 mkdir ~/wxgtk_dist/wxGTK/samples/dialogs
-cp Makefile ~/wxgtk_dist/wxGTK/samples/dialogs
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/dialogs
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/dialogs
 cp *.h ~/wxgtk_dist/wxGTK/samples/dialogs
@@ -403,7 +350,6 @@ echo DnD sample..
 
 cd dnd
 mkdir ~/wxgtk_dist/wxGTK/samples/dnd
-cp Makefile ~/wxgtk_dist/wxGTK/samples/dnd
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/dnd
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/dnd
 cp *.xpm ~/wxgtk_dist/wxGTK/samples/dnd
@@ -413,7 +359,6 @@ echo Docview sample..
 
 cd docview
 mkdir ~/wxgtk_dist/wxGTK/samples/docview
-cp Makefile ~/wxgtk_dist/wxGTK/samples/docview
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/docview
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/docview
 cp *.h ~/wxgtk_dist/wxGTK/samples/docview
@@ -424,7 +369,6 @@ echo DocvwMDI sample..
 
 cd docvwmdi
 mkdir ~/wxgtk_dist/wxGTK/samples/docvwmdi
-cp Makefile ~/wxgtk_dist/wxGTK/samples/docvwmdi
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/docvwmdi
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/docvwmdi
 cp *.h ~/wxgtk_dist/wxGTK/samples/docvwmdi
@@ -434,7 +378,6 @@ echo Dynamic sample..
 
 cd dynamic
 mkdir ~/wxgtk_dist/wxGTK/samples/dynamic
-cp Makefile ~/wxgtk_dist/wxGTK/samples/dynamic
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/dynamic
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/dynamic
 cp *.xpm ~/wxgtk_dist/wxGTK/samples/dynamic
@@ -444,7 +387,6 @@ echo Drawing sample..
 
 cd drawing
 mkdir ~/wxgtk_dist/wxGTK/samples/drawing
-cp Makefile ~/wxgtk_dist/wxGTK/samples/drawing
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/drawing
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/drawing
 cp *.xpm ~/wxgtk_dist/wxGTK/samples/drawing
@@ -454,7 +396,6 @@ echo Forty sample..
 
 cd forty
 mkdir ~/wxgtk_dist/wxGTK/samples/forty
-cp Makefile ~/wxgtk_dist/wxGTK/samples/forty
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/forty
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/forty
 cp *.h ~/wxgtk_dist/wxGTK/samples/forty
@@ -466,7 +407,6 @@ echo Fractal sample..
 
 cd fractal
 mkdir ~/wxgtk_dist/wxGTK/samples/fractal
-cp Makefile ~/wxgtk_dist/wxGTK/samples/fractal
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/fractal
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/fractal
 cd ..
@@ -475,7 +415,6 @@ echo Grid sample..
 
 cd grid
 mkdir ~/wxgtk_dist/wxGTK/samples/grid
-cp Makefile ~/wxgtk_dist/wxGTK/samples/grid
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/grid
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/grid
 cd ..
@@ -484,7 +423,6 @@ echo Help sample..
 
 cd help
 mkdir ~/wxgtk_dist/wxGTK/samples/help
-cp Makefile ~/wxgtk_dist/wxGTK/samples/help
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/help
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/help
 cp *.xpm ~/wxgtk_dist/wxGTK/samples/help
@@ -497,7 +435,6 @@ echo Image sample..
 
 cd image
 mkdir ~/wxgtk_dist/wxGTK/samples/image
-cp Makefile ~/wxgtk_dist/wxGTK/samples/image
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/image
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/image
 cp horse.png ~/wxgtk_dist/wxGTK/samples/image
@@ -509,7 +446,6 @@ echo Internat sample..
 
 cd internat
 mkdir ~/wxgtk_dist/wxGTK/samples/internat
-cp Makefile ~/wxgtk_dist/wxGTK/samples/internat
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/internat
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/internat
 cp *.xpm ~/wxgtk_dist/wxGTK/samples/internat
@@ -524,7 +460,6 @@ echo Layout sample..
 
 cd layout
 mkdir ~/wxgtk_dist/wxGTK/samples/layout
-cp Makefile ~/wxgtk_dist/wxGTK/samples/layout
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/layout
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/layout
 cp *.h ~/wxgtk_dist/wxGTK/samples/layout
@@ -534,7 +469,6 @@ echo Listctrl sample..
 
 cd listctrl
 mkdir ~/wxgtk_dist/wxGTK/samples/listctrl
-cp Makefile ~/wxgtk_dist/wxGTK/samples/listctrl
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/listctrl
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/listctrl
 cp *.h ~/wxgtk_dist/wxGTK/samples/listctrl
@@ -548,7 +482,6 @@ echo MDI sample..
 
 cd mdi
 mkdir ~/wxgtk_dist/wxGTK/samples/mdi
-cp Makefile ~/wxgtk_dist/wxGTK/samples/mdi
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/mdi
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/mdi
 cp *.h ~/wxgtk_dist/wxGTK/samples/mdi
@@ -562,7 +495,6 @@ echo Memcheck sample..
 
 cd memcheck
 mkdir ~/wxgtk_dist/wxGTK/samples/memcheck
-cp Makefile ~/wxgtk_dist/wxGTK/samples/memcheck
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/memcheck
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/memcheck
 cp *.xpm ~/wxgtk_dist/wxGTK/samples/memcheck
@@ -572,7 +504,6 @@ echo Minifram sample..
 
 cd minifram
 mkdir ~/wxgtk_dist/wxGTK/samples/minifram
-cp Makefile ~/wxgtk_dist/wxGTK/samples/minifram
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/minifram
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/minifram
 cp *.h ~/wxgtk_dist/wxGTK/samples/minifram
@@ -586,7 +517,6 @@ echo Notebook sample..
 
 cd notebook
 mkdir ~/wxgtk_dist/wxGTK/samples/notebook
-cp Makefile ~/wxgtk_dist/wxGTK/samples/notebook
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/notebook
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/notebook
 cp *.h ~/wxgtk_dist/wxGTK/samples/notebook
@@ -596,7 +526,6 @@ echo PNG sample..
 
 cd png
 mkdir ~/wxgtk_dist/wxGTK/samples/png
-cp Makefile ~/wxgtk_dist/wxGTK/samples/png
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/png
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/png
 cp *.h ~/wxgtk_dist/wxGTK/samples/png
@@ -607,7 +536,6 @@ echo Printing sample..
 
 cd printing
 mkdir ~/wxgtk_dist/wxGTK/samples/printing
-cp Makefile ~/wxgtk_dist/wxGTK/samples/printing
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/printing
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/printing
 cp *.h ~/wxgtk_dist/wxGTK/samples/printing
@@ -618,7 +546,6 @@ echo Proplist sample..
 
 cd proplist
 mkdir ~/wxgtk_dist/wxGTK/samples/proplist
-cp Makefile ~/wxgtk_dist/wxGTK/samples/proplist
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/proplist
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/proplist
 cp *.h ~/wxgtk_dist/wxGTK/samples/proplist
@@ -628,7 +555,6 @@ echo Resource sample..
 
 cd resource
 mkdir ~/wxgtk_dist/wxGTK/samples/resource
-cp Makefile ~/wxgtk_dist/wxGTK/samples/resource
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/resource
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/resource
 cp *.h ~/wxgtk_dist/wxGTK/samples/resource
@@ -639,7 +565,6 @@ echo Sashtest sample..
 
 cd sashtest
 mkdir ~/wxgtk_dist/wxGTK/samples/sashtest
-cp Makefile ~/wxgtk_dist/wxGTK/samples/sashtest
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/sashtest
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/sashtest
 cp *.h ~/wxgtk_dist/wxGTK/samples/sashtest
@@ -649,7 +574,6 @@ echo Scroll sample..
 
 cd sashtest
 mkdir ~/wxgtk_dist/wxGTK/samples/scroll
-cp Makefile ~/wxgtk_dist/wxGTK/samples/scroll
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/scroll
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/scroll
 cp *.h ~/wxgtk_dist/wxGTK/samples/scroll
@@ -659,7 +583,6 @@ echo Splitter sample..
 
 cd splitter
 mkdir ~/wxgtk_dist/wxGTK/samples/splitter
-cp Makefile ~/wxgtk_dist/wxGTK/samples/splitter
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/splitter
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/splitter
 cd ..
@@ -668,17 +591,23 @@ echo Tab sample..
 
 cd tab
 mkdir ~/wxgtk_dist/wxGTK/samples/tab
-cp Makefile ~/wxgtk_dist/wxGTK/samples/tab
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/tab
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/tab
 cp *.h ~/wxgtk_dist/wxGTK/samples/tab
+cd ..
+
+echo Text sample..
+
+cd text
+mkdir ~/wxgtk_dist/wxGTK/samples/text
+cp Makefile.in ~/wxgtk_dist/wxGTK/samples/text
+cp *.cpp ~/wxgtk_dist/wxGTK/samples/text
 cd ..
 
 echo Thread sample..
 
 cd thread
 mkdir ~/wxgtk_dist/wxGTK/samples/thread
-cp Makefile ~/wxgtk_dist/wxGTK/samples/thread
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/thread
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/thread
 cd ..
@@ -687,7 +616,6 @@ echo Toolbar sample..
 
 cd toolbar
 mkdir ~/wxgtk_dist/wxGTK/samples/toolbar
-cp Makefile ~/wxgtk_dist/wxGTK/samples/toolbar
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/toolbar
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/toolbar
 cp *.h ~/wxgtk_dist/wxGTK/samples/toolbar
@@ -701,7 +629,6 @@ echo TreeCtrl sample..
 
 cd treectrl
 mkdir ~/wxgtk_dist/wxGTK/samples/treectrl
-cp Makefile ~/wxgtk_dist/wxGTK/samples/treectrl
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/treectrl
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/treectrl
 cp *.h ~/wxgtk_dist/wxGTK/samples/treectrl
@@ -712,7 +639,6 @@ echo typetest sample..
 
 cd typetest
 mkdir ~/wxgtk_dist/wxGTK/samples/typetest
-cp Makefile ~/wxgtk_dist/wxGTK/samples/typetest
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/typetest
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/typetest
 cp *.h ~/wxgtk_dist/wxGTK/samples/typetest
@@ -723,7 +649,6 @@ echo Validate sample..
 
 cd validate
 mkdir ~/wxgtk_dist/wxGTK/samples/validate
-cp Makefile ~/wxgtk_dist/wxGTK/samples/validate
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/validate
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/validate
 cp *.h ~/wxgtk_dist/wxGTK/samples/validate
@@ -734,7 +659,6 @@ echo wxPoem sample..
 
 cd wxpoem
 mkdir ~/wxgtk_dist/wxGTK/samples/wxpoem
-cp Makefile ~/wxgtk_dist/wxGTK/samples/wxpoem
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/wxpoem
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/wxpoem
 cp *.h ~/wxgtk_dist/wxGTK/samples/wxpoem
@@ -748,7 +672,6 @@ echo wxSocket sample..
 
 cd wxsocket
 mkdir ~/wxgtk_dist/wxGTK/samples/wxsocket
-cp Makefile ~/wxgtk_dist/wxGTK/samples/wxsocket
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/wxsocket
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/wxsocket
 cp *.xpm ~/wxgtk_dist/wxGTK/samples/wxsocket
@@ -760,5 +683,6 @@ cd distrib/gtk
 cp README.txt ~/wxgtk_dist/wxGTK/utils/wxPython
 cp Setup ~/wxgtk_dist/wxGTK/utils/wxPython/src
 
+cd ..
 
-
+# tar ch | gzip -f9 > wxGTK-2.1.0-b6.tgz

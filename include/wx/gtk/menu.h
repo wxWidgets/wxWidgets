@@ -92,6 +92,9 @@ public:
 
     // implementation only
     wxList& GetMenus() { return m_menus; }
+    
+    void SetInvokingWindow( wxWindow *win );
+    void UnsetInvokingWindow( wxWindow *win );
 
     GtkAccelGroup   *m_accel;
     GtkItemFactory  *m_factory;

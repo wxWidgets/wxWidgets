@@ -63,8 +63,6 @@ wxMenuBar::wxMenuBar( long style )
     }
 
     PostCreation();
-
-    Show( TRUE );
 }
 
 wxMenuBar::wxMenuBar()
@@ -88,13 +86,96 @@ wxMenuBar::wxMenuBar()
     m_widget = GTK_WIDGET(m_menubar);
 
     PostCreation();
-
-    Show( TRUE );
 }
 
 wxMenuBar::~wxMenuBar()
 {
    // how to destroy a GtkItemFactory ?
+}
+
+static void wxMenubarUnsetInvokingWindow( wxMenu *menu, wxWindow *win )
+{
+    menu->SetInvokingWindow( (wxWindow*) NULL );
+
+#if (GTK_MINOR_VERSION > 0)
+    wxWindow *top_frame = win;
+    while (top_frame->GetParent()) top_frame = top_frame->GetParent();
+
+    /* support for native hot keys  */
+    gtk_accel_group_detach( menu->m_accel, GTK_OBJECT(top_frame->m_widget) );
+#endif
+
+    wxNode *node = menu->GetItems().First();
+    while (node)
+    {
+        wxMenuItem *menuitem = (wxMenuItem*)node->Data();
+        if (menuitem->IsSubMenu())
+            wxMenubarUnsetInvokingWindow( menuitem->GetSubMenu(), win );
+        node = node->Next();
+    }
+}
+
+static void wxMenubarSetInvokingWindow( wxMenu *menu, wxWindow *win )
+{
+    menu->SetInvokingWindow( win );
+
+#if (GTK_MINOR_VERSION > 0)
+    wxWindow *top_frame = win;
+    while (top_frame->GetParent())
+       top_frame = top_frame->GetParent();
+
+    /* support for native hot keys  */
+    gtk_accel_group_attach( menu->m_accel, GTK_OBJECT(top_frame->m_widget) );
+#endif
+
+    wxNode *node = menu->GetItems().First();
+    while (node)
+    {
+        wxMenuItem *menuitem = (wxMenuItem*)node->Data();
+        if (menuitem->IsSubMenu())
+            wxMenubarSetInvokingWindow( menuitem->GetSubMenu(), win );
+        node = node->Next();
+    }
+}
+
+void wxMenuBar::SetInvokingWindow( wxWindow *win )
+{
+#if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
+    wxWindow *top_frame = win;
+    while (top_frame->GetParent())
+       top_frame = top_frame->GetParent();
+
+    /* support for native key accelerators indicated by underscroes */
+    gtk_accel_group_attach( m_accel, GTK_OBJECT(top_frame->m_widget) );
+#endif
+
+    wxNode *node = m_menus.First();
+    while (node)
+    {
+        wxMenu *menu = (wxMenu*)node->Data();
+        wxMenubarSetInvokingWindow( menu, win );
+        node = node->Next();
+    }
+}
+
+void wxMenuBar::UnsetInvokingWindow( wxWindow *win )
+{
+#if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
+    wxWindow *top_frame = win;
+    while (top_frame->GetParent())
+       top_frame = top_frame->GetParent();
+
+    /* support for native key accelerators indicated by underscroes */
+    gtk_accel_group_detach( m_accel, GTK_OBJECT(top_frame->m_widget) );
+#endif
+
+    wxNode *node = m_menus.First();
+    while (node)
+    {
+        wxMenu *menu = (wxMenu*)node->Data();
+        wxMenubarUnsetInvokingWindow( menu, win );
+        node = node->Next();
+    }
 }
 
 void wxMenuBar::Append( wxMenu *menu, const wxString &title )
