@@ -30,7 +30,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition);
 
     void SetMessage(const wxString& message) { m_message = message; }
-    void SetPath(const wxString& path) { m_path = path; }
+    void SetPath(const wxString& path);
     void SetStyle(long style) { m_dialogStyle = style; }
 
     wxString GetMessage() const { return m_message; }
