@@ -51,20 +51,20 @@
 // ctor
 wxBaseArray::wxBaseArray()
 {
-  m_uiSize  =
-  m_uiCount = 0;
+  m_nSize  =
+  m_nCount = 0;
   m_pItems  = (long *) NULL;
 }
 
 // copy ctor
 wxBaseArray::wxBaseArray(const wxBaseArray& src)
 {
-  m_uiSize  = // not src.m_uiSize to save memory
-  m_uiCount = src.m_uiCount;
+  m_nSize  = // not src.m_nSize to save memory
+  m_nCount = src.m_nCount;
 
-  if ( m_uiSize != 0 ) {
-    m_pItems = new long[m_uiSize];
-    memcpy(m_pItems, src.m_pItems, m_uiCount*sizeof(long));
+  if ( m_nSize != 0 ) {
+    m_pItems = new long[m_nSize];
+    memcpy(m_pItems, src.m_pItems, m_nCount*sizeof(long));
   }
   else
     m_pItems = (long *) NULL;
@@ -82,12 +82,12 @@ wxBaseArray& wxBaseArray::operator=(const wxBaseArray& src)
 	}
 #endif
 
-  m_uiSize  = // not src.m_uiSize to save memory
-  m_uiCount = src.m_uiCount;
+  m_nSize  = // not src.m_nSize to save memory
+  m_nCount = src.m_nCount;
 
-  if ( m_uiSize != 0 ) {
-    m_pItems = new long[m_uiSize];
-    memcpy(m_pItems, src.m_pItems, m_uiCount*sizeof(long));
+  if ( m_nSize != 0 ) {
+    m_pItems = new long[m_nSize];
+    memcpy(m_pItems, src.m_pItems, m_nCount*sizeof(long));
   }
   else
     m_pItems = (long *) NULL;
@@ -99,24 +99,24 @@ wxBaseArray& wxBaseArray::operator=(const wxBaseArray& src)
 void wxBaseArray::Grow()
 {
   // only do it if no more place
-  if( m_uiCount == m_uiSize ) {
-    if( m_uiSize == 0 ) {
+  if( m_nCount == m_nSize ) {
+    if( m_nSize == 0 ) {
       // was empty, alloc some memory
-      m_uiSize = WX_ARRAY_DEFAULT_INITIAL_SIZE;
-      m_pItems = new long[m_uiSize];
+      m_nSize = WX_ARRAY_DEFAULT_INITIAL_SIZE;
+      m_pItems = new long[m_nSize];
     }
     else
     {
       // add 50% but not too much
-      size_t uiIncrement = m_uiSize < WX_ARRAY_DEFAULT_INITIAL_SIZE 
-                         ? WX_ARRAY_DEFAULT_INITIAL_SIZE : m_uiSize >> 1;
-      if ( uiIncrement > ARRAY_MAXSIZE_INCREMENT )
-        uiIncrement = ARRAY_MAXSIZE_INCREMENT;
-      m_uiSize += uiIncrement;
-      long *pNew = new long[m_uiSize];
+      size_t nIncrement = m_nSize < WX_ARRAY_DEFAULT_INITIAL_SIZE 
+                         ? WX_ARRAY_DEFAULT_INITIAL_SIZE : m_nSize >> 1;
+      if ( nIncrement > ARRAY_MAXSIZE_INCREMENT )
+        nIncrement = ARRAY_MAXSIZE_INCREMENT;
+      m_nSize += nIncrement;
+      long *pNew = new long[m_nSize];
 
       // copy data to new location
-      memcpy(pNew, m_pItems, m_uiCount*sizeof(long));
+      memcpy(pNew, m_pItems, m_nCount*sizeof(long));
       delete [] m_pItems;
       m_pItems = pNew;
     }
@@ -132,44 +132,59 @@ wxBaseArray::~wxBaseArray()
 // clears the list
 void wxBaseArray::Clear()
 {
-  m_uiSize  =
-  m_uiCount = 0;
+  m_nSize  =
+  m_nCount = 0;
 
   wxDELETEA(m_pItems);
 }
 
 // pre-allocates memory (frees the previous data!)
-void wxBaseArray::Alloc(size_t uiSize)
+void wxBaseArray::Alloc(size_t nSize)
 {
-  wxASSERT( uiSize > 0 );
+  wxASSERT( nSize > 0 );
 
   // only if old buffer was not big enough
-  if ( uiSize > m_uiSize ) {
+  if ( nSize > m_nSize ) {
     wxDELETEA(m_pItems);
-    m_pItems = new long[uiSize];
-    m_uiSize  = uiSize;
+    m_pItems = new long[nSize];
+    m_nSize  = nSize;
   }
 
-  m_uiCount = 0;
+  m_nCount = 0;
+}
+
+// minimizes the memory usage by freeing unused memory
+void wxBaseArray::Shrink()
+{
+  // only do it if we have some memory to free
+  if( m_nCount < m_nSize ) {
+    // allocates exactly as much memory as we need
+    long *pNew = new long[m_nCount];
+
+    // copy data to new location
+    memcpy(pNew, m_pItems, m_nCount*sizeof(long));
+    delete [] m_pItems;
+    m_pItems = pNew;
+  }
 }
 
 // searches the array for an item (forward or backwards)
 int wxBaseArray::Index(long lItem, bool bFromEnd) const
 {
   if ( bFromEnd ) {
-    if ( m_uiCount > 0 ) {
-      size_t ui = m_uiCount;
+    if ( m_nCount > 0 ) {
+      size_t n = m_nCount;
       do {
-        if ( m_pItems[--ui] == lItem )
-          return ui;
+        if ( m_pItems[--n] == lItem )
+          return n;
       }
-      while ( ui != 0 );
+      while ( n != 0 );
     }
   }
   else {
-    for( size_t ui = 0; ui < m_uiCount; ui++ ) {
-      if( m_pItems[ui] == lItem )
-        return ui;
+    for( size_t n = 0; n < m_nCount; n++ ) {
+      if( m_pItems[n] == lItem )
+        return n;
     }
   }
 
@@ -181,7 +196,7 @@ int wxBaseArray::Index(long lItem, CMPFUNC fnCompare) const
 {
   size_t i,
        lo = 0,
-       hi = m_uiCount;
+       hi = m_nCount;
   int res;
 
   while ( lo < hi ) {
@@ -202,7 +217,7 @@ int wxBaseArray::Index(long lItem, CMPFUNC fnCompare) const
 void wxBaseArray::Add(long lItem)
 {
   Grow();
-  m_pItems[m_uiCount++] = lItem;
+  m_pItems[m_nCount++] = lItem;
 }
 
 // add item assuming the array is sorted with fnCompare function
@@ -210,7 +225,7 @@ void wxBaseArray::Add(long lItem, CMPFUNC fnCompare)
 {
   size_t i,
        lo = 0,
-       hi = m_uiCount;
+       hi = m_nCount;
   int res;
 
   while ( lo < hi ) {
@@ -233,26 +248,26 @@ void wxBaseArray::Add(long lItem, CMPFUNC fnCompare)
 }
 
 // add item at the given position
-void wxBaseArray::Insert(long lItem, size_t uiIndex)
+void wxBaseArray::Insert(long lItem, size_t nIndex)
 {
-  wxCHECK_RET( uiIndex <= m_uiCount, _("bad index in wxArray::Insert") );
+  wxCHECK_RET( nIndex <= m_nCount, "bad index in wxArray::Insert" );
 
   Grow();
 
-  memmove(&m_pItems[uiIndex + 1], &m_pItems[uiIndex],
-          (m_uiCount - uiIndex)*sizeof(long));
-  m_pItems[uiIndex] = lItem;
-  m_uiCount++;
+  memmove(&m_pItems[nIndex + 1], &m_pItems[nIndex],
+          (m_nCount - nIndex)*sizeof(long));
+  m_pItems[nIndex] = lItem;
+  m_nCount++;
 }
 
 // removes item from array (by index)
-void wxBaseArray::Remove(size_t uiIndex)
+void wxBaseArray::Remove(size_t nIndex)
 {
-  wxCHECK_RET( uiIndex <= m_uiCount, _("bad index in wxArray::Remove") );
+  wxCHECK_RET( nIndex <= m_nCount, "bad index in wxArray::Remove" );
 
-  memmove(&m_pItems[uiIndex], &m_pItems[uiIndex + 1],
-          (m_uiCount - uiIndex - 1)*sizeof(long));
-  m_uiCount--;
+  memmove(&m_pItems[nIndex], &m_pItems[nIndex + 1],
+          (m_nCount - nIndex - 1)*sizeof(long));
+  m_nCount--;
 }
 
 // removes item from array (by value)
@@ -261,7 +276,7 @@ void wxBaseArray::Remove(long lItem)
   int iIndex = Index(lItem);
 
   wxCHECK_RET( iIndex != NOT_FOUND,
-               _("removing inexistent item in wxArray::Remove") );
+               "removing inexistent item in wxArray::Remove" );
 
   Remove((size_t)iIndex);
 }
@@ -269,5 +284,5 @@ void wxBaseArray::Remove(long lItem)
 // sort array elements using passed comparaison function
 void wxBaseArray::Sort(CMPFUNC fCmp)
 {
-  qsort(m_pItems, m_uiCount, sizeof(long), fCmp);
+  qsort(m_pItems, m_nCount, sizeof(long), fCmp);
 }

@@ -86,20 +86,22 @@ public:
   /** @name memory management */
   //@{
     /// empties the list, but doesn't release memory
-  void Empty() { m_uiCount = 0; }
+  void Empty() { m_nCount = 0; }
     /// empties the list and releases memory
   void Clear();
     /// preallocates memory for given number of items
   void Alloc(size_t uiSize);
+    /// minimizes the memory used by the array (frees unused memory)
+  void Shrink();
   //@}
 
   /** @name simple accessors */
   //@{
     /// number of elements in the array
-  size_t  Count() const   { return m_uiCount;      }
-  size_t  GetCount() const   { return m_uiCount;      }
+  size_t  Count() const   { return m_nCount;      }
+  size_t  GetCount() const   { return m_nCount;      }
     /// is it empty?
-  bool  IsEmpty() const { return m_uiCount == 0; }
+  bool  IsEmpty() const { return m_nCount == 0; }
   //@}
 
 protected:
@@ -111,7 +113,7 @@ protected:
   //@{
     /// get item at position uiIndex (range checking is done in debug version)
   long& Item(size_t uiIndex) const
-    { wxASSERT( uiIndex < m_uiCount ); return m_pItems[uiIndex]; }
+    { wxASSERT( uiIndex < m_nCount ); return m_pItems[uiIndex]; }
     /// same as Item()
   long& operator[](size_t uiIndex) const { return Item(uiIndex); }
   //@}
@@ -145,8 +147,8 @@ protected:
 private:
   void    Grow();     // makes array bigger if needed
 
-  size_t    m_uiSize,   // current size of the array
-          m_uiCount;  // current number of elements
+  size_t  m_nSize,    // current size of the array
+          m_nCount;   // current number of elements
 
   long   *m_pItems;   // pointer to data
 };
@@ -173,9 +175,9 @@ public:                                                             \
     { ((wxBaseArray *)this)->operator=((const wxBaseArray&)src);    \
       return *this; }                                               \
                                                                     \
-  T& operator[](size_t uiIndex) const                                 \
+  T& operator[](size_t uiIndex) const                               \
     { return (T&)(wxBaseArray::Item(uiIndex)); }                    \
-  T& Item(size_t uiIndex) const                                       \
+  T& Item(size_t uiIndex) const                                     \
     { return (T&)(wxBaseArray::Item(uiIndex)); }                    \
   T& Last() const                                                   \
     { return (T&)(wxBaseArray::Item(Count() - 1)); }                \
@@ -185,10 +187,10 @@ public:                                                             \
                                                                     \
   void Add(T Item)                                                  \
     { wxBaseArray::Add((long)Item); }                               \
-  void Insert(T Item, size_t uiIndex)                                 \
+  void Insert(T Item, size_t uiIndex)                               \
     { wxBaseArray::Insert((long)Item, uiIndex) ; }                  \
                                                                     \
-  void Remove(size_t uiIndex) { wxBaseArray::Remove(uiIndex); }       \
+  void Remove(size_t uiIndex) { wxBaseArray::Remove(uiIndex); }     \
   void Remove(T Item)                                               \
     { int iIndex = Index(Item);                                     \
       wxCHECK2_MSG( iIndex != NOT_FOUND, return,                    \
@@ -228,9 +230,9 @@ public:                                                             \
       m_fnCompare = src.m_fnCompare;                                \
       return *this; }                                               \
                                                                     \
-  T& operator[](size_t uiIndex) const                                 \
+  T& operator[](size_t uiIndex) const                               \
     { return (T&)(wxBaseArray::Item(uiIndex)); }                    \
-  T& Item(size_t uiIndex) const                                       \
+  T& Item(size_t uiIndex) const                                     \
     { return (T&)(wxBaseArray::Item(uiIndex)); }                    \
   T& Last() const                                                   \
     { return (T&)(wxBaseArray::Item(Count() - 1)); }                \
@@ -241,12 +243,12 @@ public:                                                             \
   void Add(T Item)                                                  \
     { wxBaseArray::Add((long)Item, (CMPFUNC)m_fnCompare); }         \
                                                                     \
-  void Remove(size_t uiIndex) { wxBaseArray::Remove(uiIndex); }       \
+  void Remove(size_t uiIndex) { wxBaseArray::Remove(uiIndex); }     \
   void Remove(T Item)                                               \
     { int iIndex = Index(Item);                                     \
       wxCHECK2_MSG( iIndex != NOT_FOUND, return,                    \
         "removing inexisting element in wxArray::Remove" );         \
-      wxBaseArray::Remove((size_t)iIndex); }                          \
+      wxBaseArray::Remove((size_t)iIndex); }                        \
                                                                     \
 private:                                                            \
   SCMPFUNC##T m_fnCompare;                                          \
@@ -266,9 +268,9 @@ public:                                                             \
                                                                     \
   ~name();                                                          \
                                                                     \
-  T& operator[](size_t uiIndex) const                                 \
+  T& operator[](size_t uiIndex) const                               \
     { return *(T*)wxBaseArray::Item(uiIndex); }                     \
-  T& Item(size_t uiIndex) const                                       \
+  T& Item(size_t uiIndex) const                                     \
     { return *(T*)wxBaseArray::Item(uiIndex); }                     \
   T& Last() const                                                   \
     { return *(T*)(wxBaseArray::Item(Count() - 1)); }               \
@@ -279,16 +281,16 @@ public:                                                             \
   void Add(const T* pItem)                                          \
     { wxBaseArray::Add((long)pItem); }                              \
                                                                     \
-  void Insert(const T& Item,  size_t uiIndex);                        \
-  void Insert(const T* pItem, size_t uiIndex)                         \
+  void Insert(const T& Item,  size_t uiIndex);                      \
+  void Insert(const T* pItem, size_t uiIndex)                       \
     { wxBaseArray::Insert((long)pItem, uiIndex); }                  \
                                                                     \
   void Empty();                                                     \
                                                                     \
-  T*   Detach(size_t uiIndex)                                         \
+  T*   Detach(size_t uiIndex)                                       \
     { T* p = (T*)wxBaseArray::Item(uiIndex);                        \
       wxBaseArray::Remove(uiIndex); return p; }                     \
-  void Remove(size_t uiIndex);                                        \
+  void Remove(size_t uiIndex);                                      \
                                                                     \
   void Sort(CMPFUNC##T fCmp) { wxBaseArray::Sort((CMPFUNC)fCmp); }  \
                                                                     \
