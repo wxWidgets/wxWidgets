@@ -41,54 +41,10 @@
 
 #include <math.h>
 
-DECLARE_WXCOCOA_OBJC_CLASS(NSActionCell);
-
-// ========================================================================
-// wxCocoaNSActionCell
-// ========================================================================
-WX_DECLARE_OBJC_HASHMAP(NSActionCell);
-
-class wxCocoaNSActionCell
-{
-    WX_DECLARE_OBJC_INTERFACE(NSActionCell)
-public:
-    virtual void CocoaTarget_wxNSActionCellAction() {}
-protected:
-    static struct objc_object *sm_cocoaTarget;
-};
-
-// ============================================================================
-// @class wxNSActionCellTarget
-// ============================================================================
-@interface wxNSActionCellTarget : NSObject
-{
-}
-
-- (void)wxNSActionCellAction: (id)sender;
-@end //interface wxNSActionCellTarget
-
-@implementation wxNSActionCellTarget : NSObject
-
-- (void)wxNSActionCellAction: (id)sender
-{
-    wxLogTrace(wxTRACE_COCOA,wxT("wxNSActionCellAction"));
-    wxCocoaNSActionCell *wxcontrol = wxCocoaNSActionCell::GetFromCocoa(sender);
-    wxCHECK_RET(wxcontrol,wxT("wxNSActionCellAction received but no wxCocoaNSActionCell exists!"));
-    wxcontrol->CocoaTarget_wxNSActionCellAction();
-}
-
-@end //implementation wxNSActionCellTarget
-
-// ========================================================================
-// wxCocoaNSActionCell
-// ========================================================================
-struct objc_object *wxCocoaNSActionCell::sm_cocoaTarget = [[wxNSActionCellTarget alloc] init];
-WX_IMPLEMENT_OBJC_INTERFACE(NSActionCell)
-
 // ========================================================================
 // wxToolBarTool
 // ========================================================================
-class wxToolBarTool : public wxToolBarToolBase, protected wxCocoaNSActionCell
+class wxToolBarTool : public wxToolBarToolBase
 {
 public:
     wxToolBarTool(wxToolBar *tbar, int toolid, const wxString& label,
@@ -139,9 +95,16 @@ void wxToolBarTool::Init()
     m_frameRect = NSZeroRect;
 }
 
+void wxToolBar::CocoaToolClickEnded()
+{
+    wxASSERT(m_mouseDownTool);
+    wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, m_mouseDownTool->GetId());
+    InitCommandEvent(event);
+    Command(event);
+}
+
 wxToolBarTool::~wxToolBarTool()
 {
-    DisassociateNSActionCell(m_cocoaNSButtonCell);
     [m_cocoaNSButtonCell release];
 }
 
@@ -186,7 +149,6 @@ bool wxToolBarTool::CreateButtonCell()
     [m_cocoaNSButtonCell setBordered:NO];
 //    [m_cocoaNSButtonCell setHighlightsBy:NSContentsCellMask|NSPushInCellMask];
 //    [m_cocoaNSButtonCell setShowsStateBy:NSContentsCellMask|NSPushInCellMask];
-    AssociateNSActionCell(m_cocoaNSButtonCell);
     return true;
 }
 
@@ -296,6 +258,7 @@ bool wxToolBar::Cocoa_mouseDragged(WX_NSEvent theEvent)
                 inRect:AddToolPadding(m_mouseDownTool->GetFrameRect()) ofView:m_cocoaNSView
                 untilMouseUp:NO])
             {
+                CocoaToolClickEnded();
                 m_mouseDownTool = NULL;
                 wxLogTrace(wxTRACE_COCOA,wxT("Button was clicked after drag!"));
             }
@@ -319,6 +282,7 @@ bool wxToolBar::Cocoa_mouseDown(WX_NSEvent theEvent)
                 inRect:AddToolPadding(tool->GetFrameRect()) ofView:m_cocoaNSView
                 untilMouseUp:NO])
             {
+                CocoaToolClickEnded();
                 m_mouseDownTool = NULL;
                 wxLogTrace(wxTRACE_COCOA,wxT("Button was clicked!"));
             }

@@ -61,6 +61,7 @@ protected:
     virtual bool Cocoa_mouseDown(WX_NSEvent theEvent);
     virtual bool Cocoa_mouseDragged(WX_NSEvent theEvent);
     wxToolBarTool *CocoaFindToolForPosition(const NSPoint& pos) const;
+    void CocoaToolClickEnded();
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
