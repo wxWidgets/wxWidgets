@@ -160,6 +160,19 @@ void wxZlibOutputStream::Sync()
     return;
   }
 
+  // Fixed by "Stefan Csomor" <csomor@advancedconcepts.ch>
+  while( m_deflate->avail_out == 0 )
+  {
+     m_parent_o_stream->Write(m_z_buffer, m_z_size );
+     m_deflate->next_out  = m_z_buffer;
+     m_deflate->avail_out = m_z_size;
+     err = deflate(m_deflate, Z_FULL_FLUSH);
+     if (err != Z_OK) {
+        return;
+     }
+  }
+  // End
+
   m_parent_o_stream->Write(m_z_buffer, m_z_size-m_deflate->avail_out);
   m_deflate->next_out  = m_z_buffer;
   m_deflate->avail_out = m_z_size;
