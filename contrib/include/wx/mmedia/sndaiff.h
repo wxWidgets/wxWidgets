@@ -3,7 +3,9 @@
 // Purpose:
 // Date: 08/11/1999
 // Author: Guilhem Lavaux <lavaux@easynet.fr> (C) 1999
+// License:    wxWindows license
 // CVSID: $Id$
+// License:    wxWindows license
 // --------------------------------------------------------------------------
 #ifndef _WX_SNDAIFF_H
 #define _WX_SNDAIFF_H

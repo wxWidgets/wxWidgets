@@ -4,6 +4,7 @@
 // Date: 25/02/2000
 // Author: Guilhem Lavaux <lavaux@easynet.fr> (C) 2000
 // CVSID: $Id$
+// License:    wxWindows license
 // --------------------------------------------------------------------------
 #ifndef _WX_SNDMSAD_H
 #define _WX_SNDMSAD_H
