@@ -28,6 +28,10 @@
 #include <wx/gtk/win_gtk.h>
 #endif
 
+#ifdef __WXMAC__
+#include <wx/mac/private.h>
+#endif
+
 //----------------------------------------------------------------------
 
 #if PYTHON_API_VERSION <= 1007 && wxUSE_UNICODE
@@ -1605,10 +1609,12 @@ PyObject* wxPy_ConvertList(wxListBase* list, const char* className) {
 //----------------------------------------------------------------------
 
 long wxPyGetWinHandle(wxWindow* win) {
+
 #ifdef __WXMSW__
     return (long)win->GetHandle();
 #endif
 
+    
     // Find and return the actual X-Window.
 #ifdef __WXGTK__
     if (win->m_wxwindow) {
@@ -1622,6 +1628,12 @@ long wxPyGetWinHandle(wxWindow* win) {
 #endif
     }
 #endif
+
+    
+#ifdef __WXMAC__
+    return (long)MAC_WXHWND(win->MacGetRootWindow());
+#endif
+    
     return 0;
 }
 
