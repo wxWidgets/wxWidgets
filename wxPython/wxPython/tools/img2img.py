@@ -13,11 +13,6 @@
 import sys, os, glob, getopt
 from wxPython.wx import *
 
-if wxPlatform == "__WXGTK__":
-    # some bitmap related things need to have a wxApp initialized...
-    app = wxPySimpleApp()
-
-wxInitAllImageHandlers()
 
 def convert(file, maskClr, outputDir, outputName, outType, outExt):
     if os.path.splitext(file)[1].lower() == ".ico":
