@@ -469,6 +469,7 @@ bool wxFile::Eof() const
 // ----------------------------------------------------------------------------
 // construction
 // ----------------------------------------------------------------------------
+
 wxTempFile::wxTempFile(const wxString& strName)
 {
     Open(strName);
@@ -476,9 +477,22 @@ wxTempFile::wxTempFile(const wxString& strName)
 
 bool wxTempFile::Open(const wxString& strName)
 {
-    m_strName = strName;
+    // we must have an absolute filename because otherwise CreateTempFileName()
+    // would create the temp file in $TMP (i.e. the system standard location
+    // for the temp files) which might be on another volume/drive/mount and
+    // wxRename()ing it later to m_strName from Commit() would then fail
+    //
+    // with the absolute filename, the temp file is created in the same
+    // directory as this one which ensures that wxRename() may work later
+    wxFileName fn(strName);
+    if ( !fn.IsAbsolute() )
+    {
+        fn.Normalize(wxPATH_NORM_ABSOLUTE);
+    }
 
-    m_strTemp = wxFileName::CreateTempFileName(strName, &m_file);
+    m_strName = fn.GetFullPath();
+
+    m_strTemp = wxFileName::CreateTempFileName(m_strName, &m_file);
 
     if ( m_strTemp.empty() )
     {
@@ -491,7 +505,7 @@ bool wxTempFile::Open(const wxString& strName)
     mode_t mode;
 
     wxStructStat st;
-    if ( stat(strName.fn_str(), &st) == 0 )
+    if ( stat(m_strName.fn_str(), &st) == 0 )
     {
         mode = st.st_mode;
     }
