@@ -300,10 +300,10 @@ bool wxDC::DoGetPixel(
     vPoint.x = vX;
     vPoint.y = vY;
     lColor = ::GpiSetPel(m_hPS, &vPoint);
-//    *pCol.Set(lColor);
+    *pCol = lColor;
     if(lColor>= 0)
         return(TRUE);
-   else
+    else
         return(FALSE);
 }
 
