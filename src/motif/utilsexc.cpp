@@ -109,11 +109,13 @@ void xt_notify_end_process(XtPointer client, int *fid,
       process_data->process->OnTerminate(process_data->pid, 0); // What should 'status' be?
     
     process_data->end_process = TRUE;
-
+ /*
     if (process_data->pid > 0) // synchronous
         delete process_data;
     else
         process_data->pid = 0;
+  */
+    delete process_data;
 }
 
 long wxExecute(char **argv, bool sync, wxProcess *handler)
@@ -183,11 +185,9 @@ long wxExecute(char **argv, bool sync, wxProcess *handler)
         
         if (WIFEXITED(process_data->end_process) != 0)
         {
-//            delete process_data; // Double deletion
             return WEXITSTATUS(process_data->end_process);
         }
     }
-    delete process_data;
     
     return pid;
 #endif

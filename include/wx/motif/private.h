@@ -41,6 +41,9 @@ extern int wxComputeColours (Display *display, wxColour * back, wxColour * fore)
 extern void wxDoChangeForegroundColour(WXWidget widget, wxColour& foregroundColour);
 extern void wxDoChangeBackgroundColour(WXWidget widget, wxColour& backgroundColour, bool changeArmColour = FALSE);
 
+// For repainting arbitrary windows
+void wxUniversalRepaintProc(Widget w, XtPointer WXUNUSED(c_data), XEvent *event, char *);
+
 #define	wxNO_COLORS   0x00
 #define wxBACK_COLORS 0x01
 #define wxFORE_COLORS 0x02

@@ -32,6 +32,8 @@ High Priority
 
 - Use wxImage to load other formats into wxBitmaps, such as PNG, BMP.
 
+- Allow wxFrame and other widgets to have mouse event handlers.
+
 Low Priority
 ------------
 

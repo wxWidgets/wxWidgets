@@ -17,10 +17,12 @@ wxMSW:
   with names wx.lib, wx_d.lib, wx200.lib(dll), wx200_d.lib(dll).
 - Added BC++ 5 IDE files and instructions.
 - Fixed wxChoice, wxComboBox constructor bugs (m_noStrings initialisation).
+- Fixed focus-related crash.
 
 wxMotif:
 
 - Cured asynchronous wxExecute crash.
+- Added repaint event handlers to wxFrame, wxMDIChildFrame.
 
 General:
 

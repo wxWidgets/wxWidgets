@@ -25,7 +25,6 @@
 #include <Xm/CascadeBG.h>
 #include <Xm/Text.h>
 #include <Xm/PushBG.h>
-#include <Xm/DrawingA.h>
 #include <Xm/AtomMgr.h>
 #include <Xm/Protocols.h>
 
@@ -36,10 +35,6 @@ extern wxList wxModelessWindows;
 // Implemented in frame.cpp
 extern void wxFrameFocusProc(Widget workArea, XtPointer clientData, 
                              XmAnyCallbackStruct *cbs);
-
-// From wxWindow
-extern void wxCanvasRepaintProc (Widget, XtPointer, XmDrawingAreaCallbackStruct * cbs);
-extern void wxCanvasInputEvent (Widget drawingArea, XtPointer data, XmDrawingAreaCallbackStruct * cbs);
 
 #define wxID_NOTEBOOK_CLIENT_AREA wxID_HIGHEST + 100
 
@@ -345,9 +340,10 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
         */
         XmNresizePolicy, XmRESIZE_NONE,
         NULL);
-    
-    XtAddCallback ((Widget) m_mainWidget, XmNexposeCallback, (XtCallbackProc) wxCanvasRepaintProc, (XtPointer) this);
 
+    XtAddEventHandler((Widget) m_mainWidget, ExposureMask,FALSE,
+        wxUniversalRepaintProc, (XtPointer) this);
+    
     SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
     
@@ -370,8 +366,10 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
 
 wxMDIChildFrame::~wxMDIChildFrame()
 {
-    XtRemoveCallback ((Widget) m_mainWidget, XmNexposeCallback, (XtCallbackProc) wxCanvasRepaintProc, (XtPointer) this);
-
+    if (m_mainWidget)
+      XtRemoveEventHandler((Widget) m_mainWidget, ExposureMask,FALSE,
+        wxUniversalRepaintProc, (XtPointer) this);
+    
     if (GetMDIParentFrame())
     {
         wxMDIParentFrame* parentFrame = GetMDIParentFrame();

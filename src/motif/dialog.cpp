@@ -42,7 +42,6 @@
 #include "wx/motif/private.h"
 
 static void wxCloseDialogCallback(Widget widget, XtPointer client_data, XmAnyCallbackStruct *cbs);
-static void wxDialogBoxRepaintProc(Widget w, XtPointer c_data, XEvent *event, char *);
 static void wxDialogBoxEventHandler (Widget    wid,
                                      XtPointer client_data,
                                      XEvent*   event,
@@ -231,7 +230,7 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
         SetSize(pos.x, pos.y, size.x, size.y);
     }
     XtAddEventHandler(dialogShell,ExposureMask,FALSE,
-        wxDialogBoxRepaintProc, (XtPointer) this);
+        wxUniversalRepaintProc, (XtPointer) this);
     
     XtAddEventHandler(dialogShell,
         ButtonPressMask | ButtonReleaseMask | PointerMotionMask | KeyPressMask,
@@ -259,6 +258,10 @@ void wxDialog::SetModal(bool flag)
 
 wxDialog::~wxDialog()
 {
+    if (m_mainWidget)
+      XtRemoveEventHandler((Widget) m_mainWidget, ExposureMask, FALSE,
+          wxUniversalRepaintProc, (XtPointer) this);
+    
     m_modalShowing = FALSE;
     if (!wxUSE_INVISIBLE_RESIZE && m_mainWidget)
     {
@@ -615,45 +618,7 @@ static void wxCloseDialogCallback( Widget WXUNUSED(widget), XtPointer client_dat
     dialog->GetEventHandler()->ProcessEvent(closeEvent);
 }
 
-// TODO: Preferably, we should have a universal repaint proc.
-// Meanwhile, use a special one for dialogs.
-static void wxDialogBoxRepaintProc(Widget w, XtPointer WXUNUSED(c_data), XEvent *event, char *)
-{
-    Window window;
-    Display *display;
-    
-    wxWindow* win = (wxWindow *)wxWidgetHashTable->Get((long)w);
-    if (!win)
-        return;
-    
-    switch(event -> type)
-    {
-    case Expose :
-        {
-            window = (Window) win -> GetXWindow();
-            display = (Display *) win -> GetXDisplay();
-            
-            wxRect* rect = new wxRect(event->xexpose.x, event->xexpose.y,
-                event->xexpose.width, event->xexpose.height);
-            win->m_updateRects.Append((wxObject*) rect);
-            
-            if (event -> xexpose.count == 0)
-            {
-                win->DoPaint();
-                
-                win->ClearUpdateRects();
-            }
-            break;
-        }
-    default :
-        {
-            cout << "\n\nNew Event ! is = " << event -> type << "\n";
-            break;
-        }
-    }
-}
-
-static void wxDialogBoxEventHandler (Widget    wid,
+void wxDialogBoxEventHandler (Widget    wid,
                                      XtPointer WXUNUSED(client_data),
                                      XEvent*   event,
                                      Boolean *continueToDispatch)

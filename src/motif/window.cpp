@@ -144,14 +144,6 @@ wxWindow::wxWindow()
 // Destructor
 wxWindow::~wxWindow()
 {
-    // Remove potential dangling pointer
-    if (GetParent() && GetParent()->IsKindOf(CLASSINFO(wxPanel)))
-    {
-        wxPanel* panel = (wxPanel*) GetParent();
-        if (panel->GetLastFocus() == this)
-            panel->SetLastFocus((wxWindow*) NULL);
-    }
-
     //// Motif-specific
     
     if (GetMainWidget())
@@ -3586,5 +3578,42 @@ wxNoOptimize::~wxNoOptimize()
 bool wxNoOptimize::CanOptimize()
 {
     return (m_count == 0);
+}
+
+// For repainting arbitrary windows
+void wxUniversalRepaintProc(Widget w, XtPointer WXUNUSED(c_data), XEvent *event, char *)
+{
+    Window window;
+    Display *display;
+    
+    wxWindow* win = (wxWindow *)wxWidgetHashTable->Get((long)w);
+    if (!win)
+        return;
+    
+    switch(event -> type)
+    {
+    case Expose :
+        {
+            window = (Window) win -> GetXWindow();
+            display = (Display *) win -> GetXDisplay();
+            
+            wxRect* rect = new wxRect(event->xexpose.x, event->xexpose.y,
+                event->xexpose.width, event->xexpose.height);
+            win->m_updateRects.Append((wxObject*) rect);
+            
+            if (event -> xexpose.count == 0)
+            {
+                win->DoPaint();
+                
+                win->ClearUpdateRects();
+            }
+            break;
+        }
+    default :
+        {
+            cout << "\n\nNew Event ! is = " << event -> type << "\n";
+            break;
+        }
+    }
 }
 

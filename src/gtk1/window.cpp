@@ -1526,14 +1526,6 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
 
 wxWindow::~wxWindow()
 {
-    // Remove potential dangling pointer
-    if (GetParent() && GetParent()->IsKindOf(CLASSINFO(wxPanel)))
-    {
-        wxPanel* panel = (wxPanel*) GetParent();
-        if (panel->GetLastFocus() == this)
-            panel->SetLastFocus((wxWindow*) NULL);
-    }
-
     m_hasVMT = FALSE;
 
 #if wxUSE_DRAG_AND_DROP

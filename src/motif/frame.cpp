@@ -44,7 +44,6 @@
 #include <Xm/AtomMgr.h>
 #include <Xm/LabelG.h>
 #include <Xm/Frame.h>
-#include <Xm/DrawingA.h>
 #if   XmVersion > 1000
 #include <Xm/Protocols.h>
 #endif
@@ -56,10 +55,6 @@ void wxFrameFocusProc(Widget workArea, XtPointer clientData,
                       XmAnyCallbackStruct *cbs);
 static void wxFrameMapProc(Widget frameShell, XtPointer clientData, 
                            XCrossingEvent * event);
-
-// From wxWindow
-extern void wxCanvasRepaintProc (Widget, XtPointer, XmDrawingAreaCallbackStruct * cbs);
-extern void wxCanvasInputEvent (Widget drawingArea, XtPointer data, XmDrawingAreaCallbackStruct * cbs);
 
 extern wxList wxModelessWindows;
 extern wxList wxPendingDelete;
@@ -194,10 +189,10 @@ bool wxFrame::Create(wxWindow *parent,
         XmNbottomAttachment, XmATTACH_FORM,
         //                    XmNresizePolicy, XmRESIZE_ANY,
         NULL);
-    
-    XtAddCallback ((Widget) m_clientArea, XmNexposeCallback, (XtCallbackProc) wxCanvasRepaintProc, (XtPointer) this);
-    XtAddCallback ((Widget) m_clientArea, XmNinputCallback, (XtCallbackProc) wxCanvasInputEvent, (XtPointer) this);
 
+    XtAddEventHandler((Widget) m_clientArea, ExposureMask,FALSE,
+        wxUniversalRepaintProc, (XtPointer) this);
+    
     XtVaSetValues((Widget) m_frameWidget,
         XmNworkWindow, (Widget) m_workArea,
         NULL);
@@ -294,11 +289,12 @@ bool wxFrame::Create(wxWindow *parent,
 
 wxFrame::~wxFrame()
 {
+    if (m_clientArea)
+      XtRemoveEventHandler((Widget) m_clientArea, ExposureMask, FALSE,
+          wxUniversalRepaintProc, (XtPointer) this);
+
     if (GetMainWidget())
         Show(FALSE);
-
-    XtRemoveCallback ((Widget) m_clientArea, XmNexposeCallback, (XtCallbackProc) wxCanvasRepaintProc, (XtPointer) this);
-    XtRemoveCallback ((Widget) m_clientArea, XmNinputCallback, (XtCallbackProc) wxCanvasInputEvent, (XtPointer) this);
 
     if (m_frameMenuBar)
     {
