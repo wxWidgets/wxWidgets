@@ -23,83 +23,100 @@ IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
 
 wxColour::wxColour ()
 {
-    m_isInit = FALSE;
-    m_pixel = 0;
-    m_red = m_blue = m_green = 0;
-}
+    m_bIsInit = FALSE;
+    m_vPixel = 0;
+    m_cRed = m_cBlue = m_cGreen = 0;
+} // end of wxColour::wxColour
 
-wxColour::wxColour (unsigned char r, unsigned char g, unsigned char b)
+wxColour::wxColour (
+  unsigned char                     cRed
+, unsigned char                     cGreen
+, unsigned char                     cBlue
+)
 {
-    m_red = r;
-    m_green = g;
-    m_blue = b;
-    m_isInit = TRUE;
-//    m_pixel = PALETTERGB (m_red, m_green, m_blue);
-}
+    m_cRed    = cRed;
+    m_cGreen  = cGreen;
+    m_cBlue   = cBlue;
+    m_bIsInit = TRUE;
+    m_vPixel  = PALETTERGB (m_cRed, m_cGreen, m_cBlue);
+} // end of wxColour::wxColour
 
-wxColour::wxColour (const wxColour& col)
+wxColour::wxColour (
+  const wxColour&                   rCol
+)
 {
-    m_red = col.m_red;
-    m_green = col.m_green;
-    m_blue = col.m_blue;
-    m_isInit = col.m_isInit;
-    m_pixel = col.m_pixel;
-}
+    m_cRed    = rCol.m_cRed;
+    m_cGreen  = rCol.m_cGreen;
+    m_cBlue   = rCol.m_cBlue;
+    m_bIsInit = rCol.m_bIsInit;
+    m_vPixel  = rCol.m_vPixel;
+} // end of wxColour::wxColour
 
-wxColour& wxColour::operator =(const wxColour& col)
+wxColour& wxColour::operator =(
+  const wxColour&                   rCol
+)
 {
-  m_red = col.m_red;
-  m_green = col.m_green;
-  m_blue = col.m_blue;
-  m_isInit = col.m_isInit;
-  m_pixel = col.m_pixel;
-  return *this;
-}
+    m_cRed    = rCol.m_cRed;
+    m_cGreen  = rCol.m_cGreen;
+    m_cBlue   = rCol.m_cBlue;
+    m_bIsInit = rCol.m_bIsInit;
+    m_vPixel  = rCol.m_vPixel;
+    return *this;
+} // end of wxColour& wxColour::operator =
 
-void wxColour::InitFromName(const wxString& col)
+void wxColour::InitFromName(
+  const wxString&                   sCol
+)
 {
-    wxColour *the_colour = wxTheColourDatabase->FindColour (col);
-    if (the_colour)
+    wxColour*                       pTheColour = wxTheColourDatabase->FindColour(sCol);
+
+    if (pTheColour)
     {
-        m_red = the_colour->Red ();
-        m_green = the_colour->Green ();
-        m_blue = the_colour->Blue ();
-        m_isInit = TRUE;
+        m_cRed    = pTheColour->Red();
+        m_cGreen  = pTheColour->Green();
+        m_cBlue   = pTheColour->Blue();
+        m_bIsInit = TRUE;
     }
     else
     {
-        m_red = 0;
-        m_green = 0;
-        m_blue = 0;
-        m_isInit = FALSE;
+        m_cRed = 0;
+        m_cGreen = 0;
+        m_cBlue = 0;
+        m_bIsInit = FALSE;
     }
-/* TODO
-    m_pixel = PALETTERGB (m_red, m_green, m_blue);
-*/
-}
+    m_vPixel = PALETTERGB (m_cRed, m_cGreen, m_cBlue);
+} // end of wxColour::InitFromName
 
 wxColour::~wxColour ()
 {
-}
+} // end of wxColour::~wxColour
 
-void wxColour::Set (unsigned char r, unsigned char g, unsigned char b)
+void wxColour::Set (
+  unsigned char                     cRed
+, unsigned char                     cGreen
+, unsigned char                     cBlue
+)
 {
-    m_red = r;
-    m_green = g;
-    m_blue = b;
-    m_isInit = TRUE;
-/* TODO
-    m_pixel = PALETTERGB (m_red, m_green, m_blue);
-*/
-}
+    m_cRed    = cRed;
+    m_cGreen  = cGreen;
+    m_cBlue   = cBlue;
+    m_bIsInit = TRUE;
+    m_vPixel  = PALETTERGB (m_cRed, m_cGreen, m_cBlue);
+} // end of wxColour::Set
 
+//
 // Obsolete
+//
 #if WXWIN_COMPATIBILITY
-void wxColour::Get (unsigned char *r, unsigned char *g, unsigned char *b) const
+void wxColour::Get (
+  unsigned char*                   pRed
+, unsigned char*                   pGreen
+, unsigned char*                   pBlue
+) const
 {
-  *r = m_red;
-  *g = m_green;
-  *b = m_blue;
-}
+    *Red   = m_cRed;
+    *Green = m_cGreen;
+    *Blue  = m_cBlue;
+} // end of wxColour::Get
 #endif
 

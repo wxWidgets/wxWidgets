@@ -18,72 +18,104 @@
 class WXDLLEXPORT wxColour: public wxObject
 {
 public:
-  // ctors
-    // default
-  wxColour();
+    //
+    // Ctors
+    //
+
+    //
+    // Default
+    //
+    wxColour();
+
+    //
     // from RGB
-  wxColour( unsigned char red, unsigned char green, unsigned char blue );
-    // implicit conversion from the colour name
-  wxColour( const wxString &colourName ) { InitFromName(colourName); }
-  wxColour( const char *colourName ) { InitFromName(colourName); }
+    //
+    wxColour( unsigned char cRed
+             ,unsigned char cGreen
+             ,unsigned char cBlue
+            );
 
-    // copy ctors and assignment operators
-  wxColour( const wxColour& col );
-  wxColour( const wxColour* col );
-  wxColour& operator = ( const wxColour& col );
+    //
+    // Implicit conversion from the colour name
+    //
+    wxColour(const wxString& rColourName) { InitFromName(rColourName); }
+    wxColour(const char* zColourName) { InitFromName(zColourName); }
 
-    // dtor
-  ~wxColour();
+    //
+    // Copy ctors and assignment operators
+    //
+    wxColour(const wxColour& rCol);
+    wxColour(const wxColour* pCol);
+    wxColour&operator = (const wxColour& rCol);
 
-  // Set() functions
-  void Set( unsigned char red, unsigned char green, unsigned char blue );
-  void Set( unsigned long colRGB )
-  {
-    // we don't need to know sizeof(long) here because we assume that the three
-    // least significant bytes contain the R, G and B values
-    Set((unsigned char)colRGB,
-        (unsigned char)(colRGB >> 8),
-        (unsigned char)(colRGB >> 16));
-  }
+    //
+    // Dtor
+    //
+    ~wxColour();
 
-  // accessors
-  bool Ok() const {return m_isInit; }
+    //
+    // Set functions
+    //
+    void Set( unsigned char cRed
+             ,unsigned char cGreen
+             ,unsigned char cBlue
+            );
+    void Set(unsigned long lColRGB)
+    {
+        //
+        // We don't need to know sizeof(long) here because we assume that the three
+        // least significant bytes contain the R, G and B values
+        //
+        Set( (unsigned char)lColRGB
+            ,(unsigned char)(lColRGB >> 8)
+            ,(unsigned char)(lColRGB >> 16)
+           );
+    }
 
-  // Let's remove this inelegant function
+    //
+    // Accessors
+    bool Ok(void) const {return m_bIsInit; }
+
+    //
+    // Let's remove this inelegant function
+    //
 #if WXWIN_COMPATIBILITY
-  void Get(unsigned char *r, unsigned char *g, unsigned char *b) const;
+    void Get( unsigned char* pRed
+             ,unsigned char* pGreen
+             ,unsigned char* pBlue
+            ) const;
 #endif
 
-  unsigned char Red() const { return m_red; }
-  unsigned char Green() const { return m_green; }
-  unsigned char Blue() const { return m_blue; }
+    unsigned char Red(void) const { return m_cRed; }
+    unsigned char Green(void) const { return m_cGreen; }
+    unsigned char Blue(void) const { return m_cBlue; }
 
-  // comparison
-  bool operator == (const wxColour& colour) const
-  {
-    return (m_red == colour.m_red &&
-            m_green == colour.m_green &&
-            m_blue == colour.m_blue);
-  }
-  bool operator != (const wxColour& colour) const { return !(*this == colour); }
+    //
+    // Comparison
+    //
+    bool operator == (const wxColour& rColour) const
+    {
+        return (m_cRed   == rColour.m_cRed &&
+                m_cGreen == rColour.m_cGreen &&
+                m_cBlue  == rColour.m_cBlue
+               );
+    }
+    bool operator != (const wxColour& rColour) const { return !(*this == rColour); }
 
-  void InitFromName(const wxString& col);
-
-/* TODO
-  WXCOLORREF GetPixel() const { return m_pixel; };
-*/
+    void       InitFromName(const wxString& rCol);
+    WXCOLORREF GetPixel(void) const { return m_vPixel; };
 
 private:
-  bool          m_isInit;
-  unsigned char m_red;
-  unsigned char m_blue;
-  unsigned char m_green;
+    bool                            m_bIsInit;
+    unsigned char                   m_cRed;
+    unsigned char                   m_cBlue;
+    unsigned char                   m_cGreen;
 
 public:
-     WXCOLORREF m_pixel ;
+    WXCOLORREF                      m_vPixel ;
 private:
   DECLARE_DYNAMIC_CLASS(wxColour)
-};
+}; // end of class wxColour
 
 #endif
   // _WX_COLOUR_H_

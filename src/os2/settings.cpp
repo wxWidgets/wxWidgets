@@ -24,17 +24,141 @@
 #include "wx/window.h"
 #include "wx/os2/private.h"
 
-// TODO: see ::SystemParametersInfo for all sorts of Windows settings.
-// Different args are required depending on the id. How does this differ
-// from GetSystemMetric, and should it? Perhaps call it GetSystemParameter
-// and pass an optional void* arg to get further info.
-// Should also have SetSystemParameter.
-// Also implement WM_WININICHANGE (NT) / WM_SETTINGCHANGE (Win95)
-wxColour wxSystemSettings::GetSystemColour(int index)
+wxColour wxSystemSettings::GetSystemColour(
+  int                               nIndex
+)
 {
-    // TODO
-    return wxColour();
-}
+    COLORREF                        vRef;
+    wxColour                        vCol;
+    switch (nIndex)
+    {
+        //
+        // PM actually has values for these
+        //
+        case wxSYS_COLOUR_WINDOW:
+            vRef = (ULONG)::WinQuerySysColor( HWND_DESKTOP
+                                             ,SYSCLR_WINDOW
+                                             ,0L
+                                            );
+            vCol.Set( GetRValue(vRef)
+                     ,GetGValue(vRef)
+                     ,GetBValue(vRef)
+                    );
+            return vCol;
+            break;
+
+        case wxSYS_COLOUR_WINDOWFRAME:
+            vRef = (ULONG)::WinQuerySysColor( HWND_DESKTOP
+                                             ,SYSCLR_WINDOWFRAME
+                                             ,0L
+                                            );
+            vCol.Set( GetRValue(vRef)
+                     ,GetGValue(vRef)
+                     ,GetBValue(vRef)
+                    );
+            return vCol;
+            break;
+
+        case wxSYS_COLOUR_MENUTEXT:
+            vRef = (ULONG)::WinQuerySysColor( HWND_DESKTOP
+                                             ,SYSCLR_MENUTEXT
+                                             ,0L
+                                            );
+            vCol.Set( GetRValue(vRef)
+                     ,GetGValue(vRef)
+                     ,GetBValue(vRef)
+                    );
+            break;
+
+        case wxSYS_COLOUR_BTNFACE:
+            vRef = (ULONG)::WinQuerySysColor( HWND_DESKTOP
+                                             ,SYSCLR_BUTTONDEFAULT
+                                             ,0L
+                                            );
+            vCol.Set( GetRValue(vRef)
+                     ,GetGValue(vRef)
+                     ,GetBValue(vRef)
+                    );
+            return vCol;
+            break;
+
+        case wxSYS_COLOUR_BTNSHADOW:
+            vRef = (ULONG)::WinQuerySysColor( HWND_DESKTOP
+                                             ,SYSCLR_BUTTONMIDDLE
+                                             ,0L
+                                            );
+            vCol.Set( GetRValue(vRef)
+                     ,GetGValue(vRef)
+                     ,GetBValue(vRef)
+                    );
+            return vCol;
+            break;
+
+        case wxSYS_COLOUR_BTNHIGHLIGHT:
+            vRef = (ULONG)::WinQuerySysColor( HWND_DESKTOP
+                                             ,SYSCLR_BUTTONLIGHT
+                                             ,0L
+                                            );
+            vCol.Set( GetRValue(vRef)
+                     ,GetGValue(vRef)
+                     ,GetBValue(vRef)
+                    );
+            return vCol;
+            break;
+
+        //
+        // We'll have to just give values to these
+        //
+        case wxSYS_COLOUR_LISTBOX:
+        case wxSYS_COLOUR_CAPTIONTEXT:
+            return(*wxWHITE);
+            break;
+
+        case wxSYS_COLOUR_WINDOWTEXT:
+        case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
+        case wxSYS_COLOUR_BTNTEXT:
+        case wxSYS_COLOUR_INFOTEXT:
+            return(*wxBLACK);
+            break;
+
+        //
+        // We should customize these to look like other ports
+        //
+
+        case wxSYS_COLOUR_ACTIVECAPTION:
+        case wxSYS_COLOUR_ACTIVEBORDER:
+        case wxSYS_COLOUR_HIGHLIGHT:
+            return(*wxBLUE);
+            break;
+
+        case wxSYS_COLOUR_SCROLLBAR:
+        case wxSYS_COLOUR_BACKGROUND:
+        case wxSYS_COLOUR_INACTIVECAPTION:
+        case wxSYS_COLOUR_MENU:
+        case wxSYS_COLOUR_INACTIVEBORDER:
+        case wxSYS_COLOUR_APPWORKSPACE:
+        case wxSYS_COLOUR_HIGHLIGHTTEXT:
+        case wxSYS_COLOUR_GRAYTEXT:
+        case wxSYS_COLOUR_3DDKSHADOW:
+        case wxSYS_COLOUR_3DLIGHT:
+        case wxSYS_COLOUR_INFOBK:
+            return(*wxLIGHT_GREY);
+            break;
+
+        default:
+            vRef = (ULONG)::WinQuerySysColor( HWND_DESKTOP
+                                             ,SYSCLR_WINDOW
+                                             ,0L
+                                            );
+            vCol.Set( GetRValue(vRef)
+                     ,GetGValue(vRef)
+                     ,GetBValue(vRef)
+                    );
+            return vCol;
+            break;
+    }
+    return(vCol);
+} // end of wxSystemSettings::GetSystemColour
 
 wxFont wxSystemSettings::GetSystemFont(int index)
 {

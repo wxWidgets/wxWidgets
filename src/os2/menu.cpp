@@ -86,10 +86,16 @@ void wxMenu::Init()
                                       ,0L
                                       ,NULL
                                       ,NULL
-                                     )) != 0)
+                                     )) == 0)
     {
         wxLogLastError("WinLoadMenu");
     }
+    m_vMenuData.iPosition   = 0;
+    m_vMenuData.afStyle     = MIS_SUBMENU | MIS_TEXT;
+    m_vMenuData.afAttribute = (USHORT)0;
+    m_vMenuData.id          = (USHORT)0;
+    m_vMenuData.hwndSubMenu = m_hMenu;
+    m_vMenuData.hItem       = NULLHANDLE;
 
     //
     // If we have a title, insert it in the beginning of the menu
@@ -207,6 +213,9 @@ bool wxMenu::DoInsertOrAppend(
 , size_t                            nPos
 )
 {
+    ERRORID                         vError;
+    wxString                        sError;
+
 #if wxUSE_ACCEL
     UpdateAccel(pItem);
 #endif // wxUSE_ACCEL
@@ -270,47 +279,29 @@ bool wxMenu::DoInsertOrAppend(
         pData = (char*)pItem->GetText().c_str();
     }
 
-    BOOL                            bOk;
+    APIRET                          rc;
+
+    m_vMenuData.hwndSubMenu = NULLHANDLE;
+    m_vMenuData.hItem       = NULLHANDLE;
 
     //
-    // -1 means this is a sub menu not a menuitem.  We must create a window for it.
-    // Submenus are also attached to a menubar so its parent and owner should be the handle of the menubar.
+    // -1 means append at end
     //
     if (nPos == (size_t)-1)
     {
-        HWND                        hMenuBar;
-        if (m_menuBar)
-            hMenuBar = GetWinHwnd(m_menuBar);
-        else
-            hMenuBar = HWND_DESKTOP;
-        HWND                        hSubMenu = ::WinCreateWindow( hMenuBar              // parent
-                                                                 ,WC_MENU               // type
-                                                                 ,"Menu"                // a generic name
-                                                                 ,0L                    // no style flag
-                                                                 ,0L,0L,0L,0L           // no position
-                                                                 ,hMenuBar              // no owner
-                                                                 ,HWND_TOP              // always on top
-                                                                 ,0L                    // no ID needed for dynamic creation
-                                                                 ,NULL                  // no control data
-                                                                 ,NULL                  // no presentation params
-                                                                );
-
-        m_vMenuData.iPosition   = 0;
-        m_vMenuData.hwndSubMenu = hSubMenu;
-        m_vMenuData.hItem       = NULLHANDLE;
-
-        bOk = (bool)::WinSendMsg(GetHmenu(), MM_INSERTITEM, (MPARAM)&m_vMenuData, (MPARAM)pItem->GetText().c_str());
+        m_vMenuData.iPosition = MIT_END;
     }
     else
     {
         m_vMenuData.iPosition   = nPos;
-        m_vMenuData.hwndSubMenu = NULLHANDLE;
-        m_vMenuData.hItem       = NULLHANDLE;
-        bOk = (bool)::WinSendMsg(GetHmenu(), MM_INSERTITEM, (MPARAM)&m_vMenuData, (MPARAM)pItem->GetText().c_str());
     }
 
-    if (!bOk)
+    rc = (APIRET)::WinSendMsg(GetHmenu(), MM_INSERTITEM, (MPARAM)&m_vMenuData, (MPARAM)pData);
+    if (rc == MIT_MEMERROR || rc == MIT_ERROR)
     {
+        vError = ::WinGetLastError(vHabmain);
+        sError = wxPMErrorToStr(vError);
+        wxLogError("Error inserting or appending a menuitem. Error: %s\n", sError);
         wxLogLastError("Insert or AppendMenu");
         return FALSE;
     }
@@ -625,6 +616,7 @@ WXHMENU wxMenuBar::Create()
 {
     MENUITEM                        vItem;
     HWND                            hFrame;
+    HWND                            hMenuBar = NULLHANDLE;
 
     if (m_hMenu != 0 )
         return m_hMenu;
@@ -662,19 +654,13 @@ WXHMENU wxMenuBar::Create()
     {
         size_t                      nCount = GetMenuCount();
 
+        hMenuBar = GetHwnd();
         for (size_t i = 0; i < nCount; i++)
         {
-            vItem.iPosition   = 0;
-            vItem.afStyle     = MIS_SUBMENU | MIS_TEXT;
-            vItem.afAttribute = (USHORT)0;
-            vItem.id          = (USHORT)0;
-            vItem.hwndSubMenu = m_menus[i]->GetHMenu();
-            vItem.hItem       = NULLHANDLE;
-
-            ::WinSendMsg(GetHmenu(), MM_INSERTITEM, (MPARAM)&vItem, (MPARAM)m_titles[i].c_str());
+            ::WinSendMsg(hMenuBar, MM_INSERTITEM, (MPARAM)&m_menus[i]->m_vMenuData, (MPARAM)m_titles[i].c_str());
         }
     }
-    return m_hMenu;
+    return hMenuBar;
 } // end of wxMenuBar::Create
 
 // ---------------------------------------------------------------------------

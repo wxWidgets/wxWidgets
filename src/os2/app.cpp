@@ -205,7 +205,7 @@ bool wxApp::RegisterWindowClasses(
                             ,wxFrameClassName
                             ,(PFNWP)wxWndProc
                             ,CS_SIZEREDRAW | CS_SYNCPAINT
-                            ,0
+                            ,sizeof(ULONG)
                            ))
     {
         vError = ::WinGetLastError(vHab);
@@ -321,19 +321,13 @@ void wxApp::CleanUp()
     wxLog::DontCreateOnDemand();
 
     // this will flush the old messages if any
-#if (!(defined(__VISAGECPP__) && __IBMCPP__ < 400))
-    // another VA 3.0 memory problem here
     delete wxLog::SetActiveTarget(new wxLogStderr);
-#endif
 #endif // wxUSE_LOG
 
     // One last chance for pending objects to be cleaned up
     wxTheApp->DeletePendingObjects();
 
-#if (!(defined(__VISAGECPP__) && __IBMCPP__ < 400))
-    // another VA 3.0 memory problem here
     wxModule::CleanUpModules();
-#endif
 
 #if wxUSE_WX_RESOURCES
     wxCleanUpResourceSystem();
@@ -345,10 +339,7 @@ void wxApp::CleanUp()
     // by deleting the bitmap list before g_globalCursor goes out of scope
     // (double deletion of the cursor).
     wxSetCursor(wxNullCursor);
-#if (!(defined(__VISAGECPP__) && __IBMCPP__ < 400))
-    // another VA 3.0 memory problem here
     delete g_globalCursor;
-#endif
     g_globalCursor = NULL;
 
     wxDeleteStockObjects();
@@ -364,7 +355,7 @@ void wxApp::CleanUp()
     delete[] wxBuffer;
     wxBuffer = NULL;
 
-    //// WINDOWS-SPECIFIC CLEANUP
+    //// PM-SPECIFIC CLEANUP
 
     // wxSetKeyboardHook(FALSE);
 
