@@ -16,6 +16,8 @@
 
 #include "wx/wxchar.h"
 
+#include <stdlib.h>             // malloc() and free()
+
 // ----------------------------------------------------------------------------
 // Special classes for (wide) character strings: they use malloc/free instead
 // of new/delete
