@@ -807,6 +807,7 @@ bool wxTopLevelWindowMac::Create(wxWindow *parent,
     SetName(name);
 
     m_windowId = id == -1 ? NewControlId() : id;
+    wxWindow::SetTitle( title ) ;
 
     MacCreateRealWindow( title, pos , size , MacRemoveBordersFromStyle(style) , name ) ;
 
