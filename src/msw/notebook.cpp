@@ -94,9 +94,7 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING)
 
 BEGIN_EVENT_TABLE(wxNotebook, wxControl)
     EVT_NOTEBOOK_PAGE_CHANGED(-1, wxNotebook::OnSelChange)
-
     EVT_SIZE(wxNotebook::OnSize)
-
     EVT_NAVIGATION_KEY(wxNotebook::OnNavigationKey)
 END_EVENT_TABLE()
 
@@ -1007,6 +1005,12 @@ wxNotebook::MSWPrintChild(wxWindow *win,
                           WXWPARAM wParam,
                           WXLPARAM WXUNUSED(lParam))
 {
+    // Don't paint the theme for the child if we have a solid
+    // background
+    if (m_hasBgCol || HasFlag(wxNB_NOPAGETHEME) || (wxSystemOptions::HasOption(wxT("msw.notebook.themed-background")) &&
+                                      wxSystemOptions::GetOptionInt(wxT("msw.notebook.themed-background")) == 0))
+        return false;
+    
     RECT rc;
     ::GetClientRect(GetHwnd(), &rc);
     TabCtrl_AdjustRect(GetHwnd(), true, &rc);
