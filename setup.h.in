@@ -495,6 +495,10 @@
 #define wxUSE_OWNER_DRAWN 1
 #endif
 
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#define wxUSE_NATIVE_STATUSBAR 1
+#endif
+
 #if defined(__WIN95__) && !defined(__WINE__) && !defined(__GNUWIN32_OLD__)
 #define wxUSE_RICHEDIT 1
 #else
