@@ -396,9 +396,14 @@ IMPLEMENT_ABSTRACT_CLASS(wxHtmlWinTagHandler, wxHtmlTagHandler)
 // wxHtmlTagsModule
 //-----------------------------------------------------------------------------
 
+// NB: This is *NOT* winpars.cpp's initialization and shutdown code!!
+//     This module is an ancestor for tag handlers modules defined
+//     in m_*.cpp files with TAGS_MODULE_BEGIN...TAGS_MODULE_END construct.
+//
+//     Do not add any winpars.cpp shutdown or initialization code to it,
+//     use wxHtmlWinParsModule bellow instead!
 
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlTagsModule, wxModule)
-
 
 bool wxHtmlTagsModule::OnInit()
 {
@@ -406,13 +411,31 @@ bool wxHtmlTagsModule::OnInit()
     return TRUE;
 }
 
-
-
 void wxHtmlTagsModule::OnExit()
 {
-    if (gs_htmlBuf)
-        delete [] gs_htmlBuf;
     wxHtmlWinParser::RemoveModule(this);
 }
-#endif
 
+//-----------------------------------------------------------------------------
+// This file's wxModule
+//-----------------------------------------------------------------------------
+
+class wxHtmlWinParsModule : public wxModule
+{
+    DECLARE_DYNAMIC_CLASS(wxHtmlWinParsModule)
+
+    public:
+        virtual bool OnInit() { return TRUE; }
+        virtual void OnExit()
+        {
+            if (gs_htmlBuf)
+            {
+                delete[] gs_htmlBuf;
+                gs_htmlBuf = NULL;
+            }
+        }
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxHtmlWinParsModule, wxModule)
+
+#endif
