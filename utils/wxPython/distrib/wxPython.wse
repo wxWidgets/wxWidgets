@@ -17,7 +17,7 @@ item: Global
   Patch Flags=0000000000001001
   Patch Threshold=85
   Patch Memory=4000
-  EXE Filename=wxPython-2.1b1.exe
+  EXE Filename=wxPython-2.1b2.exe
   FTP Cluster Size=20
   Per-User Version ID=1
   Dialogs Version=6
@@ -314,9 +314,9 @@ item: Custom Dialog Set
       Text=
       Text=Click Cancel to quit Setup and close any programs you have running.  Click Next to continue with the Setup program .
       Text=
-      Text=WARNING: This program is protected by copyright law and international treaties.
+      Text=WARNING: Although this program is OpenSource, it is still protected by copyright law and international treaties.  See wxWindows Library Licence, Version 3 for details.
       Text=
-      Text=Unauthorized reproduction or distribution of this program, or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under law.
+      Text=
       Text French=Il vous est fortement recommandé de fermer tous les programmes Windows avant d'exécuter le Programme d'Installation
       Text French=
       Text French=Cliquez sur Annuler pour quitter l'Installation et fermez tous les programmes actuellement utilisés. Cliquez sur Suivant pour continuer l'installation
@@ -822,8 +822,8 @@ item: Install File
   Flags=0000001010000011
 end
 item: Install File
-  Source=e:\projects\wx\lib\wx200.dll
-  Destination=%SYS%\wx200.dll
+  Source=e:\projects\wx\lib\wx21b8.dll
+  Destination=%SYS%\wx21b8.dll
   Flags=0000001010010010
 end
 item: Install File
@@ -909,6 +909,36 @@ end
 item: Install File
   Source=E:\PROJECTS\wx\docs\html\wx\wx.chm
   Destination=%MAINDIR%\wxPython\docs\wx.chm
+  Description=wxPython documentation
+  Flags=0000000010000010
+end
+item: Install File
+  Source=E:\PROJECTS\wx\docs\preamble.txt
+  Destination=%MAINDIR%\wxPython\docs\preamble.txt
+  Description=wxPython documentation
+  Flags=0000000010000010
+end
+item: Install File
+  Source=E:\PROJECTS\wx\docs\licence.txt
+  Destination=%MAINDIR%\wxPython\docs\licence.txt
+  Description=wxPython documentation
+  Flags=0000000010000010
+end
+item: Install File
+  Source=E:\PROJECTS\wx\docs\licendoc.txt
+  Destination=%MAINDIR%\wxPython\docs\licendoc.txt
+  Description=wxPython documentation
+  Flags=0000000010000010
+end
+item: Install File
+  Source=E:\PROJECTS\wx\docs\lgpl.txt
+  Destination=%MAINDIR%\wxPython\docs\lgpl.txt
+  Description=wxPython documentation
+  Flags=0000000010000010
+end
+item: Install File
+  Source=E:\PROJECTS\wx\docs\gpl.txt
+  Destination=%MAINDIR%\wxPython\docs\gpl.txt
   Description=wxPython documentation
   Flags=0000000010000010
 end
