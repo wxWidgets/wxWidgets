@@ -28,6 +28,7 @@
 
 #include "wx/scrolbar.h"
 #include "wx/msw/private.h"
+#include "wx/settings.h"
 
 #if wxUSE_EXTENDED_RTTI
 WX_DEFINE_FLAGS( wxScrollBarStyle )
