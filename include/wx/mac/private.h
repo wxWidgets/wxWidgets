@@ -33,6 +33,8 @@
     #error "please update to Apple's lastest universal headers from http://developer.apple.com/sdk/"
 #endif
 
+#if wxUSE_GUI
+
 #include "wx/window.h"
 
 class wxMacPortStateHelper 
@@ -107,6 +109,8 @@ private:
 // app.h
 bool wxMacConvertEventToRecord( EventRef event , EventRecord *rec) ;
 
+#endif // wxUSE_GUI
+
 // filefn.h
 WXDLLEXPORT wxString wxMacFSSpec2MacFilename( const FSSpec *spec ) ;
 WXDLLEXPORT void wxMacFilename2FSSpec( const char *path , FSSpec *spec ) ;
@@ -123,6 +127,8 @@ WXDLLEXPORT wxString wxUnix2MacFilename( const char *s);
 WXDLLEXPORT wxString wxMacFindFolder(short vRefNum,
                                      OSType folderType,
                                      Boolean createFolder);
+
+#if wxUSE_GUI
 
 GWorldPtr         wxMacCreateGWorld( int width , int height , int depth ) ;
 void                 wxMacDestroyGWorld( GWorldPtr gw ) ;
@@ -142,6 +148,8 @@ void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bi
 #define MAC_WXRECPTR(a) ((Rect*)a)
 #define MAC_WXPOINTPTR(a) ((Point*)a)
 #define MAC_WXHMENU(a) ((MenuHandle)a)
+
+#endif // wxUSE_GUI
 
 //---------------------------------------------------------------------------
 // wxMac string conversions
@@ -293,7 +301,7 @@ inline CFStringRef wxMacStringToCFString( const wxString &str )
 
 #endif //TARGET_CARBON
 
-#endif
+#endif // 0
 
 #endif
     // _WX_PRIVATE_H_
