@@ -23,53 +23,51 @@
         scintilla/src/Indicator.cxx
         scintilla/src/KeyMap.cxx
         scintilla/src/KeyWords.cxx
+        scintilla/src/LexAPDL.cxx
+        scintilla/src/LexAU3.cxx
+        scintilla/src/LexAVE.cxx
         scintilla/src/LexAda.cxx
         scintilla/src/LexAsm.cxx
-        scintilla/src/LexAVE.cxx
         scintilla/src/LexBaan.cxx
+        scintilla/src/LexBash.cxx
         scintilla/src/LexBullant.cxx
         scintilla/src/LexCLW.cxx
-        scintilla/src/LexConf.cxx
         scintilla/src/LexCPP.cxx
-        scintilla/src/LexCrontab.cxx
         scintilla/src/LexCSS.cxx
+        scintilla/src/LexConf.cxx
+        scintilla/src/LexCrontab.cxx
+        scintilla/src/LexEScript.cxx
         scintilla/src/LexEiffel.cxx
         scintilla/src/LexErlang.cxx
-        scintilla/src/LexEScript.cxx
         scintilla/src/LexForth.cxx
         scintilla/src/LexFortran.cxx
+        scintilla/src/LexGui4Cli.cxx
         scintilla/src/LexHTML.cxx
+        scintilla/src/LexKix.cxx
         scintilla/src/LexLisp.cxx
         scintilla/src/LexLout.cxx
         scintilla/src/LexLua.cxx
-        scintilla/src/LexMatlab.cxx
-        scintilla/src/LexMetapost.cxx
         scintilla/src/LexMMIXAL.cxx
         scintilla/src/LexMPT.cxx
+        scintilla/src/LexMSSQL.cxx
+        scintilla/src/LexMatlab.cxx
+        scintilla/src/LexMetapost.cxx
         scintilla/src/LexNsis.cxx
         scintilla/src/LexOthers.cxx
-        scintilla/src/LexPascal.cxx
         scintilla/src/LexPB.cxx
-        scintilla/src/LexPerl.cxx
         scintilla/src/LexPOV.cxx
         scintilla/src/LexPS.cxx
+        scintilla/src/LexPascal.cxx
+        scintilla/src/LexPerl.cxx
         scintilla/src/LexPython.cxx
         scintilla/src/LexRuby.cxx
-        scintilla/src/LexScriptol.cxx
         scintilla/src/LexSQL.cxx
+        scintilla/src/LexScriptol.cxx
+        scintilla/src/LexSpecman.cxx
         scintilla/src/LexTeX.cxx
         scintilla/src/LexVB.cxx
-        scintilla/src/LexYAML.cxx
-	
-        scintilla/src/LexAPDL.cxx
-        scintilla/src/LexAU3.cxx
-        scintilla/src/LexBash.cxx
-        scintilla/src/LexGui4Cli.cxx
-        scintilla/src/LexKix.cxx
-        scintilla/src/LexMSSQL.cxx
-        scintilla/src/LexSpecman.cxx
         scintilla/src/LexVerilog.cxx
-
+        scintilla/src/LexYAML.cxx
         scintilla/src/LineMarker.cxx
         scintilla/src/PropSet.cxx
         scintilla/src/RESearch.cxx
