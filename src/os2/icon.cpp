@@ -50,6 +50,7 @@ void wxIconRefData::Free()
 // ----------------------------------------------------------------------------
 
 wxIcon::wxIcon()
+: m_bIsXpm(FALSE)
 {
 }
 
@@ -58,6 +59,7 @@ wxIcon::wxIcon(
 , int                               WXUNUSED(nWidth)
 , int                               WXUNUSED(nHeight)
 )
+: m_bIsXpm(FALSE)
 {
 }
 
@@ -67,6 +69,7 @@ wxIcon::wxIcon(
 , int                               nDesiredWidth
 , int                               nDesiredHeight
 )
+: m_bIsXpm(FALSE)
 {
     //
     // A very poor hack, but we have to have separate icon files from windows
@@ -94,6 +97,11 @@ void wxIcon::CreateIconFromXpm(
     wxBitmap                        vBmp(ppData);
 
     CopyFromBitmap(vBmp);
+    if (GetHICON())
+    {
+        m_bIsXpm = TRUE;
+        m_vXpmSrc = vBmp;
+    }
 } // end of wxIcon::CreateIconFromXpm
 
 void wxIcon::CopyFromBitmap(
@@ -129,7 +137,7 @@ void wxIcon::CopyFromBitmap(
     POINTL                          vPoint[4] = { 0, 0, rBmp.GetWidth(), rBmp.GetHeight(),
                                                   0, 0, rBmp.GetWidth(), rBmp.GetHeight()
                                                 };
-    POINTL                          vPointMask[4] = { 0, 0, rBmp.GetWidth(), rBmp.GetHeight(),
+    POINTL                          vPointMask[4] = { 0, 0, rBmp.GetWidth(), rBmp.GetHeight() * 2,
                                                       0, 0, rBmp.GetWidth(), rBmp.GetHeight()
                                                     };
 
@@ -185,7 +193,7 @@ void wxIcon::CopyFromBitmap(
     }
     vIconInfo.hbmColor = hBmp;
 
-    vHeader.cy              = (ULONG)rBmp.GetHeight();
+    vHeader.cy              = (ULONG)rBmp.GetHeight() * 2;
     hBmpMask = ::GpiCreateBitmap( hPSDst
                                  ,&vHeader
                                  ,0L

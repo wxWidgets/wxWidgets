@@ -24,12 +24,6 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxDC)
 
-extern void wxLoadBitmapWithData( HPS     hPS
-                                 ,HBITMAP hBitmap
-                                 ,int     nWidth
-                                 ,int     nHeight
-                                );
-
 /////////////////////////////////////////////////////////////////////////////
 // Memory DC
 /////////////////////////////////////////////////////////////////////////////
@@ -157,19 +151,17 @@ void wxMemoryDC::SelectObject(
     WXHBITMAP                       hBmp = rBitmap.GetHBITMAP();
 
     if (!hBmp)
+    {
+        m_hOldBitmap = (WXHBITMAP)::GpiSetBitmap(m_hPS, NULLHANDLE);
         return;
-
+    }
     m_vSelectedBitmap.SetSelectedInto(this);
-    hBmp = (WXHBITMAP)::GpiSetBitmap(m_hPS, (HBITMAP)hBmp);
+    m_hOldBitmap = (WXHBITMAP)::GpiSetBitmap(m_hPS, (HBITMAP)hBmp);
 
-    if (hBmp == HBM_ERROR)
+    if (m_hOldBitmap == HBM_ERROR)
     {
         wxLogLastError(wxT("SelectObject(memDC, bitmap)"));
         wxFAIL_MSG(wxT("Couldn't select a bitmap into wxMemoryDC"));
-    }
-    else if (!m_hOldBitmap)
-    {
-        m_hOldBitmap = hBmp;
     }
 } // end of wxMemoryDC::SelectObject
 
@@ -188,121 +180,3 @@ void wxMemoryDC::DoGetSize(
     *pHeight = m_vSelectedBitmap.GetHeight();
 } // end of wxMemoryDC::DoGetSize
 
-void wxMemoryDC::DoDrawRectangle(
-  wxCoord                           vX
-, wxCoord                           vY
-, wxCoord                           vWidth
-, wxCoord                           vHeight
-)
-{
-    wxDC::DoDrawRectangle(vX, vY, vWidth, vHeight);
-
-    wxLoadBitmapWithData( m_hPS
-                         ,(HBITMAP)m_vSelectedBitmap.GetHBITMAP()
-                         ,m_vSelectedBitmap.GetWidth()
-                         ,m_vSelectedBitmap.GetHeight()
-                        );
-} // end of wxMemoryDC::DoDrawRectangle
-
-void wxMemoryDC::DoDrawRoundedRectangle(
-  wxCoord                           vX
-, wxCoord                           vY
-, wxCoord                           vWidth
-, wxCoord                           vHeight
-, double                            dRadius
-)
-{
-    wxDC::DoDrawRoundedRectangle(vX, vY, vWidth, vHeight, dRadius);
-
-    wxLoadBitmapWithData( m_hPS
-                         ,(HBITMAP)m_vSelectedBitmap.GetHBITMAP()
-                         ,m_vSelectedBitmap.GetWidth()
-                         ,m_vSelectedBitmap.GetHeight()
-                        );
-} // end of wxMemoryDC::DoDrawRoundedRectangle
-
-void wxMemoryDC::DoDrawText(
-  const wxString&                   rsText
-, wxCoord                           vX
-, wxCoord                           vY
-)
-{
-    wxDC::DoDrawText(rsText, vX, vY);
-
-    wxLoadBitmapWithData( m_hPS
-                         ,(HBITMAP)m_vSelectedBitmap.GetHBITMAP()
-                         ,m_vSelectedBitmap.GetWidth()
-                         ,m_vSelectedBitmap.GetHeight()
-                        );
-} // end of wxMemoryDC::DoDrawRectangle
-
-void wxMemoryDC::DoDrawLine(
-  wxCoord                           vX1
-, wxCoord                           vY1
-, wxCoord                           vX2
-, wxCoord                           vY2
-)
-{
-    wxDC::DoDrawLine(vX1, vY1, vX2, vY2);
-
-    wxLoadBitmapWithData( m_hPS
-                         ,(HBITMAP)m_vSelectedBitmap.GetHBITMAP()
-                         ,m_vSelectedBitmap.GetWidth()
-                         ,m_vSelectedBitmap.GetHeight()
-                        );
-} // end of wxMemoryDC::DoDrawRoundedRectangle
-
-void wxLoadBitmapWithData(
-  HPS                               hPS
-, HBITMAP                           hBitmap
-, int                               nWidth
-, int                               nHeight
-)
-{
-    BITMAPINFOHEADER2               vHeader;
-    BITMAPINFO2                     vInfo;
-
-    vHeader.cbFix = 16L;
-    if (::GpiQueryBitmapInfoHeader(hBitmap, &vHeader))
-    {
-        unsigned char*              pucData = NULL;
-        unsigned char*              pucBits;
-        int                         nBytesPerLine = nWidth * 3;
-        LONG                        lScans = 0L;
-        POINTL                      vPoint;
-        LONG                        lColor;
-
-        vInfo.cbFix     = 16;
-        vInfo.cx        = vHeader.cx;
-        vInfo.cy        = vHeader.cy;
-        vInfo.cPlanes   = vHeader.cPlanes;
-        vInfo.cBitCount = 24;
-        pucData = (unsigned char*)malloc(nBytesPerLine * nHeight);
-        pucBits = pucData;
-        for (int i = 0; i < nHeight; i++)
-        {
-            for (int j = 0; j < nWidth; j++)
-            {
-                vPoint.x = j; vPoint.y = i;
-                lColor = ::GpiQueryPel(hPS, &vPoint);
-                *(pucBits++) = (unsigned char)lColor;
-                *(pucBits++) = (unsigned char)(lColor >> 8);
-                *(pucBits++) = (unsigned char)(lColor >> 16);
-            }
-        }
-        if ((lScans = ::GpiSetBitmapBits( hPS
-                                         ,0
-                                         ,(LONG)nHeight
-                                         ,(PBYTE)pucData
-                                         ,&vInfo
-                                        )) == GPI_ALTERROR)
-        {
-            ERRORID             vError;
-            wxString            sError;
-
-            vError = ::WinGetLastError(vHabmain);
-            sError = wxPMErrorToStr(vError);
-        }
-        free(pucData);
-    }
-}

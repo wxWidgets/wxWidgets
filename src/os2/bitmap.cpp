@@ -939,14 +939,14 @@ wxImage wxBitmap::ConvertToImage() const
                                ,&vSizlPage
                                ,PU_PELS | GPIA_ASSOC
                               );
-        if ((hOldBitmap = ::GpiSetBitmap(hPSMem, hBitmap)) == HBM_ERROR)
-        {
-            ERRORID                 vError;
-            wxString                sError;
+    }
+    if ((hOldBitmap = ::GpiSetBitmap(hPSMem, hBitmap)) == HBM_ERROR)
+    {
+        ERRORID                 vError;
+        wxString                sError;
 
-            vError = ::WinGetLastError(vHabmain);
-            sError = wxPMErrorToStr(vError);
-        }
+        vError = ::WinGetLastError(vHabmain);
+        sError = wxPMErrorToStr(vError);
     }
 
     //

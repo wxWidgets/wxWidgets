@@ -1543,20 +1543,20 @@ void wxDC::DoDrawBitmap(
                             (cBmpGreen == cOldGreenFore) &&
                             (cBmpBlue == cOldBlueFore))
                         {
-                            *pucData = cRedFore;
+                            *pucData = cBlueFore;
                             pucData++;
                             *pucData = cGreenFore;
                             pucData++;
-                            *pucData = cBlueFore;
+                            *pucData = cRedFore;
                             pucData++;
                         }
                         else
                         {
-                            *pucData = cRedBack;
+                            *pucData = cBlueBack;
                             pucData++;
                             *pucData = cGreenBack;
                             pucData++;
-                            *pucData = cBlueBack;
+                            *pucData = cRedBack;
                             pucData++;
                         }
                     }
@@ -1879,6 +1879,7 @@ void wxDC::SetPen(
             if (!m_hOldPen)
                 m_hOldPen = m_pen.GetPS();
         }
+        ::GpiSetColor(m_hPS, m_pen.GetColour().GetPixel());
     }
 }
 
