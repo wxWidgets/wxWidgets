@@ -1581,7 +1581,7 @@ class FloatCanvas(wx.Panel):
             pass
 
     def LeftUpEvent(self,event):
-    	if self.HasCapture():
+        if self.HasCapture():
             self.ReleaseMouse()
         if self.GUIMode:
             if self.GUIMode == "ZoomIn":
@@ -2032,7 +2032,7 @@ class FloatCanvas(wx.Panel):
             self.BoundingBox = None
             self.ViewPortCenter= array( (0,0), Float)
             self.TransformVector = array( (1,-1), Float)
-            self.MapProjectionVector = array( (1,1), Float)			
+            self.MapProjectionVector = array( (1,1), Float)                     
             self.Scale = 1        
         self.BoundingBoxDirty = False
 
