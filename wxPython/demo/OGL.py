@@ -8,12 +8,48 @@
 # o Changed to use the python version of OGL
 # o Added TextShape, CompositeShape and CompositeShape with divisions
 #
+# 20040830 - Pierre Hjälm
+#
+# o Added DrawnShape
+#
 
 import wx
 import wx.lib.ogl as ogl
 
 import  images
 
+#----------------------------------------------------------------------
+
+class DrawnShape(ogl.DrawnShape):
+    def __init__(self):
+        ogl.DrawnShape.__init__(self)
+
+        self.SetDrawnBrush(wx.WHITE_BRUSH)
+        self.SetDrawnPen(wx.BLACK_PEN)
+        self.DrawArc((0, -10), (30, 0), (-30, 0))
+
+        self.SetDrawnPen(wx.Pen("#ff8030"))
+        self.DrawLine((-30, 5), (30, 5))
+
+        self.SetDrawnPen(wx.Pen("#00ee10"))
+        self.DrawRoundedRectangle((-20, 10, 40, 10), 5)
+
+        self.SetDrawnPen(wx.Pen("#9090f0"))
+        self.DrawEllipse((-30, 25, 60, 20))
+
+        self.SetDrawnTextColour(wx.BLACK)
+        self.SetDrawnFont(wx.Font(8, wx.SWISS, wx.NORMAL, wx.NORMAL))
+        self.DrawText("DrawText", (-26, 28))
+
+        self.SetDrawnBrush(wx.GREEN_BRUSH)
+        self.DrawPolygon([(-100, 5), (-45, 30), (-35, 20), (-30, 5)])
+
+        self.SetDrawnPen(wx.BLACK_PEN)
+        self.DrawLines([(30, -45), (40, -45), (40 ,45), (30, 45)])
+
+        # Make sure to call CalculateSize when all drawing is done
+        self.CalculateSize()
+        
 #----------------------------------------------------------------------
 
 class DiamondShape(ogl.PolygonShape):
@@ -247,7 +283,7 @@ class TestWindow(ogl.ShapeCanvas):
 
         self.MyAddShape(
             CompositeDivisionShape(self), 
-            310, 310, wx.BLACK_PEN, wx.BLUE_BRUSH, "Division"
+            270, 310, wx.BLACK_PEN, wx.BLUE_BRUSH, "Division"
             )
         
         self.MyAddShape(
@@ -270,14 +306,19 @@ class TestWindow(ogl.ShapeCanvas):
             305, 60, wx.BLACK_PEN, wx.LIGHT_GREY_BRUSH, "Rectangle"
             )
 
+        self.MyAddShape(
+            DrawnShape(),
+            500, 80, wx.BLACK_PEN, wx.BLACK_BRUSH, "DrawnShape"
+            )
+
         ds = self.MyAddShape(
             DividedShape(140, 150, self), 
-            515, 145, wx.BLACK_PEN, dsBrush, ''
+            520, 265, wx.BLACK_PEN, dsBrush, ''
             )
 
         self.MyAddShape(
             DiamondShape(90, 90), 
-            445, 305, wx.Pen(wx.BLUE, 3, wx.DOT), wx.RED_BRUSH, "Polygon"
+            355, 260, wx.Pen(wx.BLUE, 3, wx.DOT), wx.RED_BRUSH, "Polygon"
             )
             
         self.MyAddShape(

@@ -10,7 +10,7 @@ from _lines import *
 from _bmpshape import *
 from _divided import *
 from _composit import *
-
+from _drawn import *
 
 
 # Set things up for documenting with epydoc.  The __docfilter__ will

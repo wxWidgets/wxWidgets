@@ -2881,7 +2881,7 @@ class EllipseShape(Shape):
                 y = top
                 # We now have the point on the bounding box: but get the point
                 # on the ellipse by imagining a vertical line from
-                # (x, self._ypos - self_height - 500) to (x, self._ypos) intersecting
+                # (x, self._ypos - self._height - 500) to (x, self._ypos) intersecting
                 # the ellipse.
 
                 return DrawArcToEllipse(self._xpos, self._ypos, self._width, self._height, x, self._ypos - self._height - 500, x, self._ypos)
