@@ -32,6 +32,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxClientDC)
 wxWindowDC::wxWindowDC(wxWindow *win) : m_wnd(win)
 {
     MGLDevCtx *dc = win->GetPaintMGLDC();
+
     if ( dc )
     {
         m_inPaintHandler = TRUE;
@@ -42,6 +43,10 @@ wxWindowDC::wxWindowDC(wxWindow *win) : m_wnd(win)
     else
     {
         m_inPaintHandler = FALSE;
+        
+        // VS: we have to update here so that screen's content is up-to-date
+        //     and blitting from wxWindowDC works as expected
+        win->Update();
 
         dc = new MGLDevCtx(MGL_wmBeginPaint(win->GetHandle()));
 
