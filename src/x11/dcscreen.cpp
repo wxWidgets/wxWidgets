@@ -93,24 +93,23 @@ bool wxScreenDC::StartDrawingOnTop( wxWindow *window )
     return StartDrawingOnTop( &rect );
 }
 
-bool wxScreenDC::StartDrawingOnTop( wxRect *rect )
+bool wxScreenDC::StartDrawingOnTop( wxRect *rectIn )
 {
-    int x = 0;
-    int y = 0;
+    // VZ: should we do the same thing that wxMotif wxScreenDC does here?
 #if 0
-    int width = gdk_screen_width();
-    int height = gdk_screen_height();
-#else
-    int width = 1024;
-    int height = 768;
-#endif
-    if (rect)
+    wxRect rect;
+    if ( rectIn )
     {
-        x = rect->x;
-        y = rect->y;
-        width = rect->width;
-        height = rect->height;
+        rect = *rectIn;
     }
+    else
+    {
+        rect.x =
+        rect.y = 0;
+
+        DoGetSize(&rect.width, &rect.height);
+    }
+#endif // 0
 
     return TRUE;
 }
