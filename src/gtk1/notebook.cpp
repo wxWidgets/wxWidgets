@@ -20,6 +20,7 @@
 #include "wx/imaglist.h"
 #include "wx/intl.h"
 #include "wx/log.h"
+#include "wx/bitmap.h"
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/win_gtk.h"
