@@ -124,10 +124,22 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     wxAddWindowToTable( xwindow, (wxWindow*) this );
     
     XSetTransientForHint( xdisplay, xwindow, xparent );
+
+    wxSize size2(size);
+    if (size2.x == -1)
+	size2.x = 100;
+    if (size2.y == -1)
+	size2.y = 100;
+
+    wxPoint pos2(pos);
+    if (pos2.x == -1)
+	pos2.x = 100;
+    if (pos2.y == -1)
+	pos2.y = 100;
     
     size_hints.flags = PSize;
-    size_hints.width = size.x;
-    size_hints.height = size.y;
+    size_hints.width = size2.x;
+    size_hints.height = size2.y;
     XSetWMNormalHints( xdisplay, xwindow, &size_hints);
     
     wm_hints.flags = InputHint | StateHint /* | WindowGroupHint */;
@@ -141,6 +153,7 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     wxSetWMDecorations((Window) GetMainWindow(), style);
 
     SetTitle(title);
+    SetSize(pos2.x, pos2.y, size2.x, size2.y);
     
     return TRUE;
 }
@@ -336,12 +349,14 @@ bool wxSetWMDecorations(Window w, long style)
 
     if (style & wxRESIZE_BORDER)
     {
+	wxLogDebug("MWM_DECOR_RESIZEH");
         hints.flags |= MWM_HINTS_DECORATIONS;
         hints.decorations |= MWM_DECOR_RESIZEH;
     }
 
     if (style & wxSYSTEM_MENU)
     {
+	wxLogDebug("MWM_DECOR_MENU");
         hints.flags |= MWM_HINTS_DECORATIONS;
         hints.decorations |= MWM_DECOR_MENU;
     }
@@ -350,30 +365,28 @@ bool wxSetWMDecorations(Window w, long style)
         (style & wxTINY_CAPTION_HORIZ) ||
         (style & wxTINY_CAPTION_VERT))
     {
+	wxLogDebug("MWM_DECOR_TITLE");
         hints.flags |= MWM_HINTS_DECORATIONS;
         hints.decorations |= MWM_DECOR_TITLE;
     }
 
     if (style & wxTHICK_FRAME)
     {
-        hints.flags |= MWM_HINTS_DECORATIONS;
-        hints.decorations |= MWM_DECOR_BORDER;
-    }
-
-    if (style & wxTHICK_FRAME)
-    {
+	wxLogDebug("MWM_DECOR_BORDER");
         hints.flags |= MWM_HINTS_DECORATIONS;
         hints.decorations |= MWM_DECOR_BORDER;
     }
 
     if (style & wxMINIMIZE_BOX)
     {
+	wxLogDebug("MWM_DECOR_MINIMIZE");
         hints.flags |= MWM_HINTS_DECORATIONS;
         hints.decorations |= MWM_DECOR_MINIMIZE;
     }
 
     if (style & wxMAXIMIZE_BOX)
     {
+	wxLogDebug("MWM_DECOR_MAXIMIZE");
         hints.flags |= MWM_HINTS_DECORATIONS;
         hints.decorations |= MWM_DECOR_MAXIMIZE;
     }
