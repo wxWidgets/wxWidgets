@@ -76,6 +76,13 @@ public:
 #endif  // Win32/16
   };
 
+  // access mode for the key
+  enum AccessMode
+  {
+      Read,     // read-only
+      Write     // read and write
+  };
+
   // information about standard (predefined) registry keys
     // number of standard keys
   static const size_t nStdKeys;
@@ -99,7 +106,7 @@ public:
   wxRegKey(StdKey keyParent, const wxString& strKey);
     // strKey is the name of key under (previously created) keyParent
   wxRegKey(const wxRegKey& keyParent, const wxString& strKey);
-    //
+    // dtor closes the key
  ~wxRegKey();
 
   // change key (closes the previously opened key if any)
@@ -130,7 +137,7 @@ public:
   // operations on the key itself
     // explicitly open the key (will be automatically done by all functions
     // which need the key to be opened if the key is not opened yet)
-  bool  Open();
+  bool  Open(AccessMode mode = Write);
     // create the key: will fail if the key already exists and !bOkIfExists
   bool  Create(bool bOkIfExists = TRUE);
     // rename a value from old name to new one

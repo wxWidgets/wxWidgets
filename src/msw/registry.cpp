@@ -374,7 +374,7 @@ bool wxRegKey::GetKeyInfo(size_t *pnSubKeys,
 // ----------------------------------------------------------------------------
 
 // opens key (it's not an error to call Open() on an already opened key)
-bool wxRegKey::Open()
+bool wxRegKey::Open(AccessMode mode)
 {
     if ( IsOpened() )
         return TRUE;
@@ -385,7 +385,7 @@ bool wxRegKey::Open()
                         (HKEY) m_hRootKey,
                         m_strKey,
                         RESERVED,
-                        KEY_ALL_ACCESS,
+                        mode == Read ? KEY_READ : KEY_ALL_ACCESS,
                         &tmpKey
                     );
 
@@ -1097,7 +1097,7 @@ bool KeyExists(WXHKEY hRootKey, const wxChar *szKey)
             (HKEY)hRootKey,
             szKey,
             RESERVED,
-            KEY_ALL_ACCESS,
+            KEY_READ,        // we might not have enough rights for rw access
             &hkeyDummy
          ) == ERROR_SUCCESS )
     {
