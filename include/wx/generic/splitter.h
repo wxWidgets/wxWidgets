@@ -155,6 +155,12 @@ public:
     // Gets the sash position
     int GetSashPosition() const { return m_sashPosition; }
 
+    // Set the sash gravity
+    void SetSashGravity(double gravity);
+
+    // Gets the sash gravity
+    double GetSashGravity() const { return m_sashGravity; }
+
     // If this is zero, we can remove panes by dragging the sash.
     void SetMinimumPaneSize(int min);
     int GetMinimumPaneSize() const { return m_minimumPaneSize; }
@@ -213,7 +219,7 @@ public:
     bool GetNeedUpdating() const { return m_needUpdating ; }
 
 #ifdef __WXMAC__
-	virtual bool MacClipGrandChildren() const { return true ; }
+    virtual bool MacClipGrandChildren() const { return true ; }
 #endif
 protected:
     // event handlers
@@ -271,6 +277,8 @@ protected:
     int         m_oldX;
     int         m_oldY;
     int         m_sashPosition; // Number of pixels from left or top
+    double      m_sashGravity;
+    wxSize      m_lastSize;
     int         m_requestedSashPosition;
     int         m_sashPositionCurrent; // while dragging
     int         m_firstX;

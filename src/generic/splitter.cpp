@@ -117,6 +117,8 @@ void wxSplitterWindow::Init()
     m_firstX = 0;
     m_firstY = 0;
     m_sashPosition = m_requestedSashPosition = 0;
+    m_sashGravity = 0.0;
+    m_lastSize = wxSize(0,0);
     m_checkRequestedSashPosition = false;
     m_minimumPaneSize = 0;
     m_sashCursorWE = wxCursor(wxCURSOR_SIZEWE);
@@ -408,6 +410,8 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
 
     if ( iconized )
     {
+        m_lastSize = wxSize(0,0);
+
         event.Skip();
 
         return;
@@ -419,11 +423,34 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
         GetClientSize(&w, &h);
 
         int size = m_splitMode == wxSPLIT_VERTICAL ? w : h;
+
+        int old_size = m_splitMode == wxSPLIT_VERTICAL ? m_lastSize.x : m_lastSize.y;
+        if ( old_size != 0 )
+        {
+            int delta = (int) ( (size - old_size)*m_sashGravity );
+            if ( delta != 0 )
+            {
+                int newPosition = m_sashPosition + delta;
+                if( newPosition < m_minimumPaneSize )
+                    newPosition = m_minimumPaneSize;
+                SetSashPositionAndNotify(newPosition);
+            }
+        }
+
         if ( m_sashPosition >= size - 5 )
             SetSashPositionAndNotify(wxMax(10, size - 40));
+        m_lastSize = wxSize(w,h);
     }
 
     SizeWindows();
+}
+
+void wxSplitterWindow::SetSashGravity(double gravity)
+{
+    wxCHECK_RET( gravity >= 0. && gravity <= 1.,
+                    _T("invalid gravity value") );
+
+    m_sashGravity = gravity;
 }
 
 bool wxSplitterWindow::SashHitTest(int x, int y, int tolerance)
@@ -595,7 +622,7 @@ void wxSplitterWindow::SetSashPositionAndNotify(int sashPos)
 {
     // we must reset the request here, otherwise the sash would be stuck at
     // old position if the user attempted to move the sash after invalid
-    // (e.g. smaller than minsize) sash position was requested using 
+    // (e.g. smaller than minsize) sash position was requested using
     // SetSashPosition():
     m_requestedSashPosition = INT_MAX;
 

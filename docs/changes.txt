@@ -31,6 +31,7 @@ All:
 
 All (GUI):
 
+- wxSplitterWindow now supports gravity parameter (Zbigniew Zagórski)
 - recursive wxSizer::GetItem returns item of given window, sizer or nth index
 - wxLayoutConstraints now use best size, not current size, for AsIs() condition
 - wxSizer::Add/Insert etc. now returns pointer to wxSizerItem just added and this

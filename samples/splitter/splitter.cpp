@@ -52,7 +52,8 @@ enum
     SPLIT_UNSPLIT,
     SPLIT_LIVE,
     SPLIT_SETPOSITION,
-    SPLIT_SETMINSIZE
+    SPLIT_SETMINSIZE,
+    SPLIT_SETGRAVITY
 };
 
 // ----------------------------------------------------------------------------
@@ -82,6 +83,7 @@ public:
     void ToggleLive(wxCommandEvent& event);
     void SetPosition(wxCommandEvent& event);
     void SetMinSize(wxCommandEvent& event);
+    void SetGravity(wxCommandEvent& event);
 
     void Quit(wxCommandEvent& event);
 
@@ -162,6 +164,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(SPLIT_LIVE, MyFrame::ToggleLive)
     EVT_MENU(SPLIT_SETPOSITION, MyFrame::SetPosition)
     EVT_MENU(SPLIT_SETMINSIZE, MyFrame::SetMinSize)
+    EVT_MENU(SPLIT_SETGRAVITY, MyFrame::SetGravity)
 
     EVT_MENU(SPLIT_QUIT, MyFrame::Quit)
 
@@ -202,6 +205,9 @@ MyFrame::MyFrame()
     splitMenu->Append(SPLIT_SETMINSIZE,
                       _T("Set &min size\tCtrl-M"),
                       _T("Set minimum pane size"));
+    splitMenu->Append(SPLIT_SETGRAVITY,
+                      _T("Set &gravity\tCtrl-G"),
+                      _T("Set gravity of sash"));
     splitMenu->AppendSeparator();
 
     splitMenu->Append(SPLIT_QUIT, _T("E&xit\tAlt-X"), _T("Exit"));
@@ -213,6 +219,8 @@ MyFrame::MyFrame()
 
     menuBar->Check(SPLIT_LIVE, true);
     m_splitter = new MySplitterWindow(this);
+    
+    m_splitter->SetSashGravity(1.0);
 
 #if 1
     m_left = new MyCanvas(m_splitter, true);
@@ -327,6 +335,21 @@ void MyFrame::SetMinSize(wxCommandEvent& WXUNUSED(event) )
     m_splitter->SetMinimumPaneSize(minsize);
 #if wxUSE_STATUSBAR
     str.Printf( wxT("Min pane size = %d"), minsize);
+    SetStatusText(str, 1);
+#endif // wxUSE_STATUSBAR
+}
+void MyFrame::SetGravity(wxCommandEvent& WXUNUSED(event) )
+{
+    wxString str;
+    str.Printf( wxT("%g"), m_splitter->GetSashGravity());
+    str = wxGetTextFromUser(_T("Enter sash gravity (0,1):"), _T(""), str, this);
+    if ( str.empty() )
+        return;
+
+    double gravity = wxStrtod( str, (wxChar**)NULL);
+    m_splitter->SetSashGravity(gravity);
+#if wxUSE_STATUSBAR
+    str.Printf( wxT("Gravity = %g"), gravity);
     SetStatusText(str, 1);
 #endif // wxUSE_STATUSBAR
 }

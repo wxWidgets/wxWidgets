@@ -131,6 +131,16 @@ Returns the current minimum pane size (defaults to zero).
 
 \helpref{wxSplitterWindow::SetMinimumPaneSize}{wxsplitterwindowsetminimumpanesize}
 
+\membersection{wxSplitterWindow::GetSashGravity}\label{wxsplitterwindowgetsashgravity}
+
+\func{double}{GetSashGravity}{\void}
+
+Returns the current sash gravity.
+
+\wxheading{See also}
+
+\helpref{wxSplitterWindow::SetSashGravity}{wxsplitterwindowsetsashgravity}
+
 \membersection{wxSplitterWindow::GetSashPosition}\label{wxsplitterwindowgetsashposition}
 
 \func{int}{GetSashPosition}{\void}
@@ -268,6 +278,37 @@ may wish to do it yourself.
 \helpref{wxSplitterWindow::Unsplit}{wxsplitterwindowunsplit}\\
 \helpref{wxSplitterWindow::SplitVertically}{wxsplitterwindowsplitvertically}\\
 \helpref{wxSplitterWindow::SplitHorizontally}{wxsplitterwindowsplithorizontally}
+
+\membersection{wxSplitterWindow::SetSashGravity}\label{wxsplitterwindowsetsashgravity}
+
+\func{void}{SetSashGravity}{\param{double }{gravity}}
+
+Sets the sash gravity. 
+
+\wxheading{Parameters}
+
+\docparam{gravity}{The sash gravity. Value between 0.0 and 1.0.}
+
+
+\wxheading{Remarks}
+Gravity is real factor which controls position of sash while resizing wxSplitterWindow.
+Gravity tells wxSplitterWindow how much will left/top window grow while resizing.
+
+Example values:
+\begin{itemize}\itemsep=0pt
+\item{ 0.0  - only the bottom/right window is automaticaly resized}
+\item{ 0.5  - both windows grow by equal size}
+\item{ 1.0  - only left/top window grows}
+\end{itemize}
+
+Gravity should be real value betwwen 0.0 and 1.0.
+
+Default value of sash gravity is 0.0. That value is compatible with previous 
+(before gravity was introduced) behaviour of wxSplitterWindow.
+
+\wxheading{See also}
+
+\helpref{wxSplitterWindow::GetSashGravity}{wxsplitterwindowgetsashgravity}
 
 \membersection{wxSplitterWindow::SetSashPosition}\label{wxsplitterwindowsetsashposition}
 
