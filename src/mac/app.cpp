@@ -1361,6 +1361,12 @@ void wxApp::MacHandleModifierEvents( WXEVENTREF evr )
             event.SetEventType( ( ev->modifiers & optionKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
             focus->GetEventHandler()->ProcessEvent( event ) ;
         }
+        if ( ev->modifiers ^ s_lastModifiers ) & cmdKey )
+        {
+            event.m_keyCode = WXK_COMMAND ;
+            event.SetEventType( ( ev->modifiers & cmdKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
+            focus->GetEventHandler()->ProcessEvent( event ) ;
+        }
         s_lastModifiers = ev->modifiers ;
     }
 }

@@ -122,7 +122,7 @@ int wxMessageDialog::ShowModal()
             {
                 // thats a cancel missing
                 param.defaultText     = (CFStringRef) kAlertDefaultOKText ;
-                param.cancelText     = NULL;
+                param.cancelText     = (CFStringRef) kAlertDefaultCancelText ;
                 param.otherText     = NULL;
                 param.helpButton     = false ;
                 param.defaultButton = kAlertStdAlertOKButton;
@@ -197,9 +197,8 @@ int wxMessageDialog::ShowModal()
         {
             if (m_dialogStyle & wxCANCEL)
             {
-                // thats a cancel missing
                 param.defaultText     = (StringPtr) kAlertDefaultOKText ;
-                param.cancelText     = NULL;
+                param.cancelText     = (StringPtr) kAlertDefaultCancelText ;
                 param.otherText     = NULL;
                 param.helpButton     = false ;
                 param.defaultButton = kAlertStdAlertOKButton;

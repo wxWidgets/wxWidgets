@@ -226,6 +226,12 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
                     event.SetEventType( ( modifiers & optionKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
                     focus->GetEventHandler()->ProcessEvent( event ) ;
                 }
+                if ( focus && (modifiers ^ wxTheApp->s_lastModifiers ) & cmdKey )
+                {
+                    event.m_keyCode = WXK_COMMAND ;
+                    event.SetEventType( ( modifiers & cmdKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
+                    focus->GetEventHandler()->ProcessEvent( event ) ;
+                }
                 wxTheApp->s_lastModifiers = modifiers ;
             }
              break ;
@@ -528,23 +534,35 @@ wxTopLevelWindowMac::~wxTopLevelWindowMac()
 
 void wxTopLevelWindowMac::Maximize(bool maximize)
 {
-    // not available on mac
+    ZoomWindow( (WindowRef)m_macWindow , maximize ? inZoomOut : inZoomIn , false ) ;
+
+    Rect tempRect ;
+    GrafPtr port ;
+    GetPort( &port ) ;
+    Point pt = { 0, 0 } ;
+    SetPortWindowPort((WindowRef)m_macWindow) ;
+    LocalToGlobal( &pt ) ;
+    SetPort( port ) ;
+
+    GetWindowPortBounds((WindowRef)m_macWindow, &tempRect ) ;
+    SetSize( pt.h , pt.v , tempRect.right-tempRect.left ,
+        tempRect.bottom-tempRect.top, wxSIZE_USE_EXISTING);
 }
 
 bool wxTopLevelWindowMac::IsMaximized() const
 {
-    return false ;
+    return IsWindowInStandardState(  (WindowRef)m_macWindow , NULL , NULL ) ;
 }
 
 void wxTopLevelWindowMac::Iconize(bool iconize)
 {
-    // not available on mac
+    if ( IsWindowCollapsable((WindowRef)m_macWindow) )
+        CollapseWindow((WindowRef)m_macWindow , iconize ) ;
 }
 
 bool wxTopLevelWindowMac::IsIconized() const
 {
-    // mac dialogs cannot be iconized
-    return FALSE;
+    return IsWindowCollapsed((WindowRef)m_macWindow ) ;
 }
 
 void wxTopLevelWindowMac::Restore()
