@@ -16,7 +16,7 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORDLANDC__
+#ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 

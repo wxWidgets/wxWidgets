@@ -288,7 +288,6 @@ ALL_SOURCES = \
 		html/m_layout.cpp \
 		html/m_links.cpp \
 		html/m_list.cpp \
-		html/m_meta.cpp \
 		html/m_pre.cpp \
 		html/m_style.cpp \
 		html/m_tables.cpp \
@@ -457,6 +456,7 @@ ALL_HEADERS = \
 		prop.h \
 		propform.h \
 		proplist.h \
+		quantize.h \
 		radiobox.h \
 		radiobut.h \
 		regex.h \
@@ -658,7 +658,7 @@ ALL_HEADERS = \
 		generic/imaglist.h \
 		generic/laywin.h \
 		generic/listctrl.h \
-		generic/mdig.cpp \
+		generic/mdig.h \
 		generic/msgdlgg.h \
 		generic/notebook.h \
 		generic/paletteg.h \
@@ -702,7 +702,6 @@ ALL_HEADERS = \
 		protocol/protocol.h
 
 COMMONOBJS = \
-		parser.o \
 		appcmn.o \
 		artprov.o \
 		artstd.o \
@@ -988,6 +987,7 @@ GUI_LOWLEVEL_OBJS = \
 		dcprint.o \
 		dcscreen.o \
 		dde.o \
+		dialup.o \
 		dib.o \
 		evtloop.o \
 		font.o \
@@ -995,8 +995,12 @@ GUI_LOWLEVEL_OBJS = \
 		fontutil.o \
 		gdiimage.o \
 		gdiobj.o \
+		glcanvas.o \
+		helpbest.o \
+		helpchm.o \
+		helpwin.o \
 		icon.o \
-		imaglist.o \
+		joystick.o \
 		main.o \
 		palette.o \
 		pen.o \
@@ -1006,11 +1010,14 @@ GUI_LOWLEVEL_OBJS = \
 		registry.o \
 		settings.o \
 		snglinst.o \
+		taskbar.o \
 		thread.o \
 		timer.o \
+		tooltip.o \
 		toplevel.o \
 		utils.o \
 		utilsexc.o \
+		wave.o \
 		window.o
 
 HTMLOBJS = \
@@ -1030,7 +1037,6 @@ HTMLOBJS = \
 		m_layout.o \
 		m_links.o \
 		m_list.o \
-		m_meta.o \
 		m_pre.o \
 		m_style.o \
 		m_tables.o \

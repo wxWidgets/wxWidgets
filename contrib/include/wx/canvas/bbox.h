@@ -21,7 +21,7 @@ class wxBoundingBox
 {
 public:
     wxBoundingBox();
-    wxBoundingBox(wxBoundingBox&);
+    wxBoundingBox(const wxBoundingBox&);
     wxBoundingBox(const wxPoint2DDouble&);
     wxBoundingBox(double xmin, double ymin, double xmax, double ymax);
 

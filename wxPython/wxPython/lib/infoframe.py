@@ -121,7 +121,7 @@ see the appropriate "stub" file in the wxPython demo.
 """
 
 from wxPython.wx import *
-import string, sys, types, tempfile, os
+import sys, tempfile, os
 
 class _MyStatusBar(wxStatusBar):
     def __init__(self, parent,callbacks=None,useopenbutton=0):
@@ -187,7 +187,7 @@ class _MyStatusBar(wxStatusBar):
                 self.button2.SetLabel ("Open New File")
         self.useopenbutton = 1 - self.useopenbutton
         self.OnSize("")
-        self.button2.Refresh(TRUE)
+        self.button2.Refresh(True)
         self.Refresh()
 
 
@@ -269,7 +269,7 @@ class wxPyInformationalMessagesFrame:
                                              useopenbutton=hasattr(self,
                                                                   "nofile"))
                 self.frame.SetStatusBar(self.frame.sb)
-                self.frame.Show(true)
+                self.frame.Show(True)
                 EVT_CLOSE(self.frame, self.OnCloseWindow)
 
                 if hasattr(self,"nofile"):
@@ -341,7 +341,7 @@ class wxPyInformationalMessagesFrame:
                 if m is  not None:# and m.__dict__.has_key("__debug__"):
                     m.__dict__["__debug__"] = 0
 
-        if self.frame is not None: # typically true, but, e.g., allows
+        if self.frame is not None: # typically True, but, e.g., allows
                                    # DisableOutput method (which calls this
                                    # one) to be called when the frame is not
                                    # actually open, so that it is always safe

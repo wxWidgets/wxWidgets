@@ -29,11 +29,11 @@ def runTest(frame, nb, log):
     p = wxMVCTree(nb, -1)
     #f = wxFrame(frame, -1, "wxMVCTree")
     #p = wxMVCTree(f, -1)
-    p.SetAssumeChildren(true)
+    p.SetAssumeChildren(True)
     p.SetModel(LateFSTreeModel(os.path.normpath(os.getcwd() + os.sep +'..')))
     #Uncomment this to enable live filename editing!
 #    p.AddEditor(FileEditor(p))
-    p.SetMultiSelect(true)
+    p.SetMultiSelect(True)
     EVT_MVCTREE_SEL_CHANGING(p, p.GetId(), selchanging)
     EVT_MVCTREE_SEL_CHANGED(p, p.GetId(), selchanged)
     EVT_MVCTREE_ITEM_EXPANDED(p, p.GetId(), expanded)
@@ -44,7 +44,7 @@ def runTest(frame, nb, log):
 
     return p
     #frame.otherWin = f
-    #f.Show(true)
+    #f.Show(True)
     #return None
 
 

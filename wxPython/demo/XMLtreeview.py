@@ -1,5 +1,5 @@
 
-import string, sys
+import sys
 
 py2 = sys.version[0] == '2'
 
@@ -11,9 +11,9 @@ try:
     else:
         from xml.parsers import pyexpat
         parsermodule = pyexpat
-    haveXML = true
+    haveXML = True
 except ImportError:
-    haveXML = false
+    haveXML = False
 
 #----------------------------------------------------------------------
 
@@ -76,7 +76,7 @@ else:
             self.nodeStack = self.nodeStack[:-1]
 
         def CharacterData(self, data ):
-            if string.strip(data):
+            if data.strip():
                 if py2:
                     data = data.encode()
                 self.AppendItem(self.nodeStack[-1], data)

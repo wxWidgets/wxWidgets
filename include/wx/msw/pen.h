@@ -89,7 +89,7 @@ public:
   // Internal
   bool RealizeResource();
   bool FreeResource(bool force = FALSE);
-  WXHANDLE GetResourceHandle() ;
+  WXHANDLE GetResourceHandle() const;
   bool IsFree() const;
   void Unshare();
 };

@@ -11,3 +11,4 @@
 
 #define HAVE_USLEEP 1
 #define HAVE_FCNTL  1
+#define SIZEOF_INT 4

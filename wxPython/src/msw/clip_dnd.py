@@ -11,9 +11,12 @@ class wxDataFormatPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,clip_dndc=clip_dndc):
-        if self.thisown == 1 :
-            clip_dndc.delete_wxDataFormat(self)
+    def __del__(self, delfunc=clip_dndc.delete_wxDataFormat):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
     def SetType(self, *_args, **_kwargs):
         val = apply(clip_dndc.wxDataFormat_SetType,(self,) + _args, _kwargs)
         return val
@@ -43,9 +46,12 @@ class wxDataObjectPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,clip_dndc=clip_dndc):
-        if self.thisown == 1 :
-            clip_dndc.delete_wxDataObject(self)
+    def __del__(self, delfunc=clip_dndc.delete_wxDataObject):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
     def GetPreferredFormat(self, *_args, **_kwargs):
         val = apply(clip_dndc.wxDataObject_GetPreferredFormat,(self,) + _args, _kwargs)
         if val: val = wxDataFormatPtr(val) ; val.thisown = 1
@@ -56,11 +62,11 @@ class wxDataObjectPtr :
     def GetAllFormats(self, *_args, **_kwargs):
         val = apply(clip_dndc.wxDataObject_GetAllFormats,(self,) + _args, _kwargs)
         return val
-    def GetDataSize(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxDataObject_GetDataSize,(self,) + _args, _kwargs)
-        return val
     def GetDataHere(self, *_args, **_kwargs):
         val = apply(clip_dndc.wxDataObject_GetDataHere,(self,) + _args, _kwargs)
+        return val
+    def GetDataSize(self, *_args, **_kwargs):
+        val = apply(clip_dndc.wxDataObject_GetDataSize,(self,) + _args, _kwargs)
         return val
     def SetData(self, *_args, **_kwargs):
         val = apply(clip_dndc.wxDataObject_SetData,(self,) + _args, _kwargs)
@@ -353,9 +359,12 @@ class wxDropSourcePtr :
     def _setCallbackInfo(self, *_args, **_kwargs):
         val = apply(clip_dndc.wxDropSource__setCallbackInfo,(self,) + _args, _kwargs)
         return val
-    def __del__(self,clip_dndc=clip_dndc):
-        if self.thisown == 1 :
-            clip_dndc.delete_wxDropSource(self)
+    def __del__(self, delfunc=clip_dndc.delete_wxDropSource):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
     def SetData(self, *_args, **_kwargs):
         val = apply(clip_dndc.wxDropSource_SetData,(self,) + _args, _kwargs)
         return val
@@ -403,9 +412,12 @@ class wxPyDropTargetPtr(wxDropTargetPtr):
     def _setCallbackInfo(self, *_args, **_kwargs):
         val = apply(clip_dndc.wxPyDropTarget__setCallbackInfo,(self,) + _args, _kwargs)
         return val
-    def __del__(self,clip_dndc=clip_dndc):
-        if self.thisown == 1 :
-            clip_dndc.delete_wxPyDropTarget(self)
+    def __del__(self, delfunc=clip_dndc.delete_wxPyDropTarget):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
     def GetDataObject(self, *_args, **_kwargs):
         val = apply(clip_dndc.wxPyDropTarget_GetDataObject,(self,) + _args, _kwargs)
         if val: val = wxDataObjectPtr(val) 

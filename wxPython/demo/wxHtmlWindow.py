@@ -43,6 +43,23 @@ class MyHtmlWindow(wxHtmlWindow):
         self.base_OnCellClicked(cell, x, y, evt)
 
 
+# This filter doesn't really do anything but show how to use filters
+class MyHtmlFilter(wxHtmlFilter):
+    def __init__(self, log):
+        wxHtmlFilter.__init__(self)
+        self.log = log
+
+    # This method decides if this filter is able to read the file
+    def CanRead(self, fsfile):
+        self.log.write("CanRead: %s\n" % fsfile.GetMimeType())
+        return False
+
+    # If CanRead returns True then this method is called to actually
+    # read the file and return the contents.
+    def ReadFile(self, fsfile):
+        return ""
+
+
 class TestHtmlPanel(wxPanel):
     def __init__(self, parent, frame, log):
         wxPanel.__init__(self, parent, -1, style=wxNO_FULL_REPAINT_ON_RESIZE)
@@ -51,9 +68,13 @@ class TestHtmlPanel(wxPanel):
         self.cwd = os.path.split(sys.argv[0])[0]
         if not self.cwd:
             self.cwd = os.getcwd()
+        if frame:
+            self.titleBase = frame.GetTitle()
+
+        wxHtmlWindow_AddFilter(MyHtmlFilter(log))
 
         self.html = MyHtmlWindow(self, -1, log)
-        self.html.SetRelatedFrame(frame, "wxPython: (A Demonstration) -- %s")
+        self.html.SetRelatedFrame(frame, self.titleBase + " -- %s")
         self.html.SetRelatedStatusBar(0)
 
         self.printer = wxHtmlEasyPrinting()
@@ -93,13 +114,18 @@ class TestHtmlPanel(wxPanel):
 
         self.box.Add(subbox, 0, wxGROW)
         self.SetSizer(self.box)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
 
         # A button with this ID is created on the widget test page.
         EVT_BUTTON(self, wxID_OK, self.OnOk)
 
         self.OnShowDefault(None)
 
+
+    def ShutdownDemo(self):
+        # put the frame title back
+        if self.frame:
+            self.frame.SetTitle(self.titleBase)
 
 
     def OnShowDefault(self, event):
@@ -168,14 +194,26 @@ def runTest(frame, nb, log):
 
 
 
-overview = """\
-wxHtmlWindow is capable of parsing and rendering most simple HTML tags.
+overview = """<html><body>
+<h2>wxHtmlWindow</h2>
 
-It is not intended to be a high-end HTML browser.  If you're looking for something like that try http://www.mozilla.org - there's a chance you'll be able to make their widget wxWindows-compatible. I'm sure everyone will enjoy your work in that case...
+<p>wxHtmlWindow is capable of parsing and rendering most
+simple HTML tags.
 
+<p>It is not intended to be a high-end HTML browser.  If you're
+looking for something like that try http://www.mozilla.org - there's a
+chance you'll be able to make their widget wxWindows-compatible. I'm
+sure everyone will enjoy your work in that case...
+
+</body></html>
 """
 
 
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
 
 
 

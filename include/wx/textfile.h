@@ -44,7 +44,7 @@ protected:
                         wxTextBufferOpenMode OpenMode);
     virtual bool OnClose();
     virtual bool OnRead(wxMBConv& conv);
-    virtual bool OnWrite(wxTextFileType typeNew, wxMBConv& conv = wxConvLibc);
+    virtual bool OnWrite(wxTextFileType typeNew, wxMBConv& conv);
 
 private:
     wxFile m_file;

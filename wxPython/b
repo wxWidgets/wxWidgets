@@ -9,6 +9,8 @@ function getpyver {
 	PYVER=2.1
     elif [ "$1" = "22" ]; then
 	PYVER=2.2
+    elif [ "$1" = "23" ]; then
+	PYVER=2.3
     else
 	echo You must specify Python version as first parameter.
         exit
@@ -30,7 +32,7 @@ OTHERFLAGS=""
 # "c" --> clean
 if [ "$1" =  "c" ]; then
     shift
-    CMD="$SETUP $FLAGS $OTHERFLAGS clean"
+    CMD="$SETUP $FLAGS $OTHERFLAGS clean $*"
     OTHERCMD="rm -f wxPython/*.so"
 
 # "d" --> clean extension modules only
@@ -47,12 +49,12 @@ elif [ "$1" = "t" ]; then
 # "i" --> install
 elif [ "$1" = "i" ]; then
     shift
-    CMD="$SETUP $FLAGS $OTHERFLAGS install"
+    CMD="$SETUP $FLAGS $OTHERFLAGS build_ext install $*"
 
 # "s" --> source dist
 elif [ "$1" = "s" ]; then
     shift
-    CMD="$SETUP $OTHERFLAGS sdist"
+    CMD="$SETUP $OTHERFLAGS sdist $*"
 
 # "r" --> rpm dist
 elif [ "$1" = "r" ]; then

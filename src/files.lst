@@ -180,6 +180,7 @@ ALL_HEADERS = \
 		unix/gsockunx.h \
 		unix/mimetype.h \
 		msw/dde.h \
+		msw/gccpriv.h \
 		msw/mimetype.h \
 		msw/winundef.h \
 		protocol/file.h \

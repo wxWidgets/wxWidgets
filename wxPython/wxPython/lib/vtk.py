@@ -136,7 +136,7 @@ class wxVTKRenderWindowBase(wxWindow):
 
 
     def OnCreateWindow(self, event):
-	hdl = self.GetHandle()
+        hdl = self.GetHandle()
         try:
             self._RenderWindow.SetParentInfo(str(hdl))
         except:
@@ -163,7 +163,7 @@ class wxVTKRenderWindowBase(wxWindow):
         # Windows.
         #self._RenderWindow.GetSize()
         #
-	self._RenderWindow.SetSize(sz.width, sz.height)
+        self._RenderWindow.SetSize(sz.width, sz.height)
 
 
     def OnLeftButtonDown(self, event):

@@ -61,7 +61,7 @@ class PropListFrame: public wxPropertyListFrame
 public:
   PropListFrame(wxPropertyListView *v, wxFrame *parent, const wxString& title,
     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-    long style = wxDEFAULT_FRAME_STYLE, const wxString& name = "frame"):
+    long style = wxDEFAULT_FRAME_STYLE, const wxString& name = _T("frame")):
         wxPropertyListFrame(v, parent, title, pos, size, style, name)
     {
     }
@@ -76,7 +76,7 @@ class PropListDialog: public wxPropertyListDialog
 public:
   PropListDialog(wxPropertyListView *v, wxWindow *parent, const wxString& title,
     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-    long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = "dialogBox"):
+    long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = _T("dialogBox")):
         wxPropertyListDialog(v, parent, title, pos, size, style, name)
    {
    }
@@ -91,7 +91,7 @@ class PropFormFrame: public wxPropertyFormFrame
 public:
   PropFormFrame(wxPropertyFormView *v, wxFrame *parent, const wxString& title,
     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-    long style = wxDEFAULT_FRAME_STYLE, const wxString& name = "frame"):
+    long style = wxDEFAULT_FRAME_STYLE, const wxString& name = _T("frame")):
     wxPropertyFormFrame(v, parent, title, pos, size, style, name)
     {
     }
@@ -107,7 +107,7 @@ class PropFormDialog: public wxPropertyFormDialog
 public:
   PropFormDialog(wxPropertyFormView *v, wxWindow *parent, const wxString& title,
     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-    long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = "dialogBox"):
+    long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = _T("dialogBox")):
       wxPropertyFormDialog(v, parent, title, pos, size, style, name)
     {
     }

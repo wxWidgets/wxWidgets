@@ -184,6 +184,10 @@ SOURCE=.\xh_scrol.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\xh_scwin.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\xh_sizer.cpp
 # End Source File
 # Begin Source File

@@ -6,7 +6,7 @@ This is a way to save the startup time when running img2py on lots of
 files...
 """
 
-import sys, string
+import sys
 from wxPython.tools import img2py
 
 
@@ -60,10 +60,46 @@ command_lines = [
     "-a -u -n WizTest1 bmp_source/wiztest1.bmp images.py",
     "-a -u -n WizTest2 bmp_source/wiztest2.bmp images.py",
 
+
+
+    "   -u -c bmp_source/001.png throbImages.py",
+    "-a -u -c bmp_source/002.png throbImages.py",
+    "-a -u -c bmp_source/003.png throbImages.py",
+    "-a -u -c bmp_source/004.png throbImages.py",
+    "-a -u -c bmp_source/005.png throbImages.py",
+    "-a -u -c bmp_source/006.png throbImages.py",
+    "-a -u -c bmp_source/007.png throbImages.py",
+    "-a -u -c bmp_source/008.png throbImages.py",
+    "-a -u -c bmp_source/009.png throbImages.py",
+    "-a -u -c bmp_source/010.png throbImages.py",
+    "-a -u -c bmp_source/011.png throbImages.py",
+    "-a -u -c bmp_source/012.png throbImages.py",
+    "-a -u -c bmp_source/013.png throbImages.py",
+    "-a -u -c bmp_source/014.png throbImages.py",
+    "-a -u -c bmp_source/015.png throbImages.py",
+    "-a -u -c bmp_source/016.png throbImages.py",
+    "-a -u -c bmp_source/017.png throbImages.py",
+    "-a -u -c bmp_source/018.png throbImages.py",
+    "-a -u -c bmp_source/019.png throbImages.py",
+    "-a -u -c bmp_source/020.png throbImages.py",
+    "-a -u -c bmp_source/021.png throbImages.py",
+    "-a -u -c bmp_source/022.png throbImages.py",
+    "-a -u -c bmp_source/023.png throbImages.py",
+    "-a -u -c bmp_source/024.png throbImages.py",
+    "-a -u -c bmp_source/025.png throbImages.py",
+    "-a -u -c bmp_source/026.png throbImages.py",
+    "-a -u -c bmp_source/027.png throbImages.py",
+    "-a -u -c bmp_source/028.png throbImages.py",
+    "-a -u -c bmp_source/029.png throbImages.py",
+    "-a -u -c bmp_source/030.png throbImages.py",
+
+    "-a -u -c bmp_source/eclouds.png throbImages.py",
+    "-a -u -c bmp_source/logo.png    throbImages.py",
+    "-a -u -c bmp_source/rest.png    throbImages.py",
     ]
 
 
 for line in command_lines:
-    args = string.split(line)
+    args = line.split()
     img2py.main(args)
 

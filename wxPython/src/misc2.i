@@ -183,6 +183,7 @@ wxWindow* wxGetTopLevelParent(wxWindow *win);
 //---------------------------------------------------------------------------
 // Resource System
 
+#ifdef wxUSE_WX_RESOURCES
 bool wxResourceAddIdentifier(char* name, int value);
 void wxResourceClear(void);
 wxBitmap  wxResourceCreateBitmap(char* resource);
@@ -192,6 +193,7 @@ int wxResourceGetIdentifier(char* name);
 bool wxResourceParseData(char* resource, wxResourceTable *table = NULL);
 bool wxResourceParseFile(char* filename, wxResourceTable *table = NULL);
 bool wxResourceParseString(char* resource, wxResourceTable *table = NULL);
+#endif
 
 //---------------------------------------------------------------------------
 // System Settings
@@ -407,7 +409,7 @@ public:
 
 //----------------------------------------------------------------------
 
-bool wxSafeYield(wxWindow* win=NULL);
+bool wxSafeYield(wxWindow* win=NULL, bool onlyIfNeeded=FALSE);
 void wxPostEvent(wxEvtHandler *dest, wxEvent& event);
 void wxWakeUpIdle();
 
@@ -509,8 +511,10 @@ public:
     bool BeginDrag(const wxPoint& hotspot, wxWindow* window,
                    bool fullScreen = FALSE, wxRect* rect = NULL);
 
-    %name(BeginDrag2) bool BeginDrag(const wxPoint& hotspot, wxWindow* window,
-                                     wxWindow* fullScreenRect);
+    %name(BeginDragBounded) bool BeginDrag(const wxPoint& hotspot, wxWindow* window,
+                                           wxWindow* boundingWindow);
+
+    %pragma(python) addtoclass = "BeginDrag2 = BeginDragBounded"
 
     bool EndDrag();
     bool Move(const wxPoint& pt);
@@ -629,6 +633,10 @@ public:
     static unsigned long GetTraceMask();
     static bool IsAllowedTraceMask(const wxString& mask);
 
+    static void SetLogLevel(unsigned long logLevel);
+    static unsigned long GetLogLevel();
+
+
     // static void TimeStamp(wxString *str);
     %addmethods {
         wxString TimeStamp() {
@@ -695,6 +703,7 @@ void wxLogError(const wxString& msg);
 void wxLogWarning(const wxString& msg);
 void wxLogMessage(const wxString& msg);
 void wxLogInfo(const wxString& msg);
+void wxLogDebug(const wxString& msg);
 void wxLogVerbose(const wxString& msg);
 void wxLogStatus(const wxString& msg);
 %name(wxLogStatusFrame)void wxLogStatus(wxFrame *pFrame, const wxString& msg);
@@ -1108,10 +1117,10 @@ class wxFileTypeInfo
 public:
     // ctors
         // a normal item
-    wxFileTypeInfo(const char* mimeType,
-                   const char* openCmd,
-                   const char* printCmd,
-                   const char* desc);
+    wxFileTypeInfo(const wxString& mimeType,
+                   const wxString& openCmd,
+                   const wxString& printCmd,
+                   const wxString& desc);
 
 
         // the array elements correspond to the parameters of the ctor above in
@@ -1205,7 +1214,7 @@ public:
             wxString str;
             if (self->GetMimeType(&str)) {
 #if wxUSE_UNICODE
-	      return PyUnicode_FromUnicode(str.c_str(), str.Len());
+	      return PyUnicode_FromWideChar(str.c_str(), str.Len());
 #else
 	      return PyString_FromStringAndSize(str.c_str(), str.Len());
 #endif
@@ -1255,9 +1264,9 @@ public:
                 wxPyBeginBlockThreads();
                 PyObject* tuple = PyTuple_New(3);
                 PyTuple_SetItem(tuple, 0, wxPyConstructObject(new wxIcon(icon),
-                                                              "wxIcon", TRUE));
+                                                              wxT("wxIcon"), TRUE));
 #if wxUSE_UNICODE
-                PyTuple_SetItem(tuple, 1, PyUnicode_FromUnicode(iconFile.c_str(), iconFile.Len()));
+                PyTuple_SetItem(tuple, 1, PyUnicode_FromWideChar(iconFile.c_str(), iconFile.Len()));
 #else
                 PyTuple_SetItem(tuple, 1, PyString_FromStringAndSize(iconFile.c_str(), iconFile.Len()));
 #endif
@@ -1276,7 +1285,7 @@ public:
             wxString str;
             if (self->GetDescription(&str)) {
 #if  wxUSE_UNICODE
-	      return PyUnicode_FromUnicode(str.c_str(), str.Len());
+	      return PyUnicode_FromWideChar(str.c_str(), str.Len());
 #else
 	      return PyString_FromStringAndSize(str.c_str(), str.Len());
 #endif
@@ -1293,7 +1302,7 @@ public:
             wxString str;
             if (self->GetOpenCommand(&str, wxFileType::MessageParameters(filename, mimetype))) {
 #if  wxUSE_UNICODE
-                return PyUnicode_FromUnicode(str.c_str(), str.Len());
+                return PyUnicode_FromWideChar(str.c_str(), str.Len());
 #else
                 return PyString_FromStringAndSize(str.c_str(), str.Len());
 #endif
@@ -1310,7 +1319,7 @@ public:
             wxString str;
             if (self->GetPrintCommand(&str, wxFileType::MessageParameters(filename, mimetype))) {
 #if wxUSE_UNICODE
-                return PyUnicode_FromUnicode(str.c_str(), str.Len());
+                return PyUnicode_FromWideChar(str.c_str(), str.Len());
 #else
                 return PyString_FromStringAndSize(str.c_str(), str.Len());
 #endif
@@ -1525,7 +1534,7 @@ public:
         wxBitmap rval = wxNullBitmap;
         wxPyBeginBlockThreads();
         if ((wxPyCBH_findCallback(m_myInst, "CreateBitmap"))) {
-            PyObject* so = wxPyConstructObject((void*)&size, "wxSize", 0);
+            PyObject* so = wxPyConstructObject((void*)&size, wxT("wxSize"), 0);
             PyObject* ro;
             wxBitmap* ptr;
             PyObject* s1, *s2;
@@ -1580,8 +1589,6 @@ public:
                           const wxString& client = wxPyART_OTHER,
                           const wxSize& size = wxDefaultSize);
 
-    // Destroy caches & all providers
-    static void CleanUpProviders();
 };
 
 
@@ -1691,7 +1698,7 @@ public:
 // #define ADD_STRING(dict, str) \
 //     wxString tmp##str(str); \
 //     PyDict_SetItemString(dict, #str, \
-//                          PyUnicode_FromUnicode(tmp##str.c_str(), tmp##str.Len()))
+//                          PyUnicode_FromWideChar(tmp##str.c_str(), tmp##str.Len()))
 // #else
 // #define ADD_STRING(dict, str) \
 //     PyDict_SetItemString(d, #str, PyString_FromString(str))

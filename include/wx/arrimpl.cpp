@@ -75,6 +75,8 @@ void name::RemoveAt(size_t uiIndex, size_t nRemove)                           \
                                                                               \
 void name::Add(const T& item, size_t nInsert)                                 \
 {                                                                             \
+  if (nInsert == 0)                                                           \
+    return;                                                                   \
   T* pItem = new T(item);                                                     \
   size_t nOldSize = GetCount();                                               \
   if ( pItem != NULL )                                                        \
@@ -85,6 +87,8 @@ void name::Add(const T& item, size_t nInsert)                                 \
                                                                               \
 void name::Insert(const T& item, size_t uiIndex, size_t nInsert)              \
 {                                                                             \
+  if (nInsert == 0)                                                           \
+    return;                                                                   \
   T* pItem = new T(item);                                                     \
   if ( pItem != NULL )                                                        \
     wxBaseArrayPtrVoid::Insert(pItem, uiIndex, nInsert);                      \

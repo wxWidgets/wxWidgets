@@ -142,19 +142,21 @@ typedef void (wxEvtHandler::*wxDynamicSashUnifyEventFunction)(wxDynamicSashSplit
 /*
     wxDynamicSashWindow.  See above.
 */
+extern const wxChar* GIZMODLLEXPORT wxDynamicSashWindowNameStr;
+
 class GIZMODLLEXPORT wxDynamicSashWindow : public wxWindow {
 public:
     wxDynamicSashWindow();
     wxDynamicSashWindow(wxWindow *parent, wxWindowID id,
                         const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
                         long style = wxCLIP_CHILDREN | wxDS_MANAGE_SCROLLBARS | wxDS_DRAG_CORNER,
-                        const wxString& name = "dynamicSashWindow");
+                        const wxString& name = wxDynamicSashWindowNameStr);
     virtual ~wxDynamicSashWindow();
 
     virtual bool Create(wxWindow *parent, wxWindowID id,
                         const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
                         long style = wxCLIP_CHILDREN | wxDS_MANAGE_SCROLLBARS | wxDS_DRAG_CORNER,
-                        const wxString& name = "dynamicSashWindow");
+                        const wxString& name = wxDynamicSashWindowNameStr);
     virtual wxScrollBar *GetHScrollBar(const wxWindow *child) const;
     virtual wxScrollBar *GetVScrollBar(const wxWindow *child) const;
 

@@ -18,22 +18,6 @@
 #endif
 
 // ----------------------------------------------------------------------------
-// typedefs
-// ----------------------------------------------------------------------------
-
-#if (defined(__WXMSW__) && !defined(__WXMICROWIN__)) || defined (__WXPM__)
-    class WXDLLEXPORT wxApp;
-    typedef wxApp* (*wxAppInitializerFunction)();
-#else
-    // returning wxApp* won't work with gcc
-    #include "wx/object.h"
-
-    typedef wxObject* (*wxAppInitializerFunction)();
-#endif
-
-class WXDLLEXPORT wxCmdLineParser;
-
-// ----------------------------------------------------------------------------
 // headers we have to include here
 // ----------------------------------------------------------------------------
 
@@ -49,6 +33,25 @@ class WXDLLEXPORT wxCmdLineParser;
 
 #include "wx/build.h"
 
+// ----------------------------------------------------------------------------
+// typedefs
+// ----------------------------------------------------------------------------
+// Do includes first to insure that even wxBase consistently uses
+// the wxMSW case for defining wxAppInitializerFunction.
+// (otherwise, __WXMSW__ will not yet be set, if app.h is the
+//  first file to be included).
+
+#if (defined(__WXMSW__) && !defined(__WXMICROWIN__)) || defined (__WXPM__)
+    class WXDLLEXPORT wxApp;
+    typedef wxApp* (*wxAppInitializerFunction)();
+#else
+    // returning wxApp* won't work with gcc
+    #include "wx/object.h"
+
+    typedef wxObject* (*wxAppInitializerFunction)();
+#endif
+
+class WXDLLEXPORT wxCmdLineParser;
 class WXDLLEXPORT wxLog;
 class WXDLLEXPORT wxMessageOutput;
 

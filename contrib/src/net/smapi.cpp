@@ -301,7 +301,8 @@ bool wxMapiSession::Send(wxMailMessage& message)
     //Setup the "To" recipients
     int nRecipIndex = 0;
     int nToSize = message.m_to.GetCount();
-    for (int i=0; i<nToSize; i++)
+    int i;
+    for (i=0; i<nToSize; i++)
     {
         MapiRecipDesc& recip = mapiMessage.lpRecips[nRecipIndex];
         ZeroMemory(&recip, sizeof(MapiRecipDesc));

@@ -108,6 +108,8 @@ public:
   
     // implementation
     
+    virtual void SetFocus();
+    
     void OnSize( wxSizeEvent &event );
     void OnChar( wxKeyEvent &event );
   

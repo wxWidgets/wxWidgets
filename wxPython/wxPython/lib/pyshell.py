@@ -30,7 +30,7 @@ etc...  But it's a good start.
 from wxPython.wx  import *
 from wxPython.stc import *
 
-import sys, string, keyword
+import sys, keyword
 from code import InteractiveInterpreter
 
 #----------------------------------------------------------------------
@@ -238,7 +238,7 @@ class PyShellWindow(wxStyledTextCtrl, InteractiveInterpreter):
         lastPos = self.GetTextLength()
         if self.lastPromptPos and self.lastPromptPos != lastPos:
             self.SetLexer(wxSTC_LEX_PYTHON)
-            self.SetKeywords(0, string.join(keyword.kwlist))
+            self.SetKeywords(0, ' '.join(keyword.kwlist))
 
             self.Colourise(self.lastPromptPos, lastPos)
 
@@ -248,7 +248,7 @@ class PyShellWindow(wxStyledTextCtrl, InteractiveInterpreter):
     def OnUpdateUI(self, evt):
         # check for matching braces
         braceAtCaret = -1
-	braceOpposite = -1
+        braceOpposite = -1
         charBefore = None
         caretPos = self.GetCurrentPos()
         if caretPos > 0:

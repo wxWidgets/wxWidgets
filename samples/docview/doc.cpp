@@ -177,16 +177,16 @@ wxOutputStream &DoodleSegment::SaveObject(wxOutputStream& stream)
     wxTextOutputStream text_stream( stream );
     
     wxInt32 n = lines.Number();
-    text_stream << n << '\n';
+    text_stream << n << _T('\n');
     
     wxNode *node = lines.First();
     while (node)
     {
         DoodleLine *line = (DoodleLine *)node->Data();
-        text_stream << line->x1 << " " << 
-            line->y1 << " " << 
-            line->x2 << " " << 
-            line->y2 << "\n";
+        text_stream << line->x1 << _T(" ") << 
+            line->y1 << _T(" ") << 
+            line->x2 << _T(" ") << 
+            line->y2 << _T("\n");
         node = node->Next();
     }
     

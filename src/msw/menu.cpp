@@ -557,6 +557,13 @@ wxMenuBar::wxMenuBar(int count, wxMenu *menus[], const wxString titles[])
 
 wxMenuBar::~wxMenuBar()
 {
+    // we should free Windows resources only if Windows doesn't do it for us
+    // which happens if we're attached to a frame
+    if (m_hMenu && !IsAttached())
+    {
+        ::DestroyMenu((HMENU)m_hMenu);
+        m_hMenu = (WXHMENU)NULL;
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -838,8 +845,6 @@ void wxMenuBar::Attach(wxFrame *frame)
 
 void wxMenuBar::Detach()
 {
-    m_hMenu = (WXHMENU)NULL;
-
     wxMenuBarBase::Detach();
 }
 

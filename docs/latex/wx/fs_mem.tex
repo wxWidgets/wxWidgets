@@ -22,7 +22,7 @@ Example:
 void MyFrame::OnAbout(wxCommandEvent&)
 {
     wxBusyCursor bcur;
-    
+    wxFileSystem::AddHandler(new wxMemoryFSHandler);
     wxMemoryFSHandler::AddFile("logo.pcx", wxBITMAP(logo), wxBITMAP_TYPE_PCX);
     wxMemoryFSHandler::AddFile("about.htm", 
                                "<html><body>About: "

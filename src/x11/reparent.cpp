@@ -21,10 +21,11 @@
     #pragma implementation "reparent.h"
 #endif
 
-#include "wx/x11/reparent.h"
+#include "wx/setup.h"
 
 #if !wxUSE_NANOX
 
+#include "wx/x11/reparent.h"
 #include "wx/evtloop.h"
 #include "wx/log.h"
 #include "wx/app.h"
@@ -295,13 +296,13 @@ WXWindow wxReparenter::FindAClientWindow(WXWindow window, const wxString& name)
       XFetchName((Display*) wxGetDisplay(), (Window) window, &clientName);
 
       wxString str1(name);
-      wxString str2(clientName);
+      wxString str2 = wxString::FromAscii(clientName);
       str1.Lower();
       str2.Lower();
 
       bool matches;
       if (sm_exactMatch)
-          matches = (name == clientName);
+          matches = (name == wxString::FromAscii(clientName));
       else
           matches = (str1.Contains(str2) || str2.Contains(str1));
       
@@ -315,7 +316,8 @@ WXWindow wxReparenter::FindAClientWindow(WXWindow window, const wxString& name)
 
   old = XSetErrorHandler(ErrorHandler);
   if (!XQueryTree((Display*) wxGetDisplay(), (Window) window, &returnroot, &returnparent,
-    &children, &numchildren) || Xerror) {
+    &children, &numchildren) || Xerror)
+  {
     XSetErrorHandler(old);
     return NULL;
   }

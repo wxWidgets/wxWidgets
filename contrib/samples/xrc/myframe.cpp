@@ -109,18 +109,18 @@ MyFrame::MyFrame(wxWindow* parent)
     // since this frame will always be the top window, and thus parentless. 
     // However, the current approach has source code that can be recycled 
     // for other frames that aren't the top level window.]
-    wxXmlResource::Get()->LoadFrame(this, parent, "main_frame");
+    wxXmlResource::Get()->LoadFrame(this, parent, wxT("main_frame"));
 
     // Set the icon for the frame.
     SetIcon(wxICON(appicon));
 
     // Load the menubar from XRC and set this frame's menubar to it.
-    SetMenuBar(wxXmlResource::Get()->LoadMenuBar("main_menu"));
+    SetMenuBar(wxXmlResource::Get()->LoadMenuBar(wxT("main_menu")));
     // Load the toolbar from XRC and set this frame's toolbar to it.
     // NOTE: For toolbars you currently should do it exactly like this.
     // With toolbars, you currently can't create one, and set it later. It
     // needs to be all in one step.
-    SetToolBar(wxXmlResource::Get()->LoadToolBar(this, "main_toolbar"));
+    SetToolBar(wxXmlResource::Get()->LoadToolBar(this, wxT("main_toolbar")));
     
     // Give the frame a optional statusbar. The '1' just means one field. 
     // A gripsizer will automatically get put on into the corner, if that 
@@ -146,7 +146,7 @@ void MyFrame::OnNonDerivedDialogToolOrMenuCommand(wxCommandEvent& WXUNUSED(event
     wxDialog dlg;
     // "non_derived_dialog" is the name of the wxDialog XRC node that should
     // be loaded.
-    wxXmlResource::Get()->LoadDialog(&dlg, this, "non_derived_dialog");
+    wxXmlResource::Get()->LoadDialog(&dlg, this, wxT("non_derived_dialog"));
     dlg.ShowModal();
 
 }
@@ -166,7 +166,7 @@ void MyFrame::OnDerivedDialogToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnControlsToolOrMenuCommand(wxCommandEvent& WXUNUSED(event)) 
 {
     wxDialog dlg;
-    wxXmlResource::Get()->LoadDialog(&dlg, this, "controls_dialog");
+    wxXmlResource::Get()->LoadDialog(&dlg, this, wxT("controls_dialog"));
 
 #if wxUSE_LISTCTRL
     // There is no data in the listctrl. This will add some columns
@@ -211,7 +211,7 @@ void MyFrame::OnControlsToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnUncenteredToolOrMenuCommand(wxCommandEvent& WXUNUSED(event)) 
 {
     wxDialog dlg;
-    wxXmlResource::Get()->LoadDialog(&dlg, this, "uncentered_dialog");
+    wxXmlResource::Get()->LoadDialog(&dlg, this, wxT("uncentered_dialog"));
     dlg.ShowModal();
 }
 
@@ -219,7 +219,7 @@ void MyFrame::OnUncenteredToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnCustomClassToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 {
     wxDialog dlg;
-    wxXmlResource::Get()->LoadDialog(&dlg, this, "custom_class_dialog");
+    wxXmlResource::Get()->LoadDialog(&dlg, this, wxT("custom_class_dialog"));
     
     // Make an instance of our new custom class. 
     MyResizableListCtrl* a_myResizableListCtrl = new MyResizableListCtrl(&dlg, 
@@ -231,7 +231,7 @@ void MyFrame::OnCustomClassToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
     
     // "custom_control_placeholder" is the name of the "unknown" tag in the 
     // custctrl.xrc XRC file.
-    wxXmlResource::Get()->AttachUnknownControl("custom_control_placeholder",
+    wxXmlResource::Get()->AttachUnknownControl(wxT("custom_control_placeholder"),
                                                 a_myResizableListCtrl);
     dlg.ShowModal();
 }
@@ -240,7 +240,7 @@ void MyFrame::OnCustomClassToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnPlatformPropertyToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 {
     wxDialog dlg;
-    wxXmlResource::Get()->LoadDialog(&dlg, this, "platform_property_dialog");
+    wxXmlResource::Get()->LoadDialog(&dlg, this, wxT("platform_property_dialog"));
     dlg.ShowModal();
 }
 
@@ -248,7 +248,7 @@ void MyFrame::OnPlatformPropertyToolOrMenuCommand(wxCommandEvent& WXUNUSED(event
 void MyFrame::OnArtProviderToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 {
     wxDialog dlg;
-    wxXmlResource::Get()->LoadDialog(&dlg, this, "art_provider_dialog");
+    wxXmlResource::Get()->LoadDialog(&dlg, this, wxT("art_provider_dialog"));
     dlg.ShowModal();
 }
 
@@ -256,7 +256,7 @@ void MyFrame::OnArtProviderToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnVariableExpansionToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 {
     wxDialog dlg;
-    wxXmlResource::Get()->LoadDialog(&dlg, this, "variable_expansion_dialog");
+    wxXmlResource::Get()->LoadDialog(&dlg, this, wxT("variable_expansion_dialog"));
     dlg.ShowModal();
 }
 
@@ -267,5 +267,5 @@ void MyFrame::OnAboutToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
     msg.Printf( _T("This is the about dialog of XML resources demo.\n")
                 _T("Welcome to %s"), wxVERSION_STRING);
 
-    wxMessageBox(msg, "About XML resources demo", wxOK | wxICON_INFORMATION, this);
+    wxMessageBox(msg, _("About XML resources demo"), wxOK | wxICON_INFORMATION, this);
 }

@@ -14,14 +14,14 @@ ID_BUTTON_wxPyNonFatalErrorDialog = 10004
 ID_BUTTON_wxPyFatalErrorDialogWithTraceback = 10005
 ID_BUTTON_wxPyNonFatalErrorDialogWithTraceback = 10006
 
-def ErrorDialogsDemoPanelFunc( parent, call_fit = true, set_sizer = true ):
+def ErrorDialogsDemoPanelFunc( parent, call_fit = True, set_sizer = True ):
     item0 = wxBoxSizer( wxVERTICAL )
-    
+
     item1 = wxStaticText( parent, ID_TEXT, "Please select one of the buttons below for an example using explicit errors...", wxDefaultPosition, wxDefaultSize, 0 )
     item0.AddWindow( item1, 0, wxALIGN_CENTRE|wxALL, 5 )
 
     item2 = wxFlexGridSizer( 0, 2, 0, 0 )
-    
+
     item3 = wxButton( parent, ID_BUTTON_wxPyNonFatalError, "wxPyNonFatalError", wxDefaultPosition, wxDefaultSize, 0 )
     item2.AddWindow( item3, 0, wxALIGN_CENTRE|wxALL, 5 )
 
@@ -34,7 +34,7 @@ def ErrorDialogsDemoPanelFunc( parent, call_fit = true, set_sizer = true ):
     item0.AddWindow( item5, 0, wxALIGN_CENTRE|wxALL, 5 )
 
     item6 = wxFlexGridSizer( 0, 2, 0, 0 )
-    
+
     item7 = wxButton( parent, ID_BUTTON_wxPyFatalErrorDialog, "wxPyFatalErrorDialog", wxDefaultPosition, wxDefaultSize, 0 )
     item6.AddWindow( item7, 0, wxALIGN_CENTRE|wxALL, 5 )
 
@@ -51,16 +51,16 @@ def ErrorDialogsDemoPanelFunc( parent, call_fit = true, set_sizer = true ):
     item0.AddSizer( item6, 0, wxALIGN_CENTRE|wxALL, 5 )
 
     item11 = wxFlexGridSizer( 0, 2, 0, 0 )
-    
+
     item0.AddSizer( item11, 0, wxALIGN_CENTRE|wxALL, 5 )
 
-    if set_sizer == true:
-        parent.SetAutoLayout( true )
+    if set_sizer == True:
+        parent.SetAutoLayout( True )
         parent.SetSizer( item0 )
-        if call_fit == true:
+        if call_fit == True:
             item0.Fit( parent )
             item0.SetSizeHints( parent )
-    
+
     return item0
 
 # Menu bar functions
@@ -106,7 +106,7 @@ class MyPanel(wxPanel):
                    ID_BUTTON_wxPyNonFatalErrorDialogWithTraceback,
                    self.DoDialog)
         EVT_CLOSE(self,self.OnClose)
-    
+
     IndexFromID = {
         ID_BUTTON_wxPyFatalErrorDialog: 3,
         ID_BUTTON_wxPyFatalErrorDialogWithTraceback: 2,
@@ -158,9 +158,9 @@ class MyFrame(wxFrame):
 class MyApp(wxApp):
     def OnInit(self):
         frame = MyFrame()
-        frame.Show(true)
+        frame.Show(True)
         self.SetTopWindow(frame)
-        return true
+        return True
 
 def runTest(pframe, nb, log):
     panel = MyPanel(nb)

@@ -191,7 +191,7 @@ void ReopenFile(FILE **fd, char **fileName)
   else
     sprintf(buf, "%s%d.html", FileRoot, fileId);
   if (*fileName) delete[] *fileName;
-  *fileName = copystring(FileNameFromPath(buf));
+  *fileName = copystring(wxFileNameFromPath(buf));
   *fd = fopen(buf, "w");
   fprintf(*fd, "<HTML>\n");
 }
@@ -426,13 +426,13 @@ void AddBrowseButtons(char *upLabel, char *upFilename,
   if (truncateFilenames)
   {
     char buf1[80];
-    strcpy(buf1, ConvertCase(FileNameFromPath(FileRoot)));
+    strcpy(buf1, ConvertCase(wxFileNameFromPath(FileRoot)));
     sprintf(buf, "\n<A HREF=\"%s.%s\">%s</A> ", buf1, ConvertCase("htm"), contentsReference);
   }
   else
   {
     char buf1[80];
-    strcpy(buf1, ConvertCase(FileNameFromPath(FileRoot)));
+    strcpy(buf1, ConvertCase(wxFileNameFromPath(FileRoot)));
     sprintf(buf, "\n<A HREF=\"%s%s\">%s</A> ", buf1, ConvertCase("_contents.html"), contentsReference);
   }
 //  TexOutput("<NOFRAMES>");
@@ -585,13 +585,16 @@ char *ParseColourString(char *bkStr, bool *isPicture)
 
 void OutputFont(void)
 {
-  // Output <FONT FACE=...>
-  TexOutput("<FONT FACE=\"");
+  // Only output <font face> if explicitly requested by htmlFaceName= directive in
+  // tex2rtf.ini. Otherwise do NOT set the font because we want to use browser's
+  // default font:
   if (htmlFaceName)
-	TexOutput(htmlFaceName);
-  else
-	TexOutput("Times New Roman");
-  TexOutput("\">\n");
+  {
+    // Output <FONT FACE=...>
+    TexOutput("<FONT FACE=\"");
+    TexOutput(htmlFaceName);
+    TexOutput("\">\n");
+  }
 }
 
 // Output start of <BODY> block
@@ -708,9 +711,9 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
 
       char titleBuf[200];
       if (truncateFilenames)
-        sprintf(titleBuf, "%s.htm", FileNameFromPath(FileRoot));
+        sprintf(titleBuf, "%s.htm", wxFileNameFromPath(FileRoot));
       else
-        sprintf(titleBuf, "%s_contents.html", FileNameFromPath(FileRoot));
+        sprintf(titleBuf, "%s_contents.html", wxFileNameFromPath(FileRoot));
 
       fprintf(Chapters, "<A NAME=\"%s\"></A>", topicName);
 
@@ -2708,9 +2711,9 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
 
       char titleBuf[150];
       if (truncateFilenames)
-        sprintf(titleBuf, "%s.htm", FileNameFromPath(FileRoot));
+        sprintf(titleBuf, "%s.htm", wxFileNameFromPath(FileRoot));
       else
-        sprintf(titleBuf, "%s_contents.html", FileNameFromPath(FileRoot));
+        sprintf(titleBuf, "%s_contents.html", wxFileNameFromPath(FileRoot));
 
       HTMLHead();
       TexOutput("<title>");
@@ -2919,7 +2922,7 @@ bool HTMLGo(void)
       OnError("Cannot open output file!");
       return FALSE;
     }
-    AddTexRef("contents", FileNameFromPath(TitlepageName), ContentsNameString);
+    AddTexRef("contents", wxFileNameFromPath(TitlepageName), ContentsNameString);
 
     fprintf(Contents, "<P><P><H2>%s</H2><P><P>\n", ContentsNameString);
 
@@ -3003,7 +3006,7 @@ bool HTMLGo(void)
         if (contentsString)
           fprintf(tmpTitle, "<TITLE>%s</TITLE></HEAD>\n\n", contentsString);
         else
-          fprintf(tmpTitle, "<TITLE>%s</TITLE></HEAD>\n\n", FileNameFromPath(FileRoot));
+          fprintf(tmpTitle, "<TITLE>%s</TITLE></HEAD>\n\n", wxFileNameFromPath(FileRoot));
       }
 
       // Output frame information
@@ -3017,8 +3020,8 @@ bool HTMLGo(void)
 
         fprintf(tmpTitle, "<FRAMESET COLS=\"30%%,70%%\">\n");
 
-        fprintf(tmpTitle, "<FRAME SRC=\"%s\">\n", ConvertCase(FileNameFromPath(contentsFrameName)));
-        fprintf(tmpTitle, "<FRAME SRC=\"%s\" NAME=\"mainwindow\">\n", ConvertCase(FileNameFromPath(firstFileName)));
+        fprintf(tmpTitle, "<FRAME SRC=\"%s\">\n", ConvertCase(wxFileNameFromPath(contentsFrameName)));
+        fprintf(tmpTitle, "<FRAME SRC=\"%s\" NAME=\"mainwindow\">\n", ConvertCase(wxFileNameFromPath(firstFileName)));
         fprintf(tmpTitle, "</FRAMESET>\n");
 
         fprintf(tmpTitle, "<NOFRAMES>\n");
@@ -3049,7 +3052,7 @@ bool HTMLGo(void)
       fprintf(tmpTitle, "\n</HTML>\n");
 
       fclose(tmpTitle);
-      if (FileExists(TitlepageName)) wxRemoveFile(TitlepageName);
+      if (wxFileExists(TitlepageName)) wxRemoveFile(TitlepageName);
       if (!wxRenameFile("title.tmp", TitlepageName))
       {
         wxCopyFile("title.tmp", TitlepageName);
@@ -3062,7 +3065,7 @@ bool HTMLGo(void)
     if (lastTopic) delete[] lastTopic;
     lastTopic = NULL;
 
-    if (FileExists(ContentsName)) wxRemoveFile(ContentsName);
+    if (wxFileExists(ContentsName)) wxRemoveFile(ContentsName);
 
     if (!wxRenameFile(TmpContentsName, ContentsName))
     {
@@ -3147,11 +3150,11 @@ void GenerateHTMLWorkshopFiles(char *fname)
       "Default topic=%s\n"
       "Index file=%s.hhk\n"
       "Title=",
-      FileNameFromPath(fname),
-      FileNameFromPath(fname),
-      FileNameFromPath(fname),
-      FileNameFromPath(TitlepageName),
-      FileNameFromPath(fname)
+      wxFileNameFromPath(fname),
+      wxFileNameFromPath(fname),
+      wxFileNameFromPath(fname),
+      wxFileNameFromPath(TitlepageName),
+      wxFileNameFromPath(fname)
       );
 
   if (DocumentTitle) {
@@ -3162,19 +3165,19 @@ void GenerateHTMLWorkshopFiles(char *fname)
 
   fprintf(f, "\n\n[WINDOWS]\n"
           "%sHelp=,\"%s.hhc\",\"%s.hhk\",\"%s\",,,,,,0x2420,,0x380e,,,,,0,,,",
-          FileNameFromPath(fname),
-          FileNameFromPath(fname),
-          FileNameFromPath(fname),
-          FileNameFromPath(TitlepageName));
+          wxFileNameFromPath(fname),
+          wxFileNameFromPath(fname),
+          wxFileNameFromPath(fname),
+          wxFileNameFromPath(TitlepageName));
 
 
   fprintf(f, "\n\n[FILES]\n");
-  fprintf(f, "%s\n", FileNameFromPath(TitlepageName));
+  fprintf(f, "%s\n", wxFileNameFromPath(TitlepageName));
   for (int i = 1; i <= fileId; i++) {
     if (truncateFilenames)
-      sprintf(buf, "%s%d.htm", FileNameFromPath(FileRoot), i);
+      sprintf(buf, "%s%d.htm", wxFileNameFromPath(FileRoot), i);
     else
-      sprintf(buf, "%s%d.html", FileNameFromPath(FileRoot), i);
+      sprintf(buf, "%s%d.html", wxFileNameFromPath(FileRoot), i);
     fprintf(f, "%s\n", buf);
   }
   fclose(f);
@@ -3278,7 +3281,7 @@ void HTMLWorkshopStartContents()
       "<LI> <OBJECT type=\"text/sitemap\">\n"
       "<param name=\"Local\" value=\"%s\">\n"
       "<param name=\"Name\" value=\"Contents\">\n</OBJECT>\n",
-      FileNameFromPath(TitlepageName)
+      wxFileNameFromPath(TitlepageName)
       );
 
 }

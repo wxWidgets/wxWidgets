@@ -53,7 +53,7 @@ class TestPanel(wxPanel):
         border = wxBoxSizer(wxVERTICAL)
         border.Add(sizer, 0, wxALL, 25)
 
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(border)
         self.Layout()
 

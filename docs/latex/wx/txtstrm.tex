@@ -39,8 +39,11 @@ For example:
 
 \func{}{wxTextInputStream}{\param{wxInputStream\&}{ stream}}
 
+\func{}{wxTextInputStream}{\param{wxInputStream\&}{ stream}, \param{wxMBConv\&}{ conv = wxMBConvUTF8}}
+
 Constructs a text stream object from an input stream. Only read methods will
-be available.
+be available. The second form is available only in Unicode mode and lets
+you set the encoding of the text.
 
 \wxheading{Parameters}
 
@@ -139,11 +142,10 @@ and Unix in their native formats (concerning the line ending).
 
 \membersection{wxTextOutputStream::wxTextOutputStream}\label{wxtextoutputstreamconstr}
 
-\func{}{wxTextOutputStream}{\param{wxOutputStream\&}{ stream}, \param{wxEOL}{ mode = wxEOL\_NATIVE}}
+\func{}{wxTextOutputStream}{\param{wxOutputStream\&}{ stream}, \param{wxEOL}{ mode = wxEOL\_NATIVE}, \param{wxMBConv\&}{ conv = wxMBConvUTF8}}
 
 Constructs a text stream object from an output stream. Only write methods will
-be available.
-
+be available. The second form is only available in Unicode mode.
 \wxheading{Parameters}
 
 \docparam{stream}{The output stream.}
