@@ -25,6 +25,8 @@
 #include "wx/button.h"
 #include "wx/panel.h"
 #include "wx/textctrl.h"
+#include "wx/notebook.h"
+#include "wx/tabctrl.h"
 #include "wx/settings.h"
 #include "wx/filefn.h"
 #include "wx/utils.h"
@@ -159,7 +161,41 @@ void wxTextCtrl::SetValue(const wxString& st)
 	else
 		value = st ;
 	UMASetControlData( m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , value.Length() , (char*) ((const char*)value) ) ;
-	UMADrawControl( m_macControl ) ;
+	WindowRef window = GetMacRootWindow() ;
+	if ( window )
+	{
+		wxWindow* win = wxFindWinFromMacWindow( window ) ;
+		if ( win )
+		{
+			wxMacDrawingHelper help( win ) ;
+			// the mac control manager always assumes to have the origin at 0,0
+			SetOrigin( 0 , 0 ) ;
+			
+			bool			hasTabBehind = false ;
+			wxWindow* parent = GetParent() ;
+			while ( parent )
+			{
+				if( parent->MacGetWindowData() )
+				{
+					UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , kThemeBrushDialogBackgroundActive , false ) ;
+					break ;
+				}
+				
+				if( parent->IsKindOf( CLASSINFO( wxNotebook ) ) ||  parent->IsKindOf( CLASSINFO( wxTabCtrl ) ))
+				{
+					if ( ((wxControl*)parent)->GetMacControl() )
+						SetUpControlBackground( ((wxControl*)parent)->GetMacControl() , -1 , true ) ;
+					break ;
+				}
+				
+				parent = parent->GetParent() ;
+			} 
+			
+			UMADrawControl( m_macControl ) ;
+			UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
+			wxDC::MacInvalidateSetup() ;
+		}
+	}
 }
 
 // Clipboard operations
@@ -214,7 +250,41 @@ void wxTextCtrl::Paste()
    		UMAGetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
 		TEFromScrap() ;
 		TEPaste( teH ) ;
-		UMADrawControl( m_macControl ) ;
+		WindowRef window = GetMacRootWindow() ;
+		if ( window )
+		{
+			wxWindow* win = wxFindWinFromMacWindow( window ) ;
+			if ( win )
+			{
+				wxMacDrawingHelper help( win ) ;
+				// the mac control manager always assumes to have the origin at 0,0
+				SetOrigin( 0 , 0 ) ;
+				
+				bool			hasTabBehind = false ;
+				wxWindow* parent = GetParent() ;
+				while ( parent )
+				{
+					if( parent->MacGetWindowData() )
+					{
+						UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , kThemeBrushDialogBackgroundActive , false ) ;
+						break ;
+					}
+					
+					if( parent->IsKindOf( CLASSINFO( wxNotebook ) ) ||  parent->IsKindOf( CLASSINFO( wxTabCtrl ) ))
+					{
+						if ( ((wxControl*)parent)->GetMacControl() )
+							SetUpControlBackground( ((wxControl*)parent)->GetMacControl() , -1 , true ) ;
+						break ;
+					}
+					
+					parent = parent->GetParent() ;
+				} 
+				
+				UMADrawControl( m_macControl ) ;
+				UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
+				wxDC::MacInvalidateSetup() ;
+			}
+		}
 	}
 }
 

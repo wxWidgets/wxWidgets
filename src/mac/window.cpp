@@ -1743,7 +1743,7 @@ void wxWindow::MacMouseMoved( EventRecord *ev , short part)
 }
 void wxWindow::MacActivate( EventRecord *ev , bool inIsActivating )
 {
-	wxActivateEvent event(wxEVT_ACTIVATE, inIsActivating);
+	wxActivateEvent event(wxEVT_ACTIVATE, inIsActivating , m_windowId);
 	event.m_timeStamp = ev->when ;
 	event.SetEventObject(this);
 	
