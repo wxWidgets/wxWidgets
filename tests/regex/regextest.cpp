@@ -57,7 +57,8 @@ using CppUnit::TestCase;
 using CppUnit::TestSuite;
 using CppUnit::Exception;
 
-using namespace std;
+using std::string;
+using std::vector;
 
 ///////////////////////////////////////////////////////////////////////////////
 // The test case - an instance represents a single test
@@ -132,7 +133,7 @@ RegExTestCase::RegExTestCase(
     m_advanced(false)
 {
     bool badconv = m_pattern == convError() || m_data == convError();
-    vector<const char *>::const_iterator it;
+    std::vector<const char *>::const_iterator it;
 
     for (it = expected.begin(); it != expected.end(); ++it) {
         m_expected.push_back(Conv(*it));
@@ -157,7 +158,7 @@ int wxWcscmp(const wchar_t* s1, const wchar_t* s2)
     if (nLen1 != nLen2)
         return nLen1 - nLen2;
 
-    return wxMemcmp(s1, s2, nLen1);
+    return wxTmemcmp(s1, s2, nLen1);
 }
 
 // convert a string from UTF8 to the internal encoding
