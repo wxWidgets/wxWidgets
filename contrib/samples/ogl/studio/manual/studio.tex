@@ -1,0 +1,381 @@
+\documentstyle[a4,makeidx,verbatim,texhelp,fancyhea,mysober,mytitle]{report}%
+\twocolwidtha{4cm}%
+\input{psbox.tex}
+\newcommand{\commandref}[2]{\helpref{{\tt $\backslash$#1}}{#2}}%
+\newcommand{\commandrefn}[2]{\helprefn{{\tt $\backslash$#1}}{#2}\index{#1}}%
+\newcommand{\commandpageref}[2]{\latexignore{\helprefn{{\tt $\backslash$#1}}{#2}}\latexonly{{\tt $\backslash$#1} {\it page \pageref{#2}}}\index{#1}}%
+\newcommand{\indexit}[1]{#1\index{#1}}%
+\newcommand{\inioption}[1]{{\tt #1}\index{#1}}%
+\parskip=10pt%
+\parindent=0pt%
+\title{Manual for OGL Studio}%
+\author{by Julian Smart}%
+\makeindex%
+\begin{document}%
+\maketitle%
+\pagestyle{fancyplain}%
+\bibliographystyle{plain}%
+\pagenumbering{arabic}%
+\setheader{{\it CONTENTS}}{}{}{}{}{{\it CONTENTS}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+\tableofcontents%
+
+\chapter{Welcome to OGL Studio}%
+\setheader{{\it Welcome}}{}{}{}{}{{\it Welcome}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+Welcome to OGL Studio, an extended sample for the Object Graphics Library.
+
+For release information, please see the \helpref{Read Me}{readme} section.
+
+\chapter{Read Me}\label{readme}%
+\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+\section{Change log}
+
+Version 1, February 7th, 1999
+
+\begin{itemize}\itemsep=0pt
+\item First release.
+\end{itemize}
+
+\section{Bugs}
+
+There are no known bugs.
+
+\begin{comment}
+\chapter{Getting Started}\label{gettingstarted}%
+\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+\end{comment}
+
+\chapter{Working with the diagram window}\label{schedule}%
+\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+This section describes how you work in the diagram window.
+
+In addition, you may wish to refer to the following sections:
+
+\begin{itemize}\itemsep=0pt
+\item \helpref{How To}{howto}
+%\item \helpref{Getting started}{gettingstarted}
+\item \helpref{Using Menu Commands}{menucommands}
+\item \helpref{Using Toolbar Commands}{toolbarcommands}
+\end{itemize}
+
+When you first run OGL Studio, there is a menubar, a single
+toolbar with commonly-used functionality such as loading and
+saving, a project window to the left, and an MDI (Multiple Document
+Interface) area to the right, which will contain documents.
+
+\section{Creating a diagram}
+
+To create a new diagram, click on "File|New" or the New tool.
+
+A blank document and two new toolbars will appear. The first
+new toolbar is the \helpref{diagramming formatting toolbar}{diagramformattingtoolbar}, and contains
+icons and controls for:
+
+\begin{itemize}\itemsep=0pt
+\item alignment and size cloning;
+\item arrow toggling;
+\item point size;
+\item zoom level.
+\end{itemize}
+
+The second new toolbar is called the \helpref{diagram palette}{diagrampalette} and contains:
+
+\begin{itemize}\itemsep=0pt
+\item a pointer tool used for selecting, moving and sizing objects;
+\item a text tool used for editing text or creating new text boxes;
+\item a tool for each of the symbols.
+\end{itemize}
+
+\section{Basic editing}
+
+To add a symbol, left-click on the symbol in the diagram palette,
+and then left-click on the document. The currently selected
+tool will revert to the pointer tool, so to add another object,
+click on the symbol again, then on the document.
+
+To draw a line between two objects, right-drag between the two
+objects, starting at the attachment point area you wish to start the
+line with, and ending at another appropriate attachment point
+area. The initial ordering of the lines may not be correct (lines
+may overlap, for example) so to reorder lines on a particular
+side of a object, select a line, then left-drag the desired end to a new
+position (tip: keep within the object perimeter). Left-dragging the
+line end can also be used to change the attachment point of that
+end of the line, to a new side or vertex (depending on the object).
+
+To select or deselect a object, left click the object. To select
+several objects at once, keep the shift key pressed down when
+left-clicking, or left-drag a 'lassoo' around several objects.
+
+To delete a object or line, select it and press the Delete key, or use
+"Edit|Clear", or right-click on the object to show a menu and choose
+the "Cut" item.
+
+If you are deleting a object which has one ore more lines
+attached, the lines are deleted prior to the object deletion.
+
+Shapes can be rotated by right-clicking and selecting "Rotate
+clockwise" or "Rotate anticlockwise".
+
+Line arrows can be added (pointing in the direction in which
+you created the line) by selecting the line and pressing the
+"Toggle arrow" tool on the formatting toolbar.
+
+\section{Adding text}
+
+Select the text tool (on the symbol palette) and left-click on
+a object. If you click outside a object on the document, you are
+prompted to add a new free-floating text box.
+
+Alternatively, you can select a object and press Return (or
+select the "Edit|Edit label" menu item); or right-click and
+select "Edit label" from the object menu.
+
+Change the point size using the combobox on the formatting
+toolbar.
+
+\section{Aligning objects}
+
+Select several objects and click on an alignment tool on
+the formatting toolbar. The alignment will be done with
+respect to the first object you select. You can also copy
+the size of a object to other objects with the "Copy size" tool.
+
+\section{Adding segments to lines and straightening them}
+
+To make a line have more than one segment, select the line,
+then press the "New line point" tool. Create as many new control points
+(and therefore segments) as you like. Then arrange the points
+into a rough approximation of how they should be laid out
+horizontally and vertically. Click on "Straighten lines" to
+tidy up the layout.
+
+To delete a line control point, select the line and click on
+"Cut line point" tool. An arbitrary point will be deleted.
+
+\section{Undo/Redo}
+
+Every operation can be undone, and then redone, back until
+the time at which you last saved your document. Use
+"Edit|Undo" and "Edit|Redo"; or the shortcuts Ctrl-Z and Ctrl-Y.
+
+\section{Loading and saving files}
+
+Load and save files using the main toolbar, or "File|Open...",
+"File|Save", "File|Save As..." menu items.
+
+\section{Copy and paste}
+
+OGL Studio has a diagram clipboard, into which you can copy selections. You can then
+paste the contents of clipboard into the same or another diagram window.
+
+Use "Edit|Copy" (or the toolbar copy button) to copy the selection. Use "Edit|Cut" (or the toolbar cut button) to
+copy and then delete the selection. Use "Edit|Paste" (or the toolbar paste button) to copy the selection to
+the current diagram window.
+
+Under Windows, copy and cutting also copies the selection to the Windows clipboard into metafile (vector)
+format, and Windows bitmap format. Note that not all Windows applications can accept the vector format.
+If the application seems to be pasting the wrong format into the document, try using that application's
+"Edit|Paste Special..." menu item, if one exists.
+
+\section{Keyboard shortcuts}
+
+The following keyboard shortcuts are available. {\bf Note:} The OGL Studio menus indicate which shortcuts are
+available.
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{Delete}{Clear selected object(s)}
+\twocolitem{Enter}{Edit text for selected object}
+\twocolitem{Ctrl-A}{Select all}
+\twocolitem{Ctrl-C}{Copy the selection to the clipboard}
+\twocolitem{Ctrl-D}{Duplicate the selection}
+\twocolitem{Ctrl-O}{Open a diagram}
+\twocolitem{Ctrl-N}{Create a new diagram}
+\twocolitem{Ctrl-P}{Print (not implemented)}
+\twocolitem{Ctrl-S}{Save the diagram file without prompting}
+\twocolitem{Ctrl-V}{Paste the selection}
+\twocolitem{Ctrl-W}{Close the current window}
+\twocolitem{Ctrl-X}{Cut the selection}
+\twocolitem{Ctrl-Z}{Undo last action}
+\twocolitem{Ctrl-Y}{Redo current action on the undo stack}
+\twocolitem{Ctrl-Enter}{Confirm the label editing operation (dismisses the dialog)}
+\twocolitem{Esc}{Cancel the label editing dialog}
+\twocolitem{F1}{Invoke the manual}
+\twocolitem{F12}{Save the diagram file, prompting for a filename}
+\end{twocollist}
+
+\chapter{Menu commands}\label{menucommands}%
+\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+This section describes the menu commands.
+
+\section{File}
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf New...}}{Creates a new diagram window.}
+\twocolitem{{\bf Open...}}{Opens a diagram file.}
+\twocolitem{{\bf Close}}{Closes the current window.}
+\twocolitem{{\bf Save}}{Saves the current diagram without prompting.}
+\twocolitem{{\bf Save As...}}{Saves the current diagram, prompting for a filename.}
+\twocolitem{{\bf Print...}}{Prints the current diagram (not implemented).}
+\twocolitem{{\bf Print Setup...}}{Invokes the printer setup dialog.}
+\twocolitem{{\bf Print Preview}}{Invokes print preview for this diagram (not implemented).}
+\twocolitem{{\bf Exit}}{Exits the program.}
+\end{twocollist}
+
+Further menu items appended to the end of the File menu allow you
+to load previously-saved diagram files quickly.
+
+\section{Edit}
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf Undo}}{Undoes the previous action.}
+\twocolitem{{\bf Redo}}{Redoes the previously undone action.}
+\twocolitem{{\bf Cut}}{Deletes the current selection and places it on the clipboard.}
+\twocolitem{{\bf Copy}}{Copies the current selection onto the clipboard, both to the internal
+diagram clipboard and under Windows, to the Windows clipboard, in metafile and bitmap formats.}
+\twocolitem{{\bf Paste}}{Pastes from the internal diagram clipboard to the currently active window.}
+\twocolitem{{\bf Duplicate}}{Duplicates the current selection, placing the objects further down and to the right.}
+\twocolitem{{\bf Clear}}{Clears the current selection without placing it on the clipboard.}
+\twocolitem{{\bf Select All}}{Selects all objects.}
+\twocolitem{{\bf Edit Label...}}{Invokes a dialog to edit the label of the currently selected object.}
+\end{twocollist}
+
+\begin{comment}%
+\section{View}
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf Toolbar}}{Toggles the toolbar on and off.}
+\twocolitem{{\bf Status Bar}}{Toggles the status bar on and off.}
+\twocolitem{{\bf Settings}}{Invokes the \helpref{Settings dialog}{settings} to allow you to adjust a variety of
+settings.}
+\end{twocollist}
+\end{comment}%
+
+\section{Window}
+
+The Window menu is shown when one or more child window is active.
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf Cascade}}{Arranges the child windows in a cascade.}
+\twocolitem{{\bf Tile}}{Arranges the child windows in a tiled formation.}
+\twocolitem{{\bf Arrange Icons}}{Arranges the minimized icons.}
+\twocolitem{{\bf Next}}{Activates the next MDI window.}
+\end{twocollist}
+
+Further menu items appended to the end of the Window menu allow you
+to restore and activate any child window.
+
+\section{Help}
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf Help Contents}}{Invokes the on-line help, showing the contents page.}
+\twocolitem{{\bf About}}{Displays a small dialog giving copyright and version information.}
+\end{twocollist}
+
+\chapter{Toolbar commands}\label{toolbarcommands}%
+\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+This section describes the commands associated with the various toolbars and diagram palette.
+
+\section{Main toolbar}\label{maintoolbar}
+
+The main toolbar is active all the time, with buttons greyed out if not appropriate to the current context.
+
+\begin{twocollist}
+\twocolitem{\image{1cm;0cm}{new.bmp}}{{\bf New} Creates a new diagram window.}
+\twocolitem{\image{1cm;0cm}{open.bmp}}{{\bf Open} Opens a diagram file.}
+\twocolitem{\image{1cm;0cm}{save.bmp}}{{\bf Save} Saves the current diagram without prompting.}
+\twocolitem{\image{1cm;0cm}{print.bmp}}{{\bf Print} Prints the current diagram (not implemented).}
+\twocolitem{\image{1cm;0cm}{copy.bmp}}{{\bf Copy} Copies the current selection onto the internal clipboard, and under Windows, into the Windows clipboard
+in metafile and bitmap formats.}
+\twocolitem{\image{1cm;0cm}{cut.bmp}}{{\bf Cut} Deletes the current selection and puts it on the clipboard.}
+\twocolitem{\image{1cm;0cm}{paste.bmp}}{{\bf Paste} Pastes the contents of the internal diagram clipboard onto the
+current diagram window.}
+\twocolitem{\image{1cm;0cm}{undo.bmp}}{{\bf Undo} Undoes the last command.}
+\twocolitem{\image{1cm;0cm}{redo.bmp}}{{\bf Redo} Redoes the last command.}
+\twocolitem{\image{1cm;0cm}{help.bmp}}{{\bf Help button} Invokes on-line help.}
+\end{twocollist}
+
+\section{Diagram formatting toolbar}\label{diagramformattingtoolbar}
+
+The diagram toolbar is visible only when a diagram window is active.
+
+\begin{twocollist}
+\twocolitem{\image{1cm;0cm}{alignl.bmp}}{{\bf Align left} Aligns the selected objects to the left side of the last selection.}
+\twocolitem{\image{1cm;0cm}{alignr.bmp}}{{\bf Align right} Aligns the selected objects to the right side of the last selection.}
+\twocolitem{\image{1cm;0cm}{alignt.bmp}}{{\bf Align top} Aligns the selected objects to the top side of the last selection.}
+\twocolitem{\image{1cm;0cm}{alignb.bmp}}{{\bf Align bottom} Aligns the selected objects to the bottom side of the last selection.}
+\twocolitem{\image{1cm;0cm}{horiz.bmp}}{{\bf Align horizontally} Aligns the selected objects to be centered horizontally with respect to the last selection.}
+\twocolitem{\image{1cm;0cm}{vert.bmp}}{{\bf Align vertically} Aligns the selected objects to be centered vertically with respect to the last selection.}
+\twocolitem{\image{1cm;0cm}{copysize.bmp}}{{\bf Copy size} Makes the selected objects the same size as the last selection.}
+\twocolitem{\image{1cm;0cm}{linearrow.bmp}}{{\bf Line arrow} Toggles an arrow on or off for the selected objects.}
+\twocolitem{\image{1cm;0cm}{newpoint.bmp}}{{\bf New point} Inserts a control point into the selected line(s).}
+\twocolitem{\image{1cm;0cm}{cutpoint.bmp}}{{\bf Cut point} Deletes a control point from the selected line(s).}
+\twocolitem{\image{1cm;0cm}{straight.bmp}}{{\bf Straighten} Straightens line segments that are nearly horizontal
+or vertical.}
+\twocolitem{\image{1cm;0cm}{pointsize.bmp}}{{\bf Point size} Allows selection of the point size for the current
+selection.}
+\twocolitem{\image{1cm;0cm}{zoom.bmp}}{{\bf Zoom control} Allows selection of the zoom level for the current diagram.}
+\end{twocollist}
+
+\section{Diagram palette}\label{diagrampalette}
+
+The diagram palette is visible only when a diagram window is active. It contains the tools for
+adding objects and text to a diagram.
+
+\begin{twocollist}
+\twocolitem{\image{1cm;0cm}{arrow.bmp}}{{\bf Pointer tool} Click on this to allow dragging and selection of objects.}
+\twocolitem{\image{1cm;0cm}{texttool.bmp}}{{\bf Text tool} Click on this, then click on objects or the diagram background
+to edit object or free-floating text labels.}
+\end{twocollist}
+
+The other tools on this palette represent demo objects.
+
+To place an object on a diagram, click on its symbol, then left-click on the diagram. You will need to click
+on the palette symbol each time you wish to create an object, since the palette selection reverts to the pointer tool
+after each object is created.
+
+\chapter{Dialogs}\label{dialogs}%
+\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+To be written.
+
+\chapter{How To}\label{howto}%
+\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+\section{Create a new object}
+
+Create a new diagram window if you have not already. Then:
+
+\begin{itemize}\itemsep=0pt
+\item Left-click on the required object on the palette, then left-click on the diagram window.
+\end{itemize}
+
+
+% This section commented out
+\begin{comment}
+\bibliography{refs}
+\addcontentsline{toc}{chapter}{Bibliography}
+\setheader{{\it REFERENCES}}{}{}{}{}{{\it REFERENCES}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+\end{comment}
+
+\addcontentsline{toc}{chapter}{Index}
+\printindex%
+
+\setheader{{\it INDEX}}{}{}{}{}{{\it INDEX}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+\end{document}

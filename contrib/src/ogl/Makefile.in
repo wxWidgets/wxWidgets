@@ -1,0 +1,13 @@
+#
+
+top_builddir = ../..
+
+VPATH= $(top_srcdir)/ogl
+
+LIBTARGET=$(top_builddir)/lib/libogl
+
+OBJECTS=basic.o   bmpshape.o  composit.o  divided.o  lines.o    misc.o \
+        basic2.o  canvas.o    constrnt.o  drawn.o    mfutils.o  ogldiag.o
+
+
+include $(top_builddir)/src/makelib.env

@@ -1,0 +1,30 @@
+#
+# File:		makefile.vc
+# Author:	Julian Smart
+# Created:	1999
+# Updated:
+# Copyright:	(c) Julian Smart
+#
+# "%W% %G%"
+#
+# Makefile : Builds OGL studio example (MS VC++).
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+
+PROGRAM=studio
+
+FINAL=0
+
+!if "$(FINAL)" == "0"
+EXTRALIBS=$(WXDIR)\contrib\lib\ogl_d.lib
+!else
+EXTRALIBS=$(WXDIR)\contrib\lib\ogl.lib
+!endif
+
+OBJECTS = $(PROGRAM).obj doc.obj shapes.obj symbols.obj view.obj cspalette.obj\
+  mainfrm.obj project.obj dialogs.obj csprint.obj
+
+!include $(WXDIR)\src\makeprog.vc
+
