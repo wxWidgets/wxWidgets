@@ -101,6 +101,7 @@ typedef  _TUCHAR     wxUChar;
 #define  wxUngetc    _tungetc
 #define  wxVfprint   _vftprintf
 #define  wxVprintf   _vtprintf
+#define  wxVsscanf   _vstscanf
 #define  wxVsprintf  _vstprintf
 
    // stdlib.h functions
@@ -273,6 +274,7 @@ typedef unsigned char   wxUChar;
 #define  wxUngetc    ungetc
 #define  wxVfprint   vfprintf
 #define  wxVprintf   vprintf
+#define  wxVsscanf   vsscanf
 #define  wxVsprintf  vsprintf
 
    // stdlib.h functions
@@ -378,6 +380,8 @@ int      WXDLLEXPORT wxFprintf(FILE *stream, const wxChar *fmt, ...);
 int      WXDLLEXPORT wxVfprintf(FILE *stream, const wxChar *fmt, va_list argptr);
 int      WXDLLEXPORT wxSprintf(wxChar *buf, const wxChar *fmt, ...);
 int      WXDLLEXPORT wxVsprintf(wxChar *buf, const wxChar *fmt, va_list argptr);
+int      WXDLLEXPORT wxSscanf(const wxChar *buf, const wxChar *fmt, ...);
+int      WXDLLEXPORT wxVsscanf(const wxChar *buf, const wxChar *fmt, va_list argptr);
 #endif
 
 #ifndef wxAtof
