@@ -264,10 +264,6 @@ typedef unsigned int JDIMENSION;
 #endif
 
 
-#if (defined(__MWERKS__) && defined(__WXMSW__))
-#define HAVE_BOOLEAN
-#endif
-
 /*
  * On a few systems, type boolean and/or its values FALSE, TRUE may appear
  * in standard header files.  Or you may have conflicts with application-
