@@ -341,7 +341,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
 wxWindowX11::~wxWindowX11()
 {
     // Send destroy event
-    wxWindowDestroyEvent destroyEvent(this);
+    wxWindowDestroyEvent destroyEvent((wxWindow*) this);
     destroyEvent.SetId(GetId());
     GetEventHandler()->ProcessEvent(destroyEvent);
 
