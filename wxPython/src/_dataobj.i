@@ -360,9 +360,7 @@ public:
     wxFileDataObject();
 
     const wxArrayString& GetFilenames();
-#ifdef __WXMSW__
     void AddFile(const wxString &filename);
-#endif
 };
 
 
