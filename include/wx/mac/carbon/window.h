@@ -234,6 +234,9 @@ public:
     // gets the inset from every part
     virtual void        MacGetContentAreaInset( int &left , int &top , int &right , int &bottom ) ;
 
+    // flash the current invalid area, useful for debugging in OSX double buffered situation
+    void                MacFlashInvalidAreas() ;
+
 protected:
     // For controls like radiobuttons which are really composite
     wxList              m_subControls;
@@ -261,7 +264,7 @@ protected:
     void                MacPropagateEnabledStateChanged() ;
     void                MacPropagateHiliteChanged() ;
  
-
+    
 #if WXWIN_COMPATIBILITY_2_4
     bool                 m_backgroundTransparent ;
 #endif
