@@ -274,12 +274,6 @@ bool wxFileExists(const char *pszFileName)
 }
 */
 
-bool wxDirExists( const wxString& dir )
-{
-    struct stat st;
-    return ((stat(dir, &st) != -1) && S_ISDIR(st.st_mode) ? TRUE : FALSE);
-}
-
 bool
 wxIsAbsolutePath (const wxString& filename)
 {

@@ -16,8 +16,9 @@
     #pragma interface "log.h"
 #endif
 
-#include <wx/dynarray.h>
-#include <time.h>
+#include <time.h>   // for time_t
+
+#include "wx/dynarray.h"
 
 // ----------------------------------------------------------------------------
 // constants
