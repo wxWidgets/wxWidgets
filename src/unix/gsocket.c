@@ -3,7 +3,7 @@
  * Name:    gsocket.c
  * Authors: Guilhem Lavaux,
  *          Guillermo Rodriguez Garcia <guille@iies.es> (maintainer)
- * Purpose: GSocket main Unix file
+ * Purpose: GSocket main Unix and OS/2 file
  * Licence: The wxWindows licence
  * CVSID:   $Id$
  * -------------------------------------------------------------------------
@@ -17,10 +17,23 @@
 #include "wx/setup.h"
 #endif
 
+#if defined(__VISAGECPP__)
+/* Seems to be needed by Visual Age C++, though I don't see how it manages
+   to not break on including a C++ header into a plain C source file      */
+#include "wx/defs.h"
+#define BSD_SELECT /* use Berkley Sockets select */
+#endif
+
 #if wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__)
 
 #include <assert.h>
 #include <sys/types.h>
+#ifdef __VISAGECPP__
+#include <string.h>
+#include <sys/time.h>
+#include <types.h>
+#include <netinet/in.h>
+#endif
 #include <netdb.h>
 #include <sys/ioctl.h>
 
@@ -37,12 +50,42 @@ struct sockaddr_un
 #include <sys/un.h>
 #endif
 
+#ifndef __VISAGECPP__
 #include <sys/time.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <errno.h>
 #include <string.h>
 #include <unistd.h>
+#else
+#include <nerrno.h>
+#  if __IBMCPP__ < 400
+#include <machine/endian.h>
+#include <socket.h>
+#include <ioctl.h>
+#include <select.h>
+#include <unistd.h>
+
+#define EBADF   SOCEBADF
+
+#    ifdef min
+#    undef min
+#    endif
+#  else
+#include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <sys/select.h>
+
+#define close(a) soclose(a)
+#define select(a,b,c,d,e) bsdselect(a,b,c,d,e)
+int _System bsdselect(int,
+                      struct fd_set *,
+                      struct fd_set *,
+                      struct fd_set *,
+                      struct timeval *);
+int _System soclose(int);
+#  endif
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
@@ -430,8 +473,11 @@ GSocketError GSocket_SetServer(GSocket *sck)
     sck->m_error = GSOCK_IOERR;
     return GSOCK_IOERR;
   }
-
+#if defined(__EMX__) || defined(__VISAGECPP__)
+  ioctl(sck->m_fd, FIONBIO, (char*)&arg, sizeof(arg));
+#else
   ioctl(sck->m_fd, FIONBIO, &arg);
+#endif
   _GSocket_Enable_Events(sck);
 
   /* Bind to the local address,
@@ -535,8 +581,11 @@ GSocket *GSocket_WaitConnection(GSocket *socket)
     socket->m_error = err;
     return NULL;
   }
-
+#if defined(__EMX__) || defined(__VISAGECPP__)
+  ioctl(connection->m_fd, FIONBIO, (char*)&arg, sizeof(arg));
+#else
   ioctl(connection->m_fd, FIONBIO, &arg);
+#endif
   _GSocket_Enable_Events(connection);
 
   return connection;
@@ -604,8 +653,11 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
     sck->m_error = GSOCK_IOERR;
     return GSOCK_IOERR;
   }
-
+#if defined(__EMX__) || defined(__VISAGECPP__)
+  ioctl(sck->m_fd, FIONBIO, (char*)&arg, sizeof(arg));
+#else
   ioctl(sck->m_fd, FIONBIO, &arg);
+#endif
   _GSocket_Enable_Events(sck);
 
   /* Connect it to the peer address, with a timeout (see below) */
@@ -708,8 +760,11 @@ GSocketError GSocket_SetNonOriented(GSocket *sck)
     sck->m_error = GSOCK_IOERR;
     return GSOCK_IOERR;
   }
-
+#if defined(__EMX__) || defined(__VISAGECPP__)
+  ioctl(sck->m_fd, FIONBIO, (char*)&arg, sizeof(arg));
+#else
   ioctl(sck->m_fd, FIONBIO, &arg);
+#endif
   _GSocket_Enable_Events(sck);
 
   /* Bind to the local address,
@@ -1216,9 +1271,13 @@ int _GSocket_Send_Stream(GSocket *socket, const char *buffer, int size)
 {
   int ret;
 
+#ifndef __VISAGECPP__
   MASK_SIGNAL();
   ret = send(socket->m_fd, buffer, size, 0);
   UNMASK_SIGNAL();
+#else
+  ret = send(socket->m_fd, (char *)buffer, size, 0);
+#endif
 
   return ret;
 }
@@ -1242,9 +1301,13 @@ int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size)
     return -1;
   }
 
+#ifndef __VISAGECPP__
   MASK_SIGNAL();
   ret = sendto(socket->m_fd, buffer, size, 0, addr, len);
   UNMASK_SIGNAL();
+#else
+  ret = sendto(socket->m_fd, (char *)buffer, size, 0, addr, len);
+#endif
 
   /* Frees memory allocated from _GAddress_translate_to */
   free(addr);
@@ -1536,7 +1599,8 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
   {
 #else
   /* Use gethostbyname by default */
-  if (1)
+  int val = 1;  //VA doesn't like constants in conditional expressions at all
+  if (val)
   {
 #endif
     struct in_addr *array_addr;
@@ -1681,6 +1745,7 @@ unsigned short GAddress_INET_GetPort(GAddress *address)
  * -------------------------------------------------------------------------
  */
 
+#ifndef __VISAGECPP__
 GSocketError _GAddress_Init_UNIX(GAddress *address)
 {
   address->m_len  = sizeof(struct sockaddr_un);
@@ -1729,6 +1794,6 @@ GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf)
 
   return GSOCK_NOERROR;
 }
-
+#endif  /* !defined(__VISAGECPP__) */
 #endif  /* wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__) */
 
