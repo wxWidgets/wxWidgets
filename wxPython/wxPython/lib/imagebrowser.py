@@ -4,10 +4,18 @@
 #
 # Author:       Lorne White
 #
-# Version:      0.9
-# Date:         August 15, 2001
+# Version:      1.0
+# Date:         January 29, 2002
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
+
+# 1.0 Release
+# Create list of all available image file types
+# View "All Image" File Types as default filter
+# Sort the file list
+# Use newer "re" function for patterns
+ 
+#---------------------------------------------------------------------------
 
 import os, sys, string
 from wxPython.wx import *
@@ -30,8 +38,14 @@ def ConvertBMP(file_nm):
         image = wxImage(file_nm, wxBITMAP_TYPE_PNG)
     elif ext == 'jpg':
         image = wxImage(file_nm, wxBITMAP_TYPE_JPEG)
+    elif ext == 'pcx':
+        image = wxImage(file_nm, wxBITMAP_TYPE_PCX)
+    elif ext == 'tif':
+        image = wxImage(file_nm, wxBITMAP_TYPE_TIF)
+    elif ext == 'pnm':
+        image = wxImage(file_nm, wxBITMAP_TYPE_PNM)
     else:
-        image = None
+        image = wxImage(file_nm, wxBITMAP_TYPE_ANY)
 
     return image
 
@@ -155,10 +169,12 @@ class ImageDialog(wxDialog):
         image_sizex = 150
         image_sizey = self.list_height
 
-        self.fl_types = ["Bmp", "Gif", "Png", "Jpg"]
-        self.fl_ext_types = { "Bmp": "*.bmp", "Gif": "*.gif", "Png": "*.png", "Jpg": "*.jpg" }
+        self.fl_types = ["All Images", "Bmp", "Gif", "Png", "Jpg", "Ico", "Pnm", "Pcx", "Tif", "All Files"]
+        self.fl_ext_types = { "All Images": "All", "Bmp": "*.bmp", "Gif": "*.gif", "Png": "*.png", "Jpg": "*.jpg", 
+                        "Ico": "*.ico", "Pnm": "*.pnm", "Pcx": "*.pcx", "Tif": "*.tif", "All Files": "*.*" }
         
         self.set_type = self.fl_types[0]    # initial file filter setting
+        self.fl_ext = self.fl_ext_types[self.set_type]
         
         mID = NewId()
         self.sel_type = wxComboBox(self, mID, self.set_type, wxPoint(image_posx , self.type_posy), wxSize(150, -1), self.fl_types, wxCB_DROPDOWN)
@@ -181,8 +197,18 @@ class ImageDialog(wxDialog):
         self.ResetFiles()
 
     def GetFiles(self):     # get the file list using directory and extension values
-        self.fl_val = FindFiles(self, self.set_dir, self.fl_ext)
-        self.fl_list = self.fl_val.files
+        if self.fl_ext == "All":
+            all_files = []
+            for ftypes in self.fl_types[1:-1]:    # get list of all available image types
+                filter = self.fl_ext_types[ftypes]
+                self.fl_val = FindFiles(self, self.set_dir, filter)
+                all_files = all_files + self.fl_val.files   # add to list of files
+            self.fl_list = all_files
+        else:              
+            self.fl_val = FindFiles(self, self.set_dir, self.fl_ext)
+            self.fl_list = self.fl_val.files
+
+        self.fl_list.sort()     # sort the file list
 
     def DisplayDir(self):       # display the working directory
         wxStaticText(self, -1, self.set_dir, wxPoint(self.dir_x, self.dir_y), wxSize(250, -1))
@@ -253,7 +279,7 @@ class FindFiles:
         self.dir = dir
         self.file = ""
         mask = string.upper(mask)
-        self.MakeRegex(mask)
+        pattern = self.MakeRegex(mask)
         for i in os.listdir(dir):
             if i == "." or i == "..":
                 continue			
@@ -261,13 +287,13 @@ class FindFiles:
             path = string.upper(path)
             value = string.upper(i)
 
-            if self.regex.match(value) == len(value):
+            if pattern.match(value) != None:
                 filelist.append(i)
 
 	    self.files = filelist
 
     def MakeRegex(self, pattern):
-        import regex
+        import re
         f = ""	# Set up a regex for file names
         for ch in pattern:
             if ch == "*":
@@ -279,7 +305,7 @@ class FindFiles:
             else:
                 f = f + ch
 
-        self.regex = regex.compile(f)
+        return re.compile(f)
 
     def StripExt(self, file_nm):
         fl_fld = os.path.splitext(file_nm)
