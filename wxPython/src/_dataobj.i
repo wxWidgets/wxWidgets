@@ -48,13 +48,52 @@ enum wxDataFormatId
 };
 
 
+DocStr(wxDataFormat,
+"A wx.DataFormat is an encapsulation of a platform-specific format
+handle which is used by the system for the clipboard and drag and
+drop operations. The applications are usually only interested in,
+for example, pasting data from the clipboard only if the data is
+in a format the program understands.  A data format is is used to
+uniquely identify this format.
+
+On the system level, a data format is usually just a number
+(CLIPFORMAT under Windows or Atom under X11, for example).");
+
+// The standard format IDs are
+
+//     wx.DF_INVALID       An invalid format
+//     wx.DF_TEXT          Text format 
+//     wx.DF_BITMAP        A bitmap (wx.Bitmap)
+//     wx.DF_METAFILE      A metafile (wx.Metafile, Windows only)
+//     wx.DF_FILENAME      A list of filenames
+//     wx.DF_HTML          An HTML string. This is only valid on Windows and non-unicode builds
+
+// Aside the standard formats, the application may also use
+// custom formats which are identified by their names (strings)
+// and not numeric identifiers. Although internally custom format
+// must be created (or registered) first, you shouldn\'t care
+// about it because it is done automatically the first time the
+// wxDataFormat object corresponding to a given format name is
+// created. 
+
+// ");
+
 class wxDataFormat {
 public:
-    wxDataFormat( wxDataFormatId type );
-    %name(CustomDataFormat) wxDataFormat(const wxString& format);
+    DocCtorStr(
+        wxDataFormat( wxDataFormatId type ),
+        "Constructs a data format object for one of the standard data\n"
+        "formats or an empty data object (use SetType or SetId later in\n"
+        "this case)");
+
+    DocCtorStrName(
+        wxDataFormat(const wxString& format),
+        "Constructs a data format object for a custom format identified by its name.",
+        CustomDataFormat);
     
     ~wxDataFormat();    
 
+    
     %nokwargs operator==;
     %nokwargs operator!=;
     bool operator==(wxDataFormatId format) const;
@@ -62,11 +101,23 @@ public:
     bool operator==(const wxDataFormat& format) const;
     bool operator!=(const wxDataFormat& format) const;
 
-    void SetType(wxDataFormatId format);
-    wxDataFormatId GetType() const;
+    
+    DocDeclStr(
+        void , SetType(wxDataFormatId format),
+        "Sets the format to the given value, which should be one of wx.DF_XXX constants.");
+    
+    DocDeclStr(
+        wxDataFormatId , GetType() const,
+        "Returns the platform-specific number identifying the format.");
+    
 
-    wxString GetId() const;
-    void SetId(const wxString& format);
+    DocDeclStr(
+        wxString , GetId() const,
+        "Returns the name of a custom format (this function will fail for a standard format).");
+    
+    DocDeclStr(
+        void , SetId(const wxString& format),
+        "Sets the format to be the custom format identified by the given name.");    
 };
 
 
