@@ -534,7 +534,7 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
 
     // note that we can't just always call LoadImage() because it seems to do
     // some icon rescaling internally which results in very ugly 16x16 icons
-#if defined(__WIN32__) && !defined(__SC__)
+#if defined(__WIN32__) && (!defined(__SC__) || defined (__DIGITALMARS__) )
     if ( hasSize )
     {
         hicon = (HICON)::LoadImage(wxGetInstance(), name, IMAGE_ICON,

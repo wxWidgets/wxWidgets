@@ -35,7 +35,7 @@
     typedef _off_t off_t;
 #elif defined(__BORLANDC__) && defined(__WIN16__)
     typedef long off_t;
-#elif defined(__SC__)
+#elif (defined(__SC__) && !defined(__DIGITALMARS__))
     typedef long off_t;
 #elif defined(__MWERKS__) && !defined(__INTEL__)
     typedef long off_t;

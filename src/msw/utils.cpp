@@ -1022,7 +1022,7 @@ wxString wxGetOsDescription()
 
 int wxGetOsVersion(int *majorVsn, int *minorVsn)
 {
-#if defined(__WIN32__) && !defined(__SC__)
+#if defined(__WIN32__) && (!defined(__SC__) || defined(__DIGITALMARS__))
     static int ver = -1, major = -1, minor = -1;
 
     if ( ver == -1 )

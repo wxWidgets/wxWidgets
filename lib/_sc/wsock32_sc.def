@@ -30,3 +30,7 @@ EXPORTS
     _shutdown@8 = shutdown
     _closesocket@4 = closesocket
     _WSAAsyncSelect@16 = WSAAsyncSelect
+
+    _setsockopt@20 = setsockopt
+
+

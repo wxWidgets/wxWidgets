@@ -302,7 +302,7 @@
    This macro can be used to check that the version of mingw32 compiler is
    at least maj.min
  */
-#if defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || defined( __CYGWIN__ ) || defined(__DIGITALMARS__)
+#if defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || defined( __CYGWIN__ ) 
     #include "wx/msw/gccpriv.h"
 #else
     #undef wxCHECK_W32API_VERSION
