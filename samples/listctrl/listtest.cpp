@@ -46,6 +46,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_DESELECT_ALL, MyFrame::OnDeselectAll)
     EVT_MENU(LIST_SELECT_ALL, MyFrame::OnSelectAll)
     EVT_MENU(LIST_DELETE_ALL, MyFrame::OnDeleteAll)
+    EVT_MENU(LIST_SORT, MyFrame::OnSort)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
@@ -64,6 +65,12 @@ BEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
 END_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
+
+int wxCALLBACK MyCompareFunction(long item1, long item2, long sortData)
+{
+    // inverse the order
+    return item1 < item2;
+}
 
 // `Main program' equivalent, creating windows and returning main app frame
 bool MyApp::OnInit(void)
@@ -133,6 +140,8 @@ bool MyApp::OnInit(void)
   file_menu->Append(LIST_SMALL_ICON_TEXT_VIEW,     "Small icon &view with text");
   file_menu->Append(LIST_DESELECT_ALL, "&Deselect All");
   file_menu->Append(LIST_SELECT_ALL, "S&elect All");
+  file_menu->AppendSeparator();
+  file_menu->Append(LIST_SORT, "&Sort\tCtrl-S");
   file_menu->AppendSeparator();
   file_menu->Append(LIST_DELETE_ALL, "Delete &all items");
   file_menu->AppendSeparator();
@@ -265,11 +274,12 @@ void MyFrame::OnReportView(wxCommandEvent& WXUNUSED(event))
     m_listCtrl->InsertColumn(1, "Column 2"); // , wxLIST_FORMAT_LEFT, 140);
     m_listCtrl->InsertColumn(2, "One More Column (2)"); // , wxLIST_FORMAT_LEFT, 140);
 
-    for ( int i = 0; i < 3000; i++ )
+    for ( int i = 0; i < 300; i++ )
     {
         wxChar buf[50];
         wxSprintf(buf, _T("This is item %d"), i);
         long tmp = m_listCtrl->InsertItem(i, buf, 0);
+        m_listCtrl->SetItemData(tmp, i);
 
         wxSprintf(buf, _T("Col 1, item %d"), i);
         tmp = m_listCtrl->SetItem(i, 1, buf);
@@ -339,6 +349,11 @@ void MyFrame::OnSmallIconTextView(wxCommandEvent& WXUNUSED(event))
     {
         m_listCtrl->InsertItem(i, "Label", 0);
     }
+}
+
+void MyFrame::OnSort(wxCommandEvent& WXUNUSED(event))
+{
+    m_listCtrl->SortItems(MyCompareFunction, 0);
 }
 
 void MyFrame::OnDeleteAll(wxCommandEvent& WXUNUSED(event))

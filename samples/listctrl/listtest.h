@@ -11,8 +11,9 @@
 
 // Define a new application type
 class MyApp: public wxApp
-{ public:
-    bool OnInit();
+{
+public:
+    virtual bool OnInit();
 
     wxImageList *m_imageListNormal;
     wxImageList *m_imageListSmall;
@@ -26,7 +27,7 @@ public:
         wxListCtrl(parent, id, pos, size, style)
         {
         }
-	
+
     void OnColClick(wxListEvent& event);
     void OnBeginDrag(wxListEvent& event);
     void OnBeginRDrag(wxListEvent& event);
@@ -67,6 +68,7 @@ public:
     void OnDeselectAll(wxCommandEvent& event);
     void OnSelectAll(wxCommandEvent& event);
     void OnDeleteAll(wxCommandEvent& event);
+    void OnSort(wxCommandEvent& event);
 
     void BusyOn(wxCommandEvent& event);
     void BusyOff(wxCommandEvent& event);
@@ -76,20 +78,23 @@ public:
 
 
 // ID for the menu quit command
-#define LIST_QUIT                   1
-#define LIST_LIST_VIEW              2
-#define LIST_ICON_VIEW              3
-#define LIST_ICON_TEXT_VIEW         4
-#define LIST_SMALL_ICON_VIEW        5
-#define LIST_SMALL_ICON_TEXT_VIEW   6
-#define LIST_REPORT_VIEW            7
-#define LIST_DESELECT_ALL           8
-#define LIST_SELECT_ALL             9
-#define LIST_ABOUT                  102
-#define BUSY_ON                     10
-#define BUSY_OFF                    11
-#define LIST_DELETE_ALL             12
+enum
+{
+    LIST_QUIT                   = 1,
+    LIST_LIST_VIEW              = 2,
+    LIST_ICON_VIEW              = 3,
+    LIST_ICON_TEXT_VIEW         = 4,
+    LIST_SMALL_ICON_VIEW        = 5,
+    LIST_SMALL_ICON_TEXT_VIEW   = 6,
+    LIST_REPORT_VIEW            = 7,
+    LIST_DESELECT_ALL           = 8,
+    LIST_SELECT_ALL             = 9,
+    LIST_ABOUT                  = 102,
+    BUSY_ON                     = 10,
+    BUSY_OFF                    = 11,
+    LIST_DELETE_ALL             = 12,
+    LIST_SORT,
 
-#define LIST_CTRL                   1000
-
+    LIST_CTRL                   = 1000
+};
 
