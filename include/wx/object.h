@@ -190,15 +190,20 @@ class WXDLLEXPORT wxObject
 #if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING
   void * operator new (size_t size, char * fileName = NULL, int lineNum = 0);
   void operator delete (void * buf);
-  
+
 // VC++ 6.0
 #if _MSC_VER >= 1200
   void operator delete(void *buf, char*, int);
 #endif
 
   // Cause problems for VC++
-#ifndef _MSC_VER
+#ifndef _MSC_VER 
   void * operator new[] (size_t size, char * fileName = NULL, int lineNum = 0);
+  void operator delete[] (void * buf);
+#endif
+
+#ifdef __MWERKS__
+  void * operator new[] (size_t size, char * fileName  , int lineNum = 0);
   void operator delete[] (void * buf);
 #endif
 
