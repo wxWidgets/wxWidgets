@@ -71,7 +71,7 @@ static wxUint16* LINKAGEMODE GetEncTable(wxFontEncoding enc)
     	    char s[2] ;
     	    s[1] = 0 ;
     	    ByteCount byteInLen, byteOutLen ;
-    	    for( char c = 255 ; c >= 128 ; --c )
+    	    for( unsigned char c = 255 ; c >= 128 ; --c )
     	    {
     	        s[0] = c ;
                 status = TECConvertText(converter, (ConstTextPtr) &s , 1, &byteInLen,
