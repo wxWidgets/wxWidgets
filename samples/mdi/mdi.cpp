@@ -33,15 +33,17 @@
 
 #if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__)
     #include "mondrian.xpm"
-    #include "bitmaps/new.xpm"
-    #include "bitmaps/open.xpm"
-    #include "bitmaps/save.xpm"
-    #include "bitmaps/copy.xpm"
-    #include "bitmaps/cut.xpm"
-    #include "bitmaps/paste.xpm"
-    #include "bitmaps/print.xpm"
-    #include "bitmaps/help.xpm"
 #endif
+
+#include "bitmaps/new.xpm"
+#include "bitmaps/open.xpm"
+#include "bitmaps/save.xpm"
+#include "bitmaps/copy.xpm"
+#include "bitmaps/cut.xpm"
+#include "bitmaps/paste.xpm"
+#include "bitmaps/print.xpm"
+#include "bitmaps/help.xpm"
+
 
 #include "mdi.h"
 
@@ -286,16 +288,6 @@ void MyFrame::InitToolBar(wxToolBar* toolBar)
 {
     wxBitmap* bitmaps[8];
 
-#ifdef __WXMSW__
-    bitmaps[0] = new wxBitmap("icon1", wxBITMAP_TYPE_RESOURCE);
-    bitmaps[1] = new wxBitmap("icon2", wxBITMAP_TYPE_RESOURCE);
-    bitmaps[2] = new wxBitmap("icon3", wxBITMAP_TYPE_RESOURCE);
-    bitmaps[3] = new wxBitmap("icon4", wxBITMAP_TYPE_RESOURCE);
-    bitmaps[4] = new wxBitmap("icon5", wxBITMAP_TYPE_RESOURCE);
-    bitmaps[5] = new wxBitmap("icon6", wxBITMAP_TYPE_RESOURCE);
-    bitmaps[6] = new wxBitmap("icon7", wxBITMAP_TYPE_RESOURCE);
-    bitmaps[7] = new wxBitmap("icon8", wxBITMAP_TYPE_RESOURCE);
-#else
     bitmaps[0] = new wxBitmap( new_xpm );
     bitmaps[1] = new wxBitmap( open_xpm );
     bitmaps[2] = new wxBitmap( save_xpm );
@@ -304,13 +296,8 @@ void MyFrame::InitToolBar(wxToolBar* toolBar)
     bitmaps[5] = new wxBitmap( paste_xpm );
     bitmaps[6] = new wxBitmap( print_xpm );
     bitmaps[7] = new wxBitmap( help_xpm );
-#endif
 
-#ifdef __WXMSW__
     int width = 24;
-#else
-    int width = 16;
-#endif
     int currentX = 5;
 
     toolBar->AddTool( MDI_NEW_WINDOW, *(bitmaps[0]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "New file");
