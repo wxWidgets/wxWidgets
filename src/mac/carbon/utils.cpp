@@ -503,3 +503,27 @@ wxString wxGetOsDescription()
 #endif
 }
 
+#if TARGET_CARBON
+// converts this string into a carbon foundation string with optional pc 2 mac encoding
+void wxMacCFStringHolder::Assign( const wxString &str ) 
+{
+    m_cfs = CFStringCreateWithCString( kCFAllocatorSystemDefault , str.c_str() ,
+        wxApp::s_macDefaultEncodingIsPC ? 
+        kCFStringEncodingWindowsLatin1 : CFStringGetSystemEncoding() ) ;
+    m_release = true ;
+}
+
+wxString wxMacCFStringHolder::AsString() 
+{
+    wxString result ;
+    Size len = CFStringGetLength( m_cfs )  ;
+    wxChar* buf = result.GetWriteBuf( len ) ;
+
+    CFStringGetCString( m_cfs , buf , len+1 , wxApp::s_macDefaultEncodingIsPC ? 
+        kCFStringEncodingWindowsLatin1 : CFStringGetSystemEncoding() ) ;
+
+    buf[len] = 0 ;
+    result.UngetWriteBuf() ;
+    return result ;
+}
+#endif
