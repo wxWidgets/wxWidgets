@@ -51,6 +51,7 @@ class MainWindow: public wxFrame
 public:
     MyCanvas *canvas;
     MainWindow(wxFrame *frame, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style);
+    ~MainWindow();
 
     void OnCloseWindow(wxCloseEvent& event);
     void OnChar(wxKeyEvent& event);
@@ -89,6 +90,9 @@ private:
     wxFont *m_normalFont;
     wxFont *m_boldFont;
     wxFont *m_italicFont;
+
+    // Icons
+    wxIcon *m_corners[4];
 
     DECLARE_EVENT_TABLE()
 };

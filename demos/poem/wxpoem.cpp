@@ -31,13 +31,11 @@
 
 #include "wxpoem.h"
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXX11__)
 #include "corner1.xpm"
 #include "corner2.xpm"
 #include "corner3.xpm"
 #include "corner4.xpm"
 #include "wxpoem.xpm"
-#endif
 
 #define         buf_size 10000
 #define         DEFAULT_POETRY_DAT "wxpoem"
@@ -82,16 +80,6 @@ static bool     index_ok = false;               // Index loaded ok
 static bool     paging = false;                 // Are we paging?
 static int      current_page = 0;               // Currently viewed page
 
-wxIcon          *Corner1 = NULL;
-wxIcon          *Corner2 = NULL;
-wxIcon          *Corner3 = NULL;
-wxIcon          *Corner4 = NULL;
-
-// Pens
-wxPen           *GreyPen = NULL;
-wxPen           *DarkGreyPen = NULL;
-wxPen           *WhitePen = NULL;
-
 // Backing bitmap
 wxBitmap        *backingBitmap = NULL;
 
@@ -135,8 +123,28 @@ MainWindow::MainWindow(wxFrame *frame, wxWindowID id, const wxString& title,
      const wxPoint& pos, const wxSize& size, long style):
      wxFrame(frame, id, title, pos, size, style)
 {
+    m_corners[0] = m_corners[1] = m_corners[2] = m_corners[3] = NULL;
+
     ReadPreferences();
     CreateFonts();
+
+    SetIcon(wxpoem_xpm);
+
+    m_corners[0] = new wxIcon( corner1_xpm );
+    m_corners[1] = new wxIcon( corner2_xpm );
+    m_corners[2] = new wxIcon( corner3_xpm );
+    m_corners[3] = new wxIcon( corner4_xpm );
+}
+
+MainWindow::~MainWindow()
+{
+    for (int i=0;i<4;i++)
+    {
+        if(m_corners[i])
+        {
+            delete m_corners[i];
+        }
+    }
 }
 
 // Read the poetry buffer, either for finding the size
@@ -167,7 +175,7 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
     if (DrawIt && wxColourDisplay())
     {
         dc->SetBrush(*wxLIGHT_GREY_BRUSH);
-        dc->SetPen(*GreyPen);
+        dc->SetPen(*wxGREY_PEN);
         dc->DrawRectangle(0, 0, width, height);
         dc->SetBackgroundMode(wxTRANSPARENT);
     }
@@ -378,9 +386,9 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
         // Right and bottom white lines - 'grey' (black!) if
         // we're running on a mono display.
         if (wxColourDisplay())
-            dc->SetPen(*WhitePen);
+            dc->SetPen(*wxWHITE_PEN);
         else
-            dc->SetPen(*DarkGreyPen);
+            dc->SetPen(*wxBLACK_PEN);
 
         dc->DrawLine(width-THICK_LINE_BORDER, THICK_LINE_BORDER,
                      width-THICK_LINE_BORDER, height-THICK_LINE_BORDER);
@@ -388,20 +396,20 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
                      THICK_LINE_BORDER, height-THICK_LINE_BORDER);
 
         // Left and top grey lines
-        dc->SetPen(*DarkGreyPen);
+        dc->SetPen(*wxBLACK_PEN);
         dc->DrawLine(THICK_LINE_BORDER, height-THICK_LINE_BORDER,
                      THICK_LINE_BORDER, THICK_LINE_BORDER);
         dc->DrawLine(THICK_LINE_BORDER, THICK_LINE_BORDER,
                      width-THICK_LINE_BORDER, THICK_LINE_BORDER);
 
         // Draw icons
-        dc->DrawIcon(* Corner1, 0, 0);
-        dc->DrawIcon(* Corner2, int(width-32), 0);
+        dc->DrawIcon(* m_corners[0], 0, 0);
+        dc->DrawIcon(* m_corners[1], int(width-32), 0);
 
         int y2 = height - 32;
         int x2 = (width-32);
-        dc->DrawIcon(* Corner3, 0, y2);
-        dc->DrawIcon(* Corner4, x2, y2);
+        dc->DrawIcon(* m_corners[2], 0, y2);
+        dc->DrawIcon(* m_corners[3], x2, y2);
     }
 }
 
@@ -513,91 +521,64 @@ void MainWindow::Search(bool ask)
 
 bool MyApp::OnInit()
 {
-  poem_buffer = new wxChar[buf_size];
+    poem_buffer = new wxChar[buf_size];
 
-  GreyPen = new wxPen(_T("LIGHT GREY"), THICK_LINE_WIDTH, wxSOLID);
-  DarkGreyPen = new wxPen(_T("GREY"), THICK_LINE_WIDTH, wxSOLID);
-  WhitePen = new wxPen(_T("WHITE"), THICK_LINE_WIDTH, wxSOLID);
-
-  // Seed the random number generator
+    // Seed the random number generator
 #ifdef __WXWINCE__
-  srand((unsigned) CeGetRandomSeed());
+    srand((unsigned) CeGetRandomSeed());
 #else
-  time_t current_time;
+    time_t current_time;
 
-  (void)time(&current_time);
-  srand((unsigned int)current_time);
+    (void)time(&current_time);
+    srand((unsigned int)current_time);
 #endif
 
 //    randomize();
-  pages[0] = 0;
+    pages[0] = 0;
 
-  TheMainWindow = new MainWindow(NULL,
-                                 wxID_ANY,
-                                 _T("wxPoem"),
-                                 wxPoint(XPos, YPos),
-                                 wxDefaultSize,
-                                 wxCAPTION|wxMINIMIZE_BOX|wxSYSTEM_MENU|wxCLOSE_BOX|wxFULL_REPAINT_ON_RESIZE
-                                 );
+    TheMainWindow = new MainWindow(NULL,
+                                   wxID_ANY,
+                                   _T("wxPoem"),
+                                   wxPoint(XPos, YPos),
+                                   wxDefaultSize,
+                                   wxCAPTION|wxMINIMIZE_BOX|wxSYSTEM_MENU|wxCLOSE_BOX|wxFULL_REPAINT_ON_RESIZE
+                                   );
 
-  TheMainWindow->SetIcon(wxICON(wxpoem));
+    TheMainWindow->canvas = new MyCanvas(TheMainWindow);
 
-  TheMainWindow->canvas = new MyCanvas(TheMainWindow);
+    if (argc > 1)
+    {
+        index_filename = wxStrcpy(new wxChar[wxStrlen(argv[1]) + 1], argv[1]);
+        data_filename = wxStrcpy(new wxChar[wxStrlen(argv[1]) + 1], argv[1]);
+    }
+    else
+    {
+        index_filename = _T(DEFAULT_POETRY_IND);
+        data_filename = _T(DEFAULT_POETRY_DAT);
+    }
+    TryLoadIndex();
 
-  if (argc > 1)
-  {
-    index_filename = wxStrcpy(new wxChar[wxStrlen(argv[1]) + 1], argv[1]);
-    data_filename = wxStrcpy(new wxChar[wxStrlen(argv[1]) + 1], argv[1]);
-  }
-  else
-  {
-    index_filename = _T(DEFAULT_POETRY_IND);
-    data_filename = _T(DEFAULT_POETRY_DAT);
-  }
-  TryLoadIndex();
+    TheMainWindow->GetIndexLoadPoem();
+    TheMainWindow->Resize();
+    TheMainWindow->Show(true);
 
-#ifdef __WXMSW__
-  Corner1 = new wxIcon(_T("icon_1"));
-  Corner2 = new wxIcon(_T("icon_2"));
-  Corner3 = new wxIcon(_T("icon_3"));
-  Corner4 = new wxIcon(_T("icon_4"));
-#endif
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXX11__)
-  Corner1 = new wxIcon( corner1_xpm );
-  Corner2 = new wxIcon( corner2_xpm );
-  Corner3 = new wxIcon( corner3_xpm );
-  Corner4 = new wxIcon( corner4_xpm );
-#endif
-
-  TheMainWindow->GetIndexLoadPoem();
-  TheMainWindow->Resize();
-  TheMainWindow->Show(true);
-
-  return true;
+    return true;
 }
 
 int MyApp::OnExit()
 {
-  if (backingBitmap)
-    delete backingBitmap;
-  delete GreyPen;
-  delete DarkGreyPen;
-  delete WhitePen;
+    if (backingBitmap)
+        delete backingBitmap;
 
-  delete Corner1;
-  delete Corner2;
-  delete Corner3;
-  delete Corner4;
+    delete[] poem_buffer;
 
-  delete[] poem_buffer;
-
-  return 0;
+    return 0;
 }
 
 void MainWindow::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
-  WritePreferences();
-  this->Destroy();
+    WritePreferences();
+    this->Destroy();
 }
 
 void MainWindow::OnChar(wxKeyEvent& event)
@@ -866,14 +847,14 @@ long MainWindow::DoSearch(void)
         return false;
 
     FILE *file;
-    long i = 0;
+    size_t i = 0;
     int ch = 0;
     wxChar buf[100];
     long find_start;
     long previous_poem_start;
 
     bool found = false;
-    int search_length = m_searchString.length();
+    size_t search_length = m_searchString.length();
 
     if (same_search)
     {
