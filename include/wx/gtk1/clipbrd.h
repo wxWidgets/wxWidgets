@@ -69,18 +69,19 @@ public:
     // clears wxTheClipboard and the system's clipboard if possible
     virtual void Clear();
 
+    // flushes the clipboard: not available under GTK
+    virtual bool Flush() { return FALSE; }
+    
     /// If primary == TRUE, use primary selection in all further ops,
     /// primary=FALSE resets it.
     inline void UsePrimarySelection(bool primary = TRUE) { m_usePrimary = primary; }
     
-    // implementation
-
+  // implementation
     bool              m_open;
-
     bool              m_ownsClipboard;
     bool              m_ownsPrimarySelection;
+    wxDataObject     *m_data;
 
-    wxDataBroker     *m_dataBroker;
     GtkWidget        *m_clipboardWidget;  /* for getting and offering data */
     GtkWidget        *m_targetsWidget;    /* for getting list of supported formats */
     bool              m_waiting;          /* querying data or formats is asynchronous */

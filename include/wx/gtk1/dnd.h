@@ -119,27 +119,20 @@ public:
 // wxPrivateDropTarget
 //-------------------------------------------------------------------------
 
+/*
 class wxPrivateDropTarget: public wxDropTarget
 {
 public:
 
-  /* sets id to "application/myprogram" where "myprogram" is the
-     same as wxApp->GetAppName() */
   wxPrivateDropTarget();
-  /* see SetId() below for explanation */
   wxPrivateDropTarget( const wxString &id );
 
   virtual bool OnMove( long x, long y );
   virtual bool OnDrop( long x, long y );
   virtual bool OnData( long x, long y );
 
-  /* you have to override OnDropData to get at the data */
   virtual bool OnDropData( long x, long y, void *data, size_t size ) = 0;
 
-  /* the string ID identifies the format of clipboard or DnD data. a word
-     processor would e.g. add a wxTextDataObject and a wxPrivateDataObject
-     to the clipboard - the latter with the Id "application/wxword" or
-     "image/png". */
   void SetId( const wxString& id ) { m_id = id; }
   wxString GetId() { return m_id; }
 
@@ -147,6 +140,7 @@ private:
 
     wxString   m_id;
 };
+*/
 
 //----------------------------------------------------------------------------
 // A drop target which accepts files (dragged from File Manager or Explorer)
@@ -162,9 +156,7 @@ public:
   virtual bool OnDrop( long x, long y );
   virtual bool OnData( long x, long y );
 
-  /* you have to override OnDropFiles to get at the file names */
   virtual bool OnDropFiles( long x, long y, size_t nFiles, const wxChar * const aszFiles[] ) = 0;
-
 };
 
 //-------------------------------------------------------------------------
@@ -187,22 +179,10 @@ public:
   /* constructor. set data later with SetData() */
   wxDropSource( wxWindow *win, const wxIcon &go = wxNullIcon, const wxIcon &stop = wxNullIcon );
 
-  /* constructor for setting one data object */
   wxDropSource( wxDataObject& data, wxWindow *win, const wxIcon &go = wxNullIcon, const wxIcon &stop = wxNullIcon );
-
-  /* constructor for setting several data objects via wxDataBroker */
-  wxDropSource( wxDataBroker *data, wxWindow *win );
-
   ~wxDropSource();
 
-  /* set several dataobjects via wxDataBroker */
-  void SetData( wxDataBroker *data );
-
-  /* set one dataobject */
   void SetData( wxDataObject& data );
-
-  // this one isn't portable to wxMSW -- deprecated
-  void SetData( wxDataObject *data );
 
   /* start drag action */
   wxDragResult DoDragDrop( bool bAllowMove = FALSE );
@@ -218,7 +198,7 @@ public:
     GtkWidget     *m_widget;
     wxWindow      *m_window;
     wxDragResult   m_retValue;
-    wxDataBroker  *m_data;
+    wxDataObject  *m_data;
 
     wxCursor      m_defaultCursor;
     wxCursor      m_goaheadCursor;

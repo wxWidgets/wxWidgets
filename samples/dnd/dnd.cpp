@@ -181,7 +181,7 @@ public:
     // to implement in derived classes
     virtual Kind GetKind() const = 0;
 
-    virtual void Draw(wxDC& dc) = 0
+    virtual void Draw(wxDC& dc)
     {
         dc.SetPen(wxPen(m_col, 1, wxSOLID));
     }
@@ -228,7 +228,9 @@ public:
         dc.DrawLine(p2, p3);
         dc.DrawLine(p3, p1);
 
+#ifdef __WXMSW__
         dc.FloodFill(GetCentre(), m_col, wxFLOOD_BORDER);
+#endif
     }
 };
 
@@ -257,7 +259,9 @@ public:
         dc.DrawLine(p3, p4);
         dc.DrawLine(p4, p1);
 
+#ifdef __WXMSW__
         dc.FloodFill(GetCentre(), m_col, wxFLOOD_BORDER);
+#endif
     }
 };
 
@@ -278,7 +282,9 @@ public:
 
         dc.DrawEllipse(m_pos, m_size);
 
+#ifdef __WXMSW__
         dc.FloodFill(GetCentre(), m_col, wxFLOOD_BORDER);
+#endif
     }
 };
 
@@ -654,9 +660,11 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
                                  wxTE_MULTILINE | wxTE_READONLY |
                                  wxSUNKEN_BORDER );
 
+#ifdef __WXMSW__
     // redirect log messages to the text window and switch on OLE messages
     // logging
     wxLog::AddTraceMask(wxTRACE_OleCalls);
+#endif
     m_pLog = new wxLogTextCtrl(m_ctrlLog);
     m_pLogPrev = wxLog::SetActiveTarget(m_pLog);
 

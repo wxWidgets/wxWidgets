@@ -251,6 +251,7 @@ public:
 
     virtual wxCoord GetCharHeight() const = 0;
     virtual wxCoord GetCharWidth() const = 0;
+    
     void GetTextExtent(const wxString& string,
                        wxCoord *x, wxCoord *y,
                        wxCoord *descent = NULL,
@@ -440,6 +441,15 @@ public:
             *x = x2;
         if ( y )
             *y = y2;
+    }
+    void GetClippingBox(long *x, long *y, long *w, long *h) const
+    { 
+	wxCoord xx,yy,ww,hh;
+	DoGetClippingBox(&xx, &yy, &ww, &hh);
+	if (x) *x = xx;
+	if (y) *y = yy;
+	if (w) *w = ww;
+	if (h) *h = hh;
     }
 #endif // !Win16
 

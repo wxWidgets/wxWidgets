@@ -32,123 +32,111 @@ class wxPrivateDataObject;
 class wxFileDataObject;
 
 //-------------------------------------------------------------------------
-// wxDataFormat (internal)
+// wxDataFormat
 //-------------------------------------------------------------------------
 
-class wxDataFormat : public wxObject
+class wxDataFormat
 {
 public:
+    // the clipboard formats under GDK are GdkAtoms
+    typedef GdkAtom NativeFormat;
+    
     wxDataFormat();
     wxDataFormat( wxDataFormatId type );
     wxDataFormat( const wxString &id );
     wxDataFormat( const wxChar *id );
-    wxDataFormat( const wxDataFormat &format );
-    wxDataFormat( const GdkAtom atom );
+    wxDataFormat( NativeFormat format );
 
-    void SetType( wxDataFormatId type );
-    wxDataFormatId GetType() const;
+    wxDataFormat& operator=(NativeFormat format)
+        { SetId(format); return *this; }
+    wxDataFormat& operator=(const wxDataFormat& format)
+        { SetId(format); return *this; }
 
-    /* the string Id identifies the format of clipboard or DnD data. a word
-     * processor would e.g. add a wxTextDataObject and a wxPrivateDataObject
-     * to the clipboard - the latter with the Id "application/wxword", an
-     * image manipulation program would put a wxBitmapDataObject and a
-     * wxPrivateDataObject to the clipboard - the latter with "image/png". */
+    // comparison (must have both versions)
+    bool operator==(wxDataFormatId type) const
+        { return m_type == (wxDataFormatId)type; }
+    bool operator!=(wxDataFormatId type) const
+        { return m_type != (wxDataFormatId)type; }
+    bool operator==(NativeFormat format) const
+        { return m_format == (NativeFormat)format; }
+    bool operator!=(NativeFormat format) const
+        { return m_format != (NativeFormat)format; }
+    bool operator==(const wxDataFormat& format) const
+        { return m_format == format.m_format; }
+    bool operator!=(const wxDataFormat& format) const
+        { return m_format != format.m_format; }
 
+    // explicit and implicit conversions to NativeFormat which is one of
+    // standard data types (implicit conversion is useful for preserving the
+    // compatibility with old code)
+    NativeFormat GetFormatId() const { return m_format; }
+    operator NativeFormat() const { return m_format; }
+    
+    // this only works with standard ids
+    void SetId( wxDataFormatId type );
+
+    // this only works with standard ids
+    void SetId( NativeFormat format );
+
+    // string ids are used for custom types - this SetId() must be used for
+    // application-specific formats
     wxString GetId() const;
     void SetId( const wxChar *id );
 
-    GdkAtom GetAtom();
-    void SetAtom(GdkAtom atom) { m_hasAtom = TRUE; m_atom = atom; }
-
-    // implicit conversion to wxDataFormatId
-    operator wxDataFormatId() const { return m_type; }
-
-    bool operator==(wxDataFormatId type) const { return m_type == type; }
-    bool operator!=(wxDataFormatId type) const { return m_type != type; }
+    // implementation
+    wxDataFormatId GetType() const;
 
 private:
-    wxDataFormatId  m_type;
-    wxString    m_id;
-    bool        m_hasAtom;
-    GdkAtom     m_atom;
+    wxDataFormatId   m_type;
+    NativeFormat     m_format;
     
     void PrepareFormats();
-
-private:
-    DECLARE_CLASS( wxDataFormat )
-};
-
-//-------------------------------------------------------------------------
-// wxDataBroker (internal)
-//-------------------------------------------------------------------------
-
-class wxDataBroker : public wxObject
-{
-public:
-    /* constructor */
-    wxDataBroker();
-
-    /* add data object */
-    void Add( wxDataObject *dataObject, bool preferred = FALSE );
-
-private:
-    /* OLE implementation, the methods don't need to be overridden */
-
-    /* get number of supported formats */
-    virtual size_t GetFormatCount() const;
-
-    /* return nth supported format */
-    virtual wxDataFormat &GetNthFormat( size_t nth ) const;
-
-    /* return preferrd/best supported format */
-    virtual wxDataFormatId GetPreferredFormat() const;
-
-    /* search through m_dataObjects, return TRUE if found */
-    virtual bool IsSupportedFormat( wxDataFormat &format ) const;
-
-    /* search through m_dataObjects and call child's GetSize() */
-    virtual size_t GetSize( wxDataFormat& format ) const;
-
-    /* search through m_dataObjects and call child's WriteData(dest) */
-    virtual void WriteData( wxDataFormat& format, void *dest ) const;
-
-public:
-    /* implementation */
-    wxList    m_dataObjects;
-    size_t    m_preferred;
-  
-private:
-    DECLARE_CLASS( wxDataBroker )
+    void SetType( wxDataFormatId type );
 };
 
 //----------------------------------------------------------------------------
-// wxDataObject to be placed in wxDataBroker
+// wxDataObject
 //----------------------------------------------------------------------------
 
 class wxDataObject : public wxObject
 {
 public:
-    /* constructor */
     wxDataObject();
-
-    /* destructor */
     ~wxDataObject();
-
-    /* write data to dest */
-    virtual void WriteData( void *dest ) const = 0;
-
-    /* get size of data */
-    virtual size_t GetSize() const = 0;
-
-public:
-    /* implementation */
-    wxDataFormat m_format;
     
-    wxDataFormat &GetFormat();
+    virtual wxDataFormat GetPreferredFormat() const = 0;
+    
+        // get the number of formats we support: it is understood that if we
+        // can accept data in some format, then we can render data in this
+        // format as well, but the contrary is not necessarily true. For the
+        // default value of the argument, all formats we support should be
+        // returned, but if outputOnlyToo == FALSE, then we should only return
+        // the formats which our SetData() understands
+    virtual size_t GetFormatCount(bool outputOnlyToo = TRUE) const
+        { return 1; }
+	
+        // return all formats in the provided array (of size GetFormatCount())
+    virtual void GetAllFormats(wxDataFormat *formats,
+                              bool outputOnlyToo = TRUE) const
+        { formats[0] = GetPreferredFormat(); }
+	
+        // get the (total) size of data for the given format
+    virtual size_t GetDataSize(const wxDataFormat& format) const = 0;
+    
+        // copy raw data (in the specified format) to provided pointer
+    virtual bool GetDataHere(const wxDataFormat& format, void *buf) const = 0;
+    
+        // get data from the buffer (in the given format)
+    virtual bool SetData(const wxDataFormat& format, const void *buf) = 0;
 
-    wxDataFormatId GetFormatType() const;
-    wxString   GetFormatId() const;
-    GdkAtom    GetFormatAtom() const;
+        // a simpler name which makes more sense for data objects supporting
+        // only one format
+    wxDataFormat GetFormat() const { return GetPreferredFormat(); }
+
+    // old interface
+        // decide if we support this format (can be either standard or custom
+        // format) -- now uses GetAllFormats()
+    virtual bool IsSupportedFormat(const wxDataFormat& format) const;
 
 private:
     DECLARE_DYNAMIC_CLASS( wxDataObject )
@@ -161,34 +149,27 @@ private:
 class wxTextDataObject : public wxDataObject
 {
 public:
-    /* default constructor. call SetText() later or override
-       WriteData() and GetSize() for working on-demand */
+    // ctors
     wxTextDataObject();
+    wxTextDataObject(const wxString& strText);
+    void Init(const wxString& strText) { m_strText = strText; }
 
-    /* constructor */
-    wxTextDataObject( const wxString& data );
+    virtual wxDataFormat GetPreferredFormat() const
+        { return wxDF_TEXT; }
+    virtual bool IsSupportedFormat(const wxDataFormat& format) const
+        { return format == wxDF_TEXT; }
+	
+    virtual size_t GetDataSize(const wxDataFormat& format) const;
+    virtual bool GetDataHere(const wxDataFormat& format, void *buf) const;
+    virtual bool SetData(const wxDataFormat& format, const void *buf);
 
-    /* set current text data */
-    void SetText( const wxString& data );
+    // additional helpers
+    void SetText(const wxString& strText) { m_strText = strText; }
+    wxString GetText() const { return m_strText; }
 
-    /* get current text data */
-    wxString GetText() const;
-
-    /* by default calls WriteString() with string set by constructor or
-       by SetText(). can be overridden for working on-demand */
-    virtual void WriteData( void *dest ) const;
-
-    /* by default, returns length of string as set by constructor or
-       by SetText(). can be overridden for working on-demand */
-    virtual size_t GetSize() const;
-
-    /* write string to dest */
-    void WriteString( const wxString &str, void *dest ) const;
-
-public:
-    /* implementation */
-    wxString  m_data;
-
+private:
+    wxString  m_strText;
+    
 private:
     DECLARE_DYNAMIC_CLASS( wxTextDataObject )
 };
@@ -200,24 +181,21 @@ private:
 class wxFileDataObject : public wxDataObject
 {
 public:
-    /* default constructor */
     wxFileDataObject();
-
-    /* add file name to list */
+    
     void AddFile( const wxString &file );
-
-    /* get all filename as one string. each file name is 0 terminated,
-       the list is double zero terminated */
     wxString GetFiles() const;
-
-    /* write list of filenames */
-    virtual void WriteData( void *dest ) const;
-
-    /* return length of list of filenames */
-    virtual size_t GetSize() const;
+    
+    virtual wxDataFormat GetPreferredFormat() const
+        { return wxDF_FILENAME; }
+    virtual bool IsSupportedFormat(const wxDataFormat& format) const
+        { return format == wxDF_FILENAME; }
+	
+    virtual size_t GetDataSize(const wxDataFormat& format) const;
+    virtual bool GetDataHere(const wxDataFormat& format, void *buf) const;
+    virtual bool SetData(const wxDataFormat& format, const void *buf);
 
 public:
-    /* implementation */
     wxString  m_files;
   
 private:
@@ -231,26 +209,38 @@ private:
 class wxBitmapDataObject : public wxDataObject
 {
 public:
-    /* see wxTextDataObject for explanation */
+    // ctors
     wxBitmapDataObject();
-    wxBitmapDataObject( const wxBitmap& bitmap );
+    wxBitmapDataObject(const wxBitmap& bitmap);
+
+    // destr
     ~wxBitmapDataObject();
-
-    void SetBitmap( const wxBitmap &bitmap );
-    wxBitmap GetBitmap() const;
-
-    virtual void WriteData( void *dest ) const;
-    virtual size_t GetSize() const;
-    void *GetData() const { return (void*)m_pngData; }
-
-    void WriteBitmap( const wxBitmap &bitmap, void *dest ) const;
     
-    void SetPngData( const char *pngData, size_t pngSize );
+    // set/get our bitmap
+    void SetBitmap(const wxBitmap& bitmap);
+    const wxBitmap GetBitmap() const { return m_bitmap; }
 
+    virtual wxDataFormat GetPreferredFormat() const
+        { return wxDF_BITMAP; }
+    virtual bool IsSupportedFormat(const wxDataFormat& format) const
+        { return format == wxDF_BITMAP; }
+	
+    virtual size_t GetDataSize(const wxDataFormat& format) const;
+    virtual bool GetDataHere(const wxDataFormat& format, void *buf) const;
+    
+    // sets PNG data
+    virtual bool SetData(const wxDataFormat& format, const void *buf);
+
+    // sets PNG data
+    virtual void SetPngData(const void *buf, size_t size);
+    
+    void *GetData() 
+        { return m_pngData; }
+    
 private: 
     wxBitmap    m_bitmap;
     size_t      m_pngSize;
-    char       *m_pngData;
+    void       *m_pngData;
   
     void DoConvertToPng();
  

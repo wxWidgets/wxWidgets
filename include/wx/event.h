@@ -605,8 +605,15 @@ public:
     bool Leaving() const { return (m_eventType == wxEVT_LEAVE_WINDOW); }
 
     // Find the position of the event
-    void GetPosition(long *xpos, long *ypos) const { *xpos = m_x; *ypos = m_y; }
-    void Position(long *xpos, long *ypos) const { *xpos = m_x; *ypos = m_y; }
+    void GetPosition(long *xpos, long *ypos) const 
+      { if (xpos) *xpos = m_x; 
+        if (ypos) *ypos = m_y; }
+    void GetPosition(int *xpos, int *ypos) const
+      { if (xpos) *xpos = m_x; 
+        if (ypos) *ypos = m_y; }
+    void Position(long *xpos, long *ypos) const 
+      { if (xpos) *xpos = m_x; 
+        if (ypos) *ypos = m_y; }
 
     // Find the position of the event
     wxPoint GetPosition() const { return wxPoint(m_x, m_y); }
@@ -668,7 +675,11 @@ public:
 
     // Find the position of the event
     void GetPosition(long *xpos, long *ypos) const
-        { *xpos = m_x; *ypos = m_y; }
+      { if (xpos) *xpos = m_x; 
+        if (ypos) *ypos = m_y; }
+    void GetPosition(int *xpos, int *ypos) const
+      { if (xpos) *xpos = m_x; 
+        if (ypos) *ypos = m_y; }
 
     wxPoint GetPosition() const
         { return wxPoint(m_x, m_y); }

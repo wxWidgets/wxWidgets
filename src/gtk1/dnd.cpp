@@ -380,7 +380,7 @@ bool wxDropTarget::RequestData( wxDataFormat format )
     /* this should trigger an "drag_data_received" event */
     gtk_drag_get_data( m_dragWidget,
                        m_dragContext,
-                       format.GetAtom(),
+                       format,
                        m_dragTime );
 
 #if wxUSE_THREADS
@@ -403,7 +403,7 @@ bool wxDropTarget::IsSupported( wxDataFormat format )
 //        char *name = gdk_atom_name( formatAtom );
 //        if (name) printf( "Format available: %s.\n", name );
 
-        if (formatAtom == format.GetAtom()) return TRUE;
+        if (formatAtom == format) return TRUE;
         child = child->next;
     }
 
@@ -414,7 +414,7 @@ bool wxDropTarget::GetData( wxDataObject *data_object )
 {
     if (!m_dragData) return FALSE;
 
-    if (m_dragData->target !=  data_object->GetFormat().GetAtom()) return FALSE;
+    if (m_dragData->target !=  data_object->GetFormat()) return FALSE;
 
     if (data_object->GetFormat().GetType() == wxDF_TEXT)
     {
@@ -521,6 +521,7 @@ bool wxTextDropTarget::OnData( long x, long y )
 // wxPrivateDropTarget
 //-------------------------------------------------------------------------
 
+/*
 wxPrivateDropTarget::wxPrivateDropTarget()
 {
     m_id = wxTheApp->GetAppName();
@@ -558,6 +559,7 @@ bool wxPrivateDropTarget::OnData( long x, long y )
 
     return TRUE;
 }
+*/
 
 //----------------------------------------------------------------------------
 // A drop target which accepts files (dragged from File Manager or Explorer)
@@ -584,7 +586,7 @@ bool wxFileDropTarget::OnData( long x, long y )
     wxFileDataObject data;
     if (!GetData( &data )) return FALSE;
 
-    /* get number of substrings /root/mytext.txt/0/root/myothertext.txt/0/0 */
+    // get number of substrings /root/mytext.txt/0/root/myothertext.txt/0/0
     size_t number = 0;
     size_t i;
     size_t size = data.GetFiles().Length();
@@ -630,51 +632,51 @@ source_drag_data_get  (GtkWidget          *WXUNUSED(widget),
 //    char *name = gdk_atom_name( selection_data->target );
 //    if (name) printf( "Format requested: %s.\n", name );
 
-    wxNode *node = drop_source->m_data->m_dataObjects.First();
-    while (node)
+    drop_source->m_retValue = wxDragCancel;
+    
+    wxDataObject *data = drop_source->m_data;
+    
+    if (!data)
+	return;
+
+    if (!data->IsSupportedFormat(selection_data->target))
+	return;
+
+    if (data->GetDataSize(selection_data->target) == 0)
+	return;
+    
+    size_t size = data->GetDataSize(selection_data->target);
+
+//  printf( "data size: %d.\n", (int)data_size );
+
+    guchar *d = new guchar[size];
+    
+    if (!data->GetDataHere( selection_data->target, (void*)d ))
     {
-        wxDataObject *data_object = (wxDataObject*) node->Data();
-        if (data_object->GetFormat().GetAtom() == selection_data->target)
-        {
-//          printf( "format found.\n" );
-
-            size_t data_size = data_object->GetSize();
-
-            if (data_size > 0)
-            {
-//              printf( "data size: %d.\n", (int)data_size );
-
-                guchar *buffer = new guchar[data_size];
-                data_object->WriteData( buffer );
+        free( d );
+	return;
+    }
 
 #if wxUSE_THREADS
-                /* disable GUI threads */
-                wxapp_uninstall_thread_wakeup();
+    /* disable GUI threads */
+    wxapp_uninstall_thread_wakeup();
 #endif
 
                 gtk_selection_data_set( selection_data,
                                         selection_data->target,
                                         8,   // 8-bit
-                                        buffer,
-                                        data_size );
+                                        d,
+                                        size );
 
 #if wxUSE_THREADS
-                /* enable GUI threads */
-                wxapp_install_thread_wakeup();
+    /* enable GUI threads */
+    wxapp_install_thread_wakeup();
 #endif
-                free( buffer );
 
-                /* so far only copy, no moves. TODO. */
-                drop_source->m_retValue = wxDragCopy;
-
-                return;
-            }
-        }
-
-        node = node->Next();
-    }
-
-    drop_source->m_retValue = wxDragCancel;
+    free( d );
+    
+    /* so far only copy, no moves. TODO. */
+    drop_source->m_retValue = wxDragCopy;
 }
 
 //----------------------------------------------------------------------------
@@ -733,7 +735,7 @@ wxDropSource::wxDropSource( wxWindow *win, const wxIcon &go, const wxIcon &stop 
     m_widget = win->m_widget;
     if (win->m_wxwindow) m_widget = win->m_wxwindow;
 
-    m_data = (wxDataBroker*) NULL;
+    m_data = (wxDataObject*) NULL;
     m_retValue = wxDragCancel;
 
     m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
@@ -755,8 +757,7 @@ wxDropSource::wxDropSource( wxDataObject& data, wxWindow *win,
     if (win->m_wxwindow) m_widget = win->m_wxwindow;
     m_retValue = wxDragCancel;
 
-    m_data = new wxDataBroker;
-    m_data->Add(&data);
+    m_data = &data;
 
     m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
     m_goaheadCursor = wxCursor( wxCURSOR_HAND );
@@ -767,53 +768,18 @@ wxDropSource::wxDropSource( wxDataObject& data, wxWindow *win,
     if (wxNullIcon == stop) m_stopIcon = wxIcon( gv_xpm );
 }
 
-wxDropSource::wxDropSource( wxDataBroker *data, wxWindow *win )
-{
-    m_window = win;
-    m_widget = win->m_widget;
-    if (win->m_wxwindow) m_widget = win->m_wxwindow;
-    m_retValue = wxDragCancel;
-
-    m_data = data;
-
-    m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
-    m_goaheadCursor = wxCursor( wxCURSOR_HAND );
-}
-
 void wxDropSource::SetData( wxDataObject& data )
 {
-    if ( m_data )
+    if (m_data)
         delete m_data;
 
-    m_data = new wxDataBroker;
-    m_data->Add(&data);
-}
-
-void wxDropSource::SetData( wxDataObject *data )
-{
-    if (m_data) delete m_data;
-
-    if (data)
-    {
-        m_data = new wxDataBroker();
-        m_data->Add( data );
-    }
-    else
-    {
-        m_data = (wxDataBroker*) NULL;
-    }
-}
-
-void wxDropSource::SetData( wxDataBroker *data )
-{
-    if (m_data) delete m_data;
-
-    m_data = data;
+    m_data = &data;
 }
 
 wxDropSource::~wxDropSource()
 {
-    if (m_data) delete m_data;
+    if (m_data) 
+//        delete m_data;
 
     g_blockEventsOnDrag = FALSE;
 }
