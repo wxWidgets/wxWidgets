@@ -66,7 +66,7 @@
 # Author:   Julian Smart
 # Created:  1993
 # Updated:
-# Copyright:(c) 1993, AIAI, University of Edinburgh
+# Copyright:
 #
 # "%W% %G%"
 #
