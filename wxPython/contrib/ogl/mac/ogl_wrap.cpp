@@ -584,7 +584,25 @@ void wxPyLineShape_AddArrowOrdered(wxPyLineShape *self,wxArrowHead *arrow,PyObje
         }
 PyObject *wxPyLineShape_GetLineControlPoints(wxPyLineShape *self){
             wxList* list = self->GetLineControlPoints();
-            return wxPy_ConvertShapeList(list);
+            return wxPy_ConvertRealPointList(list);
+        }
+void wxPyLineShape_SetLineControlPoints(wxPyLineShape *self,PyObject *list){
+            wxList* real_point_list = wxPy_wxRealPoint_ListHelper(list);
+            self->MakeLineControlPoints((int)(real_point_list->GetCount()));
+            wxList* old_control_points = self->GetLineControlPoints();
+            wxNode* old_node = old_control_points->GetFirst();
+            wxNode* real_node = real_point_list->GetFirst();
+            while(old_node)
+            {
+                wxRealPoint* old_point = (wxRealPoint*)old_node->GetData();
+                wxRealPoint* new_point = (wxRealPoint*)real_node->GetData();
+                old_point->x = new_point->x;
+                old_point->y = new_point->y;
+                old_node = old_node->GetNext();
+                real_node = real_node->GetNext();
+            }
+            self->ClearPointList(*real_point_list);
+            delete real_point_list;
         }
 
     WXSHAPE_IMP_CALLBACKS(wxPyPolygonShape, wxPolygonShape);
@@ -600,21 +618,7 @@ PyObject *wxPyPolygonShape_Create(wxPyPolygonShape *self,PyObject *points){
         }
 PyObject *wxPyPolygonShape_GetPoints(wxPyPolygonShape *self){
             wxList* list = self->GetPoints();
-            PyObject*   pyList;
-            PyObject*   pyObj;
-            wxObject*   wxObj;
-            wxNode*     node = list->GetFirst();
-
-            bool blocked = wxPyBeginBlockThreads();
-            pyList = PyList_New(0);
-            while (node) {
-                wxObj = node->GetData();
-                pyObj = wxPyConstructObject(wxObj, wxT("wxRealPoint"), 0);
-                PyList_Append(pyList, pyObj);
-                node = node->GetNext();
-            }
-            wxPyEndBlockThreads(blocked);
-            return pyList;
+            return wxPy_ConvertRealPointList(list);
         }
 PyObject *wxPyPolygonShape_GetOriginalPoints(wxPyPolygonShape *self){
             wxList* list = self->GetOriginalPoints();
@@ -756,6 +760,27 @@ PyObject*  wxPyMake_wxShapeEvtHandler(wxShapeEvtHandler* source) {
             ((wxShapeEvtHandler*)source)->SetClientObject(new wxPyOORClientData(target));
     }
     return target;
+}
+
+//---------------------------------------------------------------------------
+
+PyObject* wxPy_ConvertRealPointList(wxListBase* listbase) {
+    wxList*     list = (wxList*)listbase;
+    PyObject*   pyList;
+    PyObject*   pyObj;
+    wxObject*   wxObj;
+    wxNode*     node = list->GetFirst();
+    
+    bool blocked = wxPyBeginBlockThreads();
+    pyList = PyList_New(0);
+    while (node) {
+        wxObj = node->GetData();
+        pyObj = wxPyConstructObject(wxObj, wxT("wxRealPoint"), 0);
+        PyList_Append(pyList, pyObj);
+        node = node->GetNext();
+    } 
+    wxPyEndBlockThreads(blocked);
+    return pyList;
 }
 
 //---------------------------------------------------------------------------
@@ -26383,6 +26408,34 @@ static PyObject *_wrap_PyLineShape_GetLineControlPoints(PyObject *self, PyObject
 }
 
 
+static PyObject *_wrap_PyLineShape_SetLineControlPoints(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyLineShape *arg1 = (wxPyLineShape *) 0 ;
+    PyObject *arg2 = (PyObject *) 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "list", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyLineShape_SetLineControlPoints",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPyLineShape,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = obj1;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxPyLineShape_SetLineControlPoints(arg1,arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_PyLineShape_SetAttachmentFrom(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyLineShape *arg1 = (wxPyLineShape *) 0 ;
@@ -33192,6 +33245,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PyLineShape_IsSpline", (PyCFunction) _wrap_PyLineShape_IsSpline, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyLineShape_MakeLineControlPoints", (PyCFunction) _wrap_PyLineShape_MakeLineControlPoints, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyLineShape_GetLineControlPoints", (PyCFunction) _wrap_PyLineShape_GetLineControlPoints, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyLineShape_SetLineControlPoints", (PyCFunction) _wrap_PyLineShape_SetLineControlPoints, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyLineShape_SetAttachmentFrom", (PyCFunction) _wrap_PyLineShape_SetAttachmentFrom, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyLineShape_SetAttachments", (PyCFunction) _wrap_PyLineShape_SetAttachments, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyLineShape_SetAttachmentTo", (PyCFunction) _wrap_PyLineShape_SetAttachmentTo, METH_VARARGS | METH_KEYWORDS },

@@ -3190,6 +3190,10 @@ class PyLineShape(PyShape):
         """GetLineControlPoints(self) -> PyObject"""
         return _ogl.PyLineShape_GetLineControlPoints(*args, **kwargs)
 
+    def SetLineControlPoints(*args, **kwargs):
+        """SetLineControlPoints(self, PyObject list)"""
+        return _ogl.PyLineShape_SetLineControlPoints(*args, **kwargs)
+
     def SetAttachmentFrom(*args, **kwargs):
         """SetAttachmentFrom(self, int fromAttach)"""
         return _ogl.PyLineShape_SetAttachmentFrom(*args, **kwargs)
