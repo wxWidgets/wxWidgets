@@ -19,7 +19,7 @@ examples of how to use it.
    and settings.  This probably means that you will need to rebuild
    wxPython yourself.  It may be possible for me to distribute the
    setup.h and etc. that I use, but you'll need to rebuild everything
-   yourself anyway to get debugger versions so I'm not too wrried
+   yourself anyway to get debugger versions so I'm not too worried
    about it just yet.  BTW, on MSW if you do a FINAL=0 build (full
    debug version) then you will need to have a debug version of Python
    built too since it expects to have extension modules in files with
