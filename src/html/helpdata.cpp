@@ -38,6 +38,7 @@
 #include "wx/log.h"
 #include "wx/html/htmlpars.h"
 #include "wx/html/htmldefs.h"
+#include "wx/filename.h"
 
 #include "wx/arrimpl.cpp"
 WX_DEFINE_OBJARRAY(wxHtmlBookRecArray)
@@ -567,8 +568,15 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
                  index = wxEmptyString,
                  charset = wxEmptyString;
 
+#ifdef __WXMAC__
+        // wxIsAbsolutePath is broken
+        bookFull = wxGetCwd() + ":" + book;
+        wxFileName fn( bookFull );
+        bookFull = fn.GetFullPath( wxPATH_UNIX );
+#else
         if (wxIsAbsolutePath(book)) bookFull = book;
         else bookFull = wxGetCwd() + "/" + book;
+#endif
 
         fi = fsys.OpenFile(bookFull);
         if (fi == NULL)
