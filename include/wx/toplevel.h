@@ -196,6 +196,9 @@ public:
     void OnCloseWindow(wxCloseEvent& event);
     void OnSize(wxSizeEvent& WXUNUSED(event)) { DoLayout(); }
 
+    // Get rect to be used to center top-level children
+    virtual void GetRectForTopLevelChildren(int *x, int *y, int *w, int *h);
+
     // this should go away, but for now it's called from docview.cpp,
     // so should be there for all platforms
     void OnActivate(wxActivateEvent &WXUNUSED(event)) { }

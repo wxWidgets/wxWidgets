@@ -117,6 +117,15 @@ void wxMDIParentFrame::SetMenuBar(wxMenuBar *menu_bar)
     wxFrame::SetMenuBar( menu_bar ) ;
 }
 
+void wxMDIParentFrame::GetRectForTopLevelChildren(int *x, int *y, int *w, int *h)
+{
+    if(x)
+        *x = 0;
+    if(y)
+        *y = 0;
+    wxDisplaySize(w,h);
+}
+
 void wxMDIParentFrame::MacActivate(long timestamp, bool activating)
 {
     wxLogDebug(wxT("MDI PARENT=%p MacActivate(0x%08lx,%s)"),this,timestamp,activating?wxT("ACTIV"):wxT("deact"));

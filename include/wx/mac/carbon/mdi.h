@@ -68,6 +68,8 @@ public:
 
   // Get the client window
   inline wxMDIClientWindow *GetClientWindow() const { return m_clientWindow; };
+  // Get rect to be used to center top-level children
+  virtual void GetRectForTopLevelChildren(int *x, int *y, int *w, int *h);
 
   // Create the client window class (don't Create the window,
   // just return a new class)

@@ -388,6 +388,7 @@ void wxWindowBase::Centre(int direction)
     int widthParent, heightParent;
 
     wxWindow *parent = NULL;
+    wxTopLevelWindow *winTop = NULL;
 
     if ( !(direction & wxCENTRE_ON_SCREEN) )
     {
@@ -409,9 +410,10 @@ void wxWindowBase::Centre(int direction)
         // Windows, for example, this places it completely off the screen
         if ( parent )
         {
-            wxTopLevelWindow *winTop = wxDynamicCast(parent, wxTopLevelWindow);
+            winTop = wxDynamicCast(parent, wxTopLevelWindow);
             if ( winTop && winTop->IsIconized() )
             {
+                winTop = NULL;
                 parent = NULL;
             }
         }
@@ -434,11 +436,16 @@ void wxWindowBase::Centre(int direction)
     {
         if ( IsTopLevel() )
         {
-            // centre on the parent
-            parent->GetSize(&widthParent, &heightParent);
+            if(winTop)
+                winTop->GetRectForTopLevelChildren(&posParent.x, &posParent.y, &widthParent, &heightParent);
+            else
+            {
+                // centre on the parent
+                parent->GetSize(&widthParent, &heightParent);
 
-            // adjust to the parents position
-            posParent = parent->GetPosition();
+                // adjust to the parents position
+                posParent = parent->GetPosition();
+            }
         }
         else
         {

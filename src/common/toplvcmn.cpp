@@ -109,6 +109,12 @@ bool wxTopLevelWindowBase::IsLastBeforeExit() const
 // wxTopLevelWindow geometry
 // ----------------------------------------------------------------------------
 
+void wxTopLevelWindowBase::GetRectForTopLevelChildren(int *x, int *y, int *w, int *h)
+{
+    GetPosition(x,y);
+    GetSize(w,h);
+}
+
 wxSize wxTopLevelWindowBase::GetMaxSize() const
 {
     wxSize  size( GetMaxWidth(), GetMaxHeight() );
