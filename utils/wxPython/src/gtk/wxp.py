@@ -1014,6 +1014,22 @@ def EVT_TREE_DELETE_ITEM(win, id, func):
 
 
 
+def EVT_SPIN_UP(win, id, func):
+    win.Connect(id, -1, wxEVT_SCROLL_LINEUP, func)
+
+def EVT_SPIN_DOWN(win, id, func):
+    win.Connect(id, -1,wxEVT_SCROLL_LINEDOWN, func)
+
+def EVT_SPIN(win, id, func):
+    win.Connect(id, -1, wxEVT_SCROLL_TOP,       func)
+    win.Connect(id, -1, wxEVT_SCROLL_BOTTOM,    func)
+    win.Connect(id, -1, wxEVT_SCROLL_LINEUP,    func)
+    win.Connect(id, -1, wxEVT_SCROLL_LINEDOWN,  func)
+    win.Connect(id, -1, wxEVT_SCROLL_PAGEUP,    func)
+    win.Connect(id, -1, wxEVT_SCROLL_PAGEDOWN,  func)
+    win.Connect(id, -1, wxEVT_SCROLL_THUMBTRACK,func)
+
+
 
 #----------------------------------------------------------------------
 
@@ -1109,8 +1125,8 @@ class wxApp(wxPyApp):
 #----------------------------------------------------------------------------
 #
 # $Log$
-# Revision 1.8  1998/11/15 23:04:59  RD
-# Removing some ifdef's for wxGTK
+# Revision 1.9  1998/11/16 00:01:43  RD
+# Generic treectrl for wxPython/GTK compiles...
 #
 # Revision 1.5  1998/10/20 07:38:02  RD
 # bug fix

@@ -15,6 +15,7 @@
 
 %{
 #include "helpers.h"
+#include <wx/spinbutt.h>
 %}
 
 //----------------------------------------------------------------------
@@ -81,6 +82,13 @@ class wxScrollEvent: public wxCommandEvent {
 public:
     int GetOrientation();
     int GetPosition();
+};
+
+//---------------------------------------------------------------------------
+
+class wxSpinEvent : public wxScrollEvent {
+public:
+
 };
 
 //---------------------------------------------------------------------------
@@ -289,6 +297,9 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.4  1998/11/16 00:00:55  RD
+// Generic treectrl for wxPython/GTK compiles...
+//
 // Revision 1.3  1998/10/20 06:43:56  RD
 // New wxTreeCtrl wrappers (untested)
 // some changes in helpers

@@ -3146,6 +3146,7 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_class_wxAcceleratorTable","_wxAcceleratorTable",0);
 	 SWIG_RegisterMapping("_class_wxGauge","_wxGauge",0);
 	 SWIG_RegisterMapping("_wxDC","_class_wxDC",0);
+	 SWIG_RegisterMapping("_wxSpinEvent","_class_wxSpinEvent",0);
 	 SWIG_RegisterMapping("_class_wxRealPoint","_wxRealPoint",0);
 	 SWIG_RegisterMapping("_class_wxMenuItem","_wxMenuItem",0);
 	 SWIG_RegisterMapping("_class_wxPaintEvent","_wxPaintEvent",0);
@@ -3184,6 +3185,7 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_wxBitmap","_class_wxBitmap",0);
 	 SWIG_RegisterMapping("_wxPyTimer","_class_wxPyTimer",0);
 	 SWIG_RegisterMapping("_wxScrollBar","_class_wxScrollBar",0);
+	 SWIG_RegisterMapping("_wxSpinButton","_class_wxSpinButton",0);
 	 SWIG_RegisterMapping("_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0);
 	 SWIG_RegisterMapping("_class_wxIconizeEvent","_wxIconizeEvent",0);
 	 SWIG_RegisterMapping("_class_wxStaticBitmap","_wxStaticBitmap",0);
@@ -3203,6 +3205,7 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_class_wxPyTimer","_wxPyTimer",0);
 	 SWIG_RegisterMapping("_wxFocusEvent","_class_wxFocusEvent",0);
 	 SWIG_RegisterMapping("_wxMaximizeEvent","_class_wxMaximizeEvent",0);
+	 SWIG_RegisterMapping("_class_wxSpinButton","_wxSpinButton",0);
 	 SWIG_RegisterMapping("_wxAcceleratorEntry","_class_wxAcceleratorEntry",0);
 	 SWIG_RegisterMapping("_class_wxPanel","_class_wxGrid",SwigwxGridTowxPanel);
 	 SWIG_RegisterMapping("_class_wxPanel","_wxGrid",SwigwxGridTowxPanel);
@@ -3287,6 +3290,7 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_int","_unsigned_int",0);
 	 SWIG_RegisterMapping("_int","_signed_int",0);
 	 SWIG_RegisterMapping("_class_wxMouseEvent","_wxMouseEvent",0);
+	 SWIG_RegisterMapping("_class_wxSpinEvent","_wxSpinEvent",0);
 	 SWIG_RegisterMapping("_wxButton","_class_wxButton",0);
 	 SWIG_RegisterMapping("_wxSize","_class_wxSize",0);
 	 SWIG_RegisterMapping("_class_wxPaintDC","_wxPaintDC",0);

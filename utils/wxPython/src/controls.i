@@ -15,9 +15,9 @@
 %{
 #include "helpers.h"
 #include <wx/slider.h>
+#include <wx/spinbutt.h>
 
 #ifdef __WXMSW__
-#include <wx/spinbutt.h>
 #if wxUSE_OWNER_DRAWN
 #include <wx/checklst.h>
 #endif
@@ -356,7 +356,6 @@ public:
 
 //----------------------------------------------------------------------
 
-#ifdef __WXMSW__
 class wxSpinButton : public wxControl {
 public:
     wxSpinButton(wxWindow* parent, wxWindowID id = -1,
@@ -371,7 +370,6 @@ public:
     void SetRange(int min, int max);
     void SetValue(int value);
 };
-#endif
 
 //----------------------------------------------------------------------
 
@@ -485,6 +483,9 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.7  1998/11/16 00:00:53  RD
+// Generic treectrl for wxPython/GTK compiles...
+//
 // Revision 1.6  1998/11/15 23:03:43  RD
 // Removing some ifdef's for wxGTK
 //

@@ -544,6 +544,41 @@ class wxScrollBar(wxScrollBarPtr):
 
 
 
+class wxSpinButtonPtr(wxControlPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def GetMax(self):
+        val = controlsc.wxSpinButton_GetMax(self.this)
+        return val
+    def GetMin(self):
+        val = controlsc.wxSpinButton_GetMin(self.this)
+        return val
+    def GetValue(self):
+        val = controlsc.wxSpinButton_GetValue(self.this)
+        return val
+    def SetRange(self,arg0,arg1):
+        val = controlsc.wxSpinButton_SetRange(self.this,arg0,arg1)
+        return val
+    def SetValue(self,arg0):
+        val = controlsc.wxSpinButton_SetValue(self.this,arg0)
+        return val
+    def __repr__(self):
+        return "<C wxSpinButton instance>"
+class wxSpinButton(wxSpinButtonPtr):
+    def __init__(self,arg0,*args) :
+        argl = map(None,args)
+        try: argl[1] = argl[1].this
+        except: pass
+        try: argl[2] = argl[2].this
+        except: pass
+        args = tuple(argl)
+        self.this = apply(controlsc.new_wxSpinButton,(arg0.this,)+args)
+        self.thisown = 1
+
+
+
+
 class wxStaticBitmapPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this

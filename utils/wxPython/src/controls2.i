@@ -226,6 +226,7 @@ public:
 
 class wxTreeCtrl : public wxControl {
 public:
+#ifdef __WXMSW__
     wxTreeCtrl(wxWindow *parent, wxWindowID id = -1,
                const wxPoint& pos = wxPyDefaultPosition,
                const wxSize& size = wxPyDefaultSize,
@@ -233,6 +234,14 @@ public:
                const wxValidator& validator = wxPyDefaultValidator,
                char* name = "wxTreeCtrl");
 
+#else
+    wxTreeCtrl(wxWindow *parent, wxWindowID id = -1,
+               const wxPoint& pos = wxPyDefaultPosition,
+               const wxSize& size = wxPyDefaultSize,
+               long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
+               //const wxValidator& validator = wxPyDefaultValidator,
+               char* name = "wxTreeCtrl");
+#endif
     %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
 
     size_t GetCount();
@@ -375,6 +384,9 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.9  1998/11/16 00:00:54  RD
+// Generic treectrl for wxPython/GTK compiles...
+//
 // Revision 1.8  1998/11/11 04:40:20  RD
 // wxTreeCtrl now works (sort of) for wxPython-GTK.  This is the new
 // TreeCtrl in src/gtk/treectrl.cpp not the old generic one.

@@ -55,9 +55,9 @@ extern PyObject *SWIG_newvarlink(void);
 
 #include "helpers.h"
 #include <wx/slider.h>
+#include <wx/spinbutt.h>
 
 #ifdef __WXMSW__
-#include <wx/spinbutt.h>
 #if wxUSE_OWNER_DRAWN
 #include <wx/checklst.h>
 #endif
@@ -3510,6 +3510,180 @@ static PyObject *_wrap_wxScrollBar_SetScrollbar(PyObject *self, PyObject *args) 
     return _resultobj;
 }
 
+static void *SwigwxSpinButtonTowxControl(void *ptr) {
+    wxSpinButton *src;
+    wxControl *dest;
+    src = (wxSpinButton *) ptr;
+    dest = (wxControl *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxSpinButtonTowxWindow(void *ptr) {
+    wxSpinButton *src;
+    wxWindow *dest;
+    src = (wxSpinButton *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxSpinButtonTowxEvtHandler(void *ptr) {
+    wxSpinButton *src;
+    wxEvtHandler *dest;
+    src = (wxSpinButton *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+#define new_wxSpinButton(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5) (new wxSpinButton(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
+static PyObject *_wrap_new_wxSpinButton(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxSpinButton * _result;
+    wxWindow * _arg0;
+    wxWindowID  _arg1 = -1;
+    wxPoint * _arg2 = &wxPyDefaultPosition;
+    wxSize * _arg3 = &wxPyDefaultSize;
+    long  _arg4 = (wxSP_HORIZONTAL);
+    char * _arg5 = "spinButton";
+    char * _argc0 = 0;
+    char * _argc2 = 0;
+    char * _argc3 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s|issls:new_wxSpinButton",&_argc0,&_arg1,&_argc2,&_argc3,&_arg4,&_arg5)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxSpinButton. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argc2) {
+        if (SWIG_GetPtr(_argc2,(void **) &_arg2,"_wxPoint_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxSpinButton. Expected _wxPoint_p.");
+        return NULL;
+        }
+    }
+    if (_argc3) {
+        if (SWIG_GetPtr(_argc3,(void **) &_arg3,"_wxSize_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxSpinButton. Expected _wxSize_p.");
+        return NULL;
+        }
+    }
+    _result = (wxSpinButton *)new_wxSpinButton(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxSpinButton_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxSpinButton_GetMax(_swigobj)  (_swigobj->GetMax())
+static PyObject *_wrap_wxSpinButton_GetMax(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxSpinButton * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxSpinButton_GetMax",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxSpinButton_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSpinButton_GetMax. Expected _wxSpinButton_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxSpinButton_GetMax(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxSpinButton_GetMin(_swigobj)  (_swigobj->GetMin())
+static PyObject *_wrap_wxSpinButton_GetMin(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxSpinButton * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxSpinButton_GetMin",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxSpinButton_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSpinButton_GetMin. Expected _wxSpinButton_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxSpinButton_GetMin(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxSpinButton_GetValue(_swigobj)  (_swigobj->GetValue())
+static PyObject *_wrap_wxSpinButton_GetValue(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxSpinButton * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxSpinButton_GetValue",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxSpinButton_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSpinButton_GetValue. Expected _wxSpinButton_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxSpinButton_GetValue(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxSpinButton_SetRange(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetRange(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxSpinButton_SetRange(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxSpinButton * _arg0;
+    int  _arg1;
+    int  _arg2;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sii:wxSpinButton_SetRange",&_argc0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxSpinButton_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSpinButton_SetRange. Expected _wxSpinButton_p.");
+        return NULL;
+        }
+    }
+    wxSpinButton_SetRange(_arg0,_arg1,_arg2);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSpinButton_SetValue(_swigobj,_swigarg0)  (_swigobj->SetValue(_swigarg0))
+static PyObject *_wrap_wxSpinButton_SetValue(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxSpinButton * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxSpinButton_SetValue",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxSpinButton_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSpinButton_SetValue. Expected _wxSpinButton_p.");
+        return NULL;
+        }
+    }
+    wxSpinButton_SetValue(_arg0,_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static void *SwigwxStaticBitmapTowxControl(void *ptr) {
     wxStaticBitmap *src;
     wxControl *dest;
@@ -4781,6 +4955,12 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxStaticBitmap_SetBitmap", _wrap_wxStaticBitmap_SetBitmap, 1 },
 	 { "wxStaticBitmap_GetBitmap", _wrap_wxStaticBitmap_GetBitmap, 1 },
 	 { "new_wxStaticBitmap", _wrap_new_wxStaticBitmap, 1 },
+	 { "wxSpinButton_SetValue", _wrap_wxSpinButton_SetValue, 1 },
+	 { "wxSpinButton_SetRange", _wrap_wxSpinButton_SetRange, 1 },
+	 { "wxSpinButton_GetValue", _wrap_wxSpinButton_GetValue, 1 },
+	 { "wxSpinButton_GetMin", _wrap_wxSpinButton_GetMin, 1 },
+	 { "wxSpinButton_GetMax", _wrap_wxSpinButton_GetMax, 1 },
+	 { "new_wxSpinButton", _wrap_new_wxSpinButton, 1 },
 	 { "wxScrollBar_SetScrollbar", _wrap_wxScrollBar_SetScrollbar, 1 },
 	 { "wxScrollBar_SetPosition", _wrap_wxScrollBar_SetPosition, 1 },
 	 { "wxScrollBar_GetThumbSize", _wrap_wxScrollBar_GetThumbSize, 1 },
@@ -4918,6 +5098,8 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxRadioBox",SwigwxRadioBoxTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxStaticBitmap",SwigwxStaticBitmapTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxStaticBitmap",SwigwxStaticBitmapTowxEvtHandler);
+	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxSpinButton",SwigwxSpinButtonTowxEvtHandler);
+	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxSpinButton",SwigwxSpinButtonTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxScrollBar",SwigwxScrollBarTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxScrollBar",SwigwxScrollBarTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxTextCtrl",SwigwxTextCtrlTowxEvtHandler);
@@ -4962,6 +5144,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxAcceleratorTable","_wxAcceleratorTable",0);
 	 SWIG_RegisterMapping("_class_wxGauge","_wxGauge",0);
 	 SWIG_RegisterMapping("_wxDC","_class_wxDC",0);
+	 SWIG_RegisterMapping("_wxSpinEvent","_class_wxSpinEvent",0);
 	 SWIG_RegisterMapping("_class_wxRealPoint","_wxRealPoint",0);
 	 SWIG_RegisterMapping("_class_wxMenuItem","_wxMenuItem",0);
 	 SWIG_RegisterMapping("_class_wxPaintEvent","_wxPaintEvent",0);
@@ -4994,6 +5177,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_wxBitmap","_class_wxBitmap",0);
 	 SWIG_RegisterMapping("_wxPyTimer","_class_wxPyTimer",0);
 	 SWIG_RegisterMapping("_wxScrollBar","_class_wxScrollBar",0);
+	 SWIG_RegisterMapping("_wxSpinButton","_class_wxSpinButton",0);
 	 SWIG_RegisterMapping("_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0);
 	 SWIG_RegisterMapping("_class_wxIconizeEvent","_wxIconizeEvent",0);
 	 SWIG_RegisterMapping("_class_wxStaticBitmap","_wxStaticBitmap",0);
@@ -5012,6 +5196,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxPyTimer","_wxPyTimer",0);
 	 SWIG_RegisterMapping("_wxFocusEvent","_class_wxFocusEvent",0);
 	 SWIG_RegisterMapping("_wxMaximizeEvent","_class_wxMaximizeEvent",0);
+	 SWIG_RegisterMapping("_class_wxSpinButton","_wxSpinButton",0);
 	 SWIG_RegisterMapping("_wxAcceleratorEntry","_class_wxAcceleratorEntry",0);
 	 SWIG_RegisterMapping("_class_wxPanel","_wxPanel",0);
 	 SWIG_RegisterMapping("_class_wxCheckBox","_wxCheckBox",0);
@@ -5040,6 +5225,8 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxWindow","_wxRadioBox",SwigwxRadioBoxTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_class_wxStaticBitmap",SwigwxStaticBitmapTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_wxStaticBitmap",SwigwxStaticBitmapTowxWindow);
+	 SWIG_RegisterMapping("_class_wxWindow","_class_wxSpinButton",SwigwxSpinButtonTowxWindow);
+	 SWIG_RegisterMapping("_class_wxWindow","_wxSpinButton",SwigwxSpinButtonTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_class_wxScrollBar",SwigwxScrollBarTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_wxScrollBar",SwigwxScrollBarTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_class_wxTextCtrl",SwigwxTextCtrlTowxWindow);
@@ -5094,6 +5281,8 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_wxControl","_wxRadioBox",SwigwxRadioBoxTowxControl);
 	 SWIG_RegisterMapping("_wxControl","_class_wxStaticBitmap",SwigwxStaticBitmapTowxControl);
 	 SWIG_RegisterMapping("_wxControl","_wxStaticBitmap",SwigwxStaticBitmapTowxControl);
+	 SWIG_RegisterMapping("_wxControl","_class_wxSpinButton",SwigwxSpinButtonTowxControl);
+	 SWIG_RegisterMapping("_wxControl","_wxSpinButton",SwigwxSpinButtonTowxControl);
 	 SWIG_RegisterMapping("_wxControl","_class_wxScrollBar",SwigwxScrollBarTowxControl);
 	 SWIG_RegisterMapping("_wxControl","_wxScrollBar",SwigwxScrollBarTowxControl);
 	 SWIG_RegisterMapping("_wxControl","_class_wxTextCtrl",SwigwxTextCtrlTowxControl);
@@ -5145,6 +5334,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_int","_unsigned_int",0);
 	 SWIG_RegisterMapping("_int","_signed_int",0);
 	 SWIG_RegisterMapping("_class_wxMouseEvent","_wxMouseEvent",0);
+	 SWIG_RegisterMapping("_class_wxSpinEvent","_wxSpinEvent",0);
 	 SWIG_RegisterMapping("_wxButton","_class_wxBitmapButton",SwigwxBitmapButtonTowxButton);
 	 SWIG_RegisterMapping("_wxButton","_wxBitmapButton",SwigwxBitmapButtonTowxButton);
 	 SWIG_RegisterMapping("_wxButton","_class_wxButton",0);
@@ -5164,6 +5354,8 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxControl","_wxRadioBox",SwigwxRadioBoxTowxControl);
 	 SWIG_RegisterMapping("_class_wxControl","_class_wxStaticBitmap",SwigwxStaticBitmapTowxControl);
 	 SWIG_RegisterMapping("_class_wxControl","_wxStaticBitmap",SwigwxStaticBitmapTowxControl);
+	 SWIG_RegisterMapping("_class_wxControl","_class_wxSpinButton",SwigwxSpinButtonTowxControl);
+	 SWIG_RegisterMapping("_class_wxControl","_wxSpinButton",SwigwxSpinButtonTowxControl);
 	 SWIG_RegisterMapping("_class_wxControl","_class_wxScrollBar",SwigwxScrollBarTowxControl);
 	 SWIG_RegisterMapping("_class_wxControl","_wxScrollBar",SwigwxScrollBarTowxControl);
 	 SWIG_RegisterMapping("_class_wxControl","_class_wxTextCtrl",SwigwxTextCtrlTowxControl);
@@ -5212,6 +5404,8 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_wxEvtHandler","_wxRadioBox",SwigwxRadioBoxTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxStaticBitmap",SwigwxStaticBitmapTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_wxStaticBitmap",SwigwxStaticBitmapTowxEvtHandler);
+	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxSpinButton",SwigwxSpinButtonTowxEvtHandler);
+	 SWIG_RegisterMapping("_wxEvtHandler","_wxSpinButton",SwigwxSpinButtonTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxScrollBar",SwigwxScrollBarTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_wxScrollBar",SwigwxScrollBarTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxTextCtrl",SwigwxTextCtrlTowxEvtHandler);
@@ -5253,6 +5447,8 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_wxWindow","_wxRadioBox",SwigwxRadioBoxTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_class_wxStaticBitmap",SwigwxStaticBitmapTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_wxStaticBitmap",SwigwxStaticBitmapTowxWindow);
+	 SWIG_RegisterMapping("_wxWindow","_class_wxSpinButton",SwigwxSpinButtonTowxWindow);
+	 SWIG_RegisterMapping("_wxWindow","_wxSpinButton",SwigwxSpinButtonTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_class_wxScrollBar",SwigwxScrollBarTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_wxScrollBar",SwigwxScrollBarTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_class_wxTextCtrl",SwigwxTextCtrlTowxWindow);

@@ -2084,7 +2084,7 @@ static void *SwigwxTreeCtrlTowxEvtHandler(void *ptr) {
     return (void *) dest;
 }
 
-#define new_wxTreeCtrl(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6) (new wxTreeCtrl(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6))
+#define new_wxTreeCtrl(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5) (new wxTreeCtrl(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
 static PyObject *_wrap_new_wxTreeCtrl(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     wxTreeCtrl * _result;
@@ -2093,16 +2093,14 @@ static PyObject *_wrap_new_wxTreeCtrl(PyObject *self, PyObject *args) {
     wxPoint * _arg2 = &wxPyDefaultPosition;
     wxSize * _arg3 = &wxPyDefaultSize;
     long  _arg4 = (wxTR_HAS_BUTTONS)|(wxTR_LINES_AT_ROOT);
-    wxValidator * _arg5 = &wxPyDefaultValidator;
-    char * _arg6 = "wxTreeCtrl";
+    char * _arg5 = "wxTreeCtrl";
     char * _argc0 = 0;
     char * _argc2 = 0;
     char * _argc3 = 0;
-    char * _argc5 = 0;
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"s|isslss:new_wxTreeCtrl",&_argc0,&_arg1,&_argc2,&_argc3,&_arg4,&_argc5,&_arg6)) 
+    if(!PyArg_ParseTuple(args,"s|issls:new_wxTreeCtrl",&_argc0,&_arg1,&_argc2,&_argc3,&_arg4,&_arg5)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxWindow_p")) {
@@ -2122,13 +2120,7 @@ static PyObject *_wrap_new_wxTreeCtrl(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    if (_argc5) {
-        if (SWIG_GetPtr(_argc5,(void **) &_arg5,"_wxValidator_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 6 of new_wxTreeCtrl. Expected _wxValidator_p.");
-        return NULL;
-        }
-    }
-    _result = (wxTreeCtrl *)new_wxTreeCtrl(_arg0,_arg1,*_arg2,*_arg3,_arg4,*_arg5,_arg6);
+    _result = (wxTreeCtrl *)new_wxTreeCtrl(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5);
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxTreeCtrl_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
@@ -3743,6 +3735,7 @@ SWIGEXPORT(void,initcontrols2c)() {
 	 SWIG_RegisterMapping("_class_wxGauge","_wxGauge",0);
 	 SWIG_RegisterMapping("_wxDC","_class_wxDC",0);
 	 SWIG_RegisterMapping("_wxListEvent","_class_wxListEvent",0);
+	 SWIG_RegisterMapping("_wxSpinEvent","_class_wxSpinEvent",0);
 	 SWIG_RegisterMapping("_class_wxRealPoint","_wxRealPoint",0);
 	 SWIG_RegisterMapping("_class_wxMenuItem","_wxMenuItem",0);
 	 SWIG_RegisterMapping("_class_wxPaintEvent","_wxPaintEvent",0);
@@ -3782,6 +3775,7 @@ SWIGEXPORT(void,initcontrols2c)() {
 	 SWIG_RegisterMapping("_wxBitmap","_class_wxBitmap",0);
 	 SWIG_RegisterMapping("_wxPyTimer","_class_wxPyTimer",0);
 	 SWIG_RegisterMapping("_wxScrollBar","_class_wxScrollBar",0);
+	 SWIG_RegisterMapping("_wxSpinButton","_class_wxSpinButton",0);
 	 SWIG_RegisterMapping("_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0);
 	 SWIG_RegisterMapping("_class_wxIconizeEvent","_wxIconizeEvent",0);
 	 SWIG_RegisterMapping("_class_wxStaticBitmap","_wxStaticBitmap",0);
@@ -3802,6 +3796,7 @@ SWIGEXPORT(void,initcontrols2c)() {
 	 SWIG_RegisterMapping("_class_wxPyTimer","_wxPyTimer",0);
 	 SWIG_RegisterMapping("_wxFocusEvent","_class_wxFocusEvent",0);
 	 SWIG_RegisterMapping("_wxMaximizeEvent","_class_wxMaximizeEvent",0);
+	 SWIG_RegisterMapping("_class_wxSpinButton","_wxSpinButton",0);
 	 SWIG_RegisterMapping("_wxAcceleratorEntry","_class_wxAcceleratorEntry",0);
 	 SWIG_RegisterMapping("_class_wxPanel","_wxPanel",0);
 	 SWIG_RegisterMapping("_class_wxCheckBox","_wxCheckBox",0);
@@ -3885,6 +3880,7 @@ SWIGEXPORT(void,initcontrols2c)() {
 	 SWIG_RegisterMapping("_int","_signed_int",0);
 	 SWIG_RegisterMapping("_class_wxMouseEvent","_wxMouseEvent",0);
 	 SWIG_RegisterMapping("_class_wxListEvent","_wxListEvent",0);
+	 SWIG_RegisterMapping("_class_wxSpinEvent","_wxSpinEvent",0);
 	 SWIG_RegisterMapping("_wxButton","_class_wxButton",0);
 	 SWIG_RegisterMapping("_wxSize","_class_wxSize",0);
 	 SWIG_RegisterMapping("_class_wxPaintDC","_wxPaintDC",0);
