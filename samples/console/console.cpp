@@ -94,7 +94,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
-    #define TEST_TEXTSTREAM
+    #define TEST_DIR
 
     static const bool TEST_ALL = FALSE;
 #endif
@@ -279,7 +279,7 @@ static void TestCmdLineConvert()
 
 #ifdef __UNIX__
     static const wxChar *ROOTDIR = _T("/");
-    static const wxChar *TESTDIR = _T("/usr");
+    static const wxChar *TESTDIR = _T("/usr/local/share");
 #elif defined(__WXMSW__)
     static const wxChar *ROOTDIR = _T("c:\\");
     static const wxChar *TESTDIR = _T("d:\\");
@@ -406,6 +406,7 @@ static void TestDirTraverse()
     }
 
     // enum again with custom traverser
+    wxPuts(_T("Now enumerating directories:"));
     wxDir dir(TESTDIR);
     DirPrintTraverser traverser;
     dir.Traverse(traverser, _T(""), wxDIR_DIRS | wxDIR_HIDDEN);
@@ -6375,9 +6376,9 @@ int main(int argc, char **argv)
     if ( TEST_ALL )
     {
         TestDirExists();
-        TestDirTraverse();
+        TestDirEnum();
     }
-    TestDirEnum();
+    TestDirTraverse();
 #endif // TEST_DIR
 
 #ifdef TEST_DLLLOADER
