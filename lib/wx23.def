@@ -1290,10 +1290,6 @@ EXPORTS
       wxEVT_SCROLLWIN_TOP
       wxEVT_NC_LEFT_UP
       wxEVT_MOUSE_CAPTURE_CHANGED
-      wxEVT_FIRST
-      wxEVT_COMMAND_TREE_END_LABEL_EDIT
-      wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT
-      wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT
       ;wxNavigationKeyEvent::sm_classwxNavigationKeyEvent
       sm_classwxNavigationKeyEvent__20wxNavigationKeyEvent
       ;wxInitDialogEvent::sm_classwxInitDialogEvent
@@ -1346,16 +1342,12 @@ EXPORTS
       __ct__20wxWindowDestroyEventFP8wxWindow
       ;wxFindFocusDescendant(wxWindow*)
       wxFindFocusDescendant__FP8wxWindow
-      wxEVT_WIZARD_PAGE_CHANGING
       wxEVT_RIGHT_DCLICK
       wxEVT_ENTER_WINDOW
-      wxEVT_COMMAND_TREE_ITEM_COLLAPSING
-      wxEVT_COMMAND_TREE_GET_INFO
-      wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK
       wxEVT_COMMAND_LEFT_CLICK
       wxEVT_CHAR_HOOK
-      ;wxEventTableEntry::wxEventTableEntry(int,int,int,void( wxObject::*)(wxEvent&),wxObject*)
-      __ct__17wxEventTableEntryFiN21M8wxObjectFR7wxEvent_vP8wxObject
+      ;wxEvtHandler::Connect(int,int,int,void( wxObject::*)(wxEvent&),wxObject*)
+      Connect__12wxEvtHandlerFiN21M8wxObjectFR7wxEvent_vP8wxObject
       wxEVT_SOCKET
       wxEVT_SCROLLWIN_PAGEUP
       wxEVT_MIDDLE_UP
@@ -1364,18 +1356,9 @@ EXPORTS
       wxEVT_ERASE_BACKGROUND
       wxEVT_DETAILED_HELP
       wxEVT_COMMAND_VLBOX_SELECTED
-      wxEVT_COMMAND_TREE_ITEM_EXPANDED
       wxEVT_COMMAND_TOOL_RCLICKED
-      wxEVT_COMMAND_TAB_SEL_CHANGED
-      wxEVT_COMMAND_SPLITTER_UNSPLIT
-      wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED
-      wxEVT_COMMAND_LIST_ITEM_DESELECTED
-      wxEVT_COMMAND_LIST_ITEM_ACTIVATED
       wxEVT_COMMAND_CHOICE_SELECTED
       wxEVT_COMMAND_CHECKBOX_CLICKED
-      wxEVT_CALENDAR_YEAR_CHANGED
-      wxEVT_CALENDAR_MONTH_CHANGED
-      wxEVT_CALENDAR_DOUBLECLICKED
       wxEVT_ACTIVATE_APP
       ;wxWindowDestroyEvent::sm_classwxWindowDestroyEvent
       sm_classwxWindowDestroyEvent__20wxWindowDestroyEvent
@@ -1400,8 +1383,6 @@ EXPORTS
       CopyObject__16wxScrollWinEventCFR8wxObject
       ;wxMouseEvent::CopyObject(wxObject&) const
       CopyObject__12wxMouseEventCFR8wxObject
-      ;wxEvtHandler::Connect(int,int,int,void( wxObject::*)(wxEvent&),wxObject*)
-      Connect__12wxEvtHandlerFiN21M8wxObjectFR7wxEvent_vP8wxObject
       ;wxEvtHandler::AddPendingEvent(wxEvent&)
       AddPendingEvent__12wxEvtHandlerFR7wxEvent
       ;wxMouseEvent::Button(int) const
@@ -1414,7 +1395,6 @@ EXPORTS
       wxEVT_MEASURE_ITEM
       wxEVT_JOY_MOVE
       wxEVT_DRAW_ITEM
-      wxEVT_COMMAND_LIST_INSERT_ITEM
       ;wxKeyEvent::wxKeyEvent(int)
       __ct__10wxKeyEventFi
       ;wxEvtHandler::wxEvtHandler()
@@ -1440,31 +1420,19 @@ EXPORTS
       ;wxEvtHandler::GetEventTable() const
       GetEventTable__12wxEvtHandlerCFv
       wxEVT_NC_LEAVE_WINDOW
-      wxEVT_END_PROCESS
       wxEVT_DROP_FILES
-      wxEVT_COMMAND_TREE_SEL_CHANGING
-      wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK
-      wxEVT_COMMAND_TAB_SEL_CHANGING
-      wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING
       wxEVT_COMMAND_RIGHT_CLICK
-      wxEVT_COMMAND_LIST_SET_INFO
-      wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK
-      wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS
       wxEVT_COMMAND_KILL_FOCUS
       ;wxEvtHandler::Disconnect(int,int,int,void( wxObject::*)(wxEvent&),wxObject*)
       Disconnect__12wxEvtHandlerFiN21M8wxObjectFR7wxEvent_vP8wxObject
-      wxEVT_WIZARD_CANCEL
       wxEVT_SYS_COLOUR_CHANGED
       wxEVT_SCROLL_TOP
       wxEVT_SCROLL_PAGEUP
       wxEVT_SCROLLWIN_LINEUP
-      wxEVT_DIALUP_DISCONNECTED
-      wxEVT_COMMAND_TREE_ITEM_ACTIVATED
       wxEVT_COMMAND_SPINCTRL_UPDATED
       wxEVT_COMMAND_SLIDER_UPDATED
       wxEVT_COMMAND_CHECKLISTBOX_TOGGLED
       wxEVT_COMMAND_BUTTON_CLICKED
-      wxEVT_CALENDAR_DAY_CHANGED
       ;wxSizeEvent::sm_classwxSizeEvent
       sm_classwxSizeEvent__11wxSizeEvent
       ;wxPaletteChangedEvent::sm_classwxPaletteChangedEvent
@@ -1505,7 +1473,6 @@ EXPORTS
       wxEVT_NC_MOTION
       wxEVT_LEFT_DOWN
       wxEVT_COMMAND_TOOL_ENTER
-      wxEVT_COMMAND_LIST_KEY_DOWN
       ;wxConstructorForwxScrollWinEvent()
       wxConstructorForwxScrollWinEvent__Fv
       ;wxConstructorForwxPaintEvent()
@@ -1523,23 +1490,17 @@ EXPORTS
       wxEVT_CLOSE_WINDOW
       ;wxCommandEvent::CopyObject(wxObject&) const
       CopyObject__14wxCommandEventCFR8wxObject
-      wxEVT_WIZARD_PAGE_CHANGED
       wxEVT_SCROLL_LINEUP
       wxEVT_PAINT
-      wxEVT_NULL
       wxEVT_NC_RIGHT_UP
       wxEVT_NC_PAINT
       wxEVT_LEFT_UP
-      wxEVT_COMMAND_TREE_ITEM_COLLAPSED
       wxEVT_COMMAND_TEXT_UPDATED
-      wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED
       wxEVT_COMMAND_RADIOBOX_SELECTED
       wxEVT_COMMAND_MENU_SELECTED
       wxEVT_COMMAND_LISTBOX_SELECTED
       wxEVT_COMMAND_LISTBOX_DOUBLECLICKED
       wxEVT_COMMAND_COMBOBOX_SELECTED
-      wxEVT_CALENDAR_WEEKDAY_CLICKED
-      wxEVT_CALENDAR_SEL_CHANGED
       ;wxUpdateUIEvent::sm_classwxUpdateUIEvent
       sm_classwxUpdateUIEvent__15wxUpdateUIEvent
       ;wxQueryNewPaletteEvent::sm_classwxQueryNewPaletteEvent
@@ -1582,7 +1543,6 @@ EXPORTS
       wxEVT_CREATE
       wxEVT_CONTEXT_MENU
       wxEVT_COMPARE_ITEM
-      wxEVT_COMMAND_LIST_DELETE_ITEM
       ;wxMouseEvent::ButtonIsDown(int) const
       ButtonIsDown__12wxMouseEventCFi
       ;wxMouseEvent::ButtonDClick(int) const
@@ -1619,12 +1579,6 @@ EXPORTS
       wxEVT_NC_MIDDLE_DCLICK
       wxEVT_NC_ENTER_WINDOW
       wxEVT_MIDDLE_DCLICK
-      wxEVT_COMMAND_TREE_SET_INFO
-      wxEVT_COMMAND_TREE_ITEM_EXPANDING
-      wxEVT_COMMAND_TREE_END_DRAG
-      wxEVT_COMMAND_TREE_BEGIN_RDRAG
-      wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING
-      wxEVT_COMMAND_LIST_GET_INFO
       wxEVT_COMMAND_LEFT_DCLICK
       ;wxMouseEvent::GetLogicalPosition(const wxDC&) const
       GetLogicalPosition__12wxMouseEventCFRC4wxDC
@@ -1637,13 +1591,8 @@ EXPORTS
       wxEVT_MENU_HIGHLIGHT
       wxEVT_KEY_UP
       wxEVT_JOY_BUTTON_UP
-      wxEVT_DIALUP_CONNECTED
-      wxEVT_COMMAND_TREE_SEL_CHANGED
-      wxEVT_COMMAND_SPLITTER_DOUBLECLICKED
       wxEVT_COMMAND_SCROLLBAR_UPDATED
       wxEVT_COMMAND_RADIOBUTTON_SELECTED
-      wxEVT_COMMAND_LIST_ITEM_SELECTED
-      wxEVT_COMMAND_LIST_END_LABEL_EDIT
       ;wxWindowCreateEvent::sm_classwxWindowCreateEvent
       sm_classwxWindowCreateEvent__19wxWindowCreateEvent
       ;wxShowEvent::sm_classwxShowEvent
@@ -1667,7 +1616,6 @@ EXPORTS
       ;wxEvent::wxEvent(int)
       __ct__7wxEventFi
       wxEVT_UPDATE_UI
-      wxEVT_COMMAND_TREE_DELETE_ITEM
       ;wxScrollEvent::wxScrollEvent(int,int,int,int)
       __ct__13wxScrollEventFiN31
       ;wxConstructorForwxIdleEvent()
@@ -1675,7 +1623,6 @@ EXPORTS
       wxEVT_SCROLL_PAGEDOWN
       wxEVT_NC_MIDDLE_DOWN
       wxEVT_MIDDLE_DOWN
-      wxEVT_COMMAND_TREE_KEY_DOWN
       wxEVT_CHAR
       ;wxConstructorForwxWindowDestroyEvent()
       wxConstructorForwxWindowDestroyEvent__Fv
@@ -1691,12 +1638,7 @@ EXPORTS
       wxEVT_SET_FOCUS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
-      wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK
-      wxEVT_COMMAND_TREE_BEGIN_DRAG
       wxEVT_COMMAND_SET_FOCUS
-      wxEVT_COMMAND_LIST_COL_CLICK
-      wxEVT_COMMAND_LIST_BEGIN_RDRAG
-      wxEVT_COMMAND_LIST_BEGIN_DRAG
   ;From object file:  G:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
@@ -3895,6 +3837,7 @@ EXPORTS
       ;wxProcess::Init(wxEvtHandler*,int,unsigned long)
       Init__9wxProcessFP12wxEvtHandleriUl
       __vft9wxProcess8wxObject
+      wxEVT_END_PROCESS
       ;wxProcess::~wxProcess()
       __dt__9wxProcessFv
       ;wxConstructorForwxProcessEvent()
@@ -5133,12 +5076,30 @@ EXPORTS
       Reinit__17wxStringTokenizerFRC8wxString
   ;From object file:  ..\common\treebase.cpp
     ;PUBDEFs (Symbols available from object file):
+      wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT
+      wxEVT_COMMAND_TREE_END_LABEL_EDIT
+      wxEVT_COMMAND_TREE_GET_INFO
+      wxEVT_COMMAND_TREE_ITEM_COLLAPSING
+      wxEVT_COMMAND_TREE_ITEM_EXPANDED
       ;wxConstructorForwxTreeEvent()
       wxConstructorForwxTreeEvent__Fv
+      wxEVT_COMMAND_TREE_SEL_CHANGING
+      wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK
+      wxEVT_COMMAND_TREE_ITEM_ACTIVATED
       ;wxTreeEvent::wxTreeEvent(int,int)
       __ct__11wxTreeEventFiT1
+      wxEVT_COMMAND_TREE_ITEM_COLLAPSED
+      wxEVT_COMMAND_TREE_BEGIN_RDRAG
+      wxEVT_COMMAND_TREE_SET_INFO
+      wxEVT_COMMAND_TREE_ITEM_EXPANDING
+      wxEVT_COMMAND_TREE_END_DRAG
       ;wxTreeEvent::sm_classwxTreeEvent
       sm_classwxTreeEvent__11wxTreeEvent
+      wxEVT_COMMAND_TREE_SEL_CHANGED
+      wxEVT_COMMAND_TREE_DELETE_ITEM
+      wxEVT_COMMAND_TREE_KEY_DOWN
+      wxEVT_COMMAND_TREE_BEGIN_DRAG
+      wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK
   ;From object file:  ..\common\txtstrm.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxTextOutputStream::SetMode(wxEOL)
@@ -6298,6 +6259,9 @@ EXPORTS
       Create__14wxCalendarCtrlFP8wxWindowiRC10wxDateTimeRC7wxPointRC6wxSizelRC8wxString
       ;wxCalendarCtrl::Show(unsigned long)
       Show__14wxCalendarCtrlFUl
+      wxEVT_CALENDAR_YEAR_CHANGED
+      wxEVT_CALENDAR_MONTH_CHANGED
+      wxEVT_CALENDAR_DOUBLECLICKED
       ;wxCalendarEvent::sm_classwxCalendarEvent
       sm_classwxCalendarEvent__15wxCalendarEvent
       ;wxCalendarCtrl::OnDClick(wxMouseEvent&)
@@ -6326,6 +6290,7 @@ EXPORTS
       GetEventTable__14wxYearSpinCtrlCFv
       ;wxCalendarCtrl::OnYearChange(wxSpinEvent&)
       OnYearChange__14wxCalendarCtrlFR11wxSpinEvent
+      wxEVT_CALENDAR_DAY_CHANGED
       ;wxYearSpinCtrl::sm_eventTable
       sm_eventTable__14wxYearSpinCtrl
       ;wxMonthComboBox::sm_eventTableEntries
@@ -6345,6 +6310,8 @@ EXPORTS
       HitTest__14wxCalendarCtrlFRC7wxPointP10wxDateTimePQ2_10wxDateTime7WeekDay
       ;wxCalendarCtrl::Enable(unsigned long)
       Enable__14wxCalendarCtrlFUl
+      wxEVT_CALENDAR_WEEKDAY_CLICKED
+      wxEVT_CALENDAR_SEL_CHANGED
       ;wxCalendarCtrl::sm_eventTable
       sm_eventTable__14wxCalendarCtrl
       __vft15wxMonthComboBox8wxObject
@@ -7279,6 +7246,7 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxListItemData::SetData(long)
       SetData__14wxListItemDataFl
+      wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT
       ;wxListTextCtrl::sm_eventTable
       sm_eventTable__14wxListTextCtrl
       ;wxListCtrl::sm_eventTableEntries
@@ -7353,8 +7321,11 @@ EXPORTS
       DoDrawRect__18wxListHeaderWindowFP4wxDCiN32
       ;wxListHeaderData::GetText(wxString&)
       GetText__16wxListHeaderDataFR8wxString
+      wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK
       ;wxListMainWindow::GetItemRect(long,wxRect&)
       GetItemRect__16wxListMainWindowFlR6wxRect
+      wxEVT_COMMAND_LIST_ITEM_DESELECTED
+      wxEVT_COMMAND_LIST_ITEM_ACTIVATED
       __vft14wxListTextCtrl8wxObject
       ;wxListMainWindow::SetMode(long)
       SetMode__16wxListMainWindowFl
@@ -7368,6 +7339,7 @@ EXPORTS
       CopyObject__11wxListEventCFR8wxObject
       ;wxListLineDataArray::operator=(const wxListLineDataArray&)
       __as__19wxListLineDataArrayFRC19wxListLineDataArray
+      wxEVT_COMMAND_LIST_INSERT_ITEM
       ;wxListLineData::sm_classwxListLineData
       sm_classwxListLineData__14wxListLineData
       ;wxListItem::sm_classwxListItem
@@ -7427,6 +7399,9 @@ EXPORTS
       ClearAttributes__10wxListItemFv
       ;wxListItemData::GetText(wxString&)
       GetText__14wxListItemDataFR8wxString
+      wxEVT_COMMAND_LIST_SET_INFO
+      wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK
+      wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS
       ;wxListHeaderWindow::sm_eventTable
       sm_eventTable__18wxListHeaderWindow
       ;wxListHeaderWindow::sm_eventTableEntries
@@ -7508,6 +7483,7 @@ EXPORTS
       Arrange__10wxListCtrlFi
       ;wxListItemData::HasImage() const
       HasImage__14wxListItemDataCFv
+      wxEVT_COMMAND_LIST_KEY_DOWN
       ;wxConstructorForwxListMainWindow()
       wxConstructorForwxListMainWindow__Fv
       ;wxConstructorForwxListLineData()
@@ -7587,6 +7563,7 @@ EXPORTS
       AssignRect__14wxListLineDataFR6wxRectRC6wxRect
       ;wxListLineDataArray::DoCopy(const wxListLineDataArray&)
       DoCopy__19wxListLineDataArrayFRC19wxListLineDataArray
+      wxEVT_COMMAND_LIST_DELETE_ITEM
       ;wxListMainWindow::UnfocusLine(wxListLineData*)
       UnfocusLine__16wxListMainWindowFP14wxListLineData
       ;wxListItemData::SetImage(int)
@@ -7647,12 +7624,15 @@ EXPORTS
       CalculatePositions__16wxListMainWindowFv
       ;wxListCtrl::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxValidator&,const wxString&)
       Create__10wxListCtrlFP8wxWindowiRC7wxPointRC6wxSizelRC11wxValidatorRC8wxString
+      wxEVT_COMMAND_LIST_GET_INFO
       ;wxListMainWindow::sm_eventTableEntries
       sm_eventTableEntries__16wxListMainWindow
       ;wxListLineData::GetText(int,wxString&)
       GetText__14wxListLineDataFiR8wxString
       ;wxListLineData::SetAttributes(wxDC*,const wxListItemAttr*,const wxColour&,const wxFont&,unsigned long)
       SetAttributes__14wxListLineDataFP4wxDCPC14wxListItemAttrRC8wxColourRC6wxFontUl
+      wxEVT_COMMAND_LIST_ITEM_SELECTED
+      wxEVT_COMMAND_LIST_END_LABEL_EDIT
       ;wxListTextCtrl::sm_eventTableEntries
       sm_eventTableEntries__14wxListTextCtrl
       ;wxListTextCtrl::sm_classwxListTextCtrl
@@ -7770,6 +7750,9 @@ EXPORTS
       ClearAll__10wxListCtrlFv
       ;wxListItemData::SetText(const wxString&)
       SetText__14wxListItemDataFRC8wxString
+      wxEVT_COMMAND_LIST_COL_CLICK
+      wxEVT_COMMAND_LIST_BEGIN_RDRAG
+      wxEVT_COMMAND_LIST_BEGIN_DRAG
       ;wxListHeaderWindow::wxListHeaderWindow(wxWindow*,int,wxListMainWindow*,const wxPoint&,const wxSize&,long,const wxString&)
       __ct__18wxListHeaderWindowFP8wxWindowiP16wxListMainWindowRC7wxPointRC6wxSizelRC8wxString
       ;wxListMainWindow::wxListMainWindow(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
@@ -8816,6 +8799,7 @@ EXPORTS
       InitColours__16wxSplitterWindowFv
       ;wxSplitterWindow::OnSetCursor(wxSetCursorEvent&)
       OnSetCursor__16wxSplitterWindowFR16wxSetCursorEvent
+      wxEVT_COMMAND_SPLITTER_UNSPLIT
       __vft16wxSplitterWindow8wxObject
       ;wxSplitterWindow::DrawSashTracker(int,int)
       DrawSashTracker__16wxSplitterWindowFiT1
@@ -8823,6 +8807,7 @@ EXPORTS
       wxConstructorForwxSplitterWindow__Fv
       ;wxSplitterWindow::~wxSplitterWindow()
       __dt__16wxSplitterWindowFv
+      wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING
       ;wxSplitterWindow::OnSashPosChanged(wxSplitterEvent&)
       OnSashPosChanged__16wxSplitterWindowFR15wxSplitterEvent
       ;wxSplitterEvent::sm_classwxSplitterEvent
@@ -8837,6 +8822,7 @@ EXPORTS
       sm_eventTableEntries__16wxSplitterWindow
       ;wxSplitterWindow::OnPaint(wxPaintEvent&)
       OnPaint__16wxSplitterWindowFR12wxPaintEvent
+      wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED
       ;wxSplitterWindow::OnIdle(wxIdleEvent&)
       OnIdle__16wxSplitterWindowFR11wxIdleEvent
       ;wxSplitterWindow::OnDoubleClick(wxSplitterEvent&)
@@ -8857,6 +8843,7 @@ EXPORTS
       DrawBorders__16wxSplitterWindowFR4wxDC
       ;wxSplitterWindow::OnMouseEvent(wxMouseEvent&)
       OnMouseEvent__16wxSplitterWindowFR12wxMouseEvent
+      wxEVT_COMMAND_SPLITTER_DOUBLECLICKED
       ;wxSplitterWindow::SetSashPosition(int,unsigned long)
       SetSashPosition__16wxSplitterWindowFiUl
       ;wxSplitterWindow::SashHitTest(int,int,int)
@@ -9353,6 +9340,7 @@ EXPORTS
       wxConstructorForwxWizardPageSimple__Fv
       ;wxWizard::GetPageSize() const
       GetPageSize__8wxWizardCFv
+      wxEVT_WIZARD_PAGE_CHANGING
       ;wxWizard::OnBackOrNext(wxCommandEvent&)
       OnBackOrNext__8wxWizardFR14wxCommandEvent
       ;wxWizardPageSimple::sm_classwxWizardPageSimple
@@ -9361,6 +9349,7 @@ EXPORTS
       GetPrev__18wxWizardPageSimpleCFv
       ;wxWizardEvent::sm_classwxWizardEvent
       sm_classwxWizardEvent__13wxWizardEvent
+      wxEVT_WIZARD_CANCEL
       ;wxConstructorForwxWizard()
       wxConstructorForwxWizard__Fv
       ;wxConstructorForwxWizardEvent()
@@ -9369,6 +9358,7 @@ EXPORTS
       GetNext__18wxWizardPageSimpleCFv
       ;wxWizard::sm_classwxWizard
       sm_classwxWizard__8wxWizard
+      wxEVT_WIZARD_PAGE_CHANGED
       ;wxWizard::sm_eventTable
       sm_eventTable__8wxWizard
       ;wxWizard::sm_eventTableEntries
@@ -10277,6 +10267,8 @@ EXPORTS
       SaveFile__15wxBitmapHandlerFP8wxBitmapRC8wxStringiPC9wxPalette
       ;wxBitmap::CopyFromCursor(const wxCursor&)
       CopyFromCursor__8wxBitmapFRC8wxCursor
+      ;wxInvertMask(unsigned long,int,int)
+      wxInvertMask__FUliT2
       ;wxMask::wxMask()
       __ct__6wxMaskFv
       ;wxBitmap::wxBitmap(const char**)
@@ -12207,6 +12199,7 @@ EXPORTS
       SetPageText__10wxNotebookFiRC8wxString
       ;wxNotebook::AdvanceSelection(unsigned long)
       AdvanceSelection__10wxNotebookFUl
+      wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED
       ;wxNotebook::ChangePage(int,int)
       ChangePage__10wxNotebookFiT1
       ;wxNotebook::SetTabSize(const wxSize&)
@@ -12247,6 +12240,7 @@ EXPORTS
       Init__10wxNotebookFv
       ;wxNotebook::sm_classwxNotebook
       sm_classwxNotebook__10wxNotebook
+      wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING
       ;wxNotebook::sm_eventTable
       sm_eventTable__10wxNotebook
       __vft10wxNotebook8wxObject
