@@ -88,13 +88,27 @@ protected:
     void OnGetLabelMenu(wxCommandEvent& event);
     void OnSetLabelMenu(wxCommandEvent& event);
 
-    void OnRightUp(wxMouseEvent& event);
+#ifdef __WXMSW__
+    void OnContextMenu(wxContextMenuEvent& event)
+        { ShowContextMenu(ScreenToClient(event.GetPosition())); }
+#else
+    void OnRightUp(wxMouseEvent& event)
+        { ShowContextMenu(event.GetPosition()); }
+#endif
+
+    void OnMenuOpen(wxMenuEvent& event)
+        { LogMenuOpenOrClose(event, _T("opened")); }
+    void OnMenuClose(wxMenuEvent& event)
+        { LogMenuOpenOrClose(event, _T("closed")); }
 
     void OnUpdateCheckMenuItemUI(wxUpdateUIEvent& event);
 
     void OnSize(wxSizeEvent& event);
 
 private:
+    void LogMenuOpenOrClose(const wxMenuEvent& event, const wxChar *what);
+    void ShowContextMenu(const wxPoint& pos);
+
     wxMenu *CreateDummyMenu(wxString *title);
 
     wxMenuItem *GetLastMenuItem() const;
@@ -208,7 +222,14 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_UPDATE_UI(Menu_Menu_Check, MyFrame::OnUpdateCheckMenuItemUI)
 
+#ifdef __WXMSW__
+    EVT_CONTEXT_MENU(MyFrame::OnContextMenu)
+#else
     EVT_RIGHT_UP(MyFrame::OnRightUp)
+#endif
+
+    EVT_MENU_OPEN(MyFrame::OnMenuOpen)
+    EVT_MENU_CLOSE(MyFrame::OnMenuClose)
 
     EVT_SIZE(MyFrame::OnSize)
 END_EVENT_TABLE()
@@ -703,7 +724,7 @@ void MyFrame::OnGetMenuItemInfo(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-void MyFrame::OnRightUp(wxMouseEvent &event)
+void MyFrame::ShowContextMenu(const wxPoint& pos)
 {
     wxMenu menu("Test popup");
 
@@ -719,7 +740,7 @@ void MyFrame::OnRightUp(wxMouseEvent &event)
     menu.Check(Menu_Popup_ToBeChecked, TRUE);
     menu.Enable(Menu_Popup_ToBeGreyed, FALSE);
 
-    PopupMenu(&menu, event.GetX(), event.GetY());
+    PopupMenu(&menu, pos.x, pos.y);
 
     // test for destroying items in popup menus
 #if 0 // doesn't work in wxGTK!
@@ -727,6 +748,12 @@ void MyFrame::OnRightUp(wxMouseEvent &event)
 
     PopupMenu( &menu, event.GetX(), event.GetY() );
 #endif // 0
+}
+
+void MyFrame::LogMenuOpenOrClose(const wxMenuEvent& event, const wxChar *what)
+{
+    wxLogStatus(this, _T("A %smenu has been %s."),
+                event.IsPopup() ? _T("popup ") : _T(""), what);
 }
 
 void MyFrame::OnSize(wxSizeEvent& event)

@@ -97,15 +97,16 @@ Unix (Base/GUI):
 
 All (GUI):
 
+- significantly improved native font support
 - wxImage::ComputeHistogram() now uses wxImageHistogram instead of type-unsafe
   wxHashTable
-- significantly improved native font support
 - added IFF image handler
 - fixed using custom renderers in wxGrid which was broken in 2.3.2
 - support for multiple images in one file added to wxImage (TIFF and ICO formats)
 - support for CUR and ANI files in wxImage added (Chris Elliott)
 - wxTextCtrl::GetRange() added
 - added wxGetFontFromUser() convenience function
+- added EVT_MENU_OPEN and EVT_MENU_CLOSE events
 
 wxMSW:
 

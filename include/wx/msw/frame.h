@@ -91,6 +91,7 @@ public:
     bool HandleSize(int x, int y, WXUINT flag);
     bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
     bool HandleMenuSelect(WXWORD nItem, WXWORD nFlags, WXHMENU hMenu);
+    bool HandleMenuLoop(const wxEventType& evtType, WXWORD isPopup);
 
     // tooltip management
 #if wxUSE_TOOLTIPS

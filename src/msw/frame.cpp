@@ -763,7 +763,17 @@ bool wxFrame::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
     }
 
     wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, item);
-    event.SetEventObject( this );
+    event.SetEventObject(this);
+
+    return GetEventHandler()->ProcessEvent(event);
+}
+
+bool wxFrame::HandleMenuLoop(const wxEventType& evtType, WXWORD isPopup)
+{
+    // we don't have the menu id here, so we use the id to specify if the event
+    // was from a popup menu or a normal one
+    wxMenuEvent event(evtType, isPopup ? -1 : 0);
+    event.SetEventObject(this);
 
     return GetEventHandler()->ProcessEvent(event);
 }
@@ -785,6 +795,10 @@ long wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             processed = !Close();
             break;
 
+        case WM_SIZE:
+            processed = HandleSize(LOWORD(lParam), HIWORD(lParam), wParam);
+            break;
+
         case WM_COMMAND:
             {
                 WORD id, cmd;
@@ -794,6 +808,10 @@ long wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 
                 processed = HandleCommand(id, cmd, (WXHWND)hwnd);
             }
+            break;
+
+        case WM_PAINT:
+            processed = HandlePaint();
             break;
 
 #ifndef __WXMICROWIN__
@@ -806,13 +824,17 @@ long wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
                 processed = HandleMenuSelect(item, flags, hmenu);
             }
             break;
-#endif
 
-        case WM_PAINT:
-            processed = HandlePaint();
+#ifndef __WIN16__
+        case WM_ENTERMENULOOP:
+            processed = HandleMenuLoop(wxEVT_MENU_OPEN, wParam);
             break;
 
-#ifndef __WXMICROWIN__
+        case WM_EXITMENULOOP:
+            processed = HandleMenuLoop(wxEVT_MENU_CLOSE, wParam);
+            break;
+#endif // __WIN16__
+
         case WM_QUERYDRAGICON:
             {
                 HICON hIcon = m_icon.Ok() ? GetHiconOf(m_icon)
@@ -821,11 +843,7 @@ long wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
                 processed = rc != 0;
             }
             break;
-#endif
-
-        case WM_SIZE:
-            processed = HandleSize(LOWORD(lParam), HIWORD(lParam), wParam);
-            break;
+#endif // !__WXMICROWIN__
     }
 
     if ( !processed )

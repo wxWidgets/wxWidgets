@@ -224,10 +224,10 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_ERASE_BACKGROUND, 417)
     DECLARE_EVENT_TYPE(wxEVT_NC_PAINT, 418)
     DECLARE_EVENT_TYPE(wxEVT_PAINT_ICON, 419)
-    DECLARE_EVENT_TYPE(wxEVT_MENU_CHAR, 420)
-    DECLARE_EVENT_TYPE(wxEVT_MENU_INIT, 421)
+    DECLARE_EVENT_TYPE(wxEVT_MENU_OPEN, 420)
+    DECLARE_EVENT_TYPE(wxEVT_MENU_CLOSE, 421)
     DECLARE_EVENT_TYPE(wxEVT_MENU_HIGHLIGHT, 422)
-    DECLARE_EVENT_TYPE(wxEVT_POPUP_MENU_INIT, 423)
+    // DECLARE_EVENT_TYPE(wxEVT_POPUP_MENU_INIT, 423) -- free slot
     DECLARE_EVENT_TYPE(wxEVT_CONTEXT_MENU, 424)
     DECLARE_EVENT_TYPE(wxEVT_SYS_COLOUR_CHANGED, 425)
     DECLARE_EVENT_TYPE(wxEVT_DISPLAY_CHANGED, 426)
@@ -1048,26 +1048,29 @@ private:
 
 // Miscellaneous menu event class
 /*
- wxEVT_MENU_CHAR,
- wxEVT_MENU_INIT,
+ wxEVT_MENU_OPEN,
+ wxEVT_MENU_CLOSE,
  wxEVT_MENU_HIGHLIGHT,
- wxEVT_POPUP_MENU_INIT,
 */
 
 class WXDLLEXPORT wxMenuEvent : public wxEvent
 {
 public:
     wxMenuEvent(wxEventType type = wxEVT_NULL, int id = 0)
-      { m_eventType = type; m_menuId = id; m_id = id; }
+        : wxEvent(id, type)
+        { m_menuId = id; }
 
+    // only for wxEVT_MENU_HIGHLIGHT
     int GetMenuId() const { return m_menuId; }
+
+    // only for wxEVT_MENU_OPEN/CLOSE
+    bool IsPopup() const { return m_menuId == -1; }
 
     virtual wxEvent *Clone() const { return new wxMenuEvent(*this); }
 
 private:
     int m_menuId;
 
-private:
     DECLARE_DYNAMIC_CLASS(wxMenuEvent)
 };
 
@@ -1973,6 +1976,8 @@ typedef void (wxEvtHandler::*wxContextMenuEventFunction)(wxContextMenuEvent&);
 #define EVT_KEY_DOWN(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_KEY_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCharEventFunction) & func, (wxObject *) NULL ),
 #define EVT_KEY_UP(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_KEY_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCharEventFunction) & func, (wxObject *) NULL ),
 #define EVT_CHAR_HOOK(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_CHAR_HOOK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCharEventFunction) & func, NULL ),
+#define EVT_MENU_OPEN(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_MENU_OPEN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMenuEventFunction) & func, (wxObject *) NULL ),
+#define EVT_MENU_CLOSE(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_MENU_CLOSE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMenuEventFunction) & func, (wxObject *) NULL ),
 #define EVT_MENU_HIGHLIGHT(id, func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_MENU_HIGHLIGHT, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxMenuEventFunction) & func, (wxObject *) NULL ),
 #define EVT_MENU_HIGHLIGHT_ALL(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_MENU_HIGHLIGHT, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMenuEventFunction) & func, (wxObject *) NULL ),
 #define EVT_SET_FOCUS(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SET_FOCUS, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxFocusEventFunction) & func, (wxObject *) NULL ),
