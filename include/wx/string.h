@@ -859,7 +859,8 @@ public:
               const wxChar* sz, size_t nCount = npos) const;
 
   // substring extraction
-  wxString substr(size_t nStart = 0, size_t nLen = npos) const;
+  wxString substr(size_t nStart = 0, size_t nLen = npos) const
+    { return Mid(nStart, nLen); }
 #endif // wxSTD_STRING_COMPATIBILITY
 };
 

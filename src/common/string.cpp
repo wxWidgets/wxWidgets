@@ -1643,17 +1643,6 @@ size_t wxString::find_last_not_of(wxChar ch, size_t nStart) const
     return npos;
 }
 
-wxString wxString::substr(size_t nStart, size_t nLen) const
-{
-  // npos means 'take all'
-  if ( nLen == npos )
-    nLen = 0;
-
-  wxASSERT( nStart + nLen <= Len() );
-
-  return wxString(c_str() + nStart, nLen == npos ? 0 : nLen);
-}
-
 wxString& wxString::erase(size_t nStart, size_t nLen)
 {
   wxString strTmp(c_str(), nStart);
