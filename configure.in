@@ -2424,10 +2424,14 @@ if test "$wxUSE_SHARED" = "yes"; then
       ;;
 
       *-*-darwin* )
+        dnl For Unix to MacOS X porting instructions, see:
+        dnl http://fink.sourceforge.net/doc/porting/porting.html
         CFLAGS="$CFLAGS -fno-common -DDYLIB_INIT"
         CXXFLAGS="$CXXFLAGS -fno-common -DDYLIB_INIT"
         SHARED_LD="$CXX -dynamiclib -init _wxWindowsDylibInit -o"
         PIC_FLAG="-dynamic -fPIC"
+        SONAME_FLAGS="-compatibility_version ${WX_RELEASE} -current_version ${WX_VERSION}"
+        SONAME_FLAGS_GL=${SONAME_FLAGS}
       ;;
 
       *-*-aix* )
