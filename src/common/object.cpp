@@ -109,6 +109,14 @@ void wxObject::operator delete (void * buf)
   wxDebugFree(buf);
 }
 
+// VC++ 6.0
+#if _MSC_VER >= 1200
+void operator delete(void* pData, char* /* fileName */, int /* lineNum */)
+{
+ ::operator delete(pData);
+}
+#endif
+
 // Cause problems for VC++ - crashes
 #ifndef _MSC_VER
 void * wxObject::operator new[] (size_t size, char * fileName, int lineNum)

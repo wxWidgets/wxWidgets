@@ -57,6 +57,11 @@ void wxDebugFree(void * buf, bool isVect = FALSE);
 void * operator new (size_t size, char * fileName, int lineNum);
 void operator delete (void * buf);
 
+// VC++ 6.0
+#if _MSC_VER >= 1200
+void operator delete(void *buf, char*, int);
+#endif
+
 #if !( defined (_MSC_VER) && (_MSC_VER <= 1020) )
 void * operator new[] (size_t size, char * fileName, int lineNum);
 void operator delete[] (void * buf);
