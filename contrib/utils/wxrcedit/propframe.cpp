@@ -228,6 +228,8 @@ PropertiesFrame::PropertiesFrame()
     m_EditCtrls.Put(_T("xmlid"), new PropEditCtrlXMLID(this));
     m_EditCtrls.Put(_T("font"), new PropEditCtrlFont(this));
     m_EditCtrls.Put(_T("choice"), new PropEditCtrlChoice(this));
+    m_EditCtrls.Put(_T("file"), new PropEditCtrlFile(this));
+    m_EditCtrls.Put(_T("imagefile"), new PropEditCtrlImageFile(this));
     m_EditCtrls.Put(_T(""), new PropEditCtrlNull(this));
             
     ClearProps();

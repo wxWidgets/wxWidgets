@@ -76,6 +76,26 @@ class PropEditCtrlFlags : public PropEditCtrlTxt
 
 
 
+class PropEditCtrlFile : public PropEditCtrlTxt
+{
+    public:
+        PropEditCtrlFile(PropertiesFrame *propFrame)
+            : PropEditCtrlTxt(propFrame) {}
 
+        virtual bool HasDetails() { return TRUE; }
+        virtual void OnDetails();
+        
+        virtual wxString GetFileTypes();
+};
+
+
+class PropEditCtrlImageFile : public PropEditCtrlFile
+{
+    public:
+        PropEditCtrlImageFile(PropertiesFrame *propFrame)
+            : PropEditCtrlFile(propFrame) {}
+
+        virtual wxString GetFileTypes();
+};
 
 #endif

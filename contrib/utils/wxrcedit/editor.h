@@ -61,6 +61,7 @@ class EditorFrame : public wxFrame
         wxString GetFileName() { return m_FileName; }
         
         void RefreshTree();
+        void RefreshTitle();
         bool SelectNode(wxXmlNode *node, wxTreeItemId *root = NULL);
         
         wxTreeItemId CreateTreeNode(wxTreeCtrl *treectrl, wxTreeItemId parent, wxXmlNode *node);
@@ -80,6 +81,11 @@ class EditorFrame : public wxFrame
 
         wxString m_FileName;
         wxXmlDocument *m_Resource;
+        
+        bool m_Modified;
+        
+        bool AskToSave();
+        void DeleteSelectedNode();
 
         DECLARE_EVENT_TABLE()
         void OnTreeSel(wxTreeEvent& event);
@@ -88,8 +94,7 @@ class EditorFrame : public wxFrame
         void OnNewNode(wxCommandEvent& event);
         void OnRightClickTree(wxPoint pos);
         void OnClipboardAction(wxCommandEvent& event);
-        
-        void DeleteSelectedNode();
+        void OnCloseWindow(wxCloseEvent&);
 };
 
 

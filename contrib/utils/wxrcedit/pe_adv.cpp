@@ -96,7 +96,11 @@ void PropEditCtrlChoice::WriteValue()
 
 void PropEditCtrlChoice::OnChoice(wxCommandEvent& event)
 {
-    if (CanSave()) WriteValue();
+    if (CanSave()) 
+    {
+        WriteValue();
+        EditorFrame::Get()->NotifyChanged(CHANGED_PROPS);    
+    }
 }
 
 
@@ -193,3 +197,66 @@ void PropEditCtrlFlags::OnDetails()
 }
 
 
+
+
+
+
+
+
+wxString PropEditCtrlFile::GetFileTypes()
+{
+    return m_PropInfo->MoreInfo;
+}
+
+
+
+void PropEditCtrlFile::OnDetails()
+{
+    wxString txt = m_TextCtrl->GetValue();
+    txt = wxPathOnly(EditorFrame::Get()->GetFileName()) + _T("/") + txt;
+    wxString name = wxFileSelector(_("Choose file"), 
+                                   wxPathOnly(txt),
+                                   wxFileNameFromPath(txt),
+                                   _T(""),
+                                   GetFileTypes(),
+                                   wxOPEN | wxFILE_MUST_EXIST);
+    if (!name) return;
+    
+    // compute relative path:
+    wxArrayString axrc, afile;
+    wxStringTokenizer tkn;
+    tkn.SetString(name, _T("/\\"));
+    while (tkn.HasMoreTokens()) afile.Add(tkn.GetNextToken());
+    tkn.SetString(EditorFrame::Get()->GetFileName(), _T("/\\"));
+    while (tkn.HasMoreTokens()) axrc.Add(tkn.GetNextToken());
+    
+    if (afile.GetCount() == 0 || axrc.GetCount() == 0)
+        txt = name;
+    else
+    {
+        while (axrc[0] == afile[0])
+        {
+            afile.Remove(0u);
+            axrc.Remove(0u);
+        }
+        size_t i;
+        txt.Empty();
+        for (i = 0; i < axrc.GetCount()-1/*w/o filename*/; i++) txt << _T("../");
+        for (i = 0; i < afile.GetCount(); i++) txt << afile[i] << _T("/");
+        txt.RemoveLast();
+    }
+
+    m_TextCtrl->SetValue(txt);
+    WriteValue();
+}
+
+
+
+wxString PropEditCtrlImageFile::GetFileTypes()
+{
+    return _("GIF files (*.gif)|*.gif|"
+             "JPEG files (*.jpg)|*.jpg|"
+             "PNG files (*.png)|*.png|"
+             "BMP files (*.bmp)|*.bmp|"
+             "All files (*)|*");
+}

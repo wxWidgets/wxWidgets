@@ -22,6 +22,7 @@
 #include "propframe.h"
 #include "propedit.h"
 #include "xmlhelpr.h"
+#include "editor.h"
 
 enum
 {
@@ -44,6 +45,7 @@ void PropEditCtrl::OnButtonDetails(wxCommandEvent& event)
 void PropEditCtrl::OnButtonClear(wxCommandEvent& event)
 {
     Clear();
+    EditorFrame::Get()->NotifyChanged(CHANGED_PROPS);        
 }
 
 

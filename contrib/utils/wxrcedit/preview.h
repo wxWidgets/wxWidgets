@@ -32,6 +32,9 @@ class PreviewFrame : public wxFrame
         ~PreviewFrame();
         
         void Preview(wxXmlNode *node);
+        void MakeDirty();
+                // current node updated, needs preview refresh
+                // (will be done once mouse enters preview win)
       
         static PreviewFrame *Get();
         
@@ -49,6 +52,11 @@ class PreviewFrame : public wxFrame
         
         wxXmlResource *m_RC;
         wxString m_TmpFile;
+        
+        bool m_Dirty;
+        
+        DECLARE_EVENT_TABLE()
+        void OnMouseEnter(wxMouseEvent& event);
 };
 
 

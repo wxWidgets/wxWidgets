@@ -40,7 +40,11 @@ wxWindow *PropEditCtrlTxt::CreateEditCtrl()
 
 void PropEditCtrlTxt::OnText(wxCommandEvent& event)
 {
-    if (CanSave()) WriteValue();
+    if (CanSave()) 
+    {
+        WriteValue();
+        EditorFrame::Get()->NotifyChanged(CHANGED_PROPS);
+    }
 }
 
 
@@ -121,7 +125,11 @@ wxString PropEditCtrlBool::GetValueAsText(wxTreeItemId ti)
 
 void PropEditCtrlBool::OnChoice(wxCommandEvent& event)
 {
-    if (CanSave()) WriteValue();
+    if (CanSave()) 
+    {
+        WriteValue();
+        EditorFrame::Get()->NotifyChanged(CHANGED_PROPS);
+    }
 }
 
 
@@ -410,6 +418,7 @@ void PropEditCtrlXMLID::OnDetails()
     if (!s) return;
     m_TextCtrl->SetValue(s);
     WriteValue();
+    EditorFrame::Get()->NotifyChanged(CHANGED_PROPS);    
 }
 
 

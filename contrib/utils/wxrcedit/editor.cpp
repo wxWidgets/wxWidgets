@@ -98,6 +98,7 @@ BEGIN_EVENT_TABLE(EditorFrame, wxFrame)
     EVT_TOOL_RANGE(ID_PREVIEW, ID_EXIT, EditorFrame::OnToolbar)
     EVT_MENU_RANGE(ID_NEWDIALOG, ID_NEWSYBNODE + 1000, EditorFrame::OnNewNode)
     EVT_MENU_RANGE(ID_CUT, ID_COPY, EditorFrame::OnClipboardAction)
+    EVT_CLOSE(EditorFrame::OnCloseWindow)
 END_EVENT_TABLE()
 
 
@@ -126,6 +127,7 @@ EditorFrame::EditorFrame(wxFrame *parent, const wxString& filename)
     ms_Instance = this;
 
     m_Clipboard = NULL;
+    m_Modified = FALSE;
     
     wxConfigBase *cfg = wxConfigBase::Get();
     
@@ -224,10 +226,13 @@ EditorFrame::~EditorFrame()
 
 void EditorFrame::LoadFile(const wxString& filename)
 {
+    if (!AskToSave()) return;
+
     delete m_Resource;
     
     m_FileName = "";
     m_Resource = new wxXmlDocument;
+    m_Modified = FALSE;
     
     if (!m_Resource->Load(filename))
     {
@@ -240,8 +245,8 @@ void EditorFrame::LoadFile(const wxString& filename)
     {
         m_FileName = filename;
         RefreshTree();
-        SetTitle("wxrcedit - " + wxFileNameFromPath(m_FileName));
     }
+    RefreshTitle();
 }
 
 
@@ -249,24 +254,42 @@ void EditorFrame::LoadFile(const wxString& filename)
 void EditorFrame::SaveFile(const wxString& filename)
 {
     m_FileName = filename;
-    SetTitle("wxrcedit - " + wxFileNameFromPath(m_FileName));
 
     if (!m_Resource->Save(filename, wxXML_IO_LIBXML))
-        wxLogError("Error saving " + filename);
+        wxLogError(_("Error saving ") + filename);
+    else
+        m_Modified = FALSE;
+
+    RefreshTitle();
 }
 
 
 
 void EditorFrame::NewFile()
 {  
+    if (!AskToSave()) return;
+
     delete m_Resource;
     
     m_FileName = "";
     m_Resource = new wxXmlDocument;
-    m_Resource->SetRoot(new wxXmlNode(wxXML_ELEMENT_NODE, "resource"));    
+    m_Resource->SetRoot(new wxXmlNode(wxXML_ELEMENT_NODE, _("resource")));
     
+    m_Modified = FALSE;
     RefreshTree();
-    SetTitle("unnamed");
+    RefreshTitle();
+}
+
+
+
+void EditorFrame::RefreshTitle()
+{
+    wxString s;
+    if (m_Modified) s << _T("* ");
+    s << _("wxrcedit");
+    if (!m_FileName)
+        s << _T(" - ") << wxFileNameFromPath(m_FileName);
+    SetTitle(s);
 }
 
 
@@ -356,6 +379,14 @@ void EditorFrame::NotifyChanged(int change_type)
         int icon = NodeHandler::Find(m_SelectedNode)->GetTreeIcon(m_SelectedNode);
         m_TreeCtrl->SetItemImage(sel, icon);
     }
+    
+    if (!m_Modified)
+    {
+        m_Modified = TRUE;
+        RefreshTitle();
+    }
+    
+    PreviewFrame::Get()->MakeDirty();
 }
 
 
@@ -421,7 +452,9 @@ void EditorFrame::OnToolbar(wxCommandEvent& event)
 
         case ID_OPEN :
             {
+            wxString cwd = wxGetCwd(); // workaround for 2.2
             wxString name = wxFileSelector(_("Open XML resource"), _T(""), _T(""), _T(""), _("XML resources (*.xrc)|*.xrc"), wxOPEN | wxFILE_MUST_EXIST);
+            wxSetWorkingDirectory(cwd);
             if (!name.IsEmpty())
                 LoadFile(name);
             break;
@@ -433,7 +466,9 @@ void EditorFrame::OnToolbar(wxCommandEvent& event)
 
         case ID_SAVEAS :
             {
+            wxString cwd = wxGetCwd(); // workaround for 2.2
             wxString name = wxFileSelector(_("Save as"), _T(""), m_FileName, _T(""), _("XML resources (*.xrc)|*.xrc"), wxSAVE | wxOVERWRITE_PROMPT);
+            wxSetWorkingDirectory(cwd);
             if (!name.IsEmpty())
                 SaveFile((m_FileName = name));
             break;
@@ -664,3 +699,27 @@ void EditorFrame::OnClipboardAction(wxCommandEvent& event)
     }
 }
 
+
+
+
+bool EditorFrame::AskToSave()
+    // asks the user to save current document (if modified)
+    // returns FALSE if user cancelled the action, TRUE of he choosed
+    // 'yes' or 'no'
+{
+    if (!m_Modified) return TRUE;
+    
+    int res = wxMessageBox(_("File modified. Do you want to save changes?"), _("Save changes"), 
+                            wxYES_NO | wxCANCEL | wxCENTRE | wxICON_QUESTION);
+    if (res == wxYES)
+        SaveFile(m_FileName);
+    return (res != wxCANCEL);
+}
+
+
+
+void EditorFrame::OnCloseWindow(wxCloseEvent&)
+{
+    if (!AskToSave()) return;
+    Destroy();
+}

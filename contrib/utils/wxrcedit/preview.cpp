@@ -63,6 +63,7 @@ PreviewFrame *PreviewFrame::Get()
 PreviewFrame::PreviewFrame()
     : wxFrame(NULL, -1, _("Preview"))
 {
+    m_Dirty = FALSE;
     ms_Instance = this;
     m_Node = NULL;
     
@@ -109,6 +110,18 @@ PreviewFrame::~PreviewFrame()
 
 
         
+void PreviewFrame::MakeDirty()
+{
+    if (m_Node == NULL) return;
+    if (m_Dirty) return;
+    m_Dirty = TRUE;
+    m_LogCtrl->Clear();
+    m_LogCtrl->SetValue(_("Resource modified.\n"
+                   "Move mouse cursor over the preview window to refresh it."));
+}
+
+
+
 void PreviewFrame::Preview(wxXmlNode *node)
 {
    while (node->GetParent()->GetParent() != NULL) node = node->GetParent();
@@ -152,6 +165,8 @@ void PreviewFrame::Preview(wxXmlNode *node)
    
    wxSetWorkingDirectory(oldcwd);
    wxLog::SetActiveTarget(oldlog);
+   
+   m_Dirty = FALSE;
 }
 
 
@@ -192,4 +207,15 @@ void PreviewFrame::PreviewPanel()
         m_ScrollWin->SetScrollbars(1, 1, panel->GetSize().x, panel->GetSize().y,
                                    0, 0, TRUE);
     }
+}
+
+
+
+BEGIN_EVENT_TABLE(PreviewFrame, wxFrame)
+    EVT_ENTER_WINDOW(PreviewFrame::OnMouseEnter)
+END_EVENT_TABLE()
+
+void PreviewFrame::OnMouseEnter(wxMouseEvent& event)
+{
+    if (m_Dirty) Preview(m_Node);
 }
