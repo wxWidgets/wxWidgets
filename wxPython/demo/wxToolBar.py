@@ -26,16 +26,16 @@ class TestToolBar(wxFrame):
         EVT_TOOL(self, 10, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 10, self.OnToolRClick)
 
-        tb.AddSimpleTool(20, images.getOpenBitmap(), "Open")
+        tb.AddSimpleTool(20, images.getOpenBitmap(), "Open", "Long help for 'Open'")
         EVT_TOOL(self, 20, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 20, self.OnToolRClick)
 
         tb.AddSeparator()
-        tb.AddSimpleTool(30, images.getCopyBitmap(), "Copy")
+        tb.AddSimpleTool(30, images.getCopyBitmap(), "Copy", "Long help for 'Copy'")
         EVT_TOOL(self, 30, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 30, self.OnToolRClick)
 
-        tb.AddSimpleTool(40, images.getPasteBitmap(), "Paste")
+        tb.AddSimpleTool(40, images.getPasteBitmap(), "Paste", "Long help for 'Paste'")
         EVT_TOOL(self, 40, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 40, self.OnToolRClick)
 
@@ -75,6 +75,8 @@ class TestToolBar(wxFrame):
         self.log.WriteText('OnToolEnter: %s, %s\n' % (event.GetId(), event.GetInt()))
         if self.timer is None:
             self.timer = wxTimer(self)
+        if self.timer.IsRunning():
+            self.timer.Stop()
         self.timer.Start(2000)
         event.Skip()
 
