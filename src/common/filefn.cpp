@@ -893,7 +893,7 @@ wxString wxUnix2MacFilename (const char *str)
   return wxString (sMacFileNameConversion) ;
 }
 
-wxString wxMacFSSpec2MacFilename( const FSSpec *spec ) 
+wxString wxMacFSSpec2MacFilename( const FSSpec *spec )
 {
 	Handle	myPath ;
 	short 	length ;
@@ -945,10 +945,10 @@ wxDos2UnixFilename (char *s)
 }
 
 void
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXPM__)
 wxUnix2DosFilename (char *s)
 #else
-wxUnix2DosFilename (char *WXUNUSED(s) ) 
+wxUnix2DosFilename (char *WXUNUSED(s) )
 #endif
 {
 // Yes, I really mean this to happen under DOS only! JACS
@@ -1512,16 +1512,16 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
 #ifdef _MSC_VER
   if (_getcwd(cbuf, sz) == NULL) {
 #elif defined( __WXMAC__)
-	enum 
-	{ 
-		SFSaveDisk = 0x214, CurDirStore = 0x398 
+	enum
+	{
+		SFSaveDisk = 0x214, CurDirStore = 0x398
 	};
 	FSSpec cwdSpec ;
 	
 	FSMakeFSSpec( - *(short *) SFSaveDisk , *(long *) CurDirStore , NULL , &cwdSpec ) ;
 	wxString res = wxMacFSSpec2UnixFilename( &cwdSpec ) ;
 	strcpy( buf , res ) ;
-	if (0) 
+	if (0)
 #else
   if (getcwd(cbuf, sz) == NULL) {
 #endif
