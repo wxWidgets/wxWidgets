@@ -520,6 +520,11 @@ bool wxToolBar::Realize()
     const bool isVertical = HasFlag(wxTB_VERTICAL);
 
     bool doRemap, doRemapBg, doTransparent;
+#ifdef __WXWINCE__
+    doRemapBg = false;
+    doRemap = false;
+    doTransparent = false;
+#else
     if (wxSystemOptions::GetOptionInt(wxT("msw.remap")) == 2)
     {
         doRemapBg = doRemap = false;
@@ -531,6 +536,7 @@ bool wxToolBar::Realize()
         doRemapBg = !doRemap;
         doTransparent = false;
     }
+#endif
 
     // delete all old buttons, if any
     for ( size_t pos = 0; pos < m_nButtons; pos++ )
@@ -570,15 +576,20 @@ bool wxToolBar::Realize()
         wxMemoryDC dcAllButtons;
         wxBitmap bitmap(totalBitmapWidth, totalBitmapHeight);
         dcAllButtons.SelectObject(bitmap);
+#ifdef __WXWINCE__
+        dcAllButtons.SetBackground(wxBrush(wxColour(192,192,192)));
+#else
         if (doTransparent)
             dcAllButtons.SetBackground(*wxTRANSPARENT_BRUSH);
         else
-        dcAllButtons.SetBackground(*wxLIGHT_GREY_BRUSH);
+            dcAllButtons.SetBackground(*wxLIGHT_GREY_BRUSH);
+#endif        
         dcAllButtons.Clear();
 
         m_hBitmap = bitmap.GetHBITMAP();
         HBITMAP hBitmap = (HBITMAP)m_hBitmap;
 
+#ifndef __WXWINCE__
         if (doRemapBg)
         {
             dcAllButtons.SelectObject(wxNullBitmap);
@@ -590,6 +601,7 @@ bool wxToolBar::Realize()
 
             dcAllButtons.SelectObject(bitmap);
         }
+#endif
 
         // the button position
         wxCoord x = 0;
@@ -1434,20 +1446,22 @@ WXLRESULT wxToolBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam
 {
     switch ( nMsg )
     {
+        case WM_MOUSEMOVE:
+            // we don't handle mouse moves, so always pass the message to
+            // wxControl::MSWWindowProc (HandleMouseMove just calls OnMouseEnter)
+            HandleMouseMove(wParam, lParam);
+            break;
+
         case WM_SIZE:
             if ( HandleSize(wParam, lParam) )
                 return 0;
             break;
 
-        case WM_MOUSEMOVE:
-            // we don't handle mouse moves, so always pass the message to
-            // wxControl::MSWWindowProc
-            HandleMouseMove(wParam, lParam);
-            break;
-
+#ifndef __WXWINCE__
         case WM_PAINT:
             if ( HandlePaint(wParam, lParam) )
                 return 0;
+#endif
     }
 
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);

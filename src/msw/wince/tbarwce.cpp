@@ -355,7 +355,7 @@ bool wxToolMenuBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
     return true;
 }
 
-bool wxToolMenuBar:Realize()
+bool wxToolMenuBar::Realize()
 {
     const size_t nTools = GetToolsCount();
     if ( nTools == 0 )
@@ -393,6 +393,7 @@ bool wxToolMenuBar:Realize()
             case wxTOOL_STYLE_CONTROL:
                 button.idCommand = tool->GetId();
                 // fall through: create just a separator too
+                // TODO: controls are not yet supported on wxToolMenuBar.
 
             case wxTOOL_STYLE_SEPARATOR:
                 button.fsState = TBSTATE_ENABLED;
@@ -419,7 +420,8 @@ bool wxToolMenuBar:Realize()
                     wxMemoryDC memDC;
                     wxBitmap b(16,16);
                     memDC.SelectObject(b);
-                    memDC.SetBackground(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE)));
+                    wxColour col = wxColour(192,192,192);
+                    memDC.SetBackground(wxBrush(col));
                     memDC.Clear();
                     int x = (16 - bmp.GetWidth())/2;
                     int y = (16 - bmp.GetHeight())/2;
