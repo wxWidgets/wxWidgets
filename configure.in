@@ -3097,6 +3097,8 @@ if test "$wxUSE_MAC" = 1; then
 else
     if test "$wxUSE_PM" = 1; then
         LIBWXMACRESCOMP="emxbind -ep \$(BIN_PROGRAM)"
+    else
+        LIBWXMACRESCOMP="#"
     fi
 fi
 
