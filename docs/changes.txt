@@ -227,6 +227,7 @@ wxMac:
 wxMSW:
 
 - fixed enhanced metafiles loading from files (Andreas Goebel)
+- Group of wxRadioButtons no longer have to be consecutive
 
 
 2.5.3
