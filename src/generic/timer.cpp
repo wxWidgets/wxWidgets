@@ -41,12 +41,13 @@
     // if we are unlucky and the latter combines information from two sources.
     #include "wx/mgl/private.h"
     extern "C" ulong _EVT_getTicks();
-    #define GetMillisecondsTime() _EVT_getTicks()
+    #define GetMillisecondsTime _EVT_getTicks
+
+    typedef ulong wxTimerTick_t;
 #else
-//    #define GetMillisecondsTime() wxGetLocalTimeMillis().ToLong()
-    // Suppresses the debug warning in ToLong. FIXME: check
-    // that we don't drastically lose precision
-    #define GetMillisecondsTime() (unsigned long) wxGetLocalTimeMillis().GetValue()
+    #define GetMillisecondsTime wxGetLocalTimeMillis
+
+    typedef wxLongLong wxTimerTick_t;
 #endif
 
 // ----------------------------------------------------------------------------
@@ -72,7 +73,7 @@ class wxTimerScheduler
 public:
     wxTimerScheduler() : m_timers(NULL) {}
 
-    void QueueTimer(wxTimerDesc *desc, unsigned long when = 0);
+    void QueueTimer(wxTimerDesc *desc, wxTimerTick_t when = 0);
     void RemoveTimer(wxTimerDesc *desc);
     void NotifyTimers();
    
@@ -80,7 +81,7 @@ private:
     wxTimerDesc *m_timers;
 };
 
-void wxTimerScheduler::QueueTimer(wxTimerDesc *desc, unsigned long when)
+void wxTimerScheduler::QueueTimer(wxTimerDesc *desc, wxTimerTick_t when)
 {
     if ( desc->running )
         return; // already scheduled
@@ -128,7 +129,7 @@ void wxTimerScheduler::NotifyTimers()
     {
         bool oneShot;
         volatile bool timerDeleted;
-        unsigned long now = GetMillisecondsTime();
+        wxTimerTick_t now = GetMillisecondsTime();
         wxTimerDesc *desc;
 
         while ( m_timers && m_timers->shotTime <= now )
