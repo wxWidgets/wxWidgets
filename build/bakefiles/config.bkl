@@ -100,7 +100,7 @@
         <option name="TOOLCHAIN_NAME"/>
         <option name="EXTRALIBS"/>
         <option name="EXTRALIBS_GUI"/>
-        <option name="OPENGL_LIBS"/>
+        <option name="EXTRALIBS_OPENGL"/>
         <option name="SAMPLES_RPATH_FLAG"/>
         
         <set var="TOP_SRCDIR">$(top_srcdir)/</set>

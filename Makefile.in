@@ -20,12 +20,12 @@ DEREZ = @DEREZ@
 DLLPREFIX = @DLLPREFIX@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
+EXTRALIBS_OPENGL = @EXTRALIBS_OPENGL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_DIR = @INSTALL_DIR@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 LDFLAGS = @LDFLAGS@
 LN_S = @LN_S@
-OPENGL_LIBS = @OPENGL_LIBS@
 PIC_FLAG = @PIC_FLAG@
 RANLIB = @RANLIB@
 RESCOMP = @RESCOMP@
@@ -1996,6 +1996,12 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_TOOLKIT_MGL@__UNIV_TEXTCTRL_OBJECTS_3 = corelib_textctrl.o
 @COND_TOOLKIT_MSW@__UNIV_TEXTCTRL_OBJECTS_3 = corelib_textctrl.o
 @COND_TOOLKIT_X11@__UNIV_TEXTCTRL_OBJECTS_3 = corelib_textctrl.o
+@COND_MONOLITHIC_0@__WXLIBGLDEP_BASE_p = \
+@COND_MONOLITHIC_0@	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5
+@COND_MONOLITHIC_0@__WXLIBGLDEP_CORE_p = \
+@COND_MONOLITHIC_0@	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5
+@COND_MONOLITHIC_1@__WXLIB_MONO_p = \
+@COND_MONOLITHIC_1@	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 @COND_MONOLITHIC_0_SHARED_1@__basedll___depname \
 @COND_MONOLITHIC_0_SHARED_1@	= \
@@ -7190,8 +7196,8 @@ distclean: clean
 	rm -f configure config.cache config.log config.status
 	rm -f bk-deps shared-ld-sh
 
-@COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@$(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname) $(__OPENGL_SRC_OBJECTS) $(__coredll___depname) $(__basedll___depname)
-@COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@	$(SHARED_LD_CXX) $@  $(__OPENGL_SRC_OBJECTS) $(LDFLAGS) $(__gldll___importlib)   -L$(top_builddir)lib $(__gldll___macinstnamecmd) $(__gldll___importlib) $(__gldll___soname_flags) $(dll___macver) $(OPENGL_LIBS)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(DLLIMPEXT) $(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
+@COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@$(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname) $(__OPENGL_SRC_OBJECTS)
+@COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@	$(SHARED_LD_CXX) $@  $(__OPENGL_SRC_OBJECTS) $(LDFLAGS) $(__gldll___importlib)   -L$(top_builddir)lib $(__gldll___macinstnamecmd) $(__gldll___importlib) $(__gldll___soname_flags) $(dll___macver) $(EXTRALIBS_OPENGL)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIBGLDEP_CORE_p) $(__WXLIBGLDEP_BASE_p) $(__WXLIB_MONO_p)
 @COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@	$(__gldll___so_symlinks_cmd)
 
 @COND_TOOLKIT_X11@gldll_glcanvas.o: $(srcdir)/src/x11/glcanvas.cpp

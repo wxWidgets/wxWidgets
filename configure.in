@@ -3018,16 +3018,6 @@ if test "$wxUSE_SHARED" = "yes"; then
             SAMPLES_RPATH_FLAG="-R\$(top_builddir)lib"
         fi
       ;;
-
-      *-*-cygwin* | *-*-mingw32* )
-        dnl Don't build seperate GL library
-        WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_SHARED}"
-        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-
-        if test "$wxUSE_OPENGL" = "yes"; then
-            LIBS="${LIBS} ${OPENGL_LIBS}"
-        fi
-      ;;
     esac
 
     dnl set target to shared if not explicitly chose static before
@@ -5395,6 +5385,9 @@ EXTRALIBS="$LDFLAGS $LDFLAGS_VERSIONING $LIBS $DMALLOC_LIBS"
 if test "$wxUSE_GUI" = "yes"; then
     EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK | sed 's/ \+/ /g'`
 fi
+if test "$wxUSE_OPENGL" = "yes"; then
+    EXTRALIBS_OPENGL="$LDFLAGS_GL $OPENGL_LIBS"
+fi
     
 LDFLAGS="$LDFLAGS $PROFILE"
 
@@ -5434,6 +5427,7 @@ AC_SUBST(WXUNIV)
 AC_SUBST(MONOLITHIC)
 AC_SUBST(EXTRALIBS)
 AC_SUBST(EXTRALIBS_GUI)
+AC_SUBST(EXTRALIBS_OPENGL)
 AC_SUBST(UNICODE)
 AC_SUBST(BUILD)
 AC_SUBST(SHARED)

@@ -7,6 +7,13 @@
     <!--                         OpenGL canvas library                     -->
     <!-- ================================================================= -->
     
+    <set var="WXLIBGLDEP_CORE">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('core')))</if>
+    </set>
+    <set var="WXLIBGLDEP_BASE">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('base')))</if>
+    </set>
+    
     <dll id="gldll" template="wx_dll"
          cond="SHARED=='1' and USE_GUI=='1' and USE_OPENGL=='1'">
         <define>WXUSINGDLL</define>
@@ -14,13 +21,13 @@
         <sources>$(OPENGL_SRC)</sources>
 
         <!-- link against base and core libs in multilib build: --> 
-        <wx-lib>coredll</wx-lib>
-        <wx-lib>basedll</wx-lib>
+        <sys-lib>$(WXLIBGLDEP_CORE)</sys-lib>
+        <sys-lib>$(WXLIBGLDEP_BASE)</sys-lib>
         <!-- link against the wxWin library in monolithic build: -->
         <sys-lib>$(WXLIB_MONO)</sys-lib>
 
         <if cond="FORMAT=='autoconf'">
-            <ldflags>$(OPENGL_LIBS)</ldflags>
+            <ldflags>$(EXTRALIBS_OPENGL)</ldflags>
         </if>
     </dll>
     
