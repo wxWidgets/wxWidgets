@@ -16,7 +16,7 @@ class MyApp: public wxApp {
  bool OnInit() {
    wxSoundStreamOSS *oss_dev = new wxSoundStreamOSS();
    wxFileInputStream *f_input = new wxFileInputStream(argv[1]);
-   wxSoundWave *wav_file = new wxSoundWave(*f_input, *oss_dev);
+   wxSoundFileStream *wav_file = new wxSoundAiff(*f_input, *oss_dev);
    wxFrame *frame = new wxFrame(NULL, -1, "My Frame");
    wxSoundFormatPcm pcm;
 

@@ -159,7 +159,7 @@ bool wxSoundStreamPcm::SetSoundFormat(const wxSoundFormatBase& format)
   pcm_format2 = (wxSoundFormatPcm *)new_format;
 
   m_16_to_8 = FALSE;
-  if (pcm_format->GetBPS() == 16 && pcm_format2->GetBPS() == 8) {
+  if (pcm_format->GetBPS() != pcm_format2->GetBPS()) {
     m_16_to_8 = TRUE;
     current_table_out = s_convert_out_16_to_8;
     current_table_in  = s_convert_in_8_to_16;

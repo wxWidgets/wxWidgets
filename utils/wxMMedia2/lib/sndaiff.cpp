@@ -90,7 +90,7 @@ bool wxSoundAiff::PrepareToPlay()
       sndformat.SetSampleRate((wxUint32) srate);
       sndformat.SetBPS(bps);
       sndformat.SetChannels(channels);
-      sndformat.Signed(TRUE);
+      sndformat.Signed(FALSE);
       sndformat.SetOrder(wxBIG_ENDIAN);
 
       if (!SetSoundFormat(sndformat))

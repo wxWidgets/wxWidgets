@@ -1,19 +1,18 @@
 // --------------------------------------------------------------------------
-// Name: sndulaw.cpp
+// Name: sndg72x.cpp
 // Purpose:
-// Date: 08/11/1999
+// Date: 08/26/1999
 // Author: Guilhem Lavaux <lavaux@easynet.fr> (C) 1999
 // CVSID: $Id$
 // --------------------------------------------------------------------------
 #ifdef __GNUG__
-#pragma implementation "sndulaw.cpp"
+#pragma implementation "sndg72x.cpp"
 #endif
 
 #include <wx/wxprec.h>
 #include "sndbase.h"
 #include "sndfile.h"
 #include "sndpcm.h"
-#include "sndulaw.h"
 #include "sndg72x.h"
 #include "g72x.h"
 
