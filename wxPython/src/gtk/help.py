@@ -61,27 +61,6 @@ class wxHelpEvent(wxHelpEventPtr):
 
 
 
-class wxContextMenuEventPtr(wxCommandEventPtr):
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def GetPosition(self, *_args, **_kwargs):
-        val = apply(helpc.wxContextMenuEvent_GetPosition,(self,) + _args, _kwargs)
-        if val: val = wxPointPtr(val) 
-        return val
-    def SetPosition(self, *_args, **_kwargs):
-        val = apply(helpc.wxContextMenuEvent_SetPosition,(self,) + _args, _kwargs)
-        return val
-    def __repr__(self):
-        return "<C wxContextMenuEvent instance at %s>" % (self.this,)
-class wxContextMenuEvent(wxContextMenuEventPtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = apply(helpc.new_wxContextMenuEvent,_args,_kwargs)
-        self.thisown = 1
-
-
-
-
 class wxContextHelpPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
@@ -192,4 +171,3 @@ wxEVT_DETAILED_HELP = helpc.wxEVT_DETAILED_HELP
 # Stuff these names into the wx namespace so wxPyConstructObject can find them
 import wx
 wx.wxHelpEventPtr         = wxHelpEventPtr
-wx.wxContextMenuEventPtr  = wxContextMenuEventPtr
