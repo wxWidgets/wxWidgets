@@ -47,7 +47,7 @@
 #endif
 
 #ifdef DBDEBUG_CONSOLE
-    #include <iostream.h>
+    #include "wx/ioswrap.h"
 #endif
 
 #ifdef    __BORLANDC__
@@ -897,7 +897,7 @@ void wxDB::Close(void)
         {
             s.sprintf("(%-20s)     tableID:[%6lu]     pDb:[%p]", tiu->tableName,tiu->tableID,tiu->pDb);
             s2.sprintf("Orphaned found using pDb:[%p]",this);
-            wxMessageBox (s,s2);
+            wxLogDebug (s,s2);
         }
         pNode = pNode->Next();
     }
@@ -961,7 +961,7 @@ bool wxDB::DispAllErrors(HENV aHenv, HDBC aHdbc, HSTMT aHstmt)
         }
 
 #ifdef __WXDEBUG__
-        wxMessageBox(odbcErrMsg.GetData(),"DEBUG MESSAGE from DispAllErrors()");
+        wxLogDebug(odbcErrMsg.GetData(),"DEBUG MESSAGE from DispAllErrors()");
 #endif
     }
 
@@ -1673,12 +1673,21 @@ wxColInf *wxDB::GetColumns(char *tableName[], const char *userID)
                         GetData( 9, SQL_C_SSHORT, (UCHAR*) &colInf[colNo].decimalDigits,0,                        &cb);
                         GetData(10, SQL_C_SSHORT, (UCHAR*) &colInf[colNo].numPrecRadix, 0,                        &cb);
                         GetData(11, SQL_C_SSHORT, (UCHAR*) &colInf[colNo].nullable,     0,                        &cb);
-                        GetData(12, SQL_C_CHAR,   (UCHAR*)  colInf[colNo].remarks,         254+1,                    &cb);
+                        GetData(12, SQL_C_CHAR,   (UCHAR*)  colInf[colNo].remarks,      254+1,                    &cb);
 
                         // Determine the wxDB data type that is used to represent the native data type of this data source
                         colInf[colNo].dbDataType = 0;
                         if (!wxStricmp(typeInfVarchar.TypeName,colInf[colNo].typeName))
+                        {
+                            if (colInf[colNo].columnSize < 1)
+                            {
+                               // Apparently mySQL and Postgres (or their ODBC drivers) do not 
+                               // return a columnSize, so set columnSize = bufferLength
+                               // if no column size was returned
+                               colInf[colNo].columnSize = colInf[colNo].bufferLength;
+                            }
                             colInf[colNo].dbDataType = DB_DATA_TYPE_VARCHAR;
+                        }
                         else if (!wxStricmp(typeInfInteger.TypeName,colInf[colNo].typeName))
                             colInf[colNo].dbDataType = DB_DATA_TYPE_INTEGER;
                         else if (!wxStricmp(typeInfFloat.TypeName,colInf[colNo].typeName))
@@ -1843,7 +1852,16 @@ wxColInf *wxDB::GetColumns(char *tableName, int *numCols, const char *userID)
                     // Determine the wxDB data type that is used to represent the native data type of this data source
                     colInf[colNo].dbDataType = 0;
                     if (!wxStricmp(typeInfVarchar.TypeName,colInf[colNo].typeName))
+                    {
+                        if (colInf[colNo].columnSize < 1)
+                        {
+                             // Apparently mySQL and Postgres (or their ODBC drivers) do not 
+                             // return a columnSize, so set columnSize = bufferLength
+                             // if no column size was returned
+                             colInf[colNo].columnSize = colInf[colNo].bufferLength;
+                        }
                         colInf[colNo].dbDataType = DB_DATA_TYPE_VARCHAR;
+                    }
                     else if (!wxStricmp(typeInfInteger.TypeName,colInf[colNo].typeName))
                         colInf[colNo].dbDataType = DB_DATA_TYPE_INTEGER;
                     else if (!wxStricmp(typeInfFloat.TypeName,colInf[colNo].typeName))
