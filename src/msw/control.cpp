@@ -168,17 +168,17 @@ void wxControl::MSWOnMouseMove(int x, int y, WXUINT flags)
   // Window gets a click down message followed by a mouse move
   // message even if position isn't changed!  We want to discard
   // the trailing move event if x and y are the same.
-  if ((m_lastEvent == wxEVT_RIGHT_DOWN || m_lastEvent == wxEVT_LEFT_DOWN ||
-       m_lastEvent == wxEVT_MIDDLE_DOWN) &&
-      (m_lastXPos == event.GetX() && m_lastYPos == event.GetY()))
+  if ((m_lastMouseEvent == wxEVT_RIGHT_DOWN || m_lastMouseEvent == wxEVT_LEFT_DOWN ||
+       m_lastMouseEvent == wxEVT_MIDDLE_DOWN) &&
+      (m_lastMouseX == event.GetX() && m_lastMouseY == event.GetY()))
   {
-    m_lastXPos = event.GetX(); m_lastYPos = event.GetY();
-    m_lastEvent = wxEVT_MOTION;
+    m_lastMouseX = event.GetX(); m_lastMouseY = event.GetY();
+    m_lastMouseEvent = wxEVT_MOTION;
     return;
   }
 
-  m_lastEvent = wxEVT_MOTION;
-  m_lastXPos = event.GetX(); m_lastYPos = event.GetY();
+  m_lastMouseEvent = wxEVT_MOTION;
+  m_lastMouseX = event.GetX(); m_lastMouseY = event.GetY();
 
   if (!GetEventHandler()->ProcessEvent(event))
     Default();
@@ -248,18 +248,6 @@ bool wxControl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam,
 #else   // !Win95
     return FALSE;
 #endif
-}
-
-/*
- * Allocates control IDs within the appropriate range
- */
-
-
-int NewControlId(void)
-{
-  static int controlId = 0;
-  controlId ++;
-  return controlId;
 }
 
 void wxControl::ProcessCommand (wxCommandEvent & event)

@@ -159,12 +159,12 @@ wxMDIParentFrame::~wxMDIParentFrame()
   if (m_clientWindow->MSWGetOldWndProc())
       m_clientWindow->UnsubclassWin();
 
-  m_clientWindow->m_hWnd = 0;
+  m_clientWindow->SetHWND(0);
   delete m_clientWindow;
 }
 
 // Get size *available for subwindows* i.e. excluding menu bar.
-void wxMDIParentFrame::GetClientSize(int *x, int *y) const
+void wxMDIParentFrame::DoGetClientSize(int *x, int *y) const
 {
   RECT rect;
   ::GetClientRect((HWND) GetHWND(), &rect);
@@ -662,7 +662,7 @@ wxMDIChildFrame::~wxMDIChildFrame()
 
 // Set the client size (i.e. leave the calculation of borders etc.
 // to wxWindows)
-void wxMDIChildFrame::SetClientSize(int width, int height)
+void wxMDIChildFrame::DoSetClientSize(int width, int height)
 {
   HWND hWnd = (HWND) GetHWND();
 
@@ -701,7 +701,7 @@ void wxMDIChildFrame::SetClientSize(int width, int height)
   GetEventHandler()->ProcessEvent(event);
 }
 
-void wxMDIChildFrame::GetPosition(int *x, int *y) const
+void wxMDIChildFrame::DoGetPosition(int *x, int *y) const
 {
   RECT rect;
   GetWindowRect((HWND) GetHWND(), &rect);
@@ -1065,7 +1065,7 @@ bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
 
   CLIENTCREATESTRUCT ccs;
   m_windowStyle = style;
-  m_windowParent = parent;
+  m_parent = parent;
 
   ccs.hWindowMenu = (HMENU) parent->GetWindowMenu();
   ccs.idFirstChild = wxFIRST_MDI_CHILD;

@@ -84,10 +84,10 @@ typedef signed short int SHORT ;
 #endif
 
 #if wxUSE_PENWIN
-WXDLLEXPORT void wxRegisterPenWin();
-WXDLLEXPORT void wxCleanUpPenWin();
-WXDLLEXPORT void wxEnablePenAppHooks (bool hook);
-#endif
+    WXDLLEXPORT void wxRegisterPenWin();
+    WXDLLEXPORT void wxCleanUpPenWin();
+    WXDLLEXPORT void wxEnablePenAppHooks (bool hook);
+#endif // wxUSE_PENWIN
 
 #if wxUSE_ITSY_BITSY
 #define IBS_HORZCAPTION    0x4000L
@@ -167,6 +167,12 @@ WXDLLEXPORT void wxAddControlHandle(WXHWND hWnd, wxWindow *item);
 // Safely get the window text (i.e. without using fixed size buffer)
 WXDLLEXPORT extern wxString wxGetWindowText(WXHWND hWnd);
 
+// get the window class name
+WXDLLEXPORT extern wxString wxGetWindowClass(WXHWND hWnd);
+
+// get the window id
+WXDLLEXPORT extern wxWindowID wxGetWindowId(WXHWND hWnd);
+
 // Does this window style specify any border?
 inline bool wxStyleHasBorder(long style)
 {
@@ -182,18 +188,21 @@ inline bool wxStyleHasBorder(long style)
   #define WS_EX_CLIENTEDGE 0x00000200L
 #endif
 
+// ---------------------------------------------------------------------------
+// debug messages
+// ---------------------------------------------------------------------------
 #if defined(__WIN95__) && defined(__WXDEBUG__) && wxUSE_DBWIN32
 
-#ifndef __TWIN32__
-#ifdef OutputDebugString
-#undef OutputDebugString
-#endif
+    #ifndef __TWIN32__
+        #ifdef OutputDebugString
+            #undef OutputDebugString
+        #endif
 
-#define OutputDebugString OutputDebugStringW95
-#endif
+        #define OutputDebugString OutputDebugStringW95
+    #endif // __TWIN32__
 
-extern void OutputDebugStringW95(const wxChar*, ...);
-#endif
+    extern void OutputDebugStringW95(const wxChar*, ...);
+#endif // USE_DBWIN32
 
 #endif
     // _WX_PRIVATE_H_

@@ -46,13 +46,6 @@
 // private functions
 // ---------------------------------------------------------------------------
 
-// get the id of the window
-#ifdef __WIN32__
-    #define GET_WIN_ID(hwnd) ::GetWindowLong((HWND)hwnd, GWL_ID)
-#else // Win16
-    #define GET_WIN_ID(hwnd) ::GetWindowWord((HWND)hwnd, GWW_ID)
-#endif // Win32/16
-
 // wnd proc for radio buttons
 #ifdef __WIN32__
 LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hWnd,
@@ -109,7 +102,7 @@ bool wxRadioBox::MSWCommand(WXUINT param, WXWORD id)
 
         for ( int i = 0; i < m_noItems; i++ )
         {
-            if ( id == GET_WIN_ID(m_radioButtons[i]) )
+            if ( id == wxGetWindowId(m_radioButtons[i]) )
             {
                 selectedButton = i;
 
@@ -597,13 +590,16 @@ void wxRadioBox::Enable(int item, bool enable)
 }
 
 // Enable all controls
-void wxRadioBox::Enable(bool enable)
+bool wxRadioBox::Enable(bool enable)
 {
-    wxControl::Enable(enable);
+    if ( !wxControl::Enable(enable) )
+        return FALSE;
 
     int i;
     for (i = 0; i < m_noItems; i++)
         ::EnableWindow((HWND) m_radioButtons[i], enable);
+
+    return TRUE;
 }
 
 // Show a specific button

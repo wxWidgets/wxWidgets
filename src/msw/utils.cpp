@@ -796,6 +796,10 @@ bool wxDirExists(const wxString& dir)
 #endif
 }
 
+// ---------------------------------------------------------------------------
+// window information functions
+// ---------------------------------------------------------------------------
+
 wxString WXDLLEXPORT wxGetWindowText(WXHWND hWnd)
 {
     wxString str;
@@ -804,6 +808,58 @@ wxString WXDLLEXPORT wxGetWindowText(WXHWND hWnd)
     str.UngetWriteBuf();
 
     return str;
+}
+
+wxString WXDLLEXPORT wxGetWindowClass(WXHWND hWnd)
+{
+    wxString str;
+
+    int len = 256; // some starting value
+
+    for ( ;; )
+    {
+        // as we've #undefined GetClassName we must now manually choose the
+        // right function to call
+        int count =
+
+        #ifndef __WIN32__
+            GetClassName
+        #else // Win32
+            #ifdef UNICODE
+                GetClassNameW
+            #else // !Unicode
+                #ifdef __TWIN32__
+                    GetClassName
+                #else // !Twin32
+                    GetClassNameA
+                #endif // Twin32/!Twin32
+            #endif // Unicode/ANSI
+        #endif // Win16/32
+                                    ((HWND)hWnd, str.GetWriteBuf(len), len);
+
+        str.UngetWriteBuf();
+        if ( count == len )
+        {
+            // the class name might have been truncated, retry with larger
+            // buffer
+            len *= 2;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    return str;
+}
+
+wxWindowID WXDLLEXPORT wxGetWindowId(WXHWND hWnd)
+{
+#ifndef __WIN32__
+    return (wxWindowID)GetWindowWord((HWND)hWnd, GWW_ID);
+#else // Win32
+    return (wxWindowID)GetWindowLong((HWND)hWnd, GWL_ID);
+#endif // Win16/32
 }
 
 #if 0

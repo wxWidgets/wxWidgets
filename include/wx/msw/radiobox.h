@@ -73,7 +73,7 @@ public:
     wxString GetLabel(int item) const;
     bool Show(bool show);
     void SetFocus();
-    void Enable(bool enable);
+    bool Enable(bool enable);
     void Enable(int item, bool enable);
     void Show(int item, bool show);
     void SetLabelFont(const wxFont& WXUNUSED(font)) {};

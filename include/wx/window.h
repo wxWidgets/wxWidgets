@@ -602,7 +602,14 @@ protected:
     // the window handle (for the underlying windowing system) and the window
     // id - a number which uniquely identifies a window among its siblings
     // unless it is -1
-    WXWidget             m_widget;
+    union
+    {
+        // we have 2 common names for this member, one for MSW and the other
+        // for the rest of the world
+        WXWidget m_widget;
+        WXWidget m_hWnd;
+    };
+
     wxWindowID           m_windowId;
 
     // the parent window of this window (or NULL) and the list of the children
@@ -753,6 +760,7 @@ wxWindow *wxWindowBase::GetGrandParent() const
 // ----------------------------------------------------------------------------
 
 extern wxWindow* WXDLLEXPORT wxGetActiveWindow();
+inline int WXDLLEXPORT NewControlId() { return wxWindowBase::NewControlId(); }
 
 #endif
     // _WX_WINDOW_H_BASE_

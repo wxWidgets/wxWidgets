@@ -415,9 +415,13 @@ bool wxDialog::Show(bool show)
       // enable it, else we enable all modeless windows
       if (last)
       {
+          // VZ: I don't understand what this is supposed to do, so I'll leave
+          //     it out for now and look for horrible consequences
         wxDialog *box = (wxDialog *)last->Data();
         HWND hwnd = (HWND) box->GetHWND();
-        if (box->m_winEnabled)
+#if 0
+        if (box->IsUserEnabled())
+#endif // 0
           EnableWindow(hwnd, TRUE);
         BringWindowToTop(hwnd);
       }
@@ -429,7 +433,9 @@ bool wxDialog::Show(bool show)
           wxWindow *win = (wxWindow *)node->Data();
           HWND hwnd = (HWND) win->GetHWND();
           // Only enable again if not user-disabled.
+#if 0
           if (win->IsUserEnabled())
+#endif // 0
             EnableWindow(hwnd, TRUE);
           node = node->Next();
         }

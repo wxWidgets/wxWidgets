@@ -182,14 +182,24 @@ int wxGauge95::GetValue(void) const
   return m_gaugePos;
 }
 
-void wxGauge95::SetForegroundColour(const wxColour& col)
+bool wxGauge95::SetForegroundColour(const wxColour& col)
 {
-  m_foregroundColour = col ;
+    if ( !wxControl::SetForegroundColour(col) )
+        return FALSE;
+
+    m_foregroundColour = col ;
+
+    return TRUE;
 }
 
-void wxGauge95::SetBackgroundColour(const wxColour& col)
+bool wxGauge95::SetBackgroundColour(const wxColour& col)
 {
-  m_backgroundColour = col ;
+    if ( !wxControl::SetBackgroundColour(col) )
+        return FALSE;
+
+    m_backgroundColour = col ;
+
+    return TRUE;
 }
 
 #endif // wxUSE_GAUGE

@@ -241,13 +241,12 @@ bool wxWindowBase::Close(bool force)
 bool wxWindowBase::DestroyChildren()
 {
     wxWindowList::Node *node;
-    for ( node = m_children.GetFirst(); node; node = node->GetNext() )
+    for ( node = GetChildren().GetFirst(); node; node = node->GetNext() )
     {
         wxWindow *child = node->GetData();
         if ( child )
         {
             delete child;
-            delete node;
         }
     }
 

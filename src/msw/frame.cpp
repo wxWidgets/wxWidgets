@@ -75,7 +75,6 @@ wxFrame::wxFrame()
   m_frameMenuBar = NULL;
   m_frameStatusBar = NULL;
 
-  m_windowParent = NULL;
   m_iconized = FALSE;
 }
 
@@ -170,7 +169,7 @@ WXHMENU wxFrame::GetWinMenu() const
 }
 
 // Get size *available for subwindows* i.e. excluding menu bar, toolbar etc.
-void wxFrame::GetClientSize(int *x, int *y) const
+void wxFrame::DoGetClientSize(int *x, int *y) const
 {
   RECT rect;
   ::GetClientRect((HWND) GetHWND(), &rect);
@@ -230,7 +229,7 @@ void wxFrame::DoSetClientSize(int width, int height)
   GetEventHandler()->ProcessEvent(event);
 }
 
-void wxFrame::GetSize(int *width, int *height) const
+void wxFrame::DoGetSize(int *width, int *height) const
 {
   RECT rect;
   GetWindowRect((HWND) GetHWND(), &rect);
@@ -238,7 +237,7 @@ void wxFrame::GetSize(int *width, int *height) const
   *height = rect.bottom - rect.top;
 }
 
-void wxFrame::GetPosition(int *x, int *y) const
+void wxFrame::DoGetPosition(int *x, int *y) const
 {
   RECT rect;
   GetWindowRect((HWND) GetHWND(), &rect);

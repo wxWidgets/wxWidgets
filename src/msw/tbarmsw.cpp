@@ -381,7 +381,7 @@ wxToolBarTool *wxToolBarMSW::AddTool(int index, const wxBitmap& bitmap, const wx
   return tool;
 }
 
-void wxToolBarMSW::Layout(void)
+void wxToolBarMSW::LayoutTools()
 {
   m_currentRowsOrColumns = 0;
   m_lastX = m_xMargin;

@@ -319,8 +319,8 @@ void wxCheckListBox::InsertItems(int nItems, const wxString items[], int pos)
 wxOwnerDrawn *wxCheckListBox::CreateItem(size_t nIndex)
 {
   wxCheckListBoxItem *pItem = new wxCheckListBoxItem(this, nIndex);
-  if ( m_windowFont.Ok() )
-    pItem->SetFont(m_windowFont);
+  if ( m_font.Ok() )
+    pItem->SetFont(m_font);
 
   return pItem;
 }

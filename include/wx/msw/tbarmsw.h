@@ -65,7 +65,7 @@ public:
   // The button size is bigger than the bitmap size
   wxSize GetToolSize(void) const;
 
-  void Layout(void);
+  void LayoutTools();
 
   // The post-tool-addition call
   bool Realize() { Layout(); return TRUE; };

@@ -204,7 +204,7 @@ class WXDLLEXPORT wxListCtrl: public wxControl
 
   // Sets the background colour (GetBackgroundColour already implicit in
   // wxWindow class)
-  void SetBackgroundColour(const wxColour& col);
+  bool SetBackgroundColour(const wxColour& col);
 
   // Gets information about this column
   bool GetColumn(int col, wxListItem& item) const;

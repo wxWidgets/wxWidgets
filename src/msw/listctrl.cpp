@@ -360,11 +360,14 @@ long wxListCtrl::ConvertToMSWStyle(long& oldStyle, long style) const
 
 // Sets the background colour (GetBackgroundColour already implicit in
 // wxWindow class)
-void wxListCtrl::SetBackgroundColour(const wxColour& col)
+bool wxListCtrl::SetBackgroundColour(const wxColour& col)
 {
-    wxWindow::SetBackgroundColour(col);
+    if ( !wxWindow::SetBackgroundColour(col) )
+        return FALSE;
 
     ListView_SetBkColor((HWND) GetHWND(), PALETTERGB(col.Red(), col.Green(), col.Blue()));
+
+    return TRUE;
 }
 
 // Gets information about this column

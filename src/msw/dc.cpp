@@ -803,7 +803,7 @@ void wxDC::SetBackground(const wxBrush& brush)
         {
             if (m_backgroundBrush.GetStyle()==wxTRANSPARENT)
             {
-                m_canvas->m_backgroundTransparent = TRUE;
+                m_canvas->SetTransparent(TRUE);
             }
             else
             {
@@ -815,7 +815,7 @@ void wxDC::SetBackground(const wxBrush& brush)
                 // wxWindow::SetTransparency(). Should that apply to the child itself, or the
                 // parent?
                 //        m_canvas->SetBackgroundColour(m_backgroundBrush.GetColour());
-                m_canvas->m_backgroundTransparent = FALSE;
+                m_canvas->SetTransparent(FALSE);
             }
         }
     }

@@ -54,9 +54,9 @@ public:
 
   virtual bool Ok(void) const { return (m_refData != NULL && M_CURSORDATA->m_hCursor) ; }
 
-  inline wxCursor& operator = (const wxCursor& cursor) { if (*this == cursor) return (*this); Ref(cursor); return *this; }
-  inline bool operator == (const wxCursor& cursor) { return m_refData == cursor.m_refData; }
-  inline bool operator != (const wxCursor& cursor) { return m_refData != cursor.m_refData; }
+  wxCursor& operator = (const wxCursor& cursor) { if (*this == cursor) return (*this); Ref(cursor); return *this; }
+  bool operator == (const wxCursor& cursor) const { return m_refData == cursor.m_refData; }
+  bool operator != (const wxCursor& cursor) const { return m_refData != cursor.m_refData; }
 
   void SetHCURSOR(WXHCURSOR cursor);
   inline WXHCURSOR GetHCURSOR(void) const { return (M_CURSORDATA ? M_CURSORDATA->m_hCursor : 0); }

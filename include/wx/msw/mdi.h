@@ -65,12 +65,6 @@ class WXDLLEXPORT wxMDIParentFrame: public wxFrame
 
   void SetMenuBar(wxMenuBar *menu_bar);
 
-  // Gets the size available for subwindows after menu size, toolbar size
-  // and status bar size have been subtracted. If you want to manage your own
-  // toolbar(s), don't call SetToolBar.
-  void GetClientSize(int *width, int *height) const;
-  wxSize GetClientSize() const { return wxWindow::GetClientSize(); }
-
   // Get the active MDI child window (Windows only)
   wxMDIChildFrame *GetActiveChild(void) const ;
 
@@ -106,6 +100,11 @@ class WXDLLEXPORT wxMDIParentFrame: public wxFrame
   void OnSysColourChanged(wxSysColourChangedEvent& event);
 
  protected:
+  // Gets the size available for subwindows after menu size, toolbar size
+  // and status bar size have been subtracted. If you want to manage your own
+  // toolbar(s), don't call SetToolBar.
+  void DoGetClientSize(int *width, int *height) const;
+
     wxMDIClientWindow *             m_clientWindow;
     wxMDIChildFrame *               m_currentChild;
     WXHMENU                         m_windowMenu;
@@ -148,12 +147,6 @@ class WXDLLEXPORT wxMDIChildFrame: public wxFrame
   // Set menu bar
   void SetMenuBar(wxMenuBar *menu_bar);
 
-  void SetClientSize(int width, int height);
-  void SetClientSize(const wxSize& sz) { wxWindow::SetClientSize(sz); }
-
-  void GetPosition(int *x, int *y) const ;
-  wxPoint GetPosition() const { return wxWindow::GetPosition(); }
-
   // MDI operations
   virtual void Maximize(void);
   virtual void Restore(void);
@@ -172,8 +165,10 @@ class WXDLLEXPORT wxMDIChildFrame: public wxFrame
 
     // Implementation
     bool ResetWindowStyle(void *vrect);
- protected:
-//    bool            m_active;
+
+protected:
+  void DoGetPosition(int *x, int *y) const ;
+  void DoSetClientSize(int width, int height);
 };
 
 class WXDLLEXPORT wxMDIClientWindow: public wxWindow
