@@ -197,14 +197,19 @@ MGLCursor *wxCursor::GetMGLCursor() const
 // Global cursor setting
 // ----------------------------------------------------------------------------
 
-static wxCursor  g_globalCursor = wxNullCursor;
+static wxCursor  gs_globalCursor = wxNullCursor;
 
 void wxSetCursor(const wxCursor& cursor)
 {
     if ( cursor.Ok() )
     {
         MGL_wmSetGlobalCursor(g_winMng, *cursor.GetMGLCursor());
-        g_globalCursor = cursor;
+        gs_globalCursor = cursor;
+    }
+    else
+    {
+        MGL_wmSetGlobalCursor(g_winMng, NULL);
+        gs_globalCursor = wxNullCursor;        
     }
 }
 
@@ -224,7 +229,7 @@ const wxCursor &wxBusyCursor::GetStoredCursor()
 
 const wxCursor wxBusyCursor::GetBusyCursor()
 {
-    return wxCursor(wxCURSOR_WAIT);
+    return gs_globalCursor;
 }
 
 void wxEndBusyCursor()
@@ -242,7 +247,7 @@ void wxBeginBusyCursor(wxCursor *cursor)
     wxASSERT_MSG( !gs_savedCursor.Ok(),
                   wxT("forgot to call wxEndBusyCursor, will leak memory") );
 
-    gs_savedCursor = g_globalCursor;
+    gs_savedCursor = gs_globalCursor;
     if ( cursor->Ok() )
         wxSetCursor(*cursor);
     else
