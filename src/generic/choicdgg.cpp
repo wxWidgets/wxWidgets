@@ -246,7 +246,7 @@ size_t wxGetMultipleChoices(wxArrayInt& selections,
     return selections.GetCount();
 }
 
-size_t wxGetMultipleChoices(wxArrayInt selections,
+size_t wxGetMultipleChoices(wxArrayInt& selections,
                             const wxString& message,
                             const wxString& caption,
                             const wxArrayString& aChoices,
@@ -273,7 +273,7 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
                                const wxString& message,
                                const wxString& caption,
                                int n, const wxString *choices,
-                               long styleDlg,
+                               long WXUNUSED(styleDlg), // FIXME: why unused?
                                const wxPoint& pos,
                                long styleLbox)
 {
@@ -335,7 +335,7 @@ wxSingleChoiceDialog::wxSingleChoiceDialog(wxWindow *parent,
                                            const wxString *choices,
                                            char **clientData,
                                            long style,
-                                           const wxPoint& pos)
+                                           const wxPoint& WXUNUSED(pos))
 {
     Create(parent, message, caption, n, choices, clientData, style);
 }
@@ -348,7 +348,7 @@ wxSingleChoiceDialog::wxSingleChoiceDialog(wxWindow *parent,
                                            const wxStringList& choices,
                                            char **clientData,
                                            long style,
-                                           const wxPoint& pos)
+                                           const wxPoint& WXUNUSED(pos))
 {
     Create(parent, message, caption, choices, clientData, style);
 }
