@@ -25,6 +25,15 @@
     * warning: unreferenced formal parameter.
     */
 #  pragma warning(disable:4100)
+
+#ifdef __WXWINCE__
+    /*
+       "unreferenced inline function has been removed": this is not
+       suppressed by push above as it is given at the end of the
+       compilation unit
+     */
+#   pragma warning(disable:4514)
+#endif /* __WXWINCE__ */
 #endif /* _MSC_VER */
 
 #include <winsock.h>
