@@ -120,6 +120,9 @@ wxList *wxPendingEvents = (wxList *)NULL;
 
 // common event types are defined here, other event types are defined by the
 // components which use them
+    
+const wxEventType wxEVT_FIRST = 10000;
+const wxEventType wxEVT_USER_FIRST = wxEVT_FIRST + 2000;
 
 DEFINE_EVENT_TYPE(wxEVT_NULL)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_BUTTON_CLICKED)
