@@ -732,6 +732,7 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
    ScrollToCursor();
    // refresh the screen
    RequestUpdate(m_llist->GetUpdateRect());
+   event.Skip();
 }
 
 void
