@@ -57,11 +57,10 @@ DEFINE_EVENT_TYPE(wxEVT_DIALUP_DISCONNECTED)
 
 // Doesn't yet compile under VC++ 4, BC++, Watcom C++: no wininet.h
 #if !defined(__BORLANDC__) && \
+    (!defined(__GNUWIN32__) || wxCHECK_W32API_VERSION(0, 5)) && \
     !defined(__GNUWIN32_OLD__) && \
     !defined(__WATCOMC__) && \
     (!defined(__VISUALC__) || (__VISUALC__ >= 1020))
-    // FIXME: add this back as soon as wxCHECK_W32API_VERSION is chcked in
-    // (!defined(__GNUWIN32__) || wxCHECK_W32API_VERSION(0, 5)) && \
 
 #include <ras.h>
 #include <raserror.h>
