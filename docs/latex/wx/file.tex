@@ -261,7 +261,7 @@ error occurred.
 
 \membersection{wxFile::Write}\label{wxfilewrite}
 
-\func{bool}{Write}{\param{const void*}{ buffer}, \param{off\_t}{ count}}
+\func{size\_t}{Write}{\param{const void*}{ buffer}, \param{off\_t}{ count}}
 
 Writes the specified number of bytes from a buffer.
 
@@ -273,7 +273,7 @@ Writes the specified number of bytes from a buffer.
 
 \wxheading{Return value}
 
-TRUE if the operation was successful.
+the number of bytes actually written
 
 \membersection{wxFile::Write}\label{wxfilewrites}
 
