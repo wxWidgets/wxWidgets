@@ -328,8 +328,8 @@ void wxDCBase::GetMultiLineTextExtent(const wxString& text,
                                       wxCoord *h,
                                       wxFont *font)
 {
-    int widthTextMax = 0, widthLine,
-        heightTextTotal = 0, heightLineDefault = 0, heightLine = 0;
+    wxCoord widthTextMax = 0, widthLine,
+            heightTextTotal = 0, heightLineDefault = 0, heightLine = 0;
 
     wxString curLine;
     for ( const wxChar *pc = text; ; pc++ )
