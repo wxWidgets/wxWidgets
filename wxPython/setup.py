@@ -16,7 +16,7 @@ from distutils.command.install_data import install_data
 VER_MAJOR        = 2      # The first three must match wxWindows
 VER_MINOR        = 4
 VER_RELEASE      = 1
-VER_SUBREL       = 1      # wxPython release num for x.y.z release of wxWindows
+VER_SUBREL       = 2      # wxPython release num for x.y.z release of wxWindows
 VER_FLAGS        = ""     # release flags, such as prerelease num, unicode, etc.
 
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
@@ -1194,7 +1194,6 @@ if __name__ == "__main__":
                           'wxPython.lib.mixins',
                           'wxPython.lib.PyCrust',
                           'wxPython.py',
-                          'wxPython.py.tests',
                           'wxPython.py.wxd',
                           'wxPython.tools',
                           'wxPython.tools.XRCed',
