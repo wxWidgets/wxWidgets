@@ -35,7 +35,7 @@ class WXDLLEXPORT wxComboBox;
 class WXDLLEXPORT wxStaticText;
 class WXDLLEXPORT wxRadioBox;
 class WXDLLEXPORT wxPrintSetupData;
-
+class WXDLLEXPORT wxPageSetupData;
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
