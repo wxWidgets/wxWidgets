@@ -182,7 +182,7 @@ END_EVENT_TABLE()
 
 void MyFrame::LoadFile(wxCommandEvent& WXUNUSED(event) )
 {
-      wxString s = wxFileSelector( _T("Load text file"), (const wxChar *) NULL, 
+      wxString s = wxFileSelector( _T("Load text file"), (const wxChar *) NULL,
                                    (const wxChar *) NULL, (const wxChar *) NULL, _T("*.txt") );
       if (s != "")
       {
@@ -205,47 +205,47 @@ void MyFrame::TestSizers(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::TestNotebookSizers(wxCommandEvent& WXUNUSED(event) )
 {
-    wxDialog dialog( this, -1, "Notebook Sizer Test Dialog"  );
+    wxDialog dialog( this, -1, wxString("Notebook Sizer Test Dialog")  );
 
     // Begin with first hierarchy: a notebook at the top and
     // and OK button at the bottom.
 
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
-    
+
     wxNotebook *notebook = new wxNotebook( &dialog, -1 );
     wxNotebookSizer *nbs = new wxNotebookSizer( notebook );
     topsizer->Add( nbs, 1, wxGROW );
-    
+
     wxButton *button = new wxButton( &dialog, wxID_OK, "OK" );
     topsizer->Add( button, 0, wxALIGN_RIGHT | wxALL, 10 );
 
     // First page: one big text ctrl
     wxTextCtrl *multi = new wxTextCtrl( notebook, -1, "TextCtrl.", wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
     notebook->AddPage( multi, "Page One" );
-    
+
     // Second page: a text ctrl and a button
     wxPanel *panel = new wxPanel( notebook, -1 );
     notebook->AddPage( panel, "Page Two" );
-    
+
     wxBoxSizer *panelsizer = new wxBoxSizer( wxVERTICAL );
-    
+
     wxTextCtrl *text = new wxTextCtrl( panel, -1, "TextLine 1.", wxDefaultPosition, wxSize(250,-1) );
     panelsizer->Add( text, 0, wxGROW|wxALL, 30 );
     text = new wxTextCtrl( panel, -1, "TextLine 2.", wxDefaultPosition, wxSize(250,-1) );
     panelsizer->Add( text, 0, wxGROW|wxALL, 30 );
     wxButton *button2 = new wxButton( panel, -1, "Hallo" );
     panelsizer->Add( button2, 0, wxALIGN_RIGHT | wxLEFT|wxRIGHT|wxBOTTOM, 30 );
-    
+
     panel->SetAutoLayout( TRUE );
     panel->SetSizer( panelsizer );
-    
+
     // Tell dialog to use sizer
-    
+
     dialog.SetAutoLayout( TRUE );
-    topsizer->Fit( &dialog );  
-    topsizer->SetSizeHints( &dialog );  
     dialog.SetSizer( topsizer );
-    
+    topsizer->Fit( &dialog );
+    topsizer->SetSizeHints( &dialog );
+
     dialog.ShowModal();
 }
 
@@ -319,9 +319,9 @@ MySizerFrame::MySizerFrame(wxFrame *frame, char *title, int x, int y ):
   // two buttons which.
 
   wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
-  
+
   // 1) top: create wxStaticText with minimum size equal to its default size
-  topsizer->Add( 
+  topsizer->Add(
     new wxStaticText( this, -1, "An explanation (wxALIGN_RIGHT)." ),
     0,                         // make vertically unstretchable
     wxALIGN_RIGHT |            // right align text
@@ -329,7 +329,7 @@ MySizerFrame::MySizerFrame(wxFrame *frame, char *title, int x, int y ):
     5 );                      // set border width to 5
 
   // 2) top: create wxTextCtrl with minimum size (100x60)
-  topsizer->Add( 
+  topsizer->Add(
     new wxTextCtrl( this, -1, "My text (wxEXPAND).", wxDefaultPosition, wxSize(100,60), wxTE_MULTILINE),
     1,            // make vertically stretchable
     wxEXPAND |    // make horizontally stretchable
@@ -350,40 +350,40 @@ MySizerFrame::MySizerFrame(wxFrame *frame, char *title, int x, int y ):
 
 
   // 3) middle: create wxStaticLine with minimum size (3x3)
-  topsizer->Add( 
-     new wxStaticLine( this, -1, wxDefaultPosition, wxSize(3,3), wxHORIZONTAL), 
+  topsizer->Add(
+     new wxStaticLine( this, -1, wxDefaultPosition, wxSize(3,3), wxHORIZONTAL),
      0,           // make vertically unstretchable
      wxEXPAND |   // make horizontally stretchable
      wxALL,       //   and make border all around
      5 );         // set border width to 5
-     
 
-  // 4) bottom: create two centred wxButtons  
+
+  // 4) bottom: create two centred wxButtons
   wxBoxSizer *button_box = new wxBoxSizer( wxHORIZONTAL );
   button_box->Add(
-     new wxButton( this, -1, "Two buttons in a box" ), 
+     new wxButton( this, -1, "Two buttons in a box" ),
      0,           // make horizontally unstretchable
      wxALL,       // make border all around
      7 );         // set border width to 7
   button_box->Add(
-     new wxButton( this, -1, "(wxCENTER)" ), 
+     new wxButton( this, -1, "(wxCENTER)" ),
      0,           // make horizontally unstretchable
      wxALL,       // make border all around
      7 );         // set border width to 7
-  
-  topsizer->Add( 
+
+  topsizer->Add(
      button_box,
      0,          // make vertically unstretchable
      wxCENTER ); // no border and centre horizontally
 
   SetAutoLayout( TRUE );
-  
+
   // set frame to minimum size
-  topsizer->Fit( this );  
-  
+  topsizer->Fit( this );
+
   // don't allow frame to get smaller than what the sizers tell ye
-  topsizer->SetSizeHints( this );  
-  
+  topsizer->SetSizeHints( this );
+
   SetSizer( topsizer );
 }
 
