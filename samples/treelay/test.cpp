@@ -24,7 +24,7 @@
 
 #include "test.h"
 
-wxStoredTree *myTree = NULL;
+wxTreeLayoutStored *myTree = NULL;
 
 // A macro needed for some compilers (AIX) that need 'main' to be defined
 // in the application itself.
@@ -70,7 +70,7 @@ bool MyApp::OnInit()
   canvas->SetScrollbars(20, 20, 50, 50);
   frame->canvas = canvas;
 
-  myTree = new wxStoredTree();
+  myTree = new wxTreeLayoutStored();
 
   wxClientDC dc(canvas);
   wxFont font(10, wxROMAN, wxNORMAL, wxBOLD);
@@ -85,7 +85,7 @@ bool MyApp::OnInit()
   return TRUE;
 }
 
-void MyApp::TreeTest(wxStoredTree& tree, wxDC& dc)
+void MyApp::TreeTest(wxTreeLayoutStored& tree, wxDC& dc)
 {
   tree.Initialize(200);
   

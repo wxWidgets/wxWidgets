@@ -26,7 +26,7 @@ No base class
 %% wxSoundStream errors
 %%
 
-\wxheading{wxSoundStream errors}\label{wxsoundstreamerrors}
+\wxheading{wxSoundStream errors}
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
@@ -64,13 +64,13 @@ processor (which can be inherited) or call a C function. Its definition is:
 
 The {\bf stream} parameter represents the current wxSoundStream.
 
-The {\bf evt} parameter represents the sound event which is the cause of the calling. (See \helpref{wxSound events}{wxsoundstreamevents}).
+The {\bf evt} parameter represents the sound event which is the cause of the calling. (See \helpref{wxSound events}{wxsoundstream}).
 
 The {\bf cdata} parameter represents the user callback data which were specified
 when the user called \helpref{wxSoundStream::Register}{wxsoundstreamregister}.
 
 {\it Note:} There are two other ways to catch sound events: you can inherit the
-sound stream and redefine \helpref{wxSoundStream::OnSoundEvent}{wxsoundstreamonsoundevent}, or you can reroute the events to another sound stream using \helpref{wxSoundStream::SetEventHandler}{wxsoundstreameventhandler}.
+sound stream and redefine \helpref{wxSoundStream::OnSoundEvent}{wxsoundstreamonsoundevent}, or you can reroute the events to another sound stream using \helpref{wxSoundStream::SetEventHandler}{wxsoundstreamseteventhandler}.
 
 %%
 %% wxSoundStream streaming mode
@@ -206,7 +206,7 @@ current sound stream (it can be a sound file or a sound driver).
 Then, either it manages to apply it and it returns {\bf TRUE}, or it could not and
 it returns {\bf FALSE}. In this case, you must check the error with
 \helpref{wxSoundStream::GetError}{wxsoundstreamgeterror}. See 
-\helpref{wxSoundStream errors section}{wxsoundstreamerrors} for more details.
+\helpref{wxSoundStream errors section}{wxsoundstream} for more details.
 
 \wxheading{Remark}
 

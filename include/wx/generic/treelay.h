@@ -93,12 +93,12 @@ public:
  * A version of wxTreeLayout with storage for nodes
  */
 
-class WXDLLEXPORT wxLayoutTreeStored: public wxTreeLayout
+class WXDLLEXPORT wxTreeLayoutStored: public wxTreeLayout
 {
-    DECLARE_DYNAMIC_CLASS(wxLayoutTreeStored)
+    DECLARE_DYNAMIC_CLASS(wxTreeLayoutStored)
 public:
-    wxLayoutTreeStored(int noNodes = 200);
-    ~wxLayoutTreeStored(void);
+    wxTreeLayoutStored(int noNodes = 200);
+    ~wxTreeLayoutStored(void);
     void Initialize(int n);
     
     wxString HitTest(wxMouseEvent& event, wxDC& dc);
@@ -131,7 +131,7 @@ private:
 };
 
 // For backward compatibility
-#define wxStoredTree wxLayoutTreeStored
+#define wxStoredTree wxTreeLayoutStored
 
 #endif
  // _WX_TREELAY_H_

@@ -14,7 +14,7 @@ and \helpref{wxTreeLayout::GetNodeParent}{wxtreelayoutgetnodeparent} functions.
 
 The application should call \helpref{wxTreeLayout::DoLayout}{wxtreelayoutdolayout} to do the tree
 layout. Depending on how the derived class has been defined, either
-\rtfsp\helprefn{wxTreeLayout::Draw}{wxtreelayoutdraw} must be called (for example by the OnPaint member
+\rtfsp\helpref{wxTreeLayout::Draw}{wxtreelayoutdraw} must be called (for example by the OnPaint member
 of a wxScrolledWindow) or the application-defined drawing code should be called
 as normal.
 
@@ -45,7 +45,7 @@ wxObject
 
 \wxheading{See also}
 
-\helpref{wxLayoutTreeStored}{wxlayouttreestored}
+\helpref{wxTreeLayoutStored}{wxtreelayoutstored}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -60,7 +60,7 @@ Constructor.
 \func{void}{ActivateNode}{\param{long}{ id}, \param{bool }{active}}
 
 Define this so wxTreeLayout can turn nodes on and off for drawing purposes
-(not all nodes may be connected in the tree). See also \helprefn{NodeActive}{nodeactive}.
+(not all nodes may be connected in the tree). See also \helpref{wxTreeLayout::NodeActive}{wxtreelayoutnodeactive}.
 
 \membersection{wxTreeLayout::CalcLayout}
 
@@ -79,7 +79,7 @@ Calculates the layout for the tree, optionally specifying the top node.
 \func{void}{Draw}{\param{wxDC\&}{ dc}}
 
 Call this to let wxTreeLayout draw the tree itself, once the layout has been
-calculated with \helprefn{DoLayout}{dolayout}.
+calculated with \helpref{wxTreeLayout::DoLayout}{wxtreelayoutdolayout}.
 
 \membersection{wxTreeLayout::DrawBranch}
 
@@ -161,7 +161,7 @@ may be necessary for your application.
 
 \constfunc{long}{GetLeftMargin}{\void}
 
-Gets the left margin set with \helprefn{SetMargins}{setmargins}.
+Gets the left margin set with \helpref{wxTreeLayout::SetMargins}{wxtreelayoutsetmargins}.
 
 \membersection{wxTreeLayout::GetOrientation}
 
@@ -173,14 +173,14 @@ Gets the orientation: TRUE means top-to-bottom, FALSE means left-to-right (the d
 
 \constfunc{long}{GetTopMargin}{\void}
 
-Gets the top margin set with \helprefn{SetMargins}{setmargins}.
+Gets the top margin set with \helpref{wxTreeLayout::SetMargins}{wxtreelayoutsetmargins}.
 
 \membersection{wxTreeLayout::GetTopNode}
 
 \constfunc{long}{GetTopNode}{\void}
 
 wxTreeLayout calls this to get the top of the tree. Don't redefine this; call
-\rtfsp\helprefn{SetTopNode}{settopnode} instead before calling \helprefn{DoLayout}{dolayout}.
+\rtfsp\helpref{wxTreeLayout::SetTopNode}{wxtreelayoutsettopnode} instead before calling \helpref{wxTreeLayout::DoLayout}{wxtreelayoutdolayout}.
 
 \membersection{wxTreeLayout::GetXSpacing}
 
@@ -206,7 +206,7 @@ or constructor.
 \func{bool}{NodeActive}{\param{long}{ id}}
 
 Define this so wxTreeLayout can know which nodes are to be drawn (not all
-nodes may be connected in the tree). See also \helprefn{ActivateNode}{activatenode}.
+nodes may be connected in the tree). See also \helpref{wxTreeLayout::ActivateNode}{wxtreelayoutactivatenode}.
 
 \membersection{wxTreeLayout::SetNodeName}
 
@@ -254,9 +254,9 @@ Sets the horizontal and vertical spacing between nodes in the tree.
 
 Sets the left and top margins of the whole tree.
 
-\section{\class{wxLayoutTreeStored}}\label{wxlayouttreestored}
+\section{\class{wxTreeLayoutStored}}\label{wxtreelayoutstored}
 
-wxLayoutTreeStored provides storage for node labels, position and client data. It also provides hit-testing
+wxTreeLayoutStored provides storage for node labels, position and client data. It also provides hit-testing
 (which node a mouse event occurred on). It is usually a more convenient class to use than wxTreeLayout.
 
 \wxheading{Derived from}
@@ -266,60 +266,60 @@ wxLayoutTreeStored provides storage for node labels, position and client data. I
 
 \wxheading{See also}
 
-\helpref{wxLayoutTree}{wxlayouttree}
+\helpref{wxTreeLayout}{wxtreelayout}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxLayoutTreeStored::wxLayoutTreeStored}
+\membersection{wxTreeLayoutStored::wxTreeLayoutStored}
 
-\func{}{wxLayoutTreeStored}{\param{int }{noNodes = 200}}
+\func{}{wxTreeLayoutStored}{\param{int }{noNodes = 200}}
 
 Constructor. Specify the maximum number of nodes to be allocated.
 
-\membersection{wxLayoutTreeStored::AddChild}\label{wxlayouttreestoredaddchild}
+\membersection{wxTreeLayoutStored::AddChild}\label{wxtreelayoutstoredaddchild}
 
 \func{long}{AddChild}{\param{const wxString\&}{ name}, \param{const wxString\&}{ parent = ""}}
 
 Adds a child with a given parent, returning the node id.
 
-\membersection{wxLayoutTreeStored::GetClientData}\label{wxlayouttreestoredgetclientdata}
+\membersection{wxTreeLayoutStored::GetClientData}\label{wxtreelayoutstoredgetclientdata}
 
 \constfunc{long}{GetClientData}{\param{long}{ id}}
 
 Gets the client data for the given node.
 
-\membersection{wxLayoutTreeStored::GetNode}\label{wxlayouttreestoredgetnode}
+\membersection{wxTreeLayoutStored::GetNode}\label{wxtreelayoutstoredgetnode}
 
 \constfunc{wxStoredNode*}{GetNode}{\param{long}{ id}}
 
 Returns the wxStoredNode object for the given node id.
 
-\membersection{wxLayoutTreeStored::GetNodeCount}\label{wxlayouttreestoredgetnodecount}
+\membersection{wxTreeLayoutStored::GetNodeCount}\label{wxtreelayoutstoredgetnodecount}
 
 \constfunc{int}{GetNodeCount}{\void}
 
 Returns the current number of nodes.
 
-\membersection{wxLayoutTreeStored::GetNumNodes}\label{wxlayouttreestoredgetnumnodes}
+\membersection{wxTreeLayoutStored::GetNumNodes}\label{wxtreelayoutstoredgetnumnodes}
 
 \constfunc{int}{GetNumNodes}{\void}
 
 Returns the maximum number of nodes.
 
-\membersection{wxLayoutTreeStored::HitTest}\label{wxlayouttreestoredhittest}
+\membersection{wxTreeLayoutStored::HitTest}\label{wxtreelayoutstoredhittest}
 
 \func{wxString}{HitTest}{\param{wxMouseEvent\&}{ event}, \param{wxDC\& }{dc}}
 
 Returns a string with the node name corresponding to the position of the mouse event, or the empty string if no node
 was detected.
 
-\membersection{wxLayoutTreeStored::NameToId}\label{wxlayouttreestorednametoid}
+\membersection{wxTreeLayoutStored::NameToId}\label{wxtreelayoutstorednametoid}
 
 \func{long}{NameToId}{\param{const wxString\&}{ name}}
 
 Returns the id for the given node name, or -1 if there was no such node.
 
-\membersection{wxLayoutTreeStored::SetClientData}\label{wxlayouttreestoredsetclientdata}
+\membersection{wxTreeLayoutStored::SetClientData}\label{wxtreelayoutstoredsetclientdata}
 
 \func{void}{SetClientData}{\param{long}{ id}, \param{long}{ clientData}}
 

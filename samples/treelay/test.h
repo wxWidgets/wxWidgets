@@ -14,7 +14,7 @@ class MyApp: public wxApp
 {
   public:
     bool OnInit();
-    void TreeTest(wxStoredTree& tree, wxDC& dc);
+    void TreeTest(wxTreeLayoutStored& tree, wxDC& dc);
 };
 
 DECLARE_APP(MyApp)

@@ -67,9 +67,6 @@ rem zip32 -@ %dest\glcanvas.zip < %src\distrib\msw\glcanvas.rsp
 rem Tex2RTF
 zip32 -@ %dest\tex2rtf2.zip < %src\distrib\msw\tex2rtf.rsp
 
-rem wxTreeLayout
-zip32 -@ %dest\treedraw.zip < %src\distrib\msw\wxtree.rsp
-
 rem JPEG source
 zip32 -@ %dest\jpeg.zip < %src\distrib\msw\jpeg.rsp
 
@@ -106,7 +103,6 @@ unzip32 -o ..\wx%version%_bc.zip
 unzip32 -o ..\wx%version%_hlp.zip
 Rem Need Word file, for Remstar DB classes
 unzip32 -o ..\wx%version%_wrd.zip
-unzip32 -o ..\treedraw.zip
 unzip32 -o ..\ogl3.zip
 unzip32 -o ..\jpeg.zip
 unzip32 -o ..\tiff.zip

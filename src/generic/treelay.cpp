@@ -245,22 +245,22 @@ void wxTreeLayout::CalcLayout(long nodeId, int level, wxDC& dc)
  *
  */
 
-IMPLEMENT_DYNAMIC_CLASS(wxLayoutTreeStored, wxTreeLayout)
+IMPLEMENT_DYNAMIC_CLASS(wxTreeLayoutStored, wxTreeLayout)
 
-wxLayoutTreeStored::wxLayoutTreeStored(int n):wxTreeLayout()
+wxTreeLayoutStored::wxTreeLayoutStored(int n):wxTreeLayout()
 {
     m_nodes = NULL;
     m_maxNodes = 0;
     Initialize(n);
 }
 
-wxLayoutTreeStored::~wxLayoutTreeStored(void)
+wxTreeLayoutStored::~wxTreeLayoutStored(void)
 {
     if (m_nodes)
         delete[] m_nodes;
 }
 
-void wxLayoutTreeStored::Initialize(int n)
+void wxTreeLayoutStored::Initialize(int n)
 {
     m_maxNodes = n;
     wxTreeLayout::Initialize();
@@ -278,7 +278,7 @@ void wxLayoutTreeStored::Initialize(int n)
     m_num = 0;
 }
 
-long wxLayoutTreeStored::AddChild(const wxString& name, const wxString& parent)
+long wxTreeLayoutStored::AddChild(const wxString& name, const wxString& parent)
 {
     if (m_num < (m_maxNodes -1 ))
     {
@@ -299,7 +299,7 @@ long wxLayoutTreeStored::AddChild(const wxString& name, const wxString& parent)
         return -1;
 }
 
-long wxLayoutTreeStored::NameToId(const wxString& name)
+long wxTreeLayoutStored::NameToId(const wxString& name)
 {
     long i;
     for (i = 0; i < m_num; i++)
@@ -308,7 +308,7 @@ long wxLayoutTreeStored::NameToId(const wxString& name)
         return -1;
 }
 
-void wxLayoutTreeStored::GetChildren(long id, wxList& list)
+void wxTreeLayoutStored::GetChildren(long id, wxList& list)
 {
     long currentId = GetTopNode();
     while (currentId != -1)
@@ -319,56 +319,56 @@ void wxLayoutTreeStored::GetChildren(long id, wxList& list)
     }
 }
 
-wxStoredNode* wxLayoutTreeStored::GetNode(long idx) const
+wxStoredNode* wxTreeLayoutStored::GetNode(long idx) const
 {
     wxASSERT(idx < m_num);
     
     return &m_nodes[idx];
 };
 
-long wxLayoutTreeStored::GetNodeX(long id)
+long wxTreeLayoutStored::GetNodeX(long id)
 {
     wxASSERT(id < m_num);
     
     return (long)m_nodes[id].m_x;
 }
 
-long wxLayoutTreeStored::GetNodeY(long id)
+long wxTreeLayoutStored::GetNodeY(long id)
 {
     wxASSERT(id < m_num);
     
     return (long)m_nodes[id].m_y;
 }
 
-void wxLayoutTreeStored::SetNodeX(long id, long x)
+void wxTreeLayoutStored::SetNodeX(long id, long x)
 {
     wxASSERT(id < m_num);
     
     m_nodes[id].m_x = (int)x;
 }
 
-void wxLayoutTreeStored::SetNodeY(long id, long y)
+void wxTreeLayoutStored::SetNodeY(long id, long y)
 {
     wxASSERT(id < m_num);
     
     m_nodes[id].m_y = (int)y;
 }
 
-void wxLayoutTreeStored::SetNodeName(long id, const wxString& name)
+void wxTreeLayoutStored::SetNodeName(long id, const wxString& name)
 {
     wxASSERT(id < m_num);
     
     m_nodes[id].m_name = name;
 }
 
-wxString wxLayoutTreeStored::GetNodeName(long id)
+wxString wxTreeLayoutStored::GetNodeName(long id)
 {
     wxASSERT(id < m_num);
     
     return m_nodes[id].m_name;
 }
 
-long wxLayoutTreeStored::GetNodeParent(long id)
+long wxTreeLayoutStored::GetNodeParent(long id)
 {
     if (id != -1)
     {
@@ -380,7 +380,7 @@ long wxLayoutTreeStored::GetNodeParent(long id)
         return -1;
 }
 
-long wxLayoutTreeStored::GetNextNode(long id)
+long wxTreeLayoutStored::GetNextNode(long id)
 {
     wxASSERT(id < m_num);
     
@@ -390,35 +390,35 @@ long wxLayoutTreeStored::GetNextNode(long id)
         return -1;
 }
 
-void wxLayoutTreeStored::SetClientData(long id, long clientData)
+void wxTreeLayoutStored::SetClientData(long id, long clientData)
 {
     wxASSERT(id < m_num);
     
     m_nodes[id].m_clientData = clientData;
 }
 
-long wxLayoutTreeStored::GetClientData(long id) const
+long wxTreeLayoutStored::GetClientData(long id) const
 {
     wxASSERT(id < m_num);
     
     return m_nodes[id].m_clientData;
 }
 
-void wxLayoutTreeStored::ActivateNode(long id, bool active)
+void wxTreeLayoutStored::ActivateNode(long id, bool active)
 {
     wxASSERT(id < m_num);
     
     m_nodes[id].m_active = active;
 }
 
-bool wxLayoutTreeStored::NodeActive(long id)
+bool wxTreeLayoutStored::NodeActive(long id)
 {
     wxASSERT(id < m_num);
     
     return m_nodes[id].m_active;
 }
 
-wxString wxLayoutTreeStored::HitTest(wxMouseEvent& event, wxDC& dc)
+wxString wxTreeLayoutStored::HitTest(wxMouseEvent& event, wxDC& dc)
 {
     wxPoint pt = event.GetPosition();
     wxCoord x = pt.x;
