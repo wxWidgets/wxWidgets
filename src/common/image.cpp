@@ -394,15 +394,26 @@ wxImage wxImage::Scale( int width, int height ) const
 
     wxCHECK_MSG( data, image, wxT("unable to create image") );
 
+    unsigned char *source_data = M_IMGDATA->m_data;
+    unsigned char *target_data = data;
+    unsigned char *source_alpha = 0 ;
+    unsigned char *target_alpha = 0 ;
+    
     if (M_IMGDATA->m_hasMask)
     {
         image.SetMaskColour( M_IMGDATA->m_maskRed,
                              M_IMGDATA->m_maskGreen,
                              M_IMGDATA->m_maskBlue );
     }
-
-    unsigned char *source_data = M_IMGDATA->m_data;
-    unsigned char *target_data = data;
+    else
+    {
+        source_alpha = M_IMGDATA->m_alpha ;
+        if ( source_alpha )
+        {
+            image.SetAlpha() ;
+            target_alpha = image.GetAlpha() ;
+        }
+    }
 
     long x_delta = (old_width<<16) / width;
     long y_delta = (old_height<<16) / height;
@@ -413,15 +424,19 @@ wxImage wxImage::Scale( int width, int height ) const
     for ( long j = 0; j < height; j++ )
         {
         unsigned char* src_line = &source_data[(y>>16)*old_width*3];
-
+        unsigned char* src_alpha_line = source_alpha ? &source_alpha[(y>>16)*old_width] : 0 ;
+        
         long x = 0;
         for ( long i = 0; i < width; i++ )
         {
              unsigned char* src_pixel = &src_line[(x>>16)*3];
+             unsigned char* src_alpha_pixel = source_alpha ? &src_alpha_line[(x>>16)] : 0 ;
              dest_pixel[0] = src_pixel[0];
              dest_pixel[1] = src_pixel[1];
              dest_pixel[2] = src_pixel[2];
              dest_pixel += 3;
+             if ( source_alpha )
+                *(target_alpha++) = *src_alpha_pixel ;
              x += x_delta;
         }
 
