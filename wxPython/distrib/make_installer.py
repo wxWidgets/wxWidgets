@@ -36,7 +36,7 @@ ISS_Template = r'''
 AppName = wxPython
 AppVerName = wxPython %(VERSION)s for Python %(PYTHONVER)s
 OutputBaseFilename = wxPythonWIN32-%(VERSION)s-%(PYVER)s
-AppCopyright = Copyright © 2003 Total Control Software
+AppCopyright = Copyright © 2004 Total Control Software
 DefaultDirName = {code:GetInstallDir|c:\DoNotInstallHere}
 DefaultGroupName = wxPython %(SHORTVER)s for Python %(PYTHONVER)s
 AlwaysCreateUninstallIcon = yes
@@ -55,17 +55,12 @@ DisableAppendDir = true
 UsePreviousAppDir = no
 UsePreviousGroup = no
 
-UninstallFilesDir = {app}\wxPython
+UninstallFilesDir = {app}\wx
 AppPublisherURL = http://wxPython.org/
 LicenseFile = licence\licence.txt
 CodeFile = %(IFSFILE)s
 
-;;WizardDebug = yes
-
-;;------------------------------------------------------------
-
-;;[Dirs]
-;;Name: "{app}\"
+WizardDebug = yes
 
 ;;------------------------------------------------------------
 
@@ -79,113 +74,111 @@ Name: samples; Description: "Sample applications";           Types: full
 ;;------------------------------------------------------------
 
 [Files]
-Source: "%(SYSDIR)s\MSVCRT.dll";            DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: sharedfile uninsneveruninstall restartreplace; Check: IsSysInstall; Components: core
-Source: "%(SYSDIR)s\MSVCIRT.dll";           DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: sharedfile uninsneveruninstall restartreplace; Check: IsSysInstall; Components: core
-Source: "%(SYSDIR)s\MSVCP60.dll";           DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: sharedfile uninsneveruninstall restartreplace; Check: IsSysInstall; Components: core
-Source: "%(SYSDIR)s\MSVCRT.dll";            DestDir: "{code:GetPythonDir}"; CopyMode: alwaysskipifsameorolder; Flags: uninsneveruninstall; Check: IsNotSysInstall; Components: core
-Source: "%(SYSDIR)s\MSVCIRT.dll";           DestDir: "{code:GetPythonDir}"; CopyMode: alwaysskipifsameorolder; Flags: uninsneveruninstall; Check: IsNotSysInstall; Components: core
-Source: "%(SYSDIR)s\MSVCP60.dll";           DestDir: "{code:GetPythonDir}"; CopyMode: alwaysskipifsameorolder; Flags: uninsneveruninstall; Check: IsNotSysInstall; Components: core
+Source: "%(SYSDIR)s\MSVCRT.dll";        DestDir: "{code:GetPythonDir}"; CopyMode: alwaysskipifsameorolder; Flags: uninsneveruninstall; Components: core
+Source: "%(SYSDIR)s\MSVCIRT.dll";       DestDir: "{code:GetPythonDir}"; CopyMode: alwaysskipifsameorolder; Flags: uninsneveruninstall; Components: core
+Source: "%(SYSDIR)s\MSVCP60.dll";       DestDir: "{code:GetPythonDir}"; CopyMode: alwaysskipifsameorolder; Flags: uninsneveruninstall; Components: core
 
-Source: "%(WXDIR)s\lib\%(WXDLL)s";          DestDir: "{app}\wxPython"; Components: core
+Source: "%(WXDIR)s\BIN\wx*%(WXDLLVER)s*.dll";  DestDir: "{app}\wx"; Components: core
 %(MSLU)s
-Source: "wxPython\wxc.pyd";                 DestDir: "{app}\wxPython"; Components: core
-Source: "wxPython\gridc.pyd";               DestDir: "{app}\wxPython"; Components: core
-Source: "wxPython\helpc.pyd";               DestDir: "{app}\wxPython"; Components: core
-Source: "wxPython\htmlc.pyd";               DestDir: "{app}\wxPython"; Components: core
-Source: "wxPython\calendarc.pyd";           DestDir: "{app}\wxPython"; Components: core
-Source: "wxPython\wizardc.pyd";             DestDir: "{app}\wxPython"; Components: core
-Source: "wxPython\glcanvasc.pyd";           DestDir: "{app}\wxPython"; Components: core
-Source: "wxPython\oglc.pyd";                DestDir: "{app}\wxPython"; Components: core
-Source: "wxPython\stc_c.pyd";               DestDir: "{app}\wxPython"; Components: core
-Source: "wxPython\xrcc.pyd";                DestDir: "{app}\wxPython"; Components: core
-Source: "wxPython\gizmosc.pyd";             DestDir: "{app}\wxPython"; Components: core
-Source: "wxPython\iewinc.pyd";              DestDir: "{app}\wxPython"; Components: core
-Source: "wxPython\dllwidget_c.pyd";         DestDir: "{app}\wxPython"; Components: core
+Source: "wx\_core.pyd";                        DestDir: "{app}\wx"; Components: core
+Source: "wx\_gdi.pyd";                         DestDir: "{app}\wx"; Components: core
+Source: "wx\_windows.pyd";                     DestDir: "{app}\wx"; Components: core
+Source: "wx\_controls.pyd";                    DestDir: "{app}\wx"; Components: core
+Source: "wx\_misc.pyd";                        DestDir: "{app}\wx"; Components: core
+Source: "wx\_calendar.pyd";                    DestDir: "{app}\wx"; Components: core
+Source: "wx\_grid.pyd";                        DestDir: "{app}\wx"; Components: core
+Source: "wx\_html.pyd";                        DestDir: "{app}\wx"; Components: core
+Source: "wx\_wizard.pyd";                      DestDir: "{app}\wx"; Components: core
+Source: "wx\_gizmos.pyd";                      DestDir: "{app}\wx"; Components: core
+Source: "wx\_glcanvas.pyd";                    DestDir: "{app}\wx"; Components: core
+Source: "wx\_iewin.pyd";                       DestDir: "{app}\wx"; Components: core
+Source: "wx\_ogl.pyd";                         DestDir: "{app}\wx"; Components: core
+Source: "wx\_stc.pyd";                         DestDir: "{app}\wx"; Components: core
+Source: "wx\_xrc.pyd";                         DestDir: "{app}\wx"; Components: core
 
-Source: "wxPython\*.py";                    DestDir: "{app}\wxPython"; Components: core
-Source: "wxPython\lib\*.py";                DestDir: "{app}\wxPython\lib"; Components: core
-Source: "wxPython\lib\*.wdr";               DestDir: "{app}\wxPython\lib"; Components: core
-Source: "wxPython\lib\editor\*.py";         DestDir: "{app}\wxPython\lib\editor"; Components: core
-Source: "wxPython\lib\editor\*.txt";        DestDir: "{app}\wxPython\lib\editor"; Components: core
-Source: "wxPython\lib\mixins\*.py";         DestDir: "{app}\wxPython\lib\mixins"; Components: core
-Source: "wxPython\lib\PyCrust\*.py";        DestDir: "{app}\wxPython\lib\PyCrust"; Components: core
-Source: "wxPython\lib\colourchooser\*.py";  DestDir: "{app}\wxPython\lib\colourchooser"; Components: core
-Source: "wxPython\lib\colourchooser\*.py";  DestDir: "{app}\wxPython\lib\colourchooser"; Components: core
-Source: "wxPython\py\*.py";                 DestDir: "{app}\wxPython\py"; Components: core
-Source: "wxPython\py\*.txt";                DestDir: "{app}\wxPython\py"; Components: core
-Source: "wxPython\py\*.ico";                DestDir: "{app}\wxPython\py"; Components: core
-Source: "wxPython\py\*.png";                DestDir: "{app}\wxPython\py"; Components: core
-Source: "wxPython\py\tests\*.py";           DestDir: "{app}\wxPython\py\tests"; Components: core
-Source: "wxPython\py\wxd\*.py";             DestDir: "{app}\wxPython\py\wxd"; Components: core
 
-Source: "wx\*.py";                          DestDir: "{app}\wx"; Components: core
-Source: "wx\lib\*.py";                      DestDir: "{app}\wx\lib"; Components: core
-Source: "wx\lib\colourchooser\*.py";        DestDir: "{app}\wx\lib\colourchooser"; Components: core
-Source: "wx\lib\editor\*.py";               DestDir: "{app}\wx\lib\editor"; Components: core
-Source: "wx\lib\mixins\*.py";               DestDir: "{app}\wx\lib\mixins"; Components: core
-Source: "wx\py\*.py";                       DestDir: "{app}\wx\py"; Components: core
-Source: "wx\tools\*.py";                    DestDir: "{app}\wx\tools"; Components: core
-Source: "wx\tools\XRCed\*.py";              DestDir: "{app}\wx\tools\XRCed"; Components: core
+Source: "wx\*.py";                             DestDir: "{app}\wx"; Components: core
+Source: "wx\lib\*.py";                         DestDir: "{app}\wx\lib"; Components: core
+Source: "wx\lib\*.wdr";                        DestDir: "{app}\wx\lib"; Components: core
+Source: "wx\lib\colourchooser\*.py";           DestDir: "{app}\wx\lib\colourchooser"; Components: core
+Source: "wx\lib\editor\*.py";                  DestDir: "{app}\wx\lib\editor"; Components: core
+Source: "wx\lib\editor\*.txt";                 DestDir: "{app}\wx\lib\editor"; Components: core
+Source: "wx\lib\mixins\*.py";                  DestDir: "{app}\wx\lib\mixins"; Components: core
+Source: "wx\py\*.py";                          DestDir: "{app}\wx\py"; Components: core
+Source: "wx\py\*.txt";                         DestDir: "{app}\wx\py"; Components: core
+Source: "wx\py\*.ico";                         DestDir: "{app}\wx\py"; Components: core
+Source: "wx\py\*.png";                         DestDir: "{app}\wx\py"; Components: core
+Source: "wx\py\tests\*.py";                    DestDir: "{app}\wx\py\tests"; Components: core
+Source: "wx\py\wxd\*.py";                      DestDir: "{app}\wx\py\wxd"; Components: core
+Source: "wx\tools\*.py";                       DestDir: "{app}\wx\tools"; Components: core
+Source: "wx\tools\XRCed\*.txt";                DestDir: "{app}\wx\tools\XRCed"; Components: core
+Source: "wx\tools\XRCed\sawfishrc";            DestDir: "{app}\wx\tools\XRCed"; Components: core
+Source: "wx\tools\XRCed\*.py";                 DestDir: "{app}\wx\tools\XRCed"; Components: core
+Source: "wx\tools\XRCed\*.xrc";                DestDir: "{app}\wx\tools\XRCed"; Components: core
+Source: "wx\tools\XRCed\*.ico";                DestDir: "{app}\wx\tools\XRCed"; Components: core
+Source: "wx\tools\XRCed\*.png";                DestDir: "{app}\wx\tools\XRCed"; Components: core
+Source: "wx\tools\XRCed\*.sh";                 DestDir: "{app}\wx\tools\XRCed"; Components: core
+Source: "wx\tools\XRCed\src-images\*.png";     DestDir: "{app}\wx\tools\XRCed\src-images"; Components: core
+
+
+Source: "wxPython\*.py";                          DestDir: "{app}\wxPython"; Components: core
+Source: "wxPython\lib\*.py";                      DestDir: "{app}\wxPython\lib"; Components: core
+Source: "wxPython\lib\colourchooser\*.py";        DestDir: "{app}\wxPython\lib\colourchooser"; Components: core
+Source: "wxPython\lib\editor\*.py";               DestDir: "{app}\wxPython\lib\editor"; Components: core
+Source: "wxPython\lib\mixins\*.py";               DestDir: "{app}\wxPython\lib\mixins"; Components: core
+Source: "wxPython\tools\*.py";                    DestDir: "{app}\wxPython\tools"; Components: core
+
 
 
 %(LOCALE)s
 
-Source: "demo\*.py";                        DestDir: "{app}\wxPython\demo"; Components: demo
-Source: "demo\*.xml";                       DestDir: "{app}\wxPython\demo"; Components: demo
-Source: "demo\*.txt";                       DestDir: "{app}\wxPython\demo"; Components: demo
-Source: "demo\*.ico";                       DestDir: "{app}\wxPython\demo"; Components: demo
-Source: "demo\*.wdr";                       DestDir: "{app}\wxPython\demo"; Components: demo
 
-Source: "demo\bitmaps\*.gif";               DestDir: "{app}\wxPython\demo\bitmaps"; Components: demo
-Source: "demo\bitmaps\*.bmp";               DestDir: "{app}\wxPython\demo\bitmaps"; Components: demo
-Source: "demo\bitmaps\*.jpg";               DestDir: "{app}\wxPython\demo\bitmaps"; Components: demo
-Source: "demo\bitmaps\*.png";               DestDir: "{app}\wxPython\demo\bitmaps"; Components: demo
-Source: "demo\bitmaps\*.ico";               DestDir: "{app}\wxPython\demo\bitmaps"; Components: demo
+Source: "demo\*.py";                        DestDir: "{app}\wx\demo"; Components: demo
+Source: "demo\*.xml";                       DestDir: "{app}\wx\demo"; Components: demo
+Source: "demo\*.txt";                       DestDir: "{app}\wx\demo"; Components: demo
+Source: "demo\*.ico";                       DestDir: "{app}\wx\demo"; Components: demo
 
-Source: "demo\bmp_source\*.gif";               DestDir: "{app}\wxPython\demo\bmp_source"; Components: demo
-Source: "demo\bmp_source\*.bmp";               DestDir: "{app}\wxPython\demo\bmp_source"; Components: demo
-;;Source: "demo\bmp_source\*.jpg";               DestDir: "{app}\wxPython\demo\bmp_source"; Components: demo
-Source: "demo\bmp_source\*.png";               DestDir: "{app}\wxPython\demo\bmp_source"; Components: demo
-Source: "demo\bmp_source\*.ico";               DestDir: "{app}\wxPython\demo\bmp_source"; Components: demo
+Source: "demo\bitmaps\*.bmp";               DestDir: "{app}\wx\demo\bitmaps"; Components: demo
+Source: "demo\bitmaps\*.gif";               DestDir: "{app}\wx\demo\bitmaps"; Components: demo
+Source: "demo\bitmaps\*.jpg";               DestDir: "{app}\wx\demo\bitmaps"; Components: demo
+Source: "demo\bitmaps\*.png";               DestDir: "{app}\wx\demo\bitmaps"; Components: demo
+Source: "demo\bitmaps\*.ico";               DestDir: "{app}\wx\demo\bitmaps"; Components: demo
 
-Source: "demo\data\*.htm";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
-Source: "demo\data\*.html";                 DestDir: "{app}\wxPython\demo\data"; Components: demo
-Source: "demo\data\*.py";                   DestDir: "{app}\wxPython\demo\data"; Components: demo
-Source: "demo\data\*.png";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
-Source: "demo\data\*.bmp";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
-Source: "demo\data\*.i";                    DestDir: "{app}\wxPython\demo\data"; Components: demo
-Source: "demo\data\*.dat";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
-Source: "demo\data\*.txt";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
-Source: "demo\data\*.wav";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
-Source: "demo\data\*.wdr";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
-Source: "demo\data\*.xrc";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
-Source: "demo\data\*.gif";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
+Source: "demo\bmp_source\*.gif";               DestDir: "{app}\wx\demo\bmp_source"; Components: demo
+Source: "demo\bmp_source\*.bmp";               DestDir: "{app}\wx\demo\bmp_source"; Components: demo
+Source: "demo\bmp_source\*.jpg";               DestDir: "{app}\wx\demo\bmp_source"; Components: demo
+Source: "demo\bmp_source\*.png";               DestDir: "{app}\wx\demo\bmp_source"; Components: demo
+Source: "demo\bmp_source\*.ico";               DestDir: "{app}\wx\demo\bmp_source"; Components: demo
 
-Source: "demo\dllwidget\*.cpp";             DestDir: "{app}\wxPython\demo\dllwidget"; Components: demo
-Source: "demo\dllwidget\*.py";              DestDir: "{app}\wxPython\demo\dllwidget"; Components: demo
-Source: "demo\dllwidget\Makefile";          DestDir: "{app}\wxPython\demo\dllwidget"; Components: demo
-Source: "demo\dllwidget\makefile.*";        DestDir: "{app}\wxPython\demo\dllwidget"; Components: demo
+Source: "demo\data\*.htm";                  DestDir: "{app}\wx\demo\data"; Components: demo
+Source: "demo\data\*.html";                 DestDir: "{app}\wx\demo\data"; Components: demo
+Source: "demo\data\*.py";                   DestDir: "{app}\wx\demo\data"; Components: demo
+Source: "demo\data\*.png";                  DestDir: "{app}\wx\demo\data"; Components: demo
+Source: "demo\data\*.bmp";                  DestDir: "{app}\wx\demo\data"; Components: demo
+Source: "demo\data\*.dat";                  DestDir: "{app}\wx\demo\data"; Components: demo
+Source: "demo\data\*.txt";                  DestDir: "{app}\wx\demo\data"; Components: demo
+Source: "demo\data\*.wav";                  DestDir: "{app}\wx\demo\data"; Components: demo
+Source: "demo\data\*.wdr";                  DestDir: "{app}\wx\demo\data"; Components: demo
+Source: "demo\data\*.xrc";                  DestDir: "{app}\wx\demo\data"; Components: demo
+Source: "demo\data\*.gif";                  DestDir: "{app}\wx\demo\data"; Components: demo
 
-Source: "README.txt";                       DestDir: "{app}\wxPython\docs";  Flags: isreadme; Components: core
-Source: "CHANGES.txt";                      DestDir: "{app}\wxPython\docs"; Components: core
-Source: "licence\*.txt";                    DestDir: "{app}\wxPython\docs\licence"; Components: core
-Source: "%(WXDIR)s\docs\htmlhelp\wx.chm";   DestDir: "{app}\wxPython\docs"; Components: docs
-Source: "%(WXDIR)s\docs\htmlhelp\ogl.chm";  DestDir: "{app}\wxPython\docs"; Components: docs
-Source: "docs\*.txt";                       DestDir: "{app}\wxPython\docs"; Components: docs
-Source: "docs\*.css";                       DestDir: "{app}\wxPython\docs"; Components: docs
-Source: "docs\*.html";                      DestDir: "{app}\wxPython\docs"; Components: docs
-Source: "docs\*.conf";                      DestDir: "{app}\wxPython\docs"; Components: docs
-Source: "docs\screenshots\*.png";           DestDir: "{app}\wxPython\docs\screenshots"; Components: docs
+;;Source: "demo\dllwidget\*.cpp";             DestDir: "{app}\wx\demo\dllwidget"; Components: demo
+;;Source: "demo\dllwidget\*.py";              DestDir: "{app}\wx\demo\dllwidget"; Components: demo
+;;Source: "demo\dllwidget\Makefile";          DestDir: "{app}\wx\demo\dllwidget"; Components: demo
+;;Source: "demo\dllwidget\makefile.*";        DestDir: "{app}\wx\demo\dllwidget"; Components: demo
 
-Source: "wxPython\tools\*.py";              DestDir: "{app}\wxPython\tools"; Components: core
-Source: "wxPython\tools\XRCed\*.txt";       DestDir: "{app}\wxPython\tools\XRCed"; Components: core
-Source: "wxPython\tools\XRCed\sawfishrc";   DestDir: "{app}\wxPython\tools\XRCed"; Components: core
-Source: "wxPython\tools\XRCed\*.py";        DestDir: "{app}\wxPython\tools\XRCed"; Components: core
-Source: "wxPython\tools\XRCed\*.xrc";       DestDir: "{app}\wxPython\tools\XRCed"; Components: core
-Source: "wxPython\tools\XRCed\*.ico";       DestDir: "{app}\wxPython\tools\XRCed"; Components: core
-Source: "wxPython\tools\XRCed\*.png";       DestDir: "{app}\wxPython\tools\XRCed"; Components: core
-Source: "wxPython\tools\XRCed\*.sh";        DestDir: "{app}\wxPython\tools\XRCed"; Components: core
-Source: "wxPython\tools\XRCed\src-images\*.png";  DestDir: "{app}\wxPython\tools\XRCed\src-images"; Components: core
+
+Source: "licence\*.txt";                    DestDir: "{app}\wx\docs\licence"; Components: core
+Source: "%(WXDIR)s\docs\htmlhelp\wx.chm";   DestDir: "{app}\wx\docs"; Components: docs
+Source: "%(WXDIR)s\docs\htmlhelp\ogl.chm";  DestDir: "{app}\wx\docs"; Components: docs
+Source: "docs\README.txt";                  DestDir: "{app}\wx\docs";  Flags: isreadme; Components: core
+Source: "docs\*.txt";                       DestDir: "{app}\wx\docs"; Components: docs
+Source: "docs\*.css";                       DestDir: "{app}\wx\docs"; Components: docs
+Source: "docs\*.html";                      DestDir: "{app}\wx\docs"; Components: docs
+Source: "docs\*.conf";                      DestDir: "{app}\wx\docs"; Components: docs
+Source: "docs\screenshots\*.png";           DestDir: "{app}\wx\docs\screenshots"; Components: docs
+Source: "docs\xml\*.xml";                   DestDir: "{app}\wx\docs\xml"; Components: docs
+
 
 Source: "scripts\*.bat";                    DestDir: "{code:GetPythonDir}\Scripts"; Components: core
 Source: "scripts\*.py";                     DestDir: "{code:GetPythonDir}\Scripts"; Components: core
@@ -200,39 +193,44 @@ Source: "scripts\pycrust";                  DestDir: "{code:GetPythonDir}\Script
 Source: "scripts\pywrap";                   DestDir: "{code:GetPythonDir}\Scripts"; Components: core
 Source: "scripts\xrced";                    DestDir: "{code:GetPythonDir}\Scripts"; Components: core
 
-Source: "samples\doodle\*.py";              DestDir: "{app}\wxPython\samples\doodle"; Components: samples
-Source: "samples\doodle\*.txt";             DestDir: "{app}\wxPython\samples\doodle"; Components: samples
-Source: "samples\doodle\sample.ddl";        DestDir: "{app}\wxPython\samples\doodle"; Components: samples
-Source: "samples\doodle\superdoodle.iss";   DestDir: "{app}\wxPython\samples\doodle"; Components: samples
 
-Source: "samples\wxProject\*.txt";          DestDir: "{app}\wxPython\samples\wxProject"; Components: samples
-Source: "samples\wxProject\*.py";           DestDir: "{app}\wxPython\samples\wxProject"; Components: samples
+Source: "samples\doodle\*.py";              DestDir: "{app}\wx\samples\doodle"; Components: samples
+Source: "samples\doodle\*.txt";             DestDir: "{app}\wx\samples\doodle"; Components: samples
+Source: "samples\doodle\sample.ddl";        DestDir: "{app}\wx\samples\doodle"; Components: samples
+Source: "samples\doodle\superdoodle.iss";   DestDir: "{app}\wx\samples\doodle"; Components: samples
 
-Source: "samples\StyleEditor\*.txt";        DestDir: "{app}\wxPython\samples\StyleEditor"; Components: samples
-Source: "samples\StyleEditor\*.py";         DestDir: "{app}\wxPython\samples\StyleEditor"; Components: samples
-Source: "samples\StyleEditor\*.cfg";        DestDir: "{app}\wxPython\samples\StyleEditor"; Components: samples
+Source: "samples\embedded\*.py";            DestDir: "{app}\wx\samples\embedded"; Components: samples
+Source: "samples\embedded\*.cpp";           DestDir: "{app}\wx\samples\embedded"; Components: samples
+Source: "samples\embedded\*.txt";           DestDir: "{app}\wx\samples\embedded"; Components: samples
+Source: "samples\embedded\*.vc";            DestDir: "{app}\wx\samples\embedded"; Components: samples
+Source: "samples\embedded\*.unx";           DestDir: "{app}\wx\samples\embedded"; Components: samples
+Source: "samples\embedded\*.ico";           DestDir: "{app}\wx\samples\embedded"; Components: samples
+Source: "samples\embedded\*.xpm";           DestDir: "{app}\wx\samples\embedded"; Components: samples
+Source: "samples\embedded\*.rc";            DestDir: "{app}\wx\samples\embedded"; Components: samples
 
-Source: "samples\pySketch\*.py";           DestDir: "{app}\wxPython\samples\pySketch"; Components: samples
-Source: "samples\pySketch\images\*.bmp";   DestDir: "{app}\wxPython\samples\pySketch\images"; Components: samples
+Source: "samples\frogedit\*.py";            DestDir: "{app}\wx\samples\frogedit"; Components: samples
 
-Source: "samples\frogedit\*.py";           DestDir: "{app}\wxPython\samples\frogedit"; Components: samples
+Source: "samples\hangman\*.py";             DestDir: "{app}\wx\samples\hangman"; Components: samples
 
-Source: "samples\hangman\*.py";            DestDir: "{app}\wxPython\samples\hangman"; Components: samples
+Source: "samples\pySketch\*.py";            DestDir: "{app}\wx\samples\pySketch"; Components: samples
+Source: "samples\pySketch\images\*.bmp";    DestDir: "{app}\wx\samples\pySketch\images"; Components: samples
 
-Source: "samples\embedded\*.py";           DestDir: "{app}\wxPython\samples\embedded"; Components: samples
-Source: "samples\embedded\*.cpp";          DestDir: "{app}\wxPython\samples\embedded"; Components: samples
-Source: "samples\embedded\*.txt";          DestDir: "{app}\wxPython\samples\embedded"; Components: samples
-Source: "samples\embedded\*.vc";           DestDir: "{app}\wxPython\samples\embedded"; Components: samples
-Source: "samples\embedded\*.unx";          DestDir: "{app}\wxPython\samples\embedded"; Components: samples
-Source: "samples\embedded\*.ico";          DestDir: "{app}\wxPython\samples\embedded"; Components: samples
-Source: "samples\embedded\*.xpm";          DestDir: "{app}\wxPython\samples\embedded"; Components: samples
+Source: "samples\simple\*.py";              DestDir: "{app}\wx\samples\simple"; Components: samples
 
-Source: "samples\wx_examples\basic\*.py";  DestDir: "{app}\wxPython\samples\wx_examples\basic"; Components: samples
-Source: "samples\wx_examples\hello\*.py";  DestDir: "{app}\wxPython\samples\wx_examples\hello"; Components: samples
-Source: "samples\wx_examples\hello\*.jpg"; DestDir: "{app}\wxPython\samples\wx_examples\hello"; Components: samples
+Source: "samples\StyleEditor\*.txt";        DestDir: "{app}\wx\samples\StyleEditor"; Components: samples
+Source: "samples\StyleEditor\*.py";         DestDir: "{app}\wx\samples\StyleEditor"; Components: samples
+Source: "samples\StyleEditor\*.cfg";        DestDir: "{app}\wx\samples\StyleEditor"; Components: samples
 
-Source: "src\winxp.manifest";              DestDir: "{code:GetPythonDir}"; DestName: "python.exe.manifest"; Components: core
-Source: "src\winxp.manifest";              DestDir: "{code:GetPythonDir}"; DestName: "pythonw.exe.manifest"; Components: core
+Source: "samples\wx_examples\basic\*.py";   DestDir: "{app}\wx\samples\wx_examples\basic"; Components: samples
+Source: "samples\wx_examples\hello\*.py";   DestDir: "{app}\wx\samples\wx_examples\hello"; Components: samples
+Source: "samples\wx_examples\hello\*.jpg";  DestDir: "{app}\wx\samples\wx_examples\hello"; Components: samples
+
+Source: "samples\wxProject\*.txt";          DestDir: "{app}\wx\samples\wxProject"; Components: samples
+Source: "samples\wxProject\*.py";           DestDir: "{app}\wx\samples\wxProject"; Components: samples
+
+
+Source: "src\winxp.manifest";               DestDir: "{code:GetPythonDir}"; DestName: "python.exe.manifest"; Components: core
+Source: "src\winxp.manifest";               DestDir: "{code:GetPythonDir}"; DestName: "pythonw.exe.manifest"; Components: core
 
 
 ;;------------------------------------------------------------
@@ -248,79 +246,30 @@ Filename: "{code:GetPythonDir}\python.exe";  Parameters: "CreateBatchFiles.py"; 
 ;;------------------------------------------------------------
 
 [Icons]
-Name: "{group}\Run the wxPython DEMO"; Filename: "{code:GetPythonDir}\pythonw.exe";   WorkingDir: "{app}\wxPython\demo";   Parameters: "demo.py"; IconFilename: "{app}\wxPython\demo\wxpdemo.ico"; Components: core
-Name: "{group}\PyCrust";               Filename: "{code:GetPythonDir}\pythonw.exe";   WorkingDir: "c:\";                   Parameters: "{code:GetPythonDir}\Scripts\pycrust";     IconFilename: "{app}\wxPython\py\PyCrust.ico"; Components: core
-Name: "{group}\PyShell";               Filename: "{code:GetPythonDir}\pythonw.exe";   WorkingDir: "c:\";                   Parameters: "{code:GetPythonDir}\Scripts\pyshell";     IconFilename: "{app}\wxPython\py\PyCrust.ico"; Components: core
-Name: "{group}\PyAlaMode";             Filename: "{code:GetPythonDir}\pythonw.exe";   WorkingDir: "c:\";                   Parameters: "{code:GetPythonDir}\Scripts\pyalamode";   IconFilename: "{app}\wxPython\py\PyCrust.ico"; Components: core
-Name: "{group}\PyAlaCarte";            Filename: "{code:GetPythonDir}\pythonw.exe";   WorkingDir: "c:\";                   Parameters: "{code:GetPythonDir}\Scripts\pyalacarte";  IconFilename: "{app}\wxPython\py\PyCrust.ico"; Components: core
-Name: "{group}\wxWindows Reference";   Filename: "{app}\wxPython\docs\wx.chm";                Components: docs
-Name: "{group}\wxOGL Reference";       Filename: "{app}\wxPython\docs\ogl.chm";               Components: docs
-Name: "{group}\licence.txt";           Filename: "{app}\wxPython\docs\licence\licence.txt";   Components: core
-Name: "{group}\README.txt";            Filename: "{app}\wxPython\docs\README.txt";            Components: core
-Name: "{group}\CHANGES.txt";           Filename: "{app}\wxPython\docs\CHANGES.txt";           Components: core
-Name: "{group}\Sample Apps";           Filename: "{app}\wxPython\samples"; Components: samples
-Name: "{group}\Resource Editor";       Filename: "{code:GetPythonDir}\pythonw.exe";   WorkingDir: "c:\";   Parameters: "{code:GetPythonDir}\Scripts\xrced"; IconFilename: "{app}\wxPython\Tools\XRCed\xrced.ico"; Components: core
-Name: "{group}\wxPython Docs";         Filename: "{app}\wxPython\docs\wxPythonDocs.html";     Components: docs
+Name: "{group}\Run the wxPython DEMO"; Filename: "{code:GetPythonDir}\pythonw.exe";   WorkingDir: "{app}\wx\demo";   Parameters: "demo.py";                                 IconFilename: "{app}\wx\demo\wxpdemo.ico"; Components: core
+Name: "{group}\PyCrust";               Filename: "{code:GetPythonDir}\pythonw.exe";   WorkingDir: "c:\";             Parameters: "{code:GetPythonDir}\Scripts\pycrust";     IconFilename: "{app}\wx\py\PyCrust.ico"; Components: core
+Name: "{group}\PyShell";               Filename: "{code:GetPythonDir}\pythonw.exe";   WorkingDir: "c:\";             Parameters: "{code:GetPythonDir}\Scripts\pyshell";     IconFilename: "{app}\wx\py\PyCrust.ico"; Components: core
+Name: "{group}\PyAlaMode";             Filename: "{code:GetPythonDir}\pythonw.exe";   WorkingDir: "c:\";             Parameters: "{code:GetPythonDir}\Scripts\pyalamode";   IconFilename: "{app}\wx\py\PyCrust.ico"; Components: core
+Name: "{group}\PyAlaCarte";            Filename: "{code:GetPythonDir}\pythonw.exe";   WorkingDir: "c:\";             Parameters: "{code:GetPythonDir}\Scripts\pyalacarte";  IconFilename: "{app}\wx\py\PyCrust.ico"; Components: core
+Name: "{group}\Resource Editor";       Filename: "{code:GetPythonDir}\pythonw.exe";   WorkingDir: "c:\";             Parameters: "{code:GetPythonDir}\Scripts\xrced";       IconFilename: "{app}\wx\tools\XRCed\xrced.ico"; Components: core
+
+Name: "{group}\Sample Apps";           Filename: "{app}\wx\samples"; Components: samples
+
+Name: "{group}\wxWindows Reference";   Filename: "{app}\wx\docs\wx.chm";                Components: docs
+Name: "{group}\wxOGL Reference";       Filename: "{app}\wx\docs\ogl.chm";               Components: docs
+Name: "{group}\licence.txt";           Filename: "{app}\wx\docs\licence\licence.txt";   Components: core
+Name: "{group}\README.txt";            Filename: "{app}\wx\docs\README.txt";            Components: docs
+Name: "{group}\CHANGES.txt";           Filename: "{app}\wx\docs\CHANGES.txt";           Components: docs
+Name: "{group}\Migration Guide";       Filename: "{app}\wx\docs\MigrationGuide.html";   Components: docs
+Name: "{group}\Other wxPython Docs";   Filename: "{app}\wx\docs\wxPythonDocs.html";     Components: docs
 
 
 ;;------------------------------------------------------------
 
 [UninstallDelete]
-Type: files; Name: "{app}\wxPython\*.pyc";
-Type: files; Name: "{app}\wxPython\*.pyo";
-Type: files; Name: "{app}\wxPython\*.pyd";
-Type: files; Name: "{app}\wxPython\lib\*.pyc";
-Type: files; Name: "{app}\wxPython\lib\*.pyo";
-Type: files; Name: "{app}\wxPython\lib\editor\*.pyc";
-Type: files; Name: "{app}\wxPython\lib\editor\*.pyo";
-Type: files; Name: "{app}\wxPython\lib\mixins\*.pyc";
-Type: files; Name: "{app}\wxPython\lib\mixins\*.pyo";
-Type: files; Name: "{app}\wxPython\lib\PyCrust\*.pyc";
-Type: files; Name: "{app}\wxPython\lib\PyCrust\*.pyo";
-Type: files; Name: "{app}\wxPython\lib\colourchooser\*.pyc";
-Type: files; Name: "{app}\wxPython\lib\colourchooser\*.pyo";
-Type: files; Name: "{app}\wxPython\py\*.pyc";
-Type: files; Name: "{app}\wxPython\py\*.pyo";
-Type: files; Name: "{app}\wxPython\py\tests\*.pyc";
-Type: files; Name: "{app}\wxPython\py\tests\*.pyo";
-Type: files; Name: "{app}\wxPython\py\wxd\*.pyc";
-Type: files; Name: "{app}\wxPython\py\wxd\*.pyo";
-Type: files; Name: "{app}\wxPython\tools\*.pyc";
-Type: files; Name: "{app}\wxPython\tools\*.pyo";
-Type: files; Name: "{app}\wxPython\tools\XRCed\*.pyc";
-Type: files; Name: "{app}\wxPython\tools\XRCed\*.pyo";
-Type: files; Name: "{app}\wxPython\demo\*.pyc";
-Type: files; Name: "{app}\wxPython\demo\*.pyo";
-Type: files; Name: "{app}\wxPython\demo\data\showTips";
-Type: files; Name: "{app}\wxPython\tools\*.pyc";
-Type: files; Name: "{app}\wxPython\tools\*.pyo";
-Type: files; Name: "{app}\wxPython\tools\XRCed\*.pyc";
-Type: files; Name: "{app}\wxPython\tools\XRCed\*.pyo";
-Type: files; Name: "{app}\wxPython\samples\doodle\*.pyc";
-Type: files; Name: "{app}\wxPython\samples\doodle\*.pyo";
-Type: files; Name: "{app}\wxPython\samples\wxProject\*.pyc";
-Type: files; Name: "{app}\wxPython\samples\wxProject\*.pyo";
-Type: files; Name: "{app}\wxPython\samples\StyleEditor\*.pyc";
-Type: files; Name: "{app}\wxPython\samples\StyleEditor\*.pyo";
-Type: files; Name: "{app}\wxPython\samples\frogedit\*.pyc";
-Type: files; Name: "{app}\wxPython\samples\frogedit\*.pyo";
-Type: files; Name: "{app}\wxPython\samples\hangman\*.pyc";
-Type: files; Name: "{app}\wxPython\samples\hangman\*.pyo";
-Type: files; Name: "{app}\wxPython\samples\hangman\*.txt";
-Type: files; Name: "{app}\wxPython\samples\wx_examples\basic\*.pyc";
-Type: files; Name: "{app}\wxPython\samples\wx_examples\basic\*.pyo";
-Type: files; Name: "{app}\wxPython\samples\wx_examples\hello\*.pyc";
-Type: files; Name: "{app}\wxPython\samples\wx_examples\hello\*.pyo";
-Type: files; Name: "{app}\wxPython\demo\data\*.pyc";
-Type: files; Name: "{app}\wxPython\demo\data\*.pyo";
-Type: files; Name: "{app}\wxPython\demo\dllwidget\*.pyc";
-Type: files; Name: "{app}\wxPython\demo\dllwidget\*.pyo";
-Type: files; Name: "{app}\wxPython\samples\embedded\*.pyc";
-Type: files; Name: "{app}\wxPython\samples\embedded\*.pyo";
-Type: files; Name: "{app}\wxPython\samples\pySketch\*.pyc";
-Type: files; Name: "{app}\wxPython\samples\pySketch\*.pyo";
 Type: files; Name: "{app}\wx\*.pyc";
 Type: files; Name: "{app}\wx\*.pyo";
+Type: files; Name: "{app}\wx\*.pyd";
 Type: files; Name: "{app}\wx\lib\*.pyc";
 Type: files; Name: "{app}\wx\lib\*.pyo";
 Type: files; Name: "{app}\wx\lib\colourchooser\*.pyc";
@@ -331,12 +280,57 @@ Type: files; Name: "{app}\wx\lib\mixins\*.pyc";
 Type: files; Name: "{app}\wx\lib\mixins\*.pyo";
 Type: files; Name: "{app}\wx\py\*.pyc";
 Type: files; Name: "{app}\wx\py\*.pyo";
+Type: files; Name: "{app}\wx\py\tests\*.pyc";
+Type: files; Name: "{app}\wx\py\tests\*.pyo";
+Type: files; Name: "{app}\wx\py\wxd\*.pyc";
+Type: files; Name: "{app}\wx\py\wxd\*.pyo";
 Type: files; Name: "{app}\wx\tools\*.pyc";
 Type: files; Name: "{app}\wx\tools\*.pyo";
 Type: files; Name: "{app}\wx\tools\XRCed\*.pyc";
 Type: files; Name: "{app}\wx\tools\XRCed\*.pyo";
 
+Type: files; Name: "{app}\wx\demo\*.pyc";
+Type: files; Name: "{app}\wx\demo\*.pyo";
+Type: files; Name: "{app}\wx\demo\data\showTips";
+Type: files; Name: "{app}\wx\demo\data\*.pyc";
+Type: files; Name: "{app}\wx\demo\data\*.pyo";
+Type: files; Name: "{app}\wx\demo\dllwidget\*.pyc";
+Type: files; Name: "{app}\wx\demo\dllwidget\*.pyo";
 
+Type: files; Name: "{app}\wx\samples\doodle\*.pyc";
+Type: files; Name: "{app}\wx\samples\doodle\*.pyo";
+Type: files; Name: "{app}\wx\samples\embedded\*.pyc";
+Type: files; Name: "{app}\wx\samples\embedded\*.pyo";
+Type: files; Name: "{app}\wx\samples\frogedit\*.pyc";
+Type: files; Name: "{app}\wx\samples\frogedit\*.pyo";
+Type: files; Name: "{app}\wx\samples\hangman\*.pyc";
+Type: files; Name: "{app}\wx\samples\hangman\*.pyo";
+Type: files; Name: "{app}\wx\samples\hangman\*.txt";
+Type: files; Name: "{app}\wx\samples\pySketch\*.pyc";
+Type: files; Name: "{app}\wx\samples\pySketch\*.pyo";
+Type: files; Name: "{app}\wx\samples\simple\*.pyc";
+Type: files; Name: "{app}\wx\samples\simple\*.pyo";
+Type: files; Name: "{app}\wx\samples\StyleEditor\*.pyc";
+Type: files; Name: "{app}\wx\samples\StyleEditor\*.pyo";
+Type: files; Name: "{app}\wx\samples\wx_examples\basic\*.pyc";
+Type: files; Name: "{app}\wx\samples\wx_examples\basic\*.pyo";
+Type: files; Name: "{app}\wx\samples\wx_examples\hello\*.pyc";
+Type: files; Name: "{app}\wx\samples\wx_examples\hello\*.pyo";
+Type: files; Name: "{app}\wx\samples\wxProject\*.pyc";
+Type: files; Name: "{app}\wx\samples\wxProject\*.pyo";
+
+Type: files; Name: "{app}\wxPython\*.pyc";
+Type: files; Name: "{app}\wxPython\*.pyo";
+Type: files; Name: "{app}\wxPython\lib\*.pyc";
+Type: files; Name: "{app}\wxPython\lib\*.pyo";
+Type: files; Name: "{app}\wxPython\lib\colourchooser\*.pyc";
+Type: files; Name: "{app}\wxPython\lib\colourchooser\*.pyo";
+Type: files; Name: "{app}\wxPython\lib\editor\*.pyc";
+Type: files; Name: "{app}\wxPython\lib\editor\*.pyo";
+Type: files; Name: "{app}\wxPython\lib\mixins\*.pyc";
+Type: files; Name: "{app}\wxPython\lib\mixins\*.pyo";
+Type: files; Name: "{app}\wxPython\tools\*.pyc";
+Type: files; Name: "{app}\wxPython\tools\*.pyo";
 
 
 '''
@@ -350,7 +344,6 @@ program Setup;
 var
     PythonDir  : String;
     InstallDir : String;
-    sysInstall : Boolean;
 
 
 function InitializeSetup(): Boolean;
@@ -376,52 +369,7 @@ begin
     InstallDir := PythonDir;
     %(IF22)s
 
-
-    (* -------------------------------------------------------------- *)
-    (* And now where to put the system DLLs                           *)
-
-    sysInstall := False;
-
-    (* Check if Python has a regkey in HKLM, if so it installed the DLLs in the SYSTEM dir *)
-    if RegValueExists(HKEY_LOCAL_MACHINE,
-                      'Software\Python\PythonCore\%(PYTHONVER)s\InstallPath', '') then begin
-        sysInstall := True;
-    end;    
-
-    (* If so, ensure that the user can write to HKLM *)
-    if sysInstall and not RegWriteStringValue(HKEY_LOCAL_MACHINE,
-                                             'Software\Python\PythonCore\%(PYTHONVER)s\Modules\wxPython',
-                                             '', '%(VERSION)s') then begin
-        (* if not then revert to installing to the Python dir *)
-        sysInstall := False;
-        (* and put the regkey in HKCU *)
-        RegWriteStringValue(HKEY_CURRENT_USER,
-                            'Software\Python\PythonCore\%(PYTHONVER)s\Modules\wxPython',
-                            '', '%(VERSION)s');
-    end;
-
-    Result := true;
-end;
-
-
-function IsSysInstall(): Boolean;
-begin
-    Result :=  sysInstall;
-end;
-function IsNotSysInstall(): Boolean;
-begin
-    Result := not sysInstall;
-end;
-
-
-
-function GetDLLDir(Default: String): String;
-begin
-    if sysInstall then begin
-        Result := Default;
-    end else begin
-        Result := PythonDir;
-    end;
+    Result := True;
 end;
 
 
@@ -438,15 +386,13 @@ end;
 
 
 
-function NextButtonClick(CurPage: Integer): Boolean;
+function UninstallOld(FileName: String): Boolean;
 var
-    FileName: string;
     ResultCode: Integer;
 begin
-    Result := True;
-    if CurPage <> wpSelectDir then Exit;
-    FileName := WizardDirValue() + '\wxPython\unins000.exe';
+    Result := False;
     if FileExists(FileName) then begin
+        Result := True;
         ResultCode := MsgBox('A prior wxPython installation was found in this directory.  It' + #13 +
                              'is recommended that it be uninstalled first.' + #13#13 +
                              'Should I do it?',
@@ -459,6 +405,18 @@ begin
 end;
 
 
+function NextButtonClick(CurPage: Integer): Boolean;
+var
+    FileName: string;
+    ResultCode: Integer;
+begin
+    Result := True;
+    if CurPage <> wpSelectDir then Exit;
+    if not UninstallOld(WizardDirValue() + '\wxPython\unins000.exe') then
+        UninstallOld(WizardDirValue() + '\wx\unins000.exe');
+end;
+
+
 begin
 end.
 
@@ -468,20 +426,22 @@ end.
 
 def find_DLLs():
 
-    WXDLL = PYTHONVER = None
+    WXDLLVER = PYTHONVER = None
 
-    proc = os.popen(r"dumpbin /imports wxPython\wxc.pyd", "r")
+    proc = os.popen(r"dumpbin /imports wx\_core.pyd", "r")
     lines = proc.readlines()
     proc.close()
     for line in lines:
-        if line[:6] == "    wx":
-            WXDLL = line.strip()
+        if line.startswith("    wxbase"):
+            WXDLLVER = line[10:14]
 
-        if line[:10] == "    python":
+        if line.startswith("    python"):
             PYTHONVER = line[10] + '.' + line[11]
 
-        if WXDLL and PYTHONVER:
-            return WXDLL, PYTHONVER
+        #if WXDLLVER and PYTHONVER:
+        #    return WXDLLVER, PYTHONVER
+
+    return WXDLLVER, PYTHONVER
 
 
 #----------------------------------------------------------------------
@@ -514,12 +474,12 @@ def get_system_dir():
 def main():
 
     verglob = {}
-    execfile("wxPython/__version__.py", verglob)
+    execfile("wx/__version__.py", verglob)
 
-    VERSION    = verglob["wxVERSION_STRING"]
+    VERSION    = verglob["VERSION_STRING"]
     SHORTVER   = VERSION[:3]
 
-    WXDLL, PYTHONVER = find_DLLs()
+    WXDLLVER, PYTHONVER = find_DLLs()
 
     PYVER      = "Py" + PYTHONVER[0] + PYTHONVER[2]
     WXDIR      = os.environ["WXWIN"]
@@ -528,6 +488,17 @@ def main():
     ISSFILE    = "__wxPython.iss"
     IFSFILE    = "__wxPython.ifs"
     LOCALE     = build_locale_string()
+
+    print """Building Win32 installer for wxPython:
+    VERSION    = %(VERSION)s
+    SHORTVER   = %(SHORTVER)s
+    WXDLLVER   = %(WXDLLVER)s
+    PYTHONVER  = %(PYTHONVER)s
+    PYVER      = %(PYVER)s
+    WXDIR      = %(WXDIR)s
+    WXPYDIR    = %(WXPYDIR)s
+    SYSDIR     = %(SYSDIR)s
+    """ % vars()
 
     if PYTHONVER >= "2.2":
         IF22 = r"InstallDir := InstallDir + '\Lib\site-packages';"
@@ -541,7 +512,7 @@ def main():
 
     MSLU=''
     if len(sys.argv) > 1 and sys.argv[1] == "UNICODE=1":
-        MSLU=r'Source: "%(WXDIR)s\lib\unicows.dll";  DestDir: "{code:GetPythonDir}"; Components: core' % vars()
+        MSLU=r'Source: "%(WXDIR)s\BIN\unicows.dll";  DestDir: "{code:GetPythonDir}"; Components: core' % vars()
 
     f = open(ISSFILE, "w")
     f.write(ISS_Template % vars())
