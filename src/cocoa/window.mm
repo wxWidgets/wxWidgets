@@ -229,11 +229,12 @@ void wxWindow::DoGetSize(int *w, int *h) const
 
 void wxWindow::DoGetPosition(int *x, int *y) const
 {
-    NSView *superview = [m_cocoaNSView superview];
+    NSView *nsview = m_dummyNSView?m_dummyNSView:m_cocoaNSView;
+    NSView *superview = [nsview superview];
     wxCHECK_RET(superview,"NSView does not have a superview");
     NSRect parentRect = [superview frame];
 
-    NSRect cocoaRect = [m_cocoaNSView frame];
+    NSRect cocoaRect = [nsview frame];
     if(x)
         *x=(int)cocoaRect.origin.x;
     if(y)
