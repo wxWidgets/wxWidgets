@@ -782,7 +782,7 @@ void MyListCtrl::OnFocused(wxListEvent& event)
 
 void MyListCtrl::OnListKeyDown(wxListEvent& event)
 {
-    switch ( event.GetCode() )
+    switch ( event.GetKeyCode() )
     {
         case 'c': // colorize
         case 'C':
