@@ -130,14 +130,14 @@ void wxHtmlWinParser::SetFonts(wxString normal_face, wxString fixed_face, const 
 void wxHtmlWinParser::InitParser(const wxString& source)
 {
     wxHtmlParser::InitParser(source);
-    wxASSERT_MSG(m_DC != NULL, _("no DC assigned to wxHtmlWinParser!!"));
+    wxASSERT_MSG(m_DC != NULL, _T("no DC assigned to wxHtmlWinParser!!"));
 
     m_FontBold = m_FontItalic = m_FontUnderlined = m_FontFixed = FALSE;
     m_FontSize = 3; //default one
     CreateCurrentFont();           // we're selecting default font into
     m_DC -> GetTextExtent("H", &m_CharWidth, &m_CharHeight);
                 /* NOTE : we're not using GetCharWidth/Height() because
-                   of differences under X and win 
+                   of differences under X and win
                  */
 
     m_UseLink = FALSE;
