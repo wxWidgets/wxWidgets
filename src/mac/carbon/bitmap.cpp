@@ -56,28 +56,47 @@ void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bi
     memset( info , 0 , sizeof(ControlButtonContentInfo) ) ;
     if ( bitmap.Ok() )
     {
-        wxBitmapRefData * bmap = (wxBitmapRefData*) ( bitmap.GetRefData()) ;
+        wxBitmapRefData * bmap = bitmap.GetBitmapData() ;
         if ( bmap == NULL )
             return ;
             
-        if ( bmap->HasNativeSize() )
+        if ( ( bmap->HasNativeSize() && forceType == 0 ) || forceType == kControlContentIconRef )
         {
+            wxBitmap scaleBmp ;
+            
+            wxBitmapRefData* bmp = bmap ;
+            
+            if ( !bmap->HasNativeSize() )
+            {
+                // as PICT conversion will only result in a 16x16 icon, let's attempt
+                // a few scales for better results 
+                
+                int w = bitmap.GetWidth() ;
+                int h = bitmap.GetHeight() ;
+                int sz = wxMax( w , h ) ;
+                if ( sz == 24 || sz == 64)
+                {
+                    scaleBmp = wxBitmap( bitmap.ConvertToImage().Scale( w * 2 , h * 2 ) ) ;
+                    bmp = scaleBmp.GetBitmapData() ;
+                }
+            }
+            
             info->contentType = kControlContentIconRef ;
-            info->u.iconRef = bmap->GetIconRef() ;
+            info->u.iconRef = bmp->GetIconRef() ;
+            AcquireIconRef( info->u.iconRef ) ;
         }
+#if wxMAC_USE_CORE_GRAPHICS              
+        else if ( forceType == kControlContentCGImageRef )
+        {
+            info->contentType = kControlContentCGImageRef ;
+            info->u.imageRef = (CGImageRef) bmap->CGImageCreate() ;
+        }
+#endif
         else
         {
             info->contentType = kControlContentPictHandle ;
             info->u.picture = bmap->GetPictHandle() ;
         }
-#if wxMAC_USE_CORE_GRAPHICS              
-        /*
-            // only on 10.4 more controls will accept a CGImage
-        
-            info->contentType = kControlContentCGImageRef ;
-            info->u.imageRef = (CGImageRef) bmap->CGImageCreate() ;
-        */
-#endif
     }
 }
 
@@ -85,11 +104,11 @@ void wxMacReleaseBitmapButton( ControlButtonContentInfo*info )
 {
     if ( info->contentType == kControlContentIconRef )
     {
-        // as the bitmap is now the owner, no need to release here
+        ReleaseIconRef( info->u.iconRef ) ;
     }
     else if ( info->contentType == kControlContentPictHandle )
     {
-        // owned by the bitma, no release here
+        // owned by the bitmap, no release here
     }
 #if wxMAC_USE_CORE_GRAPHICS && MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
     else if ( info->contentType == kControlContentCGImageRef )
