@@ -105,6 +105,10 @@ public:
     void OnShowProgress( wxCommandEvent &event );
 #endif // wxUSE_SPINBUTTON
 
+#if wxUSE_SPINCTRL
+    void OnSpinCtrl(wxSpinEvent& event);
+#endif // wxUSE_SPINCTRL
+
     wxListBox     *m_listbox,
                   *m_listboxSorted;
     wxChoice      *m_choice,
@@ -271,6 +275,7 @@ const int  ID_SLIDER            = 181;
 const int  ID_SPIN              = 182;
 const int  ID_BTNPROGRESS       = 183;
 const int  ID_BUTTON_LABEL      = 184;
+const int  ID_SPINCTRL          = 185;
 
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
 EVT_SIZE      (                         MyPanel::OnSize)
@@ -316,7 +321,10 @@ EVT_SPIN_UP   (ID_SPIN,                 MyPanel::OnSpinUp)
 EVT_SPIN_DOWN (ID_SPIN,                 MyPanel::OnSpinDown)
 EVT_UPDATE_UI (ID_BTNPROGRESS,          MyPanel::OnUpdateShowProgress)
 EVT_BUTTON    (ID_BTNPROGRESS,          MyPanel::OnShowProgress)
-#endif
+#endif // wxUSE_SPINBUTTON
+#if wxUSE_SPINCTRL
+EVT_SPIN      (ID_SPINCTRL,             MyPanel::OnSpinCtrl)
+#endif // wxUSE_SPINCTRL
 EVT_BUTTON    (ID_BUTTON_LABEL,         MyPanel::OnUpdateLabel)
 END_EVENT_TABLE()
 
@@ -519,7 +527,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 #endif // wxUSE_SPINBUTTON
 
 #if wxUSE_SPINCTRL
-    m_spinctrl = new wxSpinCtrl( panel, -1, wxPoint(200, 160), wxSize(80, -1) );
+    m_spinctrl = new wxSpinCtrl( panel, ID_SPINCTRL, wxPoint(200, 160), wxSize(80, -1) );
     m_spinctrl->SetRange(10,30);
     m_spinctrl->SetValue(15);
 #endif // wxUSE_SPINCTRL
@@ -904,6 +912,17 @@ void MyPanel::OnSliderUpdate( wxCommandEvent &WXUNUSED(event) )
 {
     m_gauge->SetValue( m_slider->GetValue() );
 }
+
+#if wxUSE_SPINCTRL
+
+void MyPanel::OnSpinCtrl(wxSpinEvent& event)
+{
+    wxString s;
+    s.Printf(_T("Current value of spin ctrl is %d\n"), m_spinctrl->GetValue());
+    m_text->AppendText(s);
+}
+
+#endif // wxUSE_SPINCTRL
 
 #if wxUSE_SPINBUTTON
 void MyPanel::OnSpinUp( wxSpinEvent &event )

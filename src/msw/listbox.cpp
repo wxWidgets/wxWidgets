@@ -230,7 +230,7 @@ bool wxListBox::Create(wxWindow *parent,
 
 wxListBox::~wxListBox()
 {
-//    Free();
+    Free();
 }
 
 void wxListBox::SetupColours()
@@ -348,7 +348,7 @@ int wxListBox::FindString(const wxString& s) const
 
 void wxListBox::Clear()
 {
-//    Free();
+    Free();
 
     ListBox_ResetContent(GetHwnd());
 
@@ -356,7 +356,6 @@ void wxListBox::Clear()
     SetHorizontalExtent();
 }
 
-/*
 void wxListBox::Free()
 {
 #if wxUSE_OWNER_DRAWN
@@ -379,7 +378,7 @@ void wxListBox::Free()
         }
     }
 }
-*/
+
 void wxListBox::SetSelection(int N, bool select)
 {
     wxCHECK_RET( N >= 0 && N < m_noItems,

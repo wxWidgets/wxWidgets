@@ -48,8 +48,12 @@ public:
                 int min = 0, int max = 100, int initial = 0,
                 const wxString& name = _T("wxSpinCtrl"));
 
+    // override some of the base class virtuals
+    virtual bool SetFont(const wxFont &font);
+
 protected:
-    void DoMoveWindow(int x, int y, int width, int height);
+    virtual void DoMoveWindow(int x, int y, int width, int height);
+    virtual wxSize DoGetBestSize();
 
     WXHWND m_hwndBuddy;
 
