@@ -840,7 +840,7 @@ wxCoord wxSVGFileDC::LogicalToDeviceYRel(wxCoord y) const
 
 void wxSVGFileDC::write(const wxString &s)
 {
-	wxWX2MBbuf buf = s.mb_str(wxConvUTF8);
+	const wxWX2MBbuf buf = s.mb_str(wxConvUTF8);
 	m_outfile->Write(buf, strlen((const char *)buf));
 	m_OK = m_outfile->Ok();
 }
