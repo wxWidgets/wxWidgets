@@ -53,9 +53,9 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
     l2 = l;
     for (int i = l-1; i >= 0; i--) {
         c = loc[(unsigned int) i];
-        if (c == T('#')) l2 = i + 1;
-        if (c == T('.')) {ext = loc.Right(l2-i-1); break;}
-        if ((c == T('/')) || (c == T('\\')) || (c == T(':'))) {return wxEmptyString;}
+        if (c == wxT('#')) l2 = i + 1;
+        if (c == wxT('.')) {ext = loc.Right(l2-i-1); break;}
+        if ((c == wxT('/')) || (c == wxT('\\')) || (c == wxT(':'))) {return wxEmptyString;}
     }
 
     if (m_MimeMng == NULL) {
@@ -110,11 +110,11 @@ wxString wxFileSystemHandler::GetProtocol(const wxString& location) const
     bool fnd;
 
     fnd = FALSE;
-    for (i = l-1; (i >= 0) && ((location[i] != T('#')) || (!fnd)); i--) {
-        if ((location[i] == T(':')) && (i != 1 /*win: C:\path*/)) fnd = TRUE;
+    for (i = l-1; (i >= 0) && ((location[i] != wxT('#')) || (!fnd)); i--) {
+        if ((location[i] == wxT(':')) && (i != 1 /*win: C:\path*/)) fnd = TRUE;
     }
-    if (!fnd) return T("file");
-    for (++i; (i < l) && (location[i] != T(':')); i++) s << location[i];
+    if (!fnd) return wxT("file");
+    for (++i; (i < l) && (location[i] != wxT(':')); i++) s << location[i];
     return s;
 }
 
@@ -126,8 +126,8 @@ wxString wxFileSystemHandler::GetLeftLocation(const wxString& location) const
 
     fnd = FALSE;
     for (i = location.Length()-1; i >= 0; i--) {
-        if ((location[i] == T(':')) && (i != 1 /*win: C:\path*/)) fnd = TRUE;
-        else if (fnd && (location[i] == T('#'))) return location.Left(i);
+        if ((location[i] == wxT(':')) && (i != 1 /*win: C:\path*/)) fnd = TRUE;
+        else if (fnd && (location[i] == wxT('#'))) return location.Left(i);
     }
     return wxEmptyString;
 }
@@ -136,7 +136,7 @@ wxString wxFileSystemHandler::GetRightLocation(const wxString& location) const
 {
     int i, l = location.Length();
     int l2 = l + 1;
-    for (i = l-1; (i >= 0) && ((location[i] != T(':')) || (i == 1) || (location[i-2] == T(':'))); i--) {if (location[i] == T('#')) l2 = i + 1;}
+    for (i = l-1; (i >= 0) && ((location[i] != wxT(':')) || (i == 1) || (location[i-2] == wxT(':'))); i--) {if (location[i] == wxT('#')) l2 = i + 1;}
     if (i == 0) return wxEmptyString;
     else return location.Mid(i + 1, l2 - i - 2);
 }
@@ -148,8 +148,8 @@ wxString wxFileSystemHandler::GetAnchor(const wxString& location) const
 
     for (int i = l-1; i >= 0; i--) {
         c = location[i];
-        if (c == T('#')) return location.Right(l-i-1);
-        else if ((c == T('.')) || (c == T('/')) || (c == T('\\')) || (c == T(':'))) return wxEmptyString;
+        if (c == wxT('#')) return location.Right(l-i-1);
+        else if ((c == wxT('.')) || (c == wxT('/')) || (c == wxT('\\')) || (c == wxT(':'))) return wxEmptyString;
     }
     return wxEmptyString;
 }
@@ -168,7 +168,7 @@ class wxLocalFSHandler : public wxFileSystemHandler
 
 bool wxLocalFSHandler::CanOpen(const wxString& location)
 {
-    return GetProtocol(location) == T("file");
+    return GetProtocol(location) == wxT("file");
 }
 
 wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& location)
@@ -199,15 +199,15 @@ void wxFileSystem::ChangePathTo(const wxString& location, bool is_dir)
     m_Path = location;
 
     for (i = m_Path.Length()-1; i >= 0; i--)
-        if (m_Path[(unsigned int) i] == T('\\')) m_Path.GetWritableChar(i) = T('/');         // wanna be windows-safe
+        if (m_Path[(unsigned int) i] == wxT('\\')) m_Path.GetWritableChar(i) = wxT('/');         // wanna be windows-safe
 
     if (is_dir == FALSE)
     {
         for (i = m_Path.Length()-1; i >= 0; i--)
 	{
-            if (m_Path[(unsigned int) i] == T('/'))
+            if (m_Path[(unsigned int) i] == wxT('/'))
 	    {
-                if ((i > 1) && (m_Path[(unsigned int) (i-1)] == T('/')) && (m_Path[(unsigned int) (i-2)] == T(':')))
+                if ((i > 1) && (m_Path[(unsigned int) (i-1)] == wxT('/')) && (m_Path[(unsigned int) (i-2)] == wxT(':')))
 		{
                     i -= 2;
                     continue;
@@ -218,7 +218,7 @@ void wxFileSystem::ChangePathTo(const wxString& location, bool is_dir)
                     break;
                 }
             }
-        else if (m_Path[(unsigned int) i] == T(':')) {
+        else if (m_Path[(unsigned int) i] == wxT(':')) {
             pathpos = i;
         break;
         }
@@ -227,9 +227,9 @@ void wxFileSystem::ChangePathTo(const wxString& location, bool is_dir)
 	{
             for (i = 0; i < (int) m_Path.Length(); i++)
 	    {
-                if (m_Path[(unsigned int) i] == T(':'))
+                if (m_Path[(unsigned int) i] == wxT(':'))
 		{
-                    //m_Path << T('/');
+                    //m_Path << wxT('/');
                     m_Path.Remove(i+1);
                     break;
                 }
@@ -239,8 +239,8 @@ void wxFileSystem::ChangePathTo(const wxString& location, bool is_dir)
         }
         else
 	{
-            if (m_Path[m_Path.Length()-1] != T('/'))
-	        m_Path << T('/');
+            if (m_Path[m_Path.Length()-1] != wxT('/'))
+	        m_Path << wxT('/');
             m_Path.Remove(pathpos+1);
         }
     }
@@ -260,16 +260,16 @@ wxFSFile* wxFileSystem::OpenFile(const wxString& location)
     meta = 0;
     for (i = 0; i < ln; i++)
     {
-        if (loc[(unsigned int) i] == T('\\')) loc.GetWritableChar(i) = T('/');         // wanna be windows-safe
+        if (loc[(unsigned int) i] == wxT('\\')) loc.GetWritableChar(i) = wxT('/');         // wanna be windows-safe
         if (!meta) switch (loc[(unsigned int) i])
 	{
-            case T('/') : case T(':') : case T('#') : meta = loc[(unsigned int) i];
+            case wxT('/') : case wxT(':') : case wxT('#') : meta = loc[(unsigned int) i];
         }
     }
     m_LastName = wxEmptyString;
 
     // try relative paths first :
-    if (meta != T(':'))
+    if (meta != wxT(':'))
     {
         node = m_Handlers.GetFirst();
         while (node)

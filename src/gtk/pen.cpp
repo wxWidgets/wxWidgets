@@ -171,35 +171,35 @@ wxDash* wxPen::GetDash() const
 
 int wxPen::GetCap() const
 {
-    wxCHECK_MSG( Ok(), -1, T("invalid pen") );
+    wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
 
     return M_PENDATA->m_capStyle;
 }
 
 int wxPen::GetJoin() const
 {
-    wxCHECK_MSG( Ok(), -1, T("invalid pen") );
+    wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
 
     return M_PENDATA->m_joinStyle;
 }
 
 int wxPen::GetStyle() const
 {
-    wxCHECK_MSG( Ok(), -1, T("invalid pen") );
+    wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
 
     return M_PENDATA->m_style;
 }
 
 int wxPen::GetWidth() const
 {
-    wxCHECK_MSG( Ok(), -1, T("invalid pen") );
+    wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
 
     return M_PENDATA->m_width;
 }
 
 wxColour &wxPen::GetColour() const
 {
-    wxCHECK_MSG( Ok(), wxNullColour, T("invalid pen") );
+    wxCHECK_MSG( Ok(), wxNullColour, wxT("invalid pen") );
 
     return M_PENDATA->m_colour;
 }

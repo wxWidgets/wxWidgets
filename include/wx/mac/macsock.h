@@ -1056,4 +1056,3 @@ __END_DECLS
 		long nothing ;
 	} ;
 
-#endif /* !_GUSI_ */

@@ -91,7 +91,7 @@ bool wxTimer::Start(int milliseconds, bool mode)
     if (milliseconds < 0)
         milliseconds = lastMilli;
 
-    wxCHECK_MSG( milliseconds > 0, FALSE, T("invalid value for timer timeour") );
+    wxCHECK_MSG( milliseconds > 0, FALSE, wxT("invalid value for timer timeour") );
 
     lastMilli = milli = milliseconds;
 
@@ -146,7 +146,7 @@ UINT WINAPI _EXPORT wxTimerProc(HWND WXUNUSED(hwnd), WORD, int idTimer, DWORD)
 {
     wxNode *node = wxTimerList.Find((long)idTimer);
 
-    wxCHECK_MSG( node, 0, T("bogus timer id in wxTimerProc") );
+    wxCHECK_MSG( node, 0, wxT("bogus timer id in wxTimerProc") );
 
     wxProcessTimer(*(wxTimer *)node->Data());
 

@@ -154,15 +154,15 @@ wxImage wxImage::Scale( int width, int height ) const
 {
     wxImage image;
 
-    wxCHECK_MSG( Ok(), image, T("invalid image") );
+    wxCHECK_MSG( Ok(), image, wxT("invalid image") );
 
-    wxCHECK_MSG( (width > 0) && (height > 0), image, T("invalid image size") );
+    wxCHECK_MSG( (width > 0) && (height > 0), image, wxT("invalid image size") );
 
     image.Create( width, height );
 
     char unsigned *data = image.GetData();
 
-    wxCHECK_MSG( data, image, T("unable to create image") );
+    wxCHECK_MSG( data, image, wxT("unable to create image") );
 
     if (M_IMGDATA->m_hasMask)
         image.SetMaskColour( M_IMGDATA->m_maskRed, M_IMGDATA->m_maskGreen, M_IMGDATA->m_maskBlue );
@@ -193,10 +193,10 @@ wxImage wxImage::GetSubImage( const wxRect &rect ) const
 {
     wxImage image;
 
-    wxCHECK_MSG( Ok(), image, T("invalid image") );
+    wxCHECK_MSG( Ok(), image, wxT("invalid image") );
 
     wxCHECK_MSG( (rect.GetLeft()>=0) && (rect.GetTop()>=0) && (rect.GetRight()<=GetWidth()) && (rect.GetBottom()<=GetHeight())
-		 , image, T("invalid subimage size") );
+		 , image, wxT("invalid subimage size") );
 
     int subwidth=rect.GetWidth();
     const int subheight=rect.GetHeight();
@@ -205,7 +205,7 @@ wxImage wxImage::GetSubImage( const wxRect &rect ) const
 
     char unsigned *subdata = image.GetData(), *data=GetData();
 
-    wxCHECK_MSG( subdata, image, T("unable to create image") );
+    wxCHECK_MSG( subdata, image, wxT("unable to create image") );
 
     if (M_IMGDATA->m_hasMask)
         image.SetMaskColour( M_IMGDATA->m_maskRed, M_IMGDATA->m_maskGreen, M_IMGDATA->m_maskBlue );
@@ -228,12 +228,12 @@ wxImage wxImage::GetSubImage( const wxRect &rect ) const
 
 void wxImage::SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned char b )
 {
-    wxCHECK_RET( Ok(), T("invalid image") );
+    wxCHECK_RET( Ok(), wxT("invalid image") );
 
     int w = M_IMGDATA->m_width;
     int h = M_IMGDATA->m_height;
 
-    wxCHECK_RET( (x>=0) && (y>=0) && (x<w) && (y<h), T("invalid image index") );
+    wxCHECK_RET( (x>=0) && (y>=0) && (x<w) && (y<h), wxT("invalid image index") );
 
     long pos = (y * w + x) * 3;
 
@@ -244,12 +244,12 @@ void wxImage::SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned c
 
 unsigned char wxImage::GetRed( int x, int y )
 {
-    wxCHECK_MSG( Ok(), 0, T("invalid image") );
+    wxCHECK_MSG( Ok(), 0, wxT("invalid image") );
 
     int w = M_IMGDATA->m_width;
     int h = M_IMGDATA->m_height;
 
-    wxCHECK_MSG( (x>=0) && (y>=0) && (x<w) && (y<h), 0, T("invalid image index") );
+    wxCHECK_MSG( (x>=0) && (y>=0) && (x<w) && (y<h), 0, wxT("invalid image index") );
 
     long pos = (y * w + x) * 3;
 
@@ -258,12 +258,12 @@ unsigned char wxImage::GetRed( int x, int y )
 
 unsigned char wxImage::GetGreen( int x, int y )
 {
-    wxCHECK_MSG( Ok(), 0, T("invalid image") );
+    wxCHECK_MSG( Ok(), 0, wxT("invalid image") );
 
     int w = M_IMGDATA->m_width;
     int h = M_IMGDATA->m_height;
 
-    wxCHECK_MSG( (x>=0) && (y>=0) && (x<w) && (y<h), 0, T("invalid image index") );
+    wxCHECK_MSG( (x>=0) && (y>=0) && (x<w) && (y<h), 0, wxT("invalid image index") );
 
     long pos = (y * w + x) * 3;
 
@@ -272,12 +272,12 @@ unsigned char wxImage::GetGreen( int x, int y )
 
 unsigned char wxImage::GetBlue( int x, int y )
 {
-    wxCHECK_MSG( Ok(), 0, T("invalid image") );
+    wxCHECK_MSG( Ok(), 0, wxT("invalid image") );
 
     int w = M_IMGDATA->m_width;
     int h = M_IMGDATA->m_height;
 
-    wxCHECK_MSG( (x>=0) && (y>=0) && (x<w) && (y<h), 0, T("invalid image index") );
+    wxCHECK_MSG( (x>=0) && (y>=0) && (x<w) && (y<h), 0, wxT("invalid image index") );
 
     long pos = (y * w + x) * 3;
 
@@ -291,14 +291,14 @@ bool wxImage::Ok() const
 
 char unsigned *wxImage::GetData() const
 {
-    wxCHECK_MSG( Ok(), (char unsigned *)NULL, T("invalid image") );
+    wxCHECK_MSG( Ok(), (char unsigned *)NULL, wxT("invalid image") );
 
     return M_IMGDATA->m_data;
 }
 
 void wxImage::SetData( char unsigned *data )
 {
-    wxCHECK_RET( Ok(), T("invalid image") );
+    wxCHECK_RET( Ok(), wxT("invalid image") );
 
     wxImageRefData *newRefData = new wxImageRefData();
 
@@ -318,7 +318,7 @@ void wxImage::SetData( char unsigned *data )
 
 void wxImage::SetMaskColour( unsigned char r, unsigned char g, unsigned char b )
 {
-    wxCHECK_RET( Ok(), T("invalid image") );
+    wxCHECK_RET( Ok(), wxT("invalid image") );
 
     M_IMGDATA->m_maskRed = r;
     M_IMGDATA->m_maskGreen = g;
@@ -328,49 +328,49 @@ void wxImage::SetMaskColour( unsigned char r, unsigned char g, unsigned char b )
 
 unsigned char wxImage::GetMaskRed() const
 {
-    wxCHECK_MSG( Ok(), 0, T("invalid image") );
+    wxCHECK_MSG( Ok(), 0, wxT("invalid image") );
 
     return M_IMGDATA->m_maskRed;
 }
 
 unsigned char wxImage::GetMaskGreen() const
 {
-    wxCHECK_MSG( Ok(), 0, T("invalid image") );
+    wxCHECK_MSG( Ok(), 0, wxT("invalid image") );
 
     return M_IMGDATA->m_maskGreen;
 }
 
 unsigned char wxImage::GetMaskBlue() const
 {
-    wxCHECK_MSG( Ok(), 0, T("invalid image") );
+    wxCHECK_MSG( Ok(), 0, wxT("invalid image") );
 
     return M_IMGDATA->m_maskBlue;
 }
 
 void wxImage::SetMask( bool mask )
 {
-    wxCHECK_RET( Ok(), T("invalid image") );
+    wxCHECK_RET( Ok(), wxT("invalid image") );
 
     M_IMGDATA->m_hasMask = mask;
 }
 
 bool wxImage::HasMask() const
 {
-    wxCHECK_MSG( Ok(), FALSE, T("invalid image") );
+    wxCHECK_MSG( Ok(), FALSE, wxT("invalid image") );
 
     return M_IMGDATA->m_hasMask;
 }
 
 int wxImage::GetWidth() const
 {
-    wxCHECK_MSG( Ok(), 0, T("invalid image") );
+    wxCHECK_MSG( Ok(), 0, wxT("invalid image") );
 
     return M_IMGDATA->m_width;
 }
 
 int wxImage::GetHeight() const
 {
-    wxCHECK_MSG( Ok(), 0, T("invalid image") );
+    wxCHECK_MSG( Ok(), 0, wxT("invalid image") );
 
     return M_IMGDATA->m_height;
 }
@@ -385,7 +385,7 @@ bool wxImage::LoadFile( const wxString& filename, long type )
     }
 
     else {
-        wxLogError( T("Can't load image from file '%s': file does not exist."), filename.c_str() );
+        wxLogError( wxT("Can't load image from file '%s': file does not exist."), filename.c_str() );
 
         return FALSE;
     }
@@ -404,7 +404,7 @@ bool wxImage::LoadFile( const wxString& filename, const wxString& mimetype )
     }
 
     else {
-        wxLogError( T("Can't load image from file '%s': file does not exist."), filename.c_str() );
+        wxLogError( wxT("Can't load image from file '%s': file does not exist."), filename.c_str() );
 
         return FALSE;
     }
@@ -459,7 +459,7 @@ bool wxImage::LoadFile( wxInputStream& stream, long type )
 
 	}
 
-	wxLogWarning( T("No handler found for this image.") );
+	wxLogWarning( wxT("No handler found for this image.") );
 	return FALSE;
     }
 
@@ -467,7 +467,7 @@ bool wxImage::LoadFile( wxInputStream& stream, long type )
 
     if (handler == NULL)
     {
-        wxLogWarning( T("No image handler for type %d defined."), type );
+        wxLogWarning( wxT("No image handler for type %d defined."), type );
 
         return FALSE;
     }
@@ -485,7 +485,7 @@ bool wxImage::LoadFile( wxInputStream& stream, const wxString& mimetype )
 
     if (handler == NULL)
     {
-        wxLogWarning( T("No image handler for type %s defined."), mimetype.GetData() );
+        wxLogWarning( wxT("No image handler for type %s defined."), mimetype.GetData() );
 
         return FALSE;
     }
@@ -495,13 +495,13 @@ bool wxImage::LoadFile( wxInputStream& stream, const wxString& mimetype )
 
 bool wxImage::SaveFile( wxOutputStream& stream, int type )
 {
-    wxCHECK_MSG( Ok(), FALSE, T("invalid image") );
+    wxCHECK_MSG( Ok(), FALSE, wxT("invalid image") );
 
     wxImageHandler *handler = FindHandler(type);
 
     if (handler == NULL)
     {
-        wxLogWarning( T("No image handler for type %d defined."), type );
+        wxLogWarning( wxT("No image handler for type %d defined."), type );
 
         return FALSE;
     }
@@ -511,13 +511,13 @@ bool wxImage::SaveFile( wxOutputStream& stream, int type )
 
 bool wxImage::SaveFile( wxOutputStream& stream, const wxString& mimetype )
 {
-    wxCHECK_MSG( Ok(), FALSE, T("invalid image") );
+    wxCHECK_MSG( Ok(), FALSE, wxT("invalid image") );
 
     wxImageHandler *handler = FindHandlerMime(mimetype);
 
     if (handler == NULL)
     {
-        wxLogWarning( T("No image handler for type %s defined."), mimetype.GetData() );
+        wxLogWarning( wxT("No image handler for type %s defined."), mimetype.GetData() );
 
         return FALSE;
     }
@@ -657,7 +657,7 @@ bool wxImageHandler::CanRead( const wxString& name )
     }
 
     else {
-        wxLogError( T("Can't check image format of file '%s': file does not exist."), name.c_str() );
+        wxLogError( wxT("Can't check image format of file '%s': file does not exist."), name.c_str() );
 
         return FALSE;
     }
@@ -717,7 +717,7 @@ wxBitmap wxImage::ConvertToBitmap() const
 
     // set bitmap parameters
     wxBitmap bitmap;
-    wxCHECK_MSG( Ok(), bitmap, T("invalid image") );
+    wxCHECK_MSG( Ok(), bitmap, wxT("invalid image") );
     bitmap.SetWidth( width );
     bitmap.SetHeight( bmpHeight );
     bitmap.SetDepth( wxDisplayDepth() );
@@ -725,7 +725,7 @@ wxBitmap wxImage::ConvertToBitmap() const
     // create a DIB header
     int headersize = sizeof(BITMAPINFOHEADER);
     LPBITMAPINFO lpDIBh = (BITMAPINFO *) malloc( headersize );
-    wxCHECK_MSG( lpDIBh, bitmap, T("could not allocate memory for DIB header") );
+    wxCHECK_MSG( lpDIBh, bitmap, wxT("could not allocate memory for DIB header") );
     // Fill in the DIB header
     lpDIBh->bmiHeader.biSize = headersize;
     lpDIBh->bmiHeader.biWidth = (DWORD)width;
@@ -746,7 +746,7 @@ wxBitmap wxImage::ConvertToBitmap() const
     lpBits = (unsigned char *)malloc( lpDIBh->bmiHeader.biSizeImage );
     if( !lpBits )
     {
-        wxFAIL_MSG( T("could not allocate memory for DIB") );
+        wxFAIL_MSG( wxT("could not allocate memory for DIB") );
         free( lpDIBh );
         return bitmap;
     }
@@ -889,7 +889,7 @@ wxImage::wxImage( const wxBitmap &bitmap )
     // check the bitmap
     if( !bitmap.Ok() )
     {
-        wxFAIL_MSG( T("invalid bitmap") );
+        wxFAIL_MSG( wxT("invalid bitmap") );
         return;
     }
 
@@ -900,7 +900,7 @@ wxImage::wxImage( const wxBitmap &bitmap )
     unsigned char *data = GetData();
     if( !data )
     {
-        wxFAIL_MSG( T("could not allocate data for image") );
+        wxFAIL_MSG( wxT("could not allocate data for image") );
         return;
     }
 
@@ -920,7 +920,7 @@ wxImage::wxImage( const wxBitmap &bitmap )
     LPBITMAPINFO lpDIBh = (BITMAPINFO *) malloc( headersize );
     if( !lpDIBh )
     {
-        wxFAIL_MSG( T("could not allocate data for DIB header") );
+        wxFAIL_MSG( wxT("could not allocate data for DIB header") );
         free( data );
         return;
     }
@@ -942,7 +942,7 @@ wxImage::wxImage( const wxBitmap &bitmap )
     lpBits = (unsigned char *) malloc( lpDIBh->bmiHeader.biSizeImage );
     if( !lpBits )
     {
-        wxFAIL_MSG( T("could not allocate data for DIB") );
+        wxFAIL_MSG( wxT("could not allocate data for DIB") );
         free( data );
         free( lpDIBh );
         return;
@@ -1033,7 +1033,7 @@ wxBitmap wxImage::ConvertToBitmap() const
 {
     wxBitmap bitmap;
 
-    wxCHECK_MSG( Ok(), bitmap, T("invalid image") );
+    wxCHECK_MSG( Ok(), bitmap, wxT("invalid image") );
 
     int width = GetWidth();
     int height = GetHeight();
@@ -1241,13 +1241,13 @@ wxBitmap wxImage::ConvertToBitmap() const
 
 wxImage::wxImage( const wxBitmap &bitmap )
 {
-    wxCHECK_RET( bitmap.Ok(), T("invalid bitmap") );
+    wxCHECK_RET( bitmap.Ok(), wxT("invalid bitmap") );
 
     GdkImage *gdk_image = gdk_image_get( bitmap.GetPixmap(),
         0, 0,
         bitmap.GetWidth(), bitmap.GetHeight() );
 
-    wxCHECK_RET( gdk_image, T("couldn't create image") );
+    wxCHECK_RET( gdk_image, wxT("couldn't create image") );
 
     Create( bitmap.GetWidth(), bitmap.GetHeight() );
     char unsigned *data = GetData();
@@ -1255,7 +1255,7 @@ wxImage::wxImage( const wxBitmap &bitmap )
     if (!data)
     {
         gdk_image_destroy( gdk_image );
-        wxFAIL_MSG( T("couldn't create image") );
+        wxFAIL_MSG( wxT("couldn't create image") );
         return;
     }
 
@@ -1340,7 +1340,7 @@ wxBitmap wxImage::ConvertToBitmap() const
 {
     wxBitmap bitmap;
 
-    wxCHECK_MSG( Ok(), bitmap, T("invalid image") );
+    wxCHECK_MSG( Ok(), bitmap, wxT("invalid image") );
 
     int width = GetWidth();
     int height = GetHeight();
@@ -1389,7 +1389,7 @@ wxBitmap wxImage::ConvertToBitmap() const
 
     vi = XGetVisualInfo( dpy, VisualIDMask|VisualDepthMask, &vinfo_template, &nitem );
 
-    wxCHECK_MSG( vi, wxNullBitmap, T("no visual") );
+    wxCHECK_MSG( vi, wxNullBitmap, wxT("no visual") );
 
     XFree( vi );
 
@@ -1540,7 +1540,7 @@ wxBitmap wxImage::ConvertToBitmap() const
 
 wxImage::wxImage( const wxBitmap &bitmap )
 {
-    wxCHECK_RET( bitmap.Ok(), T("invalid bitmap") );
+    wxCHECK_RET( bitmap.Ok(), wxT("invalid bitmap") );
 
     Display *dpy = (Display*) wxGetDisplay();
     Visual* vis = DefaultVisual( dpy, DefaultScreen( dpy ) );
@@ -1552,7 +1552,7 @@ wxImage::wxImage( const wxBitmap &bitmap )
         bitmap.GetWidth(), bitmap.GetHeight(),
         AllPlanes, ZPixmap );
 
-    wxCHECK_RET( ximage, T("couldn't create image") );
+    wxCHECK_RET( ximage, wxT("couldn't create image") );
 
     Create( bitmap.GetWidth(), bitmap.GetHeight() );
     char unsigned *data = GetData();
@@ -1560,7 +1560,7 @@ wxImage::wxImage( const wxBitmap &bitmap )
     if (!data)
     {
         XDestroyImage( ximage );
-        wxFAIL_MSG( T("couldn't create image") );
+        wxFAIL_MSG( wxT("couldn't create image") );
         return;
     }
 
@@ -1588,7 +1588,7 @@ wxImage::wxImage( const wxBitmap &bitmap )
 
     vi = XGetVisualInfo( dpy, VisualIDMask|VisualDepthMask, &vinfo_template, &nitem );
 
-    wxCHECK_RET( vi, T("no visual") );
+    wxCHECK_RET( vi, wxT("no visual") );
 
     if ((bpp == 16) && (vi->red_mask != 0xf800)) bpp = 15;
 

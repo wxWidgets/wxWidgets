@@ -28,7 +28,7 @@ class wxCharBuffer
 public:
     wxCharBuffer(const char *str)
     {
-        wxASSERT_MSG( str, T("NULL string in wxCharBuffer") );
+        wxASSERT_MSG( str, wxT("NULL string in wxCharBuffer") );
 
         m_str = str ? strdup(str) : (char *)NULL;
     }
@@ -67,7 +67,7 @@ class wxWCharBuffer
 public:
     wxWCharBuffer(const wchar_t *wcs)
     {
-        wxASSERT_MSG( wcs, T("NULL string in wxWCharBuffer") );
+        wxASSERT_MSG( wcs, wxT("NULL string in wxWCharBuffer") );
 
         if (wcs) {
           size_t siz = (wcslen(wcs)+1)*sizeof(wchar_t);

@@ -565,11 +565,11 @@ WXDLLEXPORT size_t   wxStrftime(wxChar *s, size_t max, const wxChar *fmt, const 
 // although global macros with such names are really bad, we want to have
 // another name for _T() which should be used to avoid confusion between _T()
 // and _() in wxWindows sources
-#define T(x)       _T(x)
+#define wxT(x)       _T(x)
 
 // a Unicode-friendly __FILE__ analog
 #ifndef __TFILE__
-    #define __XFILE__(x) T(x)
+    #define __XFILE__(x) wxT(x)
     #define __TFILE__ __XFILE__(__FILE__)
 #endif
 

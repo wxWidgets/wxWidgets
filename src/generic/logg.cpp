@@ -99,7 +99,7 @@ void wxLogTextCtrl::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 {
     wxString msg;
     TimeStamp(&msg);
-    msg << szString << T('\n');
+    msg << szString << wxT('\n');
 
     m_pTextCtrl->AppendText(msg);
 }
@@ -143,7 +143,7 @@ void wxLogGui::Flush()
         if ( nLines > 25 )  // don't put too many lines in message box
             break;
 
-        str << m_aMessages[n - 1] << T("\n");
+        str << m_aMessages[n - 1] << wxT("\n");
     }
 
     const wxChar *title;
@@ -213,13 +213,13 @@ void wxLogGui::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
                         // debug window anyhow, but do put a timestamp
                         wxString str;
                         TimeStamp(&str);
-                        str << szString << T("\n\r");
+                        str << szString << wxT("\n\r");
                         OutputDebugString(str);
                     #else
                         // send them to stderr
-                        wxFprintf(stderr, T("%s: %s\n"),
-                                  level == wxLOG_Trace ? T("Trace")
-                                                       : T("Debug"),
+                        wxFprintf(stderr, wxT("%s: %s\n"),
+                                  level == wxLOG_Trace ? wxT("Trace")
+                                                       : wxT("Debug"),
                                   szString);
                         fflush(stderr);
                     #endif
@@ -356,7 +356,7 @@ void wxLogFrame::OnSave(wxCommandEvent& WXUNUSED(event))
 {
     // get the file name
     // -----------------
-    const wxChar *szFileName = wxSaveFileSelector(T("log"), T("txt"), T("log.txt"));
+    const wxChar *szFileName = wxSaveFileSelector(wxT("log"), wxT("txt"), wxT("log.txt"));
     if ( szFileName == NULL ) {
         // cancelled
         return;
@@ -516,7 +516,7 @@ void wxLogWindow::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 
     wxString msg;
     TimeStamp(&msg);
-    msg << szString << T('\n');
+    msg << szString << wxT('\n');
 
     pText->AppendText(msg);
 

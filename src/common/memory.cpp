@@ -110,7 +110,7 @@
 */
 void wxMemStruct::ErrorMsg (const char * mesg)
 {
-  wxLogDebug(T("wxWindows memory checking error: %s"), mesg);
+  wxLogDebug(wxT("wxWindows memory checking error: %s"), mesg);
   PrintNode ();
 
 //         << m_fileName << ' ' << m_lineNum << endl;
@@ -121,7 +121,7 @@ void wxMemStruct::ErrorMsg (const char * mesg)
 */
 void wxMemStruct::ErrorMsg ()
 {
-  wxLogDebug(T("wxWindows over/underwrite memory error:"));
+  wxLogDebug(wxT("wxWindows over/underwrite memory error:"));
   PrintNode ();
 
 //    cerr << m_fileName << ' ' << m_lineNum << endl;
@@ -329,18 +329,18 @@ void wxMemStruct::PrintNode ()
 
     // Let's put this in standard form so IDEs can load the file at the appropriate
     // line
-    wxString msg(T(""));
+    wxString msg(wxT(""));
 
     if (m_fileName)
-      msg.Printf(T("%s(%d): "), m_fileName, (int)m_lineNum);
+      msg.Printf(wxT("%s(%d): "), m_fileName, (int)m_lineNum);
 
     if (info && info->GetClassName())
       msg += info->GetClassName();
     else
-      msg += T("object");
+      msg += wxT("object");
 
     wxString msg2;
-    msg2.Printf(T(" at $%lX, size %d"), (long)GetActualData(), (int)RequestSize());
+    msg2.Printf(wxT(" at $%lX, size %d"), (long)GetActualData(), (int)RequestSize());
     msg += msg2;
 
     wxLogDebug(msg);
@@ -350,10 +350,10 @@ void wxMemStruct::PrintNode ()
     wxString msg("");
 
     if (m_fileName)
-      msg.Printf(T("%s(%d): "), m_fileName, (int)m_lineNum);
-    msg += T("non-object data");
+      msg.Printf(wxT("%s(%d): "), m_fileName, (int)m_lineNum);
+    msg += wxT("non-object data");
     wxString msg2;
-    msg2.Printf(T(" at $%lX, size %d\n"), (long)GetActualData(), (int)RequestSize());
+    msg2.Printf(wxT(" at $%lX, size %d\n"), (long)GetActualData(), (int)RequestSize());
     msg += msg2;
 
     wxLogDebug(msg);
@@ -368,9 +368,9 @@ void wxMemStruct::Dump ()
   {
     wxObject *obj = (wxObject *)m_actualData;
 
-    wxString msg(T(""));
+    wxString msg(wxT(""));
     if (m_fileName)
-      msg.Printf(T("%s(%d): "), m_fileName, (int)m_lineNum);
+      msg.Printf(wxT("%s(%d): "), m_fileName, (int)m_lineNum);
 
 
     /* TODO: We no longer have a stream (using wxLogDebug) so we can't dump it.
@@ -383,22 +383,22 @@ void wxMemStruct::Dump ()
     if (obj->GetClassInfo() && obj->GetClassInfo()->GetClassName())
       msg += obj->GetClassInfo()->GetClassName();
     else
-      msg += T("unknown object class");
+      msg += wxT("unknown object class");
 
     wxString msg2("");
-    msg2.Printf(T(" at $%lX, size %d"), (long)GetActualData(), (int)RequestSize());
+    msg2.Printf(wxT(" at $%lX, size %d"), (long)GetActualData(), (int)RequestSize());
     msg += msg2;
 
     wxLogDebug(msg);
   }
   else
   {
-    wxString msg(T(""));
+    wxString msg(wxT(""));
     if (m_fileName)
-      msg.Printf(T("%s(%d): "), m_fileName, (int)m_lineNum);
+      msg.Printf(wxT("%s(%d): "), m_fileName, (int)m_lineNum);
 
     wxString msg2("");
-    msg2.Printf(T("non-object data at $%lX, size %d"), (long)GetActualData(), (int)RequestSize() );
+    msg2.Printf(wxT("non-object data at $%lX, size %d"), (long)GetActualData(), (int)RequestSize() );
     msg += msg2;
     wxLogDebug(msg);
   }
@@ -418,7 +418,7 @@ int wxMemStruct::ValidateNode ()
         else {
             // Can't use the error routines as we have no recognisable object.
 #ifndef __WXGTK__
-             wxLogDebug(T("Can't verify memory struct - all bets are off!"));
+             wxLogDebug(wxT("Can't verify memory struct - all bets are off!"));
 #endif
         }
         return 0;
@@ -666,23 +666,23 @@ bool wxDebugContext::Dump(void)
 
 //  if (TRUE)
   {
-    wxChar* appName = T("application");
+    wxChar* appName = wxT("application");
     wxString appNameStr("");
     if (wxTheApp)
     {
         appNameStr = wxTheApp->GetAppName();
         appName = WXSTRINGCAST appNameStr;
-        wxLogDebug(T("----- Memory dump of %s at %s -----"), appName, WXSTRINGCAST wxNow() );
+        wxLogDebug(wxT("----- Memory dump of %s at %s -----"), appName, WXSTRINGCAST wxNow() );
     }
     else
     {
-      wxLogDebug( T("----- Memory dump -----") );
+      wxLogDebug( wxT("----- Memory dump -----") );
     }
   }
   TraverseList ((PmSFV)&wxMemStruct::Dump, (checkPoint ? checkPoint->m_next : (wxMemStruct*)NULL));
 
-  wxLogDebug( T("") );
-  wxLogDebug( T("") );
+  wxLogDebug( wxT("") );
+  wxLogDebug( wxT("") );
 
   return TRUE;
 #else
@@ -723,17 +723,17 @@ bool wxDebugContext::PrintStatistics(bool detailed)
 
 //  if (TRUE)
   {
-    wxChar* appName = T("application");
-    wxString appNameStr(T(""));
+    wxChar* appName = wxT("application");
+    wxString appNameStr(wxT(""));
     if (wxTheApp)
     {
         appNameStr = wxTheApp->GetAppName();
         appName = WXSTRINGCAST appNameStr;
-        wxLogDebug(T("----- Memory statistics of %s at %s -----"), appName, WXSTRINGCAST wxNow() );
+        wxLogDebug(wxT("----- Memory statistics of %s at %s -----"), appName, WXSTRINGCAST wxNow() );
     }
     else
     {
-      wxLogDebug( T("----- Memory statistics -----") );
+      wxLogDebug( wxT("----- Memory statistics -----") );
     }
   }
 
@@ -757,7 +757,7 @@ bool wxDebugContext::PrintStatistics(bool detailed)
 //    if (detailed && (data != (void*)m_debugStream) && (data != (void*) m_streamBuf))
       if (detailed && (data != (void*) wxLog::GetActiveTarget()))
     {
-      wxChar *className = T("nonobject");
+      wxChar *className = wxT("nonobject");
       if (st->m_isObject && st->GetActualData())
       {
         wxObject *obj = (wxObject *)st->GetActualData();
@@ -792,22 +792,22 @@ bool wxDebugContext::PrintStatistics(bool detailed)
   {
     while (list)
     {
-      wxLogDebug(T("%ld objects of class %s, total size %ld"),
+      wxLogDebug(wxT("%ld objects of class %s, total size %ld"),
           list->instanceCount, list->instanceClass, list->totalSize);
       wxDebugStatsStruct *old = list;
       list = old->next;
       free((char *)old);
     }
-    wxLogDebug(T(""));
+    wxLogDebug(wxT(""));
   }
 
   SetDebugMode(currentMode);
 
-  wxLogDebug(T("Number of object items: %ld"), noObjectNodes);
-  wxLogDebug(T("Number of non-object items: %ld"), noNonObjectNodes);
-  wxLogDebug(T("Total allocated size: %ld"), totalSize);
-  wxLogDebug(T(""));
-  wxLogDebug(T(""));
+  wxLogDebug(wxT("Number of object items: %ld"), noObjectNodes);
+  wxLogDebug(wxT("Number of non-object items: %ld"), noNonObjectNodes);
+  wxLogDebug(wxT("Total allocated size: %ld"), totalSize);
+  wxLogDebug(wxT(""));
+  wxLogDebug(wxT(""));
 
   return TRUE;
 #else
@@ -822,13 +822,13 @@ bool wxDebugContext::PrintClasses(void)
 
 //  if (TRUE)
   {
-    wxChar* appName = T("application");
-    wxString appNameStr(T(""));
+    wxChar* appName = wxT("application");
+    wxString appNameStr(wxT(""));
     if (wxTheApp)
     {
         appNameStr = wxTheApp->GetAppName();
         appName = WXSTRINGCAST appNameStr;
-        wxLogDebug(T("----- Classes in %s -----"), appName);
+        wxLogDebug(wxT("----- Classes in %s -----"), appName);
     }
   }
 
@@ -844,32 +844,32 @@ bool wxDebugContext::PrintClasses(void)
     if (info->GetClassName())
     {
         wxString msg(info->GetClassName());
-        msg += T(" ");
+        msg += wxT(" ");
 
         if (info->GetBaseClassName1() && !info->GetBaseClassName2())
         {
-            msg += T("is a ");
+            msg += wxT("is a ");
             msg += info->GetBaseClassName1();
         }
         else if (info->GetBaseClassName1() && info->GetBaseClassName2())
         {
-            msg += T("is a ");
+            msg += wxT("is a ");
             msg += info->GetBaseClassName1() ;
-            msg += T(", ");
+            msg += wxT(", ");
             msg += info->GetBaseClassName2() ;
         }
         if (info->GetConstructor())
-            msg += T(": dynamic");
+            msg += wxT(": dynamic");
 
         wxLogDebug(msg);
     }
     node = wxClassInfo::sm_classTable->Next();
     n ++;
   }
-  wxLogDebug(T(""));
-  wxLogDebug(T("There are %d classes derived from wxObject."), n);
-  wxLogDebug(T(""));
-  wxLogDebug(T(""));
+  wxLogDebug(wxT(""));
+  wxLogDebug(wxT("There are %d classes derived from wxObject."), n);
+  wxLogDebug(wxT(""));
+  wxLogDebug(wxT(""));
   return TRUE;
 }
 
@@ -1040,7 +1040,7 @@ void * wxDebugAlloc(size_t size, wxChar * fileName, int lineNum, bool isObject, 
     int totSize = wxDebugContext::TotSize (size);
     char * buf = (char *) malloc(totSize);
     if (!buf) {
-        wxLogDebug(T("Call to malloc (%ld) failed."), (long)size);
+        wxLogDebug(wxT("Call to malloc (%ld) failed."), (long)size);
         return 0;
     }
     wxMemStruct * st = (wxMemStruct *)buf;

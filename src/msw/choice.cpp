@@ -69,10 +69,10 @@ bool wxChoice::Create(wxWindow *parent,
     wxASSERT_MSG( !(style & wxCB_DROPDOWN) &&
                   !(style & wxCB_READONLY) &&
                   !(style & wxCB_SIMPLE),
-                  T("this style flag is ignored by wxChoice, you "
+                  wxT("this style flag is ignored by wxChoice, you "
                      "probably want to use a wxComboBox") );
 
-    if ( !MSWCreateControl(T("COMBOBOX"), msStyle) )
+    if ( !MSWCreateControl(wxT("COMBOBOX"), msStyle) )
         return FALSE;
 
     for ( int i = 0; i < n; i++ )
@@ -102,7 +102,7 @@ int wxChoice::DoAppend(const wxString& item)
 
 void wxChoice::Delete(int n)
 {
-    wxCHECK_RET( n < GetCount(), T("invalid item index in wxChoice::Delete") );
+    wxCHECK_RET( n < GetCount(), wxT("invalid item index in wxChoice::Delete") );
 
     SendMessage(GetHwnd(), CB_DELETESTRING, n, 0);
 }
@@ -180,7 +180,7 @@ void wxChoice::DoSetClientData( int n, void* clientData )
 {
     if ( SendMessage(GetHwnd(), CB_SETITEMDATA, n, (LPARAM)clientData) == CB_ERR )
     {
-        wxLogLastError(T("CB_SETITEMDATA"));
+        wxLogLastError(wxT("CB_SETITEMDATA"));
     }
 }
 
@@ -189,7 +189,7 @@ void* wxChoice::DoGetClientData( int n ) const
     LPARAM rc = SendMessage(GetHwnd(), CB_GETITEMDATA, n, 0);
     if ( rc == CB_ERR )
     {
-        wxLogLastError(T("CB_GETITEMDATA"));
+        wxLogLastError(wxT("CB_GETITEMDATA"));
 
         // unfortunately, there is no way to return an error code to the user
 	rc = (LPARAM) NULL;

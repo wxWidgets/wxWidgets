@@ -187,7 +187,7 @@ wxWizard::wxWizard(wxWindow *parent,
 
 bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
 {
-    wxASSERT_MSG( page != m_page, T("this is useless") );
+    wxASSERT_MSG( page != m_page, wxT("this is useless") );
 
     // we'll use this to decide whether we have to change the label of this
     // button or not (initially the label is "Next")
@@ -252,7 +252,7 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
 
 bool wxWizard::RunWizard(wxWizardPage *firstPage)
 {
-    wxCHECK_MSG( firstPage, FALSE, T("can't run empty wizard") );
+    wxCHECK_MSG( firstPage, FALSE, wxT("can't run empty wizard") );
 
     // can't return FALSE here because there is no old page
     (void)ShowPage(firstPage, TRUE /* forward */);
@@ -284,7 +284,7 @@ void wxWizard::OnBackOrNext(wxCommandEvent& event)
 {
     wxASSERT_MSG( (event.GetEventObject() == m_btnNext) ||
                   (event.GetEventObject() == m_btnPrev),
-                  T("unknown button") );
+                  wxT("unknown button") );
 
     bool forward = event.GetEventObject() == m_btnNext;
 
@@ -297,7 +297,7 @@ void wxWizard::OnBackOrNext(wxCommandEvent& event)
     {
         page = m_page->GetPrev();
 
-        wxASSERT_MSG( page, T("\"<Back\" button should have been disabled") );
+        wxASSERT_MSG( page, wxT("\"<Back\" button should have been disabled") );
     }
 
     // just pass to the new page (or may be not - but we don't care here)

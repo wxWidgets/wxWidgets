@@ -52,4 +52,3 @@ protected:
 
 #endif  // wxUSE_NATIVE_STATUSBAR
 
-#endif  //_STATBR95_H

@@ -573,7 +573,7 @@ public:
       // remove spaces from left or from right (default) side
   wxString& Trim(bool bFromRight = TRUE);
       // add nCount copies chPad in the beginning or at the end (default)
-  wxString& Pad(size_t nCount, wxChar chPad = T(' '), bool bFromRight = TRUE);
+  wxString& Pad(size_t nCount, wxChar chPad = wxT(' '), bool bFromRight = TRUE);
       // truncate string to given length
   wxString& Truncate(size_t uiLen);
 
@@ -685,7 +685,7 @@ public:
     // return the maximum size of the string
   size_t max_size() const { return wxSTRING_MAXLEN; }
     // resize the string, filling the space with c if c != 0
-  void resize(size_t nSize, wxChar ch = T('\0'));
+  void resize(size_t nSize, wxChar ch = wxT('\0'));
     // delete the contents of the string
   void clear() { Empty(); }
     // returns true if the string is empty

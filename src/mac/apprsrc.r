@@ -624,4 +624,3 @@ resource 'MENU' (1, preload)
 resource 'MBAR' (1,preload)
 {
 	{ 1 } ;
-} ;

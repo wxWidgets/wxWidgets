@@ -107,7 +107,7 @@ bool wxGaugeMSW::Create(wxWindow *parent, wxWindowID id,
   msFlags |= ZYZGS_3D;
 
   HWND wx_button =
-      CreateWindowEx(MakeExtendedStyle(m_windowStyle), T("zYzGauge"), NULL, msFlags,
+      CreateWindowEx(MakeExtendedStyle(m_windowStyle), wxT("zYzGauge"), NULL, msFlags,
                     0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
                     wxGetInstance(), NULL);
 
@@ -642,7 +642,7 @@ void FAR PASCAL Draw3DLine(HDC hdc, WORD x, WORD y, WORD nLen,
 
 
 /* static global variables */
-static wxChar gszzYzGaugeClass[] = T("zYzGauge");
+static wxChar gszzYzGaugeClass[] = wxT("zYzGauge");
     
 
 /* window word position definitions */
@@ -754,7 +754,7 @@ BOOL FAR PASCAL gaugeInit(HINSTANCE hInstance)
     /*  Get a DC to determine whether device is mono or not, and set
      *  default foreground/background colors as appropriate.
      */
-    hdc = CreateIC(T("DISPLAY"), NULL, NULL, 0L) ;
+    hdc = CreateIC(wxT("DISPLAY"), NULL, NULL, 0L) ;
     if (hdc)
     {
         /* check for mono-display */
@@ -909,7 +909,7 @@ static void PASCAL gaugePaint(HWND hwnd, HDC hdc)
     hFont = (HFONT) SelectObject(hdc, pgauge->hFont);
 
     /* build up a string to blit out--ie the meaning of life: "42%" */
-    wsprintf(ach, T("%3d%%"), (WORD)((DWORD)iPos * 100 / iRange));
+    wsprintf(ach, wxT("%3d%%"), (WORD)((DWORD)iPos * 100 / iRange));
 /* Win32s has no GetTextExtent(); let's try GetTextExtentPoint() instead */
 #if defined(__WIN32__)
     GetTextExtentPoint(hdc, ach, wGomerX = lstrlen(ach), &size);

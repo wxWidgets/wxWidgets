@@ -104,7 +104,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
-        wxFAIL_MSG( T("wxComboBox creation failed") );
+        wxFAIL_MSG( wxT("wxComboBox creation failed") );
 	return FALSE;
     }
 
@@ -180,7 +180,7 @@ wxComboBox::~wxComboBox()
 
 void wxComboBox::AppendCommon( const wxString &item )
 {
-    wxCHECK_RET( m_widget != NULL, T("invalid combobox") );
+    wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
     GtkWidget *list = GTK_COMBO(m_widget)->list;
 
@@ -228,7 +228,7 @@ void wxComboBox::Append( const wxString &item, wxClientData *clientData )
 
 void wxComboBox::SetClientData( int n, void* clientData )
 {
-    wxCHECK_RET( m_widget != NULL, T("invalid combobox") );
+    wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
     wxNode *node = m_clientDataList.Nth( n );
     if (!node) return;
@@ -238,7 +238,7 @@ void wxComboBox::SetClientData( int n, void* clientData )
 
 void* wxComboBox::GetClientData( int n )
 {
-    wxCHECK_MSG( m_widget != NULL, NULL, T("invalid combobox") );
+    wxCHECK_MSG( m_widget != NULL, NULL, wxT("invalid combobox") );
 
     wxNode *node = m_clientDataList.Nth( n );
     if (!node) return NULL;
@@ -248,7 +248,7 @@ void* wxComboBox::GetClientData( int n )
 
 void wxComboBox::SetClientObject( int n, wxClientData* clientData )
 {
-    wxCHECK_RET( m_widget != NULL, T("invalid combobox") );
+    wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
     wxNode *node = m_clientObjectList.Nth( n );
     if (!node) return;
@@ -261,7 +261,7 @@ void wxComboBox::SetClientObject( int n, wxClientData* clientData )
 
 wxClientData* wxComboBox::GetClientObject( int n )
 {
-    wxCHECK_MSG( m_widget != NULL, (wxClientData*)NULL, T("invalid combobox") );
+    wxCHECK_MSG( m_widget != NULL, (wxClientData*)NULL, wxT("invalid combobox") );
 
     wxNode *node = m_clientDataList.Nth( n );
     if (!node) return (wxClientData*) NULL;
@@ -271,7 +271,7 @@ wxClientData* wxComboBox::GetClientObject( int n )
 
 void wxComboBox::Clear()
 {
-    wxCHECK_RET( m_widget != NULL, T("invalid combobox") );
+    wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
     GtkWidget *list = GTK_COMBO(m_widget)->list;
     gtk_list_clear_items( GTK_LIST(list), 0, Number() );
@@ -290,7 +290,7 @@ void wxComboBox::Clear()
 
 void wxComboBox::Delete( int n )
 {
-    wxCHECK_RET( m_widget != NULL, T("invalid combobox") );
+    wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
     GtkList *listbox = GTK_LIST( GTK_COMBO(m_widget)->list );
 
@@ -298,7 +298,7 @@ void wxComboBox::Delete( int n )
 
     if (!child)
     {
-        wxFAIL_MSG(T("wrong index"));
+        wxFAIL_MSG(wxT("wrong index"));
         return;
     }
 
@@ -323,7 +323,7 @@ void wxComboBox::Delete( int n )
 
 int wxComboBox::FindString( const wxString &item )
 {
-    wxCHECK_MSG( m_widget != NULL, -1, T("invalid combobox") );
+    wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid combobox") );
 
     GtkWidget *list = GTK_COMBO(m_widget)->list;
 
@@ -344,7 +344,7 @@ int wxComboBox::FindString( const wxString &item )
 
 int wxComboBox::GetSelection() const
 {
-    wxCHECK_MSG( m_widget != NULL, -1, T("invalid combobox") );
+    wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid combobox") );
 
     GtkWidget *list = GTK_COMBO(m_widget)->list;
 
@@ -366,7 +366,7 @@ int wxComboBox::GetSelection() const
 
 wxString wxComboBox::GetString( int n ) const
 {
-    wxCHECK_MSG( m_widget != NULL, T(""), T("invalid combobox") );
+    wxCHECK_MSG( m_widget != NULL, wxT(""), wxT("invalid combobox") );
 
     GtkWidget *list = GTK_COMBO(m_widget)->list;
 
@@ -380,7 +380,7 @@ wxString wxComboBox::GetString( int n ) const
     }
     else
     {
-        wxFAIL_MSG( T("wxComboBox: wrong index") );
+        wxFAIL_MSG( wxT("wxComboBox: wrong index") );
     }
 
     return str;
@@ -388,7 +388,7 @@ wxString wxComboBox::GetString( int n ) const
 
 wxString wxComboBox::GetStringSelection() const
 {
-    wxCHECK_MSG( m_widget != NULL, T(""), T("invalid combobox") );
+    wxCHECK_MSG( m_widget != NULL, wxT(""), wxT("invalid combobox") );
 
     GtkWidget *list = GTK_COMBO(m_widget)->list;
 
@@ -400,14 +400,14 @@ wxString wxComboBox::GetStringSelection() const
         return tmp;
     }
 
-    wxFAIL_MSG( T("wxComboBox: no selection") );
+    wxFAIL_MSG( wxT("wxComboBox: no selection") );
 
-    return T("");
+    return wxT("");
 }
 
 int wxComboBox::Number() const
 {
-    wxCHECK_MSG( m_widget != NULL, 0, T("invalid combobox") );
+    wxCHECK_MSG( m_widget != NULL, 0, wxT("invalid combobox") );
 
     GtkWidget *list = GTK_COMBO(m_widget)->list;
 
@@ -419,7 +419,7 @@ int wxComboBox::Number() const
 
 void wxComboBox::SetSelection( int n )
 {
-    wxCHECK_RET( m_widget != NULL, T("invalid combobox") );
+    wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
     DisableEvents();
 
@@ -431,7 +431,7 @@ void wxComboBox::SetSelection( int n )
 
 void wxComboBox::SetStringSelection( const wxString &string )
 {
-    wxCHECK_RET( m_widget != NULL, T("invalid combobox") );
+    wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
     int res = FindString( string );
     if (res == -1) return;
@@ -447,17 +447,17 @@ wxString wxComboBox::GetValue() const
 
 void wxComboBox::SetValue( const wxString& value )
 {
-    wxCHECK_RET( m_widget != NULL, T("invalid combobox") );
+    wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
     GtkWidget *entry = GTK_COMBO(m_widget)->entry;
-    wxString tmp = T("");
+    wxString tmp = wxT("");
     if (!value.IsNull()) tmp = value;
     gtk_entry_set_text( GTK_ENTRY(entry), tmp.mbc_str() );
 }
 
 void wxComboBox::Copy()
 {
-    wxCHECK_RET( m_widget != NULL, T("invalid combobox") );
+    wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
     GtkWidget *entry = GTK_COMBO(m_widget)->entry;
 #if (GTK_MINOR_VERSION > 0)
@@ -469,7 +469,7 @@ void wxComboBox::Copy()
 
 void wxComboBox::Cut()
 {
-    wxCHECK_RET( m_widget != NULL, T("invalid combobox") );
+    wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
     GtkWidget *entry = GTK_COMBO(m_widget)->entry;
 #if (GTK_MINOR_VERSION > 0)
@@ -481,7 +481,7 @@ void wxComboBox::Cut()
 
 void wxComboBox::Paste()
 {
-    wxCHECK_RET( m_widget != NULL, T("invalid combobox") );
+    wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
     GtkWidget *entry = GTK_COMBO(m_widget)->entry;
 #if (GTK_MINOR_VERSION > 0)
@@ -493,7 +493,7 @@ void wxComboBox::Paste()
 
 void wxComboBox::SetInsertionPoint( long pos )
 {
-    wxCHECK_RET( m_widget != NULL, T("invalid combobox") );
+    wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
     GtkWidget *entry = GTK_COMBO(m_widget)->entry;
     gtk_entry_set_position( GTK_ENTRY(entry), (int)pos );
@@ -501,7 +501,7 @@ void wxComboBox::SetInsertionPoint( long pos )
 
 void wxComboBox::SetInsertionPointEnd()
 {
-    wxCHECK_RET( m_widget != NULL, T("invalid combobox") );
+    wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
     SetInsertionPoint( -1 );
 }
@@ -521,7 +521,7 @@ long wxComboBox::GetLastPosition() const
 
 void wxComboBox::Replace( long from, long to, const wxString& value )
 {
-    wxCHECK_RET( m_widget != NULL, T("invalid combobox") );
+    wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
     // FIXME: not quite sure how to do this method right in multibyte mode
 
     GtkWidget *entry = GTK_COMBO(m_widget)->entry;
@@ -533,7 +533,7 @@ void wxComboBox::Replace( long from, long to, const wxString& value )
 
 void wxComboBox::Remove(long from, long to)
 {
-    wxCHECK_RET( m_widget != NULL, T("invalid combobox") );
+    wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
     GtkWidget *entry = GTK_COMBO(m_widget)->entry;
     gtk_editable_delete_text( GTK_EDITABLE(entry), (gint)from, (gint)to );

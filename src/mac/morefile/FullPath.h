@@ -240,4 +240,3 @@ pascal OSErr LocationFromFullPath(short fullPathLength,
 
 #include "OptimEnd.h"
 
-#endif	/* __FULLPATH__ */

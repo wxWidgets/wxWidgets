@@ -97,11 +97,11 @@ bool wxStatusBar95::Create(wxWindow *parent, wxWindowID id, long style)
     wstyle |= SBARS_SIZEGRIP;
 
   m_hWnd = (WXHWND)CreateStatusWindow(wstyle,
-                                      T(""),
+                                      wxT(""),
                                       (HWND)parent->GetHWND(),
                                       m_windowId);
   if ( m_hWnd == 0 ) {
-    wxLogSysError(T("can't create status bar window"));
+    wxLogSysError(wxT("can't create status bar window"));
     return FALSE;
   }
 
@@ -191,7 +191,7 @@ void wxStatusBar95::SetFieldsWidth()
   }
 
   if ( !StatusBar_SetParts(hwnd, m_nFields, pWidths) ) {
-    wxLogLastError(T("StatusBar_SetParts"));
+    wxLogLastError(wxT("StatusBar_SetParts"));
   }
 
   delete [] pWidths;
@@ -200,7 +200,7 @@ void wxStatusBar95::SetFieldsWidth()
 void wxStatusBar95::SetStatusText(const wxString& strText, int nField)
 {
   if ( !StatusBar_SetText(hwnd, nField, strText) ) {
-    wxLogLastError(T("StatusBar_SetText"));
+    wxLogLastError(wxT("StatusBar_SetText"));
   }
 }
 
@@ -208,7 +208,7 @@ wxString wxStatusBar95::GetStatusText(int nField) const
 {
   wxASSERT( (nField > -1) && (nField < m_nFields) );
 
-  wxString str(T(""));
+  wxString str(wxT(""));
   int len = StatusBar_GetTextLen(hwnd, nField);
   if (len > 0)
   {

@@ -552,7 +552,7 @@ class WXDLLEXPORT wxListOfStringsListValidator: public wxPropertyListValidator
    // Called when the property is double clicked.
    bool OnDoubleClick(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
-   bool EditStringList(wxWindow *parent, wxStringList *stringList, const wxChar *title = T("String List Editor"));
+   bool EditStringList(wxWindow *parent, wxStringList *stringList, const wxChar *title = wxT("String List Editor"));
 
    // Called when the edit (...) button is pressed.
    void OnEdit(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);

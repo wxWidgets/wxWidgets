@@ -267,7 +267,7 @@ static wxString GetAllMsgCatalogSubdirs(const wxChar *prefix,
     // search first in prefix/fr/LC_MESSAGES, then in prefix/fr and finally in
     // prefix (assuming the language is 'fr')
     searchPath << prefix << wxFILE_SEP_PATH << lang << wxFILE_SEP_PATH
-                         << T("LC_MESSAGES") << wxPATH_SEP
+                         << wxT("LC_MESSAGES") << wxPATH_SEP
                << prefix << wxFILE_SEP_PATH << lang << wxPATH_SEP
                << prefix << wxPATH_SEP;
 
@@ -289,13 +289,13 @@ static wxString GetFullSearchPath(const wxChar *lang)
 
     // then take the current directory
     // FIXME it should be the directory of the executable
-    searchPath << GetAllMsgCatalogSubdirs(T("."), lang) << wxPATH_SEP;
+    searchPath << GetAllMsgCatalogSubdirs(wxT("."), lang) << wxPATH_SEP;
 
     // and finally add some standard ones
     searchPath
-        << GetAllMsgCatalogSubdirs(T("/usr/share/locale"), lang) << wxPATH_SEP
-        << GetAllMsgCatalogSubdirs(T("/usr/lib/locale"), lang) << wxPATH_SEP
-        << GetAllMsgCatalogSubdirs(T("/usr/local/share/locale"), lang);
+        << GetAllMsgCatalogSubdirs(wxT("/usr/share/locale"), lang) << wxPATH_SEP
+        << GetAllMsgCatalogSubdirs(wxT("/usr/lib/locale"), lang) << wxPATH_SEP
+        << GetAllMsgCatalogSubdirs(wxT("/usr/local/share/locale"), lang);
 
     return searchPath;
 }
@@ -320,7 +320,7 @@ bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName0)
 #endif // 0
 
   wxString searchPath = GetFullSearchPath(szDirPrefix);
-  const wxChar *sublocale = wxStrchr(szDirPrefix, T('_'));
+  const wxChar *sublocale = wxStrchr(szDirPrefix, wxT('_'));
   if ( sublocale )
   {
       // also add just base locale name: for things like "fr_BE" (belgium
@@ -340,7 +340,7 @@ bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName0)
   // (we're using an object because we have several return paths)
 
   NoTransErr noTransErr;
-  wxLogVerbose(T("looking for catalog '%s' in path '%s'."),
+  wxLogVerbose(wxT("looking for catalog '%s' in path '%s'."),
                szName.c_str(), searchPath.c_str());
 
   wxString strFullName;
@@ -496,7 +496,7 @@ bool wxLocale::Init(const wxChar *szName,
   m_pMsgCat = NULL;
   bool bOk = TRUE;
   if ( bLoadDefault )
-    bOk = AddCatalog(T("wxstd"));
+    bOk = AddCatalog(wxT("wxstd"));
 
   return bOk;
 }

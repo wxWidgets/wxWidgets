@@ -119,10 +119,10 @@
 /// END for console support
 
 // In the WIN.INI file
-static const wxChar WX_SECTION[] = T("wxWindows");
-static const wxChar eHOSTNAME[]  = T("HostName");
-static const wxChar eUSERID[]    = T("UserId");
-static const wxChar eUSERNAME[]  = T("UserName");
+static const wxChar WX_SECTION[] = wxT("wxWindows");
+static const wxChar eHOSTNAME[]  = wxT("HostName");
+static const wxChar eUSERID[]    = wxT("UserId");
+static const wxChar eUSERNAME[]  = wxT("UserName");
 
 // For the following functions we SHOULD fill in support
 // for Windows-NT (which I don't know) as I assume it begin
@@ -137,13 +137,13 @@ bool wxGetHostName(wxChar *buf, int maxSize)
   return (::GetComputerName(buf, &nSize) != 0);
 #else
   wxChar *sysname;
-  const wxChar *default_host = T("noname");
+  const wxChar *default_host = wxT("noname");
 
-  if ((sysname = wxGetenv(T("SYSTEM_NAME"))) == NULL) {
+  if ((sysname = wxGetenv(wxT("SYSTEM_NAME"))) == NULL) {
      GetProfileString(WX_SECTION, eHOSTNAME, default_host, buf, maxSize - 1);
   } else
     wxStrncpy(buf, sysname, maxSize - 1);
-  buf[maxSize] = T('\0');
+  buf[maxSize] = wxT('\0');
   return *buf ? TRUE : FALSE;
 #endif
 }
@@ -156,7 +156,7 @@ bool wxGetUserId(wxChar *buf, int maxSize)
     if ( ::GetUserName(buf, &nSize) == 0 )
     {
         // actually, it does happen on Win9x if the user didn't log on
-        DWORD res = ::GetEnvironmentVariable(T("username"), buf, maxSize);
+        DWORD res = ::GetEnvironmentVariable(wxT("username"), buf, maxSize);
         if ( res == 0 )
         {
             // not found
@@ -167,12 +167,12 @@ bool wxGetUserId(wxChar *buf, int maxSize)
     return TRUE;
 #else   // Win16 or Win32s
   wxChar *user;
-  const wxChar *default_id = T("anonymous");
+  const wxChar *default_id = wxT("anonymous");
 
   // Can't assume we have NIS (PC-NFS) or some other ID daemon
   // So we ...
-  if (  (user = wxGetenv(T("USER"))) == NULL &&
-        (user = wxGetenv(T("LOGNAME"))) == NULL )
+  if (  (user = wxGetenv(wxT("USER"))) == NULL &&
+        (user = wxGetenv(wxT("LOGNAME"))) == NULL )
   {
      // Use wxWindows configuration data (comming soon)
      GetProfileString(WX_SECTION, eUSERID, default_id, buf, maxSize - 1);
@@ -225,7 +225,7 @@ bool wxGetUserName(wxChar *buf, int maxSize)
     // Get the computer name of a DC for the domain.
     if ( NetGetDCName( NULL, wszDomain, &ComputerName ) != NERR_Success )
     {
-        wxLogError(T("Can not find domain controller"));
+        wxLogError(wxT("Can not find domain controller"));
 
         goto error;
     }
@@ -242,17 +242,17 @@ bool wxGetUserName(wxChar *buf, int maxSize)
             break;
 
         case NERR_InvalidComputer:
-            wxLogError(T("Invalid domain controller name."));
+            wxLogError(wxT("Invalid domain controller name."));
 
             goto error;
 
         case NERR_UserNotFound:
-            wxLogError(T("Invalid user name '%s'."), szUserName);
+            wxLogError(wxT("Invalid user name '%s'."), szUserName);
 
             goto error;
 
         default:
-            wxLogSysError(T("Can't get information about user"));
+            wxLogSysError(wxT("Can't get information about user"));
 
             goto error;
     }
@@ -264,13 +264,13 @@ bool wxGetUserName(wxChar *buf, int maxSize)
     return TRUE;
 
 error:
-  wxLogError(T("Couldn't look up full user name."));
+  wxLogError(wxT("Couldn't look up full user name."));
 
   return FALSE;
 #else  // !USE_NET_API
     // Could use NIS, MS-Mail or other site specific programs
     // Use wxWindows configuration data
-    bool ok = GetProfileString(WX_SECTION, eUSERNAME, T(""), buf, maxSize - 1) != 0;
+    bool ok = GetProfileString(WX_SECTION, eUSERNAME, wxT(""), buf, maxSize - 1) != 0;
     if ( !ok )
     {
         ok = wxGetUserId(buf, maxSize);
@@ -278,7 +278,7 @@ error:
 
     if ( !ok )
     {
-        wxStrncpy(buf, T("Unknown User"), maxSize);
+        wxStrncpy(buf, wxT("Unknown User"), maxSize);
     }
 #endif // Win32/16
   }
@@ -298,12 +298,12 @@ bool
 wxShell(const wxString& command)
 {
   wxChar *shell;
-  if ((shell = wxGetenv(T("COMSPEC"))) == NULL)
-    shell = T("\\COMMAND.COM");
+  if ((shell = wxGetenv(wxT("COMSPEC"))) == NULL)
+    shell = wxT("\\COMMAND.COM");
 
   wxChar tmp[255];
-  if (command != T(""))
-    wxSprintf(tmp, T("%s /c %s"), shell, WXSTRINGCAST command);
+  if (command != wxT(""))
+    wxSprintf(tmp, wxT("%s /c %s"), shell, WXSTRINGCAST command);
   else
     wxStrcpy(tmp, shell);
 
@@ -405,7 +405,7 @@ void wxDebugMsg(const wxChar *fmt ...)
 // Non-fatal error: pop up message box and (possibly) continue
 void wxError(const wxString& msg, const wxString& title)
 {
-  wxSprintf(wxBuffer, T("%s\nContinue?"), WXSTRINGCAST msg);
+  wxSprintf(wxBuffer, wxT("%s\nContinue?"), WXSTRINGCAST msg);
   if (MessageBox(NULL, (LPCTSTR)wxBuffer, (LPCTSTR)WXSTRINGCAST title,
              MB_ICONSTOP | MB_YESNO) == IDNO)
     wxExit();
@@ -414,7 +414,7 @@ void wxError(const wxString& msg, const wxString& title)
 // Fatal error: pop up message box and abort
 void wxFatalError(const wxString& msg, const wxString& title)
 {
-  wxSprintf(wxBuffer, T("%s: %s"), WXSTRINGCAST title, WXSTRINGCAST msg);
+  wxSprintf(wxBuffer, wxT("%s: %s"), WXSTRINGCAST title, WXSTRINGCAST msg);
   FatalAppExit(0, (LPCTSTR)wxBuffer);
 }
 
@@ -482,7 +482,7 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
 #if wxUSE_RESOURCES
 bool wxWriteResource(const wxString& section, const wxString& entry, const wxString& value, const wxString& file)
 {
-  if (file != T(""))
+  if (file != wxT(""))
     return (WritePrivateProfileString((LPCTSTR)WXSTRINGCAST section, (LPCTSTR)WXSTRINGCAST entry, (LPCTSTR)value, (LPCTSTR)WXSTRINGCAST file) != 0);
   else
     return (WriteProfileString((LPCTSTR)WXSTRINGCAST section, (LPCTSTR)WXSTRINGCAST entry, (LPCTSTR)WXSTRINGCAST value) != 0);
@@ -491,28 +491,28 @@ bool wxWriteResource(const wxString& section, const wxString& entry, const wxStr
 bool wxWriteResource(const wxString& section, const wxString& entry, float value, const wxString& file)
 {
   wxChar buf[50];
-  wxSprintf(buf, T("%.4f"), value);
+  wxSprintf(buf, wxT("%.4f"), value);
   return wxWriteResource(section, entry, buf, file);
 }
 
 bool wxWriteResource(const wxString& section, const wxString& entry, long value, const wxString& file)
 {
   wxChar buf[50];
-  wxSprintf(buf, T("%ld"), value);
+  wxSprintf(buf, wxT("%ld"), value);
   return wxWriteResource(section, entry, buf, file);
 }
 
 bool wxWriteResource(const wxString& section, const wxString& entry, int value, const wxString& file)
 {
   wxChar buf[50];
-  wxSprintf(buf, T("%d"), value);
+  wxSprintf(buf, wxT("%d"), value);
   return wxWriteResource(section, entry, buf, file);
 }
 
 bool wxGetResource(const wxString& section, const wxString& entry, wxChar **value, const wxString& file)
 {
-  static const wxChar defunkt[] = T("$$default");
-  if (file != T(""))
+  static const wxChar defunkt[] = wxT("$$default");
+  if (file != wxT(""))
   {
     int n = GetPrivateProfileString((LPCTSTR)WXSTRINGCAST section, (LPCTSTR)WXSTRINGCAST entry, (LPCTSTR)defunkt,
                                     (LPTSTR)wxBuffer, 1000, (LPCTSTR)WXSTRINGCAST file);
@@ -594,7 +594,7 @@ void wxBeginBusyCursor(wxCursor *cursor)
 void wxEndBusyCursor()
 {
     wxCHECK_RET( gs_wxBusyCursorCount > 0,
-                 T("no matching wxBeginBusyCursor() for wxEndBusyCursor()") );
+                 wxT("no matching wxBeginBusyCursor() for wxEndBusyCursor()") );
 
     if ( --gs_wxBusyCursorCount == 0 )
     {
@@ -620,20 +620,20 @@ const wxChar* wxGetHomeDir(wxString *pstr)
     if ( szHome == NULL ) {
       // we're homeless...
       wxLogWarning(_("can't find user's HOME, using current directory."));
-      strDir = T(".");
+      strDir = wxT(".");
     }
     else
        strDir = szHome;
 
     // add a trailing slash if needed
-    if ( strDir.Last() != T('/') )
-      strDir << T('/');
+    if ( strDir.Last() != wxT('/') )
+      strDir << wxT('/');
   #else   // Windows
     #ifdef  __WIN32__
-      const wxChar *szHome = wxGetenv(T("HOMEDRIVE"));
+      const wxChar *szHome = wxGetenv(wxT("HOMEDRIVE"));
       if ( szHome != NULL )
         strDir << szHome;
-      szHome = wxGetenv(T("HOMEPATH"));
+      szHome = wxGetenv(wxT("HOMEPATH"));
       if ( szHome != NULL ) {
         strDir << szHome;
 
@@ -643,7 +643,7 @@ const wxChar* wxGetHomeDir(wxString *pstr)
         // create it in our program's dir. However, if the user took care
         // to set HOMEPATH to something other than "\\", we suppose that he
         // knows what he is doing and use the supplied value.
-        if ( wxStrcmp(szHome, T("\\")) != 0 )
+        if ( wxStrcmp(szHome, wxT("\\")) != 0 )
           return strDir.c_str();
       }
 
@@ -675,22 +675,22 @@ wxChar *wxGetUserHome (const wxString& user)
   wxChar *home;
   wxString user1(user);
 
-  if (user1 != T("")) {
+  if (user1 != wxT("")) {
     wxChar tmp[64];
     if (wxGetUserId(tmp, sizeof(tmp)/sizeof(char))) {
       // Guests belong in the temp dir
-      if (wxStricmp(tmp, T("annonymous")) == 0) {
-        if ((home = wxGetenv(T("TMP"))) != NULL ||
-            (home = wxGetenv(T("TMPDIR"))) != NULL ||
-            (home = wxGetenv(T("TEMP"))) != NULL)
-            return *home ? home : (wxChar*)T("\\");
+      if (wxStricmp(tmp, wxT("annonymous")) == 0) {
+        if ((home = wxGetenv(wxT("TMP"))) != NULL ||
+            (home = wxGetenv(wxT("TMPDIR"))) != NULL ||
+            (home = wxGetenv(wxT("TEMP"))) != NULL)
+            return *home ? home : (wxChar*)wxT("\\");
       }
       if (wxStricmp(tmp, WXSTRINGCAST user1) == 0)
-        user1 = T("");
+        user1 = wxT("");
     }
   }
-  if (user1 == T(""))
-    if ((home = wxGetenv(T("HOME"))) != NULL)
+  if (user1 == wxT(""))
+    if ((home = wxGetenv(wxT("HOME"))) != NULL)
     {
       wxStrcpy(wxBuffer, home);
       Unix2DosFilename(wxBuffer);
@@ -713,7 +713,7 @@ bool wxCheckForInterrupt(wxWindow *wnd)
     return TRUE;//*** temporary?
   }
   else{
-    wxFAIL_MSG(T("wnd==NULL !!!"));
+    wxFAIL_MSG(wxT("wnd==NULL !!!"));
 
     return FALSE;//*** temporary?
   }
@@ -1132,26 +1132,26 @@ void OutputDebugStringW95(const wxChar* lpOutputString, ...)
     }
 
     /* make sure DBWIN is open and waiting */
-    heventDBWIN = OpenEvent(EVENT_MODIFY_STATE, FALSE, T("DBWIN_BUFFER_READY"));
+    heventDBWIN = OpenEvent(EVENT_MODIFY_STATE, FALSE, wxT("DBWIN_BUFFER_READY"));
     if ( !heventDBWIN )
     {
-        //MessageBox(NULL, T("DBWIN_BUFFER_READY nonexistent"), NULL, MB_OK);
+        //MessageBox(NULL, wxT("DBWIN_BUFFER_READY nonexistent"), NULL, MB_OK);
         return;
     }
 
     /* get a handle to the data synch object */
-    heventData = OpenEvent(EVENT_MODIFY_STATE, FALSE, T("DBWIN_DATA_READY"));
+    heventData = OpenEvent(EVENT_MODIFY_STATE, FALSE, wxT("DBWIN_DATA_READY"));
     if ( !heventData )
     {
-        // MessageBox(NULL, T("DBWIN_DATA_READY nonexistent"), NULL, MB_OK);
+        // MessageBox(NULL, wxT("DBWIN_DATA_READY nonexistent"), NULL, MB_OK);
         CloseHandle(heventDBWIN);
         return;
     }
 
-    hSharedFile = CreateFileMapping((HANDLE)-1, NULL, PAGE_READWRITE, 0, 4096, T("DBWIN_BUFFER"));
+    hSharedFile = CreateFileMapping((HANDLE)-1, NULL, PAGE_READWRITE, 0, 4096, wxT("DBWIN_BUFFER"));
     if (!hSharedFile)
     {
-        //MessageBox(NULL, T("DebugTrace: Unable to create file mapping object DBWIN_BUFFER"), T("Error"), MB_OK);
+        //MessageBox(NULL, wxT("DebugTrace: Unable to create file mapping object DBWIN_BUFFER"), wxT("Error"), MB_OK);
         CloseHandle(heventDBWIN);
         CloseHandle(heventData);
         return;
@@ -1160,7 +1160,7 @@ void OutputDebugStringW95(const wxChar* lpOutputString, ...)
     lpszSharedMem = (LPSTR)MapViewOfFile(hSharedFile, FILE_MAP_WRITE, 0, 0, 512);
     if (!lpszSharedMem)
     {
-        //MessageBox(NULL, T("DebugTrace: Unable to map shared memory"), T("Error"), MB_OK);
+        //MessageBox(NULL, wxT("DebugTrace: Unable to map shared memory"), wxT("Error"), MB_OK);
         CloseHandle(heventDBWIN);
         CloseHandle(heventData);
         return;
@@ -1176,7 +1176,7 @@ void OutputDebugStringW95(const wxChar* lpOutputString, ...)
     *((LPDWORD)lpszSharedMem) = _getpid();
 #endif
 
-    wsprintf((LPTSTR)(lpszSharedMem + sizeof(DWORD)), T("%s"), achBuffer);
+    wsprintf((LPTSTR)(lpszSharedMem + sizeof(DWORD)), wxT("%s"), achBuffer);
 
     /* signal data ready event */
     SetEvent(heventData);

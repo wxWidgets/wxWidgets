@@ -55,10 +55,10 @@ wxChar wxTextInputStream::NextNonWhiteSpace()
         c = m_input->GetC();
 	if (!m_input) return (wxChar) 0;
 	
-	if (c != T('\n') &&
-	    c != T('\r') &&
-	    c != T('\t') &&
-	    c != T(' '))
+	if (c != wxT('\n') &&
+	    c != wxT('\r') &&
+	    c != wxT('\t') &&
+	    c != wxT(' '))
 	{
 	    return c;
 	}
@@ -70,20 +70,20 @@ wxChar wxTextInputStream::NextNonWhiteSpace()
 
 void wxTextInputStream::SkipIfEndOfLine( wxChar c )
 {
-    if (c == T('\n'))
+    if (c == wxT('\n'))
     {
         // eat on UNIX
 	return;
     }
 
-    if (c == T('\r'))
+    if (c == wxT('\r'))
     {
         // eat on both Mac and DOS
 	
         wxChar c2 = m_input->GetC();
         if (!m_input) return;
 	
-        if (c2 == T('\n'))
+        if (c2 == wxT('\n'))
         {
 	    // eat on DOS
 	    return;
@@ -111,18 +111,18 @@ wxUint32 wxTextInputStream::Read32()
     if (!m_input) return 0;
 
     i = 0;
-    if (! (c == T('-') || c == T('+') || isdigit(c)) )
+    if (! (c == wxT('-') || c == wxT('+') || isdigit(c)) )
     {
         m_input->Ungetch(c);
         return 0;
     }
 
-    if (c == T('-'))
+    if (c == wxT('-'))
     {
         sign = -1;
         c = m_input->GetC();
     } else
-    if (c == T('+'))
+    if (c == wxT('+'))
     {
         sign = 1;
         c = m_input->GetC();
@@ -133,7 +133,7 @@ wxUint32 wxTextInputStream::Read32()
 
     while (isdigit(c))
     {
-        i = i*10 + (c - (int)T('0'));
+        i = i*10 + (c - (int)wxT('0'));
         c = m_input->GetC();
     }
 
@@ -164,18 +164,18 @@ double wxTextInputStream::ReadDouble()
     if (!m_input) return 0.0;
 
     f = 0.0;
-    if (! (c == T('.') || c == T('-') || c == T('+') || isdigit(c)) )
+    if (! (c == wxT('.') || c == wxT('-') || c == wxT('+') || isdigit(c)) )
     {
         m_input->Ungetch(c);
         return 0.0;
     }
 
-    if (c == T('-'))
+    if (c == wxT('-'))
     {
         sign = -1;
         c = m_input->GetC();
     } else
-    if (c == T('+'))
+    if (c == wxT('+'))
     {
         sign = 1;
         c = m_input->GetC();
@@ -187,11 +187,11 @@ double wxTextInputStream::ReadDouble()
 
     while (isdigit(c))
     {
-        f = f*10 + (c - T('0'));
+        f = f*10 + (c - wxT('0'));
         c = m_input->GetC();
     }
 
-    if (c == T('.'))
+    if (c == wxT('.'))
     {
         double f_multiplicator = (double) 0.1;
 
@@ -199,12 +199,12 @@ double wxTextInputStream::ReadDouble()
 
         while (isdigit(c))
 	{
-            f += (c-T('0'))*f_multiplicator;
+            f += (c-wxT('0'))*f_multiplicator;
             f_multiplicator /= 10;
             c = m_input->GetC();
         }
 
-        if (c == T('e'))
+        if (c == wxT('e'))
 	{
             double f_multiplicator = 0.0;
             int i, e;
@@ -213,8 +213,8 @@ double wxTextInputStream::ReadDouble()
 
             switch (c)
 	    {
-                case T('-'): f_multiplicator = 0.1;  break;
-		case T('+'): f_multiplicator = 10.0; break;
+                case wxT('-'): f_multiplicator = 0.1;  break;
+		case wxT('+'): f_multiplicator = 10.0; break;
 	    }
 
             e = Read8();  // why only max 256 ?
@@ -245,20 +245,20 @@ wxString wxTextInputStream::ReadString()
         c = m_input->GetC();
         if (!m_input) break;
 	
-        if (c == T('\n'))
+        if (c == wxT('\n'))
         {
 	    // eat on UNIX
 	    break;
 	}
 	
-        if (c == T('\r'))
+        if (c == wxT('\r'))
         {
             // eat on both Mac and DOS
 	
             wxChar c2 = m_input->GetC();
 	    if (!m_input) break;
 	
-	    if (c2 == T('\n'))
+	    if (c2 == wxT('\n'))
             {
 	        // eat on DOS
 		break;
@@ -292,13 +292,13 @@ wxTextInputStream& wxTextInputStream::operator>>(wxChar& c)
         return *this;
     }
 
-    if (c1 == T('\r'))
+    if (c1 == wxT('\r'))
     {
-        c = T('\n');
+        c = wxT('\n');
         wxChar c2 = m_input->GetC();
 	if (!m_input) return *this;
 	
-	if (c2 != T('\n'))
+	if (c2 != wxT('\n'))
 	{
 	    // we are on a Mac
             m_input->Ungetch( c2 );
@@ -360,7 +360,7 @@ wxTextOutputStream::~wxTextOutputStream()
 void wxTextOutputStream::Write32(wxUint32 i)
 {
     wxString str;
-    str.Printf(T("%u"), i);
+    str.Printf(wxT("%u"), i);
 
     WriteString(str);
 }
@@ -368,7 +368,7 @@ void wxTextOutputStream::Write32(wxUint32 i)
 void wxTextOutputStream::Write16(wxUint16 i)
 {
     wxString str;
-    str.Printf(T("%u"), i);
+    str.Printf(wxT("%u"), i);
 
     WriteString(str);
 }
@@ -376,7 +376,7 @@ void wxTextOutputStream::Write16(wxUint16 i)
 void wxTextOutputStream::Write8(wxUint8 i)
 {
     wxString str;
-    str.Printf(T("%u"), i);
+    str.Printf(wxT("%u"), i);
 
     WriteString(str);
 }
@@ -385,7 +385,7 @@ void wxTextOutputStream::WriteDouble(double d)
 {
     wxString str;
 
-    str.Printf(T("%f"), d);
+    str.Printf(wxT("%f"), d);
     WriteString(str);
 }
 
@@ -394,23 +394,23 @@ void wxTextOutputStream::WriteString(const wxString& string)
     for (size_t i = 0; i < string.Len(); i++)
     {
         wxChar c = string[i];
-        if (c == T('\n'))
+        if (c == wxT('\n'))
         {
 #if   defined(__WINDOWS__)
-            c = T('\r');
+            c = wxT('\r');
             m_output->Write( (const void*)(&c), sizeof(wxChar) );
-            c = T('\n');
+            c = wxT('\n');
             m_output->Write( (const void*)(&c), sizeof(wxChar) );
 #elif defined(__UNIX__)
-            c = T('\n');
+            c = wxT('\n');
             m_output->Write( (const void*)(&c), sizeof(wxChar) );
 #elif defined(__WXMAC__)
-            c = T('\r');
+            c = wxT('\r');
             m_output->Write( (const void*)(&c), sizeof(wxChar) );
 #elif   defined(__OS2__)
-            c = T('\r');
+            c = wxT('\r');
             m_output->Write( (const void*)(&c), sizeof(wxChar) );
-            c = T('\n');
+            c = wxT('\n');
             m_output->Write( (const void*)(&c), sizeof(wxChar) );
 #else
             #error  "wxTextOutputStream: unsupported platform."
@@ -479,7 +479,7 @@ wxTextOutputStream& wxTextOutputStream::operator<<(float f)
 
 wxTextOutputStream &endl( wxTextOutputStream &stream )
 {
-    return stream << T('\n');
+    return stream << wxT('\n');
 }
 
 #endif

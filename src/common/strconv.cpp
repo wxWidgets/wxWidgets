@@ -280,7 +280,7 @@ static void wxLoadCharacterSets(void)
 #if defined(__UNIX__) && wxUSE_TEXTFILE
   // search through files in /usr/share/i18n/charmaps
   wxString fname;
-  for (fname = ::wxFindFirstFile(T("/usr/share/i18n/charmaps/*"));
+  for (fname = ::wxFindFirstFile(wxT("/usr/share/i18n/charmaps/*"));
        !fname.IsEmpty();
        fname = ::wxFindNextFile()) {
     wxTextFile cmap(fname);
@@ -289,36 +289,36 @@ static void wxLoadCharacterSets(void)
       wxString comchar,escchar;
       bool in_charset = FALSE;
 
-      // wxFprintf(stderr,T("Loaded: %s\n"),fname.c_str());
+      // wxFprintf(stderr,wxT("Loaded: %s\n"),fname.c_str());
 
       wxString line;
       for (line = cmap.GetFirstLine();
            !cmap.Eof();
            line = cmap.GetNextLine()) {
-        // wxFprintf(stderr,T("line contents: %s\n"),line.c_str());
+        // wxFprintf(stderr,wxT("line contents: %s\n"),line.c_str());
         wxStringTokenizer token(line);
         wxString cmd = token.GetNextToken();
         if (cmd == comchar) {
-          if (token.GetNextToken() == T("alias"))
+          if (token.GetNextToken() == wxT("alias"))
             cset->names.Add(token.GetNextToken());
         }
-        else if (cmd == T("<code_set_name>"))
+        else if (cmd == wxT("<code_set_name>"))
           cset->names.Add(token.GetNextToken());
-        else if (cmd == T("<comment_char>"))
+        else if (cmd == wxT("<comment_char>"))
           comchar = token.GetNextToken();
-        else if (cmd == T("<escape_char>"))
+        else if (cmd == wxT("<escape_char>"))
           escchar = token.GetNextToken();
-        else if (cmd == T("<mb_cur_min>")) {
+        else if (cmd == wxT("<mb_cur_min>")) {
           delete cset;
           cset = (wxCharacterSet *) NULL;
           break; // we don't support multibyte charsets ourselves (yet)
         }
-        else if (cmd == T("CHARMAP")) {
+        else if (cmd == wxT("CHARMAP")) {
           cset->data = (wchar_t *)calloc(256, sizeof(wchar_t));
           in_charset = TRUE;
         }
-        else if (cmd == T("END")) {
-          if (token.GetNextToken() == T("CHARMAP"))
+        else if (cmd == wxT("END")) {
+          if (token.GetNextToken() == wxT("CHARMAP"))
             in_charset = FALSE;
         }
         else if (in_charset) {
@@ -330,15 +330,15 @@ static void wxLoadCharacterSets(void)
           wxString uni = token.GetNextToken();
           // skip whitespace again
           while (wxIsEmpty(uni) && token.HasMoreTokens()) uni = token.GetNextToken();
-          if ((hex.Len() > 2) && (wxString(hex.GetChar(0)) == escchar) && (hex.GetChar(1) == T('x')) &&
-              (uni.Left(2) == T("<U"))) {
+          if ((hex.Len() > 2) && (wxString(hex.GetChar(0)) == escchar) && (hex.GetChar(1) == wxT('x')) &&
+              (uni.Left(2) == wxT("<U"))) {
             hex.MakeUpper(); uni.MakeUpper();
             int pos = ::wxHexToDec(hex.Mid(2,2));
             if (pos>=0) {
               unsigned long uni1 = ::wxHexToDec(uni.Mid(2,2));
               unsigned long uni2 = ::wxHexToDec(uni.Mid(4,2));
               cset->data[pos] = (uni1 << 16) | uni2;
-              // wxFprintf(stderr,T("char %02x mapped to %04x (%c)\n"),pos,cset->data[pos],cset->data[pos]);
+              // wxFprintf(stderr,wxT("char %02x mapped to %04x (%c)\n"),pos,cset->data[pos],cset->data[pos]);
             }
           }
         }
@@ -384,15 +384,15 @@ void wxCSConv::SetName(const wxChar *charset)
 #ifdef __UNIX__
     // first, convert the character set name to standard form
     wxString codeset;
-    if (wxString(charset,3).CmpNoCase(T("ISO")) == 0) {
+    if (wxString(charset,3).CmpNoCase(wxT("ISO")) == 0) {
       // make sure it's represented in the standard form: ISO_8859-1
-      codeset = T("ISO_");
+      codeset = wxT("ISO_");
       charset += 3;
-      if ((*charset == T('-')) || (*charset == T('_'))) charset++;
+      if ((*charset == wxT('-')) || (*charset == wxT('_'))) charset++;
       if (wxStrlen(charset)>4) {
-        if (wxString(charset,4) == T("8859")) {
-          codeset << T("8859-");
-          if (*charset == T('-')) charset++;
+        if (wxString(charset,4) == wxT("8859")) {
+          codeset << wxT("8859-");
+          if (*charset == wxT('-')) charset++;
         }
       }
     }
@@ -406,12 +406,12 @@ void wxCSConv::SetName(const wxChar *charset)
 
 void wxCSConv::LoadNow()
 {
-//  wxPrintf(T("Conversion request\n"));
+//  wxPrintf(wxT("Conversion request\n"));
   if (m_deferred) {
     if (!m_name) {
 #ifdef __UNIX__
-      wxChar *lang = wxGetenv(T("LANG"));
-      wxChar *dot = lang ? wxStrchr(lang, T('.')) : (wxChar *)NULL;
+      wxChar *lang = wxGetenv(wxT("LANG"));
+      wxChar *dot = lang ? wxStrchr(lang, wxT('.')) : (wxChar *)NULL;
       if (dot) SetName(dot+1);
 #endif
     }

@@ -17,4 +17,3 @@
 #define WX_PRECOMP
 #define __WXDEBUG__
 #include "wx/wx_cw_cm.h"
-#include "wx/wxprec.h"

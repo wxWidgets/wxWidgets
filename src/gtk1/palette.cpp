@@ -93,7 +93,7 @@ bool wxPalette::Create( int WXUNUSED(n),
 			const unsigned char *WXUNUSED(green), 
 			const unsigned char *WXUNUSED(blue) )
 {
-    wxFAIL_MSG(T("not implemented"));
+    wxFAIL_MSG(wxT("not implemented"));
 
     return FALSE;
 }
@@ -102,7 +102,7 @@ int wxPalette::GetPixel( const unsigned char WXUNUSED(red),
                          const unsigned char WXUNUSED(green), 
 			 const unsigned char WXUNUSED(blue) ) const
 {
-    wxFAIL_MSG(T("not implemented"));
+    wxFAIL_MSG(wxT("not implemented"));
 
     return 0;
 }
@@ -112,7 +112,7 @@ bool wxPalette::GetRGB( int WXUNUSED(pixel),
 			unsigned char *WXUNUSED(green), 
 			unsigned char *WXUNUSED(blue) ) const
 {
-    wxFAIL_MSG(T("not implemented"));
+    wxFAIL_MSG(wxT("not implemented"));
  
     return 0;
 }

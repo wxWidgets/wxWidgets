@@ -69,13 +69,13 @@ class wxInetCacheNode : public wxObject
 bool wxInternetFSHandler::CanOpen(const wxString& location)
 {
     wxString p = GetProtocol(location);
-    return (p == T("http")) || (p == T("ftp"));
+    return (p == wxT("http")) || (p == wxT("ftp"));
 }
 
 
 wxFSFile* wxInternetFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& location)
 {
-    wxString right = GetProtocol(location) + T(":") + GetRightLocation(location);
+    wxString right = GetProtocol(location) + wxT(":") + GetRightLocation(location);
     wxInputStream *s;
     wxString content;
     wxInetCacheNode *info;
@@ -93,7 +93,7 @@ wxFSFile* wxInternetFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxStri
         {
             wxChar buf[256];
 
-            wxGetTempFileName( T("wxhtml"), buf);
+            wxGetTempFileName( wxT("wxhtml"), buf);
             info = new wxInetCacheNode(buf, content);
             m_Cache.Put(right, info);
 

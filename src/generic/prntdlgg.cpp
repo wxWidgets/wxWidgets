@@ -274,7 +274,7 @@ void wxGenericPrintDialog::OnOK(wxCommandEvent& WXUNUSED(event))
         wxString f = wxFileSelector(_("PostScript file"),
             wxPathOnly(wxThePrintSetupData->GetPrinterFile()),
             wxFileNameFromPath(wxThePrintSetupData->GetPrinterFile()),
-            T("ps"), T("*.ps"), 0, this);
+            wxT("ps"), wxT("*.ps"), 0, this);
         if ( f.IsEmpty() )
             return;
 

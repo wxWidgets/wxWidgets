@@ -93,4 +93,3 @@ void wxMenuItem::Check(bool bDoCheck)
     // TODO
     m_bChecked = bDoCheck;
   }
-}

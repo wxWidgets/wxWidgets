@@ -172,11 +172,11 @@ bool wxDragImage::Create(const wxListCtrl& listCtrl, long id)
 // Begin drag
 bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* WXUNUSED(window))
 {
-    wxASSERT_MSG( (m_hImageList != 0), T("Image list must not be null in BeginDrag."));
+    wxASSERT_MSG( (m_hImageList != 0), wxT("Image list must not be null in BeginDrag."));
 
     bool ret = (ImageList_BeginDrag((HIMAGELIST) m_hImageList, 0, hotspot.x, hotspot.y) != 0);
 
-    wxASSERT_MSG( (ret), T("BeginDrag failed."));
+    wxASSERT_MSG( (ret), wxT("BeginDrag failed."));
 
     if (!ret)
         return FALSE;
@@ -186,7 +186,7 @@ bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* WXUNUSED(window))
         // First add the cursor to the image list
         int cursorIndex = ImageList_AddIcon((HIMAGELIST) m_hImageList, (HICON) m_cursor.GetHCURSOR());
 
-        wxASSERT_MSG( (cursorIndex != -1), T("ImageList_AddIcon failed in BeginDrag."));
+        wxASSERT_MSG( (cursorIndex != -1), wxT("ImageList_AddIcon failed in BeginDrag."));
 
         if (cursorIndex != -1)
         {
@@ -202,7 +202,7 @@ bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* WXUNUSED(window))
 // End drag
 bool wxDragImage::EndDrag(wxWindow* WXUNUSED(window))
 {
-    wxASSERT_MSG( (m_hImageList != 0), T("Image list must not be null in EndDrag."));
+    wxASSERT_MSG( (m_hImageList != 0), wxT("Image list must not be null in EndDrag."));
 
     ImageList_EndDrag();
 
@@ -215,7 +215,7 @@ bool wxDragImage::EndDrag(wxWindow* WXUNUSED(window))
 // is non-NULL, or in screen coordinates if NULL.
 bool wxDragImage::Move(const wxPoint& pt, wxWindow* window)
 {
-    wxASSERT_MSG( (m_hImageList != 0), T("Image list must not be null in Move."));
+    wxASSERT_MSG( (m_hImageList != 0), wxT("Image list must not be null in Move."));
 
     // TODO: what coordinates are these in: window, client, or screen?
     bool ret = (ImageList_DragMove( pt.x, pt.y ) != 0);
@@ -227,7 +227,7 @@ bool wxDragImage::Move(const wxPoint& pt, wxWindow* window)
 
 bool wxDragImage::Show(wxWindow* window)
 {
-    wxASSERT_MSG( (m_hImageList != 0), T("Image list must not be null in Show."));
+    wxASSERT_MSG( (m_hImageList != 0), wxT("Image list must not be null in Show."));
 
     HWND hWnd = 0;
     if (window)
@@ -240,7 +240,7 @@ bool wxDragImage::Show(wxWindow* window)
 
 bool wxDragImage::Hide(wxWindow* window)
 {
-    wxASSERT_MSG( (m_hImageList != 0), T("Image list must not be null in Hide."));
+    wxASSERT_MSG( (m_hImageList != 0), wxT("Image list must not be null in Hide."));
 
     HWND hWnd = 0;
     if (window)

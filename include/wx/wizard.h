@@ -81,7 +81,7 @@ public:
     static void Chain(wxWizardPageSimple *first, wxWizardPageSimple *second)
     {
         wxCHECK_RET( first && second,
-                     T("NULL passed to wxWizardPageSimple::Chain") );
+                     wxT("NULL passed to wxWizardPageSimple::Chain") );
 
         first->SetNext(second);
         second->SetPrev(first);

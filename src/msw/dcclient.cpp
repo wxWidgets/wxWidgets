@@ -184,12 +184,12 @@ wxPaintDC::wxPaintDC()
 
 wxPaintDC::wxPaintDC(wxWindow *canvas)
 {
-    wxCHECK_RET( canvas, T("NULL canvas in wxPaintDC ctor") );
+    wxCHECK_RET( canvas, wxT("NULL canvas in wxPaintDC ctor") );
 
 #ifdef __WXDEBUG__
     if ( g_isPainting <= 0 )
     {
-        wxFAIL_MSG( T("wxPaintDC may be created only in EVT_PAINT handler!") );
+        wxFAIL_MSG( wxT("wxPaintDC may be created only in EVT_PAINT handler!") );
 
         return;
     }
@@ -227,7 +227,7 @@ wxPaintDC::~wxPaintDC()
         size_t index;
         wxPaintDCInfo *info = FindInCache(&index);
 
-        wxCHECK_RET( info, T("existing DC should have a cache entry") );
+        wxCHECK_RET( info, wxT("existing DC should have a cache entry") );
 
         if ( !--info->count )
         {

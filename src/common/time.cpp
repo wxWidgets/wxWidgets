@@ -346,10 +346,10 @@ wxChar *wxTime::FormatTime() const {
 
   switch (Precision) {
   case wxStdMinSec:
-    wxSprintf(timeBuf,T("%2d:%02d:%02d"),hh,GetMinute(),GetSecond());
+    wxSprintf(timeBuf,wxT("%2d:%02d:%02d"),hh,GetMinute(),GetSecond());
     break;
   case wxStdMin:
-    wxSprintf(timeBuf,T("%2d:%02d"),hh,GetMinute());
+    wxSprintf(timeBuf,wxT("%2d:%02d"),hh,GetMinute());
     break;
   }
 

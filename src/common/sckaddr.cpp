@@ -103,8 +103,8 @@ wxIPV4address::~wxIPV4address()
 bool wxIPV4address::Hostname(const wxString& name)
 {
   // Some people are sometimes fool.
-  if (name == T("")) {
-    wxLogWarning( T("Trying to solve a NULL hostname: giving up") );
+  if (name == wxT("")) {
+    wxLogWarning( wxT("Trying to solve a NULL hostname: giving up") );
     return FALSE;
   }
 

@@ -328,7 +328,7 @@ wxPropertyValue *wxPropertyValue::NewCopy(void) const
      return new wxPropertyValue(m_value.stringPtr);
 
    case wxPropertyValueNull:
-    wxFAIL_MSG( T("Should never get here!\n" ) );
+    wxFAIL_MSG( wxT("Should never get here!\n" ) );
     break;
   }
   return NULL;
@@ -399,7 +399,7 @@ void wxPropertyValue::Copy(wxPropertyValue& copyFrom)
       return;
     }
    case wxPropertyValueNull:
-    wxFAIL_MSG( T("Should never get here!\n" ) );
+    wxFAIL_MSG( wxT("Should never get here!\n" ) );
     break;
   }
 }
@@ -461,20 +461,20 @@ void wxPropertyValue::WritePropertyClause(wxString& stream)  // Write this expre
   if (node)
   {
     node->WritePropertyType(stream);
-    stream.Append( T("(") );
+    stream.Append( wxT("(") );
     node = node->m_next;
     bool first = TRUE;
     while (node)
     {
       if (!first)
-        stream.Append( T("  ") );
+        stream.Append( wxT("  ") );
       node->WritePropertyType(stream);
       node = node->m_next;
       if (node)
-        stream.Append( T(",\n" ) );
+        stream.Append( wxT(",\n" ) );
       first = FALSE;
     }
-    stream.Append( T(").\n\n") );
+    stream.Append( wxT(").\n\n") );
   }
 }
 
@@ -485,43 +485,43 @@ void wxPropertyValue::WritePropertyType(wxString& stream)    // Write as any oth
   {
     case wxPropertyValueInteger:
     {
-      tmp.Printf( T("%ld"), m_value.integer );
+      tmp.Printf( wxT("%ld"), m_value.integer );
       stream.Append( tmp );
       break;
     }
     case wxPropertyValueIntegerPtr:
     {
-      tmp.Printf( T("%ld"), *m_value.integerPtr );
+      tmp.Printf( wxT("%ld"), *m_value.integerPtr );
       stream.Append( tmp );
       break;
     }
     case wxPropertyValuebool:
     {
       if (m_value.integer)
-        stream.Append( T("True") );
+        stream.Append( wxT("True") );
       else
-        stream.Append( T("False") );
+        stream.Append( wxT("False") );
       break;
     }
     case wxPropertyValueboolPtr:
     {
       if (*m_value.integerPtr)
-        stream.Append( T("True") );
+        stream.Append( wxT("True") );
       else
-        stream.Append( T("False") );
+        stream.Append( wxT("False") );
       break;
     }
     case wxPropertyValueReal:
     {
       double d = m_value.real;
-      tmp.Printf( T("%.6g"), d );
+      tmp.Printf( wxT("%.6g"), d );
       stream.Append( tmp );
       break;
     }
     case wxPropertyValueRealPtr:
     {
       double d = *m_value.realPtr;
-      tmp.Printf( T("%.6g"), d );
+      tmp.Printf( wxT("%.6g"), d );
       stream.Append( tmp );
       break;
     }
@@ -532,7 +532,7 @@ void wxPropertyValue::WritePropertyType(wxString& stream)    // Write as any oth
     }
     case wxPropertyValueStringPtr:
     {
-      wxFAIL_MSG( T("wxPropertyValue::WritePropertyType( wxPropertyValueStringPtr ) not implemented") );
+      wxFAIL_MSG( wxT("wxPropertyValue::WritePropertyType( wxPropertyValueStringPtr ) not implemented") );
       /*
       int i;
       int len = strlen(*(m_value.stringPtr));
@@ -547,20 +547,20 @@ void wxPropertyValue::WritePropertyType(wxString& stream)    // Write as any oth
     case wxPropertyValueList:
     {
       if (!m_value.first)
-        stream.Append( T("[]") );
+        stream.Append( wxT("[]") );
       else
       {
         wxPropertyValue *expr = m_value.first;
 
-        stream.Append( T("[") );
+        stream.Append( wxT("[") );
         while (expr)
         {
           expr->WritePropertyType(stream);
           expr = expr->m_next;
           if (expr)
-	    stream.Append( T(", ") );
+	    stream.Append( wxT(", ") );
         }
-        stream.Append( T("]") );
+        stream.Append( wxT("]") );
       }
       break;
     }
@@ -1097,13 +1097,13 @@ bool wxPropertyValidator::StringToLong (wxChar *s, long *number) {
 
 wxChar *wxPropertyValidator::FloatToString (float number) {
 	static wxChar buf[20];
-	wxSprintf (buf, T("%.6g"), number);
+	wxSprintf (buf, wxT("%.6g"), number);
 	return buf;
 }
 
 wxChar *wxPropertyValidator::DoubleToString (double number) {
 	static wxChar buf[20];
-	wxSprintf (buf, T("%.6g"), number);
+	wxSprintf (buf, wxT("%.6g"), number);
 	return buf;
 }
 

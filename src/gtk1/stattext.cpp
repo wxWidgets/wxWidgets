@@ -51,7 +51,7 @@ bool wxStaticText::Create(wxWindow *parent,
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
-        wxFAIL_MSG( T("wxXX creation failed") );
+        wxFAIL_MSG( wxT("wxXX creation failed") );
 	return FALSE;
     }
 

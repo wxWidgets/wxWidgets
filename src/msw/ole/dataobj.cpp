@@ -126,7 +126,7 @@ wxString wxDataFormat::GetId() const
     wxString s;
 
     wxCHECK_MSG( !IsStandard(), s,
-                 T("name of predefined format cannot be retrieved") );
+                 wxT("name of predefined format cannot be retrieved") );
 
     int len = ::GetClipboardFormatName(m_format, s.GetWriteBuf(max), max);
     s.UngetWriteBuf();
@@ -165,7 +165,7 @@ STDMETHODIMP wxIEnumFORMATETC::Next(ULONG      celt,
                                     FORMATETC *rgelt,
                                     ULONG     *pceltFetched)
 {
-  wxLogTrace(T("wxIEnumFORMATETC::Next"));
+  wxLogTrace(wxT("wxIEnumFORMATETC::Next"));
 
   if ( celt > 1 )
     return S_FALSE;
@@ -182,7 +182,7 @@ STDMETHODIMP wxIEnumFORMATETC::Next(ULONG      celt,
 
 STDMETHODIMP wxIEnumFORMATETC::Skip(ULONG celt)
 {
-  wxLogTrace(T("wxIEnumFORMATETC::Skip"));
+  wxLogTrace(wxT("wxIEnumFORMATETC::Skip"));
 
   if ( m_nCurrent == 0 )
     m_nCurrent++;
@@ -192,7 +192,7 @@ STDMETHODIMP wxIEnumFORMATETC::Skip(ULONG celt)
 
 STDMETHODIMP wxIEnumFORMATETC::Reset()
 {
-  wxLogTrace(T("wxIEnumFORMATETC::Reset"));
+  wxLogTrace(wxT("wxIEnumFORMATETC::Reset"));
 
   m_nCurrent = 0;
 
@@ -201,7 +201,7 @@ STDMETHODIMP wxIEnumFORMATETC::Reset()
 
 STDMETHODIMP wxIEnumFORMATETC::Clone(IEnumFORMATETC **ppenum)
 {
-  wxLogTrace(T("wxIEnumFORMATETC::Clone"));
+  wxLogTrace(wxT("wxIEnumFORMATETC::Clone"));
 
   wxIEnumFORMATETC *pNew = new wxIEnumFORMATETC(m_format.cfFormat);
   pNew->AddRef();
@@ -230,7 +230,7 @@ wxIDataObject::wxIDataObject(wxDataObject *pDataObject)
 // get data functions
 STDMETHODIMP wxIDataObject::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
 {
-  wxLogTrace(T("wxIDataObject::GetData"));
+  wxLogTrace(wxT("wxIDataObject::GetData"));
 
   // is data is in our format?
   HRESULT hr = QueryGetData(pformatetcIn);
@@ -262,7 +262,7 @@ STDMETHODIMP wxIDataObject::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
 STDMETHODIMP wxIDataObject::GetDataHere(FORMATETC *pformatetc,
                                         STGMEDIUM *pmedium)
 {
-  wxLogTrace(T("wxIDataObject::GetDataHere"));
+  wxLogTrace(wxT("wxIDataObject::GetDataHere"));
 
   // put data in caller provided medium
   if ( pmedium->tymed != TYMED_HGLOBAL )
@@ -271,7 +271,7 @@ STDMETHODIMP wxIDataObject::GetDataHere(FORMATETC *pformatetc,
   // copy data
   void *pBuf = GlobalLock(pmedium->hGlobal);
   if ( pBuf == NULL ) {
-    wxLogLastError(T("GlobalLock"));
+    wxLogLastError(wxT("GlobalLock"));
     return E_OUTOFMEMORY;
   }
 
@@ -287,7 +287,7 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                                     STGMEDIUM *pmedium,
                                     BOOL       fRelease)
 {
-  wxLogTrace(T("wxIDataObject::SetData"));
+  wxLogTrace(wxT("wxIDataObject::SetData"));
   return E_NOTIMPL;
 }
 
@@ -296,39 +296,39 @@ STDMETHODIMP wxIDataObject::QueryGetData(FORMATETC *pformatetc)
 {
   // do we accept data in this format?
   if ( pformatetc == NULL ) {
-    wxLogTrace(T("wxIDataObject::QueryGetData: invalid ptr."));
+    wxLogTrace(wxT("wxIDataObject::QueryGetData: invalid ptr."));
     return E_INVALIDARG;
   }
 
   // the only one allowed by current COM implementation
   if ( pformatetc->lindex != -1 ) {
-    wxLogTrace(T("wxIDataObject::QueryGetData: bad lindex %d"),
+    wxLogTrace(wxT("wxIDataObject::QueryGetData: bad lindex %d"),
                pformatetc->lindex);
     return DV_E_LINDEX;
   }
 
   // we don't support anything other (THUMBNAIL, ICON, DOCPRINT...)
   if ( pformatetc->dwAspect != DVASPECT_CONTENT ) {
-    wxLogTrace(T("wxIDataObject::QueryGetData: bad dwAspect %d"),
+    wxLogTrace(wxT("wxIDataObject::QueryGetData: bad dwAspect %d"),
                pformatetc->dwAspect);
     return DV_E_DVASPECT;
   }
 
   // @@ we only transfer data by global memory (bad for large amounts of it!)
   if ( !(pformatetc->tymed & TYMED_HGLOBAL) ) {
-    wxLogTrace(T("wxIDataObject::QueryGetData: %s != TYMED_HGLOBAL."),
+    wxLogTrace(wxT("wxIDataObject::QueryGetData: %s != TYMED_HGLOBAL."),
                GetTymedName(pformatetc->tymed));
     return DV_E_TYMED;
   }
 
   // and now check the type of data requested
   if ( m_pDataObject->IsSupportedFormat((wxDataFormatId)pformatetc->cfFormat) ) {
-    wxLogTrace(T("wxIDataObject::QueryGetData: %s ok"),
+    wxLogTrace(wxT("wxIDataObject::QueryGetData: %s ok"),
                wxDataObject::GetFormatName((wxDataFormatId)pformatetc->cfFormat));
     return S_OK;
   }
   else {
-    wxLogTrace(T("wxIDataObject::QueryGetData: %s unsupported"),
+    wxLogTrace(wxT("wxIDataObject::QueryGetData: %s unsupported"),
                wxDataObject::GetFormatName((wxDataFormatId)pformatetc->cfFormat));
     return DV_E_FORMATETC;
   }
@@ -337,7 +337,7 @@ STDMETHODIMP wxIDataObject::QueryGetData(FORMATETC *pformatetc)
 STDMETHODIMP wxIDataObject::GetCanonicalFormatEtc(FORMATETC *pFormatetcIn,
                                                   FORMATETC *pFormatetcOut)
 {
-  wxLogTrace(T("wxIDataObject::GetCanonicalFormatEtc"));
+  wxLogTrace(wxT("wxIDataObject::GetCanonicalFormatEtc"));
 
   // @@ implementation is trivial, we might want something better here
   if ( pFormatetcOut != NULL )
@@ -348,7 +348,7 @@ STDMETHODIMP wxIDataObject::GetCanonicalFormatEtc(FORMATETC *pFormatetcIn,
 STDMETHODIMP wxIDataObject::EnumFormatEtc(DWORD dwDirection,
                                           IEnumFORMATETC **ppenumFormatEtc)
 {
-  wxLogTrace(T("wxIDataObject::EnumFormatEtc"));
+  wxLogTrace(wxT("wxIDataObject::EnumFormatEtc"));
 
   if ( dwDirection == DATADIR_SET ) {
     // we don't allow setting of data anyhow

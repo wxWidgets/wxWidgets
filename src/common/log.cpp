@@ -295,7 +295,7 @@ void wxLog::TimeStamp(wxString *str)
         wxStrftime(buf, WXSIZEOF(buf), ms_timestamp, localtime(&timeNow));
 
         str->Empty();
-        *str << buf << T(": ");
+        *str << buf << wxT(": ");
     }
 }
 
@@ -339,7 +339,7 @@ void wxLog::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
 
 void wxLog::DoLogString(const wxChar *WXUNUSED(szString), time_t WXUNUSED(t))
 {
-    wxFAIL_MSG(T("DoLogString must be overriden if it's called."));
+    wxFAIL_MSG(wxT("DoLogString must be overriden if it's called."));
 }
 
 void wxLog::Flush()
@@ -363,7 +363,7 @@ void wxLogStderr::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 {
     wxString str;
     TimeStamp(&str);
-    str << szString << T('\n');
+    str << szString << wxT('\n');
 
     fputs(str.mb_str(), m_fp);
     fflush(m_fp);
@@ -371,7 +371,7 @@ void wxLogStderr::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
     // under Windows, programs usually don't have stderr at all, so make show the
     // messages also under debugger
 #ifdef __WXMSW__
-    OutputDebugString(str + T('\r'));
+    OutputDebugString(str + wxT('\r'));
 #endif // MSW
 }
 
@@ -406,7 +406,7 @@ wxLog          *wxLog::ms_pLogger      = (wxLog *)NULL;
 bool            wxLog::ms_doLog        = TRUE;
 bool            wxLog::ms_bAutoCreate  = TRUE;
 
-const wxChar   *wxLog::ms_timestamp    = T("%X");  // time only, no date
+const wxChar   *wxLog::ms_timestamp    = wxT("%X");  // time only, no date
 
 wxTraceMask     wxLog::ms_ulTraceMask  = (wxTraceMask)0;
 wxArrayString   wxLog::ms_aTraceMasks;
@@ -487,7 +487,7 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
 
     // copy it to our buffer and free memory
     wxStrncpy(s_szBuf, (const wxChar *)lpMsgBuf, WXSIZEOF(s_szBuf) - 1);
-    s_szBuf[WXSIZEOF(s_szBuf) - 1] = T('\0');
+    s_szBuf[WXSIZEOF(s_szBuf) - 1] = wxT('\0');
     LocalFree(lpMsgBuf);
 
     // returned string is capitalized and ended with '\r\n' - bad
@@ -495,8 +495,8 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
     size_t len = wxStrlen(s_szBuf);
     if ( len > 0 ) {
         // truncate string
-        if ( s_szBuf[len - 2] == T('\r') )
-            s_szBuf[len - 2] = T('\0');
+        if ( s_szBuf[len - 2] == wxT('\r') )
+            s_szBuf[len - 2] = wxT('\0');
     }
 
     return s_szBuf;
@@ -562,18 +562,18 @@ void wxOnAssert(const wxChar *szFile, int nLine, const wxChar *szMsg)
     // make life easier for people using VC++ IDE: clicking on the message
     // will take us immediately to the place of the failed assert
 #ifdef __VISUALC__
-    wxSprintf(szBuf, T("%s(%d): assert failed"), szFile, nLine);
+    wxSprintf(szBuf, wxT("%s(%d): assert failed"), szFile, nLine);
 #else  // !VC++
     // make the error message more clear for all the others
-    wxSprintf(szBuf, T("Assert failed in file %s at line %d"), szFile, nLine);
+    wxSprintf(szBuf, wxT("Assert failed in file %s at line %d"), szFile, nLine);
 #endif // VC/!VC
 
     if ( szMsg != NULL ) {
-        wxStrcat(szBuf, T(": "));
+        wxStrcat(szBuf, wxT(": "));
         wxStrcat(szBuf, szMsg);
     }
     else {
-        wxStrcat(szBuf, T("."));
+        wxStrcat(szBuf, wxT("."));
     }
 
     if ( !s_bNoAsserts ) {
@@ -583,7 +583,7 @@ void wxOnAssert(const wxChar *szFile, int nLine, const wxChar *szMsg)
 #if wxUSE_GUI
         // this message is intentionally not translated - it is for
         // developpers only
-        wxStrcat(szBuf, T("\nDo you want to stop the program?"
+        wxStrcat(szBuf, wxT("\nDo you want to stop the program?"
                 "\nYou can also choose [Cancel] to suppress "
                 "further warnings."));
 

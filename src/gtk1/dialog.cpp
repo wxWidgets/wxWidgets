@@ -288,7 +288,7 @@ bool wxDialog::Create( wxWindow *parent,
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
-        wxFAIL_MSG( T("wxDialog creation failed") );
+        wxFAIL_MSG( wxT("wxDialog creation failed") );
 	return FALSE;
     }
 
@@ -356,7 +356,7 @@ wxDialog::~wxDialog()
 void wxDialog::SetTitle( const wxString& title )
 {
     m_title = title;
-    if (m_title.IsNull()) m_title = T("");
+    if (m_title.IsNull()) m_title = wxT("");
     gtk_window_set_title( GTK_WINDOW(m_widget), m_title.mbc_str() );
 }
 
@@ -442,7 +442,7 @@ bool wxDialog::Destroy()
 
 void wxDialog::OnSize( wxSizeEvent &WXUNUSED(event) )
 {
-    wxASSERT_MSG( (m_widget != NULL), T("invalid dialog") );
+    wxASSERT_MSG( (m_widget != NULL), wxT("invalid dialog") );
 
 #if wxUSE_CONSTRAINTS
     if (GetAutoLayout())
@@ -477,8 +477,8 @@ void wxDialog::OnSize( wxSizeEvent &WXUNUSED(event) )
 
 void wxDialog::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 {
-    wxASSERT_MSG( (m_widget != NULL), T("invalid dialog") );
-    wxASSERT_MSG( (m_wxwindow != NULL), T("invalid dialog") );
+    wxASSERT_MSG( (m_widget != NULL), wxT("invalid dialog") );
+    wxASSERT_MSG( (m_wxwindow != NULL), wxT("invalid dialog") );
 
     if (m_resizing) return; /* I don't like recursions */
     m_resizing = TRUE;
@@ -567,7 +567,7 @@ void wxDialog::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int heigh
 
 void wxDialog::Centre( int direction )
 {
-    wxASSERT_MSG( (m_widget != NULL), T("invalid dialog") );
+    wxASSERT_MSG( (m_widget != NULL), wxT("invalid dialog") );
 
     int x = 0;
     int y = 0;
@@ -623,14 +623,14 @@ void wxDialog::SetModal( bool WXUNUSED(flag) )
   else
     if (m_windowStyle & wxDIALOG_MODAL) m_windowStyle -= wxDIALOG_MODAL;
 */
-    wxFAIL_MSG( T("wxDialog:SetModal obsolete now") );
+    wxFAIL_MSG( wxT("wxDialog:SetModal obsolete now") );
 }
 
 int wxDialog::ShowModal()
 {
     if (IsModal())
     {
-       wxFAIL_MSG( T("wxDialog:ShowModal called twice") );
+       wxFAIL_MSG( wxT("wxDialog:ShowModal called twice") );
        return GetReturnCode();
     }
 
@@ -653,7 +653,7 @@ void wxDialog::EndModal( int retCode )
 
     if (!IsModal())
     {
-        wxFAIL_MSG( T("wxDialog:EndModal called twice") );
+        wxFAIL_MSG( wxT("wxDialog:EndModal called twice") );
         return;
     }
 

@@ -231,31 +231,31 @@ wxPrintData::~wxPrintData()
 static wxString wxGetPrintDlgError()
 {
     DWORD err = CommDlgExtendedError();
-    wxString msg = T("Unknown");
+    wxString msg = wxT("Unknown");
     switch (err)
     {
-        case CDERR_FINDRESFAILURE: msg = T("CDERR_FINDRESFAILURE"); break;
-        case CDERR_INITIALIZATION: msg = T("CDERR_INITIALIZATION"); break;
-        case CDERR_LOADRESFAILURE: msg = T("CDERR_LOADRESFAILURE"); break;
-        case CDERR_LOADSTRFAILURE: msg = T("CDERR_LOADSTRFAILURE"); break;
-        case CDERR_LOCKRESFAILURE: msg = T("CDERR_LOCKRESFAILURE"); break;
-        case CDERR_MEMALLOCFAILURE: msg = T("CDERR_MEMALLOCFAILURE"); break;
-        case CDERR_MEMLOCKFAILURE: msg = T("CDERR_MEMLOCKFAILURE"); break;
-        case CDERR_NOHINSTANCE: msg = T("CDERR_NOHINSTANCE"); break;
-        case CDERR_NOHOOK: msg = T("CDERR_NOHOOK"); break;
-        case CDERR_NOTEMPLATE: msg = T("CDERR_NOTEMPLATE"); break;
-        case CDERR_STRUCTSIZE: msg = T("CDERR_STRUCTSIZE"); break;
-        case  PDERR_RETDEFFAILURE: msg = T("PDERR_RETDEFFAILURE"); break;
-        case  PDERR_PRINTERNOTFOUND: msg = T("PDERR_PRINTERNOTFOUND"); break;
-        case  PDERR_PARSEFAILURE: msg = T("PDERR_PARSEFAILURE"); break;
-        case  PDERR_NODEVICES: msg = T("PDERR_NODEVICES"); break;
-        case  PDERR_NODEFAULTPRN: msg = T("PDERR_NODEFAULTPRN"); break;
-        case  PDERR_LOADDRVFAILURE: msg = T("PDERR_LOADDRVFAILURE"); break;
-        case  PDERR_INITFAILURE: msg = T("PDERR_INITFAILURE"); break;
-        case  PDERR_GETDEVMODEFAIL: msg = T("PDERR_GETDEVMODEFAIL"); break;
-        case  PDERR_DNDMMISMATCH: msg = T("PDERR_DNDMMISMATCH"); break;
-        case  PDERR_DEFAULTDIFFERENT: msg = T("PDERR_DEFAULTDIFFERENT"); break;
-        case  PDERR_CREATEICFAILURE: msg = T("PDERR_CREATEICFAILURE"); break;
+        case CDERR_FINDRESFAILURE: msg = wxT("CDERR_FINDRESFAILURE"); break;
+        case CDERR_INITIALIZATION: msg = wxT("CDERR_INITIALIZATION"); break;
+        case CDERR_LOADRESFAILURE: msg = wxT("CDERR_LOADRESFAILURE"); break;
+        case CDERR_LOADSTRFAILURE: msg = wxT("CDERR_LOADSTRFAILURE"); break;
+        case CDERR_LOCKRESFAILURE: msg = wxT("CDERR_LOCKRESFAILURE"); break;
+        case CDERR_MEMALLOCFAILURE: msg = wxT("CDERR_MEMALLOCFAILURE"); break;
+        case CDERR_MEMLOCKFAILURE: msg = wxT("CDERR_MEMLOCKFAILURE"); break;
+        case CDERR_NOHINSTANCE: msg = wxT("CDERR_NOHINSTANCE"); break;
+        case CDERR_NOHOOK: msg = wxT("CDERR_NOHOOK"); break;
+        case CDERR_NOTEMPLATE: msg = wxT("CDERR_NOTEMPLATE"); break;
+        case CDERR_STRUCTSIZE: msg = wxT("CDERR_STRUCTSIZE"); break;
+        case  PDERR_RETDEFFAILURE: msg = wxT("PDERR_RETDEFFAILURE"); break;
+        case  PDERR_PRINTERNOTFOUND: msg = wxT("PDERR_PRINTERNOTFOUND"); break;
+        case  PDERR_PARSEFAILURE: msg = wxT("PDERR_PARSEFAILURE"); break;
+        case  PDERR_NODEVICES: msg = wxT("PDERR_NODEVICES"); break;
+        case  PDERR_NODEFAULTPRN: msg = wxT("PDERR_NODEFAULTPRN"); break;
+        case  PDERR_LOADDRVFAILURE: msg = wxT("PDERR_LOADDRVFAILURE"); break;
+        case  PDERR_INITFAILURE: msg = wxT("PDERR_INITFAILURE"); break;
+        case  PDERR_GETDEVMODEFAIL: msg = wxT("PDERR_GETDEVMODEFAIL"); break;
+        case  PDERR_DNDMMISMATCH: msg = wxT("PDERR_DNDMMISMATCH"); break;
+        case  PDERR_DEFAULTDIFFERENT: msg = wxT("PDERR_DEFAULTDIFFERENT"); break;
+        case  PDERR_CREATEICFAILURE: msg = wxT("PDERR_CREATEICFAILURE"); break;
         default: break;
     }
     return msg;
@@ -299,7 +299,7 @@ void wxPrintData::ConvertToNative()
             pd->hDevNames = NULL;
 
 #if defined(__WXDEBUG__) && defined(__WIN32__)
-            wxString str(T("Printing error: "));
+            wxString str(wxT("Printing error: "));
             str += wxGetPrintDlgError();
             wxLogDebug(str);
 #endif
@@ -343,7 +343,7 @@ void wxPrintData::ConvertToNative()
 
         //// Printer name
 
-        if (m_printerName != T(""))
+        if (m_printerName != wxT(""))
         {
             // TODO: make this Unicode compatible
             int len = wxMin(31, m_printerName.Len());
@@ -516,7 +516,7 @@ void wxPrintData::ConvertFromNative()
                 else
                 {
                     // Shouldn't really get here
-                    wxFAIL_MSG(T("Couldn't find paper size in paper database."));
+                    wxFAIL_MSG(wxT("Couldn't find paper size in paper database."));
 
                     m_paperId = wxPAPER_NONE;
                     m_paperSize.x = 0;
@@ -526,7 +526,7 @@ void wxPrintData::ConvertFromNative()
             else
             {
                 // Shouldn't really get here
-                wxFAIL_MSG(T("Paper database wasn't initialized in wxPrintData::ConvertFromNative."));
+                wxFAIL_MSG(wxT("Paper database wasn't initialized in wxPrintData::ConvertFromNative."));
 
                 m_paperId = wxPAPER_NONE;
                 m_paperSize.x = 0;
@@ -542,7 +542,7 @@ void wxPrintData::ConvertFromNative()
         else
         {
             // Shouldn't really get here
-            wxFAIL_MSG(T("Couldn't find paper size from DEVMODE."));
+            wxFAIL_MSG(wxT("Couldn't find paper size from DEVMODE."));
 
             m_paperSize.x = 0;
             m_paperSize.y = 0;
@@ -761,7 +761,7 @@ void wxPrintDialogData::ConvertToNative()
 
     m_printData.SetNativeData((void*) NULL);
 
-    wxASSERT_MSG( (pd->hDevMode), T("hDevMode must be non-NULL in ConvertToNative!"));
+    wxASSERT_MSG( (pd->hDevMode), wxT("hDevMode must be non-NULL in ConvertToNative!"));
 
     pd->hDC = (HDC) NULL;
     pd->nFromPage = (UINT)m_printFromPage;
@@ -1023,7 +1023,7 @@ void wxPageSetupDialogData::ConvertToNative()
 
     m_printData.SetNativeData((void*) NULL);
 
-    wxASSERT_MSG( (pd->hDevMode), T("hDevMode must be non-NULL in ConvertToNative!"));
+    wxASSERT_MSG( (pd->hDevMode), wxT("hDevMode must be non-NULL in ConvertToNative!"));
 
 //        pd->hDevMode = GlobalAlloc(GMEM_MOVEABLE, sizeof(DEVMODE));
 
@@ -1163,7 +1163,7 @@ void wxPageSetupDialogData::SetPaperSize(wxPaperSize id)
 void wxPageSetupDialogData::CalculateIdFromPaperSize()
 {
     wxASSERT_MSG( (wxThePrintPaperDatabase != (wxPrintPaperDatabase*) NULL),
-                  T("wxThePrintPaperDatabase should not be NULL. "
+                  wxT("wxThePrintPaperDatabase should not be NULL. "
                      "Do not create global print dialog data objects.") );
 
     wxSize sz = GetPaperSize();
@@ -1179,7 +1179,7 @@ void wxPageSetupDialogData::CalculateIdFromPaperSize()
 void wxPageSetupDialogData::CalculatePaperSizeFromId()
 {
     wxASSERT_MSG( (wxThePrintPaperDatabase != (wxPrintPaperDatabase*) NULL),
-                  T("wxThePrintPaperDatabase should not be NULL. "
+                  wxT("wxThePrintPaperDatabase should not be NULL. "
                      "Do not create global print dialog data objects.") );
 
     wxSize sz = wxThePrintPaperDatabase->GetSize(m_printData.GetPaperId());

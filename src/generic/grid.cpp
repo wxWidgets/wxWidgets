@@ -187,7 +187,7 @@ wxGridTableMessage::wxGridTableMessage( wxGridTableBase *table, int id,
 // this is a magic incantation which must be done!
 #include <wx/arrimpl.cpp>
 
-WX_DEFINE_OBJARRAY(wxGridStringArray);
+WX_DEFINE_OBJARRAY(wxGridStringArray)
 
 IMPLEMENT_DYNAMIC_CLASS( wxGridStringTable, wxGridTableBase )
 

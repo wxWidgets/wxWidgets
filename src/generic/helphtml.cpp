@@ -143,7 +143,7 @@ wxHTMLHelpControllerBase::LoadFile(const wxString& ifile)
          {
             newfile = WXEXTHELP_SEPARATOR;
             const wxChar *cptr = wxGetLocale()->GetName().c_str();
-            while(*cptr && *cptr != T('_'))
+            while(*cptr && *cptr != wxT('_'))
                newfile << *(cptr++);
             if(wxDirExists(newfile))
                file = newfile;
@@ -223,13 +223,13 @@ wxHTMLHelpControllerBase::DisplayContents()
    bool rc = FALSE;
    wxString file;
    file << m_MapFile << WXEXTHELP_SEPARATOR << contents;
-   if(file.Contains(T('#')))
-      file = file.BeforeLast(T('#'));
+   if(file.Contains(wxT('#')))
+      file = file.BeforeLast(wxT('#'));
    if(contents.Length() && wxFileExists(file))
       rc = DisplaySection(CONTENTS_ID);
    
    // if not found, open homemade toc:
-   return rc ? TRUE : KeywordSearch(T(""));
+   return rc ? TRUE : KeywordSearch(wxT(""));
 }
 
 bool

@@ -51,4 +51,3 @@ protected:
 };
 
 #endif
-    // _WX_STATBAR_H_

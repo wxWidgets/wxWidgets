@@ -52,7 +52,7 @@ wxPrinterDC::wxPrinterDC(const wxString& driver_name, const wxString& device_nam
 
     m_isInteractive = interactive;
 
-    if (!file.IsNull() && file != T(""))
+    if (!file.IsNull() && file != wxT(""))
         m_printData.SetFilename(file);
 
 /*
@@ -90,9 +90,9 @@ wxPrinterDC::wxPrinterDC(const wxString& driver_name, const wxString& device_nam
     else
 #endif
 */
-        if ((!driver_name.IsNull() && driver_name != T("")) &&
-            (!device_name.IsNull() && device_name != T("")) &&
-            (!file.IsNull() && file != T("")))
+        if ((!driver_name.IsNull() && driver_name != wxT("")) &&
+            (!device_name.IsNull() && device_name != wxT("")) &&
+            (!file.IsNull() && file != wxT("")))
         {
             m_hDC = (WXHDC) ::DevOpenDC( hab
                                         ,OD_QUEUED
@@ -199,7 +199,7 @@ bool wxPrinterDC::StartDoc(const wxString& message)
     if (ret <= 0)
     {
         DWORD lastError = GetLastError();
-        wxLogDebug(T("wxDC::StartDoc failed with error: %d\n"), lastError);
+        wxLogDebug(wxT("wxDC::StartDoc failed with error: %d\n"), lastError);
     }
 #endif
     return (ret > 0);
@@ -278,7 +278,7 @@ static bool wxGetDefaultDeviceName(wxString& deviceName, wxString& portName)
         GlobalFree(pd.hDevMode);
         pd.hDevMode=NULL;
     }
-    return ( deviceName != T("") );
+    return ( deviceName != wxT("") );
 */
     return(TRUE);
 }
@@ -297,7 +297,7 @@ WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
     wxChar* deviceName;
     wxChar* portName = (wxChar*) NULL; // Obsolete in WIN32
 
-    if (devNameStr == T(""))
+    if (devNameStr == wxT(""))
         deviceName = (wxChar*) NULL;
     else
         deviceName = WXSTRINGCAST devNameStr;
@@ -309,13 +309,13 @@ WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
     if ( hDevMode )
         lpDevMode = (DEVMODE*) GlobalLock(hDevMode);
 
-    if (devNameStr == T(""))
+    if (devNameStr == wxT(""))
     {
         // Retrieve the default device name
         wxString portName;
         bool ret = wxGetDefaultDeviceName(devNameStr, portName);
 
-        wxASSERT_MSG( ret, T("Could not get default device name.") );
+        wxASSERT_MSG( ret, wxT("Could not get default device name.") );
 
         deviceName = WXSTRINGCAST devNameStr;
     }

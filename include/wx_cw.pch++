@@ -16,4 +16,3 @@
 #pragma once on
 #define WX_PRECOMP
 #include "wx/wx_cw_cm.h"
-#include "wx/wxprec.h"

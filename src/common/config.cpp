@@ -186,7 +186,7 @@ bool wxConfigBase::Read(const wxString& key, int *pi, int defVal) const
 bool wxConfigBase::Write(const wxString& key, double val)
 {
     wxString str;
-    str.Printf(T("%f"), val);
+    str.Printf(wxT("%f"), val);
     return Write(key, str);
 }
 
@@ -371,11 +371,11 @@ void wxSplitPath(wxArrayString& aParts, const wxChar *sz)
   wxString strCurrent;
   const wxChar *pc = sz;
   for ( ;; ) {
-    if ( *pc == T('\0') || *pc == wxCONFIG_PATH_SEPARATOR ) {
-      if ( strCurrent == T(".") ) {
+    if ( *pc == wxT('\0') || *pc == wxCONFIG_PATH_SEPARATOR ) {
+      if ( strCurrent == wxT(".") ) {
         // ignore
       }
-      else if ( strCurrent == T("..") ) {
+      else if ( strCurrent == wxT("..") ) {
         // go up one level
         if ( aParts.IsEmpty() )
           wxLogWarning(_("'%s' has extra '..', ignored."), sz);
@@ -391,7 +391,7 @@ void wxSplitPath(wxArrayString& aParts, const wxChar *sz)
       //else:
         // could log an error here, but we prefer to ignore extra '/'
 
-      if ( *pc == T('\0') )
+      if ( *pc == wxT('\0') )
         return;
     }
     else

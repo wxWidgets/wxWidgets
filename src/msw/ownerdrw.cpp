@@ -74,7 +74,7 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
   delete [] szStripped;
 
   // # without this menu items look too tightly packed (at least under Windows)
-  str += T('W'); // 'W' is typically the widest letter
+  str += wxT('W'); // 'W' is typically the widest letter
 
   dc.GetTextExtent(str, (long *)pwidth, (long *)pheight);
 

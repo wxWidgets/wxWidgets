@@ -17,4 +17,3 @@ OBJECTS = png.obj pngread.obj pngrtran.obj pngrutil.obj \
           pngpread.obj pngtrans.obj pngwrite.obj pngwtran.obj pngwutil.obj \
           pngerror.obj pngmem.obj pngwio.obj pngrio.obj pngget.obj pngset.obj
 
-!include $(WXWIN)\src\makelib.b32

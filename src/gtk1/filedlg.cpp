@@ -117,14 +117,14 @@ wxFileDialog::wxFileDialog( wxWindow *parent, const wxString& message,
     m_needParent = FALSE;
 
     if (!PreCreation( parent, pos, wxDefaultSize ) ||
-        !CreateBase( parent, -1, pos, wxDefaultSize, style | wxDIALOG_MODAL, wxDefaultValidator, T("filedialog") ))
+        !CreateBase( parent, -1, pos, wxDefaultSize, style | wxDIALOG_MODAL, wxDefaultValidator, wxT("filedialog") ))
     {
-        wxFAIL_MSG( T("wxXX creation failed") );
+        wxFAIL_MSG( wxT("wxXX creation failed") );
 	return;
     }
     
     m_message = message;
-    m_path = T("");
+    m_path = wxT("");
     m_fileName = defaultFileName;
     m_dir = defaultDir;
     m_wildCard = wildCard;
@@ -141,7 +141,7 @@ wxFileDialog::wxFileDialog( wxWindow *parent, const wxString& message,
     gtk_file_selection_hide_fileop_buttons( sel ); // they don't work anyway
 
     m_path.Append(m_dir);
-    if( ! m_path.IsEmpty() && m_path.Last()!=T('/') )
+    if( ! m_path.IsEmpty() && m_path.Last()!=wxT('/') )
         m_path.Append('/');
     m_path.Append(m_fileName);
 
@@ -173,7 +173,7 @@ void wxFileDialog::SetPath(const wxString& path)
         wxSplitPath(path, &m_dir, &m_fileName, &ext);
 	if (!ext.IsEmpty())
 	{
-	    m_fileName += T(".");
+	    m_fileName += wxT(".");
             m_fileName += ext;
 	}
     }
@@ -194,7 +194,7 @@ wxFileSelectorEx(const wxChar *message,
                  int x, int y)
 {
     // TODO: implement this somehow
-    return wxFileSelector(message, default_path, default_filename, T(""),
+    return wxFileSelector(message, default_path, default_filename, wxT(""),
                           wildcard, flags, parent, x, y);
 }
 
@@ -205,7 +205,7 @@ wxString wxFileSelector( const wxChar *title,
 {
     wxString filter2;
     if ( defaultExtension && !filter )
-        filter2 = wxString(T("*.")) + wxString(defaultExtension) ;
+        filter2 = wxString(wxT("*.")) + wxString(defaultExtension) ;
     else if ( filter )
         filter2 = filter;
 
@@ -237,9 +237,9 @@ wxString wxLoadFileSelector( const wxChar *what, const wxChar *extension, const 
     wxString str = _("Load %s file");
     wxSprintf(prompt, str, what);
 
-    if (*ext == T('.')) ext++;
+    if (*ext == wxT('.')) ext++;
     wxChar wild[60];
-    wxSprintf(wild, T("*.%s"), ext);
+    wxSprintf(wild, wxT("*.%s"), ext);
 
     return wxFileSelector (prompt, (const wxChar *) NULL, default_name, ext, wild, 0, parent);
 }
@@ -253,9 +253,9 @@ wxString wxSaveFileSelector(const wxChar *what, const wxChar *extension, const w
     wxString str = _("Save %s file");
     wxSprintf(prompt, str, what);
 
-    if (*ext == T('.')) ext++;
+    if (*ext == wxT('.')) ext++;
     wxChar wild[60];
-    wxSprintf(wild, T("*.%s"), ext);
+    wxSprintf(wild, wxT("*.%s"), ext);
 
     return wxFileSelector (prompt, (const wxChar *) NULL, default_name, ext, wild, 0, parent);
 }

@@ -32,7 +32,7 @@ public:
     // enumerate the different encodings either for given font family or for
     // all font families - will result in OnFontEncoding() being called for
     // each available (family, encoding) couple
-    virtual bool EnumerateEncodings(const wxString& family = T(""));
+    virtual bool EnumerateEncodings(const wxString& family = wxT(""));
 
     // callbacks which are called after one of EnumerateXXX() functions from
     // above is invoked - all of them may return FALSE to stop enumeration or

@@ -118,7 +118,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
-        wxFAIL_MSG( T("wxTextCtrl creation failed") );
+        wxFAIL_MSG( wxT("wxTextCtrl creation failed") );
 	return FALSE;
     }
 
@@ -282,7 +282,7 @@ void wxTextCtrl::CalculateScrollbar()
 
 wxString wxTextCtrl::GetValue() const
 {
-    wxCHECK_MSG( m_text != NULL, T(""), T("invalid text ctrl") );
+    wxCHECK_MSG( m_text != NULL, wxT(""), wxT("invalid text ctrl") );
 
     wxString tmp;
     if (m_windowStyle & wxTE_MULTILINE)
@@ -301,9 +301,9 @@ wxString wxTextCtrl::GetValue() const
 
 void wxTextCtrl::SetValue( const wxString &value )
 {
-    wxCHECK_RET( m_text != NULL, T("invalid text ctrl") );
+    wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
-    wxString tmp = T("");
+    wxString tmp = wxT("");
     if (!value.IsNull()) tmp = value;
     if (m_windowStyle & wxTE_MULTILINE)
     {
@@ -325,7 +325,7 @@ void wxTextCtrl::SetValue( const wxString &value )
 
 void wxTextCtrl::WriteText( const wxString &text )
 {
-    wxCHECK_RET( m_text != NULL, T("invalid text ctrl") );
+    wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
     if (text.IsEmpty()) return;
 
@@ -365,7 +365,7 @@ void wxTextCtrl::WriteText( const wxString &text )
 
 void wxTextCtrl::AppendText( const wxString &text )
 {
-    wxCHECK_RET( m_text != NULL, T("invalid text ctrl") );
+    wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
     if (text.IsEmpty()) return;
 
@@ -413,7 +413,7 @@ wxString wxTextCtrl::GetLineText( long lineNo ) const
 
     if (text)
     {
-        wxString buf(T(""));
+        wxString buf(wxT(""));
         long i;
         int currentLine = 0;
         for (i = 0; currentLine != lineNo && text[i]; i++ )
@@ -441,7 +441,7 @@ void wxTextCtrl::OnDropFiles( wxDropFilesEvent &WXUNUSED(event) )
 {
   /* If you implement this, don't forget to update the documentation!
    * (file docs/latex/wx/text.tex) */
-    wxFAIL_MSG( T("wxTextCtrl::OnDropFiles not implemented") );
+    wxFAIL_MSG( wxT("wxTextCtrl::OnDropFiles not implemented") );
 }
 
 bool wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
@@ -460,7 +460,7 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
         const wxChar* stop = text.c_str() + pos;
         for ( const wxChar *p = text.c_str(); p < stop; p++ )
         {
-            if (*p == T('\n'))
+            if (*p == wxT('\n'))
             {
                 (*y)++;
                 *x=0;
@@ -536,7 +536,7 @@ int wxTextCtrl::GetNumberOfLines() const
 
 void wxTextCtrl::SetInsertionPoint( long pos )
 {
-    wxCHECK_RET( m_text != NULL, T("invalid text ctrl") );
+    wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
     if (m_windowStyle & wxTE_MULTILINE)
     {
@@ -573,7 +573,7 @@ void wxTextCtrl::SetInsertionPoint( long pos )
 
 void wxTextCtrl::SetInsertionPointEnd()
 {
-    wxCHECK_RET( m_text != NULL, T("invalid text ctrl") );
+    wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
     if (m_windowStyle & wxTE_MULTILINE)
         SetInsertionPoint(gtk_text_get_length(GTK_TEXT(m_text)));
@@ -583,7 +583,7 @@ void wxTextCtrl::SetInsertionPointEnd()
 
 void wxTextCtrl::SetEditable( bool editable )
 {
-    wxCHECK_RET( m_text != NULL, T("invalid text ctrl") );
+    wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
     if (m_windowStyle & wxTE_MULTILINE)
         gtk_text_set_editable( GTK_TEXT(m_text), editable );
@@ -598,7 +598,7 @@ void wxTextCtrl::DiscardEdits()
 
 void wxTextCtrl::SetSelection( long from, long to )
 {
-    wxCHECK_RET( m_text != NULL, T("invalid text ctrl") );
+    wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
     gtk_editable_select_region( GTK_EDITABLE(m_text), (gint)from, (gint)to );
 }
@@ -610,14 +610,14 @@ void wxTextCtrl::ShowPosition( long WXUNUSED(pos) )
 
 long wxTextCtrl::GetInsertionPoint() const
 {
-    wxCHECK_MSG( m_text != NULL, 0, T("invalid text ctrl") );
+    wxCHECK_MSG( m_text != NULL, 0, wxT("invalid text ctrl") );
 
     return (long) GTK_EDITABLE(m_text)->current_pos;
 }
 
 long wxTextCtrl::GetLastPosition() const
 {
-    wxCHECK_MSG( m_text != NULL, 0, T("invalid text ctrl") );
+    wxCHECK_MSG( m_text != NULL, 0, wxT("invalid text ctrl") );
 
     int pos = 0;
     if (m_windowStyle & wxTE_MULTILINE)
@@ -630,14 +630,14 @@ long wxTextCtrl::GetLastPosition() const
 
 void wxTextCtrl::Remove( long from, long to )
 {
-    wxCHECK_RET( m_text != NULL, T("invalid text ctrl") );
+    wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
     gtk_editable_delete_text( GTK_EDITABLE(m_text), (gint)from, (gint)to );
 }
 
 void wxTextCtrl::Replace( long from, long to, const wxString &value )
 {
-    wxCHECK_RET( m_text != NULL, T("invalid text ctrl") );
+    wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
     gtk_editable_delete_text( GTK_EDITABLE(m_text), (gint)from, (gint)to );
 
@@ -655,7 +655,7 @@ void wxTextCtrl::Replace( long from, long to, const wxString &value )
 
 void wxTextCtrl::Cut()
 {
-    wxCHECK_RET( m_text != NULL, T("invalid text ctrl") );
+    wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
 #if (GTK_MINOR_VERSION > 0)
     gtk_editable_cut_clipboard( GTK_EDITABLE(m_text) );
@@ -666,7 +666,7 @@ void wxTextCtrl::Cut()
 
 void wxTextCtrl::Copy()
 {
-    wxCHECK_RET( m_text != NULL, T("invalid text ctrl") );
+    wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
 #if (GTK_MINOR_VERSION > 0)
     gtk_editable_copy_clipboard( GTK_EDITABLE(m_text) );
@@ -677,7 +677,7 @@ void wxTextCtrl::Copy()
 
 void wxTextCtrl::Paste()
 {
-    wxCHECK_RET( m_text != NULL, T("invalid text ctrl") );
+    wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
 #if (GTK_MINOR_VERSION > 0)
     gtk_editable_paste_clipboard( GTK_EDITABLE(m_text) );
@@ -711,26 +711,26 @@ bool wxTextCtrl::CanPaste() const
 void wxTextCtrl::Undo()
 {
     // TODO
-    wxFAIL_MSG( T("wxTextCtrl::Undo not implemented") );
+    wxFAIL_MSG( wxT("wxTextCtrl::Undo not implemented") );
 }
 
 void wxTextCtrl::Redo()
 {
     // TODO
-    wxFAIL_MSG( T("wxTextCtrl::Redo not implemented") );
+    wxFAIL_MSG( wxT("wxTextCtrl::Redo not implemented") );
 }
 
 bool wxTextCtrl::CanUndo() const
 {
     // TODO
-    wxFAIL_MSG( T("wxTextCtrl::CanUndo not implemented") );
+    wxFAIL_MSG( wxT("wxTextCtrl::CanUndo not implemented") );
     return FALSE;
 }
 
 bool wxTextCtrl::CanRedo() const
 {
     // TODO
-    wxFAIL_MSG( T("wxTextCtrl::CanRedo not implemented") );
+    wxFAIL_MSG( wxT("wxTextCtrl::CanRedo not implemented") );
     return FALSE;
 }
 
@@ -738,7 +738,7 @@ bool wxTextCtrl::CanRedo() const
 // selection.
 void wxTextCtrl::GetSelection(long* from, long* to) const
 {
-    wxCHECK_RET( m_text != NULL, T("invalid text ctrl") );
+    wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
     if (!(GTK_EDITABLE(m_text)->has_selection))
     {
@@ -753,7 +753,7 @@ void wxTextCtrl::GetSelection(long* from, long* to) const
 
 bool wxTextCtrl::IsEditable() const
 {
-    wxCHECK_MSG( m_text != NULL, FALSE, T("invalid text ctrl") );
+    wxCHECK_MSG( m_text != NULL, FALSE, wxT("invalid text ctrl") );
 
     return GTK_EDITABLE(m_text)->editable;
 }
@@ -765,12 +765,12 @@ bool wxTextCtrl::IsModified() const
 
 void wxTextCtrl::Clear()
 {
-    SetValue( T("") );
+    SetValue( wxT("") );
 }
 
 void wxTextCtrl::OnChar( wxKeyEvent &key_event )
 {
-    wxCHECK_RET( m_text != NULL, T("invalid text ctrl") );
+    wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
     if ((key_event.KeyCode() == WXK_RETURN) && (m_windowStyle & wxPROCESS_ENTER))
     {
@@ -798,7 +798,7 @@ bool wxTextCtrl::IsOwnGtkWindow( GdkWindow *window )
 // the font will change for subsequent text insertiongs
 bool wxTextCtrl::SetFont( const wxFont &font )
 {
-    wxCHECK_MSG( m_text != NULL, FALSE, T("invalid text ctrl") );
+    wxCHECK_MSG( m_text != NULL, FALSE, wxT("invalid text ctrl") );
 
     if ( !wxWindowBase::SetFont(font) )
     {
@@ -824,7 +824,7 @@ bool wxTextCtrl::SetFont( const wxFont &font )
 
 bool wxTextCtrl::SetForegroundColour( const wxColour &WXUNUSED(colour) )
 {
-    wxCHECK_MSG( m_text != NULL, FALSE, T("invalid text ctrl") );
+    wxCHECK_MSG( m_text != NULL, FALSE, wxT("invalid text ctrl") );
 
     // doesn't work
     return FALSE;
@@ -832,7 +832,7 @@ bool wxTextCtrl::SetForegroundColour( const wxColour &WXUNUSED(colour) )
 
 bool wxTextCtrl::SetBackgroundColour( const wxColour &colour )
 {
-    wxCHECK_MSG( m_text != NULL, FALSE, T("invalid text ctrl") );
+    wxCHECK_MSG( m_text != NULL, FALSE, wxT("invalid text ctrl") );
 
     wxControl::SetBackgroundColour( colour );
 

@@ -107,12 +107,12 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
   if ( want3D || wxStyleHasBorder(m_windowStyle) )
     msStyle |= WS_BORDER;
 
-  m_hWnd = (WXHWND)::CreateWindowEx(exStyle, T("COMBOBOX"), NULL,
+  m_hWnd = (WXHWND)::CreateWindowEx(exStyle, wxT("COMBOBOX"), NULL,
                    msStyle,
                    0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
                    wxGetInstance(), NULL);
 
-  wxCHECK_MSG( m_hWnd, FALSE, T("Failed to create combobox") );
+  wxCHECK_MSG( m_hWnd, FALSE, wxT("Failed to create combobox") );
 
 /*
 #if wxUSE_CTL3D

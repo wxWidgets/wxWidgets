@@ -52,7 +52,7 @@ bool wxListKey::operator==(wxListKeyValue value) const
     switch ( m_keyType )
     {
         default:
-            wxFAIL_MSG(T("bad key type."));
+            wxFAIL_MSG(wxT("bad key type."));
             // let compiler optimize the line above away in release build
             // by not putting return here...
 
@@ -92,7 +92,7 @@ wxNodeBase::wxNodeBase(wxListBase *list,
             break;
 
         default:
-            wxFAIL_MSG(T("invalid key type"));
+            wxFAIL_MSG(wxT("invalid key type"));
     }
 
     if ( previous )
@@ -120,7 +120,7 @@ wxNodeBase::~wxNodeBase()
 
 int wxNodeBase::IndexOf() const
 {
-    wxCHECK_MSG( m_list, wxNOT_FOUND, T("node doesn't belong to a list in IndexOf"));
+    wxCHECK_MSG( m_list, wxNOT_FOUND, wxT("node doesn't belong to a list in IndexOf"));
 
     // It would be more efficient to implement IndexOf() completely inside
     // wxListBase (only traverse the list once), but this is probably a more
@@ -163,7 +163,7 @@ wxListBase::wxListBase(size_t count, void *elements[])
 void wxListBase::DoCopy(const wxListBase& list)
 {
     wxASSERT_MSG( !list.m_destroy,
-                  T("copying list which owns it's elements is a bad idea") );
+                  wxT("copying list which owns it's elements is a bad idea") );
 
     m_count = list.m_count;
     m_destroy = list.m_destroy;
@@ -210,7 +210,7 @@ wxNodeBase *wxListBase::Append(void *object)
 {
     // all objects in a keyed list should have a key
     wxCHECK_MSG( m_keyType == wxKEY_NONE, (wxNodeBase *)NULL,
-                 T("need a key for the object to append") );
+                 wxT("need a key for the object to append") );
 
     wxNodeBase *node = CreateNode(m_nodeLast, (wxNodeBase *)NULL, object);
 
@@ -222,7 +222,7 @@ wxNodeBase *wxListBase::Append(long key, void *object)
     wxCHECK_MSG( (m_keyType == wxKEY_INTEGER) ||
                  (m_keyType == wxKEY_NONE && m_count == 0),
                  (wxNodeBase *)NULL,
-                 T("can't append object with numeric key to this list") );
+                 wxT("can't append object with numeric key to this list") );
 
     wxNodeBase *node = CreateNode(m_nodeLast, (wxNodeBase *)NULL, object, key);
     return AppendCommon(node);
@@ -233,7 +233,7 @@ wxNodeBase *wxListBase::Append (const wxChar *key, void *object)
     wxCHECK_MSG( (m_keyType == wxKEY_STRING) ||
                  (m_keyType == wxKEY_NONE && m_count == 0),
                  (wxNodeBase *)NULL,
-                 T("can't append object with string key to this list") );
+                 wxT("can't append object with string key to this list") );
 
     wxNodeBase *node = CreateNode(m_nodeLast, (wxNodeBase *)NULL, object, key);
     return AppendCommon(node);
@@ -243,10 +243,10 @@ wxNodeBase *wxListBase::Insert(wxNodeBase *position, void *object)
 {
     // all objects in a keyed list should have a key
     wxCHECK_MSG( m_keyType == wxKEY_NONE, (wxNodeBase *)NULL,
-                 T("need a key for the object to insert") );
+                 wxT("need a key for the object to insert") );
 
     wxCHECK_MSG( !position || position->m_list == this, (wxNodeBase *)NULL,
-                 T("can't insert before a node from another list") );
+                 wxT("can't insert before a node from another list") );
 
     // previous and next node for the node being inserted
     wxNodeBase *prev, *next;
@@ -288,7 +288,7 @@ wxNodeBase *wxListBase::Item(size_t n) const
         }
     }
 
-    wxFAIL_MSG( T("invalid index in wxListBase::Item") );
+    wxFAIL_MSG( wxT("invalid index in wxListBase::Item") );
 
     return (wxNodeBase *)NULL;
 }
@@ -296,7 +296,7 @@ wxNodeBase *wxListBase::Item(size_t n) const
 wxNodeBase *wxListBase::Find(const wxListKey& key) const
 {
     wxASSERT_MSG( m_keyType == key.GetKeyType(),
-                  T("this list is not keyed on the type of this key") );
+                  wxT("this list is not keyed on the type of this key") );
 
     for ( wxNodeBase *current = GetFirst(); current; current = current->GetNext() )
     {
@@ -349,9 +349,9 @@ void wxListBase::DoDeleteNode(wxNodeBase *node)
 
 wxNodeBase *wxListBase::DetachNode(wxNodeBase *node)
 {
-    wxCHECK_MSG( node, NULL, T("detaching NULL wxNodeBase") );
+    wxCHECK_MSG( node, NULL, wxT("detaching NULL wxNodeBase") );
     wxCHECK_MSG( node->m_list == this, NULL,
-                 T("detaching node which is not from this list") );
+                 wxT("detaching node which is not from this list") );
 
     // update the list
     wxNodeBase **prevNext = node->GetPrevious() ? &node->GetPrevious()->m_next

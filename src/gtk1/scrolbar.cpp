@@ -129,7 +129,7 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
-        wxFAIL_MSG( T("wxScrollBar creation failed") );
+        wxFAIL_MSG( wxT("wxScrollBar creation failed") );
 	return FALSE;
     }
 

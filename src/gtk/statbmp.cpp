@@ -37,7 +37,7 @@ wxStaticBitmap::wxStaticBitmap( wxWindow *parent, wxWindowID id, const wxBitmap 
 
 void wxStaticBitmap::CreatePixmapWidget()
 {
-    wxCHECK_RET( m_bitmap.Ok(), T("should only be called if we have a bitmap") );
+    wxCHECK_RET( m_bitmap.Ok(), wxT("should only be called if we have a bitmap") );
 
     GdkBitmap *mask = (GdkBitmap *) NULL;
     if ( m_bitmap.GetMask() )
@@ -61,7 +61,7 @@ bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
-        wxFAIL_MSG( T("wxXX creation failed") );
+        wxFAIL_MSG( wxT("wxXX creation failed") );
 	return FALSE;
     }
 

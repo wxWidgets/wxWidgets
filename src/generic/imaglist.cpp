@@ -62,7 +62,7 @@ const wxBitmap *wxImageList::GetBitmap( int index ) const
 {
     wxNode *node = m_images.Nth( index );
     
-    wxCHECK_MSG( node, (wxBitmap *) NULL, T("wrong index in image list") );
+    wxCHECK_MSG( node, (wxBitmap *) NULL, wxT("wrong index in image list") );
     
     return (wxBitmap*)node->Data();
 }
@@ -71,7 +71,7 @@ bool wxImageList::Replace( int index, const wxBitmap &bitmap )
 {
     wxNode *node = m_images.Nth( index );
     
-    wxCHECK_MSG( node, FALSE, T("wrong index in image list") );
+    wxCHECK_MSG( node, FALSE, wxT("wrong index in image list") );
 
     wxBitmap* newBitmap = NULL;
     if (bitmap.IsKindOf(CLASSINFO(wxIcon)))
@@ -98,7 +98,7 @@ bool wxImageList::Remove( int index )
 {
     wxNode *node = m_images.Nth( index );
     
-    wxCHECK_MSG( node, FALSE, T("wrong index in image list") );
+    wxCHECK_MSG( node, FALSE, wxT("wrong index in image list") );
     
     m_images.DeleteNode( node );
      
@@ -119,7 +119,7 @@ bool wxImageList::GetSize( int index, int &width, int &height ) const
     
     wxNode *node = m_images.Nth( index );
     
-    wxCHECK_MSG( node, FALSE, T("wrong index in image list") );
+    wxCHECK_MSG( node, FALSE, wxT("wrong index in image list") );
     
     wxBitmap *bm = (wxBitmap*)node->Data();
     width = bm->GetWidth();
@@ -133,7 +133,7 @@ bool wxImageList::Draw( int index, wxDC &dc, int x, int y,
 {
     wxNode *node = m_images.Nth( index );
     
-    wxCHECK_MSG( node, FALSE, T("wrong index in image list") );
+    wxCHECK_MSG( node, FALSE, wxT("wrong index in image list") );
     
     wxBitmap *bm = (wxBitmap*)node->Data();
 

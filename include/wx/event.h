@@ -897,7 +897,7 @@ public:
     {
         // GetVeto() will return FALSE anyhow...
         wxCHECK_RET( m_canVeto,
-                     T("call to Veto() ignored (can't veto this event)") );
+                     wxT("call to Veto() ignored (can't veto this event)") );
 
         m_veto = veto;
     }
@@ -1319,7 +1319,7 @@ public:
     virtual void OnCommand(wxWindow& WXUNUSED(win),
                            wxCommandEvent& WXUNUSED(event))
     {
-        wxFAIL_MSG(T("shouldn't be called any more"));
+        wxFAIL_MSG(wxT("shouldn't be called any more"));
     }
 
     // Called if child control has no callback function

@@ -536,4 +536,3 @@ resource 'STR#' (251) {
 	}
 };
 
-// end of get file

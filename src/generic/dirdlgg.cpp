@@ -198,17 +198,17 @@ void wxDirCtrl::SetupSections()
   m_names.Clear();
 #ifdef __WXMSW__
   // better than nothing
-  ADD_SECTION(T("c:\\"), _("My Harddisk") )
+  ADD_SECTION(wxT("c:\\"), _("My Harddisk") )
 #else
-  ADD_SECTION(T("/"), _("The Computer") )
+  ADD_SECTION(wxT("/"), _("The Computer") )
   wxGetHomeDir(&home);
   ADD_SECTION(home, _("My Home") )
-  ADD_SECTION(T("/mnt"), _("Mounted Devices") )
-  ADD_SECTION(T("/usr"), _("User") )
-  ADD_SECTION(T("/usr/local"), _("User Local") )
-  ADD_SECTION(T("/var"), _("Variables") )
-  ADD_SECTION(T("/etc"), _("Etcetera") )
-  ADD_SECTION(T("/tmp"), _("Temporary") )
+  ADD_SECTION(wxT("/mnt"), _("Mounted Devices") )
+  ADD_SECTION(wxT("/usr"), _("User") )
+  ADD_SECTION(wxT("/usr/local"), _("User Local") )
+  ADD_SECTION(wxT("/var"), _("Variables") )
+  ADD_SECTION(wxT("/etc"), _("Etcetera") )
+  ADD_SECTION(wxT("/tmp"), _("Temporary") )
 #endif
 }
 #undef ADD_SECTION
@@ -254,7 +254,7 @@ void wxDirCtrl::OnEndEditItem(wxTreeEvent &event)
     if ((event.GetLabel().IsEmpty()) ||
         (event.GetLabel() == _(".")) ||
         (event.GetLabel() == _("..")) ||
-  (event.GetLabel().First( T("/") ) != wxNOT_FOUND))
+  (event.GetLabel().First( wxT("/") ) != wxNOT_FOUND))
     {
         wxMessageDialog dialog(this, _("Illegal directory name."), _("Error"), wxOK | wxICON_ERROR );
   dialog.ShowModal();
@@ -267,7 +267,7 @@ void wxDirCtrl::OnEndEditItem(wxTreeEvent &event)
     wxASSERT( data );
 
     wxString new_name( wxPathOnly( data->m_path ) );
-    new_name += T("/");
+    new_name += wxT("/");
     new_name += event.GetLabel();
 
     wxLogNull log;
@@ -502,22 +502,22 @@ void wxDirDialog::OnNew( wxCommandEvent& WXUNUSED(event) )
     wxDirItemData *data = (wxDirItemData*)m_dir->GetItemData( parent );
     wxASSERT( data );
 
-    wxString new_name( T("NewName") );
+    wxString new_name( wxT("NewName") );
     wxString path( data->m_path );
-    path += T("/");
+    path += wxT("/");
     path += new_name;
     if (wxFileExists(path))
     {
         // try NewName0, NewName1 etc.
         int i = 0;
   do {
-            new_name = T("NewName");
+            new_name = wxT("NewName");
       wxString num;
       num.Printf( "%d", i );
       new_name += num;
 
             path = data->m_path;
-            path += T("/");
+            path += wxT("/");
             path += new_name;
       i++;
   } while (wxFileExists(path));

@@ -112,7 +112,7 @@ class WXDLLEXPORT wxExpr
       return value.word;
     else if (type == wxExprString)
       return wxString(value.string);
-    else return wxString(T(""));
+    else return wxString(wxT(""));
   }
 
   inline wxString StringValue(void) const {
@@ -120,7 +120,7 @@ class WXDLLEXPORT wxExpr
       return wxString(value.string);
     else if (type == wxExprWord)
       return wxString(value.word);
-    else return wxString(T(""));
+    else return wxString(wxT(""));
   }
 
   // Get nth arg of clause (starting from 1)

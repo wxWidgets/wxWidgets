@@ -243,7 +243,7 @@ bool wxMouseEvent::ButtonDClick(int but) const
         case 3:
             return RightDClick();
         default:
-            wxFAIL_MSG(T("invalid parameter in wxMouseEvent::ButtonDClick"));
+            wxFAIL_MSG(wxT("invalid parameter in wxMouseEvent::ButtonDClick"));
     }
 
     return FALSE;
@@ -264,7 +264,7 @@ bool wxMouseEvent::ButtonDown(int but) const
         case 3:
             return RightDown();
         default:
-            wxFAIL_MSG(T("invalid parameter in wxMouseEvent::ButtonDown"));
+            wxFAIL_MSG(wxT("invalid parameter in wxMouseEvent::ButtonDown"));
     }
 
     return FALSE;
@@ -284,7 +284,7 @@ bool wxMouseEvent::ButtonUp(int but) const
         case 3:
             return RightUp();
         default:
-            wxFAIL_MSG(T("invalid parameter in wxMouseEvent::ButtonUp"));
+            wxFAIL_MSG(wxT("invalid parameter in wxMouseEvent::ButtonUp"));
     }
 
     return FALSE;
@@ -303,7 +303,7 @@ bool wxMouseEvent::Button(int but) const
         case 3:
             return (RightDown() || RightUp() || RightDClick());
         default:
-            wxFAIL_MSG(T("invalid parameter in wxMouseEvent::Button"));
+            wxFAIL_MSG(wxT("invalid parameter in wxMouseEvent::Button"));
     }
 
     return FALSE;
@@ -321,7 +321,7 @@ bool wxMouseEvent::ButtonIsDown(int but) const
         case 3:
             return RightIsDown();
         default:
-            wxFAIL_MSG(T("invalid parameter in wxMouseEvent::ButtonIsDown"));
+            wxFAIL_MSG(wxT("invalid parameter in wxMouseEvent::ButtonIsDown"));
     }
 
     return FALSE;
@@ -753,7 +753,7 @@ void wxEvtHandler::Connect( int id, int lastId,
 bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
 {
     wxCHECK_MSG( m_dynamicEvents, FALSE,
-                 T("caller should check that we have dynamic events") );
+                 wxT("caller should check that we have dynamic events") );
 
     int commandId = event.GetId();
 

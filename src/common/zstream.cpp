@@ -138,7 +138,7 @@ wxZlibOutputStream::~wxZlibOutputStream()
   err = deflate(m_deflate, Z_FINISH);
   if (err != Z_STREAM_END) 
   {
-    wxLogDebug( T("wxZlibOutputStream: an error occured while closing the stream.\n") );
+    wxLogDebug( wxT("wxZlibOutputStream: an error occured while closing the stream.\n") );
     return;
   }
 

@@ -165,7 +165,7 @@ void Uuid::UuidToCForm()
   if ( m_pszCForm == NULL )
     m_pszCForm = new wxChar[UUID_CSTRLEN];
 
-  wsprintf(m_pszCForm, T("0x%8.8X,0x%4.4X,0x%4.4X,0x%2.2X,0x2.2%X,"
+  wsprintf(m_pszCForm, wxT("0x%8.8X,0x%4.4X,0x%4.4X,0x%2.2X,0x2.2%X,"
            "0x2.2%X,0x2.2%X,0x2.2%X,0x2.2%X,0x2.2%X,0x2.2%X"),
            m_uuid.Data1, m_uuid.Data2, m_uuid.Data3,
            m_uuid.Data4[1], m_uuid.Data4[2], m_uuid.Data4[3], m_uuid.Data4[4],

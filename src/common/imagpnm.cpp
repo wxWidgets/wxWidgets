@@ -44,7 +44,7 @@ void Skip_Comment(wxInputStream &stream)
   wxString line;
   wxTextInputStream text_stream(stream);
 
-  if (stream.Peek()==T('#')) 
+  if (stream.Peek()==wxT('#')) 
     {
       text_stream >> line;
       Skip_Comment(stream);
@@ -68,19 +68,19 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
     wxTextInputStream text_stream(buf_stream);
 
     Skip_Comment(buf_stream);
-    if (buf_stream.GetC()==T('P')) c=buf_stream.GetC();
+    if (buf_stream.GetC()==wxT('P')) c=buf_stream.GetC();
 
     switch (c)
       {
-      case T('2'):
-	wxLogError(T("Loading Grey Ascii PNM image is not yet implemented."));
+      case wxT('2'):
+	wxLogError(wxT("Loading Grey Ascii PNM image is not yet implemented."));
 	return FALSE;
-      case T('5'):
-	wxLogError(T("Loading Grey Raw PNM image is not yet implemented."));
+      case wxT('5'):
+	wxLogError(wxT("Loading Grey Raw PNM image is not yet implemented."));
 	return FALSE;
-      case T('3'): case T('6'): break;
+      case wxT('3'): case wxT('6'): break;
 	default :
-	wxLogError(T("Loading PNM image : file not recognized."));
+	wxLogError(wxT("Loading PNM image : file not recognized."));
 	return FALSE;
       }
 
@@ -95,7 +95,7 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
     unsigned char *ptr = image->GetData();
     if (!ptr)
     {
-        wxLogError( T("Cannot allocate RAM for RGB data in PNM file.") );
+        wxLogError( wxT("Cannot allocate RAM for RGB data in PNM file.") );
 	return FALSE;
     }
 
@@ -111,7 +111,7 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
 
 	    if (buf_stream.LastError()!=wxSTREAM_NOERROR)
 	      {
-		wxLogError(T("Loading PNM image : file seems truncated."));
+		wxLogError(wxT("Loading PNM image : file seems truncated."));
 		return FALSE;
 	      }
 	  }
@@ -143,10 +143,10 @@ bool wxPNMHandler::CanRead( wxInputStream& stream )
 
     Skip_Comment(stream);
 
-    if (stream.GetC()==T('P'))
+    if (stream.GetC()==wxT('P'))
       switch (stream.GetC())
 	{
-	case T('3'): case T('6'):
+	case wxT('3'): case wxT('6'):
 	  stream.SeekI(pos);
 	  return TRUE;
 	}

@@ -173,7 +173,7 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
 
     wxWindow* win = NULL;
 
-    if (str == T("BUTTON"))
+    if (str == wxT("BUTTON"))
     {
         int style1 = (style & 0xFF);
         if ((style1 == BS_3STATE) || (style1 == BS_AUTO3STATE) || (style1 == BS_AUTOCHECKBOX) ||
@@ -190,7 +190,7 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
         {
             // TODO: how to find the bitmap?
             win = new wxBitmapButton;
-            wxLogError(T("Have not yet implemented bitmap button as BS_BITMAP button."));
+            wxLogError(wxT("Have not yet implemented bitmap button as BS_BITMAP button."));
         }
 #endif
         else if (style1 == BS_OWNERDRAW)
@@ -213,11 +213,11 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
         }
         else
         {
-            wxLogError(T("Don't know what kind of button this is: id = %d"),
+            wxLogError(wxT("Don't know what kind of button this is: id = %d"),
                        id);
         }
     }
-    else if (str == T("COMBOBOX"))
+    else if (str == wxT("COMBOBOX"))
     {
         win = new wxComboBox;
     }
@@ -227,30 +227,30 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
     // for correct functioning.
     // Could have wxWindow::AdoptAttributesFromHWND(WXHWND)
     // to be overridden by each control class.
-    else if (str == T("EDIT"))
+    else if (str == wxT("EDIT"))
     {
         win = new wxTextCtrl;
     }
-    else if (str == T("LISTBOX"))
+    else if (str == wxT("LISTBOX"))
     {
         win = new wxListBox;
     }
-    else if (str == T("SCROLLBAR"))
+    else if (str == wxT("SCROLLBAR"))
     {
         win = new wxScrollBar;
     }
 #if defined(__WIN95__) && !defined(__TWIN32__)
-    else if (str == T("MSCTLS_UPDOWN32"))
+    else if (str == wxT("MSCTLS_UPDOWN32"))
     {
         win = new wxSpinButton;
     }
 #endif
-    else if (str == T("MSCTLS_TRACKBAR32"))
+    else if (str == wxT("MSCTLS_TRACKBAR32"))
     {
         // Need to ascertain if it's horiz or vert
         win = new wxSlider;
     }
-    else if (str == T("STATIC"))
+    else if (str == wxT("STATIC"))
     {
         int style1 = (style & 0xFF);
 
@@ -262,13 +262,13 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
             win = new wxStaticBitmap;
 
             // Help! this doesn't correspond with the wxWin implementation.
-            wxLogError(T("Please make SS_BITMAP statics into owner-draw buttons."));
+            wxLogError(wxT("Please make SS_BITMAP statics into owner-draw buttons."));
         }
 #endif
     }
     else
     {
-        wxString msg(T("Don't know how to convert from Windows class "));
+        wxString msg(wxT("Don't know how to convert from Windows class "));
         msg += str;
         wxLogError(msg);
     }

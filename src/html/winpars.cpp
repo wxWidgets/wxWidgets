@@ -285,5 +285,5 @@ bool wxHtmlTagsModule::OnInit()
 void wxHtmlTagsModule::OnExit()
 {
 }
-
 #endif
+

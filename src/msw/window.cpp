@@ -297,7 +297,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
                       long style,
                       const wxString& name)
 {
-    wxCHECK_MSG( parent, FALSE, T("can't create wxWindow without parent") );
+    wxCHECK_MSG( parent, FALSE, wxT("can't create wxWindow without parent") );
 
     if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
@@ -448,7 +448,7 @@ bool wxWindow::SetFont(const wxFont& font)
     {
         WXHANDLE hFont = m_font.GetResourceHandle();
 
-        wxASSERT_MSG( hFont, T("should have valid font") );
+        wxASSERT_MSG( hFont, wxT("should have valid font") );
 
         ::SendMessage(hWnd, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
     }
@@ -464,7 +464,7 @@ bool wxWindow::SetCursor(const wxCursor& cursor)
     }
 
     wxASSERT_MSG( m_cursor.Ok(),
-                  T("cursor must be valid after call to the base version"));
+                  wxT("cursor must be valid after call to the base version"));
 
     HWND hWnd = GetHwnd();
 
@@ -801,10 +801,10 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
 
 void wxWindow::SubclassWin(WXHWND hWnd)
 {
-    wxASSERT_MSG( !m_oldWndProc, T("subclassing window twice?") );
+    wxASSERT_MSG( !m_oldWndProc, wxT("subclassing window twice?") );
 
     HWND hwnd = (HWND)hWnd;
-    wxCHECK_RET( ::IsWindow(hwnd), T("invalid HWND in SubclassWin") );
+    wxCHECK_RET( ::IsWindow(hwnd), wxT("invalid HWND in SubclassWin") );
 
     wxAssociateWinWithHandle(hwnd, this);
 
@@ -822,7 +822,7 @@ void wxWindow::UnsubclassWin()
     {
         m_hWnd = 0;
 
-        wxCHECK_RET( ::IsWindow(hwnd), T("invalid HWND in UnsubclassWin") );
+        wxCHECK_RET( ::IsWindow(hwnd), wxT("invalid HWND in UnsubclassWin") );
 
         FARPROC farProc = (FARPROC) GetWindowLong(hwnd, GWL_WNDPROC);
         if ( (m_oldWndProc != 0) && (farProc != (FARPROC) m_oldWndProc) )
@@ -1709,7 +1709,7 @@ LRESULT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 {
     // trace all messages - useful for the debugging
 #ifdef __WXDEBUG__
-    wxLogTrace(wxTraceMessages, T("Processing %s(wParam=%8lx, lParam=%8lx)"),
+    wxLogTrace(wxTraceMessages, wxT("Processing %s(wParam=%8lx, lParam=%8lx)"),
                wxGetMessageName(message), wParam, lParam);
 #endif // __WXDEBUG__
 
@@ -2094,7 +2094,7 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
     if ( !processed )
     {
 #ifdef __WXDEBUG__
-        wxLogTrace(wxTraceMessages, T("Forwarding %s to DefWindowProc."),
+        wxLogTrace(wxTraceMessages, wxT("Forwarding %s to DefWindowProc."),
                    wxGetMessageName(message));
 #endif // __WXDEBUG__
         rc.result = MSWDefWindowProc(message, wParam, lParam);
@@ -2139,7 +2139,7 @@ void wxAssociateWinWithHandle(HWND hWnd, wxWindow *win)
     // adding NULL hWnd is (first) surely a result of an error and
     // (secondly) breaks menu command processing
     wxCHECK_RET( hWnd != (HWND)NULL,
-                 T("attempt to add a NULL hWnd to window list ignored") );
+                 wxT("attempt to add a NULL hWnd to window list ignored") );
 
 
     wxWindow *oldWin = wxFindWinFromHandle((WXHWND) hWnd);
@@ -2191,12 +2191,12 @@ void wxWindow::MSWDetachWindowMenu()
             int chars = GetMenuString(hMenu, i, buf, 100, MF_BYPOSITION);
             if ( !chars )
             {
-                wxLogLastError(T("GetMenuString"));
+                wxLogLastError(wxT("GetMenuString"));
 
                 continue;
             }
 
-            if ( wxStrcmp(buf, T("&Window")) == 0 )
+            if ( wxStrcmp(buf, wxT("&Window")) == 0 )
             {
                 RemoveMenu(hMenu, i, MF_BYPOSITION);
 
@@ -2268,14 +2268,14 @@ bool wxWindow::MSWCreate(int id,
             if ( !::SetWindowPos(GetHwnd(), HWND_TOPMOST, 0, 0, 0, 0,
                                  SWP_NOSIZE | SWP_NOMOVE) )
             {
-                wxLogLastError(T("SetWindowPos"));
+                wxLogLastError(wxT("SetWindowPos"));
             }
         }
 
         // move the dialog to its initial position without forcing repainting
         if ( !::MoveWindow(GetHwnd(), x1, y1, width1, height1, FALSE) )
         {
-            wxLogLastError(T("MoveWindow"));
+            wxLogLastError(wxT("MoveWindow"));
         }
     }
     else
@@ -2287,12 +2287,12 @@ bool wxWindow::MSWCreate(int id,
         wxString className(wclass);
         if ( GetWindowStyleFlag() & wxNO_FULL_REPAINT_ON_RESIZE )
         {
-            className += T("NR");
+            className += wxT("NR");
         }
 
         m_hWnd = (WXHWND)CreateWindowEx(extendedStyle,
                                         wclass,
-                                        title ? title : T(""),
+                                        title ? title : wxT(""),
                                         style,
                                         x1, y1,
                                         width1, height1,
@@ -3267,7 +3267,7 @@ bool wxWindow::HandleJoystickEvent(WXUINT msg, int x, int y, WXUINT flags)
             break;
 
         default:
-            wxFAIL_MSG(T("no such joystick event"));
+            wxFAIL_MSG(wxT("no such joystick event"));
 
             return FALSE;
     }

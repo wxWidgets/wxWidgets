@@ -151,10 +151,10 @@ private:
 // template classes
 // ============================================================================
 
-// resolves the name conflict between the T() macor and T typedef: we can't
-// use T() inside WX_DEFINE_ARRAY!
-#define _WX_ERROR_SIZEOF   T("illegal use of DEFINE_ARRAY")
-#define _WX_ERROR_REMOVE   T("removing inexisting element in wxArray::Remove")
+// resolves the name conflict between the wxT() macor and T typedef: we can't
+// use wxT() inside WX_DEFINE_ARRAY!
+#define _WX_ERROR_SIZEOF   wxT("illegal use of DEFINE_ARRAY")
+#define _WX_ERROR_REMOVE   wxT("removing inexisting element in wxArray::Remove")
 
 // ----------------------------------------------------------------------------
 // This macro generates a new array class. It is intended for storage of simple

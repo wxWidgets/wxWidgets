@@ -52,7 +52,7 @@ size_t WXDLLEXPORT wxMB2WC(wchar_t *buf, const char *psz, size_t n)
 {
   if (buf) {
     if (!n || !*psz) {
-      if (n) *buf = T('\0');
+      if (n) *buf = wxT('\0');
       return 0;
     }
     return mbstowcs(buf, psz, n);
@@ -181,7 +181,7 @@ WXDLLEXPORT wxChar * wxStrtok(wxChar *psz, const wxChar *delim, wxChar **save_pt
   psz = wxStrpbrk(psz, delim);
   if (!psz) *save_ptr = (wxChar*)NULL;
   else {
-    *psz = T('\0');
+    *psz = wxT('\0');
     *save_ptr = psz + 1;
   }
   return ret;
@@ -292,15 +292,15 @@ WXDLLEXPORT double wxStrtod(const wxChar *nptr, wxChar **endptr)
 
   // FIXME: only correct for C locale
   while (wxIsspace(*nptr)) nptr++;
-  if (*nptr == T('+') || *nptr == T('-')) nptr++;
+  if (*nptr == wxT('+') || *nptr == wxT('-')) nptr++;
   while (wxIsdigit(*nptr)) nptr++;
-  if (*nptr == T('.')) {
+  if (*nptr == wxT('.')) {
     nptr++;
     while (wxIsdigit(*nptr)) nptr++;
   }
-  if (*nptr == T('E') || *nptr == T('e')) {
+  if (*nptr == wxT('E') || *nptr == wxT('e')) {
     nptr++;
-    if (*nptr == T('+') || *nptr == T('-')) nptr++;
+    if (*nptr == wxT('+') || *nptr == wxT('-')) nptr++;
     while (wxIsdigit(*nptr)) nptr++;
   }
 
@@ -320,17 +320,17 @@ WXDLLEXPORT long int wxStrtol(const wxChar *nptr, wxChar **endptr, int base)
 
   // FIXME: only correct for C locale
   while (wxIsspace(*nptr)) nptr++;
-  if (*nptr == T('+') || *nptr == T('-')) nptr++;
+  if (*nptr == wxT('+') || *nptr == wxT('-')) nptr++;
   if (((base == 0) || (base == 16)) &&
-      (nptr[0] == T('0') && nptr[1] == T('x'))) {
+      (nptr[0] == wxT('0') && nptr[1] == wxT('x'))) {
     nptr += 2;
     base = 16;
   }
-  else if ((base == 0) && (nptr[0] == T('0'))) base = 8;
+  else if ((base == 0) && (nptr[0] == wxT('0'))) base = 8;
   else if (base == 0) base = 10;
 
-  while ((wxIsdigit(*nptr) && (*nptr - T('0') < base)) ||
-         (wxIsalpha(*nptr) && (wxToupper(*nptr) - T('A') + 10 < base))) nptr++;
+  while ((wxIsdigit(*nptr) && (*nptr - wxT('0') < base)) ||
+         (wxIsalpha(*nptr) && (wxToupper(*nptr) - wxT('A') + 10 < base))) nptr++;
 
   wxString data(nptr, nptr-start);
   wxWX2MBbuf dat = data.mb_str(wxConvLibc);

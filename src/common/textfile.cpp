@@ -64,13 +64,13 @@ const wxChar *wxTextFile::GetEOL(wxTextFileType type)
 {
     switch ( type ) {
       default:
-        wxFAIL_MSG(T("bad file type in wxTextFile::GetEOL."));
+        wxFAIL_MSG(wxT("bad file type in wxTextFile::GetEOL."));
         // fall through nevertheless - we must return something...
 
-      case wxTextFileType_None: return T("");
-      case wxTextFileType_Unix: return T("\n");
-      case wxTextFileType_Dos:  return T("\r\n");
-      case wxTextFileType_Mac:  return T("\r");
+      case wxTextFileType_None: return wxT("");
+      case wxTextFileType_Unix: return wxT("\n");
+      case wxTextFileType_Dos:  return wxT("\r\n");
+      case wxTextFileType_Mac:  return wxT("\r");
     }
 }
 

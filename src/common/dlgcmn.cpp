@@ -56,13 +56,13 @@ wxSizer *wxDialogBase::CreateTextSizer( const wxString &message )
     wxString line;
     for (size_t pos = 0; pos < message.Len(); pos++)
     {
-        if (message[pos] == T('\n'))
+        if (message[pos] == wxT('\n'))
         {
             if (!line.IsEmpty())
             {
                 wxStaticText *s1 = new wxStaticText( this, -1, line );
 		box->Add( s1 );
-                line = T("");
+                line = wxT("");
             }
 	    else
 	    {

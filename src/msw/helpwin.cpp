@@ -68,12 +68,12 @@ bool wxWinHelpController::LoadFile(const wxString& file)
 
 bool wxWinHelpController::DisplayContents(void)
 {
-    if (m_helpFile == T("")) return FALSE;
+    if (m_helpFile == wxT("")) return FALSE;
 
     wxString str = m_helpFile;
     size_t len = str.Length();
-    if (!(str[(size_t)(len-1)] == T('p') && str[(size_t)(len-2)] == T('l') && str[(size_t)(len-3)] == T('h') && str[(size_t)(len-4)] == T('.')))
-      str += T(".hlp");
+    if (!(str[(size_t)(len-1)] == wxT('p') && str[(size_t)(len-2)] == wxT('l') && str[(size_t)(len-3)] == wxT('h') && str[(size_t)(len-4)] == wxT('.')))
+      str += wxT(".hlp");
 
     if (wxTheApp->GetTopWindow())
     {
@@ -90,12 +90,12 @@ bool wxWinHelpController::DisplayContents(void)
 bool wxWinHelpController::DisplaySection(int section)
 {
     // Use context number
-    if (m_helpFile == T("")) return FALSE;
+    if (m_helpFile == wxT("")) return FALSE;
 
     wxString str = m_helpFile;
     size_t len = str.Length();
-    if (!(str[(size_t)(len-1)] == T('p') && str[(size_t)(len-2)] == T('l') && str[(size_t)(len-3)] == T('h') && str[(size_t)(len-4)] == T('.')))
-      str += T(".hlp");
+    if (!(str[(size_t)(len-1)] == wxT('p') && str[(size_t)(len-2)] == wxT('l') && str[(size_t)(len-3)] == wxT('h') && str[(size_t)(len-4)] == wxT('.')))
+      str += wxT(".hlp");
 
     if (wxTheApp->GetTopWindow())
 	{
@@ -108,12 +108,12 @@ bool wxWinHelpController::DisplaySection(int section)
 bool wxWinHelpController::DisplayBlock(long block)
 {
     // Use context number -- a very rough equivalent to block id!
-    if (m_helpFile == T("")) return FALSE;
+    if (m_helpFile == wxT("")) return FALSE;
 
     wxString str = m_helpFile;
     size_t len = str.Length();
     if (!(str[(size_t)(len-1)] == 'p' && str[(size_t)(len-2)] == 'l' && str[(size_t)(len-3)] == 'h' && str[(size_t)(len-4)] == '.'))
-      str += T(".hlp");
+      str += wxT(".hlp");
 
     if (wxTheApp->GetTopWindow())
 	{
@@ -125,12 +125,12 @@ bool wxWinHelpController::DisplayBlock(long block)
 
 bool wxWinHelpController::KeywordSearch(const wxString& k)
 {
-    if (m_helpFile == T("")) return FALSE;
+    if (m_helpFile == wxT("")) return FALSE;
 
     wxString str = m_helpFile;
     size_t len = str.Length();
-    if (!(str[(size_t)(len-1)] == T('p') && str[(size_t)(len-2)] == T('l') && str[(size_t)(len-3)] == T('h') && str[(size_t)(len-4)] == T('.')))
-      str += T(".hlp");
+    if (!(str[(size_t)(len-1)] == wxT('p') && str[(size_t)(len-2)] == wxT('l') && str[(size_t)(len-3)] == wxT('h') && str[(size_t)(len-4)] == wxT('.')))
+      str += wxT(".hlp");
 
     if (wxTheApp->GetTopWindow())
     {

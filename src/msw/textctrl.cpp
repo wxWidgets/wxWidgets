@@ -129,7 +129,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     if ( m_windowStyle & wxTE_MULTILINE )
     {
         wxASSERT_MSG( !(m_windowStyle & wxTE_PROCESS_ENTER),
-                      T("wxTE_PROCESS_ENTER style is ignored for multiline "
+                      wxT("wxTE_PROCESS_ENTER style is ignored for multiline "
                          "text controls (they always process it)") );
 
         msStyle |= ES_MULTILINE | ES_WANTRETURN;
@@ -167,14 +167,14 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         m_lDlgCode |= DLGC_WANTTAB;
 
     // do create the control - either an EDIT or RICHEDIT
-    const wxChar *windowClass = T("EDIT");
+    const wxChar *windowClass = wxT("EDIT");
 
 #if wxUSE_RICHEDIT
     if ( m_windowStyle & wxTE_RICH )
     {
         msStyle |= ES_AUTOVSCROLL;
         m_isRich = TRUE;
-        windowClass = T("RICHEDIT");
+        windowClass = wxT("RICHEDIT");
     }
     else
         m_isRich = FALSE;
@@ -201,7 +201,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
                                       wxGetInstance(),
                                       NULL);
 
-    wxCHECK_MSG( m_hWnd, FALSE, T("Failed to create text ctrl") );
+    wxCHECK_MSG( m_hWnd, FALSE, wxT("Failed to create text ctrl") );
 
 #if wxUSE_CTL3D
     if ( want3D )
@@ -260,7 +260,7 @@ void wxTextCtrl::AdoptAttributesFromHWND()
 
   GetClassName(hWnd, buf, WXSIZEOF(buf));
 
-  if ( wxStricmp(buf, T("EDIT")) == 0 )
+  if ( wxStricmp(buf, wxT("EDIT")) == 0 )
     m_isRich = FALSE;
   else
     m_isRich = TRUE;
@@ -318,7 +318,7 @@ void wxTextCtrl::AppendText(const wxString& text)
 
 void wxTextCtrl::Clear()
 {
-    SetWindowText(GetHwnd(), T(""));
+    SetWindowText(GetHwnd(), wxT(""));
 }
 
 // ----------------------------------------------------------------------------

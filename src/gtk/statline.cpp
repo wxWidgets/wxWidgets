@@ -44,7 +44,7 @@ bool wxStaticLine::Create( wxWindow *parent, wxWindowID id,
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
-        wxFAIL_MSG( T("wxStaticLine creation failed") );
+        wxFAIL_MSG( wxT("wxStaticLine creation failed") );
 	return FALSE;
     }
 

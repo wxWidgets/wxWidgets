@@ -85,7 +85,7 @@ static const struct
 {
   wxStringData data;
   wxChar dummy;
-} g_strEmpty = { {-1, 0, 0}, T('\0') };
+} g_strEmpty = { {-1, 0, 0}, wxT('\0') };
 
 // empty C style string: points to 'string data' byte of g_strEmpty
 extern const wxChar WXDLLEXPORT *wxEmptyString = &g_strEmpty.dummy;
@@ -327,7 +327,7 @@ void wxString::AllocBuffer(size_t nLen)
   pData->nDataLength  = nLen;
   pData->nAllocLength = nLen + EXTRA_ALLOC;
   m_pchData           = pData->data();  // data starts after wxStringData
-  m_pchData[nLen]     = T('\0');
+  m_pchData[nLen]     = wxT('\0');
 }
 
 // must be called before changing this string
@@ -379,7 +379,7 @@ void wxString::Alloc(size_t nLen)
       pData->nDataLength = 0;
       pData->nAllocLength = nLen;
       m_pchData = pData->data();  // data starts after wxStringData
-      m_pchData[0u] = T('\0');
+      m_pchData[0u] = wxT('\0');
     }
     else if ( pData->IsShared() ) {
       pData->Unlock();                // memory not freed because shared
@@ -461,7 +461,7 @@ void wxString::AssignCopy(size_t nSrcLen, const wxChar *pszSrcData)
     AllocBeforeWrite(nSrcLen);
     memcpy(m_pchData, pszSrcData, nSrcLen*sizeof(wxChar));
     GetStringData()->nDataLength = nSrcLen;
-    m_pchData[nSrcLen] = T('\0');
+    m_pchData[nSrcLen] = wxT('\0');
   }
 }
 
@@ -563,7 +563,7 @@ void wxString::ConcatSelf(int nSrcLen, const wxChar *pszSrcData)
     // fast concatenation - all is done in our buffer
     memcpy(m_pchData + nLen, pszSrcData, nSrcLen*sizeof(wxChar));
 
-    m_pchData[nNewLen] = T('\0');          // put terminating '\0'
+    m_pchData[nNewLen] = wxT('\0');          // put terminating '\0'
     GetStringData()->nDataLength = nNewLen; // and fix the length
   }
   //else: the string to append was empty
@@ -722,7 +722,7 @@ wxString wxString::Left(size_t nCount) const
 wxString wxString::BeforeFirst(wxChar ch) const
 {
   wxString str;
-  for ( const wxChar *pc = m_pchData; *pc != T('\0') && *pc != ch; pc++ )
+  for ( const wxChar *pc = m_pchData; *pc != wxT('\0') && *pc != ch; pc++ )
     str += *pc;
 
   return str;
@@ -762,7 +762,7 @@ size_t wxString::Replace(const wxChar *szOld, const wxChar *szNew, bool bReplace
   wxString strTemp;
   const wxChar *pCurrent = m_pchData;
   const wxChar *pSubstr;
-  while ( *pCurrent != T('\0') ) {
+  while ( *pCurrent != wxT('\0') ) {
     pSubstr = wxStrstr(pCurrent, szOld);
     if ( pSubstr == NULL ) {
       // strTemp is unused if no replacements were made, so avoid the copy
@@ -882,7 +882,7 @@ wxString& wxString::Trim(bool bFromRight)
         psz--;
 
       // truncate at trailing space start
-      *++psz = T('\0');
+      *++psz = wxT('\0');
       GetStringData()->nDataLength = psz - m_pchData;
     }
     else
@@ -924,7 +924,7 @@ wxString& wxString::Truncate(size_t uiLen)
   if ( uiLen < Len() ) {
     CopyBeforeWrite();
 
-    *(m_pchData + uiLen) = T('\0');
+    *(m_pchData + uiLen) = wxT('\0');
     GetStringData()->nDataLength = uiLen;
   }
   //else: nothing to do, string is already short enough
@@ -958,7 +958,7 @@ int wxString::Find(const wxChar *pszSub) const
 wxString& wxString::operator<<(int i)
 {
     wxString res;
-    res.Printf(T("%d"), i);
+    res.Printf(wxT("%d"), i);
 
     return (*this) << res;
 }
@@ -966,7 +966,7 @@ wxString& wxString::operator<<(int i)
 wxString& wxString::operator<<(float f)
 {
     wxString res;
-    res.Printf(T("%f"), f);
+    res.Printf(wxT("%f"), f);
 
     return (*this) << res;
 }
@@ -974,7 +974,7 @@ wxString& wxString::operator<<(float f)
 wxString& wxString::operator<<(double d)
 {
     wxString res;
-    res.Printf(T("%g"), d);
+    res.Printf(wxT("%g"), d);
 
     return (*this) << res;
 }
@@ -1011,7 +1011,7 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
 
   Reinit();
   for (size_t n = 0; pszFormat[n]; n++)
-    if (pszFormat[n] == T('%')) {
+    if (pszFormat[n] == wxT('%')) {
       static char s_szFlags[256] = "%";
       size_t flagofs = 1;
       bool adj_left = FALSE, in_prec = FALSE,
@@ -1021,55 +1021,55 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
       do {
 #define CHECK_PREC if (in_prec && !prec_dot) { s_szFlags[flagofs++] = '.'; prec_dot = TRUE; }
         switch (pszFormat[++n]) {
-        case T('\0'):
+        case wxT('\0'):
           done = TRUE;
           break;
-        case T('%'):
-          *this += T('%');
+        case wxT('%'):
+          *this += wxT('%');
           done = TRUE;
           break;
-        case T('#'):
-        case T('0'):
-        case T(' '):
-        case T('+'):
-        case T('\''):
+        case wxT('#'):
+        case wxT('0'):
+        case wxT(' '):
+        case wxT('+'):
+        case wxT('\''):
           CHECK_PREC
           s_szFlags[flagofs++] = pszFormat[n];
           break;
-        case T('-'):
+        case wxT('-'):
           CHECK_PREC
           adj_left = TRUE;
           s_szFlags[flagofs++] = pszFormat[n];
           break;
-        case T('.'):
+        case wxT('.'):
           CHECK_PREC
           in_prec = TRUE;
           prec_dot = FALSE;
           max_width = 0;
           // dot will be auto-added to s_szFlags if non-negative number follows
           break;
-        case T('h'):
+        case wxT('h'):
           ilen = -1;
           CHECK_PREC
           s_szFlags[flagofs++] = pszFormat[n];
           break;
-        case T('l'):
+        case wxT('l'):
           ilen = 1;
           CHECK_PREC
           s_szFlags[flagofs++] = pszFormat[n];
           break;
-        case T('q'):
-        case T('L'):
+        case wxT('q'):
+        case wxT('L'):
           ilen = 2;
           CHECK_PREC
           s_szFlags[flagofs++] = pszFormat[n];
           break;
-        case T('Z'):
+        case wxT('Z'):
           ilen = 3;
           CHECK_PREC
           s_szFlags[flagofs++] = pszFormat[n];
           break;
-        case T('*'):
+        case wxT('*'):
           {
             int len = va_arg(argptr, int);
             if (in_prec) {
@@ -1087,15 +1087,15 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
             flagofs += ::sprintf(s_szFlags+flagofs,"%d",len);
           }
           break;
-        case T('1'): case T('2'): case T('3'):
-        case T('4'): case T('5'): case T('6'):
-        case T('7'): case T('8'): case T('9'):
+        case wxT('1'): case wxT('2'): case wxT('3'):
+        case wxT('4'): case wxT('5'): case wxT('6'):
+        case wxT('7'): case wxT('8'): case wxT('9'):
           {
             int len = 0;
             CHECK_PREC
-            while ((pszFormat[n]>=T('0')) && (pszFormat[n]<=T('9'))) {
+            while ((pszFormat[n]>=wxT('0')) && (pszFormat[n]<=wxT('9'))) {
               s_szFlags[flagofs++] = pszFormat[n];
-              len = len*10 + (pszFormat[n] - T('0'));
+              len = len*10 + (pszFormat[n] - wxT('0'));
               n++;
             }
             if (in_prec) max_width = len;
@@ -1103,12 +1103,12 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
             n--; // the main loop pre-increments n again
           }
           break;
-        case T('d'):
-        case T('i'):
-        case T('o'):
-        case T('u'):
-        case T('x'):
-        case T('X'):
+        case wxT('d'):
+        case wxT('i'):
+        case wxT('o'):
+        case wxT('u'):
+        case wxT('x'):
+        case wxT('X'):
           CHECK_PREC
           s_szFlags[flagofs++] = pszFormat[n];
           s_szFlags[flagofs] = '\0';
@@ -1140,11 +1140,11 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
           *this += wxString(s_szScratch);
           done = TRUE;
           break;
-        case T('e'):
-        case T('E'):
-        case T('f'):
-        case T('g'):
-        case T('G'):
+        case wxT('e'):
+        case wxT('E'):
+        case wxT('f'):
+        case wxT('g'):
+        case wxT('G'):
           CHECK_PREC
           s_szFlags[flagofs++] = pszFormat[n];
           s_szFlags[flagofs] = '\0';
@@ -1158,7 +1158,7 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
           *this += wxString(s_szScratch);
           done = TRUE;
           break;
-        case T('p'):
+        case wxT('p'):
           {
             void *val = va_arg(argptr, void *);
             CHECK_PREC
@@ -1169,7 +1169,7 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
             done = TRUE;
           }
           break;
-        case T('c'):
+        case wxT('c'):
           {
             wxChar val = va_arg(argptr, int);
             // we don't need to honor padding here, do we?
@@ -1177,7 +1177,7 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
             done = TRUE;
           }
           break;
-        case T('s'):
+        case wxT('s'):
           if (ilen == -1) {
             // wx extension: we'll let %hs mean non-Unicode strings
             char *val = va_arg(argptr, char *);
@@ -1188,26 +1188,26 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
             size_t len = wxSTRING_MAXLEN;
             if (val) {
               for (len = 0; val[len] && (len<max_width); len++);
-            } else val = T("(null)");
+            } else val = wxT("(null)");
             wxString s(val, len);
 #endif
             if (s.Len() < min_width)
-              s.Pad(min_width - s.Len(), T(' '), adj_left);
+              s.Pad(min_width - s.Len(), wxT(' '), adj_left);
             *this += s;
           } else {
             wxChar *val = va_arg(argptr, wxChar *);
             size_t len = wxSTRING_MAXLEN;
             if (val) {
               for (len = 0; val[len] && (len<max_width); len++);
-            } else val = T("(null)");
+            } else val = wxT("(null)");
             wxString s(val, len);
             if (s.Len() < min_width)
-              s.Pad(min_width - s.Len(), T(' '), adj_left);
+              s.Pad(min_width - s.Len(), wxT(' '), adj_left);
             *this += s;
           }
           done = TRUE;
           break;
-        case T('n'):
+        case wxT('n'):
           if (ilen == 0) {
             int *val = va_arg(argptr, int *);
             *val = Len();
@@ -1228,7 +1228,7 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
             s_szFlags[flagofs++] = pszFormat[n];
           else {
             // bad format
-            *this += T('%'); // just to pass the glibc tst-printf.c
+            *this += wxT('%'); // just to pass the glibc tst-printf.c
             n--;
             done = TRUE;
           }
@@ -1287,29 +1287,29 @@ bool wxString::Matches(const wxChar *pszMask) const
 {
   // check char by char
   const wxChar *pszTxt;
-  for ( pszTxt = c_str(); *pszMask != T('\0'); pszMask++, pszTxt++ ) {
+  for ( pszTxt = c_str(); *pszMask != wxT('\0'); pszMask++, pszTxt++ ) {
     switch ( *pszMask ) {
-      case T('?'):
-        if ( *pszTxt == T('\0') )
+      case wxT('?'):
+        if ( *pszTxt == wxT('\0') )
           return FALSE;
 
         // pszText and pszMask will be incremented in the loop statement
 
         break;
 
-      case T('*'):
+      case wxT('*'):
         {
           // ignore special chars immediately following this one
-          while ( *pszMask == T('*') || *pszMask == T('?') )
+          while ( *pszMask == wxT('*') || *pszMask == wxT('?') )
             pszMask++;
 
           // if there is nothing more, match
-          if ( *pszMask == T('\0') )
+          if ( *pszMask == wxT('\0') )
             return TRUE;
 
           // are there any other metacharacters in the mask?
           size_t uiLenMask;
-          const wxChar *pEndMask = wxStrpbrk(pszMask, T("*?"));
+          const wxChar *pEndMask = wxStrpbrk(pszMask, wxT("*?"));
 
           if ( pEndMask != NULL ) {
             // we have to match the string between two metachars
@@ -1339,7 +1339,7 @@ bool wxString::Matches(const wxChar *pszMask) const
   }
 
   // match only if nothing left
-  return *pszTxt == T('\0');
+  return *pszTxt == wxT('\0');
 }
 
 // Count the number of chars

@@ -26,7 +26,7 @@ class WXDLLEXPORT wxArrayString;
 
 extern const wxChar *wxEmptyString;
 
-#define WXDIALUP_MANAGER_DEFAULT_BEACONHOST  T("www.yahoo.com")
+#define WXDIALUP_MANAGER_DEFAULT_BEACONHOST  wxT("www.yahoo.com")
 
 // ----------------------------------------------------------------------------
 // A class which groups functions dealing with connecting to the network from a
@@ -148,8 +148,8 @@ public:
     // Sets the commands to start up the network and to hang up again. Used by
     // the Unix implementations only.
     virtual void
-    SetConnectCommand(const wxString& commandDial = T("/usr/bin/pon"),
-                      const wxString& commandHangup = T("/usr/bin/poff")) = 0;
+    SetConnectCommand(const wxString& commandDial = wxT("/usr/bin/pon"),
+                      const wxString& commandHangup = wxT("/usr/bin/poff")) = 0;
 };
 
 // ----------------------------------------------------------------------------

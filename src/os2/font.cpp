@@ -193,7 +193,7 @@ bool wxFont::RealizeResource()
     {
         // VZ: the old code returned FALSE in this case, but it doesn't seem
         //     to make sense because the font _was_ created
-        wxLogDebug(T("Calling wxFont::RealizeResource() twice"));
+        wxLogDebug(wxT("Calling wxFont::RealizeResource() twice"));
 
        return TRUE;
     }
@@ -207,7 +207,7 @@ bool wxFont::RealizeResource()
     {
         case wxSCRIPT:
 //            ff_family = FF_SCRIPT ;
-            ff_face = T("Script") ;
+            ff_face = wxT("Script") ;
             break ;
 
         case wxDECORATIVE:
@@ -216,24 +216,24 @@ bool wxFont::RealizeResource()
 
         case wxROMAN:
 //            ff_family = FF_ROMAN;
-            ff_face = T("Times New Roman") ;
+            ff_face = wxT("Times New Roman") ;
             break;
 
         case wxTELETYPE:
         case wxMODERN:
 //            ff_family = FF_MODERN;
-            ff_face = T("Courier New") ;
+            ff_face = wxT("Courier New") ;
             break;
 
         case wxSWISS:
 //            ff_family = FF_SWISS;
-            ff_face = T("Arial") ;
+            ff_face = wxT("Arial") ;
             break;
 
         case wxDEFAULT:
         default:
 //            ff_family = FF_SWISS;
-            ff_face = T("Arial") ;
+            ff_face = wxT("Arial") ;
     }
 
     BYTE ff_italic;
@@ -245,7 +245,7 @@ bool wxFont::RealizeResource()
             break;
 
         default:
-            wxFAIL_MSG(T("unknown font slant"));
+            wxFAIL_MSG(wxT("unknown font slant"));
             // fall through
 
         case wxNORMAL:
@@ -256,7 +256,7 @@ bool wxFont::RealizeResource()
     switch ( M_FONTDATA->m_weight )
     {
         default:
-            wxFAIL_MSG(T("unknown font weight"));
+            wxFAIL_MSG(wxT("unknown font weight"));
             // fall through
 
         case wxNORMAL:
@@ -378,7 +378,7 @@ bool wxFont::RealizeResource()
             break;
 
         default:
-            wxFAIL_MSG(T("unsupported encoding"));
+            wxFAIL_MSG(wxT("unsupported encoding"));
             // fall through
 
         case wxFONTENCODING_SYSTEM:

@@ -149,7 +149,7 @@ bool wxListCtrl::DoCreateControl(int x, int y, int w, int h)
     // Create the ListView control.
     m_hWnd = (WXHWND)CreateWindowEx(exStyle,
                                     WC_LISTVIEW,
-                                    T(""),
+                                    wxT(""),
                                     wstyle,
                                     x, y, w, h,
                                     GetWinHwnd(GetParent()),
@@ -159,7 +159,7 @@ bool wxListCtrl::DoCreateControl(int x, int y, int w, int h)
 
     if ( !m_hWnd )
     {
-        wxLogError(T("Can't create list control window."));
+        wxLogError(wxT("Can't create list control window."));
 
         return FALSE;
     }
@@ -871,7 +871,7 @@ bool wxListCtrl::DeleteAllColumns()
         m_colCount--;
     }
 
-    wxASSERT_MSG( m_colCount == 0, T("no columns should be left") );
+    wxASSERT_MSG( m_colCount == 0, wxT("no columns should be left") );
 
     return TRUE;
 }
@@ -1116,7 +1116,7 @@ long wxListCtrl::InsertColumn(long col, wxListItem& item)
     }
     else
     {
-        wxLogDebug(T("Failed to insert the column '%s' into listview!"),
+        wxLogDebug(wxT("Failed to insert the column '%s' into listview!"),
                    lvCol.pszText);
     }
 

@@ -109,7 +109,7 @@ wxMutex::wxMutex()
 wxMutex::~wxMutex()
 {
     if (m_locked > 0)
-        wxLogDebug(T("Freeing a locked mutex (%d locks)"), m_locked);
+        wxLogDebug(wxT("Freeing a locked mutex (%d locks)"), m_locked);
 
     pthread_mutex_destroy( &(p_internal->p_mutex) );
     delete p_internal;
@@ -120,7 +120,7 @@ wxMutexError wxMutex::Lock()
     int err = pthread_mutex_lock( &(p_internal->p_mutex) );
     if (err == EDEADLK)
     {
-        wxLogDebug(T("Locking this mutex would lead to deadlock!"));
+        wxLogDebug(wxT("Locking this mutex would lead to deadlock!"));
 
         return wxMUTEX_DEAD_LOCK;
     }
@@ -156,7 +156,7 @@ wxMutexError wxMutex::Unlock()
     }
     else
     {
-        wxLogDebug(T("Unlocking not locked mutex."));
+        wxLogDebug(wxT("Unlocking not locked mutex."));
 
         return wxMUTEX_UNLOCKED;
     }
@@ -320,7 +320,7 @@ void *wxThreadInternal::PthreadStart(void *ptr)
     // terminate the thread
     thread->Exit(status);
 
-    wxFAIL_MSG(T("wxThread::Exit() can't return."));
+    wxFAIL_MSG(wxT("wxThread::Exit() can't return."));
 
     return NULL;
 }
@@ -391,7 +391,7 @@ wxThreadInternal::~wxThreadInternal()
 wxThreadError wxThreadInternal::Run()
 {
     wxCHECK_MSG( GetState() == STATE_NEW, wxTHREAD_RUNNING,
-                 T("thread may only be started once after successful Create()") );
+                 wxT("thread may only be started once after successful Create()") );
 
     // the mutex was locked on Create(), so we will be able to lock it again
     // only when the thread really starts executing and enters the wait -
@@ -410,7 +410,7 @@ wxThreadError wxThreadInternal::Run()
 
 void wxThreadInternal::Wait()
 {
-    wxCHECK_RET( WasCancelled(), T("thread should have been cancelled first") );
+    wxCHECK_RET( WasCancelled(), wxT("thread should have been cancelled first") );
 
     // if the thread we're waiting for is waiting for the GUI mutex, we will
     // deadlock so make sure we release it temporarily
@@ -454,7 +454,7 @@ void wxThreadInternal::Pause()
     // the state is set from the thread which pauses us first, this function
     // is called later so the state should have been already set
     wxCHECK_RET( m_state == STATE_PAUSED,
-                 T("thread must first be paused with wxThread::Pause().") );
+                 wxT("thread must first be paused with wxThread::Pause().") );
 
     // don't pause the thread which is being terminated - this would lead to
     // deadlock if the thread is paused after Delete() had called Resume() but
@@ -469,7 +469,7 @@ void wxThreadInternal::Pause()
 void wxThreadInternal::Resume()
 {
     wxCHECK_RET( m_state == STATE_PAUSED,
-                 T("can't resume thread which is not suspended.") );
+                 wxT("can't resume thread which is not suspended.") );
 
     // we will be able to lock this mutex only when Pause() starts waiting
     wxMutexLocker lock(m_mutexSuspend);
@@ -581,7 +581,7 @@ wxThreadError wxThread::Create()
 wxThreadError wxThread::Run()
 {
     wxCHECK_MSG( p_internal->GetId(), wxTHREAD_MISC_ERROR,
-                 T("must call wxThread::Create() first") );
+                 wxT("must call wxThread::Create() first") );
 
     return p_internal->Run();
 }
@@ -594,7 +594,7 @@ void wxThread::SetPriority(unsigned int prio)
 {
     wxCHECK_RET( ((int)WXTHREAD_MIN_PRIORITY <= (int)prio) &&
                  ((int)prio <= (int)WXTHREAD_MAX_PRIORITY),
-                 T("invalid thread priority") );
+                 wxT("invalid thread priority") );
 
     wxCriticalSectionLocker lock(m_critsect);
 
@@ -623,7 +623,7 @@ void wxThread::SetPriority(unsigned int prio)
 
         case STATE_EXITED:
         default:
-            wxFAIL_MSG(T("impossible to set thread priority in this state"));
+            wxFAIL_MSG(wxT("impossible to set thread priority in this state"));
     }
 }
 
@@ -649,7 +649,7 @@ wxThreadError wxThread::Pause()
 
     if ( p_internal->GetState() != STATE_RUNNING )
     {
-        wxLogDebug(T("Can't pause thread which is not running."));
+        wxLogDebug(wxT("Can't pause thread which is not running."));
 
         return wxTHREAD_NOT_RUNNING;
     }
@@ -673,7 +673,7 @@ wxThreadError wxThread::Resume()
     }
     else
     {
-        wxLogDebug(T("Attempt to resume a thread which is not paused."));
+        wxLogDebug(wxT("Attempt to resume a thread which is not paused."));
 
         return wxTHREAD_MISC_ERROR;
     }
@@ -786,7 +786,7 @@ wxThread::~wxThread()
     if ( p_internal->GetState() != STATE_EXITED &&
          p_internal->GetState() != STATE_NEW )
     {
-        wxLogDebug(T("The thread is being destroyed although it is still "
+        wxLogDebug(wxT("The thread is being destroyed although it is still "
                      "running! The application may crash."));
     }
 
@@ -869,12 +869,12 @@ bool wxThreadModule::OnInit()
 
 void wxThreadModule::OnExit()
 {
-    wxASSERT_MSG( wxThread::IsMain(), T("only main thread can be here") );
+    wxASSERT_MSG( wxThread::IsMain(), wxT("only main thread can be here") );
 
     // terminate any threads left
     size_t count = gs_allThreads.GetCount();
     if ( count != 0u )
-        wxLogDebug(T("Some threads were not terminated by the application."));
+        wxLogDebug(wxT("Some threads were not terminated by the application."));
 
     for ( size_t n = 0u; n < count; n++ )
     {

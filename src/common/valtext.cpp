@@ -312,4 +312,3 @@ static bool wxIsNumeric(const wxString& val)
 
 #endif
   // wxUSE_VALIDATORS
-  

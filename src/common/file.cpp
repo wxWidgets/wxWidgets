@@ -192,7 +192,7 @@ bool wxFile::Access(const wxChar *name, OpenMode mode)
             break;
 
         default:
-            wxFAIL_MSG(T("bad wxFile::Access mode parameter."));
+            wxFAIL_MSG(wxT("bad wxFile::Access mode parameter."));
     }
 
     return access(wxFNCONV(name), how) == 0;
@@ -481,7 +481,7 @@ bool wxTempFile::Open(const wxString& strName)
     // different partitions for example). Unfortunately, the only standard
     // (POSIX) temp file creation function tmpnam() can't do it.
 #if defined(__UNIX__) || defined(__WXSTUBS__)|| defined( __WXMAC__ )
-    static const wxChar *szMktempSuffix = T("XXXXXX");
+    static const wxChar *szMktempSuffix = wxT("XXXXXX");
     m_strTemp << strName << szMktempSuffix;
     // can use the cast because length doesn't change
     mktemp(wxMBSTRINGCAST m_strTemp.mb_str());
@@ -489,21 +489,21 @@ bool wxTempFile::Open(const wxString& strName)
     // for now just create a file
     // future enhancements can be to set some extended attributes for file systems
     // OS/2 supports that have them (HPFS, FAT32) and security (HPFS386)
-    static const wxChar *szMktempSuffix = T("XXX");
+    static const wxChar *szMktempSuffix = wxT("XXX");
     m_strTemp << strName << szMktempSuffix;
     mkdir(m_strTemp.GetWriteBuf(MAX_PATH));
 #else // Windows
     wxString strPath;
     wxSplitPath(strName, &strPath, NULL, NULL);
     if ( strPath.IsEmpty() )
-        strPath = T('.');  // GetTempFileName will fail if we give it empty string
+        strPath = wxT('.');  // GetTempFileName will fail if we give it empty string
 #ifdef __WIN32__
-    if ( !GetTempFileName(strPath, T("wx_"),0, m_strTemp.GetWriteBuf(MAX_PATH)) )
+    if ( !GetTempFileName(strPath, wxT("wx_"),0, m_strTemp.GetWriteBuf(MAX_PATH)) )
 #else
         // Not sure why MSVC++ 1.5 header defines first param as BYTE - bug?
-        if ( !GetTempFileName((BYTE) (DWORD)(const wxChar*) strPath, T("wx_"),0, m_strTemp.GetWriteBuf(MAX_PATH)) )
+        if ( !GetTempFileName((BYTE) (DWORD)(const wxChar*) strPath, wxT("wx_"),0, m_strTemp.GetWriteBuf(MAX_PATH)) )
 #endif
-            wxLogLastError(T("GetTempFileName"));
+            wxLogLastError(wxT("GetTempFileName"));
     m_strTemp.UngetWriteBuf();
 #endif  // Windows/Unix
 

@@ -275,12 +275,12 @@ wxExpr *wxExpr::AttributeValue(const wxString& word) const // Use only for a cla
 wxString wxExpr::Functor(void) const // Use only for a clause
 {
   if ((type != wxExprList) || !value.first)
-    return wxString(T(""));
+    return wxString(wxT(""));
 
   if (value.first->type == wxExprWord)
     return wxString(value.first->value.word);
   else
-    return wxString(T(""));
+    return wxString(wxT(""));
 }
 
 bool wxExpr::IsFunctor(const wxString& f) const  // Use only for a clause
@@ -390,7 +390,7 @@ void wxExpr::AddAttributeValue(const wxString& attribute, wxExpr *val)
 //  DeleteAttributeValue(attribute);
 
   wxExpr *patt = new wxExpr(wxExprWord, attribute);
-  wxExpr *pequals = new wxExpr(wxExprWord, T("="));
+  wxExpr *pequals = new wxExpr(wxExprWord, wxT("="));
 
   wxExpr *listExpr = new wxExpr(wxExprList);
 
@@ -414,7 +414,7 @@ void wxExpr::AddAttributeValue(const wxString& attribute, long val)
 
   wxExpr *patt = new wxExpr(wxExprWord, attribute);
   wxExpr *pval = new wxExpr(val);
-  wxExpr *pequals = new wxExpr(wxExprWord, T("="));
+  wxExpr *pequals = new wxExpr(wxExprWord, wxT("="));
 
   wxExpr *listExpr = new wxExpr(wxExprList);
 
@@ -436,7 +436,7 @@ void wxExpr::AddAttributeValue(const wxString& attribute, double val)
 //  DeleteAttributeValue(attribute);
   wxExpr *patt = new wxExpr(wxExprWord, attribute);
   wxExpr *pval = new wxExpr(val);
-  wxExpr *pequals = new wxExpr(wxExprWord, T("="));
+  wxExpr *pequals = new wxExpr(wxExprWord, wxT("="));
 
   wxExpr *listExpr = new wxExpr(wxExprList);
 
@@ -459,7 +459,7 @@ void wxExpr::AddAttributeValueString(const wxString& attribute, const wxString& 
 
   wxExpr *patt = new wxExpr(wxExprWord, attribute);
   wxExpr *pval = new wxExpr(wxExprString, val);
-  wxExpr *pequals = new wxExpr(wxExprWord, T("="));
+  wxExpr *pequals = new wxExpr(wxExprWord, wxT("="));
 
   wxExpr *listExpr = new wxExpr(wxExprList);
 
@@ -482,7 +482,7 @@ void wxExpr::AddAttributeValueWord(const wxString& attribute, const wxString& va
 
   wxExpr *patt = new wxExpr(wxExprWord, attribute);
   wxExpr *pval = new wxExpr(wxExprWord, val);
-  wxExpr *pequals = new wxExpr(wxExprWord, T("="));
+  wxExpr *pequals = new wxExpr(wxExprWord, wxT("="));
 
   wxExpr *listExpr = new wxExpr(wxExprList);
 
@@ -507,7 +507,7 @@ void wxExpr::AddAttributeValue(const wxString& attribute, wxList *val)
 
   wxExpr *patt = new wxExpr(wxExprWord, attribute);
   wxExpr *pval = new wxExpr(val);
-  wxExpr *pequals = new wxExpr(wxExprWord, T("="));
+  wxExpr *pequals = new wxExpr(wxExprWord, wxT("="));
 
   wxExpr *listExpr = new wxExpr(wxExprList);
 
@@ -543,7 +543,7 @@ void wxExpr::AddAttributeValueStringList(const wxString& attribute, wxList *stri
 
   // Now make an (=, Att, Value) triple
   wxExpr *patt = new wxExpr(wxExprWord, attribute);
-  wxExpr *pequals = new wxExpr(wxExprWord, T("="));
+  wxExpr *pequals = new wxExpr(wxExprWord, wxT("="));
 
   wxExpr *listExpr2 = new wxExpr(wxExprList);
 
@@ -769,7 +769,7 @@ void wxExpr::WriteExpr(FILE* stream)    // Write as any other subexpression
       {
         wxExpr *expr = value.first;
 
-        if ((expr->Type() == wxExprWord) && (wxStrcmp(expr->WordValue(), T("=")) == 0))
+        if ((expr->Type() == wxExprWord) && (wxStrcmp(expr->WordValue(), wxT("=")) == 0))
         {
           wxExpr *arg1 = expr->next;
           wxExpr *arg2 = arg1->next;
@@ -1143,21 +1143,21 @@ char *wxmake_string(char *str)
   t = s;
   for(i=1; i<len; i++) // 1 since we want to skip leading quote
   {
-    if (sbuf[i] == T('\\') && sbuf[i+1] == T('"'))
+    if (sbuf[i] == wxT('\\') && sbuf[i+1] == wxT('"'))
     {
-      *t++ = T('"');
+      *t++ = wxT('"');
       i ++;
     }
-    else if (sbuf[i] == T('\\') && sbuf[i+1] == T('\\'))
+    else if (sbuf[i] == wxT('\\') && sbuf[i+1] == wxT('\\'))
     {
-      *t++ = T('\\');
+      *t++ = wxT('\\');
       i ++;
     }
     else
       *t++ = sbuf[i];
   }
 
-  *t = T('\0');
+  *t = wxT('\0');
 
   wxExpr *x = new wxExpr(wxExprString, s, FALSE);
   return (char *)x;

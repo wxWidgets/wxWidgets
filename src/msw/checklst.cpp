@@ -225,7 +225,7 @@ void wxCheckListBoxItem::Check(bool check)
         // update it
         int index = m_pParent->GetItemIndex(this);
 
-        wxASSERT_MSG( index != wxNOT_FOUND, T("what does this item do here?") );
+        wxASSERT_MSG( index != wxNOT_FOUND, wxT("what does this item do here?") );
 
         m_nIndex = (size_t)index;
     }
@@ -238,7 +238,7 @@ void wxCheckListBoxItem::Check(bool check)
         if ( ::SendMessage(hwndListbox, LB_GETITEMRECT,
                            m_nIndex, (LPARAM)&rcUpdate) == LB_ERR )
         {
-            wxLogDebug(T("LB_GETITEMRECT failed"));
+            wxLogDebug(wxT("LB_GETITEMRECT failed"));
         }
     #else // Win16
         // FIXME this doesn't work if the listbox is scrolled!
@@ -293,7 +293,7 @@ wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
 void wxCheckListBox::Delete(int N)
 {
     wxCHECK_RET( N >= 0 && N < m_noItems,
-                 T("invalid index in wxListBox::Delete") );
+                 wxT("invalid index in wxListBox::Delete") );
 
     wxListBox::Delete(N);
 
@@ -306,7 +306,7 @@ void wxCheckListBox::Delete(int N)
 void wxCheckListBox::InsertItems(int nItems, const wxString items[], int pos)
 {
     wxCHECK_RET( pos >= 0 && pos <= m_noItems,
-                 T("invalid index in wxCheckListBox::InsertItems") );
+                 wxT("invalid index in wxCheckListBox::InsertItems") );
 
     wxListBox::InsertItems(nItems, items, pos);
 

@@ -95,7 +95,7 @@ wxCursor::wxCursor( int cursorId )
         case wxCURSOR_BASED_ARROW_DOWN: gdk_cur = GDK_BASED_ARROW_DOWN; break;
 */
         default:
-            wxFAIL_MSG(T("unsupported cursor type"));
+            wxFAIL_MSG(wxT("unsupported cursor type"));
             // will use the standard one
 
         case wxCURSOR_ARROW:
@@ -170,7 +170,7 @@ void wxBeginBusyCursor( wxCursor *WXUNUSED(cursor) )
         return;
 
     wxASSERT_MSG( !gs_savedCursor.Ok(),
-                  T("forgot to call wxEndBusyCursor, will leak memory") );
+                  wxT("forgot to call wxEndBusyCursor, will leak memory") );
 
     gs_savedCursor = g_globalCursor;
 

@@ -81,8 +81,8 @@ void wxCaretBase::SetBlinkTime(int milliseconds)
 
 bool wxCaret::MSWCreateCaret()
 {
-    wxASSERT_MSG( GetWindow(), T("caret without window cannot be created") );
-    wxASSERT_MSG( IsOk(),  T("caret of zero size cannot be created") );
+    wxASSERT_MSG( GetWindow(), wxT("caret without window cannot be created") );
+    wxASSERT_MSG( IsOk(),  wxT("caret of zero size cannot be created") );
 
     if ( !m_hasCaret )
     {
@@ -127,8 +127,8 @@ void wxCaret::OnKillFocus()
 
 void wxCaret::DoShow()
 {
-    wxASSERT_MSG( GetWindow(), T("caret without window cannot be shown") );
-    wxASSERT_MSG( IsOk(), T("caret of zero size cannot be shown") );
+    wxASSERT_MSG( GetWindow(), wxT("caret without window cannot be shown") );
+    wxASSERT_MSG( IsOk(), wxT("caret of zero size cannot be shown") );
 
     if ( m_hasCaret )
     {
@@ -154,7 +154,7 @@ void wxCaret::DoMove()
     if ( m_hasCaret )
     {
         wxWindow *winFocus = wxWindow::FindFocus();
-        wxASSERT_MSG( winFocus == GetWindow(), T("how did we lose focus?") );
+        wxASSERT_MSG( winFocus == GetWindow(), wxT("how did we lose focus?") );
 
         CALL_CARET_API(SetCaretPos, (m_x, m_y));
     }

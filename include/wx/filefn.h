@@ -159,15 +159,15 @@ WXDLLEXPORT bool wxMkdir(const wxString& dir, int perm = 0777);
 WXDLLEXPORT bool wxRmdir(const wxString& dir, int flags = 0);
 
 // separators in file names
-#define wxFILE_SEP_EXT        T('.')
-#define wxFILE_SEP_DSK        T(':')
-#define wxFILE_SEP_PATH_DOS   T('\\')
-#define wxFILE_SEP_PATH_UNIX  T('/')
+#define wxFILE_SEP_EXT        wxT('.')
+#define wxFILE_SEP_DSK        wxT(':')
+#define wxFILE_SEP_PATH_DOS   wxT('\\')
+#define wxFILE_SEP_PATH_UNIX  wxT('/')
 
 // separator in the path list (as in PATH environment variable)
 // NB: these are strings and not characters on purpose!
-#define wxPATH_SEP_DOS        T(";")
-#define wxPATH_SEP_UNIX       T(":")
+#define wxPATH_SEP_DOS        wxT(";")
+#define wxPATH_SEP_UNIX       wxT(":")
 
 // platform independent versions
 #ifdef  __UNIX__

@@ -75,7 +75,7 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
   WXDWORD exStyle = Determine3DEffects(0, &want3D) ;
 
   HWND wx_button =
-    CreateWindowEx(exStyle, T("BUTTON"), (const wxChar *)label, msStyle,
+    CreateWindowEx(exStyle, wxT("BUTTON"), (const wxChar *)label, msStyle,
                     0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
                     wxGetInstance(), NULL);
 #if wxUSE_CTL3D

@@ -84,7 +84,7 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
     // Now create scrollbar
     DWORD _direction = (style & wxHORIZONTAL) ?
                         SBS_HORZ: SBS_VERT;
-    HWND scroll_bar = CreateWindowEx(MakeExtendedStyle(style), T("SCROLLBAR"), T("scrollbar"),
+    HWND scroll_bar = CreateWindowEx(MakeExtendedStyle(style), wxT("SCROLLBAR"), wxT("scrollbar"),
                          _direction | WS_CHILD | WS_VISIBLE,
                          0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
                          wxGetInstance(), NULL);

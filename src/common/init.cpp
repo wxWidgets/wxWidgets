@@ -46,7 +46,7 @@ wxAppInitializerFunction
 class /* no WXDLLEXPORT */ wxConsoleApp : public wxApp
 {
 public:
-    virtual int OnRun() { wxFAIL_MSG(T("unreachable")); return 0; }
+    virtual int OnRun() { wxFAIL_MSG(wxT("unreachable")); return 0; }
 };
 
 // ----------------------------------------------------------------------------
@@ -68,7 +68,7 @@ bool WXDLLEXPORT wxInitialize()
     }
 
     wxASSERT_MSG( !wxTheApp,
-                  T("either call wxInitialize or create app, not both!") );
+                  wxT("either call wxInitialize or create app, not both!") );
 
     wxClassInfo::InitializeClasses();
 

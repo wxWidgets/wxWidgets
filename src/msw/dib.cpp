@@ -436,8 +436,8 @@ BOOL wxReadDIB(LPTSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette)
 
     fh = OpenFile (wxFNCONV(lpFileName), &of, OF_READ);
     if (fh == -1) {
-        wsprintf(str,T("Can't open file '%s'"), lpFileName);
-	MessageBox(NULL, str, T("Error"), MB_ICONSTOP | MB_OK);
+        wsprintf(str,wxT("Can't open file '%s'"), lpFileName);
+	MessageBox(NULL, str, wxT("Error"), MB_ICONSTOP | MB_OK);
 	return (0);
     }
 

@@ -436,7 +436,7 @@ void wxListLineData::SetPosition( wxDC *dc, int x, int y, int window_width )
                 wxListItemData *item = (wxListItemData*)node->Data();
                 wxString s;
                 item->GetText( s );
-		if (s.IsEmpty()) s = T("H");
+		if (s.IsEmpty()) s = wxT("H");
                 long lw,lh;
                 dc->GetTextExtent( s, &lw, &lh );
 		m_bound_label.width = lw;
@@ -1209,7 +1209,7 @@ void wxListMainWindow::DeleteLine( wxListLineData *line )
 void wxListMainWindow::EditLabel( long item )
 {
     wxNode *node = m_lines.Nth( item );
-    wxCHECK_RET( node, T("wrong index in wxListCtrl::Edit()") );
+    wxCHECK_RET( node, wxT("wrong index in wxListCtrl::Edit()") );
     
     m_currentEdit = (wxListLineData*) node->Data();
 
@@ -1247,7 +1247,7 @@ void wxListMainWindow::EditLabel( long item )
 
 void wxListMainWindow::OnRenameTimer()
 {
-    wxCHECK_RET( m_current, T("invalid m_current") );
+    wxCHECK_RET( m_current, wxT("invalid m_current") );
     
     Edit( m_lines.IndexOf( m_current ) );
 }
@@ -2251,7 +2251,7 @@ void wxListMainWindow::DeleteItem( long index )
 void wxListMainWindow::DeleteColumn( int col )
 {
     wxCHECK_RET( col < (int)m_columns.GetCount(),
-               T("attempting to delete inexistent column in wxListView") );
+               wxT("attempting to delete inexistent column in wxListView") );
 
     m_dirty = TRUE;
     wxNode *node = m_columns.Nth( col );

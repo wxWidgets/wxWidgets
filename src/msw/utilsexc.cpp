@@ -109,7 +109,7 @@ static DWORD wxExecuteThread(wxExecuteData *data)
     }
 
     wxASSERT_MSG( data->dwExitCode != STILL_ACTIVE,
-                  T("process should have terminated") );
+                  wxT("process should have terminated") );
 
     // send a message indicating process termination to the window
     SendMessage(data->hWnd, wxWM_PROC_TERMINATED, 0, (LPARAM)data);
@@ -154,7 +154,7 @@ extern wxChar wxPanelClassName[];
 
 long wxExecute(const wxString& command, bool sync, wxProcess *handler)
 {
-    wxCHECK_MSG( !!command, 0, T("empty command in wxExecute") );
+    wxCHECK_MSG( !!command, 0, wxT("empty command in wxExecute") );
 
 #if defined(__WIN32__) && !defined(__TWIN32__)
     // the old code is disabled because we really need a process handle
@@ -250,7 +250,7 @@ long wxExecute(const wxString& command, bool sync, wxProcess *handler)
     // termination
     HWND hwnd = ::CreateWindow(wxPanelClassName, NULL, 0, 0, 0, 0, 0, NULL,
                                (HMENU)NULL, wxGetInstance(), 0);
-    wxASSERT_MSG( hwnd, T("can't create a hidden window for wxExecute") );
+    wxASSERT_MSG( hwnd, wxT("can't create a hidden window for wxExecute") );
 
     FARPROC ExecuteWindowInstance = MakeProcInstance((FARPROC)wxExecuteWindowCbk,
                                                      wxGetInstance());
@@ -265,7 +265,7 @@ long wxExecute(const wxString& command, bool sync, wxProcess *handler)
     data->state       = sync;
     if ( sync )
     {
-        wxASSERT_MSG( !handler, T("wxProcess param ignored for sync execution") );
+        wxASSERT_MSG( !handler, wxT("wxProcess param ignored for sync execution") );
 
         data->handler = NULL;
     }

@@ -151,7 +151,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
                       long style,
                       const wxString& name)
 {
-    wxCHECK_MSG( parent, FALSE, T("can't create wxWindow without parent") );
+    wxCHECK_MSG( parent, FALSE, wxT("can't create wxWindow without parent") );
 
     if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
@@ -174,7 +174,7 @@ wxWindow::~wxWindow()
     if (m_hWnd)
     {
         if(!WinDestroyWindow(GetHWND()))
-            wxLogLastError(T("DestroyWindow"));
+            wxLogLastError(wxT("DestroyWindow"));
         // remove hWnd <-> wxWindow association
         wxRemoveHandleAssociation(this);
     }
@@ -509,12 +509,12 @@ void wxWindow::PMDetachWindowMenu()
             int chars = (int)WinSendMsg(hMenu, MM_QUERYITEMTEXT, MPFROM2SHORT(i, N), buf);
             if ( !chars )
             {
-                wxLogLastError(T("GetMenuString"));
+                wxLogLastError(wxT("GetMenuString"));
 
                 continue;
             }
 
-            if ( wxStrcmp(buf, T("&Window")) == 0 )
+            if ( wxStrcmp(buf, wxT("&Window")) == 0 )
             {
                 WinSendMsg(hMenu, MM_DELETEITEM, MPFROM2SHORT(i, TRUE), 0);
                 break;
@@ -528,7 +528,7 @@ void wxAssociateWinWithHandle(HWND hWnd, wxWindow *win)
     // adding NULL hWnd is (first) surely a result of an error and
     // (secondly) breaks menu command processing
     wxCHECK_RET( hWnd != (HWND)NULL,
-                 T("attempt to add a NULL hWnd to window list ignored") );
+                 wxT("attempt to add a NULL hWnd to window list ignored") );
 
     if ( !wxWinHandleList->Find((long)hWnd) )
         wxWinHandleList->Append((long)hWnd, win);
@@ -549,12 +549,12 @@ void wxRemoveHandleAssociation(wxWindow *win)
 
 void wxWindow::SubclassWin(WXHWND hWnd)
 {
-    wxASSERT_MSG( !m_oldWndProc, T("subclassing window twice?") );
+    wxASSERT_MSG( !m_oldWndProc, wxT("subclassing window twice?") );
 
     HWND hwnd = (HWND)hWnd;
 /*
 * TODO: implement something like this:
-*   wxCHECK_RET( ::IsWindow(hwnd), T("invalid HWND in SubclassWin") );
+*   wxCHECK_RET( ::IsWindow(hwnd), wxT("invalid HWND in SubclassWin") );
 *
 *   wxAssociateWinWithHandle(hwnd, this);
 *
@@ -576,7 +576,7 @@ void wxWindow::UnsubclassWin()
     {
         m_hWnd = 0;
 
-        wxCHECK_RET( ::IsWindow(hwnd), T("invalid HWND in UnsubclassWin") );
+        wxCHECK_RET( ::IsWindow(hwnd), wxT("invalid HWND in UnsubclassWin") );
 
         FARPROC farProc = (FARPROC) GetWindowLong(hwnd, GWL_WNDPROC);
         if ( (m_oldWndProc != 0) && (farProc != (FARPROC) m_oldWndProc) )

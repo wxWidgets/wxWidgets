@@ -50,7 +50,7 @@
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxFTP, wxProtocol)
-IMPLEMENT_PROTOCOL(wxFTP, T("ftp"), T("ftp"), TRUE)
+IMPLEMENT_PROTOCOL(wxFTP, wxT("ftp"), wxT("ftp"), TRUE)
 #endif
 
 ////////////////////////////////////////////////////////////////
@@ -63,7 +63,7 @@ wxFTP::wxFTP()
   m_lastError = wxPROTO_NOERR;
   m_streaming = FALSE;
 
-  m_user = T("anonymous");
+  m_user = wxT("anonymous");
   m_passwd = wxGetUserId();
   m_passwd += '@';
   m_passwd += wxGetHostName();
@@ -99,13 +99,13 @@ bool wxFTP::Connect(wxSockAddress& addr, bool WXUNUSED(wait))
     return FALSE;
   }
 
-  command.sprintf(T("USER %s"), (const wxChar *)m_user);
+  command.sprintf(wxT("USER %s"), (const wxChar *)m_user);
   if (!SendCommand(command, '3')) {
     Close();
     return FALSE;
   }
 
-  command.sprintf(T("PASS %s"), (const wxChar *)m_passwd);
+  command.sprintf(wxT("PASS %s"), (const wxChar *)m_passwd);
   if (!SendCommand(command, '2')) {
     Close();
     return FALSE;
@@ -120,7 +120,7 @@ bool wxFTP::Connect(const wxString& host)
   wxString my_host = host;
 
   addr.Hostname(my_host);
-  addr.Service(T("ftp"));
+  addr.Service(wxT("ftp"));
 
   return Connect(addr);
 }
@@ -132,7 +132,7 @@ bool wxFTP::Close()
     return FALSE;
   }
   if (m_connected)
-    SendCommand(wxString(T("QUIT")), '2');
+    SendCommand(wxString(wxT("QUIT")), '2');
   return wxSocketClient::Close();
 }
 
@@ -147,7 +147,7 @@ bool wxFTP::SendCommand(const wxString& command, char exp_ret)
     m_lastError = wxPROTO_STREAMING;
     return FALSE;
   }
-  tmp_str = command + T("\r\n");
+  tmp_str = command + wxT("\r\n");
   const wxWX2MBbuf tmp_buf = tmp_str.mb_str();
   if (Write(wxMBSTRINGCAST tmp_buf, strlen(tmp_buf)).Error()) {
     m_lastError = wxPROTO_NETERR;
@@ -169,7 +169,7 @@ bool wxFTP::GetResult(char exp)
   if (m_lastResult.GetChar(3) == '-') {
     wxString key = m_lastResult.Left((size_t)3);
 
-    key += T(' ');
+    key += wxT(' ');
 
     while (m_lastResult.Index(key) != 0) {
       m_lastError = GetLine(this, m_lastResult);
@@ -187,14 +187,14 @@ bool wxFTP::ChDir(const wxString& dir)
 {
   wxString str = dir;
 
-  str.Prepend(T("CWD "));
+  str.Prepend(wxT("CWD "));
   return SendCommand(str, '2');
 }
 
 bool wxFTP::MkDir(const wxString& dir)
 {
   wxString str = dir;
-  str.Prepend(T("MKD "));
+  str.Prepend(wxT("MKD "));
   return SendCommand(str, '2');
 }
 
@@ -202,7 +202,7 @@ bool wxFTP::RmDir(const wxString& dir)
 {
   wxString str = dir;
   
-  str.Prepend(T("PWD "));
+  str.Prepend(wxT("PWD "));
   return SendCommand(str, '2');
 }
 
@@ -210,11 +210,11 @@ wxString wxFTP::Pwd()
 {
   int beg, end;
 
-  if (!SendCommand(T("PWD"), '2'))
+  if (!SendCommand(wxT("PWD"), '2'))
     return wxString((char *)NULL);
   
-  beg = m_lastResult.Find(T('\"'),FALSE);
-  end = m_lastResult.Find(T('\"'),TRUE);
+  beg = m_lastResult.Find(wxT('\"'),FALSE);
+  end = m_lastResult.Find(wxT('\"'),TRUE);
 
   return wxString(beg+1, end);
 }
@@ -223,11 +223,11 @@ bool wxFTP::Rename(const wxString& src, const wxString& dst)
 {
   wxString str;
 
-  str = T("RNFR ") + src;
+  str = wxT("RNFR ") + src;
   if (!SendCommand(str, '3'))
     return FALSE;
 
-  str = T("RNTO ") + dst;
+  str = wxT("RNTO ") + dst;
   return SendCommand(str, '2');
 }
 
@@ -235,7 +235,7 @@ bool wxFTP::RmFile(const wxString& path)
 {
   wxString str;
 
-  str = T("DELE ");
+  str = wxT("DELE ");
   str += path;
   return SendCommand(str, '2');
 }
@@ -288,16 +288,16 @@ wxSocketClient *wxFTP::GetPort()
   wxUint16 port;
   wxUint32 hostaddr;
 
-  if (!SendCommand(T("PASV"), '2'))
+  if (!SendCommand(wxT("PASV"), '2'))
     return NULL;
 
-  addr_pos = m_lastResult.Find(T('('));
+  addr_pos = m_lastResult.Find(wxT('('));
   if (addr_pos == -1) {
     m_lastError = wxPROTO_PROTERR;
     return NULL;
   }
   straddr = m_lastResult(addr_pos+1, m_lastResult.Length());
-  wxSscanf((const wxChar *)straddr,T("%d,%d,%d,%d,%d,%d"),&a[2],&a[3],&a[4],&a[5],&a[0],&a[1]);
+  wxSscanf((const wxChar *)straddr,wxT("%d,%d,%d,%d,%d,%d"),&a[2],&a[3],&a[4],&a[5],&a[0],&a[1]);
 
   hostaddr = (wxUint16)a[5] << 24 | (wxUint16)a[4] << 16 |
              (wxUint16)a[3] << 8 | a[2]; 
@@ -319,7 +319,7 @@ wxSocketClient *wxFTP::GetPort()
 bool wxFTP::Abort(void)
 {
   m_streaming = FALSE;
-  if (!SendCommand(T("ABOR"), '4'))
+  if (!SendCommand(wxT("ABOR"), '4'))
     return FALSE;
   return GetResult('2');
 }
@@ -330,7 +330,7 @@ wxInputStream *wxFTP::GetInputStream(const wxString& path)
   int pos_size;
   wxInputFTPStream *in_stream;
 
-  if (!SendCommand(T("TYPE I"), '2'))
+  if (!SendCommand(wxT("TYPE I"), '2'))
     return NULL;
 
   wxSocketClient *sock = GetPort();
@@ -340,15 +340,15 @@ wxInputStream *wxFTP::GetInputStream(const wxString& path)
     return NULL;
   }
 
-  tmp_str = T("RETR ") + wxURL::ConvertFromURI(path);
+  tmp_str = wxT("RETR ") + wxURL::ConvertFromURI(path);
   if (!SendCommand(tmp_str, '1'))
     return NULL;
 
   in_stream = new wxInputFTPStream(this, sock);
 
-  pos_size = m_lastResult.Index(T('('));
+  pos_size = m_lastResult.Index(wxT('('));
   if (pos_size != wxNOT_FOUND) {
-    wxString str_size = m_lastResult(pos_size+1, m_lastResult.Index(T(')'))-1);
+    wxString str_size = m_lastResult(pos_size+1, m_lastResult.Index(wxT(')'))-1);
 
     in_stream->m_ftpsize = wxAtoi(WXSTRINGCAST str_size);
   }
@@ -361,12 +361,12 @@ wxOutputStream *wxFTP::GetOutputStream(const wxString& path)
 {
   wxString tmp_str;
 
-  if (!SendCommand(T("TYPE I"), '2'))
+  if (!SendCommand(wxT("TYPE I"), '2'))
     return NULL;
 
   wxSocketClient *sock = GetPort();
 
-  tmp_str = T("STOR ") + path;
+  tmp_str = wxT("STOR ") + path;
   if (!SendCommand(tmp_str, '1'))
     return FALSE;
 
@@ -377,7 +377,7 @@ wxList *wxFTP::GetList(const wxString& wildcard)
 {
   wxList *file_list = new wxList;
   wxSocketBase *sock = GetPort();
-  wxString tmp_str = T("NLST");
+  wxString tmp_str = wxT("NLST");
 
   if (!wildcard.IsNull())
     tmp_str += wildcard;

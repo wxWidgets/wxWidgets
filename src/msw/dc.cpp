@@ -177,7 +177,7 @@ void wxDC::DoSetClippingRegion(long cx, long cy, long cw, long ch)
 
 void wxDC::DoSetClippingRegionAsRegion(const wxRegion& region)
 {
-    wxCHECK_RET( region.GetHRGN(), T("invalid clipping region") );
+    wxCHECK_RET( region.GetHRGN(), wxT("invalid clipping region") );
 
     wxRect box = region.GetBox();
 
@@ -252,7 +252,7 @@ void wxDC::Clear()
     }
     else
     {
-        wxCHECK_RET( m_selectedBitmap.Ok(), T("this DC can't be cleared") );
+        wxCHECK_RET( m_selectedBitmap.Ok(), wxT("this DC can't be cleared") );
 
         rect.left = 0; rect.top = 0;
         rect.right = m_selectedBitmap.GetWidth();
@@ -595,7 +595,7 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, long x, long y, bool useMask )
         HDC memdc = ::CreateCompatibleDC( cdc );
         HBITMAP hbitmap = (HBITMAP) bmp.GetHBITMAP( );
 
-        wxASSERT_MSG( hbitmap, T("bitmap is ok but HBITMAP is NULL?") );
+        wxASSERT_MSG( hbitmap, wxT("bitmap is ok but HBITMAP is NULL?") );
 
         ::SelectObject( memdc, hbitmap );
         ::BitBlt( cdc, x, y, bmp.GetWidth(), bmp.GetHeight(), memdc, 0, 0, SRCCOPY);
@@ -718,7 +718,7 @@ void wxDC::SetFont(const wxFont& the_font)
         HFONT f = (HFONT) ::SelectObject(GetHdc(), (HFONT) m_font.GetResourceHandle());
         if (f == (HFONT) NULL)
         {
-            wxLogDebug(T("::SelectObject failed in wxDC::SetFont."));
+            wxLogDebug(wxT("::SelectObject failed in wxDC::SetFont."));
         }
         if (!m_oldFont)
             m_oldFont = (WXHFONT) f;

@@ -144,9 +144,9 @@ void wxPathList::AddEnvList (const wxString& envVariable)
 {
   static const wxChar PATH_TOKS[] =
 #ifdef __WINDOWS__
-        T(" ;"); // Don't seperate with colon in DOS (used for drive)
+        wxT(" ;"); // Don't seperate with colon in DOS (used for drive)
 #else
-        T(" :;");
+        wxT(" :;");
 #endif
 
   wxChar *val = wxGetenv (WXSTRINGCAST envVariable);
@@ -216,8 +216,8 @@ wxString wxPathList::FindValidPath (const wxString& file)
       wxChar *path = (wxChar *) node->Data ();
       wxStrcpy (wxFileFunctionsBuffer, path);
       wxChar ch = wxFileFunctionsBuffer[wxStrlen(wxFileFunctionsBuffer)-1];
-      if (ch != T('\\') && ch != T('/'))
-        wxStrcat (wxFileFunctionsBuffer, T("/"));
+      if (ch != wxT('\\') && ch != wxT('/'))
+        wxStrcat (wxFileFunctionsBuffer, wxT("/"));
       wxStrcat (wxFileFunctionsBuffer, filename);
 #ifdef __WINDOWS__
       Unix2DosFilename (wxFileFunctionsBuffer);
@@ -228,7 +228,7 @@ wxString wxPathList::FindValidPath (const wxString& file)
       }
     }                                // for()
 
-  return wxString(T(""));                    // Not found
+  return wxString(wxT(""));                    // Not found
 }
 
 wxString wxPathList::FindAbsoluteValidPath (const wxString& file)
@@ -272,7 +272,7 @@ wxFileExists (const wxString& filename)
   struct stat stbuf;
 #endif
 
-  if ((filename != T("")) && stat (wxFNSTRINGCAST filename.fn_str(), &stbuf) == 0)
+  if ((filename != wxT("")) && stat (wxFNSTRINGCAST filename.fn_str(), &stbuf) == 0)
     return TRUE;
   return FALSE;
 #endif
@@ -293,15 +293,15 @@ bool wxFileExists(const char *pszFileName)
 bool
 wxIsAbsolutePath (const wxString& filename)
 {
-  if (filename != T(""))
+  if (filename != wxT(""))
     {
-      if (filename[0] == T('/')
+      if (filename[0] == wxT('/')
 #ifdef __VMS__
-      || (filename[0] == T('[') && filename[1] != T('.'))
+      || (filename[0] == wxT('[') && filename[1] != wxT('.'))
 #endif
 #ifdef __WINDOWS__
       /* MSDOS */
-      || filename[0] == T('\\') || (wxIsalpha (filename[0]) && filename[1] == T(':'))
+      || filename[0] == wxT('\\') || (wxIsalpha (filename[0]) && filename[1] == wxT(':'))
 #endif
         )
         return TRUE;
@@ -321,7 +321,7 @@ void wxStripExtension(wxChar *buffer)
   int i = len-1;
   while (i > 0)
   {
-    if (buffer[i] == T('.'))
+    if (buffer[i] == wxT('.'))
     {
       buffer[i] = 0;
       break;
@@ -336,7 +336,7 @@ void wxStripExtension(wxString& buffer)
   size_t i = len-1;
   while (i > 0)
   {
-    if (buffer.GetChar(i) == T('.'))
+    if (buffer.GetChar(i) == wxT('.'))
     {
       buffer = buffer.Left(i);
       break;
@@ -349,15 +349,15 @@ void wxStripExtension(wxString& buffer)
 wxChar *wxRealPath (wxChar *path)
 {
 #ifdef __WXMSW__
-  static const wxChar SEP = T('\\');
+  static const wxChar SEP = wxT('\\');
   Unix2DosFilename(path);
 #else
-  static const wxChar SEP = T('/');
+  static const wxChar SEP = wxT('/');
 #endif
   if (path[0] && path[1]) {
     /* MATTHEW: special case "/./x" */
     wxChar *p;
-    if (path[2] == SEP && path[1] == T('.'))
+    if (path[2] == SEP && path[1] == wxT('.'))
       p = &path[0];
     else
       p = &path[2];
@@ -365,31 +365,31 @@ wxChar *wxRealPath (wxChar *path)
       {
         if (*p == SEP)
           {
-            if (p[1] == T('.') && p[2] == T('.') && (p[3] == SEP || p[3] == T('\0')))
+            if (p[1] == wxT('.') && p[2] == wxT('.') && (p[3] == SEP || p[3] == wxT('\0')))
               {
                 wxChar *q;
                 for (q = p - 1; q >= path && *q != SEP; q--);
-                if (q[0] == SEP && (q[1] != T('.') || q[2] != T('.') || q[3] != SEP)
+                if (q[0] == SEP && (q[1] != wxT('.') || q[2] != wxT('.') || q[3] != SEP)
                     && (q - 1 <= path || q[-1] != SEP))
                   {
                     wxStrcpy (q, p + 3);
-                    if (path[0] == T('\0'))
+                    if (path[0] == wxT('\0'))
                       {
                         path[0] = SEP;
-                        path[1] = T('\0');
+                        path[1] = wxT('\0');
                       }
 #ifdef __WXMSW__
                     /* Check that path[2] is NULL! */
-                    else if (path[1] == T(':') && !path[2])
+                    else if (path[1] == wxT(':') && !path[2])
                       {
                         path[2] = SEP;
-                        path[3] = T('\0');
+                        path[3] = wxT('\0');
                       }
 #endif
                     p = q - 1;
                   }
               }
-            else if (p[1] == T('.') && (p[2] == SEP || p[2] == T('\0')))
+            else if (p[1] == wxT('.') && (p[2] == SEP || p[2] == wxT('\0')))
               wxStrcpy (p, p + 2);
           }
       }
@@ -400,20 +400,20 @@ wxChar *wxRealPath (wxChar *path)
 // Must be destroyed
 wxChar *wxCopyAbsolutePath(const wxString& filename)
 {
-  if (filename == T(""))
+  if (filename == wxT(""))
     return (wxChar *) NULL;
 
   if (! IsAbsolutePath(wxExpandPath(wxFileFunctionsBuffer, filename))) {
     wxChar  buf[_MAXPATHLEN];
-    buf[0] = T('\0');
+    buf[0] = wxT('\0');
     wxGetWorkingDirectory(buf, WXSIZEOF(buf));
     wxChar ch = buf[wxStrlen(buf) - 1];
 #ifdef __WXMSW__
-    if (ch != T('\\') && ch != T('/'))
-        wxStrcat(buf, T("\\"));
+    if (ch != wxT('\\') && ch != wxT('/'))
+        wxStrcat(buf, wxT("\\"));
 #else
-    if (ch != T('/'))
-        wxStrcat(buf, T("/"));
+    if (ch != wxT('/'))
+        wxStrcat(buf, wxT("/"));
 #endif
     wxStrcat(buf, wxFileFunctionsBuffer);
     return copystring( wxRealPath(buf) );
@@ -451,21 +451,21 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
     int                                q;
 
     // Some compilers don't like this line.
-//    const wxChar    trimchars[] = T("\n \t");
+//    const wxChar    trimchars[] = wxT("\n \t");
 
     wxChar      trimchars[4];
-    trimchars[0] = T('\n');
-    trimchars[1] = T(' ');
-    trimchars[2] = T('\t');
+    trimchars[0] = wxT('\n');
+    trimchars[1] = wxT(' ');
+    trimchars[2] = wxT('\t');
     trimchars[3] = 0;
 
 #ifdef __WXMSW__
-     const wxChar     SEP = T('\\');
+     const wxChar     SEP = wxT('\\');
 #else
-     const wxChar     SEP = T('/');
+     const wxChar     SEP = wxT('/');
 #endif
-    buf[0] = T('\0');
-    if (name == NULL || *name == T('\0'))
+    buf[0] = wxT('\0');
+    if (name == NULL || *name == wxT('\0'))
         return buf;
     nm = copystring(name); // Make a scratch copy
     wxChar *nm_tmp = nm;
@@ -476,14 +476,14 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
     /* And strip off trailing whitespace and cr */
     s = nm + (q = wxStrlen(nm)) - 1;
     while (q-- && wxStrchr((wxChar *)trimchars, *s) != NULL)
-        *s = T('\0');
+        *s = wxT('\0');
 
     s = nm;
     d = lnm;
 #ifdef __WXMSW__
     q = FALSE;
 #else
-    q = nm[0] == T('\\') && nm[1] == T('~');
+    q = nm[0] == wxT('\\') && nm[1] == wxT('~');
 #endif
 
     /* Expand inline environment variables */
@@ -491,7 +491,7 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
     while (*d)
     {
       *d++ = *s;
-      if(*s == T('\\'))
+      if(*s == wxT('\\'))
       {
         *(d - 1) = *++s;
         if (*d)
@@ -506,7 +506,7 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
 #else
     while ((*d++ = *s)) {
 #  ifndef __WXMSW__
-        if (*s == T('\\')) {
+        if (*s == wxT('\\')) {
             if ((*(d - 1) = *++s)) {
                 s++;
                 continue;
@@ -516,13 +516,13 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
 #  endif
 #endif
 #ifdef __WXMSW__
-        if (*s++ == T('$') && (*s == T('{') || *s == T(')')))
+        if (*s++ == wxT('$') && (*s == wxT('{') || *s == wxT(')')))
 #else
-        if (*s++ == T('$'))
+        if (*s++ == wxT('$'))
 #endif
         {
             register wxChar  *start = d;
-            register int     braces = (*s == T('{') || *s == T('('));
+            register int     braces = (*s == wxT('{') || *s == wxT('('));
             register wxChar  *value;
 #ifdef __VISAGECPP__
     // VA gives assignment in logical expr warning
@@ -531,7 +531,7 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
 #else
             while ((*d++ = *s))
 #endif
-                if (braces ? (*s == T('}') || *s == T(')')) : !(wxIsalnum(*s) || *s == T('_')) )
+                if (braces ? (*s == wxT('}') || *s == wxT(')')) : !(wxIsalnum(*s) || *s == wxT('_')) )
                     break;
                 else
                     s++;
@@ -553,14 +553,14 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
 
     /* Expand ~ and ~user */
     nm = lnm;
-    s = T("");
-    if (nm[0] == T('~') && !q)
+    s = wxT("");
+    if (nm[0] == wxT('~') && !q)
     {
         /* prefix ~ */
         if (nm[1] == SEP || nm[1] == 0)
         {        /* ~/filename */
 	    // FIXME: wxGetUserHome could return temporary storage in Unicode mode
-            if ((s = WXSTRINGCAST wxGetUserHome(T(""))) != NULL) {
+            if ((s = WXSTRINGCAST wxGetUserHome(wxT(""))) != NULL) {
                 if (*++nm)
                     nm++;
             }
@@ -577,7 +577,7 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
             if ((home = WXSTRINGCAST wxGetUserHome(wxString(nm + 1))) == NULL) {
                if (was_sep) /* replace only if it was there: */
                    *s = SEP;
-                s = T("");
+                s = wxT("");
             } else {
                 nm = nnm;
                 s = home;
@@ -588,7 +588,7 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
     d = buf;
     if (s && *s) { /* MATTHEW: s could be NULL if user '~' didn't exist */
         /* Copy home dir */
-        while (T('\0') != (*d++ = *s++))
+        while (wxT('\0') != (*d++ = *s++))
           /* loop */;
         // Handle root home
         if (d - 1 > buf && *(d - 2) != SEP)
@@ -620,7 +620,7 @@ wxContractPath (const wxString& filename, const wxString& envname, const wxStrin
 {
   static wxChar dest[_MAXPATHLEN];
 
-  if (filename == T(""))
+  if (filename == wxT(""))
     return (wxChar *) NULL;
 
   wxStrcpy (dest, WXSTRINGCAST filename);
@@ -635,10 +635,10 @@ wxContractPath (const wxString& filename, const wxString& envname, const wxStrin
      (tcp = wxStrstr (dest, val)) != NULL)
     {
         wxStrcpy (wxFileFunctionsBuffer, tcp + wxStrlen (val));
-        *tcp++ = T('$');
-        *tcp++ = T('{');
+        *tcp++ = wxT('$');
+        *tcp++ = wxT('{');
         wxStrcpy (tcp, WXSTRINGCAST envname);
-        wxStrcat (tcp, T("}"));
+        wxStrcat (tcp, wxT("}"));
         wxStrcat (tcp, wxFileFunctionsBuffer);
     }
 
@@ -648,8 +648,8 @@ wxContractPath (const wxString& filename, const wxString& envname, const wxStrin
       (len = wxStrlen(val)) > 2 &&
       wxStrncmp(dest, val, len) == 0)
     {
-      wxStrcpy(wxFileFunctionsBuffer, T("~"));
-      if (user != T(""))
+      wxStrcpy(wxFileFunctionsBuffer, wxT("~"));
+      if (user != wxT(""))
              wxStrcat(wxFileFunctionsBuffer, (const wxChar*) user);
 #ifdef __WXMSW__
 //      strcat(wxFileFunctionsBuffer, "\\");
@@ -674,16 +674,16 @@ wxChar *wxFileNameFromPath (wxChar *path)
       tcp = path + wxStrlen (path);
       while (--tcp >= path)
         {
-          if (*tcp == T('/') || *tcp == T('\\')
+          if (*tcp == wxT('/') || *tcp == wxT('\\')
 #ifdef __VMS__
-     || *tcp == T(':') || *tcp == T(']'))
+     || *tcp == wxT(':') || *tcp == wxT(']'))
 #else
      )
 #endif
             return tcp + 1;
         }                        /* while */
 #if defined(__WXMSW__) || defined(__WXPM__)
-      if (wxIsalpha (*path) && *(path + 1) == T(':'))
+      if (wxIsalpha (*path) && *(path + 1) == wxT(':'))
         return path + 2;
 #endif
     }
@@ -692,7 +692,7 @@ wxChar *wxFileNameFromPath (wxChar *path)
 
 wxString wxFileNameFromPath (const wxString& path1)
 {
-  if (path1 != T(""))
+  if (path1 != wxT(""))
   {
 
       wxChar *path = WXSTRINGCAST path1 ;
@@ -701,16 +701,16 @@ wxString wxFileNameFromPath (const wxString& path1)
       tcp = path + wxStrlen (path);
       while (--tcp >= path)
           {
-            if (*tcp == T('/') || *tcp == T('\\')
+            if (*tcp == wxT('/') || *tcp == wxT('\\')
 #ifdef __VMS__
-        || *tcp == T(':') || *tcp == T(']'))
+        || *tcp == wxT(':') || *tcp == wxT(']'))
 #else
         )
 #endif
                 return wxString(tcp + 1);
             }                        /* while */
 #if defined(__WXMSW__) || defined(__WXPM__)
-      if (wxIsalpha (*path) && *(path + 1) == T(':'))
+      if (wxIsalpha (*path) && *(path + 1) == wxT(':'))
             return wxString(path + 2);
 #endif
     }
@@ -739,7 +739,7 @@ wxPathOnly (wxChar *path)
       while (!done && i > -1)
       {
         // ] is for VMS
-        if (path[i] == T('/') || path[i] == T('\\') || path[i] == T(']'))
+        if (path[i] == wxT('/') || path[i] == wxT('\\') || path[i] == wxT(']'))
         {
           done = TRUE;
 #ifdef __VMS__
@@ -755,11 +755,11 @@ wxPathOnly (wxChar *path)
 
 #if defined(__WXMSW__) || defined(__WXPM__)
       // Try Drive specifier
-      if (wxIsalpha (buf[0]) && buf[1] == T(':'))
+      if (wxIsalpha (buf[0]) && buf[1] == wxT(':'))
         {
           // A:junk --> A:. (since A:.\junk Not A:\junk)
-          buf[2] = T('.');
-          buf[3] = T('\0');
+          buf[2] = wxT('.');
+          buf[3] = wxT('\0');
           return buf;
         }
 #endif
@@ -771,7 +771,7 @@ wxPathOnly (wxChar *path)
 // Return just the directory, or NULL if no directory
 wxString wxPathOnly (const wxString& path)
 {
-  if (path != T(""))
+  if (path != wxT(""))
     {
       wxChar buf[_MAXPATHLEN];
 
@@ -787,7 +787,7 @@ wxString wxPathOnly (const wxString& path)
       while (!done && i > -1)
       {
         // ] is for VMS
-        if (path[i] == T('/') || path[i] == T('\\') || path[i] == T(']'))
+        if (path[i] == wxT('/') || path[i] == wxT('\\') || path[i] == wxT(']'))
         {
           done = TRUE;
 #ifdef __VMS__
@@ -803,17 +803,17 @@ wxString wxPathOnly (const wxString& path)
 
 #if defined(__WXMSW__) || defined(__WXPM__)
       // Try Drive specifier
-      if (wxIsalpha (buf[0]) && buf[1] == T(':'))
+      if (wxIsalpha (buf[0]) && buf[1] == wxT(':'))
         {
           // A:junk --> A:. (since A:.\junk Not A:\junk)
-          buf[2] = T('.');
-          buf[3] = T('\0');
+          buf[2] = wxT('.');
+          buf[3] = wxT('\0');
           return wxString(buf);
         }
 #endif
     }
 
-  return wxString(T(""));
+  return wxString(wxT(""));
 }
 
 // Utility for converting delimiters in DOS filenames to UNIX style
@@ -827,15 +827,15 @@ wxMac2UnixFilename (wxChar *s)
         if (s)
         {
                 memmove( s+1 , s ,(strlen( s ) + 1)*sizeof(wxChar)) ;
-                if ( *s == T(':') )
-                        *s = T('.') ;
+                if ( *s == wxT(':') )
+                        *s = wxT('.') ;
                 else
-                        *s = T('/') ;
+                        *s = wxT('/') ;
 
                 while (*s)
                 {
-                        if (*s == T(':'))
-                          *s = T('/');
+                        if (*s == wxT(':'))
+                          *s = wxT('/');
                         else
                           *s = wxTolower(*s);        // Case INDEPENDENT
                         s++;
@@ -848,24 +848,24 @@ wxUnix2MacFilename (wxChar *s)
 {
         if (s)
         {
-                if ( *s == T('.') )
+                if ( *s == wxT('.') )
                 {
                         // relative path , since it goes on with slash which is translated to a :
                         memmove( s , s+1 ,strlen( s )*sizeof(wxChar) ) ;
                 }
-                else if ( *s == T('/') )
+                else if ( *s == wxT('/') )
                 {
                         // absolute path -> on mac just start with the drive name
                         memmove( s , s+1 ,strlen( s )*sizeof(wxChar) ) ;
                 }
                 else
                 {
-                        wxASSERT_MSG( 1 , T("unknown path beginning") ) ;
+                        wxASSERT_MSG( 1 , wxT("unknown path beginning") ) ;
                 }
                 while (*s)
                 {
-                        if (*s == T('/') || *s == T('\\'))
-                                  *s = T(':');
+                        if (*s == wxT('/') || *s == wxT('\\'))
+                                  *s = wxT(':');
 
                         s++ ;
                 }
@@ -878,8 +878,8 @@ wxDos2UnixFilename (wxChar *s)
   if (s)
     while (*s)
       {
-        if (*s == T('\\'))
-          *s = T('/');
+        if (*s == wxT('\\'))
+          *s = wxT('/');
 #if defined(__WXMSW__) || defined(__WXPM__)
         else
           *s = wxTolower(*s);        // Case INDEPENDENT
@@ -900,8 +900,8 @@ wxUnix2DosFilename (wxChar *WXUNUSED(s))
   if (s)
     while (*s)
       {
-        if (*s == T('/'))
-          *s = T('\\');
+        if (*s == wxT('/'))
+          *s = wxT('\\');
         s++;
       }
 #endif
@@ -1129,8 +1129,8 @@ bool wxPathExists(const wxChar *pszPathName)
   /* Windows API returns -1 from stat for "c:\dir\" if "c:\dir" exists
    * OTOH, we should change "d:" to "d:\" and leave "\" as is. */
   wxString strPath(pszPathName);
-  if ( wxEndsWithPathSeparator(pszPathName) && pszPathName[1] != T('\0') )
-    strPath.Last() = T('\0');
+  if ( wxEndsWithPathSeparator(pszPathName) && pszPathName[1] != wxT('\0') )
+    strPath.Last() = wxT('\0');
 
 #ifdef __SALFORDC__
   struct _stat st;
@@ -1166,7 +1166,7 @@ wxChar *wxGetTempFileName(const wxString& prefix, wxChar *buf)
 
   for (short suffix = last_temp + 1; suffix != last_temp; ++suffix %= 1000)
     {
-      wxSprintf (tmp, T("/tmp/%s%d.%03x"), WXSTRINGCAST prefix, (int) getpid (), (int) suffix);
+      wxSprintf (tmp, wxT("/tmp/%s%d.%03x"), WXSTRINGCAST prefix, (int) getpid (), (int) suffix);
       if (!wxFileExists( tmp ))
         {
           // Touch the file to create it (reserve name)
@@ -1217,11 +1217,11 @@ wxString wxFindFirstFile(const wxChar *spec, int flags)
     wxString path(wxPathOnly(gs_strFileSpec));
 
     // special case: path is really "/"
-    if ( !path && gs_strFileSpec[0u] == T('/') )
-        path = T('/');
+    if ( !path && gs_strFileSpec[0u] == wxT('/') )
+        path = wxT('/');
     // path is empty => Local directory
     if ( !path )
-        path = T('.');
+        path = wxT('.');
 
     gs_dirStream = opendir(path.fn_str());
     if ( !gs_dirStream )
@@ -1243,7 +1243,7 @@ wxString wxFindNextFile()
     wxString result;
 
 #ifndef __VMS__
-    wxCHECK_MSG( gs_dirStream, result, T("must call wxFindFirstFile first") );
+    wxCHECK_MSG( gs_dirStream, result, wxT("must call wxFindFirstFile first") );
 
     // Find path only so we can concatenate
     // found file onto path
@@ -1251,8 +1251,8 @@ wxString wxFindNextFile()
     wxString name(wxFileNameFromPath(gs_strFileSpec));
 
     /* MATTHEW: special case: path is really "/" */
-    if ( !path && gs_strFileSpec[0u] == T('/'))
-        path = T('/');
+    if ( !path && gs_strFileSpec[0u] == wxT('/'))
+        path = wxT('/');
 
     // Do the reading
     struct dirent *nextDir;
@@ -1266,8 +1266,8 @@ wxString wxFindNextFile()
             if ( !path.IsEmpty() )
             {
                 result = path;
-                if ( path != T('/') )
-                    result += T('/');
+                if ( path != wxT('/') )
+                    result += wxT('/');
             }
 
             result += nextDir->d_name;
@@ -1330,7 +1330,7 @@ wxString wxFindFirstFile(const wxChar *spec, int flags)
     // Find path only so we can concatenate found file onto path
     wxString path(wxPathOnly(gs_strFileSpec));
     if ( !path.IsEmpty() )
-        result << path << T('\\');
+        result << path << wxT('\\');
 
 #ifdef __WIN32__
     if ( gs_hFileStruct != INVALID_HANDLE_VALUE )
@@ -1423,7 +1423,7 @@ try_again:
             goto try_again;
 
         if ( !path.IsEmpty() )
-            result << path << T('\\');
+            result << path << wxT('\\');
         result << gs_findDataStruct.cFileName;
     }
 
@@ -1489,8 +1489,8 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
   if (getcwd(buf, sz) == NULL) {
 #endif
 #endif
-    buf[0] = T('.');
-    buf[1] = T('\0');
+    buf[0] = wxT('.');
+    buf[1] = wxT('\0');
   }
 #if wxUSE_UNICODE
   else {
@@ -1613,7 +1613,7 @@ void WXDLLEXPORT wxSplitPath(const wxChar *pszFileName,
                              wxString *pstrExt)
 {
     // it can be empty, but it shouldn't be NULL
-    wxCHECK_RET( pszFileName, T("NULL file name in wxSplitPath") );
+    wxCHECK_RET( pszFileName, wxT("NULL file name in wxSplitPath") );
 
     const wxChar *pDot = wxStrrchr(pszFileName, wxFILE_SEP_EXT);
 
@@ -1673,9 +1673,9 @@ bool wxIsWild( const wxString& pattern )
   wxChar *pat = WXSTRINGCAST(tmp);
     while (*pat) {
         switch (*pat++) {
-        case T('?'): case T('*'): case T('['): case T('{'):
+        case wxT('?'): case wxT('*'): case wxT('['): case wxT('{'):
             return TRUE;
-        case T('\\'):
+        case wxT('\\'):
             if (!*pat++)
                 return FALSE;
         }
@@ -1709,57 +1709,57 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
     wxChar *cp;
     bool done = FALSE, ret_code, ok;
     // Below is for vi fans
-    const wxChar OB = T('{'), CB = T('}');
+    const wxChar OB = wxT('{'), CB = wxT('}');
 
     // dot_special means '.' only matches '.'
-    if (dot_special && *str == T('.') && *pattern != *str)
+    if (dot_special && *str == wxT('.') && *pattern != *str)
         return FALSE;
 
-    while ((*pattern != T('\0')) && (!done)
-    && (((*str==T('\0'))&&((*pattern==OB)||(*pattern==T('*'))))||(*str!=T('\0')))) {
+    while ((*pattern != wxT('\0')) && (!done)
+    && (((*str==wxT('\0'))&&((*pattern==OB)||(*pattern==wxT('*'))))||(*str!=wxT('\0')))) {
         switch (*pattern) {
-        case T('\\'):
+        case wxT('\\'):
             pattern++;
-            if (*pattern != T('\0'))
+            if (*pattern != wxT('\0'))
                 pattern++;
             break;
-        case T('*'):
+        case wxT('*'):
             pattern++;
             ret_code = FALSE;
-            while ((*str!=T('\0'))
+            while ((*str!=wxT('\0'))
             && (!(ret_code=wxMatchWild(pattern, str++, FALSE))))
                 /*loop*/;
             if (ret_code) {
-                while (*str != T('\0'))
+                while (*str != wxT('\0'))
                     str++;
-                while (*pattern != T('\0'))
+                while (*pattern != wxT('\0'))
                     pattern++;
             }
             break;
-        case T('['):
+        case wxT('['):
             pattern++;
           repeat:
-            if ((*pattern == T('\0')) || (*pattern == T(']'))) {
+            if ((*pattern == wxT('\0')) || (*pattern == wxT(']'))) {
                 done = TRUE;
                 break;
             }
-            if (*pattern == T('\\')) {
+            if (*pattern == wxT('\\')) {
                 pattern++;
-                if (*pattern == T('\0')) {
+                if (*pattern == wxT('\0')) {
                     done = TRUE;
                     break;
                 }
             }
-            if (*(pattern + 1) == T('-')) {
+            if (*(pattern + 1) == wxT('-')) {
                 c = *pattern;
                 pattern += 2;
-                if (*pattern == T(']')) {
+                if (*pattern == wxT(']')) {
                     done = TRUE;
                     break;
                 }
-                if (*pattern == T('\\')) {
+                if (*pattern == wxT('\\')) {
                     pattern++;
-                    if (*pattern == T('\0')) {
+                    if (*pattern == wxT('\0')) {
                         done = TRUE;
                         break;
                     }
@@ -1773,51 +1773,51 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
                 goto repeat;
             }
             pattern++;
-            while ((*pattern != T(']')) && (*pattern != T('\0'))) {
-                if ((*pattern == T('\\')) && (*(pattern + 1) != T('\0')))
+            while ((*pattern != wxT(']')) && (*pattern != wxT('\0'))) {
+                if ((*pattern == wxT('\\')) && (*(pattern + 1) != wxT('\0')))
                     pattern++;
                 pattern++;
             }
-            if (*pattern != T('\0')) {
+            if (*pattern != wxT('\0')) {
                 pattern++, str++;
             }
             break;
-        case T('?'):
+        case wxT('?'):
             pattern++;
             str++;
             break;
         case OB:
             pattern++;
-            while ((*pattern != CB) && (*pattern != T('\0'))) {
+            while ((*pattern != CB) && (*pattern != wxT('\0'))) {
                 cp = str;
                 ok = TRUE;
-                while (ok && (*cp != T('\0')) && (*pattern != T('\0'))
-                &&  (*pattern != T(',')) && (*pattern != CB)) {
-                    if (*pattern == T('\\'))
+                while (ok && (*cp != wxT('\0')) && (*pattern != wxT('\0'))
+                &&  (*pattern != wxT(',')) && (*pattern != CB)) {
+                    if (*pattern == wxT('\\'))
                         pattern++;
                     ok = (*pattern++ == *cp++);
                 }
-                if (*pattern == T('\0')) {
+                if (*pattern == wxT('\0')) {
                     ok = FALSE;
                     done = TRUE;
                     break;
                 } else if (ok) {
                     str = cp;
-                    while ((*pattern != CB) && (*pattern != T('\0'))) {
-                        if (*++pattern == T('\\')) {
+                    while ((*pattern != CB) && (*pattern != wxT('\0'))) {
+                        if (*++pattern == wxT('\\')) {
                             if (*++pattern == CB)
                                 pattern++;
                         }
                     }
                 } else {
-                    while (*pattern!=CB && *pattern!=T(',') && *pattern!=T('\0')) {
-                        if (*++pattern == T('\\')) {
-                            if (*++pattern == CB || *pattern == T(','))
+                    while (*pattern!=CB && *pattern!=wxT(',') && *pattern!=wxT('\0')) {
+                        if (*++pattern == wxT('\\')) {
+                            if (*++pattern == CB || *pattern == wxT(','))
                                 pattern++;
                         }
                     }
                 }
-                if (*pattern != T('\0'))
+                if (*pattern != wxT('\0'))
                     pattern++;
             }
             break;
@@ -1829,9 +1829,9 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
             }
         }
     }
-    while (*pattern == T('*'))
+    while (*pattern == wxT('*'))
         pattern++;
-    return ((*str == T('\0')) && (*pattern == T('\0')));
+    return ((*str == wxT('\0')) && (*pattern == wxT('\0')));
 };
 
 #endif

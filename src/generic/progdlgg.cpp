@@ -150,21 +150,21 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     {
         nTimeLabels++;
 
-        m_elapsed = CreateLabel(T("Elapsed time : "), &lastWindow);
+        m_elapsed = CreateLabel(wxT("Elapsed time : "), &lastWindow);
     }
 
     if ( style & wxPD_ESTIMATED_TIME )
     {
         nTimeLabels++;
 
-        m_estimated = CreateLabel(T("Estimated time : "), &lastWindow);
+        m_estimated = CreateLabel(wxT("Estimated time : "), &lastWindow);
     }
 
     if ( style & wxPD_REMAINING_TIME )
     {
         nTimeLabels++;
 
-        m_remaining = CreateLabel(T("Remaining time : "), &lastWindow);
+        m_remaining = CreateLabel(wxT("Remaining time : "), &lastWindow);
     }
 
     if ( nTimeLabels > 0 )
@@ -234,7 +234,7 @@ wxStaticText *wxProgressDialog::CreateLabel(const wxString& text,
 {
     wxLayoutConstraints *c;
 
-    wxStaticText *label = new wxStaticText(this, -1, T("unknown"));
+    wxStaticText *label = new wxStaticText(this, -1, wxT("unknown"));
     c = new wxLayoutConstraints;
 
     // VZ: I like the labels be centered - if the others don't mind, you may
@@ -265,8 +265,8 @@ wxStaticText *wxProgressDialog::CreateLabel(const wxString& text,
 bool
 wxProgressDialog::Update(int value, const wxString& newmsg)
 {
-   wxASSERT_MSG( value == -1 || m_gauge, T("cannot update non existent dialog") );
-   wxASSERT_MSG( value <= m_maximum, T("invalid progress value") );
+   wxASSERT_MSG( value == -1 || m_gauge, wxT("cannot update non existent dialog") );
+   wxASSERT_MSG( value <= m_maximum, wxT("invalid progress value") );
 
 
    if( m_gauge )
@@ -374,7 +374,7 @@ static void SetTimeLabel(unsigned long val, wxStaticText *label)
         unsigned long hours = val / 3600;
         unsigned long minutes = (val % 3600) / 60;
         unsigned long seconds = val % 60;
-        s.Printf(T("%lu:%02lu:%02lu"), hours, minutes, seconds);
+        s.Printf(wxT("%lu:%02lu:%02lu"), hours, minutes, seconds);
 
         if ( s != label->GetLabel() )
             label->SetLabel(s);

@@ -339,7 +339,7 @@ wxStatusBar* wxFrame::CreateStatusBar(int number, long style, wxWindowID id,
 {
   // VZ: calling CreateStatusBar twice is an error - why anyone would do it?
   wxCHECK_MSG( m_frameStatusBar == NULL, FALSE,
-               T("recreating status bar in wxFrame") );
+               wxT("recreating status bar in wxFrame") );
 
   m_frameStatusBar = OnCreateStatusBar(number, style, id,
     name);
@@ -354,14 +354,14 @@ wxStatusBar* wxFrame::CreateStatusBar(int number, long style, wxWindowID id,
 
 void wxFrame::SetStatusText(const wxString& text, int number)
 {
-  wxCHECK_RET( m_frameStatusBar != NULL, T("no statusbar to set text for") );
+  wxCHECK_RET( m_frameStatusBar != NULL, wxT("no statusbar to set text for") );
 
   m_frameStatusBar->SetStatusText(text, number);
 }
 
 void wxFrame::SetStatusWidths(int n, const int widths_field[])
 {
-  wxCHECK_RET( m_frameStatusBar != NULL, T("no statusbar to set widths for") );
+  wxCHECK_RET( m_frameStatusBar != NULL, wxT("no statusbar to set widths for") );
 
   m_frameStatusBar->SetStatusWidths(n, widths_field);
   PositionStatusBar();
@@ -401,7 +401,7 @@ void wxFrame::SetMenuBar(wxMenuBar *menu_bar)
         return;
     }
 
-// Fix this in wxMenuBar    wxCHECK_RET( !menu_bar->GetFrame(), T("this menubar is already attached") );
+// Fix this in wxMenuBar    wxCHECK_RET( !menu_bar->GetFrame(), wxT("this menubar is already attached") );
 
     if (m_frameMenuBar)
         delete m_frameMenuBar;
@@ -711,7 +711,7 @@ void wxFrame::ClientToScreen(int *x, int *y) const
 wxToolBar* wxFrame::CreateToolBar(long style, wxWindowID id, const wxString& name)
 {
     wxCHECK_MSG( m_frameToolBar == NULL, FALSE,
-                 T("recreating toolbar in wxFrame") );
+                 wxT("recreating toolbar in wxFrame") );
 
     wxToolBar* toolBar = OnCreateToolBar(style, id, name);
     if (toolBar)

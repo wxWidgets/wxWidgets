@@ -207,7 +207,7 @@ extern "C"
 wxChar *
 copystring (const wxChar *s)
 {
-  if (s == NULL) s = T("");
+  if (s == NULL) s = wxT("");
   size_t len = wxStrlen (s) + 1;
 
   wxChar *news = new wxChar[len];
@@ -287,7 +287,7 @@ IntToString (int number)
 {
   static wxChar buf[20];
 
-  wxSprintf (buf, T("%d"), number);
+  wxSprintf (buf, wxT("%d"), number);
   return buf;
 }
 
@@ -296,27 +296,27 @@ LongToString (long number)
 {
   static wxChar buf[20];
 
-  wxSprintf (buf, T("%ld"), number);
+  wxSprintf (buf, wxT("%ld"), number);
   return buf;
 }
 
 // Array used in DecToHex conversion routine.
-static wxChar hexArray[] = T("0123456789ABCDEF");
+static wxChar hexArray[] = wxT("0123456789ABCDEF");
 
 // Convert 2-digit hex number to decimal
 int wxHexToDec(const wxString& buf)
 {
   int firstDigit, secondDigit;
 
-  if (buf.GetChar(0) >= T('A'))
-    firstDigit = buf.GetChar(0) - T('A') + 10;
+  if (buf.GetChar(0) >= wxT('A'))
+    firstDigit = buf.GetChar(0) - wxT('A') + 10;
   else
-    firstDigit = buf.GetChar(0) - T('0');
+    firstDigit = buf.GetChar(0) - wxT('0');
 
-  if (buf.GetChar(1) >= T('A'))
-    secondDigit = buf.GetChar(1) - T('A') + 10;
+  if (buf.GetChar(1) >= wxT('A'))
+    secondDigit = buf.GetChar(1) - wxT('A') + 10;
   else
-    secondDigit = buf.GetChar(1) - T('0');
+    secondDigit = buf.GetChar(1) - wxT('0');
 
   return firstDigit * 16 + secondDigit;
 }
@@ -407,13 +407,13 @@ wxChar *wxStripMenuCodes (wxChar *in, wxChar *out)
 
   while (*in)
     {
-      if (*in == T('&'))
+      if (*in == wxT('&'))
         {
           // Check && -> &, &x -> x
-          if (*++in == T('&'))
+          if (*++in == wxT('&'))
             *out++ = *in++;
         }
-      else if (*in == T('\t'))
+      else if (*in == wxT('\t'))
         {
           // Remove all stuff after \t in X mode, and let the stuff as is
           // in Windows mode.
@@ -425,7 +425,7 @@ wxChar *wxStripMenuCodes (wxChar *in, wxChar *out)
         *out++ = *in++;
     }                                // while
 
-  *out = T('\0');
+  *out = wxT('\0');
 
   return tmpOut;
 }
@@ -869,7 +869,7 @@ bool wxGetEmailAddress(wxChar *address, int maxSize)
         return FALSE;
 
     wxStrncpy(address, email, maxSize - 1);
-    address[maxSize - 1] = T('\0');
+    address[maxSize - 1] = wxT('\0');
 
     return TRUE;
 }
@@ -885,7 +885,7 @@ wxString wxGetEmailAddress()
         if ( !!user )
         {
             wxString email(user);
-            email << T('@') << host;
+            email << wxT('@') << host;
         }
     }
 

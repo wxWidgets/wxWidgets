@@ -69,7 +69,7 @@ static int CMPFUNC_CONV CompareStrings(const char *s1, const char *s2)
 static char **CreateFontList(wxChar spacing, int *nFonts)
 {
     wxString pattern;
-    pattern.Printf(T("-*-*-*-*-*-*-*-*-*-*-%c-*-*-*"), spacing);
+    pattern.Printf(wxT("-*-*-*-*-*-*-*-*-*-*-%c-*-*-*"), spacing);
 
     // get the list of all fonts
     return XListFonts((Display *)wxGetDisplay(), pattern, 32767, nFonts);
@@ -123,7 +123,7 @@ bool wxFontEnumerator::EnumerateFamilies(bool fixedWidthOnly)
     if ( fixedWidthOnly )
     {
         bool cont = TRUE;
-        fonts = CreateFontList(T('m'), &nFonts);
+        fonts = CreateFontList(wxT('m'), &nFonts);
         if ( fonts )
         {
             cont = ProcessFamiliesFromFontList(this, fonts, nFonts);
@@ -136,7 +136,7 @@ bool wxFontEnumerator::EnumerateFamilies(bool fixedWidthOnly)
             return TRUE;
         }
 
-        fonts = CreateFontList(T('c'), &nFonts);
+        fonts = CreateFontList(wxT('c'), &nFonts);
         if ( !fonts )
         {
             return TRUE;
@@ -144,11 +144,11 @@ bool wxFontEnumerator::EnumerateFamilies(bool fixedWidthOnly)
     }
     else
     {
-        fonts = CreateFontList(T('*'), &nFonts);
+        fonts = CreateFontList(wxT('*'), &nFonts);
 
         if ( !fonts )
         {
-            wxFAIL_MSG(T("No fonts at all on this system?"));
+            wxFAIL_MSG(wxT("No fonts at all on this system?"));
 
             return FALSE;
         }
@@ -165,8 +165,8 @@ bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
 {
 #if 0
     wxString pattern;
-    pattern.Printf(T("-*-%s-*-*-*-*-*-*-*-*-*-*-*-*"),
-                   family.IsEmpty() ? T("*") : family.c_str());
+    pattern.Printf(wxT("-*-%s-*-*-*-*-*-*-*-*-*-*-*-*"),
+                   family.IsEmpty() ? wxT("*") : family.c_str());
 
     // get the list of all fonts
     int nFonts;

@@ -74,4 +74,3 @@ DOBJECTS= djpeg.obj wrppm.obj wrgif.obj wrtarga.obj wrrle.obj wrbmp.obj \
         rdcolmap.obj cdjpeg.obj
 TROBJECTS= jpegtran.obj rdswitch.obj cdjpeg.obj transupp.obj
 
-!include $(WXWIN)\src\makelib.b32

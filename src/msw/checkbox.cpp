@@ -78,8 +78,8 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     m_windowStyle = style;
 
     wxString Label = label;
-    if (Label == T(""))
-        Label = T(" "); // Apparently needed or checkbox won't show
+    if (Label == wxT(""))
+        Label = wxT(" "); // Apparently needed or checkbox won't show
 
     if ( id == -1 )
         m_windowId = NewControlId();
@@ -109,7 +109,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
        msStyle |= WS_BORDER;
      */
 
-    m_hWnd = (WXHWND)CreateWindowEx(exStyle, T("BUTTON"), Label,
+    m_hWnd = (WXHWND)CreateWindowEx(exStyle, wxT("BUTTON"), Label,
             msStyle,
             0, 0, 0, 0,
             (HWND)parent->GetHWND(), (HMENU)m_windowId,
@@ -245,7 +245,7 @@ bool wxBitmapCheckBox::Create(wxWindow *parent, wxWindowID id, const wxBitmap *l
   checkHeight = -1 ;
   long msStyle = CHECK_FLAGS;
 
-  HWND wx_button = CreateWindowEx(MakeExtendedStyle(m_windowStyle), CHECK_CLASS, T("toggle"),
+  HWND wx_button = CreateWindowEx(MakeExtendedStyle(m_windowStyle), CHECK_CLASS, wxT("toggle"),
                     msStyle,
                     0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
                     wxGetInstance(), NULL);
@@ -272,5 +272,5 @@ bool wxBitmapCheckBox::Create(wxWindow *parent, wxWindowID id, const wxBitmap *l
 
 void wxBitmapCheckBox::SetLabel(const wxBitmap& bitmap)
 {
-    wxFAIL_MSG(T("not implemented"));
+    wxFAIL_MSG(wxT("not implemented"));
 }

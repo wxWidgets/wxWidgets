@@ -322,7 +322,7 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
     const char *envLibPath = getenv("LD_LIBRARY_PATH");
     if ( envLibPath )
         libPath << ':' << envLibPath;
-    wxStringTokenizer tokenizer(libPath, T(':'));
+    wxStringTokenizer tokenizer(libPath, wxT(':'));
     while ( tokenizer.HasMoreToken() )
     {
         wxString fullname(tokenizer.NextToken());

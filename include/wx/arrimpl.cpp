@@ -21,7 +21,7 @@
  *****************************************************************************/
 
 // needed to resolve the conflict between global T and macro parameter T
-#define _WX_ERROR_REMOVE2(x)     T("bad index in " #x "::Remove()")
+#define _WX_ERROR_REMOVE2(x)     wxT("bad index in " #x "::Remove()")
 
 // macro implements remaining (not inline) methods of template list
 // (it's private to this file)

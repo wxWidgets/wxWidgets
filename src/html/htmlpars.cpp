@@ -166,5 +166,5 @@ wxHtmlParser::~wxHtmlParser()
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_ABSTRACT_CLASS(wxHtmlTagHandler,wxObject)
-
 #endif
+
