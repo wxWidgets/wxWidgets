@@ -1278,7 +1278,16 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
         child->GetPosition( &x, &y );
         int w,h;
         child->GetSize( &w, &h );
-        child->SetSize( x+dx, y+dy, w, h );
+        if (rect)
+        {
+            wxRect rc(x,y,w,h);
+            if (rect->Intersects(rc))
+                child->SetSize( x+dx, y+dy, w, h );
+        }
+        else
+        {
+            child->SetSize( x+dx, y+dy, w, h );	    	
+        }        
     }
     
     Update() ;
