@@ -353,6 +353,8 @@ bool wxPanel::SetFocusToChild()
 
 bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
 {
+    wxCHECK_MSG( win, FALSE, _T("wxSetFocusToChild(): invalid window") );
+
     if ( *childLastFocused )
     {
         // It might happen that the window got reparented or no longer accepts

@@ -727,18 +727,35 @@ void wxFrame::OnActivate(wxActivateEvent& event)
         // restore focus to the child which was last focused
         wxLogTrace(_T("focus"), _T("wxFrame %08x activated."), m_hWnd);
 
-        wxSetFocusToChild(this, &m_winLastFocused);
-    }
-    else
-    {
-        // remember the last focused child
-        m_winLastFocused = FindFocus();
-        while ( m_winLastFocused )
+        wxWindow *parent = m_winLastFocused ? m_winLastFocused->GetParent()
+                                            : NULL;
+        if ( !parent )
         {
-            if ( GetChildren().Find(m_winLastFocused) )
-                break;
+            parent = this;
+        }
 
-            m_winLastFocused = m_winLastFocused->GetParent();
+        wxSetFocusToChild(parent, &m_winLastFocused);
+    }
+    else // deactivating
+    {
+        // remember the last focused child if it is our child
+        m_winLastFocused = FindFocus();
+
+        // so we NULL it out if it's a child from some other frame
+        wxWindow *win = m_winLastFocused;
+        while ( win )
+        {
+            if ( win->IsTopLevel() )
+            {
+                if ( win != this )
+                {
+                    m_winLastFocused = NULL;
+                }
+
+                break;
+            }
+
+            win = win->GetParent();
         }
 
         wxLogTrace(_T("focus"),
