@@ -3320,7 +3320,7 @@ bool wxWindowMSW::HandleDestroy()
 
     // delete our drop target if we've got one
 #if wxUSE_DRAG_AND_DROP
-    
+#ifndef __DIGITALMARS__    
     if ( m_dropTarget != NULL )
     {
         m_dropTarget->Revoke(m_hWnd);
@@ -3328,6 +3328,7 @@ bool wxWindowMSW::HandleDestroy()
         delete m_dropTarget;
         m_dropTarget = NULL;
     }
+#endif  //#ifndef __DIGITALMARS__
 #endif // wxUSE_DRAG_AND_DROP
 
     // WM_DESTROY handled
