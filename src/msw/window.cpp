@@ -3536,17 +3536,19 @@ bool wxWindowMSW::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
 #endif // wxUSE_MENUS_NATIVE
 
     wxWindow *win = NULL;
-    if ( cmd == 0 || cmd == 1 ) // menu or accel - use id
+
+    // first try to find it from HWND - this works even with the broken
+    // programs using the same ids for different controls
+    if ( control )
+    {
+        win = wxFindWinFromHandle(control);
+    }
+
+    // try the id
+    if ( !win )
     {
         // must cast to a signed type before comparing with other ids!
         win = FindItem((signed short)id);
-    }
-
-    if ( !win && control )
-    {
-        // find it from HWND - this works even with the broken programs using
-        // the same ids for different controls
-        win = wxFindWinFromHandle(control);
     }
 
     if ( win )
