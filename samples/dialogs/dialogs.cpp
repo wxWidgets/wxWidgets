@@ -851,12 +851,6 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event) )
     dc.SetTextForeground(wxGetApp().m_canvasTextColour);
     dc.SetBackgroundMode(wxTRANSPARENT);
     dc.DrawText("wxWindows common dialogs test application", 10, 10);
-    
-    dc.SetPen( *wxRED_PEN );
-    dc.DrawLine( 10,40,200,40 );
-    
-    dc.SetPen( *wxBLACK_PEN );
-    dc.DrawLine( 10,50,200,50 );
 }
 
 // ----------------------------------------------------------------------------
