@@ -1654,7 +1654,7 @@ test -n "$target_alias" &&
 wx_major_version_number=2
 wx_minor_version_number=5
 wx_release_number=3
-wx_subrelease_number=0
+wx_subrelease_number=1
 
 WX_RELEASE=$wx_major_version_number.$wx_minor_version_number
 WX_VERSION=$WX_RELEASE.$wx_release_number
@@ -39778,6 +39778,8 @@ fi
 
 
     BAKEFILE_BAKEFILE_M4_VERSION="0.1.4"
+
+
 
 
 
