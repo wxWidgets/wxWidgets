@@ -30,13 +30,44 @@ rectangle representing the intersection is returned.
 
 Some bug fixes for Clipboard and Drag-n-Drop.
 
-Rotated text!!!  WooHoo!  (See wxDC.DrawRotatedtext())
+Rotated text!!!  WooHoo!  (See wxDC.DrawRotatedText())
 
 Added a set of Generic Buttons to the library.  These are simple
 window classes that look and act like native buttons, but you can have
 a bit more control over them.  The bezel width can be set in addition
 to colours, fonts, etc.  There is a ToggleButton as well as Bitmap
 versions too.
+
+The C++ wxToolBar classes have been redone, and so have the wxPython
+wrappers.  There have been slight modifications to some of the methods
+but shouldn't impact anybody too much.  I took the opportunity to add
+support for setting user data on each toolbar tool.  The new AddTool
+methods look like this:
+
+        def AddTool(ID,
+                    bitmap,
+                    pushedBitmap = wxNullBitmap,
+                    toggle = FALSE,
+                    clientData = NULL,
+                    shortHelpString = "",
+                    longHelpString = "")
+
+        def AddSimpleTool(ID,
+                          bitmap,
+                          shortHelpString = "",
+                          longHelpString = "",
+                          toggle=FALSE)
+
+
+There are also coresponding InsertTool and InsertSimpleTool methods
+that additionally take an integer position as the first parameter.
+
+Added a wrapper for the PCX and TIFF ImageHandlers.
+
+wxRect now simulates attributes named left, right, top and bottom.
+
+
+
 
 
 

@@ -423,6 +423,7 @@ enum {
     wxBITMAP_TYPE_ANY,
     wxBITMAP_TYPE_RESOURCE,
     wxBITMAP_TYPE_JPEG,
+    wxBITMAP_TYPE_PCX,
 
     wxOPEN,
     wxSAVE,

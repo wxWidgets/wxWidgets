@@ -32,20 +32,6 @@
 
 //---------------------------------------------------------------------------
 
-%{
-class wxPyUserData : public wxObject {
-public:
-    wxPyUserData(PyObject* obj) { m_obj = obj; Py_INCREF(m_obj); }
-    ~wxPyUserData() {
-        bool doSave = wxPyRestoreThread();
-        Py_DECREF(m_obj);
-        wxPySaveThread(doSave);
-    }
-    PyObject* m_obj;
-};
-%}
-
-//---------------------------------------------------------------------------
 
 class wxSizerItem {
 public:
@@ -68,6 +54,11 @@ public:
     int GetOption();
     int GetFlag();
     int GetBorder();
+
+    void SetInitSize( int x, int y );
+    void SetOption( int option );
+    void SetFlag( int flag );
+    void SetBorder( int border );
 
     // wxObject* GetUserData();
     %addmethods {

@@ -1050,296 +1050,6 @@ static PyObject *_wrap_wxNullColour_get() {
     return pyobj;
 }
 
-#define wxGDIImage_GetHandle(_swigobj)  (_swigobj->GetHandle())
-static PyObject *_wrap_wxGDIImage_GetHandle(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    long  _result;
-    wxGDIImage * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGDIImage_GetHandle",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGDIImage_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGDIImage_GetHandle. Expected _wxGDIImage_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (long )wxGDIImage_GetHandle(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("l",_result);
-    return _resultobj;
-}
-
-#define wxGDIImage_SetHandle(_swigobj,_swigarg0)  (_swigobj->SetHandle(_swigarg0))
-static PyObject *_wrap_wxGDIImage_SetHandle(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxGDIImage * _arg0;
-    long  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","handle", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxGDIImage_SetHandle",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGDIImage_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGDIImage_SetHandle. Expected _wxGDIImage_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxGDIImage_SetHandle(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxGDIImage_Ok(_swigobj)  (_swigobj->Ok())
-static PyObject *_wrap_wxGDIImage_Ok(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxGDIImage * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGDIImage_Ok",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGDIImage_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGDIImage_Ok. Expected _wxGDIImage_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxGDIImage_Ok(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxGDIImage_GetWidth(_swigobj)  (_swigobj->GetWidth())
-static PyObject *_wrap_wxGDIImage_GetWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxGDIImage * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGDIImage_GetWidth",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGDIImage_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGDIImage_GetWidth. Expected _wxGDIImage_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxGDIImage_GetWidth(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxGDIImage_GetHeight(_swigobj)  (_swigobj->GetHeight())
-static PyObject *_wrap_wxGDIImage_GetHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxGDIImage * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGDIImage_GetHeight",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGDIImage_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGDIImage_GetHeight. Expected _wxGDIImage_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxGDIImage_GetHeight(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxGDIImage_GetDepth(_swigobj)  (_swigobj->GetDepth())
-static PyObject *_wrap_wxGDIImage_GetDepth(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxGDIImage * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGDIImage_GetDepth",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGDIImage_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGDIImage_GetDepth. Expected _wxGDIImage_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxGDIImage_GetDepth(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxGDIImage_SetWidth(_swigobj,_swigarg0)  (_swigobj->SetWidth(_swigarg0))
-static PyObject *_wrap_wxGDIImage_SetWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxGDIImage * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","w", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGDIImage_SetWidth",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGDIImage_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGDIImage_SetWidth. Expected _wxGDIImage_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxGDIImage_SetWidth(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxGDIImage_SetHeight(_swigobj,_swigarg0)  (_swigobj->SetHeight(_swigarg0))
-static PyObject *_wrap_wxGDIImage_SetHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxGDIImage * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","h", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGDIImage_SetHeight",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGDIImage_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGDIImage_SetHeight. Expected _wxGDIImage_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxGDIImage_SetHeight(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxGDIImage_SetDepth(_swigobj,_swigarg0)  (_swigobj->SetDepth(_swigarg0))
-static PyObject *_wrap_wxGDIImage_SetDepth(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxGDIImage * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","d", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGDIImage_SetDepth",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGDIImage_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGDIImage_SetDepth. Expected _wxGDIImage_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxGDIImage_SetDepth(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxGDIImage_SetSize(_swigobj,_swigarg0)  (_swigobj->SetSize(_swigarg0))
-static PyObject *_wrap_wxGDIImage_SetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxGDIImage * _arg0;
-    wxSize * _arg1;
-    PyObject * _argo0 = 0;
-    wxSize  temp;
-    PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","size", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGDIImage_SetSize",_kwnames,&_argo0,&_obj1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGDIImage_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGDIImage_SetSize. Expected _wxGDIImage_p.");
-        return NULL;
-        }
-    }
-{
-    _arg1 = &temp;
-    if (! wxSize_helper(_obj1, &_arg1))
-        return NULL;
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxGDIImage_SetSize(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-static void *SwigwxBitmapTowxGDIImage(void *ptr) {
-    wxBitmap *src;
-    wxGDIImage *dest;
-    src = (wxBitmap *) ptr;
-    dest = (wxGDIImage *) src;
-    return (void *) dest;
-}
-
 #define new_wxBitmap(_swigarg0,_swigarg1) (new wxBitmap(_swigarg0,_swigarg1))
 static PyObject *_wrap_new_wxBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1637,6 +1347,288 @@ static PyObject *_wrap_wxBitmap_SetPalette(PyObject *self, PyObject *args, PyObj
     return _resultobj;
 }
 
+#define wxBitmap_GetHandle(_swigobj)  (_swigobj->GetHandle())
+static PyObject *_wrap_wxBitmap_GetHandle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    wxBitmap * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxBitmap_GetHandle",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmap_GetHandle. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (long )wxBitmap_GetHandle(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+#define wxBitmap_SetHandle(_swigobj,_swigarg0)  (_swigobj->SetHandle(_swigarg0))
+static PyObject *_wrap_wxBitmap_SetHandle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBitmap * _arg0;
+    long  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","handle", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxBitmap_SetHandle",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmap_SetHandle. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxBitmap_SetHandle(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxBitmap_Ok(_swigobj)  (_swigobj->Ok())
+static PyObject *_wrap_wxBitmap_Ok(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxBitmap * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxBitmap_Ok",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmap_Ok. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxBitmap_Ok(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxBitmap_GetWidth(_swigobj)  (_swigobj->GetWidth())
+static PyObject *_wrap_wxBitmap_GetWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxBitmap * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxBitmap_GetWidth",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmap_GetWidth. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxBitmap_GetWidth(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxBitmap_GetHeight(_swigobj)  (_swigobj->GetHeight())
+static PyObject *_wrap_wxBitmap_GetHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxBitmap * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxBitmap_GetHeight",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmap_GetHeight. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxBitmap_GetHeight(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxBitmap_GetDepth(_swigobj)  (_swigobj->GetDepth())
+static PyObject *_wrap_wxBitmap_GetDepth(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxBitmap * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxBitmap_GetDepth",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmap_GetDepth. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxBitmap_GetDepth(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxBitmap_SetWidth(_swigobj,_swigarg0)  (_swigobj->SetWidth(_swigarg0))
+static PyObject *_wrap_wxBitmap_SetWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBitmap * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","w", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxBitmap_SetWidth",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmap_SetWidth. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxBitmap_SetWidth(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxBitmap_SetHeight(_swigobj,_swigarg0)  (_swigobj->SetHeight(_swigarg0))
+static PyObject *_wrap_wxBitmap_SetHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBitmap * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","h", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxBitmap_SetHeight",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmap_SetHeight. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxBitmap_SetHeight(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxBitmap_SetDepth(_swigobj,_swigarg0)  (_swigobj->SetDepth(_swigarg0))
+static PyObject *_wrap_wxBitmap_SetDepth(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBitmap * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","d", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxBitmap_SetDepth",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmap_SetDepth. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxBitmap_SetDepth(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxBitmap_SetSize(_swigobj,_swigarg0)  (_swigobj->SetSize(_swigarg0))
+static PyObject *_wrap_wxBitmap_SetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBitmap * _arg0;
+    wxSize * _arg1;
+    PyObject * _argo0 = 0;
+    wxSize  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","size", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxBitmap_SetSize",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmap_SetSize. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxSize_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxBitmap_SetSize(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define new_wxMask(_swigarg0) (new wxMask(_swigarg0))
 static PyObject *_wrap_new_wxMask(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1669,14 +1661,6 @@ static PyObject *_wrap_new_wxMask(PyObject *self, PyObject *args, PyObject *kwar
         _resultobj = Py_None;
     }
     return _resultobj;
-}
-
-static void *SwigwxIconTowxGDIImage(void *ptr) {
-    wxIcon *src;
-    wxGDIImage *dest;
-    src = (wxIcon *) ptr;
-    dest = (wxGDIImage *) src;
-    return (void *) dest;
 }
 
 #define new_wxIcon(_swigarg0,_swigarg1,_swigarg2,_swigarg3) (new wxIcon(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
@@ -1788,12 +1772,286 @@ static PyObject *_wrap_wxIcon_LoadFile(PyObject *self, PyObject *args, PyObject 
     return _resultobj;
 }
 
-static void *SwigwxCursorTowxGDIImage(void *ptr) {
-    wxCursor *src;
-    wxGDIImage *dest;
-    src = (wxCursor *) ptr;
-    dest = (wxGDIImage *) src;
-    return (void *) dest;
+#define wxIcon_GetHandle(_swigobj)  (_swigobj->GetHandle())
+static PyObject *_wrap_wxIcon_GetHandle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    wxIcon * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxIcon_GetHandle",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIcon_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxIcon_GetHandle. Expected _wxIcon_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (long )wxIcon_GetHandle(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+#define wxIcon_SetHandle(_swigobj,_swigarg0)  (_swigobj->SetHandle(_swigarg0))
+static PyObject *_wrap_wxIcon_SetHandle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxIcon * _arg0;
+    long  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","handle", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxIcon_SetHandle",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIcon_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxIcon_SetHandle. Expected _wxIcon_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxIcon_SetHandle(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxIcon_Ok(_swigobj)  (_swigobj->Ok())
+static PyObject *_wrap_wxIcon_Ok(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxIcon * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxIcon_Ok",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIcon_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxIcon_Ok. Expected _wxIcon_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxIcon_Ok(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxIcon_GetWidth(_swigobj)  (_swigobj->GetWidth())
+static PyObject *_wrap_wxIcon_GetWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxIcon * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxIcon_GetWidth",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIcon_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxIcon_GetWidth. Expected _wxIcon_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxIcon_GetWidth(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxIcon_GetHeight(_swigobj)  (_swigobj->GetHeight())
+static PyObject *_wrap_wxIcon_GetHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxIcon * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxIcon_GetHeight",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIcon_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxIcon_GetHeight. Expected _wxIcon_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxIcon_GetHeight(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxIcon_GetDepth(_swigobj)  (_swigobj->GetDepth())
+static PyObject *_wrap_wxIcon_GetDepth(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxIcon * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxIcon_GetDepth",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIcon_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxIcon_GetDepth. Expected _wxIcon_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxIcon_GetDepth(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxIcon_SetWidth(_swigobj,_swigarg0)  (_swigobj->SetWidth(_swigarg0))
+static PyObject *_wrap_wxIcon_SetWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxIcon * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","w", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxIcon_SetWidth",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIcon_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxIcon_SetWidth. Expected _wxIcon_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxIcon_SetWidth(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxIcon_SetHeight(_swigobj,_swigarg0)  (_swigobj->SetHeight(_swigarg0))
+static PyObject *_wrap_wxIcon_SetHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxIcon * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","h", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxIcon_SetHeight",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIcon_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxIcon_SetHeight. Expected _wxIcon_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxIcon_SetHeight(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxIcon_SetDepth(_swigobj,_swigarg0)  (_swigobj->SetDepth(_swigarg0))
+static PyObject *_wrap_wxIcon_SetDepth(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxIcon * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","d", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxIcon_SetDepth",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIcon_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxIcon_SetDepth. Expected _wxIcon_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxIcon_SetDepth(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxIcon_SetSize(_swigobj,_swigarg0)  (_swigobj->SetSize(_swigarg0))
+static PyObject *_wrap_wxIcon_SetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxIcon * _arg0;
+    wxSize * _arg1;
+    PyObject * _argo0 = 0;
+    wxSize  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","size", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxIcon_SetSize",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIcon_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxIcon_SetSize. Expected _wxIcon_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxSize_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxIcon_SetSize(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
 }
 
 #define new_wxCursor(_swigarg0,_swigarg1,_swigarg2,_swigarg3) (new wxCursor(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
@@ -1857,6 +2115,288 @@ static PyObject *_wrap_delete_wxCursor(PyObject *self, PyObject *args, PyObject 
 {
     wxPy_BEGIN_ALLOW_THREADS;
         delete_wxCursor(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxCursor_GetHandle(_swigobj)  (_swigobj->GetHandle())
+static PyObject *_wrap_wxCursor_GetHandle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    wxCursor * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCursor_GetHandle",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCursor_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCursor_GetHandle. Expected _wxCursor_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (long )wxCursor_GetHandle(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+#define wxCursor_SetHandle(_swigobj,_swigarg0)  (_swigobj->SetHandle(_swigarg0))
+static PyObject *_wrap_wxCursor_SetHandle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxCursor * _arg0;
+    long  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","handle", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxCursor_SetHandle",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCursor_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCursor_SetHandle. Expected _wxCursor_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxCursor_SetHandle(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxCursor_Ok(_swigobj)  (_swigobj->Ok())
+static PyObject *_wrap_wxCursor_Ok(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxCursor * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCursor_Ok",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCursor_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCursor_Ok. Expected _wxCursor_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxCursor_Ok(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxCursor_GetWidth(_swigobj)  (_swigobj->GetWidth())
+static PyObject *_wrap_wxCursor_GetWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxCursor * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCursor_GetWidth",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCursor_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCursor_GetWidth. Expected _wxCursor_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxCursor_GetWidth(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxCursor_GetHeight(_swigobj)  (_swigobj->GetHeight())
+static PyObject *_wrap_wxCursor_GetHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxCursor * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCursor_GetHeight",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCursor_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCursor_GetHeight. Expected _wxCursor_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxCursor_GetHeight(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxCursor_GetDepth(_swigobj)  (_swigobj->GetDepth())
+static PyObject *_wrap_wxCursor_GetDepth(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxCursor * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCursor_GetDepth",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCursor_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCursor_GetDepth. Expected _wxCursor_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxCursor_GetDepth(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxCursor_SetWidth(_swigobj,_swigarg0)  (_swigobj->SetWidth(_swigarg0))
+static PyObject *_wrap_wxCursor_SetWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxCursor * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","w", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxCursor_SetWidth",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCursor_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCursor_SetWidth. Expected _wxCursor_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxCursor_SetWidth(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxCursor_SetHeight(_swigobj,_swigarg0)  (_swigobj->SetHeight(_swigarg0))
+static PyObject *_wrap_wxCursor_SetHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxCursor * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","h", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxCursor_SetHeight",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCursor_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCursor_SetHeight. Expected _wxCursor_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxCursor_SetHeight(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxCursor_SetDepth(_swigobj,_swigarg0)  (_swigobj->SetDepth(_swigarg0))
+static PyObject *_wrap_wxCursor_SetDepth(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxCursor * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","d", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxCursor_SetDepth",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCursor_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCursor_SetDepth. Expected _wxCursor_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxCursor_SetDepth(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxCursor_SetSize(_swigobj,_swigarg0)  (_swigobj->SetSize(_swigarg0))
+static PyObject *_wrap_wxCursor_SetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxCursor * _arg0;
+    wxSize * _arg1;
+    PyObject * _argo0 = 0;
+    wxSize  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","size", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxCursor_SetSize",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCursor_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCursor_SetSize. Expected _wxCursor_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxSize_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxCursor_SetSize(_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -7108,12 +7648,42 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxFont_GetFaceName", (PyCFunction) _wrap_wxFont_GetFaceName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFont_Ok", (PyCFunction) _wrap_wxFont_Ok, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxFont", (PyCFunction) _wrap_new_wxFont, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCursor_SetSize", (PyCFunction) _wrap_wxCursor_SetSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCursor_SetDepth", (PyCFunction) _wrap_wxCursor_SetDepth, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCursor_SetHeight", (PyCFunction) _wrap_wxCursor_SetHeight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCursor_SetWidth", (PyCFunction) _wrap_wxCursor_SetWidth, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCursor_GetDepth", (PyCFunction) _wrap_wxCursor_GetDepth, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCursor_GetHeight", (PyCFunction) _wrap_wxCursor_GetHeight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCursor_GetWidth", (PyCFunction) _wrap_wxCursor_GetWidth, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCursor_Ok", (PyCFunction) _wrap_wxCursor_Ok, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCursor_SetHandle", (PyCFunction) _wrap_wxCursor_SetHandle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCursor_GetHandle", (PyCFunction) _wrap_wxCursor_GetHandle, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxCursor", (PyCFunction) _wrap_delete_wxCursor, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxCursor", (PyCFunction) _wrap_new_wxCursor, METH_VARARGS | METH_KEYWORDS },
+	 { "wxIcon_SetSize", (PyCFunction) _wrap_wxIcon_SetSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxIcon_SetDepth", (PyCFunction) _wrap_wxIcon_SetDepth, METH_VARARGS | METH_KEYWORDS },
+	 { "wxIcon_SetHeight", (PyCFunction) _wrap_wxIcon_SetHeight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxIcon_SetWidth", (PyCFunction) _wrap_wxIcon_SetWidth, METH_VARARGS | METH_KEYWORDS },
+	 { "wxIcon_GetDepth", (PyCFunction) _wrap_wxIcon_GetDepth, METH_VARARGS | METH_KEYWORDS },
+	 { "wxIcon_GetHeight", (PyCFunction) _wrap_wxIcon_GetHeight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxIcon_GetWidth", (PyCFunction) _wrap_wxIcon_GetWidth, METH_VARARGS | METH_KEYWORDS },
+	 { "wxIcon_Ok", (PyCFunction) _wrap_wxIcon_Ok, METH_VARARGS | METH_KEYWORDS },
+	 { "wxIcon_SetHandle", (PyCFunction) _wrap_wxIcon_SetHandle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxIcon_GetHandle", (PyCFunction) _wrap_wxIcon_GetHandle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIcon_LoadFile", (PyCFunction) _wrap_wxIcon_LoadFile, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxIcon", (PyCFunction) _wrap_delete_wxIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxIcon", (PyCFunction) _wrap_new_wxIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxMask", (PyCFunction) _wrap_new_wxMask, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_SetSize", (PyCFunction) _wrap_wxBitmap_SetSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_SetDepth", (PyCFunction) _wrap_wxBitmap_SetDepth, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_SetHeight", (PyCFunction) _wrap_wxBitmap_SetHeight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_SetWidth", (PyCFunction) _wrap_wxBitmap_SetWidth, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_GetDepth", (PyCFunction) _wrap_wxBitmap_GetDepth, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_GetHeight", (PyCFunction) _wrap_wxBitmap_GetHeight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_GetWidth", (PyCFunction) _wrap_wxBitmap_GetWidth, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_Ok", (PyCFunction) _wrap_wxBitmap_Ok, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_SetHandle", (PyCFunction) _wrap_wxBitmap_SetHandle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_GetHandle", (PyCFunction) _wrap_wxBitmap_GetHandle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBitmap_SetPalette", (PyCFunction) _wrap_wxBitmap_SetPalette, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBitmap_SetMask", (PyCFunction) _wrap_wxBitmap_SetMask, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBitmap_SaveFile", (PyCFunction) _wrap_wxBitmap_SaveFile, METH_VARARGS | METH_KEYWORDS },
@@ -7122,16 +7692,6 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxBitmap_GetPalette", (PyCFunction) _wrap_wxBitmap_GetPalette, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxBitmap", (PyCFunction) _wrap_delete_wxBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxBitmap", (PyCFunction) _wrap_new_wxBitmap, METH_VARARGS | METH_KEYWORDS },
-	 { "wxGDIImage_SetSize", (PyCFunction) _wrap_wxGDIImage_SetSize, METH_VARARGS | METH_KEYWORDS },
-	 { "wxGDIImage_SetDepth", (PyCFunction) _wrap_wxGDIImage_SetDepth, METH_VARARGS | METH_KEYWORDS },
-	 { "wxGDIImage_SetHeight", (PyCFunction) _wrap_wxGDIImage_SetHeight, METH_VARARGS | METH_KEYWORDS },
-	 { "wxGDIImage_SetWidth", (PyCFunction) _wrap_wxGDIImage_SetWidth, METH_VARARGS | METH_KEYWORDS },
-	 { "wxGDIImage_GetDepth", (PyCFunction) _wrap_wxGDIImage_GetDepth, METH_VARARGS | METH_KEYWORDS },
-	 { "wxGDIImage_GetHeight", (PyCFunction) _wrap_wxGDIImage_GetHeight, METH_VARARGS | METH_KEYWORDS },
-	 { "wxGDIImage_GetWidth", (PyCFunction) _wrap_wxGDIImage_GetWidth, METH_VARARGS | METH_KEYWORDS },
-	 { "wxGDIImage_Ok", (PyCFunction) _wrap_wxGDIImage_Ok, METH_VARARGS | METH_KEYWORDS },
-	 { "wxGDIImage_SetHandle", (PyCFunction) _wrap_wxGDIImage_SetHandle, METH_VARARGS | METH_KEYWORDS },
-	 { "wxGDIImage_GetHandle", (PyCFunction) _wrap_wxGDIImage_GetHandle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMemoryDCFromDC", (PyCFunction) _wrap_wxMemoryDCFromDC, METH_VARARGS | METH_KEYWORDS },
 	 { "wxNamedColour", (PyCFunction) _wrap_wxNamedColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFont_SetDefaultEncoding", (PyCFunction) _wrap_wxFont_SetDefaultEncoding, METH_VARARGS | METH_KEYWORDS },
@@ -7214,13 +7774,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_EBool","_int",0},
     { "_EBool","_wxWindowID",0},
     { "_class_wxRegion","_wxRegion",0},
-    { "_wxGDIImage","_class_wxCursor",SwigwxCursorTowxGDIImage},
-    { "_wxGDIImage","_wxCursor",SwigwxCursorTowxGDIImage},
-    { "_wxGDIImage","_class_wxIcon",SwigwxIconTowxGDIImage},
-    { "_wxGDIImage","_wxIcon",SwigwxIconTowxGDIImage},
-    { "_wxGDIImage","_class_wxBitmap",SwigwxBitmapTowxGDIImage},
-    { "_wxGDIImage","_wxBitmap",SwigwxBitmapTowxGDIImage},
-    { "_wxGDIImage","_class_wxGDIImage",0},
     { "_wxFont","_class_wxFont",0},
     { "_unsigned_long","_wxDash",0},
     { "_unsigned_long","_long",0},
@@ -7282,13 +7835,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_short","_unsigned_short",0},
     { "_short","_signed_short",0},
     { "_class_wxImageList","_wxImageList",0},
-    { "_class_wxGDIImage","_class_wxCursor",SwigwxCursorTowxGDIImage},
-    { "_class_wxGDIImage","_wxCursor",SwigwxCursorTowxGDIImage},
-    { "_class_wxGDIImage","_class_wxIcon",SwigwxIconTowxGDIImage},
-    { "_class_wxGDIImage","_wxIcon",SwigwxIconTowxGDIImage},
-    { "_class_wxGDIImage","_class_wxBitmap",SwigwxBitmapTowxGDIImage},
-    { "_class_wxGDIImage","_wxBitmap",SwigwxBitmapTowxGDIImage},
-    { "_class_wxGDIImage","_wxGDIImage",0},
     { "_wxWindowID","_wxCoord",0},
     { "_wxWindowID","_wxPrintQuality",0},
     { "_wxWindowID","_size_t",0},

@@ -55,6 +55,18 @@ class wxSizerItemPtr :
     def GetBorder(self, *_args, **_kwargs):
         val = apply(sizersc.wxSizerItem_GetBorder,(self,) + _args, _kwargs)
         return val
+    def SetInitSize(self, *_args, **_kwargs):
+        val = apply(sizersc.wxSizerItem_SetInitSize,(self,) + _args, _kwargs)
+        return val
+    def SetOption(self, *_args, **_kwargs):
+        val = apply(sizersc.wxSizerItem_SetOption,(self,) + _args, _kwargs)
+        return val
+    def SetFlag(self, *_args, **_kwargs):
+        val = apply(sizersc.wxSizerItem_SetFlag,(self,) + _args, _kwargs)
+        return val
+    def SetBorder(self, *_args, **_kwargs):
+        val = apply(sizersc.wxSizerItem_SetBorder,(self,) + _args, _kwargs)
+        return val
     def GetUserData(self, *_args, **_kwargs):
         val = apply(sizersc.wxSizerItem_GetUserData,(self,) + _args, _kwargs)
         return val

@@ -60,42 +60,20 @@ wxValidator wxDefaultValidator;
 
 class wxControl : public wxWindow {
 public:
-    wxControl();
+    wxControl(wxWindow *parent,
+                       wxWindowID id,
+                       const wxPoint& pos=wxPyDefaultPosition,
+                       const wxSize& size=wxPyDefaultSize,
+                       long style=0,
+                       const wxValidator& validator=wxPyDefaultValidator,
+                       const char* name="control");
 
-#ifdef __WXMSW__
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
+
     void Command(wxCommandEvent& event);
-#endif
     wxString GetLabel();
     void SetLabel(const wxString& label);
 };
-
-
-//  %{
-//  class wxPyControl : public wxControl {
-//  public:
-//      wxPyControl(wxWindow *parent,
-//                  wxWindowID id,
-//                  const wxPoint& pos,
-//                  const wxSize& size,
-//                  long style,
-//                  const wxValidator& validator,
-//                  const wxString& name)
-//          : wxControl() {
-//          CreateControl(parent, id, pos, size, style, validator, name);
-//      }
-//  };
-//  %}
-
-
-//  class wxPyControl : public wxControl {
-//  public:
-//      wxPyControl(wxWindow* parent, wxWindowID id,
-//                  const wxPoint& pos = wxPyDefaultPosition,
-//                  const wxSize& size = wxPyDefaultSize,
-//                  long style = 0,
-//                  const wxValidator& validator = wxPyDefaultValidator,
-//                  char* name = "control");
-//  };
 
 
 //----------------------------------------------------------------------
@@ -112,6 +90,8 @@ public:
     %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     void SetDefault();
+    void SetBackgroundColour(const wxColour& colour);
+    void SetForegroundColour(const wxColour& colour);
 };
 
 

@@ -239,6 +239,44 @@ class wxRectPtr :
         return "<C wxRect instance at %s>" % (self.this,)
     def __str__(self): return str(self.asTuple())
     def __repr__(self): return str(self.asTuple())
+    
+    # override the __getattr__ made by SWIG
+    def __getattr__(self, name):
+        d = {
+            'x' : miscc.wxRect_x_get,
+            'y' : miscc.wxRect_y_get,
+            'width' : miscc.wxRect_width_get,
+            'height' : miscc.wxRect_height_get,
+            'top' : miscc.wxRect_GetTop,
+            'bottom' : miscc.wxRect_GetBottom,
+            'left' : miscc.wxRect_GetLeft,
+            'right' : miscc.wxRect_GetRight,
+            }
+        try:
+            func = d[name]
+        except KeyError:
+            raise AttributeError,name
+        return func(self)
+
+    # and also the __setattr__
+    def __setattr__(self, name, value):
+        d = {
+            'x' : miscc.wxRect_x_set,
+            'y' : miscc.wxRect_y_set,
+            'width' : miscc.wxRect_width_set,
+            'height' : miscc.wxRect_height_set,
+            'top' : miscc.wxRect_SetTop,
+            'bottom' : miscc.wxRect_SetBottom,
+            'left' : miscc.wxRect_SetLeft,
+            'right' : miscc.wxRect_SetRight,
+            }
+        try:
+            func = d[name]
+        except KeyError:
+            self.__dict__[name] = value
+            return
+        func(self, value)
+    
 class wxRect(wxRectPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(miscc.new_wxRect,_args,_kwargs)

@@ -142,9 +142,7 @@ public:
     wxPyValidator();
 //    ~wxPyValidator();
 
-    %addmethods {
-        void Destroy() { delete self; }
-    }
+    %addmethods { void Destroy() { delete self; } }
 
     void _setSelf(PyObject* self, int incref=TRUE);
     %pragma(python) addtomethod = "__init__:self._setSelf(self, 0)"

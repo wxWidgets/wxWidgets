@@ -391,6 +391,7 @@ wxBITMAP_TYPE_PNG_RESOURCE = wxc.wxBITMAP_TYPE_PNG_RESOURCE
 wxBITMAP_TYPE_ANY = wxc.wxBITMAP_TYPE_ANY
 wxBITMAP_TYPE_RESOURCE = wxc.wxBITMAP_TYPE_RESOURCE
 wxBITMAP_TYPE_JPEG = wxc.wxBITMAP_TYPE_JPEG
+wxBITMAP_TYPE_PCX = wxc.wxBITMAP_TYPE_PCX
 wxOPEN = wxc.wxOPEN
 wxSAVE = wxc.wxSAVE
 wxHIDE_READONLY = wxc.wxHIDE_READONLY
@@ -1486,6 +1487,8 @@ wxPyDefaultSize.Set(-1,-1)
 wxDefaultPosition  = wxPyDefaultPosition
 wxDefaultSize      = wxPyDefaultSize
 
+# backwards compatibility
+wxNoRefBitmap      = wxBitmap
 
 #----------------------------------------------------------------------
 # This helper function will take a wxPython object and convert it to
@@ -1515,7 +1518,8 @@ def wxPyTypeCast(obj, typeStr):
         newPtr = ptrcast(obj, typeStr+"_p")
     theClass = globals()[typeStr+"Ptr"]
     theObj = theClass(newPtr)
-    theObj.thisown = obj.thisown
+    if hasattr(obj, "this"):
+        theObj.thisown = obj.thisown
     return theObj
 
 
@@ -1600,6 +1604,13 @@ class wxApp(wxPyApp):
         if self.stdioWin != None:
             self.stdioWin.close()
 
+#----------------------------------------------------------------------------
+
+class wxPySimpleApp(wxApp):
+    def __init__(self):
+        wxApp.__init__(self, 0)
+    def OnInit(self):
+        return true
 
 
 #----------------------------------------------------------------------------

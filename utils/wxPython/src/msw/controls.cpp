@@ -178,19 +178,58 @@ static void *SwigwxControlTowxEvtHandler(void *ptr) {
     return (void *) dest;
 }
 
-#define new_wxControl() (new wxControl())
+#define new_wxControl(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6) (new wxControl(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6))
 static PyObject *_wrap_new_wxControl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxControl * _result;
-    char *_kwnames[] = {  NULL };
+    wxWindow * _arg0;
+    wxWindowID  _arg1;
+    wxPoint * _arg2 = (wxPoint *) &wxPyDefaultPosition;
+    wxSize * _arg3 = (wxSize *) &wxPyDefaultSize;
+    long  _arg4 = (long ) 0;
+    wxValidator * _arg5 = (wxValidator *) &wxPyDefaultValidator;
+    char * _arg6 = (char *) "control";
+    PyObject * _argo0 = 0;
+    wxPoint  temp;
+    PyObject * _obj2 = 0;
+    wxSize  temp0;
+    PyObject * _obj3 = 0;
+    PyObject * _argo5 = 0;
+    char *_kwnames[] = { "parent","id","pos","size","style","validator","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxControl",_kwnames)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOlOs:new_wxControl",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_argo5,&_arg6)) 
         return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxControl. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_obj2)
+{
+    _arg2 = &temp;
+    if (! wxPoint_helper(_obj2, &_arg2))
+        return NULL;
+}
+    if (_obj3)
+{
+    _arg3 = &temp0;
+    if (! wxSize_helper(_obj3, &_arg3))
+        return NULL;
+}
+    if (_argo5) {
+        if (_argo5 == Py_None) { _arg5 = NULL; }
+        else if (SWIG_GetPtrObj(_argo5,(void **) &_arg5,"_wxValidator_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 6 of new_wxControl. Expected _wxValidator_p.");
+        return NULL;
+        }
+    }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxControl *)new_wxControl();
+        _result = (wxControl *)new_wxControl(_arg0,_arg1,*_arg2,*_arg3,_arg4,*_arg5,_arg6);
 
     wxPy_END_ALLOW_THREADS;
 }    if (_result) {
@@ -432,6 +471,78 @@ static PyObject *_wrap_wxButton_SetDefault(PyObject *self, PyObject *args, PyObj
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxButton_SetDefault(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxButton_SetBackgroundColour(_swigobj,_swigarg0)  (_swigobj->SetBackgroundColour(_swigarg0))
+static PyObject *_wrap_wxButton_SetBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxButton * _arg0;
+    wxColour * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","colour", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxButton_SetBackgroundColour",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxButton_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxButton_SetBackgroundColour. Expected _wxButton_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxButton_SetBackgroundColour. Expected _wxColour_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxButton_SetBackgroundColour(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxButton_SetForegroundColour(_swigobj,_swigarg0)  (_swigobj->SetForegroundColour(_swigarg0))
+static PyObject *_wrap_wxButton_SetForegroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxButton * _arg0;
+    wxColour * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","colour", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxButton_SetForegroundColour",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxButton_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxButton_SetForegroundColour. Expected _wxButton_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxButton_SetForegroundColour. Expected _wxColour_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxButton_SetForegroundColour(_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -7219,6 +7330,8 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxBitmapButton_GetBitmapDisabled", (PyCFunction) _wrap_wxBitmapButton_GetBitmapDisabled, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBitmapButton_GetBitmapLabel", (PyCFunction) _wrap_wxBitmapButton_GetBitmapLabel, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxBitmapButton", (PyCFunction) _wrap_new_wxBitmapButton, METH_VARARGS | METH_KEYWORDS },
+	 { "wxButton_SetForegroundColour", (PyCFunction) _wrap_wxButton_SetForegroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxButton_SetBackgroundColour", (PyCFunction) _wrap_wxButton_SetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxButton_SetDefault", (PyCFunction) _wrap_wxButton_SetDefault, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxButton", (PyCFunction) _wrap_new_wxButton, METH_VARARGS | METH_KEYWORDS },
 	 { "wxControl_SetLabel", (PyCFunction) _wrap_wxControl_SetLabel, METH_VARARGS | METH_KEYWORDS },
@@ -7395,7 +7508,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxDataFormat","_wxDataFormat",0},
     { "_class_wxDropFilesEvent","_wxDropFilesEvent",0},
     { "_wxWindowDestroyEvent","_class_wxWindowDestroyEvent",0},
-    { "_wxGDIImage","_class_wxGDIImage",0},
     { "_wxStaticText","_class_wxStaticText",0},
     { "_wxFont","_class_wxFont",0},
     { "_class_wxPyDropTarget","_wxPyDropTarget",0},
@@ -7569,7 +7681,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxSlider","_wxSlider",0},
     { "_class_wxImageList","_wxImageList",0},
     { "_class_wxBitmapButton","_wxBitmapButton",0},
-    { "_class_wxGDIImage","_wxGDIImage",0},
     { "_class_wxPaletteChangedEvent","_wxPaletteChangedEvent",0},
     { "_wxWindowID","_wxCoord",0},
     { "_wxWindowID","_wxPrintQuality",0},

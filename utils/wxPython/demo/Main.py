@@ -22,14 +22,14 @@ _useNestedSplitter = true
 
 _treeList = [
     ('New since last release', ['wxMVCTree', 'wxVTKRenderWindow',
-                                'FileBrowseButton', #'wxToggleButton',
-                                'GenericButtons']),
+                                'FileBrowseButton', 'GenericButtons',
+                                'wxMask']),
 
     ('Managed Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame']),
 
     ('Non-Managed Windows', ['wxGrid', 'wxSashWindow',
                                'wxScrolledWindow', 'wxSplitterWindow',
-                               'wxStatusBar', 'wxToolBar', 'wxNotebook',
+                               'wxStatusBar', 'wxNotebook',
                                'wxHtmlWindow']),
 
     ('Common Dialogs', ['wxColourDialog', 'wxDirDialog', 'wxFileDialog',
@@ -40,15 +40,15 @@ _treeList = [
     ('Controls', ['wxButton', 'wxCheckBox', 'wxCheckListBox', 'wxChoice',
                   'wxComboBox', 'wxGauge', 'wxListBox', 'wxListCtrl', 'wxTextCtrl',
                   'wxTreeCtrl', 'wxSpinButton', 'wxStaticText', 'wxStaticBitmap',
-                  'wxRadioBox', 'wxSlider', #'wxToggleButton'
+                  'wxRadioBox', 'wxSlider', 'wxToolBar', #'wxToggleButton'
                   ]),
 
     ('Window Layout', ['wxLayoutConstraints', 'Sizers', 'OldSizers']),
 
     ('Miscellaneous', [ 'DragAndDrop', 'CustomDragAndDrop', 'FontEnumerator',
                         'wxTimer', 'wxValidator', 'wxGLCanvas', 'DialogUnits',
-                        'wxImage', 'PrintFramework', 'wxOGL', 'PythonEvents',
-                        'Threads']),
+                        'wxImage', 'wxMask', 'PrintFramework', 'wxOGL',
+                        'PythonEvents', 'Threads']),
 
     ('wxPython Library', ['Layoutf', 'wxScrolledMessageDialog',
                           'wxMultipleChoiceDialog', 'wxPlotCanvas', 'wxFloatBar',

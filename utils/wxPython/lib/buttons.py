@@ -52,13 +52,14 @@ class wxGenButtonEvent(wxPyCommandEvent):
 
 #----------------------------------------------------------------------
 
-class wxGenButton(wxWindow):
+class wxGenButton(wxControl):
     def __init__(self, parent, ID, label,
                  pos = wxDefaultPosition, size = wxDefaultSize,
                  style = 0, validator = wxDefaultValidator,
                  name = "genbutton"):
-        wxWindow.__init__(self, parent, ID, pos, size, style, name)
-        self.SetValidator(validator)
+        if style == 0:
+            style = wxNO_BORDER
+        wxControl.__init__(self, parent, ID, pos, size, style, validator, name)
 
         self.up = true
         self.bezelWidth = 2

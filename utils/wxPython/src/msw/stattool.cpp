@@ -496,51 +496,26 @@ static PyObject *_wrap_wxStatusBar_SetStatusWidths(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
-#define new_wxToolBarTool() (new wxToolBarTool())
-static PyObject *_wrap_new_wxToolBarTool(PyObject *self, PyObject *args, PyObject *kwargs) {
+static void  wxToolBarToolBase_Destroy(wxToolBarToolBase *self) { delete self; }
+static PyObject *_wrap_wxToolBarToolBase_Destroy(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxToolBarTool * _result;
-    char *_kwnames[] = {  NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxToolBarTool",_kwnames)) 
-        return NULL;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxToolBarTool *)new_wxToolBarTool();
-
-    wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxToolBarTool_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-    return _resultobj;
-}
-
-#define delete_wxToolBarTool(_swigobj) (delete _swigobj)
-static PyObject *_wrap_delete_wxToolBarTool(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxToolBarTool * _arg0;
+    wxToolBarToolBase * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxToolBarTool",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarToolBase_Destroy",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxToolBarTool. Expected _wxToolBarTool_p.");
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarToolBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarToolBase_Destroy. Expected _wxToolBarToolBase_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        delete_wxToolBarTool(_arg0);
+        wxToolBarToolBase_Destroy(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -548,111 +523,55 @@ static PyObject *_wrap_delete_wxToolBarTool(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
-#define wxToolBarTool_SetSize(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetSize(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxToolBarTool_SetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxToolBarToolBase_GetId(_swigobj)  (_swigobj->GetId())
+static PyObject *_wrap_wxToolBarToolBase_GetId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxToolBarTool * _arg0;
-    long  _arg1;
-    long  _arg2;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","w","h", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oll:wxToolBarTool_SetSize",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_SetSize. Expected _wxToolBarTool_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxToolBarTool_SetSize(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxToolBarTool_GetWidth(_swigobj)  (_swigobj->GetWidth())
-static PyObject *_wrap_wxToolBarTool_GetWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    long  _result;
-    wxToolBarTool * _arg0;
+    int  _result;
+    wxToolBarToolBase * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarTool_GetWidth",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarToolBase_GetId",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_GetWidth. Expected _wxToolBarTool_p.");
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarToolBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarToolBase_GetId. Expected _wxToolBarToolBase_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (long )wxToolBarTool_GetWidth(_arg0);
+        _result = (int )wxToolBarToolBase_GetId(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("l",_result);
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
-#define wxToolBarTool_GetHeight(_swigobj)  (_swigobj->GetHeight())
-static PyObject *_wrap_wxToolBarTool_GetHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    long  _result;
-    wxToolBarTool * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarTool_GetHeight",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_GetHeight. Expected _wxToolBarTool_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (long )wxToolBarTool_GetHeight(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("l",_result);
-    return _resultobj;
-}
-
-#define wxToolBarTool_GetControl(_swigobj)  (_swigobj->GetControl())
-static PyObject *_wrap_wxToolBarTool_GetControl(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxToolBarToolBase_GetControl(_swigobj)  (_swigobj->GetControl())
+static PyObject *_wrap_wxToolBarToolBase_GetControl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxControl * _result;
-    wxToolBarTool * _arg0;
+    wxToolBarToolBase * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarTool_GetControl",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarToolBase_GetControl",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_GetControl. Expected _wxToolBarTool_p.");
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarToolBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarToolBase_GetControl. Expected _wxToolBarToolBase_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxControl *)wxToolBarTool_GetControl(_arg0);
+        _result = (wxControl *)wxToolBarToolBase_GetControl(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }    if (_result) {
@@ -665,96 +584,32 @@ static PyObject *_wrap_wxToolBarTool_GetControl(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
-#define wxToolBarTool_m_toolStyle_set(_swigobj,_swigval) (_swigobj->m_toolStyle = _swigval,_swigval)
-static PyObject *_wrap_wxToolBarTool_m_toolStyle_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxToolBarToolBase_GetToolBar(_swigobj)  (_swigobj->GetToolBar())
+static PyObject *_wrap_wxToolBarToolBase_GetToolBar(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    int  _result;
-    wxToolBarTool * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","m_toolStyle", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBarTool_m_toolStyle_set",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_toolStyle_set. Expected _wxToolBarTool_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxToolBarTool_m_toolStyle_set(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxToolBarTool_m_toolStyle_get(_swigobj) ((int ) _swigobj->m_toolStyle)
-static PyObject *_wrap_wxToolBarTool_m_toolStyle_get(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxToolBarTool * _arg0;
+    wxToolBarBase * _result;
+    wxToolBarToolBase * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarTool_m_toolStyle_get",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_toolStyle_get. Expected _wxToolBarTool_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxToolBarTool_m_toolStyle_get(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxToolBarTool_m_clientData_set(_swigobj,_swigval) (_swigobj->m_clientData = _swigval,_swigval)
-static PyObject *_wrap_wxToolBarTool_m_clientData_set(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxObject * _result;
-    wxToolBarTool * _arg0;
-    wxObject * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","m_clientData", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxToolBarTool_m_clientData_set",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarToolBase_GetToolBar",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_clientData_set. Expected _wxToolBarTool_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxObject_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxToolBarTool_m_clientData_set. Expected _wxObject_p.");
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarToolBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarToolBase_GetToolBar. Expected _wxToolBarToolBase_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxObject *)wxToolBarTool_m_clientData_set(_arg0,_arg1);
+        _result = (wxToolBarBase *)wxToolBarToolBase_GetToolBar(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxObject_p");
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxToolBarBase_p");
         _resultobj = Py_BuildValue("s",_ptemp);
     } else {
         Py_INCREF(Py_None);
@@ -763,574 +618,218 @@ static PyObject *_wrap_wxToolBarTool_m_clientData_set(PyObject *self, PyObject *
     return _resultobj;
 }
 
-#define wxToolBarTool_m_clientData_get(_swigobj) ((wxObject *) _swigobj->m_clientData)
-static PyObject *_wrap_wxToolBarTool_m_clientData_get(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxObject * _result;
-    wxToolBarTool * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarTool_m_clientData_get",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_clientData_get. Expected _wxToolBarTool_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxObject *)wxToolBarTool_m_clientData_get(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxObject_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-    return _resultobj;
-}
-
-#define wxToolBarTool_m_index_set(_swigobj,_swigval) (_swigobj->m_index = _swigval,_swigval)
-static PyObject *_wrap_wxToolBarTool_m_index_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxToolBarToolBase_IsButton(_swigobj)  (_swigobj->IsButton())
+static PyObject *_wrap_wxToolBarToolBase_IsButton(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
-    wxToolBarTool * _arg0;
-    int  _arg1;
+    wxToolBarToolBase * _arg0;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","m_index", NULL };
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBarTool_m_index_set",_kwnames,&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarToolBase_IsButton",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_index_set. Expected _wxToolBarTool_p.");
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarToolBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarToolBase_IsButton. Expected _wxToolBarToolBase_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxToolBarTool_m_index_set(_arg0,_arg1);
+        _result = (int )wxToolBarToolBase_IsButton(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
-#define wxToolBarTool_m_index_get(_swigobj) ((int ) _swigobj->m_index)
-static PyObject *_wrap_wxToolBarTool_m_index_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxToolBarToolBase_IsControl(_swigobj)  (_swigobj->IsControl())
+static PyObject *_wrap_wxToolBarToolBase_IsControl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
-    wxToolBarTool * _arg0;
+    wxToolBarToolBase * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarTool_m_index_get",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarToolBase_IsControl",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_index_get. Expected _wxToolBarTool_p.");
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarToolBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarToolBase_IsControl. Expected _wxToolBarToolBase_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxToolBarTool_m_index_get(_arg0);
+        _result = (int )wxToolBarToolBase_IsControl(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
-#define wxToolBarTool_m_x_set(_swigobj,_swigval) (_swigobj->m_x = _swigval,_swigval)
-static PyObject *_wrap_wxToolBarTool_m_x_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxToolBarToolBase_IsSeparator(_swigobj)  (_swigobj->IsSeparator())
+static PyObject *_wrap_wxToolBarToolBase_IsSeparator(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    long  _result;
-    wxToolBarTool * _arg0;
-    long  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","m_x", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxToolBarTool_m_x_set",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_x_set. Expected _wxToolBarTool_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (long )wxToolBarTool_m_x_set(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("l",_result);
-    return _resultobj;
-}
-
-#define wxToolBarTool_m_x_get(_swigobj) ((long ) _swigobj->m_x)
-static PyObject *_wrap_wxToolBarTool_m_x_get(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    long  _result;
-    wxToolBarTool * _arg0;
+    int  _result;
+    wxToolBarToolBase * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarTool_m_x_get",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarToolBase_IsSeparator",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_x_get. Expected _wxToolBarTool_p.");
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarToolBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarToolBase_IsSeparator. Expected _wxToolBarToolBase_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (long )wxToolBarTool_m_x_get(_arg0);
+        _result = (int )wxToolBarToolBase_IsSeparator(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("l",_result);
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
-#define wxToolBarTool_m_y_set(_swigobj,_swigval) (_swigobj->m_y = _swigval,_swigval)
-static PyObject *_wrap_wxToolBarTool_m_y_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxToolBarToolBase_GetStyle(_swigobj)  (_swigobj->GetStyle())
+static PyObject *_wrap_wxToolBarToolBase_GetStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    long  _result;
-    wxToolBarTool * _arg0;
-    long  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","m_y", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxToolBarTool_m_y_set",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_y_set. Expected _wxToolBarTool_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (long )wxToolBarTool_m_y_set(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("l",_result);
-    return _resultobj;
-}
-
-#define wxToolBarTool_m_y_get(_swigobj) ((long ) _swigobj->m_y)
-static PyObject *_wrap_wxToolBarTool_m_y_get(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    long  _result;
-    wxToolBarTool * _arg0;
+    int  _result;
+    wxToolBarToolBase * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarTool_m_y_get",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarToolBase_GetStyle",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_y_get. Expected _wxToolBarTool_p.");
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarToolBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarToolBase_GetStyle. Expected _wxToolBarToolBase_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (long )wxToolBarTool_m_y_get(_arg0);
+        _result = (int )wxToolBarToolBase_GetStyle(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("l",_result);
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
-#define wxToolBarTool_m_width_set(_swigobj,_swigval) (_swigobj->m_width = _swigval,_swigval)
-static PyObject *_wrap_wxToolBarTool_m_width_set(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    long  _result;
-    wxToolBarTool * _arg0;
-    long  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","m_width", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxToolBarTool_m_width_set",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_width_set. Expected _wxToolBarTool_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (long )wxToolBarTool_m_width_set(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("l",_result);
-    return _resultobj;
-}
-
-#define wxToolBarTool_m_width_get(_swigobj) ((long ) _swigobj->m_width)
-static PyObject *_wrap_wxToolBarTool_m_width_get(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    long  _result;
-    wxToolBarTool * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarTool_m_width_get",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_width_get. Expected _wxToolBarTool_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (long )wxToolBarTool_m_width_get(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("l",_result);
-    return _resultobj;
-}
-
-#define wxToolBarTool_m_height_set(_swigobj,_swigval) (_swigobj->m_height = _swigval,_swigval)
-static PyObject *_wrap_wxToolBarTool_m_height_set(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    long  _result;
-    wxToolBarTool * _arg0;
-    long  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","m_height", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxToolBarTool_m_height_set",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_height_set. Expected _wxToolBarTool_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (long )wxToolBarTool_m_height_set(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("l",_result);
-    return _resultobj;
-}
-
-#define wxToolBarTool_m_height_get(_swigobj) ((long ) _swigobj->m_height)
-static PyObject *_wrap_wxToolBarTool_m_height_get(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    long  _result;
-    wxToolBarTool * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarTool_m_height_get",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_height_get. Expected _wxToolBarTool_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (long )wxToolBarTool_m_height_get(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("l",_result);
-    return _resultobj;
-}
-
-#define wxToolBarTool_m_toggleState_set(_swigobj,_swigval) (_swigobj->m_toggleState = _swigval,_swigval)
-static PyObject *_wrap_wxToolBarTool_m_toggleState_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxToolBarToolBase_IsEnabled(_swigobj)  (_swigobj->IsEnabled())
+static PyObject *_wrap_wxToolBarToolBase_IsEnabled(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
-    wxToolBarTool * _arg0;
-    bool  _arg1;
-    PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","m_toggleState", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBarTool_m_toggleState_set",_kwnames,&_argo0,&tempbool1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_toggleState_set. Expected _wxToolBarTool_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxToolBarTool_m_toggleState_set(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxToolBarTool_m_toggleState_get(_swigobj) ((bool ) _swigobj->m_toggleState)
-static PyObject *_wrap_wxToolBarTool_m_toggleState_get(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxToolBarTool * _arg0;
+    wxToolBarToolBase * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarTool_m_toggleState_get",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarToolBase_IsEnabled",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_toggleState_get. Expected _wxToolBarTool_p.");
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarToolBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarToolBase_IsEnabled. Expected _wxToolBarToolBase_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxToolBarTool_m_toggleState_get(_arg0);
+        _result = (bool )wxToolBarToolBase_IsEnabled(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
-#define wxToolBarTool_m_isToggle_set(_swigobj,_swigval) (_swigobj->m_isToggle = _swigval,_swigval)
-static PyObject *_wrap_wxToolBarTool_m_isToggle_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxToolBarToolBase_IsToggled(_swigobj)  (_swigobj->IsToggled())
+static PyObject *_wrap_wxToolBarToolBase_IsToggled(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
-    wxToolBarTool * _arg0;
-    bool  _arg1;
-    PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","m_isToggle", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBarTool_m_isToggle_set",_kwnames,&_argo0,&tempbool1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_isToggle_set. Expected _wxToolBarTool_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxToolBarTool_m_isToggle_set(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxToolBarTool_m_isToggle_get(_swigobj) ((bool ) _swigobj->m_isToggle)
-static PyObject *_wrap_wxToolBarTool_m_isToggle_get(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxToolBarTool * _arg0;
+    wxToolBarToolBase * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarTool_m_isToggle_get",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarToolBase_IsToggled",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_isToggle_get. Expected _wxToolBarTool_p.");
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarToolBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarToolBase_IsToggled. Expected _wxToolBarToolBase_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxToolBarTool_m_isToggle_get(_arg0);
+        _result = (bool )wxToolBarToolBase_IsToggled(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
-#define wxToolBarTool_m_deleteSecondBitmap_set(_swigobj,_swigval) (_swigobj->m_deleteSecondBitmap = _swigval,_swigval)
-static PyObject *_wrap_wxToolBarTool_m_deleteSecondBitmap_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxToolBarToolBase_CanBeToggled(_swigobj)  (_swigobj->CanBeToggled())
+static PyObject *_wrap_wxToolBarToolBase_CanBeToggled(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
-    wxToolBarTool * _arg0;
-    bool  _arg1;
-    PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","m_deleteSecondBitmap", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBarTool_m_deleteSecondBitmap_set",_kwnames,&_argo0,&tempbool1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_deleteSecondBitmap_set. Expected _wxToolBarTool_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxToolBarTool_m_deleteSecondBitmap_set(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxToolBarTool_m_deleteSecondBitmap_get(_swigobj) ((bool ) _swigobj->m_deleteSecondBitmap)
-static PyObject *_wrap_wxToolBarTool_m_deleteSecondBitmap_get(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxToolBarTool * _arg0;
+    wxToolBarToolBase * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarTool_m_deleteSecondBitmap_get",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarToolBase_CanBeToggled",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_deleteSecondBitmap_get. Expected _wxToolBarTool_p.");
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarToolBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarToolBase_CanBeToggled. Expected _wxToolBarToolBase_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxToolBarTool_m_deleteSecondBitmap_get(_arg0);
+        _result = (bool )wxToolBarToolBase_CanBeToggled(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
-#define wxToolBarTool_m_enabled_set(_swigobj,_swigval) (_swigobj->m_enabled = _swigval,_swigval)
-static PyObject *_wrap_wxToolBarTool_m_enabled_set(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxToolBarTool * _arg0;
-    bool  _arg1;
-    PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","m_enabled", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBarTool_m_enabled_set",_kwnames,&_argo0,&tempbool1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_enabled_set. Expected _wxToolBarTool_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxToolBarTool_m_enabled_set(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxToolBarTool_m_enabled_get(_swigobj) ((bool ) _swigobj->m_enabled)
-static PyObject *_wrap_wxToolBarTool_m_enabled_get(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxToolBarTool * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarTool_m_enabled_get",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_enabled_get. Expected _wxToolBarTool_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxToolBarTool_m_enabled_get(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxToolBarTool_m_bitmap1_set(_swigobj,_swigval) (_swigobj->m_bitmap1 = *(_swigval),_swigval)
-static PyObject *_wrap_wxToolBarTool_m_bitmap1_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxToolBarToolBase_GetBitmap1(_swigobj)  (_swigobj->GetBitmap1())
+static PyObject *_wrap_wxToolBarToolBase_GetBitmap1(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxBitmap * _result;
-    wxToolBarTool * _arg0;
-    wxBitmap * _arg1;
+    wxToolBarToolBase * _arg0;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","m_bitmap1", NULL };
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxToolBarTool_m_bitmap1_set",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarToolBase_GetBitmap1",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_bitmap1_set. Expected _wxToolBarTool_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxToolBarTool_m_bitmap1_set. Expected _wxBitmap_p.");
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarToolBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarToolBase_GetBitmap1. Expected _wxToolBarToolBase_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxBitmap *)wxToolBarTool_m_bitmap1_set(_arg0,_arg1);
+        const wxBitmap & _result_ref = wxToolBarToolBase_GetBitmap1(_arg0);
+    _result = (wxBitmap *) &_result_ref;
 
     wxPy_END_ALLOW_THREADS;
 }    if (_result) {
@@ -1343,28 +842,29 @@ static PyObject *_wrap_wxToolBarTool_m_bitmap1_set(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
-#define wxToolBarTool_m_bitmap1_get(_swigobj) (&_swigobj->m_bitmap1)
-static PyObject *_wrap_wxToolBarTool_m_bitmap1_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxToolBarToolBase_GetBitmap2(_swigobj)  (_swigobj->GetBitmap2())
+static PyObject *_wrap_wxToolBarToolBase_GetBitmap2(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxBitmap * _result;
-    wxToolBarTool * _arg0;
+    wxToolBarToolBase * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarTool_m_bitmap1_get",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarToolBase_GetBitmap2",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_bitmap1_get. Expected _wxToolBarTool_p.");
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarToolBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarToolBase_GetBitmap2. Expected _wxToolBarToolBase_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxBitmap *)wxToolBarTool_m_bitmap1_get(_arg0);
+        const wxBitmap & _result_ref = wxToolBarToolBase_GetBitmap2(_arg0);
+    _result = (wxBitmap *) &_result_ref;
 
     wxPy_END_ALLOW_THREADS;
 }    if (_result) {
@@ -1377,37 +877,29 @@ static PyObject *_wrap_wxToolBarTool_m_bitmap1_get(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
-#define wxToolBarTool_m_bitmap2_set(_swigobj,_swigval) (_swigobj->m_bitmap2 = *(_swigval),_swigval)
-static PyObject *_wrap_wxToolBarTool_m_bitmap2_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxToolBarToolBase_GetBitmap(_swigobj)  (_swigobj->GetBitmap())
+static PyObject *_wrap_wxToolBarToolBase_GetBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxBitmap * _result;
-    wxToolBarTool * _arg0;
-    wxBitmap * _arg1;
+    wxToolBarToolBase * _arg0;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","m_bitmap2", NULL };
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxToolBarTool_m_bitmap2_set",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarToolBase_GetBitmap",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_bitmap2_set. Expected _wxToolBarTool_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxToolBarTool_m_bitmap2_set. Expected _wxBitmap_p.");
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarToolBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarToolBase_GetBitmap. Expected _wxToolBarToolBase_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxBitmap *)wxToolBarTool_m_bitmap2_set(_arg0,_arg1);
+        const wxBitmap & _result_ref = wxToolBarToolBase_GetBitmap(_arg0);
+    _result = (wxBitmap *) &_result_ref;
 
     wxPy_END_ALLOW_THREADS;
 }    if (_result) {
@@ -1420,114 +912,177 @@ static PyObject *_wrap_wxToolBarTool_m_bitmap2_set(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
-#define wxToolBarTool_m_bitmap2_get(_swigobj) (&_swigobj->m_bitmap2)
-static PyObject *_wrap_wxToolBarTool_m_bitmap2_get(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxBitmap * _result;
-    wxToolBarTool * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarTool_m_bitmap2_get",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_bitmap2_get. Expected _wxToolBarTool_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxBitmap *)wxToolBarTool_m_bitmap2_get(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-    return _resultobj;
-}
-
-#define wxToolBarTool_m_isMenuCommand_set(_swigobj,_swigval) (_swigobj->m_isMenuCommand = _swigval,_swigval)
-static PyObject *_wrap_wxToolBarTool_m_isMenuCommand_set(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxToolBarTool * _arg0;
-    bool  _arg1;
-    PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","m_isMenuCommand", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBarTool_m_isMenuCommand_set",_kwnames,&_argo0,&tempbool1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_isMenuCommand_set. Expected _wxToolBarTool_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxToolBarTool_m_isMenuCommand_set(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxToolBarTool_m_isMenuCommand_get(_swigobj) ((bool ) _swigobj->m_isMenuCommand)
-static PyObject *_wrap_wxToolBarTool_m_isMenuCommand_get(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxToolBarTool * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarTool_m_isMenuCommand_get",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_isMenuCommand_get. Expected _wxToolBarTool_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxToolBarTool_m_isMenuCommand_get(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxToolBarTool_m_shortHelpString_set(_swigobj,_swigval) (_swigobj->m_shortHelpString = *(_swigval),_swigval)
-static PyObject *_wrap_wxToolBarTool_m_shortHelpString_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxToolBarToolBase_GetShortHelp(_swigobj)  (_swigobj->GetShortHelp())
+static PyObject *_wrap_wxToolBarToolBase_GetShortHelp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxString * _result;
-    wxToolBarTool * _arg0;
+    wxToolBarToolBase * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarToolBase_GetShortHelp",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarToolBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarToolBase_GetShortHelp. Expected _wxToolBarToolBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxToolBarToolBase_GetShortHelp(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxToolBarToolBase_GetLongHelp(_swigobj)  (_swigobj->GetLongHelp())
+static PyObject *_wrap_wxToolBarToolBase_GetLongHelp(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxToolBarToolBase * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarToolBase_GetLongHelp",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarToolBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarToolBase_GetLongHelp. Expected _wxToolBarToolBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxToolBarToolBase_GetLongHelp(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxToolBarToolBase_Enable(_swigobj,_swigarg0)  (_swigobj->Enable(_swigarg0))
+static PyObject *_wrap_wxToolBarToolBase_Enable(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxToolBarToolBase * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","enable", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBarToolBase_Enable",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarToolBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarToolBase_Enable. Expected _wxToolBarToolBase_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxToolBarToolBase_Enable(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxToolBarToolBase_Toggle(_swigobj,_swigarg0)  (_swigobj->Toggle(_swigarg0))
+static PyObject *_wrap_wxToolBarToolBase_Toggle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxToolBarToolBase * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","toggle", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBarToolBase_Toggle",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarToolBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarToolBase_Toggle. Expected _wxToolBarToolBase_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxToolBarToolBase_Toggle(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxToolBarToolBase_SetToggle(_swigobj,_swigarg0)  (_swigobj->SetToggle(_swigarg0))
+static PyObject *_wrap_wxToolBarToolBase_SetToggle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxToolBarToolBase * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","toggle", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBarToolBase_SetToggle",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarToolBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarToolBase_SetToggle. Expected _wxToolBarToolBase_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxToolBarToolBase_SetToggle(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxToolBarToolBase_SetShortHelp(_swigobj,_swigarg0)  (_swigobj->SetShortHelp(_swigarg0))
+static PyObject *_wrap_wxToolBarToolBase_SetShortHelp(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxToolBarToolBase * _arg0;
     wxString * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","m_shortHelpString", NULL };
+    char *_kwnames[] = { "self","help", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxToolBarTool_m_shortHelpString_set",_kwnames,&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxToolBarToolBase_SetShortHelp",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_shortHelpString_set. Expected _wxToolBarTool_p.");
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarToolBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarToolBase_SetShortHelp. Expected _wxToolBarToolBase_p.");
         return NULL;
         }
     }
@@ -1540,12 +1095,10 @@ static PyObject *_wrap_wxToolBarTool_m_shortHelpString_set(PyObject *self, PyObj
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxString *)wxToolBarTool_m_shortHelpString_set(_arg0,_arg1);
+        _result = (bool )wxToolBarToolBase_SetShortHelp(_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
-}{
-    _resultobj = PyString_FromString(WXSTRINGCAST (*_result));
-}
+}    _resultobj = Py_BuildValue("i",_result);
 {
     if (_obj1)
         delete _arg1;
@@ -1553,52 +1106,23 @@ static PyObject *_wrap_wxToolBarTool_m_shortHelpString_set(PyObject *self, PyObj
     return _resultobj;
 }
 
-#define wxToolBarTool_m_shortHelpString_get(_swigobj) (&_swigobj->m_shortHelpString)
-static PyObject *_wrap_wxToolBarTool_m_shortHelpString_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxToolBarToolBase_SetLongHelp(_swigobj,_swigarg0)  (_swigobj->SetLongHelp(_swigarg0))
+static PyObject *_wrap_wxToolBarToolBase_SetLongHelp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxString * _result;
-    wxToolBarTool * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarTool_m_shortHelpString_get",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_shortHelpString_get. Expected _wxToolBarTool_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxString *)wxToolBarTool_m_shortHelpString_get(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}{
-    _resultobj = PyString_FromString(WXSTRINGCAST (*_result));
-}
-    return _resultobj;
-}
-
-#define wxToolBarTool_m_longHelpString_set(_swigobj,_swigval) (_swigobj->m_longHelpString = *(_swigval),_swigval)
-static PyObject *_wrap_wxToolBarTool_m_longHelpString_set(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxString * _result;
-    wxToolBarTool * _arg0;
+    bool  _result;
+    wxToolBarToolBase * _arg0;
     wxString * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","m_longHelpString", NULL };
+    char *_kwnames[] = { "self","help", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxToolBarTool_m_longHelpString_set",_kwnames,&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxToolBarToolBase_SetLongHelp",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_longHelpString_set. Expected _wxToolBarTool_p.");
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarToolBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarToolBase_SetLongHelp. Expected _wxToolBarToolBase_p.");
         return NULL;
         }
     }
@@ -1611,12 +1135,10 @@ static PyObject *_wrap_wxToolBarTool_m_longHelpString_set(PyObject *self, PyObje
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxString *)wxToolBarTool_m_longHelpString_set(_arg0,_arg1);
+        _result = (bool )wxToolBarToolBase_SetLongHelp(_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
-}{
-    _resultobj = PyString_FromString(WXSTRINGCAST (*_result));
-}
+}    _resultobj = Py_BuildValue("i",_result);
 {
     if (_obj1)
         delete _arg1;
@@ -1624,33 +1146,1664 @@ static PyObject *_wrap_wxToolBarTool_m_longHelpString_set(PyObject *self, PyObje
     return _resultobj;
 }
 
-#define wxToolBarTool_m_longHelpString_get(_swigobj) (&_swigobj->m_longHelpString)
-static PyObject *_wrap_wxToolBarTool_m_longHelpString_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxToolBarToolBase_SetBitmap1(_swigobj,_swigarg0)  (_swigobj->SetBitmap1(_swigarg0))
+static PyObject *_wrap_wxToolBarToolBase_SetBitmap1(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxString * _result;
-    wxToolBarTool * _arg0;
+    wxToolBarToolBase * _arg0;
+    wxBitmap * _arg1;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","bmp", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarTool_m_longHelpString_get",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxToolBarToolBase_SetBitmap1",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarTool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarTool_m_longHelpString_get. Expected _wxToolBarTool_p.");
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarToolBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarToolBase_SetBitmap1. Expected _wxToolBarToolBase_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxToolBarToolBase_SetBitmap1. Expected _wxBitmap_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxString *)wxToolBarTool_m_longHelpString_get(_arg0);
+        wxToolBarToolBase_SetBitmap1(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxToolBarToolBase_SetBitmap2(_swigobj,_swigarg0)  (_swigobj->SetBitmap2(_swigarg0))
+static PyObject *_wrap_wxToolBarToolBase_SetBitmap2(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToolBarToolBase * _arg0;
+    wxBitmap * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","bmp", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxToolBarToolBase_SetBitmap2",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarToolBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarToolBase_SetBitmap2. Expected _wxToolBarToolBase_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxToolBarToolBase_SetBitmap2. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxToolBarToolBase_SetBitmap2(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxToolBarToolBase_Detach(_swigobj)  (_swigobj->Detach())
+static PyObject *_wrap_wxToolBarToolBase_Detach(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToolBarToolBase * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarToolBase_Detach",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarToolBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarToolBase_Detach. Expected _wxToolBarToolBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxToolBarToolBase_Detach(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxToolBarToolBase_Attach(_swigobj,_swigarg0)  (_swigobj->Attach(_swigarg0))
+static PyObject *_wrap_wxToolBarToolBase_Attach(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToolBarToolBase * _arg0;
+    wxToolBarBase * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","tbar", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxToolBarToolBase_Attach",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarToolBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarToolBase_Attach. Expected _wxToolBarToolBase_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxToolBarToolBase_Attach. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxToolBarToolBase_Attach(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject * wxToolBarToolBase_GetClientData(wxToolBarToolBase *self) {
+            wxPyUserData* udata = (wxPyUserData*)self->GetClientData();
+            if (udata) {
+                Py_INCREF(udata->m_obj);
+                return udata->m_obj;
+            } else {
+                Py_INCREF(Py_None);
+                return Py_None;
+            }
+        }
+static PyObject *_wrap_wxToolBarToolBase_GetClientData(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxToolBarToolBase * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarToolBase_GetClientData",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarToolBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarToolBase_GetClientData. Expected _wxToolBarToolBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxToolBarToolBase_GetClientData(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST (*_result));
+  _resultobj = _result;
 }
     return _resultobj;
+}
+
+static void  wxToolBarToolBase_SetClientData(wxToolBarToolBase *self,PyObject * clientData) {
+            self->SetClientData(new wxPyUserData(clientData));
+        }
+static PyObject *_wrap_wxToolBarToolBase_SetClientData(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToolBarToolBase * _arg0;
+    PyObject * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","clientData", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxToolBarToolBase_SetClientData",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarToolBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarToolBase_SetClientData. Expected _wxToolBarToolBase_p.");
+        return NULL;
+        }
+    }
+{
+  _arg1 = _obj1;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxToolBarToolBase_SetClientData(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static void *SwigwxToolBarBaseTowxControl(void *ptr) {
+    wxToolBarBase *src;
+    wxControl *dest;
+    src = (wxToolBarBase *) ptr;
+    dest = (wxControl *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxToolBarBaseTowxWindow(void *ptr) {
+    wxToolBarBase *src;
+    wxWindow *dest;
+    src = (wxToolBarBase *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxToolBarBaseTowxEvtHandler(void *ptr) {
+    wxToolBarBase *src;
+    wxEvtHandler *dest;
+    src = (wxToolBarBase *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static wxToolBarToolBase * wxToolBarBase_AddTool(wxToolBarBase *self,int  id,const wxBitmap & bitmap,const wxBitmap & pushedBitmap,int  toggle,PyObject * clientData,const wxString & shortHelpString,const wxString & longHelpString) {
+            wxPyUserData* udata = NULL;
+            if (clientData)
+                udata = new wxPyUserData(clientData);
+            return self->AddTool(id, bitmap, pushedBitmap, (bool)toggle,
+                                 udata, shortHelpString, longHelpString);
+        }
+static PyObject *_wrap_wxToolBarBase_AddTool(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToolBarToolBase * _result;
+    wxToolBarBase * _arg0;
+    int  _arg1;
+    wxBitmap * _arg2;
+    wxBitmap * _arg3 = (wxBitmap *) &wxNullBitmap;
+    int  _arg4 = (int ) FALSE;
+    PyObject * _arg5 = (PyObject *) NULL;
+    wxString * _arg6 = (wxString *) &wxPyEmptyStr;
+    wxString * _arg7 = (wxString *) &wxPyEmptyStr;
+    PyObject * _argo0 = 0;
+    PyObject * _argo2 = 0;
+    PyObject * _argo3 = 0;
+    PyObject * _obj5 = 0;
+    PyObject * _obj6 = 0;
+    PyObject * _obj7 = 0;
+    char *_kwnames[] = { "self","id","bitmap","pushedBitmap","toggle","clientData","shortHelpString","longHelpString", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OiOOO:wxToolBarBase_AddTool",_kwnames,&_argo0,&_arg1,&_argo2,&_argo3,&_arg4,&_obj5,&_obj6,&_obj7)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_AddTool. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+    if (_argo2) {
+        if (_argo2 == Py_None) { _arg2 = NULL; }
+        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxToolBarBase_AddTool. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+    if (_argo3) {
+        if (_argo3 == Py_None) { _arg3 = NULL; }
+        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxToolBarBase_AddTool. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+    if (_obj5)
+{
+  _arg5 = _obj5;
+}
+    if (_obj6)
+{
+    if (!PyString_Check(_obj6)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg6 = new wxString(PyString_AsString(_obj6), PyString_Size(_obj6));
+}
+    if (_obj7)
+{
+    if (!PyString_Check(_obj7)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg7 = new wxString(PyString_AsString(_obj7), PyString_Size(_obj7));
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxToolBarToolBase *)wxToolBarBase_AddTool(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5,*_arg6,*_arg7);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxToolBarToolBase_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj6)
+        delete _arg6;
+}
+{
+    if (_obj7)
+        delete _arg7;
+}
+    return _resultobj;
+}
+
+static wxToolBarToolBase * wxToolBarBase_AddSimpleTool(wxToolBarBase *self,int  id,const wxBitmap & bitmap,const wxString & shortHelpString,const wxString & longHelpString,int  toggle) {
+            return self->AddTool(id, bitmap, wxNullBitmap, toggle, NULL,
+                                 shortHelpString, longHelpString);
+        }
+static PyObject *_wrap_wxToolBarBase_AddSimpleTool(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToolBarToolBase * _result;
+    wxToolBarBase * _arg0;
+    int  _arg1;
+    wxBitmap * _arg2;
+    wxString * _arg3 = (wxString *) &wxPyEmptyStr;
+    wxString * _arg4 = (wxString *) &wxPyEmptyStr;
+    int  _arg5 = (int ) FALSE;
+    PyObject * _argo0 = 0;
+    PyObject * _argo2 = 0;
+    PyObject * _obj3 = 0;
+    PyObject * _obj4 = 0;
+    char *_kwnames[] = { "self","id","bitmap","shortHelpString","longHelpString","toggle", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOi:wxToolBarBase_AddSimpleTool",_kwnames,&_argo0,&_arg1,&_argo2,&_obj3,&_obj4,&_arg5)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_AddSimpleTool. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+    if (_argo2) {
+        if (_argo2 == Py_None) { _arg2 = NULL; }
+        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxToolBarBase_AddSimpleTool. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+    if (_obj3)
+{
+    if (!PyString_Check(_obj3)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg3 = new wxString(PyString_AsString(_obj3), PyString_Size(_obj3));
+}
+    if (_obj4)
+{
+    if (!PyString_Check(_obj4)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg4 = new wxString(PyString_AsString(_obj4), PyString_Size(_obj4));
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxToolBarToolBase *)wxToolBarBase_AddSimpleTool(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxToolBarToolBase_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj3)
+        delete _arg3;
+}
+{
+    if (_obj4)
+        delete _arg4;
+}
+    return _resultobj;
+}
+
+static wxToolBarToolBase * wxToolBarBase_InsertTool(wxToolBarBase *self,size_t  pos,int  id,const wxBitmap & bitmap,const wxBitmap & pushedBitmap,int  toggle,PyObject * clientData,const wxString & shortHelpString,const wxString & longHelpString) {
+            wxPyUserData* udata = NULL;
+            if (clientData)
+                udata = new wxPyUserData(clientData);
+            return self->InsertTool(pos, id, bitmap, pushedBitmap, (bool)toggle,
+                                    udata, shortHelpString, longHelpString);
+        }
+static PyObject *_wrap_wxToolBarBase_InsertTool(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToolBarToolBase * _result;
+    wxToolBarBase * _arg0;
+    size_t  _arg1;
+    int  _arg2;
+    wxBitmap * _arg3;
+    wxBitmap * _arg4 = (wxBitmap *) &wxNullBitmap;
+    int  _arg5 = (int ) FALSE;
+    PyObject * _arg6 = (PyObject *) NULL;
+    wxString * _arg7 = (wxString *) &wxPyEmptyStr;
+    wxString * _arg8 = (wxString *) &wxPyEmptyStr;
+    PyObject * _argo0 = 0;
+    PyObject * _argo3 = 0;
+    PyObject * _argo4 = 0;
+    PyObject * _obj6 = 0;
+    PyObject * _obj7 = 0;
+    PyObject * _obj8 = 0;
+    char *_kwnames[] = { "self","pos","id","bitmap","pushedBitmap","toggle","clientData","shortHelpString","longHelpString", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiiO|OiOOO:wxToolBarBase_InsertTool",_kwnames,&_argo0,&_arg1,&_arg2,&_argo3,&_argo4,&_arg5,&_obj6,&_obj7,&_obj8)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_InsertTool. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+    if (_argo3) {
+        if (_argo3 == Py_None) { _arg3 = NULL; }
+        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxToolBarBase_InsertTool. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+    if (_argo4) {
+        if (_argo4 == Py_None) { _arg4 = NULL; }
+        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of wxToolBarBase_InsertTool. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+    if (_obj6)
+{
+  _arg6 = _obj6;
+}
+    if (_obj7)
+{
+    if (!PyString_Check(_obj7)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg7 = new wxString(PyString_AsString(_obj7), PyString_Size(_obj7));
+}
+    if (_obj8)
+{
+    if (!PyString_Check(_obj8)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg8 = new wxString(PyString_AsString(_obj8), PyString_Size(_obj8));
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxToolBarToolBase *)wxToolBarBase_InsertTool(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,_arg6,*_arg7,*_arg8);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxToolBarToolBase_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj7)
+        delete _arg7;
+}
+{
+    if (_obj8)
+        delete _arg8;
+}
+    return _resultobj;
+}
+
+static wxToolBarToolBase * wxToolBarBase_InsertSimpleTool(wxToolBarBase *self,size_t  pos,int  id,const wxBitmap & bitmap,const wxString & shortHelpString,const wxString & longHelpString,int  toggle) {
+            return self->InsertTool(pos, id, bitmap, wxNullBitmap, toggle, NULL,
+                                    shortHelpString, longHelpString);
+        }
+static PyObject *_wrap_wxToolBarBase_InsertSimpleTool(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToolBarToolBase * _result;
+    wxToolBarBase * _arg0;
+    size_t  _arg1;
+    int  _arg2;
+    wxBitmap * _arg3;
+    wxString * _arg4 = (wxString *) &wxPyEmptyStr;
+    wxString * _arg5 = (wxString *) &wxPyEmptyStr;
+    int  _arg6 = (int ) FALSE;
+    PyObject * _argo0 = 0;
+    PyObject * _argo3 = 0;
+    PyObject * _obj4 = 0;
+    PyObject * _obj5 = 0;
+    char *_kwnames[] = { "self","pos","id","bitmap","shortHelpString","longHelpString","toggle", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiiO|OOi:wxToolBarBase_InsertSimpleTool",_kwnames,&_argo0,&_arg1,&_arg2,&_argo3,&_obj4,&_obj5,&_arg6)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_InsertSimpleTool. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+    if (_argo3) {
+        if (_argo3 == Py_None) { _arg3 = NULL; }
+        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxToolBarBase_InsertSimpleTool. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+    if (_obj4)
+{
+    if (!PyString_Check(_obj4)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg4 = new wxString(PyString_AsString(_obj4), PyString_Size(_obj4));
+}
+    if (_obj5)
+{
+    if (!PyString_Check(_obj5)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg5 = new wxString(PyString_AsString(_obj5), PyString_Size(_obj5));
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxToolBarToolBase *)wxToolBarBase_InsertSimpleTool(_arg0,_arg1,_arg2,*_arg3,*_arg4,*_arg5,_arg6);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxToolBarToolBase_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj4)
+        delete _arg4;
+}
+{
+    if (_obj5)
+        delete _arg5;
+}
+    return _resultobj;
+}
+
+#define wxToolBarBase_AddControl(_swigobj,_swigarg0)  (_swigobj->AddControl(_swigarg0))
+static PyObject *_wrap_wxToolBarBase_AddControl(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToolBarToolBase * _result;
+    wxToolBarBase * _arg0;
+    wxControl * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","control", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxToolBarBase_AddControl",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_AddControl. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxControl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxToolBarBase_AddControl. Expected _wxControl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxToolBarToolBase *)wxToolBarBase_AddControl(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxToolBarToolBase_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxToolBarBase_InsertControl(_swigobj,_swigarg0,_swigarg1)  (_swigobj->InsertControl(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxToolBarBase_InsertControl(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToolBarToolBase * _result;
+    wxToolBarBase * _arg0;
+    size_t  _arg1;
+    wxControl * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _argo2 = 0;
+    char *_kwnames[] = { "self","pos","control", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxToolBarBase_InsertControl",_kwnames,&_argo0,&_arg1,&_argo2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_InsertControl. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+    if (_argo2) {
+        if (_argo2 == Py_None) { _arg2 = NULL; }
+        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxControl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxToolBarBase_InsertControl. Expected _wxControl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxToolBarToolBase *)wxToolBarBase_InsertControl(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxToolBarToolBase_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxToolBarBase_AddSeparator(_swigobj)  (_swigobj->AddSeparator())
+static PyObject *_wrap_wxToolBarBase_AddSeparator(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToolBarToolBase * _result;
+    wxToolBarBase * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarBase_AddSeparator",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_AddSeparator. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxToolBarToolBase *)wxToolBarBase_AddSeparator(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxToolBarToolBase_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxToolBarBase_InsertSeparator(_swigobj,_swigarg0)  (_swigobj->InsertSeparator(_swigarg0))
+static PyObject *_wrap_wxToolBarBase_InsertSeparator(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToolBarToolBase * _result;
+    wxToolBarBase * _arg0;
+    size_t  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","pos", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBarBase_InsertSeparator",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_InsertSeparator. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxToolBarToolBase *)wxToolBarBase_InsertSeparator(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxToolBarToolBase_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxToolBarBase_RemoveTool(_swigobj,_swigarg0)  (_swigobj->RemoveTool(_swigarg0))
+static PyObject *_wrap_wxToolBarBase_RemoveTool(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToolBarToolBase * _result;
+    wxToolBarBase * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","id", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBarBase_RemoveTool",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_RemoveTool. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxToolBarToolBase *)wxToolBarBase_RemoveTool(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxToolBarToolBase_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxToolBarBase_DeleteToolByPos(_swigobj,_swigarg0)  (_swigobj->DeleteToolByPos(_swigarg0))
+static PyObject *_wrap_wxToolBarBase_DeleteToolByPos(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxToolBarBase * _arg0;
+    size_t  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","pos", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBarBase_DeleteToolByPos",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_DeleteToolByPos. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxToolBarBase_DeleteToolByPos(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxToolBarBase_DeleteTool(_swigobj,_swigarg0)  (_swigobj->DeleteTool(_swigarg0))
+static PyObject *_wrap_wxToolBarBase_DeleteTool(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxToolBarBase * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","id", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBarBase_DeleteTool",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_DeleteTool. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxToolBarBase_DeleteTool(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxToolBarBase_ClearTools(_swigobj)  (_swigobj->ClearTools())
+static PyObject *_wrap_wxToolBarBase_ClearTools(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToolBarBase * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarBase_ClearTools",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_ClearTools. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxToolBarBase_ClearTools(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxToolBarBase_Realize(_swigobj)  (_swigobj->Realize())
+static PyObject *_wrap_wxToolBarBase_Realize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxToolBarBase * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarBase_Realize",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_Realize. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxToolBarBase_Realize(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxToolBarBase_EnableTool(_swigobj,_swigarg0,_swigarg1)  (_swigobj->EnableTool(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxToolBarBase_EnableTool(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToolBarBase * _arg0;
+    int  _arg1;
+    bool  _arg2;
+    PyObject * _argo0 = 0;
+    int tempbool2;
+    char *_kwnames[] = { "self","id","enable", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxToolBarBase_EnableTool",_kwnames,&_argo0,&_arg1,&tempbool2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_EnableTool. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+    _arg2 = (bool ) tempbool2;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxToolBarBase_EnableTool(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxToolBarBase_ToggleTool(_swigobj,_swigarg0,_swigarg1)  (_swigobj->ToggleTool(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxToolBarBase_ToggleTool(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToolBarBase * _arg0;
+    int  _arg1;
+    bool  _arg2;
+    PyObject * _argo0 = 0;
+    int tempbool2;
+    char *_kwnames[] = { "self","id","toggle", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxToolBarBase_ToggleTool",_kwnames,&_argo0,&_arg1,&tempbool2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_ToggleTool. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+    _arg2 = (bool ) tempbool2;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxToolBarBase_ToggleTool(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxToolBarBase_SetToggle(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetToggle(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxToolBarBase_SetToggle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToolBarBase * _arg0;
+    int  _arg1;
+    bool  _arg2;
+    PyObject * _argo0 = 0;
+    int tempbool2;
+    char *_kwnames[] = { "self","id","toggle", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxToolBarBase_SetToggle",_kwnames,&_argo0,&_arg1,&tempbool2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_SetToggle. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+    _arg2 = (bool ) tempbool2;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxToolBarBase_SetToggle(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject * wxToolBarBase_GetToolClientData(wxToolBarBase *self,int  index) {
+            wxPyUserData* udata = (wxPyUserData*)self->GetToolClientData(index);
+            if (udata) {
+                Py_INCREF(udata->m_obj);
+                return udata->m_obj;
+            } else {
+                Py_INCREF(Py_None);
+                return Py_None;
+            }
+        }
+static PyObject *_wrap_wxToolBarBase_GetToolClientData(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxToolBarBase * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","index", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBarBase_GetToolClientData",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_GetToolClientData. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxToolBarBase_GetToolClientData(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
+static void  wxToolBarBase_SetToolClientData(wxToolBarBase *self,int  index,PyObject * clientData) {
+            self->SetToolClientData(index, new wxPyUserData(clientData));
+        }
+static PyObject *_wrap_wxToolBarBase_SetToolClientData(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToolBarBase * _arg0;
+    int  _arg1;
+    PyObject * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","index","clientData", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxToolBarBase_SetToolClientData",_kwnames,&_argo0,&_arg1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_SetToolClientData. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+  _arg2 = _obj2;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxToolBarBase_SetToolClientData(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxToolBarBase_GetToolState(_swigobj,_swigarg0)  (_swigobj->GetToolState(_swigarg0))
+static PyObject *_wrap_wxToolBarBase_GetToolState(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxToolBarBase * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","id", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBarBase_GetToolState",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_GetToolState. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxToolBarBase_GetToolState(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxToolBarBase_GetToolEnabled(_swigobj,_swigarg0)  (_swigobj->GetToolEnabled(_swigarg0))
+static PyObject *_wrap_wxToolBarBase_GetToolEnabled(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxToolBarBase * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","id", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBarBase_GetToolEnabled",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_GetToolEnabled. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxToolBarBase_GetToolEnabled(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxToolBarBase_SetToolShortHelp(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetToolShortHelp(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxToolBarBase_SetToolShortHelp(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToolBarBase * _arg0;
+    int  _arg1;
+    wxString * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","id","helpString", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxToolBarBase_SetToolShortHelp",_kwnames,&_argo0,&_arg1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_SetToolShortHelp. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    if (!PyString_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxToolBarBase_SetToolShortHelp(_arg0,_arg1,*_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj2)
+        delete _arg2;
+}
+    return _resultobj;
+}
+
+#define wxToolBarBase_GetToolShortHelp(_swigobj,_swigarg0)  (_swigobj->GetToolShortHelp(_swigarg0))
+static PyObject *_wrap_wxToolBarBase_GetToolShortHelp(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxToolBarBase * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","id", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBarBase_GetToolShortHelp",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_GetToolShortHelp. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxToolBarBase_GetToolShortHelp(_arg0,_arg1));
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxToolBarBase_SetToolLongHelp(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetToolLongHelp(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxToolBarBase_SetToolLongHelp(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToolBarBase * _arg0;
+    int  _arg1;
+    wxString * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","id","helpString", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxToolBarBase_SetToolLongHelp",_kwnames,&_argo0,&_arg1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_SetToolLongHelp. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    if (!PyString_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxToolBarBase_SetToolLongHelp(_arg0,_arg1,*_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj2)
+        delete _arg2;
+}
+    return _resultobj;
+}
+
+#define wxToolBarBase_GetToolLongHelp(_swigobj,_swigarg0)  (_swigobj->GetToolLongHelp(_swigarg0))
+static PyObject *_wrap_wxToolBarBase_GetToolLongHelp(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxToolBarBase * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","id", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBarBase_GetToolLongHelp",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_GetToolLongHelp. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxToolBarBase_GetToolLongHelp(_arg0,_arg1));
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxToolBarBase_SetMarginsXY(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetMargins(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxToolBarBase_SetMarginsXY(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToolBarBase * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x","y", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxToolBarBase_SetMarginsXY",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_SetMarginsXY. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxToolBarBase_SetMarginsXY(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxToolBarBase_SetMargins(_swigobj,_swigarg0)  (_swigobj->SetMargins(_swigarg0))
+static PyObject *_wrap_wxToolBarBase_SetMargins(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToolBarBase * _arg0;
+    wxSize * _arg1;
+    PyObject * _argo0 = 0;
+    wxSize  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","size", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxToolBarBase_SetMargins",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_SetMargins. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxSize_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxToolBarBase_SetMargins(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxToolBarBase_SetToolPacking(_swigobj,_swigarg0)  (_swigobj->SetToolPacking(_swigarg0))
+static PyObject *_wrap_wxToolBarBase_SetToolPacking(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToolBarBase * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","packing", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBarBase_SetToolPacking",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_SetToolPacking. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxToolBarBase_SetToolPacking(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxToolBarBase_SetToolSeparation(_swigobj,_swigarg0)  (_swigobj->SetToolSeparation(_swigarg0))
+static PyObject *_wrap_wxToolBarBase_SetToolSeparation(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToolBarBase * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","separation", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBarBase_SetToolSeparation",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_SetToolSeparation. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxToolBarBase_SetToolSeparation(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxToolBarBase_GetToolMargins(_swigobj)  (_swigobj->GetToolMargins())
+static PyObject *_wrap_wxToolBarBase_GetToolMargins(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSize * _result;
+    wxToolBarBase * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarBase_GetToolMargins",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_GetToolMargins. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxSize (wxToolBarBase_GetToolMargins(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxToolBarBase_GetToolPacking(_swigobj)  (_swigobj->GetToolPacking())
+static PyObject *_wrap_wxToolBarBase_GetToolPacking(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxToolBarBase * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarBase_GetToolPacking",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_GetToolPacking. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxToolBarBase_GetToolPacking(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxToolBarBase_GetToolSeparation(_swigobj)  (_swigobj->GetToolSeparation())
+static PyObject *_wrap_wxToolBarBase_GetToolSeparation(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxToolBarBase * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarBase_GetToolSeparation",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_GetToolSeparation. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxToolBarBase_GetToolSeparation(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxToolBarBase_SetRows(_swigobj,_swigarg0)  (_swigobj->SetRows(_swigarg0))
+static PyObject *_wrap_wxToolBarBase_SetRows(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToolBarBase * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","nRows", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBarBase_SetRows",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_SetRows. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxToolBarBase_SetRows(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxToolBarBase_SetMaxRowsCols(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetMaxRowsCols(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxToolBarBase_SetMaxRowsCols(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToolBarBase * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","rows","cols", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxToolBarBase_SetMaxRowsCols",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_SetMaxRowsCols. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxToolBarBase_SetMaxRowsCols(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxToolBarBase_GetMaxRows(_swigobj)  (_swigobj->GetMaxRows())
+static PyObject *_wrap_wxToolBarBase_GetMaxRows(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxToolBarBase * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarBase_GetMaxRows",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_GetMaxRows. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxToolBarBase_GetMaxRows(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxToolBarBase_GetMaxCols(_swigobj)  (_swigobj->GetMaxCols())
+static PyObject *_wrap_wxToolBarBase_GetMaxCols(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxToolBarBase * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarBase_GetMaxCols",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_GetMaxCols. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxToolBarBase_GetMaxCols(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxToolBarBase_SetToolBitmapSize(_swigobj,_swigarg0)  (_swigobj->SetToolBitmapSize(_swigarg0))
+static PyObject *_wrap_wxToolBarBase_SetToolBitmapSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToolBarBase * _arg0;
+    wxSize * _arg1;
+    PyObject * _argo0 = 0;
+    wxSize  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","size", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxToolBarBase_SetToolBitmapSize",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_SetToolBitmapSize. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxSize_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxToolBarBase_SetToolBitmapSize(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxToolBarBase_GetToolBitmapSize(_swigobj)  (_swigobj->GetToolBitmapSize())
+static PyObject *_wrap_wxToolBarBase_GetToolBitmapSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSize * _result;
+    wxToolBarBase * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarBase_GetToolBitmapSize",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_GetToolBitmapSize. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxSize (wxToolBarBase_GetToolBitmapSize(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxToolBarBase_GetToolSize(_swigobj)  (_swigobj->GetToolSize())
+static PyObject *_wrap_wxToolBarBase_GetToolSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSize * _result;
+    wxToolBarBase * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarBase_GetToolSize",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_GetToolSize. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxSize (wxToolBarBase_GetToolSize(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static void *SwigwxToolBarTowxToolBarBase(void *ptr) {
+    wxToolBar *src;
+    wxToolBarBase *dest;
+    src = (wxToolBar *) ptr;
+    dest = (wxToolBarBase *) src;
+    return (void *) dest;
 }
 
 static void *SwigwxToolBarTowxControl(void *ptr) {
@@ -1685,18 +2838,19 @@ static PyObject *_wrap_new_wxToolBar(PyObject *self, PyObject *args, PyObject *k
     wxWindowID  _arg1;
     wxPoint * _arg2 = (wxPoint *) &wxPyDefaultPosition;
     wxSize * _arg3 = (wxSize *) &wxPyDefaultSize;
-    long  _arg4 = (long ) wxTB_HORIZONTAL|wxNO_BORDER;
-    char * _arg5 = (char *) "toolBar";
+    long  _arg4 = (long ) wxNO_BORDER|wxTB_HORIZONTAL;
+    wxString * _arg5 = (wxString *) &wxToolBarNameStr;
     PyObject * _argo0 = 0;
     wxPoint  temp;
     PyObject * _obj2 = 0;
     wxSize  temp0;
     PyObject * _obj3 = 0;
+    PyObject * _obj5 = 0;
     char *_kwnames[] = { "parent","id","pos","size","style","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOls:new_wxToolBar",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_arg5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOlO:new_wxToolBar",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_obj5)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1717,9 +2871,17 @@ static PyObject *_wrap_new_wxToolBar(PyObject *self, PyObject *args, PyObject *k
     if (! wxSize_helper(_obj3, &_arg3))
         return NULL;
 }
+    if (_obj5)
+{
+    if (!PyString_Check(_obj5)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg5 = new wxString(PyString_AsString(_obj5), PyString_Size(_obj5));
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxToolBar *)new_wxToolBar(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5);
+        _result = (wxToolBar *)new_wxToolBar(_arg0,_arg1,*_arg2,*_arg3,_arg4,*_arg5);
 
     wxPy_END_ALLOW_THREADS;
 }    if (_result) {
@@ -1729,307 +2891,26 @@ static PyObject *_wrap_new_wxToolBar(PyObject *self, PyObject *args, PyObject *k
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
-    return _resultobj;
-}
-
-#define wxToolBar_AddControl(_swigobj,_swigarg0)  (_swigobj->AddControl(_swigarg0))
-static PyObject *_wrap_wxToolBar_AddControl(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxToolBar * _arg0;
-    wxControl * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","control", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxToolBar_AddControl",_kwnames,&_argo0,&_argo1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_AddControl. Expected _wxToolBar_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxControl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxToolBar_AddControl. Expected _wxControl_p.");
-        return NULL;
-        }
-    }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxToolBar_AddControl(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
+    if (_obj5)
+        delete _arg5;
 }
-
-#define wxToolBar_AddSeparator(_swigobj)  (_swigobj->AddSeparator())
-static PyObject *_wrap_wxToolBar_AddSeparator(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxToolBar * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBar_AddSeparator",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_AddSeparator. Expected _wxToolBar_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxToolBar_AddSeparator(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxToolBar_ClearTools(_swigobj)  (_swigobj->ClearTools())
-static PyObject *_wrap_wxToolBar_ClearTools(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxToolBar * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBar_ClearTools",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_ClearTools. Expected _wxToolBar_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxToolBar_ClearTools(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-static wxToolBarTool * wxToolBar_AddTool(wxToolBar *self,int  toolIndex,const wxBitmap & bitmap1,const wxBitmap & bitmap2,int  isToggle,long  xPos,long  yPos,const wxString & shortHelpString,const wxString & longHelpString) {
-            return self->AddTool(toolIndex, bitmap1, bitmap2,
-                                 isToggle, xPos, yPos, NULL,
-                                 shortHelpString, longHelpString);
-        }
-static PyObject *_wrap_wxToolBar_AddTool(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxToolBarTool * _result;
-    wxToolBar * _arg0;
-    int  _arg1;
-    wxBitmap * _arg2;
-    wxBitmap * _arg3 = (wxBitmap *) &wxNullBitmap;
-    int  _arg4 = (int ) FALSE;
-    long  _arg5 = (long ) -1;
-    long  _arg6 = (long ) -1;
-    wxString * _arg7 = (wxString *) &wxPyEmptyStr;
-    wxString * _arg8 = (wxString *) &wxPyEmptyStr;
-    PyObject * _argo0 = 0;
-    PyObject * _argo2 = 0;
-    PyObject * _argo3 = 0;
-    PyObject * _obj7 = 0;
-    PyObject * _obj8 = 0;
-    char *_kwnames[] = { "self","toolIndex","bitmap1","bitmap2","isToggle","xPos","yPos","shortHelpString","longHelpString", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OillOO:wxToolBar_AddTool",_kwnames,&_argo0,&_arg1,&_argo2,&_argo3,&_arg4,&_arg5,&_arg6,&_obj7,&_obj8)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_AddTool. Expected _wxToolBar_p.");
-        return NULL;
-        }
-    }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxToolBar_AddTool. Expected _wxBitmap_p.");
-        return NULL;
-        }
-    }
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxToolBar_AddTool. Expected _wxBitmap_p.");
-        return NULL;
-        }
-    }
-    if (_obj7)
-{
-    if (!PyString_Check(_obj7)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg7 = new wxString(PyString_AsString(_obj7), PyString_Size(_obj7));
-}
-    if (_obj8)
-{
-    if (!PyString_Check(_obj8)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg8 = new wxString(PyString_AsString(_obj8), PyString_Size(_obj8));
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxToolBarTool *)wxToolBar_AddTool(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5,_arg6,*_arg7,*_arg8);
-
-    wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxToolBarTool_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-{
-    if (_obj7)
-        delete _arg7;
-}
-{
-    if (_obj8)
-        delete _arg8;
-}
-    return _resultobj;
-}
-
-static wxToolBarTool * wxToolBar_AddSimpleTool(wxToolBar *self,int  toolIndex,const wxBitmap & bitmap,const wxString & shortHelpString,const wxString & longHelpString) {
-            return self->AddTool(toolIndex, bitmap, wxNullBitmap,
-                                 FALSE, -1, -1, NULL,
-                                 shortHelpString, longHelpString);
-        }
-static PyObject *_wrap_wxToolBar_AddSimpleTool(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxToolBarTool * _result;
-    wxToolBar * _arg0;
-    int  _arg1;
-    wxBitmap * _arg2;
-    wxString * _arg3 = (wxString *) &wxPyEmptyStr;
-    wxString * _arg4 = (wxString *) &wxPyEmptyStr;
-    PyObject * _argo0 = 0;
-    PyObject * _argo2 = 0;
-    PyObject * _obj3 = 0;
-    PyObject * _obj4 = 0;
-    char *_kwnames[] = { "self","toolIndex","bitmap","shortHelpString","longHelpString", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OO:wxToolBar_AddSimpleTool",_kwnames,&_argo0,&_arg1,&_argo2,&_obj3,&_obj4)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_AddSimpleTool. Expected _wxToolBar_p.");
-        return NULL;
-        }
-    }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxToolBar_AddSimpleTool. Expected _wxBitmap_p.");
-        return NULL;
-        }
-    }
-    if (_obj3)
-{
-    if (!PyString_Check(_obj3)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg3 = new wxString(PyString_AsString(_obj3), PyString_Size(_obj3));
-}
-    if (_obj4)
-{
-    if (!PyString_Check(_obj4)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg4 = new wxString(PyString_AsString(_obj4), PyString_Size(_obj4));
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxToolBarTool *)wxToolBar_AddSimpleTool(_arg0,_arg1,*_arg2,*_arg3,*_arg4);
-
-    wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxToolBarTool_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-{
-    if (_obj3)
-        delete _arg3;
-}
-{
-    if (_obj4)
-        delete _arg4;
-}
-    return _resultobj;
-}
-
-#define wxToolBar_EnableTool(_swigobj,_swigarg0,_swigarg1)  (_swigobj->EnableTool(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxToolBar_EnableTool(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxToolBar * _arg0;
-    int  _arg1;
-    bool  _arg2;
-    PyObject * _argo0 = 0;
-    int tempbool2;
-    char *_kwnames[] = { "self","toolIndex","enable", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxToolBar_EnableTool",_kwnames,&_argo0,&_arg1,&tempbool2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_EnableTool. Expected _wxToolBar_p.");
-        return NULL;
-        }
-    }
-    _arg2 = (bool ) tempbool2;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxToolBar_EnableTool(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
     return _resultobj;
 }
 
 #define wxToolBar_FindToolForPosition(_swigobj,_swigarg0,_swigarg1)  (_swigobj->FindToolForPosition(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxToolBar_FindToolForPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxToolBarTool * _result;
+    wxToolBarToolBase * _result;
     wxToolBar * _arg0;
-    long  _arg1;
-    long  _arg2;
+    wxCoord  _arg1;
+    wxCoord  _arg2;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self","x","y", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oll:wxToolBar_FindToolForPosition",_kwnames,&_argo0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxToolBar_FindToolForPosition",_kwnames,&_argo0,&_arg1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2040,11 +2921,11 @@ static PyObject *_wrap_wxToolBar_FindToolForPosition(PyObject *self, PyObject *a
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxToolBarTool *)wxToolBar_FindToolForPosition(_arg0,_arg1,_arg2);
+        _result = (wxToolBarToolBase *)wxToolBar_FindToolForPosition(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxToolBarTool_p");
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxToolBarToolBase_p");
         _resultobj = Py_BuildValue("s",_ptemp);
     } else {
         Py_INCREF(Py_None);
@@ -2053,747 +2934,212 @@ static PyObject *_wrap_wxToolBar_FindToolForPosition(PyObject *self, PyObject *a
     return _resultobj;
 }
 
-#define wxToolBar_GetToolSize(_swigobj)  (_swigobj->GetToolSize())
-static PyObject *_wrap_wxToolBar_GetToolSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+static void *SwigwxToolBarSimpleTowxToolBarBase(void *ptr) {
+    wxToolBarSimple *src;
+    wxToolBarBase *dest;
+    src = (wxToolBarSimple *) ptr;
+    dest = (wxToolBarBase *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxToolBarSimpleTowxControl(void *ptr) {
+    wxToolBarSimple *src;
+    wxControl *dest;
+    src = (wxToolBarSimple *) ptr;
+    dest = (wxControl *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxToolBarSimpleTowxWindow(void *ptr) {
+    wxToolBarSimple *src;
+    wxWindow *dest;
+    src = (wxToolBarSimple *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxToolBarSimpleTowxEvtHandler(void *ptr) {
+    wxToolBarSimple *src;
+    wxEvtHandler *dest;
+    src = (wxToolBarSimple *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+#define new_wxToolBarSimple(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5) (new wxToolBarSimple(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
+static PyObject *_wrap_new_wxToolBarSimple(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxSize * _result;
-    wxToolBar * _arg0;
+    wxToolBarSimple * _result;
+    wxWindow * _arg0;
+    wxWindowID  _arg1;
+    wxPoint * _arg2 = (wxPoint *) &wxPyDefaultPosition;
+    wxSize * _arg3 = (wxSize *) &wxPyDefaultSize;
+    long  _arg4 = (long ) wxNO_BORDER|wxTB_HORIZONTAL;
+    wxString * _arg5 = (wxString *) &wxToolBarNameStr;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBar_GetToolSize",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_GetToolSize. Expected _wxToolBar_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxSize (wxToolBar_GetToolSize(_arg0));
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-#define wxToolBar_GetToolBitmapSize(_swigobj)  (_swigobj->GetToolBitmapSize())
-static PyObject *_wrap_wxToolBar_GetToolBitmapSize(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxSize * _result;
-    wxToolBar * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBar_GetToolBitmapSize",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_GetToolBitmapSize. Expected _wxToolBar_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxSize (wxToolBar_GetToolBitmapSize(_arg0));
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-#define wxToolBar_SetToolBitmapSize(_swigobj,_swigarg0)  (_swigobj->SetToolBitmapSize(_swigarg0))
-static PyObject *_wrap_wxToolBar_SetToolBitmapSize(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxToolBar * _arg0;
-    wxSize * _arg1;
-    PyObject * _argo0 = 0;
-    wxSize  temp;
-    PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","size", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxToolBar_SetToolBitmapSize",_kwnames,&_argo0,&_obj1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_SetToolBitmapSize. Expected _wxToolBar_p.");
-        return NULL;
-        }
-    }
-{
-    _arg1 = &temp;
-    if (! wxSize_helper(_obj1, &_arg1))
-        return NULL;
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxToolBar_SetToolBitmapSize(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxToolBar_GetToolMargins(_swigobj)  (_swigobj->GetToolMargins())
-static PyObject *_wrap_wxToolBar_GetToolMargins(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxSize * _result;
-    wxToolBar * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBar_GetToolMargins",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_GetToolMargins. Expected _wxToolBar_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxSize (wxToolBar_GetToolMargins(_arg0));
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-#define wxToolBar_GetMaxSize(_swigobj)  (_swigobj->GetMaxSize())
-static PyObject *_wrap_wxToolBar_GetMaxSize(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxSize * _result;
-    wxToolBar * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBar_GetMaxSize",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_GetMaxSize. Expected _wxToolBar_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxSize (wxToolBar_GetMaxSize(_arg0));
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-#define wxToolBar_GetToolEnabled(_swigobj,_swigarg0)  (_swigobj->GetToolEnabled(_swigarg0))
-static PyObject *_wrap_wxToolBar_GetToolEnabled(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxToolBar * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","toolIndex", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBar_GetToolEnabled",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_GetToolEnabled. Expected _wxToolBar_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxToolBar_GetToolEnabled(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxToolBar_GetToolLongHelp(_swigobj,_swigarg0)  (_swigobj->GetToolLongHelp(_swigarg0))
-static PyObject *_wrap_wxToolBar_GetToolLongHelp(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxString * _result;
-    wxToolBar * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","toolIndex", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBar_GetToolLongHelp",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_GetToolLongHelp. Expected _wxToolBar_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxString (wxToolBar_GetToolLongHelp(_arg0,_arg1));
-
-    wxPy_END_ALLOW_THREADS;
-}{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
-}
-{
-    delete _result;
-}
-    return _resultobj;
-}
-
-#define wxToolBar_GetToolPacking(_swigobj)  (_swigobj->GetToolPacking())
-static PyObject *_wrap_wxToolBar_GetToolPacking(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxToolBar * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBar_GetToolPacking",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_GetToolPacking. Expected _wxToolBar_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxToolBar_GetToolPacking(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxToolBar_GetToolSeparation(_swigobj)  (_swigobj->GetToolSeparation())
-static PyObject *_wrap_wxToolBar_GetToolSeparation(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxToolBar * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBar_GetToolSeparation",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_GetToolSeparation. Expected _wxToolBar_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxToolBar_GetToolSeparation(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxToolBar_GetToolShortHelp(_swigobj,_swigarg0)  (_swigobj->GetToolShortHelp(_swigarg0))
-static PyObject *_wrap_wxToolBar_GetToolShortHelp(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxString * _result;
-    wxToolBar * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","toolIndex", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBar_GetToolShortHelp",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_GetToolShortHelp. Expected _wxToolBar_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxString (wxToolBar_GetToolShortHelp(_arg0,_arg1));
-
-    wxPy_END_ALLOW_THREADS;
-}{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
-}
-{
-    delete _result;
-}
-    return _resultobj;
-}
-
-#define wxToolBar_GetToolState(_swigobj,_swigarg0)  (_swigobj->GetToolState(_swigarg0))
-static PyObject *_wrap_wxToolBar_GetToolState(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxToolBar * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","toolIndex", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBar_GetToolState",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_GetToolState. Expected _wxToolBar_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxToolBar_GetToolState(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxToolBar_Realize(_swigobj)  (_swigobj->Realize())
-static PyObject *_wrap_wxToolBar_Realize(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxToolBar * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBar_Realize",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_Realize. Expected _wxToolBar_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxToolBar_Realize(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxToolBar_SetToolLongHelp(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetToolLongHelp(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxToolBar_SetToolLongHelp(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxToolBar * _arg0;
-    int  _arg1;
-    wxString * _arg2;
-    PyObject * _argo0 = 0;
+    wxPoint  temp;
     PyObject * _obj2 = 0;
-    char *_kwnames[] = { "self","toolIndex","helpString", NULL };
+    wxSize  temp0;
+    PyObject * _obj3 = 0;
+    PyObject * _obj5 = 0;
+    char *_kwnames[] = { "parent","id","pos","size","style","name", NULL };
+    char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxToolBar_SetToolLongHelp",_kwnames,&_argo0,&_arg1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOlO:new_wxToolBarSimple",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_obj5)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_SetToolLongHelp. Expected _wxToolBar_p.");
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxToolBarSimple. Expected _wxWindow_p.");
         return NULL;
         }
     }
+    if (_obj2)
 {
-    if (!PyString_Check(_obj2)) {
+    _arg2 = &temp;
+    if (! wxPoint_helper(_obj2, &_arg2))
+        return NULL;
+}
+    if (_obj3)
+{
+    _arg3 = &temp0;
+    if (! wxSize_helper(_obj3, &_arg3))
+        return NULL;
+}
+    if (_obj5)
+{
+    if (!PyString_Check(_obj5)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
+    _arg5 = new wxString(PyString_AsString(_obj5), PyString_Size(_obj5));
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxToolBar_SetToolLongHelp(_arg0,_arg1,*_arg2);
+        _result = (wxToolBarSimple *)new_wxToolBarSimple(_arg0,_arg1,*_arg2,*_arg3,_arg4,*_arg5);
 
     wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxToolBarSimple_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
 {
-    if (_obj2)
-        delete _arg2;
+    if (_obj5)
+        delete _arg5;
 }
     return _resultobj;
 }
 
-#define wxToolBar_SetToolShortHelp(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetToolShortHelp(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxToolBar_SetToolShortHelp(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxToolBarSimple_FindToolForPosition(_swigobj,_swigarg0,_swigarg1)  (_swigobj->FindToolForPosition(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxToolBarSimple_FindToolForPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxToolBar * _arg0;
-    int  _arg1;
-    wxString * _arg2;
+    wxToolBarToolBase * _result;
+    wxToolBarSimple * _arg0;
+    wxCoord  _arg1;
+    wxCoord  _arg2;
     PyObject * _argo0 = 0;
-    PyObject * _obj2 = 0;
-    char *_kwnames[] = { "self","toolIndex","helpString", NULL };
+    char *_kwnames[] = { "self","x","y", NULL };
+    char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxToolBar_SetToolShortHelp",_kwnames,&_argo0,&_arg1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxToolBarSimple_FindToolForPosition",_kwnames,&_argo0,&_arg1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_SetToolShortHelp. Expected _wxToolBar_p.");
-        return NULL;
-        }
-    }
-{
-    if (!PyString_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxToolBar_SetToolShortHelp(_arg0,_arg1,*_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-{
-    if (_obj2)
-        delete _arg2;
-}
-    return _resultobj;
-}
-
-#define wxToolBar_SetMargins(_swigobj,_swigarg0)  (_swigobj->SetMargins(_swigarg0))
-static PyObject *_wrap_wxToolBar_SetMargins(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxToolBar * _arg0;
-    wxSize * _arg1;
-    PyObject * _argo0 = 0;
-    wxSize  temp;
-    PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","size", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxToolBar_SetMargins",_kwnames,&_argo0,&_obj1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_SetMargins. Expected _wxToolBar_p.");
-        return NULL;
-        }
-    }
-{
-    _arg1 = &temp;
-    if (! wxSize_helper(_obj1, &_arg1))
-        return NULL;
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxToolBar_SetMargins(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxToolBar_SetToolPacking(_swigobj,_swigarg0)  (_swigobj->SetToolPacking(_swigarg0))
-static PyObject *_wrap_wxToolBar_SetToolPacking(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxToolBar * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","packing", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBar_SetToolPacking",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_SetToolPacking. Expected _wxToolBar_p.");
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarSimple_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarSimple_FindToolForPosition. Expected _wxToolBarSimple_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxToolBar_SetToolPacking(_arg0,_arg1);
+        _result = (wxToolBarToolBase *)wxToolBarSimple_FindToolForPosition(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxToolBar_SetToolSeparation(_swigobj,_swigarg0)  (_swigobj->SetToolSeparation(_swigarg0))
-static PyObject *_wrap_wxToolBar_SetToolSeparation(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxToolBar * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","separation", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBar_SetToolSeparation",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_SetToolSeparation. Expected _wxToolBar_p.");
-        return NULL;
-        }
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxToolBarToolBase_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
     }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxToolBar_SetToolSeparation(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxToolBar_ToggleTool(_swigobj,_swigarg0,_swigarg1)  (_swigobj->ToggleTool(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxToolBar_ToggleTool(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxToolBar * _arg0;
-    int  _arg1;
-    bool  _arg2;
-    PyObject * _argo0 = 0;
-    int tempbool2;
-    char *_kwnames[] = { "self","toolIndex","toggle", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxToolBar_ToggleTool",_kwnames,&_argo0,&_arg1,&tempbool2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_ToggleTool. Expected _wxToolBar_p.");
-        return NULL;
-        }
-    }
-    _arg2 = (bool ) tempbool2;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxToolBar_ToggleTool(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxToolBar_SetToggle(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetToggle(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxToolBar_SetToggle(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxToolBar * _arg0;
-    int  _arg1;
-    bool  _arg2;
-    PyObject * _argo0 = 0;
-    int tempbool2;
-    char *_kwnames[] = { "self","toolIndex","toggle", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxToolBar_SetToggle",_kwnames,&_argo0,&_arg1,&tempbool2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_SetToggle. Expected _wxToolBar_p.");
-        return NULL;
-        }
-    }
-    _arg2 = (bool ) tempbool2;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxToolBar_SetToggle(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxToolBar_SetMaxRowsCols(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetMaxRowsCols(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxToolBar_SetMaxRowsCols(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxToolBar * _arg0;
-    int  _arg1;
-    int  _arg2;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","rows","cols", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxToolBar_SetMaxRowsCols",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_SetMaxRowsCols. Expected _wxToolBar_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxToolBar_SetMaxRowsCols(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxToolBar_GetMaxRows(_swigobj)  (_swigobj->GetMaxRows())
-static PyObject *_wrap_wxToolBar_GetMaxRows(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxToolBar * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBar_GetMaxRows",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_GetMaxRows. Expected _wxToolBar_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxToolBar_GetMaxRows(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxToolBar_GetMaxCols(_swigobj)  (_swigobj->GetMaxCols())
-static PyObject *_wrap_wxToolBar_GetMaxCols(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxToolBar * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBar_GetMaxCols",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_GetMaxCols. Expected _wxToolBar_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxToolBar_GetMaxCols(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
 static PyMethodDef stattoolcMethods[] = {
-	 { "wxToolBar_GetMaxCols", (PyCFunction) _wrap_wxToolBar_GetMaxCols, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBar_GetMaxRows", (PyCFunction) _wrap_wxToolBar_GetMaxRows, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBar_SetMaxRowsCols", (PyCFunction) _wrap_wxToolBar_SetMaxRowsCols, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBar_SetToggle", (PyCFunction) _wrap_wxToolBar_SetToggle, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBar_ToggleTool", (PyCFunction) _wrap_wxToolBar_ToggleTool, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBar_SetToolSeparation", (PyCFunction) _wrap_wxToolBar_SetToolSeparation, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBar_SetToolPacking", (PyCFunction) _wrap_wxToolBar_SetToolPacking, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBar_SetMargins", (PyCFunction) _wrap_wxToolBar_SetMargins, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBar_SetToolShortHelp", (PyCFunction) _wrap_wxToolBar_SetToolShortHelp, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBar_SetToolLongHelp", (PyCFunction) _wrap_wxToolBar_SetToolLongHelp, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBar_Realize", (PyCFunction) _wrap_wxToolBar_Realize, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBar_GetToolState", (PyCFunction) _wrap_wxToolBar_GetToolState, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBar_GetToolShortHelp", (PyCFunction) _wrap_wxToolBar_GetToolShortHelp, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBar_GetToolSeparation", (PyCFunction) _wrap_wxToolBar_GetToolSeparation, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBar_GetToolPacking", (PyCFunction) _wrap_wxToolBar_GetToolPacking, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBar_GetToolLongHelp", (PyCFunction) _wrap_wxToolBar_GetToolLongHelp, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBar_GetToolEnabled", (PyCFunction) _wrap_wxToolBar_GetToolEnabled, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBar_GetMaxSize", (PyCFunction) _wrap_wxToolBar_GetMaxSize, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBar_GetToolMargins", (PyCFunction) _wrap_wxToolBar_GetToolMargins, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBar_SetToolBitmapSize", (PyCFunction) _wrap_wxToolBar_SetToolBitmapSize, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBar_GetToolBitmapSize", (PyCFunction) _wrap_wxToolBar_GetToolBitmapSize, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBar_GetToolSize", (PyCFunction) _wrap_wxToolBar_GetToolSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarSimple_FindToolForPosition", (PyCFunction) _wrap_wxToolBarSimple_FindToolForPosition, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxToolBarSimple", (PyCFunction) _wrap_new_wxToolBarSimple, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolBar_FindToolForPosition", (PyCFunction) _wrap_wxToolBar_FindToolForPosition, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBar_EnableTool", (PyCFunction) _wrap_wxToolBar_EnableTool, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBar_AddSimpleTool", (PyCFunction) _wrap_wxToolBar_AddSimpleTool, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBar_AddTool", (PyCFunction) _wrap_wxToolBar_AddTool, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBar_ClearTools", (PyCFunction) _wrap_wxToolBar_ClearTools, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBar_AddSeparator", (PyCFunction) _wrap_wxToolBar_AddSeparator, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBar_AddControl", (PyCFunction) _wrap_wxToolBar_AddControl, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxToolBar", (PyCFunction) _wrap_new_wxToolBar, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_longHelpString_get", (PyCFunction) _wrap_wxToolBarTool_m_longHelpString_get, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_longHelpString_set", (PyCFunction) _wrap_wxToolBarTool_m_longHelpString_set, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_shortHelpString_get", (PyCFunction) _wrap_wxToolBarTool_m_shortHelpString_get, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_shortHelpString_set", (PyCFunction) _wrap_wxToolBarTool_m_shortHelpString_set, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_isMenuCommand_get", (PyCFunction) _wrap_wxToolBarTool_m_isMenuCommand_get, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_isMenuCommand_set", (PyCFunction) _wrap_wxToolBarTool_m_isMenuCommand_set, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_bitmap2_get", (PyCFunction) _wrap_wxToolBarTool_m_bitmap2_get, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_bitmap2_set", (PyCFunction) _wrap_wxToolBarTool_m_bitmap2_set, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_bitmap1_get", (PyCFunction) _wrap_wxToolBarTool_m_bitmap1_get, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_bitmap1_set", (PyCFunction) _wrap_wxToolBarTool_m_bitmap1_set, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_enabled_get", (PyCFunction) _wrap_wxToolBarTool_m_enabled_get, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_enabled_set", (PyCFunction) _wrap_wxToolBarTool_m_enabled_set, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_deleteSecondBitmap_get", (PyCFunction) _wrap_wxToolBarTool_m_deleteSecondBitmap_get, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_deleteSecondBitmap_set", (PyCFunction) _wrap_wxToolBarTool_m_deleteSecondBitmap_set, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_isToggle_get", (PyCFunction) _wrap_wxToolBarTool_m_isToggle_get, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_isToggle_set", (PyCFunction) _wrap_wxToolBarTool_m_isToggle_set, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_toggleState_get", (PyCFunction) _wrap_wxToolBarTool_m_toggleState_get, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_toggleState_set", (PyCFunction) _wrap_wxToolBarTool_m_toggleState_set, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_height_get", (PyCFunction) _wrap_wxToolBarTool_m_height_get, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_height_set", (PyCFunction) _wrap_wxToolBarTool_m_height_set, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_width_get", (PyCFunction) _wrap_wxToolBarTool_m_width_get, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_width_set", (PyCFunction) _wrap_wxToolBarTool_m_width_set, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_y_get", (PyCFunction) _wrap_wxToolBarTool_m_y_get, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_y_set", (PyCFunction) _wrap_wxToolBarTool_m_y_set, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_x_get", (PyCFunction) _wrap_wxToolBarTool_m_x_get, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_x_set", (PyCFunction) _wrap_wxToolBarTool_m_x_set, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_index_get", (PyCFunction) _wrap_wxToolBarTool_m_index_get, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_index_set", (PyCFunction) _wrap_wxToolBarTool_m_index_set, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_clientData_get", (PyCFunction) _wrap_wxToolBarTool_m_clientData_get, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_clientData_set", (PyCFunction) _wrap_wxToolBarTool_m_clientData_set, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_toolStyle_get", (PyCFunction) _wrap_wxToolBarTool_m_toolStyle_get, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_m_toolStyle_set", (PyCFunction) _wrap_wxToolBarTool_m_toolStyle_set, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_GetControl", (PyCFunction) _wrap_wxToolBarTool_GetControl, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_GetHeight", (PyCFunction) _wrap_wxToolBarTool_GetHeight, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_GetWidth", (PyCFunction) _wrap_wxToolBarTool_GetWidth, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarTool_SetSize", (PyCFunction) _wrap_wxToolBarTool_SetSize, METH_VARARGS | METH_KEYWORDS },
-	 { "delete_wxToolBarTool", (PyCFunction) _wrap_delete_wxToolBarTool, METH_VARARGS | METH_KEYWORDS },
-	 { "new_wxToolBarTool", (PyCFunction) _wrap_new_wxToolBarTool, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_GetToolSize", (PyCFunction) _wrap_wxToolBarBase_GetToolSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_GetToolBitmapSize", (PyCFunction) _wrap_wxToolBarBase_GetToolBitmapSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_SetToolBitmapSize", (PyCFunction) _wrap_wxToolBarBase_SetToolBitmapSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_GetMaxCols", (PyCFunction) _wrap_wxToolBarBase_GetMaxCols, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_GetMaxRows", (PyCFunction) _wrap_wxToolBarBase_GetMaxRows, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_SetMaxRowsCols", (PyCFunction) _wrap_wxToolBarBase_SetMaxRowsCols, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_SetRows", (PyCFunction) _wrap_wxToolBarBase_SetRows, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_GetToolSeparation", (PyCFunction) _wrap_wxToolBarBase_GetToolSeparation, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_GetToolPacking", (PyCFunction) _wrap_wxToolBarBase_GetToolPacking, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_GetToolMargins", (PyCFunction) _wrap_wxToolBarBase_GetToolMargins, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_SetToolSeparation", (PyCFunction) _wrap_wxToolBarBase_SetToolSeparation, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_SetToolPacking", (PyCFunction) _wrap_wxToolBarBase_SetToolPacking, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_SetMargins", (PyCFunction) _wrap_wxToolBarBase_SetMargins, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_SetMarginsXY", (PyCFunction) _wrap_wxToolBarBase_SetMarginsXY, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_GetToolLongHelp", (PyCFunction) _wrap_wxToolBarBase_GetToolLongHelp, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_SetToolLongHelp", (PyCFunction) _wrap_wxToolBarBase_SetToolLongHelp, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_GetToolShortHelp", (PyCFunction) _wrap_wxToolBarBase_GetToolShortHelp, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_SetToolShortHelp", (PyCFunction) _wrap_wxToolBarBase_SetToolShortHelp, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_GetToolEnabled", (PyCFunction) _wrap_wxToolBarBase_GetToolEnabled, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_GetToolState", (PyCFunction) _wrap_wxToolBarBase_GetToolState, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_SetToolClientData", (PyCFunction) _wrap_wxToolBarBase_SetToolClientData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_GetToolClientData", (PyCFunction) _wrap_wxToolBarBase_GetToolClientData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_SetToggle", (PyCFunction) _wrap_wxToolBarBase_SetToggle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_ToggleTool", (PyCFunction) _wrap_wxToolBarBase_ToggleTool, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_EnableTool", (PyCFunction) _wrap_wxToolBarBase_EnableTool, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_Realize", (PyCFunction) _wrap_wxToolBarBase_Realize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_ClearTools", (PyCFunction) _wrap_wxToolBarBase_ClearTools, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_DeleteTool", (PyCFunction) _wrap_wxToolBarBase_DeleteTool, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_DeleteToolByPos", (PyCFunction) _wrap_wxToolBarBase_DeleteToolByPos, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_RemoveTool", (PyCFunction) _wrap_wxToolBarBase_RemoveTool, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_InsertSeparator", (PyCFunction) _wrap_wxToolBarBase_InsertSeparator, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_AddSeparator", (PyCFunction) _wrap_wxToolBarBase_AddSeparator, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_InsertControl", (PyCFunction) _wrap_wxToolBarBase_InsertControl, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_AddControl", (PyCFunction) _wrap_wxToolBarBase_AddControl, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_InsertSimpleTool", (PyCFunction) _wrap_wxToolBarBase_InsertSimpleTool, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_InsertTool", (PyCFunction) _wrap_wxToolBarBase_InsertTool, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_AddSimpleTool", (PyCFunction) _wrap_wxToolBarBase_AddSimpleTool, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_AddTool", (PyCFunction) _wrap_wxToolBarBase_AddTool, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarToolBase_SetClientData", (PyCFunction) _wrap_wxToolBarToolBase_SetClientData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarToolBase_GetClientData", (PyCFunction) _wrap_wxToolBarToolBase_GetClientData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarToolBase_Attach", (PyCFunction) _wrap_wxToolBarToolBase_Attach, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarToolBase_Detach", (PyCFunction) _wrap_wxToolBarToolBase_Detach, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarToolBase_SetBitmap2", (PyCFunction) _wrap_wxToolBarToolBase_SetBitmap2, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarToolBase_SetBitmap1", (PyCFunction) _wrap_wxToolBarToolBase_SetBitmap1, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarToolBase_SetLongHelp", (PyCFunction) _wrap_wxToolBarToolBase_SetLongHelp, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarToolBase_SetShortHelp", (PyCFunction) _wrap_wxToolBarToolBase_SetShortHelp, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarToolBase_SetToggle", (PyCFunction) _wrap_wxToolBarToolBase_SetToggle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarToolBase_Toggle", (PyCFunction) _wrap_wxToolBarToolBase_Toggle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarToolBase_Enable", (PyCFunction) _wrap_wxToolBarToolBase_Enable, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarToolBase_GetLongHelp", (PyCFunction) _wrap_wxToolBarToolBase_GetLongHelp, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarToolBase_GetShortHelp", (PyCFunction) _wrap_wxToolBarToolBase_GetShortHelp, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarToolBase_GetBitmap", (PyCFunction) _wrap_wxToolBarToolBase_GetBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarToolBase_GetBitmap2", (PyCFunction) _wrap_wxToolBarToolBase_GetBitmap2, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarToolBase_GetBitmap1", (PyCFunction) _wrap_wxToolBarToolBase_GetBitmap1, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarToolBase_CanBeToggled", (PyCFunction) _wrap_wxToolBarToolBase_CanBeToggled, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarToolBase_IsToggled", (PyCFunction) _wrap_wxToolBarToolBase_IsToggled, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarToolBase_IsEnabled", (PyCFunction) _wrap_wxToolBarToolBase_IsEnabled, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarToolBase_GetStyle", (PyCFunction) _wrap_wxToolBarToolBase_GetStyle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarToolBase_IsSeparator", (PyCFunction) _wrap_wxToolBarToolBase_IsSeparator, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarToolBase_IsControl", (PyCFunction) _wrap_wxToolBarToolBase_IsControl, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarToolBase_IsButton", (PyCFunction) _wrap_wxToolBarToolBase_IsButton, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarToolBase_GetToolBar", (PyCFunction) _wrap_wxToolBarToolBase_GetToolBar, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarToolBase_GetControl", (PyCFunction) _wrap_wxToolBarToolBase_GetControl, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarToolBase_GetId", (PyCFunction) _wrap_wxToolBarToolBase_GetId, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarToolBase_Destroy", (PyCFunction) _wrap_wxToolBarToolBase_Destroy, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStatusBar_SetStatusWidths", (PyCFunction) _wrap_wxStatusBar_SetStatusWidths, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStatusBar_SetStatusText", (PyCFunction) _wrap_wxStatusBar_SetStatusText, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStatusBar_SetFieldsCount", (PyCFunction) _wrap_wxStatusBar_SetFieldsCount, METH_VARARGS | METH_KEYWORDS },
@@ -2833,8 +3179,12 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxRegionIterator","_wxRegionIterator",0},
     { "_class_wxPyTextDropTarget","_wxPyTextDropTarget",0},
     { "_class_wxMenuBar","_wxMenuBar",0},
+    { "_class_wxEvtHandler","_class_wxToolBarSimple",SwigwxToolBarSimpleTowxEvtHandler},
+    { "_class_wxEvtHandler","_wxToolBarSimple",SwigwxToolBarSimpleTowxEvtHandler},
     { "_class_wxEvtHandler","_class_wxToolBar",SwigwxToolBarTowxEvtHandler},
     { "_class_wxEvtHandler","_wxToolBar",SwigwxToolBarTowxEvtHandler},
+    { "_class_wxEvtHandler","_class_wxToolBarBase",SwigwxToolBarBaseTowxEvtHandler},
+    { "_class_wxEvtHandler","_wxToolBarBase",SwigwxToolBarBaseTowxEvtHandler},
     { "_class_wxEvtHandler","_class_wxStatusBar",SwigwxStatusBarTowxEvtHandler},
     { "_class_wxEvtHandler","_wxStatusBar",SwigwxStatusBarTowxEvtHandler},
     { "_class_wxEvtHandler","_wxEvtHandler",0},
@@ -2842,6 +3192,11 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0},
     { "_wxCursor","_class_wxCursor",0},
     { "_wxNotifyEvent","_class_wxNotifyEvent",0},
+    { "_class_wxToolBarBase","_class_wxToolBarSimple",SwigwxToolBarSimpleTowxToolBarBase},
+    { "_class_wxToolBarBase","_wxToolBarSimple",SwigwxToolBarSimpleTowxToolBarBase},
+    { "_class_wxToolBarBase","_class_wxToolBar",SwigwxToolBarTowxToolBarBase},
+    { "_class_wxToolBarBase","_wxToolBar",SwigwxToolBarTowxToolBarBase},
+    { "_class_wxToolBarBase","_wxToolBarBase",0},
     { "_wxMask","_class_wxMask",0},
     { "_wxPen","_class_wxPen",0},
     { "_wxUpdateUIEvent","_class_wxUpdateUIEvent",0},
@@ -2919,17 +3274,18 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxWindowDC","_class_wxWindowDC",0},
     { "_wxScrollBar","_class_wxScrollBar",0},
     { "_wxSpinButton","_class_wxSpinButton",0},
-    { "_wxToolBarTool","_class_wxToolBarTool",0},
     { "_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0},
     { "_class_wxNotifyEvent","_wxNotifyEvent",0},
     { "_class_wxValidator","_wxValidator",0},
     { "_class_wxPyEvent","_wxPyEvent",0},
     { "_class_wxIconizeEvent","_wxIconizeEvent",0},
     { "_class_wxStaticBitmap","_wxStaticBitmap",0},
+    { "_wxToolBarSimple","_class_wxToolBarSimple",0},
     { "_class_wxToolBar","_wxToolBar",0},
     { "_wxDropTarget","_class_wxDropTarget",0},
     { "_class_wxStaticLine","_wxStaticLine",0},
     { "_wxScrollEvent","_class_wxScrollEvent",0},
+    { "_wxToolBarToolBase","_class_wxToolBarToolBase",0},
     { "_EBool","_wxCoord",0},
     { "_EBool","_wxPrintQuality",0},
     { "_EBool","_signed_int",0},
@@ -2939,7 +3295,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxDataFormat","_wxDataFormat",0},
     { "_class_wxDropFilesEvent","_wxDropFilesEvent",0},
     { "_wxWindowDestroyEvent","_class_wxWindowDestroyEvent",0},
-    { "_wxGDIImage","_class_wxGDIImage",0},
     { "_wxStaticText","_class_wxStaticText",0},
     { "_wxFont","_class_wxFont",0},
     { "_class_wxPyDropTarget","_wxPyDropTarget",0},
@@ -2973,6 +3328,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxMoveEvent","_wxMoveEvent",0},
     { "_wxListBox","_class_wxListBox",0},
     { "_wxScreenDC","_class_wxScreenDC",0},
+    { "_class_wxToolBarSimple","_wxToolBarSimple",0},
     { "_WXTYPE","_short",0},
     { "_WXTYPE","_signed_short",0},
     { "_WXTYPE","_unsigned_short",0},
@@ -2980,8 +3336,12 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxBrush","_wxBrush",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
+    { "_class_wxWindow","_class_wxToolBarSimple",SwigwxToolBarSimpleTowxWindow},
+    { "_class_wxWindow","_wxToolBarSimple",SwigwxToolBarSimpleTowxWindow},
     { "_class_wxWindow","_class_wxToolBar",SwigwxToolBarTowxWindow},
     { "_class_wxWindow","_wxToolBar",SwigwxToolBarTowxWindow},
+    { "_class_wxWindow","_class_wxToolBarBase",SwigwxToolBarBaseTowxWindow},
+    { "_class_wxWindow","_wxToolBarBase",SwigwxToolBarBaseTowxWindow},
     { "_class_wxWindow","_class_wxStatusBar",SwigwxStatusBarTowxWindow},
     { "_class_wxWindow","_wxStatusBar",SwigwxStatusBarTowxWindow},
     { "_class_wxWindow","_wxWindow",0},
@@ -3008,7 +3368,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxFocusEvent","_wxFocusEvent",0},
     { "_class_wxMaximizeEvent","_wxMaximizeEvent",0},
     { "_wxStatusBar","_class_wxStatusBar",0},
-    { "_class_wxToolBarTool","_wxToolBarTool",0},
     { "_class_wxAcceleratorEntry","_wxAcceleratorEntry",0},
     { "_class_wxCursor","_wxCursor",0},
     { "_wxPyFileDropTarget","_class_wxPyFileDropTarget",0},
@@ -3016,8 +3375,12 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_unsigned_char","_byte",0},
     { "_class_wxMetaFileDC","_wxMetaFileDC",0},
     { "_class_wxMenu","_wxMenu",0},
+    { "_wxControl","_class_wxToolBarSimple",SwigwxToolBarSimpleTowxControl},
+    { "_wxControl","_wxToolBarSimple",SwigwxToolBarSimpleTowxControl},
     { "_wxControl","_class_wxToolBar",SwigwxToolBarTowxControl},
     { "_wxControl","_wxToolBar",SwigwxToolBarTowxControl},
+    { "_wxControl","_class_wxToolBarBase",SwigwxToolBarBaseTowxControl},
+    { "_wxControl","_wxToolBarBase",SwigwxToolBarBaseTowxControl},
     { "_wxControl","_class_wxControl",0},
     { "_class_wxListBox","_wxListBox",0},
     { "_unsigned_int","_wxCoord",0},
@@ -3041,7 +3404,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxSlider","_wxSlider",0},
     { "_class_wxImageList","_wxImageList",0},
     { "_class_wxBitmapButton","_wxBitmapButton",0},
-    { "_class_wxGDIImage","_wxGDIImage",0},
     { "_class_wxPaletteChangedEvent","_wxPaletteChangedEvent",0},
     { "_wxWindowID","_wxCoord",0},
     { "_wxWindowID","_wxPrintQuality",0},
@@ -3077,10 +3439,19 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxComboBox","_wxComboBox",0},
     { "_class_wxRadioButton","_wxRadioButton",0},
     { "_wxValidator","_class_wxValidator",0},
+    { "_wxToolBarBase","_class_wxToolBarSimple",SwigwxToolBarSimpleTowxToolBarBase},
+    { "_wxToolBarBase","_wxToolBarSimple",SwigwxToolBarSimpleTowxToolBarBase},
+    { "_wxToolBarBase","_class_wxToolBar",SwigwxToolBarTowxToolBarBase},
+    { "_wxToolBarBase","_wxToolBar",SwigwxToolBarTowxToolBarBase},
+    { "_wxToolBarBase","_class_wxToolBarBase",0},
     { "_class_wxLayoutConstraints","_wxLayoutConstraints",0},
     { "_wxIconizeEvent","_class_wxIconizeEvent",0},
+    { "_class_wxControl","_class_wxToolBarSimple",SwigwxToolBarSimpleTowxControl},
+    { "_class_wxControl","_wxToolBarSimple",SwigwxToolBarSimpleTowxControl},
     { "_class_wxControl","_class_wxToolBar",SwigwxToolBarTowxControl},
     { "_class_wxControl","_wxToolBar",SwigwxToolBarTowxControl},
+    { "_class_wxControl","_class_wxToolBarBase",SwigwxToolBarBaseTowxControl},
+    { "_class_wxControl","_wxToolBarBase",SwigwxToolBarBaseTowxControl},
     { "_class_wxControl","_wxControl",0},
     { "_wxStaticBitmap","_class_wxStaticBitmap",0},
     { "_class_wxIcon","_wxIcon",0},
@@ -3115,8 +3486,12 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxMemoryDC","_wxMemoryDC",0},
     { "_wxPyTextDropTarget","_class_wxPyTextDropTarget",0},
     { "_wxMenuBar","_class_wxMenuBar",0},
+    { "_wxEvtHandler","_class_wxToolBarSimple",SwigwxToolBarSimpleTowxEvtHandler},
+    { "_wxEvtHandler","_wxToolBarSimple",SwigwxToolBarSimpleTowxEvtHandler},
     { "_wxEvtHandler","_class_wxToolBar",SwigwxToolBarTowxEvtHandler},
     { "_wxEvtHandler","_wxToolBar",SwigwxToolBarTowxEvtHandler},
+    { "_wxEvtHandler","_class_wxToolBarBase",SwigwxToolBarBaseTowxEvtHandler},
+    { "_wxEvtHandler","_wxToolBarBase",SwigwxToolBarBaseTowxEvtHandler},
     { "_wxEvtHandler","_class_wxStatusBar",SwigwxStatusBarTowxEvtHandler},
     { "_wxEvtHandler","_wxStatusBar",SwigwxStatusBarTowxEvtHandler},
     { "_wxEvtHandler","_class_wxEvtHandler",0},
@@ -3131,8 +3506,13 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxFileDataObject","_class_wxFileDataObject",0},
     { "_class_wxEraseEvent","_wxEraseEvent",0},
     { "_class_wxDataObjectComposite","_wxDataObjectComposite",0},
+    { "_class_wxToolBarToolBase","_wxToolBarToolBase",0},
+    { "_wxWindow","_class_wxToolBarSimple",SwigwxToolBarSimpleTowxWindow},
+    { "_wxWindow","_wxToolBarSimple",SwigwxToolBarSimpleTowxWindow},
     { "_wxWindow","_class_wxToolBar",SwigwxToolBarTowxWindow},
     { "_wxWindow","_wxToolBar",SwigwxToolBarTowxWindow},
+    { "_wxWindow","_class_wxToolBarBase",SwigwxToolBarBaseTowxWindow},
+    { "_wxWindow","_wxToolBarBase",SwigwxToolBarBaseTowxWindow},
     { "_wxWindow","_class_wxStatusBar",SwigwxStatusBarTowxWindow},
     { "_wxWindow","_wxStatusBar",SwigwxStatusBarTowxWindow},
     { "_wxWindow","_class_wxWindow",0},
@@ -3148,6 +3528,9 @@ SWIGEXPORT(void) initstattoolc() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("stattoolc", stattoolcMethods);
 	 d = PyModule_GetDict(m);
+	 PyDict_SetItemString(d,"wxTOOL_STYLE_BUTTON", PyInt_FromLong((long) wxTOOL_STYLE_BUTTON));
+	 PyDict_SetItemString(d,"wxTOOL_STYLE_SEPARATOR", PyInt_FromLong((long) wxTOOL_STYLE_SEPARATOR));
+	 PyDict_SetItemString(d,"wxTOOL_STYLE_CONTROL", PyInt_FromLong((long) wxTOOL_STYLE_CONTROL));
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

@@ -15,12 +15,26 @@ class TestTreeCtrlPanel(wxPanel):
         self.tree = wxTreeCtrl(self, tID, wxDefaultPosition, wxDefaultSize,
                                wxTR_HAS_BUTTONS | wxTR_EDIT_LABELS)# | wxTR_MULTIPLE)
 
+        self.il = wxImageList(16, 16)
+        idx1 = self.il.Add(wxBitmap('bitmaps/smiles.bmp', wxBITMAP_TYPE_BMP))
+        idx2 = self.il.Add(wxBitmap('bitmaps/open.bmp', wxBITMAP_TYPE_BMP))
+        idx3 = self.il.Add(wxBitmap('bitmaps/new.bmp', wxBITMAP_TYPE_BMP))
+        idx4 = self.il.Add(wxBitmap('bitmaps/copy.bmp', wxBITMAP_TYPE_BMP))
+        idx5 = self.il.Add(wxBitmap('bitmaps/paste.bmp', wxBITMAP_TYPE_BMP))
+
+        self.tree.SetImageList(self.il)
+
         self.root = self.tree.AddRoot("The Root Item")
+        self.tree.SetItemImage(self.root, idx1)
+
         for x in range(15):
             child = self.tree.AppendItem(self.root, "Item %d" % x)
-            #self.tree.SelectItem(child)
+            self.tree.SetItemImage(child, idx2)
+            self.tree.SetItemSelectedImage(child, idx3)
             for y in range(5):
                 last = self.tree.AppendItem(child, "item %d-%s" % (x, chr(ord("a")+y)))
+                self.tree.SetItemImage(last, idx4)
+                self.tree.SetItemSelectedImage(last, idx5)
                 for z in range(5):
                     self.tree.AppendItem(last,  "item %d-%s-%d" % (x, chr(ord("a")+y), z))
 

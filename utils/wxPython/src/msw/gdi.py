@@ -2,50 +2,7 @@
 import gdic
 
 from misc import *
-class wxGDIImagePtr :
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def GetHandle(self, *_args, **_kwargs):
-        val = apply(gdic.wxGDIImage_GetHandle,(self,) + _args, _kwargs)
-        return val
-    def SetHandle(self, *_args, **_kwargs):
-        val = apply(gdic.wxGDIImage_SetHandle,(self,) + _args, _kwargs)
-        return val
-    def Ok(self, *_args, **_kwargs):
-        val = apply(gdic.wxGDIImage_Ok,(self,) + _args, _kwargs)
-        return val
-    def GetWidth(self, *_args, **_kwargs):
-        val = apply(gdic.wxGDIImage_GetWidth,(self,) + _args, _kwargs)
-        return val
-    def GetHeight(self, *_args, **_kwargs):
-        val = apply(gdic.wxGDIImage_GetHeight,(self,) + _args, _kwargs)
-        return val
-    def GetDepth(self, *_args, **_kwargs):
-        val = apply(gdic.wxGDIImage_GetDepth,(self,) + _args, _kwargs)
-        return val
-    def SetWidth(self, *_args, **_kwargs):
-        val = apply(gdic.wxGDIImage_SetWidth,(self,) + _args, _kwargs)
-        return val
-    def SetHeight(self, *_args, **_kwargs):
-        val = apply(gdic.wxGDIImage_SetHeight,(self,) + _args, _kwargs)
-        return val
-    def SetDepth(self, *_args, **_kwargs):
-        val = apply(gdic.wxGDIImage_SetDepth,(self,) + _args, _kwargs)
-        return val
-    def SetSize(self, *_args, **_kwargs):
-        val = apply(gdic.wxGDIImage_SetSize,(self,) + _args, _kwargs)
-        return val
-    def __repr__(self):
-        return "<C wxGDIImage instance at %s>" % (self.this,)
-class wxGDIImage(wxGDIImagePtr):
-    def __init__(self,this):
-        self.this = this
-
-
-
-
-class wxBitmapPtr(wxGDIImagePtr):
+class wxBitmapPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -72,6 +29,36 @@ class wxBitmapPtr(wxGDIImagePtr):
     def SetPalette(self, *_args, **_kwargs):
         val = apply(gdic.wxBitmap_SetPalette,(self,) + _args, _kwargs)
         return val
+    def GetHandle(self, *_args, **_kwargs):
+        val = apply(gdic.wxBitmap_GetHandle,(self,) + _args, _kwargs)
+        return val
+    def SetHandle(self, *_args, **_kwargs):
+        val = apply(gdic.wxBitmap_SetHandle,(self,) + _args, _kwargs)
+        return val
+    def Ok(self, *_args, **_kwargs):
+        val = apply(gdic.wxBitmap_Ok,(self,) + _args, _kwargs)
+        return val
+    def GetWidth(self, *_args, **_kwargs):
+        val = apply(gdic.wxBitmap_GetWidth,(self,) + _args, _kwargs)
+        return val
+    def GetHeight(self, *_args, **_kwargs):
+        val = apply(gdic.wxBitmap_GetHeight,(self,) + _args, _kwargs)
+        return val
+    def GetDepth(self, *_args, **_kwargs):
+        val = apply(gdic.wxBitmap_GetDepth,(self,) + _args, _kwargs)
+        return val
+    def SetWidth(self, *_args, **_kwargs):
+        val = apply(gdic.wxBitmap_SetWidth,(self,) + _args, _kwargs)
+        return val
+    def SetHeight(self, *_args, **_kwargs):
+        val = apply(gdic.wxBitmap_SetHeight,(self,) + _args, _kwargs)
+        return val
+    def SetDepth(self, *_args, **_kwargs):
+        val = apply(gdic.wxBitmap_SetDepth,(self,) + _args, _kwargs)
+        return val
+    def SetSize(self, *_args, **_kwargs):
+        val = apply(gdic.wxBitmap_SetSize,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxBitmap instance at %s>" % (self.this,)
 class wxBitmap(wxBitmapPtr):
@@ -96,7 +83,7 @@ class wxMask(wxMaskPtr):
 
 
 
-class wxIconPtr(wxGDIImagePtr):
+class wxIconPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -105,6 +92,36 @@ class wxIconPtr(wxGDIImagePtr):
             gdic.delete_wxIcon(self)
     def LoadFile(self, *_args, **_kwargs):
         val = apply(gdic.wxIcon_LoadFile,(self,) + _args, _kwargs)
+        return val
+    def GetHandle(self, *_args, **_kwargs):
+        val = apply(gdic.wxIcon_GetHandle,(self,) + _args, _kwargs)
+        return val
+    def SetHandle(self, *_args, **_kwargs):
+        val = apply(gdic.wxIcon_SetHandle,(self,) + _args, _kwargs)
+        return val
+    def Ok(self, *_args, **_kwargs):
+        val = apply(gdic.wxIcon_Ok,(self,) + _args, _kwargs)
+        return val
+    def GetWidth(self, *_args, **_kwargs):
+        val = apply(gdic.wxIcon_GetWidth,(self,) + _args, _kwargs)
+        return val
+    def GetHeight(self, *_args, **_kwargs):
+        val = apply(gdic.wxIcon_GetHeight,(self,) + _args, _kwargs)
+        return val
+    def GetDepth(self, *_args, **_kwargs):
+        val = apply(gdic.wxIcon_GetDepth,(self,) + _args, _kwargs)
+        return val
+    def SetWidth(self, *_args, **_kwargs):
+        val = apply(gdic.wxIcon_SetWidth,(self,) + _args, _kwargs)
+        return val
+    def SetHeight(self, *_args, **_kwargs):
+        val = apply(gdic.wxIcon_SetHeight,(self,) + _args, _kwargs)
+        return val
+    def SetDepth(self, *_args, **_kwargs):
+        val = apply(gdic.wxIcon_SetDepth,(self,) + _args, _kwargs)
+        return val
+    def SetSize(self, *_args, **_kwargs):
+        val = apply(gdic.wxIcon_SetSize,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxIcon instance at %s>" % (self.this,)
@@ -116,13 +133,43 @@ class wxIcon(wxIconPtr):
 
 
 
-class wxCursorPtr(wxGDIImagePtr):
+class wxCursorPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
     def __del__(self,gdic=gdic):
         if self.thisown == 1 :
             gdic.delete_wxCursor(self)
+    def GetHandle(self, *_args, **_kwargs):
+        val = apply(gdic.wxCursor_GetHandle,(self,) + _args, _kwargs)
+        return val
+    def SetHandle(self, *_args, **_kwargs):
+        val = apply(gdic.wxCursor_SetHandle,(self,) + _args, _kwargs)
+        return val
+    def Ok(self, *_args, **_kwargs):
+        val = apply(gdic.wxCursor_Ok,(self,) + _args, _kwargs)
+        return val
+    def GetWidth(self, *_args, **_kwargs):
+        val = apply(gdic.wxCursor_GetWidth,(self,) + _args, _kwargs)
+        return val
+    def GetHeight(self, *_args, **_kwargs):
+        val = apply(gdic.wxCursor_GetHeight,(self,) + _args, _kwargs)
+        return val
+    def GetDepth(self, *_args, **_kwargs):
+        val = apply(gdic.wxCursor_GetDepth,(self,) + _args, _kwargs)
+        return val
+    def SetWidth(self, *_args, **_kwargs):
+        val = apply(gdic.wxCursor_SetWidth,(self,) + _args, _kwargs)
+        return val
+    def SetHeight(self, *_args, **_kwargs):
+        val = apply(gdic.wxCursor_SetHeight,(self,) + _args, _kwargs)
+        return val
+    def SetDepth(self, *_args, **_kwargs):
+        val = apply(gdic.wxCursor_SetDepth,(self,) + _args, _kwargs)
+        return val
+    def SetSize(self, *_args, **_kwargs):
+        val = apply(gdic.wxCursor_SetSize,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxCursor instance at %s>" % (self.this,)
 class wxCursor(wxCursorPtr):
@@ -231,6 +278,9 @@ class wxColourPtr :
         return val
     def __repr__(self):
         return "<C wxColour instance at %s>" % (self.this,)
+    asTuple = Get
+    def __str__(self): return str(self.asTuple())
+    def __repr__(self): return str(self.asTuple())
 class wxColour(wxColourPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gdic.new_wxColour,_args,_kwargs)

@@ -16,10 +16,12 @@ make.bat
 makefile.test
 sedscript
 templates
+tests___Win32_Debug
 transfer.zip
 utilsc.exp
 vc50.pdb
 vc60.pdb
+wx.py
 wxPython.001
 wxPython.dsp
 wxPython.dsw

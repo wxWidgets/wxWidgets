@@ -71,6 +71,20 @@ HELPEREXPORT bool wxPyRestoreThread();
 HELPEREXPORT void wxPySaveThread(bool doSave);
 HELPEREXPORT PyObject* wxPy_ConvertList(wxListBase* list, const char* className);
 
+
+//----------------------------------------------------------------------
+
+class wxPyUserData : public wxObject {
+public:
+    wxPyUserData(PyObject* obj) { m_obj = obj; Py_INCREF(m_obj); }
+    ~wxPyUserData() {
+        bool doSave = wxPyRestoreThread();
+        Py_DECREF(m_obj);
+        wxPySaveThread(doSave);
+    }
+    PyObject* m_obj;
+};
+
 //----------------------------------------------------------------------
 // These are helpers used by the typemaps
 
@@ -124,19 +138,6 @@ public:
 
 //---------------------------------------------------------------------------
 
-//  class wxPyMenu : public wxMenu {
-//  public:
-//      wxPyMenu(const wxString& title = "", PyObject* func=NULL);
-//      ~wxPyMenu();
-
-//  private:
-//      static void MenuCallback(wxMenu& menu, wxCommandEvent& evt);
-//      PyObject*   func;
-//  };
-
-
-//---------------------------------------------------------------------------
-
 class wxPyTimer : public wxTimer {
 public:
     wxPyTimer(PyObject* callback);
@@ -185,9 +186,9 @@ private:
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
-// These classes can be derived from in Python and passed through the event
-// system without loosing anything.  They do this by keeping a reference to
-// themselves and some special case handling in wxPyCallback::EventThunker.
+// These Event classes can be derived from in Python and passed through the
+// event system without loosing anything.  They do this by keeping a reference
+// to themselves and some special case handling in wxPyCallback::EventThunker.
 
 
 class wxPyEvtSelfRef {

@@ -301,6 +301,10 @@ public:
             return rv;
         }
     }
+    %pragma(python) addtoclass = "asTuple = Get"
+    %pragma(python) addtoclass = "def __str__(self): return str(self.asTuple())"
+    %pragma(python) addtoclass = "def __repr__(self): return str(self.asTuple())"
+
 };
 
 %new wxColour* wxNamedColour(const wxString& colorName);

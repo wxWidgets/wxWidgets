@@ -82,6 +82,12 @@ public:
     wxPCXHandler();
 };
 
+class wxTIFFHandler : public wxImageHandler {
+public:
+    wxTIFFHandler();
+};
+
+
 //---------------------------------------------------------------------------
 
 class wxImage {
