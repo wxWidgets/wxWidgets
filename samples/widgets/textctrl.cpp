@@ -815,6 +815,7 @@ void TextWidgetsPage::OnText(wxCommandEvent& WXUNUSED(event))
 void TextWidgetsPage::OnTextEnter(wxCommandEvent& event)
 {
     wxLogMessage(_T("Text entered: '%s'"), event.GetString().c_str());
+    event.Skip();
 }
 
 void TextWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
