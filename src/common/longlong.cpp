@@ -465,5 +465,6 @@ ostream& operator<< (ostream& o, const wxLongLongWx& ll)
 
     return o << result;
 }
-#endif wxUSE_LONGLONG_WX
+#endif
+  // wxUSE_LONGLONG_NATIVE
 

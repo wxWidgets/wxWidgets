@@ -18,6 +18,7 @@
 
 #include "wx/font.h"
 #include "wx/colour.h"
+#include "wx/gdicmn.h"
 
 #if (defined(__WXMOTIF__) || defined(__WXGTK__)) && wxUSE_POSTSCRIPT
 class WXDLLEXPORT wxPrintSetupData;

@@ -28,6 +28,8 @@
 #include "wx/log.h"
 #include "wx/module.h"
 #include "wx/memory.h"
+#include "wx/log.h"
+#include "wx/intl.h"
 
 #if wxUSE_THREADS
 #include "wx/thread.h"
