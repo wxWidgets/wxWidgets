@@ -1,5 +1,3 @@
-%module mdi
-%{
 /////////////////////////////////////////////////////////////////////////////
 // Name:        mdi.i
 // Purpose:     MDI related class definitions for wxPython
@@ -13,6 +11,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
+%module mdi
+
+%{
 #include "helpers.h"
 %}
 
@@ -83,6 +84,13 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.2  1998/08/15 07:36:39  RD
+// - Moved the header in the .i files out of the code that gets put into
+// the .cpp files.  It caused CVS conflicts because of the RCS ID being
+// different each time.
+//
+// - A few minor fixes.
+//
 // Revision 1.1  1998/08/09 08:25:51  RD
 // Initial version
 //

@@ -53,19 +53,6 @@ extern PyObject *SWIG_newvarlink(void);
 
 #define SWIG_name    "windows2c"
 
-/////////////////////////////////////////////////////////////////////////////
-// Name:        windows2.i
-// Purpose:     SWIG definitions of MORE window classes
-//
-// Author:      Robin Dunn
-//
-// Created:     6/2/98
-// RCS-ID:      $Id$
-// Copyright:   (c) 1998 by Total Control Software
-// Licence:     wxWindows license
-/////////////////////////////////////////////////////////////////////////////
-
-
 #include "helpers.h"
 #include <wx/grid.h>
 #include <wx/notebook.h>
@@ -123,7 +110,9 @@ extern char** string_LIST_helper(PyObject* source);
 extern wxPoint* wxPoint_LIST_helper(PyObject* source);
 extern wxBitmap** wxBitmap_LIST_helper(PyObject* source);
 extern wxString* wxString_LIST_helper(PyObject* source);
+#ifdef __WXMSW__
 extern wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
+#endif
 
 
 static char* wxStringErrorMsg = "string type is required for parameter";

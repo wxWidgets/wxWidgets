@@ -53,19 +53,6 @@ extern PyObject *SWIG_newvarlink(void);
 
 #define SWIG_name    "mdic"
 
-/////////////////////////////////////////////////////////////////////////////
-// Name:        mdi.i
-// Purpose:     MDI related class definitions for wxPython
-//
-// Author:      Robin Dunn
-//
-// Created:     5/26/98
-// RCS-ID:      $Id$
-// Copyright:   (c) 1998 by Total Control Software
-// Licence:     wxWindows license
-/////////////////////////////////////////////////////////////////////////////
-
-
 #include "helpers.h"
 
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
@@ -121,7 +108,9 @@ extern char** string_LIST_helper(PyObject* source);
 extern wxPoint* wxPoint_LIST_helper(PyObject* source);
 extern wxBitmap** wxBitmap_LIST_helper(PyObject* source);
 extern wxString* wxString_LIST_helper(PyObject* source);
+#ifdef __WXMSW__
 extern wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
+#endif
 
 
 static char* wxStringErrorMsg = "string type is required for parameter";

@@ -33,8 +33,12 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.3  1998/08/14 23:36:47  RD
- * Beginings of wxGTK compatibility
+ * Revision 1.4  1998/08/15 07:36:51  RD
+ * - Moved the header in the .i files out of the code that gets put into
+ * the .cpp files.  It caused CVS conflicts because of the RCS ID being
+ * different each time.
+ *
+ * - A few minor fixes.
  *
  ************************************************************************/
 
@@ -556,18 +560,6 @@ char *SWIG_GetPtr(char *_c, void **ptr, char *_t)
 
 #define SWIG_name    "wxpc"
 
-/////////////////////////////////////////////////////////////////////////////
-// Name:        wxp.i
-// Purpose:     SWIG interface file for a python wxWindows module
-//
-// Author:      Robin Dunn
-//
-// Created:     5/22/98
-// RCS-ID:      $Id$
-// Copyright:   (c) 1998 by Total Control Software
-// Licence:     wxWindows license
-/////////////////////////////////////////////////////////////////////////////
-
 
 #ifdef __WXMSW__
 #include <windows.h>
@@ -581,13 +573,12 @@ char *SWIG_GetPtr(char *_c, void **ptr, char *_t)
 
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
-    PyObject*   o3;
-    if (!target) {                   
+    if (!target) {
         target = o;
-    } else if (target == Py_None) {  
+    } else if (target == Py_None) {
         Py_DECREF(Py_None);
         target = o;
-    } else {                         
+    } else {
         if (!PyList_Check(target)) {
             o2 = target;
             target = PyList_New(0);
@@ -604,23 +595,23 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
 
-    if (!target) {                   
+    if (!target) {
         target = o;
-    } else if (target == Py_None) {  
+    } else if (target == Py_None) {
         Py_DECREF(Py_None);
         target = o;
-    } else {                         
+    } else {
         if (!PyTuple_Check(target)) {
             o2 = target;
             target = PyTuple_New(1);
             PyTuple_SetItem(target, 0, o2);
         }
-        o3 = PyTuple_New(1);            
-        PyTuple_SetItem(o3, 0, o);      
+        o3 = PyTuple_New(1);
+        PyTuple_SetItem(o3, 0, o);
 
         o2 = target;
-        target = PySequence_Concat(o2, o3); 
-        Py_DECREF(o2);                      
+        target = PySequence_Concat(o2, o3);
+        Py_DECREF(o2);
         Py_DECREF(o3);
     }
     return target;
@@ -745,6 +736,27 @@ static PyObject *_wrap_wxPyApp_GetAppName(PyObject *self, PyObject *args) {
 {
     delete _result;
 }
+    return _resultobj;
+}
+
+#define wxPyApp_GetAuto3D(_swigobj)  (_swigobj->GetAuto3D())
+static PyObject *_wrap_wxPyApp_GetAuto3D(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyApp * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxPyApp_GetAuto3D",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPyApp_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyApp_GetAuto3D. Expected _wxPyApp_p.");
+        return NULL;
+        }
+    }
+    _result = (bool )wxPyApp_GetAuto3D(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -1004,6 +1016,30 @@ static PyObject *_wrap_wxPyApp_SetAppName(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxPyApp_SetAuto3D(_swigobj,_swigarg0)  (_swigobj->SetAuto3D(_swigarg0))
+static PyObject *_wrap_wxPyApp_SetAuto3D(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxPyApp * _arg0;
+    bool  _arg1;
+    char * _argc0 = 0;
+    int tempbool1;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxPyApp_SetAuto3D",&_argc0,&tempbool1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPyApp_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyApp_SetAuto3D. Expected _wxPyApp_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+    wxPyApp_SetAuto3D(_arg0,_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxPyApp_SetClassName(_swigobj,_swigarg0)  (_swigobj->SetClassName(_swigarg0))
 static PyObject *_wrap_wxPyApp_SetClassName(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -1175,6 +1211,7 @@ static PyMethodDef wxpcMethods[] = {
 	 { "wxPyApp_SetPrintMode", _wrap_wxPyApp_SetPrintMode, 1 },
 	 { "wxPyApp_SetExitOnFrameDelete", _wrap_wxPyApp_SetExitOnFrameDelete, 1 },
 	 { "wxPyApp_SetClassName", _wrap_wxPyApp_SetClassName, 1 },
+	 { "wxPyApp_SetAuto3D", _wrap_wxPyApp_SetAuto3D, 1 },
 	 { "wxPyApp_SetAppName", _wrap_wxPyApp_SetAppName, 1 },
 	 { "wxPyApp_Pending", _wrap_wxPyApp_Pending, 1 },
 	 { "wxPyApp_MainLoop", _wrap_wxPyApp_MainLoop, 1 },
@@ -1186,6 +1223,7 @@ static PyMethodDef wxpcMethods[] = {
 	 { "wxPyApp_GetPrintMode", _wrap_wxPyApp_GetPrintMode, 1 },
 	 { "wxPyApp_GetExitOnFrameDelete", _wrap_wxPyApp_GetExitOnFrameDelete, 1 },
 	 { "wxPyApp_GetClassName", _wrap_wxPyApp_GetClassName, 1 },
+	 { "wxPyApp_GetAuto3D", _wrap_wxPyApp_GetAuto3D, 1 },
 	 { "wxPyApp_GetAppName", _wrap_wxPyApp_GetAppName, 1 },
 	 { "new_wxPyApp", _wrap_new_wxPyApp, 1 },
 	 { "_wxSetDictionary", __wxSetDictionary, 1 },
@@ -1413,6 +1451,9 @@ SWIGEXPORT(void,initwxpc)() {
 	 PyDict_SetItemString(d,"wxSAVE", PyInt_FromLong((long) wxSAVE));
 	 PyDict_SetItemString(d,"wxHIDE_READONLY", PyInt_FromLong((long) wxHIDE_READONLY));
 	 PyDict_SetItemString(d,"wxOVERWRITE_PROMPT", PyInt_FromLong((long) wxOVERWRITE_PROMPT));
+	 PyDict_SetItemString(d,"wxACCEL_ALT", PyInt_FromLong((long) wxACCEL_ALT));
+	 PyDict_SetItemString(d,"wxACCEL_CTRL", PyInt_FromLong((long) wxACCEL_CTRL));
+	 PyDict_SetItemString(d,"wxACCEL_SHIFT", PyInt_FromLong((long) wxACCEL_SHIFT));
 	 PyDict_SetItemString(d,"ERR_PARAM", PyInt_FromLong((long) ERR_PARAM));
 	 PyDict_SetItemString(d,"ERR_NODATA", PyInt_FromLong((long) ERR_NODATA));
 	 PyDict_SetItemString(d,"ERR_CANCEL", PyInt_FromLong((long) ERR_CANCEL));
@@ -1703,7 +1744,7 @@ SWIGEXPORT(void,initwxpc)() {
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TAB_SEL_CHANGING", PyInt_FromLong((long) wxEVT_COMMAND_TAB_SEL_CHANGING));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED", PyInt_FromLong((long) wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING", PyInt_FromLong((long) wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING));
-	 PyDict_SetItemString(d,"__version__", PyString_FromString("0.3.0"));
+	 PyDict_SetItemString(d,"__version__", PyString_FromString("0.3.1"));
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultPosition",_wrap_wxPyDefaultPosition_get, _wrap_wxPyDefaultPosition_set);
 	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultSize",_wrap_wxPyDefaultSize_get, _wrap_wxPyDefaultSize_set);

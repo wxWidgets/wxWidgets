@@ -1,5 +1,3 @@
-%module windows2
-%{
 /////////////////////////////////////////////////////////////////////////////
 // Name:        windows2.i
 // Purpose:     SWIG definitions of MORE window classes
@@ -12,7 +10,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+%module windows2
 
+%{
 #include "helpers.h"
 #include <wx/grid.h>
 #include <wx/notebook.h>
@@ -222,6 +222,13 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.2  1998/08/15 07:36:50  RD
+// - Moved the header in the .i files out of the code that gets put into
+// the .cpp files.  It caused CVS conflicts because of the RCS ID being
+// different each time.
+//
+// - A few minor fixes.
+//
 // Revision 1.1  1998/08/09 08:25:52  RD
 // Initial version
 //

@@ -1,5 +1,3 @@
-%module controls2
-%{
 /////////////////////////////////////////////////////////////////////////////
 // Name:        controls2.i
 // Purpose:     More control (widget) classes for wxPython
@@ -12,7 +10,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+%module controls2
 
+%{
 #include "helpers.h"
 #include <wx/listctrl.h>
 #include <wx/treectrl.h>
@@ -375,6 +375,13 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.2  1998/08/15 07:36:30  RD
+// - Moved the header in the .i files out of the code that gets put into
+// the .cpp files.  It caused CVS conflicts because of the RCS ID being
+// different each time.
+//
+// - A few minor fixes.
+//
 // Revision 1.1  1998/08/09 08:25:49  RD
 // Initial version
 //

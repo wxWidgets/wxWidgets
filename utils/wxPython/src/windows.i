@@ -1,5 +1,3 @@
-%module windows
-%{
 /////////////////////////////////////////////////////////////////////////////
 // Name:        windows.i
 // Purpose:     SWIG definitions of various window classes
@@ -13,6 +11,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
+%module windows
+
+%{
 #include "helpers.h"
 
 #ifdef __WXMSW__
@@ -404,6 +405,13 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.3  1998/08/15 07:36:47  RD
+// - Moved the header in the .i files out of the code that gets put into
+// the .cpp files.  It caused CVS conflicts because of the RCS ID being
+// different each time.
+//
+// - A few minor fixes.
+//
 // Revision 1.2  1998/08/14 23:36:46  RD
 // Beginings of wxGTK compatibility
 //

@@ -1,5 +1,3 @@
-%module cmndlgs
-%{
 /////////////////////////////////////////////////////////////////////////////
 // Name:        cmndlgs.i
 // Purpose:     SWIG definitions for the Common Dialog Classes
@@ -12,7 +10,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+%module cmndlgs
 
+%{
 #include "helpers.h"
 #include <wx/colordlg.h>
 #include <wx/dirdlg.h>
@@ -286,6 +286,13 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.2  1998/08/15 07:36:25  RD
+// - Moved the header in the .i files out of the code that gets put into
+// the .cpp files.  It caused CVS conflicts because of the RCS ID being
+// different each time.
+//
+// - A few minor fixes.
+//
 // Revision 1.1  1998/08/09 08:25:49  RD
 // Initial version
 //
