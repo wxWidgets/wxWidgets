@@ -290,9 +290,9 @@ BEGIN_EVENT_TABLE(LboxTestFrame, wxFrame)
     EVT_UPDATE_UI(LboxTest_DeleteSel, LboxTestFrame::OnUpdateUIDeleteSelButton)
 
     EVT_LISTBOX(LboxTest_Listbox, LboxTestFrame::OnListbox)
-    EVT_LISTBOX_DCLICK(-1, LboxTestFrame::OnListboxDClick)
-    EVT_CHECKBOX(-1, LboxTestFrame::OnCheckOrRadioBox)
-    EVT_RADIOBOX(-1, LboxTestFrame::OnCheckOrRadioBox)
+    EVT_LISTBOX_DCLICK(wxID_ANY, LboxTestFrame::OnListboxDClick)
+    EVT_CHECKBOX(wxID_ANY, LboxTestFrame::OnCheckOrRadioBox)
+    EVT_RADIOBOX(wxID_ANY, LboxTestFrame::OnCheckOrRadioBox)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -311,7 +311,7 @@ bool LboxTestApp::OnInit()
     //wxLog::AddTraceMask(_T("listbox"));
     wxLog::AddTraceMask(_T("scrollbar"));
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -319,10 +319,10 @@ bool LboxTestApp::OnInit()
 // ----------------------------------------------------------------------------
 
 LboxTestFrame::LboxTestFrame(const wxString& title)
-             : wxFrame(NULL, -1, title, wxPoint(100, 100))
+             : wxFrame(NULL, wxID_ANY, title, wxPoint(100, 100))
 {
     // init everything
-    m_dirty = FALSE;
+    m_dirty = false;
     m_radioSelMode = (wxRadioBox *)NULL;
 
     m_chkVScroll =
@@ -335,7 +335,7 @@ LboxTestFrame::LboxTestFrame(const wxString& title)
 
     m_logTarget = (wxLog *)NULL;
 
-    wxPanel *panel = new wxPanel(this, -1);
+    wxPanel *panel = new wxPanel(this, wxID_ANY);
 
     /*
        What we create here is a frame having 3 panes: the explanatory pane to
@@ -356,15 +356,15 @@ LboxTestFrame::LboxTestFrame(const wxString& title)
         _T("multiple"),
     };
 
-    wxStaticBox *box = new wxStaticBox(panel, -1, _T("&Set listbox parameters"));
-    m_radioSelMode = new wxRadioBox(panel, -1, _T("Selection &mode:"),
+    wxStaticBox *box = new wxStaticBox(panel, wxID_ANY, _T("&Set listbox parameters"));
+    m_radioSelMode = new wxRadioBox(panel, wxID_ANY, _T("Selection &mode:"),
                                     wxDefaultPosition, wxDefaultSize,
                                     WXSIZEOF(modes), modes,
                                     1, wxRA_SPECIFY_COLS);
 
-    m_chkVScroll = new wxCheckBox(panel, -1, _T("Always show &vertical scrollbar"));
-    m_chkHScroll = new wxCheckBox(panel, -1, _T("Show &horizontal scrollbar"));
-    m_chkSort = new wxCheckBox(panel, -1, _T("&Sort items"));
+    m_chkVScroll = new wxCheckBox(panel, wxID_ANY, _T("Always show &vertical scrollbar"));
+    m_chkHScroll = new wxCheckBox(panel, wxID_ANY, _T("Show &horizontal scrollbar"));
+    m_chkSort = new wxCheckBox(panel, wxID_ANY, _T("&Sort items"));
 
     sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
@@ -382,7 +382,7 @@ LboxTestFrame::LboxTestFrame(const wxString& title)
     sizerLeft->Add(sizerBtn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     // middle pane
-    wxStaticBox *box2 = new wxStaticBox(panel, -1, _T("&Change listbox contents"));
+    wxStaticBox *box2 = new wxStaticBox(panel, wxID_ANY, _T("&Change listbox contents"));
     wxSizer *sizerMiddle = new wxStaticBoxSizer(box2, wxVERTICAL);
 
     wxSizer *sizerRow = new wxBoxSizer(wxHORIZONTAL);
@@ -435,10 +435,10 @@ LboxTestFrame::LboxTestFrame(const wxString& title)
     // the lower one only has the log listbox and a button to clear it
     wxSizer *sizerDown = new wxStaticBoxSizer
                              (
-                               new wxStaticBox(panel, -1, _T("&Log window")),
+                               new wxStaticBox(panel, wxID_ANY, _T("&Log window")),
                                wxVERTICAL
                              );
-    m_lboxLog = new wxListBox(panel, -1);
+    m_lboxLog = new wxListBox(panel, wxID_ANY);
     sizerDown->Add(m_lboxLog, 1, wxGROW | wxALL, 5);
     wxBoxSizer *sizerBtns = new wxBoxSizer(wxHORIZONTAL);
     btn = new wxButton(panel, LboxTest_ClearLog, _T("Clear &log"));
@@ -455,9 +455,9 @@ LboxTestFrame::LboxTestFrame(const wxString& title)
 
     // final initialization
     Reset();
-    m_dirty = FALSE;
+    m_dirty = false;
 
-    panel->SetAutoLayout(TRUE);
+    panel->SetAutoLayout(true);
     panel->SetSizer(sizerTop);
 
     sizerTop->Fit(this);
@@ -490,11 +490,11 @@ void LboxTestFrame::Reset()
     }
 
     m_radioSelMode->SetSelection(LboxSel_Single);
-    m_chkSort->SetValue(FALSE);
-    m_chkHScroll->SetValue(TRUE);
-    m_chkVScroll->SetValue(FALSE);
+    m_chkSort->SetValue(false);
+    m_chkHScroll->SetValue(true);
+    m_chkVScroll->SetValue(false);
 
-    m_dirty = TRUE;
+    m_dirty = true;
 }
 
 void LboxTestFrame::CreateLbox()
@@ -530,7 +530,7 @@ void LboxTestFrame::CreateLbox()
         delete m_lbox;
     }
 
-    m_lbox = new wxListBox(this, -1,
+    m_lbox = new wxListBox(this, wxID_ANY,
                            wxDefaultPosition, wxDefaultSize,
                            0, NULL,
                            flags);
@@ -538,7 +538,7 @@ void LboxTestFrame::CreateLbox()
     m_sizerLbox->Add(m_lbox, 1, wxGROW | wxALL, 5);
     m_sizerLbox->Layout();
 
-    m_dirty = FALSE;
+    m_dirty = false;
 }
 
 // ----------------------------------------------------------------------------
@@ -679,6 +679,6 @@ void LboxTestFrame::OnListboxDClick(wxCommandEvent& event)
 
 void LboxTestFrame::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
 {
-    m_dirty = TRUE;
+    m_dirty = true;
 }
 
