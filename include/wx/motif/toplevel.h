@@ -60,6 +60,8 @@ public:
                                int maxW = -1, int maxH = -1,
                                int incW = -1, int incH = -1 );
 
+    virtual bool SetShape( const wxRegion& region );
+
     WXWidget GetShellWidget() const;
 protected:
     // common part of all constructors

@@ -2359,6 +2359,13 @@ equivalent variable and GTK+ is version 1.2.3 or above.
             )
         fi
 
+        AC_CHECK_LIB([Xext], [XShapeQueryExtension],
+                     [
+                      GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXext"
+                      wxHAVE_XEXT_LIB=1
+                     ],
+                     [], [$GUI_TK_LIBRARY -lX11])
+
         if test "$wxUSE_UNICODE" = "yes"; then
                 PKG_CHECK_MODULES(PANGOX, pangox,
                     [
@@ -2591,6 +2598,32 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         TOOLKIT_VPATH="\${top_srcdir}/src/motif${PATH_IFS}\${top_srcdir}/src/motif/xmcombo${PATH_IFS}\${top_srcdir}/src/x11"
         TOOLKIT=MOTIF
         GUIDIST=MOTIF_DIST
+        wxHAVE_XEXT_LIB=1
+    fi
+
+    if test "$wxUSE_X11" = 1 -o "$wxUSE_MOTIF" = 1 &&
+       test "$wxHAVE_XEXT_LIB" = 1; then
+        save_CFLAGS="$CFLAGS"
+        CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+
+        AC_MSG_CHECKING([for X11/extensions/shape.h])
+        AC_TRY_COMPILE([
+                        #include <X11/Xlib.h> 
+                        #include <X11/extensions/shape.h>
+                       ],
+                       [
+                        int dummy1, dummy2;
+                        XShapeQueryExtension((Display*)NULL,
+                                             (int*)NULL, (int*)NULL);
+                       ],
+                       [
+                        AC_DEFINE(HAVE_XSHAPE)
+                        AC_MSG_RESULT([found])
+                       ],
+                       [
+                        AC_MSG_RESULT([not found])
+                       ])
+        CFLAGS="$save_CFLAGS"
     fi
 
     if test "$wxUSE_MAC" = 1; then

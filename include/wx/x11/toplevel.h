@@ -79,6 +79,8 @@ protected:
     // set the icon for the window
     void DoSetIcon( const wxIcon& icon );
 
+    virtual bool SetShape(const wxRegion& region);
+
     // For implementation purposes - sometimes decorations make the
     // client area smaller
     virtual wxPoint GetClientAreaOrigin() const;

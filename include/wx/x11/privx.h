@@ -23,6 +23,7 @@
 class wxMouseEvent;
 class wxKeyEvent;
 class wxWindow;
+class wxRegion;
 
 // ----------------------------------------------------------------------------
 // key events related functions
@@ -134,6 +135,12 @@ bool wxWindowIsVisible(Window win);
 #define XKeyEventGetY(event) (event->xkey.y)
 #define XFontStructGetAscent(f) f->ascent
 #endif
+
+// ----------------------------------------------------------------------------
+// Misc functions
+// ----------------------------------------------------------------------------
+
+bool wxDoSetShape( Display* xdisplay, Window xwindow, const wxRegion& region );
 
 class WXDLLEXPORT wxXVisualInfo
 {

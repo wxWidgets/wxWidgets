@@ -11,6 +11,66 @@
 
 #include "wx/x11/privx.h"
 
+#ifdef HAVE_XSHAPE
+#include <X11/extensions/shape.h>
+#include "wx/region.h"
+#include "wx/bitmap.h"
+#include "wx/dcmemory.h"
+#endif
+
+// ----------------------------------------------------------------------------
+// XShape code
+// ----------------------------------------------------------------------------
+
+#ifdef HAVE_XSHAPE
+
+bool wxDoSetShape( Display* xdisplay,
+                   Window xwindow,
+                   const wxRegion& region )
+{
+    int dummy1, dummy2;
+
+    if( !XShapeQueryExtension( xdisplay, &dummy1, &dummy2 ) )
+        return false;
+
+    if( region.IsEmpty() )
+    {
+        XShapeCombineMask( xdisplay, xwindow, ShapeBounding, 0, 0,
+                           None, ShapeSet );
+    }
+    else
+    {
+        // wxRegion::ConvertToBitmap gives us the wrong Pixmap:
+        // polichrome and with black and whire reversed
+        wxRect box = region.GetBox();
+        wxBitmap bmp(box.GetRight(), box.GetBottom(), 1);
+        wxMemoryDC dc;
+        dc.SelectObject(bmp);
+        dc.SetBackground(*wxBLACK_BRUSH);
+        dc.Clear();
+        dc.SetClippingRegion(region);
+        dc.SetBackground(*wxWHITE_BRUSH);
+        dc.Clear();
+        dc.SelectObject(wxNullBitmap);
+
+        XShapeCombineMask( xdisplay, xwindow, ShapeBounding, 0, 0,
+                           (Pixmap)bmp.GetDrawable(), ShapeSet );
+    }
+
+    return true;
+}
+
+#else
+
+bool wxDoSetShape( Display* WXUNUSED(xdisplay),
+                   Window WXUNUSED(xwindow),
+                   const wxRegion& WXUNUSED(region) )
+{
+    return false;
+}
+
+#endif
+
 // ----------------------------------------------------------------------------
 // wxXVisualInfo
 // ----------------------------------------------------------------------------

@@ -404,6 +404,13 @@ void wxTopLevelWindowX11::SetIcons(const wxIconBundle& icons )
     wxSetIconsX11( wxGlobalDisplay(), GetMainWindow(), icons );
 }
 
+bool wxTopLevelWindowX11::SetShape(const wxRegion& region)
+{
+    return wxDoSetShape( wxGlobalDisplay(),
+                         (Window)GetMainWindow(),
+                         region );
+}
+
 void wxTopLevelWindowX11::SetTitle(const wxString& title)
 {
     m_title = title;

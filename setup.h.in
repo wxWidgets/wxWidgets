@@ -1141,6 +1141,8 @@
 /* Define this if you are using gtk and gdk contains support for X11R6 XIM */
 #undef HAVE_XIM
 
+/* Define this is you have X11/extensions/shape.h */
+#undef HAVE_XSHAPE
 
 /* -------------------------------------------------------------------------
    Win32 adjustments section

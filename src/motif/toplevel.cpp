@@ -336,6 +336,13 @@ void wxTopLevelWindowMotif::SetSizeHints( int minW, int minH,
     XtSetValues( (Widget)GetShellWidget(), args, count ); 
 }
 
+bool wxTopLevelWindowMotif::SetShape( const wxRegion& region )
+{
+    return wxDoSetShape( (Display*)GetXDisplay(),
+                         XtWindow( (Widget)GetShellWidget() ),
+                         region );
+}
+
 // ---------------------------------------------------------------------------
 // Callback definition
 // ---------------------------------------------------------------------------
