@@ -19,12 +19,12 @@ is usually used to allow the user to make some choice or to answer a question.
 There are two kinds of dialog -- {\it modal}\ and {\it modeless}. A modal dialog
 blocks program flow and user input on other windows until it is dismissed,
 whereas a modeless dialog behaves more like a frame in that program flow
-continues, and input on other windows is still possible. To show a modal dialog
-you should use \helpref{ShowModal}{wxdialogshowmodal} method while to show
-dialog modelessly you simply use \helpref{Show}{wxdialogshow}, just as with the
+continues, and input in other windows is still possible. To show a modal dialog
+you should use the \helpref{ShowModal}{wxdialogshowmodal} method while to show
+a dialog modelessly you simply use \helpref{Show}{wxdialogshow}, just as with
 frames.
 
-Note that the modal dialogs are one of the very few examples of
+Note that the modal dialog is one of the very few examples of
 wxWindow-derived objects which may be created on the stack and not on the heap.
 In other words, although this code snippet
 \begin{verbatim}
@@ -63,15 +63,16 @@ the dialog to respond to system close events.
 \twocolitem{\windowstyle{wxRESIZE\_BORDER}}{Display a resizeable frame around the window.}
 \twocolitem{\windowstyle{wxSYSTEM\_MENU}}{Display a system menu.}
 \twocolitem{\windowstyle{wxCLOSE\_BOX}}{Displays a close box on the frame.}
+\twocolitem{\windowstyle{wxMAXIMIZE\_BOX}}{Displays a maximize box on the dialog.}
+\twocolitem{\windowstyle{wxMINIMIZE\_BOX}}{Displays a minimize box on the dialog.}
 \twocolitem{\windowstyle{wxTHICK\_FRAME}}{Display a thick frame around the window.}
 \twocolitem{\windowstyle{wxSTAY\_ON\_TOP}}{The dialog stays on top of all other windows (Windows only).}
 \twocolitem{\windowstyle{wxNO\_3D}}{Under Windows, specifies that the child controls
 should not have 3D borders unless specified in the control.}
-\twocolitem{\windowstyle{wxDIALOG\_NO\_PARENT}}{By default, the dialogs created
-with {\tt NULL} parent window will be given the 
-\helpref{applications top level window}{wxappgettopwindow} as parent. Use this
-style to prevent this from happening and create a really orphan dialog (note
-that this is not recommended for modal dialogs).}
+\twocolitem{\windowstyle{wxDIALOG\_NO\_PARENT}}{By default, a dialog created
+with a {\tt NULL} parent window will be given the 
+\helpref{application's top level window}{wxappgettopwindow} as parent. Use this
+style to prevent this from happening and create an orphan dialog. This is not recommended for modal dialogs.}
 \twocolitem{\windowstyle{wxDIALOG\_EX\_CONTEXTHELP}}{Under Windows, puts a query button on the
 caption. When pressed, Windows will go into a context-sensitive help mode and wxWindows will send
 a wxEVT\_HELP event if the user clicked on an application window. {\it Note}\ that this is an extended
