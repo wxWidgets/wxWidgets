@@ -207,7 +207,7 @@ bool MyConnection::OnExecute(const wxString& WXUNUSED(topic),
                              int WXUNUSED(size),
                              wxIPCFormat WXUNUSED(format))
 {
-    wxLogStatus("Execute command: %s", data);
+    wxLogStatus(wxT("Execute command: %s"), data);
     return TRUE;
 }
 
@@ -217,7 +217,7 @@ bool MyConnection::OnPoke(const wxString& WXUNUSED(topic),
                           int WXUNUSED(size),
                           wxIPCFormat WXUNUSED(format))
 {
-    wxLogStatus("Poke command: %s = %s", item.c_str(), data);
+    wxLogStatus(wxT("Poke command: %s = %s"), item.c_str(), data);
     return TRUE;
 }
 

@@ -251,5 +251,5 @@ MyFrame::~MyFrame()
   pConfig->Write("/MainFrame/w", (long) w);
   pConfig->Write("/MainFrame/h", (long) h);
 
-  pConfig->Write("/TestValue", "");
+  pConfig->Write("/TestValue", wxT("A test value"));
 }

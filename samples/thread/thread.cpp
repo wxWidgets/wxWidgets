@@ -574,16 +574,16 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnExecMain(wxCommandEvent& WXUNUSED(event))
 {
-    wxLogMessage("The exit code from the main program is %ld",
+    wxLogMessage(wxT("The exit code from the main program is %ld"),
                  EXEC("/bin/echo \"main program\""));
 }
 
 void MyFrame::OnExecThread(wxCommandEvent& WXUNUSED(event))
 {
-    MyExecThread thread("/bin/echo \"child thread\"");
+    MyExecThread thread(wxT("/bin/echo \"child thread\""));
     thread.Run();
 
-    wxLogMessage("The exit code from a child thread is %ld",
+    wxLogMessage(wxT("The exit code from a child thread is %ld"),
                  (long)thread.Wait());
 }
 
@@ -607,7 +607,7 @@ void MyFrame::OnShowCPUs(wxCommandEvent& WXUNUSED(event))
             break;
 
         default:
-            msg.Printf("This system has %d CPUs", nCPUs);
+            msg.Printf(wxT("This system has %d CPUs"), nCPUs);
     }
             
     wxLogMessage(msg);

@@ -326,19 +326,19 @@ void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event) )
   switch ( dialog.ShowModal() )
   {
       case wxID_YES:
-          wxLogStatus("You pressed \"Yes\"");
+          wxLogStatus(wxT("You pressed \"Yes\""));
           break;
 
       case wxID_NO:
-          wxLogStatus("You pressed \"No\"");
+          wxLogStatus(wxT("You pressed \"No\""));
           break;
 
       case wxID_CANCEL:
-          wxLogStatus("You pressed \"Cancel\"");
+          wxLogStatus(wxT("You pressed \"Cancel\""));
           break;
 
       default:
-          wxLogError("Unexpected wxMessageDialog return code!");
+          wxLogError(wxT("Unexpected wxMessageDialog return code!"));
   }
 }
 
