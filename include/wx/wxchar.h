@@ -20,6 +20,10 @@
 
 #include "wx/defs.h"        /* for wxUSE_UNICODE */
 
+#if defined(HAVE_STRTOK_R) && defined(__DARWIN__) && defined(_MSL_USING_MW_C_HEADERS) && _MSL_USING_MW_C_HEADERS
+    char	*strtok_r(char *, const char *, char **);
+#endif
+
 /* check whether we have wchar_t and which size it is if we do */
 #if !defined(wxUSE_WCHAR_T)
     #if defined(__UNIX__)
