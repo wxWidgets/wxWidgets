@@ -773,7 +773,7 @@ AC_ARG_WITH(microwin,      [  --with-microwin         use MicroWindows], [wxUSE_
 AC_ARG_WITH(x11,           [  --with-x11              use X11], [wxUSE_X11="$withval" wxUSE_UNIVERSAL="yes" CACHE_X11=1 TOOLKIT_GIVEN=1])
 WX_ARG_ENABLE(nanox,       [  --enable-nanox          use NanoX], wxUSE_NANOX)
 
-WX_ARG_ENABLE(gtk2,        [  --enable-gtk2           use GTK+ 2.0 if available (EXPERIMENTAL)], wxUSE_GTK2)
+WX_ARG_ENABLE(gtk2,        [  --enable-gtk2           use GTK+ 2.0 if available], wxUSE_GTK2)
 WX_ARG_ENABLE(gpe,         [  --enable-gpe            use GNOME PDA Environment features if possible], wxUSE_GPE)
 
 WX_ARG_SYS_WITH(libpng,    [  --with-libpng           use libpng (PNG image format)], wxUSE_LIBPNG)
