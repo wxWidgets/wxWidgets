@@ -18,7 +18,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "choiccmn.h"
+    #pragma implementation "choicebase.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".

@@ -17,10 +17,8 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if 0
 #ifdef __GNUG__
-    #pragma implementation
-#endif
+    #pragma implementation "dialogbase.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".

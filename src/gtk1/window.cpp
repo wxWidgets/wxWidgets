@@ -2663,50 +2663,44 @@ void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
         }
     }
 
+    /* there is no GTK equivalent of "draw only, don't clear" so we
+       invent our own in the GtkMyFixed widget */
+
     if (!rect)
     {
         if (m_wxwindow)
 	{
-	    /* call the callback directly for preventing GTK from
-	       clearing the background */
-	    int w = 0;
-	    int h = 0;
-	    GetClientSize( &w, &h );
+	    GtkMyFixed *myfixed = GTK_MYFIXED(m_wxwindow);
+	    gboolean old_clear = myfixed->clear_on_draw;
+	    gtk_my_fixed_set_clear( myfixed, FALSE );
 	    
-            GetUpdateRegion().Union( 0, 0, w, h );
-            wxPaintEvent event( GetId() );
-            event.SetEventObject( this );
-            GetEventHandler()->ProcessEvent( event );
-            GetUpdateRegion().Clear();
+            gtk_widget_draw( m_wxwindow, (GdkRectangle*) NULL );
+	    
+	    gtk_my_fixed_set_clear( myfixed, old_clear );
 	}
         else
-	{
             gtk_widget_draw( m_widget, (GdkRectangle*) NULL );
-	}
     }
     else
     {
+        GdkRectangle gdk_rect;
+        gdk_rect.x = rect->x;
+        gdk_rect.y = rect->y;
+        gdk_rect.width = rect->width;
+        gdk_rect.height = rect->height;
 
         if (m_wxwindow)
 	{
-	    /* call the callback directly for preventing GTK from
-	       clearing the background */
-            GetUpdateRegion().Union( rect->x, rect->y, rect->width, rect->height );
-            wxPaintEvent event( GetId() );
-            event.SetEventObject( this );
-            GetEventHandler()->ProcessEvent( event );
-            GetUpdateRegion().Clear();
+	    GtkMyFixed *myfixed = GTK_MYFIXED(m_wxwindow);
+	    gboolean old_clear = myfixed->clear_on_draw;
+	    gtk_my_fixed_set_clear( myfixed, FALSE );
+	    
+            gtk_widget_draw( m_wxwindow, &gdk_rect );
+	    
+	    gtk_my_fixed_set_clear( myfixed, old_clear );
 	}
         else
-	{
-            GdkRectangle gdk_rect;
-            gdk_rect.x = rect->x;
-            gdk_rect.y = rect->y;
-            gdk_rect.width = rect->width;
-            gdk_rect.height = rect->height;
-	    
             gtk_widget_draw( m_widget, &gdk_rect );
-	}
     }
 }
 

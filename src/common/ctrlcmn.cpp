@@ -18,7 +18,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "ctrlcmn.h"
+    #pragma implementation "controlbase.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".

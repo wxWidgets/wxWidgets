@@ -12,6 +12,10 @@
 #ifndef _WX_DIALOG_H_BASE_
 #define _WX_DIALOG_H_BASE_
 
+#ifdef __GNUG__
+    #pragma interface "dialogbase.h"
+#endif
+
 #include "wx/defs.h"
 #include "wx/panel.h"
 
