@@ -180,8 +180,10 @@ void wxApp::CleanUp()
 int wxEntryStart( int& argc, char *argv[] )
 {
 #ifdef __WXDEBUG__
+#if !wxUSE_NANOX
     // install the X error handler
     gs_pfnXErrorHandler = XSetErrorHandler( wxXErrorHandler );
+#endif
 #endif // __WXDEBUG__
 
     wxString displayName;

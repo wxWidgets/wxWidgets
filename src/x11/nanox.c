@@ -155,6 +155,8 @@ Status XGetWindowAttributes(Display* display, Window w,
                             XWindowAttributes* window_attributes)
 {
     GR_WINDOW_INFO info;
+    Window parent = 0;
+    GrFlush();
     GrGetWindowInfo(w, & info);
 
     window_attributes->x = info.x;
@@ -180,12 +182,25 @@ Status XGetWindowAttributes(Display* display, Window w,
     window_attributes->override_redirect = FALSE;
     window_attributes->screen = NULL;
 
+    /* We need to check if any parents are unmapped,
+     * or we will report a window as mapped when it is not.
+     */
+    parent = info.parent;
+    while (parent)
+    {
+        GrGetWindowInfo(parent, & info);
+        if (info.mapped == 0)
+            window_attributes->map_state = IsUnmapped;
+
+        parent = info.parent;
+    }
+
     return 1;
 }
 
 static XErrorHandler* g_ErrorHandler = NULL;
 
-static void DefaultNanoXErrorHandler(GR_EVENT_ERROR* ep)
+void DefaultNanoXErrorHandler(GR_EVENT_ERROR* ep)
 {
     if (g_ErrorHandler)
     {

@@ -1062,7 +1062,9 @@ void wxWindowX11::OnInternalIdle()
 
     // Set the input focus if couldn't do it before
     if (m_needsInputFocus)
+    {
 	SetFocus();
+    }
 }
 
 // ----------------------------------------------------------------------------
