@@ -16,8 +16,7 @@ program_dir = contrib/samples/gizmos/splittree
 PROGRAM=splittree
 OBJECTS=tree.o
 
-#APPEXTRALIBS=$(top_builddir)/lib/libgizmos.@WX_TARGET_LIBRARY_TYPE@
-APPEXTRALIBS=$(top_builddir)/lib/libgizmos.a
+APPEXTRALIBS=$(top_builddir)/lib/libgizmos.@WX_TARGET_LIBRARY_TYPE@
 APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 
 include $(top_builddir)/src/makeprog.env
