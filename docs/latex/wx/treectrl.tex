@@ -67,8 +67,8 @@ implemented in the system library {\tt comctl32.dll}. Some versions of this
 library are known to have bugs with handling the tree control colours: the
 usual symptom is that the expanded items leave black (or otherwise incorrectly
 coloured) background behind them, especially for the controls using non
-default background colour. The recommended solution is to upgrade the {\tt comctl32.dll} 
-to a newer version: see 
+default background colour. The recommended solution is to upgrade the {\tt comctl32.dll}
+to a newer version: see
 \urlref{http://www.microsoft.com/msdownload/ieplatform/ie/comctrlx86.asp}{http://www.microsoft.com/msdownload/ieplatform/ie/comctrlx86.asp}.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
@@ -178,7 +178,7 @@ will be sent which can be vetoed as well.
 
 \wxheading{See also}
 
-\helpref{wxTreeCtrl::EndEditLabel}{wxtreectrlendeditlabel}, 
+\helpref{wxTreeCtrl::EndEditLabel}{wxtreectrlendeditlabel},
 \helpref{wxTreeEvent}{wxtreeevent}
 
 \membersection{wxTreeCtrl::EndEditLabel}\label{wxtreectrlendeditlabel}
@@ -329,7 +329,7 @@ Returns the last child of the item (or an invalid tree item if this item has no 
 
 \wxheading{See also}
 
-\helpref{GetFirstChild}{wxtreectrlgetfirstchild}, 
+\helpref{GetFirstChild}{wxtreectrlgetfirstchild},
 \helpref{GetLastChild}{wxtreectrlgetlastchild}
 
 \membersection{wxTreeCtrl::GetNextChild}\label{wxtreectrlgetnextchild}
@@ -408,7 +408,7 @@ Returns the root item for the tree control.
 
 \constfunc{int}{GetItemSelectedImage}{\param{const wxTreeItemId\& }{item}}
 
-Gets the selected item image (this function is obsolete, use 
+Gets the selected item image (this function is obsolete, use
 {\tt GetItemImage(item, wxTreeItemIcon\_Selected}) instead).
 
 \membersection{wxTreeCtrl::GetSelection}\label{wxtreectrlgetselection}
@@ -416,7 +416,7 @@ Gets the selected item image (this function is obsolete, use
 \constfunc{wxTreeItemId}{GetSelection}{\void}
 
 Returns the selection, or an invalid item if there is no selection.
-This function only works with the controls without wxTR\_MULTIPLE style, use 
+This function only works with the controls without wxTR\_MULTIPLE style, use
 \helpref{GetSelections}{wxtreectrlgetselections} for the controls which do have
 this style.
 
@@ -475,6 +475,9 @@ Inserts an item after a given one ({\it previous}) or before one identified by i
 
 If {\it image} > -1 and {\it selImage} is -1, the same image is used for
 both selected and unselected items.
+
+\pythonnote{The second form of this method is called
+\tt{InsertItemBefore} in wxPython.}
 
 \membersection{wxTreeCtrl::IsBold}\label{wxtreectrlisbold}
 
@@ -609,7 +612,7 @@ usage and loading time.
 \func{void}{SetItemImage}{\param{const wxTreeItemId\&}{ item},
  \param{int }{image}, \param{wxTreeItemIcon }{which = wxTreeItemIcon\_Normal}}
 
-Sets the specified item image. See \helpref{GetItemImage}{wxtreectrlgetitemimage} 
+Sets the specified item image. See \helpref{GetItemImage}{wxtreectrlgetitemimage}
 for the description of the {\it which} parameter.
 
 \membersection{wxTreeCtrl::SetItemSelectedImage}\label{wxtreectrlsetitemselectedimage}
@@ -640,7 +643,7 @@ Sets the state image list (from which application-defined state images are taken
 
 \func{void}{SortChildren}{\param{const wxTreeItemId\&}{ item}}
 
-Sorts the children of the given item using 
+Sorts the children of the given item using
 \helpref{OnCompareItems}{wxtreectrloncompareitems} method of wxTreeCtrl. You
 should override that method to change the sort order (the default is ascending
 alphabetical order).
@@ -665,7 +668,7 @@ Removes the selection from the currently selected item (if any).
 
 \func{void}{UnselectAll}{\void}
 
-This function either behaves the same as \helpref{Unselect}{wxtreectrlunselect} 
+This function either behaves the same as \helpref{Unselect}{wxtreectrlunselect}
 if the control doesn't have wxTR\_MULTIPLE style, or removes the selection from
 all items if it does have this style.
 
