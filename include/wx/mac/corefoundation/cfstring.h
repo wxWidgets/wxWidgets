@@ -32,23 +32,20 @@ void wxMacWakeUp() ;
 class wxMacCFStringHolder
 {
 public:
-    wxMacCFStringHolder()
+    wxMacCFStringHolder() 
+        : m_cfs(NULL) , m_release(false) 
     {
-        m_cfs = NULL ;
-        m_release = false ;
     }
 
     wxMacCFStringHolder(const wxString &str , wxFontEncoding encoding )
+        : m_cfs(NULL) , m_release(false) 
     {
-        m_cfs = NULL ;
-        m_release = false ;
         Assign( str , encoding ) ;
     }
 
     wxMacCFStringHolder(CFStringRef ref , bool release = true )
+        : m_cfs(ref) , m_release(release) 
     {
-        m_cfs = ref ;
-        m_release = release ;
     }
 
     ~wxMacCFStringHolder()
@@ -80,5 +77,7 @@ private:
 
     CFStringRef m_cfs;
     bool m_release ;
+    
+    DECLARE_NO_COPY_CLASS( wxMacCFStringHolder )
 } ;
 
