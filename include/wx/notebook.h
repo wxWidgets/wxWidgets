@@ -148,7 +148,7 @@ typedef void (wxEvtHandler::*wxNotebookEventFunction)(wxNotebookEvent&);
 #elif defined(__WXMAC__)
     #include  "wx/mac/notebook.h"
 #elif defined(__WXCOCOA__)
-    #include  "wx/generic/notebook.h"
+    #include  "wx/cocoa/notebook.h"
 #elif defined(__WXPM__)
     #include  "wx/os2/notebook.h"
 #endif

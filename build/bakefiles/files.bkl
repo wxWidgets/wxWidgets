@@ -1756,6 +1756,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/cocoa/NSControl.mm
     src/cocoa/NSMenu.mm
     src/cocoa/NSPanel.mm
+    src/cocoa/NSTabView.mm
     src/cocoa/NSTableView.mm
     src/cocoa/NSTextField.mm
     src/cocoa/NSView.mm
@@ -1795,6 +1796,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/cocoa/mdi.mm
     src/cocoa/menu.mm
     src/cocoa/menuitem.mm
+    src/cocoa/notebook.mm
     src/cocoa/pen.mm
     src/cocoa/radiobox.mm
     src/cocoa/radiobut.mm
@@ -1823,7 +1825,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/imaglist.cpp
     src/generic/listctrl.cpp
     src/generic/msgdlgg.cpp
-    src/generic/notebook.cpp
     src/generic/paletteg.cpp
     src/generic/statusbr.cpp
     src/generic/tabg.cpp
@@ -1838,6 +1839,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/cocoa/NSControl.h
     wx/cocoa/NSMenu.h
     wx/cocoa/NSPanel.h
+    wx/cocoa/NSTabView.h
     wx/cocoa/NSTableView.h
     wx/cocoa/NSTextField.h
     wx/cocoa/NSView.h
@@ -1876,6 +1878,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/cocoa/mdi.h
     wx/cocoa/menu.h
     wx/cocoa/menuitem.h
+    wx/cocoa/notebook.h
     wx/cocoa/pen.h
     wx/cocoa/radiobox.h
     wx/cocoa/radiobut.h
