@@ -25,7 +25,7 @@ bombs:
 	(cd bombs && $(MAKE) all)
 
 clean: 
-	rm -rf ./.deps
+	rm -rf ./.deps ./.pch
 	rm -f ./*.o
 	(cd bombs && $(MAKE) clean)
 	(cd dbbrowse && $(MAKE) clean)
@@ -38,8 +38,7 @@ dbbrowse:
 	(cd dbbrowse && $(MAKE) all)
 
 distclean: clean
-	rm -f configure config.cache config.log config.status
-	rm -f bk-deps shared-ld-sh
+	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 forty: 
 	(cd forty && $(MAKE) all)
@@ -48,20 +47,8 @@ fractal:
 	(cd fractal && $(MAKE) all)
 
 install: all
-	(cd bombs && $(MAKE) install)
-	(cd dbbrowse && $(MAKE) install)
-	(cd forty && $(MAKE) install)
-	(cd fractal && $(MAKE) install)
-	(cd life && $(MAKE) install)
-	(cd poem && $(MAKE) install)
 
 install-strip: install
-	(cd bombs && $(MAKE) install-strip)
-	(cd dbbrowse && $(MAKE) install-strip)
-	(cd forty && $(MAKE) install-strip)
-	(cd fractal && $(MAKE) install-strip)
-	(cd life && $(MAKE) install-strip)
-	(cd poem && $(MAKE) install-strip)
 
 life: 
 	(cd life && $(MAKE) all)
