@@ -794,6 +794,12 @@ typedef float wxFloat32 ;
   #define wxUINT64_SWAP_ON_BE(val)  (val)
 #endif
 
+// Macros to convert from unsigned long to void pointer.
+// High order truncation occurs if the respective type is not large enough.
+#define WXPTRULONGSLICE (((wxBYTE_ORDER==wxBIG_ENDIAN)&&(sizeof(void*)==8)&&(sizeof(unsigned long)<8))?1:0)
+#define wxPtrToULong(p) (((unsigned long*)(&(p)))[WXPTRULONGSLICE])
+#define wxULongToPtr(p,n) (p=NULL,wxPtrToULong(p)=(unsigned long)(n),p)
+
 // ----------------------------------------------------------------------------
 // Geometric flags
 // ----------------------------------------------------------------------------

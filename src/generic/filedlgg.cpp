@@ -856,7 +856,7 @@ void wxFileCtrl::GoToParentDir()
     if (!IsTopMostDir(m_dirName))
     {
         size_t len = m_dirName.Len();
-        if (m_dirName[len-1] == wxFILE_SEP_PATH)
+        if (wxEndsWithPathSeparator(m_dirName))
             m_dirName.Remove( len-1, 1 );
         wxString fname( wxFileNameFromPath(m_dirName) );
         m_dirName = wxPathOnly( m_dirName );
@@ -1038,7 +1038,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     }
 
     size_t len = m_dir.Len();
-    if ((len > 1) && (m_dir[len-1] == wxFILE_SEP_PATH))
+    if ((len > 1) && (wxEndsWithPathSeparator(m_dir)))
         m_dir.Remove( len-1, 1 );
 
     m_path = m_dir;

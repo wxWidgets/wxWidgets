@@ -258,7 +258,7 @@ private:
   bool AssignCopy(size_t, const wxChar *);
 
   // append a (sub)string
-  bool ConcatSelf(int nLen, const wxChar *src);
+  bool ConcatSelf(size_t nLen, const wxChar *src);
 
   // functions called before writing to the string: they copy it if there
   // are other references to our data (should be the only owner when writing)

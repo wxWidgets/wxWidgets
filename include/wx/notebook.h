@@ -67,7 +67,7 @@ public:
     // ---------
 
     // get number of pages in the dialog
-    int GetPageCount() const { return m_pages.GetCount(); }
+    int GetPageCount() const { return (int) m_pages.GetCount(); }
 
     // get the panel which represents the given page
     wxNotebookPage *GetPage(int nPage) { return m_pages[nPage]; }

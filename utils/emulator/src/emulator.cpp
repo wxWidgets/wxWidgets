@@ -578,7 +578,7 @@ wxString wxFindAppPath(const wxString& argv0, const wxString& cwd, const wxStrin
     {
         // Is it a relative path?
         wxString currentDir(cwd);
-        if (currentDir.Last() != wxFILE_SEP_PATH)
+        if (!wxEndsWithPathSeparator(currentDir))
             currentDir += wxFILE_SEP_PATH;
 
         str = currentDir + argv0;

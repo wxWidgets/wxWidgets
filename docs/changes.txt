@@ -45,7 +45,6 @@ All GUI ports:
 - WXR resources can now be used in Unicode builds
 - it is now possible to use several wxFileHistory objects in the same menu
   by giving them different base IDs (Dimitri Schoolwerth)
-
 - changed to type-safe wxSizerItemList for wxSizer child items
     Deprecated:
         wxSizer::Remove( wxWindow* )
@@ -64,8 +63,12 @@ All GUI ports:
         wxListBase::operator wxList&()
             - use typesafe lists instead
 - Added wxTLW::SetShape with implementations for wxMSW and wxGTK (so
-  far).
-
+  far)
+- FL: rmoved const from EnableTool parameters
+- FL: signal child window when toolbar is closed
+- In various places, changed tests for pathsep on last char of string to call
+  wxEndsWithPathSeparator(s)
+- Added to defs.h a couple of macros (wxPtrToULong & wxULongToPtr)
 
 Unix:
 
@@ -97,6 +100,12 @@ wxMSW:
 - fixed calling wxFrame::Maximize(FALSE) before the window is shown
 - all libraries built with makefile.g95 have a _min or _cyg suffix
   (for MinGW and Cygwin)
+- When using DLL, wxLocalFSHandler was not being exported - added
+  WXEXPORTDLL
+- A wxEvtHandler object was not removed from wxPendingEvents on deletion. 
+  wxPendingEventsLocker was being deleted in App before all wxEvtHandler
+  objects have been destroyed resulting in stale handler/lock
+  ptrs; fixed
 
 wxMotif:
 

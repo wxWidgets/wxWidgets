@@ -199,7 +199,7 @@ public:
 
         // Enables or disables the given tool.
 
-    virtual void EnableTool(const int toolIndex, const bool enable = TRUE);
+    virtual void EnableTool(int toolIndex, bool enable = TRUE);
 
         // Responds to size events, calling Layout.
 

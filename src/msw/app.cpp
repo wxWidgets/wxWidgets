@@ -560,13 +560,14 @@ void wxApp::CleanUp()
 #endif
 
     delete wxWinHandleHash;
+    wxWinHandleHash = NULL; // Set to null in case anything later tries to ref it.
 
-    // GL: I'm annoyed ... I don't know where to put this and I don't want to
-    // create a module for that as it's part of the core.
     delete wxPendingEvents;
+    wxPendingEvents = NULL; // Set to null because wxAppBase::wxEvtHandler is destroyed later.
 
 #if wxUSE_THREADS
     delete wxPendingEventsLocker;
+    wxPendingEventsLocker = NULL; // Set to null because wxAppBase::wxEvtHandler is destroyed later.
     // If we don't do the following, we get an apparent memory leak
 #if wxUSE_VALIDATORS
     ((wxEvtHandler&) wxDefaultValidator).ClearEventLocker();

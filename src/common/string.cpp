@@ -608,7 +608,7 @@ wxString& wxString::operator=(const wchar_t *pwz)
 // ---------------------------------------------------------------------------
 
 // add something to this string
-bool wxString::ConcatSelf(int nSrcLen, const wxChar *pszSrcData)
+bool wxString::ConcatSelf(size_t nSrcLen, const wxChar *pszSrcData)
 {
   STATISTICS_ADD(SummandLength, nSrcLen);
 

@@ -241,7 +241,7 @@ special characters :
 */
 
 
-class wxLocalFSHandler : public wxFileSystemHandler
+class WXDLLEXPORT wxLocalFSHandler : public wxFileSystemHandler
 {
 public:
     virtual bool CanOpen(const wxString& location);

@@ -512,6 +512,9 @@ void cbBarHintsPlugin::OnLeftUp( cbLeftUpEvent&   event )
                 if ( i == 0 )
                 {
                     mpLayout->SetBarState( mpClickedBar, wxCBAR_HIDDEN, TRUE );
+                    // Notify bar child window of close event:
+                    if(mpClickedBar->mpBarWnd!=NULL)
+                        mpClickedBar->mpBarWnd->Close();
                 }
                 else
                 {

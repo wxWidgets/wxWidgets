@@ -656,6 +656,15 @@ wxEvtHandler::~wxEvtHandler()
 #  if !defined(__VISAGECPP__)
     delete m_eventsLocker;
 #  endif
+   
+    // Remove us from wxPendingEvents if necessary.
+    if(wxPendingEventsLocker)
+        wxENTER_CRIT_SECT(*wxPendingEventsLocker);
+    if ( wxPendingEvents ) {
+        wxPendingEvents->DeleteObject(this);
+    }
+    if(wxPendingEventsLocker)
+        wxLEAVE_CRIT_SECT(*wxPendingEventsLocker);
 #endif
 
     // we only delete object data, not untyped

@@ -939,7 +939,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
     {
         wxString eachFilename(dirs[i]);
         path = dirName;
-        if (path.Last() != wxFILE_SEP_PATH)
+        if (!wxEndsWithPathSeparator(path))
             path += wxString(wxFILE_SEP_PATH);
         path += eachFilename;
 
@@ -966,7 +966,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
         {
             wxString eachFilename(filenames[i]);
             path = dirName;
-            if (path.Last() != wxFILE_SEP_PATH)
+            if (!wxEndsWithPathSeparator(path))
                 path += wxString(wxFILE_SEP_PATH);
             path += eachFilename;
             //path = dirName + wxString(wxT("/")) + eachFilename;
@@ -1010,7 +1010,7 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
         if (data && !data->m_path.IsEmpty())
         {
             wxString childPath(data->m_path);
-            if (childPath.Last() != wxFILE_SEP_PATH)
+            if (!wxEndsWithPathSeparator(childPath))
                 childPath += wxString(wxFILE_SEP_PATH);
 
             // In MSW and PM, case is not significant

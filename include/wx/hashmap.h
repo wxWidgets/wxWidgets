@@ -179,7 +179,7 @@ public: \
     CLASSNAME( size_type sz = 10, const hasher& hfun = hasher(), \
                const key_equal& k_eq = key_equal(), \
                const key_extractor& k_ex = key_extractor() ) \
-        : m_tableBuckets( GetNextPrime( sz ) ), \
+        : m_tableBuckets( GetNextPrime( (unsigned long) sz ) ), \
           m_items( 0 ), \
           m_hasher( hfun ), \
           m_equals( k_eq ), \
@@ -252,7 +252,7 @@ public: \
         delete *node; \
         (*node) = temp; \
         if( SHOULD_SHRINK( m_tableBuckets, m_items ) ) \
-            ResizeTable( GetPreviousPrime( m_tableBuckets ) - 1 ); \
+            ResizeTable( GetPreviousPrime( (unsigned long) m_tableBuckets ) - 1 ); \
         return 1; \
     } \
  \
@@ -324,7 +324,7 @@ protected: \
  \
     void ResizeTable( size_t newSize ) \
     { \
-        newSize = GetNextPrime( newSize ); \
+        newSize = GetNextPrime( (unsigned long)newSize ); \
         Node** srcTable = m_table; \
         size_t srcBuckets = m_tableBuckets; \
         m_table = (Node**)AllocTable( newSize ); \
@@ -441,7 +441,7 @@ public:
 
     // TODO: this might not work well on architectures with 64 bit pointers but
     //       32 bit longs, we should use % ULONG_MAX there
-    unsigned long operator()( const void* k ) const { return (unsigned long)k; }
+    unsigned long operator()( const void* k ) const { return (unsigned long)wxPtrToULong(k); }
 
     wxPointerHash& operator=(const wxPointerHash&) { return *this; }
 };

@@ -1406,7 +1406,7 @@ wxString wxFindFirstFile(const wxChar *spec, int flags)
     wxSplitPath(spec, &gs_dirPath, NULL, NULL);
     if ( gs_dirPath.IsEmpty() )
         gs_dirPath = wxT(".");
-    if ( gs_dirPath.Last() != wxFILE_SEP_PATH )
+    if ( !wxEndsWithPathSeparator(gs_dirPath ) )
         gs_dirPath << wxFILE_SEP_PATH;
 
     if (gs_dir)
