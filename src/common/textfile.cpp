@@ -62,7 +62,8 @@ bool wxTextFile::OnExists() const
 bool wxTextFile::OnOpen(const wxString &strBufferName, wxTextBufferOpenMode OpenMode)
 {
     wxFile::OpenMode FileOpenMode = wxFile::read;
-  
+    int                             nAssertVal = 0;
+
     switch (OpenMode)
   {
         case ReadAccess :
@@ -72,7 +73,7 @@ bool wxTextFile::OnOpen(const wxString &strBufferName, wxTextBufferOpenMode Open
             FileOpenMode = wxFile::write;
             break;
         default :
-            wxASSERT(0); // Should not happen.
+            wxASSERT(nAssertVal); // Should not happen.
             break;
   }
 
