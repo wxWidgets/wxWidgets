@@ -117,7 +117,7 @@ HMODULE wxGetModuleHandle(const char *name, void *addr)
         // flags are GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT |
         //           GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS
         HMODULE hmod;
-        if ( s_pfnGetModuleHandleEx(6, (char *)addr, &hmod) && hmod )
+        if ( s_pfnGetModuleHandleEx(6, (LPCTSTR)addr, &hmod) && hmod )
             return hmod;
     }
 
@@ -262,7 +262,7 @@ void wxDynamicLibrary::Unload(wxDllType handle)
 /* static */
 void *wxDynamicLibrary::RawGetSymbol(wxDllType handle, const wxString& name)
 {
-    return ::GetProcAddress(handle, name);
+    return ::GetProcAddress(handle, name.ToAscii());
 }
 
 // ----------------------------------------------------------------------------
@@ -274,6 +274,7 @@ wxDynamicLibraryDetailsArray wxDynamicLibrary::ListLoaded()
 {
     wxDynamicLibraryDetailsArray dlls;
 
+#if wxUSE_DBGHELP
     if ( wxDbgHelpDLL::Init() )
     {
         // prepare to use functions for version info extraction
@@ -293,6 +294,7 @@ wxDynamicLibraryDetailsArray wxDynamicLibrary::ListLoaded()
             wxLogLastError(_T("EnumerateLoadedModules"));
         }
     }
+#endif // wxUSE_DBGHELP
 
     return dlls;
 }
