@@ -309,8 +309,13 @@ bool wxNotebook::DeletePage(wxNotebookPage* page)
         return FALSE;
 }
 
-// remove one page from the notebook
 bool wxNotebook::RemovePage(size_t nPage)
+{
+    return DoRemovePage(nPage) != NULL;
+}
+
+// remove one page from the notebook
+wxWindow* wxNotebook::DoRemovePage(size_t nPage)
 {
     wxCHECK( IS_VALID_PAGE(nPage), FALSE );
 
@@ -353,7 +358,7 @@ bool wxNotebook::RemovePage(size_t nPage)
 
     RefreshLayout(FALSE);
 
-    return TRUE;
+    return pPage;
 }
 
 bool wxNotebook::RemovePage(wxNotebookPage* page)

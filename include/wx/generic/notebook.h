@@ -101,6 +101,8 @@ public:
     // remove one page from the notebook, without deleting the page.
   bool RemovePage(size_t nPage);
   bool RemovePage(wxNotebookPage* page);
+  virtual wxWindow* DoRemovePage(size_t nPage);
+
     // remove all pages
   bool DeleteAllPages();
     // the same as AddPage(), but adds it at the specified position
