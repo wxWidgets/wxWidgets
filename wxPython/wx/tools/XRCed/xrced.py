@@ -931,21 +931,23 @@ class App(wxApp):
         global debug
         # Process comand-line
         try:
+            opts = args = None
             opts, args = getopt.getopt(sys.argv[1:], 'dhiv')
+            for o,a in opts:
+                if o == '-h':
+                    usage()
+                    sys.exit(0)
+                elif o == '-d':
+                    debug = True
+                elif o == '-v':
+                    print 'XRCed version', version
+                    sys.exit(0)
+            
         except getopt.GetoptError:
             if wxPlatform != '__WXMAC__': # macs have some extra parameters
                 print >> sys.stderr, 'Unknown option'
                 usage()
                 sys.exit(1)
-        for o,a in opts:
-            if o == '-h':
-                usage()
-                sys.exit(0)
-            elif o == '-d':
-                debug = True
-            elif o == '-v':
-                print 'XRCed version', version
-                sys.exit(0)
 
         self.SetAppName('xrced')
         # Settings
