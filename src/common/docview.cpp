@@ -164,6 +164,8 @@ bool wxDocument::Close()
 
 bool wxDocument::OnCloseDocument()
 {
+    // Tell all views that we're about to close
+    NotifyClosing();    
     DeleteContents();
     Modify(FALSE);
     return TRUE;
@@ -504,6 +506,17 @@ void wxDocument::UpdateAllViews(wxView *sender, wxObject *hint)
     {
         wxView *view = (wxView *)node->Data();
         view->OnUpdate(sender, hint);
+        node = node->Next();
+    }
+}
+
+void wxDocument::NotifyClosing()
+{
+    wxNode *node = m_documentViews.First();
+    while (node)
+    {
+        wxView *view = (wxView *)node->Data();
+        view->OnClosingDocument();
         node = node->Next();
     }
 }

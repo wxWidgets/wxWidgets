@@ -213,6 +213,8 @@ All (GUI):
   so that erroneous help strings are no longer found as the hash
   table fills up
 - updated libpng from 1.0.3 to 1.2.4
+- Added wxView::OnClosingDocument so the application can do
+  cleanup.
 
 wxMSW:
 
@@ -302,6 +304,7 @@ All (GUI):
 - wxGrid cell editing veto support (Roger Gammans)
 - wxListCtrl ITEM_FOCUSED event added
 - support for ICO files in wxImage added (Chris Elliott)
+- improvements to wxDragImage (Chuck Messenger)
 
 wxMSW:
 
@@ -312,6 +315,9 @@ wxMSW:
 wxGTK:
 
 - fixed popup menu positioning bug
+- fixed the edit function for wxListCtrl (Chuck Messenger)
+- fixed the key-hitting events for wxListCtrl and wxTreeCtrl, so they
+  correctly return the key which was pressed (Chuck Messenger)
 
 wxMac:
 

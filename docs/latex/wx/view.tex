@@ -126,6 +126,13 @@ all share the same window, you need to disassociate the window from the view
 and perhaps clear the window. If {\it deleteWindow} is TRUE, delete the
 frame associated with the view.
 
+\membersection{wxView::OnClosingDocument}\label{wxviewonclosingdocument}
+
+\func{virtual void}{OnClosingDoocument}{\void}
+
+Override this to clean up the view when the document is being
+closed.
+
 \membersection{wxView::OnCreate}
 
 \func{virtual bool}{OnCreate}{\param{wxDocument* }{doc}, \param{long}{ flags}}
