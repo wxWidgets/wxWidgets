@@ -2133,7 +2133,8 @@ void wxWindowMac::Freeze()
 #if TARGET_API_MAC_OSX
     if ( !m_frozenness++ )
     {
-        m_peer->SetDrawingEnabled( false ) ;
+        if ( m_peer && m_peer->Ok() )
+            m_peer->SetDrawingEnabled( false ) ;
     }
 #endif
 }
@@ -2146,8 +2147,11 @@ void wxWindowMac::Thaw()
 
     if ( !--m_frozenness )
     {
-        m_peer->SetDrawingEnabled( true ) ;
-        m_peer->InvalidateWithChildren() ;
+        if ( m_peer && m_peer->Ok() )
+        {
+            m_peer->SetDrawingEnabled( true ) ;
+            m_peer->InvalidateWithChildren() ;
+        }
     }
 #endif
 }
