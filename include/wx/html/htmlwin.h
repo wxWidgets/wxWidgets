@@ -135,6 +135,9 @@ public:
     // Adds HTML processor to wxHtmlWindow class as whole:
     static void AddGlobalProcessor(wxHtmlProcessor *processor);
 
+    // what would we do with it?
+    virtual bool AcceptsFocusFromKeyboard() const { return FALSE; }
+
 protected:
     // Scrolls to anchor of this name. (Anchor is #news
     // or #features etc. it is part of address sometimes:
@@ -212,7 +215,7 @@ private:
 
     // html processors array:
     wxHtmlProcessorList *m_Processors;
-    static wxHtmlProcessorList *m_GlobalProcessors;    
+    static wxHtmlProcessorList *m_GlobalProcessors;
 
     DECLARE_EVENT_TABLE()
 };
