@@ -694,6 +694,7 @@ swig_sources = run_swig(['core.i'], 'src', GENDIR, PKGDIR,
                           'src/_streams.i',
                           'src/_validator.i',
                           'src/_window.i',
+                          'src/_control.i',  
                           ])
 
 copy_file('src/__init__.py', PKGDIR, update=1, verbose=0)
@@ -799,7 +800,7 @@ wxpExtensions.append(ext)
 swig_sources = run_swig(['controls.i'], 'src', GENDIR, PKGDIR,
                         USE_SWIG, swig_force, swig_args, swig_deps +
                         [ 'src/_controls_rename.i',     'src/_controls_reverse.txt',
-                          'src/_control.i',             'src/_toolbar.i',
+                          'src/_toolbar.i',
                           'src/_button.i',              'src/_checkbox.i',
                           'src/_choice.i',              'src/_combobox.i',
                           'src/_gauge.i',               'src/_statctrls.i',
