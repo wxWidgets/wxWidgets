@@ -893,6 +893,10 @@ public:
     // Sets space between text and window borders.
     void SetBorders(int b);
 
+    // Sets the bitmap to use for background (currnetly it will be tiled,
+    // when/if we have CSS support we could add other possibilities...)
+    void SetBackgroundImage(const wxBitmap& bmpBg);
+
     // Saves custom settings into cfg config. it will use the path 'path'
     // if given, otherwise it will save info into currently selected path.
     // saved values : things set by SetFonts, SetBorders.
