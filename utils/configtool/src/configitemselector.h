@@ -12,7 +12,7 @@
 #ifndef _CONFIGITEMSELECTOR_H_
 #define _CONFIGITEMSELECTOR_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface "configitemselector.cpp"
 #endif
 

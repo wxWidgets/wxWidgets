@@ -12,7 +12,7 @@
 #ifndef _CT_CONFIGTOOLVIEW_H_
 #define _CT_CONFIGTOOLVIEW_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface "configtoolview.cpp"
 #endif
 

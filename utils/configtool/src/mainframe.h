@@ -12,7 +12,7 @@
 #ifndef _AP_MAINFRAME_H_
 #define _AP_MAINFRAME_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface "mainframe.cpp"
 #endif
 

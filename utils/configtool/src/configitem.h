@@ -12,7 +12,7 @@
 #ifndef _CT_CONFIGITEM_H_
 #define _CT_CONFIGITEM_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface "configitem.cpp"
 #endif
 
