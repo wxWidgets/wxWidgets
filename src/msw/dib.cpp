@@ -69,7 +69,14 @@ bool wxDIB::Create(int width, int height, int depth)
 
     info->bmiHeader.biSize = infosize;
     info->bmiHeader.biWidth = width;
-    info->bmiHeader.biHeight = -height;
+
+    // we use positive height here which corresponds to a DIB with normal, i.e.
+    // bottom to top, order -- normally using negative height (which means
+    // reversed for MS and hence natural for all the normal people top to
+    // bottom line scan order) could be used to avoid the need for the image
+    // reversal in Create(image) but this doesn't work under NT, only Win9x!
+    info->bmiHeader.biHeight = height;
+
     info->bmiHeader.biPlanes = 1;
     info->bmiHeader.biBitCount = depth;
     info->bmiHeader.biCompression = BI_RGB;
@@ -156,8 +163,8 @@ bool wxDIB::Create(const wxImage& image)
     if ( !Create(w, h, bpp) )
         return false;
 
-    // DIBs are stored in bottom to top order so we need to copy bits line by
-    // line and starting from the end
+    // DIBs are stored in bottom to top order (see also the comment above in
+    // Create()) so we need to copy bits line by line and starting from the end
     const int srcBytesPerLine = w * 3;
     const int dstBytesPerLine = GetLineSize(w, bpp);
     const unsigned char *src = image.GetData() + ((h - 1) * srcBytesPerLine);
