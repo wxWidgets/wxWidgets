@@ -31,6 +31,38 @@ swig.python-docstring.patch  Adds "autodoc" and "docstring" features.
 			     pythoncode to the begining of a
 			     SWIG-generated proxy function or method.
 
+			     Add support for two new options to the
+			     %module directive.  The first allows you
+			     to specify a docstring for the proxy
+			     module, you use it like this::
+
+			       %module(docstring="blah") modulename
+
+			     And then when generating the
+			     modulename.py file SWIG will make a
+			     docstring using the value given.  
+
+			     The second %module option allows you to
+			     specify the name of the package that the
+			     module will live in.  This is useful when
+			     the .i file is %imported by other .i
+			     files.  If they are to live in separate
+			     packages then the importer can't do local
+			     imports of the importee.  If both modules
+			     have the same package name then nothing
+			     is generated differently than the current
+			     SWIG functionality.  If they are
+			     different then the package name of the
+			     importee is prepended to the import
+			     statement and the base class declarations
+			     in the importer.  For example::
+
+			       %module(pacakge="wx") _core
+
+			     Multiple %module options can be specfied,
+			     separated by commmas.
+
+
 swig.xmlout.patch	     Fixes a couple problems in the XML output
 			     of SWIG: an extra "/>" was removed and
 			     newlines in attribute values were changed

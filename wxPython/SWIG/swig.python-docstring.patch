@@ -4,8 +4,18 @@ RCS file: /cvsroot/swig/SWIG/Source/Modules/python.cxx,v
 retrieving revision 1.40
 diff -u -4 -r1.40 python.cxx
 --- Source/Modules/python.cxx	24 Jan 2004 00:25:31 -0000	1.40
-+++ Source/Modules/python.cxx	12 May 2004 19:45:20 -0000
-@@ -50,8 +50,18 @@
++++ Source/Modules/python.cxx	2 Jun 2004 01:38:46 -0000
+@@ -19,8 +19,9 @@
+ 
+ static  String       *const_code = 0;
+ static  String       *shadow_methods = 0;
+ static  String       *module = 0;
++static  String       *package = 0;
+ static  String       *mainmodule = 0;
+ static  String       *interface = 0;
+ static  String       *global_name = 0;
+ static  int           shadow = 1;
+@@ -50,8 +51,18 @@
  static  int       have_constructor;
  static  int       have_repr;
  static  String   *real_classname;
@@ -24,27 +34,33 @@ diff -u -4 -r1.40 python.cxx
  Python Options (available with -python)\n\
       -ldflags        - Print runtime libraries to link with\n\
       -globals <name> - Set <name> used to access C global variable [default: 'cvar']\n\
-@@ -146,8 +156,9 @@
+@@ -146,19 +157,22 @@
       *
       * use %module(directors="1") modulename at the start of the 
       * interface file to enable director generation.
       */
 +    String* mod_docstring = NULL;
      {
-       Node *module = Getattr(n, "module");
-       if (module) {
-         Node *options = Getattr(module, "options");
-@@ -157,8 +168,9 @@
+-      Node *module = Getattr(n, "module");
+-      if (module) {
+-        Node *options = Getattr(module, "options");
++      Node *mod = Getattr(n, "module");
++      if (mod) {
++        Node *options = Getattr(mod, "options");
+         if (options) {
+           if (Getattr(options, "directors")) {
+             allow_directors();
            }
            if (Getattr(options, "dirprot")) {
  	    allow_dirprot();
            }
 +          mod_docstring = Getattr(options, "docstring");
++          package = Getattr(options, "package");
          }
        }
      }
  
-@@ -258,8 +270,13 @@
+@@ -258,8 +272,13 @@
            Printv(f_shadow,
                   "# This file is compatible with both classic and new-style classes.\n",
                   NIL);
@@ -58,7 +74,37 @@ diff -u -4 -r1.40 python.cxx
        Printf(f_shadow,"\nimport %s\n\n", module);
  
        if (! modern) {
-@@ -417,17 +434,25 @@
+@@ -382,9 +401,28 @@
+   virtual int importDirective(Node *n) {
+     if (shadow) {
+       String *modname = Getattr(n,"module");
+       if (modname) {
+-	Printf(f_shadow,"import %s\n", modname);
++        Printf(f_shadow,"import ");
++
++        // Find the module node for this imported module.  It should be the
++        // first child but search just in case.
++        Node* mod = firstChild(n);
++        while (mod && Strcmp(nodeType(mod), "module") != 0)
++          mod = nextSibling(mod);
++          
++        // Is the imported module in another package?  (IOW, does it use the
++        // %module(package="name") option and it's different than the package
++        // of this module.)
++        Node *options = Getattr(mod, "options");
++        if (options && Getattr(options, "package")) {
++          String* pkg = Getattr(options, "package");
++          if (!package || Strcmp(pkg, package) != 0)
++            Printf(f_shadow, "%s.", Getattr(options, "package"));
++        }
++
++        // finally, output the name of the imported module
++	Printf(f_shadow, "%s\n", modname);
+       }
+     }
+     return Language::importDirective(n);
+   }
+@@ -417,17 +455,25 @@
     *    functions.
     * ------------------------------------------------------------ */
  
@@ -89,7 +135,7 @@ diff -u -4 -r1.40 python.cxx
    }
  
  
-@@ -441,24 +466,303 @@
+@@ -441,24 +487,303 @@
    }
  
  
@@ -401,7 +447,27 @@ diff -u -4 -r1.40 python.cxx
      if (*t == '{') {
        Delitem(str ,0);
        Delitem(str,DOH_END);
-@@ -1731,9 +2035,11 @@
+@@ -1657,9 +1982,18 @@
+       mod = Getattr(n,"module");
+       if (mod) {
+ 	String *modname = Getattr(mod,"name");
+ 	if (Strcmp(modname,mainmodule) != 0) {
+-	  importname = NewStringf("%s.%s", modname, Getattr(n,"sym:name"));
++          // check if the module has a package option
++          String* pkg = NULL;
++          Node *options = Getattr(mod, "options");
++          if (options && Getattr(options, "package")) 
++            pkg = Getattr(options, "package");
++
++          if (!package || Strcmp(pkg, package) != 0)
++            importname = NewStringf("%s.%s.%s", pkg, modname, Getattr(n,"sym:name"));
++          else
++            importname = NewStringf("%s.%s", modname, Getattr(n,"sym:name"));
+ 	} else {
+ 	  importname = NewString(Getattr(n,"sym:name"));
+ 	}
+ 	Setattr(n,"python:proxy",importname);
+@@ -1731,9 +2065,11 @@
  	  Printf(f_shadow, modern ? "(object)" : "(_object)");
  	}
        }
@@ -414,7 +480,7 @@ diff -u -4 -r1.40 python.cxx
          Printv(f_shadow,tab4,"__swig_setmethods__ = {}\n",NIL);
          if (Len(base_class)) {
            Printf(f_shadow,"%sfor _s in [%s]: __swig_setmethods__.update(_s.__swig_setmethods__)\n",tab4,base_class);
-@@ -1866,16 +2172,24 @@
+@@ -1866,16 +2202,24 @@
  	  Delete(pyaction);
  	  Printv(f_shadow,pycode,"\n",NIL);
  	} else {
@@ -446,7 +512,7 @@ diff -u -4 -r1.40 python.cxx
          }
  
        }
-@@ -1890,14 +2204,22 @@
+@@ -1890,14 +2234,22 @@
    virtual int staticmemberfunctionHandler(Node *n) {
      String *symname = Getattr(n,"sym:name");
      Language::staticmemberfunctionHandler(n);
@@ -473,7 +539,7 @@ diff -u -4 -r1.40 python.cxx
                 " = staticmethod(", symname, ")\n", NIL);
  
          if (!modern) {
-@@ -1982,8 +2304,12 @@
+@@ -1982,8 +2334,12 @@
   	    }
  
              Printv(f_shadow, tab4, "def __init__(self, *args",
@@ -486,7 +552,7 @@ diff -u -4 -r1.40 python.cxx
              if (!modern) {
                Printv(f_shadow, tab8, "_swig_setattr(self, ", rclassname, ", 'this', ", 
                       funcCallHelper(Swig_name_construct(symname), allow_kwargs), ")\n", NIL);
-@@ -1996,10 +2322,10 @@
+@@ -1996,10 +2352,10 @@
                Printv(f_shadow, tab8, "self.this = newobj.this\n", NIL);
                Printv(f_shadow, tab8, "self.thisown = 1\n", NIL);
                Printv(f_shadow, tab8, "del newobj.thisown\n", NIL);
@@ -499,7 +565,7 @@ diff -u -4 -r1.40 python.cxx
    	  }
  	  have_constructor = 1;
  	} else {
-@@ -2015,13 +2341,17 @@
+@@ -2015,13 +2371,17 @@
  	  } else {
  
              Printv(f_shadow_stubs, "\ndef ", symname, "(*args",
@@ -519,7 +585,7 @@ diff -u -4 -r1.40 python.cxx
    	  }
  	}
        }
-@@ -2048,13 +2378,18 @@
+@@ -2048,13 +2408,18 @@
  	Delete(pyaction);
  	Printv(f_shadow,pycode,"\n", NIL);
        } else {
