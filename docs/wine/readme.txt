@@ -1,5 +1,5 @@
 
-  Welcome to wxWindows/Wine 2.1 snapshot 6,
+  Welcome to wxWindows/Wine 2.1 snapshot 7,
 
 you have downloaded version 2.1 of the WINE port of 
 the wxWindows GUI library. This is a developers release

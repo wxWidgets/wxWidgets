@@ -1,5 +1,5 @@
 
-20th June '99: wxWINE 2.1 snapshot 6 released
+22th June '99: wxWINE 2.1 snapshot 7 released
 
 The numbering is just in synch with the wxGTK numbering as this
 is actually the first ever release of wxWINE.

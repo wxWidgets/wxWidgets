@@ -4,7 +4,7 @@
 ##
 ## Process this file with automake to produce Makefile.in
 
-AUTOMAKE_OPTIONS = 1.3 
+AUTOMAKE_OPTIONS = 1.3
 # no-dependencies
 
 SUFFIXES = .cpp .c
@@ -18,6 +18,12 @@ EXTRA_DIST = "${srcdir}/../common ${srcdir}/../generic ${srcdir}"
 
 lib_LTLIBRARIES = @WX_LIBRARY_NAME@
 EXTRA_LTLIBRARIES = libwx_motif.la libwx_gtk.la libwx_msw.la
+
+# empty GTK library
+libwx_gtk_la_SOURCES =
+
+# empty MSW/WINE library
+libwx_msw_la_SOURCES =
 
 # these are the common files which always make part of the library
 libwx_motif_la_SOURCES = \

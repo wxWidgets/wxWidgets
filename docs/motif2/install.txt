@@ -1,0 +1,375 @@
+
+  !!! When sending bug reports tell us what version of wxWindows you are 
+      using (including the beta) and what compiler on what system. One 
+      example: wxMotif 2.1 beta 6, egcs 1.1.1, Redhat 5.0 !!!
+
+* The most simple case
+-----------------------
+
+If you compile wxWindows on Unix for the first time and don't like to read 
+install instructions just do (in the base dir):
+
+./configure --with-motif
+make
+su <type root password>
+make install
+ldconfig
+exit
+
+If you want to remove wxWindows on Unix you can do this:
+
+su <type root password>
+make uninstall
+ldconfig
+exit
+
+* The expert case
+-----------------
+
+If you want to do some more serious cross-platform programming with wxWindows, 
+such as for GTK and Motif, you can now build two complete libraries and use 
+them concurretly. For this end, you have to create a directory for each build 
+of wxWindows - you may also want to create different versions of wxWindows
+and test them concurrently. Most typically, this would be a version configured 
+with --enable-debug_flag and one without. Note, that only one build can currently 
+be installed, so you'd have to use local version of the library for that purpose.
+For building three versions (one GTK, one Motif and a debug version of the GTK 
+source) you'd do this:
+
+md buildmotif
+cd buildmotif
+../configure --with-motif
+make
+cd ..
+
+md buildgtk
+cd buildgtk
+../configure --with-gtk
+make
+cd ..
+
+md buildgtkd
+cd buildgtkd
+../configure --with-gtk --enable-debug_flag
+make
+cd ..
+
+* The most simple errors
+------------------------
+
+You get errors during compilation: The reason is that you probably have a broken 
+compiler, which includes almost everything that is called gcc. If you use gcc 2.8 
+you have to disable optimsation as the compiler will give up with an internal 
+compiler error.
+
+If there is just any way for you to use egcs, use egcs. We cannot fix gcc.
+
+You get immediate segfault when starting any sample or application: This is either 
+due to having compiled the library with different flags or options than your program - 
+typically you might have the __WXDEBUG__ option set for the library but not for your 
+program - or due to using a broken compiler (and its optimisation) such as GCC 2.8.
+
+* The most simple program
+-------------------------
+
+Now create your super-application myfoo.app and compile anywhere with
+
+g++ myfoo.cpp `wx-config --libs --cflags` -o myfoo
+
+* General
+-----------------------
+
+The Unix variants of wxWindows use GNU configure. If you have problems with your 
+make use GNU make instead.
+
+If you have general problems with installation, read my homepage at 
+
+  http://wesley.informatik.uni-freiburg.de/~wxxt
+  
+for newest information. If you still don't have any success, please send a bug 
+report to one of our mailing lists (see my homepage) INCLUDING A DESCRIPTION OF 
+YOUR SYSTEM AND YOUR PROBLEM, SUCH AS YOUR VERSION OF GTK, WXGTK, WHAT DISTRIBUTION 
+YOU USE AND WHAT ERROR WAS REPORTED. I know this has no effect, but I tried...
+
+* GUI libraries
+-----------------------
+
+wxWindows/Motif requires the Motif library to be installed on your system. As
+an alternative, you may also use the free library "lesstif" which implements
+most of the Motif API without the licence restrictions of Motif.
+
+You can get the newest version of the Lesstif from the lesstif homepage at:
+
+  http://www.lesstif.org
+  
+* Additional libraries
+-----------------------
+
+wxWindows/Motif requires a thread library and X libraries known to work with threads. 
+This is the case on all commercial Unix-Variants and all Linux-Versions that are 
+based on glibc 2 except RedHat 5.0 which is broken in many aspects. As of writing 
+this, these Linux distributions have correct glibc 2 support:
+
+ - RedHat 5.1
+ - Debian 2.0
+ - Stampede
+ - DLD 6.0
+ - SuSE 6.0
+ 
+You can disable thread support by running 
+
+./configure "--disable-threads"
+make
+su <type root password>
+make install
+ldconfig
+exit
+  
+NB: DO NOT COMPILE WXGTK WITH GCC AND THREADS, SINCE ALL PROGRAMS WILL CRASH UPON 
+START-UP! Just always use egcs and be happy.
+
+* Building wxMotif on SGI
+--------------------------
+
+Using the SGI native compilers, it is recommended that you
+also set CFLAGS and CXXFLAGS before running configure. These 
+should be set to :
+
+CFLAGS="-mips3 -n32" 
+CXXFLAGS="-mips3 -n32"
+
+This is essential if you want to use the resultant binaries 
+on any other machine than the one it was compiled on. If you 
+have a 64bit machine (Octane) you should also do this to ensure 
+you don't accidently build the libraries as 64bit (which is 
+untested).
+
+The SGI native compiler support has only been tested on Irix 6.5.
+
+* Create your configuration
+-----------------------------
+
+Usage:
+	./configure options
+
+If you want to use system's C and C++ compiler,
+set environment variables CC and CCC as
+
+	% setenv CC cc
+	% setenv CCC CC
+	% ./configure options
+
+to see all the options please use:
+
+	./configure --help
+
+The basic philosophy is that if you want to use different
+configurations, like a debug and a release version, 
+or use the same source tree on different systems,
+you have only to change the environment variable OSTYPE.
+(Sadly this variable is not set by default on some systems
+in some shells - on SGI's for example). So you will have to 
+set it there. This variable HAS to be set before starting 
+configure, so that it knows which system it tries to 
+configure for.
+
+Configure will complain if the system variable OSTYPE has 
+not been defined. And Make in some circumstances as well...
+
+
+* General options
+-------------------
+
+Given below are the commands to change the default behaviour,
+i.e. if it says "--disable-threads" it means that threads
+are enabled by default.
+
+Many of the confiugre options have been thoroughly tested
+in wxWindows snapshot 6, but not yet all (ODBC not).
+
+You have to add --with-motif on platforms, where Motif is
+not the default (on Linux, configure will deafult to GTK).
+
+        --without-gtk            Don't use the GIMP ToolKit (GTK)
+	
+	--with-motif             Use either Motif or Lesstif
+	                         Configure will look for both. 
+
+The following options handle the kind of library you want to build.
+
+	--disable-threads       Compile without thread support. Threads
+	                        support is also required for the
+				socket code to work.
+
+	--disable-shared        Do not create shared libraries.
+
+	--disable-optimise	Do not optimise the code. Can
+	                        sometimes be useful for debugging
+				and is required on some architectures
+				such as Sun with gcc 2.8.X which
+				would otherwise produce segvs.
+
+	--enable-profile        Add profiling info to the object 
+				files. Currently broken, I think.
+				
+	--enable-no_rtti        Enable compilation without creation of
+	                        C++ RTTI information in object files. 
+				This will speed-up compilation and reduce 
+				binary size.
+				
+	--enable-no_exceptions  Enable compilation without creation of
+	                        C++ exception information in object files. 
+				This will speed-up compilation and reduce 
+				binary size. Also fewer crashes during the
+				actual compilation...
+				
+	--enable-mem_tracing    Add built-in memory tracing. 
+				
+	--enable-dmalloc        Use the dmalloc memory debugger.
+	                        Read more at www.letters.com/dmalloc/
+				
+	--enable-debug_info	Add debug info to object files and
+	                        executables for use with debuggers
+				such as gdb (or its many frontends).
+
+	--enable-debug_flag	Define __DEBUG__ and __WXDEBUG__ when
+	                        compiling. This enable wxWindows' very
+				useful internal debugging tricks (such
+				as automatically reporting illegal calls)
+				to work. Note that program and library
+				must be compiled with the same debug 
+				options.
+
+* Feature Options
+-------------------
+
+Many of the confiugre options have been thoroughly tested
+in wxWindows snapshot 6, but not yet all (ODBC not).
+
+When producing an executable that is linked statically with wxGTK
+you'll be surprised at its immense size. This can sometimes be
+drastically reduced by removing features from wxWindows that 
+are not used in your program. The most relevant such features
+are
+
+	--without-libpng	Disables PNG image format code.
+	
+	--without-libjpeg	Disables JPEG image format code.
+	
+{	--without-odbc          Disables ODBC code. Not yet. }
+	
+        --disable-resources     Disables the use of *.wxr type
+	                        resources.
+		
+	--disable-threads       Disables threads. Will also
+	                        disable sockets.
+
+	--disable-sockets       Disables sockets.
+
+	--disable-dnd           Disables Drag'n'Drop.
+	
+	--disable-clipboard     Disables Clipboard.
+	
+	--disable-serial        Disables object instance serialiasation.
+	
+	--disable-streams       Disables the wxStream classes.
+	
+	--disable-file          Disables the wxFile class.
+	
+	--disable-textfile      Disables the wxTextFile class.
+	
+	--disable-intl          Disables the internationalisation.
+	
+	--disable-validators    Disables validators.
+	
+	--disable-accel         Disables accel.
+	
+Apart from disabling certain features you can very often "strip"
+the program of its debugging information resulting in a significant
+reduction in size.
+
+* Compiling
+-------------
+
+The following must be done in the base directory (e.g. ~/wxGTK
+or ~/wxWin or whatever)
+
+Now the makefiles are created (by configure) and you can compile 
+the library by typing:
+
+	make
+
+make yourself some coffee, as it will take some time. On an old
+386SX possibly two weeks. During compilation, you'll get a few 
+warning messages depending in your compiler.
+
+If you want to be more selective, you can change into a specific
+directiry and type "make" there.
+
+Then you may install the library and it's header files under
+/usr/local/include/wx and /usr/local/lib respectively. You
+have to log in as root (i.e. run "su" and enter the root
+password) and type
+
+        make install	
+
+You can remove any traces of wxWindows by typing
+
+        make uninstall
+	
+If you want to save disk space by removing unnecessary
+object-files:
+
+	 make clean
+
+in the various directories will do the work for you.
+
+* Creating a new Project
+--------------------------
+
+1) The first way uses the installed libraries and header files
+automatically using wx-config
+
+g++ myfoo.cpp `wx-config --libs` `wx-config --cflags` -o myfoo
+
+Using this way, a make file for the minimal sample would look
+like this
+
+CC = g++
+
+minimal: minimal.o
+    $(CC) -o minimal minimal.o `wx-config --libs` 
+
+minimal.o: minimal.cpp mondrian.xpm
+    $(CC) `wx-config --cflags` -c minimal.cpp -o minimal.o
+
+clean: 
+	rm -f *.o minimal
+
+This is certain to become the standard way unless we decide
+to sitch to tmake.
+
+2) The other way creates a project within the source code 
+directories of wxWindows. For this endeavour, you'll need
+the usual number of GNU tools, at least
+
+GNU automake version 1.4
+GNU autoheader version 2.14
+GNU autoconf version 2.14
+GNU libtool version 1.2 (1.3 seems broken)
+
+and quite possibly 
+
+GNU make
+GNU C++
+
+and if you have all this then you probably know enough to
+go ahead yourself :-)
+
+----------------------
+
+In the hope that it will be useful,
+
+        Robert Roebling <roebling@sun2.ruf.uni-freiburg.de>
+	
+	

@@ -1,8 +1,11 @@
 ## Purpose: The automake makefile for wxWindows (src/msw subdirectory)
-## Author:  Phil Blecker, Vadim Zeitlin
+## Author:  Phil Blecker, Vadim Zeitlin, Robert Roebling
 ## Version: $Id$
 ##
 ## Process this file with automake to produce Makefile.in
+
+AUTOMAKE_OPTIONS = 1.3
+# no-dependencies
 
 SUFFIXES = .cpp .c
 
@@ -15,6 +18,12 @@ EXTRA_DIST = "${srcdir}/../common ${srcdir}/../generic ${srcdir}"
 
 lib_LTLIBRARIES = @WX_LIBRARY_NAME@
 EXTRA_LTLIBRARIES = libwx_gtk.la libwx_motif.la libwx_msw.la
+
+# empty Motif library
+libwx_motif_la_SOURCES =
+
+# empty GTK library
+libwx_gtk_la_SOURCES =
 
 # these are the common files which always make part of the library
 libwx_msw_la_SOURCES = \

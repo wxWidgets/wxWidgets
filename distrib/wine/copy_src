@@ -656,4 +656,4 @@ cp *.xpm ~/wxwine_dist/wxWINE/samples/wxsocket
 cd ../..
 
 cd ~/wxwine_dist
-tar ch wxWINE | gzip -f9 > wxWINE-2.1.0-b6.tgz
+tar ch wxWINE | gzip -f9 > wxWINE-2.1.0-b7.tgz

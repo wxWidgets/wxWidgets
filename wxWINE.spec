@@ -1,7 +1,7 @@
 # Note that this is NOT a relocatable package
 %define pref /usr
 %define ver 2.1.0
-%define rel 6
+%define rel 7
 
 Summary: The WINE port of the wxWindows library
 Name: wxWINE
@@ -9,7 +9,7 @@ Version: %{ver}
 Release: %{rel}
 Copyright: wxWindows Licence
 Group: X11/Libraries
-Source: ftp://wesley.informatik.uni-freiburg.de/pub/linux/wxxt/source/wxWINE-2.1.0-b6.tgz
+Source: ftp://wesley.informatik.uni-freiburg.de/pub/linux/wxxt/source/wxWINE-2.1.0-b7.tgz
 URL: http://wesley.informatik.uni-freiburg.de/~wxxt/docs.html
 Packager: Robert Roebling <roebling@ruf.uni-freiburg.de>
 BuildRoot: /tmp/wxwine_root
