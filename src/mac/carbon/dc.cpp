@@ -2041,6 +2041,7 @@ void wxDC::MacInstallPen() const
 	        case wxUSER_DASH :
 	            {
 	                wxDash* dash ;
+                    int number = m_pen.GetDashes(&dash) ;
 	                // right now we don't allocate larger pixmaps
 	                for ( int i = 0 ; i < 8 ; ++i )
 	                {
