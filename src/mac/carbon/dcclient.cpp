@@ -230,6 +230,15 @@ wxClientDC::wxClientDC(wxWindow *window)
 
 wxClientDC::~wxClientDC()
 {
+#if wxMAC_USE_CORE_GRAPHICS
+/*
+    if ( m_window->MacGetCGContextRef() == 0)
+    {
+        CGContextRef cgContext = dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext() ;
+        CGContextFlush( cgContext ) ;
+    }
+*/
+#endif
 }
 
 void wxClientDC::DoGetSize(int *width, int *height) const

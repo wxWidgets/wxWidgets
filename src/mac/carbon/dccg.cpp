@@ -205,11 +205,12 @@ wxMacCGContext::~wxMacCGContext()
 {
     if ( m_cgContext )
     {
+        CGContextSynchronize( m_cgContext ) ;
         CGContextRestoreGState( m_cgContext ) ;
         CGContextRestoreGState( m_cgContext ) ;
     }
     if ( m_qdPort )
-        QDEndCGContext( m_qdPort , &m_cgContext ) ;
+        CGContextRelease( m_cgContext ) ;
 }
 
 
@@ -281,7 +282,7 @@ CGContextRef wxMacCGContext::GetNativeContext()
     {
         Rect bounds ;
         GetPortBounds( (CGrafPtr) m_qdPort , &bounds ) ;
-        OSStatus status = QDBeginCGContext( (CGrafPtr) m_qdPort , &m_cgContext ) ;
+        OSStatus status = CreateCGContextForPort((CGrafPtr) m_qdPort , &m_cgContext) ;
         CGContextSaveGState( m_cgContext ) ;
 
         wxASSERT_MSG( status == noErr , wxT("Cannot nest wxDCs on the same window") ) ;
@@ -1272,35 +1273,64 @@ bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
         xsrcMask = xsrc; ysrcMask = ysrc;
     }
 
+    wxCoord yysrc = source->YLOG2DEVMAC(ysrc) ;
+    wxCoord xxsrc = source->XLOG2DEVMAC(xsrc)  ;
+    wxCoord wwsrc = source->XLOG2DEVREL(width ) ;
+    wxCoord hhsrc = source->YLOG2DEVREL(height) ;
+    
+    wxCoord yydest = YLOG2DEVMAC(ydest) ;
+    wxCoord xxdest = XLOG2DEVMAC(xdest) ;
+    wxCoord wwdest = XLOG2DEVREL(width ) ;
+    wxCoord hhdest = YLOG2DEVREL(height) ;
+    
     wxMemoryDC* memdc = dynamic_cast<wxMemoryDC*>(source) ;
     if ( memdc && logical_func == wxCOPY )
     {
         wxBitmap blit = memdc->GetSelectedObject() ;
         wxASSERT_MSG( blit.Ok() , wxT("Invalid bitmap for blitting") ) ;
 
-        wxCoord xxdest = XLOG2DEVMAC(xdest);
-        wxCoord yydest = YLOG2DEVMAC(ydest);
-        wxCoord ww = XLOG2DEVREL(width);
-        wxCoord hh = YLOG2DEVREL(height);
-
         wxCoord bmpwidth = blit.GetWidth();
         wxCoord bmpheight = blit.GetHeight();
         
-        if ( xsrc != 0 || ysrc != 0 || bmpwidth != width || bmpheight != height )
+        if ( xxsrc != 0 || yysrc != 0 || bmpwidth != wwsrc || bmpheight != hhsrc )
         {
-            wxRect subrect( xsrc, ysrc, width , height ) ;
-            blit = blit.GetSubBitmap( subrect ) ;
+            wwsrc = wxMin( wwsrc , bmpwidth - xxsrc ) ;
+            hhsrc = wxMin( hhsrc , bmpheight - yysrc ) ;
+            if ( wwsrc > 0 && hhsrc > 0 )
+            {
+                if ( xxsrc >= 0 && yysrc >= 0 )
+                {
+                    wxRect subrect( xxsrc, yysrc, wwsrc , hhsrc ) ;
+                    blit = blit.GetSubBitmap( subrect ) ;
+                }
+                else
+                {
+                    // in this case we'd probably have to adjust the different coordinates, but
+                    // we have to find out proper contract first
+                    blit = wxNullBitmap ;
+                }
+            }
+            else
+            {
+                blit = wxNullBitmap ;
+            }
         }
-        
-        CGContextRef cg = dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext() ;
-        CGImageRef image = (CGImageRef)( blit.CGImageCreate() ) ;
-        HIRect r = CGRectMake( xxdest , yydest , ww , hh ) ;
-        HIViewDrawCGImage( cg , &r , image ) ;
-        CGImageRelease( image ) ;
+        if ( blit.Ok() )
+        {
+            CGContextRef cg = dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext() ;
+            CGImageRef image = (CGImageRef)( blit.CGImageCreate() ) ;
+            HIRect r = CGRectMake( xxdest , yydest , wwdest , hhdest ) ;
+            HIViewDrawCGImage( cg , &r , image ) ;
+            CGImageRelease( image ) ;
+        }
            
     }
     else
     {
+    /*
+        CGContextRef cg = dynamic_cast<wxMacCGContext*>(source->GetGraphicContext())->GetNativeContext() ;
+        void *data = CGBitmapContextGetData( cg ) ;
+    */
         return FALSE ; // wxFAIL_MSG( wxT("Blitting is only supported from bitmap contexts") ) ;
     }
     return TRUE;
@@ -1695,35 +1725,38 @@ void wxDC::MacInstallFont() const
         m_macATSUIStyle = NULL ;
     }
 
-    OSStatus status = noErr ;
-    status = ATSUCreateAndCopyStyle( (ATSUStyle) m_font.MacGetATSUStyle() , (ATSUStyle*) &m_macATSUIStyle ) ;
-    wxASSERT_MSG( status == noErr , wxT("couldn't set create ATSU style") ) ;
-
-    Fixed atsuSize = IntToFixed( int(m_scaleY * m_font.MacGetFontSize()) ) ;
-    RGBColor atsuColor = MAC_WXCOLORREF( m_textForegroundColour.GetPixel() ) ;
-    ATSUAttributeTag atsuTags[] =
+    if ( m_font.Ok() )
     {
-            kATSUSizeTag ,
-            kATSUColorTag ,
-    } ;
-    ByteCount atsuSizes[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
-    {
-            sizeof( Fixed ) ,
-            sizeof( RGBColor ) ,
-    } ;
-//    Boolean kTrue = true ;
-//    Boolean kFalse = false ;
+        OSStatus status = noErr ;
+        status = ATSUCreateAndCopyStyle( (ATSUStyle) m_font.MacGetATSUStyle() , (ATSUStyle*) &m_macATSUIStyle ) ;
+        wxASSERT_MSG( status == noErr , wxT("couldn't set create ATSU style") ) ;
 
-//    ATSUVerticalCharacterType kHorizontal = kATSUStronglyHorizontal;
-    ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
-    {
-            &atsuSize ,
-            &atsuColor ,
-    } ;
-    status = ::ATSUSetAttributes((ATSUStyle)m_macATSUIStyle, sizeof(atsuTags)/sizeof(ATSUAttributeTag) ,
-        atsuTags, atsuSizes, atsuValues);
+        Fixed atsuSize = IntToFixed( int(m_scaleY * m_font.MacGetFontSize()) ) ;
+        RGBColor atsuColor = MAC_WXCOLORREF( m_textForegroundColour.GetPixel() ) ;
+        ATSUAttributeTag atsuTags[] =
+        {
+                kATSUSizeTag ,
+                kATSUColorTag ,
+        } ;
+        ByteCount atsuSizes[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
+        {
+                sizeof( Fixed ) ,
+                sizeof( RGBColor ) ,
+        } ;
+    //    Boolean kTrue = true ;
+    //    Boolean kFalse = false ;
 
-    wxASSERT_MSG( status == noErr , wxT("couldn't Modify ATSU style") ) ;
+    //    ATSUVerticalCharacterType kHorizontal = kATSUStronglyHorizontal;
+        ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
+        {
+                &atsuSize ,
+                &atsuColor ,
+        } ;
+        status = ::ATSUSetAttributes((ATSUStyle)m_macATSUIStyle, sizeof(atsuTags)/sizeof(ATSUAttributeTag) ,
+            atsuTags, atsuSizes, atsuValues);
+
+        wxASSERT_MSG( status == noErr , wxT("couldn't Modify ATSU style") ) ;
+    }
 }
 
 // ---------------------------------------------------------------------------
