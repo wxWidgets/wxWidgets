@@ -510,6 +510,7 @@ uninstall:
 	@-rmdir $(datadir)/wx/$(VER_MAJMIN)/afm
 	@-rmdir $(datadir)/wx/$(VER_MAJMIN)
 	@-rmdir $(datadir)/wx
+	@$(RM) $(datadir)/aclocal/wxwin.m4
 	@echo " Removing headers..."
 	@list='$(HEADERS)'; for p in $$list; do \
 	  $(RM) $(includedir)/wx/$$p; \
