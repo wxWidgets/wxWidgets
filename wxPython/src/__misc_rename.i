@@ -99,6 +99,9 @@
 %rename(NewId)                              wxNewId;
 %rename(RegisterId)                         wxRegisterId;
 %rename(GetCurrentId)                       wxGetCurrentId;
+%rename(IsStockID)                          wxIsStockID;
+%rename(IsStockLabel)                       wxIsStockLabel;
+%rename(GetStockLabel)                      wxGetStockLabel;
 %rename(Bell)                               wxBell;
 %rename(EndBusyCursor)                      wxEndBusyCursor;
 %rename(GetElapsedTime)                     wxGetElapsedTime;
