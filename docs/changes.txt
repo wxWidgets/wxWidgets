@@ -21,6 +21,10 @@ All:
 - significant speed optimizations in several classes
 - wxFont::operator==() fixed
 
+Unix:
+
+- support for OpenBSD added to configure (Dennis Taylor)
+
 wxBase:
 
 - wxLongLong compilation fixed for SGI native compiler

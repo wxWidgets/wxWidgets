@@ -504,6 +504,7 @@ USE_ALPHA=
 USE_OSF=
 USE_BSD=
 USE_FREEBSD=
+USE_OPENBSD=
 USE_NETBSD=
 USE_VMS=
 USE_ULTRIX=
@@ -590,6 +591,13 @@ case "${host}" in
     USE_FREEBSD=1
     AC_DEFINE(__FREEBSD__)
     AC_DEFINE(__BSD__)
+    DEFAULT_DEFAULT_wxUSE_GTK=1
+  ;;
+  *-*-openbsd*)
+    USE_BSD=1
+    USE_OPENBSD=1
+    AC_DEFINE(__FREEBSD__)
+    AC_DEFINE(__OPENBSD__)
     DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-netbsd*)
@@ -2063,7 +2071,7 @@ if test "$wxUSE_SHARED" = "yes"; then
         WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
         WX_ALL="CREATE_LINKS"
       ;;
-      *-*-freebsd* | *-*-netbsd*)
+      *-*-freebsd* | *-*-openbsd* | *-*-netbsd*)
         SHARED_LD="${CC} -shared -o"
         PIC_FLAG="-fPIC"
         WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
