@@ -756,6 +756,7 @@ bitmap.h	WXH
 bmpbuttn.h	WXH
 brush.h	WXH
 buffer.h	WXH	Base
+build.h	WXH	Base
 busyinfo.h	WXH
 button.h	WXH
 calctrl.h	WXH
