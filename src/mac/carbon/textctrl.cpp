@@ -300,6 +300,7 @@ public :
                              const wxSize& size, long style ) ;
     ~wxMacMLTEClassicControl() ;
     virtual void VisibilityChanged(bool shown) ;
+    virtual bool NeedsFocusRect() const;
 protected :
     OSStatus                 DoCreate();
 public :
@@ -2470,6 +2471,11 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
     TPActivatePaneText(m_macTXNvars, m_macTXNvars->fIsActive && m_macTXNvars->fInFocus);
     /* all done */
     return err;
+}
+
+bool wxMacMLTEClassicControl::NeedsFocusRect() const 
+{
+    return m_windowStyle & wxNO_BORDER ? false : true;
 }
 
 // ----------------------------------------------------------------------------
