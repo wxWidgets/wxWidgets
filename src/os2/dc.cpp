@@ -557,7 +557,7 @@ void wxDC::Clear()
     ::GpiErase(m_hPS);
 } // end of wxDC::Clear
 
-void wxDC::DoFloodFill(
+bool wxDC::DoFloodFill(
   wxCoord                           vX
 , wxCoord                           vY
 , const wxColour&                   rCol
@@ -567,6 +567,8 @@ void wxDC::DoFloodFill(
     POINTL                          vPtlPos;
     LONG                            lColor;
     LONG                            lOptions;
+    LONG                            lHits;
+    bool                            bSuccess = FALSE;
 
     vPtlPos.x = vX;             // Loads x-coordinate
     vPtlPos.y = OS2Y(vY,0);     // Loads y-coordinate
@@ -576,8 +578,9 @@ void wxDC::DoFloodFill(
     if(wxFLOOD_SURFACE == nStyle)
         lOptions = FF_SURFACE;
 
-    ::GpiFloodFill(m_hPS, lOptions, lColor);
-
+    if ((lHits = ::GpiFloodFill(m_hPS, lOptions, lColor)) != GPI_ERROR)
+        bSuccess = TRUE;
+    return TRUE;
 } // end of wxDC::DoFloodFill
 
 bool wxDC::DoGetPixel(
@@ -975,7 +978,14 @@ void wxDC::DoDrawRectangle(
     LONG                            lBorderColor;
     int                             nIsTRANSPARENT = 0;
 
-    vY = OS2Y(vY,vHeight);
+    //
+    // Might be a memory DC with no Paint rect
+    //
+    if (!(m_vRclPaint.yTop == 0 &&
+          m_vRclPaint.yBottom == 0 &&
+          m_vRclPaint.xRight == 0 &&
+          m_vRclPaint.xLeft == 0))
+        vY = OS2Y(vY,vHeight);
 
     wxCoord                         vX2 = vX + vWidth;
     wxCoord                         vY2 = vY + vHeight;
@@ -1030,6 +1040,17 @@ void wxDC::DoDrawRectangle(
                  ,0L
                  ,0L
                 );
+        //
+        // Debug testing:
+        //
+        for (int i = 0; i < vHeight; i++)
+        {
+            for (int j = 0; j < vHeight; j++)
+            {
+                vPoint[0].x = j; vPoint[0].y = i;
+                lColor = ::GpiQueryPel(m_hPS, &vPoint[0]);
+            }
+        }
     }
     CalcBoundingBox(vX, vY);
     CalcBoundingBox(vX2, vY2);

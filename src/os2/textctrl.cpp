@@ -1066,6 +1066,15 @@ void wxTextCtrl::OnChar(
     rEvent.Skip();
 } // end of wxTextCtrl::OnChar
 
+void wxTextCtrl::SetFocus()
+{
+    wxTextCtrlBase::SetFocus();
+    if ( !HasFlag(wxTE_MULTILINE) )
+    {
+        SetSelection(-1, -1);
+    }
+} // end of wxTextCtrl::SetFocus
+
 bool wxTextCtrl::OS2Command(
   WXUINT                            uParam
 , WXWORD                            WXUNUSED(vId)

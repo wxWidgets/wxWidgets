@@ -63,9 +63,10 @@ wxBitmapRefData::wxBitmapRefData()
 
 void wxBitmapRefData::Free()
 {
-    wxASSERT_MSG( !m_pSelectedInto,
-                  wxT("deleting bitmap still selected into wxMemoryDC") );
-
+    if ( m_pSelectedInto )
+    {
+        wxLogLastError("GpiDeleteBitmap(hbitmap)");
+    }
     if (m_hBitmap)
     {
         if (!::GpiDeleteBitmap((HBITMAP)m_hBitmap))
@@ -699,15 +700,6 @@ bool wxBitmap::CreateFromImage (
     //
     if (rImage.HasMask())
     {
-        hBmp = ::GpiCreateBitmap( hPS
-                                 ,&vHeader
-                                 ,0L
-                                 ,NULL
-                                 ,NULL
-                               );
-        memset(&vHeader, '\0', sizeof(BITMAPINFOHEADER2));
-        hBmpOld = ::GpiSetBitmap(hPS, hBmp);
-
         vHeader.cbFix     =  sizeof(BITMAPINFOHEADER2);
         vHeader.cx        = nWidth;
         vHeader.cy        = nHeight;
@@ -719,6 +711,7 @@ bool wxBitmap::CreateFromImage (
                                  ,NULL
                                  ,NULL
                                 );
+        hBmpOld = ::GpiSetBitmap(hPS, hBmp);
         if (nNumDIB == 1)
             nHeight = nBmpHeight;
         else
@@ -905,6 +898,7 @@ wxImage wxBitmap::ConvertToImage() const
                                 ,NULL
                                 ,NULL
                                );
+    ::GpiSetBitmap(hPSMem, hBitmap);
     lScans = ::GpiQueryBitmapBits( hPSMem
                                   ,0L
                                   ,(LONG)nHeight
@@ -931,6 +925,7 @@ wxImage wxBitmap::ConvertToImage() const
         }
         ptbits += nPadding;
     }
+    ::GpiSetBitmap(hPSMem, NULLHANDLE);
 
     //
     // Similarly, set data according to the possible mask bitmap
@@ -956,12 +951,14 @@ wxImage wxBitmap::ConvertToImage() const
                                                           );
         ::GpiSetColor(hMemPS, OS2RGB(0, 0, 0));
         ::GpiSetBackColor(hMemPS, OS2RGB(255, 255, 255) );
+        ::GpiSetBitmap(hMemPS, hBitmap);
         ::GpiQueryBitmapBits( hPSMem
                              ,0L
                              ,(LONG)nHeight
                              ,(PBYTE)lpBits
                              ,&vDIBInfo
                             );
+        ::GpiSetBitmap(hMemPS, NULLHANDLE);
         ::GpiDestroyPS(hMemPS);
         ::DevCloseDC(hMemDC);
 
@@ -1041,7 +1038,7 @@ wxBitmap wxBitmap::GetSubBitmap(
     HPS                             hPSSrc = ::GpiCreatePS(vHabmain, hDCSrc, &vSize, PU_PELS | GPIA_ASSOC);
     HPS                             hPSDst = ::GpiCreatePS(vHabmain, hDCDst, &vSize, PU_PELS | GPIA_ASSOC);
     POINTL                          vPoint[4] = { 0, 0, rRect.width, rRect.height,
-                                                  rRect.x, rRect.y
+                                                  rRect.x, rRect.y,
                                                   rRect.x + rRect.width, rRect.y + rRect.height
                                                 };
 

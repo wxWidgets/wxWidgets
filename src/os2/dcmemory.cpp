@@ -55,6 +55,7 @@ void wxMemoryDC::Init()
         // DrawText() to OPAQUE as required, otherwise always TRANSPARENT
         ::GpiSetBackMix( GetHPS(), BM_LEAVEALONE );
     }
+    memset(&m_vRclPaint, 0, sizeof(m_vRclPaint));
 } // end of wxMemoryDC::Init
 
 bool wxMemoryDC::CreateCompatible(
@@ -147,7 +148,7 @@ void wxMemoryDC::SelectObject(
 
     m_vSelectedBitmap = rBitmap;
 
-    WXHBITMAP                       hBmp = m_vSelectedBitmap.GetHBITMAP();
+    WXHBITMAP                       hBmp = rBitmap.GetHBITMAP();
 
     if (!hBmp)
         return;

@@ -118,6 +118,7 @@ public:
                               ,long lTo
                              );
     virtual void SetEditable(bool bEditable);
+    virtual void SetFocus(void);
     virtual void SetWindowStyleFlag(long lStyle);
 
     //

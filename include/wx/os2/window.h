@@ -390,8 +390,12 @@ public:
     bool HandleSysCommand( WXWPARAM wParam
                           ,WXLPARAM lParam
                          );
-    bool HandlePaletteChanged();
+    bool HandlePaletteChanged(void);
+    bool HandleQueryNewPalette(void);
     bool HandleSysColorChange(void);
+    bool HandleDisplayChange(void);
+    bool HandleCaptureChanged(WXHWND hBainedCapture);
+
     bool HandleCtlColor(WXHBRUSH* hBrush);
     bool HandleSetFocus(WXHWND hWnd);
     bool HandleKillFocus(WXHWND hWnd);

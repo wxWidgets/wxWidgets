@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  F:\DEV\WX2\WXWINDOWS\LIB\WX.lib
+;From library:  H:\DEV\WX2\WXWINDOWS\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1925,7 +1925,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -6027,7 +6027,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -6240,6 +6240,8 @@ EXPORTS
       __ct__15wxTextValidatorFlP8wxString
       ;wxTextValidator::Validate(wxWindow*)
       Validate__15wxTextValidatorFP8wxWindow
+      ;wxTextValidator::IsNotInCharExcludeList(const wxString&)
+      IsNotInCharExcludeList__15wxTextValidatorFRC8wxString
       ;wxConstructorForwxTextValidator()
       wxConstructorForwxTextValidator__Fv
       ;wxTextValidator::sm_eventTable
@@ -6249,6 +6251,8 @@ EXPORTS
       ;wxTextValidator::SetIncludeList(const wxStringList&)
       SetIncludeList__15wxTextValidatorFRC12wxStringList
       __vft15wxTextValidator8wxObject
+      ;wxTextValidator::IsInCharIncludeList(const wxString&)
+      IsInCharIncludeList__15wxTextValidatorFRC8wxString
       ;wxTextValidator::SetExcludeList(const wxStringList&)
       SetExcludeList__15wxTextValidatorFRC12wxStringList
       ;wxTextValidator::OnChar(wxKeyEvent&)
@@ -7927,7 +7931,8 @@ EXPORTS
       wxConstructorForwxGridEditorCreatedEvent__Fv
       ;wxConstructorForwxGridCornerLabelWindow()
       wxConstructorForwxGridCornerLabelWindow__Fv
-      __vft24wxGridCellStringRenderer16wxGridCellWorker
+      __vft22wxGridCellNumberEditor21wxClientDataContainer
+      __vft22wxGridCellBoolRenderer21wxClientDataContainer
       ;wxGrid::~wxGrid()
       __dt__6wxGridFv
       ;wxGridCellWithAttrArray::~wxGridCellWithAttrArray()
@@ -8118,9 +8123,11 @@ EXPORTS
       ;wxGridCellBoolRenderer::ms_sizeCheckMark
       ms_sizeCheckMark__22wxGridCellBoolRenderer
       __vft6wxGrid14wxScrollHelper
-      __vft24wxGridCellNumberRenderer16wxGridCellWorker
-      __vft22wxGridCellBoolRenderer16wxGridCellWorker
-      __vft20wxGridCellTextEditor16wxGridCellWorker
+      __vft22wxGridCellChoiceEditor21wxClientDataContainer
+      __vft22wxGridCellAttrProvider21wxClientDataContainer
+      __vft21wxGridCellFloatEditor21wxClientDataContainer
+      __vft20wxGridCellTextEditor21wxClientDataContainer
+      __vft15wxGridTableBase21wxClientDataContainer
       ;wxGridCellAttrProvider::~wxGridCellAttrProvider()
       __dt__22wxGridCellAttrProviderFv
       ;wxGridTypeRegistry::~wxGridTypeRegistry()
@@ -8315,11 +8322,9 @@ EXPORTS
       wxConstructorForwxGridRowLabelWindow__Fv
       ;wxGridCellEditorEvtHandler::sm_classwxGridCellEditorEvtHandler
       sm_classwxGridCellEditorEvtHandler__26wxGridCellEditorEvtHandler
-      __vft22wxGridCellNumberEditor16wxGridCellWorker
-      __vft22wxGridCellAttrProvider
-      __vft21wxGridCellFloatEditor16wxGridCellWorker
-      __vft20wxGridCellBoolEditor16wxGridCellWorker
-      __vft16wxGridCellWorker
+      __vft24wxGridCellStringRenderer21wxClientDataContainer
+      __vft24wxGridCellNumberRenderer21wxClientDataContainer
+      __vft20wxGridCellBoolEditor21wxClientDataContainer
       ;wxGridStringTable::~wxGridStringTable()
       __dt__17wxGridStringTableFv
       ;wxGridWindow::~wxGridWindow()
@@ -8503,7 +8508,8 @@ EXPORTS
       __dt__16wxGridCellEditorFv
       ;wxConstructorForwxGridStringTable()
       wxConstructorForwxGridStringTable__Fv
-      __vft16wxGridCellEditor16wxGridCellWorker
+      __vft17wxGridStringTable21wxClientDataContainer
+      __vft16wxGridCellEditor21wxClientDataContainer
       ;wxGridStringTable::wxGridStringTable()
       __ct__17wxGridStringTableFv
       ;wxGrid::ShowCellEditControl()
@@ -8689,8 +8695,8 @@ EXPORTS
       wxConstructorForwxGridColLabelWindow__Fv
       ;wxGridCellEditorEvtHandler::sm_eventTableEntries
       sm_eventTableEntries__26wxGridCellEditorEvtHandler
-      __vft23wxGridCellFloatRenderer16wxGridCellWorker
-      __vft22wxGridCellChoiceEditor16wxGridCellWorker
+      __vft23wxGridCellFloatRenderer21wxClientDataContainer
+      __vft16wxGridCellWorker21wxClientDataContainer
       ;wxGridRowOrColAttrData::~wxGridRowOrColAttrData()
       __dt__22wxGridRowOrColAttrDataFv
       ;wxGridCellCoordsArray::~wxGridCellCoordsArray()
@@ -8779,11 +8785,12 @@ EXPORTS
       Draw__22wxGridCellEnumRendererFR6wxGridR14wxGridCellAttrR4wxDCRC6wxRectiT5Ul
       ;wxGridCellDateTimeRenderer::wxGridCellDateTimeRenderer(wxString,wxString)
       __ct__26wxGridCellDateTimeRendererF8wxStringT1
+      __vft20wxGridCellEnumEditor21wxClientDataContainer
       ;wxGridCellDateTimeRenderer::Draw(wxGrid&,wxGridCellAttr&,wxDC&,const wxRect&,int,int,unsigned long)
       Draw__26wxGridCellDateTimeRendererFR6wxGridR14wxGridCellAttrR4wxDCRC6wxRectiT5Ul
       ;wxGridCellAutoWrapStringRenderer::GetBestSize(wxGrid&,wxGridCellAttr&,wxDC&,int,int)
       GetBestSize__32wxGridCellAutoWrapStringRendererFR6wxGridR14wxGridCellAttrR4wxDCiT4
-      __vft32wxGridCellAutoWrapStringRenderer16wxGridCellWorker
+      __vft22wxGridCellEnumRenderer21wxClientDataContainer
       ;wxGridCellDateTimeRenderer::SetParameters(const wxString&)
       SetParameters__26wxGridCellDateTimeRendererFRC8wxString
       ;wxGridCellEnumRenderer::SetParameters(const wxString&)
@@ -8796,8 +8803,8 @@ EXPORTS
       Draw__32wxGridCellAutoWrapStringRendererFR6wxGridR14wxGridCellAttrR4wxDCRC6wxRectiT5Ul
       ;wxGridCellDateTimeRenderer::Clone() const
       Clone__26wxGridCellDateTimeRendererCFv
-      __vft22wxGridCellEnumRenderer16wxGridCellWorker
-      __vft20wxGridCellEnumEditor16wxGridCellWorker
+      __vft30wxGridCellAutoWrapStringEditor21wxClientDataContainer
+      __vft26wxGridCellDateTimeRenderer21wxClientDataContainer
       ;wxGridCellDateTimeRenderer::GetString(wxGrid&,int,int)
       GetString__26wxGridCellDateTimeRendererFR6wxGridiT2
       ;wxGridCellEnumRenderer::GetString(wxGrid&,int,int)
@@ -8814,8 +8821,7 @@ EXPORTS
       GetTextLines__32wxGridCellAutoWrapStringRendererFR6wxGridR4wxDCR14wxGridCellAttrRC6wxRectiT5
       ;wxGridCellEnumRenderer::Clone() const
       Clone__22wxGridCellEnumRendererCFv
-      __vft30wxGridCellAutoWrapStringEditor16wxGridCellWorker
-      __vft26wxGridCellDateTimeRenderer16wxGridCellWorker
+      __vft32wxGridCellAutoWrapStringRenderer21wxClientDataContainer
   ;From object file:  ..\generic\gridsel.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxGridSelection::SelectBlock(int,int,int,int,unsigned long,unsigned long,unsigned long,unsigned long,unsigned long)
@@ -14271,6 +14277,8 @@ EXPORTS
       Copy__10wxTextCtrlFv
       ;wxTextCtrl::SetStyle(long,long,const wxTextAttr&)
       SetStyle__10wxTextCtrlFlT1RC10wxTextAttr
+      ;wxTextCtrl::SetFocus()
+      SetFocus__10wxTextCtrlFv
       ;wxTextCtrl::CanRedo() const
       CanRedo__10wxTextCtrlCFv
       ;wxTextCtrl::OS2GetStyle(long,unsigned long*) const
@@ -14763,6 +14771,8 @@ EXPORTS
       HandleEraseBkgnd__8wxWindowFUl
       ;wxWindow::HandleCreate(void*,unsigned long*)
       HandleCreate__8wxWindowFPvPUl
+      ;wxWindow::HandleChar(void*,void*,unsigned long)
+      HandleChar__8wxWindowFPvT1Ul
       ;wxWindow::DoGetPosition(int*,int*) const
       DoGetPosition__8wxWindowCFPiT1
       ;wxCharCodeOS2ToWX(int)
@@ -14987,8 +14997,6 @@ EXPORTS
       FindItemByHWND__8wxWindowCFUlT1
       ;wxWindow::HandleKeyUp(void*,void*)
       HandleKeyUp__8wxWindowFPvT1
-      ;wxWindow::HandleChar(void*,void*,unsigned long)
-      HandleChar__8wxWindowFPvT1Ul
       ;wxWindow::DoMoveWindow(int,int,int,int)
       DoMoveWindow__8wxWindowFiN31
       ;wxWindow::DoClientToScreen(int*,int*) const

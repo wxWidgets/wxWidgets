@@ -70,7 +70,7 @@ bool wxCheckBox::Create(
                        ,rSize
                        ,lStyle
 #if wxUSE_VALIDATORS
-                       ,wxDefaultValidator
+                       ,rValidator
 #endif
                        ,rsName
                       ))
