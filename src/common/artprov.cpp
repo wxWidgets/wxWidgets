@@ -119,6 +119,7 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
     }
 
     sm_providers->Insert(provider);
+    sm_cache->Clear();
 }
 
 /*static*/ bool wxArtProvider::PopProvider()
