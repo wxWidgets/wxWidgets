@@ -86,7 +86,7 @@ WX_BEGIN_PROPERTIES_TABLE(wxCheckBox)
 	WX_DELEGATE( OnClick , wxEVT_COMMAND_CHECKBOX_CLICKED , wxCommandEvent )
 
 	WX_PROPERTY( Font , wxFont , SetFont , GetFont  , , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-	WX_PROPERTY( Label,wxString, SetLabel, GetLabel, wxEmptyString , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_PROPERTY( Label,wxString, SetLabel, GetLabel, wxString() , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 	WX_PROPERTY( Value ,bool, SetValue, GetValue, , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
     WX_PROPERTY_FLAGS( WindowStyle , wxCheckBoxStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 WX_END_PROPERTIES_TABLE()

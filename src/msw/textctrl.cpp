@@ -170,7 +170,7 @@ IMPLEMENT_DYNAMIC_CLASS_XTI(wxTextCtrl, wxControl,"wx/textctrl.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxTextCtrl)
 	WX_PROPERTY( Font , wxFont , SetFont , GetFont  ,, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-	WX_PROPERTY( Value , wxString , SetValue, GetValue, wxEmptyString , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_PROPERTY( Value , wxString , SetValue, GetValue, wxString() , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
     WX_PROPERTY_FLAGS( WindowStyle , wxTextCtrlStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 WX_END_PROPERTIES_TABLE()
 

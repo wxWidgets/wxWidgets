@@ -27,8 +27,6 @@
 
 #if wxUSE_EXTENDED_RTTI
 
-/*
-
 template<> void wxStringReadValue(const wxString &s , wxColour &data )
 {
 	// copied from VS xrc
@@ -51,19 +49,15 @@ template<> void wxStringReadValue(const wxString &s , wxColour &data )
 
 template<> void wxStringWriteValue(wxString &s , const wxColour &data )
 {
-	s = wxString::Format("#%2X%2X%2X", data.Red() , data.Green() , data.Blue() ) ;
+	s = wxString::Format("#%02X%02X%02X", data.Red() , data.Green() , data.Blue() ) ;
 }
 
-WX_CUSTOM_TYPE_INFO(wxColour)
-
-*/
-
-IMPLEMENT_DYNAMIC_CLASS_WITH_COPY_XTI( wxColour , wxObject , "wx/colour.h" ) 
+IMPLEMENT_DYNAMIC_CLASS_WITH_COPY_AND_STREAMERS_XTI( wxColour , wxObject , "wx/colour.h" ,  &wxToStringConverter<wxColour> , &wxFromStringConverter<wxColour>) 
 
 WX_BEGIN_PROPERTIES_TABLE(wxColour)
-	WX_READONLY_PROPERTY( Red, unsigned char , Red , 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-	WX_READONLY_PROPERTY( Green, unsigned char  , Green , 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) 
-	WX_READONLY_PROPERTY( Blue, unsigned char , Blue , 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_READONLY_PROPERTY( Red, unsigned char , Red ,  , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_READONLY_PROPERTY( Green, unsigned char  , Green ,  , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) 
+	WX_READONLY_PROPERTY( Blue, unsigned char , Blue ,  , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 WX_END_PROPERTIES_TABLE()
 
 WX_CONSTRUCTOR_3( wxColour , unsigned char , Red , unsigned char , Green , unsigned char , Blue )  

@@ -112,25 +112,99 @@ UINT GetMenuState(HMENU hMenu, UINT id, UINT flags)
 // implementation
 // ============================================================================
 
+#include <wx/listimpl.cpp>
+
+WX_DEFINE_LIST( wxMenuInfoList ) ;
+
+#if wxUSE_EXTENDED_RTTI
+
+WX_DEFINE_FLAGS( wxMenuStyle )
+
+WX_BEGIN_FLAGS( wxMenuStyle )
+    WX_FLAGS_MEMBER(wxMENU_TEAROFF)
+WX_END_FLAGS( wxMenuStyle )
+
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxMenu, wxEvtHandler,"wx/menu.h")
+
+WX_COLLECTION_TYPE_INFO( wxMenuItem * , wxMenuItemList ) ;
+
+template<> void wxCollectionToVariantArray( wxMenuItemList const &theList, wxxVariantArray &value)
+{
+    wxListCollectionToVariantArray<wxMenuItemList::compatibility_iterator>( theList , value ) ;
+}
+
+WX_BEGIN_PROPERTIES_TABLE(wxMenu)
+	WX_DELEGATE( OnSelect , wxEVT_COMMAND_MENU_SELECTED , wxCommandEvent)
+    WX_PROPERTY( Title, wxString , SetTitle, GetTitle, wxString(), 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+    WX_READONLY_PROPERTY_FLAGS( MenuStyle , wxMenuStyle , long , GetStyle , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+    WX_PROPERTY_COLLECTION( MenuItems , wxMenuItemList , wxMenuItem* , Append , GetMenuItems , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+WX_END_PROPERTIES_TABLE()
+
+WX_BEGIN_HANDLERS_TABLE(wxMenu)
+WX_END_HANDLERS_TABLE()
+
+WX_DIRECT_CONSTRUCTOR_2( wxMenu , wxString , Title , long , MenuStyle  )
+
+WX_DEFINE_FLAGS( wxMenuBarStyle )
+
+WX_BEGIN_FLAGS( wxMenuBarStyle )
+    WX_FLAGS_MEMBER(wxMB_DOCKABLE)
+WX_END_FLAGS( wxMenuBarStyle )
+
+// the negative id would lead the window (its superclass !) to vetoe streaming out otherwise
+bool wxMenuBarStreamingCallback( const wxObject *object, wxWriter * , wxPersister * , wxxVariantArray & )
+{
+    return true ;
+}
+
+IMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxMenuBar, wxWindow ,"wx/menu.h",wxMenuBarStreamingCallback)
+
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxMenuInfo, wxObject , "wx/menu.h" )
+
+WX_BEGIN_PROPERTIES_TABLE(wxMenuInfo)
+    WX_READONLY_PROPERTY( Menu , wxMenu* , GetMenu , , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    WX_READONLY_PROPERTY( Title , wxString , GetTitle , wxString() , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+WX_END_PROPERTIES_TABLE()
+
+WX_BEGIN_HANDLERS_TABLE(wxMenuInfo)
+WX_END_HANDLERS_TABLE()
+
+WX_CONSTRUCTOR_2( wxMenuInfo , wxMenu* , Menu , wxString , Title ) 
+
+WX_COLLECTION_TYPE_INFO( wxMenuInfo * , wxMenuInfoList ) ;
+
+template<> void wxCollectionToVariantArray( wxMenuInfoList const &theList, wxxVariantArray &value)
+{
+    wxListCollectionToVariantArray<wxMenuInfoList::compatibility_iterator>( theList , value ) ;
+}
+
+WX_BEGIN_PROPERTIES_TABLE(wxMenuBar)
+    WX_PROPERTY_COLLECTION( MenuInfos , wxMenuInfoList , wxMenuInfo* , Append , GetMenuInfos , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+WX_END_PROPERTIES_TABLE()
+
+WX_BEGIN_HANDLERS_TABLE(wxMenuBar)
+WX_END_HANDLERS_TABLE()
+
+WX_CONSTRUCTOR_DUMMY( wxMenuBar )
+
+#else
 IMPLEMENT_DYNAMIC_CLASS(wxMenu, wxEvtHandler)
 IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxWindow)
+IMPLEMENT_DYNAMIC_CLASS(wxMenuInfo, wxObject)
+#endif
 
-/*
-	TODO PROPERTIES
-		wxMenu
-			label
-			help
-
-		separator
-		break
-		label
-		accel
-		radio
-		checkable
-		help
-		bitmap
-		wxMenuItem
-*/
+const wxMenuInfoList& wxMenuBar::GetMenuInfos() const
+{
+    wxMenuInfoList* list = const_cast< wxMenuInfoList* >( &m_menuInfos ) ;
+    WX_CLEAR_LIST( wxMenuInfoList , *list ) ;
+    for( size_t i = 0 ; i < GetMenuCount() ; ++i )
+    {
+        wxMenuInfo* info = new wxMenuInfo() ;
+        info->Create( const_cast<wxMenuBar*>(this)->GetMenu(i) , GetLabelTop(i) ) ;
+        list->Append( info ) ;
+    }
+    return m_menuInfos ;
+}
 
 // ---------------------------------------------------------------------------
 // wxMenu construction, adding and removing menu items

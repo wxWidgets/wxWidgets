@@ -101,10 +101,6 @@ WX_BEGIN_PROPERTIES_TABLE(wxSpinButton)
 	WX_PROPERTY( Min , int , SetMin, GetMin, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 	WX_PROPERTY( Max , int , SetMax, GetMax, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
     WX_PROPERTY_FLAGS( WindowStyle , wxSpinButtonStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
-/*
-	TODO PROPERTIES
-		style wxSP_VERTICAL | wxSP_ARROW_KEYS
-*/
 WX_END_PROPERTIES_TABLE()
 
 WX_BEGIN_HANDLERS_TABLE(wxSpinButton)

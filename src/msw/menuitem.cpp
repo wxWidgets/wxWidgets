@@ -77,7 +77,48 @@ UINT GetMenuState(HMENU hMenu, UINT id, UINT flags) ;
 // dynamic classes implementation
 // ----------------------------------------------------------------------------
 
+#if wxUSE_EXTENDED_RTTI
+
+bool wxMenuItemStreamingCallback( const wxObject *object, wxWriter * , wxPersister * , wxxVariantArray & )
+{
+    const wxMenuItem * mitem = dynamic_cast<const wxMenuItem*>(object) ;
+    if ( mitem->GetMenu() && !mitem->GetMenu()->GetTitle().IsEmpty() )
+    {
+        // we don't stream out the first two items for menus with a title, they will be reconstructed
+        if ( mitem->GetMenu()->FindItemByPosition(0) == mitem || mitem->GetMenu()->FindItemByPosition(1) == mitem )
+            return false ;
+    }
+    return true ;
+}
+
+WX_BEGIN_ENUM( wxItemKind )
+    WX_ENUM_MEMBER( wxITEM_SEPARATOR ) 
+    WX_ENUM_MEMBER( wxITEM_NORMAL ) 
+    WX_ENUM_MEMBER( wxITEM_CHECK ) 
+    WX_ENUM_MEMBER( wxITEM_RADIO ) 
+WX_END_ENUM( wxItemKind )
+
+IMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxMenuItem, wxObject,"wx/menuitem.h",wxMenuItemStreamingCallback)
+
+WX_BEGIN_PROPERTIES_TABLE(wxMenuItem)
+	WX_PROPERTY( Parent,wxMenu*, SetMenu, GetMenu, , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+	WX_PROPERTY( Id,int, SetId, GetId, , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+    WX_PROPERTY( Text, wxString , SetText, GetText, wxString(), 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+    WX_PROPERTY( Help, wxString , SetHelp, GetHelp, wxString(), 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+    WX_READONLY_PROPERTY( Kind, wxItemKind , GetKind , , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+	WX_PROPERTY( SubMenu,wxMenu*, SetSubMenu, GetSubMenu, , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+	WX_PROPERTY( Enabled , bool , Enable , IsEnabled , wxxVariant((bool)true) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_PROPERTY( Checked , bool , Check , IsChecked , wxxVariant((bool)false) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_PROPERTY( Checkable , bool , SetCheckable , IsCheckable , wxxVariant((bool)false) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+WX_END_PROPERTIES_TABLE()
+
+WX_BEGIN_HANDLERS_TABLE(wxMenuItem)
+WX_END_HANDLERS_TABLE()
+
+WX_DIRECT_CONSTRUCTOR_6( wxMenuItem , wxMenu* , Parent , int , Id , wxString , Text , wxString , Help , wxItemKind , Kind , wxMenu* , SubMenu  )
+#else
 IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
+#endif
 
 // ----------------------------------------------------------------------------
 // wxMenuItem
@@ -155,6 +196,11 @@ int wxMenuItem::GetRealId() const
 
 bool wxMenuItem::IsChecked() const
 {
+    // fix that RTTI is always getting the correct state (separators cannot be checked, but the call below 
+    // returns true
+    if ( GetId() == wxID_SEPARATOR )
+        return false ;
+
     int flag = ::GetMenuState(GetHMenuOf(m_parentMenu), GetId(), MF_BYCOMMAND);
 
     return (flag & MF_CHECKED) != 0;

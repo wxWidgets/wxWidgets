@@ -131,9 +131,10 @@ WX_END_FLAGS( wxFrameStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxFrame, wxTopLevelWindow,"wx/frame.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxFrame)
-	WX_PROPERTY( Title,wxString, SetTitle, GetTitle, wxEmptyString , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_PROPERTY( Title,wxString, SetTitle, GetTitle, wxString() , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
     WX_PROPERTY_FLAGS( WindowStyle , wxFrameStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
-/*
+    WX_PROPERTY( MenuBar , wxMenuBar * , SetMenuBar , GetMenuBar , , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    /*
 	TODO PROPERTIES
 
 		style (wxDEFAULT_FRAME_STYLE)

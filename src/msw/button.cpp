@@ -91,7 +91,7 @@ WX_BEGIN_PROPERTIES_TABLE(wxButton)
 	WX_DELEGATE( OnClick , wxEVT_COMMAND_BUTTON_CLICKED , wxCommandEvent)
 
 	WX_PROPERTY( Font , wxFont , SetFont , GetFont  , , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-	WX_PROPERTY( Label, wxString , SetLabel, GetLabel, wxEmptyString, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+	WX_PROPERTY( Label, wxString , SetLabel, GetLabel, wxString(), 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
 
     WX_PROPERTY_FLAGS( WindowStyle , wxButtonStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 

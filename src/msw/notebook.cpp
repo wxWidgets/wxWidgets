@@ -186,7 +186,7 @@ WX_CONSTRUCTOR_5( wxNotebook , wxWindow* , Parent , wxWindowID , Id , wxPoint , 
 
 WX_BEGIN_PROPERTIES_TABLE(wxNotebookPageInfo)
     WX_READONLY_PROPERTY( Page , wxNotebookPage* , GetPage , , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    WX_READONLY_PROPERTY( Text , wxString , GetText , wxEmptyString , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    WX_READONLY_PROPERTY( Text , wxString , GetText , wxString() , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
     WX_READONLY_PROPERTY( Selected , bool , GetSelected , false, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
     WX_READONLY_PROPERTY( ImageId , int , GetImageId , -1 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 WX_END_PROPERTIES_TABLE()
