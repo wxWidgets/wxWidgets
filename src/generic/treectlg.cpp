@@ -1910,8 +1910,13 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
         {
             colText = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT );
 
+#ifdef __WXMAC__
+	        // no rect outline, we already have the background color
+            pen = wxTRANSPARENT_PEN;
+#else
             if ( m_hasFocus )
                pen = wxBLACK_PEN;
+#endif
 
         }
         else
