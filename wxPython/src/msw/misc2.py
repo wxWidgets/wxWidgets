@@ -12,6 +12,8 @@ from clip_dnd import *
 from events import *
 
 from streams import *
+
+from utils import *
 class wxToolTipPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
@@ -911,6 +913,59 @@ class wxMimeTypesManagerPtr :
 class wxMimeTypesManager(wxMimeTypesManagerPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(misc2c.new_wxMimeTypesManager,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxFileHistoryPtr(wxObjectPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self,misc2c=misc2c):
+        if self.thisown == 1 :
+            misc2c.delete_wxFileHistory(self)
+    def AddFileToHistory(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileHistory_AddFileToHistory,(self,) + _args, _kwargs)
+        return val
+    def RemoveFileFromHistory(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileHistory_RemoveFileFromHistory,(self,) + _args, _kwargs)
+        return val
+    def GetMaxFiles(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileHistory_GetMaxFiles,(self,) + _args, _kwargs)
+        return val
+    def UseMenu(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileHistory_UseMenu,(self,) + _args, _kwargs)
+        return val
+    def RemoveMenu(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileHistory_RemoveMenu,(self,) + _args, _kwargs)
+        return val
+    def Load(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileHistory_Load,(self,) + _args, _kwargs)
+        return val
+    def Save(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileHistory_Save,(self,) + _args, _kwargs)
+        return val
+    def AddFilesToMenu(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileHistory_AddFilesToMenu,(self,) + _args, _kwargs)
+        return val
+    def AddFilesToSingleMenu(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileHistory_AddFilesToSingleMenu,(self,) + _args, _kwargs)
+        return val
+    def GetHistoryFile(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileHistory_GetHistoryFile,(self,) + _args, _kwargs)
+        return val
+    def GetCount(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileHistory_GetCount,(self,) + _args, _kwargs)
+        return val
+    def GetNoHistoryFiles(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileHistory_GetNoHistoryFiles,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxFileHistory instance at %s>" % (self.this,)
+class wxFileHistory(wxFileHistoryPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxFileHistory,_args,_kwargs)
         self.thisown = 1
 
 

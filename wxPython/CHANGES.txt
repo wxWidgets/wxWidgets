@@ -86,6 +86,8 @@ will now Disconnect the event.
 
 Added wxPopupWindow and wxPopupTransientWindow.
 
+Added wxFileHistory.
+
 
 
 

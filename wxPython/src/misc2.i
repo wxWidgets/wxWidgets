@@ -46,6 +46,7 @@
 %import gdi.i
 %import events.i
 %import streams.i
+%import utils.i
 
 %{
     static wxString wxPyEmptyStr("");
@@ -1276,6 +1277,42 @@ extern wxMimeTypesManager* wxTheMimeTypesManager;
 #endif
 %}
 %readwrite
+
+//----------------------------------------------------------------------
+
+%{
+#include <wx/docview.h>
+%}
+
+class wxFileHistory : public wxObject
+{
+public:
+    wxFileHistory(int maxFiles = 9);
+    ~wxFileHistory();
+
+    // Operations
+    void AddFileToHistory(const wxString& file);
+    void RemoveFileFromHistory(int i);
+    int GetMaxFiles() const;
+    void UseMenu(wxMenu *menu);
+
+    // Remove menu from the list (MDI child may be closing)
+    void RemoveMenu(wxMenu *menu);
+
+    void Load(wxConfigBase& config);
+    void Save(wxConfigBase& config);
+
+    void AddFilesToMenu();
+    %name(AddFilesToSingleMenu)void AddFilesToMenu(wxMenu* menu);
+
+    // Accessors
+    wxString GetHistoryFile(int i) const;
+
+    // A synonym for GetNoHistoryFiles
+    int GetCount() const;
+    int GetNoHistoryFiles() const;
+
+};
 
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
