@@ -46,19 +46,19 @@ Please see {\tt samples/dragimag} for an example.
 Default constructor.
 
 \func{}{wxDragImage}{\param{const wxBitmap\& }{image}, \param{const wxCursor\& }{cursor = wxNullCursor},
- \param{const wxPoint& }{hotspot = wxPoint(0, 0)}}
+ \param{const wxPoint& }{cursorHotspot = wxPoint(0, 0)}}
 
 Constructs a drag image from a bitmap and optional cursor.
 
 \func{}{wxDragImage}{\param{const wxIcon\& }{image}, \param{const wxCursor\& }{cursor = wxNullCursor},
- \param{const wxPoint& }{hotspot = wxPoint(0, 0)}}
+ \param{const wxPoint& }{cursorHotspot = wxPoint(0, 0)}}
 
 Constructs a drag image from an icon and optional cursor.
 
 \pythonnote{This constructor is called wxDragIcon in wxPython.}
 
 \func{}{wxDragImage}{\param{const wxString\& }{text}, \param{const wxCursor\& }{cursor = wxNullCursor},
- \param{const wxPoint& }{hotspot = wxPoint(0, 0)}}
+ \param{const wxPoint& }{cursorHotspot = wxPoint(0, 0)}}
 
 Constructs a drag image from a text string and optional cursor.
 
@@ -77,7 +77,7 @@ Constructs a drag image from the text in the given tree control item, and option
 \pythonnote{This constructor is called wxDragListItem in wxPython.}
 
 \func{}{wxDragImage}{\param{const wxCursor\& }{cursor = wxNullCursor},
- \param{const wxPoint& }{hotspot = wxPoint(0, 0)}}
+ \param{const wxPoint& }{cursorHotspot = wxPoint(0, 0)}}
 
 Constructs a drag image an optional cursor. This constructor is only available for
 wxGenericDragImage, and can be used when the application
@@ -92,7 +92,7 @@ have a mask.}
 
 \docparam{cursor}{Optional cursor to combine with the image.}
 
-\docparam{hotspot}{Position of the hotspot within the new image.}
+\docparam{hotspot}{Optional position of the hotspot in the given cursor. This parameter is deprecated.}
 
 \docparam{treeCtrl}{Tree control for constructing a tree drag image.}
 
