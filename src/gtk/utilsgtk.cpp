@@ -120,15 +120,31 @@ bool wxGetHostName(char *buf, int sz)
 {
     *buf = '\0';
 #if defined(__SVR4__) && !defined(__sgi)
+    //KB: does this return the fully qualified host.domain name?
     return (sysinfo(SI_HOSTNAME, buf, sz) != -1);
 #else /* BSD Sockets */
-    char name[255];
-    struct hostent *h;
+    char name[255], domain[255];
+    //struct hostent *h;
     // Get hostname
     if (gethostname(name, sizeof(name)/sizeof(char)-1) == -1)
 	return FALSE;
+    if (getdomainname(domain, sizeof(domain)/sizeof(char)-1) == -1)
+	return FALSE;
     // Get official full name of host
-    strncpy(buf, (h=gethostbyname(name))!=NULL ? h->h_name : name, sz-1);
+    // doesn't return the full qualified name, replaced by following
+    // code (KB)
+    // strncpy(buf, (h=gethostbyname(name))!=NULL ? h->h_name : name, sz-1);
+    if((unsigned)sz > strlen(name)+strlen(domain)+1)
+    {
+       strcpy(buf, name);
+       if(strcmp(domain,"(none)") == 0) // standalone machine
+       {
+         strcat(buf,".");
+         strcat(buf,domain);
+       }
+    }
+    else
+       return FALSE;
     return TRUE;
 #endif
 }
@@ -148,10 +164,13 @@ bool wxGetUserId(char *buf, int sz)
 bool wxGetUserName(char *buf, int sz)
 {
     struct passwd *who;
-
+    char *comma;
+    
     *buf = '\0';
     if ((who = getpwuid (getuid ())) != NULL) {
-	strncpy (buf, who->pw_gecos, sz - 1);
+       comma = strchr(who->pw_gecos,'c');
+       if(comma) *comma = '\0'; // cut off non-name comment fields
+       strncpy (buf, who->pw_gecos, sz - 1);
 	return TRUE;
     }
     return FALSE;
