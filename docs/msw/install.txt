@@ -76,18 +76,23 @@ Compilation
 The following sections explain how to compile wxWindows with each supported
 compiler.
 
-Visual C++ 6.0 compilation
+Visual C++ compilation
 ---------------------------
 
-Please note that the VC++ 6.0 project files will work for
-VC++ .NET also, but you must open the .dsp files and not the .dsw
-files.
+Please note that the VC++ 6.0 project files will work for VC++ .NET also, but
+you must open the .dsp files and not the .dsw files and in this case you will
+need to manually build the other .dsp on which.wxWindows.dsp depends: jpeg,
+png, regex, tiff and zlib.
 
-Using project files (VC++ 6 only):
+Also note that you might make the project files work with VC++ 5 but you'll
+need to edit them version in the .dsp file by hand before this is possible.
+
+
+Using project files (VC++ 6 and later):
 
 1. Unarchive wxWindows-x.y.z-vc.zip, the VC++ 6 project
    makefiles (already included in wxMSW-x.y.z.zip and the setup version).
-2. Open src/wxWindows.dsp, which has configurations for static
+2. Open src/wxWindows.dsw, which has configurations for static
    compilation or DLL compilation, and each of these available in
    Unicode/ANSI and Debug/Release variations. Normally you'll use
    a static linking ANSI configuration. Choose the Win32 Debug or
