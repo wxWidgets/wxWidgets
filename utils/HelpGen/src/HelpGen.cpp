@@ -51,15 +51,10 @@
 // wxWindows
 #include "wx/wxprec.h"
 
-#if wxUSE_GUI
-    #error "This is a console program and can be only compiled using wxBase"
-#endif
-
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/log.h"
     #include "wx/dynarray.h"
-    #include "wx/wx.h"
 #endif // WX_PRECOMP
 
 #include "wx/file.h"
@@ -525,10 +520,12 @@ private:
 // implementation
 // =============================================================================
 
+static char **g_argv = NULL;
+
 // this function never returns
 static void usage()
 {
-    wxString prog = wxTheApp->argv[0];
+    wxString prog = g_argv[0];
     wxString basename = prog.AfterLast('/');
 #ifdef __WXMSW__
     if ( !basename )
@@ -566,6 +563,8 @@ static void usage()
 
 int main(int argc, char **argv)
 {
+    g_argv = argv;
+
     wxInitializer initializer;
     if ( !initializer )
     {
@@ -2179,6 +2178,9 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.24  2003/08/13 22:59:37  VZ
+   compilation fix
+
    Revision 1.23  2003/06/13 17:05:43  VZ
    quote '|' inside regexes (fixes dump mode); fixed crash due to strange HelpGenApp code
 
