@@ -152,6 +152,8 @@ enum wxSTC_LEX {
     wxSTC_LEX_ERRORLIST,
     wxSTC_LEX_MAKEFILE,
     wxSTC_LEX_BATCH,
+    wxSTC_LEX_XCODE,
+    wxSTC_LEX_LATEX
 };
 
 
