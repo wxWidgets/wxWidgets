@@ -57,7 +57,7 @@ Topic :: Software Development :: User Interfaces
 
 BUILD_GLCANVAS = 0 # If true, build the contrib/glcanvas extension module
 BUILD_OGL = 0      # If true, build the contrib/ogl extension module
-BUILD_STC = 0      # If true, build the contrib/stc extension module
+BUILD_STC = 1      # If true, build the contrib/stc extension module
 BUILD_XRC = 1      # XML based resource system
 BUILD_GIZMOS = 0   # Build a module for the gizmos contrib library
 BUILD_DLLWIDGET = 0# Build a module that enables unknown wx widgets
@@ -275,7 +275,8 @@ def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args, swig_deps=
                     # first run build_renamers
                     cmd = [ sys.executable, '-u',
                             './distrib/build_renamers.py',
-                            i_file, '-D'+WXPLAT, ]
+                            i_file, '-D'+WXPLAT, ] + \
+                            [x for x in swig_args if x.startswith('-I')]
                     msg(' '.join(cmd))
                     spawn(cmd)
 
@@ -988,16 +989,12 @@ if BUILD_STC:
 ##             os.chdir(cwd)
 
 
-    swig_files = ['stc_.i']
-    swig_sources = run_swig(swig_files, location, GENDIR, PKGDIR,
+    swig_sources = run_swig(['stc.i'], location, '', PKGDIR,
                             USE_SWIG, swig_force,
                             swig_args + ['-I'+STC_H, '-I'+location],
                             [opj(STC_H, 'stc.h')] + swig_deps)
 
-    # copy a contrib project specific py module to the main package dir
-    copy_file(opj(location, 'stc.py'), PKGDIR, update=1, verbose=0)
-
-    ext = Extension('stc_c',
+    ext = Extension('_stc',
                     swig_sources,
 
                     include_dirs = includes,
