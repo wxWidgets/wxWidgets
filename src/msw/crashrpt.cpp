@@ -10,8 +10,10 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*
-    The code in this file is heavily based on Matt Pietrek's column from
-    the March 2002 issue of MSDN Magazine.
+    The code generating the crash reports in this file is heavily based on
+    Matt Pietrek's column from the March 2002 issue of MSDN Magazine. Note
+    that this code is not currently used by default, however. In any case,
+    all bugs are my alone.
  */
 
 // ============================================================================
@@ -34,8 +36,28 @@
 #ifndef WX_PRECOMP
 #endif  //WX_PRECOMP
 
-#include "wx/longlong.h"
+/*
+   We have two possibilities here: one, a priori more interesting, is to
+   generate the crash report ourselves and include the values of all the
+   variables in the dump. Unfortunately my code to do it doesn't work in
+   "real life" situations i.e. it works in small examples but invariably
+   gets confused by something in big programs which makes quite useless.
+
+   The other possibility is to let dbghelp.dll to do the work for us and
+   analyze its results later using a debugger with knowledge about crash
+   dumps, such as (free!) WinDbg. This also has another advantage of not
+   needing to ship the .pdb file (containing debug info) to the user. So
+   this is the default now, but I keep the old code just in case, and if
+   you really want you can still use it.
+ */
+#define wxUSE_MINIDUMP 1
+
+#if !wxUSE_MINIDUMP
+    #include "wx/longlong.h"
+#endif // wxUSE_MINIDUMP
+
 #include "wx/datetime.h"
+
 #include "wx/dynload.h"
 
 #include "wx/msw/crashrpt.h"
@@ -68,6 +90,14 @@
 // types of imagehlp.h functions
 // ----------------------------------------------------------------------------
 
+#if wxUSE_MINIDUMP
+
+typedef BOOL (WINAPI *MiniDumpWriteDump_t)(HANDLE, DWORD, HANDLE,
+                                           MINIDUMP_TYPE,
+                                           CONST PMINIDUMP_EXCEPTION_INFORMATION,
+                                           CONST PMINIDUMP_USER_STREAM_INFORMATION,
+                                           CONST PMINIDUMP_CALLBACK_INFORMATION);
+#else // !wxUSE_MINIDUMP
 typedef DWORD (WINAPI *SymSetOptions_t)(DWORD);
 typedef BOOL (WINAPI *SymInitialize_t)(HANDLE, LPSTR, BOOL);
 typedef BOOL (WINAPI *StackWalk_t)(DWORD, HANDLE, HANDLE, LPSTACKFRAME,
@@ -86,10 +116,13 @@ typedef BOOL (WINAPI *SymEnumSymbols_t)(HANDLE, ULONG64, PCSTR,
                                         PSYM_ENUMERATESYMBOLS_CALLBACK, PVOID);
 typedef BOOL (WINAPI *SymGetTypeInfo_t)(HANDLE, DWORD64, ULONG,
                                         IMAGEHLP_SYMBOL_TYPE_INFO, PVOID);
+#endif // wxUSE_MINIDUMP
 
 // ----------------------------------------------------------------------------
-// constant
+// constants
 // ----------------------------------------------------------------------------
+
+#if !wxUSE_MINIDUMP
 
 // Stolen from CVCONST.H in the DIA 2.0 SDK
 enum BasicType
@@ -131,6 +164,8 @@ enum SymbolTag
     SYMBOL_TAG_BASECLASS
 };
 
+#endif // wxUSE_MINIDUMP
+
 #endif // wxUSE_DBGHELP
 
 // ----------------------------------------------------------------------------
@@ -154,6 +189,7 @@ public:
     }
 
 private:
+
     // formatted output to m_hFile
     void Output(const wxChar *format, ...);
 
@@ -161,6 +197,8 @@ private:
     void OutputEndl() { Output(_T("\r\n")); }
 
 #if wxUSE_DBGHELP
+
+#if !wxUSE_MINIDUMP
     // translate exception code to its symbolic name
     static wxString GetExceptionString(DWORD dwCode);
 
@@ -197,9 +235,6 @@ private:
     // outputs information about the given symbol
     void OutputSymbol(PSYMBOL_INFO pSymInfo, STACKFRAME *sf);
 
-    // load all the functions we need from dbghelp.dll, return true if all ok
-    bool ResolveSymFunctions(const wxDynamicLibrary& dllDbgHelp);
-
     // map address to module (and also section:offset), retunr true if ok
     static bool GetLogicalAddress(PVOID addr,
                                   PTSTR szModule,
@@ -228,11 +263,18 @@ private:
 
     // the current stack frame (may be NULL)
     STACKFRAME *m_sfCurrent;
+#endif // !wxUSE_MINIDUMP
+
+    // load all the functions we need from dbghelp.dll, return true if all ok
+    bool BindDbgHelpFunctions(const wxDynamicLibrary& dllDbgHelp);
 
 
     // dynamically loaded dbghelp.dll functions
     #define DECLARE_SYM_FUNCTION(func) static func ## _t func
 
+#if wxUSE_MINIDUMP
+    DECLARE_SYM_FUNCTION(MiniDumpWriteDump);
+#else // !wxUSE_MINIDUMP
     DECLARE_SYM_FUNCTION(SymSetOptions);
     DECLARE_SYM_FUNCTION(SymInitialize);
     DECLARE_SYM_FUNCTION(StackWalk);
@@ -243,6 +285,9 @@ private:
     DECLARE_SYM_FUNCTION(SymSetContext);
     DECLARE_SYM_FUNCTION(SymEnumSymbols);
     DECLARE_SYM_FUNCTION(SymGetTypeInfo);
+#endif // wxUSE_MINIDUMP/!wxUSE_MINIDUMP
+
+    #undef DECLARE_SYM_FUNCTION
 #endif // wxUSE_DBGHELP
 
     // the handle of the report file
@@ -271,6 +316,9 @@ static wxChar gs_reportFilename[MAX_PATH];
 
 #define DEFINE_SYM_FUNCTION(func) func ## _t wxCrashReportImpl::func = 0
 
+#if wxUSE_MINIDUMP
+DEFINE_SYM_FUNCTION(MiniDumpWriteDump);
+#else // !wxUSE_MINIDUMP
 DEFINE_SYM_FUNCTION(SymSetOptions);
 DEFINE_SYM_FUNCTION(SymInitialize);
 DEFINE_SYM_FUNCTION(StackWalk);
@@ -281,6 +329,7 @@ DEFINE_SYM_FUNCTION(SymGetLineFromAddr);
 DEFINE_SYM_FUNCTION(SymSetContext);
 DEFINE_SYM_FUNCTION(SymEnumSymbols);
 DEFINE_SYM_FUNCTION(SymGetTypeInfo);
+#endif // wxUSE_MINIDUMP/!wxUSE_MINIDUMP
 
 #undef DEFINE_SYM_FUNCTION
 
@@ -292,7 +341,7 @@ DEFINE_SYM_FUNCTION(SymGetTypeInfo);
 
 wxCrashReportImpl::wxCrashReportImpl(const wxChar *filename)
 {
-#if wxUSE_DBGHELP
+#if wxUSE_DBGHELP && !wxUSE_MINIDUMP
     m_sfCurrent = NULL;
 #endif // wxUSE_DBGHELP
 
@@ -322,6 +371,8 @@ void wxCrashReportImpl::Output(const wxChar *format, ...)
 }
 
 #if wxUSE_DBGHELP
+
+#if !wxUSE_MINIDUMP
 
 bool
 wxCrashReportImpl::GetLogicalAddress(PVOID addr,
@@ -921,7 +972,9 @@ void wxCrashReportImpl::OutputGlobals(HANDLE hModule)
 #endif // _M_IX86
 }
 
-bool wxCrashReportImpl::ResolveSymFunctions(const wxDynamicLibrary& dllDbgHelp)
+#endif // wxUSE_MINIDUMP
+
+bool wxCrashReportImpl::BindDbgHelpFunctions(const wxDynamicLibrary& dllDbgHelp)
 {
     #define LOAD_SYM_FUNCTION(name)                                           \
         name = (name ## _t) dllDbgHelp.GetSymbol(_T(#name));                  \
@@ -932,6 +985,9 @@ bool wxCrashReportImpl::ResolveSymFunctions(const wxDynamicLibrary& dllDbgHelp)
             return false;                                                     \
         }
 
+#if wxUSE_MINIDUMP
+    LOAD_SYM_FUNCTION(MiniDumpWriteDump);
+#else // !wxUSE_MINIDUMP
     LOAD_SYM_FUNCTION(SymSetOptions);
     LOAD_SYM_FUNCTION(SymInitialize);
     LOAD_SYM_FUNCTION(StackWalk);
@@ -942,11 +998,14 @@ bool wxCrashReportImpl::ResolveSymFunctions(const wxDynamicLibrary& dllDbgHelp)
     LOAD_SYM_FUNCTION(SymSetContext);
     LOAD_SYM_FUNCTION(SymEnumSymbols);
     LOAD_SYM_FUNCTION(SymGetTypeInfo);
+#endif // wxUSE_MINIDUMP/!wxUSE_MINIDUMP
 
     #undef LOAD_SYM_FUNCTION
 
     return true;
 }
+
+#if !wxUSE_MINIDUMP
 
 /* static */
 wxString wxCrashReportImpl::GetExceptionString(DWORD dwCode)
@@ -1003,16 +1062,18 @@ wxString wxCrashReportImpl::GetExceptionString(DWORD dwCode)
     return s;
 }
 
+#endif // !wxUSE_MINIDUMP
+
 #endif // wxUSE_DBGHELP
 
 // Remove warning
-#if wxUSE_DBGHELP
-#define _WXUNUSED(x) x
+#if wxUSE_DBGHELP && !wxUSE_MINIDUMP
+    #define WXUNUSED_LOCAL(x) x
 #else
-#define _WXUNUSED WXUNUSED
+    #define WXUNUSED_LOCAL WXUNUSED
 #endif
 
-bool wxCrashReportImpl::Generate(int _WXUNUSED(flags))
+bool wxCrashReportImpl::Generate(int WXUNUSED_LOCAL(flags))
 {
     if ( m_hFile == INVALID_HANDLE_VALUE )
         return false;
@@ -1021,6 +1082,7 @@ bool wxCrashReportImpl::Generate(int _WXUNUSED(flags))
     if ( !wxGlobalSEInformation )
         return false;
 
+#if !wxUSE_MINIDUMP
     PEXCEPTION_RECORD pExceptionRecord = wxGlobalSEInformation->ExceptionRecord;
     PCONTEXT pCtx = wxGlobalSEInformation->ContextRecord;
 
@@ -1028,13 +1090,41 @@ bool wxCrashReportImpl::Generate(int _WXUNUSED(flags))
         return false;
 
     HANDLE hModuleCrash = OutputBasicContext(pExceptionRecord, pCtx);
+#endif // !wxUSE_MINIDUMP
+
 
     // for everything else we need dbghelp.dll
     wxDynamicLibrary dllDbgHelp(_T("dbghelp.dll"), wxDL_VERBATIM);
     if ( dllDbgHelp.IsLoaded() )
     {
-        if ( ResolveSymFunctions(dllDbgHelp) )
+        if ( BindDbgHelpFunctions(dllDbgHelp) )
         {
+#if wxUSE_MINIDUMP
+            MINIDUMP_EXCEPTION_INFORMATION minidumpExcInfo;
+
+            minidumpExcInfo.ThreadId = ::GetCurrentThreadId();
+            minidumpExcInfo.ExceptionPointers = wxGlobalSEInformation;
+            minidumpExcInfo.ClientPointers = FALSE; // in our own address space
+
+            // do generate the dump
+            if ( !MiniDumpWriteDump
+                  (
+                    ::GetCurrentProcess(),
+                    ::GetCurrentProcessId(),
+                    m_hFile,                    // file to write to
+                    MiniDumpNormal,             // just the minimum
+                    &minidumpExcInfo,
+                    NULL,                       // no extra user-defined data
+                    NULL                        // no callbacks
+                  ) )
+            {
+                Output(_T("MiniDumpWriteDump() failed."));
+
+                return false;
+            }
+
+            return true;
+#else // !wxUSE_MINIDUMP
             SymSetOptions(SYMOPT_DEFERRED_LOADS | SYMOPT_UNDNAME);
 
             // Initialize DbgHelp
@@ -1049,14 +1139,17 @@ bool wxCrashReportImpl::Generate(int _WXUNUSED(flags))
 
                 return true;
             }
+#endif // !wxUSE_MINIDUMP
         }
         else
         {
-            Output(_T("Please update your dbghelp.dll version, ")
-                   _T("at least version 5.1 is needed!\r\n"));
+            Output(_T("\r\nPlease update your dbghelp.dll version, ")
+                   _T("at least version 5.1 is needed!\r\n")
+                   _T("(if you already have a new version, please ")
+                   _T("put it in the same directory where the program is.)\r\n"));
         }
     }
-    else
+    else // failed to load dbghelp.dll
     {
         Output(_T("Please install dbghelp.dll available free of charge ")
                _T("from Microsoft to get more detailed crash information!"));
@@ -1070,7 +1163,7 @@ bool wxCrashReportImpl::Generate(int _WXUNUSED(flags))
            _T("in this wxWindows version."));
 #endif // wxUSE_DBGHELP/!wxUSE_DBGHELP
 
-    return true;
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -1125,7 +1218,11 @@ bool wxHandleFatalExceptions(bool doit)
         // use PID and date to make the report file name more unique
         wxString fname = wxString::Format
                          (
+#if wxUSE_MINIDUMP
+                            _T("%s_%s_%lu.dmp"),
+#else // !wxUSE_MINIDUMP
                             _T("%s_%s_%lu.rpt"),
+#endif // wxUSE_MINIDUMP/!wxUSE_MINIDUMP
                             wxTheApp ? wxTheApp->GetAppName().c_str()
                                      : _T("wxwindows"),
                             wxDateTime::Now().Format(_T("%Y%m%d")).c_str(),
