@@ -74,6 +74,7 @@ class TestPanel(wxPanel):
     def OnFileOpenDialog(self, evt):
         dlg = wxFileDialog(self,
                            defaultDir = os.getcwd(),
+                           wildcard = "All Files|*",
                            style = wxOPEN | wxCHANGE_DIR)
         if dlg.ShowModal() == wxID_OK:
             path = dlg.GetPath()
@@ -115,3 +116,9 @@ list appended to a menu, such as the File menu.
 
 </body></html>
 """
+
+if __name__ == '__main__':
+    import os
+    import run
+    run.main(['', os.path.basename(__file__)])
+
