@@ -1055,6 +1055,7 @@ public:
     wxGridCellEditor *GetEditor(wxGrid* grid, int row, int col) const;
 
     bool IsReadOnly() const;
+    wxAttrKind GetKind();
     void SetDefAttr(wxGridCellAttr* defAttr);
 };
 
