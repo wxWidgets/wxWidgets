@@ -213,8 +213,8 @@ wxLog::wxLog()
   m_ulTraceMask  = (wxTraceMask)0;        // -1 to set all bits
 }
 
-wxLog *wxLog::GetActiveTarget() 
-{ 
+wxLog *wxLog::GetActiveTarget()
+{
   if ( !ms_bInitialized ) {
     // prevent infinite recursion if someone calls wxLogXXX() from
     // wxApp::CreateLogTarget()
@@ -230,20 +230,20 @@ wxLog *wxLog::GetActiveTarget()
     // do nothing if it fails - what can we do?
   }
 
-  return ms_pLogger; 
+  return ms_pLogger;
 }
 
 wxLog *wxLog::SetActiveTarget(wxLog *pLogger)
-{ 
+{
   // flush the old messages before changing
   if ( ms_pLogger != NULL )
     ms_pLogger->Flush();
 
   ms_bInitialized = TRUE;
 
-  wxLog *pOldLogger = ms_pLogger; 
-  ms_pLogger = pLogger; 
-  return pOldLogger; 
+  wxLog *pOldLogger = ms_pLogger;
+  ms_pLogger = pLogger;
+  return pOldLogger;
 }
 
 void wxLog::DoLog(wxLogLevel level, const char *szString)
@@ -300,7 +300,7 @@ void wxLog::DoLog(wxLogLevel level, const char *szString)
         DoLogString(str << (level == wxLOG_Trace ? _("Trace") : _("Debug"))
                         << ": " << szString);
       #endif
-            
+
       break;
 
     default:
@@ -389,10 +389,10 @@ void wxLogGui::Flush()
     return;
 
   // @@@ ugly...
-  
+
   // concatenate all strings (but not too many to not overfill the msg box)
   wxString str;
-  uint nLines    = 0, 
+  uint nLines    = 0,
        nMsgCount = m_aMessages.Count();
 
   // start from the most recent message
@@ -477,7 +477,7 @@ void wxLogGui::DoLog(wxLogLevel level, const char *szString)
 
       m_aMessages.Add(szString);
       break;
-    
+
     default:
       wxFAIL_MSG("unknown log level in wxLogGui::DoLog");
   }
@@ -523,7 +523,7 @@ BEGIN_EVENT_TABLE(wxLogFrame, wxFrame)
   EVT_MENU(Menu_Clear, wxLogFrame::OnClear)
 
   EVT_CLOSE(wxLogFrame::OnCloseWindow)
-END_EVENT_TABLE() 
+END_EVENT_TABLE()
 
 wxLogFrame::wxLogFrame(const char *szTitle)
           : wxFrame(NULL, -1, szTitle)
@@ -618,7 +618,6 @@ void wxLogFrame::OnSave(wxCommandEvent& event)
 
   // retrieve text and save it
   // -------------------------
-  
 #ifdef __WXGTK__
   // @@@@ TODO: no GetNumberOfLines and GetLineText in wxGTK yet
   wxLogError("Sorry, this function is not implemented under GTK");
@@ -628,7 +627,7 @@ void wxLogFrame::OnSave(wxCommandEvent& event)
     bOk = file.Write(m_pTextCtrl->GetLineText(nLine) + wxTextFile::GetEOL());
   }
 #endif //GTK
-  
+
   if ( bOk )
     bOk = file.Close();
 
@@ -647,7 +646,7 @@ wxLogWindow::wxLogWindow(const char *szTitle, bool bShow)
 {
   m_pOldLog = wxLog::GetActiveTarget();
   m_pLogFrame = new wxLogFrame(szTitle);
-  
+
   if ( bShow )
     m_pLogFrame->Show(TRUE);
 }
@@ -661,13 +660,13 @@ void wxLogWindow::DoLog(wxLogLevel level, const char *szString)
 {
   // first let the previous logger show it
   if ( m_pOldLog != NULL ) {
-    // @@@ why can't we access protected wxLog method from here (we derive 
+    // @@@ why can't we access protected wxLog method from here (we derive
     // from wxLog)? gcc gives "DoLog is protected in this context", what
     // does this mean? Anyhow, the cast is harmless and let's us do what
     // we want.
     ((wxLogWindow *)m_pOldLog)->DoLog(level, szString);
   }
-  
+
   // and this will format it nicely and call our DoLogString()
   wxLog::DoLog(level, szString);
 }
@@ -776,7 +775,7 @@ const char *wxSysErrorMsg(unsigned long nErrCode)
       // get error message from system
       LPVOID lpMsgBuf;
       FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-                    NULL, nErrCode, 
+                    NULL, nErrCode,
                     MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
                     (LPTSTR)&lpMsgBuf,
                     0, NULL);
@@ -844,10 +843,10 @@ void wxOnAssert(const char *szFile, int nLine, const char *szMsg)
     strcat(szBuf, ".");
   }
 
-  // send it to the normal log destination
-  wxLogDebug(szBuf);
-
   if ( !s_bNoAsserts ) {
+    // send it to the normal log destination
+    wxLogDebug(szBuf);
+
     strcat(szBuf, _("\nDo you want to stop the program?"
                     "\nYou can also choose [Cancel] to suppress "
                     "further warnings."));
@@ -861,7 +860,7 @@ void wxOnAssert(const char *szFile, int nLine, const char *szMsg)
       case wxCANCEL:
         s_bNoAsserts = TRUE;
         break;
-        
+
       //case wxNO: nothing to do
     }
   }
