@@ -32,10 +32,6 @@
     #undef Yield
 #endif
 
-#ifdef __WXMSW__
-    #include "wx/msw/wrapwin.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -247,7 +243,8 @@ private:
     // include windows.h from this public header and we also have to use the
     // union to force the correct (i.e. maximal) alignment
     //
-    // if CRITICAL_SECTION size changes in Windows, you'll get an assert below
+    // if CRITICAL_SECTION size changes in Windows, you'll get an assert from
+    // thread.cpp and will need to increase the buffer size
     //
     // finally, we need this typedef instead of declaring m_buffer directly
     // because otherwise the assert mentioned above wouldn't compile with some
@@ -257,10 +254,6 @@ private:
 #else // __WIN32__
     typedef char wxCritSectBuffer[24];
 #endif
-
-wxCOMPILE_TIME_ASSERT( sizeof(CRITICAL_SECTION) <= sizeof(wxCritSectBuffer),
-                       wxCriticalSectionBufferTooSmall );
-
     union
     {
         unsigned long m_dummy1;

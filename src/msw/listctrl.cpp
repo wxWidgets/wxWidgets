@@ -113,15 +113,15 @@ public:
         m_pItem = &item;
     }
 
-    // memcpy() in Init() can't work if the struct sizes are different
-    wxCOMPILE_TIME_ASSERT( sizeof(LV_ITEM_OTHER) == sizeof(LV_ITEM_NATIVE),
-                           CodeCantWorkIfDiffSizes);
-
     // init with conversion
     void Init(LV_ITEM_OTHER& item)
     {
         // avoid unnecessary dynamic memory allocation, jjust make m_pItem
         // point to our own m_item
+
+        // memcpy() can't work if the struct sizes are different
+        wxCOMPILE_TIME_ASSERT( sizeof(LV_ITEM_OTHER) == sizeof(LV_ITEM_NATIVE),
+                               CodeCantWorkIfDiffSizes);
 
         memcpy(&m_item, &item, sizeof(LV_ITEM_NATIVE));
 
