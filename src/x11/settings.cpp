@@ -50,7 +50,7 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
         case wxSYS_DEFAULT_GUI_FONT:
         default:
         {
-            return wxFont(12, wxNORMAL, wxNORMAL, wxNORMAL, FALSE);
+            return wxFont(12, wxSWISS, wxNORMAL, wxNORMAL, FALSE);
             break;
         }
     }
