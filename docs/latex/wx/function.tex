@@ -1954,7 +1954,7 @@ For example:
   int answer = wxMessageBox("Quit program?", "Confirm",
                             wxYES_NO | wxCANCEL, main_frame);
   if (answer == wxYES)
-    delete main_frame;
+    main_frame->Close();
   ...
 \end{verbatim}
 
