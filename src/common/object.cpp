@@ -136,6 +136,31 @@ void wxObject::operator delete[] (void * buf, const wxChar*  WXUNUSED(fileName),
 // wxClassInfo
 // ----------------------------------------------------------------------------
 
+wxClassInfo::~wxClassInfo()
+{
+    // remove this object from the linked list of all class infos: if we don't
+    // do it, loading/unloading a DLL containing static wxClassInfo objects is
+    // not going to work
+    if ( this == sm_first )
+    {
+        sm_first = m_next;
+    }
+    else
+    {
+        wxClassInfo *info = sm_first;
+        while (info)
+        {
+            if ( info->m_next == this )
+            {
+                info->m_next = m_next;
+                break;
+            }
+
+            info = info->m_next;
+        }
+    }
+}
+
 wxClassInfo *wxClassInfo::FindClass(const wxChar *className)
 {
     if ( sm_classTable )
