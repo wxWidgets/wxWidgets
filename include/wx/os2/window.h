@@ -272,6 +272,9 @@ public:
     // Transfers data to any child controls
     void OnInitDialog(wxInitDialogEvent& event);
 
+    virtual MRESULT OS2WindowProc(HWND hwnd, WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+
+
 protected:
 
     // Caret data

@@ -74,30 +74,33 @@ public:
 // ---------------------------------------------------------------------------
 
     virtual bool Destroy();
+    virtual void DoSetClientSize(int width, int height);
+    virtual void GetPosition(int *x, int *y) const;
+
+    bool Show(bool show);
+    bool IsShown() const;
+    void Iconize(bool iconize);
+
     virtual bool IsIconized() const;
-    virtual void Centre(int direction = wxBOTH);
-    virtual bool IsModal() const { return ((GetWindowStyleFlag() & wxDIALOG_MODAL) == wxDIALOG_MODAL); }
-
-    virtual int  ShowModal();
-    virtual void EndModal(int retCode);
-
-    void     SetClientSize(int width, int height) { wxWindow::DoSetClientSize(width, height); };
-    void     SetClientSize( const wxSize& size ) { wxWindow::DoSetClientSize(size.x, size.y); };
-    void     SetClientSize(const wxRect& rect) { SetClientSize( rect.width, rect.height ); };
-
-    void     GetPosition(int *x, int *y) const;
-    bool     Show(bool show);
-    void     Iconize(bool iconize);
-
-    void     Fit();
+    void         Fit();
 
     void     SetTitle(const wxString& title);
     wxString GetTitle() const ;
 
-    void     OnCharHook(wxKeyEvent& event);
-    void     OnCloseWindow(wxCloseEvent& event);
+    void OnSize(wxSizeEvent& event);
+    bool OnClose();
+    void OnCharHook(wxKeyEvent& event);
+    void OnPaint(wxPaintEvent& event);
+    void OnCloseWindow(wxCloseEvent& event);
 
-    void     SetModal(bool flag);
+    void SetModal(bool flag);
+
+    virtual void Centre(int direction = wxBOTH);
+    virtual bool IsModal() const;
+
+    // For now, same as Show(TRUE) but returns return code
+    virtual int  ShowModal();
+    virtual void EndModal(int retCode);
 
     // Standard buttons
     void     OnOK(wxCommandEvent& event);
@@ -106,6 +109,32 @@ public:
 
     // Responds to colour changes
     void     OnSysColourChanged(wxSysColourChangedEvent& event);
+
+    // implementation
+    // --------------
+    virtual MRESULT OS2WindowProc(HWND hwnd, WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+
+    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
+                                WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+
+    bool IsModalShowing() const { return m_modalShowing; }
+
+  // tooltip management
+#if wxUSE_TOOLTIPS
+    WXHWND GetToolTipCtrl() const { return m_hwndToolTip; }
+    void SetToolTipCtrl(WXHWND hwndTT) { m_hwndToolTip = hwndTT; }
+#endif // tooltips
+
+protected:
+    bool   m_modalShowing;
+    WXHWND m_hwndOldFocus;  // the window which had focus before we were shown
+
+private:
+#if wxUSE_TOOLTIPS
+    WXHWND                m_hwndToolTip;
+#endif // tooltips
+
+private:
 
 DECLARE_EVENT_TABLE()
 };

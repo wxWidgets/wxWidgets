@@ -305,6 +305,7 @@ OS2OBJS = \
   ..\os2\$D\dcprint.obj \
   ..\os2\$D\dcscreen.obj \
   ..\os2\$D\dialog.obj \
+  ..\os2\$D\dirdlg.obj \
   ..\os2\$D\frame.obj \
   ..\os2\$D\window.obj
 
@@ -331,6 +332,7 @@ OS2LIBOBJS = \
   dcprint.obj \
   dcscreen.obj \
   dialog.obj \
+  dirdlg.obj \
   frame.obj \
   window.obj
 
@@ -501,6 +503,7 @@ $(OS2LIBOBJS):
   copy ..\os2\$D\dcprint.obj
   copy ..\os2\$D\dcscreen.obj
   copy ..\os2\$D\dialog.obj
+  copy ..\os2\$D\dirdlg.obj
   copy ..\os2\$D\frame.obj
   copy ..\os2\$D\window.obj
 

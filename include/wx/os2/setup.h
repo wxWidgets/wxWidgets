@@ -12,10 +12,23 @@
 #ifndef _WX_SETUP_H_
 #define _WX_SETUP_H_
 
-/*
- * General features
- *
- */
+// ----------------------------------------------------------------------------
+// global settings
+// ----------------------------------------------------------------------------
+
+// define this to 0 when building wxBase library
+#define wxUSE_GUI            1
+
+#define WXWIN_COMPATIBILITY  0
+                                // Compatibility with 1.68 API.
+                                // Level 0: no backward compatibility, all new features
+                                // Level 1: Some compatibility. In fact
+                                // the compatibility code is now very minimal so there
+                                // is little advantage to setting it to 1.
+
+// ----------------------------------------------------------------------------
+// General features
+// ----------------------------------------------------------------------------
 
 #define wxUSE_CONFIG           1
                                 // Use wxConfig, with CreateConfig in wxApp
