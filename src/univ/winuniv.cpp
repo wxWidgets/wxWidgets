@@ -366,7 +366,7 @@ bool wxWindow::Enable(bool enable)
         return FALSE;
 
     // disabled window can't keep focus
-    if ( FindFocus() == this )
+    if ( FindFocus() == this && GetParent() != NULL )
     {
         GetParent()->SetFocus();
     }
