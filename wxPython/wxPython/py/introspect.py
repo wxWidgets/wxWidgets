@@ -174,7 +174,10 @@ def getCallTip(command='', locals=None):
         tip1 = name + argspec
     doc = ''
     if callable(object):
-        doc = inspect.getdoc(object)
+        try:
+            doc = inspect.getdoc(object)
+        except:
+            pass
     if doc:
         # tip2 is the first separated line of the docstring, like:
         # "Return call tip text for a command."
