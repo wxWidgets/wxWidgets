@@ -652,8 +652,6 @@ bool wxSetEnv(const wxString& var, const wxChar *value)
 // process management
 // ----------------------------------------------------------------------------
 
-#ifdef __WIN32__
-
 // structure used to pass parameters from wxKill() to wxEnumFindByPidProc()
 struct wxFindByPidParams
 {
@@ -689,11 +687,8 @@ BOOL CALLBACK wxEnumFindByPidProc(HWND hwnd, LPARAM lParam)
     return TRUE;
 }
 
-#endif // __WIN32__
-
 int wxKill(long pid, wxSignal sig, wxKillError *krc)
 {
-#ifdef __WIN32__
     // get the process handle to operate on
     HANDLE hProcess = ::OpenProcess(SYNCHRONIZE |
                                     PROCESS_TERMINATE |
@@ -830,25 +825,19 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc)
 
     // the return code is the same as from Unix kill(): 0 if killed
     // successfully or -1 on error
-    if ( sig == wxSIGNONE )
+    //
+    // be careful to interpret rc correctly: for wxSIGNONE we return success if
+    // the process exists, for all the other sig values -- if it doesn't
+    if ( ok &&
+            ((sig == wxSIGNONE) == (rc == STILL_ACTIVE)) )
     {
-        if ( ok && rc == STILL_ACTIVE )
+        if ( krc )
         {
-            // there is such process => success
-            return 0;
+            *krc = wxKILL_OK;
         }
+
+        return 0;
     }
-    else // not SIGNONE
-    {
-        if ( ok && rc != STILL_ACTIVE )
-        {
-            // killed => success
-            return 0;
-        }
-    }
-#else // Win16
-    wxFAIL_MSG( _T("not implemented") );
-#endif // Win32/Win16
 
     // error
     return -1;
