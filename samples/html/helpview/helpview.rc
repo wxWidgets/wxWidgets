@@ -1,4 +1,0 @@
-/* We need this to get the right default icon. */
-aaaaaa  ICON "mondrian.ico"
-
-#include "wx/msw/wx.rc"
