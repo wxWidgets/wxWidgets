@@ -2577,6 +2577,10 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 eventType = wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT;
                 TV_DISPINFO *info = (TV_DISPINFO *)lParam;
 
+                // although the user event handler may still veto it, it is
+                // important to set it now so that calls to SetItemText() from
+                // the event handler would change the text controls contents
+                m_idEdited =
                 event.m_item = info->item.hItem;
                 event.m_label = info->item.pszText;
                 event.m_editCancelled = false;
@@ -2942,8 +2946,9 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         case TVN_BEGINLABELEDIT:
             // return true to cancel label editing
             *result = !event.IsAllowed();
+
             // set ES_WANTRETURN ( like we do in BeginLabelEdit )
-            if(event.IsAllowed())
+            if ( event.IsAllowed() )
             {
                 HWND hText = TreeView_GetEditControl(GetHwnd());
                 if(hText != NULL)
@@ -2967,6 +2972,10 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     m_textCtrl->SetWindowStyle(m_textCtrl->GetWindowStyle()
                                                | wxTE_PROCESS_ENTER);
                 }
+            }
+            else // we had set m_idEdited before
+            {
+                m_idEdited.Unset();
             }
             break;
 

@@ -1105,6 +1105,11 @@ void MyTreeCtrl::OnBeginLabelEdit(wxTreeEvent& event)
 
         event.Veto();
     }
+    else if ( itemId == GetRootItem() )
+    {
+        // test that it is possible to change the text of the item being edited
+        SetItemText(itemId, _T("Editing root item"));
+    }
 }
 
 void MyTreeCtrl::OnEndLabelEdit(wxTreeEvent& event)
