@@ -49,6 +49,10 @@ public:
     int Add(const wxBitmap& bitmap, const wxBitmap& mask = wxNullBitmap);
     %Rename(AddWithColourMask,int, Add(const wxBitmap& bitmap, const wxColour& maskColour));
     %Rename(AddIcon,int, Add(const wxIcon& icon));
+
+    wxBitmap GetBitmap(int index) const;
+    wxIcon GetIcon(int index) const;
+      
 #ifdef __WXMSW__
     bool Replace(int index, const wxBitmap& bitmap, const wxBitmap& mask = wxNullBitmap);
 #else
