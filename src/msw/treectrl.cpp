@@ -756,6 +756,13 @@ size_t wxTreeCtrl::GetChildrenCount(const wxTreeItemId& item, bool recursively)
     return 0;
 }
 
+// delete all children (but don't delete the item itself)
+// NB: this won't send wxEVT_COMMAND_TREE_ITEM_DELETED events
+void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
+{
+    // TODO
+}
+
 // ----------------------------------------------------------------------------
 // implementation
 // ----------------------------------------------------------------------------
