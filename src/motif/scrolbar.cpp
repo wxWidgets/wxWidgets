@@ -96,7 +96,6 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
     XtAddCallback(scrollBarWidget, XmNtoTopCallback, (XtCallbackProc)wxScrollBarCallback, (XtPointer)this);
     XtAddCallback(scrollBarWidget, XmNtoBottomCallback, (XtCallbackProc)wxScrollBarCallback, (XtPointer)this);
 
-    SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, x, y, width, height);
     ChangeBackgroundColour();
 

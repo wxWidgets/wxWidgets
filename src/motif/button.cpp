@@ -75,8 +75,6 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
                    XmNactivateCallback, (XtCallbackProc) wxButtonCallback,
                    (XtPointer) this);
 
-    SetCanAddEventHandler(TRUE);
-
     wxSize best = GetBestSize();
     if( size.x != -1 ) best.x = size.x;
     if( size.y != -1 ) best.y = size.y;

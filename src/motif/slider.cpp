@@ -104,7 +104,6 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     XtAddCallback (sliderWidget, XmNdragCallback, (XtCallbackProc) wxSliderCallback, (XtPointer) this);
 
     ChangeFont(FALSE);
-    SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
 
     ChangeBackgroundColour();

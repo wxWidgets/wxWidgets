@@ -197,7 +197,6 @@ bool wxTextCtrl::Create(wxWindow *parent,
     if( size.x != -1 ) best.x = size.x;
     if( size.y != -1 ) best.y = size.y;
 
-    SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL,
                   pos.x, pos.y, best.x, best.y);
 
@@ -581,9 +580,9 @@ void wxTextCtrl::ChangeBackgroundColour()
             NULL);
         wxColour backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
         if (hsb)
-            DoChangeBackgroundColour((WXWidget) hsb, backgroundColour, TRUE);
+            wxDoChangeBackgroundColour((WXWidget) hsb, backgroundColour, TRUE);
         if (vsb)
-            DoChangeBackgroundColour((WXWidget) vsb, backgroundColour, TRUE);
+            wxDoChangeBackgroundColour((WXWidget) vsb, backgroundColour, TRUE);
 
         // MBN: why change parent background?
         // DoChangeBackgroundColour((WXWidget) parent, m_backgroundColour, TRUE);
@@ -611,7 +610,7 @@ void wxTextCtrl::ChangeForegroundColour()
             if (vsb)
             DoChangeForegroundColour((WXWidget) vsb, m_foregroundColour);
         */
-        DoChangeForegroundColour((WXWidget) parent, m_foregroundColour);
+        wxDoChangeForegroundColour((WXWidget) parent, m_foregroundColour);
     }
 }
 

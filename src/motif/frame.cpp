@@ -694,13 +694,13 @@ void wxFrame::ChangeFont(bool WXUNUSED(keepOriginalSize))
 void wxFrame::ChangeBackgroundColour()
 {
     if (GetClientWidget())
-        DoChangeBackgroundColour(GetClientWidget(), m_backgroundColour);
+        wxDoChangeBackgroundColour(GetClientWidget(), m_backgroundColour);
 }
 
 void wxFrame::ChangeForegroundColour()
 {
     if (GetClientWidget())
-        DoChangeForegroundColour(GetClientWidget(), m_foregroundColour);
+        wxDoChangeForegroundColour(GetClientWidget(), m_foregroundColour);
 }
 
 /* MATTEW: Used to insure that hide-&-show within an event cycle works */

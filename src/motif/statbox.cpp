@@ -121,7 +121,6 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
                 NULL);
     }
     
-    SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, NULL, pos.x, pos.y, size.x, size.y);
     ChangeBackgroundColour();
 

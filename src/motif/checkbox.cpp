@@ -70,7 +70,6 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 
     XmToggleButtonSetState ((Widget) m_mainWidget, FALSE, TRUE);
 
-    SetCanAddEventHandler(TRUE);
     AttachWidget( parent, m_mainWidget, (WXWidget)NULL,
                   pos.x, pos.y, size.x, size.y );
 

@@ -75,8 +75,6 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
     m_font = parent->GetFont();
     ChangeFont(FALSE);
 
-    SetCanAddEventHandler(TRUE);
-
     wxSize actualSize(size);
     // work around the cases where the bitmap is a wxNull(Icon/Bitmap)
     if (actualSize.x == -1)

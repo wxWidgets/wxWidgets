@@ -188,12 +188,12 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
 
 static void wxChangeListBoxColours(wxWindow* WXUNUSED(win), Widget widget)
 {
-    wxWindow::DoChangeBackgroundColour((WXWidget) widget, *wxWHITE);
+    wxDoChangeBackgroundColour((WXWidget) widget, *wxWHITE);
 
     // Change colour of the scrolled areas of the listboxes
     Widget listParent = XtParent (widget);
 #if 0
-    wxWindow::DoChangeBackgroundColour((WXWidget) listParent, *wxWHITE, TRUE);
+    wxDoChangeBackgroundColour((WXWidget) listParent, *wxWHITE, TRUE);
 #endif
 
     Widget hsb = (Widget) 0;
@@ -207,8 +207,8 @@ static void wxChangeListBoxColours(wxWindow* WXUNUSED(win), Widget widget)
     * function to change them (by default, taken from wxSystemSettings)
     */
     wxColour backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-    wxWindow::DoChangeBackgroundColour((WXWidget) hsb, backgroundColour, TRUE);
-    wxWindow::DoChangeBackgroundColour((WXWidget) vsb, backgroundColour, TRUE);
+    wxDoChangeBackgroundColour((WXWidget) hsb, backgroundColour, TRUE);
+    wxDoChangeBackgroundColour((WXWidget) vsb, backgroundColour, TRUE);
 
     if (hsb)
       XtVaSetValues (hsb,
@@ -334,9 +334,9 @@ int wxFileDialog::ShowModal()
         XmNresizePolicy, XmRESIZE_NONE,
         NULL);
 #endif
-    //    DoChangeBackgroundColour((WXWidget) fileSel, m_backgroundColour);
-    DoChangeBackgroundColour((WXWidget) filterWidget, *wxWHITE);
-    DoChangeBackgroundColour((WXWidget) selectionWidget, *wxWHITE);
+    //    wxDoChangeBackgroundColour((WXWidget) fileSel, m_backgroundColour);
+    wxDoChangeBackgroundColour((WXWidget) filterWidget, *wxWHITE);
+    wxDoChangeBackgroundColour((WXWidget) selectionWidget, *wxWHITE);
 
     wxChangeListBoxColours(this, dirListWidget);
     wxChangeListBoxColours(this, fileListWidget);

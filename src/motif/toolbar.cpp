@@ -239,7 +239,6 @@ bool wxToolBar::Create(wxWindow *parent,
     if( rSize.x == -1 && GetParent() )
         rSize.x = GetParent()->GetSize().x;
 
-    SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL,
                   rPos.x, rPos.y, rSize.x, rSize.y);
 
@@ -361,8 +360,8 @@ bool wxToolBar::Realize()
 
                 if( !tool->GetButtonWidget() )
                 {
-                    DoChangeBackgroundColour((WXWidget) button,
-                                             m_backgroundColour, TRUE);
+                    wxDoChangeBackgroundColour((WXWidget) button,
+                                               m_backgroundColour, TRUE);
 
                     tool->SetWidget(button);
                 }

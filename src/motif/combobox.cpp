@@ -86,7 +86,6 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     XtAddCallback (buttonWidget, XmNvalueChangedCallback, (XtCallbackProc) wxComboBoxCallback,
         (XtPointer) this);
 
-    SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
 
     ChangeBackgroundColour();

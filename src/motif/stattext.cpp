@@ -117,7 +117,6 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
     m_mainWidget = borderWidget ? borderWidget : m_labelWidget;
 
-    SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
 
     ChangeBackgroundColour ();

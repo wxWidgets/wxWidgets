@@ -95,7 +95,6 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 
     XtManageChild (radioButtonWidget);
 
-    SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
 
     ChangeBackgroundColour();

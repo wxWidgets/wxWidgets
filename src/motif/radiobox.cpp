@@ -168,7 +168,6 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
     XtManageChild (radioBoxWidget);
     XtManageChild ((Widget)m_mainWidget);
 
-    SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, NULL, pos.x, pos.y, size.x, size.y);
 
     ChangeBackgroundColour();
@@ -385,7 +384,7 @@ void wxRadioBox::ChangeBackgroundColour()
     {
         WXWidget radioButton = m_radioButtons[i];
 
-        DoChangeBackgroundColour(radioButton, m_backgroundColour, TRUE);
+        wxDoChangeBackgroundColour(radioButton, m_backgroundColour, TRUE);
 
         XtVaSetValues ((Widget) radioButton,
           XmNselectColor, selectPixel,
@@ -402,7 +401,7 @@ void wxRadioBox::ChangeForegroundColour()
     {
         WXWidget radioButton = m_radioButtons[i];
 
-        DoChangeForegroundColour(radioButton, m_foregroundColour);
+        wxDoChangeForegroundColour(radioButton, m_foregroundColour);
     }
 }
 

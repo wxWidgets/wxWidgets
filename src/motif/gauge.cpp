@@ -136,7 +136,6 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
 
     ChangeFont(FALSE);
 
-    SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, x, y,
                   best.x, best.y);
 

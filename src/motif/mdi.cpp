@@ -391,7 +391,6 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
     XtAddEventHandler((Widget) m_mainWidget, ExposureMask,FALSE,
         wxUniversalRepaintProc, (XtPointer) this);
 
-    SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
 
     ChangeBackgroundColour();

@@ -445,11 +445,11 @@ void wxDialog::ChangeFont(bool keepOriginalSize)
 void wxDialog::ChangeBackgroundColour()
 {
     if (GetMainWidget())
-        DoChangeBackgroundColour(GetMainWidget(), m_backgroundColour);
+        wxDoChangeBackgroundColour(GetMainWidget(), m_backgroundColour);
 }
 
 void wxDialog::ChangeForegroundColour()
 {
     if (GetMainWidget())
-        DoChangeForegroundColour(GetMainWidget(), m_foregroundColour);
+        wxDoChangeForegroundColour(GetMainWidget(), m_foregroundColour);
 }

@@ -101,8 +101,6 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id,
                    XmNactivateCallback, (XtCallbackProc) wxButtonCallback,
                    (XtPointer) this);
 
-    SetCanAddEventHandler(TRUE);
-    
     wxSize best = m_bmpNormal.Ok() ? GetBestSize() : wxSize(30, 30);
     if( size.x != -1 ) best.x = size.x;
     if( size.y != -1 ) best.y = size.y;
@@ -266,7 +264,7 @@ void wxBitmapButton::DoSetBitmap()
 
 void wxBitmapButton::ChangeBackgroundColour()
 {
-    DoChangeBackgroundColour(m_mainWidget, m_backgroundColour, TRUE);
+    wxDoChangeBackgroundColour(m_mainWidget, m_backgroundColour, TRUE);
 
     // Must reset the bitmaps since the colours have changed.
     DoSetBitmap();

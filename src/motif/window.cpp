@@ -200,10 +200,6 @@ void wxWindow::Init()
     m_needsRefresh = TRUE;
     m_mainWidget = (WXWidget) 0;
 
-    m_button1Pressed =
-    m_button2Pressed =
-    m_button3Pressed = FALSE;
-
     m_winCaptured = FALSE;
 
     m_isShown = TRUE;
@@ -214,9 +210,6 @@ void wxWindow::Init()
     m_borderWidget =
     m_scrolledWindow =
     m_drawingArea = (WXWidget) 0;
-
-    m_hScroll =
-    m_vScroll = FALSE;
 
     m_scrollPosX =
     m_scrollPosY = 0;
@@ -230,7 +223,6 @@ void wxWindow::Init()
 
     m_lastTS = 0;
     m_lastButton = 0;
-    m_canAddEventHandler = FALSE;
 }
 
 // real construction (Init() must have been called before!)
@@ -378,8 +370,8 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     // Scrolled widget needs to have its colour changed or we get a little blue
     // square where the scrollbars abutt
     wxColour backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-    DoChangeBackgroundColour(m_scrolledWindow, backgroundColour, TRUE);
-    DoChangeBackgroundColour(m_drawingArea, backgroundColour, TRUE);
+    wxDoChangeBackgroundColour(m_scrolledWindow, backgroundColour, TRUE);
+    wxDoChangeBackgroundColour(m_drawingArea, backgroundColour, TRUE);
 
     XmScrolledWindowSetAreas(
                              (Widget)m_scrolledWindow,
@@ -529,15 +521,13 @@ void wxWindow::CreateScrollbar(wxOrientation orientation)
         m_hScrollBar = (WXWidget) hScrollBar;
 
         wxColour backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-        DoChangeBackgroundColour(m_hScrollBar, backgroundColour, TRUE);
+        wxDoChangeBackgroundColour(m_hScrollBar, backgroundColour, TRUE);
 
         XtRealizeWidget(hScrollBar);
 
         XtVaSetValues((Widget) m_scrolledWindow,
             XmNhorizontalScrollBar, (Widget) m_hScrollBar,
             NULL);
-
-        m_hScroll = TRUE;
 
         wxAddWindowToTable( hScrollBar, this );
     }
@@ -564,15 +554,13 @@ void wxWindow::CreateScrollbar(wxOrientation orientation)
 
         m_vScrollBar = (WXWidget) vScrollBar;
         wxColour backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-        DoChangeBackgroundColour(m_vScrollBar, backgroundColour, TRUE);
+        wxDoChangeBackgroundColour(m_vScrollBar, backgroundColour, TRUE);
 
         XtRealizeWidget(vScrollBar);
 
         XtVaSetValues((Widget) m_scrolledWindow,
             XmNverticalScrollBar, (Widget) m_vScrollBar,
             NULL);
-
-        m_vScroll = TRUE;
 
         wxAddWindowToTable( vScrollBar, this );
     }
@@ -594,7 +582,6 @@ void wxWindow::DestroyScrollbar(wxOrientation orientation)
             XtDestroyWidget((Widget) m_hScrollBar);
         }
         m_hScrollBar = (WXWidget) 0;
-        m_hScroll = FALSE;
 
         XtVaSetValues((Widget) m_scrolledWindow,
             XmNhorizontalScrollBar, (Widget) 0,
@@ -610,7 +597,6 @@ void wxWindow::DestroyScrollbar(wxOrientation orientation)
             XtDestroyWidget((Widget) m_vScrollBar);
         }
         m_vScrollBar = (WXWidget) 0;
-        m_vScroll = FALSE;
 
         XtVaSetValues((Widget) m_scrolledWindow,
             XmNverticalScrollBar, (Widget) 0,
@@ -1884,14 +1870,12 @@ bool wxWindow::AttachWidget (wxWindow* WXUNUSED(parent), WXWidget mainWidget,
                              WXWidget formWidget, int x, int y, int width, int height)
 {
     wxAddWindowToTable((Widget) mainWidget, this);
-    if (CanAddEventHandler())
-    {
-        XtAddEventHandler((Widget) mainWidget,
-            ButtonPressMask | ButtonReleaseMask | PointerMotionMask, // | KeyPressMask,
-            False,
-            wxPanelItemEventHandler,
-            (XtPointer) this);
-    }
+    XtAddEventHandler( (Widget) mainWidget,
+                       ButtonPressMask | ButtonReleaseMask
+                     | PointerMotionMask,
+                       False,
+                       wxPanelItemEventHandler,
+                       (XtPointer) this);
 
     if (!formWidget)
     {
@@ -1925,14 +1909,12 @@ bool wxWindow::AttachWidget (wxWindow* WXUNUSED(parent), WXWidget mainWidget,
 // Remove event handler, remove from hash table
 bool wxWindow::DetachWidget(WXWidget widget)
 {
-    if (CanAddEventHandler())
-    {
-        XtRemoveEventHandler((Widget) widget,
-            ButtonPressMask | ButtonReleaseMask | PointerMotionMask, // | KeyPressMask,
-            False,
-            wxPanelItemEventHandler,
-            (XtPointer)this);
-    }
+    XtRemoveEventHandler( (Widget) widget,
+                          ButtonPressMask | ButtonReleaseMask
+                        | PointerMotionMask,
+                          False,
+                          wxPanelItemEventHandler,
+                          (XtPointer)this);
 
     wxDeleteWindowFromTable((Widget) widget);
     return TRUE;
@@ -2092,168 +2074,14 @@ static void wxCanvasInputEvent(Widget drawingArea,
     case ButtonPress:
     case ButtonRelease:
     case MotionNotify:
+    {
+        wxMouseEvent wxevent;
+        if(wxTranslateMouseEvent(wxevent, canvas, drawingArea, &local_event))
         {
-            // FIXME: most of this mouse event code is more or less
-            // duplicated in wxTranslateMouseEvent
-            //
-            wxEventType eventType = wxEVT_NULL;
-
-            if (local_event.xany.type == EnterNotify)
-            {
-                //if (local_event.xcrossing.mode!=NotifyNormal)
-                //  return ; // Ignore grab events
-                eventType = wxEVT_ENTER_WINDOW;
-                //            canvas->GetEventHandler()->OnSetFocus();
-            }
-            else if (local_event.xany.type == LeaveNotify)
-            {
-                //if (local_event.xcrossingr.mode!=NotifyNormal)
-                //  return ; // Ignore grab events
-                eventType = wxEVT_LEAVE_WINDOW;
-                //            canvas->GetEventHandler()->OnKillFocus();
-            }
-            else if (local_event.xany.type == MotionNotify)
-            {
-                eventType = wxEVT_MOTION;
-            }
-
-            else if (local_event.xany.type == ButtonPress)
-            {
-                if (local_event.xbutton.button == Button1)
-                {
-                    eventType = wxEVT_LEFT_DOWN;
-                    canvas->SetButton1(TRUE);
-                }
-                else if (local_event.xbutton.button == Button2)
-                {
-                    eventType = wxEVT_MIDDLE_DOWN;
-                    canvas->SetButton2(TRUE);
-                }
-                else if (local_event.xbutton.button == Button3)
-                {
-                    eventType = wxEVT_RIGHT_DOWN;
-                    canvas->SetButton3(TRUE);
-                }
-            }
-            else if (local_event.xany.type == ButtonRelease)
-            {
-                if (local_event.xbutton.button == Button1)
-                {
-                    eventType = wxEVT_LEFT_UP;
-                    canvas->SetButton1(FALSE);
-                }
-                else if (local_event.xbutton.button == Button2)
-                {
-                    eventType = wxEVT_MIDDLE_UP;
-                    canvas->SetButton2(FALSE);
-                }
-                else if (local_event.xbutton.button == Button3)
-                {
-                    eventType = wxEVT_RIGHT_UP;
-                    canvas->SetButton3(FALSE);
-                }
-            }
-
-            wxMouseEvent wxevent (eventType);
-
-            wxevent.m_leftDown = ((eventType == wxEVT_LEFT_DOWN)
-                || (event_left_is_down (&local_event)
-                && (eventType != wxEVT_LEFT_UP)));
-            wxevent.m_middleDown = ((eventType == wxEVT_MIDDLE_DOWN)
-                || (event_middle_is_down (&local_event)
-                && (eventType != wxEVT_MIDDLE_UP)));
-            wxevent.m_rightDown = ((eventType == wxEVT_RIGHT_DOWN)
-                || (event_right_is_down (&local_event)
-                && (eventType != wxEVT_RIGHT_UP)));
-
-            wxevent.m_shiftDown = local_event.xbutton.state & ShiftMask;
-            wxevent.m_controlDown = local_event.xbutton.state & ControlMask;
-            wxevent.m_altDown = local_event.xbutton.state & Mod3Mask;
-            wxevent.m_metaDown = local_event.xbutton.state & Mod1Mask;
-            wxevent.SetTimestamp(local_event.xbutton.time);
-
-           if ( eventType == wxEVT_MOTION )
-           {
-                if (local_event.xmotion.is_hint == NotifyHint)
-                {
-                    Window root, child;
-                    Display *dpy = XtDisplay (drawingArea);
-
-                    XQueryPointer (dpy, XtWindow (drawingArea),
-                        &root, &child,
-                        &local_event.xmotion.x_root,
-                        &local_event.xmotion.y_root,
-                        &local_event.xmotion.x,
-                        &local_event.xmotion.y,
-                        &local_event.xmotion.state);
-                }
-                else
-                {
-                }
-           }
-
-            // Now check if we need to translate this event into a double click
-            if (TRUE) // canvas->doubleClickAllowed)
-            {
-                if (wxevent.ButtonDown())
-                {
-                    long dclickTime = XtGetMultiClickTime((Display*) wxGetDisplay());
-
-                    // get button and time-stamp
-                    int button = 0;
-                    if (wxevent.LeftDown())
-                        button = 1;
-                    else if (wxevent.MiddleDown())
-                        button = 2;
-                    else if (wxevent.RightDown())
-                        button = 3;
-                    long ts = wxevent.GetTimestamp();
-
-                    // check, if single or double click
-                    int buttonLast = canvas->GetLastClickedButton();
-                    long lastTS = canvas->GetLastClickTime();
-                    if ( buttonLast && buttonLast == button && (ts - lastTS) < dclickTime )
-                    {
-                        // I have a dclick
-                        canvas->SetLastClick(0, ts);
-
-                        wxEventType typeDouble;
-                        if ( eventType == wxEVT_LEFT_DOWN )
-                            typeDouble = wxEVT_LEFT_DCLICK;
-                        else if ( eventType == wxEVT_MIDDLE_DOWN )
-                            typeDouble = wxEVT_MIDDLE_DCLICK;
-                        else if ( eventType == wxEVT_RIGHT_DOWN )
-                            typeDouble = wxEVT_RIGHT_DCLICK;
-                        else
-                            typeDouble = wxEVT_NULL;
-
-                        if ( typeDouble != wxEVT_NULL )
-                        {
-                            wxevent.SetEventType(typeDouble);
-                        }
-                    }
-                    else
-                    {
-                        // not fast enough or different button
-                        canvas->SetLastClick(button, ts);
-                    }
-                }
-            }
-
-            wxevent.SetId(canvas->GetId());
-            wxevent.SetEventObject(canvas);
-            wxevent.m_x = local_event.xbutton.x;
-            wxevent.m_y = local_event.xbutton.y;
-            canvas->GetEventHandler()->ProcessEvent (wxevent);
-#if 0
-            if (eventType == wxEVT_ENTER_WINDOW ||
-                    eventType == wxEVT_LEAVE_WINDOW ||
-                    eventType == wxEVT_MOTION
-               )
-                return;
-#endif // 0
-            break;
-      }
+            canvas->GetEventHandler()->ProcessEvent(wxevent);
+        }
+        break;
+    }
     case KeyPress:
         {
             wxKeyEvent event (wxEVT_CHAR);
@@ -2449,26 +2277,31 @@ void wxUniversalRepaintProc(Widget w, XtPointer WXUNUSED(c_data), XEvent *event,
 // TranslateXXXEvent() functions
 // ----------------------------------------------------------------------------
 
-bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Widget widget, XEvent *xevent)
+bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win,
+                           Widget widget, XEvent *xevent)
 {
     switch (xevent->xany.type)
     {
-        case EnterNotify:  // never received here - yes ? MB
-        case LeaveNotify:  // never received here - yes ? MB
+        case EnterNotify:
+        case LeaveNotify:
+#if 0
+            fprintf(stderr, "Widget 0x%p <-> window %p (%s), %s\n",
+                    (WXWidget)widget, win, win->GetClassInfo()->GetClassName(),
+                    (xevent->xany.type == EnterNotify ? "ENTER" : "LEAVE"));
+#endif
         case ButtonPress:
         case ButtonRelease:
         case MotionNotify:
         {
             wxEventType eventType = wxEVT_NULL;
 
-            // FIXME: this is never true I think - MB
-            //
             if (xevent->xany.type == LeaveNotify)
             {
-                win->SetButton1(FALSE);
-                win->SetButton2(FALSE);
-                win->SetButton3(FALSE);
-                return FALSE;
+                eventType = wxEVT_LEAVE_WINDOW;
+            }
+            if (xevent->xany.type == EnterNotify)
+            {
+                eventType = wxEVT_ENTER_WINDOW;
             }
             else if (xevent->xany.type == MotionNotify)
             {
@@ -2481,30 +2314,28 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Widget widget, 
                 if (xevent->xbutton.button == Button1)
                 {
                     eventType = wxEVT_LEFT_DOWN;
-                    win->SetButton1(TRUE);
                     button = 1;
                 }
                 else if (xevent->xbutton.button == Button2)
                 {
                     eventType = wxEVT_MIDDLE_DOWN;
-                    win->SetButton2(TRUE);
                     button = 2;
                 }
                 else if (xevent->xbutton.button == Button3)
                 {
                     eventType = wxEVT_RIGHT_DOWN;
-                    win->SetButton3(TRUE);
                     button = 3;
                 }
 
                 // check for a double click
                 //
-                long dclickTime = XtGetMultiClickTime((Display*) wxGetDisplay());
+                long dclickTime = XtGetMultiClickTime(wxGlobalDisplay());
                 long ts = wxevent.GetTimestamp();
 
                 int buttonLast = win->GetLastClickedButton();
                 long lastTS = win->GetLastClickTime();
-                if ( buttonLast && buttonLast == button && (ts - lastTS) < dclickTime )
+                if ( buttonLast && buttonLast == button &&
+                     (ts - lastTS) < dclickTime )
                 {
                     // I have a dclick
                     win->SetLastClick(0, ts);
@@ -2526,19 +2357,17 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Widget widget, 
                 if (xevent->xbutton.button == Button1)
                 {
                     eventType = wxEVT_LEFT_UP;
-                    win->SetButton1(FALSE);
                 }
                 else if (xevent->xbutton.button == Button2)
                 {
                     eventType = wxEVT_MIDDLE_UP;
-                    win->SetButton2(FALSE);
                 }
                 else if (xevent->xbutton.button == Button3)
                 {
                     eventType = wxEVT_RIGHT_UP;
-                    win->SetButton3(FALSE);
                 }
-                else return FALSE;
+                else
+                    return FALSE;
             }
             else
             {
@@ -2706,30 +2535,16 @@ void wxWindow::ChangeBackgroundColour()
 {
     WXWidget mainWidget = GetMainWidget();
     if ( mainWidget )
-        DoChangeBackgroundColour(mainWidget, m_backgroundColour);
+        wxDoChangeBackgroundColour(mainWidget, m_backgroundColour);
 }
 
 void wxWindow::ChangeForegroundColour()
 {
     WXWidget mainWidget = GetMainWidget();
     if ( mainWidget )
-        DoChangeForegroundColour(mainWidget, m_foregroundColour);
+        wxDoChangeForegroundColour(mainWidget, m_foregroundColour);
     if ( m_scrolledWindow && mainWidget != m_scrolledWindow )
-        DoChangeForegroundColour(m_scrolledWindow, m_foregroundColour);
-}
-
-// Change a widget's foreground and background colours.
-void wxWindow::DoChangeForegroundColour(WXWidget widget,
-                                        wxColour& foregroundColour)
-{
-    wxDoChangeForegroundColour( widget, foregroundColour );
-}
-
-void wxWindow::DoChangeBackgroundColour(WXWidget widget,
-                                        wxColour& backgroundColour,
-                                        bool changeArmColour)
-{
-    wxDoChangeBackgroundColour( widget, backgroundColour, changeArmColour );
+        wxDoChangeForegroundColour(m_scrolledWindow, m_foregroundColour);
 }
 
 bool wxWindow::SetBackgroundColour(const wxColour& col)

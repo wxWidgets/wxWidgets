@@ -149,7 +149,6 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
                    (XtCallbackProc) wxListBoxCallback,
                    (XtPointer) this);
 
-    SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL,
                   pos.x, pos.y, best.x, best.y);
 
@@ -619,8 +618,8 @@ void wxListBox::ChangeBackgroundColour()
     * function to change them (by default, taken from wxSystemSettings)
     */
     wxColour backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-    DoChangeBackgroundColour((WXWidget) hsb, backgroundColour, TRUE);
-    DoChangeBackgroundColour((WXWidget) vsb, backgroundColour, TRUE);
+    wxDoChangeBackgroundColour((WXWidget) hsb, backgroundColour, TRUE);
+    wxDoChangeBackgroundColour((WXWidget) vsb, backgroundColour, TRUE);
 
     XtVaSetValues (hsb,
         XmNtroughColor, backgroundColour.AllocColour(XtDisplay(hsb)),
@@ -630,7 +629,7 @@ void wxListBox::ChangeBackgroundColour()
         NULL);
 
     // MBN: why change parent's background? It looks really ugly.
-    // DoChangeBackgroundColour((WXWidget) parent, m_backgroundColour, TRUE);
+    // wxDoChangeBackgroundColour((WXWidget) parent, m_backgroundColour, TRUE);
 }
 
 void wxListBox::ChangeForegroundColour()
@@ -648,9 +647,9 @@ void wxListBox::ChangeForegroundColour()
     /* TODO: should scrollbars be affected? Should probably have separate
              function to change them (by default, taken from wxSystemSettings)
 
-        DoChangeForegroundColour((WXWidget) hsb, m_foregroundColour);
-        DoChangeForegroundColour((WXWidget) vsb, m_foregroundColour);
-        DoChangeForegroundColour((WXWidget) parent, m_foregroundColour);
+        wxDoChangeForegroundColour((WXWidget) hsb, m_foregroundColour);
+        wxDoChangeForegroundColour((WXWidget) vsb, m_foregroundColour);
+        wxDoChangeForegroundColour((WXWidget) parent, m_foregroundColour);
     */
 }
 

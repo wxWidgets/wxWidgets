@@ -179,7 +179,7 @@ int wxChoice::DoAppend(const wxString& item)
 #endif
         NULL);
 
-    DoChangeBackgroundColour((WXWidget) w, m_backgroundColour);
+    wxDoChangeBackgroundColour((WXWidget) w, m_backgroundColour);
 
     if( m_font.Ok() )
         wxDoChangeFont( w, m_font );
@@ -459,22 +459,22 @@ void wxChoice::ChangeFont(bool keepOriginalSize)
 
 void wxChoice::ChangeBackgroundColour()
 {
-    DoChangeBackgroundColour(m_formWidget, m_backgroundColour);
-    DoChangeBackgroundColour(m_buttonWidget, m_backgroundColour);
-    DoChangeBackgroundColour(m_menuWidget, m_backgroundColour);
+    wxDoChangeBackgroundColour(m_formWidget, m_backgroundColour);
+    wxDoChangeBackgroundColour(m_buttonWidget, m_backgroundColour);
+    wxDoChangeBackgroundColour(m_menuWidget, m_backgroundColour);
     size_t i;
     for (i = 0; i < m_noStrings; i++)
-        DoChangeBackgroundColour(m_widgetArray[i], m_backgroundColour);
+        wxDoChangeBackgroundColour(m_widgetArray[i], m_backgroundColour);
 }
 
 void wxChoice::ChangeForegroundColour()
 {
-    DoChangeForegroundColour(m_formWidget, m_foregroundColour);
-    DoChangeForegroundColour(m_buttonWidget, m_foregroundColour);
-    DoChangeForegroundColour(m_menuWidget, m_foregroundColour);
+    wxDoChangeForegroundColour(m_formWidget, m_foregroundColour);
+    wxDoChangeForegroundColour(m_buttonWidget, m_foregroundColour);
+    wxDoChangeForegroundColour(m_menuWidget, m_foregroundColour);
     size_t i;
     for (i = 0; i < m_noStrings; i++)
-        DoChangeForegroundColour(m_widgetArray[i], m_foregroundColour);
+        wxDoChangeForegroundColour(m_widgetArray[i], m_foregroundColour);
 }
 
 int wxChoice::GetCount() const
