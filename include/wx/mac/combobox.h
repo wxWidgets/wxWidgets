@@ -16,6 +16,7 @@
 #pragma interface "combobox.h"
 #endif
 
+#include "wx/textctrl.h"
 #include "wx/choice.h"
 
 WXDLLEXPORT_DATA(extern const char*) wxComboBoxNameStr;
@@ -28,6 +29,18 @@ class WXDLLEXPORT wxComboBox: public wxChoice
 
  public:
   inline wxComboBox() {}
+    virtual ~wxComboBox();
+    // override the base class virtuals involved in geometry calculations
+    virtual wxSize DoGetBestSize() const;
+    virtual void DoMoveWindow(int x, int y, int width, int height);
+
+    // forward these functions to all subcontrols
+    virtual bool Enable(bool enable = TRUE);
+    virtual bool Show(bool show = TRUE);
+
+    // callback functions
+    virtual void DelegateTextChanged( const wxString& value );
+    virtual void DelegateChoice( const wxString& value );
 
   inline wxComboBox(wxWindow *parent, wxWindowID id,
            const wxString& value = wxEmptyString,
@@ -60,7 +73,6 @@ class WXDLLEXPORT wxComboBox: public wxChoice
   virtual wxString GetString(int n) const ;
   virtual wxString GetStringSelection() const ;
   virtual bool SetStringSelection(const wxString& sel);
-  virtual inline int Number() const { return m_noStrings; }
   
   // Text field functions
   virtual wxString GetValue() const ;
@@ -78,10 +90,11 @@ class WXDLLEXPORT wxComboBox: public wxChoice
   virtual void Remove(long from, long to);
   virtual void SetSelection(long from, long to);
   virtual void SetEditable(bool editable);
-	void		MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
+  void MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
 protected:
-  int m_noStrings;
-  WXHMENU	m_macPopUpMenuHandle ;
+    // the subcontrols
+    wxTextCtrl*     m_text;
+    wxChoice*       m_choice;
 };
 
 #endif
