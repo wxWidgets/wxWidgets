@@ -103,11 +103,11 @@ Destructor, destroying the combobox.
 
 \membersection{wxComboBox::Append}\label{wxcomboboxappend}
 
-\func{void}{Append}{\param{const wxString\& }{item}}
+\func{int}{Append}{\param{const wxString\& }{item}}
 
 Adds the item to the end of the combobox.
 
-\func{void}{Append}{\param{const wxString\& }{ item}, \param{void* }{clientData}}
+\func{int}{Append}{\param{const wxString\& }{ item}, \param{void* }{clientData}}
 
 Adds the item to the end of the combobox, associating the given data
 with the item.
@@ -117,6 +117,11 @@ with the item.
 \docparam{item}{The string to add.}
 
 \docparam{clientData}{Client data to associate with the item.}
+
+\wxheading{Return value}
+
+The index of the newly added item, may be different from the last one if the
+control has {\tt wxLB\_SORT} style.
 
 \membersection{wxComboBox::Clear}\label{wxcomboboxclear}
 
