@@ -1149,6 +1149,7 @@ AC_DEFUN(AC_BAKEFILE_SUFFIXES,
     SO_SUFFIX="so"
     SO_SUFFIX_MODULE="so"
     EXEEXT=""
+    LIBPREFIX=lib
     DLLPREFIX=lib
     DLLPREFIX_MODULE=
     
@@ -1172,9 +1173,14 @@ AC_DEFUN(AC_BAKEFILE_SUFFIXES,
             EXEEXT=".exe"
             DLLPREFIX=""
         ;;
-        *-pc-msdosdjgpp | *-pc-os2_emx | *-pc-os2-emx )
+        *-pc-msdosdjgpp )
             EXEEXT=".exe"
             DLLPREFIX=""
+        ;;
+        *-pc-os2_emx | *-pc-os2-emx )
+            EXEEXT=".exe"
+            DLLPREFIX=""
+            LIBPREFIX=""
         ;;
         powerpc-*-darwin* )
             SO_SUFFIX="dylib"
@@ -1185,6 +1191,7 @@ AC_DEFUN(AC_BAKEFILE_SUFFIXES,
     AC_SUBST(SO_SUFFIX)
     AC_SUBST(SO_SUFFIX_MODULE)
     AC_SUBST(EXEEXT)
+    AC_SUBST(LIBPREFIX)
     AC_SUBST(DLLPREFIX)
     AC_SUBST(DLLPREFIX_MODULE)
 ])
@@ -1401,7 +1408,7 @@ EOF
       *-*-sunos4* | \
       *-*-osf* | \
       *-*-dgux5* | \
-      *-pc-os2-emx | \
+      *-pc-os2_emx | *-pc-os2-emx | \
       *-*-sysv5* )
         dnl defaults are ok
       ;;
