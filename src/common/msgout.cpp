@@ -50,6 +50,16 @@ wxMessageOutput* wxMessageOutput::ms_msgOut = 0;
 
 wxMessageOutput* wxMessageOutput::Get()
 {
+    // FIXME this is an hack
+    static bool inGet = FALSE;
+
+    if(!ms_msgOut && wxTheApp && !inGet)
+    {
+        inGet = TRUE;
+        wxTheApp->DoInit();
+    }
+
+    inGet = FALSE;
     return ms_msgOut;
 }
 
