@@ -29,6 +29,7 @@
 
 #if wxUSE_POSTSCRIPT
 
+#include "wx/window.h"
 #include "wx/dcmemory.h"
 #include "wx/utils.h"
 #include "wx/intl.h"
@@ -250,7 +251,10 @@ wxPostScriptDC::wxPostScriptDC ()
     m_signY = -1;  // default y-axis bottom up -> top down
 
     // Compatibility only
+    // HH: Doesn't seem to work for wxMSW...
+    #ifndef __WXMSW__
     m_printData = * wxThePrintSetupData;
+    #endif
 }
 
 wxPostScriptDC::wxPostScriptDC (const wxString& file, bool interactive, wxWindow *parent)
@@ -1003,7 +1007,11 @@ void wxPostScriptDC::SetFont( const wxFont& font )
     fprintf( m_pstream, " reencodeISO def\n" );
     fprintf( m_pstream, buffer );
     fprintf( m_pstream, " findfont\n" );
+    #ifdef __WXMSW__
+    fprintf( m_pstream, "%d scalefont setfont\n", YLOG2DEVREL(m_font.GetPointSize()) );
+    #else
     fprintf( m_pstream, "%ld scalefont setfont\n", YLOG2DEVREL(m_font.GetPointSize()) );
+    #endif
 }
 
 void wxPostScriptDC::SetPen( const wxPen& pen )
@@ -1016,8 +1024,11 @@ void wxPostScriptDC::SetPen( const wxPen& pen )
 
     m_pen = pen;
 
+    #ifdef __WXMSW__
+    fprintf( m_pstream, "%d setlinewidth\n", XLOG2DEVREL(m_pen.GetWidth()) );
+    #else
     fprintf( m_pstream, "%ld setlinewidth\n", XLOG2DEVREL(m_pen.GetWidth()) );
-
+    #endif
 /*
      Line style - WRONG: 2nd arg is OFFSET
 
@@ -1997,7 +2008,7 @@ void wxPostScriptDC::GetTextExtent( const wxString& string, long *x, long *y,
 # define PS_VIEWER_PROG "ghostview"
 #else
 // Windows ghostscript/ghostview
-# define PS_VIEWER_PROG NULL
+# define PS_VIEWER_PROG "gsview"
 #endif
 
 wxPrintSetupData *wxThePrintSetupData = (wxPrintSetupData *) NULL;

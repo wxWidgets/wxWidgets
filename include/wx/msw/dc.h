@@ -16,6 +16,58 @@
     #pragma interface "dc.h"
 #endif
 
+// ---------------------------------------------------------------------------
+// macros
+// ---------------------------------------------------------------------------
+
+// Logical to device
+// Absolute
+#define XLOG2DEV(x) (x)
+#define YLOG2DEV(y) (y)
+
+// Relative
+#define XLOG2DEVREL(x) (x)
+#define YLOG2DEVREL(y) (y)
+
+// Device to logical
+// Absolute
+#define XDEV2LOG(x) (x)
+
+#define YDEV2LOG(y) (y)
+
+// Relative
+#define XDEV2LOGREL(x) (x)
+#define YDEV2LOGREL(y) (y)
+
+/*
+ * Have the same macros as for XView but not for every operation:
+ * just for calculating window/viewport extent (a better way of scaling).
+ */
+
+// Logical to device
+// Absolute
+#define MS_XLOG2DEV(x) LogicalToDevice(x)
+
+#define MS_YLOG2DEV(y) LogicalToDevice(y)
+
+// Relative
+#define MS_XLOG2DEVREL(x) LogicalToDeviceXRel(x)
+#define MS_YLOG2DEVREL(y) LogicalToDeviceYRel(y)
+
+// Device to logical
+// Absolute
+#define MS_XDEV2LOG(x) DeviceToLogicalX(x)
+
+#define MS_YDEV2LOG(y) DeviceToLogicalY(y)
+
+// Relative
+#define MS_XDEV2LOGREL(x) DeviceToLogicalXRel(x)
+#define MS_YDEV2LOGREL(y) DeviceToLogicalYRel(y)
+
+#define YSCALE(y) (yorigin - (y))
+
+#define     wx_round(a)    (int)((a)+.5)
+
 class WXDLLEXPORT wxDC : public wxDCBase
 {
     DECLARE_DYNAMIC_CLASS(wxDC)
