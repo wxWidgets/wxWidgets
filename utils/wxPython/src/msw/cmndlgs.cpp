@@ -2254,14 +2254,14 @@ static PyObject *_wrap_new_wxFontDialog(PyObject *self, PyObject *args, PyObject
     PyObject * _resultobj;
     wxFontDialog * _result;
     wxWindow * _arg0;
-    wxFontData * _arg1 = (wxFontData *) NULL;
+    wxFontData * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     char *_kwnames[] = { "parent","data", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:new_wxFontDialog",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:new_wxFontDialog",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }

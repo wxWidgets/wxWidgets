@@ -37,7 +37,7 @@ below.)
                 --enable-shared=yes
                 --disable-std_iostreams
 
-   You can use whatever flags you want, but these work for me.  be
+   You can use whatever flags you want, but these work for me.  Be
    sure to run "make install" to install the wxWindows headers and
    shared library.  You can check where the wxPython build will expect
    to find them by running "wx-config --cflags" and "wx-config --libs"
