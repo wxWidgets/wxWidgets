@@ -38,7 +38,7 @@
 
     if ( Config("dll") ) {
 	$DLL="Dll";
-	$DLL_OR_LIB=Config("wxbase") ? "wxlib221" : "wxmsw221";
+	$DLL_OR_LIB=(Config("wxbase") ? "wxbase" : "wxmsw") . "221";
 	$DLL_FLAGS="/D WXUSINGDLL ";
 	$EXTRA_LIBS="";
     }
@@ -87,8 +87,8 @@
 	$vc_base_libs = 'kernel32.lib user32.lib advapi32.lib ';
 	if ( Config("wx") ) {
 	    $vc_base_libs .= 'wsock32.lib ';
-	    $vc_link_release = "$WXDIR\\Base${DLL}Release\\wxBase$DLL.lib ";
-	    $vc_link_debug = "$WXDIR\\Base${DLL}Debug\\wxBase$DLL.lib "; 
+	    $vc_link_release = "$WXDIR\\Base${DLL}Release\\$DLL_OR_LIB.lib ";
+	    $vc_link_debug = "$WXDIR\\Base${DLL}Debug\\$DLL_OR_LIB" . "d.lib ";
 	}
 	$vc_link_release .= '/nologo /subsystem:console /machine:I386';
 	$vc_link_debug   .= '/nologo /subsystem:console /debug /machine:I386 /pdbtype:sept';
