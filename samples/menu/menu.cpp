@@ -253,6 +253,7 @@ MyFrame::MyFrame()
        : wxFrame((wxFrame *)NULL, -1, "wxWindows menu sample",
                  wxDefaultPosition, wxSize(300, 200))
 {
+    m_textctrl = NULL;
     m_menu = NULL;
     m_countDummy = 0;
     m_logOld = NULL;
@@ -701,6 +702,9 @@ void MyFrame::OnRightUp(wxMouseEvent &event)
 
 void MyFrame::OnSize(wxSizeEvent& event)
 {
+    if ( !m_textctrl )
+        return;
+
     // leave a band below for popup menu testing
     wxSize size = GetClientSize();
     m_textctrl->SetSize(0, 0, size.x, (3*size.y)/4);
