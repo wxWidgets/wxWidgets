@@ -94,6 +94,9 @@ public:
      */
     static void * GetSymbol(wxDllType dllHandle, const wxString &name);
 
+    // get the extension of the shared libraries for the current system
+    static wxString GetDllExt();
+
 private:
     /// forbid construction of objects
     wxDllLoader();
