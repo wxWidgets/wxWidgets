@@ -1232,15 +1232,15 @@ public:
 	    OSStatus status = noErr ;
 	    ByteCount byteOutLen ;
 	    ByteCount byteInLen = strlen(psz) ;
-	    ByteCount byteBufferLen = n ; 
 		wchar_t *tbuf = NULL ;
 		
 		if (buf == NULL)
 		{
-			n = byteInLen * SIZEOF_WCHAR_T ;
-			tbuf = (wchar_t*) malloc( n ) ;
+			n = byteInLen ;
+			tbuf = (wchar_t*) malloc( n * SIZEOF_WCHAR_T) ;
 		}
 	
+	    ByteCount byteBufferLen = n * SIZEOF_WCHAR_T ; 
 	    status = TECConvertText(m_MB2WC_converter, (ConstTextPtr) psz , byteInLen, &byteInLen,
 	      (TextPtr) (buf ? buf : tbuf) , byteBufferLen, &byteOutLen);
 
@@ -1259,16 +1259,17 @@ public:
 	    OSStatus status = noErr ;
 	    ByteCount byteOutLen ;
 	    ByteCount byteInLen = wxWcslen(psz) * SIZEOF_WCHAR_T ;
-	    ByteCount byteBufferLen = n ;
 
 		char *tbuf = NULL ;
 		
 		if (buf == NULL)
 		{
-			n = byteInLen ;
+			// worst case
+			n = byteInLen * 2 ;
 			tbuf = (char*) malloc( n ) ;
 		}
 
+	    ByteCount byteBufferLen = n ;
 	    status = TECConvertText(m_WC2MB_converter, (ConstTextPtr) psz , byteInLen, &byteInLen,
 	       (TextPtr) ( buf ? buf : tbuf ) , byteBufferLen, &byteOutLen);
 
