@@ -422,9 +422,9 @@ wxLogStderr::wxLogStderr(FILE *fp)
         m_fp = fp;
 }
 
-#if defined(__WXMAC__) && !defined(__DARWIN__)
+#if defined(__WXMAC__) && !defined(__DARWIN__) && (__MWERKS__ > 0x5300)
 
-#if !TARGET_API_MAC_CARBON || (__MSL_CPP__ > 0x5300)
+#if !TARGET_API_MAC_CARBON
 // MetroNub stuff doesn't seem to work in CodeWarrior 5.3 Carbon builds...
 
 #ifndef __MetroNubUtils__
@@ -608,9 +608,9 @@ OSErr ClearWatchPoint (WatchPointIDT watchPointID)
 	}
 #endif
 
-#endif // !TARGET_API_MAC_CARBON || (__MSL_CPP__ > 0x5300)
+#endif // !TARGET_API_MAC_CARBON
 
-#endif // defined(__WXMAC__) && !defined(__DARWIN__)
+#endif // defined(__WXMAC__) && !defined(__DARWIN__) && (__MWERKS__ > 0x5300)
 
 void wxLogStderr::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 {
@@ -636,7 +636,7 @@ void wxLogStderr::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 
     Boolean running = false ;
 
-#if !TARGET_API_MAC_CARBON || (__MSL_CPP__ > 0x5300)
+#if !TARGET_API_MAC_CARBON && (__MWERKS__ > 0x5300)
 
     if ( IsMWDebuggerRunning() && AmIBeingMWDebugged() )
     {
