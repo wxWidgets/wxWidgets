@@ -2047,7 +2047,13 @@ long wxWindow::Default()
         wxGetMessageName(m_lastMsg));
 #endif // __WXDEBUG__
 
-    return this->MSWDefWindowProc(m_lastMsg, m_lastWParam, m_lastLParam);
+    long ret = this->MSWDefWindowProc(m_lastMsg, m_lastWParam, m_lastLParam);
+
+    // The idea here is to prevent MSWDefWindowProc from being called twice,
+    // which it can be where OnChar/OnKeyDown are concerned (because OnChar is
+    // sometimes called in wxWin where it isn't in MSW)
+    m_lastMsg = 0;
+    return ret;
 }
 
 bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
@@ -3791,7 +3797,10 @@ void wxWindow::OnChar(wxKeyEvent& event)
         id= m_lastWParam;
 
     if ( !event.ControlDown() ) // Why this test?
-        (void) MSWDefWindowProc(m_lastMsg, (WPARAM) id, m_lastLParam);
+    {
+        if (m_lastMsg != 0)
+            (void) MSWDefWindowProc(m_lastMsg, (WPARAM) id, m_lastLParam);
+    }
 }
 
 void wxWindow::OnKeyDown(wxKeyEvent& event)
