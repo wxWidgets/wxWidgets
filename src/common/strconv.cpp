@@ -369,20 +369,23 @@ static long CharsetToCodepage(const wxChar *name)
     
     wxString cn(name);
     do {
-        wxString path( wxT("MIME\\Database\\Charset\\") );
+        wxString path(wxT("MIME\\Database\\Charset\\"));
         path += cn;
-        wxRegKey key( wxRegKey::HKCR, path );
+        wxRegKey key(wxRegKey::HKCR, path);
 
-        /* two cases: either there's an AliasForCharset string,
-         * or there are Codepage and InternetEncoding dwords.
-         * The InternetEncoding gives us the actual encoding,
-         * the Codepage just says which Windows character set to
-         * use when displaying the data.
-         */
-        if (key.QueryValue( wxT("InternetEncoding"), &CP )) break;
+        if (!key.Exists()) continue;
+        
+        // two cases: either there's an AliasForCharset string,
+        // or there are Codepage and InternetEncoding dwords.
+        // The InternetEncoding gives us the actual encoding,
+        // the Codepage just says which Windows character set to
+        // use when displaying the data.
+        if (key.HasValue(wxT("InternetEncoding")) &&
+            key.QueryValue(wxT("InternetEncoding"), &CP)) break;
         
         // no encoding, see if it's an alias
-        if (!key.QueryValue( wxT("AliasForCharset"), cn )) break;
+        if (!key.HasValue(wxT("AliasForCharset")) ||
+            !key.QueryValue(wxT("AliasForCharset"), cn)) break;
     } while (1);
     
     return CP;
