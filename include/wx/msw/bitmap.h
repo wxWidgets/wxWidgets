@@ -20,16 +20,16 @@
 #include "wx/gdicmn.h"
 #include "wx/palette.h"
 
-class WXDLLEXPORT wxDC;
-class WXDLLEXPORT wxControl;
 class WXDLLEXPORT wxBitmap;
 class WXDLLEXPORT wxBitmapHandler;
 class WXDLLEXPORT wxBitmapRefData;
-class WXDLLEXPORT wxIcon;
-class WXDLLEXPORT wxMask;
-class WXDLLEXPORT wxCursor;
 class WXDLLEXPORT wxControl;
+class WXDLLEXPORT wxCursor;
+class WXDLLEXPORT wxDC;
+class WXDLLEXPORT wxDIB;
+class WXDLLEXPORT wxIcon;
 class WXDLLEXPORT wxImage;
+class WXDLLEXPORT wxMask;
 class WXDLLEXPORT wxPalette;
 class WXDLLEXPORT wxRawBitmapData;
 
@@ -118,6 +118,9 @@ public:
 
     // copies the contents and mask of the given cursor to the bitmap
     bool CopyFromCursor(const wxCursor& cursor);
+
+    // copies from a device independent bitmap
+    bool CopyFromDIB(const wxDIB& dib);
 
     virtual bool Create(int width, int height, int depth = -1);
     virtual bool Create(int width, int height, const wxDC& dc);

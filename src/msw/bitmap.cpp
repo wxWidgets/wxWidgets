@@ -306,6 +306,38 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon)
 #endif // Win16/Win32
 }
 
+bool wxBitmap::CopyFromDIB(const wxDIB& dib)
+{
+    wxCHECK_MSG( dib.IsOk(), FALSE, _T("invalid DIB in CopyFromDIB") );
+
+    HBITMAP hbitmap = dib.CreateDDB();
+    if ( !hbitmap )
+        return FALSE;
+
+    UnRef();
+
+    wxBitmapRefData *refData = new wxBitmapRefData;
+    m_refData = refData;
+
+    refData->m_width = dib.GetWidth();
+    refData->m_height = dib.GetHeight();
+    refData->m_depth = dib.GetDepth();
+
+    refData->m_hBitmap = (WXHBITMAP)hbitmap;
+
+#if wxUSE_PALETTE
+    wxPalette *palette = dib.CreatePalette();
+    if ( palette )
+    {
+        refData->m_bitmapPalette = *palette;
+    }
+
+    delete palette;
+#endif // wxUSE_PALETTE
+
+    return TRUE;
+}
+
 wxBitmap::~wxBitmap()
 {
 }
@@ -744,81 +776,7 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc )
     }
     else // we need to convert DIB to DDB
     {
-        // create and set the device-dependent bitmap
-        //
-        // VZ: why don't we just use SetDIBits() instead? because of the
-        //     palette or is there some other reason?
-        hbitmap = ::CreateCompatibleBitmap(hdc ? (HDC)hdc : ScreenHDC(), w, h);
-        if ( !hbitmap )
-        {
-            wxLogLastError(_T("CreateCompatibleBitmap()"));
-
-            return FALSE;
-        }
-
-        MemoryHDC hdcMem;
-        SelectInHDC select(hdcMem, hbitmap);
-        if ( !select )
-        {
-            wxLogLastError(_T("SelectObjct(hBitmap)"));
-        }
-
-#if wxUSE_PALETTE
-        const wxPalette& palette = image.GetPalette();
-
-        HPALETTE hOldPalette;
-        if ( palette.Ok() )
-        {
-            SetPalette(palette);
-
-            hOldPalette = ::SelectPalette
-                            (
-                                hdcMem,
-                                GetHpaletteOf(palette),
-                                FALSE                   // ignored for hdcMem
-                            );
-
-            if ( !hOldPalette )
-            {
-                wxLogLastError(_T("SelectPalette()"));
-            }
-
-            if ( ::RealizePalette(hdcMem) == GDI_ERROR )
-            {
-                wxLogLastError(_T("RealizePalette()"));
-            }
-        }
-        else // no valid palette
-        {
-            hOldPalette = 0;
-        }
-#endif // wxUSE_PALETTE
-
-        DIBSECTION ds;
-        if ( !::GetObject(dib.GetHandle(), sizeof(ds), &ds) )
-        {
-            wxLogLastError(_T("GetObject(hDIB)"));
-        }
-
-        if ( ::StretchDIBits(hdcMem,
-                             0, 0, w, h,
-                             0, 0, w, h,
-                             dib.GetData(),
-                             (BITMAPINFO *)&ds.dsBmih,
-                             DIB_RGB_COLORS,
-                             SRCCOPY) == GDI_ERROR )
-        {
-            wxLogLastError(_T("StretchDIBits()"));
-
-            return FALSE;
-        }
-
-#if wxUSE_PALETTE
-        if ( hOldPalette )
-        {
-            ::SelectPalette(hdcMem, hOldPalette, FALSE);
-        }
-#endif // wxUSE_PALETTE
+        hbitmap = dib.CreateDDB((HDC)hdc);
 
         refData->m_depth = depth == -1 ? wxDisplayDepth() : depth;
     }
