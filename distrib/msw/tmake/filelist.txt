@@ -259,7 +259,7 @@ gsocket.c	MSW	Socket,Base
 gsockmsw.c	MSW	Socket,Base
 accel.cpp	MSW
 app.cpp	MSW	LowLevel
-automtn.cpp	MSW	OLE
+automtn.cpp	MSW	OLE,LowLevel
 bitmap.cpp	MSW	LowLevel
 bmpbuttn.cpp	MSW
 brush.cpp	MSW	LowLevel
@@ -276,7 +276,7 @@ control.cpp	MSW
 curico.cpp	MSW
 cursor.cpp	MSW	LowLevel
 data.cpp	MSW	LowLevel
-dataobj.cpp	MSW	OLE
+dataobj.cpp	MSW	OLE,LowLevel
 dc.cpp	MSW	LowLevel
 dcclient.cpp	MSW	LowLevel
 dcmemory.cpp	MSW	LowLevel
@@ -288,11 +288,11 @@ dialup.cpp	MSW	LowLevel
 dib.cpp	MSW	LowLevel
 dibutils.cpp	MSW
 dir.cpp	MSW	Base
-dirdlg.cpp	MSW	Win32Only
+dirdlg.cpp	MSW	Win32Only,LowLevel
 dragimag.cpp	MSW
-dropsrc.cpp	MSW	OLE
-droptgt.cpp	MSW	OLE
-enhmeta.cpp	MSW	Win32Only
+dropsrc.cpp	MSW	OLE,LowLevel
+droptgt.cpp	MSW	OLE,LowLevel
+enhmeta.cpp	MSW	Win32Only,LowLevel
 helpbest.cpp	MSW	Win32Only,LowLevel
 evtloop.cpp	MSW	LowLevel
 fdrepdlg.cpp	MSW	Win32Only
@@ -328,7 +328,7 @@ msgdlg.cpp	MSW
 mslu.cpp	MSW
 nativdlg.cpp	MSW
 notebook.cpp	MSW	Win32Only
-oleutils.cpp	MSW	OLE
+oleutils.cpp	MSW	OLE,LowLevel
 ownerdrw.cpp	MSW
 palette.cpp	MSW	LowLevel
 pen.cpp	MSW	LowLevel
@@ -366,7 +366,7 @@ toplevel.cpp	MSW	LowLevel
 treectrl.cpp	MSW	Win32Only
 utils.cpp	MSW	Base,LowLevel
 utilsexc.cpp	MSW	Base,LowLevel
-uuid.cpp	MSW	OLE
+uuid.cpp	MSW	OLE,LowLevel
 volume.cpp	MSW	Base
 wave.cpp	MSW	LowLevel
 window.cpp	MSW	LowLevel
