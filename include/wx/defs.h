@@ -140,9 +140,8 @@
     #define va_list __gnuc_va_list
 #endif // HP-UX
 
-// Mingw32 gcc-2.95 uses new windows headers which are more ms-like
-// we are setting this define because of the complex check
-// using NORLANDER as Cygwin may follow. (header author is Anders Norlander)
+// Cygwin / Mingw32 with gcc >= 2.95 use new windows headers which
+// are more ms-like (header author is Anders Norlander, hence the name)
 #if (defined(__MINGW32__) || defined(__CYGWIN__)) && ((__GNUC__>2) ||((__GNUC__==2) && (__GNUC_MINOR__>=95)))
     #ifndef wxUSE_NORLANDER_HEADERS
         #define wxUSE_NORLANDER_HEADERS 1
@@ -153,9 +152,9 @@
     #endif
 #endif
 
-// "old" GNUWIN32 is the one without Norlander's headers: it lacks the standard
-// Win32 headers and we define the used stuff ourselves for it in
-// wx/msw/gnuwin32/extra.h
+// "old" GNUWIN32 is the one without Norlander's headers: it lacks the
+// standard Win32 headers and we define the used stuff ourselves for it
+// in wx/msw/gnuwin32/extra.h
 #if defined(__GNUC__) && !wxUSE_NORLANDER_HEADERS
     #define __GNUWIN32_OLD__
 #endif
@@ -692,7 +691,7 @@ typedef float wxFloat32 ;
         = { 0xE158 };
 
     #pragma parameter __D0 wxINT16_SWAP_ALWAYS(__D0)
-    pascal wxInt16 wxUINT16_SWAP_ALWAYS(wxInt16 value)
+    pascal wxInt16 wxINT16_SWAP_ALWAYS(wxInt16 value)
         = { 0xE158 };
 
     #pragma parameter __D0 wxUINT32_SWAP_ALWAYS (__D0)
@@ -700,7 +699,7 @@ typedef float wxFloat32 ;
         = { 0xE158, 0x4840, 0xE158 };
 
     #pragma parameter __D0 wxINT32_SWAP_ALWAYS (__D0)
-    pascal wxInt32 wxUINT32_SWAP_ALWAYS(wxInt32 value)
+    pascal wxInt32 wxINT32_SWAP_ALWAYS(wxInt32 value)
         = { 0xE158, 0x4840, 0xE158 };
 
 #endif
@@ -1089,6 +1088,7 @@ enum wxStretch
 #define wxTR_MULTIPLE        0x0020
 #define wxTR_EXTENDED        0x0040
 #define wxTR_HAS_VARIABLE_ROW_HEIGHT 0x0080
+#define wxTR_NO_LINES        0x0100
 
 /*
  * wxListCtrl flags
@@ -1793,7 +1793,7 @@ typedef void *          WXLPCREATESTRUCT;
 typedef unsigned long   WXMPARAM;
 typedef unsigned long   WXMSGID;
 typedef void*           WXRESULT;
-typedef int             (*WXFARPROC)();
+// typedef WXRESULT        (*WXFARPROC)(WXHWND, WXMSGID, WXMPARAM, WXMPARAM);
 // some windows handles not defined by PM
 typedef unsigned long   HANDLE;
 typedef unsigned long   HICON;
@@ -1840,6 +1840,13 @@ typedef struct tagLOGPALETTE
     typedef int (*WXFARPROC)();
 #elif defined(__WIN32__)
     typedef int (__stdcall *WXFARPROC)();
+#elif defined(__WXPM__)
+#  if defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )
+    // VA 3.0 for some reason needs base data types when typedefing a proc proto???
+    typedef void* (_System *WXFARPROC)(unsigned long, unsigned long, void*, void*);
+#  else
+    typedef WXRESULT (_System *WXFARPROC)(WXHWND, WXMSGID, WXWPARAM, WXLPARAM);
+#  endif
 #else
     typedef int (*WXFARPROC)();
 #endif
@@ -1895,7 +1902,7 @@ typedef struct _GdkColor        GdkColor;
 typedef struct _GdkColormap     GdkColormap;
 typedef struct _GdkFont         GdkFont;
 typedef struct _GdkGC           GdkGC;
-#ifdef __WXGTK13__
+#ifdef __WXGTK20__
     typedef struct _GdkDrawable     GdkWindow;
     typedef struct _GdkDrawable     GdkBitmap;
     typedef struct _GdkDrawable     GdkPixmap;
@@ -1926,6 +1933,18 @@ typedef struct _GtkItemFactory    GtkItemFactory;
 typedef struct _GtkSelectionData  GtkSelectionData;
 
 typedef GtkWidget *WXWidget;
+
+#ifndef __WXGTK20__
+#define GTK_OBJECT_GET_CLASS(object) (GTK_OBJECT(object)->klass)
+#define GTK_CLASS_TYPE(klass) ((klass)->type)
+#endif
+
+#ifdef __WXGTK20__
+/* Stand-ins for Pango types */
+typedef struct _PangoContext         PangoContext;
+typedef struct _PangoLayout          PangoLayout;
+typedef struct _PangoFontDescription PangoFontDescription;
+#endif
 #endif // GTK
 
 // This is required because of clashing macros in windows.h, which may be
