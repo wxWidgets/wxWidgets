@@ -1230,7 +1230,7 @@ void process_command(char * cexpr)
   add_expr(expr);
 }
 
-void syntax_error(char *s)
+void syntax_error(char *WXUNUSED(s))
 {
   if (currentwxExprErrorHandler)
     (void)(*(currentwxExprErrorHandler))(WXEXPR_ERROR_SYNTAX, "syntax error");

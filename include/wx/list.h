@@ -79,6 +79,7 @@ class WXDLLEXPORT wxList: public wxObject
   ~wxList(void);
 
   inline int Number(void) const { return n; }
+  inline int GetCount(void) const { return n; }
 
   // Append to end of list
   wxNode *Append(wxObject *object);

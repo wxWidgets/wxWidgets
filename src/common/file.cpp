@@ -132,7 +132,7 @@ bool wxFile::Exists(const char *name)
 
 bool wxFile::Access(const char *name, OpenMode mode)
 {
-  int how;
+  int how = 0;
 
   switch ( mode ) {
     case read:

@@ -97,6 +97,7 @@ public:
   //@{
     /// number of elements in the array
   size_t  Count() const   { return m_uiCount;      }
+  size_t  GetCount() const   { return m_uiCount;      }
     /// is it empty?
   bool  IsEmpty() const { return m_uiCount == 0; }
   //@}

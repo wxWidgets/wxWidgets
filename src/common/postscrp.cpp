@@ -2050,11 +2050,15 @@ wxDialog(parent, -1, title, pos, size, style)
   int yPos = 40;
 
 #if defined(__WXGTK__) || defined (__WXMOTIF__)
-  (void) new wxStaticText(this, -1, _("Printer Command: "), wxPoint(5, yPos));
-  wxTextCtrl *text_prt = new wxTextCtrl(this, wxID_PRINTER_COMMAND, wxThePrintSetupData->GetPrinterCommand(), wxPoint(100, yPos), wxSize(100, -1));
+  (void) new wxStaticText( this, -1, _("Printer Command: "), 
+                           wxPoint(5, yPos) );
+  (void) new wxTextCtrl( this, wxID_PRINTER_COMMAND, wxThePrintSetupData->GetPrinterCommand(), 
+                         wxPoint(100, yPos), wxSize(100, -1) );
   
-  (void) new wxStaticText(this, -1, _("Printer Options: "), wxPoint(210, yPos));
-  wxTextCtrl *text0 = new wxTextCtrl(this, wxID_PRINTER_OPTIONS, wxThePrintSetupData->GetPrinterOptions(), wxPoint(305, yPos), wxSize(150, -1));
+  (void) new wxStaticText( this, -1, _("Printer Options: "), 
+                           wxPoint(210, yPos) );
+  (void) new wxTextCtrl( this, wxID_PRINTER_OPTIONS, wxThePrintSetupData->GetPrinterOptions(), 
+                         wxPoint(305, yPos), wxSize(150, -1) );
 
   yPos += 40;
 #endif

@@ -95,7 +95,7 @@ install::
 	@cd $(WXBASEDIR)/lib/$(OS) ; \
 	  rm -f $(libdir)/$(STATIC_LIBRARY) ; \
 	  $(INSTALL_DATA) $(STATIC_LIBRARY) $(libdir)/$(STATIC_LIBRARY)
-	@if test $(WXBASEDIR)/lib/$(OS)/$(SHARED_LIBRARY) ; then \
+	@if test -f $(WXBASEDIR)/lib/$(OS)/$(SHARED_LIBRARY) ; then \
 	  echo "  Copying shared library" ; \
 	  cd $(WXBASEDIR)/lib/$(OS) ; \
 	    rm -f $(libdir)/lib$(LIB_TARGET).so* ; \

@@ -144,17 +144,17 @@ MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title, c
   m_leftWindow2 = win;
 }
 
-void MyFrame::OnQuit(wxCommandEvent& event)
+void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
       Close(TRUE);
 }
 
-void MyFrame::OnAbout(wxCommandEvent& event)
+void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
       (void)wxMessageBox("wxWindows 2.0 Sash Demo\nAuthor: Julian Smart (c) 1998", "About Sash Demo");
 }
 
-void MyFrame::OnToggleWindow(wxCommandEvent& event)
+void MyFrame::OnToggleWindow(wxCommandEvent& WXUNUSED(event))
 {
     if (m_leftWindow1->IsShown())
     {
@@ -203,7 +203,7 @@ void MyFrame::OnSashDrag(wxSashEvent& event)
     GetClientWindow()->Refresh();
 }
 
-void MyFrame::OnNewWindow(wxCommandEvent& event)
+void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event))
 {
       // Make another frame, containing a canvas
       MyChild *subframe = new MyChild(frame, "Canvas Frame", wxPoint(10, 10), wxSize(300, 300),
@@ -329,7 +329,7 @@ bool MyFrame::OnClose(void)
   return TRUE;
 }
 
-void MyFrame::OnSize(wxSizeEvent& event)
+void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event))
 {
     wxLayoutAlgorithm layout;
     layout.LayoutMDIFrame(this);

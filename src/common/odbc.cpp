@@ -614,7 +614,7 @@ bool wxRecordSet::GetResultSet(void)
     field1->SetType(type);
     field1->SetSize(len);
     
-    SQLBindCol(hStmt, i+1, SQL_C_BINARY, field1->GetData(), field1->GetSize(), &trash);
+    SQLBindCol(hStmt, i+1, SQL_C_BINARY, (unsigned char*)field1->GetData(), field1->GetSize(), &trash);
   }
   
   switch (type) {

@@ -71,7 +71,7 @@ bool          wxConfigBase::ms_bAutoCreate = TRUE;
 // Not all args will always be used by derived classes, but
 // including them all in each class ensures compatibility.
 wxConfigBase::wxConfigBase(const wxString& appName, const wxString& vendorName,
-    const wxString& localFilename, const wxString& globalFilename, long style):
+    const wxString& WXUNUSED(localFilename), const wxString& WXUNUSED(globalFilename), long style):
         m_appName(appName), m_vendorName(vendorName), m_style(style)
 {
     m_bExpandEnvVars = TRUE; m_bRecordDefaults = FALSE;
