@@ -167,6 +167,8 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     textCtrl.WriteText( tmp );
     
     textCtrl.WriteText( "\nReading from wxFileInputStream:\n" );
+
+    file_output.OutputStreamBuffer()->FlushBuffer();
     
     wxFileInputStream file_input( "test_wx.dat" );
     

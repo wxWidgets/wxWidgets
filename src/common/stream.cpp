@@ -648,7 +648,7 @@ wxInputStream& wxInputStream::operator>>(signed long& i)
   }
 
   while (isdigit(c)) {
-    i = i*10 + c;
+    i = i*10 + (c - (int)'0');
     c = GetC();
   }
 
@@ -690,7 +690,7 @@ wxInputStream& wxInputStream::operator>>(unsigned long& i)
   }
 
   while (isdigit(c)) {
-    i = i*10 + c;
+    i = i*10 + c - '0';
     c = GetC();
   }
 

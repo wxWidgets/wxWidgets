@@ -90,6 +90,9 @@ wxString wxDataInputStream::ReadLine()
 
   while (!end_line) {
     c = GetC();
+    if (LastError() != wxStream_NOERROR)
+      break;
+
     switch (c) {
     case '\n':
       end_line = TRUE;
