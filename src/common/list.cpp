@@ -628,11 +628,11 @@ void wxStringList::Sort()
     }
 
     qsort (array, N, sizeof (char *), wx_comparestrings);
-    Clear();
 
-    for (i = 0; i < N; i++)
-        Append (array[i]);
+    i = 0;
+    for ( node = GetFirst(); node; node = node->GetNext() )
+        node->SetData( array[i++] );
 
-    delete[]array;
+    delete [] array;
 }
 
