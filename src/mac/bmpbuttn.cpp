@@ -29,7 +29,9 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
            const wxValidator& validator,
            const wxString& name)
 {
-    if ( !wxBitmapButtonBase::Create(parent, id, _T(""), pos, size,
+    // since bitmapbuttonbase is subclass of button calling wxBitmapButtonBase::Create
+    // essentially creates an additional button
+    if ( !wxControl::Create(parent, id, pos, size,
                                      style, validator, name) )
         return false;
 
