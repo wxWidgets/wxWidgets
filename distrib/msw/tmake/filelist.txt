@@ -952,6 +952,7 @@ textdlg.h	WXH
 textfile.h	WXH	Base
 tglbtn.h	WXH
 thread.h	WXH	Base
+thrimpl.cpp	WXH	Base
 time.h	WXH	Base
 timer.h	WXH	Base
 tipdlg.h	WXH
