@@ -346,7 +346,7 @@ public:
 
     virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t) {
         bool found;
-        bool blocked = wxPyBeginBlockThreads();
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DoLog"))) {
             PyObject* s = wx2PyString(szString);
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iOi)", level, s, t));
@@ -359,7 +359,7 @@ public:
 
     virtual void DoLogString(const wxChar *szString, time_t t) {
         bool found;
-        bool blocked = wxPyBeginBlockThreads();
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DoLogString"))) {
             PyObject* s = wx2PyString(szString);
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Oi)", s, t));

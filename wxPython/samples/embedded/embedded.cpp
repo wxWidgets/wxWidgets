@@ -190,7 +190,7 @@ void MyFrame::OnPyFrame(wxCommandEvent& event)
     // First, whenever you do anything with Python objects or code, you
     // *MUST* aquire the Global Interpreter Lock and block other
     // Python threads from running.
-    bool blocked = wxPyBeginBlockThreads();
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
 
     // Execute the code in the __main__ module
     PyRun_SimpleString(python_code1);
@@ -211,7 +211,7 @@ import wx\n\
 output = wx.PyOnDemandOutputWindow()\n\
 sys.stdin = sys.stderr = output\n\
 ";
-    bool blocked = wxPyBeginBlockThreads();
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
     PyRun_SimpleString(python_redirect);
     wxPyEndBlockThreads(blocked);
 }
@@ -242,7 +242,7 @@ wxWindow* MyFrame::DoPythonStuff(wxWindow* parent)
     PyObject* result;
 
     // As always, first grab the GIL
-    bool blocked = wxPyBeginBlockThreads();
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
 
     // Now make a dictionary to serve as the global namespace when the code is
     // executed.  Put a reference to the builtins module in it.  (Yes, the

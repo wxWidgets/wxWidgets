@@ -306,7 +306,7 @@ The method will then fill up the whole image with the colour given.", "");
             unsigned char* buffer;
             int size;
 
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             if (!PyArg_Parse(data, "t#", &buffer, &size))
                 goto done;
 
@@ -360,7 +360,7 @@ The method will then fill up the whole image with the colour given.", "");
             unsigned char* buffer;
             int size;
 
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             if (!PyArg_Parse(data, "t#", &buffer, &size))
                 goto done;
 

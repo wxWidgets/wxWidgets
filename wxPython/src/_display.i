@@ -206,7 +206,7 @@ function is not supported at all on this platform.", "");
         PyObject* GetModes(const wxVideoMode& mode = wxDefaultVideoMode) {
             PyObject* pyList = NULL;
             wxArrayVideoModes arr = self->GetModes(mode);
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             pyList = PyList_New(0);
             for (int i=0; i < arr.GetCount(); i++) {
                 wxVideoMode* m = new wxVideoMode(arr.Item(i));

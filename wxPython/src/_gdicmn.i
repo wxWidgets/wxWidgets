@@ -191,7 +191,7 @@ of this object (i.e. equal to -1) with those of the other.", "");
                "Get() -> (width,height)",
                "Returns the width and height properties as a tuple.", "");
         PyObject* Get() {
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
@@ -264,7 +264,7 @@ public:
                "Get() -> (x,y)",
                "Return the x and y properties as a tuple. ", "");
         PyObject* Get() {
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyFloat_FromDouble(self->x));
             PyTuple_SET_ITEM(tup, 1, PyFloat_FromDouble(self->y));
@@ -377,7 +377,7 @@ public:
                "Get() -> (x,y)",
                "Return the x and y properties as a tuple. ", "");
         PyObject* Get() {
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
@@ -594,7 +594,7 @@ bottom, otherwise it is moved to the left or top respectively.", "",
                "Get() -> (x,y,width,height)",
                "Return the rectangle properties as a tuple.", "");
         PyObject* Get() {
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(4);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
@@ -640,7 +640,7 @@ DocAStr(wxIntersectRect,
         dest = reg1.GetBox();
 
         if (dest != wxRect(0,0,0,0)) {
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxRect* newRect = new wxRect(dest);
             obj = wxPyConstructObject((void*)newRect, wxT("wxRect"), true);
             wxPyEndBlockThreads(blocked);
@@ -728,7 +728,7 @@ public:
                "Get() -> (x,y)",
                "Return x and y properties as a tuple.", "");               
         PyObject* Get() {
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyFloat_FromDouble(self->m_x));
             PyTuple_SET_ITEM(tup, 1, PyFloat_FromDouble(self->m_y));

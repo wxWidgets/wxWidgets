@@ -283,7 +283,7 @@ public:
 
     virtual void DrawItem(wxDC& dc, wxTreeItemId id, const wxRect& rect) {
         bool found;
-        bool blocked = wxPyBeginBlockThreads();
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DrawItem"))) {
             PyObject* dcobj = wxPyMake_wxObject(&dc,false);
             PyObject* idobj = wxPyConstructObject((void*)&id, wxT("wxTreeItemId"), false);
@@ -495,7 +495,7 @@ public:
                        const wxTreeItemId& item2) {
         int rval = 0;
         bool found;
-        bool blocked = wxPyBeginBlockThreads();
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "OnCompareItems"))) {
             PyObject *o1 = wxPyConstructObject((void*)&item1, wxT("wxTreeItemId"), 0);
             PyObject *o2 = wxPyConstructObject((void*)&item2, wxT("wxTreeItemId"), 0);
@@ -757,7 +757,7 @@ public:
     //size_t GetSelections(wxArrayTreeItemIds&) const;
     %extend {
         PyObject* GetSelections() {
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject*           rval = PyList_New(0);
             wxArrayTreeItemIds  array;
             size_t              num, x;
@@ -793,7 +793,7 @@ public:
         PyObject* GetFirstChild(const wxTreeItemId& item) {
             void* cookie = 0;
             wxTreeItemId* ritem = new wxTreeItemId(self->GetFirstChild(item, cookie));
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(ritem, wxT("wxTreeItemId"), true));
             PyTuple_SET_ITEM(tup, 1, wxPyMakeSwigPtr(cookie, wxT("void")));
@@ -808,7 +808,7 @@ public:
         // passed to GetNextChild in order to continue the search.
         PyObject* GetNextChild(const wxTreeItemId& item, void* cookie) {
             wxTreeItemId* ritem = new wxTreeItemId(self->GetNextChild(item, cookie));
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(ritem, wxT("wxTreeItemId"), true));
             PyTuple_SET_ITEM(tup, 1, wxPyMakeSwigPtr(cookie, wxT("void")));
@@ -927,7 +927,7 @@ public:
         PyObject* GetBoundingRect(const wxTreeItemId& item, bool textOnly = false) {
             wxRect rect;
             if (self->GetBoundingRect(item, rect, textOnly)) {
-                bool blocked = wxPyBeginBlockThreads();
+                wxPyBlock_t blocked = wxPyBeginBlockThreads();
                 wxRect* r = new wxRect(rect);
                 PyObject* val = wxPyConstructObject((void*)r, wxT("wxRect"), 1);
                 wxPyEndBlockThreads(blocked);

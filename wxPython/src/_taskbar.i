@@ -69,7 +69,7 @@ public:
     wxMenu* CreatePopupMenu() {
         wxMenu *rval = NULL;
         bool found;
-        bool blocked = wxPyBeginBlockThreads();
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "CreatePopupMenu"))) {
             PyObject* ro;
             wxMenu* ptr;

@@ -107,7 +107,7 @@ public:
     %extend {
         PyObject* GetPrivData() {
             PyObject* data;
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             data = PyString_FromStringAndSize(self->GetPrivData(),
                                               self->GetPrivDataLen());
             wxPyEndBlockThreads(blocked);
@@ -121,7 +121,7 @@ public:
                 return /* NULL */ ;
             }
 
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             self->SetPrivData(PyString_AS_STRING(data), PyString_GET_SIZE(data));
             wxPyEndBlockThreads(blocked);
         }
@@ -353,7 +353,7 @@ void wxPyPrintout::GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *p
     bool hadErr = false;
     bool found;
 
-    bool blocked = wxPyBeginBlockThreads();
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
     if ((found = wxPyCBH_findCallback(m_myInst, "GetPageInfo"))) {
         PyObject* result = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("()"));
         if (result && PyTuple_Check(result) && PyTuple_Size(result) == 4) {
@@ -621,7 +621,7 @@ public:
     bool CLASS::CBNAME(wxPreviewCanvas* a, wxDC& b) {                                   \
         bool rval=false;                                                                \
         bool found;                                                                     \
-        bool blocked = wxPyBeginBlockThreads();                                         \
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();                                         \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                        \
             PyObject* win = wxPyMake_wxObject(a,false);                                 \
             PyObject* dc  = wxPyMake_wxObject(&b,false);                                \

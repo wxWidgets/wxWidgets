@@ -45,7 +45,7 @@ public:
         wxPyValidator* ptr = NULL;
         wxPyValidator* self = (wxPyValidator*)this;
 
-        bool blocked = wxPyBeginBlockThreads();
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if (wxPyCBH_findCallback(self->m_myInst, "Clone")) {
             PyObject* ro;
             ro = wxPyCBH_callCallbackObj(self->m_myInst, Py_BuildValue("()"));

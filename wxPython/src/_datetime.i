@@ -372,7 +372,7 @@ public:
             wxString am;
             wxString pm;
             wxDateTime::GetAmPmStrings(&am, &pm);
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, wx2PyString(am));
             PyTuple_SET_ITEM(tup, 1, wx2PyString(pm));

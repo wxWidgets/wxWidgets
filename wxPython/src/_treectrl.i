@@ -289,7 +289,7 @@ public:
                        const wxTreeItemId& item2) {
         int rval = 0;
         bool found;
-        bool blocked = wxPyBeginBlockThreads();
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "OnCompareItems"))) {
             PyObject *o1 = wxPyConstructObject((void*)&item1, wxT("wxTreeItemId"), false);
             PyObject *o2 = wxPyConstructObject((void*)&item2, wxT("wxTreeItemId"), false);
@@ -509,7 +509,7 @@ public:
         // NB: this operation is expensive and can take a long time for a
         //     control with a lot of items (~ O(number of items)).
         PyObject* GetSelections() {
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject*           rval = PyList_New(0);
             wxArrayTreeItemIds  array;
             size_t              num, x;
@@ -539,7 +539,7 @@ public:
         PyObject* GetFirstChild(const wxTreeItemId& item) {
             void* cookie = 0;
             wxTreeItemId* ritem = new wxTreeItemId(self->GetFirstChild(item, cookie));
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(ritem, wxT("wxTreeItemId"), true));
             PyTuple_SET_ITEM(tup, 1, wxPyMakeSwigPtr(cookie, wxT("void")));
@@ -554,7 +554,7 @@ public:
         // passed to GetNextChild in order to continue the search.
         PyObject* GetNextChild(const wxTreeItemId& item, void* cookie) {
             wxTreeItemId* ritem = new wxTreeItemId(self->GetNextChild(item, cookie));
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(ritem, wxT("wxTreeItemId"), true));
             PyTuple_SET_ITEM(tup, 1, wxPyMakeSwigPtr(cookie, wxT("void")));
@@ -707,7 +707,7 @@ value is set to a bitmask of wxTREE_HITTEST_xxx constants.
         PyObject* GetBoundingRect(const wxTreeItemId& item,  bool textOnly = false) {
              wxRect rect;
             if (self->GetBoundingRect(item, rect, textOnly)) {
-                bool blocked = wxPyBeginBlockThreads();
+                wxPyBlock_t blocked = wxPyBeginBlockThreads();
                 wxRect* r = new wxRect(rect);
                 PyObject* val = wxPyConstructObject((void*)r, wxT("wxRect"), true);
                 wxPyEndBlockThreads(blocked);

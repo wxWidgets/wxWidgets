@@ -206,7 +206,7 @@ public:
             return;
         }
 
-        bool blocked = wxPyBeginBlockThreads();
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
         void*  ptr = (void*)PyString_AsString(data);
         size_t size = PyString_Size(data);
         wxPyEndBlockThreads(blocked);

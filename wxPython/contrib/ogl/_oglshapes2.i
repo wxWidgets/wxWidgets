@@ -312,7 +312,7 @@ public:
             wxObject*   wxObj;
             wxNode*     node = list->GetFirst();
 
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             pyList = PyList_New(0);
             while (node) {
                 wxObj = node->GetData();

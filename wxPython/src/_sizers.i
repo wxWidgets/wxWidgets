@@ -56,7 +56,7 @@ methods are called.
         {
             wxPyUserData* data = NULL;
             if ( userData ) {
-                bool blocked = wxPyBeginBlockThreads();
+                wxPyBlock_t blocked = wxPyBeginBlockThreads();
                 data = new wxPyUserData(userData);
                 wxPyEndBlockThreads(blocked);
             }
@@ -74,7 +74,7 @@ methods are called.
         {
             wxPyUserData* data = NULL;
             if ( userData ) {
-                bool blocked = wxPyBeginBlockThreads();
+                wxPyBlock_t blocked = wxPyBeginBlockThreads();
                 data = new wxPyUserData(userData);
                 wxPyEndBlockThreads(blocked);
             }
@@ -91,7 +91,7 @@ methods are called.
         {
             wxPyUserData* data = NULL;
             if ( userData ) {
-                bool blocked = wxPyBeginBlockThreads();
+                wxPyBlock_t blocked = wxPyBeginBlockThreads();
                 data = new wxPyUserData(userData);
                 wxPyEndBlockThreads(blocked);
             }
@@ -490,7 +490,7 @@ public:
                           PyObject* userData=NULL) {
 
             wxPyUserData* data = NULL;
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, true, false);
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);
@@ -521,7 +521,7 @@ the item at index *before*.  See `Add` for a description of the parameters.", ""
                             int border=0, PyObject* userData=NULL) {
 
             wxPyUserData* data = NULL;
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, true, false);
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);
@@ -553,7 +553,7 @@ this sizer.  See `Add` for a description of the parameters.", "");
                              PyObject* userData=NULL) {
 
             wxPyUserData* data = NULL;
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, true, false);
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);
@@ -589,7 +589,7 @@ and removed.", "
     instead.
 ");
         bool Remove(PyObject* item) {
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
             wxPyEndBlockThreads(blocked);
             if ( info.window )
@@ -611,7 +611,7 @@ do so.  The *item* parameter can be either a window, a sizer, or the
 zero-based index of the item to be detached.  Returns True if the child item
 was found and detached.", "");
         bool Detach(PyObject* item) {
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
             wxPyEndBlockThreads(blocked);
             if ( info.window )
@@ -631,7 +631,7 @@ was found and detached.", "");
 parameter can be either a window, a sizer, or the zero-based index of
 the item to be detached.", "");
         wxSizerItem* GetItem(PyObject* item) {
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
             wxPyEndBlockThreads(blocked);
             if ( info.window )
@@ -646,7 +646,7 @@ the item to be detached.", "");
 
 
         void _SetItemMinSize(PyObject* item, const wxSize& size) {
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
             wxPyEndBlockThreads(blocked);
             if ( info.window )
@@ -889,7 +889,7 @@ parameter can be either a window, a sizer, or the zero-based index of
 the item.  Use the recursive parameter to show or hide an item in a
 subsizer.  Returns True if the item was found.", "");
         bool Show(PyObject* item, bool show = true, bool recursive=false) {
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
             wxPyEndBlockThreads(blocked);
             if ( info.window )
@@ -909,7 +909,7 @@ item disappear or reappear, use Show followed by `Layout`.  The *item*
 parameter can be either a window, a sizer, or the zero-based index of
 the item.", "");
         bool IsShown(PyObject* item) {
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, false);
             wxPyEndBlockThreads(blocked);
             if ( info.window )

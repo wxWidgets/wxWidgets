@@ -45,7 +45,7 @@ wxPyTimer::wxPyTimer(wxEvtHandler *owner, int id)
 
 void wxPyTimer::Notify() {
     bool found;
-    bool blocked = wxPyBeginBlockThreads();
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
     if ((found = wxPyCBH_findCallback(m_myInst, "Notify")))
         wxPyCBH_callCallback(m_myInst, Py_BuildValue("()"));
     wxPyEndBlockThreads(blocked);

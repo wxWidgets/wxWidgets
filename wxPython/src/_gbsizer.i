@@ -94,7 +94,7 @@ public:
         }
         
         PyObject* Get() {
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->GetRow()));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->GetCol()));
@@ -163,7 +163,7 @@ cell in each direction.", "");
         }
         
         PyObject* Get() {
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->GetRowspan()));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->GetColspan()));
@@ -231,7 +231,7 @@ are created automatically when the sizer's Add method is called.", "");
             {
                 wxPyUserData* data = NULL;
                 if ( userData ) {
-                    bool blocked = wxPyBeginBlockThreads();
+                    wxPyBlock_t blocked = wxPyBeginBlockThreads();
                     data = new wxPyUserData(userData);
                     wxPyEndBlockThreads(blocked);
                 }
@@ -250,7 +250,7 @@ are created automatically when the sizer's Add method is called.", "");
             {
                 wxPyUserData* data = NULL;
                 if ( userData ) {
-                    bool blocked = wxPyBeginBlockThreads();
+                    wxPyBlock_t blocked = wxPyBeginBlockThreads();
                     data = new wxPyUserData(userData);
                     wxPyEndBlockThreads(blocked);
                 }
@@ -270,7 +270,7 @@ are created automatically when the sizer's Add method is called.", "");
             {
                 wxPyUserData* data = NULL;
                 if ( userData ) {
-                    bool blocked = wxPyBeginBlockThreads();
+                    wxPyBlock_t blocked = wxPyBeginBlockThreads();
                     data = new wxPyUserData(userData);
                     wxPyEndBlockThreads(blocked);
                 }
@@ -388,7 +388,7 @@ position, False if something was already there.
                             PyObject* userData = NULL ) {
 
             wxPyUserData* data = NULL;
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, true, false);
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);

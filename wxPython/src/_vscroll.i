@@ -346,7 +346,7 @@ public:
         PyObject* GetFirstSelected() {
             unsigned long cookie = 0;
             int selected = self->GetFirstSelected(cookie);
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(selected));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(cookie));
@@ -363,7 +363,7 @@ public:
         // int GetNextSelected(unsigned long& cookie) const;
         PyObject* GetNextSelected(unsigned long cookie) {
             int selected = self->GetNextSelected(cookie);
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(selected));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(cookie));

@@ -171,7 +171,7 @@ void wxOGLCleanUp();
 // work for any class for the VERY generic cases, but beyond that the helper
 // needs to know more about the type.
 wxList* wxPy_wxListHelper(PyObject* pyList, const wxChar* className) {
-    bool blocked = wxPyBeginBlockThreads();
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
     if (!PyList_Check(pyList)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
         wxPyEndBlockThreads(blocked);
@@ -204,7 +204,7 @@ wxList* wxPy_wxListHelper(PyObject* pyList, const wxChar* className) {
 //---------------------------------------------------------------------------
 
 wxList* wxPy_wxRealPoint_ListHelper(PyObject* pyList) {
-    bool blocked = wxPyBeginBlockThreads();
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
     if (!PyList_Check(pyList)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
         wxPyEndBlockThreads(blocked);
@@ -276,7 +276,7 @@ PyObject* wxPy_ConvertRealPointList(wxListBase* listbase) {
     wxObject*   wxObj;
     wxNode*     node = list->GetFirst();
     
-    bool blocked = wxPyBeginBlockThreads();
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
     pyList = PyList_New(0);
     while (node) {
         wxObj = node->GetData();
@@ -297,7 +297,7 @@ PyObject* wxPy_ConvertShapeList(wxListBase* listbase) {
     wxObject*   wxObj;
     wxNode*     node = list->GetFirst();
 
-    bool blocked = wxPyBeginBlockThreads();
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
     pyList = PyList_New(0);
     while (node) {
         wxObj = node->GetData();

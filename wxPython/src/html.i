@@ -329,7 +329,7 @@ public:
     }
 
     void OnExit() {
-        bool blocked = wxPyBeginBlockThreads();
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
         Py_DECREF(m_tagHandlerClass);
         m_tagHandlerClass = NULL;
         for (size_t x=0; x < m_objArray.GetCount(); x++) {
@@ -343,7 +343,7 @@ public:
         // Wave our magic wand...  (if it works it's a miracle!  ;-)
 
         // First, make a new instance of the tag handler
-        bool blocked = wxPyBeginBlockThreads();
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
         PyObject* arg = PyTuple_New(0);
         PyObject* obj = PyObject_CallObject(m_tagHandlerClass, arg);
         Py_DECREF(arg);
@@ -647,7 +647,7 @@ public:
     virtual bool CanRead(const wxFSFile& file) const {
         bool rval = false;
         bool found;
-        bool blocked = wxPyBeginBlockThreads();
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "CanRead"))) {
             PyObject* obj = wxPyMake_wxObject((wxFSFile*)&file,false);  // cast away const
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));
@@ -663,7 +663,7 @@ public:
     virtual wxString ReadFile(const wxFSFile& file) const {
         wxString rval;
         bool found;
-        bool blocked = wxPyBeginBlockThreads();
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "ReadFile"))) {
             PyObject* obj = wxPyMake_wxObject((wxFSFile*)&file,false);  // cast away const
             PyObject* ro;
@@ -747,7 +747,7 @@ IMP_PYCALLBACK__CELLINTINTME(wxPyHtmlWindow, wxHtmlWindow, OnCellClicked);
 
 void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
     bool found;
-    bool blocked = wxPyBeginBlockThreads();
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
     if ((found = wxPyCBH_findCallback(m_myInst, "OnLinkClicked"))) {
         PyObject* obj = wxPyConstructObject((void*)&link, wxT("wxHtmlLinkInfo"), 0);
         wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));
@@ -767,7 +767,7 @@ wxHtmlOpeningStatus wxPyHtmlWindow::OnOpeningURL(wxHtmlURLType type,
                                                  wxString *redirect) const {
     bool found;
     wxHtmlOpeningStatus rval;
-    bool blocked = wxPyBeginBlockThreads();
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
     if ((found = wxPyCBH_findCallback(m_myInst, "OnOpeningURL"))) {
         PyObject* ro;
         PyObject* s = wx2PyString(url);

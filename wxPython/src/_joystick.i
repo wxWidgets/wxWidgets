@@ -48,7 +48,7 @@ enum
 class wxJoystick : public wxObject {
 public:
     wxJoystick(int joystick = wxJOYSTICK1) {
-        bool blocked = wxPyBeginBlockThreads();
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
         PyErr_SetString(PyExc_NotImplementedError,
                         "wxJoystick is not available on this platform.");
         wxPyEndBlockThreads(blocked);

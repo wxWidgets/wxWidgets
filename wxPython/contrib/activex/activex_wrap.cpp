@@ -1408,7 +1408,7 @@ static wxString  _VARTYPEname(VARTYPE vt);
 inline bool wxPyErr_Occurred()
 {
     bool rval;
-    bool blocked = wxPyBeginBlockThreads();
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
     rval = PyErr_Occurred() != NULL;
     wxPyEndBlockThreads(blocked);
     return rval;
@@ -1700,7 +1700,7 @@ public:
     void SetAXProp(const wxString& name, PyObject* value)
     {        
         const wxPropX& prop = GetAXPropDesc(name);
-        bool blocked = wxPyBeginBlockThreads();
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if (! PyErr_Occurred() ) {
             if (! prop.CanSet()) {
                 wxString msg;
@@ -1736,7 +1736,7 @@ public:
     {        
         PyObject* rval = NULL;
         const wxPropX& prop = GetAXPropDesc(name);
-        bool blocked = wxPyBeginBlockThreads();
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if (! PyErr_Occurred() ) {
             if (! prop.CanGet()) {
                 wxString msg;
@@ -1782,7 +1782,7 @@ public:
         PyObject* rval = NULL;
         const wxFuncX& func = GetAXMethodDesc(name);
         
-        bool blocked = wxPyBeginBlockThreads();
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if (! PyErr_Occurred() ) {
             nargs = func.params.size();
             if (nargs > 0)
@@ -1896,7 +1896,7 @@ SWIG_Check_long(PyObject* obj)
 }
 
 static void wxActiveXEvent__preCallInit(wxActiveXEvent *self,PyObject *pyself){
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* pList = PyList_New(0);
             PyObject_SetAttrString(pyself, "paramList", pList);
             Py_DECREF(pList);
@@ -1911,7 +1911,7 @@ static void wxActiveXEvent__preCallInit(wxActiveXEvent *self,PyObject *pyself){
             wxPyEndBlockThreads(blocked);
         }
 static void wxActiveXEvent__postCallCleanup(wxActiveXEvent *self,PyObject *pyself){
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             for (int i=0; i<self->ParamCount(); i+=1) {
                 PyObject* val = PyObject_GetAttrString(
                     pyself, (char*)(const char*)self->ParamName(i).mb_str());
@@ -4382,7 +4382,7 @@ static PyObject *_wrap_IEHtmlWindowBase_LoadStream(PyObject *, PyObject *args, P
             arg2 = wxPyCBInputStream_copy((wxPyCBInputStream*)temp2->m_wxis);
         } else {
             PyErr_Clear();  // clear the failure of the wxPyConvert above
-            arg2 = wxPyCBInputStream_create(obj1, false);
+            arg2 = wxPyCBInputStream_create(obj1, true);
             if (arg2 == NULL) {
                 PyErr_SetString(PyExc_TypeError, "Expected wx.InputStream or Python file-like object.");
                 SWIG_fail;
