@@ -157,8 +157,8 @@ void wxScrolledWindow::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
 	m_targetWindow->Refresh(); 
    
 #ifdef __WXMSW__
-   // Necessary?
-    UpdateWindow ((HWND) m_targetWindow->GetHWND());
+    // Necessary?
+    // UpdateWindow ((HWND) m_targetWindow->GetHWND());
 #endif
 #ifdef __WXMAC__
 		m_targetWindow->MacUpdateImmediately() ;

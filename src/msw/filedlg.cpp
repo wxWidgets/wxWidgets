@@ -356,7 +356,7 @@ int wxFileDialog::ShowModal()
 
             m_filterIndex = (int)of.nFilterIndex - 1;
 
-            if ( of.nFileExtension && fileNameBuffer[ of.nFileExtension-1] != wxT('.') )
+            if ( !of.nFileExtension || (of.nFileExtension && fileNameBuffer[ of.nFileExtension-1] != wxT('.')) )
             {                                    // user has typed an filename
                 // without an extension:
 

@@ -325,6 +325,7 @@ $(CFG): makefile.b32
 -H=$(WXDIR)\src\msw\wx32.csm
 -3
 -d
+-a1 # byte alignment
 -R-
 -X
 -w-par

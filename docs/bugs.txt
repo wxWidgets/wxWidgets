@@ -326,6 +326,28 @@ WORKAROUND: Change the declaration to void * or long
 visitor_email_address: rjl@zk3.dec.com
 wxWINDOWS+VERSION: 2.1.10
 
+DATE+FIXED: 12/01/2000
+DATE+IDENTIFIED: 12/01/2000
+DETAILS: When I try to Print or create
+wxPrintPreview object in the
+printing sample, it fails.
+The reason is the wxGetDefaultDeviceName
+function in file msw/dcprint.cpp. In line 253
+the memory is freed, and then
+the pointer to the freed memory
+is used.
+FIXED+BY: Alexey V. Exarevsky (patched into wxWin 12/1/2000 by JACS)
+IDENTIFIED+BY: Alexey V. Exarevsky
+PLATFORMS: wxMSW, compiled by VC++ 6.0
+SHORT+DESCRIPTION: Print/Print preveiw to default printer in NT
+Submit: Submit
+WORKAROUND: I have moved lines that free
+memory below the lines that
+use lpszDeviceName and 
+lpszPortName
+visitor_email_address: ave@relex.ru
+wxWINDOWS+VERSION: 2.1.11
+
 
 ---------------------------END OF BUGLIST-------------------------
 

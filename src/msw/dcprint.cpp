@@ -247,12 +247,13 @@ static bool wxGetDefaultDeviceName(wxString& deviceName, wxString& portName)
         lpszDriverName = (LPSTR)lpDevNames + lpDevNames->wDriverOffset;
         lpszDeviceName = (LPSTR)lpDevNames + lpDevNames->wDeviceOffset;
         lpszPortName   = (LPSTR)lpDevNames + lpDevNames->wOutputOffset;
-        GlobalUnlock(pd.hDevNames);
-        GlobalFree(pd.hDevNames);
-        pd.hDevNames=NULL;
 
         deviceName = lpszDeviceName;
         portName = lpszPortName;
+
+        GlobalUnlock(pd.hDevNames);
+        GlobalFree(pd.hDevNames);
+        pd.hDevNames=NULL;
     }
 
     if (pd.hDevMode)
