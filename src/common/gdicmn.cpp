@@ -29,12 +29,17 @@
 #include "wx/cursor.h"
 #include "wx/font.h"
 #include "wx/palette.h"
+#include "wx/app.h"
 
 #include "wx/log.h"
 #include <string.h>
 
 #ifdef __WXMSW__
 #include <windows.h>
+#endif
+
+#ifdef __WXMOTIF__
+#include <Xm/Xm.h>
 #endif
 
 #if !USE_SHARED_LIBRARY
@@ -283,16 +288,11 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour)
     XColor xcolour;
 
 #ifdef __WXMOTIF__
-    Display *display = XtDisplay(wxTheApp->topLevel) ;
-#endif
-#ifdef __XVIEW__
-    Xv_Screen screen = xv_get(xview_server, SERVER_NTH_SCREEN, 0);
-    Xv_opaque root_window = xv_get(screen, XV_ROOT);
-    Display *display = (Display *)xv_get(root_window, XV_DISPLAY);
+    Display *display = XtDisplay((Widget) wxTheApp->GetTopLevelWidget()) ;
 #endif
 
     /* MATTHEW: [4] Use wxGetMainColormap */
-    if (!XParseColor(display, wxGetMainColormap(display), colour,&xcolour))
+    if (!XParseColor(display, (Colormap) wxTheApp->GetMainColormap((WXDisplay*) display), colour,&xcolour))
       return NULL;
 
     unsigned char r = (unsigned char)(xcolour.red >> 8);
@@ -340,7 +340,8 @@ void wxInitializeStockObjects ()
 #ifdef __WXMOTIF__
 #endif
 #ifdef __X__
-  wxFontPool = new XFontPool;
+  // TODO
+  //  wxFontPool = new XFontPool;
 #endif
 
   wxNORMAL_FONT = new wxFont (12, wxMODERN, wxNORMAL, wxNORMAL);
@@ -604,12 +605,12 @@ wxFont *wxFontList::
 	  each_font->GetStyle () == Style &&
 	  each_font->GetWeight () == Weight &&
 	  each_font->GetUnderlined () == underline &&
-#if defined(__X__) || (defined(__WXMSW__) && USE_PORTABLE_FONTS_IN_MSW)
-	  each_font->GetFontId () == FamilyOrFontId) /* New font system */
-#else
+	  //#if defined(__X__)
+	  //	  each_font->GetFontId () == FamilyOrFontId) /* New font system */
+	  //#else
 	  each_font->GetFamily () == FamilyOrFontId &&
           (!each_font->GetFaceName() || each_font->GetFaceName() == Face))
-#endif
+	//#endif
 	return each_font;
     }
   wxFont *font = new wxFont (PointSize, FamilyOrFontId, Style, Weight, underline, Face);

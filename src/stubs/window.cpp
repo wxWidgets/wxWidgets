@@ -1172,6 +1172,11 @@ void wxWindow::SetValidator(const wxValidator& validator)
 		m_windowValidator->SetWindow(this) ;
 }
 
+void wxWindow::SetAcceleratorTable(const wxAcceleratorTable& accel)
+{
+    m_acceleratorTable = accel;
+}
+
 // Find a window by id or name
 wxWindow *wxWindow::FindWindow(long id)
 {

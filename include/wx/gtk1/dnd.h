@@ -210,18 +210,18 @@ class wxFileDropTarget: public wxDropTarget
 // wxDropSource
 //-------------------------------------------------------------------------
 
+  enum wxDragResult
+  {
+    wxDragError,    // error prevented the d&d operation from completing
+    wxDragNone,     // drag target didn't accept the data
+    wxDragCopy,     // the data was successfully copied
+    wxDragMove,     // the data was successfully moved
+    wxDragCancel    // the operation was cancelled by user (not an error)
+  };
+
 class wxDropSource: public wxObject
 {
   public:
-
-  enum DragResult
-  {
-    Error,    // error prevented the d&d operation from completing
-    None,     // drag target didn't accept the data
-    Copy,     // the data was successfully copied
-    Move,     // the data was successfully moved
-    Cancel    // the operation was cancelled by user (not an error)
-  };
 
     wxDropSource( wxWindow *win );
     wxDropSource( wxDataObject &data, wxWindow *win );
@@ -229,9 +229,9 @@ class wxDropSource: public wxObject
     ~wxDropSource(void);
     
     void SetData( wxDataObject &data  );
-    DragResult DoDragDrop( bool bAllowMove = FALSE );
+    wxDragResult DoDragDrop( bool bAllowMove = FALSE );
     
-    virtual bool GiveFeedback( DragResult WXUNUSED(effect), bool WXUNUSED(bScrolling) ) { return TRUE; };
+    virtual bool GiveFeedback( wxDragResult WXUNUSED(effect), bool WXUNUSED(bScrolling) ) { return TRUE; };
 
   protected:
   
@@ -242,7 +242,7 @@ class wxDropSource: public wxObject
   
     GtkWidget     *m_widget;
     wxWindow      *m_window;
-    DragResult     m_retValue;
+    wxDragResult   m_retValue;
     wxDataObject  *m_data;
     
     wxCursor      m_defaultCursor;

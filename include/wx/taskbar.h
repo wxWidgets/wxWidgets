@@ -4,6 +4,7 @@
 #if defined(__WXMSW__)
 #include "wx/msw/taskbar.h"
 #elif defined(__WXMOTIF__)
+#include "wx/motif/taskbar.h"
 #elif defined(__WXGTK__)
 #elif defined(__WXQT__)
 #elif defined(__WXMAC__)

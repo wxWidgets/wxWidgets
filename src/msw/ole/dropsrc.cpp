@@ -121,13 +121,13 @@ STDMETHODIMP wxIDropSource::QueryContinueDrag(BOOL fEscapePressed,
 // Notes   : default implementation is ok in more than 99% of cases
 STDMETHODIMP wxIDropSource::GiveFeedback(DWORD dwEffect)
 {
-  wxDropSource::DragResult effect;
+  wxDragResult effect;
   if ( dwEffect & DROPEFFECT_COPY )
-    effect = wxDropSource::Copy;
+    effect = wxDragCopy;
   else if ( dwEffect & DROPEFFECT_MOVE )
-    effect = wxDropSource::Move;
+    effect = wxDragMove;
   else
-    effect = wxDropSource::None;
+    effect = wxDragNone;
 
   if ( m_pDropSource->GiveFeedback(effect,
                                    (dwEffect & DROPEFFECT_SCROLL) != 0 ) )
@@ -173,12 +173,12 @@ wxDropSource::~wxDropSource()
 
 // Name    : DoDragDrop
 // Purpose : start drag and drop operation
-// Returns : DragResult - the code of performed operation
+// Returns : wxDragResult - the code of performed operation
 // Params  : [in] bool bAllowMove: if false, only copy is allowed
 // Notes   : you must call SetData() before if you had used def ctor
-wxDropSource::DragResult wxDropSource::DoDragDrop(bool bAllowMove)
+wxDragResult wxDropSource::DoDragDrop(bool bAllowMove)
 {
-  wxCHECK_MSG( m_pData != NULL, None, "No data in wxDropSource!" );
+  wxCHECK_MSG( m_pData != NULL, wxDragNone, "No data in wxDropSource!" );
 
   DWORD dwEffect;
   HRESULT hr = ::DoDragDrop(m_pData->GetInterface(), 
@@ -188,23 +188,23 @@ wxDropSource::DragResult wxDropSource::DoDragDrop(bool bAllowMove)
                             &dwEffect);
 
   if ( hr == DRAGDROP_S_CANCEL ) {
-    return Cancel;
+    return wxDragCancel;
   }
   else if ( hr == DRAGDROP_S_DROP ) {
     if ( dwEffect & DROPEFFECT_COPY ) {
-      return Copy;
+      return wxDragCopy;
     }
     else if ( dwEffect & DROPEFFECT_MOVE ) {
       // consistency check: normally, we shouldn't get "move" at all
       // here if !bAllowMove, but in practice it does happen quite often
       if ( bAllowMove )
-        return Move;
+        return wxDragMove;
       else
-        return Copy;
+        return wxDragCopy;
     }
     else {
       // not copy or move
-      return None;
+      return wxDragNone;
     }
   }
   else {
@@ -216,7 +216,7 @@ wxDropSource::DragResult wxDropSource::DoDragDrop(bool bAllowMove)
       wxLogDebug("Unexpected success return code %08lx from DoDragDrop.", hr);
     }
 
-    return Error;
+    return wxDragError;
   }
 }
 
@@ -226,7 +226,7 @@ wxDropSource::DragResult wxDropSource::DoDragDrop(bool bAllowMove)
 // Params  : [in] DragResult effect - what would happen if we dropped now
 //           [in] bool bScrolling   - true if target is scrolling    
 // Notes   : here we just leave this stuff for default implementation
-bool wxDropSource::GiveFeedback(DragResult effect, bool bScrolling)
+bool wxDropSource::GiveFeedback(wxDragResult effect, bool bScrolling)
 {
   return FALSE;
 }

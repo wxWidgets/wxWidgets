@@ -24,6 +24,8 @@
 #include "wx/list.h"
 #include "wx/tbarbase.h"
 
+class WXDLLEXPORT wxMemoryDC;
+
 WXDLLEXPORT_DATA(extern const char*) wxToolBarNameStr;
 WXDLLEXPORT_DATA(extern const wxSize) wxDefaultSize;
 WXDLLEXPORT_DATA(extern const wxPoint) wxDefaultPosition;

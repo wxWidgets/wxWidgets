@@ -71,6 +71,11 @@
 
 #endif
 
+#ifdef __WXMOTIF__
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#endif
+
 #ifdef __WXMSW__
 
 #ifdef DrawText
@@ -1447,13 +1452,16 @@ Blit (long xdest, long ydest, long fwidth, long fheight,
 #else  
 
 #ifdef __WXMOTIF__
-  d = source->display;
+  // TODO. for now, use global display
+  //  d = source->display;
+  d = (Display*) wxGetDisplay();
 #else
-  d = wxGetDisplay();
+  d = (Display*) wxGetDisplay();
 #endif
 
-  cm = wxGetMainColormap(d);
-  image = XGetImage(d, source->pixmap, x, y, width, height, AllPlanes, ZPixmap);
+  cm = (Colormap) wxTheApp->GetMainColormap((WXDisplay*) d);
+  // TODO - implement GetPixmap() and uncomment this line
+  //  image = XGetImage(d, source->GetPixmap(), x, y, width, height, AllPlanes, ZPixmap);
   
 #endif
 
@@ -2144,8 +2152,8 @@ int wxPostScriptPrintDialog::ShowModal (void)
       StringToLong (WXSTRINGCAST text4->GetValue (), &wxThePrintSetupData->printerTranslateY);
 
 #ifdef __X__
-      wxThePrintSetupData->SetPrinterOptions(WXSTRINGCAST text0->GetValue ());
-      wxThePrintSetupData->SetPrinterCommand(WXSTRINGCAST text_prt->GetValue ());
+      //      wxThePrintSetupData->SetPrinterOptions(WXSTRINGCAST text0->GetValue ());
+      //      wxThePrintSetupData->SetPrinterCommand(WXSTRINGCAST text_prt->GetValue ());
 #endif
 
       wxThePrintSetupData->SetPrinterOrientation((radio0->GetSelection() == 1 ? PS_LANDSCAPE : PS_PORTRAIT));

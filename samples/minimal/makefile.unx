@@ -9,8 +9,9 @@
 #
 # Makefile for minimal example (UNIX).
 
-include ../../src/makeprog.env
-
 PROGRAM=minimal
 
 OBJECTS=$(PROGRAM).o
+
+include ../../src/makeprog.env
+

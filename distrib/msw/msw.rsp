@@ -1,6 +1,9 @@
 docs/msw/*.txt
 docs/licence.txt
 
+distrib/msw/*.rsp
+distrib/msw/*.bat
+
 src/makeb32.env
 src/makebcc.env
 src/makemsw.env

@@ -117,7 +117,7 @@
 #endif
 
 #ifdef __WXMOTIF__
-#define wxAPP_CONTEXT wxTheApp->appContext
+#define wxAPP_CONTEXT ((XtAppContext)wxTheApp->GetAppContext())
 #endif
 
 #ifdef __WINDOWS__

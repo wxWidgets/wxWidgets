@@ -125,9 +125,9 @@ wxDropSource::~wxDropSource(void)
 {
 };
    
-wxDropSource::DragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
+wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
 {
     // TODO
-    return Error;
+    return wxDragError;
 };
 

@@ -2,7 +2,6 @@ install-sh
 Makefile
 template.mak
 TODO.txt
-configure
 configure.in
 config.guess
 config.sub

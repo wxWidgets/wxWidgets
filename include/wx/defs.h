@@ -889,9 +889,10 @@ typedef int (__stdcall *WXFARPROC)();
 typedef void*           WXWindow;
 typedef void*           WXWidget;
 typedef void*           WXAppContext;
-typedef void*           WXMainColormap;
+typedef void*           WXColormap;
 typedef void            WXDisplay;
 typedef void            WXEvent;
+typedef void*           WXCursor;
 #endif
 
 #endif

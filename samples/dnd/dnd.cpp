@@ -302,11 +302,11 @@ void DnDFrame::OnLeftDown(wxMouseEvent &WXUNUSED(event) )
     const char *pc;
 
     switch ( dragSource.DoDragDrop(TRUE) ) {
-      case wxDropSource::Error:   pc = "Error!";    break;
-      case wxDropSource::None:    pc = "Nothing";   break;
-      case wxDropSource::Copy:    pc = "Copied";    break;
-      case wxDropSource::Move:    pc = "Moved";     break;
-      case wxDropSource::Cancel:  pc = "Cancelled"; break;
+      case wxDragError:   pc = "Error!";    break;
+      case wxDragNone:    pc = "Nothing";   break;
+      case wxDragCopy:    pc = "Copied";    break;
+      case wxDragMove:    pc = "Moved";     break;
+      case wxDragCancel:  pc = "Cancelled"; break;
       default:                    pc = "Huh?";      break;
     }
 

@@ -350,6 +350,7 @@ public:
   inline virtual void SetDefaultItem(wxButton *but);
 
   virtual void SetAcceleratorTable(const wxAcceleratorTable& accel);
+  inline virtual wxAcceleratorTable& GetAcceleratorTable() const { return (wxAcceleratorTable&) m_acceleratorTable; }
 
   // Override to define new behaviour for default action (e.g. double clicking
   // on a listbox)

@@ -271,11 +271,9 @@ char* WXDLLEXPORT wxLoadUserResource(const wxString& resourceName, const wxStrin
 
 // X only
 #ifdef __X__
-// Get X display: often needed in the wxWindows implementation.
-Display *wxGetDisplay(void);
-/* Matthew Flatt: Added wxSetDisplay and wxGetDisplayName */
+WXDisplay *wxGetDisplay();
 bool wxSetDisplay(const wxString& display_name);
-wxString wxGetDisplayName(void);
+wxString wxGetDisplayName();
 #endif
 
 #ifdef __X__

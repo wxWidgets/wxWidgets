@@ -26,6 +26,7 @@
 #include "wx/string.h"
 #include "wx/list.h"
 #include "wx/region.h"
+#include "wx/accel.h"
 
 #define wxKEY_SHIFT     1
 #define wxKEY_CTRL      2
@@ -255,6 +256,9 @@ public:
   inline int GetId() const;
   inline void SetId(int id);
 
+  virtual void SetAcceleratorTable(const wxAcceleratorTable& accel);
+  inline virtual wxAcceleratorTable& GetAcceleratorTable() const { return (wxAcceleratorTable&) m_acceleratorTable; }
+
   // Make the window modal (all other windows unresponsive)
   virtual void MakeModal(bool modal);
 
@@ -477,6 +481,7 @@ protected:
   wxColour              m_foregroundColour ;
   wxColour              m_defaultBackgroundColour;
   wxColour              m_defaultForegroundColour;
+  wxAcceleratorTable    m_acceleratorTable;
 
 #if USE_DRAG_AND_DROP
   wxDropTarget         *m_pDropTarget;    // the current drop target or NULL

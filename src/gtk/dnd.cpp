@@ -158,7 +158,7 @@ void gtk_drag_callback( GtkWidget *widget, GdkEvent *event, wxDropSource *source
   
   delete ptr;
   
-  source->m_retValue = wxDropSource::Copy;
+  source->m_retValue = wxDragCopy;
 }
 
 wxDropSource::wxDropSource( wxWindow *win )
@@ -170,7 +170,7 @@ wxDropSource::wxDropSource( wxWindow *win )
   if (win->m_wxwindow) m_widget = win->m_wxwindow;
   
   m_data = (wxDataObject *) NULL;
-  m_retValue = Cancel;
+  m_retValue = wxDragCancel;
 
   m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
   m_goaheadCursor = wxCursor( wxCURSOR_HAND );
@@ -183,7 +183,7 @@ wxDropSource::wxDropSource( wxDataObject &data, wxWindow *win )
   m_window = win;
   m_widget = win->m_widget;
   if (win->m_wxwindow) m_widget = win->m_wxwindow;
-  m_retValue = Cancel;
+  m_retValue = wxDragCancel;
   
   m_data = &data;
 
@@ -203,15 +203,15 @@ wxDropSource::~wxDropSource(void)
   g_blockEventsOnDrag = FALSE;
 }
    
-wxDropSource::DragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
+wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
 {
-  if (gdk_dnd.dnd_grabbed) return (wxDropSource::DragResult) None;
-  if (gdk_dnd.drag_really) return (wxDropSource::DragResult) None;
+  if (gdk_dnd.dnd_grabbed) return (wxDragResult) wxDragNone;
+  if (gdk_dnd.drag_really) return (wxDragResult) wxDragNone;
   
   wxASSERT_MSG( m_data, "wxDragSource: no data" );
   
-  if (!m_data) return (wxDropSource::DragResult) None;
-  if (m_data->GetDataSize() == 0) return (wxDropSource::DragResult) None;
+  if (!m_data) return (wxDragResult) wxDragNone;
+  if (m_data->GetDataSize() == 0) return (wxDragResult) wxDragNone;
   
   GdkWindowPrivate *wp = (GdkWindowPrivate*) m_widget->window;
   

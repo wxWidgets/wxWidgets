@@ -6,6 +6,7 @@
 #include "wx/msw/ole/droptgt.h"
 #include "wx/msw/ole/dataobj.h"
 #elif defined(__WXMOTIF__)
+#include "wx/motif/dnd.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/dnd.h"
 #elif defined(__WXQT__)

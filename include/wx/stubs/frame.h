@@ -128,8 +128,6 @@ public:
 
   virtual void Maximize(bool maximize);
 
-  virtual void SetAcceleratorTable(const wxAcceleratorTable& accel);
-
   // Responds to colour changes
   void OnSysColourChanged(wxSysColourChangedEvent& event);
 
@@ -147,7 +145,6 @@ protected:
   bool                  m_iconized;
   static bool           m_useNativeStatusBar;
   wxToolBar *           m_frameToolBar ;
-  wxAcceleratorTable    m_acceleratorTable;
 
   DECLARE_EVENT_TABLE()
 };
