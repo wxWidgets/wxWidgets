@@ -2448,4 +2448,35 @@ extern wxPyApp *wxPythonApp;
 
 //---------------------------------------------------------------------------
 
+#define DEC_PYCALLBACK_VIZATTR_(CBNAME)                                         \
+    wxVisualAttributes  CBNAME() const;                                         \
+    wxVisualAttributes  base_##CBNAME()
+
+
+#define IMP_PYCALLBACK_VIZATTR_(CLASS, PCLASS, CBNAME)                          \
+    wxVisualAttributes CLASS::CBNAME() const {                                  \
+        wxVisualAttributes rval;                                                \
+        bool found;                                                             \
+        bool blocked = wxPyBeginBlockThreads();                                 \
+        if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
+            PyObject* ro;                                                       \
+            wxVisualAttributes* ptr;                                            \
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("()"));        \
+            if (ro) {                                                           \
+                if (wxPyConvertSwigPtr(ro, (void **)&ptr, wxT("wxVisualAttributes"))) \
+                    rval = *ptr;                                                \
+                Py_DECREF(ro);                                                  \
+            }                                                                   \
+        }                                                                       \
+        wxPyEndBlockThreads(blocked);                                           \
+        if (! found)                                                            \
+            rval = PCLASS::CBNAME();                                            \
+        return rval;                                                            \
+    }                                                                           \
+    wxVisualAttributes  CLASS::base_##CBNAME() {                                \
+        return PCLASS::CBNAME();                                                \
+    }
+
+//---------------------------------------------------------------------------
+
 #endif

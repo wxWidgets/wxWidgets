@@ -17,7 +17,6 @@
 %newgroup
 
 
-// TODO:  Virtualize ShouldInheritColours
 
 //---------------------------------------------------------------------------
 
@@ -35,6 +34,7 @@ public:
                 const wxString& name = wxPyControlNameStr)
         : wxControl(parent, id, pos, size, style, validator, name) {}
 
+    void SetBestSize(const wxSize& size) { wxControl::SetBestSize(size); }
 
     DEC_PYCALLBACK_VOID_INT4(DoMoveWindow);
     DEC_PYCALLBACK_VOID_INT5(DoSetSize);
@@ -60,8 +60,9 @@ public:
     DEC_PYCALLBACK_VOID_WXWINBASE(AddChild);
     DEC_PYCALLBACK_VOID_WXWINBASE(RemoveChild);
 
-    DEC_PYCALLBACK_BOOL_(ShouldInheritColours);
+    DEC_PYCALLBACK_BOOL_const(ShouldInheritColours);
     DEC_PYCALLBACK__COLOUR(ApplyParentThemeBackground);
+    DEC_PYCALLBACK_VIZATTR_(GetDefaultAttributes);
     
     PYPRIVATE;
 };
@@ -92,8 +93,9 @@ IMP_PYCALLBACK_SIZE_const(wxPyControl, wxControl, GetMaxSize);
 IMP_PYCALLBACK_VOID_WXWINBASE(wxPyControl, wxControl, AddChild);
 IMP_PYCALLBACK_VOID_WXWINBASE(wxPyControl, wxControl, RemoveChild);
 
-IMP_PYCALLBACK_BOOL_(wxPyControl, wxControl, ShouldInheritColours);
+IMP_PYCALLBACK_BOOL_const(wxPyControl, wxControl, ShouldInheritColours);
 IMP_PYCALLBACK__COLOUR(wxPyControl, wxControl, ApplyParentThemeBackground);
+IMP_PYCALLBACK_VIZATTR_(wxPyControl, wxControl, GetDefaultAttributes);
 %}
 
 // And now the one for SWIG to see
@@ -114,6 +116,7 @@ public:
     
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
+    void SetBestSize(const wxSize& size);
 
     void base_DoMoveWindow(int x, int y, int width, int height);
     void base_DoSetSize(int x, int y, int width, int height,
@@ -146,8 +149,9 @@ public:
     void base_AddChild(wxWindow* child);
     void base_RemoveChild(wxWindow* child);
 
-    bool base_ShouldInheritColours();
+    bool base_ShouldInheritColours() const;
     void base_ApplyParentThemeBackground(const wxColour& c);
+    wxVisualAttributes base_GetDefaultAttributes();
 };
 
 
