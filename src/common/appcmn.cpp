@@ -191,8 +191,15 @@ int wxAppBase::FilterEvent(wxEvent& WXUNUSED(event))
 
 void wxAppBase::DoInit()
 {
-    if(wxMessageOutput::Get()) return;
-#if wxUSE_GUI
+    if (wxMessageOutput::Get())
+        return;
+        
+    // NB: The standard way of printing help on command line arguments (app --help)
+    //     is (according to common practice):
+    //     - console apps: to stderr (on any platform)
+    //     - GUI apps: stderr on Unix platforms (!)
+    //                 message box under Windows and others
+#if wxUSE_GUI && !defined(__UNIX__)
     #ifdef __WXMOTIF__
     wxMessageOutput::Set(new wxMessageOutputLog);
     #else
