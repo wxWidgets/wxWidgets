@@ -12,6 +12,8 @@
 #ifndef _WX_RAWBMP_H_BASE_
 #define _WX_RAWBMP_H_BASE_
 
+#include "wx/image.h"
+
 // ----------------------------------------------------------------------------
 // Abstract Pixel API
 //
