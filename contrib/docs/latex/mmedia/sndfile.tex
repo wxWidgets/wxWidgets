@@ -32,7 +32,7 @@ wx/sndfile.h
 It constructs a new file decoder object which will send 
 audio data to the specified sound stream. 
 The {\it stream} is the input stream to be decoded. The
-{\it io_sound} is the destination sound stream.
+{\it io\_sound} is the destination sound stream.
 Once it has been constructed, you cannot change any of
 the specified streams nor the direction of the stream.
 
@@ -42,7 +42,7 @@ You will have access to the playback functions.
 
 It constructs a new file coder object which will get
 data to be recorded from the specified sound stream.
-The {\it stream} is the output wxStream. The {\it io_sound}
+The {\it stream} is the output wxStream. The {\it io\_sound}
 is the source sound stream of the audio data. Once
 it has been constructed, you cannot change any of
 the specified streams nor the direction of the stream.
@@ -68,7 +68,7 @@ It starts recording data from the sound stream and writing them
 to the output stream. You have to precise the recording length in
 parameter. This length is expressed in seconds. If you want to
 control the record length (using \helpref{Stop}{wxsoundfilestreamstop}),
-you can set it to wxSOUND_INFINITE_TIME.
+you can set it to wxSOUND\_INFINITE\_TIME.
 
 On success, it returns TRUE.
 
@@ -193,40 +193,36 @@ want to build a player (But also in some other case).
 You should use this function to test whether this file codec can read
 the stream you passed to it.
 
-
 \membersection{wxSoundFileStream::PrepareToPlay}\label{wxsoundfilestreampreparetoplay}
 \func{bool}{PrepareToPlay}{\void}
 
+It is called by wxSoundFileStream to prepare the specific file loader
+to prepare itself to play the file. Actually, this includes reading
+headers and setting the various parameters of the sound format.
+This should not be called by an external user but it should be
+implemented when you inherit wxSoundFileStream to build a new codec.
+
+It must return when the file is identified and the parameters have
+been set. In all other cases, you must return FALSE.
 
 \membersection{wxSoundFileStream::PrepareToRecord}\label{wxsoundfilestreampreparetorecord}
 \func{bool}{PrepareToRecord}{\param{wxUint32 }{time}}
 
-
 \membersection{wxSoundFileStream::FinishRecording}\label{wxsoundfilestreamfinishrecording}
 \func{bool}{FinishRecording}{\void}
 
-
 \membersection{wxSoundFileStream::RepositionStream}\label{wxsoundfilestreamrepositionstream}
-
 \func{bool}{RepositionStream}{\param{wxUint32 }{position}}
 
 
 \membersection{wxSoundFileStream::FinishPreparation}\label{wxsoundfilestreamfinishpreparation}
-
 \func{void}{FinishPreparation}{\param{wxUint32 }{len}}
 
 
 \membersection{wxSoundFileStream::GetData}\label{wxsoundfilestreamgetdata}
-
 \func{wxUint32}{GetData}{\param{void* }{buffer}, \param{wxUint32 }{len}}
 
 
 \membersection{wxSoundFileStream::PutData}\label{wxsoundfilestreamputdata}
-
 \func{wxUint32}{PutData}{\param{const void* }{buffer}, \param{wxUint32 }{len}}
-
-
-\membersection{wxSoundFileStream::OnSoundEvent}\label{wxsoundfilestreamonsoundevent}
-
-\func{void}{OnSoundEvent}{\param{int }{evt}}
 
