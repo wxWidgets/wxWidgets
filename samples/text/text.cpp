@@ -410,7 +410,7 @@ bool MyApp::OnInit()
     menuText->Append(TEXT_LINE_DOWN, _T("Scroll text one line down"));
     menuText->Append(TEXT_LINE_UP, _T("Scroll text one line up"));
     menuText->Append(TEXT_PAGE_DOWN, _T("Scroll text one page down"));
-    menuText->Append(TEXT_PAGE_DOWN, _T("Scroll text one page up"));
+    menuText->Append(TEXT_PAGE_UP, _T("Scroll text one page up"));
     menu_bar->Append(menuText, _T("Te&xt"));
 
 #if wxUSE_LOG
