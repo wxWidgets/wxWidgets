@@ -967,6 +967,9 @@ static void wxFillOtherKeyEventFields(wxKeyEvent& event,
     event.m_scanCode = gdk_event->keyval;
     event.m_rawCode = (wxUint32) gdk_event->keyval;
     event.m_rawFlags = 0;
+#if wxUSE_UNICODE
+    event.m_uniChar = gdk_keyval_to_unicode(gdk_event->keyval);
+#endif
     event.m_x = x;
     event.m_y = y;
     event.SetEventObject( win );
