@@ -751,32 +751,6 @@ void wxPyPtrTypeMap_Add(const char* commonName, const char* ptrName) {
 
 
 
-// PyObject* wxPyClassExists(const wxString& className) {
-
-//     PyObject* item;
-//     wxString  name(className);
-//     char      buff[128];               // should always be big enough...
-
-//     if (!className)
-//         return NULL;
-
-//     // Try the name as-is first
-//     sprintf(buff, "%sPtr", (const char*)name.mbc_str());
-//     PyObject* classobj = PyDict_GetItemString(wxPython_dict, buff);
-
-//     // if not found see if there is a mapped name for it
-//     if ( ! classobj) {
-//         if ((item = PyDict_GetItemString(wxPyPtrTypeMap,
-//                                          (char*)(const char*)name.mbc_str())) != NULL) {
-//             name = wxString(PyString_AsString(item), *wxConvCurrent);
-//             sprintf(buff, "%sPtr", (const char*)name.mbc_str());
-//             classobj = PyDict_GetItemString(wxPython_dict, buff);
-//         }
-//     }
-
-//     return classobj;  // returns NULL if not found
-// }
-
 
 PyObject*  wxPyMake_wxObject(wxObject* source, bool checkEvtHandler) {
     PyObject* target = NULL;
