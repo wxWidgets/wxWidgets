@@ -20,16 +20,6 @@
 // wxFrame
 // ----------------------------------------------------------------------------
 
-#if defined(__WXMSW__)
-#define wxFrameNative wxFrameMSW
-#elif defined(__WXGTK__)
-#define wxFrameNative wxFrameGTK
-#elif defined(__WXMGL__)
-#define wxFrameNative wxFrameMGL
-#elif defined(__WXMAC__)
-#define wxFrameNative wxFrameMac
-#endif
-
 class wxFrame : public wxFrameNative
 {
 public:
