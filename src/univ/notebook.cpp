@@ -382,7 +382,11 @@ wxNotebookPage *wxNotebook::DoRemovePage(int nPage)
     m_images.RemoveAt(nPage);
 
     // the spin button might not be needed any more
-    if ( HasSpinBtn() )
+    // 2002-08-12 'if' commented out by JACS on behalf
+    // of Hans Van Leemputten <Hansvl@softhome.net> who
+    // points out that UpdateSpinBtn should always be called,
+    // to ensure m_lastVisible is up to date.
+    // if ( HasSpinBtn() )
     {
         UpdateSpinBtn();
     }
