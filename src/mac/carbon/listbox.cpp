@@ -439,6 +439,21 @@ void wxListBox::Clear()
 
 void wxListBox::SetSelection(int N, bool select)
 {
+    if ( N == wxNOT_FOUND )
+    {
+        // unselect everything
+        int sel = MacGetSelection() ;
+        if ( sel != wxNOT_FOUND )
+        {
+            UInt32 id = sel + 1 ;
+            verify_noerr(
+                m_peer->SetSelectedItems( 1 , & id , kDataBrowserItemsRemove )
+            );
+        }
+
+        return;
+    }
+
     wxCHECK_RET( N >= 0 && N < m_noItems,
         wxT("invalid index in wxListBox::SetSelection") );
     MacSetSelection( N , select ) ;
