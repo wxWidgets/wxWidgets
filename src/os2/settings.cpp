@@ -72,8 +72,8 @@ void wxSystemSettingsModule::OnExit()
     delete gs_fontDefault;
 }
 
-wxColour wxSystemSettings::GetSystemColour(
-  int                               nIndex
+wxColour wxSystemSettingsNative::GetColour(
+  wxSystemColour                    nIndex
 )
 {
     COLORREF                        vRef;
@@ -200,9 +200,11 @@ wxColour wxSystemSettings::GetSystemColour(
             break;
     }
     return(vCol);
-} // end of wxSystemSettings::GetSystemColour
+} // end of wxSystemSettingsNative::GetColour
 
-wxFont wxSystemSettings::GetSystemFont(int index)
+wxFont wxSystemSettingsNative::GetFont(
+  wxSystemFont                      index
+)
 {
     // TODO
     switch (index)
@@ -236,7 +238,9 @@ wxFont wxSystemSettings::GetSystemFont(int index)
 }
 
 // Get a system metric, e.g. scrollbar size
-int wxSystemSettings::GetSystemMetric(int index)
+int wxSystemSettingsNative::GetMetric(
+  wxSystemMetric                    index
+)
 {
     switch ( index)
     {
@@ -357,13 +361,18 @@ int wxSystemSettings::GetSystemMetric(int index)
     return 0;
 }
 
-bool wxSystemSettings::GetCapability(int index)
+bool wxSystemSettingsNative::HasFeature(
+  wxSystemFeature                   index
+)
 {
     switch (index)
     {
         case wxSYS_CAN_ICONIZE_FRAME:
+            return TRUE;
+
         case wxSYS_CAN_DRAW_FRAME_DECORATIONS:
-            return TRUE; break;
+            return FALSE;
+
         default:
             return FALSE;
     }

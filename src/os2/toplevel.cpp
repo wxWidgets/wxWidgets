@@ -54,6 +54,9 @@ wxWindowList wxModelessWindows;
 // the name of the default wxWindows class
 extern const wxChar* wxCanvasClassName;
 extern const wxChar* wxFrameClassName;
+extern void          wxAssociateWinWithHandle( HWND         hWnd
+                                              ,wxWindowOS2* pWin
+                                             );
 
 // ============================================================================
 // wxTopLevelWindowMSW implementation
@@ -528,6 +531,15 @@ void wxTopLevelWindowOS2::AlterChildPos()
     }
     ::WinQueryWindowPos(GetHwnd(), &m_vSwpClient);
 } // end of wxTopLevelWindowOS2::AlterChildPos
+
+void wxTopLevelWindowOS2::UpdateInternalSize(
+  wxWindow*                         pChild
+, int                               nHeight
+)
+{
+    pChild->MoveChildren(m_vSwpClient.cy - nHeight);
+    ::WinQueryWindowPos(GetHwnd(), &m_vSwpClient);
+} // end of wxTopLevelWindowOS2::UpdateInternalSize
 
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowOS2 client size

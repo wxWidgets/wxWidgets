@@ -317,7 +317,9 @@ public:
     }
 
     // create a new (suspended) thread (for the given thread object)
-    bool Create(wxThread* pThread);
+    bool Create( wxThread*    pThread
+                ,unsigned int uStackSize
+               );
 
     // suspend/resume/terminate
     bool Suspend();
@@ -415,6 +417,7 @@ void wxThreadInternal::SetPriority(
 
 bool wxThreadInternal::Create(
   wxThread*                         pThread
+, unsigned int                      uStackSize
 )
 {
     APIRET                          ulrc;
@@ -423,7 +426,7 @@ bool wxThreadInternal::Create(
                              ,(PFNTHREAD)wxThreadInternal::OS2ThreadStart
                              ,(ULONG)pThread
                              ,CREATE_SUSPENDED | STACK_SPARSE
-                             ,8192L
+                             ,(ULONG)uStackSize
                             );
     if(ulrc != 0)
     {
@@ -519,9 +522,11 @@ wxThread::~wxThread()
 // create/start thread
 // -------------------
 
-wxThreadError wxThread::Create()
+wxThreadError wxThread::Create(
+  unsigned int                      uStackSize
+)
 {
-    if ( !m_internal->Create(this) )
+    if ( !m_internal->Create(this, uStackSize) )
         return wxTHREAD_NO_RESOURCE;
 
     return wxTHREAD_NO_ERROR;
