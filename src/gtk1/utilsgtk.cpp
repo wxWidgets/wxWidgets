@@ -141,8 +141,8 @@ wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
     info.shortName << _T("univ");
     info.name << _T("/wxUniversal");
 #endif
-    info.versionMajor = GTK_MAJOR_VERSION;
-    info.versionMinor = GTK_MINOR_VERSION;
+    info.versionMajor = gtk_major_version;
+    info.versionMinor = gtk_minor_version;
     info.os = wxGTK;
     return info;
 }
