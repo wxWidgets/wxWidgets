@@ -33,7 +33,7 @@ for line in `cat $tempdir/files1.tmp` ; do
         # The relative path
         line2=`cygpath -w $line`
         # The absolute path
-        line1=$WXWIN"\\"$line2
+        line1=$WXWIN"\\deliver\\wx\\"$line2
 
         echo "item: Install File " >> $tempdir/files2.tmp
         echo "  Source=$line1 " >> $tempdir/files2.tmp

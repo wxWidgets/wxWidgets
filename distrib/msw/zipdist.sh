@@ -11,13 +11,6 @@ version=2.3.0
 
 dowise()
 {
-    # Make dialoged-win32.zip and tex2rtf-win32.zip
-
-    cd $src/bin
-
-    zip $dest/dialoged-win32.zip dialoged.*
-    zip $dest/tex2rtf-win32.zip tex2rtf.*
-
     cd $dest
 
     # Unzip the Windows files into 'wx'
@@ -52,7 +45,7 @@ dowise()
     rm -f contrib/docs/htmlhelp/mmedia.*
     rm -f contrib/docs/htmlhelp/stc.*
     rm -f contrib/docs/pdf/*.*
-    rmdir /S contrib/docs/latex/ogl
+    rm -f -r contrib/docs/latex/ogl
     rm -f src/mingegcs.bat
     rm -f distrib
 
@@ -79,7 +72,7 @@ dowise()
 
     # Now invoke WISE install on the new wxwin2.wse
     echo Invoking WISE...
-    /c/progra~1/wise/wise32.exe /C $WXWIN\distrib\msw\wxwin2.wse
+    /c/progra~1/wise/wise32.exe /C $WXWIN\\distrib\\msw\\wxwin2.wse
     echo Press return to continue with the wxWindows distribution...
     read dummy
 
@@ -109,6 +102,9 @@ dowise()
 
     mv setup.w08 s
     mv s setup.w08
+
+    mv setup.w09 s
+    mv s setup.w09
 
     # Put all the setup files into a single zip archive.
     zip wxMSW-$version-setup.zip readme.txt setup.*
@@ -293,6 +289,13 @@ expandlines $src/distrib/msw/utilmake.rsp temp.txt
 zip -@ -u $dest/utilmake.zip < temp.txt
 
 rm -f temp.txt
+
+# Make dialoged-win32.zip and tex2rtf-win32.zip
+
+cd $src/bin
+
+zip $dest/dialoged-win32.zip dialoged.*
+zip $dest/tex2rtf-win32.zip tex2rtf.*
 
 cp $src/docs/changes.txt $dest
 cp $src/docs/msw/install.txt $dest/install_msw.txt
