@@ -415,10 +415,8 @@ if BUILD_GLCANVAS or GL_ONLY:
 
     gl_libs = []
     if os.name == 'posix':
-        if '-D__WXDEBUG__' in cflags:
-            gl_libs = ['wx_gtkd_gl', 'GL', 'GLU']
-        else:
-            gl_libs = ['wx_gtk_gl', 'GL', 'GLU']
+        gl_libs = os.popen(WX_CONFIG + ' --gl-libs', 'r').read()[:-1]
+        gl_libs = string.split(gl_libs)
     else:
         other_sources = [opj(location, 'msw/myglcanvas.cpp')]
         gl_libs = ['opengl32', 'glu32']
@@ -431,10 +429,10 @@ if BUILD_GLCANVAS or GL_ONLY:
                     define_macros = defines,
 
                     library_dirs = libdirs,
-                    libraries = libs + gl_libs,
+                    libraries = libs,
 
                     extra_compile_args = cflags,
-                    extra_link_args = lflags,
+                    extra_link_args = gl_libs + lflags,
                     )
 
     wxpExtensions.append(ext)

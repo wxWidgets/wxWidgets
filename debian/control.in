@@ -117,10 +117,10 @@ Package: libwxgtk=V-python
 Architecture: any
 Section: interpreters
 Depends: python-base (>=1.5.2), ${shlibs:Depends}
-Suggests: wxwin=V-doc
+Suggests: wxwin=V-doc, wxwin=V-examples
 Conflicts: libwxgtk=V-python-contrib, python-wxwin
 Replaces: libwxgtk=V-python-contrib, python-wxwin
-Description: wxWindows Cross-platform C++ GUI toolkit (Python binding)
+Description: wxWindows Cross-platform C++ GUI toolkit (wxPython binding)
  wxWindows is a class library for C++ providing GUI (Graphical User
  Interface) and other facilities on more than one platform.  Version =V
  currently supports subsets of GTK+, Motif, and MS Windows.
@@ -203,4 +203,34 @@ Description: wxWindows Cross-platform C++ GUI toolkit (examples)
  currently supports subsets of GTK+, Motif, and MS Windows.
  .
  This package contains examples of using the wxWindows toolkit.
+
+Package: libwxbase-msw=V-dev
+Architecture: i386
+Section: otherosfs
+Depends: wxwin=V-headers-msw (= ${Source-Version})
+Conflicts: libwxbase-msw-dev
+Replaces: libwxbase-msw-dev
+Provides: libwxbase-msw-dev
+Description: wxBase mingw32msvc-cross
+ mingw32msvc-cross wxBase libs.
+
+Package: libwxmsw=V-dev
+Architecture: i386
+Section: otherosfs
+Depends: wxwin=V-headers-msw (= ${Source-Version})
+Conflicts: libwxmsw-dev
+Replaces: libwxmsw-dev
+Provides: libwxmsw-dev
+Description: wxMSW mingw32msvc-cross
+ mingw32msvc-cross wxMSW libs.
+
+Package: wxwin=V-headers-msw
+Architecture: i386
+Section: otherosfs
+Depends: wxwin=V-headers (= ${Source-Version})
+Conflicts: wxwin-headers-msw
+Replaces: wxwin-headers-msw
+Provides: wxwin-headers-msw
+Description: Extra wxWindows headers for mingw32msvc-cross
+ Headers required by the wxWindows mingw32msvc-cross libraries.
 

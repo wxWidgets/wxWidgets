@@ -1,33 +1,59 @@
-wxwindows2.2 (2.3.1) unstable; urgency=low
+wxwindows2.3 (2.3.2) unstable; urgency=low
 
-  * 2.3.1 debs -- still not QA'd for general release yet.
+  * Major Overhaul.  First serious release contender.
 
- -- Ron <ron@debian.org>  Sun, 10 Jun 2001 20:10:36 -0700
+ -- Ron Lee <ron@debian.org>  Thu, 27 Sep 2001 05:55:07 -0700
 
-wxwindows2.2 (2.3.0) unstable; urgency=low
+wxwindows2.3 (2.3.1) unstable; urgency=low
+
+  * 2.3.1 test debs -- still not QA'd for general release yet.
+
+ -- Ron Lee <ron@debian.org>  Sun, 10 Jun 2001 20:10:36 -0700
+
+wxwindows2.3 (2.3.0) unstable; urgency=low
 
   * Updated 2.2 build scripts for 2.3
   * initial test builds, please do not release..
 
  -- Ron Lee <ron@debian.org>  Sat, 27 Jan 2001 01:51:24 -0800
 
+wxwindows2.2 (2.2.8) unstable; urgency=low
+
+  * Fixed bogus samples makefile. Closes: #110061
+  * Added ability to build wxMSW-cross packages, but they
+    are not built and distributed by default.
+
+      If you think such creatures belong in the archive,
+      register your vote by filing a wishlist bug (or preferably
+      append some reasoned response to one already posted ;)
+
+  * Pruned more inapplicable files from the raw cvs source,
+    cleaned configure.in and removed the need for a common setup.h,
+    removed superfluous library links and generally tweaked things
+    so as to make adding new ports easier.
+  * added --gl-libs flag to wx-config.
+
+ -- Ron Lee <ron@debian.org>  Thu, 30 Aug 2001 15:41:49 -0700
+
 wxwindows2.2 (2.2.7) unstable; urgency=medium
 
   * The "Testing Tarantella" release.
   * various small control (mis)behaviours corrected.
   * added missing build-dep for gettext.
+  * updated wxPython description, Closes: #102689
+  * Never publicly released, oh well.
 
- -- Ron <ron@debian.org>  Sun, 10 Jun 2001 19:32:46 -0700
+ -- Ron Lee <ron@debian.org>  Sun, 10 Jun 2001 19:32:46 -0700
 
 wxwindows2.2 (2.2.6.1) unstable; urgency=low
 
   * fix rules so it really doesn't build -indep for ports
-    and fixed ambiguous oveload bug in mmedia contrib.
+    and fixed ambiguous overload bug in mmedia contrib.
     This time it will build on alpha for sure.  Really. :)
     Closes: #92288
   * added extra -dev package deps.  Closes: #91364
 
- -- Ron <ron@aeon.otsys.com>  Sat,  7 Apr 2001 06:49:58 -0700
+ -- Ron Lee <ron@debian.org>  Sat,  7 Apr 2001 06:49:58 -0700
 
 wxwindows2.2 (2.2.6) unstable; urgency=low
 
@@ -39,7 +65,7 @@ wxwindows2.2 (2.2.6) unstable; urgency=low
     likely default use.
   * general buglet count reduced.
 
- -- Ron <ron@debian.org>  Thu,  8 Mar 2001 21:10:07 -0800
+ -- Ron Lee <ron@debian.org>  Thu,  8 Mar 2001 21:10:07 -0800
 
 wxwindows2.2 (2.2.5.1) unstable; urgency=low
 

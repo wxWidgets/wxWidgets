@@ -47,7 +47,7 @@ OpenGl add-on library for wxGTK, the GTK+ 1.2 port of the wxWindows library.
 
 %prep
 %setup -n wxGTK-%{ver}
-./configure --prefix=%{pref} --enable-burnt_name --with-odbc --with-opengl
+./configure --prefix=%{pref} --enable-soname --with-odbc --with-opengl
 
 %build
 if [ "$SMP" != "" ]; then

@@ -38,7 +38,9 @@
 #include "wx/html/forcelnk.h"
 
 // crt
+#ifdef __WXMSW__
 #include <process.h>        // spawnl()
+#endif
 
 // Include private headers
 #include "wx/applet/applet.h"

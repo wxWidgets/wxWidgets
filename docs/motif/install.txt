@@ -243,10 +243,10 @@ Usage:
 	./configure options
 
 If you want to use system's C and C++ compiler,
-set environment variables CC and CCC as
+set environment variables CXX and CC as
 
 	% setenv CC cc
-	% setenv CCC CC
+	% setenv CXX CC
 	% ./configure options
 
 to see all the options please use:
@@ -432,13 +432,13 @@ g++ myfoo.cpp `wx-config --libs` `wx-config --cflags` -o myfoo
 Using this way, a make file for the minimal sample would look
 like this
 
-CC = g++
+CXX = g++
 
 minimal: minimal.o
-    $(CC) -o minimal minimal.o `wx-config --libs` 
+    $(CXX) -o minimal minimal.o `wx-config --libs` 
 
 minimal.o: minimal.cpp mondrian.xpm
-    $(CC) `wx-config --cflags` -c minimal.cpp -o minimal.o
+    $(CXX) `wx-config --cflags` -c minimal.cpp -o minimal.o
 
 clean: 
 	rm -f *.o minimal

@@ -14,60 +14,48 @@
 
     #! find all our sources
     $project{"COMMONOBJS"} .= "parser.o ";
-    $project{"COMMONDEPS"} .= "parser.d ";
 
     foreach $file (sort keys %wxGeneric) {
         next if $wxGeneric{$file} =~ /\bNotMGL\b/;
 
         ($fileobj = $file) =~ s/cp?p?$/\o/;
-        ($filedep = $file) =~ s/cp?p?$/\d/;
 
         $project{"MGL_SOURCES"} .= "generic/" . $file . " ";
         $project{"GENERICOBJS"} .= $fileobj . " ";
-        $project{"GENERICDEPS"} .= $filedep . " "
     }
 
     foreach $file (sort keys %wxCommon) {
         next if $wxCommon{$file} =~ /\bNotMGL\b/;
 
         ($fileobj = $file) =~ s/cp?p?$/\o/;
-        ($filedep = $file) =~ s/cp?p?$/\d/;
 
         $project{"MGL_SOURCES"} .= "common/" . $file . " ";
         $project{"COMMONOBJS"} .= $fileobj . " ";
-        $project{"COMMONDEPS"} .= $filedep . " "
     }
 
     foreach $file (sort keys %wxMGL) {
         ($fileobj = $file) =~ s/cp?p?$/\o/;
-        ($filedep = $file) =~ s/cp?p?$/\d/;
 
         $project{"MGL_SOURCES"} .= "mgl/" . $file . " ";
 #!        $project{"GUIOBJS"} .= $fileobj . " ";
-#!        $project{"GUIDEPS"} .= $filedep . " ";
 
         if ( $wxMGL{$file} =~ /\bL\b/ ) {
             $project{"GUI_LOWLEVEL_OBJS"} .= $fileobj . " ";
-            $project{"GUI_LOWLEVEL_DEPS"} .= $filedep . " ";
         }
     }
 
     foreach $file (sort keys %wxUNIX) {
         ($fileobj = $file) =~ s/cp?p?$/\o/;
-        ($filedep = $file) =~ s/cp?p?$/\d/;
 
         $project{"MGL_SOURCES"} .= "unix/" . $file . " ";
         $project{"UNIXOBJS"} .= $fileobj . " ";
-        $project{"UNIXDEPS"} .= $filedep . " "
     }
 
     foreach $file (sort keys %wxHTML) {
         ($fileobj = $file) =~ s/cp?p?$/\o/;
-        ($filedep = $file) =~ s/cp?p?$/\d/;
 
         $project{"MGL_SOURCES"} .= "html/" . $file . " ";
         $project{"HTMLOBJS"} .= $fileobj . " ";
-        $project{"HTMLDEPS"} .= $filedep . " "
     }
 
     #! find all our headers
@@ -106,36 +94,18 @@ ALL_HEADERS = \
 COMMONOBJS = \
 		#$ ExpandList("COMMONOBJS");
 
-COMMONDEPS = \
-		#$ ExpandList("COMMONDEPS");
-
 GENERICOBJS = \
 		#$ ExpandList("GENERICOBJS");
-
-GENERICDEPS = \
-		#$ ExpandList("GENERICDEPS");
 
 #!GUIOBJS = \
 #!		#$ ExpandList("GUIOBJS");
 #!
-#!GUIDEPS = \
-#!		#$ ExpandList("GUIDEPS");
-
 GUI_LOWLEVEL_OBJS = \
 		#$ ExpandList("GUI_LOWLEVEL_OBJS");
-
-GUI_LOWLEVEL_DEPS = \
-		#$ ExpandList("GUI_LOWLEVEL_DEPS");
 
 UNIXOBJS = \
 		#$ ExpandList("UNIXOBJS");
 
-UNIXDEPS = \
-		#$ ExpandList("UNIXDEPS");
-
 HTMLOBJS = \
 		#$ ExpandList("HTMLOBJS");
-
-HTMLDEPS = \
-		#$ ExpandList("HTMLDEPS");
 

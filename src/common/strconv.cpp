@@ -641,7 +641,7 @@ public:
         size_t outbuf = n;
         size_t res, cres;
         
-        wchar_t *tmpbuf;
+        wchar_t *tmpbuf = 0;
 
         if (g_wcNeedsSwap)
         {

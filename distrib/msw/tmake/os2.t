@@ -15,46 +15,37 @@
 
     #! find all our sources
     $project{"COMMONOBJS"} .= "parser.o ";
-    $project{"COMMONDEPS"} .= "parser.d ";
 
     foreach $file (sort keys %wxGeneric) {
         next if $wxGeneric{$file} =~ /\bP\b/;
 
         ($fileobj = $file) =~ s/cp?p?$/\o/;
-        ($filedep = $file) =~ s/cp?p?$/\d/;
 
         $project{"OS2PM_SOURCES"} .= "generic/" . $file . " ";
         $project{"GENERICOBJS"} .= $fileobj . " ";
-        $project{"GENERICDEPS"} .= $filedep . " "
     }
 
     foreach $file (sort keys %wxCommon) {
         next if $wxCommon{$file} =~ /\bP\b/;
 
         ($fileobj = $file) =~ s/cp?p?$/\o/;
-        ($filedep = $file) =~ s/cp?p?$/\d/;
 
         $project{"OS2PM_SOURCES"} .= "common/" . $file . " ";
         $project{"COMMONOBJS"} .= $fileobj . " ";
-        $project{"COMMONDEPS"} .= $filedep . " "
     }
 
     foreach $file (sort keys %wxOS2PM) {
         ($fileobj = $file) =~ s/cp?p?$/\o/;
-        ($filedep = $file) =~ s/cp?p?$/\d/;
 
         $project{"OS2PM_SOURCES"} .= "os2/" . $file . " ";
         $project{"GUIOBJS"} .= $fileobj . " ";
-        $project{"GUIDEPS"} .= $filedep . " "
     }
 
     foreach $file (sort keys %wxHTML) {
         ($fileobj = $file) =~ s/cp?p?$/\o/;
-        ($filedep = $file) =~ s/cp?p?$/\d/;
 
         $project{"OS2PM_SOURCES"} .= "html/" . $file . " ";
         $project{"HTMLOBJS"} .= $fileobj . " ";
-        $project{"HTMLDEPS"} .= $filedep . " "
     }
     #! find all our headers
     foreach $file (sort keys %wxWXINCLUDE) {
@@ -90,30 +81,15 @@ ALL_HEADERS = \
 COMMONOBJS = \
 		#$ ExpandList("COMMONOBJS");
 
-COMMONDEPS = \
-		#$ ExpandList("COMMONDEPS");
-
 GENERICOBJS = \
 		#$ ExpandList("GENERICOBJS");
-
-GENERICDEPS = \
-		#$ ExpandList("GENERICDEPS");
 
 GUIOBJS = \
 		#$ ExpandList("GUIOBJS");
 
-GUIDEPS = \
-		#$ ExpandList("GUIDEPS");
-
 UNIXOBJS = \
 		#$ ExpandList("UNIXOBJS");
 
-UNIXDEPS = \
-		#$ ExpandList("UNIXDEPS");
-
 HTMLOBJS = \
 		#$ ExpandList("HTMLOBJS");
-
-HTMLDEPS = \
-		#$ ExpandList("HTMLDEPS");
 

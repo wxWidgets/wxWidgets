@@ -1,11 +1,12 @@
 #
 # File:     makefile.unx
-# Author:   Julian Smart, Robert Roebling, Vadim Zeitlin
+# Author:   Julian Smart, Robert Roebling, Vadim Zeitlin, Ron Lee
 # Created:  1993
-# Updated:  1999
+# Updated:  2001
 # Copyright:(c) 1993, AIAI, University of Edinburgh,
 # Copyright:(c) 1999, Vadim Zeitlin
 # Copyright:(c) 1999, Robert Roebling
+# Copyright:(c) 2001, Ron Lee
 #
 # Makefile for libwx_gtk.a, libwx_motif.a and libwx_msw.a
 
@@ -15,17 +16,17 @@ include ./src/make.env
 
 ############## override make.env for PIC ##########################
 
-# Clears all default suffixes
-.SUFFIXES:	.o .cpp .c .cxx
+%.o : %.c
+	$(CC) -c $(CFLAGS) $(PICFLAGS) @WXMSW_DLL_DEFINES@ -o $@ $<
 
-.c.o :
-	$(CCC) -c @DEP_INFO_FLAGS@ $(CFLAGS) $(PICFLAGS) @WXMSW_DLL_DEFINES@ -o $@ $<
+%.o : %.cpp
+	$(CXX) -c $(CXXFLAGS) $(PICFLAGS) @WXMSW_DLL_DEFINES@ -o $@ $<
 
-.cpp.o :
-	$(CC) -c @DEP_INFO_FLAGS@ $(CXXFLAGS) $(PICFLAGS) @WXMSW_DLL_DEFINES@ -o $@ $<
+%.o : %.cxx
+	$(CXX) -c $(CXXFLAGS) $(PICFLAGS) @WXMSW_DLL_DEFINES@ -o $@ $<
 
-.cxx.o :
-	$(CC) -c @DEP_INFO_FLAGS@ $(CXXFLAGS) $(PICFLAGS) @WXMSW_DLL_DEFINES@ -o $@ $<
+%.r : %.rsrc
+	$(DEREZ) $^ Carbon.r --useDF > $@
 
 ########################### Paths #################################
 
@@ -44,55 +45,31 @@ VP9 = @top_srcdir@/src/zlib
 VPA = @top_srcdir@/src/regex
 VP10 = @top_srcdir@/src/iodbc
 VP11 = @top_srcdir@/src/msw/ole
-VP12 = $(FTVP01)@PATH_IFS@$(FTVP02)@PATH_IFS@$(FTVP03)@PATH_IFS@$(FTVP04)@PATH_IFS@$(FTVP05)@PATH_IFS@$(FTVP06)@PATH_IFS@$(FTVP07)@PATH_IFS@$(FTVP08)@PATH_IFS@
-VP13 = $(FTVP09)@PATH_IFS@$(FTVP10)@PATH_IFS@$(FTVP11)@PATH_IFS@$(FTVP12)@PATH_IFS@$(FTVP13)@PATH_IFS@$(FTVP14)@PATH_IFS@$(FTVP15)@PATH_IFS@
 
 # the comment at the end of the next line is needed because otherwise autoconf
 # would remove this line completely - it contains a built-in hack to remove
 # any VPATH assignment not containing ':'
-VPATH = $(VP1)@PATH_IFS@$(VP2)@PATH_IFS@$(VP3)@PATH_IFS@$(VP4)@PATH_IFS@$(VP5)@PATH_IFS@$(VP6)@PATH_IFS@$(VP7)@PATH_IFS@$(VP8)@PATH_IFS@$(VP9)@PATH_IFS@$(VPA)@PATH_IFS@$(VP10)@PATH_IFS@$(VP11)@PATH_IFS@$(VP12)@PATH_IFS@$(VP13) # ':' for autoconf
+VPATH = $(VP1)@PATH_IFS@$(VP2)@PATH_IFS@$(VP3)@PATH_IFS@$(VP4)@PATH_IFS@$(VP5)@PATH_IFS@$(VP6)@PATH_IFS@$(VP7)@PATH_IFS@$(VP8)@PATH_IFS@$(VP9)@PATH_IFS@$(VPA)@PATH_IFS@$(VP10)@PATH_IFS@$(VP11) # ':' for autoconf
 
 prefix = @prefix@
 exec_prefix = @exec_prefix@
 
 bindir = @bindir@
-sbindir = @sbindir@
-libexecdir = @libexecdir@
 datadir = @datadir@
-sysconfdir = @sysconfdir@
-sharedstatedir = @sharedstatedir@
-localstatedir = @localstatedir@
 libdir = @libdir@
-infodir = @infodir@
 mandir = @mandir@
 includedir = @includedir@
-oldincludedir = /usr/include
-
-DESTDIR =
 
 localedir = $(datadir)/locale
 
-pkgdatadir = $(datadir)/@PACKAGE@
-pkglibdir = $(libdir)/@PACKAGE@
-pkgincludedir = $(includedir)/@PACKAGE@
-
 top_builddir = .
+build_libdir = $(top_builddir)/lib
 
 INSTALL = @INSTALL@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
-# my autoconf doesn't set this
-#INSTALL_SCRIPT = @INSTALL_SCRIPT@
-# maybe do an additional chmod if needed?
 INSTALL_SCRIPT = @INSTALL@
-transform = @program_transform_name@
 
-NORMAL_INSTALL = :
-PRE_INSTALL = :
-POST_INSTALL = :
-NORMAL_UNINSTALL = :
-PRE_UNINSTALL = :
-POST_UNINSTALL = :
 build_alias = @build_alias@
 build_triplet = @build@
 host_alias = @host_alias@
@@ -117,6 +94,7 @@ PNGDIR   = $(WXDIR)/src/png
 JPEGDIR  = $(WXDIR)/src/jpeg
 TIFFDIR  = $(WXDIR)/src/tiff
 ZLIBDIR  = $(WXDIR)/src/zlib
+REGEXDIR = $(WXDIR)/src/regex
 GTKDIR   = $(WXDIR)/src/gtk
 MOTIFDIR = $(WXDIR)/src/motif
 MSWDIR   = $(WXDIR)/src/msw
@@ -166,7 +144,6 @@ HEADERS = $(ALL_HEADERS)
 # for the objects and depfiles, we might be bulding only part of them
 # depending on configure arguments, so select a subset of ALL
 OBJECTS = @ALL_OBJECTS@
-DEPFILES = @ALL_DEPFILES@
 
 # the object files of sublibraries (we assume that they don't change [often],
 # so we don't generate these lists with tmake but embed them here)
@@ -328,80 +305,49 @@ IODBCOBJS = \
 		prepare.o \
 		result.o
 
-OLEOBJS = \
-		automtn.o \
-		dataobj.o \
-		dropsrc.o \
-		droptgt.o \
-		oleutils.o \
-		uuid.o
 
 ############################## Rules ##################################
 
-BURNT_LIBRARY_NAME = @BURNT_LIBRARY_NAME@
-BURNT_LIBRARY_NAME_GL = @BURNT_LIBRARY_NAME_GL@
+SONAME_FLAGS = @SONAME_FLAGS@
+SONAME_FLAGS_GL = @SONAME_FLAGS_GL@
 
 all: @WX_ALL@
 
-@WX_LIBRARY_NAME_STATIC@:  $(OBJECTS)
-	@$(INSTALL) -d ./lib
-	$(AR) $(AROPTIONS) ./lib/$@ $(OBJECTS)
-	$(RANLIB) ./lib/$@
+$(build_libdir)/@WX_LIBRARY_NAME_STATIC@:  $(OBJECTS)
+	@$(INSTALL) -d $(build_libdir)
+	$(AR) $(AROPTIONS) $@ $(OBJECTS)
+	$(RANLIB) $@
 
-@WX_LIBRARY_NAME_STATIC_GL@:  glcanvas.o
-	@$(INSTALL) -d ./lib
-	$(AR) $(AROPTIONS) ./lib/$@ glcanvas.o
-	$(RANLIB) ./lib/$@
+$(build_libdir)/@WX_LIBRARY_NAME_STATIC_GL@:  glcanvas.o
+	@$(INSTALL) -d $(build_libdir)
+	$(AR) $(AROPTIONS) $@ glcanvas.o
+	$(RANLIB) $@
 
-@WX_LIBRARY_NAME_SHARED@:  $(OBJECTS)
-	@$(INSTALL) -d ./lib
-	$(SHARED_LD) ./lib/$@ $(BURNT_LIBRARY_NAME) $(OBJECTS) $(EXTRALIBS)
+$(build_libdir)/@WX_LIBRARY_NAME_SHARED@:  $(OBJECTS)
+	@$(INSTALL) -d $(build_libdir)
+	$(SHARED_LD) $@ $(SONAME_FLAGS) $(OBJECTS) $(EXTRALIBS)
 
-@WX_LIBRARY_NAME_SHARED_GL@:  glcanvas.o @WX_LIBRARY_NAME_SHARED@
-	@$(INSTALL) -d ./lib
-	$(SHARED_LD) ./lib/$@ $(BURNT_LIBRARY_NAME_GL) glcanvas.o ./lib/@WX_LIBRARY_NAME_SHARED@ $(EXTRALIBS) $(OPENGLLIBS)
+$(build_libdir)/@WX_LIBRARY_NAME_SHARED_GL@:  glcanvas.o $(build_libdir)/@WX_LIBRARY_NAME_SHARED@
+	@$(INSTALL) -d $(build_libdir)
+	$(SHARED_LD) $@ $(SONAME_FLAGS_GL) glcanvas.o -L$(build_libdir) @WXCONFIG_LIBS@ $(EXTRALIBS) $(OPENGLLIBS)
 
-./lib/lib@WX_LIBRARY@-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).r: ./lib/lib@WX_LIBRARY@-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).rsrc
-	$(DEREZ) $^ $(DEREZFLAGS) > $@
+$(build_libdir)/@WX_RESOURCES_DARWIN@: $(MACRESOURCES)
+	@$(INSTALL) -d $(build_libdir)
+	$(RESCOMP) -d __UNIX__ -useDF $^ -o $@
 
-./lib/lib@WX_LIBRARY@-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).rsrc: $(MACRESOURCES)
-	$(REZ) $(REZFLAGS) $^ -o $@
-
-CREATE_LINKS: @WX_LIBRARY_NAME_SHARED@
-	@$(RM) ./lib/@WX_LIBRARY_LINK1@
-	@$(RM) ./lib/@WX_LIBRARY_LINK2@
-	@$(RM) ./lib/@WX_LIBRARY_LINK3@
-	cd lib \
+$(build_libdir)/@WX_LIBRARY_LINK1@: $(build_libdir)/@WX_LIBRARY_NAME_SHARED@
+	@$(RM) $(build_libdir)/@WX_LIBRARY_LINK1@
+	@$(RM) $(build_libdir)/@WX_LIBRARY_LINK2@
+	cd $(build_libdir) \
 		&& $(LN_S) @WX_TARGET_LIBRARY@ @WX_LIBRARY_LINK1@ \
-		&& $(LN_S) @WX_TARGET_LIBRARY@ @WX_LIBRARY_LINK2@ \
-		&& $(LN_S) @WX_TARGET_LIBRARY@ @WX_LIBRARY_LINK3@
+		&& $(LN_S) @WX_TARGET_LIBRARY@ @WX_LIBRARY_LINK2@
 
-CREATE_LINKS_GL: @WX_LIBRARY_NAME_SHARED_GL@
-	@$(RM) ./lib/@WX_LIBRARY_LINK1_GL@
-	@$(RM) ./lib/@WX_LIBRARY_LINK2_GL@
-	@$(RM) ./lib/@WX_LIBRARY_LINK3_GL@
-	cd lib \
+$(build_libdir)/@WX_LIBRARY_LINK1_GL@: $(build_libdir)/@WX_LIBRARY_NAME_SHARED_GL@
+	@$(RM) $(build_libdir)/@WX_LIBRARY_LINK1_GL@
+	@$(RM) $(build_libdir)/@WX_LIBRARY_LINK2_GL@
+	cd $(build_libdir) \
 		&& $(LN_S) @WX_TARGET_LIBRARY_GL@ @WX_LIBRARY_LINK1_GL@ \
-		&& $(LN_S) @WX_TARGET_LIBRARY_GL@ @WX_LIBRARY_LINK2_GL@ \
-		&& $(LN_S) @WX_TARGET_LIBRARY_GL@ @WX_LIBRARY_LINK3_GL@
-
-CREATE_INSTALLED_LINKS: preinstall
-	$(RM) $(libdir)/@WX_LIBRARY_LINK1@
-	$(RM) $(libdir)/@WX_LIBRARY_LINK2@
-	$(RM) $(libdir)/@WX_LIBRARY_LINK3@
-	cd $(libdir) \
-		&& $(LN_S) @WX_LIBRARY_NAME_SHARED@ @WX_LIBRARY_LINK1@ \
-		&& $(LN_S) @WX_LIBRARY_NAME_SHARED@ @WX_LIBRARY_LINK2@ \
-		&& $(LN_S) @WX_LIBRARY_NAME_SHARED@ @WX_LIBRARY_LINK3@
-
-CREATE_INSTALLED_LINKS_GL: preinstall_gl
-	$(RM) $(libdir)/@WX_LIBRARY_LINK1_GL@
-	$(RM) $(libdir)/@WX_LIBRARY_LINK2_GL@
-	$(RM) $(libdir)/@WX_LIBRARY_LINK3_GL@
-	cd $(libdir) \
-		&& $(LN_S) @WX_LIBRARY_NAME_SHARED_GL@ @WX_LIBRARY_LINK1_GL@ \
-		&& $(LN_S) @WX_LIBRARY_NAME_SHARED_GL@ @WX_LIBRARY_LINK2_GL@ \
-		&& $(LN_S) @WX_LIBRARY_NAME_SHARED_GL@ @WX_LIBRARY_LINK3_GL@
+		&& $(LN_S) @WX_TARGET_LIBRARY_GL@ @WX_LIBRARY_LINK2_GL@
 
 $(OBJECTS):	$(WXDIR)/include/wx/defs.h $(WXDIR)/include/wx/object.h
 
@@ -426,7 +372,22 @@ lexer.c:	$(COMMDIR)/lexer.l
 	sed -e "s/unput/PROIO_unput/g"      > lexer.c
 	@$(RM) @LEX_STEM@.c
 
--include $(DEPFILES)
+-include $(OBJECTS:.o=.d)
+
+
+CREATE_INSTALLED_LINKS: preinstall
+	$(RM) $(libdir)/@WX_LIBRARY_LINK1@
+	$(RM) $(libdir)/@WX_LIBRARY_LINK2@
+	cd $(libdir) \
+		&& $(LN_S) @WX_LIBRARY_NAME_SHARED@ @WX_LIBRARY_LINK1@ \
+		&& $(LN_S) @WX_LIBRARY_NAME_SHARED@ @WX_LIBRARY_LINK2@
+
+CREATE_INSTALLED_LINKS_GL: preinstall_gl
+	$(RM) $(libdir)/@WX_LIBRARY_LINK1_GL@
+	$(RM) $(libdir)/@WX_LIBRARY_LINK2_GL@
+	cd $(libdir) \
+		&& $(LN_S) @WX_LIBRARY_NAME_SHARED_GL@ @WX_LIBRARY_LINK1_GL@ \
+		&& $(LN_S) @WX_LIBRARY_NAME_SHARED_GL@ @WX_LIBRARY_LINK2_GL@
 
 afminstall: preinstall
 	@if test ! -d $(datadir); then $(INSTALL) -d $(datadir); fi
@@ -438,7 +399,7 @@ afminstall: preinstall
 
 # this is the real install target: copies the library, wx-config and the
 # headers to the installation directory
-preinstall: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx@TOOLKIT_NAME@-config
+preinstall: $(build_libdir)/@WX_TARGET_LIBRARY@ $(top_builddir)/wx@TOOLCHAIN_NAME@-config
 	@echo " "
 	@echo " Installing wxWindows..."
 	@echo " "
@@ -447,17 +408,19 @@ preinstall: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx@TOOLKIT_N
 	@if test ! -d $(bindir); then $(INSTALL) -d $(bindir); fi
 	@if test ! -d $(libdir); then $(INSTALL) -d $(libdir); fi
 
-	$(INSTALL_SCRIPT) $(top_builddir)/wx@TOOLKIT_NAME@-config $(bindir)/wx@TOOLKIT_NAME@-config
-	cd $(bindir) && rm -f wx-config && $(LN_S) wx@TOOLKIT_NAME@-config wx-config
-	$(INSTALL_PROGRAM) $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(libdir)/@WX_TARGET_LIBRARY@
+	$(INSTALL_SCRIPT) $(top_builddir)/wx@TOOLCHAIN_NAME@-config $(bindir)/wx@TOOLCHAIN_NAME@-config
+	cd $(bindir) && rm -f wx-config && $(LN_S) wx@TOOLCHAIN_NAME@-config wx-config
+	$(INSTALL_PROGRAM) $(build_libdir)/@WX_TARGET_LIBRARY@ $(libdir)/@WX_TARGET_LIBRARY@
 
 	$(INSTALL) -d $(libdir)/wx
 	$(INSTALL) -d $(libdir)/wx/include
-	$(INSTALL) -d $(libdir)/wx/include/wx
-	$(INSTALL) -d $(libdir)/wx/include/wx/@TOOLKIT_NAME@
-	$(INSTALL_DATA) $(top_builddir)/include/wx/@TOOLKIT_DIR@/setup.h $(libdir)/wx/include/wx/@TOOLKIT_NAME@/setup.h
+	$(INSTALL) -d $(libdir)/wx/include/@TOOLCHAIN_NAME@
+	$(INSTALL) -d $(libdir)/wx/include/@TOOLCHAIN_NAME@/wx
+	$(INSTALL_DATA) $(build_libdir)/wx/include/@TOOLCHAIN_NAME@/wx/setup.h \
+                    $(libdir)/wx/include/@TOOLCHAIN_NAME@/wx/setup.h
 
 	$(INSTALL) -d $(includedir)/wx
+	@# FIXME: This will erroneously install a wx/base dir for wxBase..
 	@if test "$(USE_GUI)" = 1; then $(INSTALL) -d $(includedir)/wx/@TOOLKIT_DIR@; fi
 	@if test "$(USE_GUI)" = 1; then $(INSTALL) -d $(includedir)/wx/html; fi
 	@if test "$(USE_GUI)" = 1; then $(INSTALL) -d $(includedir)/wx/generic; fi
@@ -476,12 +439,12 @@ preinstall: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx@TOOLKIT_N
 	  echo "$(INSTALL_DATA) $(top_srcdir)/locale/$$p.mo $(localedir)/$$p/LC_MESSAGES/wxstd.mo"; \
 	done
 
-preinstall_gl: $(top_builddir)/lib/@WX_TARGET_LIBRARY_GL@
+preinstall_gl: $(build_libdir)/@WX_TARGET_LIBRARY_GL@
 	@echo " "
 	@echo " Installing wxWindows OpenGl add-on..."
 	@echo " "
 	@if test ! -d $(libdir); then $(INSTALL) -d $(libdir); fi
-	$(INSTALL_PROGRAM) $(top_builddir)/lib/@WX_TARGET_LIBRARY_GL@ $(libdir)/@WX_TARGET_LIBRARY_GL@
+	$(INSTALL_PROGRAM) $(build_libdir)/@WX_TARGET_LIBRARY_GL@ $(libdir)/@WX_TARGET_LIBRARY_GL@
 
 install: @AFMINSTALL@ @WX_ALL_INSTALLED@
 	@echo " "
@@ -504,16 +467,14 @@ uninstall:
 	@$(RM) $(libdir)/@WX_TARGET_LIBRARY@
 	@$(RM) $(libdir)/@WX_LIBRARY_LINK1@
 	@$(RM) $(libdir)/@WX_LIBRARY_LINK2@
-	@$(RM) $(libdir)/@WX_LIBRARY_LINK3@
 	@echo " Removing GL library..."
 	@$(RM) $(libdir)/@WX_TARGET_LIBRARY_GL@
 	@$(RM) $(libdir)/@WX_LIBRARY_LINK1_GL@
 	@$(RM) $(libdir)/@WX_LIBRARY_LINK2_GL@
-	@$(RM) $(libdir)/@WX_LIBRARY_LINK3_GL@
 	@echo " Removing helper files..."
-	@$(RM) $(libdir)/wx/include/wx/@TOOLKIT_NAME@/setup.h
+	@$(RM) $(libdir)/wx/include/@TOOLCHAIN_NAME@/wx/setup.h
 	@$(RM) $(bindir)/wx-config
-	@$(RM) $(bindir)/wx@TOOLKIT_NAME@-config
+	@$(RM) $(bindir)/wx@TOOLCHAIN_NAME@-config
 	@$(RM) $(datadir)/wx/afm/*
 	@$(RM) $(datadir)/wx/gs_afm/*
 # FIXME: wxBase doesnt install these next 3 dirs.
@@ -532,8 +493,8 @@ uninstall:
 	done
 	@echo " Removing directories..."
 	@-rmdir $(localedir)
-	@if test -d $(libdir)/wx/include/wx/@TOOLKIT_NAME@; then rmdir $(libdir)/wx/include/wx/@TOOLKIT_NAME@; fi
-	@if test -d $(libdir)/wx/include/wx; then rmdir $(libdir)/wx/include/wx; fi
+	@if test -d $(libdir)/wx/include/@TOOLCHAIN_NAME@/wx; then rmdir $(libdir)/wx/include/@TOOLCHAIN_NAME@/wx; fi
+	@if test -d $(libdir)/wx/include/@TOOLCHAIN_NAME@; then rmdir $(libdir)/wx/include/@TOOLCHAIN_NAME@; fi
 	@if test -d $(libdir)/wx/include; then rmdir $(libdir)/wx/include; fi
 	@if test -d $(libdir)/wx; then rmdir $(libdir)/wx; fi
 	@if test -d $(includedir)/wx/gtk; then rmdir $(includedir)/wx/gtk; fi
@@ -573,6 +534,11 @@ ALL_DIST: distclean
 	cp $(ZLIBDIR)/*.c $(DISTDIR)/src/zlib
 	cp $(ZLIBDIR)/README $(DISTDIR)/src/zlib
 	cp $(ZLIBDIR)/*.mms $(DISTDIR)/src/zlib
+	mkdir $(DISTDIR)/src/regex
+	cp $(REGEXDIR)/*.{i,}h $(DISTDIR)/src/regex
+	cp $(REGEXDIR)/*.c $(DISTDIR)/src/regex
+	cp $(REGEXDIR)/{Makefile,COPYRIGHT,README,WHATSNEW} $(DISTDIR)/src/regex
+	cp $(REGEXDIR)/{mkh,tests} $(DISTDIR)/src/regex
 
 # this target is the common part of distribution script for all GUI toolkits,
 # but is not used when building wxBase distribution
@@ -608,7 +574,7 @@ ALL_GUI_DIST: ALL_DIST
 	mkdir $(DISTDIR)/src/tiff
 	mkdir $(DISTDIR)/src/iodbc
 	mkdir $(DISTDIR)/src/unix
-	cp $(WXDIR)/@PORT_FILES@ $(DISTDIR)
+	cp $(SRCDIR)/files.lst $(DISTDIR)/src/
 	cp $(SRCDIR)/*.in $(DISTDIR)/src
 	cp $(COMMDIR)/*.cpp $(DISTDIR)/src/common
 	cp $(COMMDIR)/*.c $(DISTDIR)/src/common
@@ -648,7 +614,7 @@ BASE_DIST: ALL_DIST
 	mkdir $(DISTDIR)/include/wx/unix
 	mkdir $(DISTDIR)/src/common
 	mkdir $(DISTDIR)/src/unix
-	cp $(WXDIR)/@PORT_FILES@ $(DISTDIR)
+	cp @PORT_FILES@ $(DISTDIR)
 	cp $(WXDIR)/@RPM_FILES@ $(DISTDIR)/@RPM_FILES@
 	cp $(WXDIR)/@RPM_SPEC@ $(DISTDIR)/@RPM_SPEC@
 	cp $(WXDIR)/wxBase*.ds[pw] $(DISTDIR)
@@ -679,6 +645,7 @@ BASE_DIST: ALL_DIST
 GTK_DIST: ALL_GUI_DIST
 	cp $(INCDIR)/wx/gtk/*.h $(DISTDIR)/include/wx/gtk
 	cp $(INCDIR)/wx/gtk/*.xpm $(DISTDIR)/include/wx/gtk
+	cp $(GTKDIR)/files.lst $(DISTDIR)/src/gtk
 	cp $(GTKDIR)/*.cpp $(DISTDIR)/src/gtk
 	cp $(GTKDIR)/*.c $(DISTDIR)/src/gtk
 	cp $(GTKDIR)/*.xbm $(DISTDIR)/src/gtk
@@ -689,6 +656,7 @@ GTK_DIST: ALL_GUI_DIST
 MOTIF_DIST: ALL_GUI_DIST
 	cp $(WXDIR)/wxMOTIF.spec $(DISTDIR)
 	cp $(INCDIR)/wx/motif/*.h $(DISTDIR)/include/wx/motif
+	cp $(MOTIFDIR)/files.lst $(DISTDIR)/src/motif
 	cp $(MOTIFDIR)/*.cpp $(DISTDIR)/src/motif
 	cp $(MOTIFDIR)/*.xbm $(DISTDIR)/src/motif
 	mkdir $(DISTDIR)/src/motif/xmcombo
@@ -701,15 +669,26 @@ MACX_DIST: ALL_GUI_DIST
 
 MSW_DIST: ALL_GUI_DIST
 	cp $(WXDIR)/wxWINE.spec $(DISTDIR)
+	mkdir $(DISTDIR)/include/wx/msw/ctl3d
+	mkdir $(DISTDIR)/include/wx/msw/gnuwin32
+	mkdir $(DISTDIR)/include/wx/msw/gnuwin32/gl
+	mkdir $(DISTDIR)/include/wx/msw/ole
 	cp $(INCDIR)/wx/msw/*.h $(DISTDIR)/include/wx/msw
 	cp $(INCDIR)/wx/msw/*.cur $(DISTDIR)/include/wx/msw
 	cp $(INCDIR)/wx/msw/*.ico $(DISTDIR)/include/wx/msw
 	cp $(INCDIR)/wx/msw/*.bmp $(DISTDIR)/include/wx/msw
 	cp $(INCDIR)/wx/msw/*.rc $(DISTDIR)/include/wx/msw
+	cp $(INCDIR)/wx/msw/ctl3d/*.h $(DISTDIR)/include/wx/msw/ctl3d
+	cp $(INCDIR)/wx/msw/gnuwin32/*.h $(DISTDIR)/include/wx/msw/gnuwin32
+	cp $(INCDIR)/wx/msw/gnuwin32/gl/*.h $(DISTDIR)/include/wx/msw/gnuwin32/gl
+	cp $(INCDIR)/wx/msw/gnuwin32/gl/*.def $(DISTDIR)/include/wx/msw/gnuwin32/gl
+	cp $(INCDIR)/wx/msw/ole/*.h $(DISTDIR)/include/wx/msw/ole
+
+	mkdir $(DISTDIR)/src/msw/ole
+	cp $(MSWDIR)/files.lst $(DISTDIR)/src/msw
 	cp $(MSWDIR)/*.cpp $(DISTDIR)/src/msw
 	cp $(MSWDIR)/*.c $(DISTDIR)/src/msw
 	cp $(MSWDIR)/*.def $(DISTDIR)/src/msw
-	mkdir $(DISTDIR)/src/msw/ole
 	cp $(MSWDIR)/ole/*.cpp $(DISTDIR)/src/msw/ole
 
 DEMOS_DIST: ALL_GUI_DIST
@@ -1203,6 +1182,12 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/wizard/*.cpp $(DISTDIR)/samples/wizard
 	cp $(SAMPDIR)/wizard/*.xpm $(DISTDIR)/samples/wizard
 
+	mkdir $(DISTDIR)/samples/widgets
+	mkdir $(DISTDIR)/samples/widgets/icons
+	cp $(SAMPDIR)/widgets/Makefile.in $(DISTDIR)/samples/widgets
+	cp $(SAMPDIR)/widgets/*.{cpp,h,rc} $(DISTDIR)/samples/widgets
+	cp $(SAMPDIR)/widgets/icons/*.xpm $(DISTDIR)/samples/widgets/icons
+
 UTILS_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/utils
 	cp $(UTILSDIR)/Makefile.in $(DISTDIR)/utils
@@ -1266,6 +1251,7 @@ PYTHON_DIST:
 	mkdir $(DISTDIR)/wxPython/contrib/glcanvas/gtk
 	mkdir $(DISTDIR)/wxPython/contrib/ogl
 	mkdir $(DISTDIR)/wxPython/contrib/stc
+	mkdir $(DISTDIR)/wxPython/contrib/xrc
 	mkdir $(DISTDIR)/wxPython/demo
 	mkdir $(DISTDIR)/wxPython/demo/bitmaps
 	mkdir $(DISTDIR)/wxPython/demo/data
@@ -1274,7 +1260,7 @@ PYTHON_DIST:
 	mkdir $(DISTDIR)/wxPython/wxPython
 	mkdir $(DISTDIR)/wxPython/wxPython/lib
 	mkdir $(DISTDIR)/wxPython/wxPython/lib/editor
-	mkdir $(DISTDIR)/wxPython/wxPython/lib/sizers
+	mkdir $(DISTDIR)/wxPython/wxPython/lib/mixins
 
 	cp $(WXDIR)/wxPython/*.txt $(DISTDIR)/wxPython
 	cp $(WXDIR)/wxPython/*.py $(DISTDIR)/wxPython
@@ -1284,6 +1270,7 @@ PYTHON_DIST:
 	cp $(WXDIR)/wxPython/contrib/glcanvas/gtk/glcanvas.* $(DISTDIR)/wxPython/contrib/glcanvas/gtk
 	-cp $(WXDIR)/wxPython/contrib/ogl/* $(DISTDIR)/wxPython/contrib/ogl
 	-cp $(WXDIR)/wxPython/contrib/stc/* $(DISTDIR)/wxPython/contrib/stc
+	-cp $(WXDIR)/wxPython/contrib/xrc/xrc.* $(DISTDIR)/wxPython/contrib/xrc
 	-cp $(WXDIR)/wxPython/demo/* $(DISTDIR)/wxPython/demo
 	-cp $(WXDIR)/wxPython/demo/bitmaps/* $(DISTDIR)/wxPython/demo/bitmaps
 	-cp $(WXDIR)/wxPython/demo/data/* $(DISTDIR)/wxPython/demo/data
@@ -1292,6 +1279,7 @@ PYTHON_DIST:
 	cp $(WXDIR)/wxPython/src/gtk/*.cpp $(DISTDIR)/wxPython/src/gtk
 	cp $(WXDIR)/wxPython/wxPython/lib/*.py $(DISTDIR)/wxPython/wxPython/lib
 	cp $(WXDIR)/wxPython/wxPython/lib/editor/*.py $(DISTDIR)/wxPython/wxPython/lib/editor
+	cp $(WXDIR)/wxPython/wxPython/lib/mixins/*.py $(DISTDIR)/wxPython/wxPython/lib/mixins
 
 distclean:
 	$(RM) -r _dist_dir
@@ -1314,7 +1302,6 @@ dist-only:
 	fi
 
 dist: @GUIDIST@
-	cp $(WXDIR)/src/files.lst $(DISTDIR)/src
 	@echo "*** Creating wxWindows distribution in $(DISTDIR)..."
 	@cd _dist_dir && tar ch $(DISTDIRNAME) | gzip -f9 > ../$(WXARCHIVE);
 	@if test "$(USE_GUI)" = 1; then \
@@ -1345,7 +1332,6 @@ bzip-dist-only:
 	fi
 
 bzip-dist: @GUIDIST@
-	cp $(WXDIR)/src/files.lst $(DISTDIR)/src/
 	@echo "*** Creating wxWindows distribution in $(DISTDIR)..."
 	@cd _dist_dir && tar ch $(DISTDIRNAME) | bzip2 -f9 > ../$(WXARCHIVE_BZIP)
 	@if test "$(USE_GUI)" = 1; then \
@@ -1358,24 +1344,41 @@ bzip-dist: @GUIDIST@
 	mv wxDemos demos; \
 	fi
 
-debian-dist: @GUIDIST@ MANUAL_DIST PYTHON_DIST
+debian-dist: debian-native-dist debian-msw-dirs MSW_DIST
 	mkdir $(DISTDIR)/debian
 	-cp $(WXDIR)/debian/* $(DISTDIR)/debian
-	cp $(WXDIR)/src/files.lst $(DISTDIR)/src/
 	cp $(DOCDIR)/licence.txt $(DISTDIR)/docs
 	cp $(DOCDIR)/licendoc.txt $(DISTDIR)/docs
 	cp $(DOCDIR)/preamble.txt $(DISTDIR)/docs
 	rm -f $(DISTDIR)/*.spec
+
+	@# now prune away a lot of the crap included by using cp -R
+	@# in other dist targets.  Ugly and hardly portable but it
+	@# will run on any Debian box and that's enough for now.
+
+	find $(DISTDIR) \( -name "CVS" -o -name "*.dsp" -o -name "*.dsw" -o -name "*.hh*" -o \
+			\( -name "makefile.*" -a ! -name "makefile.unx" \) \) \
+			-print0 | xargs -0 rm -rf
+
 	rm -rf $(WXDIR)/../wxwindows$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER)-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER)
 	mv $(DISTDIR) $(WXDIR)/../wxwindows$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER)-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER)
+
+debian-native-dist: @GUIDIST@ MANUAL_DIST PYTHON_DIST
+
+debian-msw-dirs:
+	mkdir $(DISTDIR)/include/wx/msw
+	mkdir $(DISTDIR)/src/msw
+
 
 clean:
 	$(RM) *.o
 	$(RM) *.d
 	$(RM) parser.c
 	$(RM) lexer.c
-	# $(RM) -r ./lib/wx/*
-	$(RM) ./lib/lib*
+	$(RM) $(build_libdir)/lib*
+    # Don't remove this lot, configure will reuse it
+    # if it's still good
+	# $(RM) -r $(build_libdir)/wx/*
 
 cleanall: clean
 
@@ -1393,3 +1396,4 @@ rpm: dist
 	cp -f $(WXARCHIVE) $(RPMTOP)/SOURCES
 	rpm -ba --define "_topdir `pwd`/$(RPMTOP)" $(WXDIR)/wx$(TOOLKIT).spec
 	mv -f `find $(RPMTOP) -name "wx$(TARGET)*.rpm"` .
+

@@ -45,7 +45,7 @@ OpenGl add-on library for wxMotif, the Motif/Lesstif port of the wxWindows libra
 
 %prep
 %setup -n wxMotif
-./configure --prefix=%{pref} --enable-burnt_name --with-odbc --with-opengl --with-motif
+./configure --prefix=%{pref} --enable-soname --with-odbc --with-opengl --with-motif
 
 %build
 if [ "$SMP" != "" ]; then

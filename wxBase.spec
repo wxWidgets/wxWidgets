@@ -33,7 +33,7 @@ Header files for wxBase. You need them to develop programs using wxBase.
 
 %prep
 %setup -n wxBase-%{ver}
-./configure --prefix=%{pref} --disable-gui --disable-std_iostreams
+./configure --prefix=%{pref} --enable-soname --disable-gui --disable-std_iostreams
 
 %build
 if [ "$SMP" != "" ]; then

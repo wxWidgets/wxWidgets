@@ -1008,4 +1008,25 @@
 /* Define this if you are using gtk and gdk contains support for X11R6 XIM */
 #undef HAVE_XIM
 
+
+/* --------------------------------------------------------*
+ *  This stuff is static, it doesn't get modified directly
+ *  by configure.
+*/
+
+#include "wx/chkconf.h"
+
+/*
+   define some constants identifying wxWindows version in more details than
+   just the version number
+ */
+
+/* wxLogChain class available */
+#define wxHAS_LOG_CHAIN
+
+/* define this when wxDC::Blit() respects SetDeviceOrigin() in wxGTK */
+#undef wxHAS_WORKING_GTK_DC_BLIT
+
+
 #endif /* __WX_SETUP_H__ */
+

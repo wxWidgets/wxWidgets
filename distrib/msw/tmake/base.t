@@ -15,33 +15,36 @@
     #! find all our sources
     foreach $file (sort keys %wxBase) {
         ($fileobj = $file) =~ s/cp?p?$/\o/;
-        ($filedep = $file) =~ s/cp?p?$/\d/;
 
         $project{"BASE_SOURCES"} .= "common/" . $file . " ";
         $project{"BASE_OBJS"} .= $fileobj . " ";
-        $project{"BASE_DEPS"} .= $filedep . " ";
     }
 
     foreach $file (sort keys %wxCommon) {
         next unless $wxCommon{$file} =~ /\bB\b/;
 
         ($fileobj = $file) =~ s/cp?p?$/\o/;
-        ($filedep = $file) =~ s/cp?p?$/\d/;
 
         $project{"BASE_SOURCES"} .= "common/" . $file . " ";
         $project{"BASE_OBJS"} .= $fileobj . " ";
-        $project{"BASE_DEPS"} .= $filedep . " ";
     }
 
     foreach $file (sort keys %wxUNIX) {
         next unless $wxUNIX{$file} =~ /\bB\b/;
 
         ($fileobj = $file) =~ s/cp?p?$/\o/;
-        ($filedep = $file) =~ s/cp?p?$/\d/;
 
         $project{"BASE_SOURCES"} .= "unix/" . $file . " ";
         $project{"BASE_UNIX_OBJS"} .= $fileobj . " ";
-        $project{"BASE_UNIX_DEPS"} .= $filedep . " ";
+    }
+
+    foreach $file (sort keys %wxMSW) {
+        next unless $wxMSW{$file} =~ /\bB\b/;
+
+        ($fileobj = $file) =~ s/cp?p?$/\o/;
+
+        $project{"BASE_SOURCES"} .= "msw/" . $file . " ";
+        $project{"BASE_MSW_OBJS"} .= $fileobj . " ";
     }
 
     #! find all our headers
@@ -55,6 +58,12 @@
         next unless $wxUNIXINCLUDE{$file} =~ /\bB\b/;
 
         $project{"BASE_HEADERS"} .= "unix/" . $file . " "
+    }
+
+    foreach $file (sort keys %wxMSWINCLUDE) {
+        next unless $wxMSWINCLUDE{$file} =~ /\bB\b/;
+
+        $project{"BASE_HEADERS"} .= "msw/" . $file . " "
     }
 
     foreach $file (sort keys %wxPROTOCOLINCLUDE) {
@@ -74,11 +83,10 @@ ALL_HEADERS = \
 BASE_OBJS = \
 		#$ ExpandList("BASE_OBJS");
 
-BASE_DEPS = \
-		#$ ExpandList("BASE_DEPS");
-
 BASE_UNIX_OBJS = \
 		#$ ExpandList("BASE_UNIX_OBJS");
 
-BASE_DEPS = \
-		#$ ExpandList("BASE_DEPS");
+BASE_MSW_OBJS = \
+		#$ ExpandList("BASE_MSW_OBJS");
+
+

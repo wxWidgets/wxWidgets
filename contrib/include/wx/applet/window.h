@@ -42,6 +42,7 @@ class wxQlet;
 class wxLoadPageEvent;
 class wxPageLoadedEvent;
 class wxIncludePrep;
+class wxToolBarBase;
 
 // Declare a linked list of wxApplet pointers
 WX_DECLARE_LIST(wxApplet, wxAppletList);
