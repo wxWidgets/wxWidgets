@@ -229,15 +229,6 @@ void wxPyApp::OnAssert(const wxChar *file,
 
 
 /*static*/
-bool wxPyApp::GetMacDefaultEncodingIsPC() {
-#ifdef __WXMAC__
-    return s_macDefaultEncodingIsPC;
-#else
-    return 0;
-#endif
-}
-
-/*static*/
 bool wxPyApp::GetMacSupportPCMenuShortcuts() {
 #ifdef __WXMAC__
     return s_macSupportPCMenuShortcuts;
@@ -279,13 +270,6 @@ wxString wxPyApp::GetMacHelpMenuTitleName() {
     return s_macHelpMenuTitleName;
 #else
     return wxEmptyString;
-#endif
-}
-
-/*static*/
-void wxPyApp::SetMacDefaultEncodingIsPC(bool val) {
-#ifdef __WXMAC__
-    s_macDefaultEncodingIsPC = val;
 #endif
 }
 
@@ -1686,6 +1670,10 @@ PyObject* wxPy_ConvertList(wxListBase* listbase, const char* className) {
 
 long wxPyGetWinHandle(wxWindow* win) {
 #ifdef __WXMSW__
+    return (long)win->GetHandle();
+#endif
+
+#ifdef __WXAC__
     return (long)win->GetHandle();
 #endif
 

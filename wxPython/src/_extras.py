@@ -992,13 +992,11 @@ of your Mac."""
 
 
 # change from wxPyApp_ to wxApp_
-wxApp_GetMacDefaultEncodingIsPC = wxc.wxPyApp_GetMacDefaultEncodingIsPC
 wxApp_GetMacSupportPCMenuShortcuts = wxc.wxPyApp_GetMacSupportPCMenuShortcuts
 wxApp_GetMacAboutMenuItemId = wxc.wxPyApp_GetMacAboutMenuItemId
 wxApp_GetMacPreferencesMenuItemId = wxc.wxPyApp_GetMacPreferencesMenuItemId
 wxApp_GetMacExitMenuItemId = wxc.wxPyApp_GetMacExitMenuItemId
 wxApp_GetMacHelpMenuTitleName = wxc.wxPyApp_GetMacHelpMenuTitleName
-wxApp_SetMacDefaultEncodingIsPC = wxc.wxPyApp_SetMacDefaultEncodingIsPC
 wxApp_SetMacSupportPCMenuShortcuts = wxc.wxPyApp_SetMacSupportPCMenuShortcuts
 wxApp_SetMacAboutMenuItemId = wxc.wxPyApp_SetMacAboutMenuItemId
 wxApp_SetMacPreferencesMenuItemId = wxc.wxPyApp_SetMacPreferencesMenuItemId
