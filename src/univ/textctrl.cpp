@@ -593,11 +593,11 @@ private:
 // ============================================================================
 
 BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
-    EVT_CHAR(OnChar)
+    EVT_CHAR(wxTextCtrl::OnChar)
 
-    EVT_SIZE(OnSize)
+    EVT_SIZE(wxTextCtrl::OnSize)
 
-    EVT_IDLE(OnIdle)
+    EVT_IDLE(wxTextCtrl::OnIdle)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxControl)
