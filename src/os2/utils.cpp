@@ -6,7 +6,7 @@
 // Created:     09/17/99
 // RCS-ID:      $Id$
 // Copyright:   (c) David Webster
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".
@@ -45,7 +45,7 @@
 #include <netbios.h>
 #endif
 
-static const wxChar WX_SECTION[] = _T("wxWindows");
+static const wxChar WX_SECTION[] = _T("wxWidgets");
 static const wxChar eHOSTNAME[]  = _T("HostName");
 static const wxChar eUSERID[]    = _T("UserId");
 static const wxChar eUSERNAME[]  = _T("UserName");

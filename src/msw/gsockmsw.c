@@ -68,7 +68,7 @@ HINSTANCE wxGetInstance(void);
 #include "gsockmsw.h"
 #include "gsocket.h"
 
-/* If not using wxWindows, a global var called hInst must
+/* If not using wxWidgets, a global var called hInst must
  * be available and it must contain the app's instance
  * handle.
  */

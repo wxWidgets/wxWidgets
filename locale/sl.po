@@ -4,7 +4,7 @@
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWindows 2.5.1\n"
+"Project-Id-Version: wxWidgets 2.5.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-05-07 14:03+0200\n"
 "PO-Revision-Date: 2001-06-28 12:48+0100\n"
@@ -4779,13 +4779,13 @@ msgstr ""
 # common/docview.cpp:306
 #: ../src/motif/app.cpp:207
 #, fuzzy, c-format
-msgid "wxWindows could not open display for '%s': exiting."
+msgid "wxWidgets could not open display for '%s': exiting."
 msgstr "Ne morem odpreti te datoteke za shranjevanje."
 
 # common/docview.cpp:306
 #: ../src/x11/app.cpp:176
 #, fuzzy
-msgid "wxWindows could not open display. Exiting."
+msgid "wxWidgets could not open display. Exiting."
 msgstr "Ne morem odpreti te datoteke za shranjevanje."
 
 #: ../src/common/datetime.cpp:3302
@@ -5073,5 +5073,5 @@ msgstr ""
 #~ msgstr "Zamenjam datoteko '%s'?"
 
 # common/filefn.cpp:1230
-#~ msgid "wxWindows: error finding temporary file name.\n"
-#~ msgstr "wxWindows: napaki pri iskanju imena zaèasne datoteke.\n"
+#~ msgid "wxWidgets: error finding temporary file name.\n"
+#~ msgstr "wxWidgets: napaki pri iskanju imena zaèasne datoteke.\n"

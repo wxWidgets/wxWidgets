@@ -7,7 +7,7 @@
 // Created:     29/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -145,7 +145,7 @@
     #define ACCESS(access)  , (access)
 #endif // Salford C
 
-// wxWindows
+// wxWidgets
 #ifndef WX_PRECOMP
     #include  "wx/string.h"
     #include  "wx/intl.h"

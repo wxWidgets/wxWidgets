@@ -6,11 +6,11 @@
 // Created:     06.08.00
 // RCS-ID:      $Id$
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 /*
-   wxRenderer class is used to draw all wxWindows controls. This is an ABC and
+   wxRenderer class is used to draw all wxWidgets controls. This is an ABC and
    the look of the application is determined by the concrete derivation of
    wxRenderer used in the program.
 

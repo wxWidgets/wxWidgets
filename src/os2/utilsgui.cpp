@@ -6,7 +6,7 @@
 // Created:     20.08.2003 (extracted from os2/utils.cpp)
 // RCS-ID:      $Id$
 // Copyright:   (c) David Webster
-// License:     wxWindows licence
+// License:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================

@@ -19,16 +19,16 @@
 // Created:     9.96
 // RCS-ID:      $Id$
 // Copyright:   (c) 1996 Remstar International, Inc.
-// Licence:     wxWindows licence, plus:
+// Licence:     wxWidgets licence, plus:
 // Notice:      This class library and its intellectual design are free of charge for use,
 //              modification, enhancement, debugging under the following conditions:
 //              1) These classes may only be used as part of the implementation of a
-//                 wxWindows-based application
-//              2) All enhancements and bug fixes are to be submitted back to the wxWindows
-//                 user groups free of all charges for use with the wxWindows library.
+//                 wxWidgets-based application
+//              2) All enhancements and bug fixes are to be submitted back to the wxWidgets
+//                 user groups free of all charges for use with the wxWidgets library.
 //              3) These classes may not be distributed as part of any other class library,
 //                 DLL, text (written or electronic), other than a complete distribution of
-//                 the wxWindows GUI development toolkit.
+//                 the wxWidgets GUI development toolkit.
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -71,7 +71,7 @@
     // you cannot use the iODBC headers, you must use the VC headers,
     // plus the odbcinst.h header - gt Nov 2 2000
     //
-    // Must add "odbccp32.lib" in \wx2\wxWindows\src\makevc.env to the WINLIBS= line
+    // Must add "odbccp32.lib" in \wx2\wxWidgets\src\makevc.env to the WINLIBS= line
     //
     #include "sql.h"
     #include "sqlext.h"

@@ -5,8 +5,8 @@
 // Modified by: 
 // Created:     29.04.04
 // RCS-ID:      $Id$
-// Copyright:   (c) wxWindows team
-// Licence:     wxWindows licence
+// Copyright:   (c) wxWidgets team
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // from config.log confdefs
@@ -67,10 +67,10 @@
 #define HAVE_X11_XKBLIB_H 1
 #define HAVE_X11_XLIB_H 1
 #define ICONV_CONST const
-#define PACKAGE_BUGREPORT "wx-dev@lists.wxwindows.org"
-#define PACKAGE_NAME "wxWindows"
-#define PACKAGE_STRING "wxWindows 2.5.1"
-#define PACKAGE_TARNAME "wxwindows"
+#define PACKAGE_BUGREPORT "wx-dev@lists.wxwidgets.org"
+#define PACKAGE_NAME "wxWidgets"
+#define PACKAGE_STRING "wxWidgets 2.5.1"
+#define PACKAGE_TARNAME "wxwidgets"
 #define PACKAGE_VERSION "2.5.1"
 #define SIZEOF_CHAR 1
 #define SIZEOF_INT 4

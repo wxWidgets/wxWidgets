@@ -6,7 +6,7 @@
 // Created:     05/04/03
 // RCS-ID:      $Id$
 // Copyright:   (c) Mattia Barbon
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __VMS

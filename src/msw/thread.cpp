@@ -7,7 +7,7 @@
 // RCS-ID:      $Id$
 // Copyright:   (c) Wolfram Gloger (1996, 1997), Guilhem Lavaux (1998);
 //                  Vadim Zeitlin (1999-2002)
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -526,7 +526,7 @@ void wxThreadInternal::SetPriority(unsigned int priority)
 {
     m_priority = priority;
 
-    // translate wxWindows priority to the Windows one
+    // translate wxWidgets priority to the Windows one
     int win_priority;
     if (m_priority <= 20)
         win_priority = THREAD_PRIORITY_LOWEST;
@@ -740,7 +740,7 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
                     //
                     // NB: we still must include QS_ALLINPUT even when waiting
                     //     in a secondary thread because if it had created some
-                    //     window somehow (possible not even using wxWindows)
+                    //     window somehow (possible not even using wxWidgets)
                     //     the system might dead lock then
                     if ( wxThread::IsMain() )
                     {

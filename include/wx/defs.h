@@ -6,7 +6,7 @@
 *  Created:     01/02/97
 *  RCS-ID:      $Id$
 *  Copyright:   (c)
-*  Licence:     wxWindows licence
+*  Licence:     wxWidgets licence
 */
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
@@ -97,7 +97,7 @@
 #endif /*  __BORLANDC__ */
 
 /*  ---------------------------------------------------------------------------- */
-/*  wxWindows version and compatibility defines */
+/*  wxWidgets version and compatibility defines */
 /*  ---------------------------------------------------------------------------- */
 
 #include "wx/version.h"
@@ -548,7 +548,7 @@ enum
 };
 
 /*  ---------------------------------------------------------------------------- */
-/*  standard wxWindows types */
+/*  standard wxWidgets types */
 /*  ---------------------------------------------------------------------------- */
 
 /*  the type for screen and DC coordinates */
@@ -581,7 +581,7 @@ typedef wxUint8 wxByte;
 /*  16bit */
 #ifdef SIZEOF_SHORT
     #if SIZEOF_SHORT != 2
-        #error "wxWindows assumes sizeof(short) == 2, please fix the code"
+        #error "wxWidgets assumes sizeof(short) == 2, please fix the code"
     #endif
 #else
     #define SIZEOF_SHORT 2
@@ -671,7 +671,7 @@ typedef wxUint16 wxWord;
             typedef long wxInt32;
             typedef unsigned long wxUint32;
         #elif
-            /*  wxWindows is not ready for 128bit systems yet... */
+            /*  wxWidgets is not ready for 128bit systems yet... */
             #error "Unknown sizeof(int) value, what are you compiling for?"
         #endif
     #else /*  !defined(SIZEOF_INT) */
@@ -717,7 +717,7 @@ typedef wxUint32 wxDword;
 #else
     /*
        This should never happen for the current architectures but if you're
-       using one where it does, please contact wx-dev@lists.wxwindows.org.
+       using one where it does, please contact wx-dev@lists.wxwidgets.org.
      */
     #error "Pointers can't be stored inside integer types."
 #endif
@@ -1976,7 +1976,7 @@ enum wxUpdateUI
 #endif
 
 /*  --------------------------------------------------------------------------- */
-/*  macros that enable wxWindows apps to be compiled in absence of the */
+/*  macros that enable wxWidgets apps to be compiled in absence of the */
 /*  sytem headers, although some platform specific types are used in the */
 /*  platform specific (implementation) parts of the headers */
 /*  --------------------------------------------------------------------------- */
@@ -2069,8 +2069,8 @@ typedef struct klass *WX_##klass
 #warning "Objective-C types will not be checked by the compiler."
 /*  NOTE: typedef struct objc_object *id; */
 /*  IOW, we're declaring these using the id type without using that name, */
-/*  since "id" is used extensively not only within wxWindows itself, but */
-/*  also in wxWindows application code.  The following works fine when */
+/*  since "id" is used extensively not only within wxWidgets itself, but */
+/*  also in wxWidgets application code.  The following works fine when */
 /*  compiling C(++) code, and works without typesafety for Obj-C(++) code */
 #define DECLARE_WXCOCOA_OBJC_CLASS(klass) \
 typedef struct objc_object *WX_##klass
@@ -2100,7 +2100,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSTextStorage);
 DECLARE_WXCOCOA_OBJC_CLASS(NSThread);
 DECLARE_WXCOCOA_OBJC_CLASS(NSWindow);
 DECLARE_WXCOCOA_OBJC_CLASS(NSView);
-typedef WX_NSView WXWidget; /*  wxWindows BASE definition */
+typedef WX_NSView WXWidget; /*  wxWidgets BASE definition */
 #endif /*  __WXCOCOA__ */
 
 #ifdef __WXMSW__
@@ -2379,8 +2379,8 @@ typedef struct window_t *WXWidget;
 #endif /*  MGL */
 
 /*  This is required because of clashing macros in windows.h, which may be */
-/*  included before or after wxWindows classes, and therefore must be */
-/*  disabled here before any significant wxWindows headers are included. */
+/*  included before or after wxWidgets classes, and therefore must be */
+/*  disabled here before any significant wxWidgets headers are included. */
 #ifdef __WXMSW__
 #ifdef GetClassInfo
 #undef GetClassInfo

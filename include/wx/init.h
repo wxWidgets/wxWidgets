@@ -1,12 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/init.h
-// Purpose:     wxWindows initialization and finalization functions
+// Purpose:     wxWidgets initialization and finalization functions
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     29.06.2003
 // RCS-ID:      $Id$
-// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
-// Licence:     wxWindows licence
+// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_INIT_H_
@@ -19,7 +19,7 @@
 // ----------------------------------------------------------------------------
 
 // do common initialization, return true if ok (in this case wxEntryCleanup
-// must be called later), otherwise the program can't use wxWindows at all
+// must be called later), otherwise the program can't use wxWidgets at all
 //
 // this function also creates wxTheApp as a side effect, if IMPLEMENT_APP
 // hadn't been used a dummy default application object is created

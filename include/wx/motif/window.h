@@ -6,7 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_WINDOW_H_
@@ -211,11 +211,11 @@ protected:
     bool DetachWidget(WXWidget widget);
     
     // How to implement accelerators. If we find a key event, translate to
-    // wxWindows wxKeyEvent form. Find a widget for the window. Now find a
+    // wxWidgets wxKeyEvent form. Find a widget for the window. Now find a
     // wxWindow for the widget. If there isn't one, go up the widget hierarchy
     // trying to find one. Once one is found, call ProcessAccelerator for the
     // window. If it returns TRUE (processed the event), skip the X event,
-    // otherwise carry on up the wxWindows window hierarchy calling
+    // otherwise carry on up the wxWidgets window hierarchy calling
     // ProcessAccelerator. If all return FALSE, process the X event as normal.
     // Eventually we can implement OnCharHook the same way, but concentrate on
     // accelerators for now. ProcessAccelerator must look at the current

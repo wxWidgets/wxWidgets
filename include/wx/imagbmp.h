@@ -4,7 +4,7 @@
 // Author:      Robert Roebling, Chris Elliott
 // RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling, Chris Elliott
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_IMAGBMP_H_

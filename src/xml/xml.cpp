@@ -5,7 +5,7 @@
 // Created:     2000/03/05
 // RCS-ID:      $Id$
 // Copyright:   (c) 2000 Vaclav Slavik
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)

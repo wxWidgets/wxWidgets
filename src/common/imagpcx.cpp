@@ -5,7 +5,7 @@
 // Version:     1.1
 // CVS-ID:      $Id$
 // Copyright:   (c) 1999 Guillermo Rodriguez Garcia
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)

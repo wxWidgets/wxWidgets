@@ -57,7 +57,7 @@ b) Cygwin
 
    Please refer to the Unix section below
 
-** the instructions may be out of date as for wxWidgets 2.5.1+ **
+** the instructions may be out of date as for wxWidgets 2.5.2+ **
 
 c) Other compilers
    Borland: 

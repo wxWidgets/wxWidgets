@@ -6,7 +6,7 @@
 // Created:     08.12.99
 // RCS-ID:      $Id$
 // Copyright:   (c) 1999 Stefan Csomor <csomor@advanced.ch>
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================

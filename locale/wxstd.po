@@ -3798,11 +3798,11 @@ msgstr ""
 
 #: ../src/motif/app.cpp:207
 #, c-format
-msgid "wxWindows could not open display for '%s': exiting."
+msgid "wxWidgets could not open display for '%s': exiting."
 msgstr ""
 
 #: ../src/x11/app.cpp:176
-msgid "wxWindows could not open display. Exiting."
+msgid "wxWidgets could not open display. Exiting."
 msgstr ""
 
 #: ../src/common/datetime.cpp:3302

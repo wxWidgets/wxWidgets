@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_DC_H_
@@ -258,7 +258,7 @@ protected:
 };
 
 // ----------------------------------------------------------------------------
-// wxDCTemp: a wxDC which doesn't free the given HDC (used by wxWindows
+// wxDCTemp: a wxDC which doesn't free the given HDC (used by wxWidgets
 // only/mainly)
 // ----------------------------------------------------------------------------
 

@@ -7,7 +7,7 @@
 // Created:     31.01.1999
 // RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // the goal of this file is to define wxCrtSetDbgFlag() macro which may be

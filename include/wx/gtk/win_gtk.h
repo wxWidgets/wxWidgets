@@ -1,10 +1,10 @@
 /* ///////////////////////////////////////////////////////////////////////////
 // Name:        win_gtk.h
-// Purpose:     wxWindows's GTK base widget = GtkPizza
+// Purpose:     wxWidgets's GTK base widget = GtkPizza
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:   	wxWidgets licence
 /////////////////////////////////////////////////////////////////////////// */
 
 

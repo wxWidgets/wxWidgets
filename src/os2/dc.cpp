@@ -6,7 +6,7 @@
 // Created:     10/14/99
 // RCS-ID:      $Id$
 // Copyright:   (c) David Webster
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".
@@ -39,22 +39,22 @@
     IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
 
 //
-// wxWindows uses the Microsoft convention that the origin is the UPPER left.
+// wxWidgets uses the Microsoft convention that the origin is the UPPER left.
 // Native OS/2 however in the GPI and PM define the origin as the LOWER left.
-// In order to map OS/2 GPI/PM y coordinates to wxWindows coordinates we must
+// In order to map OS/2 GPI/PM y coordinates to wxWidgets coordinates we must
 // perform the following transformation:
 //
 // Parent object height:     POBJHEIGHT
 // Desried origin:           WXORIGINY
 // Object to place's height: OBJHEIGHT
 //
-// To get the OS2 position from the wxWindows one:
+// To get the OS2 position from the wxWidgets one:
 //
 // OS2Y = POBJHEIGHT - (WXORIGINY + OBJHEIGHT)
 //
 // For OS/2 wxDC's we will always determine m_vRclPaint as the size of the
 // OS/2 Presentation Space associated with the device context.  y is the
-// desired application's y coordinate of the origin in wxWindows space.
+// desired application's y coordinate of the origin in wxWidgets space.
 // objy is the height of the object we are going to draw.
 //
 #define OS2Y(y, objy) ((m_vRclPaint.yTop - m_vRclPaint.yBottom) - (y + objy))
@@ -2271,7 +2271,7 @@ void wxDC::DoGetTextExtent(
        sError = wxPMErrorToStr(vErrorCode);
        // DEBUG
        sprintf(zMsg, "GpiQueryTextBox for %s: failed with Error: %lx - %s", pStr, vErrorCode, sError.c_str());
-       (void)wxMessageBox( "wxWindows Menu sample"
+       (void)wxMessageBox( "wxWidgets Menu sample"
                           ,zMsg
                           ,wxICON_INFORMATION
                          );

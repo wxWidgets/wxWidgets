@@ -1,4 +1,4 @@
-wxWidgets 2.5.1
+wxWidgets 2.5.2
 ---------------
 
 *** Please note that this is an UNSTABLE DEVELOPMENT SNAPSHOT.
@@ -37,11 +37,12 @@ Platforms supported
 
 wxWidgets currently supports the following platforms:
 
-- Windows 95/98/ME, Windows NT, Windows 2000, Windows XP
+- Windows 95/98/ME, Windows NT, Windows 2000, Windows XP, Pocket PC
 - Most Unix variants with GTK+
 - Most Unix variants with X11
 - Most Unix variants with Motif/Lesstif
-- MacOS 9.x and 10.x
+- MacOS 9.x and 10.x using Carbon (10.4 and above preferred)
+- MacOS 10.x using Cocoa
 - OS/2 (alpha)
 
 Most popular C++ compilers are supported; see the install.txt
@@ -210,5 +211,5 @@ web site.
 
 Have fun!
 
-The wxWidgets Team, February 2004
+The wxWidgets Team, May 2004
 

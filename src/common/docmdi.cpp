@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -180,7 +180,7 @@ void wxDocMDIChildFrame::OnActivate(wxActivateEvent& event)
 void wxDocMDIChildFrame::OnCloseWindow(wxCloseEvent& event)
 {
   // Close view but don't delete the frame while doing so!
-  // ...since it will be deleted by wxWindows if we return TRUE.
+  // ...since it will be deleted by wxWidgets if we return TRUE.
   if (m_childView)
   {
     bool ans = event.CanVeto()

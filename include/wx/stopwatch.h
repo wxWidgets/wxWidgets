@@ -4,8 +4,8 @@
 // Author:      Julian Smart (wxTimer), Sylvain Bougnoux (wxStopWatch)
 // Created:     26.06.03 (extracted from wx/timer.h)
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998-2003 wxWindows team
-// Licence:     wxWindows licence
+// Copyright:   (c) 1998-2003 wxWidgets team
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_STOPWATCH_H_

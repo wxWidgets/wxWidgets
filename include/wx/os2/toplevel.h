@@ -6,7 +6,7 @@
 // Created:     20.09.01
 // RCS-ID:      $Id$
 // Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MSW_TOPLEVEL_H_
@@ -131,7 +131,7 @@ protected:
                                 ) const;
 
     //
-    // Translate wxWindows flags into OS flags
+    // Translate wxWidgets flags into OS flags
     //
     virtual WXDWORD OS2GetStyle( long     lFlag
                                 ,WXDWORD* pdwExstyle

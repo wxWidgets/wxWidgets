@@ -4,7 +4,7 @@
 // Author:
 // RCS-ID:      $Id$
 // Copyright:
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 

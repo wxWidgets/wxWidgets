@@ -5,8 +5,8 @@
 // Modified by:
 // Created:     31.05.01 (extracted from other files)
 // RCS-ID:      $Id$
-// Copyright:   (c) wxWindows team
-// Licence:     wxWindows licence
+// Copyright:   (c) wxWidgets team
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_ACCEL_H_BASE_

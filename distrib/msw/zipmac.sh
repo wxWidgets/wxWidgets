@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Zip up an external, generic + Windows distribution of wxWindows 2
+# Zip up an external, generic + Windows distribution of wxWidgets 2
 # Usage: zipmac.sh dest-dir
 # (set the WXWIN variable first so it knows where to take the sources from)
 
@@ -83,9 +83,9 @@ expandlines $SRC/distrib/msw/xml.rsp temp.txt
 zip -u -@ `$CYGPATHPROGW $DEST/wxMac-$VERSION.zip` < temp.txt
 
 expandlines $SRC/distrib/msw/wx_html.rsp temp.txt
-zip -@ `$CYGPATHPROGW $DEST/wxWindows-$VERSION-HTML.zip` < temp.txt
+zip -@ `$CYGPATHPROGW $DEST/wxWidgets-$VERSION-HTML.zip` < temp.txt
 
 rm -f temp.txt
 
-echo wxWindows archived.
+echo wxWidgets archived.
 

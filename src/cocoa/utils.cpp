@@ -6,7 +6,7 @@
 // Created:     2003/??/??
 // RCS-ID:      $Id:
 // Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Licence:   	wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/setup.h"
@@ -84,7 +84,7 @@ void wxBell()
 }
 
 #if 0
-// DFE: These aren't even implemented by wxGTK, and no wxWindows code calls
+// DFE: These aren't even implemented by wxGTK, and no wxWidgets code calls
 // them.  If someone needs them, then they'll get a link error
 
 // Consume all events until no more left

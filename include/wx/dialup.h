@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/dialup.h
-// Purpose:     Network related wxWindows classes and functions
+// Purpose:     Network related wxWidgets classes and functions
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     07.07.99
 // RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_DIALUP_H

@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -55,7 +55,7 @@
 // conditional compilation
 // ----------------------------------------------------------------------------
 
-// wxWindows previously always considered that toolbar buttons have light grey
+// wxWidgets previously always considered that toolbar buttons have light grey
 // (0xc0c0c0) background and so ignored any bitmap masks - however, this
 // doesn't work with XPMs which then appear to have black background. To make
 // this work, we must respect the bitmap masks - which we do now. This should

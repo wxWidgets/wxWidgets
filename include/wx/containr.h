@@ -7,7 +7,7 @@
 // Created:     06.08.01
 // RCS-ID:      $Id$
 // Copyright:   (c) 2001 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_CONTAINR_H_
@@ -98,7 +98,7 @@ protected:
     DECLARE_NO_COPY_CLASS(wxControlContainer)
 };
 
-// this function is for wxWindows internal use only
+// this function is for wxWidgets internal use only
 extern bool wxSetFocusToChild(wxWindow *win, wxWindow **child);
 
 // ----------------------------------------------------------------------------

@@ -5,8 +5,8 @@
 // Modified by: 03.11.00: VZ to add wxArrayString and multiple sel functions
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) wxWindows team
-// Licence:     wxWindows licence
+// Copyright:   (c) wxWidgets team
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __CHOICEDLGH_G__

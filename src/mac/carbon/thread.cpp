@@ -7,7 +7,7 @@
 // RCS-ID:	$Id$
 // Copyright:	(c) Wolfram Gloger (1996, 1997); Guilhem Lavaux (1998),
 //		    Vadim Zeitlin (1999) , Stefan Csomor (2000)
-// Licence:	wxWindows licence
+// Licence:	wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -962,7 +962,7 @@ private:
 	MPQueueID	    m_notifyQueueId;    // its notification queue
 
     wxThreadState m_state;              // see wxThreadState enum
-    int           m_prio;               // in wxWindows units: from 0 to 100
+    int           m_prio;               // in wxWidgets units: from 0 to 100
 
     // this flag is set when the thread should terminate
     bool m_cancelled;
@@ -1092,8 +1092,8 @@ void wxThreadInternal::SetPriority( int priority)
 	if ( m_tid)
     {
 		// Mac priorities range from 1 to 10,000, with a default of 100.
-		// wxWindows priorities range from 0 to 100 with a default of 50.
-		// We can map wxWindows to Mac priorities easily by assuming
+		// wxWidgets priorities range from 0 to 100 with a default of 50.
+		// We can map wxWidgets to Mac priorities easily by assuming
 		// the former uses a logarithmic scale.
 		const unsigned int macPriority = ( int)( exp( priority / 25.0 * log( 10.0)) + 0.5);
 		

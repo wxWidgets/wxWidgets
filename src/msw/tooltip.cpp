@@ -6,7 +6,7 @@
 // Created:     31.01.99
 // RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vadim Zeitlin
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -147,7 +147,7 @@ LRESULT APIENTRY wxToolTipWndProc(HWND hwndTT,
         OutputDebugString("TTM_WINDOWFROMPOINT: ");
         OutputDebugString(wxString::Format("0x%08x => ", hwnd));
 
-        // return a HWND corresponding to a wxWindow because only wxWindows are
+        // return a HWND corresponding to a wxWindow because only wxWidgets are
         // associated with tooltips using TTM_ADDTOOL
         wxWindow *win = wxGetWindowFromHWND((WXHWND)hwnd);
 
@@ -360,7 +360,7 @@ void wxToolTip::SetWindow(wxWindow *win)
             {
                 // may be it's a child of parent of the control, in fact?
                 // (radiobuttons are subcontrols, i.e. children of the radiobox
-                // for wxWindows but are its siblings at Windows level)
+                // for wxWidgets but are its siblings at Windows level)
                 hwnd = GetDlgItem(GetHwndOf(m_window->GetParent()), id);
             }
 

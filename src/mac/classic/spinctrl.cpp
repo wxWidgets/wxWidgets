@@ -5,7 +5,7 @@
 // Modified by: Mark Newsam (Based on GTK file)
 // RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -321,7 +321,7 @@ void wxSpinCtrl::SetRange(int min, int max)
 
 void wxSpinCtrl::SetSelection(long from, long to)
 {
-    // if from and to are both -1, it means (in wxWindows) that all text should
+    // if from and to are both -1, it means (in wxWidgets) that all text should
     // be selected
     if ( (from == -1) && (to == -1) )
     {

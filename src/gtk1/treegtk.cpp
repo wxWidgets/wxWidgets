@@ -6,7 +6,7 @@
 // Created:     07/05/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Denis Pershin
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)

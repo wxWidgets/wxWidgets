@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     10/09/99
 // Copyright:   David Webster
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".

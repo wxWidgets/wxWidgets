@@ -6,7 +6,7 @@
 // Created:     04.10.99
 // RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -319,7 +319,7 @@ static void DoCommonPreCleanup()
     // flush the logged messages if any and install a 'safer' log target: the
     // default one (wxLogGui) can't be used after the resources are freed just
     // below and the user supplied one might be even more unsafe (using any
-    // wxWindows GUI function is unsafe starting from now)
+    // wxWidgets GUI function is unsafe starting from now)
     wxLog::DontCreateOnDemand();
 
     // this will flush the old messages if any

@@ -5,7 +5,7 @@
  * Created:     04/01/98
  * RCS-ID:      $Id$
  * Copyright:   (c) Robert Roebling
- * Licence:     wxWindows Licence
+ * Licence:     wxWidgets Licence
  *****************************************************************************/
 
 #include <string.h>

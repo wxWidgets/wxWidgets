@@ -6,7 +6,7 @@
 // Created:     15.09.00
 // RCS-ID:      $Id$
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -487,7 +487,7 @@ struct WXDLLEXPORT wxTextWrappedData : public wxTextMultiLineData
 // ----------------------------------------------------------------------------
 
 /*
-   We use custom versions of wxWindows command processor to implement undo/redo
+   We use custom versions of wxWidgets command processor to implement undo/redo
    as we want to avoid storing the backpointer to wxTextCtrl in wxCommand
    itself: this is a waste of memory as all commands in the given command
    processor always have the same associated wxTextCtrl and so it makes sense

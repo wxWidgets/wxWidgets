@@ -6,7 +6,7 @@
 // Created:     10/27/99
 // RCS-ID:      $Id$
 // Copyright:   (c) David Webster
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".
@@ -173,7 +173,7 @@ void wxFrame::DoGetClientSize(
 
 //
 // Set the client size (i.e. leave the calculation of borders etc.
-// to wxWindows)
+// to wxWidgets)
 //
 void wxFrame::DoSetClientSize(
   int                               nWidth
@@ -369,7 +369,7 @@ void wxFrame::SetMenuBar(
         //
         // Can set a menubar several times.
         // TODO: how to prevent a memory leak if you have a currently-unattached
-        // menubar? wxWindows assumes that the frame will delete the menu (otherwise
+        // menubar? wxWidgets assumes that the frame will delete the menu (otherwise
         // there are problems for MDI).
         //
         if (pMenuBar->GetHMenu())

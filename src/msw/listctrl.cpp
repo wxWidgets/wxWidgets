@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -1936,7 +1936,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
             case LVN_ITEMCHANGED:
                 // we translate this catch all message into more interesting
-                // (and more easy to process) wxWindows events
+                // (and more easy to process) wxWidgets events
 
                 // first of all, we deal with the state change events only and
                 // only for valid items (item == -1 for the virtual list

@@ -6,7 +6,7 @@
 // Created:     2003-07-12
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -278,7 +278,7 @@ bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size, wxMenuB
     SetHWND((WXHWND) hWnd);
 #endif
 
-    // install wxWindows window proc for this window
+    // install wxWidgets window proc for this window
     SubclassWin(m_hWnd);
 
     if (menuBar)

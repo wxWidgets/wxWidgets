@@ -6,7 +6,7 @@
 #
 # "%W% %G%"
 #
-# Makefile : Builds wxWindows library wx.lib for VC++ (32-bit)
+# Makefile : Builds wxWidgets library wx.lib for VC++ (32-bit)
 # Arguments:
 #
 # FINAL=1 argument to nmake to build version with no debugging info.
@@ -198,7 +198,7 @@ cleandocs:
 # Start Word, running the GeneratePDF macro. MakeManual.dot should be in the
 # Office StartUp folder, and PDFMaker should be installed.
 updatepdf:  # touchmanual pdfrtf
-    start $(WAITFLAG) "winword d:\wx2\wxWindows\docs\latex\pdf\wx.rtf /mGeneratePDF"
+    start $(WAITFLAG) "winword d:\wx2\wxWidgets\docs\latex\pdf\wx.rtf /mGeneratePDF"
 
 
 MFTYPE=vc

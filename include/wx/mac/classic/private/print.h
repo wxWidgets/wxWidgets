@@ -6,7 +6,7 @@
 // Created:     03/02/99
 // RCS-ID:      $Id: 
 // Copyright:   (c) Stefan Csomor
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MAC_PRIVATE_PRINT_H_

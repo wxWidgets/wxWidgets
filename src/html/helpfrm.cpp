@@ -6,7 +6,7 @@
 // Author:      Harm van der Heijden and Vaclav Slavik
 // RCS-ID:      $Id$
 // Copyright:   (c) Harm van der Heijden and Vaclav Slavik
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -1609,7 +1609,7 @@ void wxHtmlHelpFrame::OnClose(wxCommandEvent& event)
 
 void wxHtmlHelpFrame::OnAbout(wxCommandEvent& event)
 {
-    wxMessageBox(wxT("wxWindows HTML Help Viewer (c) 1998-2003, Vaclav Slavik et al"), wxT("HelpView"),
+    wxMessageBox(wxT("wxWidgets HTML Help Viewer (c) 1998-2003, Vaclav Slavik et al"), wxT("HelpView"),
         wxICON_INFORMATION|wxOK, this);
 }
 #endif

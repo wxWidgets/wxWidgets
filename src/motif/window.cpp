@@ -6,7 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -1596,7 +1596,7 @@ void wxWindow::DoPaint()
       // otherwise we don't know how many pixels have been scrolled. We might
       // solve this in the future by defining virtual wxWindow functions to get
       // the scroll position in pixels. Or, each kind of scrolled window has to
-      // implement backing stores itself, using generic wxWindows code.
+      // implement backing stores itself, using generic wxWidgets code.
       wxScrolledWindow* scrolledWindow = wxDynamicCast(this, wxScrolledWindow);
       if ( scrolledWindow )
       {
@@ -1764,7 +1764,7 @@ bool wxWindow::ProcessAccelerator(wxKeyEvent& event)
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// function which maintain the global hash table mapping Widgets to wxWindows
+// function which maintain the global hash table mapping Widgets to wxWidgets
 // ----------------------------------------------------------------------------
 
 bool wxAddWindowToTable(Widget w, wxWindow *win)
@@ -2333,7 +2333,7 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win,
             int x2, y2;
             win->GetPosition(&x2, &y2);
 
-            // The button x/y must be translated to wxWindows
+            // The button x/y must be translated to wxWidgets
             // window space - the widget might be a label or button,
             // within a form.
             int dx = 0;

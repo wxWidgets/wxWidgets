@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -201,7 +201,7 @@ public:
 
     // see the docs in src/gtk/window.cpp
     GtkWidget           *m_widget;          // mostly the widget seen by the rest of GTK
-    GtkWidget           *m_wxwindow;        // mostly the client area as per wxWindows
+    GtkWidget           *m_wxwindow;        // mostly the client area as per wxWidgets
 
     // this widget will be queried for GTK's focus events
     GtkWidget           *m_focusWidget;
@@ -210,7 +210,7 @@ public:
     GtkIMMulticontext   *m_imContext;
 #else
 #if HAVE_XIM
-    // XIM support for wxWindows
+    // XIM support for wxWidgets
     GdkIC               *m_ic;
     GdkICAttr           *m_icattr;
 #endif

@@ -22,7 +22,7 @@ fi
 
 WXVER=$3
 
-echo About to archive wxWindows:
+echo About to archive wxWidgets:
 echo   From   $1
 echo   To     $2
 echo CTRL-C if this is not correct.

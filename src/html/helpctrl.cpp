@@ -6,7 +6,7 @@
 // Author:      Harm van der Heijden and Vaclav Slavik
 // RCS-ID:      $Id$
 // Copyright:   (c) Harm van der Heijden and Vaclav Slavik
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -137,7 +137,7 @@ void wxHtmlHelpController::CreateHelpWindow()
     {
         m_Config = wxConfigBase::Get(FALSE);
         if (m_Config != NULL)
-            m_ConfigRoot = _T("wxWindows/wxHtmlHelpController");
+            m_ConfigRoot = _T("wxWidgets/wxHtmlHelpController");
     }
 
     m_helpFrame = CreateHelpFrame(&m_helpData);

@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c)
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_DOCH__
@@ -97,7 +97,7 @@ public:
     virtual wxInputStream& LoadObject(wxInputStream& stream);
 #endif
 
-    // Called by wxWindows
+    // Called by wxWidgets
     virtual bool OnSaveDocument(const wxString& filename);
     virtual bool OnOpenDocument(const wxString& filename);
     virtual bool OnNewDocument();

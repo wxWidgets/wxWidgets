@@ -6,7 +6,7 @@
 // Created:     10/13/99
 // RCS-ID:      $Id$
 // Copyright:   (c) David Webster
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -408,7 +408,7 @@ bool wxApp::RegisterWindowClasses(
 } // end of wxApp::RegisterWindowClasses
 
 //
-// Cleans up any wxWindows internal structures left lying around
+// Cleans up any wxWidgets internal structures left lying around
 //
 void wxApp::CleanUp()
 {

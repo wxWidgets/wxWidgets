@@ -6,7 +6,7 @@
 // Created:     11.06.98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -22,7 +22,7 @@
 
 #if wxUSE_NOTEBOOK
 
-// wxWindows
+// wxWidgets
 #ifndef WX_PRECOMP
   #include  "wx/string.h"
 #endif  // WX_PRECOMP
@@ -438,7 +438,7 @@ wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
 {
     wxSize sizeTotal = sizePage;
     
-    // We need to make getting tab size part of the wxWindows API.
+    // We need to make getting tab size part of the wxWidgets API.
     wxSize tabSize(0, 0);
     if (GetPageCount() > 0)
     {

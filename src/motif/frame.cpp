@@ -6,7 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -364,7 +364,7 @@ void wxFrame::DoGetClientSize(int *x, int *y) const
 }
 
 // Set the client size (i.e. leave the calculation of borders etc.
-// to wxWindows)
+// to wxWidgets)
 void wxFrame::DoSetClientSize(int width, int height)
 {
     // Calculate how large the new main window should be

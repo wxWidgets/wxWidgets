@@ -6,7 +6,7 @@
 // Created:     25/10/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart, Vaclav Slavik
-// Licence:   	wxWindows licence
+// Licence:   	wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_SOUND_H_
@@ -106,10 +106,10 @@ private:
 // ----------------------------------------------------------------------------
 
 // This is interface to sound playing implementation. There are multiple
-// sound architectures in use on Unix platforms and wxWindows can use several
+// sound architectures in use on Unix platforms and wxWidgets can use several
 // of them for playback, depending on their availability at runtime; hence
-// the need for backends. This class is for use by wxWindows and people writing
-// additional backends only, it is _not_ for use by applications! 
+// the need for backends. This class is for use by wxWidgets and people writing
+// additional backends only, it is _not_ for use by applications!
 
 // Structure that holds playback status information
 struct wxSoundPlaybackStatus
@@ -137,7 +137,7 @@ public:
     virtual bool IsAvailable() const = 0;
 
     // Returns true if the backend is capable of playing sound asynchronously.
-    // If false, then wxWindows creates a playback thread and handles async
+    // If false, then wxWidgets creates a playback thread and handles async
     // playback, otherwise it is left up to the backend (will usually be more
     // effective).
     virtual bool HasNativeAsyncPlayback() const = 0;

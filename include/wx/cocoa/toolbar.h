@@ -6,7 +6,7 @@
 // Created:     2003/08/17
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_COCOA_TOOLBAR_H__

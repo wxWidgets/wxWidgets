@@ -1,14 +1,14 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        private.h
 // Purpose:     Private declarations: as this header is only included by
-//              wxWindows itself, it may contain identifiers which don't start
+//              wxWidgets itself, it may contain identifiers which don't start
 //              with "wx".
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_PRIVATE_H_
@@ -245,7 +245,7 @@ extern LONG APIENTRY wxSubclassedGenericControlProc(WXHWND hWnd, WXDWORD message
 #define GetHfont()              ((HFONT)GetHFONT())
 #define GetHfontOf(font)        ((HFONT)(font).GetHFONT())
 
-// OS/2 convention of the mask is opposed to the wxWindows one, so we need
+// OS/2 convention of the mask is opposed to the wxWidgets one, so we need
 // to invert the mask each time we pass one/get one to/from Windows
 extern HBITMAP wxInvertMask(HBITMAP hbmpMask, int w = 0, int h = 0);
 

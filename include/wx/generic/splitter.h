@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __SPLITTERH_G__
@@ -49,7 +49,7 @@ enum
 //    The MFC splitter window manages scrollbars as well so is able to
 //    put sash buttons on the scrollbars, but we probably don't want to go down
 //    this path.
-// 2) for wxWindows 2.0, we must find a way to set the WS_CLIPCHILDREN style
+// 2) for wxWidgets 2.0, we must find a way to set the WS_CLIPCHILDREN style
 //    to prevent flickering. (WS_CLIPCHILDREN doesn't work in all cases so can't be
 //    standard).
 

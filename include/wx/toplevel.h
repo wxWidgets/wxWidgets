@@ -7,8 +7,8 @@
 // Created:     06.08.01
 // RCS-ID:      $Id$
 // Copyright:   (c) 2001 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-//                       Vaclav Slavik <vaclav@wxwindows.org>
-// Licence:     wxWindows licence
+//                       Vaclav Slavik <vaclav@wxwidgets.org>
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_TOPLEVEL_BASE_H_

@@ -5,11 +5,11 @@
 // Modified by:
 // Created:     05.11.99
 // RCS-ID:      $Id$
-// Copyright:   (c) wxWindows team
-// Licence:     wxWindows licence
+// Copyright:   (c) wxWidgets team
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
-// General note: this header is private to wxWindows and is not supposed to be
+// General note: this header is private to wxWidgets and is not supposed to be
 // included by user code. The functions declared here are implemented in
 // msw/fontutil.cpp for Windows, unix/fontutil.cpp for GTK/Motif &c.
 

@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:   	wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -42,7 +42,7 @@ typedef void (CALLBACK * PENREGPROC)(WORD,BOOL);
 // support Pen input when running under Microsoft Windows for
 // Pen Computing 1.0 without need of the PenPalete.
 //
-// Should masked edit functions be added to wxWindows we would
+// Should masked edit functions be added to wxWidgets we would
 // be a new class of functions to support BEDIT controls.
 //
 // (The function is a NOOP for native Windows-NT)

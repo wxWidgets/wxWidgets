@@ -3,7 +3,7 @@
 # Supply a source (e.g. ~/wx2) and destination (e.g. ~/wx2/deliver)
 
 # We can't use e.g. this:
-# ls `cat $SRC/distrib/msw/makefile.rsp` zip -@ -u $DEST/wxWindows-$VERSION-gen.zip
+# ls `cat $SRC/distrib/msw/makefile.rsp` zip -@ -u $DEST/wxWidgets-$VERSION-gen.zip
 # because there's not enough space on the command line, plus we need to ignore the
 # blank lines.
 
@@ -72,18 +72,18 @@ $TAR cf $2/wxAll-${WXVER}.tar -T /tmp/wxall.txt
 
 echo Re-tarring wxAll in a subdirectory...
 cd $2
-rm -f -r wxWindows-${WXVER}
-mkdir wxWindows-${WXVER}
+rm -f -r wxWidgets-${WXVER}
+mkdir wxWidgets-${WXVER}
 
 # If we have the full set of VC++ project files,
 # get them
-if [ -f $2/extra/wxWindows-${WXVER}-VC.zip ]; then
-  unzip -o $2/extra/wxWindows-${WXVER}-VC.zip
+if [ -f $2/extra/wxWidgets-${WXVER}-VC.zip ]; then
+  unzip -o $2/extra/wxWidgets-${WXVER}-VC.zip
 else
-  echo "Warning - did not find $2/deliver/extra/wxWindows-${WXVER}-VC.zip"
+  echo "Warning - did not find $2/deliver/extra/wxWidgets-${WXVER}-VC.zip"
 fi
 
-cd wxWindows-${WXVER}
+cd wxWidgets-${WXVER}
 $TAR xf ../wxAll-${WXVER}.tar
 
 # Translate all .dsp and .dsw files to DOS format
@@ -105,7 +105,7 @@ $1/distrib/msw/namedown src/os2/*.CPP src/os2/*.I
 cd ..
 
 rm -f wxAll-${WXVER}.tar
-$TAR cf $2/wxAll-${WXVER}.tar wxWindows-${WXVER}/*
-rm -f -r wxWindows-${WXVER}
+$TAR cf $2/wxAll-${WXVER}.tar wxWidgets-${WXVER}/*
+rm -f -r wxWidgets-${WXVER}
 gzip $2/wxAll-${WXVER}.tar
 

@@ -6,7 +6,7 @@
 // Created:     09/17/99
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -108,7 +108,7 @@ bool wxControl::OS2CreateControl(
 	(void) OS2GetStyle(GetWindowStyle(), &dwExstyle);
     }
     //
-    // All controls should have these styles (wxWindows creates all controls
+    // All controls should have these styles (wxWidgets creates all controls
     // visible by default)
     //
     if (m_isShown )

@@ -6,8 +6,8 @@
 //              Guillermo Rodriguez (global clean up)
 // Created:     04/01/98
 // RCS-ID:      $Id$
-// Copyright:   (c) wxWindows team
-// Licence:     wxWindows licence
+// Copyright:   (c) wxWidgets team
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_TIMER_H_BASE_

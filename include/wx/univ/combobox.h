@@ -6,7 +6,7 @@
 // Created:     30.08.00
 // RCS-ID:      $Id$
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -20,7 +20,7 @@
    down list, not just a wxListBox.
 
    So we define a base wxComboControl which can use any control as pop down
-   list and wxComboBox deriving from it which implements the standard wxWindows
+   list and wxComboBox deriving from it which implements the standard wxWidgets
    combobox API. wxComboControl needs to be told somehow which control to use
    and this is done by SetPopupControl(). However, we need something more than
    just a wxControl in this method as, for example, we need to call

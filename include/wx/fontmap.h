@@ -6,7 +6,7 @@
 // Created:     04.11.99
 // RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_FONTMAPPER_H_
@@ -35,7 +35,7 @@ class WXDLLIMPEXP_BASE wxFontMapper;
 #endif // wxUSE_GUI
 
 // ============================================================================
-// wxFontMapper manages user-definable correspondence between wxWindows font
+// wxFontMapper manages user-definable correspondence between wxWidgets font
 // encodings and the fonts present on the machine.
 //
 // This is a singleton class, font mapper objects can only be accessed using
@@ -263,7 +263,7 @@ class WXDLLIMPEXP_BASE wxFontMapper : public wxFontMapperBase
 // global variables
 // ----------------------------------------------------------------------------
 
-// the default font mapper for wxWindows programs do NOT use! This is for
+// the default font mapper for wxWidgets programs do NOT use! This is for
 // backward compatibility, use wxFontMapper::Get() instead
 #define wxTheFontMapper (wxFontMapper::Get())
 

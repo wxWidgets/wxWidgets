@@ -5,8 +5,8 @@
 // Modified by:
 // Created:     07.02.04 (extracted from wx/textdlg.h)
 // RCS-ID:      $Id$
-// Copyright:   (c) wxWindows team
-// Licence:     wxWindows licence
+// Copyright:   (c) wxWidgets team
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_NUMDLGDLG_H_BASE_

@@ -5,8 +5,8 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) wxWindows team
-// Licence:     wxWindows licence
+// Copyright:   (c) wxWidgets team
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_EVENT_H__
@@ -59,17 +59,17 @@ typedef int wxEventType;
 // handler only a function with proper parameter list can be given.
 #define wxStaticCastEvent(type, val) wx_static_cast(type, val)
 
-// in previous versions of wxWindows the event types used to be constants
+// in previous versions of wxWidgets the event types used to be constants
 // which created difficulties with custom/user event types definition
 //
-// starting from wxWindows 2.4 the event types are now dynamically assigned
+// starting from wxWidgets 2.4 the event types are now dynamically assigned
 // using wxNewEventType() which solves this problem, however at price of
 // several incompatibilities:
 //
 //  a) event table macros declaration changed, it now uses wxEventTableEntry
 //     ctor instead of initialisation from an agregate - the macro
 //     DECLARE_EVENT_TABLE_ENTRY may be used to write code which can compile
-//     with all versions of wxWindows
+//     with all versions of wxWidgets
 //
 //  b) event types can't be used as switch() cases as they're not really
 //     constant any more - there is no magic solution here, you just have to
@@ -315,7 +315,7 @@ enum Propagation_state
 };
 
 /*
- * wxWindows events, covering all interesting things that might happen
+ * wxWidgets events, covering all interesting things that might happen
  * (button clicking, resizing, setting text in widgets, etc.).
  *
  * For each completely new event type, derive a new event class.
@@ -1574,7 +1574,7 @@ public:
     // time we should update
     static void ResetUpdateTime();
 
-    // Specify how wxWindows will send update events: to
+    // Specify how wxWidgets will send update events: to
     // all windows, or only to those which specify that they
     // will process the events.
     static void SetMode(wxUpdateUIMode mode) { sm_updateMode = mode; }
@@ -1931,7 +1931,7 @@ public:
 
     virtual wxEvent *Clone() const { return new wxIdleEvent(*this); }
 
-    // Specify how wxWindows will send idle events: to
+    // Specify how wxWidgets will send idle events: to
     // all windows, or only to those which specify that they
     // will process the events.
     static void SetMode(wxIdleMode mode) { sm_idleMode = mode; }
@@ -2145,7 +2145,7 @@ protected:
 };
 
 // ----------------------------------------------------------------------------
-// wxEvtHandler: the base class for all objects handling wxWindows events
+// wxEvtHandler: the base class for all objects handling wxWidgets events
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_BASE wxEvtHandler : public wxObject

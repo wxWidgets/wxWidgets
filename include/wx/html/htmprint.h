@@ -5,7 +5,7 @@
 // Created:     25/09/99
 // RCS-ID:      $Id$
 // Copyright:   (c)
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_HTMPRINT_H_
@@ -106,7 +106,7 @@ enum {
 
 //--------------------------------------------------------------------------------
 // wxHtmlPrintout
-//                  This class is derived from standard wxWindows printout class
+//                  This class is derived from standard wxWidgets printout class
 //                  and is used to print HTML documents.
 //--------------------------------------------------------------------------------
 

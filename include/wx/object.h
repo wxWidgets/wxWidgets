@@ -7,7 +7,7 @@
 // RCS-ID:      $Id$
 // Copyright:   (c) 1997 Julian Smart
 //              (c) 2001 Ron Lee <ron@debian.org>
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_OBJECTH__
@@ -416,7 +416,7 @@ inline void* wxCheckCast(void *ptr)
 #endif // WXDEBUG && wxUSE_MEMORY_TRACING
 
 // ----------------------------------------------------------------------------
-// wxObject: the root class of wxWindows object hierarchy
+// wxObject: the root class of wxWidgets object hierarchy
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_BASE wxObject

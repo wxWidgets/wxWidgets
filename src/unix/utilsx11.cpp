@@ -5,8 +5,8 @@
 // Modified by:
 // Created:     25.03.02
 // RCS-ID:      $Id$
-// Copyright:   (c) wxWindows team
-// Licence:     wxWindows licence
+// Copyright:   (c) wxWidgets team
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__WXX11__) || defined(__WXGTK__) || defined(__WXMOTIF__)
@@ -199,7 +199,7 @@ void wxSetIconsX11( WXDisplay* display, WXWindow window,
 //     unless it has better compatiblity with older WMs).
 //
 //     
-//     This is what wxWindows does in wxSetFullScreenStateX11:
+//     This is what wxWidgets does in wxSetFullScreenStateX11:
 //       1) if _NET_WM_STATE_FULLSCREEN is supported, use it
 //       2) otherwise try WM-specific hacks (KDE, IceWM)
 //       3) use _WIN_LAYER and hope that the WM will recognize it

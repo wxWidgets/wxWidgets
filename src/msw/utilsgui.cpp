@@ -6,7 +6,7 @@
 // Created:     21.06.2003 (extracted from msw/utils.cpp)
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// License:     wxWindows license
+// License:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================

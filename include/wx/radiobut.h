@@ -5,8 +5,8 @@
 // Modified by:
 // Created:     07.09.00
 // RCS-ID:      $Id$
-// Copyright:   (c) wxWindows team
-// Licence:     wxWindows licence
+// Copyright:   (c) wxWidgets team
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_RADIOBUT_H_BASE_

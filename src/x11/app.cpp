@@ -6,7 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -173,7 +173,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         xdisplay = XOpenDisplay( displayName.ToAscii() );
     if (!xdisplay)
     {
-        wxLogError( _("wxWindows could not open display. Exiting.") );
+        wxLogError( _("wxWidgets could not open display. Exiting.") );
         return false;
     }
 

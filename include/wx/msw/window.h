@@ -7,7 +7,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_WINDOW_H_
@@ -32,7 +32,7 @@
 // constants
 // ---------------------------------------------------------------------------
 
-// FIXME does anybody use those? they're unused by wxWindows...
+// FIXME does anybody use those? they're unused by wxWidgets...
 enum
 {
     wxKEY_SHIFT = 1,
@@ -176,7 +176,7 @@ public:
     WXFARPROC MSWGetOldWndProc() const { return m_oldWndProc; }
     void MSWSetOldWndProc(WXFARPROC proc) { m_oldWndProc = proc; }
 
-    // return TRUE if the window is of a standard (i.e. not wxWindows') class
+    // return TRUE if the window is of a standard (i.e. not wxWidgets') class
     //
     // to understand why does it work, look at SubclassWin() code and comments
     bool IsOfStandardClass() const { return m_oldWndProc != NULL; }
@@ -187,21 +187,21 @@ public:
     // MSW only: TRUE if this control is part of the main control
     virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return FALSE; };
 
-    // translate wxWindows style flags for this control into the Windows style
+    // translate wxWidgets style flags for this control into the Windows style
     // and optional extended style for the corresponding native control
     //
     // this is the function that should be overridden in the derived classes,
     // but you will mostly use MSWGetCreateWindowFlags() below
     virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const ;
 
-    // get the MSW window flags corresponding to wxWindows ones
+    // get the MSW window flags corresponding to wxWidgets ones
     //
     // the functions returns the flags (WS_XXX) directly and puts the ext
     // (WS_EX_XXX) flags into the provided pointer if not NULL
     WXDWORD MSWGetCreateWindowFlags(WXDWORD *exflags = NULL) const
         { return MSWGetStyle(GetWindowStyle(), exflags); }
 
-    // translate wxWindows coords into Windows ones suitable to be passed to
+    // translate wxWidgets coords into Windows ones suitable to be passed to
     // ::CreateWindow()
     //
     // returns TRUE if non default coords are returned, FALSE otherwise

@@ -1,13 +1,13 @@
 /**
 *  Name:        wx/features.h
 *  Purpose:     test macros for the features which might be available in some
-*               wxWindows ports but not others
+*               wxWidgets ports but not others
 *  Author:      Vadim Zeitlin
 *  Modified by: Ryan Norton (Converted to C)
 *  Created:     18.03.02
 *  RCS-ID:      $Id$
-*  Copyright:   (c) 2002 Vadim Zeitlin <vadim@wxwindows.org>
-*  Licence:     wxWindows licence
+*  Copyright:   (c) 2002 Vadim Zeitlin <vadim@wxwidgets.org>
+*  Licence:     wxWidgets licence
 */
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */

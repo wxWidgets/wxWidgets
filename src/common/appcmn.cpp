@@ -6,7 +6,7 @@
 // Created:     18.10.99
 // RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -526,7 +526,7 @@ bool wxGUIAppTraitsBase::ShowAssertDialog(const wxString& msg)
               wxT("You can also choose [Cancel] to suppress ")
               wxT("further warnings.");
 
-    switch ( wxMessageBox(msgDlg, wxT("wxWindows Debug Alert"),
+    switch ( wxMessageBox(msgDlg, wxT("wxWidgets Debug Alert"),
                           wxYES_NO | wxCANCEL | wxICON_STOP ) )
     {
         case wxYES:

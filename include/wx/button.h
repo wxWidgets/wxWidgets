@@ -6,7 +6,7 @@
 // Created:     15.08.00
 // RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zetlin
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_BUTTON_H_BASE_

@@ -5,7 +5,7 @@
 // Modified by:
 // RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -216,7 +216,7 @@ void wxSpinCtrl::SetValue( int value )
 
 void wxSpinCtrl::SetSelection(long from, long to)
 {
-    // translate from wxWindows conventions to GTK+ ones: (-1, -1) means the
+    // translate from wxWidgets conventions to GTK+ ones: (-1, -1) means the
     // entire range
     if ( from == -1 && to == -1 )
     {

@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_TBARMSW_H_
@@ -76,7 +76,7 @@ public:
     // implementation only from now on
     // -------------------------------
 
-    // Handle wxWindows events
+    // Handle wxWidgets events
     void OnPaint(wxPaintEvent& event);
     void OnMouseEvent(wxMouseEvent& event);
 

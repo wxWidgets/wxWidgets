@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/msw/glcanvas.cpp
-// Purpose:     wxGLCanvas, for using OpenGL with wxWindows under MS Windows
+// Purpose:     wxGLCanvas, for using OpenGL with wxWidgets under MS Windows
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -46,7 +46,7 @@ WX_CHECK_BUILD_OPTIONS("wxGL")
   these two libraries to either the Makefile or project file.
 
   This is NOT a recommended technique, and certainly is unlikely to be used
-  anywhere else in wxWindows given it is so specific to not only wxMSW, but
+  anywhere else in wxWidgets given it is so specific to not only wxMSW, but
   also the VC compiler. However, in the case of opengl support, it's an
   applicable technique as opengl is optional in setup.h This code (wrapped by
   wxUSE_GLCANVAS), now allows opengl support to be added purely by modifying

@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ===========================================================================
@@ -286,7 +286,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         (
          NULL,
          _T("This program uses Unicode and requires Windows NT/2000/XP/CE.\nProgram aborted."),
-         _T("wxWindows Fatal Error"),
+         _T("wxWidgets Fatal Error"),
          MB_ICONERROR | MB_OK
         );
 
@@ -334,7 +334,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         wxDisableButtonBrush = ::CreateBrushIndirect( & lb );
         ::DeleteObject( (HGDIOBJ)lb.lbHatch );
     }
-    //else: wxWindows resources are probably not linked in
+    //else: wxWidgets resources are probably not linked in
 #endif
 
 #if wxUSE_PENWINDOWS
@@ -770,7 +770,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
 bool wxApp::OnExceptionInMainLoop()
 {
     // ask the user about what to do: use the Win32 API function here as it
-    // could be dangerous to use any wxWindows code in this state
+    // could be dangerous to use any wxWidgets code in this state
     switch (
             ::MessageBox
               (

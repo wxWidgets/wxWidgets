@@ -7,7 +7,7 @@
 // Created:     08/04/99
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_DRAGIMAG_H_
@@ -32,7 +32,7 @@
   void MyTreeCtrl::OnBeginDrag(wxTreeEvent& event)
   {
 #ifdef __WXMSW__
-    ::UpdateWindow((HWND) GetHWND()); // We need to implement this in wxWindows
+    ::UpdateWindow((HWND) GetHWND()); // We need to implement this in wxWidgets
 #endif
 
     CaptureMouse();

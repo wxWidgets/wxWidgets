@@ -6,7 +6,7 @@
 // Created:     2004/02/07
 // RCS-ID:      $Id$
 // Copyright:   (c) 2004 David Elliott
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_COCOA_LOG_H__

@@ -5,7 +5,7 @@
 // Created:     2003/07/22
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 Vaclav Slavik
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_WRAPWIN_H_

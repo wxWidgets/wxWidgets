@@ -1,7 +1,7 @@
 echo "dsp2dos [ver. 1.1]"
-echo "Convert wxWindows workspaces from Unix to Dos format"
+echo "Convert wxWidgets workspaces from Unix to Dos format"
 echo "  Author : Marco Cavallini (www.koansoftware.com)"
-echo "You need to build wxWindows/distrib/msw/unix2dos.c for using it"
+echo "You need to build wxWidgets/distrib/msw/unix2dos.c for using it"
 unix2dos --unix2dos $WXWIN/src/wxBase.dsp
 unix2dos --unix2dos $WXWIN/src/wxBase.dsw
 unix2dos --unix2dos $WXWIN/src/wxUniv.dsp

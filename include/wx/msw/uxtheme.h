@@ -5,8 +5,8 @@
 // Modified by:
 // Created:     2003
 // RCS-ID:      $Id$
-// Copyright:   (c) 2003 wxWindows Dev-Team
-// License:     wxWindows license
+// Copyright:   (c) 2003 wxWidgets Dev-Team
+// License:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_UXTHEME_H_

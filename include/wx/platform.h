@@ -5,8 +5,8 @@
 * Modified by:
 * Created:     29.10.01 (extracted from wx/defs.h)
 * RCS-ID:      $Id$
-* Copyright:   (c) 1997-2001 wxWindows team
-* Licence:     wxWindows licence
+* Copyright:   (c) 1997-2001 wxWidgets team
+* Licence:     wxWidgets licence
 */
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
@@ -138,7 +138,7 @@
 
 /*
    adjust the Unicode setting: wxUSE_UNICODE should be defined as 0 or 1
-   and is used by wxWindows, _UNICODE and/or UNICODE may be defined or used by
+   and is used by wxWidgets, _UNICODE and/or UNICODE may be defined or used by
    the system headers so bring these settings in sync
  */
 

@@ -5,8 +5,8 @@
 // Modified by:
 // Created:     20.02.01
 // RCS-ID:      $Id$
-// Copyright:   (c) 1996-2001 wxWindows team
-// Licence:     wxWindows licence
+// Copyright:   (c) 1996-2001 wxWidgets team
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_GAUGE_H_BASE_

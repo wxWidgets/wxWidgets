@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_LISTCTRL_H_
@@ -63,8 +63,8 @@ class WXDLLEXPORT wxImageList;
     which item. Each image in an image list can contain a mask, and can be made out
     of either a bitmap, two bitmaps or an icon. See ImagList.h for more details.
 
-    Notifications are passed via the wxWindows 2.0 event system, or using virtual
-    functions in wxWindows 1.66.
+    Notifications are passed via the wxWidgets 2.0 event system, or using virtual
+    functions in wxWidgets 1.66.
 
     See the sample wxListCtrl app for API usage.
 

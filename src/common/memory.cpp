@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -117,7 +117,7 @@
 */
 void wxMemStruct::ErrorMsg (const char * mesg)
 {
-  wxLogMessage(wxT("wxWindows memory checking error: %s"), mesg);
+  wxLogMessage(wxT("wxWidgets memory checking error: %s"), mesg);
   PrintNode ();
 }
 
@@ -126,7 +126,7 @@ void wxMemStruct::ErrorMsg (const char * mesg)
 */
 void wxMemStruct::ErrorMsg ()
 {
-  wxLogMessage(wxT("wxWindows over/underwrite memory error:"));
+  wxLogMessage(wxT("wxWidgets over/underwrite memory error:"));
   PrintNode ();
 }
 

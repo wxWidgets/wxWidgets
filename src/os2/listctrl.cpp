@@ -6,7 +6,7 @@
 // Created:     01/21/03
 // RCS-ID:      $Id$
 // Copyright:   (c) David Webster
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -69,11 +69,11 @@
 //   how many records the view will have, initially, and how many columns
 //   the detail view of the container will have, as the container represents
 //   a known data block.  Thus the OS/2 PM CV_DETAIL view, i.e.
-//   the wxWindows wxLC_REPORT view, relies on STATIC structure for its
+//   the wxWidgets wxLC_REPORT view, relies on STATIC structure for its
 //   columnar data.  It gets the data to display by telling it the specific
 //   offset of the field in the struct containing the displayable data.  That
 //   data has be of OS/2 Types, PSZ (char string), CDATE or CTIME format.
-//   wxWindows is dynamic in nature, however.  We insert columns, one at a
+//   wxWidgets is dynamic in nature, however.  We insert columns, one at a
 //   time and do not know how many until the app is done inserting them. So
 //   for OS/2 I have to set a max allowable since they are fixed.  We return
 //   an error to the app if they include more than we can handle.

@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -119,7 +119,7 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     // all controls should have this style
     style |= WS_CHILD;
 
-    // create the control visible if it's currently shown for wxWindows
+    // create the control visible if it's currently shown for wxWidgets
     if ( m_isShown )
     {
         style |= WS_VISIBLE;
@@ -163,7 +163,7 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     }
 #endif // wxUSE_CTL3D
 
-    // install wxWindows window proc for this window
+    // install wxWidgets window proc for this window
     SubclassWin(m_hWnd);
 
     // set up fonts and colours

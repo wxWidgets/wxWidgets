@@ -6,7 +6,7 @@
 // Created:     10/21/99
 // RCS-ID:      $Id$
 // Copyright:   (c) 1999 Stefan Csomor
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MAC_DATAFORM_H

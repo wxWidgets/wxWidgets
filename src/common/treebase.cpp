@@ -6,7 +6,7 @@
 // Modified:
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart et al
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // =============================================================================

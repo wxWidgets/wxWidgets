@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_CONTROL_H_
@@ -97,7 +97,7 @@ protected:
     //     implement MSWGetStyle() this version will disappear.
     //
     // create the control of the given class with the given style (combination
-    // of WS_XXX flags, i.e. Windows style, not wxWindows one), returns
+    // of WS_XXX flags, i.e. Windows style, not wxWidgets one), returns
     // FALSE if creation failed
     //
     // All parameters except classname and style are optional, if the

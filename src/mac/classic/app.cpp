@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -387,7 +387,7 @@ MenuEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
     return eventNotHandledErr;
 }
 
-// due to the rather low-level event API of wxWindows, we cannot use RunApplicationEventLoop
+// due to the rather low-level event API of wxWidgets, we cannot use RunApplicationEventLoop
 // but have to use ReceiveNextEvent dealing with events manually, therefore we also have
 // deal with clicks in the menu bar explicitely
 
@@ -841,15 +841,15 @@ void wxStAppResource::OpenSharedLibraryResource(const void *initBlock)
         NSModule    theModule;
         const char *theLibPath;
 
-        gSharedLibraryBundle = CFBundleGetBundleWithIdentifier(CFSTR("com.wxwindows.wxWindows"));
+        gSharedLibraryBundle = CFBundleGetBundleWithIdentifier(CFSTR("com.wxwindows.wxWidgets"));
         if (gSharedLibraryBundle != NULL) {
-            // wxWindows has been bundled into a framework
+            // wxWidgets has been bundled into a framework
             //   load the framework resources
 
             gSharedLibraryResource = CFBundleOpenBundleResourceMap(gSharedLibraryBundle);
         }
         else {
-            // wxWindows is a simple dynamic shared library
+            // wxWidgets is a simple dynamic shared library
             //   load the resources from the data fork of a separate resource file
             wxString theResPath;
             wxString theName;

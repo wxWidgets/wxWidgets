@@ -10,7 +10,7 @@
 //                  Vadim Zeitlin (1999-2002)
 //                  Robert Roebling (1999)
 //                  K. S. Sreeram (2002)
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -678,7 +678,7 @@ public:
 private:
     pthread_t     m_threadId;   // id of the thread
     wxThreadState m_state;      // see wxThreadState enum
-    int           m_prio;       // in wxWindows units: from 0 to 100
+    int           m_prio;       // in wxWidgets units: from 0 to 100
 
     // this flag is set when the thread should terminate
     bool m_cancelled;

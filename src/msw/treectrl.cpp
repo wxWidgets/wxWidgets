@@ -6,7 +6,7 @@
 // Created:     1997
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -2797,7 +2797,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
         case TVN_DELETEITEM:
             {
-                // NB: we might process this message using wxWindows event
+                // NB: we might process this message using wxWidgets event
                 //     tables, but due to overhead of wxWin event system we
                 //     prefer to do it here ourself (otherwise deleting a tree
                 //     with many items is just too slow)

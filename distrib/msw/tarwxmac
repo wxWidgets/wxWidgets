@@ -3,7 +3,7 @@
 # Supply a source (e.g. ~/wx2) and destination (e.g. ~/wx2/deliver)
 
 # We can't use e.g. this:
-# ls `cat $SRC/distrib/msw/makefile.rsp` zip -@ -u $DEST/wxWindows-$VERSION-gen.zip
+# ls `cat $SRC/distrib/msw/makefile.rsp` zip -@ -u $DEST/wxWidgets-$VERSION-gen.zip
 # because there's not enough space on the command line, plus we need to ignore the
 # blank lines.
 

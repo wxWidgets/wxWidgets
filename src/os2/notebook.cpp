@@ -6,7 +6,7 @@
 // Created:     10/12/99
 // RCS-ID:      $Id$
 // Copyright:   (c) David Webster
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".
@@ -14,7 +14,7 @@
 
 #if wxUSE_NOTEBOOK
 
-// wxWindows
+// wxWidgets
 #ifndef WX_PRECOMP
   #include "wx/app.h"
   #include "wx/dcclient.h"

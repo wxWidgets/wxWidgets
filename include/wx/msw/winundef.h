@@ -5,8 +5,8 @@
 // Modified by:
 // Created:     16.05.99
 // RCS-ID:      $Id$
-// Copyright:   (c) wxWindows team
-// Licence:     wxWindows licence
+// Copyright:   (c) wxWidgets team
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 /* THIS SHOULD NOT BE USED since you might include it once e.g. in window.h,

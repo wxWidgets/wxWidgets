@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_WINDOW_H_
@@ -220,7 +220,7 @@ public:
     virtual wxInt16         MacControlUserPaneFocusProc(wxInt16 action) ;
     virtual void            MacControlUserPaneBackgroundProc(void* info) ;
 
-    // translate wxWindows coords into ones suitable to be passed to
+    // translate wxWidgets coords into ones suitable to be passed to
     // the CreateControl calls
     //
     // returns TRUE if non default coords are returned, FALSE otherwise

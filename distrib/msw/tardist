@@ -1,9 +1,9 @@
 #!/bin/sh
-# tardist: make up a tar.gz distribution of wxWindows 2
+# tardist: make up a tar.gz distribution of wxWidgets 2
 # Supply a source (e.g. ~/wx2) and destination (e.g. ~/wx2/deliver)
 
 # We can't use e.g. this:
-# ls `cat $SRC/distrib/msw/makefile.rsp` zip -@ -u $DEST/wxWindows-$VERSION-gen.zip
+# ls `cat $SRC/distrib/msw/makefile.rsp` zip -@ -u $DEST/wxWidgets-$VERSION-gen.zip
 # because there's not enough space on the command line, plus we need to ignore the
 # blank lines.
 
@@ -178,10 +178,10 @@ cd wxMac-${WXVER}
 
 # If we have the full set of Mac CW project files,
 # get them
-if [ -f $WXDEST/extra/wxWindows-${WXVER}-CW-Mac.zip ]; then
-  unzip -o $WXDEST/extra/wxWindows-${WXVER}-CW-Mac.zip
+if [ -f $WXDEST/extra/wxWidgets-${WXVER}-CW-Mac.zip ]; then
+  unzip -o $WXDEST/extra/wxWidgets-${WXVER}-CW-Mac.zip
 else
-  echo "Warning - did not find $WXDEST/deliver/extra/wxWindows-${WXVER}-CW-Mac.zip"
+  echo "Warning - did not find $WXDEST/deliver/extra/wxWidgets-${WXVER}-CW-Mac.zip"
 fi
 
 $TAR xf ../wxMac-${WXVER}.tar
@@ -204,18 +204,18 @@ gzip $WXDEST/wxMac-${WXVER}.tar
 #cd $WXSRC
 #cat $WXSRC/distrib/msw/univ.rsp > /tmp/wxuniv_in.txt
 #expandlines /tmp/wxuniv_in.txt /tmp/wxuniv.txt
-#$TAR cf $WXDEST/wxWindows-${WXVER}-Univ.tar -T /tmp/wxuniv.txt
+#$TAR cf $WXDEST/wxWidgets-${WXVER}-Univ.tar -T /tmp/wxuniv.txt
 #
 #echo Re-tarring wxUniversal in a subdirectory...
 #cd $WXDEST
-#mkdir wxWindows-${WXVER}
-#cd wxWindows-${WXVER}
-#$TAR xf ../wxWindows-${WXVER}-Univ.tar
+#mkdir wxWidgets-${WXVER}
+#cd wxWidgets-${WXVER}
+#$TAR xf ../wxWidgets-${WXVER}-Univ.tar
 #cd ..
-#rm -f wxWindows-${WXVER}-Univ.tar
-#$TAR cf $WXDEST/wxWindows-${WXVER}-Univ.tar wxWindows-${WXVER}/*
-#rm -f -r wxWindows-${WXVER}
-#gzip $WXDEST/wxWindows-${WXVER}-Univ.tar
+#rm -f wxWidgets-${WXVER}-Univ.tar
+#$TAR cf $WXDEST/wxWidgets-${WXVER}-Univ.tar wxWidgets-${WXVER}/*
+#rm -f -r wxWidgets-${WXVER}
+#gzip $WXDEST/wxWidgets-${WXVER}-Univ.tar
 
 dospinwxall()
 {
@@ -229,24 +229,24 @@ $TAR cf $WXDEST/wxAll-${WXVER}.tar -T /tmp/wxall.txt
 
 echo Re-tarring wxAll in a subdirectory...
 cd $WXDEST
-mkdir wxWindows-${WXVER}
+mkdir wxWidgets-${WXVER}
 
-cd wxWindows-${WXVER}
+cd wxWidgets-${WXVER}
 
 # If we have the full set of VC++ project files,
 # get them
-if [ -f $WXDEST/extra/wxWindows-${WXVER}-VC.zip ]; then
-  unzip -o $WXDEST/extra/wxWindows-${WXVER}-VC.zip
+if [ -f $WXDEST/extra/wxWidgets-${WXVER}-VC.zip ]; then
+  unzip -o $WXDEST/extra/wxWidgets-${WXVER}-VC.zip
 else
-  echo "Warning - did not find $WXDEST/deliver/extra/wxWindows-${WXVER}-VC.zip"
+  echo "Warning - did not find $WXDEST/deliver/extra/wxWidgets-${WXVER}-VC.zip"
 fi
 
 # If we have the full set of Mac CW project files,
 # get them
-if [ -f $WXDEST/extra/wxWindows-${WXVER}-CW-Mac.zip ]; then
-  unzip -o $WXDEST/extra/wxWindows-${WXVER}-CW-Mac.zip
+if [ -f $WXDEST/extra/wxWidgets-${WXVER}-CW-Mac.zip ]; then
+  unzip -o $WXDEST/extra/wxWidgets-${WXVER}-CW-Mac.zip
 else
-  echo "Warning - did not find $WXDEST/deliver/extra/wxWindows-${WXVER}-CW-Mac.zip"
+  echo "Warning - did not find $WXDEST/deliver/extra/wxWidgets-${WXVER}-CW-Mac.zip"
 fi
 
 $TAR xf ../wxAll-${WXVER}.tar
@@ -272,8 +272,8 @@ cp $WXSRC/docs/os2/install.txt INSTALL-OS2.txt
 
 cd ..
 rm -f wxAll-${WXVER}.tar
-$TAR cf $WXDEST/wxAll-${WXVER}.tar wxWindows-${WXVER}/*
-rm -f -r wxWindows-${WXVER}
+$TAR cf $WXDEST/wxAll-${WXVER}.tar wxWidgets-${WXVER}/*
+rm -f -r wxWidgets-${WXVER}
 gzip $WXDEST/wxAll-${WXVER}.tar
 }
 
@@ -285,138 +285,138 @@ echo Tarring wxDocs...
 #cd $WXSRC
 #cat $WXSRC/distrib/msw/docsrc.rsp > /tmp/docsrc_in.txt
 #expandlines /tmp/docsrc_in.txt /tmp/docsrc.txt
-#$TAR cf $WXDEST/wxWindows-${WXVER}-doc.tar -T /tmp/docsrc.txt
+#$TAR cf $WXDEST/wxWidgets-${WXVER}-doc.tar -T /tmp/docsrc.txt
 #
 #echo Re-tarring docs in a subdirectory...
 #cd $WXDEST
-#mkdir wxWindows-${WXVER}
-#cd wxWindows-${WXVER}
-#$TAR xf ../wxWindows-${WXVER}-doc.tar
+#mkdir wxWidgets-${WXVER}
+#cd wxWidgets-${WXVER}
+#$TAR xf ../wxWidgets-${WXVER}-doc.tar
 #cd ..
-#rm -f wxWindows-${WXVER}-doc.tar
-#$TAR cf $WXDEST/wxWindows-${WXVER}-doc.tar wxWindows-${WXVER}/*
-#rm -f -r wxWindows-${WXVER}
-#gzip $WXDEST/wxWindows-${WXVER}-doc.tar
+#rm -f wxWidgets-${WXVER}-doc.tar
+#$TAR cf $WXDEST/wxWidgets-${WXVER}-doc.tar wxWidgets-${WXVER}/*
+#rm -f -r wxWidgets-${WXVER}
+#gzip $WXDEST/wxWidgets-${WXVER}-doc.tar
 
 ### HTML docs
 cd $WXSRC
 cat $WXSRC/distrib/msw/wx_html.rsp > /tmp/html_in.txt
 expandlines /tmp/html_in.txt /tmp/html.txt
-$TAR cf $WXDEST/wxWindows-${WXVER}-HTML.tar -T /tmp/html.txt
+$TAR cf $WXDEST/wxWidgets-${WXVER}-HTML.tar -T /tmp/html.txt
 
 echo Re-tarring HTML in a subdirectory...
 cd $WXDEST
-mkdir wxWindows-${WXVER}
-cd wxWindows-${WXVER}
-$TAR xf ../wxWindows-${WXVER}-HTML.tar
+mkdir wxWidgets-${WXVER}
+cd wxWidgets-${WXVER}
+$TAR xf ../wxWidgets-${WXVER}-HTML.tar
 cd ..
-rm -f wxWindows-${WXVER}-HTML.tar
-$TAR cf $WXDEST/wxWindows-${WXVER}-HTML.tar wxWindows-${WXVER}/*
-rm -f -r wxWindows-${WXVER}
-gzip $WXDEST/wxWindows-${WXVER}-HTML.tar
+rm -f wxWidgets-${WXVER}-HTML.tar
+$TAR cf $WXDEST/wxWidgets-${WXVER}-HTML.tar wxWidgets-${WXVER}/*
+rm -f -r wxWidgets-${WXVER}
+gzip $WXDEST/wxWidgets-${WXVER}-HTML.tar
 
 ### HTB docs
 cd $WXSRC
 cat $WXSRC/distrib/msw/wx_htb.rsp > /tmp/htb_in.txt
 expandlines /tmp/htb_in.txt /tmp/htb.txt
-$TAR cf $WXDEST/wxWindows-${WXVER}-HTB.tar -T /tmp/htb.txt
+$TAR cf $WXDEST/wxWidgets-${WXVER}-HTB.tar -T /tmp/htb.txt
 
 echo Re-tarring HTB in a subdirectory...
 cd $WXDEST
-mkdir wxWindows-${WXVER}
-cd wxWindows-${WXVER}
-$TAR xf ../wxWindows-${WXVER}-HTB.tar
+mkdir wxWidgets-${WXVER}
+cd wxWidgets-${WXVER}
+$TAR xf ../wxWidgets-${WXVER}-HTB.tar
 cd ..
-rm -f wxWindows-${WXVER}-HTB.tar
-$TAR cf $WXDEST/wxWindows-${WXVER}-HTB.tar wxWindows-${WXVER}/*
-rm -f -r wxWindows-${WXVER}
-gzip $WXDEST/wxWindows-${WXVER}-HTB.tar
+rm -f wxWidgets-${WXVER}-HTB.tar
+$TAR cf $WXDEST/wxWidgets-${WXVER}-HTB.tar wxWidgets-${WXVER}/*
+rm -f -r wxWidgets-${WXVER}
+gzip $WXDEST/wxWidgets-${WXVER}-HTB.tar
 
 ### PDF docs
 cd $WXSRC
 cat $WXSRC/distrib/msw/wx_pdf.rsp > /tmp/pdf_in.txt
 expandlines /tmp/pdf_in.txt /tmp/pdf.txt
-$TAR cf $WXDEST/wxWindows-${WXVER}-PDF.tar -T /tmp/pdf.txt
+$TAR cf $WXDEST/wxWidgets-${WXVER}-PDF.tar -T /tmp/pdf.txt
 
 echo Re-tarring PDF in a subdirectory...
 cd $WXDEST
-mkdir wxWindows-${WXVER}
-cd wxWindows-${WXVER}
-$TAR xf ../wxWindows-${WXVER}-PDF.tar
+mkdir wxWidgets-${WXVER}
+cd wxWidgets-${WXVER}
+$TAR xf ../wxWidgets-${WXVER}-PDF.tar
 cd ..
-rm -f wxWindows-${WXVER}-PDF.tar
-$TAR cf $WXDEST/wxWindows-${WXVER}-PDF.tar wxWindows-${WXVER}/*
-rm -f -r wxWindows-${WXVER}
-gzip $WXDEST/wxWindows-${WXVER}-PDF.tar
+rm -f wxWidgets-${WXVER}-PDF.tar
+$TAR cf $WXDEST/wxWidgets-${WXVER}-PDF.tar wxWidgets-${WXVER}/*
+rm -f -r wxWidgets-${WXVER}
+gzip $WXDEST/wxWidgets-${WXVER}-PDF.tar
 }
 
 ### Tex2RTF
 #cd $WXSRC
 #cat $WXSRC/distrib/msw/tex2rtf.rsp > /tmp/tex2rtf_in.txt
 #expandlines /tmp/tex2rtf_in.txt /tmp/tex2rtf.txt
-#$TAR cf $WXDEST/wxWindows-${WXVER}-tex2rtf.tar -T /tmp/tex2rtf.txt
+#$TAR cf $WXDEST/wxWidgets-${WXVER}-tex2rtf.tar -T /tmp/tex2rtf.txt
 #
 #echo Re-tarring Tex2RTF in a subdirectory...
 #cd $WXDEST
-#mkdir wxWindows-${WXVER}
-#cd wxWindows-${WXVER}
-#$TAR xf ../wxWindows-${WXVER}-tex2rtf.tar
+#mkdir wxWidgets-${WXVER}
+#cd wxWidgets-${WXVER}
+#$TAR xf ../wxWidgets-${WXVER}-tex2rtf.tar
 #cd ..
-#rm -f wxWindows-${WXVER}-tex2rtf.tar
-#$TAR cf $WXDEST/wxWindows-${WXVER}-tex2rtf.tar wxWindows-${WXVER}/*
-#rm -f -r wxWindows-${WXVER}
-#gzip $WXDEST/wxWindows-${WXVER}-tex2rtf.tar
+#rm -f wxWidgets-${WXVER}-tex2rtf.tar
+#$TAR cf $WXDEST/wxWidgets-${WXVER}-tex2rtf.tar wxWidgets-${WXVER}/*
+#rm -f -r wxWidgets-${WXVER}
+#gzip $WXDEST/wxWidgets-${WXVER}-tex2rtf.tar
 
 ### OGL
 #cd $WXSRC
 #cat $WXSRC/distrib/msw/ogl.rsp > /tmp/ogl_in.txt
 #expandlines /tmp/ogl_in.txt /tmp/ogl.txt
-#$TAR cf $WXDEST/wxWindows-${WXVER}-ogl.tar -T /tmp/ogl.txt
+#$TAR cf $WXDEST/wxWidgets-${WXVER}-ogl.tar -T /tmp/ogl.txt
 #
 #echo Re-tarring OGL in a subdirectory...
 #cd $WXDEST
-#mkdir wxWindows-${WXVER}
-#cd wxWindows-${WXVER}
-#$TAR xf ../wxWindows-${WXVER}-ogl.tar
+#mkdir wxWidgets-${WXVER}
+#cd wxWidgets-${WXVER}
+#$TAR xf ../wxWidgets-${WXVER}-ogl.tar
 #cd ..
-#rm -f wxWindows-${WXVER}-ogl.tar
-#$TAR cf $WXDEST/wxWindows-${WXVER}-ogl.tar wxWindows-${WXVER}/*
-#rm -f -r wxWindows-${WXVER}
-#gzip $WXDEST/wxWindows-${WXVER}-ogl.tar
+#rm -f wxWidgets-${WXVER}-ogl.tar
+#$TAR cf $WXDEST/wxWidgets-${WXVER}-ogl.tar wxWidgets-${WXVER}/*
+#rm -f -r wxWidgets-${WXVER}
+#gzip $WXDEST/wxWidgets-${WXVER}-ogl.tar
 
 ### JPEG
 #cd $WXSRC
 #cat $WXSRC/distrib/msw/jpeg.rsp > /tmp/jpeg_in.txt
 #expandlines /tmp/jpeg_in.txt /tmp/jpeg.txt
-#$TAR cf $WXDEST/wxWindows-${WXVER}-jpeg.tar -T /tmp/jpeg.txt
+#$TAR cf $WXDEST/wxWidgets-${WXVER}-jpeg.tar -T /tmp/jpeg.txt
 #
 #echo Re-tarring jpeg in a subdirectory...
 #cd $WXDEST
-#mkdir wxWindows-${WXVER}
-#cd wxWindows-${WXVER}
-#$TAR xf ../wxWindows-${WXVER}-jpeg.tar
+#mkdir wxWidgets-${WXVER}
+#cd wxWidgets-${WXVER}
+#$TAR xf ../wxWidgets-${WXVER}-jpeg.tar
 #cd ..
-#rm -f wxWindows-${WXVER}-jpeg.tar
-#$TAR cf $WXDEST/wxWindows-${WXVER}-jpeg.tar wxWindows-${WXVER}/*
-#rm -f -r wxWindows-${WXVER}
-#gzip $WXDEST/wxWindows-${WXVER}-jpeg.tar
+#rm -f wxWidgets-${WXVER}-jpeg.tar
+#$TAR cf $WXDEST/wxWidgets-${WXVER}-jpeg.tar wxWidgets-${WXVER}/*
+#rm -f -r wxWidgets-${WXVER}
+#gzip $WXDEST/wxWidgets-${WXVER}-jpeg.tar
 
 ### TIFF
 #cd $WXSRC
 #cat $WXSRC/distrib/msw/tiff.rsp > /tmp/tiff_in.txt
 #expandlines /tmp/tiff_in.txt /tmp/tiff.txt
-#$TAR cf $WXDEST/wxWindows-${WXVER}-tiff.tar -T /tmp/tiff.txt
+#$TAR cf $WXDEST/wxWidgets-${WXVER}-tiff.tar -T /tmp/tiff.txt
 #
 #echo Re-tarring docs in a subdirectory...
 #cd $WXDEST
-#mkdir wxWindows-${WXVER}
-#cd wxWindows-${WXVER}
-#$TAR xf ../wxWindows-${WXVER}-tiff.tar
+#mkdir wxWidgets-${WXVER}
+#cd wxWidgets-${WXVER}
+#$TAR xf ../wxWidgets-${WXVER}-tiff.tar
 #cd ..
-#rm -f wxWindows-${WXVER}-tiff.tar
-#$TAR cf $WXDEST/wxWindows-${WXVER}-tiff.tar wxWindows-${WXVER}/*
-#rm -f -r wxWindows-${WXVER}
-#gzip $WXDEST/wxWindows-${WXVER}-tiff.tar
+#rm -f wxWidgets-${WXVER}-tiff.tar
+#$TAR cf $WXDEST/wxWidgets-${WXVER}-tiff.tar wxWidgets-${WXVER}/*
+#rm -f -r wxWidgets-${WXVER}
+#gzip $WXDEST/wxWidgets-${WXVER}-tiff.tar
 
 init=""
 if [ "$1" = "" ]
@@ -484,7 +484,7 @@ for i in "$@"; do
     esac
 done
 
-echo About to archive wxWindows:
+echo About to archive wxWidgets:
 echo   From    $WXSRC
 echo   To      $WXDEST
 echo   Version $WXVER

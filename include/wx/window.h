@@ -5,8 +5,8 @@
 // Modified by: Ron Lee
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) wxWindows team
-// Licence:     wxWindows licence
+// Copyright:   (c) wxWidgets team
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_WINDOW_H_BASE_
@@ -168,7 +168,7 @@ public:
     // window attributes
     // -----------------
 
-        // NB: in future versions of wxWindows Set/GetTitle() will only work
+        // NB: in future versions of wxWidgets Set/GetTitle() will only work
         //     with the top level windows (such as dialogs and frames) and
         //     Set/GetLabel() only with the other ones (i.e. all controls).
 

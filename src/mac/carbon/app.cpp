@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -739,15 +739,15 @@ void wxStAppResource::OpenSharedLibraryResource(const void *initBlock)
         NSModule    theModule;
         const char *theLibPath;
 
-        gSharedLibraryBundle = CFBundleGetBundleWithIdentifier(CFSTR("com.wxwindows.wxWindows"));
+        gSharedLibraryBundle = CFBundleGetBundleWithIdentifier(CFSTR("com.wxwindows.wxWidgets"));
         if (gSharedLibraryBundle != NULL) {
-            // wxWindows has been bundled into a framework
+            // wxWidgets has been bundled into a framework
             //   load the framework resources
 
             gSharedLibraryResource = CFBundleOpenBundleResourceMap(gSharedLibraryBundle);
         }
         else {
-            // wxWindows is a simple dynamic shared library
+            // wxWidgets is a simple dynamic shared library
             //   load the resources from the data fork of a separate resource file
             wxString theResPath;
             wxString theName;

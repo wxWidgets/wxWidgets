@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -551,7 +551,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         (gtk_minor_version == 2) &&
         (gtk_micro_version < 4))
     {
-        printf( "wxWindows warning: GUI threading disabled due to outdated GTK version\n" );
+        printf( "wxWidgets warning: GUI threading disabled due to outdated GTK version\n" );
     }
     else
     {

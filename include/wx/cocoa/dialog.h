@@ -6,7 +6,7 @@
 // Created:     2002/12/15
 // RCS-ID:      $Id:
 // Copyright:   David Elliott
-// Licence:   	wxWindows license
+// Licence:   	wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_COCOA_DIALOG_H_

@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ===========================================================================
@@ -742,7 +742,7 @@ wxMDIChildFrame::~wxMDIChildFrame()
 }
 
 // Set the client size (i.e. leave the calculation of borders etc.
-// to wxWindows)
+// to wxWidgets)
 void wxMDIChildFrame::DoSetClientSize(int width, int height)
 {
   HWND hWnd = GetHwnd();

@@ -992,7 +992,7 @@ distrib_clean:
 # VZ: the -only targets allow to do "make dist bzip-dist-only" without copying
 #     the files twice
 dist-only:
-	@echo "*** Creating wxWindows distribution in $(DISTDIR)..."
+	@echo "*** Creating wxWidgets distribution in $(DISTDIR)..."
 	@cd _dist_dir && tar ch $(DISTDIRNAME) | gzip -f9 > ../$(WXARCHIVE);
 	@if test "$(USE_GUI)" = 1; then \
 	cd $(DISTDIR); \
@@ -1007,7 +1007,7 @@ dist-only:
 	fi
 
 dist: @GUIDIST@
-	@echo "*** Creating wxWindows distribution in $(DISTDIR)..."
+	@echo "*** Creating wxWidgets distribution in $(DISTDIR)..."
 	@# now prune away a lot of the crap included by using cp -R
 	@# in other dist targets.
 	find $(DISTDIR) \( -name "CVS" -o -name ".cvsignore" -o -name "*.dsp" -o -name "*.dsw" -o -name "*.hh*" -o \
@@ -1027,7 +1027,7 @@ dist: @GUIDIST@
 	fi
 
 bzip-dist-only:
-	@echo "*** Creating wxWindows distribution in $(DISTDIR)..."
+	@echo "*** Creating wxWidgets distribution in $(DISTDIR)..."
 	@cd _dist_dir && tar ch $(DISTDIRNAME) | bzip2 -f9 > ../$(WXARCHIVE_BZIP);
 	@if test "$(USE_GUI)" = 1; then \
 	cd $(DISTDIR); \
@@ -1042,7 +1042,7 @@ bzip-dist-only:
 	fi
 
 bzip-dist: @GUIDIST@
-	@echo "*** Creating wxWindows distribution in $(DISTDIR)..."
+	@echo "*** Creating wxWidgets distribution in $(DISTDIR)..."
 	@cd _dist_dir && tar ch $(DISTDIRNAME) | bzip2 -f9 > ../$(WXARCHIVE_BZIP)
 	@if test "$(USE_GUI)" = 1; then \
 	cd $(DISTDIR); \
@@ -1056,7 +1056,7 @@ bzip-dist: @GUIDIST@
 
 # RR: Copy text and binary data separatly
 win-dist: MSW_ZIP_TEXT_DIST
-	@echo "*** Creating wxWindows ZIP distribution in $(DISTDIR)..."
+	@echo "*** Creating wxWidgets ZIP distribution in $(DISTDIR)..."
 	@cd _dist_dir && mv $(DISTDIRNAME) wxMSW
 	@cd _dist_dir && zip -r -l  ../$(WXARCHIVE_ZIP) *
 	cp $(INCDIR)/wx/msw/*.cur _dist_dir/wxMSW/include/wx/msw

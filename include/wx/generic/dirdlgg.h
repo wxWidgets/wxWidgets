@@ -9,7 +9,7 @@
 // Created:     21/3/2000
 // RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling, Harm van der Heijden, Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_DIRDLGG_H_

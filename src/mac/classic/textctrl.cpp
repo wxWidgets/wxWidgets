@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -1640,7 +1640,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                    }
                 }
 
-                // this will make wxWindows eat the ENTER key so that
+                // this will make wxWidgets eat the ENTER key so that
                 // we actually prevent line wrapping in a single line
                 // text control
                 eat_key = TRUE;

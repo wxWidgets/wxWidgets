@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     20.07.2003
 // RCS-ID:      $Id$
-// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
-// Licence:     wxWindows licence
+// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 /*
-   Renderers are used in wxWindows for two similar but different things:
+   Renderers are used in wxWidgets for two similar but different things:
     (a) wxUniversal uses them to draw everything, i.e. all the control
     (b) all the native ports use them to draw generic controls only
 

@@ -6,7 +6,7 @@
 // Created:     10/10/98
 // RCS-ID:      $Id$
 // Copyright:   (c) David Webster
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -196,7 +196,7 @@ wxString wxMenuItemBase::GetLabelFromText(
         {
             //
             // '~' is the escape character for OS/2PM and '&' is the one for
-            // wxWindows - skip both of them
+            // wxWidgets - skip both of them
             //
             continue;
         }

@@ -7,7 +7,7 @@
     <set var="file_common_samples_included">1</set>
     
     <!-- =============================================================== -->
-    <!--                    Template for wxWindows samples:              -->
+    <!--                    Template for wxWidgets samples:              -->
     <!-- =============================================================== -->
 
     <if cond="FORMAT=='autoconf'">

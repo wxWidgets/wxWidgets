@@ -6,7 +6,7 @@
 // Created:     09/21/99
 // RCS-ID:      $Id$
 // Copyright:   (c) David Webster
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ===========================================================================
@@ -70,7 +70,7 @@ static RECT        g_paintStruct;
 #ifdef __WXDEBUG__
     // a global variable which we check to verify that wxPaintDC are only
     // created in resopnse to WM_PAINT message - doing this from elsewhere is a
-    // common programming error among wxWindows programmers and might lead to
+    // common programming error among wxWidgets programmers and might lead to
     // very subtle and difficult to debug refresh/repaint bugs.
     int g_isPainting = 0;
 #endif // __WXDEBUG__
@@ -113,7 +113,7 @@ wxWindowDC::wxWindowDC(
     ::GpiAssociate(m_hPS, m_hDC);
 
     //
-    // Set the wxWindows color table
+    // Set the wxWidgets color table
     //
     if (!::GpiCreateLogColorTable( m_hPS
                                   ,0L
@@ -214,7 +214,7 @@ wxClientDC::wxClientDC(
                           ,PU_PELS | GPIF_LONG | GPIA_ASSOC
                          );
 
-    // Set the wxWindows color table
+    // Set the wxWidgets color table
     if (!::GpiCreateLogColorTable( m_hPS
                                   ,0L
                                   ,LCOLF_CONSECRGB

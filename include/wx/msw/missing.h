@@ -5,7 +5,7 @@
 // Created:     2002/04/23
 // RCS-ID:      $Id$
 // Copyright:   (c) 2002 Mattia Barbon
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MISSING_H_

@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -95,7 +95,7 @@ extern GtkContainerClass *pizza_parent_class;
 
 /*
    I have been asked several times about writing some documentation about
-   the GTK port of wxWindows, especially its internal structures. Obviously,
+   the GTK port of wxWidgets, especially its internal structures. Obviously,
    you cannot understand wxGTK without knowing a little about the GTK, but
    some more information about what the wxWindow, which is the base class
    for all other window classes, does seems required as well.
@@ -129,14 +129,14 @@ extern GtkContainerClass *pizza_parent_class;
 
    6) Display a border (sunken, raised, simple or none).
 
-   Normally one might expect, that one wxWindows window would always correspond
+   Normally one might expect, that one wxWidgets window would always correspond
    to one GTK widget. Under GTK, there is no such allround widget that has all
    the functionality. Moreover, the GTK defines a client area as a different
    widget from the actual widget you are handling. Last but not least some
    special classes (e.g. wxFrame) handle different categories of widgets and
    still have the possibility to draw something in the client area.
    It was therefore required to write a special purpose GTK widget, that would
-   represent a client area in the sense of wxWindows capable to do the jobs
+   represent a client area in the sense of wxWidgets capable to do the jobs
    2), 3) and 4). I have written this class and it resides in win_gtk.c of
    this directory.
 
@@ -165,18 +165,18 @@ extern GtkContainerClass *pizza_parent_class;
    one is (in the GTK sense) a child of the GtkScrolledWindow.
 
    If the m_wxwindow field is set, then all input to this widget is inter-
-   cepted and sent to the wxWindows class. If not, all input to the widget
+   cepted and sent to the wxWidgets class. If not, all input to the widget
    that gets pointed to by m_widget gets intercepted and sent to the class.
 
    II)
 
-   The design of scrolling in wxWindows is markedly different from that offered
+   The design of scrolling in wxWidgets is markedly different from that offered
    by the GTK itself and therefore we cannot simply take it as it is. In GTK,
    clicking on a scrollbar belonging to scrolled window will inevitably move
-   the window. In wxWindows, the scrollbar will only emit an event, send this
+   the window. In wxWidgets, the scrollbar will only emit an event, send this
    to (normally) a wxScrolledWindow and that class will call ScrollWindow()
    which actually moves the window and its subchildren. Note that GtkPizza
-   memorizes how much it has been scrolled but that wxWindows forgets this
+   memorizes how much it has been scrolled but that wxWidgets forgets this
    so that the two coordinates systems have to be kept in synch. This is done
    in various places using the pizza->xoffset and pizza->yoffset values.
 
@@ -1555,7 +1555,7 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
     if (gdk_event->button == 1)
     {
         // note that GDK generates triple click events which are not supported
-        // by wxWindows but still have to be passed to the app as otherwise
+        // by wxWidgets but still have to be passed to the app as otherwise
         // clicks would simply go missing
         switch (gdk_event->type)
         {
@@ -2688,7 +2688,7 @@ bool wxWindowGTK::Create( wxWindow *parent,
     gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "changed" );
 
     // these handlers block mouse events to any window during scrolling such as
-    // motion events and prevent GTK and wxWindows from fighting over where the
+    // motion events and prevent GTK and wxWidgets from fighting over where the
     // slider should be
 
     gtk_signal_connect( GTK_OBJECT(scrolledWindow->vscrollbar), "button_press_event",
@@ -2809,7 +2809,7 @@ void wxWindowGTK::PostCreation()
     {
         if (!m_noExpose)
         {
-            // these get reported to wxWindows -> wxPaintEvent
+            // these get reported to wxWidgets -> wxPaintEvent
 
             gtk_pizza_set_external( GTK_PIZZA(m_wxwindow), TRUE );
 
@@ -3916,7 +3916,7 @@ void wxWindowGTK::GtkSendPaintEvents()
 #ifndef __WXUNIVERSAL__
 #ifndef __WXGTK20__
     // The following code will result in all window-less widgets
-    // being redrawn because the wxWindows class is allowed to
+    // being redrawn because the wxWidgets class is allowed to
     // paint over the window-less widgets.
 
     GList *children = pizza->children;
@@ -4144,7 +4144,7 @@ void wxWindowGTK::SetWidgetStyle()
         static bool s_warningPrinted = FALSE;
         if (!s_warningPrinted)
         {
-            printf( "wxWindows warning: Widget styles disabled due to buggy GTK theme.\n" );
+            printf( "wxWidgets warning: Widget styles disabled due to buggy GTK theme.\n" );
             s_warningPrinted = TRUE;
         }
         m_widgetStyle = m_widget->style;

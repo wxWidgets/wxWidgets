@@ -1,14 +1,14 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        private.h
 // Purpose:     Private declarations: as this header is only included by
-//              wxWindows itself, it may contain identifiers which don't start
+//              wxWidgets itself, it may contain identifiers which don't start
 //              with "wx".
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_PRIVATE_H_

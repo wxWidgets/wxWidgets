@@ -6,7 +6,7 @@
 // Created:     Jan 22 1999
 // RCS-ID:
 // Copyright:   (c) 1999 Kevin Smith
-// Licence:           wxWindows licence
+// Licence:           wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)

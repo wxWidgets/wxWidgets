@@ -16,7 +16,7 @@ below.
 
 a) Do a fresh checkout using the command
 
-        cvs -d :pserver:anoncvs@cvs.wxwindows.org:/packs/cvsroots/wxwindows co wxGTK
+        cvs -d :pserver:anoncvs@cvs.wxwidgets.org:/packs/cvsroots/wxwidgets co wxGTK
 
    NB: if you realize later that some needed files were not checked out
        by this command, please modify CVSROOT/modules to include the missing
@@ -129,12 +129,12 @@ b) ftp://biolpc22.york.ac.uk/pub (Julian has the password)
 -------------------------
 
 a) FreshMeat:
-   - http://freshmeat.net/projects/wxwindowsgtk/
+   - http://freshmeat.net/projects/wxwidgetsgtk/
    - username and password are "wxgtk" for logging in
    - hit "new release" at the top
    - follow the step by step
 
-b) wx-announce mailing list: mailto:wx-announce@lists.wxwindows.org
+b) wx-announce mailing list: mailto:wx-announce@lists.wxwidgets.org
 
    [where is the announcement text? TODO]
 

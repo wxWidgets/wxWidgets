@@ -6,7 +6,7 @@
 // Created:     23/03/2001
 // RCS-ID:
 // Copyright:   (c) Markus Greither
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_FINDREPLACEDLG_H_

@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ===========================================================================
@@ -76,7 +76,7 @@ static PAINTSTRUCT g_paintStruct;
 #ifdef __WXDEBUG__
     // a global variable which we check to verify that wxPaintDC are only
     // created in resopnse to WM_PAINT message - doing this from elsewhere is a
-    // common programming error among wxWindows programmers and might lead to
+    // common programming error among wxWidgets programmers and might lead to
     // very subtle and difficult to debug refresh/repaint bugs.
     int g_isPainting = 0;
 #endif // __WXDEBUG__

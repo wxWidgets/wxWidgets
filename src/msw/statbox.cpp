@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -121,7 +121,7 @@ bool wxStaticBox::Create(wxWindow *parent,
     // FIXME: I still think that it isn't the right solution because the static
     //        boxes shouldn't have to be transparent if the redrawing was done
     //        right elsewhere - who ever had to make them transparent in non
-    //        wxWindows programs, after all? But for now it does fix a serious
+    //        wxWidgets programs, after all? But for now it does fix a serious
     //        problem (try resizing the sizers test screen in the layout sample
     //        after removing WS_EX_TRANSPARENT bit) and so let's use it until
     //        we fix the real underlying problem

@@ -6,7 +6,7 @@
 // Created:     29/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_VALIDATE_H_
@@ -86,7 +86,7 @@ WXDLLEXPORT_DATA(extern const wxValidator) wxDefaultValidator;
 #define wxVALIDATOR_PARAM(val) val
 
 #else // !wxUSE_VALIDATORS
-    // wxWindows is compiled without support for wxValidator, but we still
+    // wxWidgets is compiled without support for wxValidator, but we still
     // want to be able to pass wxDefaultValidator to the functions which take
     // a wxValidator parameter to avoid using "#if wxUSE_VALIDATORS"
     // everywhere

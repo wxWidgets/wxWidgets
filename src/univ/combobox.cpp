@@ -6,7 +6,7 @@
 // Created:     15.12.00
 // RCS-ID:      $Id$
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -280,7 +280,7 @@ wxComboControl::~wxComboControl()
 {
     // as the button and the text control are the parent's children and not
     // ours, we have to delete them manually - they are not deleted
-    // automatically by wxWindows when we're deleted
+    // automatically by wxWidgets when we're deleted
     delete m_btn;
     delete m_text;
 

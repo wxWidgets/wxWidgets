@@ -1,5 +1,5 @@
 #!/bin/sh
-# Makes the wxWindows tarballs with 'make dist'
+# Makes the wxWidgets tarballs with 'make dist'
 
 doupdatecvs()
 {
@@ -224,7 +224,7 @@ for i in "$@"; do
     esac
 done
 
-echo About to make wxWindows RPMs:
+echo About to make wxWidgets RPMs:
 echo   From    $WXSRC
 echo   To      $WXDEST
 echo   Version $WXVER

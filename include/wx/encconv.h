@@ -4,7 +4,7 @@
 //              font encodings
 // Author:      Vaclav Slavik
 // Copyright:   (c) 1999 Vaclav Slavik
-// Licence:     wxWindows Licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_ENCCONV_H_
@@ -87,7 +87,7 @@ class WXDLLIMPEXP_BASE wxEncodingConverter : public wxObject
             //
             // Returns FALSE if given conversion is impossible, TRUE otherwise
             // (conversion may be impossible either if you try to convert
-            // to Unicode with non-Unicode build of wxWindows or if input
+            // to Unicode with non-Unicode build of wxWidgets or if input
             // or output encoding is not supported.)
             bool Init(wxFontEncoding input_enc, wxFontEncoding output_enc, int method = wxCONVERT_STRICT);
 

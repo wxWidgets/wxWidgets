@@ -1,6 +1,6 @@
 /*
 
-This file was altered for needs of wxWindows.
+This file was altered for needs of wxWidgets.
 $Id$
 
 */

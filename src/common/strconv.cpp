@@ -7,7 +7,7 @@
 // RCS-ID:      $Id$
 // Copyright:   (c) 1999 Ove Kaaven, Robert Roebling, Vaclav Slavik
 //              (c) 2000-2003 Vadim Zeitlin
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -959,7 +959,7 @@ wxMBConv_iconv::wxMBConv_iconv(const wxChar *name)
             {
                 ms_wcCharsetName = NULL;
 
-                // VS: we must not output an error here, since wxWindows will safely
+                // VS: we must not output an error here, since wxWidgets will safely
                 //     fall back to using wxEncodingConverter.
                 wxLogTrace(wxT("strconv"), wxT("Impossible to convert to/from charset '%s' with iconv, falling back to wxEncodingConverter."), name);
                 //wxLogError(

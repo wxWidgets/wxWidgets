@@ -6,7 +6,7 @@
 // Created:     31.01.99
 // RCS-ID:      $Id$
 // Copyright:   (c) 1999 Robert Roebling, Vadim Zeitlin, Stefan Csomor
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 

@@ -1,4 +1,4 @@
-Announcing wxWidgets 2.5.1: a cross-platform GUI toolkit
+Announcing wxWidgets 2.5.2: a cross-platform GUI toolkit
 ----------------------------------------------------------------
 
 February 24th, 2004 -- the wxWidgets team is pleased to announce

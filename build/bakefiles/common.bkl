@@ -16,7 +16,7 @@
     <include file="plugins_deps.bkl"/>
     
     <!-- ================================================================== -->
-    <!--                     wxWindows version numbers:                     -->
+    <!--                     wxWidgets version numbers:                     -->
     <!-- ================================================================== -->
 
     <set var="WXVER_MAJOR">$(wxwin.getVersionMajor())</set>
@@ -260,7 +260,7 @@
         <libname>$(id)$(WXDEBUGFLAG)$(HOST_SUFFIX)</libname>
         <!--
         we want to install 3rd party libs system-wide only with static
-        version of wxWindows; otherwise they are embedded in shared libs:
+        version of wxWidgets; otherwise they are embedded in shared libs:
         -->
         <install-if>SHARED=='0'</install-if>
         <pic>$(substituteFromDict(SHARED, {'0':'off', '1':'on'}))</pic>
@@ -323,7 +323,7 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
 
     
     <!-- =============================================================== -->
-    <!--                  Templates for wxWindows libs:                  -->
+    <!--                  Templates for wxWidgets libs:                  -->
     <!-- =============================================================== -->
 
     <template id="wx" template="common_settings">
@@ -493,7 +493,7 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
     </template>
                            
     <!-- =============================================================== -->
-    <!--             Templates for building wxWindows plugins:           -->
+    <!--             Templates for building wxWidgets plugins:           -->
     <!-- =============================================================== -->
 
     <if cond="WX_STABLE_BRANCH=='1'">
@@ -555,7 +555,7 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
     </define-rule>
     
     <!-- =============================================================== -->
-    <!--               Support for wxWindows samples and contrib:        -->
+    <!--               Support for wxWidgets samples and contrib:        -->
     <!-- =============================================================== -->
 
     <!-- Link against one wxWin library. Value must be literal! -->

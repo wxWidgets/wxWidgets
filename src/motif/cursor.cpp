@@ -6,7 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:   	wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -57,7 +57,7 @@ public:
     ~wxCursorRefData();
     
     wxXCursorList m_cursors;  // wxXCursor objects, one per display
-    wxStockCursor m_cursorId; // wxWindows standard cursor id
+    wxStockCursor m_cursorId; // wxWidgets standard cursor id
 };
 
 #define M_CURSORDATA ((wxCursorRefData *)m_refData)

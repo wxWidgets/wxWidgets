@@ -80,11 +80,11 @@ It is available in Sun Open Look, Motif, Windows 3.1, Windows 95/NT, and
 non-GUI UNIX versions.
 
 Tex2RTF was developed using the free Open Look, Motif and Windows 3.1
-C++ class library \popref{wxWindows}{wxwindows}.
+C++ class library \popref{wxWidgets}{wxwidgets}.
 
 \section{Status of Tex2RTF}\index{status of Tex2RTF}%
 
-Windows HTML help, and wxWindows 2 wxHTML help, are now catered for using
+Windows HTML help, and wxWidgets 2 wxHTML help, are now catered for using
 the htmlWorkshopFiles setting.
 
 Tex2RTF is very rarely updated these days: it would be nice to
@@ -671,8 +671,8 @@ each line with three fields separated by bar characters: the indexed phrase, the
 
 \twocolitem{\inioption{htmlWorkshopFiles}}{If true, specifies generation of {\tt .hpp, .hhc} and {\tt .hhk} files
 which can be used to create both MS HTML Help and wxHTML Help files. wxHTML Help
-is the HTML help facility that can be used by wxWindows 2 applications (see the wxWindows manual
-and the wxWindows HTML sample).}
+is the HTML help facility that can be used by wxWidgets 2 applications (see the wxWidgets manual
+and the wxWidgets HTML sample).}
 \twocolitem{\inioption{upperCaseNames}}{If true, filenames in links are in upper case. By default
 filenames are in lower case.}
 \twocolitem{\inioption{backgroundColour}}{Specifies the RGB background colour for the document, e.g. {\tt 255;255;255} for white.
@@ -725,7 +725,7 @@ The following DDE commands may be used:
 Since Tex2RTF reads the whole file into memory, a lot of memory is needed.
 For very large documents, 16MB of RAM is adviseable.
 
-I tested conversion of the wxWindows 1.63 manual on both VC++ 1.5 and
+I tested conversion of the wxWidgets 1.63 manual on both VC++ 1.5 and
 Watcom WIN32s versions of Tex2RTF, both running under Windows 3.11 on a
 Gateway P60 with 16MB of RAM and a 2MB disk cache. Two passes were
 made, with 1.5MB of WinHelp RTF being generated. The unoptimized 16-bit
@@ -795,7 +795,7 @@ hypertext format.
 commonly used by documents in the World Wide Web distributed hypertext
 system, and formats text dynamically rather like Windows Help.
 \item wxHelp\index{wxHelp}. This is the platform-independent help system for
-the class library wxWindows (see the wxWindows User Manual \cite{smart93a}).
+the class library wxWidgets (see the wxWidgets User Manual \cite{smart93a}).
 It can display ASCII files with embedded codes
 for changing font styles, but no formatting is done by wxHelp.
 \end{itemize}
@@ -1301,7 +1301,7 @@ can handle. Since spacing is passed through to the output, you need to
 format your input document appropriately, with lines of reasonable length.
 
 The generated xlp file is an ASCII file that can be read directly by
-wxHelp, the generic wxWindows help viewer.
+wxHelp, the generic wxWidgets help viewer.
 
 \chapter{Command reference}\index{command reference}%
 \setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
@@ -2294,17 +2294,17 @@ This is an example of making a glossary in a report:
     \gloss{API}\label{api}
 
     Application Programmer's Interface - a set of calls and
-    classes defining how a library (in this case, wxWindows)
+    classes defining how a library (in this case, wxWidgets)
     can be used.
 
     \gloss{Canvas}\label{canvas}
 
-    A canvas in XView and wxWindows is a subwindow...
+    A canvas in XView and wxWidgets is a subwindow...
 
     \gloss{DDE}\label{dde}
 
     Dynamic Data Exchange - Microsoft's interprocess
-    communication protocol. wxWindows provides an abstraction
+    communication protocol. wxWidgets provides an abstraction
     of DDE under both Windows and UNIX.
 
     \end{helpglossary}
@@ -2387,7 +2387,7 @@ Note that only RGB-encoded Windows bitmaps, or placeable metafiles, are
 valid for input to Tex2RTF. You can convert a RLE (run length encoded)
 bitmap file into a (bigger) RGB file using a program such as Paintshop
 Pro. A placeable metafile has a special header with dimension
-information. One may be constructed by a wxWindows program by calling
+information. One may be constructed by a wxWidgets program by calling
 the function wxMakeMetafilePlaceable. The Microsoft Windows SDK has a
 sample program that loads and steps through placeable and ordinary
 metafiles.
@@ -2807,7 +2807,7 @@ is given following the text.
 Example:
 
 \begin{verbatim}
-    See also the \urlref{wxWindows manual}
+    See also the \urlref{wxWidgets manual}
       {http://www.aiai.ed.ac.uk/~jacs.html}.
 \end{verbatim}
 
@@ -3285,14 +3285,14 @@ input to the Windows Help compiler.
 \gloss{wxHelp}\label{wxhelp}
 
 wxHelp is the hypertext help facility used to provide on-line
-documentation for UNIX-based wxWindows applications. Under Windows 3.1,
+documentation for UNIX-based wxWidgets applications. Under Windows 3.1,
 Windows Help is used instead.
 
-\gloss{wxWindows}\label{wxwindows}
+\gloss{wxWidgets}\label{wxwidgets}
 
-wxWindows is a free C++ toolkit for writing applications that are
+wxWidgets is a free C++ toolkit for writing applications that are
 portable across several platforms. Currently these are Motif, Open Look,
-Windows 3.1 and Windows NT. Tex2RTF is written using wxWindows.
+Windows 3.1 and Windows NT. Tex2RTF is written using wxWidgets.
 
 \end{helpglossary}
 

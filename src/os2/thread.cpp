@@ -7,7 +7,7 @@
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Neis (2003)
 //
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -62,7 +62,7 @@ static ULONG                        s_ulIdMainThread = 1;
 wxMutex*                            p_wxMainMutex;
 
 // OS2 substitute for Tls pointer the current parent thread object
-wxThread*                           m_pThread;    // pointer to the wxWindows thread object
+wxThread*                           m_pThread;    // pointer to the wxWidgets thread object
 
 // if it's FALSE, some secondary thread is holding the GUI lock
 static bool gs_bGuiOwnedByMainThread = TRUE;
@@ -383,7 +383,7 @@ public:
 private:
     // Threads in OS/2 have only an ID, so m_hThread is both it's handle and ID
     // PM also has no real Tls mechanism to index pointers by so we'll just
-    // keep track of the wxWindows parent object here.
+    // keep track of the wxWidgets parent object here.
     TID                             m_hThread;    // handle and ID of the thread
     wxThreadState                   m_eState;     // state, see wxThreadState enum
     unsigned int                    m_nPriority;  // thread priority in "wx" units
@@ -443,7 +443,7 @@ void wxThreadInternal::SetPriority(
   unsigned int                      nPriority
 )
 {
-    // translate wxWindows priority to the PM one
+    // translate wxWidgets priority to the PM one
     ULONG                           ulOS2_PriorityClass;
     ULONG                           ulOS2_SubPriority;
     ULONG                           ulrc;

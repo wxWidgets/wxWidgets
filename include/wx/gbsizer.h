@@ -8,7 +8,7 @@
 // Created:     03-Nov-2003
 // RCS-ID:      $Id$
 // Copyright:   (c) Robin Dunn
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WXGBSIZER_H__

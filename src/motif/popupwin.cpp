@@ -6,7 +6,7 @@
 // Created:     28.08.03
 // RCS-ID:      $Id$
 // Copyright:   (c) Mattia barbon
-// Licence:   	wxWindows licence
+// Licence:   	wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)

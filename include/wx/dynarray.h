@@ -6,7 +6,7 @@
 // Created:     12.09.97
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef   _DYNARRAY_H
@@ -612,7 +612,7 @@ private:                                                                 \
 // same except that they use an additional __declspec(dllexport) or equivalent
 // under Windows if needed.
 //
-// The first (just EXPORTED) macros do it if wxWindows was compiled as a DLL
+// The first (just EXPORTED) macros do it if wxWidgets was compiled as a DLL
 // and so must be used used inside the library. The second kind (USER_EXPORTED)
 // allow the user code to do it when it wants. This is needed if you have a dll
 // that wants to export a wxArray daubed with your own import/export goo.

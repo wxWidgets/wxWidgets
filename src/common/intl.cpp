@@ -1,13 +1,13 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/common/intl.cpp
-// Purpose:     Internationalization and localisation for wxWindows
+// Purpose:     Internationalization and localisation for wxWidgets
 // Author:      Vadim Zeitlin
 // Modified by: Michael N. Filippov <michael@idisys.iae.nsk.su>
 //              (2003/09/30 - PluralForms support)
 // Created:     29/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -55,7 +55,7 @@
   #include <langinfo.h>
 #endif
 
-// wxWindows
+// wxWidgets
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/intl.h"
@@ -1450,7 +1450,7 @@ bool wxLocale::Init(const wxChar *szName,
   // save the old locale to be able to restore it later
   m_pOldLocale = wxSetLocale(this);
 
-  // load the default catalog with wxWindows standard messages
+  // load the default catalog with wxWidgets standard messages
   m_pMsgCat = NULL;
   bool bOk = TRUE;
   if ( bLoadDefault )
@@ -2227,7 +2227,7 @@ wxFontEncoding wxLocale::GetSystemEncoding()
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
     UINT codepage = ::GetACP();
 
-    // wxWindows only knows about CP1250-1257, 932, 936, 949, 950
+    // wxWidgets only knows about CP1250-1257, 932, 936, 949, 950
     if ( codepage >= 1250 && codepage <= 1257 )
     {
         return (wxFontEncoding)(wxFONTENCODING_CP1250 + codepage - 1250);

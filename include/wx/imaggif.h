@@ -4,7 +4,7 @@
 // Author:      Vaclav Slavik & Guillermo Rodriguez Garcia
 // RCS-ID:      $Id$
 // Copyright:   (c) Guillermo Rodriguez Garcia
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_IMAGGIF_H_

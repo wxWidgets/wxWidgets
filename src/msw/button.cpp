@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -285,7 +285,7 @@ wxSize wxButtonBase::GetDefaultSize()
    NB: all this is quite complicated by now and the worst is that normally
        it shouldn't be necessary at all as for the normal Windows programs
        DefWindowProc() and IsDialogMessage() take care of all this
-       automatically -- however in wxWindows programs this doesn't work for
+       automatically -- however in wxWidgets programs this doesn't work for
        nested hierarchies (i.e. a notebook inside a notebook) for unknown
        reason and so we have to reproduce all this code ourselves. It would be
        very nice if we could avoid doing it.
@@ -298,7 +298,7 @@ void wxButton::SetDefault()
 
     wxCHECK_RET( parent, _T("button without parent?") );
 
-    // set this one as the default button both for wxWindows ...
+    // set this one as the default button both for wxWidgets ...
     wxWindow *winOldDefault = parent->SetDefaultItem(this);
 
     // ... and Windows

@@ -6,7 +6,7 @@
 // Created:     2002/12/03
 // RCS-ID:      $Id:
 // Copyright:   (c) 2002 David Elliott <dfe@cox.net>
-// Licence:     wxWindows license
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_COCOA_OBJC_ASSOCIATE_H__
@@ -58,7 +58,7 @@ public: \
 WX_IMPLEMENT_OBJC_INTERFACE_HASHMAP(ObjcClass)
 
 /*-------------------------------------------------------------------------
-Stuff to be used by the wxWindows class (not the Cocoa interface)
+Stuff to be used by the wxWidgets class (not the Cocoa interface)
 -------------------------------------------------------------------------*/
 #define WX_DECLARE_COCOA_OWNER(ObjcClass,ObjcBase,ObjcRoot) \
 public: \

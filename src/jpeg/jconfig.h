@@ -10,7 +10,7 @@
 /* jconfig.cfg --- source file edited by configure script */
 /* see jconfig.doc for explanations */
 
-/* use wxWindows' configure */
+/* use wxWidgets' configure */
 #ifdef __MWERKS__
 #if (__MWERKS__ < 0x0900) || macintosh || defined ( __MACH__ )
     #define __WXMAC__
@@ -36,7 +36,7 @@
 #undef void
 #undef const
 
-/* use wxWindows' configure */
+/* use wxWidgets' configure */
 /* #undef CHAR_IS_UNSIGNED */
 #ifdef __CHAR_UNSIGNED__
   #ifndef CHAR_IS_UNSIGNED
@@ -59,7 +59,7 @@
 
 #undef RIGHT_SHIFT_IS_UNSIGNED
 
-/* use wxWindows' configure */
+/* use wxWidgets' configure */
 /* #define INLINE __inline__ */
 #if defined(__VISAGECPP__) && (__IBMCPP__ >= 400 || __IBMC__ >= 400)
 #define INLINE

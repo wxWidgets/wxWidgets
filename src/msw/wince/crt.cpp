@@ -6,7 +6,7 @@
 // Created:     03.04.04
 // RCS-ID:
 // Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwindows.org>
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
@@ -53,7 +53,7 @@ void abort()
     if ( wxTheApp )
         name = wxTheApp->GetAppName();
     if ( name.empty() )
-        name = L"wxWindows Application";
+        name = L"wxWidgets Application";
 
     MessageBox(NULL, L"Abnormal program termination", name, MB_ICONHAND | MB_OK);
 

@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -939,7 +939,7 @@ void wxPrintDialogData::ConvertFromNative()
     }
 
     // Now convert the DEVMODE object, passed down from the PRINTDLG object,
-    // into wxWindows form.
+    // into wxWidgets form.
     m_printData.ConvertFromNative();
 
     m_printFromPage = pd->nFromPage;

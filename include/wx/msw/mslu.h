@@ -6,7 +6,7 @@
 // Created:     2002/02/17
 // RCS-ID:      $Id$
 // Copyright:   (c) 2002 Vaclav Slavik
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MSLU_H_

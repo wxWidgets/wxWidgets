@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:     The wxWindows licence
+// Licence:     The wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/defs.h"
@@ -36,7 +36,7 @@
 
 // since we have decided that we only support 8.6 upwards we are
 // checking for these minimum requirements in the startup code of
-// the application so all wxWindows code can safely assume that appearance 1.1
+// the application so all wxWidgets code can safely assume that appearance 1.1
 // windows manager, control manager, navigation services etc. are
 // present
 

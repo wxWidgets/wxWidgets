@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:       wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // We don't put main() in the library any more. GD.

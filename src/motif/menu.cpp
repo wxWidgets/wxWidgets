@@ -6,7 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -542,7 +542,7 @@ WXWidget wxMenu::CreateMenu (wxMenuBar * menuBar, WXWidget parent, wxMenu * topM
 }
 
 // Destroys the Motif implementation of the menu,
-// but maintains the wxWindows data structures so we can
+// but maintains the wxWidgets data structures so we can
 // do a CreateMenu again.
 void wxMenu::DestroyMenu (bool full)
 {

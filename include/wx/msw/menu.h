@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MENU_H_
@@ -207,7 +207,7 @@ protected:
     WXHMENU       m_hMenu;
 
     // Return the MSW position for a wxMenu which is sometimes different from
-    // the wxWindows position.
+    // the wxWidgets position.
     int MSWPositionForWxMenu(wxMenu *menu, int wxpos);
 #if wxUSE_ACCEL
     // the accelerator table for all accelerators in all our menus

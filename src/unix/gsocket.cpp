@@ -5,7 +5,7 @@
  *          Guilhem Lavaux,
  *          Guillermo Rodriguez Garcia <guille@iies.es>
  * Purpose: GSocket main Unix and OS/2 file
- * Licence: The wxWindows licence
+ * Licence: The wxWidgets licence
  * CVSID:   $Id$
  * -------------------------------------------------------------------------
  */

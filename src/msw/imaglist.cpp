@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -327,7 +327,7 @@ static HBITMAP GetMaskForImage(const wxBitmap& bitmap, const wxBitmap& mask)
         hbmpMask = (HBITMAP)pMask->GetMaskBitmap();
     }
 
-    // windows mask convention is opposite to the wxWindows one
+    // windows mask convention is opposite to the wxWidgets one
     HBITMAP hbmpMaskInv = wxInvertMask(hbmpMask);
 
     if ( deleteMask )

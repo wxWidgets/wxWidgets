@@ -6,7 +6,7 @@
 // Created:     20.09.01
 // RCS-ID:      $Id$
 // Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MSW_TOPLEVEL_H_
@@ -100,7 +100,7 @@ protected:
     // common part of Iconize(), Maximize() and Restore()
     void DoShowWindow(int nShowCmd);
 
-    // translate wxWindows flags to Windows ones
+    // translate wxWidgets flags to Windows ones
     virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle) const;
 
     // choose the right parent to use with CreateWindow()

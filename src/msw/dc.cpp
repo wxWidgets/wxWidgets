@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ===========================================================================
@@ -224,7 +224,7 @@ wxColourChanger::wxColourChanger(wxDC& dc) : m_dc(dc)
         m_colFgOld = ::GetTextColor(hdc);
         m_colBgOld = ::GetBkColor(hdc);
 
-        // note that Windows convention is opposite to wxWindows one, this is
+        // note that Windows convention is opposite to wxWidgets one, this is
         // why text colour becomes the background one and vice versa
         const wxColour& colFg = dc.GetTextForeground();
         if ( colFg.Ok() )
@@ -1082,7 +1082,7 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
         // use MaskBlt() with ROP which doesn't do anything to dst in the mask
         // points
         // On some systems, MaskBlt succeeds yet is much much slower
-        // than the wxWindows fall-back implementation. So we need
+        // than the wxWidgets fall-back implementation. So we need
         // to be able to switch this on and off at runtime.
         bool ok = false;
 #if wxUSE_SYSTEM_OPTIONS
@@ -1973,7 +1973,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
         // of the mask which is also contrary to the Windows one)
 
         // On some systems, MaskBlt succeeds yet is much much slower
-        // than the wxWindows fall-back implementation. So we need
+        // than the wxWidgets fall-back implementation. So we need
         // to be able to switch this on and off at runtime.
 #if wxUSE_SYSTEM_OPTIONS
         if (wxSystemOptions::GetOptionInt(wxT("no-maskblt")) == 0)
@@ -2228,7 +2228,7 @@ wxSize wxDC::GetPPI() const
     return wxSize(x, y);
 }
 
-// For use by wxWindows only, unless custom units are required.
+// For use by wxWidgets only, unless custom units are required.
 void wxDC::SetLogicalScale(double x, double y)
 {
     WXMICROWIN_CHECK_HDC

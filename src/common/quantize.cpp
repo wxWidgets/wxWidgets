@@ -6,7 +6,7 @@
 // Created:     22/6/2000
 // RCS-ID:      $Id$
 // Copyright:   (c) Thomas G. Lane, Vaclav Slavik, Julian Smart
-// Licence:     wxWindows licence + JPEG library licence
+// Licence:     wxWidgets licence + JPEG library licence
 /////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -1578,7 +1578,7 @@ bool wxQuantize::Quantize(const wxImage& src, wxImage& dest,
         delete[] data8bit;
 
 #if wxUSE_PALETTE
-    // Make a wxWindows palette
+    // Make a wxWidgets palette
     if (pPalette)
     {
         unsigned char* r = new unsigned char[256];

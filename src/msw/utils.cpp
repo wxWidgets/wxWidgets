@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -104,7 +104,7 @@
 // ----------------------------------------------------------------------------
 
 // In the WIN.INI file
-static const wxChar WX_SECTION[] = wxT("wxWindows");
+static const wxChar WX_SECTION[] = wxT("wxWidgets");
 static const wxChar eUSERNAME[]  = wxT("UserName");
 
 // ============================================================================
@@ -255,7 +255,7 @@ bool wxGetUserId(wxChar *buf, int maxSize)
     if (  (user = wxGetenv(wxT("USER"))) == NULL &&
             (user = wxGetenv(wxT("LOGNAME"))) == NULL )
     {
-        // Use wxWindows configuration data (comming soon)
+        // Use wxWidgets configuration data (comming soon)
         GetProfileString(WX_SECTION, eUSERID, default_id, buf, maxSize - 1);
     }
     else
@@ -340,7 +340,7 @@ error:
     return FALSE;
 #else  // !USE_NET_API
     // Could use NIS, MS-Mail or other site specific programs
-    // Use wxWindows configuration data
+    // Use wxWidgets configuration data
     bool ok = GetProfileString(WX_SECTION, eUSERNAME, wxEmptyString, buf, maxSize - 1) != 0;
     if ( !ok )
     {
@@ -1197,7 +1197,7 @@ extern long wxCharsetToCodepage(const wxChar *name)
   Creates a hidden window with supplied window proc registering the class for
   it if necesssary (i.e. the first time only). Caller is responsible for
   destroying the window and unregistering the class (note that this must be
-  done because wxWindows may be used as a DLL and so may be loaded/unloaded
+  done because wxWidgets may be used as a DLL and so may be loaded/unloaded
   multiple times into/from the same process so we cna't rely on automatic
   Windows class unregistration).
 

@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_LISTCTRL_H_
@@ -57,7 +57,7 @@
     which item. Each image in an image list can contain a mask, and can be made out
     of either a bitmap, two bitmaps or an icon. See ImagList.h for more details.
 
-    Notifications are passed via the wxWindows 2.0 event system.
+    Notifications are passed via the wxWidgets 2.0 event system.
 
     See the sample wxListCtrl app for API usage.
 
@@ -285,7 +285,7 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   // Returns the item or -1 if unsuccessful.
   long GetNextItem(long item, int geometry = wxLIST_NEXT_ALL, int state = wxLIST_STATE_DONTCARE) const ;
 
-  // Implementation: converts wxWindows style to MSW style.
+  // Implementation: converts wxWidgets style to MSW style.
   // Can be a single style flag or a bit list.
   // oldStyle is 'normalised' so that it doesn't contain
   // conflicting styles.

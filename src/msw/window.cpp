@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ===========================================================================
@@ -984,7 +984,7 @@ void wxWindowMSW::SubclassWin(WXHWND hWnd)
     {
         // don't bother restoring it neither: this also makes it easy to
         // implement IsOfStandardClass() method which returns true for the
-        // standard controls and false for the wxWindows own windows as it can
+        // standard controls and false for the wxWidgets own windows as it can
         // simply check m_oldWndProc
         m_oldWndProc = NULL;
     }
@@ -1116,7 +1116,7 @@ void wxWindowMSW::SetWindowStyleFlag(long flags)
 
 WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
 {
-    // translate common wxWindows styles to Windows ones
+    // translate common wxWidgets styles to Windows ones
 
     // most of windows are child ones, those which are not (such as
     // wxTopLevelWindow) should remove WS_CHILD in their MSWGetStyle()
@@ -2142,7 +2142,7 @@ void wxWindowMSW::UnpackMenuSelect(WXWPARAM wParam, WXLPARAM lParam,
 }
 
 // ---------------------------------------------------------------------------
-// Main wxWindows window proc and the window proc for wxWindow
+// Main wxWidgets window proc and the window proc for wxWindow
 // ---------------------------------------------------------------------------
 
 // Hook for new window just as it's being created, when the window isn't yet
@@ -3026,7 +3026,7 @@ bool wxWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
     /*
       NB: there used to be some code here which set the initial size of the
           window to the client size of the parent if no explicit size was
-          specified. This was wrong because wxWindows programs often assume
+          specified. This was wrong because wxWidgets programs often assume
           that they get a WM_SIZE (EVT_SIZE) upon creation, however this broke
           it. To see why, you should understand that Windows sends WM_SIZE from
           inside ::CreateWindow() anyhow. However, ::CreateWindow() is called
@@ -3035,7 +3035,7 @@ bool wxWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
           event goes to some base class OnSize() instead). So the WM_SIZE we
           rely on is the one sent when the parent frame resizes its children
           but here is the problem: if the child already has just the right
-          size, nothing will happen as both wxWindows and Windows check for
+          size, nothing will happen as both wxWidgets and Windows check for
           this and ignore any attempts to change the window size to the size it
           already has - so no WM_SIZE would be sent.
      */
@@ -3045,7 +3045,7 @@ bool wxWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
     //
     //  1. it results in huge frames on modern screens (1000*800 is not
     //     uncommon on my 1280*1024 screen) which is way too big for a half
-    //     empty frame of most of wxWindows samples for example)
+    //     empty frame of most of wxWidgets samples for example)
     //
     //  2. it is buggy for frames with wxFRAME_TOOL_WINDOW style for which
     //     the default is for whatever reason 8*8 which breaks client <->

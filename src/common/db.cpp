@@ -18,16 +18,16 @@
 // Created:     9.96
 // RCS-ID:      $Id$
 // Copyright:   (c) 1996 Remstar International, Inc.
-// Licence:     wxWindows licence, plus:
+// Licence:     wxWidgets licence, plus:
 // Notice:      This class library and its intellectual design are free of charge for use,
 //              modification, enhancement, debugging under the following conditions:
 //              1) These classes may only be used as part of the implementation of a
-//                 wxWindows-based application
-//              2) All enhancements and bug fixes are to be submitted back to the wxWindows
-//                 user groups free of all charges for use with the wxWindows library.
+//                 wxWidgets-based application
+//              2) All enhancements and bug fixes are to be submitted back to the wxWidgets
+//                 user groups free of all charges for use with the wxWidgets library.
 //              3) These classes may not be distributed as part of any other class library,
 //                 DLL, text (written or electronic), other than a complete distribution of
-//                 the wxWindows GUI development toolkit.
+//                 the wxWidgets GUI development toolkit.
 ///////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -2917,7 +2917,7 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, int *numCols, const wxCh
 #ifdef __WXDEBUG__
                         default:
                             wxString errMsg;
-                            errMsg.Printf(wxT("SQL Data type %d currently not supported by wxWindows"), colInf[colNo].sqlDataType);
+                            errMsg.Printf(wxT("SQL Data type %d currently not supported by wxWidgets"), colInf[colNo].sqlDataType);
                             wxLogDebug(errMsg,wxT("ODBC DEBUG MESSAGE"));
 #endif
                     }

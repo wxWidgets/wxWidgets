@@ -4,7 +4,7 @@
 <makefile>
 
     <!--
-    Support for application bundles, for wxWindows samples.
+    Support for application bundles, for wxWidgets samples.
     -->
     
     <!-- 
@@ -61,7 +61,7 @@
                 <!-- make a hardlink to the binary: -->
                 ln -f $(ref("__targetdir",id))$(ref("__targetname",id)) $(BUNDLE)/MacOS/$(id)
 
-                <!-- ditto wxWindows resources and icons: -->
+                <!-- ditto wxWidgets resources and icons: -->
                 cp -f $(BUNDLE_RESOURCE) $(BUNDLE)/Resources/$(id).rsrc
                 cp -f $(BUNDLE_ICONS) $(BUNDLE)/Resources/wxmac.icns
             </command>            

@@ -6,7 +6,7 @@
 // Created:     30.08.00
 // RCS-ID:      $Id$
 // Copyright:   (c) 2000 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_SCROLWIN_H_BASE_
@@ -51,7 +51,7 @@ public:
     virtual void GetScrollPixelsPerUnit(int *pixelsPerUnitX,
                                         int *pixelsPerUnitY) const;
 
-    // Enable/disable Windows scrolling in either direction. If TRUE, wxWindows
+    // Enable/disable Windows scrolling in either direction. If TRUE, wxWidgets
     // scrolls the canvas and only a bit of the canvas is invalidated; no
     // Clear() is necessary. If FALSE, the whole canvas is invalidated and a
     // Clear() is necessary. Disable for when the scroll increment is used to

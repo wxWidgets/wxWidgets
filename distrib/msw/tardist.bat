@@ -1,5 +1,5 @@
 @echo off
-rem Tar up an external distribution of wxWindows 2.0: but
+rem Tar up an external distribution of wxWidgets 2.0: but
 rem putting in separate ASCII and binary files
 rem This seems to be the one that works, using
 rem separate tar programs for conversion/non-conversion
@@ -7,7 +7,7 @@ rem of ASCII/binary files.
 
 if "%1" == "" goto usage
 if "%2" == "" goto usage
-echo About to archive an external wxWindows 2.0 distribution:
+echo About to archive an external wxWidgets 2.0 distribution:
 echo   From   %1
 echo   To     %2\wx200_1.tgz, %2\wx200_2.tgz, %2\wx200hlp.tgz, %2\wx200ps.tgz, %2\wx200htm.tgz
 echo CTRL-C if this is not correct.
@@ -104,11 +104,11 @@ gzip32 %2\wx200pdf.tar
 ren %2\wx200pdf.tar.gz %2\wx200pdf.tgz
 
 cd %2
-echo wxWindows archived.
+echo wxWidgets archived.
 goto end
 
 :usage
-echo Tar/gzip wxWindows distribution under DOS, making an ASCII and binary file
+echo Tar/gzip wxWidgets distribution under DOS, making an ASCII and binary file
 echo Usage: tardist source destination
 echo e.g. tardist d:\wx d:\wx\deliver
 

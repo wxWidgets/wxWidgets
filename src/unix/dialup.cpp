@@ -1,12 +1,12 @@
 // -*- c++ -*- ////////////////////////////////////////////////////////////////
 // Name:        unix/dialup.cpp
-// Purpose:     Network related wxWindows classes and functions
+// Purpose:     Network related wxWidgets classes and functions
 // Author:      Karsten Ballüder
 // Modified by:
 // Created:     03.10.99
 // RCS-ID:      $Id$
 // Copyright:   (c) Karsten Ballüder
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)

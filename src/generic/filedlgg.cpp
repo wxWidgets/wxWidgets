@@ -6,7 +6,7 @@
 // Created:     12/12/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -873,9 +873,9 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
 
     if (wxConfig::Get(FALSE))
     {
-        wxConfig::Get()->Read(wxT("/wxWindows/wxFileDialog/ViewStyle"),
+        wxConfig::Get()->Read(wxT("/wxWidgets/wxFileDialog/ViewStyle"),
                               &ms_lastViewStyle);
-        wxConfig::Get()->Read(wxT("/wxWindows/wxFileDialog/ShowHidden"),
+        wxConfig::Get()->Read(wxT("/wxWidgets/wxFileDialog/ShowHidden"),
                               &ms_lastShowHidden);
     }
 
@@ -1037,9 +1037,9 @@ wxGenericFileDialog::~wxGenericFileDialog()
 {
     if (wxConfig::Get(FALSE))
     {
-        wxConfig::Get()->Write(wxT("/wxWindows/wxFileDialog/ViewStyle"),
+        wxConfig::Get()->Write(wxT("/wxWidgets/wxFileDialog/ViewStyle"),
                                ms_lastViewStyle);
-        wxConfig::Get()->Write(wxT("/wxWindows/wxFileDialog/ShowHidden"),
+        wxConfig::Get()->Write(wxT("/wxWidgets/wxFileDialog/ShowHidden"),
                                ms_lastShowHidden);
     }
 

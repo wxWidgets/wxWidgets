@@ -5,8 +5,8 @@
 // Modified by:
 // Created:     24.12.00
 // RCS-ID:      $Id$
-// Copyright:   (c) 1996-2000 wxWindows team
-// Licence:     wxWindows licence
+// Copyright:   (c) 1996-2000 wxWidgets team
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_COMBOBOX_H_BASE_

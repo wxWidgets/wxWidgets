@@ -6,7 +6,7 @@
 // Created:     22.07.99
 // RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -441,7 +441,7 @@ int wxSpinCtrl::GetValue() const
 
 void wxSpinCtrl::SetSelection(long from, long to)
 {
-    // if from and to are both -1, it means (in wxWindows) that all text should
+    // if from and to are both -1, it means (in wxWidgets) that all text should
     // be selected - translate into Windows convention
     if ( (from == -1) && (to == -1) )
     {

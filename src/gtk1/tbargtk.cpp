@@ -5,7 +5,7 @@
 // Modified:    13.12.99 by VZ to derive from wxToolBarBase
 // RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -50,7 +50,7 @@ extern wxCursor   g_globalCursor;
 // private functions
 // ----------------------------------------------------------------------------
 
-// translate wxWindows toolbar style flags to GTK orientation and style
+// translate wxWidgets toolbar style flags to GTK orientation and style
 static void GetGtkStyle(long style,
                         GtkOrientation *orient, GtkToolbarStyle *gtkStyle)
 {

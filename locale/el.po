@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWindows 2.5.1\n"
+"Project-Id-Version: wxWidgets 2.5.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-05-07 14:03+0200\n"
 "PO-Revision-Date: 2003-04-14 21:28+0200\n"
@@ -3973,14 +3973,14 @@ msgstr "wxSocket: άγνωστο γεγονός (event)!"
 
 #: ../src/motif/app.cpp:207
 #, c-format
-msgid "wxWindows could not open display for '%s': exiting."
+msgid "wxWidgets could not open display for '%s': exiting."
 msgstr ""
-"Η βιλιοθήκη wxWindows δεν μπορεί να ανοίξει την απεικόνιση για το '%s': "
+"Η βιλιοθήκη wxWidgets δεν μπορεί να ανοίξει την απεικόνιση για το '%s': "
 "έξοδος..."
 
 #: ../src/x11/app.cpp:176
-msgid "wxWindows could not open display. Exiting."
-msgstr "Η βιλιοθήκη wxWindows δεν μπορεί να ανοίξει την απεικόνιση. 'Εξοδος..."
+msgid "wxWidgets could not open display. Exiting."
+msgstr "Η βιλιοθήκη wxWidgets δεν μπορεί να ανοίξει την απεικόνιση. 'Εξοδος..."
 
 #: ../src/common/datetime.cpp:3302
 msgid "yesterday"

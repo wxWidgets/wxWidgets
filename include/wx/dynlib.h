@@ -6,7 +6,7 @@
 // Created:     20/07/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Guilhem Lavaux
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_DYNLIB_H__
@@ -170,7 +170,7 @@ public:
     static wxString CanonicalizeName(const wxString& name,
                                      wxDynamicLibraryCategory cat = wxDL_LIBRARY);
 
-    // return name of wxWindows plugin (adds compiler and version info
+    // return name of wxWidgets plugin (adds compiler and version info
     // to the filename):
     static wxString
     CanonicalizePluginName(const wxString& name,

@@ -6,7 +6,7 @@
 // Created:     29/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef   _WX_LOGG_H_
@@ -45,7 +45,7 @@ private:
 #endif // wxUSE_TEXTCTRL
 
 // ----------------------------------------------------------------------------
-// GUI log target, the default one for wxWindows programs
+// GUI log target, the default one for wxWidgets programs
 // ----------------------------------------------------------------------------
 
 #if wxUSE_LOGGUI

@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -1806,7 +1806,7 @@ bool wxPostScriptDC::StartDoc( const wxString& message )
 
     PsPrint( "%!PS-Adobe-2.0\n" );
     PsPrintf( wxT("%%%%Title: %s\n"), m_title.c_str() );
-    PsPrint( "%%Creator: wxWindows PostScript renderer\n" );
+    PsPrint( "%%Creator: wxWidgets PostScript renderer\n" );
     PsPrintf( wxT("%%%%CreationDate: %s\n"), wxNow().c_str() );
     if (m_printData.GetOrientation() == wxLANDSCAPE)
         PsPrint( "%%Orientation: Landscape\n" );

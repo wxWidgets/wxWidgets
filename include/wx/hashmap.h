@@ -6,7 +6,7 @@
 // Created:     29/01/2002
 // RCS-ID:      $Id$
 // Copyright:   (c) Mattia Barbon
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_HASHMAP_H_

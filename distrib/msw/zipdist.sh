@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Zip up an external, generic + Windows distribution of wxWindows 2
+# Zip up an external, generic + Windows distribution of wxWidgets 2
 SRC=`cygpath -u $WXWIN`
 DEST=$SRC/deliver
 WISE=0
@@ -22,16 +22,16 @@ dowise()
 
     # After this change of directory, we're in the
     # temporary 'wx' directory and not acting on
-    # the source wxWindows directory.
+    # the source wxWidgets directory.
     cd $DEST/wx
-    unzip -o `$CYGPATHPROG -w ../wxWindows-$VERSION-msw.zip`
-    unzip -o `$CYGPATHPROG -w ../wxWindows-$VERSION-gen.zip`
-    unzip -o `$CYGPATHPROG -w ../wxWindows-$VERSION-vc.zip`
-    unzip -o `$CYGPATHPROG -w ../wxWindows-$VERSION-bc.zip`
-    unzip -o `$CYGPATHPROG -w ../wxWindows-$VERSION-HTMLHelp.zip`
+    unzip -o `$CYGPATHPROG -w ../wxWidgets-$VERSION-msw.zip`
+    unzip -o `$CYGPATHPROG -w ../wxWidgets-$VERSION-gen.zip`
+    unzip -o `$CYGPATHPROG -w ../wxWidgets-$VERSION-vc.zip`
+    unzip -o `$CYGPATHPROG -w ../wxWidgets-$VERSION-bc.zip`
+    unzip -o `$CYGPATHPROG -w ../wxWidgets-$VERSION-HTMLHelp.zip`
     unzip -o `$CYGPATHPROG -w ../extradoc.zip`
     # Need Word file, for Remstar DB classes
-    unzip -o `$CYGPATHPROG -w ../wxWindows-$VERSION-Word.zip`
+    unzip -o `$CYGPATHPROG -w ../wxWidgets-$VERSION-Word.zip`
     unzip -o `$CYGPATHPROG -w ../ogl3.zip`
     unzip -o `$CYGPATHPROG -w ../jpeg.zip`
     unzip -o `$CYGPATHPROG -w ../tiff.zip`
@@ -75,7 +75,7 @@ dowise()
     # Now invoke WISE install on the new wxwin2.wse
     echo Invoking WISE...
     /c/progra~1/wise/wise32.exe /C $WXWIN\\distrib\\msw\\wxwin2.wse
-    echo Press return to continue with the wxWindows distribution...
+    echo Press return to continue with the wxWidgets distribution...
     read dummy
 
     cd $DEST
@@ -183,58 +183,58 @@ echo Zipping...
 # for local use, and for creating wxMSW-xxx.zip.
 
 # We can't use e.g. this:
-# ls `cat $SRC/distrib/msw/makefile.rsp` zip -@ -u $DEST/wxWindows-$VERSION-gen.zip
+# ls `cat $SRC/distrib/msw/makefile.rsp` zip -@ -u $DEST/wxWidgets-$VERSION-gen.zip
 # because there's not enough space on the command line, plus we need to ignore the
 # blank lines.
 
 expandlines $SRC/distrib/msw/generic.rsp temp.txt
-zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-gen.zip` < temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWidgets-$VERSION-gen.zip` < temp.txt
 
 expandlines $SRC/distrib/msw/makefile.rsp temp.txt
-zip -@ -u `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-gen.zip` < temp.txt
+zip -@ -u `$CYGPATHPROG -w $DEST/wxWidgets-$VERSION-gen.zip` < temp.txt
 
 expandlines $SRC/distrib/msw/msw.rsp temp.txt
-zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-msw.zip` < temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWidgets-$VERSION-msw.zip` < temp.txt
 
 expandlines $SRC/distrib/msw/makefile.rsp temp.txt
-zip -@ -u `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-msw.zip` < temp.txt
+zip -@ -u `$CYGPATHPROG -w $DEST/wxWidgets-$VERSION-msw.zip` < temp.txt
 
 expandlines $SRC/distrib/msw/gtk.rsp temp.txt
-zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-gtk.zip` < temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWidgets-$VERSION-gtk.zip` < temp.txt
 
 expandlines $SRC/distrib/msw/makefile.rsp temp.txt
-zip -@ -u `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-gtk.zip` < temp.txt
+zip -@ -u `$CYGPATHPROG -w $DEST/wxWidgets-$VERSION-gtk.zip` < temp.txt
 
 expandlines $SRC/distrib/msw/stubs.rsp temp.txt
-zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-stubs.zip` < temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWidgets-$VERSION-stubs.zip` < temp.txt
 
 expandlines $SRC/distrib/msw/motif.rsp temp.txt
-zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-mot.zip` < temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWidgets-$VERSION-mot.zip` < temp.txt
 
 expandlines $SRC/distrib/msw/makefile.rsp temp.txt
-zip -@ -u `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-mot.zip` < temp.txt
+zip -@ -u `$CYGPATHPROG -w $DEST/wxWidgets-$VERSION-mot.zip` < temp.txt
 
 
 expandlines $SRC/distrib/msw/docsrc.rsp temp.txt
-zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-DocSource.zip` < temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWidgets-$VERSION-DocSource.zip` < temp.txt
 
 expandlines $SRC/distrib/msw/wx_hlp.rsp temp.txt
-zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-WinHelp.zip` < temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWidgets-$VERSION-WinHelp.zip` < temp.txt
 
 expandlines $SRC/distrib/msw/wx_html.rsp temp.txt
-zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-HTML.zip` < temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWidgets-$VERSION-HTML.zip` < temp.txt
 
 expandlines $SRC/distrib/msw/wx_pdf.rsp temp.txt
-zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-PDF.zip` < temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWidgets-$VERSION-PDF.zip` < temp.txt
 
 expandlines $SRC/distrib/msw/wx_word.rsp temp.txt
-zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-Word.zip` < temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWidgets-$VERSION-Word.zip` < temp.txt
 
 expandlines $SRC/distrib/msw/wx_htb.rsp temp.txt
-zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-HTB.zip` < temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWidgets-$VERSION-HTB.zip` < temp.txt
 
 expandlines $SRC/distrib/msw/wx_chm.rsp temp.txt
-zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-HTMLHelp.zip` < temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWidgets-$VERSION-HTMLHelp.zip` < temp.txt
 
 # PDF/HTML docs that should go into the Windows setup because
 # there are no WinHelp equivalents
@@ -243,15 +243,15 @@ zip -@ `$CYGPATHPROG -w $DEST/extradoc.zip` < temp.txt
 
 # VC++ project files
 expandlines $SRC/distrib/msw/vc.rsp temp.txt
-zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-vc.zip` < temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWidgets-$VERSION-vc.zip` < temp.txt
 
 # BC++ project files
 expandlines $SRC/distrib/msw/bc.rsp temp.txt
-zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-bc.zip` < temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWidgets-$VERSION-bc.zip` < temp.txt
 
 # CodeWarrior project files
 expandlines $SRC/distrib/msw/cw.rsp temp.txt
-zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-cw.zip` < temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWidgets-$VERSION-cw.zip` < temp.txt
 
 # OGL 3
 expandlines $SRC/distrib/msw/ogl.rsp temp.txt
@@ -306,5 +306,5 @@ if [ "$WISE" = "1" ]; then
     dowise
 fi
 
-echo wxWindows archived.
+echo wxWidgets archived.
 

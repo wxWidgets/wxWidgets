@@ -11,7 +11,7 @@
  * always start by compiling this and producing the PCH file.
  * Then subsequent source files use the PCH file.
  *
- * If precompiling wx.h for wxWindows and derived apps,
+ * If precompiling wx.h for wxWidgets and derived apps,
  * link dummy.obj with your program.
  *
  * This will produce a big PCH file.

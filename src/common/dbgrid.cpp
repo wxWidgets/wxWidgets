@@ -6,7 +6,7 @@
 // Created:
 // RCS-ID:      $Id$
 // Copyright:   (c) 1999 The Computer Surgery (roger@computer-surgery.co.uk)
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 // Branched From : dbgrid.cpp,v 1.18 2000/12/19 13:00:58
 ///////////////////////////////////////////////////////////////////////////////
@@ -179,7 +179,7 @@ wxDbGridTableBase::~wxDbGridTableBase()
 
     //FIXME: should i remove m_ColInfo and m_data from m_attrProvider if a wxDbGridAttrProvider
 //    if ((provider = dynamic_cast<wxDbGridCellAttrProvider *>(GetAttrProvider())))
-     // Using C casting for now until we can support dynamic_cast with wxWindows
+     // Using C casting for now until we can support dynamic_cast with wxWidgets
     provider = (wxDbGridCellAttrProvider *)(GetAttrProvider());
     if (provider)
     {
@@ -233,7 +233,7 @@ bool wxDbGridTableBase::AssignDbTable(wxDbTable *tab, int count, bool takeOwners
     m_data = tab;
     //FIXME: Remove dynamic_cast before sumision to wxwin
 //    if ((provider = dynamic_cast<wxDbGridCellAttrProvider *> (GetAttrProvider())))
-     // Using C casting for now until we can support dynamic_cast with wxWindows
+     // Using C casting for now until we can support dynamic_cast with wxWidgets
     provider = (wxDbGridCellAttrProvider *)(GetAttrProvider());
     if (provider)
     {

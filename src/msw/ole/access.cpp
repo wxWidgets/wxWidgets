@@ -6,7 +6,7 @@
 // Created:     2003-02-12
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -772,7 +772,7 @@ STDMETHODIMP wxIAccessible::get_accParent ( IDispatch** ppDispParent)
         return E_FAIL;
 
     // It doesn't seem acceptable to return S_FALSE with a NULL
-    // ppDispParent, so if we have no wxWindows parent, we leave
+    // ppDispParent, so if we have no wxWidgets parent, we leave
     // it to the standard interface.
     if (status == wxACC_NOT_IMPLEMENTED || !parent)
     {
@@ -1041,7 +1041,7 @@ STDMETHODIMP wxIAccessible::get_accHelp ( VARIANT varID, BSTR* pszHelp)
 // Retrieves the full path of the WinHelp file associated with the specified
 // object and the identifier of the appropriate topic within that file.
 // Not all objects support this property.
-// NOTE: not supported by wxWindows at this time. Use
+// NOTE: not supported by wxWidgets at this time. Use
 // GetHelpText instead.
         
 STDMETHODIMP wxIAccessible::get_accHelpTopic ( BSTR* pszHelpFile, VARIANT varChild, long* pidTopic)

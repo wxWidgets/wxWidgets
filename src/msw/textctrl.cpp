@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -1181,7 +1181,7 @@ bool wxTextCtrl::IsEditable() const
 
 void wxTextCtrl::SetSelection(long from, long to)
 {
-    // if from and to are both -1, it means (in wxWindows) that all text should
+    // if from and to are both -1, it means (in wxWidgets) that all text should
     // be selected - translate into Windows convention
     if ( (from == -1) && (to == -1) )
     {
@@ -2306,7 +2306,7 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
             cf.dwEffects |= CFE_UNDERLINE;
         }
 
-        // strikeout fonts are not supported by wxWindows
+        // strikeout fonts are not supported by wxWidgets
     }
 
     if ( style.HasTextColour() )

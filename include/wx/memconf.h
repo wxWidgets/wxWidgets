@@ -8,14 +8,14 @@
 // Created:     22.01.00
 // RCS-ID:      $Id$
 // Copyright:   (c) 2000 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 /*
  * NB: I don't see how this class may possibly be useful to the application
  *     program (as the settings are lost on program termination), but it is
- *     handy to have it inside wxWindows. So for now let's say that this class
- *     is private and should only be used by wxWindows itself - this might
+ *     handy to have it inside wxWidgets. So for now let's say that this class
+ *     is private and should only be used by wxWidgets itself - this might
  *     change in the future.
  */
 

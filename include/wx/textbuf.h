@@ -5,8 +5,8 @@
 //              differences between platforms.
 // Created:     14.11.01
 // Author:      Morten Hanssen, Vadim Zeitlin
-// Copyright:   (c) 1998-2001 wxWindows team
-// Licence:     wxWindows licence
+// Copyright:   (c) 1998-2001 wxWidgets team
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_TEXTBUFFER_H

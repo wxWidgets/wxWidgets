@@ -6,12 +6,12 @@
 // Created:     29/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 /*
     Efficient string class [more or less] compatible with MFC CString,
-    wxWindows version 1 wxString and std::string and some handy functions
+    wxWidgets version 1 wxString and std::string and some handy functions
     missing from string.h.
 */
 
@@ -1095,7 +1095,7 @@ public:
   void UngetWriteBuf(size_t nLen);
 #endif
 
-  // wxWindows version 1 compatibility functions
+  // wxWidgets version 1 compatibility functions
 
   // use Mid()
   wxString SubString(size_t from, size_t to) const

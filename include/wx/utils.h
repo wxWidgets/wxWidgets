@@ -6,7 +6,7 @@
 // Created:     29/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_UTILSH__
@@ -90,7 +90,7 @@ WXDLLIMPEXP_BASE int wxGetOsVersion(int *majorVsn = (int *) NULL,
 // Return a string with the current date/time
 WXDLLIMPEXP_BASE wxString wxNow();
 
-// Return path where wxWindows is installed (mostly useful in Unices)
+// Return path where wxWidgets is installed (mostly useful in Unices)
 WXDLLIMPEXP_BASE const wxChar *wxGetInstallPrefix();
 // Return path to wxWin data (/usr/share/wx/%{version}) (Unices)
 WXDLLIMPEXP_BASE wxString wxGetDataDir();
@@ -493,7 +493,7 @@ WXDLLIMPEXP_BASE bool wxYield();
 WXDLLIMPEXP_BASE bool wxYieldIfNeeded();
 
 // ----------------------------------------------------------------------------
-// Error message functions used by wxWindows (deprecated, use wxLog)
+// Error message functions used by wxWidgets (deprecated, use wxLog)
 // ----------------------------------------------------------------------------
 
 #if WXWIN_COMPATIBILITY_2_2

@@ -6,7 +6,7 @@
 // Created:     13.07.03
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -173,7 +173,7 @@ enum SymbolTag
 // ----------------------------------------------------------------------------
 
 // low level wxBusyCursor replacement: we use Win32 API directly here instead
-// of going through wxWindows calls as this could be dangerous
+// of going through wxWidgets calls as this could be dangerous
 class BusyCursor
 {
 public:
@@ -1220,7 +1220,7 @@ bool wxCrashReportImpl::Generate(
 
 #else // !wxUSE_DBGHELP
     Output(_T("Support for crash report generation was not included ")
-           _T("in this wxWindows version."));
+           _T("in this wxWidgets version."));
 #endif // wxUSE_DBGHELP/!wxUSE_DBGHELP
 
     return false;

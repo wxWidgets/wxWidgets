@@ -68,7 +68,7 @@
 
 #define USE_DEFINE
 
-// in order to avoid problems further down in wxWindows
+// in order to avoid problems further down in wxWidgets
 
 #ifdef __cplusplus
 

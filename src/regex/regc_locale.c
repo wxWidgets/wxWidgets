@@ -11,9 +11,9 @@
  *
  * RCS: @(#) $Id$
  *
- * wxWindows:
+ * wxWidgets:
  *  The Scriptics license can be found in the file COPYRIGHT. Modifications
- *  for wxWindows are under the wxWindows licence, see README for details.
+ *  for wxWidgets are under the wxWidgets licence, see README for details.
  */
 
 #define CONST const

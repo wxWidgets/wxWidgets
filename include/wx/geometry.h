@@ -6,7 +6,7 @@
 // Created:     08/05/99
 // RCS-ID:
 // Copyright:   (c) 1999 Stefan Csomor
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_GEOMETRY_H_

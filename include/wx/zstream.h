@@ -6,7 +6,7 @@
 // Created:     11/07/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Guilhem Lavaux
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 #ifndef _WX_WXZSTREAM_H__
 #define _WX_WXZSTREAM_H__

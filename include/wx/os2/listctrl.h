@@ -432,7 +432,7 @@ public:
     void UpdateStyle(void);
 
     //
-    // Implementation: converts wxWindows style to MSW style.
+    // Implementation: converts wxWidgets style to MSW style.
     // Can be a single style flag or a bit list.
     // oldStyle is 'normalised' so that it doesn't contain
     // conflicting styles.

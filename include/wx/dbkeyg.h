@@ -6,7 +6,7 @@
 // Created:     
 // RCS-ID:      $Id$
 // Copyright:   (c) 1999 The Computer Surgery (roger@computer-surgery.co.uk)
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 //
 // NOTE : There is no CPP file to go along with this
 //

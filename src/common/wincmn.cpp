@@ -5,8 +5,8 @@
 // Modified by:
 // Created:     13/07/98
 // RCS-ID:      $Id$
-// Copyright:   (c) wxWindows team
-// Licence:     wxWindows licence
+// Copyright:   (c) wxWidgets team
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -215,7 +215,7 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
 
     // ids are limited to 16 bits under MSW so if you care about portability,
     // it's not a good idea to use ids out of this range (and negative ids are
-    // reserved for wxWindows own usage)
+    // reserved for wxWidgets own usage)
     wxASSERT_MSG( id == wxID_ANY || (id >= 0 && id < 32767),
                   _T("invalid id value") );
 
@@ -974,7 +974,7 @@ wxColour wxWindowBase::GetBackgroundColour() const
 
         // we must return some valid colour to avoid redoing this every time
         // and also to avoid surprizing the applications written for older
-        // wxWindows versions where GetBackgroundColour() always returned
+        // wxWidgets versions where GetBackgroundColour() always returned
         // something -- so give them something even if it doesn't make sense
         // for this window (e.g. it has a themed background)
         if ( !colBg.Ok() )
@@ -2167,7 +2167,7 @@ void wxWindowBase::OnMiddleClick( wxMouseEvent& event )
 
         wxMessageBox(wxString::Format(
                                       _T(
-                                        "       wxWindows Library (%s port)\nVersion %u.%u.%u%s, compiled at %s %s\n   Copyright (c) 1995-2002 wxWindows team"
+                                        "       wxWidgets Library (%s port)\nVersion %u.%u.%u%s, compiled at %s %s\n   Copyright (c) 1995-2002 wxWidgets team"
                                         ),
                                       port.c_str(),
                                       wxMAJOR_VERSION,
@@ -2181,7 +2181,7 @@ void wxWindowBase::OnMiddleClick( wxMouseEvent& event )
                                       __TDATE__,
                                       __TTIME__
                                      ),
-                     _T("wxWindows information"),
+                     _T("wxWidgets information"),
                      wxICON_INFORMATION | wxOK,
                      (wxWindow *)this);
     }
@@ -2562,13 +2562,13 @@ wxAccStatus wxWindowAccessible::GetName(int childId, wxString* name)
 
     wxString title;
 
-    // If a child, leave wxWindows to call the function on the actual
+    // If a child, leave wxWidgets to call the function on the actual
     // child object.
     if (childId > 0)
         return wxACC_NOT_IMPLEMENTED;
 
     // This will eventually be replaced by specialised
-    // accessible classes, one for each kind of wxWindows
+    // accessible classes, one for each kind of wxWidgets
     // control or window.
     if (GetWindow()->IsKindOf(CLASSINFO(wxButton)))
         title = ((wxButton*) GetWindow())->GetLabel();
@@ -2723,7 +2723,7 @@ wxAccStatus wxWindowAccessible::GetRole(int childId, wxAccRole* role)
     if (!GetWindow())
         return wxACC_FAIL;
 
-    // If a child, leave wxWindows to call the function on the actual
+    // If a child, leave wxWidgets to call the function on the actual
     // child object.
     if (childId > 0)
         return wxACC_NOT_IMPLEMENTED;
@@ -2755,7 +2755,7 @@ wxAccStatus wxWindowAccessible::GetState(int childId, long* state)
     if (!GetWindow())
         return wxACC_FAIL;
 
-    // If a child, leave wxWindows to call the function on the actual
+    // If a child, leave wxWidgets to call the function on the actual
     // child object.
     if (childId > 0)
         return wxACC_NOT_IMPLEMENTED;

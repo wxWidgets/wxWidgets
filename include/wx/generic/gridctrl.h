@@ -6,7 +6,7 @@
 // Created:     11/04/2001
 // RCS-ID:      $Id$
 // Copyright:   (c) The Computer Surgery (paul@compsurg.co.uk)
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_GENERIC_GRIDCTRL_H_

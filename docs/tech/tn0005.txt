@@ -3,7 +3,7 @@
 
 Here are some different kinds of contribution:
 
-1. Bug fixes. You can send these to the wx-devel list.
+1. Bug fixes. You can send these to the wx-dev list.
 2. New classes. New classes normally go in the contrib hierarchy:
    please see below for more details. They may be promoted to
    the main wxWidgets hierarchy if they are deemed to be 'core'.
@@ -14,7 +14,7 @@ Here are some different kinds of contribution:
 
 You may or may not wish to add your code to the main wxWidgets CVS
 archive. Whether your code is appropriate for this archive
-should first be ascertained by discussing it on wx-devel@wxwindows.org.
+should first be ascertained by discussing it on wx-dev@wxwidgets.org.
 
 The contrib hierarchy
 ---------------------
@@ -59,7 +59,7 @@ site in the 'Backroom' section. Include bakefile and generated makefiles
 
 Your archive can be in .tgz or .zip format. For inclusion on
 the wxWidgets ftp site and CD-ROM, please send your submission to
-Julian Smart <julian@wxwindows.org> as a binary attachment.
+Julian Smart <julian@wxwidgets.org> as a binary attachment.
 An entry will be added to the Contributions web page.
 
 Author:  Julian Smart

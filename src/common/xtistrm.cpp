@@ -6,7 +6,7 @@
 // Created:     27/07/03
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 Stefan Csomor
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)

@@ -1,7 +1,7 @@
 #! /bin/bash
 # makedist.sh
 #
-# Build wxWindows 2 for Windows distribution.
+# Build wxWidgets 2 for Windows distribution.
 # This builds all required binaries and documents before calling
 # zipdist.sh to make the archives.
 #
@@ -19,7 +19,7 @@
 # - update the readmes, change log, manual version etc.
 # - update version.h
 # - update distrib/msw/wisetop.txt, wisebott.txt with the correct version
-#   number, plus any hard-wired wxWindows paths
+#   number, plus any hard-wired wxWidgets paths
 # - test on a variety of compilers
 #
 # TODO:
@@ -96,7 +96,7 @@ check_files() {
 build_docs() {
     cd "$SRC/src/msw"
     echo "---------------------------------"
-    echo "Building wxWindows documents"
+    echo "Building wxWidgets documents"
     nmake -f makefile.vc cleandocs docs
 
     cd "$SRC/utils/tex2rtf/src"
@@ -113,7 +113,7 @@ build_docs() {
 # This has to be interactive at present.
 build_pdf() {
     echo "---------------------------------"
-    echo "Building wxWindows PDF documents"
+    echo "Building wxWidgets PDF documents"
     if [ -e "$WORDEXE" ]; then
         "$WORDEXE" "$WXWIN\\docs\\pdf\\wx.rtf"
         "$WORDEXE" "$WXWIN\\docs\\pdf\\tex2rtf.rtf"
@@ -124,12 +124,12 @@ build_pdf() {
     fi
 }
 
-# Build wxWindows
+# Build wxWidgets
 build_wxwin_vc() {
     echo "---------------------------------"
-    echo "Building wxWindows using VC++"
+    echo "Building wxWidgets using VC++"
     cd "$SRC/src"
-    echo Building wxWindows Release library in `pwd`
+    echo Building wxWidgets Release library in `pwd`
     echo Command: msdev wxvc.dsw /useenv /make "wxvc - Win32 Release" /rebuild
     msdev wxvc.dsw /useenv /make "wxvc - Win32 Release" /rebuild | egrep -v "$WARNINGS"
 }

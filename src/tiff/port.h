@@ -1,6 +1,6 @@
 /*
  * Warning, this file was automatically created by the TIFF configure script
- *   Actually, it has been modified to use wxWindows' values.
+ *   Actually, it has been modified to use wxWidgets' values.
  * VERSION:	 v3.5.2
  * DATE:	 Son Nov 28 15:15:07 GMT 1999
  * TARGET:	 
@@ -18,14 +18,14 @@ extern "C" {
 #include <sys/types.h>
 #define HOST_FILLORDER FILLORDER_LSB2MSB
 
-/* wxWindows defines WORDS_BIGENDIAN */
+/* wxWidgets defines WORDS_BIGENDIAN */
 #ifdef WORDS_BIGENDIAN
 #define HOST_BIGENDIAN	1
 #else
 #define HOST_BIGENDIAN	0
 #endif
 
-/* wxWindows defines its own reading and writing routines */
+/* wxWidgets defines its own reading and writing routines */
 /* #define HAVE_MMAP 1 */
 
 #include <stdio.h>
@@ -44,12 +44,12 @@ typedef double dblparam_t;
 
 #define GLOBALDATA(TYPE,NAME)	extern TYPE NAME
 
-/* wxWindows defines wxUSE_LIBJPEG */
+/* wxWidgets defines wxUSE_LIBJPEG */
 #if wxUSE_LIBJPEG
 #define JPEG_SUPPORT
 #endif
 
-/* wxWindows defines wxUSE_ZLIB */
+/* wxWidgets defines wxUSE_ZLIB */
 #if wxUSE_ZLIB
 #define ZIP_SUPPORT
 #endif

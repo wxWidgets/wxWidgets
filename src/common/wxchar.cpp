@@ -5,8 +5,8 @@
 // Modified by: Ron Lee
 // Created:     09/04/99
 // RCS-ID:      $Id$
-// Copyright:   (c) wxWindows copyright
-// Licence:     wxWindows licence
+// Copyright:   (c) wxWidgets copyright
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -704,7 +704,7 @@ int vwprintf(const wxChar *format, va_list argptr)
    So to use native functions in order to get our semantics we must do the
    following translations in Unicode mode (nothing to do in ANSI mode):
 
-   wxWindows specifier      POSIX specifier
+   wxWidgets specifier      POSIX specifier
    ----------------------------------------
 
    %hc, %C, %hC             %c

@@ -6,7 +6,7 @@
 // Created:     23.03.02
 // RCS-ID:      $Id$
 // Copyright:   (c) Mattia Barbon
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_ICONBNDL_H_

@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_WINDOW_H_
@@ -161,7 +161,7 @@ public:
     wxWindowMac *FindItem(long id) const;
     wxWindowMac *FindItemByHWND(WXHWND hWnd, bool controlOnly = FALSE) const;
 
-    // Make a Windows extended style from the given wxWindows window style
+    // Make a Windows extended style from the given wxWidgets window style
     static WXDWORD MakeExtendedStyle(long style,
                                      bool eliminateBorders = TRUE);
     // Determine whether 3D effects are wanted

@@ -5,8 +5,8 @@
 // Modified by:
 // Created:     22.01.02
 // RCS-ID:      $Id$
-// Copyright:   (c) wxWindows team
-// Licence:     wxWindows licence
+// Copyright:   (c) wxWidgets team
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #define HAVE_USLEEP 1

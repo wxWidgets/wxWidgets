@@ -5,7 +5,7 @@
 // Created:     2000/03/05
 // RCS-ID:      $Id$
 // Copyright:   (c) 2000 Vaclav Slavik
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -14,7 +14,7 @@
  *                                                                           *
  *  The API defined in this header *WILL* change in the future and backward  *
  *  compatibility will *not* be preserved. If you use these classes in your  *
- *  application, it probably won't compile with future wxWindows releases.   *
+ *  application, it probably won't compile with future wxWidgets releases.   *
  *  Use on your own risk.                                                    *
  *                                                                           *
  * ************************************************************************* */

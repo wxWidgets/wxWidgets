@@ -6,7 +6,7 @@
 // Created:     10/13/99
 // RCS-ID:      $Id$
 // Copyright:   (c) David Webster
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/combobox.h"
@@ -334,7 +334,7 @@ void wxComboBox::SetSelection(
 
     //
     // If from and to are both -1, it means
-    // (in wxWindows) that all text should be selected.
+    // (in wxWidgets) that all text should be selected.
     // This translates into Windows convention
     //
     if ((lFrom == -1L) && (lTo == -1L))

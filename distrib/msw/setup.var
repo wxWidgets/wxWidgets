@@ -11,13 +11,13 @@ APPNAME=wxwin
 # The application title
 #-------------------------------------------------------------------------
 
-APPTITLE="wxWindows"
+APPTITLE="wxWidgets"
 
 #-------------------------------------------------------------------------
 # The application author (copyright holder)
 #-------------------------------------------------------------------------
 
-AUTHOR="The wxWindows Team"
+AUTHOR="The wxWidgets Team"
 
 #-------------------------------------------------------------------------
 # The application vendor (organisation)
@@ -53,7 +53,7 @@ DESTDIR=$APPDIR/deliver
 # The temporary image directory to use when preparing the setup
 #-------------------------------------------------------------------------
 
-SETUPIMAGEDIR=$APPDIR/deliver/wxWindows-$VERSION
+SETUPIMAGEDIR=$APPDIR/deliver/wxWidgets-$VERSION
 
 #-------------------------------------------------------------------------
 # The name of the file with $VERSIONSYMBOL in it

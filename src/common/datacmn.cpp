@@ -1,12 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        common/datacmn.cpp
-// Purpose:     contains definitions of various global wxWindows variables
+// Purpose:     contains definitions of various global wxWidgets variables
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     10.04.03 (from src/*/data.cpp files)
 // RCS-ID:      $Id$
-// Copyright:   (c) 1997-2002 wxWindows development team
-// License:     wxWindows license
+// Copyright:   (c) 1997-2002 wxWidgets development team
+// License:     wxWidgets license
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================

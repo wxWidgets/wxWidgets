@@ -5,7 +5,7 @@
 // Created:
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:           wxWindows licence
+// Licence:           wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __GTKDIALOGH__

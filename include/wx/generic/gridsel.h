@@ -6,7 +6,7 @@
 // Created:     20/02/2000
 // RCS-ID:      $$
 // Copyright:   (c) Stefan Neis
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/defs.h"

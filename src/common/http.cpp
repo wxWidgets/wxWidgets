@@ -6,7 +6,7 @@
 // Created:     August 1997
 // RCS-ID:      $Id$
 // Copyright:   (c) 1997, 1998 Guilhem Lavaux
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -227,7 +227,7 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
 
   // If there is no User-Agent defined, define it.
   if (GetHeader(wxT("User-Agent")).IsNull())
-    SetHeader(wxT("User-Agent"), wxT("wxWindows 2.x"));
+    SetHeader(wxT("User-Agent"), wxT("wxWidgets 2.x"));
 
   SaveState();
   SetFlags(wxSOCKET_NONE);

@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_GTK_SCROLLWIN_H_
@@ -90,7 +90,7 @@ public:
     virtual void GetScrollPixelsPerUnit(int *x_unit, int *y_unit) const;
 
     // Enable/disable Windows scrolling in either direction.
-    // If TRUE, wxWindows scrolls the canvas and only a bit of
+    // If TRUE, wxWidgets scrolls the canvas and only a bit of
     // the canvas is invalidated; no Clear() is necessary.
     // If FALSE, the whole canvas is invalidated and a Clear() is
     // necessary. Disable for when the scroll increment is used
@@ -156,7 +156,7 @@ public:
     // Calculate scroll increment
     virtual int CalcScrollInc(wxScrollWinEvent& event);
 
-    // Overridden from wxWindows due callback being static
+    // Overridden from wxWidgets due callback being static
     virtual void SetScrollPos( int orient, int pos, bool refresh = TRUE );
 
 #if WXWIN_COMPATIBILITY_2_2

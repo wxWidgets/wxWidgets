@@ -4,7 +4,7 @@
 // Author:      Vaclav Slavik
 // Copyright:   (c) 1999 Vaclav Slavik
 // RCS-ID:      $Id$
-// Licence:     wxWindows Licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __FILESYS_H__

@@ -21,7 +21,7 @@ pause
 erase %dest\wxMSW-%VERSION%-Minimal*.zip
 
 if not direxist %dest mkdir %dest
-if direxist %dest%\wxWindows-%version% erase /sxyz %dest%\wxWindows-%version%
+if direxist %dest%\wxWidgets-%version% erase /sxyz %dest%\wxWidgets-%version%
 
 echo Zipping wxMSW-Minimal distribution
 
@@ -33,10 +33,10 @@ zip32 -u -@ %dest%\wxMSW-%version%-Minimal.zip < %src%\distrib\msw\png.rsp
 zip32 -u -@ %dest%\wxMSW-%version%-Minimal.zip < %src%\distrib\msw\zlib.rsp
 zip32 -u -@ %dest%\wxMSW-%version%-Minimal.zip < %src%\distrib\msw\tiff.rsp
 
-if direxist %dest%\wxWindows-%version% erase /sxyz %dest%\wxWindows-%version%
+if direxist %dest%\wxWidgets-%version% erase /sxyz %dest%\wxWidgets-%version%
 
-mkdir %dest%\wxWindows-%version%
-cd %dest%\wxWindows-%version%
+mkdir %dest%\wxWidgets-%version%
+cd %dest%\wxWidgets-%version%
 
 unzip32 ..\wxMSW-%version%-Minimal.zip
 erase /Y src\gtk\descrip.mms src\motif\descrip.mms docs\pdf\*.pdf
@@ -54,7 +54,7 @@ erase /XY include\wx\*cw*.h
 cd %dest%
 
 erase wxMSW-%version%-Minimal.zip
-zip32 -r wxMSW-%version%-Minimal.zip wxWindows-%version%/*
+zip32 -r wxMSW-%version%-Minimal.zip wxWidgets-%version%/*
 
 echo wxMSW-Minimal archived.
 
@@ -63,7 +63,7 @@ cd %src%\distrib\msw
 goto end
 
 :usage
-echo DOS wxWindows distribution. Zips up wxMSW-Minimal.
+echo DOS wxWidgets distribution. Zips up wxMSW-Minimal.
 echo.
 echo "Usage: zipwinminimal.bat"
 

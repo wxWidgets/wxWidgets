@@ -4,7 +4,7 @@
 // Author:      Vaclav Slavik
 // Id:          $Id$
 // Copyright:   (c) Vaclav Slavik
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 

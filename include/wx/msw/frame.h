@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_FRAME_H_
@@ -133,7 +133,7 @@ protected:
 
     virtual bool IsMDIChild() const { return FALSE; }
 
-    // get default (wxWindows) icon for the frame
+    // get default (wxWidgets) icon for the frame
     virtual WXHICON GetDefaultIcon() const;
 
 #if wxUSE_STATUSBAR

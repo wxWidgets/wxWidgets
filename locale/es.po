@@ -1,11 +1,11 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWindows 2.5.1\n"
+"Project-Id-Version: wxWidgets 2.5.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-05-07 14:03+0200\n"
 "PO-Revision-Date: 2003-10-01 20:50+0100\n"
 "Last-Translator: JSJ <jsj666@hotmail.com>\n"
-"Language-Team: wxWindows translators <wx-translators@wxwindows.org>\n"
+"Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -3926,12 +3926,12 @@ msgstr "wxSocket: ¡evento desconocido!."
 
 #: ../src/motif/app.cpp:207
 #, c-format
-msgid "wxWindows could not open display for '%s': exiting."
-msgstr "wxWindows no pudo abrir el 'display' para '%s': saliendo."
+msgid "wxWidgets could not open display for '%s': exiting."
+msgstr "wxWidgets no pudo abrir el 'display' para '%s': saliendo."
 
 #: ../src/x11/app.cpp:176
-msgid "wxWindows could not open display. Exiting."
-msgstr "wxWindows no pudo abrir el 'display'. Saliendo."
+msgid "wxWidgets could not open display. Exiting."
+msgstr "wxWidgets no pudo abrir el 'display'. Saliendo."
 
 #: ../src/common/datetime.cpp:3302
 msgid "yesterday"

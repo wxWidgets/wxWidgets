@@ -6,7 +6,7 @@
 // Created:     2004/02/01
 // RCS-ID:      $Id$
 // Copyright:   (c) 2004, Vaclav Slavik
-// Licence:   	wxWindows licence
+// Licence:   	wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_SOUND_H_BASE_

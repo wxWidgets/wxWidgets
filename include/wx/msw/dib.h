@@ -5,8 +5,8 @@
 // Modified by:
 // Created:     03.03.03 (replaces the old file with the same name)
 // RCS-ID:      $Id$
-// Copyright:   (c) 1997-2003 wxWindows team
-// Licence:     wxWindows licence
+// Copyright:   (c) 1997-2003 wxWidgets team
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MSW_DIB_H_
@@ -104,7 +104,7 @@ public:
     // HBITMAP conversion
     // ------------------
 
-    // these functions are only used by wxWindows internally right now, please
+    // these functions are only used by wxWidgets internally right now, please
     // don't use them directly if possible as they're subject to change
 
 #ifndef __WXWINCE__

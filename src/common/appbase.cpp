@@ -6,7 +6,7 @@
 // Created:     19.06.2003 (extracted from common/appcmn.cpp)
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
-// License:     wxWindows license
+// License:     wxWidgets license
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -643,7 +643,7 @@ bool DoShowAssertDialog(const wxString& msg)
               wxT("You can also choose [Cancel] to suppress ")
               wxT("further warnings.");
 
-    switch ( ::MessageBox(NULL, msgDlg, _T("wxWindows Debug Alert"),
+    switch ( ::MessageBox(NULL, msgDlg, _T("wxWidgets Debug Alert"),
                           MB_YESNOCANCEL | MB_ICONSTOP ) )
     {
         case IDYES:

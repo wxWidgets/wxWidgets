@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_RADIOBOX_H_
@@ -58,7 +58,7 @@ public:
              const wxValidator& val = wxDefaultValidator,
              const wxString& name = wxRadioBoxNameStr);
 
-// Specific functions (in wxWindows2 reference)
+// Specific functions (in wxWidgets2 reference)
     virtual void SetSelection(int item);
     virtual int GetSelection() const;
 

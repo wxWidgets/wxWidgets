@@ -6,7 +6,7 @@
 // Created:     28.06.99
 // RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -114,7 +114,7 @@ wxSizer *wxDialogBase::CreateTextSizer( const wxString& message )
                 break;
 
             case wxT('&'):
-                // this is used as accel mnemonic prefix in the wxWindows
+                // this is used as accel mnemonic prefix in the wxWidgets
                 // controls but in the static messages created by
                 // CreateTextSizer() (used by wxMessageBox, for example), we
                 // don't want this special meaning, so we need to quote it

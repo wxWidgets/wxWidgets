@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -41,7 +41,7 @@
 #include "wx/toolbar.h"
 
 // ----------------------------------------------------------------------------
-// wxWindows macros
+// wxWidgets macros
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(wxToolBarBase, wxControl)

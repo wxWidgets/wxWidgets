@@ -6,7 +6,7 @@
 // Created:     10/17/99
 // RCS-ID:      $Id$
 // Copyright:   (c) David Webster
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------------
@@ -663,7 +663,7 @@ void wxTextCtrl::SetSelection(
     long                            lToChar = lTo;
 
     //
-    // If from and to are both -1, it means (in wxWindows) that all text should
+    // If from and to are both -1, it means (in wxWidgets) that all text should
     // be selected. Translate into Windows convention
     //
     if ((lFrom == -1L) && (lTo == -1L))

@@ -6,7 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:   	wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_REGION_H_
@@ -127,7 +127,7 @@ public:
     // Get the internal Region handle
     WXRegion GetXRegion() const;
 
-    // 'Naughty' functions that allow wxWindows to use a list of rects
+    // 'Naughty' functions that allow wxWidgets to use a list of rects
     // instead of the region, in certain circumstances (e.g. when
     // making a region out of the update rectangles).
     // These are used by wxPaintDC::wxPaintDC and wxRegionIterator::Reset.

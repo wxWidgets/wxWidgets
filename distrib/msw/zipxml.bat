@@ -23,7 +23,7 @@ goto end
 :usage
 echo DOS wxXML distribution.
 echo Usage: zipxml source destination
-echo e.g. zipxml d:\wx2\wxWindows d:\wx2\wxWindows\deliver
+echo e.g. zipxml d:\wx2\wxWidgets d:\wx2\wxWidgets\deliver
 
 :end
 

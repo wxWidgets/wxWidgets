@@ -4,7 +4,7 @@
 // Author:      Steffen Gutmann
 // RCS-ID:      $Id$
 // Copyright:   (c) Steffen Gutmann, 2002
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_IMAGE_IFF_H_

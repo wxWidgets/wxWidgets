@@ -115,13 +115,13 @@ dospinos2()
     zip $ZIPFLAGS -u -@ $DESTDIR/wxOS2-$VERSION.zip < $APPDIR/distrib/msw/deprecated.rsp
     zip $ZIPFLAGS -u -@ $DESTDIR/wxOS2-$VERSION.zip < $APPDIR/distrib/msw/makefile.rsp
 
-    # Rearchive under wxWindows-$VERSION
-    if [ -d $DESTDIR/wxWindows-$VERSION ]; then
-        rm -f -r $DESTDIR/wxWindows-$VERSION
+    # Rearchive under wxWidgets-$VERSION
+    if [ -d $DESTDIR/wxWidgets-$VERSION ]; then
+        rm -f -r $DESTDIR/wxWidgets-$VERSION
     fi
 
-    mkdir $DESTDIR/wxWindows-$VERSION
-    cd $DESTDIR/wxWindows-$VERSION
+    mkdir $DESTDIR/wxWidgets-$VERSION
+    cd $DESTDIR/wxWidgets-$VERSION
     unzip $ZIPFLAGS ../wxOS2-$VERSION.zip
     # No longer do this, configure should be OK
     # echo Overwriting with OS2-specific versions of configure files...
@@ -145,7 +145,7 @@ dospinos2()
     cd $DESTDIR
 
     rm -f wxOS2-$VERSION.zip
-    zip $ZIPFLAGS -r wxOS2-$VERSION.zip wxWindows-$VERSION/*
+    zip $ZIPFLAGS -r wxOS2-$VERSION.zip wxWidgets-$VERSION/*
 }
 
 dospinmac()
@@ -170,16 +170,16 @@ dospinmac()
     zip $ZIPFLAGS -u -@ $DESTDIR/wxMac-$VERSION.zip < $APPDIR/distrib/msw/deprecated.rsp
     zip $ZIPFLAGS -u -@ $DESTDIR/wxMac-$VERSION.zip < $APPDIR/distrib/msw/makefile.rsp
 
-    zip $ZIPFLAGS -@ $DESTDIR/wxWindows-$VERSION-CW-Mac.zip < $APPDIR/distrib/msw/cw_mac.rsp
+    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-CW-Mac.zip < $APPDIR/distrib/msw/cw_mac.rsp
 
     rm -f $APPDIR/include/wx/setup.h
 
-    if [ -d $DESTDIR/wxWindows-$VERSION ]; then
-        rm -f -r $DESTDIR/wxWindows-$VERSION
+    if [ -d $DESTDIR/wxWidgets-$VERSION ]; then
+        rm -f -r $DESTDIR/wxWidgets-$VERSION
     fi
 
-    mkdir $DESTDIR/wxWindows-$VERSION
-    cd $DESTDIR/wxWindows-$VERSION
+    mkdir $DESTDIR/wxWidgets-$VERSION
+    cd $DESTDIR/wxWidgets-$VERSION
     unzip $ZIPFLAGS ../wxMac-$VERSION.zip
     rm -f src/gtk/descrip.mms src/motif/descrip.mms docs/pdf/*.pdf
     rm -f -r docs/html/tex2rtf docs/htmlhelp
@@ -195,40 +195,40 @@ dospinmac()
     cd $DESTDIR
 
     rm -f wxMac-$VERSION.zip
-    zip $ZIPFLAGS -r wxMac-$VERSION.zip wxWindows-$VERSION/*
+    zip $ZIPFLAGS -r wxMac-$VERSION.zip wxWidgets-$VERSION/*
 }
 
 dospinmsw()
 {
     cd $APPDIR
 
-    # Create wxWindows-$VERSION-win.zip which is used to create wxMSW
+    # Create wxWidgets-$VERSION-win.zip which is used to create wxMSW
     echo Zipping individual components
-    zip $ZIPFLAGS -@ $DESTDIR/wxWindows-$VERSION-win.zip < $APPDIR/distrib/msw/generic.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWindows-$VERSION-win.zip < $APPDIR/distrib/msw/makefile.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWindows-$VERSION-win.zip < $APPDIR/distrib/msw/msw.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWindows-$VERSION-win.zip < $APPDIR/distrib/msw/ogl.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWindows-$VERSION-win.zip < $APPDIR/distrib/msw/mmedia.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWindows-$VERSION-win.zip < $APPDIR/distrib/msw/stc.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWindows-$VERSION-win.zip < $APPDIR/distrib/msw/tex2rtf.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWindows-$VERSION-win.zip < $APPDIR/distrib/msw/jpeg.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWindows-$VERSION-win.zip < $APPDIR/distrib/msw/tiff.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWindows-$VERSION-win.zip < $APPDIR/distrib/msw/xml.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWindows-$VERSION-win.zip < $APPDIR/distrib/msw/contrib.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWindows-$VERSION-win.zip < $APPDIR/distrib/msw/deprecated.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWindows-$VERSION-win.zip < $APPDIR/distrib/msw/utils.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWindows-$VERSION-win.zip < $APPDIR/distrib/msw/utilmake.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWindows-$VERSION-win.zip < $APPDIR/distrib/msw/univ.rsp
+    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/generic.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/makefile.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/msw.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/ogl.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/mmedia.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/stc.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/tex2rtf.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/jpeg.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/tiff.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/xml.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/contrib.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/deprecated.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/utils.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/utilmake.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/univ.rsp
 
-#    rearchive wxWindows-$VERSION-win.zip wxWindows-$VERSION $DESTDIR
+#    rearchive wxWidgets-$VERSION-win.zip wxWidgets-$VERSION $DESTDIR
 
-    if [ -d $DESTDIR/wxWindows-$VERSION ]; then
-        rm -f -r $DESTDIR/wxWindows-$VERSION
+    if [ -d $DESTDIR/wxWidgets-$VERSION ]; then
+        rm -f -r $DESTDIR/wxWidgets-$VERSION
     fi
 
-    mkdir $DESTDIR/wxWindows-$VERSION
-    cd $DESTDIR/wxWindows-$VERSION
-    unzip $ZIPFLAGS ../wxWindows-$VERSION-win.zip
+    mkdir $DESTDIR/wxWidgets-$VERSION
+    cd $DESTDIR/wxWidgets-$VERSION
+    unzip $ZIPFLAGS ../wxWidgets-$VERSION-win.zip
 
     echo Removing .mms files
     rm -f src/gtk/descrip.mms src/motif/descrip.mms
@@ -243,53 +243,53 @@ dospinmsw()
 
     cd $DESTDIR
 
-    rm -f wxWindows-$VERSION-win.zip
-    zip $ZIPFLAGS -r wxWindows-$VERSION-win.zip wxWindows-$VERSION/*
+    rm -f wxWidgets-$VERSION-win.zip
+    zip $ZIPFLAGS -r wxWidgets-$VERSION-win.zip wxWidgets-$VERSION/*
 }
 
 dospindocs()
 {
     cd $APPDIR
 
-    echo Creating $DESTDIR/wxWindows-$VERSION-DocSource.zip
-    zip $ZIPFLAGS -@ $DESTDIR/wxWindows-$VERSION-DocSource.zip < $APPDIR/distrib/msw/docsrc.rsp
-    rearchive wxWindows-$VERSION-DocSource.zip wxWindows-$VERSION $DESTDIR
+    echo Creating $DESTDIR/wxWidgets-$VERSION-DocSource.zip
+    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-DocSource.zip < $APPDIR/distrib/msw/docsrc.rsp
+    rearchive wxWidgets-$VERSION-DocSource.zip wxWidgets-$VERSION $DESTDIR
 
-    echo Creating $DESTDIR/wxWindows-$VERSION-WinHelp.zip
-    zip $ZIPFLAGS -@ $DESTDIR/wxWindows-$VERSION-WinHelp.zip < $APPDIR/distrib/msw/wx_hlp.rsp
-    rearchive wxWindows-$VERSION-WinHelp.zip wxWindows-$VERSION $DESTDIR
+    echo Creating $DESTDIR/wxWidgets-$VERSION-WinHelp.zip
+    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-WinHelp.zip < $APPDIR/distrib/msw/wx_hlp.rsp
+    rearchive wxWidgets-$VERSION-WinHelp.zip wxWidgets-$VERSION $DESTDIR
 
-    echo Creating $DESTDIR/wxWindows-$VERSION-HTML.zip
-    zip $ZIPFLAGS -@ $DESTDIR/wxWindows-$VERSION-HTML.zip < $APPDIR/distrib/msw/wx_html.rsp
-    rearchive wxWindows-$VERSION-HTML.zip wxWindows-$VERSION $DESTDIR
+    echo Creating $DESTDIR/wxWidgets-$VERSION-HTML.zip
+    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-HTML.zip < $APPDIR/distrib/msw/wx_html.rsp
+    rearchive wxWidgets-$VERSION-HTML.zip wxWidgets-$VERSION $DESTDIR
 
-    echo Creating $DESTDIR/wxWindows-$VERSION-PDF.zip
-    zip $ZIPFLAGS -@ $DESTDIR/wxWindows-$VERSION-PDF.zip < $APPDIR/distrib/msw/wx_pdf.rsp
-    rearchive wxWindows-$VERSION-PDF.zip wxWindows-$VERSION $DESTDIR
+    echo Creating $DESTDIR/wxWidgets-$VERSION-PDF.zip
+    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-PDF.zip < $APPDIR/distrib/msw/wx_pdf.rsp
+    rearchive wxWidgets-$VERSION-PDF.zip wxWidgets-$VERSION $DESTDIR
 
-    # zip $ZIPFLAGS -@ $DESTDIR/wxWindows-$VERSION-Word.zip < $APPDIR/distrib/msw/wx_word.rsp
-    # rearchive wxWindows-$VERSION-Word.zip wxWindows-$VERSION $DESTDIR
+    # zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-Word.zip < $APPDIR/distrib/msw/wx_word.rsp
+    # rearchive wxWidgets-$VERSION-Word.zip wxWidgets-$VERSION $DESTDIR
 
-    echo Creating $DESTDIR/wxWindows-$VERSION-HTB.zip
-    zip $ZIPFLAGS -@ $DESTDIR/wxWindows-$VERSION-HTB.zip < $APPDIR/distrib/msw/wx_htb.rsp
-    rearchive wxWindows-$VERSION-HTB.zip wxWindows-$VERSION $DESTDIR
+    echo Creating $DESTDIR/wxWidgets-$VERSION-HTB.zip
+    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-HTB.zip < $APPDIR/distrib/msw/wx_htb.rsp
+    rearchive wxWidgets-$VERSION-HTB.zip wxWidgets-$VERSION $DESTDIR
 
-    echo Creating $DESTDIR/wxWindows-$VERSION-HTMLHelp.zip
-    zip $ZIPFLAGS -@ $DESTDIR/wxWindows-$VERSION-HTMLHelp.zip < $APPDIR/distrib/msw/wx_chm.rsp
-    rearchive wxWindows-$VERSION-HTMLHelp.zip wxWindows-$VERSION $DESTDIR
+    echo Creating $DESTDIR/wxWidgets-$VERSION-HTMLHelp.zip
+    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-HTMLHelp.zip < $APPDIR/distrib/msw/wx_chm.rsp
+    rearchive wxWidgets-$VERSION-HTMLHelp.zip wxWidgets-$VERSION $DESTDIR
 
     # Add Linuxy docs to a separate archive to be transported to Linux for the
     # Linux-based releases
-    echo Creating $DESTDIR/wxWindows-$VERSION-LinuxDocs.zip
-    zip $ZIPFLAGS -@ $DESTDIR/wxWindows-$VERSION-LinuxDocs.zip < $APPDIR/distrib/msw/wx_html.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWindows-$VERSION-LinuxDocs.zip < $APPDIR/distrib/msw/wx_pdf.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWindows-$VERSION-LinuxDocs.zip < $APPDIR/distrib/msw/wx_htb.rsp
+    echo Creating $DESTDIR/wxWidgets-$VERSION-LinuxDocs.zip
+    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-LinuxDocs.zip < $APPDIR/distrib/msw/wx_html.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-LinuxDocs.zip < $APPDIR/distrib/msw/wx_pdf.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-LinuxDocs.zip < $APPDIR/distrib/msw/wx_htb.rsp
 
     # PDF/HTML docs that should go into the Windows setup because
     # there are no WinHelp equivalents
-    echo Creating $DESTDIR/wxWindows-$VERSION-ExtraDoc.zip
-    zip $ZIPFLAGS -@ $DESTDIR/wxWindows-$VERSION-ExtraDoc.zip < $APPDIR/distrib/msw/extradoc.rsp
-    rearchive wxWindows-$VERSION-ExtraDoc.zip wxWindows-$VERSION $DESTDIR
+    echo Creating $DESTDIR/wxWidgets-$VERSION-ExtraDoc.zip
+    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-ExtraDoc.zip < $APPDIR/distrib/msw/extradoc.rsp
+    rearchive wxWidgets-$VERSION-ExtraDoc.zip wxWidgets-$VERSION $DESTDIR
 }
 
 dospinmisc()
@@ -297,24 +297,24 @@ dospinmisc()
     cd $APPDIR
 
     # zip up Univ-specific files
-    echo Creating $DESTDIR/wxWindows-$VERSION-Univ.zip
-    zip $ZIPFLAGS -@ $DESTDIR/wxWindows-$VERSION-Univ.zip < $APPDIR/distrib/msw/univ.rsp
-    rearchive wxWindows-$VERSION-Univ.zip wxWindows-$VERSION $DESTDIR
+    echo Creating $DESTDIR/wxWidgets-$VERSION-Univ.zip
+    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-Univ.zip < $APPDIR/distrib/msw/univ.rsp
+    rearchive wxWidgets-$VERSION-Univ.zip wxWidgets-$VERSION $DESTDIR
 
     # VC++ project files
-    echo Creating $DESTDIR/wxWindows-$VERSION-VC.zip
-    zip $ZIPFLAGS -@ $DESTDIR/wxWindows-$VERSION-VC.zip < $APPDIR/distrib/msw/vc.rsp
-    # rearchive wxWindows-$VERSION-VC.zip wxWindows-$VERSION $DESTDIR
+    echo Creating $DESTDIR/wxWidgets-$VERSION-VC.zip
+    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-VC.zip < $APPDIR/distrib/msw/vc.rsp
+    # rearchive wxWidgets-$VERSION-VC.zip wxWidgets-$VERSION $DESTDIR
 
     # BC++ project files
-    echo Creating $DESTDIR/wxWindows-$VERSION-BC.zip
-    zip $ZIPFLAGS -@ $DESTDIR/wxWindows-$VERSION-BC.zip < $APPDIR/distrib/msw/bc.rsp
-    # rearchive wxWindows-$VERSION-BC.zip wxWindows-$VERSION $DESTDIR
+    echo Creating $DESTDIR/wxWidgets-$VERSION-BC.zip
+    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-BC.zip < $APPDIR/distrib/msw/bc.rsp
+    # rearchive wxWidgets-$VERSION-BC.zip wxWidgets-$VERSION $DESTDIR
 
     # CodeWarrior project files
-    echo Creating $DESTDIR/wxWindows-$VERSION-CW.zip
-    zip $ZIPFLAGS -@ $DESTDIR/wxWindows-$VERSION-CW.zip < $APPDIR/distrib/msw/cw.rsp
-    # rearchive wxWindows-$VERSION-CW.zip wxWindows-$VERSION $DESTDIR
+    echo Creating $DESTDIR/wxWidgets-$VERSION-CW.zip
+    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-CW.zip < $APPDIR/distrib/msw/cw.rsp
+    # rearchive wxWidgets-$VERSION-CW.zip wxWidgets-$VERSION $DESTDIR
 }
 
 dospinsetup()
@@ -322,23 +322,23 @@ dospinsetup()
     cd $DESTDIR
 
     # Put all archives for transit to Linux in a zip file
-    echo Creating $DESTDIR/wxWindows-$VERSION-LinuxTransit.zip
-    rm -f $DESTDIR/wxWindows-$VERSION-LinuxTransit.zip
-    zip $ZIPFLAGS $DESTDIR/wxWindows-$VERSION-LinuxTransit.zip wxWindows-$VERSION-LinuxDocs.zip wxWindows-$VERSION-VC.zip wxWindows-$VERSION-CW-Mac.zip
+    echo Creating $DESTDIR/wxWidgets-$VERSION-LinuxTransit.zip
+    rm -f $DESTDIR/wxWidgets-$VERSION-LinuxTransit.zip
+    zip $ZIPFLAGS $DESTDIR/wxWidgets-$VERSION-LinuxTransit.zip wxWidgets-$VERSION-LinuxDocs.zip wxWidgets-$VERSION-VC.zip wxWidgets-$VERSION-CW-Mac.zip
 
-    echo Unzipping the Windows files into wxWindows-$VERSION
+    echo Unzipping the Windows files into wxWidgets-$VERSION
 
-    unzip $ZIPFLAGS -o wxWindows-$VERSION-win.zip
-    unzip $ZIPFLAGS -o wxWindows-$VERSION-VC.zip -d wxWindows-$VERSION
-    unzip $ZIPFLAGS -o wxWindows-$VERSION-BC.zip -d wxWindows-$VERSION
-    unzip $ZIPFLAGS -o wxWindows-$VERSION-CW.zip -d wxWindows-$VERSION
-    unzip $ZIPFLAGS -o wxWindows-$VERSION-HTMLHelp.zip
-    unzip $ZIPFLAGS -o wxWindows-$VERSION-ExtraDoc.zip
+    unzip $ZIPFLAGS -o wxWidgets-$VERSION-win.zip
+    unzip $ZIPFLAGS -o wxWidgets-$VERSION-VC.zip -d wxWidgets-$VERSION
+    unzip $ZIPFLAGS -o wxWidgets-$VERSION-BC.zip -d wxWidgets-$VERSION
+    unzip $ZIPFLAGS -o wxWidgets-$VERSION-CW.zip -d wxWidgets-$VERSION
+    unzip $ZIPFLAGS -o wxWidgets-$VERSION-HTMLHelp.zip
+    unzip $ZIPFLAGS -o wxWidgets-$VERSION-ExtraDoc.zip
 
     # After this change of directory, we're in the
     # temporary 'wx' directory and not acting on
-    # the source wxWindows directory.
-    cd $DESTDIR/wxWindows-$VERSION
+    # the source wxWidgets directory.
+    cd $DESTDIR/wxWidgets-$VERSION
 
     # Now delete a few files that are unnecessary
     #attrib -R *
@@ -369,8 +369,8 @@ dospinsetup()
 
     # Make wxMSW-xxx.zip
     cd $DESTDIR
-    zip $ZIPFLAGS -r wxMSW-$VERSION.zip wxWindows-$VERSION/*
-    cd wxWindows-$VERSION
+    zip $ZIPFLAGS -r wxMSW-$VERSION.zip wxWidgets-$VERSION/*
+    cd wxWidgets-$VERSION
 
     echo Generating $SETUPSCRIPTNAME
     rm -f $SETUPSCRIPTNAME
@@ -448,8 +448,8 @@ dospinsetup()
     echo Putting all the setup files into a single zip archive
     zip wxMSW-$VERSION-setup.zip readme-$VERSION.txt setup*.*
 
-    rm -f wxWindows-$VERSION-win.zip
-    rm -f wxWindows-$VERSION-ExtraDoc.zip
+    rm -f wxWidgets-$VERSION-win.zip
+    rm -f wxWidgets-$VERSION-ExtraDoc.zip
 
     echo If you saw no warnings or errors, $APPTITLE was successfully spun.
     echo
@@ -514,8 +514,8 @@ makesetup()
     if [ ! -d $DESTDIR ]; then
         mkdir $DESTDIR
     fi
-    if [ -d $DESTDIR/wxWindows-$VERSION ]; then
-        rm -f -r $DESTDIR/wxWindows-$VERSION
+    if [ -d $DESTDIR/wxWidgets-$VERSION ]; then
+        rm -f -r $DESTDIR/wxWidgets-$VERSION
     fi
 
     # Copy FAQ from wxWebSite CVS
@@ -587,7 +587,7 @@ makesetup()
 }
 
 # We can't use e.g. this:
-# ls `cat $SRC/distrib/msw/makefile.rsp` zip -@ -u $DEST/wxWindows-$VERSION-gen.zip
+# ls `cat $SRC/distrib/msw/makefile.rsp` zip -@ -u $DEST/wxWidgets-$VERSION-gen.zip
 # because there's not enough space on the command line, plus we need to ignore the
 # blank lines.
 # So if we need to (not in this script so far) we do something like this instead:

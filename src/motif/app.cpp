@@ -6,7 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -207,7 +207,7 @@ bool wxApp::OnInitGui()
          // if you don't log to stderr, nothing will be shown...
         delete wxLog::SetActiveTarget(new wxLogStderr);
         wxString className(wxTheApp->GetClassName());
-        wxLogError(_("wxWindows could not open display for '%s': exiting."),
+        wxLogError(_("wxWidgets could not open display for '%s': exiting."),
                    className.c_str());
         exit(-1);
     }

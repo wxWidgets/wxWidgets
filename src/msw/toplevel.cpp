@@ -6,7 +6,7 @@
 // Created:     24.09.01
 // RCS-ID:      $Id$
 // Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
-// License:     wxWindows licence
+// License:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -85,7 +85,7 @@ wxDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 // globals
 // ----------------------------------------------------------------------------
 
-// the name of the default wxWindows class
+// the name of the default wxWidgets class
 #ifdef __WXWINCE__
 extern       wxChar *wxCanvasClassName;
 #else
@@ -932,7 +932,7 @@ void wxTopLevelWindowMSW::OnActivate(wxActivateEvent& event)
     }
 }
 
-// the DialogProc for all wxWindows dialogs
+// the DialogProc for all wxWidgets dialogs
 LONG APIENTRY _EXPORT
 wxDlgProc(HWND hDlg,
           UINT message,

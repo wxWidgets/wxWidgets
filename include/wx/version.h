@@ -1,12 +1,12 @@
 /**
 *  Name:        wx/version.h 
-*  Purpose:     wxWindows version numbers 
-*  Author:      Julian Smart 
+*  Purpose:     wxWidgets version numbers 
+*  Author:      Julian Smart
 *  Modified by: Ryan Norton (Converted to C)
 *  Created:     29/01/98 
 *  RCS-ID:      $Id$ 
 *  Copyright:   (c) 1998 Julian Smart 
-*  Licence:     wxWindows licence 
+*  Licence:     wxWidgets licence 
 */
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
@@ -21,8 +21,8 @@
 /*      so don't change its format too much or they could break */
 #define wxMAJOR_VERSION    2
 #define wxMINOR_VERSION    5
-#define wxRELEASE_NUMBER   1
-#define wxVERSION_STRING   _T("wxWidgets 2.5.1")
+#define wxRELEASE_NUMBER   2
+#define wxVERSION_STRING   _T("wxWidgets 2.5.2")
 
 /*  nothing to update below this line when updating the version */
 /*  ---------------------------------------------------------------------------- */

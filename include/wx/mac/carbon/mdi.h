@@ -8,7 +8,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MDI_H_
@@ -57,7 +57,7 @@ public:
   // Mac OS activate event
   virtual void MacActivate(long timestamp, bool activating);
 
-  // wxWindows activate event
+  // wxWidgets activate event
   void OnActivate(wxActivateEvent& event);
   void OnSysColourChanged(wxSysColourChangedEvent& event);
 

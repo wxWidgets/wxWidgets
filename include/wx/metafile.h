@@ -1,12 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/metafile.h
 // Purpose:     wxMetaFile class declaration
-// Author:      wxWindows team
+// Author:      wxWidgets team
 // Modified by:
 // Created:     13.01.00
 // RCS-ID:      $Id$
-// Copyright:   (c) wxWindows team
-// Licence:     wxWindows licence
+// Copyright:   (c) wxWidgets team
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_METAFILE_H_BASE_

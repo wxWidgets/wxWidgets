@@ -6,7 +6,7 @@
 // Created:     10/12/99
 // RCS-ID:      $Id$
 // Copyright:   (c) David Webster
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_WINDOW_H_
@@ -40,7 +40,7 @@ class WXDLLEXPORT wxButton;
 // constants
 // ---------------------------------------------------------------------------
 
-// FIXME does anybody use those? they're unused by wxWindows...
+// FIXME does anybody use those? they're unused by wxWidgets...
 enum
 {
     wxKEY_SHIFT = 1,
@@ -197,7 +197,7 @@ public:
     WXFARPROC OS2GetOldWndProc(void) const { return m_fnOldWndProc; }
     void OS2SetOldWndProc(WXFARPROC fnProc) { m_fnOldWndProc = fnProc; }
     //
-    // Return TRUE if the window is of a standard (i.e. not wxWindows') class
+    // Return TRUE if the window is of a standard (i.e. not wxWidgets') class
     //
     bool IsOfStandardClass(void) const { return m_fnOldWndProc != NULL; }
 
@@ -206,7 +206,7 @@ public:
                              ,bool   bControlOnly = FALSE
                             ) const;
 
-    // Make a Windows extended style from the given wxWindows window style ?? applicable to OS/2??
+    // Make a Windows extended style from the given wxWidgets window style ?? applicable to OS/2??
     static WXDWORD MakeExtendedStyle( long lStyle
                                      ,bool bEliminateBorders = TRUE
                                     );
@@ -214,7 +214,7 @@ public:
     // PM only: TRUE if this control is part of the main control
     virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return FALSE; };
 
-    // translate wxWindows style flags for this control into the PM style
+    // translate wxWidgets style flags for this control into the PM style
     // and optional extended style for the corresponding native control
     //
     // this is the function that should be overridden in the derived classes,
@@ -223,7 +223,7 @@ public:
                                 ,WXDWORD* pdwExstyle = NULL
                                ) const;
 
-    // get the MSW window flags corresponding to wxWindows ones
+    // get the MSW window flags corresponding to wxWidgets ones
     //
     // the functions returns the flags (WS_XXX) directly and puts the ext
     // (WS_EX_XXX) flags into the provided pointer if not NULL

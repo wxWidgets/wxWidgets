@@ -7,7 +7,7 @@
 // Created:     10.02.99
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_LONGLONG_H
@@ -47,7 +47,7 @@
         #pragma warning "Your compiler does not appear to support 64 bit "\
                         "integers, using emulation class instead.\n" \
                         "Please report your compiler version to " \
-                        "wx-dev@lists.wxwindows.org!"
+                        "wx-dev@lists.wxwidgets.org!"
     #endif
 
     #define wxUSE_LONGLONG_WX 1

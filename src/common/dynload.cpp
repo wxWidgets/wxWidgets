@@ -7,7 +7,7 @@
 // Created:      03/12/01
 // RCS-ID:       $Id$
 // Copyright:    (c) 2001 Ron Lee <ron@debian.org>
-// Licence:      wxWindows licence
+// Licence:      wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -457,7 +457,7 @@ wxLibrary::wxLibrary(wxDllType handle)
 
     // Some system may use a local heap for library.
     get_first = (t_get_first)GetSymbol(_T("wxGetClassFirst"));
-    // It is a wxWindows DLL.
+    // It is a wxWidgets DLL.
     if (get_first)
         PrepareClasses(get_first());
 }

@@ -4,7 +4,7 @@
 // Author:      Julian Smart
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MOTIF_DATAOBJ_H_

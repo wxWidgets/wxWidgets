@@ -5,7 +5,7 @@
 // Version:     3.04
 // RCS-ID:      $Id$
 // Copyright:   (c) Guillermo Rodriguez Garcia
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)

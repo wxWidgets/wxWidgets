@@ -17,12 +17,12 @@ regen
 build/bakefiles/*.bkl
 build/bakefiles/Bakefiles.bkgen
 build/bakefiles/README
-build/bakefiles/*.py
+build/bakefiles/*.py*
 build/bakefiles/*.mk
-build/bakefiles/compat/FORMATS.bkmanifest
-build/bakefiles/compat/README
-build/bakefiles/compat/wx24dsp.bkl
-build/bakefiles/compat/wx24dsp.empy
+build/bakefiles/formats/*.bkl
+build/bakefiles/formats/*.empy
+build/bakefiles/formats/README
+build/bakefiles/formats/*.bkmanifest
 
 distrib/msw/*.rsp
 distrib/msw/*.bat
@@ -1376,30 +1376,21 @@ tests/makefile*.*
 tests/test.dsp
 tests/test.dsw
 tests/*.cpp
+tests/*.fc
 
+tests/arrays/*.cpp
 tests/filesys/*.cpp
-tests/filesys/*.h
-tests/filesys/*.bkl
-tests/filesys/*.inc
-
-tests/formatconverter/*.pl
 tests/formatconverter/*.cpp
-tests/formatconverter/*.txt
-
+tests/longlong/*.cpp
 tests/mbconv/*.cpp
-tests/mbconv/*.h
-tests/mbconv/*.bkl
-tests/mbconv/*.inc
 
 tests/regex/*.cpp
-tests/regex/*.h
-tests/regex/*.bkl
 tests/regex/*.inc
 tests/regex/*.pl
 tests/regex/*.test
 
 tests/streams/*.cpp
 tests/streams/*.h
-tests/streams/*.bkl
-tests/streams/*.inc
+
+tests/strings/*.cpp
 

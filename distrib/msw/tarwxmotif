@@ -1,5 +1,5 @@
 #!/bin/sh
-# tardist: make up a tar.gz distribution of wxWindows 2
+# tardist: make up a tar.gz distribution of wxWidgets 2
 # Supply a source (e.g. ~/wx2) and destination (e.g. ~/wx2/deliver)
 
 init=""
@@ -14,7 +14,7 @@ then
   exit
 fi
 
-echo About to archive wxWindows:
+echo About to archive wxWidgets:
 echo   From   $1
 echo   To     $2
 echo CTRL-C if this is not correct.
@@ -29,7 +29,7 @@ echo Setting permissions...
 chmod a+x $1/configure $1/config.sub $1/config.guess $1/samples/configure $1/demos/configure $1/contrib/configure
 
 rm -f $2/wxMotif-${WXVER}*.tgz
-rm -f $2/wxWindows*.tgz
+rm -f $2/wxWidgets*.tgz
 rm -f $2/tex2rtf2.tgz
 rm -f $2/ogl3.tgz
 rm -f $2/jpeg.tgz
@@ -45,27 +45,27 @@ mv $2/wxMotif-${WXVER}.tar.gz $2/wxMotif-${WXVER}.tgz
 
 ### HTML docs
 ls `cat $1/distrib/msw/wx_html.rsp` > /tmp/html.txt
-tar cvf $2/wxWindows-${WXVER}-HTML.tar -T /tmp/html.txt
-gzip $2/wxWindows-${WXVER}-HTML.tar
-mv $2/wxWindows-${WXVER}-HTML.tar.gz $2/wxWindows-${WXVER}-HTML.tgz
+tar cvf $2/wxWidgets-${WXVER}-HTML.tar -T /tmp/html.txt
+gzip $2/wxWidgets-${WXVER}-HTML.tar
+mv $2/wxWidgets-${WXVER}-HTML.tar.gz $2/wxWidgets-${WXVER}-HTML.tgz
 
 ### HTB (wxHTML Help) docs
 ls `cat $1/distrib/msw/wx_htb.rsp` > /tmp/htb.txt
-tar cvf $2/wxWindows-${WXVER}-HTB.tar -T /tmp/htb.txt
-gzip $2/wxWindows-${WXVER}-HTB.tar
-mv $2/wxWindows-${WXVER}-HTB.tar.gz $2/wxWindows-${WXVER}-HTB.tgz
+tar cvf $2/wxWidgets-${WXVER}-HTB.tar -T /tmp/htb.txt
+gzip $2/wxWidgets-${WXVER}-HTB.tar
+mv $2/wxWidgets-${WXVER}-HTB.tar.gz $2/wxWidgets-${WXVER}-HTB.tgz
 
 ### PDF docs
 ls `cat $1/distrib/msw/wx_pdf.rsp` > /tmp/pdf.txt
-tar cvf $2/wxWindows-${WXVER}-PDF.tar -T /tmp/pdf.txt
-gzip $2/wxWindows-${WXVER}-PDF.tar
-mv $2/wxWindows-${WXVER}-PDF.tar.gz $2/wxWindows-${WXVER}-PDF.tgz
+tar cvf $2/wxWidgets-${WXVER}-PDF.tar -T /tmp/pdf.txt
+gzip $2/wxWidgets-${WXVER}-PDF.tar
+mv $2/wxWidgets-${WXVER}-PDF.tar.gz $2/wxWidgets-${WXVER}-PDF.tgz
 
 ### Stubs files
 #ls `cat $1/distrib/msw/stubs.rsp` > /tmp/stubs.txt
-#tar cvf $2/wxWindows-${WXVER}-stubs.tar -T /tmp/stubs.txt
-#gzip $2/wxWindows-${WXVER}-stubs.tar
-#mv $2/wxWindows-${WXVER}-stubs.tar.gz $2/wxWindows-${WXVER}-stubs.tgz
+#tar cvf $2/wxWidgets-${WXVER}-stubs.tar -T /tmp/stubs.txt
+#gzip $2/wxWidgets-${WXVER}-stubs.tar
+#mv $2/wxWidgets-${WXVER}-stubs.tar.gz $2/wxWidgets-${WXVER}-stubs.tgz
 
 ### Tex2RTF
 ls `cat $1/distrib/msw/tex2rtf.rsp` > /tmp/tex2rtf.txt

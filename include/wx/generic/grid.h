@@ -6,7 +6,7 @@
 // Created:     1/08/1999
 // RCS-ID:      $Id$
 // Copyright:   (c) Michael Bedward
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/defs.h"

@@ -5,8 +5,8 @@
 // Modified by:
 // Created:     05/25/99
 // RCS-ID:      $Id$
-// Copyright:   (c) wxWindows team
-// Licence:     wxWindows licence
+// Copyright:   (c) wxWidgets team
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -672,7 +672,7 @@ void wxDCBase::DrawLabel(const wxString& text,
 }
 
 /*
-Notes for wxWindows DrawEllipticArcRot(...)
+Notes for wxWidgets DrawEllipticArcRot(...)
 
 wxDCBase::DrawEllipticArcRot(...) draws a rotated elliptic arc or an ellipse.
 It uses wxDCBase::CalculateEllipticPoints(...) and wxDCBase::Rotate(...),

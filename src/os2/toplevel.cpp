@@ -6,7 +6,7 @@
 // Created:     30.12.01
 // RCS-ID:      $Id$
 // Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
-// License:     wxWindows licence
+// License:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -55,7 +55,7 @@
 // list of all frames and modeless dialogs
 wxWindowList wxModelessWindows;
 
-// the name of the default wxWindows class
+// the name of the default wxWidgets class
 extern void          wxAssociateWinWithHandle( HWND         hWnd
                                               ,wxWindowOS2* pWin
                                              );

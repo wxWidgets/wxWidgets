@@ -6,7 +6,7 @@
 // Created:
 // RCS-ID:      $Id$
 // Copyright:   (c) Robin Dunn, Robert Roebling
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WXSIZER_H__

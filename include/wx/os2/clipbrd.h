@@ -2,14 +2,14 @@
 // Name:        clipbrd.h
 // Purpose:     Clipboard functionality.
 //              Note: this functionality is under review, and
-//              is derived from wxWindows 1.xx code. Please contact
-//              the wxWindows developers for further information.
+//              is derived from wxWidgets 1.xx code. Please contact
+//              the wxWidgets developers for further information.
 // Author:      David Webster
 // Modified by:
 // Created:     10/13/99
 // RCS-ID:      $Id$
 // Copyright:   (c) David Webster
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_CLIPBRD_H_

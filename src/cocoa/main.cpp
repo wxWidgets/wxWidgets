@@ -6,7 +6,7 @@
 // Created:     2002/11/11
 // RCS-ID:      $Id:
 // Copyright:   (c) 2002 David Elliott
-// Licence:   	wxWindows license
+// Licence:   	wxWidgets license
 /////////////////////////////////////////////////////////////////////////////
 /* DFE: ^^^^^ Was that really necessary :-) */
 

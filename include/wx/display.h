@@ -5,8 +5,8 @@
 // Modified by: Vadim Zeitlin (resolution changes, display modes, ...)
 // Created:     06/21/02
 // RCS-ID:      $Id$
-// Copyright:   (c) 2002-2003 wxWindows team
-// Licence:     wxWindows licence
+// Copyright:   (c) 2002-2003 wxWidgets team
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_DISPLAY_H_BASE_

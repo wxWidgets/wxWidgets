@@ -5,8 +5,8 @@
  * Modified by: Vadim Zeitlin, Robert Roebling, Ron Lee
  * Created:     1998/06/12
  * RCS-ID:      $Id$
- * Copyright:   (c) 1998-2002 wxWindows dev team
- * Licence:     wxWindows licence
+ * Copyright:   (c) 1998-2002 wxWidgets dev team
+ * Licence:     wxWidgets licence
  */
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
@@ -48,7 +48,7 @@
 /*
     Standard headers we need here.
 
-    NB: don't include any wxWindows headers here because almost of them include
+    NB: don't include any wxWidgets headers here because almost of them include
         this one!
  */
 
@@ -178,7 +178,7 @@
         typedef wchar_t wxSChar;
         typedef wchar_t wxUChar;
     #else /* __WCHAR_TYPE__ and gcc < 2.96 */
-        /* VS: wxWindows used to define wxChar as __WCHAR_TYPE__ here. However, */
+        /* VS: wxWidgets used to define wxChar as __WCHAR_TYPE__ here. However, */
         /*     this doesn't work with new GCC 3.x compilers because wchar_t is */
         /*     C++'s builtin type in the new standard. OTOH, old compilers (GCC */
         /*     2.x) won't accept new definition of wx{S,U}Char, therefore we */
@@ -212,7 +212,7 @@
 
 /* although global macros with such names are normally bad, we want to have */
 /* another name for _T() which should be used to avoid confusion between _T() */
-/* and _() in wxWindows sources */
+/* and _() in wxWidgets sources */
 #define wxT(x)       _T(x)
 
 /* Unicode-friendly __FILE__, __DATE__ and __TIME__ analogs */
@@ -629,7 +629,7 @@
     #elif defined(__UNIX__) || defined(__GNUWIN32__)
         #define wxStricmp strcasecmp
         #define wxStrnicmp strncasecmp
-    /* #else -- use wxWindows implementation */
+    /* #else -- use wxWidgets implementation */
     #endif
 #endif /* !defined(wxStricmp) */
 
@@ -717,7 +717,7 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
             #define wxVsnprintf_    vswprintf
         #endif
     #else /* ASCII */
-        /* all versions of CodeWarrior supported by wxWindows apparently have */
+        /* all versions of CodeWarrior supported by wxWidgets apparently have */
         /* vsnprintf() */
         #if defined(HAVE_VSNPRINTF) || defined(__MWERKS__) || defined(__WATCOMC__)
             /* assume we have snprintf() too if we have vsnprintf() */

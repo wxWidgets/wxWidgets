@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_SETUP_H_
@@ -228,7 +228,7 @@
                                   // 0 for <iostream>
 
 #define wxUSE_STREAMS       1
-                                  // If enabled (1), compiles wxWindows streams classes
+                                  // If enabled (1), compiles wxWidgets streams classes
 
 #define wxUSE_STD_IOSTREAM  1
                                   // Use standard C++ streams if 1. If 0, use wxWin

@@ -6,7 +6,7 @@
 // Created:     15.04.02
 // RCS-ID:      $Id$
 // Copyright:   (c) 2002 Vadim Zeitlin
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // Set wxUSE_DDE_FOR_IPC to 1 to use DDE for IPC under Windows. If it is set to

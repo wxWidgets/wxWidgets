@@ -7,7 +7,7 @@
 // Created:     23.09.98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:     wxWindows licence (part of wxExtra library)
+// Licence:     wxWidgets licence (part of wxExtra library)
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MIMETYPE_H_
@@ -387,7 +387,7 @@ private:
 // global variables
 // ----------------------------------------------------------------------------
 
-// the default mime manager for wxWindows programs
+// the default mime manager for wxWidgets programs
 WXDLLIMPEXP_DATA_BASE(extern wxMimeTypesManager *) wxTheMimeTypesManager;
 
 #endif // wxUSE_MIMETYPE

@@ -6,7 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_PRIVATE_H_
@@ -69,7 +69,7 @@ extern bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window windo
 extern Window wxGetWindowParent(Window window);
 
 // Set the window manager decorations according to the
-// given wxWindows style
+// given wxWidgets style
 bool wxSetWMDecorations(Window w, long style);
 bool wxMWMIsRunning(Window w);
 

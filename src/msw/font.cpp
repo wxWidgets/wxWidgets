@@ -5,8 +5,8 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) wxWindows team
-// Licence:     wxWindows licence
+// Copyright:   (c) wxWidgets team
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -457,7 +457,7 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
 void wxNativeFontInfo::SetPointSize(int pointsize)
 {
 #if wxFONT_SIZE_COMPATIBILITY
-    // Incorrect, but compatible with old wxWindows behaviour
+    // Incorrect, but compatible with old wxWidgets behaviour
     lf.lfHeight = (pointSize*ppInch)/72;
 #else // wxFONT_SIZE_COMPATIBILITY
     // FIXME: using the screen here results in incorrect font size calculation

@@ -6,7 +6,7 @@
 // Created:     24/06/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Guilhem Lavaux
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_PROCESSH__

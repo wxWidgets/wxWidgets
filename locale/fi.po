@@ -1,11 +1,11 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWindows-2.5.1\n"
+"Project-Id-Version: wxWidgets-2.5.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-05-07 14:03+0200\n"
 "PO-Revision-Date: 2000-10-22 13:38Finland Daylight Time\n"
 "Last-Translator: Kaj G Backas <kgb@compart.fi>\n"
-"Language-Team: wxWindows translators <wx-translators@wxwindows.org>\n"
+"Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-15\n"
 "Content-Transfer-Encoding: 8-bit\n"
@@ -3936,13 +3936,13 @@ msgstr "wxSocket: tuntematon tapahtuma!"
 
 #: ../src/motif/app.cpp:207
 #, c-format
-msgid "wxWindows could not open display for '%s': exiting."
-msgstr "wxWindows ei voi avata ikkunaa prosessille '%s': lopettaa."
+msgid "wxWidgets could not open display for '%s': exiting."
+msgstr "wxWidgets ei voi avata ikkunaa prosessille '%s': lopettaa."
 
 #: ../src/x11/app.cpp:176
 #, fuzzy
-msgid "wxWindows could not open display. Exiting."
-msgstr "wxWindows ei voi avata ikkunaa prosessille '%s': lopettaa."
+msgid "wxWidgets could not open display. Exiting."
+msgstr "wxWidgets ei voi avata ikkunaa prosessille '%s': lopettaa."
 
 #: ../src/common/datetime.cpp:3302
 msgid "yesterday"
@@ -4337,8 +4337,8 @@ msgstr ""
 #~ msgid "Replace file '%s'?"
 #~ msgstr "Korvataanko tiedosto '%s'?"
 
-#~ msgid "wxWindows: error finding temporary file name.\n"
-#~ msgstr "wxWindows: virhe väliaikaistiedoston etsinnässä.\n"
+#~ msgid "wxWidgets: error finding temporary file name.\n"
+#~ msgstr "wxWidgets: virhe väliaikaistiedoston etsinnässä.\n"
 
 #~ msgid ""
 #~ "Can't create window of class %s!\n"

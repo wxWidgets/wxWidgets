@@ -3,7 +3,7 @@
  * Name:    gsocket.c
  * Author:  Guillermo Rodriguez Garcia <guille@iies.es>
  * Purpose: GSocket main MSW file
- * Licence: The wxWindows licence
+ * Licence: The wxWidgets licence
  * CVSID:   $Id$
  * -------------------------------------------------------------------------
  */

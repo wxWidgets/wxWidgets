@@ -1,5 +1,5 @@
 #!/bin/sh
-# Makes the wxWindows RPMs
+# Makes the wxWidgets RPMs
 
 doupdatecvs()
 {
@@ -442,7 +442,7 @@ for i in "$@"; do
     esac
 done
 
-echo About to make wxWindows RPMs:
+echo About to make wxWidgets RPMs:
 echo   From    $WXSRC
 echo   To      $WXDEST
 echo   Version $WXVER

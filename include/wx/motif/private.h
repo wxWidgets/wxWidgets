@@ -6,7 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_PRIVATE_H_
@@ -117,7 +117,7 @@ wxString wxXmStringToString( const XmString& xmString );
 XmString wxStringToXmString( const wxString& string );
 XmString wxStringToXmString( const char* string );
 
-// XmString made easy to use in wxWindows (and has an added benefit of
+// XmString made easy to use in wxWidgets (and has an added benefit of
 // cleaning up automatically)
 class wxXmString
 {

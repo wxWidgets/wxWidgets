@@ -6,7 +6,7 @@
 // Copyright:  (C) 1999-1997, Guilhem Lavaux
 //             (C) 2000-1999, Guillermo Rodriguez Garcia
 // RCS_ID:     $Id$
-// License:    see wxWindows licence
+// License:    see wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ==========================================================================
@@ -54,7 +54,7 @@ WX_CHECK_BUILD_OPTIONS("wxNet")
 
 // what to do within waits: we have 2 cases: from the main thread itself we
 // have to call wxYield() to let the events (including the GUI events and the
-// low-level (not wxWindows) events from GSocket) be processed. From another
+// low-level (not wxWidgets) events from GSocket) be processed. From another
 // thread it is enough to just call wxThread::Yield() which will give away the
 // rest of our time slice: the explanation is that the events will be processed
 // by the main thread anyhow, without calling wxYield(), but we don't want to

@@ -5,8 +5,8 @@
 // Modified by:
 // Created:     10.03.03
 // RCS-ID:      $Id$
-// Copyright:   (c) 2002 Vadim Zeitlin <vadim@wxwindows.org>
-// Licence:     wxWindows licence
+// Copyright:   (c) 2002 Vadim Zeitlin <vadim@wxwidgets.org>
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_RAWBMP_H_BASE_

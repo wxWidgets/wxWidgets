@@ -1,10 +1,10 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWindows-2.5.1\n"
+"Project-Id-Version: wxWidgets-2.5.2\n"
 "POT-Creation-Date: 2004-05-07 14:03+0200\n"
 "PO-Revision-Date: 2004-05-07 20:05+0100\n"
 "Last-Translator: W³odzimierz ABX Skiba <abx@abx.art.pl>\n"
-"Language-Team: wxWindows translators <wx-translators@wxwindows.org>\n"
+"Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -3980,11 +3980,11 @@ msgstr "wxSocket: nieznane zdarzenie!"
 
 #: ../src/motif/app.cpp:207
 #, c-format
-msgid "wxWindows could not open display for '%s': exiting."
+msgid "wxWidgets could not open display for '%s': exiting."
 msgstr "Nie mo¿na zainicjowaæ wy¶wietlania dla '%s': program koñczy pracê."
 
 #: ../src/x11/app.cpp:176
-msgid "wxWindows could not open display. Exiting."
+msgid "wxWidgets could not open display. Exiting."
 msgstr "Nie mo¿na zainicjowaæ wy¶wietlania. Program koñczy pracê."
 
 #: ../src/common/datetime.cpp:3302

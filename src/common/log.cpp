@@ -6,7 +6,7 @@
 // Created:     29/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -30,7 +30,7 @@
 
 #if wxUSE_LOG
 
-// wxWindows
+// wxWidgets
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/arrstr.h"

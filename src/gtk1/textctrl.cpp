@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Vadim Zeitlin
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -543,7 +543,7 @@ void wxTextCtrl::SetValue( const wxString &value )
     }
 
     // GRG, Jun/2000: Changed this after a lot of discussion in
-    //   the lists. wxWindows 2.2 will have a set of flags to
+    //   the lists. wxWidgets 2.2 will have a set of flags to
     //   customize this behaviour.
     SetInsertionPoint(0);
 

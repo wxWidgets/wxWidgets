@@ -6,7 +6,7 @@
 // Created:     10/09/99
 // RCS-ID:      $Id$
 // Copyright:   (c) David Webster
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".
@@ -194,7 +194,7 @@ bool wxListBox::Create(
     SetFont(*pTextFont);
 
     //
-    // Set standard wxWindows colors for Listbox items and highlighting
+    // Set standard wxWidgets colors for Listbox items and highlighting
     //
     wxColour                        vColour;
 

@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     30.07.2001
 // Copyright:   (c) 2001 Lindsay Mathieson <lindsay@mathieson.org>
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_STACK_H_

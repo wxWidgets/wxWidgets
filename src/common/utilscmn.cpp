@@ -6,7 +6,7 @@
 // Created:     29/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -106,8 +106,8 @@
 // ----------------------------------------------------------------------------
 
 #if WXWIN_COMPATIBILITY_2_2
-    const wxChar *wxInternalErrorStr = wxT("wxWindows Internal Error");
-    const wxChar *wxFatalErrorStr = wxT("wxWindows Fatal Error");
+    const wxChar *wxInternalErrorStr = wxT("wxWidgets Internal Error");
+    const wxChar *wxFatalErrorStr = wxT("wxWidgets Fatal Error");
 #endif // WXWIN_COMPATIBILITY_2_2
 
 // ============================================================================

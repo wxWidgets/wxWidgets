@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart, Vadim Zeitlin
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_UNIX_EXECUTE_H

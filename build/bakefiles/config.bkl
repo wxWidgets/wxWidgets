@@ -28,7 +28,7 @@
         <values-description>,Unicode</values-description>
         <default-value>0</default-value>        
         <description>
-            Compile Unicode build of wxWindows?
+            Compile Unicode build of wxWidgets?
         </description>
     </option>
 
@@ -159,7 +159,7 @@ Acts according to DEBUG_INFO by default.
         <values>0,1</values>
         <default-value>0</default-value>
         <description>
-            Is this official build by wxWindows developers?
+            Is this official build by wxWidgets developers?
         </description>
     </option>
     <option name="VENDOR">

@@ -5,7 +5,7 @@
 // Created:   Fri Oct 24 10:46:34 MET 1997
 // RCS-ID:    $Id$
 // Copyright: (c) 1997 Julian Smart, Robert Roebling
-// Licence:   wxWindows licence
+// Licence:   wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)

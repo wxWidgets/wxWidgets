@@ -6,7 +6,7 @@
 // Created:     27/07/03
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 Stefan Csomor
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_SETH__

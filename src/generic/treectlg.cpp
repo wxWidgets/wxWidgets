@@ -6,7 +6,7 @@
 // Modified:    22/10/98 - almost total rewrite, simpler interface (VZ)
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling and Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // =============================================================================
@@ -2482,7 +2482,7 @@ void wxGenericTreeCtrl::DrawLine(const wxTreeItemId &item, bool below)
 }
 
 // -----------------------------------------------------------------------------
-// wxWindows callbacks
+// wxWidgets callbacks
 // -----------------------------------------------------------------------------
 
 void wxGenericTreeCtrl::OnPaint( wxPaintEvent &WXUNUSED(event) )

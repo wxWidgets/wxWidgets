@@ -2,11 +2,11 @@
 // Name:        wx/msw/fdrepdlg.h
 // Purpose:     wxFindReplaceDialog class
 // Author:      Markus Greither
-// Modified by: 31.07.01: VZ: integrated into wxWindows
+// Modified by: 31.07.01: VZ: integrated into wxWidgets
 // Created:     23/03/2001
 // RCS-ID:
 // Copyright:   (c) Markus Greither
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)

@@ -6,7 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -20,7 +20,7 @@
 
 /* Wolfram Gloger <u7y22ab@sunmail.lrz-muenchen.de>
 I have implemented basic colormap support for the X11 versions of
-wxWindows, notably wxPalette::Create().  The way I did it is to
+wxWidgets, notably wxPalette::Create().  The way I did it is to
 allocate additional read-only color cells in the default colormap.  In
 general you will get arbitrary pixel values assigned to these new
 cells and therefore I added a method wxColourMap::TransferBitmap()

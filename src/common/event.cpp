@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -338,7 +338,7 @@ int wxNewEventType()
 // ----------------------------------------------------------------------------
 
 /*
- * General wxWindows events, covering
+ * General wxWidgets events, covering
  * all interesting things that might happen (button clicking, resizing,
  * setting text in widgets, etc.).
  *

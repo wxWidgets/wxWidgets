@@ -5,8 +5,8 @@
 // Modified by:
 // Created:     21.06.2003 (extracted from common/fontmap.cpp)
 // RCS-ID:      $Id$
-// Copyright:   (c) 1999-2003 Vadim Zeitlin <vadim@wxwindows.org>
-// Licence:     wxWindows licence
+// Copyright:   (c) 1999-2003 Vadim Zeitlin <vadim@wxwidgets.org>
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_FMAPPRIV_H_
@@ -25,7 +25,7 @@ enum { wxFONTENCODING_UNKNOWN = -2 };
 // the config paths we use
 #if wxUSE_CONFIG
 
-#define FONTMAPPER_ROOT_PATH wxT("/wxWindows/FontMapper")
+#define FONTMAPPER_ROOT_PATH wxT("/wxWidgets/FontMapper")
 #define FONTMAPPER_CHARSET_PATH wxT("Charsets")
 #define FONTMAPPER_CHARSET_ALIAS_PATH wxT("Aliases")
 

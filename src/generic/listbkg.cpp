@@ -6,7 +6,7 @@
 // Created:     19.08.03
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -45,7 +45,7 @@
 const wxCoord MARGIN = 5;
 
 // ----------------------------------------------------------------------------
-// various wxWindows macros
+// various wxWidgets macros
 // ----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxListbook, wxControl)

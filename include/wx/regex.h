@@ -6,7 +6,7 @@
 // Created:     05.02.2000
 // RCS-ID:      $Id$
 // Copyright:   (c) 2000 Karsten Ballüder <ballueder@gmx.net>
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_REGEX_H_

@@ -3,11 +3,11 @@
 // Purpose:     FTP protocol
 // Author:      Vadim Zeitlin
 // Modified by: Mark Johnson, wxWindows@mj10777.de 
-//              20000917 : RmDir, GetLastResult, GetList 
+//              20000917 : RmDir, GetLastResult, GetList
 // Created:     07/07/1997
 // RCS-ID:      $Id$
 // Copyright:   (c) 1997, 1998 Guilhem Lavaux
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_FTP_H__

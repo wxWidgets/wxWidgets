@@ -6,7 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -1293,7 +1293,7 @@ void wxWindowX11::OnInternalIdle()
 }
 
 // ----------------------------------------------------------------------------
-// function which maintain the global hash table mapping Widgets to wxWindows
+// function which maintain the global hash table mapping Widgets to wxWidgets
 // ----------------------------------------------------------------------------
 
 bool wxAddWindowToTable(Window w, wxWindow *win)

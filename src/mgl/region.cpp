@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:      region.cpp
-// Purpose:   Region handling for wxWindows/MGL
+// Purpose:   Region handling for wxWidgets/MGL
 // Author:    Vaclav Slavik
 // RCS-ID:    $Id$
 // Copyright: (c) 2001-2002 SciTech Software, Inc. (www.scitechsoft.com)
-// Licence:   wxWindows licence
+// Licence:   wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)

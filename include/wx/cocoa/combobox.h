@@ -6,7 +6,7 @@
 // Created:     2003/07/14
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWindows licence
+// Licence:   	wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_COCOA_COMBOBOX_H__

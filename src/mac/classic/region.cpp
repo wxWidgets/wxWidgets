@@ -5,7 +5,7 @@
 // Created:   Fri Oct 24 10:46:34 MET 1997
 // RCS-ID:    $Id$
 // Copyright: (c) 1997 Stefan Csomor
-// Licence:   wxWindows licence
+// Licence:   wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__

@@ -7,7 +7,7 @@
 // Created:     24/3/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////
 
 #ifndef _TASKBAR_H_

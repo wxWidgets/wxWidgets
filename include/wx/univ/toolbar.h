@@ -6,7 +6,7 @@
 // Created:     10.09.00
 // RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_UNIV_TOOLBAR_H_

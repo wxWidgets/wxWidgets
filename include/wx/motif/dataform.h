@@ -6,7 +6,7 @@
 // Created:     19.10.99 (extracted from motif/dataobj.h)
 // RCS-ID:      $Id$
 // Copyright:   (c) 1999 Robert Roebling
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MOTIF_DATAFORM_H

@@ -1,5 +1,5 @@
 #
-# Helper functions for wxWindows bakefiles
+# Helper functions for wxWidgets bakefiles
 #
 # $Id$
 #
@@ -20,7 +20,7 @@ utils.addSubstituteCallback('OBJS', __noopSubst)
 
 
 def mk_wxid(id):
-    """Creates wxWindows library identifier from bakefile target ID that
+    """Creates wxWidgets library identifier from bakefile target ID that
        follows this convention: DLLs end with 'dll', static libraries
        end with 'lib'. If withPrefix=1, then _wxid is returned instead
        of wxid."""
@@ -93,7 +93,7 @@ wxVersion = None
 VERSION_FILE = '../../include/wx/version.h'
 
 def getVersion():
-    """Returns wxWindows version as a tuple: (major,minor,release)."""
+    """Returns wxWidgets version as a tuple: (major,minor,release)."""
     global wxVersion
     if wxVersion == None:
         f = open(VERSION_FILE, 'rt')

@@ -6,7 +6,7 @@
 // Created:     05.11.99
 // RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -563,13 +563,13 @@ bool wxNativeFontInfo::GetUnderlined() const
 
 wxString wxNativeFontInfo::GetFaceName() const
 {
-    // wxWindows facename probably more accurately corresponds to X family
+    // wxWidgets facename probably more accurately corresponds to X family
     return GetXFontComponent(wxXLFD_FAMILY);
 }
 
 wxFontFamily wxNativeFontInfo::GetFamily() const
 {
-    // and wxWindows family -- to X foundry, but we have to translate it to
+    // and wxWidgets family -- to X foundry, but we have to translate it to
     // wxFontFamily somehow...
     wxFAIL_MSG(_T("not implemented")); // GetXFontComponent(wxXLFD_FOUNDRY);
 

@@ -6,7 +6,7 @@
 // Created:     20.09.01
 // RCS-ID:      $Id$
 // Copyright:   (c) 2001 Stefan Csomor
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MSW_TOPLEVEL_H_

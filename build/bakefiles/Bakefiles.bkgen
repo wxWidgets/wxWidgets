@@ -29,7 +29,7 @@
     <disable-formats>dmars,dmars_smake,cbx_unix,cbuilderx,msevc4prj</disable-formats>
     
 
-    <!-- These wildcards match all .bkl files in wxWindows tree: -->
+    <!-- These wildcards match all .bkl files in wxWidgets tree: -->
     <input>
         wx.bkl
         ../../contrib/build/*/*.bkl
@@ -139,7 +139,7 @@
 
     <add-formats files="wx.bkl">wx24dsp</add-formats>
     <add-flags formats="wx24dsp">
-        -DUSE_GUI=1 -DWXUNIV=0 -o../../src/wxWindows.dsp
+        -DUSE_GUI=1 -DWXUNIV=0 -o../../src/wxWidgets.dsp
     </add-flags>
     
     <add-formats files="wx.bkl">rpmspec</add-formats>
