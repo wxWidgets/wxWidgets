@@ -151,13 +151,11 @@ public:
       return Item(Count() - 1);
   }
 
-#if WXWIN_COMPATIBILITY_2_4
     // return a wxString[], useful for the controls which
     // take one in their ctor.  You must delete[] it yourself
     // once you are done with it.  Will return NULL if the
     // ArrayString was empty.
   wxString* GetStringArray() const;
-#endif
 
   // item management
     // Search the element in the array, starting from the beginning if
