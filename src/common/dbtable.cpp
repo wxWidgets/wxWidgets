@@ -222,7 +222,7 @@ bool wxTable::Open(void)
 	{
         wxString s;
 		s.Printf("Error opening '%s', table/view does not exist in the database.", tableName);
-		pDb->LogError(s);
+		pDb->LogError(WXSTRINGCAST(s));
 		return(FALSE);
 	}
 
