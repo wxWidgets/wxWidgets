@@ -83,6 +83,7 @@ wxSize wxControl::DoGetBestSize() const
     return wxSize(req.width, req.height);
 }
 
+#ifdef __WXGTK20__
 wxString wxControl::PrepareLabelMnemonics( const wxString &label ) const
 {
     //Format mnemonics properly for GTK2. This can be called from GTK1.x, but
@@ -124,6 +125,7 @@ wxString wxControl::PrepareLabelMnemonics( const wxString &label ) const
     }
     return label2;
 }
+#endif
 
 #endif // wxUSE_CONTROLS
 
