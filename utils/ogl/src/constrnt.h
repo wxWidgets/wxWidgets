@@ -21,12 +21,12 @@
  *
  */
 
-class OGLConstraintType: public wxObject
+class wxOGLConstraintType: public wxObject
 {
- DECLARE_DYNAMIC_CLASS(OGLConstraintType)
+ DECLARE_DYNAMIC_CLASS(wxOGLConstraintType)
 public:
-  OGLConstraintType(int type = 0, const wxString& name = "", const wxString& phrase = "");
-  ~OGLConstraintType();
+  wxOGLConstraintType(int type = 0, const wxString& name = "", const wxString& phrase = "");
+  ~wxOGLConstraintType();
 
 public:
   int           m_type;     // E.g. gyCONSTRAINT_CENTRED_VERTICALLY
@@ -35,7 +35,7 @@ public:
 
 };
 
-extern wxList* OGLConstraintTypes;
+extern wxList* wxOGLConstraintTypes;
 
 #define gyCONSTRAINT_CENTRED_VERTICALLY   1
 #define gyCONSTRAINT_CENTRED_HORIZONTALLY 2
@@ -56,14 +56,14 @@ extern wxList* OGLConstraintTypes;
 #define gyCONSTRAINT_MIDALIGNED_LEFT      14
 #define gyCONSTRAINT_MIDALIGNED_RIGHT     15
 
-class OGLConstraint: public wxObject
+class wxOGLConstraint: public wxObject
 {
- DECLARE_DYNAMIC_CLASS(OGLConstraint)
+ DECLARE_DYNAMIC_CLASS(wxOGLConstraint)
  public:
-  OGLConstraint() { m_xSpacing = 0.0; m_ySpacing = 0.0; m_constraintType = 0; m_constraintName = ""; m_constraintId = 0;
+  wxOGLConstraint() { m_xSpacing = 0.0; m_ySpacing = 0.0; m_constraintType = 0; m_constraintName = ""; m_constraintId = 0;
                         m_constrainingObject = NULL; }
-  OGLConstraint(int type, wxShape *constraining, wxList& constrained);
-  ~OGLConstraint();
+  wxOGLConstraint(int type, wxShape *constraining, wxList& constrained);
+  ~wxOGLConstraint();
 
   // Returns TRUE if anything changed
   bool Evaluate();

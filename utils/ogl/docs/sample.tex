@@ -14,47 +14,6 @@ housekeeping logic required to get it up and running. OGLEdit also provides
 a demonstration of the Undo/Redo capability supported by the document/view classes,
 and how a typical application might implement this feature.
 
-{\it Note:} A bug in the wxWindows document/view implementation before
-version 1.66C may cause Do/Undo to misbehave and get out of sync. If this is the case,
-please replace wxCommandProcessor::Submit with the following in wx\_doc.cpp.
-
-{\small
-\begin{verbatim}
-  Bool wxCommandProcessor::Submit(wxCommand *command, Bool storeIt)
-  {
-    Bool success = command->Do();
-    if (success && storeIt)
-    {
-      if (commands.Number() == maxNoCommands)
-      {
-        wxNode *firstNode = commands.First();
-        wxCommand *firstCommand = (wxCommand *)firstNode->Data();
-        delete firstCommand;
-        delete firstNode;
-      }
-
-      // Correct a bug: we must chop off the current 'branch'
-      // so that we're at the end of the command list.
-      if (currentCommand)
-      {
-        wxNode *node = currentCommand->Next();
-        while (node)
-        {
-          wxNode *next = node->Next();
-          delete node;
-          node = next;
-        }
-      }
-    
-      commands.Append(command);
-      currentCommand = commands.Last();
-      SetMenuStrings();
-    }
-    return success;
-  }
-\end{verbatim}
-}
-
 \section{OGLEdit files}
 
 OGLEdit comprises the following source files.

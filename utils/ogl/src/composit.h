@@ -17,7 +17,7 @@
 #endif
 
 class wxDivisionShape;
-class OGLConstraint;
+class wxOGLConstraint;
 
 /*
  * A composite object is an invisible rectangle surrounding all children
@@ -51,11 +51,11 @@ public:
   void AddChild(wxShape *child, wxShape *addAfter = NULL);
   void RemoveChild(wxShape *child);
 
-  OGLConstraint *AddConstraint(OGLConstraint *constraint);
-  OGLConstraint *AddConstraint(int type, wxShape *constraining, wxList& constrained);
-  OGLConstraint *AddConstraint(int type, wxShape *constraining, wxShape *constrained);
+  wxOGLConstraint *AddConstraint(wxOGLConstraint *constraint);
+  wxOGLConstraint *AddConstraint(int type, wxShape *constraining, wxList& constrained);
+  wxOGLConstraint *AddConstraint(int type, wxShape *constraining, wxShape *constrained);
 
-  void DeleteConstraint(OGLConstraint *constraint);
+  void DeleteConstraint(wxOGLConstraint *constraint);
 
   // Delete constraints that involve this child.
   void DeleteConstraintsInvolvingChild(wxShape *child);
@@ -66,7 +66,7 @@ public:
 
   // Find constraint, also returning actual composite the constraint was in,
   // in case it had to find it recursively.
-  OGLConstraint *FindConstraint(long id, wxCompositeShape **actualComposite = NULL);
+  wxOGLConstraint *FindConstraint(long id, wxCompositeShape **actualComposite = NULL);
 
   // Returns TRUE if something changed
   bool Constrain();
@@ -79,8 +79,8 @@ public:
 
 #ifdef PROLOGIO
   // Prolog database stuff
-  void WritePrologAttributes(wxExpr *clause);
-  void ReadPrologAttributes(wxExpr *clause);
+  void WriteAttributes(wxExpr *clause);
+  void ReadAttributes(wxExpr *clause);
   // In case the object has constraints it needs to read in in a different pass
   void ReadConstraints(wxExpr *clause, wxExprDatabase *database);
 #endif
@@ -155,8 +155,8 @@ class wxDivisionShape: public wxCompositeShape
 
 #ifdef PROLOGIO
   // Prolog database stuff
-  void WritePrologAttributes(wxExpr *clause);
-  void ReadPrologAttributes(wxExpr *clause);
+  void WriteAttributes(wxExpr *clause);
+  void ReadAttributes(wxExpr *clause);
 #endif
   // Does the copying for this object
   void Copy(wxShape& copy);

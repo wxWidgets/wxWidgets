@@ -679,9 +679,9 @@ void wxPolygonShape::ResetControlPoints()
 
 
 #ifdef PROLOGIO
-void wxPolygonShape::WritePrologAttributes(wxExpr *clause)
+void wxPolygonShape::WriteAttributes(wxExpr *clause)
 {
-  wxShape::WritePrologAttributes(clause);
+  wxShape::WriteAttributes(clause);
 
   clause->AddAttributeValue("x", m_xpos);
   clause->AddAttributeValue("y", m_ypos);
@@ -722,9 +722,9 @@ void wxPolygonShape::WritePrologAttributes(wxExpr *clause)
   clause->AddAttributeValue("m_originalPoints", list);
 }
 
-void wxPolygonShape::ReadPrologAttributes(wxExpr *clause)
+void wxPolygonShape::ReadAttributes(wxExpr *clause)
 {
-  wxShape::ReadPrologAttributes(clause);
+  wxShape::ReadAttributes(clause);
 
   // Read a list of lists
   m_points = new wxList;
@@ -868,7 +868,7 @@ void wxPolygonShape::Copy(wxShape& copy)
   polyCopy.m_originalHeight = m_originalHeight;
 }
 
-int wxPolygonShape::GetNumberOfAttachments()
+int wxPolygonShape::GetNumberOfAttachments() const
 {
   int maxN = (m_points ? (m_points->Number() - 1) : 0);
   wxNode *node = m_attachmentPoints.First();
@@ -991,9 +991,9 @@ bool wxRectangleShape::GetPerimeterPoint(double x1, double y1,
 }
 
 #ifdef PROLOGIO
-void wxRectangleShape::WritePrologAttributes(wxExpr *clause)
+void wxRectangleShape::WriteAttributes(wxExpr *clause)
 {
-  wxShape::WritePrologAttributes(clause);
+  wxShape::WriteAttributes(clause);
   clause->AddAttributeValue("x", m_xpos);
   clause->AddAttributeValue("y", m_ypos);
 
@@ -1003,9 +1003,9 @@ void wxRectangleShape::WritePrologAttributes(wxExpr *clause)
     clause->AddAttributeValue("corner", m_cornerRadius);
 }
 
-void wxRectangleShape::ReadPrologAttributes(wxExpr *clause)
+void wxRectangleShape::ReadAttributes(wxExpr *clause)
 {
-  wxShape::ReadPrologAttributes(clause);
+  wxShape::ReadAttributes(clause);
   clause->AssignAttributeValue("width", &m_width);
   clause->AssignAttributeValue("height", &m_height);
   clause->AssignAttributeValue("corner", &m_cornerRadius);
@@ -1031,7 +1031,7 @@ void wxRectangleShape::Copy(wxShape& copy)
   rectCopy.m_cornerRadius = m_cornerRadius;
 }
 
-int wxRectangleShape::GetNumberOfAttachments()
+int wxRectangleShape::GetNumberOfAttachments() const
 {
   return wxShape::GetNumberOfAttachments();
 }
@@ -1218,9 +1218,9 @@ void wxTextShape::Copy(wxShape& copy)
 }
 
 #ifdef PROLOGIO
-void wxTextShape::WritePrologAttributes(wxExpr *clause)
+void wxTextShape::WriteAttributes(wxExpr *clause)
 {
-  wxRectangleShape::WritePrologAttributes(clause);
+  wxRectangleShape::WriteAttributes(clause);
 }
 #endif
 
@@ -1285,9 +1285,9 @@ void wxEllipseShape::SetSize(double x, double y, bool recursive)
 }
 
 #ifdef PROLOGIO
-void wxEllipseShape::WritePrologAttributes(wxExpr *clause)
+void wxEllipseShape::WriteAttributes(wxExpr *clause)
 {
-  wxShape::WritePrologAttributes(clause);
+  wxShape::WriteAttributes(clause);
   clause->AddAttributeValue("x", m_xpos);
   clause->AddAttributeValue("y", m_ypos);
 
@@ -1295,9 +1295,9 @@ void wxEllipseShape::WritePrologAttributes(wxExpr *clause)
   clause->AddAttributeValue("height", m_height);
 }
 
-void wxEllipseShape::ReadPrologAttributes(wxExpr *clause)
+void wxEllipseShape::ReadAttributes(wxExpr *clause)
 {
-  wxShape::ReadPrologAttributes(clause);
+  wxShape::ReadAttributes(clause);
   clause->AssignAttributeValue("width", &m_width);
   clause->AssignAttributeValue("height", &m_height);
 
@@ -1322,7 +1322,7 @@ void wxEllipseShape::Copy(wxShape& copy)
   ellipseCopy.m_height = m_height;
 }
 
-int wxEllipseShape::GetNumberOfAttachments()
+int wxEllipseShape::GetNumberOfAttachments() const
 {
   return wxShape::GetNumberOfAttachments();
 }
@@ -1480,7 +1480,7 @@ void wxControlPoint::OnEndDragLeft(double x, double y, int keys, int attachment)
     m_shape->GetEventHandler()->OnSizingEndDragLeft(this, x, y, keys, attachment);
 }
 
-int wxControlPoint::GetNumberOfAttachments()
+int wxControlPoint::GetNumberOfAttachments() const
 {
   return 1;
 }

@@ -28,10 +28,9 @@ class wxBitmapShape: public wxRectangleShape
   void OnDraw(wxDC& dc);
 
 #ifdef PROLOGIO
-  // Prolog database stuff
-  char *GetFunctor();
-  void WritePrologAttributes(wxExpr *clause);
-  void ReadPrologAttributes(wxExpr *clause);
+  // I/O
+  void WriteAttributes(wxExpr *clause);
+  void ReadAttributes(wxExpr *clause);
 #endif
 
   // Does the copying for this object

@@ -62,7 +62,7 @@ class wxControlPoint: public wxRectangleShape
 
   bool GetAttachmentPosition(int attachment, double *x, double *y,
                                      int nth = 0, int no_arcs = 1, wxLineShape *line = NULL);
-  int GetNumberOfAttachments();
+  int GetNumberOfAttachments() const;
 
   inline void SetEraseObject(bool er) { m_eraseObject = er; }
 

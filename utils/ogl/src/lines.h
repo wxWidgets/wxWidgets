@@ -189,10 +189,9 @@ class wxLineShape: public wxShape
   bool HitTest(double x, double y, int *attachment, double *distance);
 
 #ifdef PROLOGIO
-  // Prolog database stuff
-  virtual char *GetFunctor();
-  virtual void WritePrologAttributes(wxExpr *clause);
-  virtual void ReadPrologAttributes(wxExpr *clause);
+  // I/O
+  virtual void WriteAttributes(wxExpr *clause);
+  virtual void ReadAttributes(wxExpr *clause);
 #endif
 
   virtual void FindNth(wxShape *image, int *nth, int *no_arcs, bool incoming);

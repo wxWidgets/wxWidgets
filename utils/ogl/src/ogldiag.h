@@ -44,7 +44,7 @@ public:
 
   void SetSnapToGrid(bool snap);
   void SetGridSpacing(double spacing);
-  inline double GetGridSpacing() { return m_gridSpacing; }
+  inline double GetGridSpacing() const { return m_gridSpacing; }
   inline bool GetSnapToGrid() const { return m_snapToGrid; }
   void Snap(double *x, double *y);
 
@@ -85,7 +85,7 @@ protected:
   wxShapeCanvas*        m_diagramCanvas;
   bool                  m_quickEditMode;
   bool                  m_snapToGrid;
-  double                 m_gridSpacing;
+  double                m_gridSpacing;
   int                   m_mouseTolerance;
   wxList*               m_shapeList;
 };

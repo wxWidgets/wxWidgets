@@ -33,8 +33,8 @@ class wxPseudoMetaFile: public wxObject
   void Draw(wxDC& dc, double xoffset, double yoffset);
 
 #ifdef PROLOGIO
-  void WritePrologAttributes(wxExpr *clause, int whichAngle);
-  void ReadPrologAttributes(wxExpr *clause, int whichAngle);
+  void WriteAttributes(wxExpr *clause, int whichAngle);
+  void ReadAttributes(wxExpr *clause, int whichAngle);
 #endif
 
   void Clear();
@@ -140,10 +140,9 @@ class wxDrawnShape: public wxRectangleShape
   void OnDraw(wxDC& dc);
 
 #ifdef PROLOGIO
-  // Prolog database stuff
-  char *GetFunctor();
-  void WritePrologAttributes(wxExpr *clause);
-  void ReadPrologAttributes(wxExpr *clause);
+  // I/O
+  void WriteAttributes(wxExpr *clause);
+  void ReadAttributes(wxExpr *clause);
 #endif
 
   // Does the copying for this object
@@ -190,12 +189,12 @@ class wxDrawnShape: public wxRectangleShape
   virtual void SetClippingRect(const wxRect& rect);
   virtual void DestroyClippingRect();
 
-  virtual void SetPen(wxPen* pen, bool isOutline = FALSE);     // TODO: eventually, just store GDI object attributes, not actual
-  virtual void SetBrush(wxBrush* brush, bool isFill = FALSE);  // pens/brushes etc.
-  virtual void SetFont(wxFont* font);
-  virtual void SetTextColour(const wxColour& colour);
-  virtual void SetBackgroundColour(const wxColour& colour);
-  virtual void SetBackgroundMode(int mode);
+  virtual void SetDrawnPen(wxPen* pen, bool isOutline = FALSE);     // TODO: eventually, just store GDI object attributes, not actual
+  virtual void SetDrawnBrush(wxBrush* brush, bool isFill = FALSE);  // pens/brushes etc.
+  virtual void SetDrawnFont(wxFont* font);
+  virtual void SetDrawnTextColour(const wxColour& colour);
+  virtual void SetDrawnBackgroundColour(const wxColour& colour);
+  virtual void SetDrawnBackgroundMode(int mode);
 
   // Set the width/height according to the shapes in the metafile.
   // Call this after drawing into the shape.
@@ -205,6 +204,8 @@ class wxDrawnShape: public wxRectangleShape
 
   inline int GetAngle() const { return m_currentAngle; }
 
+// Implementation
+protected:
   // Which metafile do we use now? Based on current rotation and validity
   // of metafiles.
   int DetermineMetaFile(double rotation);

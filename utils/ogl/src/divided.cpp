@@ -305,7 +305,7 @@ bool wxDividedShape::GetAttachmentPosition(int attachment, double *x, double *y,
   return TRUE;
 }
 
-int wxDividedShape::GetNumberOfAttachments()
+int wxDividedShape::GetNumberOfAttachments() const
 {
   // There are two attachments for each region (left and right),
   // plus one on the top and one on the bottom.
@@ -418,14 +418,14 @@ void wxDividedShape::ResetMandatoryControlPoints()
 }
 
 #ifdef PROLOGIO
-void wxDividedShape::WritePrologAttributes(wxExpr *clause)
+void wxDividedShape::WriteAttributes(wxExpr *clause)
 {
-  wxRectangleShape::WritePrologAttributes(clause);
+  wxRectangleShape::WriteAttributes(clause);
 }
 
-void wxDividedShape::ReadPrologAttributes(wxExpr *clause)
+void wxDividedShape::ReadAttributes(wxExpr *clause)
 {
-  wxRectangleShape::ReadPrologAttributes(clause);
+  wxRectangleShape::ReadAttributes(clause);
 }
 #endif
 

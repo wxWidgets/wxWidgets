@@ -155,7 +155,7 @@ $(DOCDIR)\pdf\ogl.rtf: $(DOCSOURCES)
 $(DOCDIR)\html\ogl\ogl.htm:         $(DOCSOURCES)
         cd $(LOCALDOCDIR)
         -mkdir $(DOCDIR)\html\ogl
-        cp *.gif $(DOCDIR)\html\ogl
+        copy *.gif $(DOCDIR)\html\ogl
         -start /w tex2rtf $(LOCALDOCDIR)\ogl.tex $(DOCDIR)\html\ogl\ogl.htm -twice -html
         -erase $(DOCDIR)\html\ogl\*.con
         -erase $(DOCDIR)\html\ogl\*.ref

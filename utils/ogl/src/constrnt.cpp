@@ -32,95 +32,95 @@
 #include "constrnt.h"
 #include "canvas.h"
 
-wxList *OGLConstraintTypes = NULL;
+wxList *wxOGLConstraintTypes = NULL;
 
 /*
  * Constraint type
  *
  */
 
-IMPLEMENT_DYNAMIC_CLASS(OGLConstraintType, wxObject)
+IMPLEMENT_DYNAMIC_CLASS(wxOGLConstraintType, wxObject)
 
-OGLConstraintType::OGLConstraintType(int theType, const wxString& theName, const wxString& thePhrase)
+wxOGLConstraintType::wxOGLConstraintType(int theType, const wxString& theName, const wxString& thePhrase)
 {
   m_type = theType;
   m_name = theName;
   m_phrase = thePhrase;
 }
 
-OGLConstraintType::~OGLConstraintType()
+wxOGLConstraintType::~wxOGLConstraintType()
 {
 }
 
 void OGLInitializeConstraintTypes()
 {
-    if (!OGLConstraintTypes)
+    if (!wxOGLConstraintTypes)
         return;
 
-    OGLConstraintTypes = new wxList(wxKEY_INTEGER);
+    wxOGLConstraintTypes = new wxList(wxKEY_INTEGER);
 
-    OGLConstraintTypes->Append(gyCONSTRAINT_CENTRED_VERTICALLY,
-        new OGLConstraintType(gyCONSTRAINT_CENTRED_VERTICALLY, "Centre vertically", "centred vertically w.r.t."));
+    wxOGLConstraintTypes->Append(gyCONSTRAINT_CENTRED_VERTICALLY,
+        new wxOGLConstraintType(gyCONSTRAINT_CENTRED_VERTICALLY, "Centre vertically", "centred vertically w.r.t."));
 
-    OGLConstraintTypes->Append(gyCONSTRAINT_CENTRED_HORIZONTALLY,
-        new OGLConstraintType(gyCONSTRAINT_CENTRED_HORIZONTALLY, "Centre horizontally", "centred horizontally w.r.t."));
+    wxOGLConstraintTypes->Append(gyCONSTRAINT_CENTRED_HORIZONTALLY,
+        new wxOGLConstraintType(gyCONSTRAINT_CENTRED_HORIZONTALLY, "Centre horizontally", "centred horizontally w.r.t."));
 
-    OGLConstraintTypes->Append(gyCONSTRAINT_CENTRED_BOTH,
-        new OGLConstraintType(gyCONSTRAINT_CENTRED_BOTH, "Centre", "centred w.r.t."));
+    wxOGLConstraintTypes->Append(gyCONSTRAINT_CENTRED_BOTH,
+        new wxOGLConstraintType(gyCONSTRAINT_CENTRED_BOTH, "Centre", "centred w.r.t."));
 
-    OGLConstraintTypes->Append(gyCONSTRAINT_LEFT_OF,
-        new OGLConstraintType(gyCONSTRAINT_LEFT_OF, "Left of", "left of"));
+    wxOGLConstraintTypes->Append(gyCONSTRAINT_LEFT_OF,
+        new wxOGLConstraintType(gyCONSTRAINT_LEFT_OF, "Left of", "left of"));
 
-    OGLConstraintTypes->Append(gyCONSTRAINT_RIGHT_OF,
-        new OGLConstraintType(gyCONSTRAINT_RIGHT_OF, "Right of", "right of"));
+    wxOGLConstraintTypes->Append(gyCONSTRAINT_RIGHT_OF,
+        new wxOGLConstraintType(gyCONSTRAINT_RIGHT_OF, "Right of", "right of"));
 
-    OGLConstraintTypes->Append(gyCONSTRAINT_ABOVE,
-        new OGLConstraintType(gyCONSTRAINT_ABOVE, "Above", "above"));
+    wxOGLConstraintTypes->Append(gyCONSTRAINT_ABOVE,
+        new wxOGLConstraintType(gyCONSTRAINT_ABOVE, "Above", "above"));
 
-    OGLConstraintTypes->Append(gyCONSTRAINT_BELOW,
-        new OGLConstraintType(gyCONSTRAINT_BELOW, "Below", "below"));
+    wxOGLConstraintTypes->Append(gyCONSTRAINT_BELOW,
+        new wxOGLConstraintType(gyCONSTRAINT_BELOW, "Below", "below"));
 
     // Alignment
-    OGLConstraintTypes->Append(gyCONSTRAINT_ALIGNED_TOP,
-        new OGLConstraintType(gyCONSTRAINT_ALIGNED_TOP, "Top-aligned", "aligned to the top of"));
+    wxOGLConstraintTypes->Append(gyCONSTRAINT_ALIGNED_TOP,
+        new wxOGLConstraintType(gyCONSTRAINT_ALIGNED_TOP, "Top-aligned", "aligned to the top of"));
 
-    OGLConstraintTypes->Append(gyCONSTRAINT_ALIGNED_BOTTOM,
-        new OGLConstraintType(gyCONSTRAINT_ALIGNED_BOTTOM, "Bottom-aligned", "aligned to the bottom of"));
+    wxOGLConstraintTypes->Append(gyCONSTRAINT_ALIGNED_BOTTOM,
+        new wxOGLConstraintType(gyCONSTRAINT_ALIGNED_BOTTOM, "Bottom-aligned", "aligned to the bottom of"));
 
-    OGLConstraintTypes->Append(gyCONSTRAINT_ALIGNED_LEFT,
-        new OGLConstraintType(gyCONSTRAINT_ALIGNED_LEFT, "Left-aligned", "aligned to the left of"));
+    wxOGLConstraintTypes->Append(gyCONSTRAINT_ALIGNED_LEFT,
+        new wxOGLConstraintType(gyCONSTRAINT_ALIGNED_LEFT, "Left-aligned", "aligned to the left of"));
 
-    OGLConstraintTypes->Append(gyCONSTRAINT_ALIGNED_RIGHT,
-        new OGLConstraintType(gyCONSTRAINT_ALIGNED_RIGHT, "Right-aligned", "aligned to the right of"));
+    wxOGLConstraintTypes->Append(gyCONSTRAINT_ALIGNED_RIGHT,
+        new wxOGLConstraintType(gyCONSTRAINT_ALIGNED_RIGHT, "Right-aligned", "aligned to the right of"));
 
     // Mid-alignment
-    OGLConstraintTypes->Append(gyCONSTRAINT_MIDALIGNED_TOP,
-        new OGLConstraintType(gyCONSTRAINT_MIDALIGNED_TOP, "Top-midaligned", "centred on the top of"));
+    wxOGLConstraintTypes->Append(gyCONSTRAINT_MIDALIGNED_TOP,
+        new wxOGLConstraintType(gyCONSTRAINT_MIDALIGNED_TOP, "Top-midaligned", "centred on the top of"));
 
-    OGLConstraintTypes->Append(gyCONSTRAINT_MIDALIGNED_BOTTOM,
-        new OGLConstraintType(gyCONSTRAINT_MIDALIGNED_BOTTOM, "Bottom-midaligned", "centred on the bottom of"));
+    wxOGLConstraintTypes->Append(gyCONSTRAINT_MIDALIGNED_BOTTOM,
+        new wxOGLConstraintType(gyCONSTRAINT_MIDALIGNED_BOTTOM, "Bottom-midaligned", "centred on the bottom of"));
 
-    OGLConstraintTypes->Append(gyCONSTRAINT_MIDALIGNED_LEFT,
-        new OGLConstraintType(gyCONSTRAINT_MIDALIGNED_LEFT, "Left-midaligned", "centred on the left of"));
+    wxOGLConstraintTypes->Append(gyCONSTRAINT_MIDALIGNED_LEFT,
+        new wxOGLConstraintType(gyCONSTRAINT_MIDALIGNED_LEFT, "Left-midaligned", "centred on the left of"));
 
-    OGLConstraintTypes->Append(gyCONSTRAINT_MIDALIGNED_RIGHT,
-        new OGLConstraintType(gyCONSTRAINT_MIDALIGNED_RIGHT, "Right-midaligned", "centred on the right of"));
+    wxOGLConstraintTypes->Append(gyCONSTRAINT_MIDALIGNED_RIGHT,
+        new wxOGLConstraintType(gyCONSTRAINT_MIDALIGNED_RIGHT, "Right-midaligned", "centred on the right of"));
 }
 
 void OGLCleanUpConstraintTypes()
 {
-    if (!OGLConstraintTypes)
+    if (!wxOGLConstraintTypes)
         return;
 
-    wxNode* node = OGLConstraintTypes->First();
+    wxNode* node = wxOGLConstraintTypes->First();
     while (node)
     {
-        OGLConstraintType* ct = (OGLConstraintType*) node->Data();
+        wxOGLConstraintType* ct = (wxOGLConstraintType*) node->Data();
         delete ct;
         node = node->Next();
     }
-    delete OGLConstraintTypes;
-    OGLConstraintTypes = NULL;
+    delete wxOGLConstraintTypes;
+    wxOGLConstraintTypes = NULL;
 }
 
 /*
@@ -128,9 +128,9 @@ void OGLCleanUpConstraintTypes()
  *
  */
 
-IMPLEMENT_DYNAMIC_CLASS(OGLConstraint, wxObject)
+IMPLEMENT_DYNAMIC_CLASS(wxOGLConstraint, wxObject)
 
-OGLConstraint::OGLConstraint(int type, wxShape *constraining, wxList& constrained)
+wxOGLConstraint::wxOGLConstraint(int type, wxShape *constraining, wxList& constrained)
 {
   m_xSpacing = 0.0;
   m_ySpacing = 0.0;
@@ -149,11 +149,11 @@ OGLConstraint::OGLConstraint(int type, wxShape *constraining, wxList& constraine
   }
 }
 
-OGLConstraint::~OGLConstraint()
+wxOGLConstraint::~wxOGLConstraint()
 {
 }
 
-bool OGLConstraint::Equals(double a, double b)
+bool wxOGLConstraint::Equals(double a, double b)
 {
   double marg = 0.5;
 
@@ -162,7 +162,7 @@ bool OGLConstraint::Equals(double a, double b)
 }
 
 // Return TRUE if anything changed
-bool OGLConstraint::Evaluate()
+bool wxOGLConstraint::Evaluate()
 {
   double maxWidth, maxHeight, minWidth, minHeight, x, y;
   m_constrainingObject->GetBoundingBoxMax(&maxWidth, &maxHeight);

@@ -1635,12 +1635,7 @@ void wxShape::RemoveLine(wxLineShape *line)
 }
 
 #ifdef PROLOGIO
-char *wxShape::GetFunctor()
-{
-  return "node_image";
-}
-
-void wxShape::WritePrologAttributes(wxExpr *clause)
+void wxShape::WriteAttributes(wxExpr *clause)
 {
   clause->AddAttributeValueString("type", GetClassInfo()->GetClassName());
   clause->AddAttributeValue("id", m_id);
@@ -1813,7 +1808,7 @@ void wxShape::WriteRegions(wxExpr *clause)
   }
 }
 
-void wxShape::ReadPrologAttributes(wxExpr *clause)
+void wxShape::ReadAttributes(wxExpr *clause)
 {
   clause->GetAttributeValue("id", m_id);
   RegisterId(m_id);
@@ -2548,7 +2543,7 @@ bool wxShape::AncestorSelected() const
     return GetParent()->AncestorSelected();
 }
 
-int wxShape::GetNumberOfAttachments()
+int wxShape::GetNumberOfAttachments() const
 {
   // Should return the MAXIMUM attachment point id here,
   // so higher-level functions can iterate through all attachments,
@@ -2570,7 +2565,7 @@ int wxShape::GetNumberOfAttachments()
   }
 }
 
-bool wxShape::AttachmentIsValid(int attachment)
+bool wxShape::AttachmentIsValid(int attachment) const
 {
   if ((attachment >= 0) && (attachment < 4))
     return TRUE;

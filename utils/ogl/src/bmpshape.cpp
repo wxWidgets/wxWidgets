@@ -79,23 +79,17 @@ void wxBitmapShape::SetSize(double w, double h, bool recursive)
 }
 
 #ifdef PROLOGIO
-// Prolog database stuff
-char *wxBitmapShape::GetFunctor()
-{
-  return "node_image";
-}
-
-void wxBitmapShape::WritePrologAttributes(wxExpr *clause)
+void wxBitmapShape::WriteAttributes(wxExpr *clause)
 {
   // Can't really save the bitmap; so instantiate the bitmap
   // at a higher level in the application, from a symbol library.
-  wxRectangleShape::WritePrologAttributes(clause);
+  wxRectangleShape::WriteAttributes(clause);
   clause->AddAttributeValueString("filename", m_filename);
 }
 
-void wxBitmapShape::ReadPrologAttributes(wxExpr *clause)
+void wxBitmapShape::ReadAttributes(wxExpr *clause)
 {
-  wxRectangleShape::ReadPrologAttributes(clause);
+  wxRectangleShape::ReadAttributes(clause);
   clause->GetAttributeValue("filename", m_filename);
 }
 #endif

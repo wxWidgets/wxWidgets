@@ -236,15 +236,9 @@ bool wxDrawnShape::GetPerimeterPoint(double x1, double y1,
 }
 
 #ifdef PROLOGIO
-// Prolog database stuff
-char *wxDrawnShape::GetFunctor()
+void wxDrawnShape::WriteAttributes(wxExpr *clause)
 {
-  return "node_image";
-}
-
-void wxDrawnShape::WritePrologAttributes(wxExpr *clause)
-{
-  wxRectangleShape::WritePrologAttributes(clause);
+  wxRectangleShape::WriteAttributes(clause);
 
   clause->AddAttributeValue("save_metafile", (long)m_saveToFile);
   if (m_saveToFile)
@@ -253,14 +247,14 @@ void wxDrawnShape::WritePrologAttributes(wxExpr *clause)
     for (i = 0; i < 4; i++)
     {
         if (m_metafiles[i].IsValid())
-            m_metafiles[i].WritePrologAttributes(clause, i);
+            m_metafiles[i].WriteAttributes(clause, i);
     }
   }
 }
 
-void wxDrawnShape::ReadPrologAttributes(wxExpr *clause)
+void wxDrawnShape::ReadAttributes(wxExpr *clause)
 {
-  wxRectangleShape::ReadPrologAttributes(clause);
+  wxRectangleShape::ReadAttributes(clause);
 
   int iVal = (int) m_saveToFile;
   clause->AssignAttributeValue("save_metafile", &iVal);
@@ -271,7 +265,7 @@ void wxDrawnShape::ReadPrologAttributes(wxExpr *clause)
     int i = 0;
     for (i = 0; i < 4; i++)
     {
-      m_metafiles[i].ReadPrologAttributes(clause, i);
+      m_metafiles[i].ReadAttributes(clause, i);
     }
   }
 }
@@ -376,32 +370,32 @@ void wxDrawnShape::DestroyClippingRect()
     m_metafiles[m_currentAngle].DestroyClippingRect();
 }
 
-void wxDrawnShape::SetPen(wxPen* pen, bool isOutline)
+void wxDrawnShape::SetDrawnPen(wxPen* pen, bool isOutline)
 {
     m_metafiles[m_currentAngle].SetPen(pen, isOutline);
 }
 
-void wxDrawnShape::SetBrush(wxBrush* brush, bool isFill)
+void wxDrawnShape::SetDrawnBrush(wxBrush* brush, bool isFill)
 {
     m_metafiles[m_currentAngle].SetBrush(brush, isFill);
 }
 
-void wxDrawnShape::SetFont(wxFont* font)
+void wxDrawnShape::SetDrawnFont(wxFont* font)
 {
     m_metafiles[m_currentAngle].SetFont(font);
 }
 
-void wxDrawnShape::SetTextColour(const wxColour& colour)
+void wxDrawnShape::SetDrawnTextColour(const wxColour& colour)
 {
     m_metafiles[m_currentAngle].SetTextColour(colour);
 }
 
-void wxDrawnShape::SetBackgroundColour(const wxColour& colour)
+void wxDrawnShape::SetDrawnBackgroundColour(const wxColour& colour)
 {
     m_metafiles[m_currentAngle].SetBackgroundColour(colour);
 }
 
-void wxDrawnShape::SetBackgroundMode(int mode)
+void wxDrawnShape::SetDrawnBackgroundMode(int mode)
 {
     m_metafiles[m_currentAngle].SetBackgroundMode(mode);
 }
@@ -1452,7 +1446,7 @@ void wxPseudoMetaFile::Rotate(double x, double y, double theta)
 }
 
 #ifdef PROLOGIO
-void wxPseudoMetaFile::WritePrologAttributes(wxExpr *clause, int whichAngle)
+void wxPseudoMetaFile::WriteAttributes(wxExpr *clause, int whichAngle)
 {
   wxString widthStr;
   widthStr.Printf("meta_width%d", whichAngle);
@@ -1579,7 +1573,7 @@ void wxPseudoMetaFile::WritePrologAttributes(wxExpr *clause, int whichAngle)
     
 }
 
-void wxPseudoMetaFile::ReadPrologAttributes(wxExpr *clause, int whichAngle)
+void wxPseudoMetaFile::ReadAttributes(wxExpr *clause, int whichAngle)
 {
   wxString widthStr;
   widthStr.Printf("meta_width%d", whichAngle);

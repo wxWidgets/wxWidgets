@@ -269,7 +269,7 @@ class wxShape: public wxShapeEvtHandler
   virtual bool HitTest(double x, double y, int *attachment, double *distance);
   inline void SetCentreResize(bool cr) { m_centreResize = cr; }
   inline bool GetCentreResize() const { return m_centreResize; }
-  inline wxList& GetLines() { return m_lines; }
+  inline wxList& GetLines() const { return (wxList&) m_lines; }
   inline void SetDisableLabel(bool flag) { m_disableLabel = flag; }
   inline bool GetDisableLabel() const { return m_disableLabel; }
   inline void SetAttachmentMode(bool flag) { m_attachmentMode = flag; }
@@ -364,10 +364,9 @@ class wxShape: public wxShapeEvtHandler
   void RemoveLine(wxLineShape *line);
 
 #ifdef PROLOGIO
-  // Prolog database stuff
-  virtual char *GetFunctor();
-  virtual void WritePrologAttributes(wxExpr *clause);
-  virtual void ReadPrologAttributes(wxExpr *clause);
+  // I/O
+  virtual void WriteAttributes(wxExpr *clause);
+  virtual void ReadAttributes(wxExpr *clause);
 
   // In case the object has constraints it needs to read in in a different pass
   inline virtual void ReadConstraints(wxExpr *WXUNUSED(clause), wxExprDatabase *WXUNUSED(database)) { };
@@ -378,18 +377,18 @@ class wxShape: public wxShapeEvtHandler
   // Attachment code
   virtual bool GetAttachmentPosition(int attachment, double *x, double *y,
                                      int nth = 0, int no_arcs = 1, wxLineShape *line = NULL);
-  virtual int GetNumberOfAttachments();
-  virtual bool AttachmentIsValid(int attachment);
+  virtual int GetNumberOfAttachments() const;
+  virtual bool AttachmentIsValid(int attachment) const;
 
   // Assuming the attachment lies along a vertical or horizontal line,
   // calculate the position on that point.
-  wxRealPoint CalcSimpleAttachment(const wxRealPoint& pt1, const wxRealPoint& pt2,
+  virtual wxRealPoint CalcSimpleAttachment(const wxRealPoint& pt1, const wxRealPoint& pt2,
     int nth, int noArcs, wxLineShape* line);
 
   // Returns TRUE if pt1 <= pt2 in the sense that one point comes before another on an
   // edge of the shape.
   // attachmentPoint is the attachment point (= side) in question.
-  bool AttachmentSortTest(int attachmentPoint, const wxRealPoint& pt1, const wxRealPoint& pt2);
+  virtual bool AttachmentSortTest(int attachmentPoint, const wxRealPoint& pt1, const wxRealPoint& pt2);
 
   virtual void EraseLinks(wxDC& dc, int attachment = -1, bool recurse = FALSE);
   virtual void DrawLinks(wxDC& dc, int attachment = -1, bool recurse = FALSE);
@@ -446,7 +445,7 @@ class wxShape: public wxShapeEvtHandler
  protected:
   wxShapeEvtHandler*    m_eventHandler;
   bool                  m_formatted;
-  double                 m_xpos, m_ypos;
+  double                m_xpos, m_ypos;
   wxPen*                m_pen;
   wxBrush*              m_brush;
   wxFont*               m_font;
@@ -464,7 +463,7 @@ class wxShape: public wxShapeEvtHandler
   bool                  m_selected;
   bool                  m_highlighted;      // Different from selected: user-defined highlighting,
                                             // e.g. thick border.
-  double                 m_rotation;
+  double                m_rotation;
   int                   m_sensitivity;
   bool                  m_draggable;
   bool                  m_attachmentMode;   // TRUE if using attachments, FALSE otherwise
@@ -534,11 +533,11 @@ class wxPolygonShape: public wxShape
 
 #ifdef PROLOGIO
   // Prolog database stuff
-  void WritePrologAttributes(wxExpr *clause);
-  void ReadPrologAttributes(wxExpr *clause);
+  void WriteAttributes(wxExpr *clause);
+  void ReadAttributes(wxExpr *clause);
 #endif
 
-  int GetNumberOfAttachments();
+  int GetNumberOfAttachments() const;
   bool GetAttachmentPosition(int attachment, double *x, double *y,
                                      int nth = 0, int no_arcs = 1, wxLineShape *line = NULL);
   bool AttachmentIsValid(int attachment);
@@ -550,10 +549,10 @@ class wxPolygonShape: public wxShape
  private:
   wxList*       m_points;
   wxList*       m_originalPoints;
-  double         m_boundWidth;
-  double         m_boundHeight;
-  double         m_originalWidth;
-  double         m_originalHeight;
+  double        m_boundWidth;
+  double        m_boundHeight;
+  double        m_originalWidth;
+  double        m_originalHeight;
 };
 
 class wxRectangleShape: public wxShape
@@ -571,11 +570,11 @@ class wxRectangleShape: public wxShape
 
 #ifdef PROLOGIO
   // Prolog database stuff
-  void WritePrologAttributes(wxExpr *clause);
-  void ReadPrologAttributes(wxExpr *clause);
+  void WriteAttributes(wxExpr *clause);
+  void ReadAttributes(wxExpr *clause);
 #endif
 
-  int GetNumberOfAttachments();
+  int GetNumberOfAttachments() const;
   bool GetAttachmentPosition(int attachment, double *x, double *y,
                                      int nth = 0, int no_arcs = 1, wxLineShape *line = NULL);
   // Does the copying for this object
@@ -601,7 +600,7 @@ class wxTextShape: public wxRectangleShape
   void OnDraw(wxDC& dc);
 
 #ifdef PROLOGIO
-  void WritePrologAttributes(wxExpr *clause);
+  void WriteAttributes(wxExpr *clause);
 #endif
 
   // Does the copying for this object
@@ -624,11 +623,11 @@ class wxEllipseShape: public wxShape
 
 #ifdef PROLOGIO
   // Prolog database stuff
-  void WritePrologAttributes(wxExpr *clause);
-  void ReadPrologAttributes(wxExpr *clause);
+  void WriteAttributes(wxExpr *clause);
+  void ReadAttributes(wxExpr *clause);
 #endif
 
-  int GetNumberOfAttachments();
+  int GetNumberOfAttachments() const;
   bool GetAttachmentPosition(int attachment, double *x, double *y,
                                      int nth = 0, int no_arcs = 1, wxLineShape *line = NULL);
 

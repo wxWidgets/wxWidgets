@@ -80,7 +80,7 @@ wxCompositeShape::~wxCompositeShape()
   wxNode *node = m_constraints.First();
   while (node)
   {
-    OGLConstraint *constraint = (OGLConstraint *)node->Data();
+    wxOGLConstraint *constraint = (wxOGLConstraint *)node->Data();
     delete constraint;
     node = node->Next();
   }
@@ -323,7 +323,7 @@ void wxCompositeShape::DeleteConstraintsInvolvingChild(wxShape *child)
   wxNode *node = m_constraints.First();
   while (node)
   {
-    OGLConstraint *constraint = (OGLConstraint *)node->Data();
+    wxOGLConstraint *constraint = (wxOGLConstraint *)node->Data();
     wxNode *nextNode = node->Next();
 
     if ((constraint->m_constrainingObject == child) ||
@@ -341,7 +341,7 @@ void wxCompositeShape::RemoveChildFromConstraints(wxShape *child)
   wxNode *node = m_constraints.First();
   while (node)
   {
-    OGLConstraint *constraint = (OGLConstraint *)node->Data();
+    wxOGLConstraint *constraint = (wxOGLConstraint *)node->Data();
     wxNode *nextNode = node->Next();
 
     if (constraint->m_constrainedObjects.Member(child))
@@ -396,7 +396,7 @@ void wxCompositeShape::Copy(wxShape& copy)
   node = m_constraints.First();
   while (node)
   {
-    OGLConstraint *constraint = (OGLConstraint *)node->Data();
+    wxOGLConstraint *constraint = (wxOGLConstraint *)node->Data();
 
     wxShape *newConstraining = (wxShape *)(oglObjectCopyMapping.Find((long)constraint->m_constrainingObject)->Data());
 
@@ -410,7 +410,7 @@ void wxCompositeShape::Copy(wxShape& copy)
       node2 = node2->Next(); 
     }
 
-    OGLConstraint *newConstraint = new OGLConstraint(constraint->m_constraintType, newConstraining,
+    wxOGLConstraint *newConstraint = new wxOGLConstraint(constraint->m_constraintType, newConstraining,
                                             newConstrainedList);
     newConstraint->m_constraintId = constraint->m_constraintId;
     if (constraint->m_constraintName)
@@ -457,7 +457,7 @@ void wxCompositeShape::Copy(wxShape& copy)
   }
 }
 
-OGLConstraint *wxCompositeShape::AddConstraint(OGLConstraint *constraint)
+wxOGLConstraint *wxCompositeShape::AddConstraint(wxOGLConstraint *constraint)
 {
   m_constraints.Append(constraint);
   if (constraint->m_constraintId == 0)
@@ -465,32 +465,32 @@ OGLConstraint *wxCompositeShape::AddConstraint(OGLConstraint *constraint)
   return constraint;
 }
 
-OGLConstraint *wxCompositeShape::AddConstraint(int type, wxShape *constraining, wxList& constrained)
+wxOGLConstraint *wxCompositeShape::AddConstraint(int type, wxShape *constraining, wxList& constrained)
 {
-  OGLConstraint *constraint = new OGLConstraint(type, constraining, constrained);
+  wxOGLConstraint *constraint = new wxOGLConstraint(type, constraining, constrained);
   if (constraint->m_constraintId == 0)
     constraint->m_constraintId = NewId();
   m_constraints.Append(constraint);
   return constraint;
 }
 
-OGLConstraint *wxCompositeShape::AddConstraint(int type, wxShape *constraining, wxShape *constrained)
+wxOGLConstraint *wxCompositeShape::AddConstraint(int type, wxShape *constraining, wxShape *constrained)
 {
   wxList l;
   l.Append(constrained);
-  OGLConstraint *constraint = new OGLConstraint(type, constraining, l);
+  wxOGLConstraint *constraint = new wxOGLConstraint(type, constraining, l);
   if (constraint->m_constraintId == 0)
     constraint->m_constraintId = NewId();
   m_constraints.Append(constraint);
   return constraint;
 }
 
-OGLConstraint *wxCompositeShape::FindConstraint(long cId, wxCompositeShape **actualComposite)
+wxOGLConstraint *wxCompositeShape::FindConstraint(long cId, wxCompositeShape **actualComposite)
 {
   wxNode *node = m_constraints.First();
   while (node)
   {
-    OGLConstraint *constraint = (OGLConstraint *)node->Data();
+    wxOGLConstraint *constraint = (wxOGLConstraint *)node->Data();
     if (constraint->m_constraintId == cId)
     {
       if (actualComposite)
@@ -506,7 +506,7 @@ OGLConstraint *wxCompositeShape::FindConstraint(long cId, wxCompositeShape **act
     wxShape *child = (wxShape *)node->Data();
     if (child->IsKindOf(CLASSINFO(wxCompositeShape)))
     {
-      OGLConstraint *constraint = ((wxCompositeShape *)child)->FindConstraint(cId, actualComposite);
+      wxOGLConstraint *constraint = ((wxCompositeShape *)child)->FindConstraint(cId, actualComposite);
       if (constraint)
       {
         if (actualComposite)
@@ -519,7 +519,7 @@ OGLConstraint *wxCompositeShape::FindConstraint(long cId, wxCompositeShape **act
   return NULL;
 }
 
-void wxCompositeShape::DeleteConstraint(OGLConstraint *constraint)
+void wxCompositeShape::DeleteConstraint(wxOGLConstraint *constraint)
 {
   m_constraints.DeleteObject(constraint);
   delete constraint;
@@ -595,7 +595,7 @@ bool wxCompositeShape::Constrain()
   node = m_constraints.First();
   while (node)
   {
-    OGLConstraint *constraint = (OGLConstraint *)node->Data();
+    wxOGLConstraint *constraint = (wxOGLConstraint *)node->Data();
     if (constraint->Evaluate()) changed = TRUE;
     node = node->Next();
   }
@@ -603,9 +603,9 @@ bool wxCompositeShape::Constrain()
 }
 
 #ifdef PROLOGIO
-void wxCompositeShape::WritePrologAttributes(wxExpr *clause)
+void wxCompositeShape::WriteAttributes(wxExpr *clause)
 {
-  wxRectangleShape::WritePrologAttributes(clause);
+  wxRectangleShape::WriteAttributes(clause);
 
 //  clause->AddAttributeValue("selectable", (long)selectable);
 
@@ -615,7 +615,7 @@ void wxCompositeShape::WritePrologAttributes(wxExpr *clause)
   wxNode *node = m_constraints.First();
   while (node)
   {
-    OGLConstraint *constraint = (OGLConstraint *)node->Data();
+    wxOGLConstraint *constraint = (wxOGLConstraint *)node->Data();
     sprintf(m_constraintNameBuf, "constraint%d", constraintNo);
 
     // Each constraint is stored in the form
@@ -674,9 +674,9 @@ void wxCompositeShape::WritePrologAttributes(wxExpr *clause)
 // so as to be able to link up to parent. So we may not be able
 // to find the constraint participants until we've read everything
 // in. Need to have another pass for composites.
-void wxCompositeShape::ReadPrologAttributes(wxExpr *clause)
+void wxCompositeShape::ReadAttributes(wxExpr *clause)
 {
-  wxRectangleShape::ReadPrologAttributes(clause);
+  wxRectangleShape::ReadAttributes(clause);
 
 //  clause->GetAttributeValue("selectable", selectable);
 }
@@ -747,7 +747,7 @@ void wxCompositeShape::ReadConstraints(wxExpr *clause, wxExprDatabase *database)
       i ++;
       currentIdExpr = constrainedExpr->Nth(i);
     }
-    OGLConstraint *newConstraint = AddConstraint(cType, m_constrainingObject, m_constrainedObjects);
+    wxOGLConstraint *newConstraint = AddConstraint(cType, m_constrainingObject, m_constrainedObjects);
     newConstraint->SetSpacing(cXSpacing, cYSpacing);
     newConstraint->m_constraintId = cId;
     newConstraint->m_constraintName = (const char*) cName;
@@ -989,9 +989,9 @@ void wxDivisionShape::Copy(wxShape& copy)
 }
 
 #ifdef PROLOGIO
-void wxDivisionShape::WritePrologAttributes(wxExpr *clause)
+void wxDivisionShape::WriteAttributes(wxExpr *clause)
 {
-  wxCompositeShape::WritePrologAttributes(clause);
+  wxCompositeShape::WriteAttributes(clause);
 
   if (m_leftSide)
     clause->AddAttributeValue("left_side", (long)m_leftSide->GetId());
@@ -1009,9 +1009,9 @@ void wxDivisionShape::WritePrologAttributes(wxExpr *clause)
   clause->AddAttributeValueString("top_style", m_topSideStyle);
 }
 
-void wxDivisionShape::ReadPrologAttributes(wxExpr *clause)
+void wxDivisionShape::ReadAttributes(wxExpr *clause)
 {
-  wxCompositeShape::ReadPrologAttributes(clause);
+  wxCompositeShape::ReadAttributes(clause);
 
   clause->GetAttributeValue("handle_side", m_handleSide);
   clause->GetAttributeValue("left_colour", m_leftSideColour);

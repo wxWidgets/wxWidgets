@@ -1296,14 +1296,6 @@ void wxLineShape::OnDrawContents(wxDC& dc)
   }
 }
 
-
-#ifdef PROLOGIO
-char *wxLineShape::GetFunctor()
-{
-  return "arc_image";
-}
-#endif
-
 void wxLineShape::SetTo(wxShape *object)
 {
   m_to = object;
@@ -1377,9 +1369,9 @@ void wxLineShape::ResetControlPoints()
 }
 
 #ifdef PROLOGIO
-void wxLineShape::WritePrologAttributes(wxExpr *clause)
+void wxLineShape::WriteAttributes(wxExpr *clause)
 {
-  wxShape::WritePrologAttributes(clause);
+  wxShape::WriteAttributes(clause);
 
   if (m_from)
     clause->AddAttributeValue("from", m_from->GetId());
@@ -1447,9 +1439,9 @@ void wxLineShape::WritePrologAttributes(wxExpr *clause)
   }
 }
 
-void wxLineShape::ReadPrologAttributes(wxExpr *clause)
+void wxLineShape::ReadAttributes(wxExpr *clause)
 {
-  wxShape::ReadPrologAttributes(clause);
+  wxShape::ReadAttributes(clause);
 
   int iVal = (int) m_isSpline;
   clause->AssignAttributeValue("is_spline", &iVal);

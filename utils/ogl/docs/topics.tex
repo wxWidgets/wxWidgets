@@ -43,7 +43,6 @@ new shapes from wxShape.
 Instances of a class called \helpref{wxDiagram}{wxdiagram} organise collections of
 shapes, providing default file input and output behaviour.
 
-
 \section{wxDividedShape overview}\label{dividedshapeoverview}
 
 Classes: \helpref{wxDividedShape}{wxdividedshape}
@@ -112,10 +111,9 @@ Here are examples of creating wxDividedShape objects:
 \end{verbatim}
 }
 
-
 \section{wxCompositeShape overview}\label{compositeshapeoverview}
 
-Classes: \helpref{wxCompositeShape}{wxcompositeshape}, \helpref{OGLConstraint}{oglconstraint}
+Classes: \helpref{wxCompositeShape}{wxcompositeshape}, \helpref{wxOGLConstraint}{wxoglconstraint}
 
 The wxCompositeShape allows fairly complex shapes to be created, and maintains
 a set of constraints which specify the layout and proportions of child shapes.
@@ -143,12 +141,12 @@ To specify a constraint, you need three things:
 The constraining shape can be either the parent of the constrained shapes, or a sibling. The
 constrained shapes must all be siblings of each other.
 
-For an exhaustive list and description of the available constraint types, see the \helpref{OGLConstraint constructor}{oglconstraintconstr}.
+For an exhaustive list and description of the available constraint types, see the \helpref{wxOGLConstraint constructor}{wxoglconstraintconstr}.
 Note that most constraints operate in one dimension only (vertically or horizontally), so you will
 usually need to specify constraints in pairs.
 
 You can set the spacing between constraining and constrained shapes by
-calling \helpref{OGLConstraint::SetSpacing}{oglconstraintsetspacing}.
+calling \helpref{wxOGLConstraint::SetSpacing}{wxoglconstraintsetspacing}.
 
 Finally, a wxCompositeShape can have {\it divisions}, which are special child shapes of class
 wxDivisionShape (not to be confused with wxDividedShape). The purpose of this is to allow

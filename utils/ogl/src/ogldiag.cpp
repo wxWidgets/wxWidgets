@@ -537,7 +537,7 @@ bool wxDiagram::OnDatabaseSave(wxExprDatabase& db)
 
 bool wxDiagram::OnShapeSave(wxExprDatabase& db, wxShape& shape, wxExpr& expr)
 {
-  shape.WritePrologAttributes(&expr);
+  shape.WriteAttributes(&expr);
   db.Append(&expr);
 
   if (shape.IsKindOf(CLASSINFO(wxCompositeShape)))
@@ -557,7 +557,7 @@ bool wxDiagram::OnShapeSave(wxExprDatabase& db, wxShape& shape, wxExpr& expr)
 
 bool wxDiagram::OnShapeLoad(wxExprDatabase& db, wxShape& shape, wxExpr& expr)
 {
-  shape.ReadPrologAttributes(&expr);
+  shape.ReadAttributes(&expr);
   return TRUE;
 }
 

@@ -48,8 +48,8 @@ class wxDividedShape: public wxRectangleShape
 
 #ifdef PROLOGIO
   // Prolog database stuff
-  void WritePrologAttributes(wxExpr *clause);
-  void ReadPrologAttributes(wxExpr *clause);
+  void WriteAttributes(wxExpr *clause);
+  void ReadAttributes(wxExpr *clause);
 #endif
 
   void Copy(wxShape &copy);
@@ -65,7 +65,7 @@ class wxDividedShape: public wxRectangleShape
   bool GetAttachmentPosition(int attachment, double *x, double *y,
                                      int nth = 0, int no_arcs = 1, wxLineShape *line = NULL);
   bool AttachmentIsValid(int attachment);
-  int GetNumberOfAttachments();
+  int GetNumberOfAttachments() const;
 
   // Invoke editor on CTRL-right click
   void OnRightClick(double x, double y, int keys = 0, int attachment = 0);
