@@ -67,6 +67,8 @@ wxOS2 -a wxWindows wxWindows/docs !wxWindows/docs/latex !wxWindows/docs/motif \
       !wxWindows/src/qt !wxWindows/src/stubs !wxWindows/src/unix !wxWindows/src/zlib \
       !wxWindows/src/iodbc
       wxWindows/src/generic wxWindows/src/html wxWindows/src/common wxWindows/src/os2 \
-      wxWindows/src/xpm 
+      wxWindows/src/xpm
       wxWindows/lib wxWindows/samples wxWindows/misc !wxWindows/misc/implib \
-      wxWindows/testconf 
+      wxWindows/testconf
+
+wxPython -a wxWindows/utils/wxPython wxWindows/docs/latex/wx
