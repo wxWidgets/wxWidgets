@@ -30,7 +30,7 @@
 #if wxUSE_CHECKBOX
 
 #ifndef WX_PRECOMP
-    #include "wx/dc.h"
+    #include "wx/dcclient.h"
     #include "wx/checkbox.h"
     #include "wx/validate.h"
 #endif
@@ -134,7 +134,7 @@ void wxCheckBox::DoDraw(wxControlRenderer *renderer)
 
 wxSize wxCheckBox::DoGetBestClientSize() const
 {
-    wxClientDC dc(wxConstCast(this, wxButton));
+    wxClientDC dc(wxConstCast(this, wxCheckBox));
     wxCoord width, height;
     dc.GetMultiLineTextExtent(GetLabel(), &width, &height);
 

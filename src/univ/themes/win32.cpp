@@ -24,20 +24,6 @@
     #pragma hdrstop
 #endif
 
-extern int foo = 0;
-
-static struct Foo
-{
-    Foo();
-} s_foo;
-
-Foo::Foo()
-{
-    int x;
-    x = 1;
-    x++;
-}
-
 #ifndef WX_PRECOMP
     #include "wx/timer.h"
     #include "wx/intl.h"
@@ -143,10 +129,7 @@ public:
 
     virtual void AdjustSize(wxSize *size, const wxWindow *window);
     virtual wxRect GetBorderDimensions(wxBorder border) const;
-    virtual void AdjustScrollbar(wxOrientation orient,
-                                 wxBorder border,
-                                 bool hasOtherScrollbar,
-                                 wxRect* rect) const;
+    virtual bool AreScrollbarsInsideBorder() const;
 
     virtual wxRect GetScrollbarRect(const wxScrollBar *scrollbar,
                                     wxScrollBar::Element elem,
@@ -854,12 +837,9 @@ wxRect wxWin32Renderer::GetBorderDimensions(wxBorder border) const
     return rect;
 }
 
-void wxWin32Renderer::AdjustScrollbar(wxOrientation orient,
-                                      wxBorder border,
-                                      bool hasOtherScrollbar,
-                                      wxRect* rect) const
+bool wxWin32Renderer::AreScrollbarsInsideBorder() const
 {
-    // don't do anything - we don't blend scrollbars into borders
+    return TRUE;
 }
 
 // ----------------------------------------------------------------------------

@@ -643,13 +643,13 @@ void wxControlRenderer::DrawLabelBox(const wxBitmap& bitmap, wxCoord margin)
 
     if ( m_window->GetWindowStyle() & wxALIGN_RIGHT )
     {
-        rectBmp.SetRight(m_rect.GetRight());
-        rectLabel.SetRight(rectBmp.GetLeft() - margin);
+        rectBmp.x = m_rect.GetRight() - rectBmp.width;
         rectLabel.SetLeft(m_rect.GetLeft());
+        rectLabel.SetRight(rectBmp.GetLeft() - margin);
     }
     else // normal (checkbox to the left of the text) case
     {
-        rectBmp.SetLeft(m_rect.GetLeft());
+        rectBmp.x = m_rect.GetLeft();
         rectLabel.SetLeft(rectBmp.GetRight() + margin);
         rectLabel.SetRight(m_rect.GetRight());
     }

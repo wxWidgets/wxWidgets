@@ -213,7 +213,7 @@ bool MyUnivApp::OnInit()
 // ----------------------------------------------------------------------------
 
 MyUnivFrame::MyUnivFrame(const wxString& title)
-           : wxFrame(NULL, -1, title, wxDefaultPosition, wxSize(700, 600))
+           : wxFrame(NULL, -1, title, wxDefaultPosition, wxSize(700, 700))
 {
     SetBackgroundColour(wxGetApp().GetBgColour());
 
@@ -334,7 +334,10 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
                      i % 10 ? _T("") : _T("very very long "), i));
     }
 
-    new wxCheckBox(this, -1, _T("Check me"), wxPoint(10, 520));
+    new wxCheckBox(this, -1, _T("Check me"), wxPoint(10, 550));
+    new wxCheckBox(this, -1, _T("Don't check me"),
+                   wxPoint(150, 550), wxDefaultSize,
+                   wxALIGN_RIGHT);
 }
 
 void MyUnivFrame::OnButton(wxCommandEvent& event)

@@ -1,6 +1,7 @@
 UNIVOBJS = \
            bmpbuttn.o \
            button.o \
+           checkbox.o \
            colschem.o \
            control.o \
            inphand.o \
@@ -13,11 +14,13 @@ UNIVOBJS = \
            stattext.o \
            theme.o \
            gtk.o \
-           winuniv.o
+           winuniv.o \
+           win32.o
 
 UNIVDEPS = \
            bmpbuttn.d \
            button.d \
+           checkbox.d \
            colschem.d \
            control.d \
            inphand.d \
@@ -30,5 +33,5 @@ UNIVDEPS = \
            stattext.d \
            theme.d \
            gtk.d \
-           win32.d \
-           winuniv.d
+           winuniv.d \
+           win32.d

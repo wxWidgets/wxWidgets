@@ -161,13 +161,9 @@ public:
     // the left/top side, width/heigh - of the right/bottom one
     virtual wxRect GetBorderDimensions(wxBorder border) const = 0;
 
-    // the scrollbar rectangle may need adjusting if the window has the border
-    // as the renderer might wish to combine the scrollbar border and the
-    // window one
-    virtual void AdjustScrollbar(wxOrientation orient,
-                                 wxBorder border,
-                                 bool hasOtherScrollbar,
-                                 wxRect* rect) const = 0;
+    // the scrollbars may be drawn either inside the window border or outside
+    // it - this function is used to decide how to draw them
+    virtual bool AreScrollbarsInsideBorder() const = 0;
 
     // adjust the size of the control of the given class: for most controls,
     // this just takes into account the border, but for some (buttons, for
@@ -316,11 +312,8 @@ public:
         { m_renderer->AdjustSize(size, window); }
     virtual wxRect GetBorderDimensions(wxBorder border) const
         { return m_renderer->GetBorderDimensions(border); }
-    virtual void AdjustScrollbar(wxOrientation orient,
-                                 wxBorder border,
-                                 bool hasOtherScrollbar,
-                                 wxRect* rect) const
-        { m_renderer->AdjustScrollbar(orient, border, hasOtherScrollbar, rect); }
+    virtual bool AreScrollbarsInsideBorder() const
+        { return m_renderer->AreScrollbarsInsideBorder(); }
 
     virtual wxRect GetScrollbarRect(const wxScrollBar *scrollbar,
                                     wxScrollBar::Element elem,

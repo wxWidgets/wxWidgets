@@ -118,7 +118,7 @@ struct WXDLLEXPORT wxThemeInfo
 
 // and this one must be inserted in the source file
 #define WX_IMPLEMENT_THEME(classname, themename, themedesc)                 \
-    extern bool wxThemeUse##themename = TRUE;                               \
+    bool wxThemeUse##themename = TRUE;                                      \
     wxTheme *wxCtorFor##themename() { return new classname; }               \
     wxThemeInfo classname::ms_info##themename(wxCtorFor##themename,         \
                                               #themename, themedesc)

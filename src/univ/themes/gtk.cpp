@@ -27,7 +27,7 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
-    #include "wx/dc.h"
+    #include "wx/dcmemory.h"
     #include "wx/window.h"
 
     #include "wx/button.h"
@@ -111,10 +111,7 @@ public:
 
     virtual void AdjustSize(wxSize *size, const wxWindow *window);
     virtual wxRect GetBorderDimensions(wxBorder border) const;
-    virtual void AdjustScrollbar(wxOrientation orient,
-                                 wxBorder border,
-                                 bool hasOtherScrollbar,
-                                 wxRect* rect) const;
+    virtual bool AreScrollbarsInsideBorder() const;
 
     // hit testing for the input handlers
     virtual wxRect GetScrollbarRect(const wxScrollBar *scrollbar,
@@ -128,6 +125,10 @@ public:
     virtual int PixelToScrollbar(const wxScrollBar *scrollbar, wxCoord coord);
     virtual wxCoord GetListboxItemHeight(wxCoord fontHeight)
         { return fontHeight + 2; }
+
+    // helpers for "wxBitmap wxColourScheme::Get()"
+    void DrawCheckBitmap(wxDC& dc, const wxRect& rect);
+    void DrawUncheckBitmap(wxDC& dc, const wxRect& rect);
 
 protected:
     // DrawBackground() helpers
@@ -287,6 +288,11 @@ public:
 #if wxUSE_CHECKBOX
     virtual wxBitmap Get(wxCheckBox::State state, wxCheckBox::Status status);
 #endif // wxUSE_CHECKBOX
+
+private:
+    // the checkbox bitmaps
+    wxBitmap m_bmpCheck,
+             m_bmpUncheck;
 };
 
 // ----------------------------------------------------------------------------
@@ -449,7 +455,26 @@ wxColour wxGTKColourScheme::Get(wxGTKColourScheme::StdColour col) const
 wxBitmap wxGTKColourScheme::Get(wxCheckBox::State state,
                                 wxCheckBox::Status status)
 {
-    return wxNullBitmap;
+    if ( !m_bmpCheck.Ok() )
+    {
+        // init the bitmaps once only
+        wxRect rect;
+        rect.width =
+        rect.height = 10;
+        m_bmpCheck.Create(rect.width, rect.height);
+        m_bmpUncheck.Create(rect.width, rect.height);
+
+        wxGTKRenderer *renderer = (wxGTKRenderer *)wxTheme::Get()->GetRenderer();
+
+        wxMemoryDC dc;
+        dc.SelectObject(m_bmpCheck);
+        renderer->DrawCheckBitmap(dc, rect);
+
+        dc.SelectObject(m_bmpUncheck);
+        renderer->DrawUncheckBitmap(dc, rect);
+    }
+
+    return status == wxCheckBox::Status_Checked ? m_bmpCheck : m_bmpUncheck;
 }
 
 #endif // wxUSE_CHECKBOX
@@ -668,32 +693,10 @@ wxRect wxGTKRenderer::GetBorderDimensions(wxBorder border) const
     return rect;
 }
 
-void wxGTKRenderer::AdjustScrollbar(wxOrientation orient,
-                                    wxBorder border,
-                                    bool hasOtherScrollbar,
-                                    wxRect* rect) const
+bool wxGTKRenderer::AreScrollbarsInsideBorder() const
 {
-    wxRect rectBorder = GetBorderDimensions(border);
-
-    if ( orient == wxVERTICAL )
-    {
-        // blend the top and right scrollbar borders into the window border
-        rect->y -= rectBorder.y;
-        rect->x += rectBorder.width;
-
-        // if there is no horz scrollbar, also do it with the bottom one
-        if ( !hasOtherScrollbar )
-            rect->height += rectBorder.height;
-    }
-    else // wxHORIZONTAL
-    {
-        // the logic is the same as above
-        rect->x -= rectBorder.x;
-        rect->y += rectBorder.height;
-
-        if ( !hasOtherScrollbar )
-            rect->width += rectBorder.width;
-    }
+    // no, the scrollbars are outside the border in GTK+
+    return FALSE;
 }
 
 // ----------------------------------------------------------------------------
@@ -1318,6 +1321,36 @@ void wxGTKRenderer::AdjustSize(wxSize *size, const wxWindow *window)
         size->x += rectBorder.x + rectBorder.width;
         size->y += rectBorder.y + rectBorder.height;
     }
+}
+
+// ----------------------------------------------------------------------------
+// checkbox buttons
+// ----------------------------------------------------------------------------
+
+void wxGTKRenderer::DrawUncheckBitmap(wxDC& dc, const wxRect& rectTotal)
+{
+    wxRect rect = rectTotal;
+    DrawShadedRect(dc, &rect, m_penHighlight, m_penBlack);
+    DrawAntiShadedRect(dc, &rect, m_penLightGrey, m_penDarkGrey);
+
+    wxColour col = wxSCHEME_COLOUR(m_scheme, SHADOW_IN);
+    dc.SetPen(wxPen(col, 0, wxSOLID));
+    dc.DrawPoint(rect.GetRight(), rect.GetBottom());
+
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.SetBrush(wxBrush(col, wxSOLID));
+    dc.DrawRectangle(rect);
+}
+
+void wxGTKRenderer::DrawCheckBitmap(wxDC& dc, const wxRect& rectTotal)
+{
+    wxRect rect = rectTotal;
+    DrawAntiShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
+    DrawShadedRect(dc, &rect, m_penBlack, m_penLightGrey);
+
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.SetBrush(wxBrush(wxSCHEME_COLOUR(m_scheme, CONTROL_PRESSED), wxSOLID));
+    dc.DrawRectangle(rect);
 }
 
 // ============================================================================
