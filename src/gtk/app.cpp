@@ -133,7 +133,20 @@ void wxExit()
 
 bool wxYield()
 {
-    while (gtk_events_pending() > 0) gtk_main_iteration();
+    // it's necessary to call ProcessIdle() to update the frames sizes which
+    // might have been changed (it also will update other things set from
+    // OnUpdateUI() which is a nice (and desired) side effect)
+    for ( wxNode *node = wxTopLevelWindows.GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxWindow *win = ((wxWindow*)node->GetData());
+        win->OnInternalIdle();
+    }
+
+    while (gtk_events_pending() > 0)
+        gtk_main_iteration();
+
     return TRUE;
 }
 
