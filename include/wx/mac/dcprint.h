@@ -33,16 +33,8 @@ class WXDLLEXPORT wxPrinterDC: public wxDC
     virtual void EndDoc(void) ;
     virtual void StartPage(void) ;
     virtual void EndPage(void) ;
- protected :
- #if TARGET_CARBON
-    #if PM_USE_SESSION_APIS
-      void*         m_macPrintSession;
-    #else
-      void*         m_macPrintPort ;
-    #endif
- #else
-      void* 	    m_macPrintPort ;
- #endif
+ protected:
+      void*         m_macPrintSessionPort ;
       wxPrintData   m_printData ;
 #endif // wxUSE_PRINTING_ARCHITECTURE
 };
