@@ -1380,6 +1380,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/os2/dcscreen.cpp
     src/os2/dialog.cpp
     src/os2/dnd.cpp
+    src/os2/evtloop.cpp
     src/os2/filedlg.cpp
     src/os2/font.cpp
     src/os2/fontdlg.cpp
