@@ -335,49 +335,53 @@ static pascal OSStatus
 MenuEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
     wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar();
-    wxFrame* win = mbar->GetFrame();
     
-    if ( win )
+    if ( mbar )
     {
-        // VZ: we could find the menu from its handle here by examining all
-        //     the menus in the menu bar recursively but knowing that neither
-        //     wxMSW nor wxGTK do it why bother...
-#if 0
-        MenuRef menuRef;
-
-        GetEventParameter(event,
-                          kEventParamDirectObject,
-                          typeMenuRef, NULL,
-                          sizeof(menuRef), NULL,
-                          &menuRef);
-#endif // 0
-
-        wxEventType type=0;        
-        MenuCommand cmd=0;
-        switch (GetEventKind(event))
+        wxFrame* win = mbar->GetFrame();
+        if ( win )
         {
-            case kEventMenuOpening:
-                type = wxEVT_MENU_OPEN;
-                break;
-            case kEventMenuClosed:
-                type = wxEVT_MENU_CLOSE;
-                break;
-            case kEventMenuTargetItem:
-                type = wxEVT_MENU_HIGHLIGHT;
-                GetEventParameter(event, kEventParamMenuCommand,
-                                  typeMenuCommand, NULL,
-                                  sizeof(cmd), NULL, &cmd);
-                if (cmd == 0) return eventNotHandledErr;
-                break;
-            default:
-                wxFAIL_MSG(wxT("Unexpected menu event kind"));
-                break;
+            
+            // VZ: we could find the menu from its handle here by examining all
+            //     the menus in the menu bar recursively but knowing that neither
+            //     wxMSW nor wxGTK do it why bother...
+ #if 0
+            MenuRef menuRef;
+
+            GetEventParameter(event,
+                              kEventParamDirectObject,
+                              typeMenuRef, NULL,
+                              sizeof(menuRef), NULL,
+                              &menuRef);
+ #endif // 0
+
+            wxEventType type=0;        
+            MenuCommand cmd=0;
+            switch (GetEventKind(event))
+            {
+                case kEventMenuOpening:
+                    type = wxEVT_MENU_OPEN;
+                    break;
+                case kEventMenuClosed:
+                    type = wxEVT_MENU_CLOSE;
+                    break;
+                case kEventMenuTargetItem:
+                    type = wxEVT_MENU_HIGHLIGHT;
+                    GetEventParameter(event, kEventParamMenuCommand,
+                                      typeMenuCommand, NULL,
+                                      sizeof(cmd), NULL, &cmd);
+                    if (cmd == 0) return eventNotHandledErr;
+                    break;
+                default:
+                    wxFAIL_MSG(wxT("Unexpected menu event kind"));
+                    break;
+            }
+
+            wxMenuEvent wxevent(type, cmd);
+            wxevent.SetEventObject(win);
+
+            (void)win->GetEventHandler()->ProcessEvent(wxevent);
         }
-
-        wxMenuEvent wxevent(type, cmd);
-        wxevent.SetEventObject(win);
-
-        (void)win->GetEventHandler()->ProcessEvent(wxevent);
     }
 
     return eventNotHandledErr;
