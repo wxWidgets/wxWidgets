@@ -1802,20 +1802,8 @@ void wxArrayString::Copy(const wxArrayString& src)
   if ( src.m_nCount > ARRAY_DEFAULT_INITIAL_SIZE )
     Alloc(src.m_nCount);
 
-  // we can't just copy the pointers here because otherwise we would share
-  // the strings with another array because strings are ref counted
-#if 0
-  if ( m_nCount != 0 )
-    memcpy(m_pItems, src.m_pItems, m_nCount*sizeof(wxChar *));
-#endif // 0
-
   for ( size_t n = 0; n < src.m_nCount; n++ )
     Add(src[n]);
-
-  // if the other array is auto sorted too, we're already sorted, but
-  // otherwise we should rearrange the items
-  if ( m_autoSort && !src.m_autoSort )
-    Sort();
 }
 
 // grow the array
