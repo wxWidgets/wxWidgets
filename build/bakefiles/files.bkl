@@ -1851,6 +1851,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/cocoa/NSControl.mm
     src/cocoa/NSMenu.mm
     src/cocoa/NSPanel.mm
+    src/cocoa/NSScroller.mm
     src/cocoa/NSTabView.mm
     src/cocoa/NSTableView.mm
     src/cocoa/NSTextField.mm
@@ -1896,6 +1897,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/cocoa/radiobox.mm
     src/cocoa/radiobut.mm
     src/cocoa/region.mm
+    src/cocoa/scrolbar.mm
     src/cocoa/settings.cpp
     src/cocoa/slider.mm
     src/cocoa/spinbutt.mm
@@ -1935,6 +1937,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/cocoa/NSControl.h
     wx/cocoa/NSMenu.h
     wx/cocoa/NSPanel.h
+    wx/cocoa/NSScroller.h
     wx/cocoa/NSTabView.h
     wx/cocoa/NSTableView.h
     wx/cocoa/NSTextField.h
@@ -1980,6 +1983,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/cocoa/radiobox.h
     wx/cocoa/radiobut.h
     wx/cocoa/region.h
+    wx/cocoa/scrolbar.h
     wx/cocoa/slider.h
     wx/cocoa/spinbutt.h
     wx/cocoa/statbmp.h

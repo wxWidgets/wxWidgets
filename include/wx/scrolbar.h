@@ -53,6 +53,8 @@ private:
     #include "wx/gtk/scrolbar.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/scrolbar.h"
+#elif defined(__WXCOCOA__)
+    #include "wx/cocoa/scrolbar.h"
 #elif defined(__WXPM__)
     #include "wx/os2/scrolbar.h"
 #endif

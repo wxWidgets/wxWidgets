@@ -1181,6 +1181,7 @@ COND_TOOLKIT_COCOA_GUI_HDR =  \
 	wx/cocoa/NSControl.h \
 	wx/cocoa/NSMenu.h \
 	wx/cocoa/NSPanel.h \
+	wx/cocoa/NSScroller.h \
 	wx/cocoa/NSTabView.h \
 	wx/cocoa/NSTableView.h \
 	wx/cocoa/NSTextField.h \
@@ -1226,6 +1227,7 @@ COND_TOOLKIT_COCOA_GUI_HDR =  \
 	wx/cocoa/radiobox.h \
 	wx/cocoa/radiobut.h \
 	wx/cocoa/region.h \
+	wx/cocoa/scrolbar.h \
 	wx/cocoa/slider.h \
 	wx/cocoa/spinbutt.h \
 	wx/cocoa/statbmp.h \
@@ -2571,6 +2573,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_NSControl.o \
 	monodll_NSMenu.o \
 	monodll_NSPanel.o \
+	monodll_NSScroller.o \
 	monodll_NSTabView.o \
 	monodll_NSTableView.o \
 	monodll_NSTextField.o \
@@ -2616,6 +2619,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_radiobox.o \
 	monodll_radiobut.o \
 	monodll_region.o \
+	monodll_scrolbar.o \
 	monodll_settings.o \
 	monodll_slider.o \
 	monodll_spinbutt.o \
@@ -3431,6 +3435,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_NSControl.o \
 	monolib_NSMenu.o \
 	monolib_NSPanel.o \
+	monolib_NSScroller.o \
 	monolib_NSTabView.o \
 	monolib_NSTableView.o \
 	monolib_NSTextField.o \
@@ -3476,6 +3481,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_radiobox.o \
 	monolib_radiobut.o \
 	monolib_region.o \
+	monolib_scrolbar.o \
 	monolib_settings.o \
 	monolib_slider.o \
 	monolib_spinbutt.o \
@@ -4463,6 +4469,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_NSControl.o \
 	coredll_NSMenu.o \
 	coredll_NSPanel.o \
+	coredll_NSScroller.o \
 	coredll_NSTabView.o \
 	coredll_NSTableView.o \
 	coredll_NSTextField.o \
@@ -4508,6 +4515,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_radiobox.o \
 	coredll_radiobut.o \
 	coredll_region.o \
+	coredll_scrolbar.o \
 	coredll_settings.o \
 	coredll_slider.o \
 	coredll_spinbutt.o \
@@ -5190,6 +5198,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_NSControl.o \
 	corelib_NSMenu.o \
 	corelib_NSPanel.o \
+	corelib_NSScroller.o \
 	corelib_NSTabView.o \
 	corelib_NSTableView.o \
 	corelib_NSTextField.o \
@@ -5235,6 +5244,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_radiobox.o \
 	corelib_radiobut.o \
 	corelib_region.o \
+	corelib_scrolbar.o \
 	corelib_settings.o \
 	corelib_slider.o \
 	corelib_spinbutt.o \
@@ -8147,6 +8157,9 @@ monodll_NSMenu.o: $(srcdir)/src/cocoa/NSMenu.mm $(MONODLL_ODEP)
 monodll_NSPanel.o: $(srcdir)/src/cocoa/NSPanel.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+monodll_NSScroller.o: $(srcdir)/src/cocoa/NSScroller.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 monodll_NSTabView.o: $(srcdir)/src/cocoa/NSTabView.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -10064,6 +10077,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_scrolbar.o: $(srcdir)/src/mac/carbon/scrolbar.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_scrolbar.o: $(srcdir)/src/cocoa/scrolbar.mm $(MONODLL_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_scrolbar.o: $(srcdir)/src/os2/scrolbar.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -11088,6 +11104,9 @@ monolib_NSMenu.o: $(srcdir)/src/cocoa/NSMenu.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_NSPanel.o: $(srcdir)/src/cocoa/NSPanel.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_NSScroller.o: $(srcdir)/src/cocoa/NSScroller.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_NSTabView.o: $(srcdir)/src/cocoa/NSTabView.mm $(MONOLIB_ODEP)
@@ -13007,6 +13026,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_scrolbar.o: $(srcdir)/src/mac/carbon/scrolbar.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_scrolbar.o: $(srcdir)/src/cocoa/scrolbar.mm $(MONOLIB_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_scrolbar.o: $(srcdir)/src/os2/scrolbar.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
@@ -14517,6 +14539,9 @@ coredll_NSMenu.o: $(srcdir)/src/cocoa/NSMenu.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 coredll_NSPanel.o: $(srcdir)/src/cocoa/NSPanel.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
+coredll_NSScroller.o: $(srcdir)/src/cocoa/NSScroller.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 coredll_NSTabView.o: $(srcdir)/src/cocoa/NSTabView.mm $(COREDLL_ODEP)
@@ -16217,6 +16242,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_scrolbar.o: $(srcdir)/src/mac/carbon/scrolbar.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_scrolbar.o: $(srcdir)/src/cocoa/scrolbar.mm $(COREDLL_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_scrolbar.o: $(srcdir)/src/os2/scrolbar.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -16947,6 +16975,9 @@ corelib_NSMenu.o: $(srcdir)/src/cocoa/NSMenu.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 corelib_NSPanel.o: $(srcdir)/src/cocoa/NSPanel.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
+corelib_NSScroller.o: $(srcdir)/src/cocoa/NSScroller.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 corelib_NSTabView.o: $(srcdir)/src/cocoa/NSTabView.mm $(CORELIB_ODEP)
@@ -18646,6 +18677,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_scrolbar.o: $(srcdir)/src/mac/carbon/scrolbar.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_scrolbar.o: $(srcdir)/src/cocoa/scrolbar.mm $(CORELIB_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_scrolbar.o: $(srcdir)/src/os2/scrolbar.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
