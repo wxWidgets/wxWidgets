@@ -4,6 +4,7 @@
 // Author:      Julian Smart
 // Modified by: Guilhem Lavaux (big rewrite) May 1997, 1998
 //              Guillermo Rodriguez (updated for wxSocket v2) Jan 2000
+//                                  (callbacks deprecated)    Mar 2000
 // Created:     1993
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart 1993
@@ -11,6 +12,14 @@
 //              (c) 2000 Guillermo Rodriguez <guille@iies.es>
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
+
+// ==========================================================================
+// declarations
+// ==========================================================================
+
+// --------------------------------------------------------------------------
+// headers
+// --------------------------------------------------------------------------
 
 #ifdef __GNUG__
 #pragma implementation "sckipc.h"
@@ -34,20 +43,23 @@
 
 #include "wx/socket.h"
 #include "wx/sckipc.h"
+#include "wx/module.h"
+#include "wx/event.h"
 #include "wx/log.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxTCPServer, wxServerBase)
-IMPLEMENT_DYNAMIC_CLASS(wxTCPClient, wxClientBase)
-IMPLEMENT_CLASS(wxTCPConnection, wxConnectionBase)
+// --------------------------------------------------------------------------
+// macros and constants
+// --------------------------------------------------------------------------
 
 // It seems to be already defined somewhere in the Xt includes.
 #ifndef __XT__
 // Message codes
-enum {
+enum
+{
   IPC_EXECUTE = 1,
   IPC_REQUEST,
   IPC_POKE,
@@ -62,24 +74,46 @@ enum {
 };
 #endif
 
-void Server_OnRequest(wxSocketServer& server,
-                      wxSocketNotify evt,
-                      char *cdata);
-void Client_OnRequest(wxSocketBase& sock,
-                      wxSocketNotify evt,
-                      char *cdata);
-
 
 // All sockets will be created with the following flags
-
 #define SCKIPC_FLAGS (wxSOCKET_WAITALL)
 
-// ---------------------------------------------------------------------------
-// wxTCPClient
-// ---------------------------------------------------------------------------
+// --------------------------------------------------------------------------
+// wxTCPEventHandler stuff (private class)
+// --------------------------------------------------------------------------
 
-wxTCPClient::wxTCPClient ()
-  : wxClientBase()
+class wxTCPEventHandler : public wxEvtHandler
+{
+public:
+  wxTCPEventHandler() : wxEvtHandler() {};
+
+  void Client_OnRequest(wxSocketEvent& event);
+  void Server_OnRequest(wxSocketEvent& event);
+
+  DECLARE_EVENT_TABLE()
+};
+
+enum
+{
+  _CLIENT_ONREQUEST_ID = 1000,
+  _SERVER_ONREQUEST_ID
+};
+
+static wxTCPEventHandler *gs_handler = NULL;
+
+// ==========================================================================
+// implementation
+// ==========================================================================
+
+IMPLEMENT_DYNAMIC_CLASS(wxTCPServer, wxServerBase)
+IMPLEMENT_DYNAMIC_CLASS(wxTCPClient, wxClientBase)
+IMPLEMENT_CLASS(wxTCPConnection, wxConnectionBase)
+
+// --------------------------------------------------------------------------
+// wxTCPClient
+// --------------------------------------------------------------------------
+
+wxTCPClient::wxTCPClient () : wxClientBase()
 {
 }
 
@@ -131,8 +165,8 @@ wxConnectionBase *wxTCPClient::MakeConnection (const wxString& host,
           connection->m_sockstrm = stream;
           connection->m_codeci = data_is;
           connection->m_codeco = data_os;
-          client->Callback(Client_OnRequest);
-          client->CallbackData((char *)connection);
+          client->SetEventHandler(*gs_handler, _CLIENT_ONREQUEST_ID);
+          client->SetClientData(connection);
           client->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
           client->Notify(TRUE);
           return connection;
@@ -160,12 +194,11 @@ wxConnectionBase *wxTCPClient::OnMakeConnection()
   return new wxTCPConnection;
 }
 
-// ---------------------------------------------------------------------------
+// --------------------------------------------------------------------------
 // wxTCPServer
-// ---------------------------------------------------------------------------
+// --------------------------------------------------------------------------
 
-wxTCPServer::wxTCPServer ()
-  : wxServerBase()
+wxTCPServer::wxTCPServer () : wxServerBase()
 {
 }
 
@@ -179,8 +212,8 @@ bool wxTCPServer::Create(const wxString& server_name)
 
   // Create a socket listening on specified port
   server = new wxSocketServer(addr, SCKIPC_FLAGS);
-  server->Callback((wxSocketBase::wxSockCbk)Server_OnRequest);
-  server->CallbackData((char *)this);
+  server->SetEventHandler(*gs_handler, _SERVER_ONREQUEST_ID);
+  server->SetClientData(this);
   server->SetNotify(wxSOCKET_CONNECTION_FLAG);
   server->Notify(TRUE);
 
@@ -196,14 +229,16 @@ wxConnectionBase *wxTCPServer::OnAcceptConnection( const wxString& WXUNUSED(topi
   return new wxTCPConnection();
 }
 
-// ---------------------------------------------------------------------------
+// --------------------------------------------------------------------------
 // wxTCPConnection
-// ---------------------------------------------------------------------------
+// --------------------------------------------------------------------------
 
-wxTCPConnection::wxTCPConnection ()
-  : wxConnectionBase(),
-    m_sock(NULL), m_sockstrm(NULL), m_codeci(NULL), m_codeco(NULL)
+wxTCPConnection::wxTCPConnection () : wxConnectionBase()
 {
+  m_sock     = NULL;
+  m_sockstrm = NULL;
+  m_codeci   = NULL;
+  m_codeco   = NULL;
 }
 
 wxTCPConnection::wxTCPConnection(char * WXUNUSED(buffer), int WXUNUSED(size))
@@ -229,7 +264,7 @@ bool wxTCPConnection::Disconnect ()
 {
   // Send the the disconnect message to the peer.
   m_codeco->Write8(IPC_DISCONNECT);
-  m_sock->Callback(NULL);
+  m_sock->Notify(FALSE);
   m_sock->Close();
 
   return TRUE;
@@ -357,12 +392,22 @@ bool wxTCPConnection::Advise (const wxString& item,
   return TRUE;
 }
 
-void Client_OnRequest(wxSocketBase& sock,
-                      wxSocketNotify evt,
-                      char *cdata)
+// --------------------------------------------------------------------------
+// wxTCPEventHandler (private class)
+// --------------------------------------------------------------------------
+
+BEGIN_EVENT_TABLE(wxTCPEventHandler, wxEvtHandler)
+  EVT_SOCKET(_CLIENT_ONREQUEST_ID, wxTCPEventHandler::Client_OnRequest)
+  EVT_SOCKET(_SERVER_ONREQUEST_ID, wxTCPEventHandler::Server_OnRequest)
+END_EVENT_TABLE()
+
+void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
 {
+  wxSocketBase *sock = event.GetSocket();
+  wxSocketNotify evt = event.GetSocketEvent();
+  wxTCPConnection *connection = (wxTCPConnection *)(event.GetClientData());
+
   int msg = 0;
-  wxTCPConnection *connection = (wxTCPConnection *)cdata;
   wxDataInputStream *codeci;
   wxDataOutputStream *codeco; 
   wxSocketStream *sockstrm;
@@ -372,8 +417,8 @@ void Client_OnRequest(wxSocketBase& sock,
   // The socket handler signals us that we lost the connection: destroy all.
   if (evt == wxSOCKET_LOST)
   {
-    sock.Callback(NULL);
-    sock.Close();
+    sock->Notify(FALSE);
+    sock->Close();
     connection->OnDisconnect();
     return;
   }
@@ -488,9 +533,8 @@ void Client_OnRequest(wxSocketBase& sock,
   }
   case IPC_DISCONNECT:
   {
-    wxLogDebug("IPC_DISCONNECT");
-    sock.Callback(NULL);
-    sock.Close();
+    sock->Notify(FALSE);
+    sock->Close();
     connection->OnDisconnect();
     break;
   }
@@ -500,29 +544,25 @@ void Client_OnRequest(wxSocketBase& sock,
   }
 }
 
-void Server_OnRequest(wxSocketServer& server,
-                      wxSocketNotify evt,
-                      char *cdata)
+void wxTCPEventHandler::Server_OnRequest(wxSocketEvent &event)
 {
-  wxTCPServer *ipcserv = (wxTCPServer *)cdata;
-  wxSocketStream *stream;
-  wxDataInputStream *codeci;
-  wxDataOutputStream *codeco;
+  wxSocketServer *server = (wxSocketServer *) event.GetSocket();
+  wxTCPServer *ipcserv = (wxTCPServer *) event.GetClientData();
 
-  if (evt != wxSOCKET_CONNECTION)
+  if (event.GetSocketEvent() != wxSOCKET_CONNECTION)
     return;
 
   // Accept the connection, getting a new socket
-  wxSocketBase *sock = server.Accept();
+  wxSocketBase *sock = server->Accept();
   if (!sock->Ok())
   {
     sock->Destroy();
     return;
   }
 
-  stream = new wxSocketStream(*sock);
-  codeci = new wxDataInputStream(*stream);
-  codeco = new wxDataOutputStream(*stream);
+  wxSocketStream *stream     = new wxSocketStream(*sock);
+  wxDataInputStream *codeci  = new wxDataInputStream(*stream);
+  wxDataOutputStream *codeco = new wxDataOutputStream(*stream);
 
   int msg;
   msg = codeci->Read8();
@@ -546,8 +586,8 @@ void Server_OnRequest(wxSocketServer& server,
         new_connection->m_sockstrm = stream;
         new_connection->m_codeci = codeci;
         new_connection->m_codeco = codeco;
-        sock->Callback(Client_OnRequest);
-        sock->CallbackData((char *)new_connection);
+        sock->SetEventHandler(*gs_handler, _CLIENT_ONREQUEST_ID);
+        sock->SetClientData(new_connection);
         sock->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
         sock->Notify(TRUE);
         return;
@@ -568,6 +608,22 @@ void Server_OnRequest(wxSocketServer& server,
   delete stream;
   sock->Destroy();
 }
+
+// --------------------------------------------------------------------------
+// wxTCPEventHandlerModule (private class)
+// --------------------------------------------------------------------------
+
+class WXDLLEXPORT wxTCPEventHandlerModule: public wxModule
+{
+  DECLARE_DYNAMIC_CLASS(wxTCPEventHandlerModule)
+
+public:
+  bool OnInit() { gs_handler = new wxTCPEventHandler(); return TRUE; }
+  void OnExit() { wxDELETE(gs_handler); }
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxTCPEventHandlerModule, wxModule)
+
 
 #endif
     // wxUSE_SOCKETS && wxUSE_IPC

@@ -4,6 +4,7 @@
 // Author:      Julian Smart
 // Modified by: Guilhem Lavaux (big rewrite) May 1997, 1998
 //              Guillermo Rodriguez (updated for wxSocket v2) Jan 2000
+//                                  (callbacks deprecated)    Mar 2000
 // Created:     1993
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart 1993
@@ -21,7 +22,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_SOCKETS
+#if wxUSE_SOCKETS && wxUSE_IPC
 
 #include "wx/ipcbase.h"
 #include "wx/socket.h"
@@ -91,17 +92,14 @@ protected:
 
   friend class wxTCPServer;
   friend class wxTCPClient;
-  friend void Client_OnRequest(wxSocketBase&,
-                               wxSocketNotify, char *);
-  friend void Server_OnRequest(wxSocketServer&,
-                               wxSocketNotify, char *);
+  friend class wxTCPEventHandler;
 
 private:
   //
   // We're hiding an Execute method in ConnectionBase
-  //s
+  //
   virtual bool Execute(const wxString& str)
-  { return Execute(str, -1, wxIPC_TEXT); }
+    { return Execute(str, -1, wxIPC_TEXT); }
 };
 
 class wxTCPServer: public wxServerBase
@@ -138,6 +136,6 @@ public:
   virtual wxConnectionBase *OnMakeConnection();
 };
 
-#endif // wxUSE_SOCKETS
+#endif // wxUSE_SOCKETS && wxUSE_IPC
 
-#endif // ipcsock.h
+#endif // _WX_SCKIPC_H
