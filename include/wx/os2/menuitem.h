@@ -44,7 +44,7 @@ class WXDLLEXPORT wxMenuItem: public wxMenuItemBase
 public:
     // ctor & dtor
     wxMenuItem( wxMenu*         pParentMenu = NULL
-               ,int             nId = ID_SEPARATOR
+               ,int             nId = wxID_SEPARATOR
                ,const wxString& rStrName = ""
                ,const wxString& rWxHelp = ""
                ,bool            bCheckable = FALSE
