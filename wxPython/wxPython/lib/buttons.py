@@ -151,7 +151,7 @@ class wxGenButton(wxControl):
 
 
     def SetBackgroundColour(self, colour):
-        wxWindow.SetBackgroundColour(self, colour)
+        wxControl.SetBackgroundColour(self, colour)
 
         # Calculate a new set of highlight and shadow colours based on
         # the new background colour.  Works okay if the colour is dark...
