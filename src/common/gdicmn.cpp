@@ -82,7 +82,7 @@ wxRect::wxRect(const wxPoint& topLeft, const wxPoint& bottomRight)
   if (height < 0)
   {
     height = -height;
-    x -= height;
+    y -= height;
   }
 }
 
