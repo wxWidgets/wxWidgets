@@ -120,8 +120,8 @@ import sys, os, string, getopt
 # This is really the wxPython version number, and will be placed in the
 # Makefiles for use with the distribution related targets.
 
-major_version = '2.1'
-build_version = '16'
+major_version = '2.2'
+build_version = '0'
 
 __version__ = major_version + '.' + build_version
 

@@ -17,8 +17,8 @@ inside a wxStyledTextCtrl, similar to the Python shell windows found in
 IDLE and PythonWin.
 
 There is still much to be done to improve this class, such as line
-buffering/recall, autoindent, calltips, autocomplete, etc...  But
-it's a good start.
+buffering/recall, autoindent, calltips, autocomplete, fixing the colourizer,
+etc...  But it's a good start.
 
 """
 
@@ -107,7 +107,7 @@ class PyShellWindow(wxStyledTextCtrl, InteractiveInterpreter):
         # Event handlers
         EVT_KEY_DOWN(self, self.OnKey)
         EVT_STC_UPDATEUI(self, ID, self.OnUpdateUI)
-        EVT_STC_STYLENEEDED(self, ID, self.OnStyle)
+        #EVT_STC_STYLENEEDED(self, ID, self.OnStyle)
 
 
     def GetLocals(self): return self.locals
