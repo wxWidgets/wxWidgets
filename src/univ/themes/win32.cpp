@@ -4068,8 +4068,8 @@ bool wxWin32StatusBarInputHandler::IsOnGrip(wxWindow *statbar,
     {
         wxSize sizeSbar = statbar->GetSize();
 
-        return (sizeSbar.x - pt.x) < STATUSBAR_GRIP_SIZE &&
-               (sizeSbar.y - pt.y) < STATUSBAR_GRIP_SIZE;
+        return (sizeSbar.x - pt.x) < (wxCoord)STATUSBAR_GRIP_SIZE &&
+               (sizeSbar.y - pt.y) < (wxCoord)STATUSBAR_GRIP_SIZE;
     }
 
     return FALSE;
