@@ -2767,9 +2767,9 @@ void wxDbTable::SetCol(const int colNo, const wxVariant val)
                     DATE_STRUCT *dataptr =
                         (DATE_STRUCT *)colDefs[colNo].PtrDataObj;
 
-                    dataptr->year   = (SQLSMALLINT)dateval.GetYear();
-                    dataptr->month  = (SQLUSMALLINT)(dateval.GetMonth()+1);
-                    dataptr->day    = (SQLUSMALLINT)dateval.GetDay();
+                    dataptr->year   = (SWORD)dateval.GetYear();
+                    dataptr->month  = (UWORD)(dateval.GetMonth()+1);
+                    dataptr->day    = (UWORD)dateval.GetDay();
                 }
                 break;
             case SQL_C_TIME:
@@ -2786,9 +2786,9 @@ void wxDbTable::SetCol(const int colNo, const wxVariant val)
                 {
                     TIMESTAMP_STRUCT *dataptr =
                         (TIMESTAMP_STRUCT *)colDefs[colNo].PtrDataObj;
-                    dataptr->year   = (SQLSMALLINT)dateval.GetYear();
-                    dataptr->month  = (SQLUSMALLINT)(dateval.GetMonth()+1);
-                    dataptr->day    = (SQLUSMALLINT)dateval.GetDay();
+                    dataptr->year   = (SWORD)dateval.GetYear();
+                    dataptr->month  = (UWORD)(dateval.GetMonth()+1);
+                    dataptr->day    = (UWORD)dateval.GetDay();
 
                     dataptr->hour   = dateval.GetHour();
                     dataptr->minute = dateval.GetMinute();
