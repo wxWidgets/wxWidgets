@@ -1380,7 +1380,10 @@ class WXDLLIMPEXP_BASE wxStringBufferLength
 public:
     wxStringBufferLength(wxString& str, size_t lenWanted = 1024)
         : m_str(str), m_buf(NULL), m_len(0), m_lenSet(false)
-        { m_buf = m_str.GetWriteBuf(lenWanted); }
+    { 
+        m_buf = m_str.GetWriteBuf(lenWanted); 
+        wxASSERT(m_buf != NULL);
+    }
 
     ~wxStringBufferLength()
     {
