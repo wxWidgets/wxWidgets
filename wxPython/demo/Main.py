@@ -52,7 +52,7 @@ _treeList = [
         ]),
 
     # managed windows == things with a (optional) caption you can close
-    ('Base Frames and Dialogs', [
+    ('Frames and Dialogs', [
         'Dialog',
         'Frame',
         'MDIWindows',
@@ -1607,7 +1607,7 @@ def main():
         os.chdir(demoPath)
     except:
         pass
-    app = MyApp(0) ##wx.Platform == "__WXMAC__")
+    app = MyApp(False)
     app.MainLoop()
 
 #---------------------------------------------------------------------------

@@ -193,7 +193,6 @@ class TestHtmlPanel(wx.Panel):
 
 def runTest(frame, nb, log):
     win = TestHtmlPanel(nb, frame, log)
-    print wx.Window_FindFocus()
     return win
 
 
