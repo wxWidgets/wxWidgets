@@ -42,6 +42,7 @@ wxStreamBuffer::wxStreamBuffer(wxOutputStream& o_stream)
 
 wxStreamBuffer::~wxStreamBuffer()
 {
+  wxDELETEA(m_buffer_start);
 }
 
 void wxStreamBuffer::WriteBack(char c)

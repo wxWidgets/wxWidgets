@@ -254,6 +254,8 @@ void wxObject::StoreObject( wxObjectOutputStream& stream )
 
   serial->SetObject(this);
   serial->StoreObject(stream);
+
+  delete serial;
 }
 
 void wxObject::LoadObject( wxObjectInputStream& stream )
@@ -275,6 +277,8 @@ void wxObject::LoadObject( wxObjectInputStream& stream )
 
   serial->SetObject(this);
   serial->LoadObject(stream);
+
+  delete serial;
 }
 
 #endif
