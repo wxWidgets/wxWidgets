@@ -32,8 +32,10 @@
 #include "wx/deprecated/expr.h"
 #include "wx/deprecated/wxexpr.h"
 
+#if !WXWIN_COMPATIBILITY_2_4
 static inline wxChar* copystring(const wxChar* s)
     { return wxStrcpy(new wxChar[wxStrlen(s) + 1], s); }
+#endif
 
 extern "C" void add_expr(char *);
 extern "C" void LexFromFile(FILE *fd);

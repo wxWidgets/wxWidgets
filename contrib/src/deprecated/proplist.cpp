@@ -57,8 +57,10 @@
 #include <math.h>
 #include <string.h>
 
+#if !WXWIN_COMPATIBILITY_2_4
 static inline wxChar* copystring(const wxChar* s)
     { return wxStrcpy(new wxChar[wxStrlen(s) + 1], s); }
+#endif
 
 // ----------------------------------------------------------------------------
 // Property text edit control
