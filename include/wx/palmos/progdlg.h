@@ -37,16 +37,15 @@ public:
     void Resume();
     virtual bool Show( bool show = true );
 
-    wxString GetMessage(){return m_msg;}
-    void SetMessage(wxString const &message){m_msg = message;}
+    Boolean Callback(PrgCallbackData *data);
 
-    int GetMaxValue(){return m_max;}
-    int GetCurValue(){return m_cur;}
 private:
 
     ProgressType *m_prgFrame;
     wxString m_msg;
     int m_max,m_cur;
+    bool m_canSkip;
+    bool m_activeSkip;
 
     // Virtual function hiding supression
     virtual void Update() { wxDialog::Update(); }

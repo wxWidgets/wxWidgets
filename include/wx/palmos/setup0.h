@@ -746,7 +746,7 @@
 #define wxUSE_MSGDLG        1
 
 // progress dialog class for lengthy operations
-#define wxUSE_PROGRESSDLG 0
+#define wxUSE_PROGRESSDLG 1
 
 // support for startup tips (wxShowTip &c)
 #define wxUSE_STARTUP_TIPS 0
