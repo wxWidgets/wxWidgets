@@ -491,7 +491,7 @@ private:
     wxDBMS           dbmsType;        // Type of datasource - i.e. Oracle, dBase, SQLServer, etc
 
     // Private member functions
-    bool             getDbInfo(void);
+    bool             getDbInfo(bool failOnDataTypeUnsupported = TRUE);
     bool             getDataTypeInfo(SWORD fSqlType, wxDbSqlTypeInfo &structSQLTypeInfo);
     bool             setConnectionOptions(void);
     void             logError(const wxString &errMsg, const wxString &SQLState);
