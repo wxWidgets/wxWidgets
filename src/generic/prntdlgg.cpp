@@ -39,11 +39,20 @@
 #endif
 
 #include "wx/generic/prntdlgg.h"
+
+#if wxUSE_POSTSCRIPT
 #include "wx/generic/dcpsg.h"
+#endif
+
 #include "wx/printdlg.h"
+
+// For print paper things
+#include "wx/prntbase.h"
 
 #include <stdlib.h>
 #include <string.h>
+
+#if wxUSE_POSTSCRIPT
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxGenericPrintDialog, wxDialog)
@@ -69,7 +78,7 @@ extern wxPrintPaperDatabase *wxThePrintPaperDatabase;
 
 
 wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent, wxPrintData* data):
-  wxDialog(parent, -1, _("Print"), wxPoint(0, 0), wxSize(600, 600), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL)
+  wxDialog(parent, -1, _("Print"), wxPoint(0, 0), wxSize(600, 600), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL|wxTAB_TRAVERSAL)
 {
   if ( data )
     printData = *data;
@@ -274,7 +283,7 @@ wxDC *wxGenericPrintDialog::GetPrintDC(void)
  */
 
 wxGenericPrintSetupDialog::wxGenericPrintSetupDialog(wxWindow *parent, wxPrintSetupData* data):
-  wxDialog(parent, -1, _("Print Setup"), wxPoint(0, 0), wxSize(600, 600), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL)
+  wxDialog(parent, -1, _("Print Setup"), wxPoint(0, 0), wxSize(600, 600), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL|wxTAB_TRAVERSAL)
 {
   if ( data )
     printData = *data;
@@ -408,6 +417,8 @@ wxChoice *wxGenericPrintSetupDialog::CreatePaperTypeChoice(int *x, int *y)
   choice->SetSelection(sel);
   return choice;
 }
+#endif
+  // wxUSE_POSTSCRIPT
 
 /*
  * Generic page setup dialog
@@ -429,33 +440,10 @@ void wxGenericPageSetupDialog::OnPrinter(wxCommandEvent& WXUNUSED(event))
     printDialog->ShowModal();
 
     printDialog->Destroy();
-
-#if 0
-  if (wxTheApp->GetPrintMode() == wxPRINT_POSTSCRIPT)
-  {
-    wxGenericPrintSetupDialog *genericPrintSetupDialog =
-          new wxGenericPrintSetupDialog(this, wxThePrintSetupData);
-    int ret = genericPrintSetupDialog->ShowModal();
-    if (ret == wxID_OK)
-      *wxThePrintSetupData = genericPrintSetupDialog->GetPrintData();
-
-    genericPrintSetupDialog->Close(TRUE);
-  }
-#ifdef __WXMSW__
-  else
-  {
-    wxPrintData data;
-    data.SetSetupDialog(TRUE);
-    wxPrintDialog printDialog(this, & data);
-    printDialog.ShowModal();
-  }
-#endif
-#endif
-  // 0
 }
 
 wxGenericPageSetupDialog::wxGenericPageSetupDialog(wxWindow *parent, wxPageSetupData* data):
-  wxDialog(parent, -1, _("Page Setup"), wxPoint(0, 0), wxSize(600, 600), wxDIALOG_MODAL|wxDEFAULT_DIALOG_STYLE)
+  wxDialog(parent, -1, _("Page Setup"), wxPoint(0, 0), wxSize(600, 600), wxDIALOG_MODAL|wxDEFAULT_DIALOG_STYLE|wxTAB_TRAVERSAL)
 {
   if ( data )
     pageData = *data;
@@ -583,12 +571,16 @@ bool wxGenericPageSetupDialog::TransferDataFromWindow(void)
     int sel = orientationRadioBox->GetSelection();
     if (sel == 0)
     {
+#if wxUSE_POSTSCRIPT
       wxThePrintSetupData->SetPrinterOrientation(wxPORTRAIT);
+#endif
       pageData.SetOrientation(wxPORTRAIT);
     }
     else
     {
+#if wxUSE_POSTSCRIPT
       wxThePrintSetupData->SetPrinterOrientation(wxLANDSCAPE);
+#endif
       pageData.SetOrientation(wxLANDSCAPE);
     }
   }

@@ -24,6 +24,8 @@
 #include "wx/wx.h"
 #endif
 
+#include "wx/prntbase.h"
+
 #define _MAXPATHLEN 500
 
 // Useful buffer, initialized in wxCommonInit
@@ -152,11 +154,6 @@ const char *wxDoubleToStringStr = "%.2f";
 
 #ifdef __WXMSW__
 const char *wxUserResourceStr = "TEXT";
-#endif
-
-#if wxUSE_POSTSCRIPT
-class wxPrintPaperDatabase;
-wxPrintPaperDatabase* wxThePrintPaperDatabase = NULL;
 #endif
 
 #if wxUSE_SHARED_LIBRARY
@@ -319,9 +316,10 @@ IMPLEMENT_CLASS(wxGenericPrintSetupDialog, wxDialog)
 IMPLEMENT_DYNAMIC_CLASS(wxPostScriptDC, wxDC)
 IMPLEMENT_DYNAMIC_CLASS(wxPrintSetupData, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxPageSetupData, wxObject)
+#endif
+
 IMPLEMENT_DYNAMIC_CLASS(wxPrintPaperType, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxPrintPaperDatabase, wxList)
-#endif
 
 #if wxUSE_WX_RESOURCES
 #include "wx/resource.h"

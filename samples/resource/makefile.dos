@@ -1,86 +1,17 @@
 #
 # File:		makefile.dos
 # Author:	Julian Smart
-# Created:	1993
+# Created:	1998
 # Updated:	
-# Copyright:	(c) 1993, AIAI, University of Edinburgh
 #
-# "%W% %G%"
-#
-# Makefile : Builds resource example (DOS).
+# Makefile : Builds 16-bit sample, VC++ 1.5
 # Use FINAL=1 argument to nmake to build final version with no debugging
-# info.
+# info
 
-# Set WXDIR for your system
 WXDIR = $(WXWIN)
 
-!include $(WXDIR)\src\makemsc.env
+TARGET=resource
+OBJECTS=$(TARGET).obj
 
-THISDIR = $(WXDIR)\samples\resource
-WXLIB = $(WXDIR)\lib\wx.lib
-LIBS=$(WXLIB) oldnames libw llibcew commdlg ddeml shell mmsystem
-INC=-I$(WXDIR)\include\base -I$(WXDIR)\include\msw
-DUMMY=$(WXDIR)\src\msw\dummy.obj
+!include $(WXDIR)\src\makeprog.msc
 
-# Set this to nothing if using MS C++ 7
-ZOPTION=/Z7
-
-!ifndef FINAL
-FINAL=0
-!endif
-
-PRECOMP = /YuWX_PREC.H /Fp$(WXDIR)\src\msw\wx.pch
-
-!if "$(FINAL)" == "0"
-CPPFLAGS=/AL /W3 /Zi $(ZOPTION) /G2sw /Od $(INC) $(PRECOMP) /Dwx_msw
-LINKFLAGS=/NOD /CO /ONERROR:NOEXE /SEG:256
-!else
-CPPFLAGS=/AL /W3 /G2sw $(INC) /Ox $(PRECOMP) /Dwx_msw
-LINKFLAGS=/NOD /ONERROR:NOEXE /SEG:256
-!endif
-
-HEADERS = resource.h
-SOURCES = resource.$(SRCSUFF)
-OBJECTS = resource.obj
-
-resource:    resource.exe
-
-all:    wx resource.exe
-
-wx:
-        cd $(WXDIR)\src\msw
-        nmake -f makefile.dos FINAL=$(FINAL)
-        cd $(THISDIR)
-
-wxclean:
-        cd $(WXDIR)\src\msw
-        nmake -f makefile.dos clean
-        cd $(THISDIR)
-
-
-resource.exe:      $(DUMMY) $(WXLIB) resource.obj resource.def resource.res
-        link $(LINKFLAGS) @<<
-$(DUMMY) resource.obj,
-resource,
-NUL,
-$(LIBS),
-resource.def
-;
-<<
-        rc -31 -K resource.res
-
-resource.obj:      resource.h resource.$(SRCSUFF) dialog1.wxr $(DUMMY)
-        cl @<<
-$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
-<<
-
-resource.res :      resource.rc $(WXDIR)\include\msw\wx.rc
-    rc -r /i$(WXDIR)\include\msw /i$(WXDIR)\contrib\fafa resource
-
-clean:
-        -erase *.obj
-        -erase *.exe
-        -erase *.res
-        -erase *.map
-        -erase *.sbr
-        -erase *.pdb

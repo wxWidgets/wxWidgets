@@ -70,7 +70,7 @@ bool MyApp::OnInit(void)
   frame->SetMenuBar(menuBar);
 
   // Create the toolbar
-  frame->CreateToolBar(wxNO_BORDER|wxHORIZONTAL|wxTB_FLAT|wxTB_DOCKABLE, ID_TOOLBAR);
+  frame->CreateToolBar(wxNO_BORDER|wxTB_HORIZONTAL|wxTB_FLAT|wxTB_DOCKABLE, ID_TOOLBAR);
   
   frame->GetToolBar()->SetMargins( 2, 2 );
 

@@ -1,14 +1,8 @@
-; This file is maintained by HCW. Do not modify this file directly.
-
-
 [OPTIONS]
-COMPRESS=60 Hall Zeck
-LCID=0x409 0x0 0x0 ; English (United States)
-REPORT=Yes
-CONTENTS=Contents
+BMROOT=d:\wx2\wxwind~1\docs/latex/wx ; Assume that bitmaps are where the source is
 TITLE=wxWindows Manual
-BMROOT=.
-HLP=wx.hlp
+CONTENTS=Contents
+COMPRESS=HIGH
 
 [FILES]
 wx.rtf
@@ -16,3 +10,8 @@ wx.rtf
 [CONFIG]
 CreateButton("Up", "&Up", "JumpId(`wx.hlp', `Contents')")
 BrowseButtons()
+
+[MAP]
+
+[BITMAPS]
+

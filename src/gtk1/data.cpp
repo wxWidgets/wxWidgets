@@ -59,7 +59,9 @@ char *wxOsVersion = (char *) NULL;
 
 /* For printing several pages */
 int wxPageNumber;
-wxPrintPaperDatabase* wxThePrintPaperDatabase = (wxPrintPaperDatabase *) NULL;
+
+// Now in prntbase.cpp
+// wxPrintPaperDatabase* wxThePrintPaperDatabase = (wxPrintPaperDatabase *) NULL;
 
 /* GDI Object Lists */
 wxBrushList      *wxTheBrushList = (wxBrushList *) NULL;

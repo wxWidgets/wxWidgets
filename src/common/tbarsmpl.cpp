@@ -66,6 +66,7 @@ bool wxToolBarSimple::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos
   m_yMargin = 0;
   m_toolPacking = 1;
   m_toolSeparation = 5;
+  SetCursor(*wxSTANDARD_CURSOR);
   
   return TRUE;
 }

@@ -289,53 +289,6 @@ void wxMDIParentFrame::OnActivate(wxActivateEvent& event)
 	// Do nothing
 }
 
-#if WXWIN_COMPATIBILITY
-/*
-void wxMDIParentFrame::OldOnSize(int x, int y)
-{
-#if WXWIN_COMPATIBILITY == 1
-  wxSizeEvent event(wxSize(x, y), m_windowId);
-  event.SetEventObject( this );
-  GetEventHandler()->ProcessEvent(event);
-#else
-
-#if wxUSE_CONSTRAINTS
-  if (GetAutoLayout())
-    Layout();
-#endif
-  int x = 0;
-  int y = 0;
-  int width, height;
-  GetClientSize(&width, &height);
-  if ( GetToolBar() )
-  {
-      int wt, ht;
-      GetToolBar()->GetSize(&wt, &ht);
-      height -= ht;
-      y += ht;
-  }
-
-  if ( GetClientWindow() )
-      GetClientWindow()->SetSize(x, y, width, height);
-
-#endif
-}
-
-// Default activation behaviour - nothing.
-// Default activation behaviour - override dedault wxFrame behaviour
-void wxMDIParentFrame::OldOnActivate(bool flag)
-{
-#if WXWIN_COMPATIBILITY == 1
-  wxActivateEvent event(wxEVT_ACTIVATE, flag, m_windowId);
-  event.SetEventObject( this );
-  GetEventHandler()->ProcessEvent(event);
-#else
-#endif
-}
-*/
-
-#endif
-
 // Returns the active MDI child window
 wxMDIChildFrame *wxMDIParentFrame::GetActiveChild(void) const
 {

@@ -134,7 +134,7 @@ bool wxTextValidator::Validate(wxWindow *parent)
 
     wxString val(control->GetValue());
 
-    bool ok = true;
+    bool ok = TRUE;
 
     // this format string should contian exactly one '%s'
     const char *errormsg = _("'%s' is invalid");
@@ -143,37 +143,37 @@ bool wxTextValidator::Validate(wxWindow *parent)
     {
         if ( !m_includeList.Member(val) )
         {
-            ok = false;
+            ok = FALSE;
         }
     }
     else if ( m_validatorStyle & wxFILTER_EXCLUDE_LIST )
     {
         if ( m_excludeList.Member(val) )
         {
-            ok = false;
+            ok = FALSE;
         }
     }
     else if ( (m_validatorStyle & wxFILTER_ASCII) && !val.IsAscii() )
     {
-        ok = false;
+        ok = FALSE;
 
         errormsg = _("'%s' should only contain ASCII characters.");
     }
     else if ( (m_validatorStyle & wxFILTER_ALPHA) && !wxIsAlpha(val) )
     {
-        ok = false;
+        ok = FALSE;
 
         errormsg = _("'%s' should only contain alphabetic characters.");
     }
     else if ( (m_validatorStyle & wxFILTER_ALPHANUMERIC) && !wxIsAlphaNumeric(val))
     {
-        ok = false;
+        ok = FALSE;
 
         errormsg = _("'%s' should only contain alphabetic or numeric characters.");
     }
     else if ( (m_validatorStyle & wxFILTER_NUMERIC) && !wxIsNumeric(val))
     {
-        ok = false;
+        ok = FALSE;
 
         errormsg = _("'%s' should be numeric.");
     }

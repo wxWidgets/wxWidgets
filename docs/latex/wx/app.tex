@@ -131,17 +131,16 @@ otherwise.
 
 \helpref{wxApp::SetExitOnDelete}{wxappsetexitondelete}
 
-\membersection{wxApp::GetPrintMode}\label{wxappgetprintmode}
-
-\constfunc{bool}{GetPrintMode}{\void}
-
-Returns the print mode: see \helpref{wxApp::SetPrintMode}{wxappsetprintmode}.
-
 \membersection{wxApp::GetTopWindow}\label{wxappgettopwindow}
 
 \constfunc{wxWindow *}{GetTopWindow}{\void}
 
 Returns a pointer to the top window.
+
+\wxheading{Remarks}
+
+If the top window hasn't been set using \helpref{wxApp::SetTopWindow}{wxappsettopwindow}, this
+function will find the first top-level window (frame or dialog) and return that.
 
 \wxheading{See also}
 
@@ -271,7 +270,7 @@ Under Windows, OnEndSession is called in response to the WM\_ENDSESSION message.
 \func{bool}{OnInit}{\void}
 
 This must be provided by the application, and will usually create the
-application's main window, calling \helpref{wxApp::SetTopWindow}{wxappsettopwindow}.
+application's main window, optionally calling \helpref{wxApp::SetTopWindow}{wxappsettopwindow}.
 
 Return TRUE to continue processing, FALSE to exit the application.
 
@@ -423,31 +422,16 @@ deleted. If FALSE, the application will continue to run.}
 
 Currently, setting this to FALSE only has an effect under Windows.
 
-\membersection{wxApp::SetPrintMode}\label{wxappsetprintmode}
-
-\func{void}{SetPrintMode}{\param{int}{ mode}}
-
-Sets the print mode determining what printing facilities will be
-used by the printing framework.
-
-\wxheading{Parameters}
-
-\docparam{mode}{This can be one of:
-
-\begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf wxPRINT\_WINDOWS}}{Under Windows, use Windows printing (wxPrinterDC). This is the
-default under Windows.}
-\twocolitem{{\bf wxPRINT\_POSTSCRIPT}}{Use PostScript printing (wxPostScriptDC). This is the
-default for non-Windows platforms.}
-\end{twocollist}
-}%
-
 \membersection{wxApp::SetTopWindow}\label{wxappsettopwindow}
 
 \func{void}{SetTopWindow}{\param{wxWindow* }{window}}
 
-Sets the `top' window. You should normally call this from within \helpref{wxApp::OnInit}{wxapponinit} to
-let wxWindows know which is the main window.
+Sets the `top' window. You can call this from within \helpref{wxApp::OnInit}{wxapponinit} to
+let wxWindows know which is the main window. You don't have to set the top window;
+it's only a convenience so that (for example) certain dialogs without parents can use a
+specific window as the top window. If no top window is specified by the application,
+wxWindows just uses the first frame or dialog in its top-level window list, when it
+needs to use the top window.
 
 \wxheading{Parameters}
 

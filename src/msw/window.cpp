@@ -59,6 +59,8 @@
 
 #include "wx/msw/private.h"
 
+#include "wx/textctrl.h"
+
 #include <string.h>
 
 #ifndef __GNUWIN32__
@@ -234,6 +236,7 @@ void wxWindow::Init()
     m_isWindow = TRUE;
 
     // Generic
+//    m_windowCursor = * wxSTANDARD_CURSOR;
     m_windowId = 0;
     m_isShown = TRUE;
     m_windowStyle = 0;
@@ -938,7 +941,7 @@ LRESULT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
     #define DIMENSION_TYPE int
 #endif
 
-// Main Windows 3 window proc
+// Main Windows window proc
 long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
     wxASSERT( m_lastMsg == message &&
@@ -1176,6 +1179,7 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             return MSWOnSysCommand(wParam, lParam);
             break;
         }
+
     case WM_COMMAND:
         {
 #ifdef __WIN32__
@@ -1227,7 +1231,6 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             return MSWOnMeasureItem((int)wParam, (WXMEASUREITEMSTRUCT *)lParam);
             break;
         }
-
     case WM_KEYDOWN:
         // If this has been processed by an event handler,
         // return 0 now (we've handled it).
@@ -1288,7 +1291,6 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
         }
 
         break;
-
     case WM_KEYUP:
     {
         if (!MSWOnKeyUp((WORD) wParam, lParam))
@@ -1301,7 +1303,6 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
                 return Default();
             break;
         }
-
     case WM_HSCROLL:
         {
 #ifdef __WIN32__
@@ -1479,7 +1480,6 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
                 return 1L;
             break;
         }
-
     case WM_GETMINMAXINFO:
         {
             MINMAXINFO *info = (MINMAXINFO *)lParam;
@@ -1494,10 +1494,10 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             return MSWDefWindowProc(message, wParam, lParam );
             break;
         }
-
     case WM_GETDLGCODE:
-        return MSWGetDlgCode();
-
+        {
+            return MSWGetDlgCode();
+        }
     case WM_SETCURSOR:
         {
             // don't set cursor for other windows, only for this one: this
@@ -1551,7 +1551,6 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
                 }
             }
         }
-
         return MSWDefWindowProc(message, wParam, lParam );
 
     default:
@@ -2147,6 +2146,7 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
         if ( ::IsDialogMessage((HWND)GetHWND(), msg) )
             return TRUE;
     }
+
 #if wxUSE_TOOLTIPS
     if ( m_tooltip )
     {
@@ -2156,6 +2156,15 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
             m_tooltip->RelayEvent(pMsg);
     }
 #endif // wxUSE_TOOLTIPS
+
+    // In case we don't have wxTAB_TRAVERSAL style on.
+    // If we don't call this, we may never process Enter correctly.
+    if ( m_hWnd != 0 && (GetWindowStyleFlag() & wxTAB_TRAVERSAL) == 0 )
+    {
+        MSG *msg = (MSG *)pMsg;
+        if ( ::IsDialogMessage((HWND)GetHWND(), msg) )
+            return TRUE;
+    }
 
     return FALSE;
 }

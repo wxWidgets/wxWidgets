@@ -131,10 +131,6 @@ const char *wxFatalErrorStr = "wxWindows Fatal Error";
 const char *wxFloatToStringStr = "%.2f";
 const char *wxDoubleToStringStr = "%.2f";
 
-#if wxUSE_POSTSCRIPT
-wxPrintPaperDatabase* wxThePrintPaperDatabase = NULL;
-#endif
-
 #if wxUSE_SHARED_LIBRARY
 ///// Event tables (also must be in one, statically-linked file for shared libraries)
 

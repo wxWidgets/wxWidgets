@@ -203,7 +203,7 @@ IMPLEMENT_CLASS(wxSingleChoiceDialog, wxDialog)
 
 wxSingleChoiceDialog::wxSingleChoiceDialog(wxWindow *parent, const wxString& message, const wxString& caption,
         int n, const wxString *choices, char **clientData, long style, const wxPoint& pos):
-	  wxDialog(parent, -1, caption, pos, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL)
+	  wxDialog(parent, -1, caption, pos, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL|wxTAB_TRAVERSAL)
 {
         Create(parent, message, caption, n, choices, clientData, style);
 }

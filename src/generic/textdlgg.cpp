@@ -79,7 +79,7 @@ static void wxSplitMessage2(const char *message, wxList *messageList, wxWindow *
 
 wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent, const wxString& message, const wxString& caption,
         const wxString& value, long style, const wxPoint& pos):
-	wxDialog(parent, -1, caption, pos, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL)
+	wxDialog(parent, -1, caption, pos, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL|wxTAB_TRAVERSAL)
 {
 	m_dialogStyle = style;
 	m_value = value;

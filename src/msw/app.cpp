@@ -491,6 +491,7 @@ void wxApp::CleanUp()
     // (double deletion of the cursor).
     wxSetCursor(wxNullCursor);
     delete g_globalCursor;
+    g_globalCursor = NULL;
 
     wxDeleteStockObjects() ;
 
@@ -932,6 +933,7 @@ void wxApp::Dispatch()
  * the message. Some may have accelerator tables, or have
  * MDI complications.
  */
+
 bool wxApp::ProcessMessage(WXMSG *wxmsg)
 {
     MSG *msg = (MSG *)wxmsg;

@@ -1837,10 +1837,8 @@ void wxPostScriptDC::GetSizeMM(long *width, long *height) const
 wxPrintSetupData *wxThePrintSetupData = (wxPrintSetupData *) NULL;
 
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxPostScriptModule, wxModule)
 IMPLEMENT_DYNAMIC_CLASS(wxPostScriptDC, wxDC)
 IMPLEMENT_DYNAMIC_CLASS(wxPrintSetupData, wxObject)
-IMPLEMENT_DYNAMIC_CLASS(wxPrintPaperType, wxObject)
 #endif
 
 // Redundant now I think
@@ -2338,86 +2336,19 @@ void wxInitializePrintSetupData(bool init)
   }
 }
 
-/*
- * Paper size database for PostScript
- */
+// A module to allow initialization/cleanup of PostScript-related
+// things without calling these functions from app.cpp.
 
-wxPrintPaperType::wxPrintPaperType(const char *name, int wmm, int hmm, int wp, int hp)
+class WXDLLEXPORT wxPostScriptModule: public wxModule
 {
-  widthMM = wmm;
-  heightMM = hmm;
-  widthPixels = wp;
-  heightPixels = hp;
-  pageName = copystring(name);
-}
+DECLARE_DYNAMIC_CLASS(wxPostScriptModule)
+public:
+    wxPostScriptModule() {}
+    bool OnInit();
+    void OnExit();
+};
 
-wxPrintPaperType::~wxPrintPaperType()
-{
-  delete[] pageName;
-}
-
-/*
- * Print paper database for PostScript
- */
-
-#if !USE_SHARED_LIBRARIES
-IMPLEMENT_DYNAMIC_CLASS(wxPrintPaperDatabase, wxList)
-#endif
-
-wxPrintPaperDatabase::wxPrintPaperDatabase():wxList(wxKEY_STRING)
-{
-  DeleteContents(TRUE);
-}
-
-wxPrintPaperDatabase::~wxPrintPaperDatabase()
-{
-}
-
-void wxPrintPaperDatabase::CreateDatabase()
-{
-  // Need correct values for page size in pixels.
-  // Each unit is one 'point' = 1/72 of an inch.
-  // NOTE: WE NEED ALSO TO MAKE ADJUSTMENTS WHEN TRANSLATING
-  // in wxPostScriptDC code, so we can start from top left.
-  // So access this database and translate by appropriate number
-  // of points for this paper size. OR IS IT OK ALREADY?
-  // Can't remember where the PostScript origin is by default.
-  // Heck, someone will know how to make it hunky-dory...
-  // JACS 25/5/95
-
-  AddPaperType(_("A4 210 x 297 mm"), 210, 297,         595, 842);
-  AddPaperType(_("A3 297 x 420 mm"), 297, 420,         842, 1191);
-  AddPaperType(_("Letter 8 1/2 x 11 in"), 216, 279,    612, 791);
-  AddPaperType(_("Legal 8 1/2 x 14 in"), 216, 356,     612, 1009);
-  
-/*
-  This is for 100 ppi
-
-  AddPaperType(_("A4 210 x 297 mm"), 210, 297,         210*4, 297*4 );
-  AddPaperType(_("A3 297 x 420 mm"), 297, 420,         297*4, 420*4 );
-  AddPaperType(_("Letter 8 1/2 x 11 in"), 216, 279,    216*4, 279*4 );
-  AddPaperType(_("Legal 8 1/2 x 14 in"), 216, 356,     216*4, 356*4 );
-*/
-}
-
-void wxPrintPaperDatabase::ClearDatabase()
-{
-  Clear();
-}
-
-void wxPrintPaperDatabase::AddPaperType(const char *name, int wmm, int hmm, int wp, int hp)
-{
-  Append(name, new wxPrintPaperType(name, wmm, hmm, wp, hp));
-}
-
-wxPrintPaperType *wxPrintPaperDatabase::FindPaperType(const char *name)
-{
-  wxNode *node = Find(name);
-  if (node)
-    return (wxPrintPaperType *)node->Data();
-  else
-    return (wxPrintPaperType *) NULL;
-}
+IMPLEMENT_DYNAMIC_CLASS(wxPostScriptModule, wxModule)
 
 /*
  * Initialization/cleanup module
@@ -2426,8 +2357,6 @@ wxPrintPaperType *wxPrintPaperDatabase::FindPaperType(const char *name)
 bool wxPostScriptModule::OnInit()
 {
     wxInitializePrintSetupData();
-    wxThePrintPaperDatabase = new wxPrintPaperDatabase;
-    wxThePrintPaperDatabase->CreateDatabase();
 
     return TRUE;
 }
@@ -2435,8 +2364,6 @@ bool wxPostScriptModule::OnInit()
 void wxPostScriptModule::OnExit()
 {
     wxInitializePrintSetupData(FALSE);
-    delete wxThePrintPaperDatabase;
-    wxThePrintPaperDatabase = NULL;
 }
 
 #endif

@@ -971,8 +971,11 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 
         case WXK_RETURN:
         {
+/* Oh yes it will, because we also specify DLGC_WANTCHARS
             wxASSERT_MSG( m_windowStyle & wxTE_PROCESS_ENTER,
                           "this text ctrl should never receive return" );
+*/
+
             if ( (m_windowStyle & wxTE_MULTILINE) == 0 )
             {
                 wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
@@ -1007,8 +1010,8 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     // don't just call event.Skip() because this will cause TABs and ENTERs
     // be passed upwards and we don't always want this - instead process it
     // right here
-    //Default();
-    event.Skip();
+    Default();
+//    event.Skip();
 }
 
 long wxTextCtrl::MSWGetDlgCode()

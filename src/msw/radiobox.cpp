@@ -54,10 +54,12 @@
 #endif // Win32/16
 
 // wnd proc for radio buttons
+#ifdef __WIN32__
 LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hWnd,
                                            UINT message,
                                            WPARAM wParam,
                                            LPARAM lParam);
+#endif
 
 // ---------------------------------------------------------------------------
 // global vars
@@ -706,13 +708,18 @@ void wxRadioBox::SubclassRadioButton(WXHWND hWndBtn)
     if ( !s_wndprocRadioBtn )
         s_wndprocRadioBtn = (WNDPROC)::GetWindowLong(hwndBtn, GWL_WNDPROC);
 
+    // No GWL_USERDATA in Win16, so omit this subclassing.
+#ifdef __WIN32__
     ::SetWindowLong(hwndBtn, GWL_WNDPROC, (long)wxRadioBtnWndProc);
     ::SetWindowLong(hwndBtn, GWL_USERDATA, (long)this);
+#endif
 }
 
 // ---------------------------------------------------------------------------
 // window proc for radio buttons
 // ---------------------------------------------------------------------------
+
+#ifdef __WIN32__
 
 LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
                                            UINT msg,
@@ -777,4 +784,5 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
     else
         return 0;
 }
+#endif
 

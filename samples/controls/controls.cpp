@@ -95,7 +95,9 @@ public:
     void OnSetFont( wxCommandEvent &event );
     void OnPageChanged( wxNotebookEvent &event );
     void OnSliderUpdate( wxCommandEvent &event );
+#ifndef __WIN16__
     void OnSpinUpdate( wxSpinEvent &event );
+#endif
     void OnPasteFromClipboard( wxCommandEvent &event );
     void OnCopyToClipboard( wxCommandEvent &event );
     void OnMoveToEndOfText( wxCommandEvent &event );
@@ -108,7 +110,9 @@ public:
     wxGauge       *m_gauge;
     wxSlider      *m_slider;
     wxButton      *m_fontButton;
+#ifndef __WIN16__
     wxSpinButton  *m_spinbutton;
+#endif
     wxTextCtrl    *m_spintext;
     MyTextCtrl    *m_multitext;
     MyTextCtrl    *m_textentry;
@@ -336,7 +340,9 @@ EVT_BUTTON    (ID_RADIOBOX_FONT,        MyPanel::OnRadioButtons)
 EVT_CHECKBOX  (ID_RADIOBOX_ENABLE,      MyPanel::OnRadioButtons)
 EVT_BUTTON    (ID_SET_FONT,             MyPanel::OnSetFont)
 EVT_SLIDER    (ID_SLIDER,               MyPanel::OnSliderUpdate)
+#ifndef __WIN16__
 EVT_SPIN      (ID_SPIN,                 MyPanel::OnSpinUpdate)
+#endif
 EVT_BUTTON    (ID_PASTE_TEXT,           MyPanel::OnPasteFromClipboard)
 EVT_BUTTON    (ID_COPY_TEXT,            MyPanel::OnCopyToClipboard)
 EVT_BUTTON    (ID_MOVE_END_ZONE,        MyPanel::OnMoveToEndOfText)
@@ -541,8 +547,10 @@ m_text(NULL), m_notebook(NULL)
                           );
 #endif
     m_spintext = new wxTextCtrl( panel, -1, "0", wxPoint(20,160), wxSize(80,-1) );
+#ifndef __WIN16__
     m_spinbutton = new wxSpinButton( panel, ID_SPIN, wxPoint(103,159), wxSize(-1,-1) );
     m_spinbutton->SetRange(0,100);
+#endif
     m_notebook->AddPage(panel, "wxGauge", FALSE, Image_Gauge);
 }
 
@@ -873,12 +881,14 @@ void MyPanel::OnSliderUpdate( wxCommandEvent &WXUNUSED(event) )
     m_gauge->SetValue( m_slider->GetValue() );
 }
 
+#ifndef __WIN16__
 void MyPanel::OnSpinUpdate( wxSpinEvent &event )
 {
     wxString value;
     value.sprintf( "%d", (int)event.GetPosition() );
     m_spintext->SetValue( value );
 }
+#endif
 
 MyPanel::~MyPanel()
 {

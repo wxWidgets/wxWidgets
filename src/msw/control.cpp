@@ -53,6 +53,7 @@ wxControl::wxControl(void)
   m_backgroundColour = *wxWHITE;
   m_foregroundColour = *wxBLACK;
   m_callback = 0;
+//  m_windowCursor = wxNullCursor; // To avoid the standard cursor being used
 }
 
 wxControl::~wxControl(void)

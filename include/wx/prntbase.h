@@ -340,5 +340,47 @@ public:
   DECLARE_EVENT_TABLE()
 };
 
+/*
+ * Again, this only really needed for non-Windows platforms
+ * or if you want to test the PostScript printing under Windows,
+ * or if you're using the generic page setup dialog under e.g. Win16.
+ */
+
+class WXDLLEXPORT wxPrintPaperType: public wxObject
+{
+public:
+    wxPrintPaperType(const char *name = (const char *) NULL, int wmm = 0, int hmm = 0, int wp = 0, int hp = 0);
+    ~wxPrintPaperType();
+
+public:
+    int widthMM;
+    int heightMM;
+    int widthPixels;
+    int heightPixels;
+    char *pageName;
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxPrintPaperType)
+};
+
+class WXDLLEXPORT wxPrintPaperDatabase: public wxList
+{
+public:
+    wxPrintPaperDatabase();
+    ~wxPrintPaperDatabase();
+
+    void CreateDatabase();
+    void ClearDatabase();
+
+    void AddPaperType(const char *name, int wmm, int hmm, int wp, int hp);
+    wxPrintPaperType *FindPaperType(const char *name);
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxPrintPaperDatabase)
+};
+
+WXDLLEXPORT_DATA(extern wxPrintPaperDatabase*) wxThePrintPaperDatabase;
+
+
 #endif
     // _WX_PRNTBASEH__

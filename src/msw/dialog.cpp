@@ -208,13 +208,13 @@ void wxDialog::OnCharHook(wxKeyEvent& event)
   {
     if (event.m_keyCode == WXK_ESCAPE)
     {
-    // Behaviour changed in 2.0: we'll send a Cancel message
-    // to the dialog instead of Close.
-    wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
-    cancelEvent.SetEventObject( this );
-    GetEventHandler()->ProcessEvent(cancelEvent);
+        // Behaviour changed in 2.0: we'll send a Cancel message
+        // to the dialog instead of Close.
+        wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
+        cancelEvent.SetEventObject( this );
+        GetEventHandler()->ProcessEvent(cancelEvent);
 
-    return;
+        return;
     }
   }
   // We didn't process this event.
@@ -557,7 +557,7 @@ void wxDialog::OnCancel(wxCommandEvent& event)
     else
     {
         SetReturnCode(wxID_CANCEL);
-    this->Show(FALSE);
+        this->Show(FALSE);
     }
 }
 

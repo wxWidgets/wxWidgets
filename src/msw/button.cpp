@@ -78,11 +78,6 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
                     0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
                     wxGetInstance(), NULL);
 
-#if wxUSE_CTL3D
-//  if (!(GetParent()->GetWindowStyleFlag() & wxUSER_COLOURS))
-//    Ctl3dSubclassCtl(wx_button);
-#endif
-
   m_hWnd = (WXHWND)wx_button;
 
   // Subclass again for purposes of dialog editing mode

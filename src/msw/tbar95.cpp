@@ -151,10 +151,18 @@ bool wxToolBar95::Create(wxWindow *parent,
         msflags |= TBSTYLE_FLAT;
   }
 
+  bool want3D;
+  WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D) ;
+
+  // Even with extended styles, need to combine with WS_BORDER
+  // for them to look right.
+  if ( want3D || wxStyleHasBorder(m_windowStyle) )
+      msflags |= WS_BORDER;
+
   // Create the toolbar control.
   HWND hWndToolbar = CreateWindowEx
                      (
-                      0L,                       // No extended styles.
+                      exStyle,                  // Extended styles.
                       TOOLBARCLASSNAME,         // Class name for the toolbar.
                       "",                       // No default text.
                       msflags,                  // Styles
@@ -428,7 +436,8 @@ void wxToolBar95::GetSize(int *w, int *h) const
   wxWindow::GetSize(w, h);
   // For some reason, the returned height is several pixels bigger than that
   // displayed!
-  *h -= 2;
+  // Taking this fudge factor out now, it seems fine without it.
+//  *h -= 2;
 }
 
 // The button size is bigger than the bitmap size

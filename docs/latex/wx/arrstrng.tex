@@ -3,11 +3,11 @@
 wxArrayString is an efficient container for storing 
 \helpref{wxString}{wxstring} objects. It has the same features as all 
 \helpref{wxArray}{wxarray} classes, i.e. it dynamically expands when new items
-are added to it (so it is as easy to sue as a linked list), but the access
-time to the elements is constant (instead of being linear in number of
-elements as in the case of linked lists). It is also very size efficient and
-doesn't take more space than a C array {\it wxString[]} type (wxArrayString
-uses its knowledge of internals of wxString class to achieve this).
+are added to it (so it is as easy to use as a linked list), but the access
+time to the elements is constant, instead of being linear in number of
+elements as in the case of linked lists. It is also very size efficient and
+doesn't take more space than a C array {\it wxString[]} type. wxArrayString
+uses its knowledge of internals of wxString class to achieve this.
 
 This class is used in the same way as other dynamic \helpref{arrays}{wxarray},
 except that no {\it WX\_DEFINE\_ARRAY} declaration is needed for it. When a
@@ -29,7 +29,7 @@ array elements may be modified in place like this
 Finally, none of the methods of this class is virtual including its
 destructor, so this class should not be derived from.
 
-\wxheading{Specialization of}
+\wxheading{Derived from}
 
 Although this is not true strictly speaking, this class may be considered as a
 specialization of \helpref{wxArray}{wxarray} class for the wxString member
@@ -42,8 +42,7 @@ functions.
 
 \wxheading{See also}
 
-\helpref{wxArray}{wxarray}, \helpref{wxString}{wxstring}, \helpref{wxString
-overview}{wxstringoverview}
+\helpref{wxArray}{wxarray}, \helpref{wxString}{wxstring}, \helpref{wxString overview}{wxstringoverview}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -224,10 +223,11 @@ wxString\&} parameters and returning {\it int} value less than, equal to or
 greater than 0 if the first string is less than, equal to or greater than the
 second one.
 
-Example: sorting strings by their length:
+\wxheading{Example}
+
+The following example sorts strings by their length.
 
 \begin{verbatim}
-
 static int CompareStringLen(const wxString& first, const wxString& second)
 {
     return first.length() - second.length();
@@ -243,7 +243,7 @@ array.Add("three");
 array.Add("four");
 
 array.Sort(CompareStringLen);
-
 \end{verbatim}
 
 See also: \helpref{Sort}{wxarraystringsort}
+
