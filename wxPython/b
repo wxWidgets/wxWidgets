@@ -98,9 +98,14 @@ elif [ "$1" = "r" ]; then
     exit 0
 
 
+# "f" --> FINAL (no debug)
+elif [ "$1" = "f" ]; then
+    shift
+    CMD="$SETUP $FLAGS $OTHERFLAGS build_ext --inplace $*"
+
 # (no command arg) --> normal build for development
 else
-    CMD="$SETUP $FLAGS $OTHERFLAGS build_ext --inplace $*"
+    CMD="$SETUP $FLAGS $OTHERFLAGS build_ext --inplace --debug $*"
 fi
 
 
