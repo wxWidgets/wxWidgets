@@ -116,7 +116,7 @@ private:
     void ReallocRows(int rows);
 
     // Computes minimal and maximal widths of columns. Needs to be called
-    // only once, before first Layout(). 
+    // only once, before first Layout().
     void ComputeMinMaxWidths();
 
     DECLARE_NO_COPY_CLASS(wxHtmlTableCell)
@@ -128,7 +128,7 @@ wxHtmlTableCell::wxHtmlTableCell(wxHtmlContainerCell *parent, const wxHtmlTag& t
  : wxHtmlContainerCell(parent)
 {
     m_PixelScale = pixel_scale;
-    m_HasBorders = 
+    m_HasBorders =
             (tag.HasParam(wxT("BORDER")) && tag.GetParam(wxT("BORDER")) != wxT("0"));
     m_ColsInfo = NULL;
     m_NumCols = m_NumRows = 0;
@@ -288,14 +288,14 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
         tag.GetParamAsInt(wxT("ROWSPAN"), &m_CellInfo[r][c].rowspan);
 
         // VS: the standard says this about col/rowspan:
-        //     "This attribute specifies the number of rows spanned by the 
-        //     current cell. The default value of this attribute is one ("1"). 
-        //     The value zero ("0") means that the cell spans all rows from the 
-        //     current row to the last row of the table." All mainstream 
+        //     "This attribute specifies the number of rows spanned by the
+        //     current cell. The default value of this attribute is one ("1").
+        //     The value zero ("0") means that the cell spans all rows from the
+        //     current row to the last row of the table." All mainstream
         //     browsers act as if 0==1, though, and so does wxHTML.
-        if (m_CellInfo[r][c].colspan < 1) 
+        if (m_CellInfo[r][c].colspan < 1)
             m_CellInfo[r][c].colspan = 1;
-        if (m_CellInfo[r][c].rowspan < 1) 
+        if (m_CellInfo[r][c].rowspan < 1)
             m_CellInfo[r][c].rowspan = 1;
 
         if ((m_CellInfo[r][c].colspan > 1) || (m_CellInfo[r][c].rowspan > 1))
@@ -351,7 +351,7 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
 void wxHtmlTableCell::ComputeMinMaxWidths()
 {
     if (m_NumCols == 0 || m_ColsInfo[0].minWidth != -1) return;
-    
+
     m_MaxTotalWidth = 0;
     int percentage = 0;
     for (int c = 0; c < m_NumCols; c++)
@@ -401,7 +401,7 @@ void wxHtmlTableCell::ComputeMinMaxWidths()
 void wxHtmlTableCell::Layout(int w)
 {
     ComputeMinMaxWidths();
-    
+
     wxHtmlCell::Layout(w);
 
     /*
@@ -418,7 +418,7 @@ void wxHtmlTableCell::Layout(int w)
                 m_WidthFloat = -100;
             m_Width = (100 + m_WidthFloat) * w / 100;
         }
-        else 
+        else
         {
             if (m_WidthFloat > 100)
                 m_WidthFloat = 100;
@@ -438,8 +438,8 @@ void wxHtmlTableCell::Layout(int w)
 
     */
 
-    /* 1.  setup columns widths: 
-           
+    /* 1.  setup columns widths:
+
            The algorithm tries to keep the table size less than w if possible.
        */
     {
@@ -450,7 +450,7 @@ void wxHtmlTableCell::Layout(int w)
         for (i = 0; i < m_NumCols; i++)
             if (m_ColsInfo[i].units == wxHTML_UNITS_PIXELS)
             {
-                m_ColsInfo[i].pixwidth = wxMax(m_ColsInfo[i].width, 
+                m_ColsInfo[i].pixwidth = wxMax(m_ColsInfo[i].width,
                                                m_ColsInfo[i].minWidth);
                 wpix -= m_ColsInfo[i].pixwidth;
             }
@@ -481,12 +481,12 @@ void wxHtmlTableCell::Layout(int w)
                 newWidth = w;
             else
                 newWidth = newWidth * 100 / (100 - percentage);
-                
+
             newWidth = wxMin(newWidth, w - (m_NumCols + 1) * m_Spacing);
             wpix -= m_Width - newWidth;
             m_Width = newWidth;
         }
-        
+
 
         // 1c. setup floating-width columns:
         int wtemp = wpix;
@@ -527,10 +527,10 @@ void wxHtmlTableCell::Layout(int w)
             {
                 // Assign with, make sure not to drop below minWidth
                 if (maxWidth)
-                    m_ColsInfo[i].pixwidth = wpix * (m_ColsInfo[i].maxWidth / (float)maxWidth) + 0.5;
+                    m_ColsInfo[i].pixwidth = (int)(wpix * (m_ColsInfo[i].maxWidth / (float)maxWidth) + 0.5);
                 else
                     m_ColsInfo[i].pixwidth = wpix / j;
-                
+
                 // Make sure to leave enough space for the other columns
                 int minRequired = 0;
                 int r;
@@ -545,7 +545,7 @@ void wxHtmlTableCell::Layout(int w)
                 {
                     if (m_ColsInfo[i].pixwidth > (wpix * (m_ColsInfo[i].maxWidth / (float)maxWidth) + 0.5))
                     {
-                        int diff = m_ColsInfo[i].pixwidth - (wpix * m_ColsInfo[i].maxWidth / (float)maxWidth + 0.5);
+                        int diff = (int)(m_ColsInfo[i].pixwidth - (wpix * m_ColsInfo[i].maxWidth / (float)maxWidth + 0.5));
                         maxWidth += diff - m_ColsInfo[i].maxWidth;
                     }
                     else
@@ -622,7 +622,7 @@ void wxHtmlTableCell::Layout(int w)
     /* 4. adjust table's width if it was too small: */
     if (m_NumCols > 0)
     {
-        int twidth = m_ColsInfo[m_NumCols-1].leftpos + 
+        int twidth = m_ColsInfo[m_NumCols-1].leftpos +
                      m_ColsInfo[m_NumCols-1].pixwidth + m_Spacing;
         if (twidth > m_Width)
             m_Width = twidth;
@@ -682,7 +682,7 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
                     {
                         int width = 0;
                         wxSscanf(wd.c_str(), wxT("%i"), &width);
-                        m_Table->SetWidthFloat(m_WParser->GetPixelScale() * width, wxHTML_UNITS_PIXELS);
+                        m_Table->SetWidthFloat((int)(m_WParser->GetPixelScale() * width), wxHTML_UNITS_PIXELS);
                     }
                 }
                 else
@@ -698,7 +698,7 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
             m_WParser->SetAlign(oldAlign);
             m_WParser->SetContainer(oldcont);
             m_WParser->CloseContainer();
-            
+
             m_Table = oldt;
             return TRUE;
         }
