@@ -270,7 +270,7 @@ void wxHtmlPrintout::SetHtmlText(const wxString& html, const wxString &basepath,
 }
 
 // defined in htmlfilt.cpp
-void wxPrivate_ReadString(wxString& str, wxInputStream* s);
+void wxPrivate_ReadString(wxString& str, wxInputStream* s, wxMBConv& conv);
 
 void wxHtmlPrintout::SetHtmlFile(const wxString& htmlfile)
 {
@@ -285,7 +285,7 @@ void wxHtmlPrintout::SetHtmlFile(const wxString& htmlfile)
 
     wxInputStream *st = ff->GetStream();
     wxString doc;
-    wxPrivate_ReadString(doc, st);
+    wxPrivate_ReadString(doc, st, wxConvLibc /*FIXME -- use wxHtmlFilter!!*/);
 
     delete ff;
 

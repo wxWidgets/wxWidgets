@@ -26,15 +26,16 @@
     #include "wx/intl.h"
 #endif
 
+#include "wx/strconv.h"
 #include "wx/html/htmlfilt.h"
 #include "wx/html/htmlwin.h"
 
 // utility function: read a wxString from a wxInputStream
-void wxPrivate_ReadString(wxString& str, wxInputStream* s)
+void wxPrivate_ReadString(wxString& str, wxInputStream* s, wxMBConv& conv)
 {
     size_t streamSize = s->GetSize();
 
-    if(streamSize == ~(size_t)0)
+    if (streamSize == ~(size_t)0)
     {
         const size_t bufSize = 4095;
         char buffer[bufSize+1];
@@ -45,17 +46,17 @@ void wxPrivate_ReadString(wxString& str, wxInputStream* s)
             s->Read(buffer, bufSize);
             lastRead = s->LastRead();
             buffer[lastRead] = 0;
-            str.Append( wxString::FromAscii(buffer) );  // TODO: What encoding ?
+            str.Append(wxString(buffer, conv));
         }
-        while(lastRead == bufSize);
+        while (lastRead == bufSize);
     }
     else
     {
         char* src = new char[streamSize+1];
         s->Read(src, streamSize);
         src[streamSize] = 0;
-        str = wxString::FromAscii( src);  // TODO: What encoding ?
-        delete [] src;
+        str = wxString(src, conv);
+        delete[] src;
     }
 }
 
@@ -87,7 +88,7 @@ wxString wxHtmlFilterPlainText::ReadFile(const wxFSFile& file) const
     wxString doc, doc2;
 
     if (s == NULL) return wxEmptyString;
-    wxPrivate_ReadString(doc, s);
+    wxPrivate_ReadString(doc, s, wxConvISO8859_1);
 
     doc.Replace(wxT("&"), wxT("&amp;"), TRUE);
     doc.Replace(wxT("<"), wxT("&lt;"), TRUE);
@@ -172,15 +173,43 @@ wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
         wxLogError(_("Cannot open HTML document: %s"), file.GetLocation().c_str());
         return wxEmptyString;
     }
-    wxPrivate_ReadString(doc, s);
 
-    // add meta tag if we obtained this through http:
-    if (file.GetMimeType().Find(_T("; charset=")) == 0)
+    // NB: We convert input file to wchar_t here in Unicode mode, based on 
+    //     either Content-Type header or <meta> tags. In ANSI mode, we don't
+    //     do it as it is done by wxHtmlParser (for this reason, we add <meta>
+    //     tag if we used Content-Type header).
+#if wxUSE_UNICODE
+    int charsetPos;    
+    if ((charsetPos = file.GetMimeType().Find(_T("; charset="))) != wxNOT_FOUND)
     {
-        wxString s(_T("<meta http-equiv=\"Content-Type\" content=\""));
-        s << file.GetMimeType() <<  _T("\">");
-        return s+doc;
+        wxString charset = file.GetMimeType().Mid(charsetPos + 10);
+        wxCSConv conv(charset);
+        wxPrivate_ReadString(doc, s, conv);
     }
+    else
+    {
+        wxString tmpdoc;
+        wxPrivate_ReadString(tmpdoc, s, wxConvISO8859_1);
+        wxString charset = wxHtmlParser::ExtractCharsetInformation(tmpdoc);
+        if (charset.empty())
+            doc = tmpdoc;
+        else
+        {
+            wxCSConv conv(charset);
+            doc = wxString(tmpdoc.mb_str(wxConvISO8859_1), conv);
+        }
+    }
+#else // !wxUSE_UNICODE
+    wxPrivate_ReadString(doc, s, wxConvLibc);
+    // add meta tag if we obtained this through http:
+    if (!file.GetMimeType().empty())
+    {
+        wxString hdr;
+        wxString mime = file.GetMimeType();
+        hdr.Printf(_T("<meta http-equiv=\"Content-Type\" content=\"%s\">"), mime.c_str());
+        return hdr+doc;
+    }
+#endif
 
     return doc;
 }

@@ -251,7 +251,7 @@ wxHtmlHelpData::~wxHtmlHelpData()
 }
 
 // defined in htmlfilt.cpp
-void wxPrivate_ReadString(wxString& str, wxInputStream* s);
+void wxPrivate_ReadString(wxString& str, wxInputStream* s, wxMBConv& conv);
 
 bool wxHtmlHelpData::LoadMSProject(wxHtmlBookRecord *book, wxFileSystem& fsys, const wxString& indexfile, const wxString& contentsfile)
 {
@@ -267,7 +267,7 @@ bool wxHtmlHelpData::LoadMSProject(wxHtmlBookRecord *book, wxFileSystem& fsys, c
     if (f)
     {
         buf.clear();
-        wxPrivate_ReadString(buf, f->GetStream());
+        wxPrivate_ReadString(buf, f->GetStream(), wxConvLibc /*FIXME?*/);
         delete f;
         handler->ReadIn(m_Contents, m_ContentsCnt);
         parser.Parse(buf);
@@ -280,7 +280,7 @@ bool wxHtmlHelpData::LoadMSProject(wxHtmlBookRecord *book, wxFileSystem& fsys, c
     if (f)
     {
         buf.clear();
-        wxPrivate_ReadString(buf, f->GetStream());
+        wxPrivate_ReadString(buf, f->GetStream(), wxConvLibc /*FIXME?*/);
         delete f;
         handler->ReadIn(m_Index, m_IndexCnt);
         parser.Parse(buf);
@@ -600,7 +600,7 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
         wxChar linebuf[300];
         wxString tmp;
 
-        wxPrivate_ReadString(tmp, s);
+        wxPrivate_ReadString(tmp, s, wxConvLibc /*FIXME?*/);
         lineptr = tmp.c_str();
 
         do 
@@ -839,7 +839,8 @@ bool wxSearchEngine::Scan(wxInputStream *stream)
     int wrd = wxStrlen(m_Keyword);
     bool found = FALSE;
     wxString tmp;
-    wxPrivate_ReadString(tmp, stream);
+    wxPrivate_ReadString(tmp, stream, wxConvLibc); 
+           // FIXME - use wxHtmlFilters instead of wxPrivate_ReadString !!!!!!
     int lng = tmp.length();
     const wxChar *buf = tmp.c_str();
 

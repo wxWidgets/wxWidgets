@@ -117,6 +117,11 @@ public:
     // Restores parser's state from stack or returns FALSE if the stack is
     // empty
     virtual bool RestoreState();
+    
+    // Parses HTML string 'markup' and extracts charset info from <meta> tag
+    // if present. Returns empty string if the tag is missing.
+    // For wxHTML's internal use.
+    static wxString ExtractCharsetInformation(const wxString& markup);
 
 protected:
     // DOM structure
@@ -242,7 +247,11 @@ public:
     wxChar GetEntityChar(const wxString& entity);
 
     // Returns character that represents given Unicode code
+#if wxUSE_UNICODE
+    wxChar GetCharForCode(unsigned code) { return (wxChar)code; }
+#else
     wxChar GetCharForCode(unsigned code);
+#endif
 
 protected:
 #if wxUSE_WCHAR_T && !wxUSE_UNICODE

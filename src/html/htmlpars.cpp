@@ -500,11 +500,10 @@ extern "C" int LINKAGEMODE wxHtmlEntityCompare(const void *key, const void *item
     return wxStrcmp((wxChar*)key, ((wxHtmlEntityInfo*)item)->name);
 }
 
+#if !wxUSE_UNICODE
 wxChar wxHtmlEntitiesParser::GetCharForCode(unsigned code)
 {
-#if wxUSE_UNICODE
-    return (wxChar)code;
-#elif wxUSE_WCHAR_T
+#if wxUSE_WCHAR_T
     char buf[2];
     wchar_t wbuf[2];
     wbuf[0] = (wchar_t)code;
@@ -517,6 +516,7 @@ wxChar wxHtmlEntitiesParser::GetCharForCode(unsigned code)
     return (code < 256) ? (wxChar)code : '?';
 #endif
 }
+#endif
 
 wxChar wxHtmlEntitiesParser::GetEntityChar(const wxString& entity)
 {
@@ -821,5 +821,56 @@ wxFSFile *wxHtmlParser::OpenURL(wxHtmlURLType WXUNUSED(type),
 {
     return GetFS()->OpenFile(url);
 }
+
+
+//-----------------------------------------------------------------------------
+// wxHtmlParser::ExtractCharsetInformation
+//-----------------------------------------------------------------------------
+
+class wxMetaTagParser : public wxHtmlParser
+{
+public:
+    wxObject* GetProduct() { return NULL; }
+protected:
+    virtual void AddText(const wxChar* WXUNUSED(txt)) {}
+};
+
+class wxMetaTagHandler : public wxHtmlTagHandler
+{
+public:
+    wxMetaTagHandler(wxString *retval) : wxHtmlTagHandler(), m_retval(retval) {}
+    wxString GetSupportedTags() { return wxT("META"); }
+    bool HandleTag(const wxHtmlTag& tag);
+
+private:
+    wxString *m_retval;
+};
+
+bool wxMetaTagHandler::HandleTag(const wxHtmlTag& tag)
+{
+    if (tag.HasParam(_T("HTTP-EQUIV")) &&
+        tag.GetParam(_T("HTTP-EQUIV")) == _T("Content-Type") &&
+        tag.HasParam(_T("CONTENT")))
+    {
+        wxString content = tag.GetParam(_T("CONTENT"));
+        if (content.Left(19) == _T("text/html; charset="))
+        {
+            *m_retval = content.Mid(19);
+        }
+    }
+    return FALSE;
+}
+
+
+/*static*/
+wxString wxHtmlParser::ExtractCharsetInformation(const wxString& markup)
+{
+    wxString charset;
+    wxMetaTagParser parser;
+    parser.AddTagHandler(new wxMetaTagHandler(&charset));
+    parser.Parse(markup);
+    return charset;
+}
+
 
 #endif
