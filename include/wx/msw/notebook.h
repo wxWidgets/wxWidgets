@@ -147,7 +147,6 @@ public:
   // ---------
   void OnSize(wxSizeEvent& event);
   void OnSelChange(wxNotebookEvent& event);
-  void OnSetFocus(wxFocusEvent& event);
   void OnNavigationKey(wxNavigationKeyEvent& event);
 
   // base class virtuals
@@ -156,6 +155,7 @@ public:
   virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
   virtual bool MSWOnScroll(int orientation, WXWORD nSBCode,
                            WXWORD pos, WXHWND control);
+  virtual bool MSWTranslateMessage(WXMSG *wxmsg);
 
 #if wxUSE_CONSTRAINTS
   virtual void SetConstraintSizes(bool recurse = TRUE);
