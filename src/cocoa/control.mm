@@ -48,8 +48,7 @@ bool wxControl::Create(wxWindow *parent, wxWindowID winid,
 
 wxControl::~wxControl()
 {
-    CocoaRemoveFromParent();
-    SetNSControl(NULL);
+    DisassociateNSControl(m_cocoaNSView);
 }
 
 wxSize wxControl::DoGetBestSize() const

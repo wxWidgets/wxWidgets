@@ -45,8 +45,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID winid,
 
 wxStaticText::~wxStaticText()
 {
-    CocoaRemoveFromParent();
-    SetNSTextField(NULL);
+    DisassociateNSTextField(m_cocoaNSView);
 }
 
 void wxStaticText::SetLabel(const wxString& label)

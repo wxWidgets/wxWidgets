@@ -44,8 +44,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID winid,
 
 wxTextCtrl::~wxTextCtrl()
 {
-    CocoaRemoveFromParent();
-    SetNSTextField(NULL);
+    DisassociateNSTextField(m_cocoaNSView);
 }
 
 void wxTextCtrl::Cocoa_didChangeText(void)

@@ -52,8 +52,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID winid,
 
 wxButton::~wxButton()
 {
-    CocoaRemoveFromParent();
-    SetNSButton(NULL);
+    DisassociateNSButton(m_cocoaNSView);
 }
 
 void wxButton::Cocoa_wxNSButtonAction(void)

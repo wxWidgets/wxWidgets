@@ -46,8 +46,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID winid,
 
 wxCheckBox::~wxCheckBox()
 {
-    CocoaRemoveFromParent();
-    SetNSButton(NULL);
+    DisassociateNSButton(m_cocoaNSView);
 }
 
 void wxCheckBox::SetValue(bool)

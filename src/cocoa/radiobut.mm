@@ -47,8 +47,7 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID winid,
 
 wxRadioButton::~wxRadioButton()
 {
-    CocoaRemoveFromParent();
-    SetNSButton(NULL);
+    DisassociateNSButton(m_cocoaNSView);
 }
 
 void wxRadioButton::SetValue(bool)
