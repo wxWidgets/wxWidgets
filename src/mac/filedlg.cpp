@@ -318,6 +318,7 @@ pascal Boolean CrossPlatformFilterCallback (
 	            wxString file = wxMacMakeStringFromPascal( spec.name ) ;
                 display = CheckFile( file , theInfo->fileAndFolder.fileInfo.finderInfo.fdType , data ) ;
             }   
+ #if TARGET_CARBON
             else if ( theItem->descriptorType == typeFSRef )
             {
                 FSRef fsref ;
@@ -328,6 +329,7 @@ pascal Boolean CrossPlatformFilterCallback (
                 file.UngetWriteBuf() ;
                 display = CheckFile( file , theInfo->fileAndFolder.fileInfo.finderInfo.fdType , data ) ;
             }
+#endif
         }
     }
     
@@ -546,14 +548,16 @@ int wxFileDialog::ShowModal()
         m_fileName = wxFileNameFromPath(m_path);
         m_dir = wxPathOnly(m_path);
         NavDisposeReply( &mNavReply ) ;
+#if TARGET_CARBON
         if ( navDialogRef )
             NavDialogDispose( navDialogRef ) ;   
-
+#endif
         return wxID_OK ;
     }
+#if TARGET_CARBON
     if ( navDialogRef )
         NavDialogDispose( navDialogRef ) ;   
-
+#endif
     return wxID_CANCEL;
 }
 
