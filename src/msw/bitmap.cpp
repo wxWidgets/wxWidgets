@@ -789,7 +789,7 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc)
     {
         hbitmap = dib.CreateDDB((HDC)hdc);
 
-        refData->m_depth = depth == -1 ? wxDisplayDepth() : depth;
+        refData->m_depth = depth == -1 ? dib.GetDepth() : depth;
     }
 #endif // !ALWAYS_USE_DIB
 
