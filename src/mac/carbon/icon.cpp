@@ -24,6 +24,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxIcon, wxBitmap)
 #include "wx/image.h"
 #include "wx/mac/private.h"
 
+#define M_ICONDATA ((wxIconRefData *)m_refData)
+
 
 /*
  * Icons
@@ -69,12 +71,16 @@ WXHICON wxIcon::GetHICON() const
 
 int wxIcon::GetWidth() const
 {
-    return 32 ;
+   wxCHECK_MSG( Ok(), -1, wxT("invalid icon") );
+
+   return M_ICONDATA->GetWidth();
 }
 
 int wxIcon::GetHeight() const
 {
-    return 32 ;
+   wxCHECK_MSG( Ok(), -1, wxT("invalid icon") );
+
+   return M_ICONDATA->GetHeight();
 }
 
 bool wxIcon::Ok() const
@@ -171,11 +177,16 @@ void wxIcon::CopyFromBitmap(const wxBitmap& bmp)
     UnRef() ;
     
     m_refData = new wxIconRefData( (WXHICON) wxMacCreateIconRef( bmp ) ) ;
+    M_ICONDATA->SetWidth( bmp.GetWidth() ) ;
+    M_ICONDATA->SetHeight( bmp.GetHeight() ) ;
 }
 
 wxIconRefData::wxIconRefData( WXHICON icon )
 {
     m_iconRef = MAC_WXHICON( icon ) ;
+    // Std sizes
+    SetWidth( 32 ) ;
+    SetHeight( 32 ) ;
 }
 
 void wxIconRefData::Init() 
