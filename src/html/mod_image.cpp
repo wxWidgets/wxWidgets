@@ -291,10 +291,9 @@ wxHtmlImageCell::wxHtmlImageCell(wxFSFile *input, int w, int h, int align, wxStr
 {
     wxImage *img;
     int ww, hh;
-    wxString m = input -> GetMimeType();
     wxInputStream *s = input -> GetStream();
 
-    img = new wxImage(*s, m);
+    img = new wxImage(*s, wxBITMAP_TYPE_ANY);
 
     m_Image = NULL;
     if (img && (img -> Ok())) {

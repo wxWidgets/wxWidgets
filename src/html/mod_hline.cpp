@@ -78,7 +78,7 @@ TAG_HANDLER_BEGIN(HR, "HR")
         c -> SetAlignHor(HTML_ALIGN_CENTER);
         c -> SetAlign(tag);
         c -> SetWidthFloat(tag);
-        if (tag.HasParam("SIZE")) tag.ScanParam("SIZE", "%i", &sz);
+        if (tag.HasParam("SIZE") && tag.ScanParam("SIZE", "%i", &sz) == 1) {}
         else sz = 1;
         c -> InsertCell(new wxHtmlLineCell(sz));
 

@@ -39,19 +39,19 @@ TAG_HANDLER_BEGIN(FONT, "FONT")
         if (tag.HasParam("COLOR")) {
 	    unsigned long tmp = 0; 
             wxColour clr;
-            tag.ScanParam("COLOR", "#%lX", &tmp);
-            clr = wxColour((tmp & 0xFF0000) >> 16 , (tmp & 0x00FF00) >> 8, (tmp & 0x0000FF));
-            m_WParser -> SetActualColor(clr);
-            m_WParser -> GetContainer() -> InsertCell(new wxHtmlColourCell(clr));
+            if (tag.ScanParam("COLOR", "#%lX", &tmp) == 1) {
+                clr = wxColour((tmp & 0xFF0000) >> 16 , (tmp & 0x00FF00) >> 8, (tmp & 0x0000FF));
+                m_WParser -> SetActualColor(clr);
+                m_WParser -> GetContainer() -> InsertCell(new wxHtmlColourCell(clr));
+	    }
         }
 
         if (tag.HasParam("SIZE")) {
-	    // give 'tmp' an initial value. If conversion fails, it will keep this value.
 	    long tmp = 0;
-            tag.ScanParam("SIZE", "%li", &tmp);
-	    // We *really* should check the result of (v)sscanf, but ScanParam returns void...
-            m_WParser -> SetFontSize(oldsize+tmp);
-            m_WParser -> GetContainer() -> InsertCell(new wxHtmlFontCell(m_WParser -> CreateCurrentFont()));
+            if (tag.ScanParam("SIZE", "%li", &tmp) == 1) {
+                m_WParser -> SetFontSize(oldsize+tmp);
+                m_WParser -> GetContainer() -> InsertCell(new wxHtmlFontCell(m_WParser -> CreateCurrentFont()));
+	    }
         }
 
         ParseInner(tag);

@@ -165,24 +165,27 @@ TAG_HANDLER_BEGIN(BODY, "BODY")
         wxColour clr;
 
         if (tag.HasParam("TEXT")) {
-            tag.ScanParam("TEXT", "#%lX", &tmp);
-            clr = wxColour((tmp & 0xFF0000) >> 16 , (tmp & 0x00FF00) >> 8, (tmp & 0x0000FF));
-            m_WParser -> SetActualColor(clr);
-            m_WParser -> GetContainer() -> InsertCell(new wxHtmlColourCell(clr));
-        }
+            if (tag.ScanParam("TEXT", "#%lX", &tmp) == 1) {
+                clr = wxColour((tmp & 0xFF0000) >> 16 , (tmp & 0x00FF00) >> 8, (tmp & 0x0000FF));
+                m_WParser -> SetActualColor(clr);
+                m_WParser -> GetContainer() -> InsertCell(new wxHtmlColourCell(clr));
+            }
+	}
 
         if (tag.HasParam("LINK")) {
-            tag.ScanParam("LINK", "#%lX", &tmp);
-            clr = wxColour((tmp & 0xFF0000) >> 16 , (tmp & 0x00FF00) >> 8, (tmp & 0x0000FF));
-            m_WParser -> SetLinkColor(clr);
+            if (tag.ScanParam("LINK", "#%lX", &tmp) == 1) {
+                clr = wxColour((tmp & 0xFF0000) >> 16 , (tmp & 0x00FF00) >> 8, (tmp & 0x0000FF));
+                m_WParser -> SetLinkColor(clr);
+	    }
         }
 
         if (tag.HasParam("BGCOLOR")) {
-            tag.ScanParam("BGCOLOR", "#%lX", &tmp);
-            clr = wxColour((tmp & 0xFF0000) >> 16 , (tmp & 0x00FF00) >> 8, (tmp & 0x0000FF));
-            m_WParser -> GetContainer() -> InsertCell(new wxHtmlColourCell(clr, HTML_CLR_BACKGROUND));
-        if (m_WParser -> GetWindow() != NULL)
-            m_WParser -> GetWindow() -> SetBackgroundColour(clr);
+            if (tag.ScanParam("BGCOLOR", "#%lX", &tmp) == 1) {
+                clr = wxColour((tmp & 0xFF0000) >> 16 , (tmp & 0x00FF00) >> 8, (tmp & 0x0000FF));
+                m_WParser -> GetContainer() -> InsertCell(new wxHtmlColourCell(clr, HTML_CLR_BACKGROUND));
+                if (m_WParser -> GetWindow() != NULL)
+                    m_WParser -> GetWindow() -> SetBackgroundColour(clr);
+	    }
         }
         return FALSE;
     }

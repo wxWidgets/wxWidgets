@@ -140,6 +140,10 @@ wxHtmlTag::wxHtmlTag(const wxString& source, int pos, int end_pos, wxHtmlTagsCac
                 while ((i < end_pos) && ((c = source[i++]) != '"')) m_Params += c;
                 m_Params += c;
             }
+            else if (c == '\'') {
+                while ((i < end_pos) && ((c = source[i++]) != '\'')) m_Params += c;
+                m_Params += c;
+            }
         }
    m_Begin = i;
 
@@ -184,6 +188,7 @@ wxString wxHtmlTag::GetParam(const wxString& par, bool with_commas) const
     const char *st = m_Params, *p = par;
     const char *st2, *p2;
     bool comma;
+    char comma_char;
 
     if (*st == 0) return "";
     if (*p == 0) return "";
@@ -192,13 +197,23 @@ wxString wxHtmlTag::GetParam(const wxString& par, bool with_commas) const
             wxString fnd = "";
             st2++; // '=' character
             comma = FALSE;
-            if (!with_commas && (*(st2) == '"')) {st2++; comma = TRUE;}
+	    comma_char = '\0';
+            if (!with_commas && (*(st2) == '"')) {
+	        st2++;
+		comma = TRUE; 
+		comma_char = '"';
+	    }
+	    else if (!with_commas && (*(st2) == '\'')) {
+	        st2++; 
+		comma = TRUE;
+		comma_char = '\'';
+	    }
             while (*st2 != 0) {
-                if (*st2 == '"') comma = !comma;
+                if (comma && *st2 == comma_char) comma = FALSE;
                 else if ((*st2 == ' ') && (!comma)) break;
                 fnd += (*(st2++));
             }
-            if (!with_commas && (*(st2-1) == '"')) fnd.RemoveLast();
+            if (!with_commas && (*(st2-1) == comma_char)) fnd.RemoveLast();
             return fnd;
         }
         if (*st2 == 0) return "";
@@ -212,6 +227,10 @@ wxString wxHtmlTag::GetParam(const wxString& par, bool with_commas) const
                     st2++;
                     while (*st2 != '"') st2++;
                 }
+                else if (*st2 == '\'') {
+                    st2++;
+                    while (*st2 != '\'') st2++;
+                }
                 st2++;
             }
         }
@@ -220,8 +239,9 @@ wxString wxHtmlTag::GetParam(const wxString& par, bool with_commas) const
 
 
 
-void wxHtmlTag::ScanParam(const wxString& par, char *format, ...) const
+int wxHtmlTag::ScanParam(const wxString& par, char *format, ...) const
 {
+    int retval;
     va_list argptr;
     wxString parval = GetParam(par);
 
@@ -229,13 +249,13 @@ void wxHtmlTag::ScanParam(const wxString& par, char *format, ...) const
 
 //#if defined(__MINGW32__) || defined(__CYGWIN__) || defined(__VISUALC__)
 #ifndef HAVE_VSSCANF
-    sscanf((const char*)parval, format, va_arg(argptr, void *));
+    retval = sscanf((const char*)parval, format, va_arg(argptr, void *));
 #else
-    vsscanf((const char*)parval, format, argptr);
+    retval = vsscanf((const char*)parval, format, argptr);
 #endif
 
 /*
-        --- vsscanf is not defined under Cygwin or Mingw32 or M$ Visual C++ environment
+        --- vsscanf is not defined under some compilers
             if this module doesn't compile with your compiler,
             modify the def statement and let me know. Thanks...
         
@@ -245,6 +265,7 @@ void wxHtmlTag::ScanParam(const wxString& par, char *format, ...) const
 */
 
     va_end(argptr);
+    return retval;
 }
 
 #endif

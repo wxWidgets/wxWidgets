@@ -122,8 +122,8 @@ wxHtmlTableCell::wxHtmlTableCell(wxHtmlContainerCell *parent, const wxHtmlTag& t
     m_tBkg = m_rBkg = -1;
     if (tag.HasParam("BGCOLOR")) tag.ScanParam("BGCOLOR", "#%lX", &m_tBkg);
     if (tag.HasParam("VALIGN")) m_tValign = tag.GetParam("VALIGN"); else m_tValign = wxEmptyString;
-    if (tag.HasParam("CELLSPACING")) tag.ScanParam("CELLSPACING", "%i", &m_Spacing); else m_Spacing = 2;
-    if (tag.HasParam("CELLPADDING")) tag.ScanParam("CELLPADDING", "%i", &m_Padding); else m_Padding = 3;
+    if (tag.HasParam("CELLSPACING") && tag.ScanParam("CELLSPACING", "%i", &m_Spacing) == 1) {} else m_Spacing = 2;
+    if (tag.HasParam("CELLPADDING") && tag.ScanParam("CELLPADDING", "%i", &m_Padding) == 1) {} else m_Padding = 3;
 
     if (m_HasBorders)
         SetBorder(TABLE_BORDER_CLR_1, TABLE_BORDER_CLR_2);
