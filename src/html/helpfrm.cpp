@@ -1522,7 +1522,7 @@ void wxHtmlHelpFrame::OnCloseWindow(wxCloseEvent& evt)
 }
 
 #ifdef __WXMAC__
-void wxHtmlHelpFrame::OnQuit(wxCommandEvent& event)
+void wxHtmlHelpFrame::OnClose(wxCommandEvent& event)
 {
     Close(TRUE);
 }
@@ -1550,7 +1550,7 @@ BEGIN_EVENT_TABLE(wxHtmlHelpFrame, wxFrame)
     EVT_COMBOBOX(wxID_HTML_BOOKMARKSLIST, wxHtmlHelpFrame::OnBookmarksSel)
     EVT_CLOSE(wxHtmlHelpFrame::OnCloseWindow)
 #ifdef __WXMAC__
-    EVT_MENU(wxID_CLOSE, wxHtmlHelpFrame::OnQuit)
+    EVT_MENU(wxID_CLOSE, wxHtmlHelpFrame::OnClose)
     EVT_MENU(wxID_ABOUT, wxHtmlHelpFrame::OnAbout)
 #endif
 

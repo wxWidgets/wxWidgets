@@ -169,7 +169,7 @@ protected:
     void OnActivate(wxActivateEvent& event);
 
 #ifdef __WXMAC__
-    void OnQuit(wxCommandEvent& event);
+    void OnClose(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 #endif
 
