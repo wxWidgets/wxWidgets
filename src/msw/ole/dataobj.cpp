@@ -177,7 +177,6 @@ IMPLEMENT_IUNKNOWN_METHODS(wxIEnumFORMATETC)
 
 wxIEnumFORMATETC::wxIEnumFORMATETC(const wxDataFormat *formats, ULONG nCount)
 {
-    m_cRef = 0;
     m_nCurrent = 0;
     m_nCount = nCount;
     m_formats = new CLIPFORMAT[nCount];
@@ -268,7 +267,6 @@ IMPLEMENT_IUNKNOWN_METHODS(wxIDataObject)
 
 wxIDataObject::wxIDataObject(wxDataObject *pDataObject)
 {
-    m_cRef = 0;
     m_pDataObject = pDataObject;
     m_mustDelete = FALSE;
 }

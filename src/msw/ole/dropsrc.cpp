@@ -93,7 +93,6 @@ wxIDropSource::wxIDropSource(wxDropSource *pDropSource)
 
   m_pDropSource = pDropSource;
   m_grfInitKeyState = 0;
-  m_cRef = 0;
 }
 
 // Name    : wxIDropSource::QueryContinueDrag

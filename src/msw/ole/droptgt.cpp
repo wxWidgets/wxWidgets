@@ -113,7 +113,6 @@ DWORD wxIDropTarget::GetDropEffect(DWORD flags)
 
 wxIDropTarget::wxIDropTarget(wxDropTarget *pTarget)
 {
-  m_cRef         = 0;
   m_pTarget      = pTarget;
   m_pIDataObject = NULL;
 }

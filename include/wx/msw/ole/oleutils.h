@@ -17,9 +17,11 @@
 #endif
 
 #include "wx/defs.h"
+
 #if wxUSE_NORLANDER_HEADERS
-#include <ole2.h>
+    #include <ole2.h>
 #endif
+
 // ============================================================================
 // General purpose functions and macros
 // ============================================================================
@@ -39,7 +41,7 @@ inline void ReleaseInterface(IUnknown *pIUnk)
 #define   RELEASE_AND_NULL(p)   if ( (p) != NULL ) { p->Release(); p = NULL; };
 
 // return TRUE if the iid is in the array
-bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount);
+extern bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount);
 
 // ============================================================================
 // IUnknown implementation helpers
@@ -51,20 +53,36 @@ bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount);
    implementation is quite enough.
 
    Usage is trivial: here is all you should have
-   1) DECLARE_IUNKNOWN_METHOS in your (IUnknown derived!) class declaration
+   1) DECLARE_IUNKNOWN_METHODS in your (IUnknown derived!) class declaration
    2) BEGIN/END_IID_TABLE with ADD_IID in between for all interfaces you
       support (at least all for which you intent to return 'this' from QI,
       i.e. you should derive from IFoo if you have ADD_IID(Foo)) somewhere else
-   3) IMPLEMENT_IUNKNOWN_METHOS somewhere also
+   3) IMPLEMENT_IUNKNOWN_METHODS somewhere also
 
    These macros are quite simple: AddRef and Release are trivial and QI does
    lookup in a static member array of IIDs and returns 'this' if it founds
    the requested interface in it or E_NOINTERFACE if not.
  */
 
+/*
+  wxAutoULong: this class is used for automatically initalising m_cRef to 0
+*/
+class wxAutoULong
+{
+public:
+    wxAutoULong(ULONG value = 0) : m_Value(value) { }
+
+    operator ULONG&() { return m_Value; }
+    ULONG& operator=(ULONG value) { return m_Value = value; }
+
+private:
+    ULONG m_Value;
+};
+
 // declare the methods and the member variable containing reference count
 // you must also define the ms_aIids array somewhere with BEGIN_IID_TABLE
 // and friends (see below)
+
 #define   DECLARE_IUNKNOWN_METHODS                                            \
   public:                                                                     \
     STDMETHODIMP          QueryInterface(REFIID, void **);                    \
@@ -72,7 +90,7 @@ bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount);
     STDMETHODIMP_(ULONG)  Release();                                          \
   private:                                                                    \
     static  const IID    *ms_aIids[];                                         \
-    ULONG                 m_cRef
+    wxAutoULong           m_cRef
 
 // macros for declaring supported interfaces
 // NB: you should write ADD_INTERFACE(Foo) and not ADD_INTERFACE(IID_IFoo)!
