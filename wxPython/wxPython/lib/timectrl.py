@@ -79,7 +79,7 @@ class wxTimeCtrl(wxTextCtrl):
             else:
                 testText = '00:00:00 XXX'
             w, h = self.GetTextExtent(testText)
-            self.SetClientSize( (w+4, -1) )
+            self.SetClientSize( (w+4, self.GetClientSize().height) )
 
         # Set up all the positions of the cells in the wxTimeCtrl (once):
         # Format of control is:
@@ -132,6 +132,9 @@ class wxTimeCtrl(wxTextCtrl):
 
         if spinButton:
             self.BindSpinbutton(spinButton)     # bind spin button up/down events to this control
+
+    def __repr__(self):
+        return "<wxTimeCtrl: %s>" % self.GetValue()
 
 
     def SetValue(self, value):
@@ -202,7 +205,9 @@ class wxTimeCtrl(wxTextCtrl):
                 _dbg('text=', text)
                 wxTextCtrl.SetValue(self, text)
                 _dbg('firing TimeUpdatedEvent...')
-                self.GetEventHandler().ProcessEvent(TimeUpdatedEvent(self.GetId(), text))
+                evt = TimeUpdatedEvent(self.GetId(), text)
+                evt.SetEventObject(self)
+                self.GetEventHandler().ProcessEvent(evt)
             else:
                 _dbg('len_ok:', len_ok, 'separators_correct =', separators_correct)
                 _dbg('hour_ok:', hour_ok, 'min_ok:', min_ok, 'sec_ok:', sec_ok, indent=0)
