@@ -18,8 +18,13 @@
 #include "wx/filename.h"
 #include "wx/mac/corefoundation/cfstring.h"
 
+#if defined(__DARWIN__)
 #include <CoreFoundation/CFBundle.h>
 #include <CoreFoundation/CFURL.h>
+#else
+#include <CFBundle.h>
+#include <CFURL.h>
+#endif
 
 // See comment in include/wx/mac/corefoundation/stdpaths.h
 #ifndef wxStandardPaths
