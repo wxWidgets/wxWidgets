@@ -26,6 +26,10 @@ class WXDLLEXPORT wxButton;
 class WXDLLEXPORT wxScrollBar;
 class WXDLLEXPORT wxTopLevelWindowMac;
 
+// internal implementation classes
+
+class wxMacControl ;
+
 // ---------------------------------------------------------------------------
 // constants
 // ---------------------------------------------------------------------------
@@ -126,7 +130,7 @@ public:
     // simple accessors
     // ----------------
 
-    virtual WXWidget GetHandle() const { return m_macControl ; }
+    virtual WXWidget GetHandle() const ;
 
 #if WXWIN_COMPATIBILITY_2_4
     bool GetTransparentBackground() const { return m_backgroundTransparent; }
@@ -237,8 +241,8 @@ protected:
     wxList              m_subControls;
     // number of calls to Freeze() minus number of calls to Thaw()
     unsigned int        m_frozenness;
-    // the true native ControlRef / = HIViewRef on OSX
-    WXWidget            m_macControl ;
+    // the peer object, allowing for cleaner API support
+    wxMacControl*       m_peer ;
     // true if is is not a native control but a wxWindow control
 	bool				m_macIsUserPane ;
     wxBrush             m_macBackgroundBrush ;

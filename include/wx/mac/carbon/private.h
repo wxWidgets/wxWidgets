@@ -217,6 +217,7 @@ template<> inline EventParamType wxMacGetEventParamType<Point>() { return typeQD
 template<> inline EventParamType wxMacGetEventParamType<Rect>() { return typeQDRectangle ; }
 template<> inline EventParamType wxMacGetEventParamType<Boolean>() { return typeBoolean ; }
 #if TARGET_API_MAC_OSX
+template<> inline EventParamType wxMacGetEventParamType<HICommand>() { return typeHICommand ; }
 template<> inline EventParamType wxMacGetEventParamType<HIPoint>() { return typeHIPoint ; }
 template<> inline EventParamType wxMacGetEventParamType<HISize>() { return typeHISize ; }
 template<> inline EventParamType wxMacGetEventParamType<HIRect>() { return typeHIRect ; }
@@ -236,9 +237,21 @@ class wxMacCarbonEvent
 {
     
 public :
-    wxMacCarbonEvent( EventRef event ) 
+    wxMacCarbonEvent( EventRef event , bool release = false ) 
     {
         m_eventRef = event ;
+        m_release = release ;
+    }
+    wxMacCarbonEvent(UInt32 inClassID,UInt32 inKind,EventTime inWhen = 0 /*now*/,EventAttributes inAttributes=kEventAttributeNone) 
+    {
+        m_eventRef = NULL ;
+        verify_noerr( MacCreateEvent( NULL , inClassID, inKind,inWhen,inAttributes,&m_eventRef) ) ;
+        m_release = true ;
+    }
+    ~wxMacCarbonEvent()
+    {
+        if ( m_release )
+            ReleaseEvent( m_eventRef ) ;
     }
     
     OSStatus GetParameter( EventParamName inName, EventParamType inDesiredType, UInt32 inBufferSize, void * outData) ;
@@ -265,21 +278,20 @@ public :
         return value ;
     }
 
-
-    OSStatus SetParameter( EventParamName inName, EventParamType inType, UInt32 inSize, void * inData) ;
-    template <typename T> OSStatus SetParameter( EventParamName inName, EventParamType inDesiredType , T *data )
+    OSStatus SetParameter( EventParamName inName, EventParamType inType, UInt32 inSize, const void * inData) ;
+    template <typename T> OSStatus SetParameter( EventParamName inName, EventParamType inDesiredType , const T *data )
     {
         return SetParameter( inName, inDesiredType , sizeof( T ) , data ) ;
     }
-    template <typename T> OSStatus SetParameter( EventParamName inName, EventParamType inDesiredType , T data )
+    template <typename T> OSStatus SetParameter( EventParamName inName, EventParamType inDesiredType , const T& data )
     {
         return SetParameter<T>( inName, inDesiredType , &data ) ;
     }
-    template <typename T> OSStatus SetParameter( EventParamName inName, T *data )
+    template <typename T> OSStatus SetParameter( EventParamName inName, const T *data )
     {
         return SetParameter<T>( inName, wxMacGetEventParamType<T>() , data ) ;
     }
-    template <typename T> OSStatus SetParameter( EventParamName inName, T data )
+    template <typename T> OSStatus SetParameter( EventParamName inName, const T& data )
     {
         return SetParameter<T>( inName, wxMacGetEventParamType<T>() , &data ) ;
     }
@@ -299,13 +311,20 @@ public :
     {
         return EventTimeToTicks( GetTime() ) ;
     }
+    operator EventRef () { return m_eventRef; }   
 protected :
     EventRef m_eventRef ;
+    bool     m_release ;
 } ;
 
 class wxMacControl
 {
 public :
+    wxMacControl()
+    {
+        m_controlRef = NULL ;
+    }
+    
     wxMacControl( ControlRef control ) 
     {
         m_controlRef = control ;
@@ -314,6 +333,8 @@ public :
     {
         m_controlRef = (ControlRef) control ;
     }
+    
+    bool Ok() const { return m_controlRef != NULL ; }
     
     OSStatus SetData( ControlPartCode inPartCode , ResType inTag , Size inSize , const void * inData ) ;
     OSStatus GetData( ControlPartCode inPartCode , ResType inTag , Size inBufferSize , void * inOutBuffer , Size * outActualSize ) ;
@@ -324,11 +345,11 @@ public :
         verify_noerr( GetDataSize( inPartCode , inTag , &sz ) ) ;
         return sz ;
     }
-    template <typename T> OSStatus SetData( ControlPartCode inPartCode , ResType inTag , T *data )
+    template <typename T> OSStatus SetData( ControlPartCode inPartCode , ResType inTag , const T *data )
     {
         return SetData( inPartCode , inTag , sizeof( T ) , data ) ;
     }
-    template <typename T> OSStatus SetData( ControlPartCode inPartCode , ResType inTag , T data )
+    template <typename T> OSStatus SetData( ControlPartCode inPartCode , ResType inTag , const T& data )
     {
         return SetData( inPartCode , inTag , sizeof( T ) , &data ) ;
     }
@@ -343,6 +364,36 @@ public :
         verify_noerr( GetData<T>( inPartCode , inTag , &value ) ) ;
         return value ;
     }
+    
+    OSStatus SendEvent(  EventRef ref , OptionBits inOptions = 0 ) ;
+    OSStatus SendHICommand( HICommand &command , OptionBits inOptions = 0 ) ;
+    OSStatus SendHICommand( UInt32 commandID , OptionBits inOptions = 0 ) ;
+    
+    // Flash the control for the specified amount of time
+    void Flash( ControlPartCode part , UInt32 ticks = 8 ) ;
+    
+    SInt32 GetValue() { return ::GetControl32BitValue( m_controlRef ) ; }
+    SInt32 GetMaximum() { return ::GetControl32BitMaximum( m_controlRef ) ; }
+    SInt32 GetMinimum() { return ::GetControl32BitMinimum( m_controlRef ) ; }
+    
+    void SetValue( SInt32 v ) { ::SetControl32BitValue( m_controlRef , v ) ; }
+    void SetMinimum( SInt32 v ) { ::SetControl32BitMinimum( m_controlRef , v ) ; }
+    void SetMaximum( SInt32 v ) { ::SetControl32BitMaximum( m_controlRef , v ) ; }
+
+    void SetValueAndRange( SInt32 value , SInt32 minimum , SInt32 maximum )
+    {
+        ::SetControl32BitMinimum( m_controlRef , minimum ) ;
+        ::SetControl32BitMaximum( m_controlRef , maximum ) ; 
+        ::SetControl32BitValue( m_controlRef , value ) ;
+    }
+    
+    void SetRange( SInt32 minimum , SInt32 maximum )
+    {
+        ::SetControl32BitMinimum( m_controlRef , minimum ) ;
+        ::SetControl32BitMaximum( m_controlRef , maximum ) ; 
+    }
+
+    void operator= (ControlRef c) { m_controlRef = c ; }
     operator ControlRef () { return m_controlRef; }   
     operator ControlRef * () { return &m_controlRef; }   
 protected :

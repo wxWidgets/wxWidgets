@@ -23,9 +23,8 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxGaugeNameStr;
 // Group box
 class WXDLLEXPORT wxGauge: public wxGaugeBase
 {
-  DECLARE_DYNAMIC_CLASS(wxGauge)
  public:
-  inline wxGauge() { m_rangeMax = 0; m_gaugePos = 0; }
+  inline wxGauge() { }
 
   inline wxGauge(wxWindow *parent, wxWindowID id,
            int range,
@@ -46,21 +45,12 @@ class WXDLLEXPORT wxGauge: public wxGaugeBase
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxGaugeNameStr);
 
-  void SetShadowWidth(int w);
-  void SetBezelFace(int w);
-  void SetRange(int r);
-  void SetValue(int pos);
-
-  int GetShadowWidth() const ;
-  int GetBezelFace() const ;
-  int GetRange() const ;
-  int GetValue() const ;
-
-  virtual void Command(wxCommandEvent& WXUNUSED(event)) {} ;
-
+    // set gauge range/value
+    virtual void SetRange(int range);
+    virtual void SetValue(int pos);
+    virtual int  GetValue() const ;
  protected:
-   int      m_rangeMax;
-   int      m_gaugePos;
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxGauge)
 };
 
 #endif
