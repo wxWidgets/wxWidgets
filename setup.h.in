@@ -46,7 +46,9 @@
 #undef STDC_HEADERS
 
 /* Define this to get extra features from GNU libc. */
+#ifndef _GNU_SOURCE
 #undef _GNU_SOURCE
+#endif
 
 /* Define to `int' if <sys/types.h> doesn't define.  */
 #undef uid_t
