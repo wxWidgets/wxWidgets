@@ -38,11 +38,12 @@
 
 #if wxUSE_SPINBTN
 
+#include "wx/spinbutt.h"
+
 IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent)
 
 #if defined(__WIN95__) && !defined(__TWIN32__)
 
-#include "wx/spinbutt.h"
 #include "wx/msw/private.h"
 
 #if defined(__WIN95__) && !(defined(__GNUWIN32_OLD__) || defined(__TWIN32__))
