@@ -512,17 +512,20 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
     // standard icons (although why one would want to do it considering that
     // we already have wxApp::GetStdIcon() is unclear)
 #if defined(__WIN32__) && !defined(__SC__)
-    if ( hasSize )
+    if ( !hasSize )
     {
-        hicon = (HICON)::LoadImage(wxGetInstance(), name, IMAGE_ICON,
-                                    desiredWidth, desiredHeight,
-                                    LR_DEFAULTCOLOR);
+        // use the actual size of the resource (as we don't specify
+        // LR_DEFAULTSIZE)
+        desiredWidth =
+        desiredHeight = 0;
     }
-    else
-#endif // Win32
-    {
-        hicon = ::LoadIcon(wxGetInstance(), name);
-    }
+
+    hicon = (HICON)::LoadImage(wxGetInstance(), name, IMAGE_ICON,
+                                desiredWidth, desiredHeight,
+                                LR_DEFAULTCOLOR);
+#else // !Win32
+    hicon = ::LoadIcon(wxGetInstance(), name);
+#endif // Win32/!Win32
 
     // next check if it's not a standard icon
     if ( !hicon && !hasSize )
@@ -552,7 +555,7 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
     icon->SetSize(size.x, size.y);
 
     // Override the found values with desired values
-    if ( desiredWidth > -1 && desiredHeight > -1 )
+    if ( hasSize )
     {
         icon->SetSize(desiredWidth, desiredHeight);
     }
