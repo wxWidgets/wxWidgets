@@ -771,7 +771,9 @@ bool wxFont::IsFixedWidth() const
 
 #if wxUSE_UNICODE
 #else
-    if ( M_FONTDATA->HasNativeFont() )
+    // Robert, is this right? HasNativeFont doesn't exist.
+    if ( TRUE )
+    //    if ( M_FONTDATA->HasNativeFont() )
     {
         // the monospace fonts are supposed to have "M" in the spacing field
         wxString spacing = M_FONTDATA->

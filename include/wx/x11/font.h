@@ -49,11 +49,14 @@ public:
         const wxString& face = wxEmptyString,
         wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
-#if wxUSE_UNICODE    
+    // FIXME: I added the ! to make it compile;
+    // is this right? - JACS
+#if !wxUSE_UNICODE    
     bool Create(const wxString& fontname,
         wxFontEncoding fontenc = wxFONTENCODING_DEFAULT);
 #endif
-    bool Create(const wxNativeFontInfo& fontinfo);
+    // DELETEME: no longer seems to be implemented.
+    // bool Create(const wxNativeFontInfo& fontinfo);
     
     virtual ~wxFont();
     
