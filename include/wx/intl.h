@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        intl.h
+// Name:        wx/intl.h
 // Purpose:     Internationalization and localisation for wxWindows
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -62,10 +62,10 @@ class WXDLLEXPORT wxLanguageInfoArray;
 enum wxLanguage
 {
     // user's default/preffered language as got from OS:
-    wxLANGUAGE_DEFAULT, 
+    wxLANGUAGE_DEFAULT,
     // unknown language, if wxLocale::GetSystemLanguage fails:
-    wxLANGUAGE_UNKNOWN, 
-    
+    wxLANGUAGE_UNKNOWN,
+
     wxLANGUAGE_ABKHAZIAN,
     wxLANGUAGE_AFAR,
     wxLANGUAGE_AFRIKAANS,
@@ -344,8 +344,8 @@ public:
              const wxChar *szLocale = (const wxChar *) NULL,     // locale (for setlocale)
              bool bLoadDefault = TRUE,                           // preload wxstd.mo?
              bool bConvertEncoding = FALSE)                      // convert Win<->Unix if neccessary?
-        { 
-            Init(szName, szShort, szLocale, bLoadDefault, bConvertEncoding); 
+        {
+            Init(szName, szShort, szLocale, bLoadDefault, bConvertEncoding);
         }
 
     wxLocale(int language, // wxLanguage id or custom language
@@ -365,7 +365,7 @@ public:
 
         // restores old locale
     ~wxLocale();
-    
+
     // Try to get user's (or OS's) prefered language setting.
     // Return wxLANGUAGE_UNKNOWN if language-guessing algorithm failed
     static int GetSystemLanguage();
@@ -375,18 +375,18 @@ public:
 
     // returns locale name
     const wxChar *GetLocale() const { return m_strLocale; }
-    
+
     // return current locale wxLanguage value
     int GetLanguage() const { return m_language; }
 
-    // return locale name to be passed to setlocale()    
+    // return locale name to be passed to setlocale()
     wxString GetSysName() const;
 
-    // return 'canonical' name, i.e. in the form of xx[_YY], where xx is 
+    // return 'canonical' name, i.e. in the form of xx[_YY], where xx is
     // language code according to ISO 639 and YY is country name
     // as specified by ISO 3166.
     wxString GetCanonicalName() const { return m_strShort; }
-    
+
     // add a prefix to the catalog lookup path: the message catalog files will be
     // looked up under prefix/<lang>/LC_MESSAGES, prefix/LC_MESSAGES and prefix
     // (in this order).
@@ -405,7 +405,7 @@ public:
 
     // check if the given catalog is loaded
     bool IsLoaded(const wxChar *szDomain) const;
-    
+
     // Add custom language to the list of known languages.
     // Notes: 1) wxLanguageInfo contains platform-specific data
     //        2) must be called before Init to have effect
@@ -436,7 +436,7 @@ public:
 private:
     // find catalog by name in a linked list, return NULL if !found
     wxMsgCatalog  *FindCatalog(const wxChar *szDomain) const;
-    
+
     // copy default table of languages from global static array to
     // m_langugagesInfo, called by InitLanguagesDB
     static void InitLanguagesDB();
@@ -449,7 +449,7 @@ private:
     wxLocale      *m_pOldLocale;      // previous wxLocale
 
     wxMsgCatalog  *m_pMsgCat;         // pointer to linked list of catalogs
-    
+
     bool           m_bConvertEncoding;
 
     static wxLanguageInfoArray *ms_languagesDB;
