@@ -23,7 +23,14 @@
 #else
   #include <stat.h>
 #endif
-#include <fstream.h>
+
+#if wxUSE_STD_IOSTREAM
+    #if wxUSE_IOSTREAMH
+        #include <fstream.h>
+    #else
+        #include <fstream>
+    #endif
+#endif
 
 #include "wx/app.h"
 #include "wx/dc.h"
