@@ -235,6 +235,7 @@ values were correct as constructors can not return an error code.
 \helpref{Set(double jdn)}{wxdatetimesetjdn}\\
 \helpref{Set(h, m, s, ms)}{wxdatetimesettime}\\
 \helpref{Set(day, mon, year, h, m, s, ms)}{wxdatetimesetdate}\\
+\helpref{SetFromDOS(unsigned long ddt)}{wxdatetimesetfromdos}\\
 \helpref{ResetTime}{wxdatetimeresettime}\\
 \helpref{SetYear}{wxdatetimesetyear}\\
 \helpref{SetMonth}{wxdatetimesetmonth}\\
@@ -268,7 +269,8 @@ some more complicated calculations to find the answer are under the
 \helpref{GetWeekOfMonth}{wxdatetimegetweekofmonth}\\
 \helpref{GetYearDay}{wxdatetimegetyearday}\\
 \helpref{IsWorkDay}{wxdatetimeisworkday}\\
-\helpref{IsGregorianDate}{wxdatetimeisgregoriandate}
+\helpref{IsGregorianDate}{wxdatetimeisgregoriandate}\\
+\helpref{GetAsDOS}{wxdatetimegetasdos}
 
 \membersection{Date comparison}
 
@@ -881,6 +883,24 @@ Returns {\tt TRUE} is this day is not a holiday in the given country.
 Returns {\tt TRUE} if the given date os later than the date of adoption of the
 Gregorian calendar in the given country (and hence the Gregorian calendar
 calculations make sense for it).
+
+%%%%%%%%%%%%%%%%%%%%%% dos date and time format %%%%%%%%%%%%%%%%%%%%%%%
+
+\membersection{wxDateTime::SetFromDOS}\label{wxdatetimesetfromdos}
+
+\func{wxDateTime\&}{Set}{\param{unsigned long }{ddt}}
+
+Sets the date from the date and time in 
+\urlref{DOS}{http://developer.novell.com/ndk/doc/smscomp/index.html?page=/ndk/doc/smscomp/sms\_docs/data/hc2vlu5i.html} 
+format.
+
+\membersection{wxDateTime::GetAsDOS}\label{wxdatetimegetasdos}
+
+\constfunc{unsigned long}{GetAsDOS}{\void}
+
+Returns the date and time in 
+\urlref{DOS}{http://developer.novell.com/ndk/doc/smscomp/index.html?page=/ndk/doc/smscomp/sms\_docs/data/hc2vlu5i.html} 
+format.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% comparison %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

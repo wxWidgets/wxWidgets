@@ -1248,6 +1248,82 @@ wxDateTime& wxDateTime::ResetTime()
 }
 
 // ----------------------------------------------------------------------------
+// DOS Date and Time Format functions
+// ----------------------------------------------------------------------------
+// the dos date and time value is an unsigned 32 bit value in the format:
+// YYYYYYYMMMMDDDDDhhhhhmmmmmmsssss
+//
+// Y = year offset from 1980 (0-127)
+// M = month (1-12)
+// D = day of month (1-31)
+// h = hour (0-23)
+// m = minute (0-59)
+// s = bisecond (0-29) each bisecond indicates two seconds
+// ----------------------------------------------------------------------------
+
+wxDateTime& wxDateTime::SetFromDOS(unsigned long ddt)
+{
+    struct tm tm;
+
+    long year = ddt & 0xFE000000;
+    year >>= 25;
+    year += 80;
+    tm.tm_year = year;
+
+    long month = ddt & 0x1E00000;
+    month >>= 21;
+    month -= 1;
+    tm.tm_mon = month;
+
+    long day = ddt & 0x1F0000;
+    day >>= 16;
+    tm.tm_mday = day;
+
+    long hour = ddt & 0xF800;
+    hour >>= 11;
+    tm.tm_hour = hour;
+
+    long minute = ddt & 0x7E0;
+    minute >>= 5;
+    tm.tm_min = minute;
+
+    long second = ddt & 0x1F;
+    tm.tm_sec = second * 2;
+
+    return Set(mktime(&tm));
+}
+
+unsigned long wxDateTime::GetAsDOS() const
+{
+    unsigned long ddt;
+    time_t ticks = GetTicks();
+    struct tm *tm = localtime(&ticks);
+
+    long year = tm->tm_year;
+    year -= 80;
+    year <<= 25;
+
+    long month = tm->tm_mon;
+    month += 1;
+    month <<= 21;
+
+    long day = tm->tm_mday;
+    day <<= 16;
+
+    long hour = tm->tm_hour;
+    hour <<= 11;
+
+    long minute = tm->tm_min;
+    minute <<= 5;
+
+    long second = tm->tm_sec;
+    second /= 2;
+
+    ddt = year | month | day | hour | minute | second;
+    return ddt;
+}
+
+// ----------------------------------------------------------------------------
 // time_t <-> broken down time conversions
 // ----------------------------------------------------------------------------
 

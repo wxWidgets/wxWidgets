@@ -851,6 +851,15 @@ public:
         //     adoption of the Gregorian calendar is simply unknown.
     bool IsGregorianDate(GregorianAdoption country = Gr_Standard) const;
 
+    // dos date and time format
+    // ------------------------------------------------------------------------
+
+        // set from the DOS packed format
+    wxDateTime& SetFromDOS(unsigned long ddt);
+
+        // pack the date in DOS format
+    unsigned long GetAsDOS() const;
+
     // comparison (see also functions below for operator versions)
     // ------------------------------------------------------------------------
 
