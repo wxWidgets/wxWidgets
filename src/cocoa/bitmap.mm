@@ -19,6 +19,7 @@
 #include "wx/bitmap.h"
 #include "wx/image.h"
 #include "wx/xpmdecod.h"
+#include "wx/rawbmp.h"
 
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"
@@ -394,6 +395,37 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth)
     M_BITMAPDATA->m_cocoaNSBitmapImageRep = bitmapImage;
     M_BITMAPDATA->m_bitmapMask = NULL;
     return true;
+}
+
+void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
+{
+    if(!Ok())
+        return NULL;
+
+    NSBitmapImageRep *bitmapRep = M_BITMAPDATA->m_cocoaNSBitmapImageRep;
+    if(!bitmapRep)
+        return NULL;
+
+    if([bitmapRep bitsPerPixel]!=bpp)
+    {
+        wxFAIL_MSG( _T("incorrect bitmap type in wxBitmap::GetRawData()") );
+        return NULL;
+    }
+    data.m_width = [bitmapRep pixelsWide];
+    data.m_height = [bitmapRep pixelsHigh];
+    data.m_stride = [bitmapRep bytesPerRow];
+    return [bitmapRep bitmapData];
+
+    // NOTE: It is up to the user to make sure they used the proper
+    // pixel format class that details what is actually inside the pixels
+    // We can only check to make sure that the total number of bits per
+    // pixel are being iterated over properly
+    // NSBitmapImageRep can contain grayscale or CMYK data and
+    // wxPixelDataBase doesn't really define the color format
+}
+
+void wxBitmap::UngetRawData(wxPixelDataBase& data)
+{   // TODO
 }
 
 // ========================================================================
