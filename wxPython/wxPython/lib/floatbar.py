@@ -6,6 +6,13 @@
 #
 # Created:      10/4/99
 #----------------------------------------------------------------------------
+"""
+NOTE: This module is *not* supported in any way.  Use it however you
+      wish, but be warned that dealing with any consequences is
+      entirly up to you.
+      --Robin
+"""
+
 from wxPython.wx import *
 
 if wxPlatform == '__WXGTK__':
