@@ -28,7 +28,6 @@
 
 #include "wx/cmdline.h"
 #include "wx/xrc/xml.h"
-#include "wx/xrc/xmlio.h"
 #include "wx/ffile.h"
 #include "wx/wfstream.h"
 
@@ -67,7 +66,7 @@ private:
     wxArrayString FindStrings();
     wxArrayString FindStrings(wxXmlNode *node);
             
-    bool flagVerbose, flagCPP, flagCompress, flagGettext;
+    bool flagVerbose, flagCPP, flagGettext;
     wxString parOutput, parFuncname, parOutputPath;
     wxArrayString parFiles;
     int retCode;
@@ -86,7 +85,6 @@ int XmlResApp::OnRun()
         { wxCMD_LINE_SWITCH, "h", "help",  "show help message" },
         { wxCMD_LINE_SWITCH, "v", "verbose", "be verbose" },
         { wxCMD_LINE_SWITCH, "c", "cpp-code",  "output C++ source rather than .rsc file" },
-        { wxCMD_LINE_SWITCH, "u", "uncompressed",  "do not compress .xml files (C++ only)" },
         { wxCMD_LINE_SWITCH, "g", "gettext",  "output list of translatable strings (to stdout or file if -o used)" },
         { wxCMD_LINE_OPTION, "n", "function",  "C++ function name (with -c) [InitXmlResource]" },
         { wxCMD_LINE_OPTION, "o", "output",  "output file [resource.xrs/cpp]" },
@@ -103,8 +101,6 @@ int XmlResApp::OnRun()
     wxLog::SetTimestamp(NULL);
     delete wxLog::SetActiveTarget(new wxLogStderr);
 #endif
-
-    wxXmlDocument::AddHandler(new wxXmlIOHandlerBinZ);
 
     wxCmdLineParser parser(cmdLineDesc, argc, argv);
 
@@ -146,7 +142,6 @@ void XmlResApp::ParseParams(const wxCmdLineParser& cmdline)
     flagGettext = cmdline.Found("g");
     flagVerbose = cmdline.Found("v");
     flagCPP = cmdline.Found("c");
-    flagCompress = flagCPP && !cmdline.Found("u");
 
     if (!cmdline.Found("o", &parOutput)) 
     {
@@ -210,9 +205,8 @@ wxArrayString XmlResApp::PrepareTempFiles()
 
         FindFilesInXML(doc.GetRoot(), flist, path);
 
-        doc.Save(parOutputPath + "/" + name + ".xmlbin", 
-                 flagCompress ? wxXML_IO_BINZ : wxXML_IO_BIN);
-        flist.Add(name + ".xmlbin");
+        doc.Save(parOutputPath + "/" + name + ".xrc");
+        flist.Add(name + ".xrc");
     }
     
     return flist;
@@ -394,7 +388,7 @@ void " + parFuncname + "()\n\
         wxString name, ext, path;
         wxSplitPath(parFiles[i], &path, &name, &ext);
         file.Write("    wxXmlResource::Get()->Load(\"memory:xml_resource/" + 
-                   name + ".xmlbin" + "\");\n");
+                   name + ".xrc" + "\");\n");
     }
     
     file.Write("}\n");

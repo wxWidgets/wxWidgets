@@ -331,7 +331,7 @@ void wxXmlResource::UpdateResources()
                 delete m_data[i].Doc;
                 m_data[i].Doc = new wxXmlDocument;
             }
-            if (!stream || !m_data[i].Doc->Load(*stream, wxXML_IO_AUTO, encoding))
+            if (!stream || !m_data[i].Doc->Load(*stream, encoding))
             {
                 wxLogError(_("Cannot load resources from file '%s'."),
                            m_data[i].File.c_str());

@@ -22,7 +22,7 @@ XMLTOKDIR_OBJECTS=xmltok.o xmlrole.o
 LIBTARGET=$(WXDIR)/lib/libwxxrc.a
 
 OBJECTS= $(XMLPARSEDIR_OBJECTS) $(XMLTOKDIR_OBJECTS) \
-        xml.o xmlbin.o xmlbinz.o xmlexpat.o xmlwrite.o xmlres.o xmlrsall.o \
+        xml.o xmlres.o xmlrsall.o \
         xh_bttn.o xh_chckb.o xh_chckl.o xh_choic.o xh_combo.o xh_dlg.o \
         xh_gauge.o xh_html.o xh_menu.o xh_notbk.o xh_panel.o xh_radbt.o \
         xh_radbx.o xh_sizer.o xh_slidr.o xh_spin.o xh_stbmp.o xh_sttxt.o \

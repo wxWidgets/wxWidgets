@@ -54,18 +54,6 @@ enum wxXmlNodeType
 };
 
 
-// Types of XML files:
-
-enum wxXmlIOType
-{
-    wxXML_IO_AUTO = 0,    // detect it automatically
-    wxXML_IO_EXPAT,       // use Expat to load from text/xml document
-    wxXML_IO_TEXT_OUTPUT, // generic saver into text/xml
-    wxXML_IO_BIN,         // save in binary uncompressed proprietary format
-    wxXML_IO_BINZ         // svae in binary zlib-compressed proprietary format
-};
-
-
 // Represents node property(ies).
 // Example: in <img src="hello.gif" id="3"/> "src" is property with value
 //          "hello.gif" and "id" is prop. with value "3".
@@ -178,10 +166,8 @@ class WXXMLDLLEXPORT wxXmlDocument : public wxObject
 public:
     wxXmlDocument() : wxObject(), m_version(wxT("1.0")), m_root(NULL)  {}
     wxXmlDocument(const wxString& filename,
-                  wxXmlIOType io_type = wxXML_IO_AUTO,
                   const wxString& encoding = wxT("UTF-8"));
     wxXmlDocument(wxInputStream& stream,
-                  wxXmlIOType io_type = wxXML_IO_AUTO,
                   const wxString& encoding = wxT("UTF-8"));
     ~wxXmlDocument() { delete m_root; }
 
@@ -191,17 +177,13 @@ public:
     // Parses .xml file and loads data. Returns TRUE on success, FALSE
     // otherwise.
     bool Load(const wxString& filename,
-              wxXmlIOType io_type = wxXML_IO_AUTO,
               const wxString& encoding = wxT("UTF-8"));
     bool Load(wxInputStream& stream,
-              wxXmlIOType io_type = wxXML_IO_AUTO,
               const wxString& encoding = wxT("UTF-8"));
 
     // Saves document as .xml file.
-    bool Save(const wxString& filename,
-              wxXmlIOType io_type = wxXML_IO_TEXT_OUTPUT) const;
-    bool Save(wxOutputStream& stream,
-              wxXmlIOType io_type = wxXML_IO_TEXT_OUTPUT) const;
+    bool Save(const wxString& filename) const;
+    bool Save(wxOutputStream& stream) const;
 
     bool IsOk() const { return m_root != NULL; }
 
@@ -227,13 +209,6 @@ public:
     wxString GetEncoding() const { return m_encoding; }
 #endif
 
-    static void AddHandler(wxXmlIOHandler *handler);
-    static void CleanUpHandlers();
-    static void InitStandardHandlers();
-
-protected:
-    static wxList *sm_handlers;
-
 private:
     wxString   m_version;
     wxString   m_fileEncoding;
@@ -244,28 +219,5 @@ private:
 
     void DoCopy(const wxXmlDocument& doc);
 };
-
-
-
-// wxXmlIOHandler takes care of loading and/or saving XML data.
-// see xmlio.h for available handlers
-
-class WXXMLDLLEXPORT wxXmlIOHandler : public wxObject
-{
-    public:
-        wxXmlIOHandler() {}
-
-        virtual wxXmlIOType GetType() = 0;
-        virtual bool CanLoad(wxInputStream& stream) = 0;
-        virtual bool CanSave() = 0;
-
-        virtual bool Load(wxInputStream& stream, wxXmlDocument& doc, 
-                          const wxString& encoding) = 0;
-        virtual bool Save(wxOutputStream& stream, const wxXmlDocument& doc) = 0;
-};
-
-
-
-void wxXmlInitXmlModule();
 
 #endif // _WX_XML_H_

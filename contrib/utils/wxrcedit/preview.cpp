@@ -154,7 +154,7 @@ void PreviewFrame::Preview(wxXmlNode *node,const wxString &version)
        if (XmlGetClass(doc.GetRoot()->GetChildren()) == _T("wxDialog")) 
            XmlSetClass(doc.GetRoot()->GetChildren(), _T("wxPanel"));   
 
-       doc.Save(m_TmpFile, wxXML_IO_BIN);
+       doc.Save(m_TmpFile);
        // wxXmlResource will detect change automatically
    }
 

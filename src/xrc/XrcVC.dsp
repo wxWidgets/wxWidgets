@@ -232,27 +232,11 @@ SOURCE=.\xml.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\xmlbin.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\xmlbinz.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\xmlexpat.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\xmlres.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\xmlrsall.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\xmlwrite.cpp
 # End Source File
 # End Target
 # End Project

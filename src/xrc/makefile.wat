@@ -12,7 +12,7 @@ THISDIR = $(WXDIR)\contrib\src\xrc
 NAME = wxxrc
 LNK = $(name).lnk
 
-OBJECTS=xml.obj xmlbin.obj xmlbinz.obj xmlpars.obj xmlres.obj xmlrsall.obj &
+OBJECTS=xml.obj xmlres.obj xmlrsall.obj &
         xh_bttn.obj xh_chckb.obj xh_chckl.obj xh_choic.obj xh_combo.obj xh_dlg.obj &
         xh_gauge.obj xh_html.obj xh_menu.obj xh_notbk.obj xh_panel.obj xh_radbt.obj &
         xh_radbx.obj xh_sizer.obj xh_slidr.obj xh_spin.obj xh_stbmp.obj xh_sttxt.obj &

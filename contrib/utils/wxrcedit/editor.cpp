@@ -297,7 +297,7 @@ void EditorFrame::LoadFile(const wxString& filename)
     m_Resource = new wxXmlRcEditDocument;
     m_Modified = FALSE;
     
-    if (!m_Resource->Load(filename, wxXML_IO_AUTO, wxLocale::GetSystemEncodingName()))
+    if (!m_Resource->Load(filename,  wxLocale::GetSystemEncodingName()))
     {
         delete m_Resource;
         m_Resource = NULL;
