@@ -1,12 +1,12 @@
 /* XPM */
-static char *icon3_xpm[] = {
+static char *icon4_xpm[] = {
 /* width height num_colors chars_per_pixel */
 "    32    32        5            1",
 /* colors */
 ". c #000000",
 "# c #c0c0c0",
 "a c #808080",
-"b c #ffff00",
+"b c #ff0000",
 "c c #ffffff",
 /* pixels */
 "cccccccccccccccccccccccccccccccc",

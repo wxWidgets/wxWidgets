@@ -271,7 +271,7 @@ public:
     void SetItemText(const wxTreeItemId& item, const wxString& text);
         // get one of the images associated with the item (normal by default)
     void SetItemImage(const wxTreeItemId& item, int image,
-                      wxTreeItemIcon which = wxTreeItemIcon_Normal) const;
+                      wxTreeItemIcon which = wxTreeItemIcon_Normal);
         // associate some data with the item
     void SetItemData(const wxTreeItemId& item, wxTreeItemData *data);
 

@@ -47,6 +47,12 @@ class WXDLLEXPORT wxGenericTreeItem;
 WX_DEFINE_ARRAY(wxGenericTreeItem *, wxArrayGenericTreeItems);
 WX_DEFINE_OBJARRAY(wxArrayTreeItemIds);
 
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+static const int NO_IMAGE = -1;
+
 // -----------------------------------------------------------------------------
 // private classes
 // -----------------------------------------------------------------------------
@@ -69,13 +75,16 @@ public:
   wxArrayGenericTreeItems& GetChildren() { return m_children; }
 
   const wxString& GetText() const { return m_text; }
-  int GetImage() const { return m_image; }
-  int GetSelectedImage() const { return m_selImage; }
+  int GetImage(wxTreeItemIcon which = wxTreeItemIcon_Normal) const
+    { return m_images[which]; }
   wxTreeItemData *GetData() const { return m_data; }
 
+  // returns the current image for the item (depending on its
+  // selected/expanded/whatever state)
+  int GetCurrentImage() const;
+
   void SetText( const wxString &text );
-  void SetImage(int image) { m_image = image; }
-  void SetSelectedImage(int image) { m_selImage = image; }
+  void SetImage(int image, wxTreeItemIcon which) { m_images[which] = image; }
   void SetData(wxTreeItemData *data) { m_data = data; }
 
   void SetHasPlus(bool has = TRUE) { m_hasPlus = has; }
@@ -125,7 +134,7 @@ public:
 
   // status inquiries
   bool HasChildren() const { return !m_children.IsEmpty(); }
-  bool HasHilight()  const { return m_hasHilight; }
+  bool IsSelected()  const { return m_hasHilight; }
   bool IsExpanded()  const { return !m_isCollapsed; }
   bool HasPlus()     const { return m_hasPlus || HasChildren(); }
   bool IsBold()      const { return m_isBold; }
@@ -133,8 +142,9 @@ public:
 private:
   wxString            m_text;
 
-  int                 m_image,
-                      m_selImage;
+  // tree ctrl images for the normal, selected, expanded and expanded+selected
+  // states
+  int                 m_images[wxTreeItemIcon_Max];
 
   wxTreeItemData     *m_data;
 
@@ -251,8 +261,11 @@ wxGenericTreeItem::wxGenericTreeItem(wxGenericTreeItem *parent,
                                      wxTreeItemData *data)
                  : m_text(text)
 {
-  m_image = image;
-  m_selImage = selImage;
+  m_images[wxTreeItemIcon_Normal] = image;
+  m_images[wxTreeItemIcon_Selected] = selImage;
+  m_images[wxTreeItemIcon_Expanded] = NO_IMAGE;
+  m_images[wxTreeItemIcon_SelectedExpanded] = NO_IMAGE;
+
   m_data = data;
   m_x = m_y = 0;
   m_xCross = m_yCross = 0;
@@ -307,8 +320,11 @@ void wxGenericTreeItem::SetText( const wxString &text )
 void wxGenericTreeItem::Reset()
 {
   m_text.Empty();
-  m_image =
-  m_selImage = -1;
+  for ( int i = 0; i < wxTreeItemIcon_Max; i++ )
+  {
+    m_images[i] = NO_IMAGE;
+  }
+
   m_data = NULL;
   m_x = m_y =
   m_height = m_width = 0;
@@ -367,11 +383,12 @@ wxGenericTreeItem *wxGenericTreeItem::HitTest( const wxPoint& point,
 {
   if ((point.y > m_y) && (point.y < m_y + theTree->GetLineHeight(this)))
   {
-    if (point.y<m_y+theTree->GetLineHeight(this)/2) flags|=wxTREE_HITTEST_ONITEMUPPERPART;
-    else flags|=wxTREE_HITTEST_ONITEMLOWERPART;
+    if (point.y<m_y+theTree->GetLineHeight(this)/2)
+        flags |= wxTREE_HITTEST_ONITEMUPPERPART;
+    else
+        flags |= wxTREE_HITTEST_ONITEMLOWERPART;
 
-    // FIXME why +5?
-    //  Because that is the size of the plus sign, RR
+    // 5 is the size of the plus sign
     if ((point.x > m_xCross-5) && (point.x < m_xCross+5) &&
         (point.y > m_yCross-5) && (point.y < m_yCross+5) &&
         (IsExpanded() || HasPlus()))
@@ -386,19 +403,21 @@ wxGenericTreeItem *wxGenericTreeItem::HitTest( const wxPoint& point,
       int image_h;
 
       // assuming every image (normal and selected ) has the same size !
-      if ((m_image!=-1) && theTree->m_imageListNormal)
-          theTree->m_imageListNormal->GetSize(m_image, image_w, image_h);
+      if ( (GetImage() != NO_IMAGE) && theTree->m_imageListNormal )
+          theTree->m_imageListNormal->GetSize(GetImage(), image_w, image_h);
 
       if ((image_w != -1) && (point.x <= m_x + image_w + 1))
-        flags|=wxTREE_HITTEST_ONITEMICON;
+        flags |= wxTREE_HITTEST_ONITEMICON;
       else
-        flags|=wxTREE_HITTEST_ONITEMLABEL;
+        flags |= wxTREE_HITTEST_ONITEMLABEL;
 
       return this;
     }
 
-    if (point.x < m_x)         flags|=wxTREE_HITTEST_ONITEMIDENT;
-    if (point.x > m_x+m_width) flags|=wxTREE_HITTEST_ONITEMRIGHT;
+    if (point.x < m_x)
+        flags |= wxTREE_HITTEST_ONITEMIDENT;
+    if (point.x > m_x+m_width)
+        flags |= wxTREE_HITTEST_ONITEMRIGHT;
 
     return this;
   }
@@ -418,6 +437,39 @@ wxGenericTreeItem *wxGenericTreeItem::HitTest( const wxPoint& point,
 
   flags|=wxTREE_HITTEST_NOWHERE;
   return NULL;
+}
+
+int wxGenericTreeItem::GetCurrentImage() const
+{
+    int image = NO_IMAGE;
+    if ( IsExpanded() )
+    {
+        if ( IsSelected() )
+        {
+            image = GetImage(wxTreeItemIcon_SelectedExpanded);
+        }
+
+        if ( image == NO_IMAGE )
+        {
+            // we usually fall back to the normal item, but try just the
+            // expanded one (and not selected) first in this case
+            image = GetImage(wxTreeItemIcon_Expanded);
+        }
+    }
+    else // not expanded
+    {
+        if ( IsSelected() )
+            image = GetImage(wxTreeItemIcon_Selected);
+    }
+
+    // may be it doesn't have the specific image we want, try the default one
+    // instead
+    if ( image == NO_IMAGE )
+    {
+        image = GetImage();
+    }
+
+    return image;
 }
 
 // -----------------------------------------------------------------------------
@@ -538,18 +590,12 @@ wxString wxTreeCtrl::GetItemText(const wxTreeItemId& item) const
   return item.m_pItem->GetText();
 }
 
-int wxTreeCtrl::GetItemImage(const wxTreeItemId& item) const
+int wxTreeCtrl::GetItemImage(const wxTreeItemId& item,
+                             wxTreeItemIcon which) const
 {
   wxCHECK_MSG( item.IsOk(), -1, _T("invalid tree item") );
 
-  return item.m_pItem->GetImage();
-}
-
-int wxTreeCtrl::GetItemSelectedImage(const wxTreeItemId& item) const
-{
-  wxCHECK_MSG( item.IsOk(), -1, _T("invalid tree item") );
-
-  return item.m_pItem->GetSelectedImage();
+  return item.m_pItem->GetImage(which);
 }
 
 wxTreeItemData *wxTreeCtrl::GetItemData(const wxTreeItemId& item) const
@@ -570,26 +616,18 @@ void wxTreeCtrl::SetItemText(const wxTreeItemId& item, const wxString& text)
   RefreshLine(pItem);
 }
 
-void wxTreeCtrl::SetItemImage(const wxTreeItemId& item, int image)
+void wxTreeCtrl::SetItemImage(const wxTreeItemId& item,
+                              int image,
+                              wxTreeItemIcon which)
 {
-  wxCHECK_RET( item.IsOk(), _T("invalid tree item") );
+    wxCHECK_RET( item.IsOk(), _T("invalid tree item") );
 
-  wxClientDC dc(this);
-  wxGenericTreeItem *pItem = item.m_pItem;
-  pItem->SetImage(image);
-  CalculateSize(pItem, dc);
-  RefreshLine(pItem);
-}
+    wxGenericTreeItem *pItem = item.m_pItem;
+    pItem->SetImage(image, which);
 
-void wxTreeCtrl::SetItemSelectedImage(const wxTreeItemId& item, int image)
-{
-  wxCHECK_RET( item.IsOk(), _T("invalid tree item") );
-
-  wxClientDC dc(this);
-  wxGenericTreeItem *pItem = item.m_pItem;
-  pItem->SetSelectedImage(image);
-  CalculateSize(pItem, dc);
-  RefreshLine(pItem);
+    wxClientDC dc(this);
+    CalculateSize(pItem, dc);
+    RefreshLine(pItem);
 }
 
 void wxTreeCtrl::SetItemData(const wxTreeItemId& item, wxTreeItemData *data)
@@ -650,7 +688,7 @@ bool wxTreeCtrl::IsSelected(const wxTreeItemId& item) const
 {
   wxCHECK_MSG( item.IsOk(), FALSE, _T("invalid tree item") );
 
-  return item.m_pItem->HasHilight();
+  return item.m_pItem->IsSelected();
 }
 
 bool wxTreeCtrl::IsBold(const wxTreeItemId& item) const
@@ -1066,19 +1104,20 @@ void wxTreeCtrl::SelectItemRange(wxGenericTreeItem *item1, wxGenericTreeItem *it
 
   // choice first' and 'last' between item1 and item2
   if (item1->GetY()<item2->GetY())
-    {
+  {
       first=item1;
       last=item2;
-    }
+  }
   else
-    {
+  {
       first=item2;
       last=item1;
-    }
+  }
 
-  bool select=m_current->HasHilight();
+  bool select = m_current->IsSelected();
 
-  if (TagAllChildrenUntilLast(first,last,select)) return;
+  if ( TagAllChildrenUntilLast(first,last,select) )
+      return;
 
   TagNextChildren(first,last,select);
 }
@@ -1097,18 +1136,19 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& itemId,
 
     // to keep going anyhow !!!
     if (is_single)
-      { 
-        if (item->HasHilight()) return; // nothing to do
-        unselect_others=TRUE;
-        extended_select=FALSE;
-      }
-    else // check if selection will really change
-      if (unselect_others && item->HasHilight())
-      {
-	// selection change if there is more than one item currently selected
-	wxArrayTreeItemIds selected_items;
-	if (GetSelections(selected_items)==1) return;
-      }
+    {
+        if (item->IsSelected())
+            return; // nothing to do
+        unselect_others = TRUE;
+        extended_select = FALSE;
+    }
+    else if ( unselect_others && item->IsSelected() )
+    {
+        // selection change if there is more than one item currently selected
+        wxArrayTreeItemIds selected_items;
+        if ( GetSelections(selected_items) == 1 )
+            return;
+    }
 
     wxTreeEvent event( wxEVT_COMMAND_TREE_SEL_CHANGING, GetId() );
     event.m_item = item;
@@ -1139,7 +1179,7 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& itemId,
 
         // Check if we need to toggle hilight (ctrl mode)
         if (!unselect_others)
-          select=!item->HasHilight();
+          select=!item->IsSelected();
 
         m_current = m_key_current = item;
         m_current->SetHilight(select);
@@ -1153,7 +1193,7 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& itemId,
 void wxTreeCtrl::FillArray(wxGenericTreeItem *item,
                            wxArrayTreeItemIds &array) const
 {
-    if ( item->HasHilight() )
+    if ( item->IsSelected() )
         array.Add(wxTreeItemId(item));
 
     if ( item->HasChildren() )
@@ -1183,7 +1223,7 @@ void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
     wxGenericTreeItem *parent = gitem->GetParent();
     while ( parent )
     {
-	Expand(parent);
+        Expand(parent);
         parent = parent->GetParent();
     }
 
@@ -1205,7 +1245,7 @@ void wxTreeCtrl::ScrollTo(const wxTreeItemId &item)
 
     // now scroll to the item
     int item_y = gitem->GetY();
-    
+
     int start_x = 0;
     int start_y = 0;
     ViewStart( &start_x, &start_y );
@@ -1381,14 +1421,10 @@ void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 
     int image_h = 0;
     int image_w = 0;
-    if ((item->IsExpanded()) && (item->GetSelectedImage() != -1))
+    int image = item->GetCurrentImage();
+    if ( image != NO_IMAGE )
     {
-        m_imageListNormal->GetSize( item->GetSelectedImage(), image_w, image_h );
-        image_w += 4;
-    }
-    else if (item->GetImage() != -1)
-    {
-        m_imageListNormal->GetSize( item->GetImage(), image_w, image_h );
+        m_imageListNormal->GetSize( image, image_w, image_h );
         image_w += 4;
     }
 
@@ -1396,19 +1432,10 @@ void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 
     dc.DrawRectangle( item->GetX()-2, item->GetY(), item->GetWidth()+2, total_h );
 
-    if ((item->IsExpanded()) && (item->GetSelectedImage() != -1))
+    if ( image != NO_IMAGE )
     {
         dc.SetClippingRegion( item->GetX(), item->GetY(), image_w-2, total_h );
-        m_imageListNormal->Draw( item->GetSelectedImage(), dc,
-                                 item->GetX(),
-                                 item->GetY() +((total_h > image_h)?((total_h-image_h)/2):0),
-                                 wxIMAGELIST_DRAW_TRANSPARENT );
-        dc.DestroyClippingRegion();
-    }
-    else if (item->GetImage() != -1)
-    {
-        dc.SetClippingRegion( item->GetX(), item->GetY(), image_w-2, total_h );
-        m_imageListNormal->Draw( item->GetImage(), dc,
+        m_imageListNormal->Draw( image, dc,
                                  item->GetX(),
                                  item->GetY() +((total_h > image_h)?((total_h-image_h)/2):0),
                                  wxIMAGELIST_DRAW_TRANSPARENT );
@@ -1467,7 +1494,7 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
             dc.SetPen( m_dottedPen );
         }
 
-        if (item->HasHilight())
+        if (item->IsSelected())
         {
             dc.SetTextForeground( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
 
@@ -1818,7 +1845,7 @@ void wxTreeCtrl::Edit( const wxTreeItemId& item )
     GetEventHandler()->ProcessEvent( te );
 
     if (!te.IsAllowed()) return;
-    
+
     // We have to call this here because the label in
     // question might just have been added and no screen
     // update taken place.
@@ -1832,14 +1859,11 @@ void wxTreeCtrl::Edit( const wxTreeItemId& item )
 
     int image_h = 0;
     int image_w = 0;
-    if ((m_currentEdit->IsExpanded()) && (m_currentEdit->GetSelectedImage() != -1))
+
+    int image = m_currentEdit->GetCurrentImage();
+    if ( image != NO_IMAGE )
     {
-        m_imageListNormal->GetSize( m_currentEdit->GetSelectedImage(), image_w, image_h );
-        image_w += 4;
-    }
-    else if (m_currentEdit->GetImage() != -1)
-    {
-        m_imageListNormal->GetSize( m_currentEdit->GetImage(), image_w, image_h );
+        m_imageListNormal->GetSize( image, image_w, image_h );
         image_w += 4;
     }
     x += image_w;
@@ -1891,20 +1915,20 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
     if (event.Dragging())
     {
         if (m_dragCount == 0)
-	    m_dragStart = wxPoint(x,y);
-	
+            m_dragStart = wxPoint(x,y);
+
         m_dragCount++;
-	
-	if (m_dragCount != 3) return;
-	
-	int command = wxEVT_COMMAND_TREE_BEGIN_DRAG;
-	if (event.RightIsDown()) command = wxEVT_COMMAND_TREE_BEGIN_RDRAG;
-	
+
+        if (m_dragCount != 3) return;
+
+        int command = wxEVT_COMMAND_TREE_BEGIN_DRAG;
+        if (event.RightIsDown()) command = wxEVT_COMMAND_TREE_BEGIN_RDRAG;
+
         wxTreeEvent nevent( command, GetId() );
         nevent.m_item = m_current;
         nevent.SetEventObject(this);
         GetEventHandler()->ProcessEvent(nevent);
-	return;
+        return;
     }
     else
     {
@@ -1994,14 +2018,10 @@ void wxTreeCtrl::CalculateSize( wxGenericTreeItem *item, wxDC &dc )
 
     int image_h = 0;
     int image_w = 0;
-    if ((item->IsExpanded()) && (item->GetSelectedImage() != -1))
+    int image = item->GetCurrentImage();
+    if ( image != NO_IMAGE )
     {
-        m_imageListNormal->GetSize( item->GetSelectedImage(), image_w, image_h );
-        image_w += 4;
-    }
-    else if (item->GetImage() != -1)
-    {
-        m_imageListNormal->GetSize( item->GetImage(), image_w, image_h );
+        m_imageListNormal->GetSize( image, image_w, image_h );
         image_w += 4;
     }
 
@@ -2055,7 +2075,7 @@ void wxTreeCtrl::CalculatePositions()
     //if(GetImageList() == NULL)
     // m_lineHeight = (int)(dc.GetCharHeight() + 4);
 
-    int y = 2; 
+    int y = 2;
     CalculateLevel( m_anchor, dc, 0, y ); // start recursion
 }
 

@@ -34,9 +34,12 @@
 #include "math.h"
 
 #ifdef __WXMSW__
+    // comment out this line to test multiple selection even under MSW (where
+    // it looks ugly - but works)
     #define NO_MULTIPLE_SELECTION
-    #define NO_VARIABLE_HEIGHT
 #endif
+
+#define NO_VARIABLE_HEIGHT
 
 #include "treetest.h"
 
@@ -46,6 +49,7 @@
   #include "icon2.xpm"
   #include "icon3.xpm"
   #include "icon4.xpm"
+  #include "icon5.xpm"
   #include "mondrian.xpm"
 #endif
 
