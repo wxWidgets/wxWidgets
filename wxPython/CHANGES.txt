@@ -459,6 +459,8 @@ Added wxTreeListCtrl.  (Looks like a wxTreeCtrl embedded in a
 wxListCtrl, but actually is just giving multiple columns to a
 wxTreeCtrl.)
 
+Added wxFutureCall, a subclass of wxTimer that makes it easy to delay
+a call to any Python callable object.
 
 
 
