@@ -60,6 +60,7 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/laywin.h>
 #ifndef __WXMAC__
 #include <wx/popupwin.h>
+#include <wx/tipwin.h>
 #endif
 
 

@@ -239,16 +239,19 @@ wxLB_OWNERDRAW = wxc.wxLB_OWNERDRAW
 wxLB_HSCROLL = wxc.wxLB_HSCROLL
 wxPROCESS_ENTER = wxc.wxPROCESS_ENTER
 wxPASSWORD = wxc.wxPASSWORD
-wxTE_PROCESS_ENTER = wxc.wxTE_PROCESS_ENTER
-wxTE_PROCESS_TAB = wxc.wxTE_PROCESS_TAB
-wxTE_PASSWORD = wxc.wxTE_PASSWORD
 wxTE_READONLY = wxc.wxTE_READONLY
-wxTE_RICH = wxc.wxTE_RICH
 wxTE_MULTILINE = wxc.wxTE_MULTILINE
-wxTE_AUTO_SCROLL = wxc.wxTE_AUTO_SCROLL
+wxTE_PROCESS_TAB = wxc.wxTE_PROCESS_TAB
+wxTE_RICH = wxc.wxTE_RICH
 wxTE_NO_VSCROLL = wxc.wxTE_NO_VSCROLL
+wxTE_AUTO_SCROLL = wxc.wxTE_AUTO_SCROLL
+wxTE_PROCESS_ENTER = wxc.wxTE_PROCESS_ENTER
+wxTE_PASSWORD = wxc.wxTE_PASSWORD
 wxTE_AUTO_URL = wxc.wxTE_AUTO_URL
 wxTE_NOHIDESEL = wxc.wxTE_NOHIDESEL
+wxTE_DONTWRAP = wxc.wxTE_DONTWRAP
+wxTE_LINEWRAP = wxc.wxTE_LINEWRAP
+wxTE_WORDWRAP = wxc.wxTE_WORDWRAP
 wxCB_SIMPLE = wxc.wxCB_SIMPLE
 wxCB_DROPDOWN = wxc.wxCB_DROPDOWN
 wxCB_SORT = wxc.wxCB_SORT
@@ -431,6 +434,7 @@ wxJOY_BUTTON4 = wxc.wxJOY_BUTTON4
 wxJOY_BUTTON_ANY = wxc.wxJOY_BUTTON_ANY
 wxWS_EX_VALIDATE_RECURSIVELY = wxc.wxWS_EX_VALIDATE_RECURSIVELY
 wxWS_EX_BLOCK_EVENTS = wxc.wxWS_EX_BLOCK_EVENTS
+wxWS_EX_TRANSIENT = wxc.wxWS_EX_TRANSIENT
 wxMM_TEXT = wxc.wxMM_TEXT
 wxMM_LOMETRIC = wxc.wxMM_LOMETRIC
 wxMM_HIMETRIC = wxc.wxMM_HIMETRIC
@@ -762,6 +766,7 @@ wxEVT_COMMAND_TOOL_RCLICKED = wxc.wxEVT_COMMAND_TOOL_RCLICKED
 wxEVT_COMMAND_TOOL_ENTER = wxc.wxEVT_COMMAND_TOOL_ENTER
 wxEVT_SET_FOCUS = wxc.wxEVT_SET_FOCUS
 wxEVT_KILL_FOCUS = wxc.wxEVT_KILL_FOCUS
+wxEVT_CHILD_FOCUS = wxc.wxEVT_CHILD_FOCUS
 wxEVT_MOUSEWHEEL = wxc.wxEVT_MOUSEWHEEL
 wxEVT_LEFT_DOWN = wxc.wxEVT_LEFT_DOWN
 wxEVT_LEFT_UP = wxc.wxEVT_LEFT_UP
@@ -869,7 +874,6 @@ wxDefaultSize = wxSizePtr(wxc.cvar.wxDefaultSize)
 # Author:       Robin Dunn
 #
 # Created:      6/30/97
-# RCS-ID:       $Id$
 # Copyright:    (c) 1998 by Total Control Software
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
@@ -937,6 +941,9 @@ def EVT_SET_FOCUS(win, func):
 
 def EVT_KILL_FOCUS(win, func):
     win.Connect(-1, -1, wxEVT_KILL_FOCUS, func)
+
+def EVT_CHILD_FOCUS(win, func):
+    win.Connect(-1, -1, wxEVT_CHILD_FOCUS, func)
 
 def EVT_ACTIVATE(win, func):
     win.Connect(-1, -1, wxEVT_ACTIVATE, func)

@@ -511,15 +511,15 @@ class wxGridCellAttrPtr :
         return val
     def GetTextColour(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellAttr_GetTextColour,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
+        if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def GetBackgroundColour(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellAttr_GetBackgroundColour,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
+        if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def GetFont(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellAttr_GetFont,(self,) + _args, _kwargs)
-        if val: val = wxFontPtr(val) 
+        if val: val = wxFontPtr(val) ; val.thisown = 1
         return val
     def GetAlignment(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellAttr_GetAlignment,(self,) + _args, _kwargs)

@@ -491,18 +491,12 @@ static PyObject *_wrap_wxListItemAttr_GetTextColour(PyObject *self, PyObject *ar
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        const wxColour & _result_ref = wxListItemAttr_GetTextColour(_arg0);
-    _result = (wxColour *) &_result_ref;
+        _result = new wxColour (wxListItemAttr_GetTextColour(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -527,18 +521,12 @@ static PyObject *_wrap_wxListItemAttr_GetBackgroundColour(PyObject *self, PyObje
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        const wxColour & _result_ref = wxListItemAttr_GetBackgroundColour(_arg0);
-    _result = (wxColour *) &_result_ref;
+        _result = new wxColour (wxListItemAttr_GetBackgroundColour(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -563,18 +551,12 @@ static PyObject *_wrap_wxListItemAttr_GetFont(PyObject *self, PyObject *args, Py
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        const wxFont & _result_ref = wxListItemAttr_GetFont(_arg0);
-    _result = (wxFont *) &_result_ref;
+        _result = new wxFont (wxListItemAttr_GetFont(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFont_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxFont_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -5820,18 +5802,12 @@ static PyObject *_wrap_wxTreeItemAttr_GetTextColour(PyObject *self, PyObject *ar
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        const wxColour & _result_ref = wxTreeItemAttr_GetTextColour(_arg0);
-    _result = (wxColour *) &_result_ref;
+        _result = new wxColour (wxTreeItemAttr_GetTextColour(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -5856,18 +5832,12 @@ static PyObject *_wrap_wxTreeItemAttr_GetBackgroundColour(PyObject *self, PyObje
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        const wxColour & _result_ref = wxTreeItemAttr_GetBackgroundColour(_arg0);
-    _result = (wxColour *) &_result_ref;
+        _result = new wxColour (wxTreeItemAttr_GetBackgroundColour(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -5892,18 +5862,12 @@ static PyObject *_wrap_wxTreeItemAttr_GetFont(PyObject *self, PyObject *args, Py
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        const wxFont & _result_ref = wxTreeItemAttr_GetFont(_arg0);
-    _result = (wxFont *) &_result_ref;
+        _result = new wxFont (wxTreeItemAttr_GetFont(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFont_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxFont_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -9295,7 +9259,61 @@ static PyObject *_wrap_wxTreeCtrl_SetItemFont(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
+static PyObject * wxPyTreeCtrl_GetBoundingRect(wxPyTreeCtrl *self,const wxTreeItemId & item,int  textOnly) {
+            wxRect rect;
+            if (self->GetBoundingRect(item, rect, textOnly)) {
+                wxPyTState* state = wxPyBeginBlockThreads();
+                wxRect* r = new wxRect(rect);
+                PyObject* val = wxPyConstructObject((void*)r, "wxRect");
+                wxPyEndBlockThreads(state);
+                return val;
+            }
+            else {
+                Py_INCREF(Py_None);
+                return Py_None;
+            }
+        }
+static PyObject *_wrap_wxTreeCtrl_GetBoundingRect(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxPyTreeCtrl * _arg0;
+    wxTreeItemId * _arg1;
+    int  _arg2 = (int ) FALSE;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","item","textOnly", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|i:wxTreeCtrl_GetBoundingRect",_kwnames,&_argo0,&_argo1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTreeCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeCtrl_GetBoundingRect. Expected _wxPyTreeCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_GetBoundingRect. Expected _wxTreeItemId_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxPyTreeCtrl_GetBoundingRect(_arg0,*_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
 static PyMethodDef controls2cMethods[] = {
+	 { "wxTreeCtrl_GetBoundingRect", (PyCFunction) _wrap_wxTreeCtrl_GetBoundingRect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_SetItemFont", (PyCFunction) _wrap_wxTreeCtrl_SetItemFont, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_SetItemBackgroundColour", (PyCFunction) _wrap_wxTreeCtrl_SetItemBackgroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_SetItemTextColour", (PyCFunction) _wrap_wxTreeCtrl_SetItemTextColour, METH_VARARGS | METH_KEYWORDS },

@@ -133,19 +133,19 @@ class wxBitmapButtonPtr(wxButtonPtr):
         return val
     def GetBitmapLabel(self, *_args, **_kwargs):
         val = apply(controlsc.wxBitmapButton_GetBitmapLabel,(self,) + _args, _kwargs)
-        if val: val = wxBitmapPtr(val) 
+        if val: val = wxBitmapPtr(val) ; val.thisown = 1
         return val
     def GetBitmapDisabled(self, *_args, **_kwargs):
         val = apply(controlsc.wxBitmapButton_GetBitmapDisabled,(self,) + _args, _kwargs)
-        if val: val = wxBitmapPtr(val) 
+        if val: val = wxBitmapPtr(val) ; val.thisown = 1
         return val
     def GetBitmapFocus(self, *_args, **_kwargs):
         val = apply(controlsc.wxBitmapButton_GetBitmapFocus,(self,) + _args, _kwargs)
-        if val: val = wxBitmapPtr(val) 
+        if val: val = wxBitmapPtr(val) ; val.thisown = 1
         return val
     def GetBitmapSelected(self, *_args, **_kwargs):
         val = apply(controlsc.wxBitmapButton_GetBitmapSelected,(self,) + _args, _kwargs)
-        if val: val = wxBitmapPtr(val) 
+        if val: val = wxBitmapPtr(val) ; val.thisown = 1
         return val
     def SetBitmapDisabled(self, *_args, **_kwargs):
         val = apply(controlsc.wxBitmapButton_SetBitmapDisabled,(self,) + _args, _kwargs)
@@ -572,15 +572,15 @@ class wxTextAttrPtr :
         return val
     def GetTextColour(self, *_args, **_kwargs):
         val = apply(controlsc.wxTextAttr_GetTextColour,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
+        if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def GetBackgroundColour(self, *_args, **_kwargs):
         val = apply(controlsc.wxTextAttr_GetBackgroundColour,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
+        if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def GetFont(self, *_args, **_kwargs):
         val = apply(controlsc.wxTextAttr_GetFont,(self,) + _args, _kwargs)
-        if val: val = wxFontPtr(val) 
+        if val: val = wxFontPtr(val) ; val.thisown = 1
         return val
     def IsDefault(self, *_args, **_kwargs):
         val = apply(controlsc.wxTextAttr_IsDefault,(self,) + _args, _kwargs)
@@ -845,7 +845,7 @@ class wxStaticBitmapPtr(wxControlPtr):
         return val
     def GetBitmap(self, *_args, **_kwargs):
         val = apply(controlsc.wxStaticBitmap_GetBitmap,(self,) + _args, _kwargs)
-        if val: val = wxBitmapPtr(val) 
+        if val: val = wxBitmapPtr(val) ; val.thisown = 1
         return val
     def SetBitmap(self, *_args, **_kwargs):
         val = apply(controlsc.wxStaticBitmap_SetBitmap,(self,) + _args, _kwargs)

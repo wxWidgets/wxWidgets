@@ -4053,6 +4053,34 @@ static PyObject *_wrap_wxFontList_RemoveFont(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
+#define wxFontList_GetCount(_swigobj)  (_swigobj->GetCount())
+static PyObject *_wrap_wxFontList_GetCount(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxFontList * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFontList_GetCount",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFontList_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFontList_GetCount. Expected _wxFontList_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxFontList_GetCount(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static void *SwigwxColourTowxObject(void *ptr) {
     wxColour *src;
     wxObject *dest;
@@ -5170,6 +5198,34 @@ static PyObject *_wrap_wxPenList_RemovePen(PyObject *self, PyObject *args, PyObj
     return _resultobj;
 }
 
+#define wxPenList_GetCount(_swigobj)  (_swigobj->GetCount())
+static PyObject *_wrap_wxPenList_GetCount(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxPenList * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPenList_GetCount",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPenList_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPenList_GetCount. Expected _wxPenList_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxPenList_GetCount(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static void *SwigwxBrushTowxGDIObject(void *ptr) {
     wxBrush *src;
     wxGDIObject *dest;
@@ -5595,6 +5651,34 @@ static PyObject *_wrap_wxBrushList_RemoveBrush(PyObject *self, PyObject *args, P
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxBrushList_GetCount(_swigobj)  (_swigobj->GetCount())
+static PyObject *_wrap_wxBrushList_GetCount(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxBrushList * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxBrushList_GetCount",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBrushList_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBrushList_GetCount. Expected _wxBrushList_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxBrushList_GetCount(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -6599,18 +6683,12 @@ static PyObject *_wrap_wxDC_GetBackground(PyObject *self, PyObject *args, PyObje
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxBrush & _result_ref = wxDC_GetBackground(_arg0);
-    _result = (wxBrush *) &_result_ref;
+        _result = new wxBrush (wxDC_GetBackground(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBrush_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxBrush_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -6635,18 +6713,12 @@ static PyObject *_wrap_wxDC_GetBrush(PyObject *self, PyObject *args, PyObject *k
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxBrush & _result_ref = wxDC_GetBrush(_arg0);
-    _result = (wxBrush *) &_result_ref;
+        _result = new wxBrush (wxDC_GetBrush(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBrush_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxBrush_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -6795,18 +6867,12 @@ static PyObject *_wrap_wxDC_GetFont(PyObject *self, PyObject *args, PyObject *kw
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxFont & _result_ref = wxDC_GetFont(_arg0);
-    _result = (wxFont *) &_result_ref;
+        _result = new wxFont (wxDC_GetFont(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFont_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxFont_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -6963,18 +7029,12 @@ static PyObject *_wrap_wxDC_GetPen(PyObject *self, PyObject *args, PyObject *kwa
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxPen & _result_ref = wxDC_GetPen(_arg0);
-    _result = (wxPen *) &_result_ref;
+        _result = new wxPen (wxDC_GetPen(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPen_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxPen_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -11164,6 +11224,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxDC_Blit", (PyCFunction) _wrap_wxDC_Blit, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_BeginDrawing", (PyCFunction) _wrap_wxDC_BeginDrawing, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxDC", (PyCFunction) _wrap_delete_wxDC, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBrushList_GetCount", (PyCFunction) _wrap_wxBrushList_GetCount, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBrushList_RemoveBrush", (PyCFunction) _wrap_wxBrushList_RemoveBrush, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBrushList_FindOrCreateBrush", (PyCFunction) _wrap_wxBrushList_FindOrCreateBrush, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBrushList_AddBrush", (PyCFunction) _wrap_wxBrushList_AddBrush, METH_VARARGS | METH_KEYWORDS },
@@ -11176,6 +11237,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxBrush_GetColour", (PyCFunction) _wrap_wxBrush_GetColour, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxBrush", (PyCFunction) _wrap_delete_wxBrush, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxBrush", (PyCFunction) _wrap_new_wxBrush, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPenList_GetCount", (PyCFunction) _wrap_wxPenList_GetCount, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPenList_RemovePen", (PyCFunction) _wrap_wxPenList_RemovePen, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPenList_FindOrCreatePen", (PyCFunction) _wrap_wxPenList_FindOrCreatePen, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPenList_AddPen", (PyCFunction) _wrap_wxPenList_AddPen, METH_VARARGS | METH_KEYWORDS },
@@ -11207,6 +11269,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxColour_Red", (PyCFunction) _wrap_wxColour_Red, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxColour", (PyCFunction) _wrap_delete_wxColour, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxColour", (PyCFunction) _wrap_new_wxColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFontList_GetCount", (PyCFunction) _wrap_wxFontList_GetCount, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFontList_RemoveFont", (PyCFunction) _wrap_wxFontList_RemoveFont, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFontList_FindOrCreateFont", (PyCFunction) _wrap_wxFontList_FindOrCreateFont, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFontList_AddFont", (PyCFunction) _wrap_wxFontList_AddFont, METH_VARARGS | METH_KEYWORDS },
@@ -11509,6 +11572,16 @@ SWIGEXPORT(void) initgdic() {
 	 PyDict_SetItemString(d,"wxFONTENCODING_UTF8", PyInt_FromLong((long) wxFONTENCODING_UTF8));
 	 PyDict_SetItemString(d,"wxFONTENCODING_UNICODE", PyInt_FromLong((long) wxFONTENCODING_UNICODE));
 	 PyDict_SetItemString(d,"wxFONTENCODING_MAX", PyInt_FromLong((long) wxFONTENCODING_MAX));
+	 PyDict_SetItemString(d,"wxIMAGELIST_DRAW_NORMAL", PyInt_FromLong((long) wxIMAGELIST_DRAW_NORMAL));
+	 PyDict_SetItemString(d,"wxIMAGELIST_DRAW_TRANSPARENT", PyInt_FromLong((long) wxIMAGELIST_DRAW_TRANSPARENT));
+	 PyDict_SetItemString(d,"wxIMAGELIST_DRAW_SELECTED", PyInt_FromLong((long) wxIMAGELIST_DRAW_SELECTED));
+	 PyDict_SetItemString(d,"wxIMAGELIST_DRAW_FOCUSED", PyInt_FromLong((long) wxIMAGELIST_DRAW_FOCUSED));
+	 PyDict_SetItemString(d,"wxIMAGE_LIST_NORMAL", PyInt_FromLong((long) wxIMAGE_LIST_NORMAL));
+	 PyDict_SetItemString(d,"wxIMAGE_LIST_SMALL", PyInt_FromLong((long) wxIMAGE_LIST_SMALL));
+	 PyDict_SetItemString(d,"wxIMAGE_LIST_STATE", PyInt_FromLong((long) wxIMAGE_LIST_STATE));
+	 PyDict_SetItemString(d,"wxOutRegion", PyInt_FromLong((long) wxOutRegion));
+	 PyDict_SetItemString(d,"wxPartRegion", PyInt_FromLong((long) wxPartRegion));
+	 PyDict_SetItemString(d,"wxInRegion", PyInt_FromLong((long) wxInRegion));
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxNORMAL_FONT",_wrap_wxNORMAL_FONT_get, _wrap_wxNORMAL_FONT_set);
 	 SWIG_addvarlink(SWIG_globals,"wxSMALL_FONT",_wrap_wxSMALL_FONT_get, _wrap_wxSMALL_FONT_set);
@@ -11556,16 +11629,6 @@ SWIGEXPORT(void) initgdic() {
 	 SWIG_addvarlink(SWIG_globals,"wxThePenList",_wrap_wxThePenList_get, _wrap_wxThePenList_set);
 	 SWIG_addvarlink(SWIG_globals,"wxTheBrushList",_wrap_wxTheBrushList_get, _wrap_wxTheBrushList_set);
 	 SWIG_addvarlink(SWIG_globals,"wxTheColourDatabase",_wrap_wxTheColourDatabase_get, _wrap_wxTheColourDatabase_set);
-	 PyDict_SetItemString(d,"wxIMAGELIST_DRAW_NORMAL", PyInt_FromLong((long) wxIMAGELIST_DRAW_NORMAL));
-	 PyDict_SetItemString(d,"wxIMAGELIST_DRAW_TRANSPARENT", PyInt_FromLong((long) wxIMAGELIST_DRAW_TRANSPARENT));
-	 PyDict_SetItemString(d,"wxIMAGELIST_DRAW_SELECTED", PyInt_FromLong((long) wxIMAGELIST_DRAW_SELECTED));
-	 PyDict_SetItemString(d,"wxIMAGELIST_DRAW_FOCUSED", PyInt_FromLong((long) wxIMAGELIST_DRAW_FOCUSED));
-	 PyDict_SetItemString(d,"wxIMAGE_LIST_NORMAL", PyInt_FromLong((long) wxIMAGE_LIST_NORMAL));
-	 PyDict_SetItemString(d,"wxIMAGE_LIST_SMALL", PyInt_FromLong((long) wxIMAGE_LIST_SMALL));
-	 PyDict_SetItemString(d,"wxIMAGE_LIST_STATE", PyInt_FromLong((long) wxIMAGE_LIST_STATE));
-	 PyDict_SetItemString(d,"wxOutRegion", PyInt_FromLong((long) wxOutRegion));
-	 PyDict_SetItemString(d,"wxPartRegion", PyInt_FromLong((long) wxPartRegion));
-	 PyDict_SetItemString(d,"wxInRegion", PyInt_FromLong((long) wxInRegion));
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

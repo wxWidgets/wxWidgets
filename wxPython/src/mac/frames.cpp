@@ -57,7 +57,6 @@ extern PyObject *SWIG_newvarlink(void);
 
 #include "helpers.h"
 #include <wx/minifram.h>
-#include <wx/tipwin.h>
 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
@@ -473,18 +472,12 @@ static PyObject *_wrap_wxTopLevelWindow_GetIcon(PyObject *self, PyObject *args, 
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        const wxIcon & _result_ref = wxTopLevelWindow_GetIcon(_arg0);
-    _result = (wxIcon *) &_result_ref;
+        _result = new wxIcon (wxTopLevelWindow_GetIcon(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxIcon_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxIcon_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -1804,7 +1797,7 @@ static PyObject *_wrap_wxDialog_CreateTextSizer(PyObject *self, PyObject *args, 
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}{ _resultobj = wxPyMake_wxObject(_result); }
+}{ _resultobj = wxPyMake_wxSizer(_result); }
 {
     if (_obj1)
         delete _arg1;
@@ -1837,7 +1830,7 @@ static PyObject *_wrap_wxDialog_CreateButtonSizer(PyObject *self, PyObject *args
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}{ _resultobj = wxPyMake_wxObject(_result); }
+}{ _resultobj = wxPyMake_wxSizer(_result); }
     return _resultobj;
 }
 
@@ -2069,108 +2062,7 @@ static PyObject *_wrap_wxMiniFrame_Create(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
-static void *SwigwxTipWindowTowxFrame(void *ptr) {
-    wxTipWindow *src;
-    wxFrame *dest;
-    src = (wxTipWindow *) ptr;
-    dest = (wxFrame *) src;
-    return (void *) dest;
-}
-
-static void *SwigwxTipWindowTowxTopLevelWindow(void *ptr) {
-    wxTipWindow *src;
-    wxTopLevelWindow *dest;
-    src = (wxTipWindow *) ptr;
-    dest = (wxTopLevelWindow *) src;
-    return (void *) dest;
-}
-
-static void *SwigwxTipWindowTowxWindow(void *ptr) {
-    wxTipWindow *src;
-    wxWindow *dest;
-    src = (wxTipWindow *) ptr;
-    dest = (wxWindow *) src;
-    return (void *) dest;
-}
-
-static void *SwigwxTipWindowTowxEvtHandler(void *ptr) {
-    wxTipWindow *src;
-    wxEvtHandler *dest;
-    src = (wxTipWindow *) ptr;
-    dest = (wxEvtHandler *) src;
-    return (void *) dest;
-}
-
-static void *SwigwxTipWindowTowxObject(void *ptr) {
-    wxTipWindow *src;
-    wxObject *dest;
-    src = (wxTipWindow *) ptr;
-    dest = (wxObject *) src;
-    return (void *) dest;
-}
-
-#define new_wxTipWindow(_swigarg0,_swigarg1,_swigarg2) (new wxTipWindow(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_new_wxTipWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxTipWindow * _result;
-    wxWindow * _arg0;
-    wxString * _arg1;
-    wxCoord  _arg2 = (wxCoord ) 100;
-    PyObject * _argo0 = 0;
-    PyObject * _obj1 = 0;
-    char *_kwnames[] = { "parent","text","maxLength", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|i:new_wxTipWindow",_kwnames,&_argo0,&_obj1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxTipWindow. Expected _wxWindow_p.");
-        return NULL;
-        }
-    }
-{
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg1 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
-#endif
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxTipWindow *)new_wxTipWindow(_arg0,*_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxTipWindow_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-{
-    if (_obj1)
-        delete _arg1;
-}
-    return _resultobj;
-}
-
 static PyMethodDef framescMethods[] = {
-	 { "new_wxTipWindow", (PyCFunction) _wrap_new_wxTipWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMiniFrame_Create", (PyCFunction) _wrap_wxMiniFrame_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreMiniFrame", (PyCFunction) _wrap_new_wxPreMiniFrame, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxMiniFrame", (PyCFunction) _wrap_new_wxMiniFrame, METH_VARARGS | METH_KEYWORDS },
@@ -2245,7 +2137,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
-    { "_wxTopLevelWindow","_wxTipWindow",SwigwxTipWindowTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxMiniFrame",SwigwxMiniFrameTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxDialog",SwigwxDialogTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxFrame",SwigwxFrameTowxTopLevelWindow},
@@ -2276,7 +2167,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_WXTYPE","_unsigned_short",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
-    { "_wxObject","_wxTipWindow",SwigwxTipWindowTowxObject},
     { "_wxObject","_wxMiniFrame",SwigwxMiniFrameTowxObject},
     { "_wxObject","_wxDialog",SwigwxDialogTowxObject},
     { "_wxObject","_wxFrame",SwigwxFrameTowxObject},
@@ -2294,7 +2184,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_short","_WXTYPE",0},
     { "_short","_unsigned_short",0},
     { "_short","_signed_short",0},
-    { "_wxFrame","_wxTipWindow",SwigwxTipWindowTowxFrame},
     { "_wxFrame","_wxMiniFrame",SwigwxMiniFrameTowxFrame},
     { "_wxWindowID","_wxCoord",0},
     { "_wxWindowID","_wxPrintQuality",0},
@@ -2330,12 +2219,10 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
-    { "_wxEvtHandler","_wxTipWindow",SwigwxTipWindowTowxEvtHandler},
     { "_wxEvtHandler","_wxMiniFrame",SwigwxMiniFrameTowxEvtHandler},
     { "_wxEvtHandler","_wxDialog",SwigwxDialogTowxEvtHandler},
     { "_wxEvtHandler","_wxFrame",SwigwxFrameTowxEvtHandler},
     { "_wxEvtHandler","_wxTopLevelWindow",SwigwxTopLevelWindowTowxEvtHandler},
-    { "_wxWindow","_wxTipWindow",SwigwxTipWindowTowxWindow},
     { "_wxWindow","_wxMiniFrame",SwigwxMiniFrameTowxWindow},
     { "_wxWindow","_wxDialog",SwigwxDialogTowxWindow},
     { "_wxWindow","_wxFrame",SwigwxFrameTowxWindow},

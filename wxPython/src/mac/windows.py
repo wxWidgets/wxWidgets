@@ -201,7 +201,7 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def GetFont(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetFont,(self,) + _args, _kwargs)
-        if val: val = wxFontPtr(val) 
+        if val: val = wxFontPtr(val) ; val.thisown = 1
         return val
     def GetForegroundColour(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetForegroundColour,(self,) + _args, _kwargs)
@@ -598,6 +598,7 @@ class wxPanel(wxPanelPtr):
 def wxPrePanel(*_args,**_kwargs):
     val = wxPanelPtr(apply(windowsc.new_wxPrePanel,_args,_kwargs))
     val.thisown = 1
+    val._setOORInfo(val)
     return val
 
 

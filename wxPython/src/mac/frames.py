@@ -39,7 +39,7 @@ class wxTopLevelWindowPtr(wxWindowPtr):
         return val
     def GetIcon(self, *_args, **_kwargs):
         val = apply(framesc.wxTopLevelWindow_GetIcon,(self,) + _args, _kwargs)
-        if val: val = wxIconPtr(val) 
+        if val: val = wxIconPtr(val) ; val.thisown = 1
         return val
     def SetIcon(self, *_args, **_kwargs):
         val = apply(framesc.wxTopLevelWindow_SetIcon,(self,) + _args, _kwargs)
@@ -210,21 +210,6 @@ def wxPreMiniFrame(*_args,**_kwargs):
     val.thisown = 1
     val._setOORInfo(val)
     return val
-
-
-class wxTipWindowPtr(wxFramePtr):
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __repr__(self):
-        return "<C wxTipWindow instance at %s>" % (self.this,)
-class wxTipWindow(wxTipWindowPtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = apply(framesc.new_wxTipWindow,_args,_kwargs)
-        self.thisown = 1
-        self._setOORInfo(self)
-
-
 
 
 

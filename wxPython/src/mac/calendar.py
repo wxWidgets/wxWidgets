@@ -77,19 +77,19 @@ class wxCalendarDateAttrPtr :
         return val
     def GetTextColour(self, *_args, **_kwargs):
         val = apply(calendarc.wxCalendarDateAttr_GetTextColour,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
+        if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def GetBackgroundColour(self, *_args, **_kwargs):
         val = apply(calendarc.wxCalendarDateAttr_GetBackgroundColour,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
+        if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def GetBorderColour(self, *_args, **_kwargs):
         val = apply(calendarc.wxCalendarDateAttr_GetBorderColour,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
+        if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def GetFont(self, *_args, **_kwargs):
         val = apply(calendarc.wxCalendarDateAttr_GetFont,(self,) + _args, _kwargs)
-        if val: val = wxFontPtr(val) 
+        if val: val = wxFontPtr(val) ; val.thisown = 1
         return val
     def GetBorder(self, *_args, **_kwargs):
         val = apply(calendarc.wxCalendarDateAttr_GetBorder,(self,) + _args, _kwargs)
@@ -175,33 +175,33 @@ class wxCalendarCtrlPtr(wxControlPtr):
         return val
     def GetHeaderColourFg(self, *_args, **_kwargs):
         val = apply(calendarc.wxCalendarCtrl_GetHeaderColourFg,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
+        if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def GetHeaderColourBg(self, *_args, **_kwargs):
         val = apply(calendarc.wxCalendarCtrl_GetHeaderColourBg,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
+        if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def SetHighlightColours(self, *_args, **_kwargs):
         val = apply(calendarc.wxCalendarCtrl_SetHighlightColours,(self,) + _args, _kwargs)
         return val
     def GetHighlightColourFg(self, *_args, **_kwargs):
         val = apply(calendarc.wxCalendarCtrl_GetHighlightColourFg,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
+        if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def GetHighlightColourBg(self, *_args, **_kwargs):
         val = apply(calendarc.wxCalendarCtrl_GetHighlightColourBg,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
+        if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def SetHolidayColours(self, *_args, **_kwargs):
         val = apply(calendarc.wxCalendarCtrl_SetHolidayColours,(self,) + _args, _kwargs)
         return val
     def GetHolidayColourFg(self, *_args, **_kwargs):
         val = apply(calendarc.wxCalendarCtrl_GetHolidayColourFg,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
+        if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def GetHolidayColourBg(self, *_args, **_kwargs):
         val = apply(calendarc.wxCalendarCtrl_GetHolidayColourBg,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
+        if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def GetAttr(self, *_args, **_kwargs):
         val = apply(calendarc.wxCalendarCtrl_GetAttr,(self,) + _args, _kwargs)
