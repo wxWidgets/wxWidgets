@@ -520,27 +520,35 @@ void wxPenList::RemovePen (wxPen * pen)
 
 wxPen *wxPenList::FindOrCreatePen (const wxColour& colour, int width, int style)
 {
-  for (wxNode * node = First (); node; node = node->Next ())
+    for (wxNode * node = First (); node; node = node->Next ())
     {
-      wxPen *each_pen = (wxPen *) node->Data ();
-      if (each_pen &&
-          each_pen->GetVisible() &&
-          each_pen->GetWidth () == width &&
-          each_pen->GetStyle () == style &&
-          each_pen->GetColour ().Red () == colour.Red () &&
-          each_pen->GetColour ().Green () == colour.Green () &&
-          each_pen->GetColour ().Blue () == colour.Blue ())
-        return each_pen;
+        wxPen *each_pen = (wxPen *) node->Data ();
+        if (each_pen &&
+                each_pen->GetVisible() &&
+                each_pen->GetWidth () == width &&
+                each_pen->GetStyle () == style &&
+                each_pen->GetColour ().Red () == colour.Red () &&
+                each_pen->GetColour ().Green () == colour.Green () &&
+                each_pen->GetColour ().Blue () == colour.Blue ())
+            return each_pen;
     }
-  wxPen *pen = new wxPen (colour, width, style);
 
-  // Yes, we can return a pointer to this in a later FindOrCreatePen call,
-  // because we created it within FindOrCreatePen. Safeguards against
-  // returning a pointer to an automatic variable and hanging on to it
-  // (dangling pointer).
-  pen->SetVisible(TRUE);
+    wxPen *pen = new wxPen (colour, width, style);
+    if ( !pen->Ok() )
+    {
+        // don't save the invalid pens in the list
+        delete pen;
 
-  return pen;
+        return NULL;
+    }
+
+    // Yes, we can return a pointer to this in a later FindOrCreatePen call,
+    // because we created it within FindOrCreatePen. Safeguards against
+    // returning a pointer to an automatic variable and hanging on to it
+    // (dangling pointer).
+    pen->SetVisible(TRUE);
+
+    return pen;
 }
 
 wxBrushList::~wxBrushList ()
@@ -563,27 +571,35 @@ void wxBrushList::AddBrush (wxBrush * brush)
 
 wxBrush *wxBrushList::FindOrCreateBrush (const wxColour& colour, int style)
 {
-  for (wxNode * node = First (); node; node = node->Next ())
+    for (wxNode * node = First (); node; node = node->Next ())
     {
-      wxBrush *each_brush = (wxBrush *) node->Data ();
-      if (each_brush &&
-          each_brush->GetVisible() &&
-          each_brush->GetStyle () == style &&
-          each_brush->GetColour ().Red () == colour.Red () &&
-          each_brush->GetColour ().Green () == colour.Green () &&
-          each_brush->GetColour ().Blue () == colour.Blue ())
-        return each_brush;
+        wxBrush *each_brush = (wxBrush *) node->Data ();
+        if (each_brush &&
+                each_brush->GetVisible() &&
+                each_brush->GetStyle () == style &&
+                each_brush->GetColour ().Red () == colour.Red () &&
+                each_brush->GetColour ().Green () == colour.Green () &&
+                each_brush->GetColour ().Blue () == colour.Blue ())
+            return each_brush;
     }
 
-  // Yes, we can return a pointer to this in a later FindOrCreateBrush call,
-  // because we created it within FindOrCreateBrush. Safeguards against
-  // returning a pointer to an automatic variable and hanging on to it
-  // (dangling pointer).
-  wxBrush *brush = new wxBrush (colour, style);
+    wxBrush *brush = new wxBrush (colour, style);
 
-  brush->SetVisible(TRUE);
+    if ( !brush->Ok() )
+    {
+        // don't put the brushes we failed to create into the list
+        delete brush;
 
-  return brush;
+        return NULL;
+    }
+
+    brush->SetVisible(TRUE);
+
+    // Yes, we can return a pointer to this in a later FindOrCreateBrush call,
+    // because we created it within FindOrCreateBrush. Safeguards against
+    // returning a pointer to an automatic variable and hanging on to it
+    // (dangling pointer).
+    return brush;
 }
 
 void wxBrushList::RemoveBrush (wxBrush * brush)
