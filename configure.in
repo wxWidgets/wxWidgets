@@ -1910,11 +1910,18 @@ else
     TOOLKIT_DIR="os2"
 fi
 
+    dnl the (base) name of the library and support files for this toolkit
+    if test "$wxUSE_DEBUG_FLAG" = "yes"; then
+        TOOLKIT_NAME="${TOOLKIT_DIR}d"
+    else
+        TOOLKIT_NAME="${TOOLKIT_DIR}"
+    fi
+
     dnl the symbol which allows conditional compilation for the given toolkit
     TOOLKIT_DEF="-D__WX${TOOLKIT}__"
 
     dnl the name of the (libtool) library
-    WX_LIBRARY="wx_${TOOLKIT_DIR}"
+    WX_LIBRARY="wx_${TOOLKIT_NAME}"
 
     dnl the sources, their dependenices and the headers
     ALL_OBJECTS="\$(GUIOBJS) \$(COMMONOBJS) \$(GENERICOBJS) \$(UNIXOBJS) \$(HTMLOBJS) \$(OGLOBJS)"
@@ -1950,7 +1957,16 @@ fi
 else
     USE_GUI=0
 
+    dnl this may be (almost) unneccesary for wxBase now we use TOOLKIT_NAME
     TOOLKIT_DIR="base"
+
+    dnl the base name of the library and wxXXX-config files
+    if test "$wxUSE_DEBUG_FLAG" = "yes"; then
+        TOOLKIT_NAME="${TOOLKIT_DIR}d"
+    else
+        TOOLKIT_NAME="${TOOLKIT_DIR}"
+    fi
+
     TOOLKIT_DEF="-D__WXBASE__"
 
     dnl the sources, their dependenices and the headers
@@ -1962,7 +1978,7 @@ else
     fi
 
     dnl building wxBase only
-    WX_LIBRARY="wxbase"
+    WX_LIBRARY="wx_${TOOLKIT_NAME}"
 
     PORT_FILES="src/files.lst"
     RPM_FILES="src/rpmfiles.lst"
@@ -2016,8 +2032,8 @@ if test "$wxUSE_SHARED" = "yes"; then
             SHARED_LD="${CXX} -b -o"
             PIC_FLAG="+Z"
         fi
-        WX_LIBRARY_NAME_SHARED="libwx_${TOOLKIT_DIR}.sl"
-        WX_LIBRARY_NAME_SHARED_GL="libwx_${TOOLKIT_DIR}_gl.sl"
+        WX_LIBRARY_NAME_SHARED="libwx_${TOOLKIT_NAME}.sl"
+        WX_LIBRARY_NAME_SHARED_GL="libwx_${TOOLKIT_NAME}_gl.sl"
         if test "$wxUSE_OPENGL" = "yes"; then
             WX_ALL_INSTALLED="preinstall_gl"
             WX_ALL="${WX_LIBRARY_NAME_SHARED} ${WX_LIBRARY_NAME_SHARED_GL}"
@@ -2159,12 +2175,20 @@ else
     dnl set target to static
     WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
     WX_TARGET_LIBRARY_GL="${WX_LIBRARY_NAME_STATIC_GL}"
+
     if test "$wxUSE_OPENGL" = "yes"; then
         WX_ALL_INSTALLED="preinstall_gl"
         WX_ALL="${WX_LIBRARY_NAME_STATIC} ${WX_LIBRARY_NAME_STATIC_GL}"
     else
         WX_ALL="${WX_LIBRARY_NAME_STATIC}"
     fi
+
+    dnl give static wxBase build a working install target
+    if test "$wxUSE_GUI" = "no"; then
+        dnl we're here because WX_ALL_INSTALLED is empty, but play safe anyway
+        WX_ALL_INSTALLED="${WX_ALL_INSTALLED} preinstall"
+    fi
+
     WX_TARGET_LIBRARY_TYPE="a"
 fi
 
@@ -2919,6 +2943,7 @@ if test "$wxUSE_INTL" = "yes" ; then
   else
     AC_DEFINE(wxUSE_INTL)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS internat"
+    GUIDIST="$GUIDIST INTL_DIST"
   fi
 fi
 
@@ -3782,6 +3807,7 @@ AC_SUBST(AFMINSTALL)
 AC_SUBST(TOOLKIT)
 AC_SUBST(TOOLKIT_DEF)
 AC_SUBST(TOOLKIT_DIR)
+AC_SUBST(TOOLKIT_NAME)
 AC_SUBST(TOOLKIT_INCLUDE)
 
 dnl what to compile
@@ -3878,11 +3904,11 @@ AC_OUTPUT([
           ],
           [
             chmod +x wx-config
-            mv wx-config wx${TOOLKIT_DIR}-config
-            ${LN_S} wx${TOOLKIT_DIR}-config wx-config
+            mv wx-config wx${TOOLKIT_NAME}-config
+            ${LN_S} wx${TOOLKIT_NAME}-config wx-config
             
-            dnl the debian installer wants setup.h to be in the lib subdir
-            dnl so we *copy* it there
+            dnl the debian build process wants setup.h in the lib subdir so we
+            dnl can pretend wxWin is already installed, so we *copy* it there
             
             if test ! -d lib; then
               mkdir lib
@@ -3896,11 +3922,11 @@ AC_OUTPUT([
             if test ! -d lib/wx/include/wx; then
               mkdir lib/wx/include/wx
             fi
-            if test ! -d lib/wx/include/wx/${TOOLKIT_DIR}; then
-              mkdir lib/wx/include/wx/${TOOLKIT_DIR}
+            if test ! -d lib/wx/include/wx/${TOOLKIT_NAME}; then
+              mkdir lib/wx/include/wx/${TOOLKIT_NAME}
             fi
             if test -f setup.h; then
-                cp -f setup.h lib/wx/include/wx/${TOOLKIT_DIR}/setup.h
+                cp -f setup.h lib/wx/include/wx/${TOOLKIT_NAME}/setup.h
             fi
 
             dnl *move* setup.h to its final place
@@ -3921,6 +3947,7 @@ AC_OUTPUT([
           ],
           [
             TOOLKIT_DIR="${TOOLKIT_DIR}"
+            TOOLKIT_NAME="${TOOLKIT_NAME}"
             LN_S="${LN_S}"
           ]
          )

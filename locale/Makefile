@@ -3,7 +3,11 @@
 
 # this makefile may be invoked to build either wxstd.po or any lang.mo
 
-WX_LANGUAGES = cs.po da.po de.po fi.po fr.po
+# Autodetect the languages we support.  Currently this relies on make
+# being called with this dir as the cwd, but if we generate this file
+# with configure an explicit path should be specified -- RL.
+
+WX_LINGUAS := `ls *.po 2> /dev/null | sed -n 's/\(wxstd\)\?\.po//p'`
 
 # the programs we use (TODO: use configure to detect them)
 MSGFMT=msgfmt
@@ -27,14 +31,18 @@ wxstd.po:
 	find ../include -name "*.h" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o wxstd.po
 	find ../src -name "*.cpp" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o wxstd.po
 
-allpo: update $(WX_LANGUAGES)
+allpo: force-update
+	@-for t in $(WX_LINGUAS); do $(MAKE) $$t.po; done
 
-update:
+allmo:
+	@for t in $(WX_LINGUAS); do $(MAKE) $$t.mo; done
+
+force-update:
 	$(RM) wxstd.po
 
 # targets depending on this one will be always remade
 FORCE:
 
-.PHONY: allpo update
+.PHONY: allpo allmo force-update
 
 # $Id$
