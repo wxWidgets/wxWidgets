@@ -111,6 +111,25 @@ wxChar * WXDLLEXPORT wxSetlocale(int category, const wxChar *locale)
 #endif
 
 #ifdef wxNEED_WX_STDIO_H
+int WXDLLEXPORT wxPrintf(const wxChar *fmt, ...)
+{
+  va_list argptr;
+  int ret;
+
+  va_start(argptr, fmt);
+  ret = wxVprintf(fmt, argptr);
+  va_end(argptr);
+  return ret;
+}
+
+int WXDLLEXPORT wxVprintf(const wxChar *fmt, va_list argptr)
+{
+  wxString str;
+  str.PrintfV(fmt,argptr);
+  printf("%s",(const char*)str.mb_str());
+  return str.Len();
+}
+
 int WXDLLEXPORT wxSprintf(wxChar *buf, const wxChar *fmt, ...)
 {
   va_list argptr;
