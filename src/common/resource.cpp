@@ -785,7 +785,8 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, PrologExpr *e
 	}
 	else
 	{
-        id = wxResourceGetIdentifier(WXSTRINGCAST expr1->StringValue(), &table);
+        wxString str(expr1->StringValue());
+        id = wxResourceGetIdentifier(WXSTRINGCAST str, &table);
         if (id == 0)
         {
           char buf[300];
@@ -861,10 +862,11 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, PrologExpr *e
     // Check for bitmap resource name
     if (expr->Nth(count) && ((expr->Nth(count)->Type() == PrologString) || (expr->Nth(count)->Type() == PrologWord)))
     {
-      controlItem->SetValue4(WXSTRINGCAST expr->Nth(count)->StringValue());
-      count ++;
-      if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
-        controlItem->SetFont(wxResourceInterpretFontSpec(expr->Nth(count)));
+        wxString str(expr->Nth(count)->StringValue());
+        controlItem->SetValue4(WXSTRINGCAST str);
+        count ++;
+        if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
+          controlItem->SetFont(wxResourceInterpretFontSpec(expr->Nth(count)));
     }
   }
   else if (controlType == "wxCheckBox")
@@ -896,7 +898,8 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, PrologExpr *e
     // Check for default value
     if (expr->Nth(count) && ((expr->Nth(count)->Type() == PrologString) || (expr->Nth(count)->Type() == PrologWord)))
 	{
-      controlItem->SetValue4(WXSTRINGCAST expr->Nth(count)->StringValue());
+      wxString str(expr->Nth(count)->StringValue());
+      controlItem->SetValue4(WXSTRINGCAST str);
 	  count ++;
 
       if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
@@ -914,7 +917,8 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, PrologExpr *e
     // Check for bitmap resource name
     if (expr->Nth(count) && ((expr->Nth(count)->Type() == PrologString) || (expr->Nth(count)->Type() == PrologWord)))
     {
-      controlItem->SetValue4(WXSTRINGCAST expr->Nth(count)->StringValue());
+      wxString str(expr->Nth(count)->StringValue());
+      controlItem->SetValue4(WXSTRINGCAST str);
       count ++;
       if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
         controlItem->SetFont(wxResourceInterpretFontSpec(expr->Nth(count)));
@@ -1081,7 +1085,8 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, PrologExpr *e
     PrologExpr *textValue = expr->Nth(count);
     if (textValue && (textValue->Type() == PrologString || textValue->Type() == PrologWord))
 	{
-      controlItem->SetValue4(WXSTRINGCAST textValue->StringValue());
+      wxString str(textValue->StringValue());
+      controlItem->SetValue4(WXSTRINGCAST str);
 
 	  count ++;
       
@@ -1186,7 +1191,8 @@ wxItemResource *wxResourceInterpretMenuItem(wxResourceTable& table, PrologExpr *
     item->SetType("wxMenu"); // Well, menu item, but doesn't matter.
     if (labelExpr)
     {
-      item->SetTitle(WXSTRINGCAST labelExpr->StringValue());
+      wxString str(labelExpr->StringValue());
+      item->SetTitle(WXSTRINGCAST str);
     }
     if (idExpr)
     {
@@ -1194,7 +1200,8 @@ wxItemResource *wxResourceInterpretMenuItem(wxResourceTable& table, PrologExpr *
       // If a string or word, must look up in identifier table.
       if ((idExpr->Type() == PrologString) || (idExpr->Type() == PrologWord))
       {
-        id = wxResourceGetIdentifier(WXSTRINGCAST idExpr->StringValue(), &table);
+        wxString str(idExpr->StringValue());
+        id = wxResourceGetIdentifier(WXSTRINGCAST str, &table);
         if (id == 0)
         {
           char buf[300];
@@ -1209,7 +1216,8 @@ wxItemResource *wxResourceInterpretMenuItem(wxResourceTable& table, PrologExpr *
     }
     if (helpExpr)
     {
-      item->SetValue4(WXSTRINGCAST helpExpr->StringValue());
+      wxString str(helpExpr->StringValue());
+      item->SetValue4(WXSTRINGCAST str);
     }
     if (checkableExpr)
       item->SetValue2(checkableExpr->IntegerValue());
@@ -1346,9 +1354,15 @@ wxItemResource *wxResourceInterpretBitmap(wxResourceTable& WXUNUSED(table), Prol
           PrologExpr *xresExpr = listExpr->Nth(4);
           PrologExpr *yresExpr = listExpr->Nth(5);
           if (nameExpr && nameExpr->StringValue())
-            bitmapSpec->SetName(WXSTRINGCAST nameExpr->StringValue());
+          {
+            wxString str(nameExpr->StringValue());
+            bitmapSpec->SetName(WXSTRINGCAST str);
+          }
           if (typeExpr && typeExpr->StringValue())
-            bitmapSpec->SetValue1(wxParseWindowStyle(WXSTRINGCAST typeExpr->StringValue()));
+          {
+            wxString str(typeExpr->StringValue());
+            bitmapSpec->SetValue1(wxParseWindowStyle(WXSTRINGCAST str));
+          }
           else
             bitmapSpec->SetValue1(0);
             
@@ -1421,12 +1435,23 @@ wxFont *wxResourceInterpretFontSpec(PrologExpr *expr)
   PrologExpr *faceNameExpr = expr->Nth(5);
   if (pointExpr)
     point = (int)pointExpr->IntegerValue();
+
+  wxString str;
   if (familyExpr)
-    family = (int)wxParseWindowStyle(WXSTRINGCAST familyExpr->StringValue());
+  {
+    str = familyExpr->StringValue();
+    family = (int)wxParseWindowStyle(WXSTRINGCAST str);
+  }
   if (styleExpr)
-    style = (int)wxParseWindowStyle(WXSTRINGCAST styleExpr->StringValue());
+  {
+    str = styleExpr->StringValue();
+    style = (int)wxParseWindowStyle(WXSTRINGCAST str);
+  }
   if (weightExpr)
-    weight = (int)wxParseWindowStyle(WXSTRINGCAST weightExpr->StringValue());
+  {
+    str = weightExpr->StringValue();
+    weight = (int)wxParseWindowStyle(WXSTRINGCAST str);
+  }
   if (underlineExpr)
     underline = (int)underlineExpr->IntegerValue();
   if (faceNameExpr)

@@ -813,6 +813,11 @@ void wxFrame::OnCloseWindow(wxCloseEvent& event)
     }
 }
 
+bool wxFrame::OnClose(void)
+{
+    return TRUE;
+}
+
 // Destroy the window (delayed, if a managed window)
 bool wxFrame::Destroy(void)
 {

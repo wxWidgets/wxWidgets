@@ -267,6 +267,21 @@ void wxStripExtension(char *buffer)
   }
 }
 
+void wxStripExtension(wxString& buffer)
+{
+  size_t len = buffer.Length();
+  size_t i = len-1;
+  while (i > 0)
+  {
+    if (buffer.GetChar(i) == '.')
+    {
+      buffer = buffer.Left(i);
+      break;
+    }
+    i --;
+  }
+}
+
 // Destructive removal of /./ and /../ stuff
 char *wxRealPath (char *path)
 {
