@@ -64,7 +64,7 @@ struct WXDLLEXPORT wxNativeFontInfo
     //  This is a generic implementation that should work on all ports
     //  without specific support by the port.
     //
-    #define wNO_NATIVE_FONTINFO
+    #define wxNO_NATIVE_FONTINFO
 
     int           pointSize;
     wxFontFamily  family;
