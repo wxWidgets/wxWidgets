@@ -1715,7 +1715,7 @@ DBMS wxDB::Dbms(void)
 		return(dbmsMS_SQL_SERVER);
 	if (!stricmp(dbInf.dbmsName,"MySQL"))
 		return(dbmsMY_SQL);
-	if (!stricmp(dbInf.dbmsName,"PostgresSQL"))  // v6.5.0
+	if (!stricmp(dbInf.dbmsName,"PostgreSQL"))  // v6.5.0
 		return(dbmsPOSTGRES);
 	if (!stricmp(dbInf.dbmsName,"ACCESS"))
 		return(dbmsACCESS);
