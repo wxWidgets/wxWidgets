@@ -109,6 +109,14 @@ static PNG_CONST char png_digit[16] = {
    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E',
    'F' };
 
+size_t wxstrnlen( const char *s, size_t maxlen )
+{
+	int i ;
+	for ( i = 0 ; s[i] && i < maxlen ; ++i )
+		;
+	return i ;
+}
+
 static void /* PRIVATE */
 png_format_buffer(png_structp png_ptr, png_charp buffer, png_const_charp
    error_message)
@@ -117,7 +125,7 @@ png_format_buffer(png_structp png_ptr, png_charp buffer, png_const_charp
 
    while (iin < 4)
    {
-      int c = png_ptr->chunk_name[iin++];
+      int c = png_ptr->chunk_name[iin++]; 
       if (isnonalpha(c))
       {
          buffer[iout++] = '[';
@@ -135,10 +143,12 @@ png_format_buffer(png_structp png_ptr, png_charp buffer, png_const_charp
       buffer[iout] = 0;
    else
    {
+      int len = wxstrnlen(error_message, 64);
+ 
       buffer[iout++] = ':';
       buffer[iout++] = ' ';
-      png_memcpy(buffer+iout, error_message, 64);
-      buffer[iout+63] = 0;
+      png_memcpy(buffer+iout, error_message, len);
+      buffer[iout+len-1] = 0;
    }
 }
 
