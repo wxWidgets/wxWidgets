@@ -248,6 +248,9 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
     // Associate the menu bar with the frame
     subframe->SetMenuBar(menu_bar);
 
+    subframe->CreateStatusBar();
+    subframe->SetStatusText(title);
+
     int width, height;
     subframe->GetClientSize(&width, &height);
     MyCanvas *canvas = new MyCanvas(subframe, wxPoint(0, 0), wxSize(width, height));
@@ -256,9 +259,6 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
 
     // Give it scrollbars
     canvas->SetScrollbars(20, 20, 50, 50);
-
-    subframe->CreateStatusBar();
-    subframe->SetStatusText(title);
 
     subframe->Show(TRUE);
 }
@@ -357,7 +357,9 @@ void MyCanvas::OnDraw(wxDC& dc)
     dc.DrawRoundedRectangle(150, 150, 100, 50, 20);
 
     dc.DrawEllipse(250, 250, 100, 50);
+#if wxUSE_SPLINES
     dc.DrawSpline(50, 200, 50, 100, 200, 10);
+#endif // wxUSE_SPLINES
     dc.DrawLine(50, 230, 200, 230);
     dc.DrawText("This is a test string", 50, 230);
 

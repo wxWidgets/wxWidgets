@@ -9,7 +9,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-    #pragma implementation "controls.h"
+    #pragma interface "text.cpp"
+    #pragma implementation "text.cpp"
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -194,7 +195,7 @@ bool MyApp::OnInit()
     file_menu->AppendSeparator();
     file_menu->Append(TEXT_ABOUT, "&About\tAlt-A");
     file_menu->AppendSeparator();
-    file_menu->Append(TEXT_QUIT, "E&xit\tAlt-X", "Quit controls sample");
+    file_menu->Append(TEXT_QUIT, "E&xit\tAlt-X", "Quit this sample");
 
     wxMenuBar *menu_bar = new wxMenuBar( wxMB_DOCKABLE );
     menu_bar->Append(file_menu, "&File");
@@ -444,7 +445,7 @@ void MyTextCtrl::OnText(wxCommandEvent& event)
     const wxChar *data = (const wxChar *)(win->GetClientData());
     if ( data )
     {
-        wxLogMessage(_T("text changed in control '%s'"), data);
+        wxLogMessage(_T("Text changed in control '%s'"), data);
     }
 }
 
@@ -755,7 +756,7 @@ void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
         "tooltips and intercepting key and char events.\n"
         "\n"
         "Copyright (c) 1999, Robert Roebling, Julian Smart, Vadim Zeitlin",
-        "About Text Controls",
+        "About wxTextCtrl Sample",
         wxOK | wxICON_INFORMATION);
 
     dialog.ShowModal();

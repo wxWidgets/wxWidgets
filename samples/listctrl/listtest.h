@@ -14,9 +14,6 @@ class MyApp: public wxApp
 {
 public:
     virtual bool OnInit();
-
-    wxImageList *m_imageListNormal;
-    wxImageList *m_imageListSmall;
 };
 
 class MyListCtrl: public wxListCtrl
@@ -44,6 +41,9 @@ public:
 
     void OnChar(wxKeyEvent& event);
 
+private:
+    void LogEvent(const wxListEvent& event, const wxChar *eventName);
+
     DECLARE_EVENT_TABLE()
 };
 
@@ -54,7 +54,7 @@ public:
     MyListCtrl *m_listCtrl;
     wxTextCtrl *m_logWindow;
 
-    MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h);
+    MyFrame(const wxChar *title, int x, int y, int w, int h);
     ~MyFrame();
 
 public:
@@ -76,6 +76,12 @@ public:
 
     void BusyOn(wxCommandEvent& event);
     void BusyOff(wxCommandEvent& event);
+
+    wxImageList *m_imageListNormal;
+    wxImageList *m_imageListSmall;
+
+private:
+    wxLog *m_logOld;
 
     DECLARE_EVENT_TABLE()
 };

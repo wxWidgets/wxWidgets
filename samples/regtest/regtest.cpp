@@ -31,6 +31,8 @@
 #include "wx/msw/registry.h"
 #include "wx/msw/imaglist.h"
 
+#include "wx/tokenzr.h"
+
 // ----------------------------------------------------------------------------
 // application type
 // ----------------------------------------------------------------------------
@@ -73,6 +75,9 @@ public:
   void OnItemExpanding(wxTreeEvent& event);
   void OnSelChanged   (wxTreeEvent& event);
 
+  void OnBeginEdit    (wxTreeEvent& event);
+  void OnEndEdit      (wxTreeEvent& event);
+
   void OnBeginDrag    (wxTreeEvent& event);
   void OnEndDrag      (wxTreeEvent& event);
 
@@ -84,6 +89,7 @@ public:
   void OnMenuTest();
 
   // operations
+  void GoTo(const wxString& location);
   void Refresh();
   void DeleteSelected();
   void ShowProperties();
@@ -141,6 +147,8 @@ private:
 
   bool         m_restoreStatus;     // after OnItemExpanding()
 
+  wxString     m_nameOld;           // the initial value of item being renamed
+
   TreeNode *GetNode(const wxTreeEvent& event)
     { return (TreeNode *)GetItemData((WXHTREEITEM)event.GetItem()); }
 
@@ -172,6 +180,8 @@ public:
   void OnAbout(wxCommandEvent& event);
   void OnTest (wxCommandEvent& event);
 
+  void OnGoTo (wxCommandEvent& event);
+
   void OnExpand  (wxCommandEvent& event);
   void OnCollapse(wxCommandEvent& event);
   void OnToggle  (wxCommandEvent& event);
@@ -199,6 +209,7 @@ enum
   Menu_Quit     = 100,
   Menu_About,
   Menu_Test,
+  Menu_GoTo,
   Menu_Expand,
   Menu_Collapse,
   Menu_Toggle,
@@ -221,6 +232,7 @@ BEGIN_EVENT_TABLE(RegFrame, wxFrame)
   EVT_MENU(Menu_Test,     RegFrame::OnTest)
   EVT_MENU(Menu_About,    RegFrame::OnAbout)
   EVT_MENU(Menu_Quit,     RegFrame::OnQuit)
+  EVT_MENU(Menu_GoTo,     RegFrame::OnGoTo)
   EVT_MENU(Menu_Expand,   RegFrame::OnExpand)
   EVT_MENU(Menu_Collapse, RegFrame::OnCollapse)
   EVT_MENU(Menu_Toggle,   RegFrame::OnToggle)
@@ -236,6 +248,10 @@ BEGIN_EVENT_TABLE(RegTreeCtrl, wxTreeCtrl)
   EVT_TREE_DELETE_ITEM   (Ctrl_RegTree, RegTreeCtrl::OnDeleteItem)
   EVT_TREE_ITEM_EXPANDING(Ctrl_RegTree, RegTreeCtrl::OnItemExpanding)
   EVT_TREE_SEL_CHANGED   (Ctrl_RegTree, RegTreeCtrl::OnSelChanged)
+
+  EVT_TREE_BEGIN_LABEL_EDIT(Ctrl_RegTree, RegTreeCtrl::OnBeginEdit)
+  EVT_TREE_END_LABEL_EDIT  (Ctrl_RegTree, RegTreeCtrl::OnEndEdit)
+
   EVT_TREE_BEGIN_DRAG    (Ctrl_RegTree, RegTreeCtrl::OnBeginDrag)
   EVT_TREE_BEGIN_RDRAG   (Ctrl_RegTree, RegTreeCtrl::OnBeginDrag)
   EVT_TREE_END_DRAG      (Ctrl_RegTree, RegTreeCtrl::OnEndDrag)
@@ -266,6 +282,7 @@ wxMenu *CreateRegistryMenu()
   pMenuReg->Append(Menu_New, "&New", pMenuNew);
   pMenuReg->Append(Menu_Delete,   "&Delete...", "Delete selected key/value");
   pMenuReg->AppendSeparator();
+  pMenuReg->Append(Menu_GoTo,     "&Go to...\tCtrl-G",    "Go to registry key");
   pMenuReg->Append(Menu_Expand,   "&Expand",    "Expand current key");
   pMenuReg->Append(Menu_Collapse, "&Collapse",  "Collapse current key");
   pMenuReg->Append(Menu_Toggle,   "&Toggle",    "Toggle current key");
@@ -352,37 +369,55 @@ void RegFrame::OnAbout(wxCommandEvent& event)
   dialog.ShowModal();
 }
 
-void RegFrame::OnTest(wxCommandEvent& event)
+void RegFrame::OnTest(wxCommandEvent& WXUNUSED(event))
 {
   m_treeCtrl->OnMenuTest();
 }
 
-void RegFrame::OnExpand(wxCommandEvent& event)
+void RegFrame::OnGoTo(wxCommandEvent& WXUNUSED(event))
+{
+    static wxString s_location = _T("HKEY_CURRENT_USER\\Software\\wxWindows");
+
+    wxString location = wxGetTextFromUser
+                        (
+                         _T("Enter the location to go to:"),
+                         _T("wxRegTest question"),
+                         s_location,
+                         this
+                        );
+    if ( !location )
+        return;
+
+    s_location = location;
+    m_treeCtrl->GoTo(location);
+}
+
+void RegFrame::OnExpand(wxCommandEvent& WXUNUSED(event))
 {
   m_treeCtrl->ExpandItem(m_treeCtrl->GetSelection(), wxTREE_EXPAND_EXPAND);
 }
 
-void RegFrame::OnCollapse(wxCommandEvent& event)
+void RegFrame::OnCollapse(wxCommandEvent& WXUNUSED(event))
 {
   m_treeCtrl->ExpandItem(m_treeCtrl->GetSelection(), wxTREE_EXPAND_COLLAPSE);
 }
 
-void RegFrame::OnToggle(wxCommandEvent& event)
+void RegFrame::OnToggle(wxCommandEvent& WXUNUSED(event))
 {
   m_treeCtrl->ExpandItem(m_treeCtrl->GetSelection(), wxTREE_EXPAND_TOGGLE);
 }
 
-void RegFrame::OnRefresh(wxCommandEvent& event)
+void RegFrame::OnRefresh(wxCommandEvent& WXUNUSED(event))
 {
   m_treeCtrl->Refresh();
 }
 
-void RegFrame::OnDelete(wxCommandEvent& event)
+void RegFrame::OnDelete(wxCommandEvent& WXUNUSED(event))
 {
   m_treeCtrl->DeleteSelected();
 }
 
-void RegFrame::OnNewKey(wxCommandEvent& event)
+void RegFrame::OnNewKey(wxCommandEvent& WXUNUSED(event))
 {
   if ( m_treeCtrl->IsKeySelected() ) {
     m_treeCtrl->CreateNewKey(
@@ -390,7 +425,7 @@ void RegFrame::OnNewKey(wxCommandEvent& event)
   }
 }
 
-void RegFrame::OnNewText(wxCommandEvent& event)
+void RegFrame::OnNewText(wxCommandEvent& WXUNUSED(event))
 {
   if ( m_treeCtrl->IsKeySelected() ) {
     m_treeCtrl->CreateNewTextValue(
@@ -398,7 +433,7 @@ void RegFrame::OnNewText(wxCommandEvent& event)
   }
 }
 
-void RegFrame::OnNewBinary(wxCommandEvent& event)
+void RegFrame::OnNewBinary(wxCommandEvent& WXUNUSED(event))
 {
   if ( m_treeCtrl->IsKeySelected() ) {
     m_treeCtrl->CreateNewBinaryValue(
@@ -406,7 +441,7 @@ void RegFrame::OnNewBinary(wxCommandEvent& event)
   }
 }
 
-void RegFrame::OnInfo(wxCommandEvent& event)
+void RegFrame::OnInfo(wxCommandEvent& WXUNUSED(event))
 {
     m_treeCtrl->ShowProperties();
 }
@@ -471,7 +506,7 @@ RegTreeCtrl::TreeNode *RegTreeCtrl::InsertNewTreeNode(TreeNode *pParent,
 
 RegTreeCtrl::RegTreeCtrl(wxWindow *parent, wxWindowID id)
            : wxTreeCtrl(parent, id, wxDefaultPosition, wxDefaultSize,
-                        wxTR_HAS_BUTTONS | wxSUNKEN_BORDER)
+                        wxTR_HAS_BUTTONS | wxTR_EDIT_LABELS | wxSUNKEN_BORDER)
 {
   // init members
   m_draggedItem = NULL;
@@ -625,6 +660,50 @@ void RegTreeCtrl::OnItemExpanding(wxTreeEvent& event)
   }
 }
 
+void RegTreeCtrl::OnBeginEdit(wxTreeEvent& event)
+{
+    TreeNode *pNode = GetNode(event);
+    if ( pNode->IsRoot() || pNode->Parent()->IsRoot() ) {
+        wxLogStatus(_T("This registry key can't be renamed."));
+
+        event.Veto();
+    }
+    else {
+        m_nameOld = pNode->m_strName;
+    }
+}
+
+void RegTreeCtrl::OnEndEdit(wxTreeEvent& event)
+{
+    bool ok;
+
+    wxString name = event.GetLabel();
+
+    TreeNode *pNode = GetNode(event);
+    if ( pNode->IsKey() )
+    {
+        wxRegKey& key = pNode->Key();
+        ok = key.Rename(name);
+    }
+    else
+    {
+        pNode = pNode->Parent();
+        wxRegKey& key = pNode->Key();
+
+        ok = key.RenameValue(m_nameOld, name);
+    }
+
+    if ( !ok ) {
+        wxLogError(_T("Failed to rename '%s' to '%s'."),
+                   m_nameOld.c_str(), name.c_str());
+    }
+#if 0   // MSW tree ctrl doesn't like this at all, it hangs
+    else {
+        pNode->Refresh();
+    }
+#endif // 0
+}
+
 void RegTreeCtrl::OnBeginDrag(wxTreeEvent& event)
 {
     m_copyOnDrop = event.GetEventType() == wxEVT_COMMAND_TREE_BEGIN_DRAG;
@@ -697,8 +776,6 @@ void RegTreeCtrl::OnEndDrag(wxTreeEvent& event)
       return;
     }
 
-    bool dstExpanded = IsExpanded(dst->Id());
-
     bool ok;
     if ( isKey ) {
         wxRegKey& key = src->Key();
@@ -709,10 +786,6 @@ void RegTreeCtrl::OnEndDrag(wxTreeEvent& event)
         }
         else {
             ok = key.Copy(keyDst);
-        }
-        if ( ok && dstExpanded ) {
-            dst->OnCollapse();
-            dst->OnExpand();
         }
 
         if ( ok && !m_copyOnDrop ) {
@@ -729,15 +802,14 @@ void RegTreeCtrl::OnEndDrag(wxTreeEvent& event)
         if ( ok && !m_copyOnDrop ) {
             // we moved it, so delete the old one
             ok = key.DeleteValue(src->m_strName);
-            if ( ok ) {
-                // reexpand the key
-                dst->Refresh();
-            }
         }
     }
 
     if ( !ok ) {
         wxLogError("Failed to %s registry %s.", verb.c_str(), what.c_str());
+    }
+    else {
+        dst->Refresh();
     }
 }
 
@@ -863,16 +935,15 @@ void RegTreeCtrl::TreeNode::Refresh()
     if ( !IsKey() )
         return;
 
-    if ( m_pTree->IsExpanded(Id()) ) {
+    bool wasExpanded = m_pTree->IsExpanded(Id());
+    if ( wasExpanded )
         m_pTree->Collapse(Id());
-        OnCollapse();
-        m_pTree->SetItemHasChildren(Id());
+
+    OnCollapse();
+    m_pTree->SetItemHasChildren(Id());
+    if ( wasExpanded ) {
         m_pTree->Expand(Id());
         OnExpand();
-    }
-    else {
-        // just allow it to be expanded
-        m_pTree->SetItemHasChildren(Id());
     }
 }
 
@@ -943,6 +1014,54 @@ const char *RegTreeCtrl::TreeNode::FullName() const
 // ----------------------------------------------------------------------------
 // operations on RegTreeCtrl
 // ----------------------------------------------------------------------------
+
+void RegTreeCtrl::GoTo(const wxString& location)
+{
+    wxStringTokenizer tk(location, _T("\\"));
+
+    wxTreeItemId id = GetRootItem();
+
+    while ( tk.HasMoreTokens() ) {
+        wxString subkey = tk.GetNextToken();
+
+        wxTreeItemId idCurrent = id;
+        if ( !IsExpanded(idCurrent) )
+            Expand(idCurrent);
+
+        long dummy;
+        id = GetFirstChild(idCurrent, dummy);
+
+        if ( idCurrent == GetRootItem() ) {
+            // special case: we understand both HKCU and HKEY_CURRENT_USER here
+            for ( size_t key = 0; key < wxRegKey::nStdKeys; key++ ) {
+                if ( subkey == wxRegKey::GetStdKeyName(key) ||
+                     subkey == wxRegKey::GetStdKeyShortName(key) ) {
+                    break;
+                }
+
+                id = GetNextChild(idCurrent, dummy);
+            }
+        }
+        else {
+            // enum all children
+            while ( id.IsOk() ) {
+                if ( subkey == ((TreeNode *)GetItemData(id))->m_strName )
+                    break;
+
+                id = GetNextChild(idCurrent, dummy);
+            }
+        }
+
+        if ( !id.IsOk() ) {
+            wxLogError(_T("No such key '%s'."), location.c_str());
+
+            return;
+        }
+    }
+
+    if ( id.IsOk() )
+        SelectItem(id);
+}
 
 void RegTreeCtrl::DeleteSelected()
 {
