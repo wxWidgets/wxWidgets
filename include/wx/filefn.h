@@ -114,6 +114,8 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 
     #define   wxTell(fd)   lseek(fd, 0, SEEK_CUR)
 
+    #define   wxStat       stat
+
     // types
     #define   wxStructStat struct stat
 
