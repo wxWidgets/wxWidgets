@@ -608,7 +608,7 @@ public :
 
     // Getting a simple property (non-collection)
     virtual void GetProperty(const wxObject *object, wxxVariant &result) const
-    { wxASSERT_MSG(m_getter,wxT("GetProperty called w/o valid getter") ) ; return m_getter->Get( object , result ) ;}
+    { wxASSERT_MSG(m_getter,wxT("GetProperty called w/o valid getter") ) ; m_getter->Get( object , result ) ;}
 
     // Adding an element to a collection property
     virtual void AddToPropertyCollection(wxObject *object, const wxxVariant &value) const
@@ -616,7 +616,7 @@ public :
 
     // Getting a collection property
     virtual void GetPropertyCollection( const wxObject *obj, wxxVariantArray &result) const
-    { wxASSERT_MSG(m_collectionGetter,wxT("GetPropertyCollection called w/o valid collection getter") ) ; return m_collectionGetter->Get( obj , result) ;}
+    { wxASSERT_MSG(m_collectionGetter,wxT("GetPropertyCollection called w/o valid collection getter") ) ; m_collectionGetter->Get( obj , result) ;}
 
     virtual bool HasSetter() const { return m_setter != NULL ; }
     virtual bool HasCollectionGetter() const { return m_collectionGetter != NULL ; }
