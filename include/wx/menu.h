@@ -30,6 +30,7 @@
 #include "wx/menuitem.h"
 
 class WXDLLEXPORT wxMenu;
+class WXDLLEXPORT wxMenuBarBase;
 class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxMenuItem;
 
@@ -228,6 +229,17 @@ public:
     // object that has the update event handlers defined for it. If NULL, the
     // menu or associated window will be used.
     void UpdateUI(wxEvtHandler* source = (wxEvtHandler*)NULL);
+
+    // called when the menu is attached/detached to/from a menu bar
+    void Attach(wxMenuBarBase *menubar)
+    {
+        // use Detach() instead!
+        wxASSERT_MSG( menubar, _T("menu can't be attached to NULL menubar") );
+
+        m_menuBar = (wxMenuBar *)menubar;
+    }
+
+    void Detach() { m_menuBar = NULL; }
 
     // is the menu attached to a menu bar (or is it a popup one)?
     bool IsAttached() const { return m_menuBar != NULL; }

@@ -139,10 +139,15 @@ void wxPopupWindowBase::Position(const wxPoint& ptOrigin,
 // wxPopupTransientWindow
 // ----------------------------------------------------------------------------
 
-wxPopupTransientWindow::wxPopupTransientWindow(wxWindow *parent)
+void wxPopupTransientWindow::Init()
 {
     m_child =
     m_focus = (wxWindow *)NULL;
+}
+
+wxPopupTransientWindow::wxPopupTransientWindow(wxWindow *parent)
+{
+    Init();
 
     (void)Create(parent);
 }

@@ -1654,6 +1654,12 @@ void wxWin32Renderer::DoDrawLabel(wxDC& dc,
     wxRect rectLabel;
     dc.DrawLabel(label, wxNullBitmap, rect, alignment, indexAccel, &rectLabel);
 
+    if ( flags & wxCONTROL_DISABLED )
+    {
+        // restore the fg colour
+        dc.SetTextForeground(*wxBLACK);
+    }
+
     if ( flags & wxCONTROL_FOCUSED )
     {
         if ( focusOffset.x || focusOffset.y )

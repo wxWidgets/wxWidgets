@@ -62,7 +62,10 @@ public:
 class WXDLLEXPORT wxPopupTransientWindow : public wxPopupWindow
 {
 public:
+    // ctors
+    wxPopupTransientWindow() { Init(); }
     wxPopupTransientWindow(wxWindow *parent);
+
     virtual ~wxPopupTransientWindow();
 
     // popup the window (this will show it too) and keep focus at winFocus
@@ -73,6 +76,9 @@ public:
     virtual void Dismiss();
 
 protected:
+    // common part of all ctors
+    void Init();
+
     // this is called when the popup is abotu disappeared because of anything
     // else but direct call to Dismiss()
     virtual void OnDismiss();

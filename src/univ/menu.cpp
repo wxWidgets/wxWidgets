@@ -83,7 +83,6 @@ class wxPopupMenuWindow : public wxPopupTransientWindow
 {
 public:
     wxPopupMenuWindow(wxWindow *parent, wxMenu *menu)
-        : wxPopupTransientWindow(parent)
         {
             m_menu = menu;
 
@@ -139,6 +138,7 @@ void wxMenu::Init()
     m_geometry = NULL;
 
     m_popupMenu = NULL;
+    m_isShown = FALSE;
 }
 
 wxMenu::~wxMenu()
@@ -506,6 +506,8 @@ void wxMenuBar::Attach(wxFrame *frame)
     // maybe you really wanted to call Detach()?
     wxCHECK_RET( frame, _T("wxMenuBar::Attach(NULL) called") );
 
+    wxMenuBarBase::Attach(frame);
+
     if ( IsCreated() )
     {
         // reparent if necessary
@@ -824,7 +826,7 @@ void wxMenuBar::OnLeftDown(wxMouseEvent& event)
 
         ReleaseCapture();
     }
-    else // we didn't have mosue capture, capture it now
+    else // we didn't have mouse capture, capture it now
     {
         m_current = GetMenuFromPoint(event.GetPosition());
         if ( m_current == -1 )
@@ -833,10 +835,13 @@ void wxMenuBar::OnLeftDown(wxMouseEvent& event)
             return;
         }
 
+        CaptureMouse();
+
         // show it as selected
         RefreshItem(m_current);
 
-        CaptureMouse();
+        // show the menu
+        PopupMenu();
     }
 }
 
@@ -937,7 +942,9 @@ void wxMenuBar::OnKeyDown(wxKeyEvent& event)
 
         case WXK_DOWN:
         case WXK_UP:
-            // TODO: open the menu
+        case WXK_RETURN:
+            // open the menu
+            PopupMenu();
             break;
 
         default:

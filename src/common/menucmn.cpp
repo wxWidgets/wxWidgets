@@ -591,6 +591,7 @@ bool wxMenuBarBase::Append(wxMenu *menu, const wxString& WXUNUSED(title))
     wxCHECK_MSG( menu, FALSE, wxT("can't append NULL menu") );
 
     m_menus.Append(menu);
+    menu->Attach(this);
 
     return TRUE;
 }
@@ -602,7 +603,7 @@ bool wxMenuBarBase::Insert(size_t pos, wxMenu *menu,
     {
         return wxMenuBarBase::Append(menu, title);
     }
-    else
+    else // not at the end
     {
         wxCHECK_MSG( menu, FALSE, wxT("can't insert NULL menu") );
 
@@ -610,6 +611,7 @@ bool wxMenuBarBase::Insert(size_t pos, wxMenu *menu,
         wxCHECK_MSG( node, FALSE, wxT("bad index in wxMenuBar::Insert()") );
 
         m_menus.Insert(node, menu);
+        menu->Attach(this);
 
         return TRUE;
     }
@@ -626,6 +628,9 @@ wxMenu *wxMenuBarBase::Replace(size_t pos, wxMenu *menu,
     wxMenu *menuOld = node->GetData();
     node->SetData(menu);
 
+    menu->Attach(this);
+    menuOld->Detach();
+
     return menuOld;
 }
 
@@ -637,6 +642,7 @@ wxMenu *wxMenuBarBase::Remove(size_t pos)
     node = m_menus.DetachNode(node);
     wxCHECK( node, NULL );  // unexpected
     wxMenu *menu = node->GetData();
+    menu->Detach();
 
     delete node;
 

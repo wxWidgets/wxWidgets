@@ -8,6 +8,16 @@ TEST
 TODO
 ----------------------------------------------------------------------------
 
+wxMenuXXX
+
+* understand how should mouse capturing work
+* accel string not shown
+* submenu arrow not shown
+* menu item bitmaps not implemented
+* spacing seems wrong
+
+Misc
+
 *   problems with large fonts!
 
 *   sizer calculate layout slightly incorrectly
