@@ -47,6 +47,10 @@
     #include "wx/tooltip.h"
 #endif // wxUSE_TOOLTIPS
 
+#if defined(__WXWINCE__) && !defined(WS_EX_TRANSPARENT)
+#define WS_EX_TRANSPARENT 0
+#endif
+
 // TODO: wxCONSTRUCTOR
 #if 0 // wxUSE_EXTENDED_RTTI
 WX_DEFINE_FLAGS( wxRadioBoxStyle )

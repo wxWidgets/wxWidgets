@@ -843,15 +843,32 @@ static void InitToolHelp32()
     lpfCreateToolhelp32Snapshot=
         (HANDLE(WINAPI *)(DWORD,DWORD))
         GetProcAddress( hInstLib,
-        "CreateToolhelp32Snapshot" ) ;
+#ifdef __WXWINCE__
+        wxT("CreateToolhelp32Snapshot")
+#else
+        "CreateToolhelp32Snapshot"
+#endif
+        ) ;
     
     lpfProcess32First=
         (BOOL(WINAPI *)(HANDLE,LPPROCESSENTRY32))
-        GetProcAddress( hInstLib, "Process32First" ) ;
+        GetProcAddress( hInstLib,
+#ifdef __WXWINCE__
+        wxT("Process32First")
+#else
+        "Process32First"
+#endif
+        ) ;
 
     lpfProcess32Next=
         (BOOL(WINAPI *)(HANDLE,LPPROCESSENTRY32))
-        GetProcAddress( hInstLib, "Process32Next" ) ;
+        GetProcAddress( hInstLib,
+#ifdef __WXWINCE__
+        wxT("Process32Next")
+#else
+        "Process32Next"
+#endif
+        ) ;
 
     FreeLibrary( hInstLib ) ;
 }
