@@ -7,13 +7,11 @@ from distutils.file_util import copy_file
 from distutils.dir_util  import mkpath
 from distutils.dep_util  import newer
 
-from my_distutils import run_swig, contrib_copy_tree
-
 #----------------------------------------------------------------------
 # flags and values that affect this script
 #----------------------------------------------------------------------
 
-VERSION          = "2.4.0.1"
+VERSION          = "2.4.0.2"
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
 AUTHOR_EMAIL     = "Robin Dunn <robin@alldunn.com>"
@@ -46,10 +44,6 @@ BUILD_ART2D = 0    # Build a canvas module using code from the wxArt2D project (
 
 
 CORE_ONLY = 0      # if true, don't build any of the above
-
-GL_ONLY = 0        # Only used when making the -gl RPM.  See the "b" script
-                   # for the ugly details  (TODO: This can be removed as I don't
-                   # build the RPMs that way anymore.)
 
 USE_SWIG = 0       # Should we actually execute SWIG, or just use the
                    # files already in the distribution?
@@ -139,16 +133,6 @@ wxpExtensions = []
 force = '--force' in sys.argv or '-f' in sys.argv
 debug = '--debug' in sys.argv or '-g' in sys.argv
 
-bcpp_compiling = '-c' in sys.argv and 'my_bcpp' in sys.argv # Bad heuristic
-
-if bcpp_compiling:
-    msg("Compiling wxPython by Borland C/C++ Compiler")
-    HYBRID=0
-    WXBCPPLIBVER = WXDLLVER.replace("_","")
-    # Version part of BCPP build LIBRARY name
-    WXDLLVER="" # no dll ver path avaible
-
-
 # change the PORT default for wxMac
 if sys.platform[:6] == "darwin":
     WXPORT = 'mac'
@@ -188,6 +172,8 @@ sys.argv = filter(None, sys.argv)
 
 
 #----------------------------------------------------------------------
+# some helper functions
+#----------------------------------------------------------------------
 
 def Verify_WX_CONFIG():
     """ Called below for the builds that need wx-config,
@@ -222,6 +208,56 @@ def Verify_WX_CONFIG():
                   "defaulting to \"wx-config\"" % WX_CONFIG)
             WX_CONFIG = 'wx-config'
 
+
+def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args, swig_deps=[]):
+    """Run SWIG the way I want it done"""
+    from distutils.file_util import copy_file
+    from distutils.dep_util import newer
+    from distutils.spawn import spawn
+
+    if not os.path.exists(os.path.join(dir, gendir)):
+        os.mkdir(os.path.join(dir, gendir))
+
+    sources = []
+
+    for file in files:
+        basefile = os.path.splitext(file)[0]
+        i_file   = os.path.join(dir, file)
+        py_file  = os.path.join(dir, gendir, basefile+'.py')
+        cpp_file = os.path.join(dir, gendir, basefile+'.cpp')
+
+        sources.append(cpp_file)
+
+        if USE_SWIG:
+            for dep in swig_deps:
+                if newer(dep, py_file) or newer(dep, cpp_file):
+                    force = 1
+                    break
+
+            if force or newer(i_file, py_file) or newer(i_file, cpp_file):
+                # we need forward slashes here even on win32
+                cpp_file = '/'.join(cpp_file.split('\\'))
+                i_file = '/'.join(i_file.split('\\'))
+
+                cmd = ['./wxSWIG/wxswig'] + swig_args + ['-I'+dir, '-c', '-o', cpp_file, i_file]
+                print ' '.join(cmd)
+                spawn(cmd)
+
+        # copy the generated python file to the package directory
+        copy_file(py_file, package, update=not force, verbose=0)
+
+    return sources
+
+
+
+def contrib_copy_tree(src, dest, verbose=0):
+    """Update local copies of wxWindows contrib files"""
+    from distutils.dir_util import mkpath, copy_tree
+
+    mkpath(dest, verbose=verbose)
+    copy_tree(src, dest, update=1, verbose=verbose)
+
+
 #----------------------------------------------------------------------
 # sanity checks
 
@@ -242,7 +278,7 @@ if FINAL:
     HYBRID = 0
 
 if UNICODE and WXPORT not in ['msw', 'gtk2']:
-    raise SystemExit, "UNICODE mode not surrently supported on this WXPORT: "+WXPORT
+    raise SystemExit, "UNICODE mode not currently supported on this WXPORT: "+WXPORT
 
 
 #----------------------------------------------------------------------
@@ -266,8 +302,8 @@ if os.name == 'nt':
                 opj(WXDIR, 'include'),
                 ]
 
-    defines = [ ('WIN32', None),        # Some of these are no longer
-                ('__WIN32__', None),    # necessary.  Anybody know which?
+    defines = [ ('WIN32', None),
+                ('__WIN32__', None),
                 ('_WINDOWS', None),
                 ('__WINDOWS__', None),
                 ('WINVER', '0x0400'),
@@ -282,21 +318,8 @@ if os.name == 'nt':
                 ('WXP_USE_THREAD', '1'),
                 ]
 
-    if bcpp_compiling:  # overwrite it
-        defines = [
-            ('_WINDOWS', None),
-            ('WINVER', '0x0400'),
-            ('STRICT', None),
-
-            ('WXUSINGDLL', '1'),
-
-            ('SWIG_GLOBAL', None),
-            ('HAVE_CONFIG_H', None),
-            ('WXP_USE_THREAD', '1'),
-
-            ('WXUSE_DEFINE','1'),
-            ('_RTLDLL',None),
-            ]
+    if UNDEF_NDEBUG:
+        defines.append( ('NDEBUG',) )  # using a 1-tuple makes it do an undef
 
 
     if not FINAL or HYBRID:
@@ -305,9 +328,6 @@ if os.name == 'nt':
     libdirs = [ opj(WXDIR, 'lib') ]
     wxdll = 'wxmsw' + WXDLLVER + libFlag()
     libs = [ wxdll ]
-
-    if bcpp_compiling:
-        libs = [ 'wx'+WXBCPPLIBVER ]
 
     libs = libs + ['kernel32', 'user32', 'gdi32', 'comdlg32',
             'winspool', 'winmm', 'shell32', 'oldnames', 'comctl32',
@@ -320,29 +340,20 @@ if os.name == 'nt':
              ]
     lflags = None
 
-
-    if bcpp_compiling:  # BCC flags
-        cflags = ['-5', '-VF',  ### To support MSVC spurious semicolons in the class scope
-                  ### else, all semicolons at the end of all DECLARE_...CALLBACK... macros must be eliminated
-                  '-Hc', '-H=' + opj(WXDIR, '\src\msw\wx32.csm'),
-                  '@' + opj(WXDIR, '\src\msw\wxwin32.cfg')
-                  ]
-        if not FINAL:
-            cflags = cflags + ['/Od', '/v', '/y']
-            lflags = lflags + ['/v', ]
-
-    else:  # MSVC flags
-        if FINAL:
-            pass #cflags = cflags + ['/O1']
-        elif HYBRID :
-            pass #cflags = cflags + ['/Ox']
-        else:
-            pass # cflags = cflags + ['/Od', '/Z7']
-                 # lflags = ['/DEBUG', ]
+    # Other MSVC flags...
+    # To bad I don't remember why I was playing with these, can they be removed?
+    if FINAL:
+        pass #cflags = cflags + ['/O1']
+    elif HYBRID :
+        pass #cflags = cflags + ['/Ox']
+    else:
+        pass # cflags = cflags + ['/Od', '/Z7']
+             # lflags = ['/DEBUG', ]
 
 
 
 #----------------------------------------------------------------------
+
 elif os.name == 'posix' and sys.platform[:6] == "darwin":
     # Flags and such for a Darwin (Max OS X) build of Python
     WXDIR = '..'              # assumes IN_CVS_TREE
@@ -354,6 +365,8 @@ elif os.name == 'posix' and sys.platform[:6] == "darwin":
                ('HAVE_CONFIG_H', None),
                ('WXP_USE_THREAD', '1'),
                ]
+    if UNDEF_NDEBUG:
+        defines.append( ('NDEBUG',) )  # using a 1-tuple makes it do an undef
     libdirs = []
     libs = ['stdc++']
 
@@ -361,8 +374,6 @@ elif os.name == 'posix' and sys.platform[:6] == "darwin":
 
     cflags = os.popen(WX_CONFIG + ' --cxxflags', 'r').read()[:-1]
     cflags = cflags.split()
-    if UNDEF_NDEBUG:
-        cflags.append('-UNDEBUG')
     if debug:
         cflags.append('-g')
         cflags.append('-O0')
@@ -375,6 +386,7 @@ elif os.name == 'posix' and sys.platform[:6] == "darwin":
 
 
 #----------------------------------------------------------------------
+
 elif os.name == 'posix':
     # Set flags for other Unix type platforms
     WXDIR = '..'              # assumes IN_CVS_TREE
@@ -400,6 +412,9 @@ elif os.name == 'posix':
                ('HAVE_CONFIG_H', None),
                ('WXP_USE_THREAD', '1'),
                ]
+    if UNDEF_NDEBUG:
+        defines.append( ('NDEBUG',) )  # using a 1-tuple makes it do an undef
+
     libdirs = []
     libs = []
 
@@ -408,8 +423,6 @@ elif os.name == 'posix':
     cflags = os.popen(WX_CONFIG + ' --cxxflags', 'r').read()[:-1] + ' ' + portcfg
 
     cflags = cflags.split()
-    if UNDEF_NDEBUG:
-        cflags.append('-UNDEBUG')
     if debug:
         cflags.append('-g')
         cflags.append('-O0')
@@ -426,7 +439,7 @@ elif os.name == 'posix':
 
 #----------------------------------------------------------------------
 else:
-    raise 'Sorry Charlie...'
+    raise 'Sorry Charlie, platform not supported...'
 
 
 #----------------------------------------------------------------------
@@ -442,9 +455,9 @@ if UNICODE:
 # Check if the version file needs updated
 #----------------------------------------------------------------------
 
-# Always do it since the version string can change based on the UNICODE flag
-
 ##if IN_CVS_TREE and newer('setup.py', 'src/__version__.py'):
+
+# Always do it since the version string can change based on the UNICODE flag
 open('src/__version__.py', 'w').write("ver = '%s'\n" % VERSION)
 
 
@@ -470,118 +483,117 @@ swig_deps = ['src/my_typemaps.i']
 # Define the CORE extension module
 #----------------------------------------------------------------------
 
-if not GL_ONLY:
-    msg('Preparing CORE...')
-    swig_files = [ 'wx.i', 'windows.i', 'windows2.i', 'windows3.i', 'events.i',
-                   'misc.i', 'misc2.i', 'gdi.i', 'mdi.i', 'controls.i',
-                   'controls2.i', 'cmndlgs.i', 'stattool.i', 'frames.i', 'image.i',
-                   'printfw.i', 'sizers.i', 'clip_dnd.i',
-                   'filesys.i', 'streams.i', 'utils.i', 'fonts.i'
-                   ]
+msg('Preparing CORE...')
+swig_files = [ 'wx.i', 'windows.i', 'windows2.i', 'windows3.i', 'events.i',
+               'misc.i', 'misc2.i', 'gdi.i', 'mdi.i', 'controls.i',
+               'controls2.i', 'cmndlgs.i', 'stattool.i', 'frames.i', 'image.i',
+               'printfw.i', 'sizers.i', 'clip_dnd.i',
+               'filesys.i', 'streams.i', 'utils.i', 'fonts.i'
+               ]
 
-    swig_sources = run_swig(swig_files, 'src', GENDIR, PKGDIR,
-                            USE_SWIG, swig_force, swig_args, swig_deps)
+swig_sources = run_swig(swig_files, 'src', GENDIR, PKGDIR,
+                        USE_SWIG, swig_force, swig_args, swig_deps)
 
-    copy_file('src/__init__.py', PKGDIR, update=1, verbose=0)
-    copy_file('src/__version__.py', PKGDIR, update=1, verbose=0)
-    copy_file('src/wxc.pyd.manifest', PKGDIR, update=1, verbose=0)
+copy_file('src/__init__.py', PKGDIR, update=1, verbose=0)
+copy_file('src/__version__.py', PKGDIR, update=1, verbose=0)
+copy_file('src/wxc.pyd.manifest', PKGDIR, update=1, verbose=0)
 
-    if IN_CVS_TREE:   # update the license files
-        mkpath('licence')
-        for file in ['preamble.txt', 'licence.txt', 'licendoc.txt', 'lgpl.txt']:
-            copy_file(opj(WXDIR, 'docs', file), opj('licence',file), update=1, verbose=0)
-
-
-    if os.name == 'nt':
-        rc_file = ['src/wxc.rc']
-    else:
-        rc_file = []
+if IN_CVS_TREE:   # update the license files
+    mkpath('licence')
+    for file in ['preamble.txt', 'licence.txt', 'licendoc.txt', 'lgpl.txt']:
+        copy_file(opj(WXDIR, 'docs', file), opj('licence',file), update=1, verbose=0)
 
 
-    ext = Extension('wxc', ['src/helpers.cpp',
-                            'src/libpy.c',
-                            ] + rc_file + swig_sources,
-
-                    include_dirs = includes,
-                    define_macros = defines,
-
-                    library_dirs = libdirs,
-                    libraries = libs,
-
-                    extra_compile_args = cflags,
-                    extra_link_args = lflags,
-                    )
-    wxpExtensions.append(ext)
+if os.name == 'nt':
+    rc_file = ['src/wxc.rc']
+else:
+    rc_file = []
 
 
-    # Extension for the grid module
-    swig_sources = run_swig(['grid.i'], 'src', GENDIR, PKGDIR,
-                            USE_SWIG, swig_force, swig_args, swig_deps)
-    ext = Extension('gridc', swig_sources,
-                    include_dirs =  includes,
-                    define_macros = defines,
-                    library_dirs = libdirs,
-                    libraries = libs,
-                    extra_compile_args = cflags,
-                    extra_link_args = lflags,
-                    )
-    wxpExtensions.append(ext)
+ext = Extension('wxc', ['src/helpers.cpp',
+                        'src/libpy.c',
+                        ] + rc_file + swig_sources,
+
+                include_dirs = includes,
+                define_macros = defines,
+
+                library_dirs = libdirs,
+                libraries = libs,
+
+                extra_compile_args = cflags,
+                extra_link_args = lflags,
+                )
+wxpExtensions.append(ext)
 
 
-    # Extension for the html modules
-    swig_sources = run_swig(['html.i', 'htmlhelp.i'], 'src', GENDIR, PKGDIR,
-                            USE_SWIG, swig_force, swig_args, swig_deps)
-    ext = Extension('htmlc', swig_sources,
-                    include_dirs =  includes,
-                    define_macros = defines,
-                    library_dirs = libdirs,
-                    libraries = libs,
-                    extra_compile_args = cflags,
-                    extra_link_args = lflags,
-                    )
-    wxpExtensions.append(ext)
+# Extension for the grid module
+swig_sources = run_swig(['grid.i'], 'src', GENDIR, PKGDIR,
+                        USE_SWIG, swig_force, swig_args, swig_deps)
+ext = Extension('gridc', swig_sources,
+                include_dirs =  includes,
+                define_macros = defines,
+                library_dirs = libdirs,
+                libraries = libs,
+                extra_compile_args = cflags,
+                extra_link_args = lflags,
+                )
+wxpExtensions.append(ext)
 
 
-    # Extension for the calendar module
-    swig_sources = run_swig(['calendar.i'], 'src', GENDIR, PKGDIR,
-                            USE_SWIG, swig_force, swig_args, swig_deps)
-    ext = Extension('calendarc', swig_sources,
-                    include_dirs =  includes,
-                    define_macros = defines,
-                    library_dirs = libdirs,
-                    libraries = libs,
-                    extra_compile_args = cflags,
-                    extra_link_args = lflags,
-                    )
-    wxpExtensions.append(ext)
+# Extension for the html modules
+swig_sources = run_swig(['html.i', 'htmlhelp.i'], 'src', GENDIR, PKGDIR,
+                        USE_SWIG, swig_force, swig_args, swig_deps)
+ext = Extension('htmlc', swig_sources,
+                include_dirs =  includes,
+                define_macros = defines,
+                library_dirs = libdirs,
+                libraries = libs,
+                extra_compile_args = cflags,
+                extra_link_args = lflags,
+                )
+wxpExtensions.append(ext)
 
 
-    # Extension for the help module
-    swig_sources = run_swig(['help.i'], 'src', GENDIR, PKGDIR,
-                            USE_SWIG, swig_force, swig_args, swig_deps)
-    ext = Extension('helpc', swig_sources,
-                    include_dirs =  includes,
-                    define_macros = defines,
-                    library_dirs = libdirs,
-                    libraries = libs,
-                    extra_compile_args = cflags,
-                    extra_link_args = lflags,
-                    )
-    wxpExtensions.append(ext)
+# Extension for the calendar module
+swig_sources = run_swig(['calendar.i'], 'src', GENDIR, PKGDIR,
+                        USE_SWIG, swig_force, swig_args, swig_deps)
+ext = Extension('calendarc', swig_sources,
+                include_dirs =  includes,
+                define_macros = defines,
+                library_dirs = libdirs,
+                libraries = libs,
+                extra_compile_args = cflags,
+                extra_link_args = lflags,
+                )
+wxpExtensions.append(ext)
 
 
-    # Extension for the wizard module
-    swig_sources = run_swig(['wizard.i'], 'src', GENDIR, PKGDIR,
-                            USE_SWIG, swig_force, swig_args, swig_deps)
-    ext = Extension('wizardc', swig_sources,
-                    include_dirs =  includes,
-                    define_macros = defines,
-                    library_dirs = libdirs,
-                    libraries = libs,
-                    extra_compile_args = cflags,
-                    extra_link_args = lflags,
-                    )
-    wxpExtensions.append(ext)
+# Extension for the help module
+swig_sources = run_swig(['help.i'], 'src', GENDIR, PKGDIR,
+                        USE_SWIG, swig_force, swig_args, swig_deps)
+ext = Extension('helpc', swig_sources,
+                include_dirs =  includes,
+                define_macros = defines,
+                library_dirs = libdirs,
+                libraries = libs,
+                extra_compile_args = cflags,
+                extra_link_args = lflags,
+                )
+wxpExtensions.append(ext)
+
+
+# Extension for the wizard module
+swig_sources = run_swig(['wizard.i'], 'src', GENDIR, PKGDIR,
+                        USE_SWIG, swig_force, swig_args, swig_deps)
+ext = Extension('wizardc', swig_sources,
+                include_dirs =  includes,
+                define_macros = defines,
+                library_dirs = libdirs,
+                libraries = libs,
+                extra_compile_args = cflags,
+                extra_link_args = lflags,
+                )
+wxpExtensions.append(ext)
 
 
 #----------------------------------------------------------------------
@@ -591,7 +603,7 @@ if not GL_ONLY:
 CTRB_SRC =  opj(WXDIR, 'contrib/src')
 CTRB_INC =  opj(WXDIR, 'contrib/include/wx')
 
-if BUILD_GLCANVAS or GL_ONLY:
+if BUILD_GLCANVAS:
     msg('Preparing GLCANVAS...')
     location = 'contrib/glcanvas'
     swig_files = ['glcanvas.i']
@@ -630,7 +642,7 @@ if BUILD_GLCANVAS or GL_ONLY:
 # Define the OGL extension module
 #----------------------------------------------------------------------
 
-if not GL_ONLY and BUILD_OGL:
+if BUILD_OGL:
     msg('Preparing OGL...')
     location = 'contrib/ogl'
     OGLLOC = opj(location, 'contrib/src/ogl')
@@ -679,7 +691,7 @@ if not GL_ONLY and BUILD_OGL:
 # Define the STC extension module
 #----------------------------------------------------------------------
 
-if not GL_ONLY and BUILD_STC:
+if BUILD_STC:
     msg('Preparing STC...')
     location = 'contrib/stc'
     STCLOC = opj(location, 'contrib/src/stc')
@@ -792,7 +804,7 @@ if not GL_ONLY and BUILD_STC:
 # Define the IEWIN extension module (experimental)
 #----------------------------------------------------------------------
 
-if not GL_ONLY and BUILD_IEWIN:
+if BUILD_IEWIN:
     msg('Preparing IEWIN...')
     location = 'contrib/iewin'
 
@@ -823,7 +835,7 @@ if not GL_ONLY and BUILD_IEWIN:
 # Define the XRC extension module
 #----------------------------------------------------------------------
 
-if not GL_ONLY and BUILD_XRC:
+if BUILD_XRC:
     msg('Preparing XRC...')
     location = 'contrib/xrc'
     XMLLOC = opj(location, 'contrib/src/xrc')
@@ -912,7 +924,7 @@ if not GL_ONLY and BUILD_XRC:
 # Define the GIZMOS  extension module
 #----------------------------------------------------------------------
 
-if not GL_ONLY and BUILD_GIZMOS:
+if BUILD_GIZMOS:
     msg('Preparing GIZMOS...')
     location = 'contrib/gizmos'
     GIZMOLOC = opj(location, 'contrib/src/gizmos')
@@ -958,7 +970,7 @@ if not GL_ONLY and BUILD_GIZMOS:
 # Define the DLLWIDGET  extension module
 #----------------------------------------------------------------------
 
-if not GL_ONLY and BUILD_DLLWIDGET:
+if BUILD_DLLWIDGET:
     msg('Preparing DLLWIDGET...')
     location = 'contrib/dllwidget'
     swig_files = ['dllwidget_.i']
@@ -990,7 +1002,7 @@ if not GL_ONLY and BUILD_DLLWIDGET:
 # Define the CANVAS extension module
 #----------------------------------------------------------------------
 
-if not GL_ONLY and BUILD_CANVAS:
+if BUILD_CANVAS:
     msg('Preparing CANVAS...')
     location = 'contrib/canvas'
     CANVASLOC = opj(location, 'contrib/src/canvas')
@@ -1029,7 +1041,7 @@ if not GL_ONLY and BUILD_CANVAS:
 # Define the ART2D extension module
 #----------------------------------------------------------------------
 
-if not GL_ONLY and BUILD_ART2D:
+if BUILD_ART2D:
     msg('Preparing ART2D...')
     location = 'contrib/art2d'
     ART2DLOC = opj(location, 'modules/canvas/src')
@@ -1130,52 +1142,32 @@ else:
 #----------------------------------------------------------------------
 
 if __name__ == "__main__":
-    if not GL_ONLY:
-        setup(name             = PKGDIR,
-              version          = VERSION,
-              description      = DESCRIPTION,
-              long_description = LONG_DESCRIPTION,
-              author           = AUTHOR,
-              author_email     = AUTHOR_EMAIL,
-              url              = URL,
-              license          = LICENSE,
+    setup(name             = PKGDIR,
+          version          = VERSION,
+          description      = DESCRIPTION,
+          long_description = LONG_DESCRIPTION,
+          author           = AUTHOR,
+          author_email     = AUTHOR_EMAIL,
+          url              = URL,
+          license          = LICENSE,
 
-              packages = [PKGDIR,
-                          PKGDIR+'.lib',
-                          PKGDIR+'.lib.editor',
-                          PKGDIR+'.lib.mixins',
-                          PKGDIR+'.lib.PyCrust',
-                          PKGDIR+'.tools',
-                          PKGDIR+'.tools.XRCed',
-                          ],
+          packages = [PKGDIR,
+                      PKGDIR+'.lib',
+                      PKGDIR+'.lib.editor',
+                      PKGDIR+'.lib.mixins',
+                      PKGDIR+'.lib.PyCrust',
+                      PKGDIR+'.tools',
+                      PKGDIR+'.tools.XRCed',
+                      ],
 
-              ext_package = PKGDIR,
-              ext_modules = wxpExtensions,
+          ext_package = PKGDIR,
+          ext_modules = wxpExtensions,
 
-              options = { 'build' : { 'build_base' : BUILD_BASE }},
+          options = { 'build' : { 'build_base' : BUILD_BASE }},
 
-              ##data_files = TOOLS,
-              scripts = SCRIPTS,
-              )
-
-    else:
-
-        setup(name             = "wxPython-gl",
-              version          = VERSION,
-              description      = "wxGLCanvas class for wxPython",
-              author           = AUTHOR,
-              author_email     = AUTHOR_EMAIL,
-              url              = URL,
-              license          = LICENSE,
-
-              py_modules = [ "wxPython.glcanvas" ],
-
-              ext_package = PKGDIR,
-              ext_modules = wxpExtensions,
-
-              )
-
-
+          ##data_files = TOOLS,
+          scripts = SCRIPTS,
+          )
 
 
 #----------------------------------------------------------------------
