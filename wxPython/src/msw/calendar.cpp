@@ -901,7 +901,7 @@ static PyObject *_wrap_new_wxCalendarCtrl(PyObject *self, PyObject *args, PyObje
     wxDateTime * _arg2 = (wxDateTime *) &wxDefaultDateTime;
     wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg4 = (wxSize *) &wxDefaultSize;
-    long  _arg5 = (long ) (wxCAL_SHOW_HOLIDAYS);
+    long  _arg5 = (long ) (wxCAL_SHOW_HOLIDAYS)|wxWANTS_CHARS;
     char * _arg6 = (char *) "calendar";
     PyObject * _argo0 = 0;
     PyObject * _argo2 = 0;
@@ -993,7 +993,7 @@ static PyObject *_wrap_wxCalendarCtrl_Create(PyObject *self, PyObject *args, PyO
     wxDateTime * _arg3 = (wxDateTime *) &wxDefaultDateTime;
     wxPoint * _arg4 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg5 = (wxSize *) &wxDefaultSize;
-    long  _arg6 = (long ) (wxCAL_SHOW_HOLIDAYS);
+    long  _arg6 = (long ) (wxCAL_SHOW_HOLIDAYS)|wxWANTS_CHARS;
     char * _arg7 = (char *) "calendar";
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
