@@ -1622,7 +1622,7 @@ case "${host}" in
 	enable_omf=yes
       fi
       if test "$wxUSE_OMF" = "yes"; then
-        LDFLAGS="$LDFLAGS -Zlinker /EXEPACK -Zlinker /PMTYPE:PM"
+        LDFLAGS="$LDFLAGS -Zomf -Zlinker /EXEPACK -Zlinker /PMTYPE:PM"
       fi
       dnl (end of OS/2-only piece)
   ;;
