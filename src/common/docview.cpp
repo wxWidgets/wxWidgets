@@ -2097,13 +2097,13 @@ void wxFileHistory::Load(wxConfigBase& config)
 {
     m_fileHistoryN = 0;
     wxString buf;
-    buf.Printf(wxT("file%d"), m_fileHistoryN+1);
+    buf.Printf(wxT("file%d"), (int)m_fileHistoryN+1);
     wxString historyFile;
     while ((m_fileHistoryN < m_fileMaxFiles) && config.Read(buf, &historyFile) && (historyFile != wxT("")))
     {
         m_fileHistory[m_fileHistoryN] = copystring((const wxChar*) historyFile);
         m_fileHistoryN ++;
-        buf.Printf(wxT("file%d"), m_fileHistoryN+1);
+        buf.Printf(wxT("file%d"), (int)m_fileHistoryN+1);
         historyFile = wxT("");
     }
     AddFilesToMenu();
