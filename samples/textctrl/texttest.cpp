@@ -80,6 +80,7 @@ enum
 #endif // 0
 
     TextTest_Password,
+    TextTest_HScroll,
     TextTest_Textctrl,
     TextTest_Quit
 };
@@ -158,6 +159,7 @@ protected:
 #endif
 
     void OnUpdateUIPasswordCheckbox(wxUpdateUIEvent& event);
+    void OnUpdateUIHScrollCheckbox(wxUpdateUIEvent& event);
 
     void OnUpdateUIResetButton(wxUpdateUIEvent& event);
 
@@ -169,17 +171,11 @@ protected:
     // (re)create the textctrl
     void CreateText();
 
-    // textctrl parameters
-    // ------------------
-
-    // single or multi line?
-    bool m_isSingleLine;
-
-    // readonly or can be modified?
-    bool m_isReadOnly;
-
-    // in password or normal mode?
-    bool m_isPassword;
+    // is the control currently single line?
+    bool IsSingleLine() const
+    {
+        return m_radioTextLines->GetSelection() == TextLines_Single;
+    }
 
     // the controls
     // ------------
@@ -190,8 +186,9 @@ protected:
     // the radiobox to choose between single and multi line
     wxRadioBox *m_radioTextLines;
 
-    // the checkboxes
+    // the checkboxes controlling text ctrl styles
     wxCheckBox *m_chkPassword,
+               *m_chkHScroll,
                *m_chkReadonly;
 
     // the textctrl itself and the sizer it is in
@@ -270,6 +267,7 @@ BEGIN_EVENT_TABLE(TextTestFrame, wxFrame)
 #endif // 0
 
     EVT_UPDATE_UI(TextTest_Password, TextTestFrame::OnUpdateUIPasswordCheckbox)
+    EVT_UPDATE_UI(TextTest_HScroll, TextTestFrame::OnUpdateUIHScrollCheckbox)
 
     EVT_UPDATE_UI(TextTest_Reset, TextTestFrame::OnUpdateUIResetButton)
 
@@ -310,6 +308,7 @@ TextTestFrame::TextTestFrame(const wxString& title)
     m_radioTextLines = (wxRadioBox *)NULL;
 
     m_chkPassword =
+    m_chkHScroll =
     m_chkReadonly = (wxCheckBox *)NULL;
 
     m_text =
@@ -353,6 +352,7 @@ TextTestFrame::TextTestFrame(const wxString& title)
                                       1, wxRA_SPECIFY_COLS);
 
     m_chkPassword = new wxCheckBox(m_panel, TextTest_Password, _T("&Password control"));
+    m_chkHScroll = new wxCheckBox(m_panel, TextTest_HScroll, _T("&Horz scrollbar"));
     m_chkReadonly = new wxCheckBox(m_panel, -1, _T("&Read-only mode"));
 
     sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
@@ -360,6 +360,7 @@ TextTestFrame::TextTestFrame(const wxString& title)
     sizerLeft->Add(m_radioTextLines, 0, wxGROW | wxALL, 5);
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
     sizerLeft->Add(m_chkPassword, 0, wxLEFT | wxRIGHT, 5);
+    sizerLeft->Add(m_chkHScroll, 0, wxLEFT | wxRIGHT, 5);
     sizerLeft->Add(m_chkReadonly, 0, wxLEFT | wxRIGHT, 5);
 
     wxButton *btn = new wxButton(m_panel, TextTest_Reset, _T("&Reset"));
@@ -552,6 +553,7 @@ void TextTestFrame::Reset()
 {
     m_radioTextLines->SetSelection(TextLines_Single);
     m_chkPassword->SetValue(FALSE);
+    m_chkHScroll->SetValue(TRUE);
     m_chkReadonly->SetValue(FALSE);
 }
 
@@ -576,6 +578,8 @@ void TextTestFrame::CreateText()
         flags |= wxTE_PASSWORD;
     if ( m_chkReadonly->GetValue() )
         flags |= wxTE_READONLY;
+    if ( m_chkHScroll->GetValue() )
+        flags |= wxHSCROLL;
 
     wxString valueOld;
     if ( m_text )
@@ -776,17 +780,23 @@ void TextTestFrame::OnUpdateUIClearButton(wxUpdateUIEvent& event)
     event.Enable(!m_text->GetValue().empty());
 }
 
+void TextTestFrame::OnUpdateUIHScrollCheckbox(wxUpdateUIEvent& event)
+{
+    event.Enable( !IsSingleLine() );
+}
+
 void TextTestFrame::OnUpdateUIPasswordCheckbox(wxUpdateUIEvent& event)
 {
     // can't put multiline control in password mode
-    event.Enable( m_radioTextLines->GetSelection() == TextLines_Single );
+    event.Enable( IsSingleLine() );
 }
 
 void TextTestFrame::OnUpdateUIResetButton(wxUpdateUIEvent& event)
 {
     event.Enable( (m_radioTextLines->GetSelection() != TextLines_Single) ||
                   m_chkReadonly->GetValue() ||
-                  m_chkPassword->GetValue() );
+                  m_chkPassword->GetValue() ||
+                  !m_chkHScroll->GetValue() );
 }
 
 void TextTestFrame::OnText(wxCommandEvent& event)

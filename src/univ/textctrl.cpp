@@ -277,6 +277,20 @@ bool wxTextCtrl::Create(wxWindow *parent,
                         const wxValidator& validator,
                         const wxString &name)
 {
+    if ( style & wxTE_MULTILINE )
+    {
+        // for compatibility with wxMSW we create the controls with vertical
+        // scrollbar always shown unless they have wxTE_RICH style (because
+        // Windows text controls always has vert scrollbar but richedit one
+        // doesn't)
+        if ( !(style & wxTE_RICH) )
+        {
+            style |= wxALWAYS_SHOW_SB;
+        }
+
+        // TODO: support wxTE_NO_VSCROLL (?)
+    }
+
     if ( !wxControl::Create(parent, id, pos, size, style,
                             validator, name) )
     {
@@ -294,16 +308,6 @@ bool wxTextCtrl::Create(wxWindow *parent,
         // support it anyhow
         wxASSERT_MSG( !(style & wxTE_PASSWORD),
                       _T("wxTE_PASSWORD can't be used with multiline ctrls") );
-
-        // create vertical scrollbar if necessary (on by default)
-        if ( !(style & wxTE_NO_VSCROLL) )
-        {
-        }
-
-        // and the horizontal one
-        if ( style & wxHSCROLL )
-        {
-        }
     }
 
     SetValue(value);
@@ -2627,8 +2631,8 @@ void wxTextCtrl::DoDraw(wxControlRenderer *renderer)
     dc.SetTextForeground(GetForegroundColour());
 
     // get the intersection of the update region with the text area: note that
-    // the update region is in window coord and text area is in the client
-    // ones, so it must be shifted before computing intesection
+    // the update region is in window coords and text area is in the client
+    // ones, so it must be shifted before computing intersection
     wxRegion rgnUpdate = GetUpdateRegion();
     wxRect rectTextArea = GetRealTextArea();
     wxPoint pt = GetClientAreaOrigin();
@@ -2652,16 +2656,21 @@ void wxTextCtrl::DoDraw(wxControlRenderer *renderer)
     for ( ; iter.HaveRects(); iter++ )
     {
         wxRect r = iter.GetRect();
+
+        // this is a workaround for wxGTK::wxRegion bug
+#ifdef __WXGTK__
         if ( !r.width || !r.height )
         {
-            // this happens under wxGTK
+            // ignore invalid rect
             continue;
         }
+#endif // __WXGTK__
 
         DoDrawTextInRect(dc, r);
     }
 
-    // show caret first time only
+    // show caret first time only: we must show it after drawing the text or
+    // the display can be corrupted when it's hidden
     if ( !m_hasCaret && GetCaret() )
     {
         GetCaret()->Show();

@@ -263,6 +263,7 @@ protected:
     // more readable flag testing methods
     bool IsSingleLine() const { return !(GetWindowStyle() & wxTE_MULTILINE); }
     bool IsPassword() const { return (GetWindowStyle() & wxTE_PASSWORD) != 0; }
+    bool WrapLines() const { return !(GetWindowStyle() & wxHSCROLL); }
 
     // get the extent (width) of the text
     wxCoord GetTextWidth(const wxString& text) const;
