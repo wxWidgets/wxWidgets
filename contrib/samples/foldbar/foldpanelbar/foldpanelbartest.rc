@@ -1,0 +1,4 @@
+mondrian ICON "mondrian.ico"
+
+#define FOLDPANELBARTEST_QUIT 	1
+#define FOLDPANELBARTEST_ABOUT 	102
