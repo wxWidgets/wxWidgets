@@ -1581,12 +1581,12 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
                 for (int j=row; j<row+cell_rows; j++)
                 {
                     // check w/ anchor cell for multicell block
-                    grid.GetCellSize(row, i, &c_rows, &c_cols);
+                    grid.GetCellSize(j, i, &c_rows, &c_cols);
                     if (c_rows > 0) c_rows = 0;
-                    if (grid.GetTable()->IsEmptyCell(row+c_rows, i))
+                    if (!grid.GetTable()->IsEmptyCell(j+c_rows, i))
                     {
 		        is_empty = FALSE;
-                       break;
+                        break;
                     }
                 }
                 if (is_empty)
