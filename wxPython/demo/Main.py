@@ -31,18 +31,7 @@ import images
 _treeList = [
     # new stuff
     ('Recent Additions and Updates', [
-        'VListBox',
-        'Listbook',
-        'MaskedNumCtrl',
-        'FloatCanvas',
-        'XmlResourceSubclass',
-        'GridBagSizer',
-        'Cursor',
-        'PyPlot',
-        'ImageAlpha',
-        'ActiveX_FlashWindow',
-        'ActiveX_IEHtmlWindow',
-        'ActiveX_PDFWindow',
+        'OGL',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -445,8 +434,14 @@ class wxPythonDemo(wx.Frame):
 
         if wx.Platform != '__WXMAC__':
             # setup a taskbar icon, and catch some events from it
+            if wx.Platform == '__WXGTK__':
+                dimension = 22
+            else:
+                dimension = 16
             icon = wx.IconFromBitmap(
-                images.getMondrianImage().Scale(16,16).ConvertToBitmap() )            
+                images.getMondrianImage().Scale(dimension,dimension).ConvertToBitmap() )
+            #icon = wx.Icon('bmp_source/mondrian.ico', wx.BITMAP_TYPE_ICO)
+            #icon = images.getMondrianIcon()
             self.tbicon = wx.TaskBarIcon()
             self.tbicon.SetIcon(icon, "wxPython Demo")
             self.tbicon.Bind(wx.EVT_TASKBAR_LEFT_DCLICK, self.OnTaskBarActivate)
@@ -953,13 +948,12 @@ def main():
 overview = """<html><body>
 <h2>wxPython</h2>
 
-<p> wxPython is a <b>GUI toolkit</b> for the <a
-href="http://www.python.org/">Python</a> programming language.  It
-allows Python programmers to create programs with a robust, highly
-functional graphical user interface, simply and easily.  It is
-implemented as a Python extension module (native code) that wraps the
-popular <a href="http://wxwindows.org/front.htm">wxWindows</a> cross
-platform GUI library, which is written in C++.
+<p> wxPython is a <b>GUI toolkit</b> for the Python programming
+language.  It allows Python programmers to create programs with a
+robust, highly functional graphical user interface, simply and easily.
+It is implemented as a Python extension module (native code) that
+wraps the popular wxWindows cross platform GUI library, which is
+written in C++.
 
 <p> Like Python and wxWindows, wxPython is <b>Open Source</b> which
 means that it is free for anyone to use and the source code is
