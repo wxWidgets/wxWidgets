@@ -15,16 +15,6 @@ THISDIR=$(WXWIN)\src\xpm
 
 LIBTARGET=$(WXDIR)\lib\xpm.lib
 
-# Please set these according to the settings in wx_setup.h, so we can include
-# the appropriate libraries in wx.lib
-
-# This one overrides the others, to be consistent with the settings in wx_setup.h
-MINIMAL_WXWINDOWS_SETUP=0
-
-PERIPH_LIBS=
-PERIPH_TARGET=
-PERIPH_CLEAN_TARGET=
-
 XPMDIR=$(WXDIR)\src\xpm
 
 OBJECTS = 	$(XPMDIR)\crbuffri.obj\

@@ -122,6 +122,9 @@ Troubleshooting
   of string arrays), set wxUSE_GLOBAL_MEMORY_OPERATORS to 0 in
   setup.h, and recompile.
 
+- If you get an internal compiler error in gcc, turn off
+  optimisations.
+
 - Problems with XtDestroyWidget crashing in ~wxWindow have been
   reported on SGI IRIX 6.4. This has not yet been resolved, so
   any advice here would be very welcome. See bugs.txt for a

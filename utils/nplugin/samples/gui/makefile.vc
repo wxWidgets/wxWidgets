@@ -38,11 +38,11 @@ wx:
 
 # Update the dynamic link library
 
-$(PROGRAM).dll: $(DUMMYOBJ) $(OBJECTS) $(WXDIR)\lib\wx.lib $(PLUGINLIB) $(PROGRAM).res $(PROGRAM).def
+$(PROGRAM).dll: $(DUMMYOBJ) $(OBJECTS) $(WXLIB) $(PLUGINLIB) $(PROGRAM).res $(PROGRAM).def
     $(link) $(LINKFLAGS) \
     -out:$(PROGRAM).dll   \
     -def:$(PROGRAM).def \
-    $(DUMMYOBJ) $(OBJECTS) $(PROGRAM).res $(WXDIR)\lib\wx.lib $(PLUGINLIB) \
+    $(DUMMYOBJ) $(OBJECTS) $(PROGRAM).res $(WXLIB) $(PLUGINLIB) \
     $(guilibsdll) shell32.lib comctl32.lib ctl3d32.lib
 
 gui.obj:      gui.$(SRCSUFF) gui.h $(DUMMYOBJ)

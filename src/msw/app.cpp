@@ -378,7 +378,8 @@ void wxApp::ConvertToStandardCommandArgs(char* lpCmdLine)
     ::GetModuleFileName(wxhInstance, name, WXSIZEOF(name));
 
     // GNUWIN32 already fills in the first arg with the application name.
-#if !defined(__GNUWIN32__)
+    // JACS: apparently not now (b20 and above?)
+#if 0 // !defined(__GNUWIN32__)
     args.Add(name);
     count ++;
 #endif

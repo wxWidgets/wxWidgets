@@ -71,23 +71,48 @@ Using project files:
 Using makefiles:
 
 1. Make sure your WXWIN variable is set.
-2. Change directory to wx\src\msw. Type 'nmake -f makefile.vc' to
-   make the wxWindows core library.
+2. Change directory to wx\src\msw. Type:
+
+  'nmake -f makefile.vc'
+
+   to make the wxWindows core library with debug information
+   (wx\lib\wx_d.lib), or
+
+  'nmake -f makefile.vc FINAL=1'
+
+   to make the wxWindows core library without debug information
+   (wx\lib\wx.lib).
+
 3. Change directory to wx\samples and type 'nmake -f makefile.vc'
    to make all the samples. You can also make them individually.
 
-To build the release version using makefiles, add FINAL=1 to your
-nmake invocation, both when building the library and for samples.
+Notes:
 
-Use the 'clean' target to clean all objects, libraries and
-executables.
+  Use the 'clean' target to clean all objects, libraries and
+  executables.
+
+  To build the release version using makefiles, add FINAL=1 to your
+  nmake invocation, both when building the library and for samples.
+
+  Note that the wxWindows core library allows you to have debug
+  and release libraries available simultaneously, by compiling the
+  objects in different subdirectories, whereas samples must be
+  cleaned and re-made to build a different configuration. This
+  may be changed in later versions of wxWindows.
 
 To build the DLL version using makefiles:
 
 1. Change directory to wx\src\msw. Type 'nmake -f makefile.vc dll pch'
    to make both a suitable DLL and import library, and to build a
    suitable precompiled header file for compiling applications.
-2. Invoke a sample makefile with 'nmake -f makefile.vc WXUSINGDLL=1'.
+   The resulting libraries are called:
+
+      wx\lib\wx200_d.lib(dll) (debug version)
+      wx\lib\wx200.lib(dll)   (release version, using FINAL=1)
+
+2. Invoke a sample makefile with 'nmake -f makefile.vc WXUSINGDLL=1'
+   (or edit src\makeprog.vc to set WXUSINGDLL to 1 for all
+   applications).
 
 Note (1): if you wish to use templates, please edit
 include\wx\msw\setup.h and set wxUSE_DEBUG_NEW_ALWAYS to 0.
@@ -130,6 +155,8 @@ executables.
 Borland C++ 4.5/5.0 compilation
 -------------------------------
 
+Compiling using the makefiles:
+
 1. Make sure your WXWIN variable is set, and uses the FAT (short
    name) form if doing a 16-bit compile.
 2. Change directory to wx\src\msw. Type 'make -f makefile.b32' to
@@ -145,6 +172,20 @@ Borland C++ 4.5/5.0 compilation
 Note: the wxWindows library and (some) samples compile in 16-bit mode
 using makefile.bcc, but at present the wxWindows resource system is switched
 off in this mode. See issues.txt for details.
+
+Compiling using the IDE files:
+
+1. Load src\wxwin32_lib.ide.
+2. Go to Options|Project... and specify the correct BC++ include and lib path for
+   your file structure.
+3. Press F9 to compile the wxWindows library.
+4. Load samples\samples.ide.
+5. Go to Options|Project... and specify the correct BC++ include and lib path for
+   your file structure.
+6. Press F9 to compile the samples.
+
+See also the file bc_ide.txt for further instructions and details
+of how to create your own project files.
 
 Borland C++Builder compilation
 ------------------------------

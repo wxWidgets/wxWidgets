@@ -11,8 +11,6 @@
 
 # Change WXDIR or WXWIN to wherever wxWindows is found
 WXDIR = $(WXWIN)
-WXLIB = $(WXDIR)\lib\wx.lib
-WXINC = $(WXDIR)\include
 
 WINPNGDIR = ..\png
 WINPNGINC = $(WINPNGDIR)

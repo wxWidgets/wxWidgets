@@ -11,6 +11,9 @@ wxMSW:
 
 - Fixed wxWindow::IsShown (::IsWindowVisible doesn't behave as
   expected).
+- Changed VC++ makefiles (.vc) so that it's possible to have
+  debug/release/DLL versions of the library available simultaneously,
+  with names wx.lib, wx_d.lib, wx200.lib(dll), wx200_d.lib(dll).
 
 wxMotif:
 

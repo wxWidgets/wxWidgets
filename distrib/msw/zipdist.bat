@@ -34,6 +34,9 @@ zip32 -@ %dest\wx200wrd.zip < %src\distrib\msw\wx_word.rsp
 rem VC++ project files
 zip32 -@ %dest\wx200vc.zip < %src\distrib\msw\vc.rsp
 
+rem BC++ project files
+zip32 -@ %dest\wx200bc.zip < %src\distrib\msw\bc.rsp
+
 rem CodeWarrior project files
 zip32 -@ %dest\wx200cw.zip < %src\distrib\msw\cw.rsp
 
