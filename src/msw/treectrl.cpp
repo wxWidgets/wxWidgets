@@ -44,36 +44,8 @@
 #include "wx/msw/treectrl.h"
 #include "wx/msw/dragimag.h"
 
-#ifdef __GNUWIN32_OLD__
-    #include "wx/msw/gnuwin32/extra.h"
-#endif
-
-#if defined(__WIN95__) && !(defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__))
-    #include <commctrl.h>
-#endif
-
-// Bug in headers, sometimes
-#ifndef TVIS_FOCUSED
-    #define TVIS_FOCUSED            0x0001
-#endif
-
-#ifndef TV_FIRST
-    #define TV_FIRST                0x1100
-#endif
-
-#ifndef TVS_CHECKBOXES
-    #define TVS_CHECKBOXES          0x0100
-#endif
-
-#ifndef TVS_FULLROWSELECT
-    #define TVS_FULLROWSELECT       0x1000
-#endif
-
-// old headers might miss these messages (comctl32.dll 4.71+ only)
-#ifndef TVM_SETBKCOLOR
-    #define TVM_SETBKCOLOR          (TV_FIRST + 29)
-    #define TVM_SETTEXTCOLOR        (TV_FIRST + 30)
-#endif
+// include <commctrl.h> "properly"
+#include "wx/msw/wrapcctl.h"
 
 // macros to hide the cast ugliness
 // --------------------------------

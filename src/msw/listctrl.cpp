@@ -45,13 +45,8 @@
 
 #include "wx/msw/private.h"
 
-#if defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__)
-    #include "wx/msw/gnuwin32/extra.h"
-#else
-    #include <commctrl.h>
-#endif
-
-#include "wx/msw/missing.h"
+// include <commctrl.h> "properly"
+#include "wx/msw/wrapcctl.h"
 
 // ----------------------------------------------------------------------------
 // private functions

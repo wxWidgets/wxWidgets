@@ -85,33 +85,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#if defined(__WIN95__) && !((defined(__GNUWIN32_OLD__) || defined(__WXMICROWIN__)) && !defined(__CYGWIN10__))
-    #include <commctrl.h>
-#endif
-
-// ----------------------------------------------------------------------------
-// conditional compilation
-// ----------------------------------------------------------------------------
-
-// The macro _WIN32_IE is defined by commctrl.h (unless it had already been
-// defined before) and shows us what common control features are available
-// during the compile time (it doesn't mean that they will be available during
-// the run-time, use GetComCtl32Version() to test for them!). The possible
-// values are:
-//
-// 0x0200     for comctl32.dll 4.00 shipped with Win95/NT 4.0
-// 0x0300                      4.70              IE 3.x
-// 0x0400                      4.71              IE 4.0
-// 0x0401                      4.72              IE 4.01 and Win98
-// 0x0500                      5.80              IE 5.x
-// 0x0500                      5.81              Win2k/ME
-// 0x0600                      6.00              WinXP
-
-#ifndef _WIN32_IE
-    // use maximal set of features by default, we check for them during
-    // run-time anyhow
-    #define _WIN32_IE 0x0600
-#endif
+#include "wx/msw/wrapcctl.h"
 
 #if (!defined(__MINGW32__) || wxCHECK_W32API_VERSION( 2, 0 )) && \
     !defined(__CYGWIN__) && !defined(__WXWINCE__) && \

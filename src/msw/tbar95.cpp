@@ -49,26 +49,10 @@
 
 #include "wx/msw/private.h"
 
-#if defined(__WIN95__) && !(defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__))
-    #include <commctrl.h>
-#else
-    #include "wx/msw/gnuwin32/extra.h"
-#endif
-
-#include "wx/msw/missing.h"
+// include <commctrl.h> "properly"
+#include "wx/msw/wrapcctl.h"
 
 #include "wx/app.h"         // for GetComCtl32Version
-
-#if defined(__MWERKS__) && defined(__WXMSW__)
-// including <windef.h> for max definition doesn't seem
-// to work using CodeWarrior 6 Windows. So we define it
-// here. (Otherwise we get a undefined identifier 'max'
-// later on in this file.) (Added by dimitri@shortcut.nl)
-#   ifndef max
-#       define max(a,b)            (((a) > (b)) ? (a) : (b))
-#   endif
-
-#endif
 
 // ----------------------------------------------------------------------------
 // conditional compilation
