@@ -3422,6 +3422,10 @@ void wxWindow::CaptureMouse()
 
     if (!window) return;
 
+    wxCursor* cursor = & m_cursor;
+    if (!cursor->Ok())
+        cursor = wxSTANDARD_CURSOR;
+
     gdk_pointer_grab( window, FALSE,
                       (GdkEventMask)
                          (GDK_BUTTON_PRESS_MASK |
@@ -3429,7 +3433,7 @@ void wxWindow::CaptureMouse()
                           GDK_POINTER_MOTION_HINT_MASK |
                           GDK_POINTER_MOTION_MASK),
                       (GdkWindow *) NULL,
-                      m_cursor.GetCursor(),
+                      cursor->GetCursor(),
                       (guint32)GDK_CURRENT_TIME );
     g_captureWindow = this;
 }
