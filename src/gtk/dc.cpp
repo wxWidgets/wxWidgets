@@ -97,24 +97,21 @@ wxSize wxDC::GetPPI() const
 
 void wxDC::ComputeScaleAndOrigin()
 {
-    // CMB: copy scale to see if it changes
+    /* CMB: copy scale to see if it changes */
     double origScaleX = m_scaleX;
     double origScaleY = m_scaleY;
 
     m_scaleX = m_logicalScaleX * m_userScaleX;
     m_scaleY = m_logicalScaleY * m_userScaleY;
 
-    // CMB: if scale has changed call SetPen to recalulate the line width
+    /* CMB: if scale has changed call SetPen to recalulate the line width */
     if (m_scaleX != origScaleX || m_scaleY != origScaleY)
     {
-      // this is a bit artificial, but we need to force wxDC to think
-      // the pen has changed
-        // It gives an Assert, Robert Roebling
-/*
+      /* this is a bit artificial, but we need to force wxDC to think
+         the pen has changed */
       wxPen pen = m_pen;
       m_pen = wxNullPen;
       SetPen( pen );
-*/
   }
 }
 
@@ -139,6 +136,8 @@ void wxDC::SetMapMode( int mode )
           SetLogicalScale( 1.0, 1.0 );
           break;
     }
+    m_mappingMode = mode;
+    
 /*  we don't do this mega optimisation
     if (mode != wxMM_TEXT)
     {

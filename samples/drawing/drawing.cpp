@@ -269,7 +269,7 @@ void MyFrame::OnOption(wxCommandEvent &event)
     switch (event.GetInt())
     {
         case MapMode_Text:
-            m_mapMode = wxMM_LOMETRIC;
+            m_mapMode = wxMM_TEXT;
 	    break;
         case MapMode_Lometric:
             m_mapMode = wxMM_LOMETRIC;
