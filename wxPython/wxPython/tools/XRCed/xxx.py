@@ -129,7 +129,7 @@ class xxxParamContentCheckList(xxxNode):
             for n in childNodes:
                 self.node.removeChild(n)
             l = []
-            for (s,ch) in value:
+            for s,ch in value:
                 itemElem = tree.dom.createElement('item')
                 itemElem.setAttribute('checked', str(ch))
                 itemText = tree.dom.createTextNode(s)
@@ -184,7 +184,7 @@ class xxxObject:
                 tag = node.tagName
                 if tag == 'object':
                     continue            # do nothing for object children here
-                if not tag in self.allParams and not tag in self.styles:
+                if tag not in self.allParams and tag not in self.styles:
                     print 'WARNING: unknown parameter for %s: %s' % \
                           (self.className, tag)
                 elif tag in self.specials:
@@ -511,7 +511,7 @@ class xxxFlexGridSizer(xxxGridSizer):
     # Special processing for growable* parameters
     # (they are represented by several nodes)
     def special(self, tag, node):
-        if tag not in self.params:
+        if not self.params.has_key(tag):
             self.params[tag] = xxxParamMulti()
         self.params[tag].append(xxxParamInt(node))
     def setSpecial(self, param, value):
@@ -668,12 +668,12 @@ def IsObject(node):
 # Make XXX object from some DOM object, selecting correct class
 def MakeXXXFromDOM(parent, element):
     try:
-        return xxxDict[element.getAttribute('class')](parent, element)
+        klass = xxxDict[element.getAttribute('class')]
     except KeyError:
         # Verify that it's not recursive exception
-        if element.getAttribute('class') not in xxxDict:
-            print 'ERROR: unknown class:', element.getAttribute('class')
+        print 'ERROR: unknown class:', element.getAttribute('class')
         raise
+    return klass(parent, element)
 
 # Make empty DOM element
 def MakeEmptyDOM(className): 

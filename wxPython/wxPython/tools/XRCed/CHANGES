@@ -26,6 +26,7 @@ contrib/src/xrc/xmlrsall.cpp
 >     AddHandler(new wxListCtrlXmlHandler);    
 > #if wxUSE_CHECKLISTBOX
 
+This is fixed in CVS.
 
 0.0.6
 -----
