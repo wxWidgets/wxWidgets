@@ -22,6 +22,7 @@
 
 #include "wx/palette.h"
 #include "wx/scrolwin.h"
+#include "wx/app.h"
 
 #ifdef __DARWIN__
 #  include <OpenGL/gl.h>

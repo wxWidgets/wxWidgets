@@ -17,8 +17,8 @@
 #pragma interface "taskbar.h"
 #endif
 
-#include <wx/list.h>
-#include <wx/icon.h>
+#include "wx/list.h"
+#include "wx/icon.h"
 
 class wxTaskBarIcon: public wxObject
 {
