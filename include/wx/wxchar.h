@@ -216,7 +216,11 @@ inline WORD __wxMSW_ctype(wxChar ch)
 #endif
 
 #if wxUSE_WCHAR_T
+#ifdef HAVE_WCSTR_H
+#include <wcstr.h>
+#else
 #include <wchar.h>
+#endif
 #endif
 
 // check whether we are doing Unicode
