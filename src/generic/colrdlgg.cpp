@@ -58,61 +58,64 @@ END_EVENT_TABLE()
  * Generic wxColourDialog
  */
 
-#define NUM_COLS 48
-static wxString wxColourDialogNames[NUM_COLS]={wxT("ORANGE"),
-            wxT("GOLDENROD"),
-            wxT("WHEAT"),
-            wxT("SPRING GREEN"),
-            wxT("SKY BLUE"),
-            wxT("SLATE BLUE"),
-            wxT("MEDIUM VIOLET RED"),
-            wxT("PURPLE"),
+// don't change the number of elements (48) in this array, the code below is
+// hardcoded to use it
+static const wxChar *wxColourDialogNames[] =
+{
+    wxT("ORANGE"),
+    wxT("GOLDENROD"),
+    wxT("WHEAT"),
+    wxT("SPRING GREEN"),
+    wxT("SKY BLUE"),
+    wxT("SLATE BLUE"),
+    wxT("MEDIUM VIOLET RED"),
+    wxT("PURPLE"),
 
-            wxT("RED"),
-            wxT("YELLOW"),
-            wxT("MEDIUM SPRING GREEN"),
-            wxT("PALE GREEN"),
-            wxT("CYAN"),
-            wxT("LIGHT STEEL BLUE"),
-            wxT("ORCHID"),
-            wxT("LIGHT MAGENTA"),
+    wxT("RED"),
+    wxT("YELLOW"),
+    wxT("MEDIUM SPRING GREEN"),
+    wxT("PALE GREEN"),
+    wxT("CYAN"),
+    wxT("LIGHT STEEL BLUE"),
+    wxT("ORCHID"),
+    wxT("LIGHT MAGENTA"),
 
-            wxT("BROWN"),
-            wxT("YELLOW"),
-            wxT("GREEN"),
-            wxT("CADET BLUE"),
-            wxT("MEDIUM BLUE"),
-            wxT("MAGENTA"),
-            wxT("MAROON"),
-            wxT("ORANGE RED"),
+    wxT("BROWN"),
+    wxT("YELLOW"),
+    wxT("GREEN"),
+    wxT("CADET BLUE"),
+    wxT("MEDIUM BLUE"),
+    wxT("MAGENTA"),
+    wxT("MAROON"),
+    wxT("ORANGE RED"),
 
-            wxT("FIREBRICK"),
-            wxT("CORAL"),
-            wxT("FOREST GREEN"),
-            wxT("AQUAMARINE"),
-            wxT("BLUE"),
-            wxT("NAVY"),
-            wxT("THISTLE"),
-            wxT("MEDIUM VIOLET RED"),
+    wxT("FIREBRICK"),
+    wxT("CORAL"),
+    wxT("FOREST GREEN"),
+    wxT("AQUAMARINE"),
+    wxT("BLUE"),
+    wxT("NAVY"),
+    wxT("THISTLE"),
+    wxT("MEDIUM VIOLET RED"),
 
-            wxT("INDIAN RED"),
-            wxT("GOLD"),
-            wxT("MEDIUM SEA GREEN"),
-            wxT("MEDIUM BLUE"),
-            wxT("MIDNIGHT BLUE"),
-            wxT("GREY"),
-            wxT("PURPLE"),
-            wxT("KHAKI"),
+    wxT("INDIAN RED"),
+    wxT("GOLD"),
+    wxT("MEDIUM SEA GREEN"),
+    wxT("MEDIUM BLUE"),
+    wxT("MIDNIGHT BLUE"),
+    wxT("GREY"),
+    wxT("PURPLE"),
+    wxT("KHAKI"),
 
-            wxT("BLACK"),
-            wxT("MEDIUM FOREST GREEN"),
-            wxT("KHAKI"),
-            wxT("DARK GREY"),
-            wxT("SEA GREEN"),
-            wxT("LIGHT GREY"),
-            wxT("MEDIUM SLATE BLUE"),
-            wxT("WHITE")
-            };
+    wxT("BLACK"),
+    wxT("MEDIUM FOREST GREEN"),
+    wxT("KHAKI"),
+    wxT("DARK GREY"),
+    wxT("SEA GREEN"),
+    wxT("LIGHT GREY"),
+    wxT("MEDIUM SLATE BLUE"),
+    wxT("WHITE")
+};
 
 wxGenericColourDialog::wxGenericColourDialog()
 {
@@ -288,7 +291,7 @@ void wxGenericColourDialog::InitializeColours(void)
 {
     int i;
 
-    for (i = 0; i < 48; i++)
+    for (i = 0; i < WXSIZEOF(wxColourDialogNames); i++)
     {
         wxColour *col = wxTheColourDatabase->FindColour(wxColourDialogNames[i]);
         if (col)
@@ -307,7 +310,7 @@ void wxGenericColourDialog::InitializeColours(void)
     {
         bool initColourFound = FALSE;
 
-        for (i = 0; i < 48; i++)
+        for (i = 0; i < WXSIZEOF(wxColourDialogNames); i++)
         {
             if ( standardColours[i] == curr && !initColourFound )
             {
