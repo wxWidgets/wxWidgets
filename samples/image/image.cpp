@@ -34,9 +34,11 @@ public:
     MyCanvas( wxWindow *parent, wxWindowID, const wxPoint &pos, const wxSize &size );
     ~MyCanvas();
     void OnPaint( wxPaintEvent &event );
+    void CreateAntiAliasedBitmap();
 
     wxBitmap  *my_horse;
     wxBitmap  *my_square;
+    wxBitmap  *my_anti;
 
     DECLARE_DYNAMIC_CLASS(MyCanvas)
     DECLARE_EVENT_TABLE()
@@ -107,12 +109,15 @@ MyCanvas::MyCanvas( wxWindow *parent, const wxWindowID id,
   
   image.LoadFile( dir + wxString("test.png"), wxBITMAP_TYPE_PNG );
   my_square = new wxBitmap( image.ConvertToBitmap() );
+  
+  CreateAntiAliasedBitmap();
 }
 
 MyCanvas::~MyCanvas()
 {
   delete my_horse;
   delete my_square;
+  delete my_anti;
 }
 
 void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
@@ -120,15 +125,65 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
   wxPaintDC dc( this );
   PrepareDC( dc );
 
-  dc.DrawText( "Loaded image", 30, 100 );
-  if (my_square->Ok()) dc.DrawBitmap( *my_square, 30, 120 );
+  dc.DrawText( "Loaded image", 30, 10 );
+  if (my_square->Ok()) dc.DrawBitmap( *my_square, 30, 30 );
 
-  dc.DrawText( "Drawn directly", 150, 100 );
+  dc.DrawText( "Drawn directly", 150, 10 );
   dc.SetBrush( wxBrush( "orange", wxSOLID ) );
   dc.SetPen( *wxWHITE_PEN );
-  dc.DrawRectangle( 150, 120, 100, 100 );
+  dc.DrawRectangle( 150, 30, 100, 100 );
 
-  if (my_horse->Ok()) dc.DrawBitmap( *my_horse, 30, 240 );
+  if (my_horse->Ok()) dc.DrawBitmap( *my_horse, 30, 140 );
+  
+  if (my_anti->Ok()) dc.DrawBitmap( *my_anti, 250, 140 );
+}
+
+void MyCanvas::CreateAntiAliasedBitmap()
+{
+  wxBitmap bitmap( 300, 300 );
+  wxMemoryDC dc;
+  dc.SelectObject( bitmap );
+  
+  dc.SetPen( *wxTRANSPARENT_PEN );
+  
+  dc.Clear();
+  
+  dc.SetFont( wxFont( 24, wxDECORATIVE, wxDEFAULT, wxDEFAULT ) );
+  dc.SetTextForeground( "RED" );
+  dc.DrawText( "This is anti-aliased Text.", 20, 20 );
+  dc.DrawText( "And a Rectangle.", 20, 60 );
+  
+  dc.SetBrush( *wxRED_BRUSH );
+  dc.DrawRoundedRectangle( 20, 100, 200, 180, 20 );
+  
+  wxImage original( bitmap );
+  wxImage anti( 150, 150 );
+  
+  /* This is quite slow, but safe. Use wxImage::GetData() for speed instead. */
+  
+  for (int y = 1; y < 149; y++)
+    for (int x = 1; x < 149; x++)
+    {
+       int red = original.GetRed( x*2, y*2 ) +
+                 original.GetRed( x*2-1, y*2 ) + 
+                 original.GetRed( x*2, y*2+1 ) + 
+                 original.GetRed( x*2+1, y*2+1 );
+       red = red/4; 
+       
+       int green = original.GetGreen( x*2, y*2 ) +
+                   original.GetGreen( x*2-1, y*2 ) + 
+                   original.GetGreen( x*2, y*2+1 ) + 
+                   original.GetGreen( x*2+1, y*2+1 );
+       green = green/4; 
+       
+       int blue = original.GetBlue( x*2, y*2 ) +
+                  original.GetBlue( x*2-1, y*2 ) + 
+                  original.GetBlue( x*2, y*2+1 ) + 
+                  original.GetBlue( x*2+1, y*2+1 );
+       blue = blue/4; 
+       anti.SetRGB( x, y, red, green, blue );
+    }
+  my_anti = new wxBitmap( anti.ConvertToBitmap() );
 }
 
 // MyFrame

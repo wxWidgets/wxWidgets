@@ -302,6 +302,9 @@ bool wxApp::SendIdleEvents( wxWindow* win )
 
     wxIdleEvent event;
     event.SetEventObject(win);
+    
+    win->OnInternalIdle();
+    
     win->ProcessEvent(event);
 
     if (event.MoreRequested())

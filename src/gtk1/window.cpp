@@ -1257,7 +1257,6 @@ BEGIN_EVENT_TABLE(wxWindow, wxEvtHandler)
     EVT_SIZE(wxWindow::OnSize)
     EVT_SYS_COLOUR_CHANGED(wxWindow::OnSysColourChanged)
     EVT_INIT_DIALOG(wxWindow::OnInitDialog)
-    EVT_IDLE(wxWindow::OnIdle)
     EVT_KEY_DOWN(wxWindow::OnKeyDown)
 END_EVENT_TABLE()
 
@@ -1789,6 +1788,11 @@ void wxWindow::SetSize( int x, int y, int width, int height, int sizeFlags )
     GetEventHandler()->ProcessEvent( event );
 
     m_resizing = FALSE;
+}
+
+void wxWindow::OnInternalIdle()
+{
+    UpdateWindowUI();
 }
 
 void wxWindow::SetSize( int width, int height )
@@ -3449,7 +3453,3 @@ void wxWindow::GetPositionConstraint(int *x, int *y) const
     GetPosition(x, y);
 }
 
-void wxWindow::OnIdle(wxIdleEvent& WXUNUSED(event) )
-{
-    UpdateWindowUI();
-}

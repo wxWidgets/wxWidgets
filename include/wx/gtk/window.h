@@ -177,7 +177,6 @@ public:
   { wxPoint pt(ConvertDialogToPixels(wxPoint(sz.x, sz.y))); return wxSize(pt.x, pt.y); }
 
   void OnSize( wxSizeEvent &event );
-  void OnIdle( wxIdleEvent& event );
 
   virtual bool Show( bool show );
   virtual void Enable( bool enable );
@@ -316,22 +315,24 @@ public:
 
   // implementation
 
-          void        PreCreation( wxWindow *parent, wxWindowID id, const wxPoint &pos,
-                                   const wxSize &size, long style, const wxString &name );
-          void        PostCreation();
-  virtual GtkWidget  *GetConnectWidget();
-  virtual bool        IsOwnGtkWindow( GdkWindow *window );
-          void        ConnectWidget( GtkWidget *widget );
+  void PreCreation( wxWindow *parent, wxWindowID id, const wxPoint &pos,
+                    const wxSize &size, long style, const wxString &name );
+  void PostCreation();
+  
+  virtual GtkWidget* GetConnectWidget();
+  virtual bool IsOwnGtkWindow( GdkWindow *window );
+  void ConnectWidget( GtkWidget *widget );
 
-          bool        HasVMT();
+  bool HasVMT();
 
-  virtual wxPoint     GetClientAreaOrigin() const;
-  virtual void        AdjustForParentClientOrigin( int& x, int& y, int sizeFlags );
+  virtual wxPoint GetClientAreaOrigin() const;
+  virtual void AdjustForParentClientOrigin( int& x, int& y, int sizeFlags );
 
-          GtkStyle   *GetWidgetStyle();
-          void        SetWidgetStyle();
-  virtual void        ApplyWidgetStyle();
-
+  GtkStyle *GetWidgetStyle();
+  void SetWidgetStyle();
+  virtual void ApplyWidgetStyle();
+  
+  virtual void OnInternalIdle();
 
   wxWindow            *m_parent;
   wxList               m_children;

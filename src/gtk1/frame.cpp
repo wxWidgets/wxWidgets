@@ -101,7 +101,6 @@ static gint gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventC
 BEGIN_EVENT_TABLE(wxFrame, wxWindow)
     EVT_SIZE(wxFrame::OnSize)
     EVT_CLOSE(wxFrame::OnCloseWindow)
-    EVT_IDLE(wxFrame::OnIdle)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxFrame,wxWindow)
@@ -457,7 +456,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
     m_resizing = FALSE;
 }
 
-void wxFrame::OnIdle(wxIdleEvent& WXUNUSED(event) )
+void wxFrame::OnInternalIdle()
 {
     if (!m_sizeSet)
         GtkOnSize( m_x, m_y, m_width, m_height );

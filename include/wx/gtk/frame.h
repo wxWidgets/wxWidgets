@@ -102,7 +102,6 @@ public:
   void OnActivate( wxActivateEvent &WXUNUSED(event) ) { } // called from docview.cpp
   void OnSize( wxSizeEvent &event );
   void OnCloseWindow( wxCloseEvent& event );
-  void OnIdle(wxIdleEvent& event );
 
   // implementation
   
@@ -110,6 +109,8 @@ public:
   virtual wxPoint GetClientAreaOrigin() const;
   void DoMenuUpdates();
   void DoMenuUpdates(wxMenu* menu);
+
+  virtual void OnInternalIdle();
 
   wxMenuBar    *m_frameMenuBar;
   wxStatusBar  *m_frameStatusBar;
