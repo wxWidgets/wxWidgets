@@ -30,7 +30,7 @@ class wxChoice;
 // global data
 //-----------------------------------------------------------------------------
 
-extern const char *wxChoiceNameStr;
+extern const wxChar *wxChoiceNameStr;
 
 //-----------------------------------------------------------------------------
 // wxChoice
