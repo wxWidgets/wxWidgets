@@ -4022,14 +4022,7 @@ if test "$wxUSE_HELP" = "yes"; then
 
     if test "$wxUSE_MSW" = 1; then
       if test "$wxUSE_MS_HTML_HELP" = "yes"; then
-        AC_CHECK_HEADER(htmlhelp.h, 
-            [
-                AC_DEFINE(wxUSE_MS_HTML_HELP)
-            ],
-            [
-                AC_MSG_WARN([MS HTML Help cannot be used without htmlhelp.h... disabled])
-                wxUSE_MS_HTML_HELP=no
-            ])
+        AC_DEFINE(wxUSE_MS_HTML_HELP)
       fi
     fi
 
