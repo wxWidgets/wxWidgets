@@ -125,7 +125,7 @@
         <set var="CFG_NAME_PART">
             $(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
         </set>
-        <set var="OBJS" make_var="1">objs_$(COMPILER)_$(CFG_NAME_PART)</set>
+        <set var="OBJS" make_var="1">$(COMPILER)_$(CFG_NAME_PART)</set>
         <set var="BUILDDIR">$(OBJS)</set>
     </if>
     
