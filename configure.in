@@ -705,6 +705,8 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_STATUSBAR=yes
   DEFAULT_wxUSE_TABDIALOG=no
   DEFAULT_wxUSE_TOOLBAR=no
+  DEFAULT_wxUSE_TOOLBAR_NATIVE=no
+  DEFAULT_wxUSE_TOOLBAR_SIMPLE=no
   DEFAULT_wxUSE_TREECTRL=no
 
   DEFAULT_wxUSE_UNICODE=no
@@ -819,6 +821,8 @@ else
   DEFAULT_wxUSE_STATUSBAR=yes
   DEFAULT_wxUSE_TABDIALOG=no
   DEFAULT_wxUSE_TOOLBAR=yes
+  DEFAULT_wxUSE_TOOLBAR_NATIVE=yes
+  DEFAULT_wxUSE_TOOLBAR_SIMPLE=yes
   DEFAULT_wxUSE_TREECTRL=yes
 
   DEFAULT_wxUSE_UNICODE=no
@@ -924,6 +928,8 @@ if test "$wxUSE_GUI" = "no"; then
   DEFAULT_wxUSE_STATUSBAR=no
   DEFAULT_wxUSE_TABDIALOG=no
   DEFAULT_wxUSE_TOOLBAR=no
+  DEFAULT_wxUSE_TOOLBAR_NATIVE=no
+  DEFAULT_wxUSE_TOOLBAR_SIMPLE=no
   DEFAULT_wxUSE_TREECTRL=no
   DEFAULT_wxUSE_GIF=no
   DEFAULT_wxUSE_PCX=no
@@ -1090,6 +1096,8 @@ if test "$wxUSE_CONTROLS" = "yes"; then
   DEFAULT_wxUSE_STATUSBAR=yes
   DEFAULT_wxUSE_TAB_DIALOG=yes
   DEFAULT_wxUSE_TOOLBAR=yes
+  DEFAULT_wxUSE_TOOLBAR_NATIVE=yes
+  DEFAULT_wxUSE_TOOLBAR_SIMPLE=yes
   DEFAULT_wxUSE_TOOLTIPS=yes
   DEFAULT_wxUSE_TREECTRL=yes
 elif test "$wxUSE_CONTROLS" = "no"; then
@@ -1121,6 +1129,8 @@ elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_STATUSBAR=no
   DEFAULT_wxUSE_TAB_DIALOG=no
   DEFAULT_wxUSE_TOOLBAR=no
+  DEFAULT_wxUSE_TOOLBAR_NATIVE=no
+  DEFAULT_wxUSE_TOOLBAR_SIMPLE=no
   DEFAULT_wxUSE_TOOLTIPS=no
   DEFAULT_wxUSE_TREECTRL=no
 fi
@@ -1153,6 +1163,8 @@ WX_ARG_ENABLE(statline,    [  --enable-statline       use wxStaticLine class], w
 WX_ARG_ENABLE(statusbar,   [  --enable-statusbar      use wxStatusBar class], wxUSE_STATUSBAR)
 WX_ARG_ENABLE(tabdialog,   [  --enable-tabdialog      use wxTabControl class], wxUSE_TABDIALOG)
 WX_ARG_ENABLE(toolbar,     [  --enable-toolbar        use wxToolBar class], wxUSE_TOOLBAR)
+WX_ARG_ENABLE(tbarnative,  [  --enable-tbarnative     use native wxToolBar class], wxUSE_TOOLBAR_NATIVE)
+WX_ARG_ENABLE(tbarsmpl,    [  --enable-tbarsmpl       use wxToolBarSimple class], wxUSE_TOOLBAR_SIMPLE)
 WX_ARG_ENABLE(treectrl,    [  --enable-treectrl       use wxTreeCtrl class], wxUSE_TREECTRL)
 
 dnl ---------------------------------------------------------------------------
@@ -2425,6 +2437,43 @@ dnl time/date functions
 dnl ------------------------------------------------------------------------
 
 if test "$wxUSE_TIMEDATE" = "yes"; then
+    dnl check for timezone variable
+    AC_CACHE_CHECK(for timezone variable in <time.h>,
+                   wx_cv_var_timezone,
+                   [
+                        AC_TRY_COMPILE(
+                            [
+                                #include <time.h>
+                            ],
+                            [
+                                int tz;
+                                tz = __timezone;
+                            ],
+                            [
+                                wx_cv_var_timezone=__timezone
+                            ],
+                            [
+                                AC_TRY_COMPILE(
+                                    [
+                                        #include <time.h>
+                                    ],
+                                    [
+                                        int tz;
+                                        tz = _timezone;
+                                    ],
+                                    [
+                                        wx_cv_var_timezone=_timezone
+                                    ],
+                                    AC_MSG_ERROR(no timezone variable)
+                                )
+                            ]
+                        )
+                   ]
+    )
+
+    dnl as we want $wx_cv_var_timezone to be expanded, use AC_DEFINE_UNQUOTED
+    AC_DEFINE_UNQUOTED(WX_TIMEZONE, $wx_cv_var_timezone)
+
     dnl check for localtime (POSIX), gettimeofday (SVr4, BSD 4.3) and ftime
     dnl (V7, BSD 4.3)
     AC_CHECK_FUNCS(localtime gettimeofday ftime, break)
@@ -2869,9 +2918,24 @@ if test "$wxUSE_TABDIALOG" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS tab"
 fi
 
+if test "$wxUSE_TOOLBAR_SIMPLE" = "yes"; then
+    AC_DEFINE(wxUSE_TOOLBAR_SIMPLE)
+    wxUSE_TOOLBAR="yes"
+fi
+
 if test "$wxUSE_TOOLBAR" = "yes"; then
     AC_DEFINE(wxUSE_TOOLBAR)
+
+    dnl if wxUSE_TOOLBAR and !wxUSE_TOOLBAR_SIMPLE => wxUSE_TOOLBAR_NATIVE
+    if test "$wxUSE_TOOLBAR_SIMPLE" != "yes"; then
+        wxUSE_TOOLBAR_NATIVE="yes"
+    fi
+
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS toolbar"
+fi
+
+if test "$wxUSE_TOOLBAR_NATIVE" = "yes"; then
+    AC_DEFINE(wxUSE_TOOLBAR_NATIVE)
 fi
 
 if test "$wxUSE_TOOLTIPS" = "yes"; then

@@ -309,14 +309,20 @@
 #define wxUSE_TABDIALOG wxUSE_TAB_DIALOG
 
 /*
- * Use generic wxToolBar instead of the native one?
- */
-#define wxUSE_TOOLBAR_SIMPLE 0
-
-/*
- * Use this control
+ * Use wxToollBar
  */
 #define wxUSE_TOOLBAR 0
+
+/*
+ * If 1, use the native toolbar, otherwise use the generic version
+ * (wxToolBarSimple) which may also be use together with the native one.
+ */
+#define wxUSE_TOOLBAR_NATIVE 0
+
+/*
+ * Use generic wxToolBar instead of/together with the native one?
+ */
+#define wxUSE_TOOLBAR_SIMPLE 0
 
 #if defined(__WXWINE__) || defined(__GNUWIN32__)
 #define wxUSE_OWNER_DRAWN 1 
@@ -605,6 +611,9 @@
  *       headers may not work and program size will be larger.
  */
 #define CONST_COMPATIBILITY 0
+
+/* define with the name of timezone variable */
+#undef WX_TIMEZONE
 
 /* The type of 3rd argument to getsockname() - usually size_t or int */
 #undef SOCKLEN_T
