@@ -18,7 +18,7 @@
 // wxMirrorDC allows to write the same code for horz/vertical layout
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMirrorDC : public wxDCBase
+class WXDLLEXPORT wxMirrorDC : public wxDC
 {
 public:
     // constructs a mirror DC associated with the given real DC
@@ -66,6 +66,12 @@ public:
                                   GetY(xLeftRight, yBottomUp)); }
     virtual void SetLogicalFunction(int function)
         { m_dc.SetLogicalFunction(function); }
+
+    // helper functions which may be useful for the users of this class
+    wxSize Reflect(const wxSize& sizeOrig)
+    {
+        return m_mirror ? wxSize(sizeOrig.y, sizeOrig.x) : sizeOrig;
+    }
 
 protected:
     // returns x and y if not mirroring or y and x if mirroring
