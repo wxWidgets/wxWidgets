@@ -1432,7 +1432,7 @@ bool CparameterDlg::PutData()
 bool CparameterDlg::GetData()
 {
     wxString tStr;
-    if (pParamODBCSourceList->GetStringSelection())
+    if (pParamODBCSourceList->GetStringSelection() != "")
     {
         tStr = pParamODBCSourceList->GetStringSelection();
         if (tStr.Length() > (sizeof(wxGetApp().params.ODBCSource)-1))

@@ -108,7 +108,7 @@ clipcmn.cpp	C
 config.cpp	C	B
 ctrlcmn.cpp	C
 ctrlsub.cpp	C
-datetime.cpp	C	32,B
+datetime.cpp	C	B
 datstrm.cpp	C
 db.cpp	C
 dbtable.cpp	C
