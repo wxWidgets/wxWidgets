@@ -22,6 +22,7 @@
 #ifndef WXPRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/hash.h"
 #endif
 
 #include "wx/filesys.h"

@@ -23,13 +23,13 @@ limitation)
 #pragma interface "fs_inet.h"
 #endif
 
-#include "wx/wxprec.h"
-
-#ifdef __BORDLANDC__
-#pragma hdrstop
-#endif
+#include "wx/defs.h"
 
 #if wxUSE_FILESYSTEM && wxUSE_FS_INET && wxUSE_STREAMS && wxUSE_SOCKETS
+
+#ifndef WXPRECOMP
+    #include "wx/hash.h"
+#endif
 
 #include "wx/filesys.h"
 
