@@ -451,6 +451,10 @@ SOURCE=.\common\tokenzr.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\treebase.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\txtstrm.cpp
 # End Source File
 # Begin Source File
@@ -619,6 +623,10 @@ SOURCE=.\generic\textdlgg.cpp
 # Begin Source File
 
 SOURCE=.\generic\tipdlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic\treectlg.cpp
 # End Source File
 # Begin Source File
 

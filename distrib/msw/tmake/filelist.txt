@@ -101,7 +101,7 @@ numdlgg.cpp	G
 tbarsmpl.cpp	G
 textdlgg.cpp	G
 tipdlg.cpp	G
-treectrl.cpp	G	16
+treectlg.cpp	G	16
 treelay.cpp	G
 wizard.cpp	G
 
@@ -193,6 +193,7 @@ textcmn.cpp	C
 textfile.cpp	C	B
 timercmn.cpp	C	B
 tokenzr.cpp	C	B
+treebase.cpp	C	B
 txtstrm.cpp	C	B
 unzip.c	C	B
 url.cpp	C	S,B
@@ -722,6 +723,7 @@ tipdlg.h	W
 tokenzr.h	W	B
 toolbar.h	W
 tooltip.h	W
+treebase.h	W
 treectrl.h	W
 types.h	W
 url.h	W	B
@@ -1115,7 +1117,7 @@ splitter.h	N
 statusbr.h	N
 tabg.h	N	16
 textdlgg.h	N
-treectrl.h	N	16
+treectlg.h	N	16
 wizard.h	N
 
 # vi: set noet ts=16 nolist:

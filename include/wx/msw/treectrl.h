@@ -22,6 +22,7 @@
 
 #include "wx/textctrl.h"
 #include "wx/dynarray.h"
+#include "wx/treebase.h"
 
 #ifdef __GNUWIN32__
     // Cygwin windows.h defines these identifiers
@@ -57,68 +58,6 @@ enum
 // flags for deprecated InsertItem() variant
 #define wxTREE_INSERT_FIRST 0xFFFF0001
 #define wxTREE_INSERT_LAST  0xFFFF0002
-
-// ----------------------------------------------------------------------------
-// wxTreeItemId identifies an element of the tree. In this implementation, it's
-// just a trivial wrapper around Win32 HTREEITEM. It's opaque for the
-// application.
-// ----------------------------------------------------------------------------
-class WXDLLEXPORT wxTreeItemId
-{
-public:
-    // ctors
-        // 0 is invalid value for HTREEITEM
-    wxTreeItemId() { m_itemId = 0; }
-
-        // default copy ctor/assignment operator are ok for us
-
-    // accessors
-        // is this a valid tree item?
-    bool IsOk() const { return m_itemId != 0; }
-
-    // conversion to/from either real (system-dependent) tree item id or
-    // to "long" which used to be the type for tree item ids in previous
-    // versions of wxWindows
-
-    // for wxTreeCtrl usage only
-    wxTreeItemId(WXHTREEITEM itemId) { m_itemId = (long)itemId; }
-    operator WXHTREEITEM() const { return (WXHTREEITEM)m_itemId; }
-
-    void operator=(WXHTREEITEM item) { m_itemId = (long) item; }
-
-protected:
-    long m_itemId;
-};
-
-WX_DEFINE_EXPORTED_ARRAY(WXHTREEITEM, wxArrayTreeItemIds);
-
-// ----------------------------------------------------------------------------
-// wxTreeItemData is some (arbitrary) user class associated with some item. The
-// main advantage of having this class (compared to old untyped interface) is
-// that wxTreeItemData's are destroyed automatically by the tree and, as this
-// class has virtual dtor, it means that the memory will be automatically
-// freed. OTOH, we don't just use wxObject instead of wxTreeItemData because
-// the size of this class is critical: in any real application, each tree leaf
-// will have wxTreeItemData associated with it and number of leaves may be
-// quite big.
-//
-// Because the objects of this class are deleted by the tree, they should
-// always be allocated on the heap!
-// ----------------------------------------------------------------------------
-class WXDLLEXPORT wxTreeItemData : private wxTreeItemId
-{
-public:
-    // default ctor/copy ctor/assignment operator are ok
-
-    // dtor is virtual and all the items are deleted by the tree control when
-    // it's deleted, so you normally don't have to care about freeing memory
-    // allocated in your wxTreeItemData-derived class
-    virtual ~wxTreeItemData() { }
-
-    // accessors: set/get the item associated with this node
-    void SetId(const wxTreeItemId& id) { m_itemId = id; }
-    const wxTreeItemId GetId() const { return *this; }
-};
 
 // ----------------------------------------------------------------------------
 // wxTreeCtrl

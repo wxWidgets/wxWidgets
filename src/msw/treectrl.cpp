@@ -46,9 +46,8 @@
 #include "wx/log.h"
 #include "wx/dynarray.h"
 #include "wx/imaglist.h"
-#include "wx/treectrl.h"
 #include "wx/settings.h"
-
+#include "wx/msw/treectrl.h"
 #include "wx/msw/dragimag.h"
 
 #ifdef __GNUWIN32_OLD__
@@ -2257,6 +2256,11 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     delete data; // can't be NULL here
 
                     m_itemsWithIndirectData.Remove(item);
+#if 0
+                    int iIndex = m_itemsWithIndirectData.Index(item);
+                    wxASSERT( iIndex != wxNOT_FOUND) ;
+                    m_itemsWithIndirectData.wxBaseArray::RemoveAt((size_t)iIndex);
+#endif
                 }
                 else
                 {
@@ -2324,19 +2328,6 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     }
 
     return processed;
-}
-
-// ----------------------------------------------------------------------------
-// Tree event
-// ----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxTreeEvent, wxNotifyEvent)
-
-wxTreeEvent::wxTreeEvent(wxEventType commandType, int id)
-           : wxNotifyEvent(commandType, id)
-{
-    m_code = 0;
-    m_itemOld = 0;
 }
 
 #endif // __WIN95__

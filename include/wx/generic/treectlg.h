@@ -13,7 +13,7 @@
 #define _GENERIC_TREECTRL_H_
 
 #ifdef __GNUG__
-    #pragma interface "treectrl.h"
+    #pragma interface "treectrg.h"
 #endif
 
 #include "wx/defs.h"
@@ -25,6 +25,7 @@
 #include "wx/pen.h"
 #include "wx/dynarray.h"
 #include "wx/timer.h"
+#include "wx/treebase.h"
 
 // -----------------------------------------------------------------------------
 // forward declaration
@@ -39,75 +40,17 @@ class WXDLLEXPORT wxTreeRenameTimer;
 class WXDLLEXPORT wxTreeTextCtrl;
 
 // -----------------------------------------------------------------------------
-// wxTreeItemId - unique identifier of a tree element
+// wxGenericTreeCtrl - the tree control
 // -----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTreeItemId
-{
-friend class wxTreeCtrl;
-friend class wxTreeEvent;
-public:
-    // ctors
-        // 0 is invalid value for HTREEITEM
-    wxTreeItemId() { m_pItem = 0; }
-
-        // default copy ctor/assignment operator are ok for us
-
-    // accessors
-        // is this a valid tree item?
-    bool IsOk() const { return m_pItem != 0; }
-
-    // deprecated: only for compatibility
-    wxTreeItemId(long itemId) { m_pItem = (wxGenericTreeItem *)itemId; }
-    operator long() const { return (long)m_pItem; }
-
-//protected: // not for gcc
-    // for wxTreeCtrl usage only
-    wxTreeItemId(wxGenericTreeItem *pItem) { m_pItem = pItem; }
-
-    wxGenericTreeItem *m_pItem;
-};
-
-WX_DECLARE_OBJARRAY(wxTreeItemId, wxArrayTreeItemIds);
-
-// ----------------------------------------------------------------------------
-// wxTreeItemData is some (arbitrary) user class associated with some item.
-//
-// Because the objects of this class are deleted by the tree, they should
-// always be allocated on the heap!
-// ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxTreeItemData: public wxClientData
-{
-friend class wxTreeCtrl;
-public:
-    // creation/destruction
-    // --------------------
-        // default ctor
-    wxTreeItemData() { }
-
-        // default copy ctor/assignment operator are ok
-
-    // accessor: get the item associated with us
-    const wxTreeItemId& GetId() const { return m_pItem; }
-    void SetId(const wxTreeItemId& id) { m_pItem = id; }
-
-protected:
-    wxTreeItemId m_pItem;
-};
-
-// -----------------------------------------------------------------------------
-// wxTreeCtrl - the tree control
-// -----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxTreeCtrl : public wxScrolledWindow
+class WXDLLEXPORT wxGenericTreeCtrl : public wxScrolledWindow
 {
 public:
     // creation
     // --------
-    wxTreeCtrl() { Init(); }
+    wxGenericTreeCtrl() { Init(); }
 
-    wxTreeCtrl(wxWindow *parent, wxWindowID id = -1,
+    wxGenericTreeCtrl(wxWindow *parent, wxWindowID id = -1,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
@@ -117,7 +60,7 @@ public:
         Create(parent, id, pos, size, style, validator, name);
     }
 
-    virtual ~wxTreeCtrl();
+    virtual ~wxGenericTreeCtrl();
 
     bool Create(wxWindow *parent, wxWindowID id = -1,
                 const wxPoint& pos = wxDefaultPosition,
@@ -448,7 +391,7 @@ protected:
 
 private:
     DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxTreeCtrl)
+    DECLARE_DYNAMIC_CLASS(wxGenericTreeCtrl)
 };
 
 #endif // _GENERIC_TREECTRL_H_

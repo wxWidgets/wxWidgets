@@ -98,7 +98,11 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TreeTest_ToggleIcon, MyFrame::OnToggleIcon)
 END_EVENT_TABLE()
 
+#if USE_GENERIC_TREECTRL
+BEGIN_EVENT_TABLE(MyTreeCtrl, wxGenericTreeCtrl)
+#else
 BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
+#endif
     EVT_TREE_BEGIN_DRAG(TreeTest_Ctrl, MyTreeCtrl::OnBeginDrag)
     EVT_TREE_BEGIN_RDRAG(TreeTest_Ctrl, MyTreeCtrl::OnBeginRDrag)
     EVT_TREE_END_DRAG(TreeTest_Ctrl, MyTreeCtrl::OnEndDrag)
@@ -513,7 +517,11 @@ void MyFrame::OnToggleIcon(wxCommandEvent& WXUNUSED(event))
 }
 
 // MyTreeCtrl implementation
+#if USE_GENERIC_TREECTRL
+IMPLEMENT_DYNAMIC_CLASS(MyTreeCtrl, wxGenericTreeCtrl)
+#else
 IMPLEMENT_DYNAMIC_CLASS(MyTreeCtrl, wxTreeCtrl)
+#endif
 
 MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
                        const wxPoint& pos, const wxSize& size,
