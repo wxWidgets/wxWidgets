@@ -1089,10 +1089,14 @@ bool wxMDIChildFrame::ResetWindowStyle(void *vrect)
     if (!pChild || (pChild == this))
     {
         HWND hwndClient = GetWinHwnd(pFrameWnd->GetClientWindow());
-        DWORD dwStyle = ::GetWindowLong(hwndClient, GWL_STYLE);
-        DWORD dwThisStyle = ::GetWindowLong(GetHwnd(), GWL_STYLE);
+        DWORD dwStyle = ::GetWindowLong(hwndClient, GWL_EXSTYLE);
+
+        // we want to test whether there is a maximized child, so just set
+        // dwThisStyle to 0 if there is no child at all
+        DWORD dwThisStyle = pChild
+            ? ::GetWindowLong(GetWinHwnd(pChild), GWL_STYLE) : NULL;
         DWORD dwNewStyle = dwStyle;
-        if (pChild != NULL && (dwThisStyle & WS_MAXIMIZE))
+        if ( dwThisStyle & WS_MAXIMIZE )
             dwNewStyle &= ~(WS_EX_CLIENTEDGE);
         else
             dwNewStyle |= WS_EX_CLIENTEDGE;
