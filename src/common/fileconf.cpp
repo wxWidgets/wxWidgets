@@ -67,22 +67,16 @@
 // global functions declarations
 // ----------------------------------------------------------------------------
 
-// is 'c' a valid character in group name?
-// NB: wxCONFIG_IMMUTABLE_PREFIX and wxCONFIG_PATH_SEPARATOR must be valid chars,
-//     but _not_ ']' (group name delimiter)
-// NB2: we explicitly allow symbols from the 2nd half of the ASCII table
-inline bool IsValid(char c)
-{
-    return isalnum(c) || strchr("@_/-!.*%", c) || ((c & 0x80) != 0);
-}
-
 // compare functions for sorting the arrays
 static int CompareEntries(ConfigEntry *p1, ConfigEntry *p2);
 static int CompareGroups(ConfigGroup *p1, ConfigGroup *p2);
 
 // filter strings
-static wxString FilterIn(const wxString& str);
-static wxString FilterOut(const wxString& str);
+static wxString FilterInValue(const wxString& str);
+static wxString FilterOutValue(const wxString& str);
+
+static wxString FilterInEntryName(const wxString& str);
+static wxString FilterOutEntryName(const wxString& str);
 
 // ============================================================================
 // implementation
@@ -299,8 +293,8 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
       pEnd = pStart;
 
       while ( *++pEnd != ']' ) {
-        if ( !IsValid(*pEnd) && *pEnd != ' ' )  // allow spaces in group names
-          break;
+        if ( *pEnd == '\n' || *pEnd == '\0' )
+            break;
       }
 
       if ( *pEnd != ']' ) {
@@ -312,7 +306,8 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
       // group name here is always considered as abs path
       wxString strGroup;
       pStart++;
-      strGroup << wxCONFIG_PATH_SEPARATOR << wxString(pStart, pEnd - pStart);
+      strGroup << wxCONFIG_PATH_SEPARATOR
+               << FilterInEntryName(wxString(pStart, pEnd - pStart));
 
       // will create it if doesn't yet exist
       SetPath(strGroup);
@@ -344,10 +339,17 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
     }
     else {                        // a key
       const char *pEnd = pStart;
-      while ( IsValid(*pEnd) )
-        pEnd++;
+      while ( !isspace(*pEnd) ) {
+        if ( *pEnd == '\\' ) {
+          // next character may be space or not - still take it because it's
+          // quoted
+          pEnd++;
+        }
 
-      wxString strKey(pStart, pEnd);
+        pEnd++;
+      }
+
+      wxString strKey(FilterInEntryName(wxString(pStart, pEnd)));
 
       // skip whitespace
       while ( isspace(*pEnd) )
@@ -394,7 +396,7 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
         while ( isspace(*pEnd) )
           pEnd++;
 
-        pEntry->SetValue(FilterIn(pEnd), FALSE /* read from file */);
+        pEntry->SetValue(FilterInValue(pEnd), FALSE /* read from file */);
       }
     }
   }
@@ -591,7 +593,7 @@ bool wxFileConfig::Write(const wxString& key, const wxString& szValue)
   wxString strName = path.Name();
   if ( strName.IsEmpty() ) {
     // setting the value of a group is an error
-    wxASSERT_MSG( IsEmpty(szValue), _("can't set value of a group!") );
+    wxASSERT_MSG( IsEmpty(szValue), "can't set value of a group!" );
 
     // ... except if it's empty in which case it's a way to force it's creation
     m_pCurrentGroup->SetDirty();
@@ -604,18 +606,12 @@ bool wxFileConfig::Write(const wxString& key, const wxString& szValue)
 
     // check that the name is reasonable
     if ( strName[0u] == wxCONFIG_IMMUTABLE_PREFIX ) {
-      wxLogError(_("Entry name can't start with '%c'."),
+      wxLogError(_("Config entry name cannot start with '%c'."),
                  wxCONFIG_IMMUTABLE_PREFIX);
       return FALSE;
     }
 
-    for ( const char *pc = strName; *pc != '\0'; pc++ ) {
-      if ( !IsValid(*pc) ) {
-        wxLogError(_("Character '%c' is invalid in a config entry name."),
-                   *pc);
-        return FALSE;
-      }
-    }
+    strName = FilterOutEntryName(strName);
 
     ConfigEntry *pEntry = m_pCurrentGroup->FindEntry(strName);
     if ( pEntry == NULL )
@@ -1278,7 +1274,7 @@ void ConfigEntry::SetValue(const wxString& strValue, bool bUser)
   m_strValue = strValue;
 
   if ( bUser ) {
-    wxString strVal = FilterOut(strValue);
+    wxString strVal = FilterOutValue(strValue);
     wxString strLine;
     strLine << m_strName << " = " << strVal;
 
@@ -1337,8 +1333,8 @@ int CompareGroups(ConfigGroup *p1,
 // filter functions
 // ----------------------------------------------------------------------------
 
-// undo FilterOut
-wxString FilterIn(const wxString& str)
+// undo FilterOutValue
+static wxString FilterInValue(const wxString& str)
 {
   wxString strResult;
   strResult.Alloc(str.Len());
@@ -1384,9 +1380,9 @@ wxString FilterIn(const wxString& str)
 }
 
 // quote the string before writing it to file
-wxString FilterOut(const wxString& str)
+static wxString FilterOutValue(const wxString& str)
 {
-   if(str.IsEmpty())
+   if ( !str )
       return str;
 
   wxString strResult;
@@ -1439,9 +1435,41 @@ wxString FilterOut(const wxString& str)
   return strResult;
 }
 
+// undo FilterOutEntryName
+static wxString FilterInEntryName(const wxString& str)
+{
+  wxString strResult;
+  strResult.Alloc(str.Len());
 
+  for ( const char *pc = str.c_str(); *pc != '\0'; pc++ ) {
+    if ( *pc == '\\' )
+      pc++;
 
+    strResult += *pc;
+  }
 
+  return strResult;
+}
 
+// sanitize entry or group name: insert '\\' before any special characters
+static wxString FilterOutEntryName(const wxString& str)
+{
+  wxString strResult;
+  strResult.Alloc(str.Len());
 
+  for ( const char *pc = str.c_str(); *pc != '\0'; pc++ ) {
+    char c = *pc;
+
+    // we explicitly allow some of "safe" chars and 8bit ASCII characters
+    // which will probably never have special meaning
+    // NB: note that wxCONFIG_IMMUTABLE_PREFIX and wxCONFIG_PATH_SEPARATOR
+    //     should *not* be quoted
+    if ( !isalnum(c) && !strchr("@_/-!.*%", c) && ((c & 0x80) == 0) )
+      strResult += '\\';
+
+    strResult += c;
+  }
+
+  return strResult;
+}
 
