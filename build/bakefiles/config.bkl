@@ -58,7 +58,7 @@ Acts according to DEBUG_INFO by default.
 
     <option name="SHARED">
         <values>0 1</values>
-        <values-description>Static DLL</values-description>
+        <values-description>LIB DLL</values-description>
         <default-value>1</default-value>
         <description>
             What type of library to build?
