@@ -155,10 +155,8 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         }
     }
 
-    // VZ: apparently this needs to be done a.s.a.p., right? it is done after
-    //     wxClassInfo::InitializeClasses() now but usd to be done before, I
-    //     hope it's not a problem -- if it is, please let me know, David (if
-    //     it isn't, just remove this comment :-)
+    // Posing must be completed before any instances of the Objective-C
+    // classes being posed as are created.
     wxPoseAsInitializer::InitializePosers();
 
     return wxAppBase::Initialize(argc, argv);
