@@ -530,6 +530,7 @@ class DemoCodePanel(wx.Panel):
     def ActiveModuleChanged(self):
         self.LoadDemoSource(self.demoModules.GetSource())
         self.UpdateControlState()
+        self.ReloadDemo()
 
         
     def LoadDemoSource(self, source):
@@ -573,12 +574,11 @@ class DemoCodePanel(wx.Panel):
             busy = wx.BusyInfo("Reloading demo module...")
             self.demoModules.SetActive(modSelected)
             self.ActiveModuleChanged()
-            self.ReloadDemo()
 
 
     def ReloadDemo(self):
         if self.demoModules.name != __name__:
-            self.mainFrame.RunModule(False)
+            self.mainFrame.RunModule()
 
                 
     def OnCodeModified(self, event):
@@ -624,7 +624,6 @@ class DemoCodePanel(wx.Panel):
         busy = wx.BusyInfo("Reloading demo module...")
         self.demoModules.LoadFromFile(modModified, modifiedFilename)
         self.ActiveModuleChanged()
-        self.ReloadDemo()
 
 
     def OnRestore(self, event): # Handles the "Delete Modified" button
@@ -633,7 +632,6 @@ class DemoCodePanel(wx.Panel):
         os.unlink(modifiedFilename) # Delete the modified copy
         busy = wx.BusyInfo("Reloading demo module...")
         self.ActiveModuleChanged()
-        self.ReloadDemo()
 
 
 #---------------------------------------------------------------------------
@@ -715,8 +713,6 @@ class DemoModules:
         # load modified module (if one exists)
         if DoesModifiedExist(name):
            self.LoadFromFile(modModified, GetModifiedFilename(name))
-           if (modDefault == modModified):
-               self.SetActive(modModified)
 
 
     def LoadFromFile(self, modID, filename):
@@ -988,8 +984,8 @@ class wxPythonDemo(wx.Frame):
         self.curOverview = ""
         self.demoPage = None
         self.codePage = None
-        self.useModified = False
         self.shell = None
+        self.firstTime = True
 
         icon = images.getMondrianIcon()
         self.SetIcon(icon)
@@ -1262,7 +1258,7 @@ class wxPythonDemo(wx.Frame):
                 if os.path.exists(GetOriginalFilename(demoName)):
                     wx.LogMessage("Loading demo %s.py..." % demoName)
                     self.demoModules = DemoModules(demoName)
-                    self.RunModule(True)
+                    self.LoadDemoSource()
                     self.tree.Refresh()
                 else:
                     self.SetOverview("wxPython", mainOverview)
@@ -1278,7 +1274,7 @@ class wxPythonDemo(wx.Frame):
         self.codePage.LoadDemo(self.demoModules)
         
     #---------------------------------------------
-    def RunModule(self, loadSource):
+    def RunModule(self):
         """Runs the active module"""
 
         module = self.demoModules.GetActive()
@@ -1306,11 +1302,16 @@ class wxPythonDemo(wx.Frame):
             # There was a previous error in compiling or exec-ing
             self.demoPage = DemoErrorPanel(self.nb, self.codePage,
                                            self.demoModules.GetErrorInfo(), self)
-
-        if loadSource:
-            self.LoadDemoSource()
+            
         self.SetOverview(self.demoModules.name + " Overview", overviewText)
-        self.UpdateNotebook()
+
+        if self.firstTime:
+            # cahnge to the demo page the first time a module is run
+            self.UpdateNotebook(2)
+            self.firstTime = False
+        else:
+            # otherwise just stay on the same tab in case the user has changed to another one
+            self.UpdateNotebook()
 
     #---------------------------------------------
     def ShutdownDemoModule(self):
