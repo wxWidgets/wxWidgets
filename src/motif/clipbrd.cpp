@@ -195,7 +195,7 @@ wxClipboard::~wxClipboard()
 
 void wxClipboard::Clear()
 {
-    wxDataObjectList::Node* node = m_data.GetFirst();
+    wxDataObjectList::compatibility_iterator node = m_data.GetFirst();
     while (node)
     {
         delete node->GetData();
@@ -203,7 +203,7 @@ void wxClipboard::Clear()
     }
     m_data.Clear();
 
-    for( wxDataIdToDataObjectList::Node* node2 = m_idToObject.GetFirst();
+    for( wxDataIdToDataObjectList::compatibility_iterator node2 = m_idToObject.GetFirst();
          node2; node2 = node2->GetNext() )
         delete node->GetData();
     m_idToObject.Clear();
@@ -244,7 +244,7 @@ void wxClipboardCallback( Widget xwidget, long* data_id,
     wxDataObject* dobj = NULL;
     size_t size = 0;
 
-    for( wxDataIdToDataObjectList::Node* node2 =
+    for( wxDataIdToDataObjectList::compatibility_iterator node2 =
              wxTheClipboard->m_idToObject.GetFirst();
          node2; node2 = node2->GetNext() )
     {

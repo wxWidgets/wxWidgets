@@ -69,7 +69,7 @@ wxCursorRefData::wxCursorRefData()
 
 wxCursorRefData::~wxCursorRefData()
 {
-    wxXCursorList::Node* node = m_cursors.GetFirst();
+    wxXCursorList::compatibility_iterator node = m_cursors.GetFirst();
     while (node)
     {
         wxXCursor* c = node->GetData();
@@ -299,7 +299,7 @@ WXCursor wxCursor::GetXCursor(WXDisplay* display)
 {
     if (!M_CURSORDATA)
         return (WXCursor) 0;
-    wxXCursorList::Node* node = M_CURSORDATA->m_cursors.GetFirst();
+    wxXCursorList::compatibility_iterator node = M_CURSORDATA->m_cursors.GetFirst();
     while (node)
     {
         wxXCursor* c = node->GetData();
@@ -452,7 +452,7 @@ wxXSetBusyCursor (wxWindow * win, wxCursor * cursor)
 
     XFlush (display);
 
-    for(wxWindowList::Node *node = win->GetChildren().GetFirst (); node; 
+    for(wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst (); node; 
         node = node->GetNext())
     {
         wxWindow *child = node->GetData ();
@@ -466,7 +466,7 @@ void wxBeginBusyCursor(wxCursor *cursor)
     wxBusyCursorCount++;
     if (wxBusyCursorCount == 1)
     {
-        for(wxWindowList::Node *node = wxTopLevelWindows.GetFirst (); node;
+        for(wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst (); node;
             node = node->GetNext())
         {
             wxWindow *win = node->GetData ();
@@ -484,7 +484,7 @@ void wxEndBusyCursor()
     wxBusyCursorCount--;
     if (wxBusyCursorCount == 0)
     {
-        for(wxWindowList::Node *node = wxTopLevelWindows.GetFirst (); node;
+        for(wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst (); node;
             node = node->GetNext())
         {
             wxWindow *win = node->GetData ();

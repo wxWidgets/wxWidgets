@@ -73,7 +73,7 @@ class wxSocketTable: public wxHashTable
     }
     ~wxSocketTable()
     {
-        DeleteContents(TRUE);
+        WX_CLEAR_HASH_TABLE(*this)
     }
 
     wxSocketTableEntry* FindEntry(int fd);
@@ -171,7 +171,7 @@ bool wxSocketTable::CallCallback(int fd, wxSocketTableType socketType)
 void wxSocketTable::FillSets(fd_set* readset, fd_set* writeset, int* highest)
 {
     BeginFind();
-    wxNode* node = Next();
+    wxHashTable::compatibility_iterator node = Next();
     while (node)
     {
         wxSocketTableEntry* entry = (wxSocketTableEntry*) node->GetData();
@@ -197,7 +197,7 @@ void wxSocketTable::FillSets(fd_set* readset, fd_set* writeset, int* highest)
 void wxSocketTable::ProcessEvents(fd_set* readset, fd_set* writeset)
 {
     BeginFind();
-    wxNode* node = Next();
+    wxHashTable::compatibility_iterator node = Next();
     while (node)
     {
         wxSocketTableEntry* entry = (wxSocketTableEntry*) node->GetData();

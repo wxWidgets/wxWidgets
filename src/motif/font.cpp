@@ -188,7 +188,7 @@ void wxFontRefData::Init(int pointSize,
 
 wxFontRefData::~wxFontRefData()
 {
-    wxList::Node* node = m_fonts.GetFirst();
+    wxList::compatibility_iterator node = m_fonts.GetFirst();
     while (node)
     {
         wxXFont* f = (wxXFont*) node->GetData();
@@ -511,7 +511,7 @@ wxXFont* wxFont::GetInternalFont(double scale, WXDisplay* display) const
     int pointSize = (M_FONTDATA->m_pointSize * 10 * intScale) / 100;
 
     // search existing fonts first
-    wxList::Node* node = M_FONTDATA->m_fonts.GetFirst();
+    wxList::compatibility_iterator node = M_FONTDATA->m_fonts.GetFirst();
     while (node)
     {
         wxXFont* f = (wxXFont*) node->GetData();

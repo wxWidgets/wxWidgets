@@ -60,7 +60,7 @@ bool wxBitmapBase::RemoveHandler(const wxString& name)
 
 wxBitmapHandler *wxBitmapBase::FindHandler(const wxString& name)
 {
-    wxList::Node *node = sm_handlers.GetFirst();
+    wxList::compatibility_iterator node = sm_handlers.GetFirst();
     while ( node )
     {
         wxBitmapHandler *handler = (wxBitmapHandler *)node->GetData();
@@ -73,7 +73,7 @@ wxBitmapHandler *wxBitmapBase::FindHandler(const wxString& name)
 
 wxBitmapHandler *wxBitmapBase::FindHandler(const wxString& extension, wxBitmapType bitmapType)
 {
-    wxList::Node *node = sm_handlers.GetFirst();
+    wxList::compatibility_iterator node = sm_handlers.GetFirst();
     while ( node )
     {
         wxBitmapHandler *handler = (wxBitmapHandler *)node->GetData();
@@ -87,7 +87,7 @@ wxBitmapHandler *wxBitmapBase::FindHandler(const wxString& extension, wxBitmapTy
 
 wxBitmapHandler *wxBitmapBase::FindHandler(wxBitmapType bitmapType)
 {
-    wxList::Node *node = sm_handlers.GetFirst();
+    wxList::compatibility_iterator node = sm_handlers.GetFirst();
     while ( node )
     {
         wxBitmapHandler *handler = (wxBitmapHandler *)node->GetData();
@@ -100,13 +100,13 @@ wxBitmapHandler *wxBitmapBase::FindHandler(wxBitmapType bitmapType)
 
 void wxBitmapBase::CleanUpHandlers()
 {
-    wxList::Node *node = sm_handlers.GetFirst();
+    wxList::compatibility_iterator node = sm_handlers.GetFirst();
     while ( node )
     {
         wxBitmapHandler *handler = (wxBitmapHandler *)node->GetData();
-        wxList::Node *next = node->GetNext();
+        wxList::compatibility_iterator next = node->GetNext();
         delete handler;
-        delete node;
+        sm_handlers.Erase(node);
         node = next;
     }
 }

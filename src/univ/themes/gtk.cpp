@@ -2155,7 +2155,7 @@ wxMenuGeometryInfo *wxGTKRenderer::GetMenuGeometry(wxWindow *win,
             widthAccelMax = 0,
             widthBmpMax = MENU_LEFT_MARGIN;
 
-    for ( wxMenuItemList::Node *node = menu.GetMenuItems().GetFirst();
+    for ( wxMenuItemList::compatibility_iterator node = menu.GetMenuItems().GetFirst();
           node;
           node = node->GetNext() )
     {

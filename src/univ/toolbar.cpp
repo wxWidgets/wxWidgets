@@ -211,7 +211,7 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
             return NULL;
     }
 
-    for ( wxToolBarToolsList::Node *node = m_tools.GetFirst();
+    for ( wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
           node;
           node = node->GetNext() )
     {
@@ -444,7 +444,7 @@ void wxToolBar::DoLayout()
            *pCur = IsVertical() ? &y : &x;
 
     // calculate the positions of all elements
-    for ( wxToolBarToolsList::Node *node = m_tools.GetFirst();
+    for ( wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
           node;
           node = node->GetNext() )
     {
@@ -568,7 +568,7 @@ void wxToolBar::DoDraw(wxControlRenderer *renderer)
     GetRectLimits(rectUpdate, &start, &end);
 
     // and redraw all the tools intersecting it
-    for ( wxToolBarToolsList::Node *node = m_tools.GetFirst();
+    for ( wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
           node;
           node = node->GetNext() )
     {

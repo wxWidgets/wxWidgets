@@ -581,7 +581,7 @@ void wxFrame::OnActivate(wxActivateEvent& event)
     if (!event.GetActive())
         return;
 
-    for(wxWindowList::Node *node = GetChildren().GetFirst(); node;
+    for(wxWindowList::compatibility_iterator node = GetChildren().GetFirst(); node;
         node = node->GetNext())
     {
         // Find a child that's a subwindow, but not a dialog box.

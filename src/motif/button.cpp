@@ -127,7 +127,7 @@ void wxButton::SetDefault()
     // wxButton in the same row, correction is straighforward: we set
     // resource for all wxButton in this parent (but not sub panels)
 
-    for (wxWindowList::Node * node = parent->GetChildren().GetFirst ();
+    for (wxWindowList::compatibility_iterator node = parent->GetChildren().GetFirst ();
          node; node = node->GetNext ())
     {
         wxWindow *win = node->GetData ();

@@ -222,7 +222,7 @@ void wxChoice::Delete(int n)
     Widget w = (Widget)m_widgetArray[n];
     XtRemoveCallback(w, XmNactivateCallback, (XtCallbackProc)wxChoiceCallback,
                      (XtPointer)this);
-    m_stringList.DeleteNode(m_stringList.Item(n));
+    m_stringList.Erase(m_stringList.Item(n));
     m_widgetArray.RemoveAt(size_t(n));
     m_clientDataDict.Delete(n, HasClientObjectData());
 
@@ -267,7 +267,7 @@ int wxChoice::GetSelection() const
     if (!s.IsEmpty())
     {
         int i = 0;
-        for (wxStringListNode* node = m_stringList.GetFirst ();
+        for (wxStringList::compatibility_iterator node = m_stringList.GetFirst ();
              node; node = node->GetNext ())
         {
             if (wxStrcmp(node->GetData(), s.c_str()) == 0)
@@ -287,7 +287,7 @@ void wxChoice::SetSelection(int n)
 {
     m_inSetValue = TRUE;
 
-    wxStringListNode *node = m_stringList.Item(n);
+    wxStringList::compatibility_iterator node = m_stringList.Item(n);
     if (node)
     {
 #if 0
@@ -318,7 +318,7 @@ void wxChoice::SetSelection(int n)
 int wxChoice::FindString(const wxString& s) const
 {
     int i = 0;
-    for (wxStringListNode* node = m_stringList.GetFirst();
+    for (wxStringList::compatibility_iterator node = m_stringList.GetFirst();
          node; node = node->GetNext ())
     {
         if (s == node->GetData())
@@ -332,7 +332,7 @@ int wxChoice::FindString(const wxString& s) const
 
 wxString wxChoice::GetString(int n) const
 {
-    wxStringListNode *node = m_stringList.Item(n);
+    wxStringList::compatibility_iterator node = m_stringList.Item(n);
     if (node)
         return node->GetData();
     else
@@ -523,7 +523,7 @@ wxSize wxChoice::GetItemsSize() const
     // get my
     GetTextExtent( "|", &x, &my );
 
-    wxStringList::Node* curr = m_stringList.GetFirst();
+    wxStringList::compatibility_iterator curr = m_stringList.GetFirst();
     while( curr )
     {
         GetTextExtent( curr->GetData(), &x, &y );

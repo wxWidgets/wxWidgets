@@ -590,7 +590,7 @@ void wxGenericMDIChildFrame::OnSize(wxSizeEvent& WXUNUSED(event))
     {
         // do we have _exactly_ one child?
         wxWindow *child = (wxWindow *)NULL;
-        for ( wxWindowList::Node *node = GetChildren().GetFirst();
+        for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
               node;
               node = node->GetNext() )
         {

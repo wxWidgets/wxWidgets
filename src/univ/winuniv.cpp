@@ -393,7 +393,7 @@ void wxWindow::Refresh(bool eraseBackground, const wxRect *rectClient)
     wxWindowNative::Refresh(eraseBackground, &rectWin);
 
     // Refresh all sub controls if any.
-    wxWindowList::Node *node = GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
     while ( node )
     {
         wxWindow *win = node->GetData();
@@ -954,7 +954,7 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
     // scroll children accordingly:
     wxPoint offset(dx, dy);
 
-    for (wxWindowList::Node *node = GetChildren().GetFirst();
+    for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
          node; node = node->GetNext())
     {
         wxWindow *child = node->GetData();

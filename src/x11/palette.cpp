@@ -77,7 +77,7 @@ wxPaletteRefData::~wxPaletteRefData()
 {
     Display *display = (Display*) NULL;
 
-    wxNode *node, *next;
+    wxList::compatibility_iterator node, next;
 
     for (node = m_palettes.GetFirst(); node; node = next) {
         wxXPalette *c = (wxXPalette *)node->GetData();
@@ -106,7 +106,7 @@ wxPaletteRefData::~wxPaletteRefData()
             XFreeColormap(display, cmap);
 
         next = node->GetNext();
-        m_palettes.DeleteNode(node);
+        m_palettes.Erase(node);
         delete c;
     }
 }
@@ -194,7 +194,7 @@ WXColormap wxPalette::GetXColormap(WXDisplay* display) const
     if (!M_PALETTEDATA || (M_PALETTEDATA->m_palettes.GetCount() == 0))
         return wxTheApp->GetMainColormap(display);
 
-    wxNode* node = M_PALETTEDATA->m_palettes.GetFirst();
+    wxList::compatibility_iterator node = M_PALETTEDATA->m_palettes.GetFirst();
     if (!display && node)
     {
         wxXPalette* p = (wxXPalette*) node->GetData();
@@ -319,7 +319,7 @@ unsigned long *wxPalette::GetXPixArray(WXDisplay *display, int *n)
 {
     if (!M_PALETTEDATA)
         return (unsigned long*) 0;
-    wxNode *node;
+    wxList::compatibility_iterator node;
 
     for (node = M_PALETTEDATA->m_palettes.GetFirst(); node; node = node->GetNext())
     {

@@ -78,7 +78,7 @@ void wxRadioButton::OnCheck()
     // find the radio button which is the first in the group, i.e. the one
     // with wxRB_GROUP style
     const wxWindowList& siblings = GetParent()->GetChildren();
-    wxWindowList::Node *nodeStart = siblings.Find(this);
+    wxWindowList::compatibility_iterator nodeStart = siblings.Find(this);
     while ( nodeStart )
     {
         // stop if we found a radio button with wxRB_GROUP style or it we

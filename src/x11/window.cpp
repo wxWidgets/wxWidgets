@@ -1261,7 +1261,7 @@ void wxWindowX11::SendNcPaintEvents()
 // Responds to colour changes: passes event on to children.
 void wxWindowX11::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
-    wxWindowList::Node *node = GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
     while ( node )
     {
         // Only propagate to non-top-level windows
