@@ -92,6 +92,7 @@ Source: "wx\_wizard.pyd";                      DestDir: "{app}\wx"; Components: 
 Source: "wx\_gizmos.pyd";                      DestDir: "{app}\wx"; Components: core
 Source: "wx\_glcanvas.pyd";                    DestDir: "{app}\wx"; Components: core
 Source: "wx\_iewin.pyd";                       DestDir: "{app}\wx"; Components: core
+Source: "wx\_activex.pyd";                     DestDir: "{app}\wx"; Components: core
 Source: "wx\_ogl.pyd";                         DestDir: "{app}\wx"; Components: core
 Source: "wx\_stc.pyd";                         DestDir: "{app}\wx"; Components: core
 Source: "wx\_xrc.pyd";                         DestDir: "{app}\wx"; Components: core
@@ -161,6 +162,7 @@ Source: "demo\data\*.wav";                  DestDir: "{app}\wx\demo\data"; Compo
 Source: "demo\data\*.wdr";                  DestDir: "{app}\wx\demo\data"; Components: demo
 Source: "demo\data\*.xrc";                  DestDir: "{app}\wx\demo\data"; Components: demo
 Source: "demo\data\*.gif";                  DestDir: "{app}\wx\demo\data"; Components: demo
+Source: "demo\data\*.swf";                  DestDir: "{app}\wx\demo\data"; Components: demo
 
 ;;Source: "demo\dllwidget\*.cpp";             DestDir: "{app}\wx\demo\dllwidget"; Components: demo
 ;;Source: "demo\dllwidget\*.py";              DestDir: "{app}\wx\demo\dllwidget"; Components: demo
