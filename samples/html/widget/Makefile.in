@@ -7,17 +7,17 @@
 #
 # "%W% %G%"
 #
-# Makefile for html printing example (UNIX).
+# Makefile for html widget example (UNIX).
 
 top_srcdir = @top_srcdir@
 top_builddir = ../../..
-program_dir = samples/html/printing
+program_dir = samples/html/widget
 
-DATAFILES = test.htm pic.png
-
-PROGRAM=printing
+PROGRAM=widget
 
 OBJECTS=$(PROGRAM).o
+
+DATAFILES=start.htm
 
 include ../../../src/makeprog.env
 

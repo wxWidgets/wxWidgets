@@ -1196,11 +1196,16 @@ void wxTreeCtrl::ScrollTo(const wxTreeItemId &item)
 {
     if (!item.IsOk()) return;
 
+    // We have to call this here because the label in
+    // question might just have been added and no screen
+    // update taken place.
+    if (m_dirty) wxYield();
+
     wxGenericTreeItem *gitem = item.m_pItem;
 
     // now scroll to the item
     int item_y = gitem->GetY();
-
+    
     int start_x = 0;
     int start_y = 0;
     ViewStart( &start_x, &start_y );
@@ -1339,10 +1344,10 @@ void wxTreeCtrl::AdjustMyScrollbars()
 
 int wxTreeCtrl::GetLineHeight(wxGenericTreeItem *item) const
 {
-  if (GetWindowStyleFlag() & wxTR_HAS_VARIABLE_ROW_HEIGHT)
-    return item->GetHeight();
-  else
-    return m_lineHeight;
+    if (GetWindowStyleFlag() & wxTR_HAS_VARIABLE_ROW_HEIGHT)
+        return item->GetHeight();
+    else
+        return m_lineHeight;
 }
 
 void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
@@ -1778,6 +1783,11 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
 
 wxTreeItemId wxTreeCtrl::HitTest(const wxPoint& point, int& flags)
 {
+    // We have to call this here because the label in
+    // question might just have been added and no screen
+    // update taken place.
+    if (m_dirty) wxYield();
+
     wxClientDC dc(this);
     PrepareDC(dc);
     long x = dc.DeviceToLogicalX( (long)point.x );
@@ -1808,6 +1818,11 @@ void wxTreeCtrl::Edit( const wxTreeItemId& item )
     GetEventHandler()->ProcessEvent( te );
 
     if (!te.IsAllowed()) return;
+    
+    // We have to call this here because the label in
+    // question might just have been added and no screen
+    // update taken place.
+    if (m_dirty) wxYield();
 
     wxString s = m_currentEdit->GetText();
     int x = m_currentEdit->GetX();

@@ -264,10 +264,11 @@ bool wxSingleChoiceDialog::Create( wxWindow *WXUNUSED(parent),
     // 4) buttons
     topsizer->Add( CreateButtonSizer( wxOK|wxCANCEL ), 0, wxCENTRE | wxALL, 10 );
 
+    SetAutoLayout( TRUE );
+    SetSizer( topsizer );
+    
     topsizer->SetSizeHints( this );
     topsizer->Fit( this );
-    SetSizer( topsizer );
-    SetAutoLayout( TRUE );
 
     Centre( wxBOTH );
 

@@ -224,7 +224,7 @@ void wxMenuBar::Append( wxMenu *menu, const wxString &title )
     wxString buf;
     buf << _T('/') << str.c_str();
 
-    char *cbuf = new char[buf.Length()];
+    char *cbuf = new char[buf.Length()+1];
     strcpy(cbuf, buf.mbc_str());
 
     GtkItemFactoryEntry entry;

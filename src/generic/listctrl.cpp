@@ -1159,6 +1159,11 @@ void wxListMainWindow::EditLabel( long item )
     if (!le.IsAllowed())
         return;
     
+    // We have to call this here because the label in
+    // question might just have been added and no screen
+    // update taken place.
+    if (m_dirty) wxYield();
+
     wxString s;
     m_currentEdit->GetText( 0, s );
     int x = 0;
@@ -2189,6 +2194,11 @@ void wxListMainWindow::DeleteEverything( void )
 
 void wxListMainWindow::EnsureVisible( long index )
 {
+    // We have to call this here because the label in
+    // question might just have been added and no screen
+    // update taken place.
+    if (m_dirty) wxYield();
+
     wxListLineData *oldCurrent = m_current;
     m_current = (wxListLineData *) NULL;
     int i = index;

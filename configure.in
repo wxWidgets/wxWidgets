@@ -2733,6 +2733,9 @@ AC_OUTPUT([
 	    samples/html/help/Makefile
 	    samples/html/printing/Makefile
 	    samples/html/test/Makefile
+	    samples/html/zip/Makefile
+	    samples/html/virtual/Makefile
+	    samples/html/widget/Makefile
 	    utils/Makefile
 	    utils/wxMMedia2/Makefile
 	    utils/wxMMedia2/lib/Makefile

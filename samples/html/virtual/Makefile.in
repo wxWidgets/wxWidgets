@@ -7,17 +7,17 @@
 #
 # "%W% %G%"
 #
-# Makefile for html printing example (UNIX).
+# Makefile for html virtual example (UNIX).
 
 top_srcdir = @top_srcdir@
 top_builddir = ../../..
-program_dir = samples/html/printing
+program_dir = samples/html/virtual
 
-DATAFILES = test.htm pic.png
-
-PROGRAM=printing
+PROGRAM=virtual
 
 OBJECTS=$(PROGRAM).o
+
+DATAFILES=start.htm
 
 include ../../../src/makeprog.env
 

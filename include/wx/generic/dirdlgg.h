@@ -77,13 +77,61 @@ class wxDirCtrl;
 class wxDirDialog;
 
 //-----------------------------------------------------------------------------
+// wxDirItemData
+//-----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxDirItemData : public wxTreeItemData
+{
+public:
+  wxDirItemData(wxString& path, wxString& name);
+  ~wxDirItemData();
+  bool HasSubDirs();
+  void SetNewDirName( wxString path );
+  wxString m_path, m_name;
+  bool m_isHidden;
+  bool m_hasSubDirs;
+};
+
+//-----------------------------------------------------------------------------
+// wxDirCtrl
+//-----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxDirCtrl: public wxTreeCtrl
+{
+public:
+    bool           m_showHidden;
+    wxTreeItemId   m_rootId;
+  
+    wxDirCtrl();
+    wxDirCtrl(wxWindow *parent, const wxWindowID id = -1, 
+	      const wxString &dir = "/",
+	      const wxPoint& pos = wxDefaultPosition,
+	      const wxSize& size = wxDefaultSize,
+	      const long style = wxTR_HAS_BUTTONS,
+	      const wxString& name = "wxTreeCtrl" );
+    void ShowHidden( const bool yesno );
+    void OnExpandItem(wxTreeEvent &event );
+    void OnCollapseItem(wxTreeEvent &event );
+    void OnBeginEditItem(wxTreeEvent &event );
+    void OnEndEditItem(wxTreeEvent &event );
+    
+protected:
+    void CreateItems(const wxTreeItemId &parent);
+    void SetupSections();
+    wxArrayString m_paths, m_names;
+    
+private:
+    DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxDirCtrl)
+};
+
+//-----------------------------------------------------------------------------
 // wxDirDialog
 //-----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxDirDialog: public wxDialog
 {
-  DECLARE_DYNAMIC_CLASS(wxDirDialog)
- public:
+public:
     wxDirDialog(wxWindow *parent, 
 		const wxString& message = wxFileSelectorPromptStr,
 		const wxString& defaultPath = wxEmptyString,
@@ -100,24 +148,24 @@ class WXDLLEXPORT wxDirDialog: public wxDialog
 
     void OnTreeSelected( wxTreeEvent &event );
     void OnTreeKeyDown( wxTreeEvent &event );
-    void OnSize(wxSizeEvent& event);
     void OnOK(wxCommandEvent& event);
     void OnCancel(wxCommandEvent& event); 
     void OnNew(wxCommandEvent& event);
     // void OnCheck(wxCommandEvent& event);
-    DECLARE_EVENT_TABLE()
 
- protected:
+protected:
     // implementation
-    wxString    m_message;
-    long        m_dialogStyle;
-    wxWindow *  m_parent;
-    wxString    m_path;
-    wxDirCtrl  *m_dir;
-    wxTextCtrl *m_input;
-    // wxCheckBox *m_check;
-    wxButton   *m_ok, *m_cancel, *m_new;
-    void doSize();
+    wxString       m_message;
+    long           m_dialogStyle;
+    wxString       m_path;
+    wxDirCtrl     *m_dir;
+    wxTextCtrl    *m_input;
+    wxCheckBox    *m_check;  // not yet used
+    wxButton      *m_ok, *m_cancel, *m_new;
+    
+private:
+    DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxDirDialog)
 };
 
 #endif
