@@ -309,6 +309,13 @@
     #define  wxVsscanf   _vstscanf
     #define  wxVsprintf  _vstprintf
 
+    // special case: not all TCHAR-aware compilers have those
+    #if defined(__VISUALC__) || \
+            (defined(__BORLANDC__) && __BORLANDC__ >= 0x540)
+        #define wxVsnprintf_    _vsntprintf
+        #define wxSnprintf_     _sntprintf
+    #endif
+
     // special case: these functions are missing under Win9x with Unicows so we
     // have to implement them ourselves
     #if wxUSE_UNICODE_MSLU
@@ -576,10 +583,7 @@ WXDLLEXPORT bool wxOKlibc(); // for internal use
    We define function with a trailing underscore here because the real one is a
    wrapper around it as explained below
  */
-#ifdef wxHAVE_TCHAR_SUPPORT
-    #define wxVsnprintf_    _vsntprintf
-    #define wxSnprintf_     _sntprintf
-#else // !TCHAR
+#ifndef wxVsnprintf_
     #if wxUSE_UNICODE
         #if defined(HAVE_VSWPRINTF)
             #define wxVsnprintf_    vswprintf
@@ -593,7 +597,7 @@ WXDLLEXPORT bool wxOKlibc(); // for internal use
             #define wxSnprintf_     snprintf
         #endif
     #endif
-#endif // TCHAR/!TCHAR
+#endif // wxVsnprintf_ not defined yet
 
 #ifndef wxVsnprintf_
     // no [v]snprintf(), cook our own
