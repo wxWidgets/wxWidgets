@@ -174,19 +174,20 @@ a) Add files to files.bkl:
 b) Modify bakefile system in build/bakefiles/ to recognize wxFoo:
    * Add 'foo' to MAIN_LIBS and LIBS_NOGUI or LIBS_GUI (depending on whether
      the library depends on wxCore or not) to wxwin.py file.
-   * Add the library to EXTRALIBS in wxwin.py
+   * Add extra libraries needed by wxFoo (if any) to EXTRALIBS in wxwin.py
    * Add WXLIB_FOO definition to common.bkl (into the "Names of component
      libraries" section). It looks like this:
        <set var="WXLIB_FOO">
           <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('foo')))</if>
        </set>
 
-c) Add files to monolithic build: it's enough to add FOO_SRC to MONOLIB_GUI_SRC
-   or MONOLIB_SRC, depending on whether wxFoo uses GUI or not.
+c) Modify monolithic.bkl to add files to monolithic build: it's enough to add
+   FOO_SRC to MONOLIB_GUI_SRC or MONOLIB_SRC, depending on whether wxFoo uses
+   GUI or not.
 
-d) Add files to multilib build: add foolib and foodll targets. Don't use
-   wxBase targets as the template, use e.g. wxXML or wxHTML. Make sure
-   WXMAKINGDLL_FOO is defined in foodll.
+d) Modify multilib.bkl to add files to multilib build: add foolib and foodll
+   targets. Don't use wxBase targets as the template, use e.g. wxXML or wxHTML.
+   Make sure WXMAKINGDLL_FOO is defined in foodll.
 
 e) Regenerate all makefiles (don't forget to run autoconf)
 
