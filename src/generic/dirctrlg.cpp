@@ -1645,16 +1645,17 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
         return newid;
     }
 
-    wxBitmap tmpBmp;
-    tmpBmp.CopyFromIcon(ic);
-    wxImage img = tmpBmp.ConvertToImage();
+    wxBitmap bmp;
+    bmp.CopyFromIcon(ic);
 
     int id = m_smallImageList->GetImageCount();
-    if (img.GetWidth() == 16 && img.GetHeight() == 16)
-        m_smallImageList->Add(wxBitmap(img));
+    if ((bmp.GetWidth() == 16) && (bmp.GetHeight() == 16))
+        m_smallImageList->Add(bmp);
     else
     {
-        if (img.GetWidth() != 32 || img.GetHeight() != 32)
+        wxImage img = bmp.ConvertToImage();
+
+        if ((img.GetWidth() != 32) || (img.GetHeight() != 32))
             m_smallImageList->Add(CreateAntialiasedBitmap(CutEmptyBorders(img).Rescale(32, 32)));
         else
             m_smallImageList->Add(CreateAntialiasedBitmap(img));

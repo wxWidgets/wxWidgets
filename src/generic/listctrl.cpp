@@ -4595,6 +4595,8 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
     m_mainWin = (wxListMainWindow*) NULL;
     m_headerWin = (wxListHeaderWindow*) NULL;
 
+    m_headerHeight = 0;
+
     if ( !(style & wxLC_MASK_TYPE) )
     {
         style = style | wxLC_LIST;

@@ -273,6 +273,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxClipboard,wxObject)
 wxClipboard::wxClipboard()
 {
     m_open = FALSE;
+    m_waiting = FALSE;
 
     m_ownsClipboard = FALSE;
     m_ownsPrimarySelection = FALSE;

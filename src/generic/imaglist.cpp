@@ -45,6 +45,7 @@ wxGenericImageList::wxGenericImageList( int width, int height, bool mask, int in
 
 wxGenericImageList::~wxGenericImageList()
 {
+    (void)RemoveAll();
 }
 
 int wxGenericImageList::GetImageCount() const
