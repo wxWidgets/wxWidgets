@@ -43,6 +43,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(TreeTest_Quit, MyFrame::OnQuit)
   EVT_MENU(TreeTest_About, MyFrame::OnAbout)
   EVT_MENU(TreeTest_Dump, MyFrame::OnDump)
+  EVT_MENU(TreeTest_Bold, MyFrame::OnSetBold)
+  EVT_MENU(TreeTest_UnBold, MyFrame::OnClearBold)
   EVT_MENU(TreeTest_Delete, MyFrame::OnDelete)
   EVT_MENU(TreeTest_DeleteAll, MyFrame::OnDeleteAll)
   EVT_MENU(TreeTest_Recreate, MyFrame::OnRecreate)
@@ -100,6 +102,9 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
   file_menu->Append(TreeTest_Delete, "&Delete this item");
   file_menu->Append(TreeTest_DeleteAll, "Delete &all items");
   file_menu->Append(TreeTest_Recreate, "&Recreate the tree");
+  file_menu->AppendSeparator();
+  file_menu->Append(TreeTest_Bold, "Make item &bold");
+  file_menu->Append(TreeTest_UnBold, "Make item &not bold");
   file_menu->AppendSeparator();
   file_menu->Append(TreeTest_About, "&About...");
   file_menu->AppendSeparator();
@@ -167,6 +172,11 @@ void MyFrame::OnDump(wxCommandEvent& WXUNUSED(event))
   m_treeCtrl->GetItemsRecursively(root, -1);
 }
 
+void MyFrame::DoSetBold(bool bold)
+{
+  m_treeCtrl->SetItemBold(m_treeCtrl->GetSelection(), bold);
+}
+
 void MyFrame::OnDelete(wxCommandEvent& WXUNUSED(event))
 {
   wxTreeItemId item = m_treeCtrl->GetSelection();
@@ -227,7 +237,7 @@ void MyTreeCtrl::AddItemsRecursively(const wxTreeItemId& idParent,
       int image = depth == 1 ? TreeCtrlIcon_File : TreeCtrlIcon_Folder;
       wxTreeItemId id = AppendItem(idParent, str, image, image,
                                    new MyTreeItemData(str));
-      AddItemsRecursively(id, numChildren, depth - 1,n+1);
+      AddItemsRecursively(id, numChildren, depth - 1, n + 1);
     }
   }
   //else: done!
@@ -240,7 +250,7 @@ void MyTreeCtrl::AddTestItemsToTree(size_t numChildren,
                         TreeCtrlIcon_Folder, TreeCtrlIcon_Folder,
                         new MyTreeItemData("Root item"));
 
-  AddItemsRecursively(rootId, numChildren, depth,0);
+  AddItemsRecursively(rootId, numChildren, depth, 0);
 }
 
 void MyTreeCtrl::GetItemsRecursively(const wxTreeItemId& idParent, long cookie)
@@ -322,11 +332,12 @@ static inline const char *Bool2String(bool b)
 
 void MyTreeItemData::ShowInfo(wxTreeCtrl *tree)
 {
-  wxLogMessage("Item '%s': %sselected, %sexpanded, "
+  wxLogMessage("Item '%s': %sselected, %sexpanded, %sbold,\n"
                "%u children (%u immediately under this item).",
                m_desc.c_str(),
                Bool2String(tree->IsSelected(GetId())),
                Bool2String(tree->IsExpanded(GetId())),
+               Bool2String(tree->IsBold(GetId())),
                tree->GetChildrenCount(GetId()),
                tree->GetChildrenCount(GetId(), FALSE));
 }

@@ -110,9 +110,7 @@ public:
     wxTreeItemId(WXHTREEITEM itemId) { m_itemId = (long)itemId; }
     operator WXHTREEITEM() const { return (WXHTREEITEM)m_itemId; }
 
-    void operator =(WXHTREEITEM item) { m_itemId = (long) item; }
-
-//    wxTreeItemId(long itemId) { m_itemId = itemId; }
+    void operator=(WXHTREEITEM item) { m_itemId = (long) item; }
 
 protected:
     long m_itemId;
@@ -238,6 +236,9 @@ public:
         // usage and loading time.
     void SetItemHasChildren(const wxTreeItemId& item, bool has = TRUE);
 
+        // the item will be shown in bold
+    void SetItemBold(const wxTreeItemId& item, bool bold = TRUE);
+
     // item status inquiries
     // ---------------------
 
@@ -249,6 +250,8 @@ public:
     bool IsExpanded(const wxTreeItemId& item) const;
         // is this item currently selected (the same as has focus)?
     bool IsSelected(const wxTreeItemId& item) const;
+        // is item text in bold font?
+    bool IsBold(const wxTreeItemId& item) const;
 
     // number of children
     // ------------------
@@ -371,18 +374,22 @@ public:
     // helpers
     // -------
 
-    // @@@ do we really need to expose these functions to the application?
-
-        // get the bounding rectangle of the item (or of its label only)
-    void GetBoundingRect(const wxTreeItemId& item,
-                         wxRectangle& rect,
-                         bool textOnly = FALSE) const;
-
         // determine to which item (if any) belongs the given point (the
         // coordinates specified are relative to the client area of tree ctrl)
         // and fill the flags parameter with a bitmask of wxTREE_HITTEST_xxx
-        // constants
+        // constants.
+        //
+        // The first function is more portable (because easier to implement
+        // on other platforms), but the second one returns some extra info.
+    wxTreeItemId HitTest(const wxPoint& point)
+        { int dummy; return HitTest(point, dummy); }
     wxTreeItemId HitTest(const wxPoint& point, int& flags);
+
+        // get the bounding rectangle of the item (or of its label only)
+        // @@@ do we really need to expose this functions to the application?
+    void GetBoundingRect(const wxTreeItemId& item,
+                         wxRectangle& rect,
+                         bool textOnly = FALSE) const;
 
     // deprecated
     // ----------

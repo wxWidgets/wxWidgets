@@ -32,8 +32,8 @@ class MyTreeCtrl : public wxTreeCtrl
 public:
   enum
   {
-    TreeCtrlIcon_Folder,
-    TreeCtrlIcon_File
+    TreeCtrlIcon_File,
+    TreeCtrlIcon_Folder
   };
 
   MyTreeCtrl(wxWindow *parent, const wxWindowID id,
@@ -88,8 +88,13 @@ public:
   void OnDeleteAll(wxCommandEvent& event);
   void OnRecreate(wxCommandEvent& event);
 
+  void OnSetBold(wxCommandEvent& event) { DoSetBold(TRUE); }
+  void OnClearBold(wxCommandEvent& event) { DoSetBold(FALSE); }
+
 private:
   MyTreeCtrl *m_treeCtrl;
+
+  void DoSetBold(bool bold = TRUE);
 
   DECLARE_EVENT_TABLE()
 };
@@ -100,6 +105,8 @@ enum
   TreeTest_Quit,
   TreeTest_About,
   TreeTest_Dump,
+  TreeTest_Bold,
+  TreeTest_UnBold,
   TreeTest_Delete,
   TreeTest_DeleteAll,
   TreeTest_Recreate,

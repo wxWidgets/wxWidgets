@@ -54,7 +54,7 @@
 #undef GetNextSibling
 #endif
 
-#include "wx/treectrl.h"
+#include "wx/msw/treectrl.h"
 
 // Bug in headers, sometimes
 #ifndef TVIS_FOCUSED
@@ -336,16 +336,22 @@ void wxTreeCtrl::SetItemHasChildren(const wxTreeItemId& item, bool has)
     DoSetItem(&tvItem);
 }
 
+void wxTreeCtrl::SetItemBold(const wxTreeItemId& item, bool bold)
+{
+    wxTreeViewItem tvItem(item, TVIF_STATE, TVIS_BOLD);
+    tvItem.state = bold ? TVIS_BOLD : 0;
+    DoSetItem(&tvItem);
+}
+
 // ----------------------------------------------------------------------------
 // Item status
 // ----------------------------------------------------------------------------
 
 bool wxTreeCtrl::IsVisible(const wxTreeItemId& item) const
 {
+    // Bug in Gnu-Win32 headers, so don't use the macro TreeView_GetItemRect
     RECT rect;
-//    return (TreeView_GetItemRect(wxhWnd, (HTREEITEM) (WXHTREEITEM)item, &rect, FALSE) != 0);
-    // Bug in Gnu-Win32 headers, so don't use the macro.
-    return (SendMessage((wxhWnd), TVM_GETITEMRECT, (WPARAM) FALSE, (LPARAM) & rect) != 0);
+    return SendMessage(wxhWnd, TVM_GETITEMRECT, FALSE, (LPARAM)&rect) != 0;
 
 }
 
@@ -374,6 +380,14 @@ bool wxTreeCtrl::IsSelected(const wxTreeItemId& item) const
     DoGetItem(&tvItem);
 
     return (tvItem.state & TVIS_SELECTED) != 0;
+}
+
+bool wxTreeCtrl::IsBold(const wxTreeItemId& item) const
+{
+    wxTreeViewItem tvItem(item, TVIF_STATE, TVIS_BOLD);
+    DoGetItem(&tvItem);
+
+    return (tvItem.state & TVIS_BOLD) != 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -552,10 +566,6 @@ wxTreeItemId wxTreeCtrl::AppendItem(const wxTreeItemId& parent,
 
 void wxTreeCtrl::Delete(const wxTreeItemId& item)
 {
-    wxTreeItemData *data = GetItemData(item);
-	if(data!=NULL)
-		delete data;    // may be NULL, ok
-
     if ( !TreeView_DeleteItem(wxhWnd, (HTREEITEM)(WXHTREEITEM)item) )
     {
         wxLogLastError("TreeView_DeleteItem");
