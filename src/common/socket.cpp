@@ -132,6 +132,11 @@ bool wxSocketBase::Initialize()
             BTW, the main thread must not be stopped using sleep or block
             on a semaphore (a bad idea in any case) or socket operations
             will time out.
+
+            On the Mac side, Initialize() stores a pointer to the CFRunLoop for
+            the main thread. Because secondary threads do not have run loops,
+            adding event notifications to the "Current" loop would have no
+            effect at all, events would never fire.
         */
         wxASSERT_MSG( wxIsMainThread(),
             wxT("Call wxSocketBase::Initialize() from the main thread first!"));
