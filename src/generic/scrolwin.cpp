@@ -20,10 +20,6 @@
 #include "wx/utils.h"
 #include "wx/dcclient.h"
 
-#ifdef __WXMSW__
-#include "windows.h"
-#endif
-
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
@@ -38,6 +34,10 @@ BEGIN_EVENT_TABLE(wxScrolledWindow, wxWindow)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxScrolledWindow, wxWindow)
+#endif
+
+#ifdef __WXMSW__
+#include "windows.h"
 #endif
 
 wxScrolledWindow::wxScrolledWindow(void)
@@ -110,6 +110,7 @@ void wxScrolledWindow::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
    if (do_refresh && !noRefresh) Refresh();
    
 #ifdef __WXMSW__
+   // Necessary?
     UpdateWindow ((HWND) GetHWND());
 #endif
 }
@@ -420,6 +421,7 @@ void wxScrolledWindow::Scroll( int x_pos, int y_pos )
     Refresh();
     
 #ifdef __WXMSW__
+    // Necessary?
     ::UpdateWindow ((HWND) GetHWND());
 #endif
 }

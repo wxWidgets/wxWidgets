@@ -1,0 +1,95 @@
+#
+# File:		makefile.vc
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Builds docview example (MS VC++).
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info
+
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+
+!include $(WXDIR)\src\makevc.env
+
+THISDIR = $(WXDIR)\utils\ogl\samples\ogledit
+
+OGLDIR = $(WXDIR)\utils\ogl
+OGLINC = $(OGLDIR)\src
+OGLLIB = $(WXDIR)\lib\ogl.lib
+
+PROGRAM=ogledit
+
+EXTRALIBS=$(OGLLIB)
+EXTRAINC=/I$(OGLINC)
+
+OBJECTS = $(PROGRAM).obj doc.obj view.obj palette.obj
+
+$(PROGRAM):    $(PROGRAM).exe
+
+all:    $(PROGRAM).exe
+
+wx:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(THISDIR)
+
+wxclean:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.vc clean
+        cd $(THISDIR)
+
+ogl:
+        cd $(OGLDIR)\src
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(THISDIR)
+
+$(PROGRAM).exe:      $(DUMMYOBJ) $(WXLIB) $(OBJECTS) $(OGLLIB) $(PROGRAM).res
+	$(link) @<<
+-out:$(PROGRAM).exe
+$(LINKFLAGS)
+$(DUMMYOBJ) $(OBJECTS) $(PROGRAM).res
+$(LIBS)
+<<
+
+$(PROGRAM).obj:      $(PROGRAM).h doc.h view.h palette.h $(PROGRAM).$(SRCSUFF) $(DUMMYOBJ)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+doc.obj:      view.h doc.h doc.$(SRCSUFF) ogledit.h $(DUMMYOBJ)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+view.obj:      view.h doc.h view.$(SRCSUFF) ogledit.h $(DUMMYOBJ)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+palette.obj:      view.h doc.h ogledit.h palette.$(SRCSUFF) $(DUMMYOBJ)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+$(PROGRAM).res :      $(PROGRAM).rc $(WXDIR)\include\wx\msw\wx.rc ogl.ico
+    $(rc) -r /i$(WXDIR)\include -fo$@ $(PROGRAM).rc
+
+
+cleanogl:
+        cd $(OGLDIR)\src
+        nmake -f makefile.vc clean
+        cd $(THISDIR)
+
+clean:
+        -erase *.obj
+        -erase *.sbr
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.pdb
+

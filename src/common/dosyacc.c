@@ -25,7 +25,6 @@ int yyback(int *, int);
 
 /* You may need to put /DLEX_SCANNER in your makefile
  * if you're using LEX!
-	Last change:  JS   13 Jul 97    6:12 pm
  */
 #ifdef LEX_SCANNER
 /* int yyoutput(int); */

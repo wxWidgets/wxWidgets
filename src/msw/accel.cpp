@@ -26,8 +26,9 @@
 #include "wx/window.h"
 #endif
 
-#include "wx/msw/private.h"
 #include "wx/msw/accel.h"
+
+#include "wx/msw/private.h"
 
 #ifdef LoadAccelerators
 #undef LoadAccelerators

@@ -48,9 +48,9 @@ Using project files:
 Using makefiles:
 
 1. Make sure your WXWIN variable is set.
-2. Change directory to wx\src\msw. Type 'nmake -f makefile.nt' to
+2. Change directory to wx\src\msw. Type 'nmake -f makefile.vc' to
    make the wxWindows core library.
-3. Change directory to wx\samples and type 'nmake -f makefile.nt'
+3. Change directory to wx\samples and type 'nmake -f makefile.vc'
    to make all the samples. You can also make them individually.
 
 Note (1): if you wish to use templates, please edit

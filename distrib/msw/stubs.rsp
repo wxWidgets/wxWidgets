@@ -5,6 +5,7 @@ src/stubs/*.inc
 
 src/make.env
 src/makeprog.env
+src/makelib.env
 
 include/wx/stubs/*.h
 include/wx/stubs/*.rc

@@ -9,6 +9,10 @@ mkinstalldirs
 wxinstall
 
 src/makeenvs/*.env
+src/makeprog.env
+src/make.env
+src/makelib.env
+src/makeprog.env
 
 src/Makefile
 src/Makefile.in
@@ -89,9 +93,6 @@ src/motif/mdi/lib/*.xbm
 src/motif/mdi/lib/Imakefile
 src/motif/mdi/test/*.C
 src/motif/mdi/test/Imakefile
-
-src/make.env
-src/makeprog.env
 
 include/wx/motif/*.h
 include/install-sh
