@@ -152,7 +152,7 @@ inline int GSocket_Write(GSocket *socket, const char *buffer, int size)
 inline GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
 {   return socket->Select(flags); }
 inline void GSocket_SetNonBlocking(GSocket *socket, int non_block)
-{   socket->SetNonBlocking(non_block); }
+{   socket->SetNonBlocking(!!non_block); }
 inline void GSocket_SetTimeout(GSocket *socket, unsigned long millisec)
 {   socket->SetTimeout(millisec); }
 inline GSocketError GSocket_GetError(GSocket *socket)
