@@ -56,7 +56,7 @@ IMPLEMENT_CLASS(wxURI, wxObject);
 wxURI::wxURI() : m_hostType(wxURI_REGNAME), m_fields(0)
 {
 }
- 
+
 wxURI::wxURI(const wxString& uri) : m_hostType(wxURI_REGNAME), m_fields(0)
 {
     Create(uri);
@@ -89,21 +89,21 @@ void wxURI::Clear()
 // ---------------------------------------------------------------------------
 // Create
 //
-// This creates the URI - all we do here is call the main parsing method 
+// This creates the URI - all we do here is call the main parsing method
 // ---------------------------------------------------------------------------
 
 const wxChar* wxURI::Create(const wxString& uri)
-{   
+{
     if (m_fields)
         Clear();
 
-    return Parse(uri);    
-} 
+    return Parse(uri);
+}
 
 // ---------------------------------------------------------------------------
 // Escape Methods
 //
-// TranslateEscape unencodes a 3 character URL escape sequence 
+// TranslateEscape unencodes a 3 character URL escape sequence
 //
 // Escape encodes an invalid URI character into a 3 character sequence
 //
@@ -117,7 +117,7 @@ wxChar wxURI::TranslateEscape(const wxChar* s)
 {
     wxASSERT_MSG(IsHex(*s) && IsHex(*(s+1)), wxT("Invalid escape!"));
 
-    return CharToHex(*s) * 0x10 + CharToHex(*++s);
+    return (wxChar)( CharToHex(*s) * 0x10 + CharToHex(*++s) );
 }
 
 wxString wxURI::Unescape(const wxString& uri)
@@ -141,7 +141,7 @@ void wxURI::Escape(wxString& s, const wxChar& c)
     const wxChar* hdig = wxT("0123456789abcdef");
     s += wxT('%');
     s += hdig[(c >> 4) & 15];
-	s += hdig[c & 15];
+    s += hdig[c & 15];
 }
 
 bool wxURI::IsEscape(const wxChar*& uri)
@@ -159,7 +159,7 @@ bool wxURI::IsEscape(const wxChar*& uri)
 // ---------------------------------------------------------------------------
 // BuildURI
 //
-// BuildURI() builds the entire URI into a useable 
+// BuildURI() builds the entire URI into a useable
 // representation, including proper identification characters such as slashes
 //
 // BuildUnescapedURI() does the same thing as BuildURI(), only it unescapes
@@ -167,7 +167,7 @@ bool wxURI::IsEscape(const wxChar*& uri)
 // ---------------------------------------------------------------------------
 
 wxString wxURI::BuildURI() const
-{   
+{
     wxString ret;
 
     if (HasScheme())
@@ -259,7 +259,7 @@ wxURI& wxURI::operator = (const wxURI& uri)
 }
 
 wxURI& wxURI::operator = (const wxString& string)
-{   
+{
     Create(string);
     return *this;
 }
@@ -269,7 +269,7 @@ wxURI& wxURI::operator = (const wxString& string)
 // ---------------------------------------------------------------------------
 
 bool wxURI::operator == (const wxURI& uri) const
-{    
+{
     if (HasScheme())
     {
         if(m_scheme != uri.m_scheme)
@@ -379,28 +379,28 @@ const wxChar* wxURI::ParseScheme(const wxChar* uri)
         m_scheme += *uri++;
 
         //scheme        = ALPHA *( ALPHA / DIGIT / "+" / "-" / "." )
-        while (IsAlpha(*uri) || IsDigit(*uri) || 
+        while (IsAlpha(*uri) || IsDigit(*uri) ||
                *uri == wxT('+')   ||
                *uri == wxT('-')   ||
-               *uri == wxT('.')) 
-        { 
-            m_scheme += *uri++; 
+               *uri == wxT('.'))
+        {
+            m_scheme += *uri++;
         }
 
         //valid scheme?
         if (*uri == wxT(':'))
-        { 
+        {
             //mark the scheme as valid
             m_fields |= wxURI_SCHEME;
 
             //move reference point up to input buffer
             uricopy = ++uri;
         }
-        else 
+        else
             //relative uri with relative path reference
             m_scheme = wxT("");
     }
-//    else 
+//    else
         //relative uri with _possible_ relative path reference
 
     return uricopy;
@@ -409,7 +409,7 @@ const wxChar* wxURI::ParseScheme(const wxChar* uri)
 const wxChar* wxURI::ParseAuthority(const wxChar* uri)
 {
     // authority     = [ userinfo "@" ] host [ ":" port ]
-    if (*uri == wxT('/') && *(uri+1) == wxT('/')) 
+    if (*uri == wxT('/') && *(uri+1) == wxT('/'))
     {
         uri += 2;
 
@@ -430,9 +430,9 @@ const wxChar* wxURI::ParseUser(const wxChar* uri)
     const wxChar* uricopy = uri;
 
     // userinfo      = *( unreserved / pct-encoded / sub-delims / ":" )
-    while(*uri && *uri != wxT('@') && *uri != wxT('/') && *uri != wxT('#') && *uri != wxT('?')) 
+    while(*uri && *uri != wxT('@') && *uri != wxT('/') && *uri != wxT('#') && *uri != wxT('?'))
     {
-        if(IsUnreserved(*uri) || IsEscape(uri) || 
+        if(IsUnreserved(*uri) || IsEscape(uri) ||
            IsSubDelim(*uri) || *uri == wxT(':'))
             m_user += *uri++;
         else
@@ -468,7 +468,7 @@ const wxChar* wxURI::ParseServer(const wxChar* uri)
         {
             ++uri;
             m_hostType = wxURI_IPV6ADDRESS;
-           
+
             wxStringBufferLength theBuffer(m_server, uri - uricopy);
             wxMemcpy(theBuffer, uricopy, uri-uricopy);
             theBuffer.SetLength(uri-uricopy);
@@ -480,17 +480,17 @@ const wxChar* wxURI::ParseServer(const wxChar* uri)
             if (ParseIPvFuture(++uri) && *uri == wxT(']'))
             {
                 ++uri;
-                m_hostType = wxURI_IPVFUTURE; 
-           
+                m_hostType = wxURI_IPVFUTURE;
+
                 wxStringBufferLength theBuffer(m_server, uri - uricopy);
                 wxMemcpy(theBuffer, uricopy, uri-uricopy);
                 theBuffer.SetLength(uri-uricopy);
             }
-            else 
+            else
                 uri = uricopy;
         }
     }
-    else 
+    else
     {
         if (ParseIPv4address(uri))
         {
@@ -500,7 +500,7 @@ const wxChar* wxURI::ParseServer(const wxChar* uri)
             wxMemcpy(theBuffer, uricopy, uri-uricopy);
             theBuffer.SetLength(uri-uricopy);
         }
-        else 
+        else
             uri = uricopy;
     }
 
@@ -508,13 +508,13 @@ const wxChar* wxURI::ParseServer(const wxChar* uri)
     {
         uri = uricopy;
         // reg-name      = *( unreserved / pct-encoded / sub-delims )
-        while(*uri && *uri != wxT('/') && *uri != wxT(':') && *uri != wxT('#') && *uri != wxT('?')) 
+        while(*uri && *uri != wxT('/') && *uri != wxT(':') && *uri != wxT('#') && *uri != wxT('?'))
         {
             if(IsUnreserved(*uri) || IsEscape(uri) ||  IsSubDelim(*uri))
                 m_server += *uri++;
             else
                 Escape(m_server, *uri++);
-        }                
+        }
     }
 
     //mark the server as valid
@@ -523,7 +523,7 @@ const wxChar* wxURI::ParseServer(const wxChar* uri)
     return uri;
 }
 
- 
+
 const wxChar* wxURI::ParsePort(const wxChar* uri)
 {
     wxASSERT(uri != NULL);
@@ -532,10 +532,10 @@ const wxChar* wxURI::ParsePort(const wxChar* uri)
     if(*uri == wxT(':'))
     {
         ++uri;
-        while(IsDigit(*uri)) 
+        while(IsDigit(*uri))
         {
             m_port += *uri++;
-        }                
+        }
 
         //mark the port as valid
         m_fields |= wxURI_PORT;
@@ -578,13 +578,13 @@ const wxChar* wxURI::ParsePath(const wxChar* uri, bool bReference, bool bNormali
     {
         m_path += *uri++;
 
-        while(*uri && *uri != wxT('#') && *uri != wxT('?')) 
-        { 
+        while(*uri && *uri != wxT('#') && *uri != wxT('?'))
+        {
             if( IsUnreserved(*uri) || IsSubDelim(*uri) || IsEscape(uri) ||
                 *uri == wxT(':') || *uri == wxT('@') || *uri == wxT('/'))
-                m_path += *uri++; 
-            else    
-                Escape(m_path, *uri++);    
+                m_path += *uri++;
+            else
+                Escape(m_path, *uri++);
         }
 
         if (bNormalize)
@@ -604,29 +604,29 @@ const wxChar* wxURI::ParsePath(const wxChar* uri, bool bReference, bool bNormali
         if (bReference)
         {
             //no colon allowed
-            while(*uri && *uri != wxT('#') && *uri != wxT('?')) 
+            while(*uri && *uri != wxT('#') && *uri != wxT('?'))
             {
                 if(IsUnreserved(*uri) || IsSubDelim(*uri) || IsEscape(uri) ||
                   *uri == wxT('@') || *uri == wxT('/'))
-                    m_path += *uri++; 
-                else    
-                    Escape(m_path, *uri++);    
+                    m_path += *uri++;
+                else
+                    Escape(m_path, *uri++);
             }
-        } 
+        }
         else
         {
-            while(*uri && *uri != wxT('#') && *uri != wxT('?')) 
+            while(*uri && *uri != wxT('#') && *uri != wxT('?'))
             {
                 if(IsUnreserved(*uri) || IsSubDelim(*uri) || IsEscape(uri) ||
                    *uri == wxT(':') || *uri == wxT('@') || *uri == wxT('/'))
-                    m_path += *uri++; 
-                else    
-                    Escape(m_path, *uri++);    
+                    m_path += *uri++;
+                else
+                    Escape(m_path, *uri++);
             }
         }
 
         if (uri != uricopy)
-        {         
+        {
             if (bNormalize)
             {
                 wxStringBufferLength theBuffer(m_path, m_path.length() + 1);
@@ -658,9 +658,9 @@ const wxChar* wxURI::ParseQuery(const wxChar* uri)
         {
             if (IsUnreserved(*uri) || IsSubDelim(*uri) || IsEscape(uri) ||
                 *uri == wxT(':') || *uri == wxT('@') || *uri == wxT('/') || *uri == wxT('?'))
-                  m_query += *uri++;  
+                  m_query += *uri++;
             else
-                  Escape(m_query, *uri++); 
+                  Escape(m_query, *uri++);
         }
 
         //mark the server as valid
@@ -683,9 +683,9 @@ const wxChar* wxURI::ParseFragment(const wxChar* uri)
         {
             if (IsUnreserved(*uri) || IsSubDelim(*uri) || IsEscape(uri) ||
                 *uri == wxT(':') || *uri == wxT('@') || *uri == wxT('/') || *uri == wxT('?'))
-                  m_fragment += *uri++;  
+                  m_fragment += *uri++;
             else
-                  Escape(m_fragment, *uri++); 
+                  Escape(m_fragment, *uri++);
         }
 
         //mark the server as valid
@@ -703,12 +703,12 @@ const wxChar* wxURI::ParseFragment(const wxChar* uri)
 // A version of the algorithm outlined in the RFC is used here
 // (it is shown in comments)
 //
-// Note that an empty URI inherits all components 
+// Note that an empty URI inherits all components
 // ---------------------------------------------------------------------------
 
 void wxURI::Resolve(const wxURI& base, int flags)
 {
-    wxASSERT_MSG(!base.IsReference(), 
+    wxASSERT_MSG(!base.IsReference(),
                 wxT("wxURI to inherit from must not be a reference!"));
 
     // If we arn't being strict, enable the older (pre-RFC2396)
@@ -718,7 +718,7 @@ void wxURI::Resolve(const wxURI& base, int flags)
     if ( !(flags & wxURI_STRICT) &&
             HasScheme() && base.HasScheme() &&
                 m_scheme == base.m_scheme )
-    {   
+    {
         m_fields -= wxURI_SCHEME;
     }
 
@@ -755,17 +755,17 @@ void wxURI::Resolve(const wxURI& base, int flags)
         m_user = base.m_user;
         m_fields |= wxURI_USER;
     }
-    
+
     m_server = base.m_server;
     m_hostType = base.m_hostType;
     m_fields |= wxURI_SERVER;
-    
+
     if (base.HasPort())
     {
         m_port = base.m_port;
         m_fields |= wxURI_PORT;
     }
-    
+
 
     // Simple path inheritance from base
     if (!HasPath())
@@ -773,7 +773,7 @@ void wxURI::Resolve(const wxURI& base, int flags)
         //             T.path = Base.path;
         m_path = base.m_path;
         m_fields |= wxURI_PATH;
-        
+
 
         //             if defined(R.query) then
         //                T.query = R.query;
@@ -806,7 +806,7 @@ void wxURI::Resolve(const wxURI& base, int flags)
                 UpTree(base.m_path, bp);
 
             //normalize directories
-            while(*op == wxT('.') && *(op+1) == wxT('.') && 
+            while(*op == wxT('.') && *(op+1) == wxT('.') &&
                        (*(op+2) == '\0' || *(op+2) == wxT('/')) )
             {
                 UpTree(base.m_path, bp);
@@ -817,16 +817,16 @@ void wxURI::Resolve(const wxURI& base, int flags)
                     op += 3;
             }
 
-            m_path = base.m_path.substr(0, bp - base.m_path.c_str()) + 
+            m_path = base.m_path.substr(0, bp - base.m_path.c_str()) +
                     m_path.substr((op - m_path.c_str()), m_path.Length());
         }
     }
 
-    //T.fragment = R.fragment; 
+    //T.fragment = R.fragment;
 }
 
 // ---------------------------------------------------------------------------
-// UpTree 
+// UpTree
 //
 // Moves a URI path up a directory
 // ---------------------------------------------------------------------------
@@ -838,7 +838,7 @@ void wxURI::UpTree(const wxChar* uristart, const wxChar*& uri)
     {
         uri -= 2;
     }
-    
+
     for(;uri != uristart; --uri)
     {
         if (*uri == wxT('/'))
@@ -885,7 +885,7 @@ void wxURI::Normalize(wxChar* s, bool bIgnoreLeads)
             else
                 cp += 2;
         }
-        else if (*cp == wxT('.') && *(cp+1) == wxT('.') && 
+        else if (*cp == wxT('.') && *(cp+1) == wxT('.') &&
                 (*(cp+2) == wxT('/') || *(cp+2) == '\0')
                 && (bp == cp || *(cp-1) == wxT('/')))
         {
@@ -918,7 +918,7 @@ void wxURI::Normalize(wxChar* s, bool bIgnoreLeads)
             }
         }
         else
-            *s++ = *cp++; 
+            *s++ = *cp++;
     }
 
     *s = '\0';
@@ -928,7 +928,7 @@ void wxURI::Normalize(wxChar* s, bool bIgnoreLeads)
 // ParseH16
 //
 // Parses 1 to 4 hex values.  Returns true if the first character of the input
-// string is a valid hex character.  It is the caller's responsability to move 
+// string is a valid hex character.  It is the caller's responsability to move
 // the input string back to its original position on failure.
 // ---------------------------------------------------------------------------
 
@@ -947,9 +947,9 @@ bool wxURI::ParseH16(const wxChar*& uri)
 // ---------------------------------------------------------------------------
 // ParseIPXXX
 //
-// Parses a certain version of an IP address and moves the input string past 
-// it.  Returns true if the input  string contains the proper version of an ip 
-// address.  It is the caller's responsability to move the input string back 
+// Parses a certain version of an IP address and moves the input string past
+// it.  Returns true if the input  string contains the proper version of an ip
+// address.  It is the caller's responsability to move the input string back
 // to its original position on failure.
 // ---------------------------------------------------------------------------
 
@@ -967,13 +967,13 @@ bool wxURI::ParseIPv4address(const wxChar*& uri)
     {
         ++iIPv4;
 
-        
+
         //each ip part must be between 0-255 (dupe of version in for loop)
         if( IsDigit(*++uri) && IsDigit(*++uri) &&
            //100 or less  (note !)
-           !( (*(uri-2) < wxT('2')) || 
-           //240 or less   
-             (*(uri-2) == wxT('2') && 
+           !( (*(uri-2) < wxT('2')) ||
+           //240 or less
+             (*(uri-2) == wxT('2') &&
                (*(uri-1) < wxT('5') || (*(uri-1) == wxT('5') && *uri <= wxT('5')))
              )
             )
@@ -993,9 +993,9 @@ bool wxURI::ParseIPv4address(const wxChar*& uri)
             //each ip part must be between 0-255
             if( IsDigit(*++uri) && IsDigit(*++uri) &&
                //100 or less  (note !)
-               !( (*(uri-2) < wxT('2')) || 
-               //240 or less   
-                 (*(uri-2) == wxT('2') && 
+               !( (*(uri-2) < wxT('2')) ||
+               //240 or less
+                 (*(uri-2) == wxT('2') &&
                    (*(uri-1) < wxT('5') || (*(uri-1) == wxT('5') && *uri <= wxT('5')))
                  )
                 )
@@ -1034,7 +1034,7 @@ bool wxURI::ParseIPv6address(const wxChar*& uri)
             bEndHex = true;
             break;
         }
-        
+
         if(*uri != wxT(':'))
         {
             break;
@@ -1071,7 +1071,7 @@ bool wxURI::ParseIPv6address(const wxChar*& uri)
             const wxChar* uristart = uri;
             //parse ls32
             // ls32          = ( h16 ":" h16 ) / IPv4address
-            if (ParseH16(uri) && *uri == wxT(':') && ParseH16(uri)) 
+            if (ParseH16(uri) && *uri == wxT(':') && ParseH16(uri))
                 return true;
 
             uri = uristart;
@@ -1084,7 +1084,7 @@ bool wxURI::ParseIPv6address(const wxChar*& uri)
         else
         {
             uri += 2;
-    
+
             if (numPrefix > 3)
                 maxPostfix = 0;
             else
@@ -1105,7 +1105,7 @@ bool wxURI::ParseIPv6address(const wxChar*& uri)
         const wxChar* uristart = uri;
         //parse ls32
         // ls32          = ( h16 ":" h16 ) / IPv4address
-        if (ParseH16(uri) && *uri == wxT(':') && ParseH16(uri)) 
+        if (ParseH16(uri) && *uri == wxT(':') && ParseH16(uri))
             return true;
 
         uri = uristart;
@@ -1114,7 +1114,7 @@ bool wxURI::ParseIPv6address(const wxChar*& uri)
             return true;
 
         uri = uristart;
-        
+
         if (!bAllowAltEnding)
             return false;
     }
@@ -1145,18 +1145,18 @@ bool wxURI::ParseIPvFuture(const wxChar*& uri)
 // ---------------------------------------------------------------------------
 // CharToHex
 //
-// Converts a character into a numeric hexidecimal value, or 0 if the 
+// Converts a character into a numeric hexidecimal value, or 0 if the
 // passed in character is not a valid hex character
 // ---------------------------------------------------------------------------
 
 //static
 wxInt32 wxURI::CharToHex(const wxChar& c)
 {
-	if ((c >= wxT('A')) && (c <= wxT('Z')))	return c - wxT('A') + 0x0A;
-	if ((c >= wxT('a')) && (c <= wxT('z')))	return c - wxT('a') + 0x0a;
-	if ((c >= wxT('0')) && (c <= wxT('9')))	return c - wxT('0') + 0x00;
+    if ((c >= wxT('A')) && (c <= wxT('Z')))    return c - wxT('A') + 0x0A;
+    if ((c >= wxT('a')) && (c <= wxT('z')))    return c - wxT('a') + 0x0a;
+    if ((c >= wxT('0')) && (c <= wxT('9')))    return c - wxT('0') + 0x00;
 
-	return 0;
+    return 0;
 }
 
 // ---------------------------------------------------------------------------
@@ -1167,16 +1167,16 @@ wxInt32 wxURI::CharToHex(const wxChar& c)
 
 //! unreserved    = ALPHA / DIGIT / "-" / "." / "_" / "~"
 bool wxURI::IsUnreserved (const wxChar& c)
-{   return IsAlpha(c) || IsDigit(c) || 
+{   return IsAlpha(c) || IsDigit(c) ||
            c == wxT('-') ||
            c == wxT('.') ||
            c == wxT('_') ||
            c == wxT('~') //tilde
-           ;  
+           ;
 }
 
 bool wxURI::IsReserved (const wxChar& c)
-{   
+{
     return IsGenDelim(c) || IsSubDelim(c);
 }
 
@@ -1206,7 +1206,7 @@ bool wxURI::IsSubDelim (const wxChar& c)
            c == wxT('+') ||
            c == wxT(',') ||
            c == wxT(';') ||
-           c == wxT('=') 
+           c == wxT('=')
            ;
 }
 
