@@ -2334,7 +2334,7 @@ wxString wxListCtrl::OnGetItemText(long WXUNUSED(item), long WXUNUSED(col)) cons
 {
     // this is a pure virtual function, in fact - which is not really pure
     // because the controls which are not virtual don't need to implement it
-    wxFAIL_MSG( _T("not supposed to be called") );
+    wxFAIL_MSG( _T("wxListCtrl::OnGetItemText not supposed to be called") );
 
     return wxEmptyString;
 }
@@ -2342,7 +2342,7 @@ wxString wxListCtrl::OnGetItemText(long WXUNUSED(item), long WXUNUSED(col)) cons
 int wxListCtrl::OnGetItemImage(long WXUNUSED(item)) const
 {
     // same as above
-    wxFAIL_MSG( _T("not supposed to be called") );
+    wxFAIL_MSG( _T("wxListCtrl::OnGetItemImage not supposed to be called") );
 
     return -1;
 }
