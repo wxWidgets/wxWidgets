@@ -791,21 +791,30 @@ public:
 
 bool wxPNGBitmapHandler::LoadFile(wxBitmap *bitmap, const wxString& name, 
                                   long flags, 
-                                  int WXUNUSED(desiredWidth), 
-                                  int WXUNUSED(desiredHeight))
+                                  int desiredWidth, int desiredHeight)
 {
-    bitmap_t *bmp = NULL;
+    int width, height, bpp;
+    pixel_format_t pf;
+    wxString fullname;
 
-    switch (flags)
+    if ( flags == wxBITMAP_TYPE_PNG_RESOURCE )
+        fullname = name + wxT(".png");
+    else
+        fullname = name;
+
+    if ( !MGL_getPNGSize(fullname.mb_str(), &width, &height, &bpp, &pf) )
+        return FALSE;
+
+    if ( bpp != 32 )
     {
-        case wxBITMAP_TYPE_PNG:
-            bmp = MGL_loadPNG(name.mb_str(), TRUE);
-            break;
-        case wxBITMAP_TYPE_PNG_RESOURCE:
-            bmp = MGL_loadPNG(wxString(name + wxT(".png")).mb_str(), TRUE);
-        default:
-            break;
+        // We can load ordinary PNGs faster with 'normal' MGL handler.
+        // Only RGBA PNGs need to be processed in special way because
+        // we have to convert alpha channel to mask
+        return wxMGLBitmapHandler::LoadFile(bitmap, name, flags, 
+                                            desiredWidth, desiredHeight);
     }
+        
+    bitmap_t *bmp = MGL_loadPNG(fullname.mb_str(), TRUE);
     
     if ( bmp == NULL ) return FALSE;
 
