@@ -297,7 +297,7 @@ static void InitDisplays()
 
     gs_displays = new wxDisplayInfoArray();
 
-    if ( gs_useDirectX && !DoInitDirectX() )
+    if ( !gs_useDirectX || !DoInitDirectX() )
     {
         // either we were told not to try to use DirectX or fall back to std
         // functions if DirectX method failed
