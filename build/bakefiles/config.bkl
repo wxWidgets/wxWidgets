@@ -98,7 +98,7 @@
         <set var="TOOLKIT_LOWERCASE">$(TOOLKIT.lower())</set>
         <set var="TOOLKIT_VERSION"/>
         <set var="SAMPLES_RPATH_FLAG"/>
-        <option name="EXTRALIBS"/>
+        <set var="EXTRALIBS"/>
 
         <set var="SRCDIR">
             <if cond="BUILDING_LIB=='1'">..</if>
