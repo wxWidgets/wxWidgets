@@ -475,6 +475,7 @@ bool wxToolBar::Realize()
     // First, add the bitmap: we use one bitmap for all toolbar buttons
     // ----------------------------------------------------------------
 
+    wxToolBarToolsList::Node *node;
     int bitmapId = 0;
 
     wxSize sizeBmp;
@@ -531,9 +532,7 @@ bool wxToolBar::Realize()
         // the number of buttons (not separators)
         int nButtons = 0;
 
-        for ( wxToolBarToolsList::Node *node = m_tools.GetFirst();
-              node;
-              node = node->GetNext() )
+        for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
         {
             wxToolBarToolBase *tool = node->GetData();
             if ( tool->IsButton() )
@@ -655,9 +654,7 @@ bool wxToolBar::Realize()
 
     bool lastWasRadio = FALSE;
     int i = 0;
-    for ( wxToolBarToolsList::Node *node = m_tools.GetFirst();
-          node;
-          node = node->GetNext() )
+    for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
     {
         wxToolBarToolBase *tool = node->GetData();
 
