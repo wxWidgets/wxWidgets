@@ -1,6 +1,6 @@
 # $Id$
 
-CONTRIB_SAMPLES=multicell splittree
+CONTRIB_SAMPLES=multicell splittree editlbox
 
 all:
 	@for d in $(CONTRIB_SAMPLES); do (cd $$d && $(MAKE)); done
