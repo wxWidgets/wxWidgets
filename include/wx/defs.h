@@ -805,7 +805,7 @@ enum wxStretch
 #else
 // Under Unix, the dialogs don't have a system menu. Specifying
 // wxSYSTEM_MENU here, will make a close button appear.
-#   define wxDEFAULT_DIALOG_STYLE  (wxCAPTION)
+#   define wxDEFAULT_DIALOG_STYLE  (wxCAPTION|wxTHICK_FRAME)
 #endif
 
 /*
