@@ -898,7 +898,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
                 source->LogicalToDeviceXRel(width),
                 source->LogicalToDeviceYRel(height),
                 XLOG2DEV_2 (xdest), YLOG2DEV_2 (ydest),
-                true, &cache);
+                True, &cache);
 
             if ( useMask && source->IsKindOf(CLASSINFO(wxMemoryDC)) )
             {
