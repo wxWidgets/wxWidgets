@@ -167,7 +167,9 @@ bool wxFFile::Flush()
 {
     if ( IsOpened() )
     {
-        if ( !fflush(m_fp) )
+        // fflush returns non-zero on error
+        //
+        if ( fflush(m_fp) )
         {
             wxLogSysError(_("failed to flush the file '%s'"), m_name.c_str());
 
