@@ -1,4 +1,13 @@
 
+20th November '99: wxWindows 2.1.12 released
+
+Minor compile and build fixes for different architectures.
+
+Added more flags to wxSizer for proportional sizing and
+centering and alignment combination.
+
+Added controls to wxToolBars (e.g. combobox).
+
 7st November '99: wxWindows 2.1.11 released
 
 There is still an unresolved problem with bitmap to image

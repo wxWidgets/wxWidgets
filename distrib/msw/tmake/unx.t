@@ -303,6 +303,7 @@ DOCDIR = $(WXDIR)/docs
 ########################## Archive name ###############################
 
 WXARCHIVE = wx$(TOOLKIT)-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tgz
+WXSAMPLES = wx$(TOOLKIT)-samples-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tgz
 DISTDIR = ./_dist_dir/wx$(TOOLKIT)
 
 ############################## Files ##################################
@@ -779,6 +780,7 @@ SAMPLES_DIST:
 	cp $(SAMPDIR)/Makefile.in $(DISTDIR)/samples
 	mkdir $(DISTDIR)/samples/bombs
 	cp $(SAMPDIR)/bombs/Makefile.in $(DISTDIR)/samples/bombs
+	cp $(SAMPDIR)/bombs/Makefile $(DISTDIR)/samples/bombs
 	cp $(SAMPDIR)/bombs/*.cpp $(DISTDIR)/samples/bombs
 	cp $(SAMPDIR)/bombs/*.h $(DISTDIR)/samples/bombs
 	cp $(SAMPDIR)/bombs/*.xpm $(DISTDIR)/samples/bombs
@@ -793,6 +795,7 @@ SAMPLES_DIST:
 	mkdir $(DISTDIR)/samples/controls
 	mkdir $(DISTDIR)/samples/controls/icons
 	cp $(SAMPDIR)/controls/Makefile.in $(DISTDIR)/samples/controls
+	cp $(SAMPDIR)/controls/Makefile $(DISTDIR)/samples/controls
 	cp $(SAMPDIR)/controls/*.cpp $(DISTDIR)/samples/controls
 	cp $(SAMPDIR)/controls/*.xpm $(DISTDIR)/samples/controls
 	cp $(SAMPDIR)/controls/icons/*.??? $(DISTDIR)/samples/controls/icons
@@ -966,6 +969,10 @@ SAMPLES_DIST:
 	cp $(SAMPDIR)/proplist/Makefile.in $(DISTDIR)/samples/proplist
 	cp $(SAMPDIR)/proplist/*.cpp $(DISTDIR)/samples/proplist
 	cp $(SAMPDIR)/proplist/*.h $(DISTDIR)/samples/proplist
+	mkdir $(DISTDIR)/samples/propsize
+	cp $(SAMPDIR)/propsize/Makefile.in $(DISTDIR)/samples/propsize
+	cp $(SAMPDIR)/propsize/*.cpp $(DISTDIR)/samples/propsize
+	cp $(SAMPDIR)/propsize/*.xpm $(DISTDIR)/samples/propsize
 	mkdir $(DISTDIR)/samples/sashtest
 	cp $(SAMPDIR)/sashtest/Makefile.in $(DISTDIR)/samples/sashtest
 	cp $(SAMPDIR)/sashtest/*.cpp $(DISTDIR)/samples/sashtest
@@ -1061,6 +1068,8 @@ MISC_DIST:
 	
 dist: ALL_DIST @GUIDIST@ SAMPLES_DIST UTILS_DIST MISC_DIST
 	cd _dist_dir; tar ch wx$(TOOLKIT) | gzip -f9 > $(WXARCHIVE); mv $(WXARCHIVE) ..
+	mv _dist_dir/wx$(TOOLKIT)/samples _dist_dir/wx$(TOOLKIT)/wxSamples
+	cd _dist_dir/wx$(TOOLKIT); tar ch wxSamples | gzip -f9 > $(WXSAMPLES); mv $(WXSAMPLES) ../..
 	$(RM) -r _dist_dir
 
 clean:
