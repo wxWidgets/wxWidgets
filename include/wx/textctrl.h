@@ -33,7 +33,7 @@
 // streambuf. !! Also, can't use streambuf if making or using a DLL :-(
 
 #if (defined(__BORLANDC__)) || defined(__MWERKS__) || \
-    defined(WXUSINGDLL) || defined(WXMAKINGDLL)
+    (defined(__WINDOWS__) && (defined(WXUSINGDLL) || defined(WXMAKINGDLL)))
     #define NO_TEXT_WINDOW_STREAM
 #endif
 
