@@ -100,13 +100,22 @@ or wxHORIZONTAL for creating either a column sizer or a row sizer.
 
 \func{void}{RecalcSizes}{\void}
 
+Implements the calculation of a box sizer's dimensions and then sets
+the size of its its children (calling \helpref{wxWindow::SetSize}{wxwindowsetsize}
+if the child is a window). It is used internally only and must not be called 
+by the users. Documented for information.
 
 \membersection{wxBoxSizer::CalcMin}\label{wxboxsizercalcmin}
 
 \func{wxSize}{CalcMin}{\void}
 
+Implements the calculation of a box sizer's minimal. It is used internally
+only and must not be called by the users. Documented for information.
 
 \membersection{wxBoxSizer::GetOrientation}\label{wxboxsizergetorientation}
 
 \func{int}{GetOrientation}{\void}
+
+Returns the orientation of the boxsizer, either of wxVERTICAL
+or wxHORIZONTAL.
 

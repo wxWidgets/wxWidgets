@@ -101,6 +101,7 @@ public:
     wxList           m_menus;
     GtkWidget       *m_menubar;
     long             m_style;
+    wxWindow        *m_invokingWindow;
 };
 
 //-----------------------------------------------------------------------------

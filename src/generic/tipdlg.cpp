@@ -40,6 +40,7 @@
     #include "wx/settings.h"
     #include "wx/textctrl.h"
     #include "wx/statbmp.h"
+    #include "wx/stattext.h"
     #include "wx/sizer.h"
 #endif // WX_PRECOMP
 
@@ -173,11 +174,10 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     
     wxButton *btnNext = new wxButton(this, wxID_NEXT_TIP, _("&Next"));
 
-    wxTextCtrl *text = new wxTextCtrl(this, -1, _("Did you know..."),
-                                      wxDefaultPosition, wxDefaultSize,
-                                      wxTE_READONLY | wxNO_BORDER);
+    wxStaticText *text = new wxStaticText(this, -1, _("Did you know..."), wxDefaultPosition, wxSize(-1,25) );
     text->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxBOLD));
-    text->SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNFACE));
+//
+//    text->SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNFACE));
 
     m_text = new wxTextCtrl(this, -1, _T(""),
                             wxDefaultPosition, wxSize(200, 160),
@@ -198,16 +198,17 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     
     wxBoxSizer *icon_text = new wxBoxSizer( wxHORIZONTAL );
     icon_text->Add( bmp, 0, wxCENTER );
-    icon_text->Add( text, 1, wxCENTER | wxLEFT, 10 );
+    icon_text->Add( text, 1, wxCENTER | wxLEFT, 20 );
     topsizer->Add( icon_text, 0, wxEXPAND | wxALL, 10 );
     
     topsizer->Add( m_text, 1, wxEXPAND | wxLEFT|wxRIGHT, 10 );
 
     wxBoxSizer *bottom = new wxBoxSizer( wxHORIZONTAL );
     bottom->Add( m_checkbox, 0, wxCENTER );
+    bottom->Add( 10,10,1 );
     bottom->Add( btnNext, 0, wxCENTER | wxLEFT, 10 );
     bottom->Add( btnClose, 0, wxCENTER | wxLEFT, 10 );
-    topsizer->Add( bottom, 0, wxALIGN_RIGHT | wxALL, 10 );
+    topsizer->Add( bottom, 0, wxEXPAND | wxALL, 10 );
 
     SetTipText();
     

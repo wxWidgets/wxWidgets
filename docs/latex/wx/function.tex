@@ -48,11 +48,12 @@ temporary storage that should not be deallocated.
 
 This function does directory searching; returns the first file
 that matches the path {\it spec}, or the empty string. Use \helpref{wxFindNextFile}{wxfindnextfile} to
-get the next matching file.
+get the next matching file. Neither will report the current directory "." or the
+parent directory "..".
 
 {\it spec} may contain wildcards.
 
-{\it flags} is reserved for future use.
+{\it flags} may be wxDIR for restricting the query to directories, wxFILE for files or zero for either.
 
 For example:
 

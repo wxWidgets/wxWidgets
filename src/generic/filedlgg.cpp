@@ -553,7 +553,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
                  const wxString& wildCard,
                  long style,
                  const wxPoint& pos ) :
-  wxDialog( parent, -1, message, pos, wxDefaultSize, style | wxRESIZE_BORDER )
+  wxDialog( parent, -1, message, pos, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 {
     wxBeginBusyCursor();
     
@@ -632,6 +632,12 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     
     mainsizer->Add( buttonsizer, 0, wxALL | wxEXPAND, 5 );
     
+    wxBoxSizer *staticsizer = new wxBoxSizer( wxHORIZONTAL );
+    staticsizer->Add( new wxStaticText( this, -1, _("Current directory:") ), 0, wxRIGHT, 10 );
+    m_static = new wxStaticText( this, -1, m_dir );
+    staticsizer->Add( m_static, 1 );
+    mainsizer->Add( staticsizer, 0, wxEXPAND | wxLEFT|wxRIGHT|wxBOTTOM, 10 );
+
     m_list = new wxFileCtrl( this, ID_LIST_CTRL, m_dir, firstWild, wxDefaultPosition, wxSize(440,180), 
       wxLC_LIST | wxSUNKEN_BORDER | wxLC_SINGLE_SEL );
     mainsizer->Add( m_list, 1, wxEXPAND | wxLEFT|wxRIGHT, 10 );
@@ -712,6 +718,8 @@ void wxFileDialog::OnListOk( wxCommandEvent &event )
     {
         m_list->GoToParentDir();
         m_list->SetFocus();
+        m_list->GetDir( dir );
+        m_static->SetLabel( dir );
 	return;
     }
 
@@ -734,7 +742,9 @@ void wxFileDialog::OnListOk( wxCommandEvent &event )
     if (wxDirExists(filename))
     {
         m_list->GoToDir( filename );
-	m_text->SetValue( _T("") );
+	m_text->SetValue( _T("..") );
+        m_list->GetDir( dir );
+        m_static->SetLabel( dir );
 	return;
     }
     
@@ -779,12 +789,18 @@ void wxFileDialog::OnUp( wxCommandEvent &WXUNUSED(event) )
 {
     m_list->GoToParentDir();
     m_list->SetFocus();
+    wxString dir;
+    m_list->GetDir( dir );
+    m_static->SetLabel( dir );
 }
 
 void wxFileDialog::OnHome( wxCommandEvent &WXUNUSED(event) )
 {
     m_list->GoToHomeDir();
     m_list->SetFocus();
+    wxString dir;
+    m_list->GetDir( dir );
+    m_static->SetLabel( dir );
 }
 
 void wxFileDialog::OnNew( wxCommandEvent &WXUNUSED(event) )

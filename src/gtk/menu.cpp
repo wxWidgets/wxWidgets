@@ -38,6 +38,7 @@ wxMenuBar::wxMenuBar( long style )
     /* the parent window is known after wxFrame::SetMenu() */
     m_needParent = FALSE;
     m_style = style;
+    m_invokingWindow = (wxWindow*) NULL;
 
     if (!PreCreation( (wxWindow*) NULL, wxDefaultPosition, wxDefaultSize ) ||
         !CreateBase( (wxWindow*) NULL, -1, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, _T("menubar") ))
@@ -76,6 +77,7 @@ wxMenuBar::wxMenuBar()
     /* the parent window is known after wxFrame::SetMenu() */
     m_needParent = FALSE;
     m_style = 0;
+    m_invokingWindow = (wxWindow*) NULL;
 
     if (!PreCreation( (wxWindow*) NULL, wxDefaultPosition, wxDefaultSize ) ||
         !CreateBase( (wxWindow*) NULL, -1, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("menubar") ))
@@ -152,6 +154,7 @@ static void wxMenubarSetInvokingWindow( wxMenu *menu, wxWindow *win )
 
 void wxMenuBar::SetInvokingWindow( wxWindow *win )
 {
+    m_invokingWindow = win;
 #if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
     wxWindow *top_frame = win;
     while (top_frame->GetParent())
@@ -172,6 +175,7 @@ void wxMenuBar::SetInvokingWindow( wxWindow *win )
 
 void wxMenuBar::UnsetInvokingWindow( wxWindow *win )
 {
+    m_invokingWindow = (wxWindow*) NULL;
 #if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
     wxWindow *top_frame = win;
     while (top_frame->GetParent())
@@ -254,6 +258,11 @@ void wxMenuBar::Append( wxMenu *menu, const wxString &title )
     gtk_menu_bar_append( GTK_MENU_BAR(m_menubar), menu->m_owner );
 
 #endif
+
+    // m_invokingWindow is set after wxFrame::SetMenuBar(). This call enables
+    // adding menu later on.
+    if (m_invokingWindow)
+        wxMenubarSetInvokingWindow( menu, m_invokingWindow );
 }
 
 static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString, const wxString &itemString )

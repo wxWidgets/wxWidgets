@@ -23,6 +23,8 @@
 #include "wx/listctrl.h"
 #include "wx/textctrl.h"
 #include "wx/choice.h"
+#include "wx/checkbox.h"
+#include "wx/stattext.h"
 
 //-----------------------------------------------------------------------------
 // data
@@ -162,16 +164,18 @@ public:
     void OnTextEnter( wxCommandEvent &event );
     
 protected:    
-    wxString    m_message;
-    long        m_dialogStyle;
-    wxString    m_dir;
-    wxString    m_path; // Full path
-    wxString    m_fileName;
-    wxString    m_wildCard;
-    int         m_filterIndex;
-    wxChoice   *m_choice;
-    wxTextCtrl *m_text;
-    wxFileCtrl *m_list;
+    wxString       m_message;
+    long           m_dialogStyle;
+    wxString       m_dir;
+    wxString       m_path; // Full path
+    wxString       m_fileName;
+    wxString       m_wildCard;
+    int            m_filterIndex;
+    wxChoice      *m_choice;
+    wxTextCtrl    *m_text;
+    wxFileCtrl    *m_list;
+    wxCheckBox    *m_check;
+    wxStaticText  *m_static;
     
 private:
     DECLARE_DYNAMIC_CLASS(wxFileDialog)

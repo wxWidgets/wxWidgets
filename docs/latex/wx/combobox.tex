@@ -21,7 +21,7 @@ A combobox permits a single selection only. Combobox items are numbered from zer
 \wxheading{Window styles}
 
 \begin{twocollist}\itemsep=0pt
-\twocolitem{\windowstyle{wxCB\_SIMPLE}}{Creates a combobox with a permanently displayed list.}
+\twocolitem{\windowstyle{wxCB\_SIMPLE}}{Creates a combobox with a permanently displayed list. Windows only. }
 \twocolitem{\windowstyle{wxCB\_DROPDOWN}}{Creates a combobox with a drop-down list.}
 \twocolitem{\windowstyle{wxCB\_READONLY}}{Creates a combo box consisting of a drop-down list and static text item
 displaying the current selection.}
@@ -102,7 +102,7 @@ Destructor, destroying the combobox.
 
 Adds the item to the end of the combobox.
 
-\func{void}{Append}{\param{const wxString\& }{ item}, \param{char* }{clientData}}
+\func{void}{Append}{\param{const wxString\& }{ item}, \param{void* }{clientData}}
 
 Adds the item to the end of the combobox, associating the given data
 with the item.
@@ -168,7 +168,7 @@ The position if found, or -1 if not found.
 
 \membersection{wxComboBox::GetClientData}\label{wxcomboboxgetclientdata}
 
-\constfunc{char*}{GetClientData}{\param{int}{ n}}
+\constfunc{void*}{GetClientData}{\param{int}{ n}}
 
 Returns a pointer to the client data associated with the given item (if any).
 
@@ -265,7 +265,7 @@ Removes the text between the two positions in the combobox text field.
 
 \membersection{wxComboBox::SetClientData}\label{wxcomboboxsetclientdata}
 
-\func{void}{SetClientData}{\param{int}{ n}, \param{char* }{data}}
+\func{void}{SetClientData}{\param{int}{ n}, \param{void* }{data}}
 
 Associates the given client data pointer with the given item.
 

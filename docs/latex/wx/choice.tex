@@ -90,9 +90,16 @@ Destructor, destroying the choice item.
 
 Adds the item to the end of the choice control.
 
+\func{void}{Append}{\param{const wxString\& }{ item}, \param{void* }{clientData}}
+
+Adds the item to the end of the combobox, associating the given data
+with the item.
+
 \wxheading{Parameters}
 
 \docparam{item}{String to add.}
+
+\docparam{clientData}{Client data to associate with the item.}
 
 \membersection{wxChoice::Clear}\label{wxchoiceclear}
 
@@ -133,6 +140,20 @@ Gets the number of columns in this choice item.
 
 This is implemented for Motif only.
 
+\membersection{wxChoice::GetClientData}\label{wxchoicegetclientdata}
+
+\constfunc{void*}{GetClientData}{\param{int}{ n}}
+
+Returns a pointer to the client data associated with the given item (if any).
+
+\wxheading{Parameters}
+
+\docparam{n}{An item, starting from zero.}
+
+\wxheading{Return value}
+
+A pointer to the client data, or NULL if the item was not found.
+
 \membersection{wxChoice::GetSelection}\label{wxchoicegetselection}
 
 \constfunc{int}{GetSelection}{\void}
@@ -164,6 +185,18 @@ Gets the selected string, or the empty string if no string is selected.
 \constfunc{int}{Number}{\void}
 
 Returns the number of strings in the choice control.
+
+\membersection{wxChoice::SetClientData}\label{wxchoicesetclientdata}
+
+\func{void}{SetClientData}{\param{int}{ n}, \param{void* }{data}}
+
+Associates the given client data pointer with the given item.
+
+\wxheading{Parameters}
+
+\docparam{n}{The zero-based item.}
+
+\docparam{data}{The client data.}
 
 \membersection{wxChoice::SetColumns}\label{wxchoicesetcolumns}
 

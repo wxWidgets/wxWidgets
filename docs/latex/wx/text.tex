@@ -30,7 +30,7 @@ you can still use Ctrl-Enter to pass to the next control from the keyboard.}
 \twocolitem{\windowstyle{wxTE\_MULTILINE}}{The text control allows multiple lines.}
 \twocolitem{\windowstyle{wxTE\_PASSWORD}}{The text will be echoed as asterisks.}
 \twocolitem{\windowstyle{wxTE\_READONLY}}{The text will not be user-editable.}
-\twocolitem{\windowstyle{wxHSCROLL}}{A horizontal scrollbar will be created.}
+\twocolitem{\windowstyle{wxHSCROLL}}{A horizontal scrollbar will be created. No effect under GTK+.}
 \end{twocollist}
 
 See also \helpref{window styles overview}{windowstyles} and
@@ -38,7 +38,8 @@ See also \helpref{window styles overview}{windowstyles} and
 
 \wxheading{Remarks}
 
-This class multiply-inherits from {\bf streambuf} where compilers allow, allowing code such as the following:
+This class multiply-inherits from {\bf streambuf} where compilers allow, allowing code such as 
+the following:
 
 {\small%
 \begin{verbatim}
@@ -51,8 +52,11 @@ This class multiply-inherits from {\bf streambuf} where compilers allow, allowin
 \end{verbatim}
 }%
 
-If your compiler does not support derivation from {\bf streambuf} and gives a compile error, define the symbol {\bf NO\_TEXT\_WINDOW\_STREAM} in the
-wxTextCtrl header file.
+If your compiler does not support derivation from {\bf streambuf} and gives a compile error, define the symbol 
+{\bf NO\_TEXT\_WINDOW\_STREAM} in the wxTextCtrl header file.
+
+Note that any use of C++ iostreams (including this one) deprecated and might get completely removed
+in the future.
 
 \wxheading{Event handling}
 

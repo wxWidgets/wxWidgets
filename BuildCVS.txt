@@ -54,12 +54,6 @@ won't ever work, but there is now a new makefile system
 that works without libtool and automake, using only
 configure to create what is needed. 
 
-In order to create configure, you need to have the
-GNU autoconf package (version 2.13 or 2.14) installed
-on your system and type run "autoconf" in the base
-directory (or run the autogen.sh script in the same
-directory, which just calls autoconf).
-
 Set WXWIN environment variable to the base directory such
 as ~/wxWindows (this is actually not really needed).
 

@@ -35,7 +35,7 @@ select multiple items using the SHIFT key and the mouse or special key combinati
 \twocolitem{\windowstyle{wxLB\_HSCROLL}}{Create horizontal scrollbar if contents are too wide (Windows only).}
 \twocolitem{\windowstyle{wxLB\_ALWAYS\_SB}}{Always show a vertical scrollbar.}
 \twocolitem{\windowstyle{wxLB\_NEEDED\_SB}}{Only create a vertical scrollbar if needed.}
-\twocolitem{\windowstyle{wxLB\_SORT}}{The listbox contents are sorted in alphabetical order.}
+\twocolitem{\windowstyle{wxLB\_SORT}}{The listbox contents are sorted in alphabetical order. No effect for GTK.}
 \end{twocollist}
 
 See also \helpref{window styles overview}{windowstyles}.
@@ -113,7 +113,7 @@ Destructor, destroying the list box.
 
 Adds the item to the end of the list box.
 
-\func{void}{Append}{\param{const wxString\& }{ item}, \param{char* }{clientData}}
+\func{void}{Append}{\param{const wxString\& }{ item}, \param{void* }{clientData}}
 
 Adds the item to the end of the list box, associating the given data
 with the item.
@@ -180,7 +180,7 @@ The zero-based position of the item, or -1 if the string was not found.
 
 \membersection{wxListBox::GetClientData}\label{wxlistboxgetclientdata}
 
-\constfunc{char*}{GetClientData}{\param{int}{ n}}
+\constfunc{void*}{GetClientData}{\param{int}{ n}}
 
 Returns a pointer to the client data associated with the given item (if any).
 
@@ -214,7 +214,7 @@ Applicable to single selection list boxes only.
 
 \membersection{wxListBox::GetSelections}\label{wxlistboxgetselections}
 
-\constfunc{int}{GetSelections}{\param{wxArrayInt&}{selections}}
+\constfunc{int}{GetSelections}{\param{wxArrayInt& }{selections}}
 
 Fill an array of ints with the positions of the currently selected items.
 
@@ -306,7 +306,7 @@ TRUE if the given item is selected, FALSE otherwise.
 
 \func{void}{Set}{\param{int}{ n}, \param{const wxString*}{ choices}}
 
-Clears the list box and adds the given strings.
+Clears the list box and adds the given strings. Not implemented for GTK.
 
 \wxheading{Parameters}
 
@@ -321,7 +321,7 @@ after this function has been called.
 
 \membersection{wxListBox::SetClientData}\label{wxlistboxsetclientdata}
 
-\func{void}{SetClientData}{\param{int}{ n}, \param{char* }{data}}
+\func{void}{SetClientData}{\param{int}{ n}, \param{void* }{data}}
 
 Associates the given client data pointer with the given item.
 

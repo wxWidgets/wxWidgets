@@ -475,7 +475,7 @@ void wxRadioBox::Show( int item, bool show )
         gtk_widget_hide( button );
 }
 
-wxString wxRadioBox::GetStringSelection(void) const
+wxString wxRadioBox::GetStringSelection() const
 {
     wxCHECK_MSG( m_widget != NULL, _T(""), _T("invalid radiobox") );
 
@@ -506,12 +506,12 @@ bool wxRadioBox::SetStringSelection( const wxString &s )
     return TRUE;
 }
 
-int wxRadioBox::Number(void) const
+int wxRadioBox::Number() const
 {
     return m_boxes.Number();
 }
 
-int wxRadioBox::GetNumberOfRowsOrCols(void) const
+int wxRadioBox::GetNumberOfRowsOrCols() const
 {
     return 1;
 }

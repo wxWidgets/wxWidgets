@@ -99,6 +99,9 @@ wxSizer *wxDialogBase::CreateButtonSizer( long flags )
     wxButton *cancel = (wxButton *) NULL;
     wxButton *yes = (wxButton *) NULL;
     wxButton *no = (wxButton *) NULL;
+
+    // always show an OK button, unless only YES_NO is given
+    if ((flags & wxYES_NO) == 0) flags = flags | wxOK;
     
     if (flags & wxYES_NO) 
     {

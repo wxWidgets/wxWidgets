@@ -1592,24 +1592,34 @@ case "${host}" in
     WX_CREATE_LINKS="CREATE_LINKS"
   ;;
   *-*-irix5* | *-*-irix6* )
-    SHARED_LD="${CXX} -shared -o"
+    if test "$GCC" = yes ; then
+       SHARED_LD="${CC} -shared -o"
+       PIC_FLAG="-fPIC"
+    else
+       SHARED_LD="${CXX} -shared -o"
+    fi
     WX_CREATE_INSTALLED_LINKS="CREATE_INSTALLED_LINKS"
     WX_CREATE_LINKS="CREATE_LINKS"
   ;;
   *-*-solaris2* )
-    SHARED_LD="${CXX} -G -o"
-    PIC_FLAG="PIC"
+    if test "$GCC" = yes ; then
+       SHARED_LD="${CC} -shared -o"
+       PIC_FLAG="-fPIC"
+    else
+       SHARED_LD="${CXX} -G -o"
+       PIC_FLAG="PIC"
+    fi
     WX_CREATE_INSTALLED_LINKS="CREATE_INSTALLED_LINKS"
     WX_CREATE_LINKS="CREATE_LINKS"
   ;;
   *-*-sunos4* )
-    SHARED_LD="${CXX} -shared -o"
+    SHARED_LD="${CC} -shared -o"
     PIC_FLAG="-fPIC"
     WX_CREATE_INSTALLED_LINKS="CREATE_INSTALLED_LINKS"
     WX_CREATE_LINKS="CREATE_LINKS"
   ;;
   *-*-freebsd* | *-*-netbsd*)
-    SHARED_LD="${CXX} -shared -o"
+    SHARED_LD="${CC} -shared -o"
     PIC_FLAG="-fPIC"
     WX_CREATE_INSTALLED_LINKS="CREATE_INSTALLED_LINKS"
     WX_CREATE_LINKS="CREATE_LINKS"
@@ -1627,7 +1637,7 @@ case "${host}" in
     WX_CREATE_LINKS="CREATE_LINKS"
   ;;
   *-*-sysv5* )
-    SHARED_LD="${CXX} -shared -o"
+    SHARED_LD="${CC} -shared -o"
     PIC_FLAG="-fPIC"
     WX_CREATE_INSTALLED_LINKS="CREATE_INSTALLED_LINKS"
     WX_CREATE_LINKS="CREATE_LINKS"
@@ -1997,6 +2007,8 @@ if test "$GCC" = yes ; then
     if test "$wxUSE_NO_EXCEPTIONS" = "yes" ; then
 	WXDEBUG_DEFINE="$WXDEBUG_DEFINE -fno-exceptions"
     fi
+dnl    CFLAGS="${CFLAGS} -fpermissive"
+dnl    CXXFLAGS="${CXXFLAGS} -fpermissive"
 fi  
 	  
 	  
