@@ -17,6 +17,8 @@ unicode.
 Fixed problem where the wrong class name could sometimes be used for
 OOR.
 
+Fixed a interpreter lock problem in the __eq__ and __ne__ methods in
+wxSize and etc.
 
 
 

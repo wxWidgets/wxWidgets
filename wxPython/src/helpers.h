@@ -66,6 +66,8 @@ void           wxPyEndAllowThreads(PyThreadState* state);
 void wxPyBeginBlockThreads();
 void wxPyEndBlockThreads();
 
+#define wxPyBLOCK_THREADS(stmt) wxPyBeginBlockThreads(); stmt; wxPyEndBlockThreads()
+
 //----------------------------------------------------------------------
 // These are helpers used by the typemaps
 

@@ -2224,7 +2224,7 @@ bool wxColour_helper(PyObject* source, wxColour** obj) {
         *obj = ptr;
         return TRUE;
     }
-    // otherwise a string is expected
+    // otherwise check for a string
     else if (PyString_Check(source) || PyUnicode_Check(source)) {
         wxString spec = Py2wxString(source);
         if (spec.GetChar(0) == '#' && spec.Length() == 7) {  // It's  #RRGGBB
@@ -2241,6 +2241,23 @@ bool wxColour_helper(PyObject* source, wxColour** obj) {
             **obj = wxColour(spec);
             return TRUE;
         }
+    }
+    // last chance: 3-tuple of integers is expected
+    else if (PySequence_Check(source) && PyObject_Length(source) == 3) {
+        PyObject* o1 = PySequence_GetItem(source, 0);
+        PyObject* o2 = PySequence_GetItem(source, 1);
+        PyObject* o3 = PySequence_GetItem(source, 2);
+        if (!PyNumber_Check(o1) || !PyNumber_Check(o2) || !PyNumber_Check(o3)) {
+            Py_DECREF(o1);
+            Py_DECREF(o2);
+            Py_DECREF(o3);
+            goto error;
+        }
+        **obj = wxColour(PyInt_AsLong(o1), PyInt_AsLong(o2), PyInt_AsLong(o3));
+        Py_DECREF(o1);
+        Py_DECREF(o2);
+        Py_DECREF(o3);
+        return TRUE;
     }
 
  error:

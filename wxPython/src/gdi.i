@@ -368,22 +368,24 @@ public:
         bool __eq__(PyObject* obj) {
             wxColour  tmp;
             wxColour* ptr = &tmp;
-            if (obj == Py_None)                 return FALSE;
-            if (! wxColour_helper(obj, &ptr))   return FALSE;
+            if (obj == Py_None)    return FALSE;
+            wxPyBLOCK_THREADS(bool success = wxColour_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return FALSE;
             return *self == *ptr;
         }
         bool __ne__(PyObject* obj) {
             wxColour  tmp;
             wxColour* ptr = &tmp;
-            if (obj == Py_None)                 return TRUE;
-            if (! wxColour_helper(obj, &ptr))   return TRUE;
+            if (obj == Py_None)    return TRUE;
+            wxPyBLOCK_THREADS(bool success = wxColour_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return TRUE;
             return *self != *ptr;
         }
-
     }
+
     %pragma(python) addtoclass = "asTuple = Get
     def __str__(self):                  return str(self.asTuple())
-    def __repr__(self):                 return 'wxColour: ' + str(self.asTuple())
+    def __repr__(self):                 return 'wxColour:' + str(self.asTuple())
     def __nonzero__(self):              return self.Ok()
     def __getinitargs__(self):          return ()
     def __getstate__(self):             return self.asTuple()

@@ -83,15 +83,17 @@ public:
         bool __eq__(PyObject* obj) {
             wxSize  tmp;
             wxSize* ptr = &tmp;
-            if (obj == Py_None)               return FALSE;
-            if (! wxSize_helper(obj, &ptr))   return FALSE;
+            if (obj == Py_None)    return FALSE;
+            wxPyBLOCK_THREADS(bool success = wxSize_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return FALSE;
             return *self == *ptr;
         }
         bool __ne__(PyObject* obj) {
             wxSize  tmp;
             wxSize* ptr = &tmp;
-            if (obj == Py_None)               return TRUE;
-            if (! wxSize_helper(obj, &ptr))   return TRUE;
+            if (obj == Py_None)    return TRUE;
+            wxPyBLOCK_THREADS(bool success = wxSize_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return TRUE;
             return *self != *ptr;
         }
 
@@ -148,17 +150,20 @@ public:
         bool __eq__(PyObject* obj) {
             wxRealPoint  tmp;
             wxRealPoint* ptr = &tmp;
-            if (obj == Py_None)                    return FALSE;
-            if (! wxRealPoint_helper(obj, &ptr))   return FALSE;
+            if (obj == Py_None)    return FALSE;
+            wxPyBLOCK_THREADS(bool success = wxRealPoint_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return FALSE;
             return *self == *ptr;
         }
         bool __ne__(PyObject* obj) {
             wxRealPoint  tmp;
             wxRealPoint* ptr = &tmp;
-            if (obj == Py_None)                    return TRUE;
-            if (! wxRealPoint_helper(obj, &ptr))   return TRUE;
+            if (obj == Py_None)    return TRUE;
+            wxPyBLOCK_THREADS(bool success = wxRealPoint_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return TRUE;
             return *self != *ptr;
         }
+
     }
 
     %pragma(python) addtoclass = "
@@ -210,17 +215,20 @@ public:
         bool __eq__(PyObject* obj) {
             wxPoint  tmp;
             wxPoint* ptr = &tmp;
-            if (obj == Py_None)                return FALSE;
-            if (! wxPoint_helper(obj, &ptr))   return FALSE;
+            if (obj == Py_None)    return FALSE;
+            wxPyBLOCK_THREADS(bool success = wxPoint_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return FALSE;
             return *self == *ptr;
         }
         bool __ne__(PyObject* obj) {
             wxPoint  tmp;
             wxPoint* ptr = &tmp;
-            if (obj == Py_None)                return TRUE;
-            if (! wxPoint_helper(obj, &ptr))   return TRUE;
+            if (obj == Py_None)    return TRUE;
+            wxPyBLOCK_THREADS(bool success = wxPoint_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return TRUE;
             return *self != *ptr;
         }
+
     }
 
     %pragma(python) addtoclass = "
@@ -308,17 +316,20 @@ public:
         bool __eq__(PyObject* obj) {
             wxRect  tmp;
             wxRect* ptr = &tmp;
-            if (obj == Py_None)                 return FALSE;
-            if (! wxRect_helper(obj, &ptr))     return FALSE;
+            if (obj == Py_None)    return FALSE;
+            wxPyBLOCK_THREADS(bool success = wxRect_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return FALSE;
             return *self == *ptr;
         }
         bool __ne__(PyObject* obj) {
             wxRect  tmp;
             wxRect* ptr = &tmp;
-            if (obj == Py_None)                 return TRUE;
-            if (! wxRect_helper(obj, &ptr))     return TRUE;
+            if (obj == Py_None)    return TRUE;
+            wxPyBLOCK_THREADS(bool success = wxRect_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return TRUE;
             return *self != *ptr;
         }
+
     }
 
     %pragma(python) addtoclass = "
@@ -467,17 +478,20 @@ public:
         bool __eq__(PyObject* obj) {
             wxPoint2DDouble  tmp;
             wxPoint2DDouble* ptr = &tmp;
-            if (obj == Py_None)                        return FALSE;
-            if (! wxPoint2DDouble_helper(obj, &ptr))   return FALSE;
+            if (obj == Py_None)    return FALSE;
+            wxPyBLOCK_THREADS(bool success = wxPoint2DDouble_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return FALSE;
             return *self == *ptr;
         }
         bool __ne__(PyObject* obj) {
             wxPoint2DDouble  tmp;
             wxPoint2DDouble* ptr = &tmp;
-            if (obj == Py_None)                        return TRUE;
-            if (! wxPoint2DDouble_helper(obj, &ptr))   return TRUE;
+            if (obj == Py_None)    return TRUE;
+            wxPyBLOCK_THREADS(bool success = wxPoint2DDouble_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return TRUE;
             return *self != *ptr;
         }
+
 
         PyObject* asTuple() {
             wxPyBeginBlockThreads();
