@@ -27,6 +27,38 @@
 
 const wxChar* wxSTCNameStr = wxT("stcwindow");
 
+#ifdef MAKELONG
+#undef MAKELONG
+#endif
+
+#define MAKELONG(a, b) ((a) | ((b) << 16))
+
+
+static long wxColourAsLong(const wxColour& co) {
+    return (((long)co.Blue()  << 16) |
+            ((long)co.Green() <<  8) |
+            ((long)co.Red()));
+}
+
+static wxColour wxColourFromLong(long c) {
+    wxColour clr;
+    clr.Set(c & 0xff, (c >> 8) & 0xff, (c >> 16) & 0xff);
+    return clr;
+}
+
+
+static wxColour wxColourFromSpec(const wxString& spec) {
+    // spec should be "#RRGGBB"
+    long red, green, blue;
+    red = green = blue = 0;
+    spec.Mid(1,2).ToLong(&red,   16);
+    spec.Mid(3,2).ToLong(&green, 16);
+    spec.Mid(5,2).ToLong(&blue,  16);
+    return wxColour(red, green, blue);
+}
+
+//----------------------------------------------------------------------
+
 DEFINE_EVENT_TYPE( wxEVT_STC_CHANGE )
 DEFINE_EVENT_TYPE( wxEVT_STC_STYLENEEDED )
 DEFINE_EVENT_TYPE( wxEVT_STC_CHARADDED )
@@ -57,13 +89,13 @@ BEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
     EVT_SCROLL                  (wxStyledTextCtrl::OnScroll)
     EVT_SIZE                    (wxStyledTextCtrl::OnSize)
     EVT_LEFT_DOWN               (wxStyledTextCtrl::OnMouseLeftDown)
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXMAC__)
     // Let Scintilla see the double click as a second click
     EVT_LEFT_DCLICK             (wxStyledTextCtrl::OnMouseLeftDown)
 #endif
     EVT_MOTION                  (wxStyledTextCtrl::OnMouseMove)
     EVT_LEFT_UP                 (wxStyledTextCtrl::OnMouseLeftUp)
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXMAC__)
     EVT_RIGHT_UP                (wxStyledTextCtrl::OnMouseRightUp)
 #else
     EVT_CONTEXT_MENU            (wxStyledTextCtrl::OnContextMenu)
@@ -125,36 +157,6 @@ long wxStyledTextCtrl::SendMsg(int msg, long wp, long lp) {
 }
 
 
-#ifdef MAKELONG
-#undef MAKELONG
-#endif
-
-#define MAKELONG(a, b) ((a) | ((b) << 16))
-
-
-static long wxColourAsLong(const wxColour& co) {
-    return (((long)co.Blue()  << 16) |
-            ((long)co.Green() <<  8) |
-            ((long)co.Red()));
-}
-
-static wxColour wxColourFromLong(long c) {
-    wxColour clr;
-    clr.Set(c & 0xff, (c >> 8) & 0xff, (c >> 16) & 0xff);
-    return clr;
-}
-
-
-static wxColour wxColourFromSpec(const wxString& spec) {
-    // spec should be "#RRGGBB"
-    long red, green, blue;
-    red = green = blue = 0;
-    spec.Mid(1,2).ToLong(&red,   16);
-    spec.Mid(3,2).ToLong(&green, 16);
-    spec.Mid(5,2).ToLong(&blue,  16);
-    return wxColour(red, green, blue);
-}
-
 
 //----------------------------------------------------------------------
 // BEGIN generated section.  The following code is automatically generated
@@ -188,38 +190,38 @@ int wxStyledTextCtrl::GetCurrentLine() {
 //
 void wxStyledTextCtrl::StyleSetSpec(int styleNum, const wxString& spec) {
 
-    wxStringTokenizer tkz(spec, ",");
+    wxStringTokenizer tkz(spec, wxT(","));
     while (tkz.HasMoreTokens()) {
         wxString token = tkz.GetNextToken();
 
         wxString option = token.BeforeFirst(':');
         wxString val = token.AfterFirst(':');
 
-        if (option == "bold")
+        if (option == wxT("bold"))
             StyleSetBold(styleNum, true);
 
-        else if (option == "italic")
+        else if (option == wxT("italic"))
             StyleSetItalic(styleNum, true);
 
-        else if (option == "underline")
+        else if (option == wxT("underline"))
             StyleSetUnderline(styleNum, true);
 
-        else if (option == "eol")
+        else if (option == wxT("eol"))
             StyleSetEOLFilled(styleNum, true);
 
-        else if (option == "size") {
+        else if (option == wxT("size")) {
             long points;
             if (val.ToLong(&points))
                 StyleSetSize(styleNum, points);
         }
 
-        else if (option == "face")
+        else if (option == wxT("face"))
             StyleSetFaceName(styleNum, val);
 
-        else if (option == "fore")
+        else if (option == wxT("fore"))
             StyleSetForeground(styleNum, wxColourFromSpec(val));
 
-        else if (option == "back")
+        else if (option == wxT("back"))
             StyleSetBackground(styleNum, wxColourFromSpec(val));
     }
 }
@@ -378,8 +380,8 @@ void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
     bool alt  = evt.AltDown();
     bool skip = ((ctrl || alt) && ! (ctrl && alt));
 
-    //printf("OnChar  key:%%d  consumed:%%d  ctrl:%%d  alt:%%d  skip:%%d\n",
-    //       key, m_lastKeyDownConsumed, ctrl, alt, skip);
+//     printf("OnChar key:%%d  consumed:%%d  ctrl:%%d  alt:%%d  skip:%%d\n",
+//            key, m_lastKeyDownConsumed, ctrl, alt, skip);
 
     if (key <= WXK_START && /*key >= 32 &&*/ !m_lastKeyDownConsumed && !skip) {
         m_swx->DoAddChar(key);
@@ -397,8 +399,8 @@ void wxStyledTextCtrl::OnKeyDown(wxKeyEvent& evt) {
 
     int processed = m_swx->DoKeyDown(key, shift, ctrl, alt, &m_lastKeyDownConsumed);
 
-//      printf("key: %%d  shift: %%d  ctrl: %%d  alt: %%d  processed: %%d  consumed: %%d\n",
-//             key, shift, ctrl, alt, processed, m_lastKeyDownConsumed);
+//     printf("KeyDn  key:%%d  shift:%%d  ctrl:%%d  alt:%%d  processed:%%d  consumed:%%d\n",
+//            key, shift, ctrl, alt, processed, m_lastKeyDownConsumed);
 
     if (!processed && !m_lastKeyDownConsumed)
         evt.Skip();

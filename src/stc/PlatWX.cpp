@@ -646,11 +646,37 @@ void Window::SetTitle(const char *s) {
 // Helper classes for ListBox
 
 
-// #undef  wxSTC_USE_POPUP
-// #define wxSTC_USE_POPUP 0
+#if defined(__WXMAC__)
+class wxSTCListBoxWin : public wxListBox {
+public:
+    wxSTCListBoxWin(wxWindow* parent, wxWindowID id)
+        : wxListBox(parent, id, wxDefaultPosition, wxSize(0,0),
+                    0, NULL, wxLB_SINGLE | wxSIMPLE_BORDER) {
+        SetCursor(wxCursor(wxCURSOR_ARROW));
+        Hide();
+    }
+
+    void OnFocus(wxFocusEvent& event) {
+        GetParent()->SetFocus();
+        event.Skip();
+    }
+
+    wxListBox* GetLB() { return this; }
+
+private:
+    DECLARE_EVENT_TABLE()
+};
 
 
-// A wxListBox that gives focus back to its parent if it gets it.
+BEGIN_EVENT_TABLE(wxSTCListBoxWin, wxListBox)
+    EVT_SET_FOCUS(wxSTCListBoxWin::OnFocus)
+END_EVENT_TABLE()
+
+
+
+#else
+
+
 class wxSTCListBox : public wxListBox {
 public:
     wxSTCListBox(wxWindow* parent, wxWindowID id)
@@ -675,6 +701,9 @@ END_EVENT_TABLE()
 
 
 
+// #undef  wxSTC_USE_POPUP
+// #define wxSTC_USE_POPUP 0
+
 // A window to place the listbox upon.  If wxPopupWindow is supported then
 // that will be used so the listbox can extend beyond the client area of the
 // wxSTC if needed.
@@ -694,7 +723,7 @@ public:
         lb = new wxSTCListBox(this, id);
         lb->SetCursor(wxCursor(wxCURSOR_ARROW));
         lb->SetFocus();
-    }
+   }
 
     void OnSize(wxSizeEvent& event) {
         lb->SetSize(GetSize());
@@ -722,7 +751,7 @@ private:
 BEGIN_EVENT_TABLE(wxSTCListBoxWin, wxSTCListBoxWinBase)
     EVT_SIZE(wxSTCListBoxWin::OnSize)
 END_EVENT_TABLE()
-
+#endif
 
 inline wxListBox* GETLB(WindowID win) {
     return (((wxSTCListBoxWin*)win)->GetLB());

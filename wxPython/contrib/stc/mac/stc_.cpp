@@ -9845,13 +9845,12 @@ static PyObject *_wrap_wxStyledTextEvent_SetDragAllowMove(PyObject *self, PyObje
 static PyObject *_wrap_wxStyledTextEvent_SetDragResult(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxStyledTextEvent * _arg0;
-    wxDragResult * _arg1;
+    wxDragResult  _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
     char *_kwnames[] = { "self","val", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextEvent_SetDragResult",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextEvent_SetDragResult",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -9860,16 +9859,9 @@ static PyObject *_wrap_wxStyledTextEvent_SetDragResult(PyObject *self, PyObject 
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDragResult_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxStyledTextEvent_SetDragResult. Expected _wxDragResult_p.");
-        return NULL;
-        }
-    }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxStyledTextEvent_SetDragResult(_arg0,*_arg1);
+    wxStyledTextEvent_SetDragResult(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -10431,11 +10423,10 @@ static PyObject *_wrap_wxStyledTextEvent_GetDragAllowMove(PyObject *self, PyObje
 #define wxStyledTextEvent_GetDragResult(_swigobj)  (_swigobj->GetDragResult())
 static PyObject *_wrap_wxStyledTextEvent_GetDragResult(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxDragResult * _result;
+    wxDragResult  _result;
     wxStyledTextEvent * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextEvent_GetDragResult",_kwnames,&_argo0)) 
@@ -10449,12 +10440,11 @@ static PyObject *_wrap_wxStyledTextEvent_GetDragResult(PyObject *self, PyObject 
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxDragResult (wxStyledTextEvent_GetDragResult(_arg0));
+    _result = (wxDragResult )wxStyledTextEvent_GetDragResult(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxDragResult_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
