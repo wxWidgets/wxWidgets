@@ -52,7 +52,7 @@
     #define wxLongLong_t __int64
 #elif defined(__BORLANDC__) && defined(__WIN32__) && (__BORLANDC__ >= 0x520)
     #define wxLongLong_t __int64
-#elif defined(__GNUG__)
+#elif defined(__GNUG__) || defined(__sgi)
     #define wxLongLong_t long long
 #elif defined(__MWERKS__)
     #if __option(longlong)
@@ -65,12 +65,13 @@
         #define wxLongLong_t long long
 #else // no native long long type
     // both warning and pragma warning are not portable, but at least an
-    // unknown pragma should never be an error.
-    // Err, actually, Watcom C++ doesn't like it.
-    // (well, if the compilers are _that_ broken, I'm removing it (VZ))
-#if 0 //ndef __WATCOMC__
+    // unknown pragma should never be an error - except that, actually, Watcom
+    // C++ doesn't like it, so we have to disable it in this case <sigh>
+#ifndef __WATCOMC__
     #pragma warning "Your compiler does not appear to support 64 bit "\
-                    "integers, using emulation class instead."
+                    "integers, using emulation class instead.\n" \
+                    "Please report your compiler version to " \
+                    "wx-dev@lists.wxwindows.org!"
 #endif
     #define wxUSE_LONGLONG_WX 1
 #endif // compiler

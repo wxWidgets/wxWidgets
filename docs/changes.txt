@@ -16,6 +16,10 @@ OTHER CHANGES
 2.2.7
 -----
 
+wxBase:
+
+- wxLongLong compilation fixed for SGI native compiler
+
 wxMSW:
 
 - wxListCtrl attributes are handled correctly when inserting/deleting/sorting
@@ -49,13 +53,14 @@ wxMSW:
 wxGTK:
 
 - fixed configure bug: it didn't define HAVE_VSNPRINTF properly always
+- wxGauge now supports wxGA_VERTICAL (Shane Forsythe)
 - fixed keyboard input in wxSpinCtrl
 
 wxHTML:
 
 - fixed bug in parsing tags with whitespaces around '=' in tags,
-  e.g. <a href = "something.html"> 
-  
+  e.g. <a href = "something.html">
+
 2.2.5
 -----
 
@@ -94,7 +99,7 @@ wxBase:
 - wxDB: replaced German variable names with English.
 - wxDbGetConnection() did not check for the correct scrolling
   of cursors when re-using a cached database connection.
-    
+
 All (GUI):
 
 - Corrected uninitialized variable in wxDocument constructor.
@@ -333,7 +338,7 @@ wxHTML:
 
 - almost complete rewrite of wxHtmlHelpController,
   including faster search, bookmarks, printing, setup dialog
-  and cross-platform binary compatible .cached files for faster 
+  and cross-platform binary compatible .cached files for faster
   loading of large helpbooks, case insensitive search
   splitted into 3 parts: wxHtmlHelpData, Frame and Controller
 - added support for charsets and <meta> tag
