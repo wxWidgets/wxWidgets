@@ -391,6 +391,14 @@ public:
     void OnGetToolTip( wxTreeEvent &event );
     void OnInternalIdle( );
 
+    virtual wxVisualAttributes GetDefaultAttributes() const
+    {
+        return GetClassDefaultAttributes(GetWindowVariant());
+    }
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+    
     // implementation helpers
 protected:
     friend class wxGenericTreeItem;

@@ -788,12 +788,16 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
     SetValidator( validator );
 #endif
 
-    SetForegroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT) );
-    SetBackgroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX) );
+    wxVisualAttributes attr = GetDefaultAttributes();    
+    SetDefaultForegroundColour( attr.colFg );
+    SetDefaultBackgroundColour( attr.colBg );
+    SetDefaultFont(attr.font);
 
 //  m_dottedPen = wxPen( "grey", 0, wxDOT );  too slow under XFree86
     m_dottedPen = wxPen( wxT("grey"), 0, 0 );
 
+    SetBestSize(size);
+    
     return TRUE;
 }
 
@@ -3435,6 +3439,29 @@ bool wxGenericTreeCtrl::SetForegroundColour(const wxColour& colour)
 void wxGenericTreeCtrl::OnGetToolTip( wxTreeEvent &event )
 {
     event.Veto();
+}
+
+
+// NOTE: If using the wxListBox visual attributes works everywhere then this can
+// be removed, as well as the #else case below.
+#define _USE_VISATTR 0
+
+#include "wx/listbox.h"
+
+//static
+wxVisualAttributes
+wxGenericTreeCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
+{
+#if _USE_VISATTR
+    // Use the same color scheme as wxListBox
+    return wxListBox::GetClassDefaultAttributes(variant);
+#else
+    wxVisualAttributes attr;
+    attr.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+    attr.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX);
+    attr.font  = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+    return attr;
+#endif
 }
 
 #endif // wxUSE_TREECTRL

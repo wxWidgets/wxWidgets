@@ -1658,7 +1658,16 @@ wxListHeaderWindow::wxListHeaderWindow( wxWindow *win,
     m_owner = owner;
     m_resizeCursor = new wxCursor( wxCURSOR_SIZEWE );
 
-    SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
+#if _USE_VISATTR
+    wxVisualAttributes attr = wxPanel::GetClassDefaultAttributes();    
+    SetDefaultForegroundColour( attr.colFg );
+    SetDefaultBackgroundColour( attr.colBg );
+    SetDefaultFont( attr.font );
+#else
+    SetDefaultForegroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+    SetDefaultBackgroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+    SetDefaultFont( wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT ));
+#endif
 }
 
 wxListHeaderWindow::~wxListHeaderWindow()
@@ -1703,12 +1712,8 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     dc.SetBackgroundMode(wxTRANSPARENT);
 
-    // do *not* use the listctrl colour for headers - one day we will have a
-    // function to set it separately
-    //dc.SetTextForeground( *wxBLACK );
-    dc.SetTextForeground(wxSystemSettings::
-                            GetSystemColour( wxSYS_COLOUR_WINDOWTEXT ));
-
+    dc.SetTextForeground(GetForegroundColour());
+    
     int x = HEADER_OFFSET_X;
 
     int numColumns = m_owner->GetColumnCount();
@@ -2200,7 +2205,10 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent,
 
     SetScrollbars( 0, 0, 0, 0, 0, 0 );
 
-    SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOX ) );
+    wxVisualAttributes attr = wxGenericListCtrl::GetClassDefaultAttributes();    
+    SetDefaultForegroundColour( attr.colFg );
+    SetDefaultBackgroundColour( attr.colBg );
+    SetDefaultFont( attr.font );
 }
 
 wxListMainWindow::~wxListMainWindow()
@@ -4630,6 +4638,8 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
         }
     }
 
+    SetBestSize(size);
+    
     return TRUE;
 }
 
@@ -5230,6 +5240,29 @@ bool wxGenericListCtrl::SetFont( const wxFont &font )
     Refresh();
 
     return TRUE;
+}
+
+
+// NOTE: If using the wxListBox visual attributes works everywhere then this can
+// be removed, as well as the #else case below.
+#define _USE_VISATTR 0
+
+#include "wx/listbox.h"
+
+//static
+wxVisualAttributes
+wxGenericListCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
+{
+#if _USE_VISATTR
+    // Use the same color scheme as wxListBox
+    return wxListBox::GetClassDefaultAttributes(variant);
+#else
+    wxVisualAttributes attr;
+    attr.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+    attr.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX);
+    attr.font  = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+    return attr;
+#endif
 }
 
 // ----------------------------------------------------------------------------

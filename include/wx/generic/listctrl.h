@@ -173,6 +173,14 @@ public:
     wxDEPRECATED( int GetItemSpacing( bool isSmall ) const );
 
 
+    virtual wxVisualAttributes GetDefaultAttributes() const
+    {
+        return GetClassDefaultAttributes(GetWindowVariant());
+    }
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
     // implementation only from now on
     // -------------------------------
 
