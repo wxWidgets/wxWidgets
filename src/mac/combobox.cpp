@@ -311,7 +311,12 @@ wxString wxComboBox::GetValue() const
 
 void wxComboBox::SetValue(const wxString& value)
 {
-    SetStringSelection( value ) ;
+    int s = FindString (value);
+    if (s == wxNOT_FOUND && !HasFlag(wxCB_READONLY) )
+    {
+    	m_choice->Append(value) ;
+    }
+	SetStringSelection( value ) ;
 }
 
 // Clipboard operations
