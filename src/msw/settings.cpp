@@ -277,6 +277,4 @@ bool wxSystemSettings::GetCapability(int index)
         default:
             return FALSE;
     }
-
-    return FALSE;
 }
