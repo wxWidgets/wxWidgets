@@ -120,7 +120,9 @@ wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringCon
 #endif
 
 #if !defined(WX_TIMEZONE) && !defined(WX_GMTOFF_IN_TM)
-    #if defined(__BORLANDC__) || defined(__MINGW32__) || defined(__VISAGECPP__)
+    #if defined(__WXPALMOS__)
+        #define WX_GMTOFF_IN_TM
+    #elif defined(__BORLANDC__) || defined(__MINGW32__) || defined(__VISAGECPP__)
         #define WX_TIMEZONE _timezone
     #elif defined(__MWERKS__)
         long wxmw_timezone = 28800;
@@ -3563,14 +3565,14 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
                 }
                 else // may be either day or year
                 {
-                    wxDateTime_t maxDays = (wxDateTime_t)(
+                    wxDateTime_t max_days = (wxDateTime_t)(
                         haveMon
                         ? GetNumOfDaysInMonth(haveYear ? year : Inv_Year, mon)
                         : 31
                     );
 
                     // can it be day?
-                    if ( (val == 0) || (val > (unsigned long)maxDays) )
+                    if ( (val == 0) || (val > (unsigned long)max_days) )
                     {
                         // no
                         isYear = true;

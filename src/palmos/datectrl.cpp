@@ -59,9 +59,9 @@ bool wxDatePickerCtrl::Create(wxWindow *parent,
     wxString label;
 
     if ( dt.IsValid() )
-        label = _T("test2");
+        label = dt.FormatDate();
 
-    ig(!wxControl::PalmCreateControl(selectorTriggerCtl, label, pos, size))
+    if(!wxControl::PalmCreateControl(selectorTriggerCtl, label, pos, size))
         return false;
 
     return true;
@@ -73,9 +73,7 @@ bool wxDatePickerCtrl::Create(wxWindow *parent,
 
 wxSize wxDatePickerCtrl::DoGetBestSize() const
 {
-    const int y = GetCharHeight();
-
-    return wxSize(DEFAULT_ITEM_WIDTH, EDIT_HEIGHT_FROM_CHAR_HEIGHT(y));
+    return wxSize(16,16);
 }
 
 // ----------------------------------------------------------------------------
@@ -84,7 +82,10 @@ wxSize wxDatePickerCtrl::DoGetBestSize() const
 
 void wxDatePickerCtrl::SetValue(const wxDateTime& dt)
 {
-    SetLabel(_T("test1"));
+    if ( dt.IsValid() )
+        SetLabel(dt.FormatDate());
+    else
+        SetLabel(wxEmptyString);
 }
 
 wxDateTime wxDatePickerCtrl::GetValue() const
@@ -103,6 +104,20 @@ bool wxDatePickerCtrl::GetRange(wxDateTime *dt1, wxDateTime *dt2) const
 {
     // TODO
     return false;
+}
+
+// ----------------------------------------------------------------------------
+// helpers
+// ----------------------------------------------------------------------------
+
+bool wxDatePickerCtrl::SendClickEvent()
+{
+    wxDateTime dt(wxDateTime::Today());
+    int16_t month = dt.GetMonth();
+    int16_t day = dt.GetDay();
+    int16_t year = dt.GetYear();
+
+    if(SelectDay(selectDayByMonth,&month,&day,&year,_T("Pick date")));
 }
 
 #endif // wxUSE_DATEPICKCTRL

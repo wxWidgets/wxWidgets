@@ -53,6 +53,9 @@ public:
     virtual void SetRange(const wxDateTime& dt1, const wxDateTime& dt2);
     virtual bool GetRange(wxDateTime *dt1, wxDateTime *dt2) const;
 
+    // send a notification event, return true if processed
+    bool SendClickEvent();
+
 protected:
     virtual wxSize DoGetBestSize() const;
 

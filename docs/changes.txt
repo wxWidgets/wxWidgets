@@ -140,6 +140,7 @@ wxPalmOS:
 - native wxToggleButton implementation
 - native wxRadioButton implementation
 - native wxStaticText implementation
+- native wxDatePickerCtrl implementation
 
 
 2.5.3

@@ -311,7 +311,7 @@
 // Default is 1
 //
 // Recommended setting: 1
-#define wxUSE_DATETIME      0
+#define wxUSE_DATETIME      1
 
 // Set wxUSE_TIMER to 1 to compile wxTimer class
 //
@@ -519,7 +519,7 @@
 #define wxUSE_CHECKLISTBOX 0    // wxCheckListBox (requires wxUSE_OWNER_DRAWN)
 #define wxUSE_CHOICE       0    // wxChoice
 #define wxUSE_COMBOBOX     0    // wxComboBox
-#define wxUSE_DATEPICKCTRL 0    // wxDatePickerCtrl
+#define wxUSE_DATEPICKCTRL 1    // wxDatePickerCtrl
 #define wxUSE_GAUGE        0    // wxGauge
 #define wxUSE_LISTBOX      0    // wxListBox
 #define wxUSE_LISTCTRL     0    // wxListCtrl

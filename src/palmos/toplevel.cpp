@@ -48,6 +48,7 @@
 #include "wx/radiobut.h"
 #include "wx/tglbtn.h"
 #include "wx/slider.h"
+#include "wx/datectrl.h"
 
 // ----------------------------------------------------------------------------
 // globals
@@ -257,25 +258,41 @@ bool wxTopLevelWindowPalm::HandleControlSelect(EventType* event)
     if(win==NULL)
         return false;
 
+#if wxUSE_BUTTON
     wxButton* button = wxDynamicCast(win,wxButton);
     if(button)
         return button->SendClickEvent();
+#endif // wxUSE_BUTTON
 
+#if wxUSE_CHECKBOX
     wxCheckBox* checkbox = wxDynamicCast(win,wxCheckBox);
     if(checkbox)
         return checkbox->SendClickEvent();
+#endif // wxUSE_CHECKBOX
 
+#if wxUSE_TOGGLEBTN
     wxToggleButton* toggle = wxDynamicCast(win,wxToggleButton);
     if(toggle)
         return toggle->SendClickEvent();
+#endif // wxUSE_TOGGLEBTN
 
+#if wxUSE_RADIOBTN
     wxRadioButton* radio = wxDynamicCast(win,wxRadioButton);
     if(radio)
         return radio->SendClickEvent();
+#endif // wxUSE_RADIOBTN
 
+#if wxUSE_DATEPICKCTRL
+    wxDatePickerCtrl* datepicker = wxDynamicCast(win,wxDatePickerCtrl);
+    if(datepicker)
+        return datepicker->SendClickEvent();
+#endif // wxUSE_DATEPICKCTRL
+
+#if wxUSE_SLIDER
     wxSlider* slider = wxDynamicCast(win,wxSlider);
     if(slider)
         return slider->SendUpdatedEvent();
+#endif // wxUSE_SLIDER
 
     return false;
 }
@@ -288,9 +305,11 @@ bool wxTopLevelWindowPalm::HandleControlRepeat(EventType* event)
     if(win==NULL)
         return false;
 
+#if wxUSE_SLIDER
     wxSlider* slider = wxDynamicCast(win,wxSlider);
     if(slider)
         return slider->SendScrollEvent(event);
+#endif // wxUSE_SLIDER
 
     return false;
 }
