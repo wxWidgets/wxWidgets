@@ -558,7 +558,7 @@ wxLayoutWindow::ScrollToCursor(void)
    // Make sure that the scrollbars are at a position so that the cursor is
    // visible if we are editing
    WXLO_DEBUG(("m_ScrollToCursor = %d", (int) m_ScrollToCursor));
-   wxPoint cc = m_llist->GetCursorScreenPos(*m_memDC);
+   wxPoint cc = m_llist->GetCursorScreenPos(dc);
 
    // the cursor should be completely visible in both directions
    wxPoint cs(m_llist->GetCursorSize());

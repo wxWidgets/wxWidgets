@@ -2566,13 +2566,15 @@ wxLayoutList::ApplyStyle(wxLayoutStyleInfo *si, wxDC &dc)
 void
 wxLayoutList::Debug(void)
 {
+   WXLO_DEBUG(("Cursor is in line %d, screen pos = (%d, %d)",
+               m_CursorLine->GetLineNumber(),
+               m_CursorScreenPos.x, m_CursorScreenPos.y));
+
    wxLayoutLine *line;
-
-
-   for(line = m_FirstLine;
-       line;
-       line = line->GetNextLine())
+   for(line = m_FirstLine; line; line = line->GetNextLine())
+   {
       line->Debug();
+   }
 }
 
 #endif

@@ -116,6 +116,22 @@ MyFrame::MyFrame(void) :
    m_lwin->SetWrapMargin(40);
    m_lwin->Clear(wxROMAN,16,wxNORMAL,wxNORMAL, false);
    m_lwin->SetFocus();
+
+   // create and set the background bitmap (this will result in a lattice)
+   static const int sizeBmp = 10;
+   wxBitmap *bitmap = new wxBitmap(sizeBmp, sizeBmp);
+   wxMemoryDC dcMem;
+   dcMem.SelectObject( *bitmap );
+   dcMem.SetBackground( *wxWHITE_BRUSH );
+   dcMem.Clear();
+
+   dcMem.SetPen( *wxGREEN_PEN );
+   dcMem.DrawLine(sizeBmp/2, 0, sizeBmp/2, sizeBmp);
+   dcMem.DrawLine(0, sizeBmp/2, sizeBmp, sizeBmp/2);
+
+   dcMem.SelectObject( wxNullBitmap );
+
+   m_lwin->SetBackgroundBitmap(bitmap);
 };
 
 void
