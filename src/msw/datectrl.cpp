@@ -60,8 +60,8 @@ static inline void wxToSystemTime(SYSTEMTIME *st, const wxDateTime& dt)
 {
     const wxDateTime::Tm tm(dt.GetTm());
 
-    st->wYear = tm.year;
-    st->wMonth = tm.mon - wxDateTime::Jan + 1;
+    st->wYear = (WXWORD)tm.year;
+    st->wMonth = (WXWORD)(tm.mon - wxDateTime::Jan + 1);
     st->wDay = tm.mday;
 
     st->wDayOfWeek =
