@@ -1367,8 +1367,8 @@ public:
     int GetScrollPosX() { return 0; }
     int GetScrollPosY() { return 0; }
 
-    void SetScrollX( int x ) { }
-    void SetScrollY( int y ) { }
+    void SetScrollX( int WXUNUSED(x) ) { }
+    void SetScrollY( int WXUNUSED(y) ) { }
 
     void SetColumnWidth( int col, int width )
         { SetColSize( col, width ); }
@@ -1470,7 +1470,7 @@ public:
     void SetEditable( bool edit = TRUE ) { EnableEditing( edit ); }
     bool GetEditInPlace() { return IsCellEditControlEnabled(); }
 
-    void SetEditInPlace(bool edit = TRUE) { }
+    void SetEditInPlace(bool WXUNUSED(edit) = TRUE) { }
 
     void SetCellAlignment( int align, int row, int col)
     { SetCellAlignment(row, col, align, wxCENTER); }
