@@ -366,16 +366,11 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
         m_HashTable.Put(extension, new wxFileIconEntry(newid));
         return newid;
     }
-#ifdef __WIN32__
-    wxBitmap myBitmap (ic.GetWidth(), ic.GetHeight() ) ;
-    wxMemoryDC memDC;
-    memDC.SelectObject( myBitmap );
-    memDC.DrawIcon(ic,0,0);
-    memDC.SelectObject( wxNullBitmap );
-    wxImage img = myBitmap.ConvertToImage();
-#else
-    wxImage img = ic.ConvertToImage();
-#endif
+    
+    wxBitmap tmpBmp;
+    tmpBmp.CopyFromIcon(ic);
+    wxImage img = tmpBmp.ConvertToImage();
+    
     delete ft;
 
     int id = m_ImageList.GetImageCount();
