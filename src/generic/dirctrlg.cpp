@@ -533,6 +533,13 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     m_defaultPath = dir;
     m_filter = filter;
 
+    if (m_filter.empty())
+#ifdef __UNIX__
+        m_filter = wxT("*");
+#else
+        m_filter = wxT("*.*");
+#endif
+
     SetFilterIndex(defaultFilter);
 
     if (m_filterListCtrl)
@@ -1090,7 +1097,11 @@ void wxGenericDirCtrl::SetFilterIndex(int n)
     if (ExtractWildcard(m_filter, n, f, d))
         m_currentFilterStr = f;
     else
+#ifdef __UNIX__
+        m_currentFilterStr = wxT("*");
+#else
         m_currentFilterStr = wxT("*.*");
+#endif
 }
 
 void wxGenericDirCtrl::SetFilter(const wxString& filter)
@@ -1101,7 +1112,11 @@ void wxGenericDirCtrl::SetFilter(const wxString& filter)
     if (ExtractWildcard(m_filter, m_currentFilter, f, d))
         m_currentFilterStr = f;
     else
+#ifdef __UNIX__
+        m_currentFilterStr = wxT("*");
+#else
         m_currentFilterStr = wxT("*.*");
+#endif
 }
 
 // Extract description and actual filter from overall filter string
