@@ -777,7 +777,7 @@ wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
     wxCHECK_MSG( Ok(), (wxNativeFontInfo *)NULL, wxT("invalid font") );
 
-#ifndef __WXGTK20__  // ???
+#ifndef __WXGTK20__
     if ( M_FONTDATA->m_nativeFontInfo.GetXFontName().empty() )
         GetInternalFont();
 #endif
@@ -874,6 +874,7 @@ void wxFont::SetNoAntiAliasing( bool no )
 // get internal representation of font
 // ----------------------------------------------------------------------------
 
+#ifndef __WXGTK20__
 static GdkFont *g_systemDefaultGuiFont = (GdkFont*) NULL;
 
 // this is also used from tbargtk.cpp and tooltip.cpp, hence extern
@@ -906,14 +907,6 @@ extern GdkFont *GtkGetDefaultGuiFont()
 
 GdkFont *wxFont::GetInternalFont( float scale ) const
 {
-#ifdef __WXGTK20__
-    // Deprecated for GTK 2.0 and should be removed
-    // in the 2.5 tree.
-    wxFAIL_MSG( wxT("No longer used") );
-    
-    return (GdkFont *) NULL;
-    
-#else // GTK 1.x
     GdkFont *font = (GdkFont *) NULL;
 
     wxCHECK_MSG( Ok(), font, wxT("invalid font") )
@@ -972,6 +965,6 @@ GdkFont *wxFont::GetInternalFont( float scale ) const
     wxASSERT_MSG( font, wxT("could not load any font?") );
 
     return font;
-#endif  // GTK 2.0/1.x
 }
+#endif  // not GTK 2.0
 

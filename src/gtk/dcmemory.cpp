@@ -27,6 +27,12 @@ wxMemoryDC::wxMemoryDC() : wxWindowDC()
     m_ok = FALSE;
 
     m_cmap = gtk_widget_get_default_colormap();
+    
+#ifdef __WXGTK20__
+    m_context = gdk_pango_context_get();
+    m_layout = pango_layout_new( m_context );
+    m_fontdesc = pango_font_description_copy( pango_context_get_font_description( m_context ) );
+#endif
 }
 
 wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) )
@@ -35,6 +41,12 @@ wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) )
     m_ok = FALSE;
 
     m_cmap = gtk_widget_get_default_colormap();
+    
+#ifdef __WXGTK20__
+    m_context = gdk_pango_context_get();
+    m_layout = pango_layout_new( m_context );
+    m_fontdesc = pango_font_description_copy( pango_context_get_font_description( m_context ) );
+#endif
 }
 
 wxMemoryDC::~wxMemoryDC()
