@@ -475,7 +475,7 @@ pascal OSStatus wxMacAppEventHandler( EventHandlerCallRef handler , EventRef eve
             result = wxMacAppMenuEventHandler( handler , event , data ) ;
             break ;
         case kEventClassMouse :
-            result = wxMacTopLevelMouseEventHandler( handler , event , data ) ;
+            result = wxMacTopLevelMouseEventHandler( handler , event , NULL ) ;
             break ;
         case kEventClassAppleEvent :
             {
