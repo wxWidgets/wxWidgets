@@ -87,10 +87,13 @@ LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
 
     switch ( message )
     {
-        // forward some messages to the combobox
+        // forward some messages to the combobox to generate the appropriate
+        // wxEvents from them
         case WM_KEYUP:
         case WM_KEYDOWN:
         case WM_CHAR:
+        case WM_SETFOCUS:
+        case WM_KILLFOCUS:
             {
                 wxComboBox *combo = wxDynamicCast(win, wxComboBox);
                 wxCHECK_MSG( combo, 0, _T("should have combo as parent") );
@@ -196,6 +199,12 @@ bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
 
         case WM_KEYUP:
             return HandleKeyUp(wParam, lParam);
+
+        case WM_SETFOCUS:
+            return HandleSetFocus((WXHWND)wParam);
+
+        case WM_KILLFOCUS:
+            return HandleKillFocus((WXHWND)wParam);
     }
 
     return FALSE;
