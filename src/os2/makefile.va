@@ -136,9 +136,11 @@ NONESSENTIALOBJS= \
 COMMONOBJS = \
   ..\common\$D\appcmn.obj \
   ..\common\$D\choiccmn.obj \
+  ..\common\$D\clipcmn.obj \
   ..\common\$D\cmndata.obj \
   ..\common\$D\config.obj \
   ..\common\$D\ctrlcmn.obj \
+  ..\common\$D\ctrlsub.obj \
   ..\common\$D\date.obj \
   ..\common\$D\datstrm.obj \
   ..\common\$D\db.obj \
@@ -178,6 +180,7 @@ COMMONOBJS = \
   ..\common\$D\intl.obj \
   ..\common\$D\ipcbase.obj \
   ..\common\$D\layout.obj \
+  ..\common\$D\lboxcmn.obj \
   ..\common\$D\list.obj \
   ..\common\$D\log.obj \
   ..\common\$D\longlong.obj \
@@ -230,9 +233,11 @@ COMMONOBJS = \
 COMLIBOBJS1 = \
   appcmn.obj \
   choiccmn.obj \
+  clipcmn.obj \
   cmndata.obj \
   config.obj \
   ctrlcmn.obj \
+  ctrlsub.obj \
   date.obj \
   datstrm.obj \
   db.obj \
@@ -272,6 +277,7 @@ COMLIBOBJS1 = \
   intl.obj \
   ipcbase.obj \
   layout.obj \
+  lboxcmn.obj \
   list.obj \
   log.obj
 
@@ -530,9 +536,11 @@ $(HTMLDIR)\$D:
 $(COMLIBOBJS1):
   copy ..\common\$D\appcmn.obj
   copy ..\common\$D\choiccmn.obj
+  copy ..\common\$D\clipcmn.obj
   copy ..\common\$D\cmndata.obj
   copy ..\common\$D\config.obj
   copy ..\common\$D\ctrlcmn.obj
+  copy  ..\common\$D\ctrlsub.obj
   copy ..\common\$D\date.obj
   copy ..\common\$D\datstrm.obj
   copy ..\common\$D\db.obj
@@ -572,6 +580,7 @@ $(COMLIBOBJS1):
   copy ..\common\$D\intl.obj
   copy ..\common\$D\ipcbase.obj
   copy ..\common\$D\layout.obj
+  copy ..\common\$D\lboxcmn.obj
   copy ..\common\$D\list.obj
   copy ..\common\$D\log.obj
 
@@ -838,9 +847,11 @@ $(WXDIR)\lib\wx200.dll: $(OBJECTS) $(WXDIR)\lib\wx210.lib
 !endif
 
 $D\dummy.obj: dummy.$(SRCSUFF) $(WXDIR)\include\wx\wx.h $(WXDIR)\include\wx\os2\setup.h
+        @echo $<
         icc $(CPPFLAGS) $(MAKEPRECOMP) /Fo$D\dummy.obj /Tp dummy.cpp
 
 $D\dummydll.obj: dummydll.$(SRCSUFF) $(WXDIR)\include\wx\wx.h $(WXDIR)\include\wx\os2\setup.h
+        @echo $<
         icc @<<
 $(CPPFLAGS) $(MAKEPRECOMP) /Fo$D\dummydll.obj /c /Tp dummydll.cpp
 <<
@@ -851,11 +862,13 @@ $(WXDIR)\include\wx\os2\setup.h: $(WXDIR)\include\wx\os2\setup0.h
     copy "$(WXDIR)"\include\wx\os2\setup0.h "$(WXDIR)"\include\wx\os2\setup.h
 
 ..\common\$D\extended.obj:     ..\common\extended.c
+        @echo $<
         icc @<<
 $(CPPFLAGS2) /Fo$@ $(COMMDIR)\extended.c
 <<
 
 ..\common\$D\y_tab.obj:     ..\common\y_tab.c ..\common\lex_yy.c
+        @echo $<
         icc @<<
 $(CPPFLAGS2) /DUSE_DEFINE /DYY_USE_PROTOS /Fo$@  ..\common\y_tab.c
 <<
@@ -869,6 +882,7 @@ $(CPPFLAGS2) /DUSE_DEFINE /DYY_USE_PROTOS /Fo$@  ..\common\y_tab.c
 $(OBJECTS): $(WXDIR)/include/wx/setup.h
 
 ..\common\$D\unzip.obj:     ..\common\unzip.c
+        @echo $<
         icc @<<
 $(CPPFLAGS2) /Fo$@ $(COMMDIR)\unzip.c
 <<

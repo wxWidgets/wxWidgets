@@ -128,6 +128,16 @@ int wxChoice::FindString(const wxString& s) const
     return 0;
 }
 
+void wxChoice::SetString(int n, const wxString& s)
+{
+    wxFAIL_MSG(wxT("not implemented"));
+
+#if 0 // should do this, but no Insert() so far
+    Delete(n);
+    Insert(n + 1, s);
+#endif
+}
+
 wxString wxChoice::GetString(int n) const
 {
     size_t len = 0; // TODO: (size_t)::SendMessage(GetHwnd(), CB_GETLBTEXTLEN, n, 0);
@@ -149,7 +159,7 @@ wxString wxChoice::GetString(int n) const
 // client data
 // ----------------------------------------------------------------------------
 
-void wxChoice::DoSetClientData( int n, void* clientData )
+void wxChoice::DoSetItemClientData( int n, void* clientData )
 {
    // TODO:
    /*
@@ -160,7 +170,7 @@ void wxChoice::DoSetClientData( int n, void* clientData )
    */
 }
 
-void* wxChoice::DoGetClientData( int n ) const
+void* wxChoice::DoGetItemClientData( int n ) const
 {
  // TODO:
  /*
@@ -178,12 +188,12 @@ void* wxChoice::DoGetClientData( int n ) const
     return NULL;
 }
 
-void wxChoice::DoSetClientObject( int n, wxClientData* clientData )
+void wxChoice::DoSetItemClientObject( int n, wxClientData* clientData )
 {
     DoSetClientData(n, clientData);
 }
 
-wxClientData* wxChoice::DoGetClientObject( int n ) const
+wxClientData* wxChoice::DoGetItemClientObject( int n ) const
 {
     // TODO:    return (wxClientData *)DoGetClientData(n);
     return NULL;

@@ -19,32 +19,32 @@ public:
     typedef unsigned short NativeFormat;
 
     wxDataFormat();
-    wxDataFormat( wxDataFormatId type );
-    wxDataFormat( const wxString &id );
-    wxDataFormat( const wxChar *id );
-    wxDataFormat( NativeFormat format );
+    wxDataFormat(wxDataFormatId vType);
+    wxDataFormat(const wxString& rId);
+    wxDataFormat(const wxChar* pId);
+    wxDataFormat(NativeFormat vFormat);
 
-    wxDataFormat& operator=(NativeFormat format)
-        { SetId(format); return *this; }
+    wxDataFormat& operator=(NativeFormat vFormat)
+        { SetId(vFormat); return *this; }
 
     // comparison (must have both versions)
-    bool operator==(NativeFormat format) const
-        { return m_format == (NativeFormat)format; }
-    bool operator!=(NativeFormat format) const
-        { return m_format != (NativeFormat)format; }
+    bool operator==(NativeFormat vFormat) const
+        { return m_vFormat == (NativeFormat)vFormat; }
+    bool operator!=(NativeFormat vFormat) const
+        { return m_vFormat != (NativeFormat)vFormat; }
 
     // explicit and implicit conversions to NativeFormat which is one of
     // standard data types (implicit conversion is useful for preserving the
     // compatibility with old code)
-    NativeFormat GetFormatId() const { return m_format; }
-    operator NativeFormat() const { return m_format; }
+    NativeFormat GetFormatId() const { return m_vFormat; }
+    operator NativeFormat() const { return m_vFormat; }
 
-    void SetId( NativeFormat format );
+    void SetId(NativeFormat vFormat);
 
     // string ids are used for custom types - this SetId() must be used for
     // application-specific formats
     wxString GetId() const;
-    void SetId( const wxChar *id );
+    void SetId(const wxChar* pId);
 
     // implementation
     wxDataFormatId GetType() const;
@@ -54,7 +54,7 @@ private:
     NativeFormat                    m_vFormat;
 
     void PrepareFormats();
-    void SetType( wxDataFormatId type );
+    void SetType(wxDataFormatId vType);
 };
 
 #endif // _WX_GTK_DATAFORM_H
