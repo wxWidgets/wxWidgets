@@ -50,7 +50,7 @@ public:
 #if defined(__WXMSW__) && defined(__WIN32__) && defined(SM_CXMENUCHECK)
         NONCLIENTMETRICS nm;
         nm.cbSize = sizeof(NONCLIENTMETRICS);
-        SystemParametersInfo(SPI_GETNONCLIENTMETRICS,0,&nm,0); 
+        SystemParametersInfo(SPI_GETNONCLIENTMETRICS,0,&nm,0);
 
         ms_systemMenuButtonWidth = nm.iMenuHeight;
         ms_systemMenuHeight = nm.iMenuHeight;
@@ -100,9 +100,9 @@ wxOwnerDrawn::wxOwnerDrawn(const wxString& str,
     // get the default menu height and font from the system
     NONCLIENTMETRICS nm;
     nm.cbSize = sizeof (NONCLIENTMETRICS);
-    SystemParametersInfo (SPI_GETNONCLIENTMETRICS,0,&nm,0); 
+    SystemParametersInfo (SPI_GETNONCLIENTMETRICS,0,&nm,0);
     m_nMinHeight = nm.iMenuHeight;
-    
+
     // nm.iMenuWidth is the system default for the width of
     // menu icons and checkmarks
     if (ms_nDefaultMarginWidth == 0)
@@ -125,12 +125,14 @@ wxOwnerDrawn::wxOwnerDrawn(const wxString& str,
     m_nHeight      = 0;
     m_nMarginWidth = ms_nLastMarginWidth;
     m_nMinHeight   = wxMSWSystemMenuFontModule::ms_systemMenuHeight;
+
+    m_bmpDisabled = wxNullBitmap;
 }
 
 
 // these items will be set during the first invocation of the c'tor,
 // because the values will be determined by checking the system settings,
-// which is a chunk of code  
+// which is a chunk of code
 size_t wxOwnerDrawn::ms_nDefaultMarginWidth = 0;
 size_t wxOwnerDrawn::ms_nLastMarginWidth = 0;
 
@@ -161,21 +163,9 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
 
   dc.GetTextExtent(str, (long *)pwidth, (long *)pheight);
 
-  if (!m_strAccel.IsEmpty())
-  {
-      // measure the accelerator string, and add it's width to
-      // the total item width, plus 16 (Accelerators are right justified,
-      // with the right edge of the text rectangle 16 pixels left of
-      // the right edge of the menu)
-
-      int accel_width, accel_height;
-      dc.GetTextExtent(m_strAccel, &accel_width, &accel_height);
-      *pwidth += accel_width;
-  }
-
   // add space at the end of the menu for the submenu expansion arrow
   // this will also allow offsetting the accel string from the right edge
-  *pwidth += (size_t) (GetDefaultMarginWidth() * 1.5);
+  *pwidth += (size_t) (GetDefaultMarginWidth() * 1.5) + 16;
 
   // JACS: items still look too tightly packed, so adding 5 pixels.
   (*pheight) = (*pheight) + 5;
@@ -196,21 +186,16 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
       // Does BMP encroach on default check menu position?
       size_t adjustedWidth = m_bmpChecked.GetWidth() +
                              (wxSystemSettings::GetMetric(wxSYS_EDGE_X) * 2);
-//      if (ms_nDefaultMarginWidth < adjustedWidth)
-//          *pwidth += adjustedWidth - ms_nDefaultMarginWidth;
 
       // Do we need to widen margin to fit BMP?
       if ((size_t)GetMarginWidth() != adjustedWidth)
           SetMarginWidth(adjustedWidth);
-        
-      // add the size of the bitmap to our total size...
-      *pwidth += GetMarginWidth(); 
   }
 
   // add the size of the bitmap to our total size - even if we don't have
   // a bitmap we leave room for one...
   *pwidth += GetMarginWidth();
-  
+
   // make sure that this item is at least as
   // tall as the user's system settings specify
   if (*pheight < m_nMinHeight)
@@ -343,6 +328,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
                 DST_PREFIXTEXT |
                 (((st & wxODDisabled) && !(st & wxODSelected)) ? DSS_DISABLED : 0));
 
+    /* Right alignment does not work with DSS_DISABLED (Windows98) - why?
     if ( !m_strAccel.empty() )
     {
         // right align accel string with right edge of menu ( offset by the margin width )
@@ -354,6 +340,22 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
                     DST_TEXT |
                     (((st & wxODDisabled) && !(st & wxODSelected)) ? DSS_DISABLED : 0));
         ::SetTextAlign(hdc, TA_LEFT);
+    }
+    */
+
+    // ::SetTextAlign(hdc, TA_RIGHT) doesn't work with DSS_DISABLED or DSS_MONO as last parameter 
+    // in DrawState() (at least with Windows98). So we have to take care of right alignment ourselves.
+    if ( !m_strAccel.empty() )
+    {
+        int accel_width, accel_height;
+        dc.GetTextExtent(m_strAccel, &accel_width, &accel_height);
+        // right align accel string with right edge of menu ( offset by the margin width )
+        ::DrawState(hdc, NULL, NULL,
+                (LPARAM)m_strAccel.c_str(), m_strAccel.length(),
+                rc.GetWidth()-GetMarginWidth()-accel_width, rc.y+(int) ((rc.GetHeight()-sizeRect.cy)/2.0),
+                rc.GetWidth()-GetMarginWidth()-accel_width, sizeRect.cy,
+                DST_TEXT |
+                (((st & wxODDisabled) && !(st & wxODSelected)) ? DSS_DISABLED : 0));
     }
 
     (void)SelectObject(hdc, hPrevBrush);
@@ -400,8 +402,11 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
     }
   }
   else {
+    wxBitmap bmp( // for disabled items we use m_bmpDisabled if it exists
+                  ( GetDisabledBitmap() != wxNullBitmap && ( st & wxODDisabled ) ) ? GetDisabledBitmap() :
     // for uncheckable item we use only the 'checked' bitmap
-    wxBitmap bmp(GetBitmap(IsCheckable() ? ((st & wxODChecked) != 0) : TRUE));
+                  GetBitmap(IsCheckable() ? ((st & wxODChecked) != 0) : TRUE)
+                );
     if ( bmp.Ok() ) {
       wxMemoryDC dcMem(&dc);
       dcMem.SelectObject(bmp);

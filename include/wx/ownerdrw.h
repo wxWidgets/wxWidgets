@@ -67,8 +67,15 @@ public:
       { m_bmpChecked = bmpChecked;
         m_bOwnerDrawn = TRUE; }
 
+  void SetDisabledBitmap( const wxBitmap& bmpDisabled )
+      { m_bmpDisabled = bmpDisabled;
+        m_bOwnerDrawn = TRUE; }
+
   const wxBitmap& GetBitmap(bool bChecked = TRUE) const
       { return (bChecked ? m_bmpChecked : m_bmpUnchecked); }
+
+  const wxBitmap& GetDisabledBitmap() const
+      { return m_bmpDisabled; }
 
   // the height of the menu checkmark (or bitmap) is determined by the font
   // for the current item, but the width should be always the same (for the
@@ -102,6 +109,9 @@ public:
   // want to change, say, the color for the item but only if it is owner-drawn
   // (see wxMenuItem::wxMenuItem for example)
   bool IsOwnerDrawn() const { return m_bOwnerDrawn;   }
+
+  // switch on/off owner-drawing the item
+  void SetOwnerDrawn(bool ownerDrawn = TRUE) { m_bOwnerDrawn = ownerDrawn; }
   void ResetOwnerDrawn() { m_bOwnerDrawn = FALSE;  }
 
 public:
@@ -143,7 +153,8 @@ private:
   wxColour  m_colText,      // color ----"---"---"----
             m_colBack;      // background color
   wxBitmap  m_bmpChecked,   // bitmap to put near the item
-            m_bmpUnchecked; // (checked is used also for 'uncheckable' items)
+            m_bmpUnchecked, // (checked is used also for 'uncheckable' items)
+            m_bmpDisabled;
 
   size_t    m_nHeight,      // font height
             m_nMinHeight,   // minimum height, as determined by user's system settings

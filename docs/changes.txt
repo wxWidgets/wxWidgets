@@ -47,6 +47,7 @@ All:
 
 - wxDateTime::ParseDateTime() implemented (Linus McCabe)
 - wxHTTP::GetResponse() added (David Nock)
+- added conversions to/from UTF 16/32 LE/BE (Andreas Pflug)
 
 All (GUI):
 
@@ -59,6 +60,7 @@ wxMSW:
 - wxTextCtrl::GetValue() works with text in non default encoding
 - changed wxCrashReport to generate minidumps instead of text files
 - wxRadioButtons are now checked when they get focus (standard behaviour)
+- several fixes to owner drawn menu items (Christian Sturmlechner)
 
 wxGTK:
 
