@@ -15,7 +15,7 @@
     #! now transform these hashes into $project tags
     foreach $file (sort keys %wxGeneric) {
         if ( $wxGeneric{$file} =~ /\b(PS|G|U)\b/ ) {
-            #! this file for some reason was compiled for VC++ 1.52
+            #! this file for some reason wasn't compiled for VC++ 1.52
             next unless $file =~ /^prntdlgg\./;
         }
 
@@ -27,8 +27,11 @@
         #! socket files don't compile under Win16 currently
         next if $wxCommon{$file} =~ /\b(32|S)\b/;
 
+        $isCFile = $file =~ /\.c$/;
         $file =~ s/cp?p?$/obj/;
-        $project{"WXCOMMONOBJS"} .= "\$(COMMDIR)\\" . $file . " "
+        $obj = "\$(COMMDIR)\\" . $file . " ";
+        $project{"WXCOMMONOBJS"} .= $obj;
+        $project{"WXCOBJS"} .= $obj if $isCFile;
     }
 
     foreach $file (sort keys %wxMSW) {
@@ -177,11 +180,20 @@ $(CPPFLAGS) /YcWX/WXPREC.H /c /Tp $*.$(SRCSUFF)
     $_ = $project{"WXMSWOBJS"} . $project{"WXCOMMONOBJS"} . $project{"WXGENERICOBJS"};
     my @objs = split;
     foreach (@objs) {
-        s:\\:/:;
-        $text .= $_ . ':     $*.$(SRCSUFF)' . "\n" .
-                 '        cl @<<' . "\n" .
-                 '$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)' . "\n" .
-                 "<<\n\n";
+	if ( $project{"WXCOBJS"} =~ /\Q$_/ ) {
+		s:\\:/:;
+		$text .= $_ . ':     $*.c' . "\n" .
+			 '        cl @<<' . "\n" .
+			 '$(CPPFLAGS2) /Fo$@ /c /Tc $*.c' . "\n" .
+			 "<<\n\n";
+	}
+	else {
+		s:\\:/:;
+		$text .= $_ . ':     $*.$(SRCSUFF)' . "\n" .
+			 '        cl @<<' . "\n" .
+			 '$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)' . "\n" .
+			 "<<\n\n";
+	}
     }
 #$}
 
@@ -195,17 +207,6 @@ $(COMMDIR)/y_tab.c:     $(COMMDIR)/dosyacc.c
 
 $(COMMDIR)/lex_yy.c:    $(COMMDIR)/doslex.c
     copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c
-
-$(COMMDIR)/extended.obj:     $*.c
-        cl @<<
-$(CPPFLAGS2) /Fo$@ /c /Tc $*.c
-<<
-
-$(COMMDIR)/unzip.obj:     $*.c
-        cl @<<
-$(CPPFLAGS2) /Fo$@ /c /Tc $*.c
-<<
-
 
 $(OBJECTS):	$(WXDIR)/include/wx/setup.h
 
