@@ -731,6 +731,12 @@
 /* The number of bytes in a short.  */
 #undef SIZEOF_SHORT
 
+/* Define if size_t on your machine is the same type as unsigned int. */
+#undef wxSIZE_T_IS_UINT
+
+/* Define if size_t on your machine is the same type as unsigned long. */
+#undef wxSIZE_T_IS_ULONG
+
 /* Define if you have the dlopen function.  */
 #undef HAVE_DLOPEN
 
