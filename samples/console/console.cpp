@@ -37,7 +37,7 @@
 
 //#define TEST_ARRAYS
 //#define TEST_CMDLINE
-//#define TEST_DATETIME
+#define TEST_DATETIME
 //#define TEST_DIR
 //#define TEST_DLLLOADER
 //#define TEST_EXECUTE
@@ -52,7 +52,7 @@
 //#define TEST_STRINGS
 //#define TEST_THREADS
 //#define TEST_TIMER
-#define TEST_VCARD
+//#define TEST_VCARD
 //#define TEST_WCHAR
 
 // ============================================================================
@@ -2260,16 +2260,24 @@ static void TestInteractive()
         if ( !fgets(buf, WXSIZEOF(buf), stdin) )
             break;
 
+        // kill the last '\n'
+        buf[strlen(buf) - 1] = 0;
+
         wxDateTime dt;
-        if ( !dt.ParseDate(buf) )
+        const char *p = dt.ParseDate(buf);
+        if ( !p )
         {
-            puts("failed to parse the date");
+            printf("ERROR: failed to parse the date '%s'.\n", buf);
 
             continue;
         }
+        else if ( *p )
+        {
+            printf("WARNING: parsed only first %u characters.\n", p - buf);
+        }
 
         printf("%s: day %u, week of month %u/%u, week of year %u\n",
-               dt.FormatISODate().c_str(),
+               dt.Format("%b %d, %Y").c_str(),
                dt.GetDayOfYear(),
                dt.GetWeekOfMonth(wxDateTime::Monday_First),
                dt.GetWeekOfMonth(wxDateTime::Sunday_First),
@@ -3318,9 +3326,9 @@ int main(int argc, char **argv)
         TestTimeArithmetics();
         TestTimeHolidays();
 
-    }
         TestTimeZoneBug();
-    if ( 0 )
+    }
+    if ( 1 )
         TestInteractive();
 #endif // TEST_DATETIME
 
