@@ -146,8 +146,8 @@ protected:
     void OnScroll(wxScrollWinEvent& event);
 
     // find the index of the line we need to show at the top of the window such
-    // that the last line shown is the given one
-    size_t FindFirstFromBottom(size_t lineLast);
+    // that the last (fully or partially) visible line is the given one
+    size_t FindFirstFromBottom(size_t lineLast, bool fullyVisible = false);
 
     // get the total height of the lines between lineMin (inclusive) and
     // lineMax (exclusive)

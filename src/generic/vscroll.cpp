@@ -74,7 +74,7 @@ wxCoord wxVScrolledWindow::GetLinesHeight(size_t lineMin, size_t lineMax) const
     return height;
 }
 
-size_t wxVScrolledWindow::FindFirstFromBottom(size_t lineLast)
+size_t wxVScrolledWindow::FindFirstFromBottom(size_t lineLast, bool full)
 {
     const wxCoord hWindow = GetClientSize().y;
 
@@ -88,7 +88,13 @@ size_t wxVScrolledWindow::FindFirstFromBottom(size_t lineLast)
 
         if ( h > hWindow )
         {
-            lineFirst++;
+            // for this line to be fully visible we need to go one line
+            // down, but if it is enough for it to be only partly visible then
+            // this line will do as well
+            if ( full )
+            {
+                lineFirst++;
+            }
 
             break;
         }
@@ -230,7 +236,7 @@ bool wxVScrolledWindow::ScrollToLine(size_t line)
 
     // determine the real first line to scroll to: we shouldn't scroll beyond
     // the end
-    size_t lineFirstLast = FindFirstFromBottom(m_lineMax - 1);
+    size_t lineFirstLast = FindFirstFromBottom(m_lineMax - 1, true);
     if ( line > lineFirstLast )
         line = lineFirstLast;
 
