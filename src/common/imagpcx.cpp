@@ -36,8 +36,50 @@
 // PCX decoding
 //-----------------------------------------------------------------------------
 
-void RLEencode(unsigned char *WXUNUSED(p), unsigned int WXUNUSED(size), wxOutputStream& WXUNUSED(s))
+void RLEencode(unsigned char *p, unsigned int size, wxOutputStream& s)
 {
+    unsigned int data, last, cont;
+
+    // Write 'size' bytes. The PCX official specs say there will be
+    // a decoding break at the end of each scanline, so in order to
+    // force this decoding break use this function to write, at most,
+    // _one_ complete scanline at a time.
+
+    last = (unsigned char) *(p++);
+    cont = 1;
+    size--;
+
+    while (size-- > 0)
+    {
+        data = (unsigned char) *(p++);
+
+        // Up to 63 bytes with the same value can be stored using a
+        // single { cont, value } pair.
+        //
+        if ((data == last) && (cont < 63))
+        {
+            cont++;
+        }
+        else
+        {
+            // Need to write a 'counter' byte?
+            //
+            if ((cont > 1) || ((last & 0xC0) == 0xC0))
+                s.PutC((char) (cont | 0xC0));
+
+            s.PutC((char) last);
+            last = data;
+            cont = 1;
+        }
+    }
+
+
+    // Write the last one and return;
+    //
+    if ((cont > 1) || ((last & 0xC0) == 0xC0))
+        s.PutC((char) (cont | 0xC0));
+
+    s.PutC((char) last);
 }
 
 void RLEdecode(unsigned char *p, unsigned int size, wxInputStream& s)
@@ -76,6 +118,7 @@ void RLEdecode(unsigned char *p, unsigned int size, wxInputStream& s)
 
 
 /* PCX header */
+#define HDR_MANUFACTURER    0
 #define HDR_VERSION         1
 #define HDR_ENCODING        2
 #define HDR_BITSPERPIXEL    3
@@ -85,6 +128,7 @@ void RLEdecode(unsigned char *p, unsigned int size, wxInputStream& s)
 #define HDR_YMAX            10
 #define HDR_NPLANES         65
 #define HDR_BYTESPERLINE    66
+#define HDR_PALETTEINFO     68
 
 // image formats
 enum {
@@ -216,6 +260,121 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
     return wxPCX_OK;
 }
 
+// SavePCX:
+//  Saves a PCX file into the wxImage object pointed by image.
+//  Returns wxPCX_OK on success, or an error code otherwise
+//  (see above for error codes). Currently, always saves images
+//  in 24 bit format. XXX
+//
+int SavePCX(wxImage *image, wxOutputStream& stream)
+{
+    unsigned char hdr[128];         // PCX header
+    unsigned char *p;               // space to store one scanline
+    unsigned char *src;             // pointer into wxImage data
+    unsigned int width, height;     // size of the image
+    unsigned int bytesperline;      // bytes per line (each plane)
+    int nplanes = 3;                // number of planes
+    int format = wxPCX_24BIT;       // image format (8 bit, 24 bit)
+    unsigned int i;
+ 
+    /* XXX
+    build_palette();
+    if (num_of_colors <= 256)
+    {
+        format = wxPCX_8BIT;
+        nplanes = 1;
+    }
+    else
+        free_palette();
+    */
+
+    // Get image dimensions, calculate bytesperline (must be even,
+    // according to PCX specs) and allocate space for one complete
+    // scanline.
+    //
+    if (!image->Ok())
+        return wxPCX_INVFORMAT;
+
+    width = image->GetWidth();
+    height = image->GetHeight();
+    nplanes = 3;                    /* 1 for wxPCX_8BIT */
+    bytesperline = width;
+    if (bytesperline % 2)
+        bytesperline++;
+
+    if ((p = (unsigned char *) malloc(bytesperline * nplanes)) == NULL)
+        return wxPCX_MEMERR;
+
+    // Build header data and write it to the stream. Initially,
+    // set all bytes to zero (most values default to zero).
+    //
+    memset(hdr, 0, sizeof(hdr));
+
+    hdr[HDR_MANUFACTURER]     = 10;
+    hdr[HDR_VERSION]          = 5;
+    hdr[HDR_ENCODING]         = 1;
+    hdr[HDR_NPLANES]          = nplanes;
+    hdr[HDR_BITSPERPIXEL]     = 8;
+    hdr[HDR_BYTESPERLINE]     = bytesperline % 256;
+    hdr[HDR_BYTESPERLINE + 1] = bytesperline / 256;
+    hdr[HDR_XMAX]             = (width - 1)  % 256;
+    hdr[HDR_XMAX + 1]         = (width - 1)  / 256;
+    hdr[HDR_YMAX]             = (height - 1) % 256;
+    hdr[HDR_YMAX + 1]         = (height - 1) / 256;
+    hdr[HDR_PALETTEINFO]      = 1;
+
+    stream.Write(hdr, 128);
+
+    // Encode image data line by line and write it to the stream
+    //
+    src = image->GetData();
+
+    for (; height; height--)
+    {
+        switch (format)
+        {
+            case wxPCX_8BIT:
+            /* XXX
+            {
+                for (i = 0; i < width; i++)
+                {
+                    hash = *(src++) << 24 +
+                           *(src++) << 16 +
+                           *(src++) << 8;
+
+                    p[i] = palette_lookup(hash);
+                }
+                break;
+            }
+            */
+            case wxPCX_24BIT:
+            {
+                for (i = 0; i < width; i++)
+                {
+                    p[i] = *(src++);
+                    p[i + bytesperline] = *(src++);
+                    p[i + 2 * bytesperline] = *(src++);
+                }
+                break;
+            }
+        }
+    
+        RLEencode(p, bytesperline * nplanes, stream);
+    }
+    
+    free(p);
+
+    /* XXX
+    if (format == wxPCX_8BIT)
+    {
+        stream.PutC(12);
+        dump_palette();
+    }
+    */
+
+    return wxPCX_OK;
+}
+
 
 //-----------------------------------------------------------------------------
 // wxPCXHandler
@@ -258,11 +417,24 @@ bool wxPCXHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
     return TRUE;
 }
 
-bool wxPCXHandler::SaveFile( wxImage *WXUNUSED(image), wxOutputStream& WXUNUSED(stream), bool verbose )
+bool wxPCXHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbose )
 {
-    wxFAIL_MSG(wxT("wxPCXHandler::SaveFile still not implemented"));
+    int error;
 
-    return FALSE;
+    if ((error = SavePCX(image, stream)) != wxPCX_OK)
+    {
+        if (verbose)
+        {
+            switch (error)
+            {
+                case wxPCX_INVFORMAT: wxLogError(_("wxPCXHandler: invalid image")); break;
+                case wxPCX_MEMERR:    wxLogError(_("wxPCXHandler: couldn't allocate memory")); break;
+                default:              wxLogError(_("wxPCXHandler: unknown error !!!"));
+            }
+        }
+    }
+
+    return (error == wxPCX_OK);
 }
 
 bool wxPCXHandler::DoCanRead( wxInputStream& stream )
