@@ -2230,49 +2230,6 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             (void)HandleDestroy();
             break;
 
-#ifndef __SMARTPHONE__ // or wxWinCE in general ?
-        case WM_WINDOWPOSCHANGING:
-            {
-                WINDOWPOS *wp = wx_reinterpret_cast(WINDOWPOS *, lParam);
-
-                if ( wp->flags & SWP_NOSIZE )
-                    break;
-
-                // when we resize this window, its children are probably going
-                // to be repositioned as well, prepare to use DeferWindowPos()
-                // for them
-                const int numChildren = GetChildren().GetCount();
-                if ( numChildren > 1 )
-                {
-                    m_hDWP = (WXHANDLE)::BeginDeferWindowPos(numChildren);
-                    if ( !m_hDWP )
-                    {
-                        wxLogLastError(_T("BeginDeferWindowPos"));
-                    }
-                }
-            }
-            break;
-
-        case WM_WINDOWPOSCHANGED:
-            // first let DefWindowProc() handle the message: it will generate
-            // WM_MOVE and WM_SIZE as needed
-            processed = MSWDefWindowProc(message, wParam, lParam) == 0;
-
-            // then change the positions of all child windows at once
-            if ( m_hDWP )
-            {
-                HDWP hDWP = (HDWP)m_hDWP;
-                m_hDWP = NULL;
-
-                // put all child controls in place at once now
-                if ( !::EndDeferWindowPos(hDWP) )
-                {
-                    wxLogLastError(_T("EndDeferWindowPos"));
-                }
-            }
-            break;
-#endif // __SMARTPHONE__
-
         case WM_SIZE:
             processed = HandleSize(LOWORD(lParam), HIWORD(lParam), wParam);
             break;
@@ -2282,7 +2239,6 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             break;
 
 #if !defined(__WXWINCE__)
-        // TODO: move those in WM_WINDOWPOSCHANGING case above
         case WM_MOVING:
             {
                 LPRECT pRect = (LPRECT)lParam;
@@ -4151,8 +4107,20 @@ bool wxWindowMSW::HandleMoving(wxRect& rect)
 
 bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
 {
-    bool processed = false;
+    // when we resize this window, its children are probably going to be
+    // repositioned as well, prepare to use DeferWindowPos() for them
+    const int numChildren = GetChildren().GetCount();
+    if ( numChildren > 1 )
+    {
+        m_hDWP = (WXHANDLE)::BeginDeferWindowPos(numChildren);
+        if ( !m_hDWP )
+        {
+            wxLogLastError(_T("BeginDeferWindowPos"));
+        }
+    }
 
+    // update this window size
+    bool processed = false;
     switch ( wParam )
     {
         default:
@@ -4180,6 +4148,23 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
             event.SetEventObject(this);
 
             processed = GetEventHandler()->ProcessEvent(event);
+    }
+
+    // and finally change the positions of all child windows at once
+    if ( m_hDWP )
+    {
+        // reset m_hDWP to NULL so that child windows don't try to use our
+        // m_hDWP after we call EndDeferWindowPos() on it (this shouldn't
+        // happen anyhow normally but who knows what weird flow of control we
+        // may have depending on what the users EVT_SIZE handler does...)
+        HDWP hDWP = (HDWP)m_hDWP;
+        m_hDWP = NULL;
+
+        // do put all child controls in place at once
+        if ( !::EndDeferWindowPos(hDWP) )
+        {
+            wxLogLastError(_T("EndDeferWindowPos"));
+        }
     }
 
     return processed;
