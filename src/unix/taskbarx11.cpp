@@ -139,7 +139,7 @@ void wxTaskBarIconArea::SetTrayIcon(const wxBitmap& bmp)
     // determine suitable bitmap size:
     wxSize winsize(GetSize());
     wxSize bmpsize(m_bmp.GetWidth(), m_bmp.GetHeight());
-    wxSize iconsize(wxMin(winsize.x-2, bmpsize.x), wxMin(winsize.y-2, bmpsize.y));
+    wxSize iconsize(wxMin(winsize.x, bmpsize.x), wxMin(winsize.y, bmpsize.y));
 
     // rescale the bitmap to fit into the tray icon window:
     if (bmpsize != iconsize)
