@@ -37,6 +37,18 @@
 
 #include "wx/msw/private.h"
 
+// ---------------------------------------------------------------------------
+// macros
+// ---------------------------------------------------------------------------
+
+// under Win16 the caret APIs are void but under Win32 they may return an
+// error code which we want to check - this macro does just this
+#ifdef __WIN16__
+    #define CALL_CARET_API(api, args)   api args
+#else // Win32
+    #define CALL_CARET_API(api, args)   if ( !api args ) wxLogLastError(#api)
+#endif // Win16/32
+
 // ===========================================================================
 // implementation
 // ===========================================================================
@@ -60,14 +72,7 @@ int wxCaretBase::GetBlinkTime()
 //static
 void wxCaretBase::SetBlinkTime(int milliseconds)
 {
-#ifdef __WIN16__
-    ::SetCaretBlinkTime(milliseconds) ;
-#else
-    if ( !::SetCaretBlinkTime(milliseconds) )
-    {
-        wxLogLastError("SetCaretBlinkTime");
-    }
-#endif
+    CALL_CARET_API(SetCaretBlinkTime, (milliseconds));
 }
 
 // ---------------------------------------------------------------------------
@@ -81,19 +86,10 @@ bool wxCaret::MSWCreateCaret()
 
     if ( !m_hasCaret )
     {
-#ifdef __WIN16__
-        ::CreateCaret(GetWinHwnd(GetWindow()), 0, m_width, m_height) ;
+        CALL_CARET_API(CreateCaret, (GetWinHwnd(GetWindow()), 0,
+                                     m_width, m_height));
+
         m_hasCaret = TRUE;
-#else
-        if ( !::CreateCaret(GetWinHwnd(GetWindow()), 0, m_width, m_height) )
-        {
-            wxLogLastError("CreateCaret");
-        }
-        else
-        {
-            m_hasCaret = TRUE;
-        }
-#endif
     }
 
     return m_hasCaret;
@@ -121,14 +117,7 @@ void wxCaret::OnKillFocus()
     {
         m_hasCaret = FALSE;
 
-#ifdef __WIN16__
-        ::DestroyCaret() ;
-#else
-        if ( !::DestroyCaret() )
-        {
-            wxLogLastError("DestroyCaret");
-        }
-#endif
+        CALL_CARET_API(DestroyCaret, ());
     }
 }
 
@@ -141,33 +130,18 @@ void wxCaret::DoShow()
     wxASSERT_MSG( GetWindow(), _T("caret without window cannot be shown") );
     wxASSERT_MSG( IsOk(), _T("caret of zero size cannot be shown") );
 
-    if ( !m_hasCaret )
+    if ( m_hasCaret )
     {
-        (void)MSWCreateCaret();
+        CALL_CARET_API(ShowCaret, (GetWinHwnd(GetWindow())));
     }
-
-#ifdef __WIN16__
-    ::ShowCaret(GetWinHwnd(GetWindow())) ;
-#else
-    if ( !::ShowCaret(GetWinHwnd(GetWindow())) )
-    {
-        wxLogLastError("ShowCaret");
-    }
-#endif
+    //else: will be shown when we get the focus
 }
 
 void wxCaret::DoHide()
 {
     if ( m_hasCaret )
     {
-#ifdef __WIN16__
-        ::HideCaret(GetWinHwnd(GetWindow())) ;
-#else
-        if ( !::HideCaret(GetWinHwnd(GetWindow())) )
-        {
-            wxLogLastError("HideCaret");
-        }
-#endif
+        CALL_CARET_API(HideCaret, (GetWinHwnd(GetWindow())));
     }
 }
 
@@ -179,14 +153,10 @@ void wxCaret::DoMove()
 {
     if ( m_hasCaret )
     {
-#ifdef __WIN16__
-        ::SetCaretPos(m_x, m_y) ;
-#else
-        if ( !::SetCaretPos(m_x, m_y) )
-        {
-            wxLogLastError("SetCaretPos");
-        }
-#endif
+        wxWindow *winFocus = wxWindow::FindFocus();
+        wxASSERT_MSG( winFocus == GetWindow(), "how did we lose focus?" );
+
+        CALL_CARET_API(SetCaretPos, (m_x, m_y));
     }
     //else: we don't have caret right now, nothing to do (this does happen)
 }
