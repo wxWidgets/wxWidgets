@@ -14,7 +14,7 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
     series.
 
 ! windows are no longer fully repainted when resized, use new style
-  wxFULL_REPAINT_ON_RESIZE to force this (wxNO_FULL_REPAINT_ON_RESIZE stll
+  wxFULL_REPAINT_ON_RESIZE to force this (wxNO_FULL_REPAINT_ON_RESIZE still
   exists but doesn't do anything any more, this behaviour is default now)
 
 
