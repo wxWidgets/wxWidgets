@@ -1182,12 +1182,12 @@ dnl cross-compiling support: we're cross compiling if the build system is
 dnl different from the target one (assume host and target be always the same)
 if eval "test $host != $build"; then
   if eval "test $host_alias != NONE"; then
-    CC=$host_alias-gcc 
-    CXX=$host_alias-c++ 
+    CC=$host_alias-gcc
+    CXX=$host_alias-c++
     AR=$host_alias-ar
     RANLIB=$host_alias-ranlib
-    DLLTOOL=$host_alias-dlltool 
-    LD=$host_alias-ld 
+    DLLTOOL=$host_alias-dlltool
+    LD=$host_alias-ld
     NM=$host_alias-nm
     STRIP=$host_alias-strip
   fi
@@ -1389,7 +1389,7 @@ WXGTK12=
 WXWINE=
 
 dnl Extension for programs; '.exe' for msw builds
-PROGRAM_EXT= 
+PROGRAM_EXT=
 
 if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
     if test "$cross_compiling" = "yes" ; then
@@ -1403,16 +1403,16 @@ if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
 	else
             AC_MSG_RESULT(no)
             AC_MSG_ERROR(please set CFLAGS to contain the location of windows.h)
-        fi  
+        fi
     fi
-    
+
     INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS msw"
     dnl --- Quick & Dirty ; link against most/all libraries
     dnl --- This will bloat the executable, but it'll work for now...
     LIBS="$LIBS  -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lctl3d32 -lcrtdll -ladvapi32 -lwsock32"
 
     TOOLKIT=MSW
-    
+
     GUIOBJS=MSW_GUIOBJS
     GUIHEADERS=MSW_HEADERS
     COMMONOBJS=MSW_COMMONOBJS
@@ -1433,7 +1433,7 @@ if test "$wxUSE_GTK" = 1; then
     TOOLKIT_INCLUDE="$GTK_CFLAGS"
     GUI_TK_LIBRARY="$GTK_LIBS -ldl"
     TOOLKIT=GTK
-  
+
     GUIHEADERS=GTK_HEADERS
     GUIOBJS=GTK_GUIOBJS
     COMMONOBJS=GTK_COMMONOBJS
@@ -1468,7 +1468,7 @@ if test "$wxUSE_WINE" = 1; then
         AC_MSG_RESULT(no)
         AC_MSG_WARN(library will be compiled without support for images in XPM format)
     fi
-    
+
     MESA_LINK=""
     AC_MSG_CHECKING(for Mesa library)
     WX_PATH_FIND_LIBRARIES($SEARCH_LIB,MesaGL)
@@ -1484,7 +1484,7 @@ if test "$wxUSE_WINE" = 1; then
     GUI_TK_LIBRARY="$GUI_TK_LIBRARY $GUI_TK_LINK"
     WXWINE=1
     TOOLKIT=MSW
-    
+
     GUIHEADERS=MSW_HEADERS
     GUIOBJS=MSW_GUIOBJS
     COMMONOBJS=MSW_COMMONOBJS
@@ -1559,7 +1559,7 @@ if test "$wxUSE_MOTIF" = 1; then
     GUI_TK_LINK="-lXm $XPM_LINK -lXmu -lXt -lX11 -ldl -lm"
     GUI_TK_LIBRARY="$GUI_TK_LIBRARY $GUI_TK_LINK"
     TOOLKIT=MOTIF
-  
+
     GUIHEADERS=MOTIF_HEADERS
     GUIOBJS=MOTIF_GUIOBJS
     COMMONOBJS=MOTIF_COMMONOBJS
@@ -1875,7 +1875,7 @@ fi
 
 if test "$wxUSE_THREADS" = "yes" ; then
     dnl find if POSIX threads are available
-    
+
     dnl standard lib name is pthread
     dnl We no longer test for pthread-0.7 as it breaks compilation on some
     dnl glibc2 systems, especially for static linkage.
@@ -2040,9 +2040,9 @@ if test "$GCC" = yes ; then
     if test "$wxUSE_NO_DEPS" = "no" ; then
         DEP_INFO_FLAGS="-MMD"
     fi
-fi  
-	  
-	  
+fi
+
+
 CXXFLAGS=`echo "${CXXFLAGS}" | sed "s/\-O.//g" `
 CFLAGS=`echo "${CFLAGS}" | sed "s/\-O.//g" `
 if test "$wxUSE_OPTIMISE" = "no" ; then
@@ -2285,13 +2285,13 @@ if test "$wxUSE_DYNLIB_CLASS" = "yes"; then
                     [AC_DEFINE(HAVE_SHL_LOAD) HAVE_DL_FUNCS=1 HAVE_SHL_FUNCS=1])
 
     if test "$HAVE_DL_FUNCS" = 0; then
-        if test "$USE_UNIX" = 1; then 
+        if test "$USE_UNIX" = 1; then
             AC_MSG_WARN("--with-dynlib and --with-odbc will be disabled due to missing shared library support")
             wxUSE_ODBC=no
             wxUSE_DYNLIB_CLASS=no
 	else
 	    AC_MSG_WARN("Cannot check dynlib requirements on non-Unix platforms. dynlib remains enabled.")
-	fi    
+	fi
     fi
 fi
 
@@ -2814,17 +2814,19 @@ AC_OUTPUT([
 	    utils/wxMMedia2/sample/Makefile
 	    utils/glcanvas/Makefile
 	    utils/glcanvas/${GL_TOOLKIT_DIR}/Makefile
+	    utils/ogl/Makefile
+	    utils/ogl/src/Makefile
           ],
           [
             chmod +x wx-config
-	    if test ! -d include; then 
-	      mkdir include 
+	    if test ! -d include; then
+	      mkdir include
 	    fi
-	    if test ! -d include/wx; then 
-	      mkdir include/wx 
+	    if test ! -d include/wx; then
+	      mkdir include/wx
 	    fi
-	    if test ! -d include/wx/${TOOLKIT_DIR}; then 
-	      mkdir include/wx/${TOOLKIT_DIR} 
+	    if test ! -d include/wx/${TOOLKIT_DIR}; then
+	      mkdir include/wx/${TOOLKIT_DIR}
 	    fi
 	    cp -f setup.h include/wx/${TOOLKIT_DIR}/setup.h
           ],
