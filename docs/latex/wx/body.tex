@@ -86,7 +86,7 @@ in Windows Help, HTML and Word RTF formats.
 \item Simple-to-use, object-oriented API.
 \item Flexible event system.
 \item Graphics calls include lines, rounded rectangles, splines, polylines, etc.
-\item Constraint-based and sizer-based layouting.
+\item Constraint-based and sizer-based layouts.
 \item Print/preview and document/view architectures.
 \item Toolbar, notebook, tree control, advanced list control classes.
 \item PostScript generation under Unix, normal MS Windows printing on the PC.
@@ -99,7 +99,7 @@ them to the clipboard.
 \item Ready-to-use HTML window (supporting a subset of HTML).
 \item Dialog Editor for building dialogs.
 \item Network support via a family of socket and protocol classes.
-\item Support for platform independent image procesing.
+\item Support for platform independent image processing.
 \item Built-in support for many file formats (BMP, PNG, JPEG, GIF, XPM, PNM, PCX).
 \end{itemize}
 
@@ -123,7 +123,7 @@ Additions and changes:
 
 \begin{itemize}\itemsep=0pt
 \item class hierarchy changed, and restrictions about subwindow nesting lifted;
-\item header files reorganised to conform to normal C++ standards;
+\item header files reorganized to conform to normal C++ standards;
 \item classes less dependent on each another, to reduce executable size;
 \item wxString used instead of char* wherever possible;
 \item the number of separate but mandatory utilities reduced;
@@ -449,7 +449,7 @@ fine on some platforms, and then fail under Windows.
 \section{Architecture dependency}
 
 A problem which sometimes arises from writing multi-platform programs is that
-the basic C types are not defiend the same on all platforms. This holds true
+the basic C types are not defined the same on all platforms. This holds true
 for both the length in bits of the standard types (such as int and long) as 
 well as their byte order, which might be little endian (typically
 on Intel computers) or big endian (typically on some Unix workstations). wxWindows
@@ -492,7 +492,7 @@ its own run-time type information system, implemented using macros.
 
 Some compilers (e.g. the native IRIX cc) define NULL to be 0L so that
 no conversion to pointers is allowed. Because of that, all these
-occurences of NULL in the GTK port use an explicit conversion such 
+occurrences of NULL in the GTK port use an explicit conversion such 
 as
 
 {\small
@@ -527,7 +527,7 @@ X and Windows parts of the library) conditional
 compilation that under Unix, includes a minimal set of headers;
 and when using Visual C++, includes {\tt wx.h}. This should help provide
 the optimal compilation for each compiler, although it is
-biassed towards the precompiled headers facility available
+biased towards the precompiled headers facility available
 in Microsoft C++.
 
 \section{File handling}
@@ -577,7 +577,7 @@ more easily accessed via the Contributions page on the Web site.
 wxHelp is a stand-alone program, written using wxWindows,
 for displaying hypertext help. It is necessary since not all target
 systems (notably X) supply an adequate
-standard for on-line help. wxHelp is modelled on the MS Windows help
+standard for on-line help. wxHelp is modeled on the MS Windows help
 system, with contents, search and browse buttons, but does not reformat
 text to suit the size of window, as WinHelp does, and its input files
 are uncompressed ASCII with some embedded font commands and an .xlp
@@ -690,7 +690,7 @@ it can alert you to problems later on.
 \subsection{Use wxString in preference to character arrays}
 
 Using wxString can be much safer and more convenient than using char *.
-Again, I haven't practised what I'm preaching, but I'm now trying to use
+Again, I haven't practiced what I'm preaching, but I'm now trying to use
 wxString wherever possible. You can reduce the possibility of memory
 leaks substantially, and it's much more convenient to use the overloaded
 operators than functions such as strcmp. wxString won't add a significant

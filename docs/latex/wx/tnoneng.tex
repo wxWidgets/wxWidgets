@@ -14,7 +14,7 @@ and it will be handled transparently under all systems.
 Please read \helpref{Internationalization}{internationalization} which
 describes locales concept.
 
-Whereever in the following text {\it iso8859-2} and {\it windows-1250} are
+Wherever in the following text {\it iso8859-2} and {\it windows-1250} are
 used, any encodings are meant and any encodings may be substituted there.
 
 \wxheading{Locales}
@@ -82,7 +82,7 @@ How is this done? When you tell wxLocale class to load message catalog that
 contains the header (msgid "". Normal .mo catalogs do {\bf not} contain it,
 you must remove the line with {\it fuzzy}!), it checks the charset. If the
 charset is "alien" on the platform the program is currently running (e.g.
-any of ISO encodings under Windows or CP12XX under Unix) it uses
+any of ISO encodings under Windows or CP12XX under Unix) it uses 
 \helpref{wxEncodingConverter::GetPlatformEquivalents}{wxencodingconvertergetplatformequivalents}
 to obtain encoding that is more common on this platform and converts
 the message catalog to this encoding. Note that it does {\bf not} check

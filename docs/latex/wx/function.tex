@@ -21,8 +21,8 @@ The functions defined in wxWindows are described here.
 This function must be called when any thread other than the main GUI thread
 wants to get access to the GUI library. This function will block the execution
 of the calling thread until the main thread (or any other thread holding the
-main GUI lock) leaves the GUI library and no other other thread will enter
-the GUI library until the calling thread calls \helpref{::wxMutexGuiLeave()}{wxmutexguileave}.
+main GUI lock) leaves the GUI library and no other thread will enter the GUI
+library until the calling thread calls \helpref{::wxMutexGuiLeave()}{wxmutexguileave}.
 
 Typically, these functions are used like this:
 
@@ -270,7 +270,7 @@ wxSplitPath() will correctly handle filenames with both DOS and Unix path separa
 Windows, however it will not consider backslashes as path separators under Unix (where backslash
 is a valid character in a filename).
 
-On entry, {\it fullname} should be non NULL (it may be empty though).
+On entry, {\it fullname} should be non-NULL (it may be empty though).
 
 On return, {\it path} contains the file path (without the trailing separator), {\it name}
 contains the file name and {\it ext} contains the file extension without leading dot. All
@@ -632,7 +632,7 @@ to be used for entering passwords as the function name implies.
  \param{const wxString\& }{default\_value = ``"}, \param{wxWindow *}{parent = NULL},\\
  \param{int}{ x = -1}, \param{int}{ y = -1}, \param{bool}{ centre = TRUE}}
 
-Pop up a dialog box with title set to {\it caption}, message {\it message}, and a
+Pop up a dialog box with title set to {\it caption}, {\it message}, and a
 \rtfsp{\it default\_value}.  The user may type in text and press OK to return this text,
 or press Cancel to return the empty string.
 
@@ -1285,7 +1285,7 @@ For asynchronous execution, however, the return value is the process id and
 zero value indicates that the command could not be executed.
 
 If callback isn't NULL and if execution is asynchronous (note that callback
-parameter can not be non NULL for synchronous execution), 
+parameter can not be non-NULL for synchronous execution), 
 \helpref{wxProcess::OnTerminate}{wxprocessonterminate} will be called when
 the process finishes.
 
@@ -1439,7 +1439,7 @@ Returns the mouse position in screen coordinates.
 \func{wxString}{wxGetOsDescription}{\void}
 
 Returns the string containing the description of the current platform in a
-user-readable form. For example, this function may return strings like
+user-readable form. For example, this function may return strings like  
 {\tt Windows NT Version 4.0} or {\tt Linux 2.2.2 i386}.
 
 \wxheading{See also}
@@ -1457,7 +1457,7 @@ user-readable form. For example, this function may return strings like
 Gets operating system version information.
 
 \begin{twocollist}\itemsep=0pt
-\twocolitemruled{Platform}{Return tyes}
+\twocolitemruled{Platform}{Return types}
 \twocolitem{Macintosh}{Return value is wxMACINTOSH.}
 \twocolitem{GTK}{Return value is wxGTK, For GTK 1.0, {\it major} is 1, {\it minor} is 0. }
 \twocolitem{Motif}{Return value is wxMOTIF\_X, {\it major} is X version, {\it minor} is X revision.}
@@ -1876,7 +1876,7 @@ iteration), call \helpref{wxLog::FlushActive}{wxlogflushactive}.
 
 This functions wakes up the (internal and platform dependent) idle system, i.e. it
 will force the system to send an idle event even if the system currently {\it is}
-idle and thus would not send any idle event until after some other event would get
+ idle and thus would not send any idle event until after some other event would get
 sent. This is also useful for sending events between two threads and is used by
 the corresponding functions \helpref{::wxPostEvent}{wxpostevent} and 
 \helpref{wxEvtHandler::AddPendingEvent}{wxevthandleraddpendingevent}.
@@ -2008,7 +2008,7 @@ dynamically. The same as DECLARE\_ABSTRACT\_CLASS.
 \func{}{DECLARE\_DYNAMIC\_CLASS}{className}
 
 Used inside a class declaration to declare that the objects of this class should be dynamically
-createable from run-time type information.
+creatable from run-time type information.
 
 Example:
 
@@ -2185,7 +2185,7 @@ In non-debug mode, this is defined as the normal new operator.
 
 This macro returns the pointer {\it ptr} cast to the type {\it classname *} if
 the pointer is of this type (the check is done during the run-time) or NULL
-otherwise. Usage of this macro is prefered over obsoleted wxObject::IsKindOf()
+otherwise. Usage of this macro is preferred over obsoleted wxObject::IsKindOf()
 function.
 
 The {\it ptr} argument may be NULL, in which case NULL will be returned.
@@ -2528,7 +2528,7 @@ Mostly used by wxWindows itself, but might be handy for logging errors after
 system call (API function) failure. It logs the specified message text as well
 as the last system error code ({\it errno} or {\it ::GetLastError()} depending
 on the platform) and the corresponding error message. The second form
-of this function takes the error code explitly as the first argument.
+of this function takes the error code explicitly as the first argument.
 
 \wxheading{See also}
 
@@ -2617,7 +2617,7 @@ Returns the error message corresponding to the given system error code. If
 
 \section{Debugging macros and functions}\label{debugmacros}
 
-Useful macros and functins for error checking and defensive programming. ASSERTs are only
+Useful macros and functions for error checking and defensive programming. ASSERTs are only
 compiled if \_\_WXDEBUG\_\_ is defined, whereas CHECK macros stay in release
 builds.
 

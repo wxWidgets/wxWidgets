@@ -6,7 +6,7 @@
 %% Created:     1999
 %% RCS-ID:      $Id$
 %% Copyright:   (c) wxWindows team
-%% Licence:     wxWindows licence
+%% License:     wxWindows license
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{\class{wxSocketBase}}\label{wxsocketbase}
@@ -219,7 +219,7 @@ void SocketCallback(wxSocketBase& sock, wxSocketNotify evt, char *cdata);
 \end{verbatim}
 
 The first parameter is a reference to the socket object in which the
-event occured. The second parameter tells you which event occured.
+event occurred. The second parameter tells you which event occurred.
 (See \helpref{wxSocket events}{wxsocketbase}). The third parameter
 is the user data you specified using \helpref{CallbackData}{wxsocketbasecallbackdata}.
 
@@ -316,7 +316,7 @@ If you use \helpref{Error}{wxsocketbaseerror}, it will always return FALSE.
 
 \constfunc{bool}{Error}{\void}
 
-Returns TRUE if an error occured in the last IO operation.
+Returns TRUE if an error occurred in the last IO operation.
 
 Use this function to check for an error condition after one of the
 following calls: Discard, Peek, Read, ReadMsg, Unread, Write, WriteMsg.
@@ -446,7 +446,7 @@ ReadMsg, Unread, Write, WriteMsg.
 Returns the last wxSocket error. See \helpref{wxSocket errors}{wxsocketbase}.
 
 Please note that this function merely returns the last error code,
-but it should not be used to determine if an error has occured (this
+but it should not be used to determine if an error has occurred (this
 is because successful operations do not change the LastError value).
 Use \helpref{Error}{wxsocketbaseerror} first, in order to determine
 if the last IO call failed. If this returns TRUE, use LastError
@@ -1085,7 +1085,7 @@ and {\bf wxSOCKET\_LOST} events (for connection failure).
 
 Returns TRUE if the connection is established and no error occurs.
 
-If {\it wait} was TRUE, and Connect returns FALSE, an error occured
+If {\it wait} was TRUE, and Connect returns FALSE, an error occurred
 and the connection failed.
 
 If {\it wait} was FALSE, and Connect returns FALSE, you should still
@@ -1277,7 +1277,7 @@ that there is an incoming connection waiting to be accepted.
 
 \wxheading{Return value}
 
-Returns an opened socket connection, or NULL if an error occured or
+Returns an opened socket connection, or NULL if an error occurred or
 if the {\it wait} parameter was FALSE and there were no pending
 connections.
 
@@ -1303,7 +1303,7 @@ Accept an incoming connection using the specified socket object.
 
 \wxheading{Return value}
 
-Returns TRUE on success, or FALSE if an error occured or if the
+Returns TRUE on success, or FALSE if an error occurred or if the
 {\it wait} parameter was FALSE and there were no pending
 connections.
 

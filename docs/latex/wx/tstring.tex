@@ -13,7 +13,7 @@ wxString only works with ASCII (8 bit characters) strings as of this release,
 but support for UNICODE (16 but characters) is planned for the next one.
 
 This class has all the standard operations you can expect to find in a string class:
-dynamic memory management (string extends to accomodate new characters),
+dynamic memory management (string extends to accommodate new characters),
 construction from other strings, C strings and characters, assignment operators,
 access to individual characters, string concatenation and comparison, substring
 extraction, case conversion, trimming and padding (with spaces), searching and
@@ -73,7 +73,7 @@ in both wxWindows and other programs (by just typedefing wxString as std::string
 when used outside wxWindows) and by staying compatible with future versions of
 wxWindows which will probably start using std::string sooner or later too.
 
-In the situations where there is no correspondinw std::string function, please
+In the situations where there is no corresponding std::string function, please
 try to use the new wxString methods and not the old wxWindows 1.xx variants
 which are deprecated and may disappear in future versions.
 
@@ -171,7 +171,7 @@ share the same data.
 
 But as soon as one of the two (or more) strings is modified, the data has to be
 copied because the changes to one of the strings shouldn't be seen in the
-otheres. As data copying only happens when the string is written to, this is
+others. As data copying only happens when the string is written to, this is
 known as COW.
 
 What is important to understand is that all this happens absolutely
@@ -259,7 +259,7 @@ which tells the wxString class to collect performance statistics and to show
 them on stderr on program termination. This will show you the average length of
 strings your program manipulates, their average initial length and also the
 percent of times when memory wasn't reallocated when string concatenation was
-done but the alread preallocated memory was used (this value should be about
+done but the already preallocated memory was used (this value should be about
 98\% for the default allocation policy, if it is less than 90\% you should
 really consider fine tuning wxString for your application).
 

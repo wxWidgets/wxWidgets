@@ -18,6 +18,12 @@ Note: this class is considered obsolete, replaced by the Remstar wxDB/wxTable cl
 
 \overview{wxDatabase overview}{wxdatabaseoverview}, \helpref{wxRecordSet}{wxrecordset}
 
+A much more robust and feature-rich set of ODBC classes is now
+available and recommended for use in place of the wxDatabase class.
+
+See details of these classes in:
+\helpref{wxDB}{wxdb}, \helpref{wxTable}{wxtable}
+
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 \membersection{wxDatabase::wxDatabase}
@@ -74,9 +80,9 @@ and disconnects from the current data source.
 
 Commits previous transactions. Not implemented.
 
-\membersection{wxDatabase::ErrorOccured}
+\membersection{wxDatabase::ErrorOccurred}
 
-\func{bool}{ErrorOccured}{\void}
+\func{bool}{ErrorOccurred}{\void}
 
 Returns TRUE if the last action caused an error.
 
@@ -84,7 +90,7 @@ Returns TRUE if the last action caused an error.
 
 \func{void}{ErrorSnapshot}{\param{HSTMT}{ statement = SQL\_NULL\_HSTMT}}
 
-This function will be called whenever an ODBC error occured. It stores the
+This function will be called whenever an ODBC error occurred. It stores the
 error related information returned by ODBC. If a statement handle of the
 concerning ODBC action is available it should be passed to the function.
 

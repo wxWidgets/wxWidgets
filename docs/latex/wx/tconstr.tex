@@ -69,13 +69,13 @@ When the user sets constraints, many of the constraints for windows
 edges and dimensions remain unconstrained. For a given window,
 the wxWindow::Layout algorithm first resets all constraints
 in all children to have unknown edge or dimension values, and then iterates through the constraints,
-evaulating them. For unconstrained edges and dimensions, it
+evaluating them. For unconstrained edges and dimensions, it
 tries to find the value using known relationships that always hold. For example,
 an unconstrained {\it width} may be calculated from the {\it left} and {\it right edges}, if
 both are currently known. For edges and dimensions with user-supplied constraints, these
-constraints are evaulated if the inputs of the constraint are known.
+constraints are evaluated if the inputs of the constraint are known.
 
-The algorithm stops when all child edges and dimension are known (success), or there
+The algorithm stops when all child edges and dimension are known (success), or 
 there are unknown edges or dimensions but there has been no change in this cycle (failure).
 
 It then sets all the window positions and sizes according to the values it has found.
@@ -85,7 +85,7 @@ irrelevant, however you may reduce the number of iterations (and thus speed up
 the layout calculations) by creating the controls in such order that as many
 constraints as possible can be calculated during the first iteration. For example, if
 you have 2 buttons which you'd like to position in the lower right corner, it is
-slighty more efficient to first create the second button and specify that its
+slightly more efficient to first create the second button and specify that its
 right border IsSameAs(parent, wxRight) and then create the first one by
 specifying that it should be LeftOf() the second one than to do in a more
 natural left-to-right order.

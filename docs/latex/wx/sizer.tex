@@ -20,7 +20,7 @@ What makes sizers so well fitted for use in wxWindows is the fact that every con
 reports its own minimal size and the algorithm can handle differences in font sizes
 or different window (dialog item) sizes on different platforms without problems. If e.g.
 the standard font as well as the overall design of Motif widgets requires more space than
-on Windows, the intial dialog size will automatically be bigger on Motif than on Windows.
+on Windows, the initial dialog size will automatically be bigger on Motif than on Windows.
 
 \pythonnote{If you wish to create a sizer class in wxPython you should
 derive the class from {\tt wxPySizer} in order to get Python-aware
@@ -56,7 +56,7 @@ The destructor.
 Adds the {\it window} to the sizer. As wxSizer itself is an abstract class, the parameters
 have no meaning in the wxSizer class itself, but as there currently is only one class
 deriving directly from wxSizer and this class does not override these methods, the meaning
-of the paramters is described here:
+of the parameters is described here:
 
 \docparam{window}{The window to be added to the sizer. Its initial size (either set explicitly by the
 user or calculated internally when using wxDefaultSize) is interpreted as the minimal and in many

@@ -19,7 +19,7 @@ characters from languages other than English.
 
 Starting with release 2.1 wxWindows has support for compiling in Unicode mode
 on the platforms which support it. Unicode is a standard for character
-encoding which addreses the shortcomings of the previous, 8 bit standards, by
+encoding which addresses the shortcomings of the previous, 8 bit standards, by
 using 16 bit for encoding each character. This allows to have 65536 characters
 instead of the usual 256 and is sufficient to encode all of the world
 languages at once. More details about Unicode may be found at {\tt www.unicode.org}.
@@ -28,14 +28,14 @@ languages at once. More details about Unicode may be found at {\tt www.unicode.o
 
 As this solution is obviously preferable to the previous ones (think of
 incompatible encodings for the same language, locale chaos and so on), many
-modern ooperating systems support it. The probably first example is Windows NT
+modern operating systems support it. The probably first example is Windows NT
 which uses only Unicode internally since its very first version.
 
 Writing internationalized programs is much easier with Unicode and, as the
 support for it improves, it should become more and more so. Moreover, in the
 Windows NT/2000 case, even the program which uses only standard ASCII can profit
 from using Unicode because they will work more efficiently - there will be no
-need for the system to convert all strings hte program uses to/from Unicode
+need for the system to convert all strings the program uses to/from Unicode
 each time a system call is made.
 
 \subsection{Unicode and ANSI modes}
@@ -46,7 +46,7 @@ environment. A better solution is to write programs in such way that they may
 be compiled either in ANSI (traditional) mode or in the Unicode one.
 
 This can be achieved quite simply by using the means provided by wxWindows.
-Basicly, there are only a few things to watch out for:
+Basically, there are only a few things to watch out for:
 
 \begin{itemize}
 \item Character type ({\tt char} or {\tt wchar\_t})
@@ -96,7 +96,7 @@ section.
 
 \subsection{Unicode support in wxWindows}
 
-In wxWindows, the code fragment froim above should be written instead:
+In wxWindows, the code fragment from above should be written instead:
 
 \begin{verbatim}
     wxChar ch = wxT('*');
@@ -145,7 +145,7 @@ Although everything works fine inside the program, things can get nasty when
 it tries to communicate with the outside world which, sadly, often expects
 ANSI strings (a notable exception is the entire Win32 API which accepts either
 Unicode or ANSI strings and which thus makes it unnecessary to ever perform
-any convertions in the program).
+any conversions in the program).
 
 To get a ANSI string from a wxString, you may use the 
 mb\_str() function which always returns an ANSI

@@ -783,7 +783,7 @@ this by a scaling factor to take the preview DC size into account.
 
 \func{bool}{HasPage}{\param{int}{ pageNum}}
 
-Should be overriden to return TRUE if the document has this page, or FALSE
+Should be overridden to return TRUE if the document has this page, or FALSE
 if not. Returning FALSE signifies the end of the document. By default,
 HasPage behaves as if the document has only one page.
 
@@ -802,9 +802,9 @@ this function cancels the print job. OnBeginDocument is called once for every
 copy printed.
 
 The base wxPrintout::OnBeginDocument {\it must} be called (and the return value
-checked) from within the overriden function, since it calls wxDC::StartDoc.
+checked) from within the overridden function, since it calls wxDC::StartDoc.
 
-\pythonnote{If this method is overriden in a Python class then the
+\pythonnote{If this method is overridden in a Python class then the
 base class version can be called by using the method
 {\tt base_OnBeginDocument(startPage, endPage)}. }
 
@@ -816,7 +816,7 @@ Called by the framework at the end of document printing. OnEndDocument
 is called once for every copy printed.
 
 The base wxPrintout::OnEndDocument {\it must} be called
-from within the overriden function, since it calls wxDC::EndDoc.
+from within the overridden function, since it calls wxDC::EndDoc.
 
 \membersection{wxPrintout::OnBeginPrinting}\label{wxprintoutonbeginprinting}
 
