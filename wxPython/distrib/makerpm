@@ -26,27 +26,23 @@ pythonbin=/usr/bin/python
 port=GTK
 lcport=gtk
 unicode=0
-tarname=wxPythonSrc
-rpmflag=-ba
+tarname=wxPython-src
+srpmonly=0
 
 #----------------------------------------------------------------------
 # Check parameters
 
 function usage {
     echo "Usage: $0 py_version [command flags...]"
-    echo "   py_version     String to append to $pythonbin (which python"
-    echo "                  version to use.)"
+    echo "   py_version     which python version to use."
     echo ""
     echo "command flags:"
     echo "   skipcopy       Don't copy the files for the tarball from the workspace"
     echo "   skiptar        Don't build the tarball"
     echo "   skiprpm        Don't build the RPM"
     echo "   skipclean      Don't do the cleanup at the end"
-    echo "   gtk2           Build using wxGTK2 and Unicode"
-    echo "   x11            Build using wxX11"
     echo "   speconly       Do nothing but write the RPM spec file"
     echo "   srpm           Only make the SRPM"
-#    echo "   smp            Add SMP=2 to the envivonment to speed wxGTK build"
 }
 
 if [ $# -lt 1 ]; then
@@ -68,17 +64,14 @@ fi
 
 
 function makespec {
-    echo "*** Writing ${distdir}/wxPython${port}.spec"
+    echo "*** Writing ${distdir}/wxPython.spec"
     cat ${spectemplate} \
 	| sed s:@PYTHON@:${python}:g \
 	| sed s:@PYVER@:${pyver}:g \
-	| sed s:@PORT@:${port}:g \
-	| sed s:@LCPORT@:${lcport}:g \
 	| sed s:@TARNAME@:${tarname}:g \
 	| sed s:@VERSION@:${version}:g \
 	| sed s:@VER2@:${ver2}:g \
-	| sed s:@UNICODE@:${unicode}:g \
-	> ${distdir}/wxPython${port}.spec
+	> ${distdir}/wxPython.spec
 }
 
 
@@ -89,11 +82,8 @@ for flag in $*; do
 	skipclean) skipclean=1                         ;;
 	skiptar)   skiptar=1; skipcopy=1               ;;
 	skiprpm)   skiprpm=1                           ;;
-	gtk2)      unicode=1; port=GTK2; lcport=gtk2   ;;
-	x11)       port=X11; lcport=x11                ;;
-	smp)       export SMP=2                        ;;
 	speconly)  makespec; exit 0                    ;;
-	srpm)      rpmflag=-bs;                        ;;
+	srpm)      srpmonly=1;                         ;;
 
 	*)  echo "Unknown flag \"${flag}\""
 	    usage
@@ -144,7 +134,7 @@ if [ -z "${skipcopy}" ]; then
     # copy root dir contents
     cp -pf --link ${wxdir}/* ${tarver} > /dev/null 2>&1
 
-    # copy all top dirs except CVS, build, demos, utils, samples, and wxPython
+    # copy all top dirs except CVS, build, demos, samples, utils, and wxPython
     for d in art build contrib debian distrib docs include lib locale misc patches src; do
 	if [ -e ${wxdir}/$d ]; then
 	    cp -Rpf --link ${wxdir}/$d ${tarver} #> /dev/null 2>&1
@@ -177,19 +167,29 @@ if [ -z "${skipcopy}" ]; then
     cleanup CVS
     cleanup CVSROOT
     rm BuildCVS.txt
+    rm -f ChangeLog
     rm *.spec
+    rm -rf distrib/msw/tmake
     rm -rf docs/html
     rm -rf docs/latex
     rm -rf contrib/docs
     rm -rf contrib/samples
     rm locale/*.mo
     cleanup ".#*"
+    cleanup "#*#"
     cleanup "*~"
     cleanup "*.orig"
     cleanup "*.rej"
     cleanup "*.pyc"
     cleanup core
     cleanup "core.[0-9]*"
+
+    # ports that are not supported yet
+    cleanup cocoa
+    cleanup mgl
+    cleanup motif
+    cleanup os2
+    cleanup x11
 
     rm -f wxPython/wx/*  > /dev/null 2>&1
 
@@ -205,7 +205,7 @@ fi
 # TODO?  Output all combinations of spec files to put in the tar file??
 
 makespec
-cp ${distdir}/wxPython${port}.spec ${builddir}/${tarver}/wxPython${port}.spec
+cp ${distdir}/wxPython.spec ${builddir}/${tarver}/wxPython.spec
 
 
 #----------------------------------------------------------------------
@@ -237,17 +237,44 @@ fi
 if [ -z "${skiprpm}" ]; then
     echo "*** Building RPMs..."
     cp ${distdir}/${tarver}.tar.gz ${rpmtop}/SOURCES
-    rpmbuild ${rpmflag} \
-	--define "_topdir ${rpmtop}" \
-	--define "_tmppath ${builddir}" \
-	${distdir}/wxPython${port}.spec
-    if [ "$?" != "0" ]; then
-	echo "*** RPM failure, exiting."
-	exit 1
-    else
-	echo "*** Moving RPMs to ${distdir}"
-	mv -f `find ${rpmtop} -name "wxPython*.rpm"` ${distdir}
+
+    if [ "${srpmonly}" = "1" ]; then
+	rpmbuild -bs \
+	    --define "_topdir ${rpmtop}" \
+	    --define "_tmppath ${builddir}" \
+	    --define "pyver ${pyver}" \
+	    ${distdir}/wxPython.spec
+	if [ "$?" != "0" ]; then
+	    echo "*** RPM failure, exiting."
+	    exit 1
+	fi
+	    
+    else 
+	rpmbuild  -ba \
+	    --define "_topdir ${rpmtop}" \
+	    --define "_tmppath ${builddir}" \
+	    --define "port gtk" --define "unicode 0" \
+	    --define "pyver ${pyver}" \
+	    ${distdir}/wxPython.spec
+	if [ "$?" != "0" ]; then
+	    echo "*** RPM failure, exiting."
+	    exit 1
+	fi
+
+	rpmbuild  -ba \
+	    --define "_topdir ${rpmtop}" \
+	    --define "_tmppath ${builddir}" \
+	    --define "port gtk2" --define "unicode 1" \
+	    --define "pyver ${pyver}" \
+	    ${distdir}/wxPython.spec
+	if [ "$?" != "0" ]; then
+	    echo "*** RPM failure, exiting."
+	    exit 1
+	fi
     fi
+
+    echo "*** Moving RPMs to ${distdir}"
+    mv -f `find ${rpmtop} -name "wxPython*.rpm"` ${distdir}
 fi
 
 #----------------------------------------------------------------------
