@@ -329,6 +329,7 @@ bool wxWindow::Create(
 )
 {
     HWND                            hParent = NULLHANDLE;
+    wxPoint                         vPos = rPos; // The OS/2 position
 
     wxCHECK_MSG(pParent, FALSE, wxT("can't create wxWindow without parent"));
 
@@ -346,9 +347,19 @@ bool wxWindow::Create(
     {
         pParent->AddChild(this);
         hParent = GetWinHwnd(pParent);
+        //
+        // OS2 uses normal coordinates, no bassackwards Windows ones
+        //
+        vPos.y = pParent->GetSize().y - (vPos.y + rSize.y);
     }
     else
-       hParent = HWND_DESKTOP;
+    {
+        RECTL                   vRect;
+
+        ::WinQueryWindowRect(HWND_DESKTOP, &vRect);
+        hParent = HWND_DESKTOP;
+        vPos.y = vRect.yTop - (vPos.y + rSize.y);
+    }
 
     ULONG                           ulCreateFlags = 0L;
 
@@ -382,8 +393,8 @@ bool wxWindow::Create(
               ,(PSZ)wxCanvasClassName
               ,rName.c_str()
               ,ulCreateFlags
-              ,rPos.x
-              ,rPos.y
+              ,vPos.x
+              ,vPos.y
               ,WidthDefault(rSize.x)
               ,HeightDefault(rSize.y)
               ,NULLHANDLE

@@ -108,8 +108,23 @@ bool wxTextCtrl::Create(
                     ))
         return FALSE;
 
+    wxPoint                         vPos = rPos; // The OS/2 position
+
     if (pParent )
+    {
         pParent->AddChild(this);
+        //
+        // OS2 uses normal coordinates, no bassackwards Windows ones
+        //
+        vPos.y = pParent->GetSize().y - (vPos.y + rSize.y);
+    }
+    else
+    {
+        RECTL                   vRect;
+
+        ::WinQueryWindowRect(HWND_DESKTOP, &vRect);
+        vPos.y = vRect.yTop - (vPos.y + rSize.y);
+    }
 
     m_windowStyle = lStyle;
 
@@ -147,8 +162,8 @@ bool wxTextCtrl::Create(
                                            ,WC_MLE                   // Window class
                                            ,(PSZ)rsValue.c_str()     // Initial Text
                                            ,(ULONG)lSstyle           // Style flags
-                                           ,(LONG)rPos.x             // X pos of origin
-                                           ,(LONG)rPos.y             // Y pos of origin
+                                           ,(LONG)vPos.x             // X pos of origin
+                                           ,(LONG)vPos.y             // Y pos of origin
                                            ,(LONG)rSize.x            // field width
                                            ,(LONG)rSize.y            // field height
                                            ,(HWND)GetHwndOf(pParent) // owner window handle (same as parent
@@ -164,8 +179,8 @@ bool wxTextCtrl::Create(
                                            ,WC_ENTRYFIELD            // Window class
                                            ,(PSZ)rsValue.c_str()     // Initial Text
                                            ,(ULONG)lSstyle           // Style flags
-                                           ,(LONG)rPos.x             // X pos of origin
-                                           ,(LONG)rPos.y             // Y pos of origin
+                                           ,(LONG)vPos.x             // X pos of origin
+                                           ,(LONG)vPos.y             // Y pos of origin
                                            ,(LONG)rSize.x            // field width
                                            ,(LONG)rSize.y            // field height
                                            ,(HWND)GetHwndOf(pParent) // owner window handle (same as parent
