@@ -197,10 +197,9 @@ void wxFindReplaceDialogImpl::SubclassDialog(HWND hwnd)
 
     // check that we don't subclass the parent twice: this would be a bad idea
     // as then we'd have infinite recursion in wxFindReplaceWindowProc
-    WNDPROC oldParentWndProc = (WNDPROC)::GetWindowLong(hwnd, GWL_WNDPROC);
-
-    if ( oldParentWndProc != wxFindReplaceWindowProc )
+    if ( !wxCheckWindowWndProc((WXHWND)hwnd, (WXFARPROC)wxFindReplaceWindowProc) )
     {
+        WNDPROC oldParentWndProc = (WNDPROC)::GetWindowLong(hwnd, GWL_WNDPROC);
         // save old wnd proc elsewhere to access it from
         // wxFindReplaceWindowProc
         m_oldParentWndProc = oldParentWndProc;

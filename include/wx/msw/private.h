@@ -391,6 +391,9 @@ WXDLLEXPORT extern wxString wxGetWindowClass(WXHWND hWnd);
 // is, for mainly historical reasons, signed)
 WXDLLEXPORT extern WXWORD wxGetWindowId(WXHWND hWnd);
 
+// check if hWnd's WNDPROC is wndProc. Return true if yes, false if they are different
+extern bool wxCheckWindowWndProc(WXHWND hWnd, WXFARPROC wndProc);
+
 // Does this window style specify any border?
 inline bool wxStyleHasBorder(long style)
 {

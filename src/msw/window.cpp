@@ -968,11 +968,11 @@ void wxWindowMSW::SubclassWin(WXHWND hWnd)
 
     wxAssociateWinWithHandle(hwnd, this);
 
-    m_oldWndProc = (WXFARPROC)::GetWindowLong(hwnd, GWL_WNDPROC);
-
+    m_oldWndProc = (WXFARPROC)::GetWindowLong((HWND)hWnd, GWL_WNDPROC);
+    
     // we don't need to subclass the window of our own class (in the Windows
     // sense of the word)
-    if ( (WXFARPROC) m_oldWndProc != (WXFARPROC) wxWndProc )
+    if ( !wxCheckWindowWndProc(hWnd, (WXFARPROC)wxWndProc) )
     {
         ::SetWindowLong(hwnd, GWL_WNDPROC, (LONG) wxWndProc);
     }
@@ -997,8 +997,7 @@ void wxWindowMSW::UnsubclassWin()
 
         if ( m_oldWndProc )
         {
-            FARPROC wndProc = (FARPROC)::GetWindowLong(hwnd, GWL_WNDPROC);
-            if ( wndProc != (FARPROC) m_oldWndProc )
+            if ( !wxCheckWindowWndProc((WXHWND)hwnd, m_oldWndProc) )
             {
                 ::SetWindowLong(hwnd, GWL_WNDPROC, (LONG) m_oldWndProc);
             }
@@ -1007,6 +1006,35 @@ void wxWindowMSW::UnsubclassWin()
         }
     }
 }
+
+bool wxCheckWindowWndProc(WXHWND hWnd, WXFARPROC wndProc)
+{
+#if wxUSE_UNICODE_MSLU
+    // VS: We can't use GetWindowLong(hwnd, GWL_WNDPROC) together with unicows.dll
+    //     because it doesn't return pointer to the real wnd proc but rather a handle
+    //     of a fake proc that does Unicode<->ANSI translation.
+    //
+    //     The hack bellow works, because WNDCLASS contains original window handler
+    //     rather that the unicows fake one. This may not be on purpose, though; if
+    //     it stops working with future versions of unicows.dll, we can override
+    //     unicows hooks by setting Unicows_{Set,Get}WindowLong and
+    //     Unicows_RegisterClass to our own versions that keep track of
+    //     fake<->real wnd proc mapping.
+    //
+    //     FIXME: Doesn't handle wnd procs set by SetWindowLong, only these set
+    //            with RegisterClass!!
+
+    static wxChar buffer[512];
+    WNDCLASS cls;
+
+    ::GetClassName((HWND)hWnd, buffer, 512);
+    ::GetClassInfo(wxGetInstance(), buffer, &cls);
+    return wndProc == (WXFARPROC)cls.lpfnWndProc;
+#else
+    return wndProc == (WXFARPROC)::GetWindowLong((HWND)hWnd, GWL_WNDPROC);
+#endif
+}
+
 
 // Make a Windows extended style from the given wxWindows window style
 WXDWORD wxWindowMSW::MakeExtendedStyle(long style, bool eliminateBorders)

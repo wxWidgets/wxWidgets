@@ -195,7 +195,7 @@ bool wxApp::Initialize()
     // the first thing to do is to check if we're trying to run an Unicode
     // program under Win9x - if so, abort right now as it has no chance to
     // work
-#if wxUSE_UNICODE
+#if wxUSE_UNICODE && !wxUSE_UNICODE_MSLU
     if ( wxGetOsVersion() != wxWINDOWS_NT )
     {
         // note that we can use MessageBoxW() as it's implemented even under
@@ -204,14 +204,14 @@ bool wxApp::Initialize()
         ::MessageBox
         (
          NULL,
-         _T("This program uses Unicode and requires Windows NT/2000.\nProgram aborted."),
+         _T("This program uses Unicode and requires Windows NT/2000/XP.\nProgram aborted."),
          _T("wxWindows Fatal Error"),
          MB_ICONERROR | MB_OK
         );
 
         return FALSE;
     }
-#endif // wxUSE_UNICODE
+#endif // wxUSE_UNICODE && !wxUSE_UNICODE_MSLU
 
     // Some people may wish to use this, but
     // probably it shouldn't be here by default.
