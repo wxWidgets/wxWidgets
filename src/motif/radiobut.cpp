@@ -121,6 +121,13 @@ void wxRadioButton::ChangeFont(bool keepOriginalSize)
 void wxRadioButton::ChangeBackgroundColour()
 {
     wxWindow::ChangeBackgroundColour();
+
+    // What colour should this be?
+    int selectPixel = wxBLACK->AllocColour(wxGetDisplay());
+
+    XtVaSetValues ((Widget) GetMainWidget(),
+          XmNselectColor, selectPixel,
+          NULL);
 }
 
 void wxRadioButton::ChangeForegroundColour()

@@ -24,7 +24,7 @@
 #pragma hdrstop
 #endif
 
-#ifdef wxUSE_SERIAL
+#if wxUSE_SERIAL
 
 // ----------------------------------------------------------------------------
 // wxObject_Serialize

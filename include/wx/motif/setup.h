@@ -137,6 +137,9 @@
 #define wxUSE_STREAMS       1
                                   // Use wxStream implementation within wxWindows code
 
+#define wxUSE_SERIAL        0
+                                  // Use serialization
+
 /*
  * Finer detail
  *

@@ -361,6 +361,10 @@ bool wxDialog::Show(bool show)
           TranslateMessage(&msg);
           DispatchMessage(&msg);
         }
+
+        // If we get crashes (as per George Tasker's message) with nested modal dialogs,
+        // we should try removing the m_modalShowing test
+
         if (m_modalShowing && !::PeekMessage(&msg, 0, 0, 0, PM_NOREMOVE))
         // dfgg: NB MUST test m_modalShowing again as the message loop could have triggered
         //       a Show(FALSE) in the mean time!!!
@@ -376,9 +380,12 @@ bool wxDialog::Show(bool show)
       node=disabledWindows.First();
       while(node) {
         wxWindow* win = (wxWindow*) node->Data();
-        HWND hWnd = (HWND) win->GetHWND();
-        if (::IsWindow(hWnd) && (wxModalDialogs.Member(win) || wxModelessWindows.Member(win) ))
-          ::EnableWindow(hWnd,TRUE);
+        if (wxModalDialogs.Member(win) || wxModelessWindows.Member(win))
+        {
+          HWND hWnd = (HWND) win->GetHWND();
+          if (::IsWindow(hWnd))
+            ::EnableWindow(hWnd,TRUE);
+        }
         node=node->Next();
       }
     }

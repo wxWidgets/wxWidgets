@@ -160,11 +160,6 @@ void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
 {
-#ifdef __WXMSW__
-      wxGetApp().SetPrintMode(wxPRINT_WINDOWS);
-#else
-      wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
-#endif
       wxPrinter printer;
       MyPrintout printout("My printout");
       if (!printer.Print(this, &printout, TRUE))
@@ -173,11 +168,6 @@ void MyFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnPrintPreview(wxCommandEvent& WXUNUSED(event))
 {
-#ifdef __WXMSW__
-      wxGetApp().SetPrintMode(wxPRINT_WINDOWS);
-#else
-      wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
-#endif
       wxPrintData printData;
       printData.SetOrientation(orientation);
 
@@ -198,19 +188,11 @@ void MyFrame::OnPrintPreview(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnPrintSetup(wxCommandEvent& WXUNUSED(event))
 {
-#ifdef __WXMSW__
-      wxGetApp().SetPrintMode(wxPRINT_WINDOWS);
-#else
-      wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
-#endif
       wxPrintData data;
       data.SetOrientation(orientation);
 
-#ifdef __WXMSW__
       wxPrintDialog printerDialog(this, & data);
-#else
-      wxGenericPrintDialog printerDialog(this, & data);
-#endif
+
       printerDialog.GetPrintData().SetSetupDialog(TRUE);
       printerDialog.ShowModal();
 
@@ -219,19 +201,10 @@ void MyFrame::OnPrintSetup(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnPageSetup(wxCommandEvent& WXUNUSED(event))
 {
-#ifdef __WXMSW__
-      wxGetApp().SetPrintMode(wxPRINT_WINDOWS);
-#else
-      wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
-#endif
       wxPageSetupData data;
       data.SetOrientation(orientation);
 
-#ifdef __WXMSW__
       wxPageSetupDialog pageSetupDialog(this, & data);
-#else
-      wxGenericPageSetupDialog pageSetupDialog(this, & data);
-#endif
       pageSetupDialog.ShowModal();
 
       data = pageSetupDialog.GetPageSetupData();
@@ -241,8 +214,6 @@ void MyFrame::OnPageSetup(wxCommandEvent& WXUNUSED(event))
 #if defined(__WXMSW__) && wxTEST_POSTSCRIPT_IN_MSW
 void MyFrame::OnPrintPS(wxCommandEvent& WXUNUSED(event))
 {
-      wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
-
       wxPostScriptPrinter printer;
       MyPrintout printout("My printout");
       printer.Print(this, &printout, TRUE);
@@ -250,8 +221,6 @@ void MyFrame::OnPrintPS(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnPrintPreviewPS(wxCommandEvent& WXUNUSED(event))
 {
-      wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
-
       wxPrintData printData;
       printData.SetOrientation(orientation);
 
@@ -265,8 +234,6 @@ void MyFrame::OnPrintPreviewPS(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnPrintSetupPS(wxCommandEvent& WXUNUSED(event))
 {
-      wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
-
       wxPrintData data;
       data.SetOrientation(orientation);
 
@@ -279,8 +246,6 @@ void MyFrame::OnPrintSetupPS(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnPageSetupPS(wxCommandEvent& WXUNUSED(event))
 {
-      wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
-
       wxPageSetupData data;
       data.SetOrientation(orientation);
 

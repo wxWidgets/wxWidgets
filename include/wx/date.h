@@ -20,7 +20,7 @@
 #include "wx/object.h"
 #include "wx/string.h"
 
-#ifdef wxUSE_TIMEDATE
+#if wxUSE_TIMEDATE
 
 enum wxdate_format_type {wxMDY, wxDAY, wxMONTH, wxFULL, wxEUROPEAN};
 

@@ -111,7 +111,7 @@ for the port to Windows CE (see above).<P>
 
 <h3>Can you compile wxWindows 2 as a DLL?</h3>
 
-Yes (using the Visual C++ makefile), but be aware that distributing DLLs is a thorny issue
+Yes (using the Visual C++ or Borland C++ makefile), but be aware that distributing DLLs is a thorny issue
 and you may be better off compiling statically-linked applications, unless you're
 delivering a suite of separate programs, or you're compiling a lot of wxWindows applications
 and have limited hard disk space.<P>
@@ -121,6 +121,23 @@ needing to be catered for, the end user may end up with a host of large DLLs in 
 negating the point of using DLLs. Of course, this is not a problem just associated with
 wxWindows!
 <P>
+
+<H3>How can I reduce executable size?</H3>
+
+You can compile wxWindows as a DLL (see above, VC++/BC++ only at present). You should also
+compile your programs for release using non-debugging and space-optimisation options.<P>
+
+Statically-linked wxWindows 2 programs are smaller than wxWindows 1.xx programs, because of the way
+wxWindows 2 has been designed to reduce dependencies between classes, and other
+techniques. The linker will not include code from the library that is not (directly or
+indirectly) referenced
+by your application. So for example, the 'minimal' sample is less than 300KB using VC++ 6.<P>
+
+If you want to distribute really small executables, you can
+use <a href="http://www.icl.ndirect.co.uk/petite/" target=_top>Petite</a>
+by Ian Luck. This nifty utility compresses Windows executables by around 50%, so your 500KB executable
+will shrink to a mere 250KB. With this sort of size, there is reduced incentive to
+use DLLs.<P>
 
 
 <H3>Will wxWindows be compatible with MFC?</H3>

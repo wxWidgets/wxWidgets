@@ -17,7 +17,7 @@
 
 #include "wx/defs.h"
 
-#ifdef wxUSE_ZLIB
+#if wxUSE_ZLIB
 
 #include <wx/stream.h>
 

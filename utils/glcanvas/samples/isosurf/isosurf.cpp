@@ -255,13 +255,13 @@ bool MyApp::OnInit(void)
 #endif
 
   if(!doubleBuffer
-#ifdef __X__ // JACS
+#ifdef __WXGTK__ // JACS
    || !wxGLCanvas::HaveVisual(gl_attrib)
 #endif
    )
    {
       printf("don't have double buffer, disabling\n");
-#ifndef __WXMSW__
+#ifdef __WXGTK__
       gl_attrib[9] = None;
 #endif
       doubleBuffer = GL_FALSE;

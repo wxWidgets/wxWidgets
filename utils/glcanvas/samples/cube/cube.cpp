@@ -106,7 +106,9 @@ void TestGLCanvas::OnPaint( wxPaintEvent& event )
     // OnPaint handlers must always create a wxPaintDC.
     wxPaintDC dc(this);
 
+#ifndef __WXMOTIF__
     if (!GetContext()) return;
+#endif
 
     SetCurrent();
 
@@ -155,7 +157,9 @@ void TestGLCanvas::OnSize(wxSizeEvent& event)
     int width, height;
     GetClientSize(& width, & height);
 
+#ifndef __WXMOTIF__
     if (GetContext())
+#endif
     {
         SetCurrent();
         glViewport(0, 0, width, height);

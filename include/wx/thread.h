@@ -369,7 +369,7 @@ public:
 // -----------------------------------------------------------------------------
 // implementation only until the end of file
 // -----------------------------------------------------------------------------
-#ifdef wxUSE_THREADS
+#if wxUSE_THREADS
 #ifdef __WXMSW__
     // unlock GUI if there are threads waiting for and lock it back when
     // there are no more of them - should be called periodically by the main

@@ -72,27 +72,25 @@ future versions completely.
 
 \helpref{wxObject}{wxobject}
 
-{\bf WARNING: } the rest of documentation may be out-of-date.
-
 \wxheading{Example}
 
 It is very common to iterate on a list as follows:
 
 \begin{verbatim}
   ...
-  wxPoint *point1 = new wxPoint(100, 100);
-  wxPoint *point2 = new wxPoint(200, 200);
+  wxWindow *win1 = new wxWindow(...);
+  wxWindow *win2 = new wxWindow(...);
 
   wxList SomeList;
-  SomeList.Append(point1);
-  SomeList.Append(point2);
+  SomeList.Append(win1);
+  SomeList.Append(win2);
 
   ...
 
   wxNode *node = SomeList.GetFirst();
   while (node)
   {
-    wxPoint *point = (wxPoint *)node->Data();
+    wxWindow *win = (wxWindow *)node->Data();
     ...
     node = node->Next();
   }
@@ -110,7 +108,7 @@ with
 
 \begin{verbatim}
     ...
-    delete point;
+    delete win;
     delete node;
     node = SomeList.GetFirst();
     ...

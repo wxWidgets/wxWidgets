@@ -33,7 +33,11 @@ zip32 -@ %dest\wx200vc.zip < %src\distrib\msw\vc.rsp
 rem CodeWarrior project files
 zip32 -@ %dest\wx200cw.zip < %src\distrib\msw\cw.rsp
 
+rem OGL 3
 zip32 -@ %dest\ogl3.zip < %src\utils\ogl\distrib\ogl.rsp
+
+rem GLCanvas
+zip32 -@ %dest\glcanvas.zip < %src\distrib\glcanvas.rsp
 
 rem Tex2RTF
 zip32 -@ %dest\tex2rtf2.zip < %src\distrib\msw\tex2rtf.rsp

@@ -996,7 +996,7 @@ void wxOnAssert(const char *szFile, int nLine, const char *szMsg)
     // send it to the normal log destination
     wxLogDebug(szBuf);
 
-    #ifdef wxUSE_NOGUI
+    #if wxUSE_NOGUI
       Trap();
     #else
       strcat(szBuf, _("\nDo you want to stop the program?"

@@ -32,8 +32,8 @@ bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, c
 
     m_windowStyle = style;
 
-    SetParent(parent);
-
+    if (parent) parent->AddChild(this);
+    
     m_min = 0;
     m_max = 100;
 

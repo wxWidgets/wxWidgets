@@ -22,8 +22,6 @@
 
 #include "wx/defs.h"
 
-#define WINDOWS_PRINTING    (wxTheApp->GetPrintMode() == wxPRINT_WINDOWS)
-
 #ifndef WX_PRECOMP
 #include "wx/utils.h"
 #include "wx/dc.h"
@@ -295,8 +293,14 @@ wxGenericPrintSetupDialog::wxGenericPrintSetupDialog(wxWindow *parent, wxPrintSe
   orientationRadioBox->SetSelection(0);
 
   (void) new wxStaticBox(this, wxPRINTID_STATIC, _("Options"), wxPoint(10, 130), wxSize(200,50) );
+
+  int colourXPos = 145;
+
+#ifdef __WXMOTIF__
+  colourXPos = 150;
+#endif
   
-  colourCheckBox = new wxCheckBox(this, wxPRINTID_PRINTCOLOUR, _("Print in colour"), wxPoint(15, 145));
+  colourCheckBox = new wxCheckBox(this, wxPRINTID_PRINTCOLOUR, _("Print in colour"), wxPoint(15, colourXPos));
   
 
   (void) new wxStaticBox(this, wxPRINTID_STATIC, _("Print spooling"), wxPoint(230, 10), wxSize(200,170) );
@@ -367,6 +371,7 @@ bool wxGenericPrintSetupDialog::TransferDataFromWindow(void)
     if (!val.IsNull() && val != "")
       printData.SetPaperName((char *)(const char *)val);
   }
+  *wxThePrintSetupData = GetPrintData();
   return TRUE;
 }
 
@@ -389,7 +394,12 @@ wxChoice *wxGenericPrintSetupDialog::CreatePaperTypeChoice(int *x, int *y)
       sel = i;
   }
 
-  wxChoice *choice = new wxChoice(this, wxPRINTID_PAPERSIZE, wxPoint(*x, *y), wxSize(170, -1), n,
+  int width = 170;
+#ifdef __WXMOTIF__
+  width = 150;
+#endif
+
+  wxChoice *choice = new wxChoice(this, wxPRINTID_PAPERSIZE, wxPoint(*x, *y), wxSize(width, -1), n,
     choices);
     
   delete[] choices;
@@ -404,6 +414,22 @@ wxChoice *wxGenericPrintSetupDialog::CreatePaperTypeChoice(int *x, int *y)
 
 void wxGenericPageSetupDialog::OnPrinter(wxCommandEvent& WXUNUSED(event))
 {
+    // We no longer query GetPrintMode, so we can eliminate the need
+    // to call SetPrintMode.
+    // This has the limitation that we can't explicitly call the PostScript
+    // print setup dialog from the generic Page Setup dialog under Windows,
+    // but since this choice would only happen when trying to do PostScript
+    // printing under Windows (and only in 16-bit Windows which
+    // doesn't have a Windows-specific page setup dialog) it's worth it.
+
+    wxPrintData data;
+    data.SetSetupDialog(TRUE);
+    wxPrintDialog *printDialog = new wxPrintDialog(this, & data);
+    int ret = printDialog->ShowModal();
+
+    printDialog->Destroy();
+
+#if 0
   if (wxTheApp->GetPrintMode() == wxPRINT_POSTSCRIPT)
   {
     wxGenericPrintSetupDialog *genericPrintSetupDialog =
@@ -420,9 +446,11 @@ void wxGenericPageSetupDialog::OnPrinter(wxCommandEvent& WXUNUSED(event))
     wxPrintData data;
     data.SetSetupDialog(TRUE);
     wxPrintDialog printDialog(this, & data);
-    printDialog.Show(TRUE);
+    printDialog.ShowModal();
   }
 #endif
+#endif
+  // 0
 }
 
 wxGenericPageSetupDialog::wxGenericPageSetupDialog(wxWindow *parent, wxPageSetupData* data):
@@ -434,6 +462,10 @@ wxGenericPageSetupDialog::wxGenericPageSetupDialog(wxWindow *parent, wxPageSetup
   int buttonWidth = 75;
   int buttonHeight = 25;
   int spacing = 5;
+#ifdef __WXMOTIF__
+  spacing = 15;
+#endif
+
   int yPos = 5;
   int xPos = 5;
 
@@ -454,6 +486,10 @@ wxGenericPageSetupDialog::wxGenericPageSetupDialog(wxWindow *parent, wxPageSetup
   xPos = 5;
   yPos += 35;
 
+#ifdef __WXMOTIF__
+  yPos += 10;
+#endif
+
   paperTypeChoice = CreatePaperTypeChoice(&xPos, &yPos);
 
   xPos = 5;
@@ -469,6 +505,10 @@ wxGenericPageSetupDialog::wxGenericPageSetupDialog(wxWindow *parent, wxPageSetup
   yPos += 60;
 
   int staticWidth = 110;
+#ifdef __WXMOTIF__
+  staticWidth += 20;
+#endif
+
   int textWidth = 60;
   spacing = 10;
 
@@ -563,6 +603,7 @@ bool wxGenericPageSetupDialog::TransferDataFromWindow(void)
         }
     }
   }
+
   return TRUE;
 }
 

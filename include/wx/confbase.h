@@ -20,7 +20,7 @@
 
 #include "wx/defs.h"
 
-#ifdef wxUSE_CONFIG
+#if wxUSE_CONFIG
 
 #include "wx/string.h"
 

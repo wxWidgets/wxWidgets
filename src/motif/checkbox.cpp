@@ -14,6 +14,7 @@
 #endif
 
 #include "wx/checkbox.h"
+#include "wx/utils.h"
 
 #include <Xm/Label.h>
 #include <Xm/LabelG.h>
@@ -169,8 +170,13 @@ void wxCheckBox::ChangeBackgroundColour()
         XmNforeground, g_itemColors[wxFORE_INDEX].pixel,
         NULL);
     
+    int selectPixel = wxBLACK->AllocColour(wxGetDisplay());
+
+    // Better to have the checkbox selection in black, or it's
+    // hard to determine what state it is in.
     XtVaSetValues ((Widget) m_mainWidget,
-        XmNselectColor, g_itemColors[wxSELE_INDEX].pixel,
+   //        XmNselectColor, g_itemColors[wxSELE_INDEX].pixel,
+           XmNselectColor, selectPixel,
         NULL);
 }
 

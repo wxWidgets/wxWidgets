@@ -35,15 +35,18 @@ High Priority
   painting a tiled bitmap, then a slight flicker might be seen unless
   X can be persuaded not to repaint the window background by default.
 
+- wxRadioBox doesn't show up in the controls sample, though it's
+  OK on other dialogs (e.g. printing sample).
+
+- Word wrapping in wxStaticText: how?
+
 - wxSpinButton
 
 - Miscellaneous events.
 
-- Get wxGLCanvas from 1.68 working.
+- wxGLCanvas: cure bad flicker
 
 - Use wxImage to load other formats into wxBitmaps, such as PNG, BMP.
-
-- Printing dialogs need some tidying.
 
 Low Priority
 ------------

@@ -22,6 +22,7 @@
 #include <Xm/ToggleBG.h>
 #include <Xm/RowColumn.h>
 #include <Xm/Form.h>
+#include <Xm/Frame.h>
 
 #include <wx/motif/private.h>
 
@@ -41,6 +42,7 @@ wxRadioBox::wxRadioBox()
     m_majorDim = 0 ;
 
     m_formWidget = (WXWidget) 0;
+    m_frameWidget = (WXWidget) 0;
     m_labelWidget = (WXWidget) 0;
     m_radioButtons = (WXWidget*) NULL;
     m_radioButtonLabels = (wxString*) NULL;
@@ -54,6 +56,8 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
 {
     m_selectedButton = -1;
     m_noItems = n;
+    m_formWidget = (WXWidget) 0;
+    m_frameWidget = (WXWidget) 0;
     m_labelWidget = (WXWidget) 0;
     m_radioButtons = (WXWidget*) NULL;
     m_radioButtonLabels = (wxString*) NULL;
@@ -113,6 +117,15 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
         XmStringFree (text);
     }
 
+    Widget frameWidget = XtVaCreateManagedWidget ("frame",
+					xmFrameWidgetClass, formWidget,
+                                        XmNshadowType, XmSHADOW_IN,
+//					XmNmarginHeight, 0,
+//					XmNmarginWidth, 0,
+					NULL);
+
+    m_frameWidget = (WXWidget) frameWidget;
+
     Arg args[3];
 
     majorDim = (n + majorDim - 1) / majorDim;
@@ -121,7 +134,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
   	                                XmHORIZONTAL : XmVERTICAL));
     XtSetArg (args[1], XmNnumColumns, majorDim);
 
-    Widget radioBoxWidget = XmCreateRadioBox (formWidget, "radioBoxWidget", args, 2);
+    Widget radioBoxWidget = XmCreateRadioBox (frameWidget, "radioBoxWidget", args, 2);
     m_mainWidget = (WXWidget) radioBoxWidget;
 
 
@@ -137,6 +150,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
 		     XmNtopWidget, m_labelWidget ? (Widget) m_labelWidget : formWidget,
 		     XmNbottomAttachment, XmATTACH_FORM,
 		     XmNleftAttachment, XmATTACH_FORM,
+		     XmNrightAttachment, XmATTACH_FORM,
 		     NULL);
 
     //    if (style & wxFLAT)
@@ -166,6 +180,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
     m_windowFont = parent->GetFont();
     ChangeFont(FALSE);
 
+    //    XtManageChild((Widget) m_formWidget);
     XtManageChild (radioBoxWidget);
 
     SetCanAddEventHandler(TRUE);
@@ -339,6 +354,12 @@ void wxRadioBox::Enable(bool enable)
         XtSetSensitive ((Widget) m_radioButtons[i], (Boolean) enable);
 }
 
+bool wxRadioBox::Show(bool show)
+{
+    // TODO: show/hide all children
+    return wxControl::Show(show);
+}
+
 // Show a specific button
 void wxRadioBox::Show(int n, bool show)
 {
@@ -418,12 +439,20 @@ void wxRadioBox::ChangeBackgroundColour()
 {
     wxWindow::ChangeBackgroundColour();
 
+    DoChangeBackgroundColour((Widget) m_frameWidget, m_backgroundColour);
+
+    int selectPixel = wxBLACK->AllocColour(wxGetDisplay());
+
     int i;
     for (i = 0; i < m_noItems; i++)
     {
         WXWidget radioButton = m_radioButtons[i];
 
         DoChangeBackgroundColour(radioButton, m_backgroundColour, TRUE);
+
+        XtVaSetValues ((Widget) radioButton,
+          XmNselectColor, selectPixel,
+          NULL);
     }
 }
 

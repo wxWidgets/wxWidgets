@@ -611,6 +611,7 @@ void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
 
 void wxDialog::Fit()
 {
+    wxWindow::Fit();
 }
 
 // Handle a close event from the window manager

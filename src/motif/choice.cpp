@@ -112,7 +112,7 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
     m_mainWidget = m_buttonWidget;
     
     XtManageChild ((Widget) m_buttonWidget);
-    
+
     // New code from Roland Haenel (roland_haenel@ac.cybercity.de)
     // Some time ago, I reported a problem with wxChoice-items under
     // Linux and Motif 2.0 (they caused sporadic GPFs). Now it seems
@@ -120,14 +120,16 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 #if XmVersion >= 1002
 #if XmVersion <  2000
     Widget optionLabel = XmOptionLabelGadget ((Widget) m_buttonWidget);
-    XtUnmanageChild (optionLabel);
+    // JACS, 24/1/99: this seems to cause a malloc crash later on, e.g.
+    // in controls sample.
+    //    XtUnmanageChild (optionLabel);
 #endif
 #endif
-    
+
     XtVaSetValues((Widget) m_formWidget, XmNresizePolicy, XmRESIZE_NONE, NULL);
     
     ChangeFont(FALSE);
-    
+
     AttachWidget (parent, m_buttonWidget, m_formWidget, pos.x, pos.y, size.x, size.y);
     
     ChangeBackgroundColour();

@@ -22,8 +22,6 @@
 
 #include "wx/defs.h"
 
-#define WINDOWS_PRINTING    (wxTheApp->GetPrintMode() == wxPRINT_WINDOWS)
-
 #ifndef WX_PRECOMP
 #include "wx/utils.h"
 #include "wx/dc.h"

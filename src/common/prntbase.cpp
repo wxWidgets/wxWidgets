@@ -312,6 +312,7 @@ void wxPreviewControlBar::CreateButtons()
 {
   SetSize(0, 0, 400, 40);
 
+  /*
 #ifdef __WXMSW__
   int fontSize = 9;
 #else
@@ -320,6 +321,7 @@ void wxPreviewControlBar::CreateButtons()
 
   wxFont buttonFont(fontSize, wxSWISS, wxNORMAL, wxBOLD);
   SetFont(buttonFont);
+ */
 
   int buttonWidth = 65;
 #ifdef __WXGTK__
@@ -330,7 +332,12 @@ void wxPreviewControlBar::CreateButtons()
 
   int x = 5;
   int y = 5;
+
+#ifdef __WXMOTIF__
+  int gap = 15;
+#else
   int gap = 5;
+#endif
 
   m_closeButton = new wxButton(this, wxID_PREVIEW_CLOSE, _("Close"),
   	wxPoint(x, y), wxSize(buttonWidth, buttonHeight));
@@ -394,7 +401,7 @@ void wxPreviewControlBar::CreateButtons()
 
   delete[] choices;
 
-  m_closeButton->SetDefault();
+  //  m_closeButton->SetDefault();
 }
 
 void wxPreviewControlBar::SetZoomControl(int zoom)

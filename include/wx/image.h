@@ -28,7 +28,7 @@
 //-----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxImageHandler;
-#ifdef wxUSE_LIBPNG
+#if wxUSE_LIBPNG
 class WXDLLEXPORT wxPNGHandler;
 #endif
 class WXDLLEXPORT wxBMPHandler;
@@ -70,7 +70,7 @@ protected:
 // wxPNGHandler
 //-----------------------------------------------------------------------------
 
-#ifdef wxUSE_LIBPNG
+#if wxUSE_LIBPNG
 class WXDLLEXPORT wxPNGHandler: public wxImageHandler
 {
   DECLARE_DYNAMIC_CLASS(wxPNGHandler)

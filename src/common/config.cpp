@@ -25,7 +25,7 @@
 
 #include  <wx/confbase.h>
 
-#ifdef wxUSE_CONFIG
+#if wxUSE_CONFIG
 
 #ifdef    __BORLANDC__
   #pragma hdrstop

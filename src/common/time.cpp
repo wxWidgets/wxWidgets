@@ -27,7 +27,7 @@ seconds since January 1, 1901, GMT.
 
 #include "wx/setup.h"
 
-#ifdef wxUSE_TIMEDATE
+#if wxUSE_TIMEDATE
 
 #include "wx/time.h"
 #include "wx/date.h"

@@ -61,7 +61,7 @@ public:
   void Enable(bool enable);
   void Enable(int item, bool enable);
   void Show(int item, bool show) ;
-  bool Show(bool show) { return wxControl::Show(show); };
+  bool Show(bool show) ;
 
   virtual wxString GetStringSelection() const;
   virtual bool SetStringSelection(const wxString& s);
@@ -77,6 +77,7 @@ public:
   virtual void ChangeForegroundColour();
   WXWidget GetTopWidget() const { return m_formWidget; }
   WXWidget GetLabelWidget() const { return m_labelWidget; }
+  WXWidget GetFrameWidget() const { return m_frameWidget; }
   inline WXWidget* GetRadioButtons() const { return m_radioButtons; }
   inline void SetSel(int i) { m_selectedButton = i; }
 
@@ -88,6 +89,7 @@ protected:
 
   WXWidget          m_formWidget;
   WXWidget          m_labelWidget;
+  WXWidget          m_frameWidget;
   WXWidget*         m_radioButtons;
   wxString*         m_radioButtonLabels;
 };

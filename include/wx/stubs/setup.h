@@ -123,6 +123,9 @@
 #define wxUSE_STD_IOSTREAM  1
                                   // Use standard C++ streams if 1. If 0, use wxWin
                                   // streams implementation.
+
+#define wxUSE_SERIAL        0
+                                  // Use serialization
 /*
  * Finer detail
  *

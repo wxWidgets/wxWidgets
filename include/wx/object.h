@@ -101,7 +101,7 @@ public:
 
 WXDLLEXPORT wxObject* wxCreateDynamicObject(const char *name);
 
-#ifdef wxUSE_SERIAL
+#if wxUSE_SERIAL
 WXDLLEXPORT wxObject* wxCreateStoredObject( wxInputStream& stream );
 #endif
 
@@ -222,7 +222,7 @@ class WXDLLEXPORT wxObject
   virtual void Dump(ostream& str);
 #endif
 
-#ifdef wxUSE_SERIAL
+#if wxUSE_SERIAL
   virtual void StoreObject( wxObjectOutputStream &stream );
   virtual void LoadObject( wxObjectInputStream &stream );
 #endif
@@ -238,7 +238,7 @@ class WXDLLEXPORT wxObject
 
 protected:
   wxObjectRefData*      m_refData;
-#ifdef wxUSE_SERIAL
+#if wxUSE_SERIAL
   wxObject_Serialize*   m_serialObj;
 #endif
 };

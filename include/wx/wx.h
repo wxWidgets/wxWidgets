@@ -66,7 +66,7 @@
 #include "wx/cmndata.h"
 #include "wx/intl.h"
 #include "wx/valtext.h"
-#ifdef wxUSE_SERIAL
+#if wxUSE_SERIAL
 #include "wx/objstrm.h"
 #include "wx/serbase.h"
 #endif

@@ -262,7 +262,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
     "is one of my",
     "really",
     "wonderful",
-    "examples.",
+    "examples."
   };
 
 #ifdef USE_XPM
@@ -324,6 +324,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
 //  m_notebook->SetBackgroundColour("cadet blue");
 
   wxPanel *panel = (wxPanel*) NULL;
+
   panel = new wxPanel(m_notebook);
 //  panel->SetBackgroundColour("cadet blue");
 //  panel->SetForegroundColour("blue");
@@ -338,7 +339,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
 //  button->SetForegroundColour( "red" );
   m_checkbox = new wxCheckBox( panel, ID_LISTBOX_ENABLE, "Disable", wxPoint(20,130), wxSize(140,30) );
   m_checkbox->SetValue(FALSE);
-  m_notebook->AddPage(panel, "wxList", FALSE, Image_List);
+  m_notebook->AddPage(panel, "wxList", TRUE, Image_List);
 
   panel = new wxPanel(m_notebook);
 //  panel->SetBackgroundColour("cadet blue");
@@ -410,11 +411,19 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
 //  panel->SetBackgroundColour("cadet blue");
 //  panel->SetForegroundColour("blue");
   (void)new wxStaticBox( panel, -1, "wxGauge and wxSlider", wxPoint(10,10), wxSize(180,130) );
-  m_gauge = new wxGauge( panel, -1, 200, wxPoint(18,50), wxSize(155,-1) );
+  m_gauge = new wxGauge( panel, -1, 200, wxPoint(18,50), wxSize(155, 30) );
 //  m_gauge->SetBackgroundColour("wheat");
   m_slider = new wxSlider( panel, ID_SLIDER, 0, 0, 200, wxPoint(18,90), wxSize(155,-1) );
 //  m_slider->SetBackgroundColour("wheat");
   (void)new wxStaticBox( panel, -1, "Explanation", wxPoint(200,10), wxSize(290,130) );
+#ifdef __WXMOTIF__
+  // No wrapping text in wxStaticText yet :-(
+  (void)new wxStaticText( panel, -1,
+    "Drag the slider!",
+    wxPoint(208,30),
+    wxSize(210, -1)
+    );
+#else
   (void)new wxStaticText( panel, -1,
     "In order see the gauge (aka progress bar)\n"
     "control do something you have to drag the\n"
@@ -422,11 +431,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
     "\n"
     "This is also supposed to demonstrate how\n"
     "to use static controls.\n",
-    wxPoint(208,25)
-#ifdef __WXMSW__ 
-    ,wxSize(210, 110)
-#endif
+    wxPoint(208,25),
+    wxSize(210, 110)
     );
+#endif
   m_spintext = new wxTextCtrl( panel, -1, "0", wxPoint(20,160), wxSize(80,-1) );
 //  m_spintext->SetBackgroundColour("wheat");
   m_spinbutton = new wxSpinButton( panel, ID_SPIN, wxPoint(103,159), wxSize(-1,-1) );
