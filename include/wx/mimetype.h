@@ -81,10 +81,10 @@ class WXDLLEXPORT wxFileTypeInfo
 public:
     // ctors
         // a normal item
-    wxFileTypeInfo(const char *mimeType,
-                   const char *openCmd,
-                   const char *printCmd,
-                   const char *desc,
+    wxFileTypeInfo(const wxChar *mimeType,
+                   const wxChar *openCmd,
+                   const wxChar *printCmd,
+                   const wxChar *desc,
                    // the other parameters form a NULL terminated list of
                    // extensions
                    ...);

@@ -74,10 +74,10 @@
 // wxFileTypeInfo
 // ----------------------------------------------------------------------------
 
-wxFileTypeInfo::wxFileTypeInfo(const char *mimeType,
-                               const char *openCmd,
-                               const char *printCmd,
-                               const char *desc,
+wxFileTypeInfo::wxFileTypeInfo(const wxChar *mimeType,
+                               const wxChar *openCmd,
+                               const wxChar *printCmd,
+                               const wxChar *desc,
                                ...)
               : m_mimeType(mimeType),
                 m_openCmd(openCmd),
@@ -89,7 +89,7 @@ wxFileTypeInfo::wxFileTypeInfo(const char *mimeType,
 
     for ( ;; )
     {
-        const char *ext = va_arg(argptr, const char *);
+        const wxChar *ext = va_arg(argptr, const wxChar *);
         if ( !ext )
         {
             // NULL terminates the list
