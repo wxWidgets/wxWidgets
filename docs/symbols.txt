@@ -20,7 +20,7 @@ __NT__          Windows NT
 __WXCURSES__    CURSES
 __WXSTUBS__     Stubbed version ('template' wxWin implementation)
 
-In fact, they should better all start with __WX instead of __ only. 
+In fact, they should better all start with __WX instead of __ only.
 The only GUIs implemented for 2.0 are __WXGTK__, __WXMSW__ and __WXMOTIF__
 yet. Any new ones, please start the define with __WX.
 
@@ -59,6 +59,6 @@ __XLC__         ?? compiler
 wxWindows modes:
 ----------------
 
-__WXDEBUG__       usage: #ifdef __WXDEBUG__ (=> debug mode, else => release)
+__WXDEBUG__     usage: #ifdef __WXDEBUG__ (=> debug mode, else => release)
 WXDEBUG         usage: #if DEBUG (0: release, 1: minimal debug code, ...)
 

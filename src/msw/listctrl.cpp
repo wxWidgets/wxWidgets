@@ -1990,7 +1990,7 @@ static void wxConvertToMSWListItem(const wxListCtrl *ctrl, wxListItem& info, LV_
         }
         else
         {
-            lvItem.pszText = WXSTRINGCAST info.m_text;
+            lvItem.pszText = info.m_text;
             if ( lvItem.pszText )
                 lvItem.cchTextMax = info.m_text.Length();
             else
