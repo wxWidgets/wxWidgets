@@ -814,7 +814,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     sizer->Add( new wxButton(panel, -1, "Test Button &1" ), 3, wxALL, 10 );
     sizer->Add( 20,20, 1 );
-    sizer->Add( new wxButton(panel, -1, "Test Button &2" ), 3, wxGROW|wxALL, 10 );
+    sizer->Add( new wxButton(panel, -1, "Multiline\nbutton" ), 3, wxGROW|wxALL, 10 );
 
     panel->SetSizer( sizer );
 
