@@ -8757,28 +8757,21 @@ static void *SwigwxStyledTextEventTowxObject(void *ptr) {
     return (void *) dest;
 }
 
-#define new_wxStyledTextEvent(_swigarg0) (new wxStyledTextEvent(_swigarg0))
+#define new_wxStyledTextEvent(_swigarg0,_swigarg1) (new wxStyledTextEvent(_swigarg0,_swigarg1))
 static PyObject *_wrap_new_wxStyledTextEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxStyledTextEvent * _result;
-    wxStyledTextEvent * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "event", NULL };
+    wxEventType  _arg0 = (wxEventType ) 0;
+    int  _arg1 = (int ) 0;
+    char *_kwnames[] = { "commandType","id", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxStyledTextEvent",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|ii:new_wxStyledTextEvent",_kwnames,&_arg0,&_arg1)) 
         return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextEvent_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxStyledTextEvent. Expected _wxStyledTextEvent_p.");
-        return NULL;
-        }
-    }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxStyledTextEvent *)new_wxStyledTextEvent(*_arg0);
+        _result = (wxStyledTextEvent *)new_wxStyledTextEvent(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    if (_result) {
