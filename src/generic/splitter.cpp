@@ -582,6 +582,12 @@ bool wxSplitterWindow::DoSetSashPosition(int sashPos)
 
 void wxSplitterWindow::SetSashPositionAndNotify(int sashPos)
 {
+    // we must reset the request here, otherwise the sash would be stuck at
+    // old position if the user attempted to move the sash after invalid
+    // (e.g. smaller than minsize) sash position was requested using 
+    // SetSashPosition():
+    m_requestedSashPosition = INT_MAX;
+
     if ( DoSetSashPosition(sashPos) )
     {
         wxSplitterEvent event(wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED, this);
