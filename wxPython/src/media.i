@@ -76,16 +76,6 @@ public:
                 const wxValidator& ,
                 const wxString& ) { wxPyRaiseNotImplemented(); }
 
-//     wxMediaCtrl(wxWindow* ,
-//                 wxWindowID ,
-//                 const wxURI& ,
-//                 const wxPoint&,
-//                 const wxSize& ,
-//                 long style,
-//                 const wxString& ,
-//                 const wxValidator& ,
-//                 const wxString& ) { wxPyRaiseNotImplemented(); }
-
     bool Create(wxWindow* , wxWindowID ,
                 const wxString& ,
                 const wxPoint& ,
@@ -95,25 +85,12 @@ public:
                 const wxValidator& ,
                 const wxString& ) { return false; }
 
-//     bool Create(wxWindow* ,
-//                 wxWindowID ,
-//                 const wxURI& ,
-//                 const wxPoint&,
-//                 const wxSize& ,
-//                 long style,
-//                 const wxString& ,
-//                 const wxValidator& ,
-//                 const wxString& ) { return false; }
-    
     bool Play() { return false; }
     bool Pause() { return false; }
     bool Stop() { return false; }
 
     bool Load(const wxString& fileName) { return false; }
     bool Load(const wxURI& location) { return false; }
-
-    void Loop(bool bLoop = true) {}
-    bool IsLooped() { return false; }
 
     wxMediaState GetState() { return wxMEDIASTATE_STOPPED; }
 
@@ -185,38 +162,6 @@ public:
     
     %RenameCtor(PreMediaCtrl,  wxMediaCtrl());
 
-//     %extend {
-//         %RenameCtor(MediaCtrlFromURI, 
-//              wxMediaCtrl(wxWindow* parent,
-//                          wxWindowID id=-1,
-//                          const wxString& location=wxPyEmptyString,
-//                          const wxPoint& pos = wxDefaultPosition,
-//                          const wxSize& size = wxDefaultSize,
-//                          long style = 0,
-//                          const wxString& szBackend = wxPyEmptyString,
-//                          const wxValidator& validator = wxDefaultValidator,
-//                          const wxString& name = wxPyMediaCtrlNameStr))
-//         {
-//             return new wxMediaCtrl(parent, id, wxURI(location),
-//                                    pos, size, style, szBackend, validator, name);
-//         }
-
-//         bool CreateFromURI(wxWindow* parent,
-//                            wxWindowID id=-1,
-//                            const wxString& location=wxPyEmptyString,
-//                            const wxPoint& pos = wxDefaultPosition,
-//                            const wxSize& size = wxDefaultSize,
-//                            long style = 0,
-//                            const wxString& szBackend = wxPyEmptyString,
-//                            const wxValidator& validator = wxDefaultValidator,
-//                            const wxString& name = wxPyMediaCtrlNameStr)
-//         {
-//             return self->Create(parent, id, wxURI(location),
-//                                 pos, size, style, szBackend, validator, name);
-//         }
-//     }
-
-
     bool Create(wxWindow* parent,
                 wxWindowID id=-1,
                 const wxString& fileName = wxPyEmptyString,
@@ -238,9 +183,6 @@ public:
             return self->Load(wxURI(location));
         }
     }
-
-    void Loop(bool bLoop = true);
-    bool IsLooped();
 
     wxMediaState GetState();
 
