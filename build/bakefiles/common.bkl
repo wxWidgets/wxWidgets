@@ -477,6 +477,7 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
                     $(WXTOPDIR)src/msw/dummy.cpp
                 </precomp-headers-gen>
             </if>
+            <precomp-headers-location>$(WXTOPDIR)include</precomp-headers-location>
             <precomp-headers-header>wx/wxprec.h</precomp-headers-header>
             <precomp-headers>on</precomp-headers>
             <precomp-headers-file>wxprec_$(id)</precomp-headers-file>
