@@ -78,8 +78,8 @@ int g_WindowStylesGaugeCount = sizeof(g_WindowStylesGauge)/sizeof(wxWindowStyleP
 
   /* wxTextCtrl */
 static wxWindowStylePair g_WindowStylesTextCtrl[] = {
-  { "wxPASSWORD", wxPASSWORD},
-  { "wxPROCESS_ENTER", wxPROCESS_ENTER},
+//  { "wxPASSWORD", wxPASSWORD},
+//  { "wxPROCESS_ENTER", wxPROCESS_ENTER},
   { "wxTE_PASSWORD", wxTE_PASSWORD},
   { "wxTE_READONLY", wxTE_READONLY},
   { "wxTE_PROCESS_ENTER", wxTE_PROCESS_ENTER},
