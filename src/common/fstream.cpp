@@ -28,13 +28,24 @@
 // ----------------------------------------------------------------------------
 
 wxFileInputStream::wxFileInputStream(const wxString& fileName)
-  : wxFile(fileName, read)
+  : wxInputStream()
 {
+  m_file = new wxFile(fileName, wxFile::read);
+  m_file_destroy = TRUE;
   m_i_streambuf->SetBufferIO(1024);
+}
+
+wxFileInputStream::wxFileInputStream()
+  : wxInputStream()
+{
+  m_file_destroy = FALSE;
+  m_file = NULL;
 }
 
 wxFileInputStream::~wxFileInputStream()
 {
+  if (m_file_destroy)
+    delete m_file;
 }
 
 char wxFileInputStream::Peek()
@@ -44,17 +55,17 @@ char wxFileInputStream::Peek()
 
 size_t wxFileInputStream::DoRead(void *buffer, size_t size)
 {
-  return wxFile::Read(buffer, size);
+  return m_file->Read(buffer, size);
 }
 
 off_t wxFileInputStream::DoSeekInput(off_t pos, wxSeekMode mode)
 {
-  return wxFile::Seek(pos, mode);
+  return m_file->Seek(pos, mode);
 }
 
 off_t wxFileInputStream::DoTellInput() const
 {
-  return wxFile::Tell();
+  return m_file->Tell();
 }
 
 // ----------------------------------------------------------------------------
@@ -62,37 +73,49 @@ off_t wxFileInputStream::DoTellInput() const
 // ----------------------------------------------------------------------------
 
 wxFileOutputStream::wxFileOutputStream(const wxString& fileName)
- : wxFile(fileName, write)
+{
+  m_file = new wxFile(fileName, wxFile::write);
+  m_file_destroy = TRUE;
+  m_o_streambuf->SetBufferIO(1024);
+}
+
+wxFileOutputStream::wxFileOutputStream()
+  : wxOutputStream()
 {
   m_o_streambuf->SetBufferIO(1024);
+  m_file_destroy = FALSE;
+  m_file = NULL;
 }
 
 wxFileOutputStream::~wxFileOutputStream()
 {
-  Sync();
+  if (m_file_destroy) {
+    Sync();
+    delete m_file;
+  }
 }
 
 size_t wxFileOutputStream::DoWrite(const void *buffer, size_t size)
 {
-  size_t ret = wxFile::Write(buffer, size);
-  m_bad = wxFile::Error();
+  size_t ret = m_file->Write(buffer, size);
+  m_bad = m_file->Error();
   return ret;
 }
 
 off_t wxFileOutputStream::DoTellOutput() const
 {
-  return wxFile::Tell();
+  return m_file->Tell();
 }
 
 off_t wxFileOutputStream::DoSeekOutput(off_t pos, wxSeekMode mode)
 {
-  return wxFile::Seek(pos, mode);
+  return m_file->Seek(pos, mode);
 }
 
 void wxFileOutputStream::Sync()
 {
   wxOutputStream::Sync();
-  wxFile::Flush();
+  m_file->Flush();
 }
 
 // ----------------------------------------------------------------------------
@@ -100,10 +123,15 @@ void wxFileOutputStream::Sync()
 // ----------------------------------------------------------------------------
 
 wxFileStream::wxFileStream(const wxString& fileName)
-  : wxFile(fileName, read_write)
+  : wxFileInputStream(), wxFileOutputStream()
 {
+  m_file = new wxFile(fileName, wxFile::read_write);
+  // Reread the initial buffer.
+  m_i_streambuf->SetBufferIO(1024);
 }
 
 wxFileStream::~wxFileStream()
 {
+  Sync();
+  delete m_file;
 }

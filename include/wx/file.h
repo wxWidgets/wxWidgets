@@ -120,7 +120,7 @@ public:
   bool Error() const { return m_error; }
 
   // dtor closes the file if opened
-  virtual ~wxFile(); // Temporally virtual because of wxFileStream: I'll change back in a near future.
+  ~wxFile();
 
 private:
   // copy ctor and assignment operator are private because

@@ -16,26 +16,30 @@
 #include <wx/stream.h>
 #include <wx/file.h>
 
-class wxFileInputStream: public wxInputStream, virtual public wxFile {
+class wxFileStreamBase {
+protected:
+  wxFile *m_file;
+  bool m_file_destroy;
+};
+
+class wxFileInputStream: public wxInputStream, virtual public wxFileStreamBase {
  public:
   wxFileInputStream(const wxString& fileName);
   virtual ~wxFileInputStream();
 
   virtual char Peek();
 
-  virtual bool Eof() const { return wxFile::Eof(); }
-
-  bool Ok() const { return wxFile::IsOpened(); }
+  bool Ok() const { return m_file->IsOpened(); }
 
  protected:
-  wxFileInputStream() {}
+  wxFileInputStream();
 
   size_t DoRead(void *buffer, size_t size);
   off_t DoSeekInput(off_t pos, wxSeekMode mode);
   off_t DoTellInput() const;
 };
 
-class wxFileOutputStream: public wxOutputStream, virtual public wxFile {
+class wxFileOutputStream: public wxOutputStream, virtual public wxFileStreamBase {
  public:
   wxFileOutputStream(const wxString& fileName);
   virtual ~wxFileOutputStream();
@@ -46,10 +50,10 @@ class wxFileOutputStream: public wxOutputStream, virtual public wxFile {
 
   void Sync();
 
-  bool Ok() const { return wxFile::IsOpened(); }
+  bool Ok() const { return m_file->IsOpened(); }
 
  protected:
-  wxFileOutputStream() {}
+  wxFileOutputStream();
 
   size_t DoWrite(const void *buffer, size_t size);
   off_t DoSeekOutput(off_t pos, wxSeekMode mode);
