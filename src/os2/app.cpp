@@ -731,16 +731,33 @@ bool wxApp::ProcessMessage(
 
     //
     // Try translations first; find the youngest window with
-    // a translation table.
+    // a translation table. OS/2 has case sensative accels, so
+    // this block, coded by BK, removes that and helps make them
+    // case insensative.
     //
-#if 0
-    for (pWnd = pWndThis; pWnd; pWnd = pWnd->GetParent() )
+    if(pMsg->msg == WM_CHAR)
     {
-        if (pMsg->msg == WM_CHAR)
-            if (pWnd->OS2TranslateMessage(pWxmsg))
-                return TRUE;
+       PBYTE                        pChmsg = (PBYTE)&(pMsg->msg);
+       USHORT                       uSch  = CHARMSG(pChmsg)->chr;
+       bool                         bRc;
+
+       //
+       // Do not process keyup events
+       //
+       if(!(CHARMSG(pChmsg)->fs & KC_KEYUP))
+       {
+           if((CHARMSG(pChmsg)->fs & (KC_ALT | KC_CTRL)) && CHARMSG(pChmsg)->chr != 0)
+                CHARMSG(pChmsg)->chr = (USHORT)wxToupper((UCHAR)usch);
+
+            for(pWnd = pWndThis; pWnd; pWnd = pWnd->GetParent() )
+            {
+                if(pWnd->OS2TranslateMessage(pWxmsg))
+                    break;
+            }
+            if(!bRc)    // untranslated, should restore original value
+                CHARMSG(pChmsg)->chr = uSch;
+        }
     }
-#endif
     //
     // Anyone for a non-translation message? Try youngest descendants first.
     //
