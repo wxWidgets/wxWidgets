@@ -530,6 +530,16 @@ static bool wxHasRealChildren(const wxWindowBase* win)
     return (realChildCount > 0);
 }
 #endif
+    
+void wxWindowBase::InvalidateBestSize()
+{
+    m_bestSizeCache = wxDefaultSize;
+
+    // parent's best size calculation may depend on its children's
+    // best sizes, so let's invalidate it as well to be safe:
+    if (m_parent)
+        m_parent->InvalidateBestSize();
+}
 
 // return the size best suited for the current window
 wxSize wxWindowBase::DoGetBestSize() const

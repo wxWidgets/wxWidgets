@@ -317,7 +317,7 @@ public:
 
         // reset the cached best size value so it will be recalculated the
         // next time it is needed.
-    void InvalidateBestSize() { m_bestSizeCache = wxDefaultSize; }
+    void InvalidateBestSize();
     void CacheBestSize(const wxSize& size) const
         { wxConstCast(this, wxWindowBase)->m_bestSizeCache = size; }
 
