@@ -71,6 +71,7 @@ public:
   virtual wxStatusBar *OnCreateStatusBar( int number, long style, wxWindowID id,
     const wxString& name );
   virtual wxStatusBar *GetStatusBar() const;
+  inline void SetStatusBar(wxStatusBar *statusBar) { m_frameStatusBar = statusBar; }
   virtual void SetStatusText( const wxString &text, int number = 0 );
   virtual void SetStatusWidths( int n, const int widths_field[] );
 
@@ -78,6 +79,7 @@ public:
                                     const wxString& name = wxToolBarNameStr);
   virtual wxToolBar *OnCreateToolBar( long style, wxWindowID id, const wxString& name );
   virtual wxToolBar *GetToolBar(void) const;
+  inline void SetToolBar(wxToolBar *toolbar) { m_frameToolBar = toolbar; }
 
   virtual void SetMenuBar( wxMenuBar *menuBar );
   virtual wxMenuBar *GetMenuBar() const;
