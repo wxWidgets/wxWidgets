@@ -49,7 +49,8 @@ public:
     inline int GetThumbSize() const { return m_pageSize; }
     inline int GetPageSize() const { return m_viewSize; }
     inline int GetRange() const { return m_objectSize; }
-    
+    inline bool IsVertical() const { return FALSE; }
+
     virtual void SetThumbPosition(int viewStart);
     virtual void SetScrollbar(int position, int thumbSize, int range, int pageSize,
         bool refresh = TRUE);
