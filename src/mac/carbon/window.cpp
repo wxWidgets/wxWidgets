@@ -2253,6 +2253,13 @@ void wxWindowMac::OnEraseBackground(wxEraseEvent& event)
     {
         event.Skip() ;
     }
+    else if ( m_macBackgroundBrush.MacGetBrushKind() == kwxMacBrushTheme )
+    {
+        if ( wxTheApp->MacGetCurrentEvent() != NULL && wxTheApp->MacGetCurrentEventHandlerCallRef() != NULL )
+        {
+            CallNextEventHandler((EventHandlerCallRef)wxTheApp->MacGetCurrentEventHandlerCallRef() , (EventRef) wxTheApp->MacGetCurrentEvent() ) ;
+        }
+    }
     else
 #endif
     {
@@ -3232,9 +3239,14 @@ void wxWindowMac::OnMouseEvent( wxMouseEvent &event )
 
 void wxWindowMac::OnPaint( wxPaintEvent & event )
 {
-    if ( wxTheApp->MacGetCurrentEvent() != NULL && wxTheApp->MacGetCurrentEventHandlerCallRef() != NULL )
+    // in the other case we already have drawn from the OnEraseBackground Handler
+    if ( !m_macBackgroundBrush.Ok() || m_macBackgroundBrush.GetStyle() == wxTRANSPARENT || 
+        m_macBackgroundBrush.MacGetBrushKind() != kwxMacBrushTheme )
     {
-        CallNextEventHandler((EventHandlerCallRef)wxTheApp->MacGetCurrentEventHandlerCallRef() , (EventRef) wxTheApp->MacGetCurrentEvent() ) ;
+        if ( wxTheApp->MacGetCurrentEvent() != NULL && wxTheApp->MacGetCurrentEventHandlerCallRef() != NULL )
+        {
+            CallNextEventHandler((EventHandlerCallRef)wxTheApp->MacGetCurrentEventHandlerCallRef() , (EventRef) wxTheApp->MacGetCurrentEvent() ) ;
+        }
     }
 }
 
