@@ -116,7 +116,7 @@ private:
     // terminate the current radio group, if any
     void EndRadioGroup();
 
-    // if TRUE, insert a breal before appending the next item
+    // if true, insert a breal before appending the next item
     bool m_doBreak;
 
     // the position of the first item in the current radio group or -1
@@ -143,7 +143,7 @@ public :
     wxMenuInfo() { m_menu = NULL ; }
     virtual ~wxMenuInfo() { }
 
-    void Create( wxMenu *menu , const wxString &title ) 
+    void Create( wxMenu *menu , const wxString &title )
     { m_menu = menu ; m_title = title ; }
     wxMenu* GetMenu() const { return m_menu ; }
     wxString GetTitle() const { return m_title ; }
@@ -159,7 +159,7 @@ WX_DECLARE_EXPORTED_LIST(wxMenuInfo, wxMenuInfoList );
 class WXDLLEXPORT wxMenuBar : public wxMenuBarBase
 {
 public:
-    // ctors & dtor 
+    // ctors & dtor
         // default constructor
     wxMenuBar();
         // unused under MSW

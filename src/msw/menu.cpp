@@ -106,7 +106,7 @@ UINT GetMenuState(HMENU hMenu, UINT id, UINT flags)
     wxZeroMemory(info);
     info.cbSize = sizeof(info);
     info.fMask = MIIM_STATE;
-    if ( !GetMenuItemInfo(hMenu, id, flags & MF_BYCOMMAND ? FALSE : TRUE, & info) )
+    if ( !::GetMenuItemInfo(hMenu, id, flags & MF_BYCOMMAND ? FALSE : TRUE, & info) )
         wxLogLastError(wxT("GetMenuItemInfo"));
     return info.fState;
 }
@@ -173,7 +173,7 @@ wxEND_PROPERTIES_TABLE()
 wxBEGIN_HANDLERS_TABLE(wxMenuInfo)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_2( wxMenuInfo , wxMenu* , Menu , wxString , Title ) 
+wxCONSTRUCTOR_2( wxMenuInfo , wxMenu* , Menu , wxString , Title )
 
 wxCOLLECTION_TYPE_INFO( wxMenuInfo * , wxMenuInfoList ) ;
 
@@ -217,7 +217,7 @@ const wxMenuInfoList& wxMenuBar::GetMenuInfos() const
 // Construct a menu with optional title (then use append)
 void wxMenu::Init()
 {
-    m_doBreak = FALSE;
+    m_doBreak = false;
     m_startRadioGroup = -1;
 
     // create the menu
@@ -228,7 +228,7 @@ void wxMenu::Init()
     }
 
     // if we have a title, insert it in the beginning of the menu
-    if ( !!m_title )
+    if ( !m_title.IsEmpty() )
     {
         Append(idMenuTitle, m_title);
         AppendSeparator();
@@ -258,7 +258,7 @@ wxMenu::~wxMenu()
 void wxMenu::Break()
 {
     // this will take effect during the next call to Append()
-    m_doBreak = TRUE;
+    m_doBreak = true;
 }
 
 void wxMenu::Attach(wxMenuBarBase *menubar)
@@ -345,7 +345,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     // (and don't forget to reset the flag)
     if ( m_doBreak ) {
         flags |= MF_MENUBREAK;
-        m_doBreak = FALSE;
+        m_doBreak = false;
     }
 
     if ( pItem->IsSeparator() ) {
@@ -409,7 +409,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     {
         wxLogLastError(wxT("Insert or AppendMenu"));
 
-        return FALSE;
+        return false;
     }
 
     // if we just appended the title, highlight it
@@ -427,7 +427,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
         GetMenuBar()->Refresh();
     }
 
-    return TRUE;
+    return true;
 }
 
 void wxMenu::EndRadioGroup()
@@ -440,7 +440,7 @@ wxMenuItem* wxMenu::DoAppend(wxMenuItem *item)
 {
     wxCHECK_MSG( item, NULL, _T("NULL item in wxMenu::DoAppend") );
 
-    bool check = FALSE;
+    bool check = false;
 
     if ( item->GetKind() == wxITEM_RADIO )
     {
@@ -456,7 +456,7 @@ wxMenuItem* wxMenu::DoAppend(wxMenuItem *item)
             item->SetRadioGroupEnd(m_startRadioGroup);
 
             // ensure that we have a checked item in the radio group
-            check = TRUE;
+            check = true;
         }
         else // extend the current radio group
         {
@@ -487,7 +487,7 @@ wxMenuItem* wxMenu::DoAppend(wxMenuItem *item)
     if ( check )
     {
         // check the item initially
-        item->Check(TRUE);
+        item->Check(true);
     }
 
     return item;
@@ -654,7 +654,7 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id)
         SendEvent(id, menuState & MF_CHECKED);
     }
 
-    return TRUE;
+    return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -733,7 +733,7 @@ wxMenuBar::~wxMenuBar()
         m_commandBar = (WXHWND) NULL;
 #else
         ::DestroyMenu((HMENU)m_hMenu);
-#endif        
+#endif
         m_hMenu = (WXHMENU)NULL;
     }
 #endif
@@ -777,12 +777,12 @@ WXHMENU wxMenuBar::Create()
     HMENU hMenu = (HMENU)::SendMessage(hCommandBar, SHCMBM_GETMENU, (WPARAM)0, (LPARAM)0);
     if (hMenu)
     {
-        TBBUTTON tbButton; 
+        TBBUTTON tbButton;
         memset(&tbButton, 0, sizeof(TBBUTTON));
         tbButton.iBitmap = I_IMAGENONE;
         tbButton.fsState = TBSTATE_ENABLED;
         tbButton.fsStyle = TBSTYLE_DROPDOWN | TBSTYLE_NO_DROPDOWN_ARROW | TBSTYLE_AUTOSIZE;
-        
+
         size_t i;
         for (i = 0; i < GetMenuCount(); i++)
         {
@@ -792,7 +792,7 @@ WXHMENU wxMenuBar::Create()
             tbButton.iString = (int) label.c_str();
 
             int position = i;
-            
+
             tbButton.idCommand = NewControlId();
             if (!::SendMessage(hCommandBar, TB_INSERTBUTTON, position, (LPARAM)&tbButton))
             {
@@ -923,7 +923,7 @@ void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
     {
         wxLogLastError(wxT("SetMenuItemInfo"));
     }
-    
+
 #else
     if ( ::ModifyMenu(GetHmenu(), mswpos, MF_BYPOSITION | MF_STRING | flagsOld,
         id, label) == (int)0xFFFFFFFF )
@@ -996,7 +996,7 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
         :   MSWPositionForWxMenu(GetMenu(pos),pos);
 
     if ( !wxMenuBarBase::Insert(pos, menu, title) )
-        return FALSE;
+        return false;
 
     m_titles.Insert(title, pos);
 
@@ -1004,23 +1004,23 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
     {
 #if defined(WINCE_WITHOUT_COMMANDAR)
         if (!GetToolBar())
-            return FALSE;
-        TBBUTTON tbButton; 
+            return false;
+        TBBUTTON tbButton;
         memset(&tbButton, 0, sizeof(TBBUTTON));
         tbButton.iBitmap = I_IMAGENONE;
         tbButton.fsState = TBSTATE_ENABLED;
         tbButton.fsStyle = TBSTYLE_DROPDOWN | TBSTYLE_NO_DROPDOWN_ARROW | TBSTYLE_AUTOSIZE;
-        
+
         HMENU hPopupMenu = (HMENU) menu->GetHMenu() ;
         tbButton.dwData = (DWORD)hPopupMenu;
         wxString label = wxStripMenuCodes(title);
         tbButton.iString = (int) label.c_str();
-            
+
         tbButton.idCommand = NewControlId();
         if (!::SendMessage((HWND) GetToolBar()->GetHWND(), TB_INSERTBUTTON, pos, (LPARAM)&tbButton))
         {
             wxLogLastError(wxT("TB_INSERTBUTTON"));
-            return FALSE;
+            return false;
         }
 #else
         if ( !::InsertMenu(GetHmenu(), mswpos,
@@ -1041,16 +1041,16 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
         Refresh();
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
 {
     WXHMENU submenu = menu ? menu->GetHMenu() : 0;
-    wxCHECK_MSG( submenu, FALSE, wxT("can't append invalid menu to menubar") );
+    wxCHECK_MSG( submenu, false, wxT("can't append invalid menu to menubar") );
 
     if ( !wxMenuBarBase::Append(menu, title) )
-        return FALSE;
+        return false;
 
     m_titles.Add(title);
 
@@ -1058,24 +1058,24 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
     {
 #if defined(WINCE_WITHOUT_COMMANDAR)
         if (!GetToolBar())
-            return FALSE;
-        TBBUTTON tbButton; 
+            return false;
+        TBBUTTON tbButton;
         memset(&tbButton, 0, sizeof(TBBUTTON));
         tbButton.iBitmap = I_IMAGENONE;
         tbButton.fsState = TBSTATE_ENABLED;
         tbButton.fsStyle = TBSTYLE_DROPDOWN | TBSTYLE_NO_DROPDOWN_ARROW | TBSTYLE_AUTOSIZE;
-        
+
         size_t pos = GetMenuCount();
         HMENU hPopupMenu = (HMENU) menu->GetHMenu() ;
         tbButton.dwData = (DWORD)hPopupMenu;
         wxString label = wxStripMenuCodes(title);
         tbButton.iString = (int) label.c_str();
-            
+
         tbButton.idCommand = NewControlId();
         if (!::SendMessage((HWND) GetToolBar()->GetHWND(), TB_INSERTBUTTON, pos, (LPARAM)&tbButton))
         {
             wxLogLastError(wxT("TB_INSERTBUTTON"));
-            return FALSE;
+            return false;
         }
 #else
         if ( !::AppendMenu(GetHmenu(), MF_POPUP | MF_STRING,
@@ -1096,7 +1096,7 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
         Refresh();
     }
 
-    return TRUE;
+    return true;
 }
 
 wxMenu *wxMenuBar::Remove(size_t pos)

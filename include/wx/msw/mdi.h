@@ -106,7 +106,7 @@ protected:
     wxMDIChildFrame *               m_currentChild;
     wxMenu*                         m_windowMenu;
 
-    // TRUE if MDI Frame is intercepting commands, not child
+    // true if MDI Frame is intercepting commands, not child
     bool m_parentFrameActive;
 
 private:
@@ -148,10 +148,10 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
 
-    virtual bool IsTopLevel() const { return FALSE; }
+    virtual bool IsTopLevel() const { return false; }
 
     // MDI operations
-    virtual void Maximize(bool maximize = TRUE);
+    virtual void Maximize(bool maximize = true);
     virtual void Restore();
     virtual void Activate();
 
@@ -178,7 +178,7 @@ protected:
     virtual void DoGetPosition(int *x, int *y) const;
     virtual void DoSetClientSize(int width, int height);
     virtual void InternalSetMenuBar();
-    virtual bool IsMDIChild() const { return TRUE; }
+    virtual bool IsMDIChild() const { return true; }
 
     virtual WXHICON GetDefaultIcon() const;
 

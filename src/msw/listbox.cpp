@@ -127,7 +127,7 @@ public:
     wxListBoxItem(const wxString& str = wxEmptyString);
 };
 
-wxListBoxItem::wxListBoxItem(const wxString& str) : wxOwnerDrawn(str, FALSE)
+wxListBoxItem::wxListBoxItem(const wxString& str) : wxOwnerDrawn(str, false)
 {
     // no bitmaps/checkmarks
     SetMarginWidth(0);
@@ -408,10 +408,10 @@ void wxListBox::SetSelection(int N, bool select)
 
 bool wxListBox::IsSelected(int N) const
 {
-    wxCHECK_MSG( N >= 0 && N < m_noItems, FALSE,
+    wxCHECK_MSG( N >= 0 && N < m_noItems, false,
                  wxT("invalid index in wxListBox::Selected") );
 
-    return SendMessage(GetHwnd(), LB_GETSEL, N, 0) == 0 ? FALSE : TRUE;
+    return SendMessage(GetHwnd(), LB_GETSEL, N, 0) == 0 ? false : true;
 }
 
 wxClientData* wxListBox::DoGetItemClientObject(int n) const
@@ -716,7 +716,7 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
     else
     {
         // some event we're not interested in
-        return FALSE;
+        return false;
     }
 
     wxCommandEvent event(evtType, m_windowId);
@@ -732,7 +732,7 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
             event.SetClientData( GetClientData(n) );
 
         event.SetString( GetString(n) );
-        event.SetExtraLong( HasMultipleSelection() ? IsSelected(n) : TRUE );
+        event.SetExtraLong( HasMultipleSelection() ? IsSelected(n) : true );
     }
 
     event.m_commandInt = n;
@@ -761,7 +761,7 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 bool wxListBox::MSWOnMeasure(WXMEASUREITEMSTRUCT *item)
 {
     // only owner-drawn control should receive this message
-    wxCHECK( ((m_windowStyle & wxLB_OWNERDRAW) == wxLB_OWNERDRAW), FALSE );
+    wxCHECK( ((m_windowStyle & wxLB_OWNERDRAW) == wxLB_OWNERDRAW), false );
 
     MEASUREITEMSTRUCT *pStruct = (MEASUREITEMSTRUCT *)item;
 
@@ -782,25 +782,25 @@ bool wxListBox::MSWOnMeasure(WXMEASUREITEMSTRUCT *item)
 
     DeleteDC(hdc);
 
-    return TRUE;
+    return true;
 }
 
 // forward the message to the appropriate item
 bool wxListBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
 {
     // only owner-drawn control should receive this message
-    wxCHECK( ((m_windowStyle & wxLB_OWNERDRAW) == wxLB_OWNERDRAW), FALSE );
+    wxCHECK( ((m_windowStyle & wxLB_OWNERDRAW) == wxLB_OWNERDRAW), false );
 
     DRAWITEMSTRUCT *pStruct = (DRAWITEMSTRUCT *)item;
     UINT itemID = pStruct->itemID;
 
     // the item may be -1 for an empty listbox
     if ( itemID == (UINT)-1 )
-        return FALSE;
+        return false;
 
     long data = ListBox_GetItemData(GetHwnd(), pStruct->itemID);
 
-    wxCHECK( data && (data != LB_ERR), FALSE );
+    wxCHECK( data && (data != LB_ERR), false );
 
     wxListBoxItem *pItem = (wxListBoxItem *)data;
 

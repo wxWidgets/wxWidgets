@@ -92,24 +92,24 @@ bool wxMenuItemStreamingCallback( const wxObject *object, wxWriter * , wxPersist
 }
 
 wxBEGIN_ENUM( wxItemKind )
-    wxENUM_MEMBER( wxITEM_SEPARATOR ) 
-    wxENUM_MEMBER( wxITEM_NORMAL ) 
-    wxENUM_MEMBER( wxITEM_CHECK ) 
-    wxENUM_MEMBER( wxITEM_RADIO ) 
+    wxENUM_MEMBER( wxITEM_SEPARATOR )
+    wxENUM_MEMBER( wxITEM_NORMAL )
+    wxENUM_MEMBER( wxITEM_CHECK )
+    wxENUM_MEMBER( wxITEM_RADIO )
 wxEND_ENUM( wxItemKind )
 
 IMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxMenuItem, wxObject,"wx/menuitem.h",wxMenuItemStreamingCallback)
 
 wxBEGIN_PROPERTIES_TABLE(wxMenuItem)
-	wxPROPERTY( Parent,wxMenu*, SetMenu, GetMenu, EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-	wxPROPERTY( Id,int, SetId, GetId, EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+    wxPROPERTY( Parent,wxMenu*, SetMenu, GetMenu, EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+    wxPROPERTY( Id,int, SetId, GetId, EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
     wxPROPERTY( Text, wxString , SetText, GetText, wxString(), 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
     wxPROPERTY( Help, wxString , SetHelp, GetHelp, wxString(), 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
     wxREADONLY_PROPERTY( Kind, wxItemKind , GetKind , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-	wxPROPERTY( SubMenu,wxMenu*, SetSubMenu, GetSubMenu, EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-	wxPROPERTY( Enabled , bool , Enable , IsEnabled , wxxVariant((bool)true) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-	wxPROPERTY( Checked , bool , Check , IsChecked , wxxVariant((bool)false) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-	wxPROPERTY( Checkable , bool , SetCheckable , IsCheckable , wxxVariant((bool)false) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    wxPROPERTY( SubMenu,wxMenu*, SetSubMenu, GetSubMenu, EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+    wxPROPERTY( Enabled , bool , Enable , IsEnabled , wxxVariant((bool)true) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    wxPROPERTY( Checked , bool , Check , IsChecked , wxxVariant((bool)false) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    wxPROPERTY( Checkable , bool , SetCheckable , IsCheckable , wxxVariant((bool)false) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxMenuItem)
@@ -159,7 +159,7 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu,
 void wxMenuItem::Init()
 {
     m_radioGroup.start = -1;
-    m_isRadioGroupStart = FALSE;
+    m_isRadioGroupStart = false;
 
 #if  wxUSE_OWNER_DRAWN
     // set default menu colors
@@ -196,7 +196,7 @@ int wxMenuItem::GetRealId() const
 
 bool wxMenuItem::IsChecked() const
 {
-    // fix that RTTI is always getting the correct state (separators cannot be checked, but the call below 
+    // fix that RTTI is always getting the correct state (separators cannot be checked, but the call below
     // returns true
     if ( GetId() == wxID_SEPARATOR )
         return false ;
@@ -217,7 +217,7 @@ wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
 
 void wxMenuItem::SetAsRadioGroupStart()
 {
-    m_isRadioGroupStart = TRUE;
+    m_isRadioGroupStart = true;
 }
 
 void wxMenuItem::SetRadioGroupStart(int start)
@@ -318,7 +318,7 @@ void wxMenuItem::Check(bool check)
         {
             if ( n != pos )
             {
-                node->GetData()->m_isChecked = FALSE;
+                node->GetData()->m_isChecked = false;
             }
 
             node = node->GetNext();
@@ -401,7 +401,7 @@ void wxMenuItem::SetText(const wxString& text)
         info.fType = MFT_STRING;
         info.cch = text.Length();
         info.dwTypeData = (LPTSTR) data ;
-        if ( !SetMenuItemInfo(hMenu, id, FALSE, & info) )
+        if ( !::SetMenuItemInfo(hMenu, id, FALSE, & info) )
         {
             wxLogLastError(wxT("SetMenuItemInfo"));
         }

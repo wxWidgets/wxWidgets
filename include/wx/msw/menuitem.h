@@ -47,8 +47,8 @@ public:
     virtual void SetText(const wxString& strName);
     virtual void SetCheckable(bool checkable);
 
-    virtual void Enable(bool bDoEnable = TRUE);
-    virtual void Check(bool bDoCheck = TRUE);
+    virtual void Enable(bool bDoEnable = true);
+    virtual void Check(bool bDoCheck = true);
     virtual bool IsChecked() const;
 
     // unfortunately needed to resolve ambiguity between
@@ -79,7 +79,7 @@ private:
 
     // the positions of the first and last items of the radio group this item
     // belongs to or -1: start is the radio group start and is valid for all
-    // but first radio group items (m_isRadioGroupStart == FALSE), end is valid
+    // but first radio group items (m_isRadioGroupStart == false), end is valid
     // only for the first one
     union
     {

@@ -131,8 +131,8 @@ DllMain(HANDLE hModule, DWORD fdwReason, LPVOID WXUNUSED(lpReserved))
             break;
     }
 #else
-	(void)hModule;
-	(void)fdwReason;
+    (void)hModule;
+    (void)fdwReason;
 #endif // !WXMAKINGDLL
 
     return TRUE;

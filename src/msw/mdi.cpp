@@ -203,7 +203,7 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
   if ( parent )
       parent->AddChild(this);
 
-  if ( id > -1 )
+  if ( id != wxID_ANY )
     m_windowId = id;
   else
     m_windowId = NewControlId();
@@ -655,7 +655,7 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
   SetName(name);
   wxWindowBase::Show(true); // MDI child frame starts off shown
 
-  if ( id > -1 )
+  if ( id != wxID_ANY )
     m_windowId = id;
   else
     m_windowId = (int)NewControlId();
@@ -677,22 +677,22 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
                     : wxMDIChildFrameClassNameNoRedraw;
   mcs.szTitle = title;
   mcs.hOwner = wxGetInstance();
-  if (x > -1)
+  if (x != wxDefaultCoord)
       mcs.x = x;
   else
       mcs.x = CW_USEDEFAULT;
 
-  if (y > -1)
+  if (y != wxDefaultCoord)
       mcs.y = y;
   else
       mcs.y = CW_USEDEFAULT;
 
-  if (width > -1)
+  if (width != wxDefaultCoord)
       mcs.cx = width;
   else
       mcs.cx = CW_USEDEFAULT;
 
-  if (height > -1)
+  if (height != wxDefaultCoord)
       mcs.cy = height;
   else
       mcs.cy = CW_USEDEFAULT;

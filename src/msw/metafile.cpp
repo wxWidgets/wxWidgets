@@ -105,17 +105,17 @@ wxMetafile::~wxMetafile()
 bool wxMetafile::SetClipboard(int width, int height)
 {
 #if !wxUSE_CLIPBOARD
-    return FALSE;
+    return false;
 #else
     if (!m_refData)
-        return FALSE;
+        return false;
 
     bool alreadyOpen = wxClipboardOpen();
     if (!alreadyOpen)
     {
         wxOpenClipboard();
         if (!wxEmptyClipboard())
-            return FALSE;
+            return false;
     }
     bool success = wxSetClipboardData(wxDF_METAFILE, this, width,height);
     if (!alreadyOpen)
@@ -128,7 +128,7 @@ bool wxMetafile::SetClipboard(int width, int height)
 bool wxMetafile::Play(wxDC *dc)
 {
     if (!m_refData)
-        return FALSE;
+        return false;
 
     dc->BeginDrawing();
 
@@ -143,7 +143,7 @@ bool wxMetafile::Play(wxDC *dc)
 
     dc->EndDrawing();
 
-    return TRUE;
+    return true;
 }
 
 void wxMetafile::SetHMETAFILE(WXHANDLE mf)
@@ -201,11 +201,11 @@ wxMetafileDC::wxMetafileDC(const wxString& file, int xext, int yext, int xorg, i
     m_minY = 10000;
     m_maxX = -10000;
     m_maxY = -10000;
-    if ( !!file && wxFileExists(file))
+    if ( !file.IsEmpty() && wxFileExists(file))
         wxRemoveFile(file);
     m_hDC = (WXHDC) CreateMetaFile(file);
 
-    m_ok = TRUE;
+    m_ok = true;
 
     ::SetWindowOrgEx((HDC) m_hDC,xorg,yorg, NULL);
     ::SetWindowExtEx((HDC) m_hDC,xext,yext, NULL);
@@ -351,7 +351,7 @@ struct mfPLACEABLEHEADER {
 
 bool wxMakeMetafilePlaceable(const wxString& filename, float scale)
 {
-  return wxMakeMetafilePlaceable(filename, 0, 0, 0, 0, scale, FALSE);
+    return wxMakeMetafilePlaceable(filename, 0, 0, 0, 0, scale, false);
 }
 
 bool wxMakeMetafilePlaceable(const wxString& filename, int x1, int y1, int x2, int y2, float scale, bool useOriginAndExtent)
@@ -378,13 +378,13 @@ bool wxMakeMetafilePlaceable(const wxString& filename, int x1, int y1, int x2, i
         pMFHead ->checksum ^= *p;
 
     FILE *fd = wxFopen(filename.fn_str(), _T("rb"));
-    if (!fd) return FALSE;
+    if (!fd) return false;
 
     wxChar tempFileBuf[256];
     wxGetTempFileName(wxT("mf"), tempFileBuf);
     FILE *fHandle = wxFopen(wxFNCONV(tempFileBuf), _T("wb"));
     if (!fHandle)
-        return FALSE;
+        return false;
     fwrite((void *)&header, sizeof(unsigned char), sizeof(mfPLACEABLEHEADER), fHandle);
 
     // Calculate origin and extent
@@ -449,7 +449,7 @@ bool wxMakeMetafilePlaceable(const wxString& filename, int x1, int y1, int x2, i
     wxRemoveFile(filename);
     wxCopyFile(tempFileBuf, filename);
     wxRemoveFile(tempFileBuf);
-    return TRUE;
+    return true;
 }
 
 
@@ -469,7 +469,7 @@ bool wxMetafileDataObject::GetDataHere(void *buf) const
     METAFILEPICT *mfpict = (METAFILEPICT *)buf;
     const wxMetafile& mf = GetMetafile();
 
-    wxCHECK_MSG( mf.GetHMETAFILE(), FALSE, _T("copying invalid metafile") );
+    wxCHECK_MSG( mf.GetHMETAFILE(), false, _T("copying invalid metafile") );
 
     // doesn't seem to work with any other mapping mode...
     mfpict->mm   = MM_ANISOTROPIC; //mf.GetWindowsMappingMode();
@@ -482,7 +482,7 @@ bool wxMetafileDataObject::GetDataHere(void *buf) const
 
     mfpict->hMF  = CopyMetaFile((HMETAFILE)mf.GetHMETAFILE(), NULL);
 
-    return TRUE;
+    return true;
 }
 
 bool wxMetafileDataObject::SetData(size_t WXUNUSED(len), const void *buf)
@@ -505,11 +505,11 @@ bool wxMetafileDataObject::SetData(size_t WXUNUSED(len), const void *buf)
     mf.SetHeight(h);
     mf.SetHMETAFILE((WXHANDLE)mfpict->hMF);
 
-    wxCHECK_MSG( mfpict->hMF, FALSE, _T("pasting invalid metafile") );
+    wxCHECK_MSG( mfpict->hMF, false, _T("pasting invalid metafile") );
 
     SetMetafile(mf);
 
-    return TRUE;
+    return true;
 }
 
 #endif // wxUSE_DRAG_AND_DROP

@@ -33,7 +33,7 @@ HCURSOR SetCursor(HCURSOR hCursor);
 int GetScrollPosWX (HWND hWnd, int iSBar);
 
 BOOL ScrollWindow(HWND, int xAmount, int yAmount,
-			     CONST RECT* lpRect, CONST RECT* lpClipRect);
+                 CONST RECT* lpRect, CONST RECT* lpClipRect);
 
 HWND WindowFromPoint(POINT pt);
 SHORT GetKeyState(int nVirtKey);
@@ -51,7 +51,7 @@ COLORREF GetTextColor(HDC hdc);
 COLORREF GetBkColor(HDC hdc);
 HPALETTE SelectPalette(HDC hdc, HPALETTE hPalette, BOOL b);
 BOOL IntersectClipRect(HDC hdc, int x, int y,
-		       int w, int h);
+               int w, int h);
 BOOL GetClipBox(HDC hdc, RECT* rect);
 BOOL DrawIconEx(HDC hdc, int x, int y, HICON hIcon, int w, int h, UINT istepIfAniCur, HBRUSH hbrFlickerFreeDraw, UINT diFlags);
 BOOL SetViewportExtEx(HDC hdc, int x, int y, LPSIZE lpSize);
@@ -73,8 +73,8 @@ BOOL  GetScrollPos (HWND hWnd, int iSBar, int* pPos);
 BOOL  GetScrollRange (HWND hWnd, int iSBar, int* pMinPos, int* pMaxPos);
 BOOL  SetScrollPos (HWND hWnd, int iSBar, int iNewPos);
 BOOL  SetScrollRange (HWND hWnd, int iSBar, int iMinPos, int iMaxPos);
-BOOL  SetScrollInfo (HWND hWnd, int iSBar, 
-		     LPCSCROLLINFO lpsi, BOOL fRedraw);
+BOOL  SetScrollInfo (HWND hWnd, int iSBar,
+             LPCSCROLLINFO lpsi, BOOL fRedraw);
 BOOL  GetScrollInfo(HWND hWnd, int iSBar, LPSCROLLINFO lpsi);
 BOOL  ShowScrollBar (HWND hWnd, int iSBar, BOOL bShow);
 HBITMAP WINAPI

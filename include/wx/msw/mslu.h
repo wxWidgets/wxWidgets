@@ -17,7 +17,7 @@
 #include "wx/wxchar.h"
 
 #if !wxUSE_UNICODE_MSLU
-inline bool wxUsingUnicowsDll() { return FALSE; }
+inline bool wxUsingUnicowsDll() { return false; }
 #else
 
 // Returns true if we are running under Unicode emulation in Win9x environment.
@@ -33,9 +33,9 @@ inline bool wxUsingUnicowsDll()
 
 #if wxUSE_GUI
 
-WXDLLEXPORT int wxMSLU_DrawStateW(WXHDC dc, WXHBRUSH br, WXFARPROC outputFunc, 
-                                  WXLPARAM lData, WXWPARAM wData, 
-                                  int x, int y, int cx, int cy, 
+WXDLLEXPORT int wxMSLU_DrawStateW(WXHDC dc, WXHBRUSH br, WXFARPROC outputFunc,
+                                  WXLPARAM lData, WXWPARAM wData,
+                                  int x, int y, int cx, int cy,
                                   unsigned int flags);
 #define DrawStateW(dc, br, func, ld, wd, x, y, cx, cy, flags) \
     wxMSLU_DrawStateW((WXHDC)dc,(WXHBRUSH)br,(WXFARPROC)func, \

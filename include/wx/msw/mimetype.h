@@ -57,10 +57,10 @@ public:
     bool Unassociate();
 
     // set an arbitrary command, ask confirmation if it already exists and
-    // overwriteprompt is TRUE
+    // overwriteprompt is true
     bool SetCommand(const wxString& cmd,
                     const wxString& verb,
-                    bool overwriteprompt = TRUE);
+                    bool overwriteprompt = true);
 
     bool SetDefaultIcon(const wxString& cmd = wxEmptyString, int index = 0);
 
@@ -76,7 +76,7 @@ private:
     wxString GetVerbPath(const wxString& verb) const;
 
     // check that the registry key for our extension exists, create it if it
-    // doesn't, return FALSE if this failed
+    // doesn't, return false if this failed
     bool EnsureExtKeyExists();
 
     wxString m_strFileType,         // may be empty
@@ -107,10 +107,10 @@ public:
     size_t EnumAllFileTypes(wxArrayString& mimetypes);
 
     // this are NOPs under Windows
-    bool ReadMailcap(const wxString& WXUNUSED(filename), bool WXUNUSED(fallback) = TRUE)
-        { return TRUE; }
+    bool ReadMailcap(const wxString& WXUNUSED(filename), bool WXUNUSED(fallback) = true)
+        { return true; }
     bool ReadMimeTypes(const wxString& WXUNUSED(filename))
-        { return TRUE; }
+        { return true; }
 
     // create a new filetype association
     wxFileType *Associate(const wxFileTypeInfo& ftInfo);

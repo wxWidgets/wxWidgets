@@ -185,7 +185,7 @@ typedef struct {
 #endif
 
 // ----------------------------------------------------------------------------
-// Toolbar define value missing 
+// Toolbar define value missing
 // ----------------------------------------------------------------------------
 #if !defined(CCS_VERT)
 #define CCS_VERT                0x00000080L
@@ -430,13 +430,13 @@ typedef struct {
     #define TVM_SETTEXTCOLOR        (TV_FIRST + 30)
 #endif
 
-#ifndef TVS_INFOTIP 
+#ifndef TVS_INFOTIP
     #define TVS_INFOTIP 2048
 #endif
 
 #ifndef TVN_GETINFOTIPA
-    #define TVN_GETINFOTIPA	(TVN_FIRST-13)
-    #define TVN_GETINFOTIPW	(TVN_FIRST-14) 
+    #define TVN_GETINFOTIPA    (TVN_FIRST-13)
+    #define TVN_GETINFOTIPW    (TVN_FIRST-14)
 #endif
 
 #ifndef TVN_GETINFOTIP
@@ -497,24 +497,24 @@ typedef struct {
     #define HANGUL_CHARSET  129
 #endif
 
-#ifndef TME_HOVER	
-    #define TME_HOVER	1
+#ifndef TME_HOVER
+    #define TME_HOVER     1
 #endif
 
-#ifndef TME_LEAVE	
-    #define TME_LEAVE	2
+#ifndef TME_LEAVE
+    #define TME_LEAVE     2
 #endif
 
-#ifndef TME_QUERY	
-    #define TME_QUERY	0x40000000
+#ifndef TME_QUERY
+    #define TME_QUERY     0x40000000
 #endif
 
-#ifndef TME_CANCEL	
-    #define TME_CANCEL	0x80000000
+#ifndef TME_CANCEL
+    #define TME_CANCEL    0x80000000
 #endif
 
-#ifndef HOVER_DEFAULT	
-    #define HOVER_DEFAULT	0xFFFFFFFF
+#ifndef HOVER_DEFAULT
+    #define HOVER_DEFAULT 0xFFFFFFFF
 #endif
 
 #ifdef __DMC__
