@@ -384,7 +384,6 @@
             #define  wxStrspn    wcsspn
             #define  wxStrstr    wcsstr
             #define  wxStrtod    wcstod
-            #define  wxStrtok    wcstok
             #define  wxStrtol    wcstol
             #define  wxStrtoul   wcstoul
             #define  wxStrxfrm   wcsxfrm
@@ -471,8 +470,6 @@
         #define  wxStrtod    strtod
         #ifdef HAVE_STRTOK_R
             #define  wxStrtok(str, sep, last)    strtok_r(str, sep, last)
-        #else
-            #define  wxStrtok(str, sep, last)    strtok(str, sep)
         #endif
         #define  wxStrtol    strtol
         #define  wxStrtoul   strtoul
