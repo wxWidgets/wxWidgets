@@ -80,26 +80,26 @@ typedef long celt;				/* type to hold chr, MCCE number, or
 
 /*  RN - the "not use sizeof() thing is really annoying!" */
 #if wxUSE_UNICODE
-#	if defined(__WINDOWS__)
-#		define CHRBITS 16
-#		define CHR_MAX 0xfffe		
-#	else   /* !__WINDOWS__ */
-#		if defined(__MACH__)
-#			define CHRBITS 32
-#			define CHR_MAX 0xfffffffe		
-#		else  /* !__MACH__ */
-#			if !defined(SIZEOF_WCHAR_T)
-#				define CHRBITS 16
-#				define CHR_MAX 0xfffe		
-#			else	/* defined(SIZEOF_WCHAR_T) */
-#				define CHRBITS SIZEOF_WCHAR_T
-#				define CHR_MAX ((1 << CHRBITS) - 1)		
-#			endif  /* !defined(SIZEOF_WCHAR_T) */
-#		endif  /* defined(__MACH__)  */
-#	endif  /*  defined(__WINDOWS__)  */
+#   if defined(__WINDOWS__)
+#       define CHRBITS 16
+#       define CHR_MAX 0xfffe		
+#   else   /* !__WINDOWS__ */
+#       if defined(__MACH__)
+#           define CHRBITS 32
+#           define CHR_MAX 0xfffffffe		
+#       else  /* !__MACH__ */
+#           if !defined(SIZEOF_WCHAR_T)
+#               define CHRBITS 16
+#               define CHR_MAX 0xfffe		
+#           else	/* defined(SIZEOF_WCHAR_T) */
+#               define CHRBITS SIZEOF_WCHAR_T
+#               define CHR_MAX ((1 << CHRBITS) - 1)		
+#           endif  /* !defined(SIZEOF_WCHAR_T) */
+#       endif  /* defined(__MACH__)  */
+#   endif  /*  defined(__WINDOWS__)  */
 #else  /*  !wxUSE_UNICODE */
-#	define CHRBITS 8			/* bits in a chr; must not use sizeof */
-#	define CHR_MAX 0xfe
+#   define CHRBITS 8			/* bits in a chr; must not use sizeof */
+#   define CHR_MAX 0xfe
 #endif  /* wxUSE_UNICODE  */
 
 #define CHR_MIN 0x00000000		/* smallest and largest chr; the value */
