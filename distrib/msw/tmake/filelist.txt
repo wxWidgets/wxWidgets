@@ -38,7 +38,7 @@
 #  G	generic code which might be used instead of native one
 #  U	Unix-ish file, normally not compiled under Windows
 #  O	OLE file (needs Win32 and a decent compiler)
-#  S	Socket file (currently doesn't compile under Win16 nor with GNU)
+#  S	Socket file (currently doesn't compile under Win16)
 #  R	Not required for the GTK port
 #  X	Not required for the Motif port
 #  P	Not required for the os2Pm port
@@ -204,6 +204,8 @@ wxexpr.cpp	C
 zipstrm.cpp	C	B
 zstream.cpp	C	B
 
+gsocket.c	M	S
+gsockmsw.c	M	S
 accel.cpp	M
 app.cpp	M
 automtn.cpp	M	O
@@ -306,7 +308,6 @@ uuid.cpp	M	O
 wave.cpp	M
 window.cpp	M
 xpmhand.cpp	M
-gsocket.c	M	S
 
 dialup.cpp	U
 dir.cpp	U	B
