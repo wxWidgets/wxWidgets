@@ -91,7 +91,7 @@ void wxCaretBase::SetBlinkTime(int milliseconds)
 void wxCaret::InitGeneric()
 {
     m_hasFocus = TRUE;
-    m_blinkedOut = FALSE;
+    m_blinkedOut = TRUE;
 
     m_xOld =
     m_yOld = -1;
@@ -118,8 +118,8 @@ void wxCaret::DoShow()
     if ( blinkTime )
         m_timer.Start(blinkTime);
 
-    m_blinkedOut = TRUE;
-    Blink();
+    if ( m_blinkedOut )
+        Blink();
 }
 
 void wxCaret::DoHide()
