@@ -1,22 +1,5 @@
-in the carbon targets the following items are still missing
-
-- printing support
-- navigation services support
-
 Bugs/Defects (GD)
 -----------------
-* Correct listbox creation which is causing the following error message
-  under Mac OS X:
-
-  ./Controls/Source/ControlAllocation.cp:755: failed assertion `theErr == noErr'
-  Abort
-
-  This is due to the constant kwxMacListWithVerticalScrollbar at line 40 of
-  src/mac/listbox.cpp because the custom control definition has not been loaded
-  and is not present in memory, see:
-  
-  http://developer.apple.com/technotes/tn/tn2003.html#CustomCode
-
 * Implement toggle buttons missing under Mac OS & Mac OS X
 
 * Correct smart processing errors that provoke the following error:

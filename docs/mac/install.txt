@@ -46,7 +46,7 @@ tipdlg.cpp line 201   #include "wx/generic/tip.xpm"
 
 then your cvs has changed the type of the .xpm files to something other than text, in order to fix this
 either change the type by using a resource editor or drag the files from /include/wx/generic/..xpm on 
-the MakeMetrowerksText application that is included in this folder
+the SetTypeFromExtension application that is included in this folder
 
 Missing PLStringFuncsLib
 ------------------------
