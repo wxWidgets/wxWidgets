@@ -383,7 +383,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
         }
         else
         {
-            SetSashPositionAndNotify(posSashNew);
+            DoSetSashPosition(posSashNew);
             m_needUpdating = true;
         }
     }
@@ -631,13 +631,15 @@ void wxSplitterWindow::SetSashPositionAndNotify(int sashPos)
     // SetSashPosition():
     m_requestedSashPosition = INT_MAX;
 
-    if ( DoSetSashPosition(sashPos) )
-    {
-        wxSplitterEvent event(wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED, this);
-        event.m_data.pos = m_sashPosition;
+    // note that we must send the event in any case, i.e. even if the sash
+    // position hasn't changed and DoSetSashPosition() returns false because we
+    // must generate a CHANGED event at the end of resizing
+    DoSetSashPosition(sashPos);
 
-        (void)DoSendEvent(event);
-    }
+    wxSplitterEvent event(wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED, this);
+    event.m_data.pos = m_sashPosition;
+
+    (void)DoSendEvent(event);
 }
 
 // Position and size subwindows.

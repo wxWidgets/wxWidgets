@@ -32,8 +32,8 @@ modify the position of the tracking bar to properly reflect the position that
 would be set if the drag were to be completed at this point. Processes a
 wxEVT\_COMMAND\_SPLITTER\_SASH\_POS\_CHANGING event.}
 \twocolitem{{\bf EVT\_SPLITTER\_SASH\_POS\_CHANGED(id, func)}}{The sash
-position was changed. May be used to modify the sash position before
-it is set, or to prevent the change from taking place.
+position was changed. This event is generated after the user releases the mouse
+after dragging the splitter.
 Processes a wxEVT\_COMMAND\_SPLITTER\_SASH\_POS\_CHANGED event.}
 \twocolitem{{\bf EVT\_SPLITTER\_UNSPLIT(id, func)}}{The splitter has been just
 unsplit. Processes a wxEVT\_COMMAND\_SPLITTER\_UNSPLIT event. This event can't

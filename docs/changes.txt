@@ -27,6 +27,8 @@ All (GUI):
 - Fixed wxScrolledWindow sizer behaviour so that the virtual size
   isn't used to set the window size.
 - Added wxTE_BESTWRAP (based on patch by Mart Raudsepp)
+- wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED is now only sent once at the end of
+  splitter dragging and not after each CHANGING event (Jacobo Vilella Vilahur)
 
 Unix:
 
