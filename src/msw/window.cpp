@@ -2260,15 +2260,13 @@ void wxWindow::MSWDetachWindowMenu()
 {
     if ( m_hMenu )
     {
+        wxChar buf[1024];
         HMENU hMenu = (HMENU)m_hMenu;
 
         int N = ::GetMenuItemCount(hMenu);
-        int i;
-        for (i = 0; i < N; i++)
+        for ( int i = 0; i < N; i++ )
         {
-            wxChar buf[100];
-            int chars = GetMenuString(hMenu, i, buf, 100, MF_BYPOSITION);
-            if ( !chars )
+            if ( !::GetMenuString(hMenu, i, buf, WXSIZEOF(buf), MF_BYPOSITION) )
             {
                 wxLogLastError(wxT("GetMenuString"));
 
@@ -2277,7 +2275,10 @@ void wxWindow::MSWDetachWindowMenu()
 
             if ( wxStrcmp(buf, wxT("&Window")) == 0 )
             {
-                RemoveMenu(hMenu, i, MF_BYPOSITION);
+                if ( !::RemoveMenu(hMenu, i, MF_BYPOSITION) )
+                {
+                    wxLogLastError(wxT("RemoveMenu"));
+                }
 
                 break;
             }
