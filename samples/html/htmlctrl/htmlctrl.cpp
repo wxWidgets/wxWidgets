@@ -153,14 +153,14 @@ MyFrame::MyFrame(const wxString& title)
        : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(500,500))
 {
     wxMenuBar* myBar = new wxMenuBar();
-    wxMenu* fileMenu = new wxMenu(_("&File"));
-    fileMenu->Append(ID_OPEN, _("Open"));
-    fileMenu->Append(ID_SAVE, _("Save"));
-    myBar->Append(fileMenu, _("File"));
+    wxMenu* fileMenu = new wxMenu;
+    fileMenu->Append(ID_OPEN, _("&Open"));
+    fileMenu->Append(ID_SAVE, _("&Save"));
+    myBar->Append(fileMenu, _("&File"));
     
-    wxMenu* editMenu = new wxMenu(_("Edit"));
+    wxMenu* editMenu = new wxMenu;
     editMenu->Append(ID_SET_SOURCE, _("Set Page Source"));
-    myBar->Append(editMenu, _("Edit"));
+    myBar->Append(editMenu, _("&Edit"));
     
     //wxMenu* viewMenu = new wxMenu(_("View"));
     //viewMenu->Append(ID_VIEW_SOURCE, _("View Source"));
