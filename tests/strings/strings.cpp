@@ -338,8 +338,8 @@ DoTokenizerGetPosition(const wxChar *s, const wxChar *delims, int pos, ...)
 void StringTestCase::TokenizerGetPosition()
 {
     DoTokenizerGetPosition(_T("foo"), _T("_"), 3, 0);
-    DoTokenizerGetPosition(_T("foo_bar"), _T("_"), 3, 7, 0);
-    DoTokenizerGetPosition(_T("foo_bar_"), _T("_"), 3, 7,8,  0);
+    DoTokenizerGetPosition(_T("foo_bar"), _T("_"), 4, 7, 0);
+    DoTokenizerGetPosition(_T("foo_bar_"), _T("_"), 4, 8, 0);
 }
 
 void StringTestCase::Replace()
