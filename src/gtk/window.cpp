@@ -1093,25 +1093,29 @@ static void AdjustEventButtonState(wxMouseEvent& event)
     // for compatibility with MSW and common sense we want m_leftDown be TRUE
     // for a LEFT_DOWN event, not FALSE, so we will invert
     // left/right/middleDown for the corresponding click events
-    switch ( event.GetEventType() )
+    
+    if ((event.GetEventType() == wxEVT_LEFT_DOWN) ||
+        (event.GetEventType() == wxEVT_LEFT_DCLICK) ||
+        (event.GetEventType() == wxEVT_LEFT_UP))
     {
-        case wxEVT_LEFT_DOWN:
-        case wxEVT_LEFT_DCLICK:
-        case wxEVT_LEFT_UP:
-            event.m_leftDown = !event.m_leftDown;
-            break;
+        event.m_leftDown = !event.m_leftDown;
+        return;
+    }
 
-        case wxEVT_MIDDLE_DOWN:
-        case wxEVT_MIDDLE_DCLICK:
-        case wxEVT_MIDDLE_UP:
-            event.m_middleDown = !event.m_middleDown;
-            break;
+    if ((event.GetEventType() == wxEVT_MIDDLE_DOWN) ||
+        (event.GetEventType() == wxEVT_MIDDLE_DCLICK) ||
+        (event.GetEventType() == wxEVT_MIDDLE_UP))
+    {
+        event.m_middleDown = !event.m_middleDown;
+        return;
+    }
 
-        case wxEVT_RIGHT_DOWN:
-        case wxEVT_RIGHT_DCLICK:
-        case wxEVT_RIGHT_UP:
-            event.m_rightDown = !event.m_rightDown;
-            break;
+    if ((event.GetEventType() == wxEVT_RIGHT_DOWN) ||
+        (event.GetEventType() == wxEVT_RIGHT_DCLICK) ||
+        (event.GetEventType() == wxEVT_RIGHT_UP))
+    {
+        event.m_rightDown = !event.m_rightDown;
+        return;
     }
 }
 

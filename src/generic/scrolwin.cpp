@@ -287,63 +287,49 @@ int wxScrolledWindow::CalcScrollInc(wxScrollWinEvent& event)
     int orient = event.GetOrientation();
 
     int nScrollInc = 0;
-    switch (event.GetEventType())
+    if (event.GetEventType() == wxEVT_SCROLLWIN_TOP)
     {
-        case wxEVT_SCROLLWIN_TOP:
-        {
             if (orient == wxHORIZONTAL)
                 nScrollInc = - m_xScrollPosition;
             else
                 nScrollInc = - m_yScrollPosition;
-            break;
-        }
-        case wxEVT_SCROLLWIN_BOTTOM:
-        {
+    } else
+    if (event.GetEventType() == wxEVT_SCROLLWIN_BOTTOM)
+    {
             if (orient == wxHORIZONTAL)
                 nScrollInc = m_xScrollLines - m_xScrollPosition;
             else
                 nScrollInc = m_yScrollLines - m_yScrollPosition;
-            break;
-        }
-        case wxEVT_SCROLLWIN_LINEUP:
-        {
+    } else
+    if (event.GetEventType() == wxEVT_SCROLLWIN_LINEUP)
+    {
             nScrollInc = -1;
-            break;
-        }
-        case wxEVT_SCROLLWIN_LINEDOWN:
-        {
+    } else
+    if (event.GetEventType() == wxEVT_SCROLLWIN_LINEDOWN)
+    {
             nScrollInc = 1;
-            break;
-        }
-        case wxEVT_SCROLLWIN_PAGEUP:
-        {
+    } else
+    if (event.GetEventType() == wxEVT_SCROLLWIN_PAGEUP)
+    {
             if (orient == wxHORIZONTAL)
                 nScrollInc = -GetScrollPageSize(wxHORIZONTAL);
             else
                 nScrollInc = -GetScrollPageSize(wxVERTICAL);
-            break;
-        }
-        case wxEVT_SCROLLWIN_PAGEDOWN:
-        {
+    } else
+    if (event.GetEventType() == wxEVT_SCROLLWIN_PAGEDOWN)
+    {
             if (orient == wxHORIZONTAL)
                 nScrollInc = GetScrollPageSize(wxHORIZONTAL);
             else
                 nScrollInc = GetScrollPageSize(wxVERTICAL);
-            break;
-        }
-        case wxEVT_SCROLLWIN_THUMBTRACK:
-        case wxEVT_SCROLLWIN_THUMBRELEASE:
-        {
+    } else
+    if ((event.GetEventType() == wxEVT_SCROLLWIN_THUMBTRACK) ||
+        (event.GetEventType() == wxEVT_SCROLLWIN_THUMBRELEASE))
+    {
             if (orient == wxHORIZONTAL)
                 nScrollInc = pos - m_xScrollPosition;
             else
                 nScrollInc = pos - m_yScrollPosition;
-            break;
-        }
-        default:
-        {
-            break;
-        }
     }
 
     if (orient == wxHORIZONTAL)
