@@ -54,6 +54,8 @@ public:
   #ifdef  __DEBUG__
     // function to return symbolic name of clipboard format (debug messages)
     static const char *GetFormatName(wxDataFormat format);
+  #else // not used in release mode
+    #define GetFormatName(format) ""
   #endif
 
   // ctor & dtor
