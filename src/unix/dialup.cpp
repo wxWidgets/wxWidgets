@@ -346,10 +346,12 @@ wxDialUpManagerImpl::EnableAutoCheckOnlineStatus(size_t nSeconds)
 void
 wxDialUpManagerImpl::DisableAutoCheckOnlineStatus()
 {
-   wxASSERT(m_timer != NULL);
-   m_timer->Stop();
-   delete m_timer;
-   m_timer = NULL;
+   if(m_timer != NULL)
+   {
+      m_timer->Stop();
+      delete m_timer;
+      m_timer = NULL;
+   }
 }
 
 
