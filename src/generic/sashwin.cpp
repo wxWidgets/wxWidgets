@@ -45,28 +45,19 @@ BEGIN_EVENT_TABLE(wxSashWindow, wxWindow)
     EVT_MOUSE_EVENTS(wxSashWindow::OnMouseEvent)
 END_EVENT_TABLE()
 
-wxSashWindow::wxSashWindow()
+bool wxSashWindow::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
+    const wxSize& size, long style, const wxString& name)
 {
-    m_draggingEdge = wxSASH_NONE;
-    m_dragMode = wxSASH_DRAG_NONE;
-    m_oldX = 0;
-    m_oldY = 0;
-    m_firstX = 0;
-    m_firstY = 0;
-    m_borderSize = 3 ;
-    m_extraBorderSize = 0;
-    m_sashCursorWE = NULL;
-    m_sashCursorNS = NULL;
-
-    m_minimumPaneSizeX = 0;
-    m_minimumPaneSizeY = 0;
-    m_maximumPaneSizeX = 10000;
-    m_maximumPaneSizeY = 10000;
+    return wxWindow::Create(parent, id, pos, size, style, name);
 }
 
-wxSashWindow::wxSashWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos,
-    const wxSize& size, long style, const wxString& name)
-  :wxWindow(parent, id, pos, size, style, name)
+wxSashWindow::~wxSashWindow()
+{
+    delete m_sashCursorWE;
+    delete m_sashCursorNS;
+}
+
+void wxSashWindow::Init()
 {
     m_draggingEdge = wxSASH_NONE;
     m_dragMode = wxSASH_DRAG_NONE;
@@ -85,12 +76,6 @@ wxSashWindow::wxSashWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos,
 
     // Eventually, we'll respond to colour change messages
     InitColours();
-}
-
-wxSashWindow::~wxSashWindow()
-{
-    delete m_sashCursorWE;
-    delete m_sashCursorNS;
 }
 
 void wxSashWindow::OnPaint(wxPaintEvent& WXUNUSED(event))

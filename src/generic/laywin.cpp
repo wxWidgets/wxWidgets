@@ -41,9 +41,13 @@ BEGIN_EVENT_TABLE(wxSashLayoutWindow, wxSashWindow)
     EVT_QUERY_LAYOUT_INFO(wxSashLayoutWindow::OnQueryLayoutInfo)
 END_EVENT_TABLE()
 
-wxSashLayoutWindow::wxSashLayoutWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos,
-        const wxSize& size, long style, const wxString& name):
-    wxSashWindow(parent, id, pos, size, style, name)
+bool wxSashLayoutWindow::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
+        const wxSize& size, long style, const wxString& name)
+{
+    return wxSashWindow::Create(parent, id, pos, size, style, name);
+}
+
+void wxSashLayoutWindow::Init()
 {
     m_orientation = wxLAYOUT_HORIZONTAL;
     m_alignment = wxLAYOUT_TOP;

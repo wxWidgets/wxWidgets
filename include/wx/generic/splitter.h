@@ -60,15 +60,29 @@ public:
 // Public API
 
     // Default constructor
-    wxSplitterWindow();
+    wxSplitterWindow()
+    {
+        Init();
+    }
 
     // Normal constructor
     wxSplitterWindow(wxWindow *parent, wxWindowID id = -1,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxSP_3D|wxCLIP_CHILDREN,
-                     const wxString& name = "splitter");
+                     const wxString& name = "splitter")
+    {
+        Init();
+        Create(parent, id, pos, size, style, name);
+    }
+
     ~wxSplitterWindow();
+
+    bool Create(wxWindow *parent, wxWindowID id = -1,
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize& size = wxDefaultSize,
+                     long style = wxSP_3D|wxCLIP_CHILDREN,
+                     const wxString& name = "splitter");
 
     // Gets the only or left/top pane
     wxWindow *GetWindow1() const { return m_windowOne; }
@@ -190,6 +204,10 @@ protected:
     void OnSetCursor(wxSetCursorEvent& event);
 
     void SendUnsplitEvent(wxWindow *winRemoved);
+
+private:
+    void Init();
+
 
     int         m_splitMode;
     bool        m_permitUnsplitAlways;

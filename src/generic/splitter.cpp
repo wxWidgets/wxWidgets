@@ -53,42 +53,39 @@ BEGIN_EVENT_TABLE(wxSplitterWindow, wxWindow)
     EVT_SPLITTER_UNSPLIT(-1,          wxSplitterWindow::OnUnsplitEvent)
 END_EVENT_TABLE()
 
-wxSplitterWindow::wxSplitterWindow()
-{
-    m_splitMode = wxSPLIT_VERTICAL;
-    m_permitUnsplitAlways = FALSE;
-    m_windowOne = (wxWindow *) NULL;
-    m_windowTwo = (wxWindow *) NULL;
-    m_dragMode = wxSPLIT_DRAG_NONE;
-    m_oldX = 0;
-    m_oldY = 0;
-    m_firstX = 0;
-    m_firstY = 0;
-    m_sashSize = 7;
-    m_borderSize = 2;
-    m_sashPosition = 0;
-    m_sashCursorWE = (wxCursor *) NULL;
-    m_sashCursorNS = (wxCursor *) NULL;
-    m_sashTrackerPen = (wxPen *) NULL;
-    m_lightShadowPen = (wxPen *) NULL;
-    m_mediumShadowPen = (wxPen *) NULL;
-    m_darkShadowPen = (wxPen *) NULL;
-    m_faceBrush = (wxBrush *) NULL;
-    m_facePen = (wxPen *) NULL;
-    m_hilightPen = (wxPen *) NULL;
-    m_minimumPaneSize = 0;
-    m_needUpdating = FALSE;
-}
-
-wxSplitterWindow::wxSplitterWindow(wxWindow *parent, wxWindowID id,
+bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
                                    const wxPoint& pos,
                                    const wxSize& size,
                                    long style,
                                    const wxString& name)
-                : wxWindow(parent, id, pos, size, style, name)
+{
+    if (!wxWindow::Create(parent, id, pos, size, style, name))
+        return FALSE;
+
+    m_permitUnsplitAlways = (style & wxSP_PERMIT_UNSPLIT) != 0;
+
+    if ( style & wxSP_3D )
+    {
+        m_borderSize = 2;
+        m_sashSize = 7;
+    }
+    else if ( style & wxSP_BORDER )
+    {
+        m_borderSize = 1;
+        m_sashSize = 3;
+    }
+    else
+    {
+        m_borderSize = 0;
+        m_sashSize = 3;
+    }
+    return TRUE;
+}
+
+void wxSplitterWindow::Init()
 {
     m_splitMode = wxSPLIT_VERTICAL;
-    m_permitUnsplitAlways = (style & wxSP_PERMIT_UNSPLIT) != 0;
+    m_permitUnsplitAlways = TRUE;
     m_windowOne = (wxWindow *) NULL;
     m_windowTwo = (wxWindow *) NULL;
     m_dragMode = wxSPLIT_DRAG_NONE;
@@ -110,27 +107,10 @@ wxSplitterWindow::wxSplitterWindow(wxWindow *parent, wxWindowID id,
     m_facePen = (wxPen *) NULL;
     m_hilightPen = (wxPen *) NULL;
 
-    if ( style & wxSP_3D )
-    {
-        m_borderSize = 2;
-        m_sashSize = 7;
-    }
-    else if ( style & wxSP_BORDER )
-    {
-        m_borderSize = 1;
-        m_sashSize = 3;
-    }
-    else
-    {
-        m_borderSize = 0;
-        m_sashSize = 3;
-    }
+    m_borderSize = 0;
+    m_sashSize = 3;
 
-    // Eventually, we'll respond to colour change messages
     InitColours();
-
-    // For debugging purposes, to see the background.
-//    SetBackground(wxBLUE_BRUSH);
 
     m_needUpdating = FALSE;
 }

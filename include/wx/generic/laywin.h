@@ -141,7 +141,18 @@ class WXDLLEXPORT wxSashLayoutWindow: public wxSashWindow
 {
     DECLARE_CLASS(wxSashLayoutWindow)
 public:
+    wxSashLayoutWindow()
+    {
+        Init();
+    }
+
     wxSashLayoutWindow(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize, long style = wxSW_3D|wxCLIP_CHILDREN, const wxString& name = "layoutWindow")
+    {
+        Create(parent, id, pos, size, style, name);
+    }
+
+    bool Create(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = wxSW_3D|wxCLIP_CHILDREN, const wxString& name = "layoutWindow");
 
 // Accessors
@@ -161,7 +172,10 @@ public:
 
     // Called by layout algorithm to retrieve information about the window.
     void OnQueryLayoutInfo(wxQueryLayoutInfoEvent& event);
-protected:
+
+private:
+    void Init();
+
     wxLayoutAlignment           m_alignment;
     wxLayoutOrientation         m_orientation;
     wxSize                      m_defaultSize;
