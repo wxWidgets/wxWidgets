@@ -849,9 +849,9 @@ bool wxStdToolbarInputHandler::HandleMouseMove(wxInputConsumer *consumer,
 }
 
 bool wxStdToolbarInputHandler::HandleFocus(wxInputConsumer *consumer,
-                                           const wxFocusEvent& event)
+                                           const wxFocusEvent& WXUNUSED(event))
 {
-    if (m_toolCapture)
+    if ( m_toolCapture ) 
     {
         // We shouldn't be left with a highlighted button
         consumer->PerformAction( wxACTION_TOOLBAR_LEAVE, m_toolCapture->GetId() );

@@ -182,7 +182,7 @@ const wxBitmap& wxWindow::GetBackgroundBitmap(int *alignment,
 // ----------------------------------------------------------------------------
 
 // the event handlers executed when the window must be repainted
-void wxWindow::OnNcPaint(wxPaintEvent& event)
+void wxWindow::OnNcPaint(wxPaintEvent& WXUNUSED(event))
 {
     if ( m_renderer )
     {
@@ -340,7 +340,7 @@ void wxWindow::DoDrawBorder(wxDC& dc, const wxRect& rect)
     }
 }
 
-void wxWindow::DoDraw(wxControlRenderer *renderer)
+void wxWindow::DoDraw(wxControlRenderer * WXUNUSED(renderer))
 {
 }
 
@@ -891,7 +891,7 @@ void wxWindow::SetScrollbar(int orient,
     }
 }
 
-void wxWindow::SetScrollPos(int orient, int pos, bool refresh)
+void wxWindow::SetScrollPos(int orient, int pos, bool WXUNUSED(refresh))
 {
     wxScrollBar *scrollbar = GetScrollbar(orient);
     wxCHECK_RET( scrollbar, _T("no scrollbar to set position for") );

@@ -545,7 +545,7 @@ void wxControlRenderer::DrawBitmap(wxDC &dc,
 }
 
 void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
-                                      int thumbPosOld)
+                                      int WXUNUSED(thumbPosOld))
 {
     // we will only redraw the parts which must be redrawn and not everything
     wxRegion rgnUpdate = scrollbar->GetUpdateRegion();

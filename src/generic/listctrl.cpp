@@ -255,7 +255,7 @@ WX_DECLARE_LIST(wxListItemData, wxListItemDataList);
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxListItemDataList);
 
-class WXDLLEXPORT wxListLineData
+class wxListLineData
 {
 public:
     // the list of subitems: only may have more than one item in report mode
@@ -476,7 +476,7 @@ WX_DECLARE_LIST(wxListHeaderData, wxListHeaderDataList);
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxListHeaderDataList);
 
-class WXDLLEXPORT wxListMainWindow : public wxScrolledWindow
+class wxListMainWindow : public wxScrolledWindow
 {
 public:
     wxListMainWindow();
@@ -1214,7 +1214,7 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
 }
 
 void wxListLineData::SetPosition( int x, int y,
-                                  int window_width,
+                                  int WXUNUSED(window_width),
                                   int spacing )
 {
     wxListItemDataList::compatibility_iterator node = m_items.GetFirst();

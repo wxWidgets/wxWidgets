@@ -4899,8 +4899,9 @@ bool wxStdTextCtrlInputHandler::HandleMouseMove(wxInputConsumer *consumer,
     return wxStdInputHandler::HandleMouseMove(consumer, event);
 }
 
-bool wxStdTextCtrlInputHandler::HandleFocus(wxInputConsumer *consumer,
-                                            const wxFocusEvent& event)
+bool
+wxStdTextCtrlInputHandler::HandleFocus(wxInputConsumer *consumer,
+                                       const wxFocusEvent& WXUNUSED(event))
 {
     wxTextCtrl *text = wxStaticCast(consumer->GetInputWindow(), wxTextCtrl);
 

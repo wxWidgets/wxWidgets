@@ -106,7 +106,7 @@ bool wxListBox::Create(wxWindow *parent,
 #endif
 
     if ( !wxControl::Create(parent, id, pos, size, style, 
-                            wxDefaultValidator, name) )
+                            validator, name) )
         return FALSE;
 
     SetWindow(this);
@@ -769,7 +769,7 @@ void wxListBox::DoSetSize(int x, int y,
         height = ((height - hBorders + hLine - 1) / hLine)*hLine + hBorders;
     }
 
-    wxListBoxBase::DoSetSize(x, y, width, height);
+    wxListBoxBase::DoSetSize(x, y, width, height, sizeFlags);
 }
 
 wxSize wxListBox::DoGetBestClientSize() const

@@ -1389,8 +1389,9 @@ bool wxStdNotebookInputHandler::HandleMouseMove(wxInputConsumer *consumer,
     return wxStdInputHandler::HandleMouseMove(consumer, event);
 }
 
-bool wxStdNotebookInputHandler::HandleFocus(wxInputConsumer *consumer,
-                                            const wxFocusEvent& event)
+bool
+wxStdNotebookInputHandler::HandleFocus(wxInputConsumer *consumer,
+                                       const wxFocusEvent& WXUNUSED(event))
 {
     HandleFocusChange(consumer);
 

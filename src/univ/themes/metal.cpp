@@ -87,10 +87,10 @@ public:
     wxMetalRenderer(wxRenderer *renderer, wxColourScheme* scheme);
 
     virtual void DrawButtonSurface(wxDC& dc,
-                                   const wxColour& col,
+                                   const wxColour& WXUNUSED(col),
                                    const wxRect& rect,
-                                   int flags )
-        { DrawMetal( dc, rect ); }
+                                   int WXUNUSED(flags))
+        { DrawMetal(dc, rect); }
 
     virtual void DrawScrollbarThumb(wxDC& dc,
                                     wxOrientation orient,
@@ -141,7 +141,7 @@ private:
 // wxMetalTheme
 // ----------------------------------------------------------------------------
 
-WX_DEFINE_ARRAY(wxInputHandler *, wxArrayHandlers);
+WX_DEFINE_ARRAY_NO_PTR(wxInputHandler *, wxArrayHandlers);
 
 class wxMetalTheme : public wxTheme
 {
@@ -406,9 +406,9 @@ wxMetalRenderer::wxMetalRenderer(wxRenderer *renderer, wxColourScheme *scheme)
 }
 
 void wxMetalRenderer::DrawScrollbarThumb(wxDC& dc,
-                                         wxOrientation orient,
+                                         wxOrientation WXUNUSED(orient),
                                          const wxRect& rect,
-                                         int flags)
+                                         int WXUNUSED(flags))
 {
     // we don't use the flags, the thumb never changes appearance
     wxRect rectThumb = rect;
@@ -417,15 +417,15 @@ void wxMetalRenderer::DrawScrollbarThumb(wxDC& dc,
 }
 
 void wxMetalRenderer::DrawScrollbarShaft(wxDC& dc,
-                                         wxOrientation orient,
+                                         wxOrientation WXUNUSED(orient),
                                          const wxRect& rectBar,
-                                         int flags)
+                                         int WXUNUSED(flags))
 {
-    DrawMetal( dc, rectBar );
+    DrawMetal(dc, rectBar);
 }
 
 void wxMetalRenderer::GetComboBitmaps(wxBitmap *bmpNormal,
-                                      wxBitmap *bmpFocus,
+                                      wxBitmap * WXUNUSED(bmpFocus),
                                       wxBitmap *bmpPressed,
                                       wxBitmap *bmpDisabled)
 {

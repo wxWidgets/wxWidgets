@@ -175,8 +175,8 @@ public:
 #endif
 
     // no icon
-    void SetIcon( const wxIcon &icon ) { /*m_icons = wxIconBundle( icon );*/}
-    void SetIcons( const wxIconBundle &icons ) { /*m_icons = icons;*/ }
+    void SetIcon( const wxIcon& WXUNUSED(icon) ) { }
+    void SetIcons( const wxIconBundle& WXUNUSED(icons) ) { }
 
     // no maximize etc
     virtual void Maximize( bool WXUNUSED(maximize) = TRUE) { /* Has no effect */ }

@@ -671,7 +671,7 @@ public:
                                  wxOrientation orient,
                                  int start,
                                  int end,
-                                 int step = 1,
+                                 int WXUNUSED(step) = 1,
                                  int flags = 0,
                                  long style = 0)
         { m_renderer->DrawSliderTicks(dc, rect, lenThumb, orient,

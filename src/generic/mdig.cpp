@@ -571,7 +571,7 @@ void wxGenericMDIChildFrame::OnMenuHighlight(wxMenuEvent& event)
 #endif // wxUSE_STATUSBAR
 }
 
-void wxGenericMDIChildFrame::OnActivate(wxActivateEvent& event)
+void wxGenericMDIChildFrame::OnActivate(wxActivateEvent& WXUNUSED(event))
 {
     // Do mothing.
 }

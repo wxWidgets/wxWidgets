@@ -24,7 +24,7 @@
 
 // fwd declarations
 class WXDLLEXPORT wxMenuInfo;
-WX_DECLARE_OBJARRAY(wxMenuInfo, wxMenuInfoArray);
+WX_DECLARE_EXPORTED_OBJARRAY(wxMenuInfo, wxMenuInfoArray);
 
 class WXDLLEXPORT wxMenuGeometryInfo;
 class WXDLLEXPORT wxPopupMenuWindow;

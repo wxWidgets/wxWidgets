@@ -82,7 +82,7 @@ bool wxButton::Create(wxWindow *parent,
         style |= wxALIGN_CENTRE_HORIZONTAL | wxALIGN_CENTRE_VERTICAL;
     }
 
-    if ( !wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name) )
+    if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
     SetLabel(label);
@@ -395,8 +395,8 @@ bool wxStdButtonInputHandler::HandleMouseMove(wxInputConsumer *consumer,
     return wxStdInputHandler::HandleMouseMove(consumer, event);
 }
 
-bool wxStdButtonInputHandler::HandleFocus(wxInputConsumer *consumer,
-                                          const wxFocusEvent& event)
+bool wxStdButtonInputHandler::HandleFocus(wxInputConsumer * WXUNUSED(consumer),
+                                          const wxFocusEvent& WXUNUSED(event))
 {
     // buttons change appearance when they get/lose focus, so return TRUE to
     // refresh
@@ -404,7 +404,7 @@ bool wxStdButtonInputHandler::HandleFocus(wxInputConsumer *consumer,
 }
 
 bool wxStdButtonInputHandler::HandleActivation(wxInputConsumer *consumer,
-                                               bool activated)
+                                               bool WXUNUSED(activated))
 {
     // the default button changes appearance when the app is [de]activated, so
     // return TRUE to refresh

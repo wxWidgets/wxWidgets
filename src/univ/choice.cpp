@@ -43,7 +43,7 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
                       const wxPoint& pos,
                       const wxSize& size,
                       int n, const wxString choices[],
-                      long style,
+                      long WXUNUSED(style),
                       const wxValidator& validator,
                       const wxString& name)
 {

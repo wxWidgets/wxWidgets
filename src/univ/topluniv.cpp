@@ -471,7 +471,7 @@ void wxInteractiveMoveHandler::OnMouseMove(wxMouseEvent& event)
     }
 }
 
-void wxInteractiveMoveHandler::OnMouseDown(wxMouseEvent& event)
+void wxInteractiveMoveHandler::OnMouseDown(wxMouseEvent& WXUNUSED(event))
 {
     if ( m_data.m_flags & wxINTERACTIVE_WAIT_FOR_INPUT )
     {
@@ -598,7 +598,7 @@ void wxInteractiveMoveHandler::OnKeyDown(wxKeyEvent& event)
     }
 }
 
-void wxInteractiveMoveHandler::OnMouseUp(wxMouseEvent& event)
+void wxInteractiveMoveHandler::OnMouseUp(wxMouseEvent& WXUNUSED(event))
 {
     m_data.m_evtLoop->Exit();
 }
@@ -691,7 +691,7 @@ void wxTopLevelWindow::ClickTitleBarButton(long button)
 
 bool wxTopLevelWindow::PerformAction(const wxControlAction& action,
                                      long numArg,
-                                     const wxString& strArg)
+                                     const wxString& WXUNUSED(strArg))
 {
     bool isActive = numArg != 0;
 

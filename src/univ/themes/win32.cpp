@@ -549,7 +549,8 @@ public:
 protected:
     virtual bool IsAllowedButton(int button) { return button == 1; }
 
-    virtual void Highlight(wxScrollBar *scrollbar, bool doIt)
+    virtual void Highlight(wxScrollBar * WXUNUSED(scrollbar),
+                           bool WXUNUSED(doIt))
     {
         // we don't highlight anything
     }
@@ -657,7 +658,7 @@ protected:
 // wxWin32Theme
 // ----------------------------------------------------------------------------
 
-WX_DEFINE_ARRAY(wxInputHandler *, wxArrayHandlers);
+WX_DEFINE_ARRAY_NO_PTR(wxInputHandler *, wxArrayHandlers);
 
 class wxWin32Theme : public wxTheme
 {
@@ -2453,7 +2454,9 @@ void wxWin32Renderer::DrawTextLine(wxDC& dc,
     StandardDrawTextLine(dc, text, rect, selStart, selEnd, flags);
 }
 
-void wxWin32Renderer::DrawLineWrapMark(wxDC& dc, const wxRect& rect)
+void
+wxWin32Renderer::DrawLineWrapMark(wxDC& WXUNUSED(dc),
+                                  const wxRect& WXUNUSED(rect))
 {
     // we don't draw them
 }
@@ -2584,9 +2587,10 @@ void wxWin32Renderer::DrawTab(wxDC& dc,
 // slider
 // ----------------------------------------------------------------------------
 
-wxSize wxWin32Renderer::GetSliderThumbSize(const wxRect& rect,
-                                           int lenThumb,
-                                           wxOrientation orient) const
+wxSize
+wxWin32Renderer::GetSliderThumbSize(const wxRect& WXUNUSED(rect),
+                                    int lenThumb,
+                                    wxOrientation orient) const
 {
     wxSize size;
     wxCoord width  = wxMax (lenThumb, SLIDER_THUMB_LENGTH) / 2;
@@ -2857,7 +2861,7 @@ void wxWin32Renderer::DrawSliderTicks(wxDC& dc,
                                       int start,
                                       int end,
                                       int step,
-                                      int flags,
+                                      int WXUNUSED(flags),
                                       long style)
 {
     /*    show ticks geometry
@@ -3271,7 +3275,7 @@ void wxWin32Renderer::DrawStatusField(wxDC& dc,
 // ----------------------------------------------------------------------------
 
 void wxWin32Renderer::GetComboBitmaps(wxBitmap *bmpNormal,
-                                      wxBitmap *bmpFocus,
+                                      wxBitmap * WXUNUSED(bmpFocus),
                                       wxBitmap *bmpPressed,
                                       wxBitmap *bmpDisabled)
 {
@@ -3312,7 +3316,7 @@ void wxWin32Renderer::GetComboBitmaps(wxBitmap *bmpNormal,
 void wxWin32Renderer::DoDrawBackground(wxDC& dc,
                                        const wxColour& col,
                                        const wxRect& rect,
-                                       wxWindow *window )
+                                       wxWindow * WXUNUSED(window))
 {
     wxBrush brush(col, wxSOLID);
     dc.SetBrush(brush);
@@ -3323,8 +3327,8 @@ void wxWin32Renderer::DoDrawBackground(wxDC& dc,
 void wxWin32Renderer::DrawBackground(wxDC& dc,
                                      const wxColour& col,
                                      const wxRect& rect,
-                                     int flags,
-                                     wxWindow *window )
+                                     int WXUNUSED(flags),
+                                     wxWindow *window)
 {
     // just fill it with the given or default bg colour
     wxColour colBg = col.Ok() ? col : wxSCHEME_COLOUR(m_scheme, CONTROL);
@@ -3400,9 +3404,9 @@ void wxWin32Renderer::DrawArrowButton(wxDC& dc,
 }
 
 void wxWin32Renderer::DrawScrollbarThumb(wxDC& dc,
-                                         wxOrientation orient,
+                                         wxOrientation WXUNUSED(orient),
                                          const wxRect& rect,
-                                         int flags)
+                                         int WXUNUSED(flags))
 {
     // we don't use the flags, the thumb never changes appearance
     wxRect rectThumb = rect;
@@ -3411,7 +3415,7 @@ void wxWin32Renderer::DrawScrollbarThumb(wxDC& dc,
 }
 
 void wxWin32Renderer::DrawScrollbarShaft(wxDC& dc,
-                                         wxOrientation orient,
+                                         wxOrientation WXUNUSED(orient),
                                          const wxRect& rectBar,
                                          int flags)
 {
@@ -4020,8 +4024,9 @@ static inline int GetTextBorderWidth()
     return 1;
 }
 
-wxRect wxWin32Renderer::GetTextTotalArea(const wxTextCtrl *text,
-                                         const wxRect& rect) const
+wxRect
+wxWin32Renderer::GetTextTotalArea(const wxTextCtrl * WXUNUSED(text),
+                                  const wxRect& rect) const
 {
     wxRect rectTotal = rect;
 
@@ -4034,9 +4039,10 @@ wxRect wxWin32Renderer::GetTextTotalArea(const wxTextCtrl *text,
     return rectTotal;
 }
 
-wxRect wxWin32Renderer::GetTextClientArea(const wxTextCtrl *text,
-                                          const wxRect& rect,
-                                          wxCoord *extraSpaceBeyond) const
+wxRect
+wxWin32Renderer::GetTextClientArea(const wxTextCtrl * WXUNUSED(text),
+                                   const wxRect& rect,
+                                   wxCoord *extraSpaceBeyond) const
 {
     wxRect rectText = rect;
 
@@ -4125,9 +4131,9 @@ wxWin32InputHandler::wxWin32InputHandler(wxWin32Renderer *renderer)
     m_renderer = renderer;
 }
 
-bool wxWin32InputHandler::HandleKey(wxInputConsumer *control,
-                                    const wxKeyEvent& event,
-                                    bool pressed)
+bool wxWin32InputHandler::HandleKey(wxInputConsumer * WXUNUSED(control),
+                                    const wxKeyEvent& WXUNUSED(event),
+                                    bool WXUNUSED(pressed))
 {
     return FALSE;
 }

@@ -147,7 +147,7 @@ bool wxScrollBar::Create(wxWindow *parent,
     // the scrollbars never have the border
     style &= ~wxBORDER_MASK;
 
-    if ( !wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name) )
+    if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
     SetBestSize(size);

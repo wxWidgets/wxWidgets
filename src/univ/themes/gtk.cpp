@@ -195,15 +195,15 @@ public:
                                  wxOrientation orient,
                                  int flags = 0,
                                  long style = 0);
-    virtual void DrawSliderTicks(wxDC& dc,
-                                 const wxRect& rect,
-                                 int lenThumb,
-                                 wxOrientation orient,
-                                 int start,
-                                 int end,
-                                 int step = 1,
-                                 int flags = 0,
-                                 long style = 0)
+    virtual void DrawSliderTicks(wxDC& WXUNUSED(dc),
+                                 const wxRect& WXUNUSED(rect),
+                                 int WXUNUSED(lenThumb),
+                                 wxOrientation WXUNUSED(orient),
+                                 int WXUNUSED(start),
+                                 int WXUNUSED(end),
+                                 int WXUNUSED(step) = 1,
+                                 int WXUNUSED(flags) = 0,
+                                 long WXUNUSED(style) = 0)
     {
         // we don't have the ticks in GTK version
     }
@@ -591,7 +591,7 @@ protected:
 // wxGTKTheme
 // ----------------------------------------------------------------------------
 
-WX_DEFINE_ARRAY(wxInputHandler *, wxArrayHandlers);
+WX_DEFINE_ARRAY_NO_PTR(wxInputHandler *, wxArrayHandlers);
 
 class wxGTKTheme : public wxTheme
 {
@@ -980,7 +980,7 @@ void wxGTKRenderer::DrawAntiRaisedBorder(wxDC& dc, wxRect *rect)
 void wxGTKRenderer::DrawBorder(wxDC& dc,
                                wxBorder border,
                                const wxRect& rectTotal,
-                               int flags,
+                               int WXUNUSED(flags),
                                wxRect *rectIn)
 {
     size_t width;
@@ -1634,7 +1634,7 @@ void wxGTKRenderer::DrawToolBarButton(wxDC& dc,
                                       const wxBitmap& bitmap,
                                       const wxRect& rectOrig,
                                       int flags,
-                                      long style)
+                                      long WXUNUSED(style))
 {
     // we don't draw the separators at all
     if ( !label.empty() || bitmap.Ok() )
@@ -1663,7 +1663,7 @@ void wxGTKRenderer::DrawToolBarButton(wxDC& dc,
 // text control
 // ----------------------------------------------------------------------------
 
-wxRect wxGTKRenderer::GetTextTotalArea(const wxTextCtrl *text,
+wxRect wxGTKRenderer::GetTextTotalArea(const wxTextCtrl * WXUNUSED(text),
                                        const wxRect& rect) const
 {
     wxRect rectTotal = rect;
@@ -1897,19 +1897,19 @@ wxSize wxGTKRenderer::GetSliderThumbSize(const wxRect& rect,
 }
 
 wxRect wxGTKRenderer::GetSliderShaftRect(const wxRect& rect,
-                                         int lenThumb,
+                                         int WXUNUSED(lenThumb),
                                          wxOrientation WXUNUSED(orient),
-                                         long style) const
+                                         long WXUNUSED(style)) const
 {
     return rect.Deflate(2*BORDER_THICKNESS, 2*BORDER_THICKNESS);
 }
 
 void wxGTKRenderer::DrawSliderShaft(wxDC& dc,
                                     const wxRect& rectOrig,
-                                    int lenThumb,
-                                    wxOrientation orient,
+                                    int WXUNUSED(lenThumb),
+                                    wxOrientation WXUNUSED(orient),
                                     int flags,
-                                    long style,
+                                    long WXUNUSED(style),
                                     wxRect *rectShaft)
 {
     wxRect rect = rectOrig;
@@ -1936,8 +1936,8 @@ void wxGTKRenderer::DrawSliderShaft(wxDC& dc,
 void wxGTKRenderer::DrawSliderThumb(wxDC& dc,
                                     const wxRect& rectOrig,
                                     wxOrientation orient,
-                                    int flags,
-                                    long style)
+                                    int WXUNUSED(flags),
+                                    long WXUNUSED(style))
 {
     // draw the thumb border
     wxRect rect = rectOrig;
@@ -2227,15 +2227,16 @@ wxMenuGeometryInfo *wxGTKRenderer::GetMenuGeometry(wxWindow *win,
 // status bar
 // ----------------------------------------------------------------------------
 
-wxSize wxGTKRenderer::GetStatusBarBorders(wxCoord *borderBetweenFields) const
+wxSize
+wxGTKRenderer::GetStatusBarBorders(wxCoord * WXUNUSED(borderBetweenFields)) const
 {
     return wxSize(0, 0);
 }
 
-void wxGTKRenderer::DrawStatusField(wxDC& dc,
-                                    const wxRect& rect,
-                                    const wxString& label,
-                                    int flags)
+void wxGTKRenderer::DrawStatusField(wxDC& WXUNUSED(dc),
+                                    const wxRect& WXUNUSED(rect),
+                                    const wxString& WXUNUSED(label),
+                                    int WXUNUSED(flags))
 {
 }
 
@@ -2304,7 +2305,7 @@ void wxGTKRenderer::GetComboBitmaps(wxBitmap *bmpNormal,
 void wxGTKRenderer::DoDrawBackground(wxDC& dc,
                                      const wxColour& col,
                                      const wxRect& rect,
-                                     wxWindow *window )
+                                     wxWindow * WXUNUSED(window))
 {
     wxBrush brush(col, wxSOLID);
     dc.SetBrush(brush);
@@ -2650,7 +2651,7 @@ void wxGTKRenderer::DrawScrollbarThumb(wxDC& dc,
 void wxGTKRenderer::DrawScrollbarShaft(wxDC& dc,
                                        wxOrientation orient,
                                        const wxRect& rect,
-                                       int flags)
+                                       int WXUNUSED(flags))
 {
     wxRect rectBar = rect;
     DrawThumbBorder(dc, &rectBar, orient);
@@ -2756,60 +2757,65 @@ void wxGTKRenderer::AdjustSize(wxSize *size, const wxWindow *window)
 // top level windows
 // ----------------------------------------------------------------------------
 
-void wxGTKRenderer::DrawFrameTitleBar(wxDC& dc,
-                                      const wxRect& rect,
-                                      const wxString& title,
-                                      const wxIcon& icon,
-                                      int flags,
-                                      int specialButton,
-                                      int specialButtonFlag)
+void wxGTKRenderer::DrawFrameTitleBar(wxDC& WXUNUSED(dc),
+                                      const wxRect& WXUNUSED(rect),
+                                      const wxString& WXUNUSED(title),
+                                      const wxIcon& WXUNUSED(icon),
+                                      int WXUNUSED(flags),
+                                      int WXUNUSED(specialButton),
+                                      int WXUNUSED(specialButtonFlag))
 {
 }
 
-void wxGTKRenderer::DrawFrameBorder(wxDC& dc,
-                                    const wxRect& rect,
-                                    int flags)
+void wxGTKRenderer::DrawFrameBorder(wxDC& WXUNUSED(dc),
+                                    const wxRect& WXUNUSED(rect),
+                                    int WXUNUSED(flags))
 {
 }
 
-void wxGTKRenderer::DrawFrameBackground(wxDC& dc,
-                                        const wxRect& rect,
-                                        int flags)
+void wxGTKRenderer::DrawFrameBackground(wxDC& WXUNUSED(dc),
+                                        const wxRect& WXUNUSED(rect),
+                                        int WXUNUSED(flags))
 {
 }
 
-void wxGTKRenderer::DrawFrameTitle(wxDC& dc,
-                                   const wxRect& rect,
-                                   const wxString& title,
-                                   int flags)
+void wxGTKRenderer::DrawFrameTitle(wxDC& WXUNUSED(dc),
+                                   const wxRect& WXUNUSED(rect),
+                                   const wxString& WXUNUSED(title),
+                                   int WXUNUSED(flags))
 {
 }
 
-void wxGTKRenderer::DrawFrameIcon(wxDC& dc,
-                                  const wxRect& rect,
-                                  const wxIcon& icon,
-                                  int flags)
+void wxGTKRenderer::DrawFrameIcon(wxDC& WXUNUSED(dc),
+                                  const wxRect& WXUNUSED(rect),
+                                  const wxIcon& WXUNUSED(icon),
+                                  int WXUNUSED(flags))
 {
 }
 
-void wxGTKRenderer::DrawFrameButton(wxDC& dc,
-                                    wxCoord x, wxCoord y,
-                                    int button,
-                                    int flags)
+void wxGTKRenderer::DrawFrameButton(wxDC& WXUNUSED(dc),
+                                    wxCoord WXUNUSED(x),
+                                    wxCoord WXUNUSED(y),
+                                    int WXUNUSED(button),
+                                    int WXUNUSED(flags))
 {
 }
 
-wxRect wxGTKRenderer::GetFrameClientArea(const wxRect& rect, int flags) const
+wxRect
+wxGTKRenderer::GetFrameClientArea(const wxRect& rect,
+                                  int WXUNUSED(flags)) const
 {
     return rect;
 }
 
-wxSize wxGTKRenderer::GetFrameTotalSize(const wxSize& clientSize, int flags) const
+wxSize
+wxGTKRenderer::GetFrameTotalSize(const wxSize& clientSize,
+                                 int WXUNUSED(flags)) const
 {
     return clientSize;
 }
 
-wxSize wxGTKRenderer::GetFrameMinSize(int flags) const
+wxSize wxGTKRenderer::GetFrameMinSize(int WXUNUSED(flags)) const
 {
     return wxSize(0,0);
 }
@@ -2819,7 +2825,10 @@ wxSize wxGTKRenderer::GetFrameIconSize() const
     return wxSize(-1, -1);
 }
 
-int wxGTKRenderer::HitTestFrame(const wxRect& rect, const wxPoint& pt, int flags) const
+int
+wxGTKRenderer::HitTestFrame(const wxRect& WXUNUSED(rect),
+                            const wxPoint& WXUNUSED(pt),
+                            int WXUNUSED(flags)) const
 {
     return wxHT_TOPLEVEL_CLIENT_AREA;
 }
@@ -4462,9 +4471,9 @@ wxGTKInputHandler::wxGTKInputHandler(wxGTKRenderer *renderer)
     m_renderer = renderer;
 }
 
-bool wxGTKInputHandler::HandleKey(wxInputConsumer *control,
-                                  const wxKeyEvent& event,
-                                  bool pressed)
+bool wxGTKInputHandler::HandleKey(wxInputConsumer * WXUNUSED(control),
+                                  const wxKeyEvent& WXUNUSED(event),
+                                  bool WXUNUSED(pressed))
 {
     return FALSE;
 }

@@ -49,7 +49,7 @@
     #include "wx/statbox.h"
 #endif
 
-#if wxUSE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
     #include "wx/ownerdrw.h"
 #endif
 
@@ -3520,7 +3520,16 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
 // owner drawn stuff
 // ---------------------------------------------------------------------------
 
-bool wxWindowMSW::MSWOnDrawItem(int id, WXDRAWITEMSTRUCT *itemStruct)
+#if (wxUSE_OWNER_DRAWN && wxUSE_MENUS_NATIVE) || \
+        (wxUSE_CONTROLS && !defined(__WXUNIVERSAL__))
+    #define WXUNUSED_UNLESS_ODRAWN(param) param
+#else
+    #define WXUNUSED_UNLESS_ODRAWN(param)
+#endif
+
+bool
+wxWindowMSW::MSWOnDrawItem(int WXUNUSED_UNLESS_ODRAWN(id),
+                           WXDRAWITEMSTRUCT * WXUNUSED_UNLESS_ODRAWN(itemStruct))
 {
 #if wxUSE_OWNER_DRAWN
 
@@ -3572,9 +3581,12 @@ bool wxWindowMSW::MSWOnDrawItem(int id, WXDRAWITEMSTRUCT *itemStruct)
     return FALSE;
 }
 
-bool wxWindowMSW::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
+bool
+wxWindowMSW::MSWOnMeasureItem(int WXUNUSED_UNLESS_ODRAWN(id),
+                              WXMEASUREITEMSTRUCT *
+                                  WXUNUSED_UNLESS_ODRAWN(itemStruct))
 {
-#if wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
+#if wxUSE_OWNER_DRAWN && wxUSE_MENUS_NATIVE
     // is it a menu item?
     MEASUREITEMSTRUCT *pMeasureStruct = (MEASUREITEMSTRUCT *)itemStruct;
     if ( id == 0 && pMeasureStruct->CtlType == ODT_MENU )

@@ -277,7 +277,7 @@ public:
     virtual int GetSelection() const;
     void SetSelection(int n) { Select(n); }
 
-    void SetStringSelection(const wxString& s) {  }
+    void SetStringSelection(const wxString& WXUNUSED(s)) {  }
 
     // we have to redefine these functions here to avoid ambiguities in classes
     // deriving from us which would arise otherwise because we inherit these

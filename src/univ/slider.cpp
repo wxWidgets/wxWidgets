@@ -1026,8 +1026,9 @@ bool wxStdSliderButtonInputHandler::HandleMouseMove(wxInputConsumer *consumer,
     return wxStdInputHandler::HandleMouseMove(consumer, event);
 }
 
-bool wxStdSliderButtonInputHandler::HandleFocus(wxInputConsumer *consumer,
-                                                const wxFocusEvent& event)
+bool
+wxStdSliderButtonInputHandler::HandleFocus(wxInputConsumer * WXUNUSED(consumer),
+                                           const wxFocusEvent& WXUNUSED(event))
 {
     // slider's appearance changes when it gets/loses focus
     return TRUE;

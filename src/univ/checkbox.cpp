@@ -67,7 +67,7 @@ bool wxCheckBox::Create(wxWindow *parent,
                         const wxValidator& validator,
                         const wxString &name)
 {
-    if ( !wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name) )
+    if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
     SetLabel(label);
@@ -279,7 +279,7 @@ wxStdCheckboxInputHandler::wxStdCheckboxInputHandler(wxInputHandler *inphand)
 }
 
 bool wxStdCheckboxInputHandler::HandleActivation(wxInputConsumer *consumer,
-                                                 bool activated)
+                                                 bool WXUNUSED(activated))
 {
     // only the focused checkbox appearance changes when the app gains/loses
     // activation

@@ -93,7 +93,7 @@ public:
     }
 
 protected:
-    void OnButton(wxCommandEvent& event) { m_combo->ShowPopup(); }
+    void OnButton(wxCommandEvent& WXUNUSED(event)) { m_combo->ShowPopup(); }
 
     virtual wxSize DoGetBestClientSize() const
     {
@@ -290,7 +290,7 @@ wxComboControl::~wxComboControl()
 // ----------------------------------------------------------------------------
 
 void wxComboControl::DoSetSize(int x, int y,
-                               int width, int height,
+                               int width, int WXUNUSED(height),
                                int sizeFlags)
 {
     // combo height is always fixed

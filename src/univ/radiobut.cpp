@@ -60,7 +60,7 @@ bool wxRadioButton::Create(wxWindow *parent,
                         const wxString &name)
 {
     if ( !wxCheckBox::Create(parent, id, label, pos, size, style,
-                             wxDefaultValidator, name) )
+                             validator, name) )
     {
         return FALSE;
     }

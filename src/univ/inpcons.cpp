@@ -99,9 +99,9 @@ void wxInputConsumer::OnMouse(wxMouseEvent& event)
 // the actions
 // ----------------------------------------------------------------------------
 
-bool wxInputConsumer::PerformAction(const wxControlAction& action,
-                                    long numArg,
-                                    const wxString& strArg)
+bool wxInputConsumer::PerformAction(const wxControlAction& WXUNUSED(action),
+                                    long WXUNUSED(numArg),
+                                    const wxString& WXUNUSED(strArg))
 {
     return FALSE;
 }
