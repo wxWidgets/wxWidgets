@@ -73,6 +73,7 @@
     #define TEST_MIME
     #define TEST_PATHLIST
     #define TEST_ODBC
+    #define TEST_PRINTF
     #define TEST_REGCONF
     #define TEST_REGEX
     #define TEST_REGISTRY
@@ -92,7 +93,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
-    #define TEST_DATETIME
+    #define TEST_PRINTF
 
     static const bool TEST_ALL = FALSE;
 #endif
@@ -1764,8 +1765,10 @@ static void TestMimeFilename()
             if ( !ft->GetOpenCommand(&cmd,
                                      wxFileType::MessageParameters(fname, _T(""))) )
                 cmd = _T("<no command available>");
+            else
+                cmd = wxString('"') + cmd + '"';
 
-            wxPrintf(_T("To open %s (%s) do '%s'.\n"),
+            wxPrintf(_T("To open %s (%s) do %s.\n"),
                      fname.c_str(), desc.c_str(), cmd.c_str());
 
             delete ft;
@@ -2459,6 +2462,356 @@ static void TestDbOpen()
 }
 
 #endif // TEST_ODBC
+
+// ----------------------------------------------------------------------------
+// printf() tests
+// ----------------------------------------------------------------------------
+
+/*
+   NB: this stuff was taken from the glibc test suite and modified to build
+       in wxWindows: if I read the copyright below properly, this shouldn't
+       be a problem
+ */
+
+#ifdef TEST_PRINTF
+
+#ifdef wxTEST_PRINTF
+    // use our functions from wxchar.cpp
+    #undef wxPrintf
+    #undef wxSprintf
+
+    // NB: do _not_ use ATTRIBUTE_PRINTF here, we have some invalid formats
+    //     in the tests below
+    int wxPrintf( const wxChar *format, ... );
+    int wxSprintf( wxChar *str, const wxChar *format, ... );
+#endif
+
+#include <float.h>
+
+static void rfg1 (void);
+static void rfg2 (void);
+
+
+static void
+fmtchk (const wxChar *fmt)
+{
+  (void) wxPrintf(_T("%s:\t`"), fmt);
+  (void) wxPrintf(fmt, 0x12);
+  (void) wxPrintf(_T("'\n"));
+}
+
+static void
+fmtst1chk (const wxChar *fmt)
+{
+  (void) wxPrintf(_T("%s:\t`"), fmt);
+  (void) wxPrintf(fmt, 4, 0x12);
+  (void) wxPrintf(_T("'\n"));
+}
+
+static void
+fmtst2chk (const wxChar *fmt)
+{
+  (void) wxPrintf(_T("%s:\t`"), fmt);
+  (void) wxPrintf(fmt, 4, 4, 0x12);
+  (void) wxPrintf(_T("'\n"));
+}
+
+/* This page is covered by the following copyright: */
+
+/* (C) Copyright C E Chew
+ *
+ * Feel free to copy, use and distribute this software provided:
+ *
+ *        1. you do not pretend that you wrote it
+ *        2. you leave this copyright notice intact.
+ */
+
+/*
+ * Extracted from exercise.c for glibc-1.05 bug report by Bruce Evans.
+ */
+
+#define DEC -123
+#define INT 255
+#define UNS (~0)
+
+/* Formatted Output Test
+ *
+ * This exercises the output formatting code.
+ */
+
+static void
+fp_test (void)
+{
+  int i, j, k, l;
+  wxChar buf[7];
+  wxChar *prefix = buf;
+  wxChar tp[20];
+
+  wxPuts(_T("\nFormatted output test"));
+  wxPrintf(_T("prefix  6d      6o      6x      6X      6u\n"));
+  wxStrcpy(prefix, _T("%"));
+  for (i = 0; i < 2; i++) {
+    for (j = 0; j < 2; j++) {
+      for (k = 0; k < 2; k++) {
+        for (l = 0; l < 2; l++) {
+          wxStrcpy(prefix, _T("%"));
+          if (i == 0) wxStrcat(prefix, _T("-"));
+          if (j == 0) wxStrcat(prefix, _T("+"));
+          if (k == 0) wxStrcat(prefix, _T("#"));
+          if (l == 0) wxStrcat(prefix, _T("0"));
+          wxPrintf(_T("%5s |"), prefix);
+          wxStrcpy(tp, prefix);
+          wxStrcat(tp, _T("6d |"));
+          wxPrintf(tp, DEC);
+          wxStrcpy(tp, prefix);
+          wxStrcat(tp, _T("6o |"));
+          wxPrintf(tp, INT);
+          wxStrcpy(tp, prefix);
+          wxStrcat(tp, _T("6x |"));
+          wxPrintf(tp, INT);
+          wxStrcpy(tp, prefix);
+          wxStrcat(tp, _T("6X |"));
+          wxPrintf(tp, INT);
+          wxStrcpy(tp, prefix);
+          wxStrcat(tp, _T("6u |"));
+          wxPrintf(tp, UNS);
+          wxPrintf(_T("\n"));
+        }
+      }
+    }
+  }
+  wxPrintf(_T("%10s\n"), (wxChar *) NULL);
+  wxPrintf(_T("%-10s\n"), (wxChar *) NULL);
+}
+
+static void TestPrintf()
+{
+  static wxChar shortstr[] = _T("Hi, Z.");
+  static wxChar longstr[] = "Good morning, Doctor Chandra.  This is Hal.  \
+I am ready for my first lesson today.";
+  int result = 0;
+
+  fmtchk(_T("%.4x"));
+  fmtchk(_T("%04x"));
+  fmtchk(_T("%4.4x"));
+  fmtchk(_T("%04.4x"));
+  fmtchk(_T("%4.3x"));
+  fmtchk(_T("%04.3x"));
+
+  fmtst1chk(_T("%.*x"));
+  fmtst1chk(_T("%0*x"));
+  fmtst2chk(_T("%*.*x"));
+  fmtst2chk(_T("%0*.*x"));
+
+  wxPrintf(_T("bad format:\t\"%b\"\n"));
+  wxPrintf(_T("nil pointer (padded):\t\"%10p\"\n"), (void *) NULL);
+
+  wxPrintf(_T("decimal negative:\t\"%d\"\n"), -2345);
+  wxPrintf(_T("octal negative:\t\"%o\"\n"), -2345);
+  wxPrintf(_T("hex negative:\t\"%x\"\n"), -2345);
+  wxPrintf(_T("long decimal number:\t\"%ld\"\n"), -123456L);
+  wxPrintf(_T("long octal negative:\t\"%lo\"\n"), -2345L);
+  wxPrintf(_T("long unsigned decimal number:\t\"%lu\"\n"), -123456L);
+  wxPrintf(_T("zero-padded LDN:\t\"%010ld\"\n"), -123456L);
+  wxPrintf(_T("left-adjusted ZLDN:\t\"%-010ld\"\n"), -123456);
+  wxPrintf(_T("space-padded LDN:\t\"%10ld\"\n"), -123456L);
+  wxPrintf(_T("left-adjusted SLDN:\t\"%-10ld\"\n"), -123456L);
+
+  wxPrintf(_T("zero-padded string:\t\"%010s\"\n"), shortstr);
+  wxPrintf(_T("left-adjusted Z string:\t\"%-010s\"\n"), shortstr);
+  wxPrintf(_T("space-padded string:\t\"%10s\"\n"), shortstr);
+  wxPrintf(_T("left-adjusted S string:\t\"%-10s\"\n"), shortstr);
+  wxPrintf(_T("null string:\t\"%s\"\n"), (wxChar *)NULL);
+  wxPrintf(_T("limited string:\t\"%.22s\"\n"), longstr);
+
+  wxPrintf(_T("e-style >= 1:\t\"%e\"\n"), 12.34);
+  wxPrintf(_T("e-style >= .1:\t\"%e\"\n"), 0.1234);
+  wxPrintf(_T("e-style < .1:\t\"%e\"\n"), 0.001234);
+  wxPrintf(_T("e-style big:\t\"%.60e\"\n"), 1e20);
+  wxPrintf(_T("e-style == .1:\t\"%e\"\n"), 0.1);
+  wxPrintf(_T("f-style >= 1:\t\"%f\"\n"), 12.34);
+  wxPrintf(_T("f-style >= .1:\t\"%f\"\n"), 0.1234);
+  wxPrintf(_T("f-style < .1:\t\"%f\"\n"), 0.001234);
+  wxPrintf(_T("g-style >= 1:\t\"%g\"\n"), 12.34);
+  wxPrintf(_T("g-style >= .1:\t\"%g\"\n"), 0.1234);
+  wxPrintf(_T("g-style < .1:\t\"%g\"\n"), 0.001234);
+  wxPrintf(_T("g-style big:\t\"%.60g\"\n"), 1e20);
+
+  wxPrintf (_T(" %6.5f\n"), .099999999860301614);
+  wxPrintf (_T(" %6.5f\n"), .1);
+  wxPrintf (_T("x%5.4fx\n"), .5);
+
+  wxPrintf (_T("%#03x\n"), 1);
+
+  //wxPrintf (_T("something really insane: %.10000f\n"), 1.0);
+
+  {
+    double d = FLT_MIN;
+    int niter = 17;
+
+    while (niter-- != 0)
+      wxPrintf (_T("%.17e\n"), d / 2);
+    fflush (stdout);
+  }
+
+  wxPrintf (_T("%15.5e\n"), 4.9406564584124654e-324);
+
+#define FORMAT _T("|%12.4f|%12.4e|%12.4g|\n")
+  wxPrintf (FORMAT, 0.0, 0.0, 0.0);
+  wxPrintf (FORMAT, 1.0, 1.0, 1.0);
+  wxPrintf (FORMAT, -1.0, -1.0, -1.0);
+  wxPrintf (FORMAT, 100.0, 100.0, 100.0);
+  wxPrintf (FORMAT, 1000.0, 1000.0, 1000.0);
+  wxPrintf (FORMAT, 10000.0, 10000.0, 10000.0);
+  wxPrintf (FORMAT, 12345.0, 12345.0, 12345.0);
+  wxPrintf (FORMAT, 100000.0, 100000.0, 100000.0);
+  wxPrintf (FORMAT, 123456.0, 123456.0, 123456.0);
+#undef        FORMAT
+
+  {
+    wxChar buf[20];
+    int rc = wxSnprintf (buf, WXSIZEOF(buf), _T("%30s"), _T("foo"));
+
+    wxPrintf(_T("snprintf (\"%%30s\", \"foo\") == %d, \"%.*s\"\n"),
+             rc, WXSIZEOF(buf), buf);
+#if 0
+    wxChar buf2[512];
+    wxPrintf ("snprintf (\"%%.999999u\", 10)\n",
+            wxSnprintf(buf2, WXSIZEOFbuf2), "%.999999u", 10));
+#endif
+  }
+
+  fp_test ();
+
+  wxPrintf (_T("%e should be 1.234568e+06\n"), 1234567.8);
+  wxPrintf (_T("%f should be 1234567.800000\n"), 1234567.8);
+  wxPrintf (_T("%g should be 1.23457e+06\n"), 1234567.8);
+  wxPrintf (_T("%g should be 123.456\n"), 123.456);
+  wxPrintf (_T("%g should be 1e+06\n"), 1000000.0);
+  wxPrintf (_T("%g should be 10\n"), 10.0);
+  wxPrintf (_T("%g should be 0.02\n"), 0.02);
+
+  {
+    double x=1.0;
+    wxPrintf(_T("%.17f\n"),(1.0/x/10.0+1.0)*x-x);
+  }
+
+  {
+    wxChar buf[200];
+
+    wxSprintf(buf,_T("%*s%*s%*s"),-1,_T("one"),-20,_T("two"),-30,_T("three"));
+
+    result |= wxStrcmp (buf,
+                      _T("onetwo                 three                         "));
+
+    wxPuts (result != 0 ? _T("Test failed!") : _T("Test ok."));
+  }
+
+  {
+    wxChar buf[200];
+
+    wxSprintf (buf, _T("%07Lo"), 040000000000ll);
+    wxPrintf (_T("sprintf (buf, \"%%07Lo\", 040000000000ll) = %s"), buf);
+
+    if (wxStrcmp (buf, _T("40000000000")) != 0)
+      {
+        result = 1;
+        wxPuts (_T("\tFAILED"));
+      }
+    wxPuts ("");
+  }
+
+  wxPrintf (_T("printf (\"%%hhu\", %u) = %hhu\n"), UCHAR_MAX + 2, UCHAR_MAX + 2);
+  wxPrintf (_T("printf (\"%%hu\", %u) = %hu\n"), USHRT_MAX + 2, USHRT_MAX + 2);
+
+  wxPuts (_T("--- Should be no further output. ---"));
+  rfg1 ();
+  rfg2 ();
+
+#if 0
+  {
+    wxChar bytes[7];
+    wxChar buf[20];
+
+    memset (bytes, '\xff', sizeof bytes);
+    wxSprintf (buf, _T("foo%hhn\n"), &bytes[3]);
+    if (bytes[0] != '\xff' || bytes[1] != '\xff' || bytes[2] != '\xff'
+        || bytes[4] != '\xff' || bytes[5] != '\xff' || bytes[6] != '\xff')
+      {
+        wxPuts (_T("%hhn overwrite more bytes"));
+        result = 1;
+      }
+    if (bytes[3] != 3)
+      {
+        wxPuts (_T("%hhn wrote incorrect value"));
+        result = 1;
+      }
+  }
+#endif
+}
+
+static void
+rfg1 (void)
+{
+  wxChar buf[100];
+
+  wxSprintf (buf, _T("%5.s"), _T("xyz"));
+  if (wxStrcmp (buf, _T("     ")) != 0)
+    wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T("     "));
+  wxSprintf (buf, _T("%5.f"), 33.3);
+  if (wxStrcmp (buf, _T("   33")) != 0)
+    wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T("   33"));
+  wxSprintf (buf, _T("%8.e"), 33.3e7);
+  if (wxStrcmp (buf, _T("   3e+08")) != 0)
+    wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T("   3e+08"));
+  wxSprintf (buf, _T("%8.E"), 33.3e7);
+  if (wxStrcmp (buf, _T("   3E+08")) != 0)
+    wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T("   3E+08"));
+  wxSprintf (buf, _T("%.g"), 33.3);
+  if (wxStrcmp (buf, _T("3e+01")) != 0)
+    wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T("3e+01"));
+  wxSprintf (buf, _T("%.G"), 33.3);
+  if (wxStrcmp (buf, _T("3E+01")) != 0)
+    wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T("3E+01"));
+}
+
+static void
+rfg2 (void)
+{
+  int prec;
+  wxChar buf[100];
+
+  prec = 0;
+  wxSprintf (buf, _T("%.*g"), prec, 3.3);
+  if (wxStrcmp (buf, _T("3")) != 0)
+    wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T("3"));
+  prec = 0;
+  wxSprintf (buf, _T("%.*G"), prec, 3.3);
+  if (wxStrcmp (buf, _T("3")) != 0)
+    wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T("3"));
+  prec = 0;
+  wxSprintf (buf, _T("%7.*G"), prec, 3.33);
+  if (wxStrcmp (buf, _T("      3")) != 0)
+    wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T("      3"));
+  prec = 3;
+  wxSprintf (buf, _T("%04.*o"), prec, 33);
+  if (wxStrcmp (buf, _T(" 041")) != 0)
+    wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T(" 041"));
+  prec = 7;
+  wxSprintf (buf, _T("%09.*u"), prec, 33);
+  if (wxStrcmp (buf, _T("  0000033")) != 0)
+    wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T("  0000033"));
+  prec = 3;
+  wxSprintf (buf, _T("%04.*x"), prec, 33);
+  if (wxStrcmp (buf, _T(" 021")) != 0)
+    wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T(" 021"));
+  prec = 3;
+  wxSprintf (buf, _T("%04.*X"), prec, 33);
+  if (wxStrcmp (buf, _T(" 021")) != 0)
+    wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T(" 021"));
+}
+
+#endif // TEST_PRINTF
 
 // ----------------------------------------------------------------------------
 // registry and related stuff
@@ -3487,7 +3840,7 @@ static void TestUnicodeToFromAscii()
     wxString s = wxString::FromAscii(msg);
 
     wxPrintf(_T("Message in Unicode: %s\n"), s.c_str());
-    wxPrintf(_T("Message in ASCII: %s\n"), s.ToAscii());
+    printf("Message in ASCII: %s\n", (const char *)s.ToAscii());
 
     wxPutchar(_T('\n'));
 }
@@ -6076,6 +6429,10 @@ int main(int argc, char **argv)
     TestDbOpen();
 #endif // TEST_ODBC
 
+#ifdef TEST_PRINTF
+    TestPrintf();
+#endif // TEST_PRINTF
+
 #ifdef TEST_REGCONF
     TestRegConfWrite();
 #endif // TEST_REGCONF
@@ -6118,17 +6475,16 @@ int main(int argc, char **argv)
     if ( nCPUs != -1 )
         wxThread::SetConcurrency(nCPUs);
 
+        TestDetachedThreads();
     if ( TEST_ALL )
     {
-        TestDetachedThreads();
         TestJoinableThreads();
         TestThreadSuspend();
         TestThreadDelete();
         TestThreadConditions();
         TestThreadExec();
+        TestSemaphore();
     }
-
-    TestSemaphore();
 #endif // TEST_THREADS
 
 #ifdef TEST_TIMER
