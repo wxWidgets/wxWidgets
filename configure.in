@@ -2300,6 +2300,8 @@ fi
 
 dnl check what exactly size_t is on this machine - this is necessary to avoid
 dnl ambiguos overloads in several places, notably wx/string.h and wx/array.h
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
 AC_CACHE_CHECK([if size_t is unsigned int],
     wx_cv_size_t_is_uint,
     AC_TRY_COMPILE([#include <stddef.h>],
@@ -2329,6 +2331,8 @@ else
         AC_DEFINE(wxSIZE_T_IS_ULONG)
     fi
 fi
+
+AC_LANG_RESTORE
 
 dnl ---------------------------------------------------------------------------
 dnl Checks for structures
@@ -2556,9 +2560,9 @@ AC_CACHE_CHECK([if iconv() takes char**], wx_cv_iconv_takes_char,
     AC_TRY_COMPILE([#include <iconv.h>],
     [
         char **inbuf, **outbuf;
-	iconv_t cd;
-	size_t insz, outsz;
-	iconv(cd, inbuf, &insz, outbuf, &outsz);
+        iconv_t cd;
+        size_t insz, outsz;
+        iconv(cd, inbuf, &insz, outbuf, &outsz);
     ],
     wx_cv_iconv_takes_char=yes,
     wx_cv_iconv_takes_char=no)
