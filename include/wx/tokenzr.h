@@ -30,7 +30,10 @@ public:
 
   int CountTokens();
   bool HasMoreToken();
+  inline bool HasMoreTokens() { return HasMoreToken(); };
   wxString NextToken();
+  // A better name!
+  inline wxString GetNextToken() { return NextToken(); };
   wxString GetString() { return m_string; }
 
   void SetString(const wxString& to_tokenize,

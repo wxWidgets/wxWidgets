@@ -747,7 +747,7 @@ void wxWindow::GetClientSize(int *x, int *y) const
     *x = xx; *y = yy;
 }
 
-void wxWindow::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
     // A bit of optimization to help sort out the flickers.
     int oldX, oldY, oldW, oldH;
@@ -819,7 +819,7 @@ void wxWindow::SetSize(int x, int y, int width, int height, int sizeFlags)
     */
 }
 
-void wxWindow::SetClientSize(int width, int height)
+void wxWindow::DoSetClientSize(int width, int height)
 {
     if (m_drawingArea)
     {
@@ -2307,12 +2307,18 @@ void wxDeleteWindowFromTable(Widget w)
 // Get the underlying X window and display
 WXWindow wxWindow::GetXWindow() const
 {
-    return (WXWindow) XtWindow((Widget) GetMainWidget());
+    if (GetMainWidget())
+        return (WXWindow) XtWindow((Widget) GetMainWidget());
+    else
+        return (WXWindow) 0;
 }
 
 WXDisplay *wxWindow::GetXDisplay() const
 {
-    return (WXDisplay*) XtDisplay((Widget) GetMainWidget());
+    if (GetMainWidget())
+        return (WXDisplay*) XtDisplay((Widget) GetMainWidget());
+    else
+        return (WXDisplay*) NULL;
 }
 
 WXWidget wxWindow::GetMainWidget() const

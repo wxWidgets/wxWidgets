@@ -51,7 +51,7 @@ bool wxPanel::Create(wxWindow *parent, wxWindowID id,
                      long style,
                      const wxString& name)
 {
-    m_lastFocus = NULL;
+    m_lastFocus = 0;
 
     bool ret = wxWindow::Create(parent, id, pos, size, style, name);
 

@@ -126,6 +126,12 @@
 
 #define wxUSE_SERIAL        0
                                   // Use serialization
+
+#define wxUSE_TOOLTIPS      0
+                                  // Use tooltips
+
+#define wxUSE_DYNLIB_CLASS  0
+                                  // Use wxLibrary
 /*
  * Finer detail
  *

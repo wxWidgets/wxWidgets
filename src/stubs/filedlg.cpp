@@ -59,7 +59,7 @@ wxString wxFileSelector(const char *title,
         return wxEmptyString;
 }
 
-char *wxFileSelectorEx(const char *title,
+wxString wxFileSelectorEx(const char *title,
                        const char *defaultDir,
                        const char *defaultFileName,
                        int* defaultFilterIndex,

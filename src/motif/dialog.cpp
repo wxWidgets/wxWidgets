@@ -342,6 +342,11 @@ void wxDialog::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     XtVaSetValues((Widget) m_mainWidget, XmNresizePolicy, XmRESIZE_NONE, NULL);
 }
 
+void wxDialog::DoSetClientSize(int width, int height)
+{
+    wxWindow::SetSize(-1, -1, width, height);
+}
+
 void wxDialog::SetTitle(const wxString& title)
 {
     m_dialogTitle = title;

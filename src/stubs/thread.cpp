@@ -17,6 +17,8 @@
 #include "wx/thread.h"
 #include "wx/utils.h"
 
+#if wxUSE_THREADS
+
 enum thread_state {
   STATE_IDLE = 0,
   STATE_RUNNING,
@@ -259,3 +261,5 @@ public:
 
 IMPLEMENT_DYNAMIC_CLASS(wxThreadModule, wxModule)
 
+#endif
+  // wxUSE_THREADS

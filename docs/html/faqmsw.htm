@@ -146,6 +146,26 @@ There is a sample which demonstrates MFC and wxWindows code co-existing in the s
 application. However, don't expect to be able to enable wxWindows windows with OLE-2
 functionality using MFC.<P>
 
+<H3>Why do I sometimes get bizarre crash problems using VC++ 5/6?</H3>
+
+Some crash problems can be due to inconsistent compiler
+options (and of course this isn't limited to wxWindows).
+If strange/weird/impossible things start to happen please
+check (dumping IDE project file as makefile and doing text comparison
+if necessary) that the project settings, especially the list of defined
+symbols, struct packing, etc. are exactly the same for all items in
+the project. After this, delete everything (including PCH) and recompile.<P>
+
+VC++ 5's optimization code seems to be broken and can
+cause problems: this can be seen when deleting an object Dialog
+Editor, in Release mode with optimizations on. If in doubt,
+switch off optimisations, although this will result in much
+larger executables. It seems possible that the library can be created with
+strong optimization, so long as the application is not strongly
+optimized. For example, in wxWindows project, set to 'Minimum
+Size'. In Dialog Editor project, set to 'Customize: Favor Small
+Code' (and no others). This will then work.<P>
+
 
 </font>
 

@@ -25,7 +25,7 @@
 #endif
 
 #if !wxUSE_PRINTING_ARCHITECTURE
-#error You must set wxUSE_PRINTING_ARCHITECTURE to 1 in wx_setup.h to compile this demo.
+#error You must set wxUSE_PRINTING_ARCHITECTURE to 1 in setup.h to compile this demo.
 #endif
 
 // Set this to 1 if you want to test PostScript printing under MSW.

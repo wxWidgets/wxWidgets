@@ -131,6 +131,20 @@ Troubleshooting
   possible temporary workaround (comment out the final
   XtDestroyWidget from ~wxWindow in window.cpp).
 
+- If you use flex and bison instead of yacc and lex, you may need
+  to change the relevant part of src/motif/makefile.unx to read:
+
+  ../common/y_tab.c: ../common/parser.y
+     $(YACC) ../common/parser.y
+     mv ../common/parser.tab.c ../common/y_tab.c
+
+  (the 'mv' command needs to be changed)
+
+- Some compilers, such as Sun C++, may give a lot of warnings about
+  virtual functions being hidden. Please ignore these, it's correct C++ syntax.
+  If you find any incorrect instances, though, such as a
+  missing 'const' in an overridden function, please let us know.
+
 Other Notes
 -----------
 

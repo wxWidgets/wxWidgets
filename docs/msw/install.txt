@@ -137,6 +137,13 @@ optimized. For example, in wxWindows project, set to 'Minimum
 Size'. In Dialog Editor project, set to 'Customize: Favor Small
 Code' (and no others). This will then work.
 
+Note (4): some crash problems can be due to inconsistent compiler
+options. If strange/weird/impossible things start to happen please
+check (dumping IDE project file as makefile and doing text comparison
+if necessary) that the project settings, especially the list of defined
+symbols, struct packing, etc. are exactly the same for all items in
+the project. After this, delete everything (including PCH) and recompile.
+
 Visual C++ 1.5 compilation
 --------------------------
 

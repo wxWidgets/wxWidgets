@@ -138,6 +138,9 @@
 #define wxUSE_TOOLTIPS      0
                                   // Use tooltips
 
+#define wxUSE_DYNLIB_CLASS  0
+                                  // Use wxLibrary
+
 /*
  * Finer detail
  *

@@ -556,6 +556,9 @@ wxXSetBusyCursor (wxWindow * win, wxCursor * cursor)
     Display *display = (Display*) win->GetXDisplay();
     
     Window xwin = (Window) win->GetXWindow();
+    if (!xwin)
+       return;
+
     XSetWindowAttributes attrs;
     
     if (cursor)

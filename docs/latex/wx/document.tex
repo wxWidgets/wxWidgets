@@ -141,7 +141,7 @@ dialog boxes. By default, uses the frame associated with the first view.
 
 \constfunc{wxString}{GetFilename}{\void}
 
-Gets the filename associated with this document, or NULL if none is
+Gets the filename associated with this document, or "" if none is
 associated.
 
 \membersection{wxDocument::GetFirstView}
@@ -241,7 +241,7 @@ document, and notifies the views that the filename (in fact, the title) has chan
 
 \func{virtual bool}{OnOpenDocument}{\param{const wxString\& }{filename}}
 
-Constructs an input file stream for the given filename (which must not be NULL),
+Constructs an input file stream for the given filename (which must not be empty),
 and calls LoadObject. If LoadObject returns TRUE, the document is set to
 unmodified; otherwise, an error message box is displayed. The document's
 views are notified that the filename has changed, to give windows an opportunity
@@ -251,7 +251,7 @@ to update their titles. All of the document's views are then updated.
 
 \func{virtual bool}{OnSaveDocument}{\param{const wxString\& }{filename}}
 
-Constructs an output file stream for the given filename (which must not be NULL),
+Constructs an output file stream for the given filename (which must not be empty),
 and calls SaveObject. If SaveObject returns TRUE, the document is set to
 unmodified; otherwise, an error message box is displayed.
 
