@@ -6,7 +6,7 @@
 // Created:     06/16/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart, Markus Holzem, Guilhem Lavaux
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -18,15 +18,20 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+    #include "wx/wx.h"
 #endif
+
+#if !wxUSE_THREADS
+    #error "This sample requires thread support!"
+#endif // wxUSE_THREADS
 
 #include "wx/thread.h"
 #include "wx/dynarray.h"
+#include "wx/time.h"
 
 // Define a new application type
 class MyApp: public wxApp
@@ -43,7 +48,7 @@ class MyFrame: public wxFrame
 public:
     // ctor
     MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h);
-    
+
     // operations
     void WriteText(const wxString& text) { m_txtctrl->WriteText(text); }
 
@@ -57,14 +62,15 @@ public:
     void OnResumeThread(wxCommandEvent& event);
 
     void OnSize(wxSizeEvent &event);
-    bool OnClose(void) { return TRUE; }
-    
+    void OnIdle(wxIdleEvent &event);
+    bool OnClose() { return TRUE; }
+
 public:
     wxArrayThread m_threads;
 
 private:
     wxTextCtrl *m_txtctrl;
-    
+
     DECLARE_EVENT_TABLE()
 };
 
@@ -72,8 +78,12 @@ class MyThread: public wxThread
 {
 public:
     MyThread(MyFrame *frame);
-    
-    void *Entry();
+
+    // thread execution starts here
+    virtual void *Entry();
+
+    // write something to the text control
+    void WriteText(const wxString& text);
 
 public:
     size_t   m_count;
@@ -87,34 +97,56 @@ MyThread::MyThread(MyFrame *frame)
     m_frame = frame;
 }
 
+void MyThread::WriteText(const wxString& text)
+{
+    wxString msg;
+    msg << wxTime().FormatTime() << ": " << text;
+
+    // before doing any GUI calls we must ensure that this thread is the only
+    // one doing it!
+    wxMutexGuiEnter();
+    m_frame->WriteText(msg);
+    wxMutexGuiLeave();
+}
+
 void *MyThread::Entry()
 {
     wxString text;
-   
+
     DeferDestroy(TRUE);
-    
-    while (1) {
-        TestDestroy();
-        wxMutexGuiEnter();
 
-        text.Printf("[%u] Thread 0x%x here.\n", ++m_count, GetID());
-        m_frame->WriteText(text);
+    text.Printf("Thread 0x%x started.\n", GetID());
+    WriteText(text);
 
-        wxMutexGuiLeave();
+    for ( m_count = 0; m_count < 20; m_count++ )
+    {
+        // check if we were asked to exit
+        if ( TestDestroy() )
+            break;
+
+        text.Printf("[%u] Thread 0x%x here.\n", m_count, GetID());
+        WriteText(text);
+
         wxSleep(1);
     }
-    
+
+    text.Printf("Thread 0x%x finished.\n", GetID());
+    WriteText(text);
+
     return NULL;
 }
 
 // ID for the menu commands
-#define TEST_QUIT 	  1
-#define TEST_TEXT 	  101
-#define TEST_ABOUT 	  102
-#define TEST_START_THREAD 103
-#define TEST_STOP_THREAD  104
-#define TEST_PAUSE_THREAD 105
-#define TEST_RESUME_THREAD 106
+enum
+{
+    TEST_QUIT          = 1,
+    TEST_TEXT          = 101,
+    TEST_ABOUT         = 102,
+    TEST_START_THREAD  = 103,
+    TEST_STOP_THREAD   = 104,
+    TEST_PAUSE_THREAD  = 105,
+    TEST_RESUME_THREAD = 106
+};
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEST_QUIT, MyFrame::OnQuit)
@@ -125,40 +157,41 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEST_RESUME_THREAD, MyFrame::OnResumeThread)
 
     EVT_SIZE(MyFrame::OnSize)
+
+    EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
 
 // Create a new application object
-IMPLEMENT_APP	(MyApp)
+IMPLEMENT_APP  (MyApp)
 
 // `Main program' equivalent, creating windows and returning main app frame
-bool MyApp::OnInit(void)
+bool MyApp::OnInit()
 {
     // Create the main frame window
-    MyFrame *frame = new MyFrame((wxFrame *) NULL, "wxWindows thread sample",
-                                 50, 50, 450, 340);
-    
+    MyFrame *frame = new MyFrame((wxFrame *)NULL, "", 50, 50, 450, 340);
+
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
-    
+
     file_menu->Append(TEST_ABOUT, "&About");
     file_menu->Append(TEST_QUIT, "E&xit");
     wxMenuBar *menu_bar = new wxMenuBar;
     menu_bar->Append(file_menu, "&File");
-    
+
     wxMenu *thread_menu = new wxMenu;
-    thread_menu->Append(TEST_START_THREAD, "Start a new thread");
-    thread_menu->Append(TEST_STOP_THREAD, "Stop a running thread");
+    thread_menu->Append(TEST_START_THREAD, "&Start a new thread");
+    thread_menu->Append(TEST_STOP_THREAD, "S&top a running thread");
     thread_menu->AppendSeparator();
-    thread_menu->Append(TEST_PAUSE_THREAD, "Pause a running thread");
-    thread_menu->Append(TEST_RESUME_THREAD, "Resume suspended thread");
-    menu_bar->Append(thread_menu, "Thread");
+    thread_menu->Append(TEST_PAUSE_THREAD, "&Pause a running thread");
+    thread_menu->Append(TEST_RESUME_THREAD, "&Resume suspended thread");
+    menu_bar->Append(thread_menu, "&Thread");
     frame->SetMenuBar(menu_bar);
-    
+
     // Show the frame
     frame->Show(TRUE);
-    
+
     SetTopWindow(frame);
-    
+
     return TRUE;
 }
 
@@ -167,8 +200,8 @@ MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
        : wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
 {
     wxPanel *panel = new wxPanel(this, -1, wxPoint(0, 0), wxSize(400, 200),
-                                 wxTAB_TRAVERSAL );
-    
+                                 wxTAB_TRAVERSAL);
+
     m_txtctrl = new wxTextCtrl(panel, -1, "", wxPoint(10,30), wxSize(390, 190),
                                wxTE_MULTILINE);
 
@@ -178,30 +211,30 @@ MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
 void MyFrame::OnStartThread(wxCommandEvent& WXUNUSED(event) )
 {
     MyThread *thread = new MyThread(this);
-    
+
     thread->Create();
-    
+
     m_threads.Add(thread);
 }
 
 void MyFrame::OnStopThread(wxCommandEvent& WXUNUSED(event) )
 {
     int no_thrd = m_threads.Count()-1;
-    
+
     if (no_thrd < 0)
         return;
-    
-    delete (m_threads[no_thrd]);
+
+    delete m_threads[no_thrd];
     m_threads.Remove(no_thrd);
 }
 
 void MyFrame::OnResumeThread(wxCommandEvent& WXUNUSED(event) )
 {
-    // resume first suspended thread 
+    // resume first suspended thread
     size_t n = 0;
     while ( n < m_threads.Count() && m_threads[n]->IsPaused() )
         n--;
-    
+
     if ( n < 0 )
         wxLogError("No thread to pause!");
     else
@@ -210,39 +243,58 @@ void MyFrame::OnResumeThread(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnPauseThread(wxCommandEvent& WXUNUSED(event) )
 {
-    // pause last running thread 
+    // pause last running thread
     int n = m_threads.Count() - 1;
     while ( n >= 0 && !m_threads[n]->IsRunning() )
         n--;
-    
+
     if ( n < 0 )
         wxLogError("No thread to pause!");
     else
         m_threads[n]->Pause();
 }
 
-void MyFrame::OnSize(wxSizeEvent& event )
+// set the frame title indicating the current number of threads
+void MyFrame::OnIdle(wxIdleEvent &event)
+{
+    size_t nRunning = 0,
+           nCount = m_threads.Count();
+    for ( size_t n = 0; n < nCount; n++ )
+    {
+        if ( m_threads[n]->IsRunning() )
+            nRunning++;
+    }
+
+    wxString title;
+    title.Printf("wxWindows thread sample (%u threads, %u running).",
+                 nCount, nRunning);
+    SetTitle(title);
+}
+
+void MyFrame::OnSize(wxSizeEvent& event)
 {
     wxFrame::OnSize(event);
-    
+
     wxSize size( GetClientSize() );
-    
+
     m_txtctrl->SetSize( 10, 30, size.x-20, size.y-40 );
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 {
-    unsigned int i;
-    for (i=0;i<m_threads.Count();i++)
-        delete (m_threads[i]);
+    for ( size_t i = 0; i < m_threads.Count(); i++ )
+        delete m_threads[i];
+
     Close(TRUE);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
-    wxMessageDialog dialog(this, "wxThread sample (based on minimal)\nJulian Smart and Guilhem Lavaux",
-        "About wxThread sample", wxYES_NO|wxCANCEL);
-    
+    wxMessageDialog dialog(this, "wxThread sample (based on minimal)\n"
+                                 "Julian Smart and Guilhem Lavaux",
+                           "About wxThread sample",
+                           wxOK | wxICON_INFORMATION);
+
     dialog.ShowModal();
 }
 

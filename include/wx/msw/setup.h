@@ -28,10 +28,10 @@
                                 // Level 1: wxDC, OnSize (etc.) compatibility, but
                                 //          some new features such as event tables
 
-#define wxUSE_AUTOTRANS	1
-								// Define wxTString
+#define wxUSE_AUTOTRANS   1
+                                // Define wxTString
 #define wxUSE_POSTSCRIPT  0
-                        	// 0 for no PostScript device context
+                            // 0 for no PostScript device context
 #define wxUSE_AFM_FOR_POSTSCRIPT 0
                                 // 1 to use font metric files in GetTextExtent
 #define wxUSE_METAFILE    1
@@ -120,7 +120,7 @@
                                   // since you may well need to output
                                   // an error log in a production
                                   // version (or non-debugging beta)
-#define wxUSE_GLOBAL_MEMORY_OPERATORS 1
+#define wxUSE_GLOBAL_MEMORY_OPERATORS 0
                                   // In debug mode, cause new and delete to be redefined globally.
                                   // If this causes problems (e.g. link errors), set this to 0.
 
@@ -149,12 +149,15 @@
                                   // VC++ 4.2 and above allows <iostream> and <iostream.h>
                                   // but you can't mix them. Set to 1 for <iostream.h>,
                                   // 0 for <iostream>
-                      
 
 #define wxUSE_WXCONFIG      1
                                   // if enabled, compiles built-in OS independent wxConfig
                                   // class and it's file (any platform) and registry (Win)
                                   // based implementations
+#define wxUSE_THREADS       1
+                                  // support for multithreaded applications: if
+                                  // 1, compile in thread classes (thread.h)
+                                  // and make the library thread safe
 /*
  * Finer detail
  *

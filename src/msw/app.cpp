@@ -38,6 +38,7 @@
 #include "wx/msw/private.h"
 #include "wx/log.h"
 #include "wx/module.h"
+#include "wx/thread.h"
 
 #if wxUSE_WX_RESOURCES
   #include "wx/resource.h"
@@ -844,45 +845,52 @@ bool wxApp::ProcessMessage(WXMSG *Msg)
 
 void wxApp::OnIdle(wxIdleEvent& event)
 {
-  static bool inOnIdle = FALSE;
+    static bool s_inOnIdle = FALSE;
 
-  // Avoid recursion (via ProcessEvent default case)
-  if (inOnIdle)
-    return;
+    // Avoid recursion (via ProcessEvent default case)
+    if ( s_inOnIdle )
+        return;
 
-  inOnIdle = TRUE;
+    s_inOnIdle = TRUE;
 
-  // 'Garbage' collection of windows deleted with Close().
-  DeletePendingObjects();
+    // 'Garbage' collection of windows deleted with Close().
+    DeletePendingObjects();
 
-  // flush the logged messages if any
-  wxLog *pLog = wxLog::GetActiveTarget();
-  if ( pLog != NULL && pLog->HasPendingMessages() )
-    pLog->Flush();
+    // flush the logged messages if any
+    wxLog *pLog = wxLog::GetActiveTarget();
+    if ( pLog != NULL && pLog->HasPendingMessages() )
+        pLog->Flush();
 
-  // Send OnIdle events to all windows
-  bool needMore = SendIdleEvents();
-//  bool needMore = FALSE;
+    // Send OnIdle events to all windows
+    if ( SendIdleEvents() )
+    {
+        // SendIdleEvents() returns TRUE if at least one window requested more
+        // idle events
+        event.RequestMore(TRUE);
+    }
 
-  if (needMore)
-    event.RequestMore(TRUE);
+    // give a chance to all other threads to perform GUI calls
+    wxMutexGuiLeave();
+    ::Sleep(0);
+    wxMutexGuiEnter();
 
-  inOnIdle = FALSE;
+    s_inOnIdle = FALSE;
 }
 
 // Send idle event to all top-level windows
 bool wxApp::SendIdleEvents()
 {
     bool needMore = FALSE;
-  wxNode* node = wxTopLevelWindows.First();
-  while (node)
-  {
-    wxWindow* win = (wxWindow*) node->Data();
-    if (SendIdleEvents(win))
+    wxNode* node = wxTopLevelWindows.First();
+    while (node)
+    {
+        wxWindow* win = (wxWindow*) node->Data();
+        if (SendIdleEvents(win))
             needMore = TRUE;
 
-    node = node->Next();
-  }
+        node = node->Next();
+    }
+
     return needMore;
 }
 
