@@ -615,6 +615,25 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     dc.DrawText(_T("XPM icon"), 150, 2230);
     if ( m_iconSmileXpm.Ok() )
         dc.DrawIcon(m_iconSmileXpm, 150, 2250);
+    
+    dc.DrawText(_T("Enlarged"), 250, 2230);
+    // testing icon -> bitmap conversion    
+    wxBitmap to_blit( m_iconSmileXpm );
+    dc.SetUserScale( 1.5, 1.5 );
+    dc.DrawBitmap( to_blit, (int)(250/1.5), (int)(2250/1.5) );
+    dc.SetUserScale( 2, 2 );
+    dc.DrawBitmap( to_blit, (int)(300/2), (int)(2250/2) );
+    dc.SetUserScale( 1.0, 1.0 );
+
+    dc.DrawText(_T("Blit"), 400, 2230);
+    wxMemoryDC blit_dc;
+    blit_dc.SelectObject( to_blit );
+    dc.Blit( 400, 2250, to_blit.GetWidth(), to_blit.GetHeight(), &blit_dc, 0, 0, wxCOPY, TRUE );
+    dc.SetUserScale( 1.5, 1.5 );
+    dc.Blit( (int)(450/1.5), (int)(2250/1.5), to_blit.GetWidth(), to_blit.GetHeight(), &blit_dc, 0, 0, wxCOPY, TRUE );
+    dc.SetUserScale( 2, 2 );
+    dc.Blit( (int)(500/2), (int)(2250/2), to_blit.GetWidth(), to_blit.GetHeight(), &blit_dc, 0, 0, wxCOPY, TRUE );
+    dc.SetUserScale( 1.0, 1.0 );
 
     dc.DrawText( _T("ICO handler (1st image)"), 30, 2290 );
     if (my_horse_ico32 && my_horse_ico32->Ok())
