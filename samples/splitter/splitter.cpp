@@ -53,7 +53,8 @@ enum
     SPLIT_LIVE,
     SPLIT_SETPOSITION,
     SPLIT_SETMINSIZE,
-    SPLIT_SETGRAVITY
+    SPLIT_SETGRAVITY,
+    SPLIT_REPLACE
 };
 
 // ----------------------------------------------------------------------------
@@ -74,7 +75,7 @@ class MyFrame: public wxFrame
 {
 public:
     MyFrame();
-    virtual ~MyFrame(){};
+    virtual ~MyFrame();
 
     // Menu commands
     void SplitHorizontal(wxCommandEvent& event);
@@ -84,6 +85,7 @@ public:
     void SetPosition(wxCommandEvent& event);
     void SetMinSize(wxCommandEvent& event);
     void SetGravity(wxCommandEvent& event);
+    void Replace(wxCommandEvent &event);
 
     void Quit(wxCommandEvent& event);
 
@@ -96,6 +98,7 @@ private:
     wxScrolledWindow *m_left, *m_right;
 
     wxSplitterWindow* m_splitter;
+    wxWindow *m_replacewindow;
 
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(MyFrame)
@@ -165,6 +168,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(SPLIT_SETPOSITION, MyFrame::SetPosition)
     EVT_MENU(SPLIT_SETMINSIZE, MyFrame::SetMinSize)
     EVT_MENU(SPLIT_SETGRAVITY, MyFrame::SetGravity)
+    EVT_MENU(SPLIT_REPLACE, MyFrame::Replace)
 
     EVT_MENU(SPLIT_QUIT, MyFrame::Quit)
 
@@ -210,6 +214,11 @@ MyFrame::MyFrame()
                       _T("Set gravity of sash"));
     splitMenu->AppendSeparator();
 
+    splitMenu->Append(SPLIT_REPLACE,
+                      _T("&Replace right window"),
+                      _T("Replace right window"));
+    splitMenu->AppendSeparator();
+
     splitMenu->Append(SPLIT_QUIT, _T("E&xit\tAlt-X"), _T("Exit"));
 
     wxMenuBar *menuBar = new wxMenuBar;
@@ -248,6 +257,16 @@ MyFrame::MyFrame()
 #if wxUSE_STATUSBAR
     SetStatusText(_T("Min pane size = 0"), 1);
 #endif // wxUSE_STATUSBAR
+
+    m_replacewindow = (wxWindow *)0;
+}
+
+MyFrame::~MyFrame()
+{
+    if (m_replacewindow) {
+        m_replacewindow->Destroy();
+        m_replacewindow = (wxWindow *)0;
+    }
 }
 
 // menu command handlers
@@ -352,6 +371,21 @@ void MyFrame::SetGravity(wxCommandEvent& WXUNUSED(event) )
     str.Printf( wxT("Gravity = %g"), gravity);
     SetStatusText(str, 1);
 #endif // wxUSE_STATUSBAR
+}
+
+void MyFrame::Replace(wxCommandEvent& WXUNUSED(event) )
+{
+    if (m_replacewindow == 0) {
+        m_replacewindow = m_splitter->GetWindow2();
+        m_splitter->ReplaceWindow(m_replacewindow, new wxPanel(m_splitter, wxID_ANY));
+        m_replacewindow->Hide();
+    } else {
+        wxWindow *empty = m_splitter->GetWindow2();
+        m_splitter->ReplaceWindow(empty, m_replacewindow);
+        m_replacewindow->Show();
+        m_replacewindow = 0;
+        empty->Destroy();
+    }
 }
 
 // Update UI handlers
