@@ -153,3 +153,21 @@ Helper function which redraws the X axis.
 
 Helper function which redraws the Y axis.
 
+\membersection{wxPlotWindow::SetScrollOnThumbRelease}\label{wxplotwindowsetscrollonthumbrelease}
+
+\func{void}{SetScrollOnThumbRelease}{\param{bool}{ onrelease = TRUE}}
+
+This function controls if the plot area will get scrolled only if the scrollbar thumb
+has been release or also if the thumb is being dragged. When displaying large amounts
+of data, it might become impossible to display the data fast enough to produce smooth
+scrolling and then this function should be called.
+
+\membersection{wxPlotWindow::SetEnlargeAroundWindowCentre}\label{wxplotwindowsetenlargearoundwindowcentre}
+
+\func{void}{SetEnlargeAroundWindowCentre}{\param{bool}{ aroundwindow = TRUE}}
+
+Depending on the kind of data you display, the enlarging the individual curves might
+have different desired effects. Sometimes, the data will be supposed to get enlarged
+with the fixed point being the origin, sometimes the fixed point should be the centre
+of the current drawing area. This function controls this behaviour.
+

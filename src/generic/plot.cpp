@@ -61,6 +61,12 @@ static wxBitmap *GetUpBitmap();
 static wxBitmap *GetDownBitmap();
 
 //-----------------------------------------------------------------------------
+// consts
+//-----------------------------------------------------------------------------
+
+#define wxPLOT_SCROLL_STEP  30
+
+//-----------------------------------------------------------------------------
 // wxPlotEvent
 //-----------------------------------------------------------------------------
 
@@ -115,8 +121,8 @@ void wxPlotArea::OnMouse( wxMouseEvent &event )
     int view_x;
     int view_y;
     m_owner->GetViewStart( &view_x, &view_y );
-    view_x *= 10;
-    view_y *= 10;
+    view_x *= wxPLOT_SCROLL_STEP;
+    view_y *= wxPLOT_SCROLL_STEP;
     
     int x = event.GetX();
     int y = event.GetY();
@@ -176,7 +182,7 @@ void wxPlotArea::DrawCurve( wxDC *dc, wxPlotCurve *curve, int from, int to )
     int view_x;
     int view_y;
     m_owner->GetViewStart( &view_x, &view_y );
-    view_x *= 10;
+    view_x *= wxPLOT_SCROLL_STEP;
     
     if (from == -1)
         from = view_x;
@@ -187,6 +193,8 @@ void wxPlotArea::DrawCurve( wxDC *dc, wxPlotCurve *curve, int from, int to )
     
     if (to == -1)
         to = view_x + client_width;
+        
+    to += 2;  // no idea why this is needed
 
     double zoom = m_owner->GetZoom();
 
@@ -219,8 +227,8 @@ void wxPlotArea::OnPaint( wxPaintEvent &WXUNUSED(event) )
     int view_x;
     int view_y;
     m_owner->GetViewStart( &view_x, &view_y );
-    view_x *= 10;
-    view_y *= 10;
+    view_x *= wxPLOT_SCROLL_STEP;
+    view_y *= wxPLOT_SCROLL_STEP;
 
     wxPaintDC dc( this );
     m_owner->PrepareDC( dc );
@@ -286,6 +294,7 @@ wxPlotXAxisArea::wxPlotXAxisArea( wxPlotWindow *parent )
     m_owner = parent;
     
     SetBackgroundColour( *wxWHITE );
+    SetFont( *wxSMALL_FONT );
 }
 
 void wxPlotXAxisArea::OnMouse( wxMouseEvent &event )
@@ -296,8 +305,8 @@ void wxPlotXAxisArea::OnMouse( wxMouseEvent &event )
     int view_x;
     int view_y;
     m_owner->GetViewStart( &view_x, &view_y );
-    view_x *= 10;
-    view_y *= 10;
+    view_x *= wxPLOT_SCROLL_STEP;
+    view_y *= wxPLOT_SCROLL_STEP;
     
     int x = event.GetX();
     int y = event.GetY();
@@ -312,8 +321,8 @@ void wxPlotXAxisArea::OnPaint( wxPaintEvent &WXUNUSED(event) )
     int view_x;
     int view_y;
     m_owner->GetViewStart( &view_x, &view_y );
-    view_x *= 10;
-    view_y *= 10;
+    view_x *= wxPLOT_SCROLL_STEP;
+    view_y *= wxPLOT_SCROLL_STEP;
 
     wxPaintDC dc( this );
     
@@ -374,8 +383,14 @@ void wxPlotXAxisArea::OnPaint( wxPaintEvent &WXUNUSED(event) )
         {
             dc.DrawLine( x, 5, x, 15 );
             wxString label;
-            if (range < 10)
-                label.Printf( wxT("%.1f"), current );
+            if (range < 50)
+            {
+                label.Printf( wxT("%f"), current );
+                while (label.Last() == wxT('0')) 
+                    label.RemoveLast();
+                if ((label.Last() == wxT('.')) || (label.Last() == wxT(',')))
+                    label.Append( wxT('0') );
+            }
             else
                 label.Printf( wxT("%d"), (int)floor(current) );
             dc.DrawText( label, x-4, 20 );
@@ -406,6 +421,7 @@ wxPlotYAxisArea::wxPlotYAxisArea( wxPlotWindow *parent )
     m_owner = parent;
     
     SetBackgroundColour( *wxWHITE );
+    SetFont( *wxSMALL_FONT );
 }
 
 void wxPlotYAxisArea::OnMouse( wxMouseEvent &WXUNUSED(event) )
@@ -473,7 +489,16 @@ void wxPlotYAxisArea::OnPaint( wxPaintEvent &WXUNUSED(event) )
         {
             dc.DrawLine( client_width-15, y, client_width-7, y );
             wxString label;
-            label.Printf( wxT("%.1f"), current );
+            if (range < 50)
+            {
+                label.Printf( wxT("%f"), current );
+                while (label.Last() == wxT('0')) 
+                    label.RemoveLast();
+                if ((label.Last() == wxT('.')) || (label.Last() == wxT(',')))
+                    label.Append( wxT('0') );
+            }
+            else
+                label.Printf( wxT("%d"), (int)floor(current) );
             dc.DrawText( label, 5, y-7 );
         }
 
@@ -519,6 +544,9 @@ wxPlotWindow::wxPlotWindow( wxWindow *parent, wxWindowID id, const wxPoint &pos,
 {
     m_xUnitsPerValue = 1.0;
     m_xZoom = 1.0;
+    
+    m_enlargeAroundWindowCentre = FALSE;
+    m_scrollOnThumbRelease = FALSE;
 
     m_area = new wxPlotArea( this );
     wxBoxSizer *mainsizer = new wxBoxSizer( wxHORIZONTAL );
@@ -675,11 +703,29 @@ void wxPlotWindow::Enlarge( wxPlotCurve *curve, double factor )
 {
     m_area->DeleteCurve( curve );
     
+    int client_width;
+    int client_height;
+    m_area->GetClientSize( &client_width, &client_height);
+    double offset = (double)curve->GetOffsetY() / (double)client_height;
+    
     double range = curve->GetEndY() - curve->GetStartY();
+    offset *= range;
+    
     double new_range = range / factor;
-    double middle = curve->GetEndY() - range/2;
-    curve->SetStartY( middle - new_range / 2 );
-    curve->SetEndY( middle + new_range / 2 );
+    double new_offset = offset / factor;
+    
+    if (m_enlargeAroundWindowCentre)
+    {
+        double middle = curve->GetStartY() - offset + range/2;
+    
+        curve->SetStartY( middle - new_range / 2 + new_offset );
+        curve->SetEndY( middle + new_range / 2 + new_offset  );
+    }
+    else
+    {
+        curve->SetStartY( (curve->GetStartY() - offset)/factor + new_offset );
+        curve->SetEndY( (curve->GetEndY() - offset)/factor + new_offset );
+    }
     
     m_area->Refresh( FALSE );
     RedrawYAxis();
@@ -710,7 +756,10 @@ void wxPlotWindow::SetZoom( double zoom )
             max = curve->GetEndX();
         node = node->Next();
     }
-    SetScrollbars( 10, 10, (int)((max*m_xZoom)/10)+1, 0, (int)view_x*zoom/old_zoom, 0 );
+    SetScrollbars( wxPLOT_SCROLL_STEP, wxPLOT_SCROLL_STEP, 
+                   (int)((max*m_xZoom)/wxPLOT_SCROLL_STEP)+1, 0, 
+                   (int)view_x*zoom/old_zoom, 0, 
+                   TRUE );
 
     RedrawXAxis();
     m_area->Refresh( TRUE );
@@ -728,7 +777,8 @@ void wxPlotWindow::ResetScrollbar()
         node = node->Next();
     }
     
-    SetScrollbars( 10, 10, ((max*m_xZoom)/10)+1, 0 );
+    SetScrollbars( wxPLOT_SCROLL_STEP, wxPLOT_SCROLL_STEP, 
+                   ((max*m_xZoom)/wxPLOT_SCROLL_STEP)+1, 0 );
 }
 
 void wxPlotWindow::RedrawXAxis()
@@ -778,9 +828,11 @@ void wxPlotWindow::OnShrink( wxCommandEvent& WXUNUSED(event) )
 
 void wxPlotWindow::OnScroll2( wxScrollWinEvent& event )
 {
-    wxScrolledWindow::OnScroll( event );
-    
-    RedrawXAxis();
+    if ((!m_scrollOnThumbRelease) || (event.GetEventType() != wxEVT_SCROLLWIN_THUMBTRACK))
+    {
+        wxScrolledWindow::OnScroll( event );
+        RedrawXAxis();
+    }
 }
 
 // ----------------------------------------------------------------------------

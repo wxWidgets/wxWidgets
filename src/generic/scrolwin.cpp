@@ -317,6 +317,7 @@ int wxScrolledWindow::CalcScrollInc(wxScrollWinEvent& event)
             break;
         }
         case wxEVT_SCROLLWIN_THUMBTRACK:
+        case wxEVT_SCROLLWIN_THUMBRELEASE:
         {
             if (orient == wxHORIZONTAL)
                 nScrollInc = pos - m_xScrollPosition;

@@ -213,7 +213,20 @@ public:
     void SetZoom( double zoom );
     double GetZoom()
         { return m_xZoom; }
-    
+        
+    // options
+    // -------
+
+    void SetScrollOnThumbRelease( bool scrollOnThumbRelease = TRUE )
+        { m_scrollOnThumbRelease = scrollOnThumbRelease; }
+    bool GetScrollOnThumbRelease()
+        { return m_scrollOnThumbRelease; }
+        
+    void SetEnlargeAroundWindowCentre( bool enlargeAroundWindowCentre = TRUE )
+        { m_enlargeAroundWindowCentre = enlargeAroundWindowCentre; }
+    bool GetEnlargeAroundWindowCentre()
+        { return m_enlargeAroundWindowCentre; }
+
     // events (may be overridden)
     // --------------------------
 
@@ -249,6 +262,9 @@ private:
     wxPlotXAxisArea   *m_xaxis;
     wxPlotYAxisArea   *m_yaxis;
     wxPlotCurve       *m_current;
+    
+    bool               m_scrollOnThumbRelease;
+    bool               m_enlargeAroundWindowCentre;
 
     DECLARE_CLASS(wxPlotWindow)
     DECLARE_EVENT_TABLE()
