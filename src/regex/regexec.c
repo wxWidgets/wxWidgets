@@ -5,7 +5,11 @@
  * macros that code uses.  This lets the same code operate on two different
  * representations for state sets.
  */
+#ifdef __MWERKS__
+typedef long off_t ;
+#else
 #include <sys/types.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
