@@ -641,8 +641,8 @@ private:
 
 static const char *frame_button_close_xpm[] = {
 "12 10 2 1",
-" 	c None",
-".	c black",
+"         c None",
+".        c black",
 "            ",
 "  ..    ..  ",
 "   ..  ..   ",
@@ -656,8 +656,8 @@ static const char *frame_button_close_xpm[] = {
 
 static const char *frame_button_help_xpm[] = {
 "12 10 2 1",
-" 	c None",
-".	c #000000",
+"         c None",
+".        c #000000",
 "    ....    ",
 "   ..  ..   ",
 "   ..  ..   ",
@@ -671,8 +671,8 @@ static const char *frame_button_help_xpm[] = {
 
 static const char *frame_button_maximize_xpm[] = {
 "12 10 2 1",
-" 	c None",
-".	c #000000",
+"         c None",
+".        c #000000",
 " .........  ",
 " .........  ",
 " .       .  ",
@@ -686,8 +686,8 @@ static const char *frame_button_maximize_xpm[] = {
 
 static const char *frame_button_minimize_xpm[] = {
 "12 10 2 1",
-" 	c None",
-".	c #000000",
+"         c None",
+".        c #000000",
 "            ",
 "            ",
 "            ",
@@ -701,8 +701,8 @@ static const char *frame_button_minimize_xpm[] = {
 
 static const char *frame_button_restore_xpm[] = {
 "12 10 2 1",
-" 	c None",
-".	c #000000",
+"         c None",
+".        c #000000",
 "   ......   ",
 "   ......   ",
 "   .    .   ",
@@ -2211,10 +2211,10 @@ wxBitmap wxWin32Renderer::GetIndicator(IndicatorType indType, int flags)
     if (xpm)
     {
         wxBitmap bmp(xpm);
-	return bmp;
+        return bmp;
     }
     else
-	return wxNullBitmap;
+        return wxNullBitmap;
 }
 
 void wxWin32Renderer::DrawCheckOrRadioButton(wxDC& dc,
@@ -2273,19 +2273,16 @@ void wxWin32Renderer::DrawRadioButton(wxDC& dc,
                                       wxAlignment align,
                                       int indexAccel)
 {
-    if (bitmap.Ok())
-        DrawCheckOrRadioButton(dc, label,
-			       bitmap,
-                           rect, flags, align, indexAccel,
-			     FOCUS_RECT_OFFSET_Y); // default focus rect offset
+    wxBitmap bmp;
+    if ( bitmap.Ok() )
+        bmp = bitmap;
     else
-    {
-	wxBitmap rbitmap(GetRadioBitmap(flags));
-        DrawCheckOrRadioButton(dc, label,
-			       rbitmap,
+        bmp = GetRadioBitmap(flags);
+
+    DrawCheckOrRadioButton(dc, label,
+                           bmp,
                            rect, flags, align, indexAccel,
-			       FOCUS_RECT_OFFSET_Y); // default focus rect offset
-    }
+                           FOCUS_RECT_OFFSET_Y); // default focus rect offset
 }
 
 void wxWin32Renderer::DrawCheckButton(wxDC& dc,
@@ -2296,19 +2293,16 @@ void wxWin32Renderer::DrawCheckButton(wxDC& dc,
                                       wxAlignment align,
                                       int indexAccel)
 {
-    if (bitmap.Ok())
-        DrawCheckOrRadioButton(dc, label,
-			       bitmap,
-                             rect, flags, align, indexAccel,
-                             0); // no focus rect offset for checkboxes
+    wxBitmap bmp;
+    if ( bitmap.Ok() )
+        bmp = bitmap;
     else
-    {
-	    wxBitmap cbitmap(GetCheckBitmap(flags));
-        DrawCheckOrRadioButton(dc, label,
-                             cbitmap,
-                             rect, flags, align, indexAccel,
-			       0); // no focus rect offset for checkboxes
-    }
+        bmp = GetCheckBitmap(flags);
+
+    DrawCheckOrRadioButton(dc, label,
+                           bmp,
+                           rect, flags, align, indexAccel,
+                           0); // no focus rect offset for checkboxes
 }
 
 // ----------------------------------------------------------------------------
