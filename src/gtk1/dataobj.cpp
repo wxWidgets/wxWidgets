@@ -330,46 +330,44 @@ bool wxBitmapDataObject::SetData(size_t size, const void *buf)
 {
     Clear();
 
-#if wxUSE_LIBPNG
+    wxCHECK_MSG( wxImage::FindHandler(wxBITMAP_TYPE_PNG) != NULL,
+                 FALSE, wxT("You must call wxImage::AddHandler(new wxPNGHandler); to be able to use clipboard with bitmaps!") );
+
     m_pngSize = size;
     m_pngData = malloc(m_pngSize);
 
-    memcpy( m_pngData, buf, m_pngSize );
+    memcpy(m_pngData, buf, m_pngSize);
 
-    wxMemoryInputStream mstream( (char*) m_pngData, m_pngSize );
+    wxMemoryInputStream mstream((char*) m_pngData, m_pngSize);
     wxImage image;
-    wxPNGHandler handler;
-    if ( !handler.LoadFile( &image, mstream ) )
+    if ( !image.LoadFile( mstream, wxBITMAP_TYPE_PNG ) )
     {
         return FALSE;
     }
 
-    m_bitmap = image.ConvertToBitmap();
+    m_bitmap = wxBitmap(image);
 
     return m_bitmap.Ok();
-#else
-    return FALSE;
-#endif
 }
 
 void wxBitmapDataObject::DoConvertToPng()
 {
-#if wxUSE_LIBPNG
-    if (!m_bitmap.Ok())
+    if ( !m_bitmap.Ok() )
         return;
 
-    wxImage image( m_bitmap );
-    wxPNGHandler handler;
+    wxCHECK_RET( wxImage::FindHandler(wxBITMAP_TYPE_PNG) != NULL,
+                 wxT("You must call wxImage::AddHandler(new wxPNGHandler); to be able to use clipboard with bitmaps!") );
+
+    wxImage image(m_bitmap);
 
     wxCountingOutputStream count;
-    handler.SaveFile( &image, count );
+    image.SaveFile(count, wxBITMAP_TYPE_PNG);
 
     m_pngSize = count.GetSize() + 100; // sometimes the size seems to vary ???
     m_pngData = malloc(m_pngSize);
 
-    wxMemoryOutputStream mstream( (char*) m_pngData, m_pngSize );
-    handler.SaveFile( &image, mstream );
-#endif
+    wxMemoryOutputStream mstream((char*) m_pngData, m_pngSize);
+    image.SaveFile(mstream, wxBITMAP_TYPE_PNG);
 }
 
 
