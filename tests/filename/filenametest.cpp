@@ -161,7 +161,7 @@ void FileNameTestCase::TestSetPath()
     CPPUNIT_ASSERT( fn.SameAs(wxFileName(_T("/usr/local/bin/ls"), wxPATH_UNIX)) );
 }
 
-wxString wxGetRealFile(wxString szFile)
+wxString wxTestStripExtension(wxString szFile)
 {
     wxStripExtension(szFile);
     return szFile;
@@ -170,11 +170,11 @@ wxString wxGetRealFile(wxString szFile)
 void FileNameTestCase::TestStrip()
 {
     //test a crash
-    CPPUNIT_ASSERT( wxGetRealFile( _T("") ) == _T("") );
+    CPPUNIT_ASSERT( wxTestStripExtension( _T("") ) == _T("") );
 
     //others
-    CPPUNIT_ASSERT( wxGetRealFile( _T(".") ) == _T("") );
-    CPPUNIT_ASSERT( wxGetRealFile( _T(".wav") ) == _T("") );
-    CPPUNIT_ASSERT( wxGetRealFile( _T("good.wav") ) == _T("good") );
-    CPPUNIT_ASSERT( wxGetRealFile( _T("good.wav.wav") ) == _T("good.wav") );
+    CPPUNIT_ASSERT( wxTestStripExtension( _T(".") ) == _T("") );
+    CPPUNIT_ASSERT( wxTestStripExtension( _T(".wav") ) == _T("") );
+    CPPUNIT_ASSERT( wxTestStripExtension( _T("good.wav") ) == _T("good") );
+    CPPUNIT_ASSERT( wxTestStripExtension( _T("good.wav.wav") ) == _T("good.wav") );
 }
