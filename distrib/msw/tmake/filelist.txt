@@ -230,7 +230,7 @@ strconv.cpp	Common	Base
 stream.cpp	Common	Base
 string.cpp	Common	Base
 sysopt.cpp	Common	Base
-taskbarcmn.cpp	Common
+taskbarcmn.cpp	Common	NotMac
 tbarbase.cpp	Common
 textbuf.cpp	Common	Base
 textcmn.cpp	Common
