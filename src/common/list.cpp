@@ -16,8 +16,9 @@
 // -----------------------------------------------------------------------------
 // headers
 // -----------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation "list.h"
+    #pragma implementation "list.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
@@ -242,7 +243,10 @@ wxNodeBase *wxListBase::Append(void *object)
     wxCHECK_MSG( m_keyType == wxKEY_NONE, (wxNodeBase *)NULL,
                  wxT("need a key for the object to append") );
 
-    wxNodeBase *node = CreateNode(m_nodeLast, (wxNodeBase *)NULL, object);
+    // we use wxDefaultListKey even though it is the default parameter value
+    // because gcc under Mac OS X seems to miscompile this call otherwise
+    wxNodeBase *node = CreateNode(m_nodeLast, (wxNodeBase *)NULL, object,
+                                  wxDefaultListKey);
 
     return AppendCommon(node);
 }
@@ -292,7 +296,8 @@ wxNodeBase *wxListBase::Insert(wxNodeBase *position, void *object)
         next = m_nodeFirst;
     }
 
-    wxNodeBase *node = CreateNode(prev, next, object);
+    // wxDefaultListKey: see comment in Append() above
+    wxNodeBase *node = CreateNode(prev, next, object, wxDefaultListKey);
     if ( !m_nodeFirst )
     {
         m_nodeLast = node;
