@@ -47,10 +47,6 @@
     #include "wx/tooltip.h"
 #endif // wxUSE_TOOLTIPS
 
-#if defined(__WXWINCE__) && !defined(WS_EX_TRANSPARENT)
-#define WS_EX_TRANSPARENT 0
-#endif
-
 // TODO: wxCONSTRUCTOR
 #if 0 // wxUSE_EXTENDED_RTTI
 WX_DEFINE_FLAGS( wxRadioBoxStyle )
@@ -280,7 +276,7 @@ bool wxRadioBox::Create(wxWindow *parent,
 
     // create the static box
     if ( !MSWCreateControl(wxT("BUTTON"), BS_GROUPBOX | WS_GROUP,
-                           pos, size, title, WS_EX_TRANSPARENT) )
+                           pos, size, title, 0) )
         return false;
 
     // and now create the buttons
