@@ -259,6 +259,11 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         else
         {
             msStyle |= ES_AUTOVSCROLL;
+            // Experimental: this seems to help with the scroll problem. See messages from Jekabs Andrushaitis <j.andrusaitis@konts.lv>
+            // wx-dev list, entitled "[wx-dev] wxMSW-EVT_KEY_DOWN and wxMSW-wxTextCtrl" and "[wx-dev] TextCtrl (RichEdit)"
+            // Unfortunately, showing the selection in blue when the control doesn't have
+            // the focus is non-standard behaviour, and we need to find another workaround.
+            //msStyle |= ES_NOHIDESEL ;
             m_isRich = TRUE;
 
             int ver = wxRichEditModule::GetLoadedVersion();
@@ -614,8 +619,13 @@ void wxTextCtrl::SetInsertionPoint(long pos)
     SendMessage(hWnd, EM_SETSEL, 0, MAKELPARAM(pos, pos));
 #endif // Win32/16
 
-    static const wxChar *nothing = _T("");
-    SendMessage(hWnd, EM_REPLACESEL, 0, (LPARAM)nothing);
+#if wxUSE_RICHEDIT
+    if ( !m_isRich)
+#endif
+    {
+        static const wxChar *nothing = _T("");
+        SendMessage(hWnd, EM_REPLACESEL, 0, (LPARAM)nothing);
+    }
 }
 
 void wxTextCtrl::SetInsertionPointEnd()

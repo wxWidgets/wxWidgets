@@ -327,3 +327,19 @@ contrib/src/animate/AnimateVC.dsw
 contrib/samples/animate/AniTestVC.dsp
 contrib/samples/animate/AniTestVC.dsw
 
+contrib/src/fl/flVC.dsp
+contrib/src/fl/flVC.dsw
+contrib/samples/fl/fl_demo1/fl_demo.dsp
+contrib/samples/fl/fl_demo1/fl_demo.dsw
+contrib/samples/fl/fl_demo2/fl_demo.dsp
+contrib/samples/fl/fl_demo2/fl_demo.dsw
+contrib/samples/fl/fl_sample1/fl_demo.dsp
+contrib/samples/fl/fl_sample1/fl_demo.dsw
+contrib/samples/fl/fl_sample2/fl_demo.dsp
+contrib/samples/fl/fl_sample2/fl_demo.dsw
+contrib/samples/fl/fl_sample3/fl_demo.dsp
+contrib/samples/fl/fl_sample3/fl_demo.dsw
+
+contrib/src/net/NetVC.dsp
+contrib/src/net/NetVC.dsw
+

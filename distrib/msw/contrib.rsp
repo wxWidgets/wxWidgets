@@ -219,3 +219,10 @@ contrib/src/fl/flVC.dsp
 contrib/src/fl/flVC.dsw
 contrib/include/wx/fl/*.h
 
+contrib/src/net/*.cpp
+contrib/src/net/*.h
+contrib/src/net/make*
+contrib/src/net/NetVC.dsp
+contrib/src/net/NetVC.dsw
+contrib/include/wx/net/*.h
+

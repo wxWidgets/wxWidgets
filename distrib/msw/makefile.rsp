@@ -96,6 +96,8 @@ contrib/src/stc/Makefile.in
 contrib/src/plot/Makefile.in
 contrib/src/gizmos/Makefile.in
 contrib/src/animate/Makefile.in
+contrib/src/fl/Makefile.in
+contrib/src/net/Makefile.in
 
 contrib/samples/Makefile.in
 contrib/samples/canvas/test/Makefile.in

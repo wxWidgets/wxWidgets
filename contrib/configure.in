@@ -47,6 +47,7 @@ AC_OUTPUT([
             src/plot/Makefile
             src/applet/Makefile
             src/fl/Makefile
+            src/net/Makefile
             samples/Makefile
             samples/mmedia/Makefile
             samples/ogl/Makefile

@@ -1,0 +1,144 @@
+
+# File:		makefile.vc
+# Author:	Julian Smart
+# Created:	2001
+# Updated:
+# Copyright:	(c) 2001, Julian Smart
+#
+# "%W% %G%"
+#
+# Makefile : Builds net class library (MS VC++).
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info
+
+
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+GIZMOSDIR = $(WXDIR)\contrib\src\net
+GIZMOSINC = $(WXDIR)\contrib\include\wx\net
+THISDIR = $(WXDIR)\contrib\src\net
+DOCDIR=$(WXDIR)\contrib\docs
+LOCALDOCDIR=$(WXDIR)\contrib\docs\latex\net
+
+!include $(WXDIR)\src\makevc.env
+
+OBJECTS = $(D)\smapi.obj $(D)\email.obj $(D)\web.obj
+
+LIBTARGET=$(WXDIR)\lib\net$(LIBEXT).lib
+
+all:    $(D) $(LIBTARGET)
+
+$(D) :
+	mkdir $(D)
+
+wx:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(THISDIR)
+
+wxclean:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.vc clean
+        cd $(THISDIR)
+
+$(LIBTARGET): $(OBJECTS)
+	-erase $(LIBTARGET)
+	$(implib) @<<
+-out:$(LIBTARGET)
+-machine:$(CPU)
+$(OBJECTS)
+<<
+
+$(D)\net.obj:      net.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Fo$@ /Tp $(*B).$(SRCSUFF)
+<<
+
+clean:
+        -erase $(D)\*.obj
+        -erase *.sbr
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.pdb
+        -erase $(LIBTARGET)
+
+DOCSOURCES=$(LOCALDOCDIR)\net.tex \
+ $(LOCALDOCDIR)\bugs.tex $(LOCALDOCDIR)\changes.tex\
+ $(LOCALDOCDIR)\classes.tex $(LOCALDOCDIR)\intro.tex\
+ $(LOCALDOCDIR)\topics.tex $(LOCALDOCDIR)\sample.tex
+
+html: $(DOCDIR)\html\net\net.htm
+htmlhelp: $(DOCDIR)\htmlhelp\net.chm
+htb:	$(DOCDIR)\htb\net.htb
+hlp: $(DOCDIR)\winhelp\net.hlp
+pdfrtf: $(DOCDIR)\pdf\net.rtf
+ps: $(DOCDIR)\ps\net.ps
+
+touchmanual:
+	touch $(LOCALDOCDIR)\net.tex
+
+
+$(DOCDIR)\winhelp\net.hlp:         $(LOCALDOCDIR)\net.rtf $(LOCALDOCDIR)\net.hpj
+        cd $(LOCALDOCDIR)
+        -erase net.ph
+        hc net
+        move net.hlp $(DOCDIR)\winhelp\net.hlp
+        move net.cnt $(DOCDIR)\winhelp\net.cnt
+        cd $(THISDIR)
+
+$(LOCALDOCDIR)\net.rtf: $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -start $(WAITFLAG) tex2rtf $(LOCALDOCDIR)\net.tex $(LOCALDOCDIR)\net.rtf -twice -winhelp
+        cd $(THISDIR)
+
+$(DOCDIR)\pdf\net.rtf: $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -copy *.bmp $(DOCDIR)\pdf
+        -start $(WAITFLAG) tex2rtf $(LOCALDOCDIR)\net.tex $(DOCDIR)\pdf\net.rtf -twice -rtf
+        cd $(THISDIR)
+
+$(DOCDIR)\html\net\net.htm:         $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -mkdir $(DOCDIR)\html\net
+        copy *.gif $(DOCDIR)\html\net
+        -start $(WAITFLAG) tex2rtf $(LOCALDOCDIR)\net.tex $(DOCDIR)\html\net\net.htm -twice -html
+        -erase $(DOCDIR)\html\net\*.con
+        -erase *.con
+        -erase $(DOCDIR)\html\net\*.ref
+        cd $(THISDIR)
+
+$(DOCDIR)\htmlhelp\net.chm: $(DOCDIR)\html\net\net.htm $(DOCDIR)\html\net\net.hhp
+	cd $(DOCDIR)\html\net
+	-hhc net.hhp
+    move net.chm $(DOCDIR)\htmlhelp\net.chm
+	cd $(THISDIR)
+
+# An htb file is a zip file containing the .htm, .gif, .hhp, .hhc and .hhk
+# files, renamed to htb.
+# This can then be used with e.g. helpview.
+# Optionally, a cached version of the .hhp file can be generated with hhp2cached.
+$(DOCDIR)\htb\net.htb: $(DOCDIR)\html\net\net.htm
+	cd $(DOCDIR)\html\net
+    -erase net.zip net.htb
+    zip net.zip *.htm *.gif *.hhp *.hhc *.hhk
+    -mkdir $(DOCDIR)\htb
+    move net.zip $(DOCDIR)\htb\net.htb
+    cd $(THISDIR)
+
+$(LOCALDOCDIR)\net.dvi:	$(DOCSOURCES)
+	cd $(LOCALDOCDIR)
+        -latex net
+        -latex net
+        -makeindx net
+        -bibtex net
+        -latex net
+        -latex net
+        cd $(THISDIR)
+
+$(WXDIR)\docs\ps\net.ps:	$(LOCALDOCDIR)\net.dvi
+	cd $(LOCALDOCDIR)
+        -dvips32 -o net.ps net
+        move net.ps $(WXDIR)\docs\ps\net.ps
+        cd $(THISDIR)
+
