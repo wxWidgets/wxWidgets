@@ -38,6 +38,10 @@
     #include "wx/caret.h"
 #endif // wxUSE_CARET
 
+#if wxUSE_TEXTCTRL
+#include "wx/textctrl.h"
+#endif
+
 #include "wx/menu.h"
 #include "wx/statusbr.h"
 #include "wx/intl.h"
@@ -1708,6 +1712,16 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
     }
 #endif // wxUSE_CARET
 
+#if wxUSE_TEXTCTRL
+    // If it's a wxTextCtrl don't send the event as it will be done
+    // after the control gets to process it.
+    wxTextCtrl *ctrl = wxDynamicCast(win, wxTextCtrl);
+    if ( ctrl )
+    {
+        return FALSE;
+    }
+#endif
+
     if (win->IsTopLevel())
     {
         wxActivateEvent event( wxEVT_ACTIVATE, TRUE, win->GetId() );
@@ -1775,6 +1789,16 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
         caret->OnKillFocus();
     }
 #endif // wxUSE_CARET
+
+#if wxUSE_TEXTCTRL
+    // If it's a wxTextCtrl don't send the event as it will be done
+    // after the control gets to process it.
+    wxTextCtrl *ctrl = wxDynamicCast(win, wxTextCtrl);
+    if ( ctrl )
+    {
+        return FALSE;
+    }
+#endif
 
     if (win->IsTopLevel())
     {

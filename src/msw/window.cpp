@@ -3132,6 +3132,16 @@ bool wxWindowMSW::HandleSetFocus(WXHWND hwnd)
     }
 #endif // wxUSE_CARET
 
+#if wxUSE_TEXTCTRL
+    // If it's a wxTextCtrl don't send the event as it will be done
+    // after the control gets to process it.
+    wxTextCtrl *ctrl = wxDynamicCastThis(wxTextCtrl);
+    if ( ctrl )
+    {
+        return FALSE;
+    }
+#endif
+
     wxFocusEvent event(wxEVT_SET_FOCUS, m_windowId);
     event.SetEventObject(this);
 
@@ -3150,6 +3160,16 @@ bool wxWindowMSW::HandleKillFocus(WXHWND hwnd)
         m_caret->OnKillFocus();
     }
 #endif // wxUSE_CARET
+
+#if wxUSE_TEXTCTRL
+    // If it's a wxTextCtrl don't send the event as it will be done
+    // after the control gets to process it.
+    wxTextCtrl *ctrl = wxDynamicCastThis(wxTextCtrl);
+    if ( ctrl )
+    {
+        return FALSE;
+    }
+#endif
 
     wxFocusEvent event(wxEVT_KILL_FOCUS, m_windowId);
     event.SetEventObject(this);
