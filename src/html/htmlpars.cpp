@@ -35,6 +35,12 @@
 #include "wx/dynarray.h"
 #include "wx/arrimpl.cpp"
 
+
+// DLL options compatibility check:
+#include "wx/app.h"
+WX_CHECK_BUILD_OPTIONS("wxHTML")
+//static wxBuildOptionsChecker gs_optionsChecker;
+
 //-----------------------------------------------------------------------------
 // wxHtmlParser helpers
 //-----------------------------------------------------------------------------
@@ -914,6 +920,5 @@ wxString wxHtmlParser::ExtractCharsetInformation(const wxString& markup)
     parser.Parse(markup);
     return charset;
 }
-
 
 #endif

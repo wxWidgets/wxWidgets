@@ -30,6 +30,10 @@
 
 #include "wx/msw/private.h"
 
+// DLL options compatibility check:
+#include "wx/build.h"
+WX_CHECK_BUILD_OPTIONS("wxGL")
+
 #include "wx/glcanvas.h"
 
 /*
@@ -53,6 +57,7 @@
 #  pragma comment( lib, "opengl32" )
 #  pragma comment( lib, "glu32" )
 #endif
+
 
 static const wxChar *wxGLCanvasClassName = wxT("wxGLCanvasClass");
 static const wxChar *wxGLCanvasClassNameNoRedraw = wxT("wxGLCanvasClassNR");

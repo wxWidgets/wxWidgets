@@ -32,6 +32,10 @@
 #endif
 #include "wx/motif/private.h"
 
+// DLL options compatibility check:
+#include "wx/build.h"
+WX_CHECK_BUILD_OPTIONS("wxGL")
+
 #ifdef OLD_MESA
 // workaround for bug in Mesa's glx.c
 static int bitcount( unsigned long n )

@@ -20,6 +20,11 @@
 
 #ifdef wxHAS_TASK_BAR_ICON
 
+// DLL options compatibility check:
+#include "wx/app.h"
+WX_CHECK_BUILD_OPTIONS("wxAdvanced")
+
+
 #include "wx/taskbar.h"
 
 DEFINE_EVENT_TYPE( wxEVT_TASKBAR_MOVE )

@@ -33,6 +33,10 @@
 #include "wx/generic/gridctrl.h"
 #include "wx/dbgrid.h"
 
+// DLL options compatibility check:
+#include "wx/app.h"
+WX_CHECK_BUILD_OPTIONS("wxDbGrid")
+
 
 wxDbGridCellAttrProvider::wxDbGridCellAttrProvider()
 {

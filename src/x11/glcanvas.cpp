@@ -32,6 +32,10 @@
 #endif
 #include "wx/x11/private.h"
 
+// DLL options compatibility check:
+#include "wx/build.h"
+WX_CHECK_BUILD_OPTIONS("wxGL")
+
 static inline WXWindow wxGetClientAreaWindow(wxWindow* win)
 {
 #ifdef __WXMOTIF__

@@ -41,6 +41,10 @@
 #include "wx/sckaddr.h"
 #include "wx/socket.h"
 
+// DLL options compatibility check:
+#include "wx/build.h"
+WX_CHECK_BUILD_OPTIONS("wxNet")
+
 // --------------------------------------------------------------------------
 // macros and constants
 // --------------------------------------------------------------------------

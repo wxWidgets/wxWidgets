@@ -32,6 +32,10 @@
 
 #include "expat.h" // from Expat
 
+// DLL options compatibility check:
+#include "wx/app.h"
+WX_CHECK_BUILD_OPTIONS("wxXML")
+
 //-----------------------------------------------------------------------------
 //  wxXmlNode
 //-----------------------------------------------------------------------------

@@ -33,6 +33,10 @@ extern "C"
 
 #include "wx/gtk/win_gtk.h"
 
+// DLL options compatibility check:
+#include "wx/build.h"
+WX_CHECK_BUILD_OPTIONS("wxGL")
+
 //---------------------------------------------------------------------------
 // global data
 //---------------------------------------------------------------------------

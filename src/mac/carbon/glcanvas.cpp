@@ -33,6 +33,10 @@
 #include "wx/glcanvas.h"
 #include "wx/mac/uma.h"
 
+// DLL options compatibility check:
+#include "wx/build.h"
+WX_CHECK_BUILD_OPTIONS("wxGL")
+
 /*
 * GLContext implementation
 */
