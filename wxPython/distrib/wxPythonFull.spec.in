@@ -52,10 +52,10 @@ Prefix:    %{pref}
 Provides: wxPython  = %{version}
 Provides: wxPython%{port}  = %{version}
 
-Provides: libwx_%{lcport}%{uniflg}%{dbgflg}-%{ver2}.so
-Provides: libwx_%{lcport}%{uniflg}%{dbgflg}-%{ver2}.so(WX%{port}%{UNIFLG}%{DBGFLG}_%{ver2})
-Provides: libwx_%{lcport}%{uniflg}%{dbgflg}_gl-%{ver2}.so
-Provides: libwx_%{lcport}%{uniflg}%{dbgflg}_gl-%{ver2}.so(WX%{port}%{UNIFLG}%{DBGFLG}_%{ver2})
+# Provides: libwx_%{lcport}%{uniflg}%{dbgflg}-%{ver2}.so
+# Provides: libwx_%{lcport}%{uniflg}%{dbgflg}-%{ver2}.so(WX%{port}%{UNIFLG}%{DBGFLG}_%{ver2})
+# Provides: libwx_%{lcport}%{uniflg}%{dbgflg}_gl-%{ver2}.so
+# Provides: libwx_%{lcport}%{uniflg}%{dbgflg}_gl-%{ver2}.so(WX%{port}%{UNIFLG}%{DBGFLG}_%{ver2})
 
 
 # old wxPython packages
@@ -90,20 +90,16 @@ that wxPython uses.
 
 #----------------------------------------------------------------
 %build
-if [ "$SMP" != "" ]; then
-    MAKE="make -j$SMP"
-else
-    MAKE="make"
-fi
 
 WXDIR=`pwd`
-mkdir build
-cd build
+mkdir bld
+cd bld
 
 # Configure, trying to reduce external dependencies
-$WXDIR/configure --with-%{lcport} \
+../configure --with-%{lcport} \
 	--prefix=%{wxpref} \
 	--disable-soname \
+	--disable-monolithic \
 	--enable-rpath=%{wxpref}/lib \
 	--with-opengl \
 %if %{unicode}
@@ -123,55 +119,43 @@ $WXDIR/configure --with-%{lcport} \
 %endif
 
 
-# Build wxWindows
-$MAKE
+# Build wxWindows and some contrib libs
+make 
+make -C contrib/src/gizmos 
+make -C contrib/src/ogl CXXFLAGS="-DwxUSE_DEPRECATED=0"
+make -C contrib/src/stc
+make -C contrib/src/xrc
+
+
+# Install wxWindows and the contribs so the wxPython build can find
+# all the headers it needs
+make prefix=$RPM_BUILD_ROOT%{wxpref} install
+make -C contrib/src/gizmos prefix=$RPM_BUILD_ROOT%{wxpref} install
+make -C contrib/src/ogl CXXFLAGS="-DwxUSE_DEPRECATED=0" prefix=$RPM_BUILD_ROOT%{wxpref} install
+make -C contrib/src/stc prefix=$RPM_BUILD_ROOT%{wxpref} install
+make -C contrib/src/xrc prefix=$RPM_BUILD_ROOT%{wxpref} install
 
 
 # Now build wxPython
 cd $WXDIR/wxPython
 %{python} setup.py \
-	IN_CVS_TREE=1 \
 	NO_SCRIPTS=1 \
 	WXPORT=%{lcport} \
 	UNICODE=%{unicode} \
-	WX_CONFIG="$WXDIR/build/wx-config --prefix=$WXDIR --exec-prefix=$WXDIR/build" \
+	WX_CONFIG="$RPM_BUILD_ROOT%{wxpref}/bin/wx-config --prefix=$RPM_BUILD_ROOT%{wxpref}" \
 	build
 
+## $WXDIR/bld/wx-config --prefix=$WXDIR --exec-prefix=$WXDIR/bld" 
 
-
-# Build wxrc (XRC resource tool) but don't use the makefiles since they expect
-# a shared version of the xrc lib to have been built...
-cd $WXDIR/contrib/utils/wxrc
-WX_CONFIG="$WXDIR/build/wx-config --prefix=$WXDIR --exec-prefix=$WXDIR/build"
-wCC=`$WX_CONFIG --cc`
-wCXX=`$WX_CONFIG --cxx`
-
-for f in wxrc.cpp ../../src/xrc/xml.cpp ../../src/xrc/xmlres.cpp; do
-    echo $f
-    $wCXX `$WX_CONFIG --cxxflags` -I ../../include -I ../../src/xrc/expat/xmlparse -I ../../src/xrc/expat/xmltok -c $f
-done
-for f in ../../src/xrc/expat/xmlparse/xmlparse.c ../../src/xrc/expat/xmltok/xmlrole.c ../../src/xrc/expat/xmltok/xmltok.c; do
-    echo $f
-    $wCC `$WX_CONFIG --cxxflags` -I ../../include -I ../../src/xrc/expat/xmlparse -I ../../src/xrc/expat/xmltok -c $f
-done
-
-$wCXX `$WX_CONFIG --libs` *.o -o wxrc
+# Build wxrc (XRC resource tool)
+cd $WXDIR/bld/contrib/utils/wxrc
+make
 strip wxrc
 
-
-#----------------------------------------------------------------
-%install
-[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
-
-# install wxWindows
-WXDIR=`pwd`
-cd build
-make prefix=$RPM_BUILD_ROOT%{wxpref} install
 
 # install wxPython
 cd $WXDIR/wxPython
 %{python} setup.py \
-	IN_CVS_TREE=1 \
 	NO_SCRIPTS=1 \
 	WXPORT=%{lcport} \
 	UNICODE=%{unicode} \
@@ -179,14 +163,52 @@ cd $WXDIR/wxPython
 	install \
 	--root=$RPM_BUILD_ROOT
 
+
+#----------------------------------------------------------------
+%install
+##[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
+
+WXDIR=`pwd`
+
+# # install wxWindows
+# cd bld
+# make prefix=$RPM_BUILD_ROOT%{wxpref} install
+# make -C contrib/src/gizmos prefix=$RPM_BUILD_ROOT%{wxpref} install
+# make -C contrib/src/ogl CXXFLAGS="-DwxUSE_DEPRECATED=0" prefix=$RPM_BUILD_ROOT%{wxpref} install
+# make -C contrib/src/stc prefix=$RPM_BUILD_ROOT%{wxpref} install
+# make -C contrib/src/xrc prefix=$RPM_BUILD_ROOT%{wxpref} install
+
+# # install wxPython
+# cd $WXDIR/wxPython
+# %{python} setup.py \
+# 	NO_SCRIPTS=1 \
+# 	WXPORT=%{lcport} \
+# 	UNICODE=%{unicode} \
+# 	WX_CONFIG="$RPM_BUILD_ROOT%{wxpref}/bin/wx-config --prefix=$RPM_BUILD_ROOT%{wxpref}" \
+# 	install \
+# 	--root=$RPM_BUILD_ROOT
+
+
+
+
+
+# Other "install" tasks...
+cd $WXDIR/wxPython
+
+# install the wxPython headers
+cp -R include $RPM_BUILD_ROOT%{wxpref}
+mkdir -p $RPM_BUILD_ROOT%{wxpref}/include/wx/wxPython/i_files
+cp src/*.i $RPM_BUILD_ROOT%{wxpref}/include/wx/wxPython/i_files
+
+
 # Since I want this RPM to be as generic as possible I won't let
-# distutils copy the scripts since it will mangle the #! line to use
-# the real python pathname.  Since some distros install python 2.2 as
-# python2 and others as python, then I can't let distutils do that
-# otherwise the dependencies will be fouled up.  Copy them manually
-# instead, leaving the #!/bin/env line intact.
-#
-# TODO:  Should this be dependent on %{builtin_libs} or something like it?
+# distutils copy the scripts (NO_SCRIPTS=1 above) since it will mangle
+# the #! line to use the real python pathname.  Since some distros
+# install python 2.2 as python2 and others as python I can't let
+# distutils do that otherwise the dependencies will be fouled up.
+# Copy them manually instead, leaving the #!/bin/env line intact. 
+# TODO: Should this be dependent on %{builtin_libs} or something like
+# it?
 
 mkdir -p $RPM_BUILD_ROOT%{pref}/bin
 for s in \
@@ -205,11 +227,12 @@ done
 
 
 # Install wxrc
-cp $WXDIR/contrib/utils/wxrc/wxrc $RPM_BUILD_ROOT%{pref}/bin
+cp $WXDIR/bld/contrib/utils/wxrc/wxrc $RPM_BUILD_ROOT%{pref}/bin
 
 
 # link specific name to generic name
 ln -s wxPython-%{version} $RPM_BUILD_ROOT%{wxprefbase}
+
 
 
 
@@ -250,26 +273,26 @@ ln -s wxPython-%{version} $RPM_BUILD_ROOT%{wxprefbase}
 # So instead we'll build some explicit filelists here and use %attr on
 # each entry.
 cd $WXDIR
-mkdir -p $RPM_BUILD_ROOT%{pref}/share/doc
-GFL="%{python} wxPython/distrib/genfilelist.py"
-$GFL    $RPM_BUILD_ROOT %{pref}                     > FILELIST
-$GFL -r $RPM_BUILD_ROOT %{pref}/bin                >> FILELIST
-$GFL    $RPM_BUILD_ROOT %{pref}/lib                >> FILELIST
-$GFL -r $RPM_BUILD_ROOT %{pref}/lib/python%{pyver} >> FILELIST
-$GFL -r $RPM_BUILD_ROOT %{pref}/share              >> FILELIST
-$GFL    $RPM_BUILD_ROOT %{wxpref}                  >> FILELIST
-$GFL    $RPM_BUILD_ROOT %{wxprefbase}              >> FILELIST
-$GFL    $RPM_BUILD_ROOT %{wxpref}/lib              >> FILELIST
-$GFL    $RPM_BUILD_ROOT "%{wxpref}/lib/libwx*"     >> FILELIST
-$GFL -r $RPM_BUILD_ROOT %{wxpref}/share            >> FILELIST
-###GFL -r $RPM_BUILD_ROOT %{_iconsdir}               >> FILELIST
-##$GFL -r $RPM_BUILD_ROOT %{_menudir}                >> FILELIST
+# mkdir -p $RPM_BUILD_ROOT%{pref}/share/doc
+# GFL="%{python} wxPython/distrib/genfilelist.py"
+# $GFL    $RPM_BUILD_ROOT %{pref}                     > FILELIST
+# $GFL -r $RPM_BUILD_ROOT %{pref}/bin                >> FILELIST
+# $GFL    $RPM_BUILD_ROOT %{pref}/lib                >> FILELIST
+# $GFL -r $RPM_BUILD_ROOT %{pref}/lib/python%{pyver} >> FILELIST
+# $GFL -r $RPM_BUILD_ROOT %{pref}/share              >> FILELIST
+# $GFL    $RPM_BUILD_ROOT %{wxpref}                  >> FILELIST
+# $GFL    $RPM_BUILD_ROOT %{wxprefbase}              >> FILELIST
+# $GFL    $RPM_BUILD_ROOT %{wxpref}/lib              >> FILELIST
+# $GFL    $RPM_BUILD_ROOT "%{wxpref}/lib/libwx*"     >> FILELIST
+# $GFL -r $RPM_BUILD_ROOT %{wxpref}/share            >> FILELIST
+# ###GFL -r $RPM_BUILD_ROOT %{_iconsdir}               >> FILELIST
+# ##$GFL -r $RPM_BUILD_ROOT %{_menudir}                >> FILELIST
 
-$GFL    $RPM_BUILD_ROOT %{wxpref}/include           > DEVELLIST
-$GFL -r $RPM_BUILD_ROOT %{wxpref}/include/wx       >> DEVELLIST
-$GFL -r $RPM_BUILD_ROOT %{wxpref}/lib/wx           >> DEVELLIST
-$GFL    $RPM_BUILD_ROOT %{wxconfigname}            >> DEVELLIST
-$GFL    $RPM_BUILD_ROOT %{wxpref}/bin/wx-config    >> DEVELLIST
+# $GFL    $RPM_BUILD_ROOT %{wxpref}/include           > DEVELLIST
+# $GFL -r $RPM_BUILD_ROOT %{wxpref}/include/wx       >> DEVELLIST
+# $GFL -r $RPM_BUILD_ROOT %{wxpref}/lib/wx           >> DEVELLIST
+# $GFL    $RPM_BUILD_ROOT %{wxconfigname}            >> DEVELLIST
+# $GFL    $RPM_BUILD_ROOT %{wxpref}/bin/wx-config    >> DEVELLIST
 
 
 #----------------------------------------------------------------
@@ -291,21 +314,29 @@ if [ -e %{wxprefbase} ]; then
 fi
 
 #----------------------------------------------------------------
-%clean
-[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
+#%clean
+#[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
 
 
 #----------------------------------------------------------------
 
-%files -f FILELIST
+%files
 %defattr(-,root,root)
-%doc docs/preamble.txt docs/licence.txt docs/readme.txt docs/changes.txt
-%doc wxPython/README.txt wxPython/CHANGES.txt
+%doc docs/preamble.txt docs/licence.txt docs/lgpl.txt docs/readme.txt docs/changes.txt
 %doc wxPython/docs/*
+%{_bindir}/*
+%{_libdir}/python%{pyver}/site-packages/*
+%{wxpref}/lib/libwx*
+%{wxpref}/share
+%{wxprefbase}
 
-%files -n wxPython%{port}-devel -f DEVELLIST
+
+%files -n wxPython%{port}-devel
 %defattr(-,root,root)
-
+%{wxpref}/include
+%{wxpref}/lib/wx
+%{wxconfigname}
+%{wxpref}/bin/wx-config
 
 #----------------------------------------------------------------
 # end of file

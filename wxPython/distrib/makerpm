@@ -2,6 +2,8 @@
 #----------------------------------------------------------------------
 # Build an RPM containing both wxGTK and wxPython
 
+##set -o xtrace
+
 spectemplate=distrib/wxPythonFull.spec.in
 
 if [ ! -d wxPython -o ! -e ${spectemplate} ]; then
@@ -13,6 +15,7 @@ fi
 #----------------------------------------------------------------------
 # Initialization
 
+version=`python -c "import setup;print setup.VERSION"`
 wxpdir=`pwd`
 wxdir=${wxpdir}/..
 distdir=${wxpdir}/dist
@@ -29,9 +32,8 @@ rpmflag=-ba
 #----------------------------------------------------------------------
 # Check parameters
 
-function useage {
-    echo "Usage: $0 wx_version py_version [command flags...]"
-    echo "   wx_version     String to use for version in filenames, etc."
+function usage {
+    echo "Usage: $0 py_version [command flags...]"
     echo "   py_version     String to append to $pythonbin (which python"
     echo "                  version to use.)"
     echo ""
@@ -48,13 +50,12 @@ function useage {
 }
 
 if [ $# -lt 2 ]; then
-    useage
+    usage
     exit 1
 fi
 
-version=$1
-pyver=$2
-shift;shift
+pyver=$1
+shift
 
 ver2=`echo ${version} | cut -c 1,2,3`
 tarver=${tarname}-${version}
@@ -95,7 +96,7 @@ for flag in $*; do
 	srpm)      rpmflag=-bs;                        ;;
 
 	*)  echo "Unknown flag \"${flag}\""
-	    useage
+	    usage
 	    exit 1
     esac
 done
@@ -124,6 +125,14 @@ done
 #----------------------------------------------------------------------
 # Copy the sources from my CVS workspace
 
+function cleanup {
+    RMFILES=`find . -name "$1"`
+    if [ "$RMFILES" != "" ]; then
+	rm -rf $RMFILES
+    fi
+}
+
+
 if [ -z "${skipcopy}" ]; then
     echo "*** Copying CVS tree"
     pushd ${builddir} > /dev/null
@@ -136,7 +145,7 @@ if [ -z "${skipcopy}" ]; then
     cp -pf --link ${wxdir}/* ${tarver} > /dev/null 2>&1
 
     # copy all top dirs except CVS, build, demos, utils, samples, and wxPython
-    for d in art contrib debian distrib docs include lib locale misc patches src; do
+    for d in art build contrib debian distrib docs include lib locale misc patches src; do
 	if [ -e ${wxdir}/$d ]; then
 	    cp -Rpf --link ${wxdir}/$d ${tarver} #> /dev/null 2>&1
 	fi
@@ -145,36 +154,36 @@ if [ -z "${skipcopy}" ]; then
     # now do the same thing for wxPython, skipping it's build dirs and such
     mkdir ${tarver}/wxPython
     cp -pf --link ${wxdir}/wxPython/* ${tarver}/wxPython > /dev/null 2>&1
-    for d in contrib demo distrib distutils docs licence samples scripts src wx wxPython; do
+    for d in contrib demo distrib distutils docs include licence samples scripts src SWIG wx wxPython; do
 	cp -Rpf --link ${wxdir}/wxPython/$d ${tarver}/wxPython #> /dev/null 2>&1
     done
 
+#     cp -Rpf --link ${wxdir}/* ${tarver} > /dev/null 2>&1
+#     rm -r ${tarver}/bld*
+#     rm -r ${tarver}/wxPython/build*
+#     rm -r ${tarver}/wxPython/_build_rpm
 
     echo "*** Removing uneeded stuff from copy of CVS tree"
     pushd ${tarver} > /dev/null
-    rm `find . -name .cvsignore`
-    rm -rf `find . -name CVS`
+    cleanup .cvsignore
+    cleanup CVS
+    cleanup CVSROOT
+    rm BuildCVS.txt
     rm *.spec
     rm -rf docs/html
     rm -rf docs/latex
     rm -rf contrib/docs
     rm -rf contrib/samples
     rm locale/*.mo
-    rm `find . -name ".#*"`
-    rm `find . -name "*~"`
-    rm `find . -name "*.pyc"`
-    rm `find . -name "core"`
-    rm `find . -name "core.[0-9]*"`
+    cleanup ".#*"
+    cleanup "*~"
+    cleanup "*.pyc"
+    cleanup core
+    cleanup "core.[0-9]*"
 
-    rm -f wxPython/wxPython/*  > /dev/null 2>&1
+    rm -f wxPython/wx/*  > /dev/null 2>&1
     rm wxPython/demo/.setup.sh
-    rm -rf wxPython/contrib/art2d
-    rm -rf wxPython/contrib/canvas
-    rm -rf wxPython/contrib/canvas2
-    rm -rf wxPython/contrib/gizmos/contrib
-    rm -rf wxPython/contrib/ogl/contrib
-    rm -rf wxPython/contrib/stc/contrib
-    rm -rf wxPython/contrib/xrc/contrib
+    rm -r wxPython/docs/xml-raw
 
     popd > /dev/null
     popd > /dev/null
