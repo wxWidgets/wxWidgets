@@ -268,13 +268,13 @@ wxCursor::wxCursor( const wxImage & image )
     int hotSpotX;
     int hotSpotY;
 
-    if (image.HasOption(wxCUR_HOTSPOT_X))
-        hotSpotX = image.GetOptionInt(wxCUR_HOTSPOT_X);
+    if (image.HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_X))
+        hotSpotX = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X);
     else
         hotSpotX = 0;
 
-    if (image.HasOption(wxCUR_HOTSPOT_Y))
-        hotSpotY = image.GetOptionInt(wxCUR_HOTSPOT_Y);
+    if (image.HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y))
+        hotSpotY = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y);
     else
         hotSpotY = 0;
 
