@@ -565,7 +565,7 @@ bool wxClipboard::AddData( wxDataObject *data )
 #elif wxUSE_DATAOBJ
     wxCHECK_MSG( wxIsClipboardOpened(), FALSE, wxT("clipboard not open") );
 
-    wxDataFormat format = data->GetFormat();
+    wxDataFormat format = data->GetPreferredFormat();
 
     switch ( format )
     {
@@ -582,23 +582,35 @@ bool wxClipboard::AddData( wxDataObject *data )
         {
             wxBitmapDataObject* bitmapDataObject = (wxBitmapDataObject*) data;
             wxBitmap bitmap(bitmapDataObject->GetBitmap());
-            return wxSetClipboardData(data->GetFormat(), &bitmap);
+            return wxSetClipboardData(data->GetPreferredFormat(), &bitmap);
         }
 
 #if wxUSE_METAFILE
         case wxDF_METAFILE:
         {
+#if 1
+            // TODO
+            wxLogError("Not implemented because wxMetafileDataObject does not contain width and height values.");
+            return FALSE;
+#else
             wxMetafileDataObject* metaFileDataObject =
                 (wxMetafileDataObject*) data;
             wxMetafile metaFile = metaFileDataObject->GetMetafile();
             return wxSetClipboardData(wxDF_METAFILE, &metaFile,
                                       metaFileDataObject->GetWidth(),
                                       metaFileDataObject->GetHeight());
+#endif
         }
 #endif // wxUSE_METAFILE
 
         default:
-            return wxSetClipboardData(data);
+        {
+// This didn't compile, of course
+//            return wxSetClipboardData(data);
+            // TODO
+            wxLogError("Not implemented.");
+            return FALSE;
+        }
     }
 #else // !wxUSE_DATAOBJ
     return FALSE;
@@ -776,7 +788,7 @@ bool wxClipboard::GetData( wxDataObject& data )
 #elif wxUSE_DATAOBJ
     wxCHECK_MSG( wxIsClipboardOpened(), FALSE, wxT("clipboard not open") );
 
-    wxDataFormat format = data.GetFormat();
+    wxDataFormat format = data.GetPreferredFormat();
     switch ( format )
     {
         case wxDF_TEXT:
@@ -797,7 +809,7 @@ bool wxClipboard::GetData( wxDataObject& data )
         case wxDF_DIB:
         {
             wxBitmapDataObject& bitmapDataObject = (wxBitmapDataObject &)data;
-            wxBitmap* bitmap = (wxBitmap *)wxGetClipboardData(data->GetFormat());
+            wxBitmap* bitmap = (wxBitmap *)wxGetClipboardData(data.GetPreferredFormat());
             if ( !bitmap )
                 return FALSE;
 

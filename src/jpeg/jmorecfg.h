@@ -169,6 +169,8 @@ typedef short INT16;
 #ifdef XMD_H
 /* X11/xmd.h correctly defines INT32 */
 #define INT32_DEFINED
+/* Note: GnuPRO 00r1 should be tested because it does NOT define INT32 in windows.h */
+/* For this compiler, set the following test to 0. */
 #elif (_MSC_VER >= 1200) || (__BORLANDC__ >= 0x550) \
       || wxCHECK_W32API_VERSION( 0, 5 ) \
       || ((defined(__MINGW32__) || defined(__CYGWIN__)) \

@@ -28,9 +28,11 @@
     #pragma hdrstop
 #endif
 
+#include "wx/setup.h"
+
 #if wxUSE_DIRDLG
 
-#if defined(__WIN95__) && !defined(__GNUWIN32_OLD__)
+#if defined(__WIN95__) && !defined(__GNUWIN32_OLD__) && wxUSE_OLE
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"

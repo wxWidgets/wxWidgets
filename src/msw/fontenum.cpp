@@ -146,7 +146,7 @@ bool wxFontEnumeratorHelper::SetEncoding(wxFontEncoding encoding)
     return TRUE;
 }
 
-#if defined(__GNUWIN32__) && !defined(__CYGWIN10__)
+#if 0 // defined(__GNUWIN32__) && !defined(__CYGWIN10__)
     #if wxUSE_NORLANDER_HEADERS
         #define wxFONTENUMPROC int(*)(const LOGFONT *, const TEXTMETRIC *, long unsigned int, LPARAM)
     #else

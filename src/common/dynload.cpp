@@ -242,7 +242,7 @@ void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
         symbol = NSAddressOfSymbol( NSLookupAndBindSymbol( name.c_str() ) );
 
 #elif defined(__WINDOWS__)
-    symbol = ::GetProcAddress( m_handle, name.mb_str() );
+    symbol = (void*) ::GetProcAddress( m_handle, name.mb_str() );
 
 #else
 #error  "runtime shared lib support not implemented"
