@@ -427,6 +427,15 @@ public:
 
 //---------------------------------------------------------------------------
 
+class wxDisplayChangedEvent : public wxEvent
+{
+public:
+    wxDisplayChangedEvent();
+};
+
+
+//---------------------------------------------------------------------------
+
 class  wxPaletteChangedEvent : public wxEvent {
 public:
     wxPaletteChangedEvent(wxWindowID id = 0);

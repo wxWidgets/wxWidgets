@@ -256,8 +256,8 @@ PyObject* __wxSetDictionary(PyObject* /* self */, PyObject* args)
 #ifdef __WXMOTIF__
 #define wxPlatform "__WXMOTIF__"
 #endif
-#ifdef __WXQT__
-#define wxPlatform "__WXQT__"
+#ifdef __WXX11__
+#define wxPlatform "__WXX11__"
 #endif
 #ifdef __WXGTK__
 #define wxPlatform "__WXGTK__"
@@ -450,9 +450,12 @@ unsigned long wxPyGetCurrentThreadId() {
     return wxThread::GetCurrentId();
 }
 
-
+static PyThreadState* gs_shutdownTState;
 static
 PyThreadState* wxPyGetThreadState() {
+    if (wxPyTMutex == NULL) // Python is shutting down...
+        return gs_shutdownTState;
+
     unsigned long ctid = wxPyGetCurrentThreadId();
     PyThreadState* tstate = NULL;
 
@@ -471,6 +474,10 @@ PyThreadState* wxPyGetThreadState() {
 
 static
 void wxPySaveThreadState(PyThreadState* tstate) {
+    if (wxPyTMutex == NULL) { // Python is shutting down, assume a single thread...
+        gs_shutdownTState = tstate;
+        return;
+    }
     unsigned long ctid = wxPyGetCurrentThreadId();
     wxPyTMutex->Lock();
     for(size_t i=0; i < wxPyTStates->GetCount(); i++) {
