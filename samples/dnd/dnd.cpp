@@ -46,6 +46,10 @@
 
 #if defined(__WXGTK__) || defined(__WXMOTIF__)
     #include "mondrian.xpm"
+
+    #include "dnd_copy.xpm"
+    #include "dnd_move.xpm"
+    #include "dnd_none.xpm"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -1065,16 +1069,10 @@ void DnDFrame::OnLeftDown(wxMouseEvent &WXUNUSED(event) )
         textData.AddFile( "/file1.txt" );
         textData.AddFile( "/file2.txt" );
 */
-        wxDropSource source(textData, this
-
-#ifdef __WXMSW__
-                            ,wxCURSOR_PENCIL,           // for copy
-                            wxCURSOR_SPRAYCAN,          // for move
-                            wxCURSOR_QUESTION_ARROW     // for nothing
-#elif defined(__WXGTK__)
-                            ,wxICON(mondrian)
-#endif
-                            );
+        wxDropSource source(textData, this,
+                            wxDROP_ICON(dnd_copy),
+                            wxDROP_ICON(dnd_move),
+                            wxDROP_ICON(dnd_none));
 
         const char *pc;
 

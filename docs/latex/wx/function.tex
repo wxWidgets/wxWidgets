@@ -1100,6 +1100,21 @@ The clipboard must have previously been opened for this call to succeed.
 
 \section{Miscellaneous functions}\label{miscellany}
 
+\membersection{::wxDROP\_ICON}{wxdropicon} 
+
+\func{wxIconOrCursor}{wxDROP\_ICON}{\param{const char *}{name}}
+
+This macro creates either a cursor (MSW) or an icon (elsewhere) with the given
+name. Under MSW, the cursor is loaded from the resource file and the icon is
+loaded from XPM file under other platforms.
+
+This macro should be used with 
+\helpref{wxDropSource constructor}{wxdropsourcewxdropsource}.
+
+\wxheading{Include files}
+
+<wx/dnd.h>
+
 \membersection{::wxNewId}
 
 \func{long}{wxNewId}{\void}
