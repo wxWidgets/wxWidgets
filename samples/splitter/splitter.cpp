@@ -108,7 +108,7 @@ public:
     void OnPositionChanged(wxSplitterEvent& event);
     void OnPositionChanging(wxSplitterEvent& event);
     void OnDClick(wxSplitterEvent& event);
-    void OnUnsplit(wxSplitterEvent& event);
+    void OnUnsplitEvent(wxSplitterEvent& event);
 
 private:
     wxFrame *m_frame;
@@ -146,9 +146,9 @@ bool MyApp::OnInit()
     // create and show the main frame
     MyFrame* frame = new MyFrame;
 
-    frame->Show(TRUE);
+    frame->Show(true);
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -172,7 +172,7 @@ END_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame()
-       : wxFrame(NULL, -1, _T("wxSplitterWindow sample"),
+       : wxFrame(NULL, wxID_ANY, _T("wxSplitterWindow sample"),
                  wxDefaultPosition, wxSize(420, 300),
                  wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE)
 {
@@ -209,7 +209,7 @@ MyFrame::MyFrame()
 
     SetMenuBar(menuBar);
 
-    menuBar->Check(SPLIT_LIVE, TRUE);
+    menuBar->Check(SPLIT_LIVE, true);
     m_splitter = new MySplitterWindow(this);
 
 #if 1
@@ -222,13 +222,13 @@ MyFrame::MyFrame()
     m_right->SetBackgroundColour(*wxCYAN);
     m_right->SetScrollbars(20, 20, 5, 5);
 #else // for testing kbd navigation inside the splitter
-    m_left = new wxTextCtrl(m_splitter, -1, _T("first text"));
-    m_right = new wxTextCtrl(m_splitter, -1, _T("second text"));
+    m_left = new wxTextCtrl(m_splitter, wxID_ANY, _T("first text"));
+    m_right = new wxTextCtrl(m_splitter, wxID_ANY, _T("second text"));
 #endif
 
     // you can also do this to start with a single window
 #if 0
-    m_right->Show(FALSE);
+    m_right->Show(false);
     m_splitter->Initialize(m_left);
 #else
     // you can also try -100
@@ -246,15 +246,15 @@ MyFrame::~MyFrame()
 
 void MyFrame::Quit(wxCommandEvent& WXUNUSED(event) )
 {
-    Close(TRUE);
+    Close(true);
 }
 
 void MyFrame::SplitHorizontal(wxCommandEvent& WXUNUSED(event) )
 {
     if ( m_splitter->IsSplit() )
         m_splitter->Unsplit();
-    m_left->Show(TRUE);
-    m_right->Show(TRUE);
+    m_left->Show(true);
+    m_right->Show(true);
     m_splitter->SplitHorizontally( m_left, m_right );
 
     SetStatusText(_T("Splitter split horizontally"), 1);
@@ -264,8 +264,8 @@ void MyFrame::SplitVertical(wxCommandEvent& WXUNUSED(event) )
 {
     if ( m_splitter->IsSplit() )
         m_splitter->Unsplit();
-    m_left->Show(TRUE);
-    m_right->Show(TRUE);
+    m_left->Show(true);
+    m_right->Show(true);
     m_splitter->SplitVertically( m_left, m_right );
 
     SetStatusText(_T("Splitter split vertically"), 1);
@@ -345,16 +345,16 @@ void MyFrame::UpdateUIUnsplit(wxUpdateUIEvent& event)
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MySplitterWindow, wxSplitterWindow)
-    EVT_SPLITTER_SASH_POS_CHANGED(-1, MySplitterWindow::OnPositionChanged)
-    EVT_SPLITTER_SASH_POS_CHANGING(-1, MySplitterWindow::OnPositionChanging)
+    EVT_SPLITTER_SASH_POS_CHANGED(wxID_ANY, MySplitterWindow::OnPositionChanged)
+    EVT_SPLITTER_SASH_POS_CHANGING(wxID_ANY, MySplitterWindow::OnPositionChanging)
 
-    EVT_SPLITTER_DCLICK(-1, MySplitterWindow::OnDClick)
+    EVT_SPLITTER_DCLICK(wxID_ANY, MySplitterWindow::OnDClick)
 
-    EVT_SPLITTER_UNSPLIT(-1, MySplitterWindow::OnUnsplit)
+    EVT_SPLITTER_UNSPLIT(wxID_ANY, MySplitterWindow::OnUnsplitEvent)
 END_EVENT_TABLE()
 
 MySplitterWindow::MySplitterWindow(wxFrame *parent)
-                : wxSplitterWindow(parent, -1,
+                : wxSplitterWindow(parent, wxID_ANY,
                                    wxDefaultPosition, wxDefaultSize,
                                    wxSP_3D | wxSP_LIVE_UPDATE |
                                    wxCLIP_CHILDREN /* | wxSP_NO_XP_THEME */ )
@@ -385,7 +385,7 @@ void MySplitterWindow::OnDClick(wxSplitterEvent& event)
     event.Skip();
 }
 
-void MySplitterWindow::OnUnsplit(wxSplitterEvent& event)
+void MySplitterWindow::OnUnsplitEvent(wxSplitterEvent& event)
 {
     m_frame->SetStatusText(_T("Splitter unsplit"), 1);
 
@@ -397,7 +397,7 @@ void MySplitterWindow::OnUnsplit(wxSplitterEvent& event)
 // ----------------------------------------------------------------------------
 
 MyCanvas::MyCanvas(wxWindow* parent, bool mirror)
-        : wxScrolledWindow(parent, -1, wxDefaultPosition, wxDefaultSize,
+        : wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                            wxHSCROLL | wxVSCROLL | wxNO_FULL_REPAINT_ON_RESIZE)
 {
     m_mirror = mirror;
