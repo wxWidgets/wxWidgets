@@ -2655,6 +2655,7 @@ void wxWindowGTK::Init()
 #ifdef __WXGTK20__
     m_imData = NULL;
     m_x11Context = NULL;
+    m_dirtyTabOrder = false;
 #else
 #ifdef HAVE_XIM
     m_ic = (GdkIC*) NULL;
@@ -3116,6 +3117,11 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
 
 void wxWindowGTK::OnInternalIdle()
 {
+#ifdef __WXGTK20__
+    if ( m_dirtyTabOrder )
+        RealizeTabOrder();
+#endif
+
     // Update invalidated regions.
     GtkUpdate();
 
@@ -3704,6 +3710,62 @@ void wxWindowGTK::DoAddChild(wxWindowGTK *child)
     /* insert GTK representation */
     (*m_insertCallback)(this, child);
 }
+
+#ifdef __WXGTK20__
+
+void wxWindowGTK::AddChild(wxWindowBase *child)
+{
+    wxWindowBase::AddChild(child);
+    m_dirtyTabOrder = true;
+    if (g_isIdle)
+        wxapp_install_idle_handler();
+}
+
+void wxWindowGTK::RemoveChild(wxWindowBase *child)
+{
+    wxWindowBase::RemoveChild(child);
+    m_dirtyTabOrder = true;
+    if (g_isIdle)
+        wxapp_install_idle_handler();
+}
+    
+void wxWindowGTK::DoMoveInTabOrder(wxWindow *win, MoveKind move)
+{
+    wxWindowBase::DoMoveInTabOrder(win, move);
+    m_dirtyTabOrder = true;
+    if (g_isIdle)
+        wxapp_install_idle_handler();
+}
+
+void wxWindowGTK::RealizeTabOrder()
+{
+    if (m_wxwindow)
+    {
+        if (m_children.size() > 0)
+        {
+            GList *chain = NULL;
+            
+            for (wxWindowList::const_iterator i = m_children.begin();
+                    i != m_children.end(); ++i)
+            {
+                chain = g_list_prepend(chain, (*i)->m_widget);
+            }
+            
+            chain = g_list_reverse(chain);
+            
+            gtk_container_set_focus_chain(GTK_CONTAINER(m_wxwindow), chain);
+            g_list_free(chain);
+        }
+        else
+        {
+            gtk_container_unset_focus_chain(GTK_CONTAINER(m_wxwindow));
+        }
+    }
+    
+    m_dirtyTabOrder = false;
+}
+
+#endif // __WXGTK20__
 
 void wxWindowGTK::Raise()
 {

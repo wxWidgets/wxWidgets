@@ -105,6 +105,11 @@ public:
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget );
 #endif // wxUSE_DRAG_AND_DROP
+    
+#ifdef __WXGTK20__
+    virtual void AddChild( wxWindowBase *child );
+    virtual void RemoveChild( wxWindowBase *child );
+#endif
 
     // implementation
     // --------------
@@ -229,6 +234,10 @@ public:
     bool                 m_hasFocus:1;          // true if == FindFocus()
     bool                 m_isScrolling:1;       // dragging scrollbar thumb?
     bool                 m_clipPaintRegion:1;   // TRUE after ScrollWindow()
+#ifdef __WXGTK20__
+    bool                 m_dirtyTabOrder:1;     // tab order changed, GTK focus
+                                                // chain needs update
+#endif
 
     // C++ has no virtual methods in the constrcutor of any class but we need
     // different methods of inserting a child window into a wxFrame,
@@ -257,6 +266,13 @@ public:
 protected:
     // common part of all ctors (not virtual because called from ctor)
     void Init();
+    
+#ifdef __WXGTK20__
+    virtual void DoMoveInTabOrder(wxWindow *win, MoveKind move);
+
+    // Copies m_children tab order to GTK focus chain:
+    void RealizeTabOrder();
+#endif
     
     // Called by ApplyWidgetStyle (which is called by SetFont() and
     // SetXXXColour etc to apply style changed to native widgets) to create
