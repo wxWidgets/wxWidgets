@@ -7,9 +7,9 @@
 #
 # "%W% %G%"
 #
-# Makefile : Builds xpm.lib for VC++ (32-bit)
+# Makefile : Builds xpm.lib for VC++ (16-bit)
 #
-!include <..\makevc.env>
+!include <..\makemsc.env>
 
 THISDIR=$(WXWIN)\src\xpm
 
@@ -23,8 +23,8 @@ OBJECTS = 	$(XPMDIR)\attrib.obj\
 		$(XPMDIR)\create.obj\
 		$(XPMDIR)\crifrbuf.obj\
 		$(XPMDIR)\crifrdat.obj\
-		$(XPMDIR)\data.obj\
-		$(XPMDIR)\image.obj\
+		$(XPMDIR)\dataxpm.obj\
+		$(XPMDIR)\imagexpm.obj\
 		$(XPMDIR)\info.obj\
 		$(XPMDIR)\hashtab.obj\
 		$(XPMDIR)\misc.obj\
@@ -41,10 +41,12 @@ all:    $(LIBTARGET)
 
 $(LIBTARGET):      $(OBJECTS)
 	-erase $(LIBTARGET)
-	$(implib) @<<
--out:$@
--machine:$(CPU)
-$(OBJECTS) $(PERIPH_LIBS)
+	lib /PAGESIZE:128 @<<
+$(LIBTARGET)
+y
+$(OBJECTS)
+nul
+;
 <<
 
 $(XPMDIR)\attrib.obj: $(XPMDIR)\attrib.c
@@ -77,12 +79,12 @@ $(XPMDIR)\crifrdat.obj: $(XPMDIR)\crifrdat.c
 $(CPPFLAGS2) /c $*.c /Fo$@
 <<
 
-$(XPMDIR)\data.obj: $(XPMDIR)\data.c
+$(XPMDIR)\dataxpm.obj: $(XPMDIR)\dataxpm.c
 	 	cl @<<
 $(CPPFLAGS2) /c $*.c /Fo$@
 <<
 
-$(XPMDIR)\image.obj: $(XPMDIR)\image.c
+$(XPMDIR)\imagexpm.obj: $(XPMDIR)\imagexpm.c
 	 	cl @<<
 $(CPPFLAGS2) /c $*.c /Fo$@
 <<

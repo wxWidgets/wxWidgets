@@ -44,8 +44,8 @@
 
 #include "xpm.h"
 
-// Added by JACS for Watcom C++/wxWindows compilation (no popen/pclose functions)
-#ifdef __WATCOMC__
+// Added by JACS for some compilers (no popen/pclose functions)
+#if defined(__WATCOMC__) || (!defined(WIN32) && defined(_MSC_VER))
 #define NO_ZPIPE
 #endif
 

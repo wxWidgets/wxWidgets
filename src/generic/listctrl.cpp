@@ -951,8 +951,8 @@ void wxListLineData::SetAttributes(wxDC *dc,
 
 void wxListLineData::DoDraw( wxDC *dc, bool hilight, bool paintBG )
 {
-    wxCoord dev_x = 0;
-    wxCoord dev_y = 0;
+    int dev_x = 0;
+    int dev_y = 0;
     m_owner->CalcScrolledPosition( m_bound_all.x, m_bound_all.y, &dev_x, &dev_y );
     wxCoord dev_w = m_bound_all.width;
     wxCoord dev_h = m_bound_all.height;

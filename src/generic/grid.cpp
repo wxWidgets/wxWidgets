@@ -788,7 +788,7 @@ void wxGridCellBoolEditor::Create(wxWindow* parent,
 void wxGridCellBoolEditor::SetSize(const wxRect& r)
 {
     // position it in the centre of the rectangle (TODO: support alignment?)
-    wxCoord w, h;
+    int w, h;
     m_control->GetSize(&w, &h);
 
     // the checkbox without label still has some space to the right in wxGTK,

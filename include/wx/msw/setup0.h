@@ -484,7 +484,7 @@
 #endif
 #endif
 
-#if (!defined(WIN32) && !defined(__WIN32__)) || (defined(__GNUWIN32__) && !defined(wxUSE_NORLANDER_HEADERS))
+#if (!defined(WIN32) && !defined(__WIN32__)) || (defined(__GNUWIN32__) && !wxUSE_NORLANDER_HEADERS)
 // Can't use OLE drag and drop in Windows 3.1 because we don't know how
 // to implement UUIDs
 // GnuWin32 doesn't have appropriate headers for e.g. IUnknown.

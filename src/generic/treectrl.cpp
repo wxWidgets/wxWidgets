@@ -2287,8 +2287,8 @@ void wxTreeCtrl::OnIdle( wxIdleEvent &WXUNUSED(event) )
 
 void wxTreeCtrl::CalculateSize( wxGenericTreeItem *item, wxDC &dc )
 {
-    int text_w = 0;
-    int text_h = 0;
+    wxCoord text_w = 0;
+    wxCoord text_h = 0;
 
     if (item->IsBold())
         dc.SetFont(m_boldFont);

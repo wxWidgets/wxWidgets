@@ -93,7 +93,8 @@ Using project files:
    Debug and Release configurations. If you have VC++ 4,
    use makefile.vc, but you may only have one set of object
    files at a time in use (debug or release versions).
-4. Open a sample project file, choose a configuration using
+4. Similarly for TIFF: use src/tiff/tiff.dsp.
+5. Open a sample project file, choose a configuration using
    Build | Set Active Configuration..., and compile.
    The project files don't use precompiled headers, to save
    space, but you can switch PCH compiling on for greater speed.
@@ -379,7 +380,7 @@ Here are the steps required:
   extra files to use the wxWindows makefiles. You can find these
   files in ports/mingw32 on the ftp site or CD-ROM, as extra.zip.
   These should be extracted to the Mingw32 directory.
-  If you have already have downloaded bison, flex, make, rm, mv
+  If you have already have downloaded bison, flex, make, rm, cp, mv
   from elsewhere, you won't need this.
 
   If using Mingw32 2.8.1, see also see mingw32.txt in this directory

@@ -78,7 +78,7 @@ DUMMYOBJ=dummy.obj
 # This one overrides the others, to be consistent with the settings in wx_setup.h
 MINIMAL_WXWINDOWS_SETUP=0
 
-USE_XPM_IN_MSW=0
+USE_XPM_IN_MSW=1
 USE_CTL3D=1
 
 !if "$(MINIMAL_WXWINDOWS_SETUP)" == "1"
@@ -95,7 +95,7 @@ PERIPH_CLEAN_TARGET=
 # !endif
 
 !if "$(USE_XPM_IN_MSW)" == "1"
-PERIPH_LIBS=$(WXDIR)\contrib\wxxpm\xpm.lib $(PERIPH_LIBS)
+PERIPH_LIBS=$(WXDIR)\lib\xpm.lib $(PERIPH_LIBS)
 PERIPH_TARGET=xpm $(PERIPH_TARGET)
 PERIPH_CLEAN_TARGET=clean_xpm $(PERIPH_CLEAN_TARGET)
 !endif
@@ -234,6 +234,8 @@ $(COMMDIR)/lex_yy.c:    $(COMMDIR)/doslex.c
 $(OBJECTS):	$(WXDIR)/include/wx/setup.h
 
 # Peripheral components
+
+$(WXDIR)\lib\xpm.lib: xpm
 
 xpm:
     cd $(WXDIR)\src\xpm

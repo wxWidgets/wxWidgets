@@ -428,8 +428,8 @@ void wxDC::DoDrawCheckMark(wxCoord x1, wxCoord y1,
     // In WIN16, draw a cross
     HPEN blackPen = ::CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
     HPEN whiteBrush = (HPEN)::GetStockObject(WHITE_BRUSH);
-    HPEN hPenOld = (HPEN)::SelectObject(hdcMem, blackPen);
-    HPEN hBrushOld = (HPEN)::SelectObject(hdcMem, whiteBrush);
+    HPEN hPenOld = (HPEN)::SelectObject(GetHdc(), blackPen);
+    HPEN hBrushOld = (HPEN)::SelectObject(GetHdc(), whiteBrush);
     ::SetROP2(GetHdc(), R2_COPYPEN);
     Rectangle(GetHdc(), x1, y1, x2, y2);
     MoveTo(GetHdc(), x1, y1);
