@@ -212,28 +212,37 @@ static pascal void TPPaneDrawProc(ControlRef theControl, ControlPartCode thePart
             Rect oldbounds = varsp->fRFocusOutline ;
             InsetRect( &oldbounds , -1 , -1 ) ;
 
-            InvalWindowRect( GetControlOwner( theControl ) , &oldbounds ) ;
+            if ( IsControlVisible( theControl ) )
+                InvalWindowRect( GetControlOwner( theControl ) , &oldbounds ) ;
             SetRect(&varsp->fRFocusOutline, bounds.left, bounds.top, bounds.right, bounds.bottom);
             SetRect(&varsp->fRTextOutline, bounds.left, bounds.top, bounds.right, bounds.bottom);
             SetRect(&varsp->fRTextArea, bounds.left + 2 , bounds.top + (varsp->fMultiline ? 0 : 2) ,
                 bounds.right - (varsp->fMultiline ? 0 : 2), bounds.bottom - (varsp->fMultiline ? 0 : 2));
             RectRgn(varsp->fTextBackgroundRgn, &varsp->fRTextOutline);
-            TXNSetFrameBounds(  varsp->fTXNRec, varsp->fRTextArea.top, varsp->fRTextArea.left,
-                varsp->fRTextArea.bottom, varsp->fRTextArea.right, varsp->fTXNFrame);
+            if ( IsControlVisible( theControl ) )
+                TXNSetFrameBounds(  varsp->fTXNRec, varsp->fRTextArea.top, varsp->fRTextArea.left,
+                    varsp->fRTextArea.bottom, varsp->fRTextArea.right, varsp->fTXNFrame);
+            else
+                TXNSetFrameBounds(  varsp->fTXNRec, varsp->fRTextArea.top + 30000 , varsp->fRTextArea.left + 30000 ,
+                    varsp->fRTextArea.bottom + 30000 , varsp->fRTextArea.right + 30000 , varsp->fTXNFrame);
+            
         }
 
+        if ( IsControlVisible( theControl ) )
+        {
             /* update the text region */
-        RGBColor white = { 65535 , 65535 , 65535 } ;
-        RGBBackColor( &white ) ;
-        EraseRgn(varsp->fTextBackgroundRgn);
-        TXNDraw(varsp->fTXNRec, NULL);
-            /* restore the drawing environment */
-            /* draw the text frame and focus frame (if necessary) */
-        DrawThemeEditTextFrame(&varsp->fRTextOutline, varsp->fIsActive ? kThemeStateActive: kThemeStateInactive);
-        if ((**tpvars).fIsActive && varsp->fInFocus) DrawThemeFocusRect(&varsp->fRFocusOutline, true);
-            /* release our globals */
-        HSetState((Handle) tpvars, state);
-
+            RGBColor white = { 65535 , 65535 , 65535 } ;
+            RGBBackColor( &white ) ;
+            EraseRgn(varsp->fTextBackgroundRgn);
+            TXNDraw(varsp->fTXNRec, NULL);
+                /* restore the drawing environment */
+                /* draw the text frame and focus frame (if necessary) */
+            DrawThemeEditTextFrame(&varsp->fRTextOutline, varsp->fIsActive ? kThemeStateActive: kThemeStateInactive);
+            if ((**tpvars).fIsActive && varsp->fInFocus) 
+                DrawThemeFocusRect(&varsp->fRFocusOutline, true);
+                /* release our globals */
+            HSetState((Handle) tpvars, state);
+        }
     }
 }
 
@@ -249,7 +258,7 @@ static pascal ControlPartCode TPPaneHitTestProc(ControlHandle theControl, Point 
         /* set up our locals and lock down our globals*/
     result = 0;
     tpvars = (STPTextPaneVars **) GetControlReference(theControl);
-    if (tpvars != NULL) {
+    if (tpvars != NULL && IsControlVisible( theControl) ) {
         state = HGetState((Handle) tpvars);
         HLock((Handle) tpvars);
             /* find the region where we clicked */
@@ -276,7 +285,7 @@ static pascal ControlPartCode TPPaneTrackingProc(ControlHandle theControl, Point
         /* make sure we have some variables... */
     partCodeResult = 0;
     tpvars = (STPTextPaneVars **) GetControlReference(theControl);
-    if (tpvars != NULL) {
+    if (tpvars != NULL && IsControlVisible( theControl ) ) {
             /* lock 'em down */
         state = HGetState((Handle) tpvars);
         HLock((Handle) tpvars);
@@ -319,7 +328,7 @@ static pascal void TPPaneIdleProc(ControlHandle theControl) {
     STPTextPaneVars **tpvars, *varsp;
         /* set up locals */
     tpvars = (STPTextPaneVars **) GetControlReference(theControl);
-    if (tpvars != NULL) {
+    if (tpvars != NULL && IsControlVisible( theControl ) ) {
             /* if we're not active, then we have nothing to say about the cursor */
         if ((**tpvars).fIsActive) {
             char state;
@@ -404,12 +413,16 @@ static pascal void TPPaneActivateProc(ControlHandle theControl, Boolean activati
             /* de/activate the text edit record */
         SetPort((**tpvars).fDrawingEnvironment);
         wxMacWindowClipper clipper( wxFindControlFromMacControl(theControl ) ) ;
-            GetControlBounds(theControl, &bounds);
-            varsp->fIsActive = activating;
-            TPActivatePaneText(tpvars, varsp->fIsActive && varsp->fInFocus);
+        GetControlBounds(theControl, &bounds);
+        varsp->fIsActive = activating;
+        TPActivatePaneText(tpvars, varsp->fIsActive && varsp->fInFocus);
             /* redraw the frame */
-        DrawThemeEditTextFrame(&varsp->fRTextOutline, varsp->fIsActive ? kThemeStateActive: kThemeStateInactive);
-        if (varsp->fInFocus) DrawThemeFocusRect(&varsp->fRFocusOutline, varsp->fIsActive);
+        if ( IsControlVisible( theControl ) )
+        {
+            DrawThemeEditTextFrame(&varsp->fRTextOutline, varsp->fIsActive ? kThemeStateActive: kThemeStateInactive);
+            if (varsp->fInFocus) 
+                DrawThemeFocusRect(&varsp->fRFocusOutline, varsp->fIsActive);
+        }
         HSetState((Handle) tpvars, state);
     }
 }
@@ -467,11 +480,14 @@ static pascal ControlPartCode TPPaneFocusProc(ControlHandle theControl, ControlF
                 focusResult = varsp->fInFocus ? 1 : kControlFocusNoPart;
                 break;
         }
-            TPActivatePaneText(tpvars, varsp->fIsActive && varsp->fInFocus);
-            /* redraw the text fram and focus rectangle to indicate the
-            new focus state */
-        DrawThemeEditTextFrame(&varsp->fRTextOutline, varsp->fIsActive ? kThemeStateActive: kThemeStateInactive);
-        DrawThemeFocusRect(&varsp->fRFocusOutline, varsp->fIsActive && varsp->fInFocus);
+        TPActivatePaneText(tpvars, varsp->fIsActive && varsp->fInFocus);
+        /* redraw the text fram and focus rectangle to indicate the
+        new focus state */
+        if ( IsControlVisible( theControl ) )
+        {
+            DrawThemeEditTextFrame(&varsp->fRTextOutline, varsp->fIsActive ? kThemeStateActive: kThemeStateInactive);
+            DrawThemeFocusRect(&varsp->fRFocusOutline, varsp->fIsActive && varsp->fInFocus);
+        }
             /* done */
         HSetState((Handle) tpvars, state);
     }
@@ -574,6 +590,11 @@ OSStatus mUPOpenControl(ControlHandle theControl, long wxStyle )
         kTXNTextensionFile,
         kTXNSystemDefaultEncoding,
         &varsp->fTXNRec, &varsp->fTXNFrame, (TXNObjectRefcon) tpvars);
+
+    if ( !IsControlVisible( theControl ) )
+        TXNSetFrameBounds(  varsp->fTXNRec, varsp->fRTextArea.top + 30000 , varsp->fRTextArea.left + 30000 ,
+            varsp->fRTextArea.bottom + 30000 , varsp->fRTextArea.right + 30000 , varsp->fTXNFrame);
+
 
     if ( (wxStyle & wxTE_MULTILINE) && (wxStyle & wxTE_DONTWRAP) )
     {
@@ -728,7 +749,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
     if ( !m_macUsesTXN )
     {
-        m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , "\p" , true , 0 , 0 , 1,
+        m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , "\p" , false , 0 , 0 , 1,
             (style & wxTE_PASSWORD) ? kControlEditTextPasswordProc : kControlEditTextProc , (long) this ) ;
         long size ;
         ::GetControlData((ControlHandle)  m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*)((TEHandle *)&m_macTE) , &size ) ;
@@ -742,7 +763,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
                 | kControlWantsActivate | kControlHandlesTracking | kControlHasSpecialBackground
                 | kControlGetsFocusOnClick | kControlSupportsLiveFeedback;
             /* create the control */
-        m_macControl = NewControl(MAC_WXHWND(parent->MacGetRootWindow()), &bounds, "\p", true, featurSet, 0, featurSet, kControlUserPaneProc, 0);
+        m_macControl = NewControl(MAC_WXHWND(parent->MacGetRootWindow()), &bounds, "\p", false , featurSet, 0, featurSet, kControlUserPaneProc, 0);
             /* set up the mUP specific features and data */
         mUPOpenControl((ControlHandle) m_macControl, m_windowStyle );
     }
