@@ -179,7 +179,7 @@ void wxFontRefData::Init(int pointSize,
     m_underlined = underlined;
     m_encoding = encoding;
     
-    
+#ifdef __WXGTK20__    
     // Create native font info
     m_nativeFontInfo.description = pango_font_description_new();
 
@@ -199,6 +199,7 @@ void wxFontRefData::Init(int pointSize,
     SetStyle( m_style );
     SetPointSize( m_pointSize );
     SetWeight( m_weight );
+#endif
 }
 
 wxFontRefData::wxFontRefData( const wxFontRefData& data )
