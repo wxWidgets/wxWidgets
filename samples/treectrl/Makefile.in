@@ -5,7 +5,7 @@ top_srcdir = @top_srcdir@/..
 top_builddir = ../..
 program_dir = samples/treectrl
 
-PROGRAM=treectrl
+PROGRAM=treetest
 
 OBJECTS =$(PROGRAM).o
 DEPFILES=$(PROGRAM).d
