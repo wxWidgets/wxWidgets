@@ -207,6 +207,11 @@ inline COLORREF wxColourToRGB(const wxColour& c)
     return PALETTERGB(c.Red(), c.Green(), c.Blue());
 }
 
+inline wxColour wxRGBToColour(COLORREF rgb)
+{
+    return wxColour(GetRValue(rgb), GetGValue(rgb), GetBValue(rgb));
+}
+
 inline void wxRGBToColour(wxColour& c, COLORREF rgb)
 {
     c.Set(GetRValue(rgb), GetGValue(rgb), GetBValue(rgb));
