@@ -68,6 +68,7 @@ protected:
 
     virtual wxSize DoGetBestSize() const;
 
+    virtual bool IsOwnGtkWindow( GdkWindow *window );
 private:
     // common part of Create() and DoAppend()
     size_t GtkAppendHelper(GtkWidget *menu, const wxString& item);
