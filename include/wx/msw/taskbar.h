@@ -66,9 +66,10 @@ public:
 protected:
     WXHWND          m_hWnd;
     bool            m_iconAdded;
+    wxIcon          m_icon;
+    wxString        m_strTooltip;
+
     static wxTaskBarIconList sm_taskBarIcons;
-    static bool     sm_registeredClass;
-    static unsigned int sm_taskbarMsg;
 
 #if WXWIN_COMPATIBILITY_2_4
     // non-virtual default event handlers to forward events to the virtuals
