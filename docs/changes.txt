@@ -199,6 +199,7 @@ wxGTK:
 - fixed bug in generic file selector causing incomplete file extensions to
   be appended to filenames with no extension
 - added SetSelection implementation for GTK+ 2
+- fixed a memory leak in generic wxFileDialog
 
 wxMSW:
 
