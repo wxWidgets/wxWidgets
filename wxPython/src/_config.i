@@ -45,15 +45,27 @@ enum
 
 
 
-// abstract base class wxConfigBase which defines the interface for derived
-// classes
-//
-// wxConfig organizes the items in a tree-like structure (modeled after the
-// Unix/Dos filesystem). There are groups (directories) and keys (files).
-// There is always one current group given by the current path.
-//
-// Keys are pairs "key_name = value" where value may be of string or integer
-// (long) type (TODO doubles and other types such as wxDate coming soon).
+DocStr(wxConfigBase,
+"wx.ConfigBase class defines the basic interface of all config
+classes. It can not be used by itself (it is an abstract base
+class) and you will always use one of its derivations: wx.Config
+or wx.FileConfig.
+
+wx.ConfigBase organizes the items in a tree-like structure
+(modeled after the Unix/Dos filesystem). There are groups
+(directories) and keys (files).  There is always one current
+group given by the current path.  As in the file system case, to
+specify a key in the config class you must use a path to it.
+Config classes also support the notion of the current group,
+which makes it possible to use relative paths.
+
+Keys are pairs \"key_name = value\" where value may be of string, integer
+floating point or boolean, you can not store binary data without first
+encoding it as a string.  For performance reasons items should be kept small,
+no more than a couple kilobytes.
+");
+
+
 class wxConfigBase {
 public:
 //      wxConfigBase(const wxString& appName = wxPyEmptyString,       **** An ABC
@@ -73,39 +85,52 @@ public:
     };
 
 
-    // sets the config object, returns the previous pointer
-    static wxConfigBase *Set(wxConfigBase *pConfig);
+    DocDeclStr(
+        static wxConfigBase *, Set(wxConfigBase *config),
+        "Sets the global config object (the one returned by Get) and\n"
+        "returns a reference to the previous global config object.");
+    
 
-    // get the config object, creates it on demand unless DontCreateOnDemand
-    // was called
-    static wxConfigBase *Get(bool createOnDemand = True);
+    DocDeclStr(
+        static wxConfigBase *, Get(bool createOnDemand = True),
+        "Returns the current global config object, creating one if neccessary.");
+    
 
-    // create a new config object: this function will create the "best"
-    // implementation of wxConfig available for the current platform, see
-    // comments near definition wxUSE_CONFIG_NATIVE for details. It returns
-    // the created object and also sets it as ms_pConfig.
-    static wxConfigBase *Create();
+    DocDeclStr(
+        static wxConfigBase *, Create(),
+        "Create and return a new global config object.  This function will\n"
+        "create the \"best\" implementation of wx.Config available for the\n"
+        "current platform.");
+    
 
-    // should Get() try to create a new log object if the current one is NULL?
-    static void DontCreateOnDemand();
-
-
-
-    // set current path: if the first character is '/', it's the absolute path,
-    // otherwise it's a relative path. '..' is supported. If the strPath
-    // doesn't exist it is created.
-    virtual void SetPath(const wxString& strPath);
-
-    // retrieve the current path (always as absolute path)
-    virtual const wxString& GetPath() const;
+    
+    DocDeclStr(
+        static void , DontCreateOnDemand(),
+        "Should Get() try to create a new log object if there isn't a current one?");
+    
 
 
 
+    DocDeclStr(
+        virtual void , SetPath(const wxString& path),
+        "Set current path: if the first character is '/', it's the absolute path,\n"
+        "otherwise it's a relative path. '..' is supported. If the strPath\n"
+        "doesn't exist it is created.");
+    
 
-    // Each of these enumeration methods return a 3-tuple consisting of
-    // the continue flag, the value string, and the index for the next call.
+    DocDeclStr(
+        virtual const wxString& , GetPath() const,
+        "Retrieve the current path (always as absolute path)");
+    
+
+
     %extend {
-        // enumerate subgroups
+        DocAStr(GetFirstGroup,
+                "GetFirstGroup() -> (more, value, index)",                
+                "Allows enumerating the subgroups in a config object.  Returns\n"
+                "a tuple containing a flag indicating there are more items, the\n"
+                "name of the current item, and an index to pass to GetNextGroup to\n"
+                "fetch the next item.");
         PyObject* GetFirstGroup() {
             bool     cont;
             long     index = 0;
@@ -114,6 +139,15 @@ public:
             cont = self->GetFirstGroup(value, index);
             return __EnumerationHelper(cont, value, index);
         }
+
+
+        
+        DocAStr(GetNextGroup,
+                "GetNextGroup(long index) -> (more, value, index)",                
+                "Allows enumerating the subgroups in a config object.  Returns\n"
+                "a tuple containing a flag indicating there are more items, the\n"
+                "name of the current item, and an index to pass to GetNextGroup to\n"
+                "fetch the next item.");
         PyObject* GetNextGroup(long index) {
             bool     cont;
             wxString value;
@@ -122,7 +156,13 @@ public:
             return __EnumerationHelper(cont, value, index);
         }
 
-        // enumerate entries
+        
+        DocAStr(GetFirstEntry,
+                "GetFirstEntry() -> (more, value, index)",
+                "Allows enumerating the entries in the current group in a config\n"
+                "object.  Returns a tuple containing a flag indicating there are\n"
+                "more items, the name of the current item, and an index to pass to\n"
+                "GetNextGroup to fetch the next item.");        
         PyObject* GetFirstEntry() {
             bool     cont;
             long     index = 0;
@@ -131,6 +171,14 @@ public:
             cont = self->GetFirstEntry(value, index);
             return __EnumerationHelper(cont, value, index);
         }
+
+
+        DocAStr(GetNextEntry,
+                "GetNextEntry(long index) -> (more, value, index)",
+                "Allows enumerating the entries in the current group in a config\n"
+                "object.  Returns a tuple containing a flag indicating there are\n"
+                "more items, the name of the current item, and an index to pass to\n"
+                "GetNextGroup to fetch the next item.");        
         PyObject* GetNextEntry(long index) {
             bool     cont;
             wxString value;
@@ -142,38 +190,64 @@ public:
 
 
 
-    // get number of entries/subgroups in the current group, with or without
-    // it's subgroups
-    virtual size_t GetNumberOfEntries(bool bRecursive = False) const;
-    virtual size_t GetNumberOfGroups(bool bRecursive = False) const;
+    DocDeclStr(
+        virtual size_t , GetNumberOfEntries(bool recursive = False) const,
+        "Get the number of entries in the current group, with or\n"
+        "without its subgroups.");
+    
+    DocDeclStr(
+        virtual size_t , GetNumberOfGroups(bool recursive = False) const,
+        "Get the number of subgroups in the current group, with or\n"
+        "without its subgroups.");
+    
 
-    // returns True if the group by this name exists
-    virtual bool HasGroup(const wxString& strName) const;
+    
+    DocDeclStr(
+        virtual bool , HasGroup(const wxString& name) const,
+        "Returns True if the group by this name exists");
+    
 
-    // same as above, but for an entry
-    virtual bool HasEntry(const wxString& strName) const;
+    DocDeclStr(
+        virtual bool , HasEntry(const wxString& name) const,
+        "Returns True if the entry by this name exists");
+    
 
-    // returns True if either a group or an entry with a given name exist
-    bool Exists(const wxString& strName) const;
+    DocDeclStr(
+        bool , Exists(const wxString& name) const,
+        "Returns True if either a group or an entry with a given name exists");
+    
 
     // get the entry type
-    virtual EntryType GetEntryType(const wxString& name) const;
+    DocDeclStr(
+        virtual EntryType , GetEntryType(const wxString& name) const,
+        "Get the type of the entry.  Returns one of the wx.Config.Type_XXX values.");
+    
 
 
-    // Key access.  Returns the value of key if it exists, defaultVal otherwise
-    wxString Read(const wxString& key, const wxString& defaultVal = wxPyEmptyString);
+    DocDeclStr(
+        wxString , Read(const wxString& key, const wxString& defaultVal = wxPyEmptyString),
+        "Returns the value of key if it exists, defaultVal otherwise.");
+    
 
     %extend {
+        DocStr(ReadInt,
+               "Returns the value of key if it exists, defaultVal otherwise.");
         long ReadInt(const wxString& key, long defaultVal = 0) {
             long rv;
             self->Read(key, &rv, defaultVal);
             return rv;
         }
+
+        DocStr(ReadFloat,
+               "Returns the value of key if it exists, defaultVal otherwise.");
         double ReadFloat(const wxString& key, double defaultVal = 0.0) {
             double rv;
             self->Read(key, &rv, defaultVal);
             return rv;
         }
+        
+        DocStr(ReadBool,
+               "Returns the value of key if it exists, defaultVal otherwise.");
         bool ReadBool(const wxString& key, bool defaultVal = False) {
             bool rv;
             self->Read(key, &rv, defaultVal);
@@ -183,114 +257,191 @@ public:
 
 
     // write the value (return True on success)
-    bool Write(const wxString& key, const wxString& value);
-    %name(WriteInt)bool Write(const wxString& key, long value);
-    %name(WriteFloat)bool Write(const wxString& key, double value);
-    %name(WriteBool)bool Write(const wxString& key, bool value);
+    DocDeclStr(
+        bool , Write(const wxString& key, const wxString& value),
+        "write the value (return True on success)");
+
+    DocDeclStrName(
+        bool, Write(const wxString& key, long value),
+        "write the value (return True on success)",
+        WriteInt);
+
+    DocDeclStrName(
+        bool, Write(const wxString& key, double value),
+        "write the value (return True on success)",
+        WriteFloat);
+
+    DocDeclStrName(
+        bool, Write(const wxString& key, bool value),
+        "write the value (return True on success)",
+        WriteBool);
 
 
-    // permanently writes all changes
-    virtual bool Flush(bool bCurrentOnly = False);
+    DocDeclStr(
+        virtual bool , Flush(bool currentOnly = False),
+        "permanently writes all changes");
+    
 
-    // renaming, all functions return False on failure (probably because the new
-    // name is already taken by an existing entry)
-    // rename an entry
-    virtual bool RenameEntry(const wxString& oldName,
-                             const wxString& newName);
-    // rename a group
-    virtual bool RenameGroup(const wxString& oldName,
-                             const wxString& newName);
+    DocDeclStr(
+        virtual bool , RenameEntry(const wxString& oldName,
+                                   const wxString& newName),
+        "Rename an entry.  Returns False on failure (probably because the new\n"
+        "name is already taken by an existing entry)");
+    
+    DocDeclStr(
+        virtual bool , RenameGroup(const wxString& oldName,
+                                   const wxString& newName),
+        "Rename aa group.  Returns False on failure (probably because the new\n"
+        "name is already taken by an existing entry)");
+    
 
     // deletes the specified entry and the group it belongs to if
     // it was the last key in it and the second parameter is True
-    virtual bool DeleteEntry(const wxString& key,
-                             bool bDeleteGroupIfEmpty = True);
+    DocDeclStr(
+        virtual bool , DeleteEntry(const wxString& key,
+                                   bool deleteGroupIfEmpty = True),
+        "Deletes the specified entry and the group it belongs to if\n"
+        "it was the last key in it and the second parameter is True");
+    
 
-    // delete the group (with all subgroups)
-    virtual bool DeleteGroup(const wxString& key);
+    DocDeclStr(
+        virtual bool , DeleteGroup(const wxString& key),
+        "Delete the group (with all subgroups)");
+    
 
-    // delete the whole underlying object (disk file, registry key, ...)
-    // primarly for use by desinstallation routine.
-    virtual bool DeleteAll();
+    DocDeclStr(
+        virtual bool , DeleteAll(),
+        "Delete the whole underlying object (disk file, registry key, ...)\n"
+        "primarly intended for use by desinstallation routine.");
+    
 
 
-    // we can automatically expand environment variables in the config entries
-    // (this option is on by default, you can turn it on/off at any time)
-    bool IsExpandingEnvVars() const;
-    void SetExpandEnvVars(bool bDoIt = True);
+    DocDeclStr(
+        void , SetExpandEnvVars(bool doIt = True),
+        "We can automatically expand environment variables in the config entries\n"
+        "(this option is on by default, you can turn it on/off at any time)");
+    
+    DocDeclStr(
+        bool , IsExpandingEnvVars() const,
+        "Are we currently expanding environment variables?");
+    
 
-    // recording of default values
-    void SetRecordDefaults(bool bDoIt = True);
-    bool IsRecordingDefaults() const;
+    DocDeclStr(
+        void , SetRecordDefaults(bool doIt = True),
+        "Set whether the config objec should record default values.");
+    
+    DocDeclStr(
+        bool , IsRecordingDefaults() const,
+        "Are we currently recording default values?");
+    
 
-    // does expansion only if needed
-    wxString ExpandEnvVars(const wxString& str) const;
+    DocDeclStr(
+        wxString , ExpandEnvVars(const wxString& str) const,
+        "Expand any environment variables in str and return the result");
+    
 
-    // misc accessors
-    wxString GetAppName() const;
-    wxString GetVendorName() const;
+    DocDeclStr(
+        wxString , GetAppName() const,
+        "");
+    
+    DocDeclStr(
+        wxString , GetVendorName() const,
+        "");
+    
 
-    // Used wxIniConfig to set members in constructor
-    void SetAppName(const wxString& appName);
-    void SetVendorName(const wxString& vendorName);
+    DocDeclStr(
+        void , SetAppName(const wxString& appName),
+        "");
+    
+    DocDeclStr(
+        void , SetVendorName(const wxString& vendorName),
+        "");
+    
 
-    void SetStyle(long style);
-    long GetStyle() const;
+    DocDeclStr(
+        void , SetStyle(long style),
+        "");
+    
+    DocDeclStr(
+        long , GetStyle() const,
+        "");
+    
 };
 
 
 //---------------------------------------------------------------------------
 
-// a handy little class which changes current path to the path of given entry
-// and restores it in dtor: so if you declare a local variable of this type,
-// you work in the entry directory and the path is automatically restored
-// when the function returns
-// Taken out of wxConfig since not all compilers can cope with nested classes.
-class wxConfigPathChanger
-{
-public:
-  // ctor/dtor do path changing/restorin
-  wxConfigPathChanger(const wxConfigBase *pContainer, const wxString& strEntry);
- ~wxConfigPathChanger();
+DocStr(wxConfig,
+"This ConfigBase-derived class will use the registry on Windows,
+and will be a wx.FileConfig on other platforms.");
 
-  // get the key name
-  const wxString& Name() const { return m_strName; }
-};
-
-
-//---------------------------------------------------------------------------
-
-// This will be a wxRegConfig on Win32 and wxFileConfig otherwise.
 class wxConfig : public wxConfigBase {
 public:
-    wxConfig(const wxString& appName = wxPyEmptyString,
-             const wxString& vendorName = wxPyEmptyString,
-             const wxString& localFilename = wxPyEmptyString,
-             const wxString& globalFilename = wxPyEmptyString,
-             long style = 0);
+    DocCtorStr(
+        wxConfig(const wxString& appName = wxPyEmptyString,
+                 const wxString& vendorName = wxPyEmptyString,
+                 const wxString& localFilename = wxPyEmptyString,
+                 const wxString& globalFilename = wxPyEmptyString,
+                 long style = 0),
+        "");
+    
     ~wxConfig();
 };
 
 
-// Sometimes it's nice to explicitly have a wxFileConfig too.
+
+
+DocStr(wxFileConfig,
+       "This config class will use a file for storage on all platforms.");
+
 class wxFileConfig : public wxConfigBase {
 public:
-    wxFileConfig(const wxString& appName = wxPyEmptyString,
-                 const wxString& vendorName = wxPyEmptyString,
-                 const wxString& localFilename = wxPyEmptyString,
-                 const wxString& globalFilename = wxPyEmptyString,
-                 long style = 0);
+    DocCtorStr(
+        wxFileConfig(const wxString& appName = wxPyEmptyString,
+                     const wxString& vendorName = wxPyEmptyString,
+                     const wxString& localFilename = wxPyEmptyString,
+                     const wxString& globalFilename = wxPyEmptyString,
+                     long style = 0),
+        "");
+    
     ~wxFileConfig();
 };
 
 
 //---------------------------------------------------------------------------
 
+DocStr(wxConfigPathChanger,
+"A handy little class which changes current path to the path of
+given entry and restores it in the destructoir: so if you declare
+a local variable of this type, you work in the entry directory
+and the path is automatically restored when the function returns.");
 
-//  Replace environment variables ($SOMETHING) with their values. The format is
-//  $VARNAME or ${VARNAME} where VARNAME contains alphanumeric characters and
-//  '_' only. '$' must be escaped ('\$') in order to be taken literally.
-wxString wxExpandEnvVars(const wxString &sz);
+class wxConfigPathChanger
+{
+public:
+    DocCtorStr(
+        wxConfigPathChanger(const wxConfigBase *config, const wxString& entry),
+        "");
+    
+    ~wxConfigPathChanger();
+
+    DocDeclStr(
+        const wxString& , Name() const,
+        "Get the key name");   
+};
+
+
+//---------------------------------------------------------------------------
+
+
+
+DocDeclStr(
+    wxString , wxExpandEnvVars(const wxString &sz),
+    "Replace environment variables ($SOMETHING) with their values. The\n"
+    "format is $VARNAME or ${VARNAME} where VARNAME contains\n"
+    "alphanumeric characters and '_' only. '$' must be escaped ('\$')\n"
+    "in order to be taken literally.");
+
 
 
 //---------------------------------------------------------------------------

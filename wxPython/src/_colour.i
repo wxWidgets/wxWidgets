@@ -17,27 +17,97 @@
 %newgroup;
 
 
+DocStr(wxColour,
+"A colour is an object representing a combination of Red, Green, and Blue (RGB)
+intensity values, and is used to determine drawing colours, window colours,
+etc.  Valid RGB values are in the range 0 to 255.
+
+In wxPython there are typemaps that will automatically convert from a colour
+name, or from a \"#RRGGBB\" colour hex value string to a wx.Colour object when
+calling C++ methods that expect a wxColour.  This means that the following are
+all equivallent:
+
+    win.SetBackgroundColour(wxColour(0,0,255))
+    win.SetBackgroundColour(\"BLUE\")
+    win.SetBackgroundColour(\"#0000FF\")
+
+You can retrieve the various current system colour settings with
+wx.SystemSettings.GetColour.");
+
+
 class wxColour : public wxObject {
 public:
-    wxColour(unsigned char red=0, unsigned char green=0, unsigned char blue=0);
+    
+    DocCtorStr(
+        wxColour(unsigned char red=0, unsigned char green=0, unsigned char blue=0),
+        "Constructs a colour from red, green and blue values.");
+    
+    DocCtorStrName(
+        wxColour( const wxString& colorName),
+        "Constructs a colour object using a colour name listed in wx.TheColourDatabase.",
+        NamedColour);
+    
+    DocCtorStrName(
+        wxColour( unsigned long colRGB ),
+        "Constructs a colour from a packed RGB value.",
+        ColourRGB);
+
     ~wxColour();
 
-    %name(NamedColour) wxColour( const wxString& colorName);
-    %name(ColourRGB) wxColour( unsigned long colRGB );
+    
+    DocDeclStr(
+        unsigned char , Red(),
+        "Returns the red intensity.");
+    
+    DocDeclStr(
+        unsigned char , Green(),
+        "Returns the green intensity.");
+    
+    DocDeclStr(
+        unsigned char , Blue(),
+        "Returns the blue intensity.");
+    
+    DocDeclStr(
+        bool , Ok(),
+        "Returns True if the colour object is valid (the colour has been\n"
+        "initialised with RGB values).");
+    
+    DocDeclStr(
+        void , Set(unsigned char red, unsigned char green, unsigned char blue),
+        "Sets the RGB intensity values.");
 
-    unsigned char Red();
-    unsigned char Green();
-    unsigned char Blue();
-    bool Ok();
-    void Set(unsigned char red, unsigned char green, unsigned char blue);
-    %name(SetRGB) void Set(unsigned long colRGB);
+    DocDeclStrName(
+        void , Set(unsigned long colRGB),
+        "Sets the RGB intensity values from a packed RGB value.",
+        SetRGB);
 
-    bool operator==(const wxColour& colour) const;
-    bool operator!=(const wxColour& colour) const;
+    DocDeclStrName(
+        void , InitFromName(const wxString& colourName),
+        "Sets the RGB intensity values using a colour name listed in wx.TheColourDatabase.",
+        SetFromName);
+    
+    
+    DocDeclStr(
+        long , GetPixel() const,
+        "Returns a pixel value which is platform-dependent. On Windows, a\n"
+        "COLORREF is returned. On X, an allocated pixel value is returned.\n"
+        "-1 is returned if the pixel is invalid (on X, unallocated).");
+    
+    
+    DocDeclStr(
+        bool , operator==(const wxColour& colour) const,
+        "Compare colours for equality");
+    
+    DocDeclStr(
+        bool , operator!=(const wxColour& colour) const,
+        "Compare colours for inequality");
+    
 
-    void InitFromName(const wxString& colourName);
 
     %extend {
+        DocAStr(Get,
+                "Get() -> (r, g, b)",
+                "Returns the RGB intensity values as a tuple.");
         PyObject* Get() {
             PyObject* rv = PyTuple_New(3);
             int red = -1;
@@ -53,22 +123,12 @@ public:
             PyTuple_SetItem(rv, 2, PyInt_FromLong(blue));
             return rv;
         }
-//         bool __eq__(PyObject* obj) {
-//             wxColour  tmp;
-//             wxColour* ptr = &tmp;
-//             if (obj == Py_None)    return False;
-//             wxPyBLOCK_THREADS(bool success = wxColour_helper(obj, &ptr); PyErr_Clear());
-//             if (! success)         return False;
-//             return *self == *ptr;
-//         }
-//         bool __ne__(PyObject* obj) {
-//             wxColour  tmp;
-//             wxColour* ptr = &tmp;
-//             if (obj == Py_None)    return True;
-//             wxPyBLOCK_THREADS(bool success = wxColour_helper(obj, &ptr); PyErr_Clear());
-//             if (! success)         return True;
-//             return *self != *ptr;
-//         }
+
+        DocStr(GetRGB,
+               "Return the colour as a packed RGB value");
+        unsigned long GetRGB() {
+            return self->Red() | (self->Green() << 8) | (self->Blue() << 16);
+        }
     }
 
 

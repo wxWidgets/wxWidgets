@@ -21,6 +21,33 @@ MAKE_CONST_WXSTRING(ComboBoxNameStr);
 %newgroup;
 
 
+DocStr(wxComboBox,
+"A combobox is like a combination of an edit control and a listbox. It can be
+displayed as static list with editable or read-only text field; or a drop-down
+list with text field.");
+
+RefDoc(wxComboBox, "
+ Styles
+    wx.CB_SIMPLE: 	Creates a combobox with a permanently displayed list.
+                        Windows only.
+
+    wx.CB_DROPDOWN: 	Creates a combobox with a drop-down list.
+
+    wx.CB_READONLY: 	Same as wxCB_DROPDOWN but only the strings specified as
+                        the combobox choices can be selected, it is impossible
+                        to select (even from a program) a string which is not in
+                        the choices list.
+
+    wx.CB_SORT: 	Sorts the entries in the list alphabetically.
+
+ Events
+
+    EVT_COMBOBOX: 	Sent when an item on the list is selected.
+    EVT_TEXT: 	        Sent when the combobox text changes.
+");
+
+
+
 #ifdef __WXMSW__
 class wxComboBox : public wxChoice
 #else
@@ -31,45 +58,101 @@ public:
     %pythonAppend wxComboBox         "self._setOORInfo(self)"
     %pythonAppend wxComboBox()       ""
 
-    wxComboBox(wxWindow* parent, wxWindowID id,
-               const wxString& value = wxPyEmptyString,
-               const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize,
-               //int choices=0, wxString* choices_array=NULL,
-               const wxArrayString& choices = wxPyEmptyStringArray,
-               long style = 0,
-               const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxPyComboBoxNameStr);
-    %name(PreComboBox)wxComboBox();
+    DocCtorAStr(
+        wxComboBox(wxWindow* parent, wxWindowID id,
+                   const wxString& value = wxPyEmptyString,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize& size = wxDefaultSize,
+                   const wxArrayString& choices = wxPyEmptyStringArray,
+                   long style = 0,
+                   const wxValidator& validator = wxDefaultValidator,
+                   const wxString& name = wxPyComboBoxNameStr),
+        "__init__(Window parent, int id, String value=EmptyString,\n"
+        "    Point pos=DefaultPosition, Size size=DefaultSize,\n"
+        "     List choices=[], long style=0, Validator validator=DefaultValidator,\n"
+        "     String name=ComboBoxNameStr) -> ComboBox",
+        "Constructor, creates and shows a ComboBox control.");
 
-    bool Create(wxWindow* parent, wxWindowID id,
-                const wxString& value = wxPyEmptyString,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                //int choices=0, wxString* choices_array=NULL,
-                const wxArrayString& choices = wxPyEmptyStringArray,
-                long style = 0,
-                const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxPyComboBoxNameStr);
+    DocCtorStrName(
+        wxComboBox(),
+        "Precreate a ComboBox control for 2-phase creation.",
+        PreComboBox);
 
 
-    virtual wxString GetValue() const;
-    virtual void SetValue(const wxString& value);
-
-    virtual void Copy();
-    virtual void Cut();
-    virtual void Paste();
+    DocDeclAStr(
+        bool, Create(wxWindow *parent, wxWindowID id,
+                     const wxString& value = wxPyEmptyString,
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize& size = wxDefaultSize,
+                     const wxArrayString& choices = wxPyEmptyStringArray,
+                     long style = 0,
+                     const wxValidator& validator = wxDefaultValidator,
+                     const wxString& name = wxPyChoiceNameStr),
+        "Create(Window parent, int id, String value=EmptyString,\n"
+        "    Point pos=DefaultPosition, Size size=DefaultSize,\n" 
+        "    List choices=[], long style=0, Validator validator=DefaultValidator,\n"
+        "    String name=ChoiceNameStr) -> bool",
+        "Actually create the GUI Choice control for 2-phase creation");
     
-    virtual void SetInsertionPoint(long pos);
-    virtual long GetInsertionPoint() const;
-    virtual long GetLastPosition() const;
-    virtual void Replace(long from, long to, const wxString& value);
-    void SetSelection(int n);
-    %name(SetMark) virtual void SetSelection(long from, long to);
-    virtual void SetEditable(bool editable);
 
-    virtual void SetInsertionPointEnd();
-    virtual void Remove(long from, long to);
+    DocDeclStr(
+        virtual wxString , GetValue() const,
+        "Returns the current value in the combobox text field.");
+    
+    DocDeclStr(
+        virtual void , SetValue(const wxString& value),
+        "");
+    
+
+    DocDeclStr(
+        virtual void , Copy(),
+        "Copies the selected text to the clipboard.");
+    
+    DocDeclStr(
+        virtual void , Cut(),
+        "Copies the selected text to the clipboard and removes the selection.");
+    
+    DocDeclStr(
+        virtual void , Paste(),
+        "Pastes text from the clipboard to the text field.");
+    
+    
+    DocDeclStr(
+        virtual void , SetInsertionPoint(long pos),
+        "Sets the insertion point in the combobox text field.");
+    
+    DocDeclStr(
+        virtual long , GetInsertionPoint() const,
+        "Returns the insertion point for the combobox's text field.");
+    
+    DocDeclStr(
+        virtual long , GetLastPosition() const,
+        "Returns the last position in the combobox text field.");
+    
+    DocDeclStr(
+        virtual void , Replace(long from, long to, const wxString& value),
+        "Replaces the text between two positions with the given text, in the\n"
+        "combobox text field.");
+    
+    DocDeclStr(
+        void , SetSelection(int n),
+        "Selects the text between the two positions, in the combobox text field.");
+    
+    %name(SetMark) virtual void SetSelection(long from, long to);
+
+    DocDeclStr(
+        virtual void , SetEditable(bool editable),
+        "");
+    
+
+    DocDeclStr(
+        virtual void , SetInsertionPointEnd(),
+        "Sets the insertion point at the end of the combobox text field.");
+    
+    DocDeclStr(
+        virtual void , Remove(long from, long to),
+        "Removes the text between the two positions in the combobox text field.");
+    
 };
 
 //---------------------------------------------------------------------------
