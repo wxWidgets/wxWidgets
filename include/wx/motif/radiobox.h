@@ -73,21 +73,15 @@ public:
     virtual void ChangeFont(bool keepOriginalSize = TRUE);
     virtual void ChangeBackgroundColour();
     virtual void ChangeForegroundColour();
-    WXWidget GetTopWidget() const { return m_formWidget; }
-    WXWidget GetLabelWidget() const { return m_labelWidget; }
-    WXWidget GetFrameWidget() const { return m_frameWidget; }
     inline WXWidget* GetRadioButtons() const { return m_radioButtons; }
     inline void SetSel(int i) { m_selectedButton = i; }
 
 protected:
-    int               m_majorDim ;
+    int               m_majorDim;
     int               m_noItems;
     int               m_noRowsOrCols;
     int               m_selectedButton;
 
-    WXWidget          m_formWidget;
-    WXWidget          m_labelWidget;
-    WXWidget          m_frameWidget;
     WXWidget*         m_radioButtons;
     wxString*         m_radioButtonLabels;
 
