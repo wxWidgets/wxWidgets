@@ -127,6 +127,8 @@ wxImage::wxImage( const wxImage* image )
 
 void wxImage::Create( int width, int height )
 {
+    UnRef();
+
     m_refData = new wxImageRefData();
 
     M_IMGDATA->m_data = (unsigned char *) malloc( width*height*3 );
