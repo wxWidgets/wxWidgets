@@ -226,6 +226,9 @@ public:
     // misc accessors
   wxString GetAppName() const { return m_appName; }
   wxString GetVendorName() const { return m_vendorName; }
+  // Used wxIniConfig to set members in constructor
+  void SetAppName(const wxString& appName) { m_appName = appName; }
+  void SetVendorName(const wxString& vendorName) { m_vendorName = vendorName; }
 
   void SetStyle(long style) { m_style = style; }
   long GetStyle() const { return m_style; }

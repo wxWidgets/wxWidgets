@@ -60,13 +60,22 @@ wxIniConfig::wxIniConfig(const wxString& strAppName,
                          const wxString& localFilename,
                          const wxString& globalFilename,
                          long style)
-           : wxConfigBase(!strAppName && wxTheApp ? wxTheApp->GetAppName()
+           : wxConfigBase(strAppName, strVendor, localFilename, globalFilename, style)
+
+#if 0 // This is too complex for some compilers, e.g. BC++ 5.01
+           : wxConfigBase((strAppName.IsEmpty() && wxTheApp) ? wxTheApp->GetAppName()
                                                : strAppName,
-                          !strVendor ? (wxTheApp ? wxTheApp->GetVendorName()
+                          strVendor.IsEmpty() ? (wxTheApp ? wxTheApp->GetVendorName()
                                                   : strAppName)
                                       : strVendor,
                           localFilename, globalFilename, style)
+#endif
 {
+    if (strAppName.IsEmpty() && wxTheApp)
+        SetAppName(wxTheApp->GetAppName());
+    if (strVendor.IsEmpty() && wxTheApp)
+        SetVendorName(wxTheApp->GetVendorName());
+
     m_strLocalFilename = localFilename;
     if (m_strLocalFilename.IsEmpty())
     {

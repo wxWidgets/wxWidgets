@@ -108,7 +108,7 @@ bool wxResourceTableWithSaving::SaveResource(wxTextOutputStream& stream, wxItemR
       }
 
       stream << "  style = '" << styleBuf << "',\\\n";
-      stream << "  title = '" << item->GetTitle() << "',\\\n";
+      stream << "  title = " << SafeWord(item->GetTitle()) << ",\\\n";
       stream << "  id = " << item->GetId() << ",\\\n";
       stream << "  x = " << item->GetX() << ", y = " << item->GetY();
       stream << ", width = " << item->GetWidth() << ", height = " << item->GetHeight();
@@ -576,17 +576,35 @@ char *SafeString(const wxString& s)
   }
 }
 
-// Returns quoted string or ''
+// Returns quoted string or '' : convert " to \"
 char *SafeWord(const wxString& s)
 {
-  if (s == "")
-    return "''";
-  else
-  {
-    strcpy(wxBuffer, "'");
-    strcat(wxBuffer, (const char*) s);
-    strcat(wxBuffer, "'");
-    return wxBuffer;
-  }
+	const char *cp;
+	char *dp;
+
+	if (s == "")
+		return "''";
+	else
+	{
+		dp = wxBuffer;
+		cp = s.c_str();
+		*dp++ = '\'';
+		while(*cp != 0) {
+			if(*cp == '"') {
+				*dp++ = '\\';
+				*dp++ = '"';
+			} else if(*cp == '\'') {
+				*dp++ = '\\';
+				*dp++ = '\'';
+			} else
+				*dp++ = *cp;
+
+			cp++;
+		}
+		*dp++ = '\'';
+		*dp++ = 0;
+
+		return wxBuffer;
+	}
 }
 
