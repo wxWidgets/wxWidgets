@@ -90,11 +90,11 @@ public:
     // the type of an entry
   enum EntryType
   {
-    Unknown,
-    String,
-    Boolean,
-    Integer,    // use Read(long *)
-    Float       // use Read(double *)
+    Type_Unknown,
+    Type_String,
+    Type_Boolean,
+    Type_Integer,    // use Read(long *)
+    Type_Float       // use Read(double *)
   };
 
   // static functions
@@ -111,17 +111,14 @@ public:
     // should Get() try to create a new log object if the current one is NULL?
   static void DontCreateOnDemand() { ms_bAutoCreate = FALSE; }
 
-  // ctor & virtual dtor
-    // environment variable expansion is on by default
-//  wxConfigBase() { m_bExpandEnvVars = TRUE; m_bRecordDefaults = FALSE; }
-
-  // ctor
-
-  // Not all args will always be used by derived classes, but
-  // including them all in each class ensures compatibility.
-  // If appName is empty, uses wxApp name
-  wxConfigBase(const wxString& appName = wxEmptyString, const wxString& vendorName = wxEmptyString,
-               const wxString& localFilename = wxEmptyString, const wxString& globalFilename = wxEmptyString,
+  // ctors & virtual dtor
+      // Not all args will always be used by derived classes, but including
+      // them all in each class ensures compatibility. If appName is empty,
+      // uses wxApp name
+  wxConfigBase(const wxString& appName = wxEmptyString,
+               const wxString& vendorName = wxEmptyString,
+               const wxString& localFilename = wxEmptyString,
+               const wxString& globalFilename = wxEmptyString,
                long style = 0);
 
     // empty but ensures that dtor of all derived classes is virtual
@@ -161,7 +158,7 @@ public:
   virtual EntryType GetEntryType(const wxString& name) const
   {
     // by default all entries are strings
-    return HasEntry(name) ? String : Unknown;
+    return HasEntry(name) ? Type_String : Type_Unknown;
   }
 
   // key access: returns TRUE if value was really read, FALSE if default used
@@ -238,8 +235,10 @@ public:
   wxString GetAppName() const { return m_appName; }
   wxString GetVendorName() const { return m_vendorName; }
 
-  void SetAppName(const wxString& appName) { m_appName = appName; }
-  void SetVendorName(const wxString& vendorName) { m_vendorName = vendorName; }
+  virtual void SetAppName(const wxString& appName)
+    { m_appName = appName; }
+  virtual void SetVendorName(const wxString& vendorName)
+    { m_vendorName = vendorName; }
 
   void SetStyle(long style) { m_style = style; }
   long GetStyle() const { return m_style; }

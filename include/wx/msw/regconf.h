@@ -53,6 +53,7 @@ public:
     // tests for existence
   virtual bool HasGroup(const wxString& strName) const;
   virtual bool HasEntry(const wxString& strName) const;
+  virtual EntryType GetEntryType(const wxString& name) const;
 
     // get number of entries/subgroups in the current group, with or without
     // it's subgroups

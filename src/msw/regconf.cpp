@@ -21,18 +21,18 @@
 #endif
 
 #ifndef WX_PRECOMP
-  #include  <wx/string.h>
+  #include  "wx/string.h"
 #endif //WX_PRECOMP
 
-#include <wx/event.h>
-#include <wx/app.h>
-#include <wx/log.h>
-#include <wx/config.h>
+#include "wx/event.h"
+#include "wx/app.h"
+#include "wx/log.h"
+#include "wx/config.h"
 
 #ifndef __WIN16__
 
-#include <wx/msw/registry.h>
-#include <wx/msw/regconf.h>
+#include "wx/msw/registry.h"
+#include "wx/msw/regconf.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -287,14 +287,39 @@ size_t wxRegConfig::GetNumberOfGroups(bool bRecursive) const
 // tests for existence
 // ----------------------------------------------------------------------------
 
-bool wxRegConfig::HasGroup(const wxString& strName) const
+bool wxRegConfig::HasGroup(const wxString& key) const
 {
-  return m_keyLocal.HasSubKey(strName) || m_keyGlobal.HasSubKey(strName);
+    wxConfigPathChanger path(this, key);
+
+    wxString strName(path.Name());
+
+    return m_keyLocal.HasSubKey(strName) || m_keyGlobal.HasSubKey(strName);
 }
 
-bool wxRegConfig::HasEntry(const wxString& strName) const
+bool wxRegConfig::HasEntry(const wxString& key) const
 {
-  return m_keyLocal.HasValue(strName) || m_keyGlobal.HasValue(strName);
+    wxConfigPathChanger path(this, key);
+
+    wxString strName(path.Name());
+
+    return m_keyLocal.HasValue(strName) || m_keyGlobal.HasValue(strName);
+}
+
+wxConfigBase::EntryType wxRegConfig::GetEntryType(const wxString& key) const
+{
+    wxConfigPathChanger path(this, key);
+
+    wxString strName(path.Name());
+
+    bool isNumeric;
+    if ( m_keyLocal.HasValue(strName) )
+        isNumeric = m_keyLocal.IsNumericValue(strName);
+    else if ( m_keyGlobal.HasValue(strName) )
+        isNumeric = m_keyGlobal.IsNumericValue(strName);
+    else
+        return wxConfigBase::Type_Unknown;
+
+    return isNumeric ? wxConfigBase::Type_Integer : wxConfigBase::Type_String;
 }
 
 // ----------------------------------------------------------------------------
@@ -329,8 +354,6 @@ bool wxRegConfig::Read(const wxString& key, wxString *pStr) const
        (bQueryGlobal && TryGetValue(m_keyGlobal, path.Name(), *pStr)) ) {
     // nothing to do
 
-    // TODO: do we return TRUE? Not in original implementation,
-    // but I don't see why not. -- JACS
     *pStr = wxConfigBase::ExpandEnvVars(*pStr);
     return TRUE;
   }
