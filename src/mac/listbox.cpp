@@ -26,7 +26,8 @@
   IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
 
 BEGIN_EVENT_TABLE(wxListBox, wxControl)
-    EVT_SIZE( wxListBox::OnSize ) 
+	EVT_SIZE( wxListBox::OnSize ) 
+	EVT_CHAR( wxListBox::OnChar )
 END_EVENT_TABLE()
 #endif
 
@@ -319,7 +320,7 @@ void wxListBox::Delete(int N)
         delete GetClientObject(N);
     }
 #endif // wxUSE_OWNER_DRAWN/!wxUSE_OWNER_DRAWN
-    m_stringArray.Remove( N ) ;
+    m_stringArray.RemoveAt( N ) ;
     m_dataArray.RemoveAt( N ) ;
     m_noItems --;
     
@@ -427,6 +428,7 @@ int wxListBox::FindString(const wxString& st) const
         }
         if ( s.Left(1) == "*" && s.Length() > 1 )
         {
+            s = st ;
             s.MakeLower() ;
             for ( int i = 0 ; i < m_noItems ; ++i )
             {
@@ -831,5 +833,60 @@ void wxListBox::MacDoDoubleClick()
 {
     wxCommandEvent event(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, m_windowId);
     event.SetEventObject( this );
-    GetEventHandler()->ProcessEvent(event) ; 
+	GetEventHandler()->ProcessEvent(event) ; 
 }
+
+static long sLastTypeIn = 0 ;
+
+void wxListBox::OnChar(wxKeyEvent& event)
+{
+	EventRecord *ev = (EventRecord*) (wxTheApp->MacGetCurrentEvent() ) ;
+	short keycode ;
+	short keychar ;
+	keychar = short(ev->message & charCodeMask);
+	keycode = short(ev->message & keyCodeMask) >> 8 ;
+	if ( event.KeyCode() == WXK_SPACE )
+	{
+        wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, m_windowId);
+        event.SetEventObject( this );
+
+        wxArrayInt aSelections;
+        int n, count = GetSelections(aSelections);
+        if ( count > 0 )
+        {
+               n = aSelections[0];
+               if ( HasClientObjectData() )
+                  event.SetClientObject( GetClientObject(n) );
+              else if ( HasClientUntypedData() )
+                  event.SetClientData( GetClientData(n) );
+              event.SetString( GetString(n) );
+        }
+        else
+        {
+             n = -1;
+        }
+
+        event.m_commandInt = n;
+
+        GetEventHandler()->ProcessEvent(event);
+	}
+	else if ( event.KeyCode() == WXK_DOWN || event.KeyCode() == WXK_UP )
+	{
+	  ::HandleControlKey( (ControlHandle) m_macControl , keycode , keychar , ev->modifiers ) ;
+	} 
+	else
+	{
+	  if ( ev->when > m_lastTypeIn + 60 )
+	  {
+	    m_typeIn = "" ;
+	  }
+	  m_lastTypeIn = ev->when ;
+	  m_typeIn += (char) event.KeyCode() ;
+	  int line = FindString("*"+m_typeIn+"*") ;
+	  if ( line >= 0 )
+	  {
+	    SetSelection(line) ;
+	  }
+	}
+}
+
