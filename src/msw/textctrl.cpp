@@ -95,6 +95,11 @@
     #define SF_UNICODE 0x0010
 #endif
 
+// Watcom C++ doesn't define this
+#ifndef SCF_ALL
+#define SCF_ALL 0x0004
+#endif
+
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
@@ -111,31 +116,24 @@ DWORD CALLBACK wxRichEditStreamIn(DWORD dwCookie, BYTE *buf, LONG cb, LONG *pcb)
 
 #if wxUSE_RICHEDIT
 
-// this module initializes RichEdit DLL if needed
+// this module initializes RichEdit DLL(s) if needed
 class wxRichEditModule : public wxModule
 {
 public:
     virtual bool OnInit();
     virtual void OnExit();
 
-    // get the version currently loaded, -1 if none
-    static int GetLoadedVersion() { return ms_verRichEdit; }
-
     // load the richedit DLL of at least of required version
     static bool Load(int version = 1);
 
 private:
-    // the handle to richedit DLL and the version of the DLL loaded
-    static HINSTANCE ms_hRichEdit;
-
-    // the DLL version loaded or -1 if none
-    static int ms_verRichEdit;
+    // the handles to richedit 1.0 and 2.0 (or 3.0) DLLs
+    static HINSTANCE ms_hRichEdit[2];
 
     DECLARE_DYNAMIC_CLASS(wxRichEditModule)
 };
 
-HINSTANCE wxRichEditModule::ms_hRichEdit = (HINSTANCE)NULL;
-int       wxRichEditModule::ms_verRichEdit = -1;
+HINSTANCE wxRichEditModule::ms_hRichEdit[2] = { NULL, NULL };
 
 IMPLEMENT_DYNAMIC_CLASS(wxRichEditModule, wxModule)
 
@@ -255,28 +253,63 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     wxString windowClass = wxT("EDIT");
 
 #if wxUSE_RICHEDIT
+    if ( m_windowStyle & wxTE_AUTO_URL )
+    {
+        // automatic URL detection only works in RichEdit 2.0+
+        m_windowStyle |= wxTE_RICH2;
+    }
+
+    if ( m_windowStyle & wxTE_RICH2 )
+    {
+        // using richedit 2.0 implies using wxTE_RICH
+        m_windowStyle |= wxTE_RICH;
+    }
+
+    // we need to load the richedit DLL before creating the rich edit control
     if ( m_windowStyle & wxTE_RICH )
     {
-        static bool s_errorGiven = FALSE;   // MT-FIXME
+        static bool s_errorGiven = FALSE;// MT-FIXME
+
+        // Which version do we need? Use 1.0 by default because it is much more
+        // like the the standard EDIT or 2.0 if explicitly requested, but use
+        // only 2.0 in Unicode mode as 1.0 doesn't support Unicode at all
+        //
+        // TODO: RichEdit 3.0 is apparently capable of emulating RichEdit 1.0
+        //       (and thus EDIT) much better than RichEdit 2.0 so we probably
+        //       should use 3.0 if available as it is the best of both worlds -
+        //       but as I can't test it right now I don't do it (VZ)
+#if wxUSE_UNICODE
+        const int verRichEdit = 2;
+#else // !wxUSE_UNICODE
+        int verRichEdit = m_windowStyle & wxTE_RICH2 ? 2 : 1;
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
         // only give the error msg once if the DLL can't be loaded
         if ( !s_errorGiven )
         {
-            // first try to load the RichEdit DLL (will do nothing if already
-            // done)
-            if ( !wxRichEditModule::Load() )
+            // try to load the RichEdit DLL (will do nothing if already done)
+            if ( !wxRichEditModule::Load(verRichEdit) )
             {
-                wxLogError(_("Impossible to create a rich edit control, using simple text control instead. Please reinstall riched32.dll"));
+#if !wxUSE_UNICODE
+                // try another version?
+                verRichEdit = 3 - verRichEdit; // 1 <-> 2
 
-                s_errorGiven = TRUE;
+                if ( !wxRichEditModule::Load(verRichEdit) )
+#endif // wxUSE_UNICODE
+                {
+                    wxLogError(_("Impossible to create a rich edit control, using simple text control instead. Please reinstall riched32.dll"));
+
+                    s_errorGiven = TRUE;
+                }
             }
         }
 
+        // have we managed to load any richedit version?
         if ( !s_errorGiven )
         {
             msStyle |= ES_AUTOVSCROLL;
 
-            m_verRichEdit = wxRichEditModule::GetLoadedVersion();
+            m_verRichEdit = verRichEdit;
             if ( m_verRichEdit == 1 )
             {
                 windowClass = wxT("RICHEDIT");
@@ -379,49 +412,77 @@ void wxTextCtrl::AdoptAttributesFromHWND()
 
 wxString wxTextCtrl::GetValue() const
 {
-    // we can't use wxGetWindowText() (i.e. WM_GETTEXT internally) for
-    // retrieving more than 64Kb under Win9x
+    // range 0..-1 is special for GetRange() and means to retrieve all text
+    return GetRange(0, -1);
+}
+
+wxString wxTextCtrl::GetRange(long from, long to) const
+{
+    wxString str;
+
+    if ( from >= to && to != -1 )
+    {
+        // nothing to retrieve
+        return str;
+    }
+
 #if wxUSE_RICHEDIT
     if ( IsRich() )
     {
-        wxString str;
-
         int len = GetWindowTextLength(GetHwnd());
-        if ( len )
+        if ( len > from )
         {
             // alloc one extra WORD as needed by the control
             wxChar *p = str.GetWriteBuf(++len);
 
             TEXTRANGE textRange;
-            textRange.chrg.cpMin = 0;
-            textRange.chrg.cpMax = -1;
+            textRange.chrg.cpMin = from;
+            textRange.chrg.cpMax = to == -1 ? len : to;
             textRange.lpstrText = p;
 
             (void)SendMessage(GetHwnd(), EM_GETTEXTRANGE, 0, (LPARAM)&textRange);
 
-            // believe it or not, but EM_GETTEXTRANGE uses just CR ('\r') for
-            // the newlines which is neither Unix nor Windows style (Win95 with
-            // riched20.dll shows this behaviour) - convert it to something
-            // reasonable
-            for ( ; *p; p++ )
+            if ( m_verRichEdit > 1 )
             {
-                if ( *p == _T('\r') )
-                    *p = _T('\n');
+                // RichEdit 2.0 uses just CR ('\r') for the newlines which is
+                // neither Unix nor Windows style - convert it to something
+                // reasonable
+                for ( ; *p; p++ )
+                {
+                    if ( *p == _T('\r') )
+                        *p = _T('\n');
+                }
             }
 
             str.UngetWriteBuf();
+
+            if ( m_verRichEdit == 1 )
+            {
+                // convert to the canonical form - see comment below
+                str = wxTextFile::Translate(str, wxTextFileType_Unix);
+            }
         }
         //else: no text at all, leave the string empty
-
-        return str;
     }
+    else
 #endif // wxUSE_RICHEDIT
+    {
+        // retrieve all text
+        str = wxGetWindowText(GetHWND());
 
-    // WM_GETTEXT uses standard DOS CR+LF (\r\n) convention - convert to the
-    // same one as above for consitency
-    wxString str = wxGetWindowText(GetHWND());
+        // need only a range?
+        if ( from < to )
+        {
+            str = str.Mid(from, to - from);
+        }
 
-    return wxTextFile::Translate(str, wxTextFileType_Unix);
+        // WM_GETTEXT uses standard DOS CR+LF (\r\n) convention - convert to the
+        // canonical one (same one as above) for consistency with the other kinds
+        // of controls and, more importantly, with the other ports
+        str = wxTextFile::Translate(str, wxTextFileType_Unix);
+    }
+
+    return str;
 }
 
 void wxTextCtrl::SetValue(const wxString& value)
@@ -524,7 +585,11 @@ bool wxTextCtrl::StreamIn(const wxString& value, wxFontEncoding encoding)
 
 void wxTextCtrl::WriteText(const wxString& value)
 {
-    wxString valueDos = wxTextFile::Translate(value, wxTextFileType_Dos);
+    wxString valueDos;
+    if ( m_windowStyle & wxTE_MULTILINE )
+        valueDos = wxTextFile::Translate(value, wxTextFileType_Dos);
+    else
+        valueDos = value;
 
 #if wxUSE_RICHEDIT
     // there are several complications with the rich edit controls here
@@ -598,8 +663,7 @@ void wxTextCtrl::Copy()
 {
     if (CanCopy())
     {
-        HWND hWnd = GetHwnd();
-        SendMessage(hWnd, WM_COPY, 0, 0L);
+        ::SendMessage(GetHwnd(), WM_COPY, 0, 0L);
     }
 }
 
@@ -607,8 +671,7 @@ void wxTextCtrl::Cut()
 {
     if (CanCut())
     {
-        HWND hWnd = GetHwnd();
-        SendMessage(hWnd, WM_CUT, 0, 0L);
+        ::SendMessage(GetHwnd(), WM_CUT, 0, 0L);
     }
 }
 
@@ -616,8 +679,7 @@ void wxTextCtrl::Paste()
 {
     if (CanPaste())
     {
-        HWND hWnd = GetHwnd();
-        SendMessage(hWnd, WM_PASTE, 0, 0L);
+        ::SendMessage(GetHwnd(), WM_PASTE, 0, 0L);
     }
 }
 
@@ -625,16 +687,13 @@ bool wxTextCtrl::CanCopy() const
 {
     // Can copy if there's a selection
     long from, to;
-    GetSelection(& from, & to);
-    return (from != to) ;
+    GetSelection(&from, &to);
+    return from != to;
 }
 
 bool wxTextCtrl::CanCut() const
 {
-    // Can cut if there's a selection
-    long from, to;
-    GetSelection(& from, & to);
-    return (from != to) && (IsEditable());
+    return CanCopy() && IsEditable();
 }
 
 bool wxTextCtrl::CanPaste() const
@@ -673,12 +732,25 @@ void wxTextCtrl::SetEditable(bool editable)
 
 void wxTextCtrl::SetInsertionPoint(long pos)
 {
-    SetSelection(pos, pos);
+    DoSetSelection(pos, pos);
 }
 
 void wxTextCtrl::SetInsertionPointEnd()
 {
-    long pos = GetLastPosition();
+    long pos;
+
+#if wxUSE_RICHEDIT
+    if ( m_verRichEdit == 1 )
+    {
+        // we don't have to waste time calling GetLastPosition() in this case
+        pos = -1;
+    }
+    else // !RichEdit 1.0
+#endif // wxUSE_RICHEDIT
+    {
+        pos = GetLastPosition();
+    }
+
     SetInsertionPoint(pos);
 }
 
@@ -701,19 +773,12 @@ long wxTextCtrl::GetInsertionPoint() const
 
 long wxTextCtrl::GetLastPosition() const
 {
-    HWND hWnd = GetHwnd();
+    int numLines = GetNumberOfLines();
+    long posStartLastLine = XYToPosition(0, numLines - 1);
 
-    // Will always return a number > 0 (according to docs)
-    int noLines = (int)SendMessage(hWnd, EM_GETLINECOUNT, (WPARAM)0, (LPARAM)0L);
+    long lenLastLine = GetLengthOfLineContainingPos(posStartLastLine);
 
-    // This gets the char index for the _beginning_ of the last line
-    int charIndex = (int)SendMessage(hWnd, EM_LINEINDEX, (WPARAM)(noLines-1), (LPARAM)0L);
-
-    // Get number of characters in the last line. We'll add this to the character
-    // index for the last line, 1st position.
-    int lineLength = (int)SendMessage(hWnd, EM_LINELENGTH, (WPARAM)charIndex, (LPARAM)0L);
-
-    return (long)(charIndex + lineLength);
+    return posStartLastLine + lenLastLine;
 }
 
 // If the return values from and to are the same, there is no
@@ -740,39 +805,11 @@ void wxTextCtrl::GetSelection(long* from, long* to) const
     }
 }
 
-wxString wxTextCtrl::GetStringSelection() const
-{
-    // the base class version works correctly for the rich text controls
-    // because there the lines are terminated with just '\r' which means that
-    // the string length is not changed in the result of the translations doen
-    // in GetValue() but for the normal ones when we replace "\r\n" with '\n'
-    // we break the indices
-#if wxUSE_RICHEDIT
-    if ( IsRich() )
-        return wxTextCtrlBase::GetStringSelection();
-#endif // wxUSE_RICHEDIT
-
-    long from, to;
-    GetSelection(&from, &to);
-
-    wxString str;
-    if ( from < to )
-    {
-        str = wxGetWindowText(GetHWND()).Mid(from, to - from);
-
-        // and now that we have the correct selection, convert it to the
-        // correct format
-        str = wxTextFile::Translate(str, wxTextFileType_Unix);
-    }
-
-    return str;
-}
-
 bool wxTextCtrl::IsEditable() const
 {
     long style = ::GetWindowLong(GetHwnd(), GWL_STYLE);
 
-    return ((style & ES_READONLY) == 0);
+    return (style & ES_READONLY) == 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -780,11 +817,6 @@ bool wxTextCtrl::IsEditable() const
 // ----------------------------------------------------------------------------
 
 void wxTextCtrl::SetSelection(long from, long to)
-{
-    DoSetSelection(from, to);
-}
-
-void wxTextCtrl::DoSetSelection(long from, long to, bool scrollCaret)
 {
     // if from and to are both -1, it means (in wxWindows) that all text should
     // be selected - translate into Windows convention
@@ -794,6 +826,11 @@ void wxTextCtrl::DoSetSelection(long from, long to, bool scrollCaret)
         to = -1;
     }
 
+    DoSetSelection(from, to);
+}
+
+void wxTextCtrl::DoSetSelection(long from, long to, bool scrollCaret)
+{
     HWND hWnd = GetHwnd();
 
 #ifdef __WIN32__
@@ -813,41 +850,7 @@ void wxTextCtrl::DoSetSelection(long from, long to, bool scrollCaret)
 
     if ( scrollCaret )
     {
-#if wxUSE_RICHEDIT
-        // EM_SCROLLCARET doesn't work for me with the richedit controls
-        // unless it has focus although I don't see any mention of it in the
-        // docs - this is the only workaround I found. Of course it's not
-        // perfect as it adds the dummy focus set/kill events but it's still
-        // better than nothing
-        HWND hwndFocusOld;
-        if ( IsRich() )
-        {
-            hwndFocusOld = ::GetFocus();
-            if ( hwndFocusOld == GetHwnd() )
-            {
-                // don't change focus
-                hwndFocusOld = 0;
-            }
-
-            if ( hwndFocusOld )
-            {
-                ::SetFocus(GetHwnd());
-            }
-        }
-        else // not rich
-        {
-            hwndFocusOld = 0;
-        }
-#endif // wxUSE_RICHEDIT
-
         SendMessage(hWnd, EM_SCROLLCARET, (WPARAM)0, (LPARAM)0);
-
-#if wxUSE_RICHEDIT
-        if ( hwndFocusOld )
-        {
-            ::SetFocus(hwndFocusOld);
-        }
-#endif // wxUSE_RICHEDIT
     }
 #else // Win16
     // WPARAM is 0: selection is scrolled into view
@@ -893,7 +896,7 @@ bool wxTextCtrl::LoadFile(const wxString& file)
 
 bool wxTextCtrl::IsModified() const
 {
-    return (SendMessage(GetHwnd(), EM_GETMODIFY, 0, 0) != 0);
+    return SendMessage(GetHwnd(), EM_GETMODIFY, 0, 0) != 0;
 }
 
 // Makes 'unmodified'
@@ -909,11 +912,10 @@ int wxTextCtrl::GetNumberOfLines() const
 
 long wxTextCtrl::XYToPosition(long x, long y) const
 {
-    HWND hWnd = GetHwnd();
-
     // This gets the char index for the _beginning_ of this line
-    int charIndex = (int)SendMessage(hWnd, EM_LINEINDEX, (WPARAM)y, (LPARAM)0);
-    return (long)(x + charIndex);
+    long charIndex = SendMessage(GetHwnd(), EM_LINEINDEX, (WPARAM)y, (LPARAM)0);
+
+    return charIndex + x;
 }
 
 bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
@@ -921,15 +923,17 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
     HWND hWnd = GetHwnd();
 
     // This gets the line number containing the character
-    int lineNo;
+    long lineNo;
 #if wxUSE_RICHEDIT
     if ( IsRich() )
     {
-        lineNo = (int)SendMessage(hWnd, EM_EXLINEFROMCHAR, 0, (LPARAM)pos);
+        lineNo = SendMessage(hWnd, EM_EXLINEFROMCHAR, 0, (LPARAM)pos);
     }
     else
 #endif // wxUSE_RICHEDIT
-        lineNo = (int)SendMessage(hWnd, EM_LINEFROMCHAR, (WPARAM)pos, 0);
+    {
+        lineNo = SendMessage(hWnd, EM_LINEFROMCHAR, (WPARAM)pos, 0);
+    }
 
     if ( lineNo == -1 )
     {
@@ -938,7 +942,7 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
     }
 
     // This gets the char index for the _beginning_ of this line
-    int charIndex = (int)SendMessage(hWnd, EM_LINEINDEX, (WPARAM)lineNo, (LPARAM)0);
+    long charIndex = SendMessage(hWnd, EM_LINEINDEX, (WPARAM)lineNo, (LPARAM)0);
     if ( charIndex == -1 )
     {
         return FALSE;
@@ -946,9 +950,9 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
 
     // The X position must therefore be the different between pos and charIndex
     if ( x )
-        *x = (long)(pos - charIndex);
+        *x = pos - charIndex;
     if ( y )
-        *y = (long)lineNo;
+        *y = lineNo;
 
     return TRUE;
 }
@@ -978,11 +982,16 @@ void wxTextCtrl::ShowPosition(long pos)
       (void)SendMessage(hWnd, EM_LINESCROLL, (WPARAM)0, (LPARAM)linesToScroll);
 }
 
+long wxTextCtrl::GetLengthOfLineContainingPos(long pos) const
+{
+    return ::SendMessage(GetHwnd(), EM_LINELENGTH, (WPARAM)pos, 0);
+}
+
 int wxTextCtrl::GetLineLength(long lineNo) const
 {
-    long charIndex = XYToPosition(0, lineNo);
-    int len = (int)SendMessage(GetHwnd(), EM_LINELENGTH, charIndex, 0);
-    return len;
+    long pos = XYToPosition(0, lineNo);
+
+    return GetLengthOfLineContainingPos(pos);
 }
 
 wxString wxTextCtrl::GetLineText(long lineNo) const
@@ -1033,12 +1042,12 @@ void wxTextCtrl::Redo()
 
 bool wxTextCtrl::CanUndo() const
 {
-    return (::SendMessage(GetHwnd(), EM_CANUNDO, 0, 0) != 0);
+    return ::SendMessage(GetHwnd(), EM_CANUNDO, 0, 0) != 0;
 }
 
 bool wxTextCtrl::CanRedo() const
 {
-    return (::SendMessage(GetHwnd(), EM_CANUNDO, 0, 0) != 0);
+    return ::SendMessage(GetHwnd(), EM_CANUNDO, 0, 0) != 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -1247,9 +1256,7 @@ void wxTextCtrl::OnEraseBackground(wxEraseEvent& event)
     RECT rect;
     ::GetClientRect(GetHwnd(), &rect);
 
-    COLORREF ref = PALETTERGB(col.Red(),
-                              col.Green(),
-                              col.Blue());
+    COLORREF ref = wxColourToRGB(col);
     HBRUSH hBrush = ::CreateSolidBrush(ref);
     if ( !hBrush )
         wxLogLastError(wxT("CreateSolidBrush"));
@@ -1465,11 +1472,6 @@ bool wxTextCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 // colour setting for the rich edit controls
 // ----------------------------------------------------------------------------
 
-// Watcom C++ doesn't define this
-#ifndef SCF_ALL
-#define SCF_ALL 0x0004
-#endif
-
 bool wxTextCtrl::SetBackgroundColour(const wxColour& colour)
 {
     if ( !wxTextCtrlBase::SetBackgroundColour(colour) )
@@ -1522,10 +1524,9 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
         return FALSE;
     }
 
-    // the rich text control doesn't handle setting background colour, so don't
-    // even try if it's the only thing we want to change
-    if ( wxRichEditModule::GetLoadedVersion() < 2 &&
-         !style.HasFont() && !style.HasTextColour() )
+    // the richedit 1.0 doesn't handle setting background colour, so don't
+    // even try to do anything if it's the only thing we want to change
+    if ( m_verRichEdit == 1 && !style.HasFont() && !style.HasTextColour() )
     {
         // nothing to do: return TRUE if there was really nothing to do and
         // FALSE if we failed to set bg colour
@@ -1559,8 +1560,23 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
 #else
     CHARFORMAT cf;
 #endif
+
     wxZeroMemory(cf);
-    cf.cbSize = sizeof(cf);
+
+    // we can't use CHARFORMAT2 with RichEdit 1.0, so pretend it is a simple
+    // CHARFORMAT in that case
+#if wxUSE_RICHEDIT2
+    if ( m_verRichEdit == 1 )
+    {
+        // this is the only thing the control is going to grok
+        cf.cbSize = sizeof(CHARFORMAT);
+    }
+    else
+#endif
+    {
+        // CHARFORMAT or CHARFORMAT2
+        cf.cbSize = sizeof(cf);
+    }
 
     if ( style.HasFont() )
     {
@@ -1609,7 +1625,7 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
     }
 
 #if wxUSE_RICHEDIT2
-    if ( wxRichEditModule::GetLoadedVersion() > 1 && style.HasBackgroundColour() )
+    if ( m_verRichEdit != 1 && style.HasBackgroundColour() )
     {
         cf.dwMask |= CFM_BACKCOLOR;
         cf.crBackColor = wxColourToRGB(style.GetBackgroundColour());
@@ -1645,48 +1661,48 @@ bool wxRichEditModule::OnInit()
 
 void wxRichEditModule::OnExit()
 {
-    if ( ms_hRichEdit )
+    for ( int i = 0; i < WXSIZEOF(ms_hRichEdit); i++ )
     {
-        FreeLibrary(ms_hRichEdit);
+        if ( ms_hRichEdit[i] )
+        {
+            ::FreeLibrary(ms_hRichEdit[i]);
+        }
     }
 }
 
 /* static */
 bool wxRichEditModule::Load(int version)
 {
-    wxCHECK_MSG( version >= 1 && version <= 3, FALSE,
+    // we don't support loading richedit 3.0 as I don't know how to distinguish
+    // it from 2.0 anyhow
+    wxCHECK_MSG( version == 1 || version == 2, FALSE,
                  _T("incorrect richedit control version requested") );
 
-    if ( version <= ms_verRichEdit )
+    // make it the index in the array
+    version--;
+
+    if ( ms_hRichEdit[version] )
     {
-        // we've already got this or better
+        // we've already got this one
         return TRUE;
     }
 
-    if ( ms_hRichEdit )
+    if ( ms_hRichEdit[version] == (HINSTANCE)-1 )
     {
-        ::FreeLibrary(ms_hRichEdit);
+        // we had already tried to load it and failed
+        return FALSE;
     }
 
-    // always try load riched20.dll first - like this we won't have to reload
-    // it later if we're first asked for RE 1 and then for RE 2 or 3
-    wxString dllname = _T("riched20.dll");
-    ms_hRichEdit = ::LoadLibrary(dllname);
-    ms_verRichEdit = 2; // no way to tell if it's 2 or 3, assume 2
+    wxString dllname = version ? _T("riched20") : _T("riched32");
+    dllname += _T(".dll");
 
-    if ( !ms_hRichEdit && (version == 1) )
-    {
-        // fall back to RE 1
-        dllname = _T("riched32.dll");
-        ms_hRichEdit = ::LoadLibrary(dllname);
-        ms_verRichEdit = 1;
-    }
+    ms_hRichEdit[version] = ::LoadLibrary(dllname);
 
-    if ( !ms_hRichEdit )
+    if ( !ms_hRichEdit[version] )
     {
         wxLogSysError(_("Could not load Rich Edit DLL '%s'"), dllname.c_str());
 
-        ms_verRichEdit = -1;
+        ms_hRichEdit[version] = (HINSTANCE)-1;
 
         return FALSE;
     }

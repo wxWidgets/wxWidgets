@@ -89,6 +89,10 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 #define wxTE_LINEWRAP       0x4000
 #define wxTE_WORDWRAP       0x0000  // it's just == !wxHSCROLL
 
+// force using RichEdit version 2.0 or 3.0 instead of 1.0 (default) for
+// wxTE_RICH controls - can be used together with or instead of wxTE_RICH
+#define wxTE_RICH2          0x8000
+
 // ----------------------------------------------------------------------------
 // wxTextAttr: a structure containing the visual attributes of a text
 // ----------------------------------------------------------------------------
@@ -160,6 +164,8 @@ public:
 
     virtual wxString GetValue() const = 0;
     virtual void SetValue(const wxString& value) = 0;
+
+    virtual wxString GetRange(long from, long to) const;
 
     virtual int GetLineLength(long lineNo) const = 0;
     virtual wxString GetLineText(long lineNo) const = 0;

@@ -75,6 +75,7 @@ All (GUI):
 - fixed using custom renderers in wxGrid which was broken in 2.3.2
 - support for multiple images in one file added to wxImage (TIFF and ICO formats)
 - support for CUR files in wxImage added (Chris Elliott)
+- wxTextCtrl::GetRange() added
 
 wxMSW:
 

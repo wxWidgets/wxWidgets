@@ -278,7 +278,7 @@ bool wxTextCtrlBase::CanPaste() const
 }
 
 // ----------------------------------------------------------------------------
-// misc
+// selection and ranges
 // ----------------------------------------------------------------------------
 
 void wxTextCtrlBase::SelectAll()
@@ -291,6 +291,11 @@ wxString wxTextCtrlBase::GetStringSelection() const
     long from, to;
     GetSelection(&from, &to);
 
+    return GetRange(from, to);
+}
+
+wxString wxTextCtrlBase::GetRange(long from, long to) const
+{
     wxString sel;
     if ( from < to )
     {

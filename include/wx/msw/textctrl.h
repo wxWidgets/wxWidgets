@@ -50,6 +50,8 @@ public:
     virtual wxString GetValue() const;
     virtual void SetValue(const wxString& value);
 
+    virtual wxString GetRange(long from, long to) const;
+
     virtual int GetLineLength(long lineNo) const;
     virtual wxString GetLineText(long lineNo) const;
     virtual int GetNumberOfLines() const;
@@ -58,7 +60,6 @@ public:
     virtual bool IsEditable() const;
 
     virtual void GetSelection(long* from, long* to) const;
-    virtual wxString GetStringSelection() const;
 
     // operations
     // ----------
@@ -184,6 +185,10 @@ protected:
 
     // set the selection possibly without scrolling the caret into view
     void DoSetSelection(long from, long to, bool scrollCaret = TRUE);
+
+    // get the length of the line containing the character at the given
+    // position
+    long GetLengthOfLineContainingPos(long pos) const;
 
     // override some base class virtuals
     virtual bool MSWShouldPreProcessMessage(WXMSG* pMsg);

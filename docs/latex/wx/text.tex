@@ -105,6 +105,8 @@ you can still use Ctrl-Enter to pass to the next control from the keyboard.}
 \twocolitem{\windowstyle{wxTE\_RICH}}{Use rich text control under Win32, this
 allows to have more than 64Kb of text in the control even under Win9x. This
 style is ignored under other platforms.}
+\twocolitem{\windowstyle{wxTE\_RICH2}}{Use rich text control version 2.0 or 3.0
+under Win32, this style is ignored under other platforms}
 \twocolitem{\windowstyle{wxTE\_AUTO\_URL}}{Highlight the URLs and generate the
 wxTextUrlEvents when mouse events occur over them. This style is supported
 under Win32 only and requires wxTE\_RICH.}
@@ -475,9 +477,24 @@ calculated by actually counting newline characters in the buffer. You
 may wish to avoid using functions that work with line numbers if you are
 working with controls that contain large amounts of text.
 
+\membersection{wxTextCtrl::GetRange}\label{wxtextctrlgetrange}
+
+\constfunc{virtual wxString}{GetRange}{\param{long}{ from}, \param{long}{ to}}
+
+Returns the string containing the text staring in the positions {\it from} and
+up to {\it to} in the control. The positions must have been returned by another
+wxTextCtrl method.
+
+Please note that the positions in a multiline wxTextCtrl do {\bf not}
+correspond to the indices in the string returned by 
+\helpref{GetValue}{wxtextctrlgetvalue} because of the different new line
+representations ({\tt CR} or {\tt CR LF}) and so this method should be used to
+obtain the correct results instead of extracting parts of the entire value. It
+may also be more efficient, especially if the control contains a lot of data.
+
 \membersection{wxTextCtrl::GetSelection}\label{wxtextctrlgetselection}
 
-\func{virtual void}{GetSelection}{\param{long*}{ from}, \param{long*}{ to}}
+\constfunc{virtual void}{GetSelection}{\param{long*}{ from}, \param{long*}{ to}}
 
 Gets the current selection span. If the returned values are equal, there was
 no selection.
