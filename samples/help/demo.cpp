@@ -416,8 +416,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // a panel first - if there were several controls, it would allow us to
     // navigate between them from the keyboard
     wxPanel *panel = new wxPanel(this, 301, wxPoint(0, 0), wxSize(400, 200));
-    //panel->SetHelpText(_("This panel just holds a static text control."));
-    panel->SetHelpText(wxContextId(300));
+    panel->SetHelpText(_("This panel just holds a static text control."));
+    //panel->SetHelpText(wxContextId(300));
 
     // and a static control whose parent is the panel
     wxStaticText* staticText = new wxStaticText(panel, 302, "Hello, world!", wxPoint(10, 10));
