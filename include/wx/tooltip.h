@@ -4,7 +4,7 @@
 #if defined(__WXMSW__)
 #include "wx/msw/tooltip.h"
 #elif defined(__WXMOTIF__)
-#include "wx/motif/tooltip.h"
+// #include "wx/motif/tooltip.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/tooltip.h"
 #elif defined(__WXQT__)
@@ -12,7 +12,7 @@
 #elif defined(__WXMAC__)
 #include "wx/mac/tooltip.h"
 #elif defined(__WXSTUBS__)
-#include "wx/stubs/tooltip.h"
+// #include "wx/stubs/tooltip.h"
 #endif
 
 #endif

@@ -21,14 +21,9 @@
                                 // Use constraints mechanism
 #define wxUSE_CONFIG           1
                                 // Use wxConfig, with CreateConfig in wxApp
-#define _WX_GOODCOMPILER__
-                                // gcc can have problems, but Windows compilers
-                                // are generally OK.
-#define WXWIN_COMPATIBILITY  1
-                                // Compatibility with 1.66 API.
-                                // Level 0: no backward compatibility, all new features
-                                // Level 1: wxDC, OnSize (etc.) compatibility, but
-                                //          some new features such as event tables
+#define WXWIN_COMPATIBILITY  0
+                                // Minor compatibility with 1.68 API.
+                                // 1: on 0: off.
 
 #define wxUSE_POSTSCRIPT  1
                         	// 0 for no PostScript device context
@@ -139,6 +134,9 @@
 
 #define wxUSE_SERIAL        0
                                   // Use serialization
+
+#define wxUSE_TOOLTIPS      0
+                                  // Use tooltips
 
 /*
  * Finer detail

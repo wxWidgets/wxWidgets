@@ -223,10 +223,10 @@ void wxGenericFontDialog::CreateWidgets(void)
   int x=-1;
   int y=40;
   familyChoice = new wxChoice(this, wxID_FONT_FAMILY, wxPoint(10, 10), wxSize(120, -1), 5, families);
-  styleChoice = new wxChoice(this, wxID_FONT_STYLE, wxPoint(160, 10), wxSize(120, -1), 3, styles);
-  weightChoice = new wxChoice(this, wxID_FONT_WEIGHT, wxPoint(310, 10), wxSize(120, -1), 3, weights);
+  styleChoice = new wxChoice(this, wxID_FONT_STYLE, wxPoint(170, 10), wxSize(120, -1), 3, styles);
+  weightChoice = new wxChoice(this, wxID_FONT_WEIGHT, wxPoint(330, 10), wxSize(120, -1), 3, weights);
 
-  colourChoice = new wxChoice(this, wxID_FONT_COLOUR, wxPoint(10, 40), wxSize(190, -1), NUM_COLS, wxColourDialogNames);
+  colourChoice = new wxChoice(this, wxID_FONT_COLOUR, wxPoint(10, 40), wxSize(180, -1), NUM_COLS, wxColourDialogNames);
 #if 0 // def __WXMOTIF__ // TODO: This necessary now?
   // We want the pointSizeText to line up on the y axis with the colourChoice
   colourChoice->GetPosition(&fontRect.x, &y); //NL mod
@@ -271,7 +271,8 @@ void wxGenericFontDialog::CreateWidgets(void)
 
   okButton->SetDefault();
 
-  SetClientSize(450, by + 40);
+  //  SetClientSize(450, by + 40);
+  Fit();
 
   Centre(wxBOTH);
 

@@ -249,7 +249,7 @@ public:
   void SetToolTip(const wxString& tip);
 
   // TODO
-#if 0
+#if wxUSE_TOOLTIPS
     // pointer may be NULL to remove the tooltip
   void SetToolTip(wxToolTip *tooltip);
     // get the current tooltip (may return NULL if none)
