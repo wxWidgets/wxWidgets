@@ -747,16 +747,18 @@ wxHtmlCell *wxHtmlContainerCell::FindCellByPos(wxCoord x, wxCoord y,
     }
     else if ( flags & wxHTML_FIND_NEAREST_BEFORE )
     {
-        wxHtmlCell *c;
+        wxHtmlCell *c2, *c = NULL;
         for ( const wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext() )
         {
             if (cell->GetPosY() > y || 
                     (cell->GetPosY() == y && cell->GetPosX() > x))
                 break;
-            c = cell->FindCellByPos(x - cell->GetPosX(), y - cell->GetPosY(),
-                                    flags);
-            if (c) return c;
+            c2 = cell->FindCellByPos(x - cell->GetPosX(), y - cell->GetPosY(),
+                                     flags);
+            if (c2)
+                c = c2;
         }
+        if (c) return c;
     }
 
     return NULL;
