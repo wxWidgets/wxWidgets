@@ -11,15 +11,19 @@
 
 
 // ============================================================================
-// headers & declarations
+// declarations
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
 
 // wxWindows headers
 // -----------------
 
 #ifdef __GNUG__
-#pragma implementation "menu.h"
-#pragma implementation "menuitem.h"
+  #pragma implementation "menu.h"
+  #pragma implementation "menuitem.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
@@ -36,7 +40,7 @@
 #endif
 
 #if wxUSE_OWNER_DRAWN
-#include "wx/ownerdrw.h"
+  #include "wx/ownerdrw.h"
 #endif
 
 #include "wx/msw/private.h"
@@ -48,9 +52,19 @@
 // ----------------------
 #include <string.h>
 
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// the (popup) menu title has this special id
+static const int idMenuTitle = -2;
+
+// ----------------------------------------------------------------------------
+// wxWindows macros
+// ----------------------------------------------------------------------------
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxMenu, wxEvtHandler)
-IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxEvtHandler)
+  IMPLEMENT_DYNAMIC_CLASS(wxMenu, wxEvtHandler)
+  IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxEvtHandler)
 #endif
 
 // ============================================================================
@@ -74,7 +88,7 @@ wxMenu::wxMenu(const wxString& Title, const wxFunction func)
   m_topLevelMenu = this;
   if (m_title != "")
   {
-    Append(-2, m_title) ;
+    Append(idMenuTitle, m_title) ;
     AppendSeparator() ;
   }
 
@@ -82,7 +96,7 @@ wxMenu::wxMenu(const wxString& Title, const wxFunction func)
 }
 
 // The wxWindow destructor will take care of deleting the submenus.
-wxMenu::~wxMenu(void)
+wxMenu::~wxMenu()
 {
   if (m_hMenu)
     DestroyMenu((HMENU) m_hMenu);
@@ -132,7 +146,7 @@ wxMenu::~wxMenu(void)
 */
 }
 
-void wxMenu::Break(void)
+void wxMenu::Break()
 {
   m_doBreak = TRUE ;
 }
@@ -175,7 +189,6 @@ void wxMenu::Append(wxMenuItem *pItem)
   }
 
   LPCSTR pData;
-  wxString name("");
 
 #if wxUSE_OWNER_DRAWN
   if ( pItem->IsOwnerDrawn() ) {  // want to get {Measure|Draw}Item messages?
@@ -188,27 +201,25 @@ void wxMenu::Append(wxMenuItem *pItem)
   {
     // menu is just a normal string (passed in data parameter)
     flags |= MF_STRING;
-    name = pItem->GetName();
-    pData = (const char*) name;
+    pData = pItem->GetName();
   }
 
-  // VZ: what does this magic -2 mean? I just copied the code but have no idea
-  //     about what it does... ###
-  if ( pItem->GetId() == -2 ) {
-    flags |= MF_DISABLED | MF_GRAYED;
+  // visually select the menu title
+  if ( id == idMenuTitle )
+  {
+    // TODO use SetMenuItemInfo(MFS_DEFAULT) to put it in bold face
   }
 
   HMENU hMenu = (HMENU)((m_hMenu == 0) ? m_savehMenu : m_hMenu);
-
   if ( !AppendMenu(hMenu, flags, id, pData) )
   {
-    // wxLogLastError("AppendMenu");
+    wxLogLastError("AppendMenu");
   }
 
   m_noItems++;
 }
 
-void wxMenu::AppendSeparator(void)
+void wxMenu::AppendSeparator()
 {
   Append(new wxMenuItem(this, ID_SEPARATOR));
 }
@@ -301,15 +312,47 @@ bool wxMenu::Checked(int Id) const
 
 void wxMenu::SetTitle(const wxString& label)
 {
-  m_title = label ;
-  if (m_hMenu)
-    ModifyMenu((HMENU)m_hMenu, 0,
-             MF_BYPOSITION | MF_STRING | MF_DISABLED,
-             (UINT)-2, (const char *)m_title);
-  else if (m_savehMenu)
-    ModifyMenu((HMENU)m_savehMenu, 0,
-             MF_BYPOSITION | MF_STRING | MF_DISABLED,
-             (UINT)-2, (const char *)m_title);
+  bool hasNoTitle = m_title.IsEmpty();
+  m_title = label;
+
+  HMENU hMenu = (HMENU)((m_hMenu == 0) ? m_savehMenu : m_hMenu);
+
+  if ( hasNoTitle )
+  {
+    if ( !label.IsEmpty() )
+    {
+      if ( !InsertMenu(hMenu, 0, MF_BYPOSITION | MF_STRING,
+                       idMenuTitle, m_title) ||
+           !InsertMenu(hMenu, 1, MF_BYPOSITION, -1, NULL) )
+      {
+        wxLogLastError("InsertMenu");
+      }
+    }
+  }
+  else
+  {
+    if ( label.IsEmpty() )
+    {
+      // remove the title and the separator after it
+      if ( !RemoveMenu(hMenu, 0, MF_BYPOSITION) ||
+           !RemoveMenu(hMenu, 0, MF_BYPOSITION) )
+      {
+        wxLogLastError("RemoveMenu");
+      }
+    }
+    else
+    {
+      // modify the title
+      if ( !ModifyMenu(hMenu, 0,
+                       MF_BYPOSITION | MF_STRING,
+                       idMenuTitle, m_title) )
+      {
+        wxLogLastError("ModifyMenu");
+      }
+    }
+  }
+
+  // TODO use SetMenuItemInfo(MFS_DEFAULT) to put it in bold face
 }
 
 const wxString wxMenu::GetTitle() const
@@ -457,7 +500,7 @@ void wxMenu::ProcessCommand(wxCommandEvent & event)
   // Try a callback
   if (m_callback)
   {
-      (void) (*(m_callback)) (*this, event);
+      (void)(*(m_callback))(*this, event);
       processed = TRUE;
   }
 
@@ -495,7 +538,7 @@ bool wxWindow::PopupMenu(wxMenu *menu, int x, int y)
 }
 
 // Menu Bar
-wxMenuBar::wxMenuBar(void)
+wxMenuBar::wxMenuBar()
 {
   m_eventHandler = this;
 
@@ -522,7 +565,7 @@ wxMenuBar::wxMenuBar(int N, wxMenu *Menus[], const wxString Titles[])
   m_hMenu = 0;
 }
 
-wxMenuBar::~wxMenuBar(void)
+wxMenuBar::~wxMenuBar()
 {
   // In fact, don't want menu to be destroyed before MDI
   // shuffling has taken place. Let it be destroyed
