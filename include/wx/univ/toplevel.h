@@ -17,6 +17,7 @@
 
 #include "wx/univ/inpcons.h"
 #include "wx/univ/inphand.h"
+#include "wx/icon.h"
 
 // ----------------------------------------------------------------------------
 // constants
