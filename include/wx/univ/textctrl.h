@@ -170,7 +170,7 @@ public:
     virtual void ShowCaret(bool show = TRUE);
     void HideCaret() { ShowCaret(FALSE); }
     void CreateCaret(); // for the current font size
-    wxCoord GetCaretPosition() const; // in pixels
+    wxCoord GetCaretPosition(long pos = -1) const; // in pixels, def => current
 
     // helpers for cursor movement
     long GetWordStart() const;
@@ -256,12 +256,19 @@ protected:
     // get the extent (width) of the text
     wxCoord GetTextWidth(const wxString& text) const;
 
+    // refresh the text in the given (in logical coords) rect
+    void RefreshTextRect(wxRect& rect);
+
     // refresh the text in the given range (in logical coords) of this line, if
     // width is 0, refresh to the end of line
     void RefreshPixelRange(long line, wxCoord start, wxCoord width);
 
     // refresh the text in the given range (in text coords) in this line
-    void RefreshLineRange(long line, long start, long count);
+    void RefreshColRange(long line, long start, long count);
+
+    // refresh the text from in the given line range (inclusive), if lineLast
+    // is -1, refresh all [visible] text after the lineFirst
+    void RefreshLineRange(long lineFirst, long lineLast = 0);
 
     // refresh the text in the given range which can span multiple lines
     // (this method accepts arguments in any order)
@@ -293,11 +300,25 @@ protected:
     void OnChar(wxKeyEvent& event);
     void OnSize(wxSizeEvent& event);
 
+    // accessors for derived classes (SL stands for single line)
+    const wxString& GetSLValue() const
+    {
+        wxASSERT_MSG( IsSingleLine(), _T("only for single line controls") );
+
+        return m_value;
+    }
+
+    void SetSLValue(const wxString& value)
+    {
+        wxASSERT_MSG( IsSingleLine(), _T("only for single line controls") );
+        m_value = value;
+    }
+
 private:
     // the initially specified control size
     wxSize m_sizeInitial;
 
-    // the entire control (only used for single line controls)
+    // the control text (only used for single line controls)
     wxString m_value;
 
     // the lines of text (only used for multiline controls)

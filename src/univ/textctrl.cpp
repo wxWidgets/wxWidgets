@@ -39,6 +39,8 @@
     #include "wx/dcclient.h"
     #include "wx/validate.h"
     #include "wx/textctrl.h"
+
+    #include "wx/tokenzr.h"
 #endif
 
 #include "wx/clipbrd.h"
@@ -154,7 +156,7 @@ bool wxTextCtrl::SetFont(const wxFont& font)
 
 void wxTextCtrl::SetValue(const wxString& value)
 {
-    if ( IsSingleLine() && (m_value == value) )
+    if ( IsSingleLine() && (value == GetSLValue()) )
     {
         // nothing changed
         return;
@@ -168,7 +170,7 @@ wxString wxTextCtrl::GetValue() const
     wxString value;
     if ( IsSingleLine() )
     {
-        value = m_value;
+        value = GetSLValue();
     }
     else // multiline
     {
@@ -219,6 +221,9 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
     wxString lineFirstOrig = GetLineText(lineStart);
     wxString lineFirst(lineFirstOrig, colStart);
 
+    // remember the start of the update region for later use
+    wxCoord startNewText = GetTextWidth(lineFirst);
+
     // (2) add the text which replaces this part
     if ( !lines.IsEmpty() )
     {
@@ -233,24 +238,64 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
         lineFirst += lineFirstOrig.c_str() + (size_t)colEnd;
     }
 
-    // (4) modify the line and refresh the part of the window which changed
+    // (4) refresh the part of the line which changed
+
+    // we usually refresh till the end of line except of the most common case
+    // when some text is appended to the end of it in which case we refresh
+    // just the newly appended text
+    wxCoord widthNewText;
+    if ( (lineEnd == lineStart) &&
+            ((size_t)colStart == lineFirstOrig.length()) )
+    {
+        // text appended, not replaced, so refresh only the new text
+        widthNewText = GetTextWidth(lines[0u]);
+    }
+    else
+    {
+        // refresh till the end of line as all its tail changed
+
+        // OPT: should only refresh the part occupied by the text, but OTOH
+        //      the line won't be really repainted beyond it anyhow due to the
+        //      checks in DoDrawTextInRect(), so is it really worth it?
+
+        widthNewText = 0;
+    }
+
+    RefreshPixelRange(lineStart, startNewText, widthNewText);
+
+    // (5) modify the line
     if ( IsSingleLine() )
     {
-        m_value = lineFirst;
+        SetSLValue(lineFirst);
+
+        // force m_colLastVisible update
+        m_colLastVisible = -1;
 
         // consistency check: when replacing text in a single line control, we
         // shouldn't have more than one line
         wxASSERT_MSG(lines.GetCount() <= 1,
                      _T("can't have more than one line in this wxTextCtrl"));
 
-        // nothing more can happen to us
+        // update the current position
+        SetInsertionPoint(from + text.length());
+
+        // and the selection (do it after setting the cursor to have correct value
+        // for selection anchor)
+        ClearSelection();
+
+        // nothing more can happen to us, so bail out
+        return;
     }
     else // multiline
     {
         m_lines[lineStart] = lineFirst;
     }
 
-    // now replace all intermediate lines entirely and refresh
+    // now replace all intermediate lines entirely
+
+    bool refreshAllBelow = FALSE;
+
+    // (1) modify all lines which are really repaced
     size_t nReplaceLine = 1,
            nReplaceCount = lines.GetCount();
     for ( long line = lineStart + 1; line < lineEnd; line++ )
@@ -260,10 +305,11 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
             // replace line
             m_lines[line] = lines[nReplaceLine++];
         }
-        else // no more replacement text - remove line
+        else // no more replacement text - remove line(s)
         {
-            // optimization: remove not only this line but all the next ones as
-            // well
+            // (2) remove all lines for which there is no more replacement
+            //     text (this is slightly more efficient than continuing to
+            //     run the loop)
 
             // adjust the index by the number of lines removed
             lineEnd -= lineEnd - line;
@@ -273,16 +319,31 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
             {
                 m_lines.RemoveAt(line++);
             }
+
+            // the lines below will scroll up
+            refreshAllBelow = TRUE;
         }
     }
 
-    // if there are still lines left in the replacement text, insert them
-    // before modifying the last line
-    while ( nReplaceLine < nReplaceCount - 1 ) // OPT: insert all at once?
+    // (3) if there are still lines left in the replacement text, insert them
+    //     before modifying the last line
+    if ( nReplaceLine < nReplaceCount - 1 )
     {
-        // insert line and adjust for index change by incrementing lineEnd
-        m_lines.Insert(lines[nReplaceLine++], lineEnd++);
+        // the lines below will scroll down
+        refreshAllBelow = TRUE;
+
+        while ( nReplaceLine < nReplaceCount - 1 ) // OPT: insert all at once?
+        {
+            // insert line and adjust for index change by incrementing lineEnd
+            m_lines.Insert(lines[nReplaceLine++], lineEnd++);
+        }
     }
+
+    // (4) refresh the lines: if we had replaced exactly the same number of
+    //     lines that we had before, we can just refresh these lines,
+    //     otherwise the lines below will change as well, so we have to
+    //     refresh them too (by passing -1 as RefreshLineRange() argument)
+    RefreshLineRange(lineStart + 1, refreshAllBelow ? -1 : lineEnd - 1);
 
     // now deal with the last line: (1) replace its beginning with the end of
     // the replacement text
@@ -301,56 +362,21 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
         lineLast += lineLastOrig.c_str() + (size_t)colEnd;
     }
 
+    // (3) always refresh the last line entirely if it hadn't been already
+    //     refreshed above
+    if ( !refreshAllBelow )
+    {
+        RefreshPixelRange(lineEnd, 0, 0); // entire line
+    }
+
     m_lines[lineEnd] = lineLast;
 
-#if 0 // single line only
-    // replace the part of the text with the new value
-    wxString valueNew(m_value, (size_t)from);
-
-    // remember it for later use
-    wxCoord startNewText = GetTextWidth(valueNew);
-
-    valueNew += text;
-    if ( (size_t)to < m_value.length() )
-    {
-        valueNew += m_value.c_str() + (size_t)to;
-    }
-
-    // OPT: is the following really ok? not sure any more now at 2 am...
-
-    // we usually refresh till the end of line except of the most common case
-    // when some text is appended to the end of the string in which case we
-    // refresh just it
-    wxCoord widthNewText;
-
-    if ( (size_t)from < m_value.length() )
-    {
-        // refresh till the end of line
-        widthNewText = 0;
-    }
-    else // text appended, not replaced
-    {
-        // refresh only the new text
-        widthNewText = GetTextWidth(text);
-    }
-
-    m_value = valueNew;
-
-    // force m_colLastVisible update
-    m_colLastVisible = -1;
-
     // update the current position
-    SetInsertionPoint(from + text.length());
+    SetInsertionPoint(to);
 
     // and the selection (do it after setting the cursor to have correct value
     // for selection anchor)
     ClearSelection();
-
-    // repaint
-    RefreshPixelRange(0, startNewText, widthNewText);
-
-    // TODO: and the affected parts of the next line(s)
-#endif // 0
 }
 
 void wxTextCtrl::Remove(long from, long to)
@@ -403,20 +429,8 @@ void wxTextCtrl::DoSetInsertionPoint(long pos)
     HideCaret();
 
     m_curPos = pos;
-
-    if ( IsSingleLine() )
-    {
-        m_curLine = 0;
-        m_curRow = m_curPos;
-
-        // the current position should always be shown, scroll the window
-        // for this if necessary
-        ShowHorzPosition(GetCaretPosition());
-    }
-    else // multi line
-    {
-        wxFAIL_MSG(_T("unimplemented for multi line"));
-    }
+    PositionToXY(m_curPos, &m_curRow, &m_curLine);
+    ShowPosition(m_curPos);
 
     ShowCaret();
 }
@@ -433,16 +447,31 @@ long wxTextCtrl::GetInsertionPoint() const
 
 long wxTextCtrl::GetLastPosition() const
 {
+    long pos;
     if ( IsSingleLine() )
     {
-        return m_value.length();
+        pos = GetSLValue().length();
     }
-    else
+    else // multiline
     {
-        wxFAIL_MSG(_T("unimplemented for multi line"));
+        pos = 0;
+        size_t nLineCount = m_lines.GetCount();
+        for ( size_t nLine = 0; nLine < nLineCount; nLine++ )
+        {
+            // +1 is because the positions at the end of this line and of the
+            // start of the next one are different
+            pos += m_lines[nLine].length() + 1;
+        }
 
-        return -1;
+        if ( pos > 0 )
+        {
+            // the last position is at the end of the last line, not in the
+            // beginning of the next line after it
+            pos--;
+        }
     }
+
+    return pos;
 }
 
 // ----------------------------------------------------------------------------
@@ -465,12 +494,36 @@ wxString wxTextCtrl::GetSelectionText() const
     {
         if ( IsSingleLine() )
         {
-            sel = wxString(m_value.c_str() + m_selStart,
-                           m_value.c_str() + m_selEnd);
+            sel = GetSLValue().Mid(m_selStart, m_selEnd - m_selStart);
         }
-        else
+        else // multiline
         {
-            wxFAIL_MSG(_T("unimplemented for multi line"));
+            long colStart, lineStart,
+                 colEnd, lineEnd;
+            PositionToXY(m_selStart, &colStart, &lineStart);
+            PositionToXY(m_selEnd, &colEnd, &lineEnd);
+
+            // as always, we need to check for the special case when the start
+            // and end line are the same
+            if ( lineEnd == lineStart )
+            {
+                sel = m_lines[lineStart].Mid(colStart, colEnd - colStart);
+            }
+            else // sel on multiple lines
+            {
+                // take the end of the first line
+                sel = m_lines[lineStart].c_str() + colStart;
+                sel += _T('\n');
+
+                // all intermediate ones
+                for ( long line = lineStart + 1; line < lineEnd; line++ )
+                {
+                    sel << m_lines[line] << _T('\n');
+                }
+
+                // and the start of the last one
+                sel += m_lines[lineEnd].Left(colEnd);
+            }
         }
     }
 
@@ -655,13 +708,14 @@ int wxTextCtrl::GetLineLength(long line) const
     {
         wxASSERT_MSG( line == 0, _T("invalid GetLineLength() parameter") );
 
-        return m_value.length();
+        return GetSLValue().length();
     }
     else // multiline
     {
-        wxFAIL_MSG(_T("unimplemented for multi line"));
+        wxCHECK_MSG( (size_t)line < m_lines.GetCount(), -1,
+                     _T("line index out of range") );
 
-        return 0;
+        return m_lines[line].length();
     }
 }
 
@@ -675,24 +729,18 @@ wxString wxTextCtrl::GetLineText(long line) const
     }
     else // multiline
     {
-        wxFAIL_MSG(_T("unimplemented for multi line"));
+        wxCHECK_MSG( (size_t)line < m_lines.GetCount(), _T(""),
+                     _T("line index out of range") );
 
-        return _T("");
+        return m_lines[line];
     }
 }
 
 int wxTextCtrl::GetNumberOfLines() const
 {
-    if ( IsSingleLine() )
-    {
-        return 1;
-    }
-    else // multiline
-    {
-        wxFAIL_MSG(_T("unimplemented for multi line"));
-
-        return 0;
-    }
+    // for single line controls there is always 1 line, even if the text is
+    // empty
+    return IsSingleLine() ? 1 : m_lines.GetCount();
 }
 
 long wxTextCtrl::XYToPosition(long x, long y) const
@@ -705,9 +753,23 @@ long wxTextCtrl::XYToPosition(long x, long y) const
     }
     else // multiline
     {
-        wxFAIL_MSG(_T("unimplemented for multi line"));
+        long pos = 0;
+        for ( size_t nLine = 0; nLine < (size_t)y; nLine++ )
+        {
+            // +1 is because the positions at the end of this line and of the
+            // start of the next one are different
+            pos += m_lines[nLine].length() + 1;
+        }
 
-        return -1;
+        if ( pos > 0 )
+        {
+            // the last position is at the end of the last line, not in the
+            // beginning of the next line after it
+            pos--;
+        }
+
+        // take into account also the position in line
+        return pos + x;
     }
 }
 
@@ -715,7 +777,7 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
 {
     if ( IsSingleLine() )
     {
-        if ( pos > GetLastPosition() )
+        if ( (size_t)pos > GetSLValue().length() )
             return FALSE;
 
         if ( x )
@@ -727,15 +789,42 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
     }
     else // multiline
     {
-        wxFAIL_MSG(_T("unimplemented for multi line"));
+        size_t nLineCount = m_lines.GetCount();
+        for ( size_t nLine = 0; nLine < nLineCount; nLine++ )
+        {
+            long posNew = pos - (m_lines[nLine].length() + 1);
+            if ( posNew < 0 )
+            {
+                // we've found the line, now just calc the column
+                if ( x )
+                    *x = nLine;
 
+                if ( y )
+                    *y = pos;
+
+                return TRUE;
+            }
+            else // go further down
+            {
+                pos = posNew;
+            }
+        }
+
+        // beyond the last line
         return FALSE;
     }
 }
 
 void wxTextCtrl::ShowPosition(long pos)
 {
-    wxFAIL_MSG(_T("not implemented"));
+    if ( IsSingleLine() )
+    {
+        ShowHorzPosition(GetCaretPosition(pos));
+    }
+    else
+    {
+        wxFAIL_MSG(_T("not implemented for multiline"));
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -768,6 +857,9 @@ static inline bool IsWordChar(wxChar ch)
 
 long wxTextCtrl::GetWordStart() const
 {
+    // TODO
+    wxCHECK_MSG( IsSingleLine(), -1, _T("not implemented for multline") );
+
     if ( m_curPos == -1 || m_curPos == 0 )
         return 0;
 
@@ -797,6 +889,9 @@ long wxTextCtrl::GetWordStart() const
 
 long wxTextCtrl::GetWordEnd() const
 {
+    // TODO
+    wxCHECK_MSG( IsSingleLine(), -1, _T("not implemented for multline") );
+
     if ( m_curPos == -1 )
         return 0;
 
@@ -922,6 +1017,10 @@ void wxTextCtrl::UpdateTextRect()
 
 void wxTextCtrl::UpdateLastVisible()
 {
+    // this method is only used for horizontal "scrollbarless" scrolling which
+    // is used only with single line controls
+    wxASSERT_MSG( IsSingleLine(), _T("shouldn't be called for multiline") );
+
     // OPT: estimate the correct value first, just adjust it later
 
     wxString text;
@@ -1184,7 +1283,7 @@ void wxTextCtrl::ShowHorzPosition(wxCoord pos)
     {
         // scroll backwards
         long col;
-        HitTestLine(GetValue(), pos, &col);
+        HitTestLine(GetSLValue(), pos, &col);
         ScrollText(col);
     }
     else
@@ -1203,7 +1302,7 @@ void wxTextCtrl::ShowHorzPosition(wxCoord pos)
         {
             // scroll forward
             long col;
-            HitTestLine(GetValue(), pos - width, &col);
+            HitTestLine(GetSLValue(), pos - width, &col);
             ScrollText(col + 1);
         }
     }
@@ -1326,6 +1425,18 @@ void wxTextCtrl::DoPrepareDC(wxDC& dc)
 // refresh
 // ----------------------------------------------------------------------------
 
+void wxTextCtrl::RefreshLineRange(long lineFirst, long lineLast)
+{
+    wxRect rect;
+    // rect.x is already 0
+    rect.width = m_rectText.width;
+    wxCoord h = GetCharHeight();
+    rect.y = lineFirst*h;
+    rect.SetBottom(lineLast == -1 ? m_rectText.height : (lineLast + 1)*h);
+
+    RefreshTextRect(rect);
+}
+
 void wxTextCtrl::RefreshTextRange(long start, long end)
 {
     wxCHECK_RET( start != -1 && end != -1,
@@ -1369,11 +1480,11 @@ void wxTextCtrl::RefreshTextRange(long start, long end)
             posCount = colEnd - posStart;
         }
 
-        RefreshLineRange(line, posStart, posCount);
+        RefreshColRange(line, posStart, posCount);
     }
 }
 
-void wxTextCtrl::RefreshLineRange(long line, long start, long count)
+void wxTextCtrl::RefreshColRange(long line, long start, long count)
 {
     wxString text = GetLineText(line);
 
@@ -1386,7 +1497,7 @@ void wxTextCtrl::RefreshPixelRange(long line, wxCoord start, wxCoord width)
 {
     wxCoord h = GetCharHeight();
     wxRect rect;
-    rect.x = start - m_ofsHorz;
+    rect.x = start;
     rect.y = line*h;
 
     if ( width == 0 )
@@ -1401,6 +1512,17 @@ void wxTextCtrl::RefreshPixelRange(long line, wxCoord start, wxCoord width)
     }
 
     rect.height = h;
+
+    RefreshTextRect(rect);
+}
+
+void wxTextCtrl::RefreshTextRect(wxRect& rect)
+{
+    if ( IsSingleLine() )
+    {
+        // account for horz scrolling
+        rect.x -= m_ofsHorz;
+    }
 
     // account for the text area offset
     rect.Offset(m_rectText.GetPosition());
@@ -1568,7 +1690,7 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
 
         // extract the part of line we need to redraw
         wxString textLine = GetLineText(line);
-        wxString text = textLine.Mid(colStart, colEnd - colStart + 1);
+        wxString text = textLine.Mid(colStart, colEnd - colStart);
 
         // now deal with the selection
         int selStart, selEnd;
@@ -1673,9 +1795,10 @@ void wxTextCtrl::CreateCaret()
     SetCaret(caret);
 }
 
-wxCoord wxTextCtrl::GetCaretPosition() const
+wxCoord wxTextCtrl::GetCaretPosition(long pos = -1) const
 {
-    wxString textBeforeCaret(GetLineText(m_curLine), (size_t)m_curRow);
+    wxString textBeforeCaret(GetLineText(m_curLine),
+                             (size_t)(pos == -1 ? m_curRow : pos));
 
     return GetTextWidth(textBeforeCaret);
 }
