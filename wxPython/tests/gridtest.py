@@ -83,9 +83,8 @@ class MyCellEditor(wxPyGridCellEditor):
         """
         key = evt.GetKeyCode()
         print "KeyCode:", key
-        # For linux the first range means number keys in main keyboard, and
-        # the second range means numeric keypad keys, with num-lock on.
-        if key in range(48,58) or key in range(326,336):
+        if (key in range(ord('0'),ord('9')+1) or
+            key in range(WXK_NUMPAD0, WXK_NUMPAD9+1)):
             return true
         else:
             return false
@@ -99,8 +98,7 @@ class MyCellEditor(wxPyGridCellEditor):
         key = evt.GetKeyCode()
         print "StartingKey", key
         ch = None
-        if key in [WXK_NUMPAD0, WXK_NUMPAD1, WXK_NUMPAD2, WXK_NUMPAD3, WXK_NUMPAD4,
-                   WXK_NUMPAD5, WXK_NUMPAD6, WXK_NUMPAD7, WXK_NUMPAD8, WXK_NUMPAD9]:
+        if key in range(WXK_NUMPAD0, WXK_NUMPAD9+1):
             ch = ch = chr(ord('0') + key - WXK_NUMPAD0)
 
         elif key < 256 and key >= 0 and chr(key) in string.printable:
