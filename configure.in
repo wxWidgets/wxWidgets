@@ -1717,7 +1717,7 @@ dnl checks needed to define wxVaCopy
 AC_CACHE_CHECK([for va_copy],
     wx_cv_func_va_copy,
     [
-        AC_COMPILE_IFELSE([
+        AC_LINK_IFELSE([
             #include <stdarg.h>
             void foo(char *f, ...)
             {

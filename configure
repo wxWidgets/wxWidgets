@@ -18120,6 +18120,132 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 
+echo "$as_me:$LINENO: checking for va_copy" >&5
+echo $ECHO_N "checking for va_copy... $ECHO_C" >&6
+if test "${wx_cv_func_va_copy+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+        cat >conftest.$ac_ext <<_ACEOF
+
+            #include <stdarg.h>
+            void foo(char *f, ...)
+            {
+                va_list ap1, ap2;
+                va_start(ap1, f);
+                va_copy(ap2, ap1);
+                va_end(ap2);
+                va_end(ap1);
+            }
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  wx_cv_func_va_copy=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+wx_cv_func_va_copy=no
+
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+
+
+fi
+echo "$as_me:$LINENO: result: $wx_cv_func_va_copy" >&5
+echo "${ECHO_T}$wx_cv_func_va_copy" >&6
+
+if test $wx_cv_func_va_copy = "yes"; then
+    cat >>confdefs.h <<\_ACEOF
+#define HAVE_VA_COPY 1
+_ACEOF
+
+else
+        echo "$as_me:$LINENO: checking if va_list can be copied by value" >&5
+echo $ECHO_N "checking if va_list can be copied by value... $ECHO_C" >&6
+if test "${wx_cv_type_va_list_lvalue+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+            if test "$cross_compiling" = yes; then
+                  wx_cv_type_va_list_lvalue=yes
+
+else
+  cat >conftest.$ac_ext <<_ACEOF
+
+                #include <stdarg.h>
+                int foo(char *f, ...)
+                {
+                    va_list ap1, ap2;
+                    va_start(ap1, f);
+                    ap2 = ap1;
+                    if ( va_arg(ap1, int) != 17 || va_arg(ap2, int) != 17 )
+                        return 1;
+                    va_end(ap2);
+                    va_end(ap1);
+                    return 0;
+                }
+                int main()
+                {
+                    return foo("hi", 17);
+                }
+_ACEOF
+rm -f conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  wx_cv_type_va_list_lvalue=yes
+else
+  echo "$as_me: program exited with status $ac_status" >&5
+echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+( exit $ac_status )
+wx_cv_type_va_list_lvalue=no
+fi
+rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+fi
+
+
+fi
+echo "$as_me:$LINENO: result: $wx_cv_type_va_list_lvalue" >&5
+echo "${ECHO_T}$wx_cv_type_va_list_lvalue" >&6
+
+    if test $wx_cv_type_va_list_lvalue != "yes"; then
+                        cat >>confdefs.h <<\_ACEOF
+#define VA_LIST_IS_ARRAY 1
+_ACEOF
+
+    fi
+fi
+
 # Check whether --enable-largefile or --disable-largefile was given.
 if test "${enable_largefile+set}" = set; then
   enableval="$enable_largefile"
