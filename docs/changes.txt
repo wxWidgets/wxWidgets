@@ -70,6 +70,9 @@ versions, please update your code to not use them.
                                  methods taking wxArrayString
 - wxArrayString::Remove(index, count): use RemoveAt instead
 - wxTreeItemId conversion to long is deprecated and shouldn't be used
+- wxTreeCtrl::GetFirst/NextChild() 2nd argument now has type wxTreeItemIdValue
+  and not long, please change declarations of "cookie"s in your code
+  accordingly -- otherwise your code won't work on 64 bit platforms
 - [MSW only] wxWindow::GetUseCtl3D(), GetTransparentBackground() and
              SetTransparent() as well as wxNO_3D and wxUSER_COLOURS styles
 - wxList keyed interface: use wxHashMap instead
