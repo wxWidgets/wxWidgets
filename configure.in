@@ -15,7 +15,7 @@ dnl ---------------------------------------------------------------------------
 dnl initialization
 dnl ---------------------------------------------------------------------------
 
-dnl the file passed to AC_INIT should be speicific to our package
+dnl the file passed to AC_INIT should be specific to our package
 AC_INIT(wx-config.in)
 
 AC_CANONICAL_HOST
@@ -179,11 +179,22 @@ case "${host}" in
     AC_DEFINE(__SVR4__)
     DEFAULT_DEFAULT_wxUSE_MOTIF=1
   ;;
+
+  *-*-cygwin32* )
+    USE_UNIX=0
+    AC_DEFINE(__WIN32__)
+    AC_DEFINE(__WIN95__)
+    AC_DEFINE(__WINDOWS__)
+    AC_DEFINE(__GNUWIN32__)
+    DEFAULT_DEFAULT_wxUSE_MSW=1
+  ;;
+
   *-pc-os2_emx )
     AC_DEFINE(__EMX__)
   ;;
+
   *)
-    AC_MSG_ERROR(unknown system type $(host).)
+    AC_MSG_ERROR(unknown system type ${host}.)
 esac
 
 if test "$USE_UNIX" = 1 ; then
@@ -198,16 +209,6 @@ dnl Linux: test for libc5/glibc2: glibc2 has gettext() included
 if test "$USE_LINUX" = 1; then
   AC_CHECK_LIB(c,gettext,AC_DEFINE(wxHAVE_GLIBC2))
 fi
-
-dnl TODO cross-compiling for Windows not yet supported
-AC_DEFINE(__UNIX__)
-
-dnl if eval "test $USE_CYGWIN != 1 -a $USE_MINGW32 != 1"; then
-dnl   AC_DEFINE(__UNIX__)
-dnl else
-dnl   AC_DEFINE(__WINDOWS__)
-dnl   DEFAULT_wxUSE_MSW=1
-dnl fi
 
 dnl ---------------------------------------------------------------------------
 dnl command line options for configure
@@ -416,13 +417,6 @@ dnl ============================
 dnl external package dependecies
 dnl ============================
 
-dnl TODO should support these options!
-dnl
-dnl AC_ARG_WITH(gtk-prefix,    [  --with-gtk-prefix=PFX   prefix where GTK is installed],
-dnl             gtk_config_prefix="$withval", gtk_config_prefix="")
-dnl AC_ARG_WITH(gtk-exec-prefix,
-dnl                            [  --with-gtk-exec-prefix=PFX  exec prefix where GTK is installed], gtk_config_exec_prefix="$withval", gtk_config_exec_prefix="")
-
 dnl these options use AC_ARG_WITH and not WX_ARG_WITH on purpose - we cache
 dnl these values manually
 for toolkit in `echo $ALL_TOOLKITS`; do
@@ -439,6 +433,11 @@ AC_ARG_WITH(motif,         [  --with-motif            use Motif/Lesstif], [wxUSE
 AC_ARG_WITH(wine,          [  --with-wine             use WINE], [wxUSE_WINE="$withval" CACHE_WINE=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(cygwin,        [  --with-cygwin           use Cygwin for MS-Windows], [wxUSE_CYGWIN="$withval" CACHE_CYGWIN=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(mingw,         [  --with-mingw            use GCC Minimal MS-Windows], [wxUSE_MINGW="$withval" CACHE_MINGW=1 TOOLKIT_GIVEN=1])
+
+AC_ARG_WITH(gtk-prefix,    [  --with-gtk-prefix=PFX   Prefix where GTK is installed],
+            gtk_config_prefix="$withval", gtk_config_prefix="")
+AC_ARG_WITH(gtk-exec-prefix, [  --with-gtk-exec-prefix=PFX  Exec prefix where GTK is installed],
+            gtk_config_exec_prefix="$withval", gtk_config_exec_prefix="")
 
 WX_ARG_WITH(dmalloc,       [  --with-dmalloc          use dmalloc library (www.letters.com/dmalloc)], wxUSE_DMALLOC)
 WX_ARG_WITH(zlib,          [  --with-zlib             use zlib for LZW compression], wxUSE_ZLIB)
@@ -493,7 +492,7 @@ WX_ARG_ENABLE(sockets,     [  --enable-sockets        use socket/network classes
 WX_ARG_ENABLE(ipc,         [  --enable-ipc            use interprocess communication (wxSocket etc.)], wxUSE_IPC)
 WX_ARG_ENABLE(apple_ieee,  [  --enable-apple_ieee     use the Apple IEEE codec], wxUSE_APPLE_IEEE)
 WX_ARG_ENABLE(timedate,    [  --enable-timedate       use date/time classes], wxUSE_TIMEDATE)
-WX_ARG_ENABLE(wave,    [  --enable-wave       use wxWave class], wxUSE_WAVE)
+WX_ARG_ENABLE(wave,        [  --enable-wave           use wxWave class], wxUSE_WAVE)
 WX_ARG_ENABLE(fraction,    [  --enable-fraction       use wxFraction class], wxUSE_FRACTION)
 WX_ARG_ENABLE(dynlib,      [  --enable-dynlib         use wxLibrary class for DLL loading], wxUSE_DYNLIB_CLASS)
 WX_ARG_ENABLE(longlong,    [  --enable-longlong       use wxLongLong class], wxUSE_LONGLONG)
@@ -829,7 +828,11 @@ AM_PROG_LEX
 dnl needed for making link to setup.h
 AC_PROG_LN_S
 
-dnl libtool checks (disable static libs by default, this takes too much time...)
+dnl without this (which just means that we use WXDLLEXPORT) libtool won't build
+dnl DLLs under Win32.
+AC_LIBTOOL_WIN32_DLL
+
+dnl disable static libs by default, this takes too much time...
 AM_DISABLE_STATIC
 AM_PROG_LIBTOOL
 
@@ -889,6 +892,7 @@ SEARCH_INCLUDE="\
     /usr/include/qt           \
     /usr/local/include/qt     \
                               \
+    /usr/include/windows      \
     /usr/include/wine         \
     /usr/local/include/wine   \
                               \
@@ -915,8 +919,6 @@ dnl search for toolkit (widget sets)
 dnl ----------------------------------------------------------------
 
 TOOLKIT=
-TOOLKIT_DEF=
-TOOLKIT_DIR=
 TOOLKIT_INCLUDE=
 
 GUI_TK_LIBRARY=
@@ -925,6 +927,21 @@ GUI_TK_LINK=
 WXGTK12=
 
 WXWINE=
+
+if test "$wxUSE_CYGWIN" = 1; then
+  AC_MSG_CHECKING(for Windows headers)
+  WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, windows.h)
+
+  if test "$ac_find_includes" != "" ; then
+    AC_MSG_RESULT(found $ac_find_includes)
+    TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE -I$ac_find_includes"
+  else
+    AC_MSG_RESULT(no)
+    AC_MSG_ERROR(please set CFLAGS to contain the location of windows.h)
+  fi
+
+  TOOLKIT=MSW
+fi
 
 if test "$wxUSE_GTK" = 1; then
   dnl avoid calling AM_PATH_GTK twice, so check first for the newer version and
@@ -978,6 +995,7 @@ if test "$wxUSE_WINE" = 1; then
     GUI_TK_LIBRARY="$GUI_TK_LIBRARY $GUI_TK_LINK"
     WXWINE=1
     TOOLKIT=MSW
+    LTLIBOBJS="$LTLIBOBJS winestub.lo"
 fi
 
 if test "$wxUSE_MOTIF" = 1; then
@@ -1174,8 +1192,10 @@ dnl flush the cache
 AC_CACHE_SAVE
 
 dnl ---------------------------------------------------------------------------
-dnl thread support
+dnl thread support for Unix (always available under Win32)
 dnl ---------------------------------------------------------------------------
+
+if test "$wxUSE_UNIX" = 1; then
 
 dnl the code below:
 dnl   defines THREADS_OBJ which contains the object files to build
@@ -1213,25 +1233,16 @@ if test "$wxUSE_THREADS" = "yes"; then
                 ])
             ])
         ])
-    if test "$THREADS_LINK" != ""; then
-        AC_DEFINE(wxUSE_THREADS)
-    else
-        AC_MSG_WARN(No thread support on this system)
-    fi
 fi
 
 if test -z "$THREADS_OBJ"; then
   wxUSE_THREADS=no
+  AC_MSG_WARN(No thread support on this system)
 fi
 
 dnl do other tests only if we are using threads
 if test "$wxUSE_THREADS" = "yes"; then
-  dnl must define _REENTRANT for multithreaded code
-  CFLAGS="${CFLAGS} -D_REENTRANT"
-  CXXFLAGS="${CXXFLAGS} -D_REENTRANT"
-
-  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS thread"
-dnl  LTLIBOBJS="$LTLIBOBJS $THREADS_OBJ"
+  dnl  LTLIBOBJS="$LTLIBOBJS $THREADS_OBJ"
 
   dnl define autoconf macro to check for given function in both pthread and
   dnl posix4 libraries
@@ -1294,12 +1305,28 @@ dnl  LTLIBOBJS="$LTLIBOBJS $THREADS_OBJ"
   THREADS_LINK="-l$THREADS_LINK"
 fi
 
+fi
+
+if test "$wxUSE_THREADS" = "yes"; then
+  AC_DEFINE(wxUSE_THREADS)
+
+  dnl must define _REENTRANT for multithreaded code
+  CFLAGS="${CFLAGS} -D_REENTRANT"
+  CXXFLAGS="${CXXFLAGS} -D_REENTRANT"
+
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS thread"
+fi
+
 if test "$WXGTK12" = 1 ; then
   AC_DEFINE_UNQUOTED(__WXGTK12__,$WXGTK12)
 fi
 
 if test "$WXWINE" = 1 ; then
   TOOLKIT_DEF="${TOOLKIT_DEF} -D__WXWINE__"
+fi
+
+if test "$wxUSE_CYGWIN" = 1 ; then
+  TOOLKIT_DEF="${TOOLKIT_DEF} -D__WIN95__"
 fi
 
 WXDEBUG=
@@ -1696,11 +1723,19 @@ if test "$wxUSE_CLIPBOARD" = "yes"; then
 fi
 
 if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
-  if test "$WXGTK12" = 1 ; then
+  if test "$wxUSE_GTK" = 1; then
+    if test "$WXGTK12" != 1; then
+      AC_MSG_WARN([Drag and drop is only supported under wxGTK 2.1])
+    fi
+  fi
+
+  if test "$wxUSE_MOTIF" = 1; then
+    AC_MSG_WARN([Drag and drop is not yet supported under Motif])
+  fi
+
+  if test "$wxUSE_DRAG_AND_DROP" = "yes"; then
     AC_DEFINE(wxUSE_DRAG_AND_DROP)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS dnd"  
-   else
-    AC_MSG_WARN([Drag and drop is only supported under wxGTK 2.1])
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS dnd"
   fi
 fi
 
@@ -1999,6 +2034,13 @@ AC_OUTPUT([
             wx-config
             Makefile
             src/Makefile
+
+dnl just for testing, will remove soon (VZ)
+dnl             src/msw/Makefile
+dnl             include/Makefile include/wx/Makefile include/wx/generic/Makefile
+dnl             include/wx/msw/Makefile
+dnl             samples/Makefile samples/minimal/Makefile
+
             src/gtk/Makefile
             src/motif/Makefile
             src/msw/Makefile
@@ -2070,7 +2112,7 @@ dnl The following line is more elegant but test -e is not supported by all
 dnl test varieties.
 dnl            if test ! -e include/wx/${TOOLKIT_DIR}/setup.h; then
             cat include/wx/${TOOLKIT_DIR}/setup.h >/dev/null 2>&1
-	    if test $? != 0; then
+            if test $? != 0; then
               ${LN_S} `pwd`/setup.h include/wx/${TOOLKIT_DIR}/setup.h
             fi
           ],
