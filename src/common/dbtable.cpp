@@ -128,21 +128,21 @@ bool wxDbColDef::Initialize()
 
 
 /********** wxDbTable::wxDbTable() Constructor **********/
-wxDbTable::wxDbTable(wxDb *pwxDb, const wxString &tblName, const int nCols,
+wxDbTable::wxDbTable(wxDb *pwxDb, const wxString &tblName, const UWORD numColumns,
                     const wxString &qryTblName, bool qryOnly, const wxString &tblPath)
 {
-    if (!initialize(pwxDb, tblName, nCols, qryTblName, qryOnly, tblPath))
+    if (!initialize(pwxDb, tblName, numColumns, qryTblName, qryOnly, tblPath))
         cleanup();
 }  // wxDbTable::wxDbTable()
 
 
 /***** DEPRECATED: use wxDbTable::wxDbTable() format above *****/
-wxDbTable::wxDbTable(wxDb *pwxDb, const wxString &tblName, const int nCols,
+wxDbTable::wxDbTable(wxDb *pwxDb, const wxString &tblName, const UWORD numColumns,
                     const wxChar *qryTblName, bool qryOnly, const wxString &tblPath)
 {
     wxString tempQryTblName;
     tempQryTblName = qryTblName;
-    if (!initialize(pwxDb, tblName, nCols, tempQryTblName, qryOnly, tblPath))
+    if (!initialize(pwxDb, tblName, numColumns, tempQryTblName, qryOnly, tblPath))
         cleanup();
 }  // wxDbTable::wxDbTable()
 
@@ -154,7 +154,7 @@ wxDbTable::~wxDbTable()
 }  // wxDbTable::~wxDbTable()
 
 
-bool wxDbTable::initialize(wxDb *pwxDb, const wxString &tblName, const int nCols,
+bool wxDbTable::initialize(wxDb *pwxDb, const wxString &tblName, const UWORD numColumns,
                     const wxString &qryTblName, bool qryOnly, const wxString &tblPath)
 {
     // Initializing member variables
@@ -170,7 +170,7 @@ bool wxDbTable::initialize(wxDb *pwxDb, const wxString &tblName, const int nCols
     hstmtInternal       = 0;
     colDefs             = 0;
     tableID             = 0;
-    noCols              = nCols;                    // No. of cols in the table
+    noCols              = numColumns;               // Number of cols in the table
     where.Empty();                                  // Where clause
     orderBy.Empty();                                // Order By clause
     from.Empty();                                   // From clause
@@ -430,7 +430,8 @@ bool wxDbTable::bindParams(bool forUpdate)
     
     // Bind each column of the table that should be bound
     // to a parameter marker
-    int i,colNo;
+    int i;
+	 UWORD colNo;
     for (i = 0, colNo = 1; i < noCols; i++)
     {
         if (forUpdate)
@@ -543,11 +544,10 @@ bool wxDbTable::bindCols(HSTMT cursor)
 //RG-NULL    static SDWORD  cb;
     
     // Bind each column of the table to a memory address for fetching data
-    int i;
+    UWORD i;
     for (i = 0; i < noCols; i++)
     {
-        if (SQLBindCol(cursor, i+1, colDefs[i].SqlCtype, (UCHAR*) colDefs[i].PtrDataObj,
-//RG-NULL                       colDefs[i].SzDataObj, &cb) != SQL_SUCCESS)     
+        if (SQLBindCol(cursor, (UWORD)(i+1), colDefs[i].SqlCtype, (UCHAR*) colDefs[i].PtrDataObj,
                        colDefs[i].SzDataObj, &colDefs[i].CbValue ) != SQL_SUCCESS)
         {
           return (pDb->DispAllErrors(henv, hdbc, cursor));
@@ -705,7 +705,7 @@ bool wxDbTable::Open(bool checkPrivileges, bool checkTableExists)
 
     s.Empty();
     // Verify that the table exists in the database
-    if (checkTableExists && !pDb->TableExists(tableName,/*pDb->GetUsername()*/NULL,tablePath))
+    if (checkTableExists && !pDb->TableExists(tableName, pDb->GetUsername(), tablePath))
     {
         s = wxT("Table/view does not exist in the database");
         if ( *(pDb->dbInf.accessibleTables) == wxT('Y'))
@@ -722,7 +722,7 @@ bool wxDbTable::Open(bool checkPrivileges, bool checkTableExists)
         // Unfortunately this optimization doesn't seem to be
         // reliable!
         if (// *(pDb->dbInf.accessibleTables) == 'N' && 
-            !pDb->TablePrivileges(tableName,wxT("SELECT"),NULL,pDb->GetUsername(),tablePath))
+            !pDb->TablePrivileges(tableName,wxT("SELECT"), pDb->GetUsername(), pDb->GetUsername(), tablePath))
             s = wxT("Current logged in user does not have sufficient privileges to access this table.\n");
     }
 
@@ -938,7 +938,7 @@ void wxDbTable::BuildDeleteStmt(wxString &pSqlStmt, int typeOfDel, const wxStrin
                 // Get the ROWID value.  If not successful retreiving the ROWID,
                 // simply fall down through the code and build the WHERE clause
                 // based on the key fields.
-                if (SQLGetData(hstmt, noCols+1, SQL_C_CHAR, (UCHAR*) rowid, wxDB_ROWID_LEN, &cb) == SQL_SUCCESS)
+                if (SQLGetData(hstmt, (UWORD)(noCols+1), SQL_C_CHAR, (UCHAR*) rowid, wxDB_ROWID_LEN, &cb) == SQL_SUCCESS)
                 {
                     pSqlStmt += wxT("ROWID = '");
                     pSqlStmt += rowid;
@@ -1149,7 +1149,7 @@ void wxDbTable::BuildUpdateStmt(wxString &pSqlStmt, int typeOfUpd, const wxStrin
                 // Get the ROWID value.  If not successful retreiving the ROWID,
                 // simply fall down through the code and build the WHERE clause
                 // based on the key fields.
-                if (SQLGetData(hstmt, noCols+1, SQL_C_CHAR, (UCHAR*) rowid, wxDB_ROWID_LEN, &cb) == SQL_SUCCESS)
+                if (SQLGetData(hstmt, (UWORD)(noCols+1), SQL_C_CHAR, (UCHAR*) rowid, wxDB_ROWID_LEN, &cb) == SQL_SUCCESS)
                 {
                     pSqlStmt += wxT("ROWID = '");
                     pSqlStmt += rowid;
@@ -1942,12 +1942,12 @@ bool wxDbTable::CanUpdByROWID(void)
  *        as the ROWID is not getting updated correctly
  */
     return FALSE;
-
+/*
     if (pDb->Dbms() == dbmsORACLE)
         return(TRUE);
     else
         return(FALSE);
-
+*/
 }  // wxDbTable::CanUpdByROWID()
 
 
@@ -2041,7 +2041,7 @@ bool wxDbTable::SetQueryTimeout(UDWORD nSeconds)
 
 /********** wxDbTable::SetColDefs() **********/
 void wxDbTable::SetColDefs(int index, const wxString &fieldName, int dataType, void *pData,
-                           int cType, int size, bool keyField, bool upd,
+                           SWORD cType, int size, bool keyField, bool upd,
                            bool insAllow, bool derivedCol)
 {
     if (!colDefs)  // May happen if the database connection fails
@@ -2230,7 +2230,7 @@ ULONG wxDbTable::Count(const wxString &args)
     }
 
     // Obtain the result
-    if (SQLGetData(*hstmtCount, 1, SQL_C_ULONG, &count, sizeof(count), &cb) != SQL_SUCCESS)
+    if (SQLGetData(*hstmtCount, (UWORD)1, SQL_C_ULONG, &count, sizeof(count), &cb) != SQL_SUCCESS)
     {
         pDb->DispAllErrors(henv, hdbc, *hstmtCount);
         return(0);
@@ -2275,7 +2275,7 @@ bool wxDbTable::Refresh(void)
         // Get the ROWID value.  If not successful retreiving the ROWID,
         // simply fall down through the code and build the WHERE clause
         // based on the key fields.
-        if (SQLGetData(hstmt, noCols+1, SQL_C_CHAR, (UCHAR*) rowid, wxDB_ROWID_LEN, &cb) == SQL_SUCCESS)
+        if (SQLGetData(hstmt, (UWORD)(noCols+1), SQL_C_CHAR, (UCHAR*) rowid, wxDB_ROWID_LEN, &cb) == SQL_SUCCESS)
         {
             whereClause += queryTableName;
             whereClause += wxT(".ROWID = '");
