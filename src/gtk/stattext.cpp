@@ -109,8 +109,13 @@ bool wxStaticText::Create(wxWindow *parent,
 
 wxString wxStaticText::GetLabel() const
 {
-    char *str = (char *) NULL;
-    gtk_label_get( GTK_LABEL(m_widget), &str );
+    GtkLabel *label = GTK_LABEL(m_widget);
+
+#ifdef __WXGTK20__
+    wxString str = wxGTK_CONV_BACK( gtk_label_get_text( label ) );
+#else
+    wxString str = wxString( label->label );
+#endif
 
     return wxString(str);
 }
