@@ -2393,3 +2393,7 @@ void wxWindow::GetPositionConstraint(int *x, int *y) const
     GetPosition(x, y);
 }
 
+void wxWindow::AcceptsFocus() const
+{
+  return IsEnabled() && IsShown();
+}

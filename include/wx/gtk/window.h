@@ -170,14 +170,17 @@ class wxWindow: public wxEvtHandler
     virtual void SetDropTarget( wxDropTarget *dropTarget );
     virtual wxDropTarget *GetDropTarget() const;
     
-    virtual void SetScrollbar( int orient, int pos, int thumbVisible,
-      int range, bool refresh = TRUE );
-    virtual void SetScrollPos( int orient, int pos, bool refresh = TRUE );
-    virtual int GetScrollPos( int orient ) const;
-    virtual int GetScrollThumb( int orient ) const;
-    virtual int GetScrollRange( int orient ) const;
-    virtual void ScrollWindow( int dx, int dy, const wxRect* rect = NULL );
-
+    virtual void SetScrollbar( const int orient, const int pos, const int thumbVisible,
+      const int range, const bool refresh = TRUE );
+    virtual void SetScrollPos( const int orient, const int pos, const bool refresh = TRUE );
+    virtual int GetScrollPos( const int orient ) const;
+    virtual int GetScrollThumb( const int orient ) const;
+    virtual int GetScrollRange( const int orient ) const;
+    virtual void ScrollWindow( const int dx, const int dy, const wxRect* rect = NULL );
+    
+    // return FALSE from here if the window doesn't want the focus
+    virtual bool AcceptsFocus() const;
+    
   public:         // cannot get private going yet
     
     void PreCreation( wxWindow *parent, wxWindowID id, const wxPoint &pos, 
