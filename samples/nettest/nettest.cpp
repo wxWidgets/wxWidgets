@@ -53,10 +53,18 @@ public:
     // return: if OnInit() returns false, the application terminates)
     virtual bool OnInit();
 
+    // called before the application termination
+    virtual int OnExit();
+
     // event handlers
     void OnConnected(wxDialUpEvent& event);
 
+    // accessor to dial up manager
+    wxDialUpManager *GetDialer() const { return m_dial; }
+
 private:
+    wxDialUpManager *m_dial;
+
     DECLARE_EVENT_TABLE();
 };
 
@@ -72,6 +80,8 @@ public:
     void OnAbout(wxCommandEvent& event);
     void OnHangUp(wxCommandEvent& event);
     void OnDial(wxCommandEvent& event);
+
+    void OnUpdateUI(wxUpdateUIEvent& event);
 
     void OnIdle(wxIdleEvent& event);
 
@@ -112,6 +122,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(NetTest_HangUp, MyFrame::OnHangUp)
     EVT_MENU(NetTest_Dial, MyFrame::OnDial)
 
+    EVT_UPDATE_UI(NetTest_Dial, MyFrame::OnUpdateUI)
+
     EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
 
@@ -134,24 +146,56 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // Create the main application window
-    MyFrame *frame = new MyFrame("Minimal wxWindows App",
+    MyFrame *frame = new MyFrame("Dial-up wxWindows demo",
                                  wxPoint(50, 50), wxSize(450, 340));
 
     // Show it and tell the application that it's our main window
     frame->Show(TRUE);
     SetTopWindow(frame);
 
-    // success: wxApp::OnRun() will be called which will enter the main message
-    // loop and the application will run. If we returned FALSE here, the
-    // application would exit immediately.
+    // Init dial up manager
+    m_dial = wxDialUpManager::Create();
+
+    if ( !m_dial->IsOk() )
+    {
+        wxLogError("The sample can't run on this system.");
+
+        wxLog::GetActiveTarget()->Flush();
+
+        // do it here, OnExit() won't be called
+        delete m_dial;
+
+        return FALSE;
+    }
+
     return TRUE;
+}
+
+int MyApp::OnExit()
+{
+    delete m_dial;
+
+    // exit code is 0, everything is ok
+    return 0;
 }
 
 void MyApp::OnConnected(wxDialUpEvent& event)
 {
-    wxMessageBox(event.IsConnectedEvent() ? "Just connected!"
-                                          : "Disconnected",
-                 "Dial Up Manager Notification",
+    const char *msg;
+    if ( event.IsOwnEvent() )
+    {
+        msg = event.IsConnectedEvent() ? "Successfully connected"
+                                       : "Dialing failed";
+
+        wxLogStatus("");
+    }
+    else
+    {
+        msg = event.IsConnectedEvent() ? "Just connected!"
+                                       : "Disconnected";
+    }
+
+    wxMessageBox(msg, "Dial Up Manager Notification",
                  wxOK | wxICON_INFORMATION,
                  GetTopWindow());
 }
@@ -207,7 +251,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnHangUp(wxCommandEvent& WXUNUSED(event))
 {
-    if ( wxDialUpManager::Get()->HangUp() )
+    if ( wxGetApp().GetDialer()->HangUp() )
     {
         wxLogStatus(this, "Connection was succesfully terminated.");
     }
@@ -219,14 +263,13 @@ void MyFrame::OnHangUp(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnDial(wxCommandEvent& WXUNUSED(event))
 {
-    wxLogStatus(this, "Dialing...");
+    wxLogStatus(this, "Preparing to dial...");
     wxYield();
     wxBeginBusyCursor();
 
-    if ( wxDialUpManager::Get()->Dial("Free",
-                                      "zeitlin", "") )
+    if ( wxGetApp().GetDialer()->Dial("Free", "zeitlin", "") )
     {
-        wxLogStatus(this, "Connection was succesfully established.");
+        wxLogStatus(this, "Dialing...");
     }
     else
     {
@@ -236,11 +279,17 @@ void MyFrame::OnDial(wxCommandEvent& WXUNUSED(event))
     wxEndBusyCursor();
 }
 
+void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
+{
+    // disable this item while dialing
+    event.Enable( !wxGetApp().GetDialer()->IsDialing() );
+}
+
 void MyFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
 {
     static int s_isOnline = -1; // not TRUE nor FALSE
 
-    bool isOnline = wxDialUpManager::Get()->IsOnline();
+    bool isOnline = wxGetApp().GetDialer()->IsOnline();
     if ( s_isOnline != (int)isOnline )
     {
         s_isOnline = isOnline;
