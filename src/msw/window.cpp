@@ -2338,10 +2338,18 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             break;
 
         case WM_CLOSE:
+#ifdef __WXUNIVERSAL__
+            // Universal uses its own wxFrame/wxDialog, so we don't receive
+            // close events unless we have this.
+            Close();
+            processed = TRUE;
+            rc.result = TRUE;
+#else
             // don't let the DefWindowProc() destroy our window - we'll do it
             // ourselves in ~wxWindow
             processed = TRUE;
             rc.result = TRUE;
+#endif
             break;
 
         case WM_SHOWWINDOW:

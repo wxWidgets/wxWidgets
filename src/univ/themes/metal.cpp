@@ -1183,6 +1183,7 @@ wxMetalTheme::wxMetalTheme()
     m_scheme = NULL;
     m_renderer = NULL;
     m_handlerDefault = NULL;
+    m_artProvider = NULL;
 }
 
 wxMetalTheme::~wxMetalTheme()

@@ -145,6 +145,7 @@ samples/mfc/mfc.dsw
 
 samples/minimal/minimal.dsp
 samples/minimal/minimal.dsw
+samples/minimal/minimalUniv.dsp
 
 samples/minifram/minifram.dsp
 samples/minifram/minifram.dsw
@@ -234,6 +235,7 @@ samples/wizard/wizard.dsw
 
 samples/widgets/widgets.dsp
 samples/widgets/widgets.dsw
+samples/widgets/widgetsUniv.dsp
 
 samples/opengl/cube/cube.dsp
 samples/opengl/cube/cube.dsw
