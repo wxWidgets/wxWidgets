@@ -390,7 +390,7 @@ void wxHtmlContainerCell::SetAlign(const wxHtmlTag& tag)
 
 
 
-void wxHtmlContainerCell::SetWidthFloat(const wxHtmlTag& tag)
+void wxHtmlContainerCell::SetWidthFloat(const wxHtmlTag& tag, double pixel_scale)
 {
     if (tag.HasParam("WIDTH")) {
         int wdi;
@@ -402,7 +402,7 @@ void wxHtmlContainerCell::SetWidthFloat(const wxHtmlTag& tag)
         }
         else {
             wxSscanf(wd.c_str(), wxT("%i"), &wdi);
-            SetWidthFloat(wdi, wxHTML_UNITS_PIXELS);
+            SetWidthFloat((int)(pixel_scale * (double)wdi), wxHTML_UNITS_PIXELS);
         }
     }
 }

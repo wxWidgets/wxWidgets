@@ -57,9 +57,9 @@ class wxHtmlImageMapAreaCell : public wxHtmlCell
     protected:
         CoordArray coords;
         celltype type;
-        int	radius;
+        int radius;
     public:
-        wxHtmlImageMapAreaCell( celltype t, wxString &coords );
+        wxHtmlImageMapAreaCell( celltype t, wxString &coords, double pixel_scale = 1.0);
         virtual wxString GetLink( int x = 0, int y = 0 ) const;
 };
 
@@ -67,17 +67,17 @@ class wxHtmlImageMapAreaCell : public wxHtmlCell
 
 
 
-wxHtmlImageMapAreaCell::wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::celltype t, wxString &incoords )
+wxHtmlImageMapAreaCell::wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::celltype t, wxString &incoords, double pixel_scale )
 {
-    int	i;
+    int i;
     wxString x = incoords, y;
 
     type = t;
     while ((i = x.Find( ',' )) != -1) {
-        coords.Add( wxAtoi( x.Left( i ).c_str() ) );
+        coords.Add( (int)(pixel_scale * (double)wxAtoi( x.Left( i ).c_str())) );
         x = x.Mid( i + 1 );
     }
-    coords.Add( wxAtoi( x.c_str() ) );
+    coords.Add( (int)(pixel_scale * (double)wxAtoi( x.c_str())) );
 }
 
 wxString wxHtmlImageMapAreaCell::GetLink( int x, int y ) const
@@ -85,7 +85,7 @@ wxString wxHtmlImageMapAreaCell::GetLink( int x, int y ) const
     switch (type) {
         case RECT:
             {
-                int	l, t, r, b;
+                int l, t, r, b;
 
                 l = coords[ 0 ];
                 t = coords[ 1 ];
@@ -98,8 +98,8 @@ wxString wxHtmlImageMapAreaCell::GetLink( int x, int y ) const
             }
         case CIRCLE:
             {
-                int	l, t, r;
-                double	d;
+                int l, t, r;
+                double  d;
 
                 l = coords[ 0 ];
                 t = coords[ 1 ];
@@ -113,15 +113,15 @@ wxString wxHtmlImageMapAreaCell::GetLink( int x, int y ) const
         case POLY:
             {
                 if (coords.GetCount() >= 6) {
-                    int	intersects = 0;
-                    int	wherex = x;
-                    int	wherey = y;
-                    int	totalv = coords.GetCount() / 2;
-                    int	totalc = totalv * 2;
-                    int	xval = coords[totalc - 2];
-                    int	yval = coords[totalc - 1];
-                    int	end = totalc;
-                    int	pointer = 1;
+                    int intersects = 0;
+                    int wherex = x;
+                    int wherey = y;
+                    int totalv = coords.GetCount() / 2;
+                    int totalc = totalv * 2;
+                    int xval = coords[totalc - 2];
+                    int yval = coords[totalc - 1];
+                    int end = totalc;
+                    int pointer = 1;
 
                     if ((yval >= wherey) != (coords[pointer] >= wherey)) {
                         if ((xval >= wherex) == (coords[0] >= wherex)) {
@@ -178,7 +178,7 @@ wxString wxHtmlImageMapAreaCell::GetLink( int x, int y ) const
             break;
     }
     if (m_Next) {
-        wxHtmlImageMapAreaCell	*a = (wxHtmlImageMapAreaCell*)m_Next;
+        wxHtmlImageMapAreaCell  *a = (wxHtmlImageMapAreaCell*)m_Next;
         return a->GetLink( x, y );
     }
     return wxEmptyString;
@@ -218,7 +218,7 @@ wxHtmlImageMapCell::wxHtmlImageMapCell( wxString &name )
 
 wxString wxHtmlImageMapCell::GetLink( int x, int y ) const
 {
-    wxHtmlImageMapAreaCell	*a = (wxHtmlImageMapAreaCell*)m_Next;
+    wxHtmlImageMapAreaCell  *a = (wxHtmlImageMapAreaCell*)m_Next;
     if (a)
         return a->GetLink( x, y );
     return wxHtmlCell::GetLink( x, y );
@@ -315,7 +315,7 @@ wxString wxHtmlImageCell::GetLink( int x, int y ) const
     if (m_MapName.IsEmpty())
         return wxHtmlCell::GetLink( x, y );
     if (!m_ImageMap) {
-        wxHtmlContainerCell	*p, *op;
+        wxHtmlContainerCell *p, *op;
         op = p = GetParent();
         while (p) {
             op = p;
@@ -372,7 +372,10 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                 }
                 wxHtmlImageCell *cel = NULL;
                 if (str) {
-                    cel = new wxHtmlImageCell(str, w, h, al, mn);
+                    cel = new wxHtmlImageCell(str, 
+                                (int)(m_WParser -> GetPixelScale() * (double)w), 
+                                (int)(m_WParser -> GetPixelScale() * (double)h), 
+                                al, mn);
                     cel -> SetLink(m_WParser -> GetLink());
                     m_WParser -> GetContainer() -> InsertCell(cel);
                     delete str;
@@ -394,18 +397,18 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
         if (tag.GetName() == "AREA") {
             if (tag.HasParam("SHAPE")) {
                 wxString tmp = tag.GetParam("SHAPE");
-                wxString coords;
+                wxString coords = wxEmptyString;
                 tmp.MakeUpper();
                 wxHtmlImageMapAreaCell *cel = NULL;
                 if (tag.HasParam("COORDS")) {
                     coords = tag.GetParam("COORDS");
                 }
                 if (tmp == "POLY") {
-                    cel = new wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::POLY, coords );
+                    cel = new wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::POLY, coords, m_WParser -> GetPixelScale() );
                 } else if (tmp == "CIRCLE") {
-                    cel = new wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::CIRCLE, coords );
+                    cel = new wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::CIRCLE, coords, m_WParser -> GetPixelScale() );
                 } else if (tmp == "RECT") {
-                    cel = new wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::RECT, coords );
+                    cel = new wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::RECT, coords, m_WParser -> GetPixelScale() );
                 }
                 if (cel != NULL && tag.HasParam("HREF")) {
                     wxString tmp = tag.GetParam("HREF");

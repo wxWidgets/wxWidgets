@@ -81,7 +81,7 @@ TAG_HANDLER_BEGIN(HR, "HR")
         c -> SetWidthFloat(tag);
         sz = 1;
         if (tag.HasParam(wxT("SIZE")) && tag.ScanParam(wxT("SIZE"), wxT("%i"), &sz) == 1) {}
-        c -> InsertCell(new wxHtmlLineCell(sz));
+        c -> InsertCell(new wxHtmlLineCell((int)((double)sz * m_WParser -> GetPixelScale())));
 
         m_WParser -> CloseContainer();
         m_WParser -> OpenContainer();

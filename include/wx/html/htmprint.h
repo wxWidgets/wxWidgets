@@ -38,17 +38,11 @@ class WXDLLEXPORT wxHtmlDCRenderer : public wxObject
         ~wxHtmlDCRenderer();
         
         // Following 3 methods *must* be called before any call to Render:
-        void SetDC(wxDC *dc, int maxwidth);
+        void SetDC(wxDC *dc, double pixel_scale = 1.0);
                 // asign DC to this render
-                // maxwidth is width of area (on this DC) that is equivalent to screen's width, in pixels
-                // (you should set it to page width minus margins)
-                // Also see SetSize
         void SetSize(int width, int height);
                 // sets size of output rectangle, in pixels. Note that you *can't* change
                 // width of the rectangle between calls to Render! (You can freely change height.)
-                // If you set width = maxwidth then HTML is rendered as if it were displayed in fullscreen.
-                // If you set width = 1/2 maxwidth the it is rendered as if it covered half the screen
-                // and so on..
         void SetHtmlText(const wxString& html, const wxString& basepath = wxEmptyString, bool isdir = TRUE);
                 // sets the text to be displayed
                 //
@@ -79,7 +73,6 @@ class WXDLLEXPORT wxHtmlDCRenderer : public wxObject
         wxFileSystem *m_FS;
         wxHtmlContainerCell *m_Cells;
         int m_MaxWidth, m_Width, m_Height;
-        double m_Scale;
 };
 
 

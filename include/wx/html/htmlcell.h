@@ -210,7 +210,7 @@ class WXDLLEXPORT wxHtmlContainerCell : public wxHtmlCell
         void SetAlign(const wxHtmlTag& tag);
                 // sets alignment info based on given tag's params
         void SetWidthFloat(int w, int units) {m_WidthFloat = w; m_WidthFloatUnits = units;}
-        void SetWidthFloat(const wxHtmlTag& tag);
+        void SetWidthFloat(const wxHtmlTag& tag, double pixel_scale = 1.0);
                 // sets floating width adjustment
                 // (examples : 32 percent of parent container,
                 // -15 pixels percent (this means 100 % - 15 pixels)

@@ -205,13 +205,15 @@ empty place!}
 
 \func{void}{SetWidthFloat}{\param{int }{w}, \param{int }{units}}
 
-\func{void}{SetWidthFloat}{\param{const wxHtmlTag\& }{tag}}
+\func{void}{SetWidthFloat}{\param{const wxHtmlTag\& }{tag}, \param{double }{pixel_scale = 1.0}}
 
 Sets floating width adjustment.
 
 The normal behaviour of container is that its width is the same as the width of
 parent container (and thus you can have only one sub-container per line).
 You can change this by setting FWA.
+
+{\it pixel_scale} is number of real pixels that equals to 1 HTML pixel.
 
 \wxheading{Parameters}
 

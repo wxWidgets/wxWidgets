@@ -1,4 +1,3 @@
-
 /////////////////////////////////////////////////////////////////////////////
 // Name:        htmprint.cpp
 // Purpose:     html printing classes
@@ -49,7 +48,6 @@ wxHtmlDCRenderer::wxHtmlDCRenderer() : wxObject()
     m_Parser = new wxHtmlWinParser(NULL);
     m_FS = new wxFileSystem();
     m_Parser -> SetFS(m_FS);
-    m_Scale = 1.0;
 }
 
 
@@ -63,29 +61,18 @@ wxHtmlDCRenderer::~wxHtmlDCRenderer()
 
 
 
-void wxHtmlDCRenderer::SetDC(wxDC *dc, int maxwidth)
+void wxHtmlDCRenderer::SetDC(wxDC *dc, double pixel_scale)
 {
-    int dx, dy;
-
-    wxDisplaySize(&dx, &dy);
-    m_MaxWidth = maxwidth;
-#if 0
-    m_Scale = (float)dx * 2 / 3 / (float)maxwidth;
-            // let the width of A4 is approximately 2/3 the screen width
-#endif
-    m_Scale = (float)800 / (float)maxwidth;
-            // for now, assume screen width = 800 => good results
-
     m_DC = dc;
-    m_Parser -> SetDC(dc);
+    m_Parser -> SetDC(m_DC, pixel_scale);
 }
 
 
 
 void wxHtmlDCRenderer::SetSize(int width, int height)
 {
-    m_Width = (int)(width * m_Scale);
-    m_Height = (int)(height * m_Scale);
+    m_Width = width;
+    m_Height = height;
 }
 
 
@@ -97,7 +84,6 @@ void wxHtmlDCRenderer::SetHtmlText(const wxString& html, const wxString& basepat
     if (m_Cells != NULL) delete m_Cells;
     
     m_FS -> ChangePathTo(basepath, isdir);
-    m_DC -> SetUserScale(1.0, 1.0);
     m_Cells = (wxHtmlContainerCell*) m_Parser -> Parse(html);
     m_Cells -> SetIndent(0, wxHTML_INDENT_ALL, wxHTML_UNITS_PIXELS);
     m_Cells -> Layout(m_Width);
@@ -111,26 +97,21 @@ int wxHtmlDCRenderer::Render(int x, int y, int from, int dont_render)
     
     if (m_Cells == NULL || m_DC == NULL) return 0;
     
-    pbreak = (int)(from * m_Scale + m_Height);
+    pbreak = (int)(from + m_Height);
     while (m_Cells -> AdjustPagebreak(&pbreak)) {}
-    hght = pbreak - (int)(from * m_Scale);
+    hght = pbreak - from;
     
     if (!dont_render) {
-        int w, h;
-        m_DC -> GetSize(&w, &h);
-        float overallScale = (float)(w/(float)m_MaxWidth) / m_Scale;
-        m_DC -> SetUserScale(overallScale, overallScale);
-
         m_DC -> SetBrush(*wxWHITE_BRUSH);
         
-        m_DC -> SetClippingRegion(x * m_Scale, y * m_Scale, m_Width, hght);
+        m_DC -> SetClippingRegion(x, y, m_Width, hght);
         m_Cells -> Draw(*m_DC, 
-                        x * m_Scale, (y - from) * m_Scale, 
-                        y * m_Scale, pbreak + (y /*- from*/) * m_Scale);
+                        x, (y - from),
+                        y, pbreak + (y /*- from*/));
         m_DC -> DestroyClippingRegion();
     }
     
-    if (pbreak < m_Cells -> GetHeight()) return (int)(pbreak / m_Scale);
+    if (pbreak < m_Cells -> GetHeight()) return pbreak;
     else return GetTotalHeight();
 }
 
@@ -138,7 +119,7 @@ int wxHtmlDCRenderer::Render(int x, int y, int from, int dont_render)
 
 int wxHtmlDCRenderer::GetTotalHeight()
 {
-    if (m_Cells) return (int)(m_Cells -> GetHeight() / m_Scale);
+    if (m_Cells) return m_Cells -> GetHeight();
     else return 0;
 }
 
@@ -187,7 +168,7 @@ wxHtmlPrintout::~wxHtmlPrintout()
 
 bool wxHtmlPrintout::OnBeginDocument(int startPage, int endPage)
 {
-    int pageWidth, pageHeight, mm_w, mm_h;
+    int pageWidth, pageHeight, mm_w, mm_h, scr_w, scr_h, dc_w, dc_h;
     float ppmm_h, ppmm_v;
     
     if (!wxPrintout::OnBeginDocument(startPage, endPage)) return FALSE;
@@ -197,9 +178,19 @@ bool wxHtmlPrintout::OnBeginDocument(int startPage, int endPage)
     ppmm_h = (float)pageWidth / mm_w;
     ppmm_v = (float)pageHeight / mm_h;
 
+    int ppiPrinterX, ppiPrinterY;
+    GetPPIPrinter(&ppiPrinterX, &ppiPrinterY);
+    int ppiScreenX, ppiScreenY;
+    GetPPIScreen(&ppiScreenX, &ppiScreenY);
+
+    wxDisplaySize(&scr_w, &scr_h);
+    GetDC() -> GetSize(&dc_w, &dc_h);
+
+    GetDC() -> SetUserScale((double)dc_w / (double)pageWidth, (double)dc_w / (double)pageWidth);
+
     /* prepare headers/footers renderer: */
     
-    m_RendererHdr -> SetDC(GetDC(), pageWidth);
+    m_RendererHdr -> SetDC(GetDC(), (double)ppiPrinterY / (double)ppiScreenY);
     m_RendererHdr -> SetSize(ppmm_h * (mm_w - m_MarginLeft - m_MarginTop), 
                           ppmm_v * (mm_h - m_MarginTop - m_MarginBottom));
     if (m_Headers[0] != wxEmptyString) {
@@ -220,7 +211,7 @@ bool wxHtmlPrintout::OnBeginDocument(int startPage, int endPage)
     }
     
     /* prepare main renderer: */
-    m_Renderer -> SetDC(GetDC(), pageWidth);
+    m_Renderer -> SetDC(GetDC(), (double)ppiPrinterY / (double)ppiScreenY);
     m_Renderer -> SetSize(ppmm_h * (mm_w - m_MarginLeft - m_MarginTop), 
                           ppmm_v * (mm_h - m_MarginTop - m_MarginBottom) - 
                           m_FooterHeight - m_HeaderHeight -
@@ -339,23 +330,32 @@ void wxHtmlPrintout::RenderPage(wxDC *dc, int page)
 {
     wxBusyCursor wait;
 
-    int pageWidth, pageHeight, mm_w, mm_h;
+    int pageWidth, pageHeight, mm_w, mm_h, scr_w, scr_h, dc_w, dc_h;
     float ppmm_h, ppmm_v;
 
     GetPageSizePixels(&pageWidth, &pageHeight);
     GetPageSizeMM(&mm_w, &mm_h);
     ppmm_h = (float)pageWidth / mm_w;
     ppmm_v = (float)pageHeight / mm_h;
-    
-    m_Renderer -> SetDC(dc, pageWidth);
+    wxDisplaySize(&scr_w, &scr_h);
+    dc -> GetSize(&dc_w, &dc_h);
 
+    int ppiPrinterX, ppiPrinterY;
+    GetPPIPrinter(&ppiPrinterX, &ppiPrinterY);
+    int ppiScreenX, ppiScreenY;
+    GetPPIScreen(&ppiScreenX, &ppiScreenY);
+
+    dc -> SetUserScale((double)dc_w / (double)pageWidth, (double)dc_w / (double)pageWidth);
+    
+    m_Renderer -> SetDC(dc, (double)ppiPrinterY / (double)ppiScreenY);
+    
     dc -> SetBackgroundMode(wxTRANSPARENT);
 
     m_Renderer -> Render(ppmm_h * m_MarginLeft, 
                          ppmm_v * (m_MarginTop + (m_HeaderHeight == 0 ? 0 : m_MarginSpace)) + m_HeaderHeight,
                          m_PageBreaks[page-1]);
     
-    m_RendererHdr -> SetDC(dc, pageWidth);
+    m_RendererHdr -> SetDC(dc, (double)ppiPrinterY / (double)ppiScreenY);
     if (m_Headers[page % 2] != wxEmptyString) {
         m_RendererHdr -> SetHtmlText(TranslateHeader(m_Headers[page % 2], page));
         m_RendererHdr -> Render(ppmm_h * m_MarginLeft, ppmm_v * m_MarginTop);

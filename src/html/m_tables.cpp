@@ -93,9 +93,11 @@ class wxHtmlTableCell : public wxHtmlContainerCell
         int m_tBkg, m_rBkg;
         wxString m_tValign, m_rValign;
 
+        double m_PixelScale;
+
 
     public:
-        wxHtmlTableCell(wxHtmlContainerCell *parent, const wxHtmlTag& tag);
+        wxHtmlTableCell(wxHtmlContainerCell *parent, const wxHtmlTag& tag, double pixel_scale = 1.0);
         ~wxHtmlTableCell();
         virtual void Layout(int w);
 
@@ -111,9 +113,10 @@ class wxHtmlTableCell : public wxHtmlContainerCell
 
 
 
-wxHtmlTableCell::wxHtmlTableCell(wxHtmlContainerCell *parent, const wxHtmlTag& tag)
+wxHtmlTableCell::wxHtmlTableCell(wxHtmlContainerCell *parent, const wxHtmlTag& tag, double pixel_scale)
  : wxHtmlContainerCell(parent)
 {
+    m_PixelScale = pixel_scale;
     m_HasBorders = (tag.HasParam("BORDER") && tag.GetParam("BORDER") != "0");
     m_ColsInfo = NULL;
     m_NumCols = m_NumRows = 0;
@@ -126,6 +129,8 @@ wxHtmlTableCell::wxHtmlTableCell(wxHtmlContainerCell *parent, const wxHtmlTag& t
     if (tag.HasParam(wxT("VALIGN"))) m_tValign = tag.GetParam(wxT("VALIGN")); else m_tValign = wxEmptyString;
     if (tag.HasParam(wxT("CELLSPACING")) && tag.ScanParam(wxT("CELLSPACING"), wxT("%i"), &m_Spacing) == 1) {} else m_Spacing = 2;
     if (tag.HasParam(wxT("CELLPADDING")) && tag.ScanParam(wxT("CELLPADDING"), wxT("%i"), &m_Padding) == 1) {} else m_Padding = 3;
+    m_Spacing = (int)(m_PixelScale * (double)m_Spacing);
+    m_Padding = (int)(m_PixelScale * (double)m_Padding);
 
     if (m_HasBorders)
         SetBorder(TABLE_BORDER_CLR_1, TABLE_BORDER_CLR_2);
@@ -229,6 +234,7 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
             }
             else {
                 wxSscanf(wd.c_str(), wxT("%i"), &m_ColsInfo[c].width);
+                m_ColsInfo[c].width = (int)(m_PixelScale * (double)m_ColsInfo[c].width);
                 m_ColsInfo[c].units = wxHTML_UNITS_PIXELS;
             }
         }
@@ -432,8 +438,8 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
 
             oldcont = c = m_WParser -> OpenContainer();
 
-            c -> SetWidthFloat(tag);
-            m_Table = new wxHtmlTableCell(c, tag);
+            c -> SetWidthFloat(tag, m_WParser -> GetPixelScale());
+            m_Table = new wxHtmlTableCell(c, tag, m_WParser -> GetPixelScale());
             m_OldAlign = m_WParser -> GetAlign();
             m_tAlign = wxEmptyString;
             if (tag.HasParam("ALIGN")) m_tAlign = tag.GetParam("ALIGN");

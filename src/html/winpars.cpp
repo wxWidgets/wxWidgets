@@ -244,7 +244,6 @@ wxHtmlContainerCell* wxHtmlWinParser::CloseContainer()
 }
 
 
-
 wxFont* wxHtmlWinParser::CreateCurrentFont()
 {
     int fb = GetFontBold(),
@@ -256,11 +255,11 @@ wxFont* wxHtmlWinParser::CreateCurrentFont()
     if (m_FontsTable[fb][fi][fu][ff][fs] == NULL) {
         m_FontsTable[fb][fi][fu][ff][fs] =
             new wxFont(
-            m_FontsSizes[fs],
-            ff ? wxMODERN : wxSWISS,
-            fi ? (ff ? m_ItalicModeFixed : m_ItalicModeNormal) : wxNORMAL,
-            fb ? wxBOLD : wxNORMAL,
-            fu ? TRUE : FALSE, ff ? m_FontFaceFixed : m_FontFaceNormal);
+                m_FontsSizes[fs] * m_PixelScale,
+                ff ? wxMODERN : wxSWISS,
+                fi ? (ff ? m_ItalicModeFixed : m_ItalicModeNormal) : wxNORMAL,
+                fb ? wxBOLD : wxNORMAL,
+                fu ? TRUE : FALSE, ff ? m_FontFaceFixed : m_FontFaceNormal);
     }
     m_DC -> SetFont(*(m_FontsTable[fb][fi][fu][ff][fs]));
     return (m_FontsTable[fb][fi][fu][ff][fs]);

@@ -44,10 +44,11 @@ class WXDLLEXPORT wxHtmlWinParser : public wxHtmlParser
         virtual void DoneParser();
         virtual wxObject* GetProduct();
 
-        virtual void SetDC(wxDC *dc) {m_DC = dc;}
+        virtual void SetDC(wxDC *dc, double pixel_scale = 1.0) {m_DC = dc; m_PixelScale = pixel_scale;}
                 // Set's the DC used for parsing. If SetDC() is not called,
                 // parsing won't proceed
         wxDC *GetDC() {return m_DC;}
+        double GetPixelScale() {return m_PixelScale;}
         int GetCharHeight() const {return m_CharHeight;}
         int GetCharWidth() const {return m_CharWidth;}
             // NOTE : these functions do _not_ return _actual_
@@ -113,6 +114,7 @@ class WXDLLEXPORT wxHtmlWinParser : public wxHtmlParser
             // temporary variable used by AddText
         wxWindow *m_Window;
                 // window we're parsing for
+        double m_PixelScale;
         wxDC *m_DC;
                 // Device Context we're parsing for
         static wxList m_Modules;

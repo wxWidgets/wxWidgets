@@ -23,9 +23,13 @@ Constructor.
 
 \membersection{wxHtmlDCRenderer::SetDC}\label{wxhtmldcrenderersetdc}
 
-\func{void}{SetDC}{\param{wxDC* }{dc}, \param{int }{maxwidth}}
+\func{void}{SetDC}{\param{wxDC* }{dc}, \param{double }{pixel_scale = 1.0}}
 
 Assign DC instance to the renderer.
+
+{\it pixel_scale} can be used when rendering to high-resolution DCs (e.g. printer) to adjust size of pixel metrics.
+(Many dimensions in HTML are given in pixels - e.g. image sizes. 300x300 image would be only one
+inch wide on typical printer. With pixel_scale = 3.0 it would be 3 inches.)
 
 \wxheading{Parameters}
 
@@ -45,9 +49,6 @@ See also \helpref{SetSize}{wxhtmldcrenderersetsize}.
 Set size of output rectangle, in pixels. Note that you {\bf can't} change
 width of the rectangle between calls to \helpref{Render}{wxhtmldcrendererrender}!
 (You can freely change height.)
-If you set width equal to maxwidth then HTML is rendered as if it were displayed in fullscreen.
-If you set width = 1/2 maxwidth the it is rendered as if it covered half the screen
-and so on.
 
 \membersection{wxHtmlDCRenderer::SetHtmlText}\label{wxhtmldcrenderersethtmltext}
 
