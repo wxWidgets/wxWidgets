@@ -47,6 +47,14 @@ bool wxGetUserId(char *buf, int maxSize)
     return FALSE;
 }
 
+const wxChar* wxGetHomeDir(wxString *pstr)
+{
+	*pstr = wxMacFindFolder(  (short) kOnSystemDisk, kPreferencesFolderType, kDontCreateFolder ) ;
+	return pstr->c_str() ;
+}
+
+
+
 // Get user name e.g. AUTHOR
 bool wxGetUserName(char *buf, int maxSize)
 {

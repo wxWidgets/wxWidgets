@@ -22,9 +22,18 @@ int yylex(void);
 int yylook(void);
 int yywrap(void);
 int yyback(int *, int);
-#ifdef __WXMAC__
+#if __MSL__ < 0x6000
 int read( int , char * , int ) ;
+#else
+int _read( int , void * , size_t ) ;
+#define read _read
+#endif
+#ifdef __WXMSW__
+int fileno( FILE* ) ;
+#else
+#if __MSL__ < 0x6000
 int fileno( void* ) ;
+#endif
 #endif
 
 /* You may need to put /DLEX_SCANNER in your makefile

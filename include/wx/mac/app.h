@@ -147,10 +147,10 @@ public :
   virtual void   				MacHandleHighLevelEvent( EventRecord *ev ) ;
  	virtual void					MacHandleMenuSelect( int menuid , int menuitem ) ;
 
-	virtual OSErr					MacHandleAEODoc(AppleEvent *event , AppleEvent *reply) ;
-	virtual OSErr					MacHandleAEPDoc(AppleEvent *event , AppleEvent *reply) ;
-	virtual OSErr					MacHandleAEOApp(AppleEvent *event , AppleEvent *reply) ;
-	virtual OSErr					MacHandleAEQuit(AppleEvent *event , AppleEvent *reply) ;
+	virtual OSErr					MacHandleAEODoc(const AppleEvent *event , AppleEvent *reply) ;
+	virtual OSErr					MacHandleAEPDoc(const AppleEvent *event , AppleEvent *reply) ;
+	virtual OSErr					MacHandleAEOApp(const AppleEvent *event , AppleEvent *reply) ;
+	virtual OSErr					MacHandleAEQuit(const AppleEvent *event , AppleEvent *reply) ;
 
 DECLARE_EVENT_TABLE()
 };

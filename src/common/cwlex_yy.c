@@ -69,7 +69,7 @@ char *malloc();
 int free();
 */
 
-int read();
+//int read();
 #endif
 
 

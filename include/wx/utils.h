@@ -255,6 +255,12 @@ WXDLLEXPORT const wxMB2WXbuf wxGetUserHome(const wxString& user = wxEmptyString)
 WXDLLEXPORT wxChar* wxGetUserHome(const wxString& user = wxEmptyString);
 #endif
 
+#ifdef __WXMAC__
+WXDLLEXPORT wxString wxMacFindFolder(short 					vRefNum,
+								 OSType 				folderType,
+								 Boolean 				createFolder);
+#endif
+
 #if wxUSE_GUI // GUI only things from now on
 
 // ----------------------------------------------------------------------------

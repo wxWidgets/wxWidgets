@@ -26,9 +26,10 @@ class WXDLLEXPORT wxChoice: public wxControl
   DECLARE_DYNAMIC_CLASS(wxChoice)
 
  public:
-  inline wxChoice() {}
+  wxChoice() {}
+  ~wxChoice() ;
 
-  inline wxChoice(wxWindow *parent, wxWindowID id,
+  wxChoice(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            int n = 0, const wxString choices[] = NULL,

@@ -180,6 +180,7 @@ int wxListBox::DoAppend(const wxString& item)
 		m_dataArray.Add( NULL );
 	}
  	m_noItems ++;
+	DoSetItemClientData( index , NULL ) ;
 	MacAppend( item ) ;
 
 	return index ;
@@ -255,6 +256,16 @@ int wxListBox::FindString(const wxString& st) const
 	    	if ( EqualString( s1 , s2 , false , false ) )
 	    		return i ;
 	    }
+	    if ( s.Left(1) = "*" && s.Length() > 1 )
+	    {
+	    	s.MakeLower() ;
+		    for ( int i = 0 ; i < m_noItems ; ++i )
+			{
+				if ( GetString(i).Lower().Matches(s) )
+					return i ;
+			}
+		}	
+
 	}
 	else
 	{

@@ -36,15 +36,13 @@ GrafPtr macPrintFormerPort = NULL ;
 
 wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
 {
-#if !TARGET_CARBON
-	OSErr err ;
+	OSStatus err ;
 	wxString message ;
 	
 	m_printData = printdata ;
 	m_printData.ConvertToNative() ;
 	
-	::UMAPrOpen() ;
-	err = PrError() ;
+	err = UMAPrOpen() ;
 	if ( err )
 	{
 		message.Printf( "Print Error %d", err ) ;
@@ -52,6 +50,7 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
 		UMAPrClose() ;
 	}
 	
+#if !TARGET_CARBON
 	if ( ::PrValidate( m_printData.m_macPrintInfo ) )
 	{
 		::PrStlDialog( m_printData.m_macPrintInfo ) ;
@@ -75,23 +74,37 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
 	}
 	// sets current port
 	m_macPort = (GrafPtr ) m_macPrintPort ;
+#else
+	m_macPrintPort = kPMNoReference ;
+    err = PMBeginDocument(
+    	m_printData.m_macPrintSettings, 
+    	m_printData.m_macPageFormat, 
+    	&m_macPrintPort);
+    if ( err != noErr || m_macPrintPort == kPMNoReference )
+    {
+		message.Printf( "Print Error %d", err ) ;
+		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
+		UMAPrClose() ;
+    }
+	// sets current port
+	::GetPort( &m_macPort ) ;
+#endif
 	m_ok = TRUE ;
 	m_minY = m_minX = 0 ;
+#if TARGET_CARBON
+#else
 	m_maxX = (**m_printData.m_macPrintInfo).rPaper.right - (**m_printData.m_macPrintInfo).rPaper.left ;
 	m_maxY = (**m_printData.m_macPrintInfo).rPaper.bottom - (**m_printData.m_macPrintInfo).rPaper.top ;
-#else
-#pragma warning "TODO:printing support for carbon"
 #endif
 }
 
 wxPrinterDC::~wxPrinterDC(void)
 {
+	OSStatus err ;
+	wxString message ;
 #if !TARGET_CARBON
 	if ( m_ok )
 	{
-		OSErr err ;
-		wxString message ;
-	
 		::PrCloseDoc( m_macPrintPort  ) ;
 		err = PrError() ;
 		
@@ -115,7 +128,17 @@ wxPrinterDC::~wxPrinterDC(void)
 		m_macPortHelper.Clear() ;
 	}
 #else
-#pragma warning "TODO:printing support for carbon"
+	if ( m_ok ) 
+	{
+     	err = PMEndDocument(m_macPrintPort);
+     	if ( !err )
+     	{
+			message.Printf( "Print Error %d", err ) ;
+			wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
+			UMAPrClose() ;
+     	}
+     	UMAPrClose() ;
+	}
 #endif
 }
 
@@ -130,7 +153,6 @@ void wxPrinterDC::EndDoc(void)
 
 void wxPrinterDC::StartPage(void) 
 {
-#if !TARGET_CARBON
 	if ( !m_ok )
 		return ;
 
@@ -150,11 +172,15 @@ void wxPrinterDC::StartPage(void)
 	m_macPenInstalled = false ;
 
 		
-	OSErr err ;
+	OSStatus err ;
 	wxString message ;
 
+#if !TARGET_CARBON
   	PrOpenPage( m_macPrintPort , NULL ) ;
-	SetOrigin(  - (**m_printData.m_macPrintInfo).rPaper.left , - (**m_printData.m_macPrintInfo).rPaper.top ) ;
+  	m_macLocalOrigin.h =  (**m_printData.m_macPrintInfo).rPaper.left ;
+  	m_macLocalOrigin.v =  (**m_printData.m_macPrintInfo).rPaper.top ;
+  	
+	SetOrigin(  - m_macLocalOrigin.h , - m_macLocalOrigin.v  ) ;
 	Rect clip = { -32000 , -32000 , 32000 , 32000 } ;
 	::ClipRect( &clip ) ;
 	err = PrError() ;
@@ -169,19 +195,29 @@ void wxPrinterDC::StartPage(void)
 	   	m_ok = FALSE ;
 	}
 #else
-#pragma warning "TODO:printing support for carbon"
+    err = PMBeginPage(m_macPrintPort, nil);
+	if ( err )
+	{
+		message.Printf( "Print Error %d", err ) ;
+		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
+   		PMEndPage(m_macPrintPort);
+		PMEndDocument(m_macPrintPort);
+		UMAPrClose() ;
+	   	::SetPort( macPrintFormerPort ) ;
+	   	m_ok = FALSE ;
+	}
 #endif
 }
 
 void wxPrinterDC::EndPage(void) 
 {
-#if !TARGET_CARBON
 	if ( !m_ok )
 		return ;
 
-	OSErr err ;
+	OSStatus err ;
 	wxString message ;
 
+#if !TARGET_CARBON
    	PrClosePage(  (TPrPort*) m_macPort ) ;
 	err = PrError() ;
 	if ( err )
@@ -194,7 +230,16 @@ void wxPrinterDC::EndPage(void)
 	   	m_ok = FALSE ;
 	}
 #else
-#pragma warning "TODO:printing support for carbon"
+	err = PMEndPage(m_macPrintPort);
+	if ( err )
+	{
+		message.Printf( "Print Error %d", err ) ;
+		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
+		PMEndDocument(m_macPrintPort);
+		UMAPrClose() ;
+	   	::SetPort( macPrintFormerPort ) ;
+	   	m_ok = FALSE ;
+	}
 #endif
 
 }

@@ -68,12 +68,16 @@
     // Have to ifdef this for different environments
     #include <io.h>
 #elif (defined(__WXMAC__))
+#if __MSL__ < 0x6000
     int access( const char *path, int mode ) { return 0 ; }
+#else
+    int _access( const char *path, int mode ) { return 0 ; }
+#endif
     char* mktemp( char * path ) { return path ;}
-    #include  <unistd.h>
-    #include  <unix.h>
+    #include <stat.h>
     #define   W_OK        2
     #define   R_OK        4
+    #include  <unistd.h>
 #else
     #error  "Please specify the header with file functions declarations."
 #endif  //Win/UNIX
@@ -189,7 +193,9 @@ bool wxFile::Create(const wxChar *szFileName, bool bOverwrite, int accessMode)
     // if bOverwrite we create a new file or truncate the existing one,
     // otherwise we only create the new file and fail if it already exists
 #ifdef __WXMAC__
-    int fd = open(wxUnix2MacFilename( szFileName ), O_CREAT | (bOverwrite ? O_TRUNC : O_EXCL), access);
+  // Dominic Mazzoni [dmazzoni+@cs.cmu.edu] reports that open is still broken on the mac, so we replace
+  // int fd = open(wxUnix2MacFilename( szFileName ), O_CREAT | (bOverwrite ? O_TRUNC : O_EXCL), access);
+  int fd = creat(wxUnix2MacFilename( szFileName ), accessMode);
 #else
     int fd = wxOpen(wxFNCONV(szFileName),
                     O_BINARY | O_WRONLY | O_CREAT |
@@ -293,7 +299,11 @@ size_t wxFile::Write(const void *pBuf, size_t nCount)
     wxCHECK( (pBuf != NULL) && IsOpened(), 0 );
 
 #ifdef __MWERKS__
+#if __MSL__ >= 0x6000
+    int iRc = ::write(m_fd, (void*) pBuf, nCount);
+#else
     int iRc = ::write(m_fd, (const char*) pBuf, nCount);
+#endif
 #else
     int iRc = ::write(m_fd, pBuf, nCount);
 #endif

@@ -28,14 +28,17 @@ public:
 
 public:
   bool  Create(const wxString& fileName, bool isResource = FALSE);
-  bool  IsOk() const { return (m_waveData ? TRUE : FALSE); };
+  bool  IsOk() const { return !m_sndname.IsEmpty(); }
   bool  Play(bool async = TRUE, bool looped = FALSE) const;
 
 protected:
   bool  Free();
 
 private:
-  char* m_waveData;
+  SndChannelPtr m_sndChan;
+	
+  wxString m_sndname;
+  SndListHandle m_hSnd;
   int   m_waveLength;
   bool  m_isResource;
 };

@@ -2615,6 +2615,7 @@ AGAPortHelper::~AGAPortHelper()
 		TextSize( size );
 		TextFace( style );
 		TextMode( mode );
+		SetOrigin( 0 , 0 ) ;
 		SetPort( port ) ;
 	}
 }

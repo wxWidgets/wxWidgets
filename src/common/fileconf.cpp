@@ -199,19 +199,7 @@ wxString wxFileConfig::GetGlobalDir()
   #elif defined(__WXSTUBS__)
     wxASSERT_MSG( FALSE, wxT("TODO") ) ;
   #elif defined(__WXMAC__)
-  {
-		short 		vRefNum  ;
-		long 		dirID ;
-		
-		if ( FindFolder( (short) kOnSystemDisk, kPreferencesFolderType, kDontCreateFolder, &vRefNum, &dirID) == noErr)
-		{
-			FSSpec file ;
-			if ( FSMakeFSSpec( vRefNum , dirID , "\p" , &file ) == noErr )
-			{
-				strDir = wxMacFSSpec2UnixFilename( &file ) + "/" ;
- 			}
-		}
-  }
+	strDir = wxMacFindFolder(  (short) kOnSystemDisk, kPreferencesFolderType, kDontCreateFolder ) ;
   #else // Windows
     wxChar szWinDir[MAX_PATH];
     ::GetWindowsDirectory(szWinDir, MAX_PATH);

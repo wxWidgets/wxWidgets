@@ -16,6 +16,10 @@
 #include "wx/dc.h"
 #include "wx/mac/uma.h"
 
+#if __MSL__ >= 0x6000
+#include "math.h"
+#endif
+
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
 #endif
@@ -128,7 +132,7 @@ wxDC::~wxDC(void)
 
 void wxDC::MacSetupPort() const
 {
-	AGAPortHelper* help = &m_macPortHelper ;
+	AGAPortHelper* help = (AGAPortHelper*) &m_macPortHelper ;
 	help->Setup( m_macPort ) ;
 	m_macPortId = ++m_macCurrentPortId ;
 	::SetOrigin(-m_macLocalOrigin.h, -m_macLocalOrigin.v);
@@ -427,7 +431,12 @@ void wxDC::ComputeScaleAndOrigin(void)
   // CMB: if scale has changed call SetPen to recalulate the line width 
   if (m_scaleX != origScaleX || m_scaleY != origScaleY)
   {
-  	// TODO : set internal flags for recalc
+    // this is a bit artificial, but we need to force wxDC to think
+    // the pen has changed
+    wxPen* pen = & GetPen();
+    wxPen tempPen;
+    m_pen = tempPen;
+    SetPen(* pen);
   }
 };
 

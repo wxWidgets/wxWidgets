@@ -19,17 +19,54 @@
 #include "wx/filedlg.h"
 #include "wx/intl.h"
 
+#include "PLStringFuncs.h"
+
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxFileDialog, wxDialog)
 #endif
 
 // begin wxmac
 
+#include "Navigation.h"
+
 #include "morefile.h"
 #include "moreextr.h"
 #include "fullpath.h"
 #include "fspcompa.h"
 #include "PLStringFuncs.h"
+
+extern bool gUseNavServices ;
+
+static pascal void	NavEventProc(
+								NavEventCallbackMessage		inSelector,
+								NavCBRecPtr					ioParams,
+								NavCallBackUserData			ioUserData);
+
+#if TARGET_CARBON
+		static NavEventUPP	sStandardNavEventFilter = NewNavEventUPP(NavEventProc);
+#else
+		static NavEventUPP	sStandardNavEventFilter = NewNavEventProc(NavEventProc);
+#endif
+
+static pascal void
+NavEventProc(
+	NavEventCallbackMessage		inSelector,
+	NavCBRecPtr					ioParams,
+	NavCallBackUserData			/* ioUserData */)
+{
+	if (inSelector == kNavCBEvent) {	
+			// In Universal Headers 3.2, Apple changed the definition of
+		/*
+		#if UNIVERSAL_INTERFACES_VERSION >= 0x0320 // Universal Headers 3.2
+			UModalAlerts::ProcessModalEvent(*(ioParams->eventData.eventDataParms.event));
+			
+		#else
+			UModalAlerts::ProcessModalEvent(*(ioParams->eventData.event));
+		#endif
+		*/
+		
+	}
+}
 
 char * gfilters[] =
 {
@@ -189,7 +226,7 @@ static pascal Boolean SFGetFolderModalDialogFilter(DialogPtr theDlgPtr, EventRec
 		
 	return false;
 }
-#endif
+#endif !TARGET_CARBON
 
 void ExtendedOpenFile( ConstStr255Param message , ConstStr255Param path , const char *filter , FileFilterYDUPP fileFilter, StandardFileReply *theSFR)
 {
@@ -451,6 +488,9 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
 
 int wxFileDialog::ShowModal()
 {
+	#if !TARGET_CARBON
+	if ( !gUseNavServices )
+	{
 	if ( m_dialogStyle & wxSAVE )
 	{
 		StandardFileReply	reply ;
@@ -488,7 +528,7 @@ int wxFileDialog::ShowModal()
 		strcpy((char *)prompt, m_message) ;
 		c2pstr((char *)prompt ) ;
 	
-		strcpy((char *)path, m_path ) ;
+			strcpy((char *)path, m_dir ) ;
 		c2pstr((char *)path ) ;
 
 		StandardFileReply	reply ;
@@ -514,6 +554,137 @@ int wxFileDialog::ShowModal()
 		}
 	}
     return wxID_CANCEL;
+}
+	else
+#endif
+	{
+		NavDialogOptions		mNavOptions;
+		NavObjectFilterUPP		mNavFilterUPP = NULL;
+		NavPreviewUPP			mNavPreviewUPP = NULL ;
+		NavReplyRecord			mNavReply;
+		AEDesc					mDefaultLocation ;
+		bool					mSelectDefault = false ;
+		
+		::NavGetDefaultDialogOptions(&mNavOptions);
+	
+		mNavFilterUPP	= nil;
+		mNavPreviewUPP	= nil;
+		mSelectDefault	= false;
+		mNavReply.validRecord				= false;
+		mNavReply.replacing					= false;
+		mNavReply.isStationery				= false;
+		mNavReply.translationNeeded			= false;
+		mNavReply.selection.descriptorType = typeNull;
+		mNavReply.selection.dataHandle		= nil;
+		mNavReply.keyScript					= smSystemScript;
+		mNavReply.fileTranslation			= nil;
+		
+		// Set default location, the location
+		//   that's displayed when the dialog
+		//   first appears
+		
+		FSSpec location ;
+		wxUnixFilename2FSSpec( m_dir , &location ) ;
+		OSErr err = noErr ;
+		
+		mDefaultLocation.descriptorType = typeNull;
+		mDefaultLocation.dataHandle     = nil;
+
+		err = ::AECreateDesc(typeFSS, &location, sizeof(FSSpec), &mDefaultLocation );
+
+		if ( mDefaultLocation.dataHandle ) {
+			
+			if (mSelectDefault) {
+				mNavOptions.dialogOptionFlags |= kNavSelectDefaultLocation;
+			} else {
+				mNavOptions.dialogOptionFlags &= ~kNavSelectDefaultLocation;
+			}
+		}
+		
+		strcpy((char *)mNavOptions.message, m_message) ;
+		c2pstr((char *)mNavOptions.message ) ;
+
+		strcpy((char *)mNavOptions.savedFileName, m_fileName) ;
+		c2pstr((char *)mNavOptions.savedFileName ) ;
+
+		if ( m_dialogStyle & wxSAVE )
+		{
+			
+			mNavOptions.dialogOptionFlags |= kNavNoTypePopup ;
+			mNavOptions.dialogOptionFlags |= kNavDontAutoTranslate ;
+			mNavOptions.dialogOptionFlags |= kNavDontAddTranslateItems ;
+			
+			err = ::NavPutFile(
+						&mDefaultLocation,
+						&mNavReply,
+						&mNavOptions,
+						sStandardNavEventFilter ,
+						'TEXT',
+						'TEXT',
+						0L);					// User Data
+		}
+		else
+		{
+			if ( m_dialogStyle & wxMULTIPLE )
+				mNavOptions.dialogOptionFlags |= kNavAllowMultipleFiles ;
+			else
+				mNavOptions.dialogOptionFlags &= ~kNavAllowMultipleFiles ;
+			
+		 	err = ::NavGetFile(
+						&mDefaultLocation,
+						&mNavReply,
+						&mNavOptions,
+						sStandardNavEventFilter ,
+						mNavPreviewUPP,
+						mNavFilterUPP,
+						0L /*inFileTypes.TypeListHandle() */,
+						0L);							// User Data
+		}
+		
+		if ( mDefaultLocation.dataHandle != nil )
+		{
+			::AEDisposeDesc(&mDefaultLocation);
+		}
+		
+		if ( (err != noErr) && (err != userCanceledErr) ) {
+			m_path = "" ;
+			return wxID_CANCEL ;
+		}
+
+		if (mNavReply.validRecord) {
+		
+			FSSpec  outFileSpec ;
+			AEDesc specDesc ;
+			
+			long count ;
+			::AECountItems( &mNavReply.selection , &count ) ;
+			for ( long i = 1 ; i <= count ; ++i )
+			{
+				OSErr err = ::AEGetNthDesc( &mNavReply.selection , i , typeFSS, NULL , &specDesc);
+				if ( err != noErr ) {
+					m_path = "" ;
+					return wxID_CANCEL ;
+				}			
+				outFileSpec = **(FSSpec**) specDesc.dataHandle;
+				if (specDesc.dataHandle != nil) {
+					::AEDisposeDesc(&specDesc);
+				}
+
+								
+				// outFolderDirID = thePB.dirInfo.ioDrDirID;
+				m_path = wxMacFSSpec2UnixFilename( &outFileSpec ) ;
+				m_paths.Add( m_path ) ;
+	            m_fileNames.Add(m_fileName);
+	         }
+	         // set these to the first hit
+	         m_path = m_paths[ 0 ] ;
+	         m_fileName = wxFileNameFromPath(m_path);
+	         m_dir = wxPathOnly(m_path);
+            
+			return wxID_OK ;
+		}
+		return wxID_CANCEL;
+	}
 }
 
 // Generic file load/save dialog

@@ -16,6 +16,7 @@
 #include "wx/defs.h"
 #include "wx/string.h"
 #include "wx/font.h"
+#include "wx/fontutil.h"
 #include "wx/gdicmn.h"
 
 #include "wx/fontutil.h"
@@ -119,6 +120,12 @@ void wxFont::Init()
         wxTheFontList->Append(this);
 }
 
+bool wxFont::Create(const wxNativeFontInfo& info)
+{
+    return Create(info.pointSize, info.family, info.style, info.weight,
+                  info.underlined, info.faceName, info.encoding);
+}
+
 wxFont::wxFont(const wxString& fontdesc)
 {
     wxNativeFontInfo info;
@@ -141,12 +148,6 @@ bool wxFont::Create(int pointSize,
     RealizeResource();
 
     return TRUE;
-}
-
-bool wxFont::Create(const wxNativeFontInfo& info)
-{
-    return Create(info.pointSize, info.family, info.style, info.weight,
-                  info.underlined, info.faceName, info.encoding);
 }
 
 wxFont::~wxFont()

@@ -16,6 +16,11 @@
 
 #define UMA_USE_8_6 0 
 
+#if TARGET_CARBON
+#undef UMA_USE_8_6
+#define UMA_USE_8_6 1 
+#endif
+
 #if defined(__POWERPC__) || defined(__MACH__)
 #define UMA_USE_APPEARANCE 1
 #define UMA_USE_WINDOWMGR 1
@@ -35,6 +40,7 @@
 #endif
 
 void UMAInitToolbox( UInt16 inMoreMastersCalls) ;
+void UMACleanupToolbox() ;
 bool UMAHasAppearance() ;
 long UMAGetAppearanceVersion() ;
 
@@ -69,8 +75,8 @@ void			UMADrawMenuBar() ;
 void			UMAShowWatchCursor() ;
 void			UMAShowArrowCursor() ;
 
-void			UMAPrOpen() ;
-void			UMAPrClose() ;
+OSStatus		UMAPrOpen() ;
+OSStatus		UMAPrClose() ;
 
 // window manager
 

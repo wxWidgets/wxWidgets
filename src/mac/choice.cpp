@@ -21,6 +21,14 @@
 IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
 #endif
 
+short nextMenuId = 100 ; // wxMenu takes the lower ids
+
+wxChoice::~wxChoice()
+{
+	// DeleteMenu( m_macPopUpMenuId ) ;
+	DisposeMenu( m_macPopUpMenuHandle ) ;
+}
+
 bool wxChoice::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos,
            const wxSize& size,
@@ -35,6 +43,7 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 	
 		MacPreControlCreate( parent , id ,  "" , pos , size ,style, validator , name , &bounds , title ) ;
 
+		m_macPopUpMenuHandle =  NewMenu( 1 , "\pPopUp Menu" ) ;
 		m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , title , true , 0 , -12345 , 0 , 
 	  	kControlPopupButtonProc + kControlPopupFixedWidthVariant , (long) this ) ; 
 	

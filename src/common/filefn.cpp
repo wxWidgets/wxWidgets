@@ -57,6 +57,7 @@
 #else
     #include <stat.h>
     #include <unistd.h>
+    #include <unix.h>
 #endif
 
 #ifdef __UNIX__
@@ -1682,16 +1683,40 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
 #ifdef _MSC_VER
   if (_getcwd(buf, sz) == NULL) {
 #elif defined( __WXMAC__)
-    enum
-    {
-        SFSaveDisk = 0x214, CurDirStore = 0x398
-    };
-    FSSpec cwdSpec ;
-
-    FSMakeFSSpec( - *(short *) SFSaveDisk , *(long *) CurDirStore , NULL , &cwdSpec ) ;
-    wxString res = wxMacFSSpec2UnixFilename( &cwdSpec ) ;
-    strcpy( buf , res ) ;
-    if (0) {
+	FSSpec cwdSpec ;
+	FCBPBRec pb;
+	OSErr error;
+	Str255	fileName ;
+	pb.ioNamePtr = (StringPtr) &fileName;
+	pb.ioVRefNum = 0;
+	pb.ioRefNum = LMGetCurApRefNum();
+	pb.ioFCBIndx = 0;
+	error = PBGetFCBInfoSync(&pb);
+	if ( error == noErr ) 
+	{
+		cwdSpec.vRefNum = pb.ioFCBVRefNum;
+		cwdSpec.parID = pb.ioFCBParID;
+		cwdSpec.name[0] = 0 ;
+		wxString res = wxMacFSSpec2UnixFilename( &cwdSpec ) ;
+		
+		strcpy( buf , res ) ;
+		buf[res.length()-1]=0 ;
+	}
+	else
+		buf[0] = 0 ;
+	/*
+	this version will not always give back the application directory on mac
+	enum 
+	{ 
+		SFSaveDisk = 0x214, CurDirStore = 0x398 
+	};
+	FSSpec cwdSpec ;
+	
+	FSMakeFSSpec( - *(short *) SFSaveDisk , *(long *) CurDirStore , NULL , &cwdSpec ) ;
+	wxString res = wxMacFSSpec2UnixFilename( &cwdSpec ) ;
+	strcpy( buf , res ) ;
+	*/
+	if (0) {
 #elif(__VISAGECPP__)
     APIRET rc;
     rc = ::DosQueryCurrentDir( 0 // current drive

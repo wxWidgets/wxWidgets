@@ -246,7 +246,12 @@ public :
 	WindowRef							GetMacRootWindow() const  ;
 
 	virtual ControlHandle 				MacGetContainerForEmbedding() ;
-	virtual long						MacGetBorderSize() const ;
+	
+	virtual long						MacGetLeftBorderSize() const ;
+	virtual long						MacGetRightBorderSize() const ;
+	virtual long						MacGetTopBorderSize() const ;
+	virtual long						MacGetBottomBorderSize() const ;
+
 	static long							MacRemoveBordersFromStyle( long style ) ;
 	virtual void 						MacSuperChangedPosition() ;
 	virtual void						MacSuperShown( bool show ) ;

@@ -23,8 +23,8 @@ class WXDLLEXPORT wxStatusBarMac : public wxStatusBarGeneric
 {
   DECLARE_DYNAMIC_CLASS(wxStatusBarMac);
 
-  wxStatusBarMac(void);
-  inline wxStatusBarMac(wxWindow *parent, wxWindowID id,
+  wxStatusBarMac();
+   wxStatusBarMac(wxWindow *parent, wxWindowID id,
            long style = 0,
            const wxString& name = wxPanelNameStr)
   {
@@ -34,7 +34,7 @@ class WXDLLEXPORT wxStatusBarMac : public wxStatusBarGeneric
   ~wxStatusBarMac();
 
   bool Create(wxWindow *parent, wxWindowID id,
-              long style,
+              long style ,
               const wxString& name = wxPanelNameStr) ;
 
   virtual void DrawFieldText(wxDC& dc, int i);

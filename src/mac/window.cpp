@@ -437,8 +437,8 @@ void wxWindow::DoGetClientSize(int *x, int *y) const
     *x = m_width ;
     *y = m_height ;
 
-	*x -= 2 * MacGetBorderSize(  ) ;
-	*y -= 2 * MacGetBorderSize(  ) ;
+	*x -= MacGetLeftBorderSize(  )  + MacGetRightBorderSize(  ) ;
+	*y -= MacGetTopBorderSize(  ) + MacGetBottomBorderSize( );
 	
   if ( (m_vScrollBar && m_vScrollBar->IsShown()) || (m_hScrollBar  && m_hScrollBar->IsShown()) )
   {
@@ -627,7 +627,7 @@ void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
 wxPoint wxWindow::GetClientAreaOrigin() const
 {
-    return wxPoint(MacGetBorderSize(  ) , MacGetBorderSize(  ) );
+    return wxPoint(MacGetLeftBorderSize(  ) , MacGetTopBorderSize(  ) );
 }
 
 // Makes an adjustment to the window position (for example, a frame that has
@@ -725,7 +725,7 @@ void wxWindow::GetTextExtent(const wxString& string, int *x, int *y,
     if ( !fontToUse )
         fontToUse = &m_font;
         
-    wxClientDC dc( this ) ;
+    wxClientDC dc( (wxWindow*) this ) ;
     long lx,ly,ld,le ;
     dc.GetTextExtent( string , &lx , &ly , &ld, &le, fontToUse ) ;
     if ( externalLeading )
@@ -1417,8 +1417,8 @@ void wxWindow::DoSetClientSize(int width, int height)
 		if ( height != -1 && m_vScrollBar )
 			height += MAC_SCROLLBAR_SIZE ;
 
-		width += 2 * MacGetBorderSize(  ) ;
-		height += 2 * MacGetBorderSize(  ) ;
+		width += MacGetLeftBorderSize(  ) + MacGetRightBorderSize( ) ;
+		height += MacGetTopBorderSize(  ) + MacGetBottomBorderSize( ) ;
 
 		DoSetSize( -1 , -1 , width , height ) ;
 	}
@@ -1443,7 +1443,8 @@ bool wxWindow::MacGetWindowFromPointSub( const wxPoint &point , wxWindow** outWi
 	for (wxNode *node = GetChildren().First(); node; node = node->Next())
 	{
 		wxWindow *child = (wxWindow*)node->Data();
-		if ( child->GetMacRootWindow() == window )
+		// added the m_isShown test --dmazzoni
+		if ( child->GetMacRootWindow() == window && child->m_isShown )
 		{
 			if (child->MacGetWindowFromPointSub(newPoint , outWin ))
 				return TRUE;
@@ -1462,8 +1463,11 @@ bool wxWindow::MacGetWindowFromPoint( const wxPoint &screenpoint , wxWindow** ou
 	{
 			wxPoint point( screenpoint ) ;
 			wxWindow* win = wxFindWinFromMacWindow( window ) ;
+			if ( win )
+			{
 			win->ScreenToClient( point ) ;
 			return win->MacGetWindowFromPointSub( point , outWin ) ;
+	}
 	}
 	return FALSE ;
 }
@@ -1907,8 +1911,8 @@ void wxWindow::MacRepositionScrollBars()
 	int width = m_width ; 
 	int height = m_height ;
 
-	width -= 2 * MacGetBorderSize() ;
-	height -= 2 * MacGetBorderSize() ;
+	width -= MacGetLeftBorderSize() + MacGetRightBorderSize();
+	height -= MacGetTopBorderSize() + MacGetBottomBorderSize();
 	
 	wxPoint vPoint(width-MAC_SCROLLBAR_SIZE, 0) ;
 	wxSize vSize(MAC_SCROLLBAR_SIZE, height - adjust) ;
@@ -2183,7 +2187,7 @@ void wxWindow::MacGetPortClientParams(Point* localOrigin, Rect* clipRect, Window
 	SectRect(clipRect, &myClip, clipRect);
 }
 
-long wxWindow::MacGetBorderSize( ) const
+long wxWindow::MacGetLeftBorderSize( ) const
 {
 	if( m_macWindowData )
 		return 0 ;
@@ -2199,6 +2203,66 @@ long wxWindow::MacGetBorderSize( ) const
     else if (m_windowStyle &wxSIMPLE_BORDER)
     {
     	return 1 ;
+    }
+	return 0 ;
+}
+
+long wxWindow::MacGetRightBorderSize( ) const
+{
+	if( m_macWindowData )
+		return 0 ;
+
+    if (m_windowStyle & wxRAISED_BORDER || m_windowStyle & wxSUNKEN_BORDER )
+    {
+		return 3 ;
+    }
+    else if (  m_windowStyle &wxDOUBLE_BORDER)
+    {
+		return 3 ;
+    }
+    else if (m_windowStyle &wxSIMPLE_BORDER)
+    {
+    	return 3 ;
+    }
+	return 0 ;
+}
+
+long wxWindow::MacGetTopBorderSize( ) const
+{
+	if( m_macWindowData )
+		return 0 ;
+
+    if (m_windowStyle & wxRAISED_BORDER || m_windowStyle & wxSUNKEN_BORDER )
+    {
+		return 2 ;
+    }
+    else if (  m_windowStyle &wxDOUBLE_BORDER)
+    {
+		return 2 ;
+    }
+    else if (m_windowStyle &wxSIMPLE_BORDER)
+    {
+    	return 1 ;
+    }
+	return 0 ;
+}
+
+long wxWindow::MacGetBottomBorderSize( ) const
+{
+	if( m_macWindowData )
+		return 0 ;
+
+    if (m_windowStyle & wxRAISED_BORDER || m_windowStyle & wxSUNKEN_BORDER )
+    {
+		return 3 ;
+    }
+    else if (  m_windowStyle &wxDOUBLE_BORDER)
+    {
+		return 3 ;
+    }
+    else if (m_windowStyle &wxSIMPLE_BORDER)
+    {
+    	return 3 ;
     }
 	return 0 ;
 }

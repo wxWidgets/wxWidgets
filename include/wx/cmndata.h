@@ -21,6 +21,10 @@
 #include "wx/colour.h"
 #include "wx/gdicmn.h"
 
+#if defined( __WXMAC__  ) && defined( TARGET_CARBON )
+#include <PMApplication.h>
+#endif
+
 #if (defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXPM__)) && wxUSE_POSTSCRIPT
 class WXDLLEXPORT wxPrintSetupData;
 #endif
@@ -187,7 +191,12 @@ public:
     void*           m_devMode;
     void*           m_devNames;
 #elif defined( __WXMAC__  )
+#if TARGET_CARBON
+    PMPageFormat    m_macPageFormat ;
+    PMPrintSettings m_macPrintSettings ;
+#else
 	THPrint 		m_macPrintInfo ;
+#endif
 #endif
 
 private:
@@ -284,8 +293,6 @@ class WXDLLEXPORT wxPrintDialogData: public wxObject
 
 #ifdef __WXMSW__
     void*           m_printDlgData;
-#elif defined( __WXMAC__  )
-	THPrint 		m_macPrintInfo ;
 #endif
 
 private:
@@ -388,8 +395,6 @@ public:
 
 #if defined(__WIN95__)
     void*           m_pageSetupData;
-#elif defined( __WXMAC__  )
-	THPrint 	m_macPageSetupInfo ;
 #endif
 
 private:

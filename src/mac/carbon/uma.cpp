@@ -1,6 +1,9 @@
 #include <wx/mac/uma.h>
 #include <wx/mac/aga.h>
 
+
+#include "Navigation.h"
+
 // init
 
 static bool	sUMAHasAppearance = false ;
@@ -14,7 +17,19 @@ static long sUMAWindowManagerAttr = 0 ;
 
 bool UMAHasWindowManager() { return sUMAHasWindowManager ; }
 long UMAGetWindowManagerAttr() { return sUMAWindowManagerAttr ; }
-
+void UMACleanupToolbox()
+{
+#if UMA_USE_APPEARANCE
+	if ( sUMAHasAppearance )
+	{
+		UnregisterAppearanceClient() ;
+	}
+#endif
+	if ( NavServicesAvailable() )
+	{
+		NavUnload() ;
+	}
+}
 void UMAInitToolbox( UInt16 inMoreMastersCalls )
 {
 #if !TARGET_CARBON
@@ -24,7 +39,6 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls )
 
 	::InitGraf(&qd.thePort);
 	::InitFonts();
-	::InitWindows();
 	::InitMenus();
 	::TEInit();
 	::InitDialogs(0L);
@@ -60,6 +74,16 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls )
 	}
 #endif // UMA_USE_WINDOWMGR
 #endif
+		
+	if ( sUMAHasWindowManager )
+		InitFloatingWindows() ;
+	else
+		InitWindows();
+
+	if ( NavServicesAvailable() )
+	{
+		NavLoad() ;
+	}
 }
 
 // process manager
@@ -250,7 +274,7 @@ void UMAInsertMenu( MenuRef insertMenu , SInt16 afterId )
 
 int gPrOpenCounter = 0 ;
 
-void UMAPrOpen() 
+OSStatus UMAPrOpen() 
 {
 #if !TARGET_CARBON
 	OSErr err = noErr ;
@@ -261,12 +285,20 @@ void UMAPrOpen()
 		err = PrError() ;
 		wxASSERT( err == noErr ) ;
 	}
+	return err ;
 #else
-	#pragma warning "TODO Printing for Carbon"
+	OSStatus err = noErr ;
+	++gPrOpenCounter ;
+	if ( gPrOpenCounter == 1 )
+	{
+		err = PMBegin() ;
+		wxASSERT( err == noErr ) ;
+	}
+	return err ;
 #endif
 }
 
-void UMAPrClose() 
+OSStatus UMAPrClose() 
 {
 #if !TARGET_CARBON
 	OSErr err = noErr ;
@@ -278,8 +310,16 @@ void UMAPrClose()
 		wxASSERT( err == noErr ) ;
 	}
 	--gPrOpenCounter ;
+	return err ;
 #else
-	#pragma warning "TODO Printing for Carbon"
+	OSStatus err = noErr ;
+	wxASSERT( gPrOpenCounter >= 1 ) ;
+	if ( gPrOpenCounter == 1 )
+	{
+		err = PMEnd() ;
+	}
+	--gPrOpenCounter ;
+	return err ;
 #endif
 }
 

@@ -423,7 +423,7 @@ xpmParseHeader(data)
 	    if (!l)
 		return (XpmFileInvalid);
 	    buf[l] = '\0';
-	    #if defined(macintosh) ||Êdefined(__APPLE__)
+	    #if defined(macintosh) || defined(__APPLE__)
 	    ptr = strrchr(buf, '_');
 	    #else
 	    ptr = rindex(buf, '_');

@@ -700,8 +700,37 @@ void wxMenuBar::MacInstallMenuBar()
 					}
 				}
 			}
-			else
+#else
+			if( m_titles[i] == "?" || m_titles[i] == "&?"  || m_titles[i] == wxApp::s_macHelpMenuTitleName )
+			{
+				wxMenuItem::MacBuildMenuString( label, NULL , NULL , m_titles[i] , false );
+				UMASetMenuTitle( menu->GetHMenu() , label ) ;
+					
+			  	for (pos = 0 , node = menu->GetMenuItems().First(); node; node = node->Next(), pos++) 
+		  		{
+		 			item = (wxMenuItem *)node->Data();
+		 			subMenu = item->GetSubMenu() ;
+					if (subMenu)	 		
+					{
+						UMAInsertMenu( subMenu->GetHMenu() , -1 ) ;
+					}
+					else
+					{
+						if ( item->GetId() == wxApp::s_macAboutMenuItemId )
+						{ 
+							Str255 label ;
+							UInt8 modifiers ;
+							SInt16 key ;
+							wxMenuItem::MacBuildMenuString( label, &key , &modifiers  , item->GetText(), item->GetId() != wxApp::s_macAboutMenuItemId); // no shortcut in about menu
+							UMASetMenuItemText( GetMenuHandle( kwxMacAppleMenuId ) , 1 , label );
+							UMAEnableMenuItem( GetMenuHandle( kwxMacAppleMenuId ) , 1 );
+ 						}
+					}
+				}
+				UMAInsertMenu(m_menus[i]->GetHMenu(), 0);
+			}
 #endif
+			else
 			{
 				wxMenuItem::MacBuildMenuString( label, NULL , NULL , m_titles[i] , false );
 				UMASetMenuTitle( menu->GetHMenu() , label ) ;

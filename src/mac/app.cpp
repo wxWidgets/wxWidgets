@@ -89,28 +89,28 @@ wxString wxApp::s_macHelpMenuTitleName = "&Help" ;
 pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , unsigned long refcon )
 {
 	wxApp* app = (wxApp*) refcon ;
-	return wxTheApp->MacHandleAEODoc( event , reply) ;
+	return wxTheApp->MacHandleAEODoc( (AppleEvent*) event , reply) ;
 }
 
 pascal OSErr AEHandleOApp( const AppleEvent *event , AppleEvent *reply , unsigned long refcon )
 {
 	wxApp* app = (wxApp*) refcon ;
-	return wxTheApp->MacHandleAEOApp( event , reply ) ;
+	return wxTheApp->MacHandleAEOApp( (AppleEvent*) event , reply ) ;
 }
 
 pascal OSErr AEHandlePDoc( const AppleEvent *event , AppleEvent *reply , unsigned long refcon )
 {
 	wxApp* app = (wxApp*) refcon ;
-	return wxTheApp->MacHandleAEPDoc( event , reply ) ;
+	return wxTheApp->MacHandleAEPDoc( (AppleEvent*) event , reply ) ;
 }
 
 pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , unsigned long refcon )
 {
 	wxApp* app = (wxApp*) refcon ;
-	return wxTheApp->MacHandleAEQuit( event , reply) ;
+	return wxTheApp->MacHandleAEQuit( (AppleEvent*) event , reply) ;
 }
 
-OSErr wxApp::MacHandleAEODoc(AppleEvent *event , AppleEvent *reply)
+OSErr wxApp::MacHandleAEODoc(const AppleEvent *event , AppleEvent *reply)
 {
 	ProcessSerialNumber PSN ;
 	PSN.highLongOfPSN = 0 ;
@@ -119,17 +119,17 @@ OSErr wxApp::MacHandleAEODoc(AppleEvent *event , AppleEvent *reply)
 	return noErr ;
 }
 
-OSErr wxApp::MacHandleAEPDoc(AppleEvent *event , AppleEvent *reply)
+OSErr wxApp::MacHandleAEPDoc(const AppleEvent *event , AppleEvent *reply)
 {
 	return noErr ;
 }
 
-OSErr wxApp::MacHandleAEOApp(AppleEvent *event , AppleEvent *reply)
+OSErr wxApp::MacHandleAEOApp(const AppleEvent *event , AppleEvent *reply)
 {
 	return noErr ;
 }
 
-OSErr wxApp::MacHandleAEQuit(AppleEvent *event , AppleEvent *reply)
+OSErr wxApp::MacHandleAEQuit(const AppleEvent *event , AppleEvent *reply)
 {
 	wxWindow* win = GetTopWindow() ;
 	if ( win )
@@ -510,6 +510,7 @@ void wxApp::CleanUp()
     delete wxLog::SetActiveTarget(NULL);
 #endif // wxUSE_LOG
 
+	UMACleanupToolbox() ;
 	if (s_macCursorRgn)
 		::DisposeRgn(s_macCursorRgn);
 
@@ -1044,14 +1045,16 @@ void wxApp::MacHandleMouseDownEvent( EventRecord *ev )
 					int newHeight = HiWord(growResult);
 					int oldWidth, oldHeight;
 
-					win->GetSize(&oldWidth, &oldHeight);
-					if (newWidth == 0)
-						newWidth = oldWidth;
-					if (newHeight == 0)
-						newHeight = oldHeight;
 
 					if (win)
+					{
+						win->GetSize(&oldWidth, &oldHeight);
+						if (newWidth == 0)
+							newWidth = oldWidth;
+						if (newHeight == 0)
+							newHeight = oldHeight;
 						win->SetSize( -1, -1, newWidth, newHeight, wxSIZE_USE_EXISTING);
+					}
 				}
 				s_lastMouseDown = 0;
 			break;
@@ -1253,7 +1256,10 @@ void wxApp::MacHandleKeyDownEvent( EventRecord *ev )
 	
 	UInt32 menuresult = UMAMenuEvent(ev) ;
 	if ( HiWord( menuresult ) )
+	{
+		if ( !s_macIsInModalLoop )
 		MacHandleMenuSelect( HiWord( menuresult ) , LoWord( menuresult ) ) ;
+	}
 	else
 	{
 		short keycode ;
@@ -1373,6 +1379,14 @@ void wxApp::MacHandleUpdateEvent( EventRecord *ev )
 	{
 		win->MacUpdate( ev ) ;
 	}
+	else
+	{
+		// since there is no way of telling this foreign window to update itself
+		// we have to invalidate the update region otherwise we keep getting the same
+		// event over and over again
+		BeginUpdate( window ) ;
+		EndUpdate( window ) ;
+	}
 }
 
 void wxApp::MacHandleDiskEvent( EventRecord *ev )
@@ -1490,9 +1504,12 @@ void wxApp::MacHandleOSEvent( EventRecord *ev )
 
 				switch (windowPart)
 				{
+					// fixes for setting the cursor back from dominic mazzoni
 					case inMenuBar :
+					    UMAShowArrowCursor();
 						break ;
 					case inSysWindow :
+					    UMAShowArrowCursor();
 						break ;
 					default:
 						{
@@ -1502,6 +1519,9 @@ void wxApp::MacHandleOSEvent( EventRecord *ev )
 							wxWindow* win = wxFindWinFromMacWindow( window ) ;
 							if ( win )
 								win->MacMouseMoved( ev , windowPart ) ;
+							else 					   
+					    		UMAShowArrowCursor();
+
 						}
 						break;
 				}

@@ -66,7 +66,7 @@ inline wxDateTime wxDateTime::Today()
 inline wxDateTime& wxDateTime::Set(time_t timet)
 {
     // assign first to avoid long multiplication overflow!
-    m_time = timet;
+    m_time = timet - WX_TIME_BASE_OFFSET ;
     m_time *= TIME_T_FACTOR;
 
     return *this;
@@ -146,10 +146,10 @@ inline time_t wxDateTime::GetTicks() const
         return (time_t)-1;
     }
 
-    return (time_t)((m_time / (long)TIME_T_FACTOR).GetLo());
+    return (time_t)((m_time / (long)TIME_T_FACTOR).GetLo())+WX_TIME_BASE_OFFSET ;
 }
 
-inline bool wxDateTime::SetToLastWeekDay(WeekDay weekday,
+bool wxDateTime::SetToLastWeekDay(WeekDay weekday,
                                          Month month,
                                          int year)
 {

@@ -25,7 +25,8 @@
 // ----------------------------------------------------------------------------
 
 // define off_t
-#ifndef __WXMAC__
+
+#if !defined(__WXMAC__) || defined(__DARWIN__)
     #include  <sys/types.h>
 #else
     typedef long off_t;
@@ -264,7 +265,12 @@ WXDLLEXPORT bool wxRmdir(const wxString& dir, int flags = 0);
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_UNIX
   #define wxPATH_SEP          wxPATH_SEP_UNIX
 #elif defined(__MAC__)
-  #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_MAC
+
+// TODO find out whether we can really switch back to native file names
+// previously this mac was emulating unix/win filename structures
+//  #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_MAC
+  #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_DOS
+  #define wxPATH_SEP          wxPATH_SEP_DOS
 #else   // Windows and OS/2
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_DOS
   #define wxPATH_SEP          wxPATH_SEP_DOS

@@ -111,6 +111,14 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
 	wxString value ;
 	
+	{
+ 		TEHandle teH ;
+   		long size ;
+   
+   		UMAGetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+		(*teH)->lineHeight = -1 ;
+	}
+	
 	if( wxApp::s_macDefaultEncodingIsPC )
 		value = wxMacMakeMacStringFromPC( st ) ;
 	else
@@ -152,8 +160,7 @@ void wxTextCtrl::SetValue(const wxString& st)
 	else
 		value = st ;
 	UMASetControlData( m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , value.Length() , (char*) ((const char*)value) ) ;
-	Refresh() ;
-//	MacInvalidateControl() ;
+	UMADrawControl( m_macControl ) ;
 }
 
 // Clipboard operations
@@ -208,7 +215,7 @@ void wxTextCtrl::Paste()
    		UMAGetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
 		TEFromScrap() ;
 		TEPaste( teH ) ;
-//	MacInvalidateControl() ;
+		UMADrawControl( m_macControl ) ;
 	}
 }
 
