@@ -1711,6 +1711,13 @@ AC_DEFUN([AC_BAKEFILE_SHARED_VERSIONS],
         USE_SOSYMLINKS=1
       ;;
 
+      *-*-freebsd* )
+        SONAME_FLAG="-Wl,-soname,"
+        USE_SOVERSION=1
+        USE_SOVERLINUX=1
+        USE_SOSYMLINKS=1
+      ;;
+
       *-*-solaris2* )
         SONAME_FLAG="-h "
         USE_SOVERSION=1
