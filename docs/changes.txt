@@ -15,6 +15,7 @@ wxBase:
 - wxCopyFile() respects the file permissions (Roland Scholz)
 - wxFTP::GetFileSize() added (Søren Erland Vestø)
 - wxDateTime::IsSameDate() bug fixed
+- wxTimeSpan::Format() now behaves more as expected, see docs
 
 All (GUI):
 

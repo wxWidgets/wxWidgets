@@ -37,7 +37,7 @@
 
 //#define TEST_ARRAYS
 //#define TEST_CMDLINE
-//#define TEST_DATETIME
+#define TEST_DATETIME
 //#define TEST_DIR
 //#define TEST_DLLLOADER
 //#define TEST_ENVIRON
@@ -3383,6 +3383,32 @@ static void TestTimeZoneBug()
     puts("");
 }
 
+static void TestTimeSpanFormat()
+{
+    puts("\n*** wxTimeSpan tests ***");
+
+    static const char *formats[] =
+    {
+        _T("(default) %H:%M:%S"),
+        _T("%E weeks and %D days"),
+        _T("%l milliseconds"),
+        _T("(with ms) %H:%M:%S:%l"),
+        _T("100%% of minutes is %M"),       // test "%%"
+        _T("%D days and %H hours"),
+    };
+
+    wxTimeSpan ts1(1, 2, 3, 4),
+                ts2(111, 222, 333);
+    for ( size_t n = 0; n < WXSIZEOF(formats); n++ )
+    {
+        printf("ts1 = %s\tts2 = %s\n",
+               ts1.Format(formats[n]).c_str(),
+               ts2.Format(formats[n]).c_str());
+    }
+
+    puts("");
+}
+
 #if 0
 
 // test compatibility with the old wxDate/wxTime classes
@@ -4402,7 +4428,7 @@ int main(int argc, char **argv)
 #endif // TEST_TIMER
 
 #ifdef TEST_DATETIME
-    if ( 1 )
+    if ( 0 )
     {
         TestTimeSet();
         TestTimeStatic();
@@ -4421,6 +4447,7 @@ int main(int argc, char **argv)
 
         TestTimeZoneBug();
     }
+    TestTimeSpanFormat();
     if ( 0 )
         TestDateTimeInteractive();
 #endif // TEST_DATETIME

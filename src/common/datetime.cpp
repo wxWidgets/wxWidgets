@@ -152,9 +152,15 @@ IMPLEMENT_DYNAMIC_CLASS(wxDateTimeHolidaysModule, wxModule)
 // some trivial ones
 static const int MONTHS_IN_YEAR = 12;
 
-static const int SECONDS_IN_MINUTE = 60;
+static const int SEC_PER_MIN = 60;
+
+static const int MIN_PER_HOUR = 60;
+
+static const int HOURS_PER_DAY = 24;
 
 static const long SECONDS_PER_DAY = 86400l;
+
+static const int DAYS_PER_WEEK = 7;
 
 static const long MILLISECONDS_PER_DAY = 86400000l;
 
@@ -3454,13 +3460,41 @@ wxString wxTimeSpan::Format(const wxChar *format) const
     wxString str;
     str.Alloc(wxStrlen(format));
 
+    // Suppose we have wxTimeSpan ts(1 /* hour */, 2 /* min */, 3 /* sec */)
+    //
+    // Then, of course, ts.Format("%H:%M:%S") must return "01:02:03", but the
+    // question is what should ts.Format("%S") do? The code here returns "3273"
+    // in this case (i.e. the total number of seconds, not just seconds % 60)
+    // because, for me, this call means "give me entire time interval in
+    // seconds" and not "give me the seconds part of the time interval"
+    //
+    // If we agree that it should behave like this, it is clear that the
+    // interpretation of each format specifier depends on the presence of the
+    // other format specs in the string: if there was "%H" before "%M", we
+    // should use GetMinutes() % 60, otherwise just GetMinutes() &c
+
+    // we remember the most important unit found so far
+    enum TimeSpanPart
+    {
+        Part_Week,
+        Part_Day,
+        Part_Hour,
+        Part_Min,
+        Part_Sec,
+        Part_MSec
+    } partBiggest = Part_MSec;
+
     for ( const wxChar *pch = format; *pch; pch++ )
     {
         wxChar ch = *pch;
 
         if ( ch == _T('%') )
         {
-            wxString tmp;
+            // the start of the format specification of the printf() below
+            wxString fmtPrefix = _T('%');
+
+            // the number
+            long n;
 
             ch = *++pch;    // get the format spec char
             switch ( ch )
@@ -3470,44 +3504,90 @@ wxString wxTimeSpan::Format(const wxChar *format) const
                     // fall through
 
                 case _T('%'):
-                    // will get to str << ch below
-                    break;
+                    str += ch;
+
+                    // skip the part below switch
+                    continue;
 
                 case _T('D'):
-                    tmp.Printf(_T("%d"), GetDays());
+                    n = GetDays();
+                    if ( partBiggest < Part_Day )
+                    {
+                        n %= DAYS_PER_WEEK;
+                    }
+                    else
+                    {
+                        partBiggest = Part_Day;
+                    }
                     break;
 
                 case _T('E'):
-                    tmp.Printf(_T("%d"), GetWeeks());
+                    partBiggest = Part_Week;
+                    n = GetWeeks();
                     break;
 
                 case _T('H'):
-                    tmp.Printf(_T("%02d"), GetHours());
+                    n = GetHours();
+                    if ( partBiggest < Part_Hour )
+                    {
+                        n %= HOURS_PER_DAY;
+                    }
+                    else
+                    {
+                        partBiggest = Part_Hour;
+                    }
+
+                    fmtPrefix += _T("02");
                     break;
 
                 case _T('l'):
-                    tmp.Printf(_T("%03ld"), GetMilliseconds().ToLong());
+                    n = GetMilliseconds().ToLong();
+                    if ( partBiggest < Part_MSec )
+                    {
+                        n %= 1000;
+                    }
+                    //else: no need to reset partBiggest to Part_MSec, it is
+                    //      the least significant one anyhow
+
+                    fmtPrefix += _T("03");
                     break;
 
                 case _T('M'):
-                    tmp.Printf(_T("%02d"), GetMinutes());
+                    n = GetMinutes();
+                    if ( partBiggest < Part_Min )
+                    {
+                        n %= MIN_PER_HOUR;
+                    }
+                    else
+                    {
+                        partBiggest = Part_Min;
+                    }
+
+                    fmtPrefix += _T("02");
                     break;
 
                 case _T('S'):
-                    tmp.Printf(_T("%02ld"), GetSeconds().ToLong());
+                    n = GetSeconds().ToLong();
+                    if ( partBiggest < Part_Sec )
+                    {
+                        n %= SEC_PER_MIN;
+                    }
+                    else
+                    {
+                        partBiggest = Part_Sec;
+                    }
+
+                    fmtPrefix += _T("02");
                     break;
             }
 
-            if ( !!tmp )
-            {
-                str += tmp;
-
-                // skip str += ch below
-                continue;
-            }
+            str += wxString::Format(fmtPrefix + _T("ld"), n);
         }
-
-        str += ch;
+        else
+        {
+            // normal character, just copy
+            str += ch;
+        }
     }
 
     return str;
