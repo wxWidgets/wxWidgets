@@ -80,6 +80,8 @@ public:
   virtual void ActivateNext();
   virtual void ActivatePrevious();
 
+  virtual bool Show( bool show = true );
+
 protected:
 
   // TODO maybe have this member
