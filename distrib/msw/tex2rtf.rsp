@@ -1,7 +1,6 @@
 utils/tex2rtf/Makefile.in
 utils/tex2rtf/src/*.cpp
 utils/tex2rtf/src/*.h
-utils/tex2rtf/src/makefile.vc
 utils/tex2rtf/src/makefile.bcc
 utils/tex2rtf/src/makefile.dos
 utils/tex2rtf/src/makefile.b32
@@ -9,6 +8,8 @@ utils/tex2rtf/src/makefile.wat
 utils/tex2rtf/src/makefile.unx
 utils/tex2rtf/src/makefile.vms
 utils/tex2rtf/src/makefile.g95
+utils/tex2rtf/src/makefile.gcc
+utils/tex2rtf/src/makefile.dmc
 utils/tex2rtf/src/makengui.nt
 utils/tex2rtf/src/Makefile.in
 utils/tex2rtf/src/*.bkl

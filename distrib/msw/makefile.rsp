@@ -85,6 +85,7 @@ samples/opengl/penguin/Makefile.in
 samples/opengl/isosurf/Makefile.in
 samples/validate/Makefile.in
 samples/vscroll/Makefile.in
+samples/xrc/Makefile.in
 samples/widgets/Makefile.in
 samples/wizard/Makefile.in
 demos/Makefile.in
@@ -107,6 +108,7 @@ utils/helpview/Makefile.in
 utils/helpview/src/Makefile.in
 utils/configtool/Makefile.in
 utils/configtool/src/Makefile.in
+utils/wxrc/Makefile.in
 
 contrib/Makefile.in
 contrib/src/Makefile.in

@@ -1,2 +1,3 @@
-docs/univ/readme.txt
-docs/univ/porting.txt
+include/wx/msw/wince/*.rc
+include/wx/platform.h
+src/gtk/eggtrayicon.h
