@@ -101,7 +101,7 @@ GSocket *GSocket_new()
   socket->m_gui_dependent	= NULL;
   socket->m_blocking		= FALSE;
   socket->m_timeout             = 10*60*1000;
-                                      // 10 minutes * 60 sec * 1000 millisec
+                                      /* 10 minutes * 60 sec * 1000 millisec */
 
   /* We initialize the GUI specific entries here */
   _GSocket_GUI_Init(socket);
@@ -1150,4 +1150,5 @@ GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf)
   return GSOCK_NOERROR;
 }
 
-#endif // wxUSE_SOCKETS
+#endif
+  /* wxUSE_SOCKETS */

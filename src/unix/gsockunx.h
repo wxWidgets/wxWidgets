@@ -8,7 +8,16 @@
 #ifndef __GSOCK_UNX_H
 #define __GSOCK_UNX_H
 
-#include <wx/gsocket.h>
+#include "wx/setup.h"
+
+#if wxUSE_SOCKETS
+
+#include "wx/gsocket.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 
 /* Definition of GSocket */
 struct _GSocket {
@@ -66,4 +75,12 @@ GSocketError _GAddress_Init_INET(GAddress *address);
 /* Local address family */
 GSocketError _GAddress_Init_UNIX(GAddress *address);
 
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
 #endif
+    /* wxUSE_SOCKETS */
+
+#endif
+    /* __GSOCK_UNX_H */

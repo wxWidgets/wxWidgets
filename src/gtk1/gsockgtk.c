@@ -10,9 +10,9 @@
 #if wxUSE_SOCKETS
 
 #include <stdlib.h>
-#include <gdk/gdk.h>
-#include <glib.h>
-#include <wx/gsocket.h>
+#include "gdk/gdk.h"
+#include "glib.h"
+#include "wx/gsocket.h"
 #include "../unix/gsockunx.h"
 
 void _GSocket_GDK_Input(gpointer data, gint source, GdkInputCondition condition)

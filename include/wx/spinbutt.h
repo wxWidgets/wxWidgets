@@ -12,6 +12,11 @@
 #ifndef _WX_SPINBUTT_H_BASE_
 #define _WX_SPINBUTT_H_BASE_
 
+#ifdef __GNUG__
+#pragma interface "spinbutbase.h"
+#pragma implementation "spinbutbase.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------

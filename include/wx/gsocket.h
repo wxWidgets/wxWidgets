@@ -8,12 +8,14 @@
 #ifndef __GSOCKET_H
 #define __GSOCKET_H
 
+#include "wx/setup.h"
+
+#if wxUSE_SOCKETS
+
 #include <sys/types.h>
 
 #if !defined(__cplusplus)
-
 typedef int bool;
-
 #endif
 
 #ifndef TRUE
@@ -230,7 +232,11 @@ void GSocket_DoEvent(unsigned long evt_id);
 
 #ifdef __cplusplus
 };
-#endif
+#endif /* __cplusplus */
+
 
 #endif
- /* __GSOCKET_H */
+    /* wxUSE_SOCKETS */
+
+#endif
+    /* __GSOCKET_H */

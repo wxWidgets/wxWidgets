@@ -177,7 +177,7 @@ public:                                                             \
   {                                                                 \
     size_t type = sizeof(T);                                        \
     size_t sizelong = sizeof(long);                                 \
-    if ( type <= sizelong )                                         \
+    if ( type > sizelong )                                          \
       { wxFAIL_MSG( _T("illegal use of DEFINE_ARRAY") ); }          \
   }                                                                 \
                                                                     \
@@ -239,7 +239,7 @@ public:                                                             \
   name(SCMPFUNC##T fn)                                              \
   { size_t type = sizeof(T);                                        \
     size_t sizelong = sizeof(long);                                 \
-    if ( type <= sizelong )                                         \
+    if ( type > sizelong )                                          \
       { wxFAIL_MSG( _T("illegal use of DEFINE_ARRAY") ); }          \
     m_fnCompare = fn;                                               \
   }                                                                 \

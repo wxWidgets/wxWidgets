@@ -1,5 +1,5 @@
 
-29th July '99: Eight wxGTK 2.1 snapshot released
+6th August '99: Eight wxGTK 2.1 snapshot released
 
 The new makefile system is not able to produce shared libraries 
 on Unix with the exception of Linux - libtool is really great.
@@ -36,9 +36,11 @@ wxFilesystem, wxHTMLHelpController and others.
 
 Added a wrapper for ffile() etc functions.
 
-Updateds to wxDynamicLibrary.
+Updates to wxDynamicLibrary.
 
 New documentation.
+
+New version of wxPython, of course.
 
 Fixed in unenclosed number of other bugs...
 
