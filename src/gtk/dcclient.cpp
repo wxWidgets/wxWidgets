@@ -695,20 +695,28 @@ void wxWindowDC::DoDrawLines( int n, wxPoint points[], wxCoord xoffset, wxCoord 
     if (m_pen.GetStyle() == wxTRANSPARENT) return;
     if (n <= 0) return;
 
-    CalcBoundingBox( points[0].x + xoffset, points[0].y + yoffset );
+    GdkPoint *gpts = new GdkPoint[n];
+    if (! gpts)
+    {
+        wxFAIL_MSG( wxT("Cannot allocate PolyLine") );
+        return;
+    }
 
-    for (int i = 0; i < n-1; i++)
+    for (int i = 0; i < n; i++) 
     {
         wxCoord x1 = XLOG2DEV(points[i].x + xoffset);
-        wxCoord x2 = XLOG2DEV(points[i+1].x + xoffset);
-        wxCoord y1 = YLOG2DEV(points[i].y + yoffset);     // oh, what a waste
-        wxCoord y2 = YLOG2DEV(points[i+1].y + yoffset);
+        wxCoord y1 = YLOG2DEV(points[i].y + yoffset);
 
-        if (m_window)
-            gdk_draw_line( m_window, m_penGC, x1, y1, x2, y2 );
+        CalcBoundingBox( x1 + xoffset, y1 + yoffset );
 
-        CalcBoundingBox( points[i+1].x + xoffset, points[i+1].y + yoffset );
+        gpts[i].x = x1;
+        gpts[i].y = y1;
     }
+
+    if (m_window)
+        gdk_draw_lines( m_window, m_penGC, gpts, n);
+
+    delete[] gpts;
 }
 
 void wxWindowDC::DoDrawPolygon( int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset, int WXUNUSED(fillStyle) )
