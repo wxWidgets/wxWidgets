@@ -228,7 +228,7 @@ See also \helpref{wxMouseEvent::Entering}{wxmouseevententering}.
 
 Returns TRUE if the event was a left double click.
 
-\membersection{wxMouseEvent::LeftDown}
+\membersection{wxMouseEvent::LeftDown}\label{wxmouseeventleftdown}
 
 \constfunc{bool}{LeftDown}{\void}
 
@@ -240,6 +240,14 @@ Returns TRUE if the left mouse button changed to down.
 
 Returns TRUE if the left mouse button is currently down, independent
 of the current event type.
+
+Please notice that it is {\bf not} the same as 
+\helpref{LeftDown}{wxmouseeventleftdown} which returns TRUE if the left mouse
+button was just pressed. Rather, it describes the state of the mouse button
+before the event happened.
+
+This event is usually used in the mouse event handlers which process "move
+mouse" messages to determine whether the user is (still) dragging the mouse.
 
 \membersection{wxMouseEvent::LeftUp}
 
