@@ -332,16 +332,15 @@ public:
     wxListEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
 
     int           m_code;
+    long          m_oldItemIndex;
     long          m_itemIndex;
     int           m_col;
-    bool          m_cancelled;
     wxPoint       m_pointDrag;
     wxListItem    m_item;
 
     int GetCode();
     long GetIndex();
     int GetColumn();
-    bool Cancelled();
     wxPoint GetPoint();
     const wxString& GetLabel();
     const wxString& GetText();

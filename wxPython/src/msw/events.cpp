@@ -119,33 +119,6 @@ static void *SwigwxEventTowxObject(void *ptr) {
     return (void *) dest;
 }
 
-#define new_wxEvent(_swigarg0) (new wxEvent(_swigarg0))
-static PyObject *_wrap_new_wxEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxEvent * _result;
-    int  _arg0 = (int ) 0;
-    char *_kwnames[] = { "id", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|i:new_wxEvent",_kwnames,&_arg0)) 
-        return NULL;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxEvent *)new_wxEvent(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxEvent_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-    return _resultobj;
-}
-
 #define delete_wxEvent(_swigobj) (delete _swigobj)
 static PyObject *_wrap_delete_wxEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -7226,7 +7199,6 @@ static PyMethodDef eventscMethods[] = {
 	 { "wxEvent_GetEventType", (PyCFunction) _wrap_wxEvent_GetEventType, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEvent_GetEventObject", (PyCFunction) _wrap_wxEvent_GetEventObject, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxEvent", (PyCFunction) _wrap_delete_wxEvent, METH_VARARGS | METH_KEYWORDS },
-	 { "new_wxEvent", (PyCFunction) _wrap_new_wxEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxNewEventType", (PyCFunction) _wrap_wxNewEventType, METH_VARARGS | METH_KEYWORDS },
 	 { NULL, NULL }
 };

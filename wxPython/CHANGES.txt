@@ -2,7 +2,7 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
-2.3.2 (pre)
+2.3.2
 -----
 Added EVT_HELP, EVT_HELP_RANGE, EVT_DETAILED_HELP,
 EVT_DETAILED_HELP_RANGE, EVT_CONTEXT_MENU, wxHelpEvent,
@@ -87,6 +87,11 @@ will now Disconnect the event.
 Added wxPopupWindow and wxPopupTransientWindow.
 
 Added wxFileHistory.
+
+Added wxDynamicSashWindow, whcih allows you to endlessly split widnows
+by dragging a little tab next to the scrollbars.  Added a demo to show
+this and also the ability of multiple wxStyledStectCtrls to share the
+same document.
 
 
 

@@ -756,6 +756,9 @@ public:
     int GetThumbPosition();
     int GetThumbSize();
     %name(GetThumbLength) int GetThumbSize();  // to match the docs
+
+    bool IsVertical();
+
     void SetThumbPosition(int viewStart);
     void SetScrollbar(int position, int thumbSize,
                       int range,    int pageSize,

@@ -33,6 +33,7 @@ BUILD_OGL = 1      # If true, build the contrib/ogl extension module
 BUILD_STC = 1      # If true, build the contrib/stc extension module
 BUILD_IEWIN = 0    # Internet Explorer wrapper (experimental)
 BUILD_XRC = 1      # XML based resource system
+BUILD_GIZMOS = 1   # Build a module for the gizmos contrib library
 
 
 CORE_ONLY = 0      # if true, don't build any of the above
@@ -64,7 +65,7 @@ HYBRID = 0         # If set and not debug or FINAL, then build a
                    # wxWindows must have been built with /MD, not /MDd
                    # (using FINAL=hybrid will do it.)
 
-WXDLLVER = '232'  # Version part of DLL name
+WXDLLVER = '232'   # Version part of DLL name
 
 
 #----------------------------------------------------------------------
@@ -733,6 +734,51 @@ if not GL_ONLY and BUILD_XRC:
                              ] + swig_sources,
 
                     include_dirs =  xmlres_includes,
+                    define_macros = defines,
+
+                    library_dirs = libdirs,
+                    libraries = libs,
+
+                    extra_compile_args = cflags,
+                    extra_link_args = lflags,
+                    )
+
+    wxpExtensions.append(ext)
+
+
+
+#----------------------------------------------------------------------
+# Define the GIZMOS  extension module
+#----------------------------------------------------------------------
+
+if not GL_ONLY and BUILD_GIZMOS:
+    msg('Preparing GIZMOS...')
+    location = 'contrib/gizmos'
+    GIZMOLOC = opj(location, 'contrib/src/gizmos')
+    GIZMOINC = opj(location, 'contrib/include')
+
+    swig_files = ['gizmos.i']
+
+    swig_sources = run_swig(swig_files, location, '', PKGDIR,
+                            USE_SWIG, swig_force, swig_args)
+
+    gizmos_includes = includes[:]
+    gizmos_includes.append(GIZMOINC)
+
+
+    # make sure local copy of contrib files are up to date
+    if IN_CVS_TREE:
+        contrib_copy_tree(opj(CTRB_INC, 'gizmos'), opj(GIZMOINC, 'wx/gizmos'))
+        contrib_copy_tree(opj(CTRB_SRC, 'gizmos'), GIZMOLOC)
+
+    ext = Extension('gizmosc', [
+                                '%s/dynamicsash.cpp' % GIZMOLOC,
+                                #'%s/editlbox.cpp' % GIZMOLOC,
+                                #'%s/multicell.cpp' % GIZMOLOC,
+                                '%s/splittree.cpp' % GIZMOLOC,
+                             ] + swig_sources,
+
+                    include_dirs =  gizmos_includes,
                     define_macros = defines,
 
                     library_dirs = libdirs,

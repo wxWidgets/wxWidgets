@@ -48,9 +48,8 @@ class wxEventPtr(wxObjectPtr):
     def __repr__(self):
         return "<C wxEvent instance at %s>" % (self.this,)
 class wxEvent(wxEventPtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = apply(eventsc.new_wxEvent,_args,_kwargs)
-        self.thisown = 1
+    def __init__(self,this):
+        self.this = this
 
 
 

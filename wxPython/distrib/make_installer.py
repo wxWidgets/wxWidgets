@@ -78,6 +78,7 @@ Source: "wxPython\glcanvasc.pyd";           DestDir: "{app}\wxPython"; Component
 Source: "wxPython\oglc.pyd";                DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\stc_c.pyd";               DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\xrcc.pyd";                DestDir: "{app}\wxPython"; Components: core
+Source: "wxPython\gizmosc.pyd";             DestDir: "{app}\wxPython"; Components: core
 
 Source: "wxPython\*.py";                    DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\lib\*.py";                DestDir: "{app}\wxPython\lib"; Components: core

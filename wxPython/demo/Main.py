@@ -36,6 +36,7 @@ _treeList = [
                                 'URLDragAndDrop',
                                 'wxMimeTypesManager',
                                 'wxPopupWindow',
+                                'wxDynamicSashWindow',
                                 ]),
 
     ('Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame',
@@ -45,6 +46,7 @@ _treeList = [
                  'wxHtmlWindow',
                  'wxStyledTextCtrl_1', 'wxStyledTextCtrl_2',
                  'wxPopupWindow',
+                 'wxDynamicSashWindow',
                  ]),
 
     ('Common Dialogs', ['wxColourDialog', 'wxDirDialog', 'wxFileDialog',

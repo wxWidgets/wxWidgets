@@ -156,3 +156,12 @@ include contrib/xrc/contrib/src/xrc/expat/xmlparse/*.c
 include contrib/xrc/contrib/src/xrc/expat/xmlparse/*.h
 include contrib/xrc/contrib/src/xrc/expat/xmltok/*.c
 include contrib/xrc/contrib/src/xrc/expat/xmltok/*.h
+
+include contrib/gizmos/*.txt
+include contrib/gizmos/*.i
+include contrib/gizmos/*.py
+include contrib/gizmos/*.cpp
+include contrib/gizmos/*.c
+include contrib/gizmos/*.h
+include contrib/gizmos/contrib/include/wx/gizmos/*.h
+include contrib/gizmos/contrib/src/gizmos/*.cpp

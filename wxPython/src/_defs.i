@@ -184,7 +184,6 @@ enum {
     wxBORDER,
     wxSIMPLE_BORDER,
     wxSTATIC_BORDER,
-    wxBORDER_MASK,
     wxTRANSPARENT_WINDOW,
     wxNO_BORDER,
     wxUSER_COLOURS,
@@ -486,6 +485,19 @@ enum {
     wxMM_POINTS,
     wxMM_METRIC,
 
+};
+
+
+enum wxBorder
+{
+    wxBORDER_DEFAULT,
+    wxBORDER_NONE,
+    wxBORDER_STATIC,
+    wxBORDER_SIMPLE,
+    wxBORDER_RAISED,
+    wxBORDER_SUNKEN,
+    wxBORDER_DOUBLE,
+    wxBORDER_MASK,
 };
 
 

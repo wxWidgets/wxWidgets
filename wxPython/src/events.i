@@ -35,7 +35,7 @@ int wxNewEventType();
 
 class wxEvent : public wxObject {
 public:
-    wxEvent(int id = 0);
+    // wxEvent(int id = 0);     // *** This class is now an ABC
     ~wxEvent();
 
     wxObject* GetEventObject();
