@@ -166,6 +166,7 @@ Checking in include/wx/textbuf.h;
 /pack/cvsroots/wxwindows/wxWindows/include/wx/textbuf.h,v  <--  textbuf.h
 new revision: 1.8; previous revision: 1.7
 
+
 19. Add wxFileConfig bug fix, marked by <JACS>...</JACS> in Parse().
 This prevents mungeing of the config file after reading in
 entries (say, just one entry in one group), then adding entries
@@ -178,4 +179,12 @@ http://sf.net/tracker/?func=detail&aid=215436&group_id=9863&atid=109863
 Checking in src/common/containr.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/common/containr.cpp,v  <--  containr.cpp
 new revision: 1.18; previous revision: 1.17
+
+
+21. Fix wxGTK w/ GTK+2 to respect wxDC::SetBackgroundMode and SetTextBackground
+
+Checking in dcclient.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/gtk/dcclient.cpp,v  <--  dcclient.cpp
+new revision: 1.170; previous revision: 1.169
+done
 
