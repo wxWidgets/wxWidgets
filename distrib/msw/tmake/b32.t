@@ -112,14 +112,14 @@ PERIPH_CLEAN_TARGET=clean_ctl3d $(PERIPH_CLEAN_TARGET)
 
 #PERIPH_LIBS=$(WXDIR)\lib\zlib.lib $(WXDIR)\lib\winpng.lib $(WXDIR)\lib\jpeg.lib $(WXDIR)\lib\tiff.lib $(PERIPH_LIBS)
 PERIPH_LIBS=
-PERIPH_TARGET=zlib png jpeg tiff $(PERIPH_TARGET)
-PERIPH_CLEAN_TARGET=clean_zlib clean_png clean_jpeg clean_tiff $(PERIPH_CLEAN_TARGET)
+PERIPH_TARGET=zlib png jpeg tiff regex $(PERIPH_TARGET)
+PERIPH_CLEAN_TARGET=clean_zlib clean_png clean_jpeg clean_tiff clean_regex $(PERIPH_CLEAN_TARGET)
 
 !if "$(DLL)" == "0"
 DUMMY=dummy
 !else
 DUMMY=dummydll
-LIBS= cw32mti import32 ole2w32 odbc32 zlib winpng jpeg tiff
+LIBS= cw32mti import32 ole2w32 odbc32 zlib winpng jpeg tiff regex
 !endif
 
 LIBTARGET=$(WXLIB)
@@ -303,6 +303,16 @@ jpeg:    $(CFG)
 
 clean_jpeg:
         cd $(WXDIR)\src\jpeg
+        make -f makefile.b32 clean
+        cd $(WXDIR)\src\msw
+
+regex:   $(CFG)
+        cd $(WXDIR)\src\regex
+        make -f makefile.b32 lib
+        cd $(WXDIR)\src\msw
+
+clean_regex:
+        cd $(WXDIR)\src\regex
         make -f makefile.b32 clean
         cd $(WXDIR)\src\msw
 
