@@ -224,8 +224,14 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
                   _T("wxStaticBox can't be used as a window parent!") );
 #endif // wxUSE_STATBOX
 
+    // ids are limited to 16 bits under MSW so if you care about portability,
+    // it's not a good idea to use ids out of this range (and negative ids are
+    // reserved for wxWindows own usage)
+    wxASSERT_MSG( id == wxID_ANY || (id >= 0 && id < 32767),
+                  _T("invalid id value") );
+
     // generate a new id if the user doesn't care about it
-    m_windowId = id == -1 ? NewControlId() : id;
+    m_windowId = id == wxID_ANY ? NewControlId() : id;
 
     SetName(name);
     SetWindowStyleFlag(style);
