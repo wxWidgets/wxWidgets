@@ -61,6 +61,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_TOGGLE_FIRST, MyFrame::OnToggleFirstSel)
     EVT_MENU(LIST_DESELECT_ALL, MyFrame::OnDeselectAll)
     EVT_MENU(LIST_SELECT_ALL, MyFrame::OnSelectAll)
+    EVT_MENU(LIST_DELETE, MyFrame::OnDelete)
     EVT_MENU(LIST_DELETE_ALL, MyFrame::OnDeleteAll)
     EVT_MENU(LIST_SORT, MyFrame::OnSort)
     EVT_MENU(LIST_SET_FG_COL, MyFrame::OnSetFgColour)
@@ -178,6 +179,7 @@ MyFrame::MyFrame(const wxChar *title, int x, int y, int w, int h)
     menuList->AppendSeparator();
     menuList->Append(LIST_SORT, "&Sort\tCtrl-S");
     menuList->AppendSeparator();
+    menuList->Append(LIST_DELETE, "&Delete first item");
     menuList->Append(LIST_DELETE_ALL, "Delete &all items");
     menuList->AppendSeparator();
     menuList->Append(LIST_TOGGLE_MULTI_SEL, "&Multiple selection\tCtrl-M",
@@ -480,6 +482,18 @@ void MyFrame::OnSetBgColour(wxCommandEvent& WXUNUSED(event))
 {
     m_listCtrl->SetBackgroundColour(wxGetColourFromUser(this));
     m_listCtrl->Refresh();
+}
+
+void MyFrame::OnDelete(wxCommandEvent& WXUNUSED(event))
+{
+    if ( m_listCtrl->GetItemCount() )
+    {
+        m_listCtrl->DeleteItem(0);
+    }
+    else
+    {
+        m_logWindow->WriteText("Nothing to delete");
+    }
 }
 
 void MyFrame::OnDeleteAll(wxCommandEvent& WXUNUSED(event))

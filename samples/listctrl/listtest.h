@@ -69,6 +69,7 @@ public:
     void OnToggleFirstSel(wxCommandEvent& event);
     void OnDeselectAll(wxCommandEvent& event);
     void OnSelectAll(wxCommandEvent& event);
+    void OnDelete(wxCommandEvent& event);
     void OnDeleteAll(wxCommandEvent& event);
     void OnSort(wxCommandEvent& event);
     void OnSetFgColour(wxCommandEvent& event);
@@ -106,6 +107,7 @@ enum
     BUSY_ON                     = 10,
     BUSY_OFF                    = 11,
     LIST_DELETE_ALL             = 12,
+    LIST_DELETE,
     LIST_SORT,
     LIST_SET_FG_COL,
     LIST_SET_BG_COL,
