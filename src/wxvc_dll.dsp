@@ -256,6 +256,10 @@ SOURCE=.\common\gifdecod.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\xpmdecod.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\hash.cpp
 # End Source File
 # Begin Source File
