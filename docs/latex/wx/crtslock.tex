@@ -6,6 +6,33 @@ constructor and leaves it in the destructor making it much more difficult to
 forget to leave a critical section (which, in general, will lead to serious
 and difficult to debug problems).
 
+Example of using it:
+
+\begin{verbatim}
+void SetFoo()
+{
+    // gs_critSect is some (global) critical section guarding access to the
+    // object "foo"
+    wxCriticalSectionLocker locker(gs_critSect);
+
+    if ( ... )
+    {
+        // do something
+        ...
+
+        return;
+    }
+
+    // do something else
+    ...
+
+    return;
+}
+\end{verbatim}
+
+Without wxCriticalSectionLocker, you would need to remember to manually leave
+the critical section before each {\tt return}.
+
 \wxheading{Derived from}
 
 None.
@@ -23,14 +50,14 @@ None.
 
 \membersection{wxCriticalSectionLocker::wxCriticalSectionLocker}\label{wxcriticalsectionlockerctor}
 
-\func{}{wxCriticalSectionLocker}{\param{wxCriticalSection *}{criticalsection}}
+\func{}{wxCriticalSectionLocker}{\param{wxCriticalSection\& }{criticalsection}}
 
 Constructs a wxCriticalSectionLocker object associated with given
-criticalsection which must be non NULL and enters it.
+{\it criticalsection} and enters it.
 
 \membersection{wxCriticalSectionLocker::\destruct{wxCriticalSectionLocker}}\label{wxcriticalsectionlockerdtor}
 
 \func{}{\destruct{wxCriticalSectionLocker}}{\void}
 
-Destuctor leaves the criticalsection.
+Destuctor leaves the critical section.
 
