@@ -163,7 +163,7 @@ bool wxTimerBase::Start(int milliseconds, bool oneShot)
 // wxStopWatch
 // ----------------------------------------------------------------------------
 
-#if wxUSE_LONGLONG
+#if wxUSE_STOPWATCH && wxUSE_LONGLONG
 
 void wxStopWatch::Start(long t)
 {
@@ -404,5 +404,5 @@ wxLongLong wxGetLocalTimeMillis()
 #endif // time functions
 }
 
-#endif // wxUSE_LONGLONG
+#endif // #if wxUSE_STOPWATCH && wxUSE_LONGLONG
 

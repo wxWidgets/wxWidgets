@@ -27,7 +27,7 @@
   #include "wx/dcclient.h"
 #endif
 
-#if defined(__WIN95__) && wxUSE_NATIVE_STATUSBAR
+#if wxUSE_STATUSBAR && defined(__WIN95__) && wxUSE_NATIVE_STATUSBAR
 
 #include "wx/intl.h"
 #include "wx/log.h"

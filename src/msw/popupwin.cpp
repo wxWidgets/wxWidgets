@@ -31,6 +31,8 @@
 #ifndef WX_PRECOMP
 #endif //WX_PRECOMP
 
+#if wxUSE_POPUPWIN
+
 #include "wx/popupwin.h"
 
 #include "wx/msw/private.h"     // for GetDesktopWindow()
@@ -85,3 +87,4 @@ WXHWND wxPopupWindow::MSWGetParent() const
     return (WXHWND)::GetDesktopWindow();
 }
 
+#endif // #if wxUSE_POPUPWIN

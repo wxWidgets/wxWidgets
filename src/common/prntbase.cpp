@@ -547,7 +547,9 @@ void wxPreviewFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 
 void wxPreviewFrame::Initialize()
 {
+#if wxUSE_STATUSBAR
     CreateStatusBar();
+#endif
     CreateCanvas();
     CreateControlBar();
 
@@ -780,14 +782,16 @@ bool wxPrintPreviewBase::RenderPage(int pageNum)
 
     memoryDC.SelectObject(wxNullBitmap);
 
-    wxChar buf[200];
+#if wxUSE_STATUSBAR
+    wxString status;
     if (m_maxPage != 0)
-        wxSprintf(buf, _("Page %d of %d"), pageNum, m_maxPage);
+		status = wxString::Format(_("Page %d of %d"), pageNum, m_maxPage);
     else
-        wxSprintf(buf, _("Page %d"), pageNum);
+		status = wxString::Format(_("Page %d"), pageNum);
 
     if (m_previewFrame)
-        m_previewFrame->SetStatusText(buf);
+        m_previewFrame->SetStatusText(status);
+#endif
 
     return TRUE;
 }

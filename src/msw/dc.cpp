@@ -2280,7 +2280,7 @@ static bool AlphaBlt(HDC hdcDst,
     wxASSERT_MSG( hdcDst && hdcSrc, _T("AlphaBlt(): invalid HDC") );
 
     // do we have AlphaBlend() and company in the headers?
-#ifdef AC_SRC_OVER
+#if defined(AC_SRC_OVER) && wxUSE_DYNLIB_CLASS
     // yes, now try to see if we have it during run-time
     typedef BOOL (WINAPI *AlphaBlend_t)(HDC,int,int,int,int,
                                         HDC,int,int,int,int,

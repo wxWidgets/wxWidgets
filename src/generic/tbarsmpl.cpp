@@ -28,7 +28,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_TOOLBAR_SIMPLE
+#if wxUSE_TOOLBAR && wxUSE_TOOLBAR_SIMPLE
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"

@@ -172,19 +172,23 @@ bool wxGenericDragImage::Create(const wxString& str, const wxCursor& cursor)
     return Create(bitmap, cursor);
 }
 
+#if wxUSE_TREECTRL
 // Create a drag image for the given tree control item
 bool wxGenericDragImage::Create(const wxTreeCtrl& treeCtrl, wxTreeItemId& id)
 {
     wxString str = treeCtrl.GetItemText(id);
     return Create(str);
 }
+#endif
 
+#if wxUSE_LISTCTRL
 // Create a drag image for the given list control item
 bool wxGenericDragImage::Create(const wxListCtrl& listCtrl, long id)
 {
     wxString str = listCtrl.GetItemText(id);
     return Create(str);
 }
+#endif
 
 // Begin drag
 bool wxGenericDragImage::BeginDrag(const wxPoint& hotspot,

@@ -156,19 +156,24 @@ public:
         Create(str, cursor, cursorHotspot);
     }
 
+#if wxUSE_TREECTRL
     wxGenericDragImage(const wxTreeCtrl& treeCtrl, wxTreeItemId& id)
     {
         Init();
 
         Create(treeCtrl, id);
     }
+#endif
 
+#if wxUSE_LISTCTRL
     wxGenericDragImage(const wxListCtrl& listCtrl, long id)
     {
         Init();
 
         Create(listCtrl, id);
     }
+#endif
+
     ~wxGenericDragImage();
 
     // Attributes
@@ -213,11 +218,15 @@ public:
         return Create(str, cursor);
     }
 
+#if wxUSE_TREECTRL
     // Create a drag image for the given tree control item
     bool Create(const wxTreeCtrl& treeCtrl, wxTreeItemId& id);
+#endif
 
+#if wxUSE_LISTCTRL
     // Create a drag image for the given list control item
     bool Create(const wxListCtrl& listCtrl, long id);
+#endif
 
     // Begin drag. hotspot is the location of the drag position relative to the upper-left
     // corner of the image.

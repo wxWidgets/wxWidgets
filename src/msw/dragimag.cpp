@@ -237,6 +237,7 @@ bool wxDragImage::Create(const wxString& str, const wxCursor& cursor)
     return Create(wxBitmap(image), cursor);
 }
 
+#if wxUSE_TREECTRL
 // Create a drag image for the given tree control item
 bool wxDragImage::Create(const wxTreeCtrl& treeCtrl, wxTreeItemId& id)
 {
@@ -245,7 +246,9 @@ bool wxDragImage::Create(const wxTreeCtrl& treeCtrl, wxTreeItemId& id)
     m_hImageList = (WXHIMAGELIST) TreeView_CreateDragImage((HWND) treeCtrl.GetHWND(), (HTREEITEM) (WXHTREEITEM) id);
     return TRUE;
 }
+#endif
 
+#if wxUSE_LISTCTRL
 // Create a drag image for the given list control item
 bool wxDragImage::Create(const wxListCtrl& listCtrl, long id)
 {
@@ -256,6 +259,7 @@ bool wxDragImage::Create(const wxListCtrl& listCtrl, long id)
     m_hImageList = (WXHIMAGELIST) ListView_CreateDragImage((HWND) listCtrl.GetHWND(), id, & pt);
     return TRUE;
 }
+#endif
 
 // Begin drag
 bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* window, bool fullScreen, wxRect* rect)

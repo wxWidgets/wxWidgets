@@ -18,7 +18,7 @@
 
 #include "wx/tbarbase.h"
 
-#if wxUSE_TOOLBAR_SIMPLE
+#if wxUSE_TOOLBAR && wxUSE_TOOLBAR_SIMPLE
 
 class WXDLLEXPORT wxMemoryDC;
 
