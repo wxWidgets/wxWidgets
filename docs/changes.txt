@@ -4,6 +4,10 @@ wxWindows 2.2 Change Log
 INCOMPATIBLE CHANGES
 --------------------
 
+All:
+
+- the command events are not propagated past the first top level parent
+
 wxMSW:
 
 - wxListCtrl::Find() parameter meaning changed, see docs for details
@@ -18,18 +22,44 @@ OTHER CHANGES
 
 All:
 
- - fixed a bug in wxStream classes
+- several memory leaks fixed, a few speed optimizations were done
+- using wxURL now enforces linking HTTP and FTP protocols in
 
-wxGTK:
+Unix:
 
- - fixed tree control invalid pointer after drag bug
+- configure changes: the system libraries are now used if found, fixes for
+  configuring under Solaris and Mac OS X, better support for 64 bit
+  architectures (including IA64)
+
+- call dlopen() with RTLD_GLOBAL flag
+
+- wxBase:
+
+- fixed bugs in wxString::rfind() and resize()
+- fixed wxStrtok()
+- miscellaneous fixes in wxDateTime
+- bug fixes in wxODBC
 
 wxMSW:
 
-- fixed bug in wxFrame::SetClientSize() for the frames with toolbars
-- Compilation fixes for Mingw32/JPEG code
-- fixed wxListBox memory leak (WM_DESTROY should always be
-  passed to DefWindowProc)
+- fixed wxChoice size calculations
+- fixed bad resource leak in wxListBox
+- fixed crash in wxSetFocusToChild()
+- fixed toolbar buttons drawing under Windows 2000
+- significant speed optimizations in wxRegConfig
+- better handling of accelerators
+- wxComboBox can now process enter key and sends TEXT_UPDATED more often
+- fixed crashes with big XPM files
+- compilation fixes for Mingw32/JPEG code
+
+wxGTK:
+
+- fix for non-US keyboards
+- improvents for 8bpp displays
+- various wxComboBox fixes
+- corrected radio button event sending
+- fixed slider value rounding, wxGA_VERTICAL style is now supported
+- fixed tree control invalid pointer after drag bug
 
 2.2.7
 -----
