@@ -79,7 +79,8 @@ public:
                 return NULL;
         }
     }
-
+    ~wxPyInputStream();
+    
     void close();
     void flush();
     bool eof();

@@ -1184,7 +1184,8 @@ bool wxPyInputStream::eof() {
 }
 
 wxPyInputStream::~wxPyInputStream() {
-    /* do nothing */
+    if (m_wxis)
+        delete m_wxis;
 }
 
 
@@ -1429,14 +1430,20 @@ size_t wxPyCBInputStream::OnSysWrite(const void *buffer, size_t bufsize) {
     return 0;
 }
 
+
 wxFileOffset wxPyCBInputStream::OnSysSeek(wxFileOffset off, wxSeekMode mode) {
     bool blocked = wxPyBeginBlockThreads();
-#if defined( __WINCE__) || defined(_LARGE_FILES) || wxHAS_HUGE_FILES
-    // wxFileOffset is a 64-bit value...
-    PyObject* arglist = Py_BuildValue("(Li)", off, mode);
-#else
-    PyObject* arglist = Py_BuildValue("(ii)", off, mode);
-#endif
+    PyObject* arglist = PyTuple_New(2);
+
+    if (sizeof(wxFileOffset) > sizeof(long))
+        // wxFileOffset is a 64-bit value...
+        PyTuple_SET_ITEM(arglist, 0, PyLong_FromLongLong(off));
+    else
+        PyTuple_SET_ITEM(arglist, 0, PyInt_FromLong(off));
+
+    PyTuple_SET_ITEM(arglist, 1, PyInt_FromLong(mode));
+
+    
     PyObject* result = PyEval_CallObject(m_seek, arglist);
     Py_DECREF(arglist);
     Py_XDECREF(result);
@@ -1452,11 +1459,9 @@ wxFileOffset wxPyCBInputStream::OnSysTell() const {
     Py_DECREF(arglist);
     wxFileOffset o = 0;
     if (result != NULL) {
-#if defined( __WINCE__) || defined(_LARGE_FILES) || wxHAS_HUGE_FILES
         if (PyLong_Check(result))
             o = PyLong_AsLongLong(result);
         else
-#endif
             o = PyInt_AsLong(result);
         Py_DECREF(result);
     };
