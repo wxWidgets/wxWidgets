@@ -298,6 +298,8 @@ public:
     wxGridCellEditor();
 
     bool IsCreated() { return m_control != NULL; }
+    wxControl* GetControl() { return m_control; }
+    void SetControl(wxControl* control) { m_control = control; }
 
     // Creates the actual edit control
     virtual void Create(wxWindow* parent,
@@ -933,8 +935,8 @@ private:
 
 // For comparisons...
 //
-extern wxGridCellCoords wxGridNoCellCoords;
-extern wxRect           wxGridNoCellRect;
+extern WXDLLEXPORT wxGridCellCoords wxGridNoCellCoords;
+extern WXDLLEXPORT wxRect           wxGridNoCellRect;
 
 // An array of cell coords...
 //
@@ -1356,7 +1358,7 @@ public:
             int x, int y, int w = -1, int h = -1,
             long style = wxWANTS_CHARS,
             const wxString& name = wxPanelNameStr )
-        : wxScrolledWindow( parent, -1, wxPoint(x,y), wxSize(w,h), 
+        : wxScrolledWindow( parent, -1, wxPoint(x,y), wxSize(w,h),
                             (style|wxWANTS_CHARS), name )
         {
             Create();

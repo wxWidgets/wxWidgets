@@ -71,7 +71,7 @@
 // array classes
 // ----------------------------------------------------------------------------
 
-WX_DEFINE_ARRAY(wxGridCellAttr *, wxArrayAttrs);
+WX_DEFINE_EXPORTED_ARRAY(wxGridCellAttr *, wxArrayAttrs);
 
 struct wxGridCellWithAttr
 {
@@ -89,7 +89,7 @@ struct wxGridCellWithAttr
     wxGridCellAttr  *attr;
 };
 
-WX_DECLARE_OBJARRAY(wxGridCellWithAttr, wxGridCellWithAttrArray);
+WX_DECLARE_EXPORTED_OBJARRAY(wxGridCellWithAttr, wxGridCellWithAttrArray);
 
 #include "wx/arrimpl.cpp"
 
@@ -293,7 +293,7 @@ struct wxGridDataTypeInfo
 };
 
 
-WX_DEFINE_ARRAY(wxGridDataTypeInfo*, wxGridDataTypeInfoArray);
+WX_DEFINE_EXPORTED_ARRAY(wxGridDataTypeInfo*, wxGridDataTypeInfoArray);
 
 
 class WXDLLEXPORT wxGridTypeRegistry
@@ -2567,7 +2567,7 @@ bool wxGridStringTable::AppendRows( size_t numRows )
     size_t row, col;
 
     size_t curNumRows = m_data.GetCount();
-    size_t curNumCols = ( curNumRows > 0 ? m_data[0].GetCount() : 
+    size_t curNumCols = ( curNumRows > 0 ? m_data[0].GetCount() :
                           ( GetView() ? GetView()->GetNumberCols() : 0 ) );
 
     wxArrayString sa;
@@ -4808,7 +4808,7 @@ bool wxGrid::InsertRows( int pos, int numRows, bool WXUNUSED(updateLabels) )
                 m_gridWin->Refresh();
             }
         }
-        
+
         return ok;
     }
     else
@@ -5051,7 +5051,7 @@ bool wxGrid::SendEvent( const wxEventType type,
     }
     else if ( type == wxEVT_GRID_RANGE_SELECT )
     {
-        // Right now, it should _never_ end up here! 
+        // Right now, it should _never_ end up here!
         wxGridRangeSelectEvent gridEvt( GetId(),
                                         type,
                                         this,
@@ -7757,7 +7757,7 @@ void wxGrid::SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol )
 {
     int temp;
     wxGridCellCoords updateTopLeft, updateBottomRight;
-    
+
     if ( m_selection->GetSelectionMode() == wxGrid::wxGridSelectRows )
     {
         leftCol = 0;
