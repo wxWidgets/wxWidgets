@@ -33,13 +33,16 @@
 #include  <wx/log.h>
 #include  <wx/textfile.h>
 #include  <wx/config.h>
+#include  <wx/fileconf.h>
 
-#ifdef __WINDOWS__
-#include <windows.h>
-#endif
+// _WINDOWS_ is defined when windows.h is included,
+// __WINDOWS__ is defined for MS Windows compilation
+#if       defined(__WINDOWS__) && !defined(_WINDOWS_)
+  #include  <windows.h>
+#endif  //windows.h
 
-#include <stdlib.h>
-#include <ctype.h>
+#include  <stdlib.h>
+#include  <ctype.h>
 
 // ----------------------------------------------------------------------------
 // global functions declarations
@@ -50,276 +53,73 @@
 //     but _not_ ']' (group name delimiter)
 inline bool IsValid(char c) { return isalnum(c) || strchr("_/-!.*%", c); }
 
-// get the system wide and user configuration file full path
-static const char *GetGlobalFileName(const char *szFile);
-static const char *GetLocalFileName(const char *szFile);
-
-// split path into parts removing '..' in progress
-static void SplitPath(wxArrayString& aParts, const char *sz);
-
 // filter strings
 static wxString FilterIn(const wxString& str);
 static wxString FilterOut(const wxString& str);
 
-// ----------------------------------------------------------------------------
-// wxFileConfig
-// ----------------------------------------------------------------------------
-
-/*
-  FileConfig derives from BaseConfig and implements file based config class, 
-  i.e. it uses ASCII disk files to store the information. These files are
-  alternatively called INI, .conf or .rc in the documentation. They are 
-  organized in groups or sections, which can nest (i.e. a group contains
-  subgroups, which contain their own subgroups &c). Each group has some
-  number of entries, which are "key = value" pairs. More precisely, the format 
-  is:
-
-  # comments are allowed after either ';' or '#' (Win/UNIX standard)
-
-  # blank lines (as above) are ignored
-
-  # global entries are members of special (no name) top group
-  written_for = wxWindows
-  platform    = Linux
-
-  # the start of the group 'Foo'
-  [Foo]                           # may put comments like this also
-  # following 3 lines are entries
-  key = value
-  another_key = "  strings with spaces in the beginning should be quoted, \
-                   otherwise the spaces are lost"
-  last_key = but you don't have to put " normally (nor quote them, like here)
-
-  # subgroup of the group 'Foo'
-  # (order is not important, only the name is: separator is '/', as in paths)
-  [Foo/Bar]
-  # entries prefixed with "!" are immutable, i.e. can't be changed if they are
-  # set in the system-wide config file
-  !special_key = value
-  bar_entry = whatever
-
-  [Foo/Bar/Fubar]   # depth is (theoretically :-) unlimited
-  # may have the same name as key in another section
-  bar_entry = whatever not
-
-  You have {read/write/delete}Entry functions (guess what they do) and also
-  setCurrentPath to select current group. enum{Subgroups/Entries} allow you
-  to get all entries in the config file (in the current group). Finally,
-  flush() writes immediately all changed entries to disk (otherwise it would
-  be done automatically in dtor)
-
-  FileConfig manages not less than 2 config files for each program: global
-  and local (or system and user if you prefer). Entries are read from both of
-  them and the local entries override the global ones unless the latter is
-  immutable (prefixed with '!') in which case a warning message is generated
-  and local value is ignored. Of course, the changes are always written to local
-  file only.
-*/
-
-class wxFileConfig : public wxConfig
-{
-public:
-  // ctor & dtor
-    // the config file is searched in the following locations
-    //            global                local
-    // Unix   /etc/file.ext           ~/.file
-    // Win    %windir%\file.ext   %USERPROFILE%\file.ext
-    //
-    // where file is the basename of strFile, ext is it's extension
-    // or .conf (Unix) or .ini (Win) if it has none
-  wxFileConfig(const wxString& strFile, bool bLocalOnly = FALSE);
-    // dtor will save unsaved data
-  virtual ~wxFileConfig();
-
-  // implement inherited pure virtual functions
-  virtual void SetPath(const wxString& strPath);
-  virtual const wxString& GetPath() const { return m_strPath; }
-
-  virtual bool GetFirstGroup(wxString& str, long& lIndex);
-  virtual bool GetNextGroup (wxString& str, long& lIndex);
-  virtual bool GetFirstEntry(wxString& str, long& lIndex);
-  virtual bool GetNextEntry (wxString& str, long& lIndex);
-
-  virtual const char *Read(const char *szKey, const char *szDefault = 0) const;
-  virtual long        Read(const char *szKey, long lDefault) const;
-  virtual bool Write(const char *szKey, const char *szValue);
-  virtual bool Write(const char *szKey, long Value);
-  virtual bool Flush(bool bCurrentOnly = FALSE);
-
-  virtual bool DeleteEntry(const char *szKey, bool bGroupIfEmptyAlso);
-  virtual bool DeleteGroup(const char *szKey);
-  virtual bool DeleteAll();
-
-public:
-  // fwd decl
-  class ConfigGroup;
-  class ConfigEntry;
-
-  // we store all lines of the local config file as a linked list in memory
-  class LineList
-  {
-  public:
-    // ctor
-    LineList(const wxString& str, LineList *pNext = NULL) : m_strLine(str) 
-      { SetNext(pNext); }
-    
-    // 
-    LineList *Next() const              { return m_pNext;  }
-    void      SetNext(LineList *pNext)  { m_pNext = pNext; }
-
-    //
-    void SetText(const wxString& str) { m_strLine = str;  }
-    const wxString& Text() const      { return m_strLine; }
-
-  private:
-    wxString  m_strLine;      // line contents
-    LineList *m_pNext;        // next node
-  };
-  
-  // functions to work with this list
-  LineList *LineListAppend(const wxString& str);
-  LineList *LineListInsert(const wxString& str, 
-                           LineList *pLine);    // NULL => Append()
-  bool      LineListIsEmpty();
-
-private:
-  // put the object in the initial state
-  void Init();
-
-  // parse the whole file
-  void Parse(wxTextFile& file, bool bLocal);
-
-  // the same as SetPath("/")
-  void SetRootPath();
-
-  // member variables
-  // ----------------
-  LineList   *m_linesHead,        // head of the linked list
-             *m_linesTail;        // tail
-
-  wxString    m_strFile;          // file name passed to ctor
-  wxString    m_strPath;          // current path (not '/' terminated)
-
-  ConfigGroup *m_pRootGroup,      // the top (unnamed) group
-              *m_pCurrentGroup;   // the current group
-
-  // a handy little class which changes current path to the path of given entry
-  // and restores it in dtor: so if you declare a local variable of this type,
-  // you work in the entry directory and the path is automatically restored
-  // when function returns
-  class PathChanger
-  {
-  public:
-    // ctor/dtor do path changing/restorin
-    PathChanger(const wxFileConfig *pContainer, const wxString& strEntry);
-   ~PathChanger();
-
-    // get the key name
-   const wxString& Name() const { return m_strName; }
-
-  private:
-    wxFileConfig *m_pContainer;   // object we live in
-    wxString      m_strName,      // name of entry (i.e. name only)
-                  m_strOldPath;   // saved path
-    bool          m_bChanged;     // was the path changed?
-  };
-
-//protected: --- if FileConfig::ConfigEntry is not public, functions in
-//               ConfigGroup such as Find/AddEntry can't return "ConfigEntry *"
-public:
-  WX_DEFINE_ARRAY(ConfigEntry *, ArrayEntries);
-  WX_DEFINE_ARRAY(ConfigGroup *, ArrayGroups);
-
-  class ConfigEntry
-  {
-  private:
-    ConfigGroup  *m_pParent;      // group that contains us
-    wxString      m_strName,      // entry name
-                  m_strValue;     //       value
-    bool          m_bDirty,       // changed since last read?
-                  m_bImmutable;   // can be overriden locally?
-    int           m_nLine;        // used if m_pLine == NULL only
-    LineList     *m_pLine;        // pointer to our line in the linked list
-                                  // or NULL if it was found in global file
-
-  public:
-    ConfigEntry(ConfigGroup *pParent, const wxString& strName, int nLine);
-
-    // simple accessors
-    const wxString& Name()        const { return m_strName;    }
-    const wxString& Value()       const { return m_strValue;   }
-    ConfigGroup    *Group()       const { return m_pParent;    }
-    bool            IsDirty()     const { return m_bDirty;     }
-    bool            IsImmutable() const { return m_bImmutable; }
-    bool            IsLocal()     const { return m_pLine != 0; }
-    int             Line()        const { return m_nLine;      }
-    LineList       *GetLine()     const { return m_pLine;      }
-
-    // modify entry attributes
-    void SetValue(const wxString& strValue, bool bUser = TRUE);
-    void SetDirty();
-    void SetLine(LineList *pLine);
-  };
-
-protected:
-  class ConfigGroup
-  {
-  private:
-    wxFileConfig *m_pConfig;      // config object we belong to
-    ConfigGroup  *m_pParent;      // parent group (NULL for root group)
-    ArrayEntries  m_aEntries;     // entries in this group
-    ArrayGroups   m_aSubgroups;   // subgroups
-    wxString      m_strName;      // group's name
-    bool          m_bDirty;       // if FALSE => all subgroups are not dirty
-    LineList     *m_pLine;        // pointer to our line in the linked list
-    int           m_nLastEntry,   // last here means "last added"
-                  m_nLastGroup;   // 
-
-  public:
-    // ctor
-    ConfigGroup(ConfigGroup *pParent, const wxString& strName, wxFileConfig *);
-
-    // dtor deletes all entries and subgroups also
-    ~ConfigGroup();
-
-    // simple accessors
-    const wxString& Name()    const { return m_strName; }
-    ConfigGroup    *Parent()  const { return m_pParent; }
-    wxFileConfig   *Config()  const { return m_pConfig; }
-    bool            IsDirty() const { return m_bDirty;  }
-
-    bool  IsEmpty() const { return Entries().IsEmpty() && Groups().IsEmpty(); }
-    const ArrayEntries& Entries() const { return m_aEntries;   }
-    const ArrayGroups&  Groups()  const { return m_aSubgroups; }
-
-    // find entry/subgroup (NULL if not found)
-    ConfigGroup *FindSubgroup(const char *szName) const;
-    ConfigEntry *FindEntry   (const char *szName) const;
-
-    // delete entry/subgroup, return FALSE if doesn't exist
-    bool DeleteSubgroup(const char *szName);
-    bool DeleteEntry(const char *szName);
-
-    // create new entry/subgroup returning pointer to newly created element
-    ConfigGroup *AddSubgroup(const wxString& strName);
-    ConfigEntry *AddEntry   (const wxString& strName, int nLine = NOT_FOUND);
-
-    // will also recursively set parent's dirty flag
-    void SetDirty();
-    void SetLine(LineList *pLine);
-
-    wxString GetFullName() const;
-
-    // get the last line belonging to an entry/subgroup of this group
-    LineList *GetGroupLine();
-    LineList *GetLastEntryLine();
-    LineList *GetLastGroupLine();
-  };
-};
-
 // ============================================================================
 // implementation
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// static functions
+// ----------------------------------------------------------------------------
+wxString wxFileConfig::GetGlobalFileName(const char *szFile)
+{
+  wxString str;
+
+  bool bNoExt = strchr(szFile, '.') == NULL;
+
+  #ifdef  __UNIX__
+    str << "/etc/" << szFile;
+    if ( bNoExt )
+      str << ".conf";
+  #else   // Windows
+    #ifndef _MAX_PATH
+      #define _MAX_PATH 512
+    #endif
+
+    char szWinDir[_MAX_PATH];
+    ::GetWindowsDirectory(szWinDir, _MAX_PATH);
+    str << szWinDir <<  "\\" << szFile;
+    if ( bNoExt )
+      str << ".ini";
+  #endif  // UNIX/Win
+
+  return str;
+}
+
+wxString wxFileConfig::GetLocalFileName(const char *szFile)
+{
+  wxString str;
+
+  #ifdef  __UNIX__
+    const char *szHome = getenv("HOME");
+    if ( szHome == NULL ) {
+      // we're homeless...
+      wxLogWarning("can't find user's HOME, using current directory.");
+      szHome = ".";
+    }
+    str << szHome << "/." << szFile;
+  #else   // Windows
+    #ifdef  __WIN32__
+      const char *szHome = getenv("HOMEDRIVE");
+      if ( szHome != NULL )
+        str << szHome;
+      szHome = getenv("HOMEPATH");
+      if ( szHome != NULL )
+        str << szHome;
+      str << szFile;
+      if ( strchr(szFile, '.') == NULL )
+        str << ".ini";
+    #else   // Win16
+      // Win16 has no idea about home, so use the current directory instead
+      str << ".\\" << szFile;
+    #endif  // WIN16/32
+  #endif  // UNIX/Win
+
+  return str;
+}
 
 // ----------------------------------------------------------------------------
 // ctor
@@ -338,40 +138,38 @@ void wxFileConfig::Init()
   m_strPath.Empty();
 }
 
-wxFileConfig::wxFileConfig(const wxString& strFile, bool bLocalOnly) 
-            : m_strFile(strFile)
+wxFileConfig::wxFileConfig(const wxString& strLocal, const wxString& strGlobal)
+            : m_strLocalFile(strLocal), m_strGlobalFile(strGlobal)
 {
   Init();
-
-  const char *szFile;
 
   // it's not an error if (one of the) file(s) doesn't exist
 
   // parse the global file
-  if ( !bLocalOnly ) {
-    szFile = GetGlobalFileName(strFile);
-    if ( wxFile::Exists(szFile) ) {
-      wxTextFile fileGlobal(szFile);
+  if ( !strGlobal.IsEmpty() ) {
+    if ( wxFile::Exists(strGlobal) ) {
+      wxTextFile fileGlobal(strGlobal);
 
       if ( fileGlobal.Open() ) {
         Parse(fileGlobal, FALSE /* global */);
         SetRootPath();
       }
       else
-        wxLogWarning("Can't open global configuration file.");
+        wxLogWarning("Can't open global configuration file '%s'.",
+                     strGlobal.c_str());
     }
   }
 
   // parse the local file
-  szFile = GetLocalFileName(strFile);
-  if ( wxFile::Exists(szFile) ) {
-    wxTextFile fileLocal(szFile);
+  if ( wxFile::Exists(strLocal) ) {
+    wxTextFile fileLocal(strLocal);
     if ( fileLocal.Open() ) {
       Parse(fileLocal, TRUE /* local */);
       SetRootPath();
     }
     else
-      wxLogWarning("Can't open user configuration file.");
+      wxLogWarning("Can't open user configuration file '%s'.",
+                   strLocal.c_str());
   }
 }
 
@@ -413,7 +211,7 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
 
       if ( *pEnd != ']' ) {
         wxLogError("file '%s': unexpected character at line %d (missing ']'?)",
-		                file.GetName(), n + 1);
+                   file.GetName(), n + 1);
         continue; // skip this line
       }
 
@@ -594,22 +392,43 @@ bool wxFileConfig::GetNextEntry (wxString& str, long& lIndex)
 // read/write values
 // ----------------------------------------------------------------------------
 
-const char *wxFileConfig::Read(const char *szKey, const char *szDefault) const
+const char *wxFileConfig::Read(const char *szKey,
+                               const char *szDefault) const
 {
   PathChanger path(this, szKey);
 
   ConfigEntry *pEntry = m_pCurrentGroup->FindEntry(path.Name());
-  if (pEntry == NULL)
-    return szDefault;
-  else
-    return pEntry->Value();
-//  return pEntry == NULL ? szDefault : pEntry->Value();
+  return pEntry == NULL ? szDefault : pEntry->Value().c_str();
 }
 
-long wxFileConfig::Read(const char *szKey, long lDefault) const
+bool wxFileConfig::Read(wxString   *pstr,
+                        const char *szKey,
+                        const char *szDefault) const
 {
-  const char *pc = Read(szKey);
-  return pc == NULL ? lDefault : atol(pc);
+  PathChanger path(this, szKey);
+
+  ConfigEntry *pEntry = m_pCurrentGroup->FindEntry(path.Name());
+  if (pEntry == NULL) {
+    *pstr = szDefault;
+    return FALSE;
+  }
+  else {
+    *pstr = pEntry->Value();
+    return TRUE;
+  }
+}
+
+bool wxFileConfig::Read(long *pl, const char *szKey, long lDefault) const
+{
+  wxString str;
+  if ( Read(&str, szKey) ) {
+    *pl = atol(str);
+    return TRUE;
+  }
+  else {
+    *pl = lDefault;
+    return FALSE;
+  }
 }
 
 bool wxFileConfig::Write(const char *szKey, const char *szValue)
@@ -637,7 +456,7 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
   if ( LineListIsEmpty() || !m_pRootGroup->IsDirty() )
     return TRUE;
 
-  wxTempFile file(GetLocalFileName(m_strFile));
+  wxTempFile file(m_strLocalFile);
 
   if ( !file.IsOpened() ) {
     wxLogError("Can't open user configuration file.");
@@ -687,14 +506,14 @@ bool wxFileConfig::DeleteGroup(const char *szKey)
 
 bool wxFileConfig::DeleteAll()
 {
-  const char *szFile = GetLocalFileName(m_strFile);
+  const char *szFile = m_strLocalFile;
   delete m_pRootGroup;
   Init();
 
   if ( remove(szFile) == -1 )
     wxLogSysError("Can't delete user configuration file '%s'", szFile);
 
-  szFile = GetGlobalFileName(m_strFile);
+  szFile = m_strGlobalFile;
   if ( remove(szFile) )
     wxLogSysError("Can't delete system configuration file '%s'", szFile);
 
@@ -982,7 +801,10 @@ wxFileConfig::ConfigEntry::ConfigEntry(wxFileConfig::ConfigGroup *pParent,
 
 void wxFileConfig::ConfigEntry::SetLine(LineList *pLine)
 {
-  wxASSERT( m_pLine == NULL );
+  if ( m_pLine != NULL ) {
+    wxLogWarning("Entry '%s' appears more than once in group '%s'",
+                 Name().c_str(), m_pParent->GetFullName().c_str());
+  }
 
   m_pLine = pLine;
 }
@@ -1030,139 +852,15 @@ void wxFileConfig::ConfigEntry::SetDirty()
 }
 
 // ============================================================================
-// wxFileConfig::PathChanger
-// ============================================================================
-
-wxFileConfig::PathChanger::PathChanger(const wxFileConfig *pContainer,
-                                       const wxString& strEntry)
-{
-  m_pContainer = (wxFileConfig *)pContainer;
-  wxString strPath = strEntry.Before(APPCONF_PATH_SEPARATOR);
-  if ( !strPath.IsEmpty() ) {
-    // do change the path
-    m_bChanged = TRUE;
-    m_strName = strEntry.Right(APPCONF_PATH_SEPARATOR);
-    m_strOldPath = m_pContainer->GetPath();
-    m_strOldPath += APPCONF_PATH_SEPARATOR;
-    m_pContainer->SetPath(strPath);
-  }
-  else {
-    // it's a name only, without path - nothing to do
-    m_bChanged = FALSE;
-    m_strName = strEntry;
-  }
-}
-
-wxFileConfig::PathChanger::~PathChanger()
-{
-  // only restore path if it was changed
-  if ( m_bChanged ) {
-    m_pContainer->SetPath(m_strOldPath);
-  }
-}
-
-// ============================================================================
 // global functions
 // ============================================================================
-
-const char *GetGlobalFileName(const char *szFile)
-{
-  static wxString s_str;
-  s_str.Empty();
-
-  bool bNoExt = strchr(szFile, '.') == NULL;
-
-  #ifdef  __UNIX__
-    s_str << "/etc/" << szFile;
-    if ( bNoExt )
-      s_str << ".conf";
-  #else   // Windows
-#ifndef _MAX_PATH
-#define _MAX_PATH 512
-#endif
-    char szWinDir[_MAX_PATH];
-    ::GetWindowsDirectory(szWinDir, _MAX_PATH);
-    s_str << szWinDir <<  "\\" << szFile;
-    if ( bNoExt )
-      s_str << ".INI";
-  #endif  // UNIX/Win
-
-  return s_str.c_str();
-}
-
-const char *GetLocalFileName(const char *szFile)
-{
-  static wxString s_str;
-  s_str.Empty();
-
-  #ifdef  __UNIX__
-    const char *szHome = getenv("HOME");
-    if ( szHome == NULL ) {
-      // we're homeless...
-      wxLogWarning("can't find user's HOME, using current directory.");
-      szHome = ".";
-    }
-    s_str << szHome << "/." << szFile;
-  #else   // Windows
-    #ifdef  __WIN32__
-      const char *szHome = getenv("HOMEDRIVE");
-      if ( szHome == NULL )
-        szHome = "";
-      s_str << szHome;
-      szHome = getenv("HOMEPATH");
-      s_str << ( szHome == NULL ? "." : szHome ) << szFile;
-      if ( strchr(szFile, '.') == NULL )
-        s_str << ".INI";
-    #else   // Win16
-      // Win16 has no idea about home, so use the current directory instead
-      s_str << ".\\" << szFile;
-    #endif  // WIN16/32
-  #endif  // UNIX/Win
-
-  return s_str.c_str();
-}
-
-void SplitPath(wxArrayString& aParts, const char *sz)
-{
-  aParts.Empty();
-
-  wxString strCurrent;
-  const char *pc = sz;
-  for ( ;; ) {
-    if ( *pc == '\0' || *pc == APPCONF_PATH_SEPARATOR ) {
-      if ( strCurrent == "." ) {
-        // ignore
-      }
-      else if ( strCurrent == ".." ) {
-        // go up one level
-        if ( aParts.IsEmpty() )
-          wxLogWarning("'%s' has extra '..', ignored.", sz);
-        else
-          aParts.Remove(aParts.Count() - 1);
-      }
-      else if ( !strCurrent.IsEmpty() ) {
-        aParts.Add(strCurrent);
-        strCurrent.Empty();
-      }
-      //else:
-        // could log an error here, but we prefer to ignore extra '/'
-
-      if ( *pc == '\0' )
-        return;
-    }
-    else
-      strCurrent += *pc;
-
-    pc++;
-  }
-}
 
 // undo FilterOut
 wxString FilterIn(const wxString& str)
 {
   wxString strResult;
 
-  bool bQuoted = str[0] == '"';
+  bool bQuoted = !str.IsEmpty() && str[0] == '"';
 
   for ( uint n = bQuoted ? 1 : 0; n < str.Len(); n++ ) {
     if ( str[n] == '\\' ) {
@@ -1240,9 +938,4 @@ wxString FilterOut(const wxString& str)
     strResult += '"';
 
   return strResult;
-}
-
-wxConfig *CreateFileConfig(const wxString& strFile, bool bLocalOnly)
-{
-  return new wxFileConfig(strFile, bLocalOnly);
 }
