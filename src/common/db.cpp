@@ -773,7 +773,7 @@ bool wxDb::Open(const wxString& inConnectStr, bool failOnDataTypeUnsupported)
     inConnectionStr = inConnectStr;
 
     retcode = SQLDriverConnect(hdbc, NULL, (SQLTCHAR FAR *)inConnectionStr.c_str(),
-                        inConnectionStr.Length(), (SQLTCHAR FAR *)outConnectBuffer,
+                        (SWORD)inConnectionStr.Length(), (SQLTCHAR FAR *)outConnectBuffer,
                         sizeof(outConnectBuffer), &outConnectBufferLen, SQL_DRIVER_COMPLETE );
 
     if ((retcode != SQL_SUCCESS) &&
@@ -878,7 +878,7 @@ bool wxDb::Open(wxDb *copyDb)
         inConnectionStr = copyDb->GetConnectionInStr();
 
         retcode = SQLDriverConnect(hdbc, NULL, (SQLTCHAR FAR *)inConnectionStr.c_str(),
-                            inConnectionStr.Length(), (SQLTCHAR FAR *)outConnectBuffer,
+                            (SWORD)inConnectionStr.Length(), (SQLTCHAR FAR *)outConnectBuffer,
                             sizeof(outConnectBuffer), &outConnectBufferLen, SQL_DRIVER_COMPLETE);
 
         if ((retcode != SQL_SUCCESS) &&
@@ -2191,7 +2191,7 @@ int wxDb::GetKeyFields(const wxString &tableName, wxDbColInf* colInf, UWORD noCo
 {
     wxChar       szPkTable[DB_MAX_TABLE_NAME_LEN+1];  /* Primary key table name */
     wxChar       szFkTable[DB_MAX_TABLE_NAME_LEN+1];  /* Foreign key table name */
-    short        iKeySeq;
+    SWORD        iKeySeq;
 //    SQLSMALLINT  iKeySeq;
     wxChar       szPkCol[DB_MAX_COLUMN_NAME_LEN+1];   /* Primary key column     */
     wxChar       szFkCol[DB_MAX_COLUMN_NAME_LEN+1];   /* Foreign key column     */
@@ -3201,7 +3201,7 @@ wxDbInf *wxDb::GetCatalog(const wxChar *userID)
     // Query how many columns are in each table
     for (noTab=0;noTab<pDbInf->numTables;noTab++)
     {
-        (pDbInf->pTableInf+noTab)->numCols = GetColumnCount((pDbInf->pTableInf+noTab)->tableName,UserID);
+        (pDbInf->pTableInf+noTab)->numCols = (UWORD)GetColumnCount((pDbInf->pTableInf+noTab)->tableName,UserID);
     }
 
     return pDbInf;
