@@ -17,7 +17,7 @@ item: Global
   Patch Flags=0000000000001001
   Patch Threshold=85
   Patch Memory=4000
-  EXE Filename=wxPython-2.1.13.exe
+  EXE Filename=wxPython-2.1.14.exe
   FTP Cluster Size=20
   Per-User Version ID=1
   Dialogs Version=6
@@ -815,8 +815,8 @@ item: Install File
   Flags=0000001010000011
 end
 item: Install File
-  Source=e:\projects\wx\lib\wx21_13.dll
-  Destination=%SYS%\wx21_13.dll
+  Source=e:\projects\wx\lib\wx21_14.dll
+  Destination=%SYS%\wx21_14.dll
   Flags=0000001010010010
 end
 item: Install File

@@ -16,11 +16,6 @@
 %{
 #include "helpers.h"
 #include "oglhelpers.h"
-#include <ogl.h>
-#include <basicp.h>
-#include <constrnt.h>
-#include <bmpshape.h>
-#include <drawn.h>
 %}
 
 //---------------------------------------------------------------------------

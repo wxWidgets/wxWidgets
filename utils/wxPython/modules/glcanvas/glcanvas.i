@@ -15,7 +15,7 @@
 
 %{
 #include "helpers.h"
-#include <glcanvas.h>
+#include <wx/glcanvas.h>
 %}
 
 //---------------------------------------------------------------------------

@@ -468,6 +468,7 @@ public:
                        int xPos = 0, int yPos = 0);
     void SetScrollPageSize(int orient, int pageSize);
     void SetTargetWindow(wxWindow* window);
+    void GetViewStart(int* OUTPUT, int* OUTPUT);
     void ViewStart(int* OUTPUT, int* OUTPUT);
 
     void CalcScrolledPosition( int x, int y, int *OUTPUT, int *OUTPUT);
@@ -580,7 +581,7 @@ public:
 
 class wxMenuItem {
 public:
-    wxMenuItem(wxMenu* parentMenu=NULL, int id=ID_SEPARATOR,
+    wxMenuItem(wxMenu* parentMenu=NULL, int id=wxID_SEPARATOR,
                const wxString& text = wxPyEmptyStr,
                const wxString& help = wxPyEmptyStr,
                bool isCheckable = FALSE, wxMenu* subMenu = NULL);

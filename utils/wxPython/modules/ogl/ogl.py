@@ -9,6 +9,8 @@ from windows import *
 
 from gdi import *
 
+from clip_dnd import *
+
 from events import *
 
 from mdi import *

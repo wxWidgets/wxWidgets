@@ -215,6 +215,7 @@ enum {
 
     wxFRAME_TOOL_WINDOW,
     wxFRAME_FLOAT_ON_PARENT,
+    wxFRAME_NO_WINDOW_MENU,
     wxED_CLIENT_MARGIN,
     wxED_BUTTONS_BOTTOM,
     wxED_BUTTONS_RIGHT,
@@ -404,6 +405,7 @@ enum {
     wxID_YES,
     wxID_NO,
     wxID_STATIC,
+    wxID_SEPARATOR,
 
     wxBITMAP_TYPE_BMP,
     wxBITMAP_TYPE_BMP_RESOURCE,

@@ -14,11 +14,12 @@
 #define __wxp_ogl_helpers__
 
 
-#include <ogl.h>
-#include <basicp.h>
-#include <constrnt.h>
-#include <bmpshape.h>
-#include <drawn.h>
+#include <wx/ogl/ogl.h>
+#include <wx/ogl/basicp.h>
+#include <wx/ogl/constrnt.h>
+#include <wx/ogl/bmpshape.h>
+#include <wx/ogl/drawn.h>
+
 
 //---------------------------------------------------------------------------
 // Define a macro that will be used in the class definintions below

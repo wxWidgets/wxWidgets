@@ -86,7 +86,7 @@ public:
 %new wxBitmap* wxEmptyBitmap(int width, int height, int depth=-1);
 
 #ifdef __WXMSW__
-%new wxBitmap* wxBitmapFromData(char* data, long type,
+%new wxBitmap* wxBitmapFromData(PyObject* data, long type,
                                 int width, int height, int depth = 1);
 #endif
 
@@ -96,9 +96,14 @@ public:
     }
 
 #ifdef __WXMSW__
-    wxBitmap* wxBitmapFromData(char* data, long type,
+    wxBitmap* wxBitmapFromData(PyObject* data, long type,
                                int width, int height, int depth = 1) {
-        return new wxBitmap((void*)data, type, width, height, depth);
+        if (! PyString_Check(data)) {
+            PyErr_SetString(PyExc_TypeError, "Expected string object");
+            return NULL;
+        }
+
+        return new wxBitmap((void*)PyString_AsString(data), type, width, height, depth);
     }
 #endif
 %}

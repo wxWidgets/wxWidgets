@@ -114,9 +114,14 @@ static char* wxStringErrorMsg = "string type is required for parameter";
     }
 
 #ifdef __WXMSW__
-    wxBitmap* wxBitmapFromData(char* data, long type,
+    wxBitmap* wxBitmapFromData(PyObject* data, long type,
                                int width, int height, int depth = 1) {
-        return new wxBitmap((void*)data, type, width, height, depth);
+        if (! PyString_Check(data)) {
+            PyErr_SetString(PyExc_TypeError, "Expected string object");
+            return NULL;
+        }
+
+        return new wxBitmap((void*)PyString_AsString(data), type, width, height, depth);
     }
 #endif
 
@@ -222,17 +227,21 @@ static PyObject *_wrap_wxEmptyBitmap(PyObject *self, PyObject *args, PyObject *k
 static PyObject *_wrap_wxBitmapFromData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxBitmap * _result;
-    char * _arg0;
+    PyObject * _arg0;
     long  _arg1;
     int  _arg2;
     int  _arg3;
     int  _arg4 = (int ) 1;
+    PyObject * _obj0 = 0;
     char *_kwnames[] = { "data","type","width","height","depth", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"slii|i:wxBitmapFromData",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Olii|i:wxBitmapFromData",_kwnames,&_obj0,&_arg1,&_arg2,&_arg3,&_arg4)) 
         return NULL;
+{
+  _arg0 = _obj0;
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = (wxBitmap *)wxBitmapFromData(_arg0,_arg1,_arg2,_arg3,_arg4);
