@@ -329,15 +329,18 @@ void MyFrame::TogStyle(int id, long flag)
 void MyFrame::OnIdle(wxIdleEvent& event)
 {
 #if wxUSE_STATUSBAR
-    wxTreeItemId idRoot = m_treeCtrl->GetRootItem();
+    if ( m_treeCtrl )
+    {
+        wxTreeItemId idRoot = m_treeCtrl->GetRootItem();
 
-    SetStatusText(wxString::Format
-                  (
-                    _T("Root/last item is %svisible/%svisible"),
-                    m_treeCtrl->IsVisible(idRoot) ? _T("") : _T("not "),
-                    m_treeCtrl->IsVisible(m_treeCtrl->GetLastChild(idRoot))
-                        ? _T("") : _T("not ")
-                  ), 1);
+        SetStatusText(wxString::Format
+                      (
+                        _T("Root/last item is %svisible/%svisible"),
+                        m_treeCtrl->IsVisible(idRoot) ? _T("") : _T("not "),
+                        m_treeCtrl->IsVisible(m_treeCtrl->GetLastChild(idRoot))
+                            ? _T("") : _T("not ")
+                      ), 1);
+    }
 #endif // wxUSE_STATUSBAR
 
     event.Skip();
