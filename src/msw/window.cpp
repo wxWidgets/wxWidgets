@@ -4051,10 +4051,10 @@ wxColour wxWindowMSW::MSWGetBgColourForChild(wxWindow * WXUNUSED(child))
 
 WXHBRUSH wxWindowMSW::MSWGetBgBrushForSelf(wxWindow *parent, WXHDC hDC)
 {
-    return parent->MSWGetBgBrushForChild(hDC, this);
+    return parent->MSWGetBgBrushForChild(hDC, (wxWindow *)this);
 }
 
-WXHBRUSH wxWindow::MSWGetBgBrush(WXHDC hDC)
+WXHBRUSH wxWindowMSW::MSWGetBgBrush(WXHDC hDC)
 {
     for ( wxWindow *win = this; win; win = win->GetParent() )
     {
