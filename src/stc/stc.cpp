@@ -497,7 +497,7 @@ void wxStyledTextCtrl::MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp)
         buff[len] = 0;
         SendMsg(2049, markerNumber, (long)buff);
         delete [] buff;
-
+        
 }
 
 // Set a margin to be either numeric or symbolic.
@@ -881,7 +881,7 @@ void wxStyledTextCtrl::RegisterImage(int type, const wxBitmap& bmp) {
         buff[len] = 0;
         SendMsg(2405, type, (long)buff);
         delete [] buff;
-
+     
 }
 
 // Clear all the registered images.
@@ -1056,7 +1056,7 @@ int wxStyledTextCtrl::FindText(int minPos, int maxPos,
                 int    startPos,
                 int    endPos,
                 wxDC*  draw,
-                wxDC*  target,
+                wxDC*  target, 
                 wxRect renderRect,
                 wxRect pageRect) {
              RangeToFormat fr;
@@ -2584,13 +2584,13 @@ bool wxStyledTextCtrl::LoadFile(const wxString& filename)
     if (file.IsOpened())
     {
         wxString contents;
-        size_t len = file.Length();
+        size_t len = (size_t)file.Length();
         if (len > 0)
         {
 #if wxUSE_UNICODE
             wxMemoryBuffer buffer(len+1);
             success = (file.Read(buffer.GetData(), len) == len);
-            if (success) {
+	    if (success) {
                 ((char*)buffer.GetData())[len] = 0;
                 contents = wxString(buffer, *wxConvCurrent, len);
             }
@@ -2601,7 +2601,7 @@ bool wxStyledTextCtrl::LoadFile(const wxString& filename)
 #endif
         }
         else
-            success = true; // empty file is ok
+            success = true;		// empty file is ok
 
         if (success)
         {

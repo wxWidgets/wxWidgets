@@ -1969,7 +1969,7 @@ public:
                int    startPos,
                int    endPos,
                wxDC*  draw,
-               wxDC*  target,
+               wxDC*  target, 
                wxRect renderRect,
                wxRect pageRect);
 

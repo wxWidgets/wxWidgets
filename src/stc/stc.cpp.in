@@ -54,7 +54,7 @@ static wxColour wxColourFromLong(long c) {
 static wxColour wxColourFromSpec(const wxString& spec) {
     // spec should be a colour name or "#RRGGBB"
     if (spec.GetChar(0) == wxT('#')) {
-        
+
         long red, green, blue;
         red = green = blue = 0;
         spec.Mid(1,2).ToLong(&red,   16);
@@ -120,7 +120,7 @@ BEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
     EVT_SYS_COLOUR_CHANGED      (wxStyledTextCtrl::OnSysColourChanged)
     EVT_ERASE_BACKGROUND        (wxStyledTextCtrl::OnEraseBackground)
     EVT_MENU_RANGE              (10, 16, wxStyledTextCtrl::OnMenu)
-    EVT_LISTBOX_DCLICK          (-1, wxStyledTextCtrl::OnListBox)
+    EVT_LISTBOX_DCLICK          (wxID_ANY, wxStyledTextCtrl::OnListBox)
 END_EVENT_TABLE()
 
 
@@ -166,7 +166,7 @@ void wxStyledTextCtrl::Create(wxWindow *parent,
 #endif
     m_swx = new ScintillaWX(this);
     m_stopWatch.Start();
-    m_lastKeyDownConsumed = FALSE;
+    m_lastKeyDownConsumed = false;
     m_vScrollBar = NULL;
     m_hScrollBar = NULL;
 #if wxUSE_UNICODE
@@ -340,7 +340,7 @@ bool wxStyledTextCtrl::SaveFile(const wxString& filename)
     wxFile file(filename, wxFile::write);
 
     if (!file.IsOpened())
-        return FALSE;
+        return false;
 
     bool success = file.Write(GetText(), *wxConvCurrent);
 
@@ -358,13 +358,13 @@ bool wxStyledTextCtrl::LoadFile(const wxString& filename)
     if (file.IsOpened())
     {
         wxString contents;
-        off_t len = file.Length();
+        size_t len = (size_t)file.Length();
         if (len > 0)
         {
 #if wxUSE_UNICODE
             wxMemoryBuffer buffer(len+1);
             success = (file.Read(buffer.GetData(), len) == len);
-	    if (success) {
+            if (success) {
                 ((char*)buffer.GetData())[len] = 0;
                 contents = wxString(buffer, *wxConvCurrent, len);
             }
@@ -390,12 +390,12 @@ bool wxStyledTextCtrl::LoadFile(const wxString& filename)
 
 
 #if wxUSE_DRAG_AND_DROP
-wxDragResult wxStyledTextCtrl::DoDragOver(wxCoord x, wxCoord y, wxDragResult def) { 
-        return m_swx->DoDragOver(x, y, def); 
-} 
+wxDragResult wxStyledTextCtrl::DoDragOver(wxCoord x, wxCoord y, wxDragResult def) {
+        return m_swx->DoDragOver(x, y, def);
+}
 
 
-bool wxStyledTextCtrl::DoDropText(long x, long y, const wxString& data) { 
+bool wxStyledTextCtrl::DoDropText(long x, long y, const wxString& data) {
     return m_swx->DoDropText(x, y, data);
 }
 #endif
@@ -756,7 +756,7 @@ wxStyledTextEvent::wxStyledTextEvent(wxEventType commandType, int id)
     m_listType = 0;
     m_x = 0;
     m_y = 0;
-    m_dragAllowMove = FALSE;
+    m_dragAllowMove = false;
 #if wxUSE_DRAG_AND_DROP
     m_dragResult = wxDragNone;
 #endif
