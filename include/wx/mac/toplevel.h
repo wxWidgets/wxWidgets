@@ -1,11 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/mac/toplevel.h
 // Purpose:     wxTopLevelWindowMac is the Mac implementation of wxTLW
-// Author:      Vadim Zeitlin
+// Author:      Stefan Csomor
 // Modified by:
 // Created:     20.09.01
 // RCS-ID:      $Id$
-// Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
+// Copyright:   (c) 2001 Stefan Csomor
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
