@@ -69,15 +69,15 @@ See also \helpref{window styles overview}{windowstyles}.
 wxFrame processes the following events:
 
 \begin{twocollist}\itemsep=0pt
-\twocolitem{wxEVT\_SIZE}{If the frame has exactly one child window, not
-counting the status and toolbar, this child is resized to take the entire frame
-client area. If two or more windows are present, they should be laid out
-explicitly either by manually handling wxEVT\_SIZE or using 
+\twocolitem{\helpref{wxEVT\_SIZE}{wxsizeevent}}{If the frame has exactly one
+child window, not counting the status and toolbar, this child is resized to
+take the entire frame client area. If two or more windows are present, they
+should be laid out explicitly either by manually handling wxEVT\_SIZE or using 
 \helpref{sizers}{sizeroverview}}
 
-\twocolitem{wxEVT\_MENU\_HIGHLIGHT}{The default implementation displays the
-\helpref{help string}{wxmenuitemgethelp} associated with the selected item in
-the first pane of the status bar, if there is one.}
+\twocolitem{\helpref{wxEVT\_MENU\_HIGHLIGHT}{wxmenuevent}}{The default
+implementation displays the \helpref{help string}{wxmenuitemgethelp} associated
+with the selected item in the first pane of the status bar, if there is one.}
 \end{twocollist}
 
 \wxheading{Remarks}
