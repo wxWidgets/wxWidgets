@@ -114,7 +114,8 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
    Fit();
    // and set the width from it
    wxSize size = GetClientSize();
-   SetClientSize(2*size.y, size.y);
+   if(size.x < 2*size.y)
+      SetClientSize(2*size.y, size.y);
 
    Show(TRUE);
    Centre(wxCENTER_FRAME | wxBOTH);
