@@ -27,6 +27,7 @@
     #include "wx/app.h"
     #include "wx/debug.h"
     #include "wx/filefn.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/module.h"
@@ -110,7 +111,7 @@ bool WXDLLEXPORT wxInitialize()
         return FALSE;
     }
 
-    wxTheApp->DoInit();
+    wxTheApp->CreateMessageOutput();
     gs_nInitCount++;
 
     return TRUE;
@@ -231,3 +232,5 @@ static void DoCleanUp()
     delete wxLog::SetActiveTarget(NULL);
 #endif // wxUSE_LOG
 }
+
+// vi:sts=4:sw=4:et
