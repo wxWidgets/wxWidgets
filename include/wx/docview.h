@@ -283,6 +283,9 @@ class WXDLLEXPORT wxDocManager: public wxEvtHandler
   void OnUndo(wxCommandEvent& event);
   void OnRedo(wxCommandEvent& event);
 
+  // Extend event processing to search the view's event table
+  virtual bool ProcessEvent(wxEvent& event);
+
   virtual wxDocument *CreateDocument(const wxString& path, long flags = 0);
   virtual wxView *CreateView(wxDocument *doc, long flags = 0);
   virtual void DeleteTemplate(wxDocTemplate *temp, long flags = 0);
@@ -314,7 +317,7 @@ class WXDLLEXPORT wxDocManager: public wxEvtHandler
   // Views or windows should inform the document manager
   // when a view is going in or out of focus
   virtual void ActivateView(wxView *view, bool activate = TRUE, bool deleting = FALSE);
-  virtual inline wxView *GetCurrentView(void) const { return m_currentView; }
+  virtual wxView *GetCurrentView(void) const;
 
   virtual inline wxList& GetDocuments(void) const { return (wxList&) m_docs; }
 

@@ -839,6 +839,30 @@ void wxDocManager::OnRedo(wxCommandEvent& WXUNUSED(event))
     doc->GetCommandProcessor()->Redo();
 }
 
+wxView *wxDocManager::GetCurrentView(void) const
+{
+    if (m_currentView)
+        return m_currentView;
+    if (m_docs.Number() == 1)
+    {
+        wxDocument* doc = (wxDocument*) m_docs.First()->Data();
+        return doc->GetFirstView();
+    }
+    return NULL;
+}
+
+// Extend event processing to search the view's event table
+bool wxDocManager::ProcessEvent(wxEvent& event)
+{
+    wxView* view = GetCurrentView();
+    if (view)
+    {
+        if (view->ProcessEvent(event))
+            return TRUE;
+    }
+    return wxEvtHandler::ProcessEvent(event);
+}
+
 wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
 {
   wxDocTemplate **templates = new wxDocTemplate *[m_templates.Number()];
