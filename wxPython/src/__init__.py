@@ -26,7 +26,16 @@ __all__ = [
     'calendar',
     'grid',
     'html',
-    'wizard',    
+    'wizard',
+
+    # contribs (need a better way to find these...)
+    'activex',
+    'gizmos',
+    'glcanvas',
+    'iewin',
+    'ogl',
+    'stc',
+    'xrc',
     ]
 
 # Load the package namespace with the core classes and such
@@ -36,7 +45,7 @@ del wx
 # Load up __all__ with all the names of items that should appear to be
 # defined in this pacakge so epydoc will document them that way.
 import wx._core
-__docfilter__ = wx._core.__docfilter__
+__docfilter__ = wx._core.__DocFilter(globals())
 
 __all__ += [name for name in dir(wx._core)
             if not (name.startswith('__') and name.endswith('__'))]

@@ -222,14 +222,22 @@ class FutureCall:
 # documented (or will be) as part of the classes/functions/methods
 # where they should be used.
 
-def __docfilter__(name):
-    import types
-    obj = globals().get(name, None)
-    if type(obj) not in [type, types.ClassType, types.FunctionType, types.BuiltinFunctionType]:
-        return False
-    if name.startswith('_') or name.endswith('Ptr') or name.startswith('EVT'):
-        return False
-    return True
+class __DocFilter:
+    """
+    A filter for epydoc that only allows non-Ptr classes and
+    fucntions, in order to reduce the clutter in the API docs.
+    """
+    def __init__(self, globals):
+        self._globals = globals
+        
+    def __call__(self, name):
+        import types
+        obj = self._globals.get(name, None)
+        if type(obj) not in [type, types.ClassType, types.FunctionType, types.BuiltinFunctionType]:
+            return False
+        if name.startswith('_') or name.endswith('Ptr') or name.startswith('EVT'):
+            return False
+        return True
 
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------

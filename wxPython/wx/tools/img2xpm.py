@@ -14,7 +14,7 @@
 #
 
 """
-img2xpm.py  -- convert several image formats to XPM
+img2xpm.py  -- convert several image formats to XPM.
 
 Usage:
 

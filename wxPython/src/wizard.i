@@ -25,6 +25,7 @@
 
 %import windows.i
 %pythoncode { wx = _core }
+%pythoncode { __docfilter__ = wx.__DocFilter(globals()) }
 
 %include _wizard_rename.i
 

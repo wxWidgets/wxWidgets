@@ -25,7 +25,7 @@
 
 %import core.i
 %pythoncode { wx = _core }
-%pythoncode { __docfilter__ = wx.__docfilter__ }
+%pythoncode { __docfilter__ = wx.__DocFilter(globals()) }
 
 
 MAKE_CONST_WXSTRING2(GLCanvasNameStr, wxT("GLCanvas"));

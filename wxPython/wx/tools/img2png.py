@@ -14,7 +14,7 @@
 #
 
 """
-img2png.py  -- convert several image formats to PNG format
+img2png.py  -- convert several image formats to PNG format.
 
 Usage:
 

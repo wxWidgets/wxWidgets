@@ -25,7 +25,6 @@
 
 %import core.i
 %pythoncode { wx = _core }
-%pythoncode { __docfilter__ = wx.__docfilter__ }
 
 %include __misc_rename.i
 
