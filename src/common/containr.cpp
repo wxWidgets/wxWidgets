@@ -273,6 +273,23 @@ bool wxControlContainer::DoSetFocus()
     //
     // RR: Removed for now. Let's see what happens..
 
+    // if our child already has focus, don't take it away from it
+    wxWindow *win = wxWindow::FindFocus();
+    while ( win )
+    {
+        if ( win == m_winParent )
+            return TRUE;
+
+        if ( win->IsTopLevel() )
+        {
+            // don't look beyond the first top level parent - useless and
+            // unnecessary
+            break;
+        }
+
+        win = win->GetParent();
+    }
+
     return SetFocusToChild();
 }
 
