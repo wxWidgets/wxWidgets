@@ -17,7 +17,7 @@ class TestPanel(wxScrolledPanel):
                             "the necessary bits to set up scroll handling for you.\n\n"
                             "Here are three fixed size examples of its use. The "
                             "demo panel for this sample is also using it -- the \nwxStaticLine"
-                            "below is intentionally made too long so a scrollbar will be"
+                            "below is intentionally made too long so a scrollbar will be "
                             "activated."
                             )
         desc.SetForegroundColour("Blue")
