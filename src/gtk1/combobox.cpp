@@ -219,6 +219,9 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     // and case-sensitive
     gtk_combo_set_case_sensitive( GTK_COMBO(m_widget), TRUE );
 
+    if (style & wxNO_BORDER)
+        g_object_set( GTK_ENTRY( combo->entry ), "has-frame", FALSE, NULL );
+        
     GtkWidget *list = GTK_COMBO(m_widget)->list;
 
 #ifndef __WXGTK20__
