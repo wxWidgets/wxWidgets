@@ -152,8 +152,7 @@ typedef unsigned __WCHAR_TYPE__ wxUChar;
 #define  wxIsupper   iswupper
 #define  wxIsxdigit  iswxdigit
 
-    // VZ: the test is incorrect, should test for glibc2.0 somehow probably
-#ifdef __GNUG__
+#if defined(__GLIBC__) && (__GLIBC__ == 2) && (__GLIBC_MINOR__ == 0)
     // /usr/include/wctype.h incorrectly declares translations tables which
     // provokes tons of compile-time warnings - try to correct this
     #define  wxTolower(wc)   towctrans((wc), (wctrans_t)__ctype_tolower)
@@ -371,9 +370,12 @@ wxChar * WXDLLEXPORT wxSetlocale(int category, const wxChar *locale);
 #endif
 
 #ifdef wxNEED_WX_STDIO_H
+#include <stdio.h>
 #include <stdarg.h>
 int      WXDLLEXPORT wxPrintf(const wxChar *fmt, ...);
 int      WXDLLEXPORT wxVprintf(const wxChar *fmt, va_list argptr);
+int      WXDLLEXPORT wxFprintf(FILE *stream, const wxChar *fmt, ...);
+int      WXDLLEXPORT wxVfprintf(FILE *stream, const wxChar *fmt, va_list argptr);
 int      WXDLLEXPORT wxSprintf(wxChar *buf, const wxChar *fmt, ...);
 int      WXDLLEXPORT wxVsprintf(wxChar *buf, const wxChar *fmt, va_list argptr);
 #endif
