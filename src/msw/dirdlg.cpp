@@ -46,6 +46,34 @@
 IMPLEMENT_CLASS(wxDirDialog, wxDialog)
 #endif
 
+static int CALLBACK
+BrowseCallbackProc(HWND hwnd,UINT uMsg,LPARAM lp, LPARAM pData)
+   {
+   TCHAR szDir[MAX_PATH];
+
+   switch(uMsg)
+      {
+      case BFFM_INITIALIZED:
+         // We have put m_path into pData.
+         // TRUE -> passing char *, not dir id.
+         SendMessage(hwnd,BFFM_SETSELECTION,TRUE,pData);
+         break;
+
+      case BFFM_SELCHANGED:
+         // Set the status window to the currently selected path.
+         if (SHGetPathFromIDList((LPITEMIDLIST) lp ,szDir))
+            {
+            SendMessage(hwnd,BFFM_SETSTATUSTEXT,0,(LPARAM)szDir);
+            }
+         break;
+
+      default:
+         break;
+      }
+   return 0;
+   }
+
+
 wxDirDialog::wxDirDialog(wxWindow *parent, const wxString& message,
 //		const wxString& caption,
         const wxString& defaultPath,
@@ -99,8 +127,8 @@ int wxDirDialog::ShowModal(void)
     bi.pszDisplayName = lpBuffer; 
     bi.lpszTitle = m_message; // BC++ 4.52 says LPSTR, not LPTSTR?
     bi.ulFlags = 0; 
-    bi.lpfn = NULL; 
-    bi.lParam = 0; 
+    bi.lpfn = BrowseCallbackProc; 
+    bi.lParam = (LPARAM)m_path.c_str(); 
  
     // Browse for a folder and return its PIDL. 
     pidlBrowse = SHBrowseForFolder(&bi); 
