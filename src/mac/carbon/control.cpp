@@ -68,15 +68,17 @@ pascal OSStatus wxMacSetupControlBackground( ControlRef iControl , SInt16 iMessa
 	switch( iMessage )
 	{
 		case kControlMsgSetUpBackground :
-        	wxControl*  wx = (wxControl*) GetControlReference( iControl ) ;
-        	if ( wx != NULL && wx->IsKindOf( CLASSINFO( wxControl ) ) )
-        	{
-        		wxDC::MacSetupBackgroundForCurrentPort( wx->MacGetBackgroundBrush() ) ;
-//				SetThemeBackground( iDepth , iIsColor ) ;
-			}
-			else
 			{
-				status = paramErr ;
+	        	wxControl*  wx = (wxControl*) GetControlReference( iControl ) ;
+	        	if ( wx != NULL && wx->IsKindOf( CLASSINFO( wxControl ) ) )
+	        	{
+	        		wxDC::MacSetupBackgroundForCurrentPort( wx->MacGetBackgroundBrush() ) ;
+	//				SetThemeBackground( iDepth , iIsColor ) ;
+				}
+				else
+				{
+					status = paramErr ;
+				}
 			}
 			break ;
 		default :
