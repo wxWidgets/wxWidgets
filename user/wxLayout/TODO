@@ -16,6 +16,8 @@ BUGS
 TODO
 =====================================================================
 
+Formatting of first text in message in M is broken.
+
 Selections:
   - moving in negative direction doesn't work
   - selection state not properly reset, only works once
