@@ -334,12 +334,11 @@ Returns TRUE if the socket is connected.
 
 \constfunc{bool}{IsData}{\void}
 
-Returns TRUE if the socket is readable. This might mean that
+This function waits until the socket is readable. This might mean that
 queued data is available for reading or, for streamed sockets, that
-the connection has been closed, so that a \helpref{Read}{wxsocketbaseread},
-\helpref{ReadMsg}{wxsocketbasereadmsg} or \helpref{Peek}{wxsocketbasepeek}
-operation is guaranteed to complete immediately (unless the
-{\bf wxSOCKET\_WAITALL} flag is set).
+the connection has been closed, so that a read operation will complete
+immediately without blocking (unless the {\bf wxSOCKET\_WAITALL} flag
+is set, in which case the operation might still block).
 
 \membersection{wxSocketBase::IsDisconnected}\label{wxsocketbaseisdisconnected}
 
@@ -761,10 +760,9 @@ FALSE if the timeout was reached.
 
 This function waits until the socket is readable. This might mean that
 queued data is available for reading or, for streamed sockets, that
-the connection has been closed, so that a \helpref{Read}{wxsocketbaseread},
-\helpref{ReadMsg}{wxsocketbasereadmsg} or \helpref{Peek}{wxsocketbasepeek}
-operation is guaranteed to complete immediately (unless the
-{\bf wxSOCKET\_WAITALL} flag is set).
+the connection has been closed, so that a read operation will complete
+immediately without blocking (unless the {\bf wxSOCKET\_WAITALL} flag
+is set, in which case the operation might still block).
 
 \wxheading{Parameters}
 
@@ -776,8 +774,7 @@ as set with \helpref{SetTimeout}{wxsocketbasesettimeout}.}
 
 \wxheading{Return value}
 
-Returns TRUE if there is data to be read, FALSE if the timeout was reached
-or an error occured.
+Returns TRUE if the socket becomes readable, FALSE on timeout.
 
 \wxheading{See also}
 
@@ -794,9 +791,9 @@ or an error occured.
 
 This function waits until the socket becomes writable. This might mean that
 the socket is ready to send new data, or for streamed sockets, that the
-connection has been closed, so that a \helpref{Write}{wxsocketbasewrite}
-or \helpref{ReadMsg}{wxsocketbasewritemsg} operation is guaranteed to
-complete immediately (unless the {\bf wxSOCKET\_WAITALL} flag is set).
+connection has been closed, so that a write operation is guaranteed to
+complete immediately (unless the {\bf wxSOCKET\_WAITALL} flag is set,
+in which case the operation might still block).
 
 \wxheading{Parameters}
 
@@ -808,7 +805,7 @@ as set with \helpref{SetTimeout}{wxsocketbasesettimeout}.}
 
 \wxheading{Return value}
 
-Returns TRUE if the socket becomes writable, FALSE if the timeout was reached.
+Returns TRUE if the socket becomes writable, FALSE on timeout.
 
 \wxheading{See also}
 
@@ -1025,10 +1022,29 @@ as set with \helpref{SetTimeout}{wxsocketbasesettimeout}.}
 
 \wxheading{Return value}
 
-If the connection is succesfully established, returns TRUE.
+WaitOnConnect returns TRUE if the connection request completes. This
+does not necessarily mean that the connection was succesfully established;
+it might also happen that the connection was refused by the peer. Use
+\helpref{IsConnected}{wxsocketbaseisconnected} to distinguish between
+these two situations.
 
-If the timeout expires, or if the connection fails, returns FALSE.
-To distinguish between these two conditions, use \helpref{IsConnected}{wxsocketbaseisconnected}
+If the timeout elapses, WaitOnConnect returns FALSE.
+
+These semantics allow code like this:
+
+\begin{verbatim}
+// Issue the connection request
+client->Connect(addr, FALSE);
+
+// Wait until the request completes or until we decide to give up
+bool waitmore;
+while ( !WaitOnConnect(seconds, millis) && waitmore )
+{
+    // possibly give some feedback to the user,
+    // and update waitmore if needed.
+}
+bool success = client->IsConnected();
+\end{verbatim}
 
 \wxheading{See also}
 
