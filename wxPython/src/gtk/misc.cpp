@@ -509,6 +509,25 @@ static PyObject *_wrap_wxGetOsDescription(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
+static PyObject *_wrap_wxShutdown(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxShutdownFlags  _arg0;
+    char *_kwnames[] = { "wFlags", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxShutdown",_kwnames,&_arg0)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxShutdown(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static PyObject *_wrap_wxSleep(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _arg0;
@@ -4238,6 +4257,7 @@ static PyMethodDef misccMethods[] = {
 	 { "wxYield", (PyCFunction) _wrap_wxYield, METH_VARARGS | METH_KEYWORDS },
 	 { "wxUsleep", (PyCFunction) _wrap_wxUsleep, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSleep", (PyCFunction) _wrap_wxSleep, METH_VARARGS | METH_KEYWORDS },
+	 { "wxShutdown", (PyCFunction) _wrap_wxShutdown, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetOsDescription", (PyCFunction) _wrap_wxGetOsDescription, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetOsVersion", (PyCFunction) _wrap_wxGetOsVersion, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStartTimer", (PyCFunction) _wrap_wxStartTimer, METH_VARARGS | METH_KEYWORDS },
@@ -4370,6 +4390,8 @@ SWIGEXPORT(void) initmiscc() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("miscc", misccMethods);
 	 d = PyModule_GetDict(m);
+	 PyDict_SetItemString(d,"wxSHUTDOWN_POWEROFF", PyInt_FromLong((long) wxSHUTDOWN_POWEROFF));
+	 PyDict_SetItemString(d,"wxSHUTDOWN_REBOOT", PyInt_FromLong((long) wxSHUTDOWN_REBOOT));
 	 PyDict_SetItemString(d,"wxLeft", PyInt_FromLong((long) wxLeft));
 	 PyDict_SetItemString(d,"wxTop", PyInt_FromLong((long) wxTop));
 	 PyDict_SetItemString(d,"wxRight", PyInt_FromLong((long) wxRight));

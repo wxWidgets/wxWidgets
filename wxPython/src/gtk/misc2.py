@@ -1103,6 +1103,8 @@ wxLogStatusFrame = misc2c.wxLogStatusFrame
 
 wxLogSysError = misc2c.wxLogSysError
 
+wxSafeShowMessage = misc2c.wxSafeShowMessage
+
 wxExecute = misc2c.wxExecute
 
 def wxWaveData(*_args, **_kwargs):
@@ -1123,6 +1125,10 @@ def wxSystemSettings_GetFont(*_args, **_kwargs):
 wxSystemSettings_GetMetric = misc2c.wxSystemSettings_GetMetric
 
 wxSystemSettings_HasFeature = misc2c.wxSystemSettings_HasFeature
+
+wxSystemSettings_GetScreen = misc2c.wxSystemSettings_GetScreen
+
+wxSystemSettings_SetScreen = misc2c.wxSystemSettings_SetScreen
 
 wxToolTip_Enable = misc2c.wxToolTip_Enable
 
