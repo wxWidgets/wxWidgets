@@ -432,6 +432,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/numdlgg.cpp
     src/generic/panelg.cpp
     src/generic/progdlgg.cpp
+    src/generic/printps.cpp
     src/generic/renderg.cpp
     src/generic/scrlwing.cpp
     src/generic/selstore.cpp
@@ -483,6 +484,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/notebook.h
     wx/generic/panelg.h
     wx/generic/prntdlgg.h
+    wx/generic/printps.h
     wx/generic/progdlgg.h
     wx/generic/scrolwin.h
     wx/generic/spinctlg.h
@@ -618,7 +620,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="XWIN_LOWLEVEL_SRC" hints="files">
     src/generic/caret.cpp
-    src/generic/printps.cpp
     src/unix/dialup.cpp
     src/unix/fontenum.cpp
     src/unix/fontutil.cpp
@@ -626,7 +627,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="XWIN_LOWLEVEL_HDR" hints="files">
     wx/generic/caret.h
-    wx/generic/printps.h
     wx/unix/fontutil.h
     wx/unix/utilsx11.h
 </set>
@@ -1057,6 +1057,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/palette.cpp
     src/msw/pen.cpp
     src/msw/popupwin.cpp
+    src/msw/printdlg.cpp
+    src/msw/printwin.cpp
     src/msw/region.cpp
     src/msw/renderer.cpp
     src/msw/settings.cpp
@@ -1100,8 +1102,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/notebook.cpp
     src/msw/ole/access.cpp
     src/msw/ownerdrw.cpp
-    src/msw/printdlg.cpp
-    src/msw/printwin.cpp
     src/msw/radiobox.cpp
     src/msw/radiobut.cpp
     src/msw/scrolbar.cpp

@@ -202,6 +202,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_palette.obj &
 	$(OBJS)\monolib_pen.obj &
 	$(OBJS)\monolib_popupwin.obj &
+	$(OBJS)\monolib_printdlg.obj &
+	$(OBJS)\monolib_printwin.obj &
 	$(OBJS)\monolib_region.obj &
 	$(OBJS)\monolib_renderer.obj &
 	$(OBJS)\monolib_settings.obj &
@@ -241,8 +243,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_notebook.obj &
 	$(OBJS)\monolib_access.obj &
 	$(OBJS)\monolib_ownerdrw.obj &
-	$(OBJS)\monolib_printdlg.obj &
-	$(OBJS)\monolib_printwin.obj &
 	$(OBJS)\monolib_radiobox.obj &
 	$(OBJS)\monolib_radiobut.obj &
 	$(OBJS)\monolib_scrolbar.obj &
@@ -339,6 +339,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_numdlgg.obj &
 	$(OBJS)\monolib_panelg.obj &
 	$(OBJS)\monolib_progdlgg.obj &
+	$(OBJS)\monolib_printps.obj &
 	$(OBJS)\monolib_renderg.obj &
 	$(OBJS)\monolib_scrlwing.obj &
 	$(OBJS)\monolib_selstore.obj &
@@ -393,6 +394,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_palette.obj &
 	$(OBJS)\monolib_pen.obj &
 	$(OBJS)\monolib_popupwin.obj &
+	$(OBJS)\monolib_printdlg.obj &
+	$(OBJS)\monolib_printwin.obj &
 	$(OBJS)\monolib_region.obj &
 	$(OBJS)\monolib_renderer.obj &
 	$(OBJS)\monolib_settings.obj &
@@ -531,6 +534,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_numdlgg.obj &
 	$(OBJS)\monolib_panelg.obj &
 	$(OBJS)\monolib_progdlgg.obj &
+	$(OBJS)\monolib_printps.obj &
 	$(OBJS)\monolib_renderg.obj &
 	$(OBJS)\monolib_scrlwing.obj &
 	$(OBJS)\monolib_selstore.obj &
@@ -586,6 +590,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_palette.obj &
 	$(OBJS)\coredll_pen.obj &
 	$(OBJS)\coredll_popupwin.obj &
+	$(OBJS)\coredll_printdlg.obj &
+	$(OBJS)\coredll_printwin.obj &
 	$(OBJS)\coredll_region.obj &
 	$(OBJS)\coredll_renderer.obj &
 	$(OBJS)\coredll_settings.obj &
@@ -625,8 +631,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_notebook.obj &
 	$(OBJS)\coredll_access.obj &
 	$(OBJS)\coredll_ownerdrw.obj &
-	$(OBJS)\coredll_printdlg.obj &
-	$(OBJS)\coredll_printwin.obj &
 	$(OBJS)\coredll_radiobox.obj &
 	$(OBJS)\coredll_radiobut.obj &
 	$(OBJS)\coredll_scrolbar.obj &
@@ -723,6 +727,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_numdlgg.obj &
 	$(OBJS)\coredll_panelg.obj &
 	$(OBJS)\coredll_progdlgg.obj &
+	$(OBJS)\coredll_printps.obj &
 	$(OBJS)\coredll_renderg.obj &
 	$(OBJS)\coredll_scrlwing.obj &
 	$(OBJS)\coredll_selstore.obj &
@@ -777,6 +782,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_palette.obj &
 	$(OBJS)\coredll_pen.obj &
 	$(OBJS)\coredll_popupwin.obj &
+	$(OBJS)\coredll_printdlg.obj &
+	$(OBJS)\coredll_printwin.obj &
 	$(OBJS)\coredll_region.obj &
 	$(OBJS)\coredll_renderer.obj &
 	$(OBJS)\coredll_settings.obj &
@@ -915,6 +922,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_numdlgg.obj &
 	$(OBJS)\coredll_panelg.obj &
 	$(OBJS)\coredll_progdlgg.obj &
+	$(OBJS)\coredll_printps.obj &
 	$(OBJS)\coredll_renderg.obj &
 	$(OBJS)\coredll_scrlwing.obj &
 	$(OBJS)\coredll_selstore.obj &
@@ -970,6 +978,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_palette.obj &
 	$(OBJS)\corelib_pen.obj &
 	$(OBJS)\corelib_popupwin.obj &
+	$(OBJS)\corelib_printdlg.obj &
+	$(OBJS)\corelib_printwin.obj &
 	$(OBJS)\corelib_region.obj &
 	$(OBJS)\corelib_renderer.obj &
 	$(OBJS)\corelib_settings.obj &
@@ -1009,8 +1019,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_notebook.obj &
 	$(OBJS)\corelib_access.obj &
 	$(OBJS)\corelib_ownerdrw.obj &
-	$(OBJS)\corelib_printdlg.obj &
-	$(OBJS)\corelib_printwin.obj &
 	$(OBJS)\corelib_radiobox.obj &
 	$(OBJS)\corelib_radiobut.obj &
 	$(OBJS)\corelib_scrolbar.obj &
@@ -1107,6 +1115,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_numdlgg.obj &
 	$(OBJS)\corelib_panelg.obj &
 	$(OBJS)\corelib_progdlgg.obj &
+	$(OBJS)\corelib_printps.obj &
 	$(OBJS)\corelib_renderg.obj &
 	$(OBJS)\corelib_scrlwing.obj &
 	$(OBJS)\corelib_selstore.obj &
@@ -1161,6 +1170,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_palette.obj &
 	$(OBJS)\corelib_pen.obj &
 	$(OBJS)\corelib_popupwin.obj &
+	$(OBJS)\corelib_printdlg.obj &
+	$(OBJS)\corelib_printwin.obj &
 	$(OBJS)\corelib_region.obj &
 	$(OBJS)\corelib_renderer.obj &
 	$(OBJS)\corelib_settings.obj &
@@ -1299,6 +1310,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_numdlgg.obj &
 	$(OBJS)\corelib_panelg.obj &
 	$(OBJS)\corelib_progdlgg.obj &
+	$(OBJS)\corelib_printps.obj &
 	$(OBJS)\corelib_renderg.obj &
 	$(OBJS)\corelib_scrlwing.obj &
 	$(OBJS)\corelib_selstore.obj &
@@ -1354,6 +1366,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_palette.obj &
 	$(OBJS)\monodll_pen.obj &
 	$(OBJS)\monodll_popupwin.obj &
+	$(OBJS)\monodll_printdlg.obj &
+	$(OBJS)\monodll_printwin.obj &
 	$(OBJS)\monodll_region.obj &
 	$(OBJS)\monodll_renderer.obj &
 	$(OBJS)\monodll_settings.obj &
@@ -1393,8 +1407,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_notebook.obj &
 	$(OBJS)\monodll_access.obj &
 	$(OBJS)\monodll_ownerdrw.obj &
-	$(OBJS)\monodll_printdlg.obj &
-	$(OBJS)\monodll_printwin.obj &
 	$(OBJS)\monodll_radiobox.obj &
 	$(OBJS)\monodll_radiobut.obj &
 	$(OBJS)\monodll_scrolbar.obj &
@@ -1491,6 +1503,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_numdlgg.obj &
 	$(OBJS)\monodll_panelg.obj &
 	$(OBJS)\monodll_progdlgg.obj &
+	$(OBJS)\monodll_printps.obj &
 	$(OBJS)\monodll_renderg.obj &
 	$(OBJS)\monodll_scrlwing.obj &
 	$(OBJS)\monodll_selstore.obj &
@@ -1545,6 +1558,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_palette.obj &
 	$(OBJS)\monodll_pen.obj &
 	$(OBJS)\monodll_popupwin.obj &
+	$(OBJS)\monodll_printdlg.obj &
+	$(OBJS)\monodll_printwin.obj &
 	$(OBJS)\monodll_region.obj &
 	$(OBJS)\monodll_renderer.obj &
 	$(OBJS)\monodll_settings.obj &
@@ -1683,6 +1698,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_numdlgg.obj &
 	$(OBJS)\monodll_panelg.obj &
 	$(OBJS)\monodll_progdlgg.obj &
+	$(OBJS)\monodll_printps.obj &
 	$(OBJS)\monodll_renderg.obj &
 	$(OBJS)\monodll_scrlwing.obj &
 	$(OBJS)\monodll_selstore.obj &
@@ -4060,11 +4076,20 @@ $(OBJS)\coredll_popupwin.obj :  .AUTODEPEND ..\..\src\msw\popupwin.cpp
 	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
+!ifeq USE_GUI 1
 $(OBJS)\coredll_printdlg.obj :  .AUTODEPEND ..\..\src\msw\printdlg.cpp
 	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
 
+!ifeq USE_GUI 1
+$(OBJS)\coredll_printps.obj :  .AUTODEPEND ..\..\src\generic\printps.cpp
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_printwin.obj :  .AUTODEPEND ..\..\src\msw\printwin.cpp
 	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_prntbase.obj :  .AUTODEPEND ..\..\src\common\prntbase.cpp
@@ -5265,11 +5290,20 @@ $(OBJS)\corelib_popupwin.obj :  .AUTODEPEND ..\..\src\msw\popupwin.cpp
 	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
+!ifeq USE_GUI 1
 $(OBJS)\corelib_printdlg.obj :  .AUTODEPEND ..\..\src\msw\printdlg.cpp
 	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
 
+!ifeq USE_GUI 1
+$(OBJS)\corelib_printps.obj :  .AUTODEPEND ..\..\src\generic\printps.cpp
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\corelib_printwin.obj :  .AUTODEPEND ..\..\src\msw\printwin.cpp
 	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_prntbase.obj :  .AUTODEPEND ..\..\src\common\prntbase.cpp
@@ -6854,11 +6888,20 @@ $(OBJS)\monodll_popupwin.obj :  .AUTODEPEND ..\..\src\msw\popupwin.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
+!ifeq USE_GUI 1
 $(OBJS)\monodll_printdlg.obj :  .AUTODEPEND ..\..\src\msw\printdlg.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
 
+!ifeq USE_GUI 1
+$(OBJS)\monodll_printps.obj :  .AUTODEPEND ..\..\src\generic\printps.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_printwin.obj :  .AUTODEPEND ..\..\src\msw\printwin.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_prntbase.obj :  .AUTODEPEND ..\..\src\common\prntbase.cpp
@@ -8398,11 +8441,20 @@ $(OBJS)\monolib_popupwin.obj :  .AUTODEPEND ..\..\src\msw\popupwin.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
+!ifeq USE_GUI 1
 $(OBJS)\monolib_printdlg.obj :  .AUTODEPEND ..\..\src\msw\printdlg.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
 
+!ifeq USE_GUI 1
+$(OBJS)\monolib_printps.obj :  .AUTODEPEND ..\..\src\generic\printps.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monolib_printwin.obj :  .AUTODEPEND ..\..\src\msw\printwin.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_prntbase.obj :  .AUTODEPEND ..\..\src\common\prntbase.cpp
