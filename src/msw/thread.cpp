@@ -1135,12 +1135,18 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
         }
     }
 
-    if ( !::GetExitCodeThread(hThread, (LPDWORD)&rc) )
+    // although the thread might be already in the EXITED state it might not
+    // have terminated yet and so we are not sure that it has actually
+    // terminated if the "if" above hadn't been taken
+    do
     {
-        wxLogLastError(wxT("GetExitCodeThread"));
+        if ( !::GetExitCodeThread(hThread, (LPDWORD)&rc) )
+        {
+            wxLogLastError(wxT("GetExitCodeThread"));
 
-        rc = (ExitCode)-1;
-    }
+            rc = (ExitCode)-1;
+        }
+    } while ( (DWORD)rc == STILL_ACTIVE );
 
     if ( IsDetached() )
     {
@@ -1150,9 +1156,6 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
         // closed while we were waiting on it, so we must do it here
         delete this;
     }
-
-    wxASSERT_MSG( (DWORD)rc != STILL_ACTIVE,
-                  wxT("thread must be already terminated.") );
 
     if ( pRc )
         *pRc = rc;
