@@ -5,13 +5,20 @@
 //              source such as opening and closing the data source.
 // Author:      Doug Card
 // Modified by:
-// Mods:        Dec, 1998: Added support for SQL statement logging and database
-//              cataloging
+// Mods:        Dec, 1998: 
+//                -Added support for SQL statement logging and database cataloging
+//					 April, 1999
+//						-Added QUERY_ONLY mode support to reduce default number of cursors
+//						-Added additional SQL logging code
+//                -Added DEBUG-ONLY tracking of Ctable objects to detect orphaned DB connections
+//						-Set ODBC option to only read committed writes to the DB so all
+//                   databases operate the same in that respect
+//
 // Created:     9.96
 // RCS-ID:      $Id$
 // Copyright:   (c) 1996 Remstar International, Inc.
 // Licence:     wxWindows licence, plus:
-// Notice:		This class library and its intellectual design are free of charge for use,
+// Notice:		 This class library and its intellectual design are free of charge for use,
 //              modification, enhancement, debugging under the following conditions:
 //              1) These classes may only be used as part of the implementation of a
 //                 wxWindows-based application
@@ -30,54 +37,85 @@
 
 #ifndef DB_DOT_H
 #define DB_DOT_H
- 
-#ifdef __GNUG__
-#pragma interface "db.h"
+
+// Use this line for wxWindows v1.x
+//#include "wx_ver.h"
+// Use this line for wxWindows v2.x
+#include "wx/version.h"
+
+#if wxMAJOR_VERSION == 2
+	#ifdef __GNUG__
+	#pragma interface "db.h"
+	#endif
 #endif
 
-#if defined(__WXMSW__) || defined(WIN32)
+#if defined(wx_msw) || defined(__WXMSW__) || defined(WIN32)
 #include <windows.h>
 #endif
 
+#ifdef _IODBC_
+#if wxMAJOR_VERSION == 2
+	extern "C" {
+	#include "../../src/iodbc/isql.h"
+	#include "../../src/iodbc/isqlext.h"
+	}
+#else  // version == 1
+	extern "C" {
+	#include "iodbc.h"
+	#include "isqlext.h"
+	}
+#endif
+	typedef float SFLOAT; 
+	typedef double SDOUBLE; 
+	typedef unsigned int UINT;
+	#define ULONG UDWORD
+#else  // msw
+	#define ODBCVER 0x0250
+	#include <sql.h>
+	#include <sqlext.h>
+#endif
 
-#ifdef __WXGTK__
-
-extern "C" {
-#include "../../src/iodbc/isql.h"
-#include "../../src/iodbc/isqlext.h"
-typedef float         SFLOAT;
-typedef double        SDOUBLE;
-typedef unsigned int  UINT;
-#define ULONG UDWORD
-
-}
-
-#else
-
-#define ODBCVER 0x0250
-#include <sql.h>
-#include <sqlext.h>
-
+#ifdef __UNIX__
+#   ifndef strnicmp 
+#      define strnicmp strncasecmp 
+#   endif 
+#   ifndef stricmp 
+#      define stricmp strcasecmp 
+#   endif 
+#else 
+#   include <io.h> 
 #endif
 
 enum		enumDummy		{enumDum1};
 
-#define SQL_C_BOOLEAN (sizeof(int) == 2 ? SQL_C_USHORT : SQL_C_ULONG)
-#define SQL_C_ENUM (sizeof(enumDummy) == 2 ? SQL_C_USHORT : SQL_C_ULONG)    //glt 2-21-97
+#define SQL_C_BOOLEAN(datatype) (sizeof(datatype) == 1 ? SQL_C_UTINYINT : (sizeof(datatype) == 2 ? SQL_C_USHORT : SQL_C_ULONG))
+//	#define SQL_C_BOOLEAN (sizeof(Bool) == 2 ? SQL_C_USHORT : SQL_C_ULONG)
+
+#define SQL_C_ENUM (sizeof(enumDummy) == 2 ? SQL_C_USHORT : SQL_C_ULONG)
+
+#ifndef TRUE
+#define TRUE 1
+#endif
+
+#ifndef FALSE
+#define FALSE 0
+#endif
+
+const int DB_PATH_MAX							= 254;
 
 // Database Globals
 const int DB_TYPE_NAME_LEN						= 40;
-const int DB_MAX_STATEMENT_LEN					= 2048;
-const int DB_MAX_WHERE_CLAUSE_LEN				= 1024;
-const int DB_MAX_ERROR_MSG_LEN					= 512;
-const int DB_MAX_ERROR_HISTORY					= 5;
+const int DB_MAX_STATEMENT_LEN				= 2048;
+const int DB_MAX_WHERE_CLAUSE_LEN			= 1024;
+const int DB_MAX_ERROR_MSG_LEN				= 512;
+const int DB_MAX_ERROR_HISTORY				= 5;
 const int DB_MAX_TABLE_NAME_LEN				= 128;
 const int DB_MAX_COLUMN_NAME_LEN				= 128;
 
-const int DB_DATA_TYPE_VARCHAR					= 1;
-const int DB_DATA_TYPE_INTEGER					= 2;
+const int DB_DATA_TYPE_VARCHAR				= 1;
+const int DB_DATA_TYPE_INTEGER				= 2;
 const int DB_DATA_TYPE_FLOAT					= 3;
-const int DB_DATA_TYPE_DATE						= 4;
+const int DB_DATA_TYPE_DATE					= 4;
 
 const int DB_SELECT_KEYFIELDS					= 1;
 const int DB_SELECT_WHERE						= 2;
@@ -92,14 +130,7 @@ const int DB_DEL_WHERE							= 2;
 const int DB_DEL_MATCHING						= 3;
 
 const int DB_WHERE_KEYFIELDS					= 1;
-const int DB_WHERE_MATCHING						= 2;
-
-const int DB_CURSOR0								= 0;
-const int DB_CURSOR1								= 1;
-const int DB_CURSOR2								= 2;
-//const int DB_CURSOR3							= 3;
-//const int DB_CURSOR4							= 4;
-//const int DB_CURSOR5							= 5;
+const int DB_WHERE_MATCHING					= 2;
 
 const int DB_GRANT_SELECT						= 1;
 const int DB_GRANT_INSERT						= 2;
@@ -110,8 +141,8 @@ const int DB_GRANT_ALL							= DB_GRANT_SELECT | DB_GRANT_INSERT | DB_GRANT_UPDA
 // ODBC Error codes (derived from ODBC SqlState codes)
 enum ODBC_ERRORS
 {
-	DB_FAILURE									= 0,
-	DB_SUCCESS									= 1,
+	DB_FAILURE										= 0,
+	DB_SUCCESS										= 1,
 	DB_ERR_NOT_IN_USE,
 	DB_ERR_GENERAL_WARNING,									// SqlState = '01000'
 	DB_ERR_DISCONNECT_ERROR,								// SqlState = '01002'
@@ -207,9 +238,15 @@ enum ODBC_ERRORS
 struct DbStuff
 {
 	HENV Henv;
-	char Dsn[SQL_MAX_DSN_LENGTH+1];	// Data Source Name
-	char Uid[20];							// User ID
-	char AuthStr[20];						// Authorization string (password)
+	char Dsn[SQL_MAX_DSN_LENGTH+1];				// Data Source Name
+	char Uid[20+1];									// User ID
+	char AuthStr[20+1];								// Authorization string (password)
+
+	char description[SQL_MAX_DSN_LENGTH+1];	// Not sure what the max length is
+	char fileType[SQL_MAX_DSN_LENGTH+1];		// Not sure what the max length is
+
+	// Optionals needed for some databases like dBase
+	char defaultDir[DB_PATH_MAX];					// Directory that db file resides in
 };
 
 typedef struct
@@ -236,6 +273,30 @@ enum sqlLog
 	sqlLogON
 };
 
+enum dbms
+{
+	dbmsUNIDENTIFIED,
+	dbmsORACLE,
+	dbmsSYBASE_ASA,		// Adaptive Server Anywhere
+	dbmsSYBASE_ASE,		// Adaptive Server Enterprise
+	dbmsMS_SQL_SERVER,
+	dbmsMY_SQL,
+	dbmsPOSTGRES,
+	dbmsACCESS,
+	dbmsDBASE
+};
+
+typedef enum dbms DBMS;
+
+// The wxDB::errorList is copied to this variable when the wxDB object
+// is closed.  This way, the error list is still available after the
+// database object is closed.  This is necessary if the database 
+// connection fails so the calling application can show the operator
+// why the connection failed.  Note: as each wxDB object is closed, it
+// will overwrite the errors of the previously destroyed wxDB object in 
+// this variable.
+extern char DBerrorList[DB_MAX_ERROR_HISTORY][DB_MAX_ERROR_MSG_LEN];
+
 class WXDLLEXPORT wxDB
 {
 private:
@@ -261,7 +322,7 @@ public:
 	struct
 	{
 		char   dbmsName[40];								// Name of the dbms product
-		char   dbmsVer[40];								// Version # of the dbms product
+		char   dbmsVer[64];								// Version # of the dbms product
 		char   driverName[40];							// Driver name
 		char   odbcVer[60];								// ODBC version of the driver
 		char   drvMgrOdbcVer[60];						// ODBC version of the driver manager
@@ -308,6 +369,9 @@ public:
 	//Error reporting mode
 	bool silent;
 
+	// Number of Ctable objects connected to this db object
+	unsigned int nTables;
+
 	// Inf. about logical data types VARCHAR, INTEGER, FLOAT and DATE.
 	// This inf. is obtained from the ODBC driver by use of the
 	// SQLGetTypeInfo() function.  The key piece of inf. is the
@@ -324,24 +388,28 @@ public:
 	bool		 DispAllErrors(HENV aHenv, HDBC aHdbc = SQL_NULL_HDBC, HSTMT aHstmt = SQL_NULL_HSTMT);
 	bool		 GetNextError(HENV aHenv, HDBC aHdbc = SQL_NULL_HDBC, HSTMT aHstmt = SQL_NULL_HSTMT);
 	void		 DispNextError(void);
-	bool		 CreateView(char *viewName, char *colList, char *pSqlStmt);
+	bool		 CreateView(char *viewName, char *colList, char *pSqlStmt, bool attemptDrop=TRUE);
+	bool		 DropView(char *viewName);
 	bool		 ExecSql(char *pSqlStmt);
+	bool		 GetNext(void);
+	bool		 GetData(UWORD colNo, SWORD cType, PTR pData, SDWORD maxLen, SDWORD FAR *cbReturned);
 	bool	    Grant(int privileges, char *tableName, char *userList = "PUBLIC");
 	int	    TranslateSqlState(char *SQLState);
 	bool		 Catalog(char *userID, char *fileName = "Catalog.txt");
-	CcolInf	*GetColumns(char *tableName[]);
+	CcolInf	*GetColumns(char *tableName[], char *userID=NULL);
 	char		*GetDatabaseName(void)	{return dbInf.dbmsName;}
 	char		*GetDataSource(void)		{return dsn;}
-	char		*GetUsername(void)		{return uid;}
-	char		*GetPassword(void)		{return authStr;}
+	char		*GetUsername(void)			{return uid;}
+	char		*GetPassword(void)			{return authStr;}
 	bool		 IsOpen(void)				{return dbIsOpen;}
 	HENV		 GetHENV(void)				{return henv;}
 	HDBC		 GetHDBC(void)				{return hdbc;}
-	HSTMT		 GetHSTMT(void)			{return hstmt;}
-	bool		 TableExists(char *tableName);  // Table name can refer to a table, view, alias or synonym
+	HSTMT		 GetHSTMT(void)				{return hstmt;}
+	bool		 TableExists(char *tableName, char *userID=NULL, char *path=NULL);  // Table name can refer to a table, view, alias or synonym
 	void		 LogError(char *errMsg, char *SQLState = 0) {logError(errMsg, SQLState);}
 	bool		 SqlLog(enum sqlLog state, char *filename = "sqllog.txt", bool append = FALSE);
 	bool		 WriteSqlLog(char *logMsg);
+	DBMS		 Dbms(void);
 
 };  // wxDB
 
@@ -359,6 +427,17 @@ struct DbList
 	DbList *PtrNext;							// Pointer to next item in the list
 };
 
+
+#if __WXDEBUG__ > 0
+class CstructTablesInUse : public wxObject
+{
+	public:
+		const char	*tableName;
+		ULONG			 tableID;
+		class wxDB	*pDb;
+};  // CstructTablesInUse
+#endif
+
 // The following routines allow a user to get new database connections, free them
 // for other code segments to use, or close all of them when the application has
 // completed.
@@ -367,6 +446,9 @@ wxDB* WXDLLEXPORT GetDbConnection(DbStuff *pDbStuff);
 bool  WXDLLEXPORT FreeDbConnection(wxDB *pDb);
 void  WXDLLEXPORT CloseDbConnections(void);
 int   WXDLLEXPORT NumberDbConnectionsInUse(void);
+
+// This function sets the sql log state for all open wxDB objects
+bool SqlLog(enum sqlLog state, char *filename = "sqllog.txt");
 
 // This routine allows you to query a driver manager
 // for a list of available datasources.  Call this routine
