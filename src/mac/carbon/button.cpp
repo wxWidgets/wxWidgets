@@ -108,8 +108,11 @@ void wxButton::Command (wxCommandEvent & event)
 
 void wxButton::MacHandleControlClick( ControlHandle control , SInt16 controlpart ) 
 {
+  if ( controlpart != kControlNoPart )
+  {
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, m_windowId );
     event.SetEventObject(this);
     ProcessCommand(event);
+  }
 }
 
