@@ -4,7 +4,7 @@ RCS file: /cvsroot/SWIG/Source/Modules/python.cxx,v
 retrieving revision 1.39
 diff -u -4 -r1.39 python.cxx
 --- Source/Modules/python.cxx	22 Jan 2004 22:42:17 -0000	1.39
-+++ Source/Modules/python.cxx	22 Jan 2004 22:51:35 -0000
++++ Source/Modules/python.cxx	22 Jan 2004 23:39:03 -0000
 @@ -50,8 +50,17 @@
  static  int       have_constructor;
  static  int       have_repr;
@@ -224,7 +224,7 @@ diff -u -4 -r1.39 python.cxx
 +          break;
 +        
 +        case AUTODOC_STATICFUNC:
-+          Printf(doc, "%s.%s(%s)", class_name, symname, make_autodocParmList(n, showTypes));
++          Printf(doc, "%s(%s)", symname, make_autodocParmList(n, showTypes));
 +          if (type) Printf(doc, " -> %s", type);
 +          break;
 +                      
