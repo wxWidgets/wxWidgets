@@ -294,8 +294,8 @@ static bool IsKnownUnimportantField(const wxString& field);
 //  a) for "brief" format:
 //      <mime type>  <space separated list of extensions>
 //  b) for "expanded" format:
-//      type=<mime type> \
-//      desc="<description>" \
+//      type=<mime type> \ 
+//      desc="<description>" \ 
 //      exts="<comma separated list of extensions>"
 //
 // We try to autodetect the format of mime.types: if a non-comment line starts
@@ -1291,7 +1291,8 @@ void wxMimeTypesManagerImpl::Initialize(int mailcapStyles,
                                         const wxString& sExtraDir)
 {
     // read mimecap amd mime.types
-    if ( (mailcapStyles & wxMAILCAP_NETSCAPE) || (mailcapStyles & wxMAILCAP_BASE) )
+    if ( (mailcapStyles & wxMAILCAP_NETSCAPE) ||
+         (mailcapStyles & wxMAILCAP_STANDARD) )
         GetMimeInfo(sExtraDir);
 
     // read GNOME tables
@@ -1375,7 +1376,7 @@ void wxMimeTypesManagerImpl::GetMimeInfo (const wxString& sExtraDir)
 bool wxMimeTypesManagerImpl::WriteToMimeTypes (int index, bool delete_index)
 {
     // check we have the right manager
-    if (! ( m_mailcapStylesInited & wxMAILCAP_BASE) )
+    if (! ( m_mailcapStylesInited & wxMAILCAP_STANDARD) )
         return FALSE;
 
     bool bTemp;
@@ -1517,7 +1518,7 @@ bool wxMimeTypesManagerImpl::WriteToMailCap (int index, bool delete_index)
 {
     //check we have the right managers
     if ( !( ( m_mailcapStylesInited & wxMAILCAP_NETSCAPE) ||
-            ( m_mailcapStylesInited & wxMAILCAP_BASE) ) )
+            ( m_mailcapStylesInited & wxMAILCAP_STANDARD) ) )
         return FALSE;
 
     bool bTemp;
@@ -1568,7 +1569,7 @@ bool wxMimeTypesManagerImpl::WriteToMailCap (int index, bool delete_index)
         sTmp = sTmp + wxT(";") + sCmd ; //includes wxT(" %s ");
 
         // write it in the format that Netscape uses (default)
-        if (! ( m_mailcapStylesInited & wxMAILCAP_BASE  ) )
+        if (! ( m_mailcapStylesInited & wxMAILCAP_STANDARD  ) )
         {
             if (! delete_index) file.InsertLine (sTmp, nIndex);
             nIndex ++;
@@ -1712,7 +1713,7 @@ bool wxMimeTypesManagerImpl::WriteMimeInfo(int nIndex, bool delete_mime )
 {
     bool ok = TRUE;
 
-    if ( m_mailcapStylesInited & wxMAILCAP_BASE )
+    if ( m_mailcapStylesInited & wxMAILCAP_STANDARD )
     {
         // write in metamail  format;
         if (WriteToMimeTypes (nIndex, delete_mime) )

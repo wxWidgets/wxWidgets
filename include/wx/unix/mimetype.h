@@ -33,7 +33,7 @@ public:
     ~wxMimeTypesManagerImpl();
 
     // load all data into memory - done when it is needed for the first time
-    void Initialize(int mailcapStyles,
+    void Initialize(int mailcapStyles = wxMAILCAP_STANDARD,
                     const wxString& extraDir = wxEmptyString);
 
     // and delete the data here
