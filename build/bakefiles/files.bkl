@@ -2240,10 +2240,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/eggtrayicon.c
 </set>
 
-<set var="ADVANCED_GTK_HDR" hints="files">
-    src/gtk/eggtrayicon.h
-</set>
-
 <!-- ====================================================================== -->
 <!--                               wxHTML                                   -->
 <!-- ====================================================================== -->
@@ -2606,7 +2602,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='MAC'">$(ADVANCED_MAC_HDR)</if>
         <if cond="TOOLKIT=='COCOA'">$(ADVANCED_COCOA_HDR)</if>
         <if cond="TOOLKIT=='MOTIF'">$(ADVANCED_UNIX_HDR)</if>
-        <if cond="TOOLKIT=='GTK'">$(ADVANCED_GTK_HDR) $(ADVANCED_UNIX_HDR)</if>
+        <if cond="TOOLKIT=='GTK'">$(ADVANCED_UNIX_HDR)</if>
         <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_HDR)</if>
         <if cond="TOOLKIT=='PM'">$(ADVANCED_OS2_HDR)</if>
     </set>
