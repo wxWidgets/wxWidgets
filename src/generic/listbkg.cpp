@@ -355,9 +355,9 @@ int wxListbook::SetSelection(size_t n)
 
         // change m_selection only now to ignore the selection change event
         m_selection = n;
-        
+
         m_list->Select(n);
-        m_list->Focus(n);        
+        m_list->Focus(n);
     }
 
     return selOld;
@@ -398,7 +398,7 @@ wxWindow *wxListbook::DoRemovePage(size_t page)
 {
     const int page_count = GetPageCount();
     wxWindow *win = wxBookCtrl::DoRemovePage(page);
-    
+
     if ( win )
     {
         m_list->DeleteItem(page);
@@ -408,14 +408,14 @@ wxWindow *wxListbook::DoRemovePage(size_t page)
             // force new sel valid if possible
             int sel = m_selection - 1;
             if (page_count == 1)
-                sel = -1;
+                sel = wxNOT_FOUND;
             else if ((page_count == 2) || (sel == -1))
                 sel = 0;
-            
+
             // force sel invalid if deleting current page - don't try to hide it
-            m_selection = (m_selection == (int)page) ? -1 : m_selection - 1;
-            
-            if ((sel != -1) && (sel != m_selection))
+            m_selection = (m_selection == (int)page) ? wxNOT_FOUND : m_selection - 1;
+
+            if ((sel != wxNOT_FOUND) && (sel != m_selection))
                 SetSelection(sel);
         }
     }

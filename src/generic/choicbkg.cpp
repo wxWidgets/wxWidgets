@@ -202,22 +202,12 @@ void wxChoicebook::OnSize(wxSizeEvent& event)
     m_choice->Move(posChoice.x, posChoice.y);
     m_choice->SetSize(sizeChoice.x, sizeChoice.y);
 
-    // we should always have some selection if possible
-    if ( m_selection == wxNOT_FOUND && GetPageCount() )
-    {
-        SetSelection(0);
-    }
-
+    // resize the currently shown page
     if ( m_selection != wxNOT_FOUND )
     {
         wxWindow *page = m_pages[m_selection];
         wxCHECK_RET( page, _T("NULL page in wxChoicebook?") );
-
         page->SetSize(GetPageRect());
-        if ( !page->IsShown() )
-        {
-            page->Show();
-        }
     }
 }
 
@@ -295,25 +285,23 @@ int wxChoicebook::SetSelection(size_t n)
     wxCHECK_MSG( n < GetPageCount(), wxNOT_FOUND,
                  _T("invalid page index in wxChoicebook::SetSelection()") );
 
-    int selOld = m_selection;
+    const int selOld = m_selection;
 
     if ( (int)n != m_selection )
     {
-        m_choice->Select(n);
-
-        // change m_selection only now, otherwise OnChoiceSelected() would ignore
-        // the selection change event
-
         if ( m_selection != wxNOT_FOUND )
             m_pages[m_selection]->Hide();
-        wxWindow *page = m_pages[m_selection = n];
+        wxWindow *page = m_pages[n];
         page->SetSize(GetPageRect());
         page->Show();
+
+        // change m_selection only now to ignore the selection change event
+        m_selection = n;
+        m_choice->Select(n);
     }
 
     return selOld;
 }
-
 
 // ----------------------------------------------------------------------------
 // adding/removing the pages
@@ -331,9 +319,10 @@ wxChoicebook::InsertPage(size_t n,
 
     m_choice->Insert(text, n);
 
-    if ( bSelect )
+    // we should always have some selection if possible
+    if ( bSelect || (m_selection == wxNOT_FOUND) )
     {
-        m_choice->Select(n);
+        SetSelection(n);
     }
     else // don't select this page
     {
@@ -347,10 +336,28 @@ wxChoicebook::InsertPage(size_t n,
 
 wxWindow *wxChoicebook::DoRemovePage(size_t page)
 {
+    const int page_count = GetPageCount();
     wxWindow *win = wxBookCtrl::DoRemovePage(page);
+
     if ( win )
     {
         m_choice->Delete(page);
+
+        if (m_selection >= (int)page)
+        {
+            // force new sel valid if possible
+            int sel = m_selection - 1;
+            if (page_count == 1)
+                sel = wxNOT_FOUND;
+            else if ((page_count == 2) || (sel == -1))
+                sel = 0;
+
+            // force sel invalid if deleting current page - don't try to hide it
+            m_selection = (m_selection == (int)page) ? wxNOT_FOUND : m_selection - 1;
+
+            if ((sel != wxNOT_FOUND) && (sel != m_selection))
+                SetSelection(sel);
+           }
     }
 
     return win;
@@ -370,6 +377,7 @@ bool wxChoicebook::DeleteAllPages()
 void wxChoicebook::OnChoiceSelected(wxCommandEvent& eventChoice)
 {
     const int selNew = eventChoice.GetSelection();
+    const int selOld = m_selection;
 
     if ( selNew == m_selection )
     {
@@ -384,7 +392,7 @@ void wxChoicebook::OnChoiceSelected(wxCommandEvent& eventChoice)
 
     eventIng.SetEventObject(this);
     eventIng.SetSelection(selNew);
-    eventIng.SetOldSelection(m_selection);
+    eventIng.SetOldSelection(selOld);
     if ( GetEventHandler()->ProcessEvent(eventIng) && !eventIng.IsAllowed() )
     {
         m_choice->Select(m_selection);
@@ -392,17 +400,13 @@ void wxChoicebook::OnChoiceSelected(wxCommandEvent& eventChoice)
     }
 
     // change allowed: do change the page and notify the user about it
-    if ( m_selection != wxNOT_FOUND )
-        m_pages[m_selection]->Hide();
-    wxWindow *page = m_pages[m_selection = selNew];
-    page->SetSize(GetPageRect());
-    page->Show();
+    SetSelection(selNew);
 
     wxChoicebookEvent eventEd(wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED, GetId());
 
     eventEd.SetEventObject(this);
     eventEd.SetSelection(selNew);
-    eventEd.SetOldSelection(m_selection);
+    eventEd.SetOldSelection(selOld);
 
     (void)GetEventHandler()->ProcessEvent(eventEd);
 }

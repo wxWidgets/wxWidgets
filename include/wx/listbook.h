@@ -40,26 +40,6 @@ class WXDLLEXPORT wxStaticLine;
 #endif // wxUSE_LINE_IN_LISTBOOK
 
 // ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-// wxListbook styles
-enum
-{
-    // default alignment: left everywhere except Mac where it is top
-    wxLB_DEFAULT = 0,
-
-    // put the list control to the left/right/top/bottom of the page area
-    wxLB_TOP    = 0x1,
-    wxLB_BOTTOM = 0x2,
-    wxLB_LEFT   = 0x4,
-    wxLB_RIGHT  = 0x8,
-
-    // the mask which can be used to extract the alignment from the style
-    wxLB_ALIGN_MASK = 0xf
-};
-
-// ----------------------------------------------------------------------------
 // wxListbook
 // ----------------------------------------------------------------------------
 
@@ -153,7 +133,7 @@ class WXDLLEXPORT wxListbookEvent : public wxBookCtrlEvent
 {
 public:
     wxListbookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
-                    int nSel = -1, int nOldSel = -1)
+                    int nSel = wxNOT_FOUND, int nOldSel = wxNOT_FOUND)
         : wxBookCtrlEvent(commandType, id, nSel, nOldSel)
     {
     }
@@ -171,7 +151,7 @@ typedef void (wxEvtHandler::*wxListbookEventFunction)(wxListbookEvent&);
   DECLARE_EVENT_TABLE_ENTRY(                                                \
     wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED,                                    \
     id,                                                                     \
-    -1,                                                                     \
+    wxID_ANY,                                                               \
     (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( wxListbookEventFunction, &fn ),  \
     NULL                                                                    \
   ),
@@ -180,7 +160,7 @@ typedef void (wxEvtHandler::*wxListbookEventFunction)(wxListbookEvent&);
   DECLARE_EVENT_TABLE_ENTRY(                                                \
     wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING,                                   \
     id,                                                                     \
-    -1,                                                                     \
+    wxID_ANY,                                                               \
     (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( wxListbookEventFunction, &fn ),  \
     NULL                                                                    \
   ),

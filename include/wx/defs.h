@@ -1336,6 +1336,27 @@ enum wxBorder
 #define wxNB_RIGHT            0x0040
 #define wxNB_BOTTOM           0x0080
 #define wxNB_MULTILINE        0x0100
+#define wxNB_DEFAULT          wxNB_TOP
+
+/*
+ * wxListbook flags
+ */
+#define wxLB_DEFAULT          0x0
+#define wxLB_TOP              0x1
+#define wxLB_BOTTOM           0x2
+#define wxLB_LEFT             0x4
+#define wxLB_RIGHT            0x8
+#define wxLB_ALIGN_MASK       0xf
+
+/*
+ * wxChoicebook flags
+ */
+#define wxCHB_DEFAULT         0x0
+#define wxCHB_TOP             0x1
+#define wxCHB_BOTTOM          0x2
+#define wxCHB_LEFT            0x4
+#define wxCHB_RIGHT           0x8
+#define wxCHB_ALIGN_MASK      0xf
 
 /*
  * wxTabCtrl flags
