@@ -41,10 +41,17 @@ class WXDLLIMPEXP_BASE wxMBConv
 public:
     // the actual conversion takes place here
     //
-    // note that n is the size of the output buffer, not the length of input
+    // note that outputSize is the size of the output buffer, not the length of input
     // (the latter is always supposed to be NUL-terminated)
     virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const = 0;
     virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const = 0;
+
+    // actual conversion for strings with embedded null characters
+    //
+    // outputSize is the size of the output buffer
+    // pszLen is the length of the input string (including all but last null character)
+    size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize, size_t pszLen) const;
+    size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize, size_t pszLen) const;
 
     // MB <-> WC
     const wxWCharBuffer cMB2WC(const char *psz) const;

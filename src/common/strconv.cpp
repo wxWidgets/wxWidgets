@@ -217,6 +217,94 @@ const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *pwz) const
     return buf;
 }
 
+size_t wxMBConv::MB2WC(wchar_t* szBuffer, const char* szString, 
+                       size_t outsize, size_t nStringLen) const
+{
+    const char* szEnd = szString + nStringLen + 1;
+    const char* szPos = szString;
+    const char* szStart = szPos;
+
+    size_t nActualLength = 0;
+
+    //Convert the string until the length() is reached, continuing the
+    //loop every time a null character is reached
+    while(szPos != szEnd)
+    {
+        wxASSERT(szPos < szEnd); //something is _really_ screwed up if this rings true
+
+        //Get the length of the current (sub)string
+        size_t nLen = MB2WC(NULL, szPos, 0);
+
+        //Invalid conversion?
+        if( nLen == (size_t)-1 )
+            return nLen;
+
+        //Increase the actual length (+1 for current null character)
+        nActualLength += nLen + 1;
+
+        //Only copy data in if buffer size is big enough
+        if (szBuffer != NULL &&
+            nActualLength <= outsize)
+        {
+            //Convert the current (sub)string
+            if ( MB2WC(&szBuffer[szPos - szStart], szPos, nLen + 1) == (size_t)-1 )
+                return (size_t)-1;
+        }
+
+        //Increment to next (sub)string
+        //Note that we have to use strlen here instead of nLen
+        //here because XX2XX gives us the size of the output buffer,
+        //not neccessarly the length of the string
+        szPos += strlen(szPos) + 1;
+    }
+
+    return nActualLength - 1; //success - return actual length
+}
+
+size_t wxMBConv::WC2MB(char* szBuffer, const wchar_t* szString, 
+                       size_t outsize, size_t nStringLen) const
+{
+    const wchar_t* szEnd = szString + nStringLen + 1;
+    const wchar_t* szPos = szString;
+    const wchar_t* szStart = szPos;
+
+    size_t nActualLength = 0;
+
+    //Convert the string until the length() is reached, continuing the
+    //loop every time a null character is reached
+    while(szPos != szEnd)
+    {
+        wxASSERT(szPos < szEnd); //something is _really_ screwed up if this rings true
+
+        //Get the length of the current (sub)string
+        size_t nLen = WC2MB(NULL, szPos, 0);
+
+        //Invalid conversion?
+        if( nLen == (size_t)-1 )
+            return nLen;
+
+        //Increase the actual length (+1 for current null character)
+        nActualLength += nLen + 1;
+        
+        //Only copy data in if buffer size is big enough
+        if (szBuffer != NULL &&
+            nActualLength <= outsize)
+        {
+            //Convert the current (sub)string
+            if(WC2MB(&szBuffer[szPos - szStart], szPos, nLen + 1) == (size_t)-1 )
+                return (size_t)-1;
+        }
+
+        //Increment to next (sub)string
+        //Note that we have to use wxWcslen here instead of nLen
+        //here because XX2XX gives us the size of the output buffer,
+        //not neccessarly the length of the string
+        szPos += wxWcslen(szPos) + 1;
+    }
+
+    return nActualLength - 1;  //success - return actual length
+}
+
 // ----------------------------------------------------------------------------
 // wxMBConvLibc
 // ----------------------------------------------------------------------------
@@ -2080,7 +2168,7 @@ public:
         if (szOut == NULL)
         {
             // worst case
-            nRealOutSize = wxString::WorstEncodingCase(nBufSize - 1, *this)+1 ;
+            nRealOutSize = ((nBufSize - 1) * 8) +1 ;
             szBuffer = new char[ nRealOutSize ] ;
         }
         else
@@ -2257,7 +2345,7 @@ public:
         if (buf == NULL)
         {
             // worst case
-            n = wxString::WorstEncodingCase(byteInLen / SIZEOF_WCHAR_T, *this) + SIZEOF_WCHAR_T;
+            n = ((byteInLen / SIZEOF_WCHAR_T) * 8) + SIZEOF_WCHAR_T;
             tbuf = (char*) malloc( n ) ;
         }
 
