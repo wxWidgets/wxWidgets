@@ -408,7 +408,7 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
     int iconIndex = 0;
     wxString name1(name);
     wxString strIconIndex = name.AfterLast(wxT(';'));
-    if (!strIconIndex.IsEmpty())
+    if (strIconIndex != name)
     {
         iconIndex = wxAtoi(strIconIndex);
         name1 = name.BeforeLast(wxT(';'));
