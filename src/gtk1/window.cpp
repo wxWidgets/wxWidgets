@@ -2164,10 +2164,10 @@ gtk_window_realized_callback( GtkWidget *WXUNUSED(m_widget), wxWindow *win )
         wxapp_install_idle_handler();
 
     if (win->m_delayedBackgroundColour)
-        win->SetBackgroundColour( win->GetBackgroundColour() );
+        win->GtkSetBackgroundColour( win->GetBackgroundColour() );
 
     if (win->m_delayedForegroundColour)
-        win->SetForegroundColour( win->GetForegroundColour() );
+        win->GtkSetForegroundColour( win->GetForegroundColour() );
 
     wxWindowCreateEvent event( win );
     event.SetEventObject( win );
@@ -3418,6 +3418,9 @@ void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
     if (!m_widget->window) return;
 
 #ifndef __WXGTK20__
+    if (g_isIdle)
+        wxapp_install_idle_handler();
+        
     if (eraseBackground && m_wxwindow && m_wxwindow->window)
     {
         if (rect)
@@ -3619,16 +3622,37 @@ void wxWindowGTK::ApplyToolTip( GtkTooltips *tips, const wxChar *tip )
 }
 #endif // wxUSE_TOOLTIPS
 
+void wxWindowGTK::GtkSetBackgroundColour( const wxColour &colour )
+{
+    GdkWindow *window = (GdkWindow*) NULL;
+    if (m_wxwindow)
+        window = GTK_PIZZA(m_wxwindow)->bin_window;
+    else
+        window = GetConnectWidget()->window;
+
+    wxASSERT( window );
+    
+    // We need the pixel value e.g. for background clearing.
+    m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
+    
+    if ((m_wxwindow) &&
+        (m_backgroundColour != wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE)))
+    {
+        /* wxMSW doesn't clear the window here. I don't do that either to
+          provide compatibility. call Clear() to do the job. */
+
+        gdk_window_set_background( window, m_backgroundColour.GetColor() );
+    }
+
+    ApplyWidgetStyle();
+}
+
 bool wxWindowGTK::SetBackgroundColour( const wxColour &colour )
 {
     wxCHECK_MSG( m_widget != NULL, FALSE, wxT("invalid window") );
 
     if (!wxWindowBase::SetBackgroundColour(colour))
-    {
-        // don't leave if the GTK widget has just
-        // been realized
-        if (!m_delayedBackgroundColour) return FALSE;
-    }
+        return FALSE;
 
     GdkWindow *window = (GdkWindow*) NULL;
     if (m_wxwindow)
@@ -3642,27 +3666,27 @@ bool wxWindowGTK::SetBackgroundColour( const wxColour &colour )
         // but it couldn't get applied as the
         // widget hasn't been realized yet.
         m_delayedBackgroundColour = TRUE;
+        return TRUE;
     }
-
-    if (window)
+    else
     {
-        // We need the pixel value e.g. for background clearing.
-        m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
+        GtkSetBackgroundColour( colour );
     }
-    
-    if ((m_wxwindow) &&
-        (m_wxwindow->window) &&
-        (m_backgroundColour != wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE)))
-    {
-        /* wxMSW doesn't clear the window here. I don't do that either to
-          provide compatibility. call Clear() to do the job. */
-
-        gdk_window_set_background( window, m_backgroundColour.GetColor() );
-    }
-
-    ApplyWidgetStyle();
 
     return TRUE;
+}
+
+void wxWindowGTK::GtkSetForegroundColour( const wxColour &colour )
+{
+    GdkWindow *window = (GdkWindow*) NULL;
+    if (m_wxwindow)
+        window = GTK_PIZZA(m_wxwindow)->bin_window;
+    else
+        window = GetConnectWidget()->window;
+
+    wxASSERT( window );
+
+    ApplyWidgetStyle();
 }
 
 bool wxWindowGTK::SetForegroundColour( const wxColour &colour )
@@ -3689,8 +3713,10 @@ bool wxWindowGTK::SetForegroundColour( const wxColour &colour )
         // widget hasn't been realized yet.
         m_delayedForegroundColour = TRUE;
     }
-
-    ApplyWidgetStyle();
+    else
+    {
+       GtkSetForegroundColour( colour );
+    }
 
     return TRUE;
 }
