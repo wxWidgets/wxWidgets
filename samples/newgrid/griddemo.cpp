@@ -622,7 +622,11 @@ void GridFrame::OnSelectCell( wxGridEvent& ev )
     else
         logBuf << "Deselected ";
     logBuf << "cell at row " << ev.GetRow()
-           << " col " << ev.GetCol();
+           << " col " << ev.GetCol()
+           << " ( ControlDown: "<<ev.ControlDown()
+           << ", ShiftDown: "<<ev.ShiftDown()
+           << ", AltDown: "<<ev.AltDown()
+           << ", MetaDown: "<<ev.MetaDown()<< " )";
     wxLogMessage( "%s", logBuf.c_str() );
 
     // you must call Skip() if you want the default processing
@@ -640,8 +644,11 @@ void GridFrame::OnRangeSelected( wxGridRangeSelectEvent& ev )
     logBuf << "cells from row " << ev.GetTopRow()
            << " col " << ev.GetLeftCol()
            << " to row " << ev.GetBottomRow()
-           << " col " << ev.GetRightCol();
-
+           << " col " << ev.GetRightCol()
+           << " ( ControlDown: "<<ev.ControlDown()
+           << ", ShiftDown: "<<ev.ShiftDown()
+           << ", AltDown: "<<ev.AltDown()
+           << ", MetaDown: "<<ev.MetaDown()<< " )";
     wxLogMessage( "%s", logBuf.c_str() );
 
     ev.Skip();

@@ -3190,7 +3190,7 @@ bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership,
         // View at runtime.  Is there anything in the implmentation that would
         // prevent this?
 
-        // At least, you now have to copy with m_selection
+        // At least, you now have to cope with m_selection
         wxFAIL_MSG( wxT("wxGrid::CreateGrid or wxGrid::SetTable called more than once") );
         return FALSE;
     }
@@ -4326,7 +4326,11 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
             m_selection->SelectBlock( m_currentCellCoords.GetRow(),
                                       m_currentCellCoords.GetCol(),
                                       coords.GetRow(),
-                                      coords.GetCol() );
+                                      coords.GetCol(),
+                                      event.ControlDown(),
+                                      event.ShiftDown(),
+                                      event.AltDown(),
+                                      event.MetaDown() );
         }
         else if ( XToEdgeOfCol(x) < 0  &&
                   YToEdgeOfRow(y) < 0 )
@@ -4360,7 +4364,11 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 else
                 {
                     m_selection->ToggleCellSelection( coords.GetRow(),
-                                                      coords.GetCol() );
+                                                      coords.GetCol(),
+                                                      event.ControlDown(),
+                                                      event.ShiftDown(),
+                                                      event.AltDown(),
+                                                      event.MetaDown() );
                     m_selectingTopLeft = wxGridNoCellCoords;
                     m_selectingBottomRight = wxGridNoCellCoords;
                     SetCurrentCell( coords );
@@ -4405,7 +4413,10 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                                           m_selectingTopLeft.GetCol(),
                                           m_selectingBottomRight.GetRow(),
                                           m_selectingBottomRight.GetCol(),
-                                          & event );
+                                          event.ControlDown(),
+                                          event.ShiftDown(),
+                                          event.AltDown(),
+                                          event.MetaDown() );
                 m_selectingTopLeft = wxGridNoCellCoords;
                 m_selectingBottomRight = wxGridNoCellCoords;
             }
@@ -4921,7 +4932,7 @@ bool wxGrid::SendEvent( const wxEventType type,
                              type,
                              this,
                              row, col,
-                             TRUE,
+                             FALSE,
                              mouseEv.GetX(), mouseEv.GetY(),
                              mouseEv.ControlDown(),
                              mouseEv.ShiftDown(),
@@ -5001,6 +5012,22 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
 
         // try local handlers
         //
+        if ( !event.ShiftDown() && 
+             m_selectingKeyboard != wxGridNoCellCoords )
+        {
+            m_selection->SelectBlock( m_selectingTopLeft.GetRow(),
+                                      m_selectingTopLeft.GetCol(),
+                                      m_selectingBottomRight.GetRow(),
+                                      m_selectingBottomRight.GetCol(),
+                                      event.ControlDown(),
+                                      event.ShiftDown(),
+                                      event.AltDown(),
+                                      event.MetaDown() );
+            m_selectingTopLeft = wxGridNoCellCoords;
+            m_selectingBottomRight = wxGridNoCellCoords;
+            m_selectingKeyboard = wxGridNoCellCoords;
+        }
+
         switch ( event.KeyCode() )
         {
             case WXK_UP:
@@ -5101,7 +5128,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 MovePageDown();
                 break;
 
-#if 0
+#if 1
             case WXK_SPACE:
                 if ( !IsEditable() )
                 {
@@ -5112,7 +5139,11 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
 #else
             case WXK_SPACE:
                 m_selection->ToggleCellSelection( m_currentCellCoords.GetRow(),
-                                                  m_currentCellCoords.GetCol() );
+                                                  m_currentCellCoords.GetCol(),
+                                                  event.ControlDown(),
+                                                  event.ShiftDown(),
+                                                  event.AltDown(),
+                                                  event.MetaDown() );
                 break;
 #endif
 
@@ -5152,7 +5183,6 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
 
     m_inOnKeyDown = FALSE;
 }
-
 
 void wxGrid::OnEraseBackground(wxEraseEvent&)
 {
@@ -6131,19 +6161,18 @@ bool wxGrid::MoveCursorUp( bool expandSelection )
     if ( m_currentCellCoords != wxGridNoCellCoords  &&
          m_currentCellCoords.GetRow() > 0 )
     {
-        if ( expandSelection )
-            m_selection->SelectCell( m_currentCellCoords.GetRow(),
-                                     m_currentCellCoords.GetCol() );
-        
         MakeCellVisible( m_currentCellCoords.GetRow() - 1,
-                        m_currentCellCoords.GetCol() );
-
-        SetCurrentCell( m_currentCellCoords.GetRow() - 1,
-                        m_currentCellCoords.GetCol() );
-
+                         m_currentCellCoords.GetCol() );
         if ( expandSelection )
-            m_selection->SelectCell( m_currentCellCoords.GetRow(),
-                                     m_currentCellCoords.GetCol() );
+        {
+            if ( m_selectingKeyboard == wxGridNoCellCoords )
+                m_selectingKeyboard = m_currentCellCoords;
+            m_selectingKeyboard.SetRow( m_selectingKeyboard.GetRow() - 1 );
+            SelectBlock( m_currentCellCoords, m_selectingKeyboard );
+        }
+        else
+            SetCurrentCell( m_currentCellCoords.GetRow() - 1,
+                            m_currentCellCoords.GetCol() );
         return TRUE;
     }
 
@@ -6156,19 +6185,18 @@ bool wxGrid::MoveCursorDown( bool expandSelection )
     if ( m_currentCellCoords != wxGridNoCellCoords  &&
          m_currentCellCoords.GetRow() < m_numRows-1 )
     {
-        if ( expandSelection )
-            m_selection->SelectCell( m_currentCellCoords.GetRow(),
-                                     m_currentCellCoords.GetCol() );
-
         MakeCellVisible( m_currentCellCoords.GetRow() + 1,
-                        m_currentCellCoords.GetCol() );
-
-        SetCurrentCell( m_currentCellCoords.GetRow() + 1,
-                        m_currentCellCoords.GetCol() );
-
+                         m_currentCellCoords.GetCol() );
         if ( expandSelection )
-            m_selection->SelectCell( m_currentCellCoords.GetRow(),
-                                     m_currentCellCoords.GetCol() );
+        {
+            if ( m_selectingKeyboard == wxGridNoCellCoords )
+                m_selectingKeyboard = m_currentCellCoords;
+            m_selectingKeyboard.SetRow( m_selectingKeyboard.GetRow() + 1 );
+            SelectBlock( m_currentCellCoords, m_selectingKeyboard );
+        }
+        else
+            SetCurrentCell( m_currentCellCoords.GetRow() + 1,
+                            m_currentCellCoords.GetCol() );
         return TRUE;
     }
 
@@ -6181,19 +6209,18 @@ bool wxGrid::MoveCursorLeft( bool expandSelection )
     if ( m_currentCellCoords != wxGridNoCellCoords  &&
          m_currentCellCoords.GetCol() > 0 )
     {
-        if ( expandSelection )
-            m_selection->SelectCell( m_currentCellCoords.GetRow(),
-                                     m_currentCellCoords.GetCol() );
-
         MakeCellVisible( m_currentCellCoords.GetRow(),
-                        m_currentCellCoords.GetCol() - 1 );
-
-        SetCurrentCell( m_currentCellCoords.GetRow(),
-                        m_currentCellCoords.GetCol() - 1 );
-
+                         m_currentCellCoords.GetCol() - 1 );
         if ( expandSelection )
-            m_selection->SelectCell( m_currentCellCoords.GetRow(),
-                                     m_currentCellCoords.GetCol() );
+        {
+            if ( m_selectingKeyboard == wxGridNoCellCoords )
+                m_selectingKeyboard = m_currentCellCoords;
+            m_selectingKeyboard.SetCol( m_selectingKeyboard.GetCol() - 1 );
+            SelectBlock( m_currentCellCoords, m_selectingKeyboard );
+        }
+        else
+            SetCurrentCell( m_currentCellCoords.GetRow(),
+                            m_currentCellCoords.GetCol() - 1 );
         return TRUE;
     }
 
@@ -6206,19 +6233,19 @@ bool wxGrid::MoveCursorRight( bool expandSelection )
     if ( m_currentCellCoords != wxGridNoCellCoords  &&
          m_currentCellCoords.GetCol() < m_numCols - 1 )
     {
-        if ( expandSelection )
-            m_selection->SelectCell( m_currentCellCoords.GetRow(),
-                                     m_currentCellCoords.GetCol() );
-
         MakeCellVisible( m_currentCellCoords.GetRow(),
                         m_currentCellCoords.GetCol() + 1 );
 
-        SetCurrentCell( m_currentCellCoords.GetRow(),
-                        m_currentCellCoords.GetCol() + 1 );
-
         if ( expandSelection )
-            m_selection->SelectCell( m_currentCellCoords.GetRow(),
-                                     m_currentCellCoords.GetCol() );
+        {
+            if ( m_selectingKeyboard == wxGridNoCellCoords )
+                m_selectingKeyboard = m_currentCellCoords;
+            m_selectingKeyboard.SetCol( m_selectingKeyboard.GetCol() + 1 );
+            SelectBlock( m_currentCellCoords, m_selectingKeyboard );
+        }
+        else
+            SetCurrentCell( m_currentCellCoords.GetRow(),
+                            m_currentCellCoords.GetCol() + 1 );
         return TRUE;
     }
 
@@ -6334,10 +6361,12 @@ bool wxGrid::MoveCursorUpBlock( bool expandSelection )
 
         MakeCellVisible( row, col );
         if ( expandSelection )
-            m_selection->SelectBlock( m_currentCellCoords.GetRow(),
-                                      m_currentCellCoords.GetCol(),
-                                      row, col );
-        SetCurrentCell( row, col );
+        {
+            m_selectingKeyboard = wxGridCellCoords( row, col );
+            SelectBlock( m_currentCellCoords, m_selectingKeyboard );
+        }
+        else
+            SetCurrentCell( row, col );
 
         return TRUE;
     }
@@ -6393,10 +6422,12 @@ bool wxGrid::MoveCursorDownBlock( bool expandSelection )
 
         MakeCellVisible( row, col );
         if ( expandSelection )
-            m_selection->SelectBlock( m_currentCellCoords.GetRow(),
-                                      m_currentCellCoords.GetCol(),
-                                      row, col );
-        SetCurrentCell( row, col );
+        {
+            m_selectingKeyboard = wxGridCellCoords( row, col );
+            SelectBlock( m_currentCellCoords, m_selectingKeyboard );
+        }
+        else
+            SetCurrentCell( row, col );
 
         return TRUE;
     }
@@ -6452,10 +6483,12 @@ bool wxGrid::MoveCursorLeftBlock( bool expandSelection )
 
         MakeCellVisible( row, col );
         if ( expandSelection )
-            m_selection->SelectBlock( m_currentCellCoords.GetRow(),
-                                      m_currentCellCoords.GetCol(),
-                                      row, col );
-        SetCurrentCell( row, col );
+        {
+            m_selectingKeyboard = wxGridCellCoords( row, col );
+            SelectBlock( m_currentCellCoords, m_selectingKeyboard );
+        }
+        else
+            SetCurrentCell( row, col );
 
         return TRUE;
     }
@@ -6511,10 +6544,12 @@ bool wxGrid::MoveCursorRightBlock( bool expandSelection )
 
         MakeCellVisible( row, col );
         if ( expandSelection )
-            m_selection->SelectBlock( m_currentCellCoords.GetRow(),
-                                      m_currentCellCoords.GetCol(),
-                                      row, col );
-        SetCurrentCell( row, col );
+        {
+            m_selectingKeyboard = wxGridCellCoords( row, col );
+            SelectBlock( m_currentCellCoords, m_selectingKeyboard );
+        }
+        else
+            SetCurrentCell( row, col );
 
         return TRUE;
     }

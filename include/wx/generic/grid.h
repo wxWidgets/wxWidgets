@@ -1523,6 +1523,7 @@ protected:
 
     wxGridCellCoords m_selectingTopLeft;
     wxGridCellCoords m_selectingBottomRight;
+    wxGridCellCoords m_selectingKeyboard;
     wxGridSelection  *m_selection;
     wxColour    m_selectionBackground;
     wxColour    m_selectionForeground;

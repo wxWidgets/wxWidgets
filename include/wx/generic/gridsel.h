@@ -29,13 +29,25 @@ public:
     bool IsSelection();
     bool IsInSelection ( int row, int col );
     void SetSelectionMode(wxGrid::wxGridSelectionModes selmode);
-    void SelectRow( int row, bool addToSelected = FALSE );
-    void SelectCol( int col, bool addToSelected = FALSE );
+    void SelectRow( int row, bool addToSelected = FALSE,
+                    bool ControlDown = FALSE,  bool ShiftDown = FALSE,
+                    bool AltDown = FALSE, bool MetaDown = FALSE );
+    void SelectCol( int col, bool addToSelected = FALSE,
+                    bool ControlDown = FALSE,  bool ShiftDown = FALSE,
+                    bool AltDown = FALSE, bool MetaDown = FALSE );
     void SelectBlock( int topRow, int leftCol,
                       int bottomRow, int rightCol,
-                      wxMouseEvent* event = 0, bool sendEvent = TRUE );
-    void SelectCell( int row, int col, bool sendEvent = TRUE );
-    void ToggleCellSelection( int row, int col);
+                      bool ControlDown = FALSE,  bool ShiftDown = FALSE,
+                      bool AltDown = FALSE, bool MetaDown = FALSE,
+                      bool sendEvent = TRUE );
+    void SelectCell( int row, int col,
+                     bool ControlDown = FALSE,  bool ShiftDown = FALSE,
+                     bool AltDown = FALSE, bool MetaDown = FALSE,
+                     bool sendEvent = TRUE );
+    void ToggleCellSelection( int row, int col,
+                              bool ControlDown = FALSE, 
+                              bool ShiftDown = FALSE,
+                              bool AltDown = FALSE, bool MetaDown = FALSE );
     void ClearSelection();
 
     void UpdateRows( size_t pos, int numRows );
