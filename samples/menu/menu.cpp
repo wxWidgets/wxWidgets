@@ -463,7 +463,7 @@ wxMenuItem *MyFrame::GetLastMenuItem() const
     wxMenuBar *menubar = GetMenuBar();
     wxMenu *menu = menubar->GetMenu(menubar->GetMenuCount() - 1);
 
-    wxMenuItemList::Node *node = menu->GetMenuItems().GetLast();
+    wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetLast();
     if ( !node )
     {
         wxLogWarning(wxT("No last item in the last menu!"));
