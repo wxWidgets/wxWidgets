@@ -191,7 +191,9 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
         self.x = event.GetX()
         self.y = event.GetY()
         self.log.WriteText("x, y = %s\n" % str((self.x, self.y)))
-        print event.GetEventObject()
+        item, flags = self.list.HitTest((self.x, self.y))
+        if flags & wxLIST_HITTEST_ONITEM:
+            self.list.Select(item)
         event.Skip()
 
 
