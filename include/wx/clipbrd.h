@@ -26,6 +26,7 @@
 
 class WXDLLEXPORT wxDataFormat;
 class WXDLLEXPORT wxDataObject;
+class WXDLLEXPORT wxClipboard;
 
 // ----------------------------------------------------------------------------
 // wxClipboard represents the system clipboard. Normally, you should use
@@ -38,7 +39,7 @@ class WXDLLEXPORT wxDataObject;
 class WXDLLEXPORT wxClipboardBase : public wxObject
 {
 public:
-    wxClipboardBase();
+    wxClipboardBase() {}
 
     // open the clipboard before Add/SetData() and GetData()
     virtual bool Open() = 0;
@@ -76,7 +77,16 @@ public:
     // X11 has two clipboards which get selected by this call. Empty on MSW.
     virtual void UsePrimarySelection( bool WXUNUSED(primary) = FALSE ) { }
 
+    // Returns global instance (wxTheClipboard) of the object:
+    static wxClipboard *Get();
 };
+
+// ----------------------------------------------------------------------------
+// globals
+// ----------------------------------------------------------------------------
+
+// The global clipboard object - backward compatible access macro:
+#define wxTheClipboard   (wxClipboard::Get())
 
 // ----------------------------------------------------------------------------
 // include platform-specific class declaration
@@ -99,13 +109,6 @@ public:
 #elif defined(__WXPM__)
     #include "wx/os2/clipbrd.h"
 #endif
-
-// ----------------------------------------------------------------------------
-// globals
-// ----------------------------------------------------------------------------
-
-// The global clipboard object
-WXDLLEXPORT_DATA(extern wxClipboard *) wxTheClipboard;
 
 // ----------------------------------------------------------------------------
 // helpful class for opening the clipboard and automatically closing it

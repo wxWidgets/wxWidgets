@@ -33,49 +33,32 @@
 
 #if wxUSE_CLIPBOARD
 
+static wxClipboard *gs_clipboard = NULL;
+
+/*static*/ wxClipboard *wxClipboardBase::Get()
+{
+    if ( !gs_clipboard )
+    {
+        gs_clipboard = new wxClipboard;
+    }
+    return gs_clipboard;
+}
+
 // ----------------------------------------------------------------------------
-// wxClipboardModule: module responsible for initializing the global clipboard
+// wxClipboardModule: module responsible for destroying the global clipboard
 // object
 // ----------------------------------------------------------------------------
 
 class wxClipboardModule : public wxModule
 {
 public:
-    bool OnInit();
-    void OnExit();
+    bool OnInit() { return true; }
+    void OnExit() { wxDELETE(gs_clipboard); }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxClipboardModule)
 };
 
-// ----------------------------------------------------------------------------
-// global data defined here
-// ----------------------------------------------------------------------------
-
 IMPLEMENT_DYNAMIC_CLASS(wxClipboardModule, wxModule)
-
-wxClipboard* wxTheClipboard = (wxClipboard *)NULL;
-
-// ----------------------------------------------------------------------------
-// implementation
-// ----------------------------------------------------------------------------
-
-wxClipboardBase::wxClipboardBase()
-{
-}
-
-bool wxClipboardModule::OnInit()
-{
-    wxTheClipboard = new wxClipboard;
-
-    return TRUE;
-}
-
-void wxClipboardModule::OnExit()
-{
-    delete wxTheClipboard;
-
-    wxTheClipboard = (wxClipboard *)NULL;
-}
 
 #endif // wxUSE_CLIPBOARD
