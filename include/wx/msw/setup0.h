@@ -209,7 +209,8 @@
                                   // wxBusyInfo displays window with message
                                   // when app is busy. Works in same way as
                                   // wxBusyCursor
-
+#define wxUSE_ZIPSTREAM     0
+                                  // input stream for reading from zip archives
 
 /*
  * Finer detail
