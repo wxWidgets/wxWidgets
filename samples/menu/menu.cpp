@@ -94,6 +94,10 @@ protected:
     void OnTestCheck(wxCommandEvent& event);
     void OnTestRadio(wxCommandEvent& event);
 
+    void OnUpdateSubMenuNormal(wxUpdateUIEvent& event);
+    void OnUpdateSubMenuCheck(wxUpdateUIEvent& event);
+    void OnUpdateSubMenuRadio(wxUpdateUIEvent& event);
+
 #if defined( __WXMSW__ ) || defined( __WXMAC__ )
     void OnContextMenu(wxContextMenuEvent& event)
         { ShowContextMenu(ScreenToClient(event.GetPosition())); }
@@ -188,6 +192,13 @@ enum
     Menu_Test_Radio2,
     Menu_Test_Radio3,
 
+    Menu_SubMenu = 450,
+    Menu_SubMenu_Normal,
+    Menu_SubMenu_Check,
+    Menu_SubMenu_Radio1,
+    Menu_SubMenu_Radio2,
+    Menu_SubMenu_Radio3,
+
     Menu_Dummy_First = 500,
     Menu_Dummy_Second,
     Menu_Dummy_Third,
@@ -239,6 +250,12 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Menu_Test_Radio1,    MyFrame::OnTestRadio)
     EVT_MENU(Menu_Test_Radio2,    MyFrame::OnTestRadio)
     EVT_MENU(Menu_Test_Radio3,    MyFrame::OnTestRadio)
+
+    EVT_UPDATE_UI(Menu_SubMenu_Normal,    MyFrame::OnUpdateSubMenuNormal)
+    EVT_UPDATE_UI(Menu_SubMenu_Check,     MyFrame::OnUpdateSubMenuCheck)
+    EVT_UPDATE_UI(Menu_SubMenu_Radio1,    MyFrame::OnUpdateSubMenuRadio)
+    EVT_UPDATE_UI(Menu_SubMenu_Radio2,    MyFrame::OnUpdateSubMenuRadio)
+    EVT_UPDATE_UI(Menu_SubMenu_Radio3,    MyFrame::OnUpdateSubMenuRadio)
 
     EVT_MENU_RANGE(Menu_Dummy_First, Menu_Dummy_Last, MyFrame::OnDummy)
 
@@ -336,6 +353,15 @@ MyFrame::MyFrame()
     menubarMenu->AppendSeparator();
     menubarMenu->Append(Menu_MenuBar_FindMenu, _T("&Find menu from label\tCtrl-F"),
                         _T("Find a menu by searching for its label"));
+
+    wxMenu* subMenu = new wxMenu;
+    subMenu->Append(Menu_SubMenu_Normal, _T("&Normal submenu item"), _T("Disabled submenu item"));
+    subMenu->AppendCheckItem(Menu_SubMenu_Check, _T("&Unchecked submenu item"), _T("Unchecked submenu item"));
+    subMenu->AppendRadioItem(Menu_SubMenu_Radio1, _T("&Radio item 1"), _T("Radio item"));
+    subMenu->AppendRadioItem(Menu_SubMenu_Radio2, _T("&Radio item 2"), _T("Radio item"));
+    subMenu->AppendRadioItem(Menu_SubMenu_Radio3, _T("&Radio item 3"), _T("Radio item"));
+
+    menubarMenu->Append(Menu_SubMenu, _T("Submenu"), subMenu);
 
     wxMenu *menuMenu = new wxMenu;
     menuMenu->Append(Menu_Menu_Append, _T("&Append menu item\tAlt-A"),
@@ -870,6 +896,26 @@ void MyFrame::LogMenuOpenOrClose(const wxMenuEvent& event, const wxChar *what)
 {
     wxLogStatus(this, _T("A %smenu has been %s."),
                 event.IsPopup() ? _T("popup ") : _T(""), what);
+}
+
+void MyFrame::OnUpdateSubMenuNormal(wxUpdateUIEvent& event)
+{
+    event.Enable(FALSE);
+}
+
+void MyFrame::OnUpdateSubMenuCheck(wxUpdateUIEvent& event)
+{
+    event.Enable(TRUE);
+    event.Check(TRUE);
+}
+
+void MyFrame::OnUpdateSubMenuRadio(wxUpdateUIEvent& event)
+{
+    int which = (event.GetId() - Menu_SubMenu_Radio1 + 1);
+    if (which == 2)
+        event.Check(TRUE);
+    else
+        event.Check(FALSE);
 }
 
 void MyFrame::OnSize(wxSizeEvent& event)
