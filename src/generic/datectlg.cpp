@@ -23,6 +23,15 @@
     #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/bmpbuttn.h"
+    #include "wx/dialog.h"
+    #include "wx/dcmemory.h"
+    #include "wx/panel.h"
+    #include "wx/textctrl.h"
+    #include "wx/valtext.h"
+#endif
+
 #include "wx/datectrl.h"
 #include "wx/calctrl.h"
 
