@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        buffer.h
+// Name:        wx/buffer.h
 // Purpose:     auto buffer classes: buffers which automatically free memory
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -27,44 +27,44 @@ class wxCharBuffer
 {
 public:
     wxCharBuffer(const char *str)
-        : m_str(NULL)
+        : m_str(str ? strdup(str) : NULL)
     {
         wxASSERT_MSG( str, wxT("NULL string in wxCharBuffer") );
-
-        m_str = str ? strdup(str) : (char *)NULL;
     }
+
     wxCharBuffer(size_t len)
-        : m_str(NULL)
+        : m_str((char *)malloc((len + 1)*sizeof(char)))
     {
-        m_str = (char *)malloc(len+1);
         m_str[len] = '\0';
     }
+
     // no need to check for NULL, free() does it
-   ~wxCharBuffer() { free(m_str); }
+    ~wxCharBuffer() { free(m_str); }
 
-   wxCharBuffer(const wxCharBuffer& src)
-       : m_str(src.m_str)
-   {
-       // no reference count yet...
-       ((wxCharBuffer*)&src)->m_str = (char *)NULL;
-   }
-   wxCharBuffer& operator=(const wxCharBuffer& src)
-   {
-       m_str = src.m_str;
-       // no reference count yet...
-       ((wxCharBuffer*)&src)->m_str = (char *)NULL;
-       return *this;
-   }
+    wxCharBuffer(const wxCharBuffer& src)
+        : m_str(src.m_str)
+    {
+        // no reference count yet...
+        ((wxCharBuffer*)&src)->m_str = (char *)NULL;
+    }
+    wxCharBuffer& operator=(const wxCharBuffer& src)
+    {
+        m_str = src.m_str;
+        // no reference count yet...
+        ((wxCharBuffer*)&src)->m_str = (char *)NULL;
+        return *this;
+    }
 
-   const char *data() const { return m_str; }
-   operator const char *() const { return m_str; }
-   char operator[](size_t n) const { return m_str[n]; }
+    const char *data() const { return m_str; }
+    operator const char *() const { return m_str; }
+    char operator[](size_t n) const { return m_str[n]; }
 
 private:
-   char *m_str;
+    char *m_str;
 };
 
 #if wxUSE_WCHAR_T
+
 class wxWCharBuffer
 {
 public:
@@ -85,37 +85,37 @@ public:
         }
     }
     wxWCharBuffer(size_t len)
-        : m_wcs((wchar_t *)NULL)
+        : m_wcs((wchar_t *)malloc((len + 1)*sizeof(wchar_t)))
     {
-        m_wcs = (wchar_t *)malloc((len+1)*sizeof(wchar_t));
         m_wcs[len] = L'\0';
     }
 
     // no need to check for NULL, free() does it
-   ~wxWCharBuffer() { free(m_wcs); }
+    ~wxWCharBuffer() { free(m_wcs); }
 
-   wxWCharBuffer(const wxWCharBuffer& src)
-       : m_wcs(src.m_wcs)
-   {
+    wxWCharBuffer(const wxWCharBuffer& src)
+        : m_wcs(src.m_wcs)
+    {
        // no reference count yet...
        ((wxWCharBuffer*)&src)->m_wcs = (wchar_t *)NULL;
-   }
-   wxWCharBuffer& operator=(const wxWCharBuffer& src)
-   {
-       m_wcs = src.m_wcs;
-       // no reference count yet...
-       ((wxWCharBuffer*)&src)->m_wcs = (wchar_t *)NULL;
-       return *this;
-   }
+    }
+    wxWCharBuffer& operator=(const wxWCharBuffer& src)
+    {
+        m_wcs = src.m_wcs;
+        // no reference count yet...
+        ((wxWCharBuffer*)&src)->m_wcs = (wchar_t *)NULL;
+        return *this;
+    }
 
-   const wchar_t *data() const { return m_wcs; }
-   operator const wchar_t *() const { return m_wcs; }
-   wchar_t operator[](size_t n) const { return m_wcs[n]; }
+    const wchar_t *data() const { return m_wcs; }
+    operator const wchar_t *() const { return m_wcs; }
+    wchar_t operator[](size_t n) const { return m_wcs[n]; }
 
 private:
-   wchar_t *m_wcs;
+    wchar_t *m_wcs;
 };
-#endif
+
+#endif // wxUSE_WCHAR_T
 
 #if wxUSE_UNICODE
     #define wxMB2WXbuf wxWCharBuffer
@@ -129,8 +129,6 @@ private:
     #define wxWX2WCbuf wxWCharBuffer
 #endif // Unicode/ANSI
 
-
-
 // ----------------------------------------------------------------------------
 // A class for holding growable data buffers (not necessarily strings)
 // ----------------------------------------------------------------------------
@@ -139,13 +137,9 @@ class wxMemoryBuffer
 {
 public:
     enum { BLOCK_SIZE = 1024 };
-    wxMemoryBuffer(size_t size=wxMemoryBuffer::BLOCK_SIZE)
-        : m_data(NULL), m_size(0), m_len(0)
+    wxMemoryBuffer(size_t size = wxMemoryBuffer::BLOCK_SIZE)
+        : m_data(malloc(size)), m_size(size), m_len(0)
     {
-        wxASSERT(size > 0);
-        m_data = malloc(size);
-        wxASSERT(m_data != NULL);
-        m_size = size;
     }
 
     ~wxMemoryBuffer() { free(m_data); }
@@ -209,7 +203,7 @@ public:
         m_data = src.m_data;
         m_size = src.m_size;
         m_len  = src.m_len;
-        
+
         // no reference count yet...
         ((wxMemoryBuffer*)&src)->m_data = NULL;
         ((wxMemoryBuffer*)&src)->m_size = 0;
@@ -220,7 +214,6 @@ public:
 
 
 protected:
-
     void ResizeIfNeeded(size_t newSize)
     {
         if (newSize > m_size)
@@ -236,8 +229,6 @@ private:
     size_t      m_size;
     size_t      m_len;
 };
-
-
 
 // ----------------------------------------------------------------------------
 // template class for any kind of data
