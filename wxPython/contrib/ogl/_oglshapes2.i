@@ -209,6 +209,13 @@ public:
     void Unlink();
 
 
+    void SetAlignmentOrientation(bool isEnd, bool isHoriz);
+    void SetAlignmentType(bool isEnd, int alignType);
+    bool GetAlignmentOrientation(bool isEnd);
+    int GetAlignmentType(bool isEnd);
+    int GetAlignmentStart() const;
+    int GetAlignmentEnd() const;
+
     void base_OnDraw(wxDC& dc);
     void base_OnDrawContents(wxDC& dc);
     void base_OnDrawBranches(wxDC& dc, bool erase = FALSE);
@@ -291,7 +298,32 @@ public:
             wxPyEndBlockThreads();
             return pyList;
         }
+
+        PyObject* GetOriginalPoints() {
+            wxList* list = self->GetOriginalPoints();
+            PyObject*   pyList;
+            PyObject*   pyObj;
+            wxObject*   wxObj;
+            wxNode*     node = list->GetFirst();
+
+            wxPyBeginBlockThreads();
+            pyList = PyList_New(0);
+            while (node) {
+                wxObj = node->GetData();
+                pyObj = wxPyConstructObject(wxObj, wxT("wxRealPoint"), 0);
+                PyList_Append(pyList, pyObj);
+                node = node->GetNext();
+            }
+            wxPyEndBlockThreads();
+            return pyList;
+        }        
     }
+
+    double GetOriginalWidth() const;
+    double GetOriginalHeight() const;
+
+    void SetOriginalWidth(double w);
+    void SetOriginalHeight(double h);
 
     void UpdateOriginalPoints();
 

@@ -130,7 +130,8 @@ public:
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
     void SetCornerRadius(double radius);
-
+    double GetCornerRadius();
+    
     void base_OnDelete();
     void base_OnDraw(wxDC& dc);
     void base_OnDrawContents(wxDC& dc);

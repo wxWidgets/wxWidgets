@@ -4,6 +4,7 @@
 #ifndef BUILDING_RENAMERS
 
 %rename(ShapeRegion)                        wxShapeRegion;
+%rename(AttachmentPoint)                    wxAttachmentPoint;
 %rename(PyShapeEvtHandler)                  wxPyShapeEvtHandler;
 %rename(PyShape)                            wxPyShape;
 %rename(PseudoMetaFile)                     wxPseudoMetaFile;

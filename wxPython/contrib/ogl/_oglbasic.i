@@ -58,6 +58,22 @@ public:
 
 //---------------------------------------------------------------------------
 
+/*
+ * User-defined attachment point
+ */
+
+class wxAttachmentPoint: public wxObject
+{
+public:
+    wxAttachmentPoint(int id=0, double x=0.0, double y=0.0);
+    int            m_id;           // Identifier
+    double         m_x;            // x offset from centre of object
+    double         m_y;            // y offset from centre of object
+};
+
+
+//---------------------------------------------------------------------------
+
 %{
     WXSHAPE_IMP_CALLBACKS(wxPyShapeEvtHandler,wxShapeEvtHandler);
 %}
@@ -294,6 +310,14 @@ public:
                                int nth = 0, int no_arcs = 1, wxPyLineShape *line = NULL);
     int GetNumberOfAttachments();
     bool AttachmentIsValid(int attachment);
+
+    %extend {
+        PyObject* GetAttachments() {
+            wxList& list = self->GetAttachments();
+            return wxPy_ConvertList(&list);            
+        }
+    }
+    
     bool GetAttachmentPositionEdge(int attachment, double *OUTPUT, double *OUTPUT,
                                    int nth = 0, int no_arcs = 1, wxPyLineShape *line = NULL);
     wxRealPoint CalcSimpleAttachment(const wxRealPoint& pt1, const wxRealPoint& pt2,
@@ -336,6 +360,7 @@ public:
     void CopyWithHandler(wxPyShape& copy);
     void Rotate(double x, double y, double theta);
     double GetRotation();
+    void SetRotation(double rotation);
     void ClearAttachments();
     void Recentre(wxDC& dc);
     void ClearPointList(wxList& list);
