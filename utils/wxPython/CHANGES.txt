@@ -66,6 +66,9 @@ Added a wrapper for the PCX and TIFF ImageHandlers.
 
 wxRect now simulates attributes named left, right, top and bottom.
 
+Removed all non wx stuff from the glcanvas module since DA's PyOpenGL
+is better and compatible with the wxGLCanvas.  You can get it at
+http://starship.python.net:9673/crew/da/Code/PyOpenGL.
 
 
 
