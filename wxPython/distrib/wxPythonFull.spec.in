@@ -7,29 +7,28 @@
 %define tarname @TARNAME@
 %define version @VERSION@
 %define ver2    @VER2@
-%define release 1
+%define release 2
 %define wxpref  %{pref}/lib/wxPython
 %define name    wxPython%{port}-py%{pyver}
+
 
 # Should the builtin image and etc. libs be used, or system libs?
 # Distro specific RPMs should probably set this to 0, generic ones
 # should use 1
 %define builtin_libs 1
 
-# Should --enable-debug_flag be used in release builds?
-# Using it defines __WXDEBUG__ and gives us runtime diagnostics
-# that are turned into Python exceptions starting with 2.3.4.
+
+# Should --enable-debug_flag be used in release builds?  Using it
+# defines __WXDEBUG__ and gives us runtime diagnostics that are turned
+# into Python exceptions starting with 2.3.4.  (So turning it on is a
+# very helpful thing IMO and is recommended.)
 %define debug_flag 1
 
 
-%if %{unicode}
-    %define uniflag u
-%endif
-%if %{debug_flag}
-    %define wxconfigname %{wxpref}/bin/wx%{lcport}%{uniflag}d-%{ver2}-config
-%else
-    %define wxconfigname %{wxpref}/bin/wx%{lcport}%{uniflag}-%{ver2}-config
-%endif
+# build the name of the real wx-config from the port, flags, etc.
+%define dbgflg %(if [ "%{debug_flag}" = "1" ]; then echo d; fi)
+%define uniflg %(if [ "%{unicode}" = "1" ]; then echo u; fi)
+%define wxconfigname %{wxpref}/bin/wx%{lcport}%{uniflg}%{dbgflg}-%{ver2}-config
 
 
 #----------------------------------------------------------------
@@ -46,10 +45,8 @@ BuildRoot: %{_tmppath}/%{name}-buildroot
 Prefix:    %{pref}
 #BuildRequires: %{python}
 
-Provides: wxwin
-Provides: wx%{port} = %{version}
 Provides: wxPython  = %{version}
-
+Provides: wxPython%{port}  = %{version}
 
 # old wxPython packages
 Obsoletes: wxPython
@@ -127,6 +124,7 @@ cd $WXDIR/wxPython
 	IN_CVS_TREE=1 \
 	NO_SCRIPTS=1 \
 	WXPORT=%{lcport} \
+	UNICODE=%{unicode} \
 	WX_CONFIG="$WXDIR/build/wx-config --inplace --prefix=$RPM_BUILD_ROOT%{wxpref}" \
 	build
 
@@ -146,6 +144,7 @@ cd $WXDIR/wxPython
 	IN_CVS_TREE=1 \
 	NO_SCRIPTS=1 \
 	WXPORT=%{lcport} \
+	UNICODE=%{unicode} \
 	WX_CONFIG="$RPM_BUILD_ROOT%{wxpref}/bin/wx-config --prefix=$RPM_BUILD_ROOT%{wxpref}" \
 	install \
 	--root=$RPM_BUILD_ROOT
@@ -213,6 +212,4 @@ $GFL    $RPM_BUILD_ROOT %{wxpref}/bin/wx-config    >> DEVELLIST
 
 
 #----------------------------------------------------------------
-%changelog
-
 # end of file
