@@ -1912,19 +1912,6 @@ if test "$wxUSE_GUI" = "yes"; then
                 wx_cv_lib_gtk=
                 if test "x$wxUSE_GTK2" = "xyes"; then
                     AM_PATH_GTK_2_0(2.0.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
-
-                    if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes" ; then
-                        PKG_CHECK_MODULES(PANGOFT2, pangoft2,
-                            [
-                                CXXFLAGS="$CXXFLAGS $PANGOFT2_CFLAGS"
-                                LIBS="$LIBS $PANGOFT2_LIBS"
-                            ],
-                            [
-                                AC_MSG_WARN([pangoft2 library not found, library will be compiled without printing support])
-                                wxUSE_PRINTING_ARCHITECTURE="no"
-                            ]
-                        )
-                    fi
                 fi
 
                 if test -z "$wx_cv_lib_gtk"; then
@@ -1969,6 +1956,19 @@ equivalent variable and GTK+ is version 1.2.3 or above.
                             ])
                     ;;
         esac
+
+        if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes" ; then
+            PKG_CHECK_MODULES(PANGOFT2, pangoft2,
+                [
+                    CXXFLAGS="$CXXFLAGS $PANGOFT2_CFLAGS"
+                    LIBS="$LIBS $PANGOFT2_LIBS"
+                ],
+                [
+                    AC_MSG_WARN([pangoft2 library not found, library will be compiled without printing support])
+                    wxUSE_PRINTING_ARCHITECTURE="no"
+                ]
+            )
+        fi
 
         TOOLKIT_INCLUDE="$wx_cv_cflags_gtk"
         GUI_TK_LIBRARY="$wx_cv_libs_gtk"
