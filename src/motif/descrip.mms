@@ -35,7 +35,7 @@ OBJECTS = \
 		choice.obj,\
 		clipbrd.obj,\
 		colour.obj,\
-		combobox_native.obj,\
+		combobox.obj,\
 		control.obj,\
 		cursor.obj,\
 		data.obj,\
@@ -89,7 +89,7 @@ SOURCES = \
 		choice.cpp,\
 		clipbrd.cpp,\
 		colour.cpp,\
-		combobox_native.cpp,\
+		combobox.cpp,\
 		control.cpp,\
 		cursor.cpp,\
 		data.cpp,\
@@ -152,7 +152,7 @@ checklst.obj : checklst.cpp
 choice.obj : choice.cpp
 clipbrd.obj : clipbrd.cpp
 colour.obj : colour.cpp
-combobox_native.obj : combobox_native.cpp
+combobox.obj : combobox.cpp
 control.obj : control.cpp
 cursor.obj : cursor.cpp
 data.obj : data.cpp

@@ -20,9 +20,9 @@
     #pragma implementation "statline.h"
 #endif
 
+#include "wx/wxprec.h"
 #if wxUSE_STATLINE
 // For compilers that support precompilation, includes "wx.h".
-#include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop

@@ -46,5 +46,5 @@ all : $(SOURCES)
 bitmap.obj : bitmap.cpp
 brush.obj : brush.cpp
 pen.obj : pen.cpp
-region.obj: region.cpp
+region.obj : region.cpp
 utilsx.obj : utilsx.cpp
