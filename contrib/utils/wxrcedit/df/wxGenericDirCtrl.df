@@ -1,0 +1,6 @@
+node wxGenericDirCtrl
+var defaultfolder of text
+var filter of text
+var defaultfilter of integer
+var style of flags wxDIRCTRL_DIR_ONLY,wxDIRCTRL_3D_INTERNAL,wxDIRCTRL_SELECT_FIRST,wxDIRCTRL_SHOW_FILTERS
+derived from control

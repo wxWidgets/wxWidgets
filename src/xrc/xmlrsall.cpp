@@ -29,12 +29,9 @@ void wxXmlResource::InitAllHandlers()
     AddHandler(new wxIconXmlHandler);
     AddHandler(new wxMenuXmlHandler);
     AddHandler(new wxMenuBarXmlHandler);
-
     AddHandler(new wxDialogXmlHandler);
     AddHandler(new wxPanelXmlHandler);
-
     AddHandler(new wxSizerXmlHandler);
-//Controls
     AddHandler(new wxButtonXmlHandler);
     AddHandler(new wxBitmapButtonXmlHandler);
     AddHandler(new wxStaticTextXmlHandler);
@@ -70,7 +67,6 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_SCROLLBAR
     AddHandler(new wxScrollBarXmlHandler);
 #endif
-    
 #if wxUSE_RADIOBOX
     AddHandler(new wxRadioBoxXmlHandler);
     AddHandler(new wxRadioButtonXmlHandler);
@@ -92,6 +88,8 @@ void wxXmlResource::InitAllHandlers()
     AddHandler(new wxStaticLineXmlHandler);
 #endif
     AddHandler(new wxUnknownWidgetXmlHandler);
-
+#if wxUSE_DIRDLG
+    AddHandler(new wxGenericDirCtrlXmlHandler);
+#endif
     AddHandler(new wxFrameXmlHandler);
 }
