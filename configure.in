@@ -453,7 +453,10 @@ dnl check for vsnprintf() which is another GNU extension
 AC_CHECK_FUNCS(vsnprintf)
 
 dnl check for usleep() and nanosleep() which is better in MT programs
-AC_CHECK_FUNCS(nanosleep usleep)
+AC_CHECK_FUNCS(nanosleep,
+        AC_DEFINE(HAVE_NANOSLEEP),
+        [AC_CHECK_LIB(posix4, nanosleep, AC_DEFINE(HAVE_NANOSLEEP))])
+AC_CHECK_FUNCS(usleep)
 
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
