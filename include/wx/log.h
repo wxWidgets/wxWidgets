@@ -560,5 +560,10 @@ wxSafeShowMessage(const wxString& title, const wxString& text);
     inline void wxLogLastError(const wxChar *) { }
 #endif  //debug/!debug
 
+// wxCocoa has additiional trace masks
+#if defined(__WXCOCOA__)
+#include "wx/cocoa/log.h"
+#endif
+
 #endif  // _WX_LOG_H_
 
