@@ -1503,7 +1503,7 @@ wxString wxGetCwd()
 bool wxSetWorkingDirectory(const wxString& d)
 {
 #if defined( __UNIX__ ) || defined( __WXMAC__ ) || defined(__WXPM__)
-  return (chdir((char*)d.fn_str()) == 0);
+  return (chdir(FNSTRINGCAST d.fn_str()) == 0);
 #elif defined(__WINDOWS__)
 
 #ifdef __WIN32__
