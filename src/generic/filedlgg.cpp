@@ -173,7 +173,7 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
                    wxTheMimeTypesManager -> GetFileTypeFromExtension(extension) :
                    wxTheMimeTypesManager -> GetFileTypeFromMimeType(mime);
     wxIcon ic;
-    if (ft == NULL || (!ft -> GetIcon(&ic)))
+    if (ft == NULL || (!ft -> GetIcon(&ic)) || (!ic.Ok()))
     {
         int newid = FI_UNKNOWN;
         m_HashTable.Put(extension, new wxFileIconEntry(newid));
