@@ -86,6 +86,7 @@ wxStreamBuffer::wxStreamBuffer(wxStreamBase& stream, BufMode mode)
 
     m_flushable = TRUE;
     m_destroystream = FALSE;
+    m_destroybuf = FALSE;
 }
 
 wxStreamBuffer::wxStreamBuffer(BufMode mode)
@@ -95,6 +96,7 @@ wxStreamBuffer::wxStreamBuffer(BufMode mode)
 
     m_flushable = FALSE;
     m_destroystream = TRUE;
+    m_destroybuf = FALSE;
 }
 
 wxStreamBuffer::wxStreamBuffer(const wxStreamBuffer& buffer)
