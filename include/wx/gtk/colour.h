@@ -44,6 +44,8 @@ public:
   wxColour();
     // from RGB
   wxColour( unsigned char red, unsigned char green, unsigned char blue );
+  wxColour( unsigned long colRGB ) { Set(colRGB); }
+
     // implicit conversion from the colour name
   wxColour( const wxString &colourName ) { InitFromName(colourName); }
   wxColour( const char *colourName ) { InitFromName(colourName); }
@@ -61,6 +63,15 @@ public:
 
   // accessors
   void Set( unsigned char red, unsigned char green, unsigned char blue );
+  void Set( unsigned long colRGB )
+  {
+    // we don't need to know sizeof(long) here because we assume that the three
+    // least significant bytes contain the R, G and B values
+    Set((unsigned char)colRGB,
+        (unsigned char)(colRGB >> 8),
+        (unsigned char)(colRGB >> 16));
+  }
+
   unsigned char Red() const;
   unsigned char Green() const;
   unsigned char Blue() const;

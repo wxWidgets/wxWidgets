@@ -25,13 +25,16 @@ public:
   wxColour();
     // from RGB
   wxColour( unsigned char red, unsigned char green, unsigned char blue );
+  wxColour( unsigned long colRGB ) { Set(colRGB); }
+
     // implicit conversion from the colour name
   wxColour( const wxString &colourName ) { InitFromName(colourName); }
   wxColour( const char *colourName ) { InitFromName(colourName); }
 
+
     // copy ctors and assignment operators
   wxColour( const wxColour& col );
-//  wxColour( const wxColour* col );
+  wxColour( const wxColour* col );
   wxColour& operator = ( const wxColour& col );
 
     // dtor
@@ -63,8 +66,8 @@ public:
   // comparison
   bool operator == (const wxColour& colour)
   {
-    return (m_red == colour.m_red && 
-            m_green == colour.m_green && 
+    return (m_red == colour.m_red &&
+            m_green == colour.m_green &&
             m_blue == colour.m_blue);
   }
   bool operator != (const wxColour& colour) { return !(*this == colour); }
