@@ -620,10 +620,17 @@ bool wxFrame::MSWCreate(int id, wxWindow *parent, const wxChar *wclass, wxWindow
   // could be the culprit. But without it, you can get a lot of flicker.
 
   DWORD msflags = 0;
-  if ((style & wxCAPTION) == wxCAPTION)
-    msflags = WS_OVERLAPPED;
+  if ( style & wxCAPTION )
+  {
+    if ( style & wxFRAME_TOOL_WINDOW )
+        msflags |= WS_POPUPWINDOW;
+    else
+        msflags |= WS_OVERLAPPED;
+  }
   else
-    msflags = WS_POPUP;
+  {
+    msflags |= WS_POPUP;
+  }
 
   if (style & wxMINIMIZE_BOX)
     msflags |= WS_MINIMIZEBOX;
@@ -778,6 +785,16 @@ void wxFrame::IconizeChildFrames(bool bIconize)
           node = node->GetNext() )
     {
         wxWindow *win = node->GetData();
+
+        // iconizing the frames with this style under Win95 shell puts them at
+        // the bottom of the screen (as the MDI children) instead of making
+        // them appear in the taskbar because they are, by virtue of this
+        // style, not managed by the taskbar - instead leave Windows take care
+        // of them
+#ifdef __WIN95__
+        if ( win->GetWindowStyle() & wxFRAME_TOOL_WINDOW )
+            continue;
+#endif // Win95
 
         // the child MDI frames are a special case and should not be touched by
         // the parent frame - instead, they are managed by the user
