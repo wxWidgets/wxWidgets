@@ -17,16 +17,17 @@
 // wxMemoryDC
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC,wxPaintDC)
+IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC,wxWindowDC)
 
-wxMemoryDC::wxMemoryDC(void) : wxPaintDC()
+wxMemoryDC::wxMemoryDC(void) : wxWindowDC()
 {
   m_ok = FALSE;
   
   m_cmap = gtk_widget_get_default_colormap();
 }
 
-wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) ) : wxPaintDC()
+wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) ) 
+  : wxWindowDC()
 {
   m_ok = FALSE;
   

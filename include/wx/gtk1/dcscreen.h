@@ -26,7 +26,7 @@ class wxScreenDC: public wxPaintDC
 {
   DECLARE_DYNAMIC_CLASS(wxScreenDC)
 
- public:
+public:
   wxScreenDC(void);
   ~wxScreenDC(void);
 

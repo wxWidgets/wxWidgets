@@ -114,13 +114,13 @@ extern void wxFlushResources(void);
 
 void wxExit(void)
 {
-  gtk_main_quit();
+    gtk_main_quit();
 }
 
 bool wxYield(void)
 {
-  while (gtk_events_pending() > 0) gtk_main_iteration();
-  return TRUE;
+    while (gtk_events_pending() > 0) gtk_main_iteration();
+    return TRUE;
 }
 
 //-----------------------------------------------------------------------------
@@ -135,88 +135,88 @@ END_EVENT_TABLE()
 
 gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 {
-  if (wxTheApp) while (wxTheApp->ProcessIdle()) {}
-  usleep( 10000 );
-  return TRUE;
+    if (wxTheApp) while (wxTheApp->ProcessIdle()) {}
+    usleep( 10000 );
+    return TRUE;
 }
 
 wxApp::wxApp()
 {
-  m_idleTag = 0;
-  m_topWindow = (wxWindow *) NULL;
-  m_exitOnFrameDelete = TRUE;
-  wxTheApp = this;
+    m_idleTag = 0;
+    m_topWindow = (wxWindow *) NULL;
+    m_exitOnFrameDelete = TRUE;
+    wxTheApp = this;
 }
 
 wxApp::~wxApp(void)
 {
-  gtk_idle_remove( m_idleTag );
+    gtk_idle_remove( m_idleTag );
 }
 
 bool wxApp::OnInit(void)
 {
-  return TRUE;
+    return TRUE;
 }
 
 bool wxApp::OnInitGui(void)
 {
-  m_idleTag = gtk_idle_add( wxapp_idle_callback, NULL );
-  return TRUE;
+    m_idleTag = gtk_idle_add( wxapp_idle_callback, NULL );
+    return TRUE;
 }
 
 int wxApp::OnRun(void)
 {
-  return MainLoop();
+    return MainLoop();
 }
 
 bool wxApp::ProcessIdle(void)
 {
-  wxIdleEvent event;
-  event.SetEventObject( this );
-  ProcessEvent( event );
+    wxIdleEvent event;
+    event.SetEventObject( this );
+    ProcessEvent( event );
 
-  return event.MoreRequested();
+    return event.MoreRequested();
 }
 
 void wxApp::OnIdle( wxIdleEvent &event )
 {
-  static bool inOnIdle = FALSE;
+    static bool inOnIdle = FALSE;
 
-  // Avoid recursion (via ProcessEvent default case)
-  if (inOnIdle)
-    return;
+    // Avoid recursion (via ProcessEvent default case)
+    if (inOnIdle)
+        return;
 
-  inOnIdle = TRUE;
+    inOnIdle = TRUE;
 
-  // 'Garbage' collection of windows deleted with Close().
-  DeletePendingObjects();
+    // 'Garbage' collection of windows deleted with Close().
+    DeletePendingObjects();
 
-  // flush the logged messages if any
-  wxLog *pLog = wxLog::GetActiveTarget();
-  if ( pLog != NULL && pLog->HasPendingMessages() )
-    pLog->Flush();
+    // flush the logged messages if any
+    wxLog *pLog = wxLog::GetActiveTarget();
+    if (pLog != NULL && pLog->HasPendingMessages())
+        pLog->Flush();
 
-  // Send OnIdle events to all windows
-  bool needMore = SendIdleEvents();
+    // Send OnIdle events to all windows
+    bool needMore = SendIdleEvents();
 
-  if (needMore)
-    event.RequestMore(TRUE);
+    if (needMore)
+        event.RequestMore(TRUE);
 
-  inOnIdle = FALSE;
+    inOnIdle = FALSE;
 }
 
 bool wxApp::SendIdleEvents(void)
 {
     bool needMore = FALSE;
-	wxNode* node = wxTopLevelWindows.First();
-	while (node)
-	{
-		wxWindow* win = (wxWindow*) node->Data();
-		if (SendIdleEvents(win))
+    
+    wxNode* node = wxTopLevelWindows.First();
+    while (node)
+    {
+	wxWindow* win = (wxWindow*) node->Data();
+	if (SendIdleEvents(win))
             needMore = TRUE;
-
-		node = node->Next();
-	}
+        node = node->Next();
+    }
     return needMore;
 }
 
@@ -245,28 +245,28 @@ bool wxApp::SendIdleEvents( wxWindow* win )
 
 int wxApp::OnExit(void)
 {
-  return 0;
+    return 0;
 }
 
 int wxApp::MainLoop(void)
 {
-  gtk_main();
-  return 0;
+    gtk_main();
+    return 0;
 }
 
 void wxApp::ExitMainLoop(void)
 {
-  gtk_main_quit();
+    gtk_main_quit();
 }
 
 bool wxApp::Initialized(void)
 {
-  return m_initialized;
+    return m_initialized;
 }
 
 bool wxApp::Pending(void)
 {
-  return FALSE;
+    return FALSE;
 }
 
 void wxApp::Dispatch(void)
@@ -275,31 +275,31 @@ void wxApp::Dispatch(void)
 
 void wxApp::DeletePendingObjects(void)
 {
-  wxNode *node = wxPendingDelete.First();
-  while (node)
-  {
-    wxObject *obj = (wxObject *)node->Data();
+    wxNode *node = wxPendingDelete.First();
+    while (node)
+    {
+        wxObject *obj = (wxObject *)node->Data();
 
-    delete obj;
+        delete obj;
 
-    if (wxPendingDelete.Member(obj))
-      delete node;
+        if (wxPendingDelete.Member(obj))
+        delete node;
 
-    node = wxPendingDelete.First();
-  }
+        node = wxPendingDelete.First();
+    }
 }
 
 wxWindow *wxApp::GetTopWindow(void)
 {
-  if (m_topWindow) return m_topWindow;
-  wxNode *node = wxTopLevelWindows.First();
-  if (!node) return (wxWindow *) NULL;
-  return (wxWindow*)node->Data();
+    if (m_topWindow) return m_topWindow;
+    wxNode *node = wxTopLevelWindows.First();
+    if (!node) return (wxWindow *) NULL;
+    return (wxWindow*)node->Data();
 }
 
 void wxApp::SetTopWindow( wxWindow *win )
 {
-  m_topWindow = win;
+    m_topWindow = win;
 }
 
 void wxApp::CommonInit(void)
@@ -331,21 +331,21 @@ void wxApp::CommonInit(void)
 
 void wxApp::CommonCleanUp(void)
 {
-  wxDELETE(wxTheColourDatabase);
-  wxDELETE(wxTheFontNameDirectory);
-  wxDeleteStockObjects();
+    wxDELETE(wxTheColourDatabase);
+    wxDELETE(wxTheFontNameDirectory);
+    wxDeleteStockObjects();
 
-  wxFlushResources();
+    wxFlushResources();
 
-  wxDELETE(wxTheResourceCache);
+    wxDELETE(wxTheResourceCache);
 
-  wxDeleteStockLists();
+    wxDeleteStockLists();
 
-  wxCleanUpResourceSystem();
+    wxCleanUpResourceSystem();
   
-  wxImage::CleanUpHandlers();
+    wxImage::CleanUpHandlers();
 
-  wxSystemSettings::Done();
+    wxSystemSettings::Done();
 }
 
 wxLog *wxApp::CreateLogTarget()
@@ -359,9 +359,9 @@ wxLog *wxApp::CreateLogTarget()
 
 int wxEntry( int argc, char *argv[] )
 {
-  wxBuffer = new char[BUFSIZ + 512];
+    wxBuffer = new char[BUFSIZ + 512];
 
-  wxClassInfo::InitializeClasses();
+    wxClassInfo::InitializeClasses();
 
   /* Debug stream no longer used
 #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
@@ -372,107 +372,107 @@ int wxEntry( int argc, char *argv[] )
 #endif
 */
 
-  if (!wxTheApp)
-  {
-    if (!wxApp::GetInitializerFunction())
+    if (!wxTheApp)
     {
-      printf( "wxWindows error: No initializer - use IMPLEMENT_APP macro.\n" );
-      return 0;
+        if (!wxApp::GetInitializerFunction())
+        {
+            printf( "wxWindows error: No initializer - use IMPLEMENT_APP macro.\n" );
+            return 0;
+        }
+
+        wxAppInitializerFunction app_ini = wxApp::GetInitializerFunction();
+
+        wxObject *test_app = app_ini();
+
+        wxTheApp = (wxApp*) test_app;
     }
 
-    wxAppInitializerFunction app_ini = wxApp::GetInitializerFunction();
+    if (!wxTheApp)
+    {
+        printf( "wxWindows error: wxTheApp == NULL\n" );
+        return 0;
+    }
 
-    wxObject *test_app = app_ini();
+    wxTheApp->argc = argc;
+    wxTheApp->argv = argv;
 
-    wxTheApp = (wxApp*) test_app;
-  }
-
-  if (!wxTheApp)
-  {
-    printf( "wxWindows error: wxTheApp == NULL\n" );
-    return 0;
-  }
-
-  wxTheApp->argc = argc;
-  wxTheApp->argv = argv;
-
-  char name[200];
-  strcpy( name, argv[0] );
-  strcpy( name, wxFileNameFromPath(name) );
-  wxStripExtension( name );
-  wxTheApp->SetAppName( name );
+    char name[200];
+    strcpy( name, argv[0] );
+    strcpy( name, wxFileNameFromPath(name) );
+    wxStripExtension( name );
+    wxTheApp->SetAppName( name );
   
-  gtk_set_locale();
+    gtk_set_locale();
   
-  gtk_init( &argc, &argv );
+    gtk_init( &argc, &argv );
 
-  GdkColormap *cmap = gdk_colormap_new( gdk_visual_get_system(), TRUE );
+    GdkColormap *cmap = gdk_colormap_new( gdk_visual_get_system(), TRUE );
 
-  for (int i = 0; i < 64; i++)
-  {
-    GdkColor col;
-    col.red    = g_palette[i*3 + 0] << 8;
-    col.green  = g_palette[i*3 + 1] << 8;
-    col.blue   = g_palette[i*3 + 2] << 8;
-    col.pixel  = 0;
+    for (int i = 0; i < 64; i++)
+    {
+        GdkColor col;
+        col.red    = g_palette[i*3 + 0] << 8;
+        col.green  = g_palette[i*3 + 1] << 8;
+        col.blue   = g_palette[i*3 + 2] << 8;
+        col.pixel  = 0;
     
-    gdk_color_alloc( cmap, &col );
-  }
+        gdk_color_alloc( cmap, &col );
+    }
   
-  gtk_widget_push_colormap( cmap );
+    gtk_widget_push_colormap( cmap );
   
-  gtk_widget_set_default_colormap( cmap );
+    gtk_widget_set_default_colormap( cmap );
 
-  wxApp::CommonInit();
+    wxApp::CommonInit();
 
-  wxModule::RegisterModules();
-  if (!wxModule::InitializeModules()) return FALSE;
+    wxModule::RegisterModules();
+    if (!wxModule::InitializeModules()) return FALSE;
     
-  wxTheApp->OnInitGui();
+    wxTheApp->OnInitGui();
 
-  // Here frames insert themselves automatically
-  // into wxTopLevelWindows by getting created
-  // in OnInit().
+    // Here frames insert themselves automatically
+    // into wxTopLevelWindows by getting created
+    // in OnInit().
 
-  if (!wxTheApp->OnInit()) return 0;
+    if (!wxTheApp->OnInit()) return 0;
 
-  wxTheApp->m_initialized = (wxTopLevelWindows.Number() > 0);
+    wxTheApp->m_initialized = (wxTopLevelWindows.Number() > 0);
 
-  int retValue = 0;
+    int retValue = 0;
 
-  if (wxTheApp->Initialized()) retValue = wxTheApp->OnRun();
+    if (wxTheApp->Initialized()) retValue = wxTheApp->OnRun();
 
-  wxTheApp->DeletePendingObjects();
+    wxTheApp->DeletePendingObjects();
 
-  wxTheApp->OnExit();
+    wxTheApp->OnExit();
 
-  wxModule::CleanUpModules();
+    wxModule::CleanUpModules();
   
-  wxApp::CommonCleanUp();
+    wxApp::CommonCleanUp();
 
-  wxDELETE(wxTheApp);
+    delete wxTheApp;
+    wxTheApp = (wxApp*) NULL;
 
-  wxClassInfo::CleanUpClasses();
+    wxClassInfo::CleanUpClasses();
   
-  delete[] wxBuffer;
+    delete[] wxBuffer;
   
 #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
   
-  if (wxDebugContext::CountObjectsLeft() > 0)
-  {
-    wxLogDebug("There were memory leaks.\n");
-    wxDebugContext::Dump();
-    wxDebugContext::PrintStatistics();
-  }
+    if (wxDebugContext::CountObjectsLeft() > 0)
+    {
+        wxLogDebug("There were memory leaks.\n");
+        wxDebugContext::Dump();
+        wxDebugContext::PrintStatistics();
+    }
 //  wxDebugContext::SetStream(NULL, NULL);
   
 #endif
 
-  wxLog *oldLog = wxLog::SetActiveTarget( NULL );
-  if (oldLog) delete oldLog;
+    wxLog *oldLog = wxLog::SetActiveTarget( NULL );
+    if (oldLog) delete oldLog;
 
-
-  return retValue;
+    return retValue;
 }
 
 //-----------------------------------------------------------------------------

@@ -71,8 +71,8 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
 
   SetValidator( validator );
 
-  bool bMultiLine = (style & wxTE_MULTILINE) != 0;
-  if ( bMultiLine )
+  bool multi_line = (style & wxTE_MULTILINE) != 0;
+  if ( multi_line )
   {
     // a multi-line edit control: create a vertical scrollbar by default and
     // horizontal if requested
@@ -125,7 +125,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
   
   PostCreation();
 
-  if (bMultiLine) 
+  if (multi_line) 
   {
     gtk_widget_realize(m_text);
     gtk_widget_show(m_text);
@@ -143,12 +143,20 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
     SetInsertionPointEnd();
   }
 
-  if (style & wxTE_READONLY)
+  if (style & wxTE_PASSWORD)
   {
+    if (!multi_line)
+      gtk_entry_set_visibility( GTK_ENTRY(m_text), FALSE );
+  }
+  
+  if (style & wxTE_READONLY)
+  {    
+    if (!multi_line)
+      gtk_entry_set_editable( GTK_ENTRY(m_text), FALSE );
   }
   else
   {
-    if (bMultiLine)
+    if (multi_line)
       gtk_text_set_editable( GTK_TEXT(m_text), 1 );
   }
 
