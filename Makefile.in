@@ -3583,8 +3583,12 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 	monodll_tbarwce.o \
 	monodll_textctrlce.o
 @COND_TOOLKIT_WINCE@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS)
-@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS = \
-@COND_PLATFORM_MACOSX_1@	monodll_snglinst.o monodll_webkit.o
+COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS =  \
+	monodll_snglinst.o \
+	monodll_webkit.o \
+	monodll_fontdlgosx.o \
+	monodll_colordlgosx.o
+@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS = $(COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_COCOA@	monodll_gsockosx.o monodll_utilsexc_cf.o
 COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_1 =  \
@@ -5019,8 +5023,12 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 	monolib_tbarwce.o \
 	monolib_textctrlce.o
 @COND_TOOLKIT_WINCE@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1)
-@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS_1 = \
-@COND_PLATFORM_MACOSX_1@	monolib_snglinst.o monolib_webkit.o
+COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS_1 =  \
+	monolib_snglinst.o \
+	monolib_webkit.o \
+	monolib_fontdlgosx.o \
+	monolib_colordlgosx.o
+@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS_1 = $(COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS_1)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_3 = \
 @COND_TOOLKIT_COCOA@	monolib_gsockosx.o monolib_utilsexc_cf.o
 COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_3 =  \
@@ -6649,8 +6657,12 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 	coredll_tbarwce.o \
 	coredll_textctrlce.o
 @COND_TOOLKIT_WINCE@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2)
-@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS_2 = \
-@COND_PLATFORM_MACOSX_1@	coredll_snglinst.o coredll_webkit.o
+COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS_2 =  \
+	coredll_snglinst.o \
+	coredll_webkit.o \
+	coredll_fontdlgosx.o \
+	coredll_colordlgosx.o
+@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS_2 = $(COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS_2)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_5 = \
 @COND_TOOLKIT_COCOA@	coredll_gsockosx.o coredll_utilsexc_cf.o
 COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_5 =  \
@@ -7835,8 +7847,12 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 	corelib_tbarwce.o \
 	corelib_textctrlce.o
 @COND_TOOLKIT_WINCE@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3)
-@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS_3 = \
-@COND_PLATFORM_MACOSX_1@	corelib_snglinst.o corelib_webkit.o
+COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS_3 =  \
+	corelib_snglinst.o \
+	corelib_webkit.o \
+	corelib_fontdlgosx.o \
+	corelib_colordlgosx.o
+@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS_3 = $(COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS_3)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_7 = \
 @COND_TOOLKIT_COCOA@	corelib_gsockosx.o corelib_utilsexc_cf.o
 COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_7 =  \
@@ -9925,6 +9941,12 @@ monodll_statlmac.o: $(srcdir)/src/mac/carbon/statlmac.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monodll_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_fontdlgosx.o: $(srcdir)/src/mac/carbon/fontdlgosx.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_colordlgosx.o: $(srcdir)/src/mac/carbon/colordlgosx.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monodll_NSBox.o: $(srcdir)/src/cocoa/NSBox.mm $(MONODLL_ODEP)
@@ -13243,6 +13265,12 @@ monolib_statlmac.o: $(srcdir)/src/mac/carbon/statlmac.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_fontdlgosx.o: $(srcdir)/src/mac/carbon/fontdlgosx.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_colordlgosx.o: $(srcdir)/src/mac/carbon/colordlgosx.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_NSBox.o: $(srcdir)/src/cocoa/NSBox.mm $(MONOLIB_ODEP)
@@ -17370,6 +17398,12 @@ coredll_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(COREDLL_ODEP)
 coredll_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
+coredll_fontdlgosx.o: $(srcdir)/src/mac/carbon/fontdlgosx.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
+coredll_colordlgosx.o: $(srcdir)/src/mac/carbon/colordlgosx.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
 coredll_NSBox.o: $(srcdir)/src/cocoa/NSBox.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -19852,6 +19886,12 @@ corelib_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 corelib_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
+corelib_fontdlgosx.o: $(srcdir)/src/mac/carbon/fontdlgosx.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
+corelib_colordlgosx.o: $(srcdir)/src/mac/carbon/colordlgosx.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 corelib_NSBox.o: $(srcdir)/src/cocoa/NSBox.mm $(CORELIB_ODEP)
@@ -23664,12 +23704,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/mdi/*.h $(DISTDIR)/samples/mdi
 	cp $(SAMPDIR)/mdi/*.xpm $(DISTDIR)/samples/mdi
 	cp $(SAMPDIR)/mdi/bitmaps/*.xpm $(DISTDIR)/samples/mdi/bitmaps
-
-	mkdir $(DISTDIR)/samples/mediaplayer
-	cp $(SAMPDIR)/mediaplayer/Makefile.in $(DISTDIR)/samples/mediaplayer
-	cp $(SAMPDIR)/mediaplayer/makefile.unx $(DISTDIR)/samples/mediaplayer
-	cp $(SAMPDIR)/mediaplayer/*.cpp $(DISTDIR)/samples/mediaplayer
-	cp $(SAMPDIR)/mediaplayer/*.xpm $(DISTDIR)/samples/mediaplayer
 
 	mkdir $(DISTDIR)/samples/memcheck
 	cp $(SAMPDIR)/memcheck/Makefile.in $(DISTDIR)/samples/memcheck

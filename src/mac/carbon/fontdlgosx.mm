@@ -35,16 +35,16 @@
     #include "wx/log.h"
 #endif
     
-#if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
-#endif
-
 // ============================================================================
 // implementation
 // ============================================================================
 
 //Mac OSX 10.2+ only
 #if USE_NATIVE_FONT_DIALOG_FOR_MACOSX
+
+#if !USE_SHARED_LIBRARY
+IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
+#endif
 
 // Cocoa headers
 #include "wx/cocoa/autorelease.h"

@@ -1669,8 +1669,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- wxWebKit files -->
     src/html/htmlctrl/webkit/webkit.mm
     <!-- Native color/font dialogs -->
-    src/mac/carbon/fontdlg.mm
-    src/mac/carbon/colordlg.mm
+    src/mac/carbon/fontdlgosx.mm
+    src/mac/carbon/colordlgosx.mm
 </if>
 </set>
 
