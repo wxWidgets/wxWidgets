@@ -91,21 +91,21 @@ wxContextHelp::~wxContextHelp()
 
 // Not currently needed, but on some systems capture may not work as
 // expected so we'll leave it here for now.
-#if 0
+#ifdef __WXMOTIF__
 static void wxPushOrPopEventHandlers(wxContextHelp* help, wxWindow* win, bool push)
 {
     if (push)
         win->PushEventHandler(new wxContextHelpEvtHandler(help));
     else
-        win->PopEventHandler();
+        win->PopEventHandler(TRUE);
 
-    wxNode* node = win->GetChildren().First();
+    wxWindowList::Node* node = win->GetChildren().GetFirst();
     while (node)
     {
-        wxWindow* child = (wxWindow*) node->Data();
+        wxWindow* child = node->GetData();
         wxPushOrPopEventHandlers(help, child, push);
 
-        node = node->Next();
+        node = node->GetNext();
     }
 }
 #endif
@@ -128,8 +128,11 @@ bool wxContextHelp::BeginContextHelp(wxWindow* win)
 
     m_status = FALSE;
 
+#ifdef __WXMOTIF__
+    wxPushOrPopEventHandlers(this, win, TRUE);
+#else
     win->PushEventHandler(new wxContextHelpEvtHandler(this));
-    //wxPushOrPopEventHandlers(this, win, TRUE);
+#endif
 
     win->CaptureMouse();
 
@@ -137,8 +140,11 @@ bool wxContextHelp::BeginContextHelp(wxWindow* win)
 
     win->ReleaseMouse();
 
+#ifdef __WXMOTIF__
+    wxPushOrPopEventHandlers(this, win, FALSE);
+#else
     win->PopEventHandler(TRUE);
-    //wxPushOrPopEventHandlers(this, win, FALSE);
+#endif
 
     win->SetCursor(oldCursor);
 
@@ -146,14 +152,14 @@ bool wxContextHelp::BeginContextHelp(wxWindow* win)
     {
         wxPoint pt;
         wxWindow* winAtPtr = wxFindWindowAtPointer(pt);
-    /*
+
+#if 0
         if (winAtPtr)
         {
-    wxString msg;
-        msg.Printf("Picked %s (%d)", (const char*) winAtPtr->GetName(), winAtPtr->GetId());
-        cout << msg << '\n';
+            printf("Picked %s (%d)\n", winAtPtr->GetName().c_str(),
+                   winAtPtr->GetId());
         }
-    */
+#endif
 
         if (winAtPtr)
             DispatchEvent(winAtPtr, pt);
