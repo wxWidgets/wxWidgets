@@ -3994,12 +3994,6 @@ if test "$GCC" = "yes" ; then
     if test "$wxUSE_PERMISSIVE" = "yes" ; then
         CODE_GEN_FLAGS="$CODE_GEN_FLAGS -fpermissive"
     fi
-    if test "$USE_WIN32" = 1 ; then
-        # I'm not even really sure what this was ever added to solve,
-        # but someone added it for mingw native builds, so I guess
-        # they had a reason, right??
-        CODE_GEN_FLAGS="$CODE_GEN_FLAGS -fno-pcc-struct-return"
-    fi
 
     dnl Ian Brown <ian.brown@printsoft.de> reports that versions of gcc before
     dnl 3.0 overflow the table of contents on rs6000 as they create an entry
