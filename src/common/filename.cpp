@@ -75,12 +75,18 @@ void wxFileName::Assign( const wxString &path, bool dir_only, wxPathFormat forma
         seps = ":";
     }
     
-    wxStringTokenizer tn( path, seps );
+    wxStringTokenizer tn( path, seps, wxTOKEN_RET_EMPTY_ALL );
+    bool first = TRUE;
     while (tn.HasMoreTokens())
     {
         wxString token( tn.GetNextToken() );
-        if (!token.IsEmpty())
+        
+        // If the path starts with a slash, we need the first
+        // dir entry to be an empty for later reassembly.
+        
+        if (first || !token.IsEmpty())
             m_dirs.Add( token );
+        first = FALSE;
     }
     
     if (!dir_only)
@@ -344,6 +350,7 @@ void wxFileName::SetFullName( const wxString name, wxPathFormat format )
     format = GetFormat( format );
     
     m_name = name;
+    m_ext = wxEmptyString;
     
     if (m_name == wxT(".")) return;
     if (m_name == wxT("..")) return;
@@ -409,7 +416,6 @@ wxString wxFileName::GetPath( bool add_separator, wxPathFormat format ) const
     else
     if (format == wxPATH_UNIX)
     {
-        ret = '/'; // FIXME: must be absolute
         for (size_t i = 0; i < m_dirs.GetCount(); i++)
         {
             ret += m_dirs[i];
@@ -446,7 +452,6 @@ wxString wxFileName::GetFullPath( wxPathFormat format ) const
     else
     if (format == wxPATH_UNIX)
     {
-        ret = '/'; // FIXME: must be absolute
         for (size_t i = 0; i < m_dirs.GetCount(); i++)
         {
             ret += m_dirs[i];
