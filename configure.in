@@ -932,6 +932,7 @@ if test "$wxUSE_WINE" = 1; then
     WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, windows.h)
     if test "$ac_find_includes" != "" ; then
         AC_MSG_RESULT(found $ac_find_includes)
+        TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE -I$ac_find_includes"
     else
         AC_MSG_RESULT(no)
         AC_MSG_ERROR(please set CFLAGS to contain the location of windows.h)

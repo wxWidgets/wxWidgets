@@ -256,7 +256,7 @@
 
 #ifdef __WXWINE__
   #if wxUSE_TOOLBAR
-    #define wxUSE_BUTTONBAR
+    #define wxUSE_BUTTONBAR 1
   #endif
 #endif
 
