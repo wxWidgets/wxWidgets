@@ -71,14 +71,7 @@ public:
     wxString GetExtension(size_t index) { return m_aExtensions[index]; }
 
 private:
-    void InitIfNeeded()
-    {
-        if ( !m_initialized ) {
-            // set the flag first to prevent recursion
-            m_initialized = TRUE;
-            Initialize();
-        }
-    }
+    void InitIfNeeded();
 
     wxArrayString m_aTypes,         // MIME types
                   m_aDescriptions,  // descriptions (just some text)
