@@ -23,6 +23,7 @@
 
 #include "wx/region.h"
 #include "wx/bitmap.h"
+#include "wx/image.h"
 #include "wx/dcmemory.h"
 
 
