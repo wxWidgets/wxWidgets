@@ -18,6 +18,12 @@
 
 #include "wx/defs.h"
 
+#include <math.h>
+
+#ifndef M_PI
+    #define M_PI 3.1415926535897932384626433832795
+#endif
+
 // unknown __VISAGECC__, __SYMANTECCC__
 
 #if defined(__VISUALC__) || defined(__BORLANDC__) || defined(__WATCOMC__)

@@ -18,15 +18,11 @@
 
 #include "wx/defs.h"
 
-#ifndef wxUSE_GEOMETRY
-    #define wxUSE_GEOMETRY 0
-#endif
-
 #if wxUSE_GEOMETRY
 
 #include "wx/utils.h"
 #include "wx/gdicmn.h"
-#include <math.h>
+#include "wx/math.h"
 
 #ifdef __WXMSW__
     #define wxMulDivInt32( a , b , c ) ::MulDiv( a , b , c )

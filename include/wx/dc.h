@@ -31,6 +31,7 @@
 #include "wx/palette.h"
 #include "wx/list.h"            // we use wxList in inline functions
 #include "wx/dynarray.h"
+#include "wx/math.h"
 
 class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxDCBase;
