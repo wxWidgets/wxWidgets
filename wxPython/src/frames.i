@@ -16,7 +16,6 @@
 %{
 #include "helpers.h"
 #include <wx/minifram.h>
-#include <wx/tipwin.h>
 %}
 
 //----------------------------------------------------------------------
@@ -230,18 +229,6 @@ public:
 
 //---------------------------------------------------------------------------
 
-class wxTipWindow : public wxFrame
-{
-public:
-    wxTipWindow(wxWindow *parent,
-                const wxString& text,
-                wxCoord maxLength = 100);
-
-    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-};
-
-
-//---------------------------------------------------------------------------
 
 
 

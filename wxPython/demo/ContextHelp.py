@@ -64,7 +64,7 @@ class TestPanel(wxPanel):
 
 
     def OnCtxHelp2(self, evt):
-         self.log.write("OnCtxHelp: %s" % evt)
+         self.log.write("OnCtxHelp: %s\n" % evt)
          tip = wxTipWindow(self, "This is a wxTipWindow")
 
 

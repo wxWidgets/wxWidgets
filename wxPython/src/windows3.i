@@ -18,6 +18,7 @@
 #include <wx/laywin.h>
 #ifndef __WXMAC__
 #include <wx/popupwin.h>
+#include <wx/tipwin.h>
 #endif
 %}
 
@@ -266,6 +267,19 @@ public:
     virtual void Dismiss();
 };
 
-#endif
 //---------------------------------------------------------------------------
 
+class wxTipWindow : public wxPyPopupTransientWindow
+{
+public:
+    wxTipWindow(wxWindow *parent,
+                const wxString& text,
+                wxCoord maxLength = 100);
+
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+};
+
+
+//---------------------------------------------------------------------------
+
+#endif

@@ -70,10 +70,6 @@ class TestTransientPopup(wxPopupTransientWindow):
         sz = st.GetBestSize()
         panel.SetSize( (sz.width+20, sz.height+20) )
         self.SetSize(panel.GetSize())
-##         self.SetBackgroundColour("#FFB6C1")
-##         b = wxButton(self, -1, "this is a Button", (10,10))
-##         sz = b.GetBestSize()
-##         self.SetSize( (sz.width+20, sz.height+20) )
 
 
     def ProcessLeftDown(self, evt):
