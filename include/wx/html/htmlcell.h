@@ -175,6 +175,10 @@ public:
     int GetHeight() const {return m_Height;}
     int GetDescent() const {return m_Descent;}
 
+    // Formatting cells are not visible on the screen, they only alter
+    // renderer's state.
+    bool IsFormattingCell() const { return m_Width == 0 && m_Height == 0; }
+
     const wxString& GetId() const { return m_id; }
     void SetId(const wxString& id) { m_id = id; }
 

@@ -349,12 +349,15 @@ static void SwitchSelState(wxDC& dc, wxHtmlRenderingInfo& info,
         dc.SetBackgroundMode(wxSOLID);
         dc.SetTextForeground(info.GetStyle().GetSelectedTextColour(fg));
         dc.SetTextBackground(info.GetStyle().GetSelectedTextBgColour(bg));
+        dc.SetBackground(wxBrush(info.GetStyle().GetSelectedTextBgColour(bg),
+                                 wxSOLID));
     }
     else
     {
         dc.SetBackgroundMode(wxTRANSPARENT);
         dc.SetTextForeground(fg);
         dc.SetTextBackground(bg);
+        dc.SetBackground(wxBrush(bg, wxSOLID));
     }
 }
 
@@ -367,6 +370,8 @@ void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
     dc.DrawRectangle(x+m_PosX,y+m_PosY,m_Width,m_Height);
 #endif
 
+    bool drawSelectionAfterCell = false;
+    
     if ( info.GetState().GetSelectionState() == wxHTML_SEL_CHANGING )
     {
         // Selection changing, we must draw the word piecewise:
@@ -414,22 +419,49 @@ void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
             txt = m_Word.Mid(part2);
             dc.DrawText(txt, ofs + x + m_PosX, y + m_PosY);
         }
+        else
+            drawSelectionAfterCell = true;
     }
     else
     {
+        wxHtmlSelectionState selstate = info.GetState().GetSelectionState();
         // Not changing selection state, draw the word in single mode:
-
-        if ( info.GetState().GetSelectionState() != wxHTML_SEL_OUT &&
+        if ( selstate != wxHTML_SEL_OUT &&
              dc.GetBackgroundMode() != wxSOLID )
         {
             SwitchSelState(dc, info, true);
         }
-        else if ( info.GetState().GetSelectionState() == wxHTML_SEL_OUT &&
+        else if ( selstate == wxHTML_SEL_OUT &&
                   dc.GetBackgroundMode() == wxSOLID )
         {
             SwitchSelState(dc, info, false);
         }
         dc.DrawText(m_Word, x + m_PosX, y + m_PosY);
+        drawSelectionAfterCell = (selstate != wxHTML_SEL_OUT);
+    }
+
+    // NB: If the text is justified then there is usually some free space
+    //     between adjacent cells and drawing the selection only onto cells
+    //     would result in ugly unselected spaces. The code below detects
+    //     this special case and renders the selection *outside* the sell,
+    //     too.
+    if ( m_Parent->GetAlignHor() == wxHTML_ALIGN_JUSTIFY &&
+         drawSelectionAfterCell )
+    {
+        wxHtmlCell *nextCell = m_Next;
+        while ( nextCell && nextCell->IsFormattingCell() )
+            nextCell = nextCell->GetNext();
+        if ( nextCell )
+        {
+            int nextX = nextCell->GetPosX();
+            if ( m_PosX + m_Width < nextX )
+            {
+                dc.SetBrush(dc.GetBackground());
+                dc.SetPen(*wxTRANSPARENT_PEN);
+                dc.DrawRectangle(x + m_PosX + m_Width, y + m_PosY,
+                                 nextX - m_PosX - m_Width, m_Height);
+            }
+        }
     }
 }
 
@@ -1069,11 +1101,16 @@ void wxHtmlColourCell::DrawInvisible(wxDC& dc,
     {
         state.SetBgColour(m_Colour);
         if (state.GetSelectionState() != wxHTML_SEL_IN)
+        {
             dc.SetTextBackground(m_Colour);
+            dc.SetBackground(wxBrush(m_Colour, wxSOLID));
+        }
         else
-            dc.SetTextBackground(
-                    info.GetStyle().GetSelectedTextBgColour(m_Colour));
-        dc.SetBackground(wxBrush(m_Colour, wxSOLID));
+        {
+            wxColour c = info.GetStyle().GetSelectedTextBgColour(m_Colour);
+            dc.SetTextBackground(c);
+            dc.SetBackground(wxBrush(c, wxSOLID));
+        }
     }
 }
 
