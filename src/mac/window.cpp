@@ -1440,8 +1440,6 @@ void wxWindowMac::MacRedraw( RgnHandle updatergn , long time, bool erase)
         CopyRgn( updatergn , ownUpdateRgn ) ;
         // subtract all children from updatergn, as soon as we start with transparent windows, these should
         // not be subtracted
-        RgnHandle eraseRgn = NewRgn() ;
-        CopyRgn( ownUpdateRgn , eraseRgn ) ;
 
         RgnHandle childarea = NewRgn() ;
         for (wxNode *node = GetChildren().First(); node; node = node->Next())
@@ -1451,7 +1449,7 @@ void wxWindowMac::MacRedraw( RgnHandle updatergn , long time, bool erase)
             if ( child->MacGetRootWindow() == window && child->IsShown() )
             {
                 SetRectRgn( childarea , child->m_x , child->m_y , child->m_x + child->m_width ,  child->m_y + child->m_height ) ;
-                DiffRgn( eraseRgn , childarea , eraseRgn ) ;
+                DiffRgn( ownUpdateRgn , childarea , ownUpdateRgn ) ;
             }
         }       
         DisposeRgn( childarea ) ;
@@ -1468,10 +1466,10 @@ void wxWindowMac::MacRedraw( RgnHandle updatergn , long time, bool erase)
         OffsetRgn( newupdate , -origin.x , -origin.y ) ;
         m_updateRegion = newupdate ;
         DisposeRgn( newupdate ) ; // it's been cloned to m_updateRegion
-        if ( erase && !EmptyRgn(eraseRgn) )
+        if ( erase && !EmptyRgn(ownUpdateRgn) )
         { 
           wxWindowDC dc(this);
-          dc.SetClippingRegion(wxRegion(eraseRgn));
+          dc.SetClippingRegion(wxRegion(ownUpdateRgn));
           wxEraseEvent eevent( GetId(), &dc );
           eevent.SetEventObject( this );
           GetEventHandler()->ProcessEvent( eevent );
@@ -1481,7 +1479,6 @@ void wxWindowMac::MacRedraw( RgnHandle updatergn , long time, bool erase)
           GetEventHandler()->ProcessEvent( eventNc );
         }
         DisposeRgn( ownUpdateRgn ) ; 
-        DisposeRgn( eraseRgn ) ;
         if ( !m_updateRegion.Empty() )
         {
           wxPaintEvent event;
