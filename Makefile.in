@@ -1670,6 +1670,7 @@ COND_TOOLKIT_PM_GUI_HDR =  \
 	wx/generic/colrdlgg.h \
 	wx/generic/dirdlgg.h \
 	wx/generic/fdrepdlg.h \
+	wx/generic/mdig.h \
 	wx/generic/statusbr.h \
 	wx/os2/accel.h \
 	wx/os2/app.h \
@@ -3378,6 +3379,7 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS =  \
 	monodll_toplevel.o \
 	monodll_utils.o \
 	monodll_window.o \
+	monodll_xmcombo.o \
 	monodll_colrdlgg.o \
 	monodll_dirdlgg.o \
 	monodll_fdrepdlg.o \
@@ -3444,6 +3446,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS =  \
 	monodll_dirdlgg.o \
 	monodll_fdrepdlg.o \
 	monodll_imaglist.o \
+	monodll_mdig.o \
 	monodll_msgdlgg.o \
 	monodll_prntdlgg.o \
 	monodll_statusbr.o \
@@ -3774,6 +3777,7 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1 =  \
 	monolib_toplevel.o \
 	monolib_utils.o \
 	monolib_window.o \
+	monolib_xmcombo.o \
 	monolib_colrdlgg.o \
 	monolib_dirdlgg.o \
 	monolib_fdrepdlg.o \
@@ -3840,6 +3844,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_1 =  \
 	monolib_dirdlgg.o \
 	monolib_fdrepdlg.o \
 	monolib_imaglist.o \
+	monolib_mdig.o \
 	monolib_msgdlgg.o \
 	monolib_prntdlgg.o \
 	monolib_statusbr.o \
@@ -4170,6 +4175,7 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2 =  \
 	coredll_toplevel.o \
 	coredll_utils.o \
 	coredll_window.o \
+	coredll_xmcombo.o \
 	coredll_colrdlgg.o \
 	coredll_dirdlgg.o \
 	coredll_fdrepdlg.o \
@@ -4236,6 +4242,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_2 =  \
 	coredll_dirdlgg.o \
 	coredll_fdrepdlg.o \
 	coredll_imaglist.o \
+	coredll_mdig.o \
 	coredll_msgdlgg.o \
 	coredll_prntdlgg.o \
 	coredll_statusbr.o \
@@ -4566,6 +4573,7 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3 =  \
 	corelib_toplevel.o \
 	corelib_utils.o \
 	corelib_window.o \
+	corelib_xmcombo.o \
 	corelib_colrdlgg.o \
 	corelib_dirdlgg.o \
 	corelib_fdrepdlg.o \
@@ -4632,6 +4640,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_3 =  \
 	corelib_dirdlgg.o \
 	corelib_fdrepdlg.o \
 	corelib_imaglist.o \
+	corelib_mdig.o \
 	corelib_msgdlgg.o \
 	corelib_prntdlgg.o \
 	corelib_statusbr.o \
@@ -8180,6 +8189,9 @@ coredll_mbarman.o: $(srcdir)/src/cocoa/mbarman.mm
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_mdig.o: $(srcdir)/src/generic/mdig.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_mdig.o: $(srcdir)/src/generic/mdig.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
 @COND_USE_GUI_1_WXUNIV_1@coredll_mdig.o: $(srcdir)/src/generic/mdig.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -9049,6 +9061,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp
 
 coredll_winuniv.o: $(srcdir)/src/univ/winuniv.cpp
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
+coredll_xmcombo.o: $(srcdir)/src/motif/xmcombo/xmcombo.c
+	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $<
 
 @COND_USE_GUI_1@coredll_xpmdecod.o: $(srcdir)/src/common/xpmdecod.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
@@ -10267,6 +10282,9 @@ corelib_mbarman.o: $(srcdir)/src/cocoa/mbarman.mm
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_mdig.o: $(srcdir)/src/generic/mdig.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_mdig.o: $(srcdir)/src/generic/mdig.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
 @COND_USE_GUI_1_WXUNIV_1@corelib_mdig.o: $(srcdir)/src/generic/mdig.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
@@ -11136,6 +11154,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp
 
 corelib_winuniv.o: $(srcdir)/src/univ/winuniv.cpp
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
+corelib_xmcombo.o: $(srcdir)/src/motif/xmcombo/xmcombo.c
+	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $<
 
 @COND_USE_GUI_1@corelib_xpmdecod.o: $(srcdir)/src/common/xpmdecod.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
@@ -13017,6 +13038,9 @@ monodll_mbarman.o: $(srcdir)/src/cocoa/mbarman.mm
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_mdig.o: $(srcdir)/src/generic/mdig.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_mdig.o: $(srcdir)/src/generic/mdig.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 @COND_USE_GUI_1_WXUNIV_1@monodll_mdig.o: $(srcdir)/src/generic/mdig.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -14090,6 +14114,9 @@ monodll_wizard.o: $(srcdir)/src/generic/wizard.cpp
 
 monodll_wxchar.o: $(srcdir)/src/common/wxchar.cpp
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xmcombo.o: $(srcdir)/src/motif/xmcombo/xmcombo.c
+	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
 
 monodll_xml.o: $(srcdir)/src/xml/xml.cpp
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -15587,6 +15614,9 @@ monolib_mbarman.o: $(srcdir)/src/cocoa/mbarman.mm
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_mdig.o: $(srcdir)/src/generic/mdig.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_mdig.o: $(srcdir)/src/generic/mdig.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
 @COND_USE_GUI_1_WXUNIV_1@monolib_mdig.o: $(srcdir)/src/generic/mdig.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
@@ -16660,6 +16690,9 @@ monolib_wizard.o: $(srcdir)/src/generic/wizard.cpp
 
 monolib_wxchar.o: $(srcdir)/src/common/wxchar.cpp
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xmcombo.o: $(srcdir)/src/motif/xmcombo/xmcombo.c
+	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
 
 monolib_xml.o: $(srcdir)/src/xml/xml.cpp
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<

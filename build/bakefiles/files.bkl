@@ -872,6 +872,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/motif/toplevel.cpp
     src/motif/utils.cpp
     src/motif/window.cpp
+    src/motif/xmcombo/xmcombo.c
     <!-- Generic files used by wxMotif: -->
     src/generic/colrdlgg.cpp
     src/generic/dirdlgg.cpp
