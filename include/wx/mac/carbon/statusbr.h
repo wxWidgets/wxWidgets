@@ -19,7 +19,7 @@
 
 class WXDLLEXPORT wxStatusBarMac : public wxStatusBarGeneric
 {
-  DECLARE_DYNAMIC_CLASS(wxStatusBarMac);
+  DECLARE_DYNAMIC_CLASS(wxStatusBarMac)
 
   wxStatusBarMac();
    wxStatusBarMac(wxWindow *parent, wxWindowID id,
