@@ -2504,6 +2504,11 @@ as the last system error code ({\it errno} or {\it ::GetLastError()} depending
 on the platform) and the corresponding error message. The second form
 of this function takes the error code explitly as the first argument.
 
+\wxheading{See also}
+
+\helpref{wxSysErrorCode}{wxsyserrorcode},
+\helpref{wxSysErrorMsg}{wxsyserrormsg}
+
 \membersection{::wxLogDebug}\label{wxlogdebug}
 
 \func{void}{wxLogDebug}{\param{const char*}{ formatString}, \param{...}{}}
@@ -2558,6 +2563,31 @@ trace masks.
 \item wxTraceRefCount: trace various ref counting operations
 \item wxTraceOleCalls: trace OLE method calls (Win32 only)
 \end{itemize}
+
+\membersection{::wxSysErrorCode}\label{wxsyserrorcode}
+
+\func{unsigned long}{wxSysErrorCode}{\void}
+
+Returns the error code from the last system call. This function uses
+{\tt errno} on Unix platforms and {\tt GetLastError} under Win32.
+
+\wxheading{See also}
+
+\helpref{wxSysErrorMsg}{wxsyserrormsg},
+\helpref{wxLogSysError}{wxlogsyserror}
+
+\membersection{::wxSysErrorMsg}\label{wxsyserrormsg}
+
+\func{const wxChar *}{wxSysErrorMsg}{\param{unsigned long }{errCode = 0}}
+
+Returns the error message corresponding to the given system error code. If 
+{\it errCode} is $0$ (default), the last error code (as returned by 
+\helpref{wxSysErrorCode}{wxsyserrorcode}) is used.
+
+\wxheading{See also}
+
+\helpref{wxSysErrorCode}{wxsyserrorcode},
+\helpref{wxLogSysError}{wxlogsyserror}
 
 \section{Debugging macros and functions}\label{debugmacros}
 
