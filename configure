@@ -3083,7 +3083,7 @@ if test "${enable_rpath+set}" = set; then
 fi
 
 
-if test "$wxRPATH_DIR" != "" -a "$wxRPATH_DIR" != "disable"; then
+if test "$wxRPATH_DIR" != "" -a "$wxRPATH_DIR" != "disable" -a "$wxRPATH_DIR" != "no"; then
    WXCONFIG_RPATH="-Wl,-rpath -Wl,$wxRPATH_DIR"
 fi
 
