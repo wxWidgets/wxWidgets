@@ -10,17 +10,17 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
+#ifdef __GNUG__
+#pragma implementation "menu.h"
+#pragma implementation "menuitem.h"
+#endif
+
 // ============================================================================
 // headers & declarations
 // ============================================================================
 
 // wxWindows headers
 // -----------------
-
-#ifdef __GNUG__
-#pragma implementation "menu.h"
-#pragma implementation "menuitem.h"
-#endif
 
 #include "wx/app.h"
 #include "wx/menu.h"
@@ -560,7 +560,7 @@ void wxMenuBar::MacInstallMenuBar()
    	for (size_t i = 0; i < m_menus.GetCount(); i++)
   	{
         Str255 	label;
-        wxNode *node;
+        wxwxMenuItemListNode *node;
         wxMenuItem *item;
         int pos ;
     	wxMenu* menu = m_menus[i] , *subMenu = NULL ;
@@ -578,9 +578,9 @@ void wxMenuBar::MacInstallMenuBar()
 		        DeleteMenuItem( mh , i ) ;
 		    }
 				
-		  	for (pos = 0 , node = menu->GetMenuItems().First(); node; node = node->Next(), pos++) 
+		  	for (pos = 0 , node = menu->GetMenuItems().GetFirst(); node; node = node->GetNext(), pos++) 
 	  		{
-	 			item = (wxMenuItem *)node->Data();
+	 			item = (wxMenuItem *)node->GetData();
 	 			subMenu = item->GetSubMenu() ;
 				if (subMenu)	 		
 				{
@@ -629,9 +629,9 @@ void wxMenuBar::MacInstallMenuBar()
 			UMASetMenuTitle( MAC_WXHMENU(menu->GetHMenu()) , label ) ;
 				wxArrayPtrVoid submenus ;
 				
-	  		for (pos = 0, node = menu->GetMenuItems().First(); node; node = node->Next(), pos++) 
+	  		for (pos = 0, node = menu->GetMenuItems().GetFirst(); node; node = node->GetNext(), pos++) 
   			{
-	 			item = (wxMenuItem *)node->Data();
+	 			item = (wxMenuItem *)node->GetData();
 	 			subMenu = item->GetSubMenu() ;
 				if (subMenu)	 		
 				{
@@ -642,12 +642,12 @@ void wxMenuBar::MacInstallMenuBar()
 			for ( size_t i = 0 ; i < submenus.GetCount() ; ++i )
 			{
 			    wxMenu* submenu = (wxMenu*) submenus[i] ;
-    	        wxNode *subnode;
+    	        wxwxMenuItemListNode *subnode;
     	        wxMenuItem *subitem;
     	        int subpos ;
-                for ( subpos = 0 , subnode = submenu->GetMenuItems().First(); subnode; subnode = subnode->Next(), subpos++) 
+                for ( subpos = 0 , subnode = submenu->GetMenuItems().GetFirst(); subnode; subnode = subnode->GetNext(), subpos++) 
 		  		{
-  		 			subitem = (wxMenuItem *)subnode->Data();
+  		 			subitem = (wxMenuItem *)subnode->GetData();
   		 			wxMenu* itsSubMenu = subitem->GetSubMenu() ;
   					if (itsSubMenu)	 		
   					{

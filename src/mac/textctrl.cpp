@@ -1587,27 +1587,27 @@ bool  wxTextCtrl::Show(bool show)
 // standard handlers for standard edit menu events
 // ----------------------------------------------------------------------------
 
-void wxTextCtrl::OnCut(wxCommandEvent& event)
+void wxTextCtrl::OnCut(wxCommandEvent& WXUNUSED(event))
 {
     Cut();
 }
 
-void wxTextCtrl::OnCopy(wxCommandEvent& event)
+void wxTextCtrl::OnCopy(wxCommandEvent& WXUNUSED(event))
 {
     Copy();
 }
 
-void wxTextCtrl::OnPaste(wxCommandEvent& event)
+void wxTextCtrl::OnPaste(wxCommandEvent& WXUNUSED(event))
 {
     Paste();
 }
 
-void wxTextCtrl::OnUndo(wxCommandEvent& event)
+void wxTextCtrl::OnUndo(wxCommandEvent& WXUNUSED(event))
 {
     Undo();
 }
 
-void wxTextCtrl::OnRedo(wxCommandEvent& event)
+void wxTextCtrl::OnRedo(wxCommandEvent& WXUNUSED(event))
 {
     Redo();
 }

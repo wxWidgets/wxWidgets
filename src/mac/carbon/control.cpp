@@ -87,7 +87,7 @@ pascal void wxMacLiveScrollbarActionProc( ControlHandle control , ControlPartCod
 ControlColorUPP wxMacSetupControlBackgroundUPP = NULL ;
 ControlDefUPP wxMacControlActionUPP = NULL ;
 
-pascal SInt32  wxMacControlDefintion(SInt16 varCode, ControlRef theControl, ControlDefProcMessage message, SInt32 param)
+pascal SInt32  wxMacControlDefinition(SInt16 varCode, ControlRef theControl, ControlDefProcMessage message, SInt32 param)
 {
     
 	wxControl*  wx = (wxControl*) wxFindControlFromMacControl( theControl ) ;
@@ -295,7 +295,7 @@ wxControl *wxFindControlFromMacControl(ControlHandle inControl )
     wxNode *node = wxWinMacControlList->Find((long)inControl);
     if (!node)
         return NULL;
-    return (wxControl *)node->Data();
+    return (wxControl *)node->GetData();
 }
 
 void wxAssociateControlWithMacControl(ControlHandle inControl, wxControl *control)
@@ -398,7 +398,7 @@ void wxControl::MacPostControlCreate()
 	}
 	if ( wxMacControlActionUPP == NULL )
 	{
-	    wxMacControlActionUPP = NewControlDefUPP( wxMacControlDefintion ) ;
+	    wxMacControlActionUPP = NewControlDefUPP( wxMacControlDefinition ) ;
 	}
     // The following block of code is responsible for crashes when switching
     // back to windows, which can be seen in the dialogs sample.

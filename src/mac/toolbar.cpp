@@ -172,7 +172,7 @@ wxToolBar::~wxToolBar()
 
 bool wxToolBar::Realize()
 {
-    if (m_tools.Number() == 0)
+    if (m_tools.GetCount() == 0)
         return FALSE;
 
     Point localOrigin ;
@@ -195,7 +195,7 @@ bool wxToolBar::Realize()
     controlstyle.flags = kControlUseFontMask ;
     controlstyle.font = kControlFontSmallSystemFont ;
     
-    wxNode *node = m_tools.First();
+    wxwxToolBarToolsListNode *node = m_tools.GetFirst();
     int noButtons = 0;
     int x = 0 ;
     int y = 0 ;
@@ -208,7 +208,7 @@ bool wxToolBar::Realize()
     
     while (node)
     {
-        wxToolBarTool *tool = (wxToolBarTool *)node->Data();
+        wxToolBarTool *tool = (wxToolBarTool *)node->GetData();
         
         if(  !tool->IsSeparator()  )
         {
@@ -288,7 +288,7 @@ bool wxToolBar::Realize()
         if (toolbarrect.top + y + m_yMargin + kwxMacToolBarTopMargin - m_y - localOrigin.v > maxHeight) {
             maxHeight = toolbarrect.top + y + m_yMargin + kwxMacToolBarTopMargin - m_y - localOrigin.v ;
         }
-        node = node->Next();
+        node = node->GetNext();
     }
     
     if ( GetWindowStyleFlag() & wxTB_HORIZONTAL )
@@ -339,7 +339,7 @@ void wxToolBar::MacHandleControlClick( WXWidget control , wxInt16 controlpart )
     {
         if ( m_macToolHandles[index] == (void*) control )
         {
-            wxToolBarTool *tool = (wxToolBarTool *)m_tools.Nth( index )->Data();
+            wxToolBarTool *tool = (wxToolBarTool *)m_tools.Item( index )->GetData();
             if ( tool->CanBeToggled() )
             {
                 tool->Toggle( GetControl32BitValue( (ControlHandle) control ) ) ;
@@ -363,7 +363,7 @@ void wxToolBar::SetRows(int nRows)
 
 void wxToolBar::MacSuperChangedPosition() 
 {
-  if (m_tools.Number() > 0)
+  if (m_tools.GetCount() > 0)
   {
 
     Point localOrigin ;
@@ -385,7 +385,7 @@ void wxToolBar::MacSuperChangedPosition()
     controlstyle.flags = kControlUseFontMask ;
     controlstyle.font = kControlFontSmallSystemFont ;
     
-    wxNode *node = m_tools.First();
+    wxwxToolBarToolsListNode *node = m_tools.GetFirst();
     int noButtons = 0;
     int x = 0 ;
     wxSize toolSize = GetToolSize() ;
@@ -399,7 +399,7 @@ void wxToolBar::MacSuperChangedPosition()
       WindowRef rootwindow = (WindowRef) MacGetRootWindow() ;
         while (node)
         {
-            wxToolBarTool *tool = (wxToolBarTool *)node->Data();
+            wxToolBarTool *tool = (wxToolBarTool *)node->GetData();
             
             if(  !tool->IsSeparator()  )
             {
@@ -444,7 +444,7 @@ void wxToolBar::MacSuperChangedPosition()
             if (toolbarrect.top + m_yMargin  + kwxMacToolBarTopMargin - m_y - localOrigin.v > maxHeight)
                 maxHeight = toolbarrect.top  + kwxMacToolBarTopMargin + m_yMargin - m_y - localOrigin.v ;
 
-            node = node->Next();
+            node = node->GetNext();
         }
     }
 
@@ -493,7 +493,7 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
             GetControlBounds((ControlHandle) m_macToolHandles[index], &bounds ) ;
             if ( PtInRect( pt , &bounds ) )
             {
-                return  (wxToolBarTool*) (m_tools.Nth( index )->Data() ) ;
+                return  (wxToolBarTool*) (m_tools.Item( index )->GetData() ) ;
             }
         }
     }

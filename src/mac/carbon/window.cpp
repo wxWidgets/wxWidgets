@@ -786,13 +786,13 @@ bool wxWindowMac::Show(bool show)
 
 void wxWindowMac::MacSuperShown( bool show )
 {
-    wxNode *node = GetChildren().First();
+    wxWindowListNode *node = GetChildren().GetFirst();
     while ( node )
     {
-        wxWindowMac *child = (wxWindowMac *)node->Data();
+        wxWindowMac *child = (wxWindowMac *)node->GetData();
         if ( child->m_isShown )
             child->MacSuperShown( show ) ;
-        node = node->Next();
+        node = node->GetNext();
     }
 }
 
@@ -804,13 +804,13 @@ void wxWindowMac::MacSuperEnabled( bool enabled )
       // because unter MacOSX the frames are drawn with an addXXX mode)
       // the borders area
     }
-    wxNode *node = GetChildren().First();
+    wxWindowListNode *node = GetChildren().GetFirst();
     while ( node )
     {
-        wxWindowMac *child = (wxWindowMac *)node->Data();
+        wxWindowMac *child = (wxWindowMac *)node->GetData();
         if ( child->m_isShown )
             child->MacSuperEnabled( enabled ) ;
-        node = node->Next();
+        node = node->GetNext();
     }
 }
 
@@ -1239,9 +1239,9 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
         DisposeRgn( updateRgn ) ;
     }
 
-    for (wxNode *node = GetChildren().First(); node; node = node->Next())
+    for (wxWindowListNode *node = GetChildren().GetFirst(); node; node = node->GetNext())
     {
-        wxWindowMac *child = (wxWindowMac*)node->Data();
+        wxWindowMac *child = (wxWindowMac*)node->GetData();
         if (child == m_vScrollBar) continue;
         if (child == m_hScrollBar) continue;
         if (child->IsTopLevel()) continue;
@@ -1313,13 +1313,13 @@ void wxWindowMac::OnCommand(wxWindowMac& win, wxCommandEvent& event)
 wxObject* wxWindowMac::GetChild(int number) const
 {
     // Return a pointer to the Nth object in the Panel
-    wxNode *node = GetChildren().First();
+    wxNode *node = GetChildren().GetFirst();
     int n = number;
     while (node && n--)
-        node = node->Next();
+        node = node->GetNext();
     if ( node )
     {
-        wxObject *obj = (wxObject *)node->Data();
+        wxObject *obj = (wxObject *)node->GetData();
         return(obj);
     }
     else
@@ -1435,9 +1435,9 @@ bool wxWindowMac::MacGetWindowFromPointSub( const wxPoint &point , wxWindowMac**
       newPoint.y -= m_y;
     }
 
-    for (wxNode *node = GetChildren().First(); node; node = node->Next())
+    for (wxWindowListNode *node = GetChildren().GetFirst(); node; node = node->GetNext())
     {
-        wxWindowMac *child = (wxWindowMac*)node->Data();
+        wxWindowMac *child = (wxWindowMac*)node->GetData();
         // added the m_isShown test --dmazzoni
         if ( child->MacGetRootWindow() == window && child->m_isShown )
         {
@@ -1540,9 +1540,9 @@ bool wxWindowMac::MacDispatchMouseEvent(wxMouseEvent& event)
     int x = event.m_x ;
     int y = event.m_y ;
 
-    for (wxNode *node = GetChildren().First(); node; node = node->Next())
+    for (wxWindowListNode *node = GetChildren().GetFirst(); node; node = node->GetNext())
     {
-        wxWindowMac *child = (wxWindowMac*)node->Data();
+        wxWindowMac *child = (wxWindowMac*)node->GetData();
         if ( child->MacGetRootWindow() == window && child->IsShown() && child->IsEnabled() )
         {
             if (child->MacDispatchMouseEvent(event))
@@ -1678,9 +1678,9 @@ const wxRegion& wxWindowMac::MacGetVisibleRegion( bool respectChildrenAndSibling
   {
       if ( GetWindowStyle() & wxCLIP_CHILDREN )
       {
-        for (wxNode *node = GetChildren().First(); node; node = node->Next())
+        for (wxWindowListNode *node = GetChildren().GetFirst(); node; node = node->GetNext())
         {
-            wxWindowMac *child = (wxWindowMac*)node->Data();
+            wxWindowMac *child = (wxWindowMac*)node->GetData();
 
             if ( !child->IsTopLevel() && child->IsShown() )
             {
@@ -1701,9 +1701,9 @@ const wxRegion& wxWindowMac::MacGetVisibleRegion( bool respectChildrenAndSibling
       if ( (GetWindowStyle() & wxCLIP_SIBLINGS) && GetParent() )
       {
         bool thisWindowThrough = false ;
-        for (wxNode *node = GetParent()->GetChildren().First(); node; node = node->Next())
+        for (wxWindowListNode *node = GetParent()->GetChildren().GetFirst(); node; node = node->GetNext())
         {
-            wxWindowMac *sibling = (wxWindowMac*)node->Data();
+            wxWindowMac *sibling = (wxWindowMac*)node->GetData();
             if ( sibling == this )
             {
               thisWindowThrough = true ;
@@ -1787,11 +1787,11 @@ void wxWindowMac::MacRedraw( WXHRGN updatergnr , long time, bool erase)
     // now intersect for each of the children their rect with the updateRgn and call MacRedraw recursively
 
     RgnHandle childupdate = NewRgn() ;
-    for (wxNode *node = GetChildren().First(); node; node = node->Next())
+    for (wxWindowListNode *node = GetChildren().GetFirst(); node; node = node->GetNext())
     {
         // calculate the update region for the child windows by intersecting the window rectangle with our own
         // passed in update region and then offset it to be client-wise window coordinates again
-        wxWindowMac *child = (wxWindowMac*)node->Data();
+        wxWindowMac *child = (wxWindowMac*)node->GetData();
         SetRectRgn( childupdate , child->m_x , child->m_y , child->m_x + child->m_width ,  child->m_y + child->m_height ) ;
         SectRgn( childupdate , updatergn , childupdate ) ;
         OffsetRgn( childupdate , -child->m_x , -child->m_y ) ;
@@ -1948,12 +1948,12 @@ void wxWindowMac::MacSuperChangedPosition()
 {
     // only window-absolute structures have to be moved i.e. controls
 
-    wxNode *node = GetChildren().First();
+    wxWindowListNode *node = GetChildren().GetFirst();
     while ( node )
     {
-        wxWindowMac *child = (wxWindowMac *)node->Data();
+        wxWindowMac *child = (wxWindowMac *)node->GetData();
         child->MacSuperChangedPosition() ;
-        node = node->Next();
+        node = node->GetNext();
     }
 }
 
@@ -1961,12 +1961,12 @@ void wxWindowMac::MacTopLevelWindowChangedPosition()
 {
     // only screen-absolute structures have to be moved i.e. glcanvas
 
-    wxNode *node = GetChildren().First();
+    wxWindowListNode *node = GetChildren().GetFirst();
     while ( node )
     {
-        wxWindowMac *child = (wxWindowMac *)node->Data();
+        wxWindowMac *child = (wxWindowMac *)node->GetData();
         child->MacTopLevelWindowChangedPosition() ;
-        node = node->Next();
+        node = node->GetNext();
     }
 }
 long wxWindowMac::MacGetLeftBorderSize( ) const

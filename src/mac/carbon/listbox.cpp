@@ -937,7 +937,7 @@ void wxListBox::MacDoDoubleClick()
 
 void wxListBox::OnChar(wxKeyEvent& event)
 {
-    if ( event.KeyCode() == WXK_RETURN || event.KeyCode() == WXK_NUMPAD_ENTER)
+    if ( event.GetKeyCode() == WXK_RETURN || event.GetKeyCode() == WXK_NUMPAD_ENTER)
     {
     	wxWindow* parent = GetParent() ;
     	while( parent  && !parent->IsTopLevel() && parent->GetDefaultItem() == NULL )
@@ -958,14 +958,14 @@ void wxListBox::OnChar(wxKeyEvent& event)
 	    event.Skip() ;
     }
     /* generate wxID_CANCEL if command-. or <esc> has been pressed (typically in dialogs) */
-    else if (event.KeyCode() == WXK_ESCAPE || (event.KeyCode() == '.' && event.MetaDown() ) )
+    else if (event.GetKeyCode() == WXK_ESCAPE || (event.GetKeyCode() == '.' && event.MetaDown() ) )
     {
     	wxWindow* win = GetParent()->FindWindow( wxID_CANCEL ) ;
         wxCommandEvent new_event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_CANCEL);
         new_event.SetEventObject( win );
         win->GetEventHandler()->ProcessEvent( new_event );
     }
-    else if ( event.KeyCode() == WXK_TAB )
+    else if ( event.GetKeyCode() == WXK_TAB )
     {
         wxNavigationKeyEvent new_event;
         new_event.SetEventObject( this );
@@ -976,7 +976,7 @@ void wxListBox::OnChar(wxKeyEvent& event)
         if ( !GetEventHandler()->ProcessEvent( new_event ) )
         	event.Skip() ;
     }
-	else if ( event.KeyCode() == WXK_DOWN || event.KeyCode() == WXK_UP )
+	else if ( event.GetKeyCode() == WXK_DOWN || event.GetKeyCode() == WXK_UP )
 	{
 		// perform the default key handling first
 		wxControl::OnKeyDown( event ) ;
@@ -1011,7 +1011,7 @@ void wxListBox::OnChar(wxKeyEvent& event)
 	    m_typeIn = "" ;
 	  }
 	  m_lastTypeIn = event.GetTimestamp() ;
-	  m_typeIn += (char) event.KeyCode() ;
+	  m_typeIn += (char) event.GetKeyCode() ;
 	  int line = FindString("*"+m_typeIn+"*") ;
 	  if ( line >= 0 )
 	  {

@@ -418,7 +418,7 @@ void wxSlider::MacHandleControlClick( WXWidget control , wxInt16 controlpart )
 	}
 }
 
- void wxSlider::DoMoveWindow(int x, int y, int width, int height)
- {
+void wxSlider::DoMoveWindow(int x, int y, int width, int height)
+{
     wxControl::DoMoveWindow(x,y,width,height) ;
 }

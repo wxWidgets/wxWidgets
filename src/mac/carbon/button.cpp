@@ -95,23 +95,23 @@ wxSize wxButton::GetDefaultSize()
 
 void wxButton::Command (wxCommandEvent & event)
 {
-	if ( (ControlHandle) m_macControl )
-	{
-		HiliteControl(  (ControlHandle) m_macControl , kControlButtonPart ) ;
-		unsigned long finalTicks ;
-		Delay( 8 , &finalTicks ) ;
-		HiliteControl(  (ControlHandle) m_macControl , 0 ) ;
-	}
+    if ( (ControlHandle) m_macControl )
+    {
+        HiliteControl(  (ControlHandle) m_macControl , kControlButtonPart ) ;
+        unsigned long finalTicks ;
+        Delay( 8 , &finalTicks ) ;
+        HiliteControl(  (ControlHandle) m_macControl , 0 ) ;
+    }
     ProcessCommand (event);
 }
 
-void wxButton::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
+void wxButton::MacHandleControlClick( WXWidget WXUNUSED(control) , wxInt16 controlpart ) 
 {
-  if ( controlpart != kControlNoPart )
-  {
-    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, m_windowId );
-    event.SetEventObject(this);
-    ProcessCommand(event);
-  }
+    if ( controlpart != kControlNoPart )
+    {
+        wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, m_windowId );
+        event.SetEventObject(this);
+        ProcessCommand(event);
+    }
 }
 

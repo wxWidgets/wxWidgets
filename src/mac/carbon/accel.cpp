@@ -88,10 +88,10 @@ int wxAcceleratorTable::GetCommand( wxKeyEvent &event )
 {
     if (!Ok()) return -1;
 
-    wxNode *node = M_ACCELDATA->m_accels.First();
+    wxwxAccelListNode *node = M_ACCELDATA->m_accels.GetFirst();
     while (node)
     {
-        wxAcceleratorEntry *entry = (wxAcceleratorEntry*)node->Data();
+        wxAcceleratorEntry *entry = (wxAcceleratorEntry*)node->GetData();
         if ((event.m_keyCode == entry->GetKeyCode()) &&
            (((entry->GetFlags() & wxACCEL_CTRL) == 0) || event.ControlDown()) &&
            (((entry->GetFlags() & wxACCEL_SHIFT) == 0) || event.ShiftDown()) &&
@@ -99,7 +99,7 @@ int wxAcceleratorTable::GetCommand( wxKeyEvent &event )
         {
             return entry->GetCommand();
         }
-        node = node->Next();
+        node = node->GetNext();
     }
 
     return -1;

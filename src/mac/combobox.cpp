@@ -60,7 +60,7 @@ public:
 protected:
     void OnChar( wxKeyEvent& event )
     {
-        if ( event.KeyCode() == WXK_RETURN )
+        if ( event.GetKeyCode() == WXK_RETURN )
         {
             wxString value = GetValue();
 
@@ -462,7 +462,7 @@ bool wxComboBox::SetStringSelection(const wxString& sel)
         return FALSE;
 }
 
-void wxComboBox::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
+void wxComboBox::MacHandleControlClick( WXWidget WXUNUSED(control) , wxInt16 WXUNUSED(controlpart) ) 
 {
     wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, m_windowId );
     event.SetInt(GetSelection());

@@ -376,7 +376,7 @@ END_EVENT_TABLE()
 
 void wxCheckListBox::OnChar(wxKeyEvent& event)
 {
-  if ( event.KeyCode() == WXK_SPACE )
+  if ( event.GetKeyCode() == WXK_SPACE )
   {
     int index = GetSelection() ;
     if ( index >= 0 )

@@ -75,7 +75,7 @@ wxTopLevelWindowMac *wxFindWinFromMacWindow(WXWindow inWindowRef)
     wxNode *node = wxWinMacWindowList->Find((long)inWindowRef);
     if (!node)
         return NULL;
-    return (wxTopLevelWindowMac *)node->Data();
+    return (wxTopLevelWindowMac *)node->GetData();
 }
 
 void wxAssociateWinWithMacWindow(WXWindow inWindowRef, wxTopLevelWindowMac *win)

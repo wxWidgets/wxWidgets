@@ -71,7 +71,7 @@ void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
     Refresh() ;
 }
 
-void wxStaticBitmap::OnPaint( wxPaintEvent &event ) 
+void wxStaticBitmap::OnPaint( wxPaintEvent& WXUNUSED(event) ) 
 {
     wxPaintDC dc(this);
     PrepareDC(dc);
