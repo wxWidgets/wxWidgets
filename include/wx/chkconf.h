@@ -1015,7 +1015,7 @@
 #ifndef wxUSE_NATIVE_STATUSBAR
 #   define wxUSE_NATIVE_STATUSBAR 0
 #elif wxUSE_NATIVE_STATUSBAR
-#   if defined(__WXUNIVERSAL__) || !(defined(__WXMSW__) || !defined(__WXMAC__))
+#   if defined(__WXUNIVERSAL__) || !(defined(__WXMSW__) || defined(__WXMAC__))
 #       undef wxUSE_NATIVE_STATUSBAR
 #       define wxUSE_NATIVE_STATUSBAR 0
 #   endif
