@@ -2610,60 +2610,42 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                             wxTreeItemAttr * const attr = it->second;
 
-                            HFONT hFont;
-                            if ( attr->HasFont() )
-                            {
-                                hFont = GetHfontOf(attr->GetFont());
-                            }
-                            else
-                            {
-                                hFont = 0;
-                            }
-
-                            wxColour colText;
-                            if ( attr->HasTextColour() )
-                            {
-                                colText = attr->GetTextColour();
-                            }
-                            else
-                            {
-                                colText = GetForegroundColour();
-                            }
-
-                            // selection colours should override ours
-                            if ( nmcd.uItemState & CDIS_SELECTED )
-                            {
-                                lptvcd->clrTextBk =
-                                    ::GetSysColor(COLOR_HIGHLIGHT);
-                                lptvcd->clrText =
-                                    ::GetSysColor(COLOR_HIGHLIGHTTEXT);
-                            }
-                            else // !selected
+                            // selection colours should override ours,
+                            // otherwise it is too confusing ot the user
+                            if ( !(nmcd.uItemState & CDIS_SELECTED) )
                             {
                                 wxColour colBack;
                                 if ( attr->HasBackgroundColour() )
                                 {
                                     colBack = attr->GetBackgroundColour();
+                                    lptvcd->clrTextBk = wxColourToRGB(colBack);
                                 }
-                                else
-                                {
-                                    colBack = GetBackgroundColour();
-                                }
-
-                                lptvcd->clrText = wxColourToRGB(colText);
-                                lptvcd->clrTextBk = wxColourToRGB(colBack);
                             }
 
-                            // note that if we wanted to set colours for
-                            // individual columns (subitems), we would have
-                            // returned CDRF_NOTIFYSUBITEMREDRAW from here
-                            if ( hFont )
+                            // but we still want to keep the special foreground
+                            // colour when we don't have focus (we can't keep
+                            // it when we do, it would usually be unreadable on
+                            // the almost inverted bg colour...)
+                            if ( !(nmcd.uItemState & CDIS_SELECTED) ||
+                                    FindFocus() != this )
                             {
+                                wxColour colText;
+                                if ( attr->HasTextColour() )
+                                {
+                                    colText = attr->GetTextColour();
+                                    lptvcd->clrText = wxColourToRGB(colText);
+                                }
+                            }
+
+                            if ( attr->HasFont() )
+                            {
+                                HFONT hFont = GetHfontOf(attr->GetFont());
+
                                 ::SelectObject(nmcd.hdc, hFont);
 
                                 *result = CDRF_NEWFONT;
                             }
-                            else
+                            else // no specific font
                             {
                                 *result = CDRF_DODEFAULT;
                             }
