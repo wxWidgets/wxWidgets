@@ -138,6 +138,57 @@ static void wxConvertToMSWListCol(int col, const wxListItem& item,
                                   LV_COLUMN& lvCol);
 
 // ----------------------------------------------------------------------------
+// private helper classes
+// ----------------------------------------------------------------------------
+
+// We have to handle both fooW and fooA notifications in several cases
+// because of broken commctl.dll and/or unicows.dll. This class is used to
+// convert LV_ITEMA and LV_ITEMW to LV_ITEM (which is either LV_ITEMA or 
+// LV_ITEMW depending on wxUSE_UNICODE setting), so that it can be processed
+// by wxConvertToMSWListItem().
+class wxLV_ITEM
+{
+public:
+    ~wxLV_ITEM() { delete m_buf; }
+    operator LV_ITEM&() const { return *m_item; }
+
+#if wxUSE_UNICODE
+    wxLV_ITEM(LV_ITEMW &item) : m_buf(NULL), m_item(&item) {}
+    wxLV_ITEM(LV_ITEMA &item)
+    {
+        m_item = new LV_ITEM((LV_ITEM&)item);
+        if ( (item.mask & LVIF_TEXT) && item.pszText )
+        {
+            m_buf = new wxMB2WXbuf(wxConvLocal.cMB2WX(item.pszText));
+            m_item->pszText = (wxChar*)m_buf->data();
+        }
+        else
+            m_buf = NULL;
+    }   
+private:
+    wxMB2WXbuf *m_buf;
+
+#else
+    wxLV_ITEM(LV_ITEMW &item)
+    {
+        m_item = new LV_ITEM((LV_ITEM&)item);
+        if ( (item.mask & LVIF_TEXT) && item.pszText )
+        {
+            m_buf = new wxWC2WXbuf(wxConvLocal.cWC2WX(item.pszText));
+            m_item->pszText = (wxChar*)m_buf->data();
+        }
+        else
+            m_buf = NULL;
+    }   
+    wxLV_ITEM(LV_ITEMA &item) : m_buf(NULL), m_item(&item) {}
+private:
+    wxWC2WXbuf *m_buf;
+#endif
+
+    LV_ITEM *m_item;
+};
+
+// ----------------------------------------------------------------------------
 // events
 // ----------------------------------------------------------------------------
 
@@ -1620,11 +1671,46 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 event.m_pointDrag.y = nmLV->ptAction.y;
                 break;
 
-            case LVN_BEGINLABELEDIT:
+            // NB: we have to handle both *A and *W versions here because some
+            //    versions of comctl32.dll send ANSI message to an Unicode app
+            case LVN_BEGINLABELEDITA:
                 {
                     eventType = wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT;
-                    LV_DISPINFO *info = (LV_DISPINFO *)lParam;
-                    wxConvertFromMSWListItem(GetHwnd(), event.m_item, info->item);
+                    wxLV_ITEM item(((LV_DISPINFOA *)lParam)->item);
+                    wxConvertFromMSWListItem(GetHwnd(), event.m_item, item);
+                    event.m_itemIndex = event.m_item.m_itemId;
+                }
+                break;
+            case LVN_BEGINLABELEDITW:
+                {
+                    eventType = wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT;
+                    wxLV_ITEM item(((LV_DISPINFOW *)lParam)->item);
+                    wxConvertFromMSWListItem(GetHwnd(), event.m_item, item);
+                    event.m_itemIndex = event.m_item.m_itemId;
+                }
+                break;
+
+            case LVN_ENDLABELEDITA:
+                {
+                    eventType = wxEVT_COMMAND_LIST_END_LABEL_EDIT;
+                    wxLV_ITEM item(((LV_DISPINFOA *)lParam)->item);
+                    wxConvertFromMSWListItem(NULL, event.m_item, item);
+                    if ( ((LV_ITEM)item).pszText == NULL || 
+                         ((LV_ITEM)item).iItem == -1 )
+                        return FALSE;
+
+                    event.m_itemIndex = event.m_item.m_itemId;
+                }
+                break;
+            case LVN_ENDLABELEDITW:
+                {
+                    eventType = wxEVT_COMMAND_LIST_END_LABEL_EDIT;
+                    wxLV_ITEM item(((LV_DISPINFOW *)lParam)->item);
+                    wxConvertFromMSWListItem(NULL, event.m_item, item);
+                    if ( ((LV_ITEM)item).pszText == NULL || 
+                         ((LV_ITEM)item).iItem == -1 )
+                        return FALSE;
+
                     event.m_itemIndex = event.m_item.m_itemId;
                 }
                 break;
@@ -1650,18 +1736,6 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 if ( m_hasAnyAttr )
                 {
                     delete (wxListItemAttr *)m_attrs.Delete(nmLV->iItem);
-                }
-                break;
-
-            case LVN_ENDLABELEDIT:
-                {
-                    eventType = wxEVT_COMMAND_LIST_END_LABEL_EDIT;
-                    LV_DISPINFO *info = (LV_DISPINFO *)lParam;
-                    wxConvertFromMSWListItem(NULL, event.m_item, info->item);
-                    if ( info->item.pszText == NULL || info->item.iItem == -1 )
-                        return FALSE;
-
-                    event.m_itemIndex = event.m_item.m_itemId;
                 }
                 break;
 
@@ -1910,7 +1984,8 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
             return TRUE;
 
-        case LVN_ENDLABELEDIT:
+        case LVN_ENDLABELEDITA:
+        case LVN_ENDLABELEDITW:
             // logic here is inversed compared to all the other messages
             *result = event.IsAllowed();
 
