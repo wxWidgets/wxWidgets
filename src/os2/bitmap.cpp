@@ -182,11 +182,14 @@ wxBitmap::wxBitmap(
     vHeader.ulColorEncoding = 0;
     vHeader.ulIdentifier    = 0;
 
-    vhPs = ::GpiCreatePS(habMain, hdc, &vSize, GPIA_ASSOC | PU_PELS);
-    if (vhPs == 0)
+    hPs = ::GpiCreatePS(habMain, hdc, &vSize, GPIA_ASSOC | PU_PELS);
+    if (hPs == 0)
     {
         wxLogLastError("GpiCreatePS Failure");
     }
+
+    m_hDc = hDc;
+    m_hPs = hPs;
 
     m_refData = pRefData;
 
@@ -272,20 +275,23 @@ bool wxBitmap::Create(
     HBITMAP                         hBmp;
     BITMAPINFOHEADER2               vHeader;
     BITMAPINFO2                     vInfo;
-    HDC                             hDc;
-    HPS                             hPs;
+    HPS                             hpsScreen;
+    HDC                             hdcScreen;
     DEVOPENSTRUCT                   vDop = { NULL, "DISPLAY", NULL, NULL, NULL, NULL, NULL, NULL, NULL };
     SIZEL                           vSize = {0, 0};
+    LONG                            lBitCount;
 
     wxAssert(vHabmain != NULL);
 
-    hDc = ::DevOpenDC(vHabmain, OD_MEMORY, (PSZ)"*", 1L, (PDEVOPENDATA)&vDop, 0L);
+    hpsScreen = ::WinGetScreenPS(HWND_DESKTOP);
+    hdcScreen = ::GpiQueryDevice(hpsScreen);
+    ::DevQueryCaps(hdcScreen, CAPS_COLOR_BITCOUNT, &lBitCount);
 
     vHeader.cbFix           = sizeof(vHeader);
     vHeader.cx              = (USHORT)nW;
     vHeader.cy              = (USHORT)nH;
     vHeader.cPlanes         = (USHORT)nD;
-    vHeader.cBitCount       = 24;
+    vHeader.cBitCount       = lBitCount;
     vHeader.ulCompression   = BCA_UNCOMP;
     vHeader.cxResolution    = 0;
     vHeader.cyResolution    = 0;
@@ -299,12 +305,6 @@ bool wxBitmap::Create(
     vHeader.ulColorEncoding = 0;
     vHeader.ulIdentifier    = 0;
 
-    vhPs = ::GpiCreatePS(habMain, hdc, &vSize, GPIA_ASSOC | PU_PELS);
-    if (vhPs == 0)
-    {
-        wxLogLastError("GpiCreatePS Failure");
-    }
-
 
     UnRef();
     m_refData = new wxBitmapRefData;
@@ -315,7 +315,7 @@ bool wxBitmap::Create(
 
     if (nD > 0)
     {
-        hBmp = ::GpiCreateBitmap(hPs, &vHeader, 0L, NULL, &vInfo);
+        hBmp = ::GpiCreateBitmap(hpsScreen, &vHeader, 0L, NULL, &vInfo);
         if (!hBmp)
         {
             wxLogLastError("CreateBitmap");
@@ -323,84 +323,122 @@ bool wxBitmap::Create(
     }
     else
     {
-        ScreenHDC dc;
-        hbmp = ::CreateCompatibleBitmap(dc, w, h);
-        if ( !hbmp )
-        {
-            wxLogLastError("CreateCompatibleBitmap");
-        }
+        LONG                            lPlanes;
 
+        ::DevQueryCaps(hdcScreen, CAPS_COLOR_PLANES, &lPlanes);
+        hBmp = ::GpiCreateBitmap(hpsScreen, &vHeader, 0L, NULL, &vInfo);
+        if (!hBmp)
+        {
+            wxLogLastError("CreateBitmap");
+        }
         GetBitmapData()->m_depth = wxDisplayDepth();
     }
-
-    SetHBITMAP((WXHBITMAP)hbmp);
+    SetHBITMAP((WXHBITMAP)hBmp);
 
 #if WXWIN_COMPATIBILITY_2
-    GetBitmapData()->m_ok = hbmp != 0;
+    GetBitmapData()->m_bOk = hBmp != 0;
 #endif // WXWIN_COMPATIBILITY_2
 
     return Ok();
 }
 
-bool wxBitmap::LoadFile(const wxString& filename, long type)
+bool wxBitmap::LoadFile(
+  const wxString&                   rFilename
+, long                              lType
+)
 {
     UnRef();
 
-    wxBitmapHandler *handler = wxDynamicCast(FindHandler(type), wxBitmapHandler);
+    wxBitmapHandler*                pHandler = wxDynamicCast( FindHandler(lType)
+                                                             ,wxBitmapHandler
+                                                            );
 
-    if ( handler )
+    if (pHandler)
     {
         m_refData = new wxBitmapRefData;
 
-        return handler->LoadFile(this, filename, type, -1, -1);
+        return(pHandler->LoadFile( this
+                                  ,rFilename
+                                  ,lType
+                                  , -1
+                                  , -1
+                                 );
     }
     else
     {
-        wxImage image;
-        if ( !image.LoadFile( filename, type ) || !image.Ok() )
-            return FALSE;
+        wxImage                     vImage;
 
-        *this = image.ConvertToBitmap();
+        if (!vImage.LoadFile(rFilename, lType) || !image.Ok() )
+            return(FALSE);
 
-        return TRUE;
+        *this = vImage.ConvertToBitmap();
+
+        return(TRUE);
     }
 }
 
-bool wxBitmap::Create(void *data, long type, int width, int height, int depth)
+bool wxBitmap::Create(
+  void*                             pData
+, long                              lType
+, int                               nWidth
+, int                               nHeight
+, int                               nDepth
+)
 {
     UnRef();
 
-    wxBitmapHandler *handler = wxDynamicCast(FindHandler(type), wxBitmapHandler);
+    wxBitmapHandler*                pHandler = wxDynamicCast( FindHandler(lType)
+                                                             ,wxBitmapHandler
+                                                            );
 
-    if ( !handler )
+    if (!pHandler)
     {
         wxLogDebug(wxT("Failed to create bitmap: no bitmap handler for "
                        "type %d defined."), type);
 
-        return FALSE;
+        return(FALSE);
     }
 
     m_refData = new wxBitmapRefData;
 
-    return handler->Create(this, data, type, width, height, depth);
+    return(handler->Create( this
+                           ,pData
+                           ,lType
+                           ,nWidth
+                           ,nHeight
+                           ,nDepth
+                          ));
 }
 
-bool wxBitmap::SaveFile(const wxString& filename, int type, const wxPalette *palette)
+bool wxBitmap::SaveFile( 
+  const wxString&                   rFilename
+, int                               lType
+, const wxPalette*                  pPalette
+)
 {
-    wxBitmapHandler *handler = wxDynamicCast(FindHandler(type), wxBitmapHandler);
+    wxBitmapHandler*                pHandler = wxDynamicCast( FindHandler(lType)
+                                                             ,wxBitmapHandler
+                                                            );
 
-    if ( handler )
+    if (pHandler)
     {
-        return handler->SaveFile(this, filename, type, palette);
+        return pHandler->SaveFile( this
+                                  ,rFilename
+                                  ,lType
+                                  ,pPalette
+                                 );
     }
     else
     {
         // FIXME what about palette? shouldn't we use it?
-        wxImage image( *this );
-        if (!image.Ok())
-            return FALSE;
+        wxImage                     vImage(*this);
 
-        return image.SaveFile( filename, type );
+        if (!vImage.Ok())
+            return(FALSE);
+
+        return(vImage.SaveFile( rFilename
+                               ,lType
+                              ));
     }
 }
 
@@ -408,85 +446,68 @@ bool wxBitmap::SaveFile(const wxString& filename, int type, const wxPalette *pal
 // wxBitmap accessors
 // ----------------------------------------------------------------------------
 
-void wxBitmap::SetQuality(int q)
+void wxBitmap::SetQuality(
+  int                               nQ
+)
 {
     EnsureHasData();
 
-    GetBitmapData()->m_quality = q;
+    GetBitmapData()->m_nQuality = nQ;
 }
 
 #if WXWIN_COMPATIBILITY_2
-void wxBitmap::SetOk(bool isOk)
+void wxBitmap::SetOk(
+  bool                              bOk
+)
 {
     EnsureHasData();
 
-    GetBitmapData()->m_ok = isOk;
+    GetBitmapData()->m_bOk = bOk;
 }
 #endif // WXWIN_COMPATIBILITY_2
 
-void wxBitmap::SetPalette(const wxPalette& palette)
+void wxBitmap::SetPalette(
+  const wxPalette&                  rPalette
+)
 {
     EnsureHasData();
 
-    GetBitmapData()->m_bitmapPalette = palette;
+    GetBitmapData()->m_vBitmapPalette = rPalette;
 }
 
-void wxBitmap::SetMask(wxMask *mask)
+void wxBitmap::SetMask(
+  wxMask*                           pMask
+)
 {
     EnsureHasData();
 
-    GetBitmapData()->m_bitmapMask = mask;
+    GetBitmapData()->m_pBitmapMask = pMask;
 }
 
-// Creates a bitmap that matches the device context, from
-// an arbitray bitmap. At present, the original bitmap must have an
-// associated palette. TODO: use a default palette if no palette exists.
-// Contributed by Frederic Villeneuve <frederic.villeneuve@natinst.com>
-wxBitmap wxBitmap::GetBitmapForDC(wxDC& dc) const
+// Will try something for OS/2 but not really sure how close
+// to the msw intent this is.  
+wxBitmap wxBitmap::GetBitmapForDC(
+  wxDC&                             rDc
+) const
 {
-    wxMemoryDC      memDC;
-    wxBitmap        tmpBitmap(this->GetWidth(), this->GetHeight(), dc.GetDepth());
-    HPALETTE        hPal = (HPALETTE) NULL;
-    LPBITMAPINFO    lpDib;
-    void            *lpBits = (void*) NULL;
+    wxMemoryDC                      vMemDC;
+    wxBitmap                        vTmpBitmap( this->GetWidth()
+                                               ,this->GetHeight()
+                                               ,rDc.GetDepth()
+                                              );
+    HPS                             hMemoryPS;
+    HPS                             hPs;
+    POINTL                          vPoint[4];
+    SIZEL                           vSize = {0,0}
 
-    if( GetPalette() && GetPalette()->Ok() )
-    {
-        tmpBitmap.SetPalette(*GetPalette());
-        memDC.SelectObject(tmpBitmap);
-        memDC.SetPalette(*GetPalette());
-        hPal = (HPALETTE)GetPalette()->GetHPALETTE();
-    }
-    else
-    {
-        hPal = (HPALETTE) ::GetStockObject(DEFAULT_PALETTE);
-        wxPalette palette;
-        palette.SetHPALETTE( (WXHPALETTE)hPal );
-        tmpBitmap.SetPalette( palette );
-        memDC.SelectObject(tmpBitmap);
-        memDC.SetPalette( palette );
-    }
+    hMemoryPS = ::GpiCreatePS(habMain, (HDC)vMemDC.m_hDc, &vSize, PU_PELS | GPIT_MICRO | GPI_ASSOC);
+    hPs       = ::GpiCreatePS(habMain, (HDC)rDc.m_hDc, &vSize, PU_PELS | GPIT_MICRO | GPI_ASSOC);
 
-    // set the height negative because in a DIB the order of the lines is
-    // reversed
-    if ( !wxCreateDIB(GetWidth(), -GetHeight(), GetDepth(), hPal, &lpDib) )
-    {
-        return wxNullBitmap;
-    }
+    // TODO: Set the points
 
-    lpBits = malloc(lpDib->bmiHeader.biSizeImage);
-
-    ::GetBitmapBits(GetHbitmap(), lpDib->bmiHeader.biSizeImage, lpBits);
-
-    ::SetDIBitsToDevice(GetHdcOf(memDC), 0, 0,
-                        GetWidth(), GetHeight(),
-                        0, 0, 0, GetHeight(),
-                        lpBits, lpDib, DIB_RGB_COLORS);
-
-    free(lpBits);
-
-    wxFreeDIB(lpDib);
-
+    rDc.m_oldBitmap = (WXHBITMAP)::GpiSetBitMap(hPs, (HBITMAP)vTmpBitmap.GetHBITMAP());
+    :GpiBitBlt(hPs, hMemoryPS, 4L, vPoint, &vSize, PU_PELS | GPI_ASSOC);
+    
     return tmpBitmap;
 }
 
@@ -496,36 +517,48 @@ wxBitmap wxBitmap::GetBitmapForDC(wxDC& dc) const
 
 wxMask::wxMask()
 {
-    m_maskBitmap = 0;
+    m_hMaskBitmap = 0;
 }
 
 // Construct a mask from a bitmap and a colour indicating
 // the transparent area
-wxMask::wxMask(const wxBitmap& bitmap, const wxColour& colour)
+wxMask::wxMask(
+  const wxBitmap&                   rBitmap
+, const wxColour&                   rColour
+)
 {
-    m_maskBitmap = 0;
-    Create(bitmap, colour);
+    m_hMaskBitmap = 0;
+    Create( rBitmap
+           ,rColour
+          );
 }
 
 // Construct a mask from a bitmap and a palette index indicating
 // the transparent area
-wxMask::wxMask(const wxBitmap& bitmap, int paletteIndex)
+wxMask::wxMask(
+  const wxBitmap&                   rBitmap
+, int                               nPaletteIndex
+)
 {
-    m_maskBitmap = 0;
-    Create(bitmap, paletteIndex);
+    m_hMaskBitmap = 0;
+    Create( rBitmap
+           ,nPaletteIndex
+          );
 }
 
 // Construct a mask from a mono bitmap (copies the bitmap).
-wxMask::wxMask(const wxBitmap& bitmap)
+wxMask::wxMask(
+  const wxBitmap&                   rBitmap
+)
 {
-    m_maskBitmap = 0;
-    Create(bitmap);
+    m_hMaskBitmap = 0;
+    Create(rBitmap);
 }
 
 wxMask::~wxMask()
 {
-    if ( m_maskBitmap )
-        ::DeleteObject((HBITMAP) m_maskBitmap);
+    if (m_hMaskBitmap)
+        ::GpiDeleteBitmap((HBITMAP)m_hMaskBitmap);
 }
 
 // Create a mask from a mono bitmap (copies the bitmap).

@@ -206,18 +206,7 @@ public:
     inline wxDC* GetSelectedInto() const
       { return (GetBitmapData() ? GetBitmapData()->m_selectedInto : (wxDC*) NULL); }
 
-    // Creates a bitmap that matches the device context's depth, from an
-    // arbitray bitmap. At present, the original bitmap must have an associated
-    // palette. (TODO: use a default palette if no palette exists.) This
-    // function is necessary for you to Blit an arbitrary bitmap (which may
-    // have the wrong depth). wxDC::SelectObject will compare the depth of the
-    // bitmap with the DC's depth, and create a new bitmap if the depths
-    // differ. Eventually we should perhaps make this a public API function so
-    // that an app can efficiently produce bitmaps of the correct depth. The
-    // Windows solution is to use SetDibBits to blit an arbotrary DIB directly
-    // to a DC, but this is too Windows-specific, hence this solution of
-    // quietly converting the wxBitmap. Contributed by Frederic Villeneuve
-    // <frederic.villeneuve@natinst.com>
+    // An OS/2 version that probably doesn't do anything like the msw version
     wxBitmap GetBitmapForDC(wxDC& rDc) const;
 
 protected:
@@ -229,6 +218,8 @@ protected:
 
 private:
     bool CopyFromIconOrCursor(const wxGDIImage& rIcon);
+    HDC                             m_hDc;
+    HPS                             m_hPs;
 
     DECLARE_DYNAMIC_CLASS(wxBitmap)
 };
