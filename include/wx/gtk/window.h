@@ -80,6 +80,8 @@ public:
     virtual bool SetCursor( const wxCursor &cursor );
     virtual bool SetFont( const wxFont &font );
 
+    virtual bool SetBackgroundStyle(wxBackgroundStyle style) ;
+    
     virtual int GetCharHeight() const;
     virtual int GetCharWidth() const;
     virtual void GetTextExtent(const wxString& string,
@@ -238,6 +240,8 @@ public:
     bool                 m_dirtyTabOrder:1;     // tab order changed, GTK focus
                                                 // chain needs update
 #endif
+    bool                 m_needsStyleChange:1;  // May not be able to change
+                                                // background style until OnIdle
 
     // C++ has no virtual methods in the constrcutor of any class but we need
     // different methods of inserting a child window into a wxFrame,

@@ -632,7 +632,7 @@ static void gtk_window_draw_callback( GtkWidget *widget,
 #ifndef __WXUNIVERSAL__
     GtkPizza *pizza = GTK_PIZZA (widget);
 
-    if (win->GetThemeEnabled())
+    if (win->GetThemeEnabled() && win->GetBackgroundStyle() != wxBG_STYLE_CUSTOM)
     {
         wxWindow *parent = win->GetParent();
         while (parent && !parent->IsTopLevel())
@@ -2646,6 +2646,8 @@ void wxWindowGTK::Init()
 
     m_clipPaintRegion = FALSE;
 
+    m_needsStyleChange = false;
+
     m_cursor = *wxSTANDARD_CURSOR;
 
 #ifdef __WXGTK20__
@@ -3119,6 +3121,13 @@ void wxWindowGTK::OnInternalIdle()
     if ( m_dirtyTabOrder )
         RealizeTabOrder();
 #endif
+    // Update style if the window was not yet realized
+    // and SetBackgroundStyle(wxBG_STYLE_CUSTOM) was called
+    if (m_needsStyleChange)
+    {
+        SetBackgroundStyle(GetBackgroundStyle());
+        m_needsStyleChange = false;
+    }
 
     // Update invalidated regions.
     GtkUpdate();
@@ -3601,7 +3610,6 @@ void wxWindowGTK::GetTextExtent( const wxString& string,
 void wxWindowGTK::SetFocus()
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
-
     if ( m_hasFocus )
     {
         // don't do anything if we already have focus
@@ -3935,7 +3943,7 @@ void wxWindowGTK::GtkSendPaintEvents()
     // widget to draw on
     GtkPizza *pizza = GTK_PIZZA (m_wxwindow);
 
-    if (GetThemeEnabled())
+    if (GetThemeEnabled() && GetBackgroundStyle() != wxBG_STYLE_CUSTOM)
     {
         // find ancestor from which to steal background
         wxWindow *parent = GetParent();
@@ -3989,7 +3997,7 @@ void wxWindowGTK::GtkSendPaintEvents()
         wxEraseEvent erase_event( GetId(), &dc );
         erase_event.SetEventObject( this );
 
-        if (!GetEventHandler()->ProcessEvent(erase_event))
+        if (!GetEventHandler()->ProcessEvent(erase_event) && GetBackgroundStyle() != wxBG_STYLE_CUSTOM)
         {
             if (!g_eraseGC)
             {
@@ -4114,8 +4122,9 @@ bool wxWindowGTK::SetBackgroundColour( const wxColour &colour )
     }
 
     // apply style change (forceStyle=true so that new style is applied
-    // even if the bg colour changed from valid to wxNullColour):
-    ApplyWidgetStyle(true);
+    // even if the bg colour changed from valid to wxNullColour)
+    if (GetBackgroundStyle() != wxBG_STYLE_CUSTOM)
+        ApplyWidgetStyle(true);
 
     return true;
 }
@@ -4242,6 +4251,43 @@ void wxWindowGTK::DoApplyWidgetStyle(GtkRcStyle *style)
     gtk_widget_modify_style(m_widget, style);
 }
 
+bool wxWindowGTK::SetBackgroundStyle(wxBackgroundStyle style)
+{
+    wxWindowBase::SetBackgroundStyle(style);
+    
+    if (style == wxBG_STYLE_CUSTOM)
+    {
+        GdkWindow *window = (GdkWindow*) NULL;
+        if (m_wxwindow)
+            window = GTK_PIZZA(m_wxwindow)->bin_window;
+        else
+            window = GetConnectWidget()->window;
+
+        if (window)
+        {
+            // Make sure GDK/X11 doesn't refresh the window
+            // automatically.
+            gdk_window_set_back_pixmap( window, None, False );
+#ifdef __X__
+            Display* display = GDK_WINDOW_DISPLAY(window);
+            XFlush(display);
+#endif
+            m_needsStyleChange = false;
+        }
+        else
+            // Do in OnIdle, because the window is not yet available
+            m_needsStyleChange = true;
+        
+        // Don't apply widget style, or we get a grey background
+    }
+    else
+    {
+        // apply style change (forceStyle=true so that new style is applied
+        // even if the bg colour changed from valid to wxNullColour):
+        ApplyWidgetStyle(true);
+    }
+    return true;
+}
 
 //-----------------------------------------------------------------------------
 // Pop-up menu stuff
