@@ -34,6 +34,10 @@
 #include "wx/log.h"
 #include "wx/intl.h"
 
+#if wxUSE_PALETTE
+    #include "wx/palette.h"
+#endif // wxUSE_PALETTE
+
 #include <stdlib.h>
 #include <string.h>
 
