@@ -131,7 +131,6 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
       m_gauge->SetValue(value + 1);
    if( !newmsg.IsEmpty() )
       m_msg->SetLabel(newmsg);
-   wxYield();
 
    if ( (value == m_maximum - 1) && !(GetWindowStyleFlag() & wxPD_AUTO_HIDE) )
    {
@@ -148,9 +147,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
        }
 
        m_state = Finished;
-       while ( m_state != Canceled ) // set from OnClose()
-           wxYield();
-
+       
        // so that we return TRUE below
        m_state = Finished;
    }

@@ -178,7 +178,8 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
        printout->GetTitle(),
        _("Printing..."),
        totalPages,
-       parent );
+       parent,
+       wxPD_CAN_ABORT|wxPD_AUTO_HIDE|wxPD_APP_MODAL);
     
     printout->OnBeginPrinting();
 
