@@ -12,7 +12,7 @@
 #ifndef _WX_HELPWIN_H_
 #define _WX_HELPWIN_H_
 
-//EK #include "wx/wx.h"
+#include "wx/wx.h"
 
 #if wxUSE_HELP
 
