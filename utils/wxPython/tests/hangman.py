@@ -1,29 +1,109 @@
-import random
+"""Hangman.py, a simple wxPython game, inspired by the old 
+bsd game by Ken Arnold.
+From the original man page:
+
+ In hangman, the computer picks a word from the on-line 
+ word list and you must try to guess it.  The computer 
+ keeps track of which letters have been guessed and how 
+ many wrong guesses you have made on the screen in a
+ graphic fashion. 
+
+That says it all, doesn't it?
+
+Have fun with it,
+
+Harm van der Heijden (H.v.d.Heijden@phys.tue.nl)"""
+
+import random,re,string
 from wxPython.wx import *
 
 class WordFetcher:
-    def __init__(self, filename):
+    def __init__(self, filename, min_length = 5):
+	self.min_length = min_length
 	try:
 	    f = open(filename, "r")
 	except:
 	    print "Couldn't open dictionary file %s, using build-ins" % (filename,)
 	    self.words = self.builtin_words
 	    return
-	self.words = []
-	while f and len(self.words)<100:
-	    line = f.readline()
-	    self.words.append(line[0:-1])
-	print self.words
+	self.words = f.read()
+	self.filename = filename
+	print "Got %d bytes." % (len(self.words),)
+    def SetMinLength(min_length):
+	self.min_length = min_length
     def Get(self):
-	return self.words[int(random.random()*len(self.words))]
-    builtin_words = [ 'albatros', 'banana', 'electrometer', 'eggshell' ]
+	reg = re.compile('\s+([a-zA-Z]+)\s+')
+	n = 50 # safety valve; maximum number of tries to find a suitable word
+	while n:
+	    index = int(random.random()*len(self.words))
+	    m = reg.search(self.words[index:])
+	    if m and len(m.groups()[0]) >= self.min_length: break
+	    n = n - 1
+	if n: return string.lower(m.groups()[0])
+	return "error"
+    builtin_words = ' albatros  banana  electrometer  eggshell'
+
+def stdprint(x):
+    print x
+
+class URLWordFetcher(WordFetcher):
+    def __init__(self, url):
+	self.OpenURL(url)
+	WordFetcher.__init__(self, "hangman_dict.txt")
+    def logprint(self,x):
+	print x
+    def RetrieveAsFile(self, host, path=''):
+	from httplib import HTTP
+	try:
+	    h = HTTP(host)
+	except:
+	    self.logprint("Failed to create HTTP connection to %s... is the network available?" % (host))
+	    return None
+	h.putrequest('GET',path)
+	h.putheader('Accept','text/html')
+	h.putheader('Accept','text/plain')
+	h.endheaders()
+	errcode, errmsg, headers = h.getreply()
+	if errcode != 200:
+	    self.logprint("HTTP error code %d: %s" % (errcode, errmsg))
+	    return None
+	f = h.getfile()
+	return f
+    def OpenURL(self,url):
+	from htmllib import HTMLParser
+	import formatter
+	self.url = url
+	m = re.match('http://([^/]+)(/\S*)\s*', url)
+	if m:
+	    host = m.groups()[0]
+	    path = m.groups()[1]
+	else:
+	    m = re.match('http://(\S+)\s*', url)
+	    if not m:
+		# Invalid URL
+		self.logprint("Invalid or unsupported URL: %s" % (url))
+		return
+	    host = m.groups()[0]
+	    path = ''
+	f = self.RetrieveAsFile(host,path)
+	if not f:
+	    self.logprint("Could not open %s" % (url))
+	    return
+        self.logprint("Receiving data...")
+        data = f.read()
+        tmp = open('hangman_dict.txt','w')
+        fmt = formatter.AbstractFormatter(formatter.DumbWriter(tmp))
+        p = HTMLParser(fmt)
+        self.logprint("Parsing data...")
+        p.feed(data)
+        p.close()
+        tmp.close()
 
 class HangmanWnd(wxWindow):
-    def __init__(self, parent, id):
-	wxWindow.__init__(self, parent, id)
+    def __init__(self, parent, id, pos=wxDefaultPosition, size=wxDefaultSize):
+	wxWindow.__init__(self, parent, id, pos, size)
 	self.SetBackgroundColour(wxNamedColour('white'))
 	self.SetFocus()
-	self.frame = parent # ugly
     def StartGame(self, word):
 	self.word = word
 	self.guess = []
@@ -35,8 +115,9 @@ class HangmanWnd(wxWindow):
 	self.guess = map(chr, range(ord('a'),ord('z')+1))
 	self.Draw()
     def HandleKey(self, key):
+	self.message = ""
 	if self.guess.count(key):
-	    self.frame.SetStatusText('Already guessed %s' % (key,),0)
+	    self.message = 'Already guessed %s' % (key,)
 	    return 0
 	self.guess.append(key)
 	self.guess.sort()
@@ -102,6 +183,46 @@ class HangmanWnd(wxWindow):
     def OnPaint(self, event):
 	dc = wxPaintDC(self)
 	self.Draw(dc)
+
+class HangmanDemo(HangmanWnd):
+    def __init__(self, wf, parent, id, pos, size):
+	HangmanWnd.__init__(self, parent, id, pos, size)
+	self.StartGame("dummy")
+	self.start_new = 1
+	self.wf = wf
+	self.delay = 500
+	self.timer = self.PlayTimer(self.MakeMove)
+    def MakeMove(self):
+	self.timer.Stop()
+	if self.start_new:
+	    self.StartGame(self.wf.Get())
+	    self.start_new = 0
+	    self.left = list('aaaabcdeeeeefghiiiiijklmnnnoooopqrssssttttuuuuvwxyz')
+	else:
+	    key = self.left[int(random.random()*len(self.left))]
+	    while self.left.count(key): self.left.remove(key)
+	    self.start_new = self.HandleKey(key)
+	self.timer.Start(self.delay)
+    def Stop(self):
+	self.timer.Stop()
+    class PlayTimer(wxTimer):
+	def __init__(self,func):
+	    wxTimer.__init__(self)
+	    self.func = func
+	    self.Start(1000)
+	def Notify(self):
+	    apply(self.func, ())
+
+class AboutBox(wxDialog):
+    def __init__(self, parent,wf):
+	wxDialog.__init__(self, parent, -1, "About Hangman", wxDefaultPosition, wxSize(350,450))
+	self.wnd = HangmanDemo(wf, self, -1, wxPoint(1,1), wxSize(350,150))
+	self.static = wxStaticText(self, -1, __doc__, wxPoint(1,160), wxSize(350, 250))
+	self.button = wxButton(self, 2001, "OK", wxPoint(150,420), wxSize(50,-1))
+	EVT_BUTTON(self, 2001, self.OnOK)
+    def OnOK(self, event):
+	self.wnd.Stop()
+	self.EndModal(wxID_OK)
 	
 class MyFrame(wxFrame):
     def __init__(self, wf):
@@ -113,21 +234,41 @@ class MyFrame(wxFrame):
 	menu.Append(1002, "End")
 	menu.AppendSeparator()
 	menu.Append(1003, "Reset")
+	menu.Append(1004, "Demo...")
 	menu.AppendSeparator()
-	menu.Append(1004, "Exit")
+	menu.Append(1005, "Exit")
 	menubar = wxMenuBar()
 	menubar.Append(menu, "Game")
 	menu = wxMenu()
-	menu.Append(1010, "Internal", "Use internal dictionary", TRUE)
+	#menu.Append(1010, "Internal", "Use internal dictionary", TRUE)
 	menu.Append(1011, "ASCII File...")
+	urls = [ 'wxPython home', 'http://208.240.253.245/wxPython/main.html',
+		 'slashdot.org', 'http://slashdot.org/',
+		 'cnn.com', 'http://cnn.com',
+		 'The new york Times', 'http://www.nytimes.com',
+		 'De Volkskrant', 'http://www.volkskrant.nl/frameless/25000006.html']
+	urlmenu = wxMenu()
+	for item in range(0,len(urls),2):
+	    urlmenu.Append(1020+item/2, urls[item], urls[item+1])
+	menu.AppendMenu(1012, 'URL', urlmenu, 'Use a webpage')
+	menu.Append(1013, 'Dump', 'Write contents to stdout')
 	menubar.Append(menu, "Dictionary")
+	self.urls = urls
+	self.urloffset = 1020
+	menu = wxMenu()
+	menu.Append(1090, "About...")
+	menubar.Append(menu, "Help")
 	self.SetMenuBar(menubar)
 	self.CreateStatusBar(2)
 	EVT_MENU(self, 1001, self.OnGameNew)
 	EVT_MENU(self, 1002, self.OnGameEnd)
 	EVT_MENU(self, 1003, self.OnGameReset)
-	EVT_MENU(self, 1004, self.OnWindowClose)
+	EVT_MENU(self, 1004, self.OnGameDemo)
+	EVT_MENU(self, 1005, self.OnWindowClose)
 	EVT_MENU(self, 1011, self.OnDictFile)
+	EVT_MENU_RANGE(self, 1020, 1020+len(urls)/2, self.OnDictURL)
+	EVT_MENU(self, 1013, self.OnDictDump)
+	EVT_MENU(self, 1090, self.OnHelpAbout)
 	EVT_CHAR(self.wnd, self.OnChar)
 	self.OnGameReset()
     def OnGameNew(self, event):
@@ -146,8 +287,27 @@ class MyFrame(wxFrame):
 	self.history = []
 	self.average = 0.0
 	self.OnGameNew(None)
+    def OnGameDemo(self, event):
+	frame = wxFrame(self, -1, "Hangman demo", wxDefaultPosition, self.GetSize())
+	demo = HangmanDemo(self.wf, frame, -1, wxDefaultPosition, wxDefaultSize)
+	frame.Show(TRUE)
     def OnDictFile(self, event):
-	pass
+	fd = wxFileDialog(self)
+	if (self.wf.filename):
+	    fd.SetFilename(self.wf.filename)
+	if fd.ShowModal() == wxID_OK:
+	    file = fd.GetPath()
+	    self.wf = WordFetcher(file)
+    def OnDictURL(self, event):
+	item = (event.GetId() - self.urloffset)*2
+	print "Trying to open %s at %s" % (self.urls[item], self.urls[item+1])
+	self.wf = URLWordFetcher(self.urls[item+1])
+    def OnDictDump(self, event):
+	print self.wf.words
+    def OnHelpAbout(self, event):
+	about = AboutBox(self, self.wf)
+	about.ShowModal()
+	about.wnd.Stop() # that damn timer won't stop!
     def UpdateAverages(self, has_won):
 	if has_won:
 	    self.won = self.won + 1
@@ -169,7 +329,9 @@ class MyFrame(wxFrame):
 	    event.Skip()
 	    return
 	res = self.wnd.HandleKey(key)
-	if res == 1:
+	if res == 0:
+	    self.SetStatusText(self.wnd.message)
+	elif res == 1:
 	    self.UpdateAverages(0)
 	    self.SetStatusText("Too bad, you're dead!",0)
 	    self.in_progress = 0
@@ -190,6 +352,7 @@ class MyApp(wxApp):
     def OnInit(self):
 	print "Reading word list"
 	wf = WordFetcher("/usr/share/games/hangman-words")
+	#wf = URLWordFetcher("http://www.tue.nl")
 	frame = MyFrame(wf)
 	self.SetTopWindow(frame)
 	frame.Show(TRUE)
