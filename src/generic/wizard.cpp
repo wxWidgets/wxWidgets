@@ -182,10 +182,10 @@ void wxWizard::DoCreateControls()
 
     x = m_x + m_width - 3*sizeBtn.x - BUTTON_MARGIN;
     y += SEPARATOR_LINE_MARGIN;
-    m_btnPrev = new wxButton(this, -1, _("< &Back"), wxPoint(x, y), sizeBtn);
+    m_btnPrev = new wxButton(this, wxID_BACKWARD, _("< &Back"), wxPoint(x, y), sizeBtn);
 
     x += sizeBtn.x;
-    m_btnNext = new wxButton(this, -1, _("&Next >"), wxPoint(x, y), sizeBtn);
+    m_btnNext = new wxButton(this, wxID_FORWARD, _("&Next >"), wxPoint(x, y), sizeBtn);
 
     x += sizeBtn.x + BUTTON_MARGIN;
     (void)new wxButton(this, wxID_CANCEL, _("Cancel"), wxPoint(x, y), sizeBtn);
