@@ -1,27 +1,35 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        tbarbase.cpp
-// Purpose:     Toolbar base classes
+// Name:        common/tbarbase.cpp
+// Purpose:     wxToolBarBase implementation
 // Author:      Julian Smart
-// Modified by:
+// Modified by: VZ at 11.12.99 (wxScrollableToolBar splitted off)
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation "tbarbase.h"
+    #pragma implementation "tbarbase.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+    #include "wx/wx.h"
 #endif
 
 #include "wx/frame.h"
@@ -35,20 +43,525 @@
 
 #include "wx/tbarbase.h"
 
-#if !USE_SHARED_LIBRARY
-IMPLEMENT_ABSTRACT_CLASS(wxToolBarBase, wxControl)
-IMPLEMENT_DYNAMIC_CLASS(wxToolBarTool, wxObject)
+// ----------------------------------------------------------------------------
+// wxWindows macros
+// ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxToolBarBase, wxControl)
-  EVT_SCROLL(wxToolBarBase::OnScroll)
-  EVT_SIZE(wxToolBarBase::OnSize)
-  EVT_IDLE(wxToolBarBase::OnIdle)
-END_EVENT_TABLE()
+#if !USE_SHARED_LIBRARY
+    IMPLEMENT_ABSTRACT_CLASS(wxToolBarBase, wxControl)
+    IMPLEMENT_DYNAMIC_CLASS(wxToolBarTool, wxObject)
+
+    BEGIN_EVENT_TABLE(wxToolBarBase, wxControl)
+        EVT_IDLE(wxToolBarBase::OnIdle)
+    END_EVENT_TABLE()
 #endif
 
-// Keep a list of all toolbars created, so you can tell whether a toolbar
-// is still valid: a tool may have quit the toolbar.
-static wxList gs_ToolBars;
+WX_DEFINE_LIST(wxToolBarToolsList);
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxToolBarTool
+// ----------------------------------------------------------------------------
+
+bool wxToolBarToolBase::Enable(bool enable)
+{
+    if ( m_enabled == enable )
+        return FALSE;
+
+    m_enabled = enable;
+
+    return TRUE;
+}
+
+bool wxToolBarToolBase::Toggle(bool toggle)
+{
+    if ( m_toggled == toggle )
+        return FALSE;
+
+    m_toggled = toggle;
+
+    return TRUE;
+}
+
+bool wxToolBarToolBase::SetToggle(bool toggle)
+{
+    if ( m_isToggle == toggle )
+        return FALSE;
+
+    m_isToggle = toggle;
+
+    return TRUE;
+}
+
+bool wxToolBarToolBase::SetShortHelp(const wxString& help)
+{
+    if ( m_shortHelpString == help )
+        return FALSE;
+
+    m_shortHelpString = help;
+
+    return TRUE;
+}
+
+bool wxToolBarToolBase::SetLongHelp(const wxString& help)
+{
+    if ( m_longHelpString == help )
+        return FALSE;
+
+    m_longHelpString = help;
+
+    return TRUE;
+}
+
+// ----------------------------------------------------------------------------
+// wxToolBarBase adding/deleting items
+// ----------------------------------------------------------------------------
+
+wxToolBarBase::wxToolBarBase()
+{
+    // the list owns the pointers
+    m_tools.DeleteContents(TRUE);
+
+    m_xMargin = m_yMargin = NULL;
+
+    m_maxRows = m_maxCols = 0;
+}
+
+wxToolBarTool *wxToolBarBase::AddTool(int id,
+                                      const wxBitmap& bitmap,
+                                      const wxBitmap& pushedBitmap,
+                                      bool toggle,
+                                      wxCoord WXUNUSED(xPos),
+                                      wxCoord WXUNUSED(yPos),
+                                      wxObject *clientData,
+                                      const wxString& helpString1,
+                                      const wxString& helpString2)
+{
+    wxToolBarTool *tool = wxToolBarToolBase::New(this, id,
+                                                 bitmap, pushedBitmap,
+                                                 toggle, clientData,
+                                                 helpString1, helpString2);
+
+    if ( !tool || !DoInsertTool(GetToolsCount(), tool) )
+    {
+        delete tool;
+
+        return NULL;
+    }
+
+    m_tools.Append(tool);
+
+    return tool;
+}
+
+wxToolBarTool *wxToolBarBase::InsertTool(size_t pos,
+                                         int id,
+                                         const wxBitmap& bitmap,
+                                         const wxBitmap& pushedBitmap,
+                                         bool toggle,
+                                         wxCoord WXUNUSED(xPos),
+                                         wxCoord WXUNUSED(yPos),
+                                         wxObject *clientData,
+                                         const wxString& helpString1,
+                                         const wxString& helpString2)
+{
+    wxCHECK_MSG( pos <= GetToolsCount(), (wxToolBarTool *)NULL,
+                 _T("invalid position in wxToolBar::InsertTool()") );
+
+    wxToolBarTool *tool = wxToolBarToolBase::New(this, id,
+                                                 bitmap, pushedBitmap,
+                                                 toggle, clientData,
+                                                 helpString1, helpString2);
+
+    if ( !tool || !DoInsertTool(pos, tool) )
+    {
+        delete tool;
+
+        return NULL;
+    }
+
+    m_tools.Insert(pos, tool);
+
+    return tool;
+}
+
+wxToolBarTool *wxToolBarBase::AddControl(wxControl *control)
+{
+    wxCHECK_MSG( control, NULL, _T("toolbar: can't insert NULL control") );
+
+    wxCHECK_MSG( control->GetParent() == this, NULL,
+                 _T("control must have toolbar as parent") );
+
+    wxToolBarTool *tool = wxToolBarToolBase::New(this, control);
+
+    if ( !tool || !DoInsertTool(GetToolsCount(), tool) )
+    {
+        delete tool;
+
+        return NULL;
+    }
+
+    m_tools.Append(tool);
+
+    return tool;
+}
+
+wxToolBarTool *wxToolBarBase::InsertControl(size_t pos, wxControl *control)
+{
+    wxCHECK_MSG( control, NULL, _T("toolbar: can't insert NULL control") );
+
+    wxCHECK_MSG( control->GetParent() == this, NULL,
+                 _T("control must have toolbar as parent") );
+
+    wxCHECK_MSG( pos <= GetToolsCount(), (wxToolBarTool *)NULL,
+                 _T("invalid position in wxToolBar::InsertControl()") );
+
+    wxToolBarTool *tool = wxToolBarToolBase::New(this, control);
+
+    if ( !tool || !DoInsertTool(pos, tool) )
+    {
+        delete tool;
+
+        return NULL;
+    }
+
+    m_tools.Insert(pos, tool);
+
+    return tool;
+}
+
+wxToolBarTool *wxToolBarBase::AddSeparator()
+{
+    wxToolBarTool *tool = wxToolBarToolBase::New(this, wxID_SEPARATOR);
+
+    if ( !tool || !DoInsertTool(pos, tool) )
+    {
+        delete tool;
+
+        return NULL;
+    }
+
+    m_tools.Append(tool);
+
+    return tool;
+}
+
+wxToolBarTool *wxToolBarBase::InsertSeparator(size_t pos)
+{
+    wxCHECK_MSG( pos <= GetToolsCount(), (wxToolBarTool *)NULL,
+                 _T("invalid position in wxToolBar::InsertSeparator()") );
+
+    wxToolBarTool *tool = wxToolBarToolBase::New(this, wxID_SEPARATOR);
+
+    if ( !tool || !DoInsertTool(pos, tool) )
+    {
+        delete tool;
+
+        return NULL;
+    }
+
+    m_tools.Insert(pos, tool);
+
+    return tool;
+}
+
+wxToolBarTool *wxToolBarBase::RemoveTool(int id)
+{
+    size_t pos = 0;
+    wxToolBarToolsList::Node *node;
+    for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
+    {
+        if ( node->GetData()->GetId() == id )
+            break;
+
+        pos++;
+    }
+
+    if ( !node )
+    {
+        // don't give any error messages - sometimes we might call RemoveTool()
+        // without knowing whether the tool is or not in the toolbar
+        return (wxToolBarTool *)NULL;
+    }
+
+    wxToolBarTool *tool = (wxToolBarTool *)node->GetData();
+    if ( !DoDeleteTool(pos, tool) )
+    {
+        return (wxToolBarTool *)NULL;
+    }
+
+    // the node would delete the data, so set it to NULL to avoid this
+    node->SetData(NULL);
+
+    m_tools.DeleteNode(node);
+
+    return tool;
+}
+
+bool wxToolBarBase::DeleteToolByPos(size_t pos)
+{
+    wxCHECK_MSG( pos < GetToolsCount(), FALSE,
+                 _T("invalid position in wxToolBar::DeleteToolByPos()") );
+
+    wxToolBarToolsList::Node *node = m_tools.Item(pos);
+
+    if ( !DoDeleteTool(pos, node->GetData()) )
+    {
+        return FALSE;
+    }
+
+    m_tools.DeleteNode(node);
+
+    return TRUE;
+}
+
+bool wxToolBarBase::DeleteTool(int id)
+{
+    size_t pos = 0;
+    wxToolBarToolsList::Node *node;
+    for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
+    {
+        if ( node->GetData()->GetId() == id )
+            break;
+
+        pos++;
+    }
+
+    if ( !DoDeleteTool(pos, node->GetData()) )
+    {
+        return FALSE;
+    }
+
+    m_tools.DeleteNode(node);
+
+    return TRUE;
+}
+
+wxToolBarToolBase *wxToolBarBase::FindById(int id) const
+{
+    wxToolBarToolBase *tool = (wxToolBarToolBase *)NULL;
+
+    for ( wxToolBarToolsList::Node *node = m_tools.GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        tool = node->GetData();
+        if ( tool->GetId() == id )
+        {
+            // found
+            break;
+        }
+    }
+
+    return tool;
+}
+
+void wxToolBarBase::ClearTools()
+{
+    m_tools.Clear();
+}
+
+bool wxToolBarBase::Realize()
+{
+    return TRUE;
+}
+
+// ----------------------------------------------------------------------------
+// wxToolBarBase tools state
+// ----------------------------------------------------------------------------
+
+void wxToolBarBase::EnableTool(int id, bool enable)
+{
+    wxToolBarToolBase *tool = FindById(id);
+    if ( tool )
+    {
+        if ( tool->Enable(enable) )
+        {
+            DoEnableTool(tool, enable);
+        }
+    }
+}
+
+void wxToolBarBase::ToggleTool(int id, bool toggle);
+{
+    wxToolBarToolBase *tool = FindById(id);
+    if ( tool )
+    {
+        if ( tool->Toggle(enable) )
+        {
+            DoToggleTool(tool, toggle);
+        }
+    }
+}
+
+void wxToolBarBase::SetToggle(int id, bool toggle);
+{
+    wxToolBarToolBase *tool = FindById(id);
+    if ( tool )
+    {
+        if ( tool->SetToggle(enable) )
+        {
+            DoSetToggle(tool, toggle);
+        }
+    }
+}
+
+void wxToolBarBase::SetToolShortHelp(int id, const wxString& help);
+{
+    wxToolBarToolBase *tool = FindById(id);
+    if ( tool )
+    {
+        (void)tool->SetShortHelp(help);
+    }
+}
+
+void wxToolBarBase::SetToolLongHelp(int id, const wxString& help);
+{
+    wxToolBarToolBase *tool = FindById(id);
+    if ( tool )
+    {
+        (void)tool->SetLongHelp(help);
+    }
+}
+
+wxObject *wxToolBarBase::GetToolClientData(int id) const
+{
+    wxToolBarToolBase *tool = FindById(id);
+
+    return tool ? tool->GetClientData() : (wxObject *)NULL;
+}
+
+bool wxToolBarBase::GetToolState(int id) const
+{
+    wxToolBarToolBase *tool = FindById(id);
+    wxCHECK_MSG( tool, FALSE, _T("no such tool") );
+
+    return tool->IsToggled();
+}
+
+bool wxToolBarBase::GetToolEnabled(int id) const
+{
+    wxToolBarToolBase *tool = FindById(id);
+    wxCHECK_MSG( tool, FALSE, _T("no such tool") );
+
+    return tool->IsEnabled();
+}
+
+wxString wxToolBarBase::GetToolShortHelp(int id) const
+{
+    wxToolBarToolBase *tool = FindById(id);
+    wxCHECK_MSG( tool, FALSE, _T("no such tool") );
+
+    return tool->GetShortHelp();
+}
+
+wxString wxToolBarBase::GetToolLongHelp(int id) const
+{
+    wxToolBarToolBase *tool = FindById(id);
+    wxCHECK_MSG( tool, FALSE, _T("no such tool") );
+
+    return tool->GetLongHelp();
+}
+
+// ----------------------------------------------------------------------------
+// wxToolBarBase geometry
+// ----------------------------------------------------------------------------
+
+void wxToolBarBase::SetMargins(int x, int y)
+{
+    m_xMargin = x;
+    m_yMargin = y;
+}
+
+void wxToolBarBase::SetRows(int WXUNUSED(nRows))
+{
+    // nothing
+}
+
+// ----------------------------------------------------------------------------
+// event processing
+// ----------------------------------------------------------------------------
+
+// Only allow toggle if returns TRUE
+bool wxToolBarBase::OnLeftClick(int id, bool toggleDown)
+{
+    wxCommandEvent event(wxEVT_COMMAND_TOOL_CLICKED, id);
+    event.SetEventObject(this);
+    event.SetExtraLong((long) toggleDown);
+
+    // Send events to this toolbar instead (and thence up the window hierarchy)
+    GetEventHandler()->ProcessEvent(event);
+
+    return TRUE;
+}
+
+// Call when right button down.
+void wxToolBarBase::OnRightClick(int id,
+                                 long WXUNUSED(x),
+                                 long WXUNUSED(y))
+{
+    wxCommandEvent event(wxEVT_COMMAND_TOOL_RCLICKED, id);
+    event.SetEventObject(this);
+    event.SetInt(toolIndex);
+
+    GetEventHandler()->ProcessEvent(event);
+}
+
+// Called when the mouse cursor enters a tool bitmap (no button pressed).
+// Argument is -1 if mouse is exiting the toolbar.
+// Note that for this event, the id of the window is used,
+// and the integer parameter of wxCommandEvent is used to retrieve
+// the tool id.
+void wxToolBarBase::OnMouseEnter (int id)
+{
+    wxCommandEvent event(wxEVT_COMMAND_TOOL_ENTER, GetId());
+    event.SetEventObject(this);
+    event.SetInt(id);
+
+    GetEventHandler()->ProcessEvent(event);
+}
+
+// ----------------------------------------------------------------------------
+// UI updates
+// ----------------------------------------------------------------------------
+
+void wxToolBarBase::OnIdle(wxIdleEvent& event)
+{
+    DoToolbarUpdates();
+
+    event.Skip();
+}
+
+// Do the toolbar button updates (check for EVT_UPDATE_UI handlers)
+void wxToolBarBase::DoToolbarUpdates()
+{
+    wxEvtHandler* evtHandler = GetEventHandler();
+
+    for ( wxToolBarToolsList::Node* node = GetTools().First();
+          node;
+          node = node->GetNext() )
+    {
+        int id = node->GetData()->GetId();
+
+        wxUpdateUIEvent event(m_id);
+        event.SetEventObject(this);
+
+        if ( evtHandler->ProcessEvent(event) )
+        {
+            if ( event.GetSetEnabled() )
+                EnableTool(id, event.GetEnabled());
+            if ( event.GetSetChecked() )
+                ToggleTool(id, event.GetChecked());
+#if 0
+            if ( event.GetSetText() )
+                // Set tooltip?
+#endif // 0
+        }
+    }
+}
 
 #ifdef __WXGTK__
 wxToolBarTool::wxToolBarTool(wxToolBar *owner, int theIndex,
@@ -75,14 +588,13 @@ wxToolBarTool::wxToolBarTool(int theIndex,
   m_x = xPos;
   m_y = yPos;
 #endif
-  m_index = theIndex;
+  m_id = theIndex;
   m_isToggle = toggle;
   m_toggleState = FALSE;
   m_enabled = TRUE;
   m_bitmap1 = theBitmap1;
   m_bitmap2 = theBitmap2;
   m_width = m_height = 0;
-  m_deleteSecondBitmap = FALSE;
   if (m_bitmap1.Ok())
   {
     m_width = m_bitmap1.GetWidth()+2;
@@ -97,15 +609,11 @@ wxToolBarTool::wxToolBarTool(wxControl *control)
 {
     m_toolStyle = wxTOOL_STYLE_CONTROL;
     m_control = control;
-    m_index = control->GetId();
+    m_id = control->GetId();
 }
 
 wxToolBarTool::~wxToolBarTool()
 {
-/*
-  if (m_deleteSecondBitmap && m_bitmap2)
-    delete m_bitmap2;
-*/
 }
 
 
@@ -113,8 +621,6 @@ wxToolBarTool::~wxToolBarTool()
 
 wxToolBarBase::wxToolBarBase(void) : m_tools(wxKEY_INTEGER)
 {
-  gs_ToolBars.Append(this);
-
   m_maxRows = 1;
   m_maxCols = 32000;
   m_maxWidth = 0;
@@ -142,52 +648,11 @@ wxToolBarBase::wxToolBarBase(void) : m_tools(wxKEY_INTEGER)
 
 wxToolBarBase::~wxToolBarBase ()
 {
-  gs_ToolBars.DeleteObject(this);
-
   for ( wxNode *node = m_tools.First(); node; node = node->Next() )
   {
     wxToolBarTool *tool = (wxToolBarTool *)node->Data();
     delete tool;
   }
-}
-
-// Only allow toggle if returns TRUE
-bool wxToolBarBase::OnLeftClick(int toolIndex, bool toggleDown)
-{
-    wxCommandEvent event(wxEVT_COMMAND_TOOL_CLICKED, toolIndex);
-    event.SetEventObject(this);
-    event.SetExtraLong((long) toggleDown);
-
-    // Send events to this toolbar instead (and thence up the window hierarchy)
-    GetEventHandler()->ProcessEvent(event);
-
-    return TRUE;
-}
-
-// Call when right button down.
-void wxToolBarBase::OnRightClick(int toolIndex,
-                                 long WXUNUSED(x),
-                                 long WXUNUSED(y))
-{
-    wxCommandEvent event(wxEVT_COMMAND_TOOL_RCLICKED, toolIndex);
-    event.SetEventObject(this);
-    event.SetInt(toolIndex);
-
-    GetEventHandler()->ProcessEvent(event);
-}
-
-// Called when the mouse cursor enters a tool bitmap (no button pressed).
-// Argument is -1 if mouse is exiting the toolbar.
-// Note that for this event, the id of the window is used,
-// and the integer parameter of wxCommandEvent is used to retrieve
-// the tool id.
-void wxToolBarBase::OnMouseEnter ( int toolIndex )
-{
-    wxCommandEvent event(wxEVT_COMMAND_TOOL_ENTER, GetId());
-    event.SetEventObject(this);
-    event.SetInt(toolIndex);
-
-    GetEventHandler()->ProcessEvent(event);
 }
 
 // If pushedBitmap is NULL, a reversed version of bitmap is
@@ -229,7 +694,7 @@ wxToolBarTool *wxToolBarBase::AddTool(int index, const wxBitmap& bitmap, const w
 void wxToolBarBase::AddSeparator ()
 {
   wxToolBarTool *tool = new wxToolBarTool;
-  tool->m_index = -1;
+  tool->m_id = -1;
   tool->m_toolStyle = wxTOOL_STYLE_SEPARATOR;
   m_tools.Append(-1, tool);
 }
@@ -259,109 +724,6 @@ void wxToolBarBase::EnableTool(int index, bool enable)
   }
 }
 
-void wxToolBarBase::ToggleTool(int WXUNUSED(index),
-                               bool WXUNUSED(toggle))
-{
-}
-
-void wxToolBarBase::SetToggle(int index, bool value)
-{
-  wxNode *node=m_tools.Find((long)index);
-  if (node){
-    wxToolBarTool *tool = (wxToolBarTool *)node->Data();
-    tool->m_isToggle = value;
-  }
-}
-
-bool wxToolBarBase::GetToolState(int index) const
-{
-  wxNode *node = m_tools.Find((long)index);
-  if (node)
-  {
-    wxToolBarTool *tool = (wxToolBarTool *)node->Data();
-    if (tool)
-    {
-      return tool->m_toggleState;
-    }
-    else return FALSE;
-  }
-  else return FALSE;
-}
-
-bool wxToolBarBase::GetToolEnabled(int index) const
-{
-  wxNode *node = m_tools.Find((long)index);
-  if (node)
-  {
-    wxToolBarTool *tool = (wxToolBarTool *)node->Data();
-    if (tool)
-    {
-      return tool->m_enabled;
-    }
-    else return FALSE;
-  }
-  else return FALSE;
-}
-
-wxObject *wxToolBarBase::GetToolClientData(int index) const
-{
-  wxNode *node = m_tools.Find((long)index);
-  if (node)
-  {
-    wxToolBarTool *tool = (wxToolBarTool *)node->Data();
-    if (tool)
-    {
-      return tool->m_clientData;
-    }
-    else return NULL;
-  }
-  else return NULL;
-}
-
-void wxToolBarBase::SetToolShortHelp(int index, const wxString& helpString)
-{
-  wxNode *node=m_tools.Find((long)index);
-  if (node)
-  {
-    wxToolBarTool *tool = (wxToolBarTool *)node->Data();
-    tool->m_shortHelpString = helpString;
-  }
-}
-
-wxString wxToolBarBase::GetToolShortHelp(int index) const
-{
-  wxNode *node=m_tools.Find((long)index);
-  if (node)
-  {
-    wxToolBarTool *tool = (wxToolBarTool *)node->Data();
-    return tool->m_shortHelpString;
-  }
-  else
-    return wxString("");
-}
-
-void wxToolBarBase::SetToolLongHelp(int index, const wxString& helpString)
-{
-  wxNode *node=m_tools.Find((long)index);
-  if (node)
-  {
-    wxToolBarTool *tool = (wxToolBarTool *)node->Data();
-    tool->m_longHelpString = helpString;
-  }
-}
-
-wxString wxToolBarBase::GetToolLongHelp(int index) const
-{
-  wxNode *node=m_tools.Find((long)index);
-  if (node)
-  {
-    wxToolBarTool *tool = (wxToolBarTool *)node->Data();
-    return tool->m_longHelpString;
-  }
-  else
-    return wxString("");
-}
-
 wxToolBarTool *wxToolBarBase::FindToolForPosition(long x, long y) const
 {
   wxNode *node = m_tools.First();
@@ -387,32 +749,17 @@ wxSize wxToolBarBase::GetMaxSize ( void ) const
 // the tool we're leaving was a 'sprung push button' and if so,
 // spring it back to the up state.
 //
-void wxToolBarBase::SetMargins(int x, int y)
-{
-  m_xMargin = x;
-  m_yMargin = y;
-}
-
-void wxToolBarBase::SetToolPacking(int packing)
-{
-  m_toolPacking = packing;
-}
-
-void wxToolBarBase::SetToolSeparation(int separation)
-{
-  m_toolSeparation = separation;
-}
-
-void wxToolBarBase::Command(wxCommandEvent& WXUNUSED(event))
-{
-}
-
 void wxToolBarBase::LayoutTools()
 {
 }
 
 
 // SCROLLING IMPLEMENTATION
+
+BEGIN_EVENT_TABLE()
+        EVT_SCROLL(wxToolBarBase::OnScroll)
+        EVT_SIZE(wxToolBarBase::OnSize)
+END_EVENT_TABLE()
 
 /*
  * pixelsPerUnitX/pixelsPerUnitY: number of pixels per unit (e.g. pixels per text line)
@@ -733,48 +1080,4 @@ void wxToolBarBase::ViewStart (int *x, int *y) const
   *y = m_yScrollPosition;
 }
 
-void wxToolBarBase::OnIdle(wxIdleEvent&
-#ifdef __WXGTK__
-                            WXUNUSED(event)
-#else
-                            event
-#endif
-                          )
-{
-#ifndef __WXGTK__
-    wxWindow::OnIdle(event);
-#endif
-
-    DoToolbarUpdates();
-}
-
-// Do the toolbar button updates (check for EVT_UPDATE_UI handlers)
-void wxToolBarBase::DoToolbarUpdates()
-{
-    wxEvtHandler* evtHandler = GetEventHandler() ;
-
-    wxNode* node = GetTools().First();
-    while (node)
-    {
-        wxToolBarTool* tool = (wxToolBarTool* ) node->Data();
-
-        wxUpdateUIEvent event(tool->m_index);
-        event.SetEventObject(this);
-
-        if (evtHandler->ProcessEvent(event))
-        {
-            if (event.GetSetEnabled())
-                EnableTool(tool->m_index, event.GetEnabled());
-            if (event.GetSetChecked())
-                ToggleTool(tool->m_index, event.GetChecked());
-/*
-            if (event.GetSetText())
-                // Set tooltip?
-*/
-        }
-
-        node = node->Next();
-    }
-}
-
-#endif
+#endif // wxUSE_TOOLBAR

@@ -14,12 +14,6 @@
 
 #include "wx/tbarbase.h"     // the base class for all toolbars
 
-#if 0
-class WXDLLEXPORT wxToolBar : public wxControl
-{
-};
-#endif // 0
-
 #if defined(__WXMSW__) && defined(__WIN95__)
 #   include "wx/msw/tbar95.h"
 #elif defined(__WXMSW__)

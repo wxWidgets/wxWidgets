@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        tbarsmpl.h
+// Name:        wx/tbarsmpl.h
 // Purpose:     wxToolBarSimple class
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_TBARSMPLH__
@@ -23,6 +23,21 @@
 #include "wx/bitmap.h"
 #include "wx/list.h"
 #include "wx/tbarbase.h"
+
+class WXDLLEXPORT wxToolBarTool : public wxToolBarToolBase
+{
+public:
+    void SetSize( long w, long h ) { m_width = w; m_height = h; }
+    long GetWidth() const { return m_width; }
+    long GetHeight() const { return m_height; }
+
+    wxCoord               m_x;
+    wxCoord               m_y;
+    wxCoord               m_width;
+    wxCoord               m_height;
+
+    bool                  m_deleteSecondBitmap;
+};
 
 class WXDLLEXPORT wxMemoryDC;
 
