@@ -26,12 +26,18 @@
 #include "wx/os2/private.h"
 
 #define PURE_32
+#ifndef __EMX__
 #include <upm.h>
 #include <netcons.h>
 #include <netbios.h>
+#endif
 
 #include <ctype.h>
+#ifdef __EMX__
+#include <dirent.h>
+#else
 #include <direct.h>
+#endif
 
 #include <sys/stat.h>
 #include <io.h>
@@ -41,6 +47,7 @@
 #include <string.h>
 #include <errno.h>
 #include <stdarg.h>
+
 
 // this message is sent when the process we're waiting for terminates
 #define wxWM_PROC_TERMINATED (WM_USER + 10000)
@@ -55,7 +62,7 @@ struct wxExecuteData
 public:
     ~wxExecuteData()
     {
-        cout << "Closing thread: " << endl;
+//         cout << "Closing thread: " << endl;
         DosExit(EXIT_PROCESS, 0);
     }
 
@@ -73,7 +80,7 @@ static ULONG wxExecuteThread(
     ULONG                           ulRc;
     PID                             vPidChild;
 
-    cout << "Executing thread: " << endl;
+//     cout << "Executing thread: " << endl;
 
     ulRc = ::DosWaitChild( DCWA_PROCESSTREE
                           ,DCWW_NOWAIT
@@ -135,7 +142,7 @@ long wxExecute(
 {
     if (rCommand.IsEmpty())
     {
-        cout << "empty command in wxExecute." << endl;
+//         cout << "empty command in wxExecute." << endl;
         return 0;
     }
 
@@ -168,7 +175,7 @@ long wxExecute(
         wxLogSysError(_("Execution of command '%s' failed with error: %ul"), rCommand.c_str(), rc);
         return 0;
     }
-    cout << "Executing: " << rCommand.c_str() << endl;
+//     cout << "Executing: " << rCommand.c_str() << endl;
     // Alloc data
     wxExecuteData*                  pData = new wxExecuteData;
 
