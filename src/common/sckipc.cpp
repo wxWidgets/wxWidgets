@@ -743,7 +743,7 @@ void wxTCPEventHandler::Server_OnRequest(wxSocketEvent &event)
 // wxTCPEventHandlerModule (private class)
 // --------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTCPEventHandlerModule: public wxModule
+class wxTCPEventHandlerModule: public wxModule
 {
   DECLARE_DYNAMIC_CLASS(wxTCPEventHandlerModule)
 

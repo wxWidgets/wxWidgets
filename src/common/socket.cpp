@@ -1298,7 +1298,7 @@ wxDatagramSocket& wxDatagramSocket::SendTo( wxSockAddress& addr,
 // wxSocketModule
 // ==========================================================================
 
-class WXDLLEXPORT wxSocketModule : public wxModule
+class wxSocketModule : public wxModule
 {
 public:
     virtual bool OnInit()
