@@ -39,6 +39,14 @@
 
 #include "wx/msw/private.h"
 
+#ifndef ICON_BIG
+    #define ICON_BIG 1
+#endif
+
+#ifndef ICON_SMALL
+    #define ICON_SMALL 0
+#endif
+
 // ----------------------------------------------------------------------------
 // stubs for missing functions under MicroWindows
 // ----------------------------------------------------------------------------
