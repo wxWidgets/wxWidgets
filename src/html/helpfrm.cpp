@@ -166,7 +166,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
     // toolbar?
     if (style & wxHF_TOOLBAR) {
         wxToolBar *toolBar = CreateToolBar(wxNO_BORDER | wxTB_HORIZONTAL | wxTB_DOCKABLE);
-        toolBar -> SetMargins(2, 2);
+        toolBar->SetMargins( 2, 2 );
 
         toolBar -> AddTool(wxID_HTML_PANEL, wxBITMAP(wpanel), wxNullBitmap,
                            FALSE, -1, -1, (wxObject *) NULL,
@@ -188,6 +188,9 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
                 m_Bookmarks -> Append(m_BookmarksNames[i]);
             m_Bookmarks -> SetSelection(0);
             toolBar -> AddControl(m_Bookmarks);
+#ifdef __WXGTK__
+            toolBar -> AddSeparator();
+#endif
             toolBar -> AddTool(wxID_HTML_BOOKMARKSADD, wxBITMAP(wbkadd), wxNullBitmap,
                                FALSE, -1, -1, (wxObject *) NULL,
                                _("Add current page to bookmarks"));

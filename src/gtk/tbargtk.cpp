@@ -178,8 +178,7 @@ bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
     m_toolbar = GTK_TOOLBAR( gtk_toolbar_new( GTK_ORIENTATION_HORIZONTAL,
                                               GTK_TOOLBAR_ICONS ) );
 
-//    gtk_toolbar_set_space_style( m_toolbar, GTK_TOOLBAR_SPACE_LINE );
-    m_separation = 5;
+    m_separation = 7;
     gtk_toolbar_set_space_size( m_toolbar, m_separation );
     m_hasToolAlready = FALSE;
 
@@ -330,8 +329,8 @@ wxToolBarTool *wxToolBar::AddTool( int toolIndex, const wxBitmap& bitmap,
 
     GtkRequisition req;
     (* GTK_WIDGET_CLASS( GTK_OBJECT(m_widget)->klass )->size_request ) (m_widget, &req );
-    m_width = req.width;
-    m_height = req.height;
+    m_width = req.width + m_xMargin;
+    m_height = req.height + 2*m_yMargin + 4;
 
     gtk_signal_connect( GTK_OBJECT(tool->m_item),
                         "enter_notify_event", 
@@ -359,8 +358,8 @@ bool wxToolBar::AddControl(wxControl *control)
     
     GtkRequisition req;
     (* GTK_WIDGET_CLASS( GTK_OBJECT(m_widget)->klass )->size_request ) (m_widget, &req );
-    m_width = req.width;
-    m_height = req.height;
+    m_width = req.width + m_xMargin;
+    m_height = req.height + 2*m_yMargin + 4;
 
     m_tools.Append( tool );
     
@@ -401,26 +400,6 @@ void wxToolBar::ClearTools()
 
 bool wxToolBar::Realize()
 {
-    m_x = 0;
-    m_y = 0;
-    m_width = 100;
-    m_height = 0;
-  
-    wxNode *node = m_tools.First();
-    while (node)
-    {
-        wxToolBarTool *tool = (wxToolBarTool*)node->Data();
-        if (tool->m_bitmap1.Ok())
-        {
-            int tool_height = tool->m_bitmap1.GetHeight();
-            if (tool_height > m_height) m_height = tool_height;
-        }
-    
-        node = node->Next();
-    }
-  
-    m_height += 5 + 2*m_yMargin;
-   
     return TRUE;
 }
 
@@ -536,7 +515,7 @@ void wxToolBar::SetMargins( int x, int y )
 {
     wxCHECK_RET( !m_hasToolAlready, wxT("wxToolBar::SetMargins must be called before adding tool.") );
     
-    if (x > 2) gtk_toolbar_append_space( m_toolbar );  // oh well
+    if (x > 1) gtk_toolbar_append_space( m_toolbar );  // oh well
     
     m_xMargin = x;
     m_yMargin = y;
