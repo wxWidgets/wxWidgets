@@ -26,6 +26,22 @@
 #endif
 
 //------------------------------------------------------------------------
+// Check for use of MSLU
+//------------------------------------------------------------------------
+
+#if wxUSE_BASE
+
+bool WXDLLIMPEXP_BASE wxUsingUnicowsDll()
+{
+#if wxUSE_UNICODE_MSLU
+    return (wxGetOsVersion() == wxWIN95);
+#else
+    return false;
+#endif
+}
+
+#endif // wxUSE_BASE
+
 
 #if wxUSE_UNICODE_MSLU
 
