@@ -164,7 +164,7 @@ HTMLOBJS = #$ ExpandList("WXHTMLOBJS");
 # Add $(HTMLOBJS) if wanting wxHTML classes
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS)
 
-ARCHINCDIR=$(WXDIR)\lib\msw$(INCEXT)
+ARCHINCDIR=$(WXDIR)\lib\$(_WXINC_BUILD)$(_WXINC_DLLSUFFIX)$(_WXINC_SUFFIX)$(LIBEXT)
 SETUP_H=$(ARCHINCDIR)\wx\setup.h
 
 # Normal, static library
@@ -394,7 +394,7 @@ $(CPPFLAGS2) /c $(COMMDIR)\unzip.c /Fo$@
 
 png:
     cd $(WXDIR)\src\png
-    nmake -f makefile.vc FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL) CRTFLAG=$(CRTFLAG)
+    nmake -f makefile.vc FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL) CRTFLAG=$(CRTFLAG) UNICODE=0
     cd $(WXDIR)\src\msw
 
 clean_png:
@@ -404,7 +404,7 @@ clean_png:
 
 zlib:
     cd $(WXDIR)\src\zlib
-    nmake -f makefile.vc FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL) CRTFLAG=$(CRTFLAG)
+    nmake -f makefile.vc FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL) CRTFLAG=$(CRTFLAG) UNICODE=0
     cd $(WXDIR)\src\msw
 
 clean_zlib:
@@ -414,7 +414,7 @@ clean_zlib:
 
 jpeg:
     cd $(WXDIR)\src\jpeg
-    nmake -f makefile.vc FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL)  CRTFLAG=$(CRTFLAG) all
+    nmake -f makefile.vc FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL)  CRTFLAG=$(CRTFLAG) UNICODE=0 all
     cd $(WXDIR)\src\msw
 
 clean_jpeg:
@@ -424,7 +424,7 @@ clean_jpeg:
 
 tiff:
     cd $(WXDIR)\src\tiff
-    nmake -f makefile.vc FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL)  CRTFLAG=$(CRTFLAG) all
+    nmake -f makefile.vc FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL)  CRTFLAG=$(CRTFLAG) UNICODE=0 all
     cd $(WXDIR)\src\msw
 
 clean_tiff:
@@ -434,7 +434,7 @@ clean_tiff:
 
 regex:
     cd $(WXDIR)\src\regex
-    nmake -f makefile.vc FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL) CRTFLAG=$(CRTFLAG) all
+    nmake -f makefile.vc FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL) CRTFLAG=$(CRTFLAG) UNICODE=0 all
     cd $(WXDIR)\src\msw
 
 clean_regex:
@@ -448,11 +448,11 @@ rcparser:
     cd $(WXDIR)\src\msw
 
 cleanall: clean clean_png clean_zlib clean_jpeg clean_tiff clean_regex
-        -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).dll
-        -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).lib
-        -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).exp
-        -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).pdb
-        -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).ilk
+        -erase ..\..\lib\$(WXLIBNAME).dll
+        -erase ..\..\lib\$(WXLIBNAME).lib
+        -erase ..\..\lib\$(WXLIBNAME).exp
+        -erase ..\..\lib\$(WXLIBNAME).pdb
+        -erase ..\..\lib\$(WXLIBNAME).ilk
 
 
 clean: $(PERIPH_CLEAN_TARGET)

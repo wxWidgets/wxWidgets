@@ -137,6 +137,7 @@ NONESSENTIALOBJS= $(GENDIR)\$D\colrdlgg.obj \
 
 COMMONOBJS = \
 		$(COMMDIR)\$D\y_tab.obj \
+		$(COMMDIR)\$D\accesscmn.obj \
 		$(COMMDIR)\$D\appcmn.obj \
 		$(COMMDIR)\$D\artprov.obj \
 		$(COMMDIR)\$D\artstd.obj \
@@ -163,6 +164,7 @@ COMMONOBJS = \
 		$(COMMDIR)\$D\dobjcmn.obj \
 		$(COMMDIR)\$D\docmdi.obj \
 		$(COMMDIR)\$D\docview.obj \
+		$(COMMDIR)\$D\dpycmn.obj \
 		$(COMMDIR)\$D\dseldlg.obj \
 		$(COMMDIR)\$D\dynarray.obj \
 		$(COMMDIR)\$D\dynlib.obj \
@@ -269,6 +271,7 @@ COMMONOBJS = \
 		$(COMMDIR)\$D\zstream.obj
 
 MSWOBJS = $(MSWDIR)\$D\accel.obj \
+		$(OLEDIR)\$D\access.obj \
 		$(MSWDIR)\$D\app.obj \
 		$(OLEDIR)\$D\automtn.obj \
 		$(MSWDIR)\$D\bitmap.obj \
@@ -300,6 +303,7 @@ MSWOBJS = $(MSWDIR)\$D\accel.obj \
 		$(MSWDIR)\$D\dibutils.obj \
 		$(MSWDIR)\$D\dir.obj \
 		$(MSWDIR)\$D\dirdlg.obj \
+		$(MSWDIR)\$D\display.obj \
 		$(MSWDIR)\$D\dragimag.obj \
 		$(OLEDIR)\$D\dropsrc.obj \
 		$(OLEDIR)\$D\droptgt.obj \
