@@ -441,9 +441,6 @@ void wxWindowMSW::Init()
     m_xThumbSize = 0;
     m_yThumbSize = 0;
 
-    // as all windows are created with WS_VISIBLE style...
-    m_isShown = true;
-
 #if wxUSE_MOUSEEVENT_HACK
     m_lastMouseX =
     m_lastMouseY = -1;
@@ -520,14 +517,7 @@ bool wxWindowMSW::Create(wxWindow *parent,
     msflags &= ~WS_BORDER;
 #endif // wxUniversal
 
-    // all windows are created visible by default except popup ones (which are
-    // like the wxTopLevelWindows in this aspect)
-    if ( style & wxPOPUP_WINDOW )
-    {
-        msflags &= ~WS_VISIBLE;
-        m_isShown = false;
-    }
-    else
+    if ( IsShown() )
     {
         msflags |= WS_VISIBLE;
     }
@@ -4584,7 +4574,7 @@ bool wxWindowMSW::HandleChar(WXWPARAM wParam, WXLPARAM lParam, bool isASCII)
     }
     else // we're called from WM_KEYDOWN
     {
-        id = wxCharCodeMSWToWX(wParam);
+        id = wxCharCodeMSWToWX(wParam, lParam);
         if ( id == 0 )
         {
             // it's ASCII and will be processed here only when called from
@@ -4613,7 +4603,7 @@ bool wxWindowMSW::HandleChar(WXWPARAM wParam, WXLPARAM lParam, bool isASCII)
 
 bool wxWindowMSW::HandleKeyDown(WXWPARAM wParam, WXLPARAM lParam)
 {
-    int id = wxCharCodeMSWToWX(wParam);
+    int id = wxCharCodeMSWToWX(wParam, lParam);
 
     if ( !id )
     {
@@ -4635,7 +4625,7 @@ bool wxWindowMSW::HandleKeyDown(WXWPARAM wParam, WXLPARAM lParam)
 
 bool wxWindowMSW::HandleKeyUp(WXWPARAM wParam, WXLPARAM lParam)
 {
-    int id = wxCharCodeMSWToWX(wParam);
+    int id = wxCharCodeMSWToWX(wParam, lParam);
 
     if ( !id )
     {
@@ -4919,7 +4909,7 @@ void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont *the_font)
 
 // Returns 0 if was a normal ASCII value, not a special key. This indicates that
 // the key should be ignored by WM_KEYDOWN and processed by WM_CHAR instead.
-int wxCharCodeMSWToWX(int keySym)
+int wxCharCodeMSWToWX(int keySym, WXLPARAM lParam)
 {
     int id;
     switch (keySym)
@@ -4928,7 +4918,6 @@ int wxCharCodeMSWToWX(int keySym)
         case VK_BACK:       id = WXK_BACK; break;
         case VK_TAB:        id = WXK_TAB; break;
         case VK_CLEAR:      id = WXK_CLEAR; break;
-        case VK_RETURN:     id = WXK_RETURN; break;
         case VK_SHIFT:      id = WXK_SHIFT; break;
         case VK_CONTROL:    id = WXK_CONTROL; break;
         case VK_MENU :      id = WXK_MENU; break;
@@ -5009,6 +4998,13 @@ int wxCharCodeMSWToWX(int keySym)
         case VK_RWIN:       id = WXK_WINDOWS_RIGHT; break;
         case VK_APPS:       id = WXK_WINDOWS_MENU; break;
 #endif // VK_APPS defined
+
+        case VK_RETURN:
+            // the same key is sent for both the "return" key on the main
+            // keyboard and the numeric keypad but we want to distinguish
+            // between them: we do this using the "extended" bit (24) of lParam
+            id = lParam & (1 << 24) ? WXK_NUMPAD_ENTER : WXK_RETURN;
+            break;
 
         default:
             id = 0;
@@ -5208,7 +5204,7 @@ wxKeyboardHook(int nCode, WORD wParam, DWORD lParam)
     DWORD hiWord = HIWORD(lParam);
     if ( nCode != HC_NOREMOVE && ((hiWord & KF_UP) == 0) )
     {
-        int id = wxCharCodeMSWToWX(wParam);
+        int id = wxCharCodeMSWToWX(wParam, lParam);
         if ( id != 0 )
         {
             wxKeyEvent event(wxEVT_CHAR_HOOK);
