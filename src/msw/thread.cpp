@@ -1116,6 +1116,12 @@ wxThreadError wxThread::Kill()
     {
         delete this;
     }
+    else // joinable
+    {
+        // update the status of the joinable thread
+        wxCriticalSectionLocker lock(m_critsect);
+        m_internal->SetState(STATE_EXITED);
+    }
 
     return wxTHREAD_NO_ERROR;
 }
@@ -1127,6 +1133,12 @@ void wxThread::Exit(ExitCode status)
     if ( IsDetached() )
     {
         delete this;
+    }
+    else // joinable
+    {
+        // update the status of the joinable thread
+        wxCriticalSectionLocker lock(m_critsect);
+        m_internal->SetState(STATE_EXITED);
     }
 
 #ifdef wxUSE_BEGIN_THREAD
