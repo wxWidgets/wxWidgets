@@ -45,6 +45,7 @@ private:
         CPPUNIT_TEST( Tokenizer );
         CPPUNIT_TEST( Replace );
         CPPUNIT_TEST( Match );
+        CPPUNIT_TEST( CaseChanges );
     CPPUNIT_TEST_SUITE_END();
 
     void String();
@@ -57,6 +58,7 @@ private:
     void Tokenizer();
     void Replace();
     void Match();
+    void CaseChanges();
 
     DECLARE_NO_COPY_CLASS(StringTestCase)
 };
@@ -271,3 +273,20 @@ void StringTestCase::Match()
     #undef TEST_MATCH
 }
 
+
+void StringTestCase::CaseChanges()
+{
+    wxString s1(_T("Hello!"));
+    wxString s1u(s1);
+    wxString s1l(s1);
+    s1u.MakeUpper();
+    s1l.MakeLower();
+    wxString s2u, s2l;
+    s2u.MakeUpper();
+    s2l.MakeLower();
+
+    CPPUNIT_ASSERT( s1u == _T("HELLO!") );
+    CPPUNIT_ASSERT( s1l == _T("hello!") );
+    CPPUNIT_ASSERT( s2u == wxEmptyString );
+    CPPUNIT_ASSERT( s2l == wxEmptyString );
+}
