@@ -254,9 +254,18 @@ see sample in the description of \helpref{wxBoxSizer}{wxboxsizer} if the window 
 \func{void}{SetVirtualSizeHints}{\param{wxWindow* }{window}}
 
 Tell the sizer to set the minimal size of the {\it window} virtual area to match the sizer's
-minimal size.  For windows with managed scrollbars this will set them appropriately.
+minimal size. For windows with managed scrollbars this will set them appropriately.
 
 \wxheading{See also}
 
 \helpref{wxScrolledWindow::SetScrollbars}{wxscrolledwindowsetscrollbars}
+
+\membersection{wxSizer::Show}\label{wxsizershow}
+
+\func{void}{Show}{\param{wxWindow* }{window}, \param{bool }{show = TRUE}}
+
+\func{void}{Show}{\param{wxSizer* }{sizer}, \param{bool }{show = TRUE}}
+
+Shows or hides a window or sizer. To make a sizer item disappear or 
+reappear, use Show() followed by Layout().
 

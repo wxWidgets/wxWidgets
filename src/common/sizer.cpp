@@ -50,6 +50,7 @@ wxSizerItem::wxSizerItem( int width, int height, int option, int flag, int borde
     m_option = option;
     m_border = border;
     m_flag = flag;
+    m_show = TRUE;		// Cannot be changed
     m_userData = userData;
 
     // minimal size is the initial size
@@ -69,6 +70,7 @@ wxSizerItem::wxSizerItem( wxWindow *window, int option, int flag, int border, wx
     m_option = option;
     m_border = border;
     m_flag = flag;
+    m_show = TRUE;
     m_userData = userData;
 
     // minimal size is the initial size
@@ -88,6 +90,7 @@ wxSizerItem::wxSizerItem( wxSizer *sizer, int option, int flag, int border, wxOb
     m_option = option;
     m_border = border;
     m_flag = flag;
+    m_show = TRUE;
     m_userData = userData;
 
     // minimal size is calculated later
@@ -638,6 +641,81 @@ bool wxSizer::DoSetItemMinSize( int pos, int width, int height )
     return TRUE;
 }
 
+void wxSizer::Show (wxWindow *window, bool show)
+{
+    wxNode *node = m_children.GetFirst();
+    while (node) {
+        wxSizerItem *item = (wxSizerItem*) node->Data();
+
+        if (item->IsWindow () && item->GetWindow () == window) {
+	  item->Show (show);
+	  window->Show (show);
+	  return;
+	}
+	node = node->Next();
+    }
+}
+
+void wxSizer::Show (wxSizer *sizer, bool show)
+{
+    wxNode *node = m_children.GetFirst();
+    while (node) {
+        wxSizerItem *item = (wxSizerItem*) node->Data();
+
+	if (item->IsSizer () && item->GetSizer () == sizer) {
+	    item->Show (show);
+	    sizer->ShowItems (show);
+	    return;
+	}
+	node = node->Next();
+    }
+}
+
+void wxSizer::ShowItems (bool show)
+{
+    wxNode *node = m_children.GetFirst();
+    while (node) {
+        wxSizerItem *item = (wxSizerItem*) node->Data();
+
+	if (item->IsWindow ())
+	    item->GetWindow()->Show (show);
+	else if (item->IsSizer ())
+	    item->GetSizer ()->ShowItems (show);
+
+	node = node->Next();
+    }
+}
+
+bool wxSizer::IsShown (wxWindow *window)
+{
+    wxNode *node = m_children.GetFirst();
+    while (node) {
+        wxSizerItem *item = (wxSizerItem*) node->Data();
+	
+	if (item->IsWindow () && item->GetWindow () == window) {
+	  return item->IsShown ();
+	}
+	node = node->Next();
+    }
+
+    return FALSE;
+}
+
+bool wxSizer::IsShown (wxSizer *sizer)
+{
+    wxNode *node = m_children.GetFirst();
+    while (node) {
+        wxSizerItem *item = (wxSizerItem*) node->Data();
+
+	if (item->IsSizer () && item->GetSizer () == sizer) {
+	  return item->IsShown ();
+	}
+	node = node->Next();
+    }
+
+    return FALSE;
+}
+
 //---------------------------------------------------------------------------
 // wxGridSizer
 //---------------------------------------------------------------------------
@@ -980,6 +1058,7 @@ void wxBoxSizer::RecalcSizes()
     while (node)
     {
         wxSizerItem *item = (wxSizerItem*) node->Data();
+	if (item->IsShown ()) {
 
         int weight = 1;
         if (item->GetOption())
@@ -1037,6 +1116,7 @@ void wxBoxSizer::RecalcSizes()
 
             pt.x += width;
         }
+	}
 
         node = node->Next();
     }
@@ -1059,7 +1139,7 @@ wxSize wxBoxSizer::CalcMin()
     while (node)
     {
         wxSizerItem *item = (wxSizerItem*) node->Data();
-        if (item->GetOption() != 0)
+        if (item->IsShown () && item->GetOption() != 0)
         {
             int stretch = item->GetOption();
             wxSize size( item->CalcMin() );
@@ -1079,7 +1159,7 @@ wxSize wxBoxSizer::CalcMin()
     while (node)
     {
         wxSizerItem *item = (wxSizerItem*) node->Data();
-
+	if (item->IsShown ()) {
         m_stretchable += item->GetOption();
 
         wxSize size( item->CalcMin() );
@@ -1115,7 +1195,7 @@ wxSize wxBoxSizer::CalcMin()
                 m_fixedHeight = wxMax( m_fixedHeight, size.y );
             }
         }
-
+	}
         node = node->Next();
     }
 
