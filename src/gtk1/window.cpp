@@ -517,7 +517,7 @@ static int gtk_window_expose_callback( GtkWidget *widget,
     GtkPizza *pizza = GTK_PIZZA( widget );
     if (gdk_event->window != pizza->bin_window) return FALSE;
 
-#if 0
+#if 1
     if (win->GetName())
     {
         wxPrintf( wxT("OnExpose from ") );
@@ -528,6 +528,18 @@ static int gtk_window_expose_callback( GtkWidget *widget,
                                          (int)gdk_event->area.width,
                                          (int)gdk_event->area.height );
     }
+    
+    gtk_paint_box
+    (
+        win->m_wxwindow->style,
+        pizza->bin_window,
+        GTK_STATE_NORMAL,
+        GTK_SHADOW_OUT,
+        (GdkRectangle*) NULL,
+        win->m_wxwindow,
+        (char *)"button", // const_cast
+        20,20,24,24
+    );
 #endif
 
     win->GetUpdateRegion() = wxRegion( gdk_event->region );
