@@ -77,7 +77,7 @@ int wxDirDialog::ShowModal(void)
       return wxID_CANCEL;
     
     // Allocate a buffer to receive browse information. 
-    if ((lpBuffer = (LPSTR) pMalloc->Alloc(MAX_PATH)) == NULL) 
+    if ((lpBuffer = (LPTSTR) pMalloc->Alloc(MAX_PATH)) == NULL) 
     {
         pMalloc->Release();
         return wxID_CANCEL;
