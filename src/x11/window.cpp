@@ -209,12 +209,19 @@ void wxWindowX11::SetFocus()
     Window wMain = (Window) GetMainWindow();
     if (wMain)
     {
+	// TODO: set a m_needInputFocus flag and do the
+	// the setting in OnIdle or Show, because we can't
+	// set the focus for an unmapped window.
+	// We need to figure out how to find out if the window
+	// is mapped.
+#if 0
         XSetInputFocus(wxGlobalDisplay(), wMain, RevertToParent, CurrentTime);
         
         XWMHints wmhints;
         wmhints.flags = InputHint;
         wmhints.input = True;
         XSetWMHints(wxGlobalDisplay(), wMain, &wmhints);
+#endif
     }
 }
 

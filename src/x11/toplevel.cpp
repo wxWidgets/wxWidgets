@@ -114,7 +114,7 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     Window xwindow = XCreateWindow( xdisplay, xparent, pos.x, pos.y, size.x, size.y, 
        0, DefaultDepth(xdisplay,xscreen), InputOutput, xvisual, xattributes_mask, &xattributes );
     m_mainWidget = (WXWindow) xwindow;
-    
+
     XSelectInput( xdisplay, xwindow,
         ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
         ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask |
