@@ -264,7 +264,11 @@ WXDLLEXPORT_DATA(extern wxMBConv *) wxConvCurrent;
 #endif
 #else//!wxUSE_WCHAR_T
 class WXDLLEXPORT wxMBConv {};
-WXDLLEXPORT_DATA(extern wxMBConv) wxConvLibc;
+WXDLLEXPORT_DATA(extern wxMBConv) wxConvLibc, wxConvFile;
+#define wxConv_libc wxConvLibc
+#define wxConv_file wxConvFile
+WXDLLEXPORT_DATA(extern wxMBConv *) wxConvCurrent;
+#define wxConv_current wxConvCurrent
 #endif//wxUSE_WCHAR_T
 
 // ---------------------------------------------------------------------------

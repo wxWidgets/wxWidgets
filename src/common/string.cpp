@@ -1164,7 +1164,7 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
 	    char *val = va_arg(argptr, char *);
 #if wxUSE_UNICODE
 	    // ASCII->Unicode constructor handles max_width right
-	    wxString s(val, wxConv_libc, max_width);
+	    wxString s(val, wxConvLibc, max_width);
 #else
 	    size_t len = wxSTRING_MAXLEN;
 	    if (val) {
@@ -1801,14 +1801,18 @@ void wxArrayString::DoSort()
 // MBConv
 // ============================================================================
 
+WXDLLEXPORT_DATA(wxMBConv *) wxConvCurrent = &wxConvLibc;
+#if !wxUSE_WCHAR_T
+WXDLLEXPORT_DATA(wxMBConv) wxConvLibc, wxConvFile;
+#endif
+
 #if wxUSE_WCHAR_T
-WXDLLEXPORT_DATA(wxMBConv *) wxConv_current = &wxConv_libc;
 
 // ----------------------------------------------------------------------------
 // standard libc conversion
 // ----------------------------------------------------------------------------
 
-WXDLLEXPORT_DATA(wxMBConv) wxConv_libc;
+WXDLLEXPORT_DATA(wxMBConv) wxConvLibc;
 
 size_t wxMBConv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
