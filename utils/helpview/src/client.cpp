@@ -1,309 +1,298 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        client.cpp
-// Purpose:     Tests helpview in server mode.
+// Purpose:     Remote help sample client
 // Author:      Julian Smart
-// Modified by:
-// Created:     2002-10-08
+// Modified by:	Eric Dowty
+// Created:     25/01/99
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma implementation "client.cpp"
-    #pragma interface "client.cpp"
-#endif
+// ============================================================================
+// declarations
+// ============================================================================
 
-// For compilers that support precompilation, includes "wx/wx.h".
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
+#define USE_REMOTE 1
+
+// For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
 
-// for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWindows headers
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+    #include "wx/wx.h"
 #endif
 
-#include "wx/ipc.h"
+#include <math.h>
+
 #include "wx/process.h"
+#include "wx/helpbase.h"
+#include "wx/html/helpfrm.h"
+#include "wx/html/helpctrl.h"
+#include "wx/config.h"
+
+// Settings common to both executables: determines whether
+// we're using TCP/IP or real DDE.
+
+//#include "ddesetup.h"
+//#define wxUSE_DDE_FOR_IPC 0
+#include <wx/ipc.h>
+
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
+#include "mondrian.xpm"
+#endif
+
+#include "remhelp.h"
+#include "client.h"
 
 // ----------------------------------------------------------------------------
-// private classes
+// wxWin macros
 // ----------------------------------------------------------------------------
 
-class MyConnection: public wxConnection
-{
-public:
-    MyConnection();
-    ~MyConnection();
+IMPLEMENT_APP(MyApp)
 
-    bool OnAdvise(const wxString& topic, const wxString& item, wxChar *data, int size, wxIPCFormat format);
-    bool OnDisconnect();
-};
+BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+EVT_MENU(CLIENT_QUIT, MyFrame::OnExit)
+EVT_MENU(CLIENT_HELPMAIN, MyFrame::OnHelp_Main)
+EVT_MENU(CLIENT_HELPBOOK1, MyFrame::OnHelp_Book1)
+EVT_MENU(CLIENT_HELPBOOK2, MyFrame::OnHelp_Book2)
 
-class MyClient: public wxClient
-{
-public:
-    wxConnectionBase *OnMakeConnection();
-};
+EVT_MENU(CLIENT_HELPINDEX, MyFrame::OnHelp_Index)
+EVT_MENU(CLIENT_HELPCONTENTS, MyFrame::OnHelp_Contents)
+EVT_MENU(CLIENT_HELPSEARCH, MyFrame::OnHelp_Search)
+EVT_MENU(CLIENT_HELPTITLE, MyFrame::OnHelp_Title)
+EVT_MENU(CLIENT_HELPADDBOOK, MyFrame::OnHelp_Addbook)
+EVT_MENU(CLIENT_HELPTEMPDIR, MyFrame::OnHelp_Tempdir)
+EVT_MENU(CLIENT_HELPQUIT, MyFrame::OnHelp_Quitserver)
 
-// Define a new application type, each program should derive a class from wxApp
-class HelpClientApp : public wxApp
-{
-public:
-    // override base class virtuals
-    // ----------------------------
-    
-    // this one is called on application startup and is a good place for the app
-    // initialization (doing it here and not in the ctor allows to have an error
-    // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit();
-};
-
-
-
-// Define a new frame type: this is going to be our main frame
-class HelpClientFrame : public wxFrame
-{
-    friend MyClient;
-    friend MyConnection;
-public:
-    // ctor(s)
-    HelpClientFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
-    
-    // event handlers (these functions should _not_ be virtual)
-    void OnQuit(wxCommandEvent& event);
-    void OnHelpPage(wxCommandEvent& event);
-    void OnHelpContents(wxCommandEvent& event);
-    void OnClose(wxCloseEvent& event);
-
-    bool CreateConnection();
-private:
-    MyConnection*   m_connection;
-    MyClient*       m_client;
-    
-    // any class wishing to process wxWindows events must use this macro
-    DECLARE_EVENT_TABLE()
-};
-
-HelpClientFrame* g_MainFrame = NULL;
-
-// ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-// IDs for the controls and the menu commands
-enum
-{
-    // menu items
-    HelpClient_Quit = 1,
-    HelpClient_HelpPage,
-    HelpClient_HelpContents,
-};
-
-// ----------------------------------------------------------------------------
-// event tables and other macros for wxWindows
-// ----------------------------------------------------------------------------
-
-// the event tables connect the wxWindows events with the functions (event
-// handlers) which process them. It can be also done at run-time, but for the
-// simple menu events like this the static method is much simpler.
-BEGIN_EVENT_TABLE(HelpClientFrame, wxFrame)
-EVT_MENU(HelpClient_Quit,  HelpClientFrame::OnQuit)
-EVT_MENU(HelpClient_HelpPage, HelpClientFrame::OnHelpPage)
-EVT_MENU(HelpClient_HelpContents, HelpClientFrame::OnHelpContents)
-EVT_CLOSE(HelpClientFrame::OnClose)
+EVT_MENU(DIALOG_MODAL, MyFrame::ModalDlg)
+EVT_BUTTON(BUTTON_MODAL, MyFrame::ModalDlg)
 END_EVENT_TABLE()
 
-// Create a new application object: this macro will allow wxWindows to create
-// the application object during program execution (it's better than using a
-// static object for many reasons) and also declares the accessor function
-// wxGetApp() which will return the reference of the right type (i.e. HelpClientApp and
-// not wxApp)
-IMPLEMENT_APP(HelpClientApp)
+// ----------------------------------------------------------------------------
+// globals
+// ----------------------------------------------------------------------------
+
+wxListBox *the_list = NULL;
 
 // ============================================================================
 // implementation
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// the application class
+// MyApp
 // ----------------------------------------------------------------------------
-// `Main program' equivalent: the program execution "starts" here
-bool HelpClientApp::OnInit()
-{
-    SetVendorName("wxWindows");
-    SetAppName("Help Client Demo"); 
-    
-    // Create the main application window
-    HelpClientFrame *frame = new HelpClientFrame("Help Client Demo",
-        wxPoint(50, 50), wxSize(150, 50));
-    
-    // Show it and tell the application that it's our main window
-    // @@@ what does it do exactly, in fact? is it necessary here?
-    frame->Show(TRUE);
-    SetTopWindow(frame);
 
-    // success: wxApp::OnRun() will be called which will enter the main message
-    // loop and the application will run. If we returned FALSE here, the
-    // application would exit immediately.
-    return TRUE;
-}
-
-// ----------------------------------------------------------------------------
+// The `main program' equivalent, creating the windows and returning the
 // main frame
+bool MyApp::OnInit()
+{
+    wxString a_appname, a_service, a_windowname, a_book;
+	
+    m_help = NULL;
+	
+    // for MSW (DDE classes), a_service is 'service name', apparently an arbitrary string
+    // for Unix, should be a valid file name (for a nonexistent file)
+    // for nonMSW, nonUnix, must be port number, for example "4242" (TCP/IP based classes)
+    // should be unique to the client app
+    a_service = "/tmp/wxWindows-helpconnection";
+    //a_service = "4242";
+    a_windowname = "HTML Help Test: %s";
+	
+#if defined(__WXMSW__)
+    a_appname = "helpview.exe";
+#else
+    a_appname = "./helpview";
+#endif
+	
+    //a_book = "helpfiles/testing.hhp";
+    a_book = "test.zip";
+	
+	wxConfig *conf = (wxConfig*) wxConfig::Get();
+	
+#if defined(USE_REMOTE)
+    m_help = new wxRemoteHtmlHelpController();
+	m_help->SetServer( a_appname );
+	m_help->SetService( a_service );
+#else
+    m_help = new wxHtmlHelpController();
+#endif
+	
+	//this is a dummy for wxRemoteHtmlHelpController
+    m_help->UseConfig(conf);
+	
+	m_help->AddBook( a_book );
+	m_help->SetTitleFormat( a_windowname );
+	
+	// Create the main frame window
+    MyFrame* frame = new MyFrame(NULL, "Help Client");
+    frame->Show(TRUE);
+	
+    return TRUE;
+}
+
+int MyApp::OnExit()
+{
+    delete m_help;
+	delete wxConfig::Set(NULL);
+    return 0;
+}
+
+// Define my frame constructor
+MyFrame::MyFrame(wxFrame *frame, const wxString& title)
+: wxFrame(frame, -1, title, wxDefaultPosition, wxSize( 200, 100 ) )
+{
+    m_panel = NULL;
+	
+    // Give it an icon
+    SetIcon(wxICON(mondrian));
+	
+    // Make a menubar
+    wxMenu *file_menu = new wxMenu;
+	
+    file_menu->Append(CLIENT_HELPMAIN, "Help - Main");
+    file_menu->Append(CLIENT_HELPBOOK1, "Help - Book1");
+    file_menu->Append(CLIENT_HELPBOOK2, "Help - Book2");
+	
+    file_menu->Append(CLIENT_HELPINDEX, "Help - DisplayIndex");
+    file_menu->Append(CLIENT_HELPCONTENTS, "Help - DisplayContents");
+    file_menu->Append(CLIENT_HELPSEARCH, "Help - KeywordSearch");
+    file_menu->Append(CLIENT_HELPTITLE, "Help - SetTitleFormat");
+    file_menu->Append(CLIENT_HELPADDBOOK, "Help - AddBook");
+    file_menu->Append(CLIENT_HELPTEMPDIR, "Help - SetTempDir");
+    file_menu->Append(CLIENT_HELPQUIT, "Help - Kill Server");
+	
+    file_menu->Append(DIALOG_MODAL, "Modal dialog");
+    file_menu->Append(CLIENT_QUIT, "Quit");
+	
+    wxMenuBar *menu_bar = new wxMenuBar;
+	
+    menu_bar->Append(file_menu, "File");
+	
+    // Associate the menu bar with the frame
+    SetMenuBar(menu_bar);
+	
+    // Make a panel
+    m_panel = new wxPanel(this );
+	
+    m_modalbutton = new wxButton( this, BUTTON_MODAL, "Modal Dialog", 
+		wxPoint(10,10), wxSize(-1, -1) );
+}
+
+void MyFrame::OnHelp_Book1(wxCommandEvent& event)
+{
+	wxGetApp().m_help->Display( "book1.htm" );
+}
+
+void MyFrame::OnHelp_Book2(wxCommandEvent& event)
+{
+	wxGetApp().m_help->Display( "book2.htm" );
+}
+
+void MyFrame::OnHelp_Main(wxCommandEvent& event)
+{
+	wxGetApp().m_help->Display( "main.htm" );
+}
+
+void MyFrame::OnHelp_Index(wxCommandEvent& event)
+{
+	wxGetApp().m_help->DisplayIndex( );
+}
+void MyFrame::OnHelp_Contents(wxCommandEvent& event)
+{
+	wxGetApp().m_help->DisplayContents( );
+}
+
+void MyFrame::OnHelp_Search(wxCommandEvent& event)
+{
+	wxGetApp().m_help->KeywordSearch( "enjoy" );
+}
+void MyFrame::OnHelp_Title(wxCommandEvent& event)
+{
+	wxGetApp().m_help->SetTitleFormat( "Another_Title: %s" );
+}
+void MyFrame::OnHelp_Addbook(wxCommandEvent& event)
+{
+	wxGetApp().m_help->AddBook("helpfiles/another.hhp" );
+}
+void MyFrame::OnHelp_Tempdir(wxCommandEvent& event)
+{
+	wxGetApp().m_help->SetTempDir( "tempdir" );
+}
+
+void MyFrame::OnHelp_Quitserver(wxCommandEvent& event)
+{
+	//			if (!wxGetApp().m_help->m_connection->Poke( wxT("--YouAreDead"), wxT("") ) )
+	//				wxLogError(wxT("wxRemoteHtmlHelpController - YouAreDead Failed"));
+	
+	wxGetApp().m_help->Quit();
+}
+
+void MyFrame::OnExit(wxCommandEvent& event)
+{
+    Close();
+}
+
+void MyFrame::ModalDlg(wxCommandEvent& WXUNUSED(event))
+{
+    MyModalDialog dlg(this);
+    dlg.ShowModal();
+}
+
+BEGIN_EVENT_TABLE(MyModalDialog, wxDialog)
+EVT_BUTTON(-1, MyModalDialog::OnButton)
+END_EVENT_TABLE()
+
+// ----------------------------------------------------------------------------
+// MyModalDialog
 // ----------------------------------------------------------------------------
 
-
-// frame constructor
-HelpClientFrame::HelpClientFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-: wxFrame((wxFrame *)NULL, -1, title, pos, size)
+MyModalDialog::MyModalDialog(wxWindow *parent)
+: wxDialog(parent, -1, wxString("Modal dialog"))
 {
-    g_MainFrame = this;
-
-    // create a menu bar
-    wxMenu *menuFile = new wxMenu;
-    
-    menuFile->Append(HelpClient_HelpContents, "&Help Contents");
-    menuFile->Append(HelpClient_HelpPage, "Help Page");
-    menuFile->AppendSeparator();
-    menuFile->Append(HelpClient_Quit, "E&xit");
-    
-    // now append the freshly created menu to the menu bar...
-    wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(menuFile, "&File");
-    
-    // ... and attach this menu bar to the frame
-    SetMenuBar(menuBar);
-
-    m_connection = NULL;
-    m_client = new MyClient;
+    wxBoxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
+	
+    m_main = new wxButton(this, -1, "Main");
+    m_book1 = new wxButton(this, -1, "Book1");
+    m_book2 = new wxButton(this, -1, "Book2");
+    sizerTop->Add(m_main, 0, wxALIGN_CENTER | wxALL, 5);
+    sizerTop->Add(m_book1, 0, wxALIGN_CENTER | wxALL, 5);
+    sizerTop->Add(m_book2, 0, wxALIGN_CENTER | wxALL, 5);
+	
+    SetAutoLayout(TRUE);
+    SetSizer(sizerTop);
+	
+    sizerTop->SetSizeHints(this);
+    sizerTop->Fit(this);
+	
+    m_main->SetFocus();
+    m_main->SetDefault();
 }
 
-
-// event handlers
-
-void HelpClientFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
+void MyModalDialog::OnButton(wxCommandEvent& event)
 {
-    // TRUE is to force the frame to close
-    Close(TRUE);
-}
-
-void HelpClientFrame::OnHelpPage(wxCommandEvent& WXUNUSED(event))
-{
-    if (CreateConnection())
+    if ( event.GetEventObject() == m_main )
     {
-        m_connection->Execute(wxT("Book 1"));
+        wxGetApp().m_help->Display( "main.htm" );
     }
-}
-
-void HelpClientFrame::OnHelpContents(wxCommandEvent& WXUNUSED(event))
-{
-    if (CreateConnection())
+    else if ( event.GetEventObject() == m_book1 )
     {
-        m_connection->Execute(wxT("test.zip"));
+        wxGetApp().m_help->Display( "book1.htm" );
     }
-}
-
-void HelpClientFrame::OnClose(wxCloseEvent& event)
-{
-    if (m_connection)
+    else if ( event.GetEventObject() == m_book2 )
     {
-        m_connection->Disconnect();
-        delete m_connection;
-        m_connection = NULL;
+        wxGetApp().m_help->Display( "book2.htm" );
     }
-    delete m_client;
-
-    event.Skip();   
-}
-
-bool HelpClientFrame::CreateConnection()
-{
-    if (m_connection)
-        return TRUE;
-
-    wxString cmd;
-
-#if defined(__WXMSW__)
-    cmd = "helpview.exe --server test.zip";
-#else
-    cmd = "./helpview --server test.zip";
-#endif
-
-    wxProcess *process = new wxProcess(this);
-    int pid = wxExecute( cmd, FALSE, process );
-    if( pid <= 0 ) {
-        wxMessageBox( "Failed to start server" );
-        return FALSE;
-    }
-    
-    // service name (DDE classes) or port number (TCP/IP based classes)
-    wxString service = wxT("4242");
-    
-    // ignored under DDE, host name in TCP/IP based classes
-    wxString hostName = wxT("localhost");
-    
-    int nsleep = 0;
-    
-    // suppress the log messages from MakeConnection()
+    else
     {
-        
-        wxLogNull nolog;
-        m_connection = (MyConnection *)m_client->MakeConnection(hostName, service, wxT("HELP"));
-        
-        while ( !m_connection)
-        {	
-            //try every second for a while
-            wxSleep(1);
-            if( nsleep > 4 ) {
-                if ( wxMessageBox("Failed to make connection to server.\nRetry?",
-                    "Client Demo Error",
-                    wxICON_ERROR | wxYES_NO | wxCANCEL ) != wxYES )
-                {           
-                    // no server
-                    return FALSE;
-                }
-            }
-            nsleep++;
-            
-            m_connection = (MyConnection *)m_client->MakeConnection(hostName, service, "HELP");
-        }
+        event.Skip();
     }
-
-    return (m_connection != NULL);    
-}
-
-wxConnectionBase *MyClient::OnMakeConnection()
-{
-    return new MyConnection;
-}
-
-MyConnection::MyConnection()
-            : wxConnection()
-{
-    g_MainFrame->m_connection = this;
-}
-
-MyConnection::~MyConnection()
-{
-    g_MainFrame->m_connection = NULL;
-}
-
-bool MyConnection::OnAdvise(const wxString& topic, const wxString& item, char *data, int size, wxIPCFormat format)
-{
-    return TRUE;
-}
-
-bool MyConnection::OnDisconnect()
-{
-	g_MainFrame->m_connection = NULL;
-
-    delete this;
-
-    return TRUE;
 }
 
