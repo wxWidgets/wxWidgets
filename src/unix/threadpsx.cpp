@@ -1260,7 +1260,8 @@ wxThreadError wxThread::Kill()
 #if !HAVE_THREAD_CLEANUP_FUNCTIONS
                 ScheduleThreadForDeletion();
 
-                OnExit();
+                // don't call OnExit() here, it can only be called in the
+                // threads context and we're in the context of another thread
 
                 DeleteThread(this);
 #endif // HAVE_THREAD_CLEANUP_FUNCTIONS

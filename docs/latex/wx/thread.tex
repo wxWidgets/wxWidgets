@@ -210,10 +210,11 @@ be used with extreme care (and not used at all whenever possible)!} The resource
 allocated to the thread will not be freed and the state of the C runtime library
 may become inconsistent. Use \helpref{Delete()}{wxthreaddelete} instead.
 
-For detached threads Kill() will also call \helpref{OnExit}{wxthreadonexit} 
-and delete the associated C++ object, however this will not happen for
-joinable threads and this means that you will still have to delete the
-wxThread object yourself to avoid memory leaks.
+For detached threads Kill() will also delete the associated C++ object,
+however this will not happen for joinable threads and this means that you will
+still have to delete the wxThread object yourself to avoid memory leaks.
+In neither case \helpref{OnExit}{wxthreadonexit} of the dying thread will be
+called, so no thread-specific cleanup will be performed.
 
 This function can only be called from another thread context, i.e. a thread
 can not kill itself.
@@ -228,7 +229,8 @@ paused (in the latter case, the thread will be resumed first) - if you do it,
 
 Called when the thread exits. This function is called in the context of the
 thread associated with the wxThread object, not in the context of the main
-thread.
+thread. This function will not be called if the thread was 
+\helpref{killed}{wxthreadkill}.
 
 This function should never be called directly.
 
