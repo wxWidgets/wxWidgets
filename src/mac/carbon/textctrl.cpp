@@ -2344,7 +2344,7 @@ wxInt16 wxMacMLTEClassicControl::MacControlUserPaneFocusProc(wxInt16 action)
         case kControlFocusPrevPart:
         case kControlFocusNextPart:
             MacFocusPaneText( ( !wasFocused));
-            focusResult = (!wasFocused) ? kControlEditTextPart : kControlFocusNoPart;
+            focusResult = (!wasFocused) ? (ControlPartCode) kControlEditTextPart : (ControlPartCode) kControlFocusNoPart;
             break;
             
         case kControlFocusNoPart:
@@ -2483,6 +2483,7 @@ static pascal ControlPartCode wxMacControlUserPaneFocusProc(ControlRef control, 
         return kControlNoPart ;
 }
 
+/*
 static pascal void wxMacControlUserPaneBackgroundProc(ControlRef control, ControlBackgroundPtr info)
 {
     wxTextCtrl *textCtrl =  wxDynamicCast( wxFindControlFromMacControl(control) , wxTextCtrl ) ;
@@ -2490,6 +2491,7 @@ static pascal void wxMacControlUserPaneBackgroundProc(ControlRef control, Contro
     if ( win )
         win->MacControlUserPaneBackgroundProc(info) ;
 }
+*/
 #endif
 
 // TXNRegisterScrollInfoProc

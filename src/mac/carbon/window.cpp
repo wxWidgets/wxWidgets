@@ -1811,7 +1811,6 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
     {
         // we don't adjust twice for the origin
         Rect r = wxMacGetBoundsForControl(this , wxPoint( actualX,actualY), wxSize( actualWidth, actualHeight ) , false ) ;
-        bool vis = MacIsReallyShown() ;
 
         MacInvalidateBorders() ;
         

@@ -247,7 +247,6 @@ void wxToolBarTool::SetPosition(const wxPoint& position)
 
     if ( ! GetToolBar()->MacGetTopLevelWindow()->MacUsesCompositing() )
     {
-        WindowRef rootwindow = (WindowRef) GetToolBar()->MacGetTopLevelWindowRef() ;    
         GetToolBar()->MacWindowToRootWindow( &x , &y ) ;
         mac_x += x;
         mac_y += y;
