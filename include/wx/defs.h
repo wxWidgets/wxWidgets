@@ -399,7 +399,9 @@ typedef int wxWindowID;
 /*  NULL declaration: it must be defined as 0 for C++ programs (in particular, */
 /*  it must not be defined as "(void *)0" which is standard for C but completely */
 /*  breaks C++ code) */
+#ifndef __HANDHELDPC__
 #include <stddef.h>
+#endif
 
 /*  delete pointer if it is not NULL and NULL it afterwards */
 /*  (checking that it's !NULL before passing it to delete is just a */
@@ -1030,7 +1032,11 @@ enum wxStretch
     wxTILE                    = 0xc000,
 
     // for compatibility only, default now, don't use explicitly any more
-    wxADJUST_MINSIZE          = 0x0000
+#if WXWIN_COMPATIBILITY_2_4    
+    wxADJUST_MINSIZE          = 0x00100000
+#else
+    wxADJUST_MINSIZE          = 0
+#endif
 };
 
 /*  border flags: the values are chosen for backwards compatibility */
