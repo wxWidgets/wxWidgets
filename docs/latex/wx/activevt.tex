@@ -32,12 +32,14 @@ bar changing colour, and a subwindow gaining the keyboard focus.
 An application is activated or deactivated when one of its frames becomes activated,
 or a frame becomes inactivate resulting in all application frames being inactive. (Windows only)
 
+Please note that usually you should call \helpref{event.Skip()}{wxeventskip} in
+your handlers for these events as not doing so can result in strange effects,
+especially on Mac platform.
+
 \wxheading{See also}
 
-%\helpref{wxWindow::OnActivate}{wxwindowonactivate},\rtfsp
-%% GD: OnXXX functions are not documented
-%%\helpref{wxApp::OnActivate}{wxapponactivate},\rtfsp
-\helpref{Event handling overview}{eventhandlingoverview}
+\helpref{Event handling overview}{eventhandlingoverview},\rtfsp
+\helpref{wxApp::IsActive}{wxappisactive}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
