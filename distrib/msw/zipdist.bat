@@ -6,7 +6,7 @@ if "%src" == "" goto usage
 if "%dest" == "" goto usage
 echo About to archive an external wxWindows distribution:
 echo   From   %src
-echo   To     %dest\wx200gen.zip, %dest\wx200doc.zip, %dest\wx200msw.zip, %dest\wx200ps.zip, %dest\wx200hlp.zip, %dest\wx200htm.zip, %dest\wx200pdf.zip
+echo   To     %dest
 echo CTRL-C if this is not correct.
 pause
 
@@ -18,6 +18,7 @@ zip32 -@ %dest\wx200gen.zip < %src\distrib\msw\generic.rsp
 zip32 -@ %dest\wx200msw.zip < %src\distrib\msw\msw.rsp
 zip32 -@ %dest\wx200gtk.zip < %src\distrib\msw\gtk.rsp
 zip32 -@ %dest\wx200stubs.zip < %src\distrib\msw\stubs.rsp
+zip32 -@ %dest\wx200mot.zip < %src\distrib\msw\motif.rsp
 zip32 -@ %dest\wx200doc.zip < %src\distrib\msw\docsrc.rsp
 
 zip32 -@ %dest\wx200hlp.zip < %src\distrib\msw\wx_hlp.rsp

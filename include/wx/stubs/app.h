@@ -32,10 +32,6 @@ class WXDLLEXPORT wxLog;
 
 WXDLLEXPORT_DATA(extern wxApp*) wxTheApp;
 
-void WXDLLEXPORT wxCleanUp();
-void WXDLLEXPORT wxCommonCleanUp(); // Call this from the platform's wxCleanUp()
-void WXDLLEXPORT wxCommonInit();    // Call this from the platform's initialization
-
 // Force an exit from main loop
 void WXDLLEXPORT wxExit();
 
@@ -132,8 +128,9 @@ protected:
 public:
 
   // Implementation
-  static void CommonInit();
-  static void CommonCleanUp();
+  static bool Initialize();
+  static void CleanUp();
+
   void DeletePendingObjects();
   bool ProcessIdle();
 

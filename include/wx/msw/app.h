@@ -30,10 +30,6 @@ class WXDLLEXPORT wxLog;
 
 WXDLLEXPORT_DATA(extern wxApp*) wxTheApp;
 
-void WXDLLEXPORT wxCleanUp();
-void WXDLLEXPORT wxCommonCleanUp(); // Call this from the platform's wxCleanUp()
-void WXDLLEXPORT wxCommonInit();    // Call this from the platform's initialization
-
 // Force an exit from main loop
 void WXDLLEXPORT wxExit();
 
@@ -46,7 +42,7 @@ class WXDLLEXPORT wxApp: public wxEvtHandler
 {
   DECLARE_DYNAMIC_CLASS(wxApp)
   wxApp();
-  inline ~wxApp() {}
+  ~wxApp();
 
   static void SetInitializerFunction(wxAppInitializerFunction fn) { m_appInitFn = fn; }
   static wxAppInitializerFunction GetInitializerFunction() { return m_appInitFn; }
@@ -131,11 +127,12 @@ protected:
 public:
 
   // Implementation
-  static bool Initialize(WXHINSTANCE instance);
-  static void CommonInit();
-  static bool RegisterWindowClasses();
+  static bool Initialize();
   static void CleanUp();
-  static void CommonCleanUp();
+
+  static bool RegisterWindowClasses();
+  // Convert Windows to argc, argv style
+  void ConvertToStandardCommandArgs(char* p);
   virtual bool DoMessage();
   virtual bool ProcessMessage(WXMSG* pMsg);
   void DeletePendingObjects();
@@ -148,8 +145,6 @@ public:
 
 protected:
   bool              m_keepGoing ;
-//  bool              m_resourceCollection;
-//  bool              m_pendingCleanup; // TRUE if we need to check the GDI object lists for cleanup
 
 DECLARE_EVENT_TABLE()
 };

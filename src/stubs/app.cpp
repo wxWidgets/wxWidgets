@@ -53,7 +53,7 @@ END_EVENT_TABLE()
 
 long wxApp::sm_lastMessageTime = 0;
 
-void wxApp::CommonInit()
+bool wxApp::Initialize()
 {
 #ifdef __WXMSW__
   wxBuffer = new char[1500];
@@ -61,6 +61,14 @@ void wxApp::CommonInit()
   wxBuffer = new char[BUFSIZ + 512];
 #endif
 
+#if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
+
+  streambuf* sBuf = new wxDebugStreamBuf;
+  ostream* oStr = new ostream(sBuf) ;
+  wxDebugContext::SetStream(oStr, sBuf);
+
+#endif
+  
   wxClassInfo::InitializeClasses();
 
   wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
@@ -82,9 +90,11 @@ void wxApp::CommonInit()
 
   wxModule::RegisterModules();
   wxASSERT( wxModule::InitializeModules() == TRUE );
+
+  return TRUE;
 }
 
-void wxApp::CommonCleanUp()
+void wxApp::CleanUp()
 {
   wxModule::CleanUpModules();
 
@@ -132,20 +142,8 @@ void wxApp::CommonCleanUp()
 
 int wxEntry( int argc, char *argv[] )
 {
-  wxClassInfo::InitializeClasses();
-  
-#if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
-
-#if !defined(_WINDLL)
-  streambuf* sBuf = new wxDebugStreamBuf;
-#else
-  streambuf* sBuf = NULL;
-#endif
-  ostream* oStr = new ostream(sBuf) ;
-  wxDebugContext::SetStream(oStr, sBuf);
-
-#endif
-  
+  if (!wxApp::Initialize())
+    return FALSE;
   if (!wxTheApp)
   {
     if (!wxApp::GetInitializerFunction())
@@ -165,10 +163,6 @@ int wxEntry( int argc, char *argv[] )
 
   wxTheApp->argc = argc;
   wxTheApp->argv = argv;
-
-  // TODO: your platform-specific initialization.
-
-  wxApp::CommonInit();
 
   // GUI-specific initialization, such as creating an app context.
   wxTheApp->OnInitGui();
@@ -193,7 +187,7 @@ int wxEntry( int argc, char *argv[] )
   
   wxTheApp->OnExit();
   
-  wxApp::CommonCleanUp();
+  wxApp::CleanUp();
 
   delete wxTheApp;
   wxTheApp = NULL;
@@ -393,7 +387,7 @@ wxWindow* wxApp::GetTopWindow() const
 
 void wxExit()
 {
-  wxApp::CommonCleanUp();
+  wxApp::CleanUp();
 /*
  * TODO: Exit in some platform-specific way. Not recommended that the app calls this:
  * only for emergencies.

@@ -884,5 +884,15 @@ typedef int (__stdcall *WXFARPROC)();
 
 #endif
 
+#ifdef __WXMOTIF__
+// Stand-ins for X/Xt/Motif types
+typedef void*           WXWindow;
+typedef void*           WXWidget;
+typedef void*           WXAppContext;
+typedef void*           WXMainColormap;
+typedef void            WXDisplay;
+typedef void            WXEvent;
+#endif
+
 #endif
     // _WX_DEFS_H_

@@ -100,11 +100,57 @@ long wxApp::sm_lastMessageTime = 0;
 static HINSTANCE gs_hRichEdit = NULL;
 #endif
 
-bool wxApp::Initialize(WXHINSTANCE instance)
-{
-  HINSTANCE hInstance = (HINSTANCE) instance;
+//// Initialize
 
-  CommonInit();
+bool wxApp::Initialize()
+{
+  wxBuffer = new char[1500];
+
+/* Doesn't work when using the makefiles, for some reason.
+  #if defined(__WXDEBUG__) && defined(_MSC_VER)
+    // do check for memory leaks on program exit
+    // (another useful flag is _CRTDBG_DELAY_FREE_MEM_DF which doesn't free
+    //  deallocated memory which may be used to simulate low-memory condition)
+    _CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) | _CRTDBG_LEAK_CHECK_DF);
+  #endif // debug build under MS VC++
+*/
+
+#if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
+
+#if !defined(_WINDLL)
+  streambuf* sBuf = new wxDebugStreamBuf;
+#else
+  streambuf* sBuf = NULL;
+#endif
+  ostream* oStr = new ostream(sBuf) ;
+  wxDebugContext::SetStream(oStr, sBuf);
+
+#endif  // USE_MEMORY_TRACING
+
+  wxClassInfo::InitializeClasses();
+
+#if USE_RESOURCES
+  wxGetResource("wxWindows", "OsVersion", &wxOsVersion);
+#endif
+
+  wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
+  wxTheColourDatabase->Initialize();
+
+  wxInitializeStockLists();
+  wxInitializeStockObjects();
+
+#if USE_WX_RESOURCES
+  wxInitializeResourceSystem();
+#endif
+
+  // For PostScript printing
+#if USE_POSTSCRIPT
+  wxInitializePrintSetupData();
+  wxThePrintPaperDatabase = new wxPrintPaperDatabase;
+  wxThePrintPaperDatabase->CreateDatabase();
+#endif
+
+  wxBitmap::InitStandardHandlers();
 
 #if defined(__WIN95__)
   InitCommonControls();
@@ -123,19 +169,21 @@ bool wxApp::Initialize(WXHINSTANCE instance)
 #endif
 
 #if CTL3D
-  if (!Ctl3dRegister(hInstance))
+  if (!Ctl3dRegister(wxhInstance))
     wxFatalError("Cannot register CTL3D");
 
-  Ctl3dAutoSubclass(hInstance);
+  Ctl3dAutoSubclass(wxhInstance);
 #endif
 
-  wxSTD_FRAME_ICON = LoadIcon(hInstance, "wxSTD_FRAME");
-  wxSTD_MDIPARENTFRAME_ICON = LoadIcon(hInstance, "wxSTD_MDIPARENTFRAME");
-  wxSTD_MDICHILDFRAME_ICON = LoadIcon(hInstance, "wxSTD_MDICHILDFRAME");
+  g_globalCursor = new wxCursor;
 
-  wxDEFAULT_FRAME_ICON = LoadIcon(hInstance, "wxDEFAULT_FRAME");
-  wxDEFAULT_MDIPARENTFRAME_ICON = LoadIcon(hInstance, "wxDEFAULT_MDIPARENTFRAME");
-  wxDEFAULT_MDICHILDFRAME_ICON = LoadIcon(hInstance, "wxDEFAULT_MDICHILDFRAME");
+  wxSTD_FRAME_ICON = LoadIcon(wxhInstance, "wxSTD_FRAME");
+  wxSTD_MDIPARENTFRAME_ICON = LoadIcon(wxhInstance, "wxSTD_MDIPARENTFRAME");
+  wxSTD_MDICHILDFRAME_ICON = LoadIcon(wxhInstance, "wxSTD_MDICHILDFRAME");
+
+  wxDEFAULT_FRAME_ICON = LoadIcon(wxhInstance, "wxDEFAULT_FRAME");
+  wxDEFAULT_MDIPARENTFRAME_ICON = LoadIcon(wxhInstance, "wxDEFAULT_MDIPARENTFRAME");
+  wxDEFAULT_MDICHILDFRAME_ICON = LoadIcon(wxhInstance, "wxDEFAULT_MDICHILDFRAME");
 
   RegisterWindowClasses();
 
@@ -143,7 +191,7 @@ bool wxApp::Initialize(WXHINSTANCE instance)
 
   LOGBRUSH lb ;
   lb.lbStyle = BS_PATTERN;
-  lb.lbHatch = (int)LoadBitmap( hInstance, "wxDISABLE_BUTTON_BITMAP" ) ;
+  lb.lbHatch = (int)LoadBitmap( wxhInstance, "wxDISABLE_BUTTON_BITMAP" ) ;
   wxDisableButtonBrush = ::CreateBrushIndirect( & lb ) ;
   ::DeleteObject( (HGDIOBJ)lb.lbHatch ) ;
 
@@ -167,6 +215,8 @@ bool wxApp::Initialize(WXHINSTANCE instance)
   return TRUE;
 }
 
+//// RegisterWindowClasses
+
 bool wxApp::RegisterWindowClasses()
 {
 ///////////////////////////////////////////////////////////////////////
@@ -184,7 +234,7 @@ bool wxApp::RegisterWindowClasses()
 //  wndclass.hbrBackground = GetStockObject( WHITE_BRUSH );
   wndclass.lpszMenuName  = NULL;
 #ifdef _MULTIPLE_INSTANCES
-  sprintf( wxFrameClassName,"wxFrameClass%d", hInstance );
+  sprintf( wxFrameClassName,"wxFrameClass%d", wxhInstance );
 #endif
   wndclass.lpszClassName = wxFrameClassName;
 
@@ -291,12 +341,113 @@ bool wxApp::RegisterWindowClasses()
   return TRUE;
 }
 
-// Cleans up any wxWindows internal structures left lying around
+//// Convert Windows to argc, argv style
+
+void wxApp::ConvertToStandardCommandArgs(char* lpCmdLine)
+{
+  // Split command line into tokens, as in usual main(argc, argv)
+  char **command = new char*[50];
+
+  int count = 0;
+  char *buf = new char[strlen(lpCmdLine) + 1];
+
+  // Hangs around until end of app. in case
+  // user carries pointers to the tokens
+
+  /* Model independent strcpy */
+  int i;
+  for (i = 0; (buf[i] = lpCmdLine[i]) != 0; i++)
+  {
+    /* loop */;
+  }
+
+  // Get application name
+  char name[200];
+  ::GetModuleFileName(wxhInstance, name, 199);
+
+  // Is it only 16-bit Borland that already copies the program name
+  // to the first argv index?
+#if !defined(__GNUWIN32__)
+// #if ! (defined(__BORLANDC__) && !defined(__WIN32__))
+  command[count++] = copystring(name);
+// #endif
+#endif
+
+  strcpy(name, wxFileNameFromPath(name));
+  wxStripExtension(name);
+  wxTheApp->SetAppName(name);
+
+  /* Break up string */
+  // Treat strings enclosed in double-quotes as single arguments
+    char* str = buf;
+	while (*str)
+	{
+		while (*str && *str <= ' ') str++;	// skip whitespace
+		if (*str == '"')
+		{
+			str++;
+			command[count++] = str;
+			while (*str && *str != '"') str++;
+		}
+		else if (*str)
+		{
+			command[count++] = str;
+			while (*str && *str > ' ') str++;
+		}
+		if (*str) *str++ = '\0';
+	}
+
+  wxTheApp->argv = new char*[argc+1];
+  wxTheApp->argv[count] = NULL; /* argv[] is NULL terminated list! */
+  wxTheApp->argc = count;
+
+  for (i = 0; i < count; i++)
+  {
+    wxTheApp->argv[i] = copystring(command[i]);
+  }
+  delete[] buf;
+}
+
+//// Cleans up any wxWindows internal structures left lying around
+
 void wxApp::CleanUp()
 {
+  //// COMMON CLEANUP
   wxModule::CleanUpModules();
 
-  CommonCleanUp();
+#if USE_WX_RESOURCES
+  wxCleanUpResourceSystem();
+
+//  wxDefaultResourceTable->ClearTable();
+#endif
+
+  // Indicate that the cursor can be freed,
+  // so that cursor won't be deleted by deleting
+  // the bitmap list before g_globalCursor goes out
+  // of scope (double deletion of the cursor).
+  wxSetCursor(wxNullCursor);
+  delete g_globalCursor;
+
+  wxDeleteStockObjects() ;
+
+  // Destroy all GDI lists, etc.
+  wxDeleteStockLists();
+
+  delete wxTheColourDatabase;
+  wxTheColourDatabase = NULL;
+
+#if USE_POSTSCRIPT
+  wxInitializePrintSetupData(FALSE);
+  delete wxThePrintPaperDatabase;
+  wxThePrintPaperDatabase = NULL;
+#endif
+
+  wxBitmap::CleanUpHandlers();
+
+  delete[] wxBuffer;
+  wxBuffer = NULL;
+
+  //// WINDOWS-SPECIFIC CLEANUP
 
   wxSetKeyboardHook(FALSE);
 
@@ -344,108 +495,16 @@ void wxApp::CleanUp()
   delete wxLog::SetActiveTarget(NULL);
 }
 
-void wxApp::CommonInit()
-{
-#ifdef __WXMSW__
-  wxBuffer = new char[1500];
-#else
-  wxBuffer = new char[BUFSIZ + 512];
-#endif
-
-  wxClassInfo::InitializeClasses();
-
-#if USE_RESOURCES
-  wxGetResource("wxWindows", "OsVersion", &wxOsVersion);
-#endif
-
-  wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
-  wxTheColourDatabase->Initialize();
-
-  wxInitializeStockLists();
-  wxInitializeStockObjects();
-
-#if USE_WX_RESOURCES
-  wxInitializeResourceSystem();
-#endif
-
-  // For PostScript printing
-#if USE_POSTSCRIPT
-  wxInitializePrintSetupData();
-  wxThePrintPaperDatabase = new wxPrintPaperDatabase;
-  wxThePrintPaperDatabase->CreateDatabase();
-#endif
-
-  wxBitmap::InitStandardHandlers();
-
-  g_globalCursor = new wxCursor;
-}
-
-void wxApp::CommonCleanUp()
-{
-#if USE_WX_RESOURCES
-  wxCleanUpResourceSystem();
-
-//  wxDefaultResourceTable->ClearTable();
-#endif
-
-  // Indicate that the cursor can be freed,
-  // so that cursor won't be deleted by deleting
-  // the bitmap list before g_globalCursor goes out
-  // of scope (double deletion of the cursor).
-  wxSetCursor(wxNullCursor);
-  delete g_globalCursor;
-
-  wxDeleteStockObjects() ;
-
-  // Destroy all GDI lists, etc.
-  wxDeleteStockLists();
-
-  delete wxTheColourDatabase;
-  wxTheColourDatabase = NULL;
-
-#if USE_POSTSCRIPT
-  wxInitializePrintSetupData(FALSE);
-  delete wxThePrintPaperDatabase;
-  wxThePrintPaperDatabase = NULL;
-#endif
-
-  wxBitmap::CleanUpHandlers();
-
-  delete[] wxBuffer;
-  wxBuffer = NULL;
-}
-
 #if !defined(_WINDLL) || (defined(_WINDLL) && defined(WXMAKINGDLL))
 
-// Main wxWindows entry point
+//// Main wxWindows entry point
 
-int wxEntry(WXHINSTANCE hInstance, WXHINSTANCE WXUNUSED(hPrevInstance), char *m_lpCmdLine,
+int wxEntry(WXHINSTANCE hInstance, WXHINSTANCE WXUNUSED(hPrevInstance), char *lpCmdLine,
                     int nCmdShow, bool enterLoop)
 {
   wxhInstance = (HINSTANCE) hInstance;
 
-/* Doesn't work when using the makefiles, for some reason.
-  #if defined(__WXDEBUG__) && defined(_MSC_VER)
-    // do check for memory leaks on program exit
-    // (another useful flag is _CRTDBG_DELAY_FREE_MEM_DF which doesn't free
-    //  deallocated memory which may be used to simulate low-memory condition)
-    _CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) | _CRTDBG_LEAK_CHECK_DF);
-  #endif // debug build under MS VC++
-*/
-
-#if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
-
-#if !defined(_WINDLL)
-  streambuf* sBuf = new wxDebugStreamBuf;
-#else
-  streambuf* sBuf = NULL;
-#endif
-  ostream* oStr = new ostream(sBuf) ;
-  wxDebugContext::SetStream(oStr, sBuf);
-
-#endif  // USE_MEMORY_TRACING
-
-  if (!wxApp::Initialize((WXHINSTANCE) wxhInstance))
+  if (!wxApp::Initialize())
     return 0;
 
   // The app may have declared a global application object, but we recommend
@@ -467,61 +526,7 @@ int wxEntry(WXHINSTANCE hInstance, WXHINSTANCE WXUNUSED(hPrevInstance), char *m_
     return 0;
   }
 
-  // Split command line into tokens, as in usual main(argc, argv)
-  char **command = new char*[50];
-
-  int count = 0;
-  char *buf = new char[strlen(m_lpCmdLine) + 1];
-
-  // Hangs around until end of app. in case
-  // user carries pointers to the tokens
-
-  /* Model independent strcpy */
-  int i;
-  for (i = 0; (buf[i] = m_lpCmdLine[i]) != 0; i++)
-  {
-    /* loop */;
-  }
-
-  // Get application name
-  char name[200];
-  ::GetModuleFileName(wxhInstance, name, 199);
-
-  // Is it only 16-bit Borland that already copies the program name
-  // to the first argv index?
-#if !defined(__GNUWIN32__)
-// #if ! (defined(__BORLANDC__) && !defined(__WIN32__))
-  command[count++] = copystring(name);
-// #endif
-#endif
-
-  strcpy(name, wxFileNameFromPath(name));
-  wxStripExtension(name);
-  wxTheApp->SetAppName(name);
-
-  /* Break up string */
-  // Treat strings enclosed in double-quotes as single arguments
-    char* str = buf;
-	while (*str)
-	{
-		while (*str && *str <= ' ') str++;	// skip whitespace
-		if (*str == '"')
-		{
-			str++;
-			command[count++] = str;
-			while (*str && *str != '"') str++;
-		}
-		else if (*str)
-		{
-			command[count++] = str;
-			while (*str && *str > ' ') str++;
-		}
-		if (*str) *str++ = '\0';
-	}
-  command[count] = NULL; /* argv[] is NULL terminated list! */
-
-  wxTheApp->argc = count;
-  wxTheApp->argv = command;
+  wxTheApp->ConvertToStandardCommandArgs(lpCmdLine);
   wxTheApp->m_nCmdShow = nCmdShow;
 
   // GUI-specific initialisation. In fact on Windows we don't have any,
@@ -537,11 +542,6 @@ int wxEntry(WXHINSTANCE hInstance, WXHINSTANCE WXUNUSED(hPrevInstance), char *m_
         delete wxTheApp;
         wxTheApp = NULL;
 
-        delete [] buf ;
-
-        // TODO: This should really be cleaned up in ~wxApp
-        delete [] command[0] ;
-        delete [] command ;
    	    return 0;
   }
 
@@ -581,10 +581,6 @@ int wxEntry(WXHINSTANCE hInstance, WXHINSTANCE WXUNUSED(hPrevInstance), char *m_
   delete wxTheApp;
   wxTheApp = NULL;
 
-  delete [] buf ;
-  delete [] command[0] ;
-  delete [] command ;
-
 #if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
   // At this point we want to check if there are any memory
   // blocks that aren't part of the wxDebugContext itself,
@@ -604,10 +600,12 @@ int wxEntry(WXHINSTANCE hInstance, WXHINSTANCE WXUNUSED(hPrevInstance), char *m_
 
 #else /*  _WINDLL  */
 
+//// Entry point for DLLs
+
 int wxEntry(WXHINSTANCE hInstance)
 {
   wxhInstance = (HINSTANCE) hInstance;
-  wxApp::Initialize((WXHINSTANCE) wxhInstance);
+  wxApp::Initialize();
 
   // The app may have declared a global application object, but we recommend
   // the IMPLEMENT_APP macro is used instead, which sets an initializer function
@@ -644,17 +642,15 @@ int wxEntry(WXHINSTANCE hInstance)
 }
 #endif // _WINDLL
 
-// Static member initialization
+//// Static member initialization
+
 wxAppInitializerFunction wxApp::m_appInitFn = (wxAppInitializerFunction) NULL;
 
 wxApp::wxApp()
 {
   m_topWindow = NULL;
   wxTheApp = this;
-//  work_proc = NULL ;
   m_className = "";
-//  m_resourceCollection = TRUE;
-//  m_pendingCleanup = FALSE;
   m_wantDebugOutput = TRUE ;
   m_appName = "";
   argc = 0;
@@ -666,6 +662,17 @@ wxApp::wxApp()
 #endif
   m_exitOnFrameDelete = TRUE;
   m_auto3D = TRUE;
+}
+
+wxApp::~wxApp()
+{
+  // Delete command-line args
+  int i;
+  for (i = 0; i < argc; i++)
+  {
+    delete[] argv[i];
+  }
+  delete argv;
 }
 
 bool wxApp::Initialized()
@@ -878,60 +885,6 @@ void wxApp::DeletePendingObjects()
     node = wxPendingDelete.First();
   }
 }
-
-/*
-// Free up font objects that are not being used at present.
-bool wxApp::DoResourceCleanup()
-{
-//  wxDebugMsg("ResourceCleanup\n");
-
-  if (wxTheFontList)
-  {
-    wxNode *node = wxTheFontList->First();
-    while (node)
-    {
-      wxGDIObject *obj = (wxGDIObject *)node->Data();
-      if ((obj->GetResourceHandle() != 0) && (obj->GetResourceUsage() == 0))
-      {
-//        wxDebugMsg("Freeing font %ld (GDI object %d)\n", (long)obj, (int)obj->GetResourceHandle());
-        obj->FreeResource();
-      }
-      node = node->Next();
-    }
-  }
-  if (wxThePenList)
-  {
-    wxNode *node = wxThePenList->First();
-    while (node)
-    {
-      wxGDIObject *obj = (wxGDIObject *)node->Data();
-      if ((obj->GetResourceHandle() != 0) && (obj->GetResourceUsage() == 0))
-      {
-//        wxDebugMsg("Freeing pen %ld (GDI object %d)\n", (long)obj, (int)obj->GetResourceHandle());
-        obj->FreeResource();
-      }
-      node = node->Next();
-    }
-  }
-  if (wxTheBrushList)
-  {
-    wxNode *node = wxTheBrushList->First();
-    while (node)
-    {
-      wxGDIObject *obj = (wxGDIObject *)node->Data();
-      if ((obj->GetResourceHandle() != 0) && (obj->GetResourceUsage() == 0))
-      {
-//        wxDebugMsg("Freeing brush %ld (GDI object %d)\n", (long)obj, (int)obj->GetResourceHandle());
-        obj->FreeResource();
-      }
-      node = node->Next();
-    }
-  }
-
-  SetPendingCleanup(FALSE);
-  return FALSE;
-}
-*/
 
 wxLog* wxApp::CreateLogTarget()
 {

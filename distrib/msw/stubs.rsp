@@ -3,6 +3,9 @@ src/stubs/*.h
 src/stubs/makefile*
 src/stubs/*.inc
 
+src/make.env
+src/makeprog.env
+
 include/wx/stubs/*.h
 include/wx/stubs/*.rc
 
