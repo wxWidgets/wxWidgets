@@ -1528,14 +1528,18 @@ long wxListCtrl::InsertColumn(long col,
     return InsertColumn(col, item);
 }
 
-// Scrolls the list control. If in icon, small icon or report view mode,
-// x specifies the number of pixels to scroll. If in list view mode, x
-// specifies the number of columns to scroll.
-// If in icon, small icon or list view mode, y specifies the number of pixels
-// to scroll. If in report view mode, y specifies the number of lines to scroll.
+// scroll the control by the given number of pixels (exception: in list view,
+// dx is interpreted as number of columns)
 bool wxListCtrl::ScrollList(int dx, int dy)
 {
-    return (ListView_Scroll(GetHwnd(), dx, dy) != 0);
+    if ( !ListView_Scroll(GetHwnd(), dx, dy) )
+    {
+        wxLogDebug(_T("ListView_Scroll(%d, %d) failed"), dx, dy);
+
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 // Sort items.
