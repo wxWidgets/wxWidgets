@@ -269,8 +269,6 @@ wxToolBarToolBase *wxToolBar::CreateTool(wxControl *control)
 
 void wxToolBar::Init()
 {
-    m_fg =
-    m_bg = (GdkColor *)NULL;
     m_toolbar = (GtkToolbar *)NULL;
     m_blockEvent = FALSE;
     m_defaultWidth = 32;
@@ -279,8 +277,6 @@ void wxToolBar::Init()
 
 wxToolBar::~wxToolBar()
 {
-    delete m_fg;
-    delete m_bg;
 }
 
 bool wxToolBar::Create( wxWindow *parent,
@@ -342,34 +338,6 @@ bool wxToolBar::Create( wxWindow *parent,
     if (style & wxTB_FLAT)
         gtk_toolbar_set_button_relief( GTK_TOOLBAR(m_toolbar), GTK_RELIEF_NONE );
 #endif
-
-
-    m_fg = new GdkColor;
-    m_fg->red = 0;
-    m_fg->green = 0;
-    m_fg->blue = 0;
-    wxColour fg(0,0,0);
-    fg.CalcPixel( gtk_widget_get_colormap( GTK_WIDGET(m_toolbar) ) );
-    m_fg->pixel = fg.GetPixel();
-
-    m_bg = new GdkColor;
-    m_bg->red = 65535;
-    m_bg->green = 65535;
-    m_bg->blue = 49980;
-    wxColour bg(255,255,196);
-    bg.CalcPixel( gtk_widget_get_colormap( GTK_WIDGET(m_toolbar) ) );
-    m_bg->pixel = bg.GetPixel();
-
-    gtk_tooltips_force_window( GTK_TOOLBAR(m_toolbar)->tooltips );
-
-    GtkStyle *g_style =
-        gtk_style_copy(
-                gtk_widget_get_style(
-                    GTK_TOOLBAR(m_toolbar)->tooltips->tip_window ) );
-
-    g_style->bg[GTK_STATE_NORMAL] = *m_bg;
-
-    gtk_widget_set_style( GTK_TOOLBAR(m_toolbar)->tooltips->tip_window, g_style );
 
     m_parent->DoAddChild( this );
 

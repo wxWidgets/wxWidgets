@@ -64,9 +64,6 @@ public:
 
     GtkToolbar   *m_toolbar;
 
-    GdkColor     *m_fg;
-    GdkColor     *m_bg;
-
     bool          m_blockEvent;
 
     void OnInternalIdle();
