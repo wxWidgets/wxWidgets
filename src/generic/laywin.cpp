@@ -254,11 +254,14 @@ bool wxLayoutAlgorithm::LayoutWindow(wxWindow* parent, wxWindow* mainWindow)
     {
         wxWindow* win = (wxWindow*) node->Data();
 
-        event.SetId(win->GetId());
-        event.SetEventObject(win);
-        event.SetFlags(0); // ??
+        if (win != mainWindow)
+        {
+            event.SetId(win->GetId());
+            event.SetEventObject(win);
+            event.SetFlags(0); // ??
 
-        win->GetEventHandler()->ProcessEvent(event);
+            win->GetEventHandler()->ProcessEvent(event);
+        }
 
         node = node->Next();
     }
