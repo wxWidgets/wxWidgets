@@ -45,6 +45,7 @@ extern wxWindowGTK  *g_delayedFocus;
 // "clicked"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void gtk_radiobutton_clicked_callback( GtkToggleButton *button, wxRadioBox *rb )
 {
     if (g_isIdle) wxapp_install_idle_handler();
@@ -60,11 +61,13 @@ static void gtk_radiobutton_clicked_callback( GtkToggleButton *button, wxRadioBo
     event.SetEventObject( rb );
     rb->GetEventHandler()->ProcessEvent(event);
 }
+}
 
 //-----------------------------------------------------------------------------
 // "key_press_event"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint gtk_radiobox_keypress_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxRadioBox *rb )
 {
     if (g_isIdle)
@@ -111,7 +114,9 @@ static gint gtk_radiobox_keypress_callback( GtkWidget *widget, GdkEventKey *gdk_
 
     return TRUE;
 }
+}
 
+extern "C" {
 static gint gtk_radiobutton_focus_in( GtkWidget *widget,
                                       GdkEvent *WXUNUSED(event),
                                       wxRadioBox *win )
@@ -135,7 +140,9 @@ static gint gtk_radiobutton_focus_in( GtkWidget *widget,
 
     return FALSE;
 }
+}
 
+extern "C" {
 static gint gtk_radiobutton_focus_out( GtkWidget *widget,
                                        GdkEvent *WXUNUSED(event),
                                        wxRadioBox *win )
@@ -151,6 +158,7 @@ static gint gtk_radiobutton_focus_out( GtkWidget *widget,
     win->m_lostFocus = true;
 
     return FALSE;
+}
 }
 
 //-----------------------------------------------------------------------------

@@ -44,6 +44,7 @@ static int    g_SelectionBeforePopup = -2; // -2 <=> the popup is hidden
 //              if it doesn't match an item then just get a single changed
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void
 gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 {
@@ -62,12 +63,16 @@ gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
     event.SetEventObject( combo );
     combo->GetEventHandler()->ProcessEvent( event );
 }
+}
 
+extern "C" {
 static void
 gtk_dummy_callback(GtkEntry *WXUNUSED(entry), GtkCombo *WXUNUSED(combo))
 {
 }
+}
 
+extern "C" {
 static void
 gtk_popup_hide_callback(GtkCombo *WXUNUSED(gtk_combo), wxComboBox *combo)
 {
@@ -86,7 +91,9 @@ gtk_popup_hide_callback(GtkCombo *WXUNUSED(gtk_combo), wxComboBox *combo)
     // reset the selection flag to an identifiable value (-2 = hidden)
     g_SelectionBeforePopup = -2;
 }
+}
 
+extern "C" {
 static void
 gtk_popup_show_callback(GtkCombo *WXUNUSED(gtk_combo), wxComboBox *combo)
 {
@@ -94,11 +101,13 @@ gtk_popup_show_callback(GtkCombo *WXUNUSED(gtk_combo), wxComboBox *combo)
   // if there is no selection, combo->GetSelection() returns -1
     g_SelectionBeforePopup = combo->GetSelection();
 }
+}
 
 //-----------------------------------------------------------------------------
 // "select-child" - click/cursor get select-child, changed, select-child
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void
 gtk_combo_select_child_callback( GtkList *WXUNUSED(list), GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 {
@@ -145,6 +154,7 @@ gtk_combo_select_child_callback( GtkList *WXUNUSED(list), GtkWidget *WXUNUSED(wi
     event2.SetString( combo->GetValue() );
     event2.SetEventObject( combo );
     combo->GetEventHandler()->ProcessEvent( event2 );
+}
 }
 
 //-----------------------------------------------------------------------------

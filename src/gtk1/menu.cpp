@@ -96,12 +96,14 @@ struct _GtkPixmapMenuItemClass
     guint have_pixmap_count;
 };
 
-
+extern "C" {
 GtkType    gtk_pixmap_menu_item_get_type       (void);
 GtkWidget* gtk_pixmap_menu_item_new            (void);
 void       gtk_pixmap_menu_item_set_pixmap     (GtkPixmapMenuItem *menu_item,
-                                                                    GtkWidget *pixmap);
-#endif // GTK 2.0
+                                                GtkWidget *pixmap);
+}
+
+#endif // !__WXGTK20__
 
 //-----------------------------------------------------------------------------
 // idle system
@@ -149,6 +151,7 @@ static wxString wxReplaceUnderscore( const wxString& title )
 // activate message from GTK
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void gtk_menu_open_callback( GtkWidget *widget, wxMenu *menu )
 {
     if (g_isIdle) wxapp_install_idle_handler();
@@ -162,6 +165,7 @@ static void gtk_menu_open_callback( GtkWidget *widget, wxMenu *menu )
 
     wxWindow *win = menu->GetInvokingWindow();
     if (win) win->GetEventHandler()->ProcessEvent( event );
+}
 }
 
 //-----------------------------------------------------------------------------
@@ -581,6 +585,7 @@ void wxMenuBar::SetLabelTop( size_t pos, const wxString& label )
 // "activate"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
 {
     if (g_isIdle)
@@ -651,11 +656,13 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
         menu->SendEvent(id, item->IsCheckable() ? item->IsChecked() : -1);
     }
 }
+}
 
 //-----------------------------------------------------------------------------
 // "select"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void gtk_menu_hilight_callback( GtkWidget *widget, wxMenu *menu )
 {
     if (g_isIdle) wxapp_install_idle_handler();
@@ -677,11 +684,13 @@ static void gtk_menu_hilight_callback( GtkWidget *widget, wxMenu *menu )
     wxWindow *win = menu->GetInvokingWindow();
     if (win) win->GetEventHandler()->ProcessEvent( event );
 }
+}
 
 //-----------------------------------------------------------------------------
 // "deselect"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void gtk_menu_nolight_callback( GtkWidget *widget, wxMenu *menu )
 {
     if (g_isIdle) wxapp_install_idle_handler();
@@ -703,6 +712,7 @@ static void gtk_menu_nolight_callback( GtkWidget *widget, wxMenu *menu )
     wxWindow *win = menu->GetInvokingWindow();
     if (win)
         win->GetEventHandler()->ProcessEvent( event );
+}
 }
 
 //-----------------------------------------------------------------------------
@@ -1525,7 +1535,7 @@ static void changed_have_pixmap_status         (GtkPixmapMenuItem *menu_item);
 
 static GtkMenuItemClass *parent_class = NULL;
 
-}
+} // extern "C"
 
 #define BORDER_SPACING  3
 #define PMAP_WIDTH 20
@@ -1555,6 +1565,8 @@ gtk_pixmap_menu_item_get_type (void)
 
   return pixmap_menu_item_type;
 }
+
+extern "C" {
 
 /**
  * gtk_pixmap_menu_item_new
@@ -1834,5 +1846,7 @@ changed_have_pixmap_status (GtkPixmapMenuItem *menu_item)
     gtk_widget_queue_resize(GTK_WIDGET(menu_item));
 }
 
-#endif
+} // extern "C"
+
+#endif // !__WXGTK20__
 

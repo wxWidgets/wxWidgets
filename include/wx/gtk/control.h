@@ -29,6 +29,13 @@ class wxControl;
 // wxControl
 //-----------------------------------------------------------------------------
 
+// C-linkage function pointer types for GetDefaultAttributesFromGTKWidget
+extern "C" {
+    typedef GtkWidget* (*wxGtkWidgetNew_t)(void);
+    typedef GtkWidget* (*wxGtkWidgetNewFromStr_t)(const gchar*);
+    typedef GtkWidget* (*wxGtkWidgetNewFromAdj_t)(GtkAdjustment*);
+}
+
 class wxControl : public wxControlBase
 {
 public:
@@ -69,16 +76,16 @@ protected:
                                           bool useBase = false,
                                           int state = -1);
     static wxVisualAttributes
-        GetDefaultAttributesFromGTKWidget(GtkWidget* (*widget_new)(void),
+        GetDefaultAttributesFromGTKWidget(wxGtkWidgetNew_t,
                                           bool useBase = false,
                                           int state = -1);
     static wxVisualAttributes
-        GetDefaultAttributesFromGTKWidget(GtkWidget* (*widget_new)(const gchar*),
+        GetDefaultAttributesFromGTKWidget(wxGtkWidgetNewFromStr_t,
                                           bool useBase = false,
                                           int state = -1);
 
     static wxVisualAttributes
-        GetDefaultAttributesFromGTKWidget(GtkWidget* (*widget_new)(GtkAdjustment*),
+        GetDefaultAttributesFromGTKWidget(wxGtkWidgetNewFromAdj_t,
                                           bool useBase = false,
                                           int state = -1);
 

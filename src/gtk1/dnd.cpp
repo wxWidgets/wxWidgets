@@ -139,6 +139,7 @@ static wxDragResult ConvertFromGTK(long action)
 // "drag_leave"
 // ----------------------------------------------------------------------------
 
+extern "C" {
 static void target_drag_leave( GtkWidget *WXUNUSED(widget),
                                GdkDragContext *context,
                                guint WXUNUSED(time),
@@ -160,11 +161,13 @@ static void target_drag_leave( GtkWidget *WXUNUSED(widget),
     /* after this, invalidate the drop_target's GdkDragContext */
     drop_target->SetDragContext( (GdkDragContext*) NULL );
 }
+}
 
 // ----------------------------------------------------------------------------
 // "drag_motion"
 // ----------------------------------------------------------------------------
 
+extern "C" {
 static gboolean target_drag_motion( GtkWidget *WXUNUSED(widget),
                                     GdkDragContext *context,
                                     gint x,
@@ -256,11 +259,13 @@ static gboolean target_drag_motion( GtkWidget *WXUNUSED(widget),
 
     return ret;
 }
+}
 
 // ----------------------------------------------------------------------------
 // "drag_drop"
 // ----------------------------------------------------------------------------
 
+extern "C" {
 static gboolean target_drag_drop( GtkWidget *widget,
                                   GdkDragContext *context,
                                   gint x,
@@ -355,11 +360,13 @@ static gboolean target_drag_drop( GtkWidget *widget,
 
     return ret;
 }
+}
 
 // ----------------------------------------------------------------------------
 // "drag_data_received"
 // ----------------------------------------------------------------------------
 
+extern "C" {
 static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
                                        GdkDragContext *context,
                                        gint x,
@@ -408,6 +415,7 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
 
     /* after this, invalidate the drop_target's drag data */
     drop_target->SetDragData( (GtkSelectionData*) NULL );
+}
 }
 
 //----------------------------------------------------------------------------
@@ -561,6 +569,7 @@ void wxDropTarget::RegisterWidget( GtkWidget *widget )
 // "drag_data_get"
 //----------------------------------------------------------------------------
 
+extern "C" {
 static void
 source_drag_data_get  (GtkWidget          *WXUNUSED(widget),
                        GdkDragContext     *WXUNUSED(context),
@@ -626,11 +635,13 @@ source_drag_data_get  (GtkWidget          *WXUNUSED(widget),
 
     delete[] d;
 }
+}
 
 //----------------------------------------------------------------------------
 // "drag_data_delete"
 //----------------------------------------------------------------------------
 
+extern "C" {
 static void source_drag_data_delete( GtkWidget *WXUNUSED(widget),
                                      GdkDragContext *context,
                                      wxDropSource *WXUNUSED(drop_source) )
@@ -640,11 +651,13 @@ static void source_drag_data_delete( GtkWidget *WXUNUSED(widget),
 
     // printf( "Drag source: drag_data_delete\n" );
 }
+}
 
 //----------------------------------------------------------------------------
 // "drag_begin"
 //----------------------------------------------------------------------------
 
+extern "C" {
 static void source_drag_begin( GtkWidget          *WXUNUSED(widget),
                                GdkDragContext     *WXUNUSED(context),
                                wxDropSource       *WXUNUSED(drop_source) )
@@ -654,11 +667,13 @@ static void source_drag_begin( GtkWidget          *WXUNUSED(widget),
 
     // printf( "Drag source: drag_begin.\n" );
 }
+}
 
 //----------------------------------------------------------------------------
 // "drag_end"
 //----------------------------------------------------------------------------
 
+extern "C" {
 static void source_drag_end( GtkWidget          *WXUNUSED(widget),
                              GdkDragContext     *WXUNUSED(context),
                              wxDropSource       *drop_source )
@@ -669,11 +684,13 @@ static void source_drag_end( GtkWidget          *WXUNUSED(widget),
 
     drop_source->m_waiting = FALSE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "configure_event" from m_iconWindow
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint
 gtk_dnd_window_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *WXUNUSED(event), wxDropSource *source )
 {
@@ -683,6 +700,7 @@ gtk_dnd_window_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigur
     source->GiveFeedback( ConvertFromGTK(source->m_dragContext->action) );
 
     return 0;
+}
 }
 
 //---------------------------------------------------------------------------

@@ -65,12 +65,15 @@ static bool IsMapped(Display *display, Window window)
 
 // Suspends X11 errors. Used when we expect errors but they are not fatal
 // for us.
+extern "C" {
+    static int wxX11ErrorsSuspender_handler(Display*, XErrorEvent*) { return 0; }
+}
 class wxX11ErrorsSuspender
 {
 public:
     wxX11ErrorsSuspender(Display *d) : m_display(d)
     {
-        m_old = XSetErrorHandler(handler);
+        m_old = XSetErrorHandler(wxX11ErrorsSuspender_handler);
     }
     ~wxX11ErrorsSuspender()
     {
@@ -81,7 +84,6 @@ public:
 private:
     Display *m_display;
     int (*m_old)(Display*, XErrorEvent *);
-    static int handler(Display *, XErrorEvent *) { return 0; }
 };
 
 

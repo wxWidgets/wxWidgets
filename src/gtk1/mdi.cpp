@@ -52,6 +52,7 @@ extern wxList wxPendingDelete;
 // "switch_page"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void
 gtk_mdi_page_change_callback( GtkNotebook *WXUNUSED(widget),
                               GtkNotebookPage *page,
@@ -103,6 +104,7 @@ gtk_mdi_page_change_callback( GtkNotebook *WXUNUSED(widget),
     wxActivateEvent event2( wxEVT_ACTIVATE, true, child->GetId() );
     event2.SetEventObject( child);
     child->GetEventHandler()->ProcessEvent( event2 );
+}
 }
 
 //-----------------------------------------------------------------------------
@@ -435,6 +437,7 @@ void wxMDIChildFrame::SetTitle( const wxString &title )
 // "size_allocate"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxWindow *win )
 {
     if (g_isIdle) wxapp_install_idle_handler();
@@ -449,6 +452,7 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
     }
 
     win->SetSize( alloc->x, alloc->y, alloc->width, alloc->height );
+}
 }
 
 //-----------------------------------------------------------------------------

@@ -385,6 +385,7 @@ struct wxXmlParsingContext
     wxString   version;
 };
 
+extern "C" {
 static void StartElementHnd(void *userData, const char *name, const char **atts)
 {
     wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
@@ -402,7 +403,9 @@ static void StartElementHnd(void *userData, const char *name, const char **atts)
     ctx->node = node;
     ctx->lastAsText = NULL;
 }
+}
 
+extern "C" {
 static void EndElementHnd(void *userData, const char* WXUNUSED(name))
 {
     wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
@@ -410,7 +413,9 @@ static void EndElementHnd(void *userData, const char* WXUNUSED(name))
     ctx->node = ctx->node->GetParent();
     ctx->lastAsText = NULL;
 }
+}
 
+extern "C" {
 static void TextHnd(void *userData, const char *s, int len)
 {
     wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
@@ -443,7 +448,9 @@ static void TextHnd(void *userData, const char *s, int len)
 
     delete[] buf;
 }
+}
 
+extern "C" {
 static void CommentHnd(void *userData, const char *data)
 {
     wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
@@ -458,7 +465,9 @@ static void CommentHnd(void *userData, const char *data)
     }
     ctx->lastAsText = NULL;
 }
+}
 
+extern "C" {
 static void DefaultHnd(void *userData, const char *s, int len)
 {
     // XML header:
@@ -476,7 +485,9 @@ static void DefaultHnd(void *userData, const char *s, int len)
             ctx->version = buf.Mid(pos + 9).BeforeFirst(buf[(size_t)pos+8]);
     }
 }
+}
 
+extern "C" {
 static int UnknownEncodingHnd(void * WXUNUSED(encodingHandlerData),
                               const XML_Char *name, XML_Encoding *info)
 {
@@ -507,6 +518,7 @@ static int UnknownEncodingHnd(void * WXUNUSED(encodingHandlerData),
     info->release = NULL;
 
     return 1;
+}
 }
 
 bool wxXmlDocument::Load(wxInputStream& stream, const wxString& encoding)

@@ -26,6 +26,7 @@ extern bool      g_blockEventsOnDrag;
 extern wxCursor   g_globalCursor;
 extern wxWindowGTK *g_delayedFocus;
 
+extern "C" {
 static void gtk_togglebutton_clicked_callback(GtkWidget *WXUNUSED(widget), wxToggleButton *cb)
 {
    if (g_isIdle)
@@ -41,6 +42,7 @@ static void gtk_togglebutton_clicked_callback(GtkWidget *WXUNUSED(widget), wxTog
    event.SetInt(cb->GetValue());
    event.SetEventObject(cb);
    cb->GetEventHandler()->ProcessEvent(event);
+}
 }
 
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED)

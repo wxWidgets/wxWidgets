@@ -194,7 +194,8 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 // subprocess routines
 // ----------------------------------------------------------------------------
 
-extern "C"
+extern "C" {
+static
 void GTK_EndProcessDetector(gpointer data, gint source,
                             GdkInputCondition WXUNUSED(condition) )
 {
@@ -224,6 +225,7 @@ void GTK_EndProcessDetector(gpointer data, gint source,
    gdk_input_remove(proc_data->tag);
 
    wxHandleProcessTermination(proc_data);
+}
 }
 
 int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)

@@ -67,7 +67,8 @@ struct wxlistbox_idle_struct
     gint         m_tag;
 };
 
-extern "C" gint wxlistbox_idle_callback( gpointer gdata )
+extern "C" {
+static gint wxlistbox_idle_callback( gpointer gdata )
 {
     wxlistbox_idle_struct* data = (wxlistbox_idle_struct*) gdata;
     gdk_threads_enter();
@@ -88,11 +89,13 @@ extern "C" gint wxlistbox_idle_callback( gpointer gdata )
 
     return TRUE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "focus_in_event"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint gtk_listitem_focus_in_callback( GtkWidget *widget,
                                           GdkEvent *WXUNUSED(event),
                                           wxWindow *win )
@@ -120,11 +123,13 @@ static gint gtk_listitem_focus_in_callback( GtkWidget *widget,
 
     return FALSE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "focus_out_event"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint gtk_listitem_focus_out_callback( GtkWidget *widget, GdkEventFocus *gdk_event, wxWindowGTK *win )
 {
     if (g_isIdle)
@@ -150,6 +155,7 @@ static gint gtk_listitem_focus_out_callback( GtkWidget *widget, GdkEventFocus *g
 
     return FALSE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "button_release_event"
@@ -161,6 +167,7 @@ static gint gtk_listitem_focus_out_callback( GtkWidget *widget, GdkEventFocus *g
    this can lead to race conditions so that we emit the dclick event
    after the GDK_BUTTON_RELEASE event after the GDK_2BUTTON_PRESS event */
 
+extern "C" {
 static gint
 gtk_listbox_button_release_callback( GtkWidget * WXUNUSED(widget),
                                      GdkEventButton * WXUNUSED(gdk_event),
@@ -200,11 +207,13 @@ gtk_listbox_button_release_callback( GtkWidget * WXUNUSED(widget),
 
     return FALSE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "button_press_event"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint
 gtk_listbox_button_press_callback( GtkWidget *widget,
                                    GdkEventButton *gdk_event,
@@ -254,11 +263,13 @@ gtk_listbox_button_press_callback( GtkWidget *widget,
 
     return FALSE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "key_press_event"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint
 gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxListBox *listbox )
 {
@@ -349,22 +360,11 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
 
     return FALSE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "select" and "deselect"
 //-----------------------------------------------------------------------------
-
-static void gtk_listitem_select_cb( GtkWidget *widget, wxListBox *listbox, bool is_selection );
-
-static void gtk_listitem_select_callback( GtkWidget *widget, wxListBox *listbox )
-{
-    gtk_listitem_select_cb( widget, listbox, TRUE );
-}
-
-static void gtk_listitem_deselect_callback( GtkWidget *widget, wxListBox *listbox )
-{
-    gtk_listitem_select_cb( widget, listbox, FALSE );
-}
 
 static void gtk_listitem_select_cb( GtkWidget *widget,
                                     wxListBox *listbox,
@@ -416,10 +416,25 @@ static void gtk_listitem_select_cb( GtkWidget *widget,
     listbox->GetEventHandler()->ProcessEvent( event );
 }
 
+extern "C" {
+static void gtk_listitem_select_callback( GtkWidget *widget, wxListBox *listbox )
+{
+    gtk_listitem_select_cb( widget, listbox, TRUE );
+}
+}
+
+extern "C" {
+static void gtk_listitem_deselect_callback( GtkWidget *widget, wxListBox *listbox )
+{
+    gtk_listitem_select_cb( widget, listbox, FALSE );
+}
+}
+
 //-----------------------------------------------------------------------------
 // wxListBox
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint
 gtk_listbox_realized_callback( GtkWidget *m_widget, wxListBox *win )
 {
@@ -431,6 +446,7 @@ gtk_listbox_realized_callback( GtkWidget *m_widget, wxListBox *win )
         gtk_widget_show( GTK_WIDGET(child->data) );
     
     return false;
+}
 }
 
 //-----------------------------------------------------------------------------

@@ -379,7 +379,7 @@ static void draw_frame( GtkWidget *widget, wxWindowGTK *win )
             dh += hscroll_req.height;
             dh += scroll_class->scrollbar_spacing;
         }
-}
+    }
 
     int dx = 0;
     int dy = 0;
@@ -429,7 +429,8 @@ static void draw_frame( GtkWidget *widget, wxWindowGTK *win )
 // "expose_event" of m_widget
 //-----------------------------------------------------------------------------
 
-gint gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_event, wxWindowGTK *win )
+extern "C" {
+static gint gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_event, wxWindowGTK *win )
 {
     if (gdk_event->count > 0) return FALSE;
 
@@ -442,6 +443,7 @@ gint gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_even
 #endif
     return TRUE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "draw" of m_widget
@@ -449,9 +451,11 @@ gint gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_even
 
 #ifndef __WXGTK20__
 
+extern "C" {
 static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNUSED(rect), wxWindowGTK *win )
 {
     draw_frame( widget, win );
+}
 }
 
 #endif // GTK+ < 2.0
@@ -460,8 +464,8 @@ static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNU
 // "size_request" of m_widget
 //-----------------------------------------------------------------------------
 
-// make it extern because wxStatitText needs to disconnect this one
-extern "C"
+// make it extern because wxStaticText needs to disconnect this one
+extern "C" {
 void wxgtk_window_size_request_callback(GtkWidget *widget,
                                         GtkRequisition *requisition,
                                         wxWindow *win)
@@ -476,9 +480,10 @@ void wxgtk_window_size_request_callback(GtkWidget *widget,
     requisition->height = h;
     requisition->width = w;
 }
+}
 
-
-extern "C"
+extern "C" {
+static
 void wxgtk_combo_size_request_callback(GtkWidget *widget,
                                        GtkRequisition *requisition,
                                        wxComboBox *win)
@@ -504,11 +509,13 @@ void wxgtk_combo_size_request_callback(GtkWidget *widget,
     requisition->width = w - entry_req.width;
     requisition->height = entry_req.height+4;  // TODO: why +4?
 }
+}
 
 //-----------------------------------------------------------------------------
 // "expose_event" of m_wxwindow
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static int gtk_window_expose_callback( GtkWidget *widget,
                                        GdkEventExpose *gdk_event,
                                        wxWindow *win )
@@ -578,6 +585,7 @@ static int gtk_window_expose_callback( GtkWidget *widget,
 
     return FALSE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "event" of m_wxwindow
@@ -589,6 +597,8 @@ static int gtk_window_expose_callback( GtkWidget *widget,
 // There, we look for expose events ourselves whereas all other events are
 // handled normally.
 
+extern "C" {
+static
 gint gtk_window_event_event_callback( GtkWidget *widget,
                                       GdkEventExpose *event,
                                       wxWindow *win )
@@ -601,6 +611,7 @@ gint gtk_window_event_event_callback( GtkWidget *widget,
 
     return FALSE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "draw" of m_wxwindow
@@ -611,6 +622,7 @@ gint gtk_window_event_event_callback( GtkWidget *widget,
 // This callback is a complete replacement of the gtk_pizza_draw() function,
 // which is disabled.
 
+extern "C" {
 static void gtk_window_draw_callback( GtkWidget *widget,
                                       GdkRectangle *rect,
                                       wxWindow *win )
@@ -685,6 +697,7 @@ static void gtk_window_draw_callback( GtkWidget *widget,
         }
     }
 #endif
+}
 }
 
 #endif
@@ -1129,6 +1142,7 @@ struct wxGtkIMData
 };
 #endif
 
+extern "C" {
 static gint gtk_window_key_press_callback( GtkWidget *widget,
                                            GdkEventKey *gdk_event,
                                            wxWindow *win )
@@ -1389,8 +1403,10 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
 
     return FALSE;
 }
+}
 
 #ifdef __WXGTK20__
+extern "C" {
 static void gtk_wxwindow_commit_cb (GtkIMContext *context,
                            const gchar  *str,
                            wxWindow     *window)
@@ -1444,6 +1460,7 @@ static void gtk_wxwindow_commit_cb (GtkIMContext *context,
         }
     }
 }
+}
 #endif
 
 
@@ -1451,6 +1468,7 @@ static void gtk_wxwindow_commit_cb (GtkIMContext *context,
 // "key_release_event" from any window
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint gtk_window_key_release_callback( GtkWidget *widget,
                                              GdkEventKey *gdk_event,
                                              wxWindowGTK *win )
@@ -1478,6 +1496,7 @@ static gint gtk_window_key_release_callback( GtkWidget *widget,
 
     gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_release_event" );
     return TRUE;
+}
 }
 
 // ============================================================================
@@ -1622,6 +1641,7 @@ wxWindowGTK *FindWindowForMouseEvent(wxWindowGTK *win, wxCoord& x, wxCoord& y)
 // "button_press_event"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint gtk_window_button_press_callback( GtkWidget *widget,
                                               GdkEventButton *gdk_event,
                                               wxWindowGTK *win )
@@ -1820,11 +1840,13 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
 
     return FALSE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "button_release_event"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint gtk_window_button_release_callback( GtkWidget *widget,
                                                 GdkEventButton *gdk_event,
                                                 wxWindowGTK *win )
@@ -1880,11 +1902,13 @@ static gint gtk_window_button_release_callback( GtkWidget *widget,
 
     return FALSE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "motion_notify_event"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint gtk_window_motion_notify_callback( GtkWidget *widget,
                                                GdkEventMotion *gdk_event,
                                                wxWindowGTK *win )
@@ -1954,15 +1978,17 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget,
 
     return FALSE;
 }
+}
 
 #ifdef __WXGTK20__
 //-----------------------------------------------------------------------------
 // "mouse_wheel_event"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint gtk_window_wheel_callback (GtkWidget * widget,
-					GdkEventScroll * gdk_event,
-					wxWindowGTK * win)
+                                       GdkEventScroll * gdk_event,
+                                       wxWindowGTK * win)
 {
     DEBUG_MAIN_THREAD
 
@@ -2010,10 +2036,12 @@ static gint gtk_window_wheel_callback (GtkWidget * widget,
 
     return FALSE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "popup-menu"
 //-----------------------------------------------------------------------------
+extern "C" {
 static gboolean wxgtk_window_popup_menu_callback(GtkWidget*, wxWindowGTK* win)
 {
     wxContextMenuEvent event(
@@ -2022,6 +2050,7 @@ static gboolean wxgtk_window_popup_menu_callback(GtkWidget*, wxWindowGTK* win)
         wxPoint(-1, -1));
     event.SetEventObject(win);
     return win->GetEventHandler()->ProcessEvent(event);
+}
 }
 #endif // __WXGTK20__
 
@@ -2044,6 +2073,7 @@ static bool DoSendFocusEvents(wxWindow *win)
     return win->GetEventHandler()->ProcessEvent(eventFocus);
 }
 
+extern "C" {
 static gint gtk_window_focus_in_callback( GtkWidget *widget,
                                           GdkEvent *WXUNUSED(event),
                                           wxWindow *win )
@@ -2093,11 +2123,13 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
 
     return FALSE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "focus_out_event"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEventFocus *gdk_event, wxWindowGTK *win )
 {
     DEBUG_MAIN_THREAD
@@ -2152,11 +2184,13 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEventFocus *gdk
 
     return FALSE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "enter_notify_event"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static
 gint gtk_window_enter_callback( GtkWidget *widget,
                                 GdkEventCrossing *gdk_event,
@@ -2195,11 +2229,13 @@ gint gtk_window_enter_callback( GtkWidget *widget,
 
     return FALSE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "leave_notify_event"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, wxWindowGTK *win )
 {
     DEBUG_MAIN_THREAD
@@ -2245,11 +2281,13 @@ static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_
 
     return FALSE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "value_changed" from m_vAdjust
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void gtk_window_vscroll_callback( GtkAdjustment *adjust,
                                          SCROLLBAR_CBACK_ARG
                                          wxWindowGTK *win )
@@ -2279,11 +2317,13 @@ static void gtk_window_vscroll_callback( GtkAdjustment *adjust,
     event.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent( event );
 }
+}
 
 //-----------------------------------------------------------------------------
 // "value_changed" from m_hAdjust
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void gtk_window_hscroll_callback( GtkAdjustment *adjust,
                                          SCROLLBAR_CBACK_ARG
                                          wxWindowGTK *win )
@@ -2312,11 +2352,13 @@ static void gtk_window_hscroll_callback( GtkAdjustment *adjust,
     event.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent( event );
 }
+}
 
 //-----------------------------------------------------------------------------
 // "button_press_event" from scrollbar
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint gtk_scrollbar_button_press_callback( GtkRange *widget,
                                                  GdkEventButton *gdk_event,
                                                  wxWindowGTK *win)
@@ -2336,11 +2378,13 @@ static gint gtk_scrollbar_button_press_callback( GtkRange *widget,
 
     return FALSE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "button_release_event" from scrollbar
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint gtk_scrollbar_button_release_callback( GtkRange *widget,
                                                    GdkEventButton *WXUNUSED(gdk_event),
                                                    wxWindowGTK *win)
@@ -2381,6 +2425,7 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *widget,
 
     return FALSE;
 }
+}
 
 // ----------------------------------------------------------------------------
 // this wxWindowBase function is implemented here (in platform-specific file)
@@ -2393,7 +2438,6 @@ wxWindow *wxWindowBase::DoFindFocus()
     return (wxWindow *)g_focusWindow;
 }
 
-
 //-----------------------------------------------------------------------------
 // "realize" from m_widget
 //-----------------------------------------------------------------------------
@@ -2401,6 +2445,7 @@ wxWindow *wxWindowBase::DoFindFocus()
 /* We cannot set colours and fonts before the widget has
    been realized, so we do this directly after realization. */
 
+extern "C" {
 static gint
 gtk_window_realized_callback( GtkWidget *m_widget, wxWindow *win )
 {
@@ -2424,11 +2469,13 @@ gtk_window_realized_callback( GtkWidget *m_widget, wxWindow *win )
 
     return FALSE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "size_allocate"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static
 void gtk_window_size_callback( GtkWidget *WXUNUSED(widget),
                                GtkAllocation *WXUNUSED(alloc),
@@ -2455,6 +2502,7 @@ void gtk_window_size_callback( GtkWidget *WXUNUSED(widget),
         win->GetEventHandler()->ProcessEvent( event );
     }
 }
+}
 
 
 #ifdef HAVE_XIM
@@ -2465,6 +2513,7 @@ void gtk_window_size_callback( GtkWidget *WXUNUSED(widget),
 
 /* Resize XIM window */
 
+extern "C" {
 static
 void gtk_wxwindow_size_callback( GtkWidget* WXUNUSED_UNLESS_XIM(widget),
                                  GtkAllocation* WXUNUSED_UNLESS_XIM(alloc),
@@ -2488,6 +2537,7 @@ void gtk_wxwindow_size_callback( GtkWidget* WXUNUSED_UNLESS_XIM(widget),
     }
 #endif // HAVE_XIM
 }
+}
 
 //-----------------------------------------------------------------------------
 // "realize" from m_wxwindow
@@ -2495,6 +2545,7 @@ void gtk_wxwindow_size_callback( GtkWidget* WXUNUSED_UNLESS_XIM(widget),
 
 /* Initialize XIM support */
 
+extern "C" {
 static gint
 gtk_wxwindow_realized_callback( GtkWidget * WXUNUSED_UNLESS_XIM(widget),
                                 wxWindowGTK * WXUNUSED_UNLESS_XIM(win) )
@@ -2580,6 +2631,7 @@ gtk_wxwindow_realized_callback( GtkWidget * WXUNUSED_UNLESS_XIM(widget),
 #endif // HAVE_XIM
 
     return FALSE;
+}
 }
 
 //-----------------------------------------------------------------------------

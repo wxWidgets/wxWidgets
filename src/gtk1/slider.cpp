@@ -41,6 +41,7 @@ static const float sensitivity = 0.02;
 // "value_changed"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void gtk_slider_callback( GtkAdjustment *adjust,
                                  SCROLLBAR_CBACK_ARG
                                  wxSlider *win )
@@ -71,6 +72,7 @@ static void gtk_slider_callback( GtkAdjustment *adjust,
     cevent.SetEventObject( win );
     cevent.SetInt( value );
     win->GetEventHandler()->ProcessEvent( cevent );
+}
 }
 
 //-----------------------------------------------------------------------------

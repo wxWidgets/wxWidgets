@@ -40,6 +40,7 @@ extern wxWindowGTK   *g_delayedFocus;
 // "clicked"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static 
 void gtk_radiobutton_clicked_callback( GtkToggleButton *button, wxRadioButton *rb )
 {
@@ -57,6 +58,7 @@ void gtk_radiobutton_clicked_callback( GtkToggleButton *button, wxRadioButton *r
     event.SetInt( rb->GetValue() );
     event.SetEventObject( rb );
     rb->GetEventHandler()->ProcessEvent( event );
+}
 }
 
 //-----------------------------------------------------------------------------

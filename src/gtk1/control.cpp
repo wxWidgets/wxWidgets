@@ -231,7 +231,7 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
 
 //static
 wxVisualAttributes
-wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* (*widget_new)(void),
+wxControl::GetDefaultAttributesFromGTKWidget(wxGtkWidgetNew_t widget_new,
                                              bool useBase,
                                              int state)
 {
@@ -247,7 +247,7 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* (*widget_new)(void),
 
 //static
 wxVisualAttributes
-wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* (*widget_new)(const gchar*),
+wxControl::GetDefaultAttributesFromGTKWidget(wxGtkWidgetNewFromStr_t widget_new,
                                              bool useBase,
                                              int state)
 {
@@ -264,7 +264,7 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* (*widget_new)(const gcha
 
 //static
 wxVisualAttributes
-wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* (*widget_new)(GtkAdjustment*),
+wxControl::GetDefaultAttributesFromGTKWidget(wxGtkWidgetNewFromAdj_t widget_new,
                                              bool useBase,
                                              int state)
 {

@@ -78,6 +78,7 @@ struct _GtkSelectionData
 // "selection_received" for targets
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void
 targets_selection_received( GtkWidget *WXUNUSED(widget),
                             GtkSelectionData *selection_data,
@@ -133,11 +134,13 @@ targets_selection_received( GtkWidget *WXUNUSED(widget),
 
     clipboard->m_waiting = FALSE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "selection_received" for the actual data
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void
 selection_received( GtkWidget *WXUNUSED(widget),
                     GtkSelectionData *selection_data,
@@ -189,11 +192,13 @@ selection_received( GtkWidget *WXUNUSED(widget),
     wxTheClipboard->m_formatSupported = TRUE;
     clipboard->m_waiting = FALSE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "selection_clear"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint
 selection_clear_clip( GtkWidget *WXUNUSED(widget), GdkEventSelection *event )
 {
@@ -230,11 +235,13 @@ selection_clear_clip( GtkWidget *WXUNUSED(widget), GdkEventSelection *event )
     wxTheClipboard->m_waiting = FALSE;
     return TRUE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // selection handler for supplying data
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void
 selection_handler( GtkWidget *WXUNUSED(widget),
                    GtkSelectionData *selection_data,
@@ -294,6 +301,7 @@ selection_handler( GtkWidget *WXUNUSED(widget),
     }
 
     free(d);
+}
 }
 
 //-----------------------------------------------------------------------------

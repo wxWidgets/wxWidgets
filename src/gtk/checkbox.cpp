@@ -42,6 +42,7 @@ extern wxWindowGTK   *g_delayedFocus;
 // "clicked"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void gtk_checkbox_toggled_callback(GtkWidget *widget, wxCheckBox *cb)
 {
     if (g_isIdle) wxapp_install_idle_handler();
@@ -108,6 +109,7 @@ static void gtk_checkbox_toggled_callback(GtkWidget *widget, wxCheckBox *cb)
 #endif
     event.SetEventObject(cb);
     cb->GetEventHandler()->ProcessEvent(event);
+}
 }
 
 //-----------------------------------------------------------------------------

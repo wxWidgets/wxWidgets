@@ -72,6 +72,7 @@ extern bool g_isIdle;
 // "value_changed" from m_vAdjust
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void gtk_scrolled_window_vscroll_callback( GtkAdjustment *adjust,
                                                   SCROLLBAR_CBACK_ARG
                                                   wxScrolledWindow *win )
@@ -86,11 +87,13 @@ static void gtk_scrolled_window_vscroll_callback( GtkAdjustment *adjust,
     win->GtkVScroll( adjust->value,
             GET_SCROLL_TYPE(GTK_SCROLLED_WINDOW(win->m_widget)->vscrollbar) );
 }
+}
 
 //-----------------------------------------------------------------------------
 // "value_changed" from m_hAdjust
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void gtk_scrolled_window_hscroll_callback( GtkAdjustment *adjust,
                                                   SCROLLBAR_CBACK_ARG
                                                   wxScrolledWindow *win )
@@ -104,11 +107,13 @@ static void gtk_scrolled_window_hscroll_callback( GtkAdjustment *adjust,
     win->GtkHScroll( adjust->value,
             GET_SCROLL_TYPE(GTK_SCROLLED_WINDOW(win->m_widget)->hscrollbar) );
 }
+}
 
 //-----------------------------------------------------------------------------
 // "button_press_event" from scrollbar
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint gtk_scrollbar_button_press_callback( GtkRange *widget,
                                                  GdkEventButton *gdk_event,
                                                  wxWindowGTK *win)
@@ -125,11 +130,13 @@ static gint gtk_scrollbar_button_press_callback( GtkRange *widget,
 
     return FALSE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "button_release_event" from scrollbar
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint gtk_scrollbar_button_release_callback( GtkRange *widget,
                                                    GdkEventButton *WXUNUSED(gdk_event),
                                                    wxWindowGTK *win)
@@ -167,6 +174,7 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *widget,
     win->m_isScrolling = FALSE;
 
     return FALSE;
+}
 }
 
 //-----------------------------------------------------------------------------

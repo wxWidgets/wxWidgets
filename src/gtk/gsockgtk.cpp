@@ -21,6 +21,8 @@
 #include "wx/unix/gsockunx.h"
 
 
+extern "C" {
+static
 void _GSocket_GDK_Input(gpointer data,
                         gint source,
                         GdkInputCondition condition)
@@ -31,6 +33,7 @@ void _GSocket_GDK_Input(gpointer data,
     socket->Detected_Read();
   if (condition & GDK_INPUT_WRITE)
     socket->Detected_Write();
+}
 }
 
 bool GSocketGUIFunctionsTableConcrete::CanUseEventLoop()

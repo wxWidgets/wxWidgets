@@ -38,6 +38,7 @@ extern bool g_isIdle;
 // "clicked" for OK-button
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void gtk_filedialog_ok_callback(GtkWidget *widget, wxFileDialog *dialog)
 {
     int style = dialog->GetStyle();
@@ -91,11 +92,13 @@ static void gtk_filedialog_ok_callback(GtkWidget *widget, wxFileDialog *dialog)
     event.SetEventObject(dialog);
     dialog->GetEventHandler()->ProcessEvent(event);
 }
+}
 
 //-----------------------------------------------------------------------------
 // "clicked" for Cancel-button
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void gtk_filedialog_cancel_callback(GtkWidget *WXUNUSED(w),
                                            wxFileDialog *dialog)
 {
@@ -103,7 +106,9 @@ static void gtk_filedialog_cancel_callback(GtkWidget *WXUNUSED(w),
     event.SetEventObject(dialog);
     dialog->GetEventHandler()->ProcessEvent(event);
 }
+}
 
+extern "C" {
 static void gtk_filedialog_response_callback(GtkWidget *w,
                                              int response,
                                              wxFileDialog *dialog)
@@ -120,7 +125,9 @@ static void gtk_filedialog_response_callback(GtkWidget *w,
         dialog->m_destroyed_by_delete = true;
     }
 }
-#endif
+}
+
+#endif // __WXGTK24__
 
 //-----------------------------------------------------------------------------
 // wxFileDialog

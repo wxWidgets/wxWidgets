@@ -46,6 +46,7 @@ static const float sensitivity = 0.02;
 
 // FIXME: is GtkScrollType really passed to us as 2nd argument?
 
+extern "C" {
 static void gtk_scrollbar_callback( GtkAdjustment *adjust,
                                     SCROLLBAR_CBACK_ARG
                                     wxScrollBar *win )
@@ -86,10 +87,12 @@ static void gtk_scrollbar_callback( GtkAdjustment *adjust,
     win->ProcessEvent( cevent );
 */
 }
+}
 
 //-----------------------------------------------------------------------------
 // "button_press_event" from slider
 //-----------------------------------------------------------------------------
+extern "C" {
 static gint gtk_scrollbar_button_press_callback( GtkRange *widget,
                                                  GdkEventButton *gdk_event,
                                                  wxScrollBar *win )
@@ -128,11 +131,13 @@ static gint gtk_scrollbar_button_press_callback( GtkRange *widget,
 
     return FALSE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "button_release_event" from slider
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint
 gtk_scrollbar_button_release_callback( GtkRange *WXUNUSED(widget),
                                        GdkEventButton *WXUNUSED(gdk_event),
@@ -158,6 +163,7 @@ gtk_scrollbar_button_release_callback( GtkRange *WXUNUSED(widget),
     g_currentUpDownEvent = wxEVT_NULL;
 
     return FALSE;
+}
 }
 
 //-----------------------------------------------------------------------------

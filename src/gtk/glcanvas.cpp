@@ -157,6 +157,7 @@ wxPalette wxGLContext::CreateDefaultPalette()
 // "realize" from m_wxwindow
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint
 gtk_glwindow_realized_callback( GtkWidget * WXUNUSED(widget), wxGLCanvas *win )
 {
@@ -171,11 +172,13 @@ gtk_glwindow_realized_callback( GtkWidget * WXUNUSED(widget), wxGLCanvas *win )
 
     return FALSE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "map" from m_wxwindow
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint
 gtk_glwindow_map_callback( GtkWidget * WXUNUSED(widget), wxGLCanvas *win )
 {
@@ -191,11 +194,13 @@ gtk_glwindow_map_callback( GtkWidget * WXUNUSED(widget), wxGLCanvas *win )
 
     return FALSE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "expose_event" of m_wxwindow
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void
 gtk_glwindow_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExpose *gdk_event, wxGLCanvas *win )
 {
@@ -209,12 +214,14 @@ gtk_glwindow_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExpose *gdk_e
                                   gdk_event->area.width,
                                   gdk_event->area.height );
 }
+}
 
 //-----------------------------------------------------------------------------
 // "draw" of m_wxwindow
 //-----------------------------------------------------------------------------
 
 #ifndef __WXGTK20__
+extern "C" {
 static void
 gtk_glwindow_draw_callback( GtkWidget *WXUNUSED(widget), GdkRectangle *rect, wxGLCanvas *win )
 {
@@ -226,12 +233,14 @@ gtk_glwindow_draw_callback( GtkWidget *WXUNUSED(widget), GdkRectangle *rect, wxG
     win->GetUpdateRegion().Union( rect->x, rect->y,
                                   rect->width, rect->height );
 }
+}
 #endif
 
 //-----------------------------------------------------------------------------
 // "size_allocate" of m_wxwindow
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void
 gtk_glcanvas_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxGLCanvas *win )
 {
@@ -244,6 +253,7 @@ gtk_glcanvas_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, w
     wxSizeEvent event( wxSize(win->m_width,win->m_height), win->GetId() );
     event.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent( event );
+}
 }
 
 //---------------------------------------------------------------------------

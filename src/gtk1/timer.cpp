@@ -27,7 +27,8 @@
 
 IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxEvtHandler)
 
-extern "C" gint timeout_callback( gpointer data )
+extern "C" {
+static gint timeout_callback( gpointer data )
 {
     wxTimer *timer = (wxTimer*)data;
 
@@ -53,6 +54,7 @@ extern "C" gint timeout_callback( gpointer data )
         return FALSE;
 
     return TRUE;
+}
 }
 
 void wxTimer::Init()

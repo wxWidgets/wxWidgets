@@ -38,6 +38,7 @@ extern bool g_isIdle;
 // "button_press"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint gtk_popup_button_press (GtkWidget *widget, GdkEvent *gdk_event, wxPopupWindow* win )
 {
     GtkWidget *child = gtk_get_event_widget (gdk_event);
@@ -66,11 +67,13 @@ static gint gtk_popup_button_press (GtkWidget *widget, GdkEvent *gdk_event, wxPo
 
     return TRUE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "focus" from m_window
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint gtk_dialog_focus_callback( GtkWidget *widget, GtkDirectionType WXUNUSED(d), wxWindow *WXUNUSED(win) )
 {
     if (g_isIdle)
@@ -80,11 +83,13 @@ static gint gtk_dialog_focus_callback( GtkWidget *widget, GtkDirectionType WXUNU
     gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus" );
     return TRUE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "delete_event"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 bool gtk_dialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxPopupWindow *win )
 {
     if (g_isIdle)
@@ -95,11 +100,13 @@ bool gtk_dialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED
 
     return TRUE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "size_allocate"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void gtk_dialog_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxPopupWindow *win )
 {
     if (g_isIdle)
@@ -114,6 +121,7 @@ static void gtk_dialog_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation
         win->GtkUpdateSize();
     }
 }
+}
 
 //-----------------------------------------------------------------------------
 // "realize" from m_widget
@@ -122,6 +130,7 @@ static void gtk_dialog_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation
 /* we cannot MWM hints and icons before the widget has been realized,
    so we do this directly after realization */
 
+extern "C" {
 static gint
 gtk_dialog_realized_callback( GtkWidget * WXUNUSED(widget), wxPopupWindow *win )
 {
@@ -139,6 +148,7 @@ gtk_dialog_realized_callback( GtkWidget * WXUNUSED(widget), wxPopupWindow *win )
     gtk_window_set_policy(GTK_WINDOW(win->m_widget), 0, 0, 1);
 
     return FALSE;
+}
 }
 
 //-----------------------------------------------------------------------------

@@ -38,6 +38,7 @@ extern bool   g_blockEventsOnDrag;
 // "activate"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void gtk_choice_clicked_callback( GtkWidget *WXUNUSED(widget), wxChoice *choice )
 {
     if (g_isIdle)
@@ -83,6 +84,7 @@ static void gtk_choice_clicked_callback( GtkWidget *WXUNUSED(widget), wxChoice *
         event.SetClientData( choice->GetClientData(n) );
 
     choice->GetEventHandler()->ProcessEvent(event);
+}
 }
 
 //-----------------------------------------------------------------------------

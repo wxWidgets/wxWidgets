@@ -144,6 +144,7 @@ static void wxGtkTextInsert(GtkWidget *text,
 // "insert_text" for GtkEntry
 // ----------------------------------------------------------------------------
 
+extern "C" {
 static void
 gtk_insert_text_callback(GtkEditable *editable,
                          const gchar *new_text,
@@ -179,10 +180,12 @@ gtk_insert_text_callback(GtkEditable *editable,
         win->GetEventHandler()->ProcessEvent( event );
     }
 }
+}
 
 #ifdef __WXGTK20__
 // Implementation of wxTE_AUTO_URL for wxGTK2 by Mart Raudsepp,
 
+extern "C" {
 static void
 au_apply_tag_callback(GtkTextBuffer *buffer,
                       GtkTextTag *tag,
@@ -193,33 +196,42 @@ au_apply_tag_callback(GtkTextBuffer *buffer,
     if(tag == gtk_text_tag_table_lookup(gtk_text_buffer_get_tag_table(buffer), "wxUrl"))
         g_signal_stop_emission_by_name(buffer, "apply_tag");
 }
+}
 
 //-----------------------------------------------------------------------------
 //  GtkTextCharPredicates for gtk_text_iter_*_find_char
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gboolean
 pred_whitespace (gunichar ch, gpointer user_data)
 {
     return g_unichar_isspace(ch);
 }
+}
 
+extern "C" {
 static gboolean
 pred_non_whitespace (gunichar ch, gpointer user_data)
 {
     return !g_unichar_isspace(ch);
 }
+}
 
+extern "C" {
 static gboolean
 pred_nonpunct (gunichar ch, gpointer user_data)
 {
     return !g_unichar_ispunct(ch);
 }
+}
 
+extern "C" {
 static gboolean
 pred_nonpunct_or_slash (gunichar ch, gpointer user_data)
 {
     return !g_unichar_ispunct(ch) || ch == '/';
+}
 }
 
 //-----------------------------------------------------------------------------
@@ -228,6 +240,7 @@ pred_nonpunct_or_slash (gunichar ch, gpointer user_data)
 
 // This function should be made match better while being efficient at one point.
 // Most probably with a row of regular expressions.
+extern "C" {
 static void
 au_check_word( GtkTextIter *s, GtkTextIter *e )
 {
@@ -287,7 +300,9 @@ au_check_word( GtkTextIter *s, GtkTextIter *e )
         g_signal_handler_unblock(buffer, signal_id);
     }
 }
+}
 
+extern "C" {
 static void
 au_check_range(GtkTextIter *s,
                GtkTextIter *range_end)
@@ -314,11 +329,13 @@ au_check_range(GtkTextIter *s,
         gtk_text_iter_forward_find_char(&range_start, pred_non_whitespace, NULL, range_end);
     }
 }
+}
 
 //-----------------------------------------------------------------------------
 //  "insert-text" for GtkTextBuffer
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void
 au_insert_text_callback(GtkTextBuffer *buffer,
                         GtkTextIter *end,
@@ -344,11 +361,13 @@ au_insert_text_callback(GtkTextBuffer *buffer,
 
     au_check_range(&words_start, &words_end);
 }
+}
 
 //-----------------------------------------------------------------------------
 //  "delete-range" for GtkTextBuffer
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void
 au_delete_range_callback(GtkTextBuffer *buffer,
                          GtkTextIter *start,
@@ -367,6 +386,7 @@ au_delete_range_callback(GtkTextBuffer *buffer,
 
     au_check_range(start, end);
 }
+}
 
 
 #endif
@@ -375,6 +395,7 @@ au_delete_range_callback(GtkTextBuffer *buffer,
 //  "changed"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void
 gtk_text_changed_callback( GtkWidget *widget, wxTextCtrl *win )
 {
@@ -395,16 +416,19 @@ gtk_text_changed_callback( GtkWidget *widget, wxTextCtrl *win )
     event.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent( event );
 }
+}
 
 //-----------------------------------------------------------------------------
 // "expose_event" from scrolled window and textview
 //-----------------------------------------------------------------------------
 
 #ifdef __WXGTK20__
+extern "C" {
 static gboolean
 gtk_text_exposed_callback( GtkWidget *widget, GdkEventExpose *event, wxTextCtrl *win )
 {
     return TRUE;
+}
 }
 #endif
 
@@ -413,6 +437,7 @@ gtk_text_exposed_callback( GtkWidget *widget, GdkEventExpose *event, wxTextCtrl 
 //-----------------------------------------------------------------------------
 
 #ifndef __WXGTK20__
+extern "C" {
 static void
 gtk_scrollbar_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 {
@@ -422,6 +447,7 @@ gtk_scrollbar_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
         wxapp_install_idle_handler();
 
     win->CalculateScrollbar();
+}
 }
 #endif
 
@@ -444,8 +470,8 @@ extern "C" {
 
 static GtkDrawCallback gs_gtk_text_draw = NULL;
 
-extern "C"
-void wxgtk_text_draw( GtkWidget *widget, GdkRectangle *rect)
+extern "C" {
+static void wxgtk_text_draw( GtkWidget *widget, GdkRectangle *rect)
 {
     if ( !wxIsInsideYield )
     {
@@ -454,6 +480,7 @@ void wxgtk_text_draw( GtkWidget *widget, GdkRectangle *rect)
 
         gs_gtk_text_draw(widget, rect);
     }
+}
 }
 
 #endif // __WXGTK20__

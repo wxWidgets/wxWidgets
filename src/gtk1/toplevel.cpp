@@ -82,6 +82,7 @@ static int              g_sendActivateEvent = -1;
 // "focus_in_event"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint gtk_frame_focus_in_callback( GtkWidget *widget,
                                          GdkEvent *WXUNUSED(event),
                                          wxTopLevelWindowGTK *win )
@@ -115,11 +116,13 @@ static gint gtk_frame_focus_in_callback( GtkWidget *widget,
 
     return FALSE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "focus_out_event"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint gtk_frame_focus_out_callback( GtkWidget *widget, 
                                           GdkEventFocus *WXUNUSED(gdk_event), 
                                           wxTopLevelWindowGTK *win )
@@ -148,11 +151,13 @@ static gint gtk_frame_focus_out_callback( GtkWidget *widget,
         
     return FALSE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "focus" from m_window
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint gtk_frame_focus_callback( GtkWidget *widget, GtkDirectionType WXUNUSED(d), wxWindow *WXUNUSED(win) )
 {
     if (g_isIdle)
@@ -162,11 +167,13 @@ static gint gtk_frame_focus_callback( GtkWidget *widget, GtkDirectionType WXUNUS
     gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus" );
     return TRUE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "size_allocate"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxTopLevelWindowGTK *win )
 {
     if (g_isIdle)
@@ -192,11 +199,13 @@ static void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation*
         win->GtkUpdateSize();
     }
 }
+}
 
 //-----------------------------------------------------------------------------
 // "delete_event"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxTopLevelWindowGTK *win )
 {
     if (g_isIdle)
@@ -209,12 +218,14 @@ static gint gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WX
 
     return TRUE;
 }
+}
 
 
 //-----------------------------------------------------------------------------
 // "configure_event"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint
 gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *WXUNUSED(event), wxTopLevelWindowGTK *win )
 {
@@ -237,6 +248,7 @@ gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *WX
 
     return FALSE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "realize" from m_widget
@@ -245,6 +257,7 @@ gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *WX
 // we cannot MWM hints and icons before the widget has been realized,
 // so we do this directly after realization
 
+extern "C" {
 static void
 gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget),
                              wxTopLevelWindowGTK *win )
@@ -273,11 +286,13 @@ gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget),
         win->SetIcons( iconsOld );
     }
 }
+}
 
 //-----------------------------------------------------------------------------
 // "map_event" from m_widget
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void
 gtk_frame_map_callback( GtkWidget * WXUNUSED(widget),
                         GdkEvent * WXUNUSED(event),
@@ -285,11 +300,13 @@ gtk_frame_map_callback( GtkWidget * WXUNUSED(widget),
 {
     win->SetIconizeState(FALSE);
 }
+}
 
 //-----------------------------------------------------------------------------
 // "unmap_event" from m_widget
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void
 gtk_frame_unmap_callback( GtkWidget * WXUNUSED(widget),
                           GdkEvent * WXUNUSED(event),
@@ -297,11 +314,13 @@ gtk_frame_unmap_callback( GtkWidget * WXUNUSED(widget),
 {
     win->SetIconizeState(TRUE);
 }
+}
 
 //-----------------------------------------------------------------------------
 // "expose_event" of m_client
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_event, wxWindow *win )
 {
     GtkPizza *pizza = GTK_PIZZA(widget);
@@ -316,6 +335,7 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
 
     return FALSE;
 }
+}
 
 //-----------------------------------------------------------------------------
 // "draw" of m_client
@@ -323,6 +343,7 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
 
 #ifndef __WXGTK20__
 
+extern "C" {
 static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxWindow *win )
 {
     GtkPizza *pizza = GTK_PIZZA(widget);
@@ -334,6 +355,7 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
                         win->m_widget,
                         (char *)"base",
                         0, 0, -1, -1);
+}
 }
 
 #endif // GTK+ 1.x

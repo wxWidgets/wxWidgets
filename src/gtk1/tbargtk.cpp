@@ -164,6 +164,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl)
 // "clicked" (internal from gtk_toolbar)
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget),
                                   wxToolBarTool *tool )
 {
@@ -198,11 +199,13 @@ static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget),
         tool->SetPixmap(tool->GetBitmap());
     }
 }
+}
 
 //-----------------------------------------------------------------------------
 // "enter_notify_event" / "leave_notify_event"
 //-----------------------------------------------------------------------------
 
+extern "C" {
 static gint gtk_toolbar_tool_callback( GtkWidget *WXUNUSED(widget),
                                        GdkEventCrossing *gdk_event,
                                        wxToolBarTool *tool )
@@ -220,6 +223,7 @@ static gint gtk_toolbar_tool_callback( GtkWidget *WXUNUSED(widget),
         tb->OnMouseEnter( -1 );
 
     return FALSE;
+}
 }
 
 //-----------------------------------------------------------------------------
