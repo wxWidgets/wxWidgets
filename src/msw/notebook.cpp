@@ -471,9 +471,18 @@ void wxNotebook::AdjustPageSize(wxNotebookPage *page)
 
     // get the page size from the notebook size
     GetSize((int *)&rc.right, (int *)&rc.bottom);
-    TabCtrl_AdjustRect(m_hwnd, false, &rc);
 
-    page->SetSize(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+    // This check is to work around a bug in TabCtrl_AdjustRect which will
+    // cause a crash on win2k, or on XP with themes disabled, if the
+    // wxNB_MULTILINE style is used and the rectangle is very small, (such as
+    // when the notebook is first created.)  The value of 20 is just
+    // arbitrarily chosen, if there is a better way to determine this value
+    // then please do so.  --RD
+    if (rc.right > 20 && rc.bottom > 20)
+    {
+        TabCtrl_AdjustRect(m_hwnd, false, &rc);
+        page->SetSize(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+    }
 }
 
 // ----------------------------------------------------------------------------
