@@ -85,6 +85,8 @@ Destroys the wxNotebook object.
 
 Adds a new page.
 
+The call to this function may generate the page changing events.
+
 \wxheading{Parameters}
 
 \docparam{page}{Specifies the new page.}
@@ -112,6 +114,8 @@ Do not delete the page, it will be deleted by the notebook.
 \func{void}{AdvanceSelection}{\param{bool}{ forward = true}}
 
 Cycles through the tabs.
+
+The call to this function generates the page changing events.
 
 \membersection{wxNotebook::AssignImageList}\label{wxnotebookassignimagelist}
 
@@ -144,6 +148,8 @@ Deletes all pages.
 \func{bool}{DeletePage}{\param{int}{ page}}
 
 Deletes the specified page, and the associated window.
+
+The call to this function generates the page changing events.
 
 \membersection{wxNotebook::GetImageList}\label{wxnotebookgetimagelist}
 
@@ -322,6 +328,8 @@ Sets the text for the given page.
 \func{int}{SetSelection}{\param{int}{ page}}
 
 Sets the selection for the given page, returning the previous selection.
+
+The call to this function generates the page changing events.
 
 \wxheading{See also}
 
