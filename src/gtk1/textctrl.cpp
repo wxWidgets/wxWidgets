@@ -518,7 +518,8 @@ wxString wxTextCtrl::GetValue() const
 #else
         wxCharBuffer buffer( wxConvLocal.cWC2WX( wxConvUTF8.cMB2WC( text ) ) );
 #endif
-        tmp = buffer;
+        if ( buffer )
+            tmp = buffer;
 
         g_free( text );
 #else
