@@ -41,7 +41,7 @@
 //#define TEST_DIR
 //#define TEST_DLLLOADER
 //#define TEST_EXECUTE
-//#define TEST_FILE
+#define TEST_FILE
 //#define TEST_FILECONF
 //#define TEST_HASH
 //#define TEST_LIST
@@ -56,7 +56,7 @@
 //#define TEST_VCARD            -- don't enable this (VZ)
 //#define TEST_WCHAR
 //#define TEST_ZIP
-#define TEST_ZLIB
+//#define TEST_ZLIB
 
 // ----------------------------------------------------------------------------
 // test class for container objects
@@ -368,7 +368,7 @@ static void TestFileRead()
 
         puts("File dump:\n----------");
 
-        static const size_t len = 1024;
+        static const off_t len = 1024;
         char buf[len];
         for ( ;; )
         {
@@ -404,6 +404,24 @@ static void TestTextFileRead()
     {
         printf("Number of lines: %u\n", file.GetLineCount());
         printf("Last line: '%s'\n", file.GetLastLine().c_str());
+
+        wxString s;
+
+        puts("\nDumping the entire file:");
+        for ( s = file.GetFirstLine(); !file.Eof(); s = file.GetNextLine() )
+        {
+            printf("%6u: %s\n", file.GetCurrentLine() + 1, s.c_str());
+        }
+        printf("%6u: %s\n", file.GetCurrentLine() + 1, s.c_str());
+
+        puts("\nAnd now backwards:");
+        for ( s = file.GetLastLine();
+              file.GetCurrentLine() != 0;
+              s = file.GetPrevLine() )
+        {
+            printf("%6u: %s\n", file.GetCurrentLine() + 1, s.c_str());
+        }
+        printf("%6u: %s\n", file.GetCurrentLine() + 1, s.c_str());
     }
     else
     {
@@ -3505,7 +3523,8 @@ int main(int argc, char **argv)
 #endif // TEST_LOG
 
 #ifdef TEST_FILE
-    TestFileRead();
+    if ( 0 )
+        TestFileRead();
     TestTextFileRead();
 #endif // TEST_FILE
 

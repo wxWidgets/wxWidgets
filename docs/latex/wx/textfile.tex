@@ -189,10 +189,13 @@ allows more "iterator-like" traversal of the list of lines, i.e. you may
 write something like:
 
 \begin{verbatim}
-for ( str = GetFirstLine(); !Eof(); str = GetNextLine() )
+wxTextFile file;
+...
+for ( str = file.GetFirstLine(); !file.Eof(); str = file.GetNextLine() )
 {
     // do something with the current line in str
 }
+// do something with the last line in str
 \end{verbatim}
 
 \membersection{wxTextFile::GetNextLine}\label{wxtextfilegetnextline}
@@ -212,7 +215,21 @@ Gets the previous line in the file.
 
 \func{wxString\&}{GetLastLine}{\void}
 
-Gets the last line of the file.
+Gets the last line of the file. Together with 
+\helpref{GetPrevLine}{wxtextfilegetprevline} it allows to enumerate the lines
+in the file from the end to the beginning like this:
+
+\begin{verbatim}
+wxTextFile file;
+...
+for ( str = file.GetLastLine();
+      file.GetCurrentLine() > 0;
+      str = file.GetPrevLine() )
+{
+    // do something with the current line in str
+}
+// do something with the first line in str
+\end{verbatim}
 
 \membersection{wxTextFile::GetLineType}\label{wxtextfilegetlinetype}
 
