@@ -434,7 +434,7 @@ class wxLogFrame : public wxFrame
 {
 public:
     // ctor & dtor
-    wxLogFrame(wxFrame *pParent, wxLogWindow *log, const wxChar *szTitle);
+    wxLogFrame(wxWindow *pParent, wxLogWindow *log, const wxChar *szTitle);
     virtual ~wxLogFrame();
 
     // menu callbacks
@@ -478,7 +478,7 @@ BEGIN_EVENT_TABLE(wxLogFrame, wxFrame)
     EVT_CLOSE(wxLogFrame::OnCloseWindow)
 END_EVENT_TABLE()
 
-wxLogFrame::wxLogFrame(wxFrame *pParent, wxLogWindow *log, const wxChar *szTitle)
+wxLogFrame::wxLogFrame(wxWindow *pParent, wxLogWindow *log, const wxChar *szTitle)
           : wxFrame(pParent, wxID_ANY, szTitle)
 {
     m_log = log;
@@ -585,7 +585,7 @@ wxLogFrame::~wxLogFrame()
 // wxLogWindow
 // -----------
 
-wxLogWindow::wxLogWindow(wxFrame *pParent,
+wxLogWindow::wxLogWindow(wxWindow *pParent,
                          const wxChar *szTitle,
                          bool bShow,
                          bool bDoPass)
