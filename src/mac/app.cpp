@@ -1014,11 +1014,11 @@ void wxApp::MacDoOneEvent()
 {
   EventRecord event ;
 
-    long sleepTime = 1 ; // GetCaretTime() / 4 ;
+    long sleepTime = 1; // GetCaretTime() / 4 ;
 
-    if (WaitNextEvent(everyEvent, &event,sleepTime, s_macCursorRgn))
+    if (WaitNextEvent(everyEvent, &event, sleepTime, s_macCursorRgn))
     {
-    MacHandleOneEvent( &event );
+        MacHandleOneEvent( &event );
     }
     else
     {
@@ -1034,7 +1034,7 @@ void wxApp::MacDoOneEvent()
 
     // repeaters
 
-  DeletePendingObjects() ;
+    DeletePendingObjects() ;
     wxMacProcessNotifierAndPendingEvents() ;
 }
 
@@ -1692,9 +1692,20 @@ void wxApp::MacHandleOSEvent( EventRecord *ev )
                         break ;
                     default:
                         {
-                            if ( s_lastMouseDown == 0 )
-                                ev->modifiers |= btnState ;
-
+                            // if ( s_lastMouseDown == 0 )
+                            //     ev->modifiers |= btnState ;
+                                
+                            // Calling GetNextEvent with a zero event mask will always
+                            // pass back a null event. However, it fills the EventRecord
+                            // with the state of the modifier keys. This is needed since
+                            // the modifier state returned by WaitForNextEvent often is
+                            // wrong mouse move events. The attempt above to correct this
+                            // didn't always work (under OS X at least).
+            
+                            EventRecord tmp;
+                            ::GetNextEvent(0, &tmp);
+                            ev->modifiers = tmp.modifiers;
+                            
                             wxWindow* win = wxFindWinFromMacWindow( window ) ;
                             if ( win )
                                 win->MacMouseMoved( ev , windowPart ) ;
