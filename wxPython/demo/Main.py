@@ -251,7 +251,7 @@ class MyTP(wx.PyTipProvider):
 #
 
 try:
-    ##raise ImportError
+    ##raise ImportError     # for testing the alternate implementation
     from wx import stc
     from StyledTextCtrl_2 import PythonSTC
     class DemoCodeViewer(PythonSTC):
@@ -435,12 +435,9 @@ class wxPythonDemo(wx.Frame):
 
         if wx.Platform != '__WXMAC__':
             # setup a taskbar icon, and catch some events from it
-            if wx.Platform == '__WXGTK__':
-                dimension = 22
-            else:
-                dimension = 16
+            dim = 16  # (may want to use 22 on wxGTK...)
             icon = wx.IconFromBitmap(
-                images.getMondrianImage().Scale(dimension,dimension).ConvertToBitmap() )
+                images.getMondrianImage().Scale(dim,dim).ConvertToBitmap() )
             #icon = wx.Icon('bmp_source/mondrian.ico', wx.BITMAP_TYPE_ICO)
             #icon = images.getMondrianIcon()
             self.tbicon = wx.TaskBarIcon()
