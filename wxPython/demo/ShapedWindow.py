@@ -8,7 +8,13 @@ class TestFrame(wxFrame):
     def __init__(self, parent, log):
         self.log = log
         wxFrame.__init__(self, parent, -1, "Shaped Window",
-                         style = wxFRAME_SHAPED )
+                         style =
+                           wxFRAME_SHAPED
+                         | wxSIMPLE_BORDER
+                         | wxFRAME_NO_TASKBAR
+                         | wxSTAY_ON_TOP
+                         )
+
         self.hasShape = False
         self.delta = wxPoint(0,0)
 
