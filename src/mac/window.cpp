@@ -1467,11 +1467,7 @@ bool wxWindowMac::MacSetupCursor( const wxPoint& pt)
 }
 
 bool wxWindowMac::MacDispatchMouseEvent(wxMouseEvent& event)
-{
-    //In case a third-party component changed the port...
-    wxMacPortStateHelper help( (GrafPtr) GetWindowPort( (WindowRef) MacGetRootWindow()) ) ;
-    wxMacWindowClipper clip (this);
-    
+{    
     if ((event.m_x < m_x) || (event.m_y < m_y) ||
         (event.m_x > (m_x + m_width)) || (event.m_y > (m_y + m_height)))
         return FALSE;
