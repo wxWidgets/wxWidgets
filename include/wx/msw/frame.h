@@ -155,6 +155,9 @@ private:
     WXHWND                m_hwndToolTip;
 #endif // tooltips
 
+    // used by IconizeChildFrames(), see comments there
+    bool m_wasMinimized;
+
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxFrame)
 };

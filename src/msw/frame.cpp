@@ -112,6 +112,8 @@ void wxFrame::Init()
     m_fsToolBarHeight = 0;
 //  m_fsMenu = 0;
 
+    m_wasMinimized = FALSE;
+
     m_winLastFocused = (wxWindow *)NULL;
 }
 
@@ -523,7 +525,18 @@ void wxFrame::IconizeChildFrames(bool bIconize)
 #endif // wxUSE_MDI_ARCHITECTURE
            )
         {
-            frame->Iconize(bIconize);
+            // we don't want to restore the child frames which had been
+            // iconized even before we were iconized, so save the child frame
+            // status when iconizing the parent frame and check it when
+            // restoring it
+            if ( bIconize )
+            {
+                frame->m_wasMinimized = frame->IsIconized();
+            }
+
+            // this test works for both iconizing and restoring
+            if ( !frame->m_wasMinimized )
+                frame->Iconize(bIconize);
         }
     }
 }
