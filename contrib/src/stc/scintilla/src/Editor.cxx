@@ -91,7 +91,7 @@ void LineLayout::SetLineStart(int line, int start) {
 	if ((line >= lenLineStarts) && (line != 0)) {
 		int newMaxLines = line + 20;
 		int *newLineStarts = new int[newMaxLines];
-		if (!newLineStarts) 
+		if (!newLineStarts)
 			return;
 		for (int i=0; i<newMaxLines; i++) {
 			if (i < lenLineStarts)
@@ -106,7 +106,7 @@ void LineLayout::SetLineStart(int line, int start) {
 	lineStarts[line] = start;
 }
 
-void LineLayout::SetBracesHighlight(Range rangeLine, Position braces[], 
+void LineLayout::SetBracesHighlight(Range rangeLine, Position braces[],
 	char bracesMatchStyle, int xHighlight) {
 	if (rangeLine.ContainsCharacter(braces[0])) {
 		int braceOffset = braces[0] - rangeLine.start;
@@ -144,8 +144,8 @@ void LineLayout::RestoreBracesHighlight(Range rangeLine, Position braces[]) {
 	xHighlightGuide = 0;
 }
 
-LineLayoutCache::LineLayoutCache() : 
-	level(0), length(0), size(0), cache(0), 
+LineLayoutCache::LineLayoutCache() :
+	level(0), length(0), size(0), cache(0),
 	allInvalidated(false), styleClock(-1) {
 	Allocate(0);
 }
@@ -222,7 +222,7 @@ void LineLayoutCache::SetLevel(int level_) {
 	}
 }
 
-LineLayout *LineLayoutCache::Retrieve(int lineNumber, int lineCaret, int maxChars, int styleClock_, 
+LineLayout *LineLayoutCache::Retrieve(int lineNumber, int lineCaret, int maxChars, int styleClock_,
 	int linesOnScreen, int linesInDoc) {
 	AllocateForLevel(linesOnScreen, linesInDoc);
 	if (styleClock != styleClock_) {
@@ -1077,7 +1077,7 @@ bool Editor::WrapLines() {
 			else
 				goodTopLine += cs.GetHeight(lineDocTop);
 			double durWrap = et.Duration(true);
-			Platform::DebugPrintf("Wrap:%9.6g \n", durWrap);
+			//Platform::DebugPrintf("Wrap:%9.6g \n", durWrap);
 		}
 	}
 	if (wrapOccurred) {
@@ -1306,7 +1306,7 @@ LineLayout *Editor::RetrieveLineLayout(int lineNumber) {
 	int posLineStart = pdoc->LineStart(lineNumber);
 	int posLineEnd = pdoc->LineStart(lineNumber + 1);
 	int lineCaret = pdoc->LineFromPosition(currentPos);
-	return llc.Retrieve(lineNumber, lineCaret, 
+	return llc.Retrieve(lineNumber, lineCaret,
 		posLineEnd - posLineStart, pdoc->GetStyleClock(),
 		LinesOnScreen() + 1, pdoc->LinesTotal());
 }
@@ -1332,7 +1332,7 @@ void Editor::LayoutLine(int line, Surface *surface, ViewStyle &vstyle, LineLayou
 		} else {
 			ll->edgeColumn = -1;
 		}
-		
+
 		int posLineEnd = pdoc->LineStart(line + 1);
 		Font &ctrlCharsFont = vstyle.styles[STYLE_CONTROLCHAR].font;
 		char styleByte = 0;
@@ -1361,7 +1361,7 @@ void Editor::LayoutLine(int line, Surface *surface, ViewStyle &vstyle, LineLayou
 		ll->chars[numCharsInLine] = 0;   // Also triggers processing in the loops as this is a control character
 		ll->styles[numCharsInLine] = styleByte;	// For eolFilled
 		ll->indicators[numCharsInLine] = 0;
-	
+
 		// Layout the line, determining the position of each character,
 		// with an extra element at the end for the end of the line.
 		int startseg = 0;	// Start of the current segment, in char. number
@@ -1369,7 +1369,7 @@ void Editor::LayoutLine(int line, Surface *surface, ViewStyle &vstyle, LineLayou
 		ll->positions[0] = 0;
 		unsigned int tabWidth = vstyle.spaceWidth * pdoc->tabInChars;
 		bool lastSegItalics = false;
-	
+
 		for (int charInLine = 0; charInLine < numCharsInLine; charInLine++) {
 			if ((ll->styles[charInLine] != ll->styles[charInLine + 1]) ||
 				IsControlCharacter(ll->chars[charInLine]) || IsControlCharacter(ll->chars[charInLine + 1])) {
@@ -1830,7 +1830,7 @@ void Editor::Paint(Surface *surfaceWindow, PRectangle rcArea) {
 		//Platform::DebugPrintf("Abandoning paint\n");
 		if (wrapState != eWrapNone) {
 			if (paintAbandonedByStyling) {
-				// Styling has spilled over a line end, such as occurs by starting a multiline 
+				// Styling has spilled over a line end, such as occurs by starting a multiline
 				// comment. The width of subsequent text may have changed, so rewrap.
 				NeedWrapping(cs.DocFromDisplay(topLine));
 			}
@@ -1898,7 +1898,7 @@ void Editor::Paint(Surface *surfaceWindow, PRectangle rcArea) {
 					ll->selEnd = -1;
 					ll->containsCaret = false;
 				}
-	
+
 				PRectangle rcLine = rcClient;
 				rcLine.top = ypos;
 				rcLine.bottom = ypos + vs.lineHeight;
@@ -1907,11 +1907,11 @@ void Editor::Paint(Surface *surfaceWindow, PRectangle rcArea) {
 				// Highlight the current braces if any
 				ll->SetBracesHighlight(rangeLine, braces, static_cast<char>(bracesMatchStyle),
 					highlightGuideColumn * vs.spaceWidth);
-	
+
 				// Draw the line
 				DrawLine(surface, vs, lineDoc, visibleLine, xStart, rcLine, ll, subLine);
 				//durPaint += et.Duration(true);
-	
+
 				// Restore the precvious styles for the brace highlights in case layout is in cache.
 				ll->RestoreBracesHighlight(rangeLine, braces);
 
@@ -1930,7 +1930,7 @@ void Editor::Paint(Surface *surfaceWindow, PRectangle rcArea) {
 						surface->FillRectangle(rcFoldLine, vs.styles[STYLE_DEFAULT].fore.allocated);
 					}
 				}
-	
+
 				// Draw the Caret
 				if (lineDoc == lineCaret) {
 					int offset = Platform::Minimum(posCaret - rangeLine.start, ll->maxLineLength);
@@ -1969,7 +1969,7 @@ void Editor::Paint(Surface *surfaceWindow, PRectangle rcArea) {
 						}
 					}
 				}
-	
+
 				if (bufferedDraw) {
 					Point from(vs.fixedColumnWidth, 0);
 					PRectangle rcCopyArea(vs.fixedColumnWidth, yposScreen,
@@ -1978,7 +1978,7 @@ void Editor::Paint(Surface *surfaceWindow, PRectangle rcArea) {
 				}
 				//durCopy += et.Duration(true);
 			}
-		
+
 			if (!bufferedDraw) {
 				ypos += vs.lineHeight;
 			}
@@ -2006,7 +2006,7 @@ void Editor::Paint(Surface *surfaceWindow, PRectangle rcArea) {
 			}
 		}
 		//Platform::DebugPrintf(
-		//"Layout:%9.6g    Paint:%9.6g    Ratio:%9.6g   Copy:%9.6g   Total:%9.6g\n", 
+		//"Layout:%9.6g    Paint:%9.6g    Ratio:%9.6g   Copy:%9.6g   Total:%9.6g\n",
 		//durLayout, durPaint, durLayout / durPaint, durCopy, etWhole.Duration());
 		NotifyPainted();
 	}
@@ -2228,7 +2228,7 @@ void Editor::AddCharUTF(char *s, unsigned int len, bool treatAsDBCS) {
 	SetLastXChosen();
 
 	if (treatAsDBCS) {
-		NotifyChar((static_cast<unsigned char>(s[0]) << 8) | 
+		NotifyChar((static_cast<unsigned char>(s[0]) << 8) |
 			static_cast<unsigned char>(s[1]));
 	} else {
 		int byte = static_cast<unsigned char>(s[0]);
