@@ -34,17 +34,19 @@
 
 struct WXDLLEXPORT wxPaintDCInfo
 {
-    wxPaintDCInfo(wxWindow *win, wxDC *dc)
+    wxPaintDCInfo( wxWindow* pWin
+                  ,wxDC*     pDC
+                 )
     {
-        hwnd = win->GetHWND();
-        hdc = dc->GetHDC();
-        count = 1;
+        m_hWnd = pWin->GetHWND();
+        m_hDC = pDC->GetHDC();
+        m_nCount = 1;
     }
 
-    WXHWND    hwnd;       // window for this DC
-    WXHDC     hdc;        // the DC handle
-    size_t    count;      // usage count
-};
+    WXHWND                          m_hWnd;   // window for this DC
+    WXHDC                           m_hDC;    // the DC handle
+    size_t                          m_nCount; // usage count
+}; // end of wxPaintDCInfot
 
 #include "wx/arrimpl.cpp"
 
@@ -85,13 +87,15 @@ wxWindowDC::wxWindowDC()
     m_pCanvas = NULL;
 }
 
-wxWindowDC::wxWindowDC(wxWindow *the_canvas)
+wxWindowDC::wxWindowDC(
+  wxWindow*                         pTheCanvas
+)
 {
     ERRORID                         vError;
     wxString                        sError;
 
-    m_pCanvas = the_canvas;
-    m_hDC = (WXHDC) ::WinOpenWindowDC(GetWinHwnd(the_canvas) );
+    m_pCanvas = pTheCanvas;
+    m_hDC = (WXHDC) ::WinOpenWindowDC(GetWinHwnd(pTheCanvas) );
     m_nDCCount++;
     //
     // default under PM is that Window and Client DC's are the same
@@ -153,18 +157,20 @@ wxClientDC::wxClientDC()
     m_pCanvas = NULL;
 }
 
-wxClientDC::wxClientDC(wxWindow *the_canvas)
+wxClientDC::wxClientDC(
+  wxWindow*                         pTheCanvas
+)
 {
     SIZEL                           vSizl = { 0,0};
     ERRORID                         vError;
     wxString                        sError;
 
-    m_pCanvas = the_canvas;
+    m_pCanvas = pTheCanvas;
 
     //
     // default under PM is that Window and Client DC's are the same
     //
-    m_hDC = (WXHDC) ::WinOpenWindowDC(GetWinHwnd(the_canvas));
+    m_hDC = (WXHDC) ::WinOpenWindowDC(GetWinHwnd(pTheCanvas));
     m_hPS = ::GpiCreatePS( wxGetInstance()
                           ,m_hDC
                           ,&vSizl
@@ -191,7 +197,7 @@ wxClientDC::wxClientDC(wxWindow *the_canvas)
                           ,wxSOLID
                          )
                  );
-}
+} // end of wxClientDC::wxClientDC
 
 wxClientDC::~wxClientDC()
 {
@@ -205,7 +211,7 @@ wxClientDC::~wxClientDC()
         //
         m_hDC = 0;
     }
-}
+} // end of wxClientDC::~wxClientDC
 
 // ----------------------------------------------------------------------------
 // wxPaintDC
@@ -259,13 +265,45 @@ wxPaintDC::wxPaintDC(
 
     if (pInfo)
     {
-        m_hDC = pInfo->hdc;
-        pInfo->count++;
+        m_hDC = pInfo->m_hDC;
+        pInfo->m_nCount++;
     }
     else // not in cache, create a new one
     {
+        SIZEL                       vSizl = { 0,0};
         HPS                         hPS;
+        HRGN                        hRgn;
 
+        memset(&g_paintStruct, '\0', sizeof(RECTL));
+        if (!::WinQueryUpdateRect(GetWinHwnd(m_pCanvas), &g_paintStruct))
+        {
+             wxLogLastError("CreateRectRgn");
+//             return;
+        }
+        m_hDC = (WXHDC) ::WinOpenWindowDC(GetWinHwnd(m_pCanvas));
+        m_hPS = ::GpiCreatePS( wxGetInstance()
+                              ,m_hDC
+                              ,&vSizl
+                              ,PU_PELS | GPIF_LONG | GPIA_ASSOC
+                             );
+
+        // Set the wxWindows color table
+        ::GpiCreateLogColorTable( m_hPS
+                                 ,0L
+                                 ,LCOLF_CONSECRGB
+                                 ,0L
+                                 ,(LONG)wxTheColourDatabase->m_nSize
+                                 ,(PLONG)wxTheColourDatabase->m_palTable
+                                );
+        ::GpiCreateLogColorTable( m_hPS
+                                 ,0L
+                                 ,LCOLF_RGB
+                                 ,0L
+                                 ,0L
+                                 ,NULL
+                                );
+
+#if 0
         hPS = ::WinBeginPaint( GetWinHwnd(m_pCanvas)
                               ,NULLHANDLE
                               ,&g_paintStruct
@@ -289,6 +327,8 @@ wxPaintDC::wxPaintDC(
                                      ,NULL
                                     );
         }
+#endif
+
         m_bIsPaintTime   = TRUE;
         m_hDC = (WXHDC) -1; // to satisfy those anonizmous efforts
         m_vRclPaint = g_paintStruct;
@@ -303,17 +343,17 @@ wxPaintDC::~wxPaintDC()
     {
         SelectOldObjects(m_hDC);
 
-        size_t index;
-        wxPaintDCInfo *info = FindInCache(&index);
+        size_t                      nIndex;
+        wxPaintDCInfo*              pInfo = FindInCache(&nIndex);
 
-        wxCHECK_RET( info, wxT("existing DC should have a cache entry") );
+        wxCHECK_RET( pInfo, wxT("existing DC should have a cache entry") );
 
-        if ( !--info->count )
+        if ( !--pInfo->m_nCount )
         {
             ::WinEndPaint(m_hPS);
             m_hPS          = m_hOldPS;
             m_bIsPaintTime = FALSE;
-            ms_cache.Remove(index);
+            ms_cache.Remove(nIndex);
         }
         //else: cached DC entry is still in use
 
@@ -322,20 +362,23 @@ wxPaintDC::~wxPaintDC()
     }
 }
 
-wxPaintDCInfo *wxPaintDC::FindInCache(size_t *index) const
+wxPaintDCInfo* wxPaintDC::FindInCache(
+  size_t*                           pIndex
+) const
 {
-    wxPaintDCInfo *info = NULL;
-    size_t nCache = ms_cache.GetCount();
-    for ( size_t n = 0; n < nCache; n++ )
+    wxPaintDCInfo*                  pInfo = NULL;
+    size_t                          nCache = ms_cache.GetCount();
+
+    for (size_t n = 0; n < nCache; n++)
     {
-        info = &ms_cache[n];
-        if ( info->hwnd == m_pCanvas->GetHWND() )
+        pInfo = &ms_cache[n];
+        if (pInfo->m_hWnd == m_pCanvas->GetHWND())
         {
-            if ( index )
-                *index = n;
+            if (pIndex)
+                *pIndex = n;
             break;
         }
     }
+    return pInfo;
+} // end of wxPaintDC::FindInCache
 
-    return info;
-}

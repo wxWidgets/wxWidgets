@@ -146,13 +146,12 @@ wxDC::wxDC(void)
     m_nDCCount     = 0;
     m_hOldPS       = NULL;
     m_hPS          = NULL;
-    m_bIsPaintTime = FALSE;// True at Paint Time
-};
+    m_bIsPaintTime = FALSE; // True at Paint Time
+}
 
 wxDC::~wxDC(void)
 {
-    // TODO:
-};
+}
 
 // This will select current objects out of the DC,
 // which is what you have to do before deleting the
@@ -425,19 +424,13 @@ void wxDC::DoDrawArc(
         dAnglmid = (dAngl1 + dAngl2)/2. + M_PI;
         vXm      = vXc + dRadius * cos(dAnglmid);
         vYm      = vYc + dRadius * sin(dAnglmid);
-        DoDrawArc( vX1
-                  ,vY1
-                  ,vXm
-                  ,vYm
-                  ,vXc
-                  ,vYc
+        DoDrawArc( vX1, vY1
+                  ,vXm, vYm
+                  ,vXc, vYc
                  );
-        DoDrawArc( vXm
-                  ,vYm
-                  ,vX2
-                  ,vY2
-                  ,vXc
-                  ,vYc
+        DoDrawArc( vXm, vYm
+                  ,vX2, vY2
+                  ,vXc, vYc
                  );
         return;
     }
@@ -461,8 +454,8 @@ void wxDC::DoDrawArc(
     vPtlPos.x = vX1; // Loads x-coordinate
     vPtlPos.y = vY1; // Loads y-coordinate
     ::GpiMove(m_hPS, &vPtlPos); // Sets current position
-    vPtlArc[0].x =  vXm;
-    vPtlArc[0].y =  vYm;
+    vPtlArc[0].x = vXm;
+    vPtlArc[0].y = vYm;
     vPtlArc[1].x = vX2;
     vPtlArc[1].y = vY2;
     ::GpiPointArc(m_hPS, vPtlArc); // Draws the arc
@@ -962,22 +955,19 @@ void wxDC::SetFont(
     //
     if (m_hOldFont)
     {
-//        ::SelectObject(GetHdc(), (HFONT) m_hOldFont);
         m_hOldFont = 0;
     }
-
     m_font = rFont;
-
     if (!rFont.Ok())
     {
-        if (m_hOldFont)
-//            ::SelectObject(GetHdc(), (HFONT) m_hOldFont);
         m_hOldFont = 0;
     }
 
-    if (m_font.Ok() && m_font.GetResourceHandle())
+    m_font.SetPS(m_hPS); // this will realize the font
+
+    if (m_font.Ok())
     {
-        HFONT                       hFont = (HFONT)0; //::SelectObject(GetHdc(), (HFONT) m_font.GetResourceHandle());
+        HFONT                       hFont = m_font.GetResourceHandle();
         if (hFont == (HFONT) NULL)
         {
             wxLogDebug(wxT("::SelectObject failed in wxDC::SetFont."));
@@ -985,7 +975,7 @@ void wxDC::SetFont(
         if (!m_hOldFont)
             m_hOldFont = (WXHFONT) hFont;
     }
-}
+} // end of wxDC::SetFont
 
 void wxDC::SetPen(
   const wxPen&                      rPen

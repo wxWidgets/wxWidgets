@@ -1026,20 +1026,6 @@ bool wxFrame::OS2Create(
         wxLogError("Error sizing client. Error: %s\n", sError);
         return FALSE;
     }
-
-/*
-    uCtlCount = SHORT1FROMMP(::WinSendMsg(GetHWND(), WM_FORMATFRAME, (MPARAM)vSwp, (MPARAM)vRect));
-    for (int i = 0; i < uCtlCount; i++)
-    {
-        if (vSwp[i].hwnd == GetHWND())
-            memcpy(&m_vSwp, &vSwp[i], sizeof(SWP));
-        else if (vSwp[i].hwnd == m_hVScroll)
-            memcpy(&m_vSwpVScroll, &vSwp[i], sizeof(SWP));
-        else if (vSwp[i].hwnd == m_hHScroll)
-            memcpy(&m_vSwpVScroll, &vSwp[i], sizeof(SWP));
-        else if (vSwp[i].hwnd == m_hTitleBar)
-            memcpy(&m_vSwpTitleBar, &vSwp[i], sizeof(SWP));
-    }*/
     return TRUE;
 } // end of wxFrame::OS2Create
 
@@ -1290,7 +1276,8 @@ bool wxFrame::HandlePaint()
         }
         else
         {
-            return wxWindow::HandlePaint();
+            wxWindow::HandlePaint();
+            return TRUE;
         }
     }
     else

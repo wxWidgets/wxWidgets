@@ -174,9 +174,16 @@ WXDLLEXPORT void wxSetInstance(HINSTANCE hInst);
 
 WXDLLEXPORT wxWindow* wxFindWinFromHandle(WXHWND hWnd);
 
-WXDLLEXPORT void wxGetCharSize(WXHWND wnd, int *x, int *y,wxFont *the_font);
-WXDLLEXPORT void wxFillLogFont(LOGFONT *logFont, wxFont *font);
-WXDLLEXPORT wxFont wxCreateFontFromLogFont(LOGFONT *logFont);
+WXDLLEXPORT void   wxGetCharSize(WXHWND wnd, int *x, int *y,wxFont *the_font);
+WXDLLEXPORT void   wxFillLogFont( LOGFONT*      pLogFont
+                                 ,PFACENAMEDESC pFaceName
+                                 ,const wxFont* pFont
+                                );
+WXDLLEXPORT wxFont wxCreateFontFromLogFont( LOGFONT*      pLogFont
+                                           ,PFONTMETRICS  pFM
+                                           ,PFACENAMEDESC pFace
+                                          );
+WXDLLEXPORT int    wxGpiStrcmp(char* s0, char* s1);
 
 WXDLLEXPORT void wxSliderEvent(WXHWND control, WXWORD wParam, WXWORD pos);
 WXDLLEXPORT void wxScrollBarEvent(WXHWND hbar, WXWORD wParam, WXWORD pos);

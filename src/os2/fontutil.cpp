@@ -52,199 +52,231 @@
 // convert to/from the string representation: format is
 //      encodingid;facename[;charset]
 
-bool wxNativeEncodingInfo::FromString(const wxString& s)
+bool wxNativeEncodingInfo::FromString(
+  const wxString&                   rsStr
+)
 {
-    wxStringTokenizer tokenizer(s, _T(";"));
+    wxStringTokenizer               vTokenizer(rsStr, _T(";"));
+    wxString                        sEncid = vTokenizer.GetNextToken();
+    long                            lEnc;
 
-    wxString encid = tokenizer.GetNextToken();
-    long enc;
-    if ( !encid.ToLong(&enc) )
+    if (!sEncid.ToLong(&lEnc))
         return FALSE;
-    encoding = (wxFontEncoding)enc;
-
-    facename = tokenizer.GetNextToken();
-    if ( !facename )
+    encoding = (wxFontEncoding)lEnc;
+    facename = vTokenizer.GetNextToken();
+    if (!facename)
         return FALSE;
 
-    wxString tmp = tokenizer.GetNextToken();
-    if ( !tmp )
+    wxString                        sTmp = vTokenizer.GetNextToken();
+
+    if (!sTmp)
     {
-        // default charset (don't use DEFAULT_CHARSET though because of subtle
-        // Windows 9x/NT differences in handling it)
-// TODO: what is this for OS/2?
-//        charset = ANSI_CHARSET;
+        charset = 850;
     }
     else
     {
-        if ( wxSscanf(tmp, _T("%u"), &charset) != 1 )
+        if ( wxSscanf(sTmp, _T("%u"), &charset) != 1 )
         {
             // should be a number!
             return FALSE;
         }
     }
-
     return TRUE;
-}
+} // end of wxNativeEncodingInfo::FromString
 
 wxString wxNativeEncodingInfo::ToString() const
 {
-    wxString s;
+    wxString                        sStr;
 
-    s << (long)encoding << _T(';') << facename;
+    sStr << (long)encoding << _T(';') << facename;
 
-// TODO: what is this for OS/2?
-/*
-    if ( charset != ANSI_CHARSET )
+    if (charset != 850)
     {
-        s << _T(';') << charset;
+        sStr << _T(';') << charset;
     }
-*/
-    return s;
-}
+    return sStr;
+} // end of wxNativeEncodingInfo::ToString
 
 // ----------------------------------------------------------------------------
 // helper functions
 // ----------------------------------------------------------------------------
 
-bool wxGetNativeFontEncoding(wxFontEncoding encoding,
-                             wxNativeEncodingInfo *info)
+bool wxGetNativeFontEncoding(
+  wxFontEncoding                    vEncoding
+, wxNativeEncodingInfo*             pInfo
+)
 {
-    wxCHECK_MSG( info, FALSE, _T("bad pointer in wxGetNativeFontEncoding") );
-
-    if ( encoding == wxFONTENCODING_DEFAULT )
+    wxCHECK_MSG(pInfo, FALSE, _T("bad pointer in wxGetNativeFontEncoding") );
+    if (vEncoding == wxFONTENCODING_DEFAULT)
     {
-        encoding = wxFont::GetDefaultEncoding();
+        vEncoding = wxFont::GetDefaultEncoding();
     }
-
-    switch ( encoding )
+    switch (vEncoding)
     {
-// TODO: fix this for OS2
-/*
-        // although this function is supposed to return an exact match, do do
-        // some mappings here for the most common case of "standard" encoding
-        case wxFONTENCODING_SYSTEM:
         case wxFONTENCODING_ISO8859_1:
         case wxFONTENCODING_ISO8859_15:
-        case wxFONTENCODING_CP1252:
-            info->charset = ANSI_CHARSET;
-            break;
-
         case wxFONTENCODING_CP1250:
-            info->charset = EASTEUROPE_CHARSET;
+            pInfo->charset = 1250;
             break;
 
+        case wxFONTENCODING_ISO8859_2:
+        case wxFONTENCODING_CP1252:
+            pInfo->charset = 1252;
+            break;
+
+        case wxFONTENCODING_ISO8859_4:
+        case wxFONTENCODING_ISO8859_10:
+            pInfo->charset = 921; // what is baltic?
+            break;
+
+        case wxFONTENCODING_ISO8859_5:
         case wxFONTENCODING_CP1251:
-            info->charset = RUSSIAN_CHARSET;
+            pInfo->charset = 1251;
             break;
 
-        case wxFONTENCODING_CP1253:
-            info->charset = GREEK_CHARSET;
+        case wxFONTENCODING_ISO8859_6:
+            pInfo->charset = 864;
             break;
 
-        case wxFONTENCODING_CP1254:
-            info->charset = TURKISH_CHARSET;
+        case wxFONTENCODING_ISO8859_7:
+            pInfo->charset = 869;
             break;
 
-        case wxFONTENCODING_CP1255:
-            info->charset = HEBREW_CHARSET;
+        case wxFONTENCODING_ISO8859_8:
+            pInfo->charset = 862;
             break;
 
-        case wxFONTENCODING_CP1256:
-            info->charset = ARABIC_CHARSET;
+        case wxFONTENCODING_ISO8859_9:
+            pInfo->charset = 857;
             break;
 
-        case wxFONTENCODING_CP1257:
-            info->charset = BALTIC_CHARSET;
-            break;
-
-        case wxFONTENCODING_CP874:
-            info->charset = THAI_CHARSET;
+        case wxFONTENCODING_ISO8859_11:
+            pInfo->charset = 874; // what is thai
             break;
 
         case wxFONTENCODING_CP437:
-            info->charset = OEM_CHARSET;
+            pInfo->charset = 437;
             break;
-*/
+
         default:
-            // no way to translate this encoding into a Windows charset
-            return FALSE;
+            wxFAIL_MSG(wxT("unsupported encoding"));
+            // fall through
+
+        case wxFONTENCODING_SYSTEM:
+            pInfo->charset = 850;
+            break;
     }
-
     return TRUE;
-}
+} // end of wxGetNativeFontEncoding
 
-bool wxTestFontEncoding(const wxNativeEncodingInfo& info)
+bool wxTestFontEncoding(
+  const wxNativeEncodingInfo&       rInfo
+)
 {
-   // TODO:
-   /*
-    // try to create such font
-    LOGFONT lf;
-    wxZeroMemory(lf);       // all default values
+    FATTRS                          vLogFont;
+    HPS                             hPS;
 
-    lf.lfCharSet = info.charset;
-    strncpy(lf.lfFaceName, info.facename, sizeof(lf.lfFaceName));
+    hPS = ::WinGetPS(HWND_DESKTOP);
 
-    HFONT hfont = ::CreateFontIndirect(&lf);
-    if ( !hfont )
+    memset(&vLogFont, '\0', sizeof(FATTRS));           // all default values
+    vLogFont.usRecordLength = sizeof(FATTRS);
+    vLogFont.usCodePage = rInfo.charset;
+    vLogFont.lMaxBaselineExt = 0L;                    // Outline fonts should use 0
+    vLogFont.lAveCharWidth = 0L;                      // Outline fonts should use 0
+    vLogFont.fsFontUse = FATTR_FONTUSE_OUTLINE |      // only outline fonts allowed
+                         FATTR_FONTUSE_TRANSFORMABLE; // may be transformed
+
+    strncpy(vLogFont.szFacename, rInfo.facename.c_str(), sizeof(vLogFont.szFacename));
+
+    if (!::GpiCreateLogFont( hPS
+                            ,NULL
+                            ,1L
+                            ,&vLogFont
+                           ))
     {
-        // no such font
+        ::WinReleasePS(hPS);
         return FALSE;
     }
-
-    ::DeleteObject((HGDIOBJ)hfont);
-*/
+    ::WinReleasePS(hPS);
     return TRUE;
-}
+} // end of wxTestFontEncoding
 
 // ----------------------------------------------------------------------------
 // wxFont <-> LOGFONT conversion
 // ----------------------------------------------------------------------------
 
-#if 0
-void wxFillLogFont(LOGFONT *logFont, const wxFont *font)
+void wxFillLogFont(
+  LOGFONT*                          pLogFont // OS2 GPI FATTRS
+, PFACENAMEDESC                     pFaceName
+, const wxFont*                     pFont
+)
 {
-    int ff_family;
-    wxString ff_face;
+    wxString                        sFace;
+    USHORT                          uWeight;
+    int                             nItalic;
 
-    switch ( font->GetFamily() )
+    pLogFont->fsSelection = 0;
+    pLogFont->fsSelection = FATTR_SEL_OUTLINE; // we will alway use only outlines
+    pFaceName->usWeightClass = 0;
+    pFaceName->flOptions = 0;
+    switch (pFont->GetFamily())
     {
         case wxSCRIPT:
-            ff_family = FF_SCRIPT;
-            ff_face = _T("Script");
+            sFace = _T("Script");
             break;
 
         case wxDECORATIVE:
-            ff_family = FF_DECORATIVE;
-            break;
-
         case wxROMAN:
-            ff_family = FF_ROMAN;
-            ff_face = _T("Times New Roman");
+            sFace = _T("Times New Roman");
             break;
 
         case wxTELETYPE:
         case wxMODERN:
-            ff_family = FF_MODERN;
-            ff_face = _T("Courier New");
+            sFace = _T("Courier New");
             break;
 
         case wxSWISS:
-            ff_family = FF_SWISS;
-            ff_face = _T("Arial");
+            sFace = _T("WarpSans");
             break;
 
         case wxDEFAULT:
         default:
-            ff_family = FF_SWISS;
-            ff_face = _T("MS Sans Serif");
+            sFace = _T("Helv");
     }
 
-    BYTE ff_italic;
-    switch ( font->GetStyle() )
+    switch (pFont->GetWeight())
+    {
+        default:
+            wxFAIL_MSG(_T("unknown font weight"));
+            uWeight = FWEIGHT_DONT_CARE;
+            break;
+
+        case wxNORMAL:
+            uWeight = FWEIGHT_NORMAL;
+            break;
+
+        case wxLIGHT:
+            uWeight = FWEIGHT_LIGHT;
+            break;
+
+        case wxBOLD:
+            uWeight = FWEIGHT_BOLD;
+            pLogFont->fsSelection |= FATTR_SEL_BOLD;
+            break;
+
+        case wxFONTWEIGHT_MAX:
+            uWeight = FWEIGHT_ULTRA_BOLD;
+            pLogFont->fsSelection |= FATTR_SEL_BOLD;
+            break;
+    }
+    pFaceName->usWeightClass |= uWeight;
+
+    switch (pFont->GetStyle())
     {
         case wxITALIC:
         case wxSLANT:
-            ff_italic = 1;
+            nItalic = FTYPE_ITALIC;
+            pLogFont->fsSelection |= FATTR_SEL_ITALIC;
             break;
 
         default:
@@ -252,214 +284,236 @@ void wxFillLogFont(LOGFONT *logFont, const wxFont *font)
             // fall through
 
         case wxNORMAL:
-            ff_italic = 0;
-    }
-
-    int ff_weight;
-    switch ( font->GetWeight() )
-    {
-        default:
-            wxFAIL_MSG(_T("unknown font weight"));
-            // fall through
-
-        case wxNORMAL:
-            ff_weight = FW_NORMAL;
-            break;
-
-        case wxLIGHT:
-            ff_weight = FW_LIGHT;
-            break;
-
-        case wxBOLD:
-            ff_weight = FW_BOLD;
+            nItalic = 0;
             break;
     }
+    pFaceName->flOptions |= nItalic;
+    if(pFont->GetUnderlined())
+        pLogFont->fsSelection |= FATTR_SEL_UNDERSCORE;
 
-#if 0
-    HDC dc = ::GetDC(NULL);
-    int ppInch = ::GetDeviceCaps(dc, LOGPIXELSY);
-    ::ReleaseDC(NULL, dc);
-#else
-    // New behaviour: apparently ppInch varies according to Large/Small Fonts
-    // setting in Windows. This messes up fonts. So, set ppInch to a constant
-    // 96 dpi.
-    static const int ppInch = 96;
-#endif // 0/1
+    //
+    // In PM a font's height is expressed in points.  A point equals
+    // approximately 1/72 of an inch.  We'll assume for now that,
+    // like Windows, that fonts are 96 dpi.
+    //
+    DEVOPENSTRUC                    vDop = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
+    HDC                             hDC = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDop, NULLHANDLE);
+    LONG                            lStart = CAPS_FAMILY;
+    LONG                            lCount = CAPS_VERTICAL_RESOLUTION;
+    LONG                            alArray[CAPS_VERTICAL_RESOLUTION];
+    LONG                            lRes;
+    int                             nPpInch;
 
-#if wxFONT_SIZE_COMPATIBILITY
-    // Incorrect, but compatible with old wxWindows behaviour
-    int nHeight = (font->GetPointSize()*ppInch/72);
-#else
-    // Correct for Windows compatibility
-    int nHeight = - (font->GetPointSize()*ppInch/72);
-#endif
 
-    wxString facename = font->GetFaceName();
-    if ( !!facename )
+    ::DevQueryCaps(hDC, lStart, lCount, alArray);
+    lRes = alArray[CAPS_VERTICAL_RESOLUTION-1];
+    if (lRes > 0)
+        nPpInch = (int)(lRes/39.6); // lres is in pixels per meter
+    else
+        nPpInch = 96;
+
+    int                             nHeight = (pFont->GetPointSize() * nPpInch/72);
+    wxString                        sFacename = pFont->GetFaceName();
+
+    if (!!sFacename)
     {
-        ff_face = facename;
+        sFace = sFacename;
     }
     //else: ff_face is a reasonable default facename for this font family
 
-    // deal with encoding now
-    wxNativeEncodingInfo info;
-    wxFontEncoding encoding = font->GetEncoding();
-    if ( !wxGetNativeFontEncoding(encoding, &info) )
+    //
+    // Deal with encoding now
+    //
+    wxNativeEncodingInfo            vInfo;
+    wxFontEncoding                  vEncoding = pFont->GetEncoding();
+
+    if (!wxGetNativeFontEncoding( vEncoding
+                                 ,&vInfo
+                                ))
     {
-        if ( !wxTheFontMapper->GetAltForEncoding(encoding, &info) )
+        if ( !wxTheFontMapper->GetAltForEncoding( vEncoding
+                                                 ,&vInfo
+                                                ))
         {
-            // unsupported encoding, replace with the default
-            info.charset = ANSI_CHARSET;
+            //
+            // Unsupported encoding, replace with the default
+            //
+            vInfo.charset = 850;
         }
     }
 
-    if ( !info.facename.IsEmpty() )
+    if (!vInfo.facename.IsEmpty() )
     {
-        // the facename determined by the encoding overrides everything else
-        ff_face = info.facename;
+        //
+        // The facename determined by the encoding overrides everything else
+        //
+        sFace = vInfo.facename;
     }
 
-    // transfer all the data to LOGFONT
-    logFont->lfHeight = nHeight;
-    logFont->lfWidth = 0;
-    logFont->lfEscapement = 0;
-    logFont->lfOrientation = 0;
-    logFont->lfWeight = ff_weight;
-    logFont->lfItalic = ff_italic;
-    logFont->lfUnderline = (BYTE)font->GetUnderlined();
-    logFont->lfStrikeOut = 0;
-    logFont->lfCharSet = info.charset;
-    logFont->lfOutPrecision = OUT_DEFAULT_PRECIS;
-    logFont->lfClipPrecision = CLIP_DEFAULT_PRECIS;
-    logFont->lfQuality = PROOF_QUALITY;
-    logFont->lfPitchAndFamily = DEFAULT_PITCH | ff_family;
-    wxStrncpy(logFont->lfFaceName, ff_face, WXSIZEOF(logFont->lfFaceName));
-}
+    //
+    // Transfer all the data to LOGFONT
+    //
+    pLogFont->usRecordLength = sizeof(FATTRS);
+    wxStrcpy(pLogFont->szFacename, sFace.c_str());
+    pLogFont->usCodePage = vInfo.charset;
+    pLogFont->fsFontUse |= FATTR_FONTUSE_OUTLINE |
+                           FATTR_FONTUSE_TRANSFORMABLE;
+} // end of wxFillLogFont
 
-wxFont wxCreateFontFromLogFont(const LOGFONT *logFont)
+wxFont wxCreateFontFromLogFont(
+  const LOGFONT*                    pLogFont
+, const PFONTMETRICS                pFM
+, PFACENAMEDESC                     pFaceName
+)
 {
-DEBUG_PRINTF(wxCreateFontFromLogFont)
+    //
+    // Extract family from facename
+    //
+    int                             nFontFamily;
 
-    // extract family from pitch-and-family
-    int lfFamily = logFont->lfPitchAndFamily;
-    if ( lfFamily & FIXED_PITCH )
-        lfFamily -= FIXED_PITCH;
-    if ( lfFamily & VARIABLE_PITCH )
-        lfFamily -= VARIABLE_PITCH;
+    if (strcmp(pLogFont->szFacename, "Times New Roman") == 0)
+        nFontFamily = wxROMAN;
+    else if (strcmp(pLogFont->szFacename, "WarpSans") == 0)
+        nFontFamily = wxSWISS;
+    else if (strcmp(pLogFont->szFacename, "Script") == 0)
+        nFontFamily = wxSCRIPT;
+    else if (strcmp(pLogFont->szFacename, "Courier New") == 0)
+        nFontFamily = wxMODERN;
+    else
+        nFontFamily = wxSWISS;
 
-    int fontFamily;
-    switch ( lfFamily )
+    //
+    // Weight and Style
+    //
+    int                             nFontWeight = wxNORMAL;
+
+    switch (pFaceName->usWeightClass)
     {
-        case FF_ROMAN:
-            fontFamily = wxROMAN;
-            break;
-
-        case FF_SWISS:
-            fontFamily = wxSWISS;
-            break;
-
-        case FF_SCRIPT:
-            fontFamily = wxSCRIPT;
-            break;
-
-        case FF_MODERN:
-            fontFamily = wxMODERN;
-            break;
-
-        case FF_DECORATIVE:
-            fontFamily = wxDECORATIVE;
+        case FWEIGHT_LIGHT:
+            nFontWeight = wxLIGHT;
             break;
 
         default:
-            fontFamily = wxSWISS;
-    }
-
-    // weight and style
-    int fontWeight = wxNORMAL;
-    switch ( logFont->lfWeight )
-    {
-        case FW_LIGHT:
-            fontWeight = wxLIGHT;
+        case FWEIGHT_NORMAL:
+            nFontWeight = wxNORMAL;
             break;
 
-        default:
-        case FW_NORMAL:
-            fontWeight = wxNORMAL;
-            break;
-
-        case FW_BOLD:
-            fontWeight = wxBOLD;
+        case FWEIGHT_BOLD:
+            nFontWeight = wxBOLD;
             break;
     }
 
-    int fontStyle = logFont->lfItalic ? wxITALIC : wxNORMAL;
+    int                             nFontStyle;
 
-    bool fontUnderline = logFont->lfUnderline != 0;
+    if(pLogFont->fsSelection & FATTR_SEL_ITALIC)
+        nFontStyle = wxITALIC;
+    else
+        nFontStyle = wxNORMAL;
 
-    wxString fontFace = logFont->lfFaceName;
+    bool                            bFontUnderline = (pLogFont->fsSelection & FATTR_SEL_UNDERSCORE);
+    wxString                        sFontFace = pLogFont->szFacename;
+    int                             nFontPoints = pFM->lEmHeight;
+    wxFontEncoding                  vFontEncoding;
 
-    // font size
-    HDC dc = ::GetDC(NULL);
-
-    // remember that 1pt = 1/72inch
-    int height = abs(logFont->lfHeight);
-    int fontPoints = (72*height)/GetDeviceCaps(dc, LOGPIXELSY);
-
-    ::ReleaseDC(NULL, dc);
-
-    wxFontEncoding fontEncoding;
-    switch ( logFont->lfCharSet )
+    switch (pLogFont->usCodePage)
     {
         default:
             wxFAIL_MSG(wxT("unsupported charset"));
             // fall through
 
-        case ANSI_CHARSET:
-            fontEncoding = wxFONTENCODING_CP1252;
+        case 850:
+            vFontEncoding = wxFONTENCODING_CP1252;
             break;
 
-#ifdef __WIN32__
-        case EASTEUROPE_CHARSET:
-            fontEncoding = wxFONTENCODING_CP1250;
+        case 1250:
+            vFontEncoding = wxFONTENCODING_CP1250;
             break;
 
-        case BALTIC_CHARSET:
-            fontEncoding = wxFONTENCODING_CP1257;
+        case 921:
+            vFontEncoding = wxFONTENCODING_CP1257;
             break;
 
-        case RUSSIAN_CHARSET:
-            fontEncoding = wxFONTENCODING_CP1251;
+        case 866:
+            vFontEncoding = wxFONTENCODING_CP1251;
             break;
 
-        case ARABIC_CHARSET:
-            fontEncoding = wxFONTENCODING_CP1256;
+        case 864:
+            vFontEncoding = wxFONTENCODING_CP1256;
             break;
 
-        case GREEK_CHARSET:
-            fontEncoding = wxFONTENCODING_CP1253;
+        case 869:
+            vFontEncoding = wxFONTENCODING_CP1253;
             break;
 
-        case HEBREW_CHARSET:
-            fontEncoding = wxFONTENCODING_CP1255;
+        case 862:
+            vFontEncoding = wxFONTENCODING_CP1255;
             break;
 
-        case TURKISH_CHARSET:
-            fontEncoding = wxFONTENCODING_CP1254;
+        case 857:
+            vFontEncoding = wxFONTENCODING_CP1254;
             break;
 
-        case THAI_CHARSET:
-            fontEncoding = wxFONTENCODING_CP437;
+        case 874:
+            vFontEncoding = wxFONTENCODING_CP437;
             break;
-#endif
 
-        case OEM_CHARSET:
-            fontEncoding = wxFONTENCODING_CP437;
+        case 437:
+            vFontEncoding = wxFONTENCODING_CP437;
             break;
     }
 
-    return wxFont(fontPoints, fontFamily, fontStyle,
-                  fontWeight, fontUnderline, fontFace,
-                  fontEncoding);
+    return wxFont( nFontPoints
+                  ,nFontFamily
+                  ,nFontStyle
+                  ,nFontWeight
+                  ,bFontUnderline
+                  ,sFontFace
+                  ,vFontEncoding
+                 );
+} // end of wxCreateFontFromLogFont
+
+int wxGpiStrcmp(
+  char*                             s0
+, char*                             s1
+)
+{   int                             l0;
+    int                             l1;
+    int                             l;
+    int                             d;
+    int                             d1;
+    int                             i;
+    int                             rc;
+
+    rc = 0;
+    if(s0 == NULL)
+    {
+        if(s1 == NULL)
+            return 0;
+        else
+            return 32;
+    }
+    else if(s1 == NULL)
+        return 32;
+
+    l0 = strlen(s0);
+    l1 = strlen(s1);
+    l  = l0;
+    if(l0 != l1)
+    {
+        rc++;
+        if(l1 < l0)
+            l = l1;
+    }
+    for(i=0;i<l;i++)
+    {
+        d = s0[i]-s1[i];
+        if(!d)
+            continue;
+        d1 = toupper(s0[i]) - toupper(s1[i]);
+        if(!d1)
+            continue;
+        rc += abs(d);
+    }
+    return rc;
 }
-#endif // 0
 
