@@ -868,7 +868,7 @@ void wxMenuItem::DoSetText( const wxString& str )
         {
             m_text << wxT("\\\\");
         }
-#elif
+#else
         else if ( *pc == wxT('_') )    // escape underscores
         {
             m_text << wxT("__");
