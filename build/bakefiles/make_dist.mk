@@ -243,7 +243,6 @@ MOTIF_DIST: ALL_GUI_DIST
 	cp $(WXDIR)/wxMotif.spec $(DISTDIR)
 	cp $(INCDIR)/wx/motif/*.h $(DISTDIR)/include/wx/motif
 	cp $(MOTIFDIR)/*.cpp $(DISTDIR)/src/motif
-	cp $(MOTIFDIR)/*.c $(DISTDIR)/src/motif
 	cp $(MOTIFDIR)/*.xbm $(DISTDIR)/src/motif
 	mkdir $(DISTDIR)/src/motif/xmcombo
 	cp $(MOTIFDIR)/xmcombo/*.c $(DISTDIR)/src/motif/xmcombo
