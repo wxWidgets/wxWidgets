@@ -86,7 +86,8 @@ public:
     // get current file length
   size_t Length() const;
 
-  // simple accessors
+  // simple accessors: note that Eof() and Error() may only be called if
+  // IsOpened()!
     // is file opened?
   bool IsOpened() const { return m_fp != NULL; }
     // is end of file reached?

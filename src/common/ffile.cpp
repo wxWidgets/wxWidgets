@@ -206,6 +206,9 @@ bool wxFFile::Seek(long ofs, wxSeekMode mode)
 
 size_t wxFFile::Tell() const
 {
+    wxCHECK_MSG( IsOpened(), (size_t)-1,
+                 _T("wxFFile::Tell(): file is closed!") );
+
     long rc = ftell(m_fp);
     if ( rc == -1 )
     {
@@ -218,6 +221,9 @@ size_t wxFFile::Tell() const
 
 size_t wxFFile::Length() const
 {
+    wxCHECK_MSG( IsOpened(), (size_t)-1,
+                 _T("wxFFile::Length(): file is closed!") );
+
     wxFFile& self = *(wxFFile *)this;   // const_cast
 
     size_t posOld = Tell();
