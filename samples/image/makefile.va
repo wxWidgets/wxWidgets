@@ -16,7 +16,7 @@ WXDIR=$(WXWIN)
 #
 # Define which program this is and what it's path is and where to output to
 #
-PROGRAM=menu
+PROGRAM=image
 THISDIR=$(WXWIN)\samples\$(PROGRAM)
 OPATH=$(THISDIR)\$D
 

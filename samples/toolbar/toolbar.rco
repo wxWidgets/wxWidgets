@@ -1,0 +1,13 @@
+ICON     1   PRELOAD   "mondros2.ico"
+
+BITMAP  2000        LOADONCALL  "bitmaps\\new.bmp"
+BITMAP  2001        LOADONCALL  "bitmaps\\open.bmp"
+BITMAP  2002        LOADONCALL  "bitmaps\\save.bmp"
+BITMAP  2003        LOADONCALL  "bitmaps\\copy.bmp"
+BITMAP  2004        LOADONCALL  "bitmaps\\cut.bmp"
+BITMAP  2005        LOADONCALL  "bitmaps\\paste.bmp"
+BITMAP  2006        LOADONCALL  "bitmaps\\print.bmp"
+BITMAP  2007        LOADONCALL  "bitmaps\\help.bmp"
+
+RCINCLUDE \dev\wx2\WxWindows\include\wx\os2\wx.rc
+
