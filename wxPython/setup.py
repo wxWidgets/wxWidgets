@@ -151,12 +151,12 @@ if os.name == 'nt':
             'ctl3d32', 'odbc32', 'ole32', 'oleaut32', 'uuid', 'rpcrt4',
             'advapi32', 'wsock32']
 
-    cflags = None
+    cflags = ['/GX-']  # workaround for internal compiler error in MSVC
     lflags = None
 
     if not FINAL and HYBRID:
-        cflags = ['/Od', '/Z7']
-        lflags = ['/DEBUG', ]   ## '/PDB:NONE']
+        cflags = cflags + ['/Od', '/Z7']
+        lflags = ['/DEBUG', ]
 
 
 elif os.name == 'posix':
@@ -199,7 +199,7 @@ if IN_CVS_TREE and newer('setup.py', 'src/__version__.py'):
 
 print 'Preparing CORE...'
 swig_force = force
-swig_args = ['-c++', '-shadow', '-python', '-keyword', '-dnone',
+swig_args = ['-c++', '-shadow', '-python', '-keyword', '-dascii',
              '-I./src', '-D'+WXPLAT]
 
 swig_files = [ 'wx.i', 'windows.i', 'windows2.i', 'windows3.i', 'events.i',
