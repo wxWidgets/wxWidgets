@@ -775,7 +775,17 @@ bool wxWindow::Show(bool show)
 	  }
 	}
 	MacSuperShown( show ) ;
-	Refresh() ;
+	if ( !show )
+	{
+	    WindowRef window = GetMacRootWindow() ;
+	    wxWindow* win = wxFindWinFromMacWindow( window ) ;
+	    if ( !win->m_isBeingDeleted )
+   	        Refresh() ;	
+	}
+	else
+	{
+    	Refresh() ;	
+	}
 
     return TRUE;
 }

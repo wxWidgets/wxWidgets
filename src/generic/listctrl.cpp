@@ -1719,7 +1719,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         {
             m_lines[i].Draw( &dc );
             // Draw horizontal rule if required
-            if (GetWindowStyle() & wxLC_HRULES)
+            if (m_mode & wxLC_HRULES)
             {
                 dc.SetPen(pen);
                 dc.SetBrush(* wxTRANSPARENT_BRUSH);
@@ -1728,7 +1728,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         }
 
         // Draw last horizontal rule
-        if ((i > (size_t) (y_s / lineSpacing)) && (GetWindowStyle() & wxLC_HRULES))
+        if ((i > (size_t) (y_s / lineSpacing)) && (m_mode & wxLC_HRULES))
         {
             dc.SetPen(pen);
             dc.SetBrush(* wxTRANSPARENT_BRUSH);
@@ -1736,7 +1736,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 	}
 
         // Draw vertical rules if required
-        if ((GetWindowStyle() & wxLC_VRULES) && (GetItemCount() > 0))
+        if ((m_mode & wxLC_VRULES) && (GetItemCount() > 0))
         {
             int col = 0;
             wxRect firstItemRect;
