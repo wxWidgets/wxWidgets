@@ -4048,7 +4048,7 @@ WXHBRUSH wxWindowMSW::MSWGetSolidBgBrushForChild(wxWindow *child)
 
 wxColour wxWindowMSW::MSWGetBgColourForChild(wxWindow * WXUNUSED(child))
 {
-    return m_hasBgCol ? GetBackgroundColour() : wxNullColour;
+    return m_inheritBgCol ? GetBackgroundColour() : wxNullColour;
 }
 
 WXHBRUSH wxWindowMSW::MSWGetBgBrushForSelf(wxWindow *parent, WXHDC hDC)
@@ -4060,13 +4060,14 @@ WXHBRUSH wxWindowMSW::MSWGetBgBrush(WXHDC hDC)
 {
     for ( wxWindow *win = (wxWindow *)this; win; win = win->GetParent() )
     {
-        // background is not inherited beyond the containing TLW
-        if ( win->IsTopLevel() )
-            break;
-
         WXHBRUSH hBrush = MSWGetBgBrushForSelf(win, hDC);
         if ( hBrush )
             return hBrush;
+
+        // background is not inherited beyond the windows which have their own
+        // fixed background such as top level windows and notebooks
+        if ( win->IsTopLevel() /* ProvidesBackground() */ )
+            break;
     }
 
     return 0;
