@@ -139,12 +139,7 @@ private:
 #else // !wxUSE_GUI
 
 // wxFSVolume is the same thing as wxFSVolume in wxBase
-class wxFSVolume : public wxFSVolumeBase
-{
-public:
-    wxFSVolume() : wxFSVolumeBase() { }
-    wxFSVolume(const wxString& name) : wxFSVolumeBase(name) { }
-};
+typedef wxFSVolumeBase wxFSVolume;
 
 #endif // wxUSE_GUI/!wxUSE_GUI
 
