@@ -61,7 +61,7 @@ static void gtk_choice_clicked_callback( GtkWidget *WXUNUSED(widget), wxChoice *
         GtkBin *bin = GTK_BIN( child->data );
         if (!bin->child)
         {
-            selection = count:
+            selection = count;
             break;
         }
         child = child->next;
