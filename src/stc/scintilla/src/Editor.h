@@ -127,7 +127,7 @@ public:
 
 /**
  * Hold a piece of text selected for copying or dragging.
- * The text is expected to hold a terminating '\0'.
+ * The text is expected to hold a terminating '\0' and this is counted in len.
  */
 class SelectionText {
 public:
@@ -257,6 +257,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	int searchFlags;
 	int topLine;
 	int posTopLine;
+	int lengthForEncode;
 
 	bool needUpdateUI;
 	Position braces[2];
@@ -368,6 +369,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void ShowCaretAtCurrentPosition();
 	void DropCaret();
 	void InvalidateCaret();
+	virtual void UpdateSystemCaret();
 
 	void NeedWrapping(int docLineStartWrapping = 0, int docLineEndWrapping = 0x7ffffff);
 	bool WrapLines(bool fullWrap, int priorityWrapLineStart);

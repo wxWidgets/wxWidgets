@@ -280,9 +280,9 @@ void ScintillaBase::AutoCompleteMoveToCurrentWord() {
 	char wordCurrent[1000];
 	int i;
 	int startWord = ac.posStart - ac.startLen;
-	for (i = startWord; i < currentPos; i++)
+	for (i = startWord; i < currentPos && i - startWord < 1000; i++)
 		wordCurrent[i - startWord] = pdoc->CharAt(i);
-	wordCurrent[i - startWord] = '\0';
+	wordCurrent[Platform::Minimum(i - startWord, 999)] = '\0';
 	ac.Select(wordCurrent);
 }
 
@@ -357,11 +357,12 @@ void ScintillaBase::CallTipShow(Point pt, const char *defn) {
 	AutoCompleteCancel();
 	pt.y += vs.lineHeight;
 	PRectangle rc = ct.CallTipStart(currentPos, pt,
-									defn,
-									vs.styles[STYLE_DEFAULT].fontName,
-									vs.styles[STYLE_DEFAULT].sizeZoomed,
-									IsUnicodeMode(),
-									wMain);
+		defn,
+		vs.styles[STYLE_DEFAULT].fontName,
+		vs.styles[STYLE_DEFAULT].sizeZoomed,
+		CodePage(),
+		vs.styles[STYLE_DEFAULT].characterSet,
+		wMain);
 	// If the call-tip window would be out of the client
 	// space, adjust so it displays above the text.
 	PRectangle rcClient = GetClientRectangle();

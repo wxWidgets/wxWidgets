@@ -16,8 +16,8 @@
         scintilla/src/CallTip.cxx
         scintilla/src/CellBuffer.cxx
         scintilla/src/ContractionState.cxx
-        scintilla/src/DocumentAccessor.cxx
         scintilla/src/Document.cxx
+        scintilla/src/DocumentAccessor.cxx
         scintilla/src/Editor.cxx
         scintilla/src/ExternalLexer.cxx
         scintilla/src/Indicator.cxx
@@ -28,6 +28,7 @@
         scintilla/src/LexAVE.cxx
         scintilla/src/LexAda.cxx
         scintilla/src/LexAsm.cxx
+        scintilla/src/LexAsn1.cxx
         scintilla/src/LexBaan.cxx
         scintilla/src/LexBash.cxx
         scintilla/src/LexBullant.cxx
@@ -66,14 +67,15 @@
         scintilla/src/LexSpecman.cxx
         scintilla/src/LexTeX.cxx
         scintilla/src/LexVB.cxx
+        scintilla/src/LexVHDL.cxx
         scintilla/src/LexVerilog.cxx
         scintilla/src/LexYAML.cxx
         scintilla/src/LineMarker.cxx
         scintilla/src/PropSet.cxx
         scintilla/src/RESearch.cxx
         scintilla/src/ScintillaBase.cxx
-        scintilla/src/StyleContext.cxx
         scintilla/src/Style.cxx
+        scintilla/src/StyleContext.cxx
         scintilla/src/UniConversion.cxx
         scintilla/src/ViewStyle.cxx
         scintilla/src/WindowAccessor.cxx

@@ -16,7 +16,7 @@ unsigned int UTF8Length(const wchar_t *uptr, unsigned int tlen) {
 		if (uch < 0x80)
 			len++;
 		else if (uch < 0x800)
-			len+=2;
+			len += 2;
 		else
 			len +=3;
 	}

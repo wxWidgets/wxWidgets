@@ -3,10 +3,32 @@
 // Lexer for PowerBasic by Roland Walter, roland@rowalt.de (for PowerBasic see www.powerbasic.com)
 //
 // Changes:
-// 17.10.2003 Toggling of subs/functions now until next sub/function - this gives better results
-// 29.10.2003 1. Bug: Toggling didn't work for subs/functions added in editor
-//            2. Own colors for PB constants and Inline Assembler SCE_B_CONSTANT and SCE_B_ASM
-//            3. Several smaller syntax coloring improvements and speed optimizations
+// 17.10.2003: Toggling of subs/functions now until next sub/function - this gives better results
+// 29.10.2003: 1. Bug: Toggling didn't work for subs/functions added in editor
+//             2. Own colors for PB constants and Inline Assembler SCE_B_CONSTANT and SCE_B_ASM
+//             3. Several smaller syntax coloring improvements and speed optimizations
+// 12.07.2004: 1. Toggling for macros added
+//             2. Further folding speed optimitations (for people dealing with very large listings)
+//
+// Necessary changes for the PB lexer in Scintilla project:
+//  - In SciLexer.h and Scintilla.iface:
+//
+//    #define SCLEX_POWERBASIC 51       //ID for PowerBasic lexer
+//    (...)
+//    #define SCE_B_DEFAULT 0           //in both VB and PB lexer
+//    #define SCE_B_COMMENT 1           //in both VB and PB lexer
+//    #define SCE_B_NUMBER 2            //in both VB and PB lexer
+//    #define SCE_B_KEYWORD 3           //in both VB and PB lexer
+//    #define SCE_B_STRING 4            //in both VB and PB lexer
+//    #define SCE_B_PREPROCESSOR 5      //VB lexer only, not in PB lexer
+//    #define SCE_B_OPERATOR 6          //in both VB and PB lexer
+//    #define SCE_B_IDENTIFIER 7        //in both VB and PB lexer
+//    #define SCE_B_DATE 8              //VB lexer only, not in PB lexer
+//    #define SCE_B_CONSTANT 13         //PB lexer only, not in VB lexer
+//    #define SCE_B_ASM 14              //PB lexer only, not in VB lexer
+
+//  - Statement added to KeyWords.cxx:      'LINK_LEXER(lmPB);'
+//  - Statement added to scintilla_vc6.mak: '$(DIR_O)\LexPB.obj: ...\src\LexPB.cxx $(LEX_HEADERS)'
 //
 // Copyright for Scintilla: 1998-2001 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
@@ -171,6 +193,8 @@ static void FoldPBDoc(unsigned int startPos, int length, int, WordList *[], Acce
     char chNext = styler[startPos];
 
     bool fNewLine=true;
+    bool fMightBeMultiLineMacro=false;
+    bool fBeginOfCommentFound=false;
     for (unsigned int i = startPos; i < endPos; i++)
     {
         char ch = chNext;
@@ -179,10 +203,11 @@ static void FoldPBDoc(unsigned int startPos, int length, int, WordList *[], Acce
         if (fNewLine)            //Begin of a new line (The Sub/Function/Macro keywords may occur at begin of line only)
         {
             fNewLine=false;
-
+            fBeginOfCommentFound=false;
             switch (ch)
             {
-            case ' ':      //Most lines start with space - so check this first
+            case ' ':      //Most lines start with space - so check this first, the code is the same as for 'default:'
+            case '\t':     //Handle tab too
                 {
                     int levelUse = levelCurrent;
                     int lev = levelUse | levelNext << 16;
@@ -190,37 +215,89 @@ static void FoldPBDoc(unsigned int startPos, int length, int, WordList *[], Acce
                     break;
                 }
             case 'F':
-            case 'S':
-            case 'C':
             case 'f':
+                {
+					switch (chNext)
+					{
+                    case 'U':
+                    case 'u':
+						{
+							if( MatchUpperCase(styler,i,"FUNCTION") )
+							{
+								styler.SetLevel(lineCurrent, (SC_FOLDLEVELBASE << 16) | SC_FOLDLEVELHEADERFLAG);
+								levelNext=SC_FOLDLEVELBASE+1;
+							}
+							break;
+						}
+					}
+                break;
+                }
+            case 'S':
             case 's':
+                {
+					switch (chNext)
+					{
+                    case 'U':
+                    case 'u':
+						{
+							if( MatchUpperCase(styler,i,"SUB") )
+							{
+								styler.SetLevel(lineCurrent, (SC_FOLDLEVELBASE << 16) | SC_FOLDLEVELHEADERFLAG);
+								levelNext=SC_FOLDLEVELBASE+1;
+							}
+							break;
+						}
+                    case 'T':
+                    case 't':
+						{
+							if( MatchUpperCase(styler,i,"STATIC FUNCTION") )
+							{
+								styler.SetLevel(lineCurrent, (SC_FOLDLEVELBASE << 16) | SC_FOLDLEVELHEADERFLAG);
+								levelNext=SC_FOLDLEVELBASE+1;
+							}
+							else if( MatchUpperCase(styler,i,"STATIC SUB") )
+							{
+								styler.SetLevel(lineCurrent, (SC_FOLDLEVELBASE << 16) | SC_FOLDLEVELHEADERFLAG);
+								levelNext=SC_FOLDLEVELBASE+1;
+							}
+							break;
+						}
+					}
+                break;
+                }
+            case 'C':
             case 'c':
                 {
-                    if( MatchUpperCase(styler,i,"FUNCTION") )
-                    {
-                        styler.SetLevel(lineCurrent, (SC_FOLDLEVELBASE << 16) | SC_FOLDLEVELHEADERFLAG);
-                        levelNext=SC_FOLDLEVELBASE+1;
-                    }
-                else if( MatchUpperCase(styler,i,"SUB") )
-                    {
-                        styler.SetLevel(lineCurrent, (SC_FOLDLEVELBASE << 16) | SC_FOLDLEVELHEADERFLAG);
-                        levelNext=SC_FOLDLEVELBASE+1;
-                    }
-                else if( MatchUpperCase(styler,i,"CALLBACK FUNCTION") )
-                    {
-                        styler.SetLevel(lineCurrent, (SC_FOLDLEVELBASE << 16) | SC_FOLDLEVELHEADERFLAG);
-                        levelNext=SC_FOLDLEVELBASE+1;
-                    }
-                else if( MatchUpperCase(styler,i,"STATIC FUNCTION") )
-                    {
-                        styler.SetLevel(lineCurrent, (SC_FOLDLEVELBASE << 16) | SC_FOLDLEVELHEADERFLAG);
-                        levelNext=SC_FOLDLEVELBASE+1;
-                    }
-                else if( MatchUpperCase(styler,i,"STATIC SUB") )
-                    {
-                        styler.SetLevel(lineCurrent, (SC_FOLDLEVELBASE << 16) | SC_FOLDLEVELHEADERFLAG);
-                        levelNext=SC_FOLDLEVELBASE+1;
-                    }
+					switch (chNext)
+					{
+                    case 'A':
+                    case 'a':
+						{
+							if( MatchUpperCase(styler,i,"CALLBACK FUNCTION") )
+							{
+								styler.SetLevel(lineCurrent, (SC_FOLDLEVELBASE << 16) | SC_FOLDLEVELHEADERFLAG);
+								levelNext=SC_FOLDLEVELBASE+1;
+							}
+							break;
+						}
+					}
+                break;
+                }
+            case 'M':
+            case 'm':
+                {
+					switch (chNext)
+					{
+                    case 'A':
+                    case 'a':
+						{
+							if( MatchUpperCase(styler,i,"MACRO") )
+							{
+								fMightBeMultiLineMacro=true;  //Set folder level at end of line, we have to check for single line macro
+							}
+							break;
+						}
+					}
                 break;
                 }
             default:
@@ -235,8 +312,25 @@ static void FoldPBDoc(unsigned int startPos, int length, int, WordList *[], Acce
 
         switch (ch)
         {
+            case '=':                              //To test single line macros
+            {
+                if (fBeginOfCommentFound==false)
+                    fMightBeMultiLineMacro=false;  //The found macro is a single line macro only;
+                break;
+            }
+            case '\'':                             //A comment starts
+            {
+                fBeginOfCommentFound=true;
+                break;
+            }
             case '\n':
             {
+                if (fMightBeMultiLineMacro)        //The current line is the begin of a multi line macro
+                {
+                    fMightBeMultiLineMacro=false;
+                    styler.SetLevel(lineCurrent, (SC_FOLDLEVELBASE << 16) | SC_FOLDLEVELHEADERFLAG);
+                    levelNext=SC_FOLDLEVELBASE+1;
+                }
                 lineCurrent++;
                 levelCurrent = levelNext;
                 fNewLine=true;

@@ -539,7 +539,8 @@ long ScintillaWX::WndProc(unsigned int iMessage, unsigned long wParam, long lPar
                                           defn,
                                           vs.styles[STYLE_DEFAULT].fontName,
                                           vs.styles[STYLE_DEFAULT].sizeZoomed,
-                                          IsUnicodeMode(),
+                                          CodePage(),
+                                          vs.styles[STYLE_DEFAULT].characterSet,
                                           wMain);
           // If the call-tip window would be out of the client
           // space, adjust so it displays above the text.

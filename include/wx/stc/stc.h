@@ -363,6 +363,8 @@
 #define wxSTC_LEX_AU3 60
 #define wxSTC_LEX_APDL 61
 #define wxSTC_LEX_BASH 62
+#define wxSTC_LEX_ASN1 63
+#define wxSTC_LEX_VHDL 64
 
 // When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 // value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -649,6 +651,7 @@
 #define wxSTC_ERR_IFORT 17
 #define wxSTC_ERR_ABSF 18
 #define wxSTC_ERR_TIDY 19
+#define wxSTC_ERR_JAVA_STACK 20
 
 // Lexical states for SCLEX_BATCH
 #define wxSTC_BAT_DEFAULT 0
@@ -863,6 +866,7 @@
 #define wxSTC_CSS_DIRECTIVE 12
 #define wxSTC_CSS_DOUBLESTRING 13
 #define wxSTC_CSS_SINGLESTRING 14
+#define wxSTC_CSS_IDENTIFIER2 15
 
 // Lexical states for SCLEX_POV
 #define wxSTC_POV_DEFAULT 0
@@ -1126,6 +1130,7 @@
 #define wxSTC_AU3_VARIABLE 9
 #define wxSTC_AU3_SENT 10
 #define wxSTC_AU3_PREPROCESSOR 11
+#define wxSTC_AU3_SPECIAL 12
 
 // Lexical states for SCLEX_APDL
 #define wxSTC_APDL_DEFAULT 0
@@ -1133,10 +1138,14 @@
 #define wxSTC_APDL_COMMENTBLOCK 2
 #define wxSTC_APDL_NUMBER 3
 #define wxSTC_APDL_STRING 4
-#define wxSTC_APDL_WORD 5
-#define wxSTC_APDL_COMMAND 6
+#define wxSTC_APDL_OPERATOR 5
+#define wxSTC_APDL_WORD 6
 #define wxSTC_APDL_PROCESSOR 7
-#define wxSTC_APDL_FUNCTION 8
+#define wxSTC_APDL_COMMAND 8
+#define wxSTC_APDL_SLASHCOMMAND 9
+#define wxSTC_APDL_STARCOMMAND 10
+#define wxSTC_APDL_ARGUMENT 11
+#define wxSTC_APDL_FUNCTION 12
 
 // Lexical states for SCLEX_BASH
 #define wxSTC_SH_DEFAULT 0
@@ -1153,6 +1162,36 @@
 #define wxSTC_SH_BACKTICKS 11
 #define wxSTC_SH_HERE_DELIM 12
 #define wxSTC_SH_HERE_Q 13
+
+// Lexical states for SCLEX_ASN1
+#define wxSTC_ASN1_DEFAULT 0
+#define wxSTC_ASN1_COMMENT 1
+#define wxSTC_ASN1_IDENTIFIER 2
+#define wxSTC_ASN1_STRING 3
+#define wxSTC_ASN1_OID 4
+#define wxSTC_ASN1_SCALAR 5
+#define wxSTC_ASN1_KEYWORD 6
+#define wxSTC_ASN1_ATTRIBUTE 7
+#define wxSTC_ASN1_DESCRIPTOR 8
+#define wxSTC_ASN1_TYPE 9
+#define wxSTC_ASN1_OPERATOR 10
+
+// Lexical states for SCLEX_VHDL
+#define wxSTC_VHDL_DEFAULT 0
+#define wxSTC_VHDL_COMMENT 1
+#define wxSTC_VHDL_COMMENTLINEBANG 2
+#define wxSTC_VHDL_NUMBER 3
+#define wxSTC_VHDL_STRING 4
+#define wxSTC_VHDL_OPERATOR 5
+#define wxSTC_VHDL_IDENTIFIER 6
+#define wxSTC_VHDL_STRINGEOL 7
+#define wxSTC_VHDL_KEYWORD 8
+#define wxSTC_VHDL_STDOPERATOR 9
+#define wxSTC_VHDL_ATTRIBUTE 10
+#define wxSTC_VHDL_STDFUNCTION 11
+#define wxSTC_VHDL_STDPACKAGE 12
+#define wxSTC_VHDL_STDTYPE 13
+#define wxSTC_VHDL_USERWORD 14
 
 
 //-----------------------------------------
@@ -2736,6 +2775,10 @@ public:
 
     // Enlarge the document to a particular size of text bytes.
     void Allocate(int bytes);
+
+    // Find the position of a column on a line taking into account tabs and 
+    // multi-byte characters. If beyond end of line, return line end position.
+    int FindColumn(int line, int column);
 
     // Start notifying the container of all key presses and commands.
     void StartRecord();

@@ -361,6 +361,8 @@ Editor::Editor() {
 	topLine = 0;
 	posTopLine = 0;
 
+	lengthForEncode = 0;
+
 	needUpdateUI = true;
 	braces[0] = invalidPosition;
 	braces[1] = invalidPosition;
@@ -670,7 +672,7 @@ int Editor::LineFromLocation(Point pt) {
 
 void Editor::SetTopLine(int topLineNew) {
 	topLine = topLineNew;
-	posTopLine = pdoc->LineStart(topLine);
+	posTopLine = pdoc->LineStart(cs.DocFromDisplay(topLine));
 }
 
 static inline bool IsEOLChar(char ch) {
@@ -1392,6 +1394,7 @@ void Editor::EnsureCaretVisible(bool useMargin, bool vert, bool horiz) {
 			Redraw();
 		}
 	}
+	UpdateSystemCaret();
 }
 
 void Editor::ShowCaretAtCurrentPosition() {
@@ -1416,6 +1419,10 @@ void Editor::InvalidateCaret() {
 		InvalidateRange(posDrag, posDrag + 1);
 	else
 		InvalidateRange(currentPos, currentPos + 1);
+	UpdateSystemCaret();
+}
+
+void Editor::UpdateSystemCaret() {
 }
 
 void Editor::NeedWrapping(int docLineStartWrapping, int docLineEndWrapping) {
@@ -2206,8 +2213,9 @@ void Editor::DrawLine(Surface *surface, ViewStyle &vsDraw, int line, int lineVis
 	// See if something overrides the line background color:  Either if caret is on the line
 	// and background color is set for that, or if a marker is defined that forces its background
 	// color onto the line, or if a marker is defined but has no selection margin in which to
-	// display itself.  These are checked in order with the earlier taking precedence.  When
-	// multiple markers cause background override, the color for the highest numbered one is used.
+	// display itself (as long as it's not an SC_MARK_EMPTY marker).  These are checked in order
+	// with the earlier taking precedence.  When multiple markers cause background override,
+	// the color for the highest numbered one is used.
 	bool overrideBackground = false;
 	ColourAllocated background;
 	if (caret.active && vsDraw.showCaretLineBackground && ll->containsCaret) {
@@ -2228,9 +2236,9 @@ void Editor::DrawLine(Surface *surface, ViewStyle &vsDraw, int line, int lineVis
 		if (vsDraw.maskInLine) {
 			int marks = pdoc->GetMark(line) & vsDraw.maskInLine;
 			if (marks) {
-				overrideBackground = true;
 				for (int markBit = 0; (markBit < 32) && marks; markBit++) {
-					if (marks & 1) {
+					if ((marks & 1) && (vsDraw.markers[markBit].markType != SC_MARK_EMPTY)) {
+						overrideBackground = true;
 						background = vsDraw.markers[markBit].back.allocated;
 					}
 					marks >>= 1;
@@ -2523,10 +2531,11 @@ void Editor::DrawLine(Surface *surface, ViewStyle &vsDraw, int line, int lineVis
 		indStart[indica] = 0;
 
 	for (int indicPos = lineStart; indicPos <= lineEnd; indicPos++) {
-		if ((indicPos == lineEnd) || (ll->indicators[indicPos] != ll->indicators[indicPos + 1])) {
+		if ((indicPos == lineStart) || (indicPos == lineEnd) ||
+			(ll->indicators[indicPos] != ll->indicators[indicPos + 1])) {
 			int mask = 1 << pdoc->stylingBits;
 			for (int indicnum = 0; mask < 0x100; indicnum++) {
-				if ((indicPos == lineEnd)) {
+				if ((indicPos == lineStart) || (indicPos == lineEnd)) {
 					indStart[indicnum] = ll->positions[indicPos];
 				} else if ((ll->indicators[indicPos + 1] & mask) && !(ll->indicators[indicPos] & mask)) {
 					indStart[indicnum] = ll->positions[indicPos + 1];
@@ -3283,7 +3292,6 @@ void Editor::ClearAll() {
 	currentPos = 0;
 	SetTopLine(0);
 	SetVerticalScrollPos();
-        InvalidateStyleRedraw();
 }
 
 void Editor::ClearDocumentStyle() {
@@ -4154,16 +4162,20 @@ int Editor::KeyCommand(unsigned int iMessage) {
 		break;
 	case SCI_LINEENDWRAP: {
 			int endPos = MovePositionSoVisible(StartEndDisplayLine(currentPos, false), 1);
-			if (currentPos >= endPos)
-				endPos = pdoc->LineEndPosition(currentPos);
+			int realEndPos = pdoc->LineEndPosition(currentPos);
+			if (endPos > realEndPos      // if moved past visible EOLs
+				|| currentPos >= endPos) // if at end of display line already
+				endPos = realEndPos;
 			MovePositionTo(endPos);
 			SetLastXChosen();
 		}
 		break;
 	case SCI_LINEENDWRAPEXTEND: {
 			int endPos = MovePositionSoVisible(StartEndDisplayLine(currentPos, false), 1);
-			if (currentPos >= endPos)
-				endPos = pdoc->LineEndPosition(currentPos);
+			int realEndPos = pdoc->LineEndPosition(currentPos);
+			if (endPos > realEndPos      // if moved past visible EOLs
+				|| currentPos >= endPos) // if at end of display line already
+				endPos = realEndPos;
 			MovePositionTo(endPos, selStream);
 			SetLastXChosen();
 		}
@@ -4929,7 +4941,7 @@ void Editor::ButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, b
 		//Platform::DebugPrintf("Double click: %d - %d\n", anchor, currentPos);
 		if (doubleClick) {
 			NotifyDoubleClick(pt, shift);
-			if (PointIsHotspot(newPos))
+			if (PositionIsHotspot(newPos))
 				NotifyHotSpotDoubleClicked(newPos, shift, ctrl, alt);
 		}
 	} else {	// Single click
@@ -6301,6 +6313,9 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 	case SCI_GETCOLUMN:
 		return pdoc->GetColumn(wParam);
 
+	case SCI_FINDCOLUMN:
+		return pdoc->FindColumn(wParam, lParam);
+
 	case SCI_SETHSCROLLBAR :
 		if (horizontalScrollBarVisible != (wParam != 0)) {
 			horizontalScrollBarVisible = wParam != 0;
@@ -6947,6 +6962,10 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 	case SCI_CONVERTEOLS:
 		pdoc->ConvertLineEnds(wParam);
 		SetSelection(currentPos, anchor);	// Ensure selection inside document
+		return 0;
+
+	case SCI_SETLENGTHFORENCODE:
+		lengthForEncode = wParam;
 		return 0;
 
 	case SCI_SELECTIONISRECTANGLE:

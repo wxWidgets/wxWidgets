@@ -2408,6 +2408,12 @@ void wxStyledTextCtrl::Allocate(int bytes) {
     SendMsg(2446, bytes, 0);
 }
 
+// Find the position of a column on a line taking into account tabs and 
+// multi-byte characters. If beyond end of line, return line end position.
+int wxStyledTextCtrl::FindColumn(int line, int column) {
+    return SendMsg(2456, line, column);
+}
+
 // Start notifying the container of all key presses and commands.
 void wxStyledTextCtrl::StartRecord() {
     SendMsg(3001, 0, 0);

@@ -256,7 +256,7 @@ static void ColouriseDocument(
 			ColouriseLabel(sc, keywords, apostropheStartsAttribute);
 
 		// Whitespace
-		} else if (isspace(sc.ch)) {
+		} else if (IsASpace(sc.ch)) {
 			ColouriseWhiteSpace(sc, apostropheStartsAttribute);
 
 		// Delimiters
@@ -264,7 +264,7 @@ static void ColouriseDocument(
 			ColouriseDelimiter(sc, apostropheStartsAttribute);
 
 		// Numbers
-		} else if (isdigit(sc.ch) || sc.ch == '#') {
+		} else if (IsADigit(sc.ch) || sc.ch == '#') {
 			ColouriseNumber(sc, apostropheStartsAttribute);
 
 		// Keywords or identifiers
@@ -310,11 +310,11 @@ static inline bool IsNumberCharacter(int ch) {
 }
 
 static inline bool IsNumberStartCharacter(int ch) {
-	return isdigit(ch) != 0;
+	return IsADigit(ch);
 }
 
 static inline bool IsSeparatorOrDelimiterCharacter(int ch) {
-	return isspace(ch) || IsDelimiterCharacter(ch);
+	return IsASpace(ch) || IsDelimiterCharacter(ch);
 }
 
 static bool IsValidIdentifier(const SString& identifier) {
@@ -377,7 +377,7 @@ static bool IsValidNumber(const SString& number) {
 				}
 				canBeSpecial = false;
 				seenDot = true;
-			} else if (isdigit(number[i])) {
+			} else if (IsADigit(number[i])) {
 				canBeSpecial = true;
 			} else {
 				break;
@@ -398,7 +398,7 @@ static bool IsValidNumber(const SString& number) {
 				if (!canBeSpecial)
 					return false;
 				canBeSpecial = false;
-			} else if (isdigit (ch)) {
+			} else if (IsADigit(ch)) {
 				base = base * 10 + (ch - '0');
 				if (base > 16)
 					return false;
@@ -436,7 +436,7 @@ static bool IsValidNumber(const SString& number) {
 				canBeSpecial = false;
 				seenDot = true;
 
-			} else if (isdigit (ch)) {
+			} else if (IsADigit(ch)) {
 				if (ch - '0' >= base) {
 					return false;
 				}
@@ -496,7 +496,7 @@ static bool IsValidNumber(const SString& number) {
 					return false;
 				}
 				canBeSpecial = false;
-			} else if (isdigit(number[i])) {
+			} else if (IsADigit(number[i])) {
 				canBeSpecial = true;
 			} else {
 				return false;
@@ -512,9 +512,9 @@ static bool IsValidNumber(const SString& number) {
 }
 
 static inline bool IsWordCharacter(int ch) {
-	return IsWordStartCharacter(ch) || isdigit(ch);
+	return IsWordStartCharacter(ch) || IsADigit(ch);
 }
 
 static inline bool IsWordStartCharacter(int ch) {
-	return isalpha(ch) || ch == '_';
+	return (isascii(ch) && isalpha(ch)) || ch == '_';
 }

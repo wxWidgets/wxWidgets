@@ -653,7 +653,7 @@ int Document::FindColumn(int line, int column) {
 	int position = LineStart(line);
 	int columnCurrent = 0;
 	if ((line >= 0) && (line < LinesTotal())) {
-		while (columnCurrent < column) {
+		while ((columnCurrent < column) && (position < Length())) {
 			char ch = cb.CharAt(position);
 			if (ch == '\t') {
 				columnCurrent = NextTab(columnCurrent, tabInChars);
@@ -682,43 +682,73 @@ void Document::Indent(bool forwards, int lineBottom, int lineTop) {
 	}
 }
 
+// Convert line endings for a piece of text to a particular mode.
+// Stop at len or when a NUL is found.
+// Caller must delete the returned pointer.
+char *Document::TransformLineEnds(int *pLenOut, const char *s, size_t len, int eolMode) {
+	char *dest = new char[2 * len + 1];
+	const char *sptr = s;
+	char *dptr = dest;
+	for (size_t i = 0; (i < len) && (*sptr != '\0'); i++) {
+		if (*sptr == '\n' || *sptr == '\r') {
+			if (eolMode == SC_EOL_CR) {
+				*dptr++ = '\r';
+			} else if (eolMode == SC_EOL_LF) {
+				*dptr++ = '\n';
+			} else { // eolMode == SC_EOL_CRLF
+				*dptr++ = '\r';
+				*dptr++ = '\n';
+			}
+			if ((*sptr == '\r') && (i+1 < len) && (*(sptr+1) == '\n')) {
+				i++;
+				sptr++;
+			}
+			sptr++;
+		} else {
+			*dptr++ = *sptr++;
+		}
+	}
+	*dptr++ = '\0';
+	*pLenOut = (dptr - dest) - 1;
+	return dest;
+}
+
 void Document::ConvertLineEnds(int eolModeSet) {
 	BeginUndoAction();
+
 	for (int pos = 0; pos < Length(); pos++) {
 		if (cb.CharAt(pos) == '\r') {
-			if (cb.CharAt(pos + 1) == '\n') {
-				if (eolModeSet != SC_EOL_CRLF) {
-					DeleteChars(pos, 2);
-					if (eolModeSet == SC_EOL_CR)
-						InsertString(pos, "\r", 1);
-					else
-						InsertString(pos, "\n", 1);
+			if (cb.CharAt(pos + 1) == '\n') { 
+				// CRLF
+				if (eolModeSet == SC_EOL_CR) {
+					DeleteChars(pos + 1, 1); // Delete the LF
+				} else if (eolModeSet == SC_EOL_LF) {
+					DeleteChars(pos, 1); // Delete the CR
 				} else {
 					pos++;
 				}
-			} else {
-				if (eolModeSet != SC_EOL_CR) {
-					DeleteChars(pos, 1);
-					if (eolModeSet == SC_EOL_CRLF) {
-						InsertString(pos, "\r\n", 2);
-						pos++;
-					} else {
-						InsertString(pos, "\n", 1);
-					}
+			} else { 
+				// CR
+				if (eolModeSet == SC_EOL_CRLF) {
+					InsertString(pos + 1, "\n", 1); // Insert LF
+					pos++;
+				} else if (eolModeSet == SC_EOL_LF) {
+					InsertString(pos, "\n", 1); // Insert LF
+					DeleteChars(pos + 1, 1); // Delete CR
 				}
 			}
 		} else if (cb.CharAt(pos) == '\n') {
-			if (eolModeSet != SC_EOL_LF) {
-				DeleteChars(pos, 1);
-				if (eolModeSet == SC_EOL_CRLF) {
-					InsertString(pos, "\r\n", 2);
-					pos++;
-				} else {
-					InsertString(pos, "\r", 1);
-				}
+			// LF
+			if (eolModeSet == SC_EOL_CRLF) {
+				InsertString(pos, "\r", 1); // Insert CR
+				pos++;
+			} else if (eolModeSet == SC_EOL_CR) {
+				InsertString(pos, "\r", 1); // Insert CR
+				DeleteChars(pos + 1, 1); // Delete LF
 			}
 		}
 	}
+
 	EndUndoAction();
 }
 
@@ -854,7 +884,7 @@ bool Document::IsWordStartAt(int pos) {
  * the next character is of a different character class.
  */
 bool Document::IsWordEndAt(int pos) {
-	if (pos < Length() - 1) {
+	if (pos < Length()) {
 		charClassification ccPrev = WordCharClass(CharAt(pos-1));
 		return (ccPrev == ccWord || ccPrev == ccPunctuation) &&
 			(ccPrev != WordCharClass(CharAt(pos)));

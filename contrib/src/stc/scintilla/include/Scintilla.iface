@@ -1583,6 +1583,23 @@ fun int AutoCGetCurrent=2445(,)
 # Enlarge the document to a particular size of text bytes.
 fun void Allocate=2446(int bytes,)
 
+# Returns the target converted to UTF8.
+# Return the length in bytes.
+fun int TargetAsUTF8=2447(, stringresult s)
+
+# Set the length of the utf8 argument for calling EncodedFromUTF8.
+# Set to 0 and the string will be measured to the first nul.
+fun void SetLengthForEncode=2448(int bytes,)
+
+# Translates a UTF8 string into the document encoding.
+# Return the length of the result in bytes.
+# On error return 0.
+fun int EncodedFromUTF8=2449(string utf8, stringresult encoded)
+
+# Find the position of a column on a line taking into account tabs and 
+# multi-byte characters. If beyond end of line, return line end position.
+fun int FindColumn=2456(int line, int column)
+
 # Start notifying the container of all key presses and commands.
 fun void StartRecord=3001(,)
 
@@ -1733,6 +1750,8 @@ val SCLEX_SPECMAN=59
 val SCLEX_AU3=60
 val SCLEX_APDL=61
 val SCLEX_BASH=62
+val SCLEX_ASN1=63
+val SCLEX_VHDL=64
 
 # When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 # value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -2017,6 +2036,7 @@ val SCE_ERR_IFC=16
 val SCE_ERR_IFORT=17
 val SCE_ERR_ABSF=18
 val SCE_ERR_TIDY=19
+val SCE_ERR_JAVA_STACK=20
 # Lexical states for SCLEX_BATCH
 lex Batch=SCLEX_BATCH SCE_BAT_
 val SCE_BAT_DEFAULT=0
@@ -2232,6 +2252,7 @@ val SCE_CSS_IMPORTANT=11
 val SCE_CSS_DIRECTIVE=12
 val SCE_CSS_DOUBLESTRING=13
 val SCE_CSS_SINGLESTRING=14
+val SCE_CSS_IDENTIFIER2=15
 # Lexical states for SCLEX_POV
 lex POV=SCLEX_POV SCE_POV_
 val SCE_POV_DEFAULT=0
@@ -2496,6 +2517,7 @@ val SCE_AU3_OPERATOR=8
 val SCE_AU3_VARIABLE=9
 val SCE_AU3_SENT=10
 val SCE_AU3_PREPROCESSOR=11
+val SCE_AU3_SPECIAL=12
 # Lexical states for SCLEX_APDL
 lex APDL=SCLEX_APDL SCE_APDL_
 val SCE_APDL_DEFAULT=0
@@ -2503,10 +2525,14 @@ val SCE_APDL_COMMENT=1
 val SCE_APDL_COMMENTBLOCK=2
 val SCE_APDL_NUMBER=3
 val SCE_APDL_STRING=4
-val SCE_APDL_WORD=5
-val SCE_APDL_COMMAND=6
+val SCE_APDL_OPERATOR=5
+val SCE_APDL_WORD=6
 val SCE_APDL_PROCESSOR=7
-val SCE_APDL_FUNCTION=8
+val SCE_APDL_COMMAND=8
+val SCE_APDL_SLASHCOMMAND=9
+val SCE_APDL_STARCOMMAND=10
+val SCE_APDL_ARGUMENT=11
+val SCE_APDL_FUNCTION=12
 # Lexical states for SCLEX_BASH
 lex Bash=SCLEX_BASH SCE_SH_
 val SCE_SH_DEFAULT=0
@@ -2523,6 +2549,37 @@ val SCE_SH_PARAM=10
 val SCE_SH_BACKTICKS=11
 val SCE_SH_HERE_DELIM=12
 val SCE_SH_HERE_Q=13
+# Lexical states for SCLEX_ASN1
+lex Asn1=SCLEX_ASN1 SCE_ASN1_
+val SCE_ASN1_DEFAULT=0
+val SCE_ASN1_COMMENT=1
+val SCE_ASN1_IDENTIFIER=2
+val SCE_ASN1_STRING=3
+val SCE_ASN1_OID=4
+val SCE_ASN1_SCALAR=5
+val SCE_ASN1_KEYWORD=6
+val SCE_ASN1_ATTRIBUTE=7
+val SCE_ASN1_DESCRIPTOR=8
+val SCE_ASN1_TYPE=9
+val SCE_ASN1_OPERATOR=10
+# Lexical states for SCLEX_VHDL
+lex VHDL=SCLEX_VHDL SCE_VHDL_
+val SCE_VHDL_DEFAULT=0
+val SCE_VHDL_COMMENT=1
+val SCE_VHDL_COMMENTLINEBANG=2
+val SCE_VHDL_NUMBER=3
+val SCE_VHDL_STRING=4
+val SCE_VHDL_OPERATOR=5
+val SCE_VHDL_IDENTIFIER=6
+val SCE_VHDL_STRINGEOL=7
+val SCE_VHDL_KEYWORD=8
+val SCE_VHDL_STDOPERATOR=9
+val SCE_VHDL_ATTRIBUTE=10
+val SCE_VHDL_STDFUNCTION=11
+val SCE_VHDL_STDPACKAGE=12
+val SCE_VHDL_STDTYPE=13
+val SCE_VHDL_USERWORD=14
+
 # Events
 
 evt void StyleNeeded=2000(int position)

@@ -156,6 +156,7 @@ public:
 	int GetColumn(int position);
 	int FindColumn(int line, int column);
 	void Indent(bool forwards, int lineBottom, int lineTop);
+	static char *TransformLineEnds(int *pLenOut, const char *s, size_t len, int eolMode);
 	void ConvertLineEnds(int eolModeSet);
 	void SetReadOnly(bool set) { cb.SetReadOnly(set); }
 	bool IsReadOnly() { return cb.IsReadOnly(); }

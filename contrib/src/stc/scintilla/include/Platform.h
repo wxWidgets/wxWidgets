@@ -69,7 +69,7 @@ public:
 	int x;
 	int y;
 
-	Point(int x_=0, int y_=0) : x(x_), y(y_) {
+	explicit Point(int x_=0, int y_=0) : x(x_), y(y_) {
 	}
 
 	// Other automatically defined methods (assignment, copy constructor, destructor) are fine

@@ -265,7 +265,8 @@ static void ColourisePyDoc(unsigned int startPos, int length, int initStyle,
 			} else if (IsPyStringStart(sc.ch, sc.chNext, sc.GetRelative(2))) {
 				unsigned int nextIndex = 0;
 				sc.SetState(GetPyStringState(styler, sc.currentPos, &nextIndex));
-				while (nextIndex > (sc.currentPos + 1) && sc.More()) {					sc.Forward();
+				while (nextIndex > (sc.currentPos + 1) && sc.More()) {
+					sc.Forward();
 				}
 			} else if (IsAWordStart(sc.ch)) {
 				sc.SetState(SCE_P_IDENTIFIER);

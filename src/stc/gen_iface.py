@@ -501,6 +501,11 @@ methodOverrideMap = {
          return SendMsg(%s, strlen(buf), (long)(const char*)buf);''',
      0),
 
+    # not sure what to do about these yet
+    'TargetAsUTF8' :       ( None, 0, 0, 0),
+    'SetLengthForEncode' : ( None, 0, 0, 0),
+    'EncodedFromUTF8' :    ( None, 0, 0, 0),
+    
 
     'GetDocPointer' :
     (0,

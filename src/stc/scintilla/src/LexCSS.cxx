@@ -1,7 +1,8 @@
 // Scintilla source code edit control
 /** @file LexCSS.cxx
- ** Lexer for Cascade Style Sheets
+ ** Lexer for Cascading Style Sheets
  ** Written by Jakub Vrána
+ ** Improved by Philippe Lhoste (CSS2)
  **/
 // Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
@@ -21,19 +22,27 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
+
 static inline bool IsAWordChar(const unsigned int ch) {
 	return (isalnum(ch) || ch == '-' || ch == '_' || ch >= 161); // _ is not in fact correct CSS word-character
 }
 
 inline bool IsCssOperator(const char ch) {
-	if (!isalnum(ch) && (ch == '{' || ch == '}' || ch == ':' || ch == ',' || ch == ';' || ch == '.' || ch == '#' || ch == '!' || ch == '@'))
+	if (!isalnum(ch) &&
+		(ch == '{' || ch == '}' || ch == ':' || ch == ',' || ch == ';' ||
+		 ch == '.' || ch == '#' || ch == '!' || ch == '@' ||
+		 /* CSS2 */
+		 ch == '*' || ch == '>' || ch == '+' || ch == '=' || ch == '~' || ch == '|' ||
+		 ch == '[' || ch == ']' || ch == '(' || ch == ')')) {
 		return true;
+	}
 	return false;
 }
 
 static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, WordList *keywordlists[], Accessor &styler) {
 	WordList &keywords = *keywordlists[0];
 	WordList &pseudoClasses = *keywordlists[1];
+	WordList &keywords2 = *keywordlists[2];
 
 	StyleContext sc(startPos, length, initStyle, styler);
 
@@ -44,7 +53,8 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 	for (; sc.More(); sc.Forward()) {
 		if (sc.state == SCE_CSS_COMMENT && sc.Match('*', '/')) {
 			if (lastStateC == -1) {
-				// backtrack to get last state
+				// backtrack to get last state:
+				// comments are like whitespace, so we must return to the previous state
 				unsigned int i = startPos;
 				for (; i > 0; i--) {
 					if ((lastStateC = styler.StyleAt(i-1)) != SCE_CSS_COMMENT) {
@@ -104,14 +114,15 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 					sc.SetState(SCE_CSS_IDENTIFIER);
 				break;
 			case '}':
-				if (lastState == SCE_CSS_DEFAULT || lastState == SCE_CSS_VALUE || lastState == SCE_CSS_IMPORTANT || lastState == SCE_CSS_IDENTIFIER)
+				if (lastState == SCE_CSS_DEFAULT || lastState == SCE_CSS_VALUE || lastState == SCE_CSS_IMPORTANT ||
+					lastState == SCE_CSS_IDENTIFIER || lastState == SCE_CSS_IDENTIFIER2)
 					sc.SetState(SCE_CSS_DEFAULT);
 				break;
 			case ':':
 				if (lastState == SCE_CSS_TAG || lastState == SCE_CSS_PSEUDOCLASS || lastState == SCE_CSS_DEFAULT ||
 					lastState == SCE_CSS_CLASS || lastState == SCE_CSS_ID || lastState == SCE_CSS_UNKNOWN_PSEUDOCLASS)
 					sc.SetState(SCE_CSS_PSEUDOCLASS);
-				else if (lastState == SCE_CSS_IDENTIFIER || lastState == SCE_CSS_UNKNOWN_IDENTIFIER)
+				else if (lastState == SCE_CSS_IDENTIFIER || lastState == SCE_CSS_IDENTIFIER2 || lastState == SCE_CSS_UNKNOWN_IDENTIFIER)
 					sc.SetState(SCE_CSS_VALUE);
 				break;
 			case '.':
@@ -146,7 +157,8 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 		}
 
 		if (IsAWordChar(sc.chPrev) && (
-			sc.state == SCE_CSS_IDENTIFIER || sc.state == SCE_CSS_UNKNOWN_IDENTIFIER
+			sc.state == SCE_CSS_IDENTIFIER || sc.state == SCE_CSS_IDENTIFIER2
+			|| sc.state == SCE_CSS_UNKNOWN_IDENTIFIER
 			|| sc.state == SCE_CSS_PSEUDOCLASS || sc.state == SCE_CSS_UNKNOWN_PSEUDOCLASS
 			|| sc.state == SCE_CSS_IMPORTANT
 		)) {
@@ -157,12 +169,19 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 				s2++;
 			switch (sc.state) {
 			case SCE_CSS_IDENTIFIER:
-				if (!keywords.InList(s2))
-					sc.ChangeState(SCE_CSS_UNKNOWN_IDENTIFIER);
+				if (!keywords.InList(s2)) {
+					if (keywords2.InList(s2)) {
+						sc.ChangeState(SCE_CSS_IDENTIFIER2);
+					} else {
+						sc.ChangeState(SCE_CSS_UNKNOWN_IDENTIFIER);
+					}
+				}
 				break;
 			case SCE_CSS_UNKNOWN_IDENTIFIER:
 				if (keywords.InList(s2))
 					sc.ChangeState(SCE_CSS_IDENTIFIER);
+				else if (keywords2.InList(s2))
+					sc.ChangeState(SCE_CSS_IDENTIFIER2);
 				break;
 			case SCE_CSS_PSEUDOCLASS:
 				if (!pseudoClasses.InList(s2))
@@ -253,8 +272,9 @@ static void FoldCSSDoc(unsigned int startPos, int length, int, WordList *[], Acc
 }
 
 static const char * const cssWordListDesc[] = {
-	"Keywords",
+	"CSS1 Keywords",
 	"Pseudo classes",
+	"CSS2 Keywords",
 	0
 };
 

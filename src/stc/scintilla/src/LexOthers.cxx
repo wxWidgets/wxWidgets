@@ -330,6 +330,7 @@ static void FoldPropsDoc(unsigned int startPos, int length, int, WordList *[], A
 	char chNext = styler[startPos];
 	int styleNext = styler.StyleAt(startPos);
 	bool headerPoint = false;
+	int lev;
 
 	for (unsigned int i = startPos; i < endPos; i++) {
 		char ch = chNext;
@@ -339,21 +340,32 @@ static void FoldPropsDoc(unsigned int startPos, int length, int, WordList *[], A
 		styleNext = styler.StyleAt(i + 1);
 		bool atEOL = (ch == '\r' && chNext != '\n') || (ch == '\n');
 
-		if (style==2) {
+		if (style == SCE_PROPS_SECTION) {
 			headerPoint = true;
 		}
 
 		if (atEOL) {
-			int lev = SC_FOLDLEVELBASE+1;
-			if (headerPoint)
-				lev = SC_FOLDLEVELBASE;
+			lev = SC_FOLDLEVELBASE;
 
+			if (lineCurrent > 0) {
+				int levelPrevious = styler.LevelAt(lineCurrent - 1);
+
+				if (levelPrevious & SC_FOLDLEVELHEADERFLAG) {
+					lev = SC_FOLDLEVELBASE + 1;
+				} else {
+					lev = levelPrevious & SC_FOLDLEVELNUMBERMASK;
+				}
+			}
+
+			if (headerPoint) {
+				lev = SC_FOLDLEVELBASE;
+			}
 			if (visibleChars == 0 && foldCompact)
 				lev |= SC_FOLDLEVELWHITEFLAG;
 
-			if (headerPoint)
+			if (headerPoint) {
 				lev |= SC_FOLDLEVELHEADERFLAG;
-
+			}
 			if (lev != styler.LevelAt(lineCurrent)) {
 				styler.SetLevel(lineCurrent, lev);
 			}
@@ -366,9 +378,18 @@ static void FoldPropsDoc(unsigned int startPos, int length, int, WordList *[], A
 			visibleChars++;
 	}
 
-	int lev = headerPoint ? SC_FOLDLEVELBASE : SC_FOLDLEVELBASE+1;
-	int flagsNext = styler.LevelAt(lineCurrent) & ~SC_FOLDLEVELNUMBERMASK;
-	styler.SetLevel(lineCurrent, lev | flagsNext);
+	if (lineCurrent > 0) {
+		int levelPrevious = styler.LevelAt(lineCurrent - 1);
+		if (levelPrevious & SC_FOLDLEVELHEADERFLAG) {
+			lev = SC_FOLDLEVELBASE + 1;
+		} else {
+			lev = levelPrevious & SC_FOLDLEVELNUMBERMASK;
+		}
+	} else {
+		lev = SC_FOLDLEVELBASE;
+	}
+	int flagsNext = styler.LevelAt(lineCurrent);
+	styler.SetLevel(lineCurrent, lev | flagsNext & ~SC_FOLDLEVELNUMBERMASK);
 }
 
 static void ColouriseMakeLine(
@@ -523,6 +544,15 @@ static void ColouriseErrorListLine(
 		strstr(lineBuffer, ", file ")) {
 		// Essential Lahey Fortran error message
 		styler.ColourTo(endPos, SCE_ERR_ELF);
+	} else if (strstart(lineBuffer, "line ") &&
+		       strstr(lineBuffer, " column ")) {
+		// HTML tidy style: line 42 column 1
+		styler.ColourTo(endPos, SCE_ERR_TIDY);
+	} else if (strstart(lineBuffer, "\tat ") &&
+		strstr(lineBuffer, "(") &&
+		strstr(lineBuffer, ".java:")) {
+		// Java stack back trace
+		styler.ColourTo(endPos, SCE_ERR_JAVA_STACK);
 	} else {
 		// Look for GCC <filename>:<line>:message
 		// Look for Microsoft <filename>(line) :message

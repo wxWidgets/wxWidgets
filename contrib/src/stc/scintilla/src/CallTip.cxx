@@ -214,7 +214,7 @@ void CallTip::MouseClick(Point pt) {
 
 PRectangle CallTip::CallTipStart(int pos, Point pt, const char *defn,
                                  const char *faceName, int size,
-                                 int codePage_, Window &wParent) {
+                                 int codePage_, int characterSet, Window &wParent) {
 	clickPlace = 0;
 	if (val)
 		delete []val;
@@ -234,7 +234,7 @@ PRectangle CallTip::CallTipStart(int pos, Point pt, const char *defn,
 	inCallTipMode = true;
 	posStartCallTip = pos;
 	int deviceHeight = surfaceMeasure->DeviceHeightFont(size);
-	font.Create(faceName, SC_CHARSET_DEFAULT, deviceHeight, false, false);
+	font.Create(faceName, characterSet, deviceHeight, false, false);
 	// Look for multiple lines in the text
 	// Only support \n here - simply means container must avoid \r!
 	int numLines = 1;

@@ -39,12 +39,14 @@ protected:
 		return ret;
 	}
 	static bool IncludesVar(const char *value, const char *key);
+
 public:
 	PropSet *superPS;
 	PropSet();
 	~PropSet();
 	void Set(const char *key, const char *val, int lenKey=-1, int lenVal=-1);
 	void Set(const char *keyVal);
+	void Unset(const char *key, int lenKey=-1);
 	void SetMultiple(const char *s);
 	SString Get(const char *key);
 	SString GetExpanded(const char *key);
@@ -85,9 +87,9 @@ public:
 	char *Allocate(int size);
 	void SetFromAllocated();
 	bool InList(const char *s);
-	const char *GetNearestWord(const char *wordStart, int searchLen = -1,
+	const char *GetNearestWord(const char *wordStart, int searchLen,
 		bool ignoreCase = false, SString wordCharacters="", int wordIndex = -1);
-	char *GetNearestWords(const char *wordStart, int searchLen=-1,
+	char *GetNearestWords(const char *wordStart, int searchLen,
 		bool ignoreCase=false, char otherSeparator='\0', bool exactLen=false);
 };
 

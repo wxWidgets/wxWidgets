@@ -138,7 +138,7 @@ static void ColouriseLuaDoc(
 				sc.SetState(SCE_LUA_DEFAULT);
 			}
 		} else if (sc.state == SCE_LUA_IDENTIFIER) {
-			if (!IsAWordChar(sc.ch)) {
+			if (!IsAWordChar(sc.ch) || sc.Match('.', '.')) {
 				char s[100];
 				sc.GetCurrent(s, sizeof(s));
 				if (keywords.InList(s)) {

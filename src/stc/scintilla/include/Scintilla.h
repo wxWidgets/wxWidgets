@@ -583,6 +583,10 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_SETCHARSDEFAULT 2444
 #define SCI_AUTOCGETCURRENT 2445
 #define SCI_ALLOCATE 2446
+#define SCI_TARGETASUTF8 2447
+#define SCI_SETLENGTHFORENCODE 2448
+#define SCI_ENCODEDFROMUTF8 2449
+#define SCI_FINDCOLUMN 2456
 #define SCI_STARTRECORD 3001
 #define SCI_STOPRECORD 3002
 #define SCI_SETLEXER 4001
