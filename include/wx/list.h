@@ -186,7 +186,8 @@ private:
 // -----------------------------------------------------------------------------
 class WXDLLEXPORT wxListBase : public wxObject
 {
-friend class wxNodeBase; // should be able to call DetachNode()
+friend class wxNodeBase;        // should be able to call DetachNode()
+friend class wxHashTableBase;   // should be able to call untyped Find()
 public:
     // default ctor & dtor
     wxListBase(wxKeyType keyType = wxKEY_NONE) { Init(keyType); }

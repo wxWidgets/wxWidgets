@@ -172,10 +172,10 @@ void wxListBase::DoCopy(const wxListBase& list)
     m_nodeLast = (wxNodeBase *) NULL;
 
     switch (m_keyType) {
-    
+
         case wxKEY_INTEGER:
             {
-                long key;                
+                long key;
                 for ( wxNodeBase *node = list.GetFirst(); node; node = node->GetNext() )
                 {
                     key = node->GetKeyInteger();
@@ -186,7 +186,7 @@ void wxListBase::DoCopy(const wxListBase& list)
 
         case wxKEY_STRING:
             {
-                const wxChar *key;                
+                const wxChar *key;
                 for ( wxNodeBase *node = list.GetFirst(); node; node = node->GetNext() )
                 {
                     key = node->GetKeyString();

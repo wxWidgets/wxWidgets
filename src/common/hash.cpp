@@ -2,12 +2,20 @@
 // Name:        hash.cpp
 // Purpose:     wxHashTable implementation
 // Author:      Julian Smart
-// Modified by:
+// Modified by: VZ at 25.02.00: type safe hashes with WX_DECLARE_HASH()
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
 #pragma implementation "hash.h"
@@ -29,7 +37,91 @@
 #include <string.h>
 #include <stdarg.h>
 
+// ----------------------------------------------------------------------------
+// wxWin macros
+// ----------------------------------------------------------------------------
+
 IMPLEMENT_DYNAMIC_CLASS(wxHashTable, wxObject)
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxHashTablleBase for working with "void *" data
+// ----------------------------------------------------------------------------
+
+wxHashTableBase::wxHashTableBase()
+{
+    m_deleteContents = FALSE;
+    m_hashTable = (wxListBase **)NULL;
+    m_hashSize = 0;
+    m_count = 0;
+    m_keyType = wxKEY_NONE;
+}
+
+void wxHashTableBase::Create(wxKeyType keyType, size_t size)
+{
+    Destroy();
+
+    m_hashSize = size;
+    m_keyType = keyType;
+    m_hashTable = new wxListBase *[size];
+    for ( size_t n = 0; n < m_hashSize; n++ )
+    {
+        m_hashTable[n] = (wxListBase *) NULL;
+    }
+}
+
+void wxHashTableBase::Destroy()
+{
+    if ( m_hashTable )
+    {
+        for ( size_t n = 0; n < m_hashSize; n++ )
+        {
+            delete m_hashTable[n];
+        }
+
+        delete [] m_hashTable;
+
+        m_hashTable = (wxListBase **)NULL;
+
+        m_count = 0;
+    }
+}
+
+void wxHashTableBase::DeleteContents(bool flag)
+{
+    m_deleteContents = flag;
+    for ( size_t n = 0; n < m_hashSize; n++ )
+    {
+        if ( m_hashTable[n] )
+        {
+            m_hashTable[n]->DeleteContents(flag);
+        }
+    }
+}
+
+wxNodeBase *wxHashTableBase::GetNode(long key, long value) const
+{
+    size_t slot = (size_t)abs(key % m_hashSize);
+
+    wxNodeBase *node;
+    if ( m_hashTable[slot] )
+    {
+        node = m_hashTable[slot]->Find(wxListKey(value));
+    }
+    else
+    {
+        node = (wxNodeBase *)NULL;
+    }
+
+    return node;
+}
+
+// ----------------------------------------------------------------------------
+// old not type safe wxHashTable
+// ----------------------------------------------------------------------------
 
 wxHashTable::wxHashTable (int the_key_type, int size)
 {
@@ -51,12 +143,12 @@ wxHashTable::wxHashTable (int the_key_type, int size)
 */
 }
 
-wxHashTable::~wxHashTable (void)
+wxHashTable::~wxHashTable ()
 {
   Destroy();
 }
 
-void wxHashTable::Destroy(void)
+void wxHashTable::Destroy()
 {
   if (!hash_table) return;
   int i;
@@ -123,11 +215,11 @@ void wxHashTable::Put (long key, long value, wxObject * object)
 void wxHashTable::Put (long key, const wxChar *value, wxObject * object)
 {
   // Should NEVER be
-  long k = (long) key; 
+  long k = (long) key;
 
   int position = (int) (k % n);
   if (position < 0) position = -position;
- 
+
   if (!hash_table[position])
   {
     hash_table[position] = new wxList (wxKEY_INTEGER);
@@ -142,7 +234,7 @@ void wxHashTable::Put (long key, wxObject * object)
 {
   // Should NEVER be
   long k = (long) key;
-  
+
   int position = (int) (k % n);
   if (position < 0) position = -position;
 
@@ -151,7 +243,7 @@ void wxHashTable::Put (long key, wxObject * object)
     hash_table[position] = new wxList (wxKEY_INTEGER);
     if (m_deleteContents) hash_table[position]->DeleteContents(TRUE);
   }
-  
+
   hash_table[position]->Append (k, object);
   m_count++;
 }
@@ -185,9 +277,9 @@ wxObject *wxHashTable::Get (long key, long value) const
     {
       wxNode *node = hash_table[position]->Find (value);
       if (node)
-	return node->Data ();
+        return node->Data ();
       else
-	return (wxObject *) NULL;
+        return (wxObject *) NULL;
     }
 }
 
@@ -195,7 +287,7 @@ wxObject *wxHashTable::Get (long key, const wxChar *value) const
 {
   // Should NEVER be
   long k = (long) key;
- 
+
   int position = (int) (k % n);
   if (position < 0) position = -position;
 
@@ -205,9 +297,9 @@ wxObject *wxHashTable::Get (long key, const wxChar *value) const
     {
       wxNode *node = hash_table[position]->Find (value);
       if (node)
-	return node->Data ();
+        return node->Data ();
       else
-	return (wxObject *) NULL;
+        return (wxObject *) NULL;
     }
 }
 
@@ -256,14 +348,14 @@ wxObject *wxHashTable::Delete (long key)
     {
       wxNode *node = hash_table[position]->Find (k);
       if (node)
-	{
-	  wxObject *data = node->Data ();
-	  delete node;
-	  m_count--;
-	  return data;
-	}
+        {
+          wxObject *data = node->Data ();
+          delete node;
+          m_count--;
+          return data;
+        }
       else
-	return (wxObject *) NULL;
+        return (wxObject *) NULL;
     }
 }
 
@@ -278,21 +370,21 @@ wxObject *wxHashTable::Delete (const wxChar *key)
     {
       wxNode *node = hash_table[position]->Find (key);
       if (node)
-	{
-	  wxObject *data = node->Data ();
-	  delete node;
-	  m_count--;
-	  return data;
-	}
+        {
+          wxObject *data = node->Data ();
+          delete node;
+          m_count--;
+          return data;
+        }
       else
-	return (wxObject *) NULL;
+        return (wxObject *) NULL;
     }
 }
 
 wxObject *wxHashTable::Delete (long key, int value)
 {
   // Should NEVER be
-  long k = (long) key; 
+  long k = (long) key;
 
   int position = (int) (k % n);
   if (position < 0) position = -position;
@@ -303,14 +395,14 @@ wxObject *wxHashTable::Delete (long key, int value)
     {
       wxNode *node = hash_table[position]->Find (value);
       if (node)
-	{
-	  wxObject *data = node->Data ();
-	  delete node;
-	  m_count--;
-	  return data;
-	}
+        {
+          wxObject *data = node->Data ();
+          delete node;
+          m_count--;
+          return data;
+        }
       else
-	return (wxObject *) NULL;
+        return (wxObject *) NULL;
     }
 }
 
@@ -325,14 +417,14 @@ wxObject *wxHashTable::Delete (long key, const wxChar *value)
     {
       wxNode *node = hash_table[position]->Find (value);
       if (node)
-	{
-	  wxObject *data = node->Data ();
-	  delete node;
-	  m_count--;
-	  return data;
-	}
+        {
+          wxObject *data = node->Data ();
+          delete node;
+          m_count--;
+          return data;
+        }
       else
-	return (wxObject *) NULL;
+        return (wxObject *) NULL;
     }
 }
 
@@ -346,41 +438,41 @@ long wxHashTable::MakeKey (const wxChar *string) const
   return int_key;
 }
 
-void wxHashTable::BeginFind (void)
+void wxHashTable::BeginFind ()
 {
   current_position = -1;
   current_node = (wxNode *) NULL;
 }
 
-wxNode *wxHashTable::Next (void)
+wxNode *wxHashTable::Next ()
 {
   wxNode *found = (wxNode *) NULL;
   bool end = FALSE;
   while (!end && !found)
     {
       if (!current_node)
-	{
-	  current_position++;
-	  if (current_position >= n)
-	    {
-	      current_position = -1;
-	      current_node = (wxNode *) NULL;
-	      end = TRUE;
-	    }
-	  else
-	    {
-	      if (hash_table[current_position])
-		{
-		  current_node = hash_table[current_position]->First ();
-		  found = current_node;
-		}
-	    }
-	}
+        {
+          current_position++;
+          if (current_position >= n)
+            {
+              current_position = -1;
+              current_node = (wxNode *) NULL;
+              end = TRUE;
+            }
+          else
+            {
+              if (hash_table[current_position])
+                {
+                  current_node = hash_table[current_position]->First ();
+                  found = current_node;
+                }
+            }
+        }
       else
-	{
-	  current_node = current_node->Next ();
-	  found = current_node;
-	}
+        {
+          current_node = current_node->Next ();
+          found = current_node;
+        }
     }
   return found;
 }
@@ -392,17 +484,17 @@ void wxHashTable::DeleteContents (bool flag)
   for (i = 0; i < n; i++)
     {
       if (hash_table[i])
-	hash_table[i]->DeleteContents (flag);
+        hash_table[i]->DeleteContents (flag);
     }
 }
 
-void wxHashTable::Clear (void)
+void wxHashTable::Clear ()
 {
   int i;
   for (i = 0; i < n; i++)
     {
       if (hash_table[i])
-	hash_table[i]->Clear ();
+        hash_table[i]->Clear ();
     }
   m_count = 0;
 }

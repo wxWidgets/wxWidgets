@@ -6,7 +6,7 @@
 // Created:     16/11/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #define _DEFINE_LIST(T, name)           \
