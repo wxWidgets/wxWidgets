@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_EVENTH__
-#define _WX_EVENTH__
+#ifndef _WX_EVENT_H__
+#define _WX_EVENT_H__
 
 #if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "event.h"
@@ -335,6 +335,17 @@ END_DECLARE_EVENT_TYPES()
 
 #endif // WXWIN_COMPATIBILITY
 
+// the predefined constants for the number of times we propagate event
+// upwards window child-parent chain
+enum Propagation_state
+{
+    // don't propagate it at all
+    wxEVENT_PROPAGATE_NONE = 0,
+
+    // propagate it until it is processed
+    wxEVENT_PROPAGATE_MAX = INT_MAX
+};
+
 /*
  * wxWindows events, covering all interesting things that might happen
  * (button clicking, resizing, setting text in widgets, etc.).
@@ -374,14 +385,34 @@ public:
     void Skip(bool skip = TRUE) { m_skipped = skip; }
     bool GetSkipped() const { return m_skipped; };
 
-    // Implementation only: this test is explicitlty anti OO and this functions
-    // exists only for optimization purposes.
-    bool IsCommandEvent() const { return m_isCommandEvent; }
-
     // this function is used to create a copy of the event polymorphically and
     // all derived classes must implement it because otherwise wxPostEvent()
     // for them wouldn't work (it needs to do a copy of the event)
     virtual wxEvent *Clone() const = 0;
+
+    // Implementation only: this test is explicitlty anti OO and this functions
+    // exists only for optimization purposes.
+    bool IsCommandEvent() const { return m_isCommandEvent; }
+
+    // Determine if this event should be propagating to the parent window.
+    bool ShouldPropagate() const
+        { return m_propagationLevel != wxEVENT_PROPAGATE_NONE; }
+
+    // Stop an event from propagating to its parent window, returns the old
+    // propagation level value
+    int StopPropagation()
+    {
+        int propagationLevel = m_propagationLevel;
+        m_propagationLevel = wxEVENT_PROPAGATE_NONE;
+        return propagationLevel;
+    }
+
+    // Resume the event propagation by restoring the propagation level
+    // (returned by StopPropagation())
+    void ResumePropagation(int propagationLevel)
+    {
+        m_propagationLevel = propagationLevel;
+    }
 
 public:
     wxObject*         m_eventObject;
@@ -389,14 +420,72 @@ public:
     long              m_timeStamp;
     int               m_id;
     wxObject*         m_callbackUserData;
+
+protected:
+    // the propagation level: while it is positive, we propagate the event to
+    // the parent window (if any)
+    //
+    // this one doesn't have to be public, we don't have to worry about
+    // backwards compatibility as it is new
+    int               m_propagationLevel;
+
+public:
     bool              m_skipped;
     bool              m_isCommandEvent;
-
+    
 private:
+    // it needs to access our m_propagationLevel
+    friend class WXDLLIMPEXP_BASE wxPropagateOnce;
+
     DECLARE_ABSTRACT_CLASS(wxEvent)
 };
 
+/*
+ * Helper class to temporarily change an event not to propagate.
+ */
+class WXDLLIMPEXP_BASE wxPropagationDisabler
+{
+public:
+    wxPropagationDisabler(wxEvent& event) : m_event(event)
+    {
+        m_propagationLevelOld = m_event.StopPropagation();
+    }
+
+    ~wxPropagationDisabler()
+    {
+        m_event.ResumePropagation(m_propagationLevelOld);
+    }
+
+private:
+    wxEvent& m_event;
+    int m_propagationLevelOld;
+};
+
+/*
+ * Another one to temporarily lower propagation level.
+ */
+class WXDLLIMPEXP_BASE wxPropagateOnce
+{
+public:
+    wxPropagateOnce(wxEvent& event) : m_event(event)
+    {
+        wxASSERT_MSG( m_event.m_propagationLevel > 0,
+                        _T("shouldn't be used unless ShouldPropagate()!") );
+
+        m_event.m_propagationLevel--;
+    }
+
+    ~wxPropagateOnce()
+    {
+        m_event.m_propagationLevel++;
+    }
+
+private:
+    wxEvent& m_event;
+};
+
 #if wxUSE_GUI
+
 
 // Item or menu event class
 /*
@@ -1119,7 +1208,7 @@ private:
 };
 
 // wxChildFocusEvent notifies the parent that a child has got the focus: unlike
-// wxFocusEvent it is propgated upwards the window chain
+// wxFocusEvent it is propagated upwards the window chain
 class WXDLLIMPEXP_CORE wxChildFocusEvent : public wxCommandEvent
 {
 public:
@@ -2635,5 +2724,5 @@ wxWindow* wxFindFocusDescendant(wxWindow* ancestor);
 
 #endif // wxUSE_GUI
 
-#endif
-        // _WX_EVENTH__
+#endif // _WX_EVENT_H__
+

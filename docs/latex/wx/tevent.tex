@@ -142,18 +142,20 @@ class table is tried, and so on until no more tables exist or an appropriate fun
 in which case the function exits.
 \item The search is applied down the entire chain of event handlers (usually the chain has a length
 of one). If this succeeds, the function exits.
-\item If the object is a wxWindow and the event is a wxCommandEvent, {\bf ProcessEvent} is
-recursively applied to the parent window's event handler. If this returns true, the function exits.
+\item If the object is a wxWindow and the event is set to set to propagate (in the library only
+wxCommandEvent based events are set to propagate), {\bf ProcessEvent} is recursively applied
+to the parent window's event handler. If this returns true, the function exits.
 \item Finally, {\bf ProcessEvent} is called on the wxApp object.
 \end{enumerate}
 
 {\bf Pay close attention to Step 5.}  People often overlook or get
 confused by this powerful feature of the wxWindows event processing
-system.  To put it a different way, events derived either directly or
-indirectly from wxCommandEvent will travel up the containment
-hierarchy from child to parent until an event handler is found that
-doesn't call event.Skip().  Events not derived from wxCommandEvent are
-sent only to the window they occurred in and then stop.
+system.  To put it a different way, events set to propagate 
+(\helpref{See: wxEvent::ShouldPropagate}{wxeventshouldpropagate})
+(most likely derived either directly or indirectly from wxCommandEvent)
+will travel up the containment hierarchy from child to parent until the 
+maximal propagation level is reached or an event handler is found that
+doesn't call \helpref{event.Skip()}{wxeventskip}.
 
 Finally, there is another additional complication (which, in fact, simplifies
 life of wxWindows programmers significantly): when propagating the command
@@ -182,12 +184,13 @@ event.
 Note that your application may wish to override ProcessEvent to redirect processing of
 events. This is done in the document/view framework, for example, to allow event handlers
 to be defined in the document or view. To test for command events (which will probably
-be the only events you wish to redirect), you may use wxEvent::IsCommandEvent for
-efficiency, instead of using the slower run-time type system.
+be the only events you wish to redirect), you may use 
+\helpref{wxEvent::IsCommandEvent}{wxeventiscommandevent} for efficiency, 
+instead of using the slower run-time type system.
 
 As mentioned above, only command events are recursively applied to the parents event
-handler. As this quite often causes confusion for users, here is a list of system
-events which will NOT get sent to the parent's event handler:
+handler in the libary itself. As this quite often causes confusion for users,
+here is a list of system events which will NOT get sent to the parent's event handler:
 
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\helpref{wxEvent}{wxevent}}{The event base class}

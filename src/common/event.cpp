@@ -339,6 +339,7 @@ wxEvent::wxEvent(int theId, wxEventType commandType )
     m_skipped = FALSE;
     m_callbackUserData = (wxObject *) NULL;
     m_isCommandEvent = FALSE;
+    m_propagationLevel = wxEVENT_PROPAGATE_NONE;
 }
 
 wxEvent::wxEvent(const wxEvent &src)
@@ -350,6 +351,7 @@ wxEvent::wxEvent(const wxEvent &src)
     , m_callbackUserData(src.m_callbackUserData)
     , m_skipped(src.m_skipped)
     , m_isCommandEvent(src.m_isCommandEvent)
+    , m_propagationLevel(src.m_propagationLevel)
 {
 }
 
@@ -370,6 +372,9 @@ wxCommandEvent::wxCommandEvent(wxEventType commandType, int theId)
     m_extraLong = 0;
     m_commandInt = 0;
     m_isCommandEvent = TRUE;
+
+    // the command events are propagated upwards by default
+    m_propagationLevel = wxEVENT_PROPAGATE_MAX;
 }
 
 /*

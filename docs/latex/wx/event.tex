@@ -44,6 +44,25 @@ The type of the event, such as wxEVENT\_TYPE\_BUTTON\_COMMAND.
 
 Identifier for the window.
 
+\membersection{wxEvent::m\_propagationLevel}
+
+\member{int}{m\_propagationLevel}
+
+Indicates how many levels the event can propagate. This member is protected and
+should typically only be set in the constructors of the derived classes. It
+may be temporarily changed by \helpref{StopPropagation}{wxeventstoppropagation} 
+and \helpref{ResumePropagation}{wxeventresumepropagation} and tested with 
+\helpref{ShouldPropagate}{wxeventshouldpropagate}.
+
+The initial value is set to either {\tt wxEVENT\_PROPAGATION\_NONE} (by
+default) meaning that the event shouldn't be propagated at all or to 
+{\tt wxEVENT\_PROPAGATION\_MAX} (for command events) meaning that it should be
+propagated as much as necessary.
+
+Any positive number means that the event should be propagated but no more than
+the given number of times. E.g. the propagation level may be set to $1$ to
+propagate the event to its parent only, but not to its grandparent.
+
 \membersection{wxEvent::m\_skipped}
 
 \member{bool}{m\_skipped}
@@ -92,13 +111,13 @@ such as wxEVENT\_TYPE\_BUTTON\_COMMAND.
 
 \membersection{wxEvent::GetId}
 
-\func{int}{GetId}{\void}
+\constfunc{int}{GetId}{\void}
 
 Returns the identifier associated with this event, such as a button command id.
 
 \membersection{wxEvent::GetSkipped}
 
-\func{bool}{GetSkipped}{\void}
+\constfunc{bool}{GetSkipped}{\void}
 
 Returns true if the event handler should be skipped, false otherwise.
 
@@ -107,6 +126,23 @@ Returns true if the event handler should be skipped, false otherwise.
 \func{long}{GetTimestamp}{\void}
 
 Gets the timestamp for the event.
+
+\membersection{wxEvent::IsCommandEvent}\label{wxeventiscommandevent}
+
+\constfunc{bool}{IsCommandEvent}{\void}
+
+Returns true if the event is or is derived from
+\helpref{wxCommandEvent}{wxcommandevent} else it returns false.
+Note: Exists only for optimization purposes.
+
+
+\membersection{wxEvent::ResumePropagation}\label{wxeventresumepropagation}
+
+\func{void}{ResumePropagation}{\param{int }{propagationLevel}}
+
+Sets the propagation level to the given value (for example returned from an
+earlier call to \helpref{StopPropagation}{wxeventstoppropagation}).
+
 
 \membersection{wxEvent::SetEventObject}
 
@@ -134,6 +170,13 @@ Sets the timestamp for the event.
 
 Sets the originating object.
 
+\membersection{wxEvent::ShouldPropagate}\label{wxeventshouldpropagate}
+
+\constfunc{bool}{ShouldPropagate}{\void}
+
+Test if this event should be propagated or not, i.e. if the propagation level
+is currently greater than $0$.
+
 \membersection{wxEvent::Skip}\label{wxeventskip}
 
 \func{void}{Skip}{\param{bool}{ skip = true}}
@@ -141,4 +184,15 @@ Sets the originating object.
 Called by an event handler to tell the event system that the
 event handler should be skipped, and the next valid handler used
 instead.
+
+\membersection{wxEvent::StopPropagation}
+
+\func{int}{StopPropagation}{\void}\label{wxeventstoppropagation}
+
+Stop the event from propagating to its parent window.
+
+Returns the old propagation level value which may be later passed to 
+\helpref{ResumePropagation}{wxeventresumepropagation} to allow propagating the
+event again.
+
 
