@@ -308,8 +308,15 @@ class wxLocale
 public:
     // ctor & dtor
     // -----------
-    wxLocale(int language = wxLANGUAGE_DEFAULT,
-             int flags = wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING);
+    %extend {
+        wxLocale(int language = -1,
+                 int flags = wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING) {
+            if (language == -1)
+                return new wxLocale();
+            else
+                return new wxLocale(language, flags);
+        }
+    }
 
         // restores old locale
     ~wxLocale();
