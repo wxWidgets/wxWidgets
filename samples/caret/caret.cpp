@@ -87,7 +87,7 @@ public:
     MyCanvas( wxWindow *parent );
     ~MyCanvas();
 
-    char& CharAt(int x, int y) { return *(m_text + x + m_xChars * y); }
+    wxChar& CharAt(int x, int y) { return *(m_text + x + m_xChars * y); }
 
     // caret movement
     void Home() { m_xCaret = 0; }
@@ -121,7 +121,7 @@ private:
     int      m_xChars, m_yChars;
 
     // the text
-    char    *m_text;
+    wxChar  *m_text;
 
     DECLARE_DYNAMIC_CLASS(MyCanvas)
     DECLARE_EVENT_TABLE()
@@ -265,7 +265,7 @@ MyCanvas::MyCanvas( wxWindow *parent )
                             wxDefaultPosition, wxDefaultSize,
                             wxSUNKEN_BORDER )
 {
-    m_text = (char *)NULL;
+    m_text = (wxChar *)NULL;
 
     SetBackgroundColour(* wxWHITE);
 
@@ -301,10 +301,10 @@ void MyCanvas::OnSize( wxSizeEvent &event )
         m_yChars = 1;
 
     free(m_text);
-    m_text = (char *)calloc(m_xChars * m_yChars, sizeof(char));
+    m_text = (wxChar *)calloc(m_xChars * m_yChars, sizeof(wxChar));
 
     wxString msg;
-    msg.Printf("Panel size is (%d, %d)", m_xChars, m_yChars);
+    msg.Printf(_T("Panel size is (%d, %d)"), m_xChars, m_yChars);
 
     ((wxFrame *)GetParent())->SetStatusText(msg, 1);
 
@@ -324,9 +324,9 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
         for ( int x = 0; x < m_xChars; x++ )
         {
-            char ch = CharAt(x, y);
+            wxChar ch = CharAt(x, y);
             if ( !ch )
-                ch = ' ';
+                ch = _T(' ');
             line += ch;
         }
 
@@ -368,9 +368,9 @@ void MyCanvas::OnChar( wxKeyEvent &event )
             break;
 
         default:
-            if ( isprint(event.KeyCode()) )
+            if ( wxIsprint(event.KeyCode()) )
             {
-                CharAt(m_xCaret, m_yCaret) = (char)event.KeyCode();
+                CharAt(m_xCaret, m_yCaret) = (wxChar)event.KeyCode();
                 NextChar();
             }
             else
@@ -380,7 +380,7 @@ void MyCanvas::OnChar( wxKeyEvent &event )
             }
     }
 
-    wxLogStatus("Caret is at (%d, %d)", m_xCaret, m_yCaret);
+    wxLogStatus(_T("Caret is at (%d, %d)"), m_xCaret, m_yCaret);
 
     m_caret.Move(m_xMargin + m_xCaret * m_widthChar,
                  m_yMargin + m_yCaret * m_heightChar);
