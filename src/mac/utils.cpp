@@ -38,6 +38,10 @@
 #include <Sound.h>
 #endif
 
+#include "ATSUnicode.h"
+#include "TextCommon.h"
+#include "TextEncodingConverter.h"
+
 #ifndef __DARWIN__
 // defined in unix/utilsunx.cpp for Mac OS X
 
@@ -48,7 +52,7 @@ bool wxGetFullHostName(wxChar *buf, int maxSize)
 }
 
 // Get hostname only (without domain name)
-bool wxGetHostName(char *buf, int maxSize)
+bool wxGetHostName(wxChar *buf, int maxSize)
 {
     // Gets Chooser name of user by examining a System resource.
 
@@ -61,13 +65,11 @@ bool wxGetHostName(char *buf, int maxSize)
 
     if (chooserName && *chooserName)
     {
-      int length = (*chooserName)[0] ;
-      if ( length + 1 > maxSize )
-      {
-        length = maxSize - 1 ;
-      }
-      strncpy( buf , (char*) &(*chooserName)[1] , length ) ;
-      buf[length] = 0 ;
+        HLock( (Handle) chooserName ) ;
+        wxString name = wxMacMakeStringFromPascal( *chooserName ) ;
+        HUnlock( (Handle) chooserName ) ;
+        ReleaseResource( (Handle) chooserName ) ;
+        wxStrncpy( buf , name , maxSize - 1 ) ;
     }
     else
         buf[0] = 0 ;
@@ -76,7 +78,7 @@ bool wxGetHostName(char *buf, int maxSize)
 }
 
 // Get user ID e.g. jacs
-bool wxGetUserId(char *buf, int maxSize)
+bool wxGetUserId(wxChar *buf, int maxSize)
 {
   return wxGetUserName( buf , maxSize ) ;
 }
@@ -88,7 +90,7 @@ const wxChar* wxGetHomeDir(wxString *pstr)
 }
 
 // Get user name e.g. Stefan Csomor
-bool wxGetUserName(char *buf, int maxSize)
+bool wxGetUserName(wxChar *buf, int maxSize)
 {
     // Gets Chooser name of user by examining a System resource.
 
@@ -101,13 +103,11 @@ bool wxGetUserName(char *buf, int maxSize)
 
     if (chooserName && *chooserName)
     {
-      int length = (*chooserName)[0] ;
-      if ( length + 1 > maxSize )
-      {
-        length = maxSize - 1 ;
-      }
-      strncpy( buf , (char*) &(*chooserName)[1] , length ) ;
-      buf[length] = 0 ;
+        HLock( (Handle) chooserName ) ;
+        wxString name = wxMacMakeStringFromPascal( *chooserName ) ;
+        HUnlock( (Handle) chooserName ) ;
+        ReleaseResource( (Handle) chooserName ) ;
+        wxStrncpy( buf , name , maxSize - 1 ) ;
     }
     else
         buf[0] = 0 ;
@@ -250,22 +250,25 @@ bool wxWriteResource(const wxString& section, const wxString& entry, const wxStr
 
 bool wxWriteResource(const wxString& section, const wxString& entry, float value, const wxString& file)
 {
-    char buf[50];
-    sprintf(buf, "%.4f", value);
+    wxString buf;
+    buf.Printf(wxT("%.4f"), value);
+
     return wxWriteResource(section, entry, buf, file);
 }
 
 bool wxWriteResource(const wxString& section, const wxString& entry, long value, const wxString& file)
 {
-    char buf[50];
-    sprintf(buf, "%ld", value);
+    wxString buf;
+    buf.Printf(wxT("%ld"), value);
+
     return wxWriteResource(section, entry, buf, file);
 }
 
 bool wxWriteResource(const wxString& section, const wxString& entry, int value, const wxString& file)
 {
-    char buf[50];
-    sprintf(buf, "%d", value);
+    wxString buf;
+    buf.Printf(wxT("%d"), value);
+
     return wxWriteResource(section, entry, buf, file);
 }
 
@@ -369,7 +372,7 @@ wxString wxMacFindFolder( short        vol,
 }
 
 #ifndef __DARWIN__
-char *wxGetUserHome (const wxString& user)
+wxChar *wxGetUserHome (const wxString& user)
 {
     // TODO
     return NULL;
@@ -390,7 +393,7 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
       p = p.Mid(1,pos) ;
     }
     
-    p = p + ":" ;
+    p = p + wxT(":") ;
     
     Str255 volumeName ;
     XVolumeParam pb ;
@@ -501,7 +504,7 @@ wxString wxGetOsDescription()
     // use configure generated description if available
     return wxString("MacOS (") + WXWIN_OS_DESCRIPTION + wxString(")");
 #else
-    return "MacOS" ; //TODO:define further
+    return wxT("MacOS") ; //TODO:define further
 #endif
 }
 
@@ -593,10 +596,185 @@ void wxMacConvertToPC( const char *from , char *to , int len )
     }
 }
 
-wxString wxMacMakeMacStringFromPC( const char * p )
+TECObjectRef s_TECNativeCToUnicode = NULL ;
+TECObjectRef s_TECUnicodeToNativeC = NULL ;
+TECObjectRef s_TECPCToNativeC = NULL ;
+TECObjectRef s_TECNativeCToPC = NULL ;
+void wxMacSetupConverters() 
+{
+    // if we assume errors are happening here we need low level debugging since the high level assert will use the encoders that 
+    // are not yet setup...
+    
+    OSStatus status = noErr ;
+    status = TECCreateConverter(&s_TECNativeCToUnicode, 
+    	wxApp::s_macDefaultEncodingIsPC ? kTextEncodingWindowsLatin1 : kTextEncodingMacRoman, kTextEncodingUnicodeDefault);
+
+
+    status = TECCreateConverter(&s_TECUnicodeToNativeC, 
+    	kTextEncodingUnicodeDefault, wxApp::s_macDefaultEncodingIsPC ? kTextEncodingWindowsLatin1 : kTextEncodingMacRoman);
+
+    if ( !wxApp::s_macDefaultEncodingIsPC )
+    {
+        status = TECCreateConverter(&s_TECPCToNativeC, 
+        	kTextEncodingWindowsLatin1, wxApp::s_macDefaultEncodingIsPC ? kTextEncodingWindowsLatin1 : kTextEncodingMacRoman);
+
+        	
+        status = TECCreateConverter(&s_TECNativeCToPC, 
+        	wxApp::s_macDefaultEncodingIsPC ? kTextEncodingWindowsLatin1 : kTextEncodingMacRoman , kTextEncodingWindowsLatin1 );
+    }
+}
+
+void wxMacCleanupConverters()
+{
+    OSStatus status = noErr ;
+    status = TECDisposeConverter(s_TECNativeCToUnicode);
+
+    status = TECDisposeConverter(s_TECUnicodeToNativeC);
+
+    status = TECDisposeConverter(s_TECPCToNativeC);
+
+    status = TECDisposeConverter(s_TECNativeCToPC);
+}
+
+wxWCharBuffer wxMacStringToWString( const wxString &from ) 
+{
+#if wxUSE_UNICODE
+    wxWCharBuffer result( from.wc_str() ) ;
+#else
+    OSStatus status = noErr ;
+    ByteCount byteOutLen ;
+    ByteCount byteInLen = from.Length() ;
+    ByteCount byteBufferLen = byteInLen *2 ;
+    wxWCharBuffer result( from.Length() ) ;
+    status = TECConvertText(s_TECNativeCToUnicode, (ConstTextPtr)from.c_str() , byteInLen, &byteInLen,
+        (TextPtr)result.data(), byteBufferLen, &byteOutLen);
+    result.data()[byteOutLen/2] = 0 ;
+#endif
+    return result ;
+}
+
+wxString wxMacMakeStringFromCString( const char * from , int len ) 
+{
+    OSStatus status = noErr ;
+    wxString result ;
+    wxChar* buf = result.GetWriteBuf( len ) ;
+#if wxUSE_UNICODE
+    ByteCount byteOutLen ;
+    ByteCount byteInLen = len ;
+    ByteCount byteBufferLen = len *2 ;
+
+    status = TECConvertText(s_TECNativeCToUnicode, (ConstTextPtr)from , byteInLen, &byteInLen,
+        (TextPtr)buf, byteBufferLen, &byteOutLen);
+#else
+    if ( wxApp::s_macDefaultEncodingIsPC )
+        memcpy( buf , from , len ) ;
+    else
+    {
+        OSStatus status = noErr ;
+        ByteCount byteOutLen ;
+        ByteCount byteInLen = len ;
+        ByteCount byteBufferLen = byteInLen ;
+
+        status = TECConvertText(s_TECNativeCToPC, (ConstTextPtr)from , byteInLen, &byteInLen,
+            (TextPtr)buf, byteBufferLen, &byteOutLen);
+    }
+#endif
+    buf[len] = 0 ;
+    result.UngetWriteBuf() ;
+    return result ;
+}
+
+wxString wxMacMakeStringFromCString( const char * from )
+{
+    return wxMacMakeStringFromCString( from , strlen(from) ) ;
+}
+
+wxCharBuffer wxMacStringToCString( const wxString &from ) 
+{
+#if wxUSE_UNICODE
+    OSStatus status = noErr ;
+    ByteCount byteOutLen ;
+    ByteCount byteInLen = from.Length() * 2 ;
+    ByteCount byteBufferLen = from.Length() ;
+    wxCharBuffer result( from.Length() ) ;
+    status = TECConvertText(s_TECUnicodeToNativeC , (ConstTextPtr)from.wc_str() , byteInLen, &byteInLen,
+        (TextPtr)result.data(), byteBufferLen, &byteOutLen);
+    return result ;
+#else
+    if ( wxApp::s_macDefaultEncodingIsPC )
+        return wxCharBuffer( from.c_str() ) ;
+    else
+    {
+        wxCharBuffer result( from.Length() ) ;
+        OSStatus status = noErr ;
+        ByteCount byteOutLen ;
+        ByteCount byteInLen = from.Length() ;
+        ByteCount byteBufferLen = byteInLen ;
+
+        status = TECConvertText(s_TECPCToNativeC, (ConstTextPtr)from.c_str() , byteInLen, &byteInLen,
+            (TextPtr)result.data(), byteBufferLen, &byteOutLen);
+        return result ;
+    }
+#endif
+}
+
+void wxMacStringToPascal( const wxString&from , StringPtr to ) 
+{
+    wxCharBuffer buf = wxMacStringToCString( from ) ;
+    int len = strlen(buf) ;
+
+    if ( len > 255 )
+        len = 255 ;
+    to[0] = len ;
+    memcpy( (char*) &to[1] , buf , len ) ;
+}
+
+wxString wxMacMakeStringFromPascal( ConstStringPtr from ) 
+{
+    return wxMacMakeStringFromCString( (char*) &from[1] , from[0] ) ;
+}
+
+// 
+// CFStringRefs (Carbon only)
+//
+
+#if TARGET_CARBON
+// converts this string into a carbon foundation string with optional pc 2 mac encoding
+void wxMacCFStringHolder::Assign( const wxString &str ) 
+{
+#if wxUSE_UNICODE
+  	m_cfs = CFStringCreateWithCharacters( kCFAllocatorDefault, 
+  		(const unsigned short*)str.wc_str(), str.Len() );
+#else
+    m_cfs = CFStringCreateWithCString( kCFAllocatorSystemDefault , str.c_str() ,
+        wxApp::s_macDefaultEncodingIsPC ? 
+        kCFStringEncodingWindowsLatin1 : CFStringGetSystemEncoding() ) ;
+#endif
+    m_release = true ;
+}
+
+wxString wxMacCFStringHolder::AsString() 
 {
     wxString result ;
-    int len = strlen ( p ) ;
+    Size len = CFStringGetLength( m_cfs )  ;
+    wxChar* buf = result.GetWriteBuf( len ) ;
+#if wxUSE_UNICODE
+    CFStringGetCharacters( m_cfs , CFRangeMake( 0 , len ) , (UniChar*) buf ) ;
+#else
+    CFStringGetCString( m_cfs , buf , len+1 , s_macDefaultEncodingIsPC ? 
+        kCFStringEncodingWindowsLatin1 : CFStringGetSystemEncoding() ) ;
+#endif
+    buf[len] = 0 ;
+    result.UngetWriteBuf() ;
+    return result ;
+}
+
+#if 0
+
+wxString wxMacMakeMacStringFromPC( const wxChar * p )
+{
+    wxString result ;
+    int len = wxStrlen ( p ) ;
     if ( len > 0 )
     {
         wxChar* ptr = result.GetWriteBuf(len) ;
@@ -607,10 +785,10 @@ wxString wxMacMakeMacStringFromPC( const char * p )
     return result ;
 }
 
-wxString wxMacMakePCStringFromMac( const char * p )
+wxString wxMacMakePCStringFromMac( const wxChar * p )
 {
     wxString result ;
-    int len = strlen ( p ) ;
+    int len = wxStrlen ( p ) ;
     if ( len > 0 )
     {
         wxChar* ptr = result.GetWriteBuf(len) ;
@@ -621,7 +799,7 @@ wxString wxMacMakePCStringFromMac( const char * p )
     return result ;
 }
 
-wxString wxMacMakeStringFromMacString( const char* from , bool mac2pcEncoding )
+wxString wxMacMakeStringFromMacString( const wxChar* from , bool mac2pcEncoding )
 {
     if (mac2pcEncoding)
     {
@@ -652,7 +830,7 @@ wxString wxMacMakeStringFromPascal( ConstStringPtr from , bool mac2pcEncoding )
     }
 }
 
-void wxMacStringToPascal( const char * from , StringPtr to , bool pc2macEncoding )
+void wxMacStringToPascal( const wxChar * from , StringPtr to , bool pc2macEncoding )
 {
     if (pc2macEncoding)
     {
@@ -663,19 +841,8 @@ void wxMacStringToPascal( const char * from , StringPtr to , bool pc2macEncoding
       CopyCStringToPascal( from , to ) ;
     }
 }
+#endif
 
-// 
-// CFStringRefs (Carbon only)
-//
-
-#if TARGET_CARBON
-// converts this string into a carbon foundation string with optional pc 2 mac encoding
-CFStringRef wxMacCreateCFString( const wxString &str , bool pc2macEncoding ) 
-{
-    return CFStringCreateWithCString( kCFAllocatorSystemDefault , str.c_str() ,
-        pc2macEncoding ? 
-        kCFStringEncodingWindowsLatin1 : CFStringGetSystemEncoding() ) ;
-}
 
 #endif //TARGET_CARBON
 

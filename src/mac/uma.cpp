@@ -189,10 +189,8 @@ MenuRef UMANewMenu( SInt16 id , const wxString& title )
     wxString str = wxStripMenuCodes( title ) ;
     MenuRef menu ;
 #if TARGET_CARBON
-    CFStringRef cfs = wxMacCreateCFString( str ) ;
     CreateNewMenu( id , 0 , &menu ) ;
-    SetMenuTitleWithCFString( menu , cfs ) ;
-    CFRelease( cfs ) ;
+    SetMenuTitleWithCFString( menu , wxMacCFStringHolder(str) ) ;
 #else
     Str255 ptitle ;
     wxMacStringToPascal( str , ptitle ) ;
@@ -205,9 +203,7 @@ void UMASetMenuTitle( MenuRef menu , const wxString& title )
 {
     wxString str = wxStripMenuCodes( title ) ;
 #if TARGET_CARBON
-    CFStringRef cfs = wxMacCreateCFString( str ) ;
-    SetMenuTitleWithCFString( menu , cfs ) ;
-    CFRelease( cfs ) ;
+    SetMenuTitleWithCFString( menu , wxMacCFStringHolder(str) ) ;
 #else
     Str255 ptitle ;
     wxMacStringToPascal( str , ptitle ) ;
@@ -219,9 +215,7 @@ void UMASetMenuItemText(  MenuRef menu,  MenuItemIndex item, const wxString& tit
 {
     wxString str = wxStripMenuCodes( title ) ;
 #if TARGET_CARBON
-    CFStringRef cfs = wxMacCreateCFString( str ) ;
-    SetMenuItemTextWithCFString( menu , item , cfs ) ;
-    CFRelease( cfs ) ;
+    SetMenuItemTextWithCFString( menu , item , wxMacCFStringHolder(str) ) ;
 #else
     Str255 ptitle ;
     wxMacStringToPascal( str , ptitle ) ;
@@ -558,17 +552,15 @@ void             UMADisposeWindow( WindowRef inWindowRef )
     DisposeWindow( inWindowRef ) ;
 }
 
-void             UMASetWTitleC( WindowRef inWindowRef , const char *title ) 
+void UMASetWTitle( WindowRef inWindowRef , const wxString& title ) 
 {
-    Str255    ptitle ;
-    strncpy( (char*)ptitle , title , 96 ) ;
-    ptitle[96] = 0 ;
 #if TARGET_CARBON
-    c2pstrcpy( ptitle, (char *)ptitle ) ;
+    SetWindowTitleWithCFString( inWindowRef , wxMacCFStringHolder(title) ) ;
 #else
-    c2pstr( (char*)ptitle ) ;
-#endif
+    Str255 ptitle ;
+    wxMacStringToPascal( title , ptitle ) ;
     SetWTitle( inWindowRef , ptitle ) ;
+#endif
 }
 
 void             UMAGetWTitleC( WindowRef inWindowRef , char *title ) 
@@ -582,6 +574,17 @@ void             UMAGetWTitleC( WindowRef inWindowRef , char *title )
 }
 
 // appearance additions
+
+void UMASetControlTitle( ControlHandle inControl , const wxString& title ) 
+{
+#if TARGET_CARBON
+    SetControlTitleWithCFString( inControl , wxMacCFStringHolder(title) ) ;
+#else
+    Str255 ptitle ;
+    wxMacStringToPascal( title , ptitle ) ;
+    SetControlTitle( inControl , ptitle ) ;
+#endif
+}
 
 void UMAActivateControl( ControlHandle inControl ) 
 {
@@ -795,7 +798,7 @@ void wxMacPortStateHelper::Setup( GrafPtr newport )
 {
     GetPort( &m_oldPort ) ;
     SetPort( newport ) ;
-    wxASSERT_MSG( m_clip == NULL , "Cannot call setup twice" ) ;
+    wxASSERT_MSG( m_clip == NULL , wxT("Cannot call setup twice") ) ;
     m_clip = NewRgn() ;
     GetClip( m_clip );
     m_textFont = GetPortTextFont( (CGrafPtr) newport);

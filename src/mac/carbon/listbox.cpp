@@ -94,7 +94,7 @@ static pascal void wxMacListDefinition( short message, Boolean isSelected, Rect 
         
     case lDrawMsg:
         {
-            const wxString text = list->m_stringArray[cell.v] ;
+            const wxString linetext = list->m_stringArray[cell.v] ;
             
             //  Save the current clip region, and set the clip region to the area we are about
             //  to draw.
@@ -121,32 +121,27 @@ static pascal void wxMacListDefinition( short message, Boolean isSelected, Rect 
             }
             
 #if TARGET_CARBON
-            bool useDrawThemeText = ( DrawThemeTextBox != (void*) kUnresolvedCFragSymbolAddress ) ;
-            
-               if ( useDrawThemeText )
-               {
-                Rect frame = { drawRect->top, drawRect->left + 4,
-                    drawRect->top + kwxMacListItemHeight, drawRect->right + 10000 } ;
-                CFStringRef sString = CFStringCreateWithBytes( NULL , (UInt8*) text.c_str(), text.Length(), CFStringGetSystemEncoding(), false ) ;
-                CFMutableStringRef mString = CFStringCreateMutableCopy( NULL , 0 , sString ) ;
-                CFRelease( sString ) ;
-                ::TruncateThemeText( mString , kThemeCurrentPortFont, kThemeStateActive, drawRect->right - drawRect->left , truncEnd , NULL ) ;
-                ::DrawThemeTextBox( mString,
-                    kThemeCurrentPortFont,
-                    kThemeStateActive,
-                    false,
-                    &frame,
-                    teJustLeft,
-                    nil );
-                CFRelease( mString ) ;
-            }
-            else
-#endif
-            {
+			{
+				Rect frame = { drawRect->top, drawRect->left + 4,
+				    drawRect->top + kwxMacListItemHeight, drawRect->right + 10000 } ;
+				CFMutableStringRef mString = CFStringCreateMutableCopy( NULL , 0 , wxMacCFStringHolder(linetext) ) ;
+				::TruncateThemeText( mString , kThemeCurrentPortFont, kThemeStateActive, drawRect->right - drawRect->left , truncEnd , NULL ) ;
+				::DrawThemeTextBox( mString,
+				    kThemeCurrentPortFont,
+				    kThemeStateActive,
+				    false,
+				    &frame,
+				    teJustLeft,
+				    nil );
+				CFRelease( mString ) ;
+			}
+#else
+            {	
+            	wxCharBuffer text = wxMacStringToCString( linetext ) ;
                 MoveTo(drawRect->left + 4 , drawRect->top + 10 );
-                DrawText(text, 0 , text.Length());
+                DrawText(text, 0 , strlen(text) );
             }
-            
+#endif            
             //  If the cell is hilited, do the hilite now. Paint the cell contents with the
             //  appropriate QuickDraw transform mode.
             
@@ -213,7 +208,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     Rect bounds ;
     Str255 title ;
     
-    MacPreControlCreate( parent , id ,  "" , pos , size ,style, validator , name , &bounds , title ) ;
+    MacPreControlCreate( parent , id ,  wxEmptyString , pos , size ,style, validator , name , &bounds , title ) ;
     
     ListDefSpec listDef;
     listDef.defType = kListDefUserProcType;
@@ -234,8 +229,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     fontSize = 9 ;
     fontStyle = normal ;
 #endif 
-    CopyPascalStringToC( fontName , (char*) fontName ) ;
-    SetFont( wxFont (fontSize, wxSWISS, wxNORMAL, wxNORMAL , false , fontName ) ) ;
+    SetFont( wxFont (fontSize, wxSWISS, wxNORMAL, wxNORMAL , false , wxMacMakeStringFromPascal( fontName ) ) ) ;
 #if TARGET_CARBON
     Size asize;
 
@@ -388,15 +382,8 @@ void wxListBox::Delete(int N)
 int wxListBox::DoAppend(const wxString& item)
 {
     int index = m_noItems ;
-    if( wxApp::s_macDefaultEncodingIsPC )
-    {
-        m_stringArray.Add( wxMacMakeMacStringFromPC( item ) ) ;
-        m_dataArray.Add( NULL );
-    }
-    else {
-        m_stringArray.Add( item ) ;
-        m_dataArray.Add( NULL );
-    }
+    m_stringArray.Add( item ) ;
+    m_dataArray.Add( NULL );
     m_noItems ++;
     DoSetItemClientData( index , NULL ) ;
     MacAppend( item ) ;
@@ -451,47 +438,30 @@ bool wxListBox::HasMultipleSelection() const
     return (m_windowStyle & wxLB_MULTIPLE) || (m_windowStyle & wxLB_EXTENDED);
 }
 
-int wxListBox::FindString(const wxString& st) const
+int wxListBox::FindString(const wxString& s) const
 {
-    wxString s ;
-    if( wxApp::s_macDefaultEncodingIsPC )
-    {
-        s = wxMacMakeMacStringFromPC( st ) ;
-    }
-    else
-        s = st ;
     
-    if ( s.Right(1) == "*" )
+    if ( s.Right(1) == wxT("*") )
     {
         wxString search = s.Left( s.Length() - 1 ) ;
         int len = search.Length() ;
         Str255 s1 , s2 ;
-        
-#if TARGET_CARBON
-        c2pstrcpy( (StringPtr) s2 , search.c_str() ) ;
-#else
-        strcpy( (char *) s2 , search.c_str() ) ;
-        c2pstr( (char *) s2 ) ;
-#endif
+        wxMacStringToPascal( search , s2 ) ;
         
         for ( int i = 0 ; i < m_noItems ; ++ i )
         {
-#if TARGET_CARBON
-            c2pstrcpy( (StringPtr) s1 , m_stringArray[i].Left( len ).c_str() ) ;
-#else
-            strcpy( (char *) s1 , m_stringArray[i].Left( len ).c_str() ) ;
-            c2pstr( (char *) s1 ) ;
-#endif
+        	wxMacStringToPascal( m_stringArray[i].Left( len ) , s1 ) ;
+
             if ( EqualString( s1 , s2 , false , false ) )
                 return i ;
         }
-        if ( s.Left(1) == "*" && s.Length() > 1 )
+        if ( s.Left(1) == wxT("*") && s.Length() > 1 )
         {
-            s = st ;
-            s.MakeLower() ;
+            wxString st = s ;
+            st.MakeLower() ;
             for ( int i = 0 ; i < m_noItems ; ++i )
             {
-                if ( GetString(i).Lower().Matches(s) )
+                if ( GetString(i).Lower().Matches(st) )
                     return i ;
             }
         }
@@ -501,21 +471,12 @@ int wxListBox::FindString(const wxString& st) const
     {
         Str255 s1 , s2 ;
         
-#if TARGET_CARBON
-        c2pstrcpy( (StringPtr) s2 , s.c_str() ) ;
-#else
-        strcpy( (char *) s2 , s.c_str() ) ;
-        c2pstr( (char *) s2 ) ;
-#endif
+        wxMacStringToPascal( s , s2 ) ;
         
         for ( int i = 0 ; i < m_noItems ; ++ i )
         {
-#if TARGET_CARBON
-            c2pstrcpy( (StringPtr) s1 , m_stringArray[i].c_str() ) ;
-#else
-            strcpy( (char *) s1 , m_stringArray[i].c_str() ) ;
-            c2pstr( (char *) s1 ) ;
-#endif
+        	wxMacStringToPascal( m_stringArray[i] , s1 ) ;
+
             if ( EqualString( s1 , s2 , false , false ) )
                 return i ;
         }
@@ -535,7 +496,7 @@ void wxListBox::Clear()
 void wxListBox::SetSelection(int N, bool select)
 {
     wxCHECK_RET( N >= 0 && N < m_noItems,
-        "invalid index in wxListBox::SetSelection" );
+        wxT("invalid index in wxListBox::SetSelection") );
     MacSetSelection( N , select ) ;
     GetSelections( m_selectionPreImage ) ;
 }
@@ -543,7 +504,7 @@ void wxListBox::SetSelection(int N, bool select)
 bool wxListBox::IsSelected(int N) const
 {
     wxCHECK_MSG( N >= 0 && N < m_noItems, FALSE,
-        "invalid index in wxListBox::Selected" );
+        wxT("invalid index in wxListBox::Selected") );
     
     return MacIsSelected( N ) ;
 }
@@ -564,7 +525,7 @@ wxClientData *wxListBox::DoGetItemClientObject(int N) const
 void wxListBox::DoSetItemClientData(int N, void *Client_data)
 {
     wxCHECK_RET( N >= 0 && N < m_noItems,
-        "invalid index in wxListBox::SetClientData" );
+        wxT("invalid index in wxListBox::SetClientData") );
     
 #if wxUSE_OWNER_DRAWN
     if ( m_windowStyle & wxLB_OWNERDRAW )
@@ -574,7 +535,7 @@ void wxListBox::DoSetItemClientData(int N, void *Client_data)
         wxFAIL_MSG(wxT("Can't use client data with owner-drawn listboxes"));
     }
 #endif // wxUSE_OWNER_DRAWN
-    wxASSERT_MSG( m_dataArray.GetCount() >= (size_t) N , "invalid client_data array" ) ;
+    wxASSERT_MSG( m_dataArray.GetCount() >= (size_t) N , wxT("invalid client_data array") ) ;
     
     if ( m_dataArray.GetCount() > (size_t) N )
     {
@@ -606,12 +567,7 @@ int wxListBox::GetSelection() const
 // Find string for position
 wxString wxListBox::GetString(int N) const
 {
-    if( wxApp::s_macDefaultEncodingIsPC )
-    {
-        return      wxMacMakePCStringFromMac( m_stringArray[N] ) ;
-    }
-    else
-        return m_stringArray[N]  ;
+	return m_stringArray[N]  ;
 }
 
 void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
@@ -633,14 +589,7 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
 
 void wxListBox::SetString(int N, const wxString& s)
 {
-    wxString str ;
-    if( wxApp::s_macDefaultEncodingIsPC )
-    {
-        str = wxMacMakeMacStringFromPC( s )  ;
-    }
-    else
-        str = s ;
-    m_stringArray[N] = str ;
+    m_stringArray[N] = s ;
     MacSet( N , s ) ;
 }
 
@@ -754,7 +703,7 @@ void wxListBox::MacDelete( int N )
     Refresh();
 }
 
-void wxListBox::MacInsert( int n , const char * text)
+void wxListBox::MacInsert( int n , const wxString& text)
 {
     Cell cell = { 0 , 0 } ;
     cell.v = n ;
@@ -763,7 +712,7 @@ void wxListBox::MacInsert( int n , const char * text)
     Refresh();
 }
 
-void wxListBox::MacAppend( const char * text)
+void wxListBox::MacAppend( const wxString& text)
 {
     Cell cell = { 0 , 0 } ;
     cell.v = (**(ListHandle)m_macList).dataBounds.bottom ;
@@ -834,7 +783,7 @@ int wxListBox::MacGetSelections( wxArrayInt& aSelections ) const
     return no_sel ;
 }
 
-void wxListBox::MacSet( int n , const char * text )
+void wxListBox::MacSet( int n , const wxString& text )
 {
     // our implementation does not store anything in the list
     // so we just have to redraw
@@ -1011,11 +960,11 @@ void wxListBox::OnChar(wxKeyEvent& event)
     {
         if ( event.GetTimestamp() > m_lastTypeIn + 60 )
         {
-            m_typeIn = "" ;
+            m_typeIn = wxEmptyString ;
         }
         m_lastTypeIn = event.GetTimestamp() ;
         m_typeIn += (char) event.GetKeyCode() ;
-        int line = FindString("*"+m_typeIn+"*") ;
+        int line = FindString(wxT("*")+m_typeIn+wxT("*")) ;
         if ( line >= 0 )
         {
             if ( GetSelection() != line )

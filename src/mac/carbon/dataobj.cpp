@@ -1,11 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        os2/dataobj.cpp
-// Purpose:     implementation of wx[I]DataObject class
-// Author:      David Webster
+// Name:        mac/dataobj.cpp
+// Purpose:     implementation of wxDataObject class
+// Author:      Stefan Csomor
 // Modified by:
 // Created:     10/21/99
 // RCS-ID:      $Id$
-// Copyright:   (c) 1999 David Webster
+// Copyright:   (c) 1999 Stefan Csomor
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -34,6 +34,7 @@
 #include "wx/mstream.h"
 #include "wx/image.h"
 #include "wx/mac/private.h"
+#include "Scrap.h"
 
 // ----------------------------------------------------------------------------
 // functions
@@ -73,10 +74,12 @@ void wxDataFormat::SetType(  wxDataFormatId  Type )
 {
     m_type = Type;
 
-    if (m_type == wxDF_TEXT)
-        m_format = 'TEXT';
+    if (m_type == wxDF_TEXT )
+        m_format = kScrapFlavorTypeText;
+    else if (m_type == wxDF_UNICODETEXT )
+        m_format = kScrapFlavorTypeUnicode ;
     else if (m_type == wxDF_BITMAP || m_type == wxDF_METAFILE )
-        m_format = 'PICT';
+        m_format = kScrapFlavorTypePicture;
     else if (m_type == wxDF_FILENAME)
         m_format = kDragFlavorTypeHFS ;
     else
@@ -92,18 +95,23 @@ wxDataFormatId wxDataFormat::GetType() const
 
 wxString wxDataFormat::GetId() const
 {
-    wxString sRet("");  // TODO: to name of ( m_format ) );
-    return sRet;
+	char text[5] ;
+	strncpy( text , (char*) m_format , 4 ) ;
+	text[4] = 0 ;
+    return wxString::FromAscii( text ) ;
 }
 
 void wxDataFormat::SetId(  NativeFormat  format )
 {
     m_format = format;
 
-    if (m_format == 'TEXT')
+    if (m_format == kScrapFlavorTypeText)
         m_type = wxDF_TEXT;
     else
-    if (m_format == 'PICT')
+    if (m_format == kScrapFlavorTypeUnicode )
+        m_type = wxDF_UNICODETEXT;
+    else
+    if (m_format == kScrapFlavorTypePicture)
         m_type = wxDF_BITMAP;
     else
     if (m_format == kDragFlavorTypeHFS )
@@ -201,9 +209,7 @@ bool wxFileDataObject::SetData(
 {
     m_filenames.Empty();
 
-    wxString sFile( (const char *)pBuf);  /* char, not wxChar */
-
-    AddFile(sFile);
+    AddFile(wxString::FromAscii((char*)pBuf));
 
     return TRUE;
 }

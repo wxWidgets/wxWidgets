@@ -205,12 +205,9 @@ bool wxDropTarget::GetData()
                         GetFlavorData((DragReference)m_currentDrag, theItem, theType, (void*) theData, &dataSize, 0L); 
                         if( theType == 'TEXT' )
                         {
-                            theData[dataSize]=0 ;       
-                            if ( wxApp::s_macDefaultEncodingIsPC )
-                            {
-                                wxMacConvertToPC((char*)theData,(char*)theData,dataSize) ;
-                            }
-                            m_dataObject->SetData( format, dataSize, theData );
+                            theData[dataSize]=0 ; 
+                            wxString convert = wxMacMakeStringFromCString( theData ) ;    
+                            m_dataObject->SetData( format, convert.Length() * sizeof(wxChar), (const wxChar*) convert );
                         }
                         else if ( theType == kDragFlavorTypeHFS )
                         {
@@ -303,11 +300,10 @@ wxDragResult wxDropSource::DoDragDrop(int WXUNUSED(flags))
         if ( type == 'TEXT' )
         {
             dataSize-- ;
-            if ( wxApp::s_macDefaultEncodingIsPC )
-            {
-                wxMacConvertFromPC((char*)dataPtr,(char*)dataPtr,dataSize) ;
-            }
-            AddDragItemFlavor(theDrag, theItem, type , dataPtr, dataSize, 0);
+            dataPtr[ dataSize ] = 0 ;
+            wxString st( (wxChar*) dataPtr ) ;
+            wxCharBuffer buf = wxMacStringToCString( st ) ;
+            AddDragItemFlavor(theDrag, theItem, type , buf.data(), strlen(buf), 0);
         }
         else if (type == kDragFlavorTypeHFS )
         {

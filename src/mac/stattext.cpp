@@ -59,7 +59,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
     return ret;
 }
 
-const wxString punct = " ,.-;:!?";
+const wxString punct = wxT(" ,.-;:!?");
 
 void wxStaticText::DrawParagraph(wxDC &dc, wxString paragraph, int &y)
 {
@@ -68,7 +68,7 @@ void wxStaticText::DrawParagraph(wxDC &dc, wxString paragraph, int &y)
     if (paragraph.Length() == 0)
     {
         // empty line
-        dc.GetTextExtent( "H", &width, &height );
+        dc.GetTextExtent( wxT("H"), &width, &height );
         y += height;
         
         return;
@@ -127,7 +127,7 @@ void wxStaticText::DrawParagraph(wxDC &dc, wxString paragraph, int &y)
             }
             
             dc.DrawText( paragraph, pos , y) ;
-            paragraph="";
+            paragraph=wxEmptyString;
             y += height ;
         }
     }
@@ -165,7 +165,7 @@ void wxStaticText::OnDraw( wxDC &dc )
         if (text[i] == 13 || text[i] == 10)
         {
             DrawParagraph(dc, paragraph,y);
-            paragraph = "" ;
+            paragraph = wxEmptyString ;
         }
         else
         {

@@ -130,7 +130,7 @@ bool wxNotebook::Create(wxWindow *parent,
     Rect bounds ;
     Str255 title ;
     
-    MacPreControlCreate( parent , id ,  "" , pos , size ,style, wxDefaultValidator , name , &bounds , title ) ;
+    MacPreControlCreate( parent , id ,  wxEmptyString , pos , size ,style, wxDefaultValidator , name , &bounds , title ) ;
     
     int tabstyle = kControlTabSmallNorthProc ;
     if ( HasFlag(wxNB_LEFT) )
@@ -360,12 +360,8 @@ void wxNotebook::MacSetupTabs()
         page = m_pages[ii];
         info.version = 0;
         info.iconSuiteID = 0;
-#if TARGET_CARBON
-        c2pstrcpy( (StringPtr) info.name , page->GetLabel() ) ;
-#else
-        strcpy( (char *) info.name , page->GetLabel() ) ;
-        c2pstr( (char *) info.name ) ;
-#endif
+        wxMacStringToPascal( page->GetLabel() , info.name ) ;
+
         SetControlData( (ControlHandle) m_macControl, ii+1, kControlTabInfoTag,
             sizeof( ControlTabInfoRec) , (char*) &info ) ;
         SetTabEnabled( (ControlHandle) m_macControl , ii+1 , true ) ;
@@ -488,7 +484,7 @@ bool wxNotebook::DoPhase(int /* nPhase */)
 
 void wxNotebook::Command(wxCommandEvent& event)
 {
-    wxFAIL_MSG("wxNotebook::Command not implemented");
+    wxFAIL_MSG(wxT("wxNotebook::Command not implemented"));
 }
 
 // ----------------------------------------------------------------------------

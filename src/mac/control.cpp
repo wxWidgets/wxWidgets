@@ -208,23 +208,9 @@ void wxControl::SetLabel(const wxString& title)
 {
     m_label = wxStripMenuCodes(title) ;
 
-    if ( (ControlHandle) m_macControl )
+    if ( m_macControl )
     {
-        Str255 maclabel ;
-        wxString label ;
-    
-        if( wxApp::s_macDefaultEncodingIsPC )
-            label = wxMacMakeMacStringFromPC( m_label ) ;
-        else
-            label = m_label ;
-        
-#if TARGET_CARBON
-        c2pstrcpy( (StringPtr) maclabel , label ) ;
-#else
-        strcpy( (char *) maclabel , label ) ;
-        c2pstr( (char *) maclabel ) ;
-#endif
-        ::SetControlTitle( (ControlHandle) m_macControl , maclabel ) ;
+		UMASetControlTitle( (ControlHandle) m_macControl , m_label ) ;
     }
     Refresh() ;
 }
@@ -311,7 +297,7 @@ void wxAssociateControlWithMacControl(ControlHandle inControl, wxControl *contro
 {
     // adding NULL WindowRef is (first) surely a result of an error and
     // (secondly) breaks menu command processing
-    wxCHECK_RET( inControl != (ControlHandle) NULL, "attempt to add a NULL WindowRef to window list" );
+    wxCHECK_RET( inControl != (ControlHandle) NULL, wxT("attempt to add a NULL WindowRef to window list") );
 
     if ( !wxWinMacControlList->Find((long)inControl) )
         wxWinMacControlList->Append((long)inControl, control);
@@ -361,7 +347,7 @@ void wxControl::MacPreControlCreate( wxWindow *parent, wxWindowID id, wxString l
 
 void wxControl::MacPostControlCreate()
 {
-    wxASSERT_MSG( (ControlHandle) m_macControl != NULL , "No valid mac control" ) ;
+    wxASSERT_MSG( (ControlHandle) m_macControl != NULL , wxT("No valid mac control") ) ;
     
     if ( IsKindOf( CLASSINFO( wxScrollBar ) ) )
     {
@@ -438,6 +424,10 @@ void wxControl::MacPostControlCreate()
     
     SetSize(pos.x, pos.y, new_size.x, new_size.y);
     
+#if wxUSE_UNICODE
+    UMASetControlTitle( (ControlHandle) m_macControl , wxStripMenuCodes(m_label) ) ;
+#endif
+
     UMAShowControl( (ControlHandle) m_macControl ) ;
     
     SetCursor( *wxSTANDARD_CURSOR ) ;
@@ -907,6 +897,6 @@ bool wxControl::MacCanFocus() const
 
 void wxControl::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
 {
-    wxASSERT_MSG( (ControlHandle) m_macControl != NULL , "No valid mac control" ) ;
+    wxASSERT_MSG( (ControlHandle) m_macControl != NULL , wxT("No valid mac control") ) ;
 }
 

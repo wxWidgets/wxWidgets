@@ -211,7 +211,7 @@ bool wxCheckListBox::Create(wxWindow *parent,
     Rect bounds ;
     Str255 title ;
     
-    MacPreControlCreate( parent , id ,  "" , pos , size ,style, validator , name , &bounds , title ) ;
+    MacPreControlCreate( parent , id ,  wxEmptyString , pos , size ,style, validator , name , &bounds , title ) ;
 
     ListDefSpec listDef;
     listDef.defType = kListDefUserProcType;

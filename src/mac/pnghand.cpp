@@ -57,7 +57,7 @@ extern void wxMacDestroyGWorld( GWorldPtr gw ) ;
 void
 ima_png_error(png_struct *png_ptr, char *message)
 {
-    wxMessageBox(message, "PNG error");
+    wxMessageBox(wxString::FromAscii(message), wxT("PNG error"));
     longjmp(png_ptr->jmpbuf, 1);
 }
 
@@ -819,8 +819,9 @@ bool wxPNGReader::SaveXPM(char *filename, char *name)
         strcpy(nameStr, name);
     else
     {
-        strcpy(nameStr, filename);
-        wxStripExtension(nameStr);
+    	wxString str = wxString::FromAscii(filename) ;
+    	wxStripExtension( str ) ;
+        strcpy(nameStr, str.ToAscii() );
     }
     
     if ( GetDepth() > 4 )
@@ -888,7 +889,7 @@ bool wxPNGFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long fla
                                 int desiredWidth, int desiredHeight)
 {
     wxPNGReader reader;
-    if (reader.ReadFile((char*) (const char*) name))
+    if (reader.ReadFile( (char*)(const char*) name.ToAscii() ) )
     {
         return reader.InstantiateBitmap(bitmap);
     }

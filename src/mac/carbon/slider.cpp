@@ -74,7 +74,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     
     m_pageSize = (int)((maxValue-minValue)/10);
     
-    MacPreControlCreate( parent, id, "", pos, size, style,
+    MacPreControlCreate( parent, id, wxEmptyString, pos, size, style,
         validator, name, &bounds, title );
     
     procID = kControlSliderProc + kControlSliderLiveFeedback;
@@ -86,15 +86,15 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()), &bounds, title, false,
         value, minValue, maxValue, procID, (long) this);
     
-    wxASSERT_MSG( (ControlHandle) m_macControl != NULL , "No valid mac control" ) ;
+    wxASSERT_MSG( (ControlHandle) m_macControl != NULL , wxT("No valid mac control") ) ;
     
     ::SetControlAction( (ControlHandle) m_macControl , wxMacLiveScrollbarActionUPP ) ;
     
     if(style & wxSL_LABELS)
     {
-        m_macMinimumStatic = new wxStaticText( this, -1, "" );
-        m_macMaximumStatic = new wxStaticText( this, -1, "" );
-        m_macValueStatic = new wxStaticText( this, -1, "" );
+        m_macMinimumStatic = new wxStaticText( this, -1, wxEmptyString );
+        m_macMaximumStatic = new wxStaticText( this, -1, wxEmptyString );
+        m_macValueStatic = new wxStaticText( this, -1, wxEmptyString );
         SetRange(minValue, maxValue);
         SetValue(value);
     }
@@ -132,7 +132,7 @@ int wxSlider::GetValue() const
 void wxSlider::SetValue(int value)
 {
     wxString valuestring ;
-    valuestring.Printf( "%d" , value ) ;    
+    valuestring.Printf( wxT("%d") , value ) ;    
     if ( m_macValueStatic )
         m_macValueStatic->SetLabel( valuestring ) ;
     SetControl32BitValue( (ControlHandle) m_macControl , value ) ;
@@ -149,11 +149,11 @@ void wxSlider::SetRange(int minValue, int maxValue)
     SetControl32BitMaximum( (ControlHandle) m_macControl, m_rangeMax);
     
     if(m_macMinimumStatic) {
-        value.Printf("%d", m_rangeMin);
+        value.Printf(wxT("%d"), m_rangeMin);
         m_macMinimumStatic->SetLabel(value);
     }
     if(m_macMaximumStatic) {
-        value.Printf("%d", m_rangeMax);
+        value.Printf(wxT("%d"), m_rangeMax);
         m_macMaximumStatic->SetLabel(value);
     }
     SetValue(m_rangeMin);
@@ -283,9 +283,9 @@ wxSize wxSlider::DoGetBestSize() const
         int ht, wd;
         
         // Get maximum text label width and height
-        text.Printf("%d", m_rangeMin);
+        text.Printf(wxT("%d"), m_rangeMin);
         GetTextExtent(text, &textwidth, &textheight);
-        text.Printf("%d", m_rangeMax);
+        text.Printf(wxT("%d"), m_rangeMax);
         GetTextExtent(text, &wd, &ht);
         if(ht > textheight) {
             textheight = ht;
@@ -356,9 +356,9 @@ void wxSlider::MacUpdateDimensions()
         int ht;
         
         // Get maximum text label width and height
-        text.Printf("%d", m_rangeMin);
+        text.Printf(wxT("%d"), m_rangeMin);
         GetTextExtent(text, &minValWidth, &textheight);
-        text.Printf("%d", m_rangeMax);
+        text.Printf(wxT("%d"), m_rangeMax);
         GetTextExtent(text, &maxValWidth, &ht);
         if(ht > textheight) {
             textheight = ht;

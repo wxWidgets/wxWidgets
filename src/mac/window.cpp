@@ -1642,7 +1642,7 @@ wxString wxWindowMac::MacGetToolTipString( wxPoint &pt )
     {
         return m_tooltip->GetTip() ;
     }
-    return "" ;
+    return wxEmptyString ;
 }
 
 void wxWindowMac::Update()
@@ -1855,13 +1855,13 @@ WXHWND wxWindowMac::MacGetRootWindow() const
 
         iter = iter->GetParent() ;
     }
-    wxASSERT_MSG( 1 , "No valid mac root window" ) ;
+    wxASSERT_MSG( 1 , wxT("No valid mac root window") ) ;
     return NULL ;
 }
 
 void wxWindowMac::MacCreateScrollBars( long style )
 {
-    wxASSERT_MSG( m_vScrollBar == NULL && m_hScrollBar == NULL , "attempt to create window twice" ) ;
+    wxASSERT_MSG( m_vScrollBar == NULL && m_hScrollBar == NULL , wxT("attempt to create window twice") ) ;
 
     bool hasBoth = ( style & wxVSCROLL ) && ( style & wxHSCROLL ) ;
     int adjust = hasBoth ? MAC_SCROLLBAR_SIZE - 1: 0 ;

@@ -48,9 +48,9 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
 {
     // In other languages there is no difference in naming the Exit/Quit menu item between MacOS and Windows guidelines
     // therefore these item must not be translated
-    if ( wxStripMenuCodes(m_text).Upper() ==  "EXIT" )
+    if ( wxStripMenuCodes(m_text).Upper() ==  wxT("EXIT") )
     {
-        m_text = "Quit\tCtrl+Q" ;
+        m_text =wxT("Quit\tCtrl+Q") ;
     }
 
     m_radioGroup.start = -1;
@@ -152,7 +152,7 @@ void wxMenuItem::UncheckRadio()
 
 void wxMenuItem::Check(bool bDoCheck)
 {
-    wxCHECK_RET( IsCheckable(), "only checkable items may be checked" );
+    wxCHECK_RET( IsCheckable(), wxT("only checkable items may be checked") );
 
     if ( m_isChecked != bDoCheck ) 
     {

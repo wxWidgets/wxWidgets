@@ -67,7 +67,7 @@ int wxMessageDialog::ShowModal()
     
     short result ;
     
-    wxASSERT_MSG( ( m_dialogStyle & 0x3F ) != wxYES , "this style is not supported on mac" ) ;
+    wxASSERT_MSG( ( m_dialogStyle & 0x3F ) != wxYES , wxT("this style is not supported on mac") ) ;
     
     AlertType alertType = kAlertPlainAlert ;
     if (m_dialogStyle & wxICON_EXCLAMATION)
@@ -83,17 +83,12 @@ int wxMessageDialog::ShowModal()
     if ( UMAGetSystemVersion() >= 0x1000 )
     {
         AlertStdCFStringAlertParamRec param ;
-        CFStringRef cfNoString = NULL ;
-        CFStringRef cfYesString = NULL ;
+        wxMacCFStringHolder cfNoString(_("No")) ;
+        wxMacCFStringHolder cfYesString( _("Yes")) ;
         
-        CFStringRef cfTitle = NULL;
-        CFStringRef cfText = NULL;
-        
-        cfTitle = wxMacCreateCFString( m_caption ) ;
-        cfText = wxMacCreateCFString( m_message ) ;
-        cfNoString = wxMacCreateCFString( _("No") ) ;
-        cfYesString = wxMacCreateCFString( _("Yes") ) ;
-        
+        wxMacCFStringHolder cfTitle(m_caption);
+        wxMacCFStringHolder cfText(m_message);
+                
         param.movable = true;
         param.flags = 0 ;
         
@@ -157,32 +152,13 @@ int wxMessageDialog::ShowModal()
             CreateStandardAlert( alertType , cfTitle , cfText , &param , &alertRef ) ;
             RunStandardAlert( alertRef , NULL , &result ) ;
         }
-        if(cfTitle != NULL)
-            CFRelease(cfTitle);   
-        if(cfText != NULL)
-            CFRelease(cfText);   
-        if(cfNoString != NULL)
-            CFRelease(cfNoString);   
-        if(cfYesString != NULL)
-            CFRelease(cfYesString);   
-        if ( skipDialog )
+      	if ( skipDialog )
             return wxID_CANCEL ;
     }
     else
 #endif
     {
         AlertStdAlertParamRec    param;
-        char   cText[2048] ;
-        
-        if (wxApp::s_macDefaultEncodingIsPC)
-        {
-            strcpy(cText , wxMacMakeMacStringFromPC( m_message) ) ;
-        }
-        else
-        {
-            strcpy( cText , m_message ) ;
-        }
-        wxMacConvertNewlines( cText , cText ) ;
         
         Str255 yesPString ;
         Str255 noPString ;
@@ -192,7 +168,7 @@ int wxMessageDialog::ShowModal()
         wxMacStringToPascal( m_caption , pascalTitle ) ;
         wxMacStringToPascal( _("Yes") , yesPString ) ;
         wxMacStringToPascal(  _("No") , noPString ) ;
-        CopyCStringToPascal( cText , pascalText ) ;
+        wxMacStringToPascal( m_message , pascalText ) ;
         
         param.movable         = true;
         param.filterProc     = NULL ;

@@ -852,7 +852,7 @@ bool wxThreadModule::OnInit()
 #endif
     if ( !hasThreadManager )
     {
-        wxMessageBox( "Error" , "Thread Support is not available on this System" , wxOK ) ;
+        wxMessageBox( wxT("Error") , wxT("Thread Support is not available on this System") , wxOK ) ;
         return FALSE ;
     }
 

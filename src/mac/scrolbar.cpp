@@ -46,12 +46,12 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
     Rect bounds ;
     Str255 title ;
     
-    MacPreControlCreate( parent , id ,  "" , pos , size ,style, validator , name , &bounds , title ) ;
+    MacPreControlCreate( parent , id ,  wxEmptyString , pos , size ,style, validator , name , &bounds , title ) ;
 
     m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , true , 0 , 0 , 100, 
         kControlScrollBarLiveProc , (long) this ) ;
     
-    wxASSERT_MSG( (ControlHandle) m_macControl != NULL , "No valid mac control" ) ;
+    wxASSERT_MSG( (ControlHandle) m_macControl != NULL , wxT("No valid mac control") ) ;
 
     ::SetControlAction( (ControlHandle) m_macControl , wxMacLiveScrollbarActionUPP ) ;
 

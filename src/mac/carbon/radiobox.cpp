@@ -203,7 +203,7 @@ wxString wxRadioBox::GetString(int item) const
     wxRadioButton *current;
     
     if ((item < 0) || (item >= m_noItems))
-        return wxString("");
+        return wxEmptyString;
     
     i = 0;
     current = m_radioButtonCycle;
@@ -409,7 +409,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     int totWidth,totHeight;
     
     SetFont(GetParent()->GetFont());
-    GetTextExtent(wxString("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), &charWidth, &charHeight);
+    GetTextExtent(wxT("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), &charWidth, &charHeight);
     charWidth/=52;
     
     maxWidth=-1;
@@ -490,7 +490,7 @@ wxSize wxRadioBox::DoGetBestSize() const
     int totWidth, totHeight;
     
     wxFont font = GetParent()->GetFont();
-    GetTextExtent(wxString("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"),
+    GetTextExtent(wxT("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"),
         &charWidth, &charHeight, NULL, NULL, &font);
     charWidth /= 52;
     

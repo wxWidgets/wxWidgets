@@ -362,7 +362,7 @@ void wxAssociateWinWithMacWindow(WXWindow inWindowRef, wxTopLevelWindowMac *win)
 {
     // adding NULL WindowRef is (first) surely a result of an error and
     // (secondly) breaks menu command processing
-    wxCHECK_RET( inWindowRef != (WindowRef) NULL, "attempt to add a NULL WindowRef to window list" );
+    wxCHECK_RET( inWindowRef != (WindowRef) NULL, wxT("attempt to add a NULL WindowRef to window list") );
 
     if ( !wxWinMacWindowList->Find((long)inWindowRef) )
         wxWinMacWindowList->Append((long)inWindowRef, win);
@@ -592,12 +592,7 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     
     ::CreateNewWindow( wclass , attr , &theBoundsRect , (WindowRef*)&m_macWindow ) ;
     wxAssociateWinWithMacWindow( m_macWindow , this ) ;
-    wxString label ;
-    if( wxApp::s_macDefaultEncodingIsPC )
-        label = wxMacMakeMacStringFromPC( title ) ;
-    else
-        label = title ;
-    UMASetWTitleC( (WindowRef)m_macWindow , label ) ;
+    UMASetWTitle( (WindowRef)m_macWindow , title ) ;
     ::CreateRootControl( (WindowRef)m_macWindow , (ControlHandle*)&m_macRootControl ) ;
 #if TARGET_CARBON
     InstallStandardEventHandler( GetWindowEventTarget(MAC_WXHWND(m_macWindow)) ) ;
@@ -836,15 +831,7 @@ void wxTopLevelWindowMac::MacKeyDown( WXEVENTREF ev )
 void wxTopLevelWindowMac::SetTitle(const wxString& title)
 {
     wxWindow::SetTitle( title ) ;
-    
-    wxString label ;
-    
-    if( wxApp::s_macDefaultEncodingIsPC )
-        label = wxMacMakeMacStringFromPC( m_label ) ;
-    else
-        label = m_label ;
-
-    UMASetWTitleC( (WindowRef)m_macWindow , label ) ;
+    UMASetWTitle( (WindowRef)m_macWindow , title ) ;
 }
 
 bool wxTopLevelWindowMac::Show(bool show)

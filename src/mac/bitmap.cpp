@@ -694,7 +694,7 @@ bool wxBitmap::LoadFile(const wxString& filename, wxBitmapType type)
             return true;
         }
     }
-    wxLogWarning("no bitmap handler for type %d defined.", type);
+    wxLogWarning(wxT("no bitmap handler for type %d defined."), type);
     return false;
 }
 
@@ -707,7 +707,7 @@ bool wxBitmap::Create(void *data, wxBitmapType type, int width, int height, int 
     wxBitmapHandler *handler = FindHandler(type);
 
     if ( handler == NULL ) {
-        wxLogWarning("no bitmap handler for type %d defined.", type);
+        wxLogWarning(wxT("no bitmap handler for type %d defined."), type);
 
         return FALSE;
     }
@@ -944,7 +944,7 @@ bool wxBitmap::SaveFile(const wxString& filename, wxBitmapType type,
         return image.SaveFile(filename, type);
     }
     
-    wxLogWarning("no bitmap handler for type %d defined.", type);
+    wxLogWarning(wxT("no bitmap handler for type %d defined."), type);
     return false;
 }
 
@@ -1282,8 +1282,8 @@ class WXDLLEXPORT wxPICTResourceHandler: public wxBitmapHandler
 public:
     inline wxPICTResourceHandler()
     {
-        m_name = "Macintosh Pict resource";
-        m_extension = "";
+        m_name = wxT("Macintosh Pict resource");
+        m_extension = wxEmptyString;
         m_type = wxBITMAP_TYPE_PICT_RESOURCE;
     };
 
@@ -1296,14 +1296,8 @@ bool  wxPICTResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, lo
           int desiredWidth, int desiredHeight)
 {
     Str255 theName ;
-    
-#if TARGET_CARBON
-    c2pstrcpy( (StringPtr) theName , name ) ;
-#else
-    strcpy( (char *) theName , name ) ;
-    c2pstr( (char *)theName ) ;
-#endif
-    
+    wxMacStringToPascal( name , theName ) ;
+   
     PicHandle thePict = (PicHandle ) GetNamedResource( 'PICT' , theName ) ;
     if ( thePict )
     {

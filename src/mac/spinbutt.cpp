@@ -47,12 +47,12 @@ bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, c
     Rect bounds ;
     Str255 title ;
     
-    MacPreControlCreate( parent , id ,  "" , pos , size ,style,*( (wxValidator*) NULL ) , name , &bounds , title ) ;
+    MacPreControlCreate( parent , id ,  wxEmptyString , pos , size ,style,*( (wxValidator*) NULL ) , name , &bounds , title ) ;
     
     m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 100, 
         kControlLittleArrowsProc , (long) this ) ;
     
-    wxASSERT_MSG( (ControlHandle) m_macControl != NULL , "No valid mac control" ) ;
+    wxASSERT_MSG( (ControlHandle) m_macControl != NULL , wxT("No valid mac control") ) ;
     
     MacPostControlCreate() ;
     

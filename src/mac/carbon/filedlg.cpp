@@ -104,13 +104,12 @@ NavEventProc(
                 Str255 filename ;
                 // get the current filename
                 NavCustomControl(ioParams->context, kNavCtlGetEditFileName, &filename);
-                CopyPascalStringToC( filename , (char*) filename ) ;
-                wxString sfilename( filename ) ;
+                wxString sfilename = wxMacMakeStringFromPascal( filename ) ;
                 int pos = sfilename.Find('.',TRUE) ;
                 if ( pos != wxNOT_FOUND )
                 {
                     sfilename = sfilename.Left(pos+1)+extension ;
-                    CopyCStringToPascal( sfilename.c_str() , filename ) ;
+                    wxMacStringToPascal( sfilename , filename ) ;
                     NavCustomControl(ioParams->context, kNavCtlSetEditFileName, &filename);
                 }
             }
@@ -118,11 +117,11 @@ NavEventProc(
     }
 }
 
-const char * gfilters[] =
+const wxChar * gfilters[] =
 {
-    "*.TXT" ,
-    "*.TIF" ,
-    "*.JPG" ,
+    wxT("*.TXT") ,
+    wxT("*.TIF") ,
+    wxT("*.JPG") ,
     
     NULL 
 } ;
@@ -162,7 +161,7 @@ void MakeUserDataRec(OpenUserDataRec    *myData , const wxString& filter )
                     ++filterIndex ;
                 }
                 isName = !isName ;
-                current = "" ;
+                current = wxEmptyString ;
             }
             else
             {
@@ -172,7 +171,7 @@ void MakeUserDataRec(OpenUserDataRec    *myData , const wxString& filter )
         // we allow for compatibility reason to have a single filter expression (like *.*) without
         // an explanatory text, in that case the first part is name and extension at the same time
         
-        wxASSERT_MSG( filterIndex == 0 || !isName , "incorrect format of format string" ) ;
+        wxASSERT_MSG( filterIndex == 0 || !isName , wxT("incorrect format of format string") ) ;
         if ( current.IsEmpty() )
             myData->extensions.Add( myData->name[filterIndex] ) ;
         else
@@ -189,7 +188,7 @@ void MakeUserDataRec(OpenUserDataRec    *myData , const wxString& filter )
             int j ;
             for ( j = 0 ; gfilters[j] ; j++ )
             {
-                if ( strcmp( myData->extensions[i] , gfilters[j] ) == 0 )
+                if ( myData->extensions[i] == gfilters[j]  )
                 {
                     myData->filtermactypes.Add( gfiltersmac[j] ) ;
                     break ;
@@ -205,6 +204,7 @@ void MakeUserDataRec(OpenUserDataRec    *myData , const wxString& filter )
 
 static Boolean CheckFile( ConstStr255Param name , OSType type , OpenUserDataRecPtr data)
 {
+/*
     Str255             filename ;
     
 #if TARGET_CARBON
@@ -214,20 +214,22 @@ static Boolean CheckFile( ConstStr255Param name , OSType type , OpenUserDataRecP
     p2cstr( filename ) ;
 #endif
     wxString file(filename) ;
+*/
+	wxString file = wxMacMakeStringFromPascal( name ) ;
     file.MakeUpper() ;
     
     if ( data->extensions.GetCount() > 0 )
     {
         //for ( int i = 0 ; i < data->numfilters ; ++i )
         int i = data->currentfilter ;
-        if ( data->extensions[i].Right(2) == ".*" )
+        if ( data->extensions[i].Right(2) == wxT(".*") )
             return true ;
         
         {
             if ( type == (OSType)data->filtermactypes[i] )
                 return true ;
             
-            wxStringTokenizer tokenizer( data->extensions[i] , ";" ) ;
+            wxStringTokenizer tokenizer( data->extensions[i] , wxT(";") ) ;
             while( tokenizer.HasMoreTokens() )
             {
                 wxString extension = tokenizer.GetNextToken() ;
@@ -272,17 +274,17 @@ static pascal Boolean CrossPlatformFileFilter(CInfoPBPtr myCInfoPBPtr, void *dat
 
 // end wxmac
 
-wxString wxFileSelector(const char *title,
-                     const char *defaultDir, const char *defaultFileName,
-                     const char *defaultExtension, const char *filter, int flags,
+wxString wxFileSelector(const wxChar *title,
+                     const wxChar *defaultDir, const wxChar *defaultFileName,
+                     const wxChar *defaultExtension, const wxChar *filter, int flags,
                      wxWindow *parent, int x, int y)
 {
     // If there's a default extension specified but no filter, we create a suitable
     // filter.
 
-    wxString filter2("");
+    wxString filter2;
     if ( defaultExtension && !filter )
-        filter2 = wxString("*.") + wxString(defaultExtension) ;
+        filter2 = wxString(wxT("*.")) + wxString(defaultExtension) ;
     else if ( filter )
         filter2 = filter;
 
@@ -290,13 +292,13 @@ wxString wxFileSelector(const char *title,
     if (defaultDir)
         defaultDirString = defaultDir;
     else
-        defaultDirString = "";
+        defaultDirString = wxEmptyString ;
 
     wxString defaultFilenameString;
     if (defaultFileName)
         defaultFilenameString = defaultFileName;
     else
-        defaultFilenameString = "";
+        defaultFilenameString = wxEmptyString;
 
     wxFileDialog fileDialog(parent, title, defaultDirString, defaultFilenameString, filter2, flags, wxPoint(x, y));
 
@@ -308,19 +310,19 @@ wxString wxFileSelector(const char *title,
         return wxGetEmptyString();
 }
 
-WXDLLEXPORT wxString wxFileSelectorEx(const char *title,
-                       const char *defaultDir,
-                       const char *defaultFileName,
+WXDLLEXPORT wxString wxFileSelectorEx(const wxChar *title,
+                       const wxChar *defaultDir,
+                       const wxChar *defaultFileName,
                        int* defaultFilterIndex,
-                       const char *filter,
+                       const wxChar *filter,
                        int       flags,
                        wxWindow* parent,
                        int       x,
                        int       y)
 
 {
-    wxFileDialog fileDialog(parent, title ? title : "", defaultDir ? defaultDir : "",
-        defaultFileName ? defaultFileName : "", filter ? filter : "", flags, wxPoint(x, y));
+    wxFileDialog fileDialog(parent, title ? title : wxT(""), defaultDir ? defaultDir : wxT(""),
+        defaultFileName ? defaultFileName : wxT(""), filter ? filter : wxT(""), flags, wxPoint(x, y));
 
     if ( fileDialog.ShowModal() == wxID_OK )
     {
@@ -335,17 +337,16 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
         const wxString& defaultDir, const wxString& defaultFileName, const wxString& wildCard,
         long style, const wxPoint& pos)
 {
-    wxASSERT_MSG( NavServicesAvailable() , "Navigation Services are not running" ) ;
+    wxASSERT_MSG( NavServicesAvailable() , wxT("Navigation Services are not running") ) ;
     m_message = message;
     m_dialogStyle = style;
     m_parent = parent;
-    m_path = "";
+    m_path = wxT("");
     m_fileName = defaultFileName;
     m_dir = defaultDir;
     m_wildCard = wildCard;
     m_filterIndex = 0;
 }
-
 
 pascal Boolean CrossPlatformFilterCallback (
     AEDesc *theItem, 
@@ -417,19 +418,8 @@ int wxFileDialog::ShowModal()
             mNavOptions.dialogOptionFlags &= ~kNavSelectDefaultLocation;
         }
     }
-        
-#if TARGET_CARBON
-    c2pstrcpy((StringPtr)mNavOptions.message, m_message) ;
-#else
-    strcpy((char *)mNavOptions.message, m_message) ;
-    c2pstr((char *)mNavOptions.message ) ;
-#endif
-#if TARGET_CARBON
-    c2pstrcpy((StringPtr)mNavOptions.savedFileName, m_fileName) ;
-#else
-    strcpy((char *)mNavOptions.savedFileName, m_fileName) ;
-    c2pstr((char *)mNavOptions.savedFileName ) ;
-#endif
+    wxMacStringToPascal( m_message , (StringPtr)mNavOptions.message ) ;
+    wxMacStringToPascal( m_fileName , (StringPtr)mNavOptions.savedFileName ) ;
 
     // zero all data
     
@@ -450,12 +440,7 @@ int wxFileDialog::ShowModal()
             (*mNavOptions.popupExtension)[i].version     = kNavMenuItemSpecVersion ;
             (*mNavOptions.popupExtension)[i].menuCreator = 'WXNG' ;
             (*mNavOptions.popupExtension)[i].menuType    = i ;
-#if TARGET_CARBON
-            c2pstrcpy((StringPtr)(*mNavOptions.popupExtension)[i].menuItemName, myData.name[i]) ;
-#else
-            strcpy((char *)(*mNavOptions.popupExtension)[i].menuItemName, myData.name[i]) ;
-            c2pstr((char *)(*mNavOptions.popupExtension)[i].menuItemName ) ;
-#endif
+            wxMacStringToPascal( myData.name[i] , (StringPtr)(*mNavOptions.popupExtension)[i].menuItemName ) ;
         }
     }
     if ( m_dialogStyle & wxSAVE )
@@ -519,7 +504,7 @@ int wxFileDialog::ShowModal()
         {
             OSErr err = ::AEGetNthDesc( &mNavReply.selection , i , typeFSS, &keyWord , &specDesc);
             if ( err != noErr ) {
-                m_path = "" ;
+                m_path = wxT("") ;
                 return wxID_CANCEL ;
             }            
             outFileSpec = **(FSSpec**) specDesc.dataHandle;
@@ -543,28 +528,30 @@ int wxFileDialog::ShowModal()
 
 // Generic file load/save dialog
 static wxString
-wxDefaultFileSelector(bool load, const char *what, const char *extension, const char *default_name, wxWindow *parent)
+wxDefaultFileSelector(bool load, const wxChar *what, const wxChar *extension, const wxChar *default_name, wxWindow *parent)
 {
-    char *ext = (char *)extension;
-    
-    char prompt[50];
+    wxString prompt;
+
     wxString str;
     if (load)
-        str = "Load %s file";
+        str = wxT("Load %s file");
     else
-        str = "Save %s file";
-    sprintf(prompt, wxGetTranslation(str), what);
+        str = wxT("Save %s file");
+    prompt.Printf( wxGetTranslation(str), what);
     
-    if (*ext == '.') ext++;
-    char wild[60];
-    sprintf(wild, "*.%s", ext);
+    const wxChar *ext = extension;
+    if (*ext == wxT('.'))
+        ext++;
+
+    wxString wild;
+    wild.Printf(wxT("*.%s"), ext);
     
     return wxFileSelector (prompt, NULL, default_name, ext, wild, 0, parent);
 }
 
 // Generic file load dialog
 wxString
-wxLoadFileSelector(const char *what, const char *extension, const char *default_name, wxWindow *parent)
+wxLoadFileSelector(const wxChar *what, const wxChar *extension, const wxChar *default_name, wxWindow *parent)
 {
     return wxDefaultFileSelector(TRUE, what, extension, default_name, parent);
 }
@@ -572,9 +559,7 @@ wxLoadFileSelector(const char *what, const char *extension, const char *default_
 
 // Generic file save dialog
 wxString
-wxSaveFileSelector(const char *what, const char *extension, const char *default_name, wxWindow *parent)
+wxSaveFileSelector(const wxChar *what, const wxChar *extension, const wxChar *default_name, wxWindow *parent)
 {
     return wxDefaultFileSelector(FALSE, what, extension, default_name, parent);
 }
-
-

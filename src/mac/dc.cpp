@@ -1111,7 +1111,7 @@ bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
     }
     if ( mode == kUnsupportedMode )
     {
-        wxFAIL_MSG("unsupported blitting mode" );
+        wxFAIL_MSG(wxT("unsupported blitting mode" ));
         return FALSE ;
     }
     CGrafPtr            sourcePort = (CGrafPtr) source->m_macPort ;
@@ -1295,17 +1295,10 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     }
     if ( str.Length() == 0 )
         return ;
+        
     wxMacPortSetter helper(this) ;
     MacInstallFont() ;
-    wxString text ;
-    if ( wxApp::s_macDefaultEncodingIsPC )
-    {
-        text = wxMacMakeMacStringFromPC( str ) ;
-    }
-    else
-    {
-        text = str ;
-    }
+
     wxFontRefData * font = (wxFontRefData*) m_font.GetRefData() ;
     if ( 0 )
     {
@@ -1314,23 +1307,30 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
         m_macAliasWasEnabled = true ;
     }
     OSStatus status = noErr ;
+    ATSUTextLayout atsuLayout ;
+    UniCharCount chars = str.Length() ;
+#if wxUSE_UNICODE
+    status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) (const wxChar*) str , 0 , str.Length() , str.Length() , 1 ,
+        &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
+#else
     TECObjectRef ec;
-    status = TECCreateConverter(&ec, kTextEncodingMacRoman, kTextEncodingUnicodeDefault);
-    wxASSERT_MSG( status == noErr , "couldn't start converter" ) ;
+    status = TECCreateConverter(&ec, 
+    	wxApp::s_macDefaultEncodingIsPC ? kTextEncodingWindowsLatin1 : kTextEncodingMacRoman, kTextEncodingUnicodeDefault);
+    	
+    wxASSERT_MSG( status == noErr , wxT("couldn't start converter") ) ;
     ByteCount byteOutLen ;
-    ByteCount byteInLen = text.Length() ;
+    ByteCount byteInLen = str.Length() ;
     ByteCount byteBufferLen = byteInLen *2 ;
     char* buf = new char[byteBufferLen] ;
-    status = TECConvertText(ec, (ConstTextPtr)text.c_str() , byteInLen, &byteInLen,
+    status = TECConvertText(ec, (ConstTextPtr)str.c_str() , byteInLen, &byteInLen,
         (TextPtr)buf, byteBufferLen, &byteOutLen);
-    wxASSERT_MSG( status == noErr , "couldn't convert text" ) ;
+    wxASSERT_MSG( status == noErr , wxT("couldn't convert text") ) ;
     status = TECDisposeConverter(ec);
-    wxASSERT_MSG( status == noErr , "couldn't dispose converter" ) ;
-    ATSUTextLayout atsuLayout ;
-    UniCharCount chars = byteOutLen / 2 ;
+    wxASSERT_MSG( status == noErr , wxT("couldn't dispose converter") ) ;
     status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) buf , 0 , byteOutLen / 2 , byteOutLen / 2 , 1 ,
         &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
-    wxASSERT_MSG( status == noErr , "couldn't create the layout of the rotated text" );
+#endif
+    wxASSERT_MSG( status == noErr , wxT("couldn't create the layout of the rotated text") );
     int iAngle = int( angle );
     int drawX = XLOG2DEVMAC(x) ;
     int drawY = YLOG2DEVMAC(y) ;
@@ -1366,16 +1366,19 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     drawY += cos(angle/RAD2DEG) * FixedToInt(ascent) ;
     status = ::ATSUDrawText( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
         IntToFixed(drawX) , IntToFixed(drawY) );
-    wxASSERT_MSG( status == noErr , "couldn't draw the rotated text" );
+    wxASSERT_MSG( status == noErr , wxT("couldn't draw the rotated text") );
     Rect rect ;
     status = ::ATSUMeasureTextImage( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
         IntToFixed(drawX) , IntToFixed(drawY) , &rect );
-    wxASSERT_MSG( status == noErr , "couldn't measure the rotated text" );
+    wxASSERT_MSG( status == noErr , wxT("couldn't measure the rotated text") );
     OffsetRect( &rect , -m_macLocalOrigin.x , -m_macLocalOrigin.y ) ;
     CalcBoundingBox(XDEV2LOG(rect.left), YDEV2LOG(rect.top) );
     CalcBoundingBox(XDEV2LOG(rect.right), YDEV2LOG(rect.bottom) );
     ::ATSUDisposeTextLayout(atsuLayout);
+#if wxUSE_UNICODE
+#else
     delete[] buf ;
+#endif
 }
 
 void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
@@ -1411,33 +1414,22 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
     {
         ::TextMode( srcCopy ) ;
     }
-    const char *text = NULL ;
-    int length = 0 ;
-    wxString macText ;
-    if ( wxApp::s_macDefaultEncodingIsPC )
-    {
-        macText = wxMacMakeMacStringFromPC( strtext ) ;
-        text = macText ;
-        length = macText.Length() ;
-    }
-    else
-    {
-        text = strtext ;
-        length = strtext.Length() ;
-    }
+    int length = strtext.Length() ;
+
     int laststop = 0 ;
     int i = 0 ;
     int line = 0 ;
     {
         while( i < length )
         {
-            if( text[i] == 13 || text[i] == 10)
+            if( strtext[i] == 13 || strtext[i] == 10)
             {
+            	wxString linetext = strtext.Mid( laststop , i - laststop ) ;
 #if TARGET_CARBON
                 if ( useDrawThemeText )
                 {
                     Rect frame = { yy + line*(fi.descent + fi.ascent + fi.leading)  ,xx , yy + (line+1)*(fi.descent + fi.ascent + fi.leading) , xx + 10000 } ;
-                    CFStringRef mString = CFStringCreateWithBytes( NULL , (UInt8*) text + laststop , i - laststop , CFStringGetSystemEncoding(), false ) ;
+                    wxMacCFStringHolder mString( linetext ) ;
                     if ( m_backgroundMode != wxTRANSPARENT )
                     {
                         Point bounds={0,0} ;
@@ -1460,13 +1452,13 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
                         &frame,
                         teJustLeft,
                         nil );
-                    CFRelease( mString ) ;
                     line++ ;
                 }
                 else
 #endif
                 {
-                    ::DrawText( text , laststop , i - laststop ) ;
+					wxCharBuffer text = wxMacStringToCString(linetext) ; 
+                    ::DrawText( text , 0 , strlen(text) ) ;
                     line++ ;
                     ::MoveTo( xx , yy + line*(fi.descent + fi.ascent + fi.leading) );
                 }
@@ -1474,11 +1466,12 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
             }
             i++ ;
         }
+        wxString linetext = strtext.Mid( laststop , i - laststop ) ;
 #if TARGET_CARBON
         if ( useDrawThemeText )
         {
             Rect frame = { yy + line*(fi.descent + fi.ascent + fi.leading)  ,xx , yy + (line+1)*(fi.descent + fi.ascent + fi.leading) , xx + 10000 } ;
-            CFStringRef mString = CFStringCreateWithCString( NULL , text + laststop , kCFStringEncodingMacRoman ) ;
+            wxMacCFStringHolder mString( linetext ) ;
 
             if ( m_backgroundMode != wxTRANSPARENT )
             {
@@ -1502,13 +1495,13 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
                 &frame,
                 teJustLeft,
                 nil );
-            CFRelease( mString ) ;
         }
         else
 #endif
         {
-            ::DrawText( text , laststop , i - laststop ) ;
-        }
+			wxCharBuffer text = wxMacStringToCString(linetext) ; 
+            ::DrawText( text , 0 , strlen(text) ) ;
+         }
     }
     ::TextMode( srcOr ) ;
 }
@@ -1519,7 +1512,7 @@ bool  wxDC::CanGetTextExtent() const
     return true ;
 }
 
-void  wxDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *height,
+void  wxDC::DoGetTextExtent( const wxString &strtext, wxCoord *width, wxCoord *height,
                             wxCoord *descent, wxCoord *externalLeading ,
                             wxFont *theFont ) const
 {
@@ -1545,8 +1538,9 @@ void  wxDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *he
         *descent =YDEV2LOGREL( fi.descent );
     if ( externalLeading )
         *externalLeading = YDEV2LOGREL( fi.leading ) ;
+    int length = strtext.Length() ;
+    /*
     const char *text = NULL ;
-    int length = 0 ;
     wxString macText ;
     if ( wxApp::s_macDefaultEncodingIsPC )
     {
@@ -1559,6 +1553,7 @@ void  wxDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *he
         text = string ;
         length = string.Length() ;
     }
+    */
     int laststop = 0 ;
     int i = 0 ;
     int curwidth = 0 ;
@@ -1567,8 +1562,9 @@ void  wxDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *he
         *width = 0 ;
         while( i < length )
         {
-            if( text[i] == 13 || text[i] == 10)
+            if( strtext[i] == 13 || strtext[i] == 10)
             {
+            	wxString linetext = strtext.Mid( laststop , i - laststop ) ;
                 if ( height )
                     *height += YDEV2LOGREL( fi.descent + fi.ascent + fi.leading ) ;
 #if TARGET_CARBON
@@ -1576,20 +1572,20 @@ void  wxDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *he
                 {
                     Point bounds={0,0} ;
                     SInt16 baseline ;
-                    CFStringRef mString = CFStringCreateWithBytes( NULL , (UInt8*) text + laststop , i - laststop , CFStringGetSystemEncoding(), false ) ;
+                    wxMacCFStringHolder mString( linetext ) ;
                     ::GetThemeTextDimensions( mString,
                         kThemeCurrentPortFont,
                         kThemeStateActive,
                         false,
                         &bounds,
                         &baseline );
-                    CFRelease( mString ) ;
                     curwidth = bounds.h ;
                 }
                 else
 #endif
                 {
-                    curwidth = ::TextWidth( text , laststop , i - laststop ) ;
+					wxCharBuffer text = wxMacStringToCString(linetext) ; 
+                	curwidth = ::TextWidth( text , 0 , strlen(text) ) ;
                 }
                 if ( curwidth > *width )
                     *width = XDEV2LOGREL( curwidth ) ;
@@ -1598,25 +1594,26 @@ void  wxDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *he
             i++ ;
         }
         
+        wxString linetext = strtext.Mid( laststop , i - laststop ) ;
 #if TARGET_CARBON
         if ( useGetThemeText )
         {
             Point bounds={0,0} ;
             SInt16 baseline ;
-            CFStringRef mString = CFStringCreateWithBytes( NULL , (UInt8*) text + laststop , i - laststop , CFStringGetSystemEncoding(), false ) ;
+            wxMacCFStringHolder mString( linetext ) ;
             ::GetThemeTextDimensions( mString,
                 kThemeCurrentPortFont,
                 kThemeStateActive,
                 false,
                 &bounds,
                 &baseline );
-            CFRelease( mString ) ;
             curwidth = bounds.h ;
         }
         else
 #endif
         {
-            curwidth = ::TextWidth( text , laststop , i - laststop ) ;
+			wxCharBuffer text = wxMacStringToCString(linetext) ; 
+            curwidth = ::TextWidth( text , 0 , strlen(text) ) ;
         }
         if ( curwidth > *width )
             *width = XDEV2LOGREL( curwidth ) ;
@@ -1773,7 +1770,7 @@ void wxDC::MacInstallFont() const
     Style qdStyle = font->m_macFontStyle ;
     ATSUFontID    atsuFont = font->m_macATSUFontID ;
     status = ::ATSUCreateStyle(&(ATSUStyle)m_macATSUIStyle) ;
-    wxASSERT_MSG( status == noErr , "couldn't create ATSU style" ) ;
+    wxASSERT_MSG( status == noErr , wxT("couldn't create ATSU style") ) ;
     ATSUAttributeTag atsuTags[] =
     {
         kATSUFontTag ,
@@ -1819,7 +1816,7 @@ void wxDC::MacInstallFont() const
     } ;
     status = ::ATSUSetAttributes((ATSUStyle)m_macATSUIStyle, sizeof(atsuTags)/sizeof(ATSUAttributeTag),
         atsuTags, atsuSizes, atsuValues);
-    wxASSERT_MSG( status == noErr , "couldn't set create ATSU style" ) ;
+    wxASSERT_MSG( status == noErr , wxT("couldn't set create ATSU style") ) ;
 }
 
 Pattern gHatchPatterns[] =

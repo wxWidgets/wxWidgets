@@ -129,66 +129,66 @@ wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& e)
 {
     wxString ext = e ;
     ext = ext.Lower() ;
-    if ( ext == "txt" )
+    if ( ext == wxT("txt") )
     {
         wxFileType *fileType = new wxFileType;
-        fileType->m_impl->SetFileType("text/text");
+        fileType->m_impl->SetFileType(wxT("text/text"));
         fileType->m_impl->SetExt(ext);
         return fileType;
     }
-    else if ( ext == "htm" || ext == "html" )
+    else if ( ext == wxT("htm") || ext == wxT("html") )
     {
         wxFileType *fileType = new wxFileType;
-        fileType->m_impl->SetFileType("text/html");
+        fileType->m_impl->SetFileType(wxT("text/html"));
         fileType->m_impl->SetExt(ext);
         return fileType;
     }
-    else if ( ext == "gif" )
+    else if ( ext == wxT("gif") )
     {
         wxFileType *fileType = new wxFileType;
-        fileType->m_impl->SetFileType("image/gif");
+        fileType->m_impl->SetFileType(wxT("image/gif"));
         fileType->m_impl->SetExt(ext);
         return fileType;
     }
-    else if ( ext == "png" )
+    else if ( ext == wxT("png" ))
     {
         wxFileType *fileType = new wxFileType;
-        fileType->m_impl->SetFileType("image/png");
+        fileType->m_impl->SetFileType(wxT("image/png"));
         fileType->m_impl->SetExt(ext);
         return fileType;
     }
-    else if ( ext == "jpg" || ext == "jpeg" )
+    else if ( ext == wxT("jpg" )|| ext == wxT("jpeg") )
     {
         wxFileType *fileType = new wxFileType;
-        fileType->m_impl->SetFileType("image/jpeg");
+        fileType->m_impl->SetFileType(wxT("image/jpeg"));
         fileType->m_impl->SetExt(ext);
         return fileType;
     }
-    else if ( ext == "bmp" )
+    else if ( ext == wxT("bmp") )
     {
         wxFileType *fileType = new wxFileType;
-        fileType->m_impl->SetFileType("image/bmp");
+        fileType->m_impl->SetFileType(wxT("image/bmp"));
         fileType->m_impl->SetExt(ext);
         return fileType;
     }
-    else if ( ext == "tif" || ext == "tiff" )
+    else if ( ext == wxT("tif") || ext == wxT("tiff") )
     {
         wxFileType *fileType = new wxFileType;
-        fileType->m_impl->SetFileType("image/tiff");
+        fileType->m_impl->SetFileType(wxT("image/tiff"));
         fileType->m_impl->SetExt(ext);
         return fileType;
     }
-    else if ( ext == "xpm" )
+    else if ( ext == wxT("xpm") )
     {
         wxFileType *fileType = new wxFileType;
-        fileType->m_impl->SetFileType("image/xpm");
+        fileType->m_impl->SetFileType(wxT("image/xpm"));
         fileType->m_impl->SetExt(ext);
         return fileType;
     }
-    else if ( ext == "xbm" )
+    else if ( ext == wxT("xbm") )
     {
         wxFileType *fileType = new wxFileType;
-        fileType->m_impl->SetFileType("image/xbm");
+        fileType->m_impl->SetFileType(wxT("image/xbm"));
         fileType->m_impl->SetExt(ext);
         return fileType;
     }

@@ -83,19 +83,19 @@ bool  wxICONResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, lo
                                       int desiredWidth, int desiredHeight)
 {
     short theId = -1 ;
-    if ( name == "wxICON_INFORMATION" )
+    if ( name == wxT("wxICON_INFORMATION") )
     {
         theId = kNoteIcon ;
     }
-    else if ( name == "wxICON_QUESTION" )
+    else if ( name == wxT("wxICON_QUESTION") )
     {
         theId = kCautionIcon ;
     }
-    else if ( name == "wxICON_WARNING" )
+    else if ( name == wxT("wxICON_WARNING") )
     {
         theId = kCautionIcon ;
     }
-    else if ( name == "wxICON_ERROR" )
+    else if ( name == wxT("wxICON_ERROR") )
     {
         theId = kStopIcon ;
     }
@@ -103,13 +103,7 @@ bool  wxICONResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, lo
     {
         Str255 theName ;
         OSType theType ;
-        
-#if TARGET_CARBON
-        c2pstrcpy( (StringPtr) theName , name ) ;
-#else
-        strcpy( (char *) theName , name ) ;
-        c2pstr( (char *) theName ) ;
-#endif
+        wxMacStringToPascal( name , theName ) ;
         
         Handle resHandle = GetNamedResource( 'cicn' , theName ) ;
         if ( resHandle != 0L )

@@ -39,7 +39,7 @@ bool wxTabCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
     
     m_imageList = NULL;
     
-    MacPreControlCreate( parent , id ,  "" , pos , size ,style, wxDefaultValidator , name , &bounds , title ) ;
+    MacPreControlCreate( parent , id ,  wxEmptyString , pos , size ,style, wxDefaultValidator , name , &bounds , title ) ;
     
     m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
         kControlTabSmallProc , (long) this ) ;
@@ -115,7 +115,7 @@ int wxTabCtrl::GetRowCount() const
 wxString wxTabCtrl::GetItemText(int item) const
 {
     // TODO
-    return wxString("");
+    return wxEmptyString;
 }
 
 // Get the item image

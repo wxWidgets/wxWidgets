@@ -91,7 +91,7 @@ void wxGLContext::Update()
     }
 }
 
-void wxGLContext::SetColour(const char *colour)
+void wxGLContext::SetColour(const wxChar *colour)
 {
     float r = 0.0;
     float g = 0.0;
@@ -309,7 +309,7 @@ void wxGLCanvas::SetCurrent()
     }
 }
 
-void wxGLCanvas::SetColour(const char *colour)
+void wxGLCanvas::SetColour(const wxChar *colour)
 {
     if (m_glContext)
         m_glContext->SetColour(colour);

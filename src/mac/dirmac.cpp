@@ -133,7 +133,7 @@ wxDirData::wxDirData(const wxString& dirname)
 
     err = FSpGetDirectoryID( &fsspec , &m_dirId , &m_isDir ) ;
 #endif
-    wxASSERT_MSG( (err == noErr) || (err == nsvErr) , "Error accessing directory " + m_dirname) ;
+    wxASSERT_MSG( (err == noErr) || (err == nsvErr) , wxT("Error accessing directory " + m_dirname)) ;
 
     m_CPB.hFileInfo.ioNamePtr = m_name ;
     m_index = 0 ;
@@ -153,9 +153,6 @@ bool wxDirData::Read(wxString *filename)
     if ( !m_isDir )
         return FALSE ;
         
-#if TARGET_CARBON
-    char c_name[256] ;
-#endif
     wxString result;
 
     short err = noErr ;
@@ -169,18 +166,12 @@ bool wxDirData::Read(wxString *filename)
         if ( err != noErr )
             break ;
         
-#if TARGET_CARBON
-        p2cstrcpy( c_name, m_name ) ;
-        strcpy( (char *)m_name, c_name);
-#else
-        p2cstr( m_name ) ;
-#endif
         // its hidden but we don't want it
         if ( ( m_CPB.hFileInfo.ioFlFndrInfo.fdFlags & kIsInvisible ) && !(m_flags & wxDIR_HIDDEN) )
             continue ;
 #ifdef __DARWIN__
         // under X, names that start with '.' are hidden
-        if ( ( m_name[0] == '.' ) && !(m_flags & wxDIR_HIDDEN) )
+        if ( ( m_name[1] == '.' ) && !(m_flags & wxDIR_HIDDEN) )
             continue;
 #endif
 #if TARGET_CARBON
@@ -196,18 +187,18 @@ bool wxDirData::Read(wxString *filename)
         if ( ( m_CPB.dirInfo.ioFlAttrib & ioDirMask) == 0 && !(m_flags & wxDIR_FILES ) )
             continue ;
         
-        wxString file( m_name ) ;
-        if ( m_filespec.IsEmpty() || m_filespec == "*.*" || m_filespec == "*" )
+        wxString file = wxMacMakeStringFromPascal( m_name ) ;
+        if ( m_filespec.IsEmpty() || m_filespec == wxT("*.*") || m_filespec == wxT("*") )
         {
         }
-        else if ( m_filespec.Length() > 1 && m_filespec.Left(1) =="*" )
+        else if ( m_filespec.Length() > 1 && m_filespec.Left(1) == wxT("*") )
         {
             if ( file.Right( m_filespec.Length() - 1 ).Upper() != m_filespec.Mid(1).Upper() )
             {
                 continue ;
             }
         }
-        else if ( m_filespec.Length() > 1 && m_filespec.Right(1) == "*" )
+        else if ( m_filespec.Length() > 1 && m_filespec.Right(1) == wxT("*") )
         {
             if ( file.Left( m_filespec.Length() - 1 ).Upper() != m_filespec.Left( m_filespec.Length() - 1 ).Upper() )
             {
@@ -226,7 +217,7 @@ bool wxDirData::Read(wxString *filename)
         return FALSE ;
     }
     
-    *filename = (char*) m_name ;
+    *filename = wxMacMakeStringFromPascal( m_name )  ;
 
     return TRUE;
 }

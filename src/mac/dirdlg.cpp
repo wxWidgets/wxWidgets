@@ -40,7 +40,7 @@ wxDirDialog::wxDirDialog(wxWindow *parent,
                          const wxSize& WXUNUSED(size),
                          const wxString& WXUNUSED(name))
 {
-    wxASSERT_MSG( NavServicesAvailable() , "Navigation Services are not running" ) ;
+    wxASSERT_MSG( NavServicesAvailable() , wxT("Navigation Services are not running") ) ;
     m_message = message;
     m_dialogStyle = style;
     m_parent = parent;
@@ -92,7 +92,7 @@ int wxDirDialog::ShowModal()
                         0L);                            // User Data
     
     if ( (err != noErr) && (err != userCanceledErr) ) {
-        m_path = "" ;
+        m_path = wxT("") ;
         return wxID_CANCEL ;
     }
 
@@ -104,7 +104,7 @@ int wxDirDialog::ShowModal()
         
         OSErr err = ::AECoerceDesc( &mNavReply.selection , typeFSS, &specDesc);
         if ( err != noErr ) {
-            m_path = "" ;
+            m_path = wxT("") ;
             return wxID_CANCEL ;
         }            
         folderInfo = **(FSSpec**) specDesc.dataHandle;
@@ -130,7 +130,7 @@ int wxDirDialog::ShowModal()
         
         err = ::PBGetCatInfoSync(&thePB);
         if ( err != noErr ) {
-            m_path = "" ;
+            m_path = wxT("")  ;
             return wxID_CANCEL ;
         }            
                                             // Create cannonical FSSpec

@@ -113,7 +113,7 @@ int wxJoystick::GetProductId() const
 wxString wxJoystick::GetProductName() const
 {
     // TODO
-    return wxString("");
+    return wxString(wxT(""));
 }
 
 int wxJoystick::GetXMin() const

@@ -292,13 +292,7 @@ wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int ho
     if ( flags == wxBITMAP_TYPE_MACCURSOR_RESOURCE )
     {
         Str255 theName ;
-
-    #if TARGET_CARBON
-        c2pstrcpy( (StringPtr) theName , cursor_file ) ;
-    #else
-        strcpy( (char *) theName , cursor_file ) ;
-        c2pstr( (char *) theName ) ;
-    #endif
+		wxMacStringToPascal( cursor_file , theName ) ;
         
         wxStAppResource resload ;
         Handle resHandle = ::GetNamedResource( 'crsr' , theName ) ;

@@ -116,7 +116,7 @@ bool      wxApp::s_macSupportPCMenuShortcuts = true ;
 long      wxApp::s_macAboutMenuItemId = wxID_ABOUT ;
 long      wxApp::s_macPreferencesMenuItemId = 0 ;
 long      wxApp::s_macExitMenuItemId = wxID_EXIT ;
-wxString  wxApp::s_macHelpMenuTitleName = "&Help" ;
+wxString  wxApp::s_macHelpMenuTitleName = wxT("&Help") ;
 
 //----------------------------------------------------------------------
 // Core Apple Event Support
@@ -538,7 +538,8 @@ bool wxApp::Initialize()
 #endif
 
 #endif
-
+    wxMacSetupConverters() ;
+    
     s_macCursorRgn = ::NewRgn() ;
 
     wxClassInfo::InitializeClasses();
@@ -719,7 +720,8 @@ void wxApp::CleanUp()
     //   __wxterminate in Mach-O shared libraries
     wxStAppResource::CloseSharedLibraryResource();
 #endif
-
+    wxMacCleanupConverters() ;
+    
     UMACleanupToolbox() ;
     if (s_macCursorRgn) {
         ::DisposeRgn((RgnHandle)s_macCursorRgn);
@@ -961,7 +963,17 @@ int wxEntry( int argc, char *argv[] , bool enterLoop )
     // we could try to get the open apple events here to adjust argc and argv better
 
     wxTheApp->argc = argc;
+#if wxUSE_UNICODE
+    wxTheApp->argv = new wxChar*[argc+1];
+    int mb_argc ;
+    for ( mb_argc = 0; mb_argc < argc; mb_argc++ )
+    {
+        wxTheApp->argv[mb_argc] = wxStrdup(wxConvLocal.cMB2WX(argv[mb_argc]));
+    }
+    wxTheApp->argv[mb_argc] = (wxChar *)NULL;
+#else
     wxTheApp->argv = argv;
+#endif
 
     // GUI-specific initialization, such as creating an app context.
     wxEntryInitGui();

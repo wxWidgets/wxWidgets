@@ -49,7 +49,7 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
     Rect bounds ;
     Str255 title ;
     
-    MacPreControlCreate( parent , id ,  "" , pos , size ,style, validator , name , &bounds , title ) ;
+    MacPreControlCreate( parent , id ,  wxEmptyString , pos , size ,style, validator , name , &bounds , title ) ;
     m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , -12345 , 0 , 
         kControlPopupButtonProc + kControlPopupFixedWidthVariant , (long) this ) ; 
     
@@ -169,7 +169,7 @@ wxString wxChoice::GetString(int n) const
 void wxChoice::DoSetItemClientData( int n, void* clientData )
 {
     wxCHECK_RET( n >= 0 && (size_t)n < m_datas.GetCount(),
-                 "invalid index in wxChoice::SetClientData" );
+                 wxT("invalid index in wxChoice::SetClientData") );
     
     m_datas[n] = (char*) clientData ;
 }
@@ -177,7 +177,7 @@ void wxChoice::DoSetItemClientData( int n, void* clientData )
 void *wxChoice::DoGetItemClientData(int n) const
 {
     wxCHECK_MSG( n >= 0 && (size_t)n < m_datas.GetCount(), NULL,
-                 "invalid index in wxChoice::GetClientData" );
+                 wxT("invalid index in wxChoice::GetClientData") );
     return (void *)m_datas[n];
 }
 

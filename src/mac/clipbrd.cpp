@@ -55,6 +55,8 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
         
     case wxDF_TEXT:
         break;
+    case wxDF_UNICODETEXT:
+        break;
     case wxDF_BITMAP :
     case wxDF_METAFILE :
         break ;
@@ -77,15 +79,21 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
         {
             if (( err = GetScrapFlavorSize( scrapRef, dataFormat.GetFormatId(), &byteCount )) == noErr)
             {
-                if ( dataFormat.GetType() == wxDF_TEXT )
-                    byteCount++ ;
+                Size allocSize = byteCount ;
+                if ( dataFormat.GetType() == wxDF_TEXT )  
+                    allocSize += 1 ;
+                else if ( dataFormat.GetType() == wxDF_UNICODETEXT )  
+                    allocSize += 2 ;
                 
-                data = new char[ byteCount ] ;
+                data = new char[ allocSize ] ;
+                    
                 if (( err = GetScrapFlavorData( scrapRef, dataFormat.GetFormatId(), &byteCount , data )) == noErr )
                 {
-                    *len = byteCount ;
+                    *len = allocSize ;
                     if ( dataFormat.GetType() == wxDF_TEXT )  
                         ((char*)data)[byteCount] = 0 ;
+                    if ( dataFormat.GetType() == wxDF_UNICODETEXT )  
+                        ((wxChar*)data)[byteCount/2] = 0 ;
                 }
                 else
                 {
@@ -105,14 +113,19 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
     if ( GetHandleSize( datahandle ) > 0 )
     {
         byteCount = GetHandleSize( datahandle ) ;
+        Size allocSize = byteCount ;
         if ( dataFormat.GetType() == wxDF_TEXT )  
-            data = new char[ byteCount + 1] ;
-        else
-            data = new char[ byteCount ] ;
-        
+            allocSize += 1 ;
+        else if ( dataFormat.GetType() == wxDF_UNICODETEXT )  
+            allocSize += 2 ;
+
+        data = new char[ allocSize ] ;
+
         memcpy( (char*) data , (char*) *datahandle , byteCount ) ;
         if ( dataFormat.GetType() == wxDF_TEXT )  
             ((char*)data)[byteCount] = 0 ;
+        if ( dataFormat.GetType() == wxDF_UNICODETEXT )  
+            ((wxChar*)data)[byteCount/2] = 0 ;
         *len = byteCount ;
     }
     DisposeHandle( datahandle ) ;
@@ -123,10 +136,21 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
         
         return NULL ;
     }
+
     if ( dataFormat.GetType() == wxDF_TEXT && wxApp::s_macDefaultEncodingIsPC )
     {
-        wxMacConvertToPC((char*)data,(char*)data,byteCount) ;
+        wxString st = wxMacMakeStringFromCString( (char*) data ) ;
+#if wxUSE_UNICODE
+        wxCharBuffer buf = st.ToAscii() ;
+#else
+        char* buf = st ;
+#endif
+        char* newdata = new char[strlen(buf)+1] ;
+        memcpy( newdata , buf , strlen(buf)+1 ) ;
+        delete[] ((char*) data ) ;
+        data = newdata ;
     }
+
     return data;
 }
 
@@ -234,19 +258,19 @@ bool wxClipboard::AddData( wxDataObject *data )
            {
                wxTextDataObject* textDataObject = (wxTextDataObject*) data;
                wxString str(textDataObject->GetText());
-                wxString mac ;
-                if ( wxApp::s_macDefaultEncodingIsPC )
-                {
-                    mac = wxMacMakeMacStringFromPC(textDataObject->GetText()) ;
-                }
-                else
-                {
-                    mac = textDataObject->GetText() ;
-                }
-                err = UMAPutScrap( mac.Length() , 'TEXT' , (void*) mac.c_str()  ) ;
+               wxCharBuffer buf = wxMacStringToCString( str ) ;
+               err = UMAPutScrap( strlen(buf) , kScrapFlavorTypeText , (void*) buf.data()  ) ;
            }
            break ;
-
+#if wxUSE_UNICODE
+           case wxDF_UNICODETEXT :
+           {
+               wxTextDataObject* textDataObject = (wxTextDataObject*) data;
+               wxString str(textDataObject->GetText());
+               err = UMAPutScrap( str.Length() * sizeof(wxChar) , kScrapFlavorTypeUnicode , (void*) str.wc_str()  ) ;
+           }
+           break ;
+#endif
 #if wxUSE_DRAG_AND_DROP
         case wxDF_METAFILE:
            {
@@ -255,7 +279,7 @@ bool wxClipboard::AddData( wxDataObject *data )
                   wxMetafile metaFile = metaFileDataObject->GetMetafile();
                 PicHandle pict = (PicHandle) metaFile.GetHMETAFILE() ;
                   HLock( (Handle) pict ) ;
-                  err = UMAPutScrap( GetHandleSize(  (Handle) pict ) , 'PICT' , *pict ) ;
+                  err = UMAPutScrap( GetHandleSize(  (Handle) pict ) , kScrapFlavorTypePicture , *pict ) ;
                   HUnlock(  (Handle) pict ) ;
            }
            break ;
@@ -270,7 +294,7 @@ bool wxClipboard::AddData( wxDataObject *data )
                    pict = (PicHandle) bitmapDataObject->GetBitmap().GetPict( &created ) ;
 
                   HLock( (Handle) pict ) ;
-                  err = UMAPutScrap( GetHandleSize(  (Handle) pict ) , 'PICT' , *pict ) ;
+                  err = UMAPutScrap( GetHandleSize(  (Handle) pict ) , kScrapFlavorTypePicture , *pict ) ;
                   HUnlock(  (Handle) pict ) ;
                   if ( created )
                       KillPicture( pict ) ;

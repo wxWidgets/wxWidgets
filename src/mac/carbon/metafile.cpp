@@ -72,7 +72,7 @@ wxMetaFile::wxMetaFile(const wxString& file)
 
 
     M_METAFILEDATA->m_metafile = 0;
-    wxASSERT_MSG( file.IsEmpty() , "no file based metafile support yet") ;
+    wxASSERT_MSG( file.IsEmpty() , wxT("no file based metafile support yet") ) ;
 /*
     if (!file.IsNull() && (file.Cmp("") == 0))
         M_METAFILEDATA->m_metafile = (WXHANDLE) GetMetaFile(file);
@@ -145,9 +145,9 @@ wxMetaFileDC::wxMetaFileDC(const wxString& file)
     m_maxX = -10000;
     m_maxY = -10000;
     
-    wxASSERT_MSG( file.IsEmpty() , "no file based metafile support yet") ;
+    wxASSERT_MSG( file.IsEmpty() , wxT("no file based metafile support yet") ) ;
     
-    m_metaFile = new wxMetaFile("") ;
+    m_metaFile = new wxMetaFile(wxEmptyString) ;
     Rect r={0,0,1000,1000} ;
     
     m_metaFile->SetHMETAFILE( OpenPicture( &r ) ) ;
@@ -167,9 +167,9 @@ wxMetaFileDC::wxMetaFileDC(const wxString& file, int xext, int yext, int xorg, i
     m_maxX = -10000;
     m_maxY = -10000;
     
-    wxASSERT_MSG( file.IsEmpty() , "no file based metafile support yet") ;
+    wxASSERT_MSG( file.IsEmpty() , wxT("no file based metafile support yet")) ;
     
-    m_metaFile = new wxMetaFile("") ;
+    m_metaFile = new wxMetaFile(wxEmptyString) ;
     Rect r={yorg,xorg,yorg+yext,xorg+xext} ;
     
     m_metaFile->SetHMETAFILE( OpenPicture( &r ) ) ;

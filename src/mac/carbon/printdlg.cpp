@@ -97,8 +97,8 @@ int wxPrintDialog::ShowModal()
     }
     else
     {
-        message.Printf( "Print Error %d", err ) ;
-        wxMessageDialog dialog( NULL , message  , "", wxICON_HAND | wxOK) ;
+        message.Printf( wxT("Print Error %d"), err ) ;
+        wxMessageDialog dialog( NULL , message  , wxT(""), wxICON_HAND | wxOK) ;
         dialog.ShowModal();
     }
     ::UMAPrClose(NULL) ;
@@ -179,8 +179,8 @@ int wxPrintDialog::ShowModal()
     }
     if ((err != noErr) && (err != kPMCancel))
     {
-        message.Printf( "Print Error %d", err ) ;
-        wxMessageDialog dialog( NULL , message  , "", wxICON_HAND | wxOK) ;
+        message.Printf( wxT("Print Error %d"), err ) ;
+        wxMessageDialog dialog( NULL , message  , wxEmptyString, wxICON_HAND | wxOK) ;
         dialog.ShowModal();
     }
 #else
@@ -245,8 +245,8 @@ int wxPageSetupDialog::ShowModal()
     }
     else
     {
-        message.Printf( "Print Error %d", err ) ;
-        wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
+        message.Printf( wxT("Print Error %d"), err ) ;
+        wxMessageDialog dialog( NULL , message , wxEmptyString , wxICON_HAND | wxOK) ;
         dialog.ShowModal();
     }
     ::UMAPrClose(NULL) ;
@@ -301,8 +301,8 @@ int wxPageSetupDialog::ShowModal()
     }
     if ((err != noErr) && (err != kPMCancel))
     {
-        message.Printf( "Print Error %d", err ) ;
-        wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
+        message.Printf( wxT("Print Error %d"), err ) ;
+        wxMessageDialog dialog( NULL , message , wxEmptyString, wxICON_HAND | wxOK) ;
         dialog.ShowModal();
     }
 #else

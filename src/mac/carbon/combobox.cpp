@@ -456,7 +456,7 @@ wxString wxComboBox::GetStringSelection() const
     if (sel > -1)
         return wxString(this->GetString (sel));
     else
-        return wxString("");
+        return wxEmptyString;
 }
 
 bool wxComboBox::SetStringSelection(const wxString& sel)

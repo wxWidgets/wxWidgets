@@ -67,7 +67,7 @@ wxFontRefData::~wxFontRefData()
 
 void wxFontRefData::MacFindFont()
 {
-    if( m_faceName == "" )
+    if( m_faceName.Length() == 0 )
     {
         switch( m_family )
         {
@@ -92,14 +92,13 @@ void wxFontRefData::MacFindFont()
         }
         Str255 name ;
         GetFontName( m_macFontNum , name ) ;
-        CopyPascalStringToC( name , (char*) name ) ;
-        m_faceName = (char*) name ;
+        m_faceName = wxMacMakeStringFromPascal( name ) ;
     }
     else
     {
-        if ( m_faceName == "systemfont" )
+        if ( m_faceName == wxT("systemfont") )
             m_macFontNum = ::GetSysFont() ;
-        else if ( m_faceName == "applicationfont" )
+        else if ( m_faceName == wxT("applicationfont") )
             m_macFontNum = ::GetAppFont() ;
         else
         {
@@ -126,7 +125,7 @@ void wxFontRefData::MacFindFont()
     status = ATSUFindFontFromName ( (Ptr) m_faceName , strlen( m_faceName ) ,
         kFontFullName,    kFontMacintoshPlatform, kFontRomanScript , kFontNoLanguage  ,  (UInt32*)&m_macATSUFontID ) ;
     */
-    wxASSERT_MSG( status == noErr , "couldn't retrieve font identifier" ) ;
+    wxASSERT_MSG( status == noErr , wxT("couldn't retrieve font identifier") ) ;
 }
 
 // ----------------------------------------------------------------------------

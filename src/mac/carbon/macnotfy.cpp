@@ -88,7 +88,7 @@ void wxMacAddEvent(
     short wakeUp ) 
 {
     wxMacNotificationEvents *e = (wxMacNotificationEvents *) table ;
-    wxASSERT_MSG( handler != NULL , "illegal notification proc ptr" ) ;
+    wxASSERT_MSG( handler != NULL , wxT("illegal notification proc ptr") ) ;
     /* this should be protected eventually */
     short index = e->top++ ;
     

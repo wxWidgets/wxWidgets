@@ -135,23 +135,18 @@ bool wxWave::Create(const wxString& fileName, bool isResource)
 //don't know what to do with looped, wth
 bool wxWave::Play(bool async, bool looped) const
 {
-    char lpSnd[32];
     bool ret = false;
 
     if (m_isResource)
     {
-#if TARGET_CARBON
-      c2pstrcpy((unsigned char *)lpSnd, m_sndname);
-#else
-      strcpy(lpSnd, m_sndname);
-      c2pstr((char *) lpSnd);
-#endif
-      SndListHandle hSnd;
+    	Str255 snd ;
+    	wxMacStringToPascal( m_sndname , snd ) ;
+      	SndListHandle hSnd;
 
-      hSnd = (SndListHandle) GetNamedResource('snd ',(const unsigned char *) lpSnd);
+      	hSnd = (SndListHandle) GetNamedResource('snd ', snd);
 
-      if ((hSnd != NULL) && (SndPlay((SndChannelPtr)m_sndChan, (SndListHandle) hSnd, async) == noErr))
-        ret = true;
+      	if ((hSnd != NULL) && (SndPlay((SndChannelPtr)m_sndChan, (SndListHandle) hSnd, async) == noErr))
+        	ret = true;
     }
 
     return ret;

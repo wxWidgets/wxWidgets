@@ -255,7 +255,7 @@ bool wxToolBar::Realize()
               ::SetControlFontStyle( m_macToolHandle , &controlstyle ) ;
             */
             ControlHandle container = (ControlHandle) GetParent()->MacGetContainerForEmbedding() ;
-            wxASSERT_MSG( container != NULL , "No valid mac container control" ) ;
+            wxASSERT_MSG( container != NULL , wxT("No valid mac container control") ) ;
             ::EmbedControl( m_macToolHandle , container ) ;
             
             if ( GetWindowStyleFlag() & wxTB_VERTICAL )
@@ -507,7 +507,7 @@ wxString wxToolBar::MacGetToolTipString( wxPoint &pt )
     {
         return tool->GetShortHelp() ;
     }
-    return "" ;
+    return wxEmptyString ;
 }
 
 void wxToolBar::DoEnableTool(wxToolBarToolBase *t, bool enable)

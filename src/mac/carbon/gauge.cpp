@@ -40,7 +40,7 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
         size = wxSize( 200 , 16 ) ;
     }
     
-    MacPreControlCreate( parent , id ,  "" , pos , size ,style & 0xE0FFFFFF /* no borders on mac */ , validator , name , &bounds , title ) ;
+    MacPreControlCreate( parent , id ,  wxEmptyString , pos , size ,style & 0xE0FFFFFF /* no borders on mac */ , validator , name , &bounds , title ) ;
     
     m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , range, 
         kControlProgressBarProc , (long) this ) ;

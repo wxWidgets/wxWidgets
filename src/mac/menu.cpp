@@ -107,7 +107,7 @@ void wxMenu::Attach(wxMenuBarBase *menubar)
 // append a new item or submenu to the menu
 bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 {
-    wxASSERT_MSG( pItem != NULL, "can't append NULL item to the menu" );
+    wxASSERT_MSG( pItem != NULL, wxT("can't append NULL item to the menu") );
 
     if ( pItem->IsSeparator() )
     {
@@ -121,7 +121,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
         wxMenu *pSubMenu = pItem->GetSubMenu() ;
         if ( pSubMenu != NULL )
         {
-               wxASSERT_MSG( pSubMenu->m_hMenu != NULL , "invalid submenu added");
+               wxASSERT_MSG( pSubMenu->m_hMenu != NULL , wxT("invalid submenu added"));
             pSubMenu->m_menuParent = this ;
         
             if (wxMenuBar::MacGetInstalledMenuBar() == m_menuBar) 
@@ -140,12 +140,12 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
         {
             if ( pos == (size_t)-1 )
             {
-                UMAAppendMenuItem(MAC_WXHMENU(m_hMenu), "a" );
+                UMAAppendMenuItem(MAC_WXHMENU(m_hMenu), wxT("a") );
                 pos = CountMenuItems(MAC_WXHMENU(m_hMenu)) ;
             }
             else
             {
-                UMAInsertMenuItem(MAC_WXHMENU(m_hMenu), "a" , pos);
+                UMAInsertMenuItem(MAC_WXHMENU(m_hMenu), wxT("a") , pos);
             }
 
             SetMenuItemCommandID( MAC_WXHMENU(m_hMenu) , pos , pItem->GetId() ) ;
@@ -503,7 +503,7 @@ void wxMenuBar::MacInstallMenuBar()
         
     Handle menubar = ::GetNewMBar( kwxMacMenuBarResource ) ;
     wxString message ;
-    wxCHECK_RET( menubar != NULL, "can't read MBAR resource" );
+    wxCHECK_RET( menubar != NULL, wxT("can't read MBAR resource") );
     ::SetMenuBar( menubar ) ;
 #if TARGET_API_MAC_CARBON
     ::DisposeMenuBar( menubar ) ;
@@ -550,7 +550,7 @@ void wxMenuBar::MacInstallMenuBar()
         int pos ;
         wxMenu* menu = m_menus[i] , *subMenu = NULL ;
 
-        if( m_titles[i] == "?" || m_titles[i] == "&?"  || m_titles[i] == wxApp::s_macHelpMenuTitleName )
+        if( m_titles[i] == wxT("?") || m_titles[i] == wxT("&?")  || m_titles[i] == wxApp::s_macHelpMenuTitleName )
         {
             if ( mh == NULL )
             {
