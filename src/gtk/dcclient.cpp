@@ -1506,8 +1506,8 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     }
 
     int w,h;
-    
-    if (fabs(m_scaleY - 1.0) < 0.00001)
+
+    if (fabs(m_scaleY - 1.0) > 0.00001)
     {
          // If there is a user or actually any scale applied to
          // the device context, scale the font.

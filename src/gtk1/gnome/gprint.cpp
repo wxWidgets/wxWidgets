@@ -22,6 +22,8 @@
 
 #if wxUSE_LIBGNOMEPRINT
 
+#include "math.h"
+
 #include "wx/fontutil.h"
 #include "wx/printdlg.h"
 #include "wx/gtk/private.h"
@@ -348,8 +350,8 @@ void wxGnomePrintDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
     
     SetPen( m_pen );
 
-	gnome_print_moveto ( m_gpc, XDEV2LOG(x1), YDEV2LOG(y1) );
-	gnome_print_lineto ( m_gpc, XDEV2LOG(x2), YDEV2LOG(y2) );
+	gnome_print_moveto ( m_gpc, XLOG2DEV(x1), YLOG2DEV(y1) );
+	gnome_print_lineto ( m_gpc, XLOG2DEV(x2), YLOG2DEV(y2) );
 	gnome_print_stroke ( m_gpc);
 	
     CalcBoundingBox( x1, y1 );
@@ -496,8 +498,58 @@ void wxGnomePrintDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y )
         pango_attr_list_unref(attrs);
     }
 
-	gnome_print_moveto (m_gpc, x, y);
-	gnome_print_pango_layout( m_gpc, m_layout );
+    int w,h;
+
+    if (fabs(m_scaleY - 1.0) > 0.00001)
+    {
+        // If there is a user or actually any scale applied to
+        // the device context, scale the font.
+         
+        // scale font description
+        gint oldSize = pango_font_description_get_size( m_fontdesc );
+        double size = oldSize;
+        size = size * m_scaleY;
+        pango_font_description_set_size( m_fontdesc, (gint)size );
+         
+        // actually apply scaled font
+        pango_layout_set_font_description( m_layout, m_fontdesc );
+        
+        pango_layout_get_pixel_size( m_layout, &w, &h );
+#if 0
+        if ( m_backgroundMode == wxSOLID )
+        {
+            gdk_gc_set_foreground(m_textGC, m_textBackgroundColour.GetColor());
+            gdk_draw_rectangle(m_window, m_textGC, TRUE, x, y, w, h);
+            gdk_gc_set_foreground(m_textGC, m_textForegroundColour.GetColor());
+        }
+#endif         
+        // Draw layout.
+    	gnome_print_moveto (m_gpc, x, y);
+	    gnome_print_pango_layout( m_gpc, m_layout );
+         
+        // reset unscaled size
+        pango_font_description_set_size( m_fontdesc, oldSize );
+         
+        // actually apply unscaled font
+        pango_layout_set_font_description( m_layout, m_fontdesc );
+    }
+    else
+    {
+        pango_layout_get_pixel_size( m_layout, &w, &h );
+#if 0
+        if ( m_backgroundMode == wxSOLID )
+        {
+            gdk_gc_set_foreground(m_textGC, m_textBackgroundColour.GetColor());
+            gdk_draw_rectangle(m_window, m_textGC, TRUE, x, y, w, h);
+            gdk_gc_set_foreground(m_textGC, m_textForegroundColour.GetColor());
+        }
+#endif        
+        // Draw layout.
+    	gnome_print_moveto (m_gpc, x, y);
+	    gnome_print_pango_layout( m_gpc, m_layout );
+    }
+
+
 
     if (underlined)
     {
@@ -562,6 +614,41 @@ void wxGnomePrintDC::SetPen( const wxPen& pen )
 
 void wxGnomePrintDC::SetBrush( const wxBrush& brush )
 {
+    if (!brush.Ok()) return;
+
+    m_brush = brush;
+
+    // Brush colour
+    unsigned char red = m_brush.GetColour().Red();
+    unsigned char blue = m_brush.GetColour().Blue();
+    unsigned char green = m_brush.GetColour().Green();
+
+    if (!m_colour)
+    {
+        // Anything not white is black
+        if (! (red == (unsigned char) 255 &&
+               blue == (unsigned char) 255 &&
+               green == (unsigned char) 255) )
+        {
+            red = (unsigned char) 0;
+            green = (unsigned char) 0;
+            blue = (unsigned char) 0;
+        }
+        // setgray here ?
+    }
+
+    if (!(red == m_currentRed && green == m_currentGreen && blue == m_currentBlue))
+    {
+        double redPS = (double)(red) / 255.0;
+        double bluePS = (double)(blue) / 255.0;
+        double greenPS = (double)(green) / 255.0;
+
+        gnome_print_setrgbcolor( m_gpc, redPS, bluePS, greenPS );
+
+        m_currentRed = red;
+        m_currentBlue = blue;
+        m_currentGreen = green;
+    }
 }
 
 void wxGnomePrintDC::SetLogicalFunction( int function )
