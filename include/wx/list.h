@@ -84,16 +84,16 @@ enum wxKeyType
 #define wxLIST_COMPATIBILITY
 
 #define WX_DECLARE_LIST_3(elT, dummy1, liT, dummy2, decl) \
-    WX_DECLARE_LIST_X(elT, liT, decl)
+    WX_DECLARE_LIST_WITH_DECL(elT, liT, decl)
 #define WX_DECLARE_LIST_PTR_3(elT, dummy1, liT, dummy2, decl) \
     WX_DECLARE_LIST_3(elT, dummy1, liT, dummy2, decl)
 
 #define WX_DECLARE_LIST_2(elT, liT, dummy, decl) \
-    WX_DECLARE_LIST_X(elT, liT, decl)
+    WX_DECLARE_LIST_WITH_DECL(elT, liT, decl)
 #define WX_DECLARE_LIST_PTR_2(elT, liT, dummy, decl) \
     WX_DECLARE_LIST_2(elT, liT, dummy, decl) \
 
-#define WX_DECLARE_LIST_X(elT, liT, decl) \
+#define WX_DECLARE_LIST_WITH_DECL(elT, liT, decl) \
     WX_DECLARE_LIST_XO(elT*, liT, decl)
 
 #define WX_DECLARE_LIST_XO(elT, liT, decl) \
@@ -215,17 +215,17 @@ enum wxKeyType
     }
 
 #define WX_DECLARE_LIST(elementtype, listname)                              \
-    WX_DECLARE_LIST_X(elementtype, listname, class)
+    WX_DECLARE_LIST_WITH_DECL(elementtype, listname, class)
 #define WX_DECLARE_LIST_PTR(elementtype, listname)                          \
     WX_DECLARE_LIST(elementtype, listname)
 
 #define WX_DECLARE_EXPORTED_LIST(elementtype, listname)                     \
-    WX_DECLARE_LIST_X(elementtype, listname, class WXDLLEXPORT)
+    WX_DECLARE_LIST_WITH_DECL(elementtype, listname, class WXDLLEXPORT)
 #define WX_DECLARE_EXPORTED_LIST_PTR(elementtype, listname)                 \
     WX_DECLARE_EXPORTED_LIST(elementtype, listname)
 
 #define WX_DECLARE_USER_EXPORTED_LIST(elementtype, listname, usergoo)       \
-    WX_DECLARE_LIST_X(elementtype, listname, class usergoo)
+    WX_DECLARE_LIST_WITH_DECL(elementtype, listname, class usergoo)
 #define WX_DECLARE_USER_EXPORTED_LIST_PTR(elementtype, listname, usergoo)   \
     WX_DECLARE_USER_EXPORTED_LIST(elementtype, listname, usergoo)
 
