@@ -43,6 +43,7 @@ wxMSW:
 wxGTK:
 
 - wxToolbar::InsertSeparator() fixed
+- foreign (non US) characters input problem fixed
 
 wxHTML:
 
