@@ -509,18 +509,6 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
         
         wxevent.SetEventObject( currentMouseWindow ) ;
 
-        // update cursor
-        
-        wxWindow* cursorTarget = currentMouseWindow ;
-        wxPoint cursorPoint( wxevent.m_x , wxevent.m_y ) ;
-
-        while( cursorTarget && !cursorTarget->MacSetupCursor( cursorPoint ) )
-        {
-            cursorTarget = cursorTarget->GetParent() ;
-            if ( cursorTarget )
-                cursorPoint += cursorTarget->GetPosition() ;
-        }
-
         // make tooltips current
         
     #if wxUSE_TOOLTIPS
@@ -568,6 +556,19 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
             wxTheApp->s_captureWindow = NULL ;
             // update cursor ?
          }
+
+        // update cursor
+        
+        wxWindow* cursorTarget = currentMouseWindow ;
+        wxPoint cursorPoint( wxevent.m_x , wxevent.m_y ) ;
+
+        while( cursorTarget && !cursorTarget->MacSetupCursor( cursorPoint ) )
+        {
+            cursorTarget = cursorTarget->GetParent() ;
+            if ( cursorTarget )
+                cursorPoint += cursorTarget->GetPosition() ;
+        }
+
     } // else if ( currentMouseWindow )
     else
     {
