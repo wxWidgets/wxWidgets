@@ -119,31 +119,31 @@ int wxKill(long pid, wxSignal sig)
 
 long wxExecute( const wxString& command, bool sync, wxProcess *process )
 {
-    wxCHECK_MSG( !command.IsEmpty(), 0, "can't exec empty command" );
+    wxCHECK_MSG( !command.IsEmpty(), 0, _T("can't exec empty command") );
 
     int argc = 0;
-    char *argv[WXEXECUTE_NARGS];
+    wxChar *argv[WXEXECUTE_NARGS];
     wxString argument;
-    const char *cptr = command.c_str();
-    char quotechar = '\0'; // is arg quoted?
+    const wxChar *cptr = command.c_str();
+    wxChar quotechar = _T('\0'); // is arg quoted?
     bool escaped = FALSE;
 
     // split the command line in arguments
     do
     {
-        argument="";
-        quotechar = '\0';
+        argument=_T("");
+        quotechar = _T('\0');
 
         // eat leading whitespace:
-        while ( isspace(*cptr) )
+        while ( wxIsspace(*cptr) )
             cptr++;
 
-        if ( *cptr == '\'' || *cptr == '"' )
+        if ( *cptr == _T('\'') || *cptr == _T('"') )
             quotechar = *cptr++;
 
         do
         {
-            if ( *cptr == '\\' && ! escaped )
+            if ( *cptr == _T('\\') && ! escaped )
             {
                 escaped = TRUE;
                 cptr++;
@@ -156,14 +156,14 @@ long wxExecute( const wxString& command, bool sync, wxProcess *process )
 
             // have we reached the end of the argument?
             if ( (*cptr == quotechar && ! escaped)
-                 || (quotechar == '\0' && isspace(*cptr))
-                 || *cptr == '\0' )
+                 || (quotechar == _T('\0') && wxIsspace(*cptr))
+                 || *cptr == _T('\0') )
             {
                 wxASSERT_MSG( argc < WXEXECUTE_NARGS,
-                              "too many arguments in wxExecute" );
+                              _T("too many arguments in wxExecute") );
 
-                argv[argc] = new char[argument.length() + 1];
-                strcpy(argv[argc], argument.c_str());
+                argv[argc] = new wxChar[argument.length() + 1];
+                wxStrcpy(argv[argc], argument.c_str());
                 argc++;
 
                 // if not at end of buffer, swallow last character:
@@ -191,7 +191,7 @@ bool wxShell(const wxString& command)
 {
     wxString cmd;
     if ( !!command )
-        cmd.Printf("xterm -e %s", command.c_str());
+        cmd.Printf(_T("xterm -e %s"), command.c_str());
     else
         cmd = command;
 
@@ -234,11 +234,24 @@ void wxHandleProcessTermination(wxEndProcessData *proc_data)
     }
 }
 
-long wxExecute( char **argv, bool sync, wxProcess *process )
+long wxExecute( wxChar **argv, bool sync, wxProcess *process )
 {
-    wxCHECK_MSG( *argv, 0, "can't exec empty command" );
+    wxCHECK_MSG( *argv, 0, _T("can't exec empty command") );
 
     int end_proc_detect[2];
+#if wxUSE_UNICODE
+    int mb_argc = 0;
+    char *mb_argv[WXEXECUTE_NARGS];
+
+    while (argv[mb_argc]) {
+      wxWX2MBbuf mb_arg = wxConv_libc.cWX2MB(argv[mb_argc]);
+      mb_argv[mb_argc] = strdup(mb_arg);
+      mb_argc++;
+    }
+    mb_argv[mb_argc] = (char *) NULL;
+#else
+    wxChar **mb_argv = argv;
+#endif
 
     // create pipes
     if (pipe(end_proc_detect) == -1)
@@ -287,10 +300,10 @@ long wxExecute( char **argv, bool sync, wxProcess *process )
         open("/dev/null", O_WRONLY);  // stderr
 #endif
 
-        execvp (*argv, argv);
+        execvp (*mb_argv, mb_argv);
 
         // there is no return after successful exec()
-        fprintf(stderr, _("Can't execute '%s'\n"), *argv);
+        wxFprintf(stderr, _("Can't execute '%s'\n"), *argv);
 
         _exit(-1);
     }
@@ -302,9 +315,15 @@ long wxExecute( char **argv, bool sync, wxProcess *process )
         wxEndProcessData *data = new wxEndProcessData;
         data->tag = wxAddProcessCallback(data, end_proc_detect[0]);
 
+#if wxUSE_UNICODE
+	mb_argc = 0;
+	while (mb_argv[mb_argc])
+	  free(mb_argv[mb_argc++]);
+#endif
+
         if ( sync )
         {
-            wxASSERT_MSG( !process, "wxProcess param ignored for sync exec" );
+            wxASSERT_MSG( !process, _T("wxProcess param ignored for sync exec") );
             data->process = NULL;
 
             // sync execution: indicate it by negating the pid
@@ -337,30 +356,34 @@ long wxExecute( char **argv, bool sync, wxProcess *process )
 // file and directory functions
 // ----------------------------------------------------------------------------
 
-const char* wxGetHomeDir( wxString *home  )
+const wxChar* wxGetHomeDir( wxString *home  )
 {
     *home = wxGetUserHome( wxString() );
     if ( home->IsEmpty() )
-        *home = "/";
+        *home = _T("/");
 
     return home->c_str();
 }
 
+#if wxUSE_UNICODE
+const wxMB2WXbuf wxGetUserHome( const wxString &user )
+#else // just for binary compatibility
 char *wxGetUserHome( const wxString &user )
+#endif
 {
     struct passwd *who = (struct passwd *) NULL;
 
     if ( !user )
     {
-        register char *ptr;
+        register wxChar *ptr;
 
-        if ((ptr = getenv("HOME")) != NULL)
+        if ((ptr = wxGetenv(_T("HOME"))) != NULL)
         {
             return ptr;
         }
-        if ((ptr = getenv("USER")) != NULL || (ptr = getenv("LOGNAME")) != NULL)
+        if ((ptr = wxGetenv(_T("USER"))) != NULL || (ptr = wxGetenv(_T("LOGNAME"))) != NULL)
         {
-            who = getpwnam(ptr);
+            who = getpwnam(wxConv_libc.cWX2MB(ptr));
         }
 
         // We now make sure the the user exists!
@@ -371,10 +394,14 @@ char *wxGetUserHome( const wxString &user )
     }
     else
     {
-      who = getpwnam (user);
+      who = getpwnam (user.mb_str());
     }
 
-    return who ? who->pw_dir : (char*)NULL;
+#if wxUSE_UNICODE
+    return who ? wxConv_libc.cMB2WX(who->pw_dir) : (wxMB2WXbuf)((wxChar*)NULL);
+#else
+    return who ? who->pw_dir : ((char*)NULL);
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -384,11 +411,11 @@ char *wxGetUserHome( const wxString &user )
 // retrieve either the hostname or FQDN depending on platform (caller must
 // check whether it's one or the other, this is why this function is for
 // private use only)
-static bool wxGetHostNameInternal(char *buf, int sz)
+static bool wxGetHostNameInternal(wxChar *buf, int sz)
 {
-    wxCHECK_MSG( buf, FALSE, "NULL pointer in wxGetHostNameInternal" );
+    wxCHECK_MSG( buf, FALSE, _T("NULL pointer in wxGetHostNameInternal") );
 
-    *buf = '\0';
+    *buf = _T('\0');
 
     // we're using uname() which is POSIX instead of less standard sysinfo()
 #if defined(HAVE_UNAME)
@@ -396,13 +423,13 @@ static bool wxGetHostNameInternal(char *buf, int sz)
     bool ok = uname(&uts) != -1;
     if ( ok )
     {
-        strncpy(buf, uts.nodename, sz - 1);
-        buf[sz] = '\0';
+        wxStrncpy(buf, wxConv_libc.cMB2WX(uts.nodename), sz - 1);
+        buf[sz] = _T('\0');
     }
 #elif defined(HAVE_GETHOSTNAME)
     bool ok = gethostname(buf, sz) != -1;
 #else // no uname, no gethostname
-    wxFAIL_MSG("don't know host name for this machibe");
+    wxFAIL_MSG(_T("don't know host name for this machine"));
 
     bool ok = FALSE;
 #endif // uname/gethostname
@@ -415,7 +442,7 @@ static bool wxGetHostNameInternal(char *buf, int sz)
     return ok;
 }
 
-bool wxGetHostName(char *buf, int sz)
+bool wxGetHostName(wxChar *buf, int sz)
 {
     bool ok = wxGetHostNameInternal(buf, sz);
 
@@ -423,26 +450,26 @@ bool wxGetHostName(char *buf, int sz)
     {
         // BSD systems return the FQDN, we only want the hostname, so extract
         // it (we consider that dots are domain separators)
-        char *dot = strchr(buf, '.');
+        wxChar *dot = wxStrchr(buf, _T('.'));
         if ( dot )
         {
             // nuke it
-            *dot = '\0';
+            *dot = _T('\0');
         }
     }
 
     return ok;
 }
 
-bool wxGetFullHostName(char *buf, int sz)
+bool wxGetFullHostName(wxChar *buf, int sz)
 {
     bool ok = wxGetHostNameInternal(buf, sz);
 
     if ( ok )
     {
-        if ( !strchr(buf, '.') )
+        if ( !wxStrchr(buf, _T('.')) )
         {
-            struct hostent *host = gethostbyname(buf);
+            struct hostent *host = gethostbyname(wxConv_libc.cWX2MB(buf));
             if ( !host )
             {
                 wxLogSysError(_("Cannot get the official hostname"));
@@ -452,7 +479,7 @@ bool wxGetFullHostName(char *buf, int sz)
             else
             {
                 // the canonical name
-                strncpy(buf, host->h_name, sz);
+                wxStrncpy(buf, wxConv_libc.cMB2WX(host->h_name), sz);
             }
         }
         //else: it's already a FQDN (BSD behaves this way)
@@ -461,31 +488,31 @@ bool wxGetFullHostName(char *buf, int sz)
     return ok;
 }
 
-bool wxGetUserId(char *buf, int sz)
+bool wxGetUserId(wxChar *buf, int sz)
 {
     struct passwd *who;
 
-    *buf = '\0';
+    *buf = _T('\0');
     if ((who = getpwuid(getuid ())) != NULL)
     {
-        strncpy (buf, who->pw_name, sz - 1);
+        wxStrncpy (buf, wxConv_libc.cMB2WX(who->pw_name), sz - 1);
         return TRUE;
     }
 
     return FALSE;
 }
 
-bool wxGetUserName(char *buf, int sz)
+bool wxGetUserName(wxChar *buf, int sz)
 {
     struct passwd *who;
     char *comma;
 
-    *buf = '\0';
+    *buf = _T('\0');
     if ((who = getpwuid (getuid ())) != NULL) {
        comma = strchr(who->pw_gecos, ',');
        if (comma)
            *comma = '\0'; // cut off non-name comment fields
-       strncpy (buf, who->pw_gecos, sz - 1);
+       wxStrncpy (buf, wxConv_libc.cMB2WX(who->pw_gecos), sz - 1);
        return TRUE;
     }
 
@@ -507,18 +534,17 @@ void wxDebugMsg( const char *format, ... )
 
 void wxError( const wxString &msg, const wxString &title )
 {
-  fprintf( stderr, _("Error ") );
-  if (!title.IsNull()) fprintf( stderr, "%s ", WXSTRINGCAST(title) );
-  if (!msg.IsNull()) fprintf( stderr, ": %s", WXSTRINGCAST(msg) );
-  fprintf( stderr, ".\n" );
+  wxFprintf( stderr, _("Error ") );
+  if (!title.IsNull()) wxFprintf( stderr, _T("%s "), WXSTRINGCAST(title) );
+  if (!msg.IsNull()) wxFprintf( stderr, _T(": %s"), WXSTRINGCAST(msg) );
+  wxFprintf( stderr, _T(".\n") );
 }
 
 void wxFatalError( const wxString &msg, const wxString &title )
 {
-  fprintf( stderr, _("Error ") );
-  if (!title.IsNull()) fprintf( stderr, "%s ", WXSTRINGCAST(title) );
-  if (!msg.IsNull()) fprintf( stderr, ": %s", WXSTRINGCAST(msg) );
-  fprintf( stderr, ".\n" );
+  wxFprintf( stderr, _("Error ") );
+  if (!title.IsNull()) wxFprintf( stderr, _T("%s "), WXSTRINGCAST(title) );
+  if (!msg.IsNull()) wxFprintf( stderr, _T(": %s"), WXSTRINGCAST(msg) );
+  wxFprintf( stderr, _T(".\n") );
   exit(3); // the same exit code as for abort()
 }
-
