@@ -627,7 +627,7 @@ during IO calls, so the GUI will remain blocked until the operation
 completes. If it is not used, then the application must take extra
 care to avoid unwanted reentrance.
 
-The {\bf wxSOCKET\_REUSEADDR} flag controls the use of the SO_REUSEADDR standard
+The {\bf wxSOCKET\_REUSEADDR} flag controls the use of the SO\_REUSEADDR standard
 setsockopt() flag. This flag allows the socket to bind to a port that is already in use.
 This is mostly used on UNIX-based systems to allow rapid starting and stopping of a server - 
 otherwise you may have to wait several minutes for the port to become available.
@@ -647,7 +647,7 @@ the data.
 {\bf wxSOCKET\_BLOCK} has nothing to do with the previous flags and
 it controls whether the GUI blocks.
 
-(\bf wxSOCKET\_REUSEADDR} controls special platform-specific behavior for wxServerSocket.
+{\bf wxSOCKET\_REUSEADDR} controls special platform-specific behavior for wxServerSocket.
 
 %
 % SetNotify
