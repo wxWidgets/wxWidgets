@@ -28,6 +28,7 @@
 #include "wx/intl.h"
 #include "wx/file.h"
 #include "wx/log.h"
+#include "wx/fontmap.h"
 
 #if defined(__WXGTK__) || defined(__WXMOTIF__)
 #include "mondrian.xpm"
@@ -49,12 +50,14 @@ class MyFrame: public wxFrame
 public:
   MyFrame(wxFrame *frame, const char *title, int x, int y, int w, int h);
 
-public:
+protected:
   void OnQuit(wxCommandEvent& event);
   void OnAbout(wxCommandEvent& event);
   void OnPlay(wxCommandEvent& event);
   void OnOpen(wxCommandEvent& event);
+  void OnPaint(wxPaintEvent& event);
 
+private:
   DECLARE_EVENT_TABLE()
 };
 
@@ -73,6 +76,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(MINIMAL_ABOUT, MyFrame::OnAbout)
   EVT_MENU(MINIMAL_TEST, MyFrame::OnPlay)
   EVT_MENU(MINIMAL_OPEN, MyFrame::OnOpen)
+
+  EVT_PAINT(MyFrame::OnPaint)
 END_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
@@ -86,8 +91,14 @@ bool MyApp::OnInit()
   const char *langid = NULL;
   switch ( argc )
   {
-      default:
-          // ignore the other args, fall through
+      case 4:
+          {
+              wxFontEncoding enc = wxTheFontMapper->CharsetToEncoding(argv[3]);
+              if ( enc != wxFONTENCODING_SYSTEM )
+                wxFont::SetDefaultEncoding(enc);
+          }
+
+          // fall through
 
       case 3:
           language = argv[1];
@@ -202,4 +213,12 @@ void MyFrame::OnOpen(wxCommandEvent&)
   // open a bogus file -- the error message should be also translated if you've
   // got wxstd.mo somewhere in the search path
   wxFile file("NOTEXIST.ING");
+}
+
+void MyFrame::OnPaint(wxPaintEvent&)
+{
+    wxPaintDC dc(this);
+    wxFont font(12, wxDEFAULT, wxNORMAL, wxNORMAL);
+    dc.SetFont(font);
+    dc.DrawText(_("International wxWindows App"), 10, 10);
 }
