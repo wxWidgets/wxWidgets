@@ -489,10 +489,9 @@ class wxPythonDemo(wx.Frame):
         # Make a File menu
         self.mainmenu = wx.MenuBar()
         menu = wx.Menu()
-        exitID = wx.NewId()
-        menu.Append(exitID, 'E&xit\tAlt-X', 'Get the heck outta here!')
-        self.Bind(wx.EVT_MENU, self.OnFileExit, id=exitID)
-        wx.App_SetMacExitMenuItemId(exitID)
+        item = menu.Append(-1, 'E&xit\tAlt-X', 'Get the heck outta here!')
+        self.Bind(wx.EVT_MENU, self.OnFileExit, item)
+        wx.App_SetMacExitMenuItemId(item.GetId())
         self.mainmenu.Append(menu, '&File')
 
         # Make a Demo menu
@@ -500,9 +499,8 @@ class wxPythonDemo(wx.Frame):
         for item in _treeList:
             submenu = wx.Menu()
             for childItem in item[1]:
-                mID = wx.NewId()
-                submenu.Append(mID, childItem)
-                self.Bind(wx.EVT_MENU, self.OnDemoMenu, id=mID)
+                mi = submenu.Append(-1, childItem)
+                self.Bind(wx.EVT_MENU, self.OnDemoMenu, mi)
             menu.AppendMenu(wx.NewId(), item[0], submenu)
         self.mainmenu.Append(menu, '&Demo')
 
@@ -512,14 +510,14 @@ class wxPythonDemo(wx.Frame):
         findID = wx.NewId()
         findnextID = wx.NewId()
         menu = wx.Menu()
-        menu.Append(findID, '&Find\tCtrl-F', 'Find in the Demo Code')
-        menu.Append(findnextID, 'Find &Next\tF3', 'Find Next')
+        findItem = menu.Append(-1, '&Find\tCtrl-F', 'Find in the Demo Code')
+        findnextItem = menu.Append(-1, 'Find &Next\tF3', 'Find Next')
         menu.AppendSeparator()
-        menu.Append(helpID, '&About\tCtrl-H', 'wxPython RULES!!!')
-        wx.App_SetMacAboutMenuItemId(helpID)
-        self.Bind(wx.EVT_MENU, self.OnHelpAbout, id=helpID)
-        self.Bind(wx.EVT_MENU, self.OnHelpFind, id=findID)
-        self.Bind(wx.EVT_MENU, self.OnFindNext, id=findnextID)
+        helpItem = menu.Append(-1, '&About\tCtrl-H', 'wxPython RULES!!!')
+        wx.App_SetMacAboutMenuItemId(helpItem.GetId())
+        self.Bind(wx.EVT_MENU, self.OnHelpAbout, helpItem)
+        self.Bind(wx.EVT_MENU, self.OnHelpFind,  findItem)
+        self.Bind(wx.EVT_MENU, self.OnFindNext,  findnextItem)
         self.Bind(wx.EVT_COMMAND_FIND, self.OnFind)
         self.Bind(wx.EVT_COMMAND_FIND_NEXT, self.OnFind)
         self.Bind(wx.EVT_COMMAND_FIND_CLOSE, self.OnFindClose)

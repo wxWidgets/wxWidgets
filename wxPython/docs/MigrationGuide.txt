@@ -107,11 +107,31 @@ Some examples of its use::
 
      self.Bind(wx.EVT_SIZE,   self.OnSize)
      self.Bind(wx.EVT_BUTTON, self.OnButtonClick, theButton)
-     self.Bind(wx.EVT_MENU,   self.OnExit, id=ID_EXIT)
-     
-I hope to be able to remove the need for using IDs even for menu
-events too...
+     self.Bind(wx.EVT_MENU,   self.OnExit, id=wx.ID_EXIT)
 
+
+The wx.Menu methods that add items to a wx.Menu have been modified
+such that they return a reference to the wx.MenuItem that was created.
+Additionally menu items and toolbar items have been modified to
+automatically generate a new ID if -1 is given, similar to using -1
+with window classess.  This means that you can create menu or toolbar
+items and event bindings without having to predefine a unique menu ID,
+although you still can use IDs just like before if you want.  For
+example, these are all equivallent other than ID values::
+
+  1.
+    item = menu.Append(-1, "E&xit", "Terminate the App")
+    self.Bind(wx.EVT_MENU, self.OnExit, item)
+
+  2. 
+    item = menu.Append(wx.ID_EXIT, "E&xit", "Terminate the App")
+    self.Bind(wx.EVT_MENU, self.OnExit, item)
+
+  3. 
+    menu.Append(wx.ID_EXIT, "E&xit", "Terminate the App")
+    self.Bind(wx.EVT_MENU, self.OnExit, id=wx.ID_EXIT)
+
+     
 If you create your own custom event types and EVT_* functions, and you
 want to be able to use them with the Bind method above then you should
 change your EVT_* to be an instance of wxPyEventBinder instead of a
@@ -129,6 +149,8 @@ Change it like so::
 
 The second parameter is an integer in [0, 1, 2] that specifies the
 number of IDs that are needed to be passed to Connect.
+
+
 
 
 
