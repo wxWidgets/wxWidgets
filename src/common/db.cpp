@@ -51,7 +51,6 @@
     #include "wx/ioswrap.h"
 #endif
 
-
 #ifdef    __BORLANDC__
     #pragma hdrstop
 #endif  //__BORLANDC__
@@ -2047,8 +2046,76 @@ wxDbColInf *wxDb::GetColumns(char *tableName, int *numCols, const char* WXUNUSED
 	  return NULL;
 	}
       
+
+      /* 
+	 More info can be found with SQLColAttributes. 
+
+	 columnName and the bufferLength are fetched
+	 again because they are not always properly fetched by SQLDescribeCol (I observed this only with MS odbc drivers
+	 for Access and SQLServer).		 
+	 
+	 */
+
+      SWORD cb;
+      SDWORD value;
+     
+      // Column name
+      if (SQLColAttributes(hstmt,colNum+1, SQL_COLUMN_NAME, (UCHAR*) colInf[colNum].colName, sizeof(colInf[colNum].colName), &cb, &value) != SQL_SUCCESS)
+	  {
+	    DispAllErrors(henv, hdbc, hstmt);
+	    return NULL;
+	  }
+
+      // Buffer length
+      if (SQLColAttributes(hstmt,colNum+1, SQL_COLUMN_LENGTH, NULL,0, &cb, &value) != SQL_SUCCESS)
+	{
+	  DispAllErrors(henv, hdbc, hstmt);
+	  return NULL;
+	}
+      colInf[colNum].bufferLength = value;
+   
       
-      wxStrcpy(colInf[colNum].tableName, tableName);
+      
+      // Column type name
+      if (SQLColAttributes(hstmt,colNum+1, SQL_COLUMN_TYPE_NAME, (UCHAR*) colInf[colNum].typeName, sizeof(colInf[colNum].typeName), &cb, &value) != SQL_SUCCESS)
+	{
+	  DispAllErrors(henv, hdbc, hstmt);
+	  return NULL;
+	}
+       
+ 
+      // table name
+      if (SQLColAttributes(hstmt,colNum+1, SQL_COLUMN_TABLE_NAME, (UCHAR*) colInf[colNum].tableName, sizeof(colInf[colNum].tableName), &cb, &value) != SQL_SUCCESS)
+	{
+	  DispAllErrors(henv, hdbc, hstmt);
+	  return NULL;
+	}
+       
+     
+      
+      // remarks (replaced here by the label)
+      if (SQLColAttributes(hstmt,colNum+1, SQL_COLUMN_LABEL, (UCHAR*) colInf[colNum].remarks, sizeof(colInf[colNum].remarks), &cb, &value) != SQL_SUCCESS)
+	{
+	  DispAllErrors(henv, hdbc, hstmt);
+	  return NULL;
+	}
+
+      // schema
+      if (SQLColAttributes(hstmt,colNum+1, SQL_COLUMN_OWNER_NAME, (UCHAR*) colInf[colNum].schema, sizeof(colInf[colNum].schema), &cb, &value) != SQL_SUCCESS)
+	{
+	  DispAllErrors(henv, hdbc, hstmt);
+	  return NULL;
+	}
+
+      // catalog
+      if (SQLColAttributes(hstmt,colNum+1, SQL_COLUMN_QUALIFIER_NAME, (UCHAR*) colInf[colNum].catalog, sizeof(colInf[colNum].catalog), &cb, &value) != SQL_SUCCESS)
+	{
+	  DispAllErrors(henv, hdbc, hstmt);
+	  return NULL;
+	}
+      
+      
+     
          
       // Get the intern datatype
       switch (colInf[colNum].sqlDataType)
@@ -2056,14 +2123,14 @@ wxDbColInf *wxDb::GetColumns(char *tableName, int *numCols, const char* WXUNUSED
 	case SQL_VARCHAR:
 	case SQL_CHAR:
 	  colInf[colNum].dbDataType = DB_DATA_TYPE_VARCHAR;
-	  wxStrcpy(colInf[colNum].typeName, typeInfVarchar.TypeName);
+	  //wxStrcpy(colInf[colNum].typeName, typeInfVarchar.TypeName);
 	  break;
 	  
 	case SQL_TINYINT:
 	case SQL_SMALLINT:
 	case SQL_INTEGER:
 	  colInf[colNum].dbDataType = DB_DATA_TYPE_INTEGER;
-	  wxStrcpy(colInf[colNum].typeName, typeInfInteger.TypeName);
+	  //wxStrcpy(colInf[colNum].typeName, typeInfInteger.TypeName);
 	  break;
 	case SQL_DOUBLE:
 	case SQL_DECIMAL:
@@ -2071,17 +2138,19 @@ wxDbColInf *wxDb::GetColumns(char *tableName, int *numCols, const char* WXUNUSED
 	case SQL_FLOAT:
         case SQL_REAL:
 	  colInf[colNum].dbDataType = DB_DATA_TYPE_FLOAT;
-	  wxStrcpy(colInf[colNum].typeName, typeInfFloat.TypeName);
+	  //wxStrcpy(colInf[colNum].typeName, typeInfFloat.TypeName);
 	  break;
 	case SQL_DATE:
 	  colInf[colNum].dbDataType = DB_DATA_TYPE_DATE;
-	  wxStrcpy(colInf[colNum].typeName, typeInfDate.TypeName);
+	 // wxStrcpy(colInf[colNum].typeName, typeInfDate.TypeName);
 	  break;
 	  
 	default:
-	  wxString s;
-	  s.sprintf("SQL Data type %d bot supported by wxWindows", colInf[colNum].sqlDataType);
-	  wxMessageBox(wxT(s));
+#ifdef __WXDEBUG__
+	  wxString errMsg;
+	  errMsg.sprintf("SQL Data type %d currently not supported by wxWindows", colInf[colNum].sqlDataType);
+	  wxLogDebug(errMsg,wxT("ODBC DEBUG MESSAGE"));
+#endif	 	 
 	  return NULL;
 	}
     }
