@@ -2,6 +2,7 @@ Makefile.in
 src/regex/Makefile.in
 locale/Makefile
 samples/Makefile.in
+samples/access/Makefile.in
 samples/artprov/Makefile.in
 samples/calendar/Makefile.in
 samples/caret/Makefile.in
@@ -68,6 +69,7 @@ samples/typetest/Makefile.in
 samples/validate/Makefile.in
 samples/wizard/Makefile.in
 samples/dialup/Makefile.in
+samples/display/Makefile.in
 samples/font/Makefile.in
 samples/menu/Makefile.in
 samples/memcheck/Makefile.in

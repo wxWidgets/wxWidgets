@@ -1213,7 +1213,7 @@ inline int NewControlId() { return wxWindowBase::NewControlId(); }
 class WXDLLEXPORT wxWindowAccessible: public wxAccessible
 {
 public:
-    wxWindowAccessible(wxWindow* win): wxAccessible(win) {}
+    wxWindowAccessible(wxWindow* win): wxAccessible(win) { if (win) win->SetAccessible(this); }
     virtual ~wxWindowAccessible() {};
 
 // Overridables

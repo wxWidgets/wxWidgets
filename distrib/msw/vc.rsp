@@ -22,6 +22,9 @@ src/regex/regex.dsw
 
 samples/samples.dsw
 
+samples/access/access.dsp
+samples/access/access.dsw
+
 samples/artprov/artprov.dsp
 samples/artprov/artprov.dsw
 
@@ -56,6 +59,9 @@ samples/dialogs/dialogsUniv.dsw
 
 samples/dialup/dialup.dsp
 samples/dialup/dialup.dsw
+
+samples/display/display.dsp
+samples/display/display.dsw
 
 samples/dnd/dnd.dsp
 samples/dnd/dnd.dsw

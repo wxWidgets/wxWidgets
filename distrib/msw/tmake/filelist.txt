@@ -255,6 +255,7 @@ xpmdecod.cpp	Common
 zipstrm.cpp	Common	Base
 zstream.cpp	Common	Base
 
+access.cpp	MSW
 gsocket.c	MSW	Socket,Base
 gsockmsw.c	MSW	Socket,Base
 accel.cpp	MSW
@@ -754,6 +755,7 @@ htmprint.cpp	HTML
 
 arrimpl.cpp	WXH	Base
 listimpl.cpp	WXH	Base
+access.h	WXH
 accel.h	WXH
 access.h	WXH
 app.h	WXH	Base
@@ -1257,6 +1259,7 @@ region.h	MGLH
 toplevel.h	MGLH
 window.h	MGLH
 
+access.h	MSWH
 accel.h	MSWH
 app.h	MSWH
 bitmap.h	MSWH

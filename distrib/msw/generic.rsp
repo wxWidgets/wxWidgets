@@ -184,15 +184,15 @@ samples/makefile*
 samples/configure
 samples/configure.in
 
-samples/animate/*.cpp
-samples/animate/*.h
-samples/animate/*.def
-samples/animate/makefile*
-samples/animate/*.xbm
-samples/animate/*.xpm
-samples/animate/*.ico
-samples/animate/*.rc
-samples/animate/*.pro
+samples/access/*.cpp
+samples/access/*.h
+samples/access/*.def
+samples/access/makefile*
+samples/access/*.xbm
+samples/access/*.xpm
+samples/access/*.ico
+samples/access/*.rc
+samples/access/*.pro
 
 samples/artprov/*.cpp
 samples/artprov/*.h
@@ -295,6 +295,19 @@ samples/dialup/*.png
 samples/dialup/*.ico
 samples/dialup/*.txt
 samples/dialup/*.pro
+
+samples/display/*.cpp
+samples/display/*.h
+samples/display/makefile*
+samples/display/*.rc
+samples/display/*.def
+samples/display/*.bmp
+samples/display/*.xpm
+samples/display/*.xbm
+samples/display/*.png
+samples/display/*.ico
+samples/display/*.txt
+samples/display/*.pro
 
 samples/db/*.cpp
 samples/db/*.h

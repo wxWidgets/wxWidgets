@@ -92,7 +92,7 @@ wxMSW:
 - fixed wxStaticText best size calculation (was wrong by '&' width)
 - fixed calling wxFrame::Maximize(FALSE) before the window is shown
 
-wxMotif
+wxMotif:
 
 - made wxFileDialog behaviour with complex wildcards more sensible (it still
   does not support all the features other ports do); refer to wxFileDialog
@@ -102,6 +102,11 @@ wxMotif
   xmcombo; xmcombo is still used for Motif 1.x and Lesstif when compiled
   with Motif 1.x compatibility
 - implemented wxToggleButton
+
+wxUniv:
+
+- Controls in toolbars now supported.
+
 
 OLD CHANGES
 ===========
