@@ -113,15 +113,19 @@ public:
   /* may be overridden to react to events */
   virtual void OnEnter();
   virtual void OnLeave();
+  
+  /* may be overridden to reject certain formats or drops
+     on certain areas */
   virtual bool OnMove( int x, int y );
     
-  /* has te be overridden to get data */
+  /* has to be overridden to accept drop. call GetData() to
+     indicate the format you request and get the data. */
   virtual bool OnDrop( int x, int y );
 
-  /* called to query formats available */
+  /* called to query what formats are available */
   bool IsSupported( wxDataFormat format );
   
-  /* fill data with data on the clipboard (if available) */
+  /* fill data with data from the dragging source */
   bool GetData( wxDataObject *data );
 
 // implementation
@@ -129,10 +133,17 @@ public:
   void RegisterWidget( GtkWidget *widget );
   void UnregisterWidget( GtkWidget *widget );
     
-  GdkDragContext *m_dragContext;
+  GdkDragContext     *m_dragContext;
+  GtkWidget          *m_dragWidget;
+  guint               m_dragTime;
+  bool                m_firstMotion;     /* gdk has no "gdk_drag_enter" event */
+  bool                m_waiting;         /* asynchronous process */
+  bool                m_dataRetrieveSuccess;
+  wxDataObject       *m_currentDataObject;
     
   void SetDragContext( GdkDragContext *dc ) { m_dragContext = dc; }
-  GdkDragContext *GetDragContext() { return m_dragContext; }
+  void SetDragWidget( GtkWidget *w ) { m_dragWidget = w; }
+  void SetDragTime( guint time ) { m_dragTime = time; }
 };
 
 //-------------------------------------------------------------------------
@@ -197,6 +208,7 @@ public:
     
   virtual bool OnMove( int x, int y );
   virtual bool OnDrop( int x, int y );
+  virtual void OnData( int x, int y );
   
   /* you have to override OnDropFiles to get at the file names */
   virtual bool OnDropFiles( int x, int y, size_t nFiles, const char * const aszFiles[] ) = 0;

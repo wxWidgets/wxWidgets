@@ -239,7 +239,7 @@ void DnDFrame::OnPaint(wxPaintEvent& /*event*/)
 
   wxPaintDC dc(this);
   dc.SetFont( wxFont( 24, wxDECORATIVE, wxNORMAL, wxNORMAL, FALSE, "charter" ) );
-  dc.DrawText( "Drag text from here!", 20, h-22 );
+  dc.DrawText( "Drag text from here!", 20, h-35 );
 }
 
 void DnDFrame::OnDrag(wxCommandEvent& /* event */)

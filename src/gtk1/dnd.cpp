@@ -135,11 +135,21 @@ static char * page_xpm[] = {
 static void target_drag_leave( GtkWidget *WXUNUSED(widget),
 			       GdkDragContext *context,
 			       guint WXUNUSED(time),
-			       wxDropTarget *dt )
+			       wxDropTarget *drop_target )
 {
-    dt->SetDragContext( context );
-    dt->OnLeave();
-    dt->SetDragContext( (GdkDragContext*) NULL );
+    /* inform the wxDropTarget about the current GdkDragContext.
+       this is only valid for the duration of this call */
+    drop_target->SetDragContext( context );
+    
+    /* we don't need return values. this event is just for
+       information */
+    drop_target->OnLeave();
+    
+    /* this has to be done because GDK has no "drag_enter" event */
+    drop_target->m_firstMotion = TRUE;
+    
+    /* after this, invalidate the drop_target's GdkDragContext */
+    drop_target->SetDragContext( (GdkDragContext*) NULL );
 }
 
 // ----------------------------------------------------------------------------
@@ -151,21 +161,38 @@ static gboolean target_drag_motion( GtkWidget *WXUNUSED(widget),
 			            gint x,
 			            gint y,
 			            guint time,
-			            wxDropTarget *dt )
+			            wxDropTarget *drop_target )
 {
-    dt->SetDragContext( context );
+    /* Owen Taylor: "if the coordinates not in a drop zone,
+       return FALSE, otherwise call gtk_drag_status() and
+       return TRUE" */
+       
+    /* inform the wxDropTarget about the current GdkDragContext.
+       this is only valid for the duration of this call */
+    drop_target->SetDragContext( context );
     
-    if (dt->OnMove( x, y ))
+    if (drop_target->m_firstMotion)
     {
+        /* the first "drag_motion" event substitutes a "drag_enter" event */
+	drop_target->OnEnter();
+    }
+    
+    /* give program a chance to react (i.e. to say no by returning FALSE) */
+    bool ret = drop_target->OnMove( x, y );
+    
+    /* we don't yet handle which "actions" (i.e. copy or move)
+       the target accepts. so far we simply accept the
+       suggested action. TODO. */
+    if (ret)
         gdk_drag_status( context, context->suggested_action, time );
-    }
-    else
-    {
-        gdk_drag_status( context, (GdkDragAction)0, time );
-    }
     
-    dt->SetDragContext( (GdkDragContext*) NULL );
-    return TRUE;
+    /* after this, invalidate the drop_target's GdkDragContext */
+    drop_target->SetDragContext( (GdkDragContext*) NULL );
+    
+    /* this has to be done because GDK has no "drag_enter" event */
+    drop_target->m_firstMotion = FALSE;
+    
+    return ret;
 }
 
 // ----------------------------------------------------------------------------
@@ -176,18 +203,59 @@ static gboolean target_drag_drop( GtkWidget *widget,
 			          GdkDragContext *context,
 			          gint x,
 			          gint y,
-			          guint time )
+			          guint time,
+				  wxDropTarget *drop_target )
 {
-    printf( "drop at: %d,%d.\n", x, y );
+    /* Owen Taylor: "if the drop is not in a drop zone,
+       return FALSE, otherwise, if you aren't accepting
+       the drop, call gtk_drag_finish() with success == FALSE
+       otherwise call gtk_drag_data_get()" */
+       
+    /* this seems to make a difference between not accepting
+       due to wrong target area and due to wrong format. let
+       us hope that this is not required.. */
   
-    if (context->targets)
+    /* inform the wxDropTarget about the current GdkDragContext.
+       this is only valid for the duration of this call */
+    drop_target->SetDragContext( context );
+    
+    /* inform the wxDropTarget about the current drag widget.
+       this is only valid for the duration of this call */
+    drop_target->SetDragWidget( widget );
+    
+    /* inform the wxDropTarget about the current drag time.
+       this is only valid for the duration of this call */
+    drop_target->SetDragTime( time );
+    
+    bool ret = drop_target->OnDrop( x, y );
+    
+    if (ret)
     {
+        /* this should trigger an "drag_data_received" event */
         gtk_drag_get_data( widget, 
 	                   context, 
 		           GPOINTER_TO_INT (context->targets->data), 
 		           time );
     }
-    return FALSE;
+    else
+    {
+        /* cancel the whole thing */
+        gtk_drag_finish( context,
+	                  FALSE,        /* no success */
+			  FALSE,        /* don't delete data on dropping side */
+			  time );
+    }
+    
+    /* after this, invalidate the drop_target's GdkDragContext */
+    drop_target->SetDragContext( (GdkDragContext*) NULL );
+    
+    /* after this, invalidate the drop_target's drag widget */
+    drop_target->SetDragWidget( (GtkWidget*) NULL );
+    
+    /* this has to be done because GDK has no "drag_enter" event */
+    drop_target->m_firstMotion = TRUE;
+    
+    return ret;
 }
 
 // ----------------------------------------------------------------------------
@@ -200,19 +268,53 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
 			               gint y,
 			               GtkSelectionData *data,
 			               guint WXUNUSED(info),
-			               guint time )
+			               guint time,
+				       wxDropTarget *drop_target )
 {
-    printf( "data receive at: %d,%d.\n", x, y );
-  
-    if ((data->length >= 0) && (data->format == 8))
+    /* Owen Taylor: "call gtk_drag_finish() with
+       success == TRUE" */
+
+    /* strangely, we get a "drag_data_received" event even when
+       we don't request them. this checks this. */
+    if (!drop_target->m_currentDataObject) return;
+    
+    wxDataObject *data_object = drop_target->m_currentDataObject;
+
+    if ((data->length <= 0) || (data->format != 8))
     {
-        wxString str = (const char*)data->data;
-        printf( "Received %s\n.", WXSTRINGCAST str );
-        gtk_drag_finish( context, TRUE, FALSE, time );
-        return;
+        /* negative data length and non 8-bit data format
+           qualifies for junk */
+        gtk_drag_finish (context, FALSE, FALSE, time);
     }
-  
-    gtk_drag_finish (context, FALSE, FALSE, time);
+    else
+    {
+        wxASSERT_MSG( data->target ==  data_object->GetFormat().GetAtom(), "DnD GetData target mismatch."  );
+	
+	if (data_object->GetFormat().GetType() == wxDF_TEXT)
+	{
+	    wxTextDataObject *text_object = (wxTextDataObject*)data_object;
+	    text_object->SetText( (const char*)data->data );
+	} else
+	
+	if (data_object->GetFormat().GetType() == wxDF_FILENAME)
+	{
+	} else
+	
+	if (data_object->GetFormat().GetType() == wxDF_PRIVATE)
+	{
+	    wxPrivateDataObject *priv_object = (wxPrivateDataObject*)data_object;
+	    priv_object->SetData( (const char*)data->data, (size_t)data->length );
+	}
+	
+	/* tell wxDropTarget that data transfer was successfull */
+	drop_target->m_dataRetrieveSuccess = TRUE;
+	
+	/* tell GTK that data transfer was successfull */
+        gtk_drag_finish( context, TRUE, FALSE, time );
+    }
+
+    /* tell wxDropTarget that data has arrived (or not) */
+    drop_target->m_waiting = FALSE;
 }
 
 // ----------------------------------------------------------------------------
@@ -221,6 +323,12 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
 
 wxDropTarget::wxDropTarget()
 {
+    m_firstMotion = TRUE;
+    m_dragContext = (GdkDragContext*) NULL;
+    m_dragWidget = (GtkWidget*) NULL;
+    m_dragTime = 0;
+    m_currentDataObject = (wxDataObject*) NULL;
+    m_dataRetrieveSuccess = FALSE;
 }
 
 wxDropTarget::~wxDropTarget()
@@ -235,54 +343,63 @@ void wxDropTarget::OnLeave()
 {
 }
 
-bool wxDropTarget::OnMove( int x, int y )
+bool wxDropTarget::OnMove( int WXUNUSED(x), int WXUNUSED(y) )
 {
-    printf( "generic move %d  %d.\n", x, y );
-    
     return TRUE;
 }
 
-bool wxDropTarget::OnDrop( int x, int y )
+bool wxDropTarget::OnDrop( int WXUNUSED(x), int WXUNUSED(y) )
 {
-    printf( "generic drop %d  %d.\n", x, y );
-    
-    return TRUE;
+    return FALSE;
 }
 
 bool wxDropTarget::IsSupported( wxDataFormat format )
 { 
-    printf( "generic is supported.\n" );
-    
     if (!m_dragContext) return FALSE;
     
     GList *child = m_dragContext->targets;
     while (child)
     {
         GdkAtom formatAtom = (GdkAtom) GPOINTER_TO_INT(child->data);
-        char *name = gdk_atom_name( formatAtom );
-        if (name) printf( "Format available: %s.\n", name );
-
+  
+/*        char *name = gdk_atom_name( formatAtom );
+        if (name) printf( "Format available: %s.\n", name ); */
+  
+        if (formatAtom == format.GetAtom()) return TRUE;
         child = child->next;
     }
-    
- 
-    return TRUE;
+
+    return FALSE;
 }
   
 bool wxDropTarget::GetData( wxDataObject *data )
 {
-    return FALSE;
+    if (!m_dragContext) return FALSE;
+    if (!m_dragWidget) return FALSE;
+    
+    m_currentDataObject = data;
+    m_dataRetrieveSuccess = FALSE;
+    
+    /* this should trigger an "drag_data_received" event */
+    gtk_drag_get_data( m_dragWidget, 
+	               m_dragContext,
+		       data->GetFormat().GetAtom(),
+		       m_dragTime );
+		       
+    /* wait for the "drag_data_received" event */
+    m_waiting = TRUE;
+    while (m_waiting) gtk_main_iteration();
+    
+    m_currentDataObject = (wxDataObject*) NULL;
+    
+    return m_dataRetrieveSuccess;
 }
   
 void wxDropTarget::UnregisterWidget( GtkWidget *widget )
 {
     wxCHECK_RET( widget != NULL, "unregister widget is NULL" );
   
-    gtk_drag_dest_set( widget,
-		     (GtkDestDefaults) 0,
-		     (GtkTargetEntry*) NULL, 
-		     0,
-		     (GdkDragAction) 0 );
+    gtk_drag_dest_unset( widget );
 		     
     gtk_signal_disconnect_by_func( GTK_OBJECT(widget),
 		      GTK_SIGNAL_FUNC(target_drag_leave), (gpointer) this );
@@ -301,18 +418,21 @@ void wxDropTarget::RegisterWidget( GtkWidget *widget )
 {
     wxCHECK_RET( widget != NULL, "register widget is NULL" );
   
-    GtkTargetEntry format;
-    format.info = 0;
-    format.flags = 0;
-    char buf[100];
-    strcpy( buf, "text/plain" );
-    format.target = buf;
+    /* gtk_drag_dest_set() determines what default behaviour we'd like
+       GTK to supply. we don't want to specify out targets (=formats)
+       or actions in advance (i.e. not GTK_DEST_DEFAULT_MOTION and
+       not GTK_DEST_DEFAULT_DROP). instead we react individually to
+       "drag_motion" and "drag_drop" events. this makes it possible
+       to allow dropping on only a small area. we should set 
+       GTK_DEST_DEFAULT_HIGHLIGHT as this will switch on the nice
+       highlighting if dragging over standard controls, but this
+       seems to be broken without the other two. */
   
     gtk_drag_dest_set( widget,
-		     GTK_DEST_DEFAULT_ALL,
-		     &format, 
-		     1,
-		     (GdkDragAction)(GDK_ACTION_COPY | GDK_ACTION_MOVE) ); 
+		       (GtkDestDefaults) 0,         /* no default behaviour */
+		       (GtkTargetEntry*) NULL,      /* we don't supply any formats here */
+		       0,                           /* number of targets = 0 */
+		       (GdkDragAction) 0 );         /* we don't supply any actions here */
 		     
     gtk_signal_connect( GTK_OBJECT(widget), "drag_leave",
 		      GTK_SIGNAL_FUNC(target_drag_leave), (gpointer) this );
@@ -333,21 +453,18 @@ void wxDropTarget::RegisterWidget( GtkWidget *widget )
 
 bool wxTextDropTarget::OnMove( int WXUNUSED(x), int WXUNUSED(y) )
 {
-    printf( "text move.\n" );
-
-    return IsSupported( wxDF_TEXT );  // same as "TEXT"
+    return IsSupported( wxDF_TEXT );  // same as "STRING"
 }
 
 bool wxTextDropTarget::OnDrop( int x, int y )
 {
-    printf( "text drop.\n" );
-
     if (!IsSupported( wxDF_TEXT )) return FALSE;
-
+    
     wxTextDataObject data;
     if (!GetData( &data )) return FALSE;
     
-    return OnDropText( x, y, data.GetText() );
+    OnDropText( x, y, data.GetText() );
+    return TRUE;
 }
 
 //-------------------------------------------------------------------------
@@ -372,11 +489,13 @@ bool wxPrivateDropTarget::OnMove( int WXUNUSED(x), int WXUNUSED(y) )
 bool wxPrivateDropTarget::OnDrop( int x, int y )
 {
     if (!IsSupported( m_id )) return FALSE;
-
+    
     wxPrivateDataObject data;
     if (!GetData( &data )) return FALSE;
     
-    return OnDropData( x, y, data.GetData(), data.GetSize() );
+    OnDropData( x, y, data.GetData(), data.GetSize() );
+    
+    return TRUE;
 }
 
 //----------------------------------------------------------------------------
@@ -390,10 +509,13 @@ bool wxFileDropTarget::OnMove( int WXUNUSED(x), int WXUNUSED(y) )
 
 bool wxFileDropTarget::OnDrop( int x, int y )
 {
-    if (!IsSupported( wxDF_FILENAME )) return FALSE;
-    
+    return IsSupported( wxDF_FILENAME );  // same as "file:ALL"
+}
+
+void wxFileDropTarget::OnData( int x, int y )
+{
     wxFileDataObject data;
-    if (!GetData( &data )) return FALSE;
+    if (!GetData( &data )) return;
 
     /* get number of substrings /root/mytext.txt/0/root/myothertext.txt/0/0 */
     size_t number = 0;
@@ -403,7 +525,7 @@ bool wxFileDropTarget::OnDrop( int x, int y )
     for ( i = 0; i < size; i++)
         if (text[i] == 0) number++;
 
-    if (number == 0) return TRUE;    
+    if (number == 0) return;
     
     char **files = new char*[number];
   
@@ -415,11 +537,9 @@ bool wxFileDropTarget::OnDrop( int x, int y )
         text += len+1;
     }
 
-    bool ret = OnDropFiles( x, y, number, files ); 
+    OnDropFiles( x, y, number, files ); 
   
     free( files );
-  
-    return ret;
 }
 
 //-------------------------------------------------------------------------
