@@ -452,18 +452,10 @@ void wxTextCtrl::WriteText( const wxString &text )
         // After cursor movements, gtk_text_get_point() is wrong by one.
         gtk_text_set_point( GTK_TEXT(m_text), GET_EDITABLE_POS(m_text) );
 
-        // if we have any special style, use it
-        if ( !m_defaultStyle.IsDefault() )
-        {
-            GetInsertionPoint();
-
-            wxGtkTextInsert(m_text, m_defaultStyle, txt, txtlen);
-        }
-        else // no style
-        {
-            gint len = GET_EDITABLE_POS(m_text);
-            gtk_editable_insert_text( GTK_EDITABLE(m_text), txt, txtlen, &len );
-        }
+        // always use m_defaultStyle, even if it is empty as otherwise
+        // resetting the style and appending some more text wouldn't work: if
+        // we don't specify the style explicitly, the old style would be used
+        wxGtkTextInsert(m_text, m_defaultStyle, txt, txtlen);
 
         // Bring editable's cursor back uptodate.
         SET_EDITABLE_POS(m_text, gtk_text_get_point( GTK_TEXT(m_text) ));
