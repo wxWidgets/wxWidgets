@@ -349,7 +349,7 @@ void wxWindowMac::DoGetPosition(int *x, int *y) const
  
     xx = m_x ;
     yy = m_y ;
-    if (GetParent())
+    if (!m_macWindowData && GetParent())
     {
         wxPoint pt(GetParent()->GetClientAreaOrigin());
         xx -= pt.x;
@@ -670,6 +670,7 @@ void wxWindowMac::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     // get the current size and position...
     int currentX, currentY;
     GetPosition(&currentX, &currentY);
+    
     int currentW,currentH;
     GetSize(&currentW, &currentH);
 
