@@ -612,6 +612,13 @@ inline void *wxSetWindowUserData(HWND hwnd, void *data)
 
 #else // __WIN32__
 
+#ifdef __VISUALC__
+    // strangely enough, VC++ 7.1 gives warnings about 32 -> 64 bit conversions
+    // in the functions below, even in spite of the explicit casts
+    #pragma warning(disable:4311)
+    #pragma warning(disable:4312)
+#endif
+
 inline void *wxGetWindowProc(HWND hwnd)
 {
     return (void *)::GetWindowLong(hwnd, GWL_WNDPROC);
@@ -631,6 +638,11 @@ inline void *wxSetWindowUserData(HWND hwnd, void *data)
 {
     return (void *)::SetWindowLong(hwnd, GWL_USERDATA, (LONG)data);
 }
+
+#ifdef __VISUALC__
+    #pragma warning(default:4311)
+    #pragma warning(default:4312)
+#endif
 
 #endif // __WIN64__/__WIN32__
 
