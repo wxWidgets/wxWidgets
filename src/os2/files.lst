@@ -217,7 +217,6 @@ ALL_SOURCES = \
 		os2/menuitem.cpp \
 		os2/metafile.cpp \
 		os2/mimetype.cpp \
-		os2/minifram.cpp \
 		os2/msgdlg.cpp \
 		os2/nativdlg.cpp \
 		os2/notebook.cpp \
@@ -863,7 +862,6 @@ GUIOBJS = \
 		menuitem.o \
 		metafile.o \
 		mimetype.o \
-		minifram.o \
 		msgdlg.o \
 		nativdlg.o \
 		notebook.o \

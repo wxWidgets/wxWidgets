@@ -691,7 +691,6 @@ menu.cpp	OS2
 menuitem.cpp	OS2
 metafile.cpp	OS2
 mimetype.cpp	OS2
-minifram.cpp	OS2
 msgdlg.cpp	OS2
 nativdlg.cpp	OS2
 notebook.cpp	OS2
