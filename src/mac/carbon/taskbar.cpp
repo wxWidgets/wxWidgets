@@ -165,6 +165,9 @@ bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
 	err = SetApplicationDockTileImage(pImage);
 		
 	wxASSERT(err == 0);
+    
+    if (pImage != NULL)
+        CGImageRelease(pImage);
 
         m_iconAdded = true;
 	return true;
