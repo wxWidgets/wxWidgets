@@ -1040,7 +1040,7 @@ wxImageHandler *wxImage::FindHandlerMime( const wxString& mimetype )
 void wxImage::InitStandardHandlers()
 {
     AddHandler(new wxBMPHandler);
-#if !defined(__WXGTK__) && !defined(__WXMOTIF__)
+#if wxUSE_XPM && !defined(__WXGTK__) && !defined(__WXMOTIF__)
     AddHandler(new wxXPMHandler);
 #endif
 }
