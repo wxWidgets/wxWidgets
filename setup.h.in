@@ -664,6 +664,10 @@
  * Use built-in HTML-based help controller
  */
 #define wxUSE_WXHTML_HELP 0
+/*
+ * Use MS HTML Help controller (win32)
+ */
+#define wxUSE_MS_HTML_HELP 0
 
 /*
  * Use iostream.h rather than iostream

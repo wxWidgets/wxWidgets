@@ -686,6 +686,8 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_CONSTRAINTS=no
   DEFAULT_wxUSE_IPC=no
   DEFAULT_wxUSE_HELP=no
+  DEFAULT_wxUSE_MS_HTML_HELP=no
+  
   DEFAULT_wxUSE_WXHTML_HELP=no
   DEFAULT_wxUSE_WXTREE=no
   DEFAULT_wxUSE_METAFILE=no
@@ -840,6 +842,7 @@ else
   DEFAULT_wxUSE_CONSTRAINTS=yes
   DEFAULT_wxUSE_IPC=yes
   DEFAULT_wxUSE_HELP=yes
+  DEFAULT_wxUSE_MS_HTML_HELP=yes
   DEFAULT_wxUSE_WXHTML_HELP=yes
   DEFAULT_wxUSE_WXTREE=yes
   DEFAULT_wxUSE_METAFILE=yes
@@ -1067,6 +1070,7 @@ dnl ---------------------------------------------------------------------------
 
 WX_ARG_ENABLE(docview,     [  --enable-docview        use document view architecture], wxUSE_DOC_VIEW_ARCHITECTURE)
 WX_ARG_ENABLE(help,        [  --enable-help           use help subsystem], wxUSE_HELP)
+WX_ARG_ENABLE(mshtmlhelp,  [  --enable-mshtmlhelp     use MS HTML Help (win32)], wxUSE_MS_HTML_HELP)
 WX_ARG_ENABLE(html,        [  --enable-html           use wxHTML sub-library], wxUSE_HTML)
 WX_ARG_ENABLE(htmlhelp,    [  --enable-htmlhelp       use wxHTML-based help], wxUSE_WXHTML_HELP)
 WX_ARG_ENABLE(constraints, [  --enable-constraints    use layout-constraints system], wxUSE_CONSTRAINTS)
@@ -1585,23 +1589,11 @@ if test "$wxUSE_GUI" = "yes"; then
     WXWINE=
 
     if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
-        if test "$cross_compiling" = "yes" ; then
-            dnl mingw32 will find them even if they're not in one of standard paths
-            AC_MSG_WARN(skipping windows.h check for cross-compilation)
-        else
-            AC_MSG_CHECKING(for Windows headers)
-            WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, windows.h)
-            if test "$ac_find_includes" != "" ; then
-                AC_MSG_RESULT(found $ac_find_includes)
-                TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE -I$ac_find_includes"
-            else
-                AC_MSG_RESULT(no)
+        AC_CHECK_HEADER(windows.h, [], 
+            [
                 AC_MSG_ERROR(please set CFLAGS to contain the location of windows.h)
-            fi
-        fi
+            ])
         
-        AC_CHECK_HEADERS(w32api.h)
-
         INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS msw"
         dnl --- Quick & Dirty ; link against most/all libraries
         dnl --- This will bloat the executable, but it'll work for now...
@@ -2372,6 +2364,10 @@ if test "$wxUSE_GUI" = "yes"; then
         dnl defines HAVE_X11_XKBLIB_H
         AC_CHECK_HEADERS(X11/XKBlib.h)
     fi
+fi
+
+if test "$USE_WIN32" = 1; then
+    AC_CHECK_HEADERS(w32api.h)
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -3873,8 +3869,18 @@ if test "$wxUSE_HELP" = "yes"; then
     AC_DEFINE(wxUSE_HELP)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS help"
 
-    if test "$wxUSE_WXHTML_HELP" = "yes"; then
+    if test "$USE_WIN32" = 1; then
+      if test "$wxUSE_WXHTML_HELP" = "yes"; then
         AC_DEFINE(wxUSE_WXHTML_HELP)
+        AC_CHECK_HEADER(htmlhelp.h, 
+            [
+                AC_DEFINE(wxUSE_MS_HTML_HELP)
+            ],
+            [
+                AC_MSG_WARN(MS HTML Help cannot be used without htmlhelp.h so it won't be compiled without it)
+                wxUSE_MS_HTML_HELP=no
+            ])
+      fi
     fi
 fi
 
