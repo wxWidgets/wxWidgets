@@ -1622,7 +1622,7 @@ struct WXDLLEXPORT wxWindowNext
     wxWindowNext *next;
 } *wxWindow::ms_winCaptureNext = NULL;
 
-void wxWindow::CaptureMouse()
+void wxWindowBase::CaptureMouse()
 {
     wxLogTrace(_T("mousecapture"), _T("CaptureMouse(0x%08x)"), this);
 
@@ -1640,7 +1640,7 @@ void wxWindow::CaptureMouse()
     DoCaptureMouse();
 }
 
-void wxWindow::ReleaseMouse()
+void wxWindowBase::ReleaseMouse()
 {
     DoReleaseMouse();
 

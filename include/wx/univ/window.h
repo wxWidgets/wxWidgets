@@ -268,9 +268,6 @@ private:
     wxScrollBar *m_scrollbarHorz,
                 *m_scrollbarVert;
 
-    // the stack of windows which have captured the mouse
-    static struct WXDLLEXPORT wxWindowNext *ms_winCaptureNext;
-
 #if wxUSE_MENUS
     // the current modal event loop for the popup menu we show or NULL
     static wxEventLoop *ms_evtLoopPopup;
