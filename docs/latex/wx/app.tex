@@ -104,6 +104,15 @@ had been already processed (for the former return value) or that it is not
 going to be processed at all (for the latter one).
 
 
+\membersection{wxApp::ExitMainLoop}\label{wxappexitmainloop}
+
+\func{virtual void}{ExitMainLoop}{\void}
+
+Call this to explicitly exit the main message (event) loop.
+You should normally exit the main loop (and the application) by deleting
+the top window.
+
+
 \membersection{wxApp::GetAppName}\label{wxappgetappname}
 
 \constfunc{wxString}{GetAppName}{\void}
@@ -187,13 +196,15 @@ different visuals, false otherwise.
 Returns the application's vendor name.
 
 
-\membersection{wxApp::ExitMainLoop}\label{wxappexitmainloop}
+\membersection{wxApp::IsActive}\label{wxappisactive}
 
-\func{virtual void}{ExitMainLoop}{\void}
+\constfunc{bool}{IsActive}{\void}
 
-Call this to explicitly exit the main message (event) loop.
-You should normally exit the main loop (and the application) by deleting
-the top window.
+Returns \true if the application is active, i.e. if one of its windows is
+currently in the foreground. If this function returns \false and you need to
+attract users attention to the application, you may use 
+\helpref{wxTopLevelWindow::RequestUserAttention}{wxtoplevelwindowrequestuserattention} 
+to do it.
 
 
 \membersection{wxApp::MainLoop}\label{wxappmainloop}
