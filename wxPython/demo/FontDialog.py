@@ -1,7 +1,3 @@
-# 11/18/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 
@@ -16,8 +12,6 @@ class TestPanel(wx.Panel):
         self.Bind(wx.EVT_BUTTON, self.OnSelectFont, btn)
 
         self.sampleText = wx.TextCtrl(self, -1, "Sample Text")
-        #from wxPython.lib.stattext import wxGenStaticText
-        #self.sampleText = wxGenStaticText(self, -1, "Sample Text")
 
         self.curFont = self.sampleText.GetFont()
         self.curClr = wx.BLACK

@@ -1,7 +1,3 @@
-# 11/15/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 
@@ -14,11 +10,10 @@ class TestCheckBox(wx.Panel):
 
         wx.StaticText(self, -1, "This example uses the wxCheckBox control.", (10, 10))
 
-        cID = wx.NewId()
-        cb1 = wx.CheckBox(self, cID,   "  Apples", (65, 40), (150, 20), wx.NO_BORDER)
-        cb2 = wx.CheckBox(self, cID+1, "  Oranges", (65, 60), (150, 20), wx.NO_BORDER)
+        cb1 = wx.CheckBox(self, -1, "  Apples", (65, 40), (150, 20), wx.NO_BORDER)
+        cb2 = wx.CheckBox(self, -1, "  Oranges", (65, 60), (150, 20), wx.NO_BORDER)
         cb2.SetValue(True)
-        cb3 = wx.CheckBox(self, cID+2, "  Pears", (65, 80), (150, 20), wx.NO_BORDER)
+        cb3 = wx.CheckBox(self, -1, "  Pears", (65, 80), (150, 20), wx.NO_BORDER)
 
         self.Bind(wx.EVT_CHECKBOX, self.EvtCheckBox, cb1)
         self.Bind(wx.EVT_CHECKBOX, self.EvtCheckBox, cb2)
@@ -36,15 +31,13 @@ def runTest(frame, nb, log):
 #---------------------------------------------------------------------------
 
 
-
-
-
 overview = """\
-A checkbox is a labelled box which is either on (checkmark is visible) or off (no checkmark).
+A checkbox is a labelled box which is either on (checkmark is visible) or off 
+(no checkmark).
 
 """
 
-
+#---------------------------------------------------------------------------
 
 if __name__ == '__main__':
     import sys,os

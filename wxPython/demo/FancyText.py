@@ -1,18 +1,3 @@
-# 11/5/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated to wx namespace
-#
-# 11/25/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Issues previously noted have evaporated.
-# o Hoo boy, the doc string in the lib needs fixed :-)
-#
-# 12/02/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Making the library's doc string acceptable for the overview rendered
-#   it unusable in the library's own test code, so I copied it over
-#   and massaged the XML into useful HTML. 
-#
   
 import  wx
 import  wx.lib.fancytext as fancytext

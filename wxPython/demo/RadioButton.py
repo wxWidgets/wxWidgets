@@ -1,7 +1,3 @@
-# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 
@@ -114,9 +110,9 @@ overview = """\
 This demo shows how individual radio buttons can be used to build
 more complicated selection mechanisms...
 <P>
-It uses 2 groups of wxRadioButtons, where the groups are defined by
-instantiation.  When a wxRadioButton is created with the <I>wxRB_GROUP</I>
-style, all subsequent wxRadioButtons created without it are implicitly
+It uses 2 groups of wx.RadioButtons, where the groups are defined by
+instantiation.  When a wx.RadioButton is created with the <I>wx.RB_GROUP</I>
+style, all subsequent wx.RadioButtons created without it are implicitly
 added to that group by the framework.
 </body></html>
 """

@@ -1,7 +1,3 @@
-# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 #---------------------------------------------------------------------------
@@ -29,9 +25,9 @@ def runTest(frame, nb, log):
 
 overview = """\
 This class represents the print and print setup common dialogs. You may obtain 
-a wxPrinterDC device context from a successfully dismissed print dialog.
+a wx.PrinterDC device context from a successfully dismissed print dialog.
 
-User information is stored in a wxPrintDialogData object that is passed to the
+User information is stored in a wx.PrintDialogData object that is passed to the
 dialog at creation time, and it is filled in by the user. As with other dialogs,
 do not use this data once the dialog is dismissed, and do not destroy the dialog
 until you have everything you need from it.

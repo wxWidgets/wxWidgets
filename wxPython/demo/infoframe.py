@@ -1,13 +1,3 @@
-# 11/12/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# o wx module doesn't like the doc string.
-#
-# 11/25/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Library didn't get hit by the wx renamer.
-# o Docstring issues resolved.
-#
 
 import  sys
 

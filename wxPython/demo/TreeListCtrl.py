@@ -1,7 +1,3 @@
-# 11/22/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 import  wx.gizmos   as  gizmos
@@ -104,9 +100,9 @@ def runTest(frame, nb, log):
 
 
 overview = """<html><body>
-<h2><center>wxTreeListCtrl</center></h2>
+<h2><center>TreeListCtrl</center></h2>
 
-The wx.TreeListCtrl is essentially a wx.TreeCtrl with extra columns,
+The TreeListCtrl is essentially a wx.TreeCtrl with extra columns,
 such that the look is similar to a wx.ListCtrl.
 
 </body></html>

@@ -1,13 +1,3 @@
-# 11/5/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# o Replaced all calls to deprecated whrandom module with up to date random calls.
-#   See Python docs regarding whrandom for details.
-#
-# 11/25/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o New binding
-#
 
 import  random
 import  time

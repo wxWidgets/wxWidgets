@@ -1,8 +1,3 @@
-# 11/13/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# o Issues exist that will probably need to be addressed in the 2.5 build.
-#
 # 11/26/2003 - Jeff Grimmett (grimmtooth@softhome.net)
 #
 # o Had to do a bit of rework for the demo; there was no panel attached

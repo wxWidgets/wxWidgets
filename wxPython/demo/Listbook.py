@@ -1,19 +1,10 @@
-# 11/22/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
-# 11/29/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Bunches of imports that might need to go away for the final roll-out.
-# 
 
 import  sys
 
 import  wx
 
-import images
-
 import ColorPanel
+import images
 
 colourList = [ "Aquamarine", "Black", "Blue", "Blue Violet", "Brown", "Cadet Blue",
                "Coral", "Cornflower Blue", "Cyan", "Dark Grey", "Dark Green",
@@ -112,10 +103,10 @@ def runTest(frame, nb, log):
 
 overview = """\
 <html><body>
-<h2>wxListbook</h2>
+<h2>wx.Listbook</h2>
 <p>
 This class is a control similar to a notebook control, but with a
-wxListCtrl instead of a set of tabs.
+wx.ListCtrl instead of a set of tabs.
 
 """
 

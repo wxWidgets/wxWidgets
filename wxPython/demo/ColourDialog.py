@@ -1,7 +1,3 @@
-# 11/15/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 
@@ -43,12 +39,12 @@ to suit your needs. In the example, we set the dialog up to show the extended co
 data selection pane. Otherwise, only the more compact and less extensive colour 
 dialog is shown.  You may also preset the colour as well as other items. 
 
-If the user selects something and selects OK, then the wxColourData instance contains
+If the user selects something and selects OK, then the wx.ColourData instance contains
 the colour data that the user selected. Before destroying the dialog, retrieve the data.
 <b>Do not try to retain the wx.ColourData instance.</b> It will probably not be valid
 after the dialog is destroyed.
 
-Along with he wxColourDialog documentation, see also the wx.ColourData documentation 
+Along with he wx.ColourDialog documentation, see also the wx.ColourData documentation 
 for details.
 """
 

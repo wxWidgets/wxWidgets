@@ -1,7 +1,3 @@
-# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 
@@ -13,7 +9,7 @@ class TestPanel(wx.Panel):
         self.log = log
         self.count = 0
 
-        wx.StaticText(self, -1, "This is a wxSlider.", (45, 15))
+        wx.StaticText(self, -1, "This is a wx.Slider.", (45, 15))
 
         slider = wx.Slider(
             self, 100, 25, 1, 100, (30, 60), (250, -1), 

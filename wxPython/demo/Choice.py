@@ -1,7 +1,3 @@
-# 11/15/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 
@@ -49,8 +45,6 @@ Note that the syntax of the constructor is different than the C++ implementation
 The number of choices and the choice array are consilidated into one python 
 <code>list</code>.
 """
-
-
 
 
 if __name__ == '__main__':

@@ -1,7 +1,3 @@
-# 11/17/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  os
 import  wx
@@ -9,7 +5,7 @@ import  wx
 #---------------------------------------------------------------------------
 
 # This is how you pre-establish a file filter so that the dialog
-# only shows the extention(s) you want it to.
+# only shows the extension(s) you want it to.
 wildcard = "Python source (*.py)|*.py|" \
            "Compiled Python (*.pyc)|*.pyc|" \
            "All files (*.*)|*.*"

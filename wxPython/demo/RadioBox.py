@@ -1,7 +1,3 @@
-# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 
@@ -26,7 +22,7 @@ class TestRadioBox(wx.Panel):
         self.Bind(wx.EVT_RADIOBOX, self.EvtRadioBox, rb)
         #rb.SetBackgroundColour(wx.BLUE)
         rb.SetToolTip(wx.ToolTip("This is a ToolTip!"))
-        #rb.SetLabel("wxRadioBox")
+        #rb.SetLabel("wx.RadioBox")
 
         sizer.Add(rb, 0, wx.ALL, 20)
 
@@ -46,10 +42,6 @@ class TestRadioBox(wx.Panel):
     def EvtRadioBox(self, event):
         self.log.WriteText('EvtRadioBox: %d\n' % event.GetInt())
 
-# Doesn't appear to be used for anything.
-#    def EvtRadioButton(self, event):
-#        self.log.write('EvtRadioButton:%d\n' % event.GetId())
-
 #---------------------------------------------------------------------------
 
 def runTest(frame, nb, log):
@@ -59,9 +51,10 @@ def runTest(frame, nb, log):
 
 
 overview = """\
-A radio box item is used to select one of number of mutually exclusive
+A RadioBox is used to select one of a number of mutually exclusive
 choices.  It is displayed as a vertical column or horizontal row of
-labelled buttons.
+labelled buttons, surrounded by a box that can optionally have a 
+label.
 
 """
 

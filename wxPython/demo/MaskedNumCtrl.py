@@ -1,19 +1,3 @@
-# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
-# 11/29/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o wx.lib.maskednumctrl needs hit up with the renamer and new binders
-# 
-# 12/09/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Issues with lib corrected.
-# 
-# 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o wxMaskedNumCtrl -> MaskedNumCtrl
-# 
 
 import  string
 import  sys

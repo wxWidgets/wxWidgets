@@ -1,9 +1,3 @@
-# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# o Removed the USE_GENERIC code because it doesn't work unless you use
-#   the 'from wx import *' methodology.
-#
 
 import  wx
 
@@ -14,7 +8,7 @@ class TestPanel(wx.Panel):
         wx.Panel.__init__(self, parent, -1)
 
         wx.StaticText(self, -1, "This is an example of static text", (20, 10))
-        wx.StaticText(self, -1, "using the wxStaticText Control.", (20, 30))
+        wx.StaticText(self, -1, "using the wx.StaticText Control.", (20, 30))
 
         wx.StaticText(
             self, -1, "Is this yellow?", (20, 70), (90, -1)
@@ -34,7 +28,7 @@ class TestPanel(wx.Panel):
         text.SetFont(font)
         #text.SetSize(text.GetBestSize())
 
-        wx.StaticText(self, -1, "Multi-line wxStaticText\nline 2\nline 3\n\nafter empty line", (20,150))
+        wx.StaticText(self, -1, "Multi-line wx.StaticText\nline 2\nline 3\n\nafter empty line", (20,150))
         wx.StaticText(self, -1, "Align right multi-line\nline 2\nline 3\n\nafter empty line", (220,150), style=wx.ALIGN_RIGHT)
 
 
@@ -49,7 +43,7 @@ def runTest(frame, nb, log):
 
 
 overview = '''\
-A static text control displays one or more lines of read-only text.
+A StaticText control displays one or more lines of read-only text.
 
 '''
 

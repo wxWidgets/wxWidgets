@@ -196,9 +196,9 @@ def runTest(frame, nb, log):
 
 overview = """\
 <html><body>
-<h2>wxIEHtmlWin</h2>
+<h2>wx.IEHtmlWin</h2>
 
-The wxIEHtmlWin class is the first example of using a contributed
+The wx.IEHtmlWin class is the first example of using a contributed
 wxActiveX class in wxWindows C++.  It is still experimental, but
 I think it is useful.
 

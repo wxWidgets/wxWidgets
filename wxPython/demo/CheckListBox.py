@@ -1,8 +1,3 @@
-# 11/15/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# o Why is there a popup menu in this demo?
-#
 
 import  wx
 
@@ -19,15 +14,15 @@ class TestPanel(wx.Panel):
 
         wx.StaticText(self, -1, "This example uses the wxCheckListBox control.", (45, 15))
 
-        lb = wx.CheckListBox(self, 60, (80, 50), (80, 120), sampleList)
-        self.Bind(wx.EVT_LISTBOX, self.EvtListBox, id=60)
-        self.Bind(wx.EVT_LISTBOX_DCLICK, self.EvtListBoxDClick, id=60)
+        lb = wx.CheckListBox(self, -1, (80, 50), (80, 120), sampleList)
+        self.Bind(wx.EVT_LISTBOX, self.EvtListBox, lb)
+        self.Bind(wx.EVT_LISTBOX_DCLICK, self.EvtListBoxDClick, lb)
         lb.SetSelection(0)
         self.lb = lb
 
         pos = lb.GetPosition().x + lb.GetSize().width + 25
         btn = wx.Button(self, -1, "Test SetString", (pos, 50))
-        self.Bind(wx.EVT_BUTTON, self.OnTestButton, id=btn.GetId())
+        self.Bind(wx.EVT_BUTTON, self.OnTestButton, btn)
         self.Bind(wx.EVT_RIGHT_UP, self.OnDoPopup)
 
     def EvtListBox(self, event):

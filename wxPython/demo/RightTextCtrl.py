@@ -1,28 +1,11 @@
-# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
-# 11/30/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o The rightalign library needs converted for this to work correctly.
-# 
-# 12/11/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o All issues resolved.
-# 
-# 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o wxRightTextCtrl -> RightTextCtrl
-#
-
-############################################################################\
-# Note: this demo has been converted, but the control is deprecated because |
-# wx.TextCtrl now supports the wx.TE_RIGHT style flag, which makes this     |
-# control completely superfluous.                                           |
-############################################################################/
+#####################################################################\
+# Note: This control is deprecated because wx.TextCtrl now supports  |
+# the wx.TE_RIGHT style flag, which makes this control completely    |
+# superfluous.                                                       |
+#####################################################################/
 
 import  wx
-import  wx.lib.rightalign   as right
+import  wx.lib.rightalign as right
 
 #----------------------------------------------------------------------
 

@@ -1,13 +1,3 @@
-# 11/22/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# o There are issues using the wx namespace within the xrc code.
-#
-# 11/30/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Error report: "Error: No handler found for XML node 'object', 
-#   class 'wx.StaticText'!"; no text shows on panel.
-#
 
 import  wx
 import  wx.xrc  as  xrc
@@ -21,7 +11,7 @@ resourceText = r'''<?xml version="1.0"?>
 
 <object class="MyBluePanel" name="MyPanel">
     <size>200,100</size>
-    <object class="wx.StaticText" name="label1">
+    <object class="wxStaticText" name="label1">
         <label>This blue panel is a class derived from wx.Panel,\nand is loaded by a custom XmlResourceHandler.</label>
         <pos>10,10</pos>
     </object>
@@ -177,9 +167,9 @@ def runTest(frame, nb, log):
 
 
 overview = """<html><body>
-<h2><center>wxXmlResourceHandler</center></h2>
+<h2><center>wx.XmlResourceHandler</center></h2>
 
-Deriving a class from wxXmlResourceHandler allows you to specify your
+Deriving a class from wx.XmlResourceHandler allows you to specify your
 own classes in XRC resources, and your handler class will then be used
 to create instances of that class when the resource is loaded.
 

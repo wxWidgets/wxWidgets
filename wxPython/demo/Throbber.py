@@ -1,13 +1,5 @@
-#
-# Throbber.py - Cliff Wells <clifford.wells@attbi.com>
-#
-# 11/23/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
-import  wx.lib.rcsizer  as  rcs
 import  wx.lib.throbber as  throb
 
 import throbImages # this was created using a modified version of img2py
@@ -87,37 +79,34 @@ class TestPanel(wx.Panel):
         self.otherThrobber.Bind(wx.EVT_LEFT_DOWN, self.OnClickThrobber)
 
         box = wx.BoxSizer(wx.VERTICAL)
-        sizer = rcs.RowColSizer()
+        sizer = wx.GridBagSizer()
         box.Add(sizer, 1, wx.EXPAND|wx.ALL, 5)
         sizer.AddGrowableCol(1)
 
-        sizer.Add(
-            self.otherThrobber, row = 0, col = 2, rowspan = 4, 
-            flag = wx.ALIGN_CENTER_VERTICAL
-            )
+        sizer.Add(self.otherThrobber, (0, 2), (4, 1),flag = wx.ALIGN_CENTER_VERTICAL)
 
         row = 2
 
         # use a list so we can keep our order
         for t in ['plain', 'reverse', 'autoreverse', 'label', 'overlay', 'overlay+text']:
             sizer.Add(
-                self.throbbers[t]['throbber'], row = row, col = 0, 
+                self.throbbers[t]['throbber'], (row, 0), (1, 1), 
                 flag = wx.ALIGN_CENTER|wx.ALL, border=2
                 )
 
             sizer.Add(
                 wx.StaticText(self, -1, self.throbbers[t]['text']), 
-                row = row, col = 1, flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT
+                (row, 1), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT
                 )
 
             row += 1
 
         # start and stop buttons
         startButton = wx.Button(self, -1, "Start")
-        self.Bind(wx.EVT_BUTTON, self.OnStartAnimation, id=startButton.GetId())
+        self.Bind(wx.EVT_BUTTON, self.OnStartAnimation, startButton)
 
         stopButton = wx.Button(self, -1, "Stop")
-        self.Bind(wx.EVT_BUTTON, self.OnStopAnimation, id=stopButton.GetId())
+        self.Bind(wx.EVT_BUTTON, self.OnStopAnimation, stopButton)
 
         buttonBox = wx.BoxSizer(wx.HORIZONTAL)
         buttonBox.AddMany([
@@ -125,12 +114,9 @@ class TestPanel(wx.Panel):
             (stopButton, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALL, 5),
             ])
 
-        sizer.Add(buttonBox,
-                  row = len(self.throbbers) + 3,
-                  col = 0,
-                  colspan = 3,
-                  flag = wx.ALIGN_CENTER
-                  )
+        sizer.Add(
+            buttonBox, (len(self.throbbers) + 3, 0), (1, 3), flag = wx.ALIGN_CENTER
+            )
 
         self.SetSizer(box)
         self.SetAutoLayout(True)

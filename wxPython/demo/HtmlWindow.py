@@ -1,15 +1,3 @@
-# 11/18/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
-# 12/13/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o got the wxpTag stuff working right.
-# 
-# 12/18/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o wxScrolledMessageDialog -> ScrolledMessageDialog
-# 
 
 import  os
 import  sys
@@ -211,9 +199,9 @@ def runTest(frame, nb, log):
 
 
 overview = """<html><body>
-<h2>wxHtmlWindow</h2>
+<h2>wx.HtmlWindow</h2>
 
-<p>wxHtmlWindow is capable of parsing and rendering most
+<p>wx.HtmlWindow is capable of parsing and rendering most
 simple HTML tags.
 
 <p>It is not intended to be a high-end HTML browser.  If you're

@@ -1,7 +1,3 @@
-# 11/15/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o New demo
-#
 
 import  wx
 import  wx.lib.plot

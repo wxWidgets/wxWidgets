@@ -1,15 +1,3 @@
-# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
-# 11/30/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Is it just me or are the graphics for the control not lining up right?
-# 
-# 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o wxPopupControl -> PopupControl
-#
 
 import  wx
 import  wx.lib.popupctl as  pop
@@ -89,12 +77,12 @@ overview = """<html><body>
 <h2><center>PopupControl</center></h2>
 
 PopupControl is a class that can display a value and has a button
-that will popup another window similar to how a wxComboBox works.  The
+that will popup another window similar to how a wx.ComboBox works.  The
 popup window can contain whatever is needed to edit the value.  This
-example uses a wxCalendarCtrl.
+example uses a wx.CalendarCtrl.
 
-<p>Currently a wxDialog is used for the popup.  Eventually a
-wxPopupWindow should be used...
+<p>Currently a wx.Dialog is used for the popup.  Eventually a
+wx.PopupWindow should be used...
 
 </body></html>
 """

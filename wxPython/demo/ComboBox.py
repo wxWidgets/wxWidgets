@@ -1,7 +1,3 @@
-# 11/15/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 
@@ -24,7 +20,7 @@ class TestComboBox(wx.Panel):
                       #'this is a long item that needs a scrollbar...',
                       'six', 'seven', 'eight']
 
-        wx.StaticText(self, -1, "This example uses the wxComboBox control.", (8, 10))
+        wx.StaticText(self, -1, "This example uses the wx.ComboBox control.", (8, 10))
         wx.StaticText(self, -1, "Select one:", (15, 50), (75, 18))
 
         # This combobox is created with a preset list of values.
@@ -32,11 +28,6 @@ class TestComboBox(wx.Panel):
             self, 500, "default value", (90, 50), 
             (95, -1), sampleList, wx.CB_DROPDOWN #|wxTE_PROCESS_ENTER
             )
-
-        ##import win32api, win32con
-        ##win32api.SendMessage(cb.GetHandle(),
-        ##                     win32con.CB_SETHORIZONTALEXTENT,
-	##                     200, 0)
 
         self.Bind(wx.EVT_COMBOBOX, self.EvtComboBox, cb)
         self.Bind(wx.EVT_TEXT, self.EvtText, cb)
@@ -85,7 +76,6 @@ def runTest(frame, nb, log):
 #---------------------------------------------------------------------------
 
 
-
 overview = """\
 A ComboBox is like a combination of an edit control and a listbox. It can be 
 displayed as static list with editable or read-only text field; or a drop-down 
@@ -107,6 +97,8 @@ processed by the program. EVT_TEXT can also be processed, but in that case the
 event is generated every time that the user hits a key in the ComboBox entry field.
 
 """
+
+#---------------------------------------------------------------------------
 
 if __name__ == '__main__':
     import sys,os

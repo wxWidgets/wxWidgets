@@ -1,8 +1,3 @@
-# 11/25/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for V2.5
-# o There is one wx.Size() I haven't figured out how to get rid of yet.
-#
 
 import  random
 

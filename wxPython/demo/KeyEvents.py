@@ -1,15 +1,3 @@
-# 11/19/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
-# 11/29/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o lib.mixins.listctrl needs wx renamer applied.
-# 
-# 12/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o wxListCtrlAutoWidthMixin -> ListCtrlAutoWidthMixin 
-#
 
 import  wx
 import  wx.lib.mixins.listctrl  as  listmix

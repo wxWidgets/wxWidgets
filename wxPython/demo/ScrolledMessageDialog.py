@@ -1,19 +1,3 @@
-# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
-# 11/30/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o dialogs library needs updated to wx
-# 
-# 12/01/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o dialogs library converted. All is well.
-# 
-# 12/18/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o wxScrolledMessageDialog -> ScrolledMessageDialog
-# 
 
 import  wx
 import  wx.lib.dialogs

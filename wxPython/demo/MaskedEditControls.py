@@ -1,25 +1,3 @@
-# 11/23/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
-# 11/26/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o the three libraries below all have not been hit by the 
-#   wx renamer.
-# 
-# 12/09/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o A few changes to correct my own mistakes earlier :-).
-# 
-# 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o wxMaskedTextCtrl -> MaskedTextCtrl
-# o wxMaskedComboBox -> MaskedComboBox
-# o wxIpAddrCtrl -> IpAddrCtrl
-# o wxMaskedNumCtrl -> MaskedNumCtrl
-# o wxTimeCtrl -> TimeCtrl
-# o wxScrolledPanel -> ScrolledPanel
-#
 
 import  string
 import  sys

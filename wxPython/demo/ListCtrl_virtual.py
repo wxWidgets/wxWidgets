@@ -1,11 +1,3 @@
-# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
-# 11/29/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o wx.ListItem.GetText() returns a wxString pointer, not the text.
-# 
 
 import  wx
 import  images

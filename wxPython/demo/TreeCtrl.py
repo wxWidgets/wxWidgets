@@ -1,7 +1,3 @@
-# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  string
 import  wx
@@ -191,9 +187,9 @@ def runTest(frame, nb, log):
 
 
 overview = """\
-A tree control presents information as a hierarchy, with items that may be 
+A TreeCtrl presents information as a hierarchy, with items that may be 
 expanded to show further items. Items in a tree control are referenced by 
-wxTreeItemId handles.
+wx.TreeItemId handles.
 
 """
 

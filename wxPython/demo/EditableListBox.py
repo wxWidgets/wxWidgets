@@ -1,8 +1,3 @@
-# 11/17/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# o Added overview text based on source code delving.
-#
 
 import  wx
 import  wx.gizmos   as  gizmos

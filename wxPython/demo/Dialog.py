@@ -1,7 +1,3 @@
-# 11/15/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 
@@ -19,7 +15,7 @@ class TestDialog(wx.Dialog):
             style=wx.DEFAULT_DIALOG_STYLE
             ):
 
-        # Instead of calling wxDialog.__init__ we precreate the dialog
+        # Instead of calling wx.Dialog.__init__ we precreate the dialog
         # so we can set an extra style that must be set before
         # creation, and then we create the GUI dialog using the Create
         # method.
@@ -36,7 +32,7 @@ class TestDialog(wx.Dialog):
         # contents
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        label = wx.StaticText(self, -1, "This is a wxDialog")
+        label = wx.StaticText(self, -1, "This is a wx.Dialog")
         label.SetHelpText("This is the help text for the label")
         sizer.Add(label, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
 

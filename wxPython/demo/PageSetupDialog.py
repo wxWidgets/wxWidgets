@@ -1,7 +1,3 @@
-# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 
@@ -37,12 +33,12 @@ The page setup dialog contains controls for paper size (A4, A5 etc.), orientatio
 (landscape or portrait), and controls for setting left, top, right and bottom margin 
 sizes in millimetres.
 
-When the dialog has been closed, you need to query the <code>wxPageSetupDialogData</code> object 
+When the dialog has been closed, you need to query the <code>wx.PageSetupDialogData</code> object 
 associated with the dialog.
 
 Note that the OK and Cancel buttons do not destroy the dialog; this must be done by 
 the application. As with other dialogs, do not destroy the dialog until you are done
-with the data, and, conversely, do not use the wxPageSetupDialogData after the
+with the data, and, conversely, do not use the wx.PageSetupDialogData after the
 dialog is destroyed.
 
 

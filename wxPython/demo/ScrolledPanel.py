@@ -1,22 +1,6 @@
-# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
-# 11/30/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o scrolledpanel lib needs wx update
-# 
-# 12/11/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o lib updated, all is well.
-# 
-# 12/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o wxScrolledPanel -> ScrolledPanel
-#
 
 import  wx
-import  wx.lib.scrolledpanel    as  scrolled
+import  wx.lib.scrolledpanel as scrolled
 
 #----------------------------------------------------------------------
 
@@ -33,7 +17,7 @@ class TestPanel(scrolled.ScrolledPanel):
                             "ScrolledPanel extends wx.ScrolledWindow, adding all "
                             "the necessary bits to set up scroll handling for you.\n\n"
                             "Here are three fixed size examples of its use. The "
-                            "demo panel for this sample is also using it -- the \nwxStaticLine"
+                            "demo panel for this sample is also using it -- the \nwxStaticLine "
                             "below is intentionally made too long so a scrollbar will be "
                             "activated."
                             )

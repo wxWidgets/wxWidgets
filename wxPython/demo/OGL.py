@@ -313,7 +313,7 @@ class __Cleanup:
     def __del__(self):
         self.cleanup()
 
-# when this module gets cleaned up then wxOGLCleanUp() will get called
+# when this module gets cleaned up then wx.OGLCleanUp() will get called
 __cu = __Cleanup()
 
 

@@ -1,14 +1,3 @@
-# 11/13/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# o Replaced deprecated whrandom with random module.
-#
-# 11/13/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Currently uses lib.newevent; should probably be updated to use
-#   new-style event binder. OTOH, this is the only place we get
-#   to see that library used that I know of.
-#
 
 import  random
 import  time

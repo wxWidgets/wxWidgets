@@ -1,7 +1,3 @@
-# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 
@@ -78,7 +74,7 @@ class TestListBox(wx.Panel):
                       'six', 'seven', 'eight', 'nine', 'ten', 'eleven',
                       'twelve', 'thirteen', 'fourteen']
 
-        wx.StaticText(self, -1, "This example uses the wxListBox control.", (45, 10))
+        wx.StaticText(self, -1, "This example uses the wx.ListBox control.", (45, 10))
         wx.StaticText(self, -1, "Select one:", (15, 50), (65, 18))
         self.lb1 = wx.ListBox(self, 60, (80, 50), (80, 120), sampleList, wx.LB_SINGLE)
         self.Bind(wx.EVT_LISTBOX, self.EvtListBox, self.lb1)

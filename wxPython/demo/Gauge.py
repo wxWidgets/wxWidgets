@@ -1,7 +1,3 @@
-# 11/15/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 
@@ -13,7 +9,7 @@ class TestPanel(wx.Panel):
         self.log = log
         self.count = 0
 
-        wx.StaticText(self, -1, "This example shows the wxGauge control.", (45, 15))
+        wx.StaticText(self, -1, "This example shows the wx.Gauge control.", (45, 15))
 
         self.g1 = wx.Gauge(self, -1, 50, (110, 50), (250, 25))
         self.g1.SetBezelFace(3)

@@ -1,16 +1,3 @@
-# 11/7/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# o Uncommented fbbhCallback in TestPanel.fbbh init. Appears to work fine.
-#   Wonder why it was commented.
-# o Unrelated: TestPanel.dbb appears to cause a program error in the demo. If
-#   it is commented out, everything works fine. Investigating.
-# o Bernhard has responded to query, does not plan on updating demo.
-#
-# 11/25/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o All issues, including the program error, have gone away in V2.5.
-#
 
 """ Demonstrate filebrowsebutton module of the wxPython.lib Library.
 

@@ -1,16 +1,6 @@
-# 11/4/03 - grimmtooth@softhome.net (Jeff Grimmett)
-#
-# o Updated to use wx namespace
-#
-# 11/24/03 - grimmtooth@softhome.net (Jeff Grimmett)
-#
-# o Had to move the call to wx.updateColourDB()
-# o Updated several places to change discrete pos and size parameters
-#   into two-tuples.
-#
 
 import wx
-import wx.lib.colourdb as cdb
+import wx.lib.colourdb
 
 import images
 
@@ -22,7 +12,7 @@ class TestWindow(wx.ScrolledWindow):
         wx.ScrolledWindow.__init__(self, parent, -1)
 
         # Populate our color list
-        self.clrList = cdb.getColourList()
+        self.clrList = wx.lib.colourdb.getColourList()
 
         # Just for style points, we'll use this as a background image.
         #self.clrList.sort()
@@ -165,7 +155,7 @@ def runTest(frame, nb, log):
     # Note 11/24/03 - jg - I moved this into runTest() because
     # there must be a wx.App existing before this function
     # can be called - this is a change from 2.4 -> 2.5.
-    cdb.updateColourDB()
+    wx.lib.colourdb.updateColourDB()
 
     win = TestPanel(nb)
 

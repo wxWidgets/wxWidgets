@@ -1,7 +1,3 @@
-# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 
@@ -50,7 +46,7 @@ def runTest(frame, nb, log):
 overview = """\
 This class manages up to two subwindows. The current view can be split
 into two programmatically (perhaps from a menu command), and unsplit
-either programmatically or via the wxSplitterWindow user interface.
+either programmatically or via the wx.SplitterWindow user interface.
 """
 
 if __name__ == '__main__':

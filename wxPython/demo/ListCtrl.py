@@ -9,26 +9,6 @@
 # Copyright:    (c) 1998 by Total Control Software
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
-#
-# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
-# 11/29/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o listctrl mixin needs wx renamer.
-# o wx.ListItem.GetText() returns a wxString pointer, not the text.
-# 
-# 12/14/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o ColumnSorterMixin implementation was broke - added event.Skip()
-#   to column click event to allow event to fall through to mixin.
-#
-# 12/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o wxColumnSorterMixin -> ColumnSorterMixin
-# o wxListCtrlAutoWidthMixin -> ListCtrlAutoWidthMixin 
-#
 
 import  wx
 import  wx.lib.mixins.listctrl  as  listmix

@@ -1,7 +1,3 @@
-# 11/22/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-#
 
 import  wx
 import  wx.xrc  as  xrc
@@ -18,7 +14,7 @@ resourceText = r'''<?xml version="1.0"?>
 <object class="wxPanel" subclass="XmlResourceSubclass.MyBluePanel" name="MyPanel">
     <size>200,100</size>
     <object class="wxStaticText" name="label1">
-        <label>This blue panel is a class derived from wxPanel
+        <label>This blue panel is a class derived from wx.Panel
 and is loaded by a using a subclass attribute of the object tag.</label>
         <pos>10,10</pos>
     </object>
@@ -90,7 +86,7 @@ def runTest(frame, nb, log):
 
 
 overview = """<html><body>
-<h2><center>wxXmlResourceSubclass</center></h2>
+<h2><center>wx.XmlResourceSubclass</center></h2>
 
 Sometimes it is necessary to use custom classes, but you still want
 them to be created from XRC.  The subclass XRC attribute allows you to

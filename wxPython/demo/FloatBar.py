@@ -1,17 +1,8 @@
-# 11/18/2003 - Jeff Grimmett (grimmtooth@softhome.net)
 #
-# o Updated for wx namespace
-# o OK, Main.py indicates this is deprecated. But I don't see a 
-#   replacement yet. So conversion is done anyway.
-#
-# 11/28/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Issues - library has to be converted to work properly
-#   with new namespace.
-#
-# 12/18/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o wxFloatBar -> FloatBar
+# Please note that wx.lib.floatbar is not formally supported as
+# part of wxPython. If it works, fine. If not, unfortunate.
+# GTK users can use the wx.TB_DOCKABLE flag with a regular
+# wx.ToolBar, but everyone else has to take thier chances.
 #
 
 import  wx

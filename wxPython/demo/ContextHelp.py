@@ -1,11 +1,3 @@
-# 11/4/2003 - grimmtooth@softhome.net (Jeff Grimmett)
-# 
-# o Modified for V2.5
-#
-# 11/24/2003 - grimmtooth@softhome.net (Jeff Grimmett)
-# 
-# o Removed import of wx.help - now part of wx.core.
-#
 
 import  wx
 

@@ -1,7 +1,3 @@
-# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 
@@ -27,7 +23,7 @@ and, if so, what kind.
 
 The dialog can be modal or not; of modal, the user's response is in the return
 code of ShowModal(). If not, the response can be taken from GetReturnCode() (inherited
-from the wxDialog super class). If not modal and the return code is required, it
+from the wx.Dialog). If not modal and the return code is required, it
 must be retrieved before the dialog is destroyed.
 
 """

@@ -1,7 +1,3 @@
-# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  time
 import  wx
@@ -14,6 +10,8 @@ class CustomStatusBar(wx.StatusBar):
 
         # This status bar has three fields
         self.SetFieldsCount(3)
+        # Sets the three fields to be relative widths to each other.
+        self.SetStatusWidths([-2, -1, -2])
         self.log = log
         self.sizeChanged = False
         self.Bind(wx.EVT_SIZE, self.OnSize)

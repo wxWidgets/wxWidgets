@@ -1,7 +1,3 @@
-# 11/6/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-# 
-# o Updated for wx namespace
-#
 
 """
 Example showing how to make a grid a drop target for files.

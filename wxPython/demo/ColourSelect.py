@@ -15,20 +15,7 @@
 #              - use sizers
 #              - other minor "improvements"
 #----------------------------------------------------------------------------
-# 11/22/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for V2.5
 # 
-# 11/24/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-# 
-# o Added Bind() handlers to what events can handle it. However, the
-#   colourselect library must be converted before its events can be
-#   bound using the Bind() method.
-#
-# 12/01/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-# 
-# o colourselect lib converted; demo converted to match.
-#
 
 import  wx
 import  wx.lib.colourselect as  csel

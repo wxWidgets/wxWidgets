@@ -1,7 +1,3 @@
-# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  sys
 
@@ -116,14 +112,14 @@ def runTest(frame, nb, log):
 
 overview = """\
 <html><body>
-<h2>wxNotebook</h2>
+<h2>wx.Notebook</h2>
 <p>
 This class represents a notebook control, which manages multiple
 windows with associated tabs.
 <p>
-To use the class, create a wxNotebook object and call AddPage or
+To use the class, create a wx.Notebook object and call AddPage or
 InsertPage, passing a window to be used as the page. Do not explicitly
-delete the window for a page that is currently managed by wxNotebook.
+delete the window for a page that is currently managed by wx.Notebook.
 
 """
 

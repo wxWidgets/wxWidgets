@@ -1,13 +1,9 @@
-# 11/22/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 
 #----------------------------------------------------------------------
 
-# The wxVListBox is much like a regular wxListBox except you draw the
+# The wx.VListBox is much like a regular wx.ListBox except you draw the
 # items yourself and the items can vary in height.
 class MyVListBox(wx.VListBox):
 
@@ -109,7 +105,7 @@ def runTest(frame, nb, log):
 
 
 overview = """<html><body>
-<h2><center>wxVListBox and wxHtmlListBox</center></h2>
+<h2><center>wx.VListBox and wx.HtmlListBox</center></h2>
 <hr>
 
 The "V" in wxVListBox stands for both "virtual" because it can have an
@@ -119,8 +115,8 @@ interface as wxListBox and also emits the same events so you can use
 the same EVT_LISTBOX function to connect a handler.
 <p>
 
-The wxHtmlListBox derives from wxVListBox, but draws each item itself
-as a wxHtmlCell.  This means that you just need to provide a snippet
+The wx.HtmlListBox derives from wx.VListBox, but draws each item itself
+as a wx.HtmlCell.  This means that you just need to provide a snippet
 of HTML for each item when requested.
 
 </body></html>

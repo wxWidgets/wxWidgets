@@ -1,7 +1,3 @@
-# 11/6/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# Modified for wx namespace
-#
 
 import string
 
@@ -18,7 +14,7 @@ class MyCellEditor(gridlib.PyGridCellEditor):
 
     Notice that in order to call the base class version of these special
     methods we use the method name preceded by "base_".  This is because these
-    methods are "virtual" in C++ so if we try to call wxGridCellEditor.Create
+    methods are "virtual" in C++ so if we try to call wx.GridCellEditor.Create
     for example, then when the wxPython extension module tries to call
     ptr->Create(...) then it actually calls the derived class version which
     looks up the method in this class and calls it, causing a recursion loop.

@@ -1,12 +1,3 @@
-# 11/13/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# o Gotta fix the overview.
-#
-# 11/26/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Overview fixed.
-#
 
 import  wx  
 import  wx.lib.rcsizer  as rcs

@@ -1,7 +1,3 @@
-# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 
@@ -10,7 +6,7 @@ import  wx
 def runTest(frame, nb, log):
     dlg = wx.TextEntryDialog(
             frame, 'What is your favorite programming language?',
-            'Duh??', 'Python')
+            'Eh??', 'Python')
 
     dlg.SetValue("Python is the best!")
     
@@ -26,8 +22,8 @@ def runTest(frame, nb, log):
 
 overview = """\
 This class represents a dialog that requests a one-line text string from the user. 
-It is implemented as a generic wxWindows dialog. Along with the usual wxDialog 
-style flags, all of the wxTextCtrl TE_* style flags are accepted, so, for example,
+It is implemented as a generic wxWindows dialog. Along with the usual wx.Dialog 
+style flags, all of the wx.TextCtrl TE_* style flags are accepted, so, for example,
 wx.TE_PASSWORD could be used to create a password dialog.
 
 As with other dialogs of this type, the user input must be retrieved prior to

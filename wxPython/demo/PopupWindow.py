@@ -1,14 +1,9 @@
-# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
 # 
 # 11/30/2003 - Jeff Grimmett (grimmtooth@softhome.net)
 #
 # o Some issues with the listbox example; I tried correcting
 #   it but it's still not working the way it should. Commented
-#   out for now but will be revisited.
-# o The math in determining the popup window's position is
-#   a bit off.
+#   out for now, as I found it.
 # 
 
 import  wx
@@ -23,7 +18,7 @@ except NameError:
 #---------------------------------------------------------------------------
 
 class TestPopup(wx.PopupWindow):
-    """Adds a bit of text and mouse movement to the wxPopupWindow"""
+    """Adds a bit of text and mouse movement to the wx.PopupWindow"""
     def __init__(self, parent, style):
         wx.PopupWindow.__init__(self, parent, style)
         self.SetBackgroundColour("CADET BLUE")
@@ -76,15 +71,15 @@ class TestPopup(wx.PopupWindow):
 
 
 class TestTransientPopup(wx.PopupTransientWindow):
-    """Adds a bit of text and mouse movement to the wxPopupWindow"""
+    """Adds a bit of text and mouse movement to the wx.PopupWindow"""
     def __init__(self, parent, style, log):
         wx.PopupTransientWindow.__init__(self, parent, style)
         self.log = log
         panel = wx.Panel(self, -1)
         panel.SetBackgroundColour("#FFB6C1")
         st = wx.StaticText(panel, -1,
-                          "wxPopupTransientWindow is a\n"
-                          "wxPopupWindow which disappears\n"
+                          "wx.PopupTransientWindow is a\n"
+                          "wx.PopupWindow which disappears\n"
                           "automatically when the user\n"
                           "clicks the mouse outside it or if it\n"
                           "(or its first child) loses focus in \n"
@@ -109,16 +104,16 @@ class TestPanel(wx.Panel):
         wx.Panel.__init__(self, parent, -1)
         self.log = log
 
-        b = wx.Button(self, -1, "Show wxPopupWindow", (25, 50))
+        b = wx.Button(self, -1, "Show wx.PopupWindow", (25, 50))
         self.Bind(wx.EVT_BUTTON, self.OnShowPopup, b)
 
-        b = wx.Button(self, -1, "Show wxPopupTransientWindow", (25, 95))
+        b = wx.Button(self, -1, "Show wx.PopupTransientWindow", (25, 95))
         self.Bind(wx.EVT_BUTTON, self.OnShowPopupTransient, b)
 
         # This isn't working so well, not sure why. Commented out for
         # now.
         
-#        b = wx.Button(self, -1, "Show wxPopupWindow with listbox", (25, 140))
+#        b = wx.Button(self, -1, "Show wx.PopupWindow with listbox", (25, 140))
 #        self.Bind(wx.EVT_BUTTON, self.OnShowPopupListbox, b)
 
 
@@ -160,6 +155,10 @@ class TestPanel(wx.Panel):
 
         win.Show(True)
 
+# This class is currently not implemented in the demo. It does not
+# behave the way it should, so for the time being it's only here
+# for show. If you figure out how to make it work, please send
+# a corrected file to Robin! 
 class TestPopupWithListbox(wx.PopupWindow):
     def __init__(self, parent, style, log):
         wx.PopupWindow.__init__(self, parent, style)
@@ -197,7 +196,7 @@ def runTest(frame, nb, log):
         return win
     else:
         dlg = wx.MessageDialog(
-                frame, 'wxPopupWindow is not available on this platform.',
+                frame, 'wx.PopupWindow is not available on this platform.',
                 'Sorry', wx.OK | wx.ICON_INFORMATION
                 )
 

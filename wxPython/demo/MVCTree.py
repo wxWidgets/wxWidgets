@@ -1,15 +1,3 @@
-# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
-# 11/30/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Library must be updated for this to run.
-# 
-# 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o wxMVCTree -> MVCTree
-#
 
 import  os
 import  sys

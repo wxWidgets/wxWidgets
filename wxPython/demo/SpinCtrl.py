@@ -1,7 +1,3 @@
-# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 
@@ -13,11 +9,10 @@ class TestPanel(wx.Panel):
         self.log = log
         self.count = 0
 
-        wx.StaticText(self, -1, "This example uses the wxSpinCtrl control.", (45, 15))
+        wx.StaticText(self, -1, "This example uses the wx.SpinCtrl control.", (45, 15))
         sc = wx.SpinCtrl(self, -1, "", (30, 50), (80, -1))
         sc.SetRange(1,100)
         sc.SetValue(5)
-        #sc.Enable(False)
 
 
 #----------------------------------------------------------------------
@@ -30,9 +25,9 @@ def runTest(frame, nb, log):
 
 
 overview = """\
-wxSpinCtrl combines wxTextCtrl and wxSpinButton in one control.
+wx.SpinCtrl combines wx.TextCtrl and wx.SpinButton in one control.
 
-Portable programs should try to use wxSpinCtrl instead as wxSpinButton is not 
+Portable programs should try to use this control as wx.SpinButton is not 
 implemented for all platforms (Win32 and GTK only currently).
 
 NB: the range supported by this control depends on the platform 

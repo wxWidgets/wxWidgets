@@ -1,21 +1,8 @@
-# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
 # 
 # 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
 #
-# o wx renamer needed for timectrl lib
 # o presense of spin control causing probs (see spin ctrl demo for details)
 # 
-# 12/13/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o New binders applied. Issues still exist.
-#
-# 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o wxTimeCtrl -> TimeCtrl
-# o wxScrolledPanel -> ScrolledPanel
-#
 
 import  wx
 import  wx.lib.timectrl         as  timectl
@@ -182,10 +169,10 @@ class TestPanel( scrolled.ScrolledPanel ):
         elif self.radioWx.GetValue():
             now = wx.DateTime_Now()
             self.time12.SetValue( now )
-            # (demonstrates that G/SetValue returns/takes a wxDateTime)
+            # (demonstrates that G/SetValue returns/takes a wx.DateTime)
             self.time24.SetValue( self.time12.GetValue(as_wxDateTime=True) )
 
-            # (demonstrates that G/SetValue returns/takes a wxTimeSpan)
+            # (demonstrates that G/SetValue returns/takes a wx.TimeSpan)
             self.spinless_ctrl.SetValue( self.time12.GetValue(as_wxTimeSpan=True) )
 
         elif self.radioMx.GetValue():
@@ -218,8 +205,6 @@ class TestPanel( scrolled.ScrolledPanel ):
 
         cur_min, cur_max = self.target_ctrl.GetBounds()
 
-        # jmg - A little expirimental change to ensure that min
-        # or max contain valid values before we use them
         if min and (min != cur_min): self.target_ctrl.SetMin( min )
         if max and (max != cur_max): self.target_ctrl.SetMax( max )
 

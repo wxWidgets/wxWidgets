@@ -1,11 +1,3 @@
-# 11/5/2003 - Modified by grimmtooth@softhome.net (Jeff Grimmett)
-# 
-# o Updated for wx namespace
-#
-# 11/24/2003 - Modified by grimmtooth@softhome.net (Jeff Grimmett)
-# 
-# o Issues around line 167. I'm stuck.
-#
 
 import  cPickle
 import  wx

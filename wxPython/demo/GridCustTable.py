@@ -1,9 +1,3 @@
-# 11/6/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# o Also corrected minor bug where 'true' was being used instead of 'True'. 
-#   Doesn't fail for * import (I guess that is still defined in wx), but does 
-#   in the manner we're importing wx now.
 
 import  wx
 import  wx.grid as gridlib

@@ -1,7 +1,3 @@
-# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 
@@ -41,7 +37,7 @@ def runTest(frame, nb, log):
         win = TestPanel(nb, log)
         return win
     else:
-        dlg = wx.MessageDialog(frame, 'wxToggleButton is not available on this platform.',
+        dlg = wx.MessageDialog(frame, 'wx.ToggleButton is not available on this platform.',
                           'Sorry', wx.OK | wx.ICON_INFORMATION)
         dlg.ShowModal()
         dlg.Destroy()
@@ -51,7 +47,7 @@ def runTest(frame, nb, log):
 
 
 overview = """\
-wxToggleButton is a button that stays pressed when clicked by the user. 
+wx.ToggleButton is a button that stays pressed when clicked by the user. 
 In other words, it is similar to wxCheckBox in functionality but looks like a 
 wxButton.
 

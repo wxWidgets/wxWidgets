@@ -1,7 +1,3 @@
-# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 
@@ -30,7 +26,7 @@ class MyMiniFrame(wx.MiniFrame):
 #---------------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    win = MyMiniFrame(frame, "This is a wxMiniFrame",
+    win = MyMiniFrame(frame, "This is a wx.MiniFrame",
                       #pos=(250,250), size=(200,200),
                       style=wx.DEFAULT_FRAME_STYLE | wx.TINY_CAPTION_HORIZ)
     win.SetSize((200, 200))
@@ -43,9 +39,9 @@ def runTest(frame, nb, log):
 
 
 overview = """\
-A miniframe is a frame with a small title bar. It is suitable for floating 
+A MiniFrame is a Frame with a small title bar. It is suitable for floating 
 toolbars that must not take up too much screen area. In other respects, it's the 
-same as a wxFrame.
+same as a wx.Frame.
 """
 
 

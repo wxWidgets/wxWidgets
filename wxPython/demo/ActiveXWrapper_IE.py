@@ -18,11 +18,6 @@ shown.)
 </body></html>
 """
 
-# 11/24/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for V2.5
-# 
-
 import  sys
 import  wx
 

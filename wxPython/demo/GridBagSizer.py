@@ -3,7 +3,7 @@ import wx                  # This module uses the new wx namespace
 
 #----------------------------------------------------------------------
 gbsDescription = """\
-The wxGridBagSizer is similar to the wxFlexGridSizer except the items are explicitly positioned
+The wx.GridBagSizer is similar to the wx.FlexGridSizer except the items are explicitly positioned
 in a virtual cell of the layout grid, and column or row spanning is allowed.  For example, this
 static text is positioned at (0,0) and it spans 7 columns.
 """
@@ -11,7 +11,7 @@ static text is positioned at (0,0) and it spans 7 columns.
 
 class TestFrame(wx.Frame):
     def __init__(self):
-        wx.Frame.__init__(self, None, -1, "wxGridBagSizer")
+        wx.Frame.__init__(self, None, -1, "wx.GridBagSizer")
         p = wx.Panel(self, -1)
         p.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
         
@@ -93,7 +93,7 @@ class TestFrame(wx.Frame):
         else:
             if self.gbs.CheckForIntersection( (3,6), (1,1) ):
                 wx.MessageBox("""\
-wxGridBagSizer will not allow items to be in the same cell as
+wx.GridBagSizer will not allow items to be in the same cell as
 another item, so this operation will fail.  You will also get an assert
 when compiled in debug mode.""",
                               "Warning", wx.OK | wx.ICON_INFORMATION)
@@ -130,9 +130,9 @@ def runTest(frame, nb, log):
 
 
 overview = """<html><body>
-<h2><center>wxGridBagSizer</center></h2>
+<h2><center>wx.GridBagSizer</center></h2>
 
-The wxGridBagSizer is more or less a port of the the RowColSizer (that
+The wx.GridBagSizer is more or less a port of the the RowColSizer (that
 has been in the wxPython.lib package for quite some time) to C++.  It
 allows items to be placed at specific layout grid cells, and items can
 span across more than one row or column.

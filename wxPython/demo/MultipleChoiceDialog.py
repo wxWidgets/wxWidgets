@@ -1,15 +1,3 @@
-# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
-# 11/30/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o wx renamer not applied to lib.
-# 
-# 12/18/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o wxMultipleChoiceDialog -> MultipleChoiceDialog
-# 
 
 import  wx
 import  wx.lib.dialogs
@@ -40,7 +28,7 @@ This is a Python implementation of a dialog that is not yet implemented in wxWin
 proper, so don't let the wxWindows documentation mislead you.
 
 <p><code><b>MultipleChoiceDialog</b>(self, parent, msg, title, lst, 
-pos = wx.wxDefaultPosition, size = (200,200), style = wx.wxDEFAULT_DIALOG_STYLE)
+pos = wx.wxDefaultPosition, size = (200,200), style = wx.DEFAULT_DIALOG_STYLE)
 </code>
 
 <dl>

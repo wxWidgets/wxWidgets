@@ -1,20 +1,3 @@
-# 11/19/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
-# 11/29/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o intctrl needs the renamer applied.
-# o intctrl needs new event binders.
-# 
-# 12/08/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o All issues corrected
-#
-# 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o wxIntCtrl -> IntCtrl 
-#
 
 import  wx
 import  wx.lib.intctrl

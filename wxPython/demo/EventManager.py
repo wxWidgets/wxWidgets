@@ -8,16 +8,6 @@
 # Copyright:   (c) 2002 by Robb Shecter (robb@acm.org)
 # Licence:     wxWindows license
 #---------------------------------------------------------------------------
-#
-# 11/22/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
-# 11/25/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o What happened to wx.Color()?
-# 
-
 
 import  wx
 import  wx.lib.evtmgr   as  em

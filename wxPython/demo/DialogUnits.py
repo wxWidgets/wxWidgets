@@ -10,9 +10,6 @@
 # Copyright:    (c) 1998 by Total Control Software
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
-# Updated 11/9/2003 by Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Converted for V2.5 compatability
 #
 
 import  wx

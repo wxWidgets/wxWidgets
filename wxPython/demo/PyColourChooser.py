@@ -1,16 +1,3 @@
-# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
-# 12/14/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated URL for SF link in overview.
-# 
-# 12/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o wxPyColorChooser -> PyColorChooser
-# o wxPyColourChooser -> PyColourChooser
-#
 
 import  wx
 import  wx.lib.colourchooser    as  cc

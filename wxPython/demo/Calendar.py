@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------
-# Name:         wxCalendar.py
+# Name:         Calendar.py
 # Purpose:      Calendar control display testing on panel for wxPython demo
 #
 # Author:       Lorne White (email: lwhite1@planet.eon.net)
@@ -11,14 +11,9 @@
 # 11/15/2003 - Jeff Grimmett (grimmtooth@softhome.net)
 #
 # o Updated for wx namespace
-# o Some updating of the library itself will be needed for this demo to work
-#   correctly.
 #
 # 11/26/2003 - Jeff Grimmett (grimmtooth@softhome.net)
 #
-# o Problems have changed a little. The print dialog requires
-#   a wx.Size to work with the calendar library. wx.core doesn't
-#   approve, though, so we get deprecation warnings.
 # o Ugh. AFter updating to the Bind() method, things lock up
 #   on various control clicks. Will have to debug. Only seems
 #   to happen on windows with calendar controls, though. 
@@ -27,16 +22,6 @@
 #
 # o Lockup issue clarification: it appears that the spinner is
 #   the culprit.
-#
-# 12/01/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o New Bind() method now fully supported.
-#
-# 12/17/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o wxCalendar renamed to Calendar
-# o Got rid of unneeded IDs where Bind() could figure it
-#   out for itself.
 #
 
 import  os
@@ -394,7 +379,7 @@ class PrintCalend:
         self.font = wx.SWISS
         self.bold = wx.NORMAL
 
-        self.sel_key = None      #  last used by
+        self.sel_key = None      # last used by
         self.sel_lst = []        # highlighted selected days
 
         self.size = None

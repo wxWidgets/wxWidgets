@@ -1,7 +1,3 @@
-# 11/18/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 
@@ -31,7 +27,7 @@ class MyFrame(wx.Frame):
 #---------------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    win = MyFrame(frame, -1, "This is a wxFrame", size=(350, 200),
+    win = MyFrame(frame, -1, "This is a wx.Frame", size=(350, 200),
                   style = wx.DEFAULT_FRAME_STYLE)# |  wx.FRAME_TOOL_WINDOW )
     frame.otherWin = win
     win.Show(True)

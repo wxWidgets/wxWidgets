@@ -1,13 +1,3 @@
-# 11/6/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Modified for V2.5
-#
-# 11/25/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o wx renamer didn't appear to 'catch' all the classes in 
-#   wx.lib.gridmovers
-# o Event binder not working properly with wx.lib.gridmovers
-#
 
 import  wx
 import  wx.grid             as  gridlib

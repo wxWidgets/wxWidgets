@@ -1,7 +1,3 @@
-# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  sys
 import  wx
@@ -161,7 +157,7 @@ def runTest(frame, nb, log):
 
 
 overview = """\
-A text control allows text to be displayed and (possibly) edited. It may be single 
+A TextCtrl allows text to be displayed and (possibly) edited. It may be single 
 line or multi-line, support styles or not, be read-only or not, and even supports
 text masking for such things as passwords.
 

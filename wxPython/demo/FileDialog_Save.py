@@ -1,7 +1,3 @@
-# 11/17/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  os
 import  wx
@@ -9,7 +5,7 @@ import  wx
 #---------------------------------------------------------------------------
 
 # This is how you pre-establish a file filter so that the dialog
-# only shows the extention(s) you want it to.
+# only shows the extension(s) you want it to.
 wildcard = "Python source (*.py)|*.py|"     \
            "Compiled Python (*.pyc)|*.pyc|" \
            "SPAM files (*.spam)|*.spam|"    \
@@ -76,10 +72,10 @@ There are two ways to get the results back from the dialog. GetFiles() returns o
 the file names themselves, in a Python list. GetPaths() returns the full path and 
 filenames combined as a Python list.
 
-One important thing to note: if you use the file extention filters, then files saved
-with the filter set to something will automatically get that extention appended to them
+One important thing to note: if you use the file extension filters, then files saved
+with the filter set to something will automatically get that extension appended to them
 if it is not already there. For example, suppose the dialog was displaying the 'egg'
-extention and you entered a file name of 'fried'. It would be saved as 'fried.egg.'
+extension and you entered a file name of 'fried'. It would be saved as 'fried.egg.'
 Yum!
 """
 

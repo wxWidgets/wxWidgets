@@ -1,7 +1,3 @@
-# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 
@@ -15,8 +11,8 @@ class TestPanel(wx.Panel):
         self.process = None
         self.Bind(wx.EVT_IDLE, self.OnIdle)
 
-        # We can either derive from wxProcess and override OnTerminate
-        # or we can let wxProcess send this window an event that is
+        # We can either derive from wx.Process and override OnTerminate
+        # or we can let wx.Process send this window an event that is
         # caught in the normal way...
         self.Bind(wx.EVT_END_PROCESS, self.OnProcessEnded)
 
@@ -139,9 +135,9 @@ def runTest(frame, nb, log):
 
 overview = """\
 <html><body>
-<h2>wxProcess</h2>
+<h2>wx.Process</h2>
 
-wxProcess lets you get notified when an asyncronous child process
+wx.Process lets you get notified when an asyncronous child process
 started by wxExecute terminates, and also to get input/output streams
 for the child process's stdout, stderr and stdin.
 

@@ -13,11 +13,6 @@ have Acrobat Reader 4.0 installed it won't work.
 </body></html>
 """
 
-# 11/24/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for 2.5
-#
-
 import  sys
 import  wx
 

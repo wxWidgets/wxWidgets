@@ -1,9 +1,3 @@
-# 11/13/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# o Got rid of static buton IDs
-# o Took at a stab at a lucid overview string.
-#
 
 import  wx
 import  ScrolledWindow

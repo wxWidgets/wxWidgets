@@ -1,7 +1,3 @@
-# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 import  images
@@ -132,7 +128,32 @@ def runTest(frame, nb, log):
 
 
 overview = """\
+wx.ToolBar is a narrow strip of icons on one side of a frame (top, bottom, sides)
+that acts much like a menu does, except it is always visible. Additionally, actual
+wxWindows controls, such as wx.TextCtrl or wx.ComboBox, can be added to the toolbar
+and used from within it.
 
+Toolbar creation is a two-step process. First, the toolbar is defined using the
+various Add* methods of wx.ToolBar. Once all is set up, then wx.Toolbar.Realize()
+must be called to render it.
+
+wx.Toolbar events are also propogated as Menu events; this is especially handy when
+you have a menu bar that contains items that carry out the same function. For example,
+it is not uncommon to have a little 'floppy' toolbar icon to 'save' the current file 
+(whatever it is) as well as a FILE/SAVE menu item that does the same thing. In this
+case, both events can be captured and acted upon using the same event handler
+with no ill effects.
+
+If there are cases where a toolbar icon should *not* be associated with a menu item,
+use a unique ID to trap it.
+
+There are a number of ways to create a toolbar for a wx.Frame. wx.Frame.CreateToolBar() 
+does all the work except it adds no buttons at all unless you override the virtual method
+OnCreateToolBar(). On the other hand, you can just subclass wx.ToolBar and then use
+wx.Frame.SetToolBar() instead.
+
+Note that wx.TB_DOCKABLE is only supported under GTK. An attempt to alleviate this
+is provided in wx.lib.floatbar, but it is not formally supported.
 """
 
 

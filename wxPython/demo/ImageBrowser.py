@@ -8,16 +8,6 @@
 # Date:         Feb 26, 2001
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
-#
-# 11/23/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
-# 11/25/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Library has to be updated, it is using obsolete names 
-#   (wxPyDefaultSize, etc)
-# 
 
 import  os
 

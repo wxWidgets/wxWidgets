@@ -1,11 +1,6 @@
-# 11/22/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  string
 import  wx
-
 
 #----------------------------------------------------------------------
 
@@ -220,7 +215,7 @@ def runTest(frame, nb, log):
 overview = """\
 <html>
 <body>
-wxValidator is the base class for a family of validator classes that mediate 
+wx.Validator is the base class for a family of validator classes that mediate 
 between a class of control, and application data.
 
 <p>A validator has three major roles:

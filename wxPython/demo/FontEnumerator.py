@@ -1,7 +1,3 @@
-# 11/25/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for V2.5
-#
 
 import  wx
 

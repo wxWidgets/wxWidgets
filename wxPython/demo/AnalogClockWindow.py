@@ -1,7 +1,3 @@
-# 11/4/03 - grimmtooth@softhome.net (Jeff Grimmett)
-# 
-# o wx Namespace 
-#
 
 import  wx
 import  wx.lib.analogclock  as  aclock

@@ -1,11 +1,8 @@
-# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
 # 
 # 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
 #
 # o EVT_STC_DRAG_OVER event GetdragResult() is not an int
-# o wx.TheClipboard.Flush() generates an error on program exit.
+# o wx.TheClipboard.Flush() generates a warning on program exit.
 # 
 
 import  wx
@@ -20,7 +17,7 @@ debug = 1
 
 demoText = """\
 
-This editor is provided by a class named wxStyledTextCtrl.  As
+This editor is provided by a class named wx.StyledTextCtrl.  As
 the name suggests, you can define styles that can be applied to
 sections of text.  This will typically be used for things like
 syntax highlighting code editors, but I'm sure that there are other
@@ -35,7 +32,7 @@ If you do you can simply register an event handler and the editor
 will let you know when the visible portion of the text needs
 styling.
 
-wxStyledTextEditor also supports setting markers in the margin...
+wx.StyledTextEditor also supports setting markers in the margin...
 
 
 
@@ -59,7 +56,7 @@ else:
 
 
 #----------------------------------------------------------------------
-# This shows how to catch the Modified event from the wxStyledTextCtrl
+# This shows how to catch the Modified event from the wx.StyledTextCtrl
 
 class MySTC(stc.StyledTextCtrl):
     def __init__(self, parent, ID, log):
@@ -189,7 +186,7 @@ def runTest(frame, nb, log):
         decode = codecs.lookup("utf-8")[1]
 
         ed.GotoPos(ed.GetLength())
-        ed.AddText("\n\nwxStyledTextCtrl can also do Unicode:\n")
+        ed.AddText("\n\nwx.StyledTextCtrl can also do Unicode:\n")
         unitext, l = decode('\xd0\x9f\xd0\xb8\xd1\x82\xd0\xbe\xd0\xbd - '
                             '\xd0\xbb\xd1\x83\xd1\x87\xd1\x88\xd0\xb8\xd0\xb9 '
                             '\xd1\x8f\xd0\xb7\xd1\x8b\xd0\xba \xd0\xbf\xd1\x80\xd0\xbe\xd0\xb3\xd1\x80\xd0\xb0\xd0\xbc\xd0\xbc\xd0\xb8\xd1\x80\xd0\xbe\xd0\xb2\xd0\xb0\xd0\xbd\xd0\xb8\xd1\x8f!\n\n')

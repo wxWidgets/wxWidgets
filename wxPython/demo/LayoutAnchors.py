@@ -1,9 +1,3 @@
-# 11/6/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# o In the lambda function at the top, removed the leading 'wx' from the
-#   ID names to remove confusion with 'official' wx members.
-#
 
 import  wx
 import  wx.lib.anchors as anchors

@@ -1,7 +1,3 @@
-# 11/19/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  cStringIO
 

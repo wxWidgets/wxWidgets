@@ -4,10 +4,12 @@
 # menus in wxPython 2.3.3
 #
 #-------------------------------------------------------------------
-# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
 #
-# o Updated for wx namespace
-# 
+# o Debug message when adding a menu item (see last menu):
+#
+#   Debug: ..\..\src\msw\menuitem.cpp(370): 'GetMenuState' failed with 
+#   error 0x00000002 (the system cannot find the file specified.). 
+#
 
 import  time
 import  wx
@@ -139,7 +141,6 @@ check the source for this sample to see how to implement them.
         text = item.GetText()
         help = item.GetHelp()
 
-        #print text, help
         # but in this case just call Skip so the default is done
         event.Skip() 
 
@@ -263,7 +264,7 @@ def runTest(frame, nb, log):
 
 
 overview = """\
-A demo of using wxMenuBar and wxMenu in various ways.
+A demo of using wx.MenuBar and wx.Menu in various ways.
 
 A menu is a popup (or pull down) list of items, one of which may be selected 
 before the menu goes away (clicking elsewhere dismisses the menu). Menus may be 
@@ -278,7 +279,7 @@ Menu items may be either normal items, check items or radio items. Normal items
 don't have any special properties while the check items have a boolean flag associated 
 to them and they show a checkmark in the menu when the flag is set. wxWindows 
 automatically toggles the flag value when the item is clicked and its value may 
-be retrieved using either IsChecked method of wxMenu or wxMenuBar itself or by 
+be retrieved using either IsChecked method of wx.Menu or wx.MenuBar itself or by 
 using wxEvent.IsChecked when you get the menu notification for the item in question.
 
 The radio items are similar to the check items except that all the other items 

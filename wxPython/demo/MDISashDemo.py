@@ -1,10 +1,5 @@
 #!/usr/bin/env python
 
-# 11/6/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-#
-
 import wx
 
 import ScrolledWindow

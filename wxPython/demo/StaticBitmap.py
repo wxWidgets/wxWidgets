@@ -1,7 +1,3 @@
-# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 import  images
@@ -14,7 +10,7 @@ class TestPanel(wx.Panel):
         self.log = log
         self.count = 0
 
-        wx.StaticText(self, -1, "This is a wxStaticBitmap.", (45, 15))
+        wx.StaticText(self, -1, "This is a wx.StaticBitmap.", (45, 15))
 
         bmp = images.getTest2Bitmap()
         mask = wx.MaskColour(bmp, wx.BLUE)
@@ -36,12 +32,12 @@ def runTest(frame, nb, log):
 #----------------------------------------------------------------------
 
 overview = """\
-A static bitmap control displays a bitmap.
+A StaticBitmap control displays a bitmap.
 
 The bitmap to be displayed should have a small number of colours, such as 16, 
 to avoid palette problems.
 
-A bitmap can be derived from most image formats using the wxImage class.
+A bitmap can be derived from most image formats using the wx.Image class.
 
 """
 

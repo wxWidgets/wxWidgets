@@ -1,8 +1,3 @@
-# 11/13/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-#
-
 """
 Hello, and welcome to this test of the wxTreeItemData
 class.

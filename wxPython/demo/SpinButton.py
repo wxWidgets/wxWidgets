@@ -1,7 +1,3 @@
-# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 # 11/30/2003 - Jeff Grimmett (grimmtooth@softhome.net)
 #
 # o EVT_SPIN events (or something about them) freezes up the app.
@@ -17,7 +13,7 @@ class TestPanel(wx.Panel):
         self.log = log
         self.count = 0
 
-        wx.StaticText(self, -1, "This example uses the wxSpinButton control.", (45, 15))
+        wx.StaticText(self, -1, "This example uses the wx.SpinButton control.", (45, 15))
 
         self.text = wx.TextCtrl(self, -1, "1", (30, 50), (60, -1))
         h = self.text.GetSize().height
@@ -43,12 +39,12 @@ def runTest(frame, nb, log):
 
 
 overview = """\
-A wxSpinButton has two small up and down (or left and right) arrow buttons. 
+A wx.SpinButton has two small up and down (or left and right) arrow buttons. 
 It is often used next to a text control for increment and decrementing a value. 
-Portable programs should try to use wxSpinCtrl instead as wxSpinButton is not 
+Portable programs should try to use wx.SpinCtrl instead as wx.SpinButton is not 
 implemented for all platforms (Win32 and GTK only currently).
 
-NB: the range supported by this control (and wxSpinCtrl) depends on the platform 
+NB: the range supported by this control (and wx.SpinCtrl) depends on the platform 
 but is at least -0x8000 to 0x7fff. Under GTK and Win32 with sufficiently new version 
 of comctrl32.dll (at least 4.71 is required, 5.80 is recommended) the full 32 bit 
 range is supported.

@@ -1,11 +1,5 @@
-# 11/12/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# o Rudimentary overview doc added.
-#
 
 import  wx
-
 import  images
 
 BUFFERED = 1

@@ -29,7 +29,7 @@ except ImportError:
 if not haveGLCanvas:
     def runTest(frame, nb, log):
         dlg = wx.MessageDialog(
-            frame, 'The wxGLCanvas has not been included with this build of wxPython!',
+            frame, 'The wx.GLCanvas has not been included with this build of wxPython!',
             'Sorry', wx.OK | wx.ICON_INFORMATION
             )
 
@@ -69,7 +69,7 @@ else:
                 box.Add(btn, 0, wx.ALIGN_CENTER|wx.ALL, 15)
                 self.Bind(wx.EVT_BUTTON, self.OnButton, id=k)
 
-            #** Enable this to show putting a wxGLCanvas on the wxPanel
+            #** Enable this to show putting a wx.GLCanvas on the wxPanel
             if 0:
                 c = CubeCanvas(self)
                 c.SetSize((200, 200))

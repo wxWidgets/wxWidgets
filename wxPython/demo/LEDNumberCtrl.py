@@ -1,7 +1,3 @@
-# 11/19/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  time
 
@@ -55,7 +51,7 @@ overview = """\
 source, which was a bit reluctant to reveal its secrets. My appologies if
 I missed anything - jmg</font>
 <p>
-<code><b>wxLEDNumberCtrl</b>( parent, id=-1, pos=wx.DefaultPosition, 
+<code><b>LEDNumberCtrl</b>( parent, id=-1, pos=wx.DefaultPosition, 
 size=wx.DefaultSize, style=LED_ALIGN_LEFT | LED_DRAW_FADED)</code>
 
 <p>This is a control that simulates an LED clock display. It only accepts 

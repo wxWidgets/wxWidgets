@@ -1,21 +1,3 @@
-# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
-# 11/30/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o wx renamer needs to be applied to multisash lib.
-# o There appears to be a problem with the image that
-#   the library is trying to use for the alternate cursor
-# 
-# 12/09/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o renamer issue shelved.
-#
-# 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o wxMultiSash -> MultiSash
-#
 
 import  wx
 import  wx.lib.multisash    as  sash

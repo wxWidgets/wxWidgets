@@ -1,7 +1,3 @@
-# 11/18/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 import  wx.grid as  Grid
@@ -10,7 +6,7 @@ import  images
 
 class MegaTable(Grid.PyGridTableBase):
     """
-    A custom wxGrid Table using user supplied data
+    A custom wx.Grid Table using user supplied data
     """
     def __init__(self, data, colnames, plugins):
         """data is a list of the form
@@ -90,7 +86,7 @@ class MegaTable(Grid.PyGridTableBase):
 
     def _updateColAttrs(self, grid):
         """
-        wxGrid -> update the column attributes to add the
+        wx.Grid -> update the column attributes to add the
         appropriate renderer given the column name.  (renderers
         are stored in the self.plugins dictionary)
 
@@ -187,7 +183,7 @@ class MegaTable(Grid.PyGridTableBase):
 
 
 # --------------------------------------------------------------------
-# Sample wxGrid renderers
+# Sample wx.Grid renderers
 
 class MegaImageRenderer(Grid.PyGridCellRenderer):
     def __init__(self, table):

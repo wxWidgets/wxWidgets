@@ -1,14 +1,3 @@
-# 11/6/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for V2.5
-# o The mixin features were all commented out. Is it broke? Should it even
-#   be in the source? Or is it left as an exercise to the reader? 
-#
-# 11/25/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Robin confirms, this is tutorial code. But be warned! It has not been
-#   converted OR tested!
-#
 
 import  wx
 import  wx.grid             as  gridlib

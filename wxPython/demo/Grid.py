@@ -1,20 +1,16 @@
-# 11/18/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 
 #---------------------------------------------------------------------------
 
 buttonDefs = {
-    814 : ('GridSimple',      ' Simple wxGrid, catching all events '),
-    815 : ('GridStdEdRend',   ' wxGrid showing Editors and Renderers '),
-    818 : ('GridHugeTable',   ' A wxGrid with a HUGE table (100 MILLION cells!) '),
-    817 : ('GridCustTable',   ' wxGrid using a custom Table, with non-string data '),
+    814 : ('GridSimple',      ' Simple wx.Grid, catching all events '),
+    815 : ('GridStdEdRend',   ' wx.Grid showing Editors and Renderers '),
+    818 : ('GridHugeTable',   ' A wx.Grid with a HUGE table (100 MILLION cells!) '),
+    817 : ('GridCustTable',   ' wx.Grid using a custom Table, with non-string data '),
     819 : ('GridEnterHandler',' Remapping keys to behave differently '),
     820 : ('GridCustEditor',  ' Shows how to create a custom Cell Editor '),
-    821 : ('GridDragable',    ' A wxGrid with dragable rows and columns '),
+    821 : ('GridDragable',    ' A wx.Grid with dragable rows and columns '),
     822 : ('GridDragAndDrop', ' Shows how to make a grid a drop target for files'),
     }
 
@@ -58,12 +54,12 @@ def runTest(frame, nb, log):
 
 overview = """\
 <html><body>
-<h2>wxGrid</h2>
+<h2>wx.Grid</h2>
 
 This demo shows various ways of using the <b><i>new and
-improved</i></b> wxGrid class.  Unfortunatly it has not been
+improved</i></b> wx.Grid class.  Unfortunatly it has not been
 documented yet, and while it is somewhat backwards compatible, if you
-try to go by the current wxGrid documentation you will probably just
+try to go by the current wx.Grid documentation you will probably just
 confuse yourself.
 <p>
 You can look at the sources for these samples to learn a lot about how

@@ -1,7 +1,3 @@
-# 11/15/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  cStringIO
 import  wx
@@ -225,21 +221,21 @@ def runTest(frame, nb, log):
 
 
 overview = """<html><body>
-<h2><center>wxArtProvider</center></h2>
+<h2><center>wx.ArtProvider</center></h2>
 
-wxArtProvider class can be used to customize the look of wxWindows
+wx.ArtProvider class can be used to customize the look of wxWindows
 applications.  When wxWindows internal classes need to display an icon
 or a bitmap (e.g. in the standard file dialog), it does not use a
-hard-coded resource but asks wxArtProvider for it instead. This way
-the users can plug in their own wxArtProvider class and easily replace
+hard-coded resource but asks wx.ArtProvider for it instead. This way
+the users can plug in their own wx.ArtProvider class and easily replace
 standard art with his/her own version. It is easy thing to do: all
-that is needed is to derive a class from wxArtProvider, override it's
+that is needed is to derive a class from wx.ArtProvider, override it's
 CreateBitmap method and register the provider with
-wxArtProvider_PushProvider.
+wx.ArtProvider_PushProvider.
 <p>
 
 This class can also be used to get the platform native icons as
-provided by wxArtProvider_GetBitmap or wxArtProvider_GetIcon methods.
+provided by wx.ArtProvider_GetBitmap or wx.ArtProvider_GetIcon methods.
 
 </body></html>
 """

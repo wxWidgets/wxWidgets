@@ -1,12 +1,7 @@
-# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+
 #
-# o Updated for wx namespace
-# 
-# 11/30/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+# wx.lib.wxPlotCanvas is deprecated. Use wx.lib.plot instead.
 #
-# o wxPlotCanvas must be updated with new draw mechanics (tuples) before
-#   it can be used with 2.5.
-# 
 
 import  wx
 import  wx.lib.wxPlotCanvas as  plot

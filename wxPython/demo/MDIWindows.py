@@ -1,7 +1,3 @@
-# 11/12/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-#
 
 import  wx
 

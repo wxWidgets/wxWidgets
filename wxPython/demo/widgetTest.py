@@ -1,6 +1,3 @@
-# 11/15/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
 # 
 # This file is used for the wx.HtmlWindow demo.
 #

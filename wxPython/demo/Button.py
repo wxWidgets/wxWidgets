@@ -1,7 +1,3 @@
-# 11/15/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
 
 import  wx
 import  images
@@ -42,9 +38,15 @@ class TestPanel(wx.Panel):
             mask = wx.MaskColour(bmp, wx.BLUE)
 
         bmp.SetMask(mask)
-        wx.BitmapButton(self, 30, bmp, (160, 20),
+        b = wx.BitmapButton(self, 30, bmp, (160, 20),
                        (bmp.GetWidth()+10, bmp.GetHeight()+10))
-        self.Bind(wx.EVT_BUTTON, self.OnClick, id=30)
+        b.SetToolTipString("This is a bitmap button.")
+        self.Bind(wx.EVT_BUTTON, self.OnClick, b)
+        
+
+        b = wx.Button(self, 40, "Flat Button", (20,150), style=wx.NO_BORDER)
+        b.SetToolTipString("This button has a style flag of wx.NO_BORDER")
+        self.Bind(wx.EVT_BUTTON, self.OnClick, b)
 
 
     def OnClick(self, event):

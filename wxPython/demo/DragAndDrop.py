@@ -1,14 +1,3 @@
-# 11/5/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# o Got rid of all the hardcoded window IDs.
-# o Fixed a bug in class TestPanel() (empty sizer Add())
-#
-# 11/25/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Fixed a bug in the BMP file dialog; was using GetFilename() 
-#   instead of GetPath() to get the file to load.
-#
 
 import  wx
 

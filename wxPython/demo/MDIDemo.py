@@ -1,10 +1,3 @@
-#!/usr/bin/env python
-
-# 11/12/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# o Replaced hardcoded menu IDs with dynamic IDs
-#
 
 import  wx
 

@@ -1,14 +1,6 @@
-# 11/22/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-# 
-# 11/3-/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o WizardPage* doesn't support GetId()
-# 
 
 import  wx
-import  wx.wizard   as  wiz
+import  wx.wizard as wiz
 import  images
 
 #----------------------------------------------------------------------
@@ -99,8 +91,6 @@ class UseAltBitmapPage(wiz.PyWizardPage):
 #----------------------------------------------------------------------
 
 class TestPanel(wx.Panel):
-    ID_wiz = wx.NewId()
-
     def __init__(self, parent, log):
         self.log = log
         wx.Panel.__init__(self, parent, -1)
@@ -111,9 +101,9 @@ class TestPanel(wx.Panel):
         b = wx.Button(self, -1, "Run Dynamic Wizard", pos=(50, 100))
         self.Bind(wx.EVT_BUTTON, self.OnRunDynamicWizard, b)
 
-        wiz.EVT_WIZARD_PAGE_CHANGED(self, self.ID_wiz, self.OnWizPageChanged)
-        wiz.EVT_WIZARD_PAGE_CHANGING(self, self.ID_wiz, self.OnWizPageChanging)
-        wiz.EVT_WIZARD_CANCEL(self, self.ID_wiz, self.OnWizCancel)
+        self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnWizPageChanged)
+        self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnWizPageChanging)
+        self.Bind(wiz.EVT_WIZARD_CANCEL, self.OnWizCancel)
 
 
     def OnWizPageChanged(self, evt):
@@ -152,8 +142,7 @@ class TestPanel(wx.Panel):
 
     def OnRunSimpleWizard(self, evt):
         # Create the wizard and the pages
-        wizard = wiz.Wizard(self, self.ID_wiz, "Simple Wizard",
-                          images.getWizTest1Bitmap())
+        wizard = wiz.Wizard(self, -1, "Simple Wizard", images.getWizTest1Bitmap())
         page1 = TitledPage(wizard, "Page 1")
         page2 = TitledPage(wizard, "Page 2")
         page3 = TitledPage(wizard, "Page 3")
@@ -186,8 +175,7 @@ wxWizardPageSimple class can easily be used for the pages."""))
         #wizard.SetExtraStyle(wx.WIZARD_EX_HELPBUTTON)
         #wizard.Create(self, self.ID_wiz, "Simple Wizard",
         #              images.getWizTest1Bitmap())
-        wizard = wiz.Wizard(self, self.ID_wiz, "Simple Wizard",
-                          images.getWizTest1Bitmap())
+        wizard = wiz.Wizard(self, -1, "Simple Wizard", images.getWizTest1Bitmap())
 
         page1 = TitledPage(wizard, "Page 1")
         page2 = SkipNextPage(wizard, "Page 2")

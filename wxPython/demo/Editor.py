@@ -1,15 +1,3 @@
-# 11/17/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o Updated for wx namespace
-#
-# 11/28/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o editor lib hasn't been hit by the renamer yet.
-#
-# 12/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o wxEditor -> Editor
-#
 
 import  wx
 import  wx.lib.editor    as  editor
