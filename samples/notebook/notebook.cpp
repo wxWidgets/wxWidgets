@@ -214,17 +214,17 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
     menuOrient->AppendRadioItem(ID_ORIENT_RIGHT,   wxT("&Right\tCtrl-8"));
 
     wxMenu *menuDo = new wxMenu;
-    menuDo->Append(ID_ADD_PAGE, wxT("&Add page"));
-    menuDo->Append(ID_INSERT_PAGE, wxT("&Insert page"));
-    menuDo->Append(ID_DELETE_CUR_PAGE, wxT("&Delete current page"));
-    menuDo->Append(ID_DELETE_LAST_PAGE, wxT("D&elete last page"));
-    menuDo->Append(ID_NEXT_PAGE, wxT("&Next page"));
+    menuDo->Append(ID_ADD_PAGE, wxT("&Add page\tAlt-A"));
+    menuDo->Append(ID_INSERT_PAGE, wxT("&Insert page\tAlt-I"));
+    menuDo->Append(ID_DELETE_CUR_PAGE, wxT("&Delete current page\tAlt-D"));
+    menuDo->Append(ID_DELETE_LAST_PAGE, wxT("D&elete last page\tAlt-L"));
+    menuDo->Append(ID_NEXT_PAGE, wxT("&Next page\tAlt-N"));
 
     wxMenu *menuFile = new wxMenu;
     menuFile->Append(wxID_ANY, wxT("&Type"), menuType, wxT("Type of control"));
     menuFile->Append(wxID_ANY, wxT("&Orientation"), menuOrient, wxT("Orientation of control"));
-    menuFile->AppendCheckItem(ID_SHOW_IMAGES, wxT("&Show images"));
-    menuFile->AppendCheckItem(ID_MULTI, wxT("&Multiple lines"));
+    menuFile->AppendCheckItem(ID_SHOW_IMAGES, wxT("&Show images\tAlt-S"));
+    menuFile->AppendCheckItem(ID_MULTI, wxT("&Multiple lines\tAlt-M"));
     menuFile->AppendSeparator();
     menuFile->Append(wxID_EXIT, wxT("E&xit"), wxT("Quits the application"));
     menuFile->Check(ID_SHOW_IMAGES, m_chkShowImages);
@@ -667,8 +667,6 @@ void MyFrame::OnBook(wxBookEvent& event)                                        
                           wxICON_QUESTION | wxYES_NO, this) != wxYES )                     \
             {                                                                              \
                 event.Veto();                                                              \
-                                                                                           \
-                return;                                                                    \
             }                                                                              \
                                                                                            \
         }                                                                                  \
@@ -686,8 +684,6 @@ void MyFrame::OnBook(wxBookEvent& event)                                        
     wxLogMessage(logMsg.c_str());                                                          \
                                                                                            \
     m_text->SetInsertionPointEnd();                                                        \
-                                                                                           \
-    event.Skip();                                                                          \
 }
 
 #if wxUSE_NOTEBOOK
