@@ -130,6 +130,12 @@
 
         #include <Carbon/Carbon.h>
     #endif // __WXMAC__ && __DARWIN__
+
+    #if defined(__CYGWIN__)
+        #if !defined(wxSIZE_T_IS_UINT)
+            #define wxSIZE_T_IS_UINT
+        #endif
+    #endif
 #elif defined(applec) || \
       defined(THINK_C) || \
       (defined(__MWERKS__) && !defined(__INTEL__))

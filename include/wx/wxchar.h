@@ -68,6 +68,9 @@
         #include <stddef.h>
         #include <string.h>
         #include <ctype.h>
+    #elif defined(__CYGWIN__)
+        #include <stddef.h>
+        #include <wchar.h>
     #endif
 #elif defined(__VISAGECPP__) && (__IBMCPP__ >= 400)
     // VisualAge 4.0+ supports TCHAR

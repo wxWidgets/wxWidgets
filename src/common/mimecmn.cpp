@@ -474,7 +474,7 @@ wxMimeTypesManager::~wxMimeTypesManager()
 
 bool wxMimeTypesManager::Unassociate(wxFileType *ft)
 {
-#if defined(__UNIX__) && !defined(__WXPM__)
+#if defined(__UNIX__) && !defined(__WXPM__) && !defined(__CYGWIN__)
     return m_impl->Unassociate(ft);
 #else
     return ft->Unassociate();
@@ -584,7 +584,7 @@ size_t wxMimeTypesManager::EnumAllFileTypes(wxArrayString& mimetypes)
 void wxMimeTypesManager::Initialize(int mcapStyle,
                                     const wxString& sExtraDir)
 {
-#if defined(__UNIX__) && !defined(__WXPM__)
+#if defined(__UNIX__) && !defined(__WXPM__) && !defined(__CYGWIN__)
     EnsureImpl();
 
     m_impl->Initialize(mcapStyle, sExtraDir);
@@ -597,7 +597,7 @@ void wxMimeTypesManager::Initialize(int mcapStyle,
 // and this function clears all the data from the manager
 void wxMimeTypesManager::ClearData()
 {
-#if defined(__UNIX__) && !defined(__WXPM__)
+#if defined(__UNIX__) && !defined(__WXPM__) && !defined(__CYGWIN__)
     EnsureImpl();
 
     m_impl->ClearData();

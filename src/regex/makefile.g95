@@ -1,4 +1,8 @@
 
+ifeq ($(WXWIN),)
+WXWIN=../..
+endif
+
 LIBTARGET=$(WXWIN)/lib/libregex.a
 
 OBJECTS= \
