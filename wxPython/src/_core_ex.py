@@ -102,7 +102,7 @@ def CallAfter(callable, *args, **kw):
     :see: `wx.FutureCall`
     """
     app = wx.GetApp()
-    assert app, 'No wxApp created yet'
+    assert app is not None, 'No wx.App created yet'
 
     global _wxPyCallAfterId
     if _wxPyCallAfterId is None:
