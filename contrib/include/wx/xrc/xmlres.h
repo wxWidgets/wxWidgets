@@ -240,8 +240,18 @@ protected:
     wxXmlNode *DoFindResource(wxXmlNode *parent, const wxString& name, const wxString& classname, bool recursive);
 
     // Creates a resource from information in the given node.
-    wxObject *CreateResFromNode(wxXmlNode *node, wxObject *parent, wxObject *instance = NULL);
+    wxObject *CreateResFromNode(wxXmlNode *node, wxObject *parent,
+                                wxObject *instance = NULL);
 
+    // Creates a resource from information in the given node
+    // (Uses only 'handlerToUse' if != NULL)
+    //
+    // ATTENTION: Do *NOT* use this function, it will disappear in
+    //            wxWindows 2.5.0! It exists *only* as a hack to preserve
+    //            binary compatibility in 2.4.x branch.
+    wxObject *CreateResFromNode2(wxXmlNode *node, wxObject *parent,
+                                 wxObject *instance = NULL,
+                                 wxXmlResourceHandler *handlerToUse = NULL);
 private:
     long m_version;
 

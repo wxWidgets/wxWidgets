@@ -24,6 +24,7 @@
 #include "wx/frame.h"
 #include "wx/wfstream.h"
 #include "wx/filesys.h"
+#include "wx/filename.h"
 #include "wx/log.h"
 #include "wx/intl.h"
 #include "wx/tokenzr.h"
@@ -99,12 +100,29 @@ bool wxXmlResource::Load(const wxString& filemask)
         fnd = filemask;
     while (!!fnd)
     {
-#if wxUSE_FILESYSTEM
-        if (filemask.Lower().Matches(wxT("*.zip")) ||
-            filemask.Lower().Matches(wxT("*.xrs")))
+        // NB: Load() accepts both filenames and URLs (should probably be
+        //     changed to filenames only, but embedded resources currently
+        //     rely on its ability to handle URLs - FIXME). This check
+        //     serves as a quick way to determine whether found name is
+        //     filename and not URL:
+        if (wxFileName::FileExists(fnd))
         {
-            rt = rt && Load(fnd + wxT("#zip:*.xmlbin"));
-            rt = rt && Load(fnd + wxT("#zip:*.xrc"));
+            // Make the name absolute filename, because the app may 
+            // change working directory later:
+            wxFileName fn(fnd);
+            if (fn.IsRelative())
+            {
+                fn.Normalize(wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE);
+                fnd = fn.GetFullPath();
+            }
+        }
+        
+#if wxUSE_FILESYSTEM
+        if (fnd.Lower().Matches(wxT("*.zip")) ||
+            fnd.Lower().Matches(wxT("*.xrs")))
+        {
+            wxString url(wxFileSystem::FileNameToURL(fnd));
+            rt = rt && Load(url + wxT("#zip:*.xrc"));
         }
         else
 #endif
@@ -517,7 +535,15 @@ static void MergeNodes(wxXmlNode& dest, wxXmlNode& with)
          dest.SetContent(with.GetContent());
 }
 
-wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent, wxObject *instance)
+wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent,
+                                           wxObject *instance)
+{
+    return CreateResFromNode2(node, parent, instance);
+}
+
+wxObject *wxXmlResource::CreateResFromNode2(wxXmlNode *node, wxObject *parent,
+                                            wxObject *instance,
+                                            wxXmlResourceHandler *handlerToUse)
 {
     if (node == NULL) return NULL;
 
@@ -541,17 +567,26 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent, wx
     }
 
     wxXmlResourceHandler *handler;
-    wxObject *ret;
-    wxNode * ND = m_handlers.GetFirst();
-    while (ND)
-    {
-        handler = (wxXmlResourceHandler*)ND->GetData();
-        if (node->GetName() == wxT("object") && handler->CanHandle(node))
+
+    if (handlerToUse)
+    {        
+        if (handlerToUse->CanHandle(node))
         {
-            ret = handler->CreateResource(node, parent, instance);
-            if (ret) return ret;
+            return handlerToUse->CreateResource(node, parent, instance);
         }
-        ND = ND->GetNext();
+    }
+    else if (node->GetName() == wxT("object"))
+    {    
+        wxNode *ND = m_handlers.GetFirst();
+        while (ND)
+        {
+            handler = (wxXmlResourceHandler*)ND->GetData();
+            if (handler->CanHandle(node))
+            {
+                return handler->CreateResource(node, parent, instance);
+            }
+            ND = ND->GetNext();
+        }
     }
 
     wxLogError(_("No handler found for XML node '%s', class '%s'!"),
@@ -1084,10 +1119,8 @@ void wxXmlResourceHandler::CreateChildren(wxObject *parent, bool this_hnd_only)
         if (n->GetType() == wxXML_ELEMENT_NODE &&
            (n->GetName() == wxT("object") || n->GetName() == wxT("object_ref")))
         {
-            if (this_hnd_only && CanHandle(n))
-                CreateResource(n, parent, NULL);
-            else
-                m_resource->CreateResFromNode(n, parent, NULL);
+            m_resource->CreateResFromNode2(n, parent, NULL,
+                                           this_hnd_only ? this : NULL);
         }
         n = n->GetNext();
     }
