@@ -1075,7 +1075,7 @@ GSocketError _GAddress_translate_to(GAddress *address,
 GSocketError _GAddress_Init_INET(GAddress *address)
 {
   address->m_len  = sizeof(struct sockaddr_in);
-  address->m_addr = (struct sockaddr *)malloc(address->m_len));
+  address->m_addr = (struct sockaddr *)malloc(address->m_len);
   if (address->m_addr == NULL)
   {
     address->m_error = GSOCK_MEMERR;
