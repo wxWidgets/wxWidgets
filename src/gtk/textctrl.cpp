@@ -1483,8 +1483,10 @@ bool wxTextCtrl::SetBackgroundColour( const wxColour &colour )
     if ( !wxControl::SetBackgroundColour( colour ) )
         return FALSE;
 
+#ifndef __WXGTK20__
     if (!m_widget->window)
         return FALSE;
+#endif
 
     if (!m_backgroundColour.Ok())
         return FALSE;
