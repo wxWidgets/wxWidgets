@@ -52,12 +52,6 @@
 
 #include "wx/regex.h"
 
-#if wxUSE_UNICODE
-#   if !defined(wxUSE_BUILTIN_REGEX)
-#       error "Unicode not supported with system regex, please reconfigure with --with-regex=builtin"
-#   endif
-#endif
-
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------

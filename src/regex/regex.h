@@ -44,7 +44,6 @@ extern "C" {
     WXWINDOWS CUSTOM 
 *****************************/
 #ifndef _REGEX_CUSTOM_H_
-#   define wxUSE_BUILTIN_REGEX
 #   define wx_wchar wxChar
 /*  FreeBSD, Watcom and DMars require this, CW doesn't have nor need it. */
 /*  Others also don't seem to need it. If you have an error related to */
