@@ -182,6 +182,15 @@ $TAR cf $2/wxAll-${WXVER}.tar -T /tmp/wxall.txt
 echo Re-tarring wxAll in a subdirectory...
 cd $2
 mkdir wxWindows-${WXVER}
+
+# If we have the full set of VC++ project files,
+# get them
+if [ -f $2/extra/wxWindows-${WXVER}-VC.zip ]; then
+  unzip -o $2/extra/wxWindows-${WXVER}-VC.zip
+else
+  echo "Warning - did not find $2/deliver/extra/wxWindows-${WXVER}-VC.zip"
+fi
+
 cd wxWindows-${WXVER}
 $TAR xf ../wxAll-${WXVER}.tar
 
@@ -198,8 +207,8 @@ cp $1/include/wx/os2/*.H include/wx/os2
 cp $1/src/os2/*.CPP $1/src/os2/*.I src/os2
 
 # Make all OS/2 files lower case
-$1/distrib/namedown include/wx/os2/*.H
-$1/distrib/namedown src/os2/*.CPP src/os2/*.I
+$1/distrib/msw/namedown include/wx/os2/*.H
+$1/distrib/msw/namedown src/os2/*.CPP src/os2/*.I
 
 cd ..
 rm -f wxAll-${WXVER}.tar
