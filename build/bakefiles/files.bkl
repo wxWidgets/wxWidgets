@@ -1480,6 +1480,16 @@
     src/cocoa/utils.cpp
     src/cocoa/utilsexc.cpp
     src/cocoa/window.mm
+    <!-- Generic implementations used by wxMac: -->
+    src/generic/statusbr.cpp
+    src/generic/imaglist.cpp
+    src/generic/listctrl.cpp
+    src/generic/fdrepdlg.cpp
+    src/generic/tabg.cpp
+    src/generic/fontdlgg.cpp
+    <!-- Unix files used by wxMac: -->
+    src/unix/snglinst.cpp
+    src/unix/utilsunx.cpp
 </set>
 <set var="COCOA_HDR">
     wx/cocoa/NSBox.h
@@ -1526,6 +1536,13 @@
     wx/cocoa/textctrl.h
     wx/cocoa/toplevel.h
     wx/cocoa/window.h
+    <!-- Generic implementations used by wxCocoa: -->
+    wx/generic/statusbr.h
+    wx/generic/fontdlgg.h
+    wx/generic/imaglist.h
+    wx/generic/listctrl.h
+    wx/generic/fdrepdlg.h
+    wx/generic/tabg.h
 </set>
 
 
