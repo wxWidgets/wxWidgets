@@ -181,33 +181,9 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-#if 1
-    wxDialog dialog( this, -1, "Test", wxDefaultPosition, wxDefaultSize,
-        wxDEFAULT_DIALOG_STYLE | wxCLIP_CHILDREN | wxRESIZE_BORDER );
-    wxDialog *parent = &dialog;
-    
-    wxBoxSizer *item0 = new wxBoxSizer( wxVERTICAL );
-
-    wxStaticBox *item2 = new wxStaticBox( parent, -1, "Text" );
-    wxStaticBoxSizer *item1 = new wxStaticBoxSizer( item2, wxVERTICAL );
-
-    wxCheckBox *item3 = new wxCheckBox( parent, -1, "Check", wxDefaultPosition, wxDefaultSize, 0 );
-    item1->Add( item3, 0, wxALIGN_CENTRE|wxALL, 5 );
-
-    item0->Add( item1, 0, wxALIGN_CENTRE|wxALL, 10 );
-
-    parent->SetAutoLayout( TRUE );
-    parent->SetSizer( item0 );
-    item0->Fit( parent );
-    item0->SetSizeHints( parent );
-    
-    dialog.ShowModal();
-
-#else
     wxString msg;
     msg.Printf( _T("This is the about dialog of minimal sample.\n")
                 _T("Welcome to %s"), wxVERSION_STRING);
 
     wxMessageBox(msg, _T("About Minimal"), wxOK | wxICON_INFORMATION, this);
-#endif
 }
