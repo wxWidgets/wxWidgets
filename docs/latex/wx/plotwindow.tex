@@ -14,6 +14,9 @@ of the curves, enlarging them or scrolling from one position to another. Note
 that this window is not useful for real-time measuring or for displaying charts
 with error bars etc.
 
+A single curve in the plot window is represented by the \helpref{wxPlotCurve}{wxplotcurve}
+class.
+
 The wxPlotWindow interacts with program using events, for example when clicking
 or double clicking on a curve or when selecting one by clicking on it (which
 can be vetoed). Future versions will hopefully feature selecting values or
@@ -32,8 +35,8 @@ sections of the displayed curves etc.
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\windowstyle{wxPLOT\_BUTTON\_MOVE}}{Display buttons to allao moving individual curves up or down.}
 \twocolitem{\windowstyle{wxPLOT\_BUTTON\_ENLARGE}}{Display buttons to allow enlarging individual curves vertically.}
-\twocolitem{\windowstyle{wxPLOT\_BUTTON\_ZOOM}}{Display all buttons.}
 \twocolitem{\windowstyle{wxPLOT\_BUTTON\_ZOOM}}{Display buttons to allow zooming all curves horizontally.}
+\twocolitem{\windowstyle{wxPLOT\_BUTTON\_ALL}}{Display all buttons.}
 \twocolitem{\windowstyle{wxPLOT\_Y\_AXIS}}{Display an Y axis to the left of the drawing area.}
 \twocolitem{\windowstyle{wxPLOT\_X\_AXIS}}{Display a X axis at the bottom of the drawing area.}
 \twocolitem{\windowstyle{wxPLOT\_DEFAULT}}{All of the above options.}
@@ -166,7 +169,7 @@ scrolling and then this function should be called.
 
 \func{void}{SetEnlargeAroundWindowCentre}{\param{bool}{ aroundwindow = TRUE}}
 
-Depending on the kind of data you display, the enlarging the individual curves might
+Depending on the kind of data you display, enlarging the individual curves might
 have different desired effects. Sometimes, the data will be supposed to get enlarged
 with the fixed point being the origin, sometimes the fixed point should be the centre
 of the current drawing area. This function controls this behaviour.
