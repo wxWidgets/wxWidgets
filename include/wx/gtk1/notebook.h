@@ -143,6 +143,8 @@ public:
   virtual void AddChild(wxWindow *child);
   virtual void SetConstraintSizes(bool recurse);
   virtual bool DoPhase(int phase);
+  virtual void SetFont( const wxFont &font );
+  virtual void SetBackgroundColour( const wxColour &colour );
 
 private:
   // common part of all ctors

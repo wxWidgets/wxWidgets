@@ -102,18 +102,10 @@ void wxChoice::Append( const wxString &item )
   gtk_widget_realize( menu_item );
   gtk_widget_realize( GTK_BIN(menu_item)->child );
   
-  if (m_hasOwnStyle)
+  if (m_widgetStyle)
   {
-  
-    GtkBin *bin = GTK_BIN( menu_item );
-    
-    gtk_widget_set_style( bin->child, 
-      gtk_style_ref(
-        gtk_widget_get_style( m_widget ) ) ); 
-	
-    gtk_widget_set_style( GTK_WIDGET( bin ), 
-      gtk_style_ref(
-        gtk_widget_get_style( m_widget ) ) ); 
+    gtk_widget_set_style( menu_item, m_widgetStyle );
+    gtk_widget_set_style( GTK_BIN(menu_item)->child, m_widgetStyle );
   }
   
   gtk_signal_connect( GTK_OBJECT( menu_item ), "activate", 
@@ -282,9 +274,7 @@ void wxChoice::SetFont( const wxFont &font )
     if (bin->child) label = bin->child;
     if (!label) label = GTK_BUTTON(m_widget)->child;
     
-    gtk_widget_set_style( label,
-      gtk_style_ref(
-        gtk_widget_get_style( m_widget ) ) ); 
+    gtk_widget_set_style( label, GetWidgetStyle() );
 	
     child = child->next;
   }
@@ -292,24 +282,21 @@ void wxChoice::SetFont( const wxFont &font )
 
 void wxChoice::SetBackgroundColour( const wxColour &colour )
 {
-  return;
-
   wxCHECK_RET( m_widget != NULL, "invalid choice" );
 
   wxControl::SetBackgroundColour( colour );
   
   if (!m_backgroundColour.Ok()) return;
   
-  GtkStyle *style = gtk_widget_get_style( m_widget );
-
   GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
   
-  gtk_widget_set_style( GTK_WIDGET( menu_shell ), gtk_style_ref( style ) );
+  gtk_widget_set_style( m_widget, m_widgetStyle );
+  gtk_widget_set_style( GTK_WIDGET( menu_shell ), m_widgetStyle );
   
   GList *child = menu_shell->children;
   while (child)
   {
-    gtk_widget_set_style( GTK_WIDGET( child->data ), gtk_style_ref( style ) );
+    gtk_widget_set_style( GTK_WIDGET( child->data ), m_widgetStyle );
     child = child->next;
   }
 }

@@ -1,0 +1,41 @@
+
+-------------------- High priority ---------------------
+
+wxTreeCtrl
+  -> Keyboard handling, icon support and new API.
+
+wxListCtrl
+  -> Icon support in list mode.
+
+Finish DnD
+  -> Only decoding filelist and visual feedback missing
+  
+wxClipboard
+  -> Urg.
+  
+wxHelpController
+  -> Karsten ?
+  
+Implement wxRadioBox layout
+  -> I'm so lazy.
+  
+Fix printing of bitmaps
+  -> No idea. Postponed.
+
+Add support SetForegroundColour in GTK widgets
+  -> On the way.
+  
+-------------------- Low priority ---------------------
+    
+Implement wxPalette
+  -> I never understood that. Postponed.
+  
+Implement wxDirDialog
+  -> Not heard of. Postponed.
+
+Show accelerator in menus
+  -> Changed in GTK 1.1.X. Postponed.
+  
+Correct tab navigation
+  -> seems to be broken in GTK. Postponed.
+  

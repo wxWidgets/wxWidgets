@@ -3,7 +3,7 @@
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
-// Copyright:   (c) 1998 Robert Roebling
+// Copyright:   (c) 1998 Robert Roebling, Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -14,6 +14,10 @@
 #include "wx/textctrl.h"
 #include "wx/utils.h"
 #include <wx/intl.h>
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <ctype.h>
 
 //-----------------------------------------------------------------------------
 //  "changed"
@@ -152,11 +156,15 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
 
 wxString wxTextCtrl::GetValue() const
 {
+  wxCHECK_MSG( m_text != NULL, "", "invalid text ctrl" );
+  
   wxString tmp;
   if (m_windowStyle & wxTE_MULTILINE)
   {
     gint len = gtk_text_get_length( GTK_TEXT(m_text) );
-    tmp = gtk_editable_get_chars( GTK_EDITABLE(m_text), 0, len );
+    char *text = gtk_editable_get_chars( GTK_EDITABLE(m_text), 0, len );
+    tmp = text;
+    g_free( text );
   }
   else
   {
@@ -201,45 +209,189 @@ void wxTextCtrl::WriteText( const wxString &text )
   }
 }
 
-bool wxTextCtrl::LoadFile( const wxString &WXUNUSED(file) )
+bool wxTextCtrl::LoadFile( const wxString &file )
 {
-  wxFAIL_MSG( "wxTextCtrl::LoadFile not implemented" );
+  wxCHECK_MSG( m_text != NULL, FALSE, "invalid text ctrl" );
+  
+  if (!wxFileExists(file)) return FALSE;
 
+  Clear();
+
+  FILE *fp = NULL;
+  struct stat statb;
+  
+  if ((stat ((char*) (const char*) file, &statb) == -1) || (statb.st_mode & S_IFMT) != S_IFREG ||
+      !(fp = fopen ((char*) (const char*) file, "r")))
+  {
+      return FALSE;
+  }
+  else
+  {
+    gint len = statb.st_size;
+    char *text;
+    if (!(text = (char*)malloc ((unsigned) (len + 1))))
+    {
+      fclose (fp);
+      return FALSE;
+    }
+    if (fread (text, sizeof (char), len, fp) != (size_t) len)
+	{
+	}
+    fclose (fp);
+
+    text[len] = 0;
+    
+    if (m_windowStyle & wxTE_MULTILINE)
+    {
+      gtk_editable_insert_text( GTK_EDITABLE(m_text), text, 0, &len );
+    }
+    else
+    {
+      gtk_entry_set_text( GTK_ENTRY(m_text), text );
+    }
+    
+    free (text);
+    m_modified = FALSE;
+    return TRUE;
+  }
   return FALSE;
 }
 
-bool wxTextCtrl::SaveFile( const wxString &WXUNUSED(file) )
+bool wxTextCtrl::SaveFile( const wxString &file )
 {
-  wxFAIL_MSG( "wxTextCtrl::SaveFile not implemented" );
+  wxCHECK_MSG( m_text != NULL, FALSE, "invalid text ctrl" );
+  
+  if (file == "") return FALSE;
+  
+  FILE *fp;
 
-  return FALSE;
+  if (!(fp = fopen ((char*) (const char*) file, "w")))
+    {
+      return FALSE;
+    }
+  else
+    {
+      char *text = NULL;
+      gint len = 0;
+       
+      if (m_windowStyle & wxTE_MULTILINE)
+      {
+        len = gtk_text_get_length( GTK_TEXT(m_text) );
+        text = gtk_editable_get_chars( GTK_EDITABLE(m_text), 0, len );
+      }
+      else
+      {
+        text = gtk_entry_get_text( GTK_ENTRY(m_text) );
+      }
+      
+      if (fwrite (text, sizeof (char), len, fp) != (size_t) len)
+	{
+	  // Did not write whole file
+	}
+	
+      // Make sure newline terminates the file
+      if (text[len - 1] != '\n')
+	fputc ('\n', fp);
+
+      fclose (fp);
+      
+      if (m_windowStyle & wxTE_MULTILINE) g_free( text );
+      
+      m_modified = FALSE;
+      return TRUE;
+    }
+
+  return TRUE;
 }
 
-/*
 wxString wxTextCtrl::GetLineText( long lineNo ) const
 {
+  if (m_windowStyle & wxTE_MULTILINE)
+  {
+    gint len = gtk_text_get_length( GTK_TEXT(m_text) );
+    char *text = gtk_editable_get_chars( GTK_EDITABLE(m_text), 0, len );
+
+    if (text)
+    {
+        wxString buf("");
+        long i;
+        int currentLine = 0;
+        for (i = 0; currentLine != lineNo && text[i]; i++ )
+          if (text[i] == '\n')
+            currentLine++;
+        // Now get the text
+        int j;
+        for (j = 0; text[i] && text[i] != '\n'; i++, j++ )
+            buf += text[i];
+    
+        g_free( text );
+        return buf;
+    }
+    else
+      return wxEmptyString;
+  }
+  else
+  {
+    if (lineNo == 0) return GetValue();
+    return wxEmptyString;
+  }
 }
 
-
-void wxTextCtrl::OnDropFiles( wxDropFilesEvent &event )
+void wxTextCtrl::OnDropFiles( wxDropFilesEvent &WXUNUSED(event) )
 {
+  wxFAIL_MSG( "wxTextCtrl::GetLineText( lineNo ) not implemented" );
 }
 
-long wxTextCtrl::PositionToXY( long pos, long *x, long *y ) const
+long wxTextCtrl::PositionToXY( long WXUNUSED(pos), long *WXUNUSED(x), long *WXUNUSED(y) ) const
 {
+  wxFAIL_MSG( "wxTextCtrl::XYToPosition not implemented" );
+  
+  return 0;
 }
 
-long wxTextCtrl::XYToPosition( long x, long y )
+long wxTextCtrl::XYToPosition( long WXUNUSED(x), long WXUNUSED(y) ) const
 {
+  wxFAIL_MSG( "wxTextCtrl::XYToPosition not implemented" );
+  
+  return 0;
 }
 
-int wxTextCtrl::GetNumberOfLines()
+int wxTextCtrl::GetLineLength(long lineNo) const
 {
+    wxString str = GetLineText (lineNo);
+    return (int) str.Length();
 }
 
-*/
+int wxTextCtrl::GetNumberOfLines() const
+{
+  if (m_windowStyle & wxTE_MULTILINE)
+  {
+    gint len = gtk_text_get_length( GTK_TEXT(m_text) );
+    char *text = gtk_editable_get_chars( GTK_EDITABLE(m_text), 0, len );
+
+    if (text)
+    {
+        int currentLine = 0;
+        for (int i = 0; i < len; i++ )
+          if (text[i] == '\n')
+            currentLine++;
+    
+        g_free( text );
+        return currentLine;
+    }
+    else
+      return 0;
+  }
+  else
+  {
+    return 1;
+  }
+}
+
 void wxTextCtrl::SetInsertionPoint( long pos )
 {
+  wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
+  
   int tmp = (int) pos;
   if (m_windowStyle & wxTE_MULTILINE)
     gtk_text_set_point( GTK_TEXT(m_text), tmp );
@@ -469,31 +621,17 @@ void wxTextCtrl::SetFont( const wxFont &font )
 {
   wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
   
-  if (((wxFont*)&font)->Ok())
-    m_font = font;
-  else
-    m_font = *wxSWISS_FONT;
+  wxControl::SetFont( font );
   
-  GtkStyle *style = gtk_widget_get_style( m_text );
-  if (!m_hasOwnStyle)
-  {
-    m_hasOwnStyle = TRUE;
-    style = gtk_style_copy( gtk_widget_get_style( m_text ) );
-  }
-  
-  gdk_font_unref( style->font );
-  style->font = gdk_font_ref( m_font.GetInternalFont( 1.0 ) );
-  
-  gtk_widget_set_style( m_text, style );
+  // doesn't work
 }
 
 void wxTextCtrl::SetBackgroundColour( const wxColour &colour )
 {
-  return;
-
   wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
-  
-  m_backgroundColour = colour;
+
+  wxControl::SetBackgroundColour( colour );
+    
   if (!m_backgroundColour.Ok()) return;
   
   if (m_windowStyle & wxTE_MULTILINE)
@@ -505,18 +643,7 @@ void wxTextCtrl::SetBackgroundColour( const wxColour &colour )
   }
   else
   {
-    GtkStyle *style = gtk_widget_get_style( m_text );
-    if (!m_hasOwnStyle)
-    {
-      m_hasOwnStyle = TRUE;
-      style = gtk_style_copy( gtk_widget_get_style( m_text ) );
-    }
-
-    m_backgroundColour.CalcPixel( gdk_window_get_colormap( m_text->window ) );
-    style->base[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
-    style->bg[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
-
-    gtk_widget_set_style( m_text, style );
+    gtk_widget_set_style( m_text, m_widgetStyle );
   }
 }
 

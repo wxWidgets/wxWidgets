@@ -138,7 +138,7 @@ static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExp
   if (gdk_event->count > 0) return;
 
 /*
-  printf( "OnExpose from " );
+      printf( "OnExpose from " );
   if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
     printf( win->GetClassInfo()->GetClassName() );
   printf( ".\n" );
@@ -912,8 +912,8 @@ wxWindow::wxWindow()
   m_isEnabled = TRUE;
   m_pDropTarget = (wxDropTarget *) NULL;
   m_resizing = FALSE;
-  m_hasOwnStyle = FALSE;
   m_scrollGC = (GdkGC*) NULL;
+  m_widgetStyle = (GtkStyle*) NULL;
 }
 
 bool wxWindow::Create( wxWindow *parent, wxWindowID id,
@@ -1032,6 +1032,8 @@ wxWindow::~wxWindow()
 
   DestroyChildren();
 
+  if (m_widgetStyle) gtk_style_unref( m_widgetStyle );
+  
   if (m_scrollGC) gdk_gc_unref( m_scrollGC );
     
   if (m_wxwindow) gtk_widget_destroy( m_wxwindow );
@@ -1112,8 +1114,8 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
   m_pDropTarget = (wxDropTarget *) NULL;
   m_resizing = FALSE;
   m_windowValidator = (wxValidator *) NULL;
-  m_hasOwnStyle = FALSE;
   m_scrollGC = (GdkGC*) NULL;
+  m_widgetStyle = (GtkStyle*) NULL;
 }
 
 void wxWindow::PostCreation()
@@ -1964,18 +1966,16 @@ void wxWindow::SetBackgroundColour( const wxColour &colour )
   }
   else
   {
-    GtkStyle *style = gtk_widget_get_style( m_widget );
-    if (!m_hasOwnStyle)
-    {
-      m_hasOwnStyle = TRUE;
-      style = gtk_style_copy( style );
-    }
-    
+    GtkStyle *style = GetWidgetStyle();
     m_backgroundColour.CalcPixel( gdk_window_get_colormap( m_widget->window ) );
     style->bg[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
     style->base[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
-
-    gtk_widget_set_style( m_widget, style );
+    style->bg[GTK_STATE_PRELIGHT] = *m_backgroundColour.GetColor();
+    style->base[GTK_STATE_PRELIGHT] = *m_backgroundColour.GetColor();
+    style->bg[GTK_STATE_ACTIVE] = *m_backgroundColour.GetColor();
+    style->base[GTK_STATE_ACTIVE] = *m_backgroundColour.GetColor();
+    style->bg[GTK_STATE_INSENSITIVE] = *m_backgroundColour.GetColor();
+    style->base[GTK_STATE_INSENSITIVE] = *m_backgroundColour.GetColor();
   }
 }
 
@@ -1986,7 +1986,28 @@ wxColour wxWindow::GetForegroundColour() const
 
 void wxWindow::SetForegroundColour( const wxColour &colour )
 {
+  wxCHECK_RET( m_widget != NULL, "invalid window" );
+
   m_foregroundColour = colour;
+  if (!m_foregroundColour.Ok()) return;
+  
+  if (!m_wxwindow)
+  {
+    GtkStyle *style = GetWidgetStyle();
+    m_foregroundColour.CalcPixel( gdk_window_get_colormap( m_widget->window ) );
+    style->fg[GTK_STATE_NORMAL] = *m_foregroundColour.GetColor();
+    style->fg[GTK_STATE_PRELIGHT] = *m_foregroundColour.GetColor();
+    style->fg[GTK_STATE_ACTIVE] = *m_foregroundColour.GetColor();
+  }
+}
+
+GtkStyle *wxWindow::GetWidgetStyle()
+{
+  if (!m_widgetStyle) 
+    m_widgetStyle = 
+      gtk_style_copy( 
+        gtk_widget_get_style( m_widget ) );
+  return m_widgetStyle;
 }
 
 bool wxWindow::Validate()
@@ -2149,17 +2170,9 @@ void wxWindow::SetFont( const wxFont &font )
   else
     m_font = *wxSWISS_FONT;
 
-  GtkStyle *style = gtk_widget_get_style( m_widget );
-  if (!m_hasOwnStyle)
-  {
-    m_hasOwnStyle = TRUE;
-    style = gtk_style_copy( style );
-  }
-
+  GtkStyle *style = GetWidgetStyle();
   gdk_font_unref( style->font );
   style->font = gdk_font_ref( m_font.GetInternalFont( 1.0 ) );
-
-  gtk_widget_set_style( m_widget, style );
 }
 
 wxFont *wxWindow::GetFont()

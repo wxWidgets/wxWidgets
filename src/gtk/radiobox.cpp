@@ -397,14 +397,14 @@ void wxRadioBox::SetFont( const wxFont &font )
   
   wxControl::SetFont( font );
    
+  gtk_widget_set_style( m_widget, m_widgetStyle );
+  
   wxNode *node = m_boxes.First();
   while (node)
   {
     GtkButton *button = GTK_BUTTON( node->Data() );
     
-    gtk_widget_set_style( button->child, 
-      gtk_style_ref(
-        gtk_widget_get_style( m_widget ) ) ); 
+    gtk_widget_set_style( button->child, m_widgetStyle );
     
     node = node->Next();
   }
@@ -412,22 +412,20 @@ void wxRadioBox::SetFont( const wxFont &font )
 
 void wxRadioBox::SetBackgroundColour( const wxColour &colour )
 {
-  return;
-
   wxCHECK_RET( m_widget != NULL, "invalid radiobox" );
   
   wxControl::SetBackgroundColour( colour );
   
   if (!m_backgroundColour.Ok()) return;
   
+  gtk_widget_set_style( m_widget, m_widgetStyle );
+  
   wxNode *node = m_boxes.First();
   while (node)
   {
     GtkWidget *button = GTK_WIDGET( node->Data() );
     
-    gtk_widget_set_style( button, 
-      gtk_style_ref(
-        gtk_widget_get_style( m_widget ) ) ); 
+    gtk_widget_set_style( button, m_widgetStyle );
     
     node = node->Next();
   }

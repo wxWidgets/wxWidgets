@@ -112,24 +112,28 @@ void wxButton::SetFont( const wxFont &font )
   
   wxControl::SetFont( font );
   
-  gtk_widget_set_style( GTK_BUTTON(m_widget)->child, 
-    gtk_style_ref(
-      gtk_widget_get_style( m_widget ) ) );
+  gtk_widget_set_style( GTK_BUTTON(m_widget)->child, m_widgetStyle );
 }
 
 void wxButton::SetBackgroundColour( const wxColour &colour )
 {
-  return;
-
   wxCHECK_RET( m_widget != NULL, "invalid button" );
 
   wxControl::SetBackgroundColour( colour );
   
   if (!m_backgroundColour.Ok()) return;
   
-  gtk_widget_set_style( GTK_BUTTON(m_widget)->child, 
-    gtk_style_ref(
-      gtk_widget_get_style( m_widget ) ) );
+  gtk_widget_set_style( m_widget, m_widgetStyle );
 }
 
+void wxButton::SetForegroundColour( const wxColour &colour )
+{
+  wxCHECK_RET( m_widget != NULL, "invalid button" );
+
+  wxControl::SetForegroundColour( colour );
+  
+  if (!m_foregroundColour.Ok()) return;
+  
+  gtk_widget_set_style( GTK_BUTTON(m_widget)->child, m_widgetStyle );
+}
 

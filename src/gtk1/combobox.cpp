@@ -135,15 +135,10 @@ void wxComboBox::Append( const wxString &item, char *clientData )
   
   GtkWidget *list_item = gtk_list_item_new_with_label( item ); 
   
-  if (m_hasOwnStyle)
+  if (m_widgetStyle)
   {
-    GtkBin *bin = GTK_BIN( list_item );
-    gtk_widget_set_style( bin->child, 
-      gtk_style_ref(
-        gtk_widget_get_style( m_widget ) ) ); 
-    gtk_widget_set_style( GTK_WIDGET(bin),
-      gtk_style_ref(
-        gtk_widget_get_style( m_widget ) ) ); 
+    gtk_widget_set_style( list_item, m_widgetStyle );
+    gtk_widget_set_style( GTK_BIN( list_item )->child, m_widgetStyle );
   }
   
   gtk_signal_connect( GTK_OBJECT(list_item), "select", 
@@ -449,21 +444,16 @@ void wxComboBox::SetFont( const wxFont &font )
   
   wxWindow::SetFont( font );
    
-  GtkWidget *entry = GTK_COMBO(m_widget)->entry;
+  gtk_widget_set_style( GTK_COMBO(m_widget)->entry, m_widgetStyle );
   
-  gtk_widget_set_style( entry,
-    gtk_style_ref(
-      gtk_widget_get_style( m_widget ) ) ); 
+  GtkList *list = GTK_LIST( GTK_COMBO(m_widget)->list );
   
-  GtkWidget *list = GTK_COMBO(m_widget)->list;
-  
-  GList *child = GTK_LIST(list)->children;
+  GList *child = list->children;
   while (child)
   {
     GtkBin *bin = (GtkBin*) child->data;
-    gtk_widget_set_style( bin->child, 
-      gtk_style_ref(
-        gtk_widget_get_style( m_widget ) ) ); 
+    
+    gtk_widget_set_style( bin->child, m_widgetStyle );
         
     child = child->next;
   }
@@ -482,34 +472,23 @@ bool wxComboBox::IsOwnGtkWindow( GdkWindow *window )
 
 void wxComboBox::SetBackgroundColour( const wxColour &colour )
 {
-  return;
-
   wxCHECK_RET( m_widget != NULL, "invalid combobox" );
   
-  m_backgroundColour = colour;
+  wxControl::SetBackgroundColour( colour );
+  
   if (!m_backgroundColour.Ok()) return;
   
-  GtkStyle *style = gtk_widget_get_style( m_widget );
-  if (!m_hasOwnStyle)
-  {
-    m_hasOwnStyle = TRUE;
-    style = gtk_style_copy( gtk_widget_get_style( m_widget ) );
-  }
-  
-  style->base[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
-  style->bg[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
+//  gtk_widget_set_style( m_widget, m_widgetStyle );
 
-  gtk_widget_set_style( m_widget, style );
-
-  gtk_widget_set_style( GTK_COMBO(m_widget)->button, gtk_style_ref( style ) );
-  gtk_widget_set_style( GTK_COMBO(m_widget)->entry, gtk_style_ref( style ) );
-  gtk_widget_set_style( GTK_COMBO(m_widget)->list, gtk_style_ref( style ) );
+  gtk_widget_set_style( GTK_COMBO(m_widget)->button, m_widgetStyle );
+  gtk_widget_set_style( GTK_COMBO(m_widget)->entry, m_widgetStyle );
+  gtk_widget_set_style( GTK_COMBO(m_widget)->list, m_widgetStyle );
   
   GList *child = GTK_LIST( GTK_COMBO(m_widget)->list )->children;
   while (child)
   {
-    GtkWidget *item = GTK_WIDGET(child->data);
-    gtk_widget_set_style( item, gtk_style_ref( style ) );
+    gtk_widget_set_style( GTK_WIDGET(child->data), m_widgetStyle );
+    
     child = child->next;
   }
 }

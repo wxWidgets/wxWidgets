@@ -2,7 +2,7 @@
 // Name:        notebook.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $id$
+// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -150,6 +150,8 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
 
 int wxNotebook::GetSelection() const
 {
+  wxCHECK_MSG( m_widget != NULL, -1, "invalid notebook" );
+  
   if (m_pages.Number() == 0) return -1;
 
   GtkNotebookPage *g_page = GTK_NOTEBOOK(m_widget)->cur_page;
@@ -182,6 +184,8 @@ int wxNotebook::GetRowCount() const
 
 wxString wxNotebook::GetPageText( int page ) const
 {
+  wxCHECK_MSG( m_widget != NULL, "", "invalid notebook" );
+  
   wxNotebookPage* nb_page = GetNotebookPage(page);
   if (nb_page)
     return nb_page->m_text;
@@ -191,6 +195,8 @@ wxString wxNotebook::GetPageText( int page ) const
 
 int wxNotebook::GetPageImage( int page ) const
 {
+  wxCHECK_MSG( m_widget != NULL, 0, "invalid notebook" );
+
   wxNotebookPage* nb_page = GetNotebookPage(page);
   if (nb_page)
     return nb_page->m_image;
@@ -200,6 +206,8 @@ int wxNotebook::GetPageImage( int page ) const
 
 wxNotebookPage* wxNotebook::GetNotebookPage(int page) const
 {
+  wxCHECK_MSG( m_widget != NULL, (wxNotebookPage*)NULL, "invalid notebook" );
+
   wxNotebookPage *nb_page = (wxNotebookPage *) NULL;
 
   wxNode *node = m_pages.First();
@@ -218,6 +226,8 @@ wxNotebookPage* wxNotebook::GetNotebookPage(int page) const
 
 int wxNotebook::SetSelection( int page )
 {
+  wxCHECK_MSG( m_widget != NULL, -1, "invalid notebook" );
+
   int selOld = GetSelection();
   wxNotebookPage* nb_page = GetNotebookPage(page);
   
@@ -241,6 +251,8 @@ int wxNotebook::SetSelection( int page )
 
 void wxNotebook::AdvanceSelection( bool bForward )
 {
+  wxCHECK_RET( m_widget != NULL, "invalid notebook" );
+
   int sel = GetSelection();
   int max = GetPageCount();
 
@@ -257,6 +269,8 @@ void wxNotebook::SetImageList( wxImageList* imageList )
 
 bool wxNotebook::SetPageText( int page, const wxString &text )
 {
+  wxCHECK_MSG( m_widget != NULL, FALSE, "invalid notebook" );
+
   wxNotebookPage* nb_page = GetNotebookPage(page);
   
   if (!nb_page) return FALSE;
@@ -289,6 +303,8 @@ void wxNotebook::SetPadding( const wxSize &WXUNUSED(padding) )
 
 bool wxNotebook::DeleteAllPages()
 {
+  wxCHECK_MSG( m_widget != NULL, FALSE, "invalid notebook" );
+
   wxNode *page_node = m_pages.First();
   while (page_node)
   {
@@ -331,6 +347,8 @@ bool wxNotebook::DeletePage( int page )
 bool wxNotebook::AddPage(wxWindow* win, const wxString& text,
                          bool bSelect, int imageId)
 {
+  wxCHECK_MSG( m_widget != NULL, FALSE, "invalid notebook" );
+
   // we've created the notebook page in AddChild(). Now we just have to set
   // the caption for the page and set the others parameters.
 
@@ -384,6 +402,8 @@ bool wxNotebook::AddPage(wxWindow* win, const wxString& text,
 
 wxWindow *wxNotebook::GetPage( int page ) const
 {
+  wxCHECK_MSG( m_widget != NULL, (wxWindow*) NULL, "invalid notebook" );
+
   wxNotebookPage* nb_page = GetNotebookPage(page);
   if (!nb_page)
     return (wxWindow *) NULL;
@@ -393,6 +413,8 @@ wxWindow *wxNotebook::GetPage( int page ) const
 
 void wxNotebook::AddChild( wxWindow *win )
 {
+  wxCHECK_RET( m_widget != NULL, "invalid notebook" );
+
   m_children.Append(win);
 
   wxNotebookPage *page = new wxNotebookPage();
@@ -432,6 +454,26 @@ void wxNotebook::SetConstraintSizes( bool WXUNUSED(recurse) )
 bool wxNotebook::DoPhase( int WXUNUSED(nPhase) )
 {
   return TRUE;
+}
+
+void wxNotebook::SetFont( const wxFont &font )
+{
+  wxCHECK_RET( m_widget != NULL, "invalid notebook" );
+
+  wxControl::SetFont( font );
+   
+  gtk_widget_set_style( m_widget, m_widgetStyle );
+}
+
+void wxNotebook::SetBackgroundColour( const wxColour &colour )
+{
+  wxCHECK_RET( m_widget != NULL, "invalid notebook" );
+
+  wxControl::SetBackgroundColour( colour );
+  
+  if (!m_backgroundColour.Ok()) return;
+  
+  gtk_widget_set_style( m_widget, m_widgetStyle );
 }
 
 //-----------------------------------------------------------------------------

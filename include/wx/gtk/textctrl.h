@@ -67,13 +67,12 @@ class wxTextCtrl: public wxControl, public streambuf
     bool IsModified() const { return m_modified; }
     void SetModified() { m_modified = TRUE; }
     void DiscardEdits() { m_modified = FALSE; }
-/*
     wxString GetLineText( long lineNo ) const;
     void OnDropFiles( wxDropFilesEvent &event );
     long PositionToXY( long pos, long *x, long *y ) const;
-    long XYToPosition( long x, long y );
-    int GetNumberOfLines();
-*/
+    long XYToPosition( long x, long y ) const;
+    int GetLineLength(long lineNo) const;
+    int GetNumberOfLines() const;
     virtual void SetInsertionPoint( long pos );
     virtual void SetInsertionPointEnd();
     virtual void SetEditable( bool editable );

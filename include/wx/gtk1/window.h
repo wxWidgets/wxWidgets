@@ -243,6 +243,7 @@ public:
   bool HasVMT();
   virtual void ImplementSetSize();
   virtual void ImplementSetPosition();
+  GtkStyle *GetWidgetStyle();
 
   wxWindow            *m_parent;
   wxList               m_children;
@@ -274,11 +275,11 @@ public:
   bool                 m_needParent;
   bool                 m_hasScrolling;
   bool                 m_isScrolling;
-  bool                 m_hasOwnStyle;
   bool                 m_hasVMT;
   bool                 m_sizeSet;
   bool                 m_resizing;
   GdkGC               *m_scrollGC;
+  GtkStyle            *m_widgetStyle;
 
 public:
 

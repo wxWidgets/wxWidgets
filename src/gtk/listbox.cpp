@@ -141,12 +141,10 @@ void wxListBox::Append( const wxString &item, char *clientData )
 
   GtkWidget *list_item = gtk_list_item_new_with_label( item );
 
-  if (m_hasOwnStyle)
+  if (m_widgetStyle)
   {
-    GtkBin *bin = GTK_BIN( list_item );
-    gtk_widget_set_style( bin->child,
-      gtk_style_ref(
-        gtk_widget_get_style( m_widget ) ) );
+    gtk_widget_set_style( list_item, m_widgetStyle );
+    gtk_widget_set_style( GTK_BIN( list_item )->child, m_widgetStyle );
   }
   
   gtk_signal_connect( GTK_OBJECT(list_item), "select",
@@ -473,9 +471,7 @@ void wxListBox::SetFont( const wxFont &font )
   GList *child = m_list->children;
   while (child)
   {
-    gtk_widget_set_style( GTK_BIN(child->data)->child, 
-      gtk_style_ref( 
-        gtk_widget_get_style( m_widget ) ) );
+    gtk_widget_set_style( GTK_BIN(child->data)->child, m_widgetStyle );
 	
     child = child->next;
   }
@@ -483,30 +479,24 @@ void wxListBox::SetFont( const wxFont &font )
 
 void wxListBox::SetBackgroundColour( const wxColour &colour )
 {
-  return;
-
   wxCHECK_RET( m_list != NULL, "invalid listbox" );
   
   wxControl::SetBackgroundColour( colour );
   
-  return;
-  
   if (!m_backgroundColour.Ok()) return;
   
-  gtk_widget_set_style( GTK_WIDGET(m_list), 
-    gtk_style_ref(
-      gtk_widget_get_style( m_widget ) ) );
+//  gtk_widget_set_style( GTK_WIDGET(m_list), m_widgetStyle );
+
+    GdkWindow *window = GTK_WIDGET(m_list)->window;
+    m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
+    gdk_window_set_background( window, m_backgroundColour.GetColor() );
+    gdk_window_clear( window );
       
   GList *child = m_list->children;
   while (child)
   {
-    gtk_widget_set_style( GTK_WIDGET(child->data), 
-      gtk_style_ref( 
-        gtk_widget_get_style( m_widget ) ) );
-	
-    gtk_widget_set_style( GTK_BIN(child->data)->child, 
-      gtk_style_ref( 
-        gtk_widget_get_style( m_widget ) ) );
+    gtk_widget_set_style( GTK_WIDGET(child->data), m_widgetStyle );
+//    gtk_widget_set_style( GTK_BIN(child->data)->child, m_widgetStyle );
 	
     child = child->next;
   }

@@ -119,23 +119,17 @@ void wxCheckBox::SetFont( const wxFont &font )
 
   wxControl::SetFont( font );
   
-  gtk_widget_set_style( GTK_BUTTON(m_widget)->child, 
-    gtk_style_ref(
-      gtk_widget_get_style( m_widget ) ) );
+  gtk_widget_set_style( GTK_BUTTON(m_widget)->child, m_widgetStyle );
 }
 
 void wxCheckBox::SetBackgroundColour( const wxColour &colour )
 {
-  return;
-
   wxCHECK_RET( m_widget != NULL, "invalid checkbox" );
 
   wxControl::SetBackgroundColour( colour );
   
   if (!m_backgroundColour.Ok()) return;
   
-  gtk_widget_set_style( GTK_BUTTON(m_widget)->child, 
-    gtk_style_ref(
-      gtk_widget_get_style( m_widget ) ) );
+  gtk_widget_set_style( m_widget, m_widgetStyle );
 }
 

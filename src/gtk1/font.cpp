@@ -2,7 +2,7 @@
 // Name:        font.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $id$
+// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

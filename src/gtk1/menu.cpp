@@ -2,9 +2,8 @@
 // Name:        menu.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Created:     01/02/97
 // Id:          $Id$
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
