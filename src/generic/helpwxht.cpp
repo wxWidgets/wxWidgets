@@ -277,7 +277,7 @@ wxHelpControllerHtml::DisplayHelp(const wxString &relativeURL)
 
    wxString url;
    wxString mapfileurl = m_MapFile ;
-#ifdef __WXMAC__
+#if defined(__WXMAC__) && !defined(__DARWIN__)
     mapfileurl = wxMac2UnixFilename(m_MapFile) ;
 #endif
    url << mapfileurl << SEP<< relativeURL;
