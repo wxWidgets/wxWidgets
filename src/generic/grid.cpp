@@ -5454,7 +5454,7 @@ int wxGrid::SendEvent( const wxEventType type,
                         wxMouseEvent& mouseEv )
 {
    bool claimed;
-   bool vetoed= false;
+   bool vetoed= FALSE;
 	
    if ( type == wxEVT_GRID_ROW_SIZE || type == wxEVT_GRID_COL_SIZE )
     {
@@ -5470,7 +5470,7 @@ int wxGrid::SendEvent( const wxEventType type,
                                  mouseEv.ShiftDown(),
                                  mouseEv.AltDown(),
                                  mouseEv.MetaDown() );
-    
+
         claimed = GetEventHandler()->ProcessEvent(gridEvt);
 	vetoed = !gridEvt.IsAllowed();
 
@@ -5509,12 +5509,12 @@ int wxGrid::SendEvent( const wxEventType type,
          claimed = GetEventHandler()->ProcessEvent(gridEvt);
      	 vetoed = !gridEvt.IsAllowed();
     }
- 
-  // A Veto'd event may not be `claimed' so test this first 
+
+  // A Veto'd event may not be `claimed' so test this first
   if (vetoed) return -1;
   return claimed ? 1 : 0;
 
-    
+
 }
 
 
@@ -5525,7 +5525,7 @@ int wxGrid::SendEvent( const wxEventType type,
                         int row, int col )
 {
    bool claimed;
-   bool vetoed= false;
+   bool vetoed= FALSE;
 
     if ( type == wxEVT_GRID_ROW_SIZE || type == wxEVT_GRID_COL_SIZE )
     {
@@ -5550,7 +5550,7 @@ int wxGrid::SendEvent( const wxEventType type,
         vetoed  = !gridEvt.IsAllowed();
      }
 
-	// A Veto'd event may not be `claimed' so test this first 
+	// A Veto'd event may not be `claimed' so test this first
 	if (vetoed) return -1;
 	return claimed ? 1 : 0;
 
@@ -6605,8 +6605,8 @@ void wxGrid::EnableCellEditControl( bool enable )
     {
         if ( enable )
         {
- 	    if (SendEvent( wxEVT_GRID_EDITOR_SHOWN) <0) 
-		return; 
+ 	    if (SendEvent( wxEVT_GRID_EDITOR_SHOWN) <0)
+		return;
 
 	    // this should be checked by the caller!
             wxASSERT_MSG( CanEnableCellControl(),
