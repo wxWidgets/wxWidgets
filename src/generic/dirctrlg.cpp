@@ -538,7 +538,7 @@ void wxGenericDirCtrl::SetupSections()
 {
 #if defined(__WXMSW__) || defined(__WXPM__)
 
-#ifdef __WIN32__
+# ifdef __WIN32__
     wxChar driveBuffer[256];
     size_t n = (size_t) GetLogicalDriveStrings(255, driveBuffer);
     size_t i = 0;
@@ -580,7 +580,7 @@ void wxGenericDirCtrl::SetupSections()
         if (driveBuffer[i] == wxT('\0'))
             break;
     }
-#else
+# else
     int drive;
     int currentDrive;
 
@@ -597,7 +597,7 @@ void wxGenericDirCtrl::SetupSections()
             AddSection(path, name);
         }
     }
-#endif
+# endif
 #elif defined(__WXMAC__)
     FSSpec volume ;
     short index = 1 ;
@@ -607,7 +607,7 @@ void wxGenericDirCtrl::SetupSections()
         break ;
 
       wxString name = wxMacFSSpec2MacFilename( &volume ) ;
-      AddSection(name+":", name, 0);
+      AddSection(name + wxFILE_SEP_PATH, name, 0);
     }
 #else
   AddSection(wxT("/"), _("The Computer"), 0);
