@@ -76,6 +76,12 @@ protected:
     // common part of all ctors
     void Init();
 
+    // create the toolbar control
+    bool MSWCreateToolbar(const wxPoint& pos, const wxSize& size, long style);
+
+    // recreate the control completely
+    void Recreate();
+
     // implement base class pure virtuals
     virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool);
     virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool);
@@ -94,16 +100,20 @@ protected:
                                           const wxString& longHelp);
     virtual wxToolBarToolBase *CreateTool(wxControl *control);
 
-    // should be called whenever the toolbar size changes
-    void UpdateSize();
-
     // override WndProc mainly to process WM_SIZE
     virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+
+    // return the appropriate size and flags for the toolbar control
+    virtual wxSize DoGetBestSize() const;
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
     // handlers for various events
     bool HandleSize(WXWPARAM wParam, WXLPARAM lParam);
     bool HandlePaint(WXWPARAM wParam, WXLPARAM lParam);
     void HandleMouseMove(WXWPARAM wParam, WXLPARAM lParam);
+
+    // should be called whenever the toolbar size changes
+    void UpdateSize();
 
     // the big bitmap containing all bitmaps of the toolbar buttons
     WXHBITMAP m_hBitmap;
