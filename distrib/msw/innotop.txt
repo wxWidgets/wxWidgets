@@ -7,8 +7,8 @@
     AppName=wxWindows 2.3.2
     AppId=wxWindows
     CreateUninstallRegKey=1
-    UsePreviousAppDir=1
-    UsePreviousGroup=1
+    UsePreviousAppDir=0
+    UsePreviousGroup=0
     AppVersion=2.3.2
     AppVerName=wxWindows 2.3.2
     AppCopyright=Copyright © The wxWindows Team
