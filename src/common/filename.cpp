@@ -47,7 +47,7 @@
                 Note that VMS uses different separators unlike Unix:
                  : always after the device. If the path does not contain : than
                    the default (the device of the current directory) is assumed.
-                 [ start of directory specyfication
+                 [ start of directory specification
                  . separator between directory and subdirectory
                  ] between directory and file
  */
