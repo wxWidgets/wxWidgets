@@ -58,6 +58,7 @@ private:
     void SetColumnImage(int col, int image);
 
     void LogEvent(const wxListEvent& event, const wxChar *eventName);
+    void LogColEvent(const wxListEvent& event, const wxChar *eventName);
 
     virtual wxString OnGetItemText(long item, long column) const;
     virtual int OnGetItemImage(long item) const;

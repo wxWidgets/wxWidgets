@@ -661,19 +661,30 @@ void MyListCtrl::OnColRightClick(wxListEvent& event)
     wxLogMessage( wxT("OnColumnRightClick at %d."), event.GetColumn() );
 }
 
+void MyListCtrl::LogColEvent(const wxListEvent& event, const wxChar *name)
+{
+    const int col = event.GetColumn();
+
+    wxLogMessage(wxT("%s: column %d (width = %d or %d)."),
+                 name,
+                 col,
+                 event.GetItem().GetWidth(),
+                 GetColumnWidth(col));
+}
+
 void MyListCtrl::OnColBeginDrag(wxListEvent& event)
 {
-    wxLogMessage( wxT("OnColBeginDrag: column %d."), event.GetColumn() );
+    LogColEvent( event, wxT("OnColBeginDrag") );
 }
 
 void MyListCtrl::OnColDragging(wxListEvent& event)
 {
-    wxLogMessage( wxT("OnColDragging: column %d."), event.GetColumn() );
+    LogColEvent( event, wxT("OnColDragging") );
 }
 
 void MyListCtrl::OnColEndDrag(wxListEvent& event)
 {
-    wxLogMessage( wxT("OnColEndDrag: column %d."), event.GetColumn() );
+    LogColEvent( event, wxT("OnColEndDrag") );
 }
 
 void MyListCtrl::OnBeginDrag(wxListEvent& event)
