@@ -369,7 +369,7 @@ wxToolBarTool::wxToolBarTool(wxToolBar *tbar,
     else
     {
         ControlButtonContentInfo info ;
-        wxMacCreateBitmapButton( &info , GetNormalBitmap() ) ;
+        wxMacCreateBitmapButton( &info , GetNormalBitmap()  , kControlContentIconRef ) ;
         
 #ifdef __WXMAC_OSX__
         CreateIconControl( window , &toolrect , &info , false , &m_controlHandle ) ;
