@@ -205,6 +205,32 @@ Deletes all image handlers.
 
 This function is called by wxWindows on exit.
 
+\membersection{wxImage::ComputeHistogram}\label{wximagecomputehistogram}
+
+\constfunc{unsigned long}{ComputeHistogram}{\param{wxImageHistogram\& }{histogram}}
+
+Computes the histogram of the image. {\it histogram} is a reference to 
+wxImageHistogram object. wxImageHistogram is a specialization of 
+\helpref{wxHashMap}{wxhashmap} "template" and is defined as follows:
+
+\begin{verbatim}
+class WXDLLEXPORT wxImageHistogramEntry
+{
+public:
+    wxImageHistogramEntry() : index(0), value(0) {}
+    unsigned long index;
+    unsigned long value;
+};
+
+WX_DECLARE_EXPORTED_HASH_MAP(unsigned long, wxImageHistogramEntry,
+                             wxIntegerHash, wxIntegerEqual,
+                             wxImageHistogram);
+\end{verbatim}
+
+\wxheading{Return value}
+
+Returns number of colours in the histogram.
+
 \membersection{wxImage::ConvertToBitmap}\label{wximageconverttobitmap}
 
 \constfunc{wxBitmap}{ConvertToBitmap}{\void}
@@ -611,15 +637,15 @@ TRUE if the handler was found and removed, FALSE otherwise.
 
 \membersection{wxImage::SaveFile}\label{wximagesavefile}
 
-\func{bool}{SaveFile}{\param{const wxString\& }{name}, \param{int}{ type}}
+\constfunc{bool}{SaveFile}{\param{const wxString\& }{name}, \param{int}{ type}}
 
-\func{bool}{SaveFile}{\param{const wxString\& }{name}, \param{const wxString\&}{ mimetype}}
+\constfunc{bool}{SaveFile}{\param{const wxString\& }{name}, \param{const wxString\&}{ mimetype}}
 
 Saves a image in the named file.
 
-\func{bool}{SaveFile}{\param{wxOutputStream\& }{stream}, \param{int}{ type}}
+\constfunc{bool}{SaveFile}{\param{wxOutputStream\& }{stream}, \param{int}{ type}}
 
-\func{bool}{SaveFile}{\param{wxOutputStream\& }{stream}, \param{const wxString\&}{ mimetype}}
+\constfunc{bool}{SaveFile}{\param{wxOutputStream\& }{stream}, \param{const wxString\&}{ mimetype}}
 
 Saves a image in the given stream.
 

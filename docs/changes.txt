@@ -46,6 +46,9 @@ All (GUI):
 - wxGridCellAttrProvider class API changed, you will need to update your code
   if you derived any classes from it
 
+- wxImage::ComputeHistogram()'s signature changed to 
+  unsigned long ComputeHistogram(wxImageHistogram&) const
+
 wxMSW:
 
 - build system changed: setup.h is not a static file in include/wx any more
@@ -81,6 +84,8 @@ wxBase:
   (if possible) and, especially, not to leak the file descriptors under Unix
 - memory leak in wxHTTP fixed (Dimitri)
 - fixes to AM_PATH_WXCONFIG autoconf macro
+- added wxHashMap class that replaces type-unsafe wxHashTable and is modelled
+  after STL hash_map
 
 Unix (Base/GUI):
 
@@ -89,6 +94,8 @@ Unix (Base/GUI):
 
 All (GUI):
 
+- wxImage::ComputeHistogram() now uses wxImageHistogram instead of type-unsafe
+  wxHashTable
 - significantly improved native font support
 - added IFF image handler
 - fixed using custom renderers in wxGrid which was broken in 2.3.2
