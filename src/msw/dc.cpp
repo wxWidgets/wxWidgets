@@ -1911,8 +1911,11 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
 
     WXMICROWIN_CHECK_HDC_RET(false)
 
+    // if either the source or destination has alpha channel, we must use
+    // AlphaBlt() as other function don't handle it correctly
     const wxBitmap& bmpSrc = source->m_selectedBitmap;
-    if ( bmpSrc.Ok() && bmpSrc.HasAlpha() )
+    if ( bmpSrc.Ok() && (bmpSrc.HasAlpha() ||
+            (m_selectedBitmap.Ok() && m_selectedBitmap.HasAlpha())) )
     {
         if ( AlphaBlt(GetHdc(), xdest, ydest, width, height,
                       GetHdcOf(*source), bmpSrc) )
