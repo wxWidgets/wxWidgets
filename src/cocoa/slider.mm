@@ -9,6 +9,8 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#if wxUSE_SLIDER
+
 #include "wx/app.h"
 #include "wx/slider.h"
 
@@ -39,3 +41,4 @@ wxSlider::~wxSlider()
     SetNSView(NULL);
 }
 
+#endif // wxUSE_SLIDER
