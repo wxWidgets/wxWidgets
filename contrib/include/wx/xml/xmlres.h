@@ -109,6 +109,8 @@ class WXDLLEXPORT wxXmlResource : public wxObject
         wxPanel *LoadPanel(wxWindow *parent, const wxString& name);
         bool LoadPanel(wxPanel *panel, wxWindow *parent, const wxString& name);
 
+        bool LoadFrame(wxFrame* frame, wxWindow *parent, const wxString& name);
+
         // Loads bitmap or icon resource from file:
         wxBitmap LoadBitmap(const wxString& name);
         wxIcon LoadIcon(const wxString& name);

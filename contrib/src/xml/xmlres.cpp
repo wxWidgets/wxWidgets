@@ -175,7 +175,10 @@ bool wxXmlResource::LoadPanel(wxPanel *panel, wxWindow *parent, const wxString& 
     return CreateResFromNode(FindResource(name, wxT("wxPanel")), parent, panel) != NULL;
 }
 
-
+bool wxXmlResource::LoadFrame(wxFrame* frame, wxWindow *parent, const wxString& name)
+{
+    return CreateResFromNode(FindResource(name, wxT("wxFrame")), parent, frame) != NULL;
+}
 
 wxBitmap wxXmlResource::LoadBitmap(const wxString& name)
 {

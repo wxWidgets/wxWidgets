@@ -92,4 +92,6 @@ void wxXmlResource::InitAllHandlers()
     AddHandler(new wxStaticLineXmlHandler);
 #endif
     AddHandler(new wxUnknownWidgetXmlHandler);
+
+    AddHandler(new wxFrameXmlHandler);
 }

@@ -44,4 +44,6 @@
 #include "wx/xml/xh_stlin.h"
 #include "wx/xml/xh_bmp.h"
 #include "wx/xml/xh_unkwn.h"
+#include "wx/xml/xh_frame.h"
+
 #endif // _WX_XMLRES_H_
