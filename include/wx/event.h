@@ -722,13 +722,13 @@ public:
     // True if a button is down and the mouse is moving
     bool Dragging() const
     {
-        return (m_eventType == wxEVT_MOTION) && ButtonDown(wxMOUSE_BTN_ANY);
+        return (m_eventType == wxEVT_MOTION) && ButtonIsDown(wxMOUSE_BTN_ANY);
     }
 
     // True if the mouse is moving, and no button is down
     bool Moving() const
     {
-        return (m_eventType == wxEVT_MOTION) && !ButtonDown(wxMOUSE_BTN_ANY);
+        return (m_eventType == wxEVT_MOTION) && !ButtonIsDown(wxMOUSE_BTN_ANY);
     }
 
     // True if the mouse is just entering the window
