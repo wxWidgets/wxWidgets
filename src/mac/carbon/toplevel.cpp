@@ -101,6 +101,7 @@ void wxTopLevelWindowMac::Init()
     m_maximizeOnShow = FALSE;
     m_macNoEraseUpdateRgn = NewRgn() ;
     m_macNeedsErasing = false ;
+    m_macWindow = NULL ;
 }
 
 bool wxTopLevelWindowMac::Create(wxWindow *parent,
@@ -130,9 +131,12 @@ bool wxTopLevelWindowMac::Create(wxWindow *parent,
 
 wxTopLevelWindowMac::~wxTopLevelWindowMac()
 {
-    wxToolTip::NotifyWindowDelete(m_macWindow) ;
-    UMADisposeWindow( (WindowRef) m_macWindow ) ;
-
+    if ( m_macWindow )
+    {
+        wxToolTip::NotifyWindowDelete(m_macWindow) ;
+        UMADisposeWindow( (WindowRef) m_macWindow ) ;
+    }
+    
     wxRemoveMacWindowAssociation( this ) ;
 
     wxTopLevelWindows.DeleteObject(this);
