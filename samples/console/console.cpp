@@ -42,14 +42,14 @@
 //#define TEST_DLLLOADER
 //#define TEST_EXECUTE
 //#define TEST_FILE
-#define TEST_FILECONF
+//#define TEST_FILECONF
 //#define TEST_HASH
 //#define TEST_LIST
 //#define TEST_LOG
 //#define TEST_LONGLONG
 //#define TEST_MIME
 //#define TEST_INFO_FUNCTIONS
-//#define TEST_SOCKETS
+#define TEST_SOCKETS
 //#define TEST_STRINGS
 //#define TEST_THREADS
 //#define TEST_TIMER
@@ -1319,6 +1319,51 @@ static void TestProtocolFtpUpload()
             printf("--- Uploading to %s ---\n", file1);
             out->Write("Second hello", 12);
             delete out;
+        }
+    }
+}
+
+static void TestProtocolHttp()
+{
+    puts("*** Testing wxHTTP ***\n");
+
+    wxLog::AddTraceMask(_T("http"));
+
+    static const char *hostname = "www.wxwindows.org";
+
+    printf("--- Attempting to connect to %s:80...\n", hostname);
+
+    wxHTTP http;
+    if ( !http.Connect(hostname) )
+    {
+        printf("ERROR: failed to connect to %s\n", hostname);
+    }
+    else
+    {
+        static const char *filename = "/docs.htm";
+        wxInputStream *in = http.GetInputStream(filename);
+        if ( !in )
+        {
+            printf("ERROR: couldn't retrieve '%s'\n", filename);
+        }
+        else
+        {
+            size_t size = in->StreamSize();
+            printf("Reading file %s of type %s (%u bytes)...",
+                   filename, http.GetContentType().c_str(), size);
+
+            char *data = new char[size];
+            if ( !in->Read(data, size) )
+            {
+                puts("ERROR: read error");
+            }
+            else
+            {
+                printf("\nContents of %s:\n%s\n", filename, data);
+            }
+
+            delete [] data;
+            delete in;
         }
     }
 }
@@ -3618,8 +3663,9 @@ int main(int argc, char **argv)
         TestSocketServer();
         TestSocketClient();
         TestProtocolFtp();
-    }
         TestProtocolFtpUpload();
+    }
+    TestProtocolHttp();
 #endif // TEST_SOCKETS
 
 #ifdef TEST_TIMER
