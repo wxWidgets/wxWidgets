@@ -1,3 +1,10 @@
+/*
+
+This file was altered for needs of wxWindows.
+$Id$
+
+*/
+
 /* unzip.h -- IO for uncompress .zip files using zlib
    Version 0.15 beta, Mar 19th, 1998,
 
@@ -269,7 +276,7 @@ extern int ZEXPORT unzGetLocalExtrafield OF((unzFile file,
 */
 
 #if defined(__VISAGECPP__)
-//Visualage complains of no prototypes
+/*Visualage complains of no prototypes*/
 int unzlocal_getByte(FILE* , int*);
 int strcmpcasenosensitive_internal (const char*, const char*);
 int unzlocal_getShort (FILE*, uLong*);

@@ -1,15 +1,17 @@
+/*
+
+This file was altered for needs of wxWindows.
+$Id$
+
+*/
+
 /* unzip.c -- IO on .zip files using zlib
    Version 0.15 beta, Mar 19th, 1998,
 
    Read unzip.h for more info
+
 */
 
-#if 0   
-for what compiler ?
-#if !defined(__VISAGECPP__)
-#   pragma warning(disable:4001)    /* non standard extension used: single line comment */
-#endif
-#endif
 
 
 #include "wx/setup.h"
@@ -360,23 +362,23 @@ wxUnix2MacFilename (char *s)
         {
                 if ( *s == '.' )
                 {
-                        // relative path , since it goes on with slash which is translated to a :
+                        /* relative path , since it goes on with slash which is translated to a : */
                         memmove( s , s+1 ,strlen( s ) ) ;
                 }
                 else if ( *s == '/' )
                 {
-                        // absolute path -> on mac just start with the drive name
+                        /* absolute path -> on mac just start with the drive name */
                         memmove( s , s+1 ,strlen( s ) ) ;
                 }
                 else
                 {
-//                        wxASSERT_MSG( 1 , "unkown path beginning" ) ;
+/*                        wxASSERT_MSG( 1 , "unkown path beginning" ) ; */
                 }
                 while (*s)
                 {
                         if (*s == '/' || *s == '\\')
                         {
-                        	// convert any back-directory situations
+                        	/* convert any back-directory situations */
                         	if ( *(s+1) == '.' && *(s+2) == '.' && ( (*(s+3) == '/' || *(s+3) == '\\') ) )
                         	{
                               *s = ':';
