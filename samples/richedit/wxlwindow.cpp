@@ -313,16 +313,16 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
       case WXLOWIN_MENU_LDOWN:
          {
              // always move cursor to mouse click:
-             if ( obj )
+//             if ( obj )
              {
                 // we have found the real position
                 m_llist->MoveCursorTo(cursorPos);
              }
-             else
-             {
-                // click beyond the end of the text
-                m_llist->MoveCursorToEnd();
-             }
+//             else
+//             {
+//                // click beyond the end of the text
+//                m_llist->MoveCursorToEnd();
+//             }
 
              // clicking a mouse removes the selection
              if ( m_llist->HasSelection() )
@@ -385,7 +385,7 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
          m_llist->StartSelection();
          m_llist->MoveCursorWord(1, false);
          m_llist->EndSelection();
-
+         m_Selecting = false;
          DoPaint();     // TODO: we don't have to redraw everything!
          break;
    }

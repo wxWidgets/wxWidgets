@@ -240,7 +240,7 @@ MyFrame::Clear(void)
 {
    wxColour colBg(0, 255, 255);
 
-   m_lwin->Clear(wxROMAN,16,wxNORMAL,wxNORMAL, false, wxGREEN, &colBg);
+   m_lwin->Clear(wxROMAN,16,wxNORMAL,wxNORMAL, false, wxRED, &colBg);
 }
 
 
@@ -332,7 +332,7 @@ void MyFrame::OnCommand( wxCommandEvent &event )
    {
       wxString line;
       wxLayoutList *llist = m_lwin->GetLayoutList();
-      for(int i = 1; i < 5000; i++)
+      for(int i = 1; i < 300; i++)
       {
          line.Printf("This is line number %d.", i);
          llist->Insert(line);

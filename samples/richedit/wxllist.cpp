@@ -2345,17 +2345,19 @@ wxLayoutList::Draw(wxDC &dc,
    {
       // only draw if between top and bottom:
       if((top == -1 ||
-          line->GetPosition().y + line->GetHeight() >= top))
+          line->GetPosition().y + line->GetHeight() > top))
       {
 //         if(! style_set)
          {
             ApplyStyle(line->GetStyleInfo(), dc);
             style_set = true;
          }
+         // little condition to speed up redrawing:
+         if(bottom != -1
+            && line->GetPosition().y+line->GetHeight() >= bottom)
+            break;
          line->Draw(dc, this, offset);
       }
-      // little condition to speed up redrawing:
-      if(bottom != -1 && line->GetPosition().y > bottom) break;
       line = line->GetNextLine();
    }
    InvalidateUpdateRect();
@@ -2372,7 +2374,9 @@ wxLayoutList::FindObjectScreen(wxDC &dc, wxPoint const pos,
                                bool *found)
 {
    // First, find the right line:
-   wxLayoutLine *line = m_FirstLine;
+   wxLayoutLine
+      *line = m_FirstLine,
+      *lastline = m_FirstLine;
    wxPoint p;
 
    ApplyStyle(m_DefaultStyleInfo, dc);
@@ -2381,16 +2385,7 @@ wxLayoutList::FindObjectScreen(wxDC &dc, wxPoint const pos,
       p = line->GetPosition();
       if(p.y <= pos.y && p.y+line->GetHeight() >= pos.y)
          break;
-#if 0
-      // we need to run a layout here to get font sizes right :-(
-
-      // VZ: we can't call Layout() from here because it marks the line as
-      //     clean and it is not refreshed when it's called from wxLayoutList::
-      //     Layout() - if we really need to do this, we should introduce an
-      //     extra argument to Layout() to prevent the line from MarkClean()ing
-      //     itself here
-      line->Layout(dc, this);
-#endif
+      lastline = line;
       line = line->GetNextLine();
    }
 
@@ -2398,18 +2393,21 @@ wxLayoutList::FindObjectScreen(wxDC &dc, wxPoint const pos,
    {
       if ( found )
           *found = false;
-
-      return NULL; // not found
+      // use the last line:
+      line = lastline;
    }
 
    if ( cursorPos )
        cursorPos->y = line->GetLineNumber();
 
+   bool foundinline = true;
    // Now, find the object in the line:
    wxLOiterator i = line->FindObjectScreen(dc, this,
                                            pos.x,
                                            cursorPos ? &cursorPos->x : NULL,
-                                           found);
+                                           &foundinline);
+   if(found)
+      *found = *found && foundinline;
    return (i == NULLIT) ? NULL : *i;
 
 }
@@ -2929,6 +2927,9 @@ bool wxLayoutPrintout::OnPrintPage(int page)
       int top, bottom;
       top = (page - 1)*m_PrintoutHeight;
       bottom = top + m_PrintoutHeight;
+
+      WXLO_DEBUG(("OnPrintPage(%d) printing from %d to %d", page, top, 
+                  bottom));
       // SetDeviceOrigin() doesn't work here, so we need to manually
       // translate all coordinates.
       wxPoint translate(m_Offset.x,m_Offset.y-top);
@@ -2953,13 +2954,21 @@ void wxLayoutPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom,
    float scale = ScaleDC(&psdc);
 
    psdc.GetSize(&m_PageWidth, &m_PageHeight);
-   // This sets a left/top origin of 15% and 20%:
-   m_Offset = wxPoint((15*m_PageWidth)/100, m_PageHeight/20);
+
+   // This sets a left/top origin of 10% and 7%:
+   m_Offset = wxPoint((10*m_PageWidth)/100, (7*m_PageHeight)/100);
 
    // This is the length of the printable area.
-   m_PrintoutHeight = m_PageHeight - (int) (m_PageHeight * 0.15);
+   m_PrintoutHeight = m_PageHeight - 2*m_Offset.y;
    m_PrintoutHeight = (int)( m_PrintoutHeight / scale); // we want to use the real paper height
-
+#if 0
+   // We should really use the margin settings of wxWindows somehow.
+   m_Offset = wxPoint(0,0);
+   // This is the length of the printable area.
+   m_PrintoutHeight = m_PageHeight;
+   m_PrintoutHeight = (int)( m_PrintoutHeight / scale); // we want to use the real paper height
+#endif
+   
 
    m_NumOfPages = 1 +
       (int)( m_llist->GetSize().y / (float)(m_PrintoutHeight));

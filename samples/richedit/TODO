@@ -11,6 +11,7 @@ BUGS
 TODO
 =====================================================================
 
+- use printsetup margins
 
 - merge RecalulateXXX and Layout() into one
 
