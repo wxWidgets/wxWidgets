@@ -17,8 +17,22 @@
 #endif
 
 #ifndef WX_PRECOMP
-  #include  "wx/string.h"
+    #include  "wx/string.h"
 #endif
+
+/*
+    TODO:
+
+    1. support for drives under Windows
+    2. more file operations:
+        a) chmod()
+        b) [acm]time() - get and set
+        c) file size
+        d) file permissions with readable accessors for most common bits
+           such as IsReadable() &c
+        e) rename()?
+    3. SameFileAs() function to compare inodes under Unix
+ */
 
 // ridiculously enough, this will replace DirExists with wxDirExists etc
 #include "wx/filefn.h"
@@ -224,7 +238,18 @@ public:
     // Construct full path with name and ext
     wxString GetFullPath( wxPathFormat format = wxPATH_NATIVE ) const;
 
+    // various helpers
+
+        // get the canonical path format for this platform
     static wxPathFormat GetFormat( wxPathFormat format = wxPATH_NATIVE );
+
+        // split a fullpath into path, (base) name and ext (all of the pointers
+        // can be NULL)
+    static void SplitPath(const wxString& fullpath,
+                          wxString *path,
+                          wxString *name,
+                          wxString *ext,
+                          wxPathFormat format = wxPATH_NATIVE);
 
 private:
     // the path components of the file

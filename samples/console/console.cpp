@@ -610,10 +610,10 @@ static void TestFileNameConstruction()
 
     for ( size_t n = 0; n < WXSIZEOF(filenames); n++ )
     {
-        wxFileName fn(filenames[n]);
+        wxFileName fn(filenames[n], wxPATH_UNIX);
 
         printf("Filename: '%s'\t", fn.GetFullPath().c_str());
-        if ( !fn.Normalize() )
+        if ( !fn.Normalize(wxPATH_NORM_ALL, _T(""), wxPATH_UNIX) )
         {
             puts("ERROR (couldn't be normalized)");
         }
@@ -3964,6 +3964,12 @@ int main(int argc, char **argv)
 
 #ifdef TEST_FILENAME
     TestFileNameConstruction();
+    if ( 0 )
+    {
+        TestFileNameCwd();
+        TestFileNameComparison();
+        TestFileNameOperations();
+    }
 #endif // TEST_FILENAME
 
 #ifdef TEST_THREADS

@@ -32,6 +32,7 @@
 #include "wx/utils.h"
 #include "wx/intl.h"
 #include "wx/ffile.h"
+#include "wx/filename.h"
 
 // there are just too many of those...
 #ifdef __VISUALC__
@@ -1788,56 +1789,7 @@ void WXDLLEXPORT wxSplitPath(const wxChar *pszFileName,
     // it can be empty, but it shouldn't be NULL
     wxCHECK_RET( pszFileName, wxT("NULL file name in wxSplitPath") );
 
-    const wxChar *pDot = wxStrrchr(pszFileName, wxFILE_SEP_EXT);
-
-#ifdef __WXMSW__
-    // under Windows we understand both separators
-    const wxChar *pSepUnix = wxStrrchr(pszFileName, wxFILE_SEP_PATH_UNIX);
-    const wxChar *pSepDos = wxStrrchr(pszFileName, wxFILE_SEP_PATH_DOS);
-    const wxChar *pLastSeparator = pSepUnix > pSepDos ? pSepUnix : pSepDos;
-#else // assume Unix
-    const wxChar *pLastSeparator = wxStrrchr(pszFileName, wxFILE_SEP_PATH_UNIX);
-
-    if ( pDot )
-    {
-        if ( (pDot == pszFileName) || (*(pDot - 1) == wxFILE_SEP_PATH_UNIX) )
-        {
-            // under Unix, dot may be (and commonly is) the first character of the
-            // filename, don't treat the entire filename as extension in this case
-            pDot = NULL;
-        }
-    }
-#endif // MSW/Unix
-
-    if ( pDot && (pDot < pLastSeparator) )
-    {
-        // the dot is part of the path, not the start of the extension
-        pDot = NULL;
-    }
-
-    if ( pstrPath )
-    {
-        if ( pLastSeparator )
-            *pstrPath = wxString(pszFileName, pLastSeparator - pszFileName);
-        else
-            pstrPath->Empty();
-    }
-
-    if ( pstrName )
-    {
-        const wxChar *start = pLastSeparator ? pLastSeparator + 1 : pszFileName;
-        const wxChar *end = pDot ? pDot : pszFileName + wxStrlen(pszFileName);
-
-        *pstrName = wxString(start, end - start);
-    }
-
-    if ( pstrExt )
-    {
-        if ( pDot )
-            *pstrExt = wxString(pDot + 1);
-        else
-            pstrExt->Empty();
-    }
+    wxFileName::SplitPath(pszFileName, pstrPath, pstrName, pstrExt);
 }
 
 time_t WXDLLEXPORT wxFileModificationTime(const wxString& filename)

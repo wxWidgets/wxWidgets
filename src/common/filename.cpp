@@ -38,13 +38,6 @@
 #include "wx/config.h"          // for wxExpandEnvVars
 #include "wx/utils.h"
 
-// ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-// the character separating the extension from the base name
-#define EXT_SEP _T('.')
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -89,7 +82,7 @@ void wxFileName::Assign(const wxString& fullpath,
                         wxPathFormat format)
 {
     wxString path, name, ext;
-    wxSplitPath(fullpath, &path, &name, &ext);
+    SplitPath(fullpath, &path, &name, &ext, format);
 
     Assign(path, name, ext, format);
 }
@@ -99,7 +92,7 @@ void wxFileName::Assign(const wxString& path,
                         wxPathFormat format)
 {
     wxString name, ext;
-    wxSplitPath(fullname, NULL /* no path */, &name, &ext);
+    SplitPath(fullname, NULL /* no path */, &name, &ext, format);
 
     Assign(path, name, ext, format);
 }
@@ -379,7 +372,7 @@ wxString wxFileName::GetPathSeparators(wxPathFormat format)
     {
         case wxPATH_DOS:
             // accept both as native APIs do
-            seps = _T("/\\");
+            seps << wxFILE_SEP_PATH_UNIX << wxFILE_SEP_PATH_DOS;
             break;
 
         default:
@@ -387,11 +380,11 @@ wxString wxFileName::GetPathSeparators(wxPathFormat format)
             // fall through
 
         case wxPATH_UNIX:
-            seps = _T("/");
+            seps = wxFILE_SEP_PATH_UNIX;
             break;
 
         case wxPATH_MAC:
-            seps = _T(":");
+            seps = wxFILE_SEP_PATH_MAC;
             break;
     }
 
@@ -444,7 +437,7 @@ wxString wxFileName::GetFullName() const
     wxString fullname = m_name;
     if ( !m_ext.empty() )
     {
-        fullname << EXT_SEP << m_ext;
+        fullname << wxFILE_SEP_EXT << m_ext;
     }
 
     return fullname;
@@ -486,3 +479,75 @@ wxPathFormat wxFileName::GetFormat( wxPathFormat format )
     return format;
 }
 
+// ----------------------------------------------------------------------------
+// path splitting function
+// ----------------------------------------------------------------------------
+
+void wxFileName::SplitPath(const wxString& fullpath,
+                           wxString *pstrPath,
+                           wxString *pstrName,
+                           wxString *pstrExt,
+                           wxPathFormat format)
+{
+    format = GetFormat(format);
+
+    // find the positions of the last dot and last path separator in the path
+    size_t posLastDot = fullpath.find_last_of(wxFILE_SEP_EXT);
+    size_t posLastSlash = fullpath.find_last_of(GetPathSeparators(format));
+
+    if ( (posLastDot != wxString::npos) && (format == wxPATH_UNIX) )
+    {
+        if ( (posLastDot == 0) ||
+             (fullpath[posLastDot - 1] == wxFILE_SEP_PATH_UNIX) )
+        {
+            // under Unix, dot may be (and commonly is) the first character of
+            // the filename, don't treat the entire filename as extension in
+            // this case
+            posLastDot = wxString::npos;
+        }
+    }
+
+    if ( (posLastDot != wxString::npos) && (posLastDot < posLastSlash) )
+    {
+        // the dot is part of the path, not the start of the extension
+        posLastDot = wxString::npos;
+    }
+
+    // now fill in the variables provided by user
+    if ( pstrPath )
+    {
+        if ( posLastSlash == wxString::npos )
+        {
+            // no path at all
+            pstrPath->Empty();
+        }
+        else
+        {
+            // take all until the separator
+            *pstrPath = fullpath.Left(posLastSlash);
+        }
+    }
+
+    if ( pstrName )
+    {
+        size_t nStart = posLastSlash == wxString::npos ? 0 : posLastSlash + 1;
+        size_t count = posLastDot == wxString::npos ? wxString::npos
+                                                    : posLastDot - posLastSlash;
+
+        *pstrName = fullpath.Mid(nStart, count);
+    }
+
+    if ( pstrExt )
+    {
+        if ( posLastDot == wxString::npos )
+        {
+            // no extension
+            pstrExt->Empty();
+        }
+        else
+        {
+            // take everything after the dot
+            *pstrExt = fullpath.Mid(posLastDot + 1);
+        }
+    }
+}
