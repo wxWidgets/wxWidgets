@@ -1,3 +1,8 @@
+Enhancements for wxWindows 3.0
+==============================
+
+RCS-ID:      $Id$
+
 C++ Features
 ============
 
