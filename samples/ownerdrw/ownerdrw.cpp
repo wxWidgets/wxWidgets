@@ -300,12 +300,12 @@ OwnerDrawnFrame::~OwnerDrawnFrame()
 {
 }
 
-void OwnerDrawnFrame::OnQuit(wxCommandEvent& event)
+void OwnerDrawnFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
     Close(TRUE);
 }
 
-void OwnerDrawnFrame::OnMenuToggle(wxCommandEvent& event)
+void OwnerDrawnFrame::OnMenuToggle(wxCommandEvent& WXUNUSED(event))
 {
     // This example shows the use of bitmaps in ownerdrawn menuitems and is not a good
     // example on how to enable and disable menuitems - this should be done with the help of
@@ -313,7 +313,7 @@ void OwnerDrawnFrame::OnMenuToggle(wxCommandEvent& event)
     pAboutItem->Enable( pAboutItem->IsEnabled() ? FALSE : TRUE );
 }
 
-void OwnerDrawnFrame::OnAbout(wxCommandEvent& event)
+void OwnerDrawnFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageDialog dialog(this,
                            _T("Demo of owner-drawn controls\n"),
@@ -330,7 +330,7 @@ void OwnerDrawnFrame::OnListboxSelect(wxCommandEvent& event)
     SetStatusText(strSelection);
 }
 
-void OwnerDrawnFrame::OnListboxDblClick(wxCommandEvent& event)
+void OwnerDrawnFrame::OnListboxDblClick(wxCommandEvent& WXUNUSED(event))
 {
     wxString strSelection;
     strSelection.Printf(wxT("item %d double clicked"),
