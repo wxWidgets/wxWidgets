@@ -266,10 +266,6 @@ private:
     // this flag tells us if we're online
     static int ms_isConnected;
 
-    // this flag is the result of the call to IsAlwaysOnline() (-1 if not
-    // called yet)
-    static int ms_isAlwaysOnline;
-
     // this flag tells us whether a call to RasDial() is in progress
     static wxDialUpManagerMSW *ms_dialer;
 };
@@ -321,7 +317,6 @@ RASCONNECTIONNOTIFICATION wxDialUpManagerMSW::ms_pfnRasConnectionNotification = 
 
 int wxDialUpManagerMSW::ms_userSpecifiedOnlineStatus = -1;
 int wxDialUpManagerMSW::ms_isConnected = -1;
-int wxDialUpManagerMSW::ms_isAlwaysOnline = -1;
 wxDialUpManagerMSW *wxDialUpManagerMSW::ms_dialer = NULL;
 
 // ----------------------------------------------------------------------------
@@ -926,14 +921,10 @@ bool wxDialUpManagerMSW::HangUp()
 
 bool wxDialUpManagerMSW::IsAlwaysOnline() const
 {
-    // we cache the result (presumably this won't change while the program is
-    // running!)
-    if ( ms_isAlwaysOnline != -1 )
-    {
-        return ms_isAlwaysOnline != 0;
-    }
+    // assume no permanent connection by default
+    bool isAlwaysOnline = FALSE;
 
-    // try to use WinInet function first
+    // try to use WinInet functions
 
     // NB: we could probably use wxDynamicLibrary here just as well,
     //     but we allow multiple instances of wxDialUpManagerMSW so
@@ -956,39 +947,14 @@ bool wxDialUpManagerMSW::IsAlwaysOnline() const
             if ( pfnInternetGetConnectedState(&flags, 0 /* reserved */) )
             {
                 // there is some connection to the net, see of which type
-                ms_isAlwaysOnline = ((flags & INTERNET_CONNECTION_LAN) != 0)
-                                    || ((flags & INTERNET_CONNECTION_PROXY) != 0);
+                isAlwaysOnline = (flags & (INTERNET_CONNECTION_LAN |
+                                           INTERNET_CONNECTION_PROXY)) != 0;
             }
-            else
-            {
-                // no Internet connection at all
-                ms_isAlwaysOnline = FALSE;
-            }
+            //else: no Internet connection at all
         }
     }
 
-    // did we succeed with WinInet? if not, try something else
-    if ( ms_isAlwaysOnline == -1 )
-    {
-        if ( !IsOnline() )
-        {
-            // definitely no permanent connection because we are not connected
-            // now
-            ms_isAlwaysOnline = FALSE;
-        }
-        else
-        {
-            // of course, having a modem doesn't prevent us from having a
-            // permanent connection as well, but we have to guess somehow and
-            // it's probably more common that a system connected via a modem
-            // doesn't have any other net access, so:
-            ms_isAlwaysOnline = FALSE;
-        }
-    }
-
-    wxASSERT_MSG( ms_isAlwaysOnline != -1, wxT("logic error") );
-
-    return ms_isAlwaysOnline != 0;
+    return isAlwaysOnline;
 }
 
 bool wxDialUpManagerMSW::IsOnline() const
