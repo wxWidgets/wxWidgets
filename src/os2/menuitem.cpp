@@ -58,35 +58,43 @@
 // static function for translating menu labels
 // ----------------------------------------------------------------------------
 
-static wxString TextToLabel(const wxString& rTitle)
+static wxString TextToLabel(
+  const wxString&                   rsTitle
+)
 {
-    wxString Title;
-    const wxChar *pc;
-    for (pc = rTitle.c_str(); *pc != wxT('\0'); pc++ )
+    wxString                        sTitle;
+    const wxChar*                   zPc;
+
+    if (rsTitle.IsEmpty())
+        return(sTitle);
+
+    for (zPc = rsTitle.c_str(); *zPc != wxT('\0'); zPc++)
     {
-        if (*pc == wxT('&') )
+        if (*zPc == wxT('&'))
         {
-            if (*(pc+1) == wxT('&'))
+            if (*(zPc + 1) == wxT('&'))
             {
-                pc++;
-                Title << wxT('&');
+                zPc++;
+                sTitle << wxT('&');
             }
             else
-                Title << wxT('~');
+                sTitle << wxT('~');
         }
         else
         {
-            if ( *pc == wxT('~') )
+            if ( *zPc == wxT('~'))
             {
-                // tildes must be doubled to prevent them from being
+                //
+                // Tildes must be doubled to prevent them from being
                 // interpreted as accelerator character prefix by PM ???
-                Title << *pc;
+                //
+                sTitle << *zPc;
             }
-            Title << *pc;
+            sTitle << *zPc;
         }
     }
-    return Title;
-}
+    return(sTitle);
+} // end of TextToLabel
 
 // ============================================================================
 // implementation
@@ -173,12 +181,11 @@ void wxMenuItem::Init()
     SetTextColour(SYS_COLOR(MENUTEXT));
     SetBackgroundColour(SYS_COLOR(MENU));
 
-    #undef  SYS_COLOR
-
     //
     // We don't want normal items be owner-drawn
     //
     ResetOwnerDrawn();
+    #undef  SYS_COLOR
 
     //
     // Tell the owner drawing code to to show the accel string as well
@@ -218,23 +225,25 @@ bool wxMenuItem::IsChecked() const
 } // end of wxMenuItem::IsChecked
 
 wxString wxMenuItemBase::GetLabelFromText(
-  const wxString&                   rText
+  const wxString&                   rsText
 )
 {
-    wxString label;
-    for ( const wxChar *pc = rText.c_str(); *pc; pc++ )
+    wxString                        sLabel;
+
+    for (const char* zPc = rsText.c_str(); *zPc; zPc++)
     {
-        if ( *pc == wxT('~') || *pc == wxT('&') )
+        if (*zPc == wxT('~') || *zPc == wxT('&'))
         {
-            // '~' is the escape character for GTK+ and '&' is the one for
+            //
+            // '~' is the escape character for OS/2PM and '&' is the one for
             // wxWindows - skip both of them
+            //
             continue;
         }
-
-        label += *pc;
+        sLabel += *zPc;
     }
-    return label;
-}
+    return sLabel;
+} // end of wxMenuItemBase::GetLabelFromText
 
 //
 // Radio group stuff
