@@ -109,6 +109,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_Create,(self,) + _args, _kwargs)
+        return val
     def CaptureMouse(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_CaptureMouse,(self,) + _args, _kwargs)
         return val
@@ -332,6 +335,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def Refresh(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_Refresh,(self,) + _args, _kwargs)
         return val
+    def RefreshRect(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_RefreshRect,(self,) + _args, _kwargs)
+        return val
     def ReleaseMouse(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_ReleaseMouse,(self,) + _args, _kwargs)
         return val
@@ -511,6 +517,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def Thaw(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_Thaw,(self,) + _args, _kwargs)
         return val
+    def Update(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_Update,(self,) + _args, _kwargs)
+        return val
     def GetHelpText(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetHelpText,(self,) + _args, _kwargs)
         return val
@@ -548,15 +557,22 @@ class wxWindow(wxWindowPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxWindow,_args,_kwargs)
         self.thisown = 1
-        #wx._StdWindowCallbacks(self)
 
 
+
+def wxPreWindow(*_args,**_kwargs):
+    val = wxWindowPtr(apply(windowsc.new_wxPreWindow,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 class wxPanelPtr(wxWindowPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(windowsc.wxPanel_Create,(self,) + _args, _kwargs)
+        return val
     def InitDialog(self, *_args, **_kwargs):
         val = apply(windowsc.wxPanel_InitDialog,(self,) + _args, _kwargs)
         return val
@@ -572,15 +588,22 @@ class wxPanel(wxPanelPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxPanel,_args,_kwargs)
         self.thisown = 1
-        #wx._StdWindowCallbacks(self)
 
 
+
+def wxPrePanel(*_args,**_kwargs):
+    val = wxPanelPtr(apply(windowsc.new_wxPrePanel,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 class wxDialogPtr(wxPanelPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(windowsc.wxDialog_Create,(self,) + _args, _kwargs)
+        return val
     def Centre(self, *_args, **_kwargs):
         val = apply(windowsc.wxDialog_Centre,(self,) + _args, _kwargs)
         return val
@@ -629,15 +652,22 @@ class wxDialog(wxDialogPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxDialog,_args,_kwargs)
         self.thisown = 1
-        #wx._StdDialogCallbacks(self)
 
 
+
+def wxPreDialog(*_args,**_kwargs):
+    val = wxDialogPtr(apply(windowsc.new_wxPreDialog,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 class wxScrolledWindowPtr(wxPanelPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(windowsc.wxScrolledWindow_Create,(self,) + _args, _kwargs)
+        return val
     def EnableScrolling(self, *_args, **_kwargs):
         val = apply(windowsc.wxScrolledWindow_EnableScrolling,(self,) + _args, _kwargs)
         return val
@@ -699,10 +729,13 @@ class wxScrolledWindow(wxScrolledWindowPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxScrolledWindow,_args,_kwargs)
         self.thisown = 1
-        #wx._StdWindowCallbacks(self)
-        #wx._StdOnScrollCallbacks(self)
 
 
+
+def wxPreScrolledWindow(*_args,**_kwargs):
+    val = wxScrolledWindowPtr(apply(windowsc.new_wxPreScrolledWindow,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 class wxMenuPtr(wxEvtHandlerPtr):
@@ -983,6 +1016,10 @@ class wxMenuItem(wxMenuItemPtr):
 
 #-------------- FUNCTION WRAPPERS ------------------
 
+wxValidator_IsSilent = windowsc.wxValidator_IsSilent
+
+wxValidator_SetBellOnError = windowsc.wxValidator_SetBellOnError
+
 def wxWindow_FindFocus(*_args, **_kwargs):
     val = apply(windowsc.wxWindow_FindFocus,_args,_kwargs)
     return val
@@ -992,10 +1029,6 @@ wxWindow_NewControlId = windowsc.wxWindow_NewControlId
 wxWindow_NextControlId = windowsc.wxWindow_NextControlId
 
 wxWindow_PrevControlId = windowsc.wxWindow_PrevControlId
-
-wxValidator_IsSilent = windowsc.wxValidator_IsSilent
-
-wxValidator_SetBellOnError = windowsc.wxValidator_SetBellOnError
 
 wxMenuItem_GetLabelFromText = windowsc.wxMenuItem_GetLabelFromText
 

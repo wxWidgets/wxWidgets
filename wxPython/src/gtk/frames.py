@@ -19,6 +19,9 @@ class wxFramePtr(wxWindowPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_Create,(self,) + _args, _kwargs)
+        return val
     def Centre(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_Centre,(self,) + _args, _kwargs)
         return val
@@ -108,24 +111,35 @@ class wxFrame(wxFramePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(framesc.new_wxFrame,_args,_kwargs)
         self.thisown = 1
-        #wx._StdFrameCallbacks(self)
 
 
+
+def wxPreFrame(*_args,**_kwargs):
+    val = wxFramePtr(apply(framesc.new_wxPreFrame,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 class wxMiniFramePtr(wxFramePtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(framesc.wxMiniFrame_Create,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxMiniFrame instance at %s>" % (self.this,)
 class wxMiniFrame(wxMiniFramePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(framesc.new_wxMiniFrame,_args,_kwargs)
         self.thisown = 1
-        #wx._StdFrameCallbacks(self)
 
 
+
+def wxPreMiniFrame(*_args,**_kwargs):
+    val = wxMiniFramePtr(apply(framesc.new_wxPreMiniFrame,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 class wxTipWindowPtr(wxFramePtr):
