@@ -17,8 +17,19 @@
 #include "wx/image.h"
 
 // defines for saving the BMP file in different formats, Bits Per Pixel
-// USE: wximage.SetOption( wxBMP_FORMAT, wxBMP_xBPP );
-#define wxBMP_FORMAT wxString(_T("wxBMP_FORMAT"))
+// USE: wximage.SetOption( wxIMAGE_OPTION_BMP_FORMAT, wxBMP_xBPP );
+#define wxIMAGE_OPTION_BMP_FORMAT wxString(_T("wxBMP_FORMAT"))
+
+// These two options are filled in upon reading CUR file and can (should) be
+// specified when saving a CUR file - they define the hotspot of the cursor:
+#define wxIMAGE_OPTION_CUR_HOTSPOT_X  wxT("HotSpotX")
+#define wxIMAGE_OPTION_CUR_HOTSPOT_Y  wxT("HotSpotY")
+
+// Do not use these macros, they are deprecated!! :
+#define wxBMP_FORMAT    wxIMAGE_OPTION_BMP_FORMAT
+#define wxCUR_HOTSPOT_X wxIMAGE_OPTION_CUR_HOTSPOT_X
+#define wxCUR_HOTSPOT_Y wxIMAGE_OPTION_CUR_HOTSPOT_Y
+
 
 enum
 {
@@ -99,11 +110,6 @@ private:
 // ----------------------------------------------------------------------------
 // wxCURHandler
 // ----------------------------------------------------------------------------
-
-// These two options are filled in upon reading CUR file and can (should) be
-// specified when saving a CUR file - they define the hotspot of the cursor:
-#define wxCUR_HOTSPOT_X  wxT("HotSpotX")
-#define wxCUR_HOTSPOT_Y  wxT("HotSpotY")
 
 class WXDLLEXPORT wxCURHandler : public wxICOHandler
 {

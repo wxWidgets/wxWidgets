@@ -89,8 +89,8 @@ bool wxBMPHandler::SaveDib(wxImage *image,
 
     // get the format of the BMP file to save, else use 24bpp
     unsigned format = wxBMP_24BPP;
-    if ( image->HasOption(wxBMP_FORMAT) )
-        format = image->GetOptionInt(wxBMP_FORMAT);
+    if ( image->HasOption(wxIMAGE_OPTION_BMP_FORMAT) )
+        format = image->GetOptionInt(wxIMAGE_OPTION_BMP_FORMAT);
 
     wxUint16 bpp;     // # of bits per pixel
     int palette_size; // # of color map entries, ie. 2^bpp colors
@@ -1001,10 +1001,10 @@ bool wxICOHandler::SaveFile(wxImage *image,
         }
         // Set the formats for image and mask
         // (Windows never saves with more than 8 colors):
-        image->SetOption(wxBMP_FORMAT, wxBMP_8BPP);
+        image->SetOption(wxIMAGE_OPTION_BMP_FORMAT, wxBMP_8BPP);
 
         // monochome bitmap:
-        mask.SetOption(wxBMP_FORMAT, wxBMP_1BPP_BW);
+        mask.SetOption(wxIMAGE_OPTION_BMP_FORMAT, wxBMP_1BPP_BW);
         bool IsBmp = FALSE;
         bool IsMask = FALSE;
 
@@ -1049,11 +1049,11 @@ bool wxICOHandler::SaveFile(wxImage *image,
         icondirentry.wBitCount = wxUINT16_SWAP_ON_BE(wxBMP_8BPP);
         if ( type == 2 /*CUR*/)
         {
-            int hx = image->HasOption(wxCUR_HOTSPOT_X) ?
-                         image->GetOptionInt(wxCUR_HOTSPOT_X) :
+            int hx = image->HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_X) ?
+                         image->GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X) :
                          image->GetWidth() / 2;
-            int hy = image->HasOption(wxCUR_HOTSPOT_Y) ?
-                         image->GetOptionInt(wxCUR_HOTSPOT_Y) :
+            int hy = image->HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y) ?
+                         image->GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y) :
                          image->GetHeight() / 2;
 
             // actually write the values of the hot spot here:
@@ -1175,8 +1175,8 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
         if ( bResult && bIsCursorType && nType == 2 )
         {
             // it is a cursor, so let's set the hotspot:
-            image->SetOption(wxCUR_HOTSPOT_X, wxUINT16_SWAP_ON_BE(pCurrentEntry->wPlanes));
-            image->SetOption(wxCUR_HOTSPOT_Y, wxUINT16_SWAP_ON_BE(pCurrentEntry->wBitCount));
+            image->SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X, wxUINT16_SWAP_ON_BE(pCurrentEntry->wPlanes));
+            image->SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y, wxUINT16_SWAP_ON_BE(pCurrentEntry->wBitCount));
         }
     }
     delete[] pIconDirEntry;

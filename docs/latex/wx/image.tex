@@ -145,8 +145,8 @@ initialized with \helpref{wxImage::AddHandler}{wximageaddhandler} or
 Note: you can use \helpref{GetOptionInt}{wximagegetoptionint} to get the 
 hotspot for loaded cursor file:
 \begin{verbatim}
-    int hotspot_x = image.GetOptionInt(wxCUR_HOTSPOT_X);
-    int hotspot_y = image.GetOptionInt(wxCUR_HOTSPOT_Y);
+    int hotspot_x = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X);
+    int hotspot_y = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y);
 
 \end{verbatim}
 
@@ -581,8 +581,8 @@ Depending on how wxWindows has been configured, not all formats may be available
 Note: you can use \helpref{GetOptionInt}{wximagegetoptionint} to get the 
 hotspot for loaded cursor file:
 \begin{verbatim}
-    int hotspot_x = image.GetOptionInt(wxCUR_HOTSPOT_X);
-    int hotspot_y = image.GetOptionInt(wxCUR_HOTSPOT_Y);
+    int hotspot_x = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X);
+    int hotspot_y = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y);
 
 \end{verbatim}
 
@@ -684,8 +684,8 @@ Note: you can use \helpref{GetOptionInt}{wximagegetoptionint} to set the
 hotspot before saving an image into a cursor file (default hotspot is in 
 the centre of the image):
 \begin{verbatim}
-    image.SetOption(wxCUR_HOTSPOT_X, hotspotX);
-    image.SetOption(wxCUR_HOTSPOT_Y, hotspotY);
+    image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X, hotspotX);
+    image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y, hotspotY);
 
 \end{verbatim}
 

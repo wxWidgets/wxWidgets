@@ -274,6 +274,13 @@ wxImage wxImage::Scale( int width, int height ) const
         }
     }
 #endif
+    // In case this is a cursor, make sure the hotspot is scalled accordingly:
+    if ( HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_X) )
+        image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X,
+                (GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X)*width)/old_width);
+    if ( HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y) )
+        image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y,
+                (GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y)*height)/old_height);
 
     return image;
 }
@@ -933,6 +940,9 @@ bool wxImage::LoadFile( const wxString& filename, const wxString& mimetype, int 
 bool wxImage::SaveFile( const wxString& filename, int type ) const
 {
 #if wxUSE_STREAMS
+    if ( !HasOption(wxIMAGE_OPTION_FILENAME) )
+        ((wxImage*)this)->SetOption(wxIMAGE_OPTION_FILENAME, filename);
+
     wxFileOutputStream stream(filename);
 
     if ( stream.LastError() == wxStream_NOERROR )
@@ -948,6 +958,9 @@ bool wxImage::SaveFile( const wxString& filename, int type ) const
 bool wxImage::SaveFile( const wxString& filename, const wxString& mimetype ) const
 {
 #if wxUSE_STREAMS
+    if ( !HasOption(wxIMAGE_OPTION_FILENAME) )
+        ((wxImage*)this)->SetOption(wxIMAGE_OPTION_FILENAME, filename);
+
     wxFileOutputStream stream(filename);
 
     if ( stream.LastError() == wxStream_NOERROR )

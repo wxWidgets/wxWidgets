@@ -127,13 +127,26 @@ bool wxXPMHandler::SaveFile(wxImage * image,
     for ( k = MaxCixels; cols > k; k *= MaxCixels)
         chars_per_pixel++;
 
-    // 2. write the header:
+    // 2. write the header:    
+    wxString sName;
+    if ( image->HasOption(wxIMAGE_OPTION_FILENAME) )
+    {
+        wxSplitPath(image->GetOption(wxIMAGE_OPTION_FILENAME),
+                    NULL, &sName, NULL);
+        sName << wxT("_xpm");
+    }
+    
+    if ( !sName.IsEmpty() )
+        sName = wxString(wxT("/* XPM */\nstatic char *")) + sName;
+    else 
+        sName = wxT("/* XPM */\nstatic char *xpm_data");
+    stream.Write(sName.c_str(), sName.Len());
+
     char tmpbuf[200];
     // VS: 200b is safe upper bound for anything produced by sprintf below
-    //     (101 bytes the string, neither %i can expand into more than 10 chars)
+    //     (<101 bytes the string, neither %i can expand into more than 10 chars)
     sprintf(tmpbuf, 
-               "/* XPM */\n"
-               "static char *xpm_data[] = {\n"
+               "[] = {\n"
                "/* columns rows colors chars-per-pixel */\n"
                "\"%i %i %i %i\",\n",
                image->GetWidth(), image->GetHeight(), cols, chars_per_pixel);

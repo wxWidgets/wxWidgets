@@ -151,7 +151,7 @@ public:
             return;
         }
 
-        image.SetOption(wxBMP_FORMAT, bppvalues[bppselection]);
+        image.SetOption(wxIMAGE_OPTION_BMP_FORMAT, bppvalues[bppselection]);
 
         wxString deffilename = bppchoices[bppselection];
         deffilename.Replace(wxT(" "), wxT("_"));
@@ -173,7 +173,7 @@ public:
         if ( savefilename.empty() )
             return;
 
-        if ( image.GetOptionInt(wxBMP_FORMAT) == wxBMP_8BPP_PALETTE )
+        if ( image.GetOptionInt(wxIMAGE_OPTION_BMP_FORMAT) == wxBMP_8BPP_PALETTE )
         {
             unsigned char *cmap = new unsigned char [256];
             for ( int i = 0; i < 256; i++ )
@@ -204,8 +204,8 @@ public:
         else if (extension == "cur")
             {
             image.Rescale(32,32);    
-            image.SetOption(wxCUR_HOTSPOT_X, 0);    
-            image.SetOption(wxCUR_HOTSPOT_Y, 0);    
+            image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X, 0);    
+            image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y, 0);    
             saved=image.SaveFile(savefilename, wxBITMAP_TYPE_CUR);
             }
         else
@@ -415,8 +415,8 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     else
         {
         my_horse_cur = new wxBitmap( image );
-        xH = 30 + image.GetOptionInt(wxCUR_HOTSPOT_X) ;
-        yH = 2420 + image.GetOptionInt(wxCUR_HOTSPOT_Y) ;
+        xH = 30 + image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X) ;
+        yH = 2420 + image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y) ;
         }
     
 #endif
