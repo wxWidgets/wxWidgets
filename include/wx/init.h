@@ -72,7 +72,10 @@ class WXDLLIMPEXP_BASE wxInitializer
 {
 public:
     // initialize the library
-    wxInitializer() { m_ok = wxInitialize(); }
+    wxInitializer(int argc = 0, wxChar **argv = NULL)
+    {
+        m_ok = wxInitialize(argc, argv);
+    }
 
     // has the initialization been successful? (explicit test)
     bool IsOk() const { return m_ok; }
