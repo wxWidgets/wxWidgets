@@ -27,12 +27,6 @@ wxWindowList wxTopLevelWindows;
 // List of windows pending deletion
 wxList wxPendingDelete;
 
-#if wxUSE_THREADS
-// List of events pending propagation
-wxList *wxPendingEvents = NULL;
-wxCriticalSection *wxPendingEventsLocker = NULL;
-#endif
-
 int wxPageNumber;
 
 // GDI Object Lists

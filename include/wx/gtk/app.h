@@ -59,7 +59,6 @@ public:
     static void CleanUp();
 
     bool ProcessIdle();
-    void ProcessPendingEvents();
     void DeletePendingObjects();
 
     // This can be used to suppress the generation of Idle events.

@@ -24,7 +24,7 @@
 #include "wx/wx.h"
 #endif
 
-#if wxUSE_PRINTING_ARCHITECTURE
+#if wxUSE_HTML & wxUSE_PRINTING_ARCHITECTURE
 
 #include "wx/print.h"
 #include "wx/printdlg.h"
@@ -565,4 +565,4 @@ wxHtmlPrintout *wxHtmlEasyPrinting::CreatePrintout()
 
 
 
-#endif // wxUSE_PRINTING_ARCHITECTURE
+#endif // wxUSE_HTML & wxUSE_PRINTING_ARCHITECTURE

@@ -53,11 +53,6 @@
 extern char *wxBuffer;
 extern wxList wxPendingDelete;
 
-#if wxUSE_THREADS
-extern wxList *wxPendingEvents;
-extern wxCriticalSection *wxPendingEventsLocker;
-#endif // wxUSE_THREADS
-
 wxApp *wxTheApp = NULL;
 
 wxHashTable *wxWidgetHashTable = NULL;
@@ -81,7 +76,6 @@ bool wxApp::Initialize()
     // GL: I'm annoyed ... I don't know where to put this and I don't want to
     // create a module for that as it's part of the core.
 #if wxUSE_THREADS
-    wxPendingEvents = new wxList();
     wxPendingEventsLocker = new wxCriticalSection();
 #endif
 
@@ -548,24 +542,6 @@ void wxApp::DeletePendingObjects()
         node = wxPendingDelete.First();
     }
 }
-
-#if wxUSE_THREADS
-void wxApp::ProcessPendingEvents()
-{
-    wxNode *node = wxPendingEvents->First();
-    wxCriticalSectionLocker locker(*wxPendingEventsLocker);
-
-    while (node)
-    {
-        wxEvtHandler *handler = (wxEvtHandler *)node->Data();
-
-        handler->ProcessPendingEvents();
-
-        delete node;
-        node = wxPendingEvents->First();
-    }
-}
-#endif // wxUSE_THREADS
 
 // Create an application context
 bool wxApp::OnInitGui()

@@ -28,7 +28,7 @@ class wxMemoryDC;
 // wxMemoryDC
 //-----------------------------------------------------------------------------
 
-class wxMemoryDC: public wxWindowDC
+class wxMemoryDC : public wxWindowDC
 {
   DECLARE_DYNAMIC_CLASS(wxMemoryDC)
 

@@ -8,7 +8,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-    #pragma implementation "appbase.h"
     #pragma implementation "app.h"
 #endif
 
@@ -513,28 +512,6 @@ bool wxApp::Pending()
 void wxApp::Dispatch()
 {
     gtk_main_iteration();
-}
-
-void wxApp::ProcessPendingEvents()
-{
-#if wxUSE_THREADS
-    wxCriticalSectionLocker locker(*wxPendingEventsLocker);
-#endif // wxUSE_THREADS
-
-    if ( !wxPendingEvents )
-        return;
-
-    wxNode *node = wxPendingEvents->First();
-    while (node)
-    {
-        wxEvtHandler *handler = (wxEvtHandler *)node->Data();
-
-        handler->ProcessPendingEvents();
-
-        delete node;
-
-        node = wxPendingEvents->First();
-    }
 }
 
 void wxApp::DeletePendingObjects()

@@ -29,7 +29,7 @@
 
 class WXDLLEXPORT wxFrame;
 class WXDLLEXPORT wxWindow;
-class WXDLLEXPORT wxApp ;
+class WXDLLEXPORT wxApp;
 class WXDLLEXPORT wxKeyEvent;
 class WXDLLEXPORT wxLog;
 
@@ -51,8 +51,8 @@ public:
     virtual int MainLoop();
     virtual void ExitMainLoop();
     virtual bool Initialized();
-    virtual bool Pending() ;
-    virtual void Dispatch() ;
+    virtual bool Pending();
+    virtual void Dispatch();
 
     virtual bool OnInitGui();
 
@@ -95,14 +95,11 @@ public:
 
     void DeletePendingObjects();
     bool ProcessIdle();
-#if wxUSE_THREADS
-    void ProcessPendingEvents();
-#endif
 
     // Motif-specific
     WXAppContext   GetAppContext() const { return m_appContext; }
     WXWidget       GetTopLevelWidget() const { return m_topLevelWidget; }
-    WXColormap     GetMainColormap(WXDisplay* display) ;
+    WXColormap     GetMainColormap(WXDisplay* display);
     WXDisplay*     GetInitialDisplay() const { return m_initialDisplay; }
     long           GetMaxRequestSize() const { return m_maxRequestSize; }
 
@@ -114,7 +111,7 @@ public:
     int            m_nCmdShow;
 
 protected:
-    bool                  m_keepGoing ;
+    bool                  m_keepGoing;
 
     // Motif-specific
     WXAppContext          m_appContext;

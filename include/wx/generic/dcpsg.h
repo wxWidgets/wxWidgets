@@ -62,30 +62,30 @@ public:
   virtual void BeginDrawing() {}
   virtual void EndDrawing() {}
 
-  void DoFloodFill(long x1, long y1, const wxColour &col, int style=wxFLOOD_SURFACE );
-  bool DoGetPixel(long x1, long y1, wxColour *col) const;
+  void DoFloodFill(wxCoord x1, wxCoord y1, const wxColour &col, int style=wxFLOOD_SURFACE );
+  bool DoGetPixel(wxCoord x1, wxCoord y1, wxColour *col) const;
 
-  void DoDrawLine(long x1, long y1, long x2, long y2);
-  void DoCrossHair(long x, long y) ;
-  void DoDrawArc(long x1,long y1,long x2,long y2,long xc,long yc);
-  void DoDrawEllipticArc(long x,long y,long w,long h,double sa,double ea);
-  void DoDrawPoint(long x, long y);
-  void DoDrawLines(int n, wxPoint points[], long xoffset = 0, long yoffset = 0);
-  void DoDrawPolygon(int n, wxPoint points[], long xoffset = 0, long yoffset = 0, int fillStyle=wxODDEVEN_RULE);
-  void DoDrawRectangle(long x, long y, long width, long height);
-  void DoDrawRoundedRectangle(long x, long y, long width, long height, double radius = 20);
-  void DoDrawEllipse(long x, long y, long width, long height);
+  void DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2);
+  void DoCrossHair(wxCoord x, wxCoord y) ;
+  void DoDrawArc(wxCoord x1,wxCoord y1,wxCoord x2,wxCoord y2,wxCoord xc,wxCoord yc);
+  void DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea);
+  void DoDrawPoint(wxCoord x, wxCoord y);
+  void DoDrawLines(int n, wxPoint points[], wxCoord xoffset = 0, wxCoord yoffset = 0);
+  void DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset = 0, wxCoord yoffset = 0, int fillStyle=wxODDEVEN_RULE);
+  void DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
+  void DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius = 20);
+  void DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
 
   void DoDrawSpline(wxList *points);
 
-  bool DoBlit(long xdest, long ydest, long width, long height,
-            wxDC *source, long xsrc, long ysrc, int rop = wxCOPY, bool useMask = FALSE);
-  inline bool CanDrawBitmap(void) const { return TRUE; }
+  bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
+            wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop = wxCOPY, bool useMask = FALSE);
+  bool CanDrawBitmap() const { return TRUE; }
 
-  void DoDrawIcon( const wxIcon& icon, long x, long y );
-  void DoDrawBitmap( const wxBitmap& bitmap, long x, long y, bool useMask=FALSE );
+  void DoDrawIcon( const wxIcon& icon, wxCoord x, wxCoord y );
+  void DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y, bool useMask=FALSE );
 
-  void DoDrawText(const wxString& text, long x, long y );
+  void DoDrawText(const wxString& text, wxCoord x, wxCoord y );
 
   void Clear();
   void SetFont( const wxFont& font );
@@ -94,35 +94,35 @@ public:
   void SetLogicalFunction( int function );
   void SetBackground( const wxBrush& brush );
 
-  void DoSetClippingRegion(long x, long y, long width, long height);
+  void DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
   void DestroyClippingRegion();
 
-  void DoSetClippingRegionAsRegion( const wxRegion &WXUNUSED(clip) ) {}
+  void DoSetClippingRegionAsRegion( const wxRegion &WXUNUSED(clip) ) { }
 
   bool StartDoc(const wxString& message);
   void EndDoc();
   void StartPage();
   void EndPage();
 
-  long GetCharHeight() const;
-  long GetCharWidth() const;
-  inline bool CanGetTextExtent(void) const { return FALSE; }
-  void GetTextExtent(const wxString& string, long *x, long *y,
-                     long *descent = (long *) NULL,
-                     long *externalLeading = (long *) NULL,
+  wxCoord GetCharHeight() const;
+  wxCoord GetCharWidth() const;
+  bool CanGetTextExtent() const { return FALSE; }
+  void DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
+                     wxCoord *descent = (wxCoord *) NULL,
+                     wxCoord *externalLeading = (wxCoord *) NULL,
                      wxFont *theFont = (wxFont *) NULL ) const;
 
   void DoGetSize(int* width, int* height) const;
   void DoGetSizeMM(int *width, int *height) const;
 
   // Resolution in pixels per logical inch
-  wxSize GetPPI(void) const;
+  wxSize GetPPI() const;
 
   void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
-  void SetDeviceOrigin( long x, long y );
+  void SetDeviceOrigin( wxCoord x, wxCoord y );
 
-  inline void SetBackgroundMode(int WXUNUSED(mode)) {}
-  inline void SetPalette(const wxPalette& WXUNUSED(palette)) {}
+  void SetBackgroundMode(int WXUNUSED(mode)) { }
+  void SetPalette(const wxPalette& WXUNUSED(palette)) { }
 
   wxPrintData& GetPrintData() { return m_printData; }
   void SetPrintData(const wxPrintData& data) { m_printData = data; }
@@ -145,14 +145,17 @@ protected:
 
 // Deprecated: should use wxGenericPrintDialog instead.
 #if 1
-#define wxID_PRINTER_COMMAND        1
-#define wxID_PRINTER_OPTIONS        2
-#define wxID_PRINTER_ORIENTATION    3
-#define wxID_PRINTER_MODES          4
-#define wxID_PRINTER_X_SCALE        5
-#define wxID_PRINTER_Y_SCALE        6
-#define wxID_PRINTER_X_TRANS        7
-#define wxID_PRINTER_Y_TRANS        8
+enum
+{
+    wxID_PRINTER_COMMAND = 1,
+    wxID_PRINTER_OPTIONS,
+    wxID_PRINTER_ORIENTATION,
+    wxID_PRINTER_MODES,
+    wxID_PRINTER_X_SCALE,
+    wxID_PRINTER_Y_SCALE,
+    wxID_PRINTER_X_TRANS,
+    wxID_PRINTER_Y_TRANS
+};
 
 class WXDLLEXPORT wxPostScriptPrintDialog: public wxDialog
 {
@@ -160,11 +163,11 @@ DECLARE_CLASS(wxPostScriptPrintDialog)
 public:
     wxPostScriptPrintDialog (wxWindow *parent, const wxString& title,
           const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-          long style = wxDEFAULT_DIALOG_STYLE);
+          wxCoord style = wxDEFAULT_DIALOG_STYLE);
 
-    virtual int ShowModal(void) ;
+    virtual int ShowModal();
 };
-#endif
+#endif // 1
 
 // Print Orientation (Should also add Left, Right)
 enum
@@ -188,7 +191,7 @@ WXDLLEXPORT void wxSetPrintPreviewCommand(const wxString& cmd);
 WXDLLEXPORT void wxSetPrinterOptions(const wxString& flags);
 WXDLLEXPORT void wxSetPrinterOrientation(int orientation);
 WXDLLEXPORT void wxSetPrinterScaling(double x, double y);
-WXDLLEXPORT void wxSetPrinterTranslation(long x, long y);
+WXDLLEXPORT void wxSetPrinterTranslation(wxCoord x, wxCoord y);
 WXDLLEXPORT void wxSetPrinterMode(int mode);
 WXDLLEXPORT void wxSetPrinterFile(const wxString& f);
 WXDLLEXPORT void wxSetAFMPath(const wxString& f);
@@ -199,7 +202,7 @@ WXDLLEXPORT wxString wxGetPrintPreviewCommand();
 WXDLLEXPORT wxString wxGetPrinterOptions();
 WXDLLEXPORT int wxGetPrinterOrientation();
 WXDLLEXPORT void wxGetPrinterScaling(double* x, double* y);
-WXDLLEXPORT void wxGetPrinterTranslation(long *x, long *y);
+WXDLLEXPORT void wxGetPrinterTranslation(wxCoord *x, wxCoord *y);
 WXDLLEXPORT int wxGetPrinterMode();
 WXDLLEXPORT wxString wxGetPrinterFile();
 WXDLLEXPORT wxString wxGetAFMPath();
@@ -222,7 +225,7 @@ public:
     void SetPrinterFile(const wxString& f) { m_printerFile = f; };
     void SetPrinterOrientation(int orient) { m_printerOrient = orient; };
     void SetPrinterScaling(double x, double y) { m_printerScaleX = x; m_printerScaleY = y; };
-    void SetPrinterTranslation(long x, long y) { m_printerTranslateX = x; m_printerTranslateY = y; };
+    void SetPrinterTranslation(wxCoord x, wxCoord y) { m_printerTranslateX = x; m_printerTranslateY = y; };
     // 1 = Preview, 2 = print to file, 3 = send to printer
     void SetPrinterMode(int mode) { m_printerMode = mode; };
     void SetAFMPath(const wxString& f) { m_afmPath = f; };
@@ -236,7 +239,7 @@ public:
     wxString GetPaperName() const { return m_paperName; }
     int GetPrinterOrientation() const { return m_printerOrient; };
     void GetPrinterScaling(double* x, double* y) const { *x = m_printerScaleX; *y = m_printerScaleY; };
-    void GetPrinterTranslation(long *x, long *y) const { *x = m_printerTranslateX; *y = m_printerTranslateY; };
+    void GetPrinterTranslation(wxCoord *x, wxCoord *y) const { *x = m_printerTranslateX; *y = m_printerTranslateY; };
     int GetPrinterMode() const { return m_printerMode; };
     wxString GetAFMPath() const { return m_afmPath; };
     bool GetColour() const { return m_printColour; };
@@ -247,6 +250,11 @@ public:
     // There is also an operator for initializing a wxPrintData from a wxPrintSetupData.
     void operator=(const wxPrintData& data);
 
+#ifndef __WIN16__
+    void GetPrinterTranslation(long *x, long *y) const
+        { *x = m_printerTranslateX; *y = m_printerTranslateY; }
+#endif // !Win16
+
 public:
     wxString        m_printerCommand;
     wxString        m_previewCommand;
@@ -255,8 +263,8 @@ public:
     int             m_printerOrient;
     double          m_printerScaleX;
     double          m_printerScaleY;
-    long            m_printerTranslateX;
-    long            m_printerTranslateY;
+    wxCoord         m_printerTranslateX;
+    wxCoord         m_printerTranslateY;
     // 1 = Preview, 2 = print to file, 3 = send to printer
     int             m_printerMode;
     wxString        m_afmPath;
@@ -264,7 +272,7 @@ public:
     wxString        m_paperName;
     bool            m_printColour;
 
-  DECLARE_DYNAMIC_CLASS(wxPrintSetupData)
+    DECLARE_DYNAMIC_CLASS(wxPrintSetupData)
 };
 
 WXDLLEXPORT_DATA(extern wxPrintSetupData*) wxThePrintSetupData;
@@ -272,7 +280,7 @@ WXDLLEXPORT extern void wxInitializePrintSetupData(bool init = TRUE);
 
 #endif
     // wxUSE_POSTSCRIPT
-    
+
 #endif
     // wxUSE_PRINTING_ARCHITECTURE
 

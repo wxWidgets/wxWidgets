@@ -321,7 +321,7 @@ bool wxMouseEvent::Button(int but) const
 {
     switch (but) {
         case -1:
-            return (ButtonUp(-1) || ButtonDown(-1) || ButtonDClick(-1)) ;
+            return (ButtonUp(-1) || ButtonDown(-1) || ButtonDClick(-1));
         case 1:
             return (LeftDown() || LeftUp() || LeftDClick());
         case 2:
@@ -601,11 +601,13 @@ void wxEvtHandler::AddPendingEvent(wxEvent& event)
 
     m_pendingEvents->Append(event2);
 
-    wxPendingEventsLocker->Enter();
+    wxENTER_CRIT_SECT(wxPendingEventsLocker);
+
     if ( !wxPendingEvents )
         wxPendingEvents = new wxList;
     wxPendingEvents->Append(this);
-    wxPendingEventsLocker->Leave();
+
+    wxLEAVE_CRIT_SECT(wxPendingEventsLocker);
 
     // TODO: Wake up idle handler for the other platforms.
 #ifdef __WXGTK__
@@ -623,9 +625,7 @@ void wxEvtHandler::AddPendingEvent(wxEvent& event)
 
 void wxEvtHandler::ProcessPendingEvents()
 {
-#if wxUSE_THREADS
-    wxCriticalSectionLocker locker(*m_eventsLocker);
-#endif
+    wxCRIT_SECT_LOCKER(locker, m_eventsLocker);
 
     wxNode *node = m_pendingEvents->First();
     wxEvent *event;

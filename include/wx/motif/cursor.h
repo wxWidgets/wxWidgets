@@ -54,7 +54,7 @@ public:
   wxCursor();
 
   // Copy constructors
-  inline wxCursor(const wxCursor& cursor) { Ref(cursor); }
+  wxCursor(const wxCursor& cursor) { Ref(cursor); }
 
   wxCursor(const char bits[], int width, int height, int hotSpotX = -1, int hotSpotY = -1,
     const char maskBits[] = NULL);
@@ -67,9 +67,9 @@ public:
 
   virtual bool Ok() const { return ((m_refData != NULL) && M_CURSORDATA->m_ok); }
 
-  inline wxCursor& operator = (const wxCursor& cursor) { if (*this == cursor) return (*this); Ref(cursor); return *this; }
-  inline bool operator == (const wxCursor& cursor) const { return m_refData == cursor.m_refData; }
-  inline bool operator != (const wxCursor& cursor) const { return m_refData != cursor.m_refData; }
+  wxCursor& operator = (const wxCursor& cursor) { if (*this == cursor) return (*this); Ref(cursor); return *this; }
+  bool operator == (const wxCursor& cursor) const { return m_refData == cursor.m_refData; }
+  bool operator != (const wxCursor& cursor) const { return m_refData != cursor.m_refData; }
 
   // Motif-specific.
   // Create/get a cursor for the current display

@@ -18,17 +18,20 @@
 
 #include "wx/dcclient.h"
 
-class WXDLLEXPORT wxMemoryDC: public wxDC
+class WXDLLEXPORT wxMemoryDC : public wxDC
 {
-  DECLARE_DYNAMIC_CLASS(wxMemoryDC)
+public:
+    wxMemoryDC();
+    wxMemoryDC(wxDC *dc); // Create compatible DC
 
- public:
-  wxMemoryDC(void);
-  wxMemoryDC(wxDC *dc); // Create compatible DC
+    ~wxMemoryDC();
 
-  ~wxMemoryDC(void);
-  virtual void SelectObject(const wxBitmap& bitmap);
-  virtual void DoGetSize(int* width, int* height) const;
+    virtual void SelectObject(const wxBitmap& bitmap);
+
+    virtual void DoGetSize(int* width, int* height) const;
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxMemoryDC)
 };
 
 #endif

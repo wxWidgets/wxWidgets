@@ -19,7 +19,6 @@
 
 #ifdef __GNUG__
     #pragma implementation "app.h"
-    #pragma implementation "appbase.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
@@ -44,8 +43,8 @@
     #include "wx/msgdlg.h"
     #include "wx/intl.h"
     #include "wx/dynarray.h"
-#   include "wx/wxchar.h"
-#   include "wx/icon.h"
+    #include "wx/wxchar.h"
+    #include "wx/icon.h"
 #endif
 
 #include "wx/log.h"
@@ -922,28 +921,6 @@ bool wxApp::ProcessIdle()
     ProcessEvent(event);
 
     return event.MoreRequested();
-}
-
-void wxApp::ProcessPendingEvents()
-{
-#if wxUSE_THREADS
-    // ensure that we're the only thread to modify the pending events list
-    wxCriticalSectionLocker locker(*wxPendingEventsLocker);
-#endif
-
-    if ( !wxPendingEvents )
-        return;
-
-    wxNode *node = wxPendingEvents->First();
-    while (node)
-    {
-        wxEvtHandler *handler = (wxEvtHandler *)node->Data();
-
-        handler->ProcessPendingEvents();
-
-        delete node;
-        node = wxPendingEvents->First();
-    }
 }
 
 void wxApp::ExitMainLoop()

@@ -6,7 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_ACCEL_H_
@@ -46,12 +46,12 @@ public:
         m_flags = flags; m_keyCode = keyCode; m_command = cmd;
     }
 
-    inline void Set(int flags, int keyCode, int cmd)
+    void Set(int flags, int keyCode, int cmd)
          { m_flags = flags; m_keyCode = keyCode; m_command = cmd; }
 
-    inline int GetFlags() const { return m_flags; }
-    inline int GetKeyCode() const { return m_keyCode; }
-    inline int GetCommand() const { return m_command; }
+    int GetFlags() const { return m_flags; }
+    int GetKeyCode() const { return m_keyCode; }
+    int GetCommand() const { return m_command; }
 
     void operator = (const wxAcceleratorEntry& entry)
     {
@@ -62,9 +62,9 @@ public:
     bool MatchesEvent(const wxKeyEvent& event) const;
 
 public:
-    int             m_flags;
-    int			    m_keyCode; // ASCII or virtual keycode
-    int			    m_command; // Command id to generate
+    int          m_flags;
+    int          m_keyCode; // ASCII or virtual keycode
+    int          m_command; // Command id to generate
 };
 
 class WXDLLEXPORT wxAcceleratorTable: public wxObject
@@ -76,14 +76,14 @@ public:
     wxAcceleratorTable(int n, wxAcceleratorEntry entries[]); // Load from array
 
     // Copy constructors
-    inline wxAcceleratorTable(const wxAcceleratorTable& accel) { Ref(accel); }
-    inline wxAcceleratorTable(const wxAcceleratorTable* accel) { if (accel) Ref(*accel); }
+    wxAcceleratorTable(const wxAcceleratorTable& accel) { Ref(accel); }
+    wxAcceleratorTable(const wxAcceleratorTable* accel) { if (accel) Ref(*accel); }
 
     ~wxAcceleratorTable();
 
-    inline wxAcceleratorTable& operator = (const wxAcceleratorTable& accel) { if (*this == accel) return (*this); Ref(accel); return *this; }
-    inline bool operator == (const wxAcceleratorTable& accel) { return m_refData == accel.m_refData; }
-    inline bool operator != (const wxAcceleratorTable& accel) { return m_refData != accel.m_refData; }
+    wxAcceleratorTable& operator = (const wxAcceleratorTable& accel) { if (*this == accel) return (*this); Ref(accel); return *this; }
+    bool operator == (const wxAcceleratorTable& accel) { return m_refData == accel.m_refData; }
+    bool operator != (const wxAcceleratorTable& accel) { return m_refData != accel.m_refData; }
 
     bool Ok() const;
 

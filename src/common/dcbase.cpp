@@ -30,7 +30,7 @@
 
 #include "wx/dc.h"
 
-void wxDCBase::DrawLines(const wxList *list, long xoffset, long yoffset)
+void wxDCBase::DrawLines(const wxList *list, wxCoord xoffset, wxCoord yoffset)
 {
     int n = list->Number();
     wxPoint *points = new wxPoint[n];
@@ -50,7 +50,7 @@ void wxDCBase::DrawLines(const wxList *list, long xoffset, long yoffset)
 
 
 void wxDCBase::DrawPolygon(const wxList *list,
-                           long xoffset, long yoffset,
+                           wxCoord xoffset, wxCoord yoffset,
                            int fillStyle)
 {
     int n = list->Number();
@@ -73,7 +73,7 @@ void wxDCBase::DrawPolygon(const wxList *list,
 #if wxUSE_SPLINES
 
 // TODO: this API needs fixing (wxPointList, why (!const) "wxList *"?)
-void wxDCBase::DrawSpline(long x1, long y1, long x2, long y2, long x3, long y3)
+void wxDCBase::DrawSpline(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord x3, wxCoord y3)
 {
     wxList point_list;
 

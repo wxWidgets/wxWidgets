@@ -172,12 +172,11 @@ public:
     // members are public for compatibility (don't use them directly,
     // especially that there names were chosen very unfortunately - they should
     // have been called width and height)
-    long x;
-    long y;
+    int x, y;
 
     // constructors
     wxSize() { x = y = 0; }
-    wxSize(long xx, long yy) { Set(xx, yy); }
+    wxSize(int xx, int yy) { Set(xx, yy); }
 
     // no copy ctor or assignment operator - the defaults are ok
     bool operator==(const wxSize& sz) const { return x == sz.x && y == sz.y; }
@@ -187,16 +186,16 @@ public:
     wxSize operator-(const wxSize& sz) { return wxSize(x - sz.x, y - sz.y); }
 
     // accessors
-    void Set(long xx, long yy) { x = xx; y = yy; }
-    void SetWidth(long w) { x = w; }
-    void SetHeight(long h) { y = h; }
+    void Set(int xx, int yy) { x = xx; y = yy; }
+    void SetWidth(int w) { x = w; }
+    void SetHeight(int h) { y = h; }
 
-    long GetWidth() const { return x; }
-    long GetHeight() const { return y; }
+    int GetWidth() const { return x; }
+    int GetHeight() const { return y; }
 
     // compatibility
-    long GetX() const { return x; }
-    long GetY() const { return y; }
+    int GetX() const { return x; }
+    int GetY() const { return y; }
 };
 
 // ---------------------------------------------------------------------------
@@ -221,16 +220,10 @@ public:
 class WXDLLEXPORT wxPoint
 {
 public:
-#if defined(__WXMSW__) && !defined(__WIN32__)
-    int x;
-    int y;
-#else
-    long x;
-    long y;
-#endif
+    int x, y;
 
     wxPoint() { x = y = 0; };
-    wxPoint(long xx, long yy) { x = xx; y = yy; };
+    wxPoint(int xx, int yy) { x = xx; y = yy; };
 
     // no copy ctor or assignment operator - the defaults are ok
 
@@ -259,39 +252,39 @@ class WXDLLEXPORT wxRect
 {
 public:
     wxRect() { x = y = width = height = 0; }
-    wxRect(long xx, long yy, long ww, long hh)
+    wxRect(int xx, int yy, int ww, int hh)
         { x = xx; y = yy; width = ww; height = hh; }
     wxRect(const wxPoint& topLeft, const wxPoint& bottomRight);
     wxRect(const wxPoint& pos, const wxSize& size);
 
     // default copy ctor and assignment operators ok
 
-    long GetX() const { return x; }
-    void SetX(long xx) { x = xx; }
+    int GetX() const { return x; }
+    void SetX(int xx) { x = xx; }
 
-    long GetY() const { return y; }
-    void SetY(long yy) { y = yy; }
+    int GetY() const { return y; }
+    void SetY(int yy) { y = yy; }
 
-    long GetWidth() const { return width; }
-    void SetWidth(long w) { width = w; }
+    int GetWidth() const { return width; }
+    void SetWidth(int w) { width = w; }
 
-    long GetHeight() const { return height; }
-    void SetHeight(long h) { height = h; }
+    int GetHeight() const { return height; }
+    void SetHeight(int h) { height = h; }
 
     wxPoint GetPosition() const { return wxPoint(x, y); }
     wxSize GetSize() const { return wxSize(width, height); }
 
     // MFC-like functions
 
-    long GetLeft()   const { return x; }
-    long GetTop()    const { return y; }
-    long GetBottom() const { return y + height - 1; }
-    long GetRight()  const { return x + width - 1; }
+    int GetLeft()   const { return x; }
+    int GetTop()    const { return y; }
+    int GetBottom() const { return y + height - 1; }
+    int GetRight()  const { return x + width - 1; }
 
-    void SetLeft(long left) { x = left; }
-    void SetRight(long right) { width = right - x + 1; }
-    void SetTop(long top) { y = top; }
-    void SetBottom(long bottom) { height = bottom - y + 1; }
+    void SetLeft(int left) { x = left; }
+    void SetRight(int right) { width = right - x + 1; }
+    void SetTop(int top) { y = top; }
+    void SetBottom(int bottom) { height = bottom - y + 1; }
 
     bool operator==(const wxRect& rect) const;
     bool operator!=(const wxRect& rect) const { return !(*this == rect); }
@@ -299,9 +292,9 @@ public:
     bool Inside(int cx, int cy) const;
     wxRect operator + (const wxRect& rect) const;
     const wxRect& operator += (const wxRect& rect);
-    
+
 public:
-    long x, y, width, height;
+    int x, y, width, height;
 };
 
 // ---------------------------------------------------------------------------

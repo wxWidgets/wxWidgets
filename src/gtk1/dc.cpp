@@ -51,7 +51,7 @@ wxDC::wxDC()
     m_brush = *wxWHITE_BRUSH;
 }
 
-void wxDC::DoSetClippingRegion( long x, long y, long width, long height )
+void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 {
     m_clipping = TRUE;
     m_clipX1 = x;
@@ -149,14 +149,14 @@ void wxDC::SetLogicalScale( double x, double y )
     ComputeScaleAndOrigin();
 }
 
-void wxDC::SetLogicalOrigin( long x, long y )
+void wxDC::SetLogicalOrigin( wxCoord x, wxCoord y )
 {
     m_logicalOriginX = x * m_signX;   // is this still correct ?
     m_logicalOriginY = y * m_signY;
     ComputeScaleAndOrigin();
 }
 
-void wxDC::SetDeviceOrigin( long x, long y )
+void wxDC::SetDeviceOrigin( wxCoord x, wxCoord y )
 {
     // only wxPostScripDC has m_signX = -1, we override SetDeviceOrigin there
     m_deviceOriginX = x;
@@ -176,42 +176,42 @@ void wxDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
 // coordinates transformations
 // ---------------------------------------------------------------------------
 
-long wxDCBase::DeviceToLogicalX(long x) const
+wxCoord wxDCBase::DeviceToLogicalX(wxCoord x) const
 {
     return ((wxDC *)this)->XDEV2LOG(x);
 }
 
-long wxDCBase::DeviceToLogicalY(long y) const
+wxCoord wxDCBase::DeviceToLogicalY(wxCoord y) const
 {
     return ((wxDC *)this)->YDEV2LOG(y);
 }
 
-long wxDCBase::DeviceToLogicalXRel(long x) const
+wxCoord wxDCBase::DeviceToLogicalXRel(wxCoord x) const
 {
     return ((wxDC *)this)->XDEV2LOGREL(x);
 }
 
-long wxDCBase::DeviceToLogicalYRel(long y) const
+wxCoord wxDCBase::DeviceToLogicalYRel(wxCoord y) const
 {
     return ((wxDC *)this)->YDEV2LOGREL(y);
 }
 
-long wxDCBase::LogicalToDeviceX(long x) const
+wxCoord wxDCBase::LogicalToDeviceX(wxCoord x) const
 {
     return ((wxDC *)this)->XLOG2DEV(x);
 }
 
-long wxDCBase::LogicalToDeviceY(long y) const
+wxCoord wxDCBase::LogicalToDeviceY(wxCoord y) const
 {
     return ((wxDC *)this)->YLOG2DEV(y);
 }
 
-long wxDCBase::LogicalToDeviceXRel(long x) const
+wxCoord wxDCBase::LogicalToDeviceXRel(wxCoord x) const
 {
     return ((wxDC *)this)->XLOG2DEVREL(x);
 }
 
-long wxDCBase::LogicalToDeviceYRel(long y) const
+wxCoord wxDCBase::LogicalToDeviceYRel(wxCoord y) const
 {
     return ((wxDC *)this)->YLOG2DEVREL(y);
 }

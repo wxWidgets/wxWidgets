@@ -54,8 +54,8 @@ public:
   bool Create(const wxBitmap& bitmap, int paletteIndex);
   bool Create(const wxBitmap& bitmap);
 
-  inline WXPixmap GetPixmap() const { return m_pixmap; }
-  inline void SetPixmap(WXPixmap pixmap) { m_pixmap = pixmap; }
+  WXPixmap GetPixmap() const { return m_pixmap; }
+  void SetPixmap(WXPixmap pixmap) { m_pixmap = pixmap; }
 
 protected:
   WXPixmap      m_pixmap;
@@ -110,12 +110,12 @@ public:
       int desiredWidth, int desiredHeight);
   virtual bool SaveFile(wxBitmap *bitmap, const wxString& name, int type, const wxPalette *palette = NULL);
 
-  inline void SetName(const wxString& name) { m_name = name; }
-  inline void SetExtension(const wxString& ext) { m_extension = ext; }
-  inline void SetType(long type) { m_type = type; }
-  inline wxString GetName() const { return m_name; }
-  inline wxString GetExtension() const { return m_extension; }
-  inline long GetType() const { return m_type; }
+  void SetName(const wxString& name) { m_name = name; }
+  void SetExtension(const wxString& ext) { m_extension = ext; }
+  void SetType(long type) { m_type = type; }
+  wxString GetName() const { return m_name; }
+  wxString GetExtension() const { return m_extension; }
+  long GetType() const { return m_type; }
 protected:
   wxString  m_name;
   wxString  m_extension;
@@ -134,7 +134,7 @@ public:
   wxBitmap(); // Platform-specific
 
   // Copy constructors
-  inline wxBitmap(const wxBitmap& bitmap)
+  wxBitmap(const wxBitmap& bitmap)
   { Ref(bitmap); if ( wxTheBitmapList ) wxTheBitmapList->AddBitmap(this); }
 
   // Initialize with raw XBM data
@@ -158,29 +158,29 @@ public:
   virtual bool LoadFile(const wxString& name, long type = wxBITMAP_TYPE_XPM);
   virtual bool SaveFile(const wxString& name, int type, const wxPalette *cmap = NULL);
 
-  inline bool Ok() const { return (M_BITMAPDATA && M_BITMAPDATA->m_ok); }
-  inline int GetWidth() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_width : 0); }
-  inline int GetHeight() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_height : 0); }
-  inline int GetDepth() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_depth : 0); }
-  inline int GetQuality() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_quality : 0); }
+  bool Ok() const { return (M_BITMAPDATA && M_BITMAPDATA->m_ok); }
+  int GetWidth() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_width : 0); }
+  int GetHeight() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_height : 0); }
+  int GetDepth() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_depth : 0); }
+  int GetQuality() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_quality : 0); }
   void SetWidth(int w);
   void SetHeight(int h);
   void SetDepth(int d);
   void SetQuality(int q);
   void SetOk(bool isOk);
 
-  inline wxPalette* GetPalette() const { return (M_BITMAPDATA ? (& M_BITMAPDATA->m_bitmapPalette) : (wxPalette*) NULL); }
+  wxPalette* GetPalette() const { return (M_BITMAPDATA ? (& M_BITMAPDATA->m_bitmapPalette) : (wxPalette*) NULL); }
   void SetPalette(const wxPalette& palette);
 
-  inline wxMask *GetMask() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_bitmapMask : (wxMask*) NULL); }
+  wxMask *GetMask() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_bitmapMask : (wxMask*) NULL); }
   void SetMask(wxMask *mask) ;
 
-  inline wxBitmap& operator = (const wxBitmap& bitmap) { if (*this == bitmap) return (*this); Ref(bitmap); return *this; }
-  inline bool operator == (const wxBitmap& bitmap) { return m_refData == bitmap.m_refData; }
-  inline bool operator != (const wxBitmap& bitmap) { return m_refData != bitmap.m_refData; }
+  wxBitmap& operator = (const wxBitmap& bitmap) { if (*this == bitmap) return (*this); Ref(bitmap); return *this; }
+  bool operator == (const wxBitmap& bitmap) { return m_refData == bitmap.m_refData; }
+  bool operator != (const wxBitmap& bitmap) { return m_refData != bitmap.m_refData; }
 
   // Format handling
-  static inline wxList& GetHandlers() { return sm_handlers; }
+  static wxList& GetHandlers() { return sm_handlers; }
   static void AddHandler(wxBitmapHandler *handler);
   static void InsertHandler(wxBitmapHandler *handler);
   static bool RemoveHandler(const wxString& name);
@@ -193,8 +193,8 @@ public:
 
   // Motif implementation
 public:
-  inline WXDisplay* GetDisplay() const { return M_BITMAPDATA->m_display; }
-  inline WXDisplay* GetPixmap() const { return M_BITMAPDATA->m_pixmap; }
+  WXDisplay* GetDisplay() const { return M_BITMAPDATA->m_display; }
+  WXDisplay* GetPixmap() const { return M_BITMAPDATA->m_pixmap; }
   virtual WXPixmap GetLabelPixmap(WXWidget w) ;
   virtual WXPixmap GetArmPixmap(WXWidget w) ;
   virtual WXPixmap GetInsensPixmap(WXWidget w = (WXWidget) 0) ;

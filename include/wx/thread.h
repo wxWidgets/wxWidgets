@@ -350,6 +350,12 @@ private:
 void WXDLLEXPORT wxMutexGuiEnter();
 void WXDLLEXPORT wxMutexGuiLeave();
 
+// macros for entering/leaving critical sections which may be used without
+// having to take them inside "#if wxUSE_THREADS"
+#define wxENTER_CRIT_SECT(cs)   (cs)->Enter()
+#define wxLEAVE_CRIT_SECT(cs)   (cs)->Leave()
+#define wxCRIT_SECT_LOCKER(name, cs)  wxCriticalSectionLocker name(*cs)
+
 #else // !wxUSE_THREADS
 
 #include "wx/defs.h" // for WXDLLEXPORT
@@ -357,6 +363,12 @@ void WXDLLEXPORT wxMutexGuiLeave();
 // no thread support
 inline void WXDLLEXPORT wxMutexGuiEnter() { }
 inline void WXDLLEXPORT wxMutexGuiLeave() { }
+
+// macros for entering/leaving critical sections which may be used without
+// having to take them inside "#if wxUSE_THREADS"
+#define wxENTER_CRIT_SECT(cs)
+#define wxLEAVE_CRIT_SECT(cs)
+#define wxCRIT_SECT_LOCKER(name, cs)
 
 #endif // wxUSE_THREADS
 

@@ -153,19 +153,19 @@ wxWindowDC::~wxWindowDC()
     Destroy();
 }
 
-void wxWindowDC::DoFloodFill( long WXUNUSED(x), long WXUNUSED(y),
+void wxWindowDC::DoFloodFill( wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
                            const wxColour &WXUNUSED(col), int WXUNUSED(style) )
 {
     wxFAIL_MSG( wxT("wxWindowDC::DoFloodFill not implemented") );
 }
 
-bool wxWindowDC::DoGetPixel( long WXUNUSED(x1), long WXUNUSED(y1), wxColour *WXUNUSED(col) ) const
+bool wxWindowDC::DoGetPixel( wxCoord WXUNUSED(x1), wxCoord WXUNUSED(y1), wxColour *WXUNUSED(col) ) const
 {
     wxFAIL_MSG( wxT("wxWindowDC::DoGetPixel not implemented") );
     return FALSE;
 }
 
-void wxWindowDC::DoDrawLine( long x1, long y1, long x2, long y2 )
+void wxWindowDC::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
 {
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
 
@@ -179,7 +179,7 @@ void wxWindowDC::DoDrawLine( long x1, long y1, long x2, long y2 )
     }
 }
 
-void wxWindowDC::DoCrossHair( long x, long y )
+void wxWindowDC::DoCrossHair( wxCoord x, wxCoord y )
 {
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
 
@@ -188,8 +188,8 @@ void wxWindowDC::DoCrossHair( long x, long y )
         int w = 0;
         int h = 0;
         GetSize( &w, &h );
-        long xx = XLOG2DEV(x);
-        long yy = YLOG2DEV(y);
+        wxCoord xx = XLOG2DEV(x);
+        wxCoord yy = YLOG2DEV(y);
         if (m_window)
         {
             gdk_draw_line( m_window, m_penGC, 0, yy, XLOG2DEVREL(w), yy );
@@ -198,21 +198,21 @@ void wxWindowDC::DoCrossHair( long x, long y )
     }
 }
 
-void wxWindowDC::DoDrawArc( long x1, long y1, long x2, long y2,
-                            long xc, long yc )
+void wxWindowDC::DoDrawArc( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2,
+                            wxCoord xc, wxCoord yc )
 {
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
 
-    long xx1 = XLOG2DEV(x1);
-    long yy1 = YLOG2DEV(y1);
-    long xx2 = XLOG2DEV(x2);
-    long yy2 = YLOG2DEV(y2);
-    long xxc = XLOG2DEV(xc);
-    long yyc = YLOG2DEV(yc);
+    wxCoord xx1 = XLOG2DEV(x1);
+    wxCoord yy1 = YLOG2DEV(y1);
+    wxCoord xx2 = XLOG2DEV(x2);
+    wxCoord yy2 = YLOG2DEV(y2);
+    wxCoord xxc = XLOG2DEV(xc);
+    wxCoord yyc = YLOG2DEV(yc);
     double dx = xx1 - xxc;
     double dy = yy1 - yyc;
     double radius = sqrt((double)(dx*dx+dy*dy));
-    long   r      = (long)radius;
+    wxCoord   r      = (wxCoord)radius;
     double radius1, radius2;
 
     if (xx1 == xx2 && yy1 == yy2)
@@ -234,8 +234,8 @@ void wxWindowDC::DoDrawArc( long x1, long y1, long x2, long y2,
             (yy2 - yyc < 0) ? 90.0 : -90.0 :
             -atan2(double(yy2-yyc), double(xx2-xxc)) * RAD2DEG;
     }
-    long alpha1 = long(radius1 * 64.0);
-    long alpha2 = long((radius2 - radius1) * 64.0);
+    wxCoord alpha1 = wxCoord(radius1 * 64.0);
+    wxCoord alpha2 = wxCoord((radius2 - radius1) * 64.0);
     while (alpha2 <= 0) alpha2 += 360*64;
     while (alpha1 > 360*64) alpha1 -= 360*64;
 
@@ -252,14 +252,14 @@ void wxWindowDC::DoDrawArc( long x1, long y1, long x2, long y2,
     CalcBoundingBox (x2, y2);
 }
 
-void wxWindowDC::DoDrawEllipticArc( long x, long y, long width, long height, double sa, double ea )
+void wxWindowDC::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord width, wxCoord height, double sa, double ea )
 {
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
 
-    long xx = XLOG2DEV(x);
-    long yy = YLOG2DEV(y);
-    long ww = m_signX * XLOG2DEVREL(width);
-    long hh = m_signY * YLOG2DEVREL(height);
+    wxCoord xx = XLOG2DEV(x);
+    wxCoord yy = YLOG2DEV(y);
+    wxCoord ww = m_signX * XLOG2DEVREL(width);
+    wxCoord hh = m_signY * YLOG2DEVREL(height);
 
     // CMB: handle -ve width and/or height
     if (ww < 0) { ww = -ww; xx = xx - ww; }
@@ -267,8 +267,8 @@ void wxWindowDC::DoDrawEllipticArc( long x, long y, long width, long height, dou
 
     if (m_window)
     {
-        long start = long(sa * 64.0);
-        long end = long(ea * 64.0);
+        wxCoord start = wxCoord(sa * 64.0);
+        wxCoord end = wxCoord(ea * 64.0);
 
         if (m_brush.GetStyle() != wxTRANSPARENT)
             gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy, ww, hh, start, end );
@@ -281,7 +281,7 @@ void wxWindowDC::DoDrawEllipticArc( long x, long y, long width, long height, dou
     CalcBoundingBox (x + width, y + height);
 }
 
-void wxWindowDC::DoDrawPoint( long x, long y )
+void wxWindowDC::DoDrawPoint( wxCoord x, wxCoord y )
 {
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
 
@@ -291,7 +291,7 @@ void wxWindowDC::DoDrawPoint( long x, long y )
     CalcBoundingBox (x, y);
 }
 
-void wxWindowDC::DoDrawLines( int n, wxPoint points[], long xoffset, long yoffset )
+void wxWindowDC::DoDrawLines( int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset )
 {
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
 
@@ -302,10 +302,10 @@ void wxWindowDC::DoDrawLines( int n, wxPoint points[], long xoffset, long yoffse
 
     for (int i = 0; i < n-1; i++)
     {
-        long x1 = XLOG2DEV(points[i].x + xoffset);
-        long x2 = XLOG2DEV(points[i+1].x + xoffset);
-        long y1 = YLOG2DEV(points[i].y + yoffset);     // oh, what a waste
-        long y2 = YLOG2DEV(points[i+1].y + yoffset);
+        wxCoord x1 = XLOG2DEV(points[i].x + xoffset);
+        wxCoord x2 = XLOG2DEV(points[i+1].x + xoffset);
+        wxCoord y1 = YLOG2DEV(points[i].y + yoffset);     // oh, what a waste
+        wxCoord y2 = YLOG2DEV(points[i+1].y + yoffset);
 
         if (m_window)
             gdk_draw_line( m_window, m_penGC, x1, y1, x2, y2 );
@@ -314,7 +314,7 @@ void wxWindowDC::DoDrawLines( int n, wxPoint points[], long xoffset, long yoffse
     }
 }
 
-void wxWindowDC::DoDrawPolygon( int n, wxPoint points[], long xoffset, long yoffset, int WXUNUSED(fillStyle) )
+void wxWindowDC::DoDrawPolygon( int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset, int WXUNUSED(fillStyle) )
 {
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
 
@@ -350,14 +350,14 @@ void wxWindowDC::DoDrawPolygon( int n, wxPoint points[], long xoffset, long yoff
     delete[] gdkpoints;
 }
 
-void wxWindowDC::DoDrawRectangle( long x, long y, long width, long height )
+void wxWindowDC::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 {
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
 
-    long xx = XLOG2DEV(x);
-    long yy = YLOG2DEV(y);
-    long ww = m_signX * XLOG2DEVREL(width);
-    long hh = m_signY * YLOG2DEVREL(height);
+    wxCoord xx = XLOG2DEV(x);
+    wxCoord yy = YLOG2DEV(y);
+    wxCoord ww = m_signX * XLOG2DEVREL(width);
+    wxCoord hh = m_signY * YLOG2DEVREL(height);
 
     // CMB: draw nothing if transformed w or h is 0
     if (ww == 0 || hh == 0) return;
@@ -379,17 +379,17 @@ void wxWindowDC::DoDrawRectangle( long x, long y, long width, long height )
     CalcBoundingBox( x + width, y + height );
 }
 
-void wxWindowDC::DoDrawRoundedRectangle( long x, long y, long width, long height, double radius )
+void wxWindowDC::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius )
 {
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
 
     if (radius < 0.0) radius = - radius * ((width < height) ? width : height);
 
-    long xx = XLOG2DEV(x);
-    long yy = YLOG2DEV(y);
-    long ww = m_signX * XLOG2DEVREL(width);
-    long hh = m_signY * YLOG2DEVREL(height);
-    long rr = XLOG2DEVREL((long)radius);
+    wxCoord xx = XLOG2DEV(x);
+    wxCoord yy = YLOG2DEV(y);
+    wxCoord ww = m_signX * XLOG2DEVREL(width);
+    wxCoord hh = m_signY * YLOG2DEVREL(height);
+    wxCoord rr = XLOG2DEVREL((wxCoord)radius);
 
     // CMB: handle -ve width and/or height
     if (ww < 0) { ww = -ww; xx = xx - ww; }
@@ -418,7 +418,7 @@ void wxWindowDC::DoDrawRoundedRectangle( long x, long y, long width, long height
     {
         // CMB: ensure dd is not larger than rectangle otherwise we
         // get an hour glass shape
-        long dd = 2 * rr;
+        wxCoord dd = 2 * rr;
         if (dd > ww) dd = ww;
         if (dd > hh) dd = hh;
         rr = dd / 2;
@@ -451,14 +451,14 @@ void wxWindowDC::DoDrawRoundedRectangle( long x, long y, long width, long height
     CalcBoundingBox( x + width, y + height );
 }
 
-void wxWindowDC::DoDrawEllipse( long x, long y, long width, long height )
+void wxWindowDC::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 {
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
 
-    long xx = XLOG2DEV(x);
-    long yy = YLOG2DEV(y);
-    long ww = m_signX * XLOG2DEVREL(width);
-    long hh = m_signY * YLOG2DEVREL(height);
+    wxCoord xx = XLOG2DEV(x);
+    wxCoord yy = YLOG2DEV(y);
+    wxCoord ww = m_signX * XLOG2DEVREL(width);
+    wxCoord hh = m_signY * YLOG2DEVREL(height);
 
     // CMB: handle -ve width and/or height
     if (ww < 0) { ww = -ww; xx = xx - ww; }
@@ -477,14 +477,14 @@ void wxWindowDC::DoDrawEllipse( long x, long y, long width, long height )
     CalcBoundingBox( x + width, y + height );
 }
 
-void wxWindowDC::DoDrawIcon( const wxIcon &icon, long x, long y )
+void wxWindowDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
 {
     // VZ: egcs 1.0.3 refuses to compile this without cast, no idea why
     DoDrawBitmap( (const wxBitmap&)icon, x, y, (bool)TRUE );
 }
 
 void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
-                               long x, long y,
+                               wxCoord x, wxCoord y,
                                bool useMask )
 {
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
@@ -559,8 +559,8 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
     }
 }
 
-bool wxWindowDC::DoBlit( long xdest, long ydest, long width, long height,
-                         wxDC *source, long xsrc, long ysrc,
+bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
+                         wxDC *source, wxCoord xsrc, wxCoord ysrc,
                          int logical_func, bool useMask )
 {
    /* this is the nth try to get this utterly useless function to
@@ -629,11 +629,11 @@ bool wxWindowDC::DoBlit( long xdest, long ydest, long width, long height,
     {
         /* scale/translate bitmap size */
 
-        long bm_width = memDC->m_selected.GetWidth();
-        long bm_height = memDC->m_selected.GetHeight();
+        wxCoord bm_width = memDC->m_selected.GetWidth();
+        wxCoord bm_height = memDC->m_selected.GetHeight();
 
-        long bm_ww = XLOG2DEVREL( bm_width );
-        long bm_hh = YLOG2DEVREL( bm_height );
+        wxCoord bm_ww = XLOG2DEVREL( bm_width );
+        wxCoord bm_hh = YLOG2DEVREL( bm_height );
 
         /* scale bitmap if required */
 
@@ -653,11 +653,11 @@ bool wxWindowDC::DoBlit( long xdest, long ydest, long width, long height,
 
         /* scale/translate size and position */
 
-        long xx = XLOG2DEV(xdest);
-        long yy = YLOG2DEV(ydest);
+        wxCoord xx = XLOG2DEV(xdest);
+        wxCoord yy = YLOG2DEV(ydest);
 
-        long ww = XLOG2DEVREL(width);
-        long hh = YLOG2DEVREL(height);
+        wxCoord ww = XLOG2DEVREL(width);
+        wxCoord hh = YLOG2DEVREL(height);
 
         /* apply mask if any */
 
@@ -700,11 +700,11 @@ bool wxWindowDC::DoBlit( long xdest, long ydest, long width, long height,
     {
         /* scale/translate size and position */
 
-        long xx = XLOG2DEV(xdest);
-        long yy = YLOG2DEV(ydest);
+        wxCoord xx = XLOG2DEV(xdest);
+        wxCoord yy = YLOG2DEV(ydest);
 
-        long ww = XLOG2DEVREL(width);
-        long hh = YLOG2DEVREL(height);
+        wxCoord ww = XLOG2DEVREL(width);
+        wxCoord hh = YLOG2DEVREL(height);
 
         if ((width != ww) || (height != hh))
         {
@@ -754,7 +754,7 @@ bool wxWindowDC::DoBlit( long xdest, long ydest, long width, long height,
     return TRUE;
 }
 
-void wxWindowDC::DoDrawText( const wxString &text, long x, long y )
+void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 {
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
 
@@ -770,8 +770,8 @@ void wxWindowDC::DoDrawText( const wxString &text, long x, long y )
     /* CMB 21/5/98: draw text background if mode is wxSOLID */
     if (m_backgroundMode == wxSOLID)
     {
-        long width = gdk_string_width( font, text.mbc_str() );
-        long height = font->ascent + font->descent;
+        wxCoord width = gdk_string_width( font, text.mbc_str() );
+        wxCoord height = font->ascent + font->descent;
         gdk_gc_set_foreground( m_textGC, m_textBackgroundColour.GetColor() );
         gdk_draw_rectangle( m_window, m_textGC, TRUE, x, y, width, height );
         gdk_gc_set_foreground( m_textGC, m_textForegroundColour.GetColor() );
@@ -783,42 +783,43 @@ void wxWindowDC::DoDrawText( const wxString &text, long x, long y )
        properties (see wxXt implementation) */
     if (m_font.GetUnderlined())
     {
-        long width = gdk_string_width( font, text.mbc_str() );
-        long ul_y = y + font->ascent;
+        wxCoord width = gdk_string_width( font, text.mbc_str() );
+        wxCoord ul_y = y + font->ascent;
         if (font->descent > 0) ul_y++;
         gdk_draw_line( m_window, m_textGC, x, ul_y, x + width, ul_y);
     }
 
-    long w, h;
+    wxCoord w, h;
     GetTextExtent (text, &w, &h);
     CalcBoundingBox (x + w, y + h);
     CalcBoundingBox (x, y);
 }
 
-void wxWindowDC::GetTextExtent( const wxString &string, long *width, long *height,
-                                long *descent, long *externalLeading,
-                                wxFont *theFont ) const
+void wxWindowDC::DoGetTextExtent(const wxString &string,
+                                 wxCoord *width, wxCoord *height,
+                                 wxCoord *descent, wxCoord *externalLeading,
+                                 wxFont *theFont) const
 {
     wxFont fontToUse = m_font;
     if (theFont) fontToUse = *theFont;
 
     GdkFont *font = fontToUse.GetInternalFont( m_scaleY );
-    if (width) (*width) = long(gdk_string_width( font, string.mbc_str() ) / m_scaleX);
-    if (height) (*height) = long((font->ascent + font->descent) / m_scaleY);
-    if (descent) (*descent) = long(font->descent / m_scaleY);
+    if (width) (*width) = wxCoord(gdk_string_width( font, string.mbc_str() ) / m_scaleX);
+    if (height) (*height) = wxCoord((font->ascent + font->descent) / m_scaleY);
+    if (descent) (*descent) = wxCoord(font->descent / m_scaleY);
     if (externalLeading) (*externalLeading) = 0;  // ??
 }
 
-long wxWindowDC::GetCharWidth() const
+wxCoord wxWindowDC::GetCharWidth() const
 {
     GdkFont *font = m_font.GetInternalFont( m_scaleY );
-    return long(gdk_string_width( font, "H" ) / m_scaleX);
+    return wxCoord(gdk_string_width( font, "H" ) / m_scaleX);
 }
 
-long wxWindowDC::GetCharHeight() const
+wxCoord wxWindowDC::GetCharHeight() const
 {
     GdkFont *font = m_font.GetInternalFont( m_scaleY );
-    return long((font->ascent + font->descent) / m_scaleY);
+    return wxCoord((font->ascent + font->descent) / m_scaleY);
 }
 
 void wxWindowDC::Clear()
@@ -886,7 +887,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
 
     static const char dotted[] = {1, 1};
     static const char short_dashed[] = {2, 2};
-    static const char long_dashed[] = {2, 4};
+    static const char wxCoord_dashed[] = {2, 4};
     static const char dotted_dashed[] = {3, 3, 1, 3};
 
     // We express dash pattern in pen width unit, so we are
@@ -915,7 +916,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
         {
             lineStyle = GDK_LINE_ON_OFF_DASH;
             req_nb_dash = 2;
-            req_dash = long_dashed;
+            req_dash = wxCoord_dashed;
             break;
         }
         case wxSHORT_DASH:
@@ -1168,7 +1169,7 @@ void wxWindowDC::SetPalette( const wxPalette& WXUNUSED(palette) )
     wxFAIL_MSG( wxT("wxWindowDC::SetPalette not implemented") );
 }
 
-void wxWindowDC::DoSetClippingRegion( long x, long y, long width, long height )
+void wxWindowDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 {
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
 

@@ -506,8 +506,24 @@ enum
 };
 
 // ----------------------------------------------------------------------------
-// machine specific settings
+// standard wxWindows types
 // ----------------------------------------------------------------------------
+
+// the type for screen and DC coordinates
+
+#if wxUSE_COMPATIBLE_COORD_TYPES
+    // to ensure compatibility with 2.0, we must use long
+    #define wxCoord long
+#else  // !wxUSE_COMPATIBLE_COORD_TYPES
+    #ifdef __WIN16__
+        // under Win16, int is too small, so use long to allow for bigger
+        // virtual canvases
+        typedef long wxCoord;
+    #else // !Win16
+        // other platforms we support have at least 32bit int - quite enough
+        typedef int wxCoord;
+    #endif // Win16/!Win16
+#endif // wxUSE_COMPATIBLE_COORD_TYPES/!wxUSE_COMPATIBLE_COORD_TYPES
 
 // fixed length types
 
@@ -559,6 +575,10 @@ enum
 
 #define  wxByte   wxUint8
 #define  wxWord   wxUint16
+
+// ----------------------------------------------------------------------------
+// byte ordering related definition and macros
+// ----------------------------------------------------------------------------
 
 // byte sex
 

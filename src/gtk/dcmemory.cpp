@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -25,15 +25,15 @@ IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC,wxWindowDC)
 wxMemoryDC::wxMemoryDC() : wxWindowDC()
 {
     m_ok = FALSE;
-  
+
     m_cmap = gtk_widget_get_default_colormap();
 }
 
-wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) ) 
+wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) )
   : wxWindowDC()
 {
     m_ok = FALSE;
-  
+
     m_cmap = gtk_widget_get_default_colormap();
 }
 
@@ -54,13 +54,13 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
         {
             m_window = m_selected.GetBitmap();
         }
-    
+
         SetUpDC();
-    
+
         m_isMemDC = TRUE;
     }
     else
-    { 
+    {
         m_ok = FALSE;
         m_window = (GdkWindow *) NULL;
     }

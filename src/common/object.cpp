@@ -94,7 +94,11 @@ wxObject *wxObject::Clone() const
     return object;
 }
 
+#ifdef __WXDEBUG__
 void wxObject::CopyObject(wxObject& object_dest) const
+#else // !Debug
+void wxObject::CopyObject(wxObject& WXUNUSED(object_dest)) const
+#endif // Debug/!Debug
 {
     wxASSERT(object_dest.GetClassInfo()->IsKindOf(GetClassInfo()));
 }

@@ -17,7 +17,7 @@
 
 #include <wx/defs.h>
 
-#if wxUSE_PRINTING_ARCHITECTURE
+#if wxUSE_HTML & wxUSE_PRINTING_ARCHITECTURE
 
 #include "wx/html/htmlcell.h"
 #include "wx/html/winpars.h"
@@ -25,15 +25,13 @@
 #include "wx/print.h"
 #include "wx/printdlg.h"
 
-
 //--------------------------------------------------------------------------------
 // wxHtmlDCRenderer
 //                  This class is capable of rendering HTML into specified 
 //                  portion of DC
 //--------------------------------------------------------------------------------
 
-
-class wxHtmlDCRenderer : public wxObject
+class WXDLLEXPORT wxHtmlDCRenderer : public wxObject
 {
     public:
         wxHtmlDCRenderer();
@@ -103,7 +101,7 @@ enum {
 //--------------------------------------------------------------------------------
 
 
-class wxHtmlPrintout : public wxPrintout
+class WXDLLEXPORT wxHtmlPrintout : public wxPrintout
 {
     public:
         wxHtmlPrintout(const wxString& title = "Printout");
@@ -181,7 +179,7 @@ class wxHtmlPrintout : public wxPrintout
 //                         stores page&printer settings in it.
 //--------------------------------------------------------------------------------
 
-class wxHtmlEasyPrinting : public wxObject
+class WXDLLEXPORT wxHtmlEasyPrinting : public wxObject
 {
     public:
 
@@ -233,7 +231,7 @@ class wxHtmlEasyPrinting : public wxObject
 
 
 
-#endif  // wxUSE_PRINTING_ARCHITECTURE
+#endif  // wxUSE_HTML & wxUSE_PRINTING_ARCHITECTURE
 
 #endif // _WX_HTMPRINT_H_
 

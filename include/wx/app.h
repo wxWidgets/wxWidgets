@@ -232,6 +232,9 @@ public:
     static wxAppInitializerFunction GetInitializerFunction()
         { return m_appInitFn; }
 
+    // process all events in the wxPendingEvents list
+    virtual void ProcessPendingEvents();
+
     // access to the command line arguments
     int      argc;
     wxChar **argv;

@@ -164,7 +164,7 @@ void wxDC::SelectOldObjects(WXHDC dc)
 // clipping
 // ---------------------------------------------------------------------------
 
-void wxDC::DoSetClippingRegion(long cx, long cy, long cw, long ch)
+void wxDC::DoSetClippingRegion(wxCoord cx, wxCoord cy, wxCoord cw, wxCoord ch)
 {
     m_clipping = TRUE;
     m_clipX1 = (int)cx;
@@ -273,7 +273,7 @@ void wxDC::Clear()
     ::SetWindowOrgEx(GetHdc(), (int)m_logicalOriginX, (int)m_logicalOriginY, NULL);
 }
 
-void wxDC::DoFloodFill(long x, long y, const wxColour& col, int style)
+void wxDC::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col, int style)
 {
     (void)ExtFloodFill(GetHdc(), XLOG2DEV(x), YLOG2DEV(y),
                        col.GetPixel(),
@@ -283,7 +283,7 @@ void wxDC::DoFloodFill(long x, long y, const wxColour& col, int style)
     CalcBoundingBox(x, y);
 }
 
-bool wxDC::DoGetPixel(long x, long y, wxColour *col) const
+bool wxDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 {
     // added by steve 29.12.94 (copied from DrawPoint)
     // returns TRUE for pixels in the color of the current pen
@@ -308,12 +308,12 @@ bool wxDC::DoGetPixel(long x, long y, wxColour *col) const
     return(pixelcolor==pencolor);
 }
 
-void wxDC::DoCrossHair(long x, long y)
+void wxDC::DoCrossHair(wxCoord x, wxCoord y)
 {
-    long x1 = x-VIEWPORT_EXTENT;
-    long y1 = y-VIEWPORT_EXTENT;
-    long x2 = x+VIEWPORT_EXTENT;
-    long y2 = y+VIEWPORT_EXTENT;
+    wxCoord x1 = x-VIEWPORT_EXTENT;
+    wxCoord y1 = y-VIEWPORT_EXTENT;
+    wxCoord x2 = x+VIEWPORT_EXTENT;
+    wxCoord y2 = y+VIEWPORT_EXTENT;
 
     (void)MoveToEx(GetHdc(), XLOG2DEV(x1), YLOG2DEV(y), NULL);
     (void)LineTo(GetHdc(), XLOG2DEV(x2), YLOG2DEV(y));
@@ -325,7 +325,7 @@ void wxDC::DoCrossHair(long x, long y)
     CalcBoundingBox(x2, y2);
 }
 
-void wxDC::DoDrawLine(long x1, long y1, long x2, long y2)
+void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
     (void)MoveToEx(GetHdc(), XLOG2DEV(x1), YLOG2DEV(y1), NULL);
     (void)LineTo(GetHdc(), XLOG2DEV(x2), YLOG2DEV(y2));
@@ -339,30 +339,30 @@ void wxDC::DoDrawLine(long x1, long y1, long x2, long y2)
     CalcBoundingBox(x2, y2);
 }
 
-void wxDC::DoDrawArc(long x1,long y1,long x2,long y2, long xc, long yc)
+void wxDC::DoDrawArc(wxCoord x1,wxCoord y1,wxCoord x2,wxCoord y2, wxCoord xc, wxCoord yc)
 {
     double dx = xc-x1;
     double dy = yc-y1;
     double radius = (double)sqrt(dx*dx+dy*dy) ;;
     if (x1==x2 && x2==y2)
     {
-        DrawEllipse(xc,yc,(long)(radius*2.0),(long)(radius*2.0));
+        DrawEllipse(xc,yc,(wxCoord)(radius*2.0),(wxCoord)(radius*2.0));
         return;
     }
 
-    long xx1 = XLOG2DEV(x1);
-    long yy1 = YLOG2DEV(y1);
-    long xx2 = XLOG2DEV(x2);
-    long yy2 = YLOG2DEV(y2);
-    long xxc = XLOG2DEV(xc);
-    long yyc = YLOG2DEV(yc);
-    long ray = (long) sqrt(double((xxc-xx1)*(xxc-xx1)+(yyc-yy1)*(yyc-yy1)));
+    wxCoord xx1 = XLOG2DEV(x1);
+    wxCoord yy1 = YLOG2DEV(y1);
+    wxCoord xx2 = XLOG2DEV(x2);
+    wxCoord yy2 = YLOG2DEV(y2);
+    wxCoord xxc = XLOG2DEV(xc);
+    wxCoord yyc = YLOG2DEV(yc);
+    wxCoord ray = (wxCoord) sqrt(double((xxc-xx1)*(xxc-xx1)+(yyc-yy1)*(yyc-yy1)));
 
     (void)MoveToEx(GetHdc(), (int) xx1, (int) yy1, NULL);
-    long xxx1 = (long) (xxc-ray);
-    long yyy1 = (long) (yyc-ray);
-    long xxx2 = (long) (xxc+ray);
-    long yyy2 = (long) (yyc+ray);
+    wxCoord xxx1 = (wxCoord) (xxc-ray);
+    wxCoord yyy1 = (wxCoord) (yyc-ray);
+    wxCoord xxx2 = (wxCoord) (xxc+ray);
+    wxCoord yyy2 = (wxCoord) (yyc+ray);
     if (m_brush.Ok() && m_brush.GetStyle() !=wxTRANSPARENT)
     {
         // Have to add 1 to bottom-right corner of rectangle
@@ -377,11 +377,11 @@ void wxDC::DoDrawArc(long x1,long y1,long x2,long y2, long xc, long yc)
         Arc(GetHdc(),xxx1,yyy1,xxx2,yyy2,
         xx1,yy1,xx2,yy2);
 
-    CalcBoundingBox((long)(xc-radius), (long)(yc-radius));
-    CalcBoundingBox((long)(xc+radius), (long)(yc+radius));
+    CalcBoundingBox((wxCoord)(xc-radius), (wxCoord)(yc-radius));
+    CalcBoundingBox((wxCoord)(xc+radius), (wxCoord)(yc+radius));
 }
 
-void wxDC::DoDrawPoint(long x, long y)
+void wxDC::DoDrawPoint(wxCoord x, wxCoord y)
 {
     COLORREF color = 0x00ffffff;
     if (m_pen.Ok())
@@ -394,7 +394,7 @@ void wxDC::DoDrawPoint(long x, long y)
     CalcBoundingBox(x, y);
 }
 
-void wxDC::DoDrawPolygon(int n, wxPoint points[], long xoffset, long yoffset,int fillStyle)
+void wxDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset,int fillStyle)
 {
     // Do things less efficiently if we have offsets
     if (xoffset != 0 || yoffset != 0)
@@ -425,7 +425,7 @@ void wxDC::DoDrawPolygon(int n, wxPoint points[], long xoffset, long yoffset,int
     }
 }
 
-void wxDC::DoDrawLines(int n, wxPoint points[], long xoffset, long yoffset)
+void wxDC::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset)
 {
     // Do things less efficiently if we have offsets
     if (xoffset != 0 || yoffset != 0)
@@ -452,10 +452,10 @@ void wxDC::DoDrawLines(int n, wxPoint points[], long xoffset, long yoffset)
     }
 }
 
-void wxDC::DoDrawRectangle(long x, long y, long width, long height)
+void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
-    long x2 = x + width;
-    long y2 = y + height;
+    wxCoord x2 = x + width;
+    wxCoord y2 = y + height;
 
     /* MATTHEW: [6] new normalization */
 #if WX_STANDARD_GRAPHICS
@@ -496,7 +496,7 @@ void wxDC::DoDrawRectangle(long x, long y, long width, long height)
     CalcBoundingBox(x2, y2);
 }
 
-void wxDC::DoDrawRoundedRectangle(long x, long y, long width, long height, double radius)
+void wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius)
 {
     // Now, a negative radius value is interpreted to mean
     // 'the proportion of the smallest X or Y dimension'
@@ -511,8 +511,8 @@ void wxDC::DoDrawRoundedRectangle(long x, long y, long width, long height, doubl
         radius = (- radius * smallest);
     }
 
-    long x2 = (x+width);
-    long y2 = (y+height);
+    wxCoord x2 = (x+width);
+    wxCoord y2 = (y+height);
 
     (void)RoundRect(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2),
         YLOG2DEV(y2), (int) (2*XLOG2DEV(radius)), (int)( 2*YLOG2DEV(radius)));
@@ -521,10 +521,10 @@ void wxDC::DoDrawRoundedRectangle(long x, long y, long width, long height, doubl
     CalcBoundingBox(x2, y2);
 }
 
-void wxDC::DoDrawEllipse(long x, long y, long width, long height)
+void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
-    long x2 = (x+width);
-    long y2 = (y+height);
+    wxCoord x2 = (x+width);
+    wxCoord y2 = (y+height);
 
     (void)Ellipse(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y2));
 
@@ -533,10 +533,10 @@ void wxDC::DoDrawEllipse(long x, long y, long width, long height)
 }
 
 // Chris Breeze 20/5/98: first implementation of DrawEllipticArc on Windows
-void wxDC::DoDrawEllipticArc(long x,long y,long w,long h,double sa,double ea)
+void wxDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
 {
-    long x2 = (x+w);
-    long y2 = (y+h);
+    wxCoord x2 = (x+w);
+    wxCoord y2 = (y+h);
 
     const double deg2rad = 3.14159265359 / 180.0;
     int rx1 = XLOG2DEV(x+w/2);
@@ -569,7 +569,7 @@ void wxDC::DoDrawEllipticArc(long x,long y,long w,long h,double sa,double ea)
     CalcBoundingBox(x2, y2);
 }
 
-void wxDC::DoDrawIcon(const wxIcon& icon, long x, long y)
+void wxDC::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
 {
 #if defined(__WIN32__) && !defined(__SC__) && !defined(__TWIN32__)
     ::DrawIconEx(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), (HICON) icon.GetHICON(),
@@ -582,7 +582,7 @@ void wxDC::DoDrawIcon(const wxIcon& icon, long x, long y)
     CalcBoundingBox(x+icon.GetWidth(), y+icon.GetHeight());
 }
 
-void wxDC::DoDrawBitmap( const wxBitmap &bmp, long x, long y, bool useMask )
+void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask )
 {
     if (!bmp.Ok())
         return;
@@ -623,7 +623,7 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, long x, long y, bool useMask )
     }
 }
 
-void wxDC::DoDrawText(const wxString& text, long x, long y)
+void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 {
     if (m_textForegroundColour.Ok())
         SetTextColor(GetHdc(), m_textForegroundColour.GetPixel() );
@@ -650,7 +650,7 @@ void wxDC::DoDrawText(const wxString& text, long x, long y)
 
     CalcBoundingBox(x, y);
 
-    long w, h;
+    wxCoord w, h;
     GetTextExtent(text, &w, &h);
     CalcBoundingBox((x + w), (y + h));
 }
@@ -901,7 +901,7 @@ void wxDC::EndPage()
 // text metrics
 // ---------------------------------------------------------------------------
 
-long wxDC::GetCharHeight() const
+wxCoord wxDC::GetCharHeight() const
 {
     TEXTMETRIC lpTextMetric;
 
@@ -910,7 +910,7 @@ long wxDC::GetCharHeight() const
     return YDEV2LOGREL(lpTextMetric.tmHeight);
 }
 
-long wxDC::GetCharWidth() const
+wxCoord wxDC::GetCharWidth() const
 {
     TEXTMETRIC lpTextMetric;
 
@@ -919,9 +919,9 @@ long wxDC::GetCharWidth() const
     return XDEV2LOGREL(lpTextMetric.tmAveCharWidth);
 }
 
-void wxDC::GetTextExtent(const wxString& string, long *x, long *y,
-                         long *descent, long *externalLeading,
-                         wxFont *theFont) const
+void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
+                           wxCoord *descent, wxCoord *externalLeading,
+                           wxFont *theFont) const
 {
     wxFont *fontToUse = (wxFont*) theFont;
     if (!fontToUse)
@@ -1031,7 +1031,7 @@ void wxDC::SetSystemScale(double x, double y)
     SetMapMode(m_mappingMode);
 }
 
-void wxDC::SetLogicalOrigin(long x, long y)
+void wxDC::SetLogicalOrigin(wxCoord x, wxCoord y)
 {
     m_logicalOriginX = x;
     m_logicalOriginY = y;
@@ -1039,7 +1039,7 @@ void wxDC::SetLogicalOrigin(long x, long y)
     ::SetWindowOrgEx(GetHdc(), (int)m_logicalOriginX, (int)m_logicalOriginY, NULL);
 }
 
-void wxDC::SetDeviceOrigin(long x, long y)
+void wxDC::SetDeviceOrigin(wxCoord x, wxCoord y)
 {
     m_deviceOriginX = x;
     m_deviceOriginY = y;
@@ -1051,56 +1051,56 @@ void wxDC::SetDeviceOrigin(long x, long y)
 // coordinates transformations
 // ---------------------------------------------------------------------------
 
-long wxDCBase::DeviceToLogicalX(long x) const
+wxCoord wxDCBase::DeviceToLogicalX(wxCoord x) const
 {
-    return (long) (((x) - m_deviceOriginX)/(m_logicalScaleX*m_userScaleX*m_signX*m_scaleX) - m_logicalOriginX);
+    return (wxCoord) (((x) - m_deviceOriginX)/(m_logicalScaleX*m_userScaleX*m_signX*m_scaleX) - m_logicalOriginX);
 }
 
-long wxDCBase::DeviceToLogicalXRel(long x) const
+wxCoord wxDCBase::DeviceToLogicalXRel(wxCoord x) const
 {
-    return (long) ((x)/(m_logicalScaleX*m_userScaleX*m_signX*m_scaleX));
+    return (wxCoord) ((x)/(m_logicalScaleX*m_userScaleX*m_signX*m_scaleX));
 }
 
-long wxDCBase::DeviceToLogicalY(long y) const
+wxCoord wxDCBase::DeviceToLogicalY(wxCoord y) const
 {
-    return (long) (((y) - m_deviceOriginY)/(m_logicalScaleY*m_userScaleY*m_signY*m_scaleY) - m_logicalOriginY);
+    return (wxCoord) (((y) - m_deviceOriginY)/(m_logicalScaleY*m_userScaleY*m_signY*m_scaleY) - m_logicalOriginY);
 }
 
-long wxDCBase::DeviceToLogicalYRel(long y) const
+wxCoord wxDCBase::DeviceToLogicalYRel(wxCoord y) const
 {
-    return (long) ((y)/(m_logicalScaleY*m_userScaleY*m_signY*m_scaleY));
+    return (wxCoord) ((y)/(m_logicalScaleY*m_userScaleY*m_signY*m_scaleY));
 }
 
-long wxDCBase::LogicalToDeviceX(long x) const
+wxCoord wxDCBase::LogicalToDeviceX(wxCoord x) const
 {
-    return (long) ((x - m_logicalOriginX)*m_logicalScaleX*m_userScaleX*m_signX*m_scaleX + m_deviceOriginX);
+    return (wxCoord) ((x - m_logicalOriginX)*m_logicalScaleX*m_userScaleX*m_signX*m_scaleX + m_deviceOriginX);
 }
 
-long wxDCBase::LogicalToDeviceXRel(long x) const
+wxCoord wxDCBase::LogicalToDeviceXRel(wxCoord x) const
 {
-    return (long) (x*m_logicalScaleX*m_userScaleX*m_signX*m_scaleX);
+    return (wxCoord) (x*m_logicalScaleX*m_userScaleX*m_signX*m_scaleX);
 }
 
-long wxDCBase::LogicalToDeviceY(long y) const
+wxCoord wxDCBase::LogicalToDeviceY(wxCoord y) const
 {
-    return (long) ((y - m_logicalOriginY)*m_logicalScaleY*m_userScaleY*m_signY*m_scaleY + m_deviceOriginY);
+    return (wxCoord) ((y - m_logicalOriginY)*m_logicalScaleY*m_userScaleY*m_signY*m_scaleY + m_deviceOriginY);
 }
 
-long wxDCBase::LogicalToDeviceYRel(long y) const
+wxCoord wxDCBase::LogicalToDeviceYRel(wxCoord y) const
 {
-    return (long) (y*m_logicalScaleY*m_userScaleY*m_signY*m_scaleY);
+    return (wxCoord) (y*m_logicalScaleY*m_userScaleY*m_signY*m_scaleY);
 }
 
 // ---------------------------------------------------------------------------
 // bit blit
 // ---------------------------------------------------------------------------
-bool wxDC::DoBlit(long xdest, long ydest, long width, long height,
-                  wxDC *source, long xsrc, long ysrc, int rop, bool useMask)
+bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
+                  wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop, bool useMask)
 {
-    long xdest1 = xdest;
-    long ydest1 = ydest;
-    long xsrc1 = xsrc;
-    long ysrc1 = ysrc;
+    wxCoord xdest1 = xdest;
+    wxCoord ydest1 = ydest;
+    wxCoord xsrc1 = xsrc;
+    wxCoord ysrc1 = ysrc;
 
     // Chris Breeze 18/5/98: use text foreground/background colours
     // when blitting from 1-bit bitmaps
@@ -1295,7 +1295,7 @@ void wxDC::DoGetTextExtent(const wxString& string, float *x, float *y,
                          float *descent, float *externalLeading,
                          wxFont *theFont, bool use16bit) const
 {
-    long x1, y1, descent1, externalLeading1;
+    wxCoord x1, y1, descent1, externalLeading1;
     GetTextExtent(string, & x1, & y1, & descent1, & externalLeading1, theFont, use16bit);
     *x = x1; *y = y1;
     if (descent)

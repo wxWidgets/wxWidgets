@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -22,10 +22,9 @@
 //-----------------------------------------------------------------------------
 
 GdkWindow *wxScreenDC::sm_overlayWindow  = (GdkWindow*) NULL;
-       int wxScreenDC::sm_overlayWindowX = 0;
-       int wxScreenDC::sm_overlayWindowY = 0;
+int wxScreenDC::sm_overlayWindowX = 0;
+int wxScreenDC::sm_overlayWindowY = 0;
 
-			     
 //-----------------------------------------------------------------------------
 // create X window
 //-----------------------------------------------------------------------------
@@ -57,14 +56,14 @@ int my_event_masks_table[19] =
   StructureNotifyMask,
   PropertyChangeMask,
   VisibilityChangeMask,
-  0,				/* PROXIMITY_IN */
-  0				/* PROXIMTY_OUT */
+  0,                                /* PROXIMITY_IN */
+  0                                /* PROXIMTY_OUT */
 };
 
 GdkWindow*
 gdk_window_transparent_new ( GdkWindow     *parent,
-		             GdkWindowAttr *attributes,
-		             gint           attributes_mask)
+                             GdkWindowAttr *attributes,
+                             gint           attributes_mask)
 {
   GdkWindow *window;
   GdkWindowPrivate *gprivate;
@@ -125,7 +124,7 @@ gdk_window_transparent_new ( GdkWindow     *parent,
   gprivate->height = (attributes->height > 1) ? (attributes->height) : (1);
   gprivate->window_type = attributes->window_type;
   gprivate->extension_events = FALSE;
-  
+
 #if (GTK_MINOR_VERSION == 0)
   gprivate->dnd_drag_data_type = None;
   gprivate->dnd_drag_data_typesavail =
@@ -152,16 +151,16 @@ gdk_window_transparent_new ( GdkWindow     *parent,
   for (i = 0; i < my_nevent_masks; i++)
     {
       if (attributes->event_mask & (1 << (i + 1)))
-	xattributes.event_mask |= my_event_masks_table[i];
+        xattributes.event_mask |= my_event_masks_table[i];
     }
 
   if (xattributes.event_mask)
     xattributes_mask |= CWEventMask;
 
   if(attributes_mask & GDK_WA_NOREDIR) {
-	xattributes.override_redirect =
-		(attributes->override_redirect == FALSE)?False:True;
-	xattributes_mask |= CWOverrideRedirect;
+        xattributes.override_redirect =
+                (attributes->override_redirect == FALSE)?False:True;
+        xattributes_mask |= CWOverrideRedirect;
   } else
     xattributes.override_redirect = False;
 
@@ -169,24 +168,24 @@ gdk_window_transparent_new ( GdkWindow     *parent,
       depth = visual->depth;
 
       if (attributes_mask & GDK_WA_COLORMAP)
-	gprivate->colormap = attributes->colormap;
+        gprivate->colormap = attributes->colormap;
       else
-	gprivate->colormap = gdk_colormap_get_system ();
+        gprivate->colormap = gdk_colormap_get_system ();
 
-	  xattributes.colormap = ((GdkColormapPrivate*) gprivate->colormap)->xcolormap;
-	  xattributes_mask |= CWColormap;
+          xattributes.colormap = ((GdkColormapPrivate*) gprivate->colormap)->xcolormap;
+          xattributes_mask |= CWColormap;
 
-	  xparent = gdk_root_window;
+          xparent = gdk_root_window;
 
-	  xattributes.save_under = True;
-	  xattributes.override_redirect = True;
-	  xattributes.cursor = None;
-	  xattributes_mask |= CWSaveUnder | CWOverrideRedirect;
+          xattributes.save_under = True;
+          xattributes.override_redirect = True;
+          xattributes.cursor = None;
+          xattributes_mask |= CWSaveUnder | CWOverrideRedirect;
 
   gprivate->xwindow = XCreateWindow (gprivate->xdisplay, xparent,
-				    x, y, gprivate->width, gprivate->height,
-				    0, depth, gclass, xvisual,
-				    xattributes_mask, &xattributes);
+                                    x, y, gprivate->width, gprivate->height,
+                                    0, depth, gclass, xvisual,
+                                    xattributes_mask, &xattributes);
   gdk_window_ref (window);
   gdk_xid_table_insert (&gprivate->xwindow, window);
 
@@ -246,12 +245,12 @@ gdk_window_transparent_new ( GdkWindow     *parent,
 
 IMPLEMENT_DYNAMIC_CLASS(wxScreenDC,wxPaintDC)
 
-wxScreenDC::wxScreenDC(void)
+wxScreenDC::wxScreenDC()
 {
     m_ok = FALSE;
     m_window = (GdkWindow *) NULL;
     m_cmap = gdk_colormap_get_system();
-  
+
     if (sm_overlayWindow)
     {
         m_window = sm_overlayWindow;
@@ -262,16 +261,16 @@ wxScreenDC::wxScreenDC(void)
     {
        m_window = GDK_ROOT_PARENT();
     }
-  
+
     SetUpDC();
-  
+
     gdk_gc_set_subwindow( m_penGC, GDK_INCLUDE_INFERIORS );
     gdk_gc_set_subwindow( m_brushGC, GDK_INCLUDE_INFERIORS );
     gdk_gc_set_subwindow( m_textGC, GDK_INCLUDE_INFERIORS );
     gdk_gc_set_subwindow( m_bgGC, GDK_INCLUDE_INFERIORS );
 }
 
-wxScreenDC::~wxScreenDC(void)
+wxScreenDC::~wxScreenDC()
 {
     EndDrawingOnTop();
 }
@@ -279,7 +278,7 @@ wxScreenDC::~wxScreenDC(void)
 bool wxScreenDC::StartDrawingOnTop( wxWindow *window )
 {
     if (!window) return StartDrawingOnTop();
-  
+
     int x = 0;
     int y = 0;
     window->GetPosition( &x, &y );
@@ -287,13 +286,13 @@ bool wxScreenDC::StartDrawingOnTop( wxWindow *window )
     int h = 0;
     window->GetSize( &w, &h );
     window->ClientToScreen( &x, &y );
-  
+
     wxRect rect;
     rect.x = x;
     rect.y = y;
     rect.width = 0;
     rect.height = 0;
-  
+
     return StartDrawingOnTop( &rect );
 }
 
@@ -310,7 +309,7 @@ bool wxScreenDC::StartDrawingOnTop( wxRect *rect )
     width = rect->width;
     height = rect->height;
   }
-  
+
   sm_overlayWindowX = x;
   sm_overlayWindowY = y;
 
@@ -323,23 +322,23 @@ bool wxScreenDC::StartDrawingOnTop( wxRect *rect )
   attr.wclass = GDK_INPUT_OUTPUT;
   attr.event_mask = 0;
   attr.window_type = GDK_WINDOW_TEMP;
-  
+
   // GTK cannot set transparent backgrounds. :-(
   sm_overlayWindow = gdk_window_transparent_new( NULL, &attr, GDK_WA_NOREDIR | GDK_WA_X | GDK_WA_Y );
-  
+
   if (sm_overlayWindow) gdk_window_show( sm_overlayWindow );
 
   return (sm_overlayWindow != NULL);
 }
 
-bool wxScreenDC::EndDrawingOnTop(void)
+bool wxScreenDC::EndDrawingOnTop()
 {
     if (sm_overlayWindow) gdk_window_destroy( sm_overlayWindow );
-  
+
     sm_overlayWindow = NULL;
     sm_overlayWindowX = 0;
     sm_overlayWindowY = 0;
-  
+
     return TRUE;
 }
 

@@ -83,7 +83,6 @@ public:
     virtual bool ProcessMessage(WXMSG* pMsg);
     void DeletePendingObjects();
     bool ProcessIdle();
-    void ProcessPendingEvents();
     int GetComCtl32Version() const;
 
 public:

@@ -23,9 +23,7 @@
     #include "wx/gdicmn.h"
 #endif
 
-#if wxUSE_THREADS
-    #include "wx/thread.h"
-#endif
+#include "wx/thread.h"
 
 // ----------------------------------------------------------------------------
 // forward declarations
