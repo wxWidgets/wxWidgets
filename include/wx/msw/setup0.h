@@ -1109,6 +1109,18 @@
 #define wxUSE_UXTHEME_AUTO      1
 
 // ----------------------------------------------------------------------------
+// Generic versions of native controls
+// ----------------------------------------------------------------------------
+
+// Set this to 1 to be able to use wxDatePickerCtrlGeneric in addition to the
+// native wxDatePickerCtrl
+//
+// Default is 0.
+//
+// Recommended setting: 0, this is mainly used for testing
+#define wxUSE_DATEPICKCTRL_GENERIC 0
+
+// ----------------------------------------------------------------------------
 // Crash debugging helpers
 // ----------------------------------------------------------------------------
 
