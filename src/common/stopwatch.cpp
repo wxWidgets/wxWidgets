@@ -193,51 +193,9 @@ long wxGetLocalTime()
 // Get UTC time as seconds since 00:00:00, Jan 1st 1970
 long wxGetUTCTime()
 {
-    struct tm tm;
-    struct tm *ptm;
-    time_t t0, t1;
-
-    // This cannot be made static because mktime can overwrite it
-    //
-    memset(&tm, 0, sizeof(tm));
-    tm.tm_year  = 70;
-    tm.tm_mon   = 0;
-    tm.tm_mday  = 5;        // not Jan 1st 1970 due to mktime 'feature'
-    tm.tm_hour  = 0;
-    tm.tm_min   = 0;
-    tm.tm_sec   = 0;
-    tm.tm_isdst = -1;       // let mktime guess
-
-    // Note that mktime assumes that the struct tm contains local time.
-    //
-    t1 = time(&t1);         // now
-    t0 = mktime(&tm);       // origin in localtime
-
-    if (( t0 != (time_t)-1 ) && ( t1 != (time_t)-1 ))
-    {
-        // To get t0 as GMT we convert to a struct tm with gmtime,
-        // and then back again.
-        //
-        ptm = gmtime(&t0);
-
-        if (ptm)
-        {
-            memcpy(&tm, ptm, sizeof(tm));
-            t0 = mktime(&tm);
-
-            if (t0 != (time_t)-1 )
-                return (long)difftime(t1, t0) + (60 * 60 * 24 * 4);
-            wxLogSysError(_("mktime() failed"));
-        }
-        else
-        {
-            wxLogSysError(_("gmtime() failed"));
-        }
-    }
-
-    wxLogError(_("Failed to get the UTC system time."));
-
-    return -1;
+    long timenow = 0;
+    time(&timenow);
+    return timenow;
 }
 
 #if wxUSE_LONGLONG

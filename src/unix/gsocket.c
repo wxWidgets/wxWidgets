@@ -800,27 +800,26 @@ int GSocket_Read(GSocket *socket, char *buffer, int size)
 
   assert(socket != NULL);
 
-  /* When using CFSocket we MUST NOT reenable events until we finish reading */
-#ifndef __DARWIN__
-  /* Reenable INPUT events */
-  _GSocket_Enable(socket, GSOCK_INPUT);
-#endif
-
   if (socket->m_fd == INVALID_SOCKET || socket->m_server)
   {
     socket->m_error = GSOCK_INVSOCK;
     return -1;
   }
 
+  /* Disable events during query of socket status */
+  _GSocket_Disable(socket, GSOCK_INPUT);
+    
   /* If the socket is blocking, wait for data (with a timeout) */
   if (_GSocket_Input_Timeout(socket) == GSOCK_TIMEDOUT)
-    return -1;
-
-  /* Read the data */
-  if (socket->m_stream)
-    ret = _GSocket_Recv_Stream(socket, buffer, size);
-  else
-    ret = _GSocket_Recv_Dgram(socket, buffer, size);
+    /* We no longer return here immediately, otherwise socket events would not be re-enabled! */
+    ret = -1;
+  else {
+    /* Read the data */
+    if (socket->m_stream)
+      ret = _GSocket_Recv_Stream(socket, buffer, size);
+    else
+      ret = _GSocket_Recv_Dgram(socket, buffer, size);
+  }
     
   if (ret == -1)
   {
@@ -830,11 +829,9 @@ int GSocket_Read(GSocket *socket, char *buffer, int size)
       socket->m_error = GSOCK_IOERR;
   }
   
-#ifdef __DARWIN__
-  /* Reenable INPUT events */
+  /* Enable events again now that we are done processing */
   _GSocket_Enable(socket, GSOCK_INPUT);
-#endif
-
+  
   return ret;
 }
 
