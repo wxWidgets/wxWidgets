@@ -43,8 +43,16 @@ MustHaveApp(wxCaret);
 class wxCaret {
 public:
     wxCaret(wxWindow* window, const wxSize& size);
-    ~wxCaret();
+//    ~wxCaret(); Window takes ownership
 
+    %extend {
+        DocStr(Destroy,
+               "Deletes the C++ object this Python object is a proxy for.", "");
+        void Destroy() {
+            delete self;
+        }
+    }
+    
     bool IsOk();
     bool IsVisible();
 
@@ -70,17 +78,11 @@ public:
     void Hide();
 
     %pythoncode { def __nonzero__(self): return self.IsOk() }
+
+    static int GetBlinkTime();
+    static void SetBlinkTime(int milliseconds);
 };
 
-%inline %{
-    int wxCaret_GetBlinkTime() {
-        return wxCaret::GetBlinkTime();
-    }
-
-    void wxCaret_SetBlinkTime(int milliseconds) {
-        wxCaret::SetBlinkTime(milliseconds);
-    }
-%}
 
 //---------------------------------------------------------------------------
 

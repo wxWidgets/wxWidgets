@@ -163,8 +163,6 @@
 %rename(Thread_IsMain)                      wxThread_IsMain;
 %rename(ToolTip)                            wxToolTip;
 %rename(Caret)                              wxCaret;
-%rename(Caret_GetBlinkTime)                 wxCaret_GetBlinkTime;
-%rename(Caret_SetBlinkTime)                 wxCaret_SetBlinkTime;
 %rename(BusyCursor)                         wxBusyCursor;
 %rename(WindowDisabler)                     wxWindowDisabler;
 %rename(BusyInfo)                           wxBusyInfo;
