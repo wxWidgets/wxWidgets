@@ -196,7 +196,7 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
     request = wxT("GET");
     break;
   case wxHTTP_POST:
-    tmp_buf = wxT("POST");
+    request = wxT("POST");
     break;
   default:
     return FALSE;
