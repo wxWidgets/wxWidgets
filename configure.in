@@ -4567,14 +4567,10 @@ if test "$wxUSE_FONTDLG" = "yes"; then
 fi
 
 if test "$wxUSE_DIRDLG" = "yes"; then
-    if test "$wxUSE_CONSTRAINTS" != "yes"; then
-       AC_MSG_WARN(wxDirDialog requires constraints so it won't be compiled without them)
+    if test "$wxUSE_TREECTRL" != "yes"; then
+        AC_MSG_WARN(wxDirDialog requires wxTreeCtrl so it won't be compiled without it)
     else
-        if test "$wxUSE_TREECTRL" != "yes"; then
-            AC_MSG_WARN(wxDirDialog requires wxTreeCtrl so it won't be compiled without it)
-        else
-            AC_DEFINE(wxUSE_DIRDLG)
-        fi
+        AC_DEFINE(wxUSE_DIRDLG)
     fi
 fi
 

@@ -20225,17 +20225,13 @@ EOF
 fi
 
 if test "$wxUSE_DIRDLG" = "yes"; then
-    if test "$wxUSE_CONSTRAINTS" != "yes"; then
-       echo "configure: warning: wxDirDialog requires constraints so it won't be compiled without them" 1>&2
+    if test "$wxUSE_TREECTRL" != "yes"; then
+        echo "configure: warning: wxDirDialog requires wxTreeCtrl so it won't be compiled without it" 1>&2
     else
-        if test "$wxUSE_TREECTRL" != "yes"; then
-            echo "configure: warning: wxDirDialog requires wxTreeCtrl so it won't be compiled without it" 1>&2
-        else
-            cat >> confdefs.h <<\EOF
+        cat >> confdefs.h <<\EOF
 #define wxUSE_DIRDLG 1
 EOF
 
-        fi
     fi
 fi
 
@@ -20462,7 +20458,7 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:20466: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:20462: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6

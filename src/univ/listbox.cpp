@@ -1061,9 +1061,13 @@ bool wxListBox::PerformAction(const wxControlAction& action,
     int item = (int)numArg;
 
     if ( action == wxACTION_LISTBOX_SETFOCUS )
+    {
         SetCurrentItem(item);
+    }
     else if ( action == wxACTION_LISTBOX_ACTIVATE )
+    {
         Activate(item);
+    }
     else if ( action == wxACTION_LISTBOX_TOGGLE )
     {
         if ( item == -1 )

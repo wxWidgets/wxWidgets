@@ -1361,17 +1361,32 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     x = XLOG2DEV(x);
     y = YLOG2DEV(y);
 
-#if 0
-    wxCoord width = gdk_string_width( font, text.mbc_str() );
-    wxCoord height = font->ascent + font->descent;
-
-    if ( m_backgroundMode == wxSOLID )
+    // First draw a rectangle representing the text background, if a text
+    // background is specified
+    if (m_textBackgroundColour.Ok () && (m_backgroundMode != wxTRANSPARENT))
     {
-        gdk_gc_set_foreground( m_textGC, m_textBackgroundColour.GetColor() );
-        gdk_draw_rectangle( m_window, m_textGC, TRUE, x, y, width, height );
-        gdk_gc_set_foreground( m_textGC, m_textForegroundColour.GetColor() );
+        // Since X draws from the baseline of the text, must add the text height
+        int cx = 0;
+        int cy = 0;
+        int ascent = 0;
+        int slen;
+        int direction, descent;
+
+        slen = strlen(text);
+        XCharStruct overall_return;
+
+        (void)XTextExtents(xfont, text.c_str(), slen, &direction,
+                                 &ascent, &descent, &overall_return);
+
+        cx = overall_return.width;
+        cy = ascent + descent;
+        m_textBackgroundColour.CalcPixel(m_cmap);
+        XSetForeground ((Display*) m_display, (GC) m_textGC, m_textBackgroundColour.GetPixel());
+        XFillRectangle( (Display*) m_display, (Window) m_window,
+                    (GC) m_textGC, x, y, cx, cy );
+        XSetForeground ((Display*) m_display, (GC) m_textGC, m_textForegroundColour.GetPixel());
+
     }
-#endif
 
     XSetFont( (Display*) m_display, (GC) m_textGC, xfont->fid );
 #if !wxUSE_NANOX
