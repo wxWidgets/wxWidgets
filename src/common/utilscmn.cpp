@@ -217,6 +217,11 @@ extern "C"
 #define strncasecmp strnicmp
 #endif
 
+#ifdef __WATCOMC__
+#define strcasecmp stricmp
+#define strncasecmp strnicmp
+#endif
+
 wxChar *
 copystring (const wxChar *s)
 {
