@@ -1182,6 +1182,9 @@ void wxPostScriptDC::SetBrush( const wxBrush& brush )
 #include "wx/x11/private.h"
 #endif
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 #include "wx/fontutil.h"
 #include <pango/pangoft2.h>
 #include <freetype/ftglyph.h>
