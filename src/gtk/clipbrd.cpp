@@ -490,9 +490,11 @@ bool wxClipboard::IsSupported( const wxDataFormat& format )
     /* store requested format to be asked for by callbacks */
     m_targetRequested = format;
 
+#if 0
     wxLogTrace( TRACE_CLIPBOARD,
                 wxT("wxClipboard:IsSupported: requested format: %s"),
                 format.GetId().c_str() );
+#endif
 
     wxCHECK_MSG( m_targetRequested, FALSE, wxT("invalid clipboard format") );
 

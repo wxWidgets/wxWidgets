@@ -405,11 +405,11 @@ void wxRadioBox::SetSelection( int n )
 
     GtkToggleButton *button = GTK_TOGGLE_BUTTON( node->Data() );
 
-    DisableEvents();
+    GtkDisableEvents();
     
     gtk_toggle_button_set_state( button, 1 );
     
-    EnableEvents();
+    GtkEnableEvents();
 }
 
 int wxRadioBox::GetSelection(void) const
@@ -575,7 +575,7 @@ void wxRadioBox::SetNumberOfRowsOrCols( int WXUNUSED(n) )
     wxFAIL_MSG(wxT("wxRadioBox::SetNumberOfRowsOrCols not implemented."));
 }
 
-void wxRadioBox::DisableEvents()
+void wxRadioBox::GtkDisableEvents()
 {
     wxNode *node = m_boxes.First();
     while (node)
@@ -587,7 +587,7 @@ void wxRadioBox::DisableEvents()
     }
 }
 
-void wxRadioBox::EnableEvents()
+void wxRadioBox::GtkEnableEvents()
 {
     wxNode *node = m_boxes.First();
     while (node)
@@ -617,6 +617,19 @@ void wxRadioBox::ApplyWidgetStyle()
         node = node->Next();
     }
 }
+
+#if wxUSE_TOOLTIPS
+void wxRadioBox::ApplyToolTip( GtkTooltips *tips, const wxChar *tip )
+{
+    wxNode *node = m_boxes.First();
+    while (node)
+    {
+        GtkWidget *widget = GTK_WIDGET( node->Data() );
+        gtk_tooltips_set_tip( tips, widget, wxConvCurrent->cWX2MB(tip), (gchar*) NULL );
+        node = node->Next();
+    }
+}
+#endif // wxUSE_TOOLTIPS
 
 bool wxRadioBox::IsOwnGtkWindow( GdkWindow *window )
 {

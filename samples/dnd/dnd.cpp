@@ -542,8 +542,9 @@ public:
     }
 
     // override base class (pure) virtuals
-    virtual void OnEnter()
-        { m_frame->SetStatusText("Mouse entered the frame"); }
+    virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def)
+        { m_frame->SetStatusText("Mouse entered the frame");
+	  return OnDragOver(x, y, def); }
     virtual void OnLeave()
         { m_frame->SetStatusText("Mouse left the frame"); }
     virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def)

@@ -33,22 +33,26 @@ wxMask::wxMask()
 
 wxMask::wxMask( const wxBitmap& bitmap, const wxColour& colour )
 {
+    m_bitmap = (GdkBitmap *) NULL;
     Create( bitmap, colour );
 }
 
 wxMask::wxMask( const wxBitmap& bitmap, int paletteIndex )
 {
+    m_bitmap = (GdkBitmap *) NULL;
     Create( bitmap, paletteIndex );
 }
 
 wxMask::wxMask( const wxBitmap& bitmap )
 {
+    m_bitmap = (GdkBitmap *) NULL;
     Create( bitmap );
 }
 
 wxMask::~wxMask()
 {
-    if (m_bitmap) gdk_bitmap_unref( m_bitmap );
+    if (m_bitmap) 
+        gdk_bitmap_unref( m_bitmap );
 }
 
 bool wxMask::Create( const wxBitmap& WXUNUSED(bitmap),

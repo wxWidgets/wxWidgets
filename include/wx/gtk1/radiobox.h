@@ -88,14 +88,17 @@ public:
     int GetNumberOfRowsOrCols() const;
     void SetNumberOfRowsOrCols( int n );
     
+    // implementation
+    // --------------
+    
     void SetFocus();
-    
-  // implementation    
-    
-    void DisableEvents();
-    void EnableEvents();
+    void GtkDisableEvents();
+    void GtkEnableEvents();
     bool IsOwnGtkWindow( GdkWindow *window );
     void ApplyWidgetStyle();
+#if wxUSE_TOOLTIPS
+    void ApplyToolTip( GtkTooltips *tips, const wxChar *tip );
+#endif // wxUSE_TOOLTIPS
     wxSize LayoutItems();
     void DoSetSize( int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO );
     
