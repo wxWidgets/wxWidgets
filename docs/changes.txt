@@ -156,6 +156,7 @@ wxMSW:
 - accelerators are now initially hidden if appropriate (Peter Nielsen)
 - background colour of a wxComboBox may now be set
 - fixed wxListCtrl::GetItemText/BackgroundColour()
+- Esc can now be used to close menus in the dialogs (Hartmut Honisch)
 
 wxGTK:
 

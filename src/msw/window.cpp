@@ -1837,6 +1837,25 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                         bProcess = FALSE;
                     break;
 
+                case VK_ESCAPE:
+                    {
+#if wxUSE_BUTTON
+                        wxButton *btn = wxDynamicCast(FindWindow(wxID_CANCEL),
+                                                      wxButton);
+                        if ( btn && btn->IsEnabled() )
+                        {
+                            // if we do have a cancel button, do press it
+                            btn->MSWCommand(BN_CLICKED, 0 /* unused */);
+
+                            // we consumed the message
+                            return TRUE;
+                        }
+#endif // wxUSE_BUTTON
+
+                        bProcess = FALSE;
+                    }
+                    break;
+
                 case VK_RETURN:
                     {
                         if ( (lDlgCode & DLGC_WANTMESSAGE) && !bCtrlDown )
@@ -1950,8 +1969,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
         }
 #endif // 1/0
 
-        // we handle VK_ESCAPE ourselves in wxDialog::OnCharHook() and we
-        // shouldn't let IsDialogMessage() get it as it _always_ eats the
+        // don't let IsDialogMessage() get VK_ESCAPE as it _always_ eats the
         // message even when there is no cancel button and when the message is
         // needed by the control itself: in particular, it prevents the tree in
         // place edit control from being closed with Escape in a dialog

@@ -113,8 +113,6 @@ BEGIN_EVENT_TABLE(wxDialog, wxDialogBase)
     EVT_BUTTON(wxID_APPLY, wxDialog::OnApply)
     EVT_BUTTON(wxID_CANCEL, wxDialog::OnCancel)
 
-    EVT_CHAR_HOOK(wxDialog::OnCharHook)
-
     EVT_SYS_COLOUR_CHANGED(wxDialog::OnSysColourChanged)
 
     EVT_CLOSE(wxDialog::OnCloseWindow)
@@ -212,35 +210,6 @@ wxDialog::~wxDialog()
 
     // this will also reenable all the other windows for a modal dialog
     Show(FALSE);
-}
-
-// ----------------------------------------------------------------------------
-// kbd handling
-// ----------------------------------------------------------------------------
-
-// By default, pressing escape cancels the dialog
-void wxDialog::OnCharHook(wxKeyEvent& event)
-{
-    if (GetHWND())
-    {
-        // "Esc" works as an accelerator for the "Cancel" button, but it
-        // shouldn't close the dialog which doesn't have any cancel button
-        if ( (event.m_keyCode == WXK_ESCAPE) && FindWindow(wxID_CANCEL) )
-        {
-            wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
-            cancelEvent.SetEventObject( this );
-            GetEventHandler()->ProcessEvent(cancelEvent);
-
-            // ensure that there is another message for this window so the
-            // ShowModal loop will exit and won't get stuck in GetMessage().
-            ::PostMessage(GetHwnd(), WM_NULL, 0, 0);
-
-            return;
-        }
-    }
-
-    // We didn't process this event.
-    event.Skip();
 }
 
 // ----------------------------------------------------------------------------
