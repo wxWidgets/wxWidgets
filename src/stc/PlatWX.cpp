@@ -815,7 +815,12 @@ int ListBox::Length() {
 }
 
 void ListBox::Select(int n) {
-    GETLB(id)->SetSelection(n);
+    bool select = TRUE;
+    if (n == -1) {
+        n = 0;
+        select = FALSE;
+    }
+    GETLB(id)->SetSelection(n, select);
 #ifdef __WXGTK__
     if (n > 4)
         n = n - 4;
