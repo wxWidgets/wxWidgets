@@ -36,6 +36,9 @@ class WXDLLEXPORT wxHtmlFilter : public wxObject
 
     public:
         wxHtmlFilter() : wxObject() {}
+#ifdef __WXMAC_X__
+		virtual ~wxHtmlFilter() {}
+#endif
 
         virtual bool CanRead(const wxFSFile& file) const = 0;
                 // returns TRUE if this filter is able to open&read given file
