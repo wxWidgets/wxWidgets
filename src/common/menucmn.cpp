@@ -131,7 +131,7 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
                 current.clear();
             }
             else {
-                current += wxTolower(label[n]);
+                current += (wxChar) wxTolower(label[n]);
             }
         }
 
