@@ -21,6 +21,10 @@ Unix:
 - fixed configure bug which prevented it from finding anything with some
   compiler versions
 
+wxHTML:
+
+- fixed wxHtmlHelpController's cache files handling on big endian machines
+
 2.2.9
 -----
 
