@@ -3655,7 +3655,7 @@ void wxWindowGTK::SetFocus()
 #ifndef __WXGTK20__
         if (GTK_IS_CONTAINER(m_widget))
         {
-            gtk_container_focus( GTK_CONTAINER(w), GTK_DIR_TAB_FORWARD );
+            gtk_container_focus( GTK_CONTAINER(m_widget), GTK_DIR_TAB_FORWARD );
         }
         else
 #endif
