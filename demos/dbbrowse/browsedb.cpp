@@ -376,7 +376,7 @@ bool BrowserDB::OnSelect(wxString tb_Name, int Quiet)
         return false;
     }
     //---------------------------------------------------------------------------------------
-    // SetColDefs ( 0,"NAME",DB_DATA_TYPE_VARCHAR,Name,SQL_C_CHAR,sizeof(Name),true,true);  // Primary index
+    // SetColDefs ( 0, "NAME", DB_DATA_TYPE_VARCHAR, Name, SQL_C_WXCHAR, sizeof(Name), true, true);  // Primary index
     //---------------------------------------------------------------------------------------
     if (!Quiet)
     {
