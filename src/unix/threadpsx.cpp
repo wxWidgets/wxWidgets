@@ -351,6 +351,8 @@ wxThreadInternal::wxThreadInternal()
 {
     m_state = STATE_NEW;
     m_cancelled = FALSE;
+    m_prio = WXTHREAD_DEFAULT_PRIORITY;
+    m_threadId = 0;
 
     // this mutex is locked during almost all thread lifetime - it will only be
     // unlocked in the very end
@@ -536,6 +538,17 @@ wxThreadError wxThread::Create()
         wxLogError(_("Cannot get priority range for scheduling policy %d."),
                    prio);
     }
+    else if ( max_prio == min_prio )
+    {
+        if ( p_internal->GetPriority() != WXTHREAD_DEFAULT_PRIORITY )
+        {
+            // notify the programmer that this doesn't work here
+            wxLogWarning(_("Thread priority setting is ignored."));
+        }
+        //else: we have default priority, so don't complain
+
+        // anyhow, don't do anything because priority is just ignored
+    }
     else
     {
         struct sched_param sp;
@@ -567,6 +580,9 @@ wxThreadError wxThread::Create()
 
 wxThreadError wxThread::Run()
 {
+    wxCHECK_MSG( p_internal->GetId(), wxTHREAD_MISC_ERROR,
+                 T("must call wxThread::Create() first") );
+
     return p_internal->Run();
 }
 
@@ -720,8 +736,8 @@ wxThreadError wxThread::Kill()
 
                 return wxTHREAD_MISC_ERROR;
             }
-	    //GL: As we must auto-destroy, the destruction must happen here (2).
-	    delete this;
+            //GL: As we must auto-destroy, the destruction must happen here (2).
+            delete this;
 
             return wxTHREAD_NO_ERROR;
     }
@@ -767,13 +783,17 @@ bool wxThread::TestDestroy()
 wxThread::~wxThread()
 {
     m_critsect.Enter();
-    if (p_internal->GetState() != STATE_EXITED &&
-        p_internal->GetState() != STATE_NEW)
-      wxLogDebug(T("The thread is being destroyed althought it is still running ! The application may crash."));
+    if ( p_internal->GetState() != STATE_EXITED &&
+         p_internal->GetState() != STATE_NEW )
+    {
+        wxLogDebug(T("The thread is being destroyed although it is still "
+                     "running! The application may crash."));
+    }
 
     m_critsect.Leave();
 
     delete p_internal;
+
     // remove this thread from the global array
     gs_allThreads.Remove(this);
 }
@@ -858,8 +878,8 @@ void wxThreadModule::OnExit()
 
     for ( size_t n = 0u; n < count; n++ )
     {
-	// Delete calls the destructor which removes the current entry. We
-	// should only delete the first one each time.
+        // Delete calls the destructor which removes the current entry. We
+        // should only delete the first one each time.
         gs_allThreads[0]->Delete();
     }
 

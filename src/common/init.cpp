@@ -33,6 +33,12 @@ wxApp * WXDLLEXPORT wxTheApp = NULL;
 wxAppInitializerFunction
     wxAppBase::m_appInitFn = (wxAppInitializerFunction)NULL;
 
+#if wxUSE_THREADS
+    // List of events pending processing
+    wxList *wxPendingEvents = NULL;
+    wxCriticalSection *wxPendingEventsLocker = NULL;
+#endif // wxUSE_THREADS
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -55,7 +61,7 @@ static size_t gs_nInitCount = 0;
 
 bool WXDLLEXPORT wxInitialize()
 {
-    if ( gs_nInitCount++ )
+    if ( gs_nInitCount )
     {
         // already initialized
         return TRUE;
@@ -64,15 +70,34 @@ bool WXDLLEXPORT wxInitialize()
     wxASSERT_MSG( !wxTheApp,
                   T("either call wxInitialize or create app, not both!") );
 
+    wxClassInfo::InitializeClasses();
+
+    wxModule::RegisterModules();
+    if ( !wxModule::InitializeModules() )
+    {
+        return FALSE;
+    }
+
     wxTheApp = new wxConsoleApp;
 
-    return wxTheApp != NULL;
+    if ( !wxTheApp )
+    {
+        return FALSE;
+    }
+
+    gs_nInitCount++;
+
+    return TRUE;
 }
 
 void WXDLLEXPORT wxUninitialize()
 {
     if ( !--gs_nInitCount )
     {
+        wxModule::CleanUpModules();
+
+        wxClassInfo::CleanUpClasses();
+
         // delete the application object
         delete wxTheApp;
         wxTheApp = (wxApp *)NULL;
