@@ -1387,12 +1387,12 @@ void wxGridCellEditorEvtHandler::OnKeyDown(wxKeyEvent& event)
             break;
 
         case WXK_TAB:
-            event.Skip( m_grid->ProcessEvent( event ) );
+            event.Skip( m_grid->GetEventHandler()->ProcessEvent( event ) );
             break;
 
         case WXK_RETURN:
         case WXK_NUMPAD_ENTER:
-            if (!m_grid->ProcessEvent(event))
+            if (!m_grid->GetEventHandler()->ProcessEvent(event))
                 m_editor->HandleReturn(event);
             break;
 
@@ -3117,12 +3117,12 @@ void wxGridRowLabelWindow::OnMouseEvent( wxMouseEvent& event )
 //
 void wxGridRowLabelWindow::OnKeyDown( wxKeyEvent& event )
 {
-    if ( !m_owner->ProcessEvent( event ) ) event.Skip();
+    if ( !m_owner->GetEventHandler()->ProcessEvent( event ) ) event.Skip();
 }
 
 void wxGridRowLabelWindow::OnKeyUp( wxKeyEvent& event )
 {
-    if ( !m_owner->ProcessEvent( event ) ) event.Skip();
+    if ( !m_owner->GetEventHandler()->ProcessEvent( event ) ) event.Skip();
 }
 
 
@@ -3176,12 +3176,12 @@ void wxGridColLabelWindow::OnMouseEvent( wxMouseEvent& event )
 //
 void wxGridColLabelWindow::OnKeyDown( wxKeyEvent& event )
 {
-    if ( !m_owner->ProcessEvent( event ) ) event.Skip();
+    if ( !m_owner->GetEventHandler()->ProcessEvent( event ) ) event.Skip();
 }
 
 void wxGridColLabelWindow::OnKeyUp( wxKeyEvent& event )
 {
-    if ( !m_owner->ProcessEvent( event ) ) event.Skip();
+    if ( !m_owner->GetEventHandler()->ProcessEvent( event ) ) event.Skip();
 }
 
 
@@ -3234,12 +3234,12 @@ void wxGridCornerLabelWindow::OnMouseEvent( wxMouseEvent& event )
 //
 void wxGridCornerLabelWindow::OnKeyDown( wxKeyEvent& event )
 {
-    if ( !m_owner->ProcessEvent( event ) ) event.Skip();
+    if ( !m_owner->GetEventHandler()->ProcessEvent( event ) ) event.Skip();
 }
 
 void wxGridCornerLabelWindow::OnKeyUp( wxKeyEvent& event )
 {
-    if ( !m_owner->ProcessEvent( event ) ) event.Skip();
+    if ( !m_owner->GetEventHandler()->ProcessEvent( event ) ) event.Skip();
 }
 
 
@@ -3308,12 +3308,12 @@ void wxGridWindow::OnMouseEvent( wxMouseEvent& event )
 //
 void wxGridWindow::OnKeyDown( wxKeyEvent& event )
 {
-    if ( !m_owner->ProcessEvent( event ) ) event.Skip();
+    if ( !m_owner->GetEventHandler()->ProcessEvent( event ) ) event.Skip();
 }
 
 void wxGridWindow::OnKeyUp( wxKeyEvent& event )
 {
-    if ( !m_owner->ProcessEvent( event ) ) event.Skip();
+    if ( !m_owner->GetEventHandler()->ProcessEvent( event ) ) event.Skip();
 }
 
 void wxGridWindow::OnEraseBackground( wxEraseEvent& WXUNUSED(event) )
