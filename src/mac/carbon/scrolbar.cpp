@@ -72,11 +72,11 @@ int wxScrollBar::GetThumbPosition() const
 void wxScrollBar::SetScrollbar(int position, int thumbSize, int range, int pageSize,
     bool refresh)
 {
-    m_viewSize = pageSize;
-    m_pageSize = thumbSize;
+    m_pageSize = pageSize;
+    m_viewSize = thumbSize;
     m_objectSize = range;
 
-  	int range1 = wxMax((m_objectSize - m_pageSize), 0) ;
+  	int range1 = wxMax((m_objectSize - m_viewSize), 0) ;
 
     SetControlMaximum( (ControlHandle) m_macControl , range1 ) ;
     SetControlMinimum( (ControlHandle) m_macControl , 0 ) ;
@@ -86,7 +86,7 @@ void wxScrollBar::SetScrollbar(int position, int thumbSize, int range, int pageS
     {
         if ( SetControlViewSize != (void*) kUnresolvedCFragSymbolAddress )
         {
-			SetControlViewSize( (ControlHandle) m_macControl , m_pageSize ) ;
+			    SetControlViewSize( (ControlHandle) m_macControl , m_viewSize ) ;
         }
     }
     if ( refresh )
@@ -115,19 +115,19 @@ void wxScrollBar::MacHandleControlClick( WXWidget control , wxInt16 controlpart 
 	switch( controlpart )
 	{
 		case kControlUpButtonPart :
-        nScrollInc = -m_pageSize;
+        nScrollInc = -1;
         scrollEvent = wxEVT_SCROLL_LINEUP;
 			break ;
 		case kControlDownButtonPart :
-        nScrollInc = m_pageSize;
+        nScrollInc = 1;
         scrollEvent = wxEVT_SCROLL_LINEDOWN;
 			break ;
 		case kControlPageUpPart :
-        nScrollInc = -m_viewSize;
+        nScrollInc = -m_pageSize;
         scrollEvent = wxEVT_SCROLL_PAGEUP;
 			break ;
 		case kControlPageDownPart :
-        nScrollInc = m_viewSize;
+        nScrollInc = m_pageSize;
         scrollEvent = wxEVT_SCROLL_PAGEDOWN;
 			break ;
 		case kControlIndicatorPart :
