@@ -169,6 +169,7 @@ wxMenuItem::~wxMenuItem()
 void wxMenuItem::Enable(bool bDoEnable)
 {
     wxMenuItemBase::Enable(bDoEnable);
+    // NOTE: Nothing to do, we respond to validateMenuItem instead
 }
 
 void wxMenuItem::Check(bool bDoCheck)
@@ -180,6 +181,8 @@ void wxMenuItem::Check(bool bDoCheck)
 void wxMenuItem::SetText(const wxString& label)
 {
     wxMenuItemBase::SetText(label);
+    wxCHECK_RET(m_kind != wxITEM_SEPARATOR, wxT("Separator items do not have titles."));
+    [m_cocoaNSMenuItem setTitle: wxNSStringWithWxString(wxStripMenuCodes(label))];
 }
 
 void wxMenuItem::SetCheckable(bool checkable)
