@@ -315,6 +315,7 @@ OS2OBJS = \
   ..\os2\$D\gdiobj.obj \
   ..\os2\$D\window.obj
 
+
 OS2LIBOBJS = \
   accel.obj \
   app.obj \

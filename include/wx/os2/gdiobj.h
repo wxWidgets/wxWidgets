@@ -14,11 +14,11 @@
 
 #include "wx/object.h"
 
-class WXDLLEXPORT wxGDIRefData: public wxObjectRefData {
+class WXDLLEXPORT wxGDIRefData: public wxObjectRefData
+{
 public:
     inline wxGDIRefData()
-	{
- 	}
+    { }
 };
 
 #define M_GDIDATA ((wxGDIRefData *)m_refData)

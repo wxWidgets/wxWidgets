@@ -16,7 +16,6 @@
 
 WXDLLEXPORT_DATA(extern const char*) wxGaugeNameStr;
 
-// Group box
 class WXDLLEXPORT wxGauge: public wxControl
 {
   DECLARE_DYNAMIC_CLASS(wxGauge)
