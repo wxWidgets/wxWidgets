@@ -43,6 +43,21 @@
     }
 #endif
 
+// LoadMenu
+
+#ifdef LoadMenu
+    #undef LoadMenu
+
+    inline HMENU LoadMenu(HINSTANCE instance, LPCTSTR name)
+    {
+        #ifdef _UNICODE
+            return LoadMenuW(instance, name);
+        #else
+            return LoadMenuA(instance, name);
+        #endif
+    }
+#endif
+
 // GetCharWidth
 
 #ifdef GetCharWidth
