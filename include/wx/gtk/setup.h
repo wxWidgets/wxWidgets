@@ -176,6 +176,11 @@
  * Use wxTree
  */
 
+/*
+ * Use wxConfig profile management classes (wxFileConfig only under Unix)
+ */
+#define USE_WXCONFIG 1
+
 /********************** DO NOT CHANGE BELOW THIS POINT **********************/
 
 /**************************** DEBUGGING FEATURES ****************************/
@@ -188,7 +193,7 @@
 /*
  * Enables debugging: memory tracing, assert, etc.
  */
-/* #undef DEBUG */
+#define DEBUG 1
 /*
  * Enables debugging version of wxObject::new and wxObject::delete (IF DEBUG)
  * WARNING: this code may not work with all architectures, especially

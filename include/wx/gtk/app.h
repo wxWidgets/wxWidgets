@@ -24,6 +24,7 @@
 
 class wxApp;
 class wxLog;
+class wxConfig; // it's not used #if !USE_WXCONFIG, but fwd decl doesn't harm
 
 //-----------------------------------------------------------------------------
 // global data
@@ -96,6 +97,12 @@ class wxApp: public wxEvtHandler
     // override this function to create default log target of arbitrary
     // user-defined classv (default implementation creates a wxLogGui object)
     virtual wxLog *CreateLogTarget();
+    
+#if USE_WXCONFIG
+    // override this function to create a global wxConfig object of different
+    // than default type (right now the default implementation returns NULL)
+    virtual wxConfig *CreateConfig() { return NULL; }
+#endif
     
     bool          m_initialized;
     bool          m_exitOnFrameDelete;
