@@ -81,21 +81,51 @@ public :
 	    wxASSERT( dc->Ok() ) ;
 	    GetPort( &m_oldPort ) ;
 	    SetPort( (GrafPtr) dc->m_macPort ) ;
+	    m_clipRgn = NewRgn() ;
+	    GetClip( m_clipRgn ) ;
 	    m_dc = dc ;
 	    dc->MacSetupPort( NULL ) ;
     }
     ~wxMacFastPortSetter()
     {
+        SetPort( (GrafPtr) m_dc->m_macPort ) ;
+        SetClip( m_clipRgn ) ;
 	    SetPort( m_oldPort ) ;
 	    m_dc->MacCleanupPort( NULL ) ;
+	    DisposeRgn( m_clipRgn ) ;
     }
 private :
+    RgnHandle m_clipRgn ;
     GrafPtr m_oldPort ;
     const wxDC*   m_dc ;
 } ;
 
 #else
 typedef wxMacPortSetter wxMacFastPortSetter ;
+#endif
+
+#if 0
+
+// start moving to a dual implementation for QD and CGContextRef
+
+class wxMacGraphicsContext
+{
+public :
+    void DrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask ) = 0 ;
+    void SetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height ) = 0 ;
+    void SetClippingRegion( const wxRegion &region  ) = 0 ;
+    void DestroyClippingRegion() = 0 ;
+    void SetTextForeground( const wxColour &col ) = 0 ;
+    void SetTextBackground( const wxColour &col ) = 0 ;
+    void SetLogicalScale( double x , double y ) = 0 ;
+    void SetUserScale( double x , double y ) = 0;
+} ;
+
+class wxMacQuickDrawContext : public wxMacGraphicsContext
+{
+public :
+} ;
+
 #endif
 
 wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win ) 
