@@ -25,6 +25,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/dcclient.h"
 #endif //WX_PRECOMP
 
 #include "wx/htmllbox.h"

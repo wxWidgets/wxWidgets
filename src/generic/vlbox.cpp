@@ -26,6 +26,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
+    #include "wx/dcclient.h"
 #endif //WX_PRECOMP
 
 #include "wx/vlbox.h"
