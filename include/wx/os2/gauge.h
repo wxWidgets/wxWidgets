@@ -1,20 +1,16 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        gauge.h
 // Purpose:     wxGauge class
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/06/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_GAUGE_H_
 #define _WX_GAUGE_H_
-
-#ifdef __GNUG__
-#pragma interface "gauge.h"
-#endif
 
 #include "wx/control.h"
 
@@ -56,7 +52,8 @@ class WXDLLEXPORT wxGauge: public wxControl
   int GetRange() const ;
   int GetValue() const ;
 
-  void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+  bool SetForegroundColour(const wxColour& col);
+  bool SetBackgroundColour(const wxColour& col);
 
   virtual void Command(wxCommandEvent& WXUNUSED(event)) {} ;
 

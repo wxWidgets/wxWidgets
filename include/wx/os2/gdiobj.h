@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        gdiobj.h
 // Purpose:     wxGDIObject class: base class for other GDI classes
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
 // Created:     ??/??/98
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
+// Copyright:   (c) David Webster
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -13,10 +13,6 @@
 #define _WX_GDIOBJ_H_
 
 #include "wx/object.h"
-
-#ifdef __GNUG__
-#pragma interface "gdiobj.h"
-#endif
 
 class WXDLLEXPORT wxGDIRefData: public wxObjectRefData {
 public:
@@ -33,6 +29,14 @@ DECLARE_DYNAMIC_CLASS(wxGDIObject)
  public:
   inline wxGDIObject() { m_visible = FALSE; };
   inline ~wxGDIObject() {};
+
+  // Creates the resource
+  virtual bool RealizeResource(void) { return FALSE; };
+
+  // Frees the resource
+  virtual bool FreeResource(bool WXUNUSED(force) = FALSE) { return FALSE; };
+
+  virtual bool IsFree(void) const { return FALSE; };
 
   inline bool IsNull() const { return (m_refData == 0); }
 

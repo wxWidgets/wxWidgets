@@ -311,6 +311,8 @@ OS2OBJS = \
   ..\os2\$D\font.obj \
   ..\os2\$D\fontdlg.obj \
   ..\os2\$D\frame.obj \
+  ..\os2\$D\gauge.obj \
+  ..\os2\$D\gdiobj.obj \
   ..\os2\$D\window.obj
 
 OS2LIBOBJS = \
@@ -342,6 +344,8 @@ OS2LIBOBJS = \
   font.obj \
   fontdlg.obj \
   frame.obj \
+  gauge.obj \
+  gdiobj.obj \
   window.obj
 
 HTMLOBJS = \
@@ -517,6 +521,8 @@ $(OS2LIBOBJS):
   copy ..\os2\$D\font.obj
   copy ..\os2\$D\fontdlg.obj
   copy ..\os2\$D\frame.obj
+  copy ..\os2\$D\gauge.obj
+  copy ..\os2\$D\gdiobj.obj
   copy ..\os2\$D\window.obj
 
 # wxWindows library as DLL
