@@ -2188,6 +2188,24 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             processed = HandleMove(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
             break;
 
+        case WM_MOVING:
+			{
+				LPRECT pRect = (LPRECT)lParam;
+				wxRect rc;
+				rc.SetLeft(pRect->left);
+				rc.SetTop(pRect->top);
+				rc.SetRight(pRect->right);
+				rc.SetBottom(pRect->bottom);
+				processed = HandleMoving(rc);
+				if (processed) {
+					pRect->left = rc.GetLeft();
+					pRect->top = rc.GetTop();
+					pRect->right = rc.GetRight();
+					pRect->bottom = rc.GetBottom();
+				}
+			}
+            break;
+
         case WM_SIZE:
             switch ( wParam )
             {
@@ -2213,6 +2231,24 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                 case SIZE_RESTORED:
                     processed = HandleSize(LOWORD(lParam), HIWORD(lParam),
                                            wParam);
+            }
+            break;
+
+        case WM_SIZING:
+            {
+                LPRECT pRect = (LPRECT)lParam;
+                wxRect rc;
+                rc.SetLeft(pRect->left);
+                rc.SetTop(pRect->top);
+                rc.SetRight(pRect->right);
+                rc.SetBottom(pRect->bottom);
+                processed = HandleSizing(rc);
+                if (processed) {
+                    pRect->left = rc.GetLeft();
+                    pRect->top = rc.GetTop();
+                    pRect->right = rc.GetRight();
+                    pRect->bottom = rc.GetBottom();
+                }
             }
             break;
 
@@ -3818,6 +3854,17 @@ bool wxWindowMSW::HandleMove(int x, int y)
     return GetEventHandler()->ProcessEvent(event);
 }
 
+bool wxWindowMSW::HandleMoving(wxRect& rect)
+{
+    wxMoveEvent event(rect, m_windowId);
+    event.SetEventObject(this);
+    
+    bool rc = GetEventHandler()->ProcessEvent(event);
+    if (rc)
+        rect = event.GetRect();
+    return rc;
+}
+
 bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h),
                              WXUINT WXUNUSED(flag))
 {
@@ -3828,6 +3875,17 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h),
     event.SetEventObject(this);
 
     return GetEventHandler()->ProcessEvent(event);
+}
+
+bool wxWindowMSW::HandleSizing(wxRect& rect)
+{
+    wxSizeEvent event(rect, m_windowId);
+    event.SetEventObject(this);
+    
+    bool rc = GetEventHandler()->ProcessEvent(event);
+    if (rc)
+        rect = event.GetRect();
+    return rc;
 }
 
 bool wxWindowMSW::HandleGetMinMaxInfo(void *mmInfo)

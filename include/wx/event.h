@@ -247,6 +247,8 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_INIT_DIALOG, 438)
     DECLARE_EVENT_TYPE(wxEVT_IDLE, 439)
     DECLARE_EVENT_TYPE(wxEVT_UPDATE_UI, 440)
+    DECLARE_EVENT_TYPE(wxEVT_SIZING, 441)
+    DECLARE_EVENT_TYPE(wxEVT_MOVING, 4442)
 
         // Generic command events
         // Note: a click is a higher-level event than button down/up
@@ -932,15 +934,21 @@ public:
         { }
     wxSizeEvent(const wxSizeEvent & event)
         : wxEvent(event),
-          m_size(event.m_size)
+          m_size(event.m_size), m_rect(event.m_rect)
         { }
+    wxSizeEvent(const wxRect& rect, int id = 0)
+        : m_rect(rect), m_size(rect.GetSize())
+        { m_eventType = wxEVT_SIZING; m_id = id; }
 
     wxSize GetSize() const { return m_size; }
+    wxRect GetRect() const { return m_rect; }
+    void SetRect(wxRect rect) { m_rect = rect; }
 
     virtual wxEvent *Clone() const { return new wxSizeEvent(*this); }
 
 public:
     wxSize m_size;
+    wxRect m_rect; // Used for wxEVT_SIZING
 
 private:
     DECLARE_DYNAMIC_CLASS(wxSizeEvent)
@@ -966,12 +974,18 @@ public:
         : wxEvent(event),
           m_pos(event.m_pos)
     { }
+    wxMoveEvent(const wxRect& rect, int id = 0)
+        : m_pos(rect.GetPosition()), m_rect(rect)
+        { m_eventType = wxEVT_MOVING; m_id = id; }
 
     wxPoint GetPosition() const { return m_pos; }
+    wxRect GetRect() const { return m_rect; }
+    void SetRect(wxRect rect) { m_rect = rect; }
 
     virtual wxEvent *Clone() const { return new wxMoveEvent(*this); }
 
     wxPoint m_pos;
+    wxRect m_rect;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxMoveEvent)
@@ -2198,7 +2212,9 @@ typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureC
 
 // Miscellaneous
 #define EVT_SIZE(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SIZE, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction) (wxSizeEventFunction) & func, (wxObject *) NULL ),
+#define EVT_SIZING(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SIZING, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxSizeEventFunction) & func, (wxObject *) NULL ),
 #define EVT_MOVE(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_MOVE, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction) (wxMoveEventFunction) & func, (wxObject *) NULL ),
+#define EVT_MOVING(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_MOVING, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMoveEventFunction) & func, (wxObject *) NULL ),
 #define EVT_CLOSE(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_CLOSE_WINDOW, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction) (wxCloseEventFunction) & func, (wxObject *) NULL ),
 #define EVT_END_SESSION(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_END_SESSION, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction) (wxCloseEventFunction) & func, (wxObject *) NULL ),
 #define EVT_QUERY_END_SESSION(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_QUERY_END_SESSION, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction) (wxCloseEventFunction) & func, (wxObject *) NULL ),

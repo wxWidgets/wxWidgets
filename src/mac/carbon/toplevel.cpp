@@ -349,6 +349,64 @@ pascal OSStatus wxMacWindowEventHandler( EventHandlerCallRef handler , EventRef 
 
 DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacWindowEventHandler )
 
+// Patch 531199 defined a window event handler, as follows.
+// TODO: merge the moving/sizing event handling with the event
+// handler above.
+#if 0
+static pascal OSStatus
+WindowHandler( EventHandlerCallRef inHandler, EventRef inEvent, void* userData )
+{
+    Rect		bounds;
+    SInt16		height, width;
+    UInt32		attributes;
+    OSStatus	result = eventNotHandledErr;
+    
+    GetEventParameter( inEvent, kEventParamAttributes, typeUInt32, NULL, sizeof( UInt32 ), NULL, &attributes );
+    
+    if ((attributes & (kWindowBoundsChangeSizeChanged | kWindowBoundsChangeOriginChanged)) != 0)
+    {
+        // Extract the current bounds. This is the paramter you get to modify to
+        // alter the window position or size during a window resizing.
+        GetEventParameter( inEvent, kEventParamCurrentBounds, typeQDRectangle, NULL, sizeof( bounds ), NULL, &bounds );
+        
+        wxRect rect;
+        rect.SetLeft(bounds.left);
+        rect.SetTop(bounds.top);
+        rect.SetRight(bounds.right);
+        rect.SetBottom(bounds.bottom);
+        
+        bool rc;
+        wxWindowMac *pWindow = (wxWindowMac*)userData;
+        if ((attributes & kWindowBoundsChangeSizeChanged) != 0) {
+            wxSizeEvent event(rect, pWindow->GetId());
+            event.SetEventObject(pWindow);
+            rc = pWindow->GetEventHandler()->ProcessEvent(event);
+            rect = event.GetRect();
+        }
+        else {
+            wxMoveEvent event(rect, pWindow->GetId());
+            event.SetEventObject(pWindow);
+            rc = pWindow->GetEventHandler()->ProcessEvent(event);
+            rect = event.GetRect();
+        }
+        
+        if (rc) {
+            bounds.left = rect.GetLeft();
+            bounds.top = rect.GetTop();
+            bounds.right = rect.GetRight();
+            bounds.bottom = rect.GetBottom();
+        }
+        
+        // Set the current bounds parameter to our adjusted bounds. Return
+        // noErr to indicate we handled this event.
+        SetEventParameter( inEvent, kEventParamCurrentBounds, typeQDRectangle, sizeof( bounds ), &bounds );
+        result = noErr;
+    }
+    return result;
+}
+#endif
+    // WindowHandler
+
 #endif
 
 // ---------------------------------------------------------------------------
@@ -629,6 +687,17 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     InstallStandardEventHandler( GetWindowEventTarget(MAC_WXHWND(m_macWindow)) ) ;
     InstallWindowEventHandler(MAC_WXHWND(m_macWindow), GetwxMacWindowEventHandlerUPP(),
         GetEventTypeCount(eventList), eventList, this, &((EventHandlerRef)m_macEventHandler));
+
+    // Patch 531199 also defined a window event handler, as follows:
+#if 0
+    // install a window event handler to send wxEVT_MOVING and wxEVT_SIZING events
+    EventTypeSpec events[] = { { kEventClassWindow, kEventWindowBoundsChanging } };
+    EventHandlerUPP	handlerProc = NewEventHandlerUPP( WindowHandler );
+    EventHandlerRef eventHandlerRef;
+    InstallWindowEventHandler( m_macWindowData->m_macWindow, handlerProc, GetEventTypeCount(events),
+        events, (void*)this, &eventHandlerRef);
+#endif
+
 #endif
     m_macFocus = NULL ;
 

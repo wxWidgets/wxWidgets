@@ -323,6 +323,7 @@ public:
     bool HandleMinimize();
     bool HandleMaximize();
     bool HandleSize(int x, int y, WXUINT flag);
+    bool HandleSizing(wxRect& rect);
     bool HandleGetMinMaxInfo(void *mmInfo);
 
     bool HandleShow(bool show, int status);
@@ -478,6 +479,7 @@ private:
 
     // the (non-virtual) handlers for the events
     bool HandleMove(int x, int y);
+    bool HandleMoving(wxRect& rect);
     bool HandleJoystickEvent(WXUINT msg, int x, int y, WXUINT flags);
 
 #ifdef __WIN95__
