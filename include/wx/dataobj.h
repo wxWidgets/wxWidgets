@@ -83,6 +83,10 @@ public:
     #include "wx/os2/dataform.h"
 #endif
 
+// the value for default argument to some functions (corresponds to
+// wxDF_INVALID)
+extern const wxDataFormat& wxFormatInvalid;
+
 // ----------------------------------------------------------------------------
 // wxDataObject represents a piece of data which knows which formats it
 // supports and knows how to render itself in each of them - GetDataHere(),
@@ -183,7 +187,7 @@ class WXDLLEXPORT wxDataObjectSimple : public wxDataObject
 public:
     // ctor takes the format we support, but it can also be set later with
     // SetFormat()
-    wxDataObjectSimple(const wxDataFormat& format = wxDF_INVALID)
+    wxDataObjectSimple(const wxDataFormat& format = wxFormatInvalid)
         : m_format(format)
         {
         }
@@ -391,7 +395,7 @@ class WXDLLEXPORT wxCustomDataObject : public wxDataObjectSimple
 public:
     // if you don't specify the format in the ctor, you can still use
     // SetFormat() later
-    wxCustomDataObject(const wxDataFormat& format = wxDF_INVALID);
+    wxCustomDataObject(const wxDataFormat& format = wxFormatInvalid);
 
     // the dtor calls Free()
     virtual ~wxCustomDataObject();
