@@ -133,10 +133,18 @@ often don&#39;t work.
 </tr>
 
 <tr bgcolor="#f0f0f0">
-<td align=center valign=center rowspan=2>HP-UX 10.20</td>
-     <td>wxGTK with HP CC A.10.22<br>or HP aCC B3910B A.01.18</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Staf Verhaegen</td>
+<td align=center valign=center rowspan=5>HP-UX</td>
+<tr bgcolor="#f0f0f0">
+     <td>HP-UX 10.20 wxGTK with HP CC A.10.22<br>or HP aCC B3910B A.01.18</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Staf Verhaegen</td>
      <td>you need to add <tt>-Aa -D_HPUX_SOURCE</tt> to <tt>CFLAGS</tt></td>
-<tr bgcolor="#f0f0f0"> <td>wxGTK with gcc</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Julian Albo Garcia</td><td><br></td>
+<tr bgcolor="#f0f0f0"> <td>HP-UX 10.20 wxGTK with gcc</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Julian Albo Garcia</td><td><br></td>
+<tr bgcolor="#f0f0f0"> <td>HP-UX 11i v1 PA-RISC, wxMotif 2.5.4, tried aCC A.03.57 and g++ 3.4.2</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Ian, Mike</td>
+        <td>For a 32-bit PA-RISC build, if you want to use <tt>SHLIB_PATH</tt> to make it easier to use 
+        wxWidgets without installing it, then add <tt>LDFLAGS=-Wl,+s</tt><br>
+        If you want to compile the test suite then aCC A.03.57 requires <tt>CXX='aCC -AA'</tt><br>
+        aCC can also be used as the C compiler instead of cc by adding <tt>CC='aCC -Ae'</tt>
+        </td>
+<tr bgcolor="#f0f0f0"> <td>HP-UX 11i v2 IA64, wxMotif 2.5.4, aCC A.06.00</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Mike</td><td><br></td>
 </tr>
 
 <tr>
