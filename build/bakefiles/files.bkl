@@ -100,19 +100,45 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <if cond="TOOLKIT=='WINCE'">wx/msw/wince/time.h</if>
 </set>
 
+<!-- Base files used by Carbon on OS X and CarbonLib (not true Classic) -->
+<!-- FIXME: Maybe this ought to be named BASE_MAC_CARBON_SRC  -->
 <set var="BASE_MAC_SRC" hints="files">
     src/mac/carbon/dirmac.cpp
     src/mac/carbon/mimetmac.cpp
-    src/unix/baseunix.cpp
     src/mac/carbon/utilsexc.cpp
     src/mac/carbon/thread.cpp
     src/mac/carbon/macnotfy.cpp
+    <!-- One would think MoreFilesX is only for OS X but it seems to
+         apply to CarbonLib as well (FSRefMakeFSSpec) -->
     src/mac/carbon/morefilex/MoreFilesX.c
     <!-- Shared wxMac and wxCocoa files -->
     src/mac/corefoundation/cfstring.cpp
     src/mac/corefoundation/stdpaths_cf.cpp
 </set>
 
+<!-- Base files used by Classic (not CarbonLib or OS X builds) -->
+<!-- set var="BASE_MAC_CLASSIC_SRC">
+</set -->
+
+<!-- Base files used only by CarbonLib builds (not Classic or OS X) -->
+<set var="BASE_MAC_CARBONLIB_SRC" hints="files">
+    src/mac/carbon/morefile/DirectoryCopy.c
+    src/mac/carbon/morefile/FSpCompat.c
+    src/mac/carbon/morefile/FileCopy.c
+    src/mac/carbon/morefile/FullPath.c
+    src/mac/carbon/morefile/IterateDirectory.c
+    src/mac/carbon/morefile/MoreDesktopMgr.c
+    src/mac/carbon/morefile/MoreFiles.c
+    src/mac/carbon/morefile/MoreFilesExtras.c
+    src/mac/carbon/morefile/Search.c
+</set>
+
+<!-- Base files used only by OS X builds (not CarbonLib or Classic)  -->
+<set var="BASE_MAC_OSX_SRC" hints="files">
+    src/unix/baseunix.cpp
+</set>
+
+<!-- Base and GUI files used by both OS X and CarbonLib -->
 <set var="BASE_AND_GUI_MAC_SRC" hints="files">
     src/mac/carbon/utils.cpp
     src/mac/carbon/uma.cpp
@@ -336,6 +362,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="NET_OS2_HDR" hints="files">
     wx/unix/gsockunx.h
+</set>
+<!-- Net files used only by CarbonLib (not Classic or OS X) -->
+<set var="NET_MAC_CARBONLIB_SRC" hints="files">
+    src/mac/carbon/gsocket.cpp
+</set>
+<set var="NET_MAC_CARBONLIB_HDR" hints="files">
+    include/wx/mac/carbon/gsockmac.h
 </set>
 
 <set var="NET_CMN_SRC" hints="files">
@@ -2485,8 +2518,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- wxBase files: -->
 
     <!-- Nested if would be nicer, but this works -->
+    <!-- These are the files for PLATFORM_MACOSX -->
     <set var="BASE_MACOSX_SRC" hints="files">
-        <if cond="TOOLKIT=='MAC'">$(BASE_MAC_SRC)</if>
+        <if cond="TOOLKIT=='MAC'">$(BASE_MAC_SRC) $(BASE_MAC_OSX_SRC)</if>
         <if cond="TOOLKIT=='COCOA'">$(BASE_UNIX_SRC)</if>
         <if cond="TOOLKIT=='GTK'">$(BASE_UNIX_SRC)</if>
         <if cond="TOOLKIT=='X11'">$(BASE_UNIX_SRC)</if>
@@ -2501,6 +2535,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="PLATFORM_UNIX=='1'">$(BASE_UNIX_SRC)</if>
         <if cond="PLATFORM_WIN32=='1'">$(BASE_WIN32_SRC) $(BASE_WINCE_SRC)</if>
         <if cond="PLATFORM_MACOSX=='1'">$(BASE_MACOSX_SRC)</if>
+        <if cond="PLATFORM_MACOS=='1'">$(BASE_MAC_SRC) $(BASE_MAC_CARBONLIB_SRC)</if>
         <if cond="PLATFORM_OS2=='1'">$(BASE_OS2_SRC)</if>
     </set>
     <set var="BASE_AND_GUI_TOOLKIT_SRC" hints="files">
@@ -2510,6 +2545,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="PLATFORM_UNIX=='1'">$(BASE_AND_GUI_UNIX_SRC)</if>
         <if cond="PLATFORM_WIN32=='1'">$(BASE_AND_GUI_WIN32_SRC)</if>
         <if cond="PLATFORM_MACOSX=='1'">$(BASE_AND_GUI_UNIX_SRC)</if>
+        <!-- At the moment, BASE_AND_GUI_TOOLKIT_SRC handles this -->
+        <!-- if cond="PLATFORM_MACOS=='1'">$(BASE_AND_GUI_MAC_SRC)</if -->
     </set>
     <set var="BASE_PLATFORM_HDR" hints="files">
         <if cond="PLATFORM_UNIX=='1'">$(BASE_UNIX_HDR)</if>
@@ -2532,6 +2569,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="PLATFORM_UNIX=='1'">$(NET_UNIX_SRC)</if>
         <if cond="PLATFORM_WIN32=='1'">$(NET_WIN32_SRC) $(NET_WINCE_SRC)</if>
         <if cond="PLATFORM_MACOSX=='1'">$(NET_UNIX_SRC)</if>
+        <if cond="PLATFORM_MACOS=='1'">$(NET_MAC_CARBONLIB_SRC)</if>
         <if cond="PLATFORM_OS2=='1'">$(NET_OS2_SRC)</if>
     </set>
     <set var="NET_PLATFORM_HDR" hints="files">
@@ -2539,6 +2577,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="PLATFORM_WIN32=='1'">$(NET_WIN32_HDR) $(NET_WINCE_HDR)</if>
         <if cond="PLATFORM_OS2=='1'">$(NET_OS2_HDR)</if>
         <if cond="PLATFORM_MACOSX=='1'">$(NET_UNIX_HDR)</if>
+        <if cond="PLATFORM_MACOS=='1'">$(NET_MAC_CARBONLIB_HDR)</if>
     </set>
 
     <set var="NET_SRC" hints="files">
