@@ -298,9 +298,9 @@ dospinwxbase()
   echo Copying wxBase.spec to $RPM_ROOT/SPECS...
   cp $WXSRC/wxBase.spec $RPM_ROOT/SPECS
 
-  echo Starting wxBase RPM build...
+  echo Starting wxBase RPM build, rpmbuild args=$RPMBUILDARGS...
   cd $RPM_ROOT
-  rpmbuild -ba SPECS/wxBase.spec 2>&1 | tee wxBase.out
+  rpmbuild -ba $RPMBUILDARGS SPECS/wxBase.spec 2>&1 | tee wxBase.out
 
   echo Finished wxBase RPM build, in $RPM_ROOT.
   echo "SRPMS:"
@@ -308,10 +308,12 @@ dospinwxbase()
   echo "RPMS/i386:"
   ls RPMS/i386
 
-  cp $RPM_ROOT/SRPMS/*.rpm $WXDEST
-  cp $RPM_ROOT/RPMS/i386/*.rpm $WXDEST
-  cp $WXDEST/wxbase/release/*.tar.gz $WXDEST
-  cp $WXDEST/wxbase/release/*.tar.bz2 $WXDEST
+  mkdir $WXDEST/$PLATFORM
+
+  cp $RPM_ROOT/SRPMS/*.rpm $WXDEST/$PLATFORM
+  cp $RPM_ROOT/RPMS/i386/*.rpm $WXDEST/$PLATFORM
+  cp $WXDEST/wxbase/release/*.tar.gz $WXDEST/$PLATFORM
+  cp $WXDEST/wxbase/release/*.tar.bz2 $WXDEST/$PLATFORM
 
 #  rm -f -r $WXDEST/wxbase
   echo Now try the RPMs with rpm -i.
@@ -390,6 +392,7 @@ SPINWXGTK2UNICODE=0
 SPINWXMAC=0
 SPINWXMOTIF=0
 SPINWXBASE=0
+SPINWXBASEUNICODE=0
 SPINWXMGL=0
 SPINEVERYTHING=0
 UPDATECVS=0
@@ -403,6 +406,7 @@ usage()
     echo "    --wxgtk2        Spin wxGTK2 RPMs"
     echo "    --wxgtk2unicode Spin wxGTK2 Unicode RPMs"
     echo "    --wxbase        Spin wxBase RPMs"
+    echo "    --wxbaseunicode Spin wxBase Unicode RPMs"
     echo "    --wxx11         Spin wxX11 RPMs"
     echo "    --wxmotif       Spin wxMotif RPMs"
     echo "    --wxmgl         Spin wxMGL RPMs"
@@ -444,6 +448,7 @@ for i in "$@"; do
 	--wxmgl) SPINWXMGL=1 ;;
 	--wxmac) SPINWXMAC=1 ;;
 	--wxbase) SPINWXBASE=1 ;;
+	--wxbaseunicode) SPINWXBASEUNICODE=1 ;;
 	--all) SPINEVERYTHING=1 ;;
 	--updatecvs) UPDATECVS=1 ;;
 	*)
@@ -487,6 +492,13 @@ if [ "$SPINWXGTK2UNICODE" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
 fi
 
 if [ "$SPINWXBASE" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  PLATFORM=base
+  dospinwxbase
+fi
+
+if [ "$SPINWXBASEUNICODE" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  RPMBUILDARGS="--with unicode"
+  PLATFORM=baseunicode
   dospinwxbase
 fi
 
