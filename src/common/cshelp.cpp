@@ -419,7 +419,7 @@ bool wxHelpControllerHelpProvider::ShowHelp(wxWindowBase *window)
 // Convenience function for turning context id into wxString
 wxString wxContextId(int id)
 {
-    return wxString(IntToString(id));
+    return wxString::Format(_T("%d"), id);
 }
 
 // ----------------------------------------------------------------------------
