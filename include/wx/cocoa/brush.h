@@ -1,20 +1,16 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        brush.h
+// Name:        include/wx/cocoa/brush.h
 // Purpose:     wxBrush class
-// Author:      AUTHOR
+// Author:      David Elliott <dfe@cox.net>
 // Modified by:
-// Created:     ??/??/98
+// Created:     2003/07/03
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
+// Copyright:   (c) 2003 David Elliott
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_BRUSH_H_
-#define _WX_BRUSH_H_
-
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "brush.h"
-#endif
+#ifndef __WX_COCOA_BRUSH_H__
+#define __WX_COCOA_BRUSH_H__
 
 #include "wx/gdicmn.h"
 #include "wx/gdiobj.h"
@@ -22,47 +18,56 @@
 
 class WXDLLEXPORT wxBrush;
 
-// Brush
+// ========================================================================
+// wxBrush
+// ========================================================================
 class WXDLLEXPORT wxBrush: public wxGDIObject
 {
-  DECLARE_DYNAMIC_CLASS(wxBrush)
-
+    DECLARE_DYNAMIC_CLASS(wxBrush)
+// ------------------------------------------------------------------------
+// initialization
+// ------------------------------------------------------------------------
 public:
-  wxBrush();
-  wxBrush(const wxColour& col, int style);
-  wxBrush(const wxBitmap& stipple);
-  wxBrush(const wxBrush& brush)
-      : wxGDIObject()
-      { Ref(brush); }
-  ~wxBrush();
+    wxBrush();
+    wxBrush(const wxColour& col, int style);
+    wxBrush(const wxBitmap& stipple);
+    wxBrush(const wxBrush& brush)
+    :   wxGDIObject()
+    {   Ref(brush); }
+    ~wxBrush();
 
-  virtual void SetColour(const wxColour& col)  ;
-  virtual void SetColour(unsigned char r, unsigned char g, unsigned char b)  ;
-  virtual void SetStyle(int style)  ;
-  virtual void SetStipple(const wxBitmap& stipple)  ;
-
-  wxBrush& operator = (const wxBrush& brush)
-  { if (*this == brush) return (*this); Ref(brush); return *this; }
-  bool operator == (const wxBrush& brush)
-  { return m_refData == brush.m_refData; }
-  bool operator != (const wxBrush& brush)
-  { return m_refData != brush.m_refData; }
-
-  wxColour& GetColour() const ;
-  int GetStyle() const ;
-  wxBitmap *GetStipple() const ;
-
-  virtual bool Ok() const { return (m_refData != NULL) ; }
-
+// ------------------------------------------------------------------------
 // Implementation
+// ------------------------------------------------------------------------
+    virtual void SetColour(const wxColour& col)  ;
+    virtual void SetColour(unsigned char r, unsigned char g, unsigned char b)  ;
+    virtual void SetStyle(int style)  ;
+    virtual void SetStipple(const wxBitmap& stipple)  ;
 
-  // Useful helper: create the brush resource
-  bool RealizeResource();
+    // assignment
+    wxBrush& operator = (const wxBrush& brush)
+    {   if (*this == brush) return (*this); Ref(brush); return *this; }
 
-  // When setting properties, we must make sure we're not changing
-  // another object
-  void Unshare();
+    // comparison
+    bool operator == (const wxBrush& brush)
+    {   return m_refData == brush.m_refData; }
+    bool operator != (const wxBrush& brush)
+    {   return m_refData != brush.m_refData; }
+
+    // accessors
+    wxColour GetColour() const;
+    int GetStyle() const;
+    wxBitmap *GetStipple() const;
+
+    virtual bool Ok() const
+    {   return (m_refData != NULL); }
+
+    // wxObjectRefData
+    wxObjectRefData *CreateRefData() const;
+    wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+
+    // wxCocoa
+    WX_NSColor GetNSColor();
 };
 
-#endif
-    // _WX_BRUSH_H_
+#endif // __WX_COCOA_BRUSH_H__

@@ -1467,7 +1467,7 @@
     src/cocoa/app.mm
     src/cocoa/bmpbuttn.mm
     src/cocoa/bitmap.mm
-    src/cocoa/brush.cpp
+    src/cocoa/brush.mm
     src/cocoa/button.mm
     src/cocoa/checkbox.mm
     src/cocoa/checklst.mm
