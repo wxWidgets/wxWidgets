@@ -3200,7 +3200,8 @@ bool wxWindowMSW::HandleTooltipNotify(WXUINT code,
     // we need to handle it as well, otherwise no tooltips will be shown in
     // this case
 #ifndef __WXWINCE__
-    if ( !(code == (WXUINT) TTN_NEEDTEXTA || code == (WXUINT) TTN_NEEDTEXTW) || ttip.empty() )
+    if ( !(code == (WXUINT) TTN_NEEDTEXTA || code == (WXUINT) TTN_NEEDTEXTW)
+            || ttip.empty() )
     {
         // not a tooltip message or no tooltip to show anyhow
         return false;
@@ -3209,41 +3210,58 @@ bool wxWindowMSW::HandleTooltipNotify(WXUINT code,
 
     LPTOOLTIPTEXT ttText = (LPTOOLTIPTEXT)lParam;
 
+    // We don't want to use the szText buffer because it has a limit of 80
+    // bytes and this is not enough, especially for Unicode build where it
+    // limits the tooltip string length to only 40 characters
+    //
+    // The best would be, of course, to not impose any length limitations at
+    // all but then the buffer would have to be dynamic and someone would have
+    // to free it and we don't have the tooltip owner object here any more, so
+    // for now use our own static buffer with a higher fixed max length.
+    //
+    // Note that using a static buffer should not be a problem as only a single
+    // tooltip can be shown at the same time anyhow.
 #if !wxUSE_UNICODE
-    if ( code == (WXUINT) TTN_NEEDTEXTA )
+    if ( code == (WXUINT) TTN_NEEDTEXTW )
     {
-        // we pass just the pointer as we store the string internally anyhow
-        ttText->lpszText = (char *)ttip.c_str();
-    }
-    else // TTN_NEEDTEXTW
-#endif // !Unicode
-    {
-#if wxUSE_UNICODE
-        // in Unicode mode this is just what we need
-        ttText->lpszText = (wxChar *)ttip.c_str();
-#else // !Unicode
-        // Convert tooltip from multi byte to Unicode.
+        // We need to convert tooltip from multi byte to Unicode on the fly.
+        static wchar_t buf[513];
 
-        // We don't want to use the szText buffer because it has a limit of 80
-        // bytes, for now use our own static buffer with a higher fixed max
-        // length.
-        // Preferably a dynamic buffer should be used, but who frees the buffer?
-
-        static const int MAX_LENGTH = 512;
-        static wchar_t buf[MAX_LENGTH+1];
-
-        ttText->lpszText = (LPSTR) buf;
-
-        // Truncate tooltip length if needed
-        size_t tipLength = wxMin(ttip.Len(), MAX_LENGTH);
+        // Truncate tooltip length if needed as otherwise we might not have
+        // enough space for it in the buffer and MultiByteToWideChar() would
+        // return an error
+        size_t tipLength = wxMin(ttip.Len(), WXSIZEOF(buf) - 1);
 
         // Convert to WideChar without adding the NULL character. The NULL
         // character is added afterwards (this is more efficient).
-        ::MultiByteToWideChar(CP_ACP, 0, ttip, tipLength, buf, MAX_LENGTH);
+        int len = ::MultiByteToWideChar
+                    (
+                        CP_ACP,
+                        0,                      // no flags
+                        ttip,
+                        tipLength,
+                        buf,
+                        WXSIZEOF(buf) - 1
+                    );
 
-        buf[tipLength] = '\0';
+        if ( !len )
+        {
+            wxLogLastError(_T("MultiByteToWideChar()"));
+        }
 
-#endif // Unicode/!Unicode
+        buf[len] = L'\0';
+        ttText->lpszText = (LPSTR) buf;
+    }
+    else // TTN_NEEDTEXTA
+#endif // !wxUSE_UNICODE
+    {
+        // we get here if we got TTN_NEEDTEXTA (only happens in ANSI build) or
+        // if we got TTN_NEEDTEXTW in Unicode build: in this case we just have
+        // to copy the string we have into the buffer
+        static wxChar buf[513];
+        wxStrncpy(buf, ttip.c_str(), WXSIZEOF(buf) - 1);
+        buf[WXSIZEOF(buf) - 1] = _T('\0');
+        ttText->lpszText = buf;
     }
 
     return true;
