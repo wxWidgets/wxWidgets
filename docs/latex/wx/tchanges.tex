@@ -4,17 +4,17 @@ Listed here are the depreciated and incompatable changes made to wxWidgets.
 
 For other changes (such as additional features, bug fixes, etc.) see the changes.txt file located in the docs directory of your wxWidgets directory.
 
-\subsection{Incompatable changes since 2.4.x}
+\subsection{Incompatable changes since 2.4.x}\label{incompatiblesince24}
 
-\subsubsection{New window repainting behaviour}
+\subsubsection{New window repainting behaviour}\label{newwindowrepainting}
 
 Windows are no longer fully repainted when resized, use new style wxFULL\_REPAINT\_ON\_RESIZE to force this (wxNO\_FULL\_REPAINT\_ON\_RESIZE still exists but doesn't do anything any more, this behaviour is default now).
 
-\subsubsection{Window class member changes}
+\subsubsection{Window class member changes}\label{windowclassmemberchanges}
 
 wxWindow::m\_font and m\_backgroundColour/m\_foregroundColour are no longer always set, use GetFont(), GetBack/ForegroundColour() to access them, and they will be dynamically determined if necessary.
 
-\subsubsection{Sizers Internal Overhaul}
+\subsubsection{Sizers Internal Overhaul}\label{sizersinternaloverhaul}
 
 The Sizers have had some fundamental internal changes in the 2.5.2 and 2.5.3 releases intended to make them do more of the "Right Thing" but also be as backwards compatible as possible.  First a bit about how things used to work:
 
@@ -94,7 +94,7 @@ The Sizers have had some fundamental internal changes in the 2.5.2 and 2.5.3 rel
       control is sized to a blending of the min size and best size.
       This can be done by calling SetBestFittingSize.
 
-\subsubsection{Massive wxURL Rewrite}
+\subsubsection{Massive wxURL Rewrite}\label{wxurlrewrite}
 
 wxURL has undergone some radical changes.
 
@@ -107,7 +107,7 @@ wxURL has undergone some radical changes.
 
     * ConvertFromURI has been replaced by wxURI::Unescape.
 
-\subsubsection{Less drastic incompatable changes since 2.4.x}
+\subsubsection{Less drastic incompatable changes since 2.4.x}\label{24incompatiblelessdrastic}
 
 - no initialization/cleanup can be done in wxApp/~wxApp because they are
   now called much earlier/later than before; please move any exiting code
@@ -188,7 +188,9 @@ wxURL has undergone some radical changes.
 - wxSizer::Add/Insert returns pointer to wxSizerItem just added so conditions
   writeen with if(Add(..)==true) will not work. Use if(Add(..)) instead.
 
-\subsection{Depreciated changes since 2.4.x}
+- New wxBrush::IsHatch() checking for brush type replaces IS_HATCH macro.
+
+\subsection{Depreciated changes since 2.4.x}\label{depreciatedsince24}
 
 - wxURL::GetInputStream() and similar functionality has been depreciated in
   favor of other ways of connecting, such as though sockets or wxFileSystem.

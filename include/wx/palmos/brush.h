@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -47,6 +47,9 @@ public:
     wxColour GetColour() const;
     int GetStyle() const;
     wxBitmap *GetStipple() const;
+
+    bool IsHatch() const
+        { return (GetStyle()>=wxBDIAGONAL_HATCH) && (GetStyle()<=wxVERTICAL_HATCH); }
 
     bool Ok() const { return m_refData != NULL; }
 

@@ -49,11 +49,14 @@ public:
     wxColour &GetColour() const;
     wxBitmap *GetStipple() const;
 
+    bool IsHatch() const
+        { return (GetStyle()>=wxBDIAGONAL_HATCH) && (GetStyle()<=wxVERTICAL_HATCH); }
+
     void SetColour(const wxColour& col);
     void SetColour(unsigned char r, unsigned char g, unsigned char b);
     void SetStyle(int style);
     void SetStipple(const wxBitmap& stipple);
-    
+
     // implementation:
 
     void* GetMaskPattern() const;

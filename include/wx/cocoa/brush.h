@@ -6,7 +6,7 @@
 // Created:     2003/07/03
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_COCOA_BRUSH_H__
@@ -58,6 +58,9 @@ public:
     wxColour GetColour() const;
     int GetStyle() const;
     wxBitmap *GetStipple() const;
+
+    bool IsHatch() const
+        { return (GetStyle()>=wxBDIAGONAL_HATCH) && (GetStyle()<=wxVERTICAL_HATCH); }
 
     virtual bool Ok() const
     {   return (m_refData != NULL); }

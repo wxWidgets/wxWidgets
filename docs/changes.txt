@@ -33,6 +33,7 @@ All (GUI):
 - wxBookCtrl renamed to wxBookCtrlBase, wxBookCtrl is reserved for most native
   book control (for now wxChoicebook for MSSmartphone, wxNotebook for others).
   Necessary event macros, types and styles mapped accordingly.
+- new wxBrush::IsHatch() checking for brush type replaces IS_HATCH macro
 
 Unix:
 

@@ -48,6 +48,9 @@ public:
     int GetStyle() const;
     wxBitmap *GetStipple() const;
 
+    bool IsHatch() const
+        { return (GetStyle()>=wxBDIAGONAL_HATCH) && (GetStyle()<=wxVERTICAL_HATCH); }
+
     bool Ok() const { return m_refData != NULL; }
 
     // return the HBRUSH for this brush

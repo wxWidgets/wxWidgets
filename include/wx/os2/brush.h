@@ -68,6 +68,9 @@ public:
     inline wxBitmap* GetStipple(void) const { return (M_BRUSHDATA ? & M_BRUSHDATA->m_vStipple : 0); };
     inline int       GetPS(void) const { return (M_BRUSHDATA ? M_BRUSHDATA->m_hBrush : 0); };
 
+    bool IsHatch() const
+        { return (GetStyle()>=wxBDIAGONAL_HATCH) && (GetStyle()<=wxVERTICAL_HATCH); }
+
     inline virtual bool Ok(void) const { return (m_refData != NULL) ; }
 
     //
@@ -79,7 +82,7 @@ public:
     //
     bool     RealizeResource(void);
     WXHANDLE GetResourceHandle(void) ;
-    bool     FreeResource(bool bForce = FALSE);
+    bool     FreeResource(bool bForce = false);
     bool     IsFree(void) const;
     void     Unshare(void);
 }; // end of CLASS wxBrush

@@ -86,9 +86,15 @@ static Pixmap bdiag, cdiag, fdiag, cross, horiz, verti;
 // macros
 // ----------------------------------------------------------------------------
 
-    IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxWindowDC)
-    IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxWindowDC)
-    IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
+IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxWindowDC)
+IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxWindowDC)
+IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
+
+#ifndef IS_HATCH
+    // IS_HATCH exists for WXWIN_COMPATIBILITY_2_4 only
+    // but wxMotif needs it for its internals here
+    #define IS_HATCH(s)    ((s)>=wxBDIAGONAL_HATCH && (s)<=wxVERTICAL_HATCH)
+#endif
 
 // ----------------------------------------------------------------------------
 // prototypes
@@ -163,7 +169,7 @@ wxWindowDC::wxWindowDC( wxWindow *window )
 
     m_window = window;
     m_font = window->GetFont();
-    m_ok = TRUE;
+    m_ok = true;
 
     m_display = window->GetXDisplay();
     m_pixmap = window->GetXWindow();
@@ -222,7 +228,7 @@ wxWindowDC::~wxWindowDC()
     m_clipRegion = (WXRegion) 0;
 }
 
-extern bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y, 
+extern bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
                           const wxColour & col, int style);
 
 bool wxWindowDC::DoFloodFill(wxCoord x, wxCoord y,
@@ -230,7 +236,7 @@ bool wxWindowDC::DoFloodFill(wxCoord x, wxCoord y,
 {
     return wxDoFloodFill(this, x, y, col, style);
 }
-  
+
 bool wxWindowDC::DoGetPixel( wxCoord x1, wxCoord y1, wxColour *col ) const
 {
     // Generic (and therefore rather inefficient) method.
@@ -242,7 +248,7 @@ bool wxWindowDC::DoGetPixel( wxCoord x1, wxCoord y1, wxColour *col ) const
     memdc.SelectObject(wxNullBitmap);
     wxImage image = bitmap.ConvertToImage();
     col->Set(image.GetRed(0, 0), image.GetGreen(0, 0), image.GetBlue(0, 0));
-    return TRUE;
+    return true;
 }
 
 void wxWindowDC::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
@@ -781,12 +787,12 @@ void wxWindowDC::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord hei
 
 bool wxWindowDC::CanDrawBitmap() const
 {
-    wxCHECK_MSG( Ok(), FALSE, "invalid dc" );
+    wxCHECK_MSG( Ok(), false, "invalid dc" );
 
-    return TRUE;
+    return true;
 }
 
-// TODO: use scaled Blit e.g. as per John Price's implementation 
+// TODO: use scaled Blit e.g. as per John Price's implementation
 // in Contrib/Utilities
 bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
                          wxCoord width, wxCoord height,
@@ -794,7 +800,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
                          int rop, bool useMask,
                          wxCoord xsrcMask, wxCoord ysrcMask )
 {
-    wxCHECK_MSG( Ok(), FALSE, "invalid dc" );
+    wxCHECK_MSG( Ok(), false, "invalid dc" );
 
     wxWindowDC* sourceDC = wxDynamicCast(source, wxWindowDC);
 
@@ -823,8 +829,8 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
 
         if( m_textForegroundColour.GetPixel() <= -1 )
             CalculatePixel( m_textForegroundColour,
-                            m_textForegroundColour, TRUE);
- 
+                            m_textForegroundColour, true);
+
         int pixel = m_textForegroundColour.GetPixel();
         if (pixel > -1)
             SetForegroundPixelWithLogicalFunction(pixel);
@@ -836,7 +842,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
     Pixmap sourcePixmap = (Pixmap) NULL;
     double scaleX, scaleY;
     GetUserScale(& scaleX, & scaleY);
-    bool retVal = FALSE;
+    bool retVal = false;
 
     /* TODO: use the mask origin when drawing transparently */
     if (xsrcMask == -1 && ysrcMask == -1)
@@ -924,7 +930,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
 
         } else
         {        //XGCValues values;
-        //XGetGCValues((Display*)m_display, (GC)m_gc, GCForeground, &values);   
+        //XGetGCValues((Display*)m_display, (GC)m_gc, GCForeground, &values);
 
             if (m_window && m_window->GetBackingPixmap())
             {
@@ -997,7 +1003,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
 
         SetLogicalFunction(orig);
 
-        retVal = TRUE;
+        retVal = true;
   }
   if (scaledBitmap) delete scaledBitmap;
 
@@ -1115,7 +1121,7 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
         if (!sameColour || !GetOptimization())
         {
             int pixel = CalculatePixel(m_textForegroundColour,
-                                       m_currentColour, FALSE);
+                                       m_currentColour, false);
 
             // Set the GC to the required colour
             if (pixel > -1)
@@ -1191,8 +1197,8 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y,
 
         if( m_textForegroundColour.GetPixel() <= -1 )
             CalculatePixel( m_textForegroundColour,
-                            m_textForegroundColour, TRUE);
- 
+                            m_textForegroundColour, true);
+
         foregroundPixel = m_textForegroundColour.GetPixel();
     }
 
@@ -1323,7 +1329,7 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y,
 
 bool wxWindowDC::CanGetTextExtent() const
 {
-    return TRUE;
+    return true;
 }
 
 void wxWindowDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *height,
@@ -1505,7 +1511,7 @@ int wxWindowDC::CalculatePixel(wxColour& colour, wxColour& curCol,
                                bool roundToWhite) const
 {
     const unsigned char wp = (unsigned char)255;
-        
+
     int pixel = -1;
     if(!m_colour) // Mono display
     {
@@ -1789,7 +1795,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
             pixel = m_backgroundPixel;
         else
         {
-            pixel = CalculatePixel(m_pen.GetColour(), m_currentColour, FALSE);
+            pixel = CalculatePixel(m_pen.GetColour(), m_currentColour, false);
         }
 
         // Finally, set the GC to the required colour
@@ -1853,7 +1859,7 @@ void wxWindowDC::SetBrush( const wxBrush &brush )
                 // determine whether fill style should be solid or
                 // transparent
                 int style = stippleDepth == 1 ?
-                    (m_backgroundMode == wxSOLID ? 
+                    (m_backgroundMode == wxSOLID ?
                      FillOpaqueStippled : FillStippled) :
                     FillTiled;
                 XSetFillStyle ((Display*) m_display, (GC) m_gc, style);
@@ -1951,8 +1957,8 @@ void wxWindowDC::SetBrush( const wxBrush &brush )
     // must test m_logicalFunction, because it involves background!
     if (!sameColour || !GetOptimization() || m_logicalFunction == wxXOR)
     {
-        int pixel = CalculatePixel(m_brush.GetColour(), m_currentColour, TRUE);
- 
+        int pixel = CalculatePixel(m_brush.GetColour(), m_currentColour, true);
+
         if (pixel > -1)
             SetForegroundPixelWithLogicalFunction(pixel);
     }
@@ -2207,7 +2213,7 @@ int wxWindowDC::GetDepth() const
 wxPaintDC::wxPaintDC(wxWindow* win) : wxWindowDC(win)
 {
     // Set the clipping region.to the update region
-    SetDCClipping((WXRegion)NULL);   
+    SetDCClipping((WXRegion)NULL);
 }
 
 wxPaintDC::~wxPaintDC()

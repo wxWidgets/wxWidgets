@@ -22,60 +22,63 @@
 
 class WXDLLEXPORT wxBrush;
 
-typedef enum 
+typedef enum
 {
-  kwxMacBrushColour ,
-  kwxMacBrushTheme ,
-  kwxMacBrushThemeBackground
+    kwxMacBrushColour ,
+    kwxMacBrushTheme ,
+    kwxMacBrushThemeBackground
 } wxMacBrushKind ;
 
 // Brush
 class WXDLLEXPORT wxBrush: public wxGDIObject
 {
-  DECLARE_DYNAMIC_CLASS(wxBrush)
+    DECLARE_DYNAMIC_CLASS(wxBrush)
 
 public:
-  wxBrush();
-  wxBrush(short macThemeBrush ) ;
-  wxBrush(const wxColour& col, int style = wxSOLID);
-  wxBrush(const wxBitmap& stipple);
-  wxBrush(const wxBrush& brush)
-      : wxGDIObject()
-      { Ref(brush); }
-  ~wxBrush();
+    wxBrush();
+    wxBrush(short macThemeBrush ) ;
+    wxBrush(const wxColour& col, int style = wxSOLID);
+    wxBrush(const wxBitmap& stipple);
+    wxBrush(const wxBrush& brush)
+        : wxGDIObject()
+        { Ref(brush); }
+    ~wxBrush();
 
-  virtual void SetColour(const wxColour& col)  ;
-  virtual void SetColour(unsigned char r, unsigned char g, unsigned char b)  ;
-  virtual void SetStyle(int style)  ;
-  virtual void SetStipple(const wxBitmap& stipple)  ;
-  virtual void MacSetTheme(short macThemeBrush) ;
-  virtual void MacSetThemeBackground(unsigned long macThemeBackground ,  WXRECTPTR extent) ;
+    virtual void SetColour(const wxColour& col)  ;
+    virtual void SetColour(unsigned char r, unsigned char g, unsigned char b)  ;
+    virtual void SetStyle(int style)  ;
+    virtual void SetStipple(const wxBitmap& stipple)  ;
+    virtual void MacSetTheme(short macThemeBrush) ;
+    virtual void MacSetThemeBackground(unsigned long macThemeBackground ,  WXRECTPTR extent) ;
 
-  wxBrush& operator = (const wxBrush& brush)
-  { if (*this == brush) return (*this); Ref(brush); return *this; }
-  bool operator == (const wxBrush& brush)
-  { return m_refData == brush.m_refData; }
-  bool operator != (const wxBrush& brush)
-  { return m_refData != brush.m_refData; }
+    wxBrush& operator = (const wxBrush& brush)
+    { if (*this == brush) return (*this); Ref(brush); return *this; }
+    bool operator == (const wxBrush& brush)
+    { return m_refData == brush.m_refData; }
+    bool operator != (const wxBrush& brush)
+    { return m_refData != brush.m_refData; }
 
-  wxMacBrushKind MacGetBrushKind()  const ;
+    wxMacBrushKind MacGetBrushKind()  const ;
 
-  unsigned long MacGetThemeBackground(WXRECTPTR extent)  const ;
-  short MacGetTheme()  const ;
-  wxColour& GetColour() const ;
-  int GetStyle() const ;
-  wxBitmap *GetStipple() const ;
+    unsigned long MacGetThemeBackground(WXRECTPTR extent)  const ;
+    short MacGetTheme()  const ;
+    wxColour& GetColour() const ;
+    int GetStyle() const ;
+    wxBitmap *GetStipple() const ;
 
-  virtual bool Ok() const { return (m_refData != NULL) ; }
+    bool IsHatch() const
+        { return (GetStyle()>=wxBDIAGONAL_HATCH) && (GetStyle()<=wxVERTICAL_HATCH); }
+
+    virtual bool Ok() const { return (m_refData != NULL) ; }
 
 // Implementation
 
-  // Useful helper: create the brush resource
-  bool RealizeResource();
+    // Useful helper: create the brush resource
+    bool RealizeResource();
 
-  // When setting properties, we must make sure we're not changing
-  // another object
-  void Unshare();
+    // When setting properties, we must make sure we're not changing
+    // another object
+    void Unshare();
 };
 
 #endif

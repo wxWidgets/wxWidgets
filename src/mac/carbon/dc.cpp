@@ -77,23 +77,23 @@ wxMacPortSetter::~wxMacPortSetter()
 class wxMacFastPortSetter
 {
 public :
-    wxMacFastPortSetter( const wxDC *dc ) 
+    wxMacFastPortSetter( const wxDC *dc )
     {
-	    wxASSERT( dc->Ok() ) ;
-	    m_swapped = QDSwapPort( (GrafPtr) dc->m_macPort , &m_oldPort ) ;
-	    m_clipRgn = NewRgn() ;
-	    GetClip( m_clipRgn ) ;
-	    m_dc = dc ;
-	    dc->MacSetupPort( NULL ) ;
+        wxASSERT( dc->Ok() ) ;
+        m_swapped = QDSwapPort( (GrafPtr) dc->m_macPort , &m_oldPort ) ;
+        m_clipRgn = NewRgn() ;
+        GetClip( m_clipRgn ) ;
+        m_dc = dc ;
+        dc->MacSetupPort( NULL ) ;
     }
     ~wxMacFastPortSetter()
     {
         // SetPort( (GrafPtr) m_dc->m_macPort ) ;
         SetClip( m_clipRgn ) ;
         if ( m_swapped )
-	        SetPort( m_oldPort ) ;
-	    m_dc->MacCleanupPort( NULL ) ;
-	    DisposeRgn( m_clipRgn ) ;
+            SetPort( m_oldPort ) ;
+        m_dc->MacCleanupPort( NULL ) ;
+        DisposeRgn( m_clipRgn ) ;
     }
 private :
     bool m_swapped ;
@@ -113,7 +113,7 @@ wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win ) :
     m_formerClip = NewRgn() ;
     m_newClip = NewRgn() ;
     GetClip( m_formerClip ) ;
-    
+
     if ( win )
     {
         int x = 0 , y = 0;
@@ -127,7 +127,7 @@ wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win ) :
     }
 }
 
-wxMacWindowClipper::~wxMacWindowClipper() 
+wxMacWindowClipper::~wxMacWindowClipper()
 {
     SetPort( m_newPort ) ;
     SetClip( m_formerClip ) ;
@@ -143,7 +143,7 @@ wxMacWindowStateSaver::wxMacWindowStateSaver( const wxWindow* win ) :
     GetThemeDrawingState( &m_themeDrawingState ) ;
 }
 
-wxMacWindowStateSaver::~wxMacWindowStateSaver() 
+wxMacWindowStateSaver::~wxMacWindowStateSaver()
 {
     SetPort( m_newPort ) ;
     SetThemeDrawingState( m_themeDrawingState , true ) ;
@@ -249,8 +249,8 @@ void wxMacCalculateColour( int logical_func , const RGBColor &srcColor , RGBColo
 
 wxDC::wxDC()
 {
-    m_ok = FALSE;
-    m_colour = TRUE;
+    m_ok = false;
+    m_colour = true;
     m_mm_to_pix_x = mm2pt;
     m_mm_to_pix_y = mm2pt;
     m_internalDeviceOriginX = 0;
@@ -263,11 +263,11 @@ wxDC::wxDC()
     m_userScaleY = 1.0;
     m_scaleX = 1.0;
     m_scaleY = 1.0;
-    m_needComputeScaleX = FALSE;
-    m_needComputeScaleY = FALSE;
+    m_needComputeScaleX = false;
+    m_needComputeScaleY = false;
     m_macPort = NULL ;
     m_macMask = NULL ;
-    m_ok = FALSE ;
+    m_ok = false ;
     m_macFontInstalled = false ;
     m_macBrushInstalled = false ;
     m_macPenInstalled = false ;
@@ -280,7 +280,7 @@ wxDC::wxDC()
     m_font = *wxNORMAL_FONT;
     m_brush = *wxWHITE_BRUSH;
 #ifdef __WXDEBUG__
-    // needed to debug possible errors with two active drawing methods at the same time on 
+    // needed to debug possible errors with two active drawing methods at the same time on
     // the same DC
     m_macCurrentPortStateHelper = NULL ;
 #endif
@@ -453,7 +453,7 @@ void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord hei
     }
     else
     {
-        m_clipping = TRUE;
+        m_clipping = true;
         m_clipX1 = xx;
         m_clipY1 = yy;
         m_clipX2 = xx + ww;
@@ -500,7 +500,7 @@ void wxDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
         }
         else
         {
-            m_clipping = TRUE;
+            m_clipping = true;
             m_clipX1 = xx;
             m_clipY1 = yy;
             m_clipX2 = xx + ww;
@@ -562,8 +562,8 @@ void wxDC::SetMapMode( int mode )
     }
     if (mode != wxMM_TEXT)
     {
-        m_needComputeScaleX = TRUE;
-        m_needComputeScaleY = TRUE;
+        m_needComputeScaleX = true;
+        m_needComputeScaleY = true;
     }
 }
 
@@ -1064,7 +1064,7 @@ bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
     wxCHECK_MSG(Ok(), false, wxT("wxDC::DoBlit Illegal dc"));
     wxCHECK_MSG(source->Ok(), false, wxT("wxDC::DoBlit  Illegal source DC"));
     if ( logical_func == wxNO_OP )
-        return TRUE ;
+        return true ;
     if (xsrcMask == -1 && ysrcMask == -1)
     {
         xsrcMask = xsrc; ysrcMask = ysrc;
@@ -1143,7 +1143,7 @@ bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
     if ( mode == kUnsupportedMode )
     {
         wxFAIL_MSG(wxT("unsupported blitting mode" ));
-        return FALSE ;
+        return false ;
     }
     CGrafPtr            sourcePort = (CGrafPtr) source->m_macPort ;
     PixMapHandle    bmappixels =  GetGWorldPixMap( sourcePort ) ;
@@ -1302,7 +1302,7 @@ bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
     m_macPenInstalled = false ;
     m_macBrushInstalled = false ;
     m_macFontInstalled = false ;
-    return TRUE;
+    return true;
 }
 
 #ifndef FixedToInt
@@ -1341,16 +1341,16 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     UniCharCount chars = str.Length() ;
     UniChar* ubuf = NULL ;
 #if SIZEOF_WCHAR_T == 4
-	wxMBConvUTF16BE converter ;
+    wxMBConvUTF16BE converter ;
 #if wxUSE_UNICODE
-	size_t unicharlen = converter.WC2MB( NULL , str.wc_str() , 0 ) ;
-	ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
-	converter.WC2MB( (char*) ubuf , str.wc_str(), unicharlen + 2 ) ;
+    size_t unicharlen = converter.WC2MB( NULL , str.wc_str() , 0 ) ;
+    ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
+    converter.WC2MB( (char*) ubuf , str.wc_str(), unicharlen + 2 ) ;
 #else
     const wxWCharBuffer wchar = str.wc_str( wxConvLocal ) ;
-	size_t unicharlen = converter.WC2MB( NULL , wchar.data()  , 0 ) ;
-	ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
-	converter.WC2MB( (char*) ubuf , wchar.data() , unicharlen + 2 ) ;
+    size_t unicharlen = converter.WC2MB( NULL , wchar.data()  , 0 ) ;
+    ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
+    converter.WC2MB( (char*) ubuf , wchar.data() , unicharlen + 2 ) ;
 #endif
     chars = unicharlen / 2 ;
 #else
@@ -1370,13 +1370,13 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     int iAngle = int( angle );
     int drawX = XLOG2DEVMAC(x) ;
     int drawY = YLOG2DEVMAC(y) ;
-    
+
     ATSUTextMeasurement textBefore ;
     ATSUTextMeasurement textAfter ;
     ATSUTextMeasurement ascent ;
     ATSUTextMeasurement descent ;
-    
-    
+
+
     if ( abs(iAngle) > 0 )
     {
         Fixed atsuAngle = IntToFixed( iAngle ) ;
@@ -1397,7 +1397,7 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     }
     status = ::ATSUMeasureText( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
         &textBefore , &textAfter, &ascent , &descent );
-    
+
     drawX += (int)(sin(angle/RAD2DEG) * FixedToInt(ascent));
     drawY += (int)(cos(angle/RAD2DEG) * FixedToInt(ascent));
     status = ::ATSUDrawText( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
@@ -1480,7 +1480,7 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
         else
 #endif
         {
-            wxCharBuffer text = linetext.mb_str(wxConvLocal) ; 
+            wxCharBuffer text = linetext.mb_str(wxConvLocal) ;
             ::DrawText( text , 0 , strlen(text) ) ;
          }
     }
@@ -1508,7 +1508,7 @@ void  wxDC::DoGetTextExtent( const wxString &strtext, wxCoord *width, wxCoord *h
     MacInstallFont() ;
     FontInfo fi ;
     ::GetFontInfo( &fi ) ;
-#if TARGET_CARBON    
+#if TARGET_CARBON
     bool useGetThemeText = ( GetThemeTextDimensions != (void*) kUnresolvedCFragSymbolAddress ) ;
     if ( UMAGetSystemVersion() < 0x1000 || IsKindOf(CLASSINFO( wxPrinterDC ) ) || ((wxFont*)&m_font)->GetNoAntiAliasing() )
         useGetThemeText = false ;
@@ -1542,7 +1542,7 @@ void  wxDC::DoGetTextExtent( const wxString &strtext, wxCoord *width, wxCoord *h
         }
         else
         {
-            wxCharBuffer text = linetext.mb_str(wxConvLocal) ;  
+            wxCharBuffer text = linetext.mb_str(wxConvLocal) ;
             curwidth = ::TextWidth( text , 0 , strlen(text) ) ;
         }
         if ( curwidth > *width )
@@ -1566,10 +1566,10 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
 
     if (text.Length() == 0)
         return false;
-    
+
     wxMacFastPortSetter helper(this) ;
     MacInstallFont() ;
-#if TARGET_CARBON    
+#if TARGET_CARBON
     bool useGetThemeText = ( GetThemeTextDimensions != (void*) kUnresolvedCFragSymbolAddress ) ;
     if ( UMAGetSystemVersion() < 0x1000 || IsKindOf(CLASSINFO( wxPrinterDC ) ) || ((wxFont*)&m_font)->GetNoAntiAliasing() )
         useGetThemeText = false ;
@@ -1596,7 +1596,7 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
             widths[i] = XDEV2LOGREL(bounds.h);
         }
     }
-    else        
+    else
 #endif
     {
         wxCharBuffer buff = text.mb_str(wxConvLocal);
@@ -1610,7 +1610,7 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
         for (size_t i=0; i<text.Length(); i++)
             widths[i] = XDEV2LOGREL(measurements[i+1]);
 
-        delete [] measurements;        
+        delete [] measurements;
     }
 
     return true;
@@ -1834,7 +1834,7 @@ static void wxMacGetPattern(int penStyle, Pattern *pattern)
 {
     int index = 0;  // solid pattern by default
     switch(penStyle)
-    {   
+    {
         // hatches
         case wxBDIAGONAL_HATCH:     index = 1; break;
         case wxFDIAGONAL_HATCH:     index = 2; break;
@@ -1848,7 +1848,7 @@ static void wxMacGetPattern(int penStyle, Pattern *pattern)
         case wxSHORT_DASH:          index = 9; break;
         case wxDOT_DASH:            index = 10; break;
     }
-    *pattern = gPatterns[index];    
+    *pattern = gPatterns[index];
 }
 
 void wxDC::MacInstallPen() const
@@ -1867,11 +1867,11 @@ void wxDC::MacInstallPen() const
     if ( penWidth == 0 )
         penWidth = 1 ;
     ::PenSize(penWidth, penWidth);
-    
+
     int penStyle = m_pen.GetStyle();
     Pattern pat;
     if (penStyle == wxUSER_DASH)
-    {   
+    {
         // FIXME: there should be exactly 8 items in the dash
         wxDash* dash ;
         int number = m_pen.GetDashes(&dash) ;
@@ -1958,7 +1958,7 @@ void wxDC::MacSetupBackgroundForCurrentPort(const wxBrush& background )
                 int brushStyle = background.GetStyle();
                 if (brushStyle == wxSOLID)
                     ::BackPat(GetQDGlobalsWhite(&whiteColor));
-                else if (IS_HATCH(brushStyle))
+                else if (background.IsHatch())
                 {
                     Pattern pat ;
                     wxMacGetPattern(brushStyle, &pat);
@@ -1989,7 +1989,7 @@ void wxDC::MacInstallBrush() const
     {
         ::PenPat(GetQDGlobalsBlack(&blackColor));
     }
-    else if (IS_HATCH(brushStyle))
+    else if (m_brush.IsHatch())
     {
         Pattern pat ;
         wxMacGetPattern(brushStyle, &pat);
