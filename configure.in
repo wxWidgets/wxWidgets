@@ -891,10 +891,6 @@ dnl disable static libs by default, this takes too much time...
 dnl libtool doesn't work on anything but Linux and maybe
 dnl ***BSD
 
-SHLIB_LINKER=
-SHLIB_LINKER_FLAG=
-SHLIB_CFLAG=
-
 case "${host}" in
   *-hp-hpux* )
     AM_DISABLE_SHARED
@@ -940,6 +936,14 @@ case "${host}" in
 esac
 
 AM_PROG_LIBTOOL
+
+dnl ---------------------------------------------------------------------------
+dnl things for shared libraries without libtool
+dnl ---------------------------------------------------------------------------
+
+SHARED_LINKER=gcc -shared 
+SHARED_LINKER_FLAG=
+SHARED_CFLAG=
 
 dnl ---------------------------------------------------------------------------
 dnl Define search path for includes and libraries: all headers and libs will be

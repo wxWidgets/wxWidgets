@@ -97,6 +97,7 @@ libwx_motif_la_SOURCES = \
  sckipc.cpp \
  sckstrm.cpp \
  serbase.cpp \
+ sizer.cpp \
  socket.cpp \
  stream.cpp \
  tbarbase.cpp \

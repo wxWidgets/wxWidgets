@@ -64,7 +64,7 @@ extern wxList wxPendingDelete;
 static bool wxTopLevelUsed = FALSE;
 
 #if !USE_SHARED_LIBRARY
-BEGIN_EVENT_TABLE(wxFrame, wxWindowBase)
+BEGIN_EVENT_TABLE(wxFrame, wxWindow)
   EVT_SIZE(wxFrame::OnSize)
   EVT_ACTIVATE(wxFrame::OnActivate)
   EVT_MENU_HIGHLIGHT_ALL(wxFrame::OnMenuHighlight)
@@ -73,7 +73,7 @@ BEGIN_EVENT_TABLE(wxFrame, wxWindowBase)
   EVT_CLOSE(wxFrame::OnCloseWindow)
 END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindowBase)
+IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
 #endif
 
 #if wxUSE_NATIVE_STATUSBAR
