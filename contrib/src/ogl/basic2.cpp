@@ -1410,6 +1410,7 @@ void wxShape::OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, int 
   double bound_x;
   double bound_y;
   this->GetBoundingBoxMin(&bound_x, &bound_y);
+  this->GetEventHandler()->OnBeginSize(bound_x, bound_y);
 
   // Choose the 'opposite corner' of the object as the stationary
   // point in case this is non-centring resizing.
