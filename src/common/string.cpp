@@ -441,43 +441,44 @@ void wxString::ConcatSelf(int nSrcLen, const char *pszSrcData)
 {
   STATISTICS_ADD(SummandLength, nSrcLen);
 
-  // concatenating an empty string is a NOP, but it happens quite rarely,
-  // so we don't waste our time checking for it
-  // if ( nSrcLen > 0 )
-  wxStringData *pData = GetStringData();
-  size_t nLen = pData->nDataLength;
-  size_t nNewLen = nLen + nSrcLen;
+  // concatenating an empty string is a NOP
+  if ( nSrcLen > 0 ) {
+    wxStringData *pData = GetStringData();
+    size_t nLen = pData->nDataLength;
+    size_t nNewLen = nLen + nSrcLen;
 
-  // alloc new buffer if current is too small
-  if ( pData->IsShared() ) {
-    STATISTICS_ADD(ConcatHit, 0);
+    // alloc new buffer if current is too small
+    if ( pData->IsShared() ) {
+      STATISTICS_ADD(ConcatHit, 0);
 
-    // we have to allocate another buffer
-    wxStringData* pOldData = GetStringData();
-    AllocBuffer(nNewLen);
-    memcpy(m_pchData, pOldData->data(), nLen*sizeof(char));
-    pOldData->Unlock();
+      // we have to allocate another buffer
+      wxStringData* pOldData = GetStringData();
+      AllocBuffer(nNewLen);
+      memcpy(m_pchData, pOldData->data(), nLen*sizeof(char));
+      pOldData->Unlock();
+    }
+    else if ( nNewLen > pData->nAllocLength ) {
+      STATISTICS_ADD(ConcatHit, 0);
+
+      // we have to grow the buffer
+      Alloc(nNewLen);
+    }
+    else {
+      STATISTICS_ADD(ConcatHit, 1);
+
+      // the buffer is already big enough
+    }
+
+    // should be enough space
+    wxASSERT( nNewLen <= GetStringData()->nAllocLength );
+
+    // fast concatenation - all is done in our buffer
+    memcpy(m_pchData + nLen, pszSrcData, nSrcLen*sizeof(char));
+
+    m_pchData[nNewLen] = '\0';              // put terminating '\0'
+    GetStringData()->nDataLength = nNewLen; // and fix the length
   }
-  else if ( nNewLen > pData->nAllocLength ) {
-    STATISTICS_ADD(ConcatHit, 0);
-
-    // we have to grow the buffer
-    Alloc(nNewLen);
-  }
-  else {
-    STATISTICS_ADD(ConcatHit, 1);
-
-    // the buffer is already big enough
-  }
-
-  // should be enough space
-  wxASSERT( nNewLen <= GetStringData()->nAllocLength );
-
-  // fast concatenation - all is done in our buffer
-  memcpy(m_pchData + nLen, pszSrcData, nSrcLen*sizeof(char));
-
-  m_pchData[nNewLen] = '\0';              // put terminating '\0'
-  GetStringData()->nDataLength = nNewLen; // and fix the length
+  //else: the string to append was empty
 }
 
 /*
