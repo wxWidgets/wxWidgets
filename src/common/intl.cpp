@@ -2185,6 +2185,9 @@ wxString wxLocale::GetSystemEncodingName()
     // FIXME: what is the error return value for GetACP()?
     UINT codepage = ::GetACP();
     encname.Printf(_T("windows-%u"), codepage);
+#elif defined(__WXMAC__)
+    // default is just empty string, this resolves to the default system
+    // encoding later
 #elif defined(__UNIX_LIKE__)
 
 #if defined(HAVE_LANGINFO_H) && defined(CODESET)
