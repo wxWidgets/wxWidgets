@@ -76,6 +76,9 @@ class LayoutTestFrame(wx.Frame):
         self.Bind(wx.EVT_LISTBOX, self.OnHistorySelect, self.testHistory)
         self.Bind(wx.EVT_LISTBOX_DCLICK, self.OnHistoryActivate, self.testHistory)
 
+        if 'wxMac' in wx.PlatformInfo or 'wxGTK' in wx.PlatformInfo:
+            self.testHistory.Bind(wx.EVT_KEY_DOWN, self.OnHistoryKey)
+            
 
         # setup the layout
         mainSizer = wx.BoxSizer(wx.VERTICAL)
@@ -91,7 +94,7 @@ class LayoutTestFrame(wx.Frame):
         mcSizer = wx.BoxSizer(wx.HORIZONTAL)
         mcSizer.Add(self.moduleName, 0, 0)
         mcSizer.Add(wx.StaticText(p, -1, "Class name:"),
-                      0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL |wx.LEFT, 10)
+                      0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL |wx.LEFT|wx.RIGHT, 10)
         mcSizer.Add(self.className, 1, 0)
         ctlsSizer.Add(mcSizer, 0, wx.EXPAND)
 
@@ -217,13 +220,16 @@ class LayoutTestFrame(wx.Frame):
 
 
     def OnHistorySelect(self, evt):
-        idx = self.testHistory.GetSelection()
+        #idx = self.testHistory.GetSelection()
+        idx = evt.GetInt()
         if idx != wx.NOT_FOUND:
             item = self.history[idx]
             self.moduleName.SetValue(item[0])
             self.className.SetValue(item[1])
             self.parameters.SetValue(item[2])
             self.postCreate.SetValue(item[3])
+            if 'wxMac' in wx.PlatformInfo:
+                self.OnUpdate(None)
 
 
     def OnHistoryActivate(self, evt):
@@ -232,6 +238,13 @@ class LayoutTestFrame(wx.Frame):
             e = wx.CommandEvent(wx.wxEVT_COMMAND_BUTTON_CLICKED, btn.GetId())
             btn.Command(e)
 
+
+    def OnHistoryKey(self, evt):
+        key = evt.GetKeyCode()
+        if key == wx.WXK_RETURN:
+            self.OnHistoryActivate(None)
+        else:
+            evt.Skip()
 
 
     def OnUpdate(self, evt):
@@ -270,6 +283,8 @@ class LayoutTestFrame(wx.Frame):
         parameters = self.parameters.GetValue()
         expr       = self.expression.GetValue()[4:]
         postCreate = self.postCreate.GetValue()
+        if 'wxMac' in wx.PlatformInfo:
+            postCreate = postCreate.replace('\r', '\n')
 
         # make sure the module is imported already
         if not sys.modules.has_key(moduleName):
@@ -494,7 +509,7 @@ class ColourInfoPanel(wx.Panel):
 
         
 
-app = wx.PySimpleApp(redirect=True)
+app = wx.PySimpleApp(redirect=False)
 frame = LayoutTestFrame()
 app.SetTopWindow(frame)
 frame.Show()
