@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        stattext.cpp
+// Name:        src/msw/stattext.cpp
 // Purpose:     wxStaticText
 // Author:      Julian Smart
 // Modified by:
@@ -82,13 +82,6 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
   wxCHECK_MSG( m_hWnd, FALSE, wxT("Failed to create static ctrl") );
 
-#if wxUSE_CTL3D
-/*
-  if (!(GetParent()->GetWindowStyleFlag() & wxUSER_COLOURS))
-    Ctl3dSubclassCtl(static_item);
-*/
-#endif
-
   SubclassWin(m_hWnd);
 
   wxControl::SetFont(parent->GetFont());
@@ -141,17 +134,24 @@ wxSize wxStaticText::DoGetBestSize() const
     return wxSize(widthTextMax, heightTextTotal);
 }
 
+void wxStaticText::DoSetSize(int x, int y, int w, int h, int sizeFlags)
+{
+    // we need to refresh the window after changing its size as the standard
+    // control doesn't always update itself properly
+    wxStaticTextBase::DoSetSize(x, y, w, h, sizeFlags);
+
+    Refresh();
+}
+
 void wxStaticText::SetLabel(const wxString& label)
 {
-    SetWindowText(GetHwnd(), label);
+    wxStaticTextBase::SetLabel(label);
 
     // adjust the size of the window to fit to the label unless autoresizing is
     // disabled
     if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
     {
         DoSetSize(-1, -1, -1, -1, wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
-
-        Refresh();
     }
 }
 
@@ -168,17 +168,6 @@ bool wxStaticText::SetFont(const wxFont& font)
     }
 
     return ret;
-}
-
-
-long wxStaticText::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
-{
-  // Ensure that static items get messages. Some controls don't like this
-  // message to be intercepted (e.g. RichEdit), hence the tests.
-  if (nMsg == WM_NCHITTEST)
-    return (long)HTCLIENT;
-
-  return wxWindow::MSWWindowProc(nMsg, wParam, lParam);
 }
 
 #endif // wxUSE_STATTEXT
