@@ -137,7 +137,8 @@ FLAVOUR = ""       # Optional flavour string to be appended to VERSION
 
 EP_ADD_OPTS = 0    # When doing MULTIVERSION installs the wx port and
                    # ansi/unicode settings can optionally be added to the
-                   # subdir path used in site-packages 
+                   # subdir path used in site-packages
+                   
                    
 WX_CONFIG = None   # Usually you shouldn't need to touch this, but you can set
                    # it to pass an alternate version of wx-config or alternate
@@ -567,8 +568,8 @@ def getExtraPath(shortVer=True, addOpts=False):
         ep = "wx-%d.%d" % (VER_MAJOR, VER_MINOR)
         
         # plus release if minor is odd
-        #if VER_MINOR % 2 == 1:
-        #    ep += ".%d" % VER_RELEASE
+        if VER_MINOR % 2 == 1:
+            ep += ".%d" % VER_RELEASE
             
     else:
         # long version, full version 
