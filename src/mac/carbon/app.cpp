@@ -1844,8 +1844,9 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
 	long realkeyval = keyval ;
 	if ( keyval == keychar )
 	{
-		// we are not on a special character combo -> pass the real os event-value to EVT_CHAR, but not to EVT_KEY
+		// we are not on a special character combo -> pass the real os event-value to EVT_CHAR, but not to EVT_KEY (make upper first)
 		realkeyval = short(keymessage & charCodeMask) ;
+		keyval = wxToupper( keyval ) ;
 	}
 	
     wxKeyEvent event(wxEVT_KEY_DOWN);
@@ -1986,6 +1987,10 @@ bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifier
     }
     long keyval = wxMacTranslateKey(keychar, keycode) ;
 
+	if ( keyval == keychar )
+	{
+		keyval = wxToupper( keyval ) ;	
+	}
     bool handled = false ;
 
     wxKeyEvent event(wxEVT_KEY_UP);
