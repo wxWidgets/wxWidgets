@@ -37,13 +37,7 @@ public:
         (void)Create(size, family, style, weight, underlined, face, encoding);
     }
 
-    wxFont(const wxNativeFontInfo& info)
-    {
-        Init();
-
-        (void)Create(info.pointSize, info.family, info.style, info.weight,
-                     info.underlined, info.faceName, info.encoding);
-    }
+    wxFont(const wxNativeFontInfo& info);
 
     bool Create(int size,
                 int family,

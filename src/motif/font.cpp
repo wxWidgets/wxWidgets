@@ -35,9 +35,9 @@
 #include "wx/font.h"
 #include "wx/gdicmn.h"
 #include "wx/utils.h"       // for wxGetDisplay()
-#include "wx/fontutil.h"
+#include "wx/fontutil.h"    // for wxNativeFontInfo
 
-    IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
+IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -185,6 +185,14 @@ wxFontRefData::~wxFontRefData()
 // ----------------------------------------------------------------------------
 // wxFont
 // ----------------------------------------------------------------------------
+
+wxFont(const wxNativeFontInfo& info)
+{
+    Init();
+
+    (void)Create(info.pointSize, info.family, info.style, info.weight,
+                 info.underlined, info.faceName, info.encoding);
+}
 
 void wxFont::Init()
 {
