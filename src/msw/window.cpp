@@ -2692,29 +2692,32 @@ bool wxWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
         nonDefault = TRUE;
     }
 
-    if ( size.x == -1 || size.y == -1 )
+    /*
+      NB: there used to be some code here which set the initial size of the
+          window to the client size of the parent if no explicit size was
+          specified. This was wrong because wxWindows programs often assume
+          that they get a WM_SIZE (EVT_SIZE) upon creation, however this broke
+          it. To see why, you should understand that Windows sends WM_SIZE from
+          inside ::CreateWindow() anyhow. However, ::CreateWindow() is called
+          from some base class ctor and so this WM_SIZE is not processed in the
+          real class' OnSize() (because it's not fully constructed yet and the
+          event goes to some base class OnSize() instead). So the WM_SIZE we
+          rely on is the one sent when the parent frame resizes its children
+          but here is the problem: if the child already has just the right
+          size, nothing will happen as both wxWindows and Windows check for
+          this and ignore any attempts to change the window size to the size it
+          already has - so no WM_SIZE would be sent.
+     */
+    if ( size.x == -1 )
     {
-        // Find parent's size, if it exists, to set up a possible default panel
-        // size the size of the parent window
-        wxWindow *parent = GetParent();
-        if ( parent )
-        {
-            RECT rectParent;
-            ::GetClientRect(GetHwndOf(parent), &rectParent);
-
-            w = size.x == -1 ? rectParent.right - rectParent.left : size.x;
-            h = size.y == -1 ? rectParent.bottom - rectParent.top : size.y;
-        }
-        else
-        {
-            w =
-            h = CW_USEDEFAULT;
-        }
+        // as abobe, h is not used at all in this case anyhow
+        w =
+        h = CW_USEDEFAULT;
     }
     else
     {
         w = size.x;
-        h = size.y;
+        h = size.y == -1 ? CW_USEDEFAULT : size.y;
 
         nonDefault = TRUE;
     }
