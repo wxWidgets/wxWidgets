@@ -868,6 +868,8 @@
 <set var="MSW_LOWLEVEL_HDR">
 </set>
 <set var="MSW_SRC">
+    src/generic/statusbr.cpp
+    src/msw/uxtheme.cpp
     src/msw/ole/access.cpp
     src/msw/accel.cpp
     src/msw/bmpbuttn.cpp

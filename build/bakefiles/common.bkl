@@ -61,9 +61,16 @@
         <if cond="WXUNIV=='1'">__WXUNIVERSAL__</if>
     </set>
 
-    <set var="WXNAMEPREFIX">wx</set>
-    <set var="WXNAMEPREFIXGUI">wx_$(PORTNAME)$(WXUNIVNAME)</set>
-    <set var="WXVERSIONTAG">-$(WXVER_MAJOR).$(WXVER_MINOR)</set>
+    <if cond="FORMAT=='autoconf'">
+        <set var="WXNAMEPREFIX">wx</set>
+        <set var="WXNAMEPREFIXGUI">wx_$(PORTNAME)$(WXUNIVNAME)</set>
+        <set var="WXVERSIONTAG">-$(WXVER_MAJOR).$(WXVER_MINOR)</set>
+    </if>
+    <if cond="FORMAT!='autoconf'">
+        <set var="WXNAMEPREFIX">wx$(WXVER_MAJOR)$(WXVER_MINOR)</set>
+        <set var="WXNAMEPREFIXGUI">wx$(PORTNAME)$(WXUNIVNAME)$(WXVER_MAJOR)$(WXVER_MINOR)</set>
+        <set var="WXVERSIONTAG"></set>
+    </if>
 
     <set var="TOOLCHAIN_NAME">
         $(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-$(WXVER_MAJOR).$(WXVER_MINOR)
@@ -101,11 +108,24 @@
     <!-- =============================================================== -->
     <!--                        Templates for libs:                      -->
     <!-- =============================================================== -->
+
+    <set var="DEBUGFLAG">
+        <if cond="BUILD=='debug'">on</if>
+        <if cond="BUILD=='release'">off</if>
+    </set>
+    <set var="OPTIMIZEFLAG">
+        <if cond="BUILD=='debug'">speed</if>
+        <if cond="BUILD=='release'">off</if>
+    </set>
     
     <template id="anylib">
         <depends cond="FORMAT!='autoconf' and BUILDING_LIB=='1'">setup.h</depends>
         <dirname>$(LIBDIRNAME)</dirname>
         <install-to>$(LIBDIR)</install-to>
+        
+        <debug-info>$(DEBUGFLAG)</debug-info>
+        <optimize>$(OPTIMIZEFLAG)</optimize>
+        <threading>multi</threading>        
     </template>
 
 
@@ -125,13 +145,13 @@
     <!-- =============================================================== -->
     <!--                  Templates for wxWindows libs:                  -->
     <!-- =============================================================== -->
-    
+
     <template id="wx">
         <set var="wxid">$(wxwin.mk_wxid(id))</set>
         <define>__WX$(TOOLKIT)__</define>
         <define>$(WXUNIV_DEFINE)</define>
         <include>$(TOP_SRCDIR)include</include>
-        <lib-path>$(LIBDIRNAME)</lib-path>
+        <lib-path>$(LIBDIRNAME)</lib-path>        
         <include cond="FORMAT!='autoconf'">$(LIBDIRNAME)</include>
         <include>$(INC_TIFF)</include>
         <include>$(INC_JPEG)</include>
@@ -155,6 +175,8 @@
     <template id="wx_lib_b" template="wx,anylib">
         <set var="WXLIBNAME">$(wxwin.mkLibName(wxid))</set>
         <libname>$(WXLIBNAME)</libname>
+        <precomp-headers>on</precomp-headers>
+        <precomp-headers-file>wxprec</precomp-headers-file>
     </template>
     
     <template id="wx_dll_b" template="wx_lib_b">

@@ -72,7 +72,10 @@
         <set var="SAMPLES_RPATH_FLAG"/>
         <option name="EXTRALIBS"/>
 
-        <set var="SRCDIR">..</set>
+        <set var="SRCDIR">
+            <if cond="BUILDING_LIB=='1'">..</if>
+            <if cond="BUILDING_LIB=='0'">.</if>
+        </set>
         <set var="TOP_SRCDIR">$(SRCDIR)/$(WXTOPDIR)</set>
         <set var="BUILDDIR">objs_$(COMPILER)</set>
     </if>
