@@ -9,6 +9,7 @@
 #
 
 wxPython
+wxPython/SWIG
 wxPython/contrib
 wxPython/contrib/activex
 wxPython/contrib/activex/wxie
@@ -36,10 +37,6 @@ wxPython/contrib/stc
 wxPython/contrib/stc/gtk
 wxPython/contrib/stc/mac
 wxPython/contrib/stc/msw
-wxPython/contrib/xrc
-wxPython/contrib/xrc/gtk
-wxPython/contrib/xrc/mac
-wxPython/contrib/xrc/msw
 wxPython/demo
 wxPython/demo/bitmaps
 wxPython/demo/bmp_source
@@ -52,14 +49,13 @@ wxPython/distrib/mac/wxPythonOSX
 wxPython/distrib/mac/wxPythonOSX/resources
 wxPython/distrib/msw
 wxPython/docs
-wxPython/docs/bin
 wxPython/docs/screenshots
-wxPython/docs/xml
 wxPython/include
 wxPython/include/wx
 wxPython/include/wx/wxPython
 wxPython/licence
 wxPython/samples
+wxPython/samples/StyleEditor
 wxPython/samples/doodle
 wxPython/samples/embedded
 wxPython/samples/frogedit
@@ -68,14 +64,12 @@ wxPython/samples/mainloop
 wxPython/samples/pySketch
 wxPython/samples/pySketch/images
 wxPython/samples/simple
-wxPython/samples/StyleEditor
 wxPython/samples/wxProject
 wxPython/scripts
 wxPython/src
 wxPython/src/gtk
 wxPython/src/mac
 wxPython/src/msw
-wxPython/SWIG
 wxPython/wx
 wxPython/wx/build
 wxPython/wx/lib
@@ -87,13 +81,13 @@ wxPython/wx/lib/mixins
 wxPython/wx/lib/ogl
 wxPython/wx/py
 wxPython/wx/py/tests
+wxPython/wx/tools
+wxPython/wx/tools/XRCed
+wxPython/wx/tools/XRCed/src-images
 wxPython/wxPython
 wxPython/wxPython/lib
 wxPython/wxPython/lib/colourchooser
 wxPython/wxPython/lib/editor
 wxPython/wxPython/lib/mixins
 wxPython/wxPython/tools
-wxPython/wx/tools
-wxPython/wx/tools/XRCed
-wxPython/wx/tools/XRCed/src-images
 wxPython/wxversion
