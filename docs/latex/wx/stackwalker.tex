@@ -23,7 +23,19 @@ stack, so to use it you must derive your own class from it and override this
 method.
 
 This class will not return anything except raw stack frame addresses if the
-debug information is not available. See 
+debug information is not available. Under Win32 this means that the PDB file
+matching the program being executed should be present. Note that if you use
+Microsoft Visual C++ compiler, you can create PDB files even for the programs
+built in release mode and it doesn't affect the program size (at least if you
+don't forget to add \texttt{/opt:ref} option which is suppressed by using
+\texttt{/debug} linker option by default but should be always enabled for
+release builds). Under Unix, you need to compile your program with debugging
+information (usually using \texttt{-g} compiler and linker options) to get the
+file and line numbers information, however function names should be available
+even without it. Of course, all this is only true if you build using a recent
+enough version of GNU libc which provides the \texttt{backtrace()} function
+needed to walk the stack.
+
 \helpref{debugging overview}{debuggingoverview} for how to make it available.
 
 \wxheading{Derived from}
