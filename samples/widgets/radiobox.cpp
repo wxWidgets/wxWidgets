@@ -51,6 +51,14 @@ enum
     RadioPage_Radio
 };
 
+// layout direction radiobox selections
+enum
+{
+    RadioDir_Default,
+    RadioDir_LtoR,
+    RadioDir_TtoB
+};
+
 // ----------------------------------------------------------------------------
 // RadioWidgetsPage
 // ----------------------------------------------------------------------------
@@ -84,8 +92,9 @@ protected:
     // the controls
     // ------------
 
-    // the checkboxes for styles
+    // the check/radio boxes for styles
     wxCheckBox *m_chkVert;
+    wxRadioBox *m_radioDir;
 
     // the gauge itself and the sizer it is in
     wxRadioBox *m_radio;
@@ -145,7 +154,8 @@ RadioWidgetsPage::RadioWidgetsPage(wxNotebook *notebook,
     m_textLabelBtns =
     m_textLabel = (wxTextCtrl *)NULL;
 
-    m_radio = (wxRadioBox *)NULL;
+    m_radio =
+    m_radioDir = (wxRadioBox *)NULL;
     m_sizerRadio = (wxSizer *)NULL;
 
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
@@ -156,6 +166,23 @@ RadioWidgetsPage::RadioWidgetsPage(wxNotebook *notebook,
     wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
     m_chkVert = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Vertical layout"));
+
+    static const wxString layoutDir[] =
+    {
+        _T("default"),
+        _T("left to right"),
+        _T("top to bottom")
+    };
+
+    m_radioDir = new wxRadioBox(this, -1, _T("Numbering:"),
+                                wxDefaultPosition, wxDefaultSize,
+                                WXSIZEOF(layoutDir), layoutDir);
+    sizerLeft->Add(m_radioDir, 0, wxGROW | wxALL, 5);
+
+    // if it's not defined, we can't change the radiobox direction
+#ifndef wxRA_LEFTTORIGHT
+    m_radioDir->Disable();
+#endif // wxRA_LEFTTORIGHT
 
     wxSizer *sizerRow;
     sizerRow = CreateSizerWithTextAndLabel(_T("&Major dimension"),
@@ -240,6 +267,7 @@ void RadioWidgetsPage::Reset()
     m_textLabelBtns->SetValue(_T("item"));
 
     m_chkVert->SetValue(FALSE);
+    m_radioDir->SetSelection(RadioDir_Default);
 }
 
 void RadioWidgetsPage::CreateRadio()
@@ -284,13 +312,35 @@ void RadioWidgetsPage::CreateRadio()
         items[n] = wxString::Format(_T("%s %u"), labelBtn.c_str(), n + 1);
     }
 
+    int flags = m_chkVert->GetValue() ? wxRA_VERTICAL
+                                      : wxRA_HORIZONTAL;
+
+#ifdef wxRA_LEFTTORIGHT
+    switch ( m_radioDir->GetSelection() )
+    {
+        default:
+            wxFAIL_MSG( _T("unexpected wxRadioBox layout direction") );
+            // fall through
+
+        case RadioDir_Default:
+            break;
+
+        case RadioDir_LtoR:
+            flags |= wxRA_LEFTTORIGHT;
+            break;
+
+        case RadioDir_TtoB:
+            flags |= wxRA_TOPTOBOTTOM;
+            break;
+    }
+#endif // wxRA_LEFTTORIGHT
+
     m_radio = new wxRadioBox(this, RadioPage_Radio,
                              m_textLabel->GetValue(),
                              wxDefaultPosition, wxDefaultSize,
                              count, items,
                              majorDim,
-                             m_chkVert->GetValue() ? wxRA_VERTICAL
-                                                   : wxRA_HORIZONTAL);
+                             flags);
 
     delete [] items;
 

@@ -46,7 +46,7 @@
 // ----------------------------------------------------------------------------
 
 static const int BUTTON_BORDER_X = 2;
-static const int BUTTON_BORDER_Y = 3;
+static const int BUTTON_BORDER_Y = 4;
 
 static const int BOX_BORDER_X = 2;
 static const int BOX_BORDER_Y = 2;
@@ -104,6 +104,29 @@ bool wxRadioBox::Create(wxWindow *parent,
                         const wxValidator& val,
                         const wxString& name)
 {
+    // for compatibility with the other ports which don't handle (yet?)
+    // wxRA_LEFTTORIGHT and wxRA_TOPTOBOTTOM flags, we add them ourselves if
+    // not specified
+    if ( !(style & (wxRA_LEFTTORIGHT | wxRA_TOPTOBOTTOM)) )
+    {
+        // horizontal radiobox use left to right layout
+        if ( style & wxRA_HORIZONTAL )
+        {
+            style |= wxRA_LEFTTORIGHT;
+        }
+        else if ( style & wxRA_VERTICAL )
+        {
+            style |= wxRA_TOPTOBOTTOM;
+        }
+        else
+        {
+            wxFAIL_MSG( _T("you must specify wxRA_XXX style!") );
+
+            // use default
+            style = wxRA_HORIZONTAL | wxRA_LEFTTORIGHT;
+        }
+    }
+
     if ( !wxStaticBox::Create(parent, id, title, pos, size, style, name) )
         return FALSE;
 
@@ -129,11 +152,16 @@ bool wxRadioBox::Create(wxWindow *parent,
 
 wxRadioBox::~wxRadioBox()
 {
-    // remove the event handlers we pushed on them from all buttons
+    // remove the event handlers we pushed on them from all buttons and delete
+    // the buttons themselves: this must be done as the user code expects them
+    // to disappear now and not some time later when they will be deleted by
+    // our (common) parent
     size_t count = m_buttons.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
         m_buttons[n]->PopEventHandler(TRUE /* delete it */);
+
+        delete m_buttons[n];
     }
 }
 
@@ -143,6 +171,8 @@ wxRadioBox::~wxRadioBox()
 
 void wxRadioBox::SetMajorDim(int majorDim)
 {
+    wxCHECK_RET( majorDim != 0, _T("major radiobox dimension can't be 0") );
+
     m_majorDim = majorDim;
 
     int minorDim = (GetCount() + m_majorDim - 1) / m_majorDim;
@@ -283,7 +313,7 @@ wxSize wxRadioBox::GetMaxButtonSize() const
     int count = GetCount();
     for ( int n = 0; n < count; n++ )
     {
-        m_buttons[n]->GetSize(&width, &height);
+        m_buttons[n]->GetBestSize(&width, &height);
 
         if ( width > widthMax )
             widthMax = width;
@@ -291,14 +321,8 @@ wxSize wxRadioBox::GetMaxButtonSize() const
             heightMax = height;
     }
 
-    return wxSize(widthMax, heightMax);
+    return wxSize(widthMax + BUTTON_BORDER_X, heightMax + BUTTON_BORDER_Y);
 }
-
-/*
-   Remember that wxRA_SPECIFY_COLS means that the buttons go from top to
-   bottom and from left to right while wxRA_SPECIFY_ROWS means that they are
-   laid out from left to right and then from top to bottom
-*/
 
 wxSize wxRadioBox::DoGetBestClientSize() const
 {
@@ -306,10 +330,6 @@ wxSize wxRadioBox::DoGetBestClientSize() const
 
     sizeBtn.x *= m_numCols;
     sizeBtn.y *= m_numRows;
-
-    // add an intra button border
-    sizeBtn.x += (m_numCols - 1) * BUTTON_BORDER_X;
-    sizeBtn.y += (m_numRows - 1) * BUTTON_BORDER_Y;
 
     // add a border around all buttons
     sizeBtn.x += 2*BOX_BORDER_X;
@@ -341,33 +361,33 @@ void wxRadioBox::DoMoveWindow(int x0, int y0, int width, int height)
     {
         m_buttons[n]->SetSize(x, y, sizeBtn.x, sizeBtn.y);
 
-        if ( GetWindowStyle() & wxRA_SPECIFY_COLS )
+        if ( GetWindowStyle() & wxRA_TOPTOBOTTOM )
         {
             // from top to bottom
             if ( (n + 1) % m_numRows )
             {
                 // continue in this column
-                y += sizeBtn.y + BUTTON_BORDER_Y;
+                y += sizeBtn.y;
             }
             else
             {
                 // start a new column
-                x += sizeBtn.x + BUTTON_BORDER_X;
+                x += sizeBtn.x;
                 y = y0;
             }
         }
-        else // wxRA_SPECIFY_ROWS: mirror the code above
+        else // wxRA_LEFTTORIGHT: mirror the code above
         {
             // from left to right
             if ( (n + 1) % m_numCols )
             {
                 // continue in this row
-                x += sizeBtn.x + BUTTON_BORDER_X;
+                x += sizeBtn.x;
             }
             else
             {
                 // start a new row
-                y += sizeBtn.y + BUTTON_BORDER_Y;
+                y += sizeBtn.y;
                 x = x0;
             }
         }

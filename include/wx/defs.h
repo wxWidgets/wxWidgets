@@ -1068,9 +1068,15 @@ enum wxBorder
 /*
  * wxRadioBox style flags
  */
+// should we number the items from left to right or from top to bottom in a 2d
+// radiobox?
+#define wxRA_LEFTTORIGHT    0x0001
+#define wxRA_TOPTOBOTTOM    0x0002
+
 // New, more intuitive names to specify majorDim argument
 #define wxRA_SPECIFY_COLS   wxHORIZONTAL
 #define wxRA_SPECIFY_ROWS   wxVERTICAL
+
 // Old names for compatibility
 #define wxRA_HORIZONTAL     wxHORIZONTAL
 #define wxRA_VERTICAL       wxVERTICAL

@@ -279,7 +279,9 @@ wxStdCheckboxInputHandler::wxStdCheckboxInputHandler(wxInputHandler *inphand)
 bool wxStdCheckboxInputHandler::HandleActivation(wxControl *control,
                                                  bool activated)
 {
-    return TRUE;
+    // only the focused checkbox appearance changes when the app gains/loses
+    // activation
+    return control->IsFocused();
 }
 
 #endif // wxUSE_CHECKBOX
