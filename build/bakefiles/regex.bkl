@@ -1,4 +1,5 @@
 <?xml version="1.0" ?>
+<!-- $Id$ -->
 <makefile>
     
     <set var="UNICODE_DEFINE">
