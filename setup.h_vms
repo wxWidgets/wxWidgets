@@ -565,7 +565,12 @@
 /*
  * Use this control
  */
+#ifndef __WXX11__
 #define wxUSE_TOGGLEBTN 1
+#else
+#define wxUSE_TOGGLEBTN 0
+#endif
+
 /*
  * Use Tab dialog class - obsolete, use wxNotebook instead
  */
