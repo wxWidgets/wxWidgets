@@ -1181,7 +1181,8 @@ wxImage::wxImage( const wxBitmap &bitmap )
     {
         for (int i = 0; i < bitmap.GetWidth(); i++)
         {
-            int pixel = gdk_image_get_pixel( gdk_image, i, j );
+            wxInt32 pixel = gdk_image_get_pixel( gdk_image, i, j );
+	    pixel = wxINT32_SWAP_ON_BE( pixel );
             if (bpp <= 8)
             {
                 data[pos] = cmap->colors[pixel].red >> 8;

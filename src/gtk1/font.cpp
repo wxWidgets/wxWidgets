@@ -14,6 +14,7 @@
 #include "wx/font.h"
 #include "wx/utils.h"
 #include "wx/log.h"
+#include "wx/gdicmn.h"
 #include <strings.h>
 
 #include "gdk/gdk.h"

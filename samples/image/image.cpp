@@ -102,11 +102,14 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 
   wxMemoryDC dc;
   dc.SelectObject( bitmap );
-  dc.SetBrush( wxBrush( wxColour(50,100,150), wxSOLID ) );
-  dc.SetPen( *wxBLACK_PEN );
+  dc.SetBrush( wxBrush( "orange", wxSOLID ) );
+  dc.SetPen( *wxWHITE_PEN );
   dc.DrawRectangle( 0, 0, 100, 100 );
   dc.SelectObject( wxNullBitmap );
 
+  dc.DrawText( "Loaded image", 30, 10 );
+  if (my_square && my_square->Ok()) dc.DrawBitmap( *my_square, 30, 30 );
+  
   // try to find the directory with our images
   wxString dir;
   if ( wxFile::Exists("./horse.png") )
@@ -117,10 +120,6 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
       wxLogWarning("Can't find image files in either '.' or '..'!");
 
   wxImage image( bitmap );
-  
-  printf( "(1,1) red: %d\n", (int)image.GetRed(2,2) );
-  printf( "(1,1) green: %d\n", (int)image.GetGreen(2,2) );
-  printf( "(1,1) blue: %d\n", (int)image.GetBlue(2,2) );
   
   if ( !image.SaveFile( dir + wxString("test.png"), wxBITMAP_TYPE_PNG ) )
       wxLogError("Can't save file");

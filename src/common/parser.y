@@ -164,7 +164,7 @@ void yyerror(char *s)
 #ifndef yywrap
 #define yywrap() 1
 #endif
-#else if !defined(__alpha___) && !defined(__ultrix)
+#else if !defined(__alpha___) && !defined(__alpha) && !defined(__ultrix)
 int yywrap() { return 1; }
 #endif
 #elif defined(__WX_SETUP_H__)

@@ -16,6 +16,7 @@
 #include "wx/string.h"
 #include "wx/list.h"
 #include "wx/log.h"
+#include "wx/gdicmn.h"
 
 #include <ctype.h>
 #include <string.h>
