@@ -54,6 +54,10 @@ do
 	    echo "Generating $topdir/src/gtk/files.lst for GTK and Configure..."
 	    tmake -t gtk wxwin.pro -o $topdir/src/gtk/files.lst;;
 
+	msw.t)
+	    echo "Generating $topdir/src/msw/files.lst for MSW and Configure..."
+	    tmake -t msw wxwin.pro -o $topdir/src/msw/files.lst;;
+
 	motif.t)
 	    echo "Generating $topdir/src/motif/files.lst for Motif and Configure..."
 	    tmake -t motif wxwin.pro -o $topdir/src/motif/files.lst;;
