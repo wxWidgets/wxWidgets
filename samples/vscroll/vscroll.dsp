@@ -145,7 +145,7 @@ LINK32=link.exe
 # Name "vscroll - Win32 Debug"
 # Begin Source File
 
-SOURCE=.\vscroll.cpp
+SOURCE=..\..\src\generic\vscroll.cpp
 # End Source File
 # Begin Source File
 
