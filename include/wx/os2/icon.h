@@ -22,8 +22,8 @@
     #define wxICON_IS_BITMAP 1
 #endif
 
+#include "wx/bitmap.h"
 #if wxICON_IS_BITMAP
-    #include "wx/bitmap.h"
 
     #define wxIconRefDataBase   wxBitmapRefData
     #define wxIconBase          wxBitmap
@@ -85,6 +85,8 @@ public:
 
     inline void SetHICON(WXHICON hIcon) { SetHandle((WXHANDLE)hIcon); }
     inline WXHICON GetHICON() const { return (WXHICON)GetHandle(); }
+    inline bool    IsXpm(void) const { return m_bIsXpm; };
+    inline const wxBitmap& GetXpmSrc(void) const { return m_vXpmSrc; }
 
     void CopyFromBitmap(const wxBitmap& rBmp);
 protected:
@@ -95,6 +97,9 @@ protected:
     void    CreateIconFromXpm(const char **ppData);
 
 private:
+    bool                            m_bIsXpm;
+    wxBitmap                        m_vXpmSrc;
+
     DECLARE_DYNAMIC_CLASS(wxIcon)
 };
 
