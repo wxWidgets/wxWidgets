@@ -199,7 +199,7 @@ class PyGridSizer(wx.PySizer):
 
 
 
-class PyFlexGridSizer(wxGridSizer):
+class PyFlexGridSizer(PyGridSizer):
     def __init__(self, rows=0, cols=0, hgap=0, vgap=0):
         wxGridSizer.__init__(self, rows, cols, hgap, vgap)
         self.rowHeights = []
