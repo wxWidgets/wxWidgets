@@ -939,7 +939,7 @@ bool wxTreeCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result)
 // Tree event
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxTreeEvent, wxCommandEvent)
+IMPLEMENT_DYNAMIC_CLASS(wxTreeEvent, wxNotifyEvent)
 
 wxTreeEvent::wxTreeEvent(wxEventType commandType, int id)
            : wxNotifyEvent(commandType, id)

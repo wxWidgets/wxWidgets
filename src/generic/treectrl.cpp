@@ -140,10 +140,10 @@ private:
 // wxTreeEvent
 // -----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxTreeEvent, wxCommandEvent)
+IMPLEMENT_DYNAMIC_CLASS(wxTreeEvent, wxNotifyEvent)
 
 wxTreeEvent::wxTreeEvent( wxEventType commandType, int id )
-           : wxCommandEvent( commandType, id )
+           : wxNotifyEvent( commandType, id )
 {
   m_code = 0;
   m_itemOld = (wxGenericTreeItem *)NULL;

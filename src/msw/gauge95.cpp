@@ -86,7 +86,7 @@ bool wxGauge95::Create(wxWindow *parent, wxWindowID id,
   if (width == -1)
     width = 50;
   if (height == -1)
-    height = 50;
+    height = 28;
   SetSize(x, y, width, height);
 
   ShowWindow((HWND) GetHWND(), SW_SHOW);

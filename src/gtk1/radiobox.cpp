@@ -86,7 +86,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
   
     GtkRadioButton *m_radio = (GtkRadioButton*) NULL;
   
-    if (m_windowStyle & wxRA_VERTICAL)
+    if (m_windowStyle & wxRA_HORIZONTAL)
     {
         GSList *radio_button_group = (GSList *) NULL;
         for (int i = 0; i < n; i++)
@@ -194,7 +194,7 @@ void wxRadioBox::OnSize( wxSizeEvent &event )
   int x = m_x+5;
   int y = m_y+15;
   
-  if (m_windowStyle & wxRA_VERTICAL)
+  if (m_windowStyle & wxRA_HORIZONTAL)
   {
     wxNode *node = m_boxes.First();
     while (node)

@@ -32,12 +32,12 @@ class wxNotebookPage;
 // notebook events
 // ----------------------------------------------------------------------------
 
-class wxNotebookEvent : public wxCommandEvent
+class wxNotebookEvent : public wxNotifyEvent
 {
 public:
   wxNotebookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
                   int nSel = -1, int nOldSel = -1)
-  : wxCommandEvent(commandType, id)
+  : wxNotifyEvent(commandType, id)
   {
       m_bAllow = TRUE;
       m_nSel = nSel;

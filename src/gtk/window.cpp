@@ -2428,6 +2428,8 @@ void wxWindow::SetScrollbar( int orient, int pos, int thumbVisible,
     float fpos = (float)pos;
     float frange = (float)range;
     float fthumb = (float)thumbVisible;
+    if (fpos > frange-fthumb) fpos = frange-fthumb;
+    if (fpos < 0.0) fpos = 0.0;
 
     if ((fabs(frange-m_hAdjust->upper) < 0.2) &&
         (fabs(fthumb-m_hAdjust->page_size) < 0.2))
@@ -2450,6 +2452,8 @@ void wxWindow::SetScrollbar( int orient, int pos, int thumbVisible,
     float fpos = (float)pos;
     float frange = (float)range;
     float fthumb = (float)thumbVisible;
+    if (fpos > frange-fthumb) fpos = frange-fthumb;
+    if (fpos < 0.0) fpos = 0.0;
 
     if ((fabs(frange-m_vAdjust->upper) < 0.2) &&
         (fabs(fthumb-m_vAdjust->page_size) < 0.2))
@@ -2486,10 +2490,12 @@ void wxWindow::SetScrollPos( int orient, int pos, bool WXUNUSED(refresh) )
   wxASSERT_MSG( (m_wxwindow != NULL), "window needs client area" );
 
   if (!m_wxwindow) return;
-
+  
   if (orient == wxHORIZONTAL)
   {
     float fpos = (float)pos;
+    if (fpos > m_hAdjust->upper - m_hAdjust->page_size) fpos = m_hAdjust->upper - m_hAdjust->page_size;
+    if (fpos < 0.0) fpos = 0.0;
     m_oldHorizontalPos = fpos;
 
     if (fabs(fpos-m_hAdjust->value) < 0.2) return;
@@ -2498,7 +2504,10 @@ void wxWindow::SetScrollPos( int orient, int pos, bool WXUNUSED(refresh) )
   else
   {
     float fpos = (float)pos;
+    if (fpos > m_vAdjust->upper - m_vAdjust->page_size) fpos = m_vAdjust->upper - m_vAdjust->page_size;
+    if (fpos < 0.0) fpos = 0.0;
     m_oldVerticalPos = fpos;
+    
     if (fabs(fpos-m_vAdjust->value) < 0.2) return;
     m_vAdjust->value = fpos;
   }

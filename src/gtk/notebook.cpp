@@ -527,5 +527,5 @@ void wxNotebook::ApplyWidgetStyle()
 // wxNotebookEvent
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxCommandEvent)
+IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxNotifyEvent)
 

@@ -1430,7 +1430,7 @@ static void wxConvertToMSWListItem(const wxListCtrl *ctrl, wxListItem& info, LV_
 }
 
 // List event
-IMPLEMENT_DYNAMIC_CLASS(wxListEvent, wxCommandEvent)
+IMPLEMENT_DYNAMIC_CLASS(wxListEvent, wxNotifyEvent)
 
 wxListEvent::wxListEvent(wxEventType commandType, int id)
            : wxNotifyEvent(commandType, id)

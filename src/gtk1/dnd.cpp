@@ -785,7 +785,7 @@ wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
     shape_motion( drag_icon, (GdkEventMotion *)NULL );
     shape_motion( drop_icon, (GdkEventMotion *)NULL );
 */
-    
+
   while (gdk_dnd.drag_really || gdk_dnd.drag_perhaps) wxYield();
   
   UnregisterWindow();

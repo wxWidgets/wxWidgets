@@ -56,8 +56,8 @@ user::
 install::
 	@echo "entering directory src for installing"
 	@cd src; ${MAKE} install
-	@echo "entering directory utils for installing"
-	@cd utils; ${MAKE} install
+#	@echo "entering directory utils for installing"
+#	@cd utils; ${MAKE} install
 	
 # the following ones recreate all Makefiles.
 

@@ -199,6 +199,11 @@ void wxStatusBar::DrawFieldText(wxDC& dc, int i)
 
   int xpos = rect.x + leftMargin;
   int ypos = (int) (((rect.height - y) / 2 ) + rect.y + 0.5) ;
+  
+#ifdef __WXGTK__
+  xpos++;
+  ypos++;
+#endif
 
   dc.SetClippingRegion(rect.x, rect.y, rect.width, rect.height);
 

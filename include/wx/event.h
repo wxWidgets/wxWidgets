@@ -179,6 +179,8 @@ const wxEventType wxEVT_COMMAND_LIST_ITEM_DESELECTED =      wxEVT_FIRST + 709;
 const wxEventType wxEVT_COMMAND_LIST_KEY_DOWN =             wxEVT_FIRST + 710;
 const wxEventType wxEVT_COMMAND_LIST_INSERT_ITEM =          wxEVT_FIRST + 711;
 const wxEventType wxEVT_COMMAND_LIST_COL_CLICK =            wxEVT_FIRST + 712;
+const wxEventType wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK =     wxEVT_FIRST + 713;
+const wxEventType wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK =    wxEVT_FIRST + 714;
 
  /* Tab and notebook control event types */
 const wxEventType wxEVT_COMMAND_TAB_SEL_CHANGED =           wxEVT_FIRST + 800;
@@ -362,7 +364,7 @@ public:
 private:
     bool m_bAllow;
 
-    DECLARE_DYNAMIC_CLASS(wxCommandEvent)
+    DECLARE_DYNAMIC_CLASS(wxNotifyEvent)
 };
 
 // Scroll event class

@@ -35,6 +35,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxEvtHandler, wxObject)
 IMPLEMENT_ABSTRACT_CLASS(wxEvent, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxCommandEvent, wxEvent)
+IMPLEMENT_DYNAMIC_CLASS(wxNotifyEvent, wxCommandEvent)
 IMPLEMENT_DYNAMIC_CLASS(wxScrollEvent, wxCommandEvent)
 IMPLEMENT_DYNAMIC_CLASS(wxMouseEvent, wxEvent)
 IMPLEMENT_DYNAMIC_CLASS(wxKeyEvent, wxEvent)

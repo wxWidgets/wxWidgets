@@ -69,7 +69,7 @@
   END_EVENT_TABLE()
 
   IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxControl)
-  IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxCommandEvent)
+  IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxNotifyEvent)
 #endif
 
 // ============================================================================

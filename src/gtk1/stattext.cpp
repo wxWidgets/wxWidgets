@@ -66,12 +66,10 @@ bool wxStaticText::Create( wxWindow *parent, wxWindowID id, const wxString &labe
          int x = gdk_string_measure( m_widget->style->font, s ) + 4;
          if (x > newSize.x) newSize.x = x;
          *nl++ = '\n';
-         if ((nl = strchr(s = nl, '\n'))) 
-	 {
-           ++y;
-         } 
-	 else 
-	 {
+         ++y;
+         if (! (nl = strchr(s = nl, '\n'))) 
+         {
+	 
            int x = gdk_string_measure( m_widget->style->font, s ) + 4;
            if (x > newSize.x) newSize.x = x;
          }
@@ -87,7 +85,7 @@ bool wxStaticText::Create( wxWindow *parent, wxWindowID id, const wxString &labe
      if (y == 1) 
        newSize.y = 26;
      else
-       newSize.y = 4 + y * (m_widget->style->font->ascent + 2*m_widget->style->font->descent);
+       newSize.y = 4 + y * (m_widget->style->font->ascent + m_widget->style->font->descent + 2);
    }
   
   SetSize( newSize.x, newSize.y );

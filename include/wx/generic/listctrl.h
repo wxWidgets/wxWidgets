@@ -190,7 +190,7 @@ class wxListItem: public wxObject
 // wxListEvent
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxListEvent: public wxCommandEvent
+class WXDLLEXPORT wxListEvent: public wxNotifyEvent
 {
   DECLARE_DYNAMIC_CLASS(wxListEvent)
 
@@ -222,7 +222,8 @@ typedef void (wxEvtHandler::*wxListEventFunction)(wxListEvent&);
 #define EVT_LIST_KEY_DOWN(id, fn) { wxEVT_COMMAND_LIST_KEY_DOWN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxListEventFunction) & fn, (wxObject *) NULL },
 #define EVT_LIST_INSERT_ITEM(id, fn) { wxEVT_COMMAND_LIST_INSERT_ITEM, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxListEventFunction) & fn, (wxObject *) NULL },
 #define EVT_LIST_COL_CLICK(id, fn) { wxEVT_COMMAND_LIST_COL_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxListEventFunction) & fn, (wxObject *) NULL },
-
+#define EVT_LIST_ITEM_RIGHT_CLICK(id, fn) { wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxListEventFunction) & fn, (wxObject *) NULL },
+#define EVT_LIST_ITEM_MIDDLE_CLICK(id, fn) { wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxListEventFunction) & fn, (wxObject *) NULL },
 
 //-----------------------------------------------------------------------------
 //  wxListItemData (internal)
@@ -461,7 +462,6 @@ class wxListMainWindow: public wxScrolledWindow
     void RefreshLine( wxListLineData *line );
     void OnPaint( wxPaintEvent &event );
     void HilightAll( bool on );
-    void ActivateLine( wxListLineData *line );
     void SendNotify( wxListLineData *line, wxEventType command );
     void FocusLine( wxListLineData *line );
     void UnfocusLine( wxListLineData *line );
@@ -519,7 +519,6 @@ class wxListMainWindow: public wxScrolledWindow
     void InsertColumn( long col, wxListItem &item );
 //    void AddColumn( wxListItem &item );
     void SortItems( wxListCtrlCompare fn, long data );
-    virtual bool OnListNotify( wxListEvent &event );
 
   DECLARE_EVENT_TABLE()
 };
@@ -568,6 +567,7 @@ class wxListCtrl: public wxControl
     bool GetItemPosition( long item, wxPoint& pos ) const;
     bool SetItemPosition( long item, const wxPoint& pos ); // not supported in wxGLC
     int GetItemCount(void) const;
+    int GetColumnCount(void) const;
     void SetItemSpacing( int spacing, bool isSmall = FALSE );
     int GetItemSpacing( bool isSmall ) const;
     int GetSelectedItemCount(void) const;
@@ -601,7 +601,6 @@ class wxListCtrl: public wxControl
     bool ScrollList(int dx, int dy);
     bool SortItems(wxListCtrlCompare fn, long data);
     bool Update(long item);
-    virtual bool OnListNotify(wxListEvent& WXUNUSED(event)) { return FALSE; }
     void OnIdle( wxIdleEvent &event );
     
     // We have to hand down a few functions
