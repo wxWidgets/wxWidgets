@@ -44,7 +44,7 @@
 #include <wx/db.h>                  /* Required in the file which will get the data source connection */
 #include <wx/dbtable.h>             /* Has the wxTable object from which all data objects will inherit their data table functionality */
 
-extern DbList WXDLLEXPORT *PtrBegDbList;    /* from db.cpp, used in getting back error results from db connections */
+extern wxDbList WXDLLEXPORT *PtrBegDbList;    /* from db.cpp, used in getting back error results from db connections */
 
 #include "dbtest.h"                 /* Header file for this demonstration program */
 #include "listdb.h"                 /* Code to support the "Lookup" button on the editor dialog */
@@ -112,7 +112,8 @@ char *GetExtendedDBErrorMsg(char *ErrFile, int ErrLine)
     
     /* Scan through each database connection displaying 
      * any ODBC errors that have occured. */
-    for (DbList *pDbList = PtrBegDbList; pDbList; pDbList = pDbList->PtrNext)
+    wxDbList *pDbList;
+    for (pDbList = PtrBegDbList; pDbList; pDbList = pDbList->PtrNext)
     {
         // Skip over any free connections
         if (pDbList->Free)
@@ -209,7 +210,7 @@ bool DatabaseDemoApp::OnInit()
     strcpy(DbConnectInf.AuthStr,    params.Password);      // password database username
     strcpy(DbConnectInf.defaultDir, params.DirPath);       // path where the table exists (needed for dBase)
 
-    READONLY_DB = GetDbConnection(&DbConnectInf);
+    READONLY_DB = wxDbGetConnection(&DbConnectInf);
     if (READONLY_DB == 0)
     {
         wxMessageBox("Unable to connect to the data source.\n\nCheck the name of your data source to verify it has been correctly entered/spelled.\n\nWith some databases, the user name and password must\nbe created with full rights to the CONTACT table prior to making a connection\n(using tools provided by the database manufacturer)", "DB CONNECTION ERROR...",wxOK | wxICON_EXCLAMATION);
@@ -252,7 +253,7 @@ void DatabaseDemoFrame::OnCreate(wxCommandEvent& event)
 
 void DatabaseDemoFrame::OnExit(wxCommandEvent& event)
 {
-    this->Destroy();
+    Close();
 }
 
 void DatabaseDemoFrame::OnEditParameters(wxCommandEvent& event)
@@ -273,7 +274,14 @@ void DatabaseDemoFrame::OnCloseWindow(wxCloseEvent& event)
     // Put any additional checking necessary to make certain it is alright
     // to close the program here that is not done elsewhere
 
+    // Clean up time
+    if (pEditorDlg->Close())
+        pEditorDlg = NULL;
+    else
+        event.Veto();
+
     this->Destroy();
+
 }  // DatabaseDemoFrame::OnCloseWindow()
 
 
@@ -356,7 +364,7 @@ void DatabaseDemoFrame::BuildParameterDialog(wxWindow *parent)
  *     or creating a table objects which use the same pDb, know that all the objects
  *     will be committed or rolled back when any of the objects has this function call made.
  */
-Ccontact::Ccontact (wxDB *pwxDB) : wxTable(pwxDB ? pwxDB : GetDbConnection(&DbConnectInf),CONTACT_TABLE_NAME,CONTACT_NO_COLS,NULL,!QUERY_ONLY,DbConnectInf.defaultDir)
+Ccontact::Ccontact (wxDB *pwxDB) : wxTable(pwxDB ? pwxDB : wxDbGetConnection(&DbConnectInf),CONTACT_TABLE_NAME,CONTACT_NO_COLS,NULL,!QUERY_ONLY,DbConnectInf.defaultDir)
 {
     // This is used to represent whether the database connection should be released
     // when this instance of the object is deleted.  If using the same connection
@@ -396,7 +404,7 @@ Ccontact::~Ccontact()
 {
     if (freeDbConn)
     {
-        if (!FreeDbConnection(pDb))
+        if (!wxDbFreeConnection(pDb))
         {
             wxString tStr;
             tStr  = "Unable to Free the Ccontact data table handle\n\n";
@@ -492,6 +500,7 @@ bool Ccontact::FetchByName(char *name)
  
 BEGIN_EVENT_TABLE(CeditorDlg, wxPanel)
     EVT_BUTTON(-1,  CeditorDlg::OnButton)
+    EVT_CLOSE(CeditorDlg::OnCloseWindow)
 END_EVENT_TABLE()
  
 CeditorDlg::CeditorDlg(wxWindow *parent) : wxPanel (parent, 1, 1, 460, 455)
@@ -570,7 +579,7 @@ CeditorDlg::CeditorDlg(wxWindow *parent) : wxPanel (parent, 1, 1, 460, 455)
     pResetBtn       = new wxButton(this, EDITOR_DIALOG_RESET,            "&Reset",      wxPoint(430, 200), wxSize( 70,  35), 0, wxDefaultValidator, "ResetBtn");
     pNameMsg        = new wxStaticText(this, EDITOR_DIALOG_NAME_MSG,     "Name:",       wxPoint( 17,  80), wxSize( -1,  -1), 0, "NameMsg");
     pNameTxt        = new wxTextCtrl(this, EDITOR_DIALOG_NAME_TEXT,      "",            wxPoint( 17,  97), wxSize(308,  25), 0, wxDefaultValidator, "NameTxt");
-    pNameListBtn    = new wxButton(this, EDITOR_DIALOG_LOOKUP,           "&Lookup",     wxPoint(333,  99), wxSize( 70,  24), 0, wxDefaultValidator, "LookupBtn");
+    pNameListBtn    = new wxButton(this, EDITOR_DIALOG_LOOKUP,           "&Lookup",     wxPoint(333,  97), wxSize( 70,  24), 0, wxDefaultValidator, "LookupBtn");
     pAddress1Msg    = new wxStaticText(this, EDITOR_DIALOG_ADDRESS1_MSG, "Address:",    wxPoint( 17, 130), wxSize( -1,  -1), 0, "Address1Msg");
     pAddress1Txt    = new wxTextCtrl(this, EDITOR_DIALOG_ADDRESS2_TEXT,  "",            wxPoint( 17, 147), wxSize(308,  25), 0, wxDefaultValidator, "Address1Txt");
     pAddress2Msg    = new wxStaticText(this, EDITOR_DIALOG_ADDRESS2_MSG, "Address:",    wxPoint( 17, 180), wxSize( -1,  -1), 0, "Address2Msg");
@@ -662,7 +671,7 @@ CeditorDlg::CeditorDlg(wxWindow *parent) : wxPanel (parent, 1, 1, 460, 455)
 void CeditorDlg::OnCloseWindow(wxCloseEvent& event)
 {
     // Clean up time
-     if ((mode != mCreate) && (mode != mEdit))
+    if ((mode != mCreate) && (mode != mEdit))
     {
         if (Contact)
             delete Contact;
@@ -715,6 +724,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
         SetMode(mCreate);
         pNameTxt->SetValue("");
         pNameTxt->SetFocus();
+
         return;
     }
 
@@ -1519,7 +1529,7 @@ void CparameterDlg::FillDataSourceList()
     char DsDesc[255];
     wxStringList strList;
 
-    while(GetDataSource(DbConnectInf.Henv, Dsn, SQL_MAX_DSN_LENGTH+1, DsDesc, 255))
+    while (wxDbGetDataSource(DbConnectInf.Henv, Dsn, SQL_MAX_DSN_LENGTH+1, DsDesc, 255))
         strList.Add(Dsn);
 
     strList.Sort();
@@ -1892,7 +1902,7 @@ void CqueryDlg::OnCloseWindow(wxCloseEvent& event)
     while (wxIsBusy())
         wxEndBusyCursor();
 
-	 Show(FALSE);
+	Show(FALSE);
     this->Destroy();
 
 }  // CqueryDlg::OnCloseWindow()
@@ -2079,3 +2089,29 @@ bool CqueryDlg::ValidateWhereClause()
     return(TRUE);
 
 }  // CqueryDlg::ValidateWhereClause()
+
+
+
+
+/*
+    TEST CODE FOR TESTING THE wxDbCreateDataSource() FUNCTION
+
+        int result = 0;
+        result = wxDbCreateDataSource("Microsoft Access Driver (*.mdb)","GLT-TEST2","GLT-Descrip",FALSE,"",this);
+        if (!result)
+        {
+            // check for errors caused by ConfigDSN based functions
+            DWORD retcode = 0;
+            WORD cb;
+            wxChar errMsg[500+1];
+            errMsg[0] = '\0';
+
+            SQLInstallerError(1,&retcode,errMsg,500,&cb);
+
+			wxMessageBox("FAILED creating data source","FAILED");
+        }
+        else
+            wxMessageBox("SUCCEEDED creating data source","SUCCESS");
+*/
+
+

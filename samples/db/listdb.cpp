@@ -56,12 +56,12 @@
 
 #include <wx/dbtable.h>
 
-extern DbList WXDLLEXPORT *PtrBegDbList;    /* from db.cpp, used in getting back error results from db connections */
+extern wxDbList WXDLLEXPORT *PtrBegDbList;    /* from db.cpp, used in getting back error results from db connections */
 
 #include "listdb.h"
 
 // Global structure for holding ODBC connection information
-extern DbStuff DbConnectInf;
+extern wxDbConnectInf DbConnectInf;
 
 // Global database connection
 extern wxDB *READONLY_DB;
@@ -114,7 +114,8 @@ char *GetExtendedDBErrorMsg2(char *ErrFile, int ErrLine)
     
     /* Scan through each database connection displaying 
      * any ODBC errors that have occured. */
-    for (DbList *pDbList = PtrBegDbList; pDbList; pDbList = pDbList->PtrNext)
+    wxDbList *pDbList;
+    for (pDbList = PtrBegDbList; pDbList; pDbList = pDbList->PtrNext)
     {
         // Skip over any free connections
         if (pDbList->Free)

@@ -37,7 +37,7 @@ const char      CONTACT_TABLE_NAME[]        =    "contacts";
 const int       CONTACT_NO_COLS            = 12;        // 0-11
 
 // Global structure for holding ODBC connection information
-struct DbStuff  DbConnectInf;
+struct wxDbConnectInf  DbConnectInf;
 
 enum Language {langENGLISH, langFRENCH, langGERMAN, langSPANISH, langOTHER};
 
@@ -307,7 +307,7 @@ char * const langQRY_BETWEEN      = "column BETWEEN value AND value";
 class CqueryDlg : public wxDialog
 {
     private:
-        CcolInf     *colInf;        // Column inf. returned by db->GetColumns()
+        wxColInf    *colInf;        // Column inf. returned by db->GetColumns()
         wxTable     *dbTable;
         char        *masterTableName;
         char        *pWhere;        // A pointer to the storage for the resulting where clause
