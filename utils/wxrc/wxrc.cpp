@@ -83,22 +83,26 @@ int XmlResApp::OnRun()
 {
     static const wxCmdLineEntryDesc cmdLineDesc[] =
     {
-        { wxCMD_LINE_SWITCH, "h", "help",  "show help message" },
+        { wxCMD_LINE_SWITCH, "h", "help",  "show help message", 
+              wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
         { wxCMD_LINE_SWITCH, "v", "verbose", "be verbose" },
         { wxCMD_LINE_SWITCH, "c", "cpp-code",  "output C++ source rather than .rsc file" },
         { wxCMD_LINE_SWITCH, "g", "gettext",  "output list of translatable strings (to stdout or file if -o used)" },
         { wxCMD_LINE_OPTION, "n", "function",  "C++ function name (with -c) [InitXmlResource]" },
         { wxCMD_LINE_OPTION, "o", "output",  "output file [resource.xrs/cpp]" },
+#if 0 // not yet implemented
         { wxCMD_LINE_OPTION, "l", "list-of-handlers",  "output list of neccessary handlers to this file" },
-
+#endif
         { wxCMD_LINE_PARAM,  NULL, NULL, "input file(s)",
-            wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_MULTIPLE },
+              wxCMD_LINE_VAL_STRING, 
+              wxCMD_LINE_PARAM_MULTIPLE | wxCMD_LINE_OPTION_MANDATORY },
 
         { wxCMD_LINE_NONE }
     };
 
-#if wxUSE_GUI
+#if wxUSE_GUI && !defined(__WXMSW__)
     // VS: I need reasonable output to console from wxCmdLineParser
+    //     - temporary, will hopefully be fixed in future in wxWin
     wxLog::SetTimestamp(NULL);
     delete wxLog::SetActiveTarget(new wxLogStderr);
 #endif
