@@ -19885,18 +19885,15 @@ EOF
 fi
 
 if test "$wxUSE_MDI_ARCHITECTURE" = "yes"; then
-    if test "$wxUSE_UNIVERSAL" = "yes"; then
-        echo "configure: warning: MDI not yet supported for wxUniversal... disabled" 1>&2
-        wxUSE_MDI_ARCHITECTURE=no
-    fi
 
-    if test "$wxUSE_MDI_ARCHITECTURE" = "yes"; then
-        cat >> confdefs.h <<\EOF
+
+   if test "$wxUSE_MDI_ARCHITECTURE" = "yes"; then
+       cat >> confdefs.h <<\EOF
 #define wxUSE_MDI_ARCHITECTURE 1
 EOF
 
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS mdi"
-    fi
+       SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS mdi"
+   fi
 fi
 
 if test "$wxUSE_DOC_VIEW_ARCHITECTURE" = "yes" ; then
@@ -19985,17 +19982,17 @@ if test "$wxUSE_MSW" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
 do
 ac_safe=`echo "$ac_hdr" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $ac_hdr""... $ac_c" 1>&6
-echo "configure:19989: checking for $ac_hdr" >&5
+echo "configure:19986: checking for $ac_hdr" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 19994 "configure"
+#line 19991 "configure"
 #include "confdefs.h"
 #include <$ac_hdr>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:19999: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:19996: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -20987,7 +20984,7 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:20991: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:20988: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
