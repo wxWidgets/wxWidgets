@@ -26,6 +26,7 @@ _treeList = [
     # new stuff
     ('Recent Additions', [
         'wxMaskedNumCtrl',
+        'FloatCanvas',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -106,6 +107,7 @@ _treeList = [
         'ColourSelect',
         'ContextHelp',
         'FancyText',
+        'FloatCanvas',
         'FileBrowseButton',
         'GenericButtons',
         'MaskedEditControls',

@@ -18,6 +18,7 @@ Updates to wxMaskedEditCtrl.
 
 Added wxMaskedNumCtrl.
 
+Added Chris Barker's FloatCanvas.
 
 
 
