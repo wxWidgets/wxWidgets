@@ -41,6 +41,7 @@ wxMemoryDC::wxMemoryDC(void)
 {
   m_hDC = (WXHDC) ::CreateCompatibleDC(NULL);
   m_ok = (m_hDC != 0);
+  m_bOwnsDC = TRUE;
 
   SetBrush(*wxWHITE_BRUSH);
   SetPen(*wxBLACK_PEN);

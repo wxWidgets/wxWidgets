@@ -132,47 +132,6 @@ void wxConvertDialogToPixels(wxWindow *control, int *x, int *y)
 }
 */
 
-#if 0
-// We can't rely on Windows giving us events corresponding to the wxWindows Z-ordering.
-// E.g. we can't push a wxGroupBox to the back for editing purposes.
-// Convert the item event to parent coordinates, then search for
-// an item that could receive this event.
-wxControl *wxFakeItemEvent(wxWindow *parent, wxControl *item, wxMouseEvent& event)
-{
-  int x, y;
-  item->GetPosition(&x, &y);
-  event.m_x += x;
-  event.m_y += y;
-
-  wxNode *node = parent->GetChildren()->Last();
-  while (node)
-  {
-    wxControl *newItem = (wxControl *)node->Data();
-    if (newItem->IsSelected() && newItem->SelectionHandleHitTest(event.x, event.GetY()))
-    {
-      // This event belongs to the panel.
-      parent->GetEventHandler()->OldOnMouseEvent(event);
-      return NULL;
-    }
-    else if (newItem->HitTest(event.x, event.GetY()))
-    {
-      int x1, y1;
-      newItem->GetPosition(&x1, &y1);
-      event.x -= x1;
-      event.GetY() -= y1;
-      newItem->OldOnMouseEvent(event);
-      return newItem;
-    }
-    node = node->Previous();
-  }
-  // No takers, so do what we would have done anyway.
-  event.x -= x;
-  event.y -= y;
-  item->OldOnMouseEvent(event);
-  return item;
-}
-#endif
-
 void wxControl::MSWOnMouseMove(const int x, const int y, const WXUINT flags)
 {
 /*

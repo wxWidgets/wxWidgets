@@ -142,6 +142,8 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
     msflags |= WS_MAXIMIZE;
   if (style & wxCAPTION)
     msflags |= WS_CAPTION;
+  if (style & wxCLIP_CHILDREN)
+    msflags |= WS_CLIPCHILDREN;
 
   wxWindow::MSWCreate(m_windowId, parent, wxMDIFrameClassName, this, title, x, y, width, height,
          msflags);

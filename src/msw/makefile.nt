@@ -489,6 +489,11 @@ $(MSWDIR)/nativdlg.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
+$(MSWDIR)/notebook.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
 $(MSWDIR)/ownerdrw.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@

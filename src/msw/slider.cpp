@@ -156,6 +156,8 @@ bool wxSlider::Create(wxWindow *parent, const wxWindowID id,
 
   SubclassWin(GetHWND());
 
+  SetFont(parent->GetFont());
+
   if ( m_windowStyle & wxSL_LABELS )
   {
       // Finally, create max value static item
@@ -164,8 +166,6 @@ bool wxSlider::Create(wxWindow *parent, const wxWindowID id,
                              STATIC_FLAGS,
                              0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)NewControlId(),
                              wxGetInstance(), NULL);
-
-      SetFont(parent->GetFont());
 
       if (GetFont())
       {

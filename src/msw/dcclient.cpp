@@ -111,7 +111,10 @@ wxPaintDC::wxPaintDC(wxWindow *the_canvas)
 		m_staticPaintHDC = m_hDC ;
 	}
 	else
+    {
+        wxDebugMsg("wxPaintDC: Using existing HDC\n");
   		m_hDC = m_staticPaintHDC ;
+    }
 
   m_canvas = the_canvas;
   RECT updateRect1 = g_paintStruct.rcPaint;
@@ -136,6 +139,13 @@ wxPaintDC::~wxPaintDC(void)
   			m_hDCCount --;
 			m_hDC = 0;
 		}
+        else
+            wxDebugMsg("~wxPaintDC: Did not release HDC\n");
+
 		m_staticPaintHDC = 0 ;
 	}
+    else
+    {
+        wxDebugMsg("~wxPaintDC: Did not release HDC\n");
+    }
 }

@@ -24,6 +24,8 @@
 #pragma hdrstop
 #endif
 
+#if USE_OWNER_DRAWN
+
 #include <windows.h>
 
 #include "wx/ownerdrw.h"
@@ -304,3 +306,6 @@ void wxCheckListBox::OnLeftClick(wxMouseEvent& event)
     event.Skip();
   }
 }
+
+#endif
+

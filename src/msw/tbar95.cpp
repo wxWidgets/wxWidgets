@@ -104,7 +104,7 @@ bool wxToolBar95::Create(wxWindow *parent, const wxWindowID id, const wxPoint& p
 
   m_windowStyle = style;
 
-  SetFont(wxTheFontList->FindOrCreateFont(11, wxSWISS, wxNORMAL, wxNORMAL));
+  SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
 
   SetParent(parent);
 

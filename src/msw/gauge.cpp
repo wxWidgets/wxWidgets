@@ -191,27 +191,20 @@ void wxGauge::SetSize(const int x, const int y, const int width, const int heigh
   if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     y1 = currentY;
 
-  float control_width, control_height, control_x, control_y;
-
   // If we're prepared to use the existing size, then...
   if (width == -1 && height == -1 && ((sizeFlags & wxSIZE_AUTO) != wxSIZE_AUTO))
   {
-    GetSize(&x1, &y1);
+    GetSize(&w1, &h1);
   }
 
   // Deal with default size (using -1 values)
-  if (width<=0)
+  if (w1<=0)
     w1 = DEFAULT_ITEM_WIDTH;
 
-  if (height<=0)
+  if (h1<=0)
     h1 = DEFAULT_ITEM_HEIGHT;
 
-  control_x = (float)x1;
-  control_y = (float)y1;
-  control_width = (float)w1;
-  control_height = (float)h1;
-
-  MoveWindow((HWND) GetHWND(), (int)control_x, (int)control_y, (int)control_width, (int)control_height, TRUE);
+  MoveWindow((HWND) GetHWND(), x1, y1, w1, h1, TRUE);
 
 #if WXWIN_COMPATIBILITY
   GetEventHandler()->OldOnSize(width, height);

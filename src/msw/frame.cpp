@@ -552,13 +552,11 @@ void wxFrame::MSWCreate(const int id, wxWindow *parent, const char *wclass, wxWi
   // If child windows aren't properly drawn initially, WS_CLIPCHILDREN
   // could be the culprit. But without it, you can get a lot of flicker.
 
-//   DWORD msflags = WS_POPUP | WS_CLIPCHILDREN ;
-
   DWORD msflags = 0;
   if ((style & wxCAPTION) == wxCAPTION)
-    msflags = WS_OVERLAPPED | WS_CLIPCHILDREN ; // WS_POPUP | WS_CLIPCHILDREN ;
+    msflags = WS_OVERLAPPED;
   else
-    msflags = WS_POPUP | WS_CLIPCHILDREN ;
+    msflags = WS_POPUP;
 
   if (style & wxMINIMIZE_BOX)
     msflags |= WS_MINIMIZEBOX;
@@ -574,6 +572,8 @@ void wxFrame::MSWCreate(const int id, wxWindow *parent, const char *wclass, wxWi
     msflags |= WS_MAXIMIZE;
   if (style & wxCAPTION)
     msflags |= WS_CAPTION;
+  if (style & wxCLIP_CHILDREN)
+    msflags |= WS_CLIPCHILDREN;
 
   // Keep this in wxFrame because it saves recoding this function
   // in wxTinyFrame
@@ -642,12 +642,9 @@ bool wxFrame::MSWOnPaint(void)
 
       EndPaint((HWND) GetHWND(), &ps);
     }
-
-    if (!m_iconized)
+    else
     {
-//      m_paintHDC = (WXHDC) cdc;
       GetEventHandler()->OldOnPaint();
-//      m_paintHDC = NULL;
     }
     return 0;
   }

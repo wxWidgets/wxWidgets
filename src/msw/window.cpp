@@ -472,11 +472,10 @@ bool wxWindow::Create(wxWindow *parent, const wxWindowID id,
     msflags |= WS_BORDER;
   if (style & wxTHICK_FRAME)
     msflags |= WS_THICKFRAME;
-  // TODO: probably make WS_CLIPCHILDREN this a setting in wx/setup.h,
-  // to reduce flicker with the trade-off that groupboxes must paint in a solid
-  // colour (so your control order must be correct, and you can't easily draw a
-  // transparent group).
-  msflags |= WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN;
+
+  msflags |= WS_CHILD | WS_VISIBLE;
+  if (style & wxCLIP_CHILDREN)
+    msflags |= WS_CLIPCHILDREN;
 
   bool want3D;
   WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D) ;
@@ -819,9 +818,6 @@ void wxWindow::GetTextExtent(const wxString& string, int *x, int *y,
   HFONT was = 0;
   if (fontToUse && fontToUse->Ok())
   {
-//    fontToUse->UseResource();
-    
-//    fontToUse->RealizeResource();
     if ((fnt=(HFONT) fontToUse->GetResourceHandle()))
       was = SelectObject(dc,fnt) ;
   }
@@ -881,42 +877,11 @@ void wxWindow::Refresh(const bool eraseBack, const wxRectangle *rect)
   }
 }
 
-// TODO: Are these really necessary now?
-/*
-WXHDC wxWindow::GetHDC(void) const
-{
-  wxWindow *nonConst = (wxWindow *)this;
-  if (m_paintHDC)
-    return(m_paintHDC) ;
-  nonConst->m_tempHDC = (WXHDC) ::GetDC((HWND) GetHWND()) ;
-  return(m_tempHDC) ;
-}
-
-void wxWindow::ReleaseHDC(void)
-{
-  // We're within an OnPaint: it'll be released.
-  if (m_paintHDC)
-    return ;
-
-  ::ReleaseDC((HWND) GetHWND(),(HDC) m_tempHDC) ;
-}
-*/
-
 // Hook for new window just as it's being created,
 // when the window isn't yet associated with the handle
 wxWindow *wxWndHook = NULL;
 
-/*
-#if HAVE_SOCKET
-// DDE Interface Handler
-extern	"C" {
-  long	ddeWindowProc(HWND hwnd,UINT message,WPARAM wparam,LPARAM lparam);
-  void __ddeUnblock(HWND hWnd, WPARAM wParam);
-};
-#endif
-*/
-
-// Main Windows 3 window proc
+// Main window proc
 LRESULT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
   wxWindow *wnd = wxFindWinFromHandle((WXHWND) hWnd);
@@ -945,12 +910,6 @@ LRESULT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
     wnd->m_lastMsg = message;
     wnd->m_lastWParam = wParam;
     wnd->m_lastLParam = lParam;
-/* Don't know why this was here
-    if (message == WM_SETFONT)
-      return 0;
-    else if (message == WM_INITDIALOG)
-      return TRUE;
-*/
   }
   if (wnd)
     return wnd->MSWWindowProc(message, wParam, lParam);
@@ -1024,12 +983,6 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 
   switch (message)
   {
-/*
-        case WM_SETFONT:
-        {
-          return 0;
-        }
-*/
         case WM_ACTIVATE:
         {
 #ifdef __WIN32__
@@ -1296,25 +1249,27 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 
         case WM_KEYDOWN:
         {
-            // these keys are not interesting to the application (@@ or are they?)
-            if ( wParam == VK_SHIFT || wParam == VK_CONTROL )
-              return Default();
+            if (wParam == VK_SHIFT)
+            	return Default();
+
+            else if (wParam == VK_CONTROL)
+            	return Default();
 
             // Avoid duplicate messages to OnChar
-            if ((wParam == VK_ESCAPE) || (wParam == VK_SPACE)  || 
-                (wParam == VK_RETURN) || (wParam == VK_BACK)   || 
-                (wParam == VK_TAB))
-              return Default();
-
-            MSWOnChar((WORD)wParam, lParam);
-            //VZ: commented - what is it for?
-            //if (::GetKeyState(VK_CONTROL)&0x100?TRUE:FALSE)
-            //  return Default();
+            else if ((wParam != VK_ESCAPE) && (wParam != VK_SPACE) && (wParam != VK_RETURN) && (wParam != VK_BACK) && (wParam != VK_TAB))
+	    	{
+              MSWOnChar((WORD)wParam, lParam);
+              if (::GetKeyState(VK_CONTROL)&0x100?TRUE:FALSE)
+			    return Default();
+	    	}
+			else
+				return Default();
+        }
+        case WM_KEYUP:
+        {
             break;
         }
-
         // VZ: WM_KEYUP not processed
-
         case WM_CHAR: // Always an ASCII character
         {
           MSWOnChar((WORD)wParam, lParam, TRUE);
@@ -1981,7 +1936,11 @@ long wxWindow::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
 long wxWindow::Default()
 {
-  return this->MSWDefWindowProc(m_lastMsg, m_lastWParam, m_lastLParam);
+    // These are fake events, ignore them
+    if (m_lastEvent != wxEVT_ENTER_WINDOW && m_lastEvent != wxEVT_LEAVE_WINDOW)
+        return this->MSWDefWindowProc(m_lastMsg, m_lastWParam, m_lastLParam);
+    else
+        return 0;
 }
 
 bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
@@ -2262,9 +2221,7 @@ void wxWindow::MSWOnLButtonUp(const int x, const int y, const WXUINT flags)
 
 void wxWindow::MSWOnLButtonDClick(const int x, const int y, const WXUINT flags)
 {
-  /* MATTHEW: If dclick not allowed, generate another single-click */
-  wxMouseEvent event(m_doubleClickAllowed ?
-		     wxEVENT_TYPE_LEFT_DCLICK : wxEVENT_TYPE_LEFT_DOWN);
+  wxMouseEvent event(wxEVENT_TYPE_LEFT_DCLICK);
 
   event.m_x = x; event.m_y = y;
   event.m_shiftDown = ((flags & MK_SHIFT) != 0);
@@ -2315,7 +2272,7 @@ void wxWindow::MSWOnMButtonDown(const int x, const int y, const WXUINT flags)
   event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
   event.m_eventObject = this;
 
-  m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVENT_TYPE_LEFT_DOWN;
+  m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVENT_TYPE_MIDDLE_DOWN;
   GetEventHandler()->OldOnMouseEvent(event);
 }
 
@@ -2333,16 +2290,13 @@ void wxWindow::MSWOnMButtonUp(const int x, const int y, const WXUINT flags)
   event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
   event.m_eventObject = this;
 
-  m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVENT_TYPE_LEFT_UP;
+  m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVENT_TYPE_MIDDLE_UP;
   GetEventHandler()->OldOnMouseEvent(event);
 }
 
 void wxWindow::MSWOnMButtonDClick(const int x, const int y, const WXUINT flags)
 {
-//wxDebugMsg("MButtonDClick\n") ;
-  /* MATTHEW: If dclick not allowed, generate another single-click */
-  wxMouseEvent event((m_doubleClickAllowed) ?
-		     wxEVENT_TYPE_MIDDLE_DCLICK : wxEVENT_TYPE_MIDDLE_DOWN);
+  wxMouseEvent event(wxEVENT_TYPE_MIDDLE_DCLICK);
 
   event.m_x = x; event.m_y = y;
   event.m_shiftDown = ((flags & MK_SHIFT) != 0);
@@ -2353,7 +2307,7 @@ void wxWindow::MSWOnMButtonDClick(const int x, const int y, const WXUINT flags)
   event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
   event.m_eventObject = this;
 
-  m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVENT_TYPE_LEFT_DCLICK;
+  m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVENT_TYPE_MIDDLE_DCLICK;
 //  if (m_doubleClickAllowed)
      GetEventHandler()->OldOnMouseEvent(event);
 }
@@ -2415,9 +2369,7 @@ void wxWindow::MSWOnRButtonUp(const int x, const int y, const WXUINT flags)
 
 void wxWindow::MSWOnRButtonDClick(const int x, const int y, const WXUINT flags)
 {
-  /* MATTHEW: If dclick not allowed, generate another single-click */
-  wxMouseEvent event((m_doubleClickAllowed) ?
-		     wxEVENT_TYPE_RIGHT_DCLICK : wxEVENT_TYPE_RIGHT_DOWN);
+  wxMouseEvent event(wxEVENT_TYPE_RIGHT_DCLICK);
 
   event.m_x = x; event.m_y = y;
   event.m_shiftDown = ((flags & MK_SHIFT) != 0);
@@ -2492,7 +2444,7 @@ void wxWindow::MSWOnMouseEnter(const int x, const int y, const WXUINT flags)
 
   m_lastEvent = wxEVT_ENTER_WINDOW;
   m_lastXPos = event.m_x; m_lastYPos = event.m_y;
-  GetEventHandler()->OldOnMouseEvent(event);
+  GetEventHandler()->ProcessEvent(event);
 }
 
 void wxWindow::MSWOnMouseLeave(const int x, const int y, const WXUINT flags)
@@ -2510,7 +2462,7 @@ void wxWindow::MSWOnMouseLeave(const int x, const int y, const WXUINT flags)
 
   m_lastEvent = wxEVT_LEAVE_WINDOW;
   m_lastXPos = event.m_x; m_lastYPos = event.m_y;
-  GetEventHandler()->OldOnMouseEvent(event);
+  GetEventHandler()->ProcessEvent(event);
 }
 
 void wxWindow::MSWOnChar(const WXWORD wParam, const WXLPARAM lParam, const bool isASCII)
@@ -4718,7 +4670,6 @@ void wxWindow::OnIdle(wxIdleEvent& event)
             MSWOnMouseLeave(pt.x, pt.y, 0);
         }
     }
-
 	UpdateWindowUI();
 }
 

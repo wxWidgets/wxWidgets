@@ -67,7 +67,7 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu, int id,
 {
   wxASSERT( pParentMenu != NULL );
 
-#ifdef  USE_OWNER_DRAWN
+#if  USE_OWNER_DRAWN
     // set default menu colors
     #define SYS_COLOR(c) (wxSystemSettings::GetSystemColour(wxSYS_COLOUR_##c))
     

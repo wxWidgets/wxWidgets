@@ -94,7 +94,7 @@ bool wxStatusBar95::Create(wxWindow *parent, wxWindowID id, long style)
   m_windowId = id == -1 ? NewControlId() : id;
 
   DWORD wstyle = WS_CHILD | WS_VISIBLE;
-  if ( style & wxSB_SIZEGRIP )
+  if ( style & wxST_SIZEGRIP )
     wstyle |= SBARS_SIZEGRIP;
 
   m_hWnd = (WXHWND)CreateStatusWindow(wstyle,

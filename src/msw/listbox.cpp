@@ -207,6 +207,9 @@ bool wxListBox::Create(wxWindow *parent, const wxWindowID id,
                                 0, 0, 0, 0, 
                                 (HWND)parent->GetHWND(), (HMENU)m_windowId,
                                 wxGetInstance(), NULL);
+
+  m_hWnd = (WXHWND)wx_list;
+
 #if CTL3D
   if (want3D)
   {
@@ -215,12 +218,15 @@ bool wxListBox::Create(wxWindow *parent, const wxWindowID id,
   }
 #endif
 
+  // Subclass again to catch messages
+  SubclassWin((WXHWND)wx_list);
+
   uint ui;
   for (ui = 0; ui < (uint)n; ui++) {
     SendMessage(wx_list, LB_ADDSTRING, 0, (LPARAM)(const char *)choices[ui]);
   }
 
-  #if USE_OWNER_DRAWN
+#if USE_OWNER_DRAWN
     if ( m_windowStyle & wxLB_OWNERDRAW ) {
       for (ui = 0; ui < (uint)n; ui++) {
         // create new item which will process WM_{DRAW|MEASURE}ITEM messages
@@ -230,33 +236,30 @@ bool wxListBox::Create(wxWindow *parent, const wxWindowID id,
         ListBox_SetItemData(wx_list, ui, pNewItem);
       }
     }
-  #endif
+#endif
 
   if ((m_windowStyle & wxLB_MULTIPLE) == 0)
     SendMessage(wx_list, LB_SETCURSEL, 0, 0);
 
-  ShowWindow(wx_list, SW_SHOW);
-
-  m_hWnd = (WXHWND)wx_list;
-
-  // Subclass again for purposes of dialog editing mode
-  SubclassWin((WXHWND)wx_list);
-
   SetFont(* parent->GetFont());
 
   SetSize(x, y, width, height);
+
+  ShowWindow(wx_list, SW_SHOW);
 
   return TRUE;
 }
 
 wxListBox::~wxListBox(void)
 {
-  #if USE_OWNER_DRAWN
+#if USE_OWNER_DRAWN
     uint uiCount = m_aItems.Count();
     while ( uiCount-- != 0 ) {
       delete m_aItems[uiCount];
     }
-  #endif
+#endif
+
+  DELETEA(m_selections);
 }
 
 void wxListBox::SetupColours(void)
@@ -290,14 +293,14 @@ void wxListBox::Append(const wxString& item)
   int index = ListBox_AddString(hwnd, item);
   m_noItems ++;
 
-  #if USE_OWNER_DRAWN
+#if USE_OWNER_DRAWN
     if ( m_windowStyle & wxLB_OWNERDRAW ) {
       wxOwnerDrawn *pNewItem = CreateItem(-1); // dummy argument
       pNewItem->SetName(item);
       m_aItems.Add(pNewItem);
       ListBox_SetItemData(hwnd, index, pNewItem);
     }
-  #endif
+#endif
 
   SetHorizontalExtent(item);
 }
@@ -307,14 +310,14 @@ void wxListBox::Append(const wxString& item, char *Client_data)
   int index = ListBox_AddString(hwnd, item);
   m_noItems ++;
 
-  #if USE_OWNER_DRAWN
+#if USE_OWNER_DRAWN
     if ( m_windowStyle & wxLB_OWNERDRAW ) {
       // client data must be pointer to wxOwnerDrawn, otherwise we would crash
       // in OnMeasure/OnDraw.
       wxFAIL_MSG("Can't use client data with owner-drawn listboxes");
     }
     else
-  #endif
+#endif
       ListBox_SetItemData(hwnd, index, Client_data);
 
   SetHorizontalExtent(item);
@@ -333,7 +336,7 @@ void wxListBox::Set(const int n, const wxString *choices, char** clientData)
   }
   m_noItems = n;
 
-  #if USE_OWNER_DRAWN
+#if USE_OWNER_DRAWN
     if ( m_windowStyle & wxLB_OWNERDRAW ) {
       // first delete old items
       uint ui = m_aItems.Count();
@@ -353,7 +356,7 @@ void wxListBox::Set(const int n, const wxString *choices, char** clientData)
                      "Can't use client data with owner-drawn listboxes");
       }
     }
-  #endif
+#endif
 
   SetHorizontalExtent("");
   ShowWindow(hwnd, SW_SHOW);
@@ -711,7 +714,6 @@ WXHBRUSH wxListBox::OnCtlColor(const WXHDC pDC, const WXHWND pWnd, const WXUINT 
 
 long wxListBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
-/*
   switch (nMsg)
   {
         case WM_INITDIALOG:
@@ -730,7 +732,7 @@ long wxListBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         case WM_MBUTTONDBLCLK:
         case WM_LBUTTONDOWN:
         case WM_LBUTTONUP:
-//        case WM_LBUTTONDBLCLK:
+        case WM_LBUTTONDBLCLK:
         case WM_MOUSEMOVE:
         case WM_DESTROY:
         case WM_COMMAND:
@@ -761,7 +763,6 @@ long wxListBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 		case WM_NCHITTEST:
             return MSWDefWindowProc(nMsg, wParam, lParam );
     }
-*/
   return wxControl::MSWWindowProc(nMsg, wParam, lParam);
 }
 

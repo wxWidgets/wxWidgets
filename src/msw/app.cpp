@@ -825,6 +825,7 @@ void wxApp::OnIdle(wxIdleEvent& event)
 
   // Send OnIdle events to all windows
   bool needMore = SendIdleEvents();
+//  bool needMore = FALSE;
 
   if (needMore)
     event.RequestMore(TRUE);
