@@ -14,6 +14,19 @@
 
 #include "wx/version.h"
 
+// NB: This file contains macros for checking binary compatibility of libraries
+//     in multilib buildm, plugins and user components.
+//     The WX_BUILD_OPTIONS_SIGNATURE macro expands into string that should
+//     uniquely identify binary compatible builds: i.e. if two builds of the
+//     library are binary compatible, their signature string should be the
+//     same; if two builds are binary incompatible, their signatures should
+//     be different.
+//
+//     Therefore, wxUSE_XXX flags that affect binary compatibility (vtables,
+//     function signatures) should be accounted for here. So should compilers
+//     and compiler versions (but note that binary compatible compiler versions
+//     such as gcc-2.95.2 and gcc-2.95.3 should have same signature!).
+
 // ----------------------------------------------------------------------------
 // WX_BUILD_OPTIONS_SIGNATURE
 // ----------------------------------------------------------------------------
