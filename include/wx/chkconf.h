@@ -1589,7 +1589,7 @@
 #       undef wxUSE_XRC
 #       define wxUSE_XRC 0
 #   endif
-#endif /* wxUSE_UNICODE_XRC */
+#endif /* wxUSE_XRC */
 
 #endif /* wxUSE_GUI */
 
