@@ -18,18 +18,26 @@
     #pragma hdrstop
 #endif
 
+
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
     #include "wx/module.h"
     #include "wx/evtloop.h"
     #include "wx/frame.h"
     #include "wx/dialog.h"
+    #include "wx/log.h"
     #include "wx/intl.h"
 #endif
 
 #include "wx/app.h"
 #include "wx/fontutil.h"
 #include "wx/mgl/private.h"
+
+#define MGL_DEBUG
+
+#if defined(MGL_DEBUG) && !defined(__WXDEBUG__)
+#undef MGL_DEBUG
+#endif
 
 //-----------------------------------------------------------------------------
 // Global data
@@ -145,6 +153,12 @@ bool wxApp::OnInitGui()
     // wxUniv's themes
     if ( !wxAppBase::OnInitGui() )
         return FALSE;
+
+#ifdef MGL_DEBUG
+    // That damn MGL redirects stdin and stdout to physical console
+    FILE *file = fopen("stderr", "wt");
+    wxLog::SetActiveTarget(new wxLogStderr(file));
+#endif
 
     return TRUE;
 }
