@@ -2909,7 +2909,11 @@ bool wxWindow::DoPopupMenu( wxMenu *menu, int x, int y )
                   0 //gs_timeLastClick         // the time of activation
                 );
 		
-    while (is_waiting) wxYield();		
+    while (is_waiting)
+    {
+        while (gtk_events_pending())
+            gtk_main_iteration();
+    }
 
     return TRUE;
 }

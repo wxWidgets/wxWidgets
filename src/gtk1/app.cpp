@@ -143,47 +143,37 @@ gint wxapp_idle_callback( gpointer WXUNUSED(data) );
 
 bool wxYield()
 {
-    /* it's necessary to call ProcessIdle() to update the frames sizes which
-       might have been changed (it also will update other things set from
-       OnUpdateUI() which is a nice (and desired) side effect) */
-    while (wxTheApp->ProcessIdle()) { }
-
-#if 0
-    for ( wxWindowList::Node *node = wxTopLevelWindows.GetFirst();
-          node;
-          node = node->GetNext() )
-    {
-        wxWindow *win = node->GetData();
-        win->OnInternalIdle();
-    }
-#endif
-
-    if (wxTheApp->m_idleTag)
+    bool has_idle = (wxTheApp->m_idleTag != 0);
+    
+    if (has_idle)
     {
         /* We need to temporarily remove idle callbacks or the loop will
            never finish. */
         gtk_idle_remove( wxTheApp->m_idleTag );
         wxTheApp->m_idleTag = 0;
+    }
 
-        while (gtk_events_pending())
-            gtk_main_iteration();
+    while (gtk_events_pending())
+        gtk_main_iteration();
 
+    /* it's necessary to call ProcessIdle() to update the frames sizes which
+       might have been changed (it also will update other things set from
+       OnUpdateUI() which is a nice (and desired) side effect) */
+    while (wxTheApp->ProcessIdle()) { }
+	
+    if (has_idle)
+    {
         /* re-add idle handler */
         wxTheApp->m_idleTag = gtk_idle_add( wxapp_idle_callback, (gpointer) NULL );
     }
-    else
-    {
-        while (gtk_events_pending())
-            gtk_main_iteration();
-    }
-
+    
     return TRUE;
 }
 
 gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 {
     if (!wxTheApp) return TRUE;
-
+    
 #if (GTK_MINOR_VERSION > 0)
     /* when getting called from GDK's idle handler we
        are no longer within GDK's grab on the GUI
@@ -424,18 +414,26 @@ bool wxApp::ProcessIdle()
     event.SetEventObject( this );
     ProcessEvent( event );
 
+    wxWindowList::Node* node = wxTopLevelWindows.GetFirst();
+    while (node)
+    {
+        wxWindow* win = node->GetData();
+        win->OnInternalIdle();
+        node = node->GetNext();
+    }
+
     return event.MoreRequested();
 }
 
 void wxApp::OnIdle( wxIdleEvent &event )
 {
-    static bool inOnIdle = FALSE;
+    static bool s_inOnIdle = FALSE;
 
     /* Avoid recursion (via ProcessEvent default case) */
-    if (inOnIdle)
+    if (s_inOnIdle)
         return;
 
-    inOnIdle = TRUE;
+    s_inOnIdle = TRUE;
 
 #if wxUSE_THREADS
     /* Resend in the main thread events which have been prepared in other
@@ -459,7 +457,7 @@ void wxApp::OnIdle( wxIdleEvent &event )
     if (needMore)
         event.RequestMore(TRUE);
 
-    inOnIdle = FALSE;
+    s_inOnIdle = FALSE;
 }
 
 bool wxApp::SendIdleEvents()
@@ -484,8 +482,6 @@ bool wxApp::SendIdleEvents( wxWindow* win )
 
     wxIdleEvent event;
     event.SetEventObject(win);
-
-    win->OnInternalIdle();
 
     win->ProcessEvent(event);
 

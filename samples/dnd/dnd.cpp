@@ -23,6 +23,7 @@
 #include "wx/log.h"
 
 #include "wx/dnd.h"
+#include "wx/dirdlg.h"
 
 #ifdef __WXMOTIF__
     #error Sorry, drag and drop is not yet implemented on wxMotif.

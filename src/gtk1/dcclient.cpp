@@ -995,28 +995,25 @@ void wxWindowDC::SetBrush( const wxBrush &brush )
     m_brush.GetColour().CalcPixel( m_cmap );
     gdk_gc_set_foreground( m_brushGC, m_brush.GetColour().GetColor() );
   
-    GdkFill fillStyle = GDK_SOLID;
-    switch (m_brush.GetStyle())
-    {
-      case wxSOLID:
-      case wxTRANSPARENT:
-         break;
-      default:
-         fillStyle = GDK_STIPPLED;
-    }
-  
-    gdk_gc_set_fill( m_brushGC, fillStyle );
+    gdk_gc_set_fill( m_brushGC, GDK_SOLID );
   
     if ((m_brush.GetStyle() == wxSTIPPLE) && (m_brush.GetStipple()->Ok()))
     {
         if (m_brush.GetStipple()->GetPixmap())
+	{
+            gdk_gc_set_fill( m_brushGC, GDK_TILED );
             gdk_gc_set_tile( m_brushGC, m_brush.GetStipple()->GetPixmap() );
+	}
         else
+	{
+            gdk_gc_set_fill( m_brushGC, GDK_STIPPLED );
             gdk_gc_set_stipple( m_brushGC, m_brush.GetStipple()->GetBitmap() );
+	}
     }
   
     if (IS_HATCH(m_brush.GetStyle()))
     {
+        gdk_gc_set_fill( m_brushGC, GDK_STIPPLED );
         int num = m_brush.GetStyle() - wxBDIAGONAL_HATCH;
         gdk_gc_set_stipple( m_brushGC, hatches[num] );
     }
