@@ -41,6 +41,43 @@ extern bool g_isIdle;
 extern bool       g_blockEventsOnDrag;
 extern wxCursor   g_globalCursor;
 
+// ----------------------------------------------------------------------------
+// "insert_text" for GtkEntry
+// ----------------------------------------------------------------------------
+
+static void
+gtk_insert_text_callback(GtkEditable *editable,
+                         const gchar *new_text,
+                         gint new_text_length,
+                         gint *position,
+                         wxTextCtrl *win)
+{
+    // we should only be called if we have a max len limit at all
+    GtkEntry *entry = GTK_ENTRY (editable);
+
+    wxCHECK_RET( entry->text_max_length, _T("shouldn't be called") );
+
+    // check that we don't overflow the max length limit
+    //
+    // FIXME: this doesn't work when we paste a string which is going to be
+    //        truncated
+    if ( entry->text_length == entry->text_max_length )
+    {
+        // we don't need to run the base class version at all
+        gtk_signal_emit_stop_by_name(GTK_OBJECT(editable), "insert_text");
+
+        // remember that the next changed signal is to be ignored to avoid
+        // generating a dummy wxEVT_COMMAND_TEXT_UPDATED event
+        win->IgnoreNextTextUpdate();
+
+        // and generate the correct one ourselves
+        wxCommandEvent event(wxEVT_COMMAND_TEXT_MAXLEN, win->GetId());
+        event.SetEventObject(win);
+        event.SetString(win->GetValue());
+        win->GetEventHandler()->ProcessEvent( event );
+    }
+}
+
 //-----------------------------------------------------------------------------
 //  "changed"
 //-----------------------------------------------------------------------------
@@ -48,6 +85,9 @@ extern wxCursor   g_globalCursor;
 static void
 gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 {
+    if ( win->IgnoreTextUpdate() )
+        return;
+
     if (!win->m_hasVMT) return;
 
     if (g_isIdle)
@@ -57,8 +97,8 @@ gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
     win->UpdateFontIfNeeded();
 
     wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, win->GetId() );
-    event.SetString( win->GetValue() );
     event.SetEventObject( win );
+    event.SetString( win->GetValue() );
     win->GetEventHandler()->ProcessEvent( event );
 }
 
@@ -206,6 +246,7 @@ END_EVENT_TABLE()
 
 void wxTextCtrl::Init()
 {
+    m_ignoreNextUpdate =
     m_modified = FALSE;
     m_updateFont = FALSE;
     m_text =
@@ -826,11 +867,58 @@ void wxTextCtrl::DiscardEdits()
     m_modified = FALSE;
 }
 
+// ----------------------------------------------------------------------------
+// max text length support
+// ----------------------------------------------------------------------------
+
+void wxTextCtrl::IgnoreNextTextUpdate()
+{
+    m_ignoreNextUpdate = TRUE;
+}
+
+bool wxTextCtrl::IgnoreTextUpdate()
+{
+    if ( m_ignoreNextUpdate )
+    {
+        m_ignoreNextUpdate = FALSE;
+
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
 void wxTextCtrl::SetMaxLength(unsigned long len)
 {
     if ( !HasFlag(wxTE_MULTILINE) )
     {
         gtk_entry_set_max_length(GTK_ENTRY(m_text), len);
+
+        // there is a bug in GTK+ 1.2.x: "changed" signal is emitted even if
+        // we had tried to enter more text than allowed by max text length and
+        // the text wasn't really changed
+        //
+        // to detect this and generate TEXT_MAXLEN event instead of
+        // TEXT_CHANGED one in this case we also catch "insert_text" signal
+        //
+        // when max len is set to 0 we disconnect our handler as it means that
+        // we shouldn't check anything any more
+        if ( len )
+        {
+            gtk_signal_connect( GTK_OBJECT(m_text),
+                                "insert_text",
+                                GTK_SIGNAL_FUNC(gtk_insert_text_callback),
+                                (gpointer)this);
+        }
+        else // no checking
+        {
+            gtk_signal_disconnect_by_func
+            (
+                GTK_OBJECT(m_text),
+                GTK_SIGNAL_FUNC(gtk_insert_text_callback),
+                (gpointer)this
+            );
+        }
     }
 }
 

@@ -154,10 +154,18 @@ public:
     virtual bool ScrollLines(int lines);
     virtual bool ScrollPages(int pages);
 
+    // implementation only from now on
+
     // wxGTK-specific: called recursively by Enable,
     // to give widgets an oppprtunity to correct their colours after they
     // have been changed by Enable
     virtual void OnParentEnable( bool enable ) ;
+
+    // tell the control to ignore next text changed signal
+    void IgnoreNextTextUpdate();
+
+    // should we ignore the changed signal? always resets the flag
+    bool IgnoreTextUpdate();
 
 protected:
     virtual wxSize DoGetBestSize() const;
@@ -176,11 +184,13 @@ private:
     // change the font for everything in this control
     void ChangeFontGlobally();
 
-    bool        m_modified;
     GtkWidget  *m_text;
     GtkWidget  *m_vScrollbar;
-    bool        m_vScrollbarVisible;
-    bool        m_updateFont;
+
+    bool        m_modified:1;
+    bool        m_vScrollbarVisible:1;
+    bool        m_updateFont:1;
+    bool        m_ignoreNextUpdate:1;
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxTextCtrl);
