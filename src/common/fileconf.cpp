@@ -226,18 +226,21 @@ wxFileConfig::wxFileConfig(const wxString& appName, const wxString& vendorName,
     SetStyle(GetStyle() | wxCONFIG_USE_GLOBAL_FILE);
 
   // if the path is not absolute, prepend the standard directory to it
-  if ( !m_strLocalFile.IsEmpty() && !wxIsAbsolutePath(m_strLocalFile) )
-  {
-    wxString strLocal = m_strLocalFile;
-    m_strLocalFile = GetLocalDir();
-    m_strLocalFile << strLocal;
-  }
+  // UNLESS wxCONFIG_USE_RELATIVE_PATH style is set
+  if ( !(style & wxCONFIG_USE_RELATIVE_PATH) ){
+	  if ( !m_strLocalFile.IsEmpty() && !wxIsAbsolutePath(m_strLocalFile) )
+	  {
+		  wxString strLocal = m_strLocalFile;
+		  m_strLocalFile = GetLocalDir();
+		  m_strLocalFile << strLocal;
+	  }
 
-  if ( !m_strGlobalFile.IsEmpty() && !wxIsAbsolutePath(m_strGlobalFile) )
-  {
-    wxString strGlobal = m_strGlobalFile;
-    m_strGlobalFile = GetGlobalDir();
-    m_strGlobalFile << strGlobal;
+	  if ( !m_strGlobalFile.IsEmpty() && !wxIsAbsolutePath(m_strGlobalFile) )
+	  {
+		  wxString strGlobal = m_strGlobalFile;
+		  m_strGlobalFile = GetGlobalDir();
+		  m_strGlobalFile << strGlobal;
+	  }
   }
 
   Init();
