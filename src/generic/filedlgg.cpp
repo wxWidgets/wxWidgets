@@ -254,7 +254,7 @@ wxFileIconsTable::wxFileIconsTable() :
 
 static wxBitmap CreateAntialiasedBitmap(const wxImage& img)
 {
-    wxImage small(16, 16);
+    wxImage smallimg (16, 16);
     unsigned char *p1, *p2, *ps;
     unsigned char mr = img.GetMaskRed(),
                   mg = img.GetMaskGreen(),
@@ -263,8 +263,8 @@ static wxBitmap CreateAntialiasedBitmap(const wxImage& img)
     unsigned x, y;
     unsigned sr, sg, sb, smask;
 
-    p1 = img.GetData(), p2 = img.GetData() + 3 * 32, ps = small.GetData();
-    small.SetMaskColour(mr, mr, mr);
+    p1 = img.GetData(), p2 = img.GetData() + 3 * 32, ps = smallimg.GetData();
+    smallimg.SetMaskColour(mr, mr, mr);
 
     for (y = 0; y < 16; y++)
     {
@@ -297,7 +297,7 @@ static wxBitmap CreateAntialiasedBitmap(const wxImage& img)
         p1 += 32 * 3, p2 += 32 * 3;
     }
 
-    return wxBitmap(small);
+    return wxBitmap(smallimg);
 }
 
 // finds empty borders and return non-empty area of image:
@@ -467,8 +467,12 @@ wxFileData::wxFileData( const wxString &name, const wxString &fname )
 //  struct passwd *user = getpwuid( buff.st_uid );
 //  struct group *grp = getgrgid( buff.st_gid );
 
-    m_isDir = S_ISDIR( buff.st_mode );
-    m_isExe = ((buff.st_mode & S_IXUSR ) == S_IXUSR );
+#ifdef __VISUALC__
+    m_isDir = ((buff.st_mode & _S_IFDIR ) == _S_IFDIR );
+#else
+	m_isDir = S_ISDIR( buff.st_mode );
+#endif // VC++
+    m_isExe = ((buff.st_mode & wxS_IXUSR ) == wxS_IXUSR );
 
     m_size = buff.st_size;
 
@@ -481,9 +485,9 @@ wxFileData::wxFileData( const wxString &name, const wxString &fname )
 
     char buffer[10];
     sprintf( buffer, "%c%c%c",
-     ((( buff.st_mode & S_IRUSR ) == S_IRUSR ) ? 'r' : '-'),
-     ((( buff.st_mode & S_IWUSR ) == S_IWUSR ) ? 'w' : '-'),
-     ((( buff.st_mode & S_IXUSR ) == S_IXUSR ) ? 'x' : '-') );
+     ((( buff.st_mode & wxS_IRUSR ) == wxS_IRUSR ) ? 'r' : '-'),
+     ((( buff.st_mode & wxS_IWUSR ) == wxS_IWUSR ) ? 'w' : '-'),
+     ((( buff.st_mode & wxS_IXUSR ) == wxS_IXUSR ) ? 'x' : '-') );
 #if wxUSE_UNICODE
     m_permissions = wxConvUTF8.cMB2WC( buffer );
 #else
