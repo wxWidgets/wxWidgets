@@ -40,7 +40,14 @@ pascal OSStatus wxFontDialogEventHandler(	EventHandlerCallRef inHandlerCallRef,
     Fixed fontsize;
     RGBColor fontcolor;
     FMFontStyle fontstyle;
+    FMFontFamily fontfamily;
         
+    status = GetEventParameter (event, kEventParamFMFontFamily,
+                                    typeFMFontFamily, NULL,
+                                    sizeof (FMFontFamily), 
+                                    NULL, &(fontfamily)); 
+    check_noerr (status); 
+
     status = GetEventParameter (event, kEventParamFMFontStyle,
                                     typeFMFontStyle, NULL,
                                     sizeof (FMFontStyle), 
@@ -93,8 +100,14 @@ pascal OSStatus wxFontDialogEventHandler(	EventHandlerCallRef inHandlerCallRef,
     //the above have types in SFNTTypes.h
 
     ByteCount 			theActualLength;
+    ItemCount numFontFaces;
+    
+/*
+    ATSUCountFontNames(fontid,
+                       &numFontFaces);
+                       
     ATSUGetIndFontName(fontid, 
-                       0, //first font in index array
+                       numFontFaces-1, //first font in index array
                        0, //need to get length first
                        NULL, //nothin'
                        &theActualLength,
@@ -105,7 +118,7 @@ pascal OSStatus wxFontDialogEventHandler(	EventHandlerCallRef inHandlerCallRef,
     
     Ptr szBuffer = NewPtr(theActualLength);
     ATSUGetIndFontName(fontid, 
-                       0, //first font in index array
+                       numFontFaces-1, //first font in index array
                        theActualLength, 
                        szBuffer, 
                        &theActualLength,
@@ -117,7 +130,12 @@ pascal OSStatus wxFontDialogEventHandler(	EventHandlerCallRef inHandlerCallRef,
     //its unicode - convert it to wx's char value and put it in there
     theFont.SetFaceName(wxConvLocal.cMB2WX((char*)szBuffer));
     DisposePtr(szBuffer);
-    
+*/
+
+    Str255 theFontName;
+    GetFontName(fontfamily, theFontName);
+    theFont.SetFaceName(wxMacMakeStringFromPascal(theFontName));
+      
     //TODOTODO: Get font family - mayby by the script code?
     theFont.SetFamily(wxDEFAULT);  
 
