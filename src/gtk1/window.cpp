@@ -800,10 +800,7 @@ static int gtk_window_expose_callback( GtkWidget *widget,
                                   gdk_event->area.width,
                                   gdk_event->area.height );
 
-    // Actually send the various events based on the
-    // current update region.
-    if (gdk_event->count == 0)
-        win->GtkSendPaintEvents();
+    // Actual redrawing takes place in idle time.
 
     return TRUE;
 }
@@ -898,10 +895,9 @@ static void gtk_window_draw_callback( GtkWidget *widget,
 
     win->GetUpdateRegion().Union( rect->x, rect->y, rect->width, rect->height );
 
-    // Actually send the various events based on the
-    // current update region.
-    win->GtkSendPaintEvents();
+    // Actual redrawing takes place in idle time.
 
+#ifndef __WXUNIVERSAL__
     // Redraw child widgets
     GList *children = pizza->children;
     while (children)
@@ -915,6 +911,7 @@ static void gtk_window_draw_callback( GtkWidget *widget,
             gtk_widget_draw (child->widget, &child_area /* (GdkRectangle*) NULL*/ );
         }
     }
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -3417,34 +3414,49 @@ void wxWindowGTK::GtkSendPaintEvents()
 
     m_clipPaintRegion = FALSE;
 
+#ifndef __WXUNIVERSAL__
+    // The following code will result in all window-less widgets
+    // being redrawn because the wxWindows class is allowed to
+    // paint over the window-less widgets.
+    
     GtkPizza *pizza = GTK_PIZZA(m_wxwindow);
-    if (g_list_length(pizza->children) > 0)
+    
+    GList *children = pizza->children;
+    while (children)
     {
-        // The following code will result in all window-less widgets
-        // being redrawn because the wxWindows class is allowed to
-        // paint over the window-less widgets.
-        GList *children = pizza->children;
-        while (children)
-        {
-            GtkPizzaChild *child = (GtkPizzaChild*) children->data;
-            children = children->next;
+        GtkPizzaChild *child = (GtkPizzaChild*) children->data;
+        children = children->next;
 
-            if (GTK_WIDGET_NO_WINDOW (child->widget) &&
-                GTK_WIDGET_DRAWABLE (child->widget))
+        if (GTK_WIDGET_NO_WINDOW (child->widget) &&
+            GTK_WIDGET_DRAWABLE (child->widget))
+        {
+            // Get intersection of widget area and update region
+            wxRegion region( m_updateRegion );
+            
+            GdkEventExpose gdk_event;
+            gdk_event.type = GDK_EXPOSE;
+            gdk_event.window = pizza->bin_window;
+            gdk_event.count = 0;
+            
+            wxRegionIterator upd( m_updateRegion );
+            while (upd)
             {
-                // Get intersection of widget area and update region
-                wxRegion region( m_updateRegion );
-                region.Intersect( child->widget->allocation.x,
-                                  child->widget->allocation.y,
-                                  child->widget->allocation.width,
-                                  child->widget->allocation.height );
+                GdkRectangle rect;
+                rect.x = upd.GetX();
+                rect.y = upd.GetY();
+                rect.width = upd.GetWidth();
+                rect.height = upd.GetHeight();
                 
-                // Redraw the whole widget anyway
-                if (!region.IsEmpty())
-                    gtk_widget_draw( child->widget, NULL );
+                if (gtk_widget_intersect (child->widget, &rect, &gdk_event.area))
+                {
+                    gtk_widget_event (child->widget, (GdkEvent*) &gdk_event);
+                }
+                
+                upd ++;
             }
         }
     }
+#endif
 
     m_updateRegion.Clear();
 }
@@ -3583,7 +3595,7 @@ GtkStyle *wxWindowGTK::GetWidgetStyle()
 
 void wxWindowGTK::SetWidgetStyle()
 {
-#if DISABLE_STYLE_IF_BROKEN_THEM
+#if DISABLE_STYLE_IF_BROKEN_THEME
     if (m_widget->style->engine_data)
     {
         static bool s_warningPrinted = FALSE;
