@@ -461,14 +461,33 @@ if successful, FALSE otherwise.
 Makes a copy of the string {\it s} using the C++ new operator, so it can be
 deleted with the {\it delete} operator.
 
+\membersection{::wxIsEmpty}\label{wxisempty}
+
+\func{bool}{IsEmpty}{\param{const char *}{ p}}
+
+Returns {\tt TRUE} if the pointer is either {\tt NULL} or points to an empty
+string, {\tt FALSE} otherwise.
+
+\membersection{::wxStricmp}\label{wxstricmp}
+
+\func{int}{Stricmp}{\param{const char *}{p1}, \param{const char *}{p2}}
+
+Returns a negative value, 0, or positive value if {\it p1} is less than, equal
+to or greater than {\it p2}. The comparison is case-insensitive.
+
+This function complements the standard C function {\it strcmp()} which performs
+case-sensitive comparison.
+
 \membersection{::wxStringMatch}
 
 \func{bool}{wxStringMatch}{\param{const wxString\& }{s1}, \param{const wxString\& }{s2},\\
   \param{bool}{ subString = TRUE}, \param{bool}{ exact = FALSE}}
 
-Returns TRUE if the substring {\it s1} is found within {\it s2},
-ignoring case if {\it exact} is FALSE. If {\it subString} is FALSE,
+Returns {\tt TRUE} if the substring {\it s1} is found within {\it s2},
+ignoring case if {\it exact} is FALSE. If {\it subString} is {\tt FALSE},
 no substring matching is done.
+
+This function is obsolete, use \helpref{wxString::Find}{wxstringfind} instead.
 
 \membersection{::wxStringEq}\label{wxstringeq}
 
@@ -480,30 +499,15 @@ A macro defined as:
 #define wxStringEq(s1, s2) (s1 && s2 && (strcmp(s1, s2) == 0))
 \end{verbatim}
 
-\membersection{::IsEmpty}\label{isempty}
+This function is obsolete, use \helpref{wxString}{wxstring} instead.
 
-\func{bool}{IsEmpty}{\param{const char *}{ p}}
-
-Returns TRUE if the string is empty, FALSE otherwise. It is safe to pass NULL
-pointer to this function and it will return TRUE for it.
-
-\membersection{::Stricmp}\label{stricmp}
-
-\func{int}{Stricmp}{\param{const char *}{p1}, \param{const char *}{p2}}
-
-Returns a negative value, 0, or positive value if {\it p1} is less than, equal
-to or greater than {\it p2}. The comparison is case-insensitive.
-
-This function complements the standard C function {\it strcmp()} which performs
-case-sensitive comparison.
-
-\membersection{::Strlen}\label{strlen}
+\membersection{::wxStrlen}\label{wxstrlen}
 
 \func{size\_t}{Strlen}{\param{const char *}{ p}}
 
 This is a safe version of standard function {\it strlen()}: it does exactly the
 same thing (i.e. returns the length of the string) except that it returns 0 if
-{\it p} is the NULL pointer.
+{\it p} is the {\tt NULL} pointer.
 
 \membersection{::wxGetTranslation}\label{wxgettranslation}
 

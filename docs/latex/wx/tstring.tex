@@ -131,18 +131,19 @@ variables.
 
 \subsection{Other string related functions and classes}
 
-As most programs use character strings, the standard C library provides quite a
-few functions to work with them. Unfortunately, some of them have rather
-counter-intuitive behaviour (like strncpy() which doesn't always terminate the resulting
-string with a NULL) and are in general not very safe (passing NULL to them will
-probably lead to program crash). Moreover, some very useful functions are not
-standard at all. This is why in addition to all wxString functions, there are
-also a few global string functions which try to correct these problems: 
-\helpref{wxIsEmpty()}{wxisempty} verifies whether the string is empty (returning
-TRUE for NULL pointers), \helpref{wxStrlen()}{wxstrlen} also handles NULLs correctly
-and returns 0 for them and \helpref{wxStricmp()}{wxstricmp} is just a
-platform-independent version of case-insensitive string comparison function
-known either as stricmp() or strcasecmp() on different platforms.
+As most programs use character strings, the standard C library provides quite
+a few functions to work with them. Unfortunately, some of them have rather
+counter-intuitive behaviour (like strncpy() which doesn't always terminate the
+resulting string with a NULL) and are in general not very safe (passing NULL
+to them will probably lead to program crash). Moreover, some very useful
+functions are not standard at all. This is why in addition to all wxString
+functions, there are also a few global string functions which try to correct
+these problems: \helpref{wxIsEmpty()}{wxisempty} verifies whether the string
+is empty (returning {\tt TRUE} for {\tt NULL| pointers), 
+\helpref{wxStrlen()}{wxstrlen} also handles NULLs correctly and returns 0 for
+them and \helpref{wxStricmp()}{wxstricmp} is just a platform-independent
+version of case-insensitive string comparison function known either as
+stricmp() or strcasecmp() on different platforms.
 
 The {\tt <wx/string.h>} header also defines \helpref{wxSnprintf}{wxsnprintf} 
 and \helpref{wxVsnprintf}{wxvsnprintf} functions which should be used instead
