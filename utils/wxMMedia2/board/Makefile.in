@@ -1,0 +1,38 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1998
+# Updated:	
+# Copyright:	(c) 1998 Julian Smart
+#
+# "%W% %G%"
+#
+# Makefile for minimal example (UNIX).
+
+top_srcdir = @top_srcdir@
+top_builddir = ../../..
+program_dir = utils/wxMMedia2/board
+
+PROGRAM=mmboard
+
+OBJECTS=$(PROGRAM).o
+
+EXTRA_CPPFLAGS= -I$(top_srcdir)/utils/wxMMedia2/lib
+
+EXTRA_LIBS= ../lib/libwxmmedia2.a
+# the comment at the end of the next line is needed because otherwise autoconf
+# would remove this line completely - it contains a built-in hack to remove
+# any VPATH assignment not containing ':'
+VPATH = @PATH_IFS@$(top_srcdir)/utils/wxMMedia2/sample # ':' for autoconf
+
+include ../../../src/make.env
+
+.SUFFIXES: .o .cpp .c
+
+.cpp.o:
+	$(CC) $(CPPFLAGS) $(EXTRA_CPPFLAGS) -o $@ $<
+
+all: $(PROGRAM)
+
+mmboard: $(OBJECTS)
+	$(CC) $(LDFLAGS) -o mmboard $(OBJECTS) $(EXTRA_LIBS) $(LDLIBS) $(top_builddir)/lib/@WX_TARGET_LIBRARY@
