@@ -12,34 +12,51 @@ if [ -z $1 ]; then
 fi
 
 if [ ! -d wxPython ]; then
-    echo "Please run this script from the directory containing the wxPython directory."
+    echo "Please run this script from the root wxPython directory."
     exit 1
 fi
 
-cp $WXWIN/docs/gpl.txt wxPython
-cp $WXWIN/docs/lgpl.txt wxPython
-cp $WXWIN/docs/licence.txt wxPython
-cp $WXWIN/docs/licendoc.txt wxPython
-cp $WXWIN/docs/preamble.txt wxPython
+mkdir _distrib_tgz
+mkdir _distrib_tgz/wxPython-$1
 
-rm -f wxPython/distrib/filelist
-for x in `cat wxPython/distrib/wxPython.rsp`; do
-    ls $x >> wxPython/distrib/filelist
+# Copy license files
+cp $WXWIN/docs/gpl.txt _distrib_tgz/wxPython-$1
+cp $WXWIN/docs/lgpl.txt _distrib_tgz/wxPython-$1
+cp $WXWIN/docs/licence.txt _distrib_tgz/wxPython-$1
+cp $WXWIN/docs/licendoc.txt _distrib_tgz/wxPython-$1
+cp $WXWIN/docs/preamble.txt _distrib_tgz/wxPython-$1
+
+# Copy files from the live dirs
+#   first, get a list of files
+for x in `cat distrib/wxPython.rsp`; do
+    ls $x >> _distrib_tgz/filelist
 done
 
+#   and make a tar file containing those files
+tar cf _distrib_tgz/dist-temp.tar -T _distrib_tgz/filelist
 
-tar cf wxPython/distrib/dist-temp.tar -T wxPython/distrib/filelist
-cd wxPython/distrib
-tar xf dist-temp.tar
-rm dist-temp.tar
-mv wxPython wxPython-$1
+#   now untar it in the right place
+cd _distrib_tgz/wxPython-$1
+tar xf ../dist-temp.tar
+cd ..
+
+#   update a few things
 rm wxPython-$1/src/gtk/helpers.cpp
 touch `find wxPython-$1 -name "*.cpp"`
 touch `find wxPython-$1 -name "*.py"`
 
+# Finally, make the finished tar file
+tar cvf ../distrib/wxPython-$1.tar wxPython-$1
+gzip ../distrib/wxPython-$1.tar
 
-tar cvf wxPython-$1.tar wxPython-$1
-gzip wxPython-$1.tar
+cd ..
+rm -rf _distrib_tgz
 
-rm -rf wxPython-$1
+
+
+
+
+
+
+
 

@@ -285,10 +285,9 @@ class BuildConfig:
                           '`$(WXCONFIG) --cflags` -I$(PYINCLUDE) -I$(EXECINCLUDE) '\
                           '-I$(WXPSRCDIR)'
             self.LFLAGS = '-L$(WXPSRCDIR) `$(WXCONFIG) --libs`'
-            self.LIBS   = '-l$(HELPERLIB)'
             self.RMCMD  = '-rm -f '
             self.WXCONFIG = 'wx-config'
-
+            self.USE_SONAME = '0'
 
             # **** What to do when I start supporting Motif, etc.???
             self.GENCODEDIR = 'gtk'
@@ -712,7 +711,7 @@ MODULE = %(MODULE)s
 SWIGFLAGS = %(SWIGFLAGS)s %(SWIGTOOLKITFLAG)s %(OTHERSWIGFLAGS)s
 CFLAGS = %(CFLAGS)s $(OPT) %(OTHERCFLAGS)s
 LFLAGS = %(LFLAGS)s %(OTHERLFLAGS)s
-LIBS = %(LIBS)s %(OTHERLIBS)s
+
 PYVERSION = %(PYVERSION)s
 PYPREFIX = %(PYPREFIX)s
 EXECPREFIX = %(EXECPREFIX)s
@@ -751,6 +750,13 @@ TARGET = %(TARGET)s
 
 ifeq ($(WXP_USE_THREAD), 1)
 THREAD=-DWXP_USE_THREAD
+endif
+
+USE_SONAME = %(USE_SONAME)s
+ifeq ($(USE_SONAME), 1)
+LIBS = -l$(HELPERLIB) %(OTHERLIBS)s
+else
+LIBS = $(WXPSRCDIR)/lib$(HELPERLIB)$(SO) %(OTHERLIBS)s
 endif
 
 #----------------------------------------------------------------------
