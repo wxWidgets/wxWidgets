@@ -1148,6 +1148,13 @@ void wxToolBar::OnSysColourChanged(wxSysColourChangedEvent& event)
 
 void wxToolBar::OnMouseEvent(wxMouseEvent& event)
 {
+    if (event.Leaving() && m_pInTool)
+    {
+        OnMouseEnter( -1 );
+        event.Skip();
+        return;
+    }
+
     if (event.RightDown())
     {
         // For now, we don't have an id. Later we could
