@@ -8323,6 +8323,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"TL_SEARCH_FULL", SWIG_FromInt((int)wxTL_SEARCH_FULL));
     PyDict_SetItemString(d,"TL_SEARCH_PARTIAL", SWIG_FromInt((int)wxTL_SEARCH_PARTIAL));
     PyDict_SetItemString(d,"TL_SEARCH_NOCASE", SWIG_FromInt((int)wxTL_SEARCH_NOCASE));
+    PyDict_SetItemString(d,"TR_DONT_ADJUST_MAC", SWIG_FromInt((int)wxTR_DONT_ADJUST_MAC));
     
     
     wxPyPtrTypeMap_Add("wxTreeCompanionWindow", "wxPyTreeCompanionWindow");

@@ -11,8 +11,8 @@ import _gizmos
 import _windows
 import _core
 import _controls
-wx = _core 
-__docfilter__ = wx.__DocFilter(globals()) 
+import wx 
+__docfilter__ = wx._core.__DocFilter(globals()) 
 wxEVT_DYNAMIC_SASH_SPLIT = _gizmos.wxEVT_DYNAMIC_SASH_SPLIT
 wxEVT_DYNAMIC_SASH_UNIFY = _gizmos.wxEVT_DYNAMIC_SASH_UNIFY
 DS_MANAGE_SCROLLBARS = _gizmos.DS_MANAGE_SCROLLBARS
@@ -359,6 +359,8 @@ TL_SEARCH_LEVEL = _gizmos.TL_SEARCH_LEVEL
 TL_SEARCH_FULL = _gizmos.TL_SEARCH_FULL
 TL_SEARCH_PARTIAL = _gizmos.TL_SEARCH_PARTIAL
 TL_SEARCH_NOCASE = _gizmos.TL_SEARCH_NOCASE
+TR_DONT_ADJUST_MAC = _gizmos.TR_DONT_ADJUST_MAC
+wx.TR_DONT_ADJUST_MAC = TR_DONT_ADJUST_MAC 
 class TreeListColumnInfo(_core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTreeListColumnInfo instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
