@@ -1150,11 +1150,11 @@ public:
     // and may be overridden by the user
     virtual void DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr );
 
-    void DrawRowLabels( wxDC& dc, const wxArrayInt& rows );
-    void DrawRowLabel( wxDC& dc, int row );
+    virtual void DrawRowLabels( wxDC& dc, const wxArrayInt& rows );
+    virtual void DrawRowLabel( wxDC& dc, int row );
 
-    void DrawColLabels( wxDC& dc, const wxArrayInt& cols );
-    void DrawColLabel( wxDC& dc, int col );
+    virtual void DrawColLabels( wxDC& dc, const wxArrayInt& cols );
+    virtual void DrawColLabel( wxDC& dc, int col );
 
 
     // ------ Cell text drawing functions
