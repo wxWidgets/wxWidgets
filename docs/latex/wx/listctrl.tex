@@ -142,14 +142,6 @@ wxIMAGE\_LIST\_NORMAL, wxIMAGE\_LIST\_SMALL, wxIMAGE\_LIST\_STATE (the last is u
 
 \helpref{wxListCtrl::SetImageList}{wxlistctrlsetimagelist}
 
-\membersection{wxListCtrl::Create}\label{wxlistctrlcreate}
-
-\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
-\param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
-\param{long}{ style = wxLC\_ICON}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``listCtrl"}}
-
-Creates the list control. See \helpref{wxListCtrl::wxListCtrl}{wxlistctrlconstr} for further details.
-
 \membersection{wxListCtrl::ClearAll}\label{wxlistctrlclearall}
 
 \func{void}{ClearAll}{}
@@ -164,6 +156,14 @@ Deletes the specified item. This function sends the
 {\tt wxEVT\_COMMAND\_LIST\_DELETE\_ITEM} event for the item being deleted.
 
 See also: \helpref{DeleteAllItems}{wxlistctrldeleteallitems}
+
+\membersection{wxListCtrl::Create}\label{wxlistctrlcreate}
+
+\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
+\param{long}{ style = wxLC\_ICON}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``listCtrl"}}
+
+Creates the list control. See \helpref{wxListCtrl::wxListCtrl}{wxlistctrlconstr} for further details.
 
 \membersection{wxListCtrl::DeleteAllItems}\label{wxlistctrldeleteallitems}
 
@@ -280,6 +280,12 @@ before calling this method.
 for the item ID, an optional integer for the column number, and
 returns the wxListItem object.  }
 
+\membersection{wxListCtrl::GetItemCount}\label{wxlistctrlgetitemcount}
+
+\constfunc{int}{GetItemCount}{\void}
+
+Returns the number of items in the list control.
+
 \membersection{wxListCtrl::GetItemData}\label{wxlistctrlgetitemdata}
 
 \constfunc{long}{GetItemData}{\param{long }{item}}
@@ -306,20 +312,6 @@ Returns the rectangle representing the item's size and position, in client coord
 \pythonnote{The wxPython version of this method accepts only the item
 ID and code and returns the wxRect.}
 
-\membersection{wxListCtrl::GetItemState}\label{wxlistctrlgetitemstate}
-
-\constfunc{int}{GetItemState}{\param{long }{item}, \param{long }{stateMask}}
-
-Gets the item state. For a list of state flags, see \helpref{wxListCtrl::SetItem}{wxlistctrlsetitem}.
-
-The {\bf stateMask} indicates which state flags are of interest.
-
-\membersection{wxListCtrl::GetItemCount}\label{wxlistctrlgetitemcount}
-
-\constfunc{int}{GetItemCount}{\void}
-
-Returns the number of items in the list control.
-
 \membersection{wxListCtrl::GetItemSpacing}\label{wxlistctrlgetitemspacing}
 
 \constfunc{int}{GetItemSpacing}{\param{bool }{isSmall}}
@@ -327,6 +319,14 @@ Returns the number of items in the list control.
 Retrieves the spacing between icons in pixels.
 If {\it small} is TRUE, gets the spacing for the small icon
 view, otherwise the large icon view.
+
+\membersection{wxListCtrl::GetItemState}\label{wxlistctrlgetitemstate}
+
+\constfunc{int}{GetItemState}{\param{long }{item}, \param{long }{stateMask}}
+
+Gets the item state. For a list of state flags, see \helpref{wxListCtrl::SetItem}{wxlistctrlsetitem}.
+
+The {\bf stateMask} indicates which state flags are of interest.
 
 \membersection{wxListCtrl::GetItemText}\label{wxlistctrlgetitemtext}
 
