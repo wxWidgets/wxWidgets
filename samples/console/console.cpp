@@ -45,7 +45,7 @@
 //#define TEST_FILE
 //#define TEST_FILECONF
 //#define TEST_FILENAME
-#define TEST_FTP
+//#define TEST_FTP
 //#define TEST_HASH
 //#define TEST_LIST
 //#define TEST_LOG
@@ -54,7 +54,7 @@
 //#define TEST_INFO_FUNCTIONS
 //#define TEST_REGISTRY
 //#define TEST_SOCKETS
-//#define TEST_STREAMS
+#define TEST_STREAMS
 //#define TEST_STRINGS
 //#define TEST_THREADS
 //#define TEST_TIMER
@@ -1838,7 +1838,33 @@ static void TestFtpUpload()
 
 #ifdef TEST_STREAMS
 
+#include <wx/wfstream.h>
 #include <wx/mstream.h>
+
+static void TestFileStream()
+{
+    puts("*** Testing wxFileInputStream ***");
+
+    static const wxChar *filename = _T("testdata.fs");
+    {
+        wxFileOutputStream fsOut(filename);
+        fsOut.Write("foo", 3);
+    }
+
+    wxFileInputStream fsIn(filename);
+    printf("File stream size: %u\n", fsIn.GetSize());
+    while ( !fsIn.Eof() )
+    {
+        putchar(fsIn.GetC());
+    }
+
+    if ( !wxRemoveFile(filename) )
+    {
+        printf("ERROR: failed to remove the file '%s'.\n", filename);
+    }
+
+    puts("\n*** wxFileInputStream test done ***");
+}
 
 static void TestMemoryStream()
 {
@@ -2158,37 +2184,49 @@ static void TestVCardWrite()
 #ifdef TEST_WCHAR
 
 #include <wx/strconv.h>
+#include <wx/fontenc.h>
+#include <wx/encconv.h>
 #include <wx/buffer.h>
 
 static void TestUtf8()
 {
     puts("*** Testing UTF8 support ***\n");
 
-    wxString testString = "français";
+    static const char textInUtf8[] =
+    {
+        208, 157, 208, 181, 209, 129, 208, 186, 208, 176, 208, 183, 208, 176,
+        208, 189, 208, 189, 208, 190, 32, 208, 191, 208, 190, 209, 128, 208,
+        176, 208, 180, 208, 190, 208, 178, 208, 176, 208, 187, 32, 208, 188,
+        208, 181, 208, 189, 209, 143, 32, 209, 129, 208, 178, 208, 190, 208,
+        181, 208, 185, 32, 208, 186, 209, 128, 209, 131, 209, 130, 208, 181,
+        208, 185, 209, 136, 208, 181, 208, 185, 32, 208, 189, 208, 190, 208,
+        178, 208, 190, 209, 129, 209, 130, 209, 140, 209, 142, 0
+    };
+
+    char buf[1024];
+    wchar_t wbuf[1024];
+    if ( wxConvUTF8.MB2WC(wbuf, textInUtf8, WXSIZEOF(textInUtf8)) <= 0 )
+    {
+        puts("ERROR: UTF-8 decoding failed.");
+    }
+    else
+    {
+        // using wxEncodingConverter
 #if 0
-"************ French - Français ****************"
-"Juste un petit exemple pour dire que les français aussi"
-"ont à cœur de pouvoir utiliser tous leurs caractères ! :)";
+        wxEncodingConverter ec;
+        ec.Init(wxFONTENCODING_UNICODE, wxFONTENCODING_KOI8);
+        ec.Convert(wbuf, buf);
+#else // using wxCSConv
+        wxCSConv conv(_T("koi8-r"));
+        if ( conv.WC2MB(buf, wbuf, 0 /* not needed wcslen(wbuf) */) <= 0 )
+        {
+            puts("ERROR: conversion to KOI8-R failed.");
+        }
+        else
 #endif
 
-    wxWCharBuffer wchBuf = testString.wc_str(wxConvUTF8);
-    const wchar_t *pwz = (const wchar_t *)wchBuf;
-    wxString testString2(pwz, wxConvLocal);
-
-    printf("Decoding '%s' => '%s'\n", testString.c_str(), testString2.c_str());
-
-    char *psz = "fran" "\xe7" "ais";
-    size_t len = strlen(psz);
-    wchar_t *pwz2 = new wchar_t[len + 1];
-    for ( size_t n = 0; n <= len; n++ )
-    {
-        pwz2[n] = (wchar_t)(unsigned char)psz[n];
+        printf("The resulting string (in koi8-r): %s\n", buf);
     }
-
-    wxString testString3(pwz2, wxConvUTF8);
-    delete [] pwz2;
-
-    printf("Encoding '%s' -> '%s'\n", psz, testString3.c_str());
 }
 
 #endif // TEST_WCHAR
@@ -4250,6 +4288,8 @@ int main(int argc, char **argv)
 #endif // TEST_FTP
 
 #ifdef TEST_STREAMS
+    if ( 0 )
+    TestFileStream();
     TestMemoryStream();
 #endif // TEST_STREAMS
 
