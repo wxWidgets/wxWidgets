@@ -101,8 +101,8 @@ void wxSetIconsX11( WXDisplay* display, WXWindow window,
 
     if( size > 0 )
     {
-        wxUint32* data = new wxUint32[size];
-        wxUint32* ptr = data;
+        long* data = new long[size];
+        long* ptr = data;
 
         for( i = 0; i < max; ++i )
         {
