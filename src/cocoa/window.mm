@@ -536,20 +536,45 @@ void wxWindow::Clear()
     // TODO
 }
 
+static int CocoaRaiseWindowCompareFunction(id first, id second, void *target)
+{
+    // first should be ordered higher
+    if(first==target)
+        return NSOrderedDescending;
+    // second should be ordered higher
+    if(second==target)
+        return NSOrderedAscending;
+    return NSOrderedSame;
+}
+
 // Raise the window to the top of the Z order
 void wxWindow::Raise()
 {
-    wxAutoNSAutoreleasePool pool;
+//    wxAutoNSAutoreleasePool pool;
     NSView *nsview = GetNSViewForSuperview();
-    NSView *superview = [nsview superview];
-    [nsview removeFromSuperview];
-    [superview addSubview:nsview];
+    [[nsview superview] sortSubviewsUsingFunction:
+            CocoaRaiseWindowCompareFunction
+        context: nsview];
+}
+
+static int CocoaLowerWindowCompareFunction(id first, id second, void *target)
+{
+    // first should be ordered lower
+    if(first==target)
+        return NSOrderedAscending;
+    // second should be ordered lower
+    if(second==target)
+        return NSOrderedDescending;
+    return NSOrderedSame;
 }
 
 // Lower the window to the bottom of the Z order
 void wxWindow::Lower()
 {
-    // TODO
+    NSView *nsview = GetNSViewForSuperview();
+    [[nsview superview] sortSubviewsUsingFunction:
+            CocoaLowerWindowCompareFunction
+        context: nsview];
 }
 
 bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
