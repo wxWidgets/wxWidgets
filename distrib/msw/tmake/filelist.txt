@@ -151,7 +151,7 @@ stream.cpp	C
 strconv.cpp	C
 string.cpp	C
 tbarbase.cpp	C
-tbarsmpl.cpp	C	16
+tbarsmpl.cpp	C
 textcmn.cpp	C
 textfile.cpp	C
 time.cpp	C
