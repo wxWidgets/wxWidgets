@@ -83,9 +83,7 @@ private:
 
 static bool SendIdleMessage()
 {
-    wxIdleEvent event;
-
-    return wxTheApp->ProcessEvent(event) && event.MoreRequested();
+    return wxTheApp->ProcessIdle();
 }
 
 bool wxEventLoopImpl::SendIdleMessage()
