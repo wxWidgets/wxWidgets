@@ -166,7 +166,11 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
 
     // border and caption styles
     if ( style & wxRESIZE_BORDER )
+#ifdef __WXWINCE__
+        msflags = msflags;
+#else
         msflags |= WS_THICKFRAME;
+#endif
     else if ( exflags && ((style & wxBORDER_DOUBLE) || (style & wxBORDER_RAISED)) )
         *exflags |= WS_EX_DLGMODALFRAME;
     else if ( !(style & wxBORDER_NONE) )
