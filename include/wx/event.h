@@ -1089,7 +1089,15 @@ public:
 #endif // debug
     }
 
+    // default copy ctor and dtor are normally fine, we only need them to keep
+    // g_isPainting updated in debug build
 #if defined(__WXDEBUG__) && (defined(__WXMSW__) || defined(__WXPM__))
+    wxPaintEvent(const wxPaintEvent& event)
+            : wxEvent(event)
+    {
+        g_isPainting++;
+    }
+
     ~wxPaintEvent()
     {
         g_isPainting--;
