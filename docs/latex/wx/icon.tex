@@ -85,6 +85,10 @@ Creates an icon from XPM data.
 
 Loads an icon from a file or resource.
 
+\func{}{wxIcon}{\param{const wxIconLocation\& }{loc}}
+
+Loads an icon from the specified \helpref{location}{wxiconlocation}.
+
 \wxheading{Parameters}
 
 \docparam{bits}{Specifies an array of pixel values.}
@@ -106,6 +110,9 @@ screen is used.}
 
 \docparam{name}{This can refer to a resource name under MS Windows, or a filename under MS Windows and X.
 Its meaning is determined by the {\it flags} parameter.}
+
+\docparam{loc}{The object describing the location of the native icon, see 
+\helpref{wxIconLocation}{wxiconlocation}.}
 
 \docparam{type}{May be one of the following:
 

@@ -42,13 +42,6 @@ wxIcon::wxIcon(const char **data)
     (void) Create((void*) data, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
 }
 
-wxIcon::wxIcon(const wxString& icon_file, wxBitmapType type,
-               int desiredWidth, int desiredHeight)
-               
-{
-    LoadFile(icon_file, type, desiredWidth, desiredHeight);
-}
-
 void wxIcon::CopyFromBitmap(const wxBitmap& bmp)
 {
     wxIcon *icon = (wxIcon*)(&bmp);

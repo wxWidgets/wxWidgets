@@ -45,6 +45,11 @@ public:
     }
     wxIcon( char **bits, int width=-1, int height=-1 );
 
+    wxIcon(const wxIconLocation& loc)
+        : wxBitmap(loc.GetFileName(), wxBITMAP_TYPE_XPM)
+    {
+    }
+
     wxIcon& operator=(const wxIcon& icon);
     bool operator==(const wxIcon& icon) const { return m_refData == icon.m_refData; }
     bool operator!=(const wxIcon& icon) const { return !(*this == icon); }

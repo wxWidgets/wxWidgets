@@ -85,6 +85,19 @@ wxIcon::wxIcon(const wxString& iconfile,
     LoadFile(iconfile, flags, desiredWidth, desiredHeight);
 }
 
+wxIcon::wxIcon(const wxIconLocation& loc)
+{
+    // wxICOFileHandler accepts names in the format "filename;index"
+    wxString fullname = loc.GetFileName();
+    if ( loc.GetIndex() )
+    {
+        fullname << _T(';') << loc.GetIndex();
+    }
+    //else: 0 is default
+
+    LoadFile(fullname);
+}
+
 wxIcon::~wxIcon()
 {
 }

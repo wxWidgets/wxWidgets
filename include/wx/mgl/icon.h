@@ -42,16 +42,21 @@ public:
     wxIcon(const wxString& filename, int type = wxBITMAP_TYPE_ICO_RESOURCE,
            int WXUNUSED(desiredWidth)=-1, int WXUNUSED(desiredHeight)=-1 ) :
            wxBitmap(filename, (wxBitmapType)type) {}
-    
-    wxIcon& operator = (const wxIcon& icon);
-    inline bool operator == (const wxIcon& icon) { return m_refData == icon.m_refData; }
-    inline bool operator != (const wxIcon& icon) { return m_refData != icon.m_refData; }
+
+    wxIcon(const wxIconLocation& loc)
+        : wxBitmap(loc.GetFileName(), wxBITMAP_TYPE_ICO)
+    {
+    }
+
+    wxIcon& operator=(const wxIcon& icon);
+    bool operator==(const wxIcon& icon) const { return m_refData == icon.m_refData; }
+    bool operator!=(const wxIcon& icon) const { return !(*this == icon); }
 
     // create from bitmap (which should have a mask unless it's monochrome):
     // there shouldn't be any implicit bitmap -> icon conversion (i.e. no
     // ctors, assignment operators...), but it's ok to have such function
     void CopyFromBitmap(const wxBitmap& bmp);
-  
+
 private:
     DECLARE_DYNAMIC_CLASS(wxIcon)
 };

@@ -1,11 +1,7 @@
 #ifndef _WX_ICON_H_BASE_
 #define _WX_ICON_H_BASE_
 
-/* Commenting out since duplicated in gdicmn.h
-// this is for Unix (i.e. now for anything other than MSW)
-#undef  wxICON
-#define wxICON(icon_name)   wxIcon(icon_name##_xpm)
-*/
+#include "wx/iconloc.h"
 
 #if defined(__WXMSW__)
   #include "wx/msw/icon.h"

@@ -53,14 +53,18 @@ public:
 
         // from raw data
     wxIcon(const char bits[], int width, int height);
+
         // from XPM data
     wxIcon(const char **data) { CreateIconFromXpm(data); }
 
     wxIcon(char **data) { CreateIconFromXpm((const char **)data); }
+
         // from resource/file
     wxIcon(const wxString& name,
            long type = wxBITMAP_TYPE_ICO_RESOURCE,
            int desiredWidth = -1, int desiredHeight = -1);
+
+    wxIcon(const wxIconLocation& loc);
 
     virtual ~wxIcon();
 

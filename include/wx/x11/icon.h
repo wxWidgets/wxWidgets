@@ -38,9 +38,14 @@ public:
     }
     wxIcon( char **bits, int width=-1, int height=-1 );
 
-    wxIcon& operator = (const wxIcon& icon);
-    inline bool operator == (const wxIcon& icon) { return m_refData == icon.m_refData; }
-    inline bool operator != (const wxIcon& icon) { return m_refData != icon.m_refData; }
+    wxIcon(const wxIconLocation& loc)
+        : wxBitmap(loc.GetFileName(), wxBITMAP_TYPE_XPM)
+    {
+    }
+
+    wxIcon& operator=(const wxIcon& icon);
+    bool operator==(const wxIcon& icon) const { return m_refData == icon.m_refData; }
+    bool operator!=(const wxIcon& icon) const { return !(*this == icon); }
 
     // create from bitmap (which should have a mask unless it's monochrome):
     // there shouldn't be any implicit bitmap -> icon conversion (i.e. no
