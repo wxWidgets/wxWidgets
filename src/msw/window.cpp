@@ -3111,7 +3111,7 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
     // do create the window
     wxWindowCreationHook hook(this);
 
-    // VZ: anyonce cares to explain why is this done for CE?
+    // VZ: anyone care to explain why this is done for CE?
 #ifdef __WXWINCE__
     if (extendedStyle == 0)
     {
