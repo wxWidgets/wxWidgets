@@ -110,7 +110,6 @@ END_EVENT_TABLE()
 
 // the default initialization
 wxWindowBase::wxWindowBase()
-:   m_bestSize(wxDefaultSize)
 {
     // no window yet, no parent nor children
     m_parent = (wxWindow *)NULL;
@@ -545,7 +544,7 @@ wxSize wxWindowBase::DoGetBestSize() const
         return wxSize(maxX, maxY);
     }
 #endif // wxUSE_CONSTRAINTS
-    else if ( GetChildren().GetCount() > 0 )
+    else if ( !GetChildren().empty() )
     {
         // our minimal acceptable size is such that all our windows fit inside
         int maxX = 0,
@@ -592,20 +591,11 @@ wxSize wxWindowBase::DoGetBestSize() const
 
         return wxSize(maxX, maxY);
     }
-    else
+    else // has children
     {
-        // Windows which don't implement DoGetBestSize and aren't parents.
-        // This emulates the behavior of a wxSizer without wxADJUST_MINSIZE
-
-        // If you get the following message you should do one of two things
-        // 1. Do what it says (best)
-        // 2. m_bestSize = GetSize() at end of Create() (hack)
-        if(m_bestSize == wxDefaultSize)
-        {
-            wxLogDebug(wxT("Class %s (or superclass) should implement DoGetBestSize()"),GetClassInfo()->GetClassName());
-            wxConstCast(this,wxWindowBase)->m_bestSize = GetSize();
-        }
-        return m_bestSize;
+        // for a generic window there is no natural best size - just use the
+        // current size
+        return GetSize();
     }
 }
 
@@ -890,7 +880,7 @@ bool wxWindowBase::RemoveEventHandler(wxEvtHandler *handler)
 
 void wxWindowBase::InheritAttributes()
 {
-    const wxWindow * const parent = GetParent();
+    const wxWindowBase * const parent = GetParent();
     if ( !parent )
         return;
 
