@@ -126,10 +126,12 @@ bool wxXPMDecoder::CanRead(wxInputStream& stream)
 {
     unsigned char buf[9];
 
-    stream.Read(buf, 9);
-    stream.SeekI(-9, wxFromCurrent);
+    if ( !stream.Read(buf, WXSIZEOF(buf)) )
+        return FALSE;
 
-    return (memcmp(buf, "/* XPM */", 9) == 0);
+    stream.SeekI(-WXSIZEOF(buf), wxFromCurrent);
+
+    return memcmp(buf, "/* XPM */", WXSIZEOF(buf)) == 0;
 }
 
 wxImage wxXPMDecoder::ReadFile(wxInputStream& stream)

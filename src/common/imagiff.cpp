@@ -230,12 +230,14 @@ int wxIFFDecoder::GetTransparentColour() const { return m_image->transparent; }
 //
 bool wxIFFDecoder::CanRead()
 {
-    unsigned char buf[12] = "";
+    unsigned char buf[12];
 
-    m_f->Read(buf, 12);
-    m_f->SeekI(-12, wxFromCurrent);
+    if ( !m_f->Read(buf, WXSIZEOF(buf)) )
+        return FALSE;
 
-    return (memcmp(buf, "FORM", 4) == 0 && memcmp(buf+8, "ILBM", 4) == 0);
+    m_f->SeekI(-WXSIZEOF(buf), wxFromCurrent);
+
+    return (memcmp(buf, "FORM", 4) == 0) && (memcmp(buf+8, "ILBM", 4) == 0);
 }
 
 

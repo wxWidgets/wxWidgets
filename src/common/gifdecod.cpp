@@ -617,10 +617,12 @@ bool wxGIFDecoder::CanRead()
 {
     unsigned char buf[3];
 
-    m_f->Read(buf, 3);
-    m_f->SeekI(-3, wxFromCurrent);
+    if ( !m_f->Read(buf, WXSIZEOF(buf)) )
+        return FALSE;
 
-    return (memcmp(buf, "GIF", 3) == 0);
+    m_f->SeekI(-WXSIZEOF(buf), wxFromCurrent);
+
+    return memcmp(buf, "GIF", WXSIZEOF(buf)) == 0;
 }
 
 

@@ -370,11 +370,13 @@ bool wxTIFFHandler::DoCanRead( wxInputStream& stream )
 {
     unsigned char hdr[2];
 
-    stream.Read(&hdr, 2);
-    stream.SeekI(-2, wxFromCurrent);
+    if ( !stream.Read(&hdr, WXSIZEOF(hdr)) )
+        return FALSE;
 
-    return ((hdr[0] == 0x49 && hdr[1] == 0x49) ||
-            (hdr[0] == 0x4D && hdr[1] == 0x4D));
+    stream.SeekI(-WXSIZEOF(hdr), wxFromCurrent);
+
+    return (hdr[0] == 'I' && hdr[1] == 'I') ||
+           (hdr[0] == 'M' && hdr[1] == 'M');
 }
 
 

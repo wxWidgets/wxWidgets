@@ -876,9 +876,13 @@ bool wxBMPHandler::DoCanRead(wxInputStream& stream)
 {
     unsigned char hdr[2];
 
-    stream.Read(hdr, 2);
-    stream.SeekI(-2, wxFromCurrent);
-    return (hdr[0] == 'B' && hdr[1] == 'M');
+    if ( !stream.Read(hdr, WXSIZEOF(hdr)) )
+        return FALSE;
+
+    stream.SeekI(-WXSIZEOF(hdr), wxFromCurrent);
+
+    // do we have the BMP file signature?
+    return hdr[0] == 'B' && hdr[1] == 'M';
 }
 
 
@@ -1259,7 +1263,7 @@ bool wxANIHandler::LoadFile(wxImage *image, wxInputStream& stream,
         //now either data or a FCC
         if ( (FCC1 == *riff32) || (FCC1 == *list32) )
         {
-    	    stream.Read(&FCC2, 4);
+            stream.Read(&FCC2, 4);
         }
         else
         {
@@ -1305,11 +1309,11 @@ bool wxANIHandler::DoCanRead(wxInputStream& stream)
             return TRUE;
         // we always have a data size:
         stream.Read(&datalen, 4);
-        datalen = wxINT32_SWAP_ON_BE(datalen) ;  
+        datalen = wxINT32_SWAP_ON_BE(datalen) ;
         // now either data or a FCC:
         if ( (FCC1 == *riff32) || (FCC1 == *list32) )
         {
-       	    stream.Read(&FCC2, 4);
+            stream.Read(&FCC2, 4);
         }
         else
         {
@@ -1317,7 +1321,11 @@ bool wxANIHandler::DoCanRead(wxInputStream& stream)
         }
 
         // try to read next data chunk:
-        stream.Read(&FCC1, 4);
+        if ( !stream.Read(&FCC1, 4) )
+        {
+            // reading failed -- either EOF or IO error, bail out anyhow
+            return FALSE;
+        }
     }
 
     return FALSE;
@@ -1348,8 +1356,8 @@ int wxANIHandler::GetImageCount(wxInputStream& stream)
         datalen = wxINT32_SWAP_ON_BE(datalen) ;
         // now either data or a FCC:
         if ( (FCC1 == *riff32) || (FCC1 == *list32) )
-    	{
-    	    stream.Read(&FCC2, 4);
+        {
+            stream.Read(&FCC2, 4);
         }
         else
         {

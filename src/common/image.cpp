@@ -1015,7 +1015,7 @@ int wxImage::GetImageCount( const wxString &name, long type )
 
 bool wxImage::CanRead( wxInputStream &stream )
 {
-    wxList &list=GetHandlers();
+    const wxList& list = GetHandlers();
 
     for ( wxList::Node *node = list.GetFirst(); node; node = node->GetNext() )
     {

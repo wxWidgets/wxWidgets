@@ -418,9 +418,12 @@ bool wxPNGHandler::DoCanRead( wxInputStream& stream )
 {
     unsigned char hdr[4];
 
-    stream.Read(hdr, 4);
-    stream.SeekI(-4, wxFromCurrent);
-    return (hdr[0] == 0x89 && hdr[1] == 'P' && hdr[2] == 'N' && hdr[3] == 'G');
+    if ( !stream.Read(hdr, WXSIZEOF(hdr)) )
+        return FALSE;
+
+    stream.SeekI(-WXSIZEOF(hdr), wxFromCurrent);
+
+    return memcmp(hdr, "\211PNG", WXSIZEOF(hdr)) == 0;
 }
 
 #endif  // wxUSE_STREAMS
