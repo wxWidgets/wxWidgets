@@ -1112,6 +1112,14 @@ void wxApp::OnIdle(wxIdleEvent& event)
     wxLog::FlushActive();
 #endif // wxUSE_LOG
 
+#if wxUSE_DC_CACHEING
+    // automated DC cache management: clear the cached DCs and bitmap
+    // if it's likely that the app has finished with them, that is, we
+    // get an idle event and we're not dragging anything.
+    if (!::GetKeyState(MK_LBUTTON) && !::GetKeyState(MK_MBUTTON) && ::GetKeyState(MK_RBUTTON))
+        wxDC::ClearCache();
+#endif // wxUSE_DC_CACHEING
+
     // Send OnIdle events to all windows
     if ( SendIdleEvents() )
     {

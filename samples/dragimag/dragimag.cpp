@@ -101,9 +101,6 @@ void MyCanvas::OnEraseBackground(wxEraseEvent& event)
             wxClientDC dc(this);
             wxGetApp().TileBitmap(rect, dc, wxGetApp().GetBackgroundBitmap());
         }
-#if wxUSE_DC_CACHEING
-        wxDC::ClearCache();
-#endif
     }
     else
         event.Skip(); // The official way of doing it
@@ -281,9 +278,6 @@ void MyCanvas::DrawShapes(wxDC& dc)
           shape->Draw(dc);
         node = node->Next();
     }
-#if wxUSE_DC_CACHEING
-    wxDC::ClearCache();
-#endif
 }
 
 void MyCanvas::EraseShape(DragShape* shape, wxDC& dc)
@@ -385,12 +379,6 @@ bool MyApp::OnInit()
     wxImage::AddHandler( new wxPNGHandler );
 #endif
 
-    // The DC cache is an efficiency measure to be used
-    // when a lot of masked blitting is done
-#if wxUSE_DC_CACHEING
-    wxDC::EnableCache(TRUE);
-#endif
-
     wxImage image;
     if (image.LoadFile("backgrnd.png", wxBITMAP_TYPE_PNG))
     {
@@ -445,9 +433,6 @@ bool MyApp::OnInit()
 
 int MyApp::OnExit()
 {
-#if wxUSE_DC_CACHEING
-    wxDC::ClearCache();
-#endif
     return 0;
 }
 

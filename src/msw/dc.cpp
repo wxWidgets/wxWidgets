@@ -42,6 +42,7 @@
 
 #include "wx/sysopt.h"
 #include "wx/dcprint.h"
+#include "wx/module.h"
 
 #include <string.h>
 #include <math.h>
@@ -1984,6 +1985,19 @@ void wxDC::ClearCache()
     sm_dcCache.Clear();
     sm_dcCache.DeleteContents(FALSE);
 }
+
+// Clean up cache at app exit
+class wxDCModule : public wxModule
+{
+public:
+    virtual bool OnInit() { return TRUE; }
+    virtual void OnExit() { wxDC::ClearCache(); }
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxDCModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxDCModule, wxModule)
 
 #endif
     // wxUSE_DC_CACHEING

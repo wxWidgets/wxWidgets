@@ -104,8 +104,8 @@ and the background colour set to WHITE.
 This sequence of operations ensures that the source's transparent area need not be black,
 and logical functions are supported.
 
-{\bf Note:} on Windows, blitting with masks can be speeded up considerably by using 
-\helpref{DC cacheing}{wxdcenablecache}. You can also influence whether MaskBlt
+{\bf Note:} on Windows, blitting with masks can be speeded up considerably by compiling
+wxWindows with the wxUSE\_DC\_CACHE option enabled. You can also influence whether MaskBlt
 or the explicit mask blitting code above is used, by using \helpref{wxSystemOptions}{wxsystemoptions} and
 setting the {\bf no-maskblt} option to 1.
 
@@ -128,6 +128,7 @@ See \helpref{wxMemoryDC}{wxmemorydc} for typical usage.
 
 \helpref{wxMemoryDC}{wxmemorydc}, \helpref{wxBitmap}{wxbitmap}, \helpref{wxMask}{wxmask}
 
+\begin{comment}
 \membersection{wxDC::CacheEnabled}\label{wxdccacheenabled}
 
 \func{static bool}{CacheEnabled}{\void}
@@ -143,6 +144,7 @@ wxUSE\_DC\_CACHEING preprocessor symbol for portability.
 \wxheading{See also}
 
 \helpref{wxDC::EnableCache}{wxdcenablecache}, \helpref{wxDC::ClearCache}
+\end{comment}
 
 \membersection{wxDC::CalcBoundingBox}\label{wxdccalcboundingbox}
 
@@ -162,6 +164,7 @@ Adds the specified point to the bounding box which can be retrieved with
 
 Clears the device context using the current background brush.
 
+\begin{comment}
 \membersection{wxDC::ClearCache}\label{wxdcclearcache}
 
 \func{static void}{ClearCache}{\void}
@@ -179,6 +182,7 @@ wxUSE\_DC\_CACHEING preprocessor symbol for portability.
 \wxheading{See also}
 
 \helpref{wxDC::EnableCache}{wxdcenablecache}, \helpref{wxDC::CacheEnabled}
+\end{comment}
 
 \membersection{wxDC::CrossHair}\label{wxdccrosshair}
 
@@ -417,6 +421,7 @@ text more precisely.
 but it is ignored by wxMSW. Thus, you should avoid using logical functions
 with this function in portable programs.
 
+\begin{comment}
 \membersection{wxDC::EnableCache}\label{wxdcenablecache}
 
 \func{static void}{EnableCache}{\param{bool}{ enableCache}}
@@ -431,6 +436,7 @@ wxUSE\_DC\_CACHEING preprocessor symbol for portability.
 \wxheading{See also}
 
 \helpref{wxDC::CacheEnabled}{wxdccacheenabled}, \helpref{wxDC::ClearCache}
+\end{comment}
 
 \membersection{wxDC::EndDoc}\label{wxdcenddoc}
 
