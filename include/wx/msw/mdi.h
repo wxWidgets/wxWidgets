@@ -174,6 +174,8 @@ public:
     bool ResetWindowStyle(void *vrect);
 
     void OnIdle(wxIdleEvent& event);
+    
+    virtual bool Show(bool show = true);
 
 protected:
     virtual void DoGetPosition(int *x, int *y) const;
@@ -187,6 +189,7 @@ protected:
     void Init();
 
 private:
+    bool m_needsInitialShow; // Show must be called in idle time after Creation
     bool m_needsResize; // flag which tells us to artificially resize the frame
 
     DECLARE_EVENT_TABLE()
