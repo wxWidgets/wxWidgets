@@ -48,7 +48,7 @@
     
     <option name="USE_OPENGL">
         <values>0 1</values>
-        <default-value>1</default-value>
+        <default-value>0</default-value>
         <description>
             Build OpenGL canvas library (USE_GUI must be 1)?
         </description>
