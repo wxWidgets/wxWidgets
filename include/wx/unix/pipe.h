@@ -28,8 +28,7 @@ public:
     enum Direction
     {
         Read,
-        Write,
-        Direction_Max
+        Write
     };
 
     enum
@@ -83,7 +82,7 @@ public:
     ~wxPipe() { Close(); }
 
 private:
-    int m_fds[Direction_Max];
+    int m_fds[2];
 };
 
 #if wxUSE_STREAMS
