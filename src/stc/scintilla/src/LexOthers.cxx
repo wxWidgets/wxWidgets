@@ -20,6 +20,14 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
+static bool Is0To9(char ch) {
+	return (ch >= '0') && (ch <= '9');
+}
+
+static bool Is1To9(char ch) {
+	return (ch >= '1') && (ch <= '9');
+}
+
 static inline bool AtEOL(Accessor &styler, unsigned int i) {
 	return (styler[i] == '\n') ||
 		((styler[i] == '\r') && (styler.SafeGetCharAt(i + 1) != '\n'));
@@ -85,7 +93,7 @@ static void ColouriseBatchLine(
 		while (offset < lengthLine) {
 			if (state == SCE_BAT_DEFAULT && lineBuffer[offset] == '%') {
 				styler.ColourTo(startLine + offset - 1, state);
-				if (isdigit(lineBuffer[offset + 1])) {
+				if (Is0To9(lineBuffer[offset + 1])) {
 					styler.ColourTo(startLine + offset + 1, SCE_BAT_IDENTIFIER);
 					offset += 2;
 				} else if (lineBuffer[offset + 1] == '%' &&
@@ -343,12 +351,17 @@ static void ColouriseMakeDoc(unsigned int startPos, int length, int, WordList *[
 	}
 }
 
+static bool strstart(char *haystack, char *needle) {
+	return strncmp(haystack, needle, strlen(needle)) == 0;
+}
+
 static void ColouriseErrorListLine(
     char *lineBuffer,
     unsigned int lengthLine,
     //		unsigned int startLine,
     unsigned int endPos,
     Accessor &styler) {
+	const int unRecognized = 99;
 	if (lineBuffer[0] == '>') {
 		// Command or return status
 		styler.ColourTo(endPos, SCE_ERR_CMD);
@@ -367,10 +380,17 @@ static void ColouriseErrorListLine(
 		styler.ColourTo(endPos, SCE_ERR_PYTHON);
 	} else if (strstr(lineBuffer, " in ") && strstr(lineBuffer, " on line ")) {
 		styler.ColourTo(endPos, SCE_ERR_PHP);
-	} else if (0 == strncmp(lineBuffer, "Error ", strlen("Error "))) {
+	} else if ((strstart(lineBuffer, "Error ") ||
+		strstart(lineBuffer, "Warning ")) &&
+		strstr(lineBuffer, " at (") &&
+		strstr(lineBuffer, ") : ") &&
+		(strstr(lineBuffer, " at (") < strstr(lineBuffer, ") : "))) {
+		// Intel Fortran Compiler error/warning message
+		styler.ColourTo(endPos, SCE_ERR_IFC);
+	} else if (strstart(lineBuffer, "Error ")) {
 		// Borland error message
 		styler.ColourTo(endPos, SCE_ERR_BORLAND);
-	} else if (0 == strncmp(lineBuffer, "Warning ", strlen("Warning "))) {
+	} else if (strstart(lineBuffer, "Warning ")) {
 		// Borland warning message
 		styler.ColourTo(endPos, SCE_ERR_BORLAND);
 	} else if (strstr(lineBuffer, "at line " ) &&
@@ -382,51 +402,84 @@ static void ColouriseErrorListLine(
 	} else if (strstr(lineBuffer, " at " ) &&
 	           (strstr(lineBuffer, " at " ) < (lineBuffer + lengthLine)) &&
 	           strstr(lineBuffer, " line ") &&
-	           (strstr(lineBuffer, " line ") < (lineBuffer + lengthLine))) {
+	           (strstr(lineBuffer, " line ") < (lineBuffer + lengthLine)) &&
+			   (strstr(lineBuffer, " at " ) < (strstr(lineBuffer, " line ")))) {
 		// perl error message
 		styler.ColourTo(endPos, SCE_ERR_PERL);
 	} else if ((memcmp(lineBuffer, "   at ", 6) == 0) &&
 		strstr(lineBuffer, ":line ")) {
 		// A .NET traceback
 		styler.ColourTo(endPos, SCE_ERR_NET);
+	} else if (strstart(lineBuffer, "Line ") &&
+		strstr(lineBuffer, ", file ")) {
+		// Essential Lahey Fortran error message
+		styler.ColourTo(endPos, SCE_ERR_ELF);
 	} else {
-		// Look for <filename>:<line>:message
-		// Look for <filename>(line)message
-		// Look for <filename>(line,pos)message
+		// Look for GCC <filename>:<line>:message
+		// Look for Microsoft <filename>(line) :message
+		// Look for Microsoft <filename>(line,pos)message
+		// Look for CTags \tmessage
 		int state = 0;
 		for (unsigned int i = 0; i < lengthLine; i++) {
-			if ((state == 0) && (lineBuffer[i] == ':') && isdigit(lineBuffer[i + 1])) {
-				state = 1;
-			} else if ((state == 0) && (lineBuffer[i] == '(')) {
-				state = 10;
-			} else if ((state == 0) && (lineBuffer[i] == '\t')) {
-				state = 20;
-			} else if ((state == 1) && isdigit(lineBuffer[i])) {
-				state = 2;
-			} else if ((state == 2) && (lineBuffer[i] == ':')) {
-				state = 3;
-				break;
-			} else if ((state == 2) && !isdigit(lineBuffer[i])) {
-				state = 99;
-			} else if ((state == 10) && isdigit(lineBuffer[i])) {
-				state = 11;
-			} else if ((state == 11) && (lineBuffer[i] == ',')) {
-				state = 14;
-			} else if ((state == 11) && (lineBuffer[i] == ')')) {
-				state = 12;
-			} else if ((state == 12) && (lineBuffer[i] == ':')) {
-				state = 13;
-			} else if ((state == 14) && (lineBuffer[i] == ')')) {
-				state = 15;
-				break;
-			} else if (((state == 11) || (state == 14)) && !((lineBuffer[i] == ' ') || isdigit(lineBuffer[i]))) {
-				state = 99;
-			} else if ((state == 20) && (lineBuffer[i-1] == '\t') &&
-				((lineBuffer[i] == '/' && lineBuffer[i+1] == '^') || isdigit(lineBuffer[i]))) {
-				state = 24;
-				break;
-			} else if ((state == 20) && ((lineBuffer[i] == '/') && (lineBuffer[i+1] == '^'))) {
-				state = 21;
+			char ch = lineBuffer[i];
+			char chNext = ' ';
+			if ((i+1) < lengthLine)
+				chNext = lineBuffer[i+1];
+			if (state == 0) {
+				if (ch == ':') {
+					// May be GCC
+					if ((chNext != '\\') && (chNext != '/')) {
+						// This check is not completely accurate as may be on
+						// GTK+ with a file name that includes ':'.
+						state = 1;
+					}
+				} else if ((ch == '(') && Is1To9(chNext)) {
+					// May be Microsoft
+					// Check againt '0' often removes phone numbers
+					state = 10;
+				} else if (ch == '\t') {
+					// May be CTags
+					state = 20;
+				}
+			} else if (state == 1) {
+				state = Is1To9(ch) ? 2 : unRecognized;
+			} else if (state == 2) {
+				if (ch == ':') {
+					state = 3;	// :9.*: is GCC
+					break;
+				} else if (!Is0To9(ch)) {
+					state = unRecognized;
+				}
+			} else if (state == 10) {
+				state = Is0To9(ch) ? 11 : unRecognized;
+			} else if (state == 11) {
+				if (ch == ',') {
+					state = 14;
+				} else if (ch == ')') {
+					state = 12;
+				} else if ((ch != ' ') && !Is0To9(ch)) {
+					state = unRecognized;
+				}
+			} else if (state == 12) {
+				if ((ch == ' ') && (chNext == ':'))
+					state = 13;
+				else
+					state = unRecognized;
+			} else if (state == 14) {
+				if (ch == ')') {
+					state = 15;
+					break;
+				} else if ((ch != ' ') && !Is0To9(ch)) {
+					state = unRecognized;
+				}
+			} else if (state == 20) {
+				if ((lineBuffer[i-1] == '\t') &&
+					((ch == '/' && lineBuffer[i+1] == '^') || Is0To9(ch))) {
+					state = 24;
+					break;
+				} else if ((ch == '/') && (lineBuffer[i+1] == '^')) {
+					state = 21;
+				}
 			} else if ((state == 21) && ((lineBuffer[i] == '$') && (lineBuffer[i+1] == '/'))) {
 				state = 22;
 				break;
@@ -561,12 +614,21 @@ static void ColouriseLatexDoc(unsigned int startPos, int length, int initStyle,
 			}
 		}
 	}
-	styler.ColourTo(lengthDoc, state);
+	styler.ColourTo(lengthDoc-1, state);
 }
 
-LexerModule lmBatch(SCLEX_BATCH, ColouriseBatchDoc, "batch");
-LexerModule lmDiff(SCLEX_DIFF, ColouriseDiffDoc, "diff");
-LexerModule lmProps(SCLEX_PROPERTIES, ColourisePropsDoc, "props");
-LexerModule lmMake(SCLEX_MAKEFILE, ColouriseMakeDoc, "makefile");
-LexerModule lmErrorList(SCLEX_ERRORLIST, ColouriseErrorListDoc, "errorlist");
-LexerModule lmLatex(SCLEX_LATEX, ColouriseLatexDoc, "latex");
+static const char * const batchWordListDesc[] = {
+	"Keywords",
+	0
+};
+
+static const char * const emptyWordListDesc[] = {
+	0
+};
+
+LexerModule lmBatch(SCLEX_BATCH, ColouriseBatchDoc, "batch", 0, batchWordListDesc);
+LexerModule lmDiff(SCLEX_DIFF, ColouriseDiffDoc, "diff", 0, emptyWordListDesc);
+LexerModule lmProps(SCLEX_PROPERTIES, ColourisePropsDoc, "props", 0, emptyWordListDesc);
+LexerModule lmMake(SCLEX_MAKEFILE, ColouriseMakeDoc, "makefile", 0, emptyWordListDesc);
+LexerModule lmErrorList(SCLEX_ERRORLIST, ColouriseErrorListDoc, "errorlist", 0, emptyWordListDesc);
+LexerModule lmLatex(SCLEX_LATEX, ColouriseLatexDoc, "latex", 0, emptyWordListDesc);
