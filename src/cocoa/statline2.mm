@@ -12,7 +12,7 @@
 #include "wx/app.h"
 #include "wx/statline.h"
 
-#import <AppKit/NSView.h>
+#import <AppKit/NSBox.h>
 
 IMPLEMENT_DYNAMIC_CLASS(wxStaticLine, wxControl)
 BEGIN_EVENT_TABLE(wxStaticLine, wxStaticLineBase)
@@ -27,8 +27,9 @@ bool wxStaticLine::Create(wxWindow *parent, wxWindowID winid,
 {
     if(!CreateControl(parent,winid,pos,size,style,wxDefaultValidator,name))
         return false;
-    SetNSView([[NSView alloc] initWithFrame: MakeDefaultNSRect(size)]);
+    SetNSView([[NSBox alloc] initWithFrame: MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
+    [(NSBox*)m_cocoaNSView setBoxType: NSBoxSeparator];
     if(m_parent)
         m_parent->CocoaAddChild(this);
     SetInitialFrameRect(pos,size);
