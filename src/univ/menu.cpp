@@ -601,10 +601,12 @@ void wxPopupMenuWindow::ClickItem(wxMenuItem *item)
     wxASSERT_MSG( !item->IsSeparator() && !item->IsSubMenu(),
                   _T("can't click this item") );
 
-    m_menu->ClickItem(item);
+    wxMenu* menu = m_menu;
 
     // close all menus
     DismissAndNotify();
+    
+    menu->ClickItem(item);
 }
 
 void wxPopupMenuWindow::OpenSubmenu(wxMenuItem *item, InputMethod how)
@@ -2223,6 +2225,11 @@ void wxMenuBar::PopupCurrentMenu(bool selectFirst)
             // that we pass 0 as width to position the menu exactly below the
             // item, not to the right of it
             wxRect rectItem = GetItemRect(m_current);
+
+	    // Release mouse, because the menu will get the capture.
+	    if (HasCapture())
+		ReleaseMouse();
+
             m_menuShown->Popup(ClientToScreen(rectItem.GetPosition()),
                                wxSize(0, rectItem.GetHeight()),
                                selectFirst);
