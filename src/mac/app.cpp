@@ -274,10 +274,21 @@ void wxMacConvertFromPC( const char *from , char *to , int len )
     {
         for( int i = 0 ; i < len ; ++ i )
         {
-            c = strchr( StringANSI , *from ) ;
-            if ( c != NULL )
+            if ( *from & 0x80 )
             {
-                *to = StringMac[ c - StringANSI] ;
+                c = strchr( StringANSI , *from ) ;
+                if ( c != NULL )
+                {
+                    *to = StringMac[ c - StringANSI] ;
+                }
+            }
+            else if ( *from == 0x0a )
+            {
+                *to = 0x0d ;
+            }
+            else
+            {
+                *to = *from ;
             }
             ++to ;
             ++from ;
@@ -287,10 +298,21 @@ void wxMacConvertFromPC( const char *from , char *to , int len )
     {
         for( int i = 0 ; i < len ; ++ i )
         {
-            c = strchr( StringANSI , *from ) ;
-            if ( c != NULL )
+            if ( *from & 0x80 )
             {
-                *to = StringMac[ c - StringANSI] ;
+                c = strchr( StringANSI , *from ) ;
+                if ( c != NULL )
+                {
+                    *to = StringMac[ c - StringANSI] ;
+                }
+                else
+                {
+                    *to = *from ;
+                }
+            }
+            else if ( *from == 0x0a )
+            {
+                *to = 0x0d ;
             }
             else
             {
