@@ -169,6 +169,14 @@ WXDLLIMPEXP_BASE int wxMSLU__tremove(const wxChar *name)
         return _tremove(name);
 }
 
+WXDLLIMPEXP_BASE FILE* wxMSLU__tfopen(const wxChar *name,const wxChar* mode)
+{
+    if ( wxUsingUnicowsDll() )
+        return fopen(wxConvFile.cWX2MB(name),wxConvFile.cWX2MB(mode));
+    else
+        return _tfopen(name,mode);
+}
+
 #if defined( __VISUALC__ ) \
     || ( defined(__MINGW32__) && wxCHECK_W32API_VERSION( 0, 5 ) ) \
     || ( defined(__MWERKS__) && defined(__WXMSW__) ) \

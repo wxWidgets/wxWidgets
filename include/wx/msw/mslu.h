@@ -51,6 +51,7 @@ WXDLLEXPORT int wxMSLU_GetSaveFileNameW(void *ofn);
 
 WXDLLIMPEXP_BASE int wxMSLU__trename(const wxChar *oldname, const wxChar *newname);
 WXDLLIMPEXP_BASE int wxMSLU__tremove(const wxChar *name);
+WXDLLIMPEXP_BASE FILE* wxMSLU__tfopen(const wxChar *name, const wxChar *mode);
 
 #if defined( __VISUALC__ ) \
     || ( defined(__MINGW32__) && wxCHECK_W32API_VERSION( 0, 5 ) ) \

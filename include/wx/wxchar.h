@@ -299,7 +299,11 @@
     #define  wxFgetc     _fgettc
     #define  wxFgetchar  _fgettchar
     #define  wxFgets     _fgetts
-    #define  wxFopen     _tfopen
+    #if wxUSE_UNICODE_MSLU
+        #define  wxFopen    wxMSLU__tfopen
+    #else
+        #define  wxFopen     _tfopen
+    #endif
     #define  wxFputc     _fputtc
     #define  wxFputchar  _fputtchar
     #define  wxFprintf   _ftprintf
