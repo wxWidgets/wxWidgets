@@ -25,7 +25,7 @@
 #include "wx/wx.h"
 #endif
 
-#include "wx/date.h"
+#include "wx/datetime.h"
 
 #if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
 #include "mondrian.xpm"
@@ -86,7 +86,10 @@ bool MyApp::OnInit(void)
   wxDebugContext::SetCheckpoint();
 
   wxString *thing = new wxString;
-  wxDate* date = new wxDate;
+
+#if wxUSE_DATETIME
+  wxDateTime* date = new wxDateTime;
+#endif // wxUSE_DATETIME
 
   // non-object allocation
   char *ordinaryNonObject = new char[1000];
