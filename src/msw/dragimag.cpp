@@ -78,14 +78,18 @@ wxDragImage::~wxDragImage()
 {
     if ( m_hImageList )
         ImageList_Destroy(GetHimageList());
+#if !wxUSE_SIMPLER_DRAGIMAGE
     if ( m_hCursorImageList )
         ImageList_Destroy((HIMAGELIST) m_hCursorImageList);
+#endif
 }
 
 void wxDragImage::Init()
 {
     m_hImageList = 0;
+#if !wxUSE_SIMPLER_DRAGIMAGE
     m_hCursorImageList = 0;
+#endif
     m_window = (wxWindow*) NULL;
     m_fullScreen = FALSE;
 }
@@ -98,7 +102,7 @@ void wxDragImage::Init()
 ////////////////////////////////////////////////////////////////////////////
 
 // Create a drag image from a bitmap and optional cursor
-bool wxDragImage::Create(const wxBitmap& image, const wxCursor& cursor, const wxPoint& hotspot)
+bool wxDragImage::Create(const wxBitmap& image, const wxCursor& cursor, const wxPoint& cursorHotspot)
 {
     if ( m_hImageList )
         ImageList_Destroy(GetHimageList());
@@ -142,13 +146,13 @@ bool wxDragImage::Create(const wxBitmap& image, const wxCursor& cursor, const wx
         wxLogError(_("Couldn't add an image to the image list."));
     }
     m_cursor = cursor; // Can only combine with drag image after calling BeginDrag.
-    m_hotspot = hotspot;
+    m_cursorHotspot = cursorHotspot;
 
     return (index != -1) ;
 }
 
 // Create a drag image from an icon and optional cursor
-bool wxDragImage::Create(const wxIcon& image, const wxCursor& cursor, const wxPoint& hotspot)
+bool wxDragImage::Create(const wxIcon& image, const wxCursor& cursor, const wxPoint& cursorHotspot)
 {
     if ( m_hImageList )
         ImageList_Destroy(GetHimageList());
@@ -180,13 +184,13 @@ bool wxDragImage::Create(const wxIcon& image, const wxCursor& cursor, const wxPo
     }
 
     m_cursor = cursor; // Can only combine with drag image after calling BeginDrag.
-    m_hotspot = hotspot;
+    m_cursorHotspot = cursorHotspot;
 
     return (index != -1) ;
 }
 
 // Create a drag image from a string and optional cursor
-bool wxDragImage::Create(const wxString& str, const wxCursor& cursor, const wxPoint& hotspot)
+bool wxDragImage::Create(const wxString& str, const wxCursor& cursor, const wxPoint& cursorHotspot)
 {
     wxFont font(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
 
@@ -222,7 +226,7 @@ bool wxDragImage::Create(const wxString& str, const wxCursor& cursor, const wxPo
     image.SetMaskColour(255, 255, 255);
     bitmap = image.ConvertToBitmap();
 
-    return Create(bitmap, cursor, hotspot);
+    return Create(bitmap, cursor, cursorHotspot);
 }
 
 // Create a drag image for the given tree control item
@@ -266,6 +270,10 @@ bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* window, bool fullS
 
     if (m_cursor.Ok())
     {
+#if wxUSE_SIMPLER_DRAGIMAGE
+	    m_oldCursor = window->GetCursor();
+	    window->SetCursor(m_cursor);
+#else
         if (!m_hCursorImageList)
         {           
             int cxCursor = GetSystemMetrics(SM_CXCURSOR); 
@@ -282,12 +290,17 @@ bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* window, bool fullS
 
         if (cursorIndex != -1)
         {
-            ImageList_SetDragCursorImage((HIMAGELIST) m_hCursorImageList, cursorIndex, m_hotspot.x, m_hotspot.y);
+            ImageList_SetDragCursorImage((HIMAGELIST) m_hCursorImageList, cursorIndex, m_cursorHotspot.x, m_cursorHotspot.y);
         }
+#endif
     }
 
     m_window = window;
-    ::ShowCursor(FALSE);
+
+#if !wxUSE_SIMPLER_DRAGIMAGE
+    if (m_cursor.Ok())
+        ::ShowCursor(FALSE);
+#endif
 
     ::SetCapture(GetHwndOf(window));
 
@@ -327,7 +340,13 @@ bool wxDragImage::EndDrag()
         wxLogLastError(wxT("ReleaseCapture"));
     }
 
+#if wxUSE_SIMPLER_DRAGIMAGE
+    if (m_cursor.Ok() && m_oldCursor.Ok())
+	    m_window->SetCursor(m_oldCursor);
+#else
     ::ShowCursor(TRUE);
+#endif
+
     m_window = (wxWindow*) NULL;
 
     return TRUE;
@@ -339,8 +358,26 @@ bool wxDragImage::Move(const wxPoint& pt)
 {
     wxASSERT_MSG( (m_hImageList != 0), wxT("Image list must not be null in Move."));
 
-    // TODO: what coordinates are these in: window, client, or screen?
-    bool ret = (ImageList_DragMove( pt.x, pt.y ) != 0);
+    // These are in window, not client coordinates.
+    // So need to convert to client coordinates.
+    wxPoint pt2(pt);
+    if (m_window)
+    {
+        RECT rect;
+        rect.left = 0; rect.top = 0;
+        rect.right = 0; rect.bottom = 0;
+        DWORD style = ::GetWindowLong((HWND) m_window->GetHWND(), GWL_STYLE);
+#ifdef __WIN32__
+        DWORD exStyle = ::GetWindowLong((HWND) m_window->GetHWND(), GWL_EXSTYLE);
+        ::AdjustWindowRectEx(& rect, style, FALSE, exStyle);
+#else
+        ::AdjustWindowRect(& rect, style, FALSE);
+#endif
+        // Subtract the (negative) values, i.e. add a small increment
+        pt2.x -= rect.left; pt2.y -= rect.top;
+    }
+
+    bool ret = (ImageList_DragMove( pt2.x, pt2.y ) != 0);
 
     m_position = pt;
 
