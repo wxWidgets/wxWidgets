@@ -1321,7 +1321,9 @@ PYTHON_DIST:
 	mkdir $(DISTDIR)/wxPython/contrib/xrc
 	mkdir $(DISTDIR)/wxPython/demo
 	mkdir $(DISTDIR)/wxPython/demo/bitmaps
+	mkdir $(DISTDIR)/wxPython/demo/bmp_source
 	mkdir $(DISTDIR)/wxPython/demo/data
+	mkdir $(DISTDIR)/wxPython/demo/dllwidget
 	mkdir $(DISTDIR)/wxPython/src
 	mkdir $(DISTDIR)/wxPython/src/gtk
 	mkdir $(DISTDIR)/wxPython/wxPython
@@ -1344,7 +1346,10 @@ PYTHON_DIST:
 	-cp $(WXDIR)/wxPython/contrib/xrc/xrc.* $(DISTDIR)/wxPython/contrib/xrc
 	-cp $(WXDIR)/wxPython/demo/* $(DISTDIR)/wxPython/demo
 	-cp $(WXDIR)/wxPython/demo/bitmaps/* $(DISTDIR)/wxPython/demo/bitmaps
+	-cp $(WXDIR)/wxPython/demo/bmp_source/* $(DISTDIR)/wxPython/demo/bmp_source
 	-cp $(WXDIR)/wxPython/demo/data/* $(DISTDIR)/wxPython/demo/data
+	-cp $(WXDIR)/wxPython/demo/dllwidget/Makefile $(DISTDIR)/wxPython/demo/dllwidget
+	-cp $(WXDIR)/wxPython/demo/dllwidget/test_* $(DISTDIR)/wxPython/demo/dllwidget
 	-cp $(WXDIR)/wxPython/src/* $(DISTDIR)/wxPython/src
 	cp $(WXDIR)/wxPython/src/gtk/*.py $(DISTDIR)/wxPython/src/gtk
 	cp $(WXDIR)/wxPython/src/gtk/*.cpp $(DISTDIR)/wxPython/src/gtk
