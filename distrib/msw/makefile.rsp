@@ -70,6 +70,7 @@ samples/opengl/Makefile.in
 samples/opengl/cube/Makefile.in
 samples/opengl/penguin/Makefile.in
 samples/opengl/isosurf/Makefile.in
+samples/widgets/Makefile.in
 demos/Makefile.in
 demos/bombs/Makefile.in
 demos/forty/Makefile.in

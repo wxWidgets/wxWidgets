@@ -102,6 +102,9 @@ Rem PDF/HTML docs that should go into the Windows setup because
 Rem there are no WinHelp equivalents
 zip32 -@ %dest\extradoc-%version%.zip < %src\distrib\msw\extradoc.rsp
 
+Rem zip up Univ-specific files
+zip32 -@ %dest\wxWindows-%version%-univ.zip < %src\distrib\msw\univ.rsp
+
 rem VC++ project files
 zip32 -@ %dest\wxWindows-%version%-vc.zip < %src\distrib\msw\vc.rsp
 
@@ -183,6 +186,7 @@ Rem the source wxWindows directory.
 cd %dest\wx
 unzip32 -o ..\wxWindows-%version%-msw.zip
 unzip32 -o ..\wxWindows-%version%-gen.zip
+unzip32 -o ..\wxWindows-%version%-univ.zip
 unzip32 -o ..\wxWindows-%version%-vc.zip
 unzip32 -o ..\wxWindows-%version%-bc.zip
 unzip32 -o ..\wxWindows-%version%-HTMLHelp.zip

@@ -1030,6 +1030,16 @@ samples/opengl/penguin/*.xpm
 samples/opengl/penguin/make*.*
 samples/opengl/penguin/penguin.lwo
 
+samples/widgets/*.cpp
+samples/widgets/*.h
+samples/widgets/makefile*
+samples/widgets/*.rc
+samples/widgets/*.def
+samples/widgets/*.ico
+samples/widgets/*.xpm
+samples/widgets/*.txt
+samples/widgets/*.bmp
+
 demos/makefile*
 demos/configure
 demos/configure.in

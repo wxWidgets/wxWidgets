@@ -231,6 +231,9 @@ samples/validate/Validate.dsw
 samples/wizard/Wizard.dsp
 samples/wizard/Wizard.dsw
 
+samples/widgets/Treelay.dsp
+samples/widgets/Treelay.dsw
+
 samples/opengl/cube/Cube.dsp
 samples/opengl/cube/Cube.dsw
 samples/opengl/isosurf/Isosurf.dsp
