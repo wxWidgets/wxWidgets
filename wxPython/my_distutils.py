@@ -53,9 +53,9 @@ class MyMSVCCompiler(MSVCCompiler):
                 self.mkpath (os.path.dirname (obj))
 
                 if ext in self._c_extensions:
-                    input_opt = "/Tc" + src
+                    input_opt = "/Tc" + os.path.abspath(src)
                 elif ext in self._cpp_extensions:
-                    input_opt = "/Tp" + src
+                    input_opt = "/Tp" + os.path.abspath(src)
                 elif ext in self._rc_extensions:
                     # compile .RC to .RES file
                     input_opt = src

@@ -32,6 +32,7 @@ class TestPanel(wxPanel):
         b.SetBackgroundColour(wxNamedColour("Navy"))
         b.SetForegroundColour(wxWHITE)
         #b.SetUseFocusIndicator(false)
+        b.SetToolTipString("This is a BIG button...")
 
         bmp = wxBitmap('bitmaps/test2.bmp', wxBITMAP_TYPE_BMP)
         b = wxGenBitmapButton(self, -1, bmp, (10, 130))

@@ -881,11 +881,22 @@ static PyObject *_wrap_wxGridCellRenderer_SetParameters(PyObject *self, PyObject
         }
     }
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj1)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1204,11 +1215,22 @@ static PyObject *_wrap_wxPyGridCellRenderer_base_SetParameters(PyObject *self, P
         }
     }
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj1)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1601,11 +1623,22 @@ static PyObject *_wrap_wxGridCellEditor_SetParameters(PyObject *self, PyObject *
         }
     }
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj1)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -2508,11 +2541,22 @@ static PyObject *_wrap_wxPyGridCellEditor_base_SetParameters(PyObject *self, PyO
         }
     }
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj1)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4280,11 +4324,22 @@ static PyObject *_wrap_wxGridTableBase_SetValue(PyObject *self, PyObject *args, 
         }
     }
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj3) && !PyUnicode_Check(_obj3)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj3, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg3 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj3)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg3 = new wxString(PyString_AsString(_obj3), PyString_Size(_obj3));
+    _arg3 = new wxString(PyString_AS_STRING(_obj3), PyString_GET_SIZE(_obj3));
+#endif
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4357,11 +4412,22 @@ static PyObject *_wrap_wxGridTableBase_CanGetValueAs(PyObject *self, PyObject *a
         }
     }
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj3) && !PyUnicode_Check(_obj3)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj3, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg3 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj3)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg3 = new wxString(PyString_AsString(_obj3), PyString_Size(_obj3));
+    _arg3 = new wxString(PyString_AS_STRING(_obj3), PyString_GET_SIZE(_obj3));
+#endif
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4399,11 +4465,22 @@ static PyObject *_wrap_wxGridTableBase_CanSetValueAs(PyObject *self, PyObject *a
         }
     }
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj3) && !PyUnicode_Check(_obj3)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj3, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg3 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj3)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg3 = new wxString(PyString_AsString(_obj3), PyString_Size(_obj3));
+    _arg3 = new wxString(PyString_AS_STRING(_obj3), PyString_GET_SIZE(_obj3));
+#endif
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4883,11 +4960,22 @@ static PyObject *_wrap_wxGridTableBase_SetRowLabelValue(PyObject *self, PyObject
         }
     }
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg2 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj2)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
+    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
+#endif
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4924,11 +5012,22 @@ static PyObject *_wrap_wxGridTableBase_SetColLabelValue(PyObject *self, PyObject
         }
     }
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg2 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj2)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
+    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
+#endif
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5273,11 +5372,22 @@ static PyObject *_wrap_wxPyGridTableBase_base_CanGetValueAs(PyObject *self, PyOb
         }
     }
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj3) && !PyUnicode_Check(_obj3)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj3, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg3 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj3)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg3 = new wxString(PyString_AsString(_obj3), PyString_Size(_obj3));
+    _arg3 = new wxString(PyString_AS_STRING(_obj3), PyString_GET_SIZE(_obj3));
+#endif
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5315,11 +5425,22 @@ static PyObject *_wrap_wxPyGridTableBase_base_CanSetValueAs(PyObject *self, PyOb
         }
     }
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj3) && !PyUnicode_Check(_obj3)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj3, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg3 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj3)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg3 = new wxString(PyString_AsString(_obj3), PyString_Size(_obj3));
+    _arg3 = new wxString(PyString_AS_STRING(_obj3), PyString_GET_SIZE(_obj3));
+#endif
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5620,11 +5741,22 @@ static PyObject *_wrap_wxPyGridTableBase_base_SetRowLabelValue(PyObject *self, P
         }
     }
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg2 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj2)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
+    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
+#endif
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5661,11 +5793,22 @@ static PyObject *_wrap_wxPyGridTableBase_base_SetColLabelValue(PyObject *self, P
         }
     }
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg2 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj2)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
+    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
+#endif
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -7060,11 +7203,22 @@ static PyObject *_wrap_wxGrid_DrawTextRectangle(PyObject *self, PyObject *args, 
         }
     }
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg2 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj2)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
+    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
+#endif
 }
 {
     _arg3 = &temp;
@@ -7107,11 +7261,22 @@ static PyObject *_wrap_wxGrid_StringToLines(PyObject *self, PyObject *args, PyOb
         }
     }
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj1)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
 }
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -8858,11 +9023,22 @@ static PyObject *_wrap_wxGrid_SetRowLabelValue(PyObject *self, PyObject *args, P
         }
     }
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg2 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj2)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
+    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
+#endif
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -8899,11 +9075,22 @@ static PyObject *_wrap_wxGrid_SetColLabelValue(PyObject *self, PyObject *args, P
         }
     }
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg2 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj2)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
+    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
+#endif
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -9422,11 +9609,22 @@ static PyObject *_wrap_wxGrid_SetColFormatCustom(PyObject *self, PyObject *args,
         }
     }
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg2 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj2)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
+    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
+#endif
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -10830,11 +11028,22 @@ static PyObject *_wrap_wxGrid_SetCellValue(PyObject *self, PyObject *args, PyObj
         }
     }
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj3) && !PyUnicode_Check(_obj3)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj3, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg3 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj3)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg3 = new wxString(PyString_AsString(_obj3), PyString_Size(_obj3));
+    _arg3 = new wxString(PyString_AS_STRING(_obj3), PyString_GET_SIZE(_obj3));
+#endif
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -11314,11 +11523,22 @@ static PyObject *_wrap_wxGrid_RegisterDataType(PyObject *self, PyObject *args, P
         }
     }
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj1)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
 }
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -11442,11 +11662,22 @@ static PyObject *_wrap_wxGrid_GetDefaultEditorForType(PyObject *self, PyObject *
         }
     }
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj1)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -11489,11 +11720,22 @@ static PyObject *_wrap_wxGrid_GetDefaultRendererForType(PyObject *self, PyObject
         }
     }
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj1)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;

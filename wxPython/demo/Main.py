@@ -257,8 +257,7 @@ class wxPythonDemo(wxFrame):
         item, flags = self.tree.HitTest(pt)
         if item == self.tree.GetSelection():
             self.SetOverview(self.tree.GetItemText(item), self.curOverview)
-        else:
-            event.Skip()
+        event.Skip()
 
     #---------------------------------------------
     def OnSelChanged(self, event):

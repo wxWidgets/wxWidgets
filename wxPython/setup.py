@@ -201,6 +201,7 @@ print 'Preparing CORE...'
 swig_force = force
 swig_args = ['-c++', '-shadow', '-python', '-keyword', '-dascii',
              '-I./src', '-D'+WXPLAT]
+swig_deps = ['src/my_typemaps.i']
 
 swig_files = [ 'wx.i', 'windows.i', 'windows2.i', 'windows3.i', 'events.i',
                'misc.i', 'misc2.i', 'utils.i', 'gdi.i', 'mdi.i', 'controls.i',
@@ -210,7 +211,7 @@ swig_files = [ 'wx.i', 'windows.i', 'windows2.i', 'windows3.i', 'events.i',
                ]
 
 swig_sources = run_swig(swig_files, 'src', GENDIR, PKGDIR,
-                        USE_SWIG, swig_force, swig_args)
+                        USE_SWIG, swig_force, swig_args, swig_deps)
 
 copy_file('src/__init__.py', PKGDIR, update=1, verbose=0)
 copy_file('src/__version__.py', PKGDIR, update=1, verbose=0)
@@ -264,7 +265,7 @@ else:
     swig_files = ['glcanvas.i']
 
     swig_sources = run_swig(swig_files, location, GENDIR, PKGDIR,
-                            USE_SWIG, swig_force, swig_args)
+                            USE_SWIG, swig_force, swig_args, swig_deps)
 
     gl_libs = []
     if os.name == 'posix':
@@ -294,7 +295,7 @@ else:
                   'oglcanvas.i']
 
     swig_sources = run_swig(swig_files, location, '', PKGDIR,
-                            USE_SWIG, swig_force, swig_args)
+                            USE_SWIG, swig_force, swig_args, swig_deps)
 
     # make sure local copy of contrib files are up to date
     if IN_CVS_TREE:
@@ -343,7 +344,7 @@ else:
     swig_sources = run_swig(swig_files, location, '', PKGDIR,
                             USE_SWIG, swig_force,
                             swig_args + ['-I'+STC_H, '-I'+location],
-                            [STC_H+'/stc.h'])
+                            swig_deps + [STC_H+'/stc.h'])
 
     # copy a project specific py module to the main package dir
     copy_file(location+'/stc.py', PKGDIR, update=1, verbose=1)

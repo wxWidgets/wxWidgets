@@ -483,6 +483,14 @@ enum {
     wxHW_SCROLLBAR_NEVER,
     wxHW_SCROLLBAR_AUTO,
 
+    wxJOYSTICK1,
+    wxJOYSTICK2,
+    wxJOY_BUTTON1,
+    wxJOY_BUTTON2,
+    wxJOY_BUTTON3,
+    wxJOY_BUTTON4,
+    wxJOY_BUTTON_ANY,
+
 };
 
 

@@ -139,7 +139,7 @@ public:
             }
 
             size_t len = self->GetWidth() * self->GetHeight() * 3;
-            dataPtr = new unsigned char[len];
+            dataPtr = (unsigned char*) malloc(len);
             memcpy(dataPtr, PyString_AsString(data), len);
             self->SetData(dataPtr);
         }

@@ -444,11 +444,22 @@ static PyObject *_wrap_wxShell(PyObject *self, PyObject *args, PyObject *kwargs)
         return NULL;
     if (_obj0)
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg0 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj0)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg0 = new wxString(PyString_AsString(_obj0), PyString_Size(_obj0));
+    _arg0 = new wxString(PyString_AS_STRING(_obj0), PyString_GET_SIZE(_obj0));
+#endif
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -643,11 +654,22 @@ static PyObject *_wrap_wxStripMenuCodes(PyObject *self, PyObject *args, PyObject
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStripMenuCodes",_kwnames,&_obj0)) 
         return NULL;
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg0 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj0)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg0 = new wxString(PyString_AsString(_obj0), PyString_Size(_obj0));
+    _arg0 = new wxString(PyString_AS_STRING(_obj0), PyString_GET_SIZE(_obj0));
+#endif
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -811,11 +833,22 @@ static PyObject *_wrap_wxGetAccelFromString(PyObject *self, PyObject *args, PyOb
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGetAccelFromString",_kwnames,&_obj0)) 
         return NULL;
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg0 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj0)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg0 = new wxString(PyString_AsString(_obj0), PyString_Size(_obj0));
+    _arg0 = new wxString(PyString_AS_STRING(_obj0), PyString_GET_SIZE(_obj0));
+#endif
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4726,11 +4759,22 @@ static PyObject *_wrap_new_wxBusyInfo(PyObject *self, PyObject *args, PyObject *
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxBusyInfo",_kwnames,&_obj0)) 
         return NULL;
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg0 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj0)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg0 = new wxString(PyString_AsString(_obj0), PyString_Size(_obj0));
+    _arg0 = new wxString(PyString_AS_STRING(_obj0), PyString_GET_SIZE(_obj0));
+#endif
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;

@@ -22,6 +22,7 @@
 #include <wx/fontenum.h>
 #include <wx/tipdlg.h>
 #include <wx/process.h>
+#include <wx/joystick.h>
 %}
 
 //----------------------------------------------------------------------
@@ -666,6 +667,58 @@ public:
 long wxExecute(const wxString& command,
                int sync = FALSE,
                wxPyProcess *process = NULL);
+
+//----------------------------------------------------------------------
+
+class wxJoystick {
+public:
+    wxJoystick(int joystick = wxJOYSTICK1);
+    wxPoint GetPosition();
+    int GetZPosition();
+    int GetButtonState();
+    int GetPOVPosition();
+    int GetPOVCTSPosition();
+    int GetRudderPosition();
+    int GetUPosition();
+    int GetVPosition();
+    int GetMovementThreshold();
+    void SetMovementThreshold(int threshold) ;
+
+    bool IsOk(void);
+    int GetNumberJoysticks();
+    int GetManufacturerId();
+    int GetProductId();
+    wxString GetProductName();
+    int GetXMin();
+    int GetYMin();
+    int GetZMin();
+    int GetXMax();
+    int GetYMax();
+    int GetZMax();
+    int GetNumberButtons();
+    int GetNumberAxes();
+    int GetMaxButtons();
+    int GetMaxAxes();
+    int GetPollingMin();
+    int GetPollingMax();
+    int GetRudderMin();
+    int GetRudderMax();
+    int GetUMin();
+    int GetUMax();
+    int GetVMin();
+    int GetVMax();
+
+    bool HasRudder();
+    bool HasZ();
+    bool HasU();
+    bool HasV();
+    bool HasPOV();
+    bool HasPOV4Dir();
+    bool HasPOVCTS();
+
+    bool SetCapture(wxWindow* win, int pollingFreq = 0);
+    bool ReleaseCapture();
+};
 
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------

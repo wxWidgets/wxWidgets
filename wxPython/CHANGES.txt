@@ -2,6 +2,37 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
+2.3b1
+-----
+
+New typemaps for wxString when compiling for Python 2.0 and beyond
+that allow Unicode objects to be passed as well as String objects.  If
+a Unicode object is passed PyString_AsStringAndSize is used to convert
+it to a wxString using the default encoding.
+
+Fixed the generic buttons so tool tips work for them.
+
+Fixed a bug in the demo's tree control.
+
+Added a listbox to the listbox demo that shows how to find items with
+a patching prefix as keys are typed.
+
+Added code to the wxListCtrl demo to show how to get text from a
+column in report mode.
+
+Added code to the toolbar demo to clear the long help from the status
+bar after 2 seconds.
+
+Added wxJoystick.
+
+Fixed wxTimer so it can be used as described in the docs, either with
+a Notify method in a subclass, or sending an event to a wxEvtHandler
+object, (usually a window.)
+
+Added wxNotifyEvent.Allow()
+
+
+
 New in 2.2.2
 ------------
 

@@ -561,20 +561,26 @@ wxPyTimer::~wxPyTimer() {
 }
 
 void wxPyTimer::Notify() {
-    bool doSave = wxPyRestoreThread();
-
-    PyObject*   result;
-    PyObject*   args = Py_BuildValue("()");
-
-    result = PyEval_CallObject(func, args);
-    Py_DECREF(args);
-    if (result) {
-        Py_DECREF(result);
-        PyErr_Clear();
-    } else {
-        PyErr_Print();
+    if (!func || func == Py_None) {
+        wxTimer::Notify();
     }
-    wxPySaveThread(doSave);
+    else {
+        bool doSave = wxPyRestoreThread();
+
+        PyObject*   result;
+        PyObject*   args = Py_BuildValue("()");
+
+        result = PyEval_CallObject(func, args);
+        Py_DECREF(args);
+        if (result) {
+            Py_DECREF(result);
+            PyErr_Clear();
+        } else {
+            PyErr_Print();
+        }
+
+        wxPySaveThread(doSave);
+    }
 }
 
 

@@ -383,6 +383,7 @@ class wxNotifyEvent : public wxCommandEvent {
 public:
     wxNotifyEvent(int commandType = wxEVT_NULL, int id = 0);
     bool IsAllowed();
+    void Allow();
     void Veto();
 };
 

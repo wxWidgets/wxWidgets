@@ -51,6 +51,7 @@ echo %CMD%
 %CMD%
 
 iff "%OTHERCMD%" != "" then
+	echo %OTHERCMD%
 	%OTHERCMD%
 endiff
 

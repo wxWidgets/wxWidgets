@@ -248,6 +248,7 @@ class wxGenButton(wxControl):
         self.CaptureMouse()
         self.SetFocus()
         self.Refresh()
+        event.Skip()
 
 
     def OnLeftUp(self, event):
@@ -258,7 +259,7 @@ class wxGenButton(wxControl):
         self.up = true
         self.ReleaseMouse()
         self.Refresh()
-
+        event.Skip()
 
     def OnMotion(self, event):
         if not self.IsEnabled():
@@ -274,6 +275,7 @@ class wxGenButton(wxControl):
                 self.up = true
                 self.Refresh()
                 return
+        event.Skip()
 
 
     def OnGainFocus(self, event):

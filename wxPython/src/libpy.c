@@ -5,10 +5,14 @@
  * Contains variable linking and pointer type-checking code.
  ************************************************************************/
 
+#include <string.h>
+#include <stdlib.h>
+
+#include "Python.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "Python.h"
 
 /* Definitions for Windows/Unix exporting */
 #if defined(_WIN32) || defined(__WIN32__)

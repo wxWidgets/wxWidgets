@@ -1402,11 +1402,22 @@ static PyObject *_wrap_wxPyApp_SetAppName(PyObject *self, PyObject *args, PyObje
         }
     }
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj1)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1472,11 +1483,22 @@ static PyObject *_wrap_wxPyApp_SetClassName(PyObject *self, PyObject *args, PyOb
         }
     }
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj1)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1606,11 +1628,22 @@ static PyObject *_wrap_wxPyApp_SetVendorName(PyObject *self, PyObject *args, PyO
         }
     }
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check(_obj1)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -2025,6 +2058,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxBusyInfo","_class_wxBusyInfo",0},
     { "_class_wxMenuEvent","_wxMenuEvent",0},
     { "_wxPaletteChangedEvent","_class_wxPaletteChangedEvent",0},
+    { "_wxJoystick","_class_wxJoystick",0},
     { "_class_wxPyBitmapDataObject","_wxPyBitmapDataObject",0},
     { "_wxClientDC","_class_wxClientDC",0},
     { "_wxMouseEvent","_class_wxMouseEvent",0},
@@ -2203,6 +2237,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxGauge","_class_wxGauge",0},
     { "_class_wxCheckListBox","_wxCheckListBox",0},
     { "_class_wxBusyInfo","_wxBusyInfo",0},
+    { "_class_wxJoystick","_wxJoystick",0},
     { "_class_wxCommandEvent","_wxCommandEvent",0},
     { "_class_wxClientDC","_wxClientDC",0},
     { "_class_wxSizeEvent","_wxSizeEvent",0},
@@ -2552,6 +2587,13 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxLI_VERTICAL", PyInt_FromLong((long) wxLI_VERTICAL));
 	 PyDict_SetItemString(d,"wxHW_SCROLLBAR_NEVER", PyInt_FromLong((long) wxHW_SCROLLBAR_NEVER));
 	 PyDict_SetItemString(d,"wxHW_SCROLLBAR_AUTO", PyInt_FromLong((long) wxHW_SCROLLBAR_AUTO));
+	 PyDict_SetItemString(d,"wxJOYSTICK1", PyInt_FromLong((long) wxJOYSTICK1));
+	 PyDict_SetItemString(d,"wxJOYSTICK2", PyInt_FromLong((long) wxJOYSTICK2));
+	 PyDict_SetItemString(d,"wxJOY_BUTTON1", PyInt_FromLong((long) wxJOY_BUTTON1));
+	 PyDict_SetItemString(d,"wxJOY_BUTTON2", PyInt_FromLong((long) wxJOY_BUTTON2));
+	 PyDict_SetItemString(d,"wxJOY_BUTTON3", PyInt_FromLong((long) wxJOY_BUTTON3));
+	 PyDict_SetItemString(d,"wxJOY_BUTTON4", PyInt_FromLong((long) wxJOY_BUTTON4));
+	 PyDict_SetItemString(d,"wxJOY_BUTTON_ANY", PyInt_FromLong((long) wxJOY_BUTTON_ANY));
 	 PyDict_SetItemString(d,"wxDEFAULT", PyInt_FromLong((long) wxDEFAULT));
 	 PyDict_SetItemString(d,"wxDECORATIVE", PyInt_FromLong((long) wxDECORATIVE));
 	 PyDict_SetItemString(d,"wxROMAN", PyInt_FromLong((long) wxROMAN));

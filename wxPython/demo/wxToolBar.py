@@ -8,11 +8,13 @@ class TestToolBar(wxFrame):
         wxFrame.__init__(self, parent, -1, 'Test ToolBar',
                          wxPoint(0,0), wxSize(500, 300))
         self.log = log
+        self.timer = None
+        EVT_CLOSE(self, self.OnCloseWindow)
 
         wxWindow(self, -1).SetBackgroundColour(wxNamedColour("WHITE"))
 
         tb = self.CreateToolBar(wxTB_HORIZONTAL|wxNO_BORDER) #|wxTB_FLAT)
-        #tb = wxToolBar(self, -1, wxDefaultPosition, wxDefaultSize,
+        #tb = wxToolBarSimple(self, -1, wxDefaultPosition, wxDefaultSize,
         #               wxTB_HORIZONTAL | wxNO_BORDER | wxTB_FLAT)
         #self.SetToolBar(tb)
 
@@ -21,34 +23,34 @@ class TestToolBar(wxFrame):
         tb.AddSimpleTool(10, wxBitmap('bitmaps/new.bmp',   wxBITMAP_TYPE_BMP),
                          "New", "Long help for 'New'")
         EVT_TOOL(self, 10, self.OnToolClick)
-        EVT_TOOL_RCLICKED(self, 10, self.OnToolRClick)
 
-        tb.AddSimpleTool(20, wxBitmap('bitmaps/open.bmp',  wxBITMAP_TYPE_BMP), "Open")
+        tb.AddSimpleTool(20, wxBitmap('bitmaps/open.bmp',  wxBITMAP_TYPE_BMP),
+                         "Open", "Long help for 'Open'")
         EVT_TOOL(self, 20, self.OnToolClick)
-        EVT_TOOL_RCLICKED(self, 20, self.OnToolRClick)
 
         tb.AddSeparator()
-        tb.AddSimpleTool(30, wxBitmap('bitmaps/copy.bmp',  wxBITMAP_TYPE_BMP), "Copy")
+        tb.AddSimpleTool(30, wxBitmap('bitmaps/copy.bmp',  wxBITMAP_TYPE_BMP),
+                         "Copy", "Long help for 'Copy'")
         EVT_TOOL(self, 30, self.OnToolClick)
-        EVT_TOOL_RCLICKED(self, 30, self.OnToolRClick)
 
-        tb.AddSimpleTool(40, wxBitmap('bitmaps/paste.bmp', wxBITMAP_TYPE_BMP), "Paste")
+        tb.AddSimpleTool(40, wxBitmap('bitmaps/paste.bmp', wxBITMAP_TYPE_BMP),
+                         "Paste", "Long help for 'Paste'")
         EVT_TOOL(self, 40, self.OnToolClick)
-        EVT_TOOL_RCLICKED(self, 40, self.OnToolRClick)
 
         tb.AddSeparator()
 
         tool = tb.AddTool(50, wxBitmap('bitmaps/tog1.bmp', wxBITMAP_TYPE_BMP),
                           shortHelpString="Toggle this", isToggle=true)
         EVT_TOOL(self, 50, self.OnToolClick)
-        EVT_TOOL_RCLICKED(self, 50, self.OnToolRClick)
 
         tb.AddTool(60, wxBitmap('bitmaps/tog1.bmp', wxBITMAP_TYPE_BMP),
                    wxBitmap('bitmaps/tog2.bmp', wxBITMAP_TYPE_BMP),
                    shortHelpString="Toggle with 2 bitmaps", isToggle=true)
         EVT_TOOL(self, 60, self.OnToolClick)
-        EVT_TOOL_RCLICKED(self, 60, self.OnToolRClick)
 
+        EVT_TOOL_ENTER(self, -1, self.OnToolEnter)
+        EVT_TOOL_RCLICKED(self, -1, self.OnToolRClick)  # Match all
+        EVT_TIMER(self, -1, self.OnClearSB)
 
         tb.AddSeparator()
         cbID = wxNewId()
@@ -57,11 +59,7 @@ class TestToolBar(wxFrame):
         EVT_COMBOBOX(self, cbID, self.OnCombo)
 
         tb.Realize()
-        EVT_CLOSE(self, self.OnCloseWindow)
 
-
-    def OnCloseWindow(self, event):
-        self.Destroy()
 
     def OnToolClick(self, event):
         self.log.WriteText("tool %s clicked\n" % event.GetId())
@@ -72,6 +70,25 @@ class TestToolBar(wxFrame):
     def OnCombo(self, event):
         self.log.WriteText("combobox item selected: %s\n" % event.GetString())
 
+    def OnToolEnter(self, event):
+        self.log.WriteText('OnToolEnter: %s, %s\n' % (event.GetId(), event.GetInt()))
+        if self.timer is None:
+            self.timer = wxTimer(self)
+        self.timer.Start(2000)
+        event.Skip()
+
+
+    def OnClearSB(self, event):
+        self.SetStatusText("")
+        self.timer.Stop()
+        self.timer = None
+
+
+    def OnCloseWindow(self, event):
+        if self.timer is not None:
+            self.timer.Stop()
+            self.timer = None
+        self.Destroy()
 
 #---------------------------------------------------------------------------
 
@@ -98,37 +115,5 @@ def runTest(frame, nb, log):
 
 
 overview = """\
-The name wxToolBar is defined to be a synonym for one of the following classes:
 
-wxToolBar95 The native Windows 95 toolbar. Used on Windows 95, NT 4 and above.
-
-wxToolBarMSW A Windows implementation. Used on 16-bit Windows.
-
-wxToolBarGTK The GTK toolbar.
-
-wxToolBarSimple A simple implementation, with scrolling. Used on platforms with no native toolbar control, or where scrolling is required.
-
-wxToolBar()
------------------------
-
-Default constructor.
-
-wxToolBar(wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTB_HORIZONTAL | wxNO_BORDER, const wxString& name = wxPanelNameStr)
-
-Constructs a toolbar.
-
-Parameters
--------------------
-
-parent = Pointer to a parent window.
-
-id = Window identifier. If -1, will automatically create an identifier.
-
-pos = Window position. wxDefaultPosition is (-1, -1) which indicates that wxWindows should generate a default position for the window. If using the wxWindow class directly, supply an actual position.
-
-size = Window size. wxDefaultSize is (-1, -1) which indicates that wxWindows should generate a default size for the window.
-
-style = Window style. See wxToolBar for details.
-
-name = Window name.
 """

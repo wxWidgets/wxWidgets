@@ -119,6 +119,9 @@ D. If using the sources (either from the tarball or from CVS) then
    special debugging code in wxWindows by defining the __WXDEBUG__
    macro.  You'll get some extra asserts, failure logging, etc.
 
+   To make a static library and not make a shared library, use the
+   --disable-shared and --enable-static flags.
+
 E. Now just compile and install.  You need to use GNU make, so if your
    system has something else get GNU make and build and install it and
    use it instead of your system's default make command.
