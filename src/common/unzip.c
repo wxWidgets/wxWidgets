@@ -12,7 +12,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include "zlib.h"
+
+/* Not the right solution (paths in makefiles) but... */
+#ifdef __BORLANDC__
+#include "../common/unzip.h"
+#else
 #include "unzip.h"
+#endif
 
 #ifdef STDC
 #  include <stddef.h>

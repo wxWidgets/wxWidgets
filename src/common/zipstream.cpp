@@ -24,7 +24,14 @@
 #include "wx/stream.h"
 #include "wx/wfstream.h"
 #include "wx/zipstream.h"
+
+/* Not the right solution (paths in makefiles) but... */
+#ifdef __BORLANDC__
+#include "../common/unzip.h"
+#else
 #include "unzip.h"
+#endif
+
 
 wxZipInputStream::wxZipInputStream(const wxString& archive, const wxString& file) : wxInputStream()
 {

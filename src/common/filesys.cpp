@@ -52,7 +52,7 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
 
     l2 = l;
     for (int i = l-1; i >= 0; i--) {
-        c = loc[i];
+        c = loc[(unsigned int) i];
         if (c == _T('#')) l2 = i + 1;
         if (c == _T('.')) {ext = loc.Right(l2-i-1); break;}
         if ((c == _T('/')) || (c == _T('\\')) || (c == _T(':'))) {return wxEmptyString;}
@@ -161,15 +161,15 @@ void wxFileSystem::ChangePathTo(const wxString& location, bool is_dir)
     m_Path = location;
 
     for (i = m_Path.Length()-1; i >= 0; i--)
-        if (m_Path[i] == _T('\\')) m_Path.GetWritableChar(i) = _T('/');         // wanna be windows-safe
+        if (m_Path[(unsigned int) i] == _T('\\')) m_Path.GetWritableChar(i) = _T('/');         // wanna be windows-safe
 
     if (is_dir == FALSE) 
     {
         for (i = m_Path.Length()-1; i >= 0; i--) 
 	{
-            if (m_Path[i] == _T('/')) 
+            if (m_Path[(unsigned int) i] == _T('/'))
 	    {
-                if ((i > 1) && (m_Path[i-1] == _T('/')) && (m_Path[i-2] == _T(':'))) 
+                if ((i > 1) && (m_Path[(unsigned int) (i-1)] == _T('/')) && (m_Path[(unsigned int) (i-2)] == _T(':')))
 		{
                     i -= 2;
                     continue;
@@ -180,7 +180,7 @@ void wxFileSystem::ChangePathTo(const wxString& location, bool is_dir)
                     break;
                 }
             }
-        else if (m_Path[i] == _T(':')) {
+        else if (m_Path[(unsigned int) i] == _T(':')) {
             pathpos = i;
         break;
         }
@@ -189,7 +189,7 @@ void wxFileSystem::ChangePathTo(const wxString& location, bool is_dir)
 	{
             for (i = 0; i < (int) m_Path.Length(); i++) 
 	    {
-                if (m_Path[i] == _T(':')) 
+                if (m_Path[(unsigned int) i] == _T(':'))
 		{
                     //m_Path << _T('/');
                     m_Path.Remove(i+1);
@@ -222,10 +222,10 @@ wxFSFile* wxFileSystem::OpenFile(const wxString& location)
     meta = 0;
     for (i = 0; i < ln; i++) 
     {
-        if (loc[i] == _T('\\')) loc.GetWritableChar(i) = _T('/');         // wanna be windows-safe
-        if (!meta) switch (loc[i]) 
+        if (loc[(unsigned int) i] == _T('\\')) loc.GetWritableChar(i) = _T('/');         // wanna be windows-safe
+        if (!meta) switch (loc[(unsigned int) i])
 	{
-            case _T('/') : case _T(':') : case _T('#') : meta = loc[i];
+            case _T('/') : case _T(':') : case _T('#') : meta = loc[(unsigned int) i];
         }
     }
     m_LastName = wxEmptyString;

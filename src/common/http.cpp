@@ -239,7 +239,7 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
   token.NextToken();
   tmp_str2 = token.NextToken();
 
-  switch (tmp_str2[0]) {
+  switch (tmp_str2[(unsigned int) 0]) {
   case _T('1'):
     /* INFORMATION / SUCCESS */
     break;
