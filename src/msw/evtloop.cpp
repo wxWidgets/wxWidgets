@@ -332,7 +332,8 @@ int wxEventLoop::Run()
                     // there is none yet. OTOH, wxCATCH_ALL isn't
                     // expanded unless wxUSE_EXCEPTIONS, so its
                     // safe to use throw here.
-                    throw;  
+                    throw;
+                default:
                     break;
     }
         )
