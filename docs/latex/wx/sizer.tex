@@ -391,14 +391,17 @@ minimal size. For windows with managed scrollbars this will set them appropriate
 
 \membersection{wxSizer::Show}\label{wxsizershow}
 
-\func{void}{Show}{\param{wxWindow* }{window}, \param{bool }{show = true}}
+\func{bool}{Show}{\param{wxWindow* }{window}, \param{bool }{show = true}, \param{bool }{recursive = false}}
 
-\func{void}{Show}{\param{wxSizer* }{sizer}, \param{bool }{show = true}}
+\func{bool}{Show}{\param{wxSizer* }{sizer}, \param{bool }{show = true}, \param{bool }{recursive = false}}
 
-\func{void}{Show}{\param{size\_t }{index}, \param{bool }{show = true}}
+\func{bool}{Show}{\param{size\_t }{index}, \param{bool }{show = true}}
 
 Shows or hides the {\it window}, {\it sizer}, or item at {\it index}.
 To make a sizer item disappear or reappear, use Show() followed by Layout().
+Use parameter {\it recursive} to show or hide elements found in subsizers.
+
+Returns true if the child item was found, false otherwise.
 
 Note that this only works with wxBoxSizer and wxFlexGridSizer, since they
 are the only two sizer classes that can size rows/columns independently.

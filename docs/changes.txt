@@ -207,7 +207,6 @@ All:
 - added wxMicroSleep() and wxMilliSleep() replacing deprecated wxUsleep()
 - basic UDP sockets support (Lenny Maiorani)
 - fixed wxDateTime::GetWeekDayName() for some dates (Daniel Kaps)
-- support for comma in contrib gizmo wxLEDNumberCtrl (Grant Likely)
 - deprecated wxDateTime::SetToTheWeek() in favour of SetToWeekOfYear()
 
 All (GUI):
@@ -226,6 +225,8 @@ All (GUI):
 - added samples/splash
 - added support for stock buttons
 - added wxTopLevelWindow::RequestUserAttention()
+- support for comma in contrib gizmo wxLEDNumberCtrl (Grant Likely)
+- recursive wxSizer::Show for subsizer and return value if element was found
 
 Unix:
 

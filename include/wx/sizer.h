@@ -80,10 +80,10 @@ public:
     void SetMinSize(const wxSize& size)
         {
             if (IsWindow()) m_window->SetMinSize(size);
-            m_minSize = size;            
+            m_minSize = size;
         }
     void SetMinSize( int x, int y )
-        { SetMinSize(wxSize(x, y)); }    
+        { SetMinSize(wxSize(x, y)); }
     void SetInitSize( int x, int y )
         { SetMinSize(wxSize(x, y)); }
 
@@ -308,16 +308,16 @@ public:
 
     // Manage whether individual scene items are considered
     // in the layout calculations or not.
-    void Show( wxWindow *window, bool show = true );
-    void Show( wxSizer *sizer, bool show = true );
-    void Show( size_t index, bool show = true );
+    bool Show( wxWindow *window, bool show = true, bool recursive = false );
+    bool Show( wxSizer *sizer, bool show = true, bool recursive = false );
+    bool Show( size_t index, bool show = true );
 
-    void Hide( wxSizer *sizer )
-        { Show( sizer, false ); }
-    void Hide( wxWindow *window )
-        { Show( window, false ); }
-    void Hide( size_t index )
-        { Show( index, false ); }
+    bool Hide( wxSizer *sizer, bool recursive = false )
+        { return Show( sizer, false, recursive ); }
+    bool Hide( wxWindow *window, bool recursive = false )
+        { return Show( window, false, recursive ); }
+    bool Hide( size_t index )
+        { return Show( index, false ); }
 
     bool IsShown( wxWindow *window ) const;
     bool IsShown( wxSizer *sizer ) const;
@@ -435,7 +435,7 @@ public:
     // Read-only access to the row heights and col widths arrays
     const wxArrayInt& GetRowHeights() const { return m_rowHeights; }
     const wxArrayInt& GetColWidths() const  { return m_colWidths; }
-    
+
     // implementation
     virtual void RecalcSizes();
     virtual wxSize CalcMin();
@@ -444,7 +444,7 @@ protected:
     void AdjustForFlexDirection();
     void AdjustForGrowables(const wxSize& sz, const wxSize& minsz,
                             int nrows, int ncols);
-    
+
     // the heights/widths of all rows/columns
     wxArrayInt  m_rowHeights,
                 m_colWidths;
@@ -553,7 +553,7 @@ public:
     wxDEPRECATED( wxBookCtrlSizer(wxBookCtrl *bookctrl) );
 
     wxBookCtrl *GetControl() const { return m_bookctrl; }
-    
+
     virtual void RecalcSizes();
     virtual wxSize CalcMin();
 
@@ -561,7 +561,7 @@ protected:
     // this protected ctor lets us mark the real one above as deprecated
     // and still have warning-free build of the library itself:
     wxBookCtrlSizer() {}
-    
+
     wxBookCtrl *m_bookctrl;
 
 private:

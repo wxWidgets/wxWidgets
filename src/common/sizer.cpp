@@ -47,35 +47,35 @@ IMPLEMENT_CLASS(wxStaticBoxSizer, wxBoxSizer)
 WX_DEFINE_EXPORTED_LIST( wxSizerItemList );
 
 /*
-	TODO PROPERTIES
-	  sizeritem
-	    object
-		object_ref
-		  minsize
-		  option
-		  flag
-		  border
+    TODO PROPERTIES
+      sizeritem
+        object
+        object_ref
+          minsize
+          option
+          flag
+          border
      spacer
-		option
-		flag
-		borfder
-	boxsizer
-	   orient
+        option
+        flag
+        borfder
+    boxsizer
+       orient
     staticboxsizer
-	   orient
-	   label
-	gridsizer
-	   rows
-	   cols
-	   vgap
-	   hgap
-	flexgridsizer
-	   rows
-	   cols
-	   vgap
-	   hgap
-	   growablerows
-	   growablecols
+       orient
+       label
+    gridsizer
+       rows
+       cols
+       vgap
+       hgap
+    flexgridsizer
+       rows
+       cols
+       vgap
+       hgap
+       growablerows
+       growablecols
     minsize
 */
 //---------------------------------------------------------------------------
@@ -108,7 +108,7 @@ wxSizerItem::wxSizerItem( wxWindow *window, int proportion, int flag, int border
     if (flag & wxFIXED_MINSIZE)
         window->SetMinSize(window->GetSize());
     m_minSize = window->GetSize();
-    
+
     // aspect ratio calculated from initial size
     SetRatio( m_minSize );
 
@@ -211,7 +211,7 @@ wxSize wxSizerItem::GetMinSizeWithBorder() const
         ret.y += m_border;
     if (m_flag & wxSOUTH)
         ret.y += m_border;
-    
+
     return ret;
 }
 
@@ -858,7 +858,7 @@ bool wxSizer::DoSetItemMinSize( size_t index, int width, int height )
     return true;
 }
 
-void wxSizer::Show( wxWindow *window, bool show )
+bool wxSizer::Show( wxWindow *window, bool show, bool recursive )
 {
     wxASSERT_MSG( window, _T("Show for NULL window") );
 
@@ -870,13 +870,22 @@ void wxSizer::Show( wxWindow *window, bool show )
         if (item->GetWindow() == window)
         {
             item->Show( show );
-            break;
+
+            return true;
         }
+        else if (recursive && item->IsSizer())
+        {
+            if (item->GetSizer()->Show(window, show, recursive))
+                return true;
+        }
+
         node = node->GetNext();
     }
+
+    return false;
 }
 
-void wxSizer::Show( wxSizer *sizer, bool show )
+bool wxSizer::Show( wxSizer *sizer, bool show, bool recursive )
 {
     wxASSERT_MSG( sizer, _T("Show for NULL sizer") );
 
@@ -888,18 +897,30 @@ void wxSizer::Show( wxSizer *sizer, bool show )
         if (item->GetSizer() == sizer)
         {
             item->Show( show );
-            break;
+
+            return true;
         }
+        else if (recursive && item->IsSizer())
+        {
+            if (item->GetSizer()->Show(sizer, show, recursive))
+                return true;
+        }
+
         node = node->GetNext();
     }
+
+    return false;
 }
 
-void wxSizer::Show( size_t index, bool show )
+bool wxSizer::Show( size_t index, bool show)
 {
-    wxCHECK_RET( index < m_children.GetCount(),
+    wxCHECK_MSG( index < m_children.GetCount(),
+                 false,
                  _T("Show index is out of range") );
 
     m_children.Item( index )->GetData()->Show( show );
+
+    return true;
 }
 
 void wxSizer::ShowItems( bool show )
@@ -1072,7 +1093,7 @@ wxSize wxGridSizer::CalcMin()
 void wxGridSizer::SetItemBounds( wxSizerItem *item, int x, int y, int w, int h )
 {
     wxPoint pt( x,y );
-    wxSize sz( item->GetMinSizeWithBorder() ); 
+    wxSize sz( item->GetMinSizeWithBorder() );
     int flag = item->GetFlag();
 
     if ((flag & wxEXPAND) || (flag & wxSHAPED))
@@ -1206,7 +1227,7 @@ wxSize wxFlexGridSizer::CalcMin()
     }
 
     AdjustForFlexDirection();
-    
+
     // Sum total minimum size, including gaps between rows/columns.
     // -1 is used as a magic number meaning empty column.
     int width = 0;
@@ -1250,7 +1271,7 @@ void wxFlexGridSizer::AdjustForFlexDirection()
             array[n] = largest;
         }
     }
-}    
+}
 
 
 void wxFlexGridSizer::AdjustForGrowables(const wxSize& sz, const wxSize& minsz,
@@ -1270,7 +1291,7 @@ void wxFlexGridSizer::AdjustForGrowables(const wxSize& sz, const wxSize& minsz,
             // requested growable rows/columns are still valid.
             if (m_growableRows[idx] >= nrows)
                 continue;
-            
+
             // If all items in a row/column are hidden, that row/column will
             // have a dimension of -1.  This causes the row/column to be
             // hidden completely.
@@ -1322,7 +1343,7 @@ void wxFlexGridSizer::AdjustForGrowables(const wxSize& sz, const wxSize& minsz,
             // requested growable rows/columns are still valid.
             if (m_growableCols[idx] >= ncols)
                 continue;
-            
+
             // If all items in a row/column are hidden, that row/column will
             // have a dimension of -1.  This causes the column to be hidden
             // completely.
@@ -1494,7 +1515,7 @@ wxSize wxBoxSizer::CalcMin()
 
         if (item->IsShown())
             item->CalcMin();  // result is stored in the item
-        
+
         if (item->IsShown() && item->GetProportion() != 0)
             m_stretchable += item->GetProportion();
 
@@ -1514,7 +1535,7 @@ wxSize wxBoxSizer::CalcMin()
             int stretch = item->GetProportion();
             wxSize size( item->GetMinSizeWithBorder() );
             int minSize;
-            
+
             // Integer division rounded up is (a + b - 1) / b
             // Round up needed in order to guarantee that all
             // all items will have size not less then their min size
@@ -1522,7 +1543,7 @@ wxSize wxBoxSizer::CalcMin()
                 minSize = ( size.x*m_stretchable + stretch - 1)/stretch;
             else
                 minSize = ( size.y*m_stretchable + stretch - 1)/stretch;
-            
+
             if (minSize > maxMinSize)
                 maxMinSize = minSize;
         }
@@ -1614,7 +1635,7 @@ static void GetStaticBoxBorders( wxStaticBox *box,
             // pixels (otherwise overlapping occurs at the top). The "other"
             // border has to be 11.
             extraTop = 11;
-            other = 11; 
+            other = 11;
         }
 
     }
