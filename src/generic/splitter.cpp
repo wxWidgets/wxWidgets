@@ -800,6 +800,9 @@ void wxSplitterWindow::SizeWindows()
 // Set pane for unsplit window
 void wxSplitterWindow::Initialize(wxWindow *window)
 {
+    wxASSERT_MSG( window->GetParent() == this,
+                  _T("windows in the splitter should have it as parent!") );
+
     m_windowOne = window;
     m_windowTwo = (wxWindow *) NULL;
     DoSetSashPosition(0);
@@ -814,6 +817,9 @@ bool wxSplitterWindow::DoSplit(wxSplitMode mode,
 {
     if ( IsSplit() )
         return FALSE;
+
+    wxASSERT_MSG( window1->GetParent() == this && window2->GetParent() == this,
+                  _T("windows in the splitter should have it as parent!") );
 
     m_splitMode = mode;
     m_windowOne = window1;
