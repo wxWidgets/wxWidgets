@@ -41,7 +41,7 @@ swig_type_info* wxPyFindSwigType(const wxChar* className) {
     if (! swigType) {
         // it wasn't in the cache, so look it up from SWIG
         name.Append(wxT(" *"));
-        swigType = SWIG_TypeQuery(name.mb_str());
+        swigType = SWIG_Python_TypeQuery(name.mb_str());
         if (swigType) {
             // and add it to the map if found
             (*typeInfoCache)[className] = swigType;
@@ -69,7 +69,7 @@ PyObject* wxPyConstructObject(void* ptr,
     swig_type_info* swigType = wxPyFindSwigType(className);
     wxCHECK_MSG(swigType != NULL, NULL, wxT("Unknown type in wxPyConstructObject"));
 
-    return SWIG_NewPointerObj(ptr, swigType, setThisOwn);
+    return SWIG_Python_NewPointerObj(ptr, swigType, setThisOwn);
 }
 
 
@@ -83,7 +83,7 @@ bool wxPyConvertSwigPtr(PyObject* obj, void **ptr,
     swig_type_info* swigType = wxPyFindSwigType(className);
     wxCHECK_MSG(swigType != NULL, false, wxT("Unknown type in wxPyConvertSwigPtr"));
 
-    return SWIG_ConvertPtr(obj, ptr, swigType, SWIG_POINTER_EXCEPTION) != -1;
+    return SWIG_Python_ConvertPtr(obj, ptr, swigType, SWIG_POINTER_EXCEPTION) != -1;
 }
 
 
@@ -102,7 +102,7 @@ PyObject* wxPyMakeSwigPtr(void* ptr, const wxChar* className) {
         char result[1024];
         char *r = result;
         *(r++) = '_';
-        r = SWIG_PackData(r, &ptr, sizeof(void *));
+        r = SWIG_Python_PackData(r, &ptr, sizeof(void *));
         strcpy(r, swigType->name);
         robj = PyString_FromString(result);
     }     
@@ -116,26 +116,26 @@ PyObject* wxPyMakeSwigPtr(void* ptr, const wxChar* className) {
 
 // Export a C API in a struct.  Other modules will be able to load this from
 // the wx.core module and will then have safe access to these functions, even if
-// in another shared library.
+// they are located in another shared library.
 static wxPyCoreAPI API = {
 
-    (p_SWIG_TypeRegister_t)SWIG_TypeRegister,
-    (p_SWIG_TypeCheck_t)SWIG_TypeCheck,
-    (p_SWIG_TypeCast_t)SWIG_TypeCast,
-    (p_SWIG_TypeDynamicCast_t)SWIG_TypeDynamicCast,
-    (p_SWIG_TypeName_t)SWIG_TypeName,
-    (p_SWIG_TypeQuery_t)SWIG_TypeQuery,
-    (p_SWIG_TypeClientData_t)SWIG_TypeClientData,
-    (p_SWIG_newvarlink_t)SWIG_newvarlink,
-    (p_SWIG_addvarlink_t)SWIG_addvarlink,
-    (p_SWIG_ConvertPtr_t)SWIG_ConvertPtr,
-    (p_SWIG_ConvertPacked_t)SWIG_ConvertPacked,
-    (p_SWIG_PackData_t)SWIG_PackData,
-    (p_SWIG_UnpackData_t)SWIG_UnpackData,
-    (p_SWIG_NewPointerObj_t)SWIG_NewPointerObj,
-    (p_SWIG_NewPackedObj_t)SWIG_NewPackedObj,
-    (p_SWIG_InstallConstants_t)SWIG_InstallConstants,
-
+    (p_SWIG_Python_TypeRegister_t)SWIG_Python_TypeRegister,
+    (p_SWIG_Python_TypeCheck_t)SWIG_Python_TypeCheck,
+    (p_SWIG_Python_TypeCast_t)SWIG_Python_TypeCast,
+    (p_SWIG_Python_TypeDynamicCast_t)SWIG_Python_TypeDynamicCast,
+    (p_SWIG_Python_TypeName_t)SWIG_Python_TypeName,
+    (p_SWIG_Python_TypeQuery_t)SWIG_Python_TypeQuery,
+    (p_SWIG_Python_TypeClientData_t)SWIG_Python_TypeClientData,
+    (p_SWIG_Python_newvarlink_t)SWIG_Python_newvarlink,
+    (p_SWIG_Python_addvarlink_t)SWIG_Python_addvarlink,
+    (p_SWIG_Python_ConvertPtr_t)SWIG_Python_ConvertPtr,
+    (p_SWIG_Python_ConvertPacked_t)SWIG_Python_ConvertPacked,
+    (p_SWIG_Python_PackData_t)SWIG_Python_PackData,
+    (p_SWIG_Python_UnpackData_t)SWIG_Python_UnpackData,
+    (p_SWIG_Python_NewPointerObj_t)SWIG_Python_NewPointerObj,
+    (p_SWIG_Python_NewPackedObj_t)SWIG_Python_NewPackedObj,
+    (p_SWIG_Python_InstallConstants_t)SWIG_Python_InstallConstants,
+    (p_SWIG_Python_MustGetPtr_t)SWIG_Python_MustGetPtr,
 
     wxPyCheckSwigType,
     wxPyConstructObject,

@@ -9,6 +9,23 @@ tracker, so hopefully they will get incorporated into the main SWIG
 source tree soon.
 
 
+------------------------------------------------------------------------
+
+swig.python-2.patch	    Adds the ability to turn off the automatic
+			    generation of __repr__ methods on a class
+			    by class basis.  Used in wxPython for
+			    classes that have a __repr__ added in
+			    %pythoncode directives.  See SF Patch
+			    #835471.
+
+
+
+
+
+
+------------------------------------------------------------------------
+These patches have already been checked in to SWIG's CVS
+------------------------------------------------------------------------
 
 swig.SplitLines.patch	    Adds a new SplitLines function to the DOH
 			    library.  See SF Patch #829317.
@@ -27,3 +44,4 @@ swig.python.patch	    Lots of changes for SWIG's Python module,
 			    more details, also SF Patch #829325.
 			    *Checked in 10/31/2003*
 
+------------------------------------------------------------------------

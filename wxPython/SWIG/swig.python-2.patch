@@ -1,0 +1,19 @@
+Index: Source/Modules/python.cxx
+===================================================================
+RCS file: /cvsroot/SWIG/Source/Modules/python.cxx,v
+retrieving revision 1.26
+diff -u -r1.26 python.cxx
+--- Source/Modules/python.cxx	31 Oct 2003 17:55:38 -0000	1.26
++++ Source/Modules/python.cxx	4 Nov 2003 01:34:47 -0000
+@@ -1870,7 +1870,10 @@
+         classic = 0;
+         modern = 1;
+       }
+-
++      if (Getattr(n,"feature:noautorepr")) {
++          have_repr = 1;
++      }
++      
+       shadow_indent = (String *) tab4;
+       
+       class_name = Getattr(n,"sym:name");

@@ -108,6 +108,7 @@ enum wxStockCursor
 
 //---------------------------------------------------------------------------
 %newgroup
+%noautorepr wxSize;
 
 class wxSize
 {
@@ -165,7 +166,7 @@ public:
 
 //---------------------------------------------------------------------------
 %newgroup
-
+%noautorepr wxRealPoint;
 
 class wxRealPoint
 {
@@ -215,6 +216,7 @@ public:
 
 //---------------------------------------------------------------------------
 %newgroup
+%noautorepr wxPoint;
 
 class wxPoint
 {
@@ -266,6 +268,7 @@ public:
 
 //---------------------------------------------------------------------------
 %newgroup
+%noautorepr wxRect;
 
 class wxRect
 {
@@ -390,10 +393,7 @@ public:
 
 //---------------------------------------------------------------------------
 %newgroup
-
-%{
-%}
-
+%noautorepr wxPoint2D;
 
 // wxPoint2Ds represent a point or a vector in a 2d coordinate system
 

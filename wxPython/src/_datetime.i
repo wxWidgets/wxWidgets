@@ -58,6 +58,7 @@
 
 //---------------------------------------------------------------------------
 
+%noautorepr wxDateTime;
 
 // wxDateTime represents an absolute moment in the time
 class wxDateTime {
@@ -812,6 +813,7 @@ public:
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 
+%noautorepr wxTimeSpan;
 
 // This class contains a difference between 2 wxDateTime values, so it makes
 // sense to add it to wxDateTime and it is the result of subtraction of 2
