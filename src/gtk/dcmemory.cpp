@@ -71,6 +71,10 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
             m_window = m_selected.GetBitmap();
         }
 
+#ifdef __WXGTK20__
+        m_selected.PurgeOtherRepresentations(wxBitmap::Pixmap);
+#endif
+
         m_isMemDC = TRUE;
 
         SetUpDC();
