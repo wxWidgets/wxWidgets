@@ -1844,7 +1844,7 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             break;
 
         case WM_MOVE:
-            processed = HandleMove(LOWORD(lParam), HIWORD(lParam));
+            processed = HandleMove(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
             break;
 
         case WM_SIZE:
@@ -1885,12 +1885,9 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             break;
 
         case WM_MOUSEMOVE:
-            {
-                short x = LOWORD(lParam);
-                short y = HIWORD(lParam);
-
-                processed = HandleMouseMove(x, y, wParam);
-            }
+            processed = HandleMouseMove(GET_X_LPARAM(lParam),
+                                        GET_Y_LPARAM(lParam),
+                                        wParam);
             break;
 
         case WM_LBUTTONDOWN:
@@ -1910,12 +1907,10 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
         case WM_MBUTTONDOWN:
         case WM_MBUTTONUP:
         case WM_MBUTTONDBLCLK:
-            {
-                short x = LOWORD(lParam);
-                short y = HIWORD(lParam);
-
-                processed = HandleMouseEvent(message, x, y, wParam);
-            }
+            processed = HandleMouseEvent(message,
+                                         GET_X_LPARAM(lParam),
+                                         GET_Y_LPARAM(lParam),
+                                         wParam);
             break;
 
         case MM_JOY1MOVE:
@@ -1926,12 +1921,10 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
         case MM_JOY2BUTTONDOWN:
         case MM_JOY1BUTTONUP:
         case MM_JOY2BUTTONUP:
-            {
-                int x = LOWORD(lParam);
-                int y = HIWORD(lParam);
-
-                processed = HandleJoystickEvent(message, x, y, wParam);
-            }
+            processed = HandleJoystickEvent(message,
+                                            GET_X_LPARAM(lParam),
+                                            GET_Y_LPARAM(lParam),
+                                            wParam);
             break;
 
         case WM_SYSCOMMAND:

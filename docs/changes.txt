@@ -30,6 +30,8 @@ wxMSW:
 
 - wxChoice sizing bug introduced in 2.2.5 fixed (oops) and calculating of
   the size of initially empty wxChoice controls fixed as well
+- bug with negative coordinates being turned into huge positive ones in
+  EVT_MOVE fixed (Imad Jureidini)
 - jpeg library compilation fixed for newer versions of mingw32 and cygwin
 - controls which don't accept focus don't get it on left mouse click
 - wxDC::DeviceToLogical[XY] fixed (Chuck Messenger)
