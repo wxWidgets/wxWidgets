@@ -446,7 +446,6 @@ def wxDLG_SZE(win, size_width, height=None):
         return win.ConvertDialogSizeToPixels(wxSize(size_width, height))
 "
 
-#ifdef __WXMSW__
 %inline %{
     wxWindow* wxWindow_FindFocus() {
         return wxWindow::FindFocus();
@@ -454,6 +453,7 @@ def wxDLG_SZE(win, size_width, height=None):
 %}
 
 
+#ifdef __WXMSW__
 %inline %{
 wxWindow* wxWindow_FromHWND(unsigned long hWnd) {
     wxWindow* win = new wxWindow;

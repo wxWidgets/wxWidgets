@@ -161,6 +161,10 @@ IMP_PYCALLBACK_BOOL_(wxPyValidator, wxValidator, TransferFromWindow);
 IMPLEMENT_DYNAMIC_CLASS(wxPyValidator, wxValidator);
 
 
+    wxWindow* wxWindow_FindFocus() {
+        return wxWindow::FindFocus();
+    }
+
     int wxWindow_NewControlId() {
         return wxWindow::NewControlId();
     }
@@ -205,6 +209,30 @@ static PyObject *_wrap_wxValidator_SetBellOnError(PyObject *self, PyObject *args
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxWindow_FindFocus(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxWindow_FindFocus",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxWindow *)wxWindow_FindFocus();
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxWindow_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
     return _resultobj;
 }
 
@@ -9245,6 +9273,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_PrevControlId", (PyCFunction) _wrap_wxWindow_PrevControlId, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_NextControlId", (PyCFunction) _wrap_wxWindow_NextControlId, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_NewControlId", (PyCFunction) _wrap_wxWindow_NewControlId, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_FindFocus", (PyCFunction) _wrap_wxWindow_FindFocus, METH_VARARGS | METH_KEYWORDS },
 	 { "wxValidator_SetBellOnError", (PyCFunction) _wrap_wxValidator_SetBellOnError, METH_VARARGS | METH_KEYWORDS },
 	 { "wxValidator_IsSilent", (PyCFunction) _wrap_wxValidator_IsSilent, METH_VARARGS | METH_KEYWORDS },
 	 { NULL, NULL }

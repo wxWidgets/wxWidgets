@@ -978,6 +978,11 @@ wxValidator_IsSilent = windowsc.wxValidator_IsSilent
 
 wxValidator_SetBellOnError = windowsc.wxValidator_SetBellOnError
 
+def wxWindow_FindFocus(*_args, **_kwargs):
+    val = apply(windowsc.wxWindow_FindFocus,_args,_kwargs)
+    if val: val = wxWindowPtr(val)
+    return val
+
 wxWindow_NewControlId = windowsc.wxWindow_NewControlId
 
 wxWindow_NextControlId = windowsc.wxWindow_NextControlId
