@@ -82,7 +82,11 @@ system to a native text control by overriding wxTextCtrl and defining a
 handler for key events using EVT\_KEY\_DOWN. This would indeed prevent
 any key events from being sent to the native control - which might not be
 what is desired. In this case the event handler function has to call Skip()
-so as to indicate that it did NOT handle the event at all.
+so as to indicate that the search for the event handler should continue.
+
+To summarize, instead of explicitly calling the base class version as you
+would have done with C++ virtual functions (i.e. {\it wxTextCtrl::OnChar()}),
+you should instead call \helpref{Skip}{wxeventskip}.
 
 In practice, this would look like this if the derived text control only
 accepts 'a' to 'z' and 'A' to 'Z':
