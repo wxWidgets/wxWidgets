@@ -198,12 +198,12 @@ gint wxapp_idle_callback( gpointer WXUNUSED(data) )
         return TRUE;
 
 #ifdef __WXDEBUG__
+    // don't generate the idle events while the assert modal dialog is shown,
+    // this completely confuses the apps which don't expect to be reentered
+    // from some safely-looking functions
     if ( wxTheApp->IsInAssert() )
     {
-        // don't generate the idle events while the assert modal dialog is
-        // shown, this completely confuses the apps which don't expect to be
-        // reentered from some safely-looking functions
-        return FALSE;
+        return TRUE;
     }
 #endif // __WXDEBUG__
 
@@ -220,8 +220,9 @@ gint wxapp_idle_callback( gpointer WXUNUSED(data) )
     g_isIdle = TRUE;
     wxTheApp->m_idleTag = 0;
 
-    // Sent idle event to all who request them
-    while (wxTheApp->ProcessIdle()) { }
+    // Sent idle event to all who request them as long as they do
+    while (wxTheApp->ProcessIdle())
+        ;
 
     // Release lock again
     gdk_threads_leave();
