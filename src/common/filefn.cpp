@@ -1396,30 +1396,30 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
     // for the compilers which have Unicode version of _getcwd(), call it
     // directly, for the others call the ANSI version and do the translation
 #if !wxUSE_UNICODE
-	#define cbuf buf
+    #define cbuf buf
 #else // wxUSE_UNICODE
-	bool needsANSI = TRUE;
+    bool needsANSI = TRUE;
 
-	#if !defined(HAVE_WGETCWD) || wxUSE_UNICODE_MSLU
+    #if !defined(HAVE_WGETCWD) || wxUSE_UNICODE_MSLU
         wxCharBuffer c_buffer(sz);
-		char *cbuf = (char*)(const char*)c_buffer;
-	#endif
-
-    #ifdef HAVE_WGETCWD
-		#if	wxUSE_UNICODE_MSLU
-			if ( wxGetOsVersion() != wxWIN95 )
-        #else
-            char *cbuf = NULL; // never really used because needsANSI will always be FALSE
-		#endif
-			{
-				ok = _wgetcwd(buf, sz) != NULL;
-				needsANSI = FALSE;
-			}
+        char *cbuf = (char*)(const char*)c_buffer;
     #endif
 
-	if ( needsANSI )
+    #ifdef HAVE_WGETCWD
+        #if wxUSE_UNICODE_MSLU
+            if ( wxGetOsVersion() != wxWIN95 )
+        #else
+            char *cbuf = NULL; // never really used because needsANSI will always be FALSE
+        #endif
+            {
+                ok = _wgetcwd(buf, sz) != NULL;
+                needsANSI = FALSE;
+            }
+    #endif
+
+    if ( needsANSI )
 #endif // wxUSE_UNICODE
-	{
+    {
     #ifdef _MSC_VER
         ok = _getcwd(cbuf, sz) != NULL;
     #elif defined(__WXMAC__) && !defined(__DARWIN__)
@@ -1458,7 +1458,12 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
     #else // !Win32/VC++ !Mac !OS2
         ok = getcwd(cbuf, sz) != NULL;
     #endif // platform
-	}
+
+    #if wxUSE_UNICODE
+        // finally convert the result to Unicode if needed
+        wxConvFile.MB2WC(buf, cbuf, sz);
+    #endif // wxUSE_UNICODE
+    }
 
     if ( !ok )
     {
@@ -1487,17 +1492,12 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
         wxString pathUnix = buf;
         cygwin_conv_to_full_win32_path(pathUnix, buf);
 #endif // __CYGWIN__
-
-        // finally convert the result to Unicode if needed
-#if wxUSE_UNICODE
-        wxConvFile.MB2WC(buf, cbuf, sz);
-#endif // wxUSE_UNICODE
     }
 
     return buf;
 
 #if !wxUSE_UNICODE
-	#undef cbuf
+    #undef cbuf
 #endif
 }
 
