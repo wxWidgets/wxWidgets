@@ -552,9 +552,15 @@ bool wxTextCtrl::StreamIn(const wxString& value,
 
     // next translate to Unicode using this code page
     int len = ::MultiByteToWideChar(codepage, 0, value, -1, NULL, 0);
+
+#if wxUSE_WCHAR_T
     wxWCharBuffer wchBuf(len);
+#else
+    wchar_t *wchBuf = (wchar_t *)malloc((len + 1)*sizeof(wchar_t));
+#endif
+
     if ( !::MultiByteToWideChar(codepage, 0, value, -1,
-                                (wchar_t *)wchBuf.data(), len) )
+                                (wchar_t *)(const wchar_t *)wchBuf, len) )
     {
         wxLogLastError(_T("MultiByteToWideChar"));
     }
@@ -576,9 +582,11 @@ bool wxTextCtrl::StreamIn(const wxString& value,
                         (LPARAM)&eds) || eds.dwError )
     {
         wxLogLastError(_T("EM_STREAMIN"));
-
-        return FALSE;
     }
+
+#if !wxUSE_WCHAR_T
+    free(wchBuf);
+#endif // !wxUSE_WCHAR_T
 
     return TRUE;
 }
