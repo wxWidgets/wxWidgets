@@ -346,7 +346,11 @@ wxRect wxSlider95::GetBoundingBox() const
 
     wxRect rect(x, y, w, h);
     if ( m_labels )
-        rect.Union(m_labels->GetBoundingBox());
+    {
+        wxRect lrect = m_labels->GetBoundingBox();
+        GetParent()->ScreenToClient(&lrect.x, &lrect.y);
+        rect.Union(lrect);
+    }
 
     return rect;
 }
