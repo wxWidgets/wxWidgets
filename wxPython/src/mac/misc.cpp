@@ -55,7 +55,6 @@ extern PyObject *SWIG_newvarlink(void);
 #define SWIG_name    "miscc"
 
 #include "helpers.h"
-#include <wx/resource.h>
 #include <wx/tooltip.h>
 #include <wx/busyinfo.h>
 #include <wx/geometry.h>
@@ -1306,6 +1305,76 @@ static PyObject *_wrap_wxSize_SetHeight(PyObject *self, PyObject *args, PyObject
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     wxSize_SetHeight(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSize_IncTo(_swigobj,_swigarg0)  (_swigobj->IncTo(_swigarg0))
+static PyObject *_wrap_wxSize_IncTo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSize * _arg0;
+    wxSize * _arg1;
+    wxSize  temp;
+    PyObject * _obj0 = 0;
+    wxSize  temp0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","sz", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxSize_IncTo",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxSize_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    _arg1 = &temp0;
+    if (! wxSize_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSize_IncTo(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSize_DecTo(_swigobj,_swigarg0)  (_swigobj->DecTo(_swigarg0))
+static PyObject *_wrap_wxSize_DecTo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSize * _arg0;
+    wxSize * _arg1;
+    wxSize  temp;
+    PyObject * _obj0 = 0;
+    wxSize  temp0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","sz", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxSize_DecTo",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxSize_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    _arg1 = &temp0;
+    if (! wxSize_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSize_DecTo(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -5495,6 +5564,8 @@ static PyMethodDef misccMethods[] = {
 	 { "wxSize___ne__", (PyCFunction) _wrap_wxSize___ne__, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSize___eq__", (PyCFunction) _wrap_wxSize___eq__, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSize_asTuple", (PyCFunction) _wrap_wxSize_asTuple, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSize_DecTo", (PyCFunction) _wrap_wxSize_DecTo, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSize_IncTo", (PyCFunction) _wrap_wxSize_IncTo, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSize_SetHeight", (PyCFunction) _wrap_wxSize_SetHeight, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSize_SetWidth", (PyCFunction) _wrap_wxSize_SetWidth, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSize_GetHeight", (PyCFunction) _wrap_wxSize_GetHeight, METH_VARARGS | METH_KEYWORDS },

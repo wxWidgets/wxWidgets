@@ -2290,6 +2290,35 @@ static PyObject *_wrap_wxToolBarBase_SetToolClientData(PyObject *self, PyObject 
     return _resultobj;
 }
 
+#define wxToolBarBase_GetToolPos(_swigobj,_swigarg0)  (_swigobj->GetToolPos(_swigarg0))
+static PyObject *_wrap_wxToolBarBase_GetToolPos(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxToolBarBase * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","id", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBarBase_GetToolPos",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_GetToolPos. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxToolBarBase_GetToolPos(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxToolBarBase_GetToolState(_swigobj,_swigarg0)  (_swigobj->GetToolState(_swigarg0))
 static PyObject *_wrap_wxToolBarBase_GetToolState(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -3061,7 +3090,7 @@ static PyObject *_wrap_new_wxToolBar(PyObject *self, PyObject *args, PyObject *k
     wxWindowID  _arg1;
     wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg3 = (wxSize *) &wxDefaultSize;
-    long  _arg4 = (long ) wxNO_BORDER|wxTB_HORIZONTAL;
+    long  _arg4 = (long ) wxNO_BORDER|(wxTB_HORIZONTAL);
     wxString * _arg5 = (wxString *) &wxPyToolBarNameStr;
     PyObject * _argo0 = 0;
     wxPoint  temp;
@@ -3155,7 +3184,7 @@ static PyObject *_wrap_wxToolBar_Create(PyObject *self, PyObject *args, PyObject
     wxWindowID  _arg2;
     wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg4 = (wxSize *) &wxDefaultSize;
-    long  _arg5 = (long ) wxNO_BORDER|wxTB_HORIZONTAL;
+    long  _arg5 = (long ) wxNO_BORDER|(wxTB_HORIZONTAL);
     wxString * _arg6 = (wxString *) &wxPyToolBarNameStr;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
@@ -3293,7 +3322,7 @@ static PyObject *_wrap_new_wxToolBarSimple(PyObject *self, PyObject *args, PyObj
     wxWindowID  _arg1;
     wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg3 = (wxSize *) &wxDefaultSize;
-    long  _arg4 = (long ) wxNO_BORDER|wxTB_HORIZONTAL;
+    long  _arg4 = (long ) wxNO_BORDER|(wxTB_HORIZONTAL);
     wxString * _arg5 = (wxString *) &wxPyToolBarNameStr;
     PyObject * _argo0 = 0;
     wxPoint  temp;
@@ -3387,7 +3416,7 @@ static PyObject *_wrap_wxToolBarSimple_Create(PyObject *self, PyObject *args, Py
     wxWindowID  _arg2;
     wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg4 = (wxSize *) &wxDefaultSize;
-    long  _arg5 = (long ) wxNO_BORDER|wxTB_HORIZONTAL;
+    long  _arg5 = (long ) wxNO_BORDER|(wxTB_HORIZONTAL);
     wxString * _arg6 = (wxString *) &wxPyToolBarNameStr;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
@@ -3509,6 +3538,7 @@ static PyMethodDef stattoolcMethods[] = {
 	 { "wxToolBarBase_SetToolShortHelp", (PyCFunction) _wrap_wxToolBarBase_SetToolShortHelp, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolBarBase_GetToolEnabled", (PyCFunction) _wrap_wxToolBarBase_GetToolEnabled, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolBarBase_GetToolState", (PyCFunction) _wrap_wxToolBarBase_GetToolState, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_GetToolPos", (PyCFunction) _wrap_wxToolBarBase_GetToolPos, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolBarBase_SetToolClientData", (PyCFunction) _wrap_wxToolBarBase_SetToolClientData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolBarBase_GetToolClientData", (PyCFunction) _wrap_wxToolBarBase_GetToolClientData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolBarBase_SetToggle", (PyCFunction) _wrap_wxToolBarBase_SetToggle, METH_VARARGS | METH_KEYWORDS },
@@ -3705,6 +3735,17 @@ SWIGEXPORT(void) initstattoolc() {
 	 PyDict_SetItemString(d,"wxTOOL_STYLE_BUTTON", PyInt_FromLong((long) wxTOOL_STYLE_BUTTON));
 	 PyDict_SetItemString(d,"wxTOOL_STYLE_SEPARATOR", PyInt_FromLong((long) wxTOOL_STYLE_SEPARATOR));
 	 PyDict_SetItemString(d,"wxTOOL_STYLE_CONTROL", PyInt_FromLong((long) wxTOOL_STYLE_CONTROL));
+	 PyDict_SetItemString(d,"wxTB_HORIZONTAL", PyInt_FromLong((long) wxTB_HORIZONTAL));
+	 PyDict_SetItemString(d,"wxTB_VERTICAL", PyInt_FromLong((long) wxTB_VERTICAL));
+	 PyDict_SetItemString(d,"wxTB_3DBUTTONS", PyInt_FromLong((long) wxTB_3DBUTTONS));
+	 PyDict_SetItemString(d,"wxTB_FLAT", PyInt_FromLong((long) wxTB_FLAT));
+	 PyDict_SetItemString(d,"wxTB_DOCKABLE", PyInt_FromLong((long) wxTB_DOCKABLE));
+	 PyDict_SetItemString(d,"wxTB_NOICONS", PyInt_FromLong((long) wxTB_NOICONS));
+	 PyDict_SetItemString(d,"wxTB_TEXT", PyInt_FromLong((long) wxTB_TEXT));
+	 PyDict_SetItemString(d,"wxTB_NODIVIDER", PyInt_FromLong((long) wxTB_NODIVIDER));
+	 PyDict_SetItemString(d,"wxTB_NOALIGN", PyInt_FromLong((long) wxTB_NOALIGN));
+	 PyDict_SetItemString(d,"wxTB_HORZ_LAYOUT", PyInt_FromLong((long) wxTB_HORZ_LAYOUT));
+	 PyDict_SetItemString(d,"wxTB_HORZ_TEXT", PyInt_FromLong((long) wxTB_HORZ_TEXT));
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

@@ -903,7 +903,7 @@ if BUILD_GIZMOS:
                             USE_SWIG, swig_force, swig_args, swig_deps)
 
     ext = Extension('gizmosc',
-                    swig_sources,
+                    [ '%s/treelistctrl.cpp' % location ] + swig_sources,
 
                     include_dirs =  includes,
                     define_macros = defines,

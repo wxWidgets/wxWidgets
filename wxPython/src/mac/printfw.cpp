@@ -64,8 +64,13 @@ extern PyObject *SWIG_newvarlink(void);
     // Put some wx default wxChar* values into wxStrings.
     static const wxChar* wxPrintoutTitleStr = wxT("Printout");
     DECLARE_DEF_STRING(PrintoutTitleStr);
+    static const wxChar* wxPreviewCanvasNameStr = wxT("previewcanvas");
+    DECLARE_DEF_STRING(PreviewCanvasNameStr);
 
     DECLARE_DEF_STRING(FrameNameStr);
+    DECLARE_DEF_STRING(PanelNameStr);
+    DECLARE_DEF_STRING(DialogNameStr);
+
 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
@@ -151,6 +156,129 @@ IMP_PYCALLBACK_BOOL_INT_pure(wxPyPrintout, wxPrintout, OnPrintPage);
 IMP_PYCALLBACK_BOOL_INT(wxPyPrintout, wxPrintout, HasPage);
 
 
+
+
+#define DEC_PYCALLBACK_BOOL_PREWINDC(CBNAME)                                    \
+    bool CBNAME(wxPreviewCanvas* a, wxDC& b);                                   \
+    bool base_##CBNAME(wxPreviewCanvas* a, wxDC& b)
+
+
+#define IMP_PYCALLBACK_BOOL_PREWINDC(CLASS, PCLASS, CBNAME)                     \
+    bool CLASS::CBNAME(wxPreviewCanvas* a, wxDC& b) {                           \
+        bool rval=FALSE;                                                        \
+        bool found;                                                             \
+        wxPyBeginBlockThreads();                                                \
+        if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
+            PyObject* win = wxPyMake_wxObject(a);                               \
+            PyObject* dc  = wxPyMake_wxObject(&b);                              \
+            rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OO)", win, dc));\
+            Py_DECREF(win);                                                     \
+            Py_DECREF(dc);                                                      \
+        }                                                                       \
+        wxPyEndBlockThreads();                                                  \
+        if (! found)                                                            \
+            rval = PCLASS::CBNAME(a, b);                                        \
+        return rval;                                                            \
+    }                                                                           \
+    bool CLASS::base_##CBNAME(wxPreviewCanvas* a, wxDC& b) {                    \
+        return PCLASS::CBNAME(a, b);                                            \
+    }
+
+
+
+
+class wxPyPrintPreview : public wxPrintPreview
+{
+    DECLARE_CLASS(wxPyPrintPreview)
+public:
+    wxPyPrintPreview(wxPyPrintout* printout,
+                     wxPyPrintout* printoutForPrinting,
+                     wxPrintData* data=NULL)
+        : wxPrintPreview(printout, printoutForPrinting, data)
+    {}
+
+    DEC_PYCALLBACK_BOOL_INT(SetCurrentPage);
+    DEC_PYCALLBACK_BOOL_PREWINDC(PaintPage);
+    DEC_PYCALLBACK_BOOL_PREWINDC(DrawBlankPage);
+    DEC_PYCALLBACK_BOOL_INT(RenderPage);
+    DEC_PYCALLBACK_VOID_INT(SetZoom);
+    DEC_PYCALLBACK_BOOL_BOOL(Print);
+    DEC_PYCALLBACK_VOID_(DetermineScaling);
+
+    PYPRIVATE;
+};
+
+// Stupid renamed classes...  Fix this in 2.5...
+#if defined(__WXMSW__)
+IMPLEMENT_CLASS( wxPyPrintPreview, wxWindowsPrintPreview );
+#elif defined(__WXMAC__)
+IMPLEMENT_CLASS( wxPyPrintPreview, wxMacPrintPreview );
+#else
+IMPLEMENT_CLASS( wxPyPrintPreview, wxPostScriptPrintPreview );
+#endif
+
+IMP_PYCALLBACK_BOOL_INT     (wxPyPrintPreview, wxPrintPreview, SetCurrentPage);
+IMP_PYCALLBACK_BOOL_PREWINDC(wxPyPrintPreview, wxPrintPreview, PaintPage);
+IMP_PYCALLBACK_BOOL_PREWINDC(wxPyPrintPreview, wxPrintPreview, DrawBlankPage);
+IMP_PYCALLBACK_BOOL_INT     (wxPyPrintPreview, wxPrintPreview, RenderPage);
+IMP_PYCALLBACK_VOID_INT     (wxPyPrintPreview, wxPrintPreview, SetZoom);
+IMP_PYCALLBACK_BOOL_BOOL    (wxPyPrintPreview, wxPrintPreview, Print);
+IMP_PYCALLBACK_VOID_        (wxPyPrintPreview, wxPrintPreview, DetermineScaling);
+
+class wxPyPreviewFrame : public wxPreviewFrame
+{
+    DECLARE_CLASS(wxPyPreviewFrame);
+public:
+    wxPyPreviewFrame(wxPrintPreview* preview, wxFrame* parent,
+                     const wxString& title,
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize&  size = wxDefaultSize,
+                     long style = wxDEFAULT_FRAME_STYLE,
+                     const wxString& name = wxPyFrameNameStr)
+        : wxPreviewFrame(preview, parent, title, pos, size, style, name)
+    {}
+
+    void SetPreviewCanvas(wxPreviewCanvas* canvas) { m_previewCanvas = canvas; }
+    void SetControlBar(wxPreviewControlBar* bar) { m_controlBar = bar; }
+
+    DEC_PYCALLBACK_VOID_(Initialize);
+    DEC_PYCALLBACK_VOID_(CreateCanvas);
+    DEC_PYCALLBACK_VOID_(CreateControlBar);
+
+    PYPRIVATE;
+};
+
+IMPLEMENT_CLASS(wxPyPreviewFrame, wxPreviewFrame);
+
+IMP_PYCALLBACK_VOID_(wxPyPreviewFrame, wxPreviewFrame, Initialize);
+IMP_PYCALLBACK_VOID_(wxPyPreviewFrame, wxPreviewFrame, CreateCanvas);
+IMP_PYCALLBACK_VOID_(wxPyPreviewFrame, wxPreviewFrame, CreateControlBar);
+
+class wxPyPreviewControlBar : public wxPreviewControlBar
+{
+    DECLARE_CLASS(wxPyPreviewControlBar);
+public:
+    wxPyPreviewControlBar(wxPrintPreview *preview,
+                          long buttons,
+                          wxWindow *parent,
+                          const wxPoint& pos = wxDefaultPosition,
+                          const wxSize& size = wxDefaultSize,
+                          long style = 0,
+                          const wxString& name = wxPyPanelNameStr)
+        : wxPreviewControlBar(preview, buttons, parent, pos, size, style, name)
+    {}
+
+    void SetPrintPreview(wxPrintPreview* preview) { m_printPreview = preview; }
+
+    DEC_PYCALLBACK_VOID_(CreateButtons);
+    DEC_PYCALLBACK_VOID_INT(SetZoomControl);
+
+    PYPRIVATE;
+};
+
+IMPLEMENT_CLASS(wxPyPreviewControlBar, wxPreviewControlBar);
+IMP_PYCALLBACK_VOID_(wxPyPreviewControlBar, wxPreviewControlBar, CreateButtons);
+IMP_PYCALLBACK_VOID_INT(wxPyPreviewControlBar, wxPreviewControlBar, SetZoomControl);
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -1083,11 +1211,10 @@ static PyObject *_wrap_wxPrintData_GetPrinterTranslateY(PyObject *self, PyObject
 #define wxPrintData_GetPrintMode(_swigobj)  (_swigobj->GetPrintMode())
 static PyObject *_wrap_wxPrintData_GetPrintMode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxPrintMode * _result;
+    wxPrintMode  _result;
     wxPrintData * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintData_GetPrintMode",_kwnames,&_argo0)) 
@@ -1101,12 +1228,11 @@ static PyObject *_wrap_wxPrintData_GetPrintMode(PyObject *self, PyObject *args, 
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxPrintMode (wxPrintData_GetPrintMode(_arg0));
+    _result = (wxPrintMode )wxPrintData_GetPrintMode(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxPrintMode_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -1485,13 +1611,12 @@ static PyObject *_wrap_wxPrintData_SetPrinterTranslation(PyObject *self, PyObjec
 static PyObject *_wrap_wxPrintData_SetPrintMode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintData * _arg0;
-    wxPrintMode * _arg1;
+    wxPrintMode  _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
     char *_kwnames[] = { "self","printMode", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPrintData_SetPrintMode",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintData_SetPrintMode",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1500,16 +1625,9 @@ static PyObject *_wrap_wxPrintData_SetPrintMode(PyObject *self, PyObject *args, 
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPrintMode_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPrintData_SetPrintMode. Expected _wxPrintMode_p.");
-        return NULL;
-        }
-    }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintData_SetPrintMode(_arg0,*_arg1);
+    wxPrintData_SetPrintMode(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2850,186 +2968,6 @@ static PyObject *_wrap_delete_wxPrintDialogData(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
-#define wxPrintDialogData_EnableHelp(_swigobj,_swigarg0)  (_swigobj->EnableHelp(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_EnableHelp(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    bool  _arg1;
-    PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","flag", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_EnableHelp",_kwnames,&_argo0,&tempbool1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_EnableHelp. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintDialogData_EnableHelp(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_EnablePageNumbers(_swigobj,_swigarg0)  (_swigobj->EnablePageNumbers(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_EnablePageNumbers(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    bool  _arg1;
-    PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","flag", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_EnablePageNumbers",_kwnames,&_argo0,&tempbool1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_EnablePageNumbers. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintDialogData_EnablePageNumbers(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_EnablePrintToFile(_swigobj,_swigarg0)  (_swigobj->EnablePrintToFile(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_EnablePrintToFile(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    bool  _arg1;
-    PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","flag", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_EnablePrintToFile",_kwnames,&_argo0,&tempbool1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_EnablePrintToFile. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintDialogData_EnablePrintToFile(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_EnableSelection(_swigobj,_swigarg0)  (_swigobj->EnableSelection(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_EnableSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    bool  _arg1;
-    PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","flag", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_EnableSelection",_kwnames,&_argo0,&tempbool1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_EnableSelection. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintDialogData_EnableSelection(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_GetAllPages(_swigobj)  (_swigobj->GetAllPages())
-static PyObject *_wrap_wxPrintDialogData_GetAllPages(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxPrintDialogData * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetAllPages",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetAllPages. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxPrintDialogData_GetAllPages(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPrintDialogData_GetCollate(_swigobj)  (_swigobj->GetCollate())
-static PyObject *_wrap_wxPrintDialogData_GetCollate(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxPrintDialogData * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetCollate",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetCollate. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxPrintDialogData_GetCollate(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
 #define wxPrintDialogData_GetFromPage(_swigobj)  (_swigobj->GetFromPage())
 static PyObject *_wrap_wxPrintDialogData_GetFromPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -3051,155 +2989,6 @@ static PyObject *_wrap_wxPrintDialogData_GetFromPage(PyObject *self, PyObject *a
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     _result = (int )wxPrintDialogData_GetFromPage(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPrintDialogData_GetMaxPage(_swigobj)  (_swigobj->GetMaxPage())
-static PyObject *_wrap_wxPrintDialogData_GetMaxPage(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxPrintDialogData * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetMaxPage",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetMaxPage. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxPrintDialogData_GetMaxPage(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPrintDialogData_GetMinPage(_swigobj)  (_swigobj->GetMinPage())
-static PyObject *_wrap_wxPrintDialogData_GetMinPage(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxPrintDialogData * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetMinPage",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetMinPage. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxPrintDialogData_GetMinPage(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPrintDialogData_GetNoCopies(_swigobj)  (_swigobj->GetNoCopies())
-static PyObject *_wrap_wxPrintDialogData_GetNoCopies(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxPrintDialogData * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetNoCopies",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetNoCopies. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxPrintDialogData_GetNoCopies(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-static wxPrintData * wxPrintDialogData_GetPrintData(wxPrintDialogData *self) {
-            return new wxPrintData(self->GetPrintData());  // force a copy
-        }
-static PyObject *_wrap_wxPrintDialogData_GetPrintData(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPrintData * _result;
-    wxPrintDialogData * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetPrintData",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetPrintData. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxPrintData *)wxPrintDialogData_GetPrintData(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPrintData_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-    return _resultobj;
-}
-
-#define wxPrintDialogData_GetPrintToFile(_swigobj)  (_swigobj->GetPrintToFile())
-static PyObject *_wrap_wxPrintDialogData_GetPrintToFile(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxPrintDialogData * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetPrintToFile",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetPrintToFile. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxPrintDialogData_GetPrintToFile(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -3235,8 +3024,92 @@ static PyObject *_wrap_wxPrintDialogData_GetToPage(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
-#define wxPrintDialogData_Ok(_swigobj)  (_swigobj->Ok())
-static PyObject *_wrap_wxPrintDialogData_Ok(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxPrintDialogData_GetMinPage(_swigobj)  (_swigobj->GetMinPage())
+static PyObject *_wrap_wxPrintDialogData_GetMinPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxPrintDialogData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetMinPage",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetMinPage. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxPrintDialogData_GetMinPage(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintDialogData_GetMaxPage(_swigobj)  (_swigobj->GetMaxPage())
+static PyObject *_wrap_wxPrintDialogData_GetMaxPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxPrintDialogData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetMaxPage",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetMaxPage. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxPrintDialogData_GetMaxPage(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintDialogData_GetNoCopies(_swigobj)  (_swigobj->GetNoCopies())
+static PyObject *_wrap_wxPrintDialogData_GetNoCopies(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxPrintDialogData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetNoCopies",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetNoCopies. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxPrintDialogData_GetNoCopies(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintDialogData_GetAllPages(_swigobj)  (_swigobj->GetAllPages())
+static PyObject *_wrap_wxPrintDialogData_GetAllPages(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxPrintDialogData * _arg0;
@@ -3244,22 +3117,341 @@ static PyObject *_wrap_wxPrintDialogData_Ok(PyObject *self, PyObject *args, PyOb
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_Ok",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetAllPages",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_Ok. Expected _wxPrintDialogData_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetAllPages. Expected _wxPrintDialogData_p.");
         return NULL;
         }
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxPrintDialogData_Ok(_arg0);
+    _result = (bool )wxPrintDialogData_GetAllPages(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintDialogData_GetSelection(_swigobj)  (_swigobj->GetSelection())
+static PyObject *_wrap_wxPrintDialogData_GetSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPrintDialogData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetSelection",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetSelection. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPrintDialogData_GetSelection(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintDialogData_GetCollate(_swigobj)  (_swigobj->GetCollate())
+static PyObject *_wrap_wxPrintDialogData_GetCollate(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPrintDialogData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetCollate",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetCollate. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPrintDialogData_GetCollate(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintDialogData_GetPrintToFile(_swigobj)  (_swigobj->GetPrintToFile())
+static PyObject *_wrap_wxPrintDialogData_GetPrintToFile(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPrintDialogData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetPrintToFile",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetPrintToFile. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPrintDialogData_GetPrintToFile(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintDialogData_GetSetupDialog(_swigobj)  (_swigobj->GetSetupDialog())
+static PyObject *_wrap_wxPrintDialogData_GetSetupDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPrintDialogData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetSetupDialog",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetSetupDialog. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPrintDialogData_GetSetupDialog(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintDialogData_SetFromPage(_swigobj,_swigarg0)  (_swigobj->SetFromPage(_swigarg0))
+static PyObject *_wrap_wxPrintDialogData_SetFromPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintDialogData * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","v", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetFromPage",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetFromPage. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPrintDialogData_SetFromPage(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPrintDialogData_SetToPage(_swigobj,_swigarg0)  (_swigobj->SetToPage(_swigarg0))
+static PyObject *_wrap_wxPrintDialogData_SetToPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintDialogData * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","v", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetToPage",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetToPage. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPrintDialogData_SetToPage(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPrintDialogData_SetMinPage(_swigobj,_swigarg0)  (_swigobj->SetMinPage(_swigarg0))
+static PyObject *_wrap_wxPrintDialogData_SetMinPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintDialogData * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","v", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetMinPage",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetMinPage. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPrintDialogData_SetMinPage(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPrintDialogData_SetMaxPage(_swigobj,_swigarg0)  (_swigobj->SetMaxPage(_swigarg0))
+static PyObject *_wrap_wxPrintDialogData_SetMaxPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintDialogData * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","v", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetMaxPage",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetMaxPage. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPrintDialogData_SetMaxPage(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPrintDialogData_SetNoCopies(_swigobj,_swigarg0)  (_swigobj->SetNoCopies(_swigarg0))
+static PyObject *_wrap_wxPrintDialogData_SetNoCopies(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintDialogData * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","v", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetNoCopies",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetNoCopies. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPrintDialogData_SetNoCopies(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPrintDialogData_SetAllPages(_swigobj,_swigarg0)  (_swigobj->SetAllPages(_swigarg0))
+static PyObject *_wrap_wxPrintDialogData_SetAllPages(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintDialogData * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetAllPages",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetAllPages. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPrintDialogData_SetAllPages(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPrintDialogData_SetSelection(_swigobj,_swigarg0)  (_swigobj->SetSelection(_swigarg0))
+static PyObject *_wrap_wxPrintDialogData_SetSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintDialogData * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetSelection",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetSelection. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPrintDialogData_SetSelection(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -3286,158 +3478,6 @@ static PyObject *_wrap_wxPrintDialogData_SetCollate(PyObject *self, PyObject *ar
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     wxPrintDialogData_SetCollate(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_SetFromPage(_swigobj,_swigarg0)  (_swigobj->SetFromPage(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetFromPage(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","page", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetFromPage",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetFromPage. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintDialogData_SetFromPage(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_SetMaxPage(_swigobj,_swigarg0)  (_swigobj->SetMaxPage(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetMaxPage(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","page", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetMaxPage",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetMaxPage. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintDialogData_SetMaxPage(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_SetMinPage(_swigobj,_swigarg0)  (_swigobj->SetMinPage(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetMinPage(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","page", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetMinPage",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetMinPage. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintDialogData_SetMinPage(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_SetNoCopies(_swigobj,_swigarg0)  (_swigobj->SetNoCopies(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetNoCopies(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","n", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetNoCopies",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetNoCopies. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintDialogData_SetNoCopies(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_SetPrintData(_swigobj,_swigarg0)  (_swigobj->SetPrintData(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetPrintData(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    wxPrintData * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","printData", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPrintDialogData_SetPrintData",_kwnames,&_argo0,&_argo1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetPrintData. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPrintData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPrintDialogData_SetPrintData. Expected _wxPrintData_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintDialogData_SetPrintData(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -3508,27 +3548,335 @@ static PyObject *_wrap_wxPrintDialogData_SetSetupDialog(PyObject *self, PyObject
     return _resultobj;
 }
 
-#define wxPrintDialogData_SetToPage(_swigobj,_swigarg0)  (_swigobj->SetToPage(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetToPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxPrintDialogData_EnablePrintToFile(_swigobj,_swigarg0)  (_swigobj->EnablePrintToFile(_swigarg0))
+static PyObject *_wrap_wxPrintDialogData_EnablePrintToFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintDialogData * _arg0;
-    int  _arg1;
+    bool  _arg1;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","page", NULL };
+    int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetToPage",_kwnames,&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_EnablePrintToFile",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetToPage. Expected _wxPrintDialogData_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_EnablePrintToFile. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPrintDialogData_EnablePrintToFile(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPrintDialogData_EnableSelection(_swigobj,_swigarg0)  (_swigobj->EnableSelection(_swigarg0))
+static PyObject *_wrap_wxPrintDialogData_EnableSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintDialogData * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_EnableSelection",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_EnableSelection. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPrintDialogData_EnableSelection(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPrintDialogData_EnablePageNumbers(_swigobj,_swigarg0)  (_swigobj->EnablePageNumbers(_swigarg0))
+static PyObject *_wrap_wxPrintDialogData_EnablePageNumbers(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintDialogData * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_EnablePageNumbers",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_EnablePageNumbers. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPrintDialogData_EnablePageNumbers(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPrintDialogData_EnableHelp(_swigobj,_swigarg0)  (_swigobj->EnableHelp(_swigarg0))
+static PyObject *_wrap_wxPrintDialogData_EnableHelp(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintDialogData * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_EnableHelp",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_EnableHelp. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPrintDialogData_EnableHelp(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPrintDialogData_GetEnablePrintToFile(_swigobj)  (_swigobj->GetEnablePrintToFile())
+static PyObject *_wrap_wxPrintDialogData_GetEnablePrintToFile(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPrintDialogData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetEnablePrintToFile",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetEnablePrintToFile. Expected _wxPrintDialogData_p.");
         return NULL;
         }
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintDialogData_SetToPage(_arg0,_arg1);
+    _result = (bool )wxPrintDialogData_GetEnablePrintToFile(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintDialogData_GetEnableSelection(_swigobj)  (_swigobj->GetEnableSelection())
+static PyObject *_wrap_wxPrintDialogData_GetEnableSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPrintDialogData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetEnableSelection",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetEnableSelection. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPrintDialogData_GetEnableSelection(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintDialogData_GetEnablePageNumbers(_swigobj)  (_swigobj->GetEnablePageNumbers())
+static PyObject *_wrap_wxPrintDialogData_GetEnablePageNumbers(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPrintDialogData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetEnablePageNumbers",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetEnablePageNumbers. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPrintDialogData_GetEnablePageNumbers(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintDialogData_GetEnableHelp(_swigobj)  (_swigobj->GetEnableHelp())
+static PyObject *_wrap_wxPrintDialogData_GetEnableHelp(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPrintDialogData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetEnableHelp",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetEnableHelp. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPrintDialogData_GetEnableHelp(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintDialogData_Ok(_swigobj)  (_swigobj->Ok())
+static PyObject *_wrap_wxPrintDialogData_Ok(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPrintDialogData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_Ok",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_Ok. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPrintDialogData_Ok(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static wxPrintData * wxPrintDialogData_GetPrintData(wxPrintDialogData *self) {
+            return new wxPrintData(self->GetPrintData());  // force a copy
+        }
+static PyObject *_wrap_wxPrintDialogData_GetPrintData(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintData * _result;
+    wxPrintDialogData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetPrintData",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetPrintData. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxPrintData *)wxPrintDialogData_GetPrintData(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPrintData_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxPrintDialogData_SetPrintData(_swigobj,_swigarg0)  (_swigobj->SetPrintData(_swigarg0))
+static PyObject *_wrap_wxPrintDialogData_SetPrintData(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintDialogData * _arg0;
+    wxPrintData * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","printData", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPrintDialogData_SetPrintData",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetPrintData. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPrintData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPrintDialogData_SetPrintData. Expected _wxPrintData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPrintDialogData_SetPrintData(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -4643,6 +4991,169 @@ static PyObject *_wrap_wxPrinter_Setup(PyObject *self, PyObject *args, PyObject 
     return _resultobj;
 }
 
+#define wxPrinter_GetAbort(_swigobj)  (_swigobj->GetAbort())
+static PyObject *_wrap_wxPrinter_GetAbort(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPrinter * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrinter_GetAbort",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrinter_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrinter_GetAbort. Expected _wxPrinter_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPrinter_GetAbort(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxPrinter_GetLastError(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrinterError  _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxPrinter_GetLastError",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxPrinterError )wxPrinter::GetLastError();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static void *SwigwxPrintAbortDialogTowxDialog(void *ptr) {
+    wxPrintAbortDialog *src;
+    wxDialog *dest;
+    src = (wxPrintAbortDialog *) ptr;
+    dest = (wxDialog *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPrintAbortDialogTowxTopLevelWindow(void *ptr) {
+    wxPrintAbortDialog *src;
+    wxTopLevelWindow *dest;
+    src = (wxPrintAbortDialog *) ptr;
+    dest = (wxTopLevelWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPrintAbortDialogTowxWindow(void *ptr) {
+    wxPrintAbortDialog *src;
+    wxWindow *dest;
+    src = (wxPrintAbortDialog *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPrintAbortDialogTowxEvtHandler(void *ptr) {
+    wxPrintAbortDialog *src;
+    wxEvtHandler *dest;
+    src = (wxPrintAbortDialog *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPrintAbortDialogTowxObject(void *ptr) {
+    wxPrintAbortDialog *src;
+    wxObject *dest;
+    src = (wxPrintAbortDialog *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxPrintAbortDialog(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5) (new wxPrintAbortDialog(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
+static PyObject *_wrap_new_wxPrintAbortDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintAbortDialog * _result;
+    wxWindow * _arg0;
+    wxString * _arg1;
+    wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg3 = (wxSize *) &wxDefaultSize;
+    long  _arg4 = (long ) 0;
+    wxString * _arg5 = (wxString *) &wxPyDialogNameStr;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    wxPoint  temp;
+    PyObject * _obj2 = 0;
+    wxSize  temp0;
+    PyObject * _obj3 = 0;
+    PyObject * _obj5 = 0;
+    char *_kwnames[] = { "parent","title","pos","size","style","name", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|OOlO:new_wxPrintAbortDialog",_kwnames,&_argo0,&_obj1,&_obj2,&_obj3,&_arg4,&_obj5)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxPrintAbortDialog. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+    if (_obj2)
+{
+    _arg2 = &temp;
+    if (! wxPoint_helper(_obj2, &_arg2))
+        return NULL;
+}
+    if (_obj3)
+{
+    _arg3 = &temp0;
+    if (! wxSize_helper(_obj3, &_arg3))
+        return NULL;
+}
+    if (_obj5)
+{
+    _arg5 = wxString_in_helper(_obj5);
+    if (_arg5 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxPrintAbortDialog *)new_wxPrintAbortDialog(_arg0,*_arg1,*_arg2,*_arg3,_arg4,*_arg5);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPrintAbortDialog_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj1)
+        delete _arg1;
+}
+{
+    if (_obj5)
+        delete _arg5;
+}
+    return _resultobj;
+}
+
 static void *SwigwxPrintPreviewTowxObject(void *ptr) {
     wxPrintPreview *src;
     wxObject *dest;
@@ -4704,31 +5215,32 @@ static PyObject *_wrap_new_wxPrintPreview(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
-#define wxPrintPreview_GetCanvas(_swigobj)  (_swigobj->GetCanvas())
-static PyObject *_wrap_wxPrintPreview_GetCanvas(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxPrintPreview_SetCurrentPage(_swigobj,_swigarg0)  (_swigobj->SetCurrentPage(_swigarg0))
+static PyObject *_wrap_wxPrintPreview_SetCurrentPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxWindow * _result;
+    bool  _result;
     wxPrintPreview * _arg0;
+    int  _arg1;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
+    char *_kwnames[] = { "self","pageNum", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintPreview_GetCanvas",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintPreview_SetCurrentPage",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_GetCanvas. Expected _wxPrintPreview_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_SetCurrentPage. Expected _wxPrintPreview_p.");
         return NULL;
         }
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxWindow *)wxPrintPreview_GetCanvas(_arg0);
+    _result = (bool )wxPrintPreview_SetCurrentPage(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}{ _resultobj = wxPyMake_wxObject(_result); }
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -4760,123 +5272,40 @@ static PyObject *_wrap_wxPrintPreview_GetCurrentPage(PyObject *self, PyObject *a
     return _resultobj;
 }
 
-#define wxPrintPreview_GetFrame(_swigobj)  (_swigobj->GetFrame())
-static PyObject *_wrap_wxPrintPreview_GetFrame(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxPrintPreview_SetPrintout(_swigobj,_swigarg0)  (_swigobj->SetPrintout(_swigarg0))
+static PyObject *_wrap_wxPrintPreview_SetPrintout(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxFrame * _result;
     wxPrintPreview * _arg0;
+    wxPyPrintout * _arg1;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","printout", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintPreview_GetFrame",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPrintPreview_SetPrintout",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_GetFrame. Expected _wxPrintPreview_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_SetPrintout. Expected _wxPrintPreview_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPyPrintout_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPrintPreview_SetPrintout. Expected _wxPyPrintout_p.");
         return NULL;
         }
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxFrame *)wxPrintPreview_GetFrame(_arg0);
+    wxPrintPreview_SetPrintout(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}{ _resultobj = wxPyMake_wxObject(_result); }
-    return _resultobj;
-}
-
-#define wxPrintPreview_GetMaxPage(_swigobj)  (_swigobj->GetMaxPage())
-static PyObject *_wrap_wxPrintPreview_GetMaxPage(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxPrintPreview * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintPreview_GetMaxPage",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_GetMaxPage. Expected _wxPrintPreview_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxPrintPreview_GetMaxPage(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPrintPreview_GetMinPage(_swigobj)  (_swigobj->GetMinPage())
-static PyObject *_wrap_wxPrintPreview_GetMinPage(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxPrintPreview * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintPreview_GetMinPage",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_GetMinPage. Expected _wxPrintPreview_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxPrintPreview_GetMinPage(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPrintPreview_GetPrintDialogData(_swigobj)  (_swigobj->GetPrintDialogData())
-static PyObject *_wrap_wxPrintPreview_GetPrintDialogData(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _result;
-    wxPrintPreview * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintPreview_GetPrintDialogData",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_GetPrintDialogData. Expected _wxPrintPreview_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintDialogData & _result_ref = wxPrintPreview_GetPrintDialogData(_arg0);
-    _result = (wxPrintDialogData *) &_result_ref;
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPrintDialogData_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -4936,159 +5365,6 @@ static PyObject *_wrap_wxPrintPreview_GetPrintoutForPrinting(PyObject *self, PyO
     return _resultobj;
 }
 
-#define wxPrintPreview_GetZoom(_swigobj)  (_swigobj->GetZoom())
-static PyObject *_wrap_wxPrintPreview_GetZoom(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxPrintPreview * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintPreview_GetZoom",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_GetZoom. Expected _wxPrintPreview_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxPrintPreview_GetZoom(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPrintPreview_Ok(_swigobj)  (_swigobj->Ok())
-static PyObject *_wrap_wxPrintPreview_Ok(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxPrintPreview * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintPreview_Ok",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_Ok. Expected _wxPrintPreview_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxPrintPreview_Ok(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPrintPreview_Print(_swigobj,_swigarg0)  (_swigobj->Print(_swigarg0))
-static PyObject *_wrap_wxPrintPreview_Print(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxPrintPreview * _arg0;
-    bool  _arg1;
-    PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","prompt", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintPreview_Print",_kwnames,&_argo0,&tempbool1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_Print. Expected _wxPrintPreview_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxPrintPreview_Print(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPrintPreview_SetCanvas(_swigobj,_swigarg0)  (_swigobj->SetCanvas(_swigarg0))
-static PyObject *_wrap_wxPrintPreview_SetCanvas(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPrintPreview * _arg0;
-    wxWindow * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","window", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPrintPreview_SetCanvas",_kwnames,&_argo0,&_argo1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_SetCanvas. Expected _wxPrintPreview_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPrintPreview_SetCanvas. Expected _wxWindow_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintPreview_SetCanvas(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintPreview_SetCurrentPage(_swigobj,_swigarg0)  (_swigobj->SetCurrentPage(_swigarg0))
-static PyObject *_wrap_wxPrintPreview_SetCurrentPage(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPrintPreview * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","pageNum", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintPreview_SetCurrentPage",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_SetCurrentPage. Expected _wxPrintPreview_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintPreview_SetCurrentPage(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 #define wxPrintPreview_SetFrame(_swigobj,_swigarg0)  (_swigobj->SetFrame(_swigarg0))
 static PyObject *_wrap_wxPrintPreview_SetFrame(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -5126,40 +5402,295 @@ static PyObject *_wrap_wxPrintPreview_SetFrame(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
-#define wxPrintPreview_SetPrintout(_swigobj,_swigarg0)  (_swigobj->SetPrintout(_swigarg0))
-static PyObject *_wrap_wxPrintPreview_SetPrintout(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxPrintPreview_SetCanvas(_swigobj,_swigarg0)  (_swigobj->SetCanvas(_swigarg0))
+static PyObject *_wrap_wxPrintPreview_SetCanvas(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintPreview * _arg0;
-    wxPyPrintout * _arg1;
+    wxPreviewCanvas * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","printout", NULL };
+    char *_kwnames[] = { "self","canvas", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPrintPreview_SetPrintout",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPrintPreview_SetCanvas",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_SetPrintout. Expected _wxPrintPreview_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_SetCanvas. Expected _wxPrintPreview_p.");
         return NULL;
         }
     }
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPyPrintout_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPrintPreview_SetPrintout. Expected _wxPyPrintout_p.");
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPreviewCanvas_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPrintPreview_SetCanvas. Expected _wxPreviewCanvas_p.");
         return NULL;
         }
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintPreview_SetPrintout(_arg0,_arg1);
+    wxPrintPreview_SetCanvas(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPrintPreview_GetFrame(_swigobj)  (_swigobj->GetFrame())
+static PyObject *_wrap_wxPrintPreview_GetFrame(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFrame * _result;
+    wxPrintPreview * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintPreview_GetFrame",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_GetFrame. Expected _wxPrintPreview_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxFrame *)wxPrintPreview_GetFrame(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{ _resultobj = wxPyMake_wxObject(_result); }
+    return _resultobj;
+}
+
+#define wxPrintPreview_GetCanvas(_swigobj)  (_swigobj->GetCanvas())
+static PyObject *_wrap_wxPrintPreview_GetCanvas(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPreviewCanvas * _result;
+    wxPrintPreview * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintPreview_GetCanvas",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_GetCanvas. Expected _wxPrintPreview_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxPreviewCanvas *)wxPrintPreview_GetCanvas(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPreviewCanvas_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxPrintPreview_PaintPage(_swigobj,_swigarg0,_swigarg1)  (_swigobj->PaintPage(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPrintPreview_PaintPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPrintPreview * _arg0;
+    wxPreviewCanvas * _arg1;
+    wxDC * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    PyObject * _argo2 = 0;
+    char *_kwnames[] = { "self","canvas","dc", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPrintPreview_PaintPage",_kwnames,&_argo0,&_argo1,&_argo2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_PaintPage. Expected _wxPrintPreview_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPreviewCanvas_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPrintPreview_PaintPage. Expected _wxPreviewCanvas_p.");
+        return NULL;
+        }
+    }
+    if (_argo2) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxPrintPreview_PaintPage. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPrintPreview_PaintPage(_arg0,_arg1,*_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintPreview_DrawBlankPage(_swigobj,_swigarg0,_swigarg1)  (_swigobj->DrawBlankPage(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPrintPreview_DrawBlankPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPrintPreview * _arg0;
+    wxPreviewCanvas * _arg1;
+    wxDC * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    PyObject * _argo2 = 0;
+    char *_kwnames[] = { "self","canvas","dc", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPrintPreview_DrawBlankPage",_kwnames,&_argo0,&_argo1,&_argo2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_DrawBlankPage. Expected _wxPrintPreview_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPreviewCanvas_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPrintPreview_DrawBlankPage. Expected _wxPreviewCanvas_p.");
+        return NULL;
+        }
+    }
+    if (_argo2) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxPrintPreview_DrawBlankPage. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPrintPreview_DrawBlankPage(_arg0,_arg1,*_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintPreview_RenderPage(_swigobj,_swigarg0)  (_swigobj->RenderPage(_swigarg0))
+static PyObject *_wrap_wxPrintPreview_RenderPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPrintPreview * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","pageNum", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintPreview_RenderPage",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_RenderPage. Expected _wxPrintPreview_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPrintPreview_RenderPage(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintPreview_AdjustScrollbars(_swigobj,_swigarg0)  (_swigobj->AdjustScrollbars(_swigarg0))
+static PyObject *_wrap_wxPrintPreview_AdjustScrollbars(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintPreview * _arg0;
+    wxPreviewCanvas * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","canvas", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPrintPreview_AdjustScrollbars",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_AdjustScrollbars. Expected _wxPrintPreview_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPreviewCanvas_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPrintPreview_AdjustScrollbars. Expected _wxPreviewCanvas_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPrintPreview_AdjustScrollbars(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPrintPreview_GetPrintDialogData(_swigobj)  (_swigobj->GetPrintDialogData())
+static PyObject *_wrap_wxPrintPreview_GetPrintDialogData(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintDialogData * _result;
+    wxPrintPreview * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintPreview_GetPrintDialogData",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_GetPrintDialogData. Expected _wxPrintPreview_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPrintDialogData & _result_ref = wxPrintPreview_GetPrintDialogData(_arg0);
+    _result = (wxPrintDialogData *) &_result_ref;
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPrintDialogData_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
     return _resultobj;
 }
 
@@ -5184,6 +5715,208 @@ static PyObject *_wrap_wxPrintPreview_SetZoom(PyObject *self, PyObject *args, Py
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     wxPrintPreview_SetZoom(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPrintPreview_GetZoom(_swigobj)  (_swigobj->GetZoom())
+static PyObject *_wrap_wxPrintPreview_GetZoom(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxPrintPreview * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintPreview_GetZoom",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_GetZoom. Expected _wxPrintPreview_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxPrintPreview_GetZoom(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintPreview_GetMaxPage(_swigobj)  (_swigobj->GetMaxPage())
+static PyObject *_wrap_wxPrintPreview_GetMaxPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxPrintPreview * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintPreview_GetMaxPage",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_GetMaxPage. Expected _wxPrintPreview_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxPrintPreview_GetMaxPage(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintPreview_GetMinPage(_swigobj)  (_swigobj->GetMinPage())
+static PyObject *_wrap_wxPrintPreview_GetMinPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxPrintPreview * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintPreview_GetMinPage",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_GetMinPage. Expected _wxPrintPreview_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxPrintPreview_GetMinPage(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintPreview_Ok(_swigobj)  (_swigobj->Ok())
+static PyObject *_wrap_wxPrintPreview_Ok(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPrintPreview * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintPreview_Ok",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_Ok. Expected _wxPrintPreview_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPrintPreview_Ok(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintPreview_SetOk(_swigobj,_swigarg0)  (_swigobj->SetOk(_swigarg0))
+static PyObject *_wrap_wxPrintPreview_SetOk(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintPreview * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","ok", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintPreview_SetOk",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_SetOk. Expected _wxPrintPreview_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPrintPreview_SetOk(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPrintPreview_Print(_swigobj,_swigarg0)  (_swigobj->Print(_swigarg0))
+static PyObject *_wrap_wxPrintPreview_Print(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPrintPreview * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","interactive", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintPreview_Print",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_Print. Expected _wxPrintPreview_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPrintPreview_Print(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintPreview_DetermineScaling(_swigobj)  (_swigobj->DetermineScaling())
+static PyObject *_wrap_wxPrintPreview_DetermineScaling(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintPreview * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintPreview_DetermineScaling",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintPreview_DetermineScaling. Expected _wxPrintPreview_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPrintPreview_DetermineScaling(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -5346,26 +6079,1536 @@ static PyObject *_wrap_wxPreviewFrame_Initialize(PyObject *self, PyObject *args,
     return _resultobj;
 }
 
+#define wxPreviewFrame_CreateControlBar(_swigobj)  (_swigobj->CreateControlBar())
+static PyObject *_wrap_wxPreviewFrame_CreateControlBar(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPreviewFrame * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPreviewFrame_CreateControlBar",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPreviewFrame_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPreviewFrame_CreateControlBar. Expected _wxPreviewFrame_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPreviewFrame_CreateControlBar(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPreviewFrame_CreateCanvas(_swigobj)  (_swigobj->CreateCanvas())
+static PyObject *_wrap_wxPreviewFrame_CreateCanvas(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPreviewFrame * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPreviewFrame_CreateCanvas",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPreviewFrame_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPreviewFrame_CreateCanvas. Expected _wxPreviewFrame_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPreviewFrame_CreateCanvas(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPreviewFrame_GetControlBar(_swigobj)  (_swigobj->GetControlBar())
+static PyObject *_wrap_wxPreviewFrame_GetControlBar(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPreviewControlBar * _result;
+    wxPreviewFrame * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPreviewFrame_GetControlBar",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPreviewFrame_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPreviewFrame_GetControlBar. Expected _wxPreviewFrame_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxPreviewControlBar *)wxPreviewFrame_GetControlBar(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPreviewControlBar_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+static void *SwigwxPreviewCanvasTowxScrolledWindow(void *ptr) {
+    wxPreviewCanvas *src;
+    wxScrolledWindow *dest;
+    src = (wxPreviewCanvas *) ptr;
+    dest = (wxScrolledWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPreviewCanvasTowxPanel(void *ptr) {
+    wxPreviewCanvas *src;
+    wxPanel *dest;
+    src = (wxPreviewCanvas *) ptr;
+    dest = (wxPanel *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPreviewCanvasTowxWindow(void *ptr) {
+    wxPreviewCanvas *src;
+    wxWindow *dest;
+    src = (wxPreviewCanvas *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPreviewCanvasTowxEvtHandler(void *ptr) {
+    wxPreviewCanvas *src;
+    wxEvtHandler *dest;
+    src = (wxPreviewCanvas *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPreviewCanvasTowxObject(void *ptr) {
+    wxPreviewCanvas *src;
+    wxObject *dest;
+    src = (wxPreviewCanvas *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxPreviewCanvas(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5) (new wxPreviewCanvas(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
+static PyObject *_wrap_new_wxPreviewCanvas(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPreviewCanvas * _result;
+    wxPrintPreview * _arg0;
+    wxWindow * _arg1;
+    wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg3 = (wxSize *) &wxDefaultSize;
+    long  _arg4 = (long ) 0;
+    wxString * _arg5 = (wxString *) &wxPyPreviewCanvasNameStr;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    wxPoint  temp;
+    PyObject * _obj2 = 0;
+    wxSize  temp0;
+    PyObject * _obj3 = 0;
+    PyObject * _obj5 = 0;
+    char *_kwnames[] = { "preview","parent","pos","size","style","name", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|OOlO:new_wxPreviewCanvas",_kwnames,&_argo0,&_argo1,&_obj2,&_obj3,&_arg4,&_obj5)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxPreviewCanvas. Expected _wxPrintPreview_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxPreviewCanvas. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_obj2)
+{
+    _arg2 = &temp;
+    if (! wxPoint_helper(_obj2, &_arg2))
+        return NULL;
+}
+    if (_obj3)
+{
+    _arg3 = &temp0;
+    if (! wxSize_helper(_obj3, &_arg3))
+        return NULL;
+}
+    if (_obj5)
+{
+    _arg5 = wxString_in_helper(_obj5);
+    if (_arg5 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxPreviewCanvas *)new_wxPreviewCanvas(_arg0,_arg1,*_arg2,*_arg3,_arg4,*_arg5);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPreviewCanvas_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj5)
+        delete _arg5;
+}
+    return _resultobj;
+}
+
+static void *SwigwxPreviewControlBarTowxPanel(void *ptr) {
+    wxPreviewControlBar *src;
+    wxPanel *dest;
+    src = (wxPreviewControlBar *) ptr;
+    dest = (wxPanel *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPreviewControlBarTowxWindow(void *ptr) {
+    wxPreviewControlBar *src;
+    wxWindow *dest;
+    src = (wxPreviewControlBar *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPreviewControlBarTowxEvtHandler(void *ptr) {
+    wxPreviewControlBar *src;
+    wxEvtHandler *dest;
+    src = (wxPreviewControlBar *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPreviewControlBarTowxObject(void *ptr) {
+    wxPreviewControlBar *src;
+    wxObject *dest;
+    src = (wxPreviewControlBar *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxPreviewControlBar(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6) (new wxPreviewControlBar(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6))
+static PyObject *_wrap_new_wxPreviewControlBar(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPreviewControlBar * _result;
+    wxPrintPreview * _arg0;
+    long  _arg1;
+    wxWindow * _arg2;
+    wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg4 = (wxSize *) &wxDefaultSize;
+    long  _arg5 = (long ) wxTAB_TRAVERSAL;
+    wxString * _arg6 = (wxString *) &wxPyPanelNameStr;
+    PyObject * _argo0 = 0;
+    PyObject * _argo2 = 0;
+    wxPoint  temp;
+    PyObject * _obj3 = 0;
+    wxSize  temp0;
+    PyObject * _obj4 = 0;
+    PyObject * _obj6 = 0;
+    char *_kwnames[] = { "preview","buttons","parent","pos","size","style","name", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OlO|OOlO:new_wxPreviewControlBar",_kwnames,&_argo0,&_arg1,&_argo2,&_obj3,&_obj4,&_arg5,&_obj6)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxPreviewControlBar. Expected _wxPrintPreview_p.");
+        return NULL;
+        }
+    }
+    if (_argo2) {
+        if (_argo2 == Py_None) { _arg2 = NULL; }
+        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxPreviewControlBar. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_obj3)
+{
+    _arg3 = &temp;
+    if (! wxPoint_helper(_obj3, &_arg3))
+        return NULL;
+}
+    if (_obj4)
+{
+    _arg4 = &temp0;
+    if (! wxSize_helper(_obj4, &_arg4))
+        return NULL;
+}
+    if (_obj6)
+{
+    _arg6 = wxString_in_helper(_obj6);
+    if (_arg6 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxPreviewControlBar *)new_wxPreviewControlBar(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,*_arg6);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPreviewControlBar_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj6)
+        delete _arg6;
+}
+    return _resultobj;
+}
+
+#define wxPreviewControlBar_GetZoomControl(_swigobj)  (_swigobj->GetZoomControl())
+static PyObject *_wrap_wxPreviewControlBar_GetZoomControl(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxPreviewControlBar * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPreviewControlBar_GetZoomControl",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPreviewControlBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPreviewControlBar_GetZoomControl. Expected _wxPreviewControlBar_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxPreviewControlBar_GetZoomControl(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPreviewControlBar_SetZoomControl(_swigobj,_swigarg0)  (_swigobj->SetZoomControl(_swigarg0))
+static PyObject *_wrap_wxPreviewControlBar_SetZoomControl(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPreviewControlBar * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","zoom", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPreviewControlBar_SetZoomControl",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPreviewControlBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPreviewControlBar_SetZoomControl. Expected _wxPreviewControlBar_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPreviewControlBar_SetZoomControl(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPreviewControlBar_GetPrintPreview(_swigobj)  (_swigobj->GetPrintPreview())
+static PyObject *_wrap_wxPreviewControlBar_GetPrintPreview(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintPreview * _result;
+    wxPreviewControlBar * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPreviewControlBar_GetPrintPreview",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPreviewControlBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPreviewControlBar_GetPrintPreview. Expected _wxPreviewControlBar_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxPrintPreview *)wxPreviewControlBar_GetPrintPreview(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPrintPreview_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxPreviewControlBar_OnNext(_swigobj)  (_swigobj->OnNext())
+static PyObject *_wrap_wxPreviewControlBar_OnNext(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPreviewControlBar * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPreviewControlBar_OnNext",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPreviewControlBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPreviewControlBar_OnNext. Expected _wxPreviewControlBar_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPreviewControlBar_OnNext(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPreviewControlBar_OnPrevious(_swigobj)  (_swigobj->OnPrevious())
+static PyObject *_wrap_wxPreviewControlBar_OnPrevious(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPreviewControlBar * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPreviewControlBar_OnPrevious",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPreviewControlBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPreviewControlBar_OnPrevious. Expected _wxPreviewControlBar_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPreviewControlBar_OnPrevious(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPreviewControlBar_OnFirst(_swigobj)  (_swigobj->OnFirst())
+static PyObject *_wrap_wxPreviewControlBar_OnFirst(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPreviewControlBar * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPreviewControlBar_OnFirst",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPreviewControlBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPreviewControlBar_OnFirst. Expected _wxPreviewControlBar_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPreviewControlBar_OnFirst(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPreviewControlBar_OnLast(_swigobj)  (_swigobj->OnLast())
+static PyObject *_wrap_wxPreviewControlBar_OnLast(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPreviewControlBar * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPreviewControlBar_OnLast",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPreviewControlBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPreviewControlBar_OnLast. Expected _wxPreviewControlBar_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPreviewControlBar_OnLast(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPreviewControlBar_OnGoto(_swigobj)  (_swigobj->OnGoto())
+static PyObject *_wrap_wxPreviewControlBar_OnGoto(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPreviewControlBar * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPreviewControlBar_OnGoto",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPreviewControlBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPreviewControlBar_OnGoto. Expected _wxPreviewControlBar_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPreviewControlBar_OnGoto(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static void *SwigwxPyPrintPreviewTowxPrintPreview(void *ptr) {
+    wxPyPrintPreview *src;
+    wxPrintPreview *dest;
+    src = (wxPyPrintPreview *) ptr;
+    dest = (wxPrintPreview *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPyPrintPreviewTowxObject(void *ptr) {
+    wxPyPrintPreview *src;
+    wxObject *dest;
+    src = (wxPyPrintPreview *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxPyPrintPreview(_swigarg0,_swigarg1,_swigarg2) (new wxPyPrintPreview(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_new_wxPyPrintPreview(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPrintPreview * _result;
+    wxPyPrintout * _arg0;
+    wxPyPrintout * _arg1;
+    wxPrintData * _arg2 = (wxPrintData *) NULL;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    PyObject * _argo2 = 0;
+    char *_kwnames[] = { "printout","printoutForPrinting","data", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|O:new_wxPyPrintPreview",_kwnames,&_argo0,&_argo1,&_argo2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPrintout_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxPyPrintPreview. Expected _wxPyPrintout_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPyPrintout_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxPyPrintPreview. Expected _wxPyPrintout_p.");
+        return NULL;
+        }
+    }
+    if (_argo2) {
+        if (_argo2 == Py_None) { _arg2 = NULL; }
+        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxPrintData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxPyPrintPreview. Expected _wxPrintData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxPyPrintPreview *)new_wxPyPrintPreview(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyPrintPreview_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxPyPrintPreview__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPyPrintPreview__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPrintPreview * _arg0;
+    PyObject * _arg1;
+    PyObject * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","self","_class", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyPrintPreview__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPrintPreview_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPrintPreview__setCallbackInfo. Expected _wxPyPrintPreview_p.");
+        return NULL;
+        }
+    }
+{
+  _arg1 = _obj1;
+}
+{
+  _arg2 = _obj2;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyPrintPreview__setCallbackInfo(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPyPrintPreview_base_SetCurrentPage(_swigobj,_swigarg0)  (_swigobj->base_SetCurrentPage(_swigarg0))
+static PyObject *_wrap_wxPyPrintPreview_base_SetCurrentPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyPrintPreview * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","pageNum", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPyPrintPreview_base_SetCurrentPage",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPrintPreview_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPrintPreview_base_SetCurrentPage. Expected _wxPyPrintPreview_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPyPrintPreview_base_SetCurrentPage(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPyPrintPreview_base_PaintPage(_swigobj,_swigarg0,_swigarg1)  (_swigobj->base_PaintPage(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPyPrintPreview_base_PaintPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyPrintPreview * _arg0;
+    wxPreviewCanvas * _arg1;
+    wxDC * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    PyObject * _argo2 = 0;
+    char *_kwnames[] = { "self","canvas","dc", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyPrintPreview_base_PaintPage",_kwnames,&_argo0,&_argo1,&_argo2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPrintPreview_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPrintPreview_base_PaintPage. Expected _wxPyPrintPreview_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPreviewCanvas_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyPrintPreview_base_PaintPage. Expected _wxPreviewCanvas_p.");
+        return NULL;
+        }
+    }
+    if (_argo2) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxPyPrintPreview_base_PaintPage. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPyPrintPreview_base_PaintPage(_arg0,_arg1,*_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPyPrintPreview_base_DrawBlankPage(_swigobj,_swigarg0,_swigarg1)  (_swigobj->base_DrawBlankPage(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPyPrintPreview_base_DrawBlankPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyPrintPreview * _arg0;
+    wxPreviewCanvas * _arg1;
+    wxDC * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    PyObject * _argo2 = 0;
+    char *_kwnames[] = { "self","canvas","dc", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyPrintPreview_base_DrawBlankPage",_kwnames,&_argo0,&_argo1,&_argo2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPrintPreview_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPrintPreview_base_DrawBlankPage. Expected _wxPyPrintPreview_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPreviewCanvas_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyPrintPreview_base_DrawBlankPage. Expected _wxPreviewCanvas_p.");
+        return NULL;
+        }
+    }
+    if (_argo2) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxPyPrintPreview_base_DrawBlankPage. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPyPrintPreview_base_DrawBlankPage(_arg0,_arg1,*_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPyPrintPreview_base_RenderPage(_swigobj,_swigarg0)  (_swigobj->base_RenderPage(_swigarg0))
+static PyObject *_wrap_wxPyPrintPreview_base_RenderPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyPrintPreview * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","pageNum", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPyPrintPreview_base_RenderPage",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPrintPreview_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPrintPreview_base_RenderPage. Expected _wxPyPrintPreview_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPyPrintPreview_base_RenderPage(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPyPrintPreview_base_SetZoom(_swigobj,_swigarg0)  (_swigobj->base_SetZoom(_swigarg0))
+static PyObject *_wrap_wxPyPrintPreview_base_SetZoom(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPrintPreview * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","percent", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPyPrintPreview_base_SetZoom",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPrintPreview_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPrintPreview_base_SetZoom. Expected _wxPyPrintPreview_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyPrintPreview_base_SetZoom(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPyPrintPreview_base_Print(_swigobj,_swigarg0)  (_swigobj->base_Print(_swigarg0))
+static PyObject *_wrap_wxPyPrintPreview_base_Print(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyPrintPreview * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","interactive", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPyPrintPreview_base_Print",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPrintPreview_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPrintPreview_base_Print. Expected _wxPyPrintPreview_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPyPrintPreview_base_Print(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPyPrintPreview_base_DetermineScaling(_swigobj)  (_swigobj->base_DetermineScaling())
+static PyObject *_wrap_wxPyPrintPreview_base_DetermineScaling(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPrintPreview * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyPrintPreview_base_DetermineScaling",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPrintPreview_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPrintPreview_base_DetermineScaling. Expected _wxPyPrintPreview_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyPrintPreview_base_DetermineScaling(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static void *SwigwxPyPreviewFrameTowxPreviewFrame(void *ptr) {
+    wxPyPreviewFrame *src;
+    wxPreviewFrame *dest;
+    src = (wxPyPreviewFrame *) ptr;
+    dest = (wxPreviewFrame *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPyPreviewFrameTowxFrame(void *ptr) {
+    wxPyPreviewFrame *src;
+    wxFrame *dest;
+    src = (wxPyPreviewFrame *) ptr;
+    dest = (wxFrame *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPyPreviewFrameTowxTopLevelWindow(void *ptr) {
+    wxPyPreviewFrame *src;
+    wxTopLevelWindow *dest;
+    src = (wxPyPreviewFrame *) ptr;
+    dest = (wxTopLevelWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPyPreviewFrameTowxWindow(void *ptr) {
+    wxPyPreviewFrame *src;
+    wxWindow *dest;
+    src = (wxPyPreviewFrame *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPyPreviewFrameTowxEvtHandler(void *ptr) {
+    wxPyPreviewFrame *src;
+    wxEvtHandler *dest;
+    src = (wxPyPreviewFrame *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPyPreviewFrameTowxObject(void *ptr) {
+    wxPyPreviewFrame *src;
+    wxObject *dest;
+    src = (wxPyPreviewFrame *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxPyPreviewFrame(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6) (new wxPyPreviewFrame(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6))
+static PyObject *_wrap_new_wxPyPreviewFrame(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPreviewFrame * _result;
+    wxPrintPreview * _arg0;
+    wxFrame * _arg1;
+    wxString * _arg2;
+    wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg4 = (wxSize *) &wxDefaultSize;
+    long  _arg5 = (long ) wxDEFAULT_FRAME_STYLE;
+    wxString * _arg6 = (wxString *) &wxPyFrameNameStr;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    PyObject * _obj2 = 0;
+    wxPoint  temp;
+    PyObject * _obj3 = 0;
+    wxSize  temp0;
+    PyObject * _obj4 = 0;
+    PyObject * _obj6 = 0;
+    char *_kwnames[] = { "preview","parent","title","pos","size","style","name", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO|OOlO:new_wxPyPreviewFrame",_kwnames,&_argo0,&_argo1,&_obj2,&_obj3,&_obj4,&_arg5,&_obj6)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxPyPreviewFrame. Expected _wxPrintPreview_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFrame_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxPyPreviewFrame. Expected _wxFrame_p.");
+        return NULL;
+        }
+    }
+{
+    _arg2 = wxString_in_helper(_obj2);
+    if (_arg2 == NULL)
+        return NULL;
+}
+    if (_obj3)
+{
+    _arg3 = &temp;
+    if (! wxPoint_helper(_obj3, &_arg3))
+        return NULL;
+}
+    if (_obj4)
+{
+    _arg4 = &temp0;
+    if (! wxSize_helper(_obj4, &_arg4))
+        return NULL;
+}
+    if (_obj6)
+{
+    _arg6 = wxString_in_helper(_obj6);
+    if (_arg6 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxPyPreviewFrame *)new_wxPyPreviewFrame(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,*_arg6);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyPreviewFrame_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj2)
+        delete _arg2;
+}
+{
+    if (_obj6)
+        delete _arg6;
+}
+    return _resultobj;
+}
+
+#define wxPyPreviewFrame__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPyPreviewFrame__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPreviewFrame * _arg0;
+    PyObject * _arg1;
+    PyObject * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","self","_class", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyPreviewFrame__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPreviewFrame_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPreviewFrame__setCallbackInfo. Expected _wxPyPreviewFrame_p.");
+        return NULL;
+        }
+    }
+{
+  _arg1 = _obj1;
+}
+{
+  _arg2 = _obj2;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyPreviewFrame__setCallbackInfo(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPyPreviewFrame_SetPreviewCanvas(_swigobj,_swigarg0)  (_swigobj->SetPreviewCanvas(_swigarg0))
+static PyObject *_wrap_wxPyPreviewFrame_SetPreviewCanvas(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPreviewFrame * _arg0;
+    wxPreviewCanvas * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","canvas", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyPreviewFrame_SetPreviewCanvas",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPreviewFrame_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPreviewFrame_SetPreviewCanvas. Expected _wxPyPreviewFrame_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPreviewCanvas_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyPreviewFrame_SetPreviewCanvas. Expected _wxPreviewCanvas_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyPreviewFrame_SetPreviewCanvas(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPyPreviewFrame_SetControlBar(_swigobj,_swigarg0)  (_swigobj->SetControlBar(_swigarg0))
+static PyObject *_wrap_wxPyPreviewFrame_SetControlBar(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPreviewFrame * _arg0;
+    wxPreviewControlBar * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","bar", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyPreviewFrame_SetControlBar",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPreviewFrame_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPreviewFrame_SetControlBar. Expected _wxPyPreviewFrame_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPreviewControlBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyPreviewFrame_SetControlBar. Expected _wxPreviewControlBar_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyPreviewFrame_SetControlBar(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPyPreviewFrame_base_Initialize(_swigobj)  (_swigobj->base_Initialize())
+static PyObject *_wrap_wxPyPreviewFrame_base_Initialize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPreviewFrame * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyPreviewFrame_base_Initialize",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPreviewFrame_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPreviewFrame_base_Initialize. Expected _wxPyPreviewFrame_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyPreviewFrame_base_Initialize(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPyPreviewFrame_base_CreateCanvas(_swigobj)  (_swigobj->base_CreateCanvas())
+static PyObject *_wrap_wxPyPreviewFrame_base_CreateCanvas(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPreviewFrame * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyPreviewFrame_base_CreateCanvas",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPreviewFrame_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPreviewFrame_base_CreateCanvas. Expected _wxPyPreviewFrame_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyPreviewFrame_base_CreateCanvas(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPyPreviewFrame_base_CreateControlBar(_swigobj)  (_swigobj->base_CreateControlBar())
+static PyObject *_wrap_wxPyPreviewFrame_base_CreateControlBar(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPreviewFrame * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyPreviewFrame_base_CreateControlBar",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPreviewFrame_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPreviewFrame_base_CreateControlBar. Expected _wxPyPreviewFrame_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyPreviewFrame_base_CreateControlBar(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static void *SwigwxPyPreviewControlBarTowxPreviewControlBar(void *ptr) {
+    wxPyPreviewControlBar *src;
+    wxPreviewControlBar *dest;
+    src = (wxPyPreviewControlBar *) ptr;
+    dest = (wxPreviewControlBar *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPyPreviewControlBarTowxPanel(void *ptr) {
+    wxPyPreviewControlBar *src;
+    wxPanel *dest;
+    src = (wxPyPreviewControlBar *) ptr;
+    dest = (wxPanel *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPyPreviewControlBarTowxWindow(void *ptr) {
+    wxPyPreviewControlBar *src;
+    wxWindow *dest;
+    src = (wxPyPreviewControlBar *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPyPreviewControlBarTowxEvtHandler(void *ptr) {
+    wxPyPreviewControlBar *src;
+    wxEvtHandler *dest;
+    src = (wxPyPreviewControlBar *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPyPreviewControlBarTowxObject(void *ptr) {
+    wxPyPreviewControlBar *src;
+    wxObject *dest;
+    src = (wxPyPreviewControlBar *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxPyPreviewControlBar(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6) (new wxPyPreviewControlBar(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6))
+static PyObject *_wrap_new_wxPyPreviewControlBar(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPreviewControlBar * _result;
+    wxPrintPreview * _arg0;
+    long  _arg1;
+    wxWindow * _arg2;
+    wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg4 = (wxSize *) &wxDefaultSize;
+    long  _arg5 = (long ) 0;
+    wxString * _arg6 = (wxString *) &wxPyPanelNameStr;
+    PyObject * _argo0 = 0;
+    PyObject * _argo2 = 0;
+    wxPoint  temp;
+    PyObject * _obj3 = 0;
+    wxSize  temp0;
+    PyObject * _obj4 = 0;
+    PyObject * _obj6 = 0;
+    char *_kwnames[] = { "preview","buttons","parent","pos","size","style","name", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OlO|OOlO:new_wxPyPreviewControlBar",_kwnames,&_argo0,&_arg1,&_argo2,&_obj3,&_obj4,&_arg5,&_obj6)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintPreview_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxPyPreviewControlBar. Expected _wxPrintPreview_p.");
+        return NULL;
+        }
+    }
+    if (_argo2) {
+        if (_argo2 == Py_None) { _arg2 = NULL; }
+        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxPyPreviewControlBar. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_obj3)
+{
+    _arg3 = &temp;
+    if (! wxPoint_helper(_obj3, &_arg3))
+        return NULL;
+}
+    if (_obj4)
+{
+    _arg4 = &temp0;
+    if (! wxSize_helper(_obj4, &_arg4))
+        return NULL;
+}
+    if (_obj6)
+{
+    _arg6 = wxString_in_helper(_obj6);
+    if (_arg6 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxPyPreviewControlBar *)new_wxPyPreviewControlBar(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,*_arg6);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyPreviewControlBar_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj6)
+        delete _arg6;
+}
+    return _resultobj;
+}
+
+#define wxPyPreviewControlBar__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPyPreviewControlBar__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPreviewControlBar * _arg0;
+    PyObject * _arg1;
+    PyObject * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","self","_class", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyPreviewControlBar__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPreviewControlBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPreviewControlBar__setCallbackInfo. Expected _wxPyPreviewControlBar_p.");
+        return NULL;
+        }
+    }
+{
+  _arg1 = _obj1;
+}
+{
+  _arg2 = _obj2;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyPreviewControlBar__setCallbackInfo(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPyPreviewControlBar_SetPrintPreview(_swigobj,_swigarg0)  (_swigobj->SetPrintPreview(_swigarg0))
+static PyObject *_wrap_wxPyPreviewControlBar_SetPrintPreview(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPreviewControlBar * _arg0;
+    wxPrintPreview * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","preview", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyPreviewControlBar_SetPrintPreview",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPreviewControlBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPreviewControlBar_SetPrintPreview. Expected _wxPyPreviewControlBar_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPrintPreview_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyPreviewControlBar_SetPrintPreview. Expected _wxPrintPreview_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyPreviewControlBar_SetPrintPreview(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPyPreviewControlBar_base_CreateButtons(_swigobj)  (_swigobj->base_CreateButtons())
+static PyObject *_wrap_wxPyPreviewControlBar_base_CreateButtons(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPreviewControlBar * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyPreviewControlBar_base_CreateButtons",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPreviewControlBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPreviewControlBar_base_CreateButtons. Expected _wxPyPreviewControlBar_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyPreviewControlBar_base_CreateButtons(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPyPreviewControlBar_base_SetZoomControl(_swigobj,_swigarg0)  (_swigobj->base_SetZoomControl(_swigarg0))
+static PyObject *_wrap_wxPyPreviewControlBar_base_SetZoomControl(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPreviewControlBar * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","zoom", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPyPreviewControlBar_base_SetZoomControl",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPreviewControlBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPreviewControlBar_base_SetZoomControl. Expected _wxPyPreviewControlBar_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyPreviewControlBar_base_SetZoomControl(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static PyMethodDef printfwcMethods[] = {
+	 { "wxPyPreviewControlBar_base_SetZoomControl", (PyCFunction) _wrap_wxPyPreviewControlBar_base_SetZoomControl, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPreviewControlBar_base_CreateButtons", (PyCFunction) _wrap_wxPyPreviewControlBar_base_CreateButtons, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPreviewControlBar_SetPrintPreview", (PyCFunction) _wrap_wxPyPreviewControlBar_SetPrintPreview, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPreviewControlBar__setCallbackInfo", (PyCFunction) _wrap_wxPyPreviewControlBar__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPyPreviewControlBar", (PyCFunction) _wrap_new_wxPyPreviewControlBar, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPreviewFrame_base_CreateControlBar", (PyCFunction) _wrap_wxPyPreviewFrame_base_CreateControlBar, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPreviewFrame_base_CreateCanvas", (PyCFunction) _wrap_wxPyPreviewFrame_base_CreateCanvas, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPreviewFrame_base_Initialize", (PyCFunction) _wrap_wxPyPreviewFrame_base_Initialize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPreviewFrame_SetControlBar", (PyCFunction) _wrap_wxPyPreviewFrame_SetControlBar, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPreviewFrame_SetPreviewCanvas", (PyCFunction) _wrap_wxPyPreviewFrame_SetPreviewCanvas, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPreviewFrame__setCallbackInfo", (PyCFunction) _wrap_wxPyPreviewFrame__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPyPreviewFrame", (PyCFunction) _wrap_new_wxPyPreviewFrame, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPrintPreview_base_DetermineScaling", (PyCFunction) _wrap_wxPyPrintPreview_base_DetermineScaling, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPrintPreview_base_Print", (PyCFunction) _wrap_wxPyPrintPreview_base_Print, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPrintPreview_base_SetZoom", (PyCFunction) _wrap_wxPyPrintPreview_base_SetZoom, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPrintPreview_base_RenderPage", (PyCFunction) _wrap_wxPyPrintPreview_base_RenderPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPrintPreview_base_DrawBlankPage", (PyCFunction) _wrap_wxPyPrintPreview_base_DrawBlankPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPrintPreview_base_PaintPage", (PyCFunction) _wrap_wxPyPrintPreview_base_PaintPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPrintPreview_base_SetCurrentPage", (PyCFunction) _wrap_wxPyPrintPreview_base_SetCurrentPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPrintPreview__setCallbackInfo", (PyCFunction) _wrap_wxPyPrintPreview__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPyPrintPreview", (PyCFunction) _wrap_new_wxPyPrintPreview, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPreviewControlBar_OnGoto", (PyCFunction) _wrap_wxPreviewControlBar_OnGoto, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPreviewControlBar_OnLast", (PyCFunction) _wrap_wxPreviewControlBar_OnLast, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPreviewControlBar_OnFirst", (PyCFunction) _wrap_wxPreviewControlBar_OnFirst, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPreviewControlBar_OnPrevious", (PyCFunction) _wrap_wxPreviewControlBar_OnPrevious, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPreviewControlBar_OnNext", (PyCFunction) _wrap_wxPreviewControlBar_OnNext, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPreviewControlBar_GetPrintPreview", (PyCFunction) _wrap_wxPreviewControlBar_GetPrintPreview, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPreviewControlBar_SetZoomControl", (PyCFunction) _wrap_wxPreviewControlBar_SetZoomControl, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPreviewControlBar_GetZoomControl", (PyCFunction) _wrap_wxPreviewControlBar_GetZoomControl, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPreviewControlBar", (PyCFunction) _wrap_new_wxPreviewControlBar, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPreviewCanvas", (PyCFunction) _wrap_new_wxPreviewCanvas, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPreviewFrame_GetControlBar", (PyCFunction) _wrap_wxPreviewFrame_GetControlBar, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPreviewFrame_CreateCanvas", (PyCFunction) _wrap_wxPreviewFrame_CreateCanvas, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPreviewFrame_CreateControlBar", (PyCFunction) _wrap_wxPreviewFrame_CreateControlBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPreviewFrame_Initialize", (PyCFunction) _wrap_wxPreviewFrame_Initialize, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreviewFrame", (PyCFunction) _wrap_new_wxPreviewFrame, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintPreview_SetZoom", (PyCFunction) _wrap_wxPrintPreview_SetZoom, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintPreview_SetPrintout", (PyCFunction) _wrap_wxPrintPreview_SetPrintout, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintPreview_SetFrame", (PyCFunction) _wrap_wxPrintPreview_SetFrame, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintPreview_SetCurrentPage", (PyCFunction) _wrap_wxPrintPreview_SetCurrentPage, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintPreview_SetCanvas", (PyCFunction) _wrap_wxPrintPreview_SetCanvas, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_DetermineScaling", (PyCFunction) _wrap_wxPrintPreview_DetermineScaling, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrintPreview_Print", (PyCFunction) _wrap_wxPrintPreview_Print, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_SetOk", (PyCFunction) _wrap_wxPrintPreview_SetOk, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrintPreview_Ok", (PyCFunction) _wrap_wxPrintPreview_Ok, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintPreview_GetZoom", (PyCFunction) _wrap_wxPrintPreview_GetZoom, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintPreview_GetPrintoutForPrinting", (PyCFunction) _wrap_wxPrintPreview_GetPrintoutForPrinting, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintPreview_GetPrintout", (PyCFunction) _wrap_wxPrintPreview_GetPrintout, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintPreview_GetPrintDialogData", (PyCFunction) _wrap_wxPrintPreview_GetPrintDialogData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrintPreview_GetMinPage", (PyCFunction) _wrap_wxPrintPreview_GetMinPage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrintPreview_GetMaxPage", (PyCFunction) _wrap_wxPrintPreview_GetMaxPage, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintPreview_GetFrame", (PyCFunction) _wrap_wxPrintPreview_GetFrame, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintPreview_GetCurrentPage", (PyCFunction) _wrap_wxPrintPreview_GetCurrentPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_GetZoom", (PyCFunction) _wrap_wxPrintPreview_GetZoom, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_SetZoom", (PyCFunction) _wrap_wxPrintPreview_SetZoom, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_GetPrintDialogData", (PyCFunction) _wrap_wxPrintPreview_GetPrintDialogData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_AdjustScrollbars", (PyCFunction) _wrap_wxPrintPreview_AdjustScrollbars, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_RenderPage", (PyCFunction) _wrap_wxPrintPreview_RenderPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_DrawBlankPage", (PyCFunction) _wrap_wxPrintPreview_DrawBlankPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_PaintPage", (PyCFunction) _wrap_wxPrintPreview_PaintPage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrintPreview_GetCanvas", (PyCFunction) _wrap_wxPrintPreview_GetCanvas, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_GetFrame", (PyCFunction) _wrap_wxPrintPreview_GetFrame, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_SetCanvas", (PyCFunction) _wrap_wxPrintPreview_SetCanvas, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_SetFrame", (PyCFunction) _wrap_wxPrintPreview_SetFrame, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_GetPrintoutForPrinting", (PyCFunction) _wrap_wxPrintPreview_GetPrintoutForPrinting, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_GetPrintout", (PyCFunction) _wrap_wxPrintPreview_GetPrintout, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_SetPrintout", (PyCFunction) _wrap_wxPrintPreview_SetPrintout, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_GetCurrentPage", (PyCFunction) _wrap_wxPrintPreview_GetCurrentPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_SetCurrentPage", (PyCFunction) _wrap_wxPrintPreview_SetCurrentPage, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPrintPreview", (PyCFunction) _wrap_new_wxPrintPreview, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPrintAbortDialog", (PyCFunction) _wrap_new_wxPrintAbortDialog, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrinter_GetLastError", (PyCFunction) _wrap_wxPrinter_GetLastError, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrinter_GetAbort", (PyCFunction) _wrap_wxPrinter_GetAbort, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrinter_Setup", (PyCFunction) _wrap_wxPrinter_Setup, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrinter_ReportError", (PyCFunction) _wrap_wxPrinter_ReportError, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrinter_PrintDialog", (PyCFunction) _wrap_wxPrinter_PrintDialog, METH_VARARGS | METH_KEYWORDS },
@@ -5394,29 +7637,37 @@ static PyMethodDef printfwcMethods[] = {
 	 { "wxPrintDialog_GetPrintDC", (PyCFunction) _wrap_wxPrintDialog_GetPrintDC, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrintDialog_GetPrintDialogData", (PyCFunction) _wrap_wxPrintDialog_GetPrintDialogData, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPrintDialog", (PyCFunction) _wrap_new_wxPrintDialog, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_SetToPage", (PyCFunction) _wrap_wxPrintDialogData_SetToPage, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_SetSetupDialog", (PyCFunction) _wrap_wxPrintDialogData_SetSetupDialog, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_SetPrintToFile", (PyCFunction) _wrap_wxPrintDialogData_SetPrintToFile, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrintDialogData_SetPrintData", (PyCFunction) _wrap_wxPrintDialogData_SetPrintData, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_SetNoCopies", (PyCFunction) _wrap_wxPrintDialogData_SetNoCopies, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_SetMinPage", (PyCFunction) _wrap_wxPrintDialogData_SetMinPage, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_SetMaxPage", (PyCFunction) _wrap_wxPrintDialogData_SetMaxPage, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_SetFromPage", (PyCFunction) _wrap_wxPrintDialogData_SetFromPage, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_SetCollate", (PyCFunction) _wrap_wxPrintDialogData_SetCollate, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_Ok", (PyCFunction) _wrap_wxPrintDialogData_Ok, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_GetToPage", (PyCFunction) _wrap_wxPrintDialogData_GetToPage, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_GetPrintToFile", (PyCFunction) _wrap_wxPrintDialogData_GetPrintToFile, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrintDialogData_GetPrintData", (PyCFunction) _wrap_wxPrintDialogData_GetPrintData, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_GetNoCopies", (PyCFunction) _wrap_wxPrintDialogData_GetNoCopies, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_GetMinPage", (PyCFunction) _wrap_wxPrintDialogData_GetMinPage, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_GetMaxPage", (PyCFunction) _wrap_wxPrintDialogData_GetMaxPage, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_GetFromPage", (PyCFunction) _wrap_wxPrintDialogData_GetFromPage, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_GetCollate", (PyCFunction) _wrap_wxPrintDialogData_GetCollate, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_GetAllPages", (PyCFunction) _wrap_wxPrintDialogData_GetAllPages, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_Ok", (PyCFunction) _wrap_wxPrintDialogData_Ok, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetEnableHelp", (PyCFunction) _wrap_wxPrintDialogData_GetEnableHelp, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetEnablePageNumbers", (PyCFunction) _wrap_wxPrintDialogData_GetEnablePageNumbers, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetEnableSelection", (PyCFunction) _wrap_wxPrintDialogData_GetEnableSelection, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetEnablePrintToFile", (PyCFunction) _wrap_wxPrintDialogData_GetEnablePrintToFile, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_EnableHelp", (PyCFunction) _wrap_wxPrintDialogData_EnableHelp, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_EnablePageNumbers", (PyCFunction) _wrap_wxPrintDialogData_EnablePageNumbers, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrintDialogData_EnableSelection", (PyCFunction) _wrap_wxPrintDialogData_EnableSelection, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrintDialogData_EnablePrintToFile", (PyCFunction) _wrap_wxPrintDialogData_EnablePrintToFile, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_EnablePageNumbers", (PyCFunction) _wrap_wxPrintDialogData_EnablePageNumbers, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_EnableHelp", (PyCFunction) _wrap_wxPrintDialogData_EnableHelp, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetSetupDialog", (PyCFunction) _wrap_wxPrintDialogData_SetSetupDialog, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetPrintToFile", (PyCFunction) _wrap_wxPrintDialogData_SetPrintToFile, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetCollate", (PyCFunction) _wrap_wxPrintDialogData_SetCollate, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetSelection", (PyCFunction) _wrap_wxPrintDialogData_SetSelection, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetAllPages", (PyCFunction) _wrap_wxPrintDialogData_SetAllPages, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetNoCopies", (PyCFunction) _wrap_wxPrintDialogData_SetNoCopies, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetMaxPage", (PyCFunction) _wrap_wxPrintDialogData_SetMaxPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetMinPage", (PyCFunction) _wrap_wxPrintDialogData_SetMinPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetToPage", (PyCFunction) _wrap_wxPrintDialogData_SetToPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetFromPage", (PyCFunction) _wrap_wxPrintDialogData_SetFromPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetSetupDialog", (PyCFunction) _wrap_wxPrintDialogData_GetSetupDialog, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetPrintToFile", (PyCFunction) _wrap_wxPrintDialogData_GetPrintToFile, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetCollate", (PyCFunction) _wrap_wxPrintDialogData_GetCollate, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetSelection", (PyCFunction) _wrap_wxPrintDialogData_GetSelection, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetAllPages", (PyCFunction) _wrap_wxPrintDialogData_GetAllPages, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetNoCopies", (PyCFunction) _wrap_wxPrintDialogData_GetNoCopies, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetMaxPage", (PyCFunction) _wrap_wxPrintDialogData_GetMaxPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetMinPage", (PyCFunction) _wrap_wxPrintDialogData_GetMinPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetToPage", (PyCFunction) _wrap_wxPrintDialogData_GetToPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetFromPage", (PyCFunction) _wrap_wxPrintDialogData_GetFromPage, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxPrintDialogData", (PyCFunction) _wrap_delete_wxPrintDialogData, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPrintDialogData", (PyCFunction) _wrap_new_wxPrintDialogData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPageSetupDialog_ShowModal", (PyCFunction) _wrap_wxPageSetupDialog_ShowModal, METH_VARARGS | METH_KEYWORDS },
@@ -5524,6 +7775,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
     { "_wxDC","_wxPostScriptDC",SwigwxPostScriptDCTowxDC},
+    { "_wxPrintPreview","_wxPyPrintPreview",SwigwxPyPrintPreviewTowxPrintPreview},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
     { "_size_t","_time_t",0},
@@ -5531,7 +7783,12 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
+    { "_wxPanel","_wxPyPreviewControlBar",SwigwxPyPreviewControlBarTowxPanel},
+    { "_wxPanel","_wxPreviewControlBar",SwigwxPreviewControlBarTowxPanel},
+    { "_wxPanel","_wxPreviewCanvas",SwigwxPreviewCanvasTowxPanel},
+    { "_wxTopLevelWindow","_wxPyPreviewFrame",SwigwxPyPreviewFrameTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxPreviewFrame",SwigwxPreviewFrameTowxTopLevelWindow},
+    { "_wxTopLevelWindow","_wxPrintAbortDialog",SwigwxPrintAbortDialogTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxPrintDialog",SwigwxPrintDialogTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxPageSetupDialog",SwigwxPageSetupDialogTowxTopLevelWindow},
     { "_uint","_wxCoord",0},
@@ -5549,6 +7806,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_EBool","_signed_int",0},
     { "_EBool","_int",0},
     { "_EBool","_wxWindowID",0},
+    { "_wxPreviewControlBar","_wxPyPreviewControlBar",SwigwxPyPreviewControlBarTowxPreviewControlBar},
     { "_unsigned_long","_long",0},
     { "_wxNativeFontInfo","_struct_wxNativeFontInfo",0},
     { "_signed_int","_wxCoord",0},
@@ -5561,8 +7819,14 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_WXTYPE","_unsigned_short",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
+    { "_wxObject","_wxPyPreviewControlBar",SwigwxPyPreviewControlBarTowxObject},
+    { "_wxObject","_wxPyPreviewFrame",SwigwxPyPreviewFrameTowxObject},
+    { "_wxObject","_wxPyPrintPreview",SwigwxPyPrintPreviewTowxObject},
+    { "_wxObject","_wxPreviewControlBar",SwigwxPreviewControlBarTowxObject},
+    { "_wxObject","_wxPreviewCanvas",SwigwxPreviewCanvasTowxObject},
     { "_wxObject","_wxPreviewFrame",SwigwxPreviewFrameTowxObject},
     { "_wxObject","_wxPrintPreview",SwigwxPrintPreviewTowxObject},
+    { "_wxObject","_wxPrintAbortDialog",SwigwxPrintAbortDialogTowxObject},
     { "_wxObject","_wxPrinter",SwigwxPrinterTowxObject},
     { "_wxObject","_wxPyPrintout",SwigwxPyPrintoutTowxObject},
     { "_wxObject","_wxPrintDialog",SwigwxPrintDialogTowxObject},
@@ -5573,6 +7837,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxObject","_wxPrintData",SwigwxPrintDataTowxObject},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
+    { "_wxScrolledWindow","_wxPreviewCanvas",SwigwxPreviewCanvasTowxScrolledWindow},
     { "_unsigned_char","_byte",0},
     { "_unsigned_int","_wxCoord",0},
     { "_unsigned_int","_wxPrintQuality",0},
@@ -5581,11 +7846,13 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_unsigned_int","_uint",0},
     { "_unsigned_int","_wxWindowID",0},
     { "_unsigned_int","_int",0},
+    { "_wxDialog","_wxPrintAbortDialog",SwigwxPrintAbortDialogTowxDialog},
     { "_wxDialog","_wxPrintDialog",SwigwxPrintDialogTowxDialog},
     { "_wxDialog","_wxPageSetupDialog",SwigwxPageSetupDialogTowxDialog},
     { "_short","_WXTYPE",0},
     { "_short","_unsigned_short",0},
     { "_short","_signed_short",0},
+    { "_wxFrame","_wxPyPreviewFrame",SwigwxPyPreviewFrameTowxFrame},
     { "_wxFrame","_wxPreviewFrame",SwigwxPreviewFrameTowxFrame},
     { "_wxWindowID","_wxCoord",0},
     { "_wxWindowID","_wxPrintQuality",0},
@@ -5621,10 +7888,21 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
+    { "_wxPreviewFrame","_wxPyPreviewFrame",SwigwxPyPreviewFrameTowxPreviewFrame},
+    { "_wxEvtHandler","_wxPyPreviewControlBar",SwigwxPyPreviewControlBarTowxEvtHandler},
+    { "_wxEvtHandler","_wxPyPreviewFrame",SwigwxPyPreviewFrameTowxEvtHandler},
+    { "_wxEvtHandler","_wxPreviewControlBar",SwigwxPreviewControlBarTowxEvtHandler},
+    { "_wxEvtHandler","_wxPreviewCanvas",SwigwxPreviewCanvasTowxEvtHandler},
     { "_wxEvtHandler","_wxPreviewFrame",SwigwxPreviewFrameTowxEvtHandler},
+    { "_wxEvtHandler","_wxPrintAbortDialog",SwigwxPrintAbortDialogTowxEvtHandler},
     { "_wxEvtHandler","_wxPrintDialog",SwigwxPrintDialogTowxEvtHandler},
     { "_wxEvtHandler","_wxPageSetupDialog",SwigwxPageSetupDialogTowxEvtHandler},
+    { "_wxWindow","_wxPyPreviewControlBar",SwigwxPyPreviewControlBarTowxWindow},
+    { "_wxWindow","_wxPyPreviewFrame",SwigwxPyPreviewFrameTowxWindow},
+    { "_wxWindow","_wxPreviewControlBar",SwigwxPreviewControlBarTowxWindow},
+    { "_wxWindow","_wxPreviewCanvas",SwigwxPreviewCanvasTowxWindow},
     { "_wxWindow","_wxPreviewFrame",SwigwxPreviewFrameTowxWindow},
+    { "_wxWindow","_wxPrintAbortDialog",SwigwxPrintAbortDialogTowxWindow},
     { "_wxWindow","_wxPrintDialog",SwigwxPrintDialogTowxWindow},
     { "_wxWindow","_wxPageSetupDialog",SwigwxPageSetupDialogTowxWindow},
 {0,0,0}};
@@ -5638,6 +7916,29 @@ SWIGEXPORT(void) initprintfwc() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("printfwc", printfwcMethods);
 	 d = PyModule_GetDict(m);
+	 PyDict_SetItemString(d,"wxPRINT_MODE_NONE", PyInt_FromLong((long) wxPRINT_MODE_NONE));
+	 PyDict_SetItemString(d,"wxPRINT_MODE_PREVIEW", PyInt_FromLong((long) wxPRINT_MODE_PREVIEW));
+	 PyDict_SetItemString(d,"wxPRINT_MODE_FILE", PyInt_FromLong((long) wxPRINT_MODE_FILE));
+	 PyDict_SetItemString(d,"wxPRINT_MODE_PRINTER", PyInt_FromLong((long) wxPRINT_MODE_PRINTER));
+	 PyDict_SetItemString(d,"wxPRINTER_NO_ERROR", PyInt_FromLong((long) wxPRINTER_NO_ERROR));
+	 PyDict_SetItemString(d,"wxPRINTER_CANCELLED", PyInt_FromLong((long) wxPRINTER_CANCELLED));
+	 PyDict_SetItemString(d,"wxPRINTER_ERROR", PyInt_FromLong((long) wxPRINTER_ERROR));
+	 PyDict_SetItemString(d,"wxPREVIEW_PRINT", PyInt_FromLong((long) wxPREVIEW_PRINT));
+	 PyDict_SetItemString(d,"wxPREVIEW_PREVIOUS", PyInt_FromLong((long) wxPREVIEW_PREVIOUS));
+	 PyDict_SetItemString(d,"wxPREVIEW_NEXT", PyInt_FromLong((long) wxPREVIEW_NEXT));
+	 PyDict_SetItemString(d,"wxPREVIEW_ZOOM", PyInt_FromLong((long) wxPREVIEW_ZOOM));
+	 PyDict_SetItemString(d,"wxPREVIEW_FIRST", PyInt_FromLong((long) wxPREVIEW_FIRST));
+	 PyDict_SetItemString(d,"wxPREVIEW_LAST", PyInt_FromLong((long) wxPREVIEW_LAST));
+	 PyDict_SetItemString(d,"wxPREVIEW_GOTO", PyInt_FromLong((long) wxPREVIEW_GOTO));
+	 PyDict_SetItemString(d,"wxPREVIEW_DEFAULT", PyInt_FromLong((long) wxPREVIEW_DEFAULT));
+	 PyDict_SetItemString(d,"wxID_PREVIEW_CLOSE", PyInt_FromLong((long) wxID_PREVIEW_CLOSE));
+	 PyDict_SetItemString(d,"wxID_PREVIEW_NEXT", PyInt_FromLong((long) wxID_PREVIEW_NEXT));
+	 PyDict_SetItemString(d,"wxID_PREVIEW_PREVIOUS", PyInt_FromLong((long) wxID_PREVIEW_PREVIOUS));
+	 PyDict_SetItemString(d,"wxID_PREVIEW_PRINT", PyInt_FromLong((long) wxID_PREVIEW_PRINT));
+	 PyDict_SetItemString(d,"wxID_PREVIEW_ZOOM", PyInt_FromLong((long) wxID_PREVIEW_ZOOM));
+	 PyDict_SetItemString(d,"wxID_PREVIEW_FIRST", PyInt_FromLong((long) wxID_PREVIEW_FIRST));
+	 PyDict_SetItemString(d,"wxID_PREVIEW_LAST", PyInt_FromLong((long) wxID_PREVIEW_LAST));
+	 PyDict_SetItemString(d,"wxID_PREVIEW_GOTO", PyInt_FromLong((long) wxID_PREVIEW_GOTO));
 
     wxPyPtrTypeMap_Add("wxPrintout", "wxPyPrintout");
 {

@@ -198,9 +198,7 @@ void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
 }
 
 #include <wx/metafile.h>
-
-    // See below in the init function...
-    wxClipboard* wxPyTheClipboard;
+extern wxClipboard * wxTheClipboard; 
 
 class wxPyDropSource : public wxDropSource {
 public:
@@ -366,17 +364,17 @@ static PyObject *_wrap_wxPyFormatInvalid_get() {
     return pyobj;
 }
 
-static int _wrap_wxPyTheClipboard_set(PyObject *val) {
+static int _wrap_wxTheClipboard_set(PyObject *val) {
 
     PyErr_SetString(PyExc_TypeError,"Variable wxTheClipboard is read-only.");
     return 1;
 }
 
-static PyObject *_wrap_wxPyTheClipboard_get() {
+static PyObject *_wrap_wxTheClipboard_get() {
     PyObject * pyobj;
     char ptemp[128];
 
-    SWIG_MakePtr(ptemp, (char *) wxPyTheClipboard,"_wxClipboard_p");
+    SWIG_MakePtr(ptemp, (char *) wxTheClipboard,"_wxClipboard_p");
     pyobj = PyString_FromString(ptemp);
     return pyobj;
 }
@@ -3794,7 +3792,7 @@ SWIGEXPORT(void) initclip_dndc() {
 	 PyDict_SetItemString(d,"wxDF_MAX", PyInt_FromLong((long) wxDF_MAX));
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxFormatInvalid",_wrap_wxPyFormatInvalid_get, _wrap_wxPyFormatInvalid_set);
-	 SWIG_addvarlink(SWIG_globals,"wxTheClipboard",_wrap_wxPyTheClipboard_get, _wrap_wxPyTheClipboard_set);
+	 SWIG_addvarlink(SWIG_globals,"wxTheClipboard",_wrap_wxTheClipboard_get, _wrap_wxTheClipboard_set);
 	 PyDict_SetItemString(d,"wxDrag_CopyOnly", PyInt_FromLong((long) wxDrag_CopyOnly));
 	 PyDict_SetItemString(d,"wxDrag_AllowMove", PyInt_FromLong((long) wxDrag_AllowMove));
 	 PyDict_SetItemString(d,"wxDrag_DefaultMove", PyInt_FromLong((long) wxDrag_DefaultMove));
@@ -3806,7 +3804,6 @@ SWIGEXPORT(void) initclip_dndc() {
 	 PyDict_SetItemString(d,"wxDragCancel", PyInt_FromLong((long) wxDragCancel));
 
 
-    wxPyTheClipboard = wxTheClipboard;
     wxPyPtrTypeMap_Add("wxDropSource", "wxPyDropSource");
     wxPyPtrTypeMap_Add("wxTextDropTarget", "wxPyTextDropTarget");
     wxPyPtrTypeMap_Add("wxFileDropTarget", "wxPyFileDropTarget");

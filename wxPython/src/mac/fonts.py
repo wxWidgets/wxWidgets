@@ -7,70 +7,70 @@ class wxNativeFontInfoPtr :
         self.this = this
         self.thisown = 0
     def Init(self, *_args, **_kwargs):
-        val = apply(fontsc.wxNativeFontInfo_Init,(self,) + _args, _kwargs)
+        val = fontsc.wxNativeFontInfo_Init(self, *_args, **_kwargs)
         return val
     def GetPointSize(self, *_args, **_kwargs):
-        val = apply(fontsc.wxNativeFontInfo_GetPointSize,(self,) + _args, _kwargs)
+        val = fontsc.wxNativeFontInfo_GetPointSize(self, *_args, **_kwargs)
         return val
     def GetStyle(self, *_args, **_kwargs):
-        val = apply(fontsc.wxNativeFontInfo_GetStyle,(self,) + _args, _kwargs)
+        val = fontsc.wxNativeFontInfo_GetStyle(self, *_args, **_kwargs)
         return val
     def GetWeight(self, *_args, **_kwargs):
-        val = apply(fontsc.wxNativeFontInfo_GetWeight,(self,) + _args, _kwargs)
+        val = fontsc.wxNativeFontInfo_GetWeight(self, *_args, **_kwargs)
         return val
     def GetUnderlined(self, *_args, **_kwargs):
-        val = apply(fontsc.wxNativeFontInfo_GetUnderlined,(self,) + _args, _kwargs)
+        val = fontsc.wxNativeFontInfo_GetUnderlined(self, *_args, **_kwargs)
         return val
     def GetFaceName(self, *_args, **_kwargs):
-        val = apply(fontsc.wxNativeFontInfo_GetFaceName,(self,) + _args, _kwargs)
+        val = fontsc.wxNativeFontInfo_GetFaceName(self, *_args, **_kwargs)
         return val
     def GetFamily(self, *_args, **_kwargs):
-        val = apply(fontsc.wxNativeFontInfo_GetFamily,(self,) + _args, _kwargs)
+        val = fontsc.wxNativeFontInfo_GetFamily(self, *_args, **_kwargs)
         return val
     def GetEncoding(self, *_args, **_kwargs):
-        val = apply(fontsc.wxNativeFontInfo_GetEncoding,(self,) + _args, _kwargs)
+        val = fontsc.wxNativeFontInfo_GetEncoding(self, *_args, **_kwargs)
         return val
     def SetPointSize(self, *_args, **_kwargs):
-        val = apply(fontsc.wxNativeFontInfo_SetPointSize,(self,) + _args, _kwargs)
+        val = fontsc.wxNativeFontInfo_SetPointSize(self, *_args, **_kwargs)
         return val
     def SetStyle(self, *_args, **_kwargs):
-        val = apply(fontsc.wxNativeFontInfo_SetStyle,(self,) + _args, _kwargs)
+        val = fontsc.wxNativeFontInfo_SetStyle(self, *_args, **_kwargs)
         return val
     def SetWeight(self, *_args, **_kwargs):
-        val = apply(fontsc.wxNativeFontInfo_SetWeight,(self,) + _args, _kwargs)
+        val = fontsc.wxNativeFontInfo_SetWeight(self, *_args, **_kwargs)
         return val
     def SetUnderlined(self, *_args, **_kwargs):
-        val = apply(fontsc.wxNativeFontInfo_SetUnderlined,(self,) + _args, _kwargs)
+        val = fontsc.wxNativeFontInfo_SetUnderlined(self, *_args, **_kwargs)
         return val
     def SetFaceName(self, *_args, **_kwargs):
-        val = apply(fontsc.wxNativeFontInfo_SetFaceName,(self,) + _args, _kwargs)
+        val = fontsc.wxNativeFontInfo_SetFaceName(self, *_args, **_kwargs)
         return val
     def SetFamily(self, *_args, **_kwargs):
-        val = apply(fontsc.wxNativeFontInfo_SetFamily,(self,) + _args, _kwargs)
+        val = fontsc.wxNativeFontInfo_SetFamily(self, *_args, **_kwargs)
         return val
     def SetEncoding(self, *_args, **_kwargs):
-        val = apply(fontsc.wxNativeFontInfo_SetEncoding,(self,) + _args, _kwargs)
+        val = fontsc.wxNativeFontInfo_SetEncoding(self, *_args, **_kwargs)
         return val
     def FromString(self, *_args, **_kwargs):
-        val = apply(fontsc.wxNativeFontInfo_FromString,(self,) + _args, _kwargs)
+        val = fontsc.wxNativeFontInfo_FromString(self, *_args, **_kwargs)
         return val
     def ToString(self, *_args, **_kwargs):
-        val = apply(fontsc.wxNativeFontInfo_ToString,(self,) + _args, _kwargs)
+        val = fontsc.wxNativeFontInfo_ToString(self, *_args, **_kwargs)
         return val
     def __str__(self, *_args, **_kwargs):
-        val = apply(fontsc.wxNativeFontInfo___str__,(self,) + _args, _kwargs)
+        val = fontsc.wxNativeFontInfo___str__(self, *_args, **_kwargs)
         return val
     def FromUserString(self, *_args, **_kwargs):
-        val = apply(fontsc.wxNativeFontInfo_FromUserString,(self,) + _args, _kwargs)
+        val = fontsc.wxNativeFontInfo_FromUserString(self, *_args, **_kwargs)
         return val
     def ToUserString(self, *_args, **_kwargs):
-        val = apply(fontsc.wxNativeFontInfo_ToUserString,(self,) + _args, _kwargs)
+        val = fontsc.wxNativeFontInfo_ToUserString(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxNativeFontInfo instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxNativeFontInfo instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxNativeFontInfo(wxNativeFontInfoPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(fontsc.new_wxNativeFontInfo,_args,_kwargs)
+        self.this = fontsc.new_wxNativeFontInfo(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -86,32 +86,32 @@ class wxFontMapperPtr :
                 delfunc(self)
             except:
                 pass
-    def GetAltForEncoding(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFontMapper_GetAltForEncoding,(self,) + _args, _kwargs)
-        return val
-    def IsEncodingAvailable(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFontMapper_IsEncodingAvailable,(self,) + _args, _kwargs)
-        return val
     def CharsetToEncoding(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFontMapper_CharsetToEncoding,(self,) + _args, _kwargs)
-        return val
-    def SetDialogParent(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFontMapper_SetDialogParent,(self,) + _args, _kwargs)
-        return val
-    def SetDialogTitle(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFontMapper_SetDialogTitle,(self,) + _args, _kwargs)
+        val = fontsc.wxFontMapper_CharsetToEncoding(self, *_args, **_kwargs)
         return val
     def SetConfig(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFontMapper_SetConfig,(self,) + _args, _kwargs)
+        val = fontsc.wxFontMapper_SetConfig(self, *_args, **_kwargs)
         return val
     def SetConfigPath(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFontMapper_SetConfigPath,(self,) + _args, _kwargs)
+        val = fontsc.wxFontMapper_SetConfigPath(self, *_args, **_kwargs)
+        return val
+    def GetAltForEncoding(self, *_args, **_kwargs):
+        val = fontsc.wxFontMapper_GetAltForEncoding(self, *_args, **_kwargs)
+        return val
+    def IsEncodingAvailable(self, *_args, **_kwargs):
+        val = fontsc.wxFontMapper_IsEncodingAvailable(self, *_args, **_kwargs)
+        return val
+    def SetDialogParent(self, *_args, **_kwargs):
+        val = fontsc.wxFontMapper_SetDialogParent(self, *_args, **_kwargs)
+        return val
+    def SetDialogTitle(self, *_args, **_kwargs):
+        val = fontsc.wxFontMapper_SetDialogTitle(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxFontMapper instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxFontMapper instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxFontMapper(wxFontMapperPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(fontsc.new_wxFontMapper,_args,_kwargs)
+        self.this = fontsc.new_wxFontMapper(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -122,7 +122,7 @@ class wxFontPtr(wxObjectPtr):
         self.this = this
         self.thisown = 0
     def wxFontFromNativeInfoString(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFont_wxFontFromNativeInfoString,(self,) + _args, _kwargs)
+        val = fontsc.wxFont_wxFontFromNativeInfoString(self, *_args, **_kwargs)
         if val: val = wxFontPtr(val) ; val.thisown = 1
         return val
     def __del__(self, delfunc=fontsc.delete_wxFont):
@@ -132,95 +132,96 @@ class wxFontPtr(wxObjectPtr):
             except:
                 pass
     def Ok(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFont_Ok,(self,) + _args, _kwargs)
+        val = fontsc.wxFont_Ok(self, *_args, **_kwargs)
         return val
     def GetPointSize(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFont_GetPointSize,(self,) + _args, _kwargs)
+        val = fontsc.wxFont_GetPointSize(self, *_args, **_kwargs)
         return val
     def GetFamily(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFont_GetFamily,(self,) + _args, _kwargs)
+        val = fontsc.wxFont_GetFamily(self, *_args, **_kwargs)
         return val
     def GetStyle(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFont_GetStyle,(self,) + _args, _kwargs)
+        val = fontsc.wxFont_GetStyle(self, *_args, **_kwargs)
         return val
     def GetWeight(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFont_GetWeight,(self,) + _args, _kwargs)
+        val = fontsc.wxFont_GetWeight(self, *_args, **_kwargs)
         return val
     def GetUnderlined(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFont_GetUnderlined,(self,) + _args, _kwargs)
+        val = fontsc.wxFont_GetUnderlined(self, *_args, **_kwargs)
         return val
     def GetFaceName(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFont_GetFaceName,(self,) + _args, _kwargs)
+        val = fontsc.wxFont_GetFaceName(self, *_args, **_kwargs)
         return val
     def GetEncoding(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFont_GetEncoding,(self,) + _args, _kwargs)
+        val = fontsc.wxFont_GetEncoding(self, *_args, **_kwargs)
         return val
     def IsFixedWidth(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFont_IsFixedWidth,(self,) + _args, _kwargs)
+        val = fontsc.wxFont_IsFixedWidth(self, *_args, **_kwargs)
         return val
     def GetNativeFontInfo(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFont_GetNativeFontInfo,(self,) + _args, _kwargs)
+        val = fontsc.wxFont_GetNativeFontInfo(self, *_args, **_kwargs)
         if val: val = wxNativeFontInfoPtr(val) 
         return val
     def GetNativeFontInfoDesc(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFont_GetNativeFontInfoDesc,(self,) + _args, _kwargs)
+        val = fontsc.wxFont_GetNativeFontInfoDesc(self, *_args, **_kwargs)
         return val
     def GetNativeFontInfoUserDesc(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFont_GetNativeFontInfoUserDesc,(self,) + _args, _kwargs)
+        val = fontsc.wxFont_GetNativeFontInfoUserDesc(self, *_args, **_kwargs)
         return val
     def SetPointSize(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFont_SetPointSize,(self,) + _args, _kwargs)
+        val = fontsc.wxFont_SetPointSize(self, *_args, **_kwargs)
         return val
     def SetFamily(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFont_SetFamily,(self,) + _args, _kwargs)
+        val = fontsc.wxFont_SetFamily(self, *_args, **_kwargs)
         return val
     def SetStyle(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFont_SetStyle,(self,) + _args, _kwargs)
+        val = fontsc.wxFont_SetStyle(self, *_args, **_kwargs)
         return val
     def SetWeight(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFont_SetWeight,(self,) + _args, _kwargs)
+        val = fontsc.wxFont_SetWeight(self, *_args, **_kwargs)
         return val
     def SetFaceName(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFont_SetFaceName,(self,) + _args, _kwargs)
+        val = fontsc.wxFont_SetFaceName(self, *_args, **_kwargs)
         return val
     def SetUnderlined(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFont_SetUnderlined,(self,) + _args, _kwargs)
+        val = fontsc.wxFont_SetUnderlined(self, *_args, **_kwargs)
         return val
     def SetEncoding(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFont_SetEncoding,(self,) + _args, _kwargs)
+        val = fontsc.wxFont_SetEncoding(self, *_args, **_kwargs)
         return val
     def SetNativeFontInfo(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFont_SetNativeFontInfo,(self,) + _args, _kwargs)
+        val = fontsc.wxFont_SetNativeFontInfo(self, *_args, **_kwargs)
         return val
     def SetNativeFontInfoUserDesc(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFont_SetNativeFontInfoUserDesc,(self,) + _args, _kwargs)
+        val = fontsc.wxFont_SetNativeFontInfoUserDesc(self, *_args, **_kwargs)
         return val
     def GetFamilyString(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFont_GetFamilyString,(self,) + _args, _kwargs)
+        val = fontsc.wxFont_GetFamilyString(self, *_args, **_kwargs)
         return val
     def GetStyleString(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFont_GetStyleString,(self,) + _args, _kwargs)
+        val = fontsc.wxFont_GetStyleString(self, *_args, **_kwargs)
         return val
     def GetWeightString(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFont_GetWeightString,(self,) + _args, _kwargs)
+        val = fontsc.wxFont_GetWeightString(self, *_args, **_kwargs)
         return val
     def SetNoAntiAliasing(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFont_SetNoAntiAliasing,(self,) + _args, _kwargs)
+        val = fontsc.wxFont_SetNoAntiAliasing(self, *_args, **_kwargs)
         return val
     def GetNoAntiAliasing(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFont_GetNoAntiAliasing,(self,) + _args, _kwargs)
+        val = fontsc.wxFont_GetNoAntiAliasing(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxFont instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxFont instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+    def __nonzero__(self): return self.Ok()
 class wxFont(wxFontPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(fontsc.new_wxFont,_args,_kwargs)
+        self.this = fontsc.new_wxFont(*_args,**_kwargs)
         self.thisown = 1
 
 
 
 def wxFontFromNativeInfo(*_args,**_kwargs):
-    val = wxFontPtr(apply(fontsc.new_wxFontFromNativeInfo,_args,_kwargs))
+    val = wxFontPtr(fontsc.new_wxFontFromNativeInfo(*_args,**_kwargs))
     val.thisown = 1
     return val
 
@@ -230,20 +231,20 @@ class wxFontListPtr(wxObjectPtr):
         self.this = this
         self.thisown = 0
     def AddFont(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFontList_AddFont,(self,) + _args, _kwargs)
+        val = fontsc.wxFontList_AddFont(self, *_args, **_kwargs)
         return val
     def FindOrCreateFont(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFontList_FindOrCreateFont,(self,) + _args, _kwargs)
+        val = fontsc.wxFontList_FindOrCreateFont(self, *_args, **_kwargs)
         if val: val = wxFontPtr(val) 
         return val
     def RemoveFont(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFontList_RemoveFont,(self,) + _args, _kwargs)
+        val = fontsc.wxFontList_RemoveFont(self, *_args, **_kwargs)
         return val
     def GetCount(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFontList_GetCount,(self,) + _args, _kwargs)
+        val = fontsc.wxFontList_GetCount(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxFontList instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxFontList instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxFontList(wxFontListPtr):
     def __init__(self,this):
         self.this = this
@@ -262,25 +263,25 @@ class wxFontEnumeratorPtr :
             except:
                 pass
     def _setCallbackInfo(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFontEnumerator__setCallbackInfo,(self,) + _args, _kwargs)
+        val = fontsc.wxFontEnumerator__setCallbackInfo(self, *_args, **_kwargs)
         return val
     def EnumerateFacenames(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFontEnumerator_EnumerateFacenames,(self,) + _args, _kwargs)
+        val = fontsc.wxFontEnumerator_EnumerateFacenames(self, *_args, **_kwargs)
         return val
     def EnumerateEncodings(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFontEnumerator_EnumerateEncodings,(self,) + _args, _kwargs)
+        val = fontsc.wxFontEnumerator_EnumerateEncodings(self, *_args, **_kwargs)
         return val
     def GetEncodings(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFontEnumerator_GetEncodings,(self,) + _args, _kwargs)
+        val = fontsc.wxFontEnumerator_GetEncodings(self, *_args, **_kwargs)
         return val
     def GetFacenames(self, *_args, **_kwargs):
-        val = apply(fontsc.wxFontEnumerator_GetFacenames,(self,) + _args, _kwargs)
+        val = fontsc.wxFontEnumerator_GetFacenames(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxFontEnumerator instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxFontEnumerator instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxFontEnumerator(wxFontEnumeratorPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(fontsc.new_wxFontEnumerator,_args,_kwargs)
+        self.this = fontsc.new_wxFontEnumerator(*_args,**_kwargs)
         self.thisown = 1
         self._setCallbackInfo(self, wxFontEnumerator, 0)
 
@@ -311,7 +312,7 @@ class wxLanguageInfoPtr :
             return fontsc.wxLanguageInfo_Description_get(self)
         raise AttributeError,name
     def __repr__(self):
-        return "<C wxLanguageInfo instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxLanguageInfo instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxLanguageInfo(wxLanguageInfoPtr):
     def __init__(self,this):
         self.this = this
@@ -330,51 +331,51 @@ class wxLocalePtr :
             except:
                 pass
     def Init1(self, *_args, **_kwargs):
-        val = apply(fontsc.wxLocale_Init1,(self,) + _args, _kwargs)
+        val = fontsc.wxLocale_Init1(self, *_args, **_kwargs)
         return val
     def Init2(self, *_args, **_kwargs):
-        val = apply(fontsc.wxLocale_Init2,(self,) + _args, _kwargs)
+        val = fontsc.wxLocale_Init2(self, *_args, **_kwargs)
         return val
     def IsOk(self, *_args, **_kwargs):
-        val = apply(fontsc.wxLocale_IsOk,(self,) + _args, _kwargs)
+        val = fontsc.wxLocale_IsOk(self, *_args, **_kwargs)
         return val
     def GetLocale(self, *_args, **_kwargs):
-        val = apply(fontsc.wxLocale_GetLocale,(self,) + _args, _kwargs)
+        val = fontsc.wxLocale_GetLocale(self, *_args, **_kwargs)
         return val
     def GetLanguage(self, *_args, **_kwargs):
-        val = apply(fontsc.wxLocale_GetLanguage,(self,) + _args, _kwargs)
+        val = fontsc.wxLocale_GetLanguage(self, *_args, **_kwargs)
         return val
     def GetSysName(self, *_args, **_kwargs):
-        val = apply(fontsc.wxLocale_GetSysName,(self,) + _args, _kwargs)
+        val = fontsc.wxLocale_GetSysName(self, *_args, **_kwargs)
         return val
     def GetCanonicalName(self, *_args, **_kwargs):
-        val = apply(fontsc.wxLocale_GetCanonicalName,(self,) + _args, _kwargs)
+        val = fontsc.wxLocale_GetCanonicalName(self, *_args, **_kwargs)
         return val
     def AddCatalog(self, *_args, **_kwargs):
-        val = apply(fontsc.wxLocale_AddCatalog,(self,) + _args, _kwargs)
+        val = fontsc.wxLocale_AddCatalog(self, *_args, **_kwargs)
         return val
     def IsLoaded(self, *_args, **_kwargs):
-        val = apply(fontsc.wxLocale_IsLoaded,(self,) + _args, _kwargs)
+        val = fontsc.wxLocale_IsLoaded(self, *_args, **_kwargs)
         return val
     def GetString(self, *_args, **_kwargs):
-        val = apply(fontsc.wxLocale_GetString,(self,) + _args, _kwargs)
+        val = fontsc.wxLocale_GetString(self, *_args, **_kwargs)
         return val
     def GetName(self, *_args, **_kwargs):
-        val = apply(fontsc.wxLocale_GetName,(self,) + _args, _kwargs)
+        val = fontsc.wxLocale_GetName(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxLocale instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxLocale instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
     
     def Init(self, *_args, **_kwargs):
         if type(_args[0]) in [type(''), type(u'')]:
-            val = apply(self.Init1, _args, _kwargs)
+            val = self.Init1(*_args, **_kwargs)
         else:
-            val = apply(self.Init2, _args, _kwargs)
+            val = self.Init2(*_args, **_kwargs)
         return val
     
 class wxLocale(wxLocalePtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(fontsc.new_wxLocale,_args,_kwargs)
+        self.this = fontsc.new_wxLocale(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -391,16 +392,17 @@ class wxEncodingConverterPtr(wxObjectPtr):
             except:
                 pass
     def Init(self, *_args, **_kwargs):
-        val = apply(fontsc.wxEncodingConverter_Init,(self,) + _args, _kwargs)
+        val = fontsc.wxEncodingConverter_Init(self, *_args, **_kwargs)
         return val
     def Convert(self, *_args, **_kwargs):
-        val = apply(fontsc.wxEncodingConverter_Convert,(self,) + _args, _kwargs)
+        val = fontsc.wxEncodingConverter_Convert(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxEncodingConverter instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxEncodingConverter instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+    def __nonzero__(self): return self.IsOk()
 class wxEncodingConverter(wxEncodingConverterPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(fontsc.new_wxEncodingConverter,_args,_kwargs)
+        self.this = fontsc.new_wxEncodingConverter(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -411,21 +413,25 @@ class wxEncodingConverter(wxEncodingConverterPtr):
 #-------------- FUNCTION WRAPPERS ------------------
 
 def wxGetLocale(*_args, **_kwargs):
-    val = apply(fontsc.wxGetLocale,_args,_kwargs)
+    val = fontsc.wxGetLocale(*_args,**_kwargs)
     if val: val = wxLocalePtr(val)
     return val
 
 wxGetTranslation = fontsc.wxGetTranslation
 
 def wxFontMapper_Get(*_args, **_kwargs):
-    val = apply(fontsc.wxFontMapper_Get,_args,_kwargs)
+    val = fontsc.wxFontMapper_Get(*_args,**_kwargs)
     if val: val = wxFontMapperPtr(val)
     return val
 
 def wxFontMapper_Set(*_args, **_kwargs):
-    val = apply(fontsc.wxFontMapper_Set,_args,_kwargs)
+    val = fontsc.wxFontMapper_Set(*_args,**_kwargs)
     if val: val = wxFontMapperPtr(val)
     return val
+
+wxFontMapper_GetSupportedEncodingsCount = fontsc.wxFontMapper_GetSupportedEncodingsCount
+
+wxFontMapper_GetEncoding = fontsc.wxFontMapper_GetEncoding
 
 wxFontMapper_GetEncodingName = fontsc.wxFontMapper_GetEncodingName
 
@@ -446,12 +452,14 @@ wxLocale_GetSystemEncodingName = fontsc.wxLocale_GetSystemEncodingName
 wxLocale_AddCatalogLookupPathPrefix = fontsc.wxLocale_AddCatalogLookupPathPrefix
 
 def wxLocale_GetLanguageInfo(*_args, **_kwargs):
-    val = apply(fontsc.wxLocale_GetLanguageInfo,_args,_kwargs)
+    val = fontsc.wxLocale_GetLanguageInfo(*_args,**_kwargs)
     if val: val = wxLanguageInfoPtr(val)
     return val
 
+wxLocale_GetLanguageName = fontsc.wxLocale_GetLanguageName
+
 def wxLocale_FindLanguageInfo(*_args, **_kwargs):
-    val = apply(fontsc.wxLocale_FindLanguageInfo,_args,_kwargs)
+    val = fontsc.wxLocale_FindLanguageInfo(*_args,**_kwargs)
     if val: val = wxLanguageInfoPtr(val)
     return val
 

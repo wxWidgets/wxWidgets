@@ -458,7 +458,11 @@ public:
         }
 
         PyObject* GetClientData(int n) {
+#ifdef __WXMAC__
+            wxPyClientData* data = (wxPyClientData*)self->wxItemContainer::GetClientObject(n);
+#else
             wxPyClientData* data = (wxPyClientData*)self->GetClientObject(n);
+#endif
             if (data) {
                 Py_INCREF(data->m_obj);
                 return data->m_obj;
@@ -470,7 +474,11 @@ public:
 
         void SetClientData(int n, PyObject* clientData) {
             wxPyClientData* data = new wxPyClientData(clientData);
+#ifdef __WXMAC__
+            self->wxItemContainer::SetClientObject(n, data);
+#else
             self->SetClientObject(n, data);
+#endif
         }
     }
 

@@ -30,6 +30,7 @@
 
 #include <wx/clipbrd.h>
 #include <wx/mimetype.h>
+#include <wx/image.h>
 
 //----------------------------------------------------------------------
 

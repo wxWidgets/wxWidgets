@@ -719,7 +719,7 @@ static PyObject *_wrap_wxHelpProvider_ShowHelp(PyObject *self, PyObject *args, P
     PyObject * _resultobj;
     bool  _result;
     wxHelpProvider * _arg0;
-    wxWindowBase * _arg1;
+    wxWindow * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     char *_kwnames[] = { "self","window", NULL };
@@ -736,8 +736,8 @@ static PyObject *_wrap_wxHelpProvider_ShowHelp(PyObject *self, PyObject *args, P
     }
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindowBase_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxHelpProvider_ShowHelp. Expected _wxWindowBase_p.");
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxHelpProvider_ShowHelp. Expected _wxWindow_p.");
         return NULL;
         }
     }
@@ -755,7 +755,7 @@ static PyObject *_wrap_wxHelpProvider_ShowHelp(PyObject *self, PyObject *args, P
 static PyObject *_wrap_wxHelpProvider_AddHelp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxHelpProvider * _arg0;
-    wxWindowBase * _arg1;
+    wxWindow * _arg1;
     wxString * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
@@ -774,8 +774,8 @@ static PyObject *_wrap_wxHelpProvider_AddHelp(PyObject *self, PyObject *args, Py
     }
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindowBase_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxHelpProvider_AddHelp. Expected _wxWindowBase_p.");
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxHelpProvider_AddHelp. Expected _wxWindow_p.");
         return NULL;
         }
     }

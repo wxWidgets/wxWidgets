@@ -1640,7 +1640,7 @@ static void *SwigwxWizardTowxObject(void *ptr) {
     return (void *) dest;
 }
 
-#define new_wxWizard(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4) (new wxWizard(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
+#define new_wxWizard(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5) (new wxWizard(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
 static PyObject *_wrap_new_wxWizard(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxWizard * _result;
@@ -1649,16 +1649,17 @@ static PyObject *_wrap_new_wxWizard(PyObject *self, PyObject *args, PyObject *kw
     wxString * _arg2 = (wxString *) &wxEmptyString;
     wxBitmap * _arg3 = (wxBitmap *) &wxNullBitmap;
     wxPoint * _arg4 = (wxPoint *) &wxDefaultPosition;
+    long  _arg5 = (long ) wxDEFAULT_DIALOG_STYLE;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
     PyObject * _argo3 = 0;
     wxPoint  temp;
     PyObject * _obj4 = 0;
-    char *_kwnames[] = { "parent","id","title","bitmap","pos", NULL };
+    char *_kwnames[] = { "parent","id","title","bitmap","pos","style", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iOOO:new_wxWizard",_kwnames,&_argo0,&_arg1,&_obj2,&_argo3,&_obj4)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iOOOl:new_wxWizard",_kwnames,&_argo0,&_arg1,&_obj2,&_argo3,&_obj4,&_arg5)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1687,7 +1688,7 @@ static PyObject *_wrap_new_wxWizard(PyObject *self, PyObject *args, PyObject *kw
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxWizard *)new_wxWizard(_arg0,_arg1,*_arg2,*_arg3,*_arg4);
+    _result = (wxWizard *)new_wxWizard(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1994,6 +1995,63 @@ static PyObject *_wrap_wxWizard_FitToPage(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
+#define wxWizard_GetPageAreaSizer(_swigobj)  (_swigobj->GetPageAreaSizer())
+static PyObject *_wrap_wxWizard_GetPageAreaSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizer * _result;
+    wxWizard * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWizard_GetPageAreaSizer",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWizard_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWizard_GetPageAreaSizer. Expected _wxWizard_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxSizer *)wxWizard_GetPageAreaSizer(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{ _resultobj = wxPyMake_wxSizer(_result); }
+    return _resultobj;
+}
+
+#define wxWizard_SetBorder(_swigobj,_swigarg0)  (_swigobj->SetBorder(_swigarg0))
+static PyObject *_wrap_wxWizard_SetBorder(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWizard * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","border", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxWizard_SetBorder",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWizard_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWizard_SetBorder. Expected _wxWizard_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxWizard_SetBorder(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxWizard_IsRunning(_swigobj)  (_swigobj->IsRunning())
 static PyObject *_wrap_wxWizard_IsRunning(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2141,6 +2199,8 @@ static PyMethodDef wizardcMethods[] = {
 	 { "wxWizard_HasNextPage", (PyCFunction) _wrap_wxWizard_HasNextPage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWizard_ShowPage", (PyCFunction) _wrap_wxWizard_ShowPage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWizard_IsRunning", (PyCFunction) _wrap_wxWizard_IsRunning, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWizard_SetBorder", (PyCFunction) _wrap_wxWizard_SetBorder, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWizard_GetPageAreaSizer", (PyCFunction) _wrap_wxWizard_GetPageAreaSizer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWizard_FitToPage", (PyCFunction) _wrap_wxWizard_FitToPage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWizard_GetPageSize", (PyCFunction) _wrap_wxWizard_GetPageSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWizard_SetPageSize", (PyCFunction) _wrap_wxWizard_SetPageSize, METH_VARARGS | METH_KEYWORDS },
