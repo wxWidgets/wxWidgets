@@ -180,7 +180,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MY_CUSTOM_COMMAND(wxID_ANY, MyFrame::OnProcessCustom)
 
-    // this would also work:
+    // the line below would also work if OnProcessCustom() were defined as
+    // taking a wxEvent (as required by EVT_CUSTOM) and not wxCommandEvent
     //EVT_CUSTOM(wxEVT_MY_CUSTOM_COMMAND, wxID_ANY, MyFrame::OnProcessCustom)
 END_EVENT_TABLE()
 
