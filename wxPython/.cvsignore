@@ -1,3 +1,7 @@
 .emacs.desktop
+MANIFEST
+build
 build.local
+dist
+licence
 update.log
