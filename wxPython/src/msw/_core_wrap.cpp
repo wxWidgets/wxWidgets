@@ -2301,6 +2301,43 @@ SWIG_Check_unsigned_SS_char(PyObject* obj)
 /*@@*/
 
 
+
+SWIGINTERNSHORT unsigned long
+SWIG_As_unsigned_SS_long(PyObject* obj)
+{
+  unsigned long v;
+  if (!SWIG_AsVal_unsigned_SS_long(obj, &v)) {
+    /*
+      this is needed to make valgrind/purify happier. 
+     */
+    memset((void*)&v, 0, sizeof(unsigned long));
+  }
+  return v;
+}
+
+  
+SWIGINTERNSHORT int
+SWIG_Check_unsigned_SS_long(PyObject* obj)
+{
+  return SWIG_AsVal_unsigned_SS_long(obj, (unsigned long*)0);
+}
+
+static unsigned long wxImageHistogram_GetCount(wxImageHistogram *self,unsigned long key){
+            wxImageHistogramEntry e = (*self)[key];
+            return e.value;
+        }
+static unsigned long wxImageHistogram_GetCountRGB(wxImageHistogram *self,unsigned char r,unsigned char g,unsigned char b){
+            unsigned long key = wxImageHistogram::MakeKey(r, g, b);
+            wxImageHistogramEntry e = (*self)[key];
+            return e.value;
+        }
+static unsigned long wxImageHistogram_GetCountColour(wxImageHistogram *self,wxColour const &colour){
+            unsigned long key = wxImageHistogram::MakeKey(colour.Red(),
+                                                          colour.Green(),
+                                                          colour.Blue());
+            wxImageHistogramEntry e = (*self)[key];
+            return e.value;
+        }
 static wxImage *new_wxImage(int width=0,int height=0,bool clear=true){
             if (width > 0 && height > 0)
                 return new wxImage(width, height, clear);
@@ -2434,27 +2471,6 @@ static void wxImage_SetAlphaBuffer(wxImage *self,PyObject *data){
         done:
             wxPyEndBlockThreads(blocked);
         }
-
-SWIGINTERNSHORT unsigned long
-SWIG_As_unsigned_SS_long(PyObject* obj)
-{
-  unsigned long v;
-  if (!SWIG_AsVal_unsigned_SS_long(obj, &v)) {
-    /*
-      this is needed to make valgrind/purify happier. 
-     */
-    memset((void*)&v, 0, sizeof(unsigned long));
-  }
-  return v;
-}
-
-  
-SWIGINTERNSHORT int
-SWIG_Check_unsigned_SS_long(PyObject* obj)
-{
-  return SWIG_AsVal_unsigned_SS_long(obj, (unsigned long*)0);
-}
-
 static wxBitmap wxImage_ConvertToBitmap(wxImage *self,int depth=-1){
             wxBitmap bitmap(*self, depth);
             return bitmap;
@@ -10309,6 +10325,121 @@ static PyObject *_wrap_ImageHistogram_FindFirstUnusedColour(PyObject *, PyObject
     SWIG_From_unsigned_SS_char((*arg3)) : SWIG_NewPointerObj((void*)(arg3), SWIGTYPE_p_unsigned_char, 0)));
     resultobj = t_output_helper(resultobj, ((res4 == SWIG_NEWOBJ) ?
     SWIG_From_unsigned_SS_char((*arg4)) : SWIG_NewPointerObj((void*)(arg4), SWIGTYPE_p_unsigned_char, 0)));
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ImageHistogram_GetCount(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxImageHistogram *arg1 = (wxImageHistogram *) 0 ;
+    unsigned long arg2 ;
+    unsigned long result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "key", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:ImageHistogram_GetCount",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImageHistogram, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = (unsigned long)(SWIG_As_unsigned_SS_long(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (unsigned long)wxImageHistogram_GetCount(arg1,arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = SWIG_From_unsigned_SS_long((unsigned long)(result)); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ImageHistogram_GetCountRGB(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxImageHistogram *arg1 = (wxImageHistogram *) 0 ;
+    unsigned char arg2 ;
+    unsigned char arg3 ;
+    unsigned char arg4 ;
+    unsigned long result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "r",(char *) "g",(char *) "b", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:ImageHistogram_GetCountRGB",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImageHistogram, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = (unsigned char)(SWIG_As_unsigned_SS_char(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        arg3 = (unsigned char)(SWIG_As_unsigned_SS_char(obj2)); 
+        if (SWIG_arg_fail(3)) SWIG_fail;
+    }
+    {
+        arg4 = (unsigned char)(SWIG_As_unsigned_SS_char(obj3)); 
+        if (SWIG_arg_fail(4)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (unsigned long)wxImageHistogram_GetCountRGB(arg1,arg2,arg3,arg4);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = SWIG_From_unsigned_SS_long((unsigned long)(result)); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ImageHistogram_GetCountColour(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxImageHistogram *arg1 = (wxImageHistogram *) 0 ;
+    wxColour *arg2 = 0 ;
+    unsigned long result;
+    wxColour temp2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "colour", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:ImageHistogram_GetCountColour",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImageHistogram, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxColour_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (unsigned long)wxImageHistogram_GetCountColour(arg1,(wxColour const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = SWIG_From_unsigned_SS_long((unsigned long)(result)); 
+    }
     return resultobj;
     fail:
     return NULL;
@@ -45329,6 +45460,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_ImageHistogram", (PyCFunction) _wrap_new_ImageHistogram, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ImageHistogram_MakeKey", (PyCFunction) _wrap_ImageHistogram_MakeKey, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ImageHistogram_FindFirstUnusedColour", (PyCFunction) _wrap_ImageHistogram_FindFirstUnusedColour, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"ImageHistogram_GetCount", (PyCFunction) _wrap_ImageHistogram_GetCount, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"ImageHistogram_GetCountRGB", (PyCFunction) _wrap_ImageHistogram_GetCountRGB, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"ImageHistogram_GetCountColour", (PyCFunction) _wrap_ImageHistogram_GetCountColour, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ImageHistogram_swigregister", ImageHistogram_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Image", (PyCFunction) _wrap_new_Image, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"delete_Image", (PyCFunction) _wrap_delete_Image, METH_VARARGS | METH_KEYWORDS, NULL},

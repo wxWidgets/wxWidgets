@@ -2113,6 +2113,31 @@ class ImageHistogram(object):
         """
         return _core_.ImageHistogram_FindFirstUnusedColour(*args, **kwargs)
 
+    def GetCount(*args, **kwargs):
+        """
+        GetCount(self, unsigned long key) -> unsigned long
+
+        Returns the pixel count for the given key.  Use `MakeKey` to create a
+        key value from a RGB tripple.
+        """
+        return _core_.ImageHistogram_GetCount(*args, **kwargs)
+
+    def GetCountRGB(*args, **kwargs):
+        """
+        GetCountRGB(self, unsigned char r, unsigned char g, unsigned char b) -> unsigned long
+
+        Returns the pixel count for the given RGB values.
+        """
+        return _core_.ImageHistogram_GetCountRGB(*args, **kwargs)
+
+    def GetCountColour(*args, **kwargs):
+        """
+        GetCountColour(self, Colour colour) -> unsigned long
+
+        Returns the pixel count for the given `wx.Colour` value.
+        """
+        return _core_.ImageHistogram_GetCountColour(*args, **kwargs)
+
 
 class ImageHistogramPtr(ImageHistogram):
     def __init__(self, this):
