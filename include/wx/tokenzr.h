@@ -29,7 +29,7 @@ public:
     wxStringTokenizer() { m_retdelims = FALSE;}
     virtual ~wxStringTokenizer();
 
-    int CountTokens() count;
+    int CountTokens() const;
     bool HasMoreTokens();
 
     wxString NextToken();
@@ -47,7 +47,7 @@ public:
     }
 
 protected:
-    off_t FindDelims(const wxString& str, const wxString& delims);
+    off_t FindDelims(const wxString& str, const wxString& delims) const;
     void EatLeadingDelims();
 
     wxString m_string, m_delims;

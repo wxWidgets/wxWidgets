@@ -35,7 +35,7 @@ wxStringTokenizer::~wxStringTokenizer()
 {
 }
 
-off_t wxStringTokenizer::FindDelims(const wxString& str, const wxString& delims)
+off_t wxStringTokenizer::FindDelims(const wxString& str, const wxString& delims) const
 {
     for ( int i = 0; i < str.Length(); i++ )
     {
@@ -55,7 +55,7 @@ int wxStringTokenizer::CountTokens() const
 {
     wxString p_string = m_string;
     bool found = TRUE;
-    int pos, count = 1; 
+    int pos, count = 1;
 
     if (p_string.Length() == 0)
         return 0;
@@ -77,13 +77,13 @@ int wxStringTokenizer::CountTokens() const
     return count;
 }
 
-bool wxStringTokenizer::HasMoreToken()
+bool wxStringTokenizer::HasMoreTokens()
 {
     return !m_string.IsEmpty();
 }
 
 // needed to fix leading whitespace / mult. delims bugs
-void wxStringTokenizer::EatLeadingDelims() 
+void wxStringTokenizer::EatLeadingDelims()
 {
     int pos;
 

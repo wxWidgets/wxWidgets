@@ -29,7 +29,12 @@
 
 // this one if used by wxPaintDC only
 struct WXDLLEXPORT wxPaintDCInfo;
+
+#undef  WXDLLEXPORTLOCAL
+#define WXDLLEXPORTLOCAL WXDLLEXPORT
 WX_DECLARE_OBJARRAY(wxPaintDCInfo, wxArrayDCInfo);
+#undef  WXDLLEXPORTLOCAL
+#define WXDLLEXPORTLOCAL
 
 // ----------------------------------------------------------------------------
 // DC classes
