@@ -2267,7 +2267,7 @@ wxWindow *wxWindowBase::FindFocus()
 
 // VZ: Robert commented the code using out so it generates warnings: should
 //     be either fixed or removed completely
-//**#if 0
+#if 0
 
 static void gtk_window_destroy_callback( GtkWidget* widget, wxWindow *win )
 {
@@ -2275,7 +2275,7 @@ static void gtk_window_destroy_callback( GtkWidget* widget, wxWindow *win )
     win->GetEventHandler()->ProcessEvent(event);
 }
 
-//**#endif // 0
+#endif // 0
 
 //-----------------------------------------------------------------------------
 // "realize" from m_widget
@@ -2928,9 +2928,9 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
       GTK_SIGNAL_FUNC(gtk_window_leave_callback), (gpointer)this );
 
     // This keeps crashing on me. RR.
-    //**
-    gtk_signal_connect( GTK_OBJECT(widget), "destroy",
-      GTK_SIGNAL_FUNC(gtk_window_destroy_callback), (gpointer)this );
+    //
+    // gtk_signal_connect( GTK_OBJECT(widget), "destroy",
+    //  GTK_SIGNAL_FUNC(gtk_window_destroy_callback), (gpointer)this );
 }
 
 bool wxWindowGTK::Destroy()
