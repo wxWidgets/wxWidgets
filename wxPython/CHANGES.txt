@@ -10,6 +10,10 @@ Added wxGenericDirCtrl.
 
 Added wxMultiChoiceDialog.
 
+The calltip window and autocomplete window in wxSTC will now use a
+wxPopupWindow if available so they can extend beyond the client area
+of the STC if needed.
+
 
 
 2.3.2.1

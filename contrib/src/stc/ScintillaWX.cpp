@@ -63,10 +63,19 @@ void  wxSTCDropTarget::OnLeave() {
 #endif
 
 
-class wxSTCCallTip : public wxWindow {
+#if wxUSE_POPUPWIN
+#include <wx/popupwin.h>
+#define wxSTCCallTipBase wxPopupWindow
+#define param2  wxBORDER_NONE  // popup's 2nd param is flags
+#else
+#define wxSTCCallTipBase wxWindow
+#define param2 -1 // wxWindows 2nd param is ID
+#endif
+
+class wxSTCCallTip : public wxSTCCallTipBase {
 public:
-    wxSTCCallTip(wxWindow* parent, int ID, CallTip* ct)
-        : wxWindow(parent, ID)
+    wxSTCCallTip(wxWindow* parent, CallTip* ct)
+        : wxSTCCallTipBase(parent, param2)
         {
             m_ct = ct;
         }
@@ -79,13 +88,27 @@ public:
         surfaceWindow.Release();
     }
 
+#if wxUSE_POPUPWIN
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO) {
+        if (x != -1)
+            GetParent()->ClientToScreen(&x, NULL);
+        if (y != -1)
+            GetParent()->ClientToScreen(NULL, &y);
+        wxSTCCallTipBase::DoSetSize(x, y, width, height, sizeFlags);
+    }
+#endif
+
+private:
     CallTip*    m_ct;
     DECLARE_EVENT_TABLE()
 };
 
-BEGIN_EVENT_TABLE(wxSTCCallTip, wxWindow)
+BEGIN_EVENT_TABLE(wxSTCCallTip, wxSTCCallTipBase)
     EVT_PAINT(wxSTCCallTip::OnPaint)
 END_EVENT_TABLE()
+
 
 //----------------------------------------------------------------------
 // Constructor/Destructor
@@ -313,7 +336,7 @@ bool ScintillaWX::CanPaste() {
 }
 
 void ScintillaWX::CreateCallTipWindow(PRectangle) {
-    ct.wCallTip = new wxSTCCallTip(stc, -1, &ct);
+    ct.wCallTip = new wxSTCCallTip(stc, &ct);
     ct.wDraw = ct.wCallTip;
 }
 

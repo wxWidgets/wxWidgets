@@ -453,11 +453,15 @@ void Window::SetTitle(const char *s) {
 }
 
 
+//----------------------------------------------------------------------
+// Helper classes for ListBox
+
+// A wxListBox that gives focus to its parent if it gets it.
 class wxSTCListBox : public wxListBox {
 public:
     wxSTCListBox(wxWindow* parent, wxWindowID id)
         : wxListBox(parent, id, wxDefaultPosition, wxDefaultSize,
-                    0, NULL, wxLB_SINGLE | wxSIMPLE_BORDER) // | wxLB_SORT )
+                    0, NULL, wxLB_SINGLE | wxSIMPLE_BORDER)
         {}
 
     void OnFocus(wxFocusEvent& event) {
@@ -474,6 +478,64 @@ BEGIN_EVENT_TABLE(wxSTCListBox, wxListBox)
 END_EVENT_TABLE()
 
 
+
+// A window to place the listbox upon.  If wxPopupWindow is supported then
+// that will be used so the listbox can extend beyond the client area of the
+// wxSTC if needed.
+
+#if wxUSE_POPUPWIN
+#include <wx/popupwin.h>
+#define wxSTCListBoxWinBase wxPopupWindow
+#define param2  wxBORDER_NONE  // popup's 2nd param is flags
+#else
+#define wxSTCListBoxWinBase wxWindow
+#define param2 -1 // wxWindows 2nd param is ID
+#endif
+
+class wxSTCListBoxWin : public wxSTCListBoxWinBase {
+public:
+    wxSTCListBoxWin(wxWindow* parent, wxWindowID id)
+        : wxSTCListBoxWinBase(parent, param2) {
+        lb = new wxSTCListBox(this, id);
+    }
+
+    void OnSize(wxSizeEvent& event) {
+        lb->SetSize(GetSize());
+    }
+    void OnFocus(wxFocusEvent& event) {
+        GetParent()->SetFocus();
+        event.Skip();
+    }
+
+    wxListBox* GetLB() { return lb; }
+
+#if wxUSE_POPUPWIN
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO) {
+        if (x != -1)
+            GetParent()->ClientToScreen(&x, NULL);
+        if (y != -1)
+            GetParent()->ClientToScreen(NULL, &y);
+        wxSTCListBoxWinBase::DoSetSize(x, y, width, height, sizeFlags);
+    }
+#endif
+
+private:
+    wxSTCListBox* lb;
+    DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(wxSTCListBoxWin, wxSTCListBoxWinBase)
+    EVT_SIZE       (wxSTCListBoxWin::OnSize)
+    EVT_SET_FOCUS  (wxSTCListBoxWin::OnFocus)
+END_EVENT_TABLE()
+
+
+#define GETLB(win)  (((wxSTCListBoxWin*)win)->GetLB())
+
+//----------------------------------------------------------------------
+
 ListBox::ListBox() {
 }
 
@@ -481,15 +543,15 @@ ListBox::~ListBox() {
 }
 
 void ListBox::Create(Window &parent, int ctrlID) {
-    id = new wxSTCListBox(parent.id, ctrlID);
+    id = new wxSTCListBoxWin(parent.id, ctrlID);
 }
 
 void ListBox::SetVisibleRows(int rows) {
-	desiredVisibleRows = rows;
+    desiredVisibleRows = rows;
 }
 
 PRectangle ListBox::GetDesiredRect() {
-    wxSize sz = ((wxListBox*)id)->GetBestSize();
+    wxSize sz = GETLB(id)->GetBestSize();
     PRectangle rc;
     rc.top = 0;
     rc.left = 0;
@@ -507,34 +569,34 @@ void ListBox::SetAverageCharWidth(int width) {
 }
 
 void ListBox::SetFont(Font &font) {
-    Window::SetFont(font);
+    GETLB(id)->SetFont(*font.GetID());
 }
 
 void ListBox::Clear() {
-    ((wxListBox*)id)->Clear();
+    GETLB(id)->Clear();
 }
 
 void ListBox::Append(char *s) {
-    ((wxListBox*)id)->Append(s);
+    GETLB(id)->Append(s);
 }
 
 int ListBox::Length() {
-    return ((wxListBox*)id)->GetCount();
+    return GETLB(id)->GetCount();
 }
 
 void ListBox::Select(int n) {
-    ((wxListBox*)id)->SetSelection(n);
+    GETLB(id)->SetSelection(n);
 #ifdef __WXGTK__
     if (n > 4)
         n = n - 4;
     else
         n = 1;
-    ((wxListBox*)id)->SetFirstItem(n);
+    GETLB(id)->SetFirstItem(n);
 #endif
 }
 
 int ListBox::GetSelection() {
-    return ((wxListBox*)id)->GetSelection();
+    return GETLB(id)->GetSelection();
 }
 
 int ListBox::Find(const char *prefix) {
@@ -543,13 +605,12 @@ int ListBox::Find(const char *prefix) {
 }
 
 void ListBox::GetValue(int n, char *value, int len) {
-    wxString text = ((wxListBox*)id)->GetString(n);
+    wxString text = GETLB(id)->GetString(n);
     strncpy(value, text.c_str(), len);
     value[len-1] = '\0';
 }
 
 void ListBox::Sort() {
-    // wxWindows keeps sorted so no need to sort
 }
 
 
