@@ -177,6 +177,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/variant.cpp
     src/common/wfstream.cpp
     src/common/wxchar.cpp
+    src/common/xti.cpp
+    src/common/xtistrm.cpp
     src/common/zipstrm.cpp
     src/common/zstream.cpp
 </set>
@@ -279,6 +281,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/wx.h
     wx/wxchar.h
     wx/wxprec.h
+    wx/xti.h
+    wx/xtistrm.h
     wx/zipstrm.h
     wx/zstream.h
 </set>
