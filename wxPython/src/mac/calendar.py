@@ -3,9 +3,9 @@
 
 import _calendar
 
-import misc
-import core
-wx = core 
+import _misc
+import _core
+wx = _core 
 __docfilter__ = wx.__docfilter__ 
 CAL_SUNDAY_FIRST = _calendar.CAL_SUNDAY_FIRST
 CAL_MONDAY_FIRST = _calendar.CAL_MONDAY_FIRST
@@ -118,7 +118,7 @@ class CalendarDateAttrPtr(CalendarDateAttr):
         self.__class__ = CalendarDateAttr
 _calendar.CalendarDateAttr_swigregister(CalendarDateAttrPtr)
 
-class CalendarEvent(core.CommandEvent):
+class CalendarEvent(_core.CommandEvent):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCalendarEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -164,7 +164,7 @@ EVT_CALENDAR_MONTH =           wx.PyEventBinder( wxEVT_CALENDAR_MONTH_CHANGED, 1
 EVT_CALENDAR_YEAR =            wx.PyEventBinder( wxEVT_CALENDAR_YEAR_CHANGED, 1)
 EVT_CALENDAR_WEEKDAY_CLICKED = wx.PyEventBinder( wxEVT_CALENDAR_WEEKDAY_CLICKED, 1)
 
-class CalendarCtrl(core.Control):
+class CalendarCtrl(_core.Control):
     """The calendar control allows the user to pick a date interactively."""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCalendarCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)

@@ -3,8 +3,8 @@
 
 import _activex
 
-import core
-wx = core 
+import _core
+wx = _core 
 __docfilter__ = wx.__docfilter__ 
 #---------------------------------------------------------------------------
 
@@ -195,7 +195,7 @@ _activex.PropXArray_swigregister(PropXArrayPtr)
 
 #---------------------------------------------------------------------------
 
-class ActiveXWindow(core.Window):
+class ActiveXWindow(_core.Window):
     """
     ActiveXWindow derives from wxWindow and the constructor accepts a
     CLSID for the ActiveX Control that should be created.  The
@@ -355,7 +355,7 @@ def RegisterActiveXEvent(*args, **kwargs):
     Creates a standard wx event ID for the given eventName.
     """
     return _activex.RegisterActiveXEvent(*args, **kwargs)
-class ActiveXEvent(core.CommandEvent):
+class ActiveXEvent(_core.CommandEvent):
     """
     An instance of ActiveXEvent is sent to the handler for all bound
     ActiveX events.  Any event parameters from the ActiveX cntrol are

@@ -3,9 +3,9 @@
 
 import _html
 
-import windows
-import core
-wx = core 
+import _windows
+import _core
+wx = _core 
 __docfilter__ = wx.__docfilter__ 
 #---------------------------------------------------------------------------
 
@@ -45,7 +45,7 @@ HTML_REDIRECT = _html.HTML_REDIRECT
 HTML_URL_PAGE = _html.HTML_URL_PAGE
 HTML_URL_IMAGE = _html.HTML_URL_IMAGE
 HTML_URL_OTHER = _html.HTML_URL_OTHER
-class HtmlLinkInfo(core.Object):
+class HtmlLinkInfo(_core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlLinkInfo instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -90,7 +90,7 @@ HtmlWindowNameStr = cvar.HtmlWindowNameStr
 HtmlPrintoutTitleStr = cvar.HtmlPrintoutTitleStr
 HtmlPrintingTitleStr = cvar.HtmlPrintingTitleStr
 
-class HtmlTag(core.Object):
+class HtmlTag(_core.Object):
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlTag instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -134,7 +134,7 @@ class HtmlTagPtr(HtmlTag):
         self.__class__ = HtmlTag
 _html.HtmlTag_swigregister(HtmlTagPtr)
 
-class HtmlParser(core.Object):
+class HtmlParser(_core.Object):
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlParser instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -323,7 +323,7 @@ class HtmlWinParserPtr(HtmlWinParser):
         self.__class__ = HtmlWinParser
 _html.HtmlWinParser_swigregister(HtmlWinParserPtr)
 
-class HtmlTagHandler(core.Object):
+class HtmlTagHandler(_core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyHtmlTagHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -608,7 +608,7 @@ _html.HtmlRenderingInfo_swigregister(HtmlRenderingInfoPtr)
 HTML_FIND_EXACT = _html.HTML_FIND_EXACT
 HTML_FIND_NEAREST_BEFORE = _html.HTML_FIND_NEAREST_BEFORE
 HTML_FIND_NEAREST_AFTER = _html.HTML_FIND_NEAREST_AFTER
-class HtmlCell(core.Object):
+class HtmlCell(_core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlCell instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -908,7 +908,7 @@ _html.HtmlWidgetCell_swigregister(HtmlWidgetCellPtr)
 
 #---------------------------------------------------------------------------
 
-class HtmlFilter(core.Object):
+class HtmlFilter(_core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyHtmlFilter instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -933,7 +933,7 @@ _html.HtmlFilter_swigregister(HtmlFilterPtr)
 
 #---------------------------------------------------------------------------
 
-class HtmlWindow(windows.ScrolledWindow):
+class HtmlWindow(_windows.ScrolledWindow):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyHtmlWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1109,7 +1109,7 @@ def HtmlWindow_AddFilter(*args, **kwargs):
 
 #---------------------------------------------------------------------------
 
-class HtmlDCRenderer(core.Object):
+class HtmlDCRenderer(_core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlDCRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1162,7 +1162,7 @@ _html.HtmlDCRenderer_swigregister(HtmlDCRendererPtr)
 PAGE_ODD = _html.PAGE_ODD
 PAGE_EVEN = _html.PAGE_EVEN
 PAGE_ALL = _html.PAGE_ALL
-class HtmlPrintout(windows.Printout):
+class HtmlPrintout(_windows.Printout):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlPrintout instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1224,7 +1224,7 @@ def HtmlPrintout_CleanUpStatics(*args, **kwargs):
     """HtmlPrintout_CleanUpStatics()"""
     return _html.HtmlPrintout_CleanUpStatics(*args, **kwargs)
 
-class HtmlEasyPrinting(core.Object):
+class HtmlEasyPrinting(_core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlEasyPrinting instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1481,7 +1481,7 @@ class HtmlHelpDataPtr(HtmlHelpData):
         self.__class__ = HtmlHelpData
 _html.HtmlHelpData_swigregister(HtmlHelpDataPtr)
 
-class HtmlHelpFrame(windows.Frame):
+class HtmlHelpFrame(_windows.Frame):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlHelpFrame instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1552,7 +1552,7 @@ HF_BOOKMARKS = _html.HF_BOOKMARKS
 HF_OPENFILES = _html.HF_OPENFILES
 HF_PRINT = _html.HF_PRINT
 HF_DEFAULTSTYLE = _html.HF_DEFAULTSTYLE
-class HtmlHelpController(core.EvtHandler):
+class HtmlHelpController(_core.EvtHandler):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlHelpController instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):

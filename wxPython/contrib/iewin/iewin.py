@@ -3,10 +3,10 @@
 
 import _iewin
 
-import core
-wx = core 
+import _core
+wx = _core 
 __docfilter__ = wx.__docfilter__ 
-class MSHTMLEvent(core.NotifyEvent):
+class MSHTMLEvent(_core.NotifyEvent):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMSHTMLEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -52,7 +52,7 @@ IEHTML_REFRESH_NORMAL = _iewin.IEHTML_REFRESH_NORMAL
 IEHTML_REFRESH_IFEXPIRED = _iewin.IEHTML_REFRESH_IFEXPIRED
 IEHTML_REFRESH_CONTINUE = _iewin.IEHTML_REFRESH_CONTINUE
 IEHTML_REFRESH_COMPLETELY = _iewin.IEHTML_REFRESH_COMPLETELY
-class IEHtmlWin(core.Window):
+class IEHtmlWin(_core.Window):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxIEHtmlWin instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):

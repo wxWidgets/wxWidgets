@@ -3,8 +3,8 @@
 
 import _xrc
 
-import core
-wx = core 
+import _core
+wx = _core 
 __docfilter__ = wx.__docfilter__ 
 #---------------------------------------------------------------------------
 
@@ -14,7 +14,7 @@ WX_XMLRES_CURRENT_VERSION_RELEASE = _xrc.WX_XMLRES_CURRENT_VERSION_RELEASE
 WX_XMLRES_CURRENT_VERSION_REVISION = _xrc.WX_XMLRES_CURRENT_VERSION_REVISION
 XRC_USE_LOCALE = _xrc.XRC_USE_LOCALE
 XRC_NO_SUBCLASSING = _xrc.XRC_NO_SUBCLASSING
-class XmlResource(core.Object):
+class XmlResource(_core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxXmlResource instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -401,7 +401,7 @@ def XmlNodeEasy(*args, **kwargs):
     val.thisown = 1
     return val
 
-class XmlDocument(core.Object):
+class XmlDocument(_core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxXmlDocument instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -482,7 +482,7 @@ def EmptyXmlDocument(*args, **kwargs):
 
 #---------------------------------------------------------------------------
 
-class XmlResourceHandler(core.Object):
+class XmlResourceHandler(_core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyXmlResourceHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):

@@ -3,9 +3,9 @@
 
 import _grid
 
-import windows
-import core
-wx = core 
+import _windows
+import _core
+wx = _core 
 __docfilter__ = wx.__docfilter__ 
 GRID_VALUE_STRING = _grid.GRID_VALUE_STRING
 GRID_VALUE_BOOL = _grid.GRID_VALUE_BOOL
@@ -802,7 +802,7 @@ class PyGridCellAttrProviderPtr(PyGridCellAttrProvider):
         self.__class__ = PyGridCellAttrProvider
 _grid.PyGridCellAttrProvider_swigregister(PyGridCellAttrProviderPtr)
 
-class GridTableBase(core.Object):
+class GridTableBase(_core.Object):
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridTableBase instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -1207,7 +1207,7 @@ class GridCellCoordsPtr(GridCellCoords):
         self.__class__ = GridCellCoords
 _grid.GridCellCoords_swigregister(GridCellCoordsPtr)
 
-class Grid(windows.ScrolledWindow):
+class Grid(_windows.ScrolledWindow):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGrid instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1991,7 +1991,7 @@ class GridPtr(Grid):
         self.__class__ = Grid
 _grid.Grid_swigregister(GridPtr)
 
-class GridEvent(core.NotifyEvent):
+class GridEvent(_core.NotifyEvent):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2045,7 +2045,7 @@ class GridEventPtr(GridEvent):
         self.__class__ = GridEvent
 _grid.GridEvent_swigregister(GridEventPtr)
 
-class GridSizeEvent(core.NotifyEvent):
+class GridSizeEvent(_core.NotifyEvent):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridSizeEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2090,7 +2090,7 @@ class GridSizeEventPtr(GridSizeEvent):
         self.__class__ = GridSizeEvent
 _grid.GridSizeEvent_swigregister(GridSizeEventPtr)
 
-class GridRangeSelectEvent(core.NotifyEvent):
+class GridRangeSelectEvent(_core.NotifyEvent):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridRangeSelectEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2156,7 +2156,7 @@ class GridRangeSelectEventPtr(GridRangeSelectEvent):
         self.__class__ = GridRangeSelectEvent
 _grid.GridRangeSelectEvent_swigregister(GridRangeSelectEventPtr)
 
-class GridEditorCreatedEvent(core.CommandEvent):
+class GridEditorCreatedEvent(_core.CommandEvent):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridEditorCreatedEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):

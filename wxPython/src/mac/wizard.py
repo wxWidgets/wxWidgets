@@ -3,9 +3,9 @@
 
 import _wizard
 
-import windows
-import core
-wx = core 
+import _windows
+import _core
+wx = _core 
 WIZARD_EX_HELPBUTTON = _wizard.WIZARD_EX_HELPBUTTON
 wxEVT_WIZARD_PAGE_CHANGED = _wizard.wxEVT_WIZARD_PAGE_CHANGED
 wxEVT_WIZARD_PAGE_CHANGING = _wizard.wxEVT_WIZARD_PAGE_CHANGING
@@ -18,7 +18,7 @@ EVT_WIZARD_CANCEL        = wx.PyEventBinder( wxEVT_WIZARD_CANCEL, 1)
 EVT_WIZARD_HELP          = wx.PyEventBinder( wxEVT_WIZARD_HELP, 1)
 EVT_WIZARD_FINISHED      = wx.PyEventBinder( wxEVT_WIZARD_FINISHED, 1)
 
-class WizardEvent(core.NotifyEvent):
+class WizardEvent(_core.NotifyEvent):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxWizardEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -46,7 +46,7 @@ class WizardEventPtr(WizardEvent):
         self.__class__ = WizardEvent
 _wizard.WizardEvent_swigregister(WizardEventPtr)
 
-class WizardPage(windows.Panel):
+class WizardPage(_windows.Panel):
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxWizardPage instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -231,7 +231,7 @@ def WizardPageSimple_Chain(*args, **kwargs):
     """WizardPageSimple_Chain(WizardPageSimple first, WizardPageSimple second)"""
     return _wizard.WizardPageSimple_Chain(*args, **kwargs)
 
-class Wizard(windows.Dialog):
+class Wizard(_windows.Dialog):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxWizard instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):

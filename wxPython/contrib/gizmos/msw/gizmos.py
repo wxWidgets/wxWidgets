@@ -3,16 +3,16 @@
 
 import _gizmos
 
-import windows
-import core
-import controls
-wx = core 
+import _windows
+import _core
+import _controls
+wx = _core 
 __docfilter__ = wx.__docfilter__ 
 wxEVT_DYNAMIC_SASH_SPLIT = _gizmos.wxEVT_DYNAMIC_SASH_SPLIT
 wxEVT_DYNAMIC_SASH_UNIFY = _gizmos.wxEVT_DYNAMIC_SASH_UNIFY
 DS_MANAGE_SCROLLBARS = _gizmos.DS_MANAGE_SCROLLBARS
 DS_DRAG_CORNER = _gizmos.DS_DRAG_CORNER
-class DynamicSashSplitEvent(core.CommandEvent):
+class DynamicSashSplitEvent(_core.CommandEvent):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDynamicSashSplitEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -33,7 +33,7 @@ DynamicSashNameStr = cvar.DynamicSashNameStr
 EditableListBoxNameStr = cvar.EditableListBoxNameStr
 TreeListCtrlNameStr = cvar.TreeListCtrlNameStr
 
-class DynamicSashUnifyEvent(core.CommandEvent):
+class DynamicSashUnifyEvent(_core.CommandEvent):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDynamicSashUnifyEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -50,7 +50,7 @@ class DynamicSashUnifyEventPtr(DynamicSashUnifyEvent):
         self.__class__ = DynamicSashUnifyEvent
 _gizmos.DynamicSashUnifyEvent_swigregister(DynamicSashUnifyEventPtr)
 
-class DynamicSashWindow(core.Window):
+class DynamicSashWindow(_core.Window):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDynamicSashWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -101,7 +101,7 @@ EVT_DYNAMIC_SASH_UNIFY = wx.PyEventBinder( wxEVT_DYNAMIC_SASH_UNIFY, 1 )
 EL_ALLOW_NEW = _gizmos.EL_ALLOW_NEW
 EL_ALLOW_EDIT = _gizmos.EL_ALLOW_EDIT
 EL_ALLOW_DELETE = _gizmos.EL_ALLOW_DELETE
-class EditableListBox(windows.Panel):
+class EditableListBox(_windows.Panel):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxEditableListBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -156,7 +156,7 @@ class EditableListBoxPtr(EditableListBox):
         self.__class__ = EditableListBox
 _gizmos.EditableListBox_swigregister(EditableListBoxPtr)
 
-class RemotelyScrolledTreeCtrl(controls.TreeCtrl):
+class RemotelyScrolledTreeCtrl(_controls.TreeCtrl):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxRemotelyScrolledTreeCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -202,7 +202,7 @@ class RemotelyScrolledTreeCtrlPtr(RemotelyScrolledTreeCtrl):
         self.__class__ = RemotelyScrolledTreeCtrl
 _gizmos.RemotelyScrolledTreeCtrl_swigregister(RemotelyScrolledTreeCtrlPtr)
 
-class TreeCompanionWindow(core.Window):
+class TreeCompanionWindow(_core.Window):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyTreeCompanionWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -236,7 +236,7 @@ class TreeCompanionWindowPtr(TreeCompanionWindow):
         self.__class__ = TreeCompanionWindow
 _gizmos.TreeCompanionWindow_swigregister(TreeCompanionWindowPtr)
 
-class ThinSplitterWindow(windows.SplitterWindow):
+class ThinSplitterWindow(_windows.SplitterWindow):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxThinSplitterWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -258,7 +258,7 @@ class ThinSplitterWindowPtr(ThinSplitterWindow):
         self.__class__ = ThinSplitterWindow
 _gizmos.ThinSplitterWindow_swigregister(ThinSplitterWindowPtr)
 
-class SplitterScrolledWindow(windows.ScrolledWindow):
+class SplitterScrolledWindow(_windows.ScrolledWindow):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSplitterScrolledWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -285,7 +285,7 @@ LED_ALIGN_RIGHT = _gizmos.LED_ALIGN_RIGHT
 LED_ALIGN_CENTER = _gizmos.LED_ALIGN_CENTER
 LED_ALIGN_MASK = _gizmos.LED_ALIGN_MASK
 LED_DRAW_FADED = _gizmos.LED_DRAW_FADED
-class LEDNumberCtrl(core.Control):
+class LEDNumberCtrl(_core.Control):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxLEDNumberCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -348,7 +348,7 @@ TL_ALIGN_LEFT = _gizmos.TL_ALIGN_LEFT
 TL_ALIGN_RIGHT = _gizmos.TL_ALIGN_RIGHT
 TL_ALIGN_CENTER = _gizmos.TL_ALIGN_CENTER
 TREE_HITTEST_ONITEMCOLUMN = _gizmos.TREE_HITTEST_ONITEMCOLUMN
-class TreeListColumnInfo(core.Object):
+class TreeListColumnInfo(_core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTreeListColumnInfo instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -408,7 +408,7 @@ class TreeListColumnInfoPtr(TreeListColumnInfo):
         self.__class__ = TreeListColumnInfo
 _gizmos.TreeListColumnInfo_swigregister(TreeListColumnInfoPtr)
 
-class TreeListCtrl(core.Control):
+class TreeListCtrl(_core.Control):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyTreeListCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
