@@ -6139,18 +6139,8 @@ AC_CONFIG_COMMANDS([ wx-config
                      LN_S="${LN_S}"
                    ])
 
-dnl When contrib is gone, this is all we will need:
-dnl AC_CONFIG_LINKS([ include/wx-$WX_RELEASE$WX_FLAVOUR/wx:include/wx ])
-
-dnl Until then, we need to be a little more extravagent to create
-dnl a 'real' working $prefix subtree in each build dir.  Doing this
-dnl really does make them otherwise identical to an installed set.
-for c in `ls $srcdir/contrib/include/wx 2> /dev/null`; do
-    AC_CONFIG_LINKS([ include/wx-$WX_RELEASE$WX_FLAVOUR/wx/$c:contrib/include/wx/$c ])
-done
-for f in `ls $srcdir/include/wx 2> /dev/null`; do
-    AC_CONFIG_LINKS([ include/wx-$WX_RELEASE$WX_FLAVOUR/wx/$f:include/wx/$f ])
-done
+AC_CONFIG_LINKS([ include/wx-$WX_RELEASE$WX_FLAVOUR:include ])
+AC_CONFIG_LINKS([ contrib/include ])
 
 
 dnl Configure samples, contrib etc. directories, but only if they are present:

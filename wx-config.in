@@ -883,8 +883,9 @@ fi
 
 [ -n "$this_linkage"   ] || _static_cppflags="@TOOLCHAIN_DLL_DEFS@"
 [ "$using_gui" = "yes" ] || _gui_cppflags="-DwxUSE_GUI=0"
+[ -z "$this_prefix"    ] || _intree_cppflags="-I${prefix}/contrib/include"
 
-_cppflags=$(echo "-I${libdir}/wx/include/@TOOLCHAIN_FULLNAME@ -I${includedir}/wx-@WX_RELEASE@@WX_FLAVOUR@" "@WXDEBUG_DEFINE@" "@TOOLCHAIN_DEFS@" $_static_cppflags $_gui_cppflags "@WXCONFIG_INCLUDE@" "@WX_LARGEFILE_FLAGS@" "@GCC_PRAGMA_FLAGS@")  
+_cppflags=$(echo "-I${libdir}/wx/include/@TOOLCHAIN_FULLNAME@ -I${includedir}/wx-@WX_RELEASE@@WX_FLAVOUR@" $_intree_cppflags "@WXDEBUG_DEFINE@" "@TOOLCHAIN_DEFS@" $_static_cppflags $_gui_cppflags "@WXCONFIG_INCLUDE@" "@WX_LARGEFILE_FLAGS@" "@GCC_PRAGMA_FLAGS@")  
 
 # now without further ado, we can answer these too.
 [ -z "$output_option_cppflags" ] || echo $_cppflags
