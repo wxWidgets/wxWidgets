@@ -71,6 +71,25 @@ wxXmlNode::wxXmlNode(const wxXmlNode& node)
 
 
 
+wxXmlNode::~wxXmlNode()
+{
+    wxXmlNode *c, *c2;
+    for (c = m_children; c; c = c2)
+    {
+        c2 = c->m_next;
+        delete c;
+    }
+
+    wxXmlProperty *p, *p2;
+    for (p = m_properties; p; p = p2)
+    {
+        p2 = p->GetNext();
+        delete p;
+    }
+}
+
+
+
 wxXmlNode& wxXmlNode::operator=(const wxXmlNode& node)
 {
     delete m_properties;
