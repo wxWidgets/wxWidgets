@@ -683,8 +683,8 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
         
     if (win->IsTopLevel())
     {
-        gtk_paint_flat_box (widget->style, pizza->bin_window, GTK_STATE_NORMAL, 
-		      GTK_SHADOW_NONE, &gdk_event->area, widget, "base", 0, 0, -1, -1);
+        gtk_paint_flat_box (win->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL, 
+		      GTK_SHADOW_NONE, &gdk_event->area, win->m_widget, "base", 0, 0, -1, -1);
     }
         
     win->GetUpdateRegion().Union( gdk_event->area.x,
@@ -785,8 +785,8 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
 
     if (win->IsTopLevel())
     {
-        gtk_paint_flat_box (widget->style, pizza->bin_window, GTK_STATE_NORMAL, 
-		      GTK_SHADOW_NONE, rect, widget, "base", 0, 0, -1, -1);
+        gtk_paint_flat_box (win->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL, 
+		      GTK_SHADOW_NONE, rect, win->m_widget, "base", 0, 0, -1, -1);
     }
         
         if (!(GTK_WIDGET_APP_PAINTABLE (widget)) &&
