@@ -6589,7 +6589,7 @@ void TestStdString()
 
 int main(int argc, char **argv)
 {
-    wxApp::CheckBuildOptions(wxBuildOptions());
+    wxApp::CheckBuildOptions(WX_BUILD_OPTIONS_SIGNATURE, "program");
 
     wxInitializer initializer;
     if ( !initializer )
