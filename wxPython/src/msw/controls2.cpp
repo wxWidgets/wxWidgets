@@ -95,7 +95,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     const wxChar* wxListCtrlNameStr = _T("wxListCtrl");
     DECLARE_DEF_STRING(ListCtrlNameStr);
 
-    const wxChar* wx_TreeCtrlNameStr = _T("wxListCtrl");
+    const wxChar* wx_TreeCtrlNameStr = _T("wxTreeCtrl");
     DECLARE_DEF_STRING(_TreeCtrlNameStr);
     DECLARE_DEF_STRING(DirDialogDefaultFolderStr);
 
