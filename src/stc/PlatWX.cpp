@@ -405,7 +405,7 @@ void SurfaceImpl::DrawTextNoClip(PRectangle rc, Font &font, int ybase,
     SetFont(font);
     hdc->SetTextForeground(wxColourFromCA(fore));
     hdc->SetTextBackground(wxColourFromCA(back));
-    //FillRectangle(rc, back);
+    FillRectangle(rc, back);
 
     // ybase is where the baseline should be, but wxWin uses the upper left
     // corner, so I need to calculate the real position for the text...
@@ -418,11 +418,12 @@ void SurfaceImpl::DrawTextClipped(PRectangle rc, Font &font, int ybase,
     SetFont(font);
     hdc->SetTextForeground(wxColourFromCA(fore));
     hdc->SetTextBackground(wxColourFromCA(back));
-    //FillRectangle(rc, back);
+    FillRectangle(rc, back);
     hdc->SetClippingRegion(wxRectFromPRectangle(rc));
 
     // see comments above
     hdc->DrawText(stc2wx(s, len), rc.left, ybase - font.ascent);
+    hdc->DestroyClippingRegion();
 }
 
 
@@ -450,7 +451,7 @@ void SurfaceImpl::MeasureWidths(Font &font, const char *s, int len, int *positio
 #ifndef __WXMAC__
     // Calculate the position of each character based on the widths of
     // the previous characters
-    int* tpos = new int[len];
+    int* tpos = new int[len+1];
     int totalWidth = 0;
     size_t i;
     for (i=0; i<str.Length(); i++) {
@@ -465,7 +466,7 @@ void SurfaceImpl::MeasureWidths(Font &font, const char *s, int len, int *positio
     // on OS X widths can be fractions of pixels wide when more than one
     // are drawn together, so the sum of all character widths is not necessarily
     // (and probably not) the same as the whole string width.
-    int* tpos = new int[len];
+    int* tpos = new int[len+1];
     size_t i;
     for (i=0; i<str.Length(); i++) {
         int w, h;
