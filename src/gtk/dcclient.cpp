@@ -1609,8 +1609,8 @@ void wxWindowDC::DoGetTextExtent(const wxString &string,
     pango_layout_line_get_extents(line, NULL, &rect);
        
     
-    if (width) (*width) = (wxCoord) rect.width;
-    if (height) (*height) = (wxCoord) rect.height;
+    if (width) (*width) = (wxCoord) (rect.width / PANGO_SCALE);
+    if (height) (*height) = (wxCoord) (rect.height / PANGO_SCALE);
     if (descent)
     {
         // Do something about metrics here
