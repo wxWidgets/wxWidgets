@@ -874,9 +874,6 @@
 /* struct tm doesn't always have the tm_gmtoff field, define this if it does */
 #undef WX_GMTOFF_IN_TM
 
-/* iconv()'s 2nd argument is char ** and not const char ** */
-#undef WX_ICONV_TAKES_CHAR
-
 /* Define if you have pw_gecos field in struct passwd */
 #undef HAVE_PW_GECOS
 
@@ -1060,11 +1057,11 @@
 /* Define if you have the <wctype.h> header file.  */
 #undef HAVE_WCTYPE_H
 
-/* Define if you have the <iconv.h> header file.  */
-#undef HAVE_ICONV_H
+/* Define if you have the <iconv.h> header file and iconv() symbol.  */
+#undef HAVE_ICONV
 
-/* Test for GLIBC 2.2 iconv() */
-#undef WX_ICONV_TAKES_CHAR
+/* Define as "const" if the declaration of iconv() needs const.  */
+#undef ICONV_CONST
 
 /* Define if you have the <langinfo.h> header file.  */
 #undef HAVE_LANGINFO_H

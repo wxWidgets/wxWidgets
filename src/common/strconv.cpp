@@ -60,7 +60,7 @@ WXDLLEXPORT_DATA(wxMBConv *) wxConvCurrent = &wxConvLibc;
   #include <clib.h>
 #endif
 
-#ifdef HAVE_ICONV_H
+#ifdef HAVE_ICONV
   #include <iconv.h>
 #endif
 
@@ -549,7 +549,7 @@ public:
 // The classes doing conversion using the iconv_xxx() functions
 // ============================================================================
 
-#ifdef HAVE_ICONV_H
+#ifdef HAVE_ICONV
 
 // VS: glibc 2.1.3 is broken in that iconv() conversion to/from UCS4 fails with E2BIG
 //     if output buffer is _exactly_ as big as needed. Such case is (unless there's
@@ -565,11 +565,7 @@ public:
 #define ICONV_FAILED(cres, bufLeft)  (cres == (size_t)-1)
 #endif
 
-#ifdef WX_ICONV_TAKES_CHAR
-    #define ICONV_CHAR_CAST(x)  (char **)x
-#else
-    #define ICONV_CHAR_CAST(x)  (const char **)x
-#endif
+#define ICONV_CHAR_CAST(x)  ((ICONV_CONST char **)(x))
 
 // ----------------------------------------------------------------------------
 // IC_CharSet: encapsulates an iconv character set
@@ -809,7 +805,7 @@ size_t IC_CharSet::WC2MB(char *buf, const wchar_t *psz, size_t n)
     return res;
 }
 
-#endif // HAVE_ICONV_H
+#endif // HAVE_ICONV
 
 // ============================================================================
 // Win32 conversion classes
@@ -919,7 +915,7 @@ static wxCharacterSet *wxGetCharacterSet(const wxChar *name)
         }
         else
         {
-#ifdef HAVE_ICONV_H
+#ifdef HAVE_ICONV
             cset = new IC_CharSet(name); // may not take NULL
 #endif
         }
