@@ -47,7 +47,8 @@ Or you can send mail directly to the list using this address:
 
 What's new in 2.1.12
 --------------------
-Updated wxMVCTree and added a demo for it.
+Updated wxMVCTree and added a demo for it, also fixed layout on GTK
+and some flicker problems.
 
 Added a wrapper class for the Visualization ToolKit (or VTK) in the
 wxPython.lib.vtk module.  (http://www.kitware.com/)
@@ -56,6 +57,8 @@ Fixed wxTreeCtrl.SetItemImage and GetItemImage to recognise the new
 "which" parameter.
 
 Added wxPython.lib.spashscreen from Mike Fletcher.
+
+Added wxPython.lib.filebrowsebutton also from Mike Fletcher.
 
 
 
@@ -528,81 +531,6 @@ version segfault shortly after starting up.
 
 ----------------------------------------------------------------------
 
-
-
-Build Instructions
-------------------
-I used SWIG (http://www.swig.org) to create the source code for the
-extension module.  This enabled me to only have to deal with a small
-amount of code and only have to bother with the exceptional issues.
-SWIG takes care of the rest and generates all the repetative code for
-me.  You don't need SWIG to build the extension module as all the
-generated C++ code is included under the src directory.
-
-I added a few minor features to SWIG to control some of the code
-generation.  If you want to play around with this you will need to get
-a recent version of SWIG from their CVS or from a daily build.  See
-http://www.swig.org/ for details.
-
-wxPython is organized as a Python package.  This means that the
-directory containing the results of the build process should be a
-subdirectory of a directory on the PYTHONPATH.  (And preferably should
-be named wxPython.)  You can control where the build process will dump
-wxPython by setting the TARGETDIR variable for the build utility, (see
-below.)
-
-
-1. Build wxWindows as described in its BuildCVS.txt file.  For *nix
-   systems I run configure with these flags:
-
-                --with-gtk
-                --with-libjpeg
-                --without-odbc
-                --enable-unicode=no
-                --enable-threads=yes
-                --enable-socket=yes
-                --enable-static=no
-                --enable-shared=yes
-                --disable-std_iostreams
-
-   You can use whatever flags you want, but I know these work.
-
-   For Win32 systems I use Visual C++ 6.0, but 5.0 should work.  The
-   build utility currently does not support any other win32 compilers.
-
-2. At this point you may want to make an alias or symlink, script,
-   batch file, whatever on the PATH that invokes
-   $(WXWIN)/utils/wxPython/distrib/build.py to help simplify matters
-   somewhat.  For example, on my win32 system I have a file named
-   build.bat in a directory on the PATH that contains:
-
-   python $(WXWIN)/utils/wxPython/distrib/build.py %1 %2 %3 %4 %5 %6
-
-
-3. Change into the $(WXWIN)/utils/wxPython/src directory.
-
-4. Type "build -b" to build wxPython and "build -i" to install it.
-
-   The build.py script actually generates a Makefile based on what it
-   finds on your system and information found in the build.cfg file.
-   If you have troubles building or you want it built or installed in
-   a different way, take a look at the docstring in build.py.  You may
-   be able to override configuration options in a file named
-   build.local.
-
-5. To build and install the add-on modules, change to the appropriate
-   directory under $(WXWIN)/utils/wxPython/modules and run the build
-   utility again.
-
-6. Change to the $(WXWIN)/utils/wxPython/demo directory.
-
-7. Try executing the demo program.  For example:
-
-    python demo.py
-
-To run it without requiring a console on win32, you can use the
-pythonw.exe version of Python either from the command line or from a
-shortcut.
 
 
 
