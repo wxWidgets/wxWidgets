@@ -13,7 +13,11 @@
 
 THISDIR=$(WXWIN)\src\xpm
 
+!if "$(FINAL)" == "1"
 LIBTARGET=$(WXDIR)\lib\xpm.lib
+!else
+LIBTARGET=$(WXDIR)\lib\xpmd.lib
+!endif
 
 XPMDIR=$(WXDIR)\src\xpm
 

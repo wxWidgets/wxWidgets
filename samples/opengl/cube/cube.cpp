@@ -27,6 +27,10 @@
 
 #include "wx/log.h"
 
+#if !wxUSE_GLCANVAS
+#error Please set wxUSE_GLCANVAS to 1 in setup.h.
+#endif
+
 #include "cube.h"
 
 #ifndef __WXMSW__     // for wxStopWatch, see remark below 

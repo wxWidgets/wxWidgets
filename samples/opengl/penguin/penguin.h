@@ -59,7 +59,6 @@ public:
 DECLARE_EVENT_TABLE()
 };
 
-
 class TestGLCanvas: public wxGLCanvas
 {
  public:

@@ -18,8 +18,8 @@ OGLDIR = $(WXDIR)\src\ogl
 OGLINC = $(WXDIR)\contrib\include\wx\ogl
 THISDIR = $(WXDIR)\src\ogl
 EXTRAFLAGS=/DPROLOGIO=1
-DOCDIR=$(WXDIR)\docs
-LOCALDOCDIR=$(WXDIR)\docs\latex\ogl
+DOCDIR=$(WXDIR)\contrib\docs
+LOCALDOCDIR=$(WXDIR)\contrib\docs\latex\ogl
 
 !include $(WXDIR)\src\makevc.env
 

@@ -38,8 +38,8 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "ReleaseDLL"
-# PROP Intermediate_Dir "ReleaseDLL"
+# PROP Output_Dir "../lib"
+# PROP Intermediate_Dir "msw/ReleaseDLL"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
@@ -53,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comctl32.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib uuid.lib rpcrt4.lib advapi32.lib winmm.lib /nologo /subsystem:windows /dll /machine:I386 /out:"ReleaseDLL/wxvc.dll"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comctl32.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib uuid.lib rpcrt4.lib advapi32.lib winmm.lib /nologo /subsystem:windows /dll /machine:I386 /out:"../lib/wxdll.dll"
 
 !ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
@@ -64,8 +64,8 @@ LINK32=link.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "DebugDLL"
-# PROP Intermediate_Dir "DebugDLL"
+# PROP Output_Dir "../lib"
+# PROP Intermediate_Dir "msw/DebugDLL"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
@@ -79,7 +79,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comctl32.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib uuid.lib rpcrt4.lib advapi32.lib winmm.lib /nologo /subsystem:windows /dll /debug /machine:I386 /out:"DebugDLL/wxvc.dll" /pdbtype:sept
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comctl32.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib uuid.lib rpcrt4.lib advapi32.lib winmm.lib /nologo /subsystem:windows /dll /debug /machine:I386 /out:"../lib/wxdlld.dll" /pdbtype:sept
 
 !ENDIF 
 
@@ -522,6 +522,10 @@ SOURCE=.\generic\grid.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\generic\gridsel.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\generic\helpext.cpp
 # End Source File
 # Begin Source File
@@ -791,6 +795,10 @@ SOURCE=.\msw\dde.cpp
 # Begin Source File
 
 SOURCE=.\msw\dialog.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\dialup.cpp
 # End Source File
 # Begin Source File
 
@@ -2173,6 +2181,208 @@ SOURCE=.\jpeg\jutils.c
 
 !ENDIF 
 
+# End Source File
+# End Group
+# Begin Group "TIFF files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\tiff\tif_aux.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_close.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_codec.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_compress.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_dir.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_dirinfo.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_dirread.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_dirwrite.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_dumpmode.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_error.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_fax3.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_fax3sm.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_flush.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_getimage.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_jpeg.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_luv.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_lzw.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_next.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_open.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_packbits.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_pixarlog.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_predict.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_print.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_read.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_strip.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_swab.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_thunder.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_tile.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_version.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_warning.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_win32.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_write.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff\tif_zip.c
+# ADD CPP /I "tiff"
+# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # End Group
 # End Target

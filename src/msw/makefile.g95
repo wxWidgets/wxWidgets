@@ -74,6 +74,7 @@ GENERICOBJS = \
 		$(GENDIR)/choicdgg.$(OBJSUFF) \
 		$(GENDIR)/dragimgg.$(OBJSUFF) \
 		$(GENDIR)/grid.$(OBJSUFF) \
+		$(GENDIR)/gridsel.$(OBJSUFF) \
 		$(GENDIR)/laywin.$(OBJSUFF) \
 		$(GENDIR)/logg.$(OBJSUFF) \
 		$(GENDIR)/numdlgg.$(OBJSUFF) \

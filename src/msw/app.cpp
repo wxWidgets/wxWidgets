@@ -564,7 +564,7 @@ void wxApp::CleanUp()
     // wxDebugContext, too.
     if (wxDebugContext::CountObjectsLeft(TRUE) > 0)
     {
-        wxLogDebug(wxT("There were memory leaks."));
+        wxLogMessage(wxT("There were memory leaks."));
         wxDebugContext::Dump();
         wxDebugContext::PrintStatistics();
     }

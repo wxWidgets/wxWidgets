@@ -18,7 +18,7 @@ PROGRAM=studio
 FINAL=0
 
 !if "$(FINAL)" == "0"
-EXTRALIBS=$(WXDIR)\contrib\lib\ogl_d.lib
+EXTRALIBS=$(WXDIR)\contrib\lib\ogld.lib
 !else
 EXTRALIBS=$(WXDIR)\contrib\lib\ogl.lib
 !endif

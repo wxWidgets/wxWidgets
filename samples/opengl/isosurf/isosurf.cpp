@@ -25,6 +25,10 @@
 #include "wx/wx.h"
 #endif
 
+#if !wxUSE_GLCANVAS
+#error Please set wxUSE_GLCANVAS to 1 in setup.h.
+#endif
+
 #include "wx/timer.h"
 #include "wx/glcanvas.h"
 

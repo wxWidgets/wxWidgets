@@ -3,7 +3,82 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
+Project: "jpeg"=.\jpeg\jpeg.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "png"=.\png\png.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "tiff"=.\tiff\tiff.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "wxvc"=.\wxvc.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name zlib
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name xpm
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name png
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name jpeg
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name tiff
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "xpm"=.\xpm\xpm.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "zlib"=.\zlib\zlib.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

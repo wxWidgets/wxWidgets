@@ -219,7 +219,7 @@ wxUint8 MMBoardApp::TestMultimediaCaps()
     // We test the Windows sound support.
 
     dev = new wxSoundStreamWin();
-    if (dev->GetError() == wxSOUND_NOERR)
+    if (dev->GetError() == wxSOUND_NOERROR)
         caps |= MM_SOUND_WIN;
     delete dev;
 #endif

@@ -3,14 +3,20 @@ src/wxvc.dsw
 src/wxvc_dll.dsp
 src/wxvc_dll.dsw
 
-src/ogl/OglVC.dsp
-src/ogl/OglVC.dsw
-
 src/jpeg/jpeg.dsp
 src/jpeg/jpeg.dsw
 
 src/tiff/tiff.dsp
 src/tiff/tiff.dsw
+
+src/zlib/zlib.dsp
+src/zlib/zlib.dsw
+
+src/png/png.dsp
+src/png/png.dsw
+
+src/xpm/xpm.dsp
+src/xpm/xpm.dsw
 
 samples/calendar/CalendarVC.dsp
 samples/calendar/CalendarVC.dsw
@@ -45,8 +51,8 @@ samples/dragimag/DragimagVC.dsw
 samples/docview/DocviewVC.dsp
 samples/docview/DocviewVC.dsw
 
-samples/docvwmdi/DocVwVC.dsp
-samples/docvwmdi/DocVwVC.dsw
+samples/docvwmdi/DocVwMdiVC.dsp
+samples/docvwmdi/DocVwMdiVC.dsw
 
 samples/drawing/DrawingVC.dsp
 samples/drawing/DrawingVC.dsw
@@ -66,22 +72,22 @@ samples/grid/GridVC.dsw
 samples/help/HelpVC.dsp
 samples/help/HelpVC.dsw
 
-samples/html/AboutVC.dsp
-samples/html/AboutVC.dsw
-samples/html/HelpVC.dsp
-samples/html/HelpVC.dsw
-samples/html/HelpViewVC.dsp
-samples/html/HelpViewVC.dsw
-samples/html/PrintingVC.dsp
-samples/html/PrintingVC.dsw
-samples/html/TestVC.dsp
-samples/html/TestVC.dsw
-samples/html/VirtualVC.dsp
-samples/html/VirtualVC.dsw
-samples/html/WidgetVC.dsp
-samples/html/WidgetVC.dsw
-samples/html/ZipVC.dsp
-samples/html/ZipVC.dsw
+samples/html/about/AboutVC.dsp
+samples/html/about/AboutVC.dsw
+samples/html/help/HelpVC.dsp
+samples/html/help/HelpVC.dsw
+samples/html/helpview/HelpViewVC.dsp
+samples/html/helpview/HelpViewVC.dsw
+samples/html/printing/PrintingVC.dsp
+samples/html/printing/PrintingVC.dsw
+samples/html/test/TestVC.dsp
+samples/html/test/TestVC.dsw
+samples/html/virtual/VirtualVC.dsp
+samples/html/virtual/VirtualVC.dsw
+samples/html/widget/WidgetVC.dsp
+samples/html/widget/WidgetVC.dsw
+samples/html/zip/ZipVC.dsp
+samples/html/zip/ZipVC.dsw
 
 samples/image/ImageVC.dsp
 samples/image/ImageVC.dsw
@@ -163,8 +169,8 @@ samples/sashtest/SashtestVC.dsw
 samples/scroll/ScrollVC.dsp
 samples/scroll/ScrollVC.dsw
 
-samples/scrollsub/ScrollVC.dsp
-samples/scrollsub/ScrollVC.dsw
+samples/scrollsub/ScrollsubVC.dsp
+samples/scrollsub/ScrollsubVC.dsw
 
 samples/sockets/ClientVC.dsp
 samples/sockets/ServerVC.dsw
@@ -187,6 +193,9 @@ samples/toolbar/ToolbarVC.dsw
 samples/treectrl/TreectrlVC.dsp
 samples/treectrl/TreeCtrlVC.dsw
 
+samples/treelay/TreelayVC.dsp
+samples/treelay/TreelayVC.dsw
+
 samples/typetest/TypetestVC.dsp
 samples/typetest/TypetestVC.dsw
 
@@ -202,14 +211,6 @@ samples/opengl/isosurf/IsosurfVC.dsp
 samples/opengl/isosurf/IsosurfVC.dsw
 samples/opengl/penguin/PenguinVC.dsp
 samples/opengl/penguin/PenguinVC.dsw
-
-samples/ogl/ogledit/OgleditVC.dsp
-samples/ogl/ogledit/OgleditVC.dsw
-samples/ogl/studio/StudioVC.dsp
-samples/ogl/studio/StudioVC.dsw
-
-samples/treelay/TreeSampleVC.dsp
-samples/treelay/TreeSampleVC.dsw
 
 demos/bombs/BombsVC.dsp
 demos/bombs/BombsVC.dsw
@@ -235,4 +236,17 @@ utils/dialoged/src/DialogEdVC.dsw
 utils/tex2rtf/src/Tex2RTFVC.dsp
 utils/tex2rtf/src/Tex2RTFVC.dsw
 
+contrib/src/ogl/OglVC.dsp
+contrib/src/ogl/OglVC.dsw
+
+contrib/samples/ogl/ogledit/OgleditVC.dsp
+contrib/samples/ogl/ogledit/OgleditVC.dsw
+contrib/samples/ogl/studio/StudioVC.dsp
+contrib/samples/ogl/studio/StudioVC.dsw
+
+contrib/src/mmedia/MmediaVC.dsp
+contrib/src/mmedia/MMediaVC.dsw
+
+contrib/samples/mmedia/MmboardVC.dsp
+contrib/samples/mmedia/MmboardVC.dsw
 

@@ -168,12 +168,14 @@ bool MyApp::GenerateSample(const wxString& projectName, const wxString& targetNa
 {
     wxString relativeIncludePath(relativeRootPath + wxString("/include"));
     wxString relativeLibPath(relativeRootPath + wxString("/lib"));
+#if 0
     wxString relativeDebugPath(relativeRootPath + wxString("/src/Debug"));
     wxString relativeReleasePath(relativeRootPath + wxString("/src/Release"));
     wxString relativeDebugPathJPEG(relativeRootPath + wxString("/src/jpeg/Debug"));
     wxString relativeReleasePathJPEG(relativeRootPath + wxString("/src/jpeg/Release"));
     wxString relativeDebugPathTIFF(relativeRootPath + wxString("/src/tiff/Debug"));
     wxString relativeReleasePathTIFF(relativeRootPath + wxString("/src/tiff/Release"));
+#endif
 
     wxProject project;
 
@@ -181,9 +183,13 @@ bool MyApp::GenerateSample(const wxString& projectName, const wxString& targetNa
     project.SetIncludeDirs(wxStringList((const char*) relativeIncludePath, 0));
     project.SetResourceIncludeDirs(wxStringList((const char*) relativeIncludePath, 0));
     project.SetLibDirs(wxStringList((const char*) relativeLibPath, 0));
+#if 0
     project.SetDebugLibDirs(wxStringList((const char*) relativeDebugPath, (const char*) relativeDebugPathJPEG, (const char*) relativeDebugPathTIFF, 0));
     project.SetReleaseLibDirs(wxStringList((const char*) relativeReleasePath, (const char*) relativeReleasePathJPEG, (const char*) relativeReleasePathTIFF, 0));
-    project.SetExtraLibs(wxStringList("opengl32.lib", "glu32.lib", 0));
+#endif
+
+    project.SetExtraLibsRelease(wxStringList("opengl32.lib", "glu32.lib", 0));
+    project.SetExtraLibsDebug(wxStringList("opengl32.lib", "glu32.lib", 0));
 
     project.SetProjectName(projectName);
     project.SetTargetName(targetName);
@@ -305,6 +311,7 @@ void MyApp::GenerateSamples(const wxString& dir)
     GenerateSample("MenuVC", "menu", dir + wxString("/samples/menu"), wxStringList("menu.cpp", 0));
     GenerateSample("TreelayVC", "test", dir + wxString("/samples/treelay"), wxStringList("test.cpp", "test.h", 0));
     GenerateSample("DragimagVC", "test", dir + wxString("/samples/dragimag"), wxStringList("test.cpp", "test.h", 0));
+    GenerateSample("PlotVC", "plot", dir + wxString("/samples/plot"), wxStringList("plot.cpp", 0));
 
     //// Demos
 
@@ -337,8 +344,10 @@ void MyApp::GenerateSamples(const wxString& dir)
     project.SetIncludeDirs(wxStringList("../../../include", 0));
     project.SetResourceIncludeDirs(wxStringList("../../../include", 0));
     project.SetLibDirs(wxStringList("../../../lib", 0));
+#if 0
     project.SetDebugLibDirs(wxStringList("../../../src/Debug", "../../../src/jpeg/Debug", "../../../src/tiff/Debug", 0));
     project.SetReleaseLibDirs(wxStringList("../../../src/Release", "../../../src/jpeg/Release", "../../../src/tiff/Release", 0));
+#endif
 
     project.SetProjectName("DialogEdVC");
     project.SetTargetName("dialoged");
@@ -359,8 +368,10 @@ void MyApp::GenerateSamples(const wxString& dir)
     project.SetIncludeDirs(wxStringList("../../../include", 0));
     project.SetResourceIncludeDirs(wxStringList("../../../include", 0));
     project.SetLibDirs(wxStringList("../../../lib", 0));
+#if 0
     project.SetDebugLibDirs(wxStringList("../../../src/Debug", "../../../src/jpeg/Debug", "../../../src/tiff/Debug", 0));
     project.SetReleaseLibDirs(wxStringList("../../../src/Release", "../../../src/jpeg/Release", "../../../src/tiff/Release", 0));
+#endif
 
     project.SetProjectName("Tex2RTFVC");
     project.SetTargetName("tex2rtf");
@@ -380,8 +391,10 @@ void MyApp::GenerateSamples(const wxString& dir)
     project.SetIncludeDirs(wxStringList("../../../include", 0));
     project.SetResourceIncludeDirs(wxStringList("../../../include", 0));
     project.SetLibDirs(wxStringList("../../../lib", 0));
+#if 0
     project.SetDebugLibDirs(wxStringList("../../../src/Debug", "../../../src/jpeg/Debug", "../../../src/tiff/Debug", 0));
     project.SetReleaseLibDirs(wxStringList("../../../src/Release", "../../../src/jpeg/Release", "../../../src/tiff/Release", 0));
+#endif
 
     project.SetProjectName("HelpGenVC");
     project.SetTargetName("helpgen");
@@ -402,8 +415,10 @@ void MyApp::GenerateSamples(const wxString& dir)
     project.SetIncludeDirs(wxStringList("../../include", 0));
     project.SetResourceIncludeDirs(wxStringList("../../include", 0));
     project.SetLibDirs(wxStringList("../../lib", 0));
+#if 0
     project.SetDebugLibDirs(wxStringList("../../src/Debug", "../../src/jpeg/Debug", "../../src/tiff/Debug", 0));
     project.SetReleaseLibDirs(wxStringList("../../src/Release", "../../src/jpeg/Release", "../../src/tiff/Release", 0));
+#endif
 
     project.SetProjectName("ProjGenVC");
     project.SetTargetName("makeproj");
@@ -420,8 +435,10 @@ void MyApp::GenerateSamples(const wxString& dir)
     project.SetIncludeDirs(wxStringList("../../include", 0));
     project.SetResourceIncludeDirs(wxStringList("../../include", 0));
     project.SetLibDirs(wxStringList("../../lib", 0));
+#if 0
     project.SetDebugLibDirs(wxStringList("../../src/Debug", "../../src/jpeg/Debug", "../../src/tiff/Debug", 0));
     project.SetReleaseLibDirs(wxStringList("../../src/Release", "../../src/jpeg/Release", "../../src/tiff/Release", 0));
+#endif
 
     project.SetProjectName("hhp2cachedVC");
     project.SetTargetName("hhp2cached");
@@ -439,10 +456,13 @@ void MyApp::GenerateSamples(const wxString& dir)
     project.SetIncludeDirs(wxStringList("../../../../include", "../../../include", 0));
     project.SetResourceIncludeDirs(wxStringList("../../../../include", "../../../include", 0));
     project.SetLibDirs(wxStringList("../../../../lib", "../../../lib", 0));
+#if 0
     project.SetDebugLibDirs(wxStringList("../../../../src/Debug", "../../../src/ogl/Debug", "../../../../src/jpeg/Debug", "../../../../src/tiff/Debug", 0));
     project.SetReleaseLibDirs(wxStringList("../../../../src/Release", "../../../src/ogl/Release", "../../../../src/jpeg/Release", "../../../../src/tiff/Release", 0));
+#endif
 
-    project.SetExtraLibs(wxStringList("ogl.lib", 0));
+    project.SetExtraLibsDebug(wxStringList("ogld.lib", 0));
+    project.SetExtraLibsRelease(wxStringList("ogl.lib", 0));
 
     project.SetProjectName("OGLEditVC");
     project.SetTargetName("ogledit");
@@ -462,10 +482,12 @@ void MyApp::GenerateSamples(const wxString& dir)
     project.SetIncludeDirs(wxStringList("../../../../include", "../../../include", 0));
     project.SetResourceIncludeDirs(wxStringList("../../../../include", "../../../include", 0));
     project.SetLibDirs(wxStringList("../../../../lib", "../../../lib", 0));
+#if 0
     project.SetDebugLibDirs(wxStringList("../../../../src/Debug", "../../../src/ogl/Debug", "../../../../src/jpeg/Debug", "../../../../src/tiff/Debug", 0));
     project.SetReleaseLibDirs(wxStringList("../../../../src/Release", "../../../src/ogl/Release", "../../../../src/jpeg/Release", "../../../../src/tiff/Release", 0));
-
-    project.SetExtraLibs(wxStringList("ogl.lib", 0));
+#endif
+    project.SetExtraLibsDebug(wxStringList("ogld.lib", 0));
+    project.SetExtraLibsRelease(wxStringList("ogl.lib", 0));
 
     project.SetProjectName("StudioVC");
     project.SetTargetName("studio");
@@ -479,6 +501,25 @@ void MyApp::GenerateSamples(const wxString& dir)
     if (!project.GenerateVCProject())
     {
         wxString msg("Could not generate OGL Studio project");
+        wxMessageBox(msg);
+    }
+
+    // MMedia mmboard
+
+    project.SetIncludeDirs(wxStringList("../../../include", "../../include", 0));
+    project.SetResourceIncludeDirs(wxStringList("../../../include", 0));
+    project.SetLibDirs(wxStringList("../../../lib", "../../lib", 0));
+    project.SetExtraLibsDebug(wxStringList("mmediad.lib", 0));
+    project.SetExtraLibsRelease(wxStringList("mmedia.lib", 0));
+
+    project.SetProjectName("MMboardVC");
+    project.SetTargetName("mmboard");
+    project.SetProjectPath(dir + wxString("/contrib/samples/mmedia"));
+    project.SetSourceFiles(wxStringList("mmboard.cpp", "mmboard.h", "mmbman.cpp", "mmbman.h", 0));
+
+    if (!project.GenerateVCProject())
+    {
+        wxString msg("Could not generate MMboard project");
         wxMessageBox(msg);
     }
 }
@@ -631,12 +672,12 @@ bool wxProject::GenerateVCProject()
     stream << "# ADD BASE BSC32 /nologo\n";
     stream << "# ADD BSC32 /nologo\n";
     stream << "LINK32=link.exe\n";
-    stream << "# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib /nologo /subsystem:windows /machine:I386\n";
-    stream << "# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib wxvc.lib jpeg.lib tiff.lib ";
-    n = m_extraLibs.Number();
+    stream << "# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib winmm.lib /nologo /subsystem:windows /machine:I386\n";
+    stream << "# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib winmm.lib wx.lib xpm.lib png.lib zlib.lib jpeg.lib tiff.lib ";
+    n = m_extraLibsRelease.Number();
     for (i = 0; i < n; i++)
     {
-        wxString lib = m_extraLibs[i];
+        wxString lib = m_extraLibsRelease[i];
         stream << lib << " ";
     }
 
@@ -691,12 +732,12 @@ bool wxProject::GenerateVCProject()
     stream << "# ADD BASE BSC32 /nologo\n";
     stream << "# ADD BSC32 /nologo\n";
     stream << "LINK32=link.exe\n";
-    stream << "# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept\n";
-    stream << "# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib wxvc.lib jpeg.lib tiff.lib ";
-    n = m_extraLibs.Number();
+    stream << "# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib winmm.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept\n";
+    stream << "# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib winmm.lib wxd.lib xpmd.lib pngd.lib zlibd.lib jpegd.lib tiffd.lib ";
+    n = m_extraLibsDebug.Number();
     for (i = 0; i < n; i++)
     {
-        wxString lib = m_extraLibs[i];
+        wxString lib = m_extraLibsDebug[i];
         stream << lib << " ";
     }
     stream << "/nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:\"libcd.lib,libcid.lib,msvcrt.lib\" /out:\"Debug/" << m_targetName << ".exe\" /pdbtype:sept";
@@ -752,12 +793,12 @@ bool wxProject::GenerateVCProject()
     stream << "# ADD BASE BSC32 /nologo\n";
     stream << "# ADD BSC32 /nologo\n";
     stream << "LINK32=link.exe\n";
-    stream << "# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept\n";
-    stream << "# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib wxvc.lib ";
-    n = m_extraLibs.Number();
+    stream << "# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib winmm.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept\n";
+    stream << "# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib winmm.lib wxdlld.lib ";
+    n = m_extraLibsDebug.Number();
     for (i = 0; i < n; i++)
     {
-        wxString lib = m_extraLibs[i];
+        wxString lib = m_extraLibsDebug[i];
         stream << lib << " ";
     }
     stream << "/nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:\"libcd.lib\" /nodefaultlib:\"libcid.lib\" /out:\"DebugDLL/" << m_targetName << ".exe\" /pdbtype:sept";
@@ -815,12 +856,12 @@ bool wxProject::GenerateVCProject()
     stream << "# ADD BASE BSC32 /nologo\n";
     stream << "# ADD BSC32 /nologo\n";
     stream << "LINK32=link.exe\n";
-    stream << "# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib /nologo /subsystem:windows /machine:I386\n";
-    stream << "# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib wxvc.lib ";
-    n = m_extraLibs.Number();
+    stream << "# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib winmm.lib /nologo /subsystem:windows /machine:I386\n";
+    stream << "# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib winmm.lib wxdll.lib ";
+    n = m_extraLibsRelease.Number();
     for (i = 0; i < n; i++)
     {
-        wxString lib = m_extraLibs[i];
+        wxString lib = m_extraLibsRelease[i];
         stream << lib << " ";
     }
     stream << "/nologo /subsystem:windows /machine:I386 /nodefaultlib:\"libc.lib\" /nodefaultlib:\"libci.lib\" /out:\"ReleaseDLL/" << m_targetName << ".exe\"";

@@ -1,6 +1,9 @@
 
-
+!if "$(FINAL)" == "1"
 LIBTARGET=$(WXDIR)\lib\tiff.lib
+!else
+LIBTARGET=$(WXDIR)\lib\tiffd.lib
+!endif
 
 OBJECTS= \
 		tif_aux.obj \

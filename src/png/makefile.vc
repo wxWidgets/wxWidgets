@@ -14,7 +14,12 @@ WXDIR = $(WXWIN)
 
 WINPNGDIR = ..\png
 WINPNGINC = $(WINPNGDIR)
-WINPNGLIB = ..\..\lib\winpng.lib
+
+!if "$(FINAL)" == "1"
+WINPNGLIB=..\..\lib\png.lib
+!else
+WINPNGLIB=..\..\lib\pngd.lib
+!endif
 
 INC = /I..\zlib
 
@@ -54,7 +59,7 @@ OBJECTS = png.obj pngread.obj pngrtran.obj pngrutil.obj \
 all:    $(WINPNGLIB)
 
 $(WINPNGLIB):      $(OBJECTS)
-        -erase $(WINPNGLIB)
+        -del $(WINPNGLIB)
         lib @<<
 -out:$(WINPNGLIB)
 $(OBJECTS)

@@ -238,22 +238,20 @@ utils/dialoged/test/*.ico
 utils/dialoged/test/*.prj
 utils/dialoged/test/*.bmp
 
-utils/wxMMedia2/makefile*
-utils/wxMMedia2/README
-utils/wxMMedia2/lib/*.h
-utils/wxMMedia2/lib/*.cpp
-utils/wxMMedia2/lib/*.def
-utils/wxMMedia2/lib/*.rc
-utils/wxMMedia2/lib/makefile*
-utils/wxMMedia2/sample/*.h
-utils/wxMMedia2/sample/*.cpp
-utils/wxMMedia2/sample/makefile*
-utils/wxMMedia2/sample/*.xbm
-utils/wxMMedia2/sample/*.xpm
-utils/wxMMedia2/sample/*.txt
-utils/wxMMedia2/board/*.cpp
-utils/wxMMedia2/board/*.def
-utils/wxMMedia2/board/make*
+contrib/src/mmedia/makefile*
+contrib/src/mmedia/README
+contrib/src/mmedia/lib/*.h
+contrib/src/mmedia/lib/*.cpp
+contrib/src/mmedia/lib/makefile*
+contrib/samples/mmedia/*.h
+contrib/samples/mmedia/*.cpp
+contrib/samples/mmedia/makefile*
+contrib/samples/mmedia/*.xbm
+contrib/samples/mmedia/*.xpm
+contrib/samples/mmedia/*.ico
+contrib/samples/mmedia/*.txt
+contrib/samples/mmedia/*.rc
+contrib/samples/mmedia/*.def
 
 samples/*.txt
 samples/makefile*

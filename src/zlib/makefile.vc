@@ -34,7 +34,11 @@ LIB=tlib
 LDFLAGS=$(MODEL)
 O=.obj
 
+!if "$(FINAL)" == "1"
 LIBTARGET=..\..\lib\zlib.lib
+!else
+LIBTARGET=..\..\lib\zlibd.lib
+!endif
 
 # variables
 OBJ1 = adler32$(O) compress$(O) crc32$(O) gzio$(O) uncompr$(O) deflate$(O) \

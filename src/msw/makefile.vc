@@ -359,7 +359,7 @@ HTMLOBJS = ..\html\$D\helpctrl.obj \
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS)
 
 # Normal, static library
-all:    dirs $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib xpm jpeg tiff $(LIBTARGET)
+all:    dirs $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png$(LIBEXT) zlib$(LIBEXT) xpm$(LIBEXT) jpeg$(LIBEXT) tiff$(LIBEXT) $(LIBTARGET)
 
 dirs: $(MSWDIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(OLEDIR)\$D $(HTMLDIR)\$D
 

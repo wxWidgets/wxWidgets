@@ -37,8 +37,8 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "Release"
-# PROP Intermediate_Dir "Release"
+# PROP Output_Dir "msw/Release"
+# PROP Intermediate_Dir "msw/Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
 # ADD CPP /nologo /MD /W3 /GX /O1 /Ob2 /I "../include" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /Yu"wx/wxprec.h" /FD /c
@@ -49,7 +49,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo
+# ADD LIB32 /nologo /out:"..\lib\wx.lib"
 
 !ELSEIF  "$(CFG)" == "wxvc - Win32 Debug"
 
@@ -60,11 +60,11 @@ LIB32=link.exe -lib
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "Debug"
-# PROP Intermediate_Dir "Debug"
+# PROP Output_Dir "msw/Debug"
+# PROP Intermediate_Dir "msw/Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MDd /W3 /GX /Z7 /Od /I "../include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /Yu"wx/wxprec.h" /FD /c
+# ADD CPP /nologo /MDd /W3 /GX /Zi /Od /I "../include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /Yu"wx/wxprec.h" /FD /c
 # ADD BASE RSC /l 0x809
 # ADD RSC /l 0x809
 BSC32=bscmake.exe
@@ -72,7 +72,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo
+# ADD LIB32 /nologo /out:"..\lib\wxd.lib"
 
 !ENDIF 
 
@@ -520,6 +520,10 @@ SOURCE=.\generic\grid.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\generic\gridsel.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\generic\helpext.cpp
 # End Source File
 # Begin Source File
@@ -789,6 +793,10 @@ SOURCE=.\msw\dde.cpp
 # Begin Source File
 
 SOURCE=.\msw\dialog.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\dialup.cpp
 # End Source File
 # Begin Source File
 
@@ -1104,281 +1112,6 @@ SOURCE=.\msw\ole\oleutils.cpp
 # Begin Source File
 
 SOURCE=.\msw\ole\uuid.cpp
-# End Source File
-# End Group
-# Begin Group "PNG Files"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=.\png\png.c
-# ADD CPP /I "zlib"
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\png\png.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\png\pngconf.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\png\pngerror.c
-# ADD CPP /I "zlib"
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\png\pngget.c
-# ADD CPP /I "zlib"
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\png\pngmem.c
-# ADD CPP /I "zlib"
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\png\pngpread.c
-# ADD CPP /I "zlib"
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\png\pngread.c
-# ADD CPP /I "zlib"
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\png\pngrio.c
-# ADD CPP /I "zlib"
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\png\pngrtran.c
-# ADD CPP /I "zlib"
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\png\pngrutil.c
-# ADD CPP /I "zlib"
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\png\pngset.c
-# ADD CPP /I "zlib"
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\png\pngtrans.c
-# ADD CPP /I "zlib"
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\png\pngwio.c
-# ADD CPP /I "zlib"
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\png\pngwrite.c
-# ADD CPP /I "zlib"
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\png\pngwtran.c
-# ADD CPP /I "zlib"
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\png\pngwutil.c
-# ADD CPP /I "zlib"
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# End Group
-# Begin Group "XPM files"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=.\xpm\attrib.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\crbuffri.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\crdatfri.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\create.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\crifrbuf.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\crifrdat.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\dataxpm.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\hashtab.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\imagexpm.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\info.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\misc.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\parse.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\rdftodat.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\rdftoi.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\rgb.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\scan.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\simx.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\wrffrdat.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\wrffri.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# End Group
-# Begin Group "Zlib Files"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=.\zlib\adler32.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\zlib\compress.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\zlib\crc32.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\zlib\deflate.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\zlib\gzio.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\zlib\infblock.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\zlib\infcodes.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\zlib\inffast.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\zlib\inflate.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\zlib\inftrees.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\zlib\infutil.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\zlib\trees.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\zlib\uncompr.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\zlib\zutil.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # End Group
 # Begin Group "Setup"

@@ -295,7 +295,9 @@ wxLongLong wxGetLocalTimeMillis()
     ::GetLocalTime(&st);
     val += st.wMilliseconds;
 #else
+#ifndef __VISUALC__
 #warning "wxStopWatch will be up to second resolution!"
+#endif
 #endif
 
     return val;
