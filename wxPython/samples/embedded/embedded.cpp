@@ -11,6 +11,9 @@
 // Licence:     wxWindows license
 //----------------------------------------------------------------------
 
+#include <Python.h>
+
+
 // For compilers that support precompilation, includes "wx/wx.h".
 #include <wx/wxprec.h>
 
@@ -29,8 +32,8 @@
 #endif
 
 // Import Python and wxPython headers
-#include <Python.h>
-#include <wxPython.h>
+#include <wx/wxPython/wxPython.h>
+
 
 //----------------------------------------------------------------------
 // Class definitions
@@ -41,6 +44,8 @@ public:
     virtual bool OnInit();
     virtual ~MyApp();
     void Init_wxPython();
+private:
+    PyThreadState* m_mainTState;
 };
 
 
@@ -81,22 +86,16 @@ void MyApp::Init_wxPython()
     // module and sets a pointer to a function table located there.
     wxPyCoreAPI_IMPORT();
 
-    // Ensure that the new classes defined in the wxPython wrappers are
-    // recognised by the wx RTTI system.  (If you don't use wxWindows in
-    // your C++ app you won't need to do this.)
-    wxClassInfo::CleanUpClasses();
-    wxClassInfo::InitializeClasses();
-
     // Save the current Python thread state and release the
     // Global Interpreter Lock.
-    wxPyBeginAllowThreads();
+    m_mainTState = wxPyBeginAllowThreads();
 }
 
 
 MyApp::~MyApp()
 {
     // Restore the thread state and tell Python to cleanup after itself.
-    wxPyEndAllowThreads(true);
+    wxPyEndAllowThreads(m_mainTState);
     Py_Finalize();
 }
 
@@ -126,10 +125,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     wxMenuBar* mbar = new wxMenuBar;
     wxMenu*    menu = new wxMenu;
-    menu->Append(ID_PYFRAME, "Make wx&Python frame");
+    menu->Append(ID_PYFRAME, _T("Make wx&Python frame"));
     menu->AppendSeparator();
-    menu->Append(ID_EXIT, "&Close Frame\tAlt-X");
-    mbar->Append(menu, "&File");
+    menu->Append(ID_EXIT, _T("&Close Frame\tAlt-X"));
+    mbar->Append(menu, _T("&File"));
     SetMenuBar(mbar);
 
     CreateStatusBar();
@@ -140,7 +139,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     wxPanel* p1 = new wxPanel(sp, -1);
     p1->SetFont(wxFont(12, wxSWISS, wxNORMAL, wxBOLD));
     new wxStaticText(p1, -1,
-                 wxT("The frame, menu, splitter, this panel and this text were created in C++..."),
+                 _T("The frame, menu, splitter, this panel and this text were created in C++..."),
                  wxPoint(10,10));
 
     // And get a panel from Python
@@ -156,7 +155,7 @@ void MyFrame::OnExit(wxCommandEvent& event)
 
 
 //----------------------------------------------------------------------
-// This is were the fun begins...
+// This is where the fun begins...
 
 
 char* python_code1 = "\
@@ -239,7 +238,7 @@ wxWindow* MyFrame::DoPythonStuff(wxWindow* parent)
     // Was there an exception?
     if (! result) {
         PyErr_Print();
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
         return NULL;
     }
     Py_DECREF(result);
@@ -265,8 +264,8 @@ wxWindow* MyFrame::DoPythonStuff(wxWindow* parent)
     else {
         // Otherwise, get the returned window out of Python-land and
         // into C++-ville...
-        bool error = SWIG_GetPtrObj(result, (void**)&window, "_wxWindow_p");
-        wxASSERT_MSG(!error, wxT("Returned object was not a wxWindow!"));
+        bool success = wxPyConvertSwigPtr(result, (void**)&window, _T("wxWindow"));
+        wxASSERT_MSG(success, _T("Returned object was not a wxWindow!"));
         Py_DECREF(result);
     }
 
