@@ -253,6 +253,9 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
                 m_windowOne = m_windowTwo;
                 m_windowTwo = (wxWindow *) NULL;
                 OnUnsplit(removedWindow);
+                wxSplitterEvent event(wxEVT_COMMAND_SPLITTER_UNSPLIT, this);
+                event.m_data.win = removedWindow;
+                (void)DoSendEvent(event);
                 SetSashPositionAndNotify(0);
             }
             else if ( posSashNew == GetWindowSize() )
@@ -261,6 +264,9 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
                 wxWindow *removedWindow = m_windowTwo;
                 m_windowTwo = (wxWindow *) NULL;
                 OnUnsplit(removedWindow);
+                wxSplitterEvent event(wxEVT_COMMAND_SPLITTER_UNSPLIT, this);
+                event.m_data.win = removedWindow;
+                (void)DoSendEvent(event);
                 SetSashPositionAndNotify(0);
             }
             else
@@ -878,7 +884,7 @@ bool wxSplitterWindow::Unsplit(wxWindow *toRemove)
         return FALSE;
     }
 
-    win->Show(FALSE);
+    OnUnsplit(win);
     DoSetSashPosition(0);
     SizeWindows();
 
@@ -1059,8 +1065,12 @@ void wxSplitterWindow::OnDoubleClickSash(int x, int y)
         if ( GetMinimumPaneSize() == 0 || m_permitUnsplitAlways )
         {
             wxWindow* win = m_windowTwo;
-            if (Unsplit(win))
-                OnUnsplit(win);
+            if ( Unsplit(win) )
+            {
+                wxSplitterEvent unsplitEvent(wxEVT_COMMAND_SPLITTER_UNSPLIT, this);
+                unsplitEvent.m_data.win = win;
+                (void)DoSendEvent(unsplitEvent);
+            }
         }
     }
     //else: blocked by user
@@ -1068,13 +1078,8 @@ void wxSplitterWindow::OnDoubleClickSash(int x, int y)
 
 void wxSplitterWindow::OnUnsplit(wxWindow *winRemoved)
 {
-    // do it before calling the event handler which may delete the window
+    // call this before calling the event handler which may delete the window
     winRemoved->Show(FALSE);
-
-    wxSplitterEvent event(wxEVT_COMMAND_SPLITTER_UNSPLIT, this);
-    event.m_data.win = winRemoved;
-
-    (void)DoSendEvent(event);
 }
 
 #if defined( __WXMSW__ ) || defined( __WXMAC__)
