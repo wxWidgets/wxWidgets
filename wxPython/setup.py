@@ -655,10 +655,9 @@ else:
                opj('scripts/pyshell'),
                opj('scripts/pywrap'),
                opj('scripts/pywrap'),
+               opj('scripts/pywxrc'),
                opj('scripts/xrced'),
                ]
-    if INSTALL_WXRC:
-        SCRIPTS += [opj('scripts/wxrc')]
 
 
 
@@ -681,7 +680,7 @@ else:
 
 
 if INSTALL_MULTIVERSION:
-    EXTRA_PATH = getExtraPath()
+    EXTRA_PATH = getExtraPath(addOpts=EP_ADD_OPTS)
     open("src/wx.pth", "w").write(EXTRA_PATH)
     CLEANUP.append("src/wx.pth")
 else:

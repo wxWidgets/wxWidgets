@@ -134,9 +134,11 @@ INSTALL_MULTIVERSION = 1 # Install the packages such that multiple versions
                    
 FLAVOUR = ""       # Optional flavour string to be appended to VERSION
                    # in MULTIVERSION installs
-                   
-INSTALL_WXRC = 0   # Should the Python version of wxrc be installed?  
 
+EP_ADD_OPTS = 0    # When doing MULTIVERSION installs the wx port and
+                   # ansi/unicode settings can optionally be added to the
+                   # subdir path used in site-packages 
+                   
 WX_CONFIG = None   # Usually you shouldn't need to touch this, but you can set
                    # it to pass an alternate version of wx-config or alternate
                    # flags, eg. as required by the .deb in-tree build.  By
@@ -234,7 +236,7 @@ for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC',
              'BUILD_GIZMOS', 'BUILD_DLLWIDGET', 'BUILD_IEWIN', 'BUILD_ACTIVEX',
              'CORE_ONLY', 'PREP_ONLY', 'USE_SWIG', 'UNICODE',
              'UNDEF_NDEBUG', 'NO_SCRIPTS', 'NO_HEADERS', 'BUILD_RENAMERS',
-             'FULL_DOCS', 'INSTALL_MULTIVERSION', 'INSTALL_WXRC',
+             'FULL_DOCS', 'INSTALL_MULTIVERSION', 'EP_ADD_OPTS',
              'FINAL', 'HYBRID', ]:
     for x in range(len(sys.argv)):
         if sys.argv[x].find(flag) == 0:
@@ -285,6 +287,8 @@ def Verify_WX_CONFIG():
                 msg("Found wx-config: " + fp)
                 msg("    Using flags: " + flags)
                 WX_CONFIG = fp + flags
+                if hasattr(sys, 'setup_is_main') and not sys.setup_is_main:
+                    WX_CONFIG += " 2>/dev/null "
                 break
         else:
             msg("ERROR: WX_CONFIG not specified and wx-config not found on the $PATH")
