@@ -6733,6 +6733,65 @@ static PyObject *_wrap_wxWindow_HasCapture(PyObject *self, PyObject *args, PyObj
     return _resultobj;
 }
 
+#define wxWindow_SetThemeEnabled(_swigobj,_swigarg0)  (_swigobj->SetThemeEnabled(_swigarg0))
+static PyObject *_wrap_wxWindow_SetThemeEnabled(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","enable", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxWindow_SetThemeEnabled",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_SetThemeEnabled. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxWindow_SetThemeEnabled(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxWindow_GetThemeEnabled(_swigobj)  (_swigobj->GetThemeEnabled())
+static PyObject *_wrap_wxWindow_GetThemeEnabled(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWindow_GetThemeEnabled",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_GetThemeEnabled. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxWindow_GetThemeEnabled(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static void *SwigwxPanelTowxWindow(void *ptr) {
     wxPanel *src;
     wxWindow *dest;
@@ -12021,6 +12080,8 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxPanel_Create", (PyCFunction) _wrap_wxPanel_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPrePanel", (PyCFunction) _wrap_new_wxPrePanel, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPanel", (PyCFunction) _wrap_new_wxPanel, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_GetThemeEnabled", (PyCFunction) _wrap_wxWindow_GetThemeEnabled, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_SetThemeEnabled", (PyCFunction) _wrap_wxWindow_SetThemeEnabled, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_HasCapture", (PyCFunction) _wrap_wxWindow_HasCapture, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetCapture", (PyCFunction) _wrap_wxWindow_GetCapture, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_ReleaseMouse", (PyCFunction) _wrap_wxWindow_ReleaseMouse, METH_VARARGS | METH_KEYWORDS },

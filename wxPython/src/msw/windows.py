@@ -649,6 +649,12 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def HasCapture(self, *_args, **_kwargs):
         val = windowsc.wxWindow_HasCapture(self, *_args, **_kwargs)
         return val
+    def SetThemeEnabled(self, *_args, **_kwargs):
+        val = windowsc.wxWindow_SetThemeEnabled(self, *_args, **_kwargs)
+        return val
+    def GetThemeEnabled(self, *_args, **_kwargs):
+        val = windowsc.wxWindow_GetThemeEnabled(self, *_args, **_kwargs)
+        return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
     # replaces broken shadow method

@@ -10392,6 +10392,84 @@ static PyObject *_wrap_wxStyledTextCtrl_SetLastKeydownProcessed(PyObject *self, 
     return _resultobj;
 }
 
+#define wxStyledTextCtrl_SaveFile(_swigobj,_swigarg0)  (_swigobj->SaveFile(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SaveFile(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxStyledTextCtrl * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","filename", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_SaveFile",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SaveFile. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxStyledTextCtrl_SaveFile(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_LoadFile(_swigobj,_swigarg0)  (_swigobj->LoadFile(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_LoadFile(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxStyledTextCtrl * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","filename", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_LoadFile",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_LoadFile. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxStyledTextCtrl_LoadFile(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
 static void *SwigwxStyledTextEventTowxCommandEvent(void *ptr) {
     wxStyledTextEvent *src;
     wxCommandEvent *dest;
@@ -11818,6 +11896,8 @@ static PyMethodDef stc_cMethods[] = {
 	 { "wxStyledTextEvent_SetPosition", (PyCFunction) _wrap_wxStyledTextEvent_SetPosition, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxStyledTextEvent", (PyCFunction) _wrap_delete_wxStyledTextEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxStyledTextEvent", (PyCFunction) _wrap_new_wxStyledTextEvent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_LoadFile", (PyCFunction) _wrap_wxStyledTextCtrl_LoadFile, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SaveFile", (PyCFunction) _wrap_wxStyledTextCtrl_SaveFile, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_SetLastKeydownProcessed", (PyCFunction) _wrap_wxStyledTextCtrl_SetLastKeydownProcessed, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_GetLastKeydownProcessed", (PyCFunction) _wrap_wxStyledTextCtrl_GetLastKeydownProcessed, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_SetHScrollBar", (PyCFunction) _wrap_wxStyledTextCtrl_SetHScrollBar, METH_VARARGS | METH_KEYWORDS },

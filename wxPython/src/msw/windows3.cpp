@@ -57,10 +57,8 @@ extern PyObject *SWIG_newvarlink(void);
 #include "helpers.h"
 #include <wx/sashwin.h>
 #include <wx/laywin.h>
-#ifndef __WXMAC__
 #include <wx/popupwin.h>
 #include <wx/tipwin.h>
-#endif
 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {

@@ -1114,6 +1114,12 @@ class wxStyledTextCtrlPtr(wxControlPtr):
     def SetLastKeydownProcessed(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_SetLastKeydownProcessed(self, *_args, **_kwargs)
         return val
+    def SaveFile(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_SaveFile(self, *_args, **_kwargs)
+        return val
+    def LoadFile(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_LoadFile(self, *_args, **_kwargs)
+        return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxStyledTextCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxStyledTextCtrl(wxStyledTextCtrlPtr):
