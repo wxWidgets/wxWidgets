@@ -848,8 +848,13 @@ void wxHtmlWindow::OnCellMouseHover(wxHtmlCell * WXUNUSED(cell),
     // do nothing here
 }
 
-void wxHtmlWindow::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
+void wxHtmlWindow::OnEraseBackground(wxEraseEvent& event)
 {
+    // we do have to erase background now that we reuse it (instead of
+    // overwriting it) in OnPaint() below, but maybe we should set some flag if
+    // we get here as this would mean that user code doesn't paint background
+    // itself and then we wouldn't have to copy old bits to dcm below...
+    event.Skip();
 }
 
 void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
