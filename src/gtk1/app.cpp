@@ -21,6 +21,7 @@
 #include "wx/settings.h"
 #include "wx/resource.h"
 #include "wx/module.h"
+#include "wx/image.h"
 
 #include "unistd.h"
 

@@ -19,7 +19,6 @@
 #include "wx/object.h"
 #include "wx/string.h"
 #include "wx/palette.h"
-#include "wx/image.h"
 
 //-----------------------------------------------------------------------------
 // classes
@@ -27,6 +26,18 @@
 
 class wxMask;
 class wxBitmap;
+
+//-----------------------------------------------------------------------------
+// also implemented here from wxImage
+//-----------------------------------------------------------------------------
+
+/*
+class wxImage : wxGDIObject
+{
+  wxImage( const wxBitmap &bitmap );
+  wxBitmap ConvertToBitmap() const;
+}
+*/
 
 //-----------------------------------------------------------------------------
 // wxMask
@@ -61,7 +72,6 @@ public:
   wxBitmap();
   wxBitmap( int width, int height, int depth = -1 );
   wxBitmap( const char bits[], int width, int height, int depth = 1 );
-  wxBitmap( const wxImage &image );
   wxBitmap( const char **bits );
   wxBitmap( char **bits );
   wxBitmap( const wxBitmap& bmp );
@@ -73,14 +83,9 @@ public:
   bool operator != ( const wxBitmap& bmp );
   bool Ok() const;
     
-  wxImage ConvertToImage() const;
-
   int GetHeight() const;
   int GetWidth() const;
   int GetDepth() const;
-  void SetHeight( int height );
-  void SetWidth( int width );
-  void SetDepth( int depth );
 
   wxMask *GetMask() const;
   void SetMask( wxMask *mask );
@@ -94,6 +99,11 @@ public:
       
 // implementation      
 
+  void SetHeight( int height );
+  void SetWidth( int width );
+  void SetDepth( int depth );
+  void SetPixmap( GdkPixmap *pixmap );
+  
   GdkPixmap *GetPixmap() const;
   GdkBitmap *GetBitmap() const;
 

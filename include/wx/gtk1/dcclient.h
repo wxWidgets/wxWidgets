@@ -35,10 +35,10 @@ class wxWindowDC: public wxDC
   DECLARE_DYNAMIC_CLASS(wxWindowDC)
 
 public:
-  wxWindowDC(void);
+  wxWindowDC();
   wxWindowDC( wxWindow *win );
     
-  ~wxWindowDC(void);
+  ~wxWindowDC();
     
   virtual void FloodFill( long x, long y, const wxColour& col, int style=wxFLOOD_SURFACE );
   virtual bool GetPixel( long x1, long y1, wxColour *col ) const;
@@ -60,21 +60,21 @@ public:
   virtual void DrawRoundedRectangle( long x, long y, long width, long height, double radius = 20.0 );
   virtual void DrawEllipse( long x, long y, long width, long height );
     
-  virtual bool CanDrawBitmap(void) const;
+  virtual bool CanDrawBitmap() const;
   virtual void DrawIcon( const wxIcon &icon, long x, long y );
   virtual void DrawBitmap( const wxBitmap &bitmap, long x, long y, bool useMask=FALSE );
   virtual bool Blit( long xdest, long ydest, long width, long height,
                       wxDC *source, long xsrc, long ysrc, int logical_func = wxCOPY, bool useMask=FALSE );
 
   virtual void DrawText( const wxString &text, long x, long y, bool use16 = FALSE );
-  virtual bool CanGetTextExtent(void) const;
+  virtual bool CanGetTextExtent() const;
   virtual void GetTextExtent( const wxString &string, long *width, long *height,
                      long *descent = (long *) NULL, long *externalLeading = (long *) NULL,
                      wxFont *theFont = (wxFont *) NULL, bool use16 = FALSE );
-  virtual long GetCharWidth(void);
-  virtual long GetCharHeight(void);
+  virtual long GetCharWidth();
+  virtual long GetCharHeight();
     
-  virtual void Clear(void);
+  virtual void Clear();
             
   virtual void SetFont( const wxFont &font );
   virtual void SetPen( const wxPen &pen );
@@ -87,7 +87,7 @@ public:
   virtual void SetPalette( const wxPalette& palette );
     
   virtual void SetClippingRegion( long x, long y, long width, long height );
-  virtual void DestroyClippingRegion(void);
+  virtual void DestroyClippingRegion();
   virtual void SetClippingRegion( const wxRegion &region  );
     
   virtual void DrawSpline( wxList *points );
@@ -102,9 +102,9 @@ public:
   GdkColormap  *m_cmap;
   bool          m_isMemDC;
     
-  void SetUpDC(void);
-  void Destroy(void);
-  GdkWindow *GetWindow(void);
+  void SetUpDC();
+  void Destroy();
+  GdkWindow *GetWindow();
 };
 
 //-----------------------------------------------------------------------------
@@ -116,7 +116,7 @@ class wxPaintDC : public wxWindowDC
   DECLARE_DYNAMIC_CLASS(wxPaintDC)
 
 public:
-  wxPaintDC(void);
+  wxPaintDC();
   wxPaintDC( wxWindow *win );
 };
 
@@ -129,7 +129,7 @@ class wxClientDC : public wxWindowDC
   DECLARE_DYNAMIC_CLASS(wxClientDC)
 
 public:
-  wxClientDC(void);
+  wxClientDC();
   wxClientDC( wxWindow *win );
 };
 

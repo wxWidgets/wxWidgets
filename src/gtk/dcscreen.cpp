@@ -245,51 +245,53 @@ IMPLEMENT_DYNAMIC_CLASS(wxScreenDC,wxPaintDC)
 
 wxScreenDC::wxScreenDC(void)
 {
-  m_ok = FALSE;
-  m_window = (GdkWindow *) NULL;
-  m_cmap = gdk_colormap_get_system();
+    m_ok = FALSE;
+    m_window = (GdkWindow *) NULL;
+    m_cmap = gdk_colormap_get_system();
   
-  if (sm_overlayWindow)
-  {
-    m_window = sm_overlayWindow;
-    m_deviceOriginX = - sm_overlayWindowX;
-    m_deviceOriginY = - sm_overlayWindowY;
-  }
-  else
-    m_window = GDK_ROOT_PARENT();
+    if (sm_overlayWindow)
+    {
+        m_window = sm_overlayWindow;
+        m_deviceOriginX = - sm_overlayWindowX;
+        m_deviceOriginY = - sm_overlayWindowY;
+    }
+    else
+    {
+       m_window = GDK_ROOT_PARENT();
+    }
   
-  SetUpDC();
+    SetUpDC();
   
-  gdk_gc_set_subwindow( m_penGC, GDK_INCLUDE_INFERIORS );
-  gdk_gc_set_subwindow( m_brushGC, GDK_INCLUDE_INFERIORS );
-  gdk_gc_set_subwindow( m_textGC, GDK_INCLUDE_INFERIORS );
-  gdk_gc_set_subwindow( m_bgGC, GDK_INCLUDE_INFERIORS );
+    gdk_gc_set_subwindow( m_penGC, GDK_INCLUDE_INFERIORS );
+    gdk_gc_set_subwindow( m_brushGC, GDK_INCLUDE_INFERIORS );
+    gdk_gc_set_subwindow( m_textGC, GDK_INCLUDE_INFERIORS );
+    gdk_gc_set_subwindow( m_bgGC, GDK_INCLUDE_INFERIORS );
 }
 
 wxScreenDC::~wxScreenDC(void)
 {
-  EndDrawingOnTop();
+    EndDrawingOnTop();
 }
 
 bool wxScreenDC::StartDrawingOnTop( wxWindow *window )
 {
-  if (!window) return StartDrawingOnTop();
+    if (!window) return StartDrawingOnTop();
   
-  int x = 0;
-  int y = 0;
-  window->GetPosition( &x, &y );
-  int w = 0;
-  int h = 0;
-  window->GetSize( &w, &h );
-  window->ClientToScreen( &x, &y );
+    int x = 0;
+    int y = 0;
+    window->GetPosition( &x, &y );
+    int w = 0;
+    int h = 0;
+    window->GetSize( &w, &h );
+    window->ClientToScreen( &x, &y );
   
-  wxRect rect;
-  rect.x = x;
-  rect.y = y;
-  rect.width = 0;
-  rect.height = 0;
+    wxRect rect;
+    rect.x = x;
+    rect.y = y;
+    rect.width = 0;
+    rect.height = 0;
   
-  return StartDrawingOnTop( &rect );
+    return StartDrawingOnTop( &rect );
 }
 
 bool wxScreenDC::StartDrawingOnTop( wxRect *rect )
@@ -329,12 +331,12 @@ bool wxScreenDC::StartDrawingOnTop( wxRect *rect )
 
 bool wxScreenDC::EndDrawingOnTop(void)
 {
-  if (sm_overlayWindow) gdk_window_destroy( sm_overlayWindow );
+    if (sm_overlayWindow) gdk_window_destroy( sm_overlayWindow );
   
-  sm_overlayWindow = NULL;
-  sm_overlayWindowX = 0;
-  sm_overlayWindowY = 0;
+    sm_overlayWindow = NULL;
+    sm_overlayWindowX = 0;
+    sm_overlayWindowY = 0;
   
-  return TRUE;
+    return TRUE;
 }
 

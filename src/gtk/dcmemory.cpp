@@ -19,62 +19,62 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC,wxWindowDC)
 
-wxMemoryDC::wxMemoryDC(void) : wxWindowDC()
+wxMemoryDC::wxMemoryDC() : wxWindowDC()
 {
-  m_ok = FALSE;
+    m_ok = FALSE;
   
-  m_cmap = gtk_widget_get_default_colormap();
+    m_cmap = gtk_widget_get_default_colormap();
 }
 
 wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) ) 
   : wxWindowDC()
 {
-  m_ok = FALSE;
+    m_ok = FALSE;
   
-  m_cmap = gtk_widget_get_default_colormap();
+    m_cmap = gtk_widget_get_default_colormap();
 }
 
-wxMemoryDC::~wxMemoryDC(void)
+wxMemoryDC::~wxMemoryDC()
 {
 }
 
 void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
 {
-  m_selected = bitmap;
-  if (m_selected.Ok())
-  {
-    if (m_selected.GetPixmap())
+    m_selected = bitmap;
+    if (m_selected.Ok())
     {
-      m_window = m_selected.GetPixmap();
+        if (m_selected.GetPixmap())
+        {
+            m_window = m_selected.GetPixmap();
+        }
+        else
+        {
+            m_window = m_selected.GetBitmap();
+        }
+    
+        SetUpDC();
+    
+        m_isMemDC = TRUE;
     }
     else
-    {
-      m_window = m_selected.GetBitmap();
+    { 
+        m_ok = FALSE;
+        m_window = (GdkWindow *) NULL;
     }
-    
-    SetUpDC();
-    
-    m_isMemDC = TRUE;
-  }
-  else
-  {
-    m_ok = FALSE;
-    m_window = (GdkWindow *) NULL;
-  }
 }
 
 void wxMemoryDC::GetSize( int *width, int *height ) const
 {
-  if (m_selected.Ok())
-  {
-    if (width) (*width) = m_selected.GetWidth();
-    if (height) (*height) = m_selected.GetHeight();
-  }
-  else
-  {
-    if (width) (*width) = 0;
-    if (height) (*height) = 0;
-  }
+    if (m_selected.Ok())
+    {
+        if (width) (*width) = m_selected.GetWidth();
+        if (height) (*height) = m_selected.GetHeight();
+    }
+    else
+    {
+        if (width) (*width) = 0;
+        if (height) (*height) = 0;
+    }
 }
 
 

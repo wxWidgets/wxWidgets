@@ -28,6 +28,8 @@ class WXDLLEXPORT wxPNGHandler;
 class WXDLLEXPORT wxBMPHandler;
 class WXDLLEXPORT wxImage;
 
+class WXDLLEXPORT wxBitmap;
+
 //-----------------------------------------------------------------------------
 // wxImageHandler
 //-----------------------------------------------------------------------------
@@ -115,9 +117,15 @@ public:
   
   wxImage( const wxImage& image );
   wxImage( const wxImage* image );
+  
+  // these functions get implemented in /src/(platform)/bitmap.cpp 
+  wxImage( const wxBitmap &bitmap );
+  wxBitmap ConvertToBitmap() const;
 
   void Create( int width, int height );
   void Destroy();
+  
+  wxImage Scale( int width, int height );
   
   virtual bool LoadFile( const wxString& name, long type = wxBITMAP_TYPE_PNG );
   virtual bool SaveFile( const wxString& name, int type );

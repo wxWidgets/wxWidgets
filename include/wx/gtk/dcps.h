@@ -45,10 +45,12 @@ public:
 
   bool Create(const wxString& output, bool interactive = TRUE, wxWindow *parent = (wxWindow *) NULL);
 
+  virtual bool Ok() const;
+
   virtual bool PrinterDialog(wxWindow *parent = (wxWindow *) NULL);
 
-  inline virtual void BeginDrawing(void) {} ;
-  inline virtual void EndDrawing(void) {} ;
+  virtual void BeginDrawing() {}
+  virtual void EndDrawing() {}
 
   void FloodFill(long x1, long y1, const wxColour &col, int style=wxFLOOD_SURFACE) ;
   bool GetPixel(long x1, long y1, wxColour *col) const;
@@ -80,7 +82,6 @@ public:
 
   void DrawIcon( const wxIcon& icon, long x, long y );
   void DrawBitmap( const wxBitmap& bitmap, long x, long y, bool useMask=FALSE );
-  
   
   void DrawText(const wxString& text, long x, long y, bool use16 = FALSE);
 
@@ -114,7 +115,7 @@ public:
   void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
   void SetDeviceOrigin( long x, long y );
   
-  inline void SetBackgroundMode(int WXUNUSED(mode)) {};
+  inline void SetBackgroundMode(int WXUNUSED(mode)) {}
   inline void SetPalette(const wxPalette& WXUNUSED(palette)) {}
   
   inline ofstream *GetStream(void) const { return m_pstream; }

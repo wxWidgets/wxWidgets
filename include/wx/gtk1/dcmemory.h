@@ -33,9 +33,9 @@ class wxMemoryDC: public wxWindowDC
   DECLARE_DYNAMIC_CLASS(wxMemoryDC)
 
 public:
-  wxMemoryDC(void);
+  wxMemoryDC();
   wxMemoryDC( wxDC *dc ); // Create compatible DC
-  ~wxMemoryDC(void);
+  ~wxMemoryDC();
   virtual void SelectObject( const wxBitmap& bitmap );
   void GetSize( int *width, int *height ) const;
 

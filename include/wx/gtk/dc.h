@@ -59,13 +59,13 @@ class wxDC: public wxObject
 
 public:
 
-  wxDC(void);
-  ~wxDC(void);
+  wxDC();
+  ~wxDC();
     
-  void BeginDrawing(void) {};
-  void EndDrawing(void) {};
+  virtual void BeginDrawing() {}
+  virtual void EndDrawing() {}
     
-  virtual bool Ok(void) const;
+  virtual bool Ok() const;
 
   virtual void FloodFill( long x, long y, const wxColour& col, int style=wxFLOOD_SURFACE ) = 0;
   inline void FloodFill(const wxPoint& pt, const wxColour& col, int style=wxFLOOD_SURFACE)
@@ -186,30 +186,30 @@ public:
   virtual long GetCharWidth(void) = 0;
   virtual long GetCharHeight(void) = 0;
     
-  virtual void Clear(void) = 0;
+  virtual void Clear() = 0;
             
   virtual void SetFont( const wxFont &font ) = 0;
-  virtual wxFont *GetFont(void) { return &m_font; };
+  virtual wxFont *GetFont() { return &m_font; };
     
   virtual void SetPen( const wxPen &pen ) = 0;
-  virtual wxPen *GetPen(void) { return &m_pen; };
+  virtual wxPen *GetPen() { return &m_pen; };
     
   virtual void SetBrush( const wxBrush &brush ) = 0;
-  virtual wxBrush *GetBrush(void) { return &m_brush; };
+  virtual wxBrush *GetBrush() { return &m_brush; };
 
   virtual void SetBackground( const wxBrush &brush ) = 0;
-  virtual wxBrush *GetBackground(void) { return &m_backgroundBrush; };
+  virtual wxBrush *GetBackground() { return &m_backgroundBrush; };
 
   virtual void SetLogicalFunction( int function ) = 0;
-  virtual int GetLogicalFunction(void) { return m_logicalFunction; };
+  virtual int GetLogicalFunction() { return m_logicalFunction; };
     
   virtual void SetTextForeground( const wxColour &col );
   virtual void SetTextBackground( const wxColour &col );
-  virtual wxColour& GetTextBackground(void) const { return (wxColour&)m_textBackgroundColour; };
-  virtual wxColour& GetTextForeground(void) const { return (wxColour&)m_textForegroundColour; };
+  virtual wxColour& GetTextBackground() const { return (wxColour&)m_textBackgroundColour; };
+  virtual wxColour& GetTextForeground() const { return (wxColour&)m_textForegroundColour; };
     
   virtual void SetBackgroundMode( int mode ) = 0;
-  virtual int GetBackgroundMode(void) { return m_backgroundMode; };
+  virtual int GetBackgroundMode() { return m_backgroundMode; };
     
   virtual void SetPalette( const wxPalette& palette ) = 0;
   void SetColourMap( const wxPalette& palette ) { SetPalette(palette); };
@@ -220,19 +220,19 @@ public:
   virtual void GetClippingBox( long *x, long *y, long *width, long *height ) const;
   virtual void SetClippingRegion( const wxRegion &region  ) = 0;
     
-  virtual inline long MinX(void) const { return m_minX; }
-  virtual inline long MaxX(void) const { return m_maxX; }
-  virtual inline long MinY(void) const { return m_minY; }
-  virtual inline long MaxY(void) const { return m_maxY; }
+  virtual long MinX() const { return m_minX; }
+  virtual long MaxX() const { return m_maxX; }
+  virtual long MinY() const { return m_minY; }
+  virtual long MaxY() const { return m_maxY; }
 
   virtual void GetSize( int* width, int* height ) const;
   inline wxSize GetSize(void) const { int w, h; GetSize(&w, &h); return wxSize(w, h); }
   virtual void GetSizeMM( long* width, long* height ) const;
     
-  virtual bool StartDoc( const wxString& WXUNUSED(message) ) { return TRUE; };
-  virtual void EndDoc(void) {};
-  virtual void StartPage(void) {};
-  virtual void EndPage(void) {};
+  virtual bool StartDoc( const wxString& WXUNUSED(message) ) { return TRUE; }
+  virtual void EndDoc() {}
+  virtual void StartPage() {}
+  virtual void EndPage() {}
     
   virtual void SetMapMode( int mode );
   virtual int GetMapMode(void) const { return m_mappingMode; };
@@ -249,8 +249,8 @@ public:
 
   virtual void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
     
-  virtual void SetOptimization( bool WXUNUSED(optimize) ) {};
-  virtual bool GetOptimization(void) { return m_optimize; };
+  virtual void SetOptimization( bool WXUNUSED(optimize) ) {}
+  virtual bool GetOptimization() { return m_optimize; }
     
   virtual long DeviceToLogicalX(long x) const;
   virtual long DeviceToLogicalY(long y) const;
@@ -264,7 +264,7 @@ public:
   // implementation
   
     void CalcBoundingBox( long x, long y );
-    void ComputeScaleAndOrigin(void);
+    void ComputeScaleAndOrigin();
     
     long XDEV2LOG(long x) const
 	{

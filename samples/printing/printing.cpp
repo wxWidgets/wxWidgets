@@ -47,16 +47,16 @@
 
 #include "printing.h"
 
+#ifndef __WXMSW__
+#include "mondrian.xpm"
+#endif
+
 // Declare a frame
 MyFrame   *frame = (MyFrame *) NULL;
 int orientation = wxPORTRAIT;
 
 // Main proc
 IMPLEMENT_APP(MyApp)
-
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
-#include "folder.xpm"
-#endif
 
 // Writes a header on a page. Margin units are in millimetres.
 bool WritePageHeader(wxPrintout *printout, wxDC *dc, char *text, float mmToLogical);
@@ -78,12 +78,7 @@ bool MyApp::OnInit(void)
   frame->CreateStatusBar(2);
 
   // Load icon and bitmap
-#ifdef __WXMSW__
-  frame->SetIcon(wxIcon("mondrian"));
-#endif
-#ifdef __X__
-//  frame->SetIcon(wxIcon(mondrian_bits, mondrian_width, mondrian_height));
-#endif
+  frame->SetIcon( wxICON( mondrian) );
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
@@ -324,13 +319,7 @@ void MyFrame::Draw(wxDC& dc)
   dc.DrawLine(0, 0, 200, 200);
   dc.DrawLine(200, 0, 0, 200);
   
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
-  wxIcon my_icon( folder_xpm );
-#elif defined(__WXMSW__)
-  wxIcon my_icon( "mondrian" );
-#elif
-#error "Platform not supported."
-#endif
+  wxIcon my_icon( wxICON(mondrian) );
 
   dc.DrawIcon( my_icon, 100, 100);
 }
