@@ -66,6 +66,7 @@ class wxColourDialog(wxColourDialogPtr):
         args = tuple(argl)
         self.this = apply(cmndlgsc.new_wxColourDialog,(arg0.this,)+args)
         self.thisown = 1
+        wxp._StdDialogCallbacks(self)
 
 
 
@@ -129,6 +130,7 @@ class wxFileDialog(wxFileDialogPtr):
         args = tuple(argl)
         self.this = apply(cmndlgsc.new_wxFileDialog,(arg0.this,)+args)
         self.thisown = 1
+        wxp._StdDialogCallbacks(self)
 
 
 
@@ -159,6 +161,7 @@ class wxSingleChoiceDialog(wxSingleChoiceDialogPtr):
         args = tuple(argl)
         self.this = apply(cmndlgsc.new_wxSingleChoiceDialog,(arg0.this,arg1,arg2,arg3,)+args)
         self.thisown = 1
+        wxp._StdDialogCallbacks(self)
 
 
 
@@ -186,6 +189,7 @@ class wxTextEntryDialog(wxTextEntryDialogPtr):
         args = tuple(argl)
         self.this = apply(cmndlgsc.new_wxTextEntryDialog,(arg0.this,arg1,)+args)
         self.thisown = 1
+        wxp._StdDialogCallbacks(self)
 
 
 
@@ -272,6 +276,7 @@ class wxFontDialog(wxFontDialogPtr):
         args = tuple(argl)
         self.this = apply(cmndlgsc.new_wxFontDialog,(arg0.this,)+args)
         self.thisown = 1
+        wxp._StdDialogCallbacks(self)
 
 
 
@@ -293,6 +298,7 @@ class wxMessageDialog(wxMessageDialogPtr):
         args = tuple(argl)
         self.this = apply(cmndlgsc.new_wxMessageDialog,(arg0.this,arg1,)+args)
         self.thisown = 1
+        wxp._StdDialogCallbacks(self)
 
 
 

@@ -10,6 +10,7 @@ from gdi import *
 from events import *
 
 from controls import *
+import wxp
 class wxListItemPtr :
     def __init__(self,this):
         self.this = this
@@ -287,6 +288,7 @@ class wxListCtrl(wxListCtrlPtr):
         args = tuple(argl)
         self.this = apply(controls2c.new_wxListCtrl,(arg0.this,arg1,)+args)
         self.thisown = 1
+        wxp._StdWindowCallbacks(self)
 
 
 
@@ -478,6 +480,7 @@ class wxTreeCtrl(wxTreeCtrlPtr):
         args = tuple(argl)
         self.this = apply(controls2c.new_wxTreeCtrl,(arg0.this,)+args)
         self.thisown = 1
+        wxp._StdWindowCallbacks(self)
 
 
 

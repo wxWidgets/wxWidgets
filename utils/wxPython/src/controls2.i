@@ -284,20 +284,12 @@ public:
 
 class wxTreeCtrl : public wxControl {
 public:
-#ifdef __WXMSW__
     wxTreeCtrl(wxWindow *parent, wxWindowID id = -1,
             const wxPoint& pos = wxPyDefaultPosition,
             const wxSize& size = wxPyDefaultSize,
             long style = wxTR_HAS_BUTTONS,
             const wxValidator& validator = wxPyDefaultValidator,
             char* name = "wxTreeCtrl");
-#else
-    wxTreeCtrl(wxWindow *parent, wxWindowID id = -1,
-            const wxPoint& pos = wxPyDefaultPosition,
-            const wxSize& size = wxPyDefaultSize,
-            long style = wxTR_HAS_BUTTONS,
-            char* name = "wxTreeCtrl");
-#endif
 
     %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
 
@@ -438,7 +430,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.5  1998/10/07 07:34:33  RD
+// Version 0.4.1 for wxGTK
+//
 // Revision 1.4  1998/10/02 06:40:36  RD
+//
 // Version 0.4 of wxPython for MSW.
 //
 // Revision 1.3  1998/08/18 19:48:15  RD

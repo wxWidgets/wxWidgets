@@ -132,7 +132,7 @@ static char* wxStringErrorMsg = "string type is required for parameter";
         return new wxMask(bitmap, colour);
     }
                               // Alternate 'constructor'
-    wxCursor* wxStockCursor(int id) {
+    wxCursor* wxPyStockCursor(int id) {
         return new wxCursor(id);
     }
                                       // Alternate 'constructor'
@@ -257,7 +257,7 @@ static PyObject *_wrap_wxStockCursor(PyObject *self, PyObject *args) {
     self = self;
     if(!PyArg_ParseTuple(args,"i:wxStockCursor",&_arg0)) 
         return NULL;
-    _result = (wxCursor *)wxStockCursor(_arg0);
+    _result = (wxCursor *)wxPyStockCursor(_arg0);
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxCursor_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;

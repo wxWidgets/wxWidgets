@@ -44,7 +44,7 @@
 
 //---------------------------------------------------------------------------
 
-#define __version__ "0.3.1"
+#define __version__ "0.4.1"
 
 wxPoint     wxPyDefaultPosition;
 wxSize      wxPyDefaultSize;
@@ -147,7 +147,11 @@ extern "C" SWIGEXPORT(void,initframesc)();
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.8  1998/10/07 07:34:35  RD
+// Version 0.4.1 for wxGTK
+//
 // Revision 1.7  1998/10/02 06:40:44  RD
+//
 // Version 0.4 of wxPython for MSW.
 //
 // Revision 1.6  1998/08/27 21:59:10  RD

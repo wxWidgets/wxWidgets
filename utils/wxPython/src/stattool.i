@@ -70,18 +70,22 @@ class wxToolBarTool {
 public:
     wxToolBarTool();
     ~wxToolBarTool();
+#ifdef __WXMSW__
     void SetSize( long w, long h ) { m_width = w; m_height = h; }
     long GetWidth () const { return m_width; }
     long GetHeight () const { return m_height; }
+#endif
 
 public:
     int                   m_toolStyle;
     wxObject *            m_clientData;
     int                   m_index;
+#ifdef __WXMSW__
     long                  m_x;
     long                  m_y;
     long                  m_width;
     long                  m_height;
+#endif
     bool                  m_toggleState;
     bool                  m_isToggle;
     bool                  m_deleteSecondBitmap;
@@ -95,8 +99,18 @@ public:
 
 
 
-class wxToolBarBase : public wxControl {
+//  class wxToolBarBase : public wxControl {
+//  public:
+
+class wxToolBar : public wxControl {
 public:
+    wxToolBar(wxWindow* parent, wxWindowID id,
+              const wxPoint& pos = wxPyDefaultPosition,
+              const wxSize& size = wxPyDefaultSize,
+              long style = wxTB_HORIZONTAL | wxNO_BORDER,
+              char* name = "toolBar");
+
+    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
 
 
     void AddSeparator(void);
@@ -120,17 +134,21 @@ public:
 
 //    void DrawTool(wxMemoryDC& memDC, wxToolBarTool* tool);
     void EnableTool(int toolIndex, const bool enable);
+#ifdef __WXMSW__
     wxToolBarTool* FindToolForPosition(const float x, const float y);
     wxSize GetToolSize();
     wxSize GetToolBitmapSize();
 //    wxSize GetMargins();
     wxSize GetMaxSize();
 //    wxObject* GetToolClientData(int toolIndex);
+#endif
     bool GetToolEnabled(int toolIndex);
+#ifdef __WXMSW__
     wxString GetToolLongHelp(int toolIndex);
     int GetToolPacking();
     int GetToolSeparation();
     wxString GetToolShortHelp(int toolIndex);
+#endif
     bool GetToolState(int toolIndex);
 
     // TODO:  figure out how to handle these
@@ -138,44 +156,51 @@ public:
     //void OnMouseEnter(int toolIndex);
     //void OnRightClick(int toolIndex, float x, float y);
 
+
+#ifdef __WXMSW__
     bool Realize();
+#else
+    void Realize();
+#endif
+#ifdef __WXMSW__
     void SetToolBitmapSize(const wxSize& size);
-    void SetMargins(const wxSize& size);
     void SetToolLongHelp(int toolIndex, const wxString& helpString);
-    void SetToolPacking(int packing);
     void SetToolShortHelp(int toolIndex, const wxString& helpString);
+#endif
+    void SetMargins(const wxSize& size);
+    void SetToolPacking(int packing);
     void SetToolSeparation(int separation);
     void ToggleTool(int toolIndex, const bool toggle);
 };
 
 
 
-// The Native Toolbar
-class wxToolBar : public wxToolBarBase {
-public:
-    wxToolBar(wxWindow* parent, wxWindowID id,
-              const wxPoint& pos = wxPyDefaultPosition,
-              const wxSize& size = wxPyDefaultSize,
-              long style = wxTB_HORIZONTAL | wxNO_BORDER,
-              char* name = "toolBar");
+//  // The Native Toolbar
+//  class wxToolBar : public wxToolBarBase {
+//  public:
+//      wxToolBar(wxWindow* parent, wxWindowID id,
+//                const wxPoint& pos = wxPyDefaultPosition,
+//                const wxSize& size = wxPyDefaultSize,
+//                long style = wxTB_HORIZONTAL | wxNO_BORDER,
+//                char* name = "toolBar");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+//      %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
 
-};
+//  };
 
 
-// A generic toolbar
-class wxToolBarSimple : public wxToolBarBase {
-public:
-    wxToolBarSimple(wxWindow* parent, wxWindowID id,
-                    const wxPoint& pos = wxPyDefaultPosition,
-                    const wxSize& size = wxPyDefaultSize,
-                    long style = wxTB_HORIZONTAL | wxNO_BORDER,
-                    char* name = "toolBar");
+//  // A generic toolbar
+//  class wxToolBarSimple : public wxToolBarBase {
+//  public:
+//      wxToolBarSimple(wxWindow* parent, wxWindowID id,
+//                      const wxPoint& pos = wxPyDefaultPosition,
+//                      const wxSize& size = wxPyDefaultSize,
+//                      long style = wxTB_HORIZONTAL | wxNO_BORDER,
+//                      char* name = "toolBar");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+//      %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
 
-};
+//  };
 
 
 //---------------------------------------------------------------------------
@@ -183,7 +208,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.2  1998/10/07 07:34:34  RD
+// Version 0.4.1 for wxGTK
+//
 // Revision 1.1  1998/10/02 06:40:42  RD
+//
 // Version 0.4 of wxPython for MSW.
 //
 //

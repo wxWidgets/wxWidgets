@@ -58,6 +58,9 @@ extern PyObject *SWIG_newvarlink(void);
 
 #ifdef __WXMSW__
 #include <wx/spinbutt.h>
+#if wxUSE_OWNER_DRAWN
+#include <wx/checklst.h>
+#endif
 #endif
 
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
@@ -3688,32 +3691,6 @@ static PyObject *_wrap_wxRadioBox_FindString(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define wxRadioBox_GetBoxLabel(_swigobj)  (_swigobj->GetLabel())
-static PyObject *_wrap_wxRadioBox_GetBoxLabel(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxString * _result;
-    wxRadioBox * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxRadioBox_GetBoxLabel",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxRadioBox_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRadioBox_GetBoxLabel. Expected _wxRadioBox_p.");
-        return NULL;
-        }
-    }
-    _result = new wxString (wxRadioBox_GetBoxLabel(_arg0));
-{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
-}
-{
-    delete _result;
-}
-    return _resultobj;
-}
-
 #define wxRadioBox_GetLabel(_swigobj,_swigarg0)  (_swigobj->GetLabel(_swigarg0))
 static PyObject *_wrap_wxRadioBox_GetLabel(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -4664,7 +4641,6 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxRadioBox_GetString", _wrap_wxRadioBox_GetString, 1 },
 	 { "wxRadioBox_GetSelection", _wrap_wxRadioBox_GetSelection, 1 },
 	 { "wxRadioBox_GetLabel", _wrap_wxRadioBox_GetLabel, 1 },
-	 { "wxRadioBox_GetBoxLabel", _wrap_wxRadioBox_GetBoxLabel, 1 },
 	 { "wxRadioBox_FindString", _wrap_wxRadioBox_FindString, 1 },
 	 { "wxRadioBox_Enable", _wrap_wxRadioBox_Enable, 1 },
 	 { "wxRadioBox_EnableBox", _wrap_wxRadioBox_EnableBox, 1 },
@@ -5016,7 +4992,6 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxChoice","_wxChoice",0);
 	 SWIG_RegisterMapping("_class_wxSlider","_wxSlider",0);
 	 SWIG_RegisterMapping("_class_wxBitmapButton","_wxBitmapButton",0);
-	 SWIG_RegisterMapping("_wxFrame","_class_wxFrame",0);
 	 SWIG_RegisterMapping("_wxWindowID","_EBool",0);
 	 SWIG_RegisterMapping("_wxWindowID","_uint",0);
 	 SWIG_RegisterMapping("_wxWindowID","_int",0);
@@ -5161,5 +5136,4 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_wxWindow","_class_wxControl",SwigwxControlTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_wxControl",SwigwxControlTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_class_wxWindow",0);
-	 SWIG_RegisterMapping("_class_wxFrame","_wxFrame",0);
 }

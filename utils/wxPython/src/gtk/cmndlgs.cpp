@@ -2011,7 +2011,6 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_short","_WXTYPE",0);
 	 SWIG_RegisterMapping("_short","_unsigned_short",0);
 	 SWIG_RegisterMapping("_short","_signed_short",0);
-	 SWIG_RegisterMapping("_wxFrame","_class_wxFrame",0);
 	 SWIG_RegisterMapping("_wxWindowID","_EBool",0);
 	 SWIG_RegisterMapping("_wxWindowID","_uint",0);
 	 SWIG_RegisterMapping("_wxWindowID","_int",0);
@@ -2068,5 +2067,4 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_wxWindow","_class_wxColourDialog",SwigwxColourDialogTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_wxColourDialog",SwigwxColourDialogTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_class_wxWindow",0);
-	 SWIG_RegisterMapping("_class_wxFrame","_wxFrame",0);
 }

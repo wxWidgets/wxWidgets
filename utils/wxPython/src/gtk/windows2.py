@@ -10,6 +10,7 @@ from windows import *
 from controls import *
 
 from events import *
+import wxp
 class wxGridCellPtr :
     def __init__(self,this):
         self.this = this
@@ -286,6 +287,7 @@ class wxGrid(wxGridPtr):
         args = tuple(argl)
         self.this = apply(windows2c.new_wxGrid,(arg0.this,arg1,)+args)
         self.thisown = 1
+        wxp._StdWindowCallbacks(self)
 
 
 
@@ -370,6 +372,73 @@ class wxNotebook(wxNotebookPtr):
         args = tuple(argl)
         self.this = apply(windows2c.new_wxNotebook,(arg0.this,arg1,)+args)
         self.thisown = 1
+        wxp._StdWindowCallbacks(self)
+
+
+
+
+class wxSplitterWindowPtr(wxWindowPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def GetMinimumPaneSize(self):
+        val = windows2c.wxSplitterWindow_GetMinimumPaneSize(self.this)
+        return val
+    def GetSashPosition(self):
+        val = windows2c.wxSplitterWindow_GetSashPosition(self.this)
+        return val
+    def GetSplitMode(self):
+        val = windows2c.wxSplitterWindow_GetSplitMode(self.this)
+        return val
+    def GetWindow1(self):
+        val = windows2c.wxSplitterWindow_GetWindow1(self.this)
+        val = wxWindowPtr(val)
+        return val
+    def GetWindow2(self):
+        val = windows2c.wxSplitterWindow_GetWindow2(self.this)
+        val = wxWindowPtr(val)
+        return val
+    def Initialize(self,arg0):
+        val = windows2c.wxSplitterWindow_Initialize(self.this,arg0.this)
+        return val
+    def IsSplit(self):
+        val = windows2c.wxSplitterWindow_IsSplit(self.this)
+        return val
+    def SetSashPosition(self,arg0,*args):
+        val = apply(windows2c.wxSplitterWindow_SetSashPosition,(self.this,arg0,)+args)
+        return val
+    def SetMinimumPaneSize(self,arg0):
+        val = windows2c.wxSplitterWindow_SetMinimumPaneSize(self.this,arg0)
+        return val
+    def SetSplitMode(self,arg0):
+        val = windows2c.wxSplitterWindow_SetSplitMode(self.this,arg0)
+        return val
+    def SplitHorizontally(self,arg0,arg1,*args):
+        val = apply(windows2c.wxSplitterWindow_SplitHorizontally,(self.this,arg0.this,arg1.this,)+args)
+        return val
+    def SplitVertically(self,arg0,arg1,*args):
+        val = apply(windows2c.wxSplitterWindow_SplitVertically,(self.this,arg0.this,arg1.this,)+args)
+        return val
+    def Unsplit(self,*args):
+        argl = map(None,args)
+        try: argl[0] = argl[0].this
+        except: pass
+        args = tuple(argl)
+        val = apply(windows2c.wxSplitterWindow_Unsplit,(self.this,)+args)
+        return val
+    def __repr__(self):
+        return "<C wxSplitterWindow instance>"
+class wxSplitterWindow(wxSplitterWindowPtr):
+    def __init__(self,arg0,arg1,*args) :
+        argl = map(None,args)
+        try: argl[0] = argl[0].this
+        except: pass
+        try: argl[1] = argl[1].this
+        except: pass
+        args = tuple(argl)
+        self.this = apply(windows2c.new_wxSplitterWindow,(arg0.this,arg1,)+args)
+        self.thisown = 1
+        wxp._StdWindowCallbacks(self)
 
 
 

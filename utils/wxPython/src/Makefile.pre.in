@@ -370,8 +370,9 @@ $(GENCODEDIR)/helpers.cpp:
 wxInstall :	sharedmods $(PYMODULES)
 	if test ! -d $(TARGETDIR) ; then \
 		mkdir $(TARGETDIR) ; else true ; fi
-	-chmod 755 $(SHAREDMODS); \
-	 cp $(SHAREDMODS) $(TARGETDIR);
+	if [ "$(SHAREDMODS)" != "" ]; then \
+		-chmod 755 $(SHAREDMODS); \
+		 cp $(SHAREDMODS) $(TARGETDIR); fi
 	-for i in $(PYMODULES); do \
 		cp $$i $(TARGETDIR); \
 	done

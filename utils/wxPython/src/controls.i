@@ -415,7 +415,9 @@ public:
     %name(EnableBox)void Enable(bool enable);
     void Enable(int n, bool enable);
     int FindString(const wxString& string);
+#ifdef __WXMSW__
     %name(GetBoxLabel)wxString GetLabel();
+#endif
     wxString GetLabel(int n);
     int GetSelection();
     wxString GetString(int n);
@@ -489,7 +491,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.5  1998/10/07 07:34:32  RD
+// Version 0.4.1 for wxGTK
+//
 // Revision 1.4  1998/10/02 06:40:35  RD
+//
 // Version 0.4 of wxPython for MSW.
 //
 // Revision 1.3  1998/08/18 19:48:14  RD

@@ -56,7 +56,9 @@ extern PyObject *SWIG_newvarlink(void);
 #include "helpers.h"
 #include <wx/listctrl.h>
 #include <wx/treectrl.h>
+#if 0
 #include <wx/tabctrl.h>
+#endif
 
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
@@ -2134,7 +2136,7 @@ static void *SwigwxTreeCtrlTowxEvtHandler(void *ptr) {
     return (void *) dest;
 }
 
-#define new_wxTreeCtrl(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5) (new wxTreeCtrl(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
+#define new_wxTreeCtrl(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6) (new wxTreeCtrl(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6))
 static PyObject *_wrap_new_wxTreeCtrl(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     wxTreeCtrl * _result;
@@ -2143,14 +2145,16 @@ static PyObject *_wrap_new_wxTreeCtrl(PyObject *self, PyObject *args) {
     wxPoint * _arg2 = &wxPyDefaultPosition;
     wxSize * _arg3 = &wxPyDefaultSize;
     long  _arg4 = (wxTR_HAS_BUTTONS);
-    char * _arg5 = "wxTreeCtrl";
+    wxValidator * _arg5 = &wxPyDefaultValidator;
+    char * _arg6 = "wxTreeCtrl";
     char * _argc0 = 0;
     char * _argc2 = 0;
     char * _argc3 = 0;
+    char * _argc5 = 0;
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"s|issls:new_wxTreeCtrl",&_argc0,&_arg1,&_argc2,&_argc3,&_arg4,&_arg5)) 
+    if(!PyArg_ParseTuple(args,"s|isslss:new_wxTreeCtrl",&_argc0,&_arg1,&_argc2,&_argc3,&_arg4,&_argc5,&_arg6)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxWindow_p")) {
@@ -2170,7 +2174,13 @@ static PyObject *_wrap_new_wxTreeCtrl(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (wxTreeCtrl *)new_wxTreeCtrl(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5);
+    if (_argc5) {
+        if (SWIG_GetPtr(_argc5,(void **) &_arg5,"_wxValidator_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 6 of new_wxTreeCtrl. Expected _wxValidator_p.");
+        return NULL;
+        }
+    }
+    _result = (wxTreeCtrl *)new_wxTreeCtrl(_arg0,_arg1,*_arg2,*_arg3,_arg4,*_arg5,_arg6);
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxTreeCtrl_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
@@ -3062,7 +3072,6 @@ SWIGEXPORT(void,initcontrols2c)() {
 	 SWIG_RegisterMapping("_class_wxChoice","_wxChoice",0);
 	 SWIG_RegisterMapping("_class_wxSlider","_wxSlider",0);
 	 SWIG_RegisterMapping("_class_wxBitmapButton","_wxBitmapButton",0);
-	 SWIG_RegisterMapping("_wxFrame","_class_wxFrame",0);
 	 SWIG_RegisterMapping("_wxWindowID","_EBool",0);
 	 SWIG_RegisterMapping("_wxWindowID","_uint",0);
 	 SWIG_RegisterMapping("_wxWindowID","_int",0);
@@ -3132,5 +3141,4 @@ SWIGEXPORT(void,initcontrols2c)() {
 	 SWIG_RegisterMapping("_wxWindow","_class_wxListCtrl",SwigwxListCtrlTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_wxListCtrl",SwigwxListCtrlTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_class_wxWindow",0);
-	 SWIG_RegisterMapping("_class_wxFrame","_wxFrame",0);
 }

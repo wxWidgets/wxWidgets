@@ -15,9 +15,15 @@
 
 from wxp import *
 
+import wxp
+__version__ = wxp.__version__
+
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.2  1998/10/07 07:34:32  RD
+# Version 0.4.1 for wxGTK
+#
 # Revision 1.1  1998/08/09 08:25:49  RD
 # Initial version
 #
