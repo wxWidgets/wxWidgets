@@ -31,6 +31,7 @@
 #include "wx/statbox.h"
 #include "wx/settings.h"
 #include "wx/listimpl.cpp"
+#include "wx/intl.h"
 #if WXWIN_COMPATIBILITY_2_4
     #include "wx/notebook.h"
 #endif
