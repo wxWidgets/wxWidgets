@@ -9,20 +9,20 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/wxprec.h"
+#include <wx/wxprec.h>
 
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+#include <wx/wx.h>
 #endif
 
-#include  "wx/intl.h"
-#include  "wx/log.h"
+#include <wx/intl.h>
+#include <wx/log.h>
 
-#include  "wx/dnd.h"
+#include <wx/dnd.h>
 
 #ifdef __WXMOTIF__
 #error Sorry, drag and drop is not yet implemented on wxMotif.
@@ -42,7 +42,7 @@ class DnDText : public wxTextDropTarget
 public:
   DnDText(wxListBox *pOwner) { m_pOwner = pOwner; }
 
-  virtual bool OnDropText(int x, int y, const wxChar* psz );
+  virtual bool OnDropText(long x, long y, const wxChar* psz );
 
 private:
   wxListBox *m_pOwner;
@@ -53,7 +53,7 @@ class DnDFile : public wxFileDropTarget
 public:
   DnDFile(wxListBox *pOwner) { m_pOwner = pOwner; }
 
-  virtual bool OnDropFiles(int x, int y,
+  virtual bool OnDropFiles(long x, long y,
                            size_t nFiles, const wxChar* const aszFiles[] );
 
 private:
@@ -349,14 +349,14 @@ DnDFrame::~DnDFrame()
 // ----------------------------------------------------------------------------
 // Notifications called by the base class
 // ----------------------------------------------------------------------------
-bool DnDText::OnDropText( int, int, const wxChar *psz )
+bool DnDText::OnDropText( long, long, const wxChar *psz )
 {
   m_pOwner->Append(psz);
 
   return TRUE;
 }
 
-bool DnDFile::OnDropFiles( int, int, size_t nFiles,
+bool DnDFile::OnDropFiles( long, long, size_t nFiles,
                            const wxChar* const aszFiles[])
 {
   wxString str;
