@@ -815,12 +815,13 @@ wxHtmlCell *wxHtmlContainerCell::GetLastTerminal() const
 {
     if ( m_Cells )
     {
-        wxHtmlCell *c, *c2 = NULL;
         // most common case first:
-        c = m_LastCell->GetLastTerminal();
+        wxHtmlCell *c = m_LastCell->GetLastTerminal();
         if ( c )
             return c;
-        for (wxHtmlCell *c = m_Cells; c; c = c->GetNext())
+
+        wxHtmlCell *c2 = NULL;
+        for (c = m_Cells; c; c = c->GetNext())
             c2 = c->GetLastTerminal();
         return c2;
     }
