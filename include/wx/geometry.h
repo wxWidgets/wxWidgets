@@ -583,13 +583,15 @@ public:
         { MoveCentreTo( pt ); }    // since this is impossible without moving...
     inline void MoveCentreTo( const wxPoint2DDouble &pt )
         { m_x += pt.m_x - (m_x+m_width/2) , m_y += pt.m_y -(m_y+m_height/2); }
-    inline wxOutCode GetOutcode( const wxPoint2DDouble &pt ) const
+    inline wxOutCode GetOutCode( const wxPoint2DDouble &pt ) const
         { return (wxOutCode) (( ( pt.m_x < m_x ) ? wxOutLeft : 0 ) +
                      ( ( pt.m_x >= m_x + m_width ) ? wxOutRight : 0 ) +
                      ( ( pt.m_y < m_y ) ? wxOutTop : 0 )  +
                      ( ( pt.m_y >= m_y + m_height ) ? wxOutBottom : 0 )); }
+	inline wxOutCode GetOutcode(const wxPoint2DDouble &pt) const
+		{ return GetOutCode(pt) ; }
     inline bool Contains( const wxPoint2DDouble &pt ) const
-        { return  GetOutcode( pt ) == wxInside; }
+        { return  GetOutCode( pt ) == wxInside; }
     inline bool Contains( const wxRect2DDouble &rect ) const
         { return ( ( ( m_x <= rect.m_x ) && ( rect.m_x + rect.m_width <= m_x + m_width ) ) &&
                 ( ( m_y <= rect.m_y ) && ( rect.m_y + rect.m_height <= m_y + m_height ) ) ); }
@@ -693,13 +695,15 @@ public:
         inline wxPoint2DInt GetCentre() const { return wxPoint2DInt( m_x+m_width/2 , m_y+m_height/2 ); }
         inline void SetCentre( const wxPoint2DInt &pt ) { MoveCentreTo( pt ); }    // since this is impossible without moving...
         inline void MoveCentreTo( const wxPoint2DInt &pt ) { m_x += pt.m_x - (m_x+m_width/2) , m_y += pt.m_y -(m_y+m_height/2); }
-        inline wxOutCode GetOutcode( const wxPoint2DInt &pt ) const
+        inline wxOutCode GetOutCode( const wxPoint2DInt &pt ) const
             { return (wxOutCode) (( ( pt.m_x < m_x ) ? wxOutLeft : 0 ) +
                      ( ( pt.m_x >= m_x + m_width ) ? wxOutRight : 0 ) +
                      ( ( pt.m_y < m_y ) ? wxOutTop : 0 )  +
                      ( ( pt.m_y >= m_y + m_height ) ? wxOutBottom : 0 )); }
+		inline wxOutCode GetOutcode( const wxPoint2DInt &pt ) const
+			{ return GetOutCode( pt ) ; }
         inline bool Contains( const wxPoint2DInt &pt ) const
-            { return  GetOutcode( pt ) == wxInside; }
+            { return  GetOutCode( pt ) == wxInside; }
         inline bool Contains( const wxRect2DInt &rect ) const
             { return ( ( ( m_x <= rect.m_x ) && ( rect.m_x + rect.m_width <= m_x + m_width ) ) &&
                 ( ( m_y <= rect.m_y ) && ( rect.m_y + rect.m_height <= m_y + m_height ) ) ); }
