@@ -91,10 +91,27 @@ wxSize wxNotebookBase::CalcSizeFromPage(const wxSize& sizePage)
     // this was just taken from wxNotebookSizer::CalcMin() and is, of
     // course, totally bogus - just like the original code was
     wxSize sizeTotal = sizePage;
+    
+    // Mac has large notebook borders.
+
     if ( HasFlag(wxNB_LEFT) || HasFlag(wxNB_RIGHT) )
+    {
         sizeTotal.x += 90;
+#ifdef __WXMAC__
+        sizeTotal.y += 15;
+#else
+        sizeTotal.y += 10;
+#endif
+    }
     else
+    {
+#ifdef __WXMAC__
+        sizeTotal.x += 28;   // This is correct for Aqua.
+#else
+        sizeTotal.x += 10;
+#endif
         sizeTotal.y += 40;
+    }
 
     return sizeTotal;
 }
