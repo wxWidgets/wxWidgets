@@ -154,6 +154,10 @@ bool wxFrame::Create(wxWindow *parent,
             x, y, width, height, style);
 
   wxModelessWindows.Append(this);
+
+  // unlike (almost?) all other windows, frames are created hidden
+  m_isShown = FALSE;
+
   return TRUE;
 }
 
@@ -289,6 +293,10 @@ void wxFrame::DoShowWindow(int nShowCmd)
 
 bool wxFrame::Show(bool show)
 {
+    // don't use wxWindow version as we want to call DoShowWindow()
+    if ( !wxWindowBase::Show(show) )
+        return FALSE;
+
     DoShowWindow(show ? SW_SHOW : SW_HIDE);
 
     if ( show )

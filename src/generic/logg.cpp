@@ -100,10 +100,6 @@ private:
     wxArrayInt m_severity;
     wxArrayLong m_times;
 
-    // the sizer containing the buttons to which we dynamically add (and
-    // remove) the "Save" button
-    wxBoxSizer *m_sizerButtons;
-
     // the "toggle" button and its state
     wxButton *m_btnDetails;
     bool      m_showingDetails;
@@ -715,9 +711,11 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
 
     m_showingDetails = FALSE; // not initially
     m_listctrl = (wxListCtrl *)NULL;
+
 #if wxUSE_STATLINE
     m_statline = (wxStaticLine *)NULL;
 #endif // wxUSE_STATLINE
+
 #if wxUSE_FILE
     m_btnSave = (wxButton *)NULL;
 #endif // wxUSE_FILE
@@ -726,13 +724,13 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     // sizers even though our window is not resizeable to calculate the size of
     // the dialog properly
     wxBoxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
-    m_sizerButtons = new wxBoxSizer(wxVERTICAL);
+    wxBoxSizer *sizerButtons = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer *sizerAll = new wxBoxSizer(wxHORIZONTAL);
 
     wxButton *btnOk = new wxButton(this, wxID_OK, _("OK"));
-    m_sizerButtons->Add(btnOk, 0, wxCENTRE|wxBOTTOM, MARGIN/2);
+    sizerButtons->Add(btnOk, 0, wxCENTRE|wxBOTTOM, MARGIN/2);
     m_btnDetails = new wxButton(this, wxID_MORE, ms_details + _T(" >>"));
-    m_sizerButtons->Add(m_btnDetails, 0, wxCENTRE|wxTOP, MARGIN/2 - 1);
+    sizerButtons->Add(m_btnDetails, 0, wxCENTRE|wxTOP, MARGIN/2 - 1);
 
 #ifndef __WIN16__
     wxIcon icon = wxTheApp->GetStdIcon((int)(style & wxICON_MASK));
@@ -741,7 +739,7 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
 
     const wxString& message = messages.Last();
     sizerAll->Add(CreateTextSizer(message), 0, wxCENTRE|wxLEFT|wxRIGHT, MARGIN);
-    sizerAll->Add(m_sizerButtons, 0, wxALIGN_RIGHT|wxLEFT, MARGIN);
+    sizerAll->Add(sizerButtons, 0, wxALIGN_RIGHT|wxLEFT, MARGIN);
 
     sizerTop->Add(sizerAll, 0, wxCENTRE|wxALL, MARGIN);
 
@@ -874,7 +872,7 @@ void wxLogDialog::CreateDetailsControls()
 
     int y;
     GetTextExtent(_T("H"), (int*)NULL, &y, (int*)NULL, (int*)NULL, &font);
-    int height = wxMin(y*(count + 3), 100);
+    int height = wxMax(y*(count + 3), 100);
     m_listctrl->SetSize(-1, height);
 }
 
@@ -948,7 +946,7 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
 #endif // wxUSE_STATLINE
 
 #if wxUSE_FILE
-        m_sizerButtons->Remove(m_btnSave);
+        sizer->Remove(m_btnSave);
 #endif // wxUSE_FILE
     }
     else // show details now
@@ -960,24 +958,20 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
             CreateDetailsControls();
         }
 
-#if wxUSE_FILE
-        m_sizerButtons->Add(m_btnSave, 0, wxCENTRE|wxTOP, MARGIN);
-#endif // wxUSE_FILE
-
 #if wxUSE_STATLINE
         sizer->Add(m_statline, 0, wxEXPAND | (wxALL & ~wxTOP), MARGIN);
 #endif // wxUSE_STATLINE
 
-        sizer->Add(m_listctrl, 1, wxEXPAND| (wxALL & ~wxTOP), MARGIN);
+        sizer->Add(m_listctrl, 1, wxEXPAND | (wxALL & ~wxTOP), MARGIN);
+
+#if wxUSE_FILE
+        sizer->Add(m_btnSave, 0, wxALIGN_RIGHT | (wxALL & ~wxTOP), MARGIN);
+#endif // wxUSE_FILE
     }
 
     m_showingDetails = !m_showingDetails;
 
     // in any case, our size changed - update
-#if wxUSE_FILE
-    m_sizerButtons->RecalcSizes();
-#endif // wxUSE_FILE
-
     sizer->SetSizeHints(this);
     sizer->Fit(this);
 

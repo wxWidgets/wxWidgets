@@ -224,13 +224,6 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
 
     if ( m_page )
     {
-        // ask the current page first
-        if ( !m_page->TransferDataFromWindow() )
-        {
-            // the page data is incorrect
-            return FALSE;
-        }
-
         // send the event to the old page
         wxWizardEvent event(wxEVT_WIZARD_PAGE_CHANGING, GetId(), goingForward);
         if ( m_page->GetEventHandler()->ProcessEvent(event) &&
@@ -342,6 +335,15 @@ void wxWizard::OnBackOrNext(wxCommandEvent& event)
     wxASSERT_MSG( (event.GetEventObject() == m_btnNext) ||
                   (event.GetEventObject() == m_btnPrev),
                   wxT("unknown button") );
+
+    // ask the current page first: notice that we do it before calling
+    // GetNext/Prev() because the data transfered from the controls of the page
+    // may change the value returned by these methods
+    if ( m_page && !m_page->TransferDataFromWindow() )
+    {
+        // the page data is incorrect, don't do anything
+        return;
+    }
 
     bool forward = event.GetEventObject() == m_btnNext;
 

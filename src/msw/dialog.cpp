@@ -338,10 +338,6 @@ void wxDialog::DoShowModal()
         {
             m_oldFocus = parent;
         }
-        if ( !m_oldFocus )
-        {
-            m_oldFocus = wxTheApp->GetTopWindow();
-        }
 
         // enter the modal loop
         while ( IsModalShowing() )
@@ -406,7 +402,7 @@ bool wxDialog::Show(bool show)
             if ( !GetParent() )
             {
                 wxWindow *parent = wxTheApp->GetTopWindow();
-                if ( parent && parent != this )
+                if ( parent && parent != this && parent->IsShown() )
                 {
                     // use it
                     m_parent = parent;

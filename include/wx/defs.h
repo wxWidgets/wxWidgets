@@ -926,14 +926,16 @@ enum wxStretch
 #endif
 
 #define wxDEFAULT_FRAME_STYLE \
-  (wxSYSTEM_MENU | wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxTHICK_FRAME | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN)
+  (wxSYSTEM_MENU | wxRESIZE_BORDER | \
+   wxMINIMIZE_BOX | wxMAXIMIZE_BOX | \
+   wxCAPTION | wxCLIP_CHILDREN)
 
 #ifdef __WXMSW__
-#   define wxDEFAULT_DIALOG_STYLE  (wxSYSTEM_MENU|wxCAPTION|wxTHICK_FRAME)
+#   define wxDEFAULT_DIALOG_STYLE  (wxSYSTEM_MENU | wxCAPTION)
 #else
-// Under Unix, the dialogs don't have a system menu. Specifying
-// wxSYSTEM_MENU here, will make a close button appear.
-#   define wxDEFAULT_DIALOG_STYLE  (wxCAPTION|wxTHICK_FRAME)
+//  Under Unix, the dialogs don't have a system menu. Specifying wxSYSTEM_MENU
+//  here will make a close button appear.
+#   define wxDEFAULT_DIALOG_STYLE  wxCAPTION
 #endif
 
 /*

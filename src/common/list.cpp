@@ -204,7 +204,7 @@ void wxListBase::DoCopy(const wxListBase& list)
             }
     }
 
-    wxASSERT_MSG( m_count = list.m_count, _T("logic error in wxList::DoCopy") );
+    wxASSERT_MSG( m_count == list.m_count, _T("logic error in wxList::DoCopy") );
 }
 
 wxListBase::~wxListBase()
