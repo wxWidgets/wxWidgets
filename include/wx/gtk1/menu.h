@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        menu.h
+// Name:        wx/gtk/menu.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -7,95 +7,56 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef __GTKMENUH__
 #define __GTKMENUH__
 
 #ifdef __GNUG__
-#pragma interface
+    #pragma interface "menu.h"
 #endif
-
-#include "wx/defs.h"
-#include "wx/object.h"
-#include "wx/list.h"
-#include "wx/window.h"
-#include "wx/menuitem.h"
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class wxMenuBar;
-class wxMenuItem;
-class wxMenu;
 
 //-----------------------------------------------------------------------------
 // wxMenuBar
 //-----------------------------------------------------------------------------
 
-class wxMenuBar : public wxWindow
+class wxMenuBar : public wxMenuBarBase
 {
-    DECLARE_DYNAMIC_CLASS(wxMenuBar)
-
 public:
     // ctors
     wxMenuBar();
     wxMenuBar(long style);
     wxMenuBar(int n, wxMenu *menus[], const wxString titles[]);
-    ~wxMenuBar();
+    virtual ~wxMenuBar();
 
-    // menubar construction
-    void Append( wxMenu *menu, const wxString &title );
+    // implement base class (pure) virtuals
+    virtual bool Append( wxMenu *menu, const wxString &title );
+    virtual bool Insert(size_t pos, wxMenu *menu, const wxString& title);
+    virtual wxMenu *Replace(size_t pos, wxMenu *menu, const wxString& title);
+    virtual wxMenu *Remove(size_t pos);
 
-    // item search
-        // by menu and item names, returns wxNOT_FOUND if not found
     virtual int FindMenuItem(const wxString& menuString,
                              const wxString& itemString) const;
-        // returns NULL if not found
-    wxMenuItem* FindItem( int id ) const;
-        // returns NULL if not found, fills menuForItem if !NULL
-    wxMenuItem *FindItemForId(int itemId, wxMenu **menuForItem = NULL) const;
+    virtual wxMenuItem* FindItem( int id, wxMenu **menu = NULL ) const;
 
-    // state control
-    void Check( int id, bool check );
-    bool IsChecked( int id ) const;
-    void Enable( int id, bool enable );
-    bool IsEnabled( int id ) const;
+    virtual void EnableTop( size_t pos, bool flag );
+    virtual void SetLabelTop( size_t pos, const wxString& label );
+    virtual wxString GetLabelTop( size_t pos ) const;
 
-    void SetLabel( int id, const wxString &label );
-    wxString GetLabel( int id ) const;
-    wxString GetLabel() const                { return wxWindow::GetLabel(); }
-
-    void EnableTop( int pos, bool flag );
-    void SetLabelTop( int pos, const wxString& label );
-    wxString GetLabelTop( int pos ) const;
-
-    virtual void SetHelpString( int id, const wxString& helpString );
-    virtual wxString GetHelpString( int id ) const;
-
-    int GetMenuCount() const { return m_menus.Number(); }
-    wxMenu *GetMenu( int n ) const { return (wxMenu *)m_menus.Nth(n)->Data(); }
-
-#ifdef WXWIN_COMPATIBILITY
-    // compatibility: these functions are deprecated
-    bool Enabled(int id) const { return IsEnabled(id); }
-    bool Checked(int id) const { return IsChecked(id); }
-
-    wxMenuItem* FindMenuItemById( int id ) const { return FindItem(id); }
-#endif // WXWIN_COMPATIBILITY
-
-    // implementation only
-    wxList& GetMenus() { return m_menus; }
-
+    // implementation only from now on
     void SetInvokingWindow( wxWindow *win );
     void UnsetInvokingWindow( wxWindow *win );
 
     GtkAccelGroup   *m_accel;
     GtkItemFactory  *m_factory;
-    wxList           m_menus;
     GtkWidget       *m_menubar;
     long             m_style;
     wxWindow        *m_invokingWindow;
+
+#if 0 // seems to be unused (VZ)
+    wxMenuList& GetMenus() { return m_menus; }
+#endif // 0
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxMenuBar)
 };
 
 //-----------------------------------------------------------------------------
@@ -125,7 +86,7 @@ public:
     // title
     void SetTitle(const wxString& label);
     const wxString GetTitle() const;
-    
+
     // menu creation
     void AppendSeparator();
     void Append(int id, const wxString &item,
@@ -201,7 +162,7 @@ public:
 private:
     // common code for both constructors:
     void Init( const wxString& title,
-               long style, 
+               long style,
                const wxFunction func = (wxFunction) NULL );
 
     wxString       m_title;

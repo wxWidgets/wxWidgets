@@ -52,6 +52,9 @@ public:
                            bool isCheckable = FALSE,
                            wxMenu *subMenu = (wxMenu *)NULL);
 
+    // the menu we're in
+    wxMenu *GetMenu() const { return m_parentMenu; }
+
     // get/set id
     void SetId(int id) { m_id = id; }
     int  GetId() const { return m_id; }

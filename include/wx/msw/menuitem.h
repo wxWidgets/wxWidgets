@@ -49,6 +49,7 @@ public:
 
     virtual void Enable(bool bDoEnable = TRUE);
     virtual void Check(bool bDoCheck = TRUE);
+    virtual void IsChecked() const;
 
     // unfortunately needed to resolve ambiguity between
     // wxMenuItemBase::IsCheckable() and wxOwnerDrawn::IsCheckable()

@@ -137,6 +137,17 @@ void wxMenuItem::DeleteSubMenu()
     m_subMenu = NULL;
 }
 
+// get item state
+// --------------
+
+void wxMenuItem::IsChecked() const
+{
+    int flag = ::GetMenuState(GetHMenuOf(m_parentMenu), id, MF_BYCOMMAND);
+
+    // don't "and" with MF_ENABLED because its value is 0
+    return (flag & MF_DISABLED) == 0;
+}
+
 // change item state
 // -----------------
 

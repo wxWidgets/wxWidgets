@@ -12,10 +12,10 @@
 #pragma implementation "menuitem.h"
 #endif
 
-#include "wx/menu.h"
 #include "wx/log.h"
 #include "wx/intl.h"
 #include "wx/app.h"
+#include "wx/menu.h"
 
 #if wxUSE_ACCEL
     #include "wx/accel.h"
@@ -199,7 +199,7 @@ void wxMenuBar::UnsetInvokingWindow( wxWindow *win )
     }
 }
 
-void wxMenuBar::Append( wxMenu *menu, const wxString &title )
+bool wxMenuBar::Append( wxMenu *menu, const wxString &title )
 {
     m_menus.Append( menu );
 
@@ -283,6 +283,38 @@ void wxMenuBar::Append( wxMenu *menu, const wxString &title )
     // adding menu later on.
     if (m_invokingWindow)
         wxMenubarSetInvokingWindow( menu, m_invokingWindow );
+
+    return TRUE;
+}
+
+bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
+{
+    if ( !wxMenuBarBase::Insert(pos, menu, title) )
+        return FALSE;
+
+    wxFAIL_MSG(wxT("TODO"));
+
+    return FALSE;
+}
+
+wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
+{
+    if ( !wxMenuBarBase::Replace(pos, menu, title) )
+        return FALSE;
+
+    wxFAIL_MSG(wxT("TODO"));
+
+    return NULL;
+}
+
+wxMenu *wxMenuBar::Remove(size_t pos)
+{
+    if ( !wxMenuBarBase::Remove(pos) )
+        return FALSE;
+
+    wxFAIL_MSG(wxT("TODO"));
+
+    return NULL;
 }
 
 static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString, const wxString &itemString )
@@ -305,18 +337,6 @@ static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString
     }
 
     return wxNOT_FOUND;
-}
-
-wxMenuItem *wxMenuBar::FindItemForId(int itemId, wxMenu **menuForItem ) const
-{
-    if ( menuForItem )
-    {
-        // TODO return the pointer to the menu
-
-        *menuForItem = NULL;
-    }
-
-    return FindItem(itemId);
 }
 
 int wxMenuBar::FindMenuItem( const wxString &menuString, const wxString &itemString ) const
@@ -351,7 +371,7 @@ static wxMenuItem* FindMenuItemByIdRecursive(const wxMenu* menu, int id)
     return result;
 }
 
-wxMenuItem* wxMenuBar::FindItem( int id ) const
+wxMenuItem* wxMenuBar::FindItem( int id, wxMenu **menuForItem ) const
 {
     wxMenuItem* result = 0;
     wxNode *node = m_menus.First();
@@ -362,113 +382,46 @@ wxMenuItem* wxMenuBar::FindItem( int id ) const
         node = node->Next();
     }
 
+    if ( menuForItem )
+    {
+        *menuForItem = result ? result->GetMenu() : (wxMenu *)NULL;
+    }
+
     return result;
 }
 
-void wxMenuBar::Check( int id, bool check )
+void wxMenuBar::EnableTop( size_t pos, bool flag )
 {
-    wxMenuItem* item = FindMenuItemById( id );
-
-    wxCHECK_RET( item, wxT("wxMenuBar::Check: no such item") );
-
-    item->Check(check);
-}
-
-bool wxMenuBar::IsChecked( int id ) const
-{
-    wxMenuItem* item = FindMenuItemById( id );
-
-    wxCHECK_MSG( item, FALSE, wxT("wxMenuBar::IsChecked: no such item") );
-
-    return item->IsChecked();
-}
-
-void wxMenuBar::Enable( int id, bool enable )
-{
-    wxMenuItem* item = FindMenuItemById( id );
-
-    wxCHECK_RET( item, wxT("wxMenuBar::Enable: no such item") );
-
-    item->Enable(enable);
-}
-
-bool wxMenuBar::IsEnabled( int id ) const
-{
-    wxMenuItem* item = FindMenuItemById( id );
-
-    wxCHECK_MSG( item, FALSE, wxT("wxMenuBar::IsEnabled: no such item") );
-
-    return item->IsEnabled();
-}
-
-wxString wxMenuBar::GetLabel( int id ) const
-{
-    wxMenuItem* item = FindMenuItemById( id );
-
-    wxCHECK_MSG( item, wxT(""), wxT("wxMenuBar::GetLabel: no such item") );
-
-    return item->GetText();
-}
-
-void wxMenuBar::SetLabel( int id, const wxString &label )
-{
-    wxMenuItem* item = FindMenuItemById( id );
-
-    wxCHECK_RET( item, wxT("wxMenuBar::SetLabel: no such item") );
-
-    item->SetText( label );
-}
-
-void wxMenuBar::EnableTop( int pos, bool flag )
-{
-    wxNode *node = m_menus.Nth( pos );
+    wxMenuList::Node *node = m_menus.Item( pos );
 
     wxCHECK_RET( node, wxT("menu not found") );
 
-    wxMenu* menu = (wxMenu*)node->Data();
+    wxMenu* menu = node->GetData();
 
     if (menu->m_owner)
         gtk_widget_set_sensitive( menu->m_owner, flag );
 }
 
-wxString wxMenuBar::GetLabelTop( int pos ) const
+wxString wxMenuBar::GetLabelTop( size_t pos ) const
 {
-    wxNode *node = m_menus.Nth( pos );
+    wxMenuList::Node *node = m_menus.Item( pos );
 
     wxCHECK_MSG( node, wxT("invalid"), wxT("menu not found") );
 
-    wxMenu* menu = (wxMenu*)node->Data();
+    wxMenu* menu = node->GetData();
 
     return menu->GetTitle();
 }
 
-void wxMenuBar::SetLabelTop( int pos, const wxString& label )
+void wxMenuBar::SetLabelTop( size_t pos, const wxString& label )
 {
-    wxNode *node = m_menus.Nth( pos );
+    wxMenuList::Node *node = m_menus.Item( pos );
 
     wxCHECK_RET( node, wxT("menu not found") );
 
-    wxMenu* menu = (wxMenu*)node->Data();
+    wxMenu* menu = node->GetData();
 
     menu->SetTitle( label );
-}
-
-void wxMenuBar::SetHelpString( int id, const wxString& helpString )
-{
-    wxMenuItem* item = FindMenuItemById( id );
-
-    wxCHECK_RET( item, wxT("wxMenuBar::SetHelpString: no such item") );
-
-    item->SetHelp( helpString );
-}
-
-wxString wxMenuBar::GetHelpString( int id ) const
-{
-    wxMenuItem* item = FindMenuItemById( id );
-
-    wxCHECK_MSG( item, wxT(""), wxT("wxMenuBar::GetHelpString: no such item") );
-
-    return item->GetHelp();
 }
 
 //-----------------------------------------------------------------------------
@@ -840,7 +793,7 @@ static wxString GetHotKey( const wxMenuItem& item )
                 case WXK_F10:
                 case WXK_F11:
                 case WXK_F12:
-                    hotkey << wxT('F') << code = WXK_F1 + 1;
+                    hotkey << wxT('F') << code - WXK_F1 + 1;
                     break;
 
                 // if there are any other keys wxGetAccelFromString() may return,

@@ -670,20 +670,11 @@ WXHMENU wxMenuBar::Create()
 }
 
 // ---------------------------------------------------------------------------
-// wxMenuBar functions forwarded to wxMenuItem
+// wxMenuBar functions to work with the top level submenus
 // ---------------------------------------------------------------------------
 
-// Must only be used AFTER menu has been attached to frame,
-// otherwise use individual menus to enable/disable items
-void wxMenuBar::Enable(int id, bool enable)
-{
-    wxMenu *itemMenu = NULL;
-    wxMenuItem *item = FindItemForId(id, &itemMenu) ;
-
-    wxCHECK_RET( item, wxT("attempt to enable an item which doesn't exist") );
-
-    item->Enable(enable);
-}
+// NB: we don't support owner drawn top level items for now, if we do these
+//     functions would have to be changed to use wxMenuItem as well
 
 void wxMenuBar::EnableTop(int pos, bool enable)
 {
@@ -693,92 +684,6 @@ void wxMenuBar::EnableTop(int pos, bool enable)
 
     Refresh();
 }
-
-// Must only be used AFTER menu has been attached to frame,
-// otherwise use individual menus
-void wxMenuBar::Check(int id, bool check)
-{
-    wxMenu *itemMenu = NULL;
-    wxMenuItem *item = FindItemForId(id, &itemMenu) ;
-
-    wxCHECK_RET( item, wxT("attempt to check an item which doesn't exist") );
-    wxCHECK_RET( item->IsCheckable(), wxT("attempt to check an uncheckable item") );
-
-    item->Check(check);
-}
-
-bool wxMenuBar::IsChecked(int id) const
-{
-    wxMenu *itemMenu = NULL;
-    wxMenuItem *item = FindItemForId(id, &itemMenu) ;
-
-    wxCHECK_MSG( item, FALSE, wxT("wxMenuBar::IsChecked(): no such item") );
-
-    int flag = ::GetMenuState(GetHmenuOf(itemMenu), id, MF_BYCOMMAND);
-
-    return (flag & MF_CHECKED) != 0;
-}
-
-bool wxMenuBar::IsEnabled(int id) const
-{
-    wxMenu *itemMenu = NULL;
-    wxMenuItem *item = FindItemForId(id, &itemMenu) ;
-
-    wxCHECK_MSG( item, FALSE, wxT("wxMenuBar::IsEnabled(): no such item") );
-
-    int flag = ::GetMenuState(GetHmenuOf(itemMenu), id, MF_BYCOMMAND) ;
-
-    // don't "and" with MF_ENABLED because its value is 0
-    return (flag & MF_DISABLED) == 0;
-}
-
-void wxMenuBar::SetLabel(int id, const wxString& label)
-{
-    wxMenu *itemMenu = NULL;
-    wxMenuItem *item = FindItemForId(id, &itemMenu) ;
-
-    wxCHECK_RET( item, wxT("wxMenuBar::SetLabel(): no such item") );
-
-    item->SetText(label);
-}
-
-wxString wxMenuBar::GetLabel(int id) const
-{
-    wxMenu *itemMenu = NULL;
-    wxMenuItem *item = FindItemForId(id, &itemMenu) ;
-
-    wxCHECK_MSG( item, wxEmptyString,
-                 wxT("wxMenuBar::GetLabel(): no such item") );
-
-    return item->GetText();
-}
-
-void wxMenuBar::SetHelpString (int id, const wxString& helpString)
-{
-    wxMenu *itemMenu = NULL;
-    wxMenuItem *item = FindItemForId(id, &itemMenu) ;
-
-    wxCHECK_RET( item, wxT("wxMenuBar::SetHelpString(): no such item") );
-
-    item->SetHelp(helpString);
-}
-
-wxString wxMenuBar::GetHelpString (int id) const
-{
-    wxMenu *itemMenu = NULL;
-    wxMenuItem *item = FindItemForId(id, &itemMenu) ;
-
-    wxCHECK_MSG( item, wxT(""), wxT("wxMenuBar::GetHelpString(): no such item") );
-
-    return item->GetHelp();
-}
-
-// ---------------------------------------------------------------------------
-// wxMenuBar functions to work with the top level submenus
-// ---------------------------------------------------------------------------
-
-// NB: we don't support owner drawn top level items for now, if we do these
-//     functions would have to be changed to use wxMenuItem as well
 
 void wxMenuBar::SetLabelTop(int pos, const wxString& label)
 {

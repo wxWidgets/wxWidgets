@@ -143,6 +143,7 @@ lboxcmn.cpp	C
 list.cpp	C	B
 log.cpp	C	B
 memory.cpp	C
+menucmn.cpp	C
 mimetype.cpp	C	32,B
 module.cpp	C	B
 mstream.cpp	C
