@@ -78,9 +78,9 @@ enum
     #define TXTCTRL_FLAGS     wxNO_BORDER
     #define BTN_FLAGS         wxNO_BORDER
     #define CALBORDER         0
-    #define RIGHTBUTTONBORDER 3
+    #define RIGHTBUTTONBORDER 4
     #define TOPBUTTONBORDER   0
-    #define BUTTONBORDER      3
+    #define BUTTONBORDER      4
     #define TXTPOSY           1
 #else
     #define TXTCTRL_FLAGS     0
@@ -184,26 +184,29 @@ void wxDropdownButton::DoMoveWindow(int x, int y, int w, int h)
         if (h < 0)
             h = GetSize().y;
 
-        int bw = w - m_marginX - m_borderX;
-        int bh = h - m_marginY - m_borderY;
+        int borderX = m_marginX + m_borderX; 
+        int borderY = m_marginY + m_borderY;
+        int bw = w - borderX;
+        int bh = h - borderY;
         if (bh < 11) bh=11;
         if (bw < 9)  bw=9;
 
         wxBitmap bmp(bw, bh);
         dc.SelectObject(bmp);
 
-        wxRect r(0,0,bw, bh);
         wxRendererNative& renderer = wxRendererNative::Get();
 
 #ifdef __WXGTK__
+        wxRect r(-(borderX/2),-(borderY/2),w,h);
         wxColour magic(255,0,255);
         dc.SetBrush( wxBrush( magic ) );
         dc.SetPen( *wxTRANSPARENT_PEN );
         dc.DrawRectangle(0,0,bw,bh);
-        renderer.DrawComboBoxDropButton(this, dc, r);
+        renderer.DrawDropArrow(this, dc, r);
         wxMask *mask = new wxMask( bmp, magic );
         bmp.SetMask( mask );
 #else
+        wxRect r(0,0,bw,bh);
         renderer.DrawComboBoxDropButton(this, dc, r);
 #endif
         SetBitmapLabel(bmp);
@@ -215,7 +218,7 @@ void wxDropdownButton::DoMoveWindow(int x, int y, int w, int h)
         dc.SetBrush( wxBrush( magic ) );
         dc.SetPen( *wxTRANSPARENT_PEN );
         dc.DrawRectangle(0,0,bw,bh);
-        renderer.DrawComboBoxDropButton(this, dc, r, wxCONTROL_PRESSED);
+        renderer.DrawDropArrow(this, dc, r, wxCONTROL_PRESSED);
         mask = new wxMask( bmpSel, magic );
         bmpSel.SetMask( mask );
 #else
