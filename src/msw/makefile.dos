@@ -64,6 +64,7 @@ GENERICOBJS= $(GENDIR)\busyinfo.obj \
 		$(GENDIR)\laywin.obj \
 		$(GENDIR)\listctrl.obj \
 		$(GENDIR)\logg.obj \
+		$(GENDIR)\mdig.obj \
 		$(GENDIR)\notebook.obj \
 		$(GENDIR)\numdlgg.obj \
 		$(GENDIR)\panelg.obj \
@@ -1438,6 +1439,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(GENDIR)/logg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(GENDIR)/mdig.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

@@ -307,6 +307,7 @@ ALL_HEADERS = \
 		dynarray.h \
 		dynlib.h \
 		dynload.h \
+		effects.h \
 		encconv.h \
 		event.h \
 		expr.h \
@@ -482,7 +483,6 @@ ALL_HEADERS = \
 		xpmdecod.h \
 		zipstrm.h \
 		zstream.h \
-		x11/accel.h \
 		x11/app.h \
 		x11/bitmap.h \
 		x11/brush.h \
@@ -503,7 +503,6 @@ ALL_HEADERS = \
 		x11/glcanvas.h \
 		x11/icon.h \
 		x11/joystick.h \
-		x11/mdi.h \
 		x11/minifram.h \
 		x11/palette.h \
 		x11/pen.h \
@@ -511,9 +510,7 @@ ALL_HEADERS = \
 		x11/private.h \
 		x11/region.h \
 		x11/reparent.h \
-		x11/settings.h \
 		x11/textctrl.h \
-		x11/toolbar.h \
 		x11/toplevel.h \
 		x11/window.h \
 		univ/app.h \
@@ -574,7 +571,7 @@ ALL_HEADERS = \
 		generic/imaglist.h \
 		generic/laywin.h \
 		generic/listctrl.h \
-		generic/mdig.h \
+		generic/mdig.cpp \
 		generic/msgdlgg.h \
 		generic/notebook.h \
 		generic/paletteg.h \

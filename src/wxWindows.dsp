@@ -1786,6 +1786,10 @@ SOURCE=..\include\wx\dynload.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\effects.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\encconv.h
 # End Source File
 # Begin Source File
@@ -2019,6 +2023,10 @@ SOURCE=..\include\wx\laywin.h
 # Begin Source File
 
 SOURCE=..\include\wx\list.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\listbase.h
 # End Source File
 # Begin Source File
 
@@ -2985,6 +2993,10 @@ SOURCE=..\include\wx\generic\splash.h
 # Begin Source File
 
 SOURCE=..\include\wx\generic\splitter.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\generic\statline.h
 # End Source File
 # Begin Source File
 

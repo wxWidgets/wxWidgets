@@ -81,6 +81,7 @@ GENERICOBJS= $(MSWDIR)\busyinfo.obj \
 		$(MSWDIR)\laywin.obj \
 		$(MSWDIR)\listctrl.obj \
 		$(MSWDIR)\logg.obj \
+		$(MSWDIR)\mdig.obj \
 		$(MSWDIR)\notebook.obj \
 		$(MSWDIR)\numdlgg.obj \
 		$(MSWDIR)\panelg.obj \
@@ -777,6 +778,8 @@ $(MSWDIR)\laywin.obj: $(GENDIR)\laywin.$(SRCSUFF)
 $(MSWDIR)\listctrl.obj: $(GENDIR)\listctrl.$(SRCSUFF)
 
 $(MSWDIR)\logg.obj: $(GENDIR)\logg.$(SRCSUFF)
+
+$(MSWDIR)\mdig.obj: $(GENDIR)\mdig.$(SRCSUFF)
 
 $(MSWDIR)\notebook.obj: $(GENDIR)\notebook.$(SRCSUFF)
 

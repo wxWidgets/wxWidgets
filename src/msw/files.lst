@@ -359,6 +359,7 @@ ALL_HEADERS = \
 		dynarray.h \
 		dynlib.h \
 		dynload.h \
+		effects.h \
 		encconv.h \
 		event.h \
 		expr.h \
@@ -657,6 +658,7 @@ ALL_HEADERS = \
 		generic/imaglist.h \
 		generic/laywin.h \
 		generic/listctrl.h \
+		generic/mdig.cpp \
 		generic/msgdlgg.h \
 		generic/notebook.h \
 		generic/paletteg.h \

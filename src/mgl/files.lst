@@ -298,6 +298,7 @@ ALL_HEADERS = \
 		dynarray.h \
 		dynlib.h \
 		dynload.h \
+		effects.h \
 		encconv.h \
 		event.h \
 		expr.h \

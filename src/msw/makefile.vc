@@ -129,6 +129,7 @@ NONESSENTIALOBJS= $(GENDIR)\$D\colrdlgg.obj \
 		$(GENDIR)\$D\helphtml.obj \
 		$(GENDIR)\$D\imaglist.obj \
 		$(GENDIR)\$D\listctrl.obj \
+		$(GENDIR)\$D\mdig.obj \
 		$(GENDIR)\$D\msgdlgg.obj \
 		$(GENDIR)\$D\notebook.obj \
 		$(GENDIR)\$D\tabg.obj

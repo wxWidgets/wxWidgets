@@ -8,7 +8,7 @@
 # Version:   $Id$
 #
 # This creates the makefiles for all compilers from the templates using
-# tmake. The tmake executable should be in the path.  
+# tmake. The tmake executable should be in the path.
 
 # Assume we are in distrib/msw/tmake
 #
@@ -16,13 +16,13 @@ topdir="../../.."
 srcdir="$topdir/src"
 mswdir="$srcdir/msw"
 
-for tname in `ls *.t` 
+for tname in `ls *.t`
 do
     case $tname in
 	b32.t)
 	    echo "Generating $mswdir/makefile.b32 for Borland C++ (32 bits)..."
-	    ./tmake -t b32 wxwin.pro -o $mswdir/makefile.b32 ;;
-	    ./tmake -t b32univ wxwin.pro -o $mswdir/makeuniv.b32 ;;
+	    ./tmake -t b32 wxwin.pro -o $mswdir/makefile.b32
+	    ./tmake -t b32univ wxwin.pro -o $mswdir/makeuniv.b32
 	    ./tmake -t b32base wxwin.pro -o $mswdir/makebase.b32 ;;
 
 	bcc.t)
@@ -41,19 +41,19 @@ do
 	    echo "Generating $mswdir/makefile.sc for Symantec C++..."
 	    ./tmake -t sc wxwin.pro -o $mswdir/makefile.sc;;
 
-	vc.t) 
+	vc.t)
 	    echo "Generating $mswdir/makefile.vc for Visual C++ 4.0..."
 	    ./tmake -t vc wxwin.pro -o $mswdir/makefile.vc;;
 
-	vc6msw.t) 
+	vc6msw.t)
 	    echo "Generating $srcdir/wxWindows.dsp for Visual C++ 6.0..."
 	    ./tmake -t vc6msw wxwin.pro -o $srcdir/wxWindows.dsp;;
 
-	vc6base.t) 
+	vc6base.t)
 	    echo "Generating $srcdir/wxBase.dsp for Visual C++ 6.0..."
 	    ./tmake -t vc6base wxwin.pro -o $srcdir/wxBase.dsp;;
 
-	vc6univ.t) 
+	vc6univ.t)
 	    echo "Generating $srcdir/wxUniv.dsp for Visual C++ 6.0..."
 	    ./tmake -t vc6univ wxwin.pro -o $srcdir/wxUniv.dsp;;
 

@@ -813,6 +813,7 @@ dragimag.h	WXH
 dynarray.h	WXH	Base
 dynlib.h	WXH	Base
 dynload.h	WXH	Base
+effects.h	WXH
 encconv.h	WXH	Base
 event.h	WXH	Base
 expr.h	WXH
