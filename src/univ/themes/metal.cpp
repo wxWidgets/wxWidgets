@@ -3211,20 +3211,20 @@ void wxMetalRenderer::DoDrawBackground(wxDC& dc,
                                        const wxColour& col,
                                        const wxRect& rect)
 {
+    dc.SetPen(*wxTRANSPARENT_PEN);
     if (col == wxTheme::Get()->GetColourScheme()->Get( wxColourScheme::CONTROL ))
     {
         for (int y = rect.y; y < rect.height+rect.y; y++)
         {
            int intens = 230 + 80 * (rect.y-y) / rect.height;
-           dc.SetPen( wxPen( wxColour(intens,intens,intens), 1, wxSOLID ) );
-           dc.DrawLine( rect.x, y, rect.x+rect.width, y );
+           dc.SetBrush( wxBrush( wxColour(intens,intens,intens), wxSOLID ) );
+           dc.DrawRectangle( rect.x, y, rect.width, 1 );
         }
     }
     else
     {
         wxBrush brush(col, wxSOLID);
         dc.SetBrush(brush);
-        dc.SetPen(*wxTRANSPARENT_PEN);
         dc.DrawRectangle(rect);
     }
 }
