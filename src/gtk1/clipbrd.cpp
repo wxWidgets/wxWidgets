@@ -348,7 +348,8 @@ void wxClipboard::Clear()
         {
             m_waiting = TRUE;
             
-            gtk_selection_owner_set( (GtkWidget*) NULL, g_clipboardAtom, GDK_CURRENT_TIME );
+            gtk_selection_owner_set( (GtkWidget*) NULL, g_clipboardAtom,
+                                     (guint32) GDK_CURRENT_TIME );
             
             while (m_waiting) gtk_main_iteration();
         }
@@ -357,7 +358,8 @@ void wxClipboard::Clear()
         {
             m_waiting = TRUE;
             
-            gtk_selection_owner_set( (GtkWidget*) NULL, GDK_SELECTION_PRIMARY, GDK_CURRENT_TIME );
+            gtk_selection_owner_set( (GtkWidget*) NULL, GDK_SELECTION_PRIMARY,
+                                     (guint32) GDK_CURRENT_TIME );
             
             while (m_waiting) gtk_main_iteration();
         }
@@ -443,7 +445,7 @@ bool wxClipboard::AddData( wxDataObject *data )
     /* Tell the world we offer clipboard data */
     bool res = (gtk_selection_owner_set( m_clipboardWidget,
                                          clipboard,
-                                         GDK_CURRENT_TIME ));
+                                         (guint32) GDK_CURRENT_TIME ));
     
     if (m_usePrimary)
         m_ownsPrimarySelection = res;
@@ -496,7 +498,7 @@ bool wxClipboard::IsSupported( const wxDataFormat& format )
                            m_usePrimary ? (GdkAtom)GDK_SELECTION_PRIMARY
                                         : g_clipboardAtom, 
                            g_targetsAtom,
-                           GDK_CURRENT_TIME );
+                           (guint32) GDK_CURRENT_TIME );
 
     while (m_waiting) gtk_main_iteration();
     
@@ -542,7 +544,7 @@ bool wxClipboard::GetData( wxDataObject& data )
                            m_usePrimary ? (GdkAtom)GDK_SELECTION_PRIMARY
                                         : g_clipboardAtom, 
                            g_targetsAtom,
-                           GDK_CURRENT_TIME );
+                           (guint32) GDK_CURRENT_TIME );
 
         while (m_waiting) gtk_main_iteration();
     
@@ -576,7 +578,7 @@ bool wxClipboard::GetData( wxDataObject& data )
                                m_usePrimary ? (GdkAtom)GDK_SELECTION_PRIMARY
                                             : g_clipboardAtom, 
                                m_targetRequested,
-                               GDK_CURRENT_TIME );
+                               (guint32) GDK_CURRENT_TIME );
   
         while (m_waiting) gtk_main_iteration();
 

@@ -317,15 +317,13 @@ public:
 private:
     wxString m_text;
 
-#if defined(__VISAGECPP__)
-    // Virtual function hiding supression
-    size_t GetDataSize(const wxDataFormat& rFormat) const
-    { return(wxDataObjectSimple::GetDataSize(rFormat)); }
-    bool GetDataHere(const wxDataFormat& WXUNUSED(rFormat), void *pBuf) const
-    { return(GetDataHere(pBuf)); }
-    bool SetData(const wxDataFormat& rFormat, size_t nLen, const void* pBuf)
-    { return(wxDataObjectSimple::SetData(rFormat, nLen, pBuf)); }
-#endif
+    // virtual function hiding supression
+    size_t GetDataSize(const wxDataFormat& format) const
+        { return(wxDataObjectSimple::GetDataSize(format)); }
+    bool GetDataHere(const wxDataFormat& WXUNUSED(format), void *pBuf) const
+        { return(wxDataObjectSimple::GetDataHere(pBuf)); }
+    bool SetData(const wxDataFormat& format, size_t nLen, const void* pBuf)
+        { return(wxDataObjectSimple::SetData(format, nLen, pBuf)); }
 };
 
 // ----------------------------------------------------------------------------
@@ -374,14 +372,12 @@ public:
 protected:
     wxArrayString m_filenames;
 
-#if defined(__VISAGECPP__)
 private:
     // Virtual function hiding supression
-    size_t GetDataSize(const wxDataFormat& rFormat) const
-    { return(wxDataObjectSimple::GetDataSize(rFormat)); }
-    bool GetDataHere(const wxDataFormat& WXUNUSED(rformat), void* pBuf) const
-    { return(GetDataHere(pBuf)); }
-#endif
+    size_t GetDataSize(const wxDataFormat& format) const
+        { return(wxDataObjectSimple::GetDataSize(format)); }
+    bool GetDataHere(const wxDataFormat& WXUNUSED(format), void* pBuf) const
+        { return(wxDataObjectSimple::GetDataHere(pBuf)); }
 };
 
 // ----------------------------------------------------------------------------
@@ -429,15 +425,13 @@ private:
     size_t m_size;
     void  *m_data;
 
-#if defined(__VISAGECPP__)
-    // Virtual function hiding supression
-    size_t GetDataSize(const wxDataFormat& rFormat) const
-    { return(wxDataObjectSimple::GetDataSize(rFormat)); }
-    bool GetDataHere(const wxDataFormat& rFormat, void* pBuf) const
-    { return(wxDataObjectSimple::GetDataHere(rFormat, pBuf)); }
-    bool SetData(const wxDataFormat& rFormat, size_t nLen, const void* pBuf)
-    { return(wxDataObjectSimple::SetData(rFormat, nLen, pBuf)); }
-#endif
+    // virtual function hiding supression
+    size_t GetDataSize(const wxDataFormat& format) const
+        { return(wxDataObjectSimple::GetDataSize(format)); }
+    bool GetDataHere(const wxDataFormat& format, void* pBuf) const
+        { return(wxDataObjectSimple::GetDataHere(format, pBuf)); }
+    bool SetData(const wxDataFormat& format, size_t nLen, const void* pBuf)
+        { return(wxDataObjectSimple::SetData(format, nLen, pBuf)); }
 };
 
 // ----------------------------------------------------------------------------

@@ -48,6 +48,15 @@ protected:
     void       *m_pngData;
 
     void DoConvertToPng();
+
+private:
+    // virtual function hiding supression
+    size_t GetDataSize(const wxDataFormat& format) const
+        { return(wxDataObjectSimple::GetDataSize(format)); }
+    bool GetDataHere(const wxDataFormat& format, void* pBuf) const
+        { return(wxDataObjectSimple::GetDataHere(format, pBuf)); }
+    bool SetData(const wxDataFormat& format, size_t nLen, const void* pBuf)
+        { return(wxDataObjectSimple::SetData(format, nLen, pBuf)); }
 };
 
 // ----------------------------------------------------------------------------
@@ -65,6 +74,15 @@ public:
     virtual size_t GetDataSize() const;
     virtual bool GetDataHere(void *buf) const;
     virtual bool SetData(size_t len, const void *buf);
+
+private:
+    // virtual function hiding supression
+    size_t GetDataSize(const wxDataFormat& format) const
+        { return(wxDataObjectSimple::GetDataSize(format)); }
+    bool GetDataHere(const wxDataFormat& format, void* pBuf) const
+        { return(wxDataObjectSimple::GetDataHere(format, pBuf)); }
+    bool SetData(const wxDataFormat& format, size_t nLen, const void* pBuf)
+        { return(wxDataObjectSimple::SetData(format, nLen, pBuf)); }
 };
 
 #endif // _WX_GTK_DATAOBJ2_H_

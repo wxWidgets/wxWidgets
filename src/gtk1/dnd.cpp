@@ -503,7 +503,7 @@ void wxDropTarget::RegisterWidget( GtkWidget *widget )
 
 static void
 source_drag_data_get  (GtkWidget          *WXUNUSED(widget),
-                       GdkDragContext     *context,
+                       GdkDragContext     *WXUNUSED(context),
                        GtkSelectionData   *selection_data,
                        guint               WXUNUSED(info),
                        guint               WXUNUSED(time),
@@ -748,7 +748,7 @@ wxDragResult wxDropSource::DoDragDrop( bool allowMove )
     event.x = x;
     event.y = y;
     event.state = state;
-    event.time = GDK_CURRENT_TIME;
+    event.time = (guint32)GDK_CURRENT_TIME;
 
     /* GTK wants to know which button was pressed which caused the dragging */
     int button_number = 0;

@@ -333,7 +333,7 @@ static void draw_frame( GtkWidget *widget, wxWindow *win )
     if (win->HasFlag(wxSIMPLE_BORDER))
     {
         GdkGC *gc;
-	gc = gdk_gc_new( widget->window );
+        gc = gdk_gc_new( widget->window );
         gdk_gc_set_foreground( gc, &widget->style->black );
         gdk_draw_rectangle( widget->window, gc, FALSE, 
                          dx, dy,
@@ -465,9 +465,9 @@ static long map_to_unmodified_wx_keysym( KeySym keysym )
         {
             if (keysym <= 0xFF)
             {
-                guint upper = gdk_keyval_to_upper( keysym );
+                guint upper = gdk_keyval_to_upper( (guint)keysym );
                 keysym = (upper != 0 ? upper : keysym ); /* to be MSW compatible */
-                key_code = keysym;
+                key_code = (guint)keysym;
             }
         }
     }
@@ -564,7 +564,7 @@ static long map_to_wx_keysym( KeySym keysym )
         {
             if (keysym <= 0xFF)
             {
-                key_code = keysym;
+                key_code = (guint)keysym;
             }
         }
     }
@@ -614,7 +614,8 @@ static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExp
 // "draw" of m_wxwindow
 //-----------------------------------------------------------------------------
 
-static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxWindow *win )
+static void gtk_window_draw_callback( GtkWidget *WXUNUSED(widget),
+                                      GdkRectangle *rect, wxWindow *win )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -634,7 +635,7 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
                                 (int)rect->width,
                                 (int)rect->height );
 */
-				
+                                
     wxEraseEvent eevent( win->GetId() );
     eevent.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent(eevent);
@@ -707,8 +708,8 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
                 ret = ancestor->GetEventHandler()->ProcessEvent( command_event );
                 break;
             }
-	    if (ancestor->m_isFrame)
-	        break;
+            if (ancestor->m_isFrame)
+                break;
             ancestor = ancestor->GetParent();
         }
     }
@@ -740,11 +741,11 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
     if ( (!ret) &&
          ((gdk_event->keyval == GDK_Tab) || (gdk_event->keyval == GDK_ISO_Left_Tab)) &&
          (!win->HasFlag(wxTE_PROCESS_TAB)) &&
-	 (win->GetParent()) &&
-	 (win->GetParent()->HasFlag( wxTAB_TRAVERSAL)) )
+         (win->GetParent()) &&
+         (win->GetParent()->HasFlag( wxTAB_TRAVERSAL)) )
     {
         wxNavigationKeyEvent new_event;
-	new_event.SetEventObject( win );
+        new_event.SetEventObject( win );
         /* GDK reports GDK_ISO_Left_Tab for SHIFT-TAB */
         new_event.SetDirection( (gdk_event->keyval == GDK_Tab) );
         /* CTRL-TAB changes the (parent) window, i.e. switch notebook page */
@@ -967,23 +968,23 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
 
     if (!g_captureWindow)
     {
-        int x = event.m_x;
-        int y = event.m_y;
+        wxCoord x = event.m_x;
+        wxCoord y = event.m_y;
         if (win->m_wxwindow)
         {
             GtkPizza *pizza = GTK_PIZZA(win->m_wxwindow);
-	    x += pizza->xoffset;
-	    y += pizza->yoffset;
+            x += pizza->xoffset;
+            y += pizza->yoffset;
         }
 
         wxNode *node = win->GetChildren().First();
         while (node)
         {
             wxWindow *child = (wxWindow*)node->Data();
-	    
+            
             node = node->Next();
-	    if (!child->IsShown())
-	        continue;
+            if (!child->IsShown())
+                continue;
 
             if (child->m_isStaticBox)
             {
@@ -1094,13 +1095,13 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
 
     if (!g_captureWindow)
     {
-        int x = event.m_x;
-        int y = event.m_y;
+        wxCoord x = event.m_x;
+        wxCoord y = event.m_y;
         if (win->m_wxwindow)
         {
             GtkPizza *pizza = GTK_PIZZA(win->m_wxwindow);
-	    x += pizza->xoffset;
-	    y += pizza->yoffset;
+            x += pizza->xoffset;
+            y += pizza->yoffset;
         }
 
         wxNode *node = win->GetChildren().First();
@@ -1109,8 +1110,8 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
             wxWindow *child = (wxWindow*)node->Data();
 
             node = node->Next();
-	    if (!child->IsShown())
-	        continue;
+            if (!child->IsShown())
+                continue;
 
             if (child->m_isStaticBox)
             {
@@ -1214,13 +1215,13 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
 
     if (!g_captureWindow)
     {
-        int x = event.m_x;
-        int y = event.m_y;
+        wxCoord x = event.m_x;
+        wxCoord y = event.m_y;
         if (win->m_wxwindow)
         {
             GtkPizza *pizza = GTK_PIZZA(win->m_wxwindow);
-	    x += pizza->xoffset;
-	    y += pizza->yoffset;
+            x += pizza->xoffset;
+            y += pizza->yoffset;
         }
 
         wxNode *node = win->GetChildren().First();
@@ -1229,8 +1230,8 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
             wxWindow *child = (wxWindow*)node->Data();
 
             node = node->Next();
-	    if (!child->IsShown())
-	        continue;
+            if (!child->IsShown())
+                continue;
 
             if (child->m_isStaticBox)
             {
@@ -1742,7 +1743,7 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
         wxFAIL_MSG( wxT("wxWindow creation failed") );
-	return FALSE;
+        return FALSE;
     }
 
     m_insertCallback = wxInsertChildInWindow;
@@ -1951,15 +1952,15 @@ void wxWindow::PostCreation()
     if (m_wxwindow)
     {
         if (!m_noExpose)
-	{
+        {
             /* these get reported to wxWindows -> wxPaintEvent */
             gtk_signal_connect( GTK_OBJECT(m_wxwindow), "expose_event",
                 GTK_SIGNAL_FUNC(gtk_window_expose_callback), (gpointer)this );
 
             gtk_signal_connect( GTK_OBJECT(m_wxwindow), "draw",
                 GTK_SIGNAL_FUNC(gtk_window_draw_callback), (gpointer)this );
-	}
-	  
+        }
+          
 #if (GTK_MINOR_VERSION > 0)
         /* these are called when the "sunken" or "raised" borders are drawn */
         gtk_signal_connect( GTK_OBJECT(m_widget), "expose_event",
@@ -2040,7 +2041,7 @@ void wxWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
     else
     {
         GtkPizza *pizza = GTK_PIZZA(m_parent->m_wxwindow);
-	
+        
         if ((sizeFlags & wxSIZE_ALLOW_MINUS_ONE) == 0)
         {
             if (x != -1) m_x = x + pizza->xoffset;
@@ -2114,10 +2115,10 @@ void wxWindow::OnInternalIdle()
     if (cursor.Ok())
     {
         /* I now set the cursor anew in every OnInternalIdle call
-	   as setting the cursor in a parent window also effects the
-	   windows above so that checking for the current cursor is
-	   not possible. */
-	
+           as setting the cursor in a parent window also effects the
+           windows above so that checking for the current cursor is
+           not possible. */
+        
         if (m_wxwindow)
         {
             GdkWindow *window = GTK_PIZZA(m_wxwindow)->bin_window;
@@ -2311,8 +2312,8 @@ void wxWindow::DoGetPosition( int *x, int *y ) const
     if (m_parent && m_parent->m_wxwindow)
     {
         GtkPizza *pizza = GTK_PIZZA(m_parent->m_wxwindow);
-	dx = pizza->xoffset;
-	dy = pizza->yoffset;
+        dx = pizza->xoffset;
+        dy = pizza->yoffset;
     }
 
     if (x) (*x) = m_x - dx;
@@ -2476,7 +2477,7 @@ void wxWindow::SetFocus()
         }
         else
         {
-	   // ?
+           // ?
         }
     }
 }
@@ -2574,7 +2575,7 @@ void wxWindow::WarpPointer( int x, int y )
         window = GTK_PIZZA(m_wxwindow)->bin_window;
     else
         window = GetConnectWidget()->window;
-	
+        
     if (window)
         gdk_window_warp_pointer( window, x, y );
 }
@@ -2605,15 +2606,15 @@ void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
     if (!rect)
     {
         if (m_wxwindow)
-	{
-	    GtkPizza *pizza = GTK_PIZZA(m_wxwindow);
-	    gboolean old_clear = pizza->clear_on_draw;
-	    gtk_pizza_set_clear( pizza, FALSE );
-	    
+        {
+            GtkPizza *pizza = GTK_PIZZA(m_wxwindow);
+            gboolean old_clear = pizza->clear_on_draw;
+            gtk_pizza_set_clear( pizza, FALSE );
+            
             gtk_widget_draw( m_wxwindow, (GdkRectangle*) NULL );
-	    
-	    gtk_pizza_set_clear( pizza, old_clear );
-	}
+            
+            gtk_pizza_set_clear( pizza, old_clear );
+        }
         else
             gtk_widget_draw( m_widget, (GdkRectangle*) NULL );
     }
@@ -2626,15 +2627,15 @@ void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
         gdk_rect.height = rect->height;
 
         if (m_wxwindow)
-	{
-	    GtkPizza *pizza = GTK_PIZZA(m_wxwindow);
-	    gboolean old_clear = pizza->clear_on_draw;
-	    gtk_pizza_set_clear( pizza, FALSE );
-	    
+        {
+            GtkPizza *pizza = GTK_PIZZA(m_wxwindow);
+            gboolean old_clear = pizza->clear_on_draw;
+            gtk_pizza_set_clear( pizza, FALSE );
+            
             gtk_widget_draw( m_wxwindow, &gdk_rect );
-	    
-	    gtk_pizza_set_clear( pizza, old_clear );
-	}
+            
+            gtk_pizza_set_clear( pizza, old_clear );
+        }
         else
             gtk_widget_draw( m_widget, &gdk_rect );
     }
@@ -2683,7 +2684,7 @@ bool wxWindow::SetBackgroundColour( const wxColour &colour )
         window = GTK_PIZZA(m_wxwindow)->bin_window;
     else
         window = GetConnectWidget()->window;
-	
+        
     if (!window)
     {
         // indicate that a new style has been set
@@ -2735,7 +2736,7 @@ bool wxWindow::SetForegroundColour( const wxColour &colour )
         window = GTK_PIZZA(m_wxwindow)->bin_window;
     else
         window = GetConnectWidget()->window;
-	
+        
     if (!window)
     {
         // indicate that a new style has been set
@@ -2868,7 +2869,7 @@ bool wxWindow::DoPopupMenu( wxMenu *menu, int x, int y )
                   0,                           // button used to activate it
                   gs_timeLastClick             // the time of activation
                 );
-		
+                
     while (is_waiting)
     {
         while (gtk_events_pending())
@@ -2928,7 +2929,7 @@ bool wxWindow::SetFont( const wxFont &font )
         window = GTK_PIZZA(m_wxwindow)->bin_window;
     else
         window = GetConnectWidget()->window;
-	
+        
     if (!window)
     {
         // indicate that a new style has been set
@@ -2966,7 +2967,7 @@ void wxWindow::CaptureMouse()
         window = GTK_PIZZA(m_wxwindow)->bin_window;
     else
         window = GetConnectWidget()->window;
-	
+        
     if (!window) return;
 
     gdk_pointer_grab( window, FALSE,
@@ -2977,7 +2978,7 @@ void wxWindow::CaptureMouse()
                           GDK_POINTER_MOTION_MASK),
                       (GdkWindow *) NULL,
                       m_cursor.GetCursor(),
-                      GDK_CURRENT_TIME );
+                      (guint32)GDK_CURRENT_TIME );
     g_captureWindow = this;
 }
 
@@ -2992,10 +2993,11 @@ void wxWindow::ReleaseMouse()
         window = GTK_PIZZA(m_wxwindow)->bin_window;
     else
         window = GetConnectWidget()->window;
-	
-    if (!window) return;
+        
+    if (!window)
+        return;
 
-    gdk_pointer_ungrab ( GDK_CURRENT_TIME );
+    gdk_pointer_ungrab ( (guint32)GDK_CURRENT_TIME );
     g_captureWindow = (wxWindow*) NULL;
 }
 

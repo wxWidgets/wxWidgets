@@ -605,15 +605,21 @@ public:
     bool Leaving() const { return (m_eventType == wxEVT_LEAVE_WINDOW); }
 
     // Find the position of the event
-    void GetPosition(long *xpos, long *ypos) const 
-      { if (xpos) *xpos = m_x; 
-        if (ypos) *ypos = m_y; }
+    void GetPosition(wxCoord *xpos, wxCoord *ypos) const 
+    {
+        if (xpos)
+            *xpos = m_x; 
+        if (ypos)
+            *ypos = m_y;
+    }
+
     void GetPosition(int *xpos, int *ypos) const
-      { if (xpos) *xpos = m_x; 
-        if (ypos) *ypos = m_y; }
-    void Position(long *xpos, long *ypos) const 
-      { if (xpos) *xpos = m_x; 
-        if (ypos) *ypos = m_y; }
+    {
+        if (xpos)
+            *xpos = (int)m_x; 
+        if (ypos)
+            *ypos = (int)m_y;
+    }
 
     // Find the position of the event
     wxPoint GetPosition() const { return wxPoint(m_x, m_y); }
@@ -623,6 +629,14 @@ public:
 
     // Compatibility
 #if WXWIN_COMPATIBILITY
+    void Position(long *xpos, long *ypos) const 
+    {
+        if (xpos)
+            *xpos = (long)m_x; 
+        if (ypos)
+            *ypos = (long)m_y;
+    }
+
     void Position(float *xpos, float *ypos) const
     {
         *xpos = (float) m_x; *ypos = (float) m_y;
@@ -638,8 +652,8 @@ public:
     void CopyObject(wxObject& obj) const;
 
 public:
-    long          m_x;
-    long          m_y;
+    wxCoord m_x, m_y;
+
     bool          m_leftDown;
     bool          m_middleDown;
     bool          m_rightDown;
@@ -674,28 +688,34 @@ public:
     long KeyCode() const { return m_keyCode; }
 
     // Find the position of the event
-    void GetPosition(long *xpos, long *ypos) const
-      { if (xpos) *xpos = m_x; 
-        if (ypos) *ypos = m_y; }
+    void GetPosition(wxCoord *xpos, wxCoord *ypos) const
+    {
+        if (xpos) *xpos = m_x; 
+        if (ypos) *ypos = m_y;
+    }
+
     void GetPosition(int *xpos, int *ypos) const
-      { if (xpos) *xpos = m_x; 
-        if (ypos) *ypos = m_y; }
+    {
+        if (xpos) *xpos = (int)m_x; 
+        if (ypos) *ypos = (int)m_y;
+    }
 
     wxPoint GetPosition() const
         { return wxPoint(m_x, m_y); }
 
     // Get X position
-    long GetX() const { return m_x; }
+    wxCoord GetX() const { return m_x; }
 
     // Get Y position
-    long GetY() const { return m_y; }
+    wxCoord GetY() const { return m_y; }
 
     void CopyObject(wxObject& obj) const;
 
 public:
-    long          m_x;
-    long          m_y;
+    wxCoord       m_x, m_y;
+
     long          m_keyCode;
+
     bool          m_controlDown;
     bool          m_shiftDown;
     bool          m_altDown;

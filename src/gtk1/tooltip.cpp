@@ -99,9 +99,10 @@ void wxToolTip::Enable( bool flag )
 
 void wxToolTip::SetDelay( long msecs )
 {
-    if (!ss_tooltips) return;
+    if (!ss_tooltips)
+        return;
 
-    gtk_tooltips_set_delay( ss_tooltips, msecs );
+    gtk_tooltips_set_delay( ss_tooltips, (int)msecs );
 }
 
 #endif

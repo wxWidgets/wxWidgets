@@ -116,7 +116,8 @@ bool wxSpinCtrl::Create(wxWindow *parent, wxWindowID id,
 
     m_widget = gtk_spin_button_new( m_adjust, 1, 0 );
 
-    gtk_spin_button_set_wrap( GTK_SPIN_BUTTON(m_widget), (m_windowStyle & wxSP_WRAP) );
+    gtk_spin_button_set_wrap( GTK_SPIN_BUTTON(m_widget),
+                              (int)(m_windowStyle & wxSP_WRAP) );
 
     gtk_signal_connect( GTK_OBJECT (m_adjust),
                         "value_changed",

@@ -62,7 +62,7 @@ static char **CreateFontList(wxChar spacing,
                              int *nFonts)
 {
     wxString xencoding, xregistry;
-    wxGetXFontEncoding(encoding, &xencoding, &xregistry);
+    wxGetXFontEncoding(encoding, &xregistry, &xencoding);
 
     wxString pattern;
     pattern.Printf(wxT("-*-*-*-*-*-*-*-*-*-*-%c-*-%s-%s"),

@@ -187,7 +187,7 @@ wxFont::wxFont( GdkFont *WXUNUSED(font), char *xFontName )
     tn.GetNextToken();                           // pixel size
 
     tmp = tn.GetNextToken();                     // pointsize
-    int num =  wxStrtol (tmp.c_str(), (wxChar **) NULL, 10);
+    long num = wxStrtol (tmp.c_str(), (wxChar **) NULL, 10);
     M_FONTDATA->m_pointSize = num / 10;
 
     tn.GetNextToken();                           // x-res
@@ -394,7 +394,7 @@ GdkFont *wxFont::GetInternalFont( float scale ) const
     }
 
     long int_scale = long(scale * 100.0 + 0.5); /* key for fontlist */
-    int point_scale = (M_FONTDATA->m_pointSize * 10 * int_scale) / 100;
+    int point_scale = (int)((M_FONTDATA->m_pointSize * 10 * int_scale) / 100);
     GdkFont *font = (GdkFont *) NULL;
 
     wxNode *node = M_FONTDATA->m_scaled_xfonts.Find(int_scale);

@@ -40,9 +40,9 @@ class WXDLLEXPORT wxToolBarTool: public wxObject
  public:
   wxToolBarTool() {}
 #ifdef __WXGTK__
-  wxToolBarTool(wxToolBar *owner, 
+  wxToolBarTool(wxToolBar *owner,
                 int theIndex = 0, const wxBitmap& bitmap1 = wxNullBitmap, const wxBitmap& bitmap2 = wxNullBitmap,
-                bool toggle = FALSE, wxObject *clientData = (wxObject *) NULL, 
+                bool toggle = FALSE, wxObject *clientData = (wxObject *) NULL,
                 const wxString& shortHelpString = "", const wxString& longHelpString = "",
                 GtkWidget *pixmap = (GtkWidget *) NULL );
 #else
@@ -84,8 +84,8 @@ class WXDLLEXPORT wxToolBarBase : public wxControl
   DECLARE_ABSTRACT_CLASS(wxToolBarBase)
  public:
 
-  wxToolBarBase(void);
-  ~wxToolBarBase(void);
+  wxToolBarBase();
+  ~wxToolBarBase();
 
   // Handle wxToolBar events
 
@@ -105,14 +105,14 @@ class WXDLLEXPORT wxToolBarBase : public wxControl
   virtual wxToolBarTool *AddTool(int toolIndex, const wxBitmap& bitmap, const wxBitmap& pushedBitmap = wxNullBitmap,
                bool toggle = FALSE, long xPos = -1, long yPos = -1, wxObject *clientData = NULL,
                const wxString& helpString1 = wxEmptyString, const wxString& helpString2 = wxEmptyString);
-  virtual void AddSeparator(void);
-  virtual void ClearTools(void);
+  virtual void AddSeparator();
+  virtual void ClearTools();
 
   virtual void EnableTool(int toolIndex, bool enable);
   virtual void ToggleTool(int toolIndex, bool toggle); // toggle is TRUE if toggled on
   virtual void SetToggle(int toolIndex, bool toggle); // Set this to be togglable (or not)
   virtual wxObject *GetToolClientData(int index) const;
-  inline wxList& GetTools(void) const { return (wxList&) m_tools; }
+  inline wxList& GetTools() const { return (wxList&) m_tools; }
 
   // After the toolbar has initialized, this is the size the tools take up
 #if WXWXIN_COMPATIBILITY
@@ -135,34 +135,34 @@ class WXDLLEXPORT wxToolBarBase : public wxControl
   virtual void SetToolPacking(int packing);
   virtual void SetToolSeparation(int separation);
 
-  inline virtual wxSize GetToolMargins(void) { return wxSize(m_xMargin, m_yMargin); }
-  inline virtual int GetToolPacking(void) { return m_toolPacking; }
-  inline virtual int GetToolSeparation(void) { return m_toolSeparation; }
+  inline virtual wxSize GetToolMargins() { return wxSize(m_xMargin, m_yMargin); }
+  inline virtual int GetToolPacking() { return m_toolPacking; }
+  inline virtual int GetToolSeparation() { return m_toolSeparation; }
 
   virtual void SetToolBitmapSize(const wxSize& size) { m_defaultWidth = size.x; m_defaultHeight = size.y; };
-  virtual wxSize GetToolBitmapSize(void) const { return wxSize(m_defaultWidth, m_defaultHeight); }
+  virtual wxSize GetToolBitmapSize() const { return wxSize(m_defaultWidth, m_defaultHeight); }
 
   // The button size (in some implementations) is bigger than the bitmap size: this returns
   // the total button size.
-  virtual wxSize GetToolSize(void) const { return wxSize(m_defaultWidth, m_defaultHeight); } ;
+  virtual wxSize GetToolSize() const { return wxSize(m_defaultWidth, m_defaultHeight); } ;
 
   // Compatibility
 #if WXWIN_COMPATIBILITY
-  inline void SetDefaultSize(int w, int h) { SetDefaultSize(wxSize(w, h)); }
-  inline long GetDefaultWidth(void) const { return m_defaultWidth; }
-  inline long GetDefaultHeight(void) const { return m_defaultHeight; }
-  inline int GetDefaultButtonWidth(void) const { return (int) GetDefaultButtonSize().x; };
-  inline int GetDefaultButtonHeight(void) const { return (int) GetDefaultButtonSize().y; };
+  void SetDefaultSize(int w, int h) { SetDefaultSize(wxSize(w, h)); }
+  long GetDefaultWidth() const { return m_defaultWidth; }
+  long GetDefaultHeight() const { return m_defaultHeight; }
+  int GetDefaultButtonWidth() const { return (int) GetDefaultButtonSize().x; };
+  int GetDefaultButtonHeight() const { return (int) GetDefaultButtonSize().y; };
   virtual void SetDefaultSize(const wxSize& size) { SetToolBitmapSize(size); }
-  virtual wxSize GetDefaultSize(void) const { return GetToolBitmapSize(); }
-  virtual wxSize GetDefaultButtonSize(void) const { return GetToolSize(); }
+  virtual wxSize GetDefaultSize() const { return GetToolBitmapSize(); }
+  virtual wxSize GetDefaultButtonSize() const { return GetToolSize(); }
 #endif
 
   // Lay the tools out
   virtual void LayoutTools();
-  
+
   // Add all the buttons: required for Win95.
-  virtual bool CreateTools(void) { return TRUE; }
+  virtual bool CreateTools() { return TRUE; }
 
   // Calls the appropriate function after tools have been created.
   // E.g. Layout, or CreateTools.
@@ -184,7 +184,7 @@ class WXDLLEXPORT wxToolBarBase : public wxControl
   virtual void Scroll(int x_pos, int y_pos);
   virtual void GetScrollPixelsPerUnit(int *x_unit, int *y_unit) const;
   virtual void EnableScrolling(bool x_scrolling, bool y_scrolling);
-  virtual void AdjustScrollbars(void);
+  virtual void AdjustScrollbars();
 
   // Prepare the DC by translating it according to the current scroll position
   virtual void PrepareDC(wxDC& dc);
@@ -199,7 +199,7 @@ class WXDLLEXPORT wxToolBarBase : public wxControl
   virtual void GetVirtualSize(int *x, int *y) const;
 
   // Do the toolbar button updates (check for EVT_UPDATE_UI handlers)
-  virtual void DoToolbarUpdates(void);
+  virtual void DoToolbarUpdates();
 
   inline void SetMaxRowsCols(int rows, int cols) { m_maxRows = rows; m_maxCols = cols; }
   inline int GetMaxRows() const { return m_maxRows; }
@@ -222,13 +222,14 @@ class WXDLLEXPORT wxToolBarBase : public wxControl
   int                   m_yMargin;
   int                   m_toolPacking;
   int                   m_toolSeparation;
-  long                  m_defaultWidth;
-  long                  m_defaultHeight;
+
+  wxCoord               m_defaultWidth;
+  wxCoord               m_defaultHeight;
 
 public:
   ////////////////////////////////////////////////////////////////////////
   //// IMPLEMENTATION
-  
+
   // Calculate scroll increment
   virtual int CalcScrollInc(wxScrollEvent& event);
 

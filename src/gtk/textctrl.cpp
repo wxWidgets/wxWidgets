@@ -567,7 +567,7 @@ void wxTextCtrl::SetInsertionPoint( long pos )
 
         /* bring editable's cursor uptodate. bug in GTK. */
 
-        GTK_EDITABLE(m_text)->current_pos = pos;
+        GTK_EDITABLE(m_text)->current_pos = (guint32)pos;
     }
 }
 
