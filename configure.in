@@ -5773,6 +5773,7 @@ fi
 
 if test "$wxUSE_SPLASH" = "yes"; then
     AC_DEFINE(wxUSE_SPLASH)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS splash"
 fi
 
 if test "$wxUSE_STARTUP_TIPS" = "yes"; then
