@@ -266,7 +266,9 @@ This function can only be called from another thread context.
 
 \func{void}{SetPriority}{\param{int}{ priority}}
 
-Sets the priority of the thread, between zero and 100. This must be set before the thread is created.
+Sets the priority of the thread, between $0$ and $100$. It can only be set
+after calling \helpref{Create()}{wxthreadcreate} but before calling 
+\helpref{Run()}{wxthreadrun}.
 
 The following priorities are already defined:
 
