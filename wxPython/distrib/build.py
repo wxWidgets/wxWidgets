@@ -120,7 +120,10 @@ import sys, os, string, getopt
 # This is really the wxPython version number, and will be placed in the
 # Makefiles for use with the distribution related targets.
 
-__version__ = '2.2.16'
+major_version = '2.1'
+build_version = '16'
+
+__version__ = major_version + '.' + build_version
 
 #----------------------------------------------------------------------------
 
@@ -223,6 +226,8 @@ class BuildConfig:
         base = os.path.join(base, '..')
         self.WXPYDIR = os.path.abspath(base)
         self.VERSION = __version__
+        self.MAJVER = major_version
+        self.BLDVER = build_version
         self.MODULE = ''
         self.SWIGFILES = []
         self.SWIGFLAGS = '-c++ -shadow -python -keyword -dnone -I$(WXPSRCDIR)'
@@ -287,7 +292,7 @@ class BuildConfig:
             self.LFLAGS = '-L$(WXPSRCDIR) `$(WXCONFIG) --libs`'
             self.RMCMD  = '-rm -f '
             self.WXCONFIG = 'wx-config'
-            self.USE_SONAME = '0'
+            self.USE_SONAME = '1'
 
             # **** What to do when I start supporting Motif, etc.???
             self.GENCODEDIR = 'gtk'
@@ -518,6 +523,8 @@ win32Template = '''
 
 WXDIR = %(WXDIR)s
 VERSION = %(VERSION)s
+MAJVER = %(MAJVER)s
+BLDVER = %(BLDVER)s
 MODULE = %(MODULE)s
 SWIGFLAGS = %(SWIGFLAGS)s %(SWIGTOOLKITFLAG)s %(OTHERSWIGFLAGS)s
 CFLAGS = %(CFLAGS)s
@@ -703,10 +710,10 @@ unixTemplate = '''
 # lost if the generator is run again.  You have been warned.
 #----------------------------------------------------------------------
 
-
-
 WXDIR = %(WXDIR)s
 VERSION = %(VERSION)s
+MAJVER = %(MAJVER)s
+BLDVER = %(BLDVER)s
 MODULE = %(MODULE)s
 SWIGFLAGS = %(SWIGFLAGS)s %(SWIGTOOLKITFLAG)s %(OTHERSWIGFLAGS)s
 CFLAGS = %(CFLAGS)s $(OPT) %(OTHERCFLAGS)s
@@ -766,7 +773,7 @@ endif
 install: default $(TARGETDIR) $(TARGETDIR)/$(TARGET) pycfiles %(OTHERINSTALLTARGETS)s
 
 clean:
-	-rm -f *.o *$(SO) *~
+	-rm -f *.o *$(SO) *$(SO).* *~
 	-rm -f $(TARGET)
 	-rm -f $(BUILDDIR)/$(TARGET)
 %(PYCLEANUP)s
@@ -820,7 +827,6 @@ $(BUILDDIR)/%% : $(GENCODEDIR)/%%
 
 $(TARGET) : $(OBJECTS)
 	$(LDSHARED) $(OBJECTS) $(LFLAGS) $(LIBS) $(OTHERLIBS) -o $(TARGET)
-
 
 
 pycfiles : $(PYMODULES)

@@ -40,27 +40,31 @@ OpenGL add on for wxPython.
 %setup
 
 %build
+NOSWIG=1
+export NOSWIG
 cd src
-python ../distrib/build.py -b WXPSRCDIR=$PWD
-cd ../ogl
-python ../../distrib/build.py -b WXPSRCDIR=../../src
+python ../distrib/build.py -b WXPSRCDIR=$PWD USE_SONAME=1
+cd ../contrib/ogl
+python ../../distrib/build.py -b WXPSRCDIR=../../src USE_SONAME=1
 cd ../stc
-python ../../distrib/build.py -b WXPSRCDIR=../../src
-if [ ! -z $NOGLCANVAS ]; then
+python ../../distrib/build.py -b WXPSRCDIR=../../src USE_SONAME=1
+if [ -z $NOGLCANVAS ]; then
     cd ../glcanvas
-    python ../../distrib/build.py -b WXPSRCDIR=../../src
+    python ../../distrib/build.py -b WXPSRCDIR=../../src USE_SONAME=1
 fi
 
 #----------------------------------------------------------------------
 
 %install
+NOSWIG=1
+export NOSWIG
 cd src
 python ../distrib/build.py -i
-cd ../ogl
+cd ../contrib/ogl
 python ../../distrib/build.py -i
 cd ../stc
 python ../../distrib/build.py -i
-if [ ! -z $NOGLCANVAS ]; then
+if [ -z $NOGLCANVAS ]; then
     cd ../glcanvas
     python ../../distrib/build.py -i
 fi
@@ -77,7 +81,7 @@ fi
 
 %files
 %doc BUILD.txt CHANGES.txt README.txt gpl.txt lgpl.txt licence.txt licendoc.txt preamble.txt
-%{pref}/lib/libwxPyHelpers.so
+%{pref}/lib/libwxPyHelpers*
 %{pref}/lib/python1.5/site-packages/wxPython/*.py
 %{pref}/lib/python1.5/site-packages/wxPython/*.py?
 %{pref}/lib/python1.5/site-packages/wxPython/lib
