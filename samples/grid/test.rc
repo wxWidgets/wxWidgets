@@ -1,5 +1,0 @@
-#include "wx/msw/wx.rc"
-
-bitmap1 BITMAP "bitmap1.bmp"
-bitmap2 BITMAP "bitmap2.bmp"
-
