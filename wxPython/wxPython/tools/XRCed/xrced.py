@@ -69,7 +69,8 @@ class ScrolledMessageDialog(wxDialog):
                              wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY)
         text.SetFont(modernFont)
         dc = wxWindowDC(text)
-        w, h = dc.GetTextExtent(' ')
+        # !!! possible bug - GetTextExtent without font returns sysfont dims
+        w, h = dc.GetFullTextExtent(' ', modernFont)[:2]
         ok = wxButton(self, wxID_OK, "OK")
         text.SetConstraints(Layoutf('t=t5#1;b=t5#2;l=l5#1;r=r5#1', (self,ok)))
         text.SetSize((w * 80 + 30, h * 40))
