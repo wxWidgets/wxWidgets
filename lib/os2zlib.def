@@ -1,0 +1,121 @@
+LIBRARY OS2ZLIB INITINSTANCE TERMINSTANCE
+PROTMODE
+DATA MULTIPLE NONSHARED READWRITE LOADONCALL
+CODE LOADONCALL
+
+EXPORTS
+;From library:  H:\dev\wx2\wxWindows\LIB\os2zlib.lib
+  ;From object file:  ..\zlib\adler32.c
+    ;PUBDEFs (Symbols available from object file):
+      adler32
+  ;From object file:  ..\zlib\compress.c
+    ;PUBDEFs (Symbols available from object file):
+      compress
+      compress2
+  ;From object file:  ..\zlib\crc32.c
+    ;PUBDEFs (Symbols available from object file):
+      get_crc_table
+      crc32
+  ;From object file:  ..\zlib\deflate.c
+    ;PUBDEFs (Symbols available from object file):
+      deflateReset
+      deflate
+      deflateCopy
+      deflateInit_
+      deflateEnd
+      deflateInit2_
+      deflateSetDictionary
+      deflateParams
+  ;From object file:  ..\zlib\gzio.c
+    ;PUBDEFs (Symbols available from object file):
+      gzwrite
+      gzerror
+      gzsetparams
+      gzrewind
+      gzprintf
+      gztell
+      gzclose
+      gzdopen
+      gzread
+      gzopen
+      gzeof
+      gzgets
+      gzputs
+      gzflush
+      gzgetc
+      gzseek
+      gzputc
+  ;From object file:  ..\zlib\infblock.c
+    ;PUBDEFs (Symbols available from object file):
+      ;inflate_blocks_reset(inflate_blocks_state*,z_stream_s*,unsigned long*)
+      inflate_blocks_reset__FP20inflate_blocks_stateP10z_stream_sPUl
+      ;inflate_blocks_new(z_stream_s*,unsigned long(*)(unsigned long,const unsigned char*,unsigned int),unsigned int)
+      inflate_blocks_new__FP10z_stream_sPFUlPCUcUi_UlUi
+      ;inflate_blocks_sync_point(inflate_blocks_state*)
+      inflate_blocks_sync_point__FP20inflate_blocks_state
+      ;inflate_blocks(inflate_blocks_state*,z_stream_s*,int)
+      inflate_blocks__FP20inflate_blocks_stateP10z_stream_si
+      ;inflate_blocks_free(inflate_blocks_state*,z_stream_s*)
+      inflate_blocks_free__FP20inflate_blocks_stateP10z_stream_s
+      ;inflate_set_dictionary(inflate_blocks_state*,const unsigned char*,unsigned int)
+      inflate_set_dictionary__FP20inflate_blocks_statePCUcUi
+  ;From object file:  ..\zlib\infcodes.c
+    ;PUBDEFs (Symbols available from object file):
+      ;inflate_codes(inflate_blocks_state*,z_stream_s*,int)
+      inflate_codes__FP20inflate_blocks_stateP10z_stream_si
+      ;inflate_codes_new(unsigned int,unsigned int,inflate_huft_s*,inflate_huft_s*,z_stream_s*)
+      inflate_codes_new__FUiT1P14inflate_huft_sT3P10z_stream_s
+      ;inflate_codes_free(inflate_codes_state*,z_stream_s*)
+      inflate_codes_free__FP19inflate_codes_stateP10z_stream_s
+  ;From object file:  ..\zlib\inflate.c
+    ;PUBDEFs (Symbols available from object file):
+      inflateReset
+      inflateSyncPoint
+      inflateInit2_
+      inflate
+      inflateInit_
+      inflateSync
+      inflateEnd
+      inflateSetDictionary
+  ;From object file:  ..\zlib\inftrees.c
+    ;PUBDEFs (Symbols available from object file):
+      ;inflate_trees_dynamic(unsigned int,unsigned int,unsigned int*,unsigned int*,unsigned int*,inflate_huft_s**,inflate_huft_s**,inflate_huft_s*,z_stream_s*)
+      inflate_trees_dynamic__FUiT1PUiN23PP14inflate_huft_sT6P14inflate_huft_sP10z_stream_s
+      ;inflate_trees_bits(unsigned int*,unsigned int*,inflate_huft_s**,inflate_huft_s*,z_stream_s*)
+      inflate_trees_bits__FPUiT1PP14inflate_huft_sP14inflate_huft_sP10z_stream_s
+      ;inflate_trees_fixed(unsigned int*,unsigned int*,inflate_huft_s**,inflate_huft_s**,z_stream_s*)
+      inflate_trees_fixed__FPUiT1PP14inflate_huft_sT3P10z_stream_s
+  ;From object file:  ..\zlib\infutil.c
+    ;PUBDEFs (Symbols available from object file):
+      inflate_mask
+      ;inflate_flush(inflate_blocks_state*,z_stream_s*,int)
+      inflate_flush__FP20inflate_blocks_stateP10z_stream_si
+  ;From object file:  ..\zlib\inffast.c
+    ;PUBDEFs (Symbols available from object file):
+      ;inflate_fast(unsigned int,unsigned int,inflate_huft_s*,inflate_huft_s*,inflate_blocks_state*,z_stream_s*)
+      inflate_fast__FUiT1P14inflate_huft_sT3P20inflate_blocks_stateP10z_stream_s
+  ;From object file:  ..\zlib\trees.c
+    ;PUBDEFs (Symbols available from object file):
+      ;_tr_init(internal_state*)
+      _tr_init__FP14internal_state
+      ;_tr_flush_block(internal_state*,char*,unsigned long,int)
+      _tr_flush_block__FP14internal_statePcUli
+      ;_tr_tally(internal_state*,unsigned int,unsigned int)
+      _tr_tally__FP14internal_stateUiT2
+      ;_tr_stored_block(internal_state*,char*,unsigned long,int)
+      _tr_stored_block__FP14internal_statePcUli
+      ;_tr_align(internal_state*)
+      _tr_align__FP14internal_state
+  ;From object file:  ..\zlib\uncompr.c
+    ;PUBDEFs (Symbols available from object file):
+      uncompress
+  ;From object file:  ..\zlib\zutil.c
+    ;PUBDEFs (Symbols available from object file):
+      zlibVersion
+      z_errmsg
+      zcfree
+      z_verbose
+      zError
+      ;z_error(char*)
+      z_error__FPc
+      zcalloc

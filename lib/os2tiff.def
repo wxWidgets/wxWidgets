@@ -1,0 +1,218 @@
+LIBRARY OS2TIFF INITINSTANCE TERMINSTANCE
+PROTMODE
+DATA MULTIPLE NONSHARED READWRITE LOADONCALL
+CODE LOADONCALL
+
+EXPORTS
+;From library:  H:\dev\wx2\wxWindows\LIB\os2tiff.lib
+  ;From object file:  ..\tiff\tif_aux.c
+    ;PUBDEFs (Symbols available from object file):
+      TIFFVGetFieldDefaulted
+      TIFFGetFieldDefaulted
+  ;From object file:  ..\tiff\tif_close.c
+    ;PUBDEFs (Symbols available from object file):
+      TIFFClose
+  ;From object file:  ..\tiff\tif_codec.c
+    ;PUBDEFs (Symbols available from object file):
+      _TIFFBuiltinCODECS
+  ;From object file:  ..\tiff\tif_compress.c
+    ;PUBDEFs (Symbols available from object file):
+      _TIFFNoSeek
+      ;_TIFFNoPreCode(tiff*,unsigned short)
+      _TIFFNoPreCode__FP4tiffUs
+      TIFFUnRegisterCODEC
+      _TIFFNoTileEncode
+      _TIFFNoRowDecode
+      TIFFSetCompressionScheme
+      TIFFRegisterCODEC
+      _TIFFNoRowEncode
+      _TIFFNoStripDecode
+      _TIFFNoStripEncode
+      _TIFFNoTileDecode
+      _TIFFSetDefaultCompressionState
+      TIFFFindCODEC
+  ;From object file:  ..\tiff\tif_dir.c
+    ;PUBDEFs (Symbols available from object file):
+      TIFFVGetField
+      _TIFFsetByteArray
+      _TIFFsetFloatArray
+      TIFFSetSubDirectory
+      TIFFReassignTagToIgnore
+      TIFFCurrentDirOffset
+      _TIFFsetLongArray
+      TIFFUnlinkDirectory
+      TIFFSetDirectory
+      TIFFVSetField
+      TIFFFreeDirectory
+      TIFFDefaultDirectory
+      TIFFSetTagExtender
+      TIFFNumberOfDirectories
+      _TIFFsetShortArray
+      TIFFLastDirectory
+      ;_TIFFsetNString(char**,char*,long)
+      _TIFFsetNString__FPPcPcl
+      TIFFSetField
+      TIFFGetField
+      _TIFFsetDoubleArray
+      _TIFFsetString
+  ;From object file:  ..\tiff\tif_dirinfo.c
+    ;PUBDEFs (Symbols available from object file):
+      tiffDataWidth
+      _TIFFPrintFieldInfo
+      _TIFFFindFieldInfo
+      _TIFFSampleToTagType
+      _TIFFSetupFieldInfo
+      _TIFFMergeFieldInfo
+      _TIFFFieldWithTag
+  ;From object file:  ..\tiff\tif_dirread.c
+    ;PUBDEFs (Symbols available from object file):
+      TIFFReadDirectory
+  ;From object file:  ..\tiff\tif_dirwrite.c
+    ;PUBDEFs (Symbols available from object file):
+      TIFFWriteDirectory
+  ;From object file:  ..\tiff\tif_dumpmode.c
+    ;PUBDEFs (Symbols available from object file):
+      TIFFInitDumpMode
+  ;From object file:  ..\tiff\tif_error.c
+    ;PUBDEFs (Symbols available from object file):
+      TIFFSetErrorHandler
+      TIFFError
+  ;From object file:  ..\tiff\tif_fax3.c
+    ;PUBDEFs (Symbols available from object file):
+      TIFFInitCCITTFax4
+      TIFFInitCCITTRLE
+      _TIFFFax3fillruns
+      TIFFInitCCITTRLEW
+      TIFFInitCCITTFax3
+  ;From object file:  ..\tiff\tif_fax3sm.c
+    ;PUBDEFs (Symbols available from object file):
+      TIFFFaxBlackTable
+      TIFFFaxMainTable
+      TIFFFaxWhiteTable
+  ;From object file:  ..\tiff\tif_flush.c
+    ;PUBDEFs (Symbols available from object file):
+      TIFFFlush
+      TIFFFlushData
+  ;From object file:  ..\tiff\tif_getimage.c
+    ;PUBDEFs (Symbols available from object file):
+      TIFFRGBAImageOK
+      TIFFRGBAImageEnd
+      TIFFRGBAImageBegin
+      TIFFRGBAImageGet
+      TIFFReadRGBAStrip
+      TIFFReadRGBATile
+      TIFFReadRGBAImage
+  ;From object file:  ..\tiff\tif_jpeg.c
+  ;From object file:  ..\tiff\tif_luv.c
+    ;PUBDEFs (Symbols available from object file):
+      TIFFInitSGILog
+  ;From object file:  ..\tiff\tif_lzw.c
+    ;PUBDEFs (Symbols available from object file):
+      TIFFInitLZW
+  ;From object file:  ..\tiff\tif_next.c
+    ;PUBDEFs (Symbols available from object file):
+      TIFFInitNeXT
+  ;From object file:  ..\tiff\tif_open.c
+    ;PUBDEFs (Symbols available from object file):
+      TIFFIsTiled
+      TIFFIsUpSampled
+      TIFFIsByteSwapped
+      _TIFFgetMode
+      TIFFCurrentDirectory
+      TIFFCurrentTile
+      TIFFIsMSB2LSB
+      TIFFFileName
+      TIFFCurrentRow
+      TIFFCurrentStrip
+      TIFFGetMode
+      TIFFClientOpen
+      TIFFFileno
+  ;From object file:  ..\tiff\tif_os2.c
+    ;PUBDEFs (Symbols available from object file):
+      _TIFFmemset
+      _TIFFfree
+      _TIFFmemcmp
+      TIFFFdOpen
+      _TIFFmalloc
+      _TIFFmemcpy
+      TIFFOpen
+      _TIFFwarningHandler
+      _TIFFrealloc
+      _TIFFerrorHandler
+  ;From object file:  ..\tiff\tif_packbits.c
+    ;PUBDEFs (Symbols available from object file):
+      TIFFInitPackBits
+  ;From object file:  ..\tiff\tif_pixarlog.c
+  ;From object file:  ..\tiff\tif_predict.c
+    ;PUBDEFs (Symbols available from object file):
+      TIFFPredictorInit
+  ;From object file:  ..\tiff\tif_print.c
+    ;PUBDEFs (Symbols available from object file):
+      TIFFPrintDirectory
+      _TIFFprintAsciiTag
+      _TIFFprintAscii
+  ;From object file:  ..\tiff\tif_read.c
+    ;PUBDEFs (Symbols available from object file):
+      TIFFReadRawStrip
+      TIFFReadScanline
+      _TIFFSwab16BitData
+      TIFFReadRawTile
+      _TIFFSwab32BitData
+      TIFFReadEncodedStrip
+      _TIFFNoPostDecode
+      _TIFFSwab64BitData
+      TIFFReadTile
+      TIFFReadEncodedTile
+      TIFFReadBufferSetup
+  ;From object file:  ..\tiff\tif_strip.c
+    ;PUBDEFs (Symbols available from object file):
+      TIFFNumberOfStrips
+      TIFFScanlineSize
+      TIFFDefaultStripSize
+      TIFFComputeStrip
+      TIFFRasterScanlineSize
+      TIFFVStripSize
+      _TIFFDefaultStripSize
+      TIFFStripSize
+  ;From object file:  ..\tiff\tif_swab.c
+    ;PUBDEFs (Symbols available from object file):
+      TIFFSwabArrayOfDouble
+      TIFFSwabDouble
+      TIFFGetBitRevTable
+      TIFFSwabArrayOfLong
+      TIFFSwabArrayOfShort
+      TIFFSwabLong
+      TIFFReverseBits
+      TIFFSwabShort
+  ;From object file:  ..\tiff\tif_thunder.c
+    ;PUBDEFs (Symbols available from object file):
+      TIFFInitThunderScan
+  ;From object file:  ..\tiff\tif_tile.c
+    ;PUBDEFs (Symbols available from object file):
+      TIFFDefaultTileSize
+      TIFFComputeTile
+      _TIFFDefaultTileSize
+      TIFFTileSize
+      TIFFCheckTile
+      TIFFTileRowSize
+      TIFFVTileSize
+      TIFFNumberOfTiles
+  ;From object file:  ..\tiff\tif_version.c
+    ;PUBDEFs (Symbols available from object file):
+      TIFFGetVersion
+  ;From object file:  ..\tiff\tif_warning.c
+    ;PUBDEFs (Symbols available from object file):
+      TIFFSetWarningHandler
+      TIFFWarning
+  ;From object file:  ..\tiff\tif_write.c
+    ;PUBDEFs (Symbols available from object file):
+      TIFFSetWriteOffset
+      TIFFWriteRawStrip
+      TIFFWriteTile
+      TIFFWriteEncodedStrip
+      TIFFWriteRawTile
+      TIFFWriteBufferSetup
+      TIFFFlushData1
+      TIFFWriteScanline
+      TIFFWriteEncodedTile
+  ;From object file:  ..\tiff\tif_zip.c

@@ -1,0 +1,201 @@
+LIBRARY OS2JPEG INITINSTANCE TERMINSTANCE
+PROTMODE
+DATA MULTIPLE NONSHARED READWRITE LOADONCALL
+CODE LOADONCALL
+
+EXPORTS
+;From library:  H:\dev\wx2\wxWindows\lib\os2jpeg.lib
+  ;From object file:  ..\jpeg\jcomapi.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_destroy
+      jpeg_abort
+      jpeg_alloc_huff_table
+      jpeg_alloc_quant_table
+  ;From object file:  ..\jpeg\jutils.c
+    ;PUBDEFs (Symbols available from object file):
+      jdiv_round_up
+      jzero_far
+      jround_up
+      jcopy_block_row
+      jcopy_sample_rows
+      jpeg_natural_order
+  ;From object file:  ..\jpeg\jerror.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_std_error
+  ;From object file:  ..\jpeg\jmemmgr.c
+    ;PUBDEFs (Symbols available from object file):
+      jinit_memory_mgr
+  ;From object file:  ..\jpeg\jmemnobs.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_free_large
+      jpeg_mem_term
+      jpeg_mem_available
+      jpeg_mem_init
+      jpeg_open_backing_store
+      jpeg_get_small
+      jpeg_free_small
+      jpeg_get_large
+  ;From object file:  ..\jpeg\jcapimin.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_write_marker
+      jpeg_destroy_compress
+      jpeg_abort_compress
+      jpeg_write_m_byte
+      jpeg_suppress_tables
+      jpeg_write_tables
+      jpeg_write_m_header
+      jpeg_CreateCompress
+      jpeg_finish_compress
+  ;From object file:  ..\jpeg\jcapistd.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_write_raw_data
+      jpeg_start_compress
+      jpeg_write_scanlines
+  ;From object file:  ..\jpeg\jctrans.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_write_coefficients
+      jpeg_copy_critical_parameters
+  ;From object file:  ..\jpeg\jcparam.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_set_quality
+      jpeg_set_colorspace
+      jpeg_simple_progression
+      jpeg_default_colorspace
+      jpeg_set_defaults
+      jpeg_add_quant_table
+      jpeg_set_linear_quality
+      jpeg_quality_scaling
+  ;From object file:  ..\jpeg\jdatadst.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_stdio_dest
+  ;From object file:  ..\jpeg\jcinit.c
+    ;PUBDEFs (Symbols available from object file):
+      jinit_compress_master
+  ;From object file:  ..\jpeg\jcmaster.c
+    ;PUBDEFs (Symbols available from object file):
+      jinit_c_master_control
+  ;From object file:  ..\jpeg\jcmarker.c
+    ;PUBDEFs (Symbols available from object file):
+      jinit_marker_writer
+  ;From object file:  ..\jpeg\jcmainct.c
+    ;PUBDEFs (Symbols available from object file):
+      jinit_c_main_controller
+  ;From object file:  ..\jpeg\jcprepct.c
+    ;PUBDEFs (Symbols available from object file):
+      jinit_c_prep_controller
+  ;From object file:  ..\jpeg\jccoefct.c
+    ;PUBDEFs (Symbols available from object file):
+      jinit_c_coef_controller
+  ;From object file:  ..\jpeg\jccolor.c
+    ;PUBDEFs (Symbols available from object file):
+      jinit_color_converter
+  ;From object file:  ..\jpeg\jcsample.c
+    ;PUBDEFs (Symbols available from object file):
+      jinit_downsampler
+  ;From object file:  ..\jpeg\jchuff.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_make_c_derived_tbl
+      jinit_huff_encoder
+      jpeg_gen_optimal_table
+  ;From object file:  ..\jpeg\jcphuff.c
+    ;PUBDEFs (Symbols available from object file):
+      jinit_phuff_encoder
+  ;From object file:  ..\jpeg\jcdctmgr.c
+    ;PUBDEFs (Symbols available from object file):
+      jinit_forward_dct
+  ;From object file:  ..\jpeg\jfdctfst.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_fdct_ifast
+  ;From object file:  ..\jpeg\jfdctflt.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_fdct_float
+  ;From object file:  ..\jpeg\jfdctint.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_fdct_islow
+  ;From object file:  ..\jpeg\jdapimin.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_has_multiple_scans
+      jpeg_finish_decompress
+      jpeg_read_header
+      jpeg_input_complete
+      jpeg_consume_input
+      jpeg_CreateDecompress
+      jpeg_destroy_decompress
+      jpeg_abort_decompress
+  ;From object file:  ..\jpeg\jdapistd.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_start_output
+      jpeg_read_raw_data
+      jpeg_start_decompress
+      jpeg_read_scanlines
+      jpeg_finish_output
+  ;From object file:  ..\jpeg\jdtrans.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_read_coefficients
+  ;From object file:  ..\jpeg\jdatasrc.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_stdio_src
+  ;From object file:  ..\jpeg\jdmaster.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_calc_output_dimensions
+      jpeg_new_colormap
+      jinit_master_decompress
+  ;From object file:  ..\jpeg\jdinput.c
+    ;PUBDEFs (Symbols available from object file):
+      jinit_input_controller
+  ;From object file:  ..\jpeg\jdmarker.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_resync_to_restart
+      jpeg_save_markers
+      jpeg_set_marker_processor
+      jinit_marker_reader
+  ;From object file:  ..\jpeg\jdhuff.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_huff_decode
+      jpeg_fill_bit_buffer
+      jpeg_make_d_derived_tbl
+      jinit_huff_decoder
+  ;From object file:  ..\jpeg\jdphuff.c
+    ;PUBDEFs (Symbols available from object file):
+      jinit_phuff_decoder
+  ;From object file:  ..\jpeg\jdmainct.c
+    ;PUBDEFs (Symbols available from object file):
+      jinit_d_main_controller
+  ;From object file:  ..\jpeg\jdcoefct.c
+    ;PUBDEFs (Symbols available from object file):
+      jinit_d_coef_controller
+  ;From object file:  ..\jpeg\jdpostct.c
+    ;PUBDEFs (Symbols available from object file):
+      jinit_d_post_controller
+  ;From object file:  ..\jpeg\jddctmgr.c
+    ;PUBDEFs (Symbols available from object file):
+      jinit_inverse_dct
+  ;From object file:  ..\jpeg\jidctfst.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_idct_ifast
+  ;From object file:  ..\jpeg\jidctflt.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_idct_float
+  ;From object file:  ..\jpeg\jidctint.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_idct_islow
+  ;From object file:  ..\jpeg\jidctred.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_idct_4x4
+      jpeg_idct_1x1
+      jpeg_idct_2x2
+  ;From object file:  ..\jpeg\jdsample.c
+    ;PUBDEFs (Symbols available from object file):
+      jinit_upsampler
+  ;From object file:  ..\jpeg\jdcolor.c
+    ;PUBDEFs (Symbols available from object file):
+      jinit_color_deconverter
+  ;From object file:  ..\jpeg\jquant1.c
+    ;PUBDEFs (Symbols available from object file):
+      jinit_1pass_quantizer
+  ;From object file:  ..\jpeg\jquant2.c
+    ;PUBDEFs (Symbols available from object file):
+      jinit_2pass_quantizer
+  ;From object file:  ..\jpeg\jdmerge.c
+    ;PUBDEFs (Symbols available from object file):
+      jinit_merged_upsampler
