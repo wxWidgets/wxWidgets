@@ -30,7 +30,7 @@
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxFileProto, wxProtocol)
-IMPLEMENT_PROTOCOL(wxFileProto, "file", NULL, FALSE)
+IMPLEMENT_PROTOCOL(wxFileProto, _T("file"), NULL, FALSE)
 #endif
 
 wxFileProto::wxFileProto()

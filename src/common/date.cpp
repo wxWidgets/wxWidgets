@@ -282,7 +282,7 @@ bool WXDLLEXPORT operator != (const wxDate &dt1, const wxDate &dt2)
 
 ostream WXDLLEXPORT & operator << (ostream &os, const wxDate &dt)
 {
-    return os << (const wxChar *) dt.FormatDate();
+    return os << dt.FormatDate().mb_str();
 }
 
 //////////////////////////////////////////////////////////////

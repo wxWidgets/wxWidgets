@@ -1606,7 +1606,7 @@ void wxMacSocketHandlerProc( void *refcon , short event )
 #endif
 #ifdef __WINDOWS__
 
-extern char wxPanelClassName[];
+extern wxChar wxPanelClassName[];
 
 LRESULT APIENTRY _EXPORT wxSocketHandlerWndProc(HWND hWnd, UINT message,
    WPARAM wParam, LPARAM lParam)
@@ -1645,7 +1645,7 @@ LRESULT APIENTRY _EXPORT wxSocketHandlerWndProc(HWND hWnd, UINT message,
     break;
 
   default:
-      wxFAIL_MSG("invalid socket event");
+      wxFAIL_MSG(_T("invalid socket event"));
       return (LRESULT)0;
   }
 

@@ -109,7 +109,7 @@ bool wxURL::ParseURL()
 
 void wxURL::CleanData()
 {
-  if (m_protoname != "proxy")
+  if (m_protoname != _T("proxy"))
     delete m_protocol;
 }
 
@@ -239,7 +239,7 @@ wxInputStream *wxURL::GetInputStream(void)
   }
 
   m_error = wxURL_NOERR;
-  if (m_user != "") {
+  if (m_user != _T("")) {
     m_protocol->SetUser(m_user);
     m_protocol->SetPassword(m_password);
   }
