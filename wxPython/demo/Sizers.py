@@ -141,11 +141,11 @@ def makeBoxInBox(win):
     box.Add(wxButton(win, 1010, "one"), 0, wxEXPAND)
 
     box2 = wxBoxSizer(wxHORIZONTAL)
-    box2.AddMany([ (wxButton(win, 1010, "two"), 0, wxEXPAND),
-                   (wxButton(win, 1010, "three"), 0, wxEXPAND),
-                   (wxButton(win, 1010, "four"), 0, wxEXPAND),
-                   (wxButton(win, 1010, "five"), 0, wxEXPAND),
-                   ])
+    box2.Add(wxButton(win, 1010, "two"), 0, wxEXPAND)
+    btn3 = wxButton(win, 1010, "three")
+    box2.Add(btn3, 0, wxEXPAND)
+    box2.Add(wxButton(win, 1010, "four"), 0, wxEXPAND)
+    box2.Add(wxButton(win, 1010, "five"), 0, wxEXPAND)
 
     box3 = wxBoxSizer(wxVERTICAL)
     box3.AddMany([ (wxButton(win, 1010, "six"),   0, wxEXPAND),
@@ -158,6 +158,8 @@ def makeBoxInBox(win):
     box.Add(box2, 1, wxEXPAND)
 
     box.Add(wxButton(win, 1010, "ten"), 0, wxEXPAND)
+
+    ##box.Hide(btn3)
 
     return box
 
