@@ -302,6 +302,7 @@ void wxApp::MacNewFile()
 	    { kEventClassAppleEvent , kEventAppleEvent } ,
 	    
     	{ kEventClassMouse , kEventMouseDown } ,
+    	{ 'WXMC' , 'WXMC' }
 	} ;
 
 static pascal OSStatus MenuEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
@@ -1170,14 +1171,7 @@ bool wxApp::ProcessIdle()
 
 void wxApp::ExitMainLoop()
 {
-#if TARGET_CARBON
-	if (s_inReceiveEvent)
-		QuitApplicationEventLoop() ;
-	else
-  		m_keepGoing = FALSE;
-#else
   	m_keepGoing = FALSE;
-#endif
 }
 
 // Is a message/event pending?
@@ -1360,7 +1354,8 @@ bool wxApp::Yield(bool onlyIfNeeded)
 		}
 		else if ( status == eventLoopQuitErr )
 		{
-			m_keepGoing = false ;
+			// according to QA1061 this may also occur when a WakeUp Process
+			// is executed
 		}
 		else
 		{
@@ -1374,7 +1369,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
 	// having a larger value here leads to large performance slowdowns
 	// so we cannot give background apps more processor time here
 	// we do so however having a large sleep value in the main event loop
-    long sleepTime = 0 ; 
+    sleepTime = 0 ; 
 
     while ( !IsExiting() && WaitNextEvent(everyEvent, &event,sleepTime, (RgnHandle) wxApp::s_macCursorRgn))
     {
@@ -1468,7 +1463,8 @@ void wxApp::MacDoOneEvent()
 	}
 	else if ( status == eventLoopQuitErr )
 	{
-		m_keepGoing = false ;
+		// according to QA1061 this may also occur when a WakeUp Process
+		// is executed
 	}
 	else
 	{
