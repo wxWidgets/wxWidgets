@@ -24,29 +24,29 @@
 #endif
 
 /*
-	WXMAC variants
-	__WXMAC_CLASSIC__ means ppc non-carbon builds, __WXMAC_CARBON__ means
-	carbon API available (mach or cfm builds) , __WXMAC_OSX__ means mach-o
-	builds, running under 10.2 + only
+    WXMAC variants
+    __WXMAC_CLASSIC__ means ppc non-carbon builds, __WXMAC_CARBON__ means
+    carbon API available (mach or cfm builds) , __WXMAC_OSX__ means mach-o
+    builds, running under 10.2 + only
 */
 #ifdef __WXMAC__
-	#if defined(__MACH__)
-		#define __WXMAC_OSX__ 1
-		#define __WXMAC_CARBON__ 1
-		#define __WXMAC_CLASSIC__ 0
+    #if defined(__MACH__)
+        #define __WXMAC_OSX__ 1
+        #define __WXMAC_CARBON__ 1
+        #define __WXMAC_CLASSIC__ 0
         #ifdef __WXMAC_XCODE__
             #include "wx/mac/carbon/config_xcode.h"
         #endif
-	#else
-		#define __WXMAC_OSX__ 0
-		#if TARGET_CARBON
-			#define __WXMAC_CARBON__ 1
-			#define __WXMAC_CLASSIC__ 0
-		#else
-			#define __WXMAC_CARBON__ 0
-			#define __WXMAC_CLASSIC__ 1
-		#endif
-	#endif
+    #else
+        #define __WXMAC_OSX__ 0
+        #if TARGET_CARBON
+            #define __WXMAC_CARBON__ 1
+            #define __WXMAC_CLASSIC__ 0
+        #else
+            #define __WXMAC_CARBON__ 0
+            #define __WXMAC_CLASSIC__ 1
+        #endif
+    #endif
 #endif
 
 /*
@@ -117,6 +117,11 @@
                 with it, hence explicitly define a lower WINVER value for it.
              */
 #           define WINVER 0x0400
+#       elif defined(__DMC__)
+            /*
+                Digital Mars is distributed with a little outdated headers.
+             */
+#           define WINVER 0x0400
 #       else /* !VC++ 6 */
             /*
                see MSDN for the description of possible WINVER values, this one
@@ -175,7 +180,7 @@
 #       ifndef __WINCE_NET__
 #           define __WINCE_NET__
 #       endif
-#   elif (_WIN32_WCE >= 200) 
+#   elif (_WIN32_WCE >= 200)
 #       ifndef __HANDHELDPC__
 #           define __HANDHELDPC__
 #       endif
