@@ -27,8 +27,8 @@ samples/dnd/DndVC.dsw
 samples/docview/DocviewVC.dsp
 samples/docview/DocviewVC.dsw
 
-samples/docvwmdi/DocViewVC.dsp
-samples/docvwmdi/DocViewVC.dsw
+samples/docvwmdi/DocVwVC.dsp
+samples/docvwmdi/DocVwVC.dsw
 
 samples/dynamic/DynamicVC.dsp
 samples/dynamic/DynamicVC.dsw

@@ -146,7 +146,7 @@ static const wxChar* gs_encodingNames[] =
 static wxFontMapper gs_fontMapper;
 
 // and public pointer
-wxFontMapper * WXDLLEXPORT wxTheFontMapper = &gs_fontMapper;
+wxFontMapper * wxTheFontMapper = &gs_fontMapper;
 
 // ----------------------------------------------------------------------------
 // private classes

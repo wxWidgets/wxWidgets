@@ -298,6 +298,17 @@ call, added the condition to check for the len==limit.
 visitor_email_address: vasuh@bullant.net
 wxWINDOWS+VERSION: wx2.1.11
 
+DATE+FIXED: 30/12/1999
+DATE+IDENTIFIED: 
+DETAILS: the setting of wxvc_dll have a bug of precompiled setting with release version.
+FIXED+BY: Pumb Peng
+IDENTIFIED+BY: Pumb Peng
+PLATFORMS: windows NT
+SHORT+DESCRIPTION: wxvc_dll.dsp Bug
+Submit: Submit
+WORKAROUND: 
+visitor_email_address: 
+wxWINDOWS+VERSION: 2.1.11
 
 ---------------------------END OF BUGLIST-------------------------
 

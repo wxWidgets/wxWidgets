@@ -68,21 +68,22 @@ void wxDebugFree(void * buf, bool isVect = FALSE);
 
 // Added JACS 25/11/98: needed for some compilers
 void * operator new (size_t size);
-void * operator new (size_t size, wxChar * fileName, int lineNum);
+WXDLLEXPORT void * operator new (size_t size, wxChar * fileName, int lineNum);
+
 #if !defined(__VISAGECPP__)
 void operator delete (void * buf);
 #endif
 
 #if wxUSE_ARRAY_MEMORY_OPERATORS
-    void * operator new[] (size_t size);
-    void * operator new[] (size_t size, wxChar * fileName, int lineNum);
-    void operator delete[] (void * buf);
+    WXDLLEXPORT void* operator new[] (size_t size);
+    WXDLLEXPORT void* operator new[] (size_t size, wxChar * fileName, int lineNum);
+    WXDLLEXPORT void operator delete[] (void * buf);
 #endif
 
 // VC++ 6.0
 #if defined(__VISUALC__) && (__VISUALC__ >= 1200)
-    void operator delete(void *buf, wxChar*, int);
-    void operator delete[](void *buf, wxChar*, int);
+    WXDLLEXPORT void operator delete(void *buf, wxChar*, int);
+    WXDLLEXPORT void operator delete[](void *buf, wxChar*, int);
 #endif
 
 #endif

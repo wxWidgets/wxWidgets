@@ -1004,8 +1004,6 @@ void operator delete (void * buf)
 #if defined(__VISUALC__) && (__VISUALC__ >= 1200)
 void operator delete(void* pData, wxChar* /* fileName */, int /* lineNum */)
 {
-// ::operator delete(pData);
-  // JACS 21/11/1998: surely we need to call wxDebugFree?
   wxDebugFree(pData, FALSE);
 }
 // New operator 21/11/1998

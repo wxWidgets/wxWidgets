@@ -171,7 +171,7 @@ void ScoreFile::WritePlayersScore(const char* player, int wins, int games, int s
     if (player)
 	{
 		m_config->SetPath("/General");
-		m_config->Write("LastPlayer", player);
+		m_config->Write("LastPlayer", wxString(player)); // Without wxString tmp, thinks it's bool in VC++
 
 		m_config->SetPath("/Players");
 		m_config->SetPath(player);

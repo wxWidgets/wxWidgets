@@ -376,7 +376,7 @@ public:
 
         // a class representing a time zone: basicly, this is just an offset
         // (in seconds) from GMT
-    class TimeZone
+    class WXDLLEXPORT TimeZone
     {
     public:
         TimeZone(TZ tz);

@@ -126,6 +126,8 @@ rem from within distrib\msw, to split off wisetop.txt and wisebott.txt.
 echo Calling 'makewise' to generate wxwin2.wse...
 call %WXWIN\distrib\msw\makewise.bat
 
+erase /Y setup.*
+
 rem Now invoke WISE install on the new wxwin2.wse
 set wisecmd="c:\Program Files\wise\wise32.exe" /C %WXWIN\distrib\msw\wxwin2.wse
 echo Invoking %wisecmd...
@@ -152,6 +154,9 @@ ren s setup.w05
 
 ren setup.w06 s
 ren s setup.w06
+
+rem Put all the setup files into a single zip archive.
+zip32 setup.zip readme.txt setup.*
 
 echo wxWindows archived.
 

@@ -500,6 +500,10 @@ SOURCE=.\generic\busyinfo.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\generic\calctrl.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\generic\choicdgg.cpp
 # End Source File
 # Begin Source File
