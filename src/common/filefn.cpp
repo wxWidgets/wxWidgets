@@ -77,6 +77,12 @@
 #endif // __WINDOWS__
 #endif // native Win compiler
 
+#if defined(__DOS__) && defined(__WATCOMC__)
+    #include <direct.h>
+    #include <dos.h>
+    #include <io.h>
+#endif
+
 #ifdef __GNUWIN32__
     #include <wchar.h>
     #ifndef __TWIN32__
@@ -1186,7 +1192,7 @@ bool wxMkdir(const wxString& dir, int perm)
 
     // assume mkdir() has 2 args on non Windows-OS/2 platforms and on Windows too
     // for the GNU compiler
-#if (!(defined(__WXMSW__) || defined(__WXPM__))) || (defined(__GNUWIN32__) && !defined(__MINGW32__)) || defined(__WXWINE__) || defined(__WXMICROWIN__)
+#if (!(defined(__WXMSW__) || defined(__WXPM__) || defined(__DOS__))) || (defined(__GNUWIN32__) && !defined(__MINGW32__)) || defined(__WXWINE__) || defined(__WXMICROWIN__)
     if ( mkdir(wxFNCONV(dirname), perm) != 0 )
 #elif defined(__WXPM__)
     if (::DosCreateDir((PSZ)dirname, NULL) != 0) // enhance for EAB's??
@@ -1813,7 +1819,7 @@ wxString wxGetCwd()
 
 bool wxSetWorkingDirectory(const wxString& d)
 {
-#if defined( __UNIX__ ) || defined( __WXMAC__ )
+#if defined(__UNIX__) || defined(__WXMAC__) || defined(__DOS__)
   return (chdir(wxFNSTRINGCAST d.fn_str()) == 0);
 #elif defined(__WXPM__)
   return (::DosSetCurrentDir((PSZ)d.c_str()) == 0);
