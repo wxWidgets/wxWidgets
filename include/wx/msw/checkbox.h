@@ -42,7 +42,7 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxCheckBoxNameStr);
 
-    virtual void SetValue(const bool value);
+    virtual void SetValue(bool value);
     virtual bool GetValue() const;
 
     virtual void SetLabel(const wxString& label);
