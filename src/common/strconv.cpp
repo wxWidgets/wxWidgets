@@ -933,11 +933,17 @@ static wxCharacterSet *wxGetCharacterSet(const wxChar *name)
 #endif // HAVE_ICONV/!HAVE_ICONV
     }
 
-    if ( cset->usable() )
-        return cset;
+    // it can only be NULL in this case
+#ifndef HAVE_ICONV
+    if ( cset )
+#endif // !HAVE_ICONV
+    {
+        if ( cset->usable() )
+            return cset;
 
-    delete cset;
-    cset = NULL;
+        delete cset;
+        cset = NULL;
+    }
 
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
     cset = new CP_CharSet(name);
