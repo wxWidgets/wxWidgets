@@ -531,7 +531,7 @@ static bool wxExecuteDDE(const wxString& ddeServer,
 
 long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
 {
-    wxCHECK_MSG( !cmd.IsEmpty(), 0, wxT("empty command in wxExecute") );
+    wxCHECK_MSG( !cmd.empty(), 0, wxT("empty command in wxExecute") );
 
 #if wxUSE_THREADS
     // for many reasons, the code below breaks down if it's called from another
@@ -889,7 +889,7 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
     }
 
     wxAppTraits *traits = NULL;
-    void *cookie wxDUMMY_INITIALIZE(NULL);
+    void *cookie = NULL;
     if ( !(flags & wxEXEC_NODISABLE) )
     {
         if ( wxTheApp )
