@@ -402,14 +402,16 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
     return result;
 #else // 1
 
-    HANDLE h_readPipe[2];
-    HANDLE h_writePipe[2];
-    HANDLE h_oldreadPipe;
-    HANDLE h_oldwritePipe;
-    BOOL inheritHandles;
+    HANDLE hpipeRead[2];
+    HANDLE hpipeWrite[2];
+    HANDLE hStdIn = INVALID_HANDLE_VALUE;
+    HANDLE hStdOut = INVALID_HANDLE_VALUE;
+
+    // we need to inherit handles in the child process if we want to redirect
+    // its IO
+    BOOL inheritHandles = FALSE;
 
     // open the pipes to which child process IO will be redirected if needed
-    inheritHandles = FALSE;
     if ( handler && handler->IsRedirected() )
     {
         SECURITY_ATTRIBUTES security;
@@ -418,17 +420,17 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
         security.lpSecurityDescriptor = NULL;
         security.bInheritHandle       = TRUE;
 
-        if (! ::CreatePipe(&h_readPipe[0], &h_readPipe[1], &security, 0) )
+        if ( !::CreatePipe(&hpipeRead[0], &hpipeRead[1], &security, 0) )
         {
             wxLogSysError(_("Can't create the inter-process read pipe"));
 
             return 0;
         }
 
-        if (! ::CreatePipe(&h_writePipe[0], &h_writePipe[1], &security, 0) )
+        if ( !::CreatePipe(&hpipeWrite[0], &hpipeWrite[1], &security, 0) )
         {
-            ::CloseHandle(h_readPipe[0]);
-            ::CloseHandle(h_readPipe[1]);
+            ::CloseHandle(hpipeRead[0]);
+            ::CloseHandle(hpipeRead[1]);
 
             wxLogSysError(_("Can't create the inter-process write pipe"));
 
@@ -437,11 +439,14 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
 
         // We need to save the old stdio handles to restore them after the call
         // to CreateProcess
-        h_oldreadPipe  = GetStdHandle(STD_INPUT_HANDLE);
-        h_oldwritePipe = GetStdHandle(STD_OUTPUT_HANDLE);
+        hStdIn  = ::GetStdHandle(STD_INPUT_HANDLE);
+        hStdOut = ::GetStdHandle(STD_OUTPUT_HANDLE);
 
-        SetStdHandle(STD_INPUT_HANDLE, h_readPipe[0]);
-        SetStdHandle(STD_OUTPUT_HANDLE, h_writePipe[1]);
+        if ( !::SetStdHandle(STD_INPUT_HANDLE, hpipeRead[0]) ||
+             !::SetStdHandle(STD_OUTPUT_HANDLE, hpipeWrite[1]) )
+        {
+            wxLogDebug(_T("Failed to change stdin/out handles"));
+        }
 
         inheritHandles = TRUE;
     }
@@ -470,10 +475,10 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
     {
         if ( inheritHandles )
         {
-            ::CloseHandle(h_writePipe[0]);
-            ::CloseHandle(h_writePipe[1]);
-            ::CloseHandle(h_readPipe[0]);
-            ::CloseHandle(h_readPipe[1]);
+            ::CloseHandle(hpipeWrite[0]);
+            ::CloseHandle(hpipeWrite[1]);
+            ::CloseHandle(hpipeRead[0]);
+            ::CloseHandle(hpipeRead[1]);
         }
 
         wxLogSysError(_("Execution of command '%s' failed"), command.c_str());
@@ -482,17 +487,23 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
     }
 
     // Restore the old stdio handles
-    if (inheritHandles) {
-        SetStdHandle(STD_INPUT_HANDLE, h_oldreadPipe);
-        SetStdHandle(STD_OUTPUT_HANDLE, h_oldwritePipe);
+    if ( inheritHandles )
+    {
+        if ( !::SetStdHandle(STD_INPUT_HANDLE, hStdIn) ||
+             !::SetStdHandle(STD_OUTPUT_HANDLE, hStdOut) )
+        {
+            wxLogDebug(_T("Failed to restore old stdin/out handles"));
+        }
 
-        ::CloseHandle(h_writePipe[1]);
-        ::CloseHandle(h_readPipe[0]);
+        // they're still opened in child process
+        ::CloseHandle(hpipeWrite[1]);
+        ::CloseHandle(hpipeRead[0]);
+
         // We can now initialize the wxStreams
-        wxInputStream *processOutput = new wxPipeInputStream(h_writePipe[0]);
-        wxOutputStream *processInput = new wxPipeOutputStream(h_readPipe[1]);
+        wxInputStream *inStream = new wxPipeInputStream(hpipeWrite[0]);
+        wxOutputStream *outStream = new wxPipeOutputStream(hpipeRead[1]);
 
-        handler->SetPipeStreams(processOutput, processInput);
+        handler->SetPipeStreams(inStream, outStream);
     }
 
     // register the class for the hidden window used for the notifications
@@ -528,8 +539,8 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
     data->state       = sync;
     if ( sync )
     {
-        wxASSERT_MSG( !handler, wxT("wxProcess param ignored for sync execution") );
-
+        // handler may be !NULL for capturing program output, but we don't use
+        // it wxExecuteData struct in this case
         data->handler = NULL;
     }
     else

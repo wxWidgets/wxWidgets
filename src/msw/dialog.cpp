@@ -419,8 +419,29 @@ bool wxDialog::Show(bool show)
 // Replacement for Show(TRUE) for modal dialogs - returns return code
 int wxDialog::ShowModal()
 {
+    // modal dialog needs a parent window, so try to find one
+    if ( !GetParent() )
+    {
+        wxWindow *parent = wxTheApp->GetTopWindow();
+        if ( parent && parent != this )
+        {
+            // use it
+            m_parent = parent;
+        }
+    }
+
+    wxWindowDisabler *wd = (wxWindowDisabler *)NULL;
+    if ( !GetParent() )
+    {
+        // still no parent? make the dialog app modal by disabling all windows
+        wd = new wxWindowDisabler(this);
+    }
+
     m_windowStyle |= wxDIALOG_MODAL;
     Show(TRUE);
+
+    delete wd;
+
     return GetReturnCode();
 }
 
@@ -521,6 +542,33 @@ long wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 
     switch ( message )
     {
+        case WM_ACTIVATE:
+            switch ( LOWORD(wParam) )
+            {
+                case WA_ACTIVE:
+                case WA_CLICKACTIVE:
+                    if ( IsModalShowing() && GetParent() )
+                    {
+                        // bring the owner window to top as the standard dialog
+                        // boxes do
+                        if ( !::SetWindowPos
+                                (
+                                    GetHwndOf(GetParent()),
+                                    GetHwnd(),
+                                    0, 0,
+                                    0, 0,
+                                    SWP_NOACTIVATE |
+                                    SWP_NOMOVE |
+                                    SWP_NOSIZE
+                                ) )
+                        {
+                            wxLogLastError("SetWindowPos(SWP_NOACTIVATE)");
+                        }
+                    }
+                    // fall through to process it normally as well
+            }
+            break;
+
         case WM_CLOSE:
             // if we can't close, tell the system that we processed the
             // message - otherwise it would close us

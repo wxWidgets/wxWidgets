@@ -78,7 +78,7 @@
 #endif
 
 #ifdef __WXMSW__
-    #include "windows.h"
+    #include "wx/msw/private.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -983,6 +983,12 @@ wxWindowDisabler::wxWindowDisabler(wxWindow *winToSkip)
     // remember all windows we're going to (temporarily) disable
     m_winDisabled = new wxWindowList;
 
+#ifdef __WXMSW__
+    // and the top level window too
+    HWND hwndFG = ::GetForegroundWindow();
+    m_winTop = hwndFG ? wxFindWinFromHandle((WXHWND)hwndFG) : (wxWindow *)NULL;
+#endif // MSW
+
     wxWindowList::Node *node;
     for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
     {
@@ -1013,6 +1019,16 @@ wxWindowDisabler::~wxWindowDisabler()
     }
 
     delete m_winDisabled;
+
+#ifdef __WXMSW__
+    if ( m_winTop )
+    {
+        if ( !::SetForegroundWindow(GetHwndOf(m_winTop)) )
+        {
+            wxLogLastError("SetForegroundWindow");
+        }
+    }
+#endif // MSW
 }
 
 // Yield to other apps/messages and disable user input to all windows except
@@ -1188,7 +1204,7 @@ long wxExecute(const wxString& command, wxArrayString& output)
     {
         wxInputStream& is = *process->GetInputStream();
         wxTextInputStream tis(is);
-        while ( !is.Eof() )
+        while ( !is.Eof() && is.IsOk() )
         {
             wxString line = tis.ReadLine();
             if ( is.LastError() )
