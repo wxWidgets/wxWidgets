@@ -613,47 +613,21 @@ public:
         { wxApp::SetInitializerFunction(fn); }
 };
 
-// Here's a macro you can use if your compiler really, really wants main() to
-// be in your main program (e.g. hello.cpp). Now IMPLEMENT_APP should add this
-// code if required.
+// the code below defines a IMPLEMENT_WXWIN_MAIN macro which you can use if
+// your compiler really, really wants main() to be in your main program (e.g.
+// hello.cpp). Now IMPLEMENT_APP should add this code if required.
 
 #define IMPLEMENT_WXWIN_MAIN_CONSOLE \
         int main(int argc, char **argv) { return wxEntry(argc, argv); }
 
-#if !wxUSE_GUI || !defined(__WXMSW__)
-    #define IMPLEMENT_WXWIN_MAIN                                              \
-        IMPLEMENT_WXWIN_MAIN_CONSOLE
-#elif defined(__WXMSW__)
-    // we need HINSTANCE declaration to define WinMain()
-    #include "wx/msw/wrapwin.h"
-
-    #ifndef SW_SHOWNORMAL
-        #define SW_SHOWNORMAL 1
+// port-specific header could have defined it already in some special wau
+#ifndef IMPLEMENT_WXWIN_MAIN
+    #if !wxUSE_GUI
+        #define IMPLEMENT_WXWIN_MAIN IMPLEMENT_WXWIN_MAIN_CONSOLE
+    #else // wxUSE_GUI
+        #define IMPLEMENT_WXWIN_MAIN
     #endif
-
-    // WinMain() is always ANSI, even in Unicode build, under normal Windows
-    // but is always Unicode under CE
-    #ifdef __WXWINCE__
-        typedef wchar_t *wxCmdLineArgType;
-    #else
-        typedef char *wxCmdLineArgType;
-    #endif
-
-    #define IMPLEMENT_WXWIN_MAIN \
-        extern int wxEntry(HINSTANCE hInstance,                               \
-                           HINSTANCE hPrevInstance = NULL,                    \
-                           wxCmdLineArgType pCmdLine = NULL,                  \
-                           int nCmdShow = SW_SHOWNORMAL);                     \
-        extern "C" int WINAPI WinMain(HINSTANCE hInstance,                    \
-                                      HINSTANCE hPrevInstance,                \
-                                      wxCmdLineArgType lpCmdLine,             \
-                                      int nCmdShow)                           \
-        {                                                                     \
-            return wxEntry(hInstance, hPrevInstance, lpCmdLine, nCmdShow);    \
-        }
-#else
-    #define IMPLEMENT_WXWIN_MAIN
-#endif
+#endif // defined(IMPLEMENT_WXWIN_MAIN)
 
 #ifdef __WXUNIVERSAL__
     #include "wx/univ/theme.h"

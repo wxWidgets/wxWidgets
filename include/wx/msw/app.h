@@ -81,8 +81,39 @@ protected:
     DECLARE_NO_COPY_CLASS(wxApp)
 };
 
-int WXDLLEXPORT wxEntry(WXHINSTANCE hInstance, WXHINSTANCE hPrevInstance,
-                        wxCmdLineArgType *lpszCmdLine, int nCmdShow);
+// ----------------------------------------------------------------------------
+// MSW-specific wxEntry() overload and IMPLEMENT_WXWIN_MAIN definition
+// ----------------------------------------------------------------------------
+
+// we need HINSTANCE declaration to define WinMain()
+#include "wx/msw/wrapwin.h"
+
+#ifndef SW_SHOWNORMAL
+    #define SW_SHOWNORMAL 1
+#endif
+
+// WinMain() is always ANSI, even in Unicode build, under normal Windows
+// but is always Unicode under CE
+#ifdef __WXWINCE__
+    typedef wchar_t *wxCmdLineArgType;
+#else
+    typedef char *wxCmdLineArgType;
+#endif
+
+extern int WXDLLEXPORT
+wxEntry(HINSTANCE hInstance,
+        HINSTANCE hPrevInstance = NULL,
+        wxCmdLineArgType pCmdLine = NULL,
+        int nCmdShow = SW_SHOWNORMAL);
+
+#define IMPLEMENT_WXWIN_MAIN \
+    extern "C" int WINAPI WinMain(HINSTANCE hInstance,                    \
+                                  HINSTANCE hPrevInstance,                \
+                                  wxCmdLineArgType lpCmdLine,             \
+                                  int nCmdShow)                           \
+    {                                                                     \
+        return wxEntry(hInstance, hPrevInstance, lpCmdLine, nCmdShow);    \
+    }
 
 #endif // _WX_APP_H_
 
