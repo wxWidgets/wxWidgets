@@ -1202,7 +1202,7 @@ void wxListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
     x = dc->XLOG2DEV( x );
     
 	gtk_paint_box (m_wxwindow->style, GTK_PIZZA(m_wxwindow)->bin_window, state, GTK_SHADOW_OUT,
-		(GdkRectangle*) NULL, m_wxwindow, "button", x, y, w+1, h+1);
+		(GdkRectangle*) NULL, m_wxwindow, "button", x-1, y-1, w+2, h+2);
 #else
     const int m_corner = 1;
 

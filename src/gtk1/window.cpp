@@ -679,10 +679,18 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
     }
 */
                                 
-        win->GetUpdateRegion().Union( gdk_event->area.x,
-                                      gdk_event->area.y,
-                                      gdk_event->area.width,
-                                      gdk_event->area.height );
+    GtkPizza *pizza = GTK_PIZZA (widget);
+        
+    if (win->IsTopLevel())
+    {
+        gtk_paint_flat_box (widget->style, pizza->bin_window, GTK_STATE_NORMAL, 
+		      GTK_SHADOW_NONE, &gdk_event->area, widget, "base", 0, 0, -1, -1);
+    }
+        
+    win->GetUpdateRegion().Union( gdk_event->area.x,
+                                  gdk_event->area.y,
+                                  gdk_event->area.width,
+                                  gdk_event->area.height );
 
         if (gdk_event->count == 0)
         {
@@ -702,8 +710,6 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
            paint *anything* because it will then be allowed to paint
            over the window-less widgets */
        
-        GtkPizza *pizza = GTK_PIZZA (widget);
-        
         GList *children = pizza->children;
         while (children)
         {
@@ -776,6 +782,12 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
 */
    
     GtkPizza *pizza = GTK_PIZZA (widget);
+
+    if (win->IsTopLevel())
+    {
+        gtk_paint_flat_box (widget->style, pizza->bin_window, GTK_STATE_NORMAL, 
+		      GTK_SHADOW_NONE, rect, widget, "base", 0, 0, -1, -1);
+    }
         
         if (!(GTK_WIDGET_APP_PAINTABLE (widget)) &&
              (pizza->clear_on_draw))
