@@ -2025,6 +2025,7 @@ typedef struct objc_object *WX_##klass
 #endif // defined(__GNUC__) && defined(__APPLE__)
 
 DECLARE_WXCOCOA_OBJC_CLASS(NSApplication);
+DECLARE_WXCOCOA_OBJC_CLASS(NSBitmapImageRep);
 DECLARE_WXCOCOA_OBJC_CLASS(NSBox);
 DECLARE_WXCOCOA_OBJC_CLASS(NSButton);
 DECLARE_WXCOCOA_OBJC_CLASS(NSColor);
