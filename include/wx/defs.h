@@ -1,13 +1,13 @@
-/* /////////////////////////////////////////////////////////////////////////// */
-/*  Name:        defs.h */
-/*  Purpose:     Declarations/definitions common to all wx source files */
-/*  Author:      Julian Smart and others */
-/*  Modified by: */
-/*  Created:     01/02/97 */
-/*  RCS-ID:      $Id$ */
-/*  Copyright:   (c) */
-/*  Licence:     wxWindows licence */
-/* /////////////////////////////////////////////////////////////////////////// */
+/**
+*  Name:        defs.h 
+*  Purpose:     Declarations/definitions common to all wx source files 
+*  Author:      Julian Smart and others 
+*  Modified by: Ryan Norton (Converted to C)
+*  Created:     01/02/97 
+*  RCS-ID:      $Id$ 
+*  Copyright:   (c) 
+*  Licence:     wxWindows licence 
+**/
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
 
