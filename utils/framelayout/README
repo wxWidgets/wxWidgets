@@ -41,6 +41,15 @@ for Windows systems:
 The src directory contains a few untested makefiles. Pick one, and best of
 luck! 
 
+NOTE: src/Makefile.vc has been tested and works well. (Russell)
+
+<Added 3-11-99>
+The samples directory and subdirectories contain (tested) Makefile.vc files 
+for use with Visual C++. Move to the samples directory and type 
+nmake -f Makefile.vc to build. Alternatively you can enter each sample
+directory (demo,sample, etc) and run the command there to build the 
+individual sample.
+
 -----------------------------------------------------------------------------
 BUGS
 -----------------------------------------------------------------------------
