@@ -319,7 +319,7 @@ bool wxDB::getDbInfo(void)
 	if (SQLGetInfo(hdbc, SQL_DBMS_NAME, (UCHAR*) dbInf.dbmsName, 40, &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_DBMS_VER, (UCHAR*) dbInf.dbmsVer, 20, &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_DBMS_VER, (UCHAR*) dbInf.dbmsVer, 40, &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
 	if (SQLGetInfo(hdbc, SQL_ACTIVE_CONNECTIONS, (UCHAR*) &dbInf.maxConnections, sizeof(dbInf.maxConnections), &cb) != SQL_SUCCESS)
@@ -331,13 +331,13 @@ bool wxDB::getDbInfo(void)
 	if (SQLGetInfo(hdbc, SQL_DRIVER_NAME, (UCHAR*) dbInf.driverName, 40, &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_DRIVER_ODBC_VER, (UCHAR*) dbInf.odbcVer, 20, &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_DRIVER_ODBC_VER, (UCHAR*) dbInf.odbcVer, 60, &cb) == SQL_ERROR)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_ODBC_VER, (UCHAR*) dbInf.drvMgrOdbcVer, 20, &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_ODBC_VER, (UCHAR*) dbInf.drvMgrOdbcVer, 60, &cb) == SQL_ERROR)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_DRIVER_VER, (UCHAR*) dbInf.driverVer, 40, &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_DRIVER_VER, (UCHAR*) dbInf.driverVer, 60, &cb) == SQL_ERROR)
 		return(DispAllErrors(henv, hdbc));
 
 	if (SQLGetInfo(hdbc, SQL_ODBC_API_CONFORMANCE, (UCHAR*) &dbInf.apiConfLvl, sizeof(dbInf.apiConfLvl), &cb) != SQL_SUCCESS)

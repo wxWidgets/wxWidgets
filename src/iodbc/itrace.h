@@ -7,6 +7,12 @@
 #  endif
 # endif
 
+/* never trace, Robert Roebling */
+
+#ifndef NO_TRACE
+#define NO_TRACE
+#endif
+
 # define TRACE_TYPE_APP2DM      1
 # define TRACE_TYPE_DM2DRV      2
 # define TRACE_TYPE_DRV2DM      3

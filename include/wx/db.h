@@ -263,12 +263,12 @@ public:
 	struct
 	{
 		char   dbmsName[40];								// Name of the dbms product
-		char   dbmsVer[20];								// Version # of the dbms product
+		char   dbmsVer[40];								// Version # of the dbms product
 		char   driverName[40];							// Driver name
-		char   odbcVer[20];								// ODBC version of the driver
-		char   drvMgrOdbcVer[20];						// ODBC version of the driver manager
-		char   driverVer[40];							// Driver version
-		char   serverName[40];							// Server Name, typically a connect string
+		char   odbcVer[60];								// ODBC version of the driver
+		char   drvMgrOdbcVer[60];						// ODBC version of the driver manager
+		char   driverVer[60];							// Driver version
+		char   serverName[80];							// Server Name, typically a connect string
 		char	 databaseName[128];						// Database filename
 		char   outerJoins[2];							// Indicates whether the data source supports outer joins
 		char	 procedureSupport[2];					// Indicates whether the data source supports stored procedures

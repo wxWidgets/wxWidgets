@@ -35,7 +35,8 @@ LIB_CPP_SRC=\
  common/memory.cpp \
  common/module.cpp \
  common/object.cpp \
- common/odbc.cpp \
+ common/db.cpp \
+ common/dbtable.cpp \
  common/postscrp.cpp \
  common/prntbase.cpp \
  common/serbase.cpp \
