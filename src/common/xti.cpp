@@ -260,7 +260,7 @@ template<> void wxStringReadValue(const wxString &s , unsigned char &data )
 {
 	int intdata ;
 	wxSscanf(s, _T("%d"), &intdata ) ;
-	data = unsigned char(intdata) ;
+	data = (unsigned char)(intdata) ;
 }
 
 template<> void wxStringWriteValue(wxString &s , const unsigned char &data )
@@ -525,7 +525,7 @@ wxxVariant wxClassInfo::GetProperty(wxObject *object, const char *propertyName)
 VARIANT TO OBJECT
 */
 
-wxObject* wxxVariant::GetAsObject() 
+wxObject* wxxVariant::GetAsObject()
 {
 	const wxClassTypeInfo *ti = dynamic_cast<const wxClassTypeInfo*>( m_data->GetTypeInfo() ) ;
 	if ( ti )
