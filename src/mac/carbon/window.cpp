@@ -413,11 +413,19 @@ void wxWindow::MacRootWindowToClient( int *x , int *y ) const
 
 bool wxWindow::SetCursor(const wxCursor& cursor)
 {
-   if ( !wxWindowBase::SetCursor(cursor) )
-   {
-       // no change
+    if (m_cursor == cursor)
        return FALSE;
-   }
+
+    if (wxNullCursor == cursor)
+    {
+       if ( ! wxWindowBase::SetCursor( *wxSTANDARD_CURSOR ) )
+        return FALSE ;
+    }
+    else
+    {
+       if ( ! wxWindowBase::SetCursor( cursor ) )
+        return FALSE ;
+    }
 
   wxASSERT_MSG( m_cursor.Ok(),
                   wxT("cursor must be valid after call to the base version"));
@@ -432,7 +440,7 @@ bool wxWindow::SetCursor(const wxCursor& cursor)
   {
   	if ( mouseWin == this && !wxIsBusy() )
   	{
-		cursor.MacInstall() ;
+		m_cursor.MacInstall() ;
   	}
   }
 
