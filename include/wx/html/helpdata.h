@@ -32,7 +32,7 @@ class WXDLLEXPORT wxHtmlHelpData;
 // helper classes & structs
 //--------------------------------------------------------------------------------
 
-class WXDLLEXPORT wxHtmlBookRecord : public wxObject
+class WXDLLEXPORT wxHtmlBookRecord
 {
 public:
     wxHtmlBookRecord(const wxString& bookfile, const wxString& basepath, 
