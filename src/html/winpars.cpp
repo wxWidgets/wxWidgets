@@ -72,7 +72,7 @@ wxHtmlWinParser::wxHtmlWinParser(wxHtmlWindow *wnd) : wxHtmlParser()
 #else
         static int default_sizes[7] = {10, 12, 14, 16, 19, 24, 32};
 #endif
-        SetFonts("", "", default_sizes);
+        SetFonts(wxT(""), wxT(""), default_sizes);
     }
 
     // fill in wxHtmlParser's tables:
@@ -138,18 +138,18 @@ void wxHtmlWinParser::SetFonts(wxString normal_face, wxString fixed_face, const 
 void wxHtmlWinParser::InitParser(const wxString& source)
 {
     wxHtmlParser::InitParser(source);
-    wxASSERT_MSG(m_DC != NULL, _T("no DC assigned to wxHtmlWinParser!!"));
+    wxASSERT_MSG(m_DC != NULL, wxT("no DC assigned to wxHtmlWinParser!!"));
 
     m_FontBold = m_FontItalic = m_FontUnderlined = m_FontFixed = FALSE;
     m_FontSize = 3; //default one
     CreateCurrentFont();           // we're selecting default font into
-    m_DC->GetTextExtent("H", &m_CharWidth, &m_CharHeight);
+    m_DC->GetTextExtent( wxT("H"), &m_CharWidth, &m_CharHeight);
                 /* NOTE : we're not using GetCharWidth/Height() because
                    of differences under X and win
                  */
 
     m_UseLink = FALSE;
-    m_Link = wxHtmlLinkInfo("", "");
+    m_Link = wxHtmlLinkInfo( wxT(""), wxT("") );
     m_LinkColor.Set(0, 0, 0xFF);
     m_ActualColor.Set(0, 0, 0);
     m_Align = wxHTML_ALIGN_LEFT;

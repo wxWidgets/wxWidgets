@@ -611,7 +611,7 @@ wxHtmlLinkInfo *wxHtmlImageCell::GetLink( int x, int y ) const
 // tag handler
 //--------------------------------------------------------------------------------
 
-TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
+TAG_HANDLER_BEGIN(IMG, wxT("IMG,MAP,AREA"))
 
     TAG_HANDLER_PROC(tag)
     {

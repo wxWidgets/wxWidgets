@@ -925,12 +925,12 @@ void wxMimeTypesManagerImpl::LoadKDELinksForMimeSubtype(const wxString& dirbase,
     wxArrayString sExts;
     wxString mimetype, mime_desc, strIcon;
 
-    int nIndex = file.pIndexOf ("MimeType=");
+    int nIndex = file.pIndexOf( wxT("MimeType=") );
     if (nIndex == wxNOT_FOUND)
     {
         // construct mimetype from the directory name and the basename of the
         // file (it always has .kdelnk extension)
-        mimetype << subdir << _T('/') << filename.BeforeLast(_T('.'));
+        mimetype << subdir << wxT('/') << filename.BeforeLast( wxT('.') );
     }
     else mimetype = file.GetCmd (nIndex);
 
@@ -1097,15 +1097,15 @@ void wxMimeTypesManagerImpl::GetKDEMimeInfo(const wxString& sExtraDir)
     wxArrayString icondirs;
 
     // settings in ~/.kde have maximal priority
-    dirs.Add(wxGetHomeDir() + _T("/.kde/share"));
-    icondirs.Add(wxGetHomeDir() + _T("/.kde/share/icons/"));
+    dirs.Add(wxGetHomeDir() + wxT("/.kde/share"));
+    icondirs.Add(wxGetHomeDir() + wxT("/.kde/share/icons/"));
 
     // the variable KDEDIR is set when KDE is running
-    const char *kdedir = getenv("KDEDIR");
+    const wxChar *kdedir = wxGetenv( wxT("KDEDIR") );
     if ( kdedir )
     {
-        dirs.Add(wxString(kdedir) + _T("/share"));
-        icondirs.Add(wxString(kdedir) + _T("/share/icons/"));
+        dirs.Add( wxString(kdedir) + wxT("/share") );
+        icondirs.Add( wxString(kdedir) + wxT("/share/icons/") );
     }
     else
     {

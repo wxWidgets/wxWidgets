@@ -69,7 +69,7 @@ void wxHtmlLineCell::Draw(wxDC& dc, int x, int y, int WXUNUSED(view_y1), int WXU
 //-----------------------------------------------------------------------------
 
 
-TAG_HANDLER_BEGIN(HR, "HR")
+TAG_HANDLER_BEGIN(HR, wxT("HR"))
 
     TAG_HANDLER_PROC(tag)
     {

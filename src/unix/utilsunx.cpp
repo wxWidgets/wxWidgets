@@ -952,7 +952,7 @@ wxString wxGetOsDescription()
 #ifndef WXWIN_OS_DESCRIPTION
     #error WXWIN_OS_DESCRIPTION should be defined in config.h by configure
 #else
-    return WXWIN_OS_DESCRIPTION;
+    return wxString::FromAscii( WXWIN_OS_DESCRIPTION );
 #endif
 }
 #endif

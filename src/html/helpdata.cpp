@@ -584,7 +584,7 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
         bookFull = fn.GetFullPath( wxPATH_UNIX );
 #else
         if (wxIsAbsolutePath(book)) bookFull = book;
-        else bookFull = wxGetCwd() + "/" + book;
+        else bookFull = wxGetCwd() + wxT("/") + book;
 #endif
 
         fi = fsys.OpenFile(bookFull);
@@ -607,7 +607,7 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
         {
             lineptr = ReadLine(lineptr, linebuf, 300);
             
-            for (wxChar *ch = linebuf; *ch != '\0' && *ch != '='; ch++)
+            for (wxChar *ch = linebuf; *ch != wxT('\0') && *ch != wxT('='); ch++)
                *ch = tolower(*ch);
 
             if (wxStrstr(linebuf, _T("title=")) == linebuf)

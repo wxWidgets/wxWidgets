@@ -70,7 +70,7 @@ void wxHtmlListmarkCell::Draw(wxDC& dc, int x, int y, int WXUNUSED(view_y1), int
 //-----------------------------------------------------------------------------
 
 
-TAG_HANDLER_BEGIN(OLULLI, "OL,UL,LI")
+TAG_HANDLER_BEGIN(OLULLI, wxT("OL,UL,LI") )
 
     TAG_HANDLER_VARS
         int m_Numbering;

@@ -45,7 +45,7 @@ void wxPrivate_ReadString(wxString& str, wxInputStream* s)
             s->Read(buffer, bufSize);
             lastRead = s->LastRead();
             buffer[lastRead] = 0;
-            str.Append(buffer);
+            str.Append( wxString::FromAscii(buffer) );  // TODO: What encoding ?
         }
         while(lastRead == bufSize);
     }
@@ -54,7 +54,7 @@ void wxPrivate_ReadString(wxString& str, wxInputStream* s)
         char* src = new char[streamSize+1];
         s->Read(src, streamSize);
         src[streamSize] = 0;
-        str = src;
+        str = wxString::FromAscii( src);  // TODO: What encoding ?
         delete [] src;
     }
 }
@@ -92,7 +92,7 @@ wxString wxHtmlFilterPlainText::ReadFile(const wxFSFile& file) const
     doc.Replace(wxT("&"), wxT("&amp;"), TRUE);
     doc.Replace(wxT("<"), wxT("&lt;"), TRUE);
     doc.Replace(wxT(">"), wxT("&gt;"), TRUE);
-    doc2 = "<HTML><BODY><PRE>\n" + doc + "\n</PRE></BODY></HTML>";
+    doc2 = wxT("<HTML><BODY><PRE>\n") + doc + wxT("\n</PRE></BODY></HTML>");
     return doc2;
 }
 
@@ -127,7 +127,8 @@ bool wxHtmlFilterImage::CanRead(const wxFSFile& file) const
 
 wxString wxHtmlFilterImage::ReadFile(const wxFSFile& file) const
 {
-    return ("<HTML><BODY><IMG SRC=\"" + file.GetLocation() + "\"></BODY></HTML>");
+    wxString res = wxT("<HTML><BODY><IMG SRC=\"") + file.GetLocation() + wxT("\"></BODY></HTML>");
+    return res;
 }
 
 

@@ -68,7 +68,7 @@ static wxString LINKAGEMODE HtmlizeWhitespaces(const wxString& str)
 //-----------------------------------------------------------------------------
 
 
-TAG_HANDLER_BEGIN(PRE, "PRE")
+TAG_HANDLER_BEGIN(PRE, wxT("PRE"))
 
     TAG_HANDLER_PROC(tag)
     {

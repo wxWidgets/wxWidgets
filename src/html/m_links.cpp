@@ -48,23 +48,23 @@ class wxHtmlAnchorCell : public wxHtmlCell
 
 
 
-TAG_HANDLER_BEGIN(A, "A")
+TAG_HANDLER_BEGIN(A, wxT("A"))
 
     TAG_HANDLER_PROC(tag)
     {
-        if (tag.HasParam("NAME"))
+        if (tag.HasParam( wxT("NAME") ))
         {
-            m_WParser->GetContainer()->InsertCell(new wxHtmlAnchorCell(tag.GetParam("NAME")));
+            m_WParser->GetContainer()->InsertCell(new wxHtmlAnchorCell(tag.GetParam( wxT("NAME") )));
         }
 
-        if (tag.HasParam("HREF"))
+        if (tag.HasParam( wxT("HREF") ))
         {
             wxHtmlLinkInfo oldlnk = m_WParser->GetLink();
             wxColour oldclr = m_WParser->GetActualColor();
             int oldund = m_WParser->GetFontUnderlined();
-            wxString name(tag.GetParam("HREF")), target;
+            wxString name(tag.GetParam( wxT("HREF") )), target;
 
-            if (tag.HasParam("TARGET")) target = tag.GetParam("TARGET");
+            if (tag.HasParam( wxT("TARGET") )) target = tag.GetParam( wxT("TARGET") );
             m_WParser->SetActualColor(m_WParser->GetLinkColor());
             m_WParser->GetContainer()->InsertCell(new wxHtmlColourCell(m_WParser->GetLinkColor()));
             m_WParser->SetFontUnderlined(TRUE);
