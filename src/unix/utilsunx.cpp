@@ -363,7 +363,7 @@ public:
     wxPipeInputStream(int fd) : wxFileInputStream(fd) { }
 
     // return TRUE if the pipe is still opened
-    bool IsOpened() const { return TRUE; } // TODO
+    bool IsOpened() const { return !Eof(); }
 
     // return TRUE if we have anything to read, don't block
     bool IsAvailable() const;
@@ -372,7 +372,7 @@ public:
 bool wxPipeInputStream::IsAvailable() const
 {
     if ( m_lasterror == wxSTREAM_EOF )
-        return TRUE;
+        return FALSE;
 
     // check if there is any input available
     struct timeval tv;
@@ -391,15 +391,17 @@ bool wxPipeInputStream::IsAvailable() const
             // fall through
 
         case 0:
-            return TRUE;
+            return FALSE;
 
         default:
             wxFAIL_MSG(_T("unexpected select() return value"));
             // still fall through
 
         case 1:
-            // input available
-            return TRUE;
+            // input available -- or maybe not, as select() returns 1 when a
+            // read() will complete without delay, but it could still not read
+            // anything
+            return !Eof();
     }
 }
 
