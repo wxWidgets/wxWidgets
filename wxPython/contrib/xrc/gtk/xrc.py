@@ -1,6 +1,11 @@
 # This file was created automatically by SWIG.
 # Don't modify this file, modify the SWIG interface instead.
 
+"""
+The `XmlResource` class allows program resources defining menus, layout of
+controls on a panel, etc.
+"""
+
 import _xrc
 
 import _core

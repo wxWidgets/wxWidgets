@@ -1,6 +1,11 @@
 # This file was created automatically by SWIG.
 # Don't modify this file, modify the SWIG interface instead.
 
+"""
+The Object Graphics Library provides for simple drawing and manipulation
+of 2D objects.
+"""
+
 import _ogl
 
 import _windows
@@ -349,7 +354,7 @@ class PyShape(PyShapeEvtHandler):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
-        self._setOORandCallbackInfo(PyShapeEvtHandler)
+        self._setOORandCallbackInfo(PyShape)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
@@ -1194,15 +1199,15 @@ class PseudoMetaFile(_core.Object):
         return _ogl.PseudoMetaFile_DrawText(*args, **kwargs)
 
     def DrawLines(*args, **kwargs):
-        """DrawLines(self, int PCOUNT, Point points)"""
+        """DrawLines(self, int points, Point points_array)"""
         return _ogl.PseudoMetaFile_DrawLines(*args, **kwargs)
 
     def DrawPolygon(*args, **kwargs):
-        """DrawPolygon(self, int PCOUNT, Point points, int flags=0)"""
+        """DrawPolygon(self, int points, Point points_array, int flags=0)"""
         return _ogl.PseudoMetaFile_DrawPolygon(*args, **kwargs)
 
     def DrawSpline(*args, **kwargs):
-        """DrawSpline(self, int PCOUNT, Point points)"""
+        """DrawSpline(self, int points, Point points_array)"""
         return _ogl.PseudoMetaFile_DrawSpline(*args, **kwargs)
 
     def SetClippingRect(*args, **kwargs):
@@ -1779,7 +1784,7 @@ class PyDrawnShape(PyRectangleShape):
         return _ogl.PyDrawnShape_DrawLine(*args, **kwargs)
 
     def DrawLines(*args, **kwargs):
-        """DrawLines(self, int PCOUNT, Point points)"""
+        """DrawLines(self, int points, Point points_array)"""
         return _ogl.PyDrawnShape_DrawLines(*args, **kwargs)
 
     def DrawPoint(*args, **kwargs):
@@ -1787,7 +1792,7 @@ class PyDrawnShape(PyRectangleShape):
         return _ogl.PyDrawnShape_DrawPoint(*args, **kwargs)
 
     def DrawPolygon(*args, **kwargs):
-        """DrawPolygon(self, int PCOUNT, Point points, int flags=0)"""
+        """DrawPolygon(self, int points, Point points_array, int flags=0)"""
         return _ogl.PyDrawnShape_DrawPolygon(*args, **kwargs)
 
     def DrawRectangle(*args, **kwargs):
@@ -1799,7 +1804,7 @@ class PyDrawnShape(PyRectangleShape):
         return _ogl.PyDrawnShape_DrawRoundedRectangle(*args, **kwargs)
 
     def DrawSpline(*args, **kwargs):
-        """DrawSpline(self, int PCOUNT, Point points)"""
+        """DrawSpline(self, int points, Point points_array)"""
         return _ogl.PyDrawnShape_DrawSpline(*args, **kwargs)
 
     def DrawText(*args, **kwargs):
@@ -3867,6 +3872,8 @@ class PyShapeCanvas(_windows.ScrolledWindow):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
+        self._setOORandCallbackInfo(PyShapeCanvas)
+
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _ogl.PyShapeCanvas__setCallbackInfo(*args, **kwargs)

@@ -1594,6 +1594,7 @@ class Font(GDIObject):
             String face=EmptyString, 
             int encoding=FONTENCODING_DEFAULT) -> Font
         """
+        if kwargs.has_key('faceName'): kwargs['face'] = kwargs['faceName'];del kwargs['faceName']
         newobj = _gdi_.new_Font(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1741,12 +1742,14 @@ _gdi_.Font_swigregister(FontPtr)
 
 def FontFromNativeInfo(*args, **kwargs):
     """FontFromNativeInfo(NativeFontInfo info) -> Font"""
+    if kwargs.has_key('faceName'): kwargs['face'] = kwargs['faceName'];del kwargs['faceName']
     val = _gdi_.new_FontFromNativeInfo(*args, **kwargs)
     val.thisown = 1
     return val
 
 def FontFromNativeInfoString(*args, **kwargs):
     """FontFromNativeInfoString(String info) -> Font"""
+    if kwargs.has_key('faceName'): kwargs['face'] = kwargs['faceName'];del kwargs['faceName']
     val = _gdi_.new_FontFromNativeInfoString(*args, **kwargs)
     val.thisown = 1
     return val
@@ -1756,6 +1759,7 @@ def Font2(*args, **kwargs):
     Font2(int pointSize, int family, int flags=FONTFLAG_DEFAULT, 
         String face=EmptyString, int encoding=FONTENCODING_DEFAULT) -> Font
     """
+    if kwargs.has_key('faceName'): kwargs['face'] = kwargs['faceName'];del kwargs['faceName']
     val = _gdi_.new_Font2(*args, **kwargs)
     val.thisown = 1
     return val

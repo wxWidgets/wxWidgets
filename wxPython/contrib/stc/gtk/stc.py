@@ -1,6 +1,12 @@
 # This file was created automatically by SWIG.
 # Don't modify this file, modify the SWIG interface instead.
 
+"""
+The `StyledTextCtrl` provides a text editor that can used as a syntax
+highlighting source code editor, or similar.  Lexers for several programming
+languages are built-in.
+"""
+
 import _stc
 
 import _core
@@ -1985,7 +1991,11 @@ class StyledTextCtrl(_core.Control):
         return _stc.StyledTextCtrl_DocumentEndExtend(*args, **kwargs)
 
     def PageUp(*args, **kwargs):
-        """PageUp(self)"""
+        """
+        PageUp(self)
+
+        This is just a wrapper for ScrollPages(-1).
+        """
         return _stc.StyledTextCtrl_PageUp(*args, **kwargs)
 
     def PageUpExtend(*args, **kwargs):

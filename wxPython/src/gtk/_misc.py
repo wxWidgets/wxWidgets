@@ -4362,6 +4362,16 @@ def CustomDataFormat(*args, **kwargs):
     return val
 
 class DataObject(object):
+    """
+    A wxDataObject represents data that can be copied to or from the
+    clipboard, or dragged and dropped. The important thing about
+    wxDataObject is that this is a 'smart' piece of data unlike usual
+    'dumb' data containers such as memory buffers or files. Being 'smart'
+    here means that the data object itself should know what data formats
+    it supports and how to render itself in each of supported formats.
+
+
+    """
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)

@@ -1,6 +1,10 @@
 # This file was created automatically by SWIG.
 # Don't modify this file, modify the SWIG interface instead.
 
+"""
+`GLCanvas` provides an OpenGL Context on a `wx.Window`.
+"""
+
 import _glcanvas
 
 import _core

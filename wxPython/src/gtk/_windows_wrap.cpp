@@ -864,6 +864,7 @@ public:
                const wxString& name = wxPyPanelNameStr)
         : wxWindow(parent, id, pos, size, style, name) {}
 
+    void SetBestSize(const wxSize& size) { wxWindow::SetBestSize(size); }
 
     DEC_PYCALLBACK_VOID_INT4(DoMoveWindow);
     DEC_PYCALLBACK_VOID_INT5(DoSetSize);
@@ -889,8 +890,9 @@ public:
     DEC_PYCALLBACK_VOID_WXWINBASE(AddChild);
     DEC_PYCALLBACK_VOID_WXWINBASE(RemoveChild);
 
-    DEC_PYCALLBACK_BOOL_(ShouldInheritColours);
+    DEC_PYCALLBACK_BOOL_const(ShouldInheritColours);
     DEC_PYCALLBACK__COLOUR(ApplyParentThemeBackground);
+    DEC_PYCALLBACK_VIZATTR_(GetDefaultAttributes);
     
     PYPRIVATE;
 };
@@ -921,8 +923,9 @@ IMP_PYCALLBACK_SIZE_const(wxPyWindow, wxWindow, GetMaxSize);
 IMP_PYCALLBACK_VOID_WXWINBASE(wxPyWindow, wxWindow, AddChild);
 IMP_PYCALLBACK_VOID_WXWINBASE(wxPyWindow, wxWindow, RemoveChild);
 
-IMP_PYCALLBACK_BOOL_(wxPyWindow, wxWindow, ShouldInheritColours);
+IMP_PYCALLBACK_BOOL_const(wxPyWindow, wxWindow, ShouldInheritColours);
 IMP_PYCALLBACK__COLOUR(wxPyWindow, wxWindow, ApplyParentThemeBackground);
+IMP_PYCALLBACK_VIZATTR_(wxPyWindow, wxWindow, GetDefaultAttributes);
  
 
  // C++ version of Python aware wxPanel
@@ -938,6 +941,8 @@ public:
                const wxString& name = wxPyPanelNameStr)
         : wxPanel(parent, id, pos, size, style, name) {}
 
+    void SetBestSize(const wxSize& size) { wxPanel::SetBestSize(size); }
+    
 
     DEC_PYCALLBACK_VOID_INT4(DoMoveWindow);
     DEC_PYCALLBACK_VOID_INT5(DoSetSize);
@@ -963,8 +968,9 @@ public:
     DEC_PYCALLBACK_VOID_WXWINBASE(AddChild);
     DEC_PYCALLBACK_VOID_WXWINBASE(RemoveChild);
 
-    DEC_PYCALLBACK_BOOL_(ShouldInheritColours);
+    DEC_PYCALLBACK_BOOL_const(ShouldInheritColours);
     DEC_PYCALLBACK__COLOUR(ApplyParentThemeBackground);
+    DEC_PYCALLBACK_VIZATTR_(GetDefaultAttributes);
     
     PYPRIVATE;
 };
@@ -995,9 +1001,11 @@ IMP_PYCALLBACK_SIZE_const(wxPyPanel, wxPanel, GetMaxSize);
 IMP_PYCALLBACK_VOID_WXWINBASE(wxPyPanel, wxPanel, AddChild);
 IMP_PYCALLBACK_VOID_WXWINBASE(wxPyPanel, wxPanel, RemoveChild);
 
-IMP_PYCALLBACK_BOOL_(wxPyPanel, wxPanel, ShouldInheritColours);
+IMP_PYCALLBACK_BOOL_const(wxPyPanel, wxPanel, ShouldInheritColours);
 IMP_PYCALLBACK__COLOUR(wxPyPanel, wxPanel, ApplyParentThemeBackground);
+IMP_PYCALLBACK_VIZATTR_(wxPyPanel, wxPanel, GetDefaultAttributes);
 
+ 
  // C++ version of Python aware wxScrolledWindow
 class wxPyScrolledWindow : public wxScrolledWindow
 {
@@ -1011,6 +1019,7 @@ public:
                const wxString& name = wxPyPanelNameStr)
         : wxScrolledWindow(parent, id, pos, size, style, name) {}
 
+    void SetBestSize(const wxSize& size) { wxScrolledWindow::SetBestSize(size); }
 
     DEC_PYCALLBACK_VOID_INT4(DoMoveWindow);
     DEC_PYCALLBACK_VOID_INT5(DoSetSize);
@@ -1036,8 +1045,9 @@ public:
     DEC_PYCALLBACK_VOID_WXWINBASE(AddChild);
     DEC_PYCALLBACK_VOID_WXWINBASE(RemoveChild);
 
-    DEC_PYCALLBACK_BOOL_(ShouldInheritColours);
+    DEC_PYCALLBACK_BOOL_const(ShouldInheritColours);
     DEC_PYCALLBACK__COLOUR(ApplyParentThemeBackground);
+    DEC_PYCALLBACK_VIZATTR_(GetDefaultAttributes);
     
     PYPRIVATE;
 };
@@ -1068,8 +1078,10 @@ IMP_PYCALLBACK_SIZE_const(wxPyScrolledWindow, wxScrolledWindow, GetMaxSize);
 IMP_PYCALLBACK_VOID_WXWINBASE(wxPyScrolledWindow, wxScrolledWindow, AddChild);
 IMP_PYCALLBACK_VOID_WXWINBASE(wxPyScrolledWindow, wxScrolledWindow, RemoveChild);
 
-IMP_PYCALLBACK_BOOL_(wxPyScrolledWindow, wxScrolledWindow, ShouldInheritColours);
+IMP_PYCALLBACK_BOOL_const(wxPyScrolledWindow, wxScrolledWindow, ShouldInheritColours);
 IMP_PYCALLBACK__COLOUR(wxPyScrolledWindow, wxScrolledWindow, ApplyParentThemeBackground);
+IMP_PYCALLBACK_VIZATTR_(wxPyScrolledWindow, wxScrolledWindow, GetDefaultAttributes);
+
 
 
 #include "wx/wxPython/printfw.h"
@@ -15386,6 +15398,38 @@ static PyObject *_wrap_PyWindow__setCallbackInfo(PyObject *self, PyObject *args,
 }
 
 
+static PyObject *_wrap_PyWindow_SetBestSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyWindow *arg1 = (wxPyWindow *) 0 ;
+    wxSize *arg2 = 0 ;
+    wxSize temp2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "size", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyWindow_SetBestSize",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPyWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetBestSize((wxSize const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_PyWindow_base_DoMoveWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyWindow *arg1 = (wxPyWindow *) 0 ;
@@ -15984,7 +16028,7 @@ static PyObject *_wrap_PyWindow_base_ShouldInheritColours(PyObject *self, PyObje
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->base_ShouldInheritColours();
+        result = (bool)((wxPyWindow const *)arg1)->base_ShouldInheritColours();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -16024,6 +16068,36 @@ static PyObject *_wrap_PyWindow_base_ApplyParentThemeBackground(PyObject *self, 
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PyWindow_base_GetDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyWindow *arg1 = (wxPyWindow *) 0 ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_base_GetDefaultAttributes",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPyWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (arg1)->base_GetDefaultAttributes();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -16154,6 +16228,38 @@ static PyObject *_wrap_PyPanel__setCallbackInfo(PyObject *self, PyObject *args, 
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->_setCallbackInfo(arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PyPanel_SetBestSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyPanel *arg1 = (wxPyPanel *) 0 ;
+    wxSize *arg2 = 0 ;
+    wxSize temp2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "size", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyPanel_SetBestSize",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPyPanel,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetBestSize((wxSize const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -16763,7 +16869,7 @@ static PyObject *_wrap_PyPanel_base_ShouldInheritColours(PyObject *self, PyObjec
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->base_ShouldInheritColours();
+        result = (bool)((wxPyPanel const *)arg1)->base_ShouldInheritColours();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -16803,6 +16909,36 @@ static PyObject *_wrap_PyPanel_base_ApplyParentThemeBackground(PyObject *self, P
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PyPanel_base_GetDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyPanel *arg1 = (wxPyPanel *) 0 ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_base_GetDefaultAttributes",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPyPanel,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (arg1)->base_GetDefaultAttributes();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -16933,6 +17069,38 @@ static PyObject *_wrap_PyScrolledWindow__setCallbackInfo(PyObject *self, PyObjec
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->_setCallbackInfo(arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PyScrolledWindow_SetBestSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyScrolledWindow *arg1 = (wxPyScrolledWindow *) 0 ;
+    wxSize *arg2 = 0 ;
+    wxSize temp2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "size", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyScrolledWindow_SetBestSize",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPyScrolledWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetBestSize((wxSize const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -17542,7 +17710,7 @@ static PyObject *_wrap_PyScrolledWindow_base_ShouldInheritColours(PyObject *self
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->base_ShouldInheritColours();
+        result = (bool)((wxPyScrolledWindow const *)arg1)->base_ShouldInheritColours();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -17582,6 +17750,36 @@ static PyObject *_wrap_PyScrolledWindow_base_ApplyParentThemeBackground(PyObject
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PyScrolledWindow_base_GetDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyScrolledWindow *arg1 = (wxPyScrolledWindow *) 0 ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_base_GetDefaultAttributes",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPyScrolledWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (arg1)->base_GetDefaultAttributes();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -24880,6 +25078,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_PyWindow", (PyCFunction) _wrap_new_PyWindow, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_PrePyWindow", (PyCFunction) _wrap_new_PrePyWindow, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyWindow__setCallbackInfo", (PyCFunction) _wrap_PyWindow__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyWindow_SetBestSize", (PyCFunction) _wrap_PyWindow_SetBestSize, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyWindow_base_DoMoveWindow", (PyCFunction) _wrap_PyWindow_base_DoMoveWindow, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyWindow_base_DoSetSize", (PyCFunction) _wrap_PyWindow_base_DoSetSize, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyWindow_base_DoSetClientSize", (PyCFunction) _wrap_PyWindow_base_DoSetClientSize, METH_VARARGS | METH_KEYWORDS },
@@ -24900,10 +25099,12 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PyWindow_base_RemoveChild", (PyCFunction) _wrap_PyWindow_base_RemoveChild, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyWindow_base_ShouldInheritColours", (PyCFunction) _wrap_PyWindow_base_ShouldInheritColours, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyWindow_base_ApplyParentThemeBackground", (PyCFunction) _wrap_PyWindow_base_ApplyParentThemeBackground, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyWindow_base_GetDefaultAttributes", (PyCFunction) _wrap_PyWindow_base_GetDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyWindow_swigregister", PyWindow_swigregister, METH_VARARGS },
 	 { (char *)"new_PyPanel", (PyCFunction) _wrap_new_PyPanel, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_PrePyPanel", (PyCFunction) _wrap_new_PrePyPanel, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyPanel__setCallbackInfo", (PyCFunction) _wrap_PyPanel__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyPanel_SetBestSize", (PyCFunction) _wrap_PyPanel_SetBestSize, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyPanel_base_DoMoveWindow", (PyCFunction) _wrap_PyPanel_base_DoMoveWindow, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyPanel_base_DoSetSize", (PyCFunction) _wrap_PyPanel_base_DoSetSize, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyPanel_base_DoSetClientSize", (PyCFunction) _wrap_PyPanel_base_DoSetClientSize, METH_VARARGS | METH_KEYWORDS },
@@ -24924,10 +25125,12 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PyPanel_base_RemoveChild", (PyCFunction) _wrap_PyPanel_base_RemoveChild, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyPanel_base_ShouldInheritColours", (PyCFunction) _wrap_PyPanel_base_ShouldInheritColours, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyPanel_base_ApplyParentThemeBackground", (PyCFunction) _wrap_PyPanel_base_ApplyParentThemeBackground, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyPanel_base_GetDefaultAttributes", (PyCFunction) _wrap_PyPanel_base_GetDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyPanel_swigregister", PyPanel_swigregister, METH_VARARGS },
 	 { (char *)"new_PyScrolledWindow", (PyCFunction) _wrap_new_PyScrolledWindow, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_PrePyScrolledWindow", (PyCFunction) _wrap_new_PrePyScrolledWindow, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyScrolledWindow__setCallbackInfo", (PyCFunction) _wrap_PyScrolledWindow__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyScrolledWindow_SetBestSize", (PyCFunction) _wrap_PyScrolledWindow_SetBestSize, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyScrolledWindow_base_DoMoveWindow", (PyCFunction) _wrap_PyScrolledWindow_base_DoMoveWindow, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyScrolledWindow_base_DoSetSize", (PyCFunction) _wrap_PyScrolledWindow_base_DoSetSize, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyScrolledWindow_base_DoSetClientSize", (PyCFunction) _wrap_PyScrolledWindow_base_DoSetClientSize, METH_VARARGS | METH_KEYWORDS },
@@ -24948,6 +25151,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PyScrolledWindow_base_RemoveChild", (PyCFunction) _wrap_PyScrolledWindow_base_RemoveChild, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyScrolledWindow_base_ShouldInheritColours", (PyCFunction) _wrap_PyScrolledWindow_base_ShouldInheritColours, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyScrolledWindow_base_ApplyParentThemeBackground", (PyCFunction) _wrap_PyScrolledWindow_base_ApplyParentThemeBackground, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyScrolledWindow_base_GetDefaultAttributes", (PyCFunction) _wrap_PyScrolledWindow_base_GetDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyScrolledWindow_swigregister", PyScrolledWindow_swigregister, METH_VARARGS },
 	 { (char *)"new_PrintData", (PyCFunction) _wrap_new_PrintData, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"delete_PrintData", (PyCFunction) _wrap_delete_PrintData, METH_VARARGS | METH_KEYWORDS },
