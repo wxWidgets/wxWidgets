@@ -106,6 +106,9 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
         CWBorderPixel | CWBackPixel;
     xattributes.background_pixel = m_backgroundColour.GetPixel();
     xattributes.border_pixel = BlackPixel( xdisplay, xscreen );
+
+    // TODO: if we want no border, caption etc.,
+    // I think we set this to True to remove decorations
     xattributes.override_redirect = False;
     
     Window xwindow = XCreateWindow( xdisplay, xparent, pos.x, pos.y, size.x, size.y, 

@@ -156,6 +156,7 @@ src/generic/descrip.mms
 src/gtk/descrip.mms
 src/html/descrip.mms
 src/motif/descrip.mms
+src/x11/descrip.mms
 src/png/scripts/descrip.mms
 src/unix/descrip.mms
 src/zlib/descrip.mms

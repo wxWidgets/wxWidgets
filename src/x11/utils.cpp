@@ -45,13 +45,24 @@
 #pragma message disable nosimpint
 #endif
 
+#ifdef __WXMOTIF__
+#include <Xm/Xm.h>
+#endif
+
 #ifdef __VMS__
 #pragma message enable nosimpint
 #endif
 
 #include "wx/unix/execute.h"
 
+#ifdef __WXMOTIF__
+#include "wx/motif/private.h"
+#endif
+
+#ifdef __WXX11__
 #include "wx/x11/private.h"
+#endif
+
 #include "X11/Xresource.h"
 #include "X11/Xutil.h"
 
@@ -83,11 +94,8 @@ void wxFlushEvents()
     Display *display = (Display*) wxGetDisplay();
 
     XSync (display, FALSE);
-    XFlush(display);
 
-    // TODO
-#if 0
-    
+#ifdef __WXMOTIF__   
     // XtAppPending returns availability of events AND timers/inputs, which
     // are processed via callbacks, so XtAppNextEvent will not return if
     // there are no events. So added '& XtIMXEvent' - Sergey.
@@ -98,15 +106,17 @@ void wxFlushEvents()
         XtAppProcessEvent((XtAppContext) wxTheApp->GetAppContext(), XtIMXEvent);
     }
 #endif
+#ifdef __WXX11__
+    // TODO for X11
+    // ??
+#endif
 }
 
 // Check whether this window wants to process messages, e.g. Stop button
 // in long calculations.
 bool wxCheckForInterrupt(wxWindow *wnd)
 {
-    wxASSERT_MSG(FALSE, "wxCheckForInterrupt not yet implemented.");
-    return FALSE;
-#if 0
+#ifdef __WXMOTIF__
     wxCHECK_MSG( wnd, FALSE, "NULL window in wxCheckForInterrupt" );
 
     Display *dpy=(Display*) wnd->GetXDisplay();
@@ -133,13 +143,16 @@ bool wxCheckForInterrupt(wxWindow *wnd)
     }
 
     return hadEvents;
+#else
+    wxASSERT_MSG(FALSE, "wxCheckForInterrupt not yet implemented.");
+    return FALSE;
 #endif
 }
 
 // ----------------------------------------------------------------------------
 // wxExecute stuff
 // ----------------------------------------------------------------------------
-#if 0
+#ifdef __WXMOTIF__
 static void xt_notify_end_process(XtPointer data, int *WXUNUSED(fid),
                                   XtInputId *id)
 {
@@ -152,11 +165,9 @@ static void xt_notify_end_process(XtPointer data, int *WXUNUSED(fid),
 
     XtRemoveInput(*id);
 }
-#endif
 
 int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
 {
-#if 0
     XtInputId id = XtAppAddInput((XtAppContext) wxTheApp->GetAppContext(),
                                  fd,
                                  (XtPointer *) XtInputReadMask,
@@ -164,8 +175,8 @@ int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
                                  (XtPointer) proc_data);
 
     return (int)id;
-#endif
 }
+#endif
 
 // ----------------------------------------------------------------------------
 // misc
@@ -180,11 +191,25 @@ void wxBell()
 
 int wxGetOsVersion(int *majorVsn, int *minorVsn)
 {
+#ifdef __WXMOTIF__
+    // FIXME TODO
+    // This code is WRONG!! Does NOT return the
+    // Motif version of the libs but the X protocol
+    // version!
+    Display *display = XtDisplay ((Widget) wxTheApp->GetTopLevelWidget());
+    if (majorVsn)
+        *majorVsn = ProtocolVersion (display);
+    if (minorVsn)
+        *minorVsn = ProtocolRevision (display);
+
+    return wxMOTIF_X;
+#ifdef __WXX11__
     if (majorVsn)
         *majorVsn = 0;
     if (minorVsn)
         *minorVsn = 0;
     return wxX11;
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -595,7 +620,7 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 }
 
 
-// Configurable display in X11
+// Configurable display in wxX11 and wxMotif
 static WXDisplay *gs_currentDisplay = NULL;
 static wxString gs_displayName;
 
@@ -603,8 +628,15 @@ WXDisplay *wxGetDisplay()
 {
     if (gs_currentDisplay)
         return gs_currentDisplay;
-    else
-        return wxApp::GetDisplay();
+#ifdef __WXMOTIF__
+    if (wxTheApp && wxTheApp->GetTopLevelWidget())
+        return XtDisplay ((Widget) wxTheApp->GetTopLevelWidget());
+    else if (wxTheApp)
+        return wxTheApp->GetInitialDisplay();
+#endif
+#ifdef __WXGTK__
+    return wxApp::GetDisplay();
+#endif
 }
 
 bool wxSetDisplay(const wxString& display_name)
@@ -619,6 +651,30 @@ bool wxSetDisplay(const wxString& display_name)
     }
     else
     {
+#ifdef __WXMOTIF__
+        Cardinal argc = 0;
+
+        Display *display = XtOpenDisplay((XtAppContext) wxTheApp->GetAppContext(),
+            (const char*) display_name,
+            (const char*) wxTheApp->GetAppName(),
+            (const char*) wxTheApp->GetClassName(),
+            NULL,
+#if XtSpecificationRelease < 5
+            0, &argc,
+#else
+            0, (int *)&argc,
+#endif
+            NULL);
+
+        if (display)
+        {
+            gs_currentDisplay = (WXDisplay*) display;
+            return TRUE;
+        }
+        else
+            return FALSE;
+#endif
+#ifdef __WXX11__
         Display* display = XOpenDisplay((const char*) display_name);
 
         if (display)
@@ -628,6 +684,7 @@ bool wxSetDisplay(const wxString& display_name)
         }
         else
             return FALSE;
+#endif
     }
 }
 
@@ -639,90 +696,6 @@ wxString wxGetDisplayName()
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 {
     return wxGenericFindWindowAtPoint(pt);
-}
-
-// ----------------------------------------------------------------------------
-// accelerators
-// ----------------------------------------------------------------------------
-
-// Find the letter corresponding to the mnemonic, for Motif
-char wxFindMnemonic (const char *s)
-{
-    char mnem = 0;
-    int len = strlen (s);
-    int i;
-    for (i = 0; i < len; i++)
-    {
-        if (s[i] == '&')
-        {
-            // Carefully handle &&
-            if ((i + 1) <= len && s[i + 1] == '&')
-                i++;
-            else
-            {
-                mnem = s[i + 1];
-                break;
-            }
-        }
-    }
-    return mnem;
-}
-
-char * wxFindAccelerator (const char *s)
-{
-    // VZ: this function returns incorrect keysym which completely breaks kbd
-    //     handling
-    return NULL;
-
-#if 0
-   // The accelerator text is after the \t char.
-    while (*s && *s != '\t')
-        s++;
-    if (*s == '\0')
-        return (NULL);
-    s++;
-    /*
-    Now we need to format it as X standard:
-
-      input            output
-
-        F7           --> <Key>F7
-        Ctrl+N       --> Ctrl<Key>N
-        Alt+k        --> Meta<Key>k
-        Ctrl+Shift+A --> Ctrl Shift<Key>A
-
-    */
-
-    wxBuffer[0] = '\0';
-    char *tmp = copystring (s);
-    s = tmp;
-    char *p = tmp;
-
-    while (1)
-    {
-        while (*p && *p != '+')
-            p++;
-        if (*p)
-        {
-            *p = '\0';
-            if (wxBuffer[0])
-                strcat (wxBuffer, " ");
-            if (strcmp (s, "Alt"))
-                strcat (wxBuffer, s);
-            else
-                strcat (wxBuffer, "Meta");
-            s = p++;
-        }
-        else
-        {
-            strcat (wxBuffer, "<Key>");
-            strcat (wxBuffer, s);
-            break;
-        }
-    }
-    delete[]tmp;
-    return wxBuffer;
-#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -1081,3 +1054,148 @@ void wxAllocColor(Display *d,Colormap cmp,XColor *xc)
     }
 }
 
+#ifdef __WXMOTIF__
+// ----------------------------------------------------------------------------
+// accelerators
+// ----------------------------------------------------------------------------
+
+// Find the letter corresponding to the mnemonic, for Motif
+char wxFindMnemonic (const char *s)
+{
+    char mnem = 0;
+    int len = strlen (s);
+    int i;
+    for (i = 0; i < len; i++)
+    {
+        if (s[i] == '&')
+        {
+            // Carefully handle &&
+            if ((i + 1) <= len && s[i + 1] == '&')
+                i++;
+            else
+            {
+                mnem = s[i + 1];
+                break;
+            }
+        }
+    }
+    return mnem;
+}
+
+char * wxFindAccelerator (const char *s)
+{
+    // VZ: this function returns incorrect keysym which completely breaks kbd
+    //     handling
+    return NULL;
+
+#if 0
+   // The accelerator text is after the \t char.
+    while (*s && *s != '\t')
+        s++;
+    if (*s == '\0')
+        return (NULL);
+    s++;
+    /*
+    Now we need to format it as X standard:
+
+      input            output
+
+        F7           --> <Key>F7
+        Ctrl+N       --> Ctrl<Key>N
+        Alt+k        --> Meta<Key>k
+        Ctrl+Shift+A --> Ctrl Shift<Key>A
+
+    */
+
+    wxBuffer[0] = '\0';
+    char *tmp = copystring (s);
+    s = tmp;
+    char *p = tmp;
+
+    while (1)
+    {
+        while (*p && *p != '+')
+            p++;
+        if (*p)
+        {
+            *p = '\0';
+            if (wxBuffer[0])
+                strcat (wxBuffer, " ");
+            if (strcmp (s, "Alt"))
+                strcat (wxBuffer, s);
+            else
+                strcat (wxBuffer, "Meta");
+            s = p++;
+        }
+        else
+        {
+            strcat (wxBuffer, "<Key>");
+            strcat (wxBuffer, s);
+            break;
+        }
+    }
+    delete[]tmp;
+    return wxBuffer;
+#endif
+}
+
+XmString wxFindAcceleratorText (const char *s)
+{
+    // VZ: this function returns incorrect keysym which completely breaks kbd
+    //     handling
+    return NULL;
+
+#if 0
+   // The accelerator text is after the \t char.
+    while (*s && *s != '\t')
+        s++;
+    if (*s == '\0')
+        return (NULL);
+    s++;
+    XmString text = XmStringCreateSimple ((char *)s);
+    return text;
+#endif
+}
+
+
+// These functions duplicate those in wxWindow, but are needed
+// for use outside of wxWindow (e.g. wxMenu, wxMenuBar).
+
+// Change a widget's foreground and background colours.
+
+void wxDoChangeForegroundColour(WXWidget widget, wxColour& foregroundColour)
+{
+    // When should we specify the foreground, if it's calculated
+    // by wxComputeColours?
+    // Solution: say we start with the default (computed) foreground colour.
+    // If we call SetForegroundColour explicitly for a control or window,
+    // then the foreground is changed.
+    // Therefore SetBackgroundColour computes the foreground colour, and
+    // SetForegroundColour changes the foreground colour. The ordering is
+    // important.
+
+    XtVaSetValues ((Widget) widget,
+        XmNforeground, foregroundColour.AllocColour(XtDisplay((Widget) widget)),
+        NULL);
+}
+
+void wxDoChangeBackgroundColour(WXWidget widget, wxColour& backgroundColour, bool changeArmColour)
+{
+    wxComputeColours (XtDisplay((Widget) widget), & backgroundColour,
+        (wxColour*) NULL);
+
+    XtVaSetValues ((Widget) widget,
+        XmNbackground, g_itemColors[wxBACK_INDEX].pixel,
+        XmNtopShadowColor, g_itemColors[wxTOPS_INDEX].pixel,
+        XmNbottomShadowColor, g_itemColors[wxBOTS_INDEX].pixel,
+        XmNforeground, g_itemColors[wxFORE_INDEX].pixel,
+        NULL);
+
+    if (changeArmColour)
+        XtVaSetValues ((Widget) widget,
+        XmNarmColor, g_itemColors[wxSELE_INDEX].pixel,
+        NULL);
+}
+
+#endif
+    // __WXMOTIF__

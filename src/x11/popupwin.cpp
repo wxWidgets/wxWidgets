@@ -65,7 +65,10 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
         CWBorderPixel | CWBackPixel;
     xattributes.background_pixel = BlackPixel( xdisplay, xscreen );
     xattributes.border_pixel = BlackPixel( xdisplay, xscreen );
-    xattributes.override_redirect = False;
+
+    // Trying True in order to stop WM decorating it
+    //xattributes.override_redirect = False;
+    xattributes.override_redirect = TRUE;
 
     Window xwindow = XCreateWindow( xdisplay, xparent, pos.x, pos.y, size.x, size.y, 
        0, DefaultDepth(xdisplay,xscreen), InputOutput, xvisual, xattributes_mask, &xattributes );
@@ -78,9 +81,12 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
 
     m_mainWidget = (WXWindow) xwindow;
     wxAddWindowToTable( xwindow, (wxWindow*) this );
-    
-    XSetTransientForHint( xdisplay, xwindow, xparent );
-    
+
+    // Probably shouldn't be here for an unmanaged window
+    //XSetTransientForHint( xdisplay, xwindow, xparent );
+
+    // TODO: Will these calls cause decoration??
+
     size_hints.flags = PSize;
     size_hints.width = size.x;
     size_hints.height = size.y;
@@ -90,11 +96,14 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     wm_hints.input = True;
     wm_hints.initial_state = NormalState;
     XSetWMHints( xdisplay, xwindow, &wm_hints);
-    
+ 
+    // No decorations for this window
+#if 0
     Atom wm_delete_window = XInternAtom( xdisplay, "WM_DELETE_WINDOW", False);
     XSetWMProtocols( xdisplay, xwindow, &wm_delete_window, 1);
     
     wxSetWMDecorations((Window) GetMainWindow(), style);
+#endif
 
     return TRUE;
 }

@@ -1,5 +1,3 @@
-src/motif.inc
-
 src/motif/files.lst
 src/motif/*.cpp
 src/motif/*.c
@@ -12,6 +10,13 @@ src/motif/xmcombo/*.h
 src/motif/xmcombo/*.doc
 src/motif/xmcombo/*.man
 src/motif/xmcombo/*.txt
+src/x11/files.lst
+src/x11/*.cpp
+src/x11/*.c
+src/x11/*.h
+src/x11/makefile*
+src/x11/*.inc
+src/x11/*.xbm
 
 src/iodbc/*.c
 src/iodbc/*.ci
@@ -26,8 +31,7 @@ src/iodbc/Changes.log
 src/iodbc/postgres/*.h
 
 include/wx/motif/*.h
-include/install-sh
-include/wx/install-sh
+include/wx/x11/*.h
 
 docs/motif/*.txt
 docs/motif/makewxmotif
