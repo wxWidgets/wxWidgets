@@ -184,7 +184,7 @@ class WXDLLEXPORT wxPluginLibrary : public wxDynamicLibrary
 {
 public:
 
-    static wxDLImports ms_classes;  // Static hash of all imported classes.
+    static wxDLImports* ms_classes;  // Static hash of all imported classes.
 
     wxPluginLibrary( const wxString &libname, int flags = wxDL_DEFAULT );
     ~wxPluginLibrary();
@@ -269,10 +269,13 @@ public:
         return m_entry->GetSymbol( symbol, success );
     }
 
+    static void CreateManifest() { ms_manifest = new wxDLManifest(wxKEY_STRING); }
+    static void ClearManifest() { delete ms_manifest; ms_manifest = NULL; }
+
 private:
 
-    static wxDLManifest  ms_manifest;  // Static hash of loaded libs.
-    wxPluginLibrary     *m_entry;      // Cache our entry in the manifest.
+    static wxDLManifest* ms_manifest;  // Static hash of loaded libs.
+    wxPluginLibrary*     m_entry;      // Cache our entry in the manifest.
 
     // We could allow this class to be copied if we really
     // wanted to, but not without modification.

@@ -504,10 +504,8 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
     long treeStyle = wxTR_HAS_BUTTONS | wxTR_HIDE_ROOT;
 
-#ifdef __WXMSW__
-    if (style & wxDIRCTRL_EDITABLE)
+    if (style & wxDIRCTRL_EDIT_LABELS)
         treeStyle |= wxTR_EDIT_LABELS;
-#endif
 
     if ((style & wxDIRCTRL_3D_INTERNAL) == 0)
         treeStyle |= wxNO_BORDER;

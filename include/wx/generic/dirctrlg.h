@@ -47,7 +47,7 @@ enum
     // Use 3D borders on internal controls
     wxDIRCTRL_3D_INTERNAL    = 0x0080,
     // Editable labels
-    wxDIRCTRL_EDITABLE       = 0x0100
+    wxDIRCTRL_EDIT_LABELS    = 0x0100
 };
 
 //-----------------------------------------------------------------------------

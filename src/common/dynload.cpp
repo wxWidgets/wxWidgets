@@ -38,6 +38,7 @@
 #include "wx/filename.h"        // for SplitPath()
 
 #include "wx/dynload.h"
+#include "wx/module.h"
 
 #if defined(__DARWIN__)
 /* Porting notes:
@@ -280,7 +281,22 @@ void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
 // ---------------------------------------------------------------------------
 
 
-wxDLImports  wxPluginLibrary::ms_classes(wxKEY_STRING);
+wxDLImports*  wxPluginLibrary::ms_classes = NULL;
+
+class wxPluginLibraryModule : public wxModule
+{
+public:
+    wxPluginLibraryModule() {}
+    bool OnInit() { wxPluginLibrary::ms_classes = new wxDLImports(wxKEY_STRING); return TRUE; }
+    void OnExit() { delete wxPluginLibrary::ms_classes; wxPluginLibrary::ms_classes = NULL;
+                    wxPluginManager::ClearManifest(); }
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxPluginLibraryModule )
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxPluginLibraryModule, wxModule)
+
 
 wxPluginLibrary::wxPluginLibrary(const wxString &libname, int flags)
         : m_linkcount(1)
@@ -347,8 +363,8 @@ void wxPluginLibrary::UpdateClassInfo()
             // Hash all the class names into a local table too so
             // we can quickly find the entry they correspond to.
 
-            if( ms_classes.Get(info->m_className) == 0 )
-                ms_classes.Put(info->m_className, (wxObject *) this);
+            if( ms_classes->Get(info->m_className) == 0 )
+                ms_classes->Put(info->m_className, (wxObject *) this);
         }
     }
 
@@ -368,7 +384,7 @@ void wxPluginLibrary::RestoreClassInfo()
     for(info = m_after; info != m_before; info = info->m_next)
     {
         wxClassInfo::sm_classTable->Delete(info->m_className);
-        ms_classes.Delete(info->m_className);
+        ms_classes->Delete(info->m_className);
     }
 
     if( wxClassInfo::sm_first == m_after )
@@ -457,7 +473,7 @@ void wxPluginLibrary::UnregisterModules()
 // wxPluginLibrary
 // ---------------------------------------------------------------------------
 
-wxDLManifest   wxPluginManager::ms_manifest(wxKEY_STRING);
+wxDLManifest*   wxPluginManager::ms_manifest = NULL;
 
 // ------------------------
 // Static accessors
@@ -470,7 +486,7 @@ wxPluginLibrary *wxPluginManager::LoadLibrary(const wxString &libname, int flags
     if( !(flags & wxDL_VERBATIM) )
         realname += wxDynamicLibrary::GetDllExt();
 
-    wxPluginLibrary *entry = (wxPluginLibrary*) ms_manifest.Get(realname);
+    wxPluginLibrary *entry = (wxPluginLibrary*) ms_manifest->Get(realname);
 
     if( entry != 0 )
     {
@@ -482,7 +498,7 @@ wxPluginLibrary *wxPluginManager::LoadLibrary(const wxString &libname, int flags
 
         if( entry->IsLoaded() )
         {
-            ms_manifest.Put(realname, (wxObject*) entry);
+            ms_manifest->Put(realname, (wxObject*) entry);
         }
         else
         {
@@ -496,10 +512,10 @@ wxPluginLibrary *wxPluginManager::LoadLibrary(const wxString &libname, int flags
 
 bool wxPluginManager::UnloadLibrary(const wxString &libname)
 {
-    wxPluginLibrary *entry = (wxPluginLibrary*) ms_manifest.Get(libname);
+    wxPluginLibrary *entry = (wxPluginLibrary*) ms_manifest->Get(libname);
 
     if( !entry )
-        entry = (wxPluginLibrary*) ms_manifest.Get(libname + wxDynamicLibrary::GetDllExt());
+        entry = (wxPluginLibrary*) ms_manifest->Get(libname + wxDynamicLibrary::GetDllExt());
 
     if( entry )
         return entry->UnrefLib();
@@ -512,9 +528,9 @@ bool wxPluginManager::UnloadLibrary(const wxString &libname)
 wxPluginLibrary *wxPluginManager::GetObjectFromHandle(wxDllType handle)
 {
     wxNode  *node;
-    ms_manifest.BeginFind();
+    ms_manifest->BeginFind();
 
-    for(node = ms_manifest.Next(); node; node = ms_manifest.Next())
+    for(node = ms_manifest->Next(); node; node = ms_manifest->Next())
         if( ((wxPluginLibrary*)node->GetData())->GetLibHandle() == handle )
             return (wxPluginLibrary*)node->GetData();
 
@@ -535,11 +551,11 @@ bool wxPluginManager::Load(const wxString &libname, int flags)
 void wxPluginManager::Unload()
 {
     wxNode  *node;
-    ms_manifest.BeginFind();
+    ms_manifest->BeginFind();
 
     // It's either this or store the name of the lib just to do this.
 
-    for(node = ms_manifest.Next(); node; node = ms_manifest.Next())
+    for(node = ms_manifest->Next(); node; node = ms_manifest->Next())
         if( (wxPluginLibrary*)node->GetData() == m_entry )
             break;
 

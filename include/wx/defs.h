@@ -1160,6 +1160,12 @@ enum wxBorder
 #define wxPD_REMAINING_TIME     0x0040
 
 /*
+ * wxDirDialog styles
+ */
+
+#define wxDD_NEW_DIR_BUTTON     0x0080
+
+/*
  * extended dialog specifiers. these values are stored in a different
  * flag and thus do not overlap with other style flags. note that these
  * values do not correspond to the return values of the dialogs (for

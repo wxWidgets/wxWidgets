@@ -41,7 +41,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxDirSelectorPromptStr;
 WXDLLEXPORT wxString
 wxDirSelector(const wxString& message = wxDirSelectorPromptStr,
               const wxString& defaultPath = wxEmptyString,
-              long style = 0,
+              long style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxDD_NEW_DIR_BUTTON,
               const wxPoint& pos = wxDefaultPosition,
               wxWindow *parent = NULL);
 

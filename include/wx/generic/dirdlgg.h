@@ -38,7 +38,7 @@ public:
     wxGenericDirDialog(): wxDialog() {}
     wxGenericDirDialog(wxWindow* parent, const wxString& title,
                        const wxString& defaultPath = wxEmptyString,
-                       long style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER,
+                       long style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxDD_NEW_DIR_BUTTON,
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& sz = wxSize(450, 550),
                        const wxString& name = _T("dialog"));

@@ -93,14 +93,19 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
     
     // I'm not convinced we need a New button, and we tend to get annoying
     // accidental-editing with label editing enabled.
-    wxBitmapButton* newButton = 
-        new wxBitmapButton(this, ID_NEW,
-                           wxArtProvider::GetBitmap(wxART_NEW_DIR, wxART_CMN_DIALOG));
-    buttonsizer->Add( newButton, 0, wxRIGHT, 10 );
+    if (style & wxDD_NEW_DIR_BUTTON)
+    {
+        wxBitmapButton* newButton = 
+            new wxBitmapButton(this, ID_NEW,
+                            wxArtProvider::GetBitmap(wxART_NEW_DIR, wxART_CMN_DIALOG));
+        buttonsizer->Add( newButton, 0, wxRIGHT, 10 );
+#if wxUSE_TOOLTIPS
+        newButton->SetToolTip(_("Create new directory"));
+#endif    
+    }
 
 #if wxUSE_TOOLTIPS
     homeButton->SetToolTip(_("Go to home directory"));
-    newButton->SetToolTip(_("Create new directory"));
 #endif
 
     topsizer->Add( buttonsizer, 0, wxTOP | wxALIGN_RIGHT, 10 );
@@ -108,10 +113,21 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
     // 1) dir ctrl
     m_dirCtrl = NULL; // this is neccessary, event handler called from 
                       // wxGenericDirCtrl would crash otherwise!
+    long dirStyle = wxDIRCTRL_DIR_ONLY|wxSUNKEN_BORDER;
+    
+#ifdef __WXMSW__
+    if (style & wxDD_NEW_DIR_BUTTON)
+    {
+        // Only under Windows do we need the wxTR_EDIT_LABEL tree control style
+        // before we can call EditLabel (required for "New directory")
+        dirStyle |= wxDIRCTRL_EDIT_LABELS;
+    }
+#endif    
+
     m_dirCtrl = new wxGenericDirCtrl(this, ID_DIRCTRL,
                                      m_path, wxPoint(5, 5),
                                      wxSize(300, 200), 
-                                     wxDIRCTRL_DIR_ONLY|wxDIRCTRL_EDITABLE|wxSUNKEN_BORDER);
+                                     dirStyle);
 
     topsizer->Add( m_dirCtrl, 1, wxTOP|wxLEFT|wxRIGHT | wxEXPAND, 10 );
 
