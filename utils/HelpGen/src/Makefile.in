@@ -28,8 +28,8 @@ top_srcdir = @top_srcdir@
 ### Variables: ###
 
 DESTDIR = 
-HELPGEN_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) $(CXXFLAGS)
+HELPGEN_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) $(CPPFLAGS) $(CXXFLAGS)
 HELPGEN_OBJECTS =  \
 	HelpGen_HelpGen.o \
 	HelpGen_cjparser.o \

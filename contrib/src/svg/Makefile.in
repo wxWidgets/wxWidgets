@@ -44,14 +44,13 @@ top_srcdir = @top_srcdir@
 
 DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
-SVGDLL_CXXFLAGS = $(__svgdll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
-	-DWXUSINGDLL -DWXMAKINGDLL_SVG $(CXXFLAGS) $(PIC_FLAG)
+SVGDLL_CXXFLAGS = $(__svgdll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include -I$(srcdir)/../../include -DWXUSINGDLL \
+	-DWXMAKINGDLL_SVG $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
 SVGDLL_OBJECTS =  \
 	svgdll_dcsvg.o
-SVGLIB_CXXFLAGS = $(__svglib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
-	$(CXXFLAGS)
+SVGLIB_CXXFLAGS = $(__svglib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include -I$(srcdir)/../../include $(CPPFLAGS) $(CXXFLAGS)
 SVGLIB_OBJECTS =  \
 	svglib_dcsvg.o
 WX_VERSION = 2.5.1

@@ -36,9 +36,9 @@ top_srcdir = @top_srcdir@
 
 DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
-MINIFRAM_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+MINIFRAM_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
-	-I$(srcdir)/../../samples $(CXXFLAGS)
+	-I$(srcdir)/../../samples $(CPPFLAGS) $(CXXFLAGS)
 MINIFRAM_OBJECTS =  \
 	$(__minifram_os2_lib_res) \
 	minifram_minifram.o \

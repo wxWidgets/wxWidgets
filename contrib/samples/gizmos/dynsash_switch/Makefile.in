@@ -35,9 +35,10 @@ top_srcdir = @top_srcdir@
 ### Variables: ###
 
 DESTDIR = 
-DYNSASH_SWITCH_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+DYNSASH_SWITCH_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
-	-I$(srcdir)/../../../../samples -I$(srcdir)/../../../include $(CXXFLAGS)
+	-I$(srcdir)/../../../../samples -I$(srcdir)/../../../include $(CPPFLAGS) \
+	$(CXXFLAGS)
 DYNSASH_SWITCH_OBJECTS =  \
 	$(__dynsash_switch___win32rc) \
 	$(__dynsash_switch_os2_lib_res) \

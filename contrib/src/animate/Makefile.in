@@ -42,14 +42,14 @@ top_srcdir = @top_srcdir@
 
 ### Variables: ###
 
-ANIMATEDLL_CXXFLAGS = $(__animatedll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+ANIMATEDLL_CXXFLAGS = $(__animatedll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
-	-DWXUSINGDLL -DWXMAKINGDLL_ANIMATE $(CXXFLAGS) $(PIC_FLAG)
+	-DWXUSINGDLL -DWXMAKINGDLL_ANIMATE $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
 ANIMATEDLL_OBJECTS =  \
 	animatedll_animate.o
-ANIMATELIB_CXXFLAGS = $(__animatelib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+ANIMATELIB_CXXFLAGS = $(__animatelib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
-	$(CXXFLAGS)
+	$(CPPFLAGS) $(CXXFLAGS)
 ANIMATELIB_OBJECTS =  \
 	animatelib_animate.o
 DESTDIR = 

@@ -35,8 +35,8 @@ top_srcdir = @top_srcdir@
 
 DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
-WXRC_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) $(CXXFLAGS)
+WXRC_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) $(CPPFLAGS) $(CXXFLAGS)
 WXRC_OBJECTS =  \
 	wxrc_wxrc.o
 

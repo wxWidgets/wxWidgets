@@ -43,9 +43,9 @@ top_srcdir = @top_srcdir@
 ### Variables: ###
 
 DESTDIR = 
-GIZMOSDLL_CXXFLAGS = $(__gizmosdll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+GIZMOSDLL_CXXFLAGS = $(__gizmosdll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
-	-DWXUSINGDLL -DWXMAKINGDLL_GIZMOS $(CXXFLAGS) $(PIC_FLAG)
+	-DWXUSINGDLL -DWXMAKINGDLL_GIZMOS $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
 GIZMOSDLL_OBJECTS =  \
 	gizmosdll_dynamicsash.o \
 	gizmosdll_editlbox.o \
@@ -53,9 +53,9 @@ GIZMOSDLL_OBJECTS =  \
 	gizmosdll_multicell.o \
 	gizmosdll_splittree.o \
 	gizmosdll_statpict.o
-GIZMOSLIB_CXXFLAGS = $(__gizmoslib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+GIZMOSLIB_CXXFLAGS = $(__gizmoslib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
-	$(CXXFLAGS)
+	$(CPPFLAGS) $(CXXFLAGS)
 GIZMOSLIB_OBJECTS =  \
 	gizmoslib_dynamicsash.o \
 	gizmoslib_editlbox.o \

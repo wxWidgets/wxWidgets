@@ -35,9 +35,9 @@ top_srcdir = @top_srcdir@
 ### Variables: ###
 
 DESTDIR = 
-DYNAMIC_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+DYNAMIC_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
-	-I$(srcdir)/../../samples $(CXXFLAGS)
+	-I$(srcdir)/../../samples $(CPPFLAGS) $(CXXFLAGS)
 DYNAMIC_OBJECTS =  \
 	$(__dynamic_os2_lib_res) \
 	dynamic_dynamic.o \

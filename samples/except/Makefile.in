@@ -35,9 +35,9 @@ top_srcdir = @top_srcdir@
 ### Variables: ###
 
 DESTDIR = 
-EXCEPT_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+EXCEPT_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
-	-I$(srcdir)/../../samples $(CXXFLAGS)
+	-I$(srcdir)/../../samples $(CPPFLAGS) $(CXXFLAGS)
 EXCEPT_OBJECTS =  \
 	$(__except___win32rc) \
 	$(__except_os2_lib_res) \

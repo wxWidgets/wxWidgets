@@ -39,12 +39,12 @@ top_srcdir = @top_srcdir@
 
 DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
-PENGUIN_CFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+PENGUIN_CFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
-	-I$(srcdir)/../../../samples $(CFLAGS)
-PENGUIN_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(srcdir)/../../../samples $(CPPFLAGS) $(CFLAGS)
+PENGUIN_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
-	-I$(srcdir)/../../../samples $(CXXFLAGS)
+	-I$(srcdir)/../../../samples $(CPPFLAGS) $(CXXFLAGS)
 PENGUIN_OBJECTS =  \
 	$(__penguin_os2_lib_res) \
 	penguin_penguin.o \

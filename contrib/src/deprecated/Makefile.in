@@ -44,14 +44,14 @@ top_srcdir = @top_srcdir@
 
 ### Variables: ###
 
-DEPRECATEDDLL_CFLAGS = $(__deprecateddll_PCH_INC) $(CPPFLAGS) \
-	-D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include \
-	-I$(srcdir)/../../include -DWXUSINGDLL -DWXMAKINGDLL_DEPRECATED -I$(srcdir) \
-	$(CFLAGS) $(PIC_FLAG)
-DEPRECATEDDLL_CXXFLAGS = $(__deprecateddll_PCH_INC) $(CPPFLAGS) \
-	-D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include \
-	-I$(srcdir)/../../include -DWXUSINGDLL -DWXMAKINGDLL_DEPRECATED -I$(srcdir) \
-	$(CXXFLAGS) $(PIC_FLAG)
+DEPRECATEDDLL_CFLAGS = $(__deprecateddll_PCH_INC) -D__WX$(TOOLKIT)__ \
+	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
+	-DWXUSINGDLL -DWXMAKINGDLL_DEPRECATED -I$(srcdir) $(PIC_FLAG) $(CPPFLAGS) \
+	$(CFLAGS)
+DEPRECATEDDLL_CXXFLAGS = $(__deprecateddll_PCH_INC) -D__WX$(TOOLKIT)__ \
+	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
+	-DWXUSINGDLL -DWXMAKINGDLL_DEPRECATED -I$(srcdir) $(PIC_FLAG) $(CPPFLAGS) \
+	$(CXXFLAGS)
 DEPRECATEDDLL_OBJECTS =  \
 	deprecateddll_prop.o \
 	deprecateddll_propform.o \
@@ -61,12 +61,12 @@ DEPRECATEDDLL_OBJECTS =  \
 	deprecateddll_treelay.o \
 	deprecateddll_wxexpr.o \
 	deprecateddll_dosyacc.o
-DEPRECATEDLIB_CFLAGS = $(__deprecatedlib_PCH_INC) $(CPPFLAGS) \
-	-D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include \
-	-I$(srcdir)/../../include -I$(srcdir) $(CFLAGS)
-DEPRECATEDLIB_CXXFLAGS = $(__deprecatedlib_PCH_INC) $(CPPFLAGS) \
-	-D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include \
-	-I$(srcdir)/../../include -I$(srcdir) $(CXXFLAGS)
+DEPRECATEDLIB_CFLAGS = $(__deprecatedlib_PCH_INC) -D__WX$(TOOLKIT)__ \
+	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
+	-I$(srcdir) $(CPPFLAGS) $(CFLAGS)
+DEPRECATEDLIB_CXXFLAGS = $(__deprecatedlib_PCH_INC) -D__WX$(TOOLKIT)__ \
+	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
+	-I$(srcdir) $(CPPFLAGS) $(CXXFLAGS)
 DEPRECATEDLIB_OBJECTS =  \
 	deprecatedlib_prop.o \
 	deprecatedlib_propform.o \

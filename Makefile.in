@@ -53,11 +53,10 @@ top_srcdir = @top_srcdir@
 
 ### Variables: ###
 
-ADVDLL_CXXFLAGS = $(__advdll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
-	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DWXUSINGDLL -DWXMAKINGDLL_ADV $(CXXFLAGS) \
-	$(PIC_FLAG)
+ADVDLL_CXXFLAGS = $(__advdll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
+	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
+	-DWXUSINGDLL -DWXMAKINGDLL_ADV $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
 ADVDLL_OBJECTS =  \
 	advdll_calctrl.o \
 	advdll_dcbuffer.o \
@@ -71,10 +70,10 @@ ADVDLL_OBJECTS =  \
 	advdll_tipdlg.o \
 	advdll_wizard.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_2)
-ADVLIB_CXXFLAGS = $(__advlib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
-	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) $(CXXFLAGS)
+ADVLIB_CXXFLAGS = $(__advlib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
+	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
+	$(CPPFLAGS) $(CXXFLAGS)
 ADVLIB_OBJECTS =  \
 	advlib_calctrl.o \
 	advlib_dcbuffer.o \
@@ -323,16 +322,16 @@ ALL_BASE_SOURCES =  \
 ALL_HEADERS =  \
 	$(ALL_BASE_HEADERS) \
 	$(ALL_GUI_HEADERS)
-BASEDLL_CFLAGS = $(__basedll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+BASEDLL_CFLAGS = $(__basedll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
+	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
+	-DwxUSE_GUI=0 -DWXMAKINGDLL_BASE -DwxUSE_BASE=1 $(PIC_FLAG) $(CPPFLAGS) \
+	$(CFLAGS)
+BASEDLL_CXXFLAGS = $(__basedll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
 	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_GUI=0 -DWXMAKINGDLL_BASE \
-	-DwxUSE_BASE=1 $(CFLAGS) $(PIC_FLAG)
-BASEDLL_CXXFLAGS = $(__basedll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
-	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_GUI=0 -DWXMAKINGDLL_BASE \
-	-DwxUSE_BASE=1 $(CXXFLAGS) $(PIC_FLAG)
+	-DwxUSE_BASE=1 $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
 BASEDLL_OBJECTS =  \
 	basedll_appbase.o \
 	basedll_clntdata.o \
@@ -394,14 +393,15 @@ BASEDLL_OBJECTS =  \
 	basedll_utilscmn.o \
 	$(__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_2) \
 	$(__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_2)
-BASELIB_CFLAGS = $(__baselib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+BASELIB_CFLAGS = $(__baselib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
+	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
+	-DwxUSE_GUI=0 -DwxUSE_BASE=1 $(CPPFLAGS) $(CFLAGS)
+BASELIB_CXXFLAGS = $(__baselib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_GUI=0 -DwxUSE_BASE=1 $(CFLAGS)
-BASELIB_CXXFLAGS = $(__baselib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
-	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_GUI=0 -DwxUSE_BASE=1 $(CXXFLAGS)
+	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_GUI=0 -DwxUSE_BASE=1 $(CPPFLAGS) \
+	$(CXXFLAGS)
 BASELIB_OBJECTS =  \
 	baselib_appbase.o \
 	baselib_clntdata.o \
@@ -463,16 +463,16 @@ BASELIB_OBJECTS =  \
 	baselib_utilscmn.o \
 	$(__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_3) \
 	$(__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_3)
-COREDLL_CFLAGS = $(__coredll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+COREDLL_CFLAGS = $(__coredll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
+	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
+	-DWXUSINGDLL -DWXMAKINGDLL_CORE -DwxUSE_BASE=0 $(PIC_FLAG) $(CPPFLAGS) \
+	$(CFLAGS)
+COREDLL_CXXFLAGS = $(__coredll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
 	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DWXUSINGDLL -DWXMAKINGDLL_CORE \
-	-DwxUSE_BASE=0 $(CFLAGS) $(PIC_FLAG)
-COREDLL_CXXFLAGS = $(__coredll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
-	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DWXUSINGDLL -DWXMAKINGDLL_CORE \
-	-DwxUSE_BASE=0 $(CXXFLAGS) $(PIC_FLAG)
+	-DwxUSE_BASE=0 $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
 COREDLL_OBJECTS =  \
 	coredll_event.o \
 	coredll_fs_mem.o \
@@ -481,14 +481,14 @@ COREDLL_OBJECTS =  \
 	$(__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_4) \
 	$(__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_4) \
 	$(__CORE_SRC_OBJECTS_2)
-CORELIB_CFLAGS = $(__corelib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+CORELIB_CFLAGS = $(__corelib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
+	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
+	-DwxUSE_BASE=0 $(CPPFLAGS) $(CFLAGS)
+CORELIB_CXXFLAGS = $(__corelib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_BASE=0 $(CFLAGS)
-CORELIB_CXXFLAGS = $(__corelib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
-	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_BASE=0 $(CXXFLAGS)
+	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_BASE=0 $(CPPFLAGS) $(CXXFLAGS)
 CORELIB_OBJECTS =  \
 	corelib_event.o \
 	corelib_fs_mem.o \
@@ -497,38 +497,37 @@ CORELIB_OBJECTS =  \
 	$(__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_5) \
 	$(__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_5) \
 	$(__CORE_SRC_OBJECTS_3)
-DBGRIDDLL_CXXFLAGS = $(__dbgriddll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+DBGRIDDLL_CXXFLAGS = $(__dbgriddll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
 	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DWXUSINGDLL -DWXMAKINGDLL_DBGRID \
-	$(CXXFLAGS) $(PIC_FLAG)
+	$(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
 DBGRIDDLL_OBJECTS =  \
 	dbgriddll_dbgrid.o
-DBGRIDLIB_CXXFLAGS = $(__dbgridlib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+DBGRIDLIB_CXXFLAGS = $(__dbgridlib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) $(CXXFLAGS)
+	$(__INC_REGEX_p) $(__INC_EXPAT_p) $(CPPFLAGS) $(CXXFLAGS)
 DBGRIDLIB_OBJECTS =  \
 	dbgridlib_dbgrid.o
 DESTDIR = 
-GLDLL_CXXFLAGS = $(__gldll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
-	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DWXUSINGDLL -DWXMAKINGDLL_GL $(CXXFLAGS) \
-	$(PIC_FLAG)
+GLDLL_CXXFLAGS = $(__gldll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
+	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
+	-DWXUSINGDLL -DWXMAKINGDLL_GL $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
 GLDLL_OBJECTS =  \
 	$(__OPENGL_SRC_OBJECTS)
-GLLIB_CXXFLAGS = $(__gllib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
-	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) $(CXXFLAGS)
+GLLIB_CXXFLAGS = $(__gllib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
+	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
+	$(CPPFLAGS) $(CXXFLAGS)
 GLLIB_OBJECTS =  \
 	$(__OPENGL_SRC_OBJECTS_1)
-HTMLDLL_CXXFLAGS = $(__htmldll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+HTMLDLL_CXXFLAGS = $(__htmldll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
 	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DWXUSINGDLL -DWXMAKINGDLL_HTML \
-	$(CXXFLAGS) $(PIC_FLAG)
+	$(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
 HTMLDLL_OBJECTS =  \
 	$(__HTML_SRC_PLATFORM_OBJECTS_2) \
 	htmldll_helpctrl.o \
@@ -552,10 +551,10 @@ HTMLDLL_OBJECTS =  \
 	htmldll_m_tables.o \
 	htmldll_winpars.o \
 	htmldll_htmllbox.o
-HTMLLIB_CXXFLAGS = $(__htmllib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+HTMLLIB_CXXFLAGS = $(__htmllib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) $(CXXFLAGS)
+	$(__INC_REGEX_p) $(__INC_EXPAT_p) $(CPPFLAGS) $(CXXFLAGS)
 HTMLLIB_OBJECTS =  \
 	$(__HTML_SRC_PLATFORM_OBJECTS_3) \
 	htmllib_helpctrl.o \
@@ -581,16 +580,15 @@ HTMLLIB_OBJECTS =  \
 	htmllib_htmllbox.o
 LIBDIRNAME = $(top_builddir)lib
 LOCALE_LINGUAS = ca cs da de el es fi fr hu id it ja nl pl ru sl sv tr uk zh zh_CN zh_TW
-MONODLL_CFLAGS = $(__monodll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+MONODLL_CFLAGS = $(__monodll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
+	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
+	-DwxUSE_BASE=1 -DWXMAKINGDLL $(PIC_FLAG) $(CPPFLAGS) $(CFLAGS)
+MONODLL_CXXFLAGS = $(__monodll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_BASE=1 -DWXMAKINGDLL $(CFLAGS) \
-	$(PIC_FLAG)
-MONODLL_CXXFLAGS = $(__monodll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
-	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_BASE=1 -DWXMAKINGDLL $(CXXFLAGS) \
-	$(PIC_FLAG)
+	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_BASE=1 -DWXMAKINGDLL $(PIC_FLAG) \
+	$(CPPFLAGS) $(CXXFLAGS)
 MONODLL_OBJECTS =  \
 	monodll_appbase.o \
 	monodll_clntdata.o \
@@ -666,14 +664,14 @@ MONODLL_OBJECTS =  \
 	$(__MONOLIB_GUI_SRC_OBJECTS) \
 	monodll_xml.o \
 	monodll_xtixml.o
-MONOLIB_CFLAGS = $(__monolib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+MONOLIB_CFLAGS = $(__monolib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
+	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
+	-DwxUSE_BASE=1 $(CPPFLAGS) $(CFLAGS)
+MONOLIB_CXXFLAGS = $(__monolib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_BASE=1 $(CFLAGS)
-MONOLIB_CXXFLAGS = $(__monolib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
-	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_BASE=1 $(CXXFLAGS)
+	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_BASE=1 $(CPPFLAGS) $(CXXFLAGS)
 MONOLIB_OBJECTS =  \
 	monolib_appbase.o \
 	monolib_clntdata.o \
@@ -749,16 +747,16 @@ MONOLIB_OBJECTS =  \
 	$(__MONOLIB_GUI_SRC_OBJECTS_1) \
 	monolib_xml.o \
 	monolib_xtixml.o
-NETDLL_CFLAGS = $(__netdll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
-	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_GUI=0 -DWXUSINGDLL \
-	-DWXMAKINGDLL_NET $(CFLAGS) $(PIC_FLAG)
-NETDLL_CXXFLAGS = $(__netdll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
-	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_GUI=0 -DWXUSINGDLL \
-	-DWXMAKINGDLL_NET $(CXXFLAGS) $(PIC_FLAG)
+NETDLL_CFLAGS = $(__netdll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
+	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
+	-DwxUSE_GUI=0 -DWXUSINGDLL -DWXMAKINGDLL_NET $(PIC_FLAG) $(CPPFLAGS) \
+	$(CFLAGS)
+NETDLL_CXXFLAGS = $(__netdll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
+	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
+	-DwxUSE_GUI=0 -DWXUSINGDLL -DWXMAKINGDLL_NET $(PIC_FLAG) $(CPPFLAGS) \
+	$(CXXFLAGS)
 NETDLL_OBJECTS =  \
 	netdll_fs_inet.o \
 	netdll_ftp.o \
@@ -771,14 +769,14 @@ NETDLL_OBJECTS =  \
 	netdll_socket.o \
 	netdll_url.o \
 	$(__NET_PLATFORM_SRC_OBJECTS_2)
-NETLIB_CFLAGS = $(__netlib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
-	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_GUI=0 $(CFLAGS)
-NETLIB_CXXFLAGS = $(__netlib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
-	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_GUI=0 $(CXXFLAGS)
+NETLIB_CFLAGS = $(__netlib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
+	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
+	-DwxUSE_GUI=0 $(CPPFLAGS) $(CFLAGS)
+NETLIB_CXXFLAGS = $(__netlib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
+	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
+	-DwxUSE_GUI=0 $(CPPFLAGS) $(CXXFLAGS)
 NETLIB_OBJECTS =  \
 	netlib_fs_inet.o \
 	netlib_ftp.o \
@@ -791,27 +789,27 @@ NETLIB_OBJECTS =  \
 	netlib_socket.o \
 	netlib_url.o \
 	$(__NET_PLATFORM_SRC_OBJECTS_3)
-ODBCDLL_CXXFLAGS = $(__odbcdll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+ODBCDLL_CXXFLAGS = $(__odbcdll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
 	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_GUI=0 -DWXUSINGDLL \
-	-DWXMAKINGDLL_ODBC $(CXXFLAGS) $(PIC_FLAG)
+	-DWXMAKINGDLL_ODBC $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
 ODBCDLL_OBJECTS =  \
 	odbcdll_db.o \
 	odbcdll_dbtable.o
-ODBCLIB_CXXFLAGS = $(__odbclib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+ODBCLIB_CXXFLAGS = $(__odbclib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_GUI=0 $(CXXFLAGS)
+	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_GUI=0 $(CPPFLAGS) $(CXXFLAGS)
 ODBCLIB_OBJECTS =  \
 	odbclib_db.o \
 	odbclib_dbtable.o
-WXEXPAT_CFLAGS = $(CPPFLAGS)    -I./src/expat $(CFLAGS)
+WXEXPAT_CFLAGS =     -I./src/expat  $(CPPFLAGS) $(CFLAGS)
 WXEXPAT_OBJECTS =  \
 	wxexpat_xmlparse.o \
 	wxexpat_xmlrole.o \
 	wxexpat_xmltok.o
-WXJPEG_CFLAGS = $(CPPFLAGS)    $(CFLAGS)
+WXJPEG_CFLAGS =      $(CPPFLAGS) $(CFLAGS)
 WXJPEG_OBJECTS =  \
 	wxjpeg_jcomapi.o \
 	wxjpeg_jutils.o \
@@ -859,7 +857,7 @@ WXJPEG_OBJECTS =  \
 	wxjpeg_jquant1.o \
 	wxjpeg_jquant2.o \
 	wxjpeg_jdmerge.o
-WXODBC_CFLAGS = $(CPPFLAGS)    $(CFLAGS)
+WXODBC_CFLAGS =      $(CPPFLAGS) $(CFLAGS)
 WXODBC_OBJECTS =  \
 	wxodbc_catalog.o \
 	wxodbc_connect.o \
@@ -876,7 +874,7 @@ WXODBC_OBJECTS =  \
 	wxodbc_misc.o \
 	wxodbc_prepare.o \
 	wxodbc_result.o
-WXPNG_CFLAGS = $(CPPFLAGS)    $(__INC_ZLIB_p) $(CFLAGS)
+WXPNG_CFLAGS =     $(__INC_ZLIB_p)  $(CPPFLAGS) $(CFLAGS)
 WXPNG_OBJECTS =  \
 	wxpng_png.o \
 	wxpng_pngerror.o \
@@ -895,13 +893,13 @@ WXPNG_OBJECTS =  \
 	wxpng_pngwrite.o \
 	wxpng_pngwtran.o \
 	wxpng_pngwutil.o
-WXREGEX_CFLAGS = $(CPPFLAGS)    $(CFLAGS)
+WXREGEX_CFLAGS =      $(CPPFLAGS) $(CFLAGS)
 WXREGEX_OBJECTS =  \
 	wxregex_regcomp.o \
 	wxregex_regexec.o \
 	wxregex_regerror.o \
 	wxregex_regfree.o
-WXTIFF_CFLAGS = $(CPPFLAGS)    $(CFLAGS)
+WXTIFF_CFLAGS =      $(CPPFLAGS) $(CFLAGS)
 WXTIFF_OBJECTS =  \
 	$(__TIFF_PLATFORM_SRC_OBJECTS) \
 	wxtiff_tif_aux.o \
@@ -936,7 +934,7 @@ WXTIFF_OBJECTS =  \
 	wxtiff_tif_warning.o \
 	wxtiff_tif_write.o \
 	wxtiff_tif_zip.o
-WXZLIB_CFLAGS = $(CPPFLAGS)    $(CFLAGS)
+WXZLIB_CFLAGS =      $(CPPFLAGS) $(CFLAGS)
 WXZLIB_OBJECTS =  \
 	wxzlib_adler32.o \
 	wxzlib_compress.o \
@@ -953,18 +951,18 @@ WXZLIB_OBJECTS =  \
 	wxzlib_infutil.o \
 	wxzlib_inffast.o
 WX_VERSION = 2.5.1
-XMLDLL_CXXFLAGS = $(__xmldll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
-	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_GUI=0 -DWXUSINGDLL \
-	-DWXMAKINGDLL_XML $(CXXFLAGS) $(PIC_FLAG)
+XMLDLL_CXXFLAGS = $(__xmldll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
+	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
+	-DwxUSE_GUI=0 -DWXUSINGDLL -DWXMAKINGDLL_XML $(PIC_FLAG) $(CPPFLAGS) \
+	$(CXXFLAGS)
 XMLDLL_OBJECTS =  \
 	xmldll_xml.o \
 	xmldll_xtixml.o
-XMLLIB_CXXFLAGS = $(__xmllib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
-	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_GUI=0 $(CXXFLAGS)
+XMLLIB_CXXFLAGS = $(__xmllib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
+	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
+	-DwxUSE_GUI=0 $(CPPFLAGS) $(CXXFLAGS)
 XMLLIB_OBJECTS =  \
 	xmllib_xml.o \
 	xmllib_xtixml.o

@@ -44,16 +44,16 @@ top_srcdir = @top_srcdir@
 
 DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
-NETUTILSDLL_CXXFLAGS = $(__netutilsdll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+NETUTILSDLL_CXXFLAGS = $(__netutilsdll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
-	-DWXUSINGDLL -DWXMAKINGDLL_NETUTILS $(CXXFLAGS) $(PIC_FLAG)
+	-DWXUSINGDLL -DWXMAKINGDLL_NETUTILS $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
 NETUTILSDLL_OBJECTS =  \
 	netutilsdll_email.o \
 	netutilsdll_smapi.o \
 	netutilsdll_web.o
-NETUTILSLIB_CXXFLAGS = $(__netutilslib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+NETUTILSLIB_CXXFLAGS = $(__netutilslib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
-	$(CXXFLAGS)
+	$(CPPFLAGS) $(CXXFLAGS)
 NETUTILSLIB_OBJECTS =  \
 	netutilslib_email.o \
 	netutilslib_smapi.o \

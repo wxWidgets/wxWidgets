@@ -43,9 +43,9 @@ top_srcdir = @top_srcdir@
 ### Variables: ###
 
 DESTDIR = 
-FLDLL_CXXFLAGS = $(__fldll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
-	-DWXUSINGDLL -DWXMAKINGDLL_FL $(CXXFLAGS) $(PIC_FLAG)
+FLDLL_CXXFLAGS = $(__fldll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include -I$(srcdir)/../../include -DWXUSINGDLL \
+	-DWXMAKINGDLL_FL $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
 FLDLL_OBJECTS =  \
 	fldll_antiflickpl.o \
 	fldll_bardragpl.o \
@@ -64,9 +64,8 @@ FLDLL_OBJECTS =  \
 	fldll_rowlayoutpl.o \
 	fldll_toolwnd.o \
 	fldll_updatesmgr.o
-FLLIB_CXXFLAGS = $(__fllib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
-	$(CXXFLAGS)
+FLLIB_CXXFLAGS = $(__fllib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include -I$(srcdir)/../../include $(CPPFLAGS) $(CXXFLAGS)
 FLLIB_OBJECTS =  \
 	fllib_antiflickpl.o \
 	fllib_bardragpl.o \

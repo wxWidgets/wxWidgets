@@ -36,9 +36,9 @@ top_srcdir = @top_srcdir@
 
 DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
-OWNERDRW_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+OWNERDRW_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
-	-I$(srcdir)/../../samples $(CXXFLAGS)
+	-I$(srcdir)/../../samples $(CPPFLAGS) $(CXXFLAGS)
 OWNERDRW_OBJECTS =  \
 	$(__ownerdrw_os2_lib_res) \
 	ownerdrw_ownerdrw.o \

@@ -35,42 +35,42 @@ top_srcdir = @top_srcdir@
 ### Variables: ###
 
 DESTDIR = 
-FL_DEMO1_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+FL_DEMO1_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../../samples -I$(srcdir)/../../include \
-	-DBMP_DIR=\"bitmaps/\" $(CXXFLAGS)
+	-DBMP_DIR=\"bitmaps/\" $(CPPFLAGS) $(CXXFLAGS)
 FL_DEMO1_OBJECTS =  \
 	$(__fl) \
 	fl_demo1_fl_demo1.o \
 	$(__fl_demo1___win32rc)
-FL_DEMO2_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+FL_DEMO2_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../../samples -I$(srcdir)/../../include \
-	-DBMP_DIR=\"bitmaps/\" $(CXXFLAGS)
+	-DBMP_DIR=\"bitmaps/\" $(CPPFLAGS) $(CXXFLAGS)
 FL_DEMO2_OBJECTS =  \
 	$(__fl) \
 	fl_demo2_fl_demo2.o \
 	$(__fl_demo2___win32rc)
-FL_SAMPLE1_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+FL_SAMPLE1_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../../samples -I$(srcdir)/../../include \
-	-DBMP_DIR=\"bitmaps/\" $(CXXFLAGS)
+	-DBMP_DIR=\"bitmaps/\" $(CPPFLAGS) $(CXXFLAGS)
 FL_SAMPLE1_OBJECTS =  \
 	$(__fl) \
 	fl_sample1_fl_sample1.o \
 	$(__fl_sample1___win32rc)
-FL_SAMPLE2_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+FL_SAMPLE2_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../../samples -I$(srcdir)/../../include \
-	-DBMP_DIR=\"bitmaps/\" $(CXXFLAGS)
+	-DBMP_DIR=\"bitmaps/\" $(CPPFLAGS) $(CXXFLAGS)
 FL_SAMPLE2_OBJECTS =  \
 	$(__fl) \
 	fl_sample2_fl_sample2.o \
 	$(__fl_sample2___win32rc)
-FL_SAMPLE3_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+FL_SAMPLE3_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../../samples -I$(srcdir)/../../include \
-	-DBMP_DIR=\"bitmaps/\" $(CXXFLAGS)
+	-DBMP_DIR=\"bitmaps/\" $(CPPFLAGS) $(CXXFLAGS)
 FL_SAMPLE3_OBJECTS =  \
 	$(__fl) \
 	fl_sample3_fl_sample3.o \

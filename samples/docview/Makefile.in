@@ -35,9 +35,9 @@ top_srcdir = @top_srcdir@
 ### Variables: ###
 
 DESTDIR = 
-DOCVIEW_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+DOCVIEW_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
-	-I$(srcdir)/../../samples $(CXXFLAGS)
+	-I$(srcdir)/../../samples $(CPPFLAGS) $(CXXFLAGS)
 DOCVIEW_OBJECTS =  \
 	$(__docview_os2_lib_res) \
 	docview_docview.o \

@@ -47,9 +47,9 @@ top_srcdir = @top_srcdir@
 DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 WX_VERSION = 2.5.1
-XRCDLL_CXXFLAGS = $(__xrcdll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
-	-DWXUSINGDLL -DWXMAKINGDLL_XRC $(CXXFLAGS) $(PIC_FLAG)
+XRCDLL_CXXFLAGS = $(__xrcdll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include -I$(srcdir)/../../include -DWXUSINGDLL \
+	-DWXMAKINGDLL_XRC $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
 XRCDLL_OBJECTS =  \
 	xrcdll_xmlres.o \
 	xrcdll_xh_bmp.o \
@@ -88,9 +88,9 @@ XRCDLL_OBJECTS =  \
 	xrcdll_xh_unkwn.o \
 	xrcdll_xh_wizrd.o \
 	xrcdll_xmlrsall.o
-XRCLIB_CXXFLAGS = $(__xrclib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
-	-I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(CXXFLAGS)
+XRCLIB_CXXFLAGS = $(__xrclib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include -I$(srcdir)/../../include \
+	-I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(CPPFLAGS) $(CXXFLAGS)
 XRCLIB_OBJECTS =  \
 	xrclib_xmlres.o \
 	xrclib_xh_bmp.o \

@@ -29,9 +29,9 @@ top_srcdir = @top_srcdir@
 
 ### Variables: ###
 
-CONSOLE_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+CONSOLE_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) $(__MULTILIB_FLAG_p) \
-	$(CXXFLAGS)
+	$(CPPFLAGS) $(CXXFLAGS)
 CONSOLE_OBJECTS =  \
 	console_console.o
 DESTDIR = 

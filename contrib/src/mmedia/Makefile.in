@@ -45,9 +45,9 @@ top_srcdir = @top_srcdir@
 
 DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
-MMEDIADLL_CXXFLAGS = $(__mmediadll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+MMEDIADLL_CXXFLAGS = $(__mmediadll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
-	-DWXUSINGDLL -DWXMAKINGDLL_MMEDIA $(CXXFLAGS) $(PIC_FLAG)
+	-DWXUSINGDLL -DWXMAKINGDLL_MMEDIA $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
 MMEDIADLL_OBJECTS =  \
 	$(__MMEDIA_PLATFORM_SRC_OBJECTS) \
 	mmediadll_cdbase.o \
@@ -67,9 +67,9 @@ MMEDIADLL_OBJECTS =  \
 	mmediadll_sndulaw.o \
 	mmediadll_sndwav.o \
 	mmediadll_vidbase.o
-MMEDIALIB_CXXFLAGS = $(__mmedialib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+MMEDIALIB_CXXFLAGS = $(__mmedialib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
-	$(CXXFLAGS)
+	$(CPPFLAGS) $(CXXFLAGS)
 MMEDIALIB_OBJECTS =  \
 	$(__MMEDIA_PLATFORM_SRC_OBJECTS_1) \
 	mmedialib_cdbase.o \

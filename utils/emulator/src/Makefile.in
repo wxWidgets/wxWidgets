@@ -34,9 +34,9 @@ top_srcdir = @top_srcdir@
 
 DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
-WXEMULATOR_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+WXEMULATOR_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
-	-I$(srcdir)/../../../samples $(CXXFLAGS)
+	-I$(srcdir)/../../../samples $(CPPFLAGS) $(CXXFLAGS)
 WXEMULATOR_OBJECTS =  \
 	$(__wxemulator___win32rc) \
 	$(__wxemulator_os2_lib_res) \

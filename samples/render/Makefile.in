@@ -40,13 +40,13 @@ top_srcdir = @top_srcdir@
 
 DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
-RENDDLL_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	-I$(top_srcdir)/include -DWXUSINGDLL $(CXXFLAGS) $(PIC_FLAG)
+RENDDLL_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include -DWXUSINGDLL $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
 RENDDLL_OBJECTS =  \
 	renddll_renddll.o
-RENDER_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+RENDER_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
-	-I$(srcdir)/../../samples $(CXXFLAGS)
+	-I$(srcdir)/../../samples $(CPPFLAGS) $(CXXFLAGS)
 RENDER_OBJECTS =  \
 	$(__render___win32rc) \
 	$(__render_os2_lib_res) \

@@ -44,11 +44,11 @@ top_srcdir = @top_srcdir@
 
 DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
-STCDLL_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+STCDLL_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir)/../../include \
 	-I$(srcdir)/scintilla/include -I$(srcdir)/scintilla/src -D__WX__ \
-	-DSCI_LEXER -DLINK_LEXERS -DWXUSINGDLL -DWXMAKINGDLL_STC $(CXXFLAGS) \
-	$(PIC_FLAG)
+	-DSCI_LEXER -DLINK_LEXERS -DWXUSINGDLL -DWXMAKINGDLL_STC $(PIC_FLAG) \
+	$(CPPFLAGS) $(CXXFLAGS)
 STCDLL_OBJECTS =  \
 	stcdll_PlatWX.o \
 	stcdll_ScintillaWX.o \
@@ -103,10 +103,10 @@ STCDLL_OBJECTS =  \
 	stcdll_ViewStyle.o \
 	stcdll_WindowAccessor.o \
 	stcdll_XPM.o
-STCLIB_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+STCLIB_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir)/../../include \
 	-I$(srcdir)/scintilla/include -I$(srcdir)/scintilla/src -D__WX__ \
-	-DSCI_LEXER -DLINK_LEXERS $(CXXFLAGS)
+	-DSCI_LEXER -DLINK_LEXERS $(CPPFLAGS) $(CXXFLAGS)
 STCLIB_OBJECTS =  \
 	stclib_PlatWX.o \
 	stclib_ScintillaWX.o \

@@ -44,9 +44,9 @@ top_srcdir = @top_srcdir@
 
 DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
-OGLDLL_CXXFLAGS = $(__ogldll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
-	-DWXUSINGDLL -DWXMAKINGDLL_OGL $(CXXFLAGS) $(PIC_FLAG)
+OGLDLL_CXXFLAGS = $(__ogldll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include -I$(srcdir)/../../include -DWXUSINGDLL \
+	-DWXMAKINGDLL_OGL $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
 OGLDLL_OBJECTS =  \
 	ogldll_basic2.o \
 	ogldll_canvas.o \
@@ -60,9 +60,8 @@ OGLDLL_OBJECTS =  \
 	ogldll_constrnt.o \
 	ogldll_lines.o \
 	ogldll_ogldiag.o
-OGLLIB_CXXFLAGS = $(__ogllib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
-	$(CXXFLAGS)
+OGLLIB_CXXFLAGS = $(__ogllib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include -I$(srcdir)/../../include $(CPPFLAGS) $(CXXFLAGS)
 OGLLIB_OBJECTS =  \
 	ogllib_basic2.o \
 	ogllib_canvas.o \

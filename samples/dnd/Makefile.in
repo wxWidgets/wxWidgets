@@ -35,9 +35,8 @@ top_srcdir = @top_srcdir@
 ### Variables: ###
 
 DESTDIR = 
-DND_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
-	-I$(srcdir)/../../samples $(CXXFLAGS)
+DND_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include \
+	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples $(CPPFLAGS) $(CXXFLAGS)
 DND_OBJECTS =  \
 	$(__dnd_os2_lib_res) \
 	dnd_dnd.o \

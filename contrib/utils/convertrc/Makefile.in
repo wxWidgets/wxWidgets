@@ -37,9 +37,10 @@ top_srcdir = @top_srcdir@
 
 ### Variables: ###
 
-CONVERTRC_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+CONVERTRC_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
-	-I$(srcdir)/../../../samples -I$(srcdir)/../../include $(CXXFLAGS)
+	-I$(srcdir)/../../../samples -I$(srcdir)/../../include $(CPPFLAGS) \
+	$(CXXFLAGS)
 CONVERTRC_OBJECTS =  \
 	$(__convertrc_os2_lib_res) \
 	convertrc_convert.o \

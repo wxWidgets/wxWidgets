@@ -44,14 +44,14 @@ top_srcdir = @top_srcdir@
 
 DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
-PLOTDLL_CXXFLAGS = $(__plotdll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+PLOTDLL_CXXFLAGS = $(__plotdll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
-	-DWXUSINGDLL -DWXMAKINGDLL_PLOT $(CXXFLAGS) $(PIC_FLAG)
+	-DWXUSINGDLL -DWXMAKINGDLL_PLOT $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
 PLOTDLL_OBJECTS =  \
 	plotdll_plot.o
-PLOTLIB_CXXFLAGS = $(__plotlib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+PLOTLIB_CXXFLAGS = $(__plotlib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
-	$(CXXFLAGS)
+	$(CPPFLAGS) $(CXXFLAGS)
 PLOTLIB_OBJECTS =  \
 	plotlib_plot.o
 WX_VERSION = 2.5.1
