@@ -64,12 +64,12 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_ABOUT, GridFrame::About )
     EVT_MENU( wxID_EXIT, GridFrame::OnQuit )
 
-    EVT_WXGRID_LABEL_LEFT_CLICK( GridFrame::OnLabelLeftClick )
-    EVT_WXGRID_CELL_LEFT_CLICK( GridFrame::OnCellLeftClick )
-    EVT_WXGRID_ROW_SIZE( GridFrame::OnRowSize )
-    EVT_WXGRID_COL_SIZE( GridFrame::OnColSize )
-    EVT_WXGRID_RANGE_SELECT( GridFrame::OnRangeSelected )
-    EVT_WXGRID_CELL_CHANGE( GridFrame::OnCellValueChanged )
+    EVT_GRID_LABEL_LEFT_CLICK( GridFrame::OnLabelLeftClick )
+    EVT_GRID_CELL_LEFT_CLICK( GridFrame::OnCellLeftClick )
+    EVT_GRID_ROW_SIZE( GridFrame::OnRowSize )
+    EVT_GRID_COL_SIZE( GridFrame::OnColSize )
+    EVT_GRID_RANGE_SELECT( GridFrame::OnRangeSelected )
+    EVT_GRID_CELL_CHANGE( GridFrame::OnCellValueChanged )
 END_EVENT_TABLE()
 
     
