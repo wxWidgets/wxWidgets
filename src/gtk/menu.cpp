@@ -955,9 +955,9 @@ bool wxMenu::DoInsert(size_t pos, wxMenuItem *item)
 #else // GTK < 1.2
     // this should be easy to do...
     wxFAIL_MSG( wxT("not implemented") );
-#endif // GTK 1.2/1.0
 
     return FALSE;
+#endif // GTK 1.2/1.0
 }
 
 wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
