@@ -261,7 +261,6 @@ wxHTMLHelpControllerBase::KeywordSearch(const wxString& k)
    if(! m_NumOfEntries)
       return FALSE;
 
-   wxBusyCursor b; // display a busy cursor
    wxString     *choices = new wxString[m_NumOfEntries];
    wxString     *urls = new wxString[m_NumOfEntries];
    wxString compA, compB;
@@ -272,27 +271,30 @@ wxHTMLHelpControllerBase::KeywordSearch(const wxString& k)
    wxNode       *node = m_MapList->First();
    wxExtHelpMapEntry *entry;
 
-   compA = k; compA.LowerCase(); // we compare case insensitive
-   while(node)
    {
-      entry = (wxExtHelpMapEntry *)node->Data();
-      compB = entry->doc; compB.LowerCase();
-      if((showAll || compB.Contains(k)) && ! compB.IsEmpty())
+      wxBusyCursor b; // display a busy cursor
+      compA = k; compA.LowerCase(); // we compare case insensitive
+      while(node)
       {
-         urls[idx] = entry->url;
-         // doesn't work:
-         // choices[idx] = (**i).doc.Contains((**i).doc.Before(WXEXTHELP_COMMENTCHAR));
-         //if(choices[idx].IsEmpty()) // didn't contain the ';'
-         //   choices[idx] = (**i).doc;
-         choices[idx] = "";
-         for(j=0;entry->doc.c_str()[j]
-                && entry->doc.c_str()[j] != WXEXTHELP_COMMENTCHAR; j++)
-            choices[idx] << entry->doc.c_str()[j];
-         idx++;
+         entry = (wxExtHelpMapEntry *)node->Data();
+         compB = entry->doc; compB.LowerCase();
+         if((showAll || compB.Contains(k)) && ! compB.IsEmpty())
+         {
+            urls[idx] = entry->url;
+            // doesn't work:
+            // choices[idx] = (**i).doc.Contains((**i).doc.Before(WXEXTHELP_COMMENTCHAR));
+            //if(choices[idx].IsEmpty()) // didn't contain the ';'
+            //   choices[idx] = (**i).doc;
+            choices[idx] = "";
+            for(j=0;entry->doc.c_str()[j]
+                   && entry->doc.c_str()[j] != WXEXTHELP_COMMENTCHAR; j++)
+               choices[idx] << entry->doc.c_str()[j];
+            idx++;
+         }
+         node = node->Next();
       }
-      node = node->Next();
    }
-
+   
    if(idx == 1)
       rc = DisplayHelp(urls[0]);
    else if(idx == 0)
