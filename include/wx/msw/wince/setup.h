@@ -244,7 +244,7 @@
 // Default is 1
 //
 // Recommended setting: 0 unless you do plan to develop MT applications
-#define wxUSE_THREADS 1
+#define wxUSE_THREADS 0
 
 // If enabled (1), compiles wxWindows streams classes
 #define wxUSE_STREAMS       1

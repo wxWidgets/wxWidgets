@@ -931,8 +931,11 @@ WXDLLIMPEXP_BASE int      wxSystem(const wxChar *psz);
 #ifdef __WXWINCE__
 WXDLLIMPEXP_BASE char* strdup(const char* s);
 WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
+
+#if _WIN32_WCE <= 211
 WXDLLIMPEXP_BASE int isspace(int c);
 WXDLLIMPEXP_BASE int isascii( int c );
+#endif
 #endif
 
 // ----------------------------------------------------------------------------

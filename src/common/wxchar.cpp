@@ -1403,7 +1403,8 @@ char *strdup(const char *s)
 }
 #endif
 
-#if (defined(__MWERKS__) && !defined(__MACH__)) || defined(__WXWINCE__)
+#if (defined(__MWERKS__) && !defined(__MACH__)) || (defined(__WXWINCE__) && _WIN32_WCE <= 211)
+
 int isascii( int c )
 {
     return ( c >= 0 && c < 128 );
@@ -1418,8 +1419,11 @@ void *calloc( size_t num, size_t size )
     return ptr;
 }
 
+#if (_WIN32_WCE <= 211)
 int isspace(int c)
 {
     return (c == ' ');
 }
+#endif
+
 #endif

@@ -236,8 +236,9 @@ bool wxAppBase::ProcessIdle()
 bool wxAppBase::SendIdleEvents(wxWindow* win, wxIdleEvent& event)
 {
     bool needMore = FALSE;
-    
+
     win->OnInternalIdle();
+
     if (wxIdleEvent::CanSend(win))
     {
         event.SetEventObject(win);
@@ -246,7 +247,6 @@ bool wxAppBase::SendIdleEvents(wxWindow* win, wxIdleEvent& event)
         if (event.MoreRequested())
             needMore = TRUE;
     }
-
     wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
     while ( node )
     {

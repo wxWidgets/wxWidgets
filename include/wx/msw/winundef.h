@@ -317,7 +317,11 @@
     #undef IsMaximized
     inline BOOL IsMaximized(HWND hwnd)
     {
+#ifdef __WXWINCE__
+        return FALSE;
+#else
         return IsZoomed(hwnd);
+#endif
     }
 #endif
 
@@ -327,7 +331,11 @@
     #undef GetFirstChild
     inline HWND GetFirstChild(HWND hwnd)
     {
+#ifdef __WXWINCE__
+        return 0;
+#else
         return GetTopWindow(hwnd);
+#endif
     }
 #endif
 

@@ -16,10 +16,11 @@
 
 #include "wx/msw/wrapwin.h"
 
-
 #if defined (__WXWINCE__)
     #include <wingdi.h>     // RGB, COLORREF
+    #define ERRFALSE(x)
     #include <winuser.h>    // Global Namespaces ::GetKeyState, ::GetWindowRect
+    #include "wx/msw/winundef.h"
 #endif
 
 
@@ -555,6 +556,7 @@ WXDLLEXPORT void wxDrawLine(HDC hdc, int x1, int y1, int x2, int y2);
 #ifdef __WXWINCE__
 #include <winbase.h>
 
+#if _WIN32_WCE <= 211
 #define GlobalAlloc LocalAlloc
 #define GlobalFree LocalFree
 #define GlobalLock(mem) mem
@@ -564,6 +566,7 @@ WXDLLEXPORT void wxDrawLine(HDC hdc, int x1, int y1, int x2, int y2);
 #define GHND LPTR
 #define GMEM_MOVEABLE 0
 #define GMEM_SHARE 0
+#endif
 
 #if 0
 
