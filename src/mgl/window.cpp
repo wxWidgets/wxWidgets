@@ -703,6 +703,17 @@ bool wxWindowMGL::Show(bool show)
         return FALSE;
 
     MGL_wmShowWindow(m_wnd, show);
+    
+    if (!show && gs_activeFrame == this)
+    {
+       // activate next frame in Z-order:
+       if ( m_wnd->prev )
+       {
+           wxWindowMGL *win = (wxWindowMGL*)m_wnd->prev->userData;
+           win->SetFocus();
+        }
+    }
+
     return TRUE;
 }
 
