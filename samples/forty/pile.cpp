@@ -79,7 +79,7 @@ void Pile::Redraw(wxDC& dc )
    wxWindow *canvas = (wxWindow *) NULL;
    if (frame)
    {
-     wxNode *node = frame->GetChildren()->First();
+     wxNode *node = frame->GetChildren().First();
      if (node) canvas = (wxWindow*)node->Data();
    }
 

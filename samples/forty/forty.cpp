@@ -110,7 +110,7 @@ const wxBrush& FortyApp::BackgroundBrush()
 {
 	if (!m_backgroundBrush)
 	{
-		m_backgroundBrush = new wxBrush(*BackgroundColour(), wxSOLID);
+		m_backgroundBrush = new wxBrush(BackgroundColour(), wxSOLID);
 	}
 
 	return *m_backgroundBrush;
@@ -132,10 +132,10 @@ FortyFrame::FortyFrame(wxFrame* frame, char* title, int x, int y, int w, int h):
 {
 	// set the icon
 #ifdef __WXMSW__
-	SetIcon(new wxIcon("CardsIcon"));
+	SetIcon(wxIcon("CardsIcon"));
 #else
 #ifdef GTK_TBD
-	SetIcon(new wxIcon(Cards_bits, Cards_width, Cards_height));
+	SetIcon(wxIcon(Cards_bits, Cards_width, Cards_height));
 #endif
 #endif
 

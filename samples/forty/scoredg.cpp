@@ -28,7 +28,7 @@
 #endif
 
 #if wxUSE_IOSTREAMH
-#if defined(__WXMSW__) && !defined(GNUWIN32)
+#if defined(__WXMSW__) && !defined(__GNUWIN32__)
 #include <strstrea.h>
 #else
 #include <strstream.h>
@@ -96,7 +96,7 @@ ScoreCanvas::~ScoreCanvas()
 
 void ScoreCanvas::OnDraw(wxDC& dc)
 {
-	dc.SetFont(m_font);
+	dc.SetFont(* m_font);
 
 	const char* str = m_text;
 	unsigned int tab = 0;

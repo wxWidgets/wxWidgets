@@ -963,13 +963,13 @@ void wxPropertySheet::UpdateAllViews( wxPropertyView *WXUNUSED(thisView) )
 // Add a property
 void wxPropertySheet::AddProperty(wxProperty *property)
 {
-  m_properties.Append(property->GetName().GetData(), property);
+  m_properties.Append((const char*) property->GetName(), property);
 }
 
 // Get property by name
 wxProperty *wxPropertySheet::GetProperty(wxString name)
 {
-  wxNode *node = m_properties.Find(name.GetData());
+  wxNode *node = m_properties.Find((const char*) name);
   if (!node)
     return NULL;
   else
@@ -1018,14 +1018,14 @@ wxPropertyValidatorRegistry::~wxPropertyValidatorRegistry(void)
   ClearRegistry();
 }
 
-void wxPropertyValidatorRegistry::RegisterValidator(wxString& typeName, wxPropertyValidator *validator)
+void wxPropertyValidatorRegistry::RegisterValidator(const wxString& typeName, wxPropertyValidator *validator)
 {
-  Put(typeName.GetData(), validator);
+  Put((const char*) typeName, validator);
 }
 
-wxPropertyValidator *wxPropertyValidatorRegistry::GetValidator(wxString& typeName)
+wxPropertyValidator *wxPropertyValidatorRegistry::GetValidator(const wxString& typeName)
 {
-  return (wxPropertyValidator *)Get(typeName.GetData());
+  return (wxPropertyValidator *)Get((const char*) typeName);
 }
 
 void wxPropertyValidatorRegistry::ClearRegistry(void)

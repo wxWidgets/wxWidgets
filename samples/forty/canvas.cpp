@@ -50,7 +50,7 @@ FortyCanvas::FortyCanvas(wxWindow* parent, int x, int y, int w, int h) :
 #else
 	m_font = wxTheFontList->FindOrCreateFont(10, wxSWISS, wxNORMAL, wxNORMAL);
 #endif
-	SetBackgroundColour(*FortyApp::BackgroundColour());
+	SetBackgroundColour(FortyApp::BackgroundColour());
 	AllowDoubleClick(true);
 
 	m_handCursor = new wxCursor(wxCURSOR_HAND);
@@ -91,7 +91,7 @@ void FortyCanvas::UpdateScores()
 
 void FortyCanvas::OnDraw(wxDC& dc)
 {
-	dc.SetFont(m_font);
+	dc.SetFont(* m_font);
 	m_game->Redraw(dc);
 
 	// if player name not set (and selection dialog is not displayed)
@@ -141,7 +141,7 @@ void FortyCanvas::OnMouseEvent(wxMouseEvent& event)
 
 	wxClientDC dc(this); 
 	PrepareDC(dc);
-	dc.SetFont(m_font);
+	dc.SetFont(* m_font);
 
 	if (event.LeftDClick())
 	{
@@ -208,7 +208,7 @@ void FortyCanvas::SetCursorStyle(int x, int y)
 
 			wxClientDC dc(this); 
 			PrepareDC(dc);
-			dc.SetFont(m_font);
+			dc.SetFont(* m_font);
 			m_game->Redraw(dc);
 		}
 		else
@@ -222,11 +222,11 @@ void FortyCanvas::SetCursorStyle(int x, int y)
 	// the card under the cursor can go somewhere 
 	if (m_game->CanYouGo(x, y) && m_helpingHand)
 	{
-		SetCursor(m_handCursor);
+		SetCursor(* m_handCursor);
 	}
 	else
 	{
-		SetCursor(m_arrowCursor);
+		SetCursor(* m_arrowCursor);
 	}
 
 }
@@ -241,7 +241,7 @@ void FortyCanvas::Undo()
 {
 	wxClientDC dc(this); 
 	PrepareDC(dc);
-	dc.SetFont(m_font);
+	dc.SetFont(* m_font);
 	m_game->Undo(dc);
 }
 
@@ -249,6 +249,6 @@ void FortyCanvas::Redo()
 {
 	wxClientDC dc(this); 
 	PrepareDC(dc);
-	dc.SetFont(m_font);
+	dc.SetFont(* m_font);
 	m_game->Redo(dc);
 }

@@ -166,12 +166,12 @@ void Game::DoMove(wxDC& dc, Pile* src, Pile* dest)
 
 void Game::DisplayScore(wxDC& dc)
 {
-    wxColour* bgColour = FortyApp::BackgroundColour();
-	wxPen* pen = wxThePenList->FindOrCreatePen(*bgColour, 1, wxSOLID);
-    dc.SetTextBackground(*bgColour);
-    dc.SetTextForeground(*FortyApp::TextColour());
+    wxColour bgColour = FortyApp::BackgroundColour();
+	wxPen* pen = wxThePenList->FindOrCreatePen(bgColour, 1, wxSOLID);
+    dc.SetTextBackground(bgColour);
+    dc.SetTextForeground(FortyApp::TextColour());
 	dc.SetBrush(FortyApp::BackgroundBrush());
-	dc.SetPen(pen);
+	dc.SetPen(* pen);
 
 	// count the number of cards in foundations
     m_currentScore = 0;
@@ -746,8 +746,8 @@ void Pack::Redraw(wxDC& dc)
     char str[10];
     sprintf(str, "%d  ", m_topCard + 1);
 
-	dc.SetTextBackground(*FortyApp::BackgroundColour());
-	dc.SetTextForeground(*FortyApp::TextColour());
+	dc.SetTextBackground(FortyApp::BackgroundColour());
+	dc.SetTextForeground(FortyApp::TextColour());
     dc.DrawText(str, m_x + CardWidth + 5, m_y + CardHeight / 2);
 
 }

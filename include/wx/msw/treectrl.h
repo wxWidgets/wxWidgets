@@ -22,9 +22,14 @@
 #include "wx/control.h"
 #include "wx/event.h"
 
-#ifdef __MINGW32__
-#undef GetFirstChild()
-#undef GetNextSibling()
+#ifdef __GNUWIN32__
+#  ifdef GetFirstChild
+#    undef GetFirstChild
+#  endif
+
+#  ifdef GetNextSibling
+#    undef GetNextSibling
+#  endif
 #endif
 
 // the type for "untyped" data

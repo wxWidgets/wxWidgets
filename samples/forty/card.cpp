@@ -138,11 +138,11 @@ Card::~Card()
 void Card::Erase(wxDC& dc, int x, int y)
 {
 	wxPen* pen = wxThePenList->FindOrCreatePen(
-						*FortyApp::BackgroundColour(),
+						FortyApp::BackgroundColour(),
 						1,
 						wxSOLID
 						);
-	dc.SetPen(pen);
+	dc.SetPen(* pen);
 	dc.SetBrush(FortyApp::BackgroundBrush());
 	dc.DrawRectangle(x, y, CardWidth, CardHeight);
 } // Card::Erase()
@@ -171,18 +171,18 @@ void Card::Erase(wxDC& dc, int x, int y)
 //+-------------------------------------------------------------+
 void Card::Draw(wxDC& dc, int x, int y)
 {
-	wxBrush* backgroundBrush = dc.GetBackground();
-	dc.SetBrush(wxWHITE_BRUSH);
-	dc.SetPen(wxBLACK_PEN);
+	wxBrush* backgroundBrush = & dc.GetBackground();
+	dc.SetBrush(* wxWHITE_BRUSH);
+	dc.SetPen(* wxBLACK_PEN);
 	dc.DrawRoundedRectangle(x, y, CardWidth, CardHeight, 4);
 	if (m_wayUp == facedown)
 	{
-		dc.SetBackground(wxRED_BRUSH);
+		dc.SetBackground(* wxRED_BRUSH);
 		dc.SetBackgroundMode(wxSOLID);
 		wxBrush* brush = wxTheBrushList->FindOrCreateBrush(
 							"BLACK", wxCROSSDIAG_HATCH
 							);
-		dc.SetBrush(brush);
+		dc.SetBrush(* brush);
 
 		dc.DrawRoundedRectangle(
 				x + 4, y + 4,
@@ -193,7 +193,7 @@ void Card::Draw(wxDC& dc, int x, int y)
 	else
 	{
 		wxMemoryDC memoryDC;
-		memoryDC.SelectObject(m_symbolBmap);
+		memoryDC.SelectObject(* m_symbolBmap);
 
 //		dc.SetBackgroundMode(wxTRANSPARENT);
 
@@ -324,10 +324,10 @@ void Card::Draw(wxDC& dc, int x, int y)
 		case 11:
 		case 12:
 		case 13:
-			memoryDC.SelectObject(m_pictureBmap);
+			memoryDC.SelectObject(* m_pictureBmap);
 			dc.Blit(x + 5, y - 5 + CardHeight / 4, 40, 45,
 				&memoryDC, 40 * (m_pipValue - 11), 0, wxCOPY);
-			memoryDC.SelectObject(m_symbolBmap);
+			memoryDC.SelectObject(* m_symbolBmap);
 			dc.Blit(x + 32, y - 3 + CardHeight / 4, 11, 11,
 				&memoryDC, 11 * m_suit, 14, wxCOPY);
 			dc.Blit(x + 7, y + 27 + CardHeight / 4, 11, 11,
@@ -336,7 +336,7 @@ void Card::Draw(wxDC& dc, int x, int y)
 		}
 
 	}
-	dc.SetBackground(backgroundBrush);
+	dc.SetBackground(* backgroundBrush);
 } // Card:Draw()
 
 
@@ -349,9 +349,9 @@ void Card::Draw(wxDC& dc, int x, int y)
 //+-------------------------------------------------------------+
 void Card::DrawNullCard(wxDC& dc, int x, int y)
 {
-	wxPen* pen = wxThePenList->FindOrCreatePen(*FortyApp::TextColour(), 1, wxSOLID);
+	wxPen* pen = wxThePenList->FindOrCreatePen(FortyApp::TextColour(), 1, wxSOLID);
 	dc.SetBrush(FortyApp::BackgroundBrush());
-	dc.SetPen(pen);
+	dc.SetPen(*pen);
 	dc.DrawRoundedRectangle(x, y, CardWidth, CardHeight, 4);
 } // Card::DrawNullCard()
 

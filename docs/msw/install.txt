@@ -41,10 +41,8 @@ Using project files:
 2. Open src/wxvc.dsp, set Debug or Release configuration, and
    compile. This will produce lib/wxvc.lib or lib/wxvc_debug.lib.
 3. Open a sample project file, choose a configuration, and compile.
-   Currently only the minimal and mdi samples have project files.
-   To create others, copy the .dsp/.dsw files from the minimal
-   sample and globally replace 'MinimalVC' and 'minimal' with
-   suitable names. Add any other required source files.
+   The project files don't use precompiled headers, to save
+   space, but you can switch PCH compiling on for greater speed.
 
 Using makefiles:
 

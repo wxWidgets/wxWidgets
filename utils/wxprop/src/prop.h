@@ -150,8 +150,8 @@ class wxPropertyValidatorRegistry: public wxHashTable
   wxPropertyValidatorRegistry(void);
   ~wxPropertyValidatorRegistry(void);
 
-  virtual void RegisterValidator(wxString& roleName, wxPropertyValidator *validator);
-  virtual wxPropertyValidator *GetValidator(wxString& roleName);
+  virtual void RegisterValidator(const wxString& roleName, wxPropertyValidator *validator);
+  virtual wxPropertyValidator *GetValidator(const wxString& roleName);
   void ClearRegistry(void);
 };
 
