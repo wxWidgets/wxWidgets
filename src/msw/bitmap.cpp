@@ -1265,7 +1265,7 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
 
     // scan the bitmap for the transparent colour and set the corresponding
     // pixels in the mask to BLACK and the rest to WHITE
-    COLORREF maskColour = RGB(colour.Red(), colour.Green(), colour.Blue());
+    COLORREF maskColour = wxColourToPalRGB(colour);
     m_maskBitmap = (WXHBITMAP)::CreateBitmap(width, height, 1, 1, 0);
 
     HDC srcDC = ::CreateCompatibleDC(NULL);
