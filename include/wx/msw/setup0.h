@@ -616,6 +616,10 @@
                                 // Define 1 for font size to be backward compatible
                                 // to 1.63 and earlier. 1.64 and later define point
                                 // sizes to be compatible with Windows.
+#define wxDIALOG_UNIT_COMPATIBILITY   1
+                                // Set to 0 for accurate dialog units, else
+                                // 1 to be as per 2.1.16 and before. If migrating
+                                // between versions, your dialogs may seem to shrink.
 #define wxUSE_PENWINDOWS             0
                                 // Set to 1 to use PenWindows
 
