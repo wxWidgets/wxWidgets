@@ -430,8 +430,10 @@ Returns the blue intensity at the given coordinate.
 Returns the image data as an array. This is most often used when doing
 direct image manipulation. The return value points to an array of
 characters in RGBRGBRGB$\ldots$ format in the top-to-bottom, left-to-right
-order, that is the first RGB triplet corresponds to the pixel $(0, 0)$, the
-second one --- to $(0, 1)$ and so on.
+order, that is the first RGB triplet corresponds to the pixel first pixel of
+the first row, the second one --- to the second pixel of the first row and so
+on until the end of the first row, with second row following after it and so
+on.
 
 You should not delete the returned pointer nor pass it to
 \helpref{wxImage::SetData}{wximagesetdata}.
