@@ -7,184 +7,105 @@
 
 @MAKE_SET@
 
-CPPFLAGS = @CPPFLAGS@
-INSTALL_DIR = @INSTALL_DIR@
-DEREZ = @DEREZ@
-wxUSE_ZLIB = @wxUSE_ZLIB@
-MONOLITHIC = @MONOLITHIC@
-SONAME_FLAG = @SONAME_FLAG@
-CXXFLAGS = @CXXFLAGS@
 prefix = @prefix@
-INSTALL = @INSTALL@
-EXEEXT = @EXEEXT@
-RESCOMP = @RESCOMP@
-PLATFORM_MAC = @PLATFORM_MAC@
-USE_SOVERSION = @USE_SOVERSION@
-SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
-INSTALL_PROGRAM = @INSTALL_PROGRAM@
-wxUSE_LIBPNG = @wxUSE_LIBPNG@
-wxUSE_LIBTIFF = @wxUSE_LIBTIFF@
 exec_prefix = @exec_prefix@
-libdir = @libdir@
-TOOLKIT = @TOOLKIT@
-EXTRALIBS = @EXTRALIBS@
-CC = @CC@
-datadir = @datadir@
-PLATFORM_MSDOS = @PLATFORM_MSDOS@
-SETFILE = @SETFILE@
-LDFLAGS = @LDFLAGS@
-STRIP = @STRIP@
-USE_SOVERSOLARIS = @USE_SOVERSOLARIS@
-srcdir = @srcdir@
-wxUSE_ODBC = @wxUSE_ODBC@
-wxUSE_REGEX = @wxUSE_REGEX@
-bindir = @bindir@
-PIC_FLAG = @PIC_FLAG@
-USE_SOSYMLINKS = @USE_SOSYMLINKS@
-LDFLAGS_GUI = @LDFLAGS_GUI@
-INSTALL_DATA = @INSTALL_DATA@
-USE_GUI = @USE_GUI@
-PLATFORM_UNIX = @PLATFORM_UNIX@
-RANLIB = @RANLIB@
-SO_SUFFIX = @SO_SUFFIX@
-top_srcdir = @top_srcdir@
-wxUSE_LIBJPEG = @wxUSE_LIBJPEG@
-AR = @AR@
-BUILD = @BUILD@
-PLATFORM_WIN32 = @PLATFORM_WIN32@
-USE_MACVERSION = @USE_MACVERSION@
-PLATFORM_MACOSX = @PLATFORM_MACOSX@
-DEPS_TRACKING = @DEPS_TRACKING@
-OFFICIAL_BUILD = @OFFICIAL_BUILD@
-UNICODE = @UNICODE@
-WXUNIV = @WXUNIV@
-TOOLKIT_LOWERCASE = @TOOLKIT_LOWERCASE@
+CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
-SHARED_LD_CXX = @SHARED_LD_CXX@
-VENDOR = @VENDOR@
+CXXFLAGS = @CXXFLAGS@
+EXEEXT = @EXEEXT@
+EXTRALIBS = @EXTRALIBS@
+LDFLAGS = @LDFLAGS@
+LDFLAGS_GUI = @LDFLAGS_GUI@
+RESCOMP = @RESCOMP@
+SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
+SETFILE = @SETFILE@
+TOOLKIT = @TOOLKIT@
+TOOLKIT_LOWERCASE = @TOOLKIT_LOWERCASE@
 TOOLKIT_VERSION = @TOOLKIT_VERSION@
-includedir = @includedir@
-LN_S = @LN_S@
-CFLAGS = @CFLAGS@
-DLLPREFIX = @DLLPREFIX@
-SHARED = @SHARED@
-USE_SOVERLINUX = @USE_SOVERLINUX@
+srcdir = @srcdir@
 top_builddir = @top_builddir@
-SHARED_LD_CC = @SHARED_LD_CC@
+top_srcdir = @top_srcdir@
 
 ### Variables: ###
 
-HELP_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) -I$(srcdir) $(__DLLFLAG_p) $(CXXFLAGS)
-HELP_CFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) -I$(srcdir) $(__DLLFLAG_p) $(CFLAGS)
+HELP_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p)   -I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) -I$(srcdir) $(__DLLFLAG_p) $(CXXFLAGS)
 
 ### Conditionally set variables: ###
 
-@COND_WXUSE_ZLIB_BUILTIN@__LIB_ZLIB_p = -lwxzlib$(WXDEBUGFLAG)
-@COND_UNICODE_1@WXUNICODEFLAG = u
-@COND_BUILD_DEBUG@WXDEBUGFLAG = d
-@COND_PLATFORM_WIN32_1@WXDLLVERSIONTAG = 
-@COND_PLATFORM_WIN32_0@WXDLLVERSIONTAG = -2.5
-@COND_WXUSE_LIBJPEG_BUILTIN@__INC_JPEG_p = -I$(srcdir)/src/jpeg
-@COND_WXUSE_LIBPNG_BUILTIN@LIB_PNG = wxpng$(WXDEBUGFLAG)
-@COND_WXUSE_ZLIB_BUILTIN@__INC_ZLIB_p = -I$(srcdir)/src/zlib
-@COND_WXUSE_LIBJPEG_BUILTIN@INC_JPEG = $(srcdir)/src/jpeg
-@COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
-@COND_WXUSE_ZLIB_BUILTIN@INC_ZLIB = $(srcdir)/src/zlib
-@COND_BUILD_DEBUG@OPTIMIZEFLAG = off
-@COND_BUILD_RELEASE@OPTIMIZEFLAG = speed
-@COND_DEPS_TRACKING_1@CCC = $(top_builddir)./bk-deps $(CC)
-@COND_DEPS_TRACKING_0@CCC = $(CC)
-@COND_TOOLKIT_MAC@MACOSX_RESOURCES = Carbon.r ../../lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.r
-@COND_MONOLITHIC_0@WXLIB_BASE = wx$(WXUNICODEFLAG)$(WXDEBUGFLAG)_base-2.5
-@COND_PLATFORM_WIN32_1@DLLIMPEXT = .a
-@COND_PLATFORM_WIN32_0@DLLIMPEXT = .$(SO_SUFFIX)
-@COND_WXUSE_ZLIB_BUILTIN@__INC_ZLIB_p_1 = --include-dir $(srcdir)/src/zlib
-@COND_MONOLITHIC_1@WXLIB_MONO = wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5
-@COND_WXUSE_ODBC_BUILTIN@LIB_ODBC = wxodbc$(WXDEBUGFLAG)
-@COND_MONOLITHIC_1@__WXLIB_MONO_p = -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5
-@COND_MONOLITHIC_0@WXLIB_CORE = wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5
-@COND_SHARED_1@__DLLFLAG_p = -DWXUSINGDLL
-@COND_WXUSE_LIBPNG_BUILTIN@__INC_PNG_p_1 = --include-dir $(srcdir)/src/png
-@COND_WXUSE_LIBTIFF_BUILTIN@__INC_TIFF_p_1 = --include-dir $(srcdir)/src/tiff
-@COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p = $(RESCOMP) -d __DARWIN__ -t APPL -d __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -i $(top_srcdir)/include -i $(INC_TIFF) -i $(INC_JPEG) -i $(INC_PNG) -i $(INC_ZLIB) -i $(INC_ODBC) -i $(INC_REGEX) -i $(srcdir) $(__DLLFLAG_p_1) -o help$(EXEEXT) Carbon.r ../../lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.r
-@COND_WXUSE_REGEX_BUILTIN@__LIB_REGEX_p = -lwxregex$(WXDEBUGFLAG)
-@COND_WXUSE_LIBJPEG_BUILTIN@__INC_JPEG_p_1 = --include-dir $(srcdir)/src/jpeg
-@COND_SHARED_1@DLLFLAG = WXUSINGDLL
-@COND_WXUSE_LIBPNG_BUILTIN@__LIB_PNG_p = -lwxpng$(WXDEBUGFLAG)
-@COND_WXUSE_ODBC_BUILTIN@__LIB_ODBC_p = -lwxodbc$(WXDEBUGFLAG)
-@COND_WXUSE_REGEX_BUILTIN@INC_REGEX = $(srcdir)/src/regex
-@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
 @COND_DEPS_TRACKING_0@CXXC = $(CXX)
-@COND_PLATFORM_UNIX_1@TIFF_PLATFORM_SRC = src/tiff/tif_unix.c
-@COND_PLATFORM_MACOSX_1@TIFF_PLATFORM_SRC = src/tiff/tif_unix.c
-@COND_PLATFORM_WIN32_1@TIFF_PLATFORM_SRC = src/tiff/tif_win32.c
-@COND_PLATFORM_WIN32_1@WXDLLNAMEPREFIXGUI = wx$(PORTNAME)$(WXUNIVNAME)25
-@COND_PLATFORM_WIN32_0@WXDLLNAMEPREFIXGUI = wx_$(PORTNAME)$(WXUNIVNAME)
-@COND_WXUSE_LIBJPEG_BUILTIN@__LIB_JPEG_p = -lwxjpeg$(WXDEBUGFLAG)
-@COND_WXUSE_LIBPNG_BUILTIN@INC_PNG = $(srcdir)/src/png
-@COND_WXUSE_ODBC_BUILTIN@__INC_ODBC_p = -I$(srcdir)/src/odbc
-@COND_WXUSE_ODBC_BUILTIN@__INC_ODBC_p_1 = --include-dir $(srcdir)/src/odbc
-@COND_WXUNIV_1@WXUNIVNAME = univ
-@COND_MONOLITHIC_0@__WXLIB_CORE_p = -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5
-@COND_WXUSE_ODBC_BUILTIN@INC_ODBC = $(srcdir)/src/odbc
-@COND_PLATFORM_WIN32_1@WXCOMPILER = _gcc
-@COND_WXUSE_ZLIB_BUILTIN@LIB_ZLIB = wxzlib$(WXDEBUGFLAG)
-@COND_BUILD_DEBUG@DEBUGFLAG = on
-@COND_BUILD_RELEASE@DEBUGFLAG = off
-@COND_WXUSE_REGEX_BUILTIN@__INC_REGEX_p = -I$(srcdir)/src/regex
-@COND_SHARED_1@__DLLFLAG_p_1 = -d WXUSINGDLL
-@COND_PLATFORM_WIN32_1@WXDLLNAMEPREFIX = wx25
-@COND_PLATFORM_WIN32_0@WXDLLNAMEPREFIX = wx
-@COND_SHARED_1@__DLLFLAG_p_2 = --define WXUSINGDLL
-@COND_WXUSE_LIBTIFF_BUILTIN@__INC_TIFF_p = -I$(srcdir)/src/tiff
-@COND_WXUSE_LIBTIFF_BUILTIN@INC_TIFF = $(srcdir)/src/tiff
-@COND_MONOLITHIC_0@WXLIB_HTML = wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5
-@COND_WXUNIV_1@WXUNIV_DEFINE = __WXUNIVERSAL__
-@COND_PLATFORM_WIN32_1@__help___win32rc = help-help_rc.o
-@COND_WXUSE_LIBTIFF_BUILTIN@__LIB_TIFF_p = -lwxtiff$(WXDEBUGFLAG)
-@COND_OFFICIAL_BUILD_1@VENDORTAG = 
-@COND_OFFICIAL_BUILD_0@VENDORTAG = _$(VENDOR)
-@COND_WXUNIV_1@__WXUNIV_DEFINE_p_1 = -d __WXUNIVERSAL__
-@COND_WXUNIV_1@__WXUNIV_DEFINE_p_2 = --define __WXUNIVERSAL__
-@COND_WXUSE_REGEX_BUILTIN@__INC_REGEX_p_1 = --include-dir $(srcdir)/src/regex
-@COND_WXUSE_LIBJPEG_BUILTIN@LIB_JPEG = wxjpeg$(WXDEBUGFLAG)
-@COND_WXUSE_LIBTIFF_BUILTIN@LIB_TIFF = wxtiff$(WXDEBUGFLAG)
+@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
+@COND_BUILD_DEBUG@WXDEBUGFLAG = d
+@COND_UNICODE_1@WXUNICODEFLAG = u
+@COND_WXUNIV_1@WXUNIVNAME = univ
+@COND_SHARED_1@__DLLFLAG_p = -DWXUSINGDLL
+@COND_SHARED_1@__DLLFLAG_p_1 = -d WXUSINGDLL
+@COND_SHARED_1@__DLLFLAG_p_2 = --define WXUSINGDLL
+@COND_WXUSE_LIBJPEG_BUILTIN@__INC_JPEG_p = -I$(top_srcdir)/src/jpeg
+@COND_WXUSE_LIBJPEG_BUILTIN@__INC_JPEG_p_1 = -i $(top_srcdir)/src/jpeg
+@COND_WXUSE_LIBJPEG_BUILTIN@__INC_JPEG_p_2 = --include-dir $(top_srcdir)/src/jpeg
+@COND_WXUSE_ODBC_BUILTIN@__INC_ODBC_p = -I$(top_srcdir)/src/odbc
+@COND_WXUSE_ODBC_BUILTIN@__INC_ODBC_p_1 = -i $(top_srcdir)/src/odbc
+@COND_WXUSE_ODBC_BUILTIN@__INC_ODBC_p_2 = --include-dir $(top_srcdir)/src/odbc
+@COND_WXUSE_LIBPNG_BUILTIN@__INC_PNG_p = -I$(top_srcdir)/src/png
+@COND_WXUSE_LIBPNG_BUILTIN@__INC_PNG_p_1 = -i $(top_srcdir)/src/png
+@COND_WXUSE_LIBPNG_BUILTIN@__INC_PNG_p_2 = --include-dir $(top_srcdir)/src/png
+@COND_WXUSE_REGEX_BUILTIN@__INC_REGEX_p = -I$(top_srcdir)/src/regex
+@COND_WXUSE_REGEX_BUILTIN@__INC_REGEX_p_1 = -i $(top_srcdir)/src/regex
+@COND_WXUSE_REGEX_BUILTIN@__INC_REGEX_p_2 = --include-dir $(top_srcdir)/src/regex
+@COND_WXUSE_LIBTIFF_BUILTIN@__INC_TIFF_p = -I$(top_srcdir)/src/tiff
+@COND_WXUSE_LIBTIFF_BUILTIN@__INC_TIFF_p_1 = -i $(top_srcdir)/src/tiff
+@COND_WXUSE_LIBTIFF_BUILTIN@__INC_TIFF_p_2 = --include-dir $(top_srcdir)/src/tiff
+@COND_WXUSE_ZLIB_BUILTIN@__INC_ZLIB_p = -I$(top_srcdir)/src/zlib
+@COND_WXUSE_ZLIB_BUILTIN@__INC_ZLIB_p_1 = -i $(top_srcdir)/src/zlib
+@COND_WXUSE_ZLIB_BUILTIN@__INC_ZLIB_p_2 = --include-dir $(top_srcdir)/src/zlib
+@COND_WXUSE_LIBJPEG_BUILTIN@__LIB_JPEG_p = -lwxjpeg$(WXDEBUGFLAG)
+@COND_WXUSE_ODBC_BUILTIN@__LIB_ODBC_p = -lwxodbc$(WXDEBUGFLAG)
+@COND_WXUSE_LIBPNG_BUILTIN@__LIB_PNG_p = -lwxpng$(WXDEBUGFLAG)
+@COND_WXUSE_REGEX_BUILTIN@__LIB_REGEX_p = -lwxregex$(WXDEBUGFLAG)
+@COND_WXUSE_LIBTIFF_BUILTIN@__LIB_TIFF_p = -lwxtiff$(WXDEBUGFLAG)
+@COND_WXUSE_ZLIB_BUILTIN@__LIB_ZLIB_p = -lwxzlib$(WXDEBUGFLAG)
+@COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_1 = $(RESCOMP) -d __DARWIN__ -t APPL -d __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1)   -i $(top_srcdir)/include $(__INC_TIFF_p_1) $(__INC_JPEG_p_1) $(__INC_PNG_p_1) $(__INC_ZLIB_p_1) $(__INC_ODBC_p_1) $(__INC_REGEX_p_1) -i $(srcdir) $(__DLLFLAG_p_1) -o help$(EXEEXT) Carbon.r $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.r
+@COND_MONOLITHIC_0@__WXLIB_BASE_p = -lwx$(WXUNICODEFLAG)$(WXDEBUGFLAG)_base-2.5
+@COND_MONOLITHIC_0@__WXLIB_CORE_p = -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5
+@COND_MONOLITHIC_1@__WXLIB_MONO_p = -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5
+@COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
+@COND_WXUNIV_1@__WXUNIV_DEFINE_p_1 = -d __WXUNIVERSAL__
+@COND_WXUNIV_1@__WXUNIV_DEFINE_p_2 = --define __WXUNIVERSAL__
+@COND_PLATFORM_MAC_1@__help___mac_rezcmd = $(__MACOSX_RESOURCES_p_1)
 @COND_PLATFORM_MAC_1@__help___mac_setfilecmd = $(SETFILE) -a C help$(EXEEXT)
-@COND_PLATFORM_MAC_1@__help___mac_rezcmd = $(__MACOSX_RESOURCES_p)
-@COND_WXUSE_LIBPNG_BUILTIN@__INC_PNG_p = -I$(srcdir)/src/png
-@COND_WXUSE_REGEX_BUILTIN@LIB_REGEX = wxregex$(WXDEBUGFLAG)
+@COND_PLATFORM_WIN32_1@__help___win32rc = help_help_rc.o
 
 ### Targets: ###
 
 all: help$(EXEEXT)
-
-install-strip: install
 
 clean: 
 	rm -rf ./.deps
 	rm -f -f ./*.o
 	rm -f help$(EXEEXT)
 
-install: all
-
-help-help_rc.o: $(srcdir)/help.rc
-	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) --include-dir $(top_srcdir)/include $(__INC_TIFF_p_1) $(__INC_JPEG_p_1) $(__INC_PNG_p_1) $(__INC_ZLIB_p_1) $(__INC_ODBC_p_1) $(__INC_REGEX_p_1) --include-dir $(srcdir) $(__DLLFLAG_p_2)
-
 distclean: clean
 	rm -f configure config.cache config.log config.status
 	rm -f bk-deps shared-ld-sh
 
-uninstall: 
-
-help-help.o: $(srcdir)/help.cpp
-	$(CXXC) -c -o $@ $(HELP_CXXFLAGS) $<
-
-help$(EXEEXT): help-help.o $(__help___win32rc)
-	$(CXX) -o $@  help-help.o $(__help___win32rc) $(LDFLAGS) -L$(top_builddir)lib $(SAMPLES_RPATH_FLAG) $(LDFLAGS_GUI)  $(__WXLIB_MONO_p) $(__WXLIB_CORE_p) $(EXTRALIBS) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p)
+help$(EXEEXT): help_demo.o $(__help___win32rc)
+	$(CXX) -o $@  help_demo.o $(__help___win32rc) $(LDFLAGS) -L$(top_builddir)lib $(SAMPLES_RPATH_FLAG) $(LDFLAGS_GUI)  $(__WXLIB_MONO_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS)
 	$(__help___mac_rezcmd)
 	$(__help___mac_setfilecmd)
+
+help_demo.o: $(srcdir)/demo.cpp
+	$(CXXC) -c -o $@ $(HELP_CXXFLAGS) $<
+
+help_help_rc.o: $(srcdir)/help.rc
+	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include $(__INC_TIFF_p_2) $(__INC_JPEG_p_2) $(__INC_PNG_p_2) $(__INC_ZLIB_p_2) $(__INC_ODBC_p_2) $(__INC_REGEX_p_2) --include-dir $(srcdir) $(__DLLFLAG_p_2)
+
+install: all
+
+install-strip: install
+
+uninstall: 
 
 
 # Include dependency info, if present:

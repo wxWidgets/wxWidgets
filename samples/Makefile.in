@@ -7,104 +7,22 @@
 
 @MAKE_SET@
 
-CPPFLAGS = @CPPFLAGS@
-INSTALL_DIR = @INSTALL_DIR@
-DEREZ = @DEREZ@
-MONOLITHIC = @MONOLITHIC@
-SONAME_FLAG = @SONAME_FLAG@
-CXXFLAGS = @CXXFLAGS@
 prefix = @prefix@
-INSTALL = @INSTALL@
-EXEEXT = @EXEEXT@
-RESCOMP = @RESCOMP@
-PLATFORM_MAC = @PLATFORM_MAC@
-USE_SOVERSION = @USE_SOVERSION@
-SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
-INSTALL_PROGRAM = @INSTALL_PROGRAM@
 exec_prefix = @exec_prefix@
-libdir = @libdir@
-TOOLKIT = @TOOLKIT@
-EXTRALIBS = @EXTRALIBS@
-CC = @CC@
-datadir = @datadir@
-PLATFORM_MSDOS = @PLATFORM_MSDOS@
-SETFILE = @SETFILE@
-LDFLAGS = @LDFLAGS@
-STRIP = @STRIP@
-USE_SOVERSOLARIS = @USE_SOVERSOLARIS@
-srcdir = @srcdir@
-bindir = @bindir@
-PIC_FLAG = @PIC_FLAG@
-USE_SOSYMLINKS = @USE_SOSYMLINKS@
-LDFLAGS_GUI = @LDFLAGS_GUI@
-INSTALL_DATA = @INSTALL_DATA@
-USE_GUI = @USE_GUI@
-PLATFORM_UNIX = @PLATFORM_UNIX@
-RANLIB = @RANLIB@
-SO_SUFFIX = @SO_SUFFIX@
-top_srcdir = @top_srcdir@
-AR = @AR@
-BUILD = @BUILD@
-PLATFORM_WIN32 = @PLATFORM_WIN32@
-USE_MACVERSION = @USE_MACVERSION@
-PLATFORM_MACOSX = @PLATFORM_MACOSX@
-DEPS_TRACKING = @DEPS_TRACKING@
-OFFICIAL_BUILD = @OFFICIAL_BUILD@
-UNICODE = @UNICODE@
-WXUNIV = @WXUNIV@
-TOOLKIT_LOWERCASE = @TOOLKIT_LOWERCASE@
-CXX = @CXX@
-SHARED_LD_CXX = @SHARED_LD_CXX@
-VENDOR = @VENDOR@
-TOOLKIT_VERSION = @TOOLKIT_VERSION@
-includedir = @includedir@
-LN_S = @LN_S@
-CFLAGS = @CFLAGS@
-DLLPREFIX = @DLLPREFIX@
-SHARED = @SHARED@
-USE_SOVERLINUX = @USE_SOVERLINUX@
-top_builddir = @top_builddir@
-SHARED_LD_CC = @SHARED_LD_CC@
 
 ### Variables: ###
 
 
 ### Conditionally set variables: ###
 
-@COND_PLATFORM_WIN32_1@DLLIMPEXT = .a
-@COND_PLATFORM_WIN32_0@DLLIMPEXT = .$(SO_SUFFIX)
 @COND_USE_GUI_0@__console___depname = console
-@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
-@COND_DEPS_TRACKING_0@CXXC = $(CXX)
-@COND_DEPS_TRACKING_1@CCC = $(top_builddir)./bk-deps $(CC)
-@COND_DEPS_TRACKING_0@CCC = $(CC)
 
 ### Targets: ###
 
 all: artprov $(__console___depname) dialogs image minimal
 
-install-strip: install
-	(cd artprov && $(MAKE) install-strip)
-	(cd console && $(MAKE) install-strip)
-	(cd dialogs && $(MAKE) install-strip)
-	(cd image && $(MAKE) install-strip)
-	(cd minimal && $(MAKE) install-strip)
-
-dialogs: 
-	(cd dialogs && $(MAKE) all)
-
-install: all
-	(cd artprov && $(MAKE) install)
-	(cd console && $(MAKE) install)
-	(cd dialogs && $(MAKE) install)
-	(cd image && $(MAKE) install)
-	(cd minimal && $(MAKE) install)
-
-image: 
-	(cd image && $(MAKE) all)
-
-@COND_USE_GUI_0@console: 
-@COND_USE_GUI_0@	(cd console && $(MAKE) all)
+artprov: 
+	(cd artprov && $(MAKE) all)
 
 clean: 
 	rm -rf ./.deps
@@ -115,12 +33,32 @@ clean:
 	(cd image && $(MAKE) clean)
 	(cd minimal && $(MAKE) clean)
 
-artprov: 
-	(cd artprov && $(MAKE) all)
+@COND_USE_GUI_0@console: 
+@COND_USE_GUI_0@	(cd console && $(MAKE) all)
+
+dialogs: 
+	(cd dialogs && $(MAKE) all)
 
 distclean: clean
 	rm -f configure config.cache config.log config.status
 	rm -f bk-deps shared-ld-sh
+
+image: 
+	(cd image && $(MAKE) all)
+
+install: all
+	(cd artprov && $(MAKE) install)
+	(cd console && $(MAKE) install)
+	(cd dialogs && $(MAKE) install)
+	(cd image && $(MAKE) install)
+	(cd minimal && $(MAKE) install)
+
+install-strip: install
+	(cd artprov && $(MAKE) install-strip)
+	(cd console && $(MAKE) install-strip)
+	(cd dialogs && $(MAKE) install-strip)
+	(cd image && $(MAKE) install-strip)
+	(cd minimal && $(MAKE) install-strip)
 
 minimal: 
 	(cd minimal && $(MAKE) all)
@@ -131,4 +69,4 @@ uninstall:
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all dialogs image console artprov minimal
+.PHONY: all artprov console dialogs image minimal

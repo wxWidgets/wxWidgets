@@ -7,6 +7,8 @@
 
 @MAKE_SET@
 
+prefix = @prefix@
+exec_prefix = @exec_prefix@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
@@ -65,6 +67,7 @@ DIALOGS_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p)   -I$(top
 @COND_WXUSE_LIBTIFF_BUILTIN@__LIB_TIFF_p = -lwxtiff$(WXDEBUGFLAG)
 @COND_WXUSE_ZLIB_BUILTIN@__LIB_ZLIB_p = -lwxzlib$(WXDEBUGFLAG)
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_1 = $(RESCOMP) -d __DARWIN__ -t APPL -d __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1)   -i $(top_srcdir)/include $(__INC_TIFF_p_1) $(__INC_JPEG_p_1) $(__INC_PNG_p_1) $(__INC_ZLIB_p_1) $(__INC_ODBC_p_1) $(__INC_REGEX_p_1) -i $(srcdir) $(__DLLFLAG_p_1) -o dialogs$(EXEEXT) Carbon.r $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.r
+@COND_MONOLITHIC_0@__WXLIB_BASE_p = -lwx$(WXUNICODEFLAG)$(WXDEBUGFLAG)_base-2.5
 @COND_MONOLITHIC_0@__WXLIB_CORE_p = -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
@@ -93,7 +96,7 @@ data:
 	done
 
 dialogs$(EXEEXT): dialogs_dialogs.o $(__dialogs___win32rc)
-	$(CXX) -o $@  dialogs_dialogs.o $(__dialogs___win32rc) $(LDFLAGS) -L$(top_builddir)lib $(SAMPLES_RPATH_FLAG) $(LDFLAGS_GUI)  $(__WXLIB_MONO_p) $(__WXLIB_CORE_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS)
+	$(CXX) -o $@  dialogs_dialogs.o $(__dialogs___win32rc) $(LDFLAGS) -L$(top_builddir)lib $(SAMPLES_RPATH_FLAG) $(LDFLAGS_GUI)  $(__WXLIB_MONO_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS)
 	$(__dialogs___mac_rezcmd)
 	$(__dialogs___mac_setfilecmd)
 
