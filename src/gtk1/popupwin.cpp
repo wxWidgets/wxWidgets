@@ -151,8 +151,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxPopupWindow, wxWindow)
 
 wxPopupWindow::~wxPopupWindow()
 {
-    if (GTK_WIDGET_HAS_GRAB(m_widget))
-        gtk_grab_remove( m_widget );
 }
 
 bool wxPopupWindow::Create( wxWindow *parent, int style )
@@ -349,13 +347,7 @@ bool wxPopupWindow::Show( bool show )
         GtkOnSize( m_x, m_y, m_width, m_height );
     }
     
-    if (!show)
-        gtk_grab_remove( m_widget );
-    
     bool ret = wxWindow::Show( show );
-    
-    if (show)
-        gtk_grab_add( m_widget );
     
     return ret;
 }

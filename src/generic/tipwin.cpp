@@ -31,7 +31,9 @@
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
 #endif // WX_PRECOMP
-
+#ifdef __WXGTK__
+    #include <gtk/gtk.h>
+#endif
 #include "wx/tipwin.h"
 
 #if wxUSE_TIPWINDOW
@@ -157,6 +159,10 @@ wxTipWindow::wxTipWindow(wxWindow *parent,
 #if wxUSE_POPUPWIN
     Position(wxPoint(x, y), wxSize(0, 0));
     Popup(m_view);
+    #ifdef __WXGTK__
+        if (!GTK_WIDGET_HAS_GRAB(m_widget))
+            gtk_grab_add( m_widget );
+    #endif   
 #else
     Move(x, y);
     Show(TRUE);
@@ -169,6 +175,12 @@ wxTipWindow::~wxTipWindow()
     {
         *m_windowPtr = NULL;
     }
+    #ifdef wxUSE_POPUPWIN
+        #ifdef __WXGTK__
+            if (GTK_WIDGET_HAS_GRAB(m_widget))
+                gtk_grab_remove( m_widget );
+        #endif
+    #endif
 }
 
 void wxTipWindow::OnMouseClick(wxMouseEvent& WXUNUSED(event))
@@ -218,6 +230,10 @@ void wxTipWindow::Close()
 
 #if wxUSE_POPUPWIN
     Show(FALSE);
+    #ifdef __WXGTK__
+        if (GTK_WIDGET_HAS_GRAB(m_widget))
+            gtk_grab_remove( m_widget );
+    #endif   
     Destroy();
 #else
     wxFrame::Close();
