@@ -43,12 +43,10 @@ MenuHandle NewUniqueMenu()
 // margin should be bigger on OS X due to blue highlight
 // around text control.
 static const wxCoord MARGIN = 6;
-static const int    POPUPWIDTH = 24;
 // this is the border a focus rect on OSX is needing
 static const int    TEXTFOCUSBORDER = 3 ;
 #else
 static const wxCoord MARGIN = 2;
-static const int    POPUPWIDTH = 18;
 static const int    TEXTFOCUSBORDER = 0 ;
 #endif
 static const int    POPUPHEIGHT = 23;
@@ -146,6 +144,17 @@ public:
     {
         m_cb = cb;
     }
+    int GetPopupWidth() const
+    {
+        switch ( GetWindowVariant() )
+        {
+            case wxWINDOW_VARIANT_NORMAL :
+            case wxWINDOW_VARIANT_LARGE :
+                return 24 ;
+            default :
+                return 21 ;
+        }
+    }
 
 protected:
     void OnChoice( wxCommandEvent& e )
@@ -163,7 +172,7 @@ protected:
     {
         wxSize sz = wxChoice::DoGetBestSize() ;
         if (! m_cb->HasFlag(wxCB_READONLY) )
-            sz.x = POPUPWIDTH;
+            sz.x = GetPopupWidth() ;
         return sz ;
     }  
 
@@ -211,14 +220,20 @@ wxSize wxComboBox::DoGetBestSize() const
         wxSize  sizeText = m_text->GetBestSize();
         if (sizeText.y > size.y)
             size.y = sizeText.y;
-        size.x = POPUPWIDTH + sizeText.x + MARGIN;
+        size.x = m_choice->GetPopupWidth() + sizeText.x + MARGIN;
         size.x += TEXTFOCUSBORDER ;
         size.y += 2 * TEXTFOCUSBORDER ;
+    }
+    else
+    {
+        // clipping is too tight
+        size.y += 1 ;
     }
     return size;
 }
 
-void wxComboBox::DoMoveWindow(int x, int y, int width, int height) {
+void wxComboBox::DoMoveWindow(int x, int y, int width, int height) 
+{
     wxControl::DoMoveWindow(x, y, width , height );
     
     if ( m_text == NULL )
@@ -229,9 +244,10 @@ void wxComboBox::DoMoveWindow(int x, int y, int width, int height) {
     }
     else
     {
-        wxCoord wText = width - POPUPWIDTH - MARGIN;
+        wxCoord wText = width - m_choice->GetPopupWidth() - MARGIN;
         m_text->SetSize(TEXTFOCUSBORDER, TEXTFOCUSBORDER, wText, -1 );
-        m_choice->SetSize(TEXTFOCUSBORDER + wText + MARGIN, TEXTFOCUSBORDER, POPUPWIDTH, -1);
+        // put it at an inset of 1 to have outer area shadows drawn as well
+        m_choice->SetSize(TEXTFOCUSBORDER + wText + MARGIN - 1 , TEXTFOCUSBORDER, m_choice->GetPopupWidth() , -1);
     }    
 }
 
