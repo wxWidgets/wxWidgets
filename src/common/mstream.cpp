@@ -60,8 +60,15 @@ wxMemoryInputStream::~wxMemoryInputStream()
 char wxMemoryInputStream::Peek()
 {
     char *buf = (char *)m_i_streambuf->GetBufferStart();
+    size_t pos = m_i_streambuf->GetIntPosition();
+    if ( pos == m_length )
+    {
+        m_lasterror = wxSTREAM_READ_ERROR;
 
-    return buf[m_i_streambuf->GetIntPosition()];
+        return 0;
+    }
+
+    return buf[pos];
 }
 
 bool wxMemoryInputStream::Eof() const
