@@ -56,7 +56,7 @@
     #include "wx/isql.h"
     #include "wx/isqlext.h"
 // If you use the wxCreateDataSource() function with MSW/VC6,
-// you cannot use the iODBC headers, you must use the VC headers, 
+// you cannot use the iODBC headers, you must use the VC headers,
 // plus the odbcinst.h header
     //#include "sql.h"
     //#include "sqlext.h"
@@ -69,8 +69,8 @@
     }
 #endif
 
-typedef float SFLOAT; 
-typedef double SDOUBLE; 
+typedef float SFLOAT;
+typedef double SDOUBLE;
 typedef unsigned int UINT;
 #define ULONG UDWORD
 
@@ -270,7 +270,7 @@ public:
 
     wxColFor();
     ~wxColFor();
-  
+
     int            Format(int Nation, int dbDataType, SWORD sqlDataType, short columnSize, short decimalDigits);
 };
 
@@ -347,10 +347,10 @@ enum wxDBMS
 
 // The wxDB::errorList is copied to this variable when the wxDB object
 // is closed.  This way, the error list is still available after the
-// database object is closed.  This is necessary if the database 
+// database object is closed.  This is necessary if the database
 // connection fails so the calling application can show the operator
 // why the connection failed.  Note: as each wxDB object is closed, it
-// will overwrite the errors of the previously destroyed wxDB object in 
+// will overwrite the errors of the previously destroyed wxDB object in
 // this variable.
 extern char DBerrorList[DB_MAX_ERROR_HISTORY][DB_MAX_ERROR_MSG_LEN];
 
@@ -434,7 +434,7 @@ public:
     // type name the data source uses for each logical data type.
     // e.g. VARCHAR; Oracle calls it VARCHAR2.
     wxSqlTypeInfo typeInfVarchar, typeInfInteger, typeInfFloat, typeInfDate;
-    
+
     // Public member functions
     wxDB(HENV &aHenv, bool FwdOnlyCursors=(bool)TRUE);
     bool         Open(char *Dsn, char *Uid, char *AuthStr);  // Data Source Name, User ID, Password
@@ -514,7 +514,7 @@ bool wxDbSqlLog(wxSqlLogState state, const char *filename = SQL_LOG_FILENAME);
 
 #if 0
 // MSW/VC6 ONLY!!!  Experimental
-int WXDLLEXPORT wxDbCreateDataSource(const char *driverName, const char *dsn, const char *description="", 
+int WXDLLEXPORT wxDbCreateDataSource(const char *driverName, const char *dsn, const char *description="",
                                      bool sysDSN=FALSE, const char *defDir="", wxWindow *parent=NULL);
 #endif
 
@@ -541,7 +541,7 @@ typedef enum wxDBMS DBMS;
 typedef wxODBC_ERRORS ODBC_ERRORS;
 typedef wxDbConnectInf DbStuff;
 typedef wxDbList DbList;
-typedef wxTablesInUse CstructTablesInUse;
+// typedef wxTablesInUse CstructTablesInUse;  // mj10777 : OK : VC/Debug ; not OK VC/Release + GTK
 
 // Deprecated function names that are replaced by the function names listed above
 wxDB  WXDLLEXPORT *GetDbConnection(DbStuff *pDbStuff, bool FwdOnlyCursors=(bool)wxODBC_FWD_ONLY_CURSORS);
