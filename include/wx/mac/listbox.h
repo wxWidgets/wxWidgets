@@ -138,7 +138,8 @@ protected:
     bool HasMultipleSelection() const;
 
     // free memory (common part of Clear() and dtor)
-    void Free();
+    // prevent collision with some BSD definitions of macro Free()   
+    void FreeData();
 
     int m_noItems;
     int m_selected;

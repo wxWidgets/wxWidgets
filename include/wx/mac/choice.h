@@ -93,7 +93,8 @@ protected:
     virtual wxClientData* DoGetItemClientObject( int n ) const;
 
     // free all memory we have (used by Clear() and dtor)
-    void Free();
+    // prevent collision with some BSD definitions of macro Free()   
+    void FreeData();
 
   wxArrayString m_strings;
   wxChoiceDataArray m_datas ;

@@ -38,7 +38,7 @@ wxWave::wxWave(const wxString& sFileName, bool isResource)
 
 wxWave::~wxWave()
 {
-    Free();
+    FreeData();
 }
 
 wxWave::wxWave(int size, const wxByte* data)
@@ -156,7 +156,7 @@ bool wxWave::Play(bool async, bool looped) const
 }
 
 
-bool wxWave::Free()
+bool wxWave::FreeData()
 {
 	bool ret = false;
 	

@@ -33,7 +33,8 @@ public:
   bool  Play(bool async = TRUE, bool looped = FALSE) const;
 
 protected:
-  bool  Free();
+  // prevent collision with some BSD definitions of macro Free()
+  bool  FreeData();
 
 private:
   void* m_sndChan;

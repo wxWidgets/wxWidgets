@@ -246,7 +246,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 
 wxListBox::~wxListBox()
 {
-    Free() ;
+    FreeData() ;
     if ( m_macList )
     {
 #if !TARGET_CARBON
@@ -257,7 +257,7 @@ wxListBox::~wxListBox()
     }
 }
 
-void wxListBox::Free()
+void wxListBox::FreeData()
 {
 #if wxUSE_OWNER_DRAWN
     if ( m_windowStyle & wxLB_OWNERDRAW )
@@ -468,7 +468,7 @@ int wxListBox::FindString(const wxString& st) const
 
 void wxListBox::Clear()
 {
-  Free();
+  FreeData();
   m_noItems = 0;
   m_stringArray.Empty() ;
   m_dataArray.Empty() ;

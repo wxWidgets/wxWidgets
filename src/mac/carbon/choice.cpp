@@ -98,18 +98,18 @@ void wxChoice::Delete(int n)
 
 void wxChoice::Clear()
 {
-    Free();
+    FreeData();
 
     for ( int i = 0 ; i < GetCount() ; i++ )
     {
     	::DeleteMenuItem( MAC_WXHMENU(m_macPopUpMenuHandle) , 1 ) ;
-	  }
+    }
     m_strings.Empty() ;
     m_datas.Empty() ;
-	SetControlMaximum( (ControlHandle) m_macControl , 0 ) ;
+    SetControlMaximum( (ControlHandle) m_macControl , 0 ) ;
 }
 
-void wxChoice::Free()
+void wxChoice::FreeData()
 {
     if ( HasClientObjectData() )
     {
@@ -156,7 +156,7 @@ int wxChoice::FindString(const wxString& s) const
 
 void wxChoice::SetString(int n, const wxString& s)
 {
-    wxFAIL_MSG(wxT("not implemented"));
+    wxFAIL_MSG(wxT("wxChoice::SetString() not yet implemented"));
 
 #if 0 // should do this, but no Insert() so far
     Delete(n);
