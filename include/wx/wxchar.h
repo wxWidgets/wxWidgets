@@ -497,12 +497,15 @@
             #define wxNEED_WX_STDIO_H
 
             /* stdlib.h functions */
+            #ifdef __MACH__
+            #define wxNEED_WX_STDLIB_H
+            #else
             #define  wxAtof      watof
             #define  wxAtoi      watoi
             #define  wxAtol      watol
             #define  wxGetenv(a)    ((wxChar*)NULL)
             #define  wxSystem(a)    ((int)NULL)
-
+            #endif
             /* time.h functions */
             #define  wxAsctime   wasciitime
             #define  wxCtime     wctime
