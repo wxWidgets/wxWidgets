@@ -505,6 +505,16 @@ Returns the (modified) image itself.
 
 \helpref{Scale}{wximagescale}
 
+\membersection{wxImage::Rotate}\label{wximagererotate}
+
+\func{wxImage}{Rotate}{\param{double}{ angle}, \param{const wxPoint\& }{rotationCentre},
+ \param{bool}{ interpolating = TRUE}, \param{wxPoint*}{ offsetAfterRotation = NULL}}
+
+Rotates the image about the given point, by {\it angle} radians. Passing TRUE
+to {\it interpolating} results in better image quality, but is slower.
+
+Returns the rotated image, leaving this image intact.
+
 \membersection{wxImage::Scale}\label{wximagescale}
 
 \constfunc{wxImage}{Scale}{\param{int}{ width}, \param{int}{ height}}

@@ -117,6 +117,11 @@ public:
     // rescales the image in place
     wxImage& Rescale( int width, int height ) { return *this = Scale(width, height); }
 
+    // Rotates the image about the given point, 'angle' radians.
+    // Returns the rotated image, leaving this image intact.
+    wxImage Rotate(double angle, const wxPoint & centre_of_rotation,
+                   bool interpolating = TRUE, wxPoint * offset_after_rotation = (wxPoint*) NULL) const ;
+
     // replace one colour with another
     void Replace( unsigned char r1, unsigned char g1, unsigned char b1,
                   unsigned char r2, unsigned char g2, unsigned char b2 );
