@@ -2222,7 +2222,10 @@ AC_CHECK_HEADERS(unistd.h)
 dnl defines HAVE_FCNTL_H
 AC_CHECK_HEADERS(fcntl.h)
 dnl defines HAVE_WCHAR_H
-AC_CHECK_HEADERS(wchar.h)
+AC_CHECK_HEADERS(wchar.h, [
+    AC_DEFINE(wxUSE_WCHAR_T)
+    ])
+
 dnl defines HAVE_WCSTR_H
 AC_CHECK_HEADERS(wcstr.h)
 dnl defines HAVE_FNMATCH_H
