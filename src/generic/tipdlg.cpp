@@ -172,7 +172,7 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     m_checkbox = new wxCheckBox(this, -1, _("&Show tips at startup"));
     m_checkbox->SetValue(showAtStartup);
     
-    wxButton *btnNext = new wxButton(this, wxID_NEXT_TIP, _("&Next"));
+    wxButton *btnNext = new wxButton(this, wxID_NEXT_TIP, _("&Next Tip"));
 
     wxStaticText *text = new wxStaticText(this, -1, _("Did you know..."), wxDefaultPosition, wxSize(-1,25) );
 #if defined(__WXMSW__)
@@ -186,7 +186,11 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     m_text = new wxTextCtrl(this, -1, wxT(""),
                             wxDefaultPosition, wxSize(200, 160),
                             wxTE_MULTILINE | wxTE_READONLY | wxSUNKEN_BORDER);
+#if defined(__WXMSW__)
+    m_text->SetFont(wxFont(12, wxROMAN, wxNORMAL, wxNORMAL));
+#else
     m_text->SetFont(wxFont(14, wxROMAN, wxNORMAL, wxNORMAL));
+#endif
 
 #if defined(__WXMSW__) || defined(__WXPM__)
     wxIcon icon("wxICON_TIP");
