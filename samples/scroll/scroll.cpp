@@ -97,7 +97,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
   
   (void) new wxComboBox( this, -1, "This", wxPoint(10,130), wxDefaultSize, 5, choices );
   
-  (void) new wxRadioBox( this, -1, "This", wxPoint(10,200), wxDefaultSize, 5, choices );
+  (void) new wxRadioBox( this, -1, "This", wxPoint(10,200), wxDefaultSize, 5, choices, 2, wxRA_SPECIFY_COLS );
 
   wxListCtrl *m_listCtrl = new wxListCtrl(
 	this, -1, wxPoint(200, 10), wxSize(180, 120),
