@@ -1685,7 +1685,25 @@ bool wxLocale::Init(int language, int flags)
         wxLogError(wxT("Cannot set locale to language %s."), name.c_str());
         return false;
     }
-#elif defined(__WXMAC__) || defined(__WXPM__)
+#elif defined(__WXMAC__)
+    if (language == wxLANGUAGE_DEFAULT)
+        locale = wxEmptyString;
+    else
+        locale = info->CanonicalName;
+
+    wxMB2WXbuf retloc = wxSetlocale(LC_ALL, locale);
+
+    if ( !retloc )
+    {
+        // Some C libraries don't like xx_YY form and require xx only
+        retloc = wxSetlocale(LC_ALL, locale.Mid(0,2));
+    }
+    if ( !retloc )
+    {
+        wxLogError(wxT("Cannot set locale to '%s'."), locale.c_str());
+        return false;
+    }
+#elif defined(__WXPM__)
     wxMB2WXbuf retloc = wxSetlocale(LC_ALL , wxEmptyString);
 #else
     return false;
