@@ -984,9 +984,14 @@ wxWindowDisabler::wxWindowDisabler(wxWindow *winToSkip)
     m_winDisabled = new wxWindowList;
 
 #ifdef __WXMSW__
+#ifdef __WIN32__
     // and the top level window too
     HWND hwndFG = ::GetForegroundWindow();
     m_winTop = hwndFG ? wxFindWinFromHandle((WXHWND)hwndFG) : (wxWindow *)NULL;
+#else
+    HWND hwndFG = ::GetTopWindow();
+    m_winTop = hwndFG ? wxFindWinFromHandle((WXHWND)hwndFG) : (wxWindow *)NULL;
+#endif
 #endif // MSW
 
     wxWindowList::Node *node;
@@ -1021,6 +1026,7 @@ wxWindowDisabler::~wxWindowDisabler()
     delete m_winDisabled;
 
 #ifdef __WXMSW__
+#ifdef __WIN32__
     if ( m_winTop )
     {
         if ( !::SetForegroundWindow(GetHwndOf(m_winTop)) )
@@ -1028,6 +1034,18 @@ wxWindowDisabler::~wxWindowDisabler()
             wxLogLastError("SetForegroundWindow");
         }
     }
+#else
+    if ( m_winTop )
+    {
+        // 16-bit SetForegroundWindow() replacement
+        RECT reWin;
+        GetWindowRect(m_winTop, &reWin);
+        SetWindowPos (m_winTop, HWND_TOP,
+                             reWin.left, reWin.top, 
+                             reWin.right - reWin.left, reWin.bottom, 
+                             SWP_SHOWWINDOW);
+    }
+#endif
 #endif // MSW
 }
 
