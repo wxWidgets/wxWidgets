@@ -280,7 +280,7 @@ void ButtonWidgetsPage::CreateButton()
     switch ( m_radioHAlign->GetSelection() )
     {
         case ButtonHAlign_Left:
-            flags |= wxALIGN_LEFT;
+            flags |= wxBU_LEFT;
             break;
 
         default:
@@ -288,18 +288,17 @@ void ButtonWidgetsPage::CreateButton()
             // fall through
 
         case ButtonHAlign_Centre:
-            flags |= wxALIGN_CENTRE_HORIZONTAL;
             break;
 
         case ButtonHAlign_Right:
-            flags |= wxALIGN_RIGHT;
+            flags |= wxBU_RIGHT;
             break;
     }
 
     switch ( m_radioVAlign->GetSelection() )
     {
         case ButtonVAlign_Top:
-            flags |= wxALIGN_TOP;
+            flags |= wxBU_TOP;
             break;
 
         default:
@@ -311,7 +310,7 @@ void ButtonWidgetsPage::CreateButton()
             break;
 
         case ButtonVAlign_Bottom:
-            flags |= wxALIGN_BOTTOM;
+            flags |= wxBU_BOTTOM;
             break;
     }
 
