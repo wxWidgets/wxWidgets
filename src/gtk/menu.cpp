@@ -78,7 +78,7 @@ typedef struct _GtkPixmapMenuItemClass  GtkPixmapMenuItemClass;
 struct _GtkPixmapMenuItem
 {
     GtkMenuItem menu_item;
-    
+
     GtkWidget *pixmap;
 };
 
@@ -1183,18 +1183,37 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         GtkWidget *label = gtk_accel_label_new ( wxGTK_CONV( text ) );
         gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
         gtk_container_add (GTK_CONTAINER (menuItem), label);
-        
-        guint accel_key = gtk_label_parse_uline (GTK_LABEL(label), wxGTK_CONV( text ) );
+
         gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (label), menuItem);
+        guint accel_key;
+        GdkModifierType accel_mods;
+
+        // accelerator for the item, as specified by its label
+        // (ex. Ctrl+O for open)
+        gtk_accelerator_parse(GetHotKey(*mitem).c_str(), &accel_key,
+                              &accel_mods);
         if (accel_key != GDK_VoidSymbol)
         {
             gtk_widget_add_accelerator (menuItem,
                                         "activate_item",
-                                        gtk_menu_ensure_uline_accel_group (GTK_MENU (m_menu)),
+                                        gtk_menu_get_accel_group(
+                                            GTK_MENU(m_menu)),
+                                        accel_key, accel_mods,
+                                        GTK_ACCEL_VISIBLE);
+        }
+
+        // accelerator for the underlined char (ex ALT+F for the File menu)
+        accel_key = gtk_label_parse_uline (GTK_LABEL(label), wxGTK_CONV( text ) );
+        if (accel_key != GDK_VoidSymbol)
+        {
+            gtk_widget_add_accelerator (menuItem,
+                                        "activate_item",
+                                        gtk_menu_ensure_uline_accel_group (
+                                            GTK_MENU (m_menu)),
                                         accel_key, (GdkModifierType) 0,
                                         GTK_ACCEL_LOCKED);
         }
-            
+
         gtk_widget_show (label);
 
         mitem->SetLabelWidget(label);
@@ -1203,14 +1222,14 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         gtk_widget_show(pixmap);
         gtk_pixmap_menu_item_set_pixmap(GTK_PIXMAP_MENU_ITEM( menuItem ), pixmap);
 
-        gtk_signal_connect( GTK_OBJECT(menuItem), "activate_item",
+        gtk_signal_connect( GTK_OBJECT(menuItem), "activate",
                             GTK_SIGNAL_FUNC(gtk_menu_clicked_callback),
                             (gpointer)this );
 
         gtk_menu_append( GTK_MENU(m_menu), menuItem );
         gtk_widget_show( menuItem );
     }
-#endif 
+#endif
     else // a normal item
     {
         // text has "_" instead of "&" after mitem->SetText() so don't use it
@@ -1290,14 +1309,14 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
                     unsigned char mask_b = image.GetMaskBlue();
                     unsigned char mask_g = image.GetMaskGreen();
                     wxUint32 tmp;
-                    
+
                     // Magic
                     *dest = 'G'; dest++; *dest = 'd'; dest++; *dest = 'k'; dest++; *dest = 'P'; dest++;
-                    // Data size                    
+                    // Data size
                     tmp = size;
                     *dest = tmp >> 24; dest++; *dest = tmp >> 16; dest++; *dest = tmp >> 8; dest++; *dest = tmp; dest++;
                     // Pixdata type
-                    *dest = 1; dest++; *dest = 1; dest++; *dest = 0; dest++; *dest = 2; dest++;  
+                    *dest = 1; dest++; *dest = 1; dest++; *dest = 0; dest++; *dest = 2; dest++;
                     // Rowstride
                     tmp = image.GetWidth()*4;
                     *dest = tmp >> 24; dest++; *dest = tmp >> 16; dest++; *dest = tmp >> 8; dest++; *dest = tmp; dest++;
@@ -1551,7 +1570,7 @@ static wxString GetHotKey( const wxMenuItem& item )
 // substitute for missing GtkPixmapMenuItem
 //-----------------------------------------------------------------------------
 
-#ifndef __WXGTK20__ 
+#ifndef __WXGTK20__
 
 /*
  * Copyright (C) 1998, 1999, 2000 Free Software Foundation
