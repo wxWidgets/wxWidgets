@@ -9,6 +9,30 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+/*
+   A few words about all the classes defined in this file are probably in
+   order: why do we need extra wxComboControl and wxComboPopup classes?
+
+   This is because a traditional combobox is a combination of a text control
+   (with a button allowing to open the pop down list) with a listbox and
+   wxComboBox class is exactly such control, however we want to also have other
+   combinations - in fact, we want to allow anything at all to be used as pop
+   down list, not just a wxListBox.
+
+   So we define a base wxComboControl which can use any control as pop down
+   list and wxComboBox deriving from it which implements the standard wxWindows
+   combobox API. wxComboControl needs to be told somehow which control to use
+   and this is done by SetPopupControl(). However, we need something more than
+   just a wxControl in this method as, for example, we need to call
+   SetSelection("initial text value") and wxControl doesn't have such method.
+   So we also need a wxComboPopup which is just a very simple interface which
+   must be implemented by a control to be usable as a popup.
+
+   We couldn't derive wxComboPopup from wxControl as this would make it
+   impossible to have a class deriving from both wxListBx and from it, so
+   instead it is just a mix-in.
+ */
+
 #ifndef _WX_UNIV_COMBOBOX_H_
 #define _WX_UNIV_COMBOBOX_H_
 
@@ -16,6 +40,7 @@
     #pragma implementation "univcombobox.h"
 #endif
 
+class WXDLLEXPORT wxComboControl;
 class WXDLLEXPORT wxListBox;
 
 // ----------------------------------------------------------------------------
@@ -33,7 +58,28 @@ class WXDLLEXPORT wxListBox;
 #define wxACTION_COMBOBOX_SELECT_PREV _T("prev")
 #define wxACTION_COMBOBOX_SELECT      _T("select")
 
-// TODO define wxComboPopup class defining the popup control interface
+// ----------------------------------------------------------------------------
+// wxComboPopup is the interface which must be implemented by a control to be
+// used as a popup by wxComboControl
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxComboPopup
+{
+public:
+    wxComboPopup(wxComboControl *combo) { m_combo = combo; }
+
+    // we must have an associated control which is subclassed by the combobox
+    virtual wxControl *GetControl() = 0;
+
+    // called before showing the control to set the initial selection - notice
+    // that the text passed to this method might not correspond to any valid
+    // item (if the user edited it directly), in which case the method should
+    // just return FALSE but not emit any errors
+    virtual bool SetSelection(const wxString& value) = 0;
+
+protected:
+    wxComboControl *m_combo;
+};
 
 // ----------------------------------------------------------------------------
 // wxComboControl: a combination of a (single line) text control with a button
@@ -41,7 +87,7 @@ class WXDLLEXPORT wxListBox;
 // choose the value directly.
 // ----------------------------------------------------------------------------
 
-class wxComboControl : public wxControl
+class WXDLLEXPORT wxComboControl : public wxControl
 {
 public:
     // construction
@@ -76,8 +122,8 @@ public:
     virtual ~wxComboControl();
 
     // a combo control needs a control for popup window it displays
-    void SetPopupControl(wxControl *control);
-    wxControl *GetPopupControl() const { return m_ctrlPopup; }
+    void SetPopupControl(wxComboPopup *popup);
+    wxComboPopup *GetPopupControl() const { return m_popup; }
 
     // operations
     void ShowPopup();
@@ -85,6 +131,15 @@ public:
 
     // implementation only from now on
     // -------------------------------
+
+    // notifications from wxComboPopup (shouldn't be called by anybody else)
+
+    // called when the user selects something in the popup: this normally hides
+    // the popup and sets the text to the new value
+    virtual void OnSelect(const wxString& value);
+
+    // called when the user dismisses the popup
+    virtual void OnDismiss();
 
     // forward these functions to all subcontrols
     virtual bool Enable(bool enable = TRUE);
@@ -104,11 +159,20 @@ protected:
     // access the control components
     wxTextCtrl *GetText() const { return m_text; }
 
+    // remove the combobox event handler from m_popup (ok to call if m_popup ==
+    // NULL)
+    void RemoveEventHandler();
+
 private:
-    // the text control all the time and the one we popup when m_btn is pressed
+    // the text control and button we show all the time
     wxTextCtrl *m_text;
     wxButton *m_btn;
-    wxControl *m_ctrlPopup;
+
+    // the popup control
+    wxComboPopup *m_popup;
+
+    // the height of the combobox popup as calculated in Create()
+    wxCoord m_heightPopup;
 
     DECLARE_EVENT_TABLE()
 };
@@ -117,7 +181,7 @@ private:
 // wxComboBox: a combination of text control and a listbox
 // ----------------------------------------------------------------------------
 
-class wxComboBox : public wxComboControl, public wxComboBoxBase
+class WXDLLEXPORT wxComboBox : public wxComboControl, public wxComboBoxBase
 {
 public:
     // ctors and such

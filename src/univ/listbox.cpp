@@ -769,22 +769,27 @@ wxSize wxListBox::DoGetBestClientSize() const
 // listbox actions
 // ----------------------------------------------------------------------------
 
-bool wxListBox::SendEvent(int item, wxEventType type)
+bool wxListBox::SendEvent(wxEventType type)
 {
+    // don't generate events while the mouse is captured, we will only send
+    // them once it is released
+    if ( GetCapture() == this )
+        return FALSE;
+
     wxCommandEvent event(type, m_windowId);
     event.SetEventObject(this);
 
-    if ( item != -1 )
+    if ( m_current != -1 )
     {
         if ( HasClientObjectData() )
-            event.SetClientObject(GetClientObject(item));
+            event.SetClientObject(GetClientObject(m_current));
         else if ( HasClientUntypedData() )
-            event.SetClientData(GetClientData(item));
+            event.SetClientData(GetClientData(m_current));
 
-        event.SetString(GetString(item));
+        event.SetString(GetString(m_current));
     }
 
-    event.m_commandInt = item;
+    event.m_commandInt = m_current;
 
     return GetEventHandler()->ProcessEvent(event);
 }
@@ -823,7 +828,7 @@ bool wxListBox::FindItem(const wxString& prefix)
             if ( !(GetWindowStyle() & wxLB_MULTIPLE) )
             {
                 DeselectAll(item);
-                Select(TRUE, item);
+                SelectAndNotify(item);
 
                 if ( GetWindowStyle() & wxLB_EXTENDED )
                     AnchorSelection(item);
@@ -942,12 +947,14 @@ void wxListBox::Select(bool sel, int item)
     {
         // [de]select the new one
         SetSelection(m_current, sel);
-
-        if ( sel )
-        {
-            SendEvent(m_current, wxEVT_COMMAND_LISTBOX_SELECTED);
-        }
     }
+}
+
+void wxListBox::SelectAndNotify(int item)
+{
+    Select(TRUE, item);
+
+    SendEvent(wxEVT_COMMAND_LISTBOX_SELECTED);
 }
 
 void wxListBox::Activate(int item)
@@ -964,9 +971,9 @@ void wxListBox::Activate(int item)
 
     if ( item != -1 )
     {
-        Select();
+        Select(TRUE, item);
 
-        SendEvent(m_current, wxEVT_COMMAND_LISTBOX_DOUBLECLICKED);
+        SendEvent(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED);
     }
 }
 
@@ -993,12 +1000,16 @@ bool wxListBox::PerformAction(const wxControlAction& action,
     {
         if ( item == -1 )
             item = m_current;
-        Select(!IsSelected(item), item);
+
+        if ( IsSelected(item) )
+            Unselect(item);
+        else
+            SelectAndNotify(item);
     }
     else if ( action == wxACTION_LISTBOX_SELECT )
     {
         DeselectAll(item);
-        Select(TRUE, item);
+        SelectAndNotify(item);
     }
     else if ( action == wxACTION_LISTBOX_SELECTADD )
         Select(TRUE, item);
@@ -1235,11 +1246,14 @@ bool wxStdListboxInputHandler::HandleMouse(wxControl *control,
         }
         else
         {
-            // this is not supposed to happen - if we get here, the even is
+            // this is not supposed to happen - if we get here, the event is
             // from the mouse button which had been pressed before and we must
             // have captured the mouse back then
             wxFAIL_MSG(_T("logic error in listbox mosue handling"));
         }
+
+        // generate the last event to triiger sending the selection event
+        action = m_actionMouse;
     }
     else if ( event.LeftDClick() )
     {
@@ -1257,7 +1271,7 @@ bool wxStdListboxInputHandler::HandleMouse(wxControl *control,
 }
 
 bool wxStdListboxInputHandler::HandleMouseMove(wxControl *control,
-                                           const wxMouseEvent& event)
+                                               const wxMouseEvent& event)
 {
     if ( m_winCapture && (event.GetEventObject() == m_winCapture) )
     {

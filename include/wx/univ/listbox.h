@@ -131,6 +131,12 @@ public:
     // select or unselect the specified or current (if -1) item
     void Select(bool sel = TRUE, int item = -1);
 
+    // more readable wrapper
+    void Unselect(int item) { Select(FALSE, item); }
+
+    // select an item and send a notification about it
+    void SelectAndNotify(int item);
+
     // ensure that the given item is visible by scrolling it into view
     virtual void EnsureVisible(int n);
 
@@ -184,8 +190,8 @@ protected:
     void RefreshFromItemToEnd(int n);
     void RefreshAll();
 
-    // send an event of the given type
-    bool SendEvent(int item, wxEventType type);
+    // send an event of the given type (using m_current item)
+    bool SendEvent(wxEventType type);
 
     // calculate the number of items per page using our current size
     void CalcItemsPerPage();

@@ -104,13 +104,13 @@ protected:
     void OnFocus(wxFocusEvent& event);
     void OnActivate(wxActivateEvent& event);
 
-private:
     // common part of all ctors
     void Init();
 
     // input processor
     wxInputHandler *m_handler;
 
+private:
     // label and accel info
     wxString   m_label;
     int        m_indexAccel;
