@@ -91,6 +91,8 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 
     // Put some wx default wxChar* values into wxStrings.
     DECLARE_DEF_STRING(FileSelectorPromptStr);
+    DECLARE_DEF_STRING(DirSelectorPromptStr);
+    DECLARE_DEF_STRING(DirDialogNameStr);
     DECLARE_DEF_STRING(FileSelectorDefaultWildcardStr);
     DECLARE_DEF_STRING(GetTextFromUserPromptStr);
     DECLARE_DEF_STRING(MessageBoxCaptionStr);
@@ -540,25 +542,30 @@ static void *SwigwxDirDialogTowxObject(void *ptr) {
     return (void *) dest;
 }
 
-#define new_wxDirDialog(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4) (new wxDirDialog(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
+#define new_wxDirDialog(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6) (new wxDirDialog(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6))
 static PyObject *_wrap_new_wxDirDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDirDialog * _result;
     wxWindow * _arg0;
-    wxString * _arg1 = (wxString *) &wxPyFileSelectorPromptStr;
+    wxString * _arg1 = (wxString *) &wxPyDirSelectorPromptStr;
     wxString * _arg2 = (wxString *) &wxPyEmptyString;
     long  _arg3 = (long ) 0;
     wxPoint * _arg4 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg5 = (wxSize *) &wxDefaultSize;
+    wxString * _arg6 = (wxString *) &wxPyDirDialogNameStr;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
     PyObject * _obj2 = 0;
     wxPoint  temp;
     PyObject * _obj4 = 0;
-    char *_kwnames[] = { "parent","message","defaultPath","style","pos", NULL };
+    wxSize  temp0;
+    PyObject * _obj5 = 0;
+    PyObject * _obj6 = 0;
+    char *_kwnames[] = { "parent","message","defaultPath","style","pos","size","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|OOlO:new_wxDirDialog",_kwnames,&_argo0,&_obj1,&_obj2,&_arg3,&_obj4)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|OOlOOO:new_wxDirDialog",_kwnames,&_argo0,&_obj1,&_obj2,&_arg3,&_obj4,&_obj5,&_obj6)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -585,9 +592,21 @@ static PyObject *_wrap_new_wxDirDialog(PyObject *self, PyObject *args, PyObject 
     if (! wxPoint_helper(_obj4, &_arg4))
         return NULL;
 }
+    if (_obj5)
+{
+    _arg5 = &temp0;
+    if (! wxSize_helper(_obj5, &_arg5))
+        return NULL;
+}
+    if (_obj6)
+{
+    _arg6 = wxString_in_helper(_obj6);
+    if (_arg6 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxDirDialog *)new_wxDirDialog(_arg0,*_arg1,*_arg2,_arg3,*_arg4);
+    _result = (wxDirDialog *)new_wxDirDialog(_arg0,*_arg1,*_arg2,_arg3,*_arg4,*_arg5,*_arg6);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -605,6 +624,10 @@ static PyObject *_wrap_new_wxDirDialog(PyObject *self, PyObject *args, PyObject 
 {
     if (_obj2)
         delete _arg2;
+}
+{
+    if (_obj6)
+        delete _arg6;
 }
     return _resultobj;
 }
