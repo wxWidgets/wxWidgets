@@ -1060,20 +1060,9 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
     }
 
     // scale bitmap if required 
-    wxBitmap use_bitmap;
+    wxBitmap use_bitmap = bitmap;
     if ((w != ww) || (h != hh))
-    {
-        wxImage image = bitmap.ConvertToImage();
-        image.Rescale( ww, hh );
-        if (is_mono)
-            use_bitmap = wxBitmap(image.ConvertToMono(255,255,255), 1);
-        else
-            use_bitmap = wxBitmap(image);
-    }
-    else
-    {
-        use_bitmap = bitmap;
-    }
+        use_bitmap = use_bitmap.Rescale( 0, 0, ww, hh, ww, hh );
     
     // apply mask if any
     GdkBitmap *mask = (GdkBitmap *) NULL;
