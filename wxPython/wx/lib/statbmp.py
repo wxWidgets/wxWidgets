@@ -21,7 +21,9 @@ class GenStaticBitmap(wx.PyControl):
                  pos = wx.DefaultPosition, size = wx.DefaultSize,
                  style = 0,
                  name = "genstatbmp"):
-        wx.PyControl.__init__(self, parent, ID, pos, size, style|wx.NO_BORDER,
+        if not style & wx.BORDER_MASK:
+            style = style | wx.BORDER_NONE
+        wx.PyControl.__init__(self, parent, ID, pos, size, style,
                              wx.DefaultValidator, name)
         self._bitmap = bitmap
         self.InheritAttributes()
