@@ -53,6 +53,9 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
     SetValidator(validator);
 #endif // wxUSE_VALIDATORS
 
+    if ((style & wxBORDER_MASK) == wxBORDER_DEFAULT)
+        style |= wxNO_BORDER;
+
     SetBackgroundColour(parent->GetBackgroundColour()) ;
     SetForegroundColour(parent->GetForegroundColour()) ;
     m_windowStyle = style;
