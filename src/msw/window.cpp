@@ -130,8 +130,8 @@ wxWindow *wxFindWinFromHandle(WXHWND hWnd);
 static void TranslateKbdEventToMouse(wxWindow *win, int *x, int *y, WPARAM *flags);
 
 // get the current state of SHIFT/CTRL keys
-static inline bool IsShiftDown() { return (GetKeyState(VK_SHIFT) & 0x100) != 0; }
-static inline bool IsCtrlDown() { return (GetKeyState(VK_CONTROL) & 0x100) != 0; }
+extern inline bool wxIsShiftDown() { return (GetKeyState(VK_SHIFT) & 0x100) != 0; }
+extern inline bool wxIsCtrlDown() { return (GetKeyState(VK_CONTROL) & 0x100) != 0; }
 
 // ---------------------------------------------------------------------------
 // event tables
@@ -974,9 +974,9 @@ void wxWindow::OnIdle(wxIdleEvent& event)
             // by the time the OnIdle function is called, so 'state' may be
             // meaningless.
             int state = 0;
-            if ( ::GetKeyState(VK_SHIFT) != 0 )
+            if ( wxIsShiftDown() )
                 state |= MK_SHIFT;
-            if ( ::GetKeyState(VK_CONTROL) != 0 )
+            if ( wxIsCtrlDown() )
                 state |= MK_CONTROL;
 
             wxMouseEvent event(wxEVT_LEAVE_WINDOW);
@@ -1483,8 +1483,8 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
 
         if ( bProcess )
         {
-            bool bCtrlDown = IsCtrlDown();
-            bool bShiftDown = IsShiftDown();
+            bool bCtrlDown = wxIsCtrlDown();
+            bool bShiftDown = wxIsShiftDown();
 
             // WM_GETDLGCODE: ask the control if it wants the key for itself,
             // don't process it if it's the case (except for Ctrl-Tab/Enter
@@ -1599,7 +1599,7 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
             // don't process system keys here
             if ( !(HIWORD(msg->lParam) & KF_ALTDOWN) )
             {
-                if ( (msg->wParam == VK_TAB) && IsCtrlDown() )
+                if ( (msg->wParam == VK_TAB) && wxIsCtrlDown() )
                 {
                     // find the first notebook parent and change its page
                     wxWindow *win = this;
@@ -1612,7 +1612,7 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
 
                     if ( nbook )
                     {
-                        bool forward = !IsShiftDown();
+                        bool forward = !wxIsShiftDown();
 
                         nbook->AdvanceSelection(forward);
                     }
@@ -3160,8 +3160,8 @@ wxKeyEvent wxWindow::CreateKeyEvent(wxEventType evType,
 {
     wxKeyEvent event(evType);
     event.SetId(GetId());
-    event.m_shiftDown = IsShiftDown();
-    event.m_controlDown = IsCtrlDown();
+    event.m_shiftDown = wxIsShiftDown();
+    event.m_controlDown = wxIsCtrlDown();
     event.m_altDown = (HIWORD(lParam) & KF_ALTDOWN) == KF_ALTDOWN;
 
     event.m_eventObject = (wxWindow *)this; // const_cast
@@ -3715,8 +3715,8 @@ wxKeyboardHook(int nCode, WORD wParam, DWORD lParam)
 
             event.m_eventObject = NULL;
             event.m_keyCode = id;
-            event.m_shiftDown = IsShiftDown();
-            event.m_controlDown = IsCtrlDown();
+            event.m_shiftDown = wxIsShiftDown();
+            event.m_controlDown = wxIsCtrlDown();
             event.SetTimestamp(s_currentMsg.time);
 
             wxWindow *win = wxGetActiveWindow();
@@ -4168,9 +4168,9 @@ static void TranslateKbdEventToMouse(wxWindow *win, int *x, int *y, WPARAM *flag
     WPARAM& fwKeys = *flags;
 
     fwKeys = MK_RBUTTON;
-    if ( (::GetKeyState(VK_CONTROL) & 0x100) != 0 )
+    if ( wxIsCtrlDown() )
         fwKeys |= MK_CONTROL;
-    if ( (::GetKeyState(VK_SHIFT) & 0x100) != 0 )
+    if ( wxIsShiftDown() )
         fwKeys |= MK_SHIFT;
 
     // simulate right mouse button click

@@ -805,9 +805,12 @@ void wxFrame::IconizeChildFrames(bool bIconize)
     {
         wxWindow *win = node->GetData();
 
-        if ( win->IsKindOf(CLASSINFO(wxFrame)) )
+        // the child MDI frames are a special case and should not be touched by
+        // the parent frame - instead, they are managed by the user
+        wxFrame *frame = wxDynamicCast(win, wxFrame);
+        if ( frame && !wxDynamicCast(frame, wxMDIChildFrame) )
         {
-            ((wxFrame *)win)->Iconize(bIconize);
+            frame->Iconize(bIconize);
         }
     }
 }

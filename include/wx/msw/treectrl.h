@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        treectrl.h
+// Name:        wx/msw/treectrl.h
 // Purpose:     wxTreeCtrl class
 // Author:      Julian Smart
 // Modified by: Vadim Zeitlin to be less MSW-specific on 10/10/98
@@ -440,6 +440,7 @@ public:
 
     // implementation
     // --------------
+
     virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
     virtual bool MSWCommand(WXUINT param, WXWORD id);
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
@@ -502,6 +503,9 @@ private:
 
     // used for dragging
     wxDragImage *m_dragImage;
+
+    // the starting item for selection with Shift
+    WXHTREEITEM m_htSelStart;
 
     DECLARE_DYNAMIC_CLASS(wxTreeCtrl)
 };
