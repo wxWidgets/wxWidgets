@@ -159,8 +159,13 @@ class wxGenButton(wxPyControl):
         highlightClr = wxSystemSettings_GetSystemColour(wxSYS_COLOUR_BTNHIGHLIGHT)
         self.shadowPen    = wxPen(shadowClr, 1, wxSOLID)
         self.highlightPen = wxPen(highlightClr, 1, wxSOLID)
-        self.focusIndPen  = wxPen(textClr, 1, wxUSER_DASH)
-        ##self.focusIndPen = wxPen(textClr, 1, wxDOT)
+        if wxPlatform == "__WXMAC__":
+            self.focusIndPen = wxPen(textClr, 1, wxSOLID)
+        else:
+            self.focusIndPen  = wxPen(textClr, 1, wxUSER_DASH)
+            self.focusIndPen.SetDashes([1,1])
+            self.focusIndPen.SetCap(wxCAP_BUTT)
+        self.focusClr = highlightClr
 
 
     def SetBackgroundColour(self, colour):
@@ -176,6 +181,7 @@ class wxGenButton(wxPyControl):
         self.shadowPen = wxPen(wxColour(sr,sg,sb), 1, wxSOLID)
         hr, hg, hb = min(255,r+64), min(255,g+64), min(255,b+64)
         self.highlightPen = wxPen(wxColour(hr,hg,hb), 1, wxSOLID)
+        self.focusClr = wxColour(hr, hg, hb)
 
 
     def _GetLabelSize(self):
@@ -227,15 +233,17 @@ class wxGenButton(wxPyControl):
 
     def DrawFocusIndicator(self, dc, w, h):
         bw = self.bezelWidth
-        if self.hasFocus:
-            self.focusIndPen.SetColour(self.GetForegroundColour())
-        else:
-            self.focusIndPen.SetColour(self.GetBackgroundColour())
-        self.focusIndPen.SetDashes([1,1])
-        self.focusIndPen.SetCap(wxCAP_BUTT)
+##         if self.hasFocus:
+##             self.focusIndPen.SetColour(self.GetForegroundColour())
+##         else:
+##             #self.focusIndPen.SetColour(self.GetBackgroundColour())
+##             self.focusIndPen.SetColour(self.GetForegroundColour())
+        self.focusIndPen.SetColour(self.focusClr)
+        dc.SetLogicalFunction(wxINVERT)
         dc.SetPen(self.focusIndPen)
         dc.SetBrush(wxTRANSPARENT_BRUSH)
         dc.DrawRectangle(bw+2,bw+2, w-bw*2-4, h-bw*2-4)
+        dc.SetLogicalFunction(wxCOPY)
 
 
     def OnPaint(self, event):

@@ -3,6 +3,11 @@ from wxPython.wx import *
 
 #---------------------------------------------------------------------------
 
+RBOX1 = wxNewId()
+RBOX2 = wxNewId()
+RBUT1 = wxNewId()
+RBUT2 = wxNewId()
+
 class TestRadioButtons(wxPanel):
     def __init__(self, parent, log):
         self.log = log
@@ -12,20 +17,32 @@ class TestRadioButtons(wxPanel):
         sampleList = ['zero', 'one', 'two', 'three', 'four', 'five',
                       'six', 'seven', 'eight']
 
-        rb = wxRadioBox(self, 30, "wxRadioBox", wxPoint(35, 30), wxDefaultSize,
-                        sampleList, 3, wxRA_SPECIFY_COLS)
-        EVT_RADIOBOX(self, 30, self.EvtRadioBox)
+        sizer = wxBoxSizer(wxVERTICAL)
+        rb = wxRadioBox(self, RBOX1, "wxRadioBox",
+                        wxDefaultPosition, wxDefaultSize,
+                        sampleList, 2, wxRA_SPECIFY_COLS)
+        EVT_RADIOBOX(self, RBOX1, self.EvtRadioBox)
         #rb.SetBackgroundColour(wxBLUE)
         rb.SetToolTip(wxToolTip("This is a ToolTip!"))
+        #rb.SetLabel("wxRadioBox")
+        sizer.Add(rb, 0, wxALL, 20)
 
-        wxRadioButton(self, 32, "wxRadioButton", (235, 35))
-        wxRadioButton(self, 33, "wxRadioButton", (235, 55))
-        EVT_RADIOBUTTON(self, 32, self.EvtRadioButton)
-        EVT_RADIOBUTTON(self, 33, self.EvtRadioButton)
-
-        rb = wxRadioBox(self, 35, "", wxPoint(35, 120), wxDefaultSize,
+        rb = wxRadioBox(self, RBOX2, "", wxDefaultPosition, wxDefaultSize,
                         sampleList, 3, wxRA_SPECIFY_COLS | wxNO_BORDER)
-        EVT_RADIOBOX(self, 35, self.EvtRadioBox)
+        EVT_RADIOBOX(self, RBOX2, self.EvtRadioBox)
+        rb.SetToolTip(wxToolTip("This box has no label"))
+        sizer.Add(rb, 0, wxLEFT|wxRIGHT|wxBOTTOM, 20)
+
+        sizer.Add(wxStaticText(self, -1, "These are plain wxRadioButtons"),
+                  0, wxLEFT|wxRIGHT, 20)
+        sizer.Add(wxRadioButton(self, RBUT1, "wxRadioButton 1"),
+                  0, wxLEFT|wxRIGHT, 20)
+        sizer.Add(wxRadioButton(self, RBUT2, "wxRadioButton 2"),
+                  0, wxLEFT|wxRIGHT, 20)
+        EVT_RADIOBUTTON(self, RBUT1, self.EvtRadioButton)
+        EVT_RADIOBUTTON(self, RBUT2, self.EvtRadioButton)
+
+        self.SetSizer(sizer)
 
 
     def EvtRadioBox(self, event):

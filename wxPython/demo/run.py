@@ -33,7 +33,7 @@ class RunDemoApp(wxApp):
     def __init__(self, name, module):
         self.name = name
         self.demoModule = module
-        wxApp.__init__(self, wxPlatform == "__WXMAC__")
+        wxApp.__init__(self, 0) ##wxPlatform == "__WXMAC__")
 
 
     def OnInit(self):

@@ -17,7 +17,7 @@ progDir="`dirname \"$0\"`"
 defSrcPath="/projects/wx"
 defDstPath="/projects/wx/wxPython/dist"
 
-pkgName="wxMacPython"
+pkgName="wxPythonOSX"
 #version=`date +"%Y-%m-%d"`
 version=`cd $defSrcPath/wxPython; python$PYVER -c 'import setup;print setup.VERSION'`
 

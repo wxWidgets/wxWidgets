@@ -1,5 +1,12 @@
 from wxPython.wx import *
 
+havePopupWindow = 1
+try:
+    wxPopupWindow
+except NameError:
+    havePopupWindow = 0
+    wxPopupWindow = wxPopupTransientWindow = wxWindow
+
 #---------------------------------------------------------------------------
 
 class TestPopup(wxPopupWindow):
@@ -158,8 +165,14 @@ class TestPopupWithListbox(wxPopupWindow):
 #---------------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    win = TestPanel(nb, log)
-    return win
+    if havePopupWindow:
+        win = TestPanel(nb, log)
+        return win
+    else:
+        dlg = wxMessageDialog(frame, 'wxPopupWindow is not available on this platform.',
+                          'Sorry', wxOK | wxICON_INFORMATION)
+        dlg.ShowModal()
+        dlg.Destroy()
 
 #---------------------------------------------------------------------------
 

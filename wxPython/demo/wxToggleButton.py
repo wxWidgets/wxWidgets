@@ -1,6 +1,12 @@
 
 from wxPython.wx import *
 
+haveToggleBtn = 1
+try:
+    wxToggleButton
+except NameError:
+    haveToggleBtn = 0
+
 #----------------------------------------------------------------------
 
 class TestPanel(wxPanel):
@@ -25,8 +31,16 @@ class TestPanel(wxPanel):
 #----------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    win = TestPanel(nb, log)
-    return win
+    if haveToggleBtn:
+        win = TestPanel(nb, log)
+        return win
+    else:
+        dlg = wxMessageDialog(frame, 'wxToggleButton is not available on this platform.',
+                          'Sorry', wxOK | wxICON_INFORMATION)
+        dlg.ShowModal()
+        dlg.Destroy()
+
+
 
 
 #----------------------------------------------------------------------

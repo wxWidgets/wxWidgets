@@ -8,8 +8,9 @@ def runTest(frame, nb, log):
     data.EnableEffects(true)
     font_colour = wxColour(255, 0, 0)   # colour of font (red)
     data.SetColour(font_colour)         # set colour
-    print data.GetColour()
+    ##print data.GetColour()
     dlg = wxFontDialog(frame, data)
+    dlg.SetSize((250,250))
     if dlg.ShowModal() == wxID_OK:
         data = dlg.GetFontData()
         font = data.GetChosenFont()

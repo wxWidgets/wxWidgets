@@ -13,7 +13,7 @@ def runTest(frame, nb, log):
 
     keepGoing = true
     count = 0
-    while keepGoing and count <= max:
+    while keepGoing and count < max:
         count = count + 1
         wxSleep(1)
 

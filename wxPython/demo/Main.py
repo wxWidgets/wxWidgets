@@ -306,8 +306,8 @@ class wxPythonDemo(wxFrame):
         self.treeMap = {}
         self.tree = wxTreeCtrl(splitter, tID,
                                style=wxTR_HAS_BUTTONS |
-                               wxTR_EDIT_LABELS |
-                               wxTR_HAS_VARIABLE_ROW_HEIGHT)
+                               wxTR_HAS_VARIABLE_ROW_HEIGHT
+                               )
 
         #self.tree.SetBackgroundColour(wxNamedColour("Pink"))
         root = self.tree.AddRoot("wxPython Overview")

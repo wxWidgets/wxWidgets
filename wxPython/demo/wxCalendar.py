@@ -62,7 +62,10 @@ class TestPanel(wxPanel):
         monthlist = GetMonthList()
 
         mID = NewId()
-        self.date = wxComboBox(self, mID, Month[start_month], wxPoint(100, 20), wxSize(90, -1), monthlist, wxCB_DROPDOWN)
+        self.date = wxComboBox(self, mID, "",
+                               wxPoint(100, 20), wxSize(90, -1),
+                               monthlist, wxCB_DROPDOWN)
+        self.date.SetSelection(start_month-1)
         EVT_COMBOBOX(self, mID, self.EvtComboBox)
 
 # set start month and year

@@ -19,7 +19,8 @@ class TestNB(wxNotebook):
         self.AddPage(win, "Blue")
         st = wxStaticText(win, -1,
                           "You can put nearly any type of window here,\n"
-                          "and the tabs can be on any side... (look below.)",
+                          "and if the platform supports it then the\n"
+                          "tabs can be on any side of the notebook.",
                           wxPoint(10, 10))
         st.SetForegroundColour(wxWHITE)
         st.SetBackgroundColour(wxBLUE)

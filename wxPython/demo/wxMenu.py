@@ -19,6 +19,12 @@ class MyFrame(wxFrame):
         self.CreateStatusBar()
         self.SetStatusText("This is the statusbar")
 
+        tc = wxTextCtrl(self, -1, """
+A bunch of bogus menus have been created for this frame.  You
+can play around with them to see how they behave and then
+check the source for this sample to see how to implement them.
+""", style=wxTE_READONLY|wxTE_MULTILINE)
+
         # Prepare the menu bar
         menuBar = wxMenuBar()
 
@@ -28,7 +34,7 @@ class MyFrame(wxFrame):
         menu1.Append(102, "Venus", "")
         menu1.Append(103, "Earth", "You may select Earth too")
         menu1.AppendSeparator()
-        menu1.Append(104, "Exit", "Close this frame")
+        menu1.Append(104, "Close", "Close this frame")
         # Add menu to the menu bar
         menuBar.Append(menu1, "&Planets")
 

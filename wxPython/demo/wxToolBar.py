@@ -54,11 +54,12 @@ class TestToolBar(wxFrame):
         EVT_TOOL_RCLICKED(self, -1, self.OnToolRClick)  # Match all
         EVT_TIMER(self, -1, self.OnClearSB)
 
-        tb.AddSeparator()
-        cbID = wxNewId()
-        tb.AddControl(wxComboBox(tb, cbID, "", choices=["", "This", "is a", "wxComboBox"],
-                                 size=(150,-1), style=wxCB_DROPDOWN))
-        EVT_COMBOBOX(self, cbID, self.OnCombo)
+        if wxPlatform != "__WXMAC__":
+            tb.AddSeparator()
+            cbID = wxNewId()
+            tb.AddControl(wxComboBox(tb, cbID, "", choices=["", "This", "is a", "wxComboBox"],
+                                     size=(150,-1), style=wxCB_DROPDOWN))
+            EVT_COMBOBOX(self, cbID, self.OnCombo)
 
         tb.Realize()
 

@@ -158,12 +158,13 @@ class wxEditor(wxScrolledWindow):
 
 
     def UpdateView(self, dc = None):
-        if not dc:
+        if dc is None:
             dc = wxClientDC(self)
-        self.SetCharDimensions()
-        self.KeepCursorOnScreen()
-        self.DrawSimpleCursor(0,0,dc, true)
-        self.Draw(dc)
+        if dc.Ok():
+            self.SetCharDimensions()
+            self.KeepCursorOnScreen()
+            self.DrawSimpleCursor(0,0,dc, true)
+            self.Draw(dc)
 
     def OnPaint(self, event):
         dc = wxPaintDC(self)
@@ -188,9 +189,7 @@ class wxEditor(wxScrolledWindow):
         self.selectColor = wxColour(238, 220, 120)  # r, g, b = emacsOrange
 
     def InitDoubleBuffering(self):
-        bw,bh = self.GetClientSizeTuple()
-        self.mdc = wxMemoryDC()
-        self.mdc.SelectObject(wxEmptyBitmap(bw,bh))
+        pass
 
     def DrawEditText(self, t, x, y, dc):
         dc.DrawText(t, x * self.fw, y * self.fh)
@@ -218,19 +217,19 @@ class wxEditor(wxScrolledWindow):
         if not odc:
             odc = wxClientDC(self)
 
-        dc = self.mdc
-        dc.SetFont(self.font)
-        dc.SelectObject(wxEmptyBitmap(self.bw,self.bh))
-        dc.SetBackgroundMode(wxSOLID)
-        dc.SetTextBackground(self.bgColor)
-        dc.SetTextForeground(self.fgColor)
-        dc.Clear()
-        for line in range(self.sy, self.sy + self.sh):
-            self.DrawLine(line, dc)
-        if len(self.lines) < self.sh + self.sy:
-            self.DrawEofMarker(dc)
-        odc.Blit(0,0,self.bw,self.bh,dc,0,0,wxCOPY)
-        self.DrawCursor(odc)
+        bmp = wxEmptyBitmap(max(1,self.bw), max(1,self.bh))
+        dc = wxBufferedDC(odc, bmp)
+        if dc.Ok():
+            dc.SetFont(self.font)
+            dc.SetBackgroundMode(wxSOLID)
+            dc.SetTextBackground(self.bgColor)
+            dc.SetTextForeground(self.fgColor)
+            dc.Clear()
+            for line in range(self.sy, self.sy + self.sh):
+                self.DrawLine(line, dc)
+            if len(self.lines) < self.sh + self.sy:
+                self.DrawEofMarker(dc)
+            self.DrawCursor(dc)
 
 ##------------------ eofMarker stuff
 

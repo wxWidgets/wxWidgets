@@ -71,12 +71,14 @@ class CustomStatusBar(wxStatusBar):
 
 class TestCustomStatusBar(wxFrame):
     def __init__(self, parent, log):
-        wxFrame.__init__(self, parent, -1, 'Test Custom StatusBar',
-                         wxPoint(0,0), wxSize(500, 300))
-        wxWindow(self, -1).SetBackgroundColour(wxNamedColour("WHITE"))
+        wxFrame.__init__(self, parent, -1, 'Test Custom StatusBar')
+        #wxWindow(self, -1).SetBackgroundColour(wxNamedColour("WHITE"))
 
         self.sb = CustomStatusBar(self, log)
         self.SetStatusBar(self.sb)
+        tc = wxTextCtrl(self, -1, "", style=wxTE_READONLY|wxTE_MULTILINE)
+
+        self.SetSize((500, 300))
         EVT_CLOSE(self, self.OnCloseWindow)
 
     def OnCloseWindow(self, event):

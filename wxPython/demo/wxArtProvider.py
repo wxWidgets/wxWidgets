@@ -165,11 +165,13 @@ class TestPanel(wxPanel):
 
 
     def OnSelectClient(self, evt):
+        self.log.write("OnSelectClient\n")
         self.client = eval(evt.GetString())
         self.getArt()
 
 
     def OnSelectID(self, evt):
+        self.log.write("OnSelectID\n")
         self.artid = eval(evt.GetString())
         self.getArt()
 
