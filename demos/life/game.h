@@ -50,11 +50,11 @@ struct Cell
 class LifeShape
 {
 public:
-    LifeShape::LifeShape(wxString name,
-                         wxString desc,
-                         int width,
-                         int height,
-                         char *data)
+    LifeShape(wxString name,
+              wxString desc,
+              int width,
+              int height,
+              char *data)
     {
         m_name   = name;
         m_desc   = desc;
