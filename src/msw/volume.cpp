@@ -102,7 +102,7 @@ static WNetCloseEnumPtr s_pWNetCloseEnum;
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 static long s_cancelSearch = FALSE;
 
-struct FileInfo : public wxObject
+struct FileInfo
 {
     FileInfo(unsigned flag=0, wxFSVolumeKind type=wxFS_VOL_OTHER) :
         m_flags(flag), m_type(type) {}
@@ -119,7 +119,14 @@ struct FileInfo : public wxObject
     wxFSVolumeKind m_type;
 };
 WX_DECLARE_STRING_HASH_MAP(FileInfo, FileInfoMap);
-static FileInfoMap s_fileInfo(25);
+// Cygwin bug (?) destructor for global s_fileInfo is called twice...
+static FileInfoMap& GetFileInfoMap()
+{
+    static FileInfoMap s_fileInfo(25);
+
+    return s_fileInfo;
+}
+#define s_fileInfo (GetFileInfoMap())
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Other initialization.
