@@ -403,9 +403,6 @@
 %rename(EncodingConverter)                  wxEncodingConverter;
 %rename(DC)                                 wxDC;
 %rename(MemoryDC)                           wxMemoryDC;
-%rename(BUFFER_DC_OVERWRITE_BG)             wxBUFFER_DC_OVERWRITE_BG;
-%rename(BUFFER_DC_PRESERVE_BG)              wxBUFFER_DC_PRESERVE_BG;
-%rename(BUFFER_DC_DEFAULT)                  wxBUFFER_DC_DEFAULT;
 %rename(BufferedDC)                         wxBufferedDC;
 %rename(BufferedPaintDC)                    wxBufferedPaintDC;
 %rename(ScreenDC)                           wxScreenDC;

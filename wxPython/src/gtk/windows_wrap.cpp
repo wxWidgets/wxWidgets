@@ -12257,31 +12257,6 @@ static PyObject *_wrap_SingleChoiceDialog_SetSelection(PyObject *self, PyObject 
 }
 
 
-static PyObject *_wrap_SingleChoiceDialog_ShowModal(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxSingleChoiceDialog *arg1 = (wxSingleChoiceDialog *) 0 ;
-    int result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:SingleChoiceDialog_ShowModal",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxSingleChoiceDialog,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (int)(arg1)->ShowModal();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = SWIG_PyObj_FromInt((int)result);
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject * SingleChoiceDialog_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -12453,31 +12428,6 @@ static PyObject *_wrap_TextEntryDialog_SetValue(PyObject *self, PyObject *args, 
         if (temp2)
         delete arg2;
     }
-    return NULL;
-}
-
-
-static PyObject *_wrap_TextEntryDialog_ShowModal(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxTextEntryDialog *arg1 = (wxTextEntryDialog *) 0 ;
-    int result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:TextEntryDialog_ShowModal",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxTextEntryDialog,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (int)(arg1)->ShowModal();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = SWIG_PyObj_FromInt((int)result);
-    return resultobj;
-    fail:
     return NULL;
 }
 
@@ -12921,18 +12871,37 @@ static PyObject * FontData_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_FontDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_FontDialog__SWIG_0(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    wxFontDialog *result;
+    PyObject * obj0 = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O:new_FontDialog",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxFontDialog *)new wxFontDialog(arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxFontDialog, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_new_FontDialog__SWIG_1(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxFontData *arg2 = 0 ;
     wxFontDialog *result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "parent",(char *) "data", NULL 
-    };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:new_FontDialog",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"OO:new_FontDialog",&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxFontData,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (arg2 == NULL) {
@@ -12948,6 +12917,62 @@ static PyObject *_wrap_new_FontDialog(PyObject *self, PyObject *args, PyObject *
     resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxFontDialog, 1);
     return resultobj;
     fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_new_FontDialog(PyObject *self, PyObject *args) {
+    int argc;
+    PyObject *argv[3];
+    int ii;
+    
+    argc = PyObject_Length(args);
+    for (ii = 0; (ii < argc) && (ii < 2); ii++) {
+        argv[ii] = PyTuple_GetItem(args,ii);
+    }
+    if (argc == 1) {
+        int _v;
+        {
+            void *ptr;
+            if (SWIG_ConvertPtr(argv[0], (void **) &ptr, SWIGTYPE_p_wxWindow, 0) == -1) {
+                _v = 0;
+                PyErr_Clear();
+            } else {
+                _v = 1;
+            }
+        }
+        if (_v) {
+            return _wrap_new_FontDialog__SWIG_0(self,args);
+        }
+    }
+    if (argc == 2) {
+        int _v;
+        {
+            void *ptr;
+            if (SWIG_ConvertPtr(argv[0], (void **) &ptr, SWIGTYPE_p_wxWindow, 0) == -1) {
+                _v = 0;
+                PyErr_Clear();
+            } else {
+                _v = 1;
+            }
+        }
+        if (_v) {
+            {
+                void *ptr;
+                if (SWIG_ConvertPtr(argv[1], (void **) &ptr, SWIGTYPE_p_wxFontData, 0) == -1) {
+                    _v = 0;
+                    PyErr_Clear();
+                } else {
+                    _v = 1;
+                }
+            }
+            if (_v) {
+                return _wrap_new_FontDialog__SWIG_1(self,args);
+            }
+        }
+    }
+    
+    PyErr_SetString(PyExc_TypeError,"No matching function for overloaded 'new_FontDialog'");
     return NULL;
 }
 
@@ -12974,31 +12999,6 @@ static PyObject *_wrap_FontDialog_GetFontData(PyObject *self, PyObject *args, Py
         if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxFontData, 0);
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_FontDialog_ShowModal(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxFontDialog *arg1 = (wxFontDialog *) 0 ;
-    int result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:FontDialog_ShowModal",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxFontDialog,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (int)(arg1)->ShowModal();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -13086,31 +13086,6 @@ static PyObject *_wrap_new_MessageDialog(PyObject *self, PyObject *args, PyObjec
         if (temp3)
         delete arg3;
     }
-    return NULL;
-}
-
-
-static PyObject *_wrap_MessageDialog_ShowModal(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxMessageDialog *arg1 = (wxMessageDialog *) 0 ;
-    int result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MessageDialog_ShowModal",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxMessageDialog,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (int)(arg1)->ShowModal();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = SWIG_PyObj_FromInt((int)result);
-    return resultobj;
-    fail:
     return NULL;
 }
 
@@ -22927,12 +22902,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SingleChoiceDialog_GetSelection", (PyCFunction) _wrap_SingleChoiceDialog_GetSelection, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"SingleChoiceDialog_GetStringSelection", (PyCFunction) _wrap_SingleChoiceDialog_GetStringSelection, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"SingleChoiceDialog_SetSelection", (PyCFunction) _wrap_SingleChoiceDialog_SetSelection, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"SingleChoiceDialog_ShowModal", (PyCFunction) _wrap_SingleChoiceDialog_ShowModal, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"SingleChoiceDialog_swigregister", SingleChoiceDialog_swigregister, METH_VARARGS },
 	 { (char *)"new_TextEntryDialog", (PyCFunction) _wrap_new_TextEntryDialog, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TextEntryDialog_GetValue", (PyCFunction) _wrap_TextEntryDialog_GetValue, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TextEntryDialog_SetValue", (PyCFunction) _wrap_TextEntryDialog_SetValue, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"TextEntryDialog_ShowModal", (PyCFunction) _wrap_TextEntryDialog_ShowModal, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TextEntryDialog_swigregister", TextEntryDialog_swigregister, METH_VARARGS },
 	 { (char *)"new_FontData", (PyCFunction) _wrap_new_FontData, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"delete_FontData", (PyCFunction) _wrap_delete_FontData, METH_VARARGS | METH_KEYWORDS },
@@ -22950,12 +22923,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"FontData_SetRange", (PyCFunction) _wrap_FontData_SetRange, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"FontData_SetShowHelp", (PyCFunction) _wrap_FontData_SetShowHelp, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"FontData_swigregister", FontData_swigregister, METH_VARARGS },
-	 { (char *)"new_FontDialog", (PyCFunction) _wrap_new_FontDialog, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_FontDialog", _wrap_new_FontDialog, METH_VARARGS },
 	 { (char *)"FontDialog_GetFontData", (PyCFunction) _wrap_FontDialog_GetFontData, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"FontDialog_ShowModal", (PyCFunction) _wrap_FontDialog_ShowModal, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"FontDialog_swigregister", FontDialog_swigregister, METH_VARARGS },
 	 { (char *)"new_MessageDialog", (PyCFunction) _wrap_new_MessageDialog, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"MessageDialog_ShowModal", (PyCFunction) _wrap_MessageDialog_ShowModal, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"MessageDialog_swigregister", MessageDialog_swigregister, METH_VARARGS },
 	 { (char *)"new_ProgressDialog", (PyCFunction) _wrap_new_ProgressDialog, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ProgressDialog_Update", (PyCFunction) _wrap_ProgressDialog_Update, METH_VARARGS | METH_KEYWORDS },

@@ -2818,22 +2818,25 @@ def MemoryDCFromDC(*args, **kwargs):
 
 #---------------------------------------------------------------------------
 
-BUFFER_DC_OVERWRITE_BG = _gdi.BUFFER_DC_OVERWRITE_BG
-BUFFER_DC_PRESERVE_BG = _gdi.BUFFER_DC_PRESERVE_BG
-BUFFER_DC_DEFAULT = _gdi.BUFFER_DC_DEFAULT
 class BufferedDC(MemoryDC):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBufferedDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args):
         """
         __init__(DC dc, Bitmap buffer) -> BufferedDC
-        __init__(DC dc, Size area, int flags=BUFFER_DC_DEFAULT) -> BufferedDC
+        __init__(DC dc, Size area) -> BufferedDC
         """
         newobj = _gdi.new_BufferedDC(*args)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
         self._dc = args[0] # save a ref so the other dc will not be deleted before self
+
+    def __del__(self, destroy=_gdi.delete_BufferedDC):
+        """__del__()"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
 
     def UnMask(*args, **kwargs):
         """UnMask()"""
@@ -2848,7 +2851,7 @@ class BufferedDCPtr(BufferedDC):
 _gdi.BufferedDC_swigregister(BufferedDCPtr)
 
 def BufferedDCInternalBuffer(*args):
-    """BufferedDCInternalBuffer(DC dc, Size area, int flags=BUFFER_DC_DEFAULT) -> BufferedDC"""
+    """BufferedDCInternalBuffer(DC dc, Size area) -> BufferedDC"""
     val = _gdi.new_BufferedDCInternalBuffer(*args)
     val.thisown = 1
     val._dc = args[0] # save a ref so the other dc will not be deleted before self
@@ -2857,12 +2860,9 @@ def BufferedDCInternalBuffer(*args):
 class BufferedPaintDC(BufferedDC):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBufferedPaintDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args):
-        """
-        __init__(Window window, Bitmap buffer) -> BufferedPaintDC
-        __init__(Window window, int flags=BUFFER_DC_DEFAULT) -> BufferedPaintDC
-        """
-        newobj = _gdi.new_BufferedPaintDC(*args)
+    def __init__(self, *args, **kwargs):
+        """__init__(Window window, Bitmap buffer=NullBitmap) -> BufferedPaintDC"""
+        newobj = _gdi.new_BufferedPaintDC(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
