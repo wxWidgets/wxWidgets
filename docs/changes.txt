@@ -13,6 +13,14 @@ wxMSW:
 OTHER CHANGES
 -------------
 
+2.2.10
+------
+
+Unix:
+
+- fixed configure bug which prevented it from finding anything with some
+  compiler versions
+
 2.2.9
 -----
 
