@@ -926,7 +926,7 @@ void MyTreeCtrl::OnEndLabelEdit(wxTreeEvent& event)
     // don't allow anything except letters in the labels
     if ( !event.GetLabel().IsWord() )
     {
-        wxMessageBox(wxT("The label should contain only letters."));
+        wxMessageBox(wxT("The new label should be a single word."));
 
         event.Veto();
     }
