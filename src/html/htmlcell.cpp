@@ -94,7 +94,7 @@ wxHtmlCell::wxHtmlCell() : wxObject()
     m_Next = NULL;
     m_Parent = NULL;
     m_Width = m_Height = m_Descent = 0;
-    m_CanLiveOnPagebreak = TRUE;
+    m_CanLiveOnPagebreak = true;
     m_Link = NULL;
 }
 
@@ -139,10 +139,10 @@ bool wxHtmlCell::AdjustPagebreak(int *pagebreak, int* WXUNUSED(known_pagebreaks)
                 m_PosY < *pagebreak && m_PosY + m_Height > *pagebreak)
     {
         *pagebreak = m_PosY;
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 
@@ -260,7 +260,7 @@ wxHtmlWordCell::wxHtmlWordCell(const wxString& word, wxDC& dc) : wxHtmlCell()
 {
     m_Word = word;
     dc.GetTextExtent(m_Word, &m_Width, &m_Height, &m_Descent);
-    SetCanLiveOnPagebreak(FALSE);
+    SetCanLiveOnPagebreak(false);
     m_allowLinebreak = true;
 }
 
@@ -283,7 +283,7 @@ void wxHtmlWordCell::Split(wxDC& dc,
     wxPoint pt1 = (selFrom == wxDefaultPosition) ?
                    wxDefaultPosition : selFrom - GetAbsPos();
     wxPoint pt2 = (selTo == wxDefaultPosition) ?
-                   wxPoint(m_Width, -1) : selTo - GetAbsPos();
+                   wxPoint(m_Width, wxDefaultPosition.y) : selTo - GetAbsPos();
 
     wxCoord charW, charH;
     unsigned len = m_Word.length();
@@ -535,8 +535,8 @@ wxHtmlContainerCell::wxHtmlContainerCell(wxHtmlContainerCell *parent) : wxHtmlCe
     m_AlignVer = wxHTML_ALIGN_BOTTOM;
     m_IndentLeft = m_IndentRight = m_IndentTop = m_IndentBottom = 0;
     m_WidthFloat = 100; m_WidthFloatUnits = wxHTML_UNITS_PERCENT;
-    m_UseBkColour = FALSE;
-    m_UseBorder = FALSE;
+    m_UseBkColour = false;
+    m_UseBorder = false;
     m_MinHeight = 0;
     m_MinHeightAlign = wxHTML_ALIGN_TOP;
     m_LastLayout = -1;
@@ -581,7 +581,7 @@ int wxHtmlContainerCell::GetIndent(int ind) const
 
 int wxHtmlContainerCell::GetIndentUnits(int ind) const
 {
-    bool p = FALSE;
+    bool p = false;
     if (ind & wxHTML_INDENT_LEFT) p = m_IndentLeft < 0;
     else if (ind & wxHTML_INDENT_RIGHT) p = m_IndentRight < 0;
     else if (ind & wxHTML_INDENT_TOP) p = m_IndentTop < 0;
@@ -600,13 +600,13 @@ bool wxHtmlContainerCell::AdjustPagebreak(int *pagebreak, int* known_pagebreaks,
     else
     {
         wxHtmlCell *c = GetFirstChild();
-        bool rt = FALSE;
+        bool rt = false;
         int pbrk = *pagebreak - m_PosY;
 
         while (c)
         {
             if (c->AdjustPagebreak(&pbrk, known_pagebreaks, number_of_pages))
-                rt = TRUE;
+                rt = true;
             c = c->GetNext();
         }
         if (rt)
@@ -645,7 +645,6 @@ void wxHtmlContainerCell::Layout(int w)
     int s_width, nextWordWidth, s_indent;
     int ysizeup = 0, ysizedown = 0;
     int MaxLineWidth = 0;
-    int xcnt = 0;
     int curLineWidth = 0;
     m_MaxTotalWidth = 0;
 
@@ -717,7 +716,6 @@ void wxHtmlContainerCell::Layout(int w)
             curLineWidth += cell->GetMaxTotalWidth();
 
         cell = cell->GetNext();
-        xcnt++;
             
         // compute length of the next word that would be added:
         nextWordWidth = 0;
@@ -816,7 +814,7 @@ void wxHtmlContainerCell::Layout(int w)
             }
 
             ypos += ysizedown;
-            xpos = xcnt = 0;
+            xpos = 0;
             ysizeup = ysizedown = 0;
             line = cell;
         }
