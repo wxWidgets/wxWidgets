@@ -17,6 +17,9 @@
  *
  */
 
+#define __GOODCOMPILER__
+                                // gcc can have problems, but Windows compilers
+                                // are generally OK.
 #define WXWIN_COMPATIBILITY  1
                                 // Compatibility with 1.66 API.
                                 // Level 0: no backward compatibility, all new features
