@@ -97,7 +97,7 @@ static bool IsItemSelected(HWND hwndTV, HTREEITEM hItem)
     return (tvi.state & TVIS_SELECTED) != 0;
 }
 
-static void SelectItem(HWND hwndTV, HTREEITEM hItem, bool select = true)
+static bool SelectItem(HWND hwndTV, HTREEITEM hItem, bool select = true)
 {
     TV_ITEM tvi;
     tvi.mask = TVIF_STATE | TVIF_HANDLE;
@@ -108,7 +108,10 @@ static void SelectItem(HWND hwndTV, HTREEITEM hItem, bool select = true)
     if ( TreeView_SetItem(hwndTV, &tvi) == -1 )
     {
         wxLogLastError(wxT("TreeView_SetItem"));
+        return false;
     }
+
+    return true;
 }
 
 static inline void UnselectItem(HWND hwndTV, HTREEITEM htItem)
@@ -1864,19 +1867,22 @@ void wxTreeCtrl::UnselectAll()
     }
 }
 
-void wxTreeCtrl::SelectItem(const wxTreeItemId& item)
+void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
 {
     if ( m_windowStyle & wxTR_MULTIPLE )
     {
 #if wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
         // selecting the item means checking it
-        SetItemCheck(item);
+        SetItemCheck(item, select);
 #else // !wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
-        ::SelectItem(GetHwnd(), HITEM(item));
+        ::SelectItem(GetHwnd(), HITEM(item), select);
 #endif // wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE/!wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
     }
     else
     {
+        wxASSERT_MSG( select,
+                      _T("SelectItem(false) works only for multiselect") );
+
         // inspite of the docs (MSDN Jan 99 edition), we don't seem to receive
         // the notification from the control (i.e. TVN_SELCHANG{ED|ING}), so
         // send them ourselves
@@ -1888,11 +1894,7 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item)
         event.SetEventType(wxEVT_COMMAND_TREE_SEL_CHANGING);
         if ( !GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
         {
-            if ( !TreeView_SelectItem(GetHwnd(), HITEM(item)) )
-            {
-                wxLogLastError(wxT("TreeView_SelectItem"));
-            }
-            else
+            if ( ::SelectItem(GetHwnd(), HITEM(item), select) )
             {
                 event.SetEventType(wxEVT_COMMAND_TREE_SEL_CHANGED);
                 (void)GetEventHandler()->ProcessEvent(event);
@@ -1900,6 +1902,16 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item)
         }
         //else: program vetoed the change
     }
+}
+
+void wxTreeCtrl::UnselectItem(const wxTreeItemId& item)
+{
+    SelectItem(item, false);
+}
+
+void wxTreeCtrl::ToggleItemSelection(const wxTreeItemId& item)
+{
+    SelectItem(item, !IsSelected(item));
 }
 
 void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
@@ -2162,7 +2174,7 @@ long wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                         SetFocus();
 
                         // toggle selected state
-                        ToggleItemSelection(GetHwnd(), htItem);
+                        ::ToggleItemSelection(GetHwnd(), htItem);
 
                         ::SetFocus(GetHwnd(), htItem);
 
@@ -2325,7 +2337,7 @@ long wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         {
             if ( bCtrl )
             {
-                ToggleItemSelection(GetHwnd(), htSel);
+                ::ToggleItemSelection(GetHwnd(), htSel);
             }
             else
             {
