@@ -108,6 +108,13 @@ wxUxThemeEngine* wxUxThemeEngine::Get()
 
 bool wxUxThemeEngine::Initialize()
 {
+    if ( wxTheApp->GetComCtl32Version() < 600 )
+    {
+        // not using theme-aware comctl32.dll anyhow, don't even try to use
+        // themes
+        return false;
+    }
+        
     // we're prepared to handle the errors
     wxLogNull noLog;
 
@@ -170,22 +177,6 @@ bool wxUxThemeEngine::Initialize()
 #undef RESOLVE_UXTHEME_FUNCTION
 
     return true;
-}
-
-// This calls IsAppThemed but also checks the commctrl.dll version
-// for a more reliable answer.
-bool wxUxThemeEngine::IsAppThemedEx()
-{
-    static bool g_TestedForTheme = FALSE;
-    static bool g_UseTheme = FALSE;
-    if (!g_TestedForTheme)
-    {
-        int commCtrlVersion = wxTheApp->GetComCtl32Version() ;
-        
-        g_UseTheme = (commCtrlVersion >= 600);
-        g_TestedForTheme = TRUE;
-    }
-    return IsAppThemed() && g_UseTheme;
 }
 
 #endif // wxUSE_UXTHEME
