@@ -148,13 +148,13 @@ bool wxBitmapButton::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
     
         gtk_widget_show( pixmap );
         gtk_container_add( GTK_CONTAINER(m_widget), pixmap );
+	
+        int border = 10;
+        if (style & wxNO_BORDER) border = 4;
+        if (newSize.x == -1) newSize.x = m_bitmap.GetWidth()+border;
+        if (newSize.y == -1) newSize.y = m_bitmap.GetHeight()+border;
+        SetSize( newSize.x, newSize.y );
     }
-  
-    int border = 10;
-    if (style & wxNO_BORDER) border = 4;
-    if (newSize.x == -1) newSize.x = m_bitmap.GetWidth()+border;
-    if (newSize.y == -1) newSize.y = m_bitmap.GetHeight()+border;
-    SetSize( newSize.x, newSize.y );
   
     gtk_signal_connect( GTK_OBJECT(m_widget), "clicked", 
       GTK_SIGNAL_FUNC(gtk_bmpbutton_clicked_callback), (gpointer*)this );

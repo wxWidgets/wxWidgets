@@ -13,9 +13,11 @@
 #pragma interface
 #endif
 
-#if wxUSE_ZLIB && wxUSE_STREAMS && wxUSE_ZIPSTREAM
+#include "wx/defs.h"
 
-#include <wx/stream.h>
+#if wxUSE_STREAMS && wxUSE_ZIPSTREAM && wxUSE_ZLIB 
+
+#include "wx/stream.h"
 
 //--------------------------------------------------------------------------------
 // wxZipInputStream
@@ -48,9 +50,11 @@ class WXDLLEXPORT wxZipInputStream : public wxInputStream
 };
 
 
-#endif // 
+#endif 
+   // wxUSE_STREAMS && wxUSE_ZIPSTREAM && wxUSE_ZLIB 
 
-#endif // __ZIPSTREAM_H__
+#endif 
+   // __ZIPSTREAM_H__
 
 
 

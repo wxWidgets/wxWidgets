@@ -7,28 +7,24 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation
+#pragma implementation "zipstream.h"
 #endif
 
-#include <wx/wxprec.h>
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
 
-#ifdef __BORDLANDC__
-#pragma hdrstop
+#ifdef __BORLANDC__
+  #pragma hdrstop
 #endif
 
-#ifndef WXPRECOMP
-#include <wx/wx.h>
-#endif
+#if wxUSE_STREAMS && wxUSE_ZIPSTREAM && wxUSE_ZLIB 
 
-#if wxUSE_ZLIB && wxUSE_STREAMS && wxUSE_ZIPSTREAM
-
-#include <wx/stream.h>
-#include <wx/wfstream.h>
-#include <wx/zipstream.h>
+#include "wx/log.h"
+#include "wx/intl.h"
+#include "wx/stream.h"
+#include "wx/wfstream.h"
+#include "wx/zipstream.h"
 #include "unzip.h"
-
-
-
 
 wxZipInputStream::wxZipInputStream(const wxString& archive, const wxString& file) : wxInputStream()
 {
@@ -37,17 +33,21 @@ wxZipInputStream::wxZipInputStream(const wxString& archive, const wxString& file
     m_Pos = 0;
     m_Size = 0;
     m_Archive = (void*) unzOpen(archive);
-    if (m_Archive == NULL) {
+    if (m_Archive == NULL) 
+    {
         m_lasterror = wxStream_READ_ERR;
         return;
     }
-    if (unzLocateFile((unzFile)m_Archive, file, 0) != UNZ_OK) {
+    if (unzLocateFile((unzFile)m_Archive, file, 0) != UNZ_OK) 
+    {
         m_lasterror = wxStream_READ_ERR;
         return;
     }
-    unzGetCurrentFileInfo((unzFile)m_Archive, &zinfo, NULL, 0, NULL, 0, NULL, 0);
+    
+    unzGetCurrentFileInfo((unzFile)m_Archive, &zinfo, (char*) NULL, 0, (void*) NULL, 0, (char*) NULL, 0);
 
-    if (unzOpenCurrentFile((unzFile)m_Archive) != UNZ_OK) {
+    if (unzOpenCurrentFile((unzFile)m_Archive) != UNZ_OK) 
+    {
         m_lasterror = wxStream_READ_ERR;
         return;
     }
@@ -58,7 +58,8 @@ wxZipInputStream::wxZipInputStream(const wxString& archive, const wxString& file
 
 wxZipInputStream::~wxZipInputStream()
 {
-    if (m_Archive) {
+    if (m_Archive) 
+    {
         if (m_Size != 0)
             unzCloseCurrentFile((unzFile)m_Archive);
         unzClose((unzFile)m_Archive);
@@ -82,7 +83,8 @@ off_t wxZipInputStream::OnSysSeek(off_t seek, wxSeekMode mode)
     off_t nextpos;
     void *buf;
 
-    switch (mode) {
+    switch (mode) 
+    {
         case wxFromCurrent : nextpos = seek + m_Pos; break;
         case wxFromStart : nextpos = seek; break;
         case wxFromEnd : nextpos = m_Size - 1 + seek; break;
@@ -90,14 +92,16 @@ off_t wxZipInputStream::OnSysSeek(off_t seek, wxSeekMode mode)
     }
 
     // cheated seeking :
-    if (nextpos > m_Pos) {
+    if (nextpos > m_Pos) 
+    {
         buf = malloc(nextpos - m_Pos);
         unzReadCurrentFile((unzFile)m_Archive, buf, nextpos -  m_Pos);
         free(buf);
     }
     else if (nextpos < m_Pos) {
         unzCloseCurrentFile((unzFile)m_Archive);
-        if (unzOpenCurrentFile((unzFile)m_Archive) != UNZ_OK) {
+        if (unzOpenCurrentFile((unzFile)m_Archive) != UNZ_OK) 
+	{
             m_lasterror = wxStream_READ_ERR;
             return m_Pos;
         }
@@ -111,3 +115,4 @@ off_t wxZipInputStream::OnSysSeek(off_t seek, wxSeekMode mode)
 }
 
 #endif
+  // wxUSE_STREAMS && wxUSE_ZIPSTREAM && wxUSE_ZLIB 

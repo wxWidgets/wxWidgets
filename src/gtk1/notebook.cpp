@@ -515,15 +515,15 @@ bool wxNotebook::InsertPage( int position, wxWindow* win, const wxString& text,
     page->m_box = gtk_hbox_new( FALSE, 0 );
     gtk_container_border_width( GTK_CONTAINER(page->m_box), 2 );
 
+    gtk_signal_connect( GTK_OBJECT(win->m_widget), "size_allocate",
+      GTK_SIGNAL_FUNC(gtk_page_size_callback), (gpointer)win );
+
     if (position < 0)
         gtk_notebook_append_page( notebook, win->m_widget, page->m_box );
     else 
         gtk_notebook_insert_page( notebook, win->m_widget, page->m_box, position );
 
     page->m_page = (GtkNotebookPage*) g_list_last(notebook->children)->data;
-
-    gtk_signal_connect( GTK_OBJECT(win->m_widget), "size_allocate",
-      GTK_SIGNAL_FUNC(gtk_page_size_callback), (gpointer)win );
 
     /* set the label image */
     page->m_image = imageId;

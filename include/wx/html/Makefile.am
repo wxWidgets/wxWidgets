@@ -14,6 +14,4 @@ htmlparser.h \
 htmltag.h \
 htmlwin.h \
 htmlwinparser.h \
-mod_templ.h \
-msw \
-version.h
+mod_templ.h

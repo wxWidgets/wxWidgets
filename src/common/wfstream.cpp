@@ -20,15 +20,11 @@
   #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-  #include "wx/defs.h"
-#endif
-
 #if wxUSE_STREAMS && wxUSE_FILE
 
 #include <stdio.h>
-#include <wx/stream.h>
-#include <wx/wfstream.h>
+#include "wx/stream.h"
+#include "wx/wfstream.h"
 
 // ----------------------------------------------------------------------------
 // wxFileInputStream

@@ -20,17 +20,21 @@
   #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-  #include "wx/defs.h"
-#endif
-
 #if wxUSE_ZLIB && wxUSE_STREAMS
 
 #include "wx/zstream.h"
 #include "wx/utils.h"
 #include "wx/intl.h"
 #include "wx/log.h"
-#include "../zlib/zlib.h"
+
+// When using configure, the path must be "zlib.h" I don't know
+// what other ports (wxMac, wxMotif without configure) need here.
+
+#ifdef __WXMSW__
+   #include "..\zlib\zlib.h"
+#else
+   #include "zlib.h"
+#endif
 
 #define ZSTREAM_BUFFER_SIZE 1024
 

@@ -68,6 +68,13 @@ cp Makefile.am ~/wxwine_dist/wxWINE/include/wx/generic
 cp Makefile.in ~/wxwine_dist/wxWINE/include/wx/generic
 cd ..
 
+mkdir ~/wxgtk_dist/wxGTK/include/wx/html
+cd html
+cp *.h ~/wxgtk_dist/wxGTK/include/wx/html
+cp Makefile.am ~/wxgtk_dist/wxGTK/include/wx/html
+cp Makefile.in ~/wxgtk_dist/wxGTK/include/wx/html
+cd ..
+
 mkdir ~/wxwine_dist/wxWINE/include/wx/unix
 cd unix
 cp *.h ~/wxwine_dist/wxWINE/include/wx/unix
@@ -148,6 +155,15 @@ cp parser.y ~/wxwine_dist/wxWINE/src/common
 cp extended.c ~/wxwine_dist/wxWINE/src/common
 cp *.cpp ~/wxwine_dist/wxWINE/src/common
 cd ..
+
+cd html
+mkdir ~/wxgtk_dist/wxGTK/src/html
+cp *.cpp ~/wxgtk_dist/wxGTK/src/html
+cp *.h ~/wxgtk_dist/wxGTK/src/html
+cd bitmaps
+mkdir ~/wxgtk_dist/wxGTK/src/html/bitmaps
+cp *.xpm ~/wxgtk_dist/wxGTK/src/html/bitmaps
+cd ../..
 
 cd unix
 mkdir ~/wxwine_dist/wxWINE/src/unix

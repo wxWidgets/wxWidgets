@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/setup.h"
+#include "wx/string.h"
 
 // ----------------------------------------------------------------------------
 // forward declarations

@@ -3,6 +3,7 @@
 // Purpose:     Information window (when app is busy)
 // Author:      Vaclav Slavik
 // Copyright:   (c) 1999 Vaclav Slavik
+// RCS-ID:      $Id$
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -10,25 +11,18 @@
 #define __INFOWIN_H__
 
 #ifdef __GNUG__
-#pragma implementation
+#pragma interface
 #endif
 
-#include <wx/wxprec.h>
+#include "wx/wxprec.h"
 
 #ifdef __BORDLANDC__
 #pragma hdrstop
 #endif
 
-#ifndef WXPRECOMP
-#include <wx/wx.h>
-#endif
+#include "wx/frame.h"
 
 #if wxUSE_BUSYINFO
-
-#include <wx/dialog.h>
-
-
-
 
 class wxInfoFrame : public wxFrame
 {

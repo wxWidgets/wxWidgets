@@ -68,6 +68,13 @@ cp Makefile.am ~/wxmotif_dist/wxMotif/include/wx/generic
 cp Makefile.in ~/wxmotif_dist/wxMotif/include/wx/generic
 cd ..
 
+mkdir ~/wxgtk_dist/wxGTK/include/wx/html
+cd html
+cp *.h ~/wxgtk_dist/wxGTK/include/wx/html
+cp Makefile.am ~/wxgtk_dist/wxGTK/include/wx/html
+cp Makefile.in ~/wxgtk_dist/wxGTK/include/wx/html
+cd ..
+
 mkdir ~/wxmotif_dist/wxMotif/include/wx/unix
 cd unix
 cp *.h ~/wxmotif_dist/wxMotif/include/wx/unix
@@ -148,6 +155,15 @@ cp parser.y ~/wxmotif_dist/wxMotif/src/common
 cp extended.c ~/wxmotif_dist/wxMotif/src/common
 cp *.cpp ~/wxmotif_dist/wxMotif/src/common
 cd ..
+
+cd html
+mkdir ~/wxgtk_dist/wxGTK/src/html
+cp *.cpp ~/wxgtk_dist/wxGTK/src/html
+cp *.h ~/wxgtk_dist/wxGTK/src/html
+cd bitmaps
+mkdir ~/wxgtk_dist/wxGTK/src/html/bitmaps
+cp *.xpm ~/wxgtk_dist/wxGTK/src/html/bitmaps
+cd ../..
 
 cd unix
 mkdir ~/wxmotif_dist/wxMotif/src/unix

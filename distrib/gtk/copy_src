@@ -68,6 +68,13 @@ cp Makefile.am ~/wxgtk_dist/wxGTK/include/wx/generic
 cp Makefile.in ~/wxgtk_dist/wxGTK/include/wx/generic
 cd ..
 
+mkdir ~/wxgtk_dist/wxGTK/include/wx/html
+cd html
+cp *.h ~/wxgtk_dist/wxGTK/include/wx/html
+cp Makefile.am ~/wxgtk_dist/wxGTK/include/wx/html
+cp Makefile.in ~/wxgtk_dist/wxGTK/include/wx/html
+cd ..
+
 mkdir ~/wxgtk_dist/wxGTK/include/wx/unix
 cd unix
 cp *.h ~/wxgtk_dist/wxGTK/include/wx/unix
@@ -153,6 +160,15 @@ cd unix
 mkdir ~/wxgtk_dist/wxGTK/src/unix
 cp *.cpp ~/wxgtk_dist/wxGTK/src/unix
 cd ..
+
+cd html
+mkdir ~/wxgtk_dist/wxGTK/src/html
+cp *.cpp ~/wxgtk_dist/wxGTK/src/html
+cp *.h ~/wxgtk_dist/wxGTK/src/html
+cd bitmaps
+mkdir ~/wxgtk_dist/wxGTK/src/html/bitmaps
+cp *.xpm ~/wxgtk_dist/wxGTK/src/html/bitmaps
+cd ../..
 
 cd generic
 mkdir ~/wxgtk_dist/wxGTK/src/generic
@@ -776,4 +792,4 @@ cp README.txt ~/wxgtk_dist/wxGTK/utils/wxPython
 cp Setup ~/wxgtk_dist/wxGTK/utils/wxPython/src
 
 cd ~/wxgtk_dist
-tar ch wxGTK | gzip -f9 > wxGTK-2.1.0-b7.tgz
+tar ch wxGTK | gzip -f9 > wxGTK-2.1.0-b7b.tgz
