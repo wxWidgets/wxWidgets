@@ -16,7 +16,7 @@
     donated by the development team at Remstar International.
 
     The table this sample is based on is developer contact table, and shows
-    some of the simple uses of the database classes wxDB and wxTable.
+    some of the simple uses of the database classes wxDb and wxDbTable.
 
  *  SYNOPSIS END
  */
@@ -42,7 +42,7 @@
 #include <stdio.h>                  /* Included strictly for reading the text file with the database parameters */
 
 #include <wx/db.h>                  /* Required in the file which will get the data source connection */
-#include <wx/dbtable.h>             /* Has the wxTable object from which all data objects will inherit their data table functionality */
+#include <wx/dbtable.h>             /* Has the wxDbTable object from which all data objects will inherit their data table functionality */
 
 extern wxDbList WXDLLEXPORT *PtrBegDbList;    /* from db.cpp, used in getting back error results from db connections */
 
@@ -61,23 +61,23 @@ DatabaseDemoFrame *DemoFrame;       /* Pointer to the main frame */
  * for user login names and passwords, getting workstation settings, etc.
  * ---> IMPORTANT <---
  * 
- *        For each database object created which uses this wxDB pointer
+ *        For each database object created which uses this wxDb pointer
  *    connection to the database, when a CommitTrans() or RollBackTrans()
- *    will commit or rollback EVERY object which uses this wxDB pointer.
+ *    will commit or rollback EVERY object which uses this wxDb pointer.
  *
- *    To allow each table object (those derived from wxTable) to be 
+ *    To allow each table object (those derived from wxDbTable) to be 
  *    individually committed or rolled back, you MUST use a different
- *    instance of wxDB in the constructor of the table.  Doing so creates 
+ *    instance of wxDb in the constructor of the table.  Doing so creates 
  *        more overhead, and will use more database connections (some DBs have
  *    connection limits...), so use connections sparringly.
  *
  *        It is recommended that one "main" database connection be created for
  *        the entire program to use for READ-ONLY database accesses, but for each
  *        table object which will do a CommitTrans() or RollbackTrans() that a
- *        new wxDB object be created and used for it.
+ *        new wxDb object be created and used for it.
  */
  
-wxDB    *READONLY_DB;
+wxDb    *READONLY_DB;
 
 /*
  * This function will return the exact string(s) from the database engine
@@ -353,24 +353,24 @@ void DatabaseDemoFrame::BuildParameterDialog(wxWindow *parent)
 
 
 /*
- * Constructor note: If no wxDB object is passed in, a new connection to the database
+ * Constructor note: If no wxDb object is passed in, a new connection to the database
  *     is created for this instance of Ccontact.  This can be a slow process depending
  *     on the database engine being used, and some database engines have a limit on the
  *     number of connections (either hard limits, or license restricted) so care should 
  *     be used to use as few connections as is necessary.  
  *
- * IMPORTANT: Objects which share a wxDB pointer are ALL acted upon whenever a member 
+ * IMPORTANT: Objects which share a wxDb pointer are ALL acted upon whenever a member 
  *     function of pDb is called (i.e. CommitTrans() or RollbackTrans(), so if modifying 
  *     or creating a table objects which use the same pDb, know that all the objects
  *     will be committed or rolled back when any of the objects has this function call made.
  */
-Ccontact::Ccontact (wxDB *pwxDB) : wxTable(pwxDB ? pwxDB : wxDbGetConnection(&DbConnectInf),CONTACT_TABLE_NAME,CONTACT_NO_COLS,NULL,!QUERY_ONLY,DbConnectInf.defaultDir)
+Ccontact::Ccontact (wxDb *pwxDb) : wxDbTable(pwxDb ? pwxDb : wxDbGetConnection(&DbConnectInf),CONTACT_TABLE_NAME,CONTACT_NO_COLS,NULL,!QUERY_ONLY,DbConnectInf.defaultDir)
 {
     // This is used to represent whether the database connection should be released
     // when this instance of the object is deleted.  If using the same connection
     // for multiple instance of database objects, then the connection should only be 
     // released when the last database instance using the connection is deleted
-    freeDbConn = !pwxDB;
+    freeDbConn = !pwxDb;
     
     SetupColumns();
 
@@ -416,7 +416,7 @@ Ccontact::~Ccontact()
 
 
 /*
- * Handles setting up all the connections for the interface from the wxTable
+ * Handles setting up all the connections for the interface from the wxDbTable
  * functions to interface to the data structure used to store records in 
  * memory, and for all the column definitions that define the table structure
  */
@@ -444,7 +444,7 @@ bool Ccontact::CreateIndexes(void)
     // This index could easily be accomplished with an "orderBy" clause, 
     // but is done to show how to construct a non-primary index.
     wxString    indexName;
-    CidxDef     idxDef[2];
+    wxDbIdxDef  idxDef[2];
 
     bool        Ok = TRUE;
 
@@ -624,9 +624,9 @@ CeditorDlg::CeditorDlg(wxWindow *parent) : wxPanel (parent, 1, 1, 460, 455)
     
     Contact->orderBy = "NAME";  // field name to sort by
 
-    // The wxString "whereStr" is not a member of the wxTable object, it is a member variable
+    // The wxString "whereStr" is not a member of the wxDbTable object, it is a member variable
     // specifically in the Ccontact class.  It is used here for simpler construction of a varying
-    // length string, and then after the string is built, the wxTable member variable "where" is
+    // length string, and then after the string is built, the wxDbTable member variable "where" is
     // assigned the pointer to the constructed string.
     //
     // The constructed where clause below has a sub-query within it "SELECT MIN(NAME) FROM %s" 
@@ -1548,7 +1548,7 @@ BEGIN_EVENT_TABLE(CqueryDlg, wxDialog)
 END_EVENT_TABLE()
  
 // CqueryDlg() constructor
-CqueryDlg::CqueryDlg(wxWindow *parent, wxDB *pDb, char *tblName[], char *pWhereArg) : wxDialog (parent, QUERY_DIALOG, "Query", wxPoint(-1, -1), wxSize(480, 360))
+CqueryDlg::CqueryDlg(wxWindow *parent, wxDb *pDb, char *tblName[], char *pWhereArg) : wxDialog (parent, QUERY_DIALOG, "Query", wxPoint(-1, -1), wxSize(480, 360))
 {
     wxBeginBusyCursor();
 
@@ -2023,11 +2023,11 @@ void CqueryDlg::ProcessCountBtn()
     if (!ValidateWhereClause())
         return;
 
-    if (dbTable == 0)  // wxTable object needs to be created and opened
+    if (dbTable == 0)  // wxDbTable object needs to be created and opened
     {
-        if (!(dbTable = new wxTable(pDB, masterTableName, 0, NULL, !QUERY_ONLY, DbConnectInf.defaultDir)))
+        if (!(dbTable = new wxDbTable(pDB, masterTableName, 0, NULL, !QUERY_ONLY, DbConnectInf.defaultDir)))
         {
-            wxMessageBox("Memory allocation failed creating a wxTable object.","Error...",wxOK | wxICON_EXCLAMATION);
+            wxMessageBox("Memory allocation failed creating a wxDbTable object.","Error...",wxOK | wxICON_EXCLAMATION);
             return;
         }
         if (!dbTable->Open())

@@ -30,7 +30,7 @@
      data table/object for building the list.
        
     The data table record access is all handled through the routines
-    in this module, interfacing with the methods defined in wxTable.
+    in this module, interfacing with the methods defined in wxDbTable.
 
      All objects which use data table access must be initialized and
      have opened the table prior to passing them in the dialog
@@ -64,7 +64,7 @@ extern wxDbList WXDLLEXPORT *PtrBegDbList;    /* from db.cpp, used in getting ba
 extern wxDbConnectInf DbConnectInf;
 
 // Global database connection
-extern wxDB *READONLY_DB;
+extern wxDb *READONLY_DB;
 
 
 // Used for passing the selected listbox selection back to the calling
@@ -139,7 +139,7 @@ char *GetExtendedDBErrorMsg2(char *ErrFile, int ErrLine)
 
 
 // Clookup constructor
-Clookup::Clookup(char *tblName, char *colName) : wxTable(READONLY_DB, tblName, 1, NULL, !QUERY_ONLY, DbConnectInf.defaultDir)
+Clookup::Clookup(char *tblName, char *colName) : wxDbTable(READONLY_DB, tblName, 1, NULL, !QUERY_ONLY, DbConnectInf.defaultDir)
 {
 
     SetColDefs (0, colName, DB_DATA_TYPE_VARCHAR, lookupCol, SQL_C_CHAR, LOOKUP_COL_LEN+1, FALSE, FALSE);
@@ -148,8 +148,8 @@ Clookup::Clookup(char *tblName, char *colName) : wxTable(READONLY_DB, tblName, 1
 
 
 // Clookup2 constructor
-Clookup2::Clookup2(char *tblName, char *colName1, char *colName2, wxDB *pDb)
-   : wxTable(pDb, tblName, (1 + (strlen(colName2) > 0)), NULL, !QUERY_ONLY, DbConnectInf.defaultDir)
+Clookup2::Clookup2(char *tblName, char *colName1, char *colName2, wxDb *pDb)
+   : wxDbTable(pDb, tblName, (1 + (strlen(colName2) > 0)), NULL, !QUERY_ONLY, DbConnectInf.defaultDir)
 {
     int i = 0;
 
@@ -264,7 +264,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, char *windowTitle, char *tableName, cha
 //
 ClookUpDlg::ClookUpDlg(wxWindow *parent, char *windowTitle, char *tableName,
     char *dispCol1, char *dispCol2, char *where, char *orderBy, bool distinctValues,
-    char *selectStmt, int maxLenCol1, wxDB *pDb, bool allowOk)  : wxDialog (parent, LOOKUP_DIALOG, "Select...", wxPoint(-1, -1), wxSize(400, 290))
+    char *selectStmt, int maxLenCol1, wxDb *pDb, bool allowOk)  : wxDialog (parent, LOOKUP_DIALOG, "Select...", wxPoint(-1, -1), wxSize(400, 290))
 {
     wxBeginBusyCursor();
     

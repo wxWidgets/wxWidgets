@@ -74,9 +74,9 @@ class CstructContact : public wxObject
 
 
 //
-// NOTE: Ccontact inherits wxTable, which gives access to all the database functionality
+// NOTE: Ccontact inherits wxDbTable, which gives access to all the database functionality
 //
-class Ccontact : public wxTable, public CstructContact
+class Ccontact : public wxDbTable, public CstructContact
 { 
     private:
         bool                 freeDbConn;
@@ -86,7 +86,7 @@ class Ccontact : public wxTable, public CstructContact
         wxString             whereStr;
         wxString             qryWhereStr;   // Where string returned from the query dialog
 
-        Ccontact(wxDB *pwxDB=NULL);
+        Ccontact(wxDb *pwxDb=NULL);
         ~Ccontact();
 
         void                 Initialize();
@@ -307,11 +307,11 @@ char * const langQRY_BETWEEN      = "column BETWEEN value AND value";
 class CqueryDlg : public wxDialog
 {
     private:
-        wxColInf    *colInf;        // Column inf. returned by db->GetColumns()
-        wxTable     *dbTable;
+        wxDbColInf  *colInf;        // Column inf. returned by db->GetColumns()
+        wxDbTable   *dbTable;
         char        *masterTableName;
         char        *pWhere;        // A pointer to the storage for the resulting where clause
-        wxDB        *pDB;
+        wxDb        *pDB;
 
     public:
         bool                     widgetPtrsSet;
@@ -345,7 +345,7 @@ class CqueryDlg : public wxDialog
 
         wxTextCtrl                 *pFocusTxt;
 
-        CqueryDlg(wxWindow *parent, wxDB *pDb, char *tblName[], char *pWhereArg);
+        CqueryDlg(wxWindow *parent, wxDb *pDb, char *tblName[], char *pWhereArg);
         ~CqueryDlg();
 
         void        OnButton( wxCommandEvent &event );
