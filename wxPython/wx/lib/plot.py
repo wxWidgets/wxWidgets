@@ -1136,7 +1136,7 @@ class PlotPrintout(wx.Printout):
             return False
 
     def GetPageInfo(self):
-        return (0, 1, 1, 1)  # disable page numbers
+        return (1, 1, 1, 1)  # disable page numbers
 
     def OnPrintPage(self, page):
         dc = FloatDCWrapper(self.GetDC())  # allows using floats for certain functions
