@@ -229,7 +229,6 @@ public:
     bool                 m_hasFocus:1;          // true if == FindFocus()
     bool                 m_isScrolling:1;       // dragging scrollbar thumb?
     bool                 m_clipPaintRegion:1;   // TRUE after ScrollWindow()
-    bool                 m_queuedFullRedraw:1;  // TRUE after DoMoveWindow
 
     // C++ has no virtual methods in the constrcutor of any class but we need
     // different methods of inserting a child window into a wxFrame,
