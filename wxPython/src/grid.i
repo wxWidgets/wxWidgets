@@ -1558,7 +1558,17 @@ public:
             long style = wxWANTS_CHARS,
             const wxString& name = wxPyPanelNameStr);
 
+    %name(PreGrid) wxGrid();
+    
+    
+    bool Create( wxWindow *parent,
+                 wxWindowID id,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = wxWANTS_CHARS,
+                 const wxString& name = wxPyPanelNameStr );
 
+    
     enum wxGridSelectionModes {
         wxGridSelectCells,
         wxGridSelectRows,
