@@ -13,6 +13,13 @@ wxMSW:
 OTHER CHANGES
 -------------
 
+2.2.8
+-----
+
+wxMSW:
+
+- fixed bug in wxFrame::SetClientSize() for the frames with toolbars
+
 2.2.7
 -----
 

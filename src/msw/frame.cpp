@@ -249,8 +249,8 @@ void wxFrame::DoSetClientSize(int width, int height)
 #endif // wxUSE_STATUSBAR
 
   wxPoint pt(GetClientAreaOrigin());
-  actual_width += pt.y;
-  actual_height += pt.x;
+  actual_width += pt.x;
+  actual_height += pt.y;
 
   POINT point;
   point.x = rect2.left;
