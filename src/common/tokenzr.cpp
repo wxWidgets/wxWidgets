@@ -66,7 +66,7 @@ int wxStringTokenizer::CountTokens() const
         if (pos != -1)
         {
             count++;
-            p_string = p_string(0, pos);
+            p_string = p_string(pos+1, p_string.Length());
         }
         else
         {
