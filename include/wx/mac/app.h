@@ -42,126 +42,133 @@ bool WXDLLEXPORT wxYield();
 // a new App object to start application
 class WXDLLEXPORT wxApp: public wxAppBase
 {
-  DECLARE_DYNAMIC_CLASS(wxApp)
-  wxApp();
-  virtual ~wxApp() {}
+    DECLARE_DYNAMIC_CLASS(wxApp)
+        
+    wxApp();
+    virtual ~wxApp() {}
 
-  virtual int MainLoop();
-  virtual void ExitMainLoop();
-  virtual bool Initialized();
-  virtual bool Pending() ;
-  virtual void Dispatch() ;
-  virtual bool Yield(bool onlyIfNeeded = FALSE);
-
-  virtual void SetPrintMode(int mode) { m_printMode = mode; }
-  virtual int GetPrintMode() const { return m_printMode; }
-
-  // implementation only
-  void OnIdle(wxIdleEvent& event);
-  void OnEndSession(wxCloseEvent& event);
-  void OnQueryEndSession(wxCloseEvent& event);
-
-  // Send idle event to all top-level windows.
-  // Returns TRUE if more idle time is requested.
-  bool SendIdleEvents();
-
-  // Send idle event to window and all subwindows
-  // Returns TRUE if more idle time is requested.
-  bool SendIdleEvents(wxWindowMac* win);
-
-  // Windows only, but for compatibility...
-  inline void SetAuto3D(bool flag) { m_auto3D = flag; }
-  inline bool GetAuto3D() const { return m_auto3D; }
-
+    virtual int MainLoop();
+    virtual void ExitMainLoop();
+    virtual bool Initialized();
+    virtual bool Pending() ;
+    virtual void Dispatch() ;
+    virtual bool Yield(bool onlyIfNeeded = FALSE);
+    
+    virtual void SetPrintMode(int mode) { m_printMode = mode; }
+    virtual int GetPrintMode() const { return m_printMode; }
+    
+    // implementation only
+    void OnIdle(wxIdleEvent& event);
+    void OnEndSession(wxCloseEvent& event);
+    void OnQueryEndSession(wxCloseEvent& event);
+    
+    // Send idle event to all top-level windows.
+    // Returns TRUE if more idle time is requested.
+    bool SendIdleEvents();
+    
+    // Send idle event to window and all subwindows
+    // Returns TRUE if more idle time is requested.
+    bool SendIdleEvents(wxWindowMac* win);
+    
+    // Windows only, but for compatibility...
+    inline void SetAuto3D(bool flag) { m_auto3D = flag; }
+    inline bool GetAuto3D() const { return m_auto3D; }
+    
 protected:
-  bool                  m_showOnInit;
-  int                   m_printMode; // wxPRINT_WINDOWS, wxPRINT_POSTSCRIPT
-  bool                  m_auto3D ;   // Always use 3D controls, except
-                                 // where overriden
+    bool                  m_showOnInit;
+    int                   m_printMode; // wxPRINT_WINDOWS, wxPRINT_POSTSCRIPT
+    bool                  m_auto3D ;   // Always use 3D controls, except
+                                       // where overriden
 public:
 
-  // Implementation
-  static bool Initialize();
-  static void CleanUp();
+    // Implementation
+    static bool Initialize();
+    static void CleanUp();
+    
+    void DeletePendingObjects();
+    bool ProcessIdle();
+    bool IsExiting() { return !m_keepGoing ; }
+    
+public:
+    static long           sm_lastMessageTime;
+    static wxWindow*      s_captureWindow ;
+    static int            s_lastMouseDown ; // 0 = none , 1 = left , 2 = right
+    static WXHRGN         s_macCursorRgn ;
+    WXEVENTREF            m_macCurrentEvent ;
+    
+    int                   m_nCmdShow;
+    
+protected:
+    bool                  m_keepGoing ;
 
-  void DeletePendingObjects();
-  bool ProcessIdle();
-  bool IsExiting() { return !m_keepGoing ; }
+    // mac specifics
 
 public:
-  static long           sm_lastMessageTime;
-  static wxWindow*			s_captureWindow ;
-  static int						s_lastMouseDown ; // 0 = none , 1 = left , 2 = right
-  static WXHRGN			s_macCursorRgn ;
-  WXEVENTREF					m_macCurrentEvent ;
+    static bool           s_macDefaultEncodingIsPC ;
+    static bool           s_macSupportPCMenuShortcuts ;
+    static long           s_macAboutMenuItemId ;
+    static wxString       s_macHelpMenuTitleName ;
+
+    static bool           s_macHasAppearance ;
+    static long           s_macAppearanceVersion ;
+    static bool           s_macHasNavigation ;
+    static bool           s_macNavigationVersion ;
+    static bool           s_macHasWindowManager ;
+    static long           s_macWindowManagerVersion ;
+    static bool           s_macHasMenuManager ;
+    static long           s_macMenuManagerVersion ;
+    static bool           s_macHasDialogManager ;
+    static long           s_macDialogManagerVersion ;
+
+    WXHRGN                m_macCursorRgn ;
+    WXHRGN                m_macSleepRgn ;
+    WXHRGN                m_macHelpRgn ;
+    
+    virtual void          MacSuspend( bool convertClipboard ) ;
+    virtual void          MacResume( bool convertClipboard ) ;
+
+    virtual void          MacConvertPrivateToPublicScrap() ;
+    virtual void          MacConvertPublicToPrivateScrap() ;
+
+    // event main methods
+
+    void                  MacDoOneEvent() ;
+    void                  MacHandleOneEvent( WXEVENTREF ev ) ;
+    WXEVENTREF            MacGetCurrentEvent() { return m_macCurrentEvent ; }
   
-  int                   m_nCmdShow;
-
-protected:
-  bool                  m_keepGoing ;
-
-// mac specifics
-
-public :
-	static bool						s_macDefaultEncodingIsPC ;
-	static bool						s_macSupportPCMenuShortcuts ;
-	static long						s_macAboutMenuItemId ;
-	static wxString				s_macHelpMenuTitleName ;
-
-  static bool						s_macHasAppearance ;
-  static long						s_macAppearanceVersion ;
-  static bool						s_macHasNavigation ;
-  static bool						s_macNavigationVersion ;
-  static bool						s_macHasWindowManager ;
-  static long						s_macWindowManagerVersion ;
-  static bool						s_macHasMenuManager ;
-  static long						s_macMenuManagerVersion ;
-  static bool						s_macHasDialogManager ;
-  static long						s_macDialogManagerVersion ;
-
-	WXHRGN							m_macCursorRgn ;
-	WXHRGN							m_macSleepRgn ;
-	WXHRGN							m_macHelpRgn ;
+    // primary events
 	
-  virtual void          MacSuspend( bool convertClipboard ) ;
-  virtual void          MacResume( bool convertClipboard ) ;
-
-	virtual void					MacConvertPrivateToPublicScrap() ;
-	virtual void					MacConvertPublicToPrivateScrap() ;
-
-	// event main methods
-
-	void									MacDoOneEvent() ;	
-	void									MacHandleOneEvent( WXEVENTREF ev ) ;
-	WXEVENTREF					MacGetCurrentEvent() { return m_macCurrentEvent ; }
-	// primary events
-	
-  virtual void          MacHandleMouseDownEvent( WXEVENTREF ev ) ;
-  virtual void          MacHandleMouseUpEvent( WXEVENTREF ev ) ;
- 	virtual void          MacHandleActivateEvent( WXEVENTREF ev ) ;
-  virtual void          MacHandleUpdateEvent( WXEVENTREF ev ) ;
-  virtual void          MacHandleKeyDownEvent( WXEVENTREF ev ) ;
-  virtual void          MacHandleKeyUpEvent( WXEVENTREF ev ) ;
-  virtual void          MacHandleDiskEvent( WXEVENTREF ev ) ;
-  virtual void          MacHandleOSEvent( WXEVENTREF ev ) ;
-  virtual void   				MacHandleHighLevelEvent( WXEVENTREF ev ) ;
- 	virtual void					MacHandleMenuSelect( int menuid , int menuitem ) ;
-
-	virtual short					MacHandleAEODoc(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
-	virtual short					MacHandleAEPDoc(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
-	virtual short					MacHandleAEOApp(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
-	virtual short					MacHandleAEQuit(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
-
-DECLARE_EVENT_TABLE()
+    virtual void          MacHandleMouseDownEvent( WXEVENTREF ev ) ;
+    virtual void          MacHandleMouseUpEvent( WXEVENTREF ev ) ;
+    virtual void          MacHandleActivateEvent( WXEVENTREF ev ) ;
+    virtual void          MacHandleUpdateEvent( WXEVENTREF ev ) ;
+    virtual void          MacHandleKeyDownEvent( WXEVENTREF ev ) ;
+    virtual void          MacHandleKeyUpEvent( WXEVENTREF ev ) ;
+    virtual void          MacHandleDiskEvent( WXEVENTREF ev ) ;
+    virtual void          MacHandleOSEvent( WXEVENTREF ev ) ;
+    virtual void          MacHandleHighLevelEvent( WXEVENTREF ev ) ;
+    virtual void          MacHandleMenuSelect( int menuid , int menuitem ) ;
+    
+    virtual short         MacHandleAEODoc(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
+    virtual short         MacHandleAEPDoc(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
+    virtual short         MacHandleAEOApp(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
+    virtual short         MacHandleAEQuit(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
+    
+    DECLARE_EVENT_TABLE()
 };
 
 class WXDLLEXPORT wxStAppResource
 {
-public :
+public:
     wxStAppResource() ;
     ~wxStAppResource() ;
-private :
-    short m_currentRefNum ;
+
+    // opaque pointer for CFragInitBlock
+    static void OpenSharedLibraryResource(const void *) ;
+    static void CloseSharedLibraryResource() ;
+    
+private:    
+    short       m_currentRefNum ;
 } ;
 
 // TODO: add platform-specific arguments

@@ -91,15 +91,15 @@ const short    kMacMinHeap = (29 * 1024) ;
 const short kwxMacMenuBarResource = 1 ;
 const short kwxMacAppleMenuId = 1 ;
 
-WXHRGN            wxApp::s_macCursorRgn = NULL;
-wxWindow*            wxApp::s_captureWindow = NULL ;
-int                    wxApp::s_lastMouseDown = 0 ;
-long                     wxApp::sm_lastMessageTime = 0;
+WXHRGN    wxApp::s_macCursorRgn = NULL;
+wxWindow* wxApp::s_captureWindow = NULL ;
+int       wxApp::s_lastMouseDown = 0 ;
+long      wxApp::sm_lastMessageTime = 0;
 
-bool    wxApp::s_macDefaultEncodingIsPC = true ;
-bool wxApp::s_macSupportPCMenuShortcuts = true ;
-long wxApp::s_macAboutMenuItemId = wxID_ABOUT ;
-wxString wxApp::s_macHelpMenuTitleName = "&Help" ;
+bool      wxApp::s_macDefaultEncodingIsPC = true ;
+bool      wxApp::s_macSupportPCMenuShortcuts = true ;
+long      wxApp::s_macAboutMenuItemId = wxID_ABOUT ;
+wxString  wxApp::s_macHelpMenuTitleName = "&Help" ;
 
 pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , long refcon ) ;
 pascal OSErr AEHandleOApp( const AppleEvent *event , AppleEvent *reply , long refcon ) ;
@@ -384,39 +384,52 @@ WXIMPORT char std::__throws_bad_alloc ;
 
 bool wxApp::Initialize()
 {
-  int error = 0 ;
+    int error = 0 ;
 
-  // Mac-specific
+    // Mac-specific
 
-  UMAInitToolbox( 4 ) ;
-  SetEventMask( everyEvent ) ;
+    UMAInitToolbox( 4 ) ;
+    SetEventMask( everyEvent ) ;
     UMAShowWatchCursor() ;
 
+#if defined(WXMAKINGDLL) && defined(__DARWIN__)
+    // open shared library resources from here since we don't have
+    //   __wxinitialize in Mach-O shared libraries
+    wxStAppResource::OpenSharedLibraryResource(NULL);
+#endif
+    
 #if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
-    AEInstallEventHandler( kCoreEventClass , kAEOpenDocuments ,   NewAEEventHandlerUPP(AEHandleODoc) ,
+    AEInstallEventHandler( kCoreEventClass , kAEOpenDocuments ,
+                           NewAEEventHandlerUPP(AEHandleODoc) ,
                            (long) wxTheApp , FALSE ) ;
-    AEInstallEventHandler( kCoreEventClass , kAEOpenApplication , NewAEEventHandlerUPP(AEHandleOApp) ,
+    AEInstallEventHandler( kCoreEventClass , kAEOpenApplication ,
+                           NewAEEventHandlerUPP(AEHandleOApp) ,
                            (long) wxTheApp , FALSE ) ;
-    AEInstallEventHandler( kCoreEventClass , kAEPrintDocuments ,  NewAEEventHandlerUPP(AEHandlePDoc) ,
+    AEInstallEventHandler( kCoreEventClass , kAEPrintDocuments ,
+                           NewAEEventHandlerUPP(AEHandlePDoc) ,
                            (long) wxTheApp , FALSE ) ;
-    AEInstallEventHandler( kCoreEventClass , kAEQuitApplication , NewAEEventHandlerUPP(AEHandleQuit) ,
+    AEInstallEventHandler( kCoreEventClass , kAEQuitApplication ,
+                           NewAEEventHandlerUPP(AEHandleQuit) ,
                            (long) wxTheApp , FALSE ) ;
 #else
-    AEInstallEventHandler( kCoreEventClass , kAEOpenDocuments ,   NewAEEventHandlerProc(AEHandleODoc) ,
-                   (long) wxTheApp , FALSE ) ;
-    AEInstallEventHandler( kCoreEventClass , kAEOpenApplication , NewAEEventHandlerProc(AEHandleOApp) ,
-                   (long) wxTheApp , FALSE ) ;
-    AEInstallEventHandler( kCoreEventClass , kAEPrintDocuments ,  NewAEEventHandlerProc(AEHandlePDoc) ,
-                   (long) wxTheApp , FALSE ) ;
-    AEInstallEventHandler( kCoreEventClass , kAEQuitApplication , NewAEEventHandlerProc(AEHandleQuit) ,
-                   (long) wxTheApp , FALSE ) ;
+    AEInstallEventHandler( kCoreEventClass , kAEOpenDocuments ,
+                           NewAEEventHandlerProc(AEHandleODoc) ,
+                           (long) wxTheApp , FALSE ) ;
+    AEInstallEventHandler( kCoreEventClass , kAEOpenApplication ,
+                           NewAEEventHandlerProc(AEHandleOApp) ,
+                           (long) wxTheApp , FALSE ) ;
+    AEInstallEventHandler( kCoreEventClass , kAEPrintDocuments ,
+                           NewAEEventHandlerProc(AEHandlePDoc) ,
+                           (long) wxTheApp , FALSE ) ;
+    AEInstallEventHandler( kCoreEventClass , kAEQuitApplication ,
+                           NewAEEventHandlerProc(AEHandleQuit) ,
+                           (long) wxTheApp , FALSE ) ;
 #endif
 
-
 #ifndef __DARWIN__
-  // test the minimal configuration necessary
+    // test the minimal configuration necessary
 
-    #if !TARGET_CARBON
+#  if !TARGET_CARBON
     long theSystem ;
     long theMachine;
 
@@ -440,7 +453,7 @@ bool wxApp::Initialize()
     {
         error = kMacSTRSmallSize;
     }
-    #endif
+#  endif
     /*
     else
     {
@@ -468,9 +481,9 @@ bool wxApp::Initialize()
   }
 
 #ifndef __DARWIN__
-  #if __option(profile)
+#  if __option(profile)
     ProfilerInit( collectDetailed, bestTimeBase , 20000 , 40 ) ;
-  #endif
+#  endif
 #endif
 
 #ifndef __DARWIN__
@@ -549,50 +562,51 @@ void wxApp::CleanUp()
     // One last chance for pending objects to be cleaned up
     wxTheApp->DeletePendingObjects();
 
-  wxModule::CleanUpModules();
+    wxModule::CleanUpModules();
 
 #if wxUSE_WX_RESOURCES
-  wxCleanUpResourceSystem();
+    wxCleanUpResourceSystem();
 #endif
 
-  wxDeleteStockObjects() ;
+    wxDeleteStockObjects() ;
 
     // Destroy all GDI lists, etc.
     wxDeleteStockLists();
 
-  delete wxTheColourDatabase;
-  wxTheColourDatabase = NULL;
+    delete wxTheColourDatabase;
+    wxTheColourDatabase = NULL;
 
-  wxBitmap::CleanUpHandlers();
+    wxBitmap::CleanUpHandlers();
 
-  delete[] wxBuffer;
-  wxBuffer = NULL;
+    delete[] wxBuffer;
+    wxBuffer = NULL;
 
-  wxMacDestroyNotifierTable() ;
-  if (wxWinMacWindowList)
-    delete wxWinMacWindowList ;
-
-  if (wxWinMacControlList)
-    delete wxWinMacControlList ;
-
+    wxMacDestroyNotifierTable() ;
+    if (wxWinMacWindowList) {
+        delete wxWinMacWindowList ;
+    }
+    if (wxWinMacControlList) {
+        delete wxWinMacControlList ;
+    }
     delete wxPendingEvents;
+    
 #if wxUSE_THREADS
     delete wxPendingEventsLocker;
     // If we don't do the following, we get an apparent memory leak.
     ((wxEvtHandler&) wxDefaultValidator).ClearEventLocker();
 #endif
 
-  wxClassInfo::CleanUpClasses();
+    wxClassInfo::CleanUpClasses();
 
 #ifndef __DARWIN__
-  #if __option(profile)
-  ProfilerDump( "\papp.prof" ) ;
-  ProfilerTerm() ;
-  #endif
+#  if __option(profile)
+    ProfilerDump( "\papp.prof" ) ;
+    ProfilerTerm() ;
+#  endif
 #endif
 
-  delete wxTheApp;
-  wxTheApp = NULL;
+    delete wxTheApp;
+    wxTheApp = NULL;
 
 #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
     // At this point we want to check if there are any memory
@@ -613,10 +627,17 @@ void wxApp::CleanUp()
     delete wxLog::SetActiveTarget(NULL);
 #endif // wxUSE_LOG
 
+#if defined(WXMAKINGDLL) && defined(__DARWIN__)
+    // close shared library resources from here since we don't have
+    //   __wxterminate in Mach-O shared libraries
+    wxStAppResource::CloseSharedLibraryResource();
+#endif
+    
     UMACleanupToolbox() ;
-    if (s_macCursorRgn)
+    if (s_macCursorRgn) {
         ::DisposeRgn((RgnHandle)s_macCursorRgn);
-
+    }
+    
     #if 0
         TerminateAE() ;
     #endif
@@ -626,26 +647,64 @@ void wxApp::CleanUp()
 // wxEntry
 //----------------------------------------------------------------------
 
-short gCurrentResource = -1 ;
+// extern variable for shared library resource id
+// need to be able to find it with NSLookupAndBindSymbol
+short gSharedLibraryResource = kResFileNotOpened ;
+
 #if defined(WXMAKINGDLL) && defined(__DARWIN__)
-CFBundleRef gDylibBundle = NULL;
+CFBundleRef gSharedLibraryBundle = NULL;
 #endif /* WXMAKINGDLL && __DARWIN__ */
 
 wxStAppResource::wxStAppResource()
 {
-#if defined(WXMAKINGDLL) && defined(__DARWIN__)
-    // Open the shared library resource file if it is not yet open
-    if (gCurrentResource == -1) {
+    m_currentRefNum = CurResFile() ;
+    if ( gSharedLibraryResource != kResFileNotOpened )
+    {
+        UseResFile( gSharedLibraryResource ) ;
+    }
+}
+
+wxStAppResource::~wxStAppResource()
+{
+    if ( m_currentRefNum != kResFileNotOpened )
+    {
+        UseResFile( m_currentRefNum ) ;
+    }
+}
+
+void wxStAppResource::OpenSharedLibraryResource(const void *initBlock)
+{
+    gSharedLibraryResource = kResFileNotOpened;
+
+#ifdef WXMAKINGDLL
+    if ( initBlock != NULL ) {
+        const CFragInitBlock *theInitBlock = (const CFragInitBlock *)initBlock;
+        FSSpec *fileSpec = NULL;
+        
+        if (theInitBlock->fragLocator.where == kDataForkCFragLocator) {
+            fileSpec = theInitBlock->fragLocator.u.onDisk.fileSpec;
+        }
+        else if (theInitBlock->fragLocator.where == kResourceCFragLocator) {
+            fileSpec = theInitBlock->fragLocator.u.inSegs.fileSpec;
+        }
+        
+        if (fileSpec != NULL) {
+            gSharedLibraryResource =  FSpOpenResFile(fileSpec, fsRdPerm);
+        }
+    }
+    else {
+#ifdef __DARWIN__
+        // Open the shared library resource file if it is not yet open
         NSSymbol    theSymbol;
         NSModule    theModule;
         const char *theLibPath;
         
-        gDylibBundle = CFBundleGetBundleWithIdentifier(CFSTR("com.wxwindows.wxWindows"));
-        if (gDylibBundle != NULL) {
+        gSharedLibraryBundle = CFBundleGetBundleWithIdentifier(CFSTR("com.wxwindows.wxWindows"));
+        if (gSharedLibraryBundle != NULL) {
             // wxWindows has been bundled into a framework
             //   load the framework resources
             
-            gCurrentResource = CFBundleOpenBundleResourceMap(gDylibBundle);
+            gSharedLibraryResource = CFBundleOpenBundleResourceMap(gSharedLibraryBundle);
         }
         else {
             // wxWindows is a simple dynamic shared library
@@ -657,11 +716,9 @@ wxStAppResource::wxStAppResource()
             OSErr  theErr = noErr;
             
             // get the library path
-            theSymbol = NSLookupAndBindSymbol("_gCurrentResource");
+            theSymbol = NSLookupAndBindSymbol("_gSharedLibraryResource");
             theModule = NSModuleForSymbol(theSymbol);
             theLibPath = NSLibraryNameForModule(theModule);
-            
-            wxLogDebug( theLibPath );
 
             // allocate copy to replace .dylib.* extension with .rsrc
             theResPath = strdup(theLibPath);
@@ -690,54 +747,34 @@ wxStAppResource::wxStAppResource()
                 // open the resource file
                 if (theErr == noErr) {
                     theErr = FSOpenResourceFile( &theResRef, 0, NULL, fsRdPerm,
-                                                 &gCurrentResource);
+                                                 &gSharedLibraryResource);
                 }
             }
         }
-        
-        /*
-          char *path;
-          int i, len;
-          
-          if( i++ > 0 ) {
-          len = i + strlen(rPath);
-          path = (char*) malloc(len+1);
-          }
-          else {
-          // try current directory
-          myerr = FSPathMakeRef((UInt8 *) rPath, &myref, false);
-          }
-        */
+#endif /* __DARWIN__ */
     }
-#endif /* WXMAKINGDLL && __DARWIN__ */
-    
-    m_currentRefNum = CurResFile() ;
-    if ( gCurrentResource != -1 )
-    {
-        UseResFile( gCurrentResource ) ;
-    }
+#endif /* WXMAKINGDLL */
 }
 
-wxStAppResource::~wxStAppResource()
+void wxStAppResource::CloseSharedLibraryResource()
 {
-    if ( m_currentRefNum != -1 )
-    {
-        UseResFile( m_currentRefNum ) ;
-    }
-    
-#if defined(WXMAKINGDLL) && defined(__DARWIN__)
+#ifdef WXMAKINGDLL
     // Close the shared library resource file
-    if (gCurrentResource != -1) {
-        if (gDylibBundle != NULL) {
-            CFBundleCloseBundleResourceMap(gDylibBundle, gCurrentResource);
-            gDylibBundle = NULL;
+    if (gSharedLibraryResource != kResFileNotOpened) {
+#ifdef __DARWIN__
+        if (gSharedLibraryBundle != NULL) {
+            CFBundleCloseBundleResourceMap(gSharedLibraryBundle,
+                                           gSharedLibraryResource);
+            gSharedLibraryBundle = NULL;
         }
-        else {
-            CloseResFile(gCurrentResource);
+        else
+#endif /* __DARWIN__ */
+        {
+            CloseResFile(gSharedLibraryResource);
         }
-        gCurrentResource = -1;
-    }
-#endif /* WXMAKINGDLL && __DARWIN__ */
+        gSharedLibraryResource = kResFileNotOpened;
+    }    
+#endif /* WXMAKINGDLL */
 }
 
 #if defined(WXMAKINGDLL) && !defined(__DARWIN__)
@@ -746,34 +783,21 @@ wxStAppResource::~wxStAppResource()
 // ref num upon initializing and releasing when terminating, therefore
 // the __wxinitialize and __wxterminate must be used
 
-#ifdef __cplusplus
 extern "C" {
-#endif
-
-void __sinit(void);	/*	(generated by linker)	*/
-pascal OSErr __initialize(const CFragInitBlock *theInitBlock);
-pascal void __terminate(void);
-
-#ifdef __cplusplus
+    void __sinit(void);	/*	(generated by linker)	*/
+    pascal OSErr __initialize(const CFragInitBlock *theInitBlock);
+    pascal void __terminate(void);
 }
-#endif
 
 pascal OSErr __wxinitialize(const CFragInitBlock *theInitBlock)
 {
-   gCurrentResource = -1;
-   
-   if (theInitBlock->fragLocator.where == kDataForkCFragLocator) {
-      gCurrentResource = 
-         FSpOpenResFile(theInitBlock->fragLocator.u.onDisk.fileSpec, 
-                              fsRdPerm);
-   }
-   return __initialize( theInitBlock ) ;
+    wxStAppResource::OpenSharedLibraryResource( theInitBlock ) ;
+    return __initialize( theInitBlock ) ;
 }
 
 pascal void __wxterminate(void)
 {
-    if (gCurrentResource != -1)
-      CloseResFile(gCurrentResource);
+    wxStAppResource::CloseSharedLibraryResource() ;
     __terminate() ;
 }
 
@@ -796,10 +820,6 @@ void WXDLLEXPORT wxEntryCleanup()
 
 int wxEntry( int argc, char *argv[] , bool enterLoop )
 {
-#if !(defined(WXMAKINGDLL) && defined(__DARWIN__))
-    gCurrentResource = CurResFile() ;
-#endif
-    
 #ifdef __MWERKS__
 #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
     // This seems to be necessary since there are 'rogue'
