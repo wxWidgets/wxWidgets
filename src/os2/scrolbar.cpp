@@ -35,14 +35,22 @@ END_EVENT_TABLE()
 bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos,
            const wxSize& size, long style,
+#if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+           const wxValidator* validator,
+#  else
            const wxValidator& validator,
+#  endif
+#endif
            const wxString& name)
 {
     if (!parent)
         return FALSE;
     parent->AddChild(this);
     SetName(name);
+#if wxUSE_VALIDATORS
     SetValidator(validator);
+#endif
 
     SetBackgroundColour(parent->GetBackgroundColour()) ;
     SetForegroundColour(parent->GetForegroundColour()) ;

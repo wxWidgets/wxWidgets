@@ -36,7 +36,7 @@
 // treated as a static global class by VA and thus cannot use in this form.
 // Defined as a pointer and then explicity allocated and deallocated
 // by user if desired
-const wxValidator* wxDefaultValidator;
+const wxValidator* wxDefaultValidator = NULL;
 #else
 const wxValidator wxDefaultValidator;
 #endif

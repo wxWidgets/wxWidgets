@@ -57,7 +57,13 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos,
            const wxSize& size,
            long style,
+#if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+           const wxValidator* validator,
+#  else
            const wxValidator& validator,
+#  endif
+#endif
            const wxString& name)
 {
     static bool wxGaugeOS2Initialised = FALSE;
@@ -73,7 +79,9 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
     }
 
     SetName(name);
+#if wxUSE_VALIDATORS
     SetValidator(validator);
+#endif
     if (parent) parent->AddChild(this);
     m_rangeMax = range;
     m_gaugePos = 0;

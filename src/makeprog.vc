@@ -11,13 +11,13 @@
 # info
 
 # Set WXDIR for your system
-WXDIR = $(WXWIN)
+WXDIR = j:\dev\wx2\wxWindows
 
 WXUSINGDLL=0
 
 !include $(WXDIR)\src\makevc.env
 
-all:    $(PROGRAM).exe $(EXTRATARGETS)
+all:    $(PROGRAM).exe
 
 wx:
         cd $(WXDIR)\src\msw
@@ -29,16 +29,13 @@ wxclean:
         nmake -f makefile.vc clean
 #        cd $(THISDIR)
 
-$(PROGRAM).exe:      $(DUMMYOBJ) $(WXLIB) $(OBJECTS) $(PROGRAM).res
+$(PROGRAM).exe:      $(DUMMYOBJ) $(WXLIB) $(OBJECTS) 
 	$(link) @<<
 -out:$(PROGRAM).exe
 $(LINKFLAGS)
-$(DUMMYOBJ) $(OBJECTS) $(PROGRAM).res
+$(DUMMYOBJ) $(OBJECTS)
 $(LIBS)
 <<
-
-$(PROGRAM).res :      $(PROGRAM).rc $(WXDIR)\include\wx\msw\wx.rc
-    $(rc) -r /i$(WXDIR)\include -fo$@ $(PROGRAM).rc
 
 clean:
         -erase $(OBJECTS)

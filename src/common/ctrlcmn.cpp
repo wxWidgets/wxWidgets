@@ -42,7 +42,13 @@ bool wxControlBase::CreateControl(wxWindowBase *parent,
                                   const wxPoint& pos,
                                   const wxSize& size,
                                   long style,
+#if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+                                  const wxValidator* validator,
+#  else
                                   const wxValidator& validator,
+#  endif
+#endif
                                   const wxString& name)
 {
     // even if it's possible to create controls without parents in some port,

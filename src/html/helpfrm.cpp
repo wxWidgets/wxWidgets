@@ -142,6 +142,14 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
 
     wxFrame::Create(parent, id, _("Help"), wxPoint(m_Cfg.x, m_Cfg.y), wxSize(m_Cfg.w, m_Cfg.h));
 
+#if defined(__WXMSW__) || (__WXPM__)
+    wxIcon frameIcon("wxhelp", wxBITMAP_TYPE_ICO_RESOURCE, 32, 32);
+#else
+    wxIcon frameIcon(help_xpm);
+#endif
+    if (frameIcon.Ok())
+        SetIcon(frameIcon);
+
     GetPosition(&m_Cfg.x, &m_Cfg.y);
 
     SetIcon(wxICON(help));
@@ -157,7 +165,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
         toolBar -> SetMargins(2, 2);
         wxBitmap* toolBarBitmaps[3];
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || (__WXPM__)
         toolBarBitmaps[0] = new wxBitmap("panel");
         toolBarBitmaps[1] = new wxBitmap("back");
         toolBarBitmaps[2] = new wxBitmap("forward");
@@ -614,7 +622,7 @@ void wxHtmlHelpFrame::OnContentsSel(wxTreeEvent& event)
 
 void wxHtmlHelpFrame::OnIndexSel(wxCommandEvent& WXUNUSED(event))
 {
-    wxHtmlContentsItem *it = (wxHtmlContentsItem*) m_IndexBox -> GetClientData(m_IndexBox -> GetSelection());    
+    wxHtmlContentsItem *it = (wxHtmlContentsItem*) m_IndexBox -> GetClientData(m_IndexBox -> GetSelection());
     m_HtmlWin -> LoadPage(it -> m_Book -> GetBasePath() + it -> m_Page);
 }
 

@@ -100,8 +100,7 @@ wxMutex::~wxMutex()
     if (m_locked > 0)
         wxLogDebug(wxT("Warning: freeing a locked mutex (%d locks)."), m_locked);
     ::DosCloseMutexSem(p_internal->m_vMutex);
-    delete p_internal;
-    p_internal = NULL;
+    p_internal->m_vMutex = NULL;
 }
 
 wxMutexError wxMutex::Lock()
@@ -243,6 +242,34 @@ void wxCondition::Broadcast()
 // ----------------------------------------------------------------------------
 // wxCriticalSection implementation
 // ----------------------------------------------------------------------------
+
+class wxCriticalSectionInternal
+{
+public:
+    // init the critical section object
+    wxCriticalSectionInternal()
+        { }
+
+    // free the associated ressources
+    ~wxCriticalSectionInternal()
+        { }
+
+private:
+};
+
+// ----------------------------------------------------------------------------
+// wxCriticalSection implementation
+// ----------------------------------------------------------------------------
+
+wxCriticalSection::wxCriticalSection()
+{
+    m_critsect = new wxCriticalSectionInternal;
+}
+
+wxCriticalSection::~wxCriticalSection()
+{
+    delete m_critsect;
+}
 
 void wxCriticalSection::Enter()
 {

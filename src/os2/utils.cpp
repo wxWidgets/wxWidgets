@@ -195,10 +195,9 @@ bool wxShell(
 }
 
 // Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)
-long wxGetFreeMemory(
-  void*                             pMemptr
-)
+long wxGetFreeMemory()
 {
+    void*                           pMemptr;
     ULONG                           lSize;
     ULONG                           lMemFlags;
     APIRET                          rc;
@@ -309,14 +308,17 @@ int wxGetOsVersion(
 )
 {
     ULONG                           ulSysInfo[QSV_MAX] = {0};
+    APIRET                          ulrc;
 
-    if (::DosQuerySysInfo( 1L
-                          ,QSV_MAX
-                          ,(PVOID)ulSysInfo
-                          ,sizeof(ULONG) * QSV_MAX
-                         ))
+    ulrc = ::DosQuerySysInfo( 1L
+                             ,QSV_MAX
+                             ,(PVOID)ulSysInfo
+                             ,sizeof(ULONG) * QSV_MAX
+                            );
+    if (ulrc == 0L)
     {
         *pMajorVsn = ulSysInfo[QSV_VERSION_MAJOR];
+        *pMajorVsn = *pMajorVsn/10;
         *pMinorVsn = ulSysInfo[QSV_VERSION_MINOR];
         return wxWINDOWS_OS2;
     }
@@ -427,10 +429,10 @@ bool wxGetResource(
                                               ,(PSZ)WXSTRINGCAST rSection
                                               ,(PSZ)WXSTRINGCAST rEntry
                                               ,(PSZ)zDefunkt
-                                              ,(void*)wxBuffer
+                                              ,(void*)*ppValue
                                               ,1000
                                              );
-            if (n == 0L || wxStrcmp(wxBuffer, zDefunkt) == 0)
+            if (n != 0L || wxStrcmp(*ppValue, zDefunkt) == 0)
                 return FALSE;
         }
         else
@@ -442,15 +444,12 @@ bool wxGetResource(
                                           ,(PSZ)WXSTRINGCAST rSection
                                           ,(PSZ)WXSTRINGCAST rEntry
                                           ,(PSZ)zDefunkt
-                                          ,(void*)wxBuffer
+                                          ,(void*)*ppValue
                                           ,1000
                                          );
-        if (n == 0L || wxStrcmp(wxBuffer, zDefunkt) == 0)
+        if (n != 0L || wxStrcmp(*ppValue, zDefunkt) == 0)
             return FALSE;
     }
-    if (*ppValue)
-        delete[] (*ppValue);
-    *ppValue = copystring(wxBuffer);
     return TRUE;
 }
 

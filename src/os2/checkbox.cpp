@@ -49,11 +49,19 @@ bool wxCheckBox::OS2Command(WXUINT WXUNUSED(param), WXWORD WXUNUSED(id))
 bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
            const wxPoint& pos,
            const wxSize& size, long style,
+#if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+           const wxValidator* validator,
+#  else
            const wxValidator& validator,
+#  endif
+#endif
            const wxString& name)
 {
     SetName(name);
+#if wxUSE_VALIDATORS
     SetValidator(validator);
+#endif
     if (parent) parent->AddChild(this);
 
     SetBackgroundColour(parent->GetBackgroundColour()) ;
@@ -176,11 +184,19 @@ void wxCheckBox::Command (wxCommandEvent & event)
 bool wxBitmapCheckBox::Create(wxWindow *parent, wxWindowID id, const wxBitmap *label,
            const wxPoint& pos,
            const wxSize& size, long style,
+#if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+           const wxValidator* validator,
+#  else
            const wxValidator& validator,
+#  endif
+#endif
            const wxString& name)
 {
     SetName(name);
+#if wxUSE_VALIDATORS
     SetValidator(validator);
+#endif
     if (parent) parent->AddChild(this);
 
     SetBackgroundColour(parent->GetBackgroundColour()) ;

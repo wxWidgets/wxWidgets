@@ -80,7 +80,13 @@ bool wxListBox::Create(wxWindow *parent,
                        const wxSize& size,
                        int n, const wxString choices[],
                        long style,
+#if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+                       const wxValidator* validator,
+#  else
                        const wxValidator& validator,
+#  endif
+#endif
                        const wxString& name)
 {
     m_noItems = 0;
@@ -88,7 +94,9 @@ bool wxListBox::Create(wxWindow *parent,
     m_selected = 0;
 
     SetName(name);
+#if wxUSE_VALIDATORS
     SetValidator(validator);
+#endif
 
     if (parent)
         parent->AddChild(this);

@@ -154,7 +154,13 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
                               const wxPoint& WXUNUSED(pos),
                               const wxSize& WXUNUSED(size),
                               long style,
+#if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+                              const wxValidator* validator,
+#  else
                               const wxValidator& validator,
+#  endif
+#endif
                               const wxString& name)
 {
     // m_isWindow is set to TRUE in wxWindowBase::Init() as well as many other
@@ -589,6 +595,18 @@ void wxWindowBase::SetCaret(wxCaret *caret)
 // validators
 // ----------------------------------------------------------------------------
 
+#  if defined(__VISAGECPP__)
+void wxWindowBase::SetValidator(const wxValidator* validator)
+{
+    if ( m_windowValidator )
+        delete m_windowValidator;
+
+    m_windowValidator = (wxValidator *)validator->Clone();
+
+    if ( m_windowValidator )
+        m_windowValidator->SetWindow(this) ;
+}
+#  else
 void wxWindowBase::SetValidator(const wxValidator& validator)
 {
     if ( m_windowValidator )
@@ -599,6 +617,7 @@ void wxWindowBase::SetValidator(const wxValidator& validator)
     if ( m_windowValidator )
         m_windowValidator->SetWindow(this) ;
 }
+#  endif // __VISAGECPP__
 #endif // wxUSE_VALIDATORS
 
 // ----------------------------------------------------------------------------
@@ -895,14 +914,14 @@ bool wxWindowBase::Layout()
 {
     int w, h;
     GetClientSize(&w, &h);
-    
+
     // If there is a sizer, use it instead of the constraints
     if ( GetSizer() )
     {
         GetSizer()->SetDimension( 0, 0, w, h );
         return TRUE;
     }
-    
+
     if ( GetConstraints() )
     {
         GetConstraints()->width.SetValue(w);
@@ -914,7 +933,7 @@ bool wxWindowBase::Layout()
     DoPhase(1);           // Just one phase need if no sizers involved
     DoPhase(2);
     SetConstraintSizes(); // Recursively set the real window sizes
-    
+
     return TRUE;
 }
 
