@@ -67,7 +67,7 @@ wxFSFile* MyVFS::OpenFile(wxFileSystem& fs, const wxString& location)
     // WARNING: wxMemoryInputStream will not free buf.
     // There is a memory leak here.
     str = new wxMemoryInputStream(buf, strlen(buf));
-    f = new wxFSFile(str, location, "text/html", wxEmptyString);
+    f = new wxFSFile(str, location, "text/html", wxEmptyString, wxDateTime::Today());
     return f;
 }
 
