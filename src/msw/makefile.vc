@@ -98,7 +98,7 @@ GENERICOBJS= ..\generic\$D\busyinfo.obj \
 		..\generic\$D\logg.obj \
 		..\generic\$D\numdlgg.obj \
 		..\generic\$D\panelg.obj \
-		..\generic\$D\plot.obj \
+#		..\generic\$D\plot.obj \
 		..\generic\$D\progdlgg.obj \
 		..\generic\$D\prop.obj \
 		..\generic\$D\propform.obj \
