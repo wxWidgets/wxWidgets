@@ -49,6 +49,17 @@ public:
 
     virtual void SetTitle(const wxString& title);
 
+    // deprecated functions
+#if wxUSE_MENU_CALLBACK
+    wxMenu(const wxString& title, const wxFunction func)
+        : wxMenuBase(title)
+    {
+        Init();
+
+        Callback(func);
+    }
+#endif // wxUSE_MENU_CALLBACK
+
     // implementation only from now on
     // -------------------------------
 
@@ -158,7 +169,7 @@ public:
     void Refresh();
 
     // To avoid compile warning
-    void Refresh( bool eraseBackground = TRUE,
+    void Refresh( bool eraseBackground,
                           const wxRect *rect = (const wxRect *) NULL ) { wxWindow::Refresh(eraseBackground, rect); }
 
 protected:
