@@ -214,6 +214,7 @@
 %rename(LogStatus)                          wxLogStatus;
 %rename(LogSysError)                        wxLogSysError;
 %rename(LogTrace)                           wxLogTrace;
+%rename(LogTrace)                           wxLogTrace;
 %rename(LogGeneric)                         wxLogGeneric;
 %rename(SafeShowMessage)                    wxSafeShowMessage;
 %rename(LogNull)                            wxLogNull;

@@ -218,8 +218,9 @@ void wxLogStatus(const wxString& msg);
 %name(LogStatusFrame)void wxLogStatus(wxFrame *pFrame, const wxString& msg);
 void wxLogSysError(const wxString& msg);
 
-void wxLogTrace(const wxString& msg);
-%name(LogTraceMask)void wxLogTrace(const wxString& mask, const wxString& msg);
+%nokwargs wxLogTrace;
+void wxLogTrace(unsigned long mask, const wxString& msg);
+void wxLogTrace(const wxString& mask, const wxString& msg);
 
 void wxLogGeneric(unsigned long level, const wxString& msg);
 
