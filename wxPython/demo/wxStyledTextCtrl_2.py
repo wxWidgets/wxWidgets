@@ -12,7 +12,7 @@ demoText = """\
 
 
 """
-
+wxSTC_CMD_ZOOMIN
 #----------------------------------------------------------------------
 
 
@@ -265,8 +265,19 @@ class PythonSTC(wxStyledTextCtrl):
 
 #----------------------------------------------------------------------
 
+_USE_PANEL = 1
+
 def runTest(frame, nb, log):
-    ed = PythonSTC(nb, -1)
+    if not _USE_PANEL:
+        ed = p = PythonSTC(nb, -1)
+    else:
+        p = wxPanel(nb, -1)
+        ed = PythonSTC(p, -1)
+        s = wxBoxSizer(wxHORIZONTAL)
+        s.Add(ed, 1, wxEXPAND)
+        p.SetSizer(s)
+        p.SetAutoLayout(true)
+
 
     ed.SetText(demoText + open('Main.py').read())
     ed.EmptyUndoBuffer()
@@ -276,7 +287,7 @@ def runTest(frame, nb, log):
     ed.SetMarginType(1, wxSTC_MARGIN_NUMBER)
     ed.SetMarginWidth(1, 25)
 
-    return ed
+    return p
 
 
 

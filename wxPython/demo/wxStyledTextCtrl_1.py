@@ -96,8 +96,19 @@ class MySTC(wxStyledTextCtrl):
 
 #----------------------------------------------------------------------
 
+_USE_PANEL = 1
+
 def runTest(frame, nb, log):
-    ed = MySTC(nb, -1, log)
+    if not _USE_PANEL:
+        ed = p = MySTC(nb, -1, log)
+
+    else:
+        p = wxPanel(nb, -1)
+        ed = MySTC(p, -1, log)
+        s = wxBoxSizer(wxHORIZONTAL)
+        s.Add(ed, 1, wxEXPAND)
+        p.SetSizer(s)
+        p.SetAutoLayout(true)
 
     ed.SetText(demoText)
     ed.EmptyUndoBuffer()
@@ -158,7 +169,7 @@ def runTest(frame, nb, log):
     ed.SetStyling(10, wxSTC_INDIC2_MASK | wxSTC_INDIC1_MASK)
 
 
-    return ed
+    return p
 
 
 
