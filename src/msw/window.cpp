@@ -1905,8 +1905,8 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                                 return true;
                             }
                             else // no default button
-                            {
 #endif // wxUSE_BUTTON
+                            {
                                 // this is a quick and dirty test for a text
                                 // control
                                 if ( !(lDlgCode & DLGC_HASSETSEL) )
@@ -2346,9 +2346,11 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
 #ifndef __WXWINCE__
         case WM_PRINT:
             {
+#if wxUSE_LISTCTRL
                 // Don't call the wx handlers in this case
                 if ( wxIsKindOf(this, wxListCtrl) )
                     break;
+#endif
 
                 if ( lParam & PRF_ERASEBKGND )
                     HandleEraseBkgnd((WXHDC)(HDC)wParam);
@@ -5794,6 +5796,8 @@ bool wxWindowMSW::UnregisterHotKey(int hotkeyId)
     return true;
 }
 
+#if wxUSE_ACCEL
+
 bool wxWindowMSW::HandleHotKey(WXWPARAM wParam, WXLPARAM lParam)
 {
     int hotkeyId = wParam;
@@ -5809,6 +5813,8 @@ bool wxWindowMSW::HandleHotKey(WXWPARAM wParam, WXLPARAM lParam)
 
     return GetEventHandler()->ProcessEvent(event);
 }
+
+#endif // wxUSE_ACCEL
 
 #endif // wxUSE_HOTKEY
 

@@ -4543,7 +4543,9 @@ private:
    
     wxWin32FrameInputHandler *m_inputHnd;
     wxTopLevelWindow         *m_wnd;
+#if wxUSE_ACCEL
     wxAcceleratorTable        m_oldAccelTable;
+#endif
 };
 
 wxWin32SystemMenuEvtHandler::wxWin32SystemMenuEvtHandler(
@@ -4560,6 +4562,7 @@ void wxWin32SystemMenuEvtHandler::Attach(wxInputConsumer *consumer)
     m_wnd = wxStaticCast(consumer->GetInputWindow(), wxTopLevelWindow);
     m_wnd->PushEventHandler(this);
     
+#if wxUSE_ACCEL
     // VS: This code relies on using generic implementation of 
     //     wxAcceleratorTable in wxUniv!
     wxAcceleratorTable table = *m_wnd->GetAcceleratorTable();
@@ -4567,13 +4570,16 @@ void wxWin32SystemMenuEvtHandler::Attach(wxInputConsumer *consumer)
     table.Add(wxAcceleratorEntry(wxACCEL_ALT, WXK_SPACE, wxID_SYSTEM_MENU));
     table.Add(wxAcceleratorEntry(wxACCEL_ALT, WXK_F4, wxID_CLOSE_FRAME));
     m_wnd->SetAcceleratorTable(table);
+#endif
 }
 
 void wxWin32SystemMenuEvtHandler::Detach()
 {
     if ( m_wnd )
     {
+#if wxUSE_ACCEL
         m_wnd->SetAcceleratorTable(m_oldAccelTable);
+#endif
         m_wnd->RemoveEventHandler(this); 
         m_wnd = NULL;
     }
@@ -4595,10 +4601,16 @@ void wxWin32SystemMenuEvtHandler::OnSystemMenu(wxCommandEvent &WXUNUSED(event))
     pt.x = -pt.x + border;
     pt.y = -pt.y + border + FRAME_TITLEBAR_HEIGHT;
 
+#if wxUSE_ACCEL
     wxAcceleratorTable table = *m_wnd->GetAcceleratorTable();
     m_wnd->SetAcceleratorTable(wxNullAcceleratorTable);
+#endif
+
     m_inputHnd->PopupSystemMenu(m_wnd, pt);
+
+#if wxUSE_ACCEL
     m_wnd->SetAcceleratorTable(table);
+#endif
 }
 
 void wxWin32SystemMenuEvtHandler::OnCloseFrame(wxCommandEvent &WXUNUSED(event))

@@ -19,6 +19,24 @@
 #include "wx/defs.h"
 
 // ----------------------------------------------------------------------------
+// common constants for use in wxUSE_LOG/!wxUSE_LOG
+// ----------------------------------------------------------------------------
+
+// the trace masks have been superceded by symbolic trace constants, they're
+// for compatibility only andwill be removed soon - do NOT use them
+
+// meaning of different bits of the trace mask (which allows selectively
+// enable/disable some trace messages)
+#define wxTraceMemAlloc 0x0001  // trace memory allocation (new/delete)
+#define wxTraceMessages 0x0002  // trace window messages/X callbacks
+#define wxTraceResAlloc 0x0004  // trace GDI resource allocation
+#define wxTraceRefCount 0x0008  // trace various ref counting operations
+
+#ifdef  __WXMSW__
+    #define wxTraceOleCalls 0x0100  // OLE interface calls
+#endif
+
+// ----------------------------------------------------------------------------
 // types
 // ----------------------------------------------------------------------------
 
@@ -91,20 +109,6 @@ enum
 
 #ifdef  __WXMSW__
     #define wxTRACE_OleCalls wxT("ole")  // OLE interface calls
-#endif
-
-// the trace masks have been superceded by symbolic trace constants, they're
-// for compatibility only andwill be removed soon - do NOT use them
-
-// meaning of different bits of the trace mask (which allows selectively
-// enable/disable some trace messages)
-#define wxTraceMemAlloc 0x0001  // trace memory allocation (new/delete)
-#define wxTraceMessages 0x0002  // trace window messages/X callbacks
-#define wxTraceResAlloc 0x0004  // trace GDI resource allocation
-#define wxTraceRefCount 0x0008  // trace various ref counting operations
-
-#ifdef  __WXMSW__
-    #define wxTraceOleCalls 0x0100  // OLE interface calls
 #endif
 
 #include "wx/iosfwrap.h"
@@ -444,9 +448,6 @@ extern void expdecl wxVLog##level(arg, const wxChar *szFormat,              \
                                       va_list argptr);                      \
 extern void expdecl wxLog##level(arg, const wxChar *szFormat,               \
                                      ...) ATTRIBUTE_PRINTF_2
-#define DECLARE_LOG_FUNCTION2(level, arg)                                   \
-    DECLARE_LOG_FUNCTION2_EXP(level, arg, WXDLLIMPEXP_BASE)
-
 #else // !wxUSE_LOG
 
 // log functions do nothing at all
@@ -454,7 +455,7 @@ extern void expdecl wxLog##level(arg, const wxChar *szFormat,               \
 inline void wxVLog##level(const wxChar *szFormat,                           \
                                      va_list argptr) { }                    \
 inline void wxLog##level(const wxChar *szFormat, ...) { }
-#define DECLARE_LOG_FUNCTION2(level, arg)                                   \
+#define DECLARE_LOG_FUNCTION2_EXP(level, arg, expdecl)                      \
 inline void wxVLog##level(arg, const wxChar *szFormat,                      \
                                      va_list argptr) {}                     \
 inline void wxLog##level(arg, const wxChar *szFormat, ...) { }
@@ -474,6 +475,9 @@ public:
 #define wxTRACE_OleCalls wxEmptyString // OLE interface calls
 
 #endif // wxUSE_LOG/!wxUSE_LOG
+#define DECLARE_LOG_FUNCTION2(level, arg)                                   \
+    DECLARE_LOG_FUNCTION2_EXP(level, arg, WXDLLIMPEXP_BASE)
+
 
 // a generic function for all levels (level is passes as parameter)
 DECLARE_LOG_FUNCTION2(Generic, wxLogLevel level);
@@ -492,6 +496,7 @@ DECLARE_LOG_FUNCTION(Status);
 
 #if wxUSE_GUI
     // this one is the same as previous except that it allows to explicitly
+    class wxFrame;
     // specify the frame to which the output should go
     DECLARE_LOG_FUNCTION2_EXP(Status, wxFrame *pFrame, WXDLLIMPEXP_CORE);
 #endif // wxUSE_GUI

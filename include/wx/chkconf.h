@@ -946,6 +946,17 @@
 #    endif
 #endif /* controls */
 
+#if wxUSE_BMPBUTTON
+#    if !wxUSE_BUTTON
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_BMPBUTTON requires wxUSE_BUTTON"
+#        else
+#            undef wxUSE_BUTTON
+#            define wxUSE_BUTTON 1
+#        endif
+#    endif
+#endif /* wxUSE_BMPBUTTON */
+
 #if wxUSE_NOTEBOOK || wxUSE_LISTBOOK
 #   if defined(wxUSE_BOOKCTRL) && !wxUSE_BOOKCTRL
 #       ifdef wxABORT_ON_CONFIG_ERROR
@@ -1201,6 +1212,17 @@
 #   endif
 #endif /* wxUSE_RADIOBTN */
 
+#if wxUSE_HELP
+#   if !wxUSE_BMPBUTTON
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_HELP requires wxUSE_BMPBUTTON"
+#       else
+#           undef wxUSE_BMPBUTTON
+#           define wxUSE_BMPBUTTON 1
+#       endif
+#   endif
+#endif /* wxUSE_HELP */
+
 #if wxUSE_WXHTML_HELP
 #   if !wxUSE_HELP || !wxUSE_HTML || !wxUSE_COMBOBOX || !wxUSE_NOTEBOOK
 #       ifdef wxABORT_ON_CONFIG_ERROR
@@ -1378,6 +1400,25 @@
 #   endif
 #endif /* wxUSE_FILEDLG */
 
+#if !wxUSE_BUTTON
+#   if wxUSE_PROGRESSDLG || \
+       wxUSE_FONTDLG || \
+       wxUSE_FILEDLG || \
+       wxUSE_CHOICEDLG || \
+       wxUSE_NUMBERDLG || \
+       wxUSE_TEXTDLG || \
+       wxUSE_DIRDLG || \
+       wxUSE_STARTUP_TIPS || \
+       wxUSE_WIZARDDLG
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "Common and generic dialogs require wxUSE_BUTTON"
+#       else
+#           undef wxUSE_BUTTON
+#           define wxUSE_BUTTON 1
+#       endif
+#   endif
+#endif /* wxUSE_PROGRESSDLG */
+
 #if !wxUSE_TOOLBAR
 #   if wxUSE_TOOLBAR_NATIVE
 #        ifdef wxABORT_ON_CONFIG_ERROR
@@ -1444,12 +1485,14 @@
 #endif /* wxUSE_LOGWINDOW */
 
 #if wxUSE_LOG_DIALOG
-#    if !wxUSE_LISTCTRL
+#    if !wxUSE_LISTCTRL || !wxUSE_BUTTON
 #        ifdef wxABORT_ON_CONFIG_ERROR
-#            error "wxUSE_LOG_DIALOG requires wxUSE_LISTCTRL"
+#            error "wxUSE_LOG_DIALOG requires wxUSE_LISTCTRL and wxUSE_BUTTON"
 #        else
 #            undef wxUSE_LISTCTRL
 #            define wxUSE_LISTCTRL 1
+#            undef wxUSE_BUTTON
+#            define wxUSE_BUTTON 1
 #        endif
 #    endif
 #endif /* wxUSE_LOG_DIALOG */

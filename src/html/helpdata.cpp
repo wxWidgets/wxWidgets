@@ -543,6 +543,7 @@ bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
     // Now store the contents range
     bookr->SetContentsRange(cont_start, m_ContentsCnt);
 
+#if wxUSE_FONTMAP
     // Convert encoding, if neccessary:
     if (encoding != wxFONTENCODING_SYSTEM)
     {
@@ -559,6 +560,11 @@ bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
                 conv.Convert(m_Contents[i].m_Name);
         }
     }
+#else
+    wxUnusedVar(IndexOld);
+    wxUnusedVar(ContentsOld);
+    wxASSERT_MSG(encoding == wxFONTENCODING_SYSTEM, wxT("Encoding can't be converted"));
+#endif
 
     m_BookRecords.Add(bookr);
     if (m_IndexCnt > 0)

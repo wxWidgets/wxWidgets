@@ -130,11 +130,15 @@ wxSize wxToggleButton::DoGetBestSize() const
    // the button height is proportional to the height of the font used
    int hBtn = BUTTON_HEIGHT_FROM_CHAR_HEIGHT(hChar);
 
+#if wxUSE_BUTTON
    wxSize sz = wxButton::GetDefaultSize();
    if (wBtn > sz.x)
        sz.x = wBtn;
    if (hBtn > sz.y)
        sz.y = hBtn;
+#else
+   wxSize sz(wBtn, hBtn);
+#endif
 
    return sz;
 }

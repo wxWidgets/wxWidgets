@@ -665,7 +665,7 @@ bool wxClipboard::AddData( wxDataObject *data )
         {
 #if 1
             // TODO
-            wxLogError("Not implemented because wxMetafileDataObject does not contain width and height values.");
+            wxLogError(wxT("Not implemented because wxMetafileDataObject does not contain width and height values."));
             return FALSE;
 #else
             wxMetafileDataObject* metaFileDataObject =

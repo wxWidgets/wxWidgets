@@ -2570,9 +2570,11 @@ wxAccStatus wxWindowAccessible::GetName(int childId, wxString* name)
     // This will eventually be replaced by specialised
     // accessible classes, one for each kind of wxWidgets
     // control or window.
+#if wxUSE_BUTTON
     if (GetWindow()->IsKindOf(CLASSINFO(wxButton)))
         title = ((wxButton*) GetWindow())->GetLabel();
     else
+#endif
         title = GetWindow()->GetName();
 
     if (!title.IsEmpty())

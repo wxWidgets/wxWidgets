@@ -242,12 +242,16 @@ HRESULT WINAPI wxDDEnumModesCallback(LPDDSURFACEDESC lpDDSurfaceDesc,
 // initialize gs_displays using DirectX functions
 static bool DoInitDirectX()
 {
+#if wxUSE_LOG
     // suppress the errors if ddraw.dll is not found
     wxLog::EnableLogging(false);
+#endif
 
     wxDynamicLibrary dllDX(_T("ddraw.dll"));
 
-    wxLog::EnableLogging(true);
+#if wxUSE_LOG
+    wxLog::EnableLogging();
+#endif
 
     if ( !dllDX.IsLoaded() )
         return false;

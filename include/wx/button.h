@@ -14,21 +14,29 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_BUTTON
-
 // ----------------------------------------------------------------------------
-// wxButton flags
+// wxButton flags shared with other classes
 // ----------------------------------------------------------------------------
 
-// These two flags are obsolete
-#define wxBU_NOAUTODRAW      0x0000
-#define wxBU_AUTODRAW        0x0004
+#if wxUSE_TOGGLEBTN || wxUSE_BUTTON
 
 // These flags affect label alignment
 #define wxBU_LEFT            0x0040
 #define wxBU_TOP             0x0080
 #define wxBU_RIGHT           0x0100
 #define wxBU_BOTTOM          0x0200
+
+#endif
+
+#if wxUSE_BUTTON
+
+// ----------------------------------------------------------------------------
+// wxButton specific flags
+// ----------------------------------------------------------------------------
+
+// These two flags are obsolete
+#define wxBU_NOAUTODRAW      0x0000
+#define wxBU_AUTODRAW        0x0004
 
 // by default, the buttons will be created with some (system dependent)
 // minimal size to make them look nicer, giving this style will make them as
