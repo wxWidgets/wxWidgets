@@ -51,7 +51,14 @@ static void gtk_spinctrl_callback( GtkWidget *WXUNUSED(widget), wxSpinCtrl *win 
 
     wxCommandEvent event( wxEVT_COMMAND_SPINCTRL_UPDATED, win->GetId());
     event.SetEventObject( win );
-    event.SetInt( win->GetValue() );
+
+    // note that we don't use wxSpinCtrl::GetValue() here because it would
+    // adjust the value to fit into the control range and this means that we
+    // would never be able to enter an "invalid" value in the control, even
+    // temporarily - and trying to enter 10 into the control which accepts the
+    // values in range 5..50 is then, ummm, quite challenging (hint: you can't
+    // enter 1!) (VZ)
+    event.SetInt( (int)ceil(win->m_adjust->value) );
     win->GetEventHandler()->ProcessEvent( event );
 }
 
