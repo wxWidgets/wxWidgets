@@ -723,7 +723,6 @@ const wxChar *wxDataObject::GetFormatName(wxDataFormat format)
     switch ( format ) {
         case CF_TEXT:         return wxT("CF_TEXT");
         case CF_BITMAP:       return wxT("CF_BITMAP");
-        case CF_METAFILEPICT: return wxT("CF_METAFILEPICT");
         case CF_SYLK:         return wxT("CF_SYLK");
         case CF_DIF:          return wxT("CF_DIF");
         case CF_TIFF:         return wxT("CF_TIFF");
@@ -734,9 +733,12 @@ const wxChar *wxDataObject::GetFormatName(wxDataFormat format)
         case CF_RIFF:         return wxT("CF_RIFF");
         case CF_WAVE:         return wxT("CF_WAVE");
         case CF_UNICODETEXT:  return wxT("CF_UNICODETEXT");
+#ifndef __WXWINCE__
+        case CF_METAFILEPICT: return wxT("CF_METAFILEPICT");
         case CF_ENHMETAFILE:  return wxT("CF_ENHMETAFILE");
-        case CF_HDROP:        return wxT("CF_HDROP");
         case CF_LOCALE:       return wxT("CF_LOCALE");
+        case CF_HDROP:        return wxT("CF_HDROP");
+#endif
 
         default:
             if ( !::GetClipboardFormatName(format, s_szBuf, WXSIZEOF(s_szBuf)) )
