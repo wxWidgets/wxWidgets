@@ -283,3 +283,19 @@ Checking in mimetype.cpp;
 new revision: 1.29; previous revision: 1.28
 done
 
+
+24.  Fix SetScrollbars bug.  You know the one :-)
+
+Checking in src/common/wincmn.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/common/wincmn.cpp,v  <--  wincmn.cpp
+new revision: 1.129; previous revision: 1.128
+done
+Checking in src/generic/scrlwing.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/generic/scrlwing.cpp,v  <--  scrlwing.cpp
+new revision: 1.35; previous revision: 1.34
+done
+Checking in src/gtk/scrolwin.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/gtk/scrolwin.cpp,v  <--  scrolwin.cpp
+new revision: 1.27; previous revision: 1.26
+done
+
