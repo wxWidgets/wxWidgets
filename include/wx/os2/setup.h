@@ -15,12 +15,6 @@
 // ----------------------------------------------------------------------------
 // global settings
 // ----------------------------------------------------------------------------
-// use TCPV40 from toolkit - EK
-#define TCPV40HDRS
-
-// use double mode + PM GUI and Window text window,
-// to use it you must link your app as "Window"
-#define wxUSE_CONSOLEDEBUG   1
 
 // define this to 1 if you want icons to behave as bitmaps
 #define wxICON_IS_BITMAP     0
@@ -33,12 +27,6 @@
 // ----------------------------------------------------------------------------
 
 #define wxUSE_FILESYSTEM       1 // better have this is you want to compile wxHTML
-
-#define wxUSE_PCX              1 // Utilize PCX images
-
-#define wxUSE_PNM              1 // Utilize PNM images
-
-#define wxUSE_GIF              1 // Utilize GIF images
 
 #if defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )
 #define wxUSE_LONGLONG        1
@@ -219,10 +207,23 @@
                                   // and make the library thread safe
 #define wxUSE_ZLIB          1
                                   // Use zlib for compression in streams and PNG code
+#define wxUSE_IMAGE         1
+                                  // Set to 1 for wxImage support (recommended).
 #define wxUSE_LIBPNG        1
-                                  // Use PNG bitmap code
+                                  // Set to 1 for PNG format support
 #define wxUSE_LIBJPEG       1
-                                  // Use JPEG bitmap code
+                                  // Set to 1 for JPEG format support
+#define wxUSE_LIBTIFF       1
+                                  // Set to 1 for TIFF format support
+#define wxUSE_GIF           1
+                                  // Set to 1 for GIF format support
+#define wxUSE_PNM           1
+                                  // Set to 1 for PNM format support
+#define wxUSE_PCX           1
+                                  // Set to 1 for PCX format support
+#define wxUSE_XPM           1
+                                  // Set to 1 for XPM format support
+
 #define wxUSE_SERIAL        1
                                   // Use serialization (requires utils/serialize)
 #define wxUSE_DYNLIB_CLASS  1

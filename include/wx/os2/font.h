@@ -107,6 +107,7 @@ public:
     virtual WXHANDLE GetResourceHandle(void);
     virtual bool     FreeResource(bool bForce = FALSE);
 
+    WXHFONT GetHFONT(void) const;
 protected:
     //
     // Common part of all ctors
