@@ -37,7 +37,7 @@
 
 #include "wx/statline.h"
 #include "wx/dirctrl.h"
-#include "wx/dirdlg.h"
+#include "wx/generic/dirdlgg.h"
 #include "wx/artprov.h"
 #include "wx/bmpbuttn.h"
 
