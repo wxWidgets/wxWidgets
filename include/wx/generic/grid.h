@@ -949,13 +949,27 @@ protected:
     bool m_inOnKeyDown;
     int  m_batchCount;
 
-    int  m_cursorMode;
-    enum { WXGRID_CURSOR_SELECT_CELL,
-           WXGRID_CURSOR_RESIZE_ROW,
-           WXGRID_CURSOR_RESIZE_COL,
-           WXGRID_CURSOR_SELECT_ROW,
-           WXGRID_CURSOR_SELECT_COL
+    enum CursorMode
+    {
+        WXGRID_CURSOR_SELECT_CELL,
+        WXGRID_CURSOR_RESIZE_ROW,
+        WXGRID_CURSOR_RESIZE_COL,
+        WXGRID_CURSOR_SELECT_ROW,
+        WXGRID_CURSOR_SELECT_COL
     };
+
+    // this method not only sets m_cursorMode but also sets the correct cursor
+    // for the given mode and, if captureMouse is not FALSE releases the mouse
+    // if it was captured and captures it if it must be captured
+    //
+    // for this to work, you should always use it and not set m_cursorMode
+    // directly!
+    void ChangeCursorMode(CursorMode mode,
+                          wxWindow *win = (wxWindow *)NULL,
+                          bool captureMouse = TRUE);
+
+    wxWindow *m_winCapture;     // the window which captured the mouse
+    CursorMode m_cursorMode;
 
     int  m_dragLastPos;
     int  m_dragRowOrCol;

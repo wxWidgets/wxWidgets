@@ -1323,6 +1323,7 @@ void wxGrid::Init()
     m_gridLinesEnabled = TRUE;
 
     m_cursorMode  = WXGRID_CURSOR_SELECT_CELL;
+    m_winCapture = (wxWindow *)NULL;
     m_dragLastPos  = -1;
     m_dragRowOrCol = -1;
     m_isDragging = FALSE;
@@ -1773,14 +1774,16 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
                 break;
 
                 case WXGRID_CURSOR_SELECT_ROW:
-                {
                     if ( (row = YToRow( y )) >= 0  &&
                          !IsInSelection( row, 0 ) )
                     {
                         SelectRow( row, TRUE );
                     }
-                }
-                break;
+
+                // default label to suppress warnings about "enumeration value
+                // 'xxx' not handled in switch
+                default:
+                    break;
             }
         }
         return;
@@ -1793,11 +1796,10 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
     //
     if ( event.Entering() || event.Leaving() )
     {
-        m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
-        m_rowLabelWin->SetCursor( *wxSTANDARD_CURSOR );
+        ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, m_rowLabelWin);
     }
 
-    
+
     // ------------ Left button pressed
     //
     else if ( event.LeftDown() )
@@ -1813,14 +1815,14 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
                  !SendEvent( EVT_GRID_LABEL_LEFT_CLICK, row, -1, event ) )
             {
                 SelectRow( row, event.ShiftDown() );
-                m_cursorMode = WXGRID_CURSOR_SELECT_ROW;
+                ChangeCursorMode(WXGRID_CURSOR_SELECT_ROW, m_rowLabelWin);
             }
         }
         else
         {
             // starting to drag-resize a row
             //
-            m_rowLabelWin->CaptureMouse();
+            ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW, m_rowLabelWin);
         }
     }
 
@@ -1843,7 +1845,6 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
     {
         if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW )
         {
-            m_rowLabelWin->ReleaseMouse();
             DoEndDragResizeRow();
 
             // Note: we are ending the event *after* doing
@@ -1852,8 +1853,8 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
             SendEvent( EVT_GRID_ROW_SIZE, m_dragRowOrCol, -1, event );
         }
 
-        m_cursorMode  = WXGRID_CURSOR_SELECT_CELL;
-        m_dragLastPos  = -1;
+        ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, m_rowLabelWin);
+        m_dragLastPos = -1;
     }
 
 
@@ -1890,14 +1891,13 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
         {
             if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
             {
-                m_cursorMode = WXGRID_CURSOR_RESIZE_ROW;
-                m_rowLabelWin->SetCursor( m_rowResizeCursor );
+                // don't capture the mouse yet
+                ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW, m_rowLabelWin, FALSE);
             }
         }
         else if ( m_cursorMode != WXGRID_CURSOR_SELECT_CELL )
         {
-            m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
-            m_rowLabelWin->SetCursor( *wxSTANDARD_CURSOR );
+            ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, m_rowLabelWin, FALSE);
         }
     }
 }
@@ -1936,14 +1936,16 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
                 break;
 
                 case WXGRID_CURSOR_SELECT_COL:
-                {
                     if ( (col = XToCol( x )) >= 0  &&
                          !IsInSelection( 0, col ) )
                     {
                         SelectCol( col, TRUE );
                     }
-                }
-                break;
+
+                // default label to suppress warnings about "enumeration value
+                // 'xxx' not handled in switch
+                default:
+                    break;
             }
         }
         return;
@@ -1956,11 +1958,10 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
     //
     if ( event.Entering() || event.Leaving() )
     {
-        m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
-        m_colLabelWin->SetCursor( *wxSTANDARD_CURSOR );
+        ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, m_colLabelWin);
     }
 
-    
+
     // ------------ Left button pressed
     //
     else if ( event.LeftDown() )
@@ -1976,14 +1977,14 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
                  !SendEvent( EVT_GRID_LABEL_LEFT_CLICK, -1, col, event ) )
             {
                 SelectCol( col, event.ShiftDown() );
-                m_cursorMode = WXGRID_CURSOR_SELECT_COL;
+                ChangeCursorMode(WXGRID_CURSOR_SELECT_COL, m_colLabelWin);
             }
         }
         else
         {
             // starting to drag-resize a col
             //
-            m_colLabelWin->CaptureMouse();
+            ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL, m_colLabelWin);
         }
     }
 
@@ -2006,16 +2007,15 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
     {
         if ( m_cursorMode == WXGRID_CURSOR_RESIZE_COL )
         {
-            m_colLabelWin->ReleaseMouse();
             DoEndDragResizeCol();
-            
+
             // Note: we are ending the event *after* doing
             // default processing in this case
             //
             SendEvent( EVT_GRID_COL_SIZE, -1, m_dragRowOrCol, event );
         }
 
-        m_cursorMode  = WXGRID_CURSOR_SELECT_CELL;
+        ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, m_colLabelWin);
         m_dragLastPos  = -1;
     }
 
@@ -2053,14 +2053,13 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
         {
             if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
             {
-                m_cursorMode = WXGRID_CURSOR_RESIZE_COL;
-                m_colLabelWin->SetCursor( m_colResizeCursor );
+                // don't capture the cursor yet
+                ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL, m_colLabelWin, FALSE);
             }
         }
         else if ( m_cursorMode != WXGRID_CURSOR_SELECT_CELL )
         {
-            m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
-            m_colLabelWin->SetCursor( *wxSTANDARD_CURSOR );
+            ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, m_colLabelWin, FALSE);
         }
     }
 }
@@ -2101,6 +2100,68 @@ void wxGrid::ProcessCornerLabelMouseEvent( wxMouseEvent& event )
     }
 }
 
+void wxGrid::ChangeCursorMode(CursorMode mode,
+                              wxWindow *win,
+                              bool captureMouse)
+{
+#ifdef __WXDEBUG__
+    static const wxChar *cursorModes[] =
+    {
+        _T("SELECT_CELL"),
+        _T("RESIZE_ROW"),
+        _T("RESIZE_COL"),
+        _T("SELECT_ROW"),
+        _T("SELECT_COL")
+    };
+
+    wxLogDebug(_T("wxGrid cursor mode (mouse capture for %s): %s -> %s"),
+               win == m_colLabelWin ? _T("colLabelWin")
+                                    : win ? _T("rowLabelWin")
+                                          : _T("gridWin"),
+               cursorModes[m_cursorMode], cursorModes[mode]);
+#endif // __WXDEBUG__
+
+    if ( mode == m_cursorMode )
+        return;
+
+    if ( !win )
+    {
+        // by default use the grid itself
+        win = m_gridWin;
+    }
+
+    if ( m_winCapture )
+    {
+        m_winCapture->ReleaseMouse();
+        m_winCapture = (wxWindow *)NULL;
+    }
+
+    m_cursorMode = mode;
+
+    switch ( m_cursorMode )
+    {
+        case WXGRID_CURSOR_RESIZE_ROW:
+            win->SetCursor( m_rowResizeCursor );
+            break;
+
+        case WXGRID_CURSOR_RESIZE_COL:
+            win->SetCursor( m_colResizeCursor );
+            break;
+
+        default:
+            win->SetCursor( *wxSTANDARD_CURSOR );
+    }
+
+    // we need to capture mouse when resizing
+    bool resize = m_cursorMode == WXGRID_CURSOR_RESIZE_ROW ||
+                  m_cursorMode == WXGRID_CURSOR_RESIZE_COL;
+
+    if ( captureMouse && resize )
+    {
+        win->CaptureMouse();
+        m_winCapture = win;
+    }
+}
 
 void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
 {
@@ -2153,7 +2214,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
             int cw, ch, dummy, top;
             m_gridWin->GetClientSize( &cw, &ch );
             CalcUnscrolledPosition( 0, 0, &dummy, &top );
-            
+
             wxClientDC dc( m_gridWin );
             PrepareDC( dc );
             dc.SetLogicalFunction(wxINVERT);
@@ -2164,7 +2225,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
             dc.DrawLine( x, top, x, top+ch );
             m_dragLastPos = x;
         }
-            
+
         return;
     }
 
@@ -2172,15 +2233,21 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
 
     if ( coords != wxGridNoCellCoords )
     {
+        // VZ: if we do this, the mode is reset to WXGRID_CURSOR_SELECT_CELL
+        //     immediately after it becomes WXGRID_CURSOR_RESIZE_ROW/COL under
+        //     wxGTK
+#if 0
         if ( event.Entering() || event.Leaving() )
         {
-            m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
+            ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
             m_gridWin->SetCursor( *wxSTANDARD_CURSOR );
         }
-        
+        else
+#endif // 0
+
         // ------------ Left button pressed
         //
-        else if ( event.LeftDown() )
+        if ( event.LeftDown() )
         {
             if ( event.ShiftDown() )
             {
@@ -2233,7 +2300,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
             }
             else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW )
             {
-                m_gridWin->ReleaseMouse();
+                ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
                 DoEndDragResizeRow();
 
                 // Note: we are ending the event *after* doing
@@ -2243,15 +2310,15 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
             }
             else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_COL )
             {
-                m_gridWin->ReleaseMouse();
+                ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
                 DoEndDragResizeCol();
-            
+
                 // Note: we are ending the event *after* doing
                 // default processing in this case
                 //
                 SendEvent( EVT_GRID_COL_SIZE, -1, m_dragRowOrCol, event );
             }
-            
+
             m_dragLastPos = -1;
         }
 
@@ -2295,8 +2362,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
             //
             if ( dragRow >= 0  &&  dragCol >= 0 )
             {
-                m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
-                m_gridWin->SetCursor( *wxSTANDARD_CURSOR );
+                ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
                 return;
             }
 
@@ -2306,32 +2372,29 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
 
                 if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
                 {
-                    m_cursorMode = WXGRID_CURSOR_RESIZE_ROW;
-                    m_gridWin->SetCursor( m_rowResizeCursor );
+                    ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW);
                 }
 
                 return;
             }
-                
+
             if ( dragCol >= 0 )
             {
                 m_dragRowOrCol = dragCol;
-                    
+
                 if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
                 {
-                    m_cursorMode = WXGRID_CURSOR_RESIZE_COL;
-                    m_gridWin->SetCursor( m_colResizeCursor );
+                    ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL);
                 }
-                    
+
                 return;
             }
-                
+
             // Neither on a row or col edge
             //
             if ( m_cursorMode != WXGRID_CURSOR_SELECT_CELL )
             {
-                m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
-                m_gridWin->SetCursor( *wxSTANDARD_CURSOR );
+                ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
             }
         }
     }
@@ -2357,7 +2420,7 @@ void wxGrid::DoEndDragResizeRow()
         int rowTop = m_rowBottoms[m_dragRowOrCol] - m_rowHeights[m_dragRowOrCol];
         SetRowSize( m_dragRowOrCol,
                     wxMax( m_dragLastPos - rowTop, WXGRID_MIN_ROW_HEIGHT ) );
-        
+
         if ( !GetBatchCount() )
         {
             // Only needed to get the correct rect.y:
@@ -2408,7 +2471,7 @@ void wxGrid::DoEndDragResizeCol()
             rect.height = ch;
             m_gridWin->Refresh( FALSE, &rect );
         }
-        
+
         ShowCellEditControl();
     }
 }
@@ -3369,7 +3432,7 @@ void wxGrid::StringToLines( const wxString& value, wxArrayString& lines )
     int pos;
     wxString eol = wxTextFile::GetEOL( wxTextFileType_Unix );
     wxString tVal = wxTextFile::Translate( value, wxTextFileType_Unix );
-    
+
     while ( startPos < (int)tVal.Length() )
     {
         pos = tVal.Mid(startPos).Find( eol );
