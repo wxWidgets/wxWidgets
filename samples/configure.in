@@ -6,6 +6,14 @@ AC_INIT(Makefile.in)
 SAMPLES_SUBDIRS=$wx_cv_path_samplesubdirs
 AC_SUBST(SAMPLES_SUBDIRS)
 
+PATH_IFS=$wx_cv_path_ifs
+PROGRAM_EXT=$wx_cv_program_ext
+WX_TARGET_LIBRARY=$wx_cv_target_library
+
+AC_SUBST(PATH_IFS)
+AC_SUBST(PROGRAM_EXT)
+AC_SUBST(WX_TARGET_LIBRARY)
+
 AC_OUTPUT([
             Makefile
             caret/Makefile

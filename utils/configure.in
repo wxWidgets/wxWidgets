@@ -8,9 +8,6 @@ AC_SUBST(GL_TOOLKIT_DIR)
 
 AC_OUTPUT([
             Makefile
-            wxMMedia2/Makefile
-            wxMMedia2/lib/Makefile
-            wxMMedia2/sample/Makefile
             makegen/Makefile
             HelpGen/Makefile
             HelpGen/src/Makefile

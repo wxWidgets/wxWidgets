@@ -1,0 +1,12 @@
+#
+# Makefile : Builds wxWindows contrib src for Unix.
+#
+
+all:
+	cd ogl; make
+	cd mmedia; make
+
+clean:
+	cd ogl; make clean
+	cd mmedia; make clean
+

@@ -1,0 +1,10 @@
+#
+# Makefile : Builds wxWindows utils for Unix.
+#
+
+all:
+	cd mmedia; make
+
+clean:
+	cd mmedia; make clean
+

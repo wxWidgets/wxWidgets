@@ -1166,6 +1166,6 @@ clean:
 	$(RM) *.d
 	$(RM) parser.c
 	$(RM) lexer.c
-	$(RM) ./lib/*
+	$(RM) -r ./lib/*
 
 cleanall: clean

@@ -3489,7 +3489,7 @@ dnl makefile system without libtool
 LD_LIBS="\${top_builddir}/lib/${WX_LIBRARY_NAME_STATIC} $EXTRA_LIBS"
 
 dnl all -I options we must pass to the compiler
-INCLUDES="-I. -I\${top_builddir}/include -I\${top_srcdir}/include $ZLIB_INCLUDE $PNG_INCLUDE $JPEG_INCLUDE $TIFF_INCLUDE $TOOLKIT_INCLUDE"
+INCLUDES="-I. -I\${top_builddir}/include -I\${top_srcdir}/include -I\${top_srcdir}/contrib/include $ZLIB_INCLUDE $PNG_INCLUDE $JPEG_INCLUDE $TIFF_INCLUDE $TOOLKIT_INCLUDE"
 
 dnl C/C++ compiler options used to compile wxWindows
 if test "$GXX" = yes ; then
@@ -3636,10 +3636,13 @@ AC_CONFIG_HEADER(setup.h:setup.h.in)
 
 dnl some more GUI only things
 if test "$wxUSE_GUI" = "yes"; then
-    dnl we need to pass SAMPLES_SUBDIRS to the configure in
+    dnl we need to pass SAMPLES_SUBDIRS (and some other) to the configure in
     dnl samples and the only way to do it is, again, use the cache
     wx_cv_path_samplesubdirs=$SAMPLES_SUBDIRS
-    AC_CONFIG_SUBDIRS(demos samples utils)
+    wx_cv_path_ifs=$PATH_IFS
+    wx_cv_program_ext=$PROGRAM_EXT
+    wx_cv_target_library=$WX_TARGET_LIBRARY
+    AC_CONFIG_SUBDIRS(demos samples utils contrib)
 fi
 dnl from wxUSE_GUI
 
