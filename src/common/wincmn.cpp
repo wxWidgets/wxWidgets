@@ -213,7 +213,8 @@ wxWindowBase::~wxWindowBase()
         delete m_windowValidator;
 #endif // wxUSE_VALIDATORS
 
-    if ( m_clientObject )
+    // we only delete object data, not untyped
+    if ( m_clientDataType == ClientData_Object )
         delete m_clientObject;
 
 #if wxUSE_CONSTRAINTS
