@@ -16,6 +16,7 @@
 %{
 #include "wxPython.h"
 #include "IEHtmlWin.h"
+#include "pyistream.h"
 %}
 
 //---------------------------------------------------------------------------
@@ -28,6 +29,7 @@
 %extern _defs.i
 %extern misc.i
 %extern events.i
+%extern streams.i
 
 %pragma(python) code = "import wx"
 
@@ -101,7 +103,7 @@ public:
 
     void LoadUrl(const wxString&);
     bool LoadString(wxString html);
-    /* bool LoadStream(istream *strm); */
+    bool LoadStream(wxInputStream *is);
 
     %pragma(python) addtoclass = "Navigate = LoadUrl"
 

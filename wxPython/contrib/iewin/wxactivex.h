@@ -50,7 +50,7 @@ template <class I> class wxAutoOleInterface
 	};
 
 	// copy constructor
-    explicit wxAutoOleInterface(const wxAutoOleInterface<I>& ti) : m_interface(NULL)
+    wxAutoOleInterface(const wxAutoOleInterface<I>& ti) : m_interface(NULL)
     {
 		operator = (ti);
     }
@@ -362,11 +362,11 @@ public:
     wxVariant& operator[] (wxString name);
 };
 
-const wxEventType& RegisterActiveXEvent(wxString eventName);
+const wxEventType& RegisterActiveXEvent(wxChar *eventName);
 
 typedef void (wxEvtHandler::*wxActiveXEventFunction)(wxActiveXEvent&);
 
-#define EVT_ACTIVEX(id, eventName, fn) DECLARE_EVENT_TABLE_ENTRY(RegisterActiveXEvent(eventName), id, -1, (wxObjectEventFunction) (wxEventFunction) (wxActiveXEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_ACTIVEX(id, eventName, fn) DECLARE_EVENT_TABLE_ENTRY(RegisterActiveXEvent(wxT(eventName)), id, -1, (wxObjectEventFunction) (wxEventFunction) (wxActiveXEventFunction) & fn, (wxObject *) NULL ),
 
 //util
 bool MSWVariantToVariant(VARIANTARG& va, wxVariant& vx);

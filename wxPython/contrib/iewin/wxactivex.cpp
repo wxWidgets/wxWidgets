@@ -31,7 +31,7 @@ END_EVENT_TABLE()
 
 class wxActiveX;
 
-class FrameSite :
+class FrameSite : 
     public IOleClientSite,
     public IOleInPlaceSiteEx,
     public IOleInPlaceFrame,
@@ -58,7 +58,7 @@ public:
 	STDMETHODIMP RequestBorderSpace(LPCBORDERWIDTHS);
 	STDMETHODIMP SetBorderSpace(LPCBORDERWIDTHS);
 	STDMETHODIMP SetActiveObject(IOleInPlaceActiveObject*, LPCOLESTR);
-
+	
     //IOleInPlaceFrame
 	STDMETHODIMP InsertMenus(HMENU, LPOLEMENUGROUPWIDTHS);
 	STDMETHODIMP SetMenu(HMENU, HOLEMENU, HWND);
@@ -71,7 +71,7 @@ public:
 	STDMETHODIMP CanInPlaceActivate();
 	STDMETHODIMP OnInPlaceActivate();
 	STDMETHODIMP OnUIActivate();
-	STDMETHODIMP GetWindowContext(IOleInPlaceFrame**, IOleInPlaceUIWindow**,
+	STDMETHODIMP GetWindowContext(IOleInPlaceFrame**, IOleInPlaceUIWindow**, 
 		LPRECT, LPRECT, LPOLEINPLACEFRAMEINFO);
 	STDMETHODIMP Scroll(SIZE);
 	STDMETHODIMP OnUIDeactivate(BOOL);
@@ -117,7 +117,7 @@ public:
 	STDMETHODIMP GetObject(LPOLESTR, DWORD, IBindCtx*, REFIID, void**);
 	STDMETHODIMP GetObjectStorage(LPOLESTR, IBindCtx*, REFIID, void**);
 	STDMETHODIMP IsRunning(LPOLESTR);
-
+    
 	//IDispatch
 	STDMETHODIMP GetIDsOfNames(REFIID, OLECHAR**, unsigned int, LCID, DISPID*);
 	STDMETHODIMP GetTypeInfo(unsigned int, LCID, ITypeInfo**);
@@ -146,7 +146,7 @@ protected:
 	bool m_bInPlaceActive;
 	bool m_bUIActive;
 	bool m_bWindowless;
-
+    
 
 
 	LCID m_nAmbientLocale;
@@ -207,7 +207,7 @@ wxActiveX::wxActiveX(wxWindow * parent, wxString progId, wxWindowID id,
 {
     m_bAmbientUserMode = true;
     m_docAdviseCookie = 0;
-    CreateActiveX((LPOLESTR) (const wchar_t*)progId.wc_str(wxConvUTF8));
+    CreateActiveX((LPOLESTR) (const wchar_t *) progId.wc_str(wxConvUTF8));
 }
 
 wxActiveX::~wxActiveX()
@@ -223,14 +223,14 @@ wxActiveX::~wxActiveX()
 	};
 	m_connections.clear();
 
-    if (m_oleInPlaceObject.Ok())
+    if (m_oleInPlaceObject.Ok()) 
 	{
 		m_oleInPlaceObject->InPlaceDeactivate();
 		m_oleInPlaceObject->UIDeactivate();
 	}
 
 
-	if (m_oleObject.Ok())
+	if (m_oleObject.Ok()) 
 	{
 	    if (m_docAdviseCookie != 0)
     		m_oleObject->Unadvise(m_docAdviseCookie);
@@ -266,9 +266,19 @@ void wxActiveX::CreateActiveX(REFCLSID clsid)
 	GetTypeInfo();
 
 	// Get IOleObject interface
-	hret = m_oleObject.QueryInterface(IID_IOleObject, m_ActiveX);
+	hret = m_oleObject.QueryInterface(IID_IOleObject, m_ActiveX); 
 	wxASSERT(SUCCEEDED(hret));
-	// Get IOleInPlaceObject interface
+
+    // document advise
+    m_docAdviseCookie = 0;
+    hret = m_oleObject->Advise(adviseSink, &m_docAdviseCookie);
+    WXOLE_WARN(hret, "m_oleObject->Advise(adviseSink, &m_docAdviseCookie),\"Advise\")");
+    m_oleObject->SetHostNames(L"wxActiveXContainer", NULL);
+	OleSetContainedObject(m_oleObject, TRUE);
+    OleRun(m_oleObject);
+
+
+    // Get IOleInPlaceObject interface
 	hret = m_oleInPlaceObject.QueryInterface(IID_IOleInPlaceObject, m_ActiveX);
 	wxASSERT(SUCCEEDED(hret));
 
@@ -292,13 +302,6 @@ void wxActiveX::CreateActiveX(REFCLSID clsid)
         WXOLE_WARN(hret, "CreateActiveX::pPersistStreamInit->InitNew()");
     };
 
-    // document advise
-    m_docAdviseCookie = 0;
-    hret = m_oleObject->Advise(adviseSink, &m_docAdviseCookie);
-    WXOLE_WARN(hret, "m_oleObject->Advise(adviseSink, &m_docAdviseCookie),\"Advise\")");
-    m_oleObject->SetHostNames(L"wxActiveXContainer", NULL);
-	OleSetContainedObject(m_oleObject, TRUE);
-
     if (! (dwMiscStatus & OLEMISC_SETCLIENTSITEFIRST))
 		m_oleObject->SetClientSite(m_clientSite);
 
@@ -312,22 +315,26 @@ void wxActiveX::CreateActiveX(REFCLSID clsid)
 	posRect.bottom = h;
 
     m_oleObjectHWND = 0;
-	hret = m_oleInPlaceObject->GetWindow(&m_oleObjectHWND);
-	WXOLE_WARN(hret, "m_oleInPlaceObject->GetWindow(&m_oleObjectHWND)");
-    if (SUCCEEDED(hret))
-	    ::SetActiveWindow(m_oleObjectHWND);
+
+    if (m_oleInPlaceObject.Ok())
+    {
+    	hret = m_oleInPlaceObject->GetWindow(&m_oleObjectHWND);
+	    WXOLE_WARN(hret, "m_oleInPlaceObject->GetWindow(&m_oleObjectHWND)");
+        if (SUCCEEDED(hret))
+	        ::SetActiveWindow(m_oleObjectHWND);
+    };
 
 
     if (! (dwMiscStatus & OLEMISC_INVISIBLEATRUNTIME))
     {
-		if (w > 0 && h > 0)
+		if (w > 0 && h > 0 && m_oleInPlaceObject.Ok())
 			m_oleInPlaceObject->SetObjectRects(&posRect, &posRect);
 
 		hret = m_oleObject->DoVerb(OLEIVERB_INPLACEACTIVATE, NULL, m_clientSite, 0, (HWND)GetHWND(), &posRect);
         hret = m_oleObject->DoVerb(OLEIVERB_SHOW, 0, m_clientSite, 0, (HWND)GetHWND(), &posRect);
     };
 
-	if (! m_oleObjectHWND)
+	if (! m_oleObjectHWND && m_oleInPlaceObject.Ok())
 	{
 		hret = m_oleInPlaceObject->GetWindow(&m_oleObjectHWND);
 		WXOLE_WARN(hret, "m_oleInPlaceObject->GetWindow(&m_oleObjectHWND)");
@@ -385,13 +392,14 @@ public:
 
 static ActiveXEventMapFlusher s_dummyActiveXEventMapFlusher;
 
-const wxEventType& RegisterActiveXEvent(wxString eventName)
+const wxEventType& RegisterActiveXEvent(wxChar *eventName)
 {
-    ActiveXEventMap::iterator it = sg_eventMap.find(eventName);
+    wxString ev = eventName;
+    ActiveXEventMap::iterator it = sg_eventMap.find(ev);
     if (it == sg_eventMap.end())
     {
         wxEventType  *et = new wxEventType(wxNewEventType());
-        sg_eventMap[eventName] = et;
+        sg_eventMap[ev] = et;
 
         return *et;
     };
@@ -479,23 +487,23 @@ private:
 
 public:
     wxActiveXEvents(wxActiveX *ax) : m_activeX(ax) {}
-	~wxActiveXEvents()
+	~wxActiveXEvents() 
     {
     }
 
 	//IDispatch
 	STDMETHODIMP GetIDsOfNames(REFIID r, OLECHAR** o, unsigned int i, LCID l, DISPID* d)
-	{
+	{ 
         return E_NOTIMPL;
     };
 
 	STDMETHODIMP GetTypeInfo(unsigned int i, LCID l, ITypeInfo** t)
-	{
+	{ 
         return E_NOTIMPL;
     };
 
 	STDMETHODIMP GetTypeInfoCount(unsigned int* i)
-	{
+	{ 
         return E_NOTIMPL;
     };
 
@@ -505,7 +513,7 @@ public:
 						  WORD wFlags, DISPPARAMS * pDispParams,
 						  VARIANT * pVarResult, EXCEPINFO * pExcepInfo,
 						  unsigned int * puArgErr)
-	{
+	{ 
 	    if (wFlags & (DISPATCH_PROPERTYGET | DISPATCH_PROPERTYPUT | DISPATCH_PROPERTYPUTREF))
             return E_NOTIMPL;
 
@@ -516,7 +524,7 @@ public:
 
         int idx = mid->second;
 
-
+        
         wxActiveX::FuncX &func = m_activeX->m_events[idx];
 
         ActiveXEventMap::iterator it = sg_eventMap.find(func.name);
@@ -555,7 +563,7 @@ public:
 				if (px.IsOut())
 				{
 					wxVariant& vx = event.m_params[pDispParams->cArgs - i - 1];
-
+					
 					VariantToMSWVariant(vx, va);
 				};
 			};
@@ -622,15 +630,15 @@ wxVariant& wxActiveXEvent::operator[] (wxString name)
 void wxActiveX::GetTypeInfo()
 {
 	/*
-	We are currently only interested in the IDispatch interface
+	We are currently only interested in the IDispatch interface 
 	to the control. For dual interfaces (TypeKind = TKIND_INTERFACE)
-	we should drill down through the inheritance
+	we should drill down through the inheritance 
 	(using TYPEATTR->cImplTypes) and GetRefTypeOfImplType(n)
-	and retrieve all the func names etc that way, then generate a C++
+	and retrieve all the func names etc that way, then generate a C++ 
 	header	file for it.
 
-	But we don't do this and probably never will, so if we have a DUAL
-	interface then we query for the IDispatch
+	But we don't do this and probably never will, so if we have a DUAL 
+	interface then we query for the IDispatch 
 	via GetRefTypeOfImplType(-1).
 	*/
 
@@ -792,11 +800,11 @@ HRESULT wxActiveX::ConnectAdvise(REFIID riid, IUnknown *events)
 	wxAutoOleInterface<IConnectionPointContainer> cpContainer(IID_IConnectionPointContainer, m_ActiveX);
 	if (! cpContainer.Ok())
 		return E_FAIL;
-
+	
 	HRESULT hret = cpContainer->FindConnectionPoint(riid, cp.GetRef());
 	if (! SUCCEEDED(hret))
 		return hret;
-
+	
 	hret = cp->Advise(events, &adviseCookie);
 
 	if (SUCCEEDED(hret))
@@ -857,28 +865,32 @@ void wxActiveX::OnSize(wxSizeEvent& event)
 	if (w <= 0 && h <= 0)
 		return;
 
-	if (m_oleInPlaceObject)
+	if (m_oleInPlaceObject.Ok()) 
 		m_oleInPlaceObject->SetObjectRects(&posRect, &posRect);
 
 	// extents are in HIMETRIC units
-    SIZEL sz = {w, h};
-	PixelsToHimetric(sz);
+    if (m_oleObject.Ok())
+    {
+        SIZEL sz = {w, h};
+	    PixelsToHimetric(sz);
 
-    SIZEL sz2;
-    m_oleObject->GetExtent(DVASPECT_CONTENT, &sz2);
-    if (sz2.cx !=  sz.cx || sz.cy != sz2.cy)
-        m_oleObject->SetExtent(DVASPECT_CONTENT, &sz);
+        SIZEL sz2;
+
+        m_oleObject->GetExtent(DVASPECT_CONTENT, &sz2);
+        if (sz2.cx !=  sz.cx || sz.cy != sz2.cy)
+            m_oleObject->SetExtent(DVASPECT_CONTENT, &sz);
+    };
 }
 
 void wxActiveX::OnSetFocus(wxFocusEvent& event)
 {
-	if (m_oleInPlaceActiveObject.Ok())
+	if (m_oleInPlaceActiveObject.Ok()) 
         m_oleInPlaceActiveObject->OnFrameWindowActivate(TRUE);
 }
 
 void wxActiveX::OnKillFocus(wxFocusEvent& event)
 {
-	if (m_oleInPlaceActiveObject.Ok())
+	if (m_oleInPlaceActiveObject.Ok()) 
         m_oleInPlaceActiveObject->OnFrameWindowActivate(FALSE);
 }
 
@@ -898,7 +910,7 @@ FrameSite::FrameSite(wxActiveX * win)
 	m_bAmbientShowHatching = true;
 	m_bAmbientShowGrabHandles = true;
 	m_bAmbientAppearance = true;
-
+ 
 	m_hDCBuffer = NULL;
 	m_hWndParent = (HWND)m_window->GetHWND();
 }
@@ -941,7 +953,7 @@ HRESULT FrameSite::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
 
     HRESULT hr;
 
-	if (pVarResult == NULL)
+	if (pVarResult == NULL) 
 		return E_INVALIDARG;
 
     //The most common case is boolean, use as an initial type
@@ -1017,7 +1029,7 @@ HRESULT FrameSite::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
 HRESULT FrameSite::GetWindow(HWND * phwnd)
 {
 	WXOLE_TRACE("IOleWindow::GetWindow");
-	if (phwnd == NULL)
+	if (phwnd == NULL) 
         return E_INVALIDARG;
 	(*phwnd) = m_hWndParent;
 	return S_OK;
@@ -1034,7 +1046,7 @@ HRESULT FrameSite::ContextSensitiveHelp(BOOL fEnterMode)
 HRESULT FrameSite::GetBorder(LPRECT lprectBorder)
 {
 	WXOLE_TRACE("IOleInPlaceUIWindow::GetBorder");
-	if (lprectBorder == NULL)
+	if (lprectBorder == NULL) 
         return E_INVALIDARG;
 	return INPLACE_E_NOTOOLSPACE;
 }
@@ -1042,7 +1054,7 @@ HRESULT FrameSite::GetBorder(LPRECT lprectBorder)
 HRESULT FrameSite::RequestBorderSpace(LPCBORDERWIDTHS pborderwidths)
 {
 	WXOLE_TRACE("IOleInPlaceUIWindow::RequestBorderSpace");
-	if (pborderwidths == NULL)
+	if (pborderwidths == NULL) 
         return E_INVALIDARG;
 	return INPLACE_E_NOTOOLSPACE;
 }
@@ -1139,9 +1151,9 @@ HRESULT FrameSite::GetWindowContext(IOleInPlaceFrame **ppFrame,
 	if (ppFrame == NULL || ppDoc == NULL || lprcPosRect == NULL ||
 		lprcClipRect == NULL || lpFrameInfo == NULL)
 	{
-		if (ppFrame != NULL)
+		if (ppFrame != NULL) 
             (*ppFrame) = NULL;
-		if (ppDoc != NULL)
+		if (ppDoc != NULL) 
             (*ppDoc) = NULL;
 		return E_INVALIDARG;
 	}
@@ -1231,7 +1243,7 @@ HRESULT FrameSite::OnInPlaceActivateEx(BOOL * pfNoRedraw, DWORD dwFlags)
 {
 	WXOLE_TRACE("IOleInPlaceSiteEx::OnInPlaceActivateEx");
 	OleLockRunning(m_window->m_ActiveX, TRUE, FALSE);
-    if (pfNoRedraw)
+    if (pfNoRedraw) 
         (*pfNoRedraw) = FALSE;
 	return S_OK;
 }
@@ -1268,9 +1280,9 @@ HRESULT FrameSite::GetMoniker(DWORD dwAssign, DWORD dwWhichMoniker,
 HRESULT FrameSite::GetContainer(LPOLECONTAINER * ppContainer)
 {
 	WXOLE_TRACE("IOleClientSite::GetContainer");
-	if (ppContainer == NULL)
+	if (ppContainer == NULL) 
         return E_INVALIDARG;
-
+	
     HRESULT hr = QueryInterface(IID_IOleContainer, (void**)(ppContainer));
     wxASSERT(SUCCEEDED(hr));
 
@@ -1323,26 +1335,26 @@ HRESULT FrameSite::LockContainer(BOOL fLock)
 
 //IOleItemContainer
 
-HRESULT FrameSite::GetObject(LPOLESTR pszItem, DWORD dwSpeedNeeded,
+HRESULT FrameSite::GetObject(LPOLESTR pszItem, DWORD dwSpeedNeeded, 
 							 IBindCtx * pbc, REFIID riid, void ** ppvObject)
 {
 	WXOLE_TRACE("IOleItemContainer::GetObject");
-	if (pszItem == NULL)
+	if (pszItem == NULL) 
         return E_INVALIDARG;
-	if (ppvObject == NULL)
+	if (ppvObject == NULL) 
         return E_INVALIDARG;
 
 	*ppvObject = NULL;
 	return MK_E_NOOBJECT;
 }
 
-HRESULT FrameSite::GetObjectStorage(LPOLESTR pszItem, IBindCtx * pbc,
+HRESULT FrameSite::GetObjectStorage(LPOLESTR pszItem, IBindCtx * pbc, 
 									REFIID riid, void ** ppvStorage)
 {
 	WXOLE_TRACE("IOleItemContainer::GetObjectStorage");
-	if (pszItem == NULL)
+	if (pszItem == NULL) 
         return E_INVALIDARG;
-	if (ppvStorage == NULL)
+	if (ppvStorage == NULL) 
         return E_INVALIDARG;
 
 	*ppvStorage = NULL;
@@ -1352,7 +1364,7 @@ HRESULT FrameSite::GetObjectStorage(LPOLESTR pszItem, IBindCtx * pbc,
 HRESULT FrameSite::IsRunning(LPOLESTR pszItem)
 {
 	WXOLE_TRACE("IOleItemContainer::IsRunning");
-	if (pszItem == NULL)
+	if (pszItem == NULL) 
         return E_INVALIDARG;
 
 	return MK_E_NOOBJECT;
@@ -1417,7 +1429,7 @@ HRESULT FrameSite::ShowPropertyFrame()
 
 //IOleCommandTarget
 
-HRESULT FrameSite::QueryStatus(const GUID * pguidCmdGroup, ULONG cCmds,
+HRESULT FrameSite::QueryStatus(const GUID * pguidCmdGroup, ULONG cCmds, 
 							   OLECMD * prgCmds, OLECMDTEXT * pCmdTet)
 {
 	WXOLE_TRACE("IOleCommandTarget::QueryStatus");
@@ -1436,8 +1448,8 @@ HRESULT FrameSite::QueryStatus(const GUID * pguidCmdGroup, ULONG cCmds,
 	return S_OK;
 }
 
-HRESULT FrameSite::Exec(const GUID * pguidCmdGroup, DWORD nCmdID,
-						DWORD nCmdExecOpt, VARIANTARG * pVaIn,
+HRESULT FrameSite::Exec(const GUID * pguidCmdGroup, DWORD nCmdID, 
+						DWORD nCmdExecOpt, VARIANTARG * pVaIn, 
 						VARIANTARG * pVaOut)
 {
 	WXOLE_TRACE("IOleCommandTarget::Exec");
@@ -1592,7 +1604,7 @@ wxString OLEHResultToString(HRESULT hr)
 wxString GetIIDName(REFIID riid)
 {
   // an association between symbolic name and numeric value of an IID
-  struct KNOWN_IID
+  struct KNOWN_IID 
   {
     const IID  *pIid;
     const wxChar *szName;
@@ -1602,7 +1614,7 @@ wxString GetIIDName(REFIID riid)
   #define ADD_KNOWN_IID(name) { &IID_I##name, _T(#name) }
   #define ADD_KNOWN_GUID(name) { &name, _T(#name) }
 
-  static const KNOWN_IID aKnownIids[] =
+  static const KNOWN_IID aKnownIids[] = 
   {
     ADD_KNOWN_IID(AdviseSink),
     ADD_KNOWN_IID(AdviseSink2),
@@ -1696,9 +1708,9 @@ wxString GetIIDName(REFIID riid)
   #undef ADD_KNOWN_GUID
 
   // try to find the interface in the table
-  for ( size_t ui = 0; ui < WXSIZEOF(aKnownIids); ui++ )
+  for ( size_t ui = 0; ui < WXSIZEOF(aKnownIids); ui++ ) 
   {
-    if ( riid == *aKnownIids[ui].pIid )
+    if ( riid == *aKnownIids[ui].pIid ) 
     {
       return aKnownIids[ui].szName;
     }

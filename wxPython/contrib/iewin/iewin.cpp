@@ -57,6 +57,7 @@ extern PyObject *SWIG_newvarlink(void);
 
 #include "wxPython.h"
 #include "IEHtmlWin.h"
+#include "pyistream.h"
 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
@@ -407,6 +408,55 @@ static PyObject *_wrap_wxIEHtmlWin_LoadString(PyObject *self, PyObject *args, Py
 }    _resultobj = Py_BuildValue("i",_result);
 {
     if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxIEHtmlWin_LoadStream(_swigobj,_swigarg0)  (_swigobj->LoadStream(_swigarg0))
+static PyObject *_wrap_wxIEHtmlWin_LoadStream(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxIEHtmlWin * _arg0;
+    wxInputStream * _arg1;
+    PyObject * _argo0 = 0;
+    wxPyInputStream * temp;
+    bool  created;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","is", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxIEHtmlWin_LoadStream",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIEHtmlWin_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxIEHtmlWin_LoadStream. Expected _wxIEHtmlWin_p.");
+        return NULL;
+        }
+    }
+{
+    if (SWIG_GetPtrObj(_obj1, (void **) &temp, "_wxPyInputStream_p") == 0) {
+        _arg1 = temp->m_wxis;
+        created = FALSE;
+    } else {
+        _arg1 = wxPyCBInputStream_create(_obj1, FALSE);
+        if (_arg1 == NULL) {
+            PyErr_SetString(PyExc_TypeError,"Expected _wxInputStream_p or Python file-like object.");
+            return NULL;
+        }
+        created = TRUE;
+    }
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxIEHtmlWin_LoadStream(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (created)
         delete _arg1;
 }
     return _resultobj;
@@ -771,6 +821,7 @@ static PyMethodDef iewincMethods[] = {
 	 { "wxIEHtmlWin_GetEditMode", (PyCFunction) _wrap_wxIEHtmlWin_GetEditMode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIEHtmlWin_SetEditMode", (PyCFunction) _wrap_wxIEHtmlWin_SetEditMode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIEHtmlWin_SetCharset", (PyCFunction) _wrap_wxIEHtmlWin_SetCharset, METH_VARARGS | METH_KEYWORDS },
+	 { "wxIEHtmlWin_LoadStream", (PyCFunction) _wrap_wxIEHtmlWin_LoadStream, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIEHtmlWin_LoadString", (PyCFunction) _wrap_wxIEHtmlWin_LoadString, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIEHtmlWin_LoadUrl", (PyCFunction) _wrap_wxIEHtmlWin_LoadUrl, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxIEHtmlWin", (PyCFunction) _wrap_new_wxIEHtmlWin, METH_VARARGS | METH_KEYWORDS },

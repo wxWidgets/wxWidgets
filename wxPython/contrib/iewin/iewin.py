@@ -95,6 +95,9 @@ class wxIEHtmlWinPtr(wxWindowPtr):
     def LoadString(self, *_args, **_kwargs):
         val = apply(iewinc.wxIEHtmlWin_LoadString,(self,) + _args, _kwargs)
         return val
+    def LoadStream(self, *_args, **_kwargs):
+        val = apply(iewinc.wxIEHtmlWin_LoadStream,(self,) + _args, _kwargs)
+        return val
     def SetCharset(self, *_args, **_kwargs):
         val = apply(iewinc.wxIEHtmlWin_SetCharset,(self,) + _args, _kwargs)
         return val

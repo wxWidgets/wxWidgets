@@ -1,7 +1,9 @@
 #include "IEHtmlWin.h"
 #include <wx/strconv.h>
+#include <wx/string.h>
 #include <wx/event.h>
 #include <wx/listctrl.h>
+#include <wx/mstream.h>
 #include <oleidl.h>
 #include <winerror.h>
 #include <exdispid.h>
@@ -35,23 +37,23 @@ private:
 
 public:
     FS_DWebBrowserEvents2(wxIEHtmlWin *iewin) : m_iewin(iewin) {}
-	~FS_DWebBrowserEvents2()
+	~FS_DWebBrowserEvents2() 
     {
     }
 
 	//IDispatch
 	STDMETHODIMP GetIDsOfNames(REFIID r, OLECHAR** o, unsigned int i, LCID l, DISPID* d)
-	{
+	{ 
         return E_NOTIMPL;
     };
 
 	STDMETHODIMP GetTypeInfo(unsigned int i, LCID l, ITypeInfo** t)
-	{
+	{ 
         return E_NOTIMPL;
     };
 
 	STDMETHODIMP GetTypeInfoCount(unsigned int* i)
-	{
+	{ 
         return E_NOTIMPL;
     };
 
@@ -114,7 +116,7 @@ public:
 						  WORD wFlags, DISPPARAMS * pDispParams,
 						  VARIANT * pVarResult, EXCEPINFO * pExcepInfo,
 						  unsigned int * puArgErr)
-	{
+	{ 
 	    if (wFlags & DISPATCH_PROPERTYGET)
             return E_NOTIMPL;
 
@@ -123,21 +125,21 @@ public:
 		    case DISPID_BEFORENAVIGATE2:
 				if (Process(wxEVT_COMMAND_MSHTML_BEFORENAVIGATE2, STR_ARG(5)))
 					*pDispParams->rgvarg->pboolVal = VARIANT_FALSE;
-				else
+				else 
 					*pDispParams->rgvarg->pboolVal = VARIANT_TRUE;
 				break;
 
 		    case DISPID_NEWWINDOW2:
 				if (Process(wxEVT_COMMAND_MSHTML_NEWWINDOW2))
 					*pDispParams->rgvarg->pboolVal = VARIANT_FALSE;
-				else
+				else 
 					*pDispParams->rgvarg->pboolVal = VARIANT_TRUE;
 				break;
 
             case DISPID_PROGRESSCHANGE:
 				Post(wxEVT_COMMAND_MSHTML_PROGRESSCHANGE, "", LONG_ARG(1), LONG_ARG(0));
 				break;
-
+		    
             case DISPID_DOCUMENTCOMPLETE:
 				Post(wxEVT_COMMAND_MSHTML_DOCUMENTCOMPLETE, STR_ARG(0));
 				break;
@@ -181,7 +183,7 @@ wxIEHtmlWin::wxIEHtmlWin(wxWindow * parent, wxWindowID id,
         const wxPoint& pos,
         const wxSize& size,
         long style,
-        const wxString& name) :
+        const wxString& name) : 
     wxActiveX(parent, PROGID, id, pos, size, style, name)
 {
     SetupBrowser();
@@ -242,7 +244,8 @@ void wxIEHtmlWin::SetCharset(wxString charset)
 	{
 		wxAutoOleInterface<IHTMLDocument2> doc(IID_IHTMLDocument2, disp);
 		if (doc.Ok())
-            doc->put_charset((BSTR) (const wchar_t*)charset.wc_str(wxConvUTF8));
+            doc->put_charset((BSTR) (const wchar_t *) charset.wc_str(wxConvUTF8));
+			//doc->put_charset((BSTR) wxConvUTF8.cMB2WC(charset).data());
 	};
 };
 
@@ -284,12 +287,12 @@ private:
     istream *m_is;
 
 public:
-
-    IStreamAdaptor(istream *is)	: IStreamAdaptorBase(), m_is(is)
+    
+    IStreamAdaptor(istream *is)	: IStreamAdaptorBase(), m_is(is) 
     {
         wxASSERT(m_is != NULL);
     }
-    ~IStreamAdaptor()
+    ~IStreamAdaptor()	
     {
         delete m_is;
     }
@@ -305,11 +308,37 @@ public:
 	};
 };
 
+class IwxStreamAdaptor : public IStreamAdaptorBase
+{
+private:
+    wxInputStream *m_is;
+
+public:
+    
+    IwxStreamAdaptor(wxInputStream *is)	: IStreamAdaptorBase(), m_is(is) 
+    {
+        wxASSERT(m_is != NULL);
+    }
+    ~IwxStreamAdaptor()	
+    {
+        delete m_is;
+    }
+
+    // ISequentialStream
+    HRESULT STDMETHODCALLTYPE Read(void __RPC_FAR *pv, ULONG cb, ULONG __RPC_FAR *pcbRead)
+	{
+		m_is->Read((char *) pv, cb);
+		if (pcbRead)
+			*pcbRead = m_is->LastRead();
+
+		return S_OK;
+	};
+};
 
 void wxIEHtmlWin::LoadUrl(const wxString& url)
 {
 	VARIANTARG navFlag, targetFrame, postData, headers;
-	navFlag.vt = VT_EMPTY;
+	navFlag.vt = VT_EMPTY; 
 	navFlag.vt = VT_I2;
 	navFlag.iVal = navNoReadFromCache;
 	targetFrame.vt = VT_EMPTY;
@@ -317,24 +346,38 @@ void wxIEHtmlWin::LoadUrl(const wxString& url)
 	headers.vt = VT_EMPTY;
 
 	HRESULT hret = 0;
-	hret = m_webBrowser->Navigate((BSTR) (const wchar_t*)url.wc_str(wxConvUTF8),
-		&navFlag, &targetFrame, &postData, &headers);
+	hret = m_webBrowser->Navigate((BSTR) (const wchar_t *) url.wc_str(wxConvUTF8), 
+		&navFlag, &targetFrame, &postData, &headers);	
 };
 
+class wxOwnedMemInputStream : public wxMemoryInputStream
+{
+public:
+    char *m_data;
+
+    wxOwnedMemInputStream(char *data, size_t len) :
+        wxMemoryInputStream(data, len), m_data(data)
+    {}
+    ~wxOwnedMemInputStream() 
+    {
+        free(m_data);
+    }
+};
 
 bool  wxIEHtmlWin::LoadString(wxString html)
 {
-	string s = html.mb_str(wxConvUTF8);
-	istringstream *is = new istringstream(s);
-	return LoadStream(is);
+    char *data = NULL;
+    size_t len = html.length();
+#ifdef UNICODE
+    len *= 2;
+#endif
+    data = (char *) malloc(len);
+    memcpy(data, html.c_str(), len);
+	return LoadStream(new wxOwnedMemInputStream(data, len));
 };
 
-bool  wxIEHtmlWin::LoadStream(istream *is)
+bool wxIEHtmlWin::LoadStream(IStreamAdaptorBase *pstrm)
 {
-	// wrap reference around stream
-    IStreamAdaptor *pstrm = new IStreamAdaptor(is);
-	pstrm->AddRef();
-
 	wxAutoOleInterface<IStream>	strm(pstrm);
 
     // Document Interface
@@ -360,6 +403,25 @@ bool  wxIEHtmlWin::LoadStream(istream *is)
 	else
 	    return false;
 };
+
+bool  wxIEHtmlWin::LoadStream(istream *is)
+{
+	// wrap reference around stream
+    IStreamAdaptor *pstrm = new IStreamAdaptor(is);
+	pstrm->AddRef();
+
+    return LoadStream(pstrm);
+};
+
+bool wxIEHtmlWin::LoadStream(wxInputStream *is)
+{
+	// wrap reference around stream
+    IwxStreamAdaptor *pstrm = new IwxStreamAdaptor(is);
+	pstrm->AddRef();
+
+    return LoadStream(pstrm);
+};
+
 
 bool wxIEHtmlWin::GoBack()
 {
@@ -466,7 +528,7 @@ wxString wxIEHtmlWin::GetStringSelection(bool asHTML)
 
     BSTR text = NULL;
     HRESULT hr = E_FAIL;
-
+	
 	if (asHTML)
 		hr = tr->get_htmlText(&text);
 	else
@@ -508,7 +570,7 @@ wxString wxIEHtmlWin::GetText(bool asHTML)
 	// get inner text
     BSTR text = NULL;
     hr = E_FAIL;
-
+	
 	if (asHTML)
 		hr = body->get_innerHTML(&text);
 	else
@@ -519,5 +581,5 @@ wxString wxIEHtmlWin::GetText(bool asHTML)
     wxString s = text;
     SysFreeString(text);
 
-    return s;
+    return s;	
 };

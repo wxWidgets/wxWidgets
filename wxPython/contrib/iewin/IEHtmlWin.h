@@ -61,8 +61,11 @@ enum wxIEHtmlRefreshLevel
 	wxIEHTML_REFRESH_COMPLETELY = 3
 };
 
+class IStreamAdaptorBase;
+
 class wxIEHtmlWin : public wxActiveX
 {
+
 public:
     wxIEHtmlWin(wxWindow * parent, wxWindowID id = -1,
         const wxPoint& pos = wxDefaultPosition,
@@ -74,6 +77,7 @@ public:
 	void LoadUrl(const wxString&);
     bool LoadString(wxString html);
     bool LoadStream(istream *strm);
+    bool LoadStream(wxInputStream *is);
 
 	void SetCharset(wxString charset);
     void SetEditMode(bool seton);
@@ -92,6 +96,7 @@ public:
 
 protected:
     void SetupBrowser();
+    bool LoadStream(IStreamAdaptorBase *pstrm);
 
 	wxAutoOleInterface<IWebBrowser2>		m_webBrowser;
 };
