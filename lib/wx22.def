@@ -3240,12 +3240,16 @@ EXPORTS
       OnSysTell__20wxMemoryOutputStreamCFv
   ;From object file:  ..\common\object.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxObject::Nid
+      Nid__8wxObject
       __vft8wxObject
       ;wxCreateStoredObject(wxInputStream&)
       wxCreateStoredObject__FR13wxInputStream
       __vft15wxObjectRefData
       ;wxCreateDynamicObject(const char*)
       wxCreateDynamicObject__FPCc
+      ;wxObject::N
+      N__8wxObject
       ;wxObject::Dump(ostream&)
       Dump__8wxObjectFR7ostream
       wxTrue
@@ -3288,8 +3292,6 @@ EXPORTS
       __ct__8wxObjectFv
       ;wxObject::~wxObject()
       __dt__8wxObjectFv
-      ;wxObject::operator delete(void*)
-      __dl__8wxObjectFPv
       ;wxClassInfo::InitializeClasses()
       InitializeClasses__11wxClassInfoFv
       ;wxClassInfo::IsKindOf(wxClassInfo*) const
@@ -4394,6 +4396,8 @@ EXPORTS
       DoSort__13wxArrayStringFv
       ;operator+(char,const wxString&)
       __pl__FcRC8wxString
+      ;wxString::resize(unsigned int,char)
+      resize__8wxStringFUic
       ;wxString::replace(unsigned int,unsigned int,const char*)
       replace__8wxStringFUiT1PCc
       ;wxString::Matches(const char*) const
@@ -4476,6 +4480,8 @@ EXPORTS
       AllocCopy__8wxStringCFR8wxStringiT2
       ;wxString::operator=(const char*)
       __as__8wxStringFPCc
+      ;wxString::swap(wxString&)
+      swap__8wxStringFR8wxString
       ;wxString::insert(unsigned int,const wxString&)
       insert__8wxStringFUiRC8wxString
       ;operator+(const wxString&,const char*)
@@ -4641,6 +4647,8 @@ EXPORTS
       GetToolShortHelp__13wxToolBarBaseCFi
       ;wxToolBarBase::sm_eventTable
       sm_eventTable__13wxToolBarBase
+      ;wxToolBarBase::sm_classwxToolBarBase
+      sm_classwxToolBarBase__13wxToolBarBase
       __vft24wxwxToolBarToolsListNode10wxNodeBase
       ;wxwxToolBarToolsListNode::DeleteData()
       DeleteData__24wxwxToolBarToolsListNodeFv
@@ -6027,9 +6035,9 @@ EXPORTS
       DoDraw__7wxCaretFP4wxDC
   ;From object file:  ..\generic\choicdgg.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxMultiChoiceDialog::Create(wxWindow*,const wxString&,const wxString&,int,const wxString*,long,const wxPoint&)
+      Create__19wxMultiChoiceDialogFP8wxWindowRC8wxStringT2iPC8wxStringlRC7wxPoint
       __vft20wxSingleChoiceDialog8wxObject
-      ;wxGetSingleChoiceIndex(const wxString&,const wxString&,int,char**,wxWindow*,int,int,unsigned long,int,int)
-      wxGetSingleChoiceIndex__FRC8wxStringT1iPPcP8wxWindowN23UlN23
       ;wxGetSingleChoiceData(const wxString&,const wxString&,int,const wxString*,void**,wxWindow*,int,int,unsigned long,int,int)
       wxGetSingleChoiceData__FRC8wxStringT1iPC8wxStringPPvP8wxWindowN23UlN23
       ;wxSingleChoiceDialog::sm_eventTable
@@ -6038,30 +6046,43 @@ EXPORTS
       sm_classwxSingleChoiceDialog__20wxSingleChoiceDialog
       ;wxSingleChoiceDialog::OnListBoxDClick(wxCommandEvent&)
       OnListBoxDClick__20wxSingleChoiceDialogFR14wxCommandEvent
+      __vft19wxMultiChoiceDialog8wxObject
       ;wxSingleChoiceDialog::SetSelection(int)
       SetSelection__20wxSingleChoiceDialogFi
+      ;wxGetMultipleChoices(wxArrayInt&,const wxString&,const wxString&,int,const wxString*,wxWindow*,int,int,unsigned long,int,int)
+      wxGetMultipleChoices__FR10wxArrayIntRC8wxStringT2iPC8wxStringP8wxWindowN24UlN24
       ;wxSingleChoiceDialog::Create(wxWindow*,const wxString&,const wxString&,int,const wxString*,char**,long,const wxPoint&)
       Create__20wxSingleChoiceDialogFP8wxWindowRC8wxStringT2iPC8wxStringPPclRC7wxPoint
+      ;wxGetSingleChoice(const wxString&,const wxString&,const wxArrayString&,wxWindow*,int,int,unsigned long,int,int)
+      wxGetSingleChoice__FRC8wxStringT1RC13wxArrayStringP8wxWindowiT5UlN25
+      ;wxAnyChoiceDialog::Create(wxWindow*,const wxString&,const wxString&,int,const wxString*,long,const wxPoint&,long)
+      Create__17wxAnyChoiceDialogFP8wxWindowRC8wxStringT2iPC8wxStringlRC7wxPointT6
+      ;wxGetSingleChoiceData(const wxString&,const wxString&,const wxArrayString&,void**,wxWindow*,int,int,unsigned long,int,int)
+      wxGetSingleChoiceData__FRC8wxStringT1RC13wxArrayStringPPvP8wxWindowiT6UlN26
+      ;wxGetMultipleChoices(wxArrayInt&,const wxString&,const wxString&,const wxArrayString&,wxWindow*,int,int,unsigned long,int,int)
+      wxGetMultipleChoices__FR10wxArrayIntRC8wxStringT2RC13wxArrayStringP8wxWindowiT6UlN26
       ;wxGetSingleChoice(const wxString&,const wxString&,int,const wxString*,wxWindow*,int,int,unsigned long,int,int)
       wxGetSingleChoice__FRC8wxStringT1iPC8wxStringP8wxWindowN23UlN23
-      ;wxGetSingleChoice(const wxString&,const wxString&,int,char**,wxWindow*,int,int,unsigned long,int,int)
-      wxGetSingleChoice__FRC8wxStringT1iPPcP8wxWindowN23UlN23
-      ;wxGetSingleChoiceData(const wxString&,const wxString&,int,char**,void**,wxWindow*,int,int,unsigned long,int,int)
-      wxGetSingleChoiceData__FRC8wxStringT1iPPcPPvP8wxWindowN23UlN23
+      ;wxMultiChoiceDialog::SetSelections(const wxArrayInt&)
+      SetSelections__19wxMultiChoiceDialogFRC10wxArrayInt
       ;wxSingleChoiceDialog::GetEventTable() const
       GetEventTable__20wxSingleChoiceDialogCFv
+      ;wxConstructorForwxSingleChoiceDialog()
+      wxConstructorForwxSingleChoiceDialog__Fv
+      ;wxConstructorForwxMultiChoiceDialog()
+      wxConstructorForwxMultiChoiceDialog__Fv
       ;wxSingleChoiceDialog::wxSingleChoiceDialog(wxWindow*,const wxString&,const wxString&,int,const wxString*,char**,long,const wxPoint&)
       __ct__20wxSingleChoiceDialogFP8wxWindowRC8wxStringT2iPC8wxStringPPclRC7wxPoint
-      ;wxSingleChoiceDialog::wxSingleChoiceDialog(wxWindow*,const wxString&,const wxString&,const wxStringList&,char**,long,const wxPoint&)
-      __ct__20wxSingleChoiceDialogFP8wxWindowRC8wxStringT2RC12wxStringListPPclRC7wxPoint
       ;wxSingleChoiceDialog::OnOK(wxCommandEvent&)
       OnOK__20wxSingleChoiceDialogFR14wxCommandEvent
-      ;wxSingleChoiceDialog::Create(wxWindow*,const wxString&,const wxString&,const wxStringList&,char**,long,const wxPoint&)
-      Create__20wxSingleChoiceDialogFP8wxWindowRC8wxStringT2RC12wxStringListPPclRC7wxPoint
+      ;wxMultiChoiceDialog::TransferDataFromWindow()
+      TransferDataFromWindow__19wxMultiChoiceDialogFv
       ;wxGetSingleChoiceIndex(const wxString&,const wxString&,int,const wxString*,wxWindow*,int,int,unsigned long,int,int)
       wxGetSingleChoiceIndex__FRC8wxStringT1iPC8wxStringP8wxWindowN23UlN23
       ;wxSingleChoiceDialog::sm_eventTableEntries
       sm_eventTableEntries__20wxSingleChoiceDialog
+      ;wxMultiChoiceDialog::sm_classwxMultiChoiceDialog
+      sm_classwxMultiChoiceDialog__19wxMultiChoiceDialog
   ;From object file:  ..\generic\colrdlgg.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxGenericColourDialog::OnBasicColourClick(int)
@@ -7156,6 +7177,8 @@ EXPORTS
       OnPaint__18wxListHeaderWindowFR12wxPaintEvent
       ;wxListMainWindow::OnMouse(wxMouseEvent&)
       OnMouse__16wxListMainWindowFR12wxMouseEvent
+      ;wxListTextCtrl::OnKeyUp(wxKeyEvent&)
+      OnKeyUp__14wxListTextCtrlFR10wxKeyEvent
       ;wxListMainWindow::OnChar(wxKeyEvent&)
       OnChar__16wxListMainWindowFR10wxKeyEvent
       ;wxListMainWindow::HilightAll(unsigned long)
@@ -7677,6 +7700,8 @@ EXPORTS
       __ct__16wxProgressDialogFRC8wxStringT1iP8wxWindowT3
       ;wxProgressDialog::CreateLabel(const wxString&,wxWindow**)
       CreateLabel__16wxProgressDialogFRC8wxStringPP8wxWindow
+      ;wxProgressDialog::OnShow(wxShowEvent&)
+      OnShow__16wxProgressDialogFR11wxShowEvent
       __vft16wxProgressDialog8wxObject
       ;wxProgressDialog::GetEventTable() const
       GetEventTable__16wxProgressDialogCFv
@@ -7692,6 +7717,8 @@ EXPORTS
       sm_eventTableEntries__16wxProgressDialog
       ;wxProgressDialog::OnCancel(wxCommandEvent&)
       OnCancel__16wxProgressDialogFR14wxCommandEvent
+      ;wxProgressDialog::ReenableOtherWindows()
+      ReenableOtherWindows__16wxProgressDialogFv
       ;wxProgressDialog::~wxProgressDialog()
       __dt__16wxProgressDialogFv
   ;From object file:  ..\generic\prop.cpp
@@ -8844,6 +8871,8 @@ EXPORTS
       SetItemFont__17wxGenericTreeCtrlFRC12wxTreeItemIdRC6wxFont
       ;wxGenericTreeCtrl::OnPaint(wxPaintEvent&)
       OnPaint__17wxGenericTreeCtrlFR12wxPaintEvent
+      ;wxTreeTextCtrl::OnKeyUp(wxKeyEvent&)
+      OnKeyUp__14wxTreeTextCtrlFR10wxKeyEvent
       ;wxGenericTreeCtrl::OnIdle(wxIdleEvent&)
       OnIdle__17wxGenericTreeCtrlFR11wxIdleEvent
       ;wxGenericTreeCtrl::IsSelected(const wxTreeItemId&) const
@@ -9381,6 +9410,8 @@ EXPORTS
       sm_classwxHtmlWinModule__15wxHtmlWinModule
       ;wxHtmlWindow::~wxHtmlWindow()
       __dt__12wxHtmlWindowFv
+      ;wxHtmlWindow::HistoryCanForward()
+      HistoryCanForward__12wxHtmlWindowFv
       ;wxHtmlWindow::HistoryBack()
       HistoryBack__12wxHtmlWindowFv
       ;wxHtmlWindow::AddFilter(wxHtmlFilter*)
@@ -9450,6 +9481,8 @@ EXPORTS
       __vft12wxHtmlWindow8wxObject
       ;HtmlHistoryArray::HtmlHistoryArray(const HtmlHistoryArray&)
       __ct__16HtmlHistoryArrayFRC16HtmlHistoryArray
+      ;wxHtmlWindow::HistoryCanBack()
+      HistoryCanBack__12wxHtmlWindowFv
       ;wxHtmlWindow::HistoryForward()
       HistoryForward__12wxHtmlWindowFv
       ;wxHtmlWindow::wxHtmlWindow(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
@@ -9796,6 +9829,7 @@ EXPORTS
       Pending__5wxAppFv
       ;wxApp::DeletePendingObjects()
       DeletePendingObjects__5wxAppFv
+      CANTREGISTERCLASS
       ;wxApp::RegisterWindowClasses(unsigned long)
       RegisterWindowClasses__5wxAppFUl
       ;wxApp::sm_eventTableEntries
@@ -10486,8 +10520,8 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxDC::SetFont(const wxFont&)
       SetFont__4wxDCFRC6wxFont
-      ;wxDC::DoDrawArc(int,int,int,int,int,int)
-      DoDrawArc__4wxDCFiN51
+      ;SetTextColor(unsigned long,int)
+      SetTextColor__FUli
       ;wxDC::SetSystemScale(double,double)
       SetSystemScale__4wxDCFdT1
       ;wxDC::SetPalette(const wxPalette&)
@@ -10500,6 +10534,8 @@ EXPORTS
       LogicalToDeviceYRel__8wxDCBaseCFi
       ;wxDC::DoDrawEllipse(int,int,int,int)
       DoDrawEllipse__4wxDCFiN31
+      ;wxDC::DoDrawArc(int,int,int,int,int,int)
+      DoDrawArc__4wxDCFiN51
       ;wxDCBase::DeviceToLogicalYRel(int) const
       DeviceToLogicalYRel__8wxDCBaseCFi
       ;wxDC::DrawAnyText(const wxString&,int,int)
@@ -10580,11 +10616,15 @@ EXPORTS
       Clear__4wxDCFv
       ;wxDC::CanGetTextExtent() const
       CanGetTextExtent__4wxDCCFv
+      ;QueryTextBkColor(unsigned long)
+      QueryTextBkColor__FUl
+      __vft8wxSpline8wxObject
       ;wxDC::SelectOldObjects(unsigned long)
       SelectOldObjects__4wxDCFUl
-      __vft8wxSpline8wxObject
       ;wxDC::DoDrawSpline(wxList*)
       DoDrawSpline__4wxDCFP6wxList
+      ;SetBkMode(unsigned long,int)
+      SetBkMode__FUli
       ;wxDC::DoSetClippingRegion(int,int,int,int)
       DoSetClippingRegion__4wxDCFiN31
       ;wxDC::DoGetSize(int*,int*) const
@@ -10611,8 +10651,8 @@ EXPORTS
       SetRop__4wxDCFUl
       ;wxDC::SetBackground(const wxBrush&)
       SetBackground__4wxDCFRC7wxBrush
-      ;wxDC::DoDrawPoint(int,int)
-      DoDrawPoint__4wxDCFiT1
+      ;SetTextBkColor(unsigned long,int)
+      SetTextBkColor__FUli
       ;wx_spline_push(double,double,double,double,double,double,double,double)
       wx_spline_push__FdN71
       ;wx_spline_pop(double*,double*,double*,double*,double*,double*,double*,double*)
@@ -10623,6 +10663,8 @@ EXPORTS
       SetDeviceOrigin__4wxDCFiT1
       ;wxDCBase::LogicalToDeviceY(int) const
       LogicalToDeviceY__8wxDCBaseCFi
+      ;wxDC::DoDrawPoint(int,int)
+      DoDrawPoint__4wxDCFiT1
       ;wxDC::DoGetPixel(int,int,wxColour*) const
       DoGetPixel__4wxDCCFiT1P8wxColour
       ;wxDC::SetPen(const wxPen&)
@@ -10884,6 +10926,8 @@ EXPORTS
       ;wxFont::SetFamily(int)
       SetFamily__6wxFontFi
       __vft13wxFontRefData15wxObjectRefData
+      ;HeapCheck()
+      HeapCheck__Fv
       ;wxConstructorForwxFont()
       wxConstructorForwxFont__Fv
       ;wxFontRefData::~wxFontRefData()
@@ -11018,6 +11062,8 @@ EXPORTS
       m_bUseNativeStatusBar__7wxFrame
       ;wxFrame::~wxFrame()
       __dt__7wxFrameFv
+      ;wxFrame::GetClient()
+      GetClient__7wxFrameFv
       ;wxFrame::OS2Create(int,wxWindow*,const char*,wxWindow*,const char*,int,int,int,int,long)
       OS2Create__7wxFrameFiP8wxWindowPCcT2T3N41l
       ;wxFrame::HandleCommand(unsigned short,unsigned short,unsigned long)
@@ -11038,6 +11084,8 @@ EXPORTS
       CreateToolBar__7wxFrameFliRC8wxString
       ;wxFrame::Maximize(unsigned long)
       Maximize__7wxFrameFUl
+      ;wxFrame::SetClient(unsigned long)
+      SetClient__7wxFrameFUl
       ;wxFrame::IconizeChildFrames(unsigned long)
       IconizeChildFrames__7wxFrameFUl
       ;wxFrame::DoGetClientSize(int*,int*) const
@@ -11050,6 +11098,8 @@ EXPORTS
       GetEventTable__7wxFrameCFv
       ;wxFrame::DetachMenuBar()
       DetachMenuBar__7wxFrameFv
+      ;wxFrame::SetClient(wxWindow*)
+      SetClient__7wxFrameFP8wxWindow
   ;From object file:  ..\os2\gauge.cpp
     ;PUBDEFs (Symbols available from object file):
       __vft7wxGauge8wxObject
