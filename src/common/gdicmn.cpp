@@ -388,7 +388,7 @@ void wxColourDatabase::AddColour(const wxString& name, const wxColour& colour)
     }
     else // new colour
     {
-        (*m_map)[name] = new wxColour(colour);
+        (*m_map)[colName] = new wxColour(colour);
     }
 }
 
