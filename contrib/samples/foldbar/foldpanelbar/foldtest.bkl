@@ -17,12 +17,4 @@
         <win32-res>foldpanelbartest.rc</win32-res>
     </exe>
 
-    <wx-data id="data">
-        <dstdir>$(BUILDDIR)</dstdir>
-        <srcdir>$(SRCDIR)</srcdir>
-        <files>
-            mondrian.ico
-        </files>
-    </wx-data>
-
 </makefile>
