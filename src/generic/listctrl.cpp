@@ -2261,8 +2261,6 @@ wxListLineData *wxListMainWindow::GetDummyLine() const
 
 wxCoord wxListMainWindow::GetLineHeight() const
 {
-    wxASSERT_MSG( HasFlag(wxLC_REPORT), _T("only works in report mode") );
-
     // we cache the line height as calling GetTextExtent() is slow
     if ( !m_lineHeight )
     {
