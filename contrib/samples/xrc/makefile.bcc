@@ -202,3 +202,4 @@ $(OBJS)\xrcdemo_custclas.obj: .\custclas.cpp
 
 $(OBJS)\xrcdemo_xrcdemo.res: .\xrcdemo.rc
 	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include  -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i.\..\..\..\include -i$(SETUPHDIR) -i. $(__DLLFLAG_p_1) -i.\..\..\..\samples -i.\..\..\include $**
+

@@ -18,7 +18,7 @@ SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 XRCDEMO_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I.\..\..\..\include -I$(SETUPHDIR) -Wall -I. \
+	$(__UNICODE_DEFINE_p) -I.\..\..\..\include -I$(SETUPHDIR) -W -Wall -I. \
 	$(__DLLFLAG_p) -I.\..\..\..\samples -I.\..\..\include $(__EXCEPTIONSFLAG_4) \
 	$(__EXCEPTIONSFLAG_5) $(CPPFLAGS) $(CXXFLAGS)
 XRCDEMO_OBJECTS =  \
@@ -201,3 +201,4 @@ $(OBJS)\xrcdemo_xrcdemo_rc.o: ./xrcdemo.rc
 	windres --use-temp-file -i$< -o$@  --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../samples --include-dir ./../../include
 
 .PHONY: all clean data
+

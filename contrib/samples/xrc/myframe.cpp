@@ -168,6 +168,8 @@ void MyFrame::OnDerivedDialogToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnControlsToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 {
     wxDialog dlg;
+	wxFont font(20, wxSWISS, wxNORMAL, wxNORMAL);
+	dlg.wxWindowBase::SetFont(font);
     wxXmlResource::Get()->LoadDialog(&dlg, this, wxT("controls_dialog"));
 
 #if wxUSE_LISTCTRL

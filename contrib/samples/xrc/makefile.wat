@@ -103,6 +103,13 @@ __RUNTIME_LIBS_5 = -br
 !ifeq RUNTIME_LIBS static
 __RUNTIME_LIBS_5 = 
 !endif
+__EXCEPTIONSFLAG_6 =
+!ifeq USE_EXCEPTIONS 0
+__EXCEPTIONSFLAG_6 = 
+!endif
+!ifeq USE_EXCEPTIONS 1
+__EXCEPTIONSFLAG_6 = -xr
+!endif
 __EXCEPTIONSFLAG_7 =
 !ifeq USE_EXCEPTIONS 0
 __EXCEPTIONSFLAG_7 = 
@@ -188,8 +195,8 @@ SETUPHDIR = &
 XRCDEMO_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm $(__RUNTIME_LIBS_5) &
 	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
 	-i=.\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) &
-	-i=.\..\..\..\samples -i=.\..\..\include $(__EXCEPTIONSFLAG_7) $(CPPFLAGS) &
-	$(CXXFLAGS)
+	-i=.\..\..\..\samples -i=.\..\..\include $(__EXCEPTIONSFLAG_6) &
+	$(__EXCEPTIONSFLAG_7) $(CPPFLAGS) $(CXXFLAGS)
 XRCDEMO_OBJECTS =  &
 	$(OBJS)\xrcdemo_xrcdemo.obj &
 	$(OBJS)\xrcdemo_myframe.obj &
@@ -241,3 +248,4 @@ $(OBJS)\xrcdemo_custclas.obj :  .AUTODEPEND .\custclas.cpp
 
 $(OBJS)\xrcdemo_xrcdemo.res :  .AUTODEPEND .\xrcdemo.rc
 	wrc -q -ad -bt=nt -r -fo=$^@  -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\..\samples -i=.\..\..\include $<
+
