@@ -99,6 +99,15 @@ struct FileInfo : public wxObject
 {
     FileInfo(unsigned flag=0, wxFSVolumeKind type=wxFS_VOL_OTHER) :
         m_flags(flag), m_type(type) {}
+
+    FileInfo(const FileInfo& other) { *this = other; }
+    FileInfo& operator=(const FileInfo& other)
+    {
+        m_flags = other.m_flags;
+        m_type = other.m_type;
+        return *this;
+    }
+
     unsigned m_flags;
     wxFSVolumeKind m_type;
 };
