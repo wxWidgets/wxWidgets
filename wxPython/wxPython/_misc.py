@@ -360,6 +360,7 @@ wxSOUND_ASYNC = wx._misc.SOUND_ASYNC
 wxSOUND_LOOP = wx._misc.SOUND_LOOP
 wxSound = wx._misc.Sound
 wxSoundPtr = wx._misc.SoundPtr
+wxSoundFromData = wx._misc.SoundFromData
 wxSound_PlaySound = wx._misc.Sound_PlaySound
 wxSound_Stop = wx._misc.Sound_Stop
 wxMAILCAP_STANDARD = wx._misc.MAILCAP_STANDARD
