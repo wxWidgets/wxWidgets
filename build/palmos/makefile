@@ -54,7 +54,15 @@ BASE_CMN_SRC = \
 ../../src/common/dynlib.cpp \
 ../../src/common/dynload.cpp \
 ../../src/common/encconv.cpp \
-../../src/common/extended.c
+../../src/common/extended.c \
+../../src/common/ffile.cpp \
+../../src/common/file.cpp \
+../../src/common/fileconf.cpp \
+../../src/common/filefn.cpp \
+../../src/common/filename.cpp \
+../../src/common/filesys.cpp \
+../../src/common/fmapbase.cpp \
+../../src/common/fs_zip.cpp
 
 SOURCES =  ../../samples/minimal/minimal.cpp \
 $(BASE_CMN_SRC) \
@@ -87,18 +95,12 @@ $(BASE_CMN_SRC) \
 ../../src/common/effects.cpp \
 ../../src/common/event.cpp \
 ../../src/common/fddlgcmn.cpp \
-../../src/common/ffile.cpp \
-../../src/common/file.cpp \
-../../src/common/fileconf.cpp \
-../../src/common/filesys.cpp \
 ../../src/common/fldlgcmn.cpp \
-../../src/common/fmapbase.cpp \
 ../../src/common/fontcmn.cpp \
 ../../src/common/fontmap.cpp \
 ../../src/common/framecmn.cpp \
 ../../src/common/fs_inet.cpp \
 ../../src/common/fs_mem.cpp \
-../../src/common/fs_zip.cpp \
 ../../src/common/ftp.cpp \
 ../../src/common/gaugecmn.cpp \
 ../../src/common/gbsizer.cpp \
@@ -295,7 +297,7 @@ SLD_FILE = ../../include/wx/palmos/wxWidgets.sld
 # Register Creator ID at: http://dev.palmos.com/creatorid/
 ## --------------------------------------------------------------------------
 
-CREATOR_ID = bapp
+CREATOR_ID = wx06
 DB_TYPE = appl
 
 DATABASE_RESET =

@@ -75,7 +75,7 @@
     #endif // __GNUWIN32__
 #endif // __WINDOWS__
 
-#if defined __VMS__
+#if defined(__VMS__)
     #include <fab.h>
 #endif
 
@@ -230,7 +230,7 @@ bool wxPathList::Member (const wxString& path)
   {
       wxString path2( node->GetData() );
       if (
-#if defined(__WINDOWS__) || defined(__OS2__) || defined(__VMS__) || defined (__WXMAC__)
+#if defined(__WINDOWS__) || defined(__OS2__) || defined(__VMS__) || defined(__WXMAC__)
       // Case INDEPENDENT
           path.CompareTo (path2, wxString::ignoreCase) == 0
 #else
@@ -294,9 +294,11 @@ wxString wxPathList::FindAbsoluteValidPath (const wxString& file)
 bool
 wxFileExists (const wxString& filename)
 {
+#if defined(__WXPALMOS__)
+    return false;
+#elif defined(__WIN32__) && !defined(__WXMICROWIN__)
     // we must use GetFileAttributes() instead of the ANSI C functions because
     // it can cope with network (UNC) paths unlike them
-#if defined(__WIN32__) && !defined(__WXMICROWIN__)
     DWORD ret = ::GetFileAttributes(filename);
 
     return (ret != (DWORD)-1) && !(ret & FILE_ATTRIBUTE_DIRECTORY);
@@ -1001,6 +1003,9 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
 #elif defined(__OS2__)
     if ( ::DosCopy(file2, file2, overwrite ? DCPY_EXISTING : 0) != 0 )
         return false;
+#elif defined(__PALMOS__)
+    // TODO with http://www.palmos.com/dev/support/docs/protein_books/Memory_Databases_Files/
+    return false;
 #else // !Win32
 
     wxStructStat fbuf;
@@ -1080,7 +1085,7 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
 bool
 wxRenameFile (const wxString& file1, const wxString& file2)
 {
-#ifndef __WXWINCE__
+#if !defined(__WXWINCE__) && !defined(__WXPALMOS__)
     // Normal system call
   if ( wxRename (file1, file2) == 0 )
     return true;
@@ -1103,20 +1108,25 @@ bool wxRemoveFile(const wxString& file)
  || defined(__DMC__) \
  || defined(__GNUWIN32__) \
  || (defined(__MWERKS__) && defined(__MSL__))
-  int res = wxRemove(file);
+    int res = wxRemove(file);
 #elif defined(__WXMAC__)
-  int res = unlink(wxFNCONV(file));
+    int res = unlink(wxFNCONV(file));
+#elif defined(__WXPALMOS__)
+    int res = 1;
+    // TODO with VFSFileDelete()
 #else
-  int res = unlink(OS_FILENAME(file));
+    int res = unlink(OS_FILENAME(file));
 #endif
 
-  return res == 0;
+    return res == 0;
 }
 
 bool wxMkdir(const wxString& dir, int perm)
 {
-#if defined(__WXMAC__) && !defined(__UNIX__)
-  return (mkdir( wxFNCONV(dir) , 0 ) == 0);
+#if defined(__WXPALMOS__)
+    return false;
+#elif defined(__WXMAC__) && !defined(__UNIX__)
+    return (mkdir( wxFNCONV(dir) , 0 ) == 0);
 #else // !Mac
     const wxChar *dirname = dir.c_str();
 
@@ -1160,18 +1170,17 @@ bool wxMkdir(const wxString& dir, int perm)
 
 bool wxRmdir(const wxString& dir, int WXUNUSED(flags))
 {
-#ifdef __VMS__
+#if defined(__VMS__)
     return false; //to be changed since rmdir exists in VMS7.x
 #elif defined(__OS2__)
     return (::DosDeleteDir((PSZ)dir.c_str()) == 0);
-#else
-
-#ifdef __WXWINCE__
+#elif defined(__WXWINCE__)
     return (CreateDirectory(dir, NULL) != 0);
+#elif defined(__WXPALMOS__)
+    // TODO with VFSFileRename()
+    return false;
 #else
     return (wxRmDir(OS_FILENAME(dir)) == 0);
-#endif
-
 #endif
 }
 
@@ -1200,7 +1209,9 @@ bool wxPathExists(const wxChar *pszPathName)
         strPath << _T('.');
 #endif
 
-#if defined(__WIN32__) && !defined(__WXMICROWIN__)
+#if defined(__WXPALMOS__)
+    return false;
+#elif defined(__WIN32__) && !defined(__WXMICROWIN__)
     // stat() can't cope with network paths
     DWORD ret = ::GetFileAttributes(strPath);
 
@@ -1221,6 +1232,7 @@ bool wxPathExists(const wxChar *pszPathName)
 // Get a temporary filename, opening and closing the file.
 wxChar *wxGetTempFileName(const wxString& prefix, wxChar *buf)
 {
+#if wxUSE_FILE
     wxString filename = wxFileName::CreateTempFileName(prefix);
     if ( filename.empty() )
         return NULL;
@@ -1231,11 +1243,15 @@ wxChar *wxGetTempFileName(const wxString& prefix, wxChar *buf)
         buf = MYcopystring(filename);
 
     return buf;
+#else
+    // wxFileName::CreateTempFileName needs wxFile class enabled
+    return NULL;
+#endif
 }
 
 bool wxGetTempFileName(const wxString& prefix, wxString& buf)
 {
-    buf = wxFileName::CreateTempFileName(prefix);
+    buf = wxGetTempFileName(prefix);
 
     return !buf.empty();
 }
@@ -1304,7 +1320,10 @@ wxString wxFindNextFile()
 // copies into buf.
 wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
 {
-#ifdef __WXWINCE__
+#if defined(__WXPALMOS__)
+    // TODO ?
+    return NULL;
+#elif defined(__WXWINCE__)
     return NULL;
 #else
     if ( !buf )
@@ -1556,7 +1575,9 @@ void WXDLLEXPORT wxSplitPath(const wxChar *pszFileName,
 
 time_t WXDLLEXPORT wxFileModificationTime(const wxString& filename)
 {
-#ifdef __WXWINCE__
+#if defined(__WXPALMOS__)
+    return 0;
+#elif defined(__WXWINCE__)
     FILETIME creationTime, lastAccessTime, lastWriteTime;
     HANDLE fileHandle = ::CreateFile(filename, GENERIC_READ, FILE_SHARE_READ, NULL,
         0, FILE_ATTRIBUTE_NORMAL, 0);
@@ -1860,14 +1881,16 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
 //
 wxFileKind wxGetFileKind(int fd)
 {
-#if !defined (__WXWINCE__)
+#if !defined(__WXWINCE__) && !defined(__WXPALMOS__)
     if (isatty(fd))
         return wxFILE_KIND_TERMINAL;
 #endif
 
-#if defined __WXWINCE__
+#if defined(__WXPALMOS__)
     return wxFILE_KIND_UNKNOWN;
-#elif defined __WXMSW__
+#elif defined(__WXWINCE__)
+    return wxFILE_KIND_UNKNOWN;
+#elif defined(__WXMSW__)
     switch (::GetFileType(wxGetOSFHandle(fd)) & ~FILE_TYPE_REMOTE)
     {
         case FILE_TYPE_DISK:
@@ -1878,7 +1901,7 @@ wxFileKind wxGetFileKind(int fd)
 
     return wxFILE_KIND_UNKNOWN;
 
-#elif defined __UNIX__
+#elif defined(__UNIX__)
     struct stat st;
     fstat(fd, &st);
 
@@ -1887,7 +1910,7 @@ wxFileKind wxGetFileKind(int fd)
     if (!S_ISREG(st.st_mode))
         return wxFILE_KIND_UNKNOWN;
 
-    #if defined __VMS__
+    #if defined(__VMS__)
         if (st.st_fab_rfm != FAB$C_STMLF)
             return wxFILE_KIND_UNKNOWN;
     #endif

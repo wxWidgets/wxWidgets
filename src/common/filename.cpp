@@ -573,6 +573,8 @@ wxString wxFileName::GetHomeDir()
     return ::wxGetHomeDir();
 }
 
+#if wxUSE_FILE
+
 void wxFileName::AssignTempFileName(const wxString& prefix, wxFile *fileTemp)
 {
     wxString tempname = CreateTempFileName(prefix, fileTemp);
@@ -604,7 +606,7 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     }
     path = dir + wxT("\\") + prefix;
     int i = 1;
-    while (wxFileExists(path))
+    while (FileExists(path))
     {
         path = dir + wxT("\\") + prefix ;
         path << i;
@@ -720,7 +722,7 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     }
 #else // !HAVE_MKTEMP (includes __DOS__)
     // generate the unique file name ourselves
-    #if !defined(__DOS__) && (!defined(__MWERKS__) || defined(__DARWIN__) )
+    #if !defined(__DOS__) && !defined(__PALMOS__) && (!defined(__MWERKS__) || defined(__DARWIN__) )
     path << (unsigned int)getpid();
     #endif
 
@@ -731,7 +733,7 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     {
         // 3 hex digits is enough for numTries == 1000 < 4096
         pathTry = path + wxString::Format(_T("%.03x"), (unsigned int) n);
-        if ( !wxFile::Exists(pathTry) )
+        if ( !FileExists(pathTry) )
         {
             break;
         }
@@ -781,6 +783,8 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
 
     return path;
 }
+
+#endif // wxUSE_FILE
 
 // ----------------------------------------------------------------------------
 // directory operations

@@ -39,7 +39,9 @@
 #include "wx/filefn.h"
 #include "wx/datetime.h"
 
+#if wxUSE_FILE
 class WXDLLIMPEXP_BASE wxFile;
+#endif
 
 // ----------------------------------------------------------------------------
 // constants
@@ -240,12 +242,14 @@ public:
     void AssignHomeDir();
     static wxString GetHomeDir();
 
+#if wxUSE_FILE
         // get a temp file name starting with the specified prefix and open the
         // file passed to us using this name for writing (atomically if
         // possible)
     void AssignTempFileName(const wxString& prefix, wxFile *fileTemp = NULL);
     static wxString CreateTempFileName(const wxString& prefix,
                                        wxFile *fileTemp = NULL);
+#endif // wxUSE_FILE
 
     // directory creation and removal.
     bool Mkdir( int perm = 0777, int flags = 0);
