@@ -11,10 +11,13 @@
 #ifndef __GSOCKET_H
 #define __GSOCKET_H
 
-/* DFE: Define this and compile gsocket.cpp instead of gsocket.c and
-   compile existing GUI gsock*.c as C++ to try out the new GSocket. */
-/* #define wxUSE_GSOCKET_CPLUSPLUS 1 */
+// FIXME: OS/2 needs to move to modern C++ GSocket
+#if defined(__OS2__)
 #undef wxUSE_GSOCKET_CPLUSPLUS
+#else
+#define wxUSE_GSOCKET_CPLUSPLUS 1
+#endif
+
 #if !defined(__cplusplus) && defined(wxUSE_GSOCKET_CPLUSPLUS)
 #error "You need to compile this file (probably a GUI gsock peice) as C++"
 #endif

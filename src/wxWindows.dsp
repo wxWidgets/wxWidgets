@@ -1288,13 +1288,11 @@ SOURCE=.\msw\glcanvas.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\gsocket.c
-# SUBTRACT CPP /YX /Yc /Yu
+SOURCE=.\msw\gsocket.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\gsockmsw.c
-# SUBTRACT CPP /YX /Yc /Yu
+SOURCE=.\msw\gsockmsw.cpp
 # End Source File
 # Begin Source File
 

@@ -307,14 +307,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- ====================================================================== -->
 
 <set var="NET_UNIX_SRC" hints="files">
-    src/unix/gsocket.c
+    src/unix/gsocket.cpp
 </set>
 <set var="NET_UNIX_HDR" hints="files">
     wx/unix/gsockunx.h
 </set>
 
 <set var="NET_WIN32_SRC" hints="files">
-    src/msw/gsocket.c
+    src/msw/gsocket.cpp
     src/msw/urlmsw.cpp
 </set>
 <set var="NET_WIN32_HDR" hints="files">
@@ -329,7 +329,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="NET_DARWIN_SRC" hints="files">
-    src/unix/gsocket.c
+    src/unix/gsocket.cpp
 </set>
 <set var="NET_DARWIN_HDR" hints="files">
     wx/unix/gsockunx.h
@@ -686,7 +686,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/evtloop.cpp
     src/gtk/font.cpp
     src/gtk/gdiobj.cpp
-    src/gtk/gsockgtk.c
+    src/gtk/gsockgtk.cpp
     src/gtk/icon.cpp
     src/gtk/main.cpp
     src/gtk/minifram.cpp
@@ -873,7 +873,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/motif/frame.cpp
     src/motif/gauge.cpp
     src/motif/gdiobj.cpp
-    src/motif/gsockmot.c
+    src/motif/gsockmot.cpp
     src/motif/icon.cpp
     src/motif/listbox.cpp
     src/motif/main.cpp
@@ -1005,7 +1005,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/x11/evtloop.cpp
     src/x11/font.cpp
     src/x11/gdiobj.cpp
-    src/x11/gsockx11.c
+    src/x11/gsockx11.cpp
     src/x11/icon.cpp
     src/x11/main.cpp
     src/x11/minifram.cpp
@@ -1085,7 +1085,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/fontutil.cpp
     src/msw/gdiimage.cpp
     src/msw/gdiobj.cpp
-    src/msw/gsockmsw.c
+    src/msw/gsockmsw.cpp
     src/msw/icon.cpp
     src/msw/minifram.cpp
     src/msw/ole/dataobj.cpp
@@ -1606,7 +1606,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/carbon/frame.cpp
     src/mac/carbon/gauge.cpp
     src/mac/carbon/gdiobj.cpp
-    src/mac/carbon/gsockosx.c
+    src/mac/carbon/gsockosx.cpp
     src/mac/carbon/icon.cpp
     src/mac/carbon/listbox.cpp
     src/mac/carbon/mdi.cpp
@@ -1928,7 +1928,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/tabg.cpp
     src/generic/timer.cpp
     <!-- wxMac stuff used by wxCocoa: -->
-    src/mac/carbon/gsockosx.c
+    src/mac/carbon/gsockosx.cpp
 </set>
 <set var="COCOA_HDR" hints="files">
     wx/cocoa/NSApplication.h

@@ -536,12 +536,6 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_main.obj \
 	$(OBJS)\baselib_mslu.obj \
 	$(OBJS)\baselib_volume.obj
-NETDLL_CFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -DwxUSE_GUI=0 -DWXUSINGDLL -DWXMAKINGDLL_NET \
-	$(CPPFLAGS) $(CFLAGS)
 NETDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
@@ -562,11 +556,6 @@ NETDLL_OBJECTS =  \
 	$(OBJS)\netdll_url.obj \
 	$(OBJS)\netdll_gsocket.obj \
 	$(OBJS)\netdll_urlmsw.obj
-NETLIB_CFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -DwxUSE_GUI=0 $(CPPFLAGS) $(CFLAGS)
 NETLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
@@ -587,12 +576,6 @@ NETLIB_OBJECTS =  \
 	$(OBJS)\netlib_url.obj \
 	$(OBJS)\netlib_gsocket.obj \
 	$(OBJS)\netlib_urlmsw.obj
-COREDLL_CFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -DWXUSINGDLL -DWXMAKINGDLL_CORE -DwxUSE_BASE=0 \
-	$(CPPFLAGS) $(CFLAGS)
 COREDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
@@ -609,11 +592,6 @@ COREDLL_OBJECTS =  \
 	$(OBJS)\coredll_mslu.obj \
 	$(OBJS)\coredll_volume.obj \
 	$(____CORE_SRC_FILENAMES_2_OBJECTS)
-CORELIB_CFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -DwxUSE_BASE=0 $(CPPFLAGS) $(CFLAGS)
 CORELIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
@@ -3589,8 +3567,8 @@ $(OBJS)\monodll_socket.obj: ..\..\src\common\socket.cpp
 $(OBJS)\monodll_url.obj: ..\..\src\common\url.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 
-$(OBJS)\monodll_gsocket.obj: ..\..\src\msw\gsocket.c
-	$(CC) -q -c -P- -o$@ $(MONODLL_CFLAGS) $**
+$(OBJS)\monodll_gsocket.obj: ..\..\src\msw\gsocket.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 
 $(OBJS)\monodll_urlmsw.obj: ..\..\src\msw\urlmsw.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
@@ -3972,8 +3950,8 @@ $(OBJS)\monodll_gdiobj.obj: ..\..\src\msw\gdiobj.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_gsockmsw.obj: ..\..\src\msw\gsockmsw.c
-	$(CC) -q -c -P- -o$@ $(MONODLL_CFLAGS) $**
+$(OBJS)\monodll_gsockmsw.obj: ..\..\src\msw\gsockmsw.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -5059,8 +5037,8 @@ $(OBJS)\monolib_socket.obj: ..\..\src\common\socket.cpp
 $(OBJS)\monolib_url.obj: ..\..\src\common\url.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 
-$(OBJS)\monolib_gsocket.obj: ..\..\src\msw\gsocket.c
-	$(CC) -q -c -P- -o$@ $(MONOLIB_CFLAGS) $**
+$(OBJS)\monolib_gsocket.obj: ..\..\src\msw\gsocket.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 
 $(OBJS)\monolib_urlmsw.obj: ..\..\src\msw\urlmsw.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
@@ -5442,8 +5420,8 @@ $(OBJS)\monolib_gdiobj.obj: ..\..\src\msw\gdiobj.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_gsockmsw.obj: ..\..\src\msw\gsockmsw.c
-	$(CC) -q -c -P- -o$@ $(MONOLIB_CFLAGS) $**
+$(OBJS)\monolib_gsockmsw.obj: ..\..\src\msw\gsockmsw.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -6745,8 +6723,8 @@ $(OBJS)\netdll_socket.obj: ..\..\src\common\socket.cpp
 $(OBJS)\netdll_url.obj: ..\..\src\common\url.cpp
 	$(CXX) -q -c -P -o$@ $(NETDLL_CXXFLAGS) $**
 
-$(OBJS)\netdll_gsocket.obj: ..\..\src\msw\gsocket.c
-	$(CC) -q -c -P- -o$@ $(NETDLL_CFLAGS) $**
+$(OBJS)\netdll_gsocket.obj: ..\..\src\msw\gsocket.cpp
+	$(CXX) -q -c -P -o$@ $(NETDLL_CXXFLAGS) $**
 
 $(OBJS)\netdll_urlmsw.obj: ..\..\src\msw\urlmsw.cpp
 	$(CXX) -q -c -P -o$@ $(NETDLL_CXXFLAGS) $**
@@ -6784,8 +6762,8 @@ $(OBJS)\netlib_socket.obj: ..\..\src\common\socket.cpp
 $(OBJS)\netlib_url.obj: ..\..\src\common\url.cpp
 	$(CXX) -q -c -P -o$@ $(NETLIB_CXXFLAGS) $**
 
-$(OBJS)\netlib_gsocket.obj: ..\..\src\msw\gsocket.c
-	$(CC) -q -c -P- -o$@ $(NETLIB_CFLAGS) $**
+$(OBJS)\netlib_gsocket.obj: ..\..\src\msw\gsocket.cpp
+	$(CXX) -q -c -P -o$@ $(NETLIB_CXXFLAGS) $**
 
 $(OBJS)\netlib_urlmsw.obj: ..\..\src\msw\urlmsw.cpp
 	$(CXX) -q -c -P -o$@ $(NETLIB_CXXFLAGS) $**
@@ -7068,8 +7046,8 @@ $(OBJS)\coredll_gdiobj.obj: ..\..\src\msw\gdiobj.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\coredll_gsockmsw.obj: ..\..\src\msw\gsockmsw.c
-	$(CC) -q -c -P- -o$@ $(COREDLL_CFLAGS) $**
+$(OBJS)\coredll_gsockmsw.obj: ..\..\src\msw\gsockmsw.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -8190,8 +8168,8 @@ $(OBJS)\corelib_gdiobj.obj: ..\..\src\msw\gdiobj.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\corelib_gsockmsw.obj: ..\..\src\msw\gsockmsw.c
-	$(CC) -q -c -P- -o$@ $(CORELIB_CFLAGS) $**
+$(OBJS)\corelib_gsockmsw.obj: ..\..\src\msw\gsockmsw.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
 !endif
 
 !if "$(USE_GUI)" == "1"
