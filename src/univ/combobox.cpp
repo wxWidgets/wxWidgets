@@ -724,10 +724,16 @@ void wxComboBox::SetEditable(bool editable)
 void wxComboBox::Clear()
 {
     GetLBox()->Clear();
+    GetText()->SetValue(wxEmptyString);
 }
 
 void wxComboBox::Delete(int n)
 {
+    wxCHECK_RET( (n >= 0) && (n < GetCount()), _T("invalid index in wxComboBox::Delete") );
+
+    if (GetSelection() == n)
+        GetText()->SetValue(wxEmptyString);
+
     GetLBox()->Delete(n);
 }
 
@@ -738,11 +744,15 @@ int wxComboBox::GetCount() const
 
 wxString wxComboBox::GetString(int n) const
 {
+    wxCHECK_MSG( (n >= 0) && (n < GetCount()), wxEmptyString, _T("invalid index in wxComboBox::GetString") );
+
     return GetLBox()->GetString(n);
 }
 
 void wxComboBox::SetString(int n, const wxString& s)
 {
+    wxCHECK_RET( (n >= 0) && (n < GetCount()), _T("invalid index in wxComboBox::SetString") );
+
     GetLBox()->SetString(n, s);
 }
 
@@ -753,7 +763,7 @@ int wxComboBox::FindString(const wxString& s) const
 
 void wxComboBox::Select(int n)
 {
-    wxCHECK_RET( (n >= 0) && (n < GetCount()), _T("invalid combobox index") );
+    wxCHECK_RET( (n >= 0) && (n < GetCount()), _T("invalid index in wxComboBox::Select") );
 
     GetLBox()->SetSelection(n);
     GetText()->SetValue(GetLBox()->GetString(n));
@@ -761,8 +771,15 @@ void wxComboBox::Select(int n)
 
 int wxComboBox::GetSelection() const
 {
+#if 1 // FIXME:: What is the correct behavior?
     // if the current value isn't one of the listbox strings, return -1
+    return GetLBox()->GetSelection();
+#else    
+    // Why oh why is this done this way? 
+    // It is not because the value displayed in the text can be found 
+    // in the list that it is the item that is selected!
     return FindString(GetText()->GetValue());
+#endif
 }
 
 int wxComboBox::DoAppend(const wxString& item)
