@@ -17,19 +17,18 @@ Objective-C Poser class initialization
 -------------------------------------------------------------------------*/
 #ifdef __OBJC__
 #import <objc/objc-class.h>
+#import <Foundation/NSObjcRuntime.h>
 
 class wxPoseAsInitializer
 {
 public:
-	wxPoseAsInitializer(Class poser)
-	: m_poser(poser)
-	, m_next(sm_first)
+	wxPoseAsInitializer()
+	: m_next(sm_first)
 	{
 		sm_first = this;
 	}
-	~wxPoseAsInitializer()
+	virtual ~wxPoseAsInitializer()
 	{
-		class_poseAs(m_poser,m_poser->super_class);
 		sm_first = m_next;
 	}
 	static void InitializePosers()
@@ -40,7 +39,6 @@ public:
 		}
 	};
 protected:
-	Class m_poser;
 	wxPoseAsInitializer *m_next;
 	static wxPoseAsInitializer *sm_first;
 };
@@ -52,7 +50,15 @@ public:
 };
 
 #define WX_IMPLEMENT_POSER(poser) \
-wxDummyForPoseAsInitializer wxDummyPoseAsInitializerFor##poser(new wxPoseAsInitializer([poser class]))
+class wxPoseAsInitializerFor##poser: public wxPoseAsInitializer \
+{ \
+protected: \
+    virtual ~wxPoseAsInitializerFor##poser() \
+    { \
+        class_poseAs([poser class],[poser superclass]); \
+    } \
+}; \
+wxDummyForPoseAsInitializer wxDummyPoseAsInitializerFor##poser(new wxPoseAsInitializerFor##poser)
 
 #else // __OBJC__
 #warning "Objective-C++ Only!"
