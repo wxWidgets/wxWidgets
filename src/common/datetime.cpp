@@ -2843,9 +2843,9 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
 // the locale is set; otherwise or in case of failure, leaves fmt unchanged
 static void GetLocaleDateFormat(wxString *fmt)
 {
-    // there is no setlocale() under Windows CE with Standard SDK, so just
-    // always query the system there
-#ifndef WCE_PLATFORM_STANDARDSDK
+    // there is no setlocale() under Windows CE, so just always query the
+    // system there
+#ifndef __WXWINCE__
     if ( strcmp(setlocale(LC_ALL, NULL), "C") != 0 )
 #endif
     {
