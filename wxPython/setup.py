@@ -83,6 +83,7 @@ swig_sources = run_swig(['core.i'], 'src', GENDIR, PKGDIR,
                           'src/_defs.i',
                           'src/_event.i',
                           'src/_event_ex.py',
+                          'src/_evtloop.i',
                           'src/_evthandler.i',
                           'src/_filesys.i',
                           'src/_gdicmn.i',
@@ -355,6 +356,31 @@ ext = Extension('_wizard', swig_sources,
 wxpExtensions.append(ext)
 
 
+
+swig_sources = run_swig(['xrc.i'], 'src', GENDIR, PKGDIR,
+                        USE_SWIG, swig_force, swig_args, swig_deps +
+                        [ 'src/_xrc_rename.i',
+                          'src/_xrc_ex.py',
+                          'src/_xmlres.i',
+                          'src/_xmlsub.i',
+                          'src/_xml.i',
+                          'src/_xmlhandler.i',
+                          ])
+ext = Extension('_xrc',
+                swig_sources,
+
+                include_dirs =  includes + CONTRIBS_INC,
+                define_macros = defines,
+
+                library_dirs = libdirs,
+                libraries = libs,
+
+                extra_compile_args = cflags,
+                extra_link_args = lflags,
+                )
+wxpExtensions.append(ext)
+
+
 #----------------------------------------------------------------------
 # Define the GLCanvas extension module
 #----------------------------------------------------------------------
@@ -540,41 +566,6 @@ if BUILD_ACTIVEX:
 
 
 #----------------------------------------------------------------------
-# Define the XRC extension module
-#----------------------------------------------------------------------
-
-if BUILD_XRC:
-    msg('Preparing XRC...')
-    location = 'contrib/xrc'
-
-    swig_sources = run_swig(['xrc.i'], location, GENDIR, PKGDIR,
-                            USE_SWIG, swig_force, swig_args, swig_deps +
-                            [ '%s/_xrc_rename.i' % location,
-                              '%s/_xrc_ex.py' % location,
-                              '%s/_xmlres.i' % location,
-                              '%s/_xmlsub.i' % location,
-                              '%s/_xml.i' % location,
-                              '%s/_xmlhandler.i' % location,
-                              ])
-
-    ext = Extension('_xrc',
-                    swig_sources,
-
-                    include_dirs =  includes + CONTRIBS_INC,
-                    define_macros = defines,
-
-                    library_dirs = libdirs,
-                    libraries = libs + makeLibName('xrc'),
-
-                    extra_compile_args = cflags,
-                    extra_link_args = lflags,
-                    )
-
-    wxpExtensions.append(ext)
-
-
-
-#----------------------------------------------------------------------
 # Define the GIZMOS  extension module
 #----------------------------------------------------------------------
 
@@ -636,7 +627,17 @@ if BUILD_DLLWIDGET:
 
 
 
+#----------------------------------------------------------------------
+# patch distutils if it can't cope with the "classifiers" or
+# "download_url" keywords 
+#----------------------------------------------------------------------
 
+if sys.version < '2.2.3': 
+    from distutils.dist import DistributionMetadata 
+    DistributionMetadata.classifiers = None 
+    DistributionMetadata.download_url = None
+
+    
 #----------------------------------------------------------------------
 # Tools, scripts data files, etc.
 #----------------------------------------------------------------------

@@ -112,6 +112,14 @@ Added limited support for wxEventLoop (you can't derive from a
 wx.PyEventLoop version yet...)  Updated and moved the sample showing
 how to replace the MainLoop to samples/mainloop/mainloop.py.
 
+The C++ xrc lib has been moved out of contrib and into the core, so it
+is always built by default.  wxPython's build has also changed
+accordingly and will build the xrc module as part of the core set of
+modules built by default.  If you were axplicitly using BUILD_XRC then
+it will no longer be recognized as a build option, otherwise you
+should notice no difference.
+
+
 
 
 

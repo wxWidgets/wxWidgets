@@ -80,7 +80,6 @@ Topic :: Software Development :: User Interfaces
 BUILD_GLCANVAS = 1 # If true, build the contrib/glcanvas extension module
 BUILD_OGL = 1      # If true, build the contrib/ogl extension module
 BUILD_STC = 1      # If true, build the contrib/stc extension module
-BUILD_XRC = 1      # XML based resource system
 BUILD_GIZMOS = 1   # Build a module for the gizmos contrib library
 BUILD_DLLWIDGET = 0# Build a module that enables unknown wx widgets
                    # to be loaded from a DLL and to be used from Python.
@@ -215,7 +214,7 @@ if os.name == 'nt':
 #----------------------------------------------------------------------
 
 # Boolean (int) flags
-for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'BUILD_XRC',
+for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 
              'BUILD_GIZMOS', 'BUILD_DLLWIDGET', 'BUILD_IEWIN', 'BUILD_ACTIVEX',
              'CORE_ONLY', 'PREP_ONLY', 'USE_SWIG', 'UNICODE',
              'UNDEF_NDEBUG', 'NO_SCRIPTS', 'NO_HEADERS', 'BUILD_RENAMERS',
@@ -403,11 +402,11 @@ class wx_install_headers(distutils.command.install_headers.install_headers):
     Install the header files to the WXPREFIX, with an extra dir per
     filename too
     """
-    def initialize_options (self):
+    def initialize_options(self):
         self.root = None
         distutils.command.install_headers.install_headers.initialize_options(self)
 
-    def finalize_options (self):
+    def finalize_options(self):
         self.set_undefined_options('install', ('root', 'root'))
         distutils.command.install_headers.install_headers.finalize_options(self)
 
@@ -488,7 +487,7 @@ def makeLibName(name):
 
 
 def adjustCFLAGS(cflags, defines, includes):
-    '''Extrace the raw -I, -D, and -U flags and put them into
+    '''Extract the raw -I, -D, and -U flags and put them into
        defines and includes as needed.'''
     newCFLAGS = []
     for flag in cflags:
@@ -528,7 +527,6 @@ if CORE_ONLY:
     BUILD_GLCANVAS = 0
     BUILD_OGL = 0
     BUILD_STC = 0
-    BUILD_XRC = 0
     BUILD_GIZMOS = 0
     BUILD_DLLWIDGET = 0
     BUILD_IEWIN = 0
