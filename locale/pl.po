@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets-2.5.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-02-15 01:23+0100\n"
-"PO-Revision-Date: 2005-02-18 21:30+0100\n"
+"PO-Revision-Date: 2005-03-30 21:11+0100\n"
 "Last-Translator: W³odzimierz Skiba <abx@abx.art.pl>\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
 "MIME-Version: 1.0\n"
@@ -2063,9 +2063,8 @@ msgid "Failed to unregister DDE server '%s'"
 msgstr "Nie uda³o siê wyrejestrowaæ serwera DDE '%s'"
 
 #: ../src/common/fileconf.cpp:990
-#, fuzzy
 msgid "Failed to update user configuration file."
-msgstr "nie mo¿na otworzyæ pliku konfiguracyjnego u¿ytkownika."
+msgstr "Nie powiod³a siê aktualizacja pliku konfiguracyjnego u¿ytkownika."
 
 # ze ¼róde³ wynika ¿e chodzi o PID
 #: ../src/unix/snglinst.cpp:173
@@ -2364,9 +2363,9 @@ msgstr "IFF: nieznany b³±d !!!"
 
 #: ../contrib/src/deprecated/resource.cpp:2673
 #: ../contrib/src/deprecated/resource.cpp:2684
-#, fuzzy, c-format
+#, c-format
 msgid "Icon resource specification %s not found."
-msgstr "Nie znaleziono zasobu XRC '%s' (klasa '%s')!"
+msgstr "Specyfikacja zasobu ikony %s nie znaleziona."
 
 #: ../src/msw/registry.cpp:1281
 #, c-format
@@ -2399,9 +2398,8 @@ msgid "Illegal file specification."
 msgstr "Niedozwolona specyfikacja pliku."
 
 #: ../src/common/image.cpp:969
-#, fuzzy
 msgid "Image and mask have different sizes."
-msgstr "Obraz i maska maj± ró¿ne rozmiary"
+msgstr "Obraz i maska maj± ró¿ne rozmiary."
 
 #: ../src/common/image.cpp:1289
 #, c-format
@@ -2768,9 +2766,8 @@ msgid "No unused colour in image being masked."
 msgstr "Brak nieu¿ywanych kolorów w maskowanym obrazie."
 
 #: ../src/common/image.cpp:1608
-#, fuzzy
 msgid "No unused colour in image."
-msgstr "Brak wolnych kolorów w maskowanym obrazie"
+msgstr "Brak wolnych kolorów w obrazie."
 
 #: ../src/common/fmapbase.cpp:112
 msgid "Nordic (ISO-8859-10)"
@@ -2950,9 +2947,8 @@ msgid "Please choose an existing file."
 msgstr "Proszê wybraæ istniej±cy plik."
 
 #: ../src/html/helpfrm.cpp:790
-#, fuzzy
 msgid "Please choose the page to display:"
-msgstr "Proszê wybraæ istniej±cy plik."
+msgstr "Wybierz stronê do wy¶wietlenia:"
 
 #: ../src/msw/dialup.cpp:750
 msgid "Please choose which ISP do you want to connect to"
@@ -4164,9 +4160,8 @@ msgid "can't determine if the end of file is reached on descriptor %d"
 msgstr "nie mo¿na okre¶liæ czy osi±gniêto koniec pliku w deskryptorze %d"
 
 #: ../src/common/zipstrm.cpp:1344
-#, fuzzy
 msgid "can't find central directory in zip"
-msgstr "Nie mo¿na znale¼æ bie¿±cej pozycji w pliku '%s'"
+msgstr "nie mo¿na znale¼æ centralnego katalogu zip"
 
 #: ../src/common/file.cpp:429
 #, c-format
@@ -4338,9 +4333,8 @@ msgid "error opening file"
 msgstr "b³±d otwarcia pliku"
 
 #: ../src/common/zipstrm.cpp:1429
-#, fuzzy
 msgid "error reading zip central directory"
-msgstr "B³±d przy tworzeniu katalogu"
+msgstr "b³±d przy odczycie centralnego katalogu zip"
 
 #: ../src/common/zipstrm.cpp:1507
 msgid "error reading zip local header"
@@ -4434,9 +4428,8 @@ msgid "invalid message box return value"
 msgstr "warto¶æ zwrócona przez okno komunikatu jest nieprawid³owa"
 
 #: ../src/common/zipstrm.cpp:1293
-#, fuzzy
 msgid "invalid zip file"
-msgstr "Nieprawid³owy plik blokuj±cy '%s'."
+msgstr "nieprawid³owy plik zip"
 
 #: ../src/common/fontcmn.cpp:585
 #: ../src/common/fontcmn.cpp:649
