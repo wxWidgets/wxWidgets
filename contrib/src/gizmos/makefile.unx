@@ -16,7 +16,8 @@ LIB_CPP_SRC=\
 \
   multicell.o\
   editlbox.o\
-  splittree.o
+  splittree.o\
+  dynamicsash.o
 
 all:    $(GIZMOSLIB)
 

@@ -97,6 +97,10 @@ SOURCE=..\..\include\wx\gizmos\editlbox.h
 
 SOURCE=..\..\include\wx\gizmos\splittree.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\gizmos\dynamicsash.h
+# End Source File
 # End Group
 # Begin Source File
 
@@ -109,6 +113,10 @@ SOURCE=.\editlbox.cpp
 # Begin Source File
 
 SOURCE=.\splittree.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\dynamicsash.cpp
 # End Source File
 # End Target
 # End Project

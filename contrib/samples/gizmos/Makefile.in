@@ -1,6 +1,6 @@
 # $Id$
 
-CONTRIB_SAMPLES=multicell splittree editlbox
+CONTRIB_SAMPLES=multicell splittree editlbox dynsash dynsash_switch
 
 all:
 	@for d in $(CONTRIB_SAMPLES); do (cd $$d && $(MAKE)); done

@@ -11,7 +11,7 @@ WXDIR = $(WXWIN)
 
 LIBTARGET=$(WXDIR)\lib\gizmos.lib
 
-OBJECTS = multicell.obj splittree.obj editlbox.obj
+OBJECTS = multicell.obj splittree.obj editlbox.obj dynamicsash.obj
 
 !include $(WXDIR)\src\makelib.b32
 
