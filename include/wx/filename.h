@@ -273,25 +273,25 @@ public:
     static bool IsCaseSensitive( wxPathFormat format = wxPATH_NATIVE );
 
         // is this filename absolute?
-    bool IsAbsolute( wxPathFormat format = wxPATH_NATIVE ) const;
+    bool IsAbsolute(wxPathFormat format = wxPATH_NATIVE) const;
 
         // is this filename relative?
-    bool IsRelative() const
-        { return m_relative; }
-        
-        // forcibly set the flag
-    void SetAbsolute()
-        { m_relative = FALSE; }
-    void SetRelative()
-        { m_relative = TRUE; }
+    bool IsRelative(wxPathFormat format = wxPATH_NATIVE) const
+        { return !IsAbsolute(format); }
 
     // Information about path format
 
-    // get the string separating the volume from the path for this format
+    // get the string separating the volume from the path for this format,
+    // return an empty string if this format doesn't support the notion of
+    // volumes at all
     static wxString GetVolumeSeparator(wxPathFormat format = wxPATH_NATIVE);
 
     // get the string of path separators for this format
     static wxString GetPathSeparators(wxPathFormat format = wxPATH_NATIVE);
+
+    // get the canonical path separator for this format
+    static wxChar GetPathSeparator(wxPathFormat format = wxPATH_NATIVE)
+        { return GetPathSeparators(format)[0u]; }
 
     // is the char a path separator for this format?
     static bool IsPathSeparator(wxChar ch, wxPathFormat format = wxPATH_NATIVE);
@@ -375,8 +375,15 @@ private:
     // the file name and extension (empty for directories)
     wxString        m_name,
                     m_ext;
-                    
-    // is the path relative
+
+    // when m_dirs is empty it may mean either that we have no path at all or
+    // that our path is '/', i.e. the root directory
+    //
+    // we use m_relative to distinguish between these two cases, it will be
+    // TRUE in the former and FALSE in the latter
+    //
+    // NB: the path is not absolute just because m_relative is FALSE, it still
+    //     needs the drive (i.e. volume) in some formats (Windows)
     bool            m_relative;
 };
 
