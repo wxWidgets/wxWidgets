@@ -49,6 +49,7 @@ OBJECTS = \
 	minifram.obj,\
 	pen.obj,\
 	popupwin.obj,\
+	renderer.obj,\
 	region.obj,\
 	settings.obj,\
 	timer.obj,\
@@ -132,6 +133,7 @@ SOURCES =\
 	popupwin.cpp,\
 	radiobox.cpp,\
 	radiobut.cpp,\
+	renderer.cpp,\
 	region.cpp,\
 	scrolbar.cpp,\
 	scrolwin.cpp,\
@@ -204,6 +206,7 @@ pen.obj : pen.cpp
 popupwin.obj : popupwin.cpp
 radiobox.obj : radiobox.cpp
 radiobut.obj : radiobut.cpp
+renderer.obj : renderer.cpp
 region.obj : region.cpp
 scrolbar.obj : scrolbar.cpp
 scrolwin.obj : scrolwin.cpp
