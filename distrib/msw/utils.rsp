@@ -76,8 +76,6 @@ utils/configtool/docs/manual/*.ini
 utils/configtool/docs/manual/*.gif
 utils/configtool/docs/manual/*.bmp
 utils/configtool/docs/manual/*.png
-utils/configtool/docs/manual/*.ini
-utils/configtool/docs/manual/*.ini
 utils/configtool/docs/manual/Makefile
 utils/configtool/docs/code/*.doxy
 utils/configtool/docs/code/Makefile

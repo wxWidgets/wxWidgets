@@ -140,5 +140,4 @@ utils/hhp2cached/makefile.dmc
 utils/makefile.dmc
 utils/tex2rtf/src/makefile.dmc
 utils/wxrc/makefile.dmc
-contrib/utils/wxrcedit/makefile.dmc
 

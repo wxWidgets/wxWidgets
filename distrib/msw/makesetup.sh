@@ -124,7 +124,7 @@ findversion()
 dospinos2()
 {
     cd $APPDIR
-    echo Zipping OS/2
+    echo Zipping OS/2...
 
     # Zip up the complete wxOS2-xxx.zip file
     zip $ZIPFLAGS -@ $DESTDIR/wxOS2-$VERSION.zip < $APPDIR/distrib/msw/generic.rsp
@@ -176,6 +176,7 @@ dospinos2()
 
 dospinmac()
 {
+    echo Spinning wxMac...
     cd $APPDIR
 
     echo Zipping wxMac distribution
@@ -227,6 +228,7 @@ dospinmac()
 
 dospinmsw()
 {
+    echo Zipping wxMSW...
     cd $APPDIR
 
     # Create wxWidgets-$VERSION-win.zip which is used to create wxMSW
@@ -248,12 +250,12 @@ dospinmsw()
     zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/utilmake.rsp
     zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/univ.rsp
     zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/wince.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/dmc.rsp
 
 }
 
 dospinwxall()
 {
+    echo Zipping wxAll...
     cd $APPDIR
 
     echo Zipping individual components
@@ -291,7 +293,7 @@ dospinbase()
 {
     cd $APPDIR
 
-    echo Zipping wxBase
+    echo Zipping wxBase...
     rm -f $DESTDIR/wxBase-$VERSION.zip
     zip $ZIPFLAGS -@ $DESTDIR/wxBase-$VERSION.zip < $APPDIR/distrib/msw/base.rsp
 
@@ -415,6 +417,7 @@ dospinsetup()
 
     unzip $ZIPFLAGS -o wxWidgets-$VERSION-win.zip -d wxWidgets-$VERSION
     unzip $ZIPFLAGS -o wxWidgets-$VERSION-VC.zip -d wxWidgets-$VERSION
+    unzip $ZIPFLAGS -o wxWidgets-$VERSION-DMC.zip -d wxWidgets-$VERSION
     unzip $ZIPFLAGS -o wxWidgets-$VERSION-BC.zip -d wxWidgets-$VERSION
     unzip $ZIPFLAGS -o wxWidgets-$VERSION-CW.zip -d wxWidgets-$VERSION
     unzip $ZIPFLAGS -o wxWidgets-$VERSION-HTMLHelp.zip
@@ -644,7 +647,7 @@ makesetup()
     fi
 
     # Do wxBase spin
-    if [ "$SPINBASE" = "1" ]; then
+    if [ "$SPINBASE" = "1" ] || [ "$SPINALL" = "1" ]; then
         dospinbase
     fi
 
@@ -775,7 +778,7 @@ for i in "$@"; do
 	--upx) UPX=1 ;;
 	--no-upx) UPX=0 ;;
 	--wxmac) SPINMAC=1; SPINALL=0 ;;
-	--wxmsw) SPINMSW=1; SPINALL=0; SPINWXALL=0 ;;
+	--wxmsw) SPINMSW=1; SPINALL=0 ;;
 	--wxos2) SPINOS2=1; SPINALL=0 ;;
 	--wxall) SPINWXALL=1; SPINALL=0 ;;
 	--wxbase) SPINBASE=1; SPINALL=0 ;;
