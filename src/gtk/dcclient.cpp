@@ -1651,18 +1651,40 @@ void wxWindowDC::DoGetTextExtent(const wxString &string,
 
 wxCoord wxWindowDC::GetCharWidth() const
 {
+#ifdef __WXGTK20__
+    // There should be an easier way.
+    PangoLayout *layout = pango_layout_new(m_context);
+    pango_layout_set_font_description(layout, m_fontdesc);
+    pango_layout_set_text(layout, "H", 1 );
+    int w,h;
+    pango_layout_get_pixel_size(layout, &w, &h);
+    g_object_unref( G_OBJECT( layout ) );
+    return w;
+#else
     GdkFont *font = m_font.GetInternalFont( m_scaleY );
     wxCHECK_MSG( font, -1, wxT("invalid font") );
 
     return wxCoord(gdk_string_width( font, "H" ) / m_scaleX);
+#endif
 }
 
 wxCoord wxWindowDC::GetCharHeight() const
 {
+#ifdef __WXGTK20__
+    // There should be an easier way.
+    PangoLayout *layout = pango_layout_new(m_context);
+    pango_layout_set_font_description(layout, m_fontdesc);
+    pango_layout_set_text(layout, "H", 1 );
+    int w,h;
+    pango_layout_get_pixel_size(layout, &w, &h);
+    g_object_unref( G_OBJECT( layout ) );
+    return h;
+#else
     GdkFont *font = m_font.GetInternalFont( m_scaleY );
     wxCHECK_MSG( font, -1, wxT("invalid font") );
 
     return wxCoord((font->ascent + font->descent) / m_scaleY);
+#endif
 }
 
 void wxWindowDC::Clear()
