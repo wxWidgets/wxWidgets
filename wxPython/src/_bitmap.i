@@ -190,6 +190,11 @@ public:
 #endif
 
     %pythoncode { def __nonzero__(self): return self.Ok() }
+
+    %extend {
+        bool __eq__(const wxBitmap* other) { return other ? (*self == *other) : False; }
+        bool __ne__(const wxBitmap* other) { return other ? (*self != *other) : True;  }
+    }
 };
 
 
