@@ -1145,7 +1145,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, char *buffer, int pos, char *e
           pos ++;
           int noBraces = 1;
 
-          wxBuffer[0] = 0;
+          wxTex2RTFBuffer[0] = 0;
           int i = 0;
           bool end = FALSE;
           while (!end)
@@ -1156,37 +1156,37 @@ int ParseArg(TexChunk *thisArg, wxList& children, char *buffer, int pos, char *e
               noBraces --;
               if (noBraces == 0)
               {
-                wxBuffer[i] = 0;
+                wxTex2RTFBuffer[i] = 0;
                 end = TRUE;
               }
               else
               {
-                wxBuffer[i] = '}';
+                wxTex2RTFBuffer[i] = '}';
                 i ++;
               }
               pos ++;
             }
             else if (ch == '{')
             {
-              wxBuffer[i] = '{';
+              wxTex2RTFBuffer[i] = '{';
               i ++;
               pos ++;
             }
             else if (ch == '\\' && buffer[pos+1] == '}')
             {
-              wxBuffer[i] = '}';
+              wxTex2RTFBuffer[i] = '}';
               pos += 2;
               i++;
             }
             else if (ch == '\\' && buffer[pos+1] == '{')
             {
-              wxBuffer[i] = '{';
+              wxTex2RTFBuffer[i] = '{';
               pos += 2;
               i++;
             }
             else
             {
-              wxBuffer[i] = ch;
+              wxTex2RTFBuffer[i] = ch;
               pos ++;
               i ++;
               if (ch == 0)
@@ -1207,7 +1207,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, char *buffer, int pos, char *e
           TexChunk *argValue = new TexChunk(CHUNK_TYPE_STRING);
           arg->children.Append((wxObject *)argValue);
           argValue->argn = 1;
-          argValue->value = copystring(wxBuffer);
+          argValue->value = copystring(wxTex2RTFBuffer);
 
           children.Append((wxObject *)chunk);
         }

@@ -132,13 +132,9 @@ int BufSize = 500;
 bool Go(void);
 void ShowOptions(void);
 
-#ifdef NO_GUI
+char wxTex2RTFBuffer[1500];
 
-#if wxUSE_GUI || !defined(__UNIX__)
-// wxBase for Unix does not have wxBuffer
-extern 
-#endif
-char *wxBuffer; // we must init it, otherwise tex2rtf will crash
+#ifdef NO_GUI
 
 int main(int argc, char **argv)
 #else
@@ -187,9 +183,6 @@ bool MyApp::OnInit()
   }
 
 #ifdef NO_GUI
-  wxBuffer = new char[1500];
-  // this is done in wxApp, but NO_GUI version doesn't call it :-(
-
   if (!InputFile || !OutputFile)
   {
     wxSTD cout << "Tex2RTF: input or output file is missing.\n";
@@ -446,7 +439,6 @@ bool MyApp::OnInit()
   // Return the main frame window
   return TRUE;
 #else
-  delete[] wxBuffer;
   return FALSE;
 #endif
 }

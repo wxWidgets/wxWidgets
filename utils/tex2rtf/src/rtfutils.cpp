@@ -213,18 +213,18 @@ void ResetContentsLevels(int l)
 // : for space.
 void OutputSectionKeyword(FILE *fd)
 {
-  OutputCurrentSectionToString(wxBuffer);
+  OutputCurrentSectionToString(wxTex2RTFBuffer);
   
   unsigned int i;
-  for (i = 0; i < strlen(wxBuffer); i++)
-    if (wxBuffer[i] == ':')
-      wxBuffer[i] = ' ';
+  for (i = 0; i < strlen(wxTex2RTFBuffer); i++)
+    if (wxTex2RTFBuffer[i] == ':')
+      wxTex2RTFBuffer[i] = ' ';
     // Don't write to index if there's some RTF in the string
-    else if ( wxBuffer[i] == '{' )
+    else if ( wxTex2RTFBuffer[i] == '{' )
         return;
 
   fprintf(fd, "K{\\footnote {K} ");
-  fprintf(fd, "%s", wxBuffer);
+  fprintf(fd, "%s", wxTex2RTFBuffer);
   
   fprintf(fd, "}\n");
 }
@@ -1113,8 +1113,8 @@ void RTFOnMacro(int macroId, int no_args, bool start)
 
       if (winHelpContents && winHelp && !InPopups())
       {
-        OutputCurrentSectionToString(wxBuffer);
-        WriteWinHelpContentsFileLine(topicName, wxBuffer, 1);
+        OutputCurrentSectionToString(wxTex2RTFBuffer);
+        WriteWinHelpContentsFileLine(topicName, wxTex2RTFBuffer, 1);
       }
       AddTexRef(topicName, NULL, ChapterNameString, chapterNo);
 
@@ -1255,8 +1255,8 @@ void RTFOnMacro(int macroId, int no_args, bool start)
       NotifyParentHasChildren(1);
       if (winHelpContents && winHelp && !InPopups())
       {
-        OutputCurrentSectionToString(wxBuffer);
-        WriteWinHelpContentsFileLine(topicName, wxBuffer, 2);
+        OutputCurrentSectionToString(wxTex2RTFBuffer);
+        WriteWinHelpContentsFileLine(topicName, wxTex2RTFBuffer, 2);
       }
       AddTexRef(topicName, NULL, SectionNameString, chapterNo, sectionNo);
 
@@ -1439,8 +1439,8 @@ void RTFOnMacro(int macroId, int no_args, bool start)
       NotifyParentHasChildren(2);
       if (winHelpContents && winHelp && !InPopups())
       {
-        OutputCurrentSectionToString(wxBuffer);
-        WriteWinHelpContentsFileLine(topicName, wxBuffer, 3);
+        OutputCurrentSectionToString(wxTex2RTFBuffer);
+        WriteWinHelpContentsFileLine(topicName, wxTex2RTFBuffer, 3);
       }
       AddTexRef(topicName, NULL, SectionNameString, chapterNo, sectionNo, subsectionNo);
 
@@ -1589,8 +1589,8 @@ void RTFOnMacro(int macroId, int no_args, bool start)
       NotifyParentHasChildren(3);
       if (winHelpContents && winHelp)
       {
-        OutputCurrentSectionToString(wxBuffer);
-        WriteWinHelpContentsFileLine(topicName, wxBuffer, 4);
+        OutputCurrentSectionToString(wxTex2RTFBuffer);
+        WriteWinHelpContentsFileLine(topicName, wxTex2RTFBuffer, 4);
       }
       AddTexRef(topicName, NULL, SectionNameString, chapterNo, sectionNo, subsectionNo, subsubsectionNo);
 

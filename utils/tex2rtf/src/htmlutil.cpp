@@ -720,8 +720,8 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
       // Add this section title to the list of keywords
       if (htmlIndex)
       {
-        OutputCurrentSectionToString(wxBuffer);
-        AddKeyWordForTopic(topicName, wxBuffer, ConvertCase(currentFileName));
+        OutputCurrentSectionToString(wxTex2RTFBuffer);
+        AddKeyWordForTopic(topicName, wxTex2RTFBuffer, ConvertCase(currentFileName));
       }
     }
     break;
@@ -782,8 +782,8 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
       // Add this section title to the list of keywords
       if (htmlIndex)
       {
-        OutputCurrentSectionToString(wxBuffer);
-        AddKeyWordForTopic(topicName, wxBuffer, currentFileName);
+        OutputCurrentSectionToString(wxTex2RTFBuffer);
+        AddKeyWordForTopic(topicName, wxTex2RTFBuffer, currentFileName);
       }
     }
     break;
@@ -889,8 +889,8 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
           // Add this section title to the list of keywords
           if (htmlIndex)
           {
-            OutputCurrentSectionToString(wxBuffer);
-            AddKeyWordForTopic(topicName, wxBuffer, currentFileName);
+            OutputCurrentSectionToString(wxTex2RTFBuffer);
+            AddKeyWordForTopic(topicName, wxTex2RTFBuffer, currentFileName);
           }
 
       }
@@ -967,8 +967,8 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
         // Add this section title to the list of keywords
         if (htmlIndex)
         {
-          OutputCurrentSectionToString(wxBuffer);
-          AddKeyWordForTopic(topicName, wxBuffer, currentFileName);
+          OutputCurrentSectionToString(wxTex2RTFBuffer);
+          AddKeyWordForTopic(topicName, wxTex2RTFBuffer, currentFileName);
         }
       }
     }

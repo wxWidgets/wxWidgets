@@ -139,6 +139,7 @@ extern wxHashTable TopicTable;
 void AddKeyWordForTopic(char *topic, char *entry, char *filename = NULL);
 void ClearKeyWordTable(void);
 
+extern char wxTex2RTFBuffer[];
 extern TexChunk     *TopLevel;
 extern wxHashTable  MacroDefs;
 extern wxStringList IgnorableInputFiles; // Ignorable \input files, e.g. psbox.tex
