@@ -16,8 +16,11 @@
 // global settings
 // ----------------------------------------------------------------------------
 
-// define this to 0 when building wxBase library
-#define wxUSE_GUI            1
+// define this to 0 when building wxBase library - this can also be done from
+// makefile/project file overriding the value here
+#ifndef wxUSE_GUI
+    #define wxUSE_GUI            1
+#endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // compatibility settings
