@@ -422,13 +422,13 @@ void wxClipboard::Close()
     m_open = FALSE;
 }
 
-bool wxClipboard::IsSupported( wxDataObject &data )
+bool wxClipboard::IsSupported( wxDataFormat format )
 {
     wxCHECK_MSG( m_open, FALSE, "clipboard not open" );
     
     /* store requested format to be asked for by callbacks */
     
-    m_targetRequested = data.GetFormat().GetAtom();
+    m_targetRequested = format.GetAtom();
   
     wxCHECK_MSG( m_targetRequested, FALSE, "invalid clipboard format" );
     
@@ -458,21 +458,21 @@ bool wxClipboard::IsSupported( wxDataObject &data )
     return TRUE;
 }    
     
-bool wxClipboard::GetData( wxDataObject &data )
+bool wxClipboard::GetData( wxDataObject *data )
 {
     wxCHECK_MSG( m_open, FALSE, "clipboard not open" );
     
     /* is data supported by clipboard ? */
     
-    if (!IsSupported( data )) return FALSE;
+    if (!IsSupported( data->GetFormat() )) return FALSE;
     
     /* store pointer to data object to be filled up by callbacks */
     
-    m_receivedData = &data;
+    m_receivedData = data;
     
     /* store requested format to be asked for by callbacks */
     
-    m_targetRequested = data.GetFormat().GetAtom();
+    m_targetRequested = data->GetFormat().GetAtom();
   
     wxCHECK_MSG( m_targetRequested, FALSE, "invalid clipboard format" );
     
