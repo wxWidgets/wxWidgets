@@ -26,6 +26,26 @@
 
 #include "wx/gtk/private.h"
 
+#ifndef __WXGTK20__
+
+// ----------------------------------------------------------------------------
+// wxGdkRegion: creates a new region in ctor and destroys in dtor
+// ----------------------------------------------------------------------------
+
+class wxGdkRegion
+{
+public:
+    wxGdkRegion() { m_region = gdk_region_new(); }
+    ~wxGdkRegion() { gdk_region_destroy(m_region); }
+
+    operator GdkRegion *() const { return m_region; }
+
+private:
+    GdkRegion *m_region;
+};
+
+#endif // __WXGTK20__
+
 // ----------------------------------------------------------------------------
 // wxRegionRefData: private class containing the information about the region
 // ----------------------------------------------------------------------------
@@ -37,20 +57,17 @@ public:
     {
         m_region = NULL;
     }
-    
+
     wxRegionRefData(const wxRegionRefData& refData)
         : wxObjectRefData()
     {
 #ifdef __WXGTK20__
         m_region = gdk_region_copy(refData.m_region);
 #else
-        m_region = gdk_region_new();
-        GdkRegion *regCopy = gdk_regions_union(m_region, refData.m_region);
-        gdk_region_destroy(m_region);
-        m_region = regCopy;
+        m_region = gdk_regions_union(wxGdkRegion(), refData.m_region);
 #endif
     }
-    
+
     ~wxRegionRefData()
     {
         if (m_region)
@@ -83,22 +100,24 @@ void wxRegion::InitRect(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
     rect.y = y;
     rect.width = w;
     rect.height = h;
-    
+
     m_refData = new wxRegionRefData();
-    
+
 #ifdef __WXGTK20__
     M_REGIONDATA->m_region = gdk_region_rectangle( &rect );
 #else
-    GdkRegion *reg = gdk_region_new();
-    M_REGIONDATA->m_region = gdk_region_union_with_rect( reg, &rect );
-    gdk_region_destroy( reg );
+    M_REGIONDATA->m_region = gdk_region_union_with_rect( wxGdkRegion(), &rect );
 #endif
 }
 
 wxRegion::wxRegion( GdkRegion *region )
 {
     m_refData = new wxRegionRefData();
+#ifdef __WXGTK20__
     M_REGIONDATA->m_region = gdk_region_copy( region );
+#else
+    M_REGIONDATA->m_region = gdk_regions_union(wxGdkRegion(), region);
+#endif
 }
 
 wxRegion::wxRegion( size_t n, const wxPoint *points, int fillStyle )
@@ -149,7 +168,7 @@ bool wxRegion::operator==( const wxRegion& region )
     if (m_refData == region.m_refData) return TRUE;
 
     if (!m_refData || !region.m_refData) return FALSE;
-    
+
     // compare the regions themselves, not the pointers to ref data!
     return gdk_region_equal(M_REGIONDATA->m_region,
                             M_REGIONDATA_OF(region)->m_region);
@@ -171,16 +190,14 @@ bool wxRegion::Union( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
     rect.y = y;
     rect.width = width;
     rect.height = height;
-    
+
     if (!m_refData)
     {
         m_refData = new wxRegionRefData();
 #ifdef __WXGTK20__
         M_REGIONDATA->m_region = gdk_region_rectangle( &rect );
 #else
-        GdkRegion *reg = gdk_region_new();
-        M_REGIONDATA->m_region = gdk_region_union_with_rect( reg, &rect );
-        gdk_region_destroy( reg );
+        M_REGIONDATA->m_region = gdk_region_union_with_rect(wxGdkRegion(), &rect);
 #endif
     }
     else
@@ -240,7 +257,7 @@ bool wxRegion::Intersect( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 bool wxRegion::Intersect( const wxRect& rect )
 {
     wxRegion reg( rect );
-    
+
     return Intersect( reg );
 }
 
@@ -253,8 +270,8 @@ bool wxRegion::Intersect( const wxRegion& region )
     {
         m_refData = new wxRegionRefData();
         M_REGIONDATA->m_region = gdk_region_new();
-        
-        // leave here 
+
+        // leave here
         return TRUE;
     }
     else
@@ -498,16 +515,16 @@ void wxRIRefData::CreateRects( const wxRegion& region )
     delete [] m_rects;
 
     Init();
-    
+
     GdkRegion *gdkregion = region.GetRegion();
     if (!gdkregion)
         return;
-    
+
 #ifdef __WXGTK20__
     GdkRectangle *gdkrects = NULL;
     gint numRects = 0;
     gdk_region_get_rectangles( gdkregion, &gdkrects, &numRects );
-    
+
     m_numRects = numRects;
     if (numRects)
     {
