@@ -622,11 +622,7 @@ public:
 
 // port-specific header could have defined it already in some special wau
 #ifndef IMPLEMENT_WXWIN_MAIN
-    #if !wxUSE_GUI
-        #define IMPLEMENT_WXWIN_MAIN IMPLEMENT_WXWIN_MAIN_CONSOLE
-    #else // wxUSE_GUI
-        #define IMPLEMENT_WXWIN_MAIN
-    #endif
+    #define IMPLEMENT_WXWIN_MAIN IMPLEMENT_WXWIN_MAIN_CONSOLE
 #endif // defined(IMPLEMENT_WXWIN_MAIN)
 
 #ifdef __WXUNIVERSAL__
