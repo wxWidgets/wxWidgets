@@ -136,6 +136,8 @@ wxMSW:
 - wxTaskBarIcon must be explicitly destroyed now, otherwise the application
   won't exit even though there are no top level windows
 - wxFileName::GetModificationTime() works with opened files too now
+- wxDC::GetClippingBox() now works even for clipping regions created by Windows
+- fixed wxFileDataObject in Unicode build (Alex D)
 
 wxMotif:
 

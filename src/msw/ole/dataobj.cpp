@@ -1082,7 +1082,7 @@ bool wxFileDataObject::GetDataHere(void *pData) const
     {
         // copy filename to pbuf and add null terminator
         size_t len = m_filenames[i].Len();
-        memcpy(pbuf, m_filenames[i], len);
+        memcpy(pbuf, m_filenames[i], len*sizeof(wxChar));
         pbuf += len;
         *pbuf++ = wxT('\0');
     }
