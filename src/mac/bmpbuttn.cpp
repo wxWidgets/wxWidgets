@@ -48,8 +48,8 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
     if ( height == -1 && bitmap.Ok())
 	height = bitmap.GetHeight() + 2*m_marginY;
 
-	m_macHorizontalBorder = 2 ; // additional pixels around the real control
-	m_macVerticalBorder = 2 ;
+	m_macHorizontalBorder = 0 ; // additional pixels around the real control
+	m_macVerticalBorder = 0 ;
 	Rect bounds ;
 	Str255 title ;
 	MacPreControlCreate( parent , id ,  "" , pos , wxSize( width , height ) ,style, validator , name , &bounds , title ) ;

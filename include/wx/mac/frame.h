@@ -56,6 +56,7 @@ public:
            const wxString& name = wxFrameNameStr);
 
   virtual bool Destroy();
+  virtual bool IsTopLevel() const { return TRUE; }
 
   void OnSize(wxSizeEvent& event);
   void OnMenuHighlight(wxMenuEvent& event);

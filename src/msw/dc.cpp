@@ -600,19 +600,63 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
     if (!bmp.Ok())
         return;
 
+	bool needsPixelCopy = false ;
+	bool isPrinter = false ;
+    if (IsKindOf(CLASSINFO(wxPrinterDC)) )
+    {
+    	isPrinter = true ;
+      	if ( ::GetDeviceCaps((HDC) m_hDC, RASTERCAPS) & RC_STRETCHDIB )
+       	{
+      	}
+       	else
+       	{
+       		needsPixelCopy = true ;
+       	}
+	}
     // If we're not drawing transparently, and not drawing to a printer,
     // optimize this function to use Windows functions.
-    if (!useMask && !IsKindOf(CLASSINFO(wxPrinterDC)))
+    if (!useMask && !needsPixelCopy)
     {
-        HDC cdc = GetHdc();
-        HDC memdc = ::CreateCompatibleDC( cdc );
-        HBITMAP hbitmap = (HBITMAP) bmp.GetHBITMAP( );
+    	if ( isPrinter )
+    	{
+    		BITMAPINFO *info = (BITMAPINFO *) malloc( sizeof( BITMAPINFOHEADER ) + 256 * sizeof(RGBQUAD ) ) ;
+    		int iBitsSize = ((bmp.GetWidth() + 3 ) & ~3 ) * bmp.GetHeight() ;
+    		
+    		void* bits = malloc( iBitsSize ) ;
+    		
+    		memset( info , 0 , sizeof( BITMAPINFOHEADER ) ) ;
+    		
+    		info->bmiHeader.biSize = sizeof( BITMAPINFOHEADER ) ;
+    		info->bmiHeader.biWidth = bmp.GetWidth() ;
+    		info->bmiHeader.biHeight = bmp.GetHeight() ;
+    		info->bmiHeader.biPlanes = 1 ;
+    		info->bmiHeader.biBitCount = 8 ;
+    		info->bmiHeader.biCompression = BI_RGB ;
+     		
+    		HDC display = GetDC( NULL ) ;
+			if ( GetDIBits( display , (HBITMAP) bmp.GetHBITMAP( ) , 0 , bmp.GetHeight() , bits , info , DIB_RGB_COLORS ) )
+			{
+				StretchDIBits( (HDC) m_hDC, 
+					x, y, bmp.GetWidth(), bmp.GetHeight() , 
+					0 , 0 ,bmp.GetWidth(), bmp.GetHeight() , 
+					bits , info , DIB_RGB_COLORS , SRCCOPY ) ;
+			}
+			ReleaseDC( NULL , display ) ;
+			free ( bits ) ;
+			free( info ) ;
+    	}
+    	else
+    	{
+        	HDC cdc = GetHdc();
+        	HDC memdc = ::CreateCompatibleDC( cdc );
+        	HBITMAP hbitmap = (HBITMAP) bmp.GetHBITMAP( );
 
-        wxASSERT_MSG( hbitmap, wxT("bitmap is ok but HBITMAP is NULL?") );
+        	wxASSERT_MSG( hbitmap, wxT("bitmap is ok but HBITMAP is NULL?") );
 
-        ::SelectObject( memdc, hbitmap );
-        ::BitBlt( cdc, x, y, bmp.GetWidth(), bmp.GetHeight(), memdc, 0, 0, SRCCOPY);
-        ::DeleteDC( memdc );
+        	::SelectObject( memdc, hbitmap );
+        	::BitBlt( cdc, x, y, bmp.GetWidth(), bmp.GetHeight(), memdc, 0, 0, SRCCOPY);
+        	::DeleteDC( memdc );
+        }
     }
     else
     {

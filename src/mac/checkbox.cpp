@@ -59,6 +59,10 @@ void wxCheckBox::Command (wxCommandEvent & event)
 void wxCheckBox::MacHandleControlClick( ControlHandle control , SInt16 controlpart ) 
 {
 	SetValue( !GetValue() ) ;
+    wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, m_windowId );
+    event.SetInt(GetValue());
+    event.SetEventObject(this);
+    ProcessCommand(event);
 }
 
 // Bitmap checkbox

@@ -55,11 +55,23 @@ void wxMacCtoPString(const char* theCString, Str255 thePString);
 
 // remove inappropriate characters, if useShortcuts is false, the ampersand will not auto-generate a mac menu-shortcut
 
-void wxMacBuildMenuString(StringPtr outMacItemText, char *outMacShortcutChar , short *outMacModifiers , const char *inItemName , bool useShortcuts )
+void wxMacBuildMenuString(StringPtr outMacItemText, char *outMacShortcutChar , short *outMacModifiers , const char *inItemText , bool useShortcuts )
 {
 	char *p = (char *) &outMacItemText[1] ;
 	short macModifiers = 0 ;
 	char macShortCut = 0 ;
+	const char *inItemName ;
+	wxString inItemTextMac ;
+	
+	if (wxApp::s_macDefaultEncodingIsPC)
+	{
+		inItemTextMac =  wxMacMakeMacStringFromPC( inItemText ) ;
+		inItemName = inItemTextMac ;
+	}
+	else
+	{
+		inItemName = inItemText ;
+	}
 	
 	if ( useShortcuts && !wxApp::s_macSupportPCMenuShortcuts )
 		useShortcuts = false ;
@@ -118,6 +130,11 @@ void wxMacBuildMenuString(StringPtr outMacItemText, char *outMacShortcutChar , s
 						if (strncmp("Ctrl", inItemName, 4) == 0) 
 						{
 							inItemName = inItemName + 5;
+							macShortCut = *inItemName;
+						}
+						else if  (strncmp("Cntrl", inItemName, 5) == 0) 
+						{
+							inItemName = inItemName + 6;
 							macShortCut = *inItemName;
 						}
 						else if (strncmp("Alt", inItemName, 3) == 0) 
@@ -876,7 +893,7 @@ void wxMenuBar::MacInstallMenuBar()
 			wxMenu* menu = m_menus[i] , *subMenu = NULL ;
 		
 			
-			if( m_titles[i] == "?" || m_titles[i] == wxApp::s_macHelpMenuTitleName )
+			if( m_titles[i] == "?" || m_titles[i] == "&?"  || m_titles[i] == wxApp::s_macHelpMenuTitleName )
 			{
 				MenuHandle mh = NULL ;
 				if ( HMGetHelpMenuHandle( &mh ) != noErr )
@@ -899,24 +916,32 @@ void wxMenuBar::MacInstallMenuBar()
 					}
 					else		
 					{
-						Str255 label ;
-						wxMacBuildMenuString( label , NULL , NULL , item->GetText(), item->GetId() != wxApp::s_macAboutMenuItemId); // no shortcut in about menu
-						if ( label[0] == 0 )
-						{
-							// we cannot add empty menus on mac
-							label[0] = 1 ;
-							label[1] = ' ' ;
-						}
-						if ( item->GetId() == wxApp::s_macAboutMenuItemId )
-						{ 
-								::SetMenuItemText( GetMenuHandle( kwxMacAppleMenuId ) , 1 , label );
-		//					::EnableMenuItem( GetMenuHandle( kwxMacAppleMenuId ) , 1 );
-								::EnableItem( GetMenuHandle( kwxMacAppleMenuId ) , 1 );
- 						}
-						else
+						if ( item->IsSeparator() )
 						{
 							if ( mh )
-								::AppendMenu(mh, label );
+								::AppendMenu(mh, "\p-" );
+						}
+						else
+						{
+							Str255 label ;
+							wxMacBuildMenuString( label , NULL , NULL , item->GetText(), item->GetId() != wxApp::s_macAboutMenuItemId); // no shortcut in about menu
+							if ( label[0] == 0 )
+							{
+								// we cannot add empty menus on mac
+								label[0] = 1 ;
+								label[1] = ' ' ;
+							}
+							if ( item->GetId() == wxApp::s_macAboutMenuItemId )
+							{ 
+									::SetMenuItemText( GetMenuHandle( kwxMacAppleMenuId ) , 1 , label );
+			//					::EnableMenuItem( GetMenuHandle( kwxMacAppleMenuId ) , 1 );
+									::EnableItem( GetMenuHandle( kwxMacAppleMenuId ) , 1 );
+	 						}
+							else
+							{
+								if ( mh )
+									::AppendMenu(mh, label );
+							}
 						}
 					}
 				}
@@ -1094,7 +1119,7 @@ void wxMenuBar::MacMenuSelect(wxEvtHandler* handler, long when , int macMenuId, 
 	  for (int i = 0; i < m_menus.GetCount() ; i++)
 	  {
 	  	if ( m_menus[i]->MacGetMenuId() == macMenuId || 
-	  		( macMenuId == kHMHelpMenuID && ( m_titles[i] == "?" || m_titles[i] == wxApp::s_macHelpMenuTitleName ) )
+	  		( macMenuId == kHMHelpMenuID && ( m_titles[i] == "?" || m_titles[i] == "&?"  || m_titles[i] == wxApp::s_macHelpMenuTitleName ) )
 	  		)
 	  	{
 	  		if ( m_menus[i]->MacMenuSelect( handler , when , macMenuId , macMenuItemNum ) )

@@ -111,6 +111,7 @@ public:
     // --------------
 
     bool IsModalShowing() const { return m_modalShowing; }
+    virtual bool IsTopLevel() const { return TRUE; }
 
   // tooltip management
 #if wxUSE_TOOLTIPS

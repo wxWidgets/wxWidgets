@@ -68,14 +68,18 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 	UMAGetControlData( m_macControl , kControlNoPart , kControlListBoxListHandleTag , sizeof( ListHandle ) , (char*) &m_macList  , &result ) ;
 
 	NewExtLDEFInfo( m_macList , MacDrawStringCell , (long) this ) ;
-	(**m_macList).selFlags = lOnlyOne ;
-	if ( style  & wxLB_MULTIPLE )
+	(**m_macList).selFlags = 0 ;
+	if ( style & wxLB_MULTIPLE )
 	{
 		(**m_macList).selFlags += lNoExtend ;
 	}
 	else if ( style & wxLB_EXTENDED )
 	{
 		(**m_macList).selFlags += lExtendDrag ;
+	}
+	else
+	{
+		(**m_macList).selFlags = lOnlyOne ;
 	}
 	Point pt = (**m_macList).cellSize ;
 	pt.v = 14 ;
@@ -151,6 +155,7 @@ void wxListBox::Delete(int N)
     }
 #endif // wxUSE_OWNER_DRAWN/!wxUSE_OWNER_DRAWN
 	m_stringArray.Remove( N ) ;
+	m_dataArray.Remove( N ) ;
   	m_noItems --;
 	
 	MacDelete( N ) ;
@@ -185,7 +190,7 @@ void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
             wxASSERT_MSG(clientData[i] == NULL,
                          wxT("Can't use client data with owner-drawn listboxes"));
 #else // !wxUSE_OWNER_DRAWN
-  		Append( choices[i] , clientData[0] ) ;
+  		Append( choices[i] , clientData[i] ) ;
  #endif
   	}
   	else
@@ -298,7 +303,16 @@ void wxListBox::DoSetItemClientData(int N, void *Client_data)
         wxFAIL_MSG(wxT("Can't use client data with owner-drawn listboxes"));
     }
 #endif // wxUSE_OWNER_DRAWN
-    m_dataArray[N] = (char*) Client_data ;
+	wxASSERT_MSG( m_dataArray.GetCount() >= N , "invalid client_data array" ) ;
+	
+	if ( m_dataArray.GetCount() > N )
+	{
+    	m_dataArray[N] = (char*) Client_data ;
+	}
+    else
+    {
+    	m_dataArray.Add( (char*) Client_data ) ;
+    }
 }
 
 void wxListBox::DoSetItemClientObject(int n, wxClientData* clientData)

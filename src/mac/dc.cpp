@@ -84,6 +84,7 @@ wxDC::wxDC(void)
   
 //  m_palette = wxAPP_COLOURMAP;
   m_macPort = NULL ;
+  m_macMask = NULL ;
   m_ok = FALSE ;
   
 	m_macFontInstalled = false ;
@@ -153,8 +154,6 @@ void wxDC::DrawBitmap( const wxBitmap &bmp, long x, long y, bool useMask )
 					RGBColor		black = { 0,0,0} ;
 					RGBForeColor( &black ) ;
 					RGBBackColor( &white ) ;
-			//		RGBForeColor( &m_textForegroundColour.GetPixel() ) ;
-			//		RGBBackColor( &m_textBackgroundColour.GetPixel() ) ;
 			
 					bmappixels = GetGWorldPixMap( bmapworld ) ;
 					if ( LockPixels(bmappixels) )
@@ -168,21 +167,20 @@ void wxDC::DrawBitmap( const wxBitmap &bmp, long x, long y, bool useMask )
 						dest.left = XLOG2DEV(x) ;
 						dest.bottom = YLOG2DEV(y + bmap->m_height )  ;
 						dest.right = XLOG2DEV(x + bmap->m_width ) ;
-						// ::ClipRect(&m_macClipRect);
-						CopyBits( &GrafPtr( bmapworld )->portBits , &GrafPtr( m_macPort )->portBits ,
-							&source, &dest, srcCopy, NULL ) ;
-						/*
-						if ( m_clipping )
-						{
-							long x1 = XLOG2DEV(m_clipX1);
-							long y1 = YLOG2DEV(m_clipY1);
-							long x2 = XLOG2DEV(m_clipX2);
-							long y2 = YLOG2DEV(m_clipY2);
 	
-							Rect clip = { y1 , x1 , y2 , x2 } ;
-							::ClipRect(&clip);
+						if ( useMask && bmp.GetMask() )
+						{
+							if ( LockPixels( GetGWorldPixMap( bmp.GetMask()->GetMaskBitmap( ) ) ) )
+							{
+								CopyMask( &GrafPtr( bmapworld )->portBits , &GrafPtr( bmp.GetMask()->GetMaskBitmap( ) )->portBits , &GrafPtr( m_macPort )->portBits ,
+									&source, &source , &dest ) ;
+								UnlockPixels( GetGWorldPixMap( bmp.GetMask()->GetMaskBitmap( ) )  ) ;
+							}
 						}
-						*/
+						else
+							CopyBits( &GrafPtr( bmapworld )->portBits , &GrafPtr( m_macPort )->portBits ,
+								&source, &dest, srcCopy, NULL ) ;
+
 						UnlockPixels( bmappixels ) ;
 					} 
 					m_macPenInstalled = false ;
@@ -1071,8 +1069,6 @@ bool  wxDC::Blit( long xdest, long ydest, long width, long height,
 	PixMapHandle	bmappixels =  GetGWorldPixMap( sourcePort ) ; 
 	RGBColor		white = { 0xFFFF, 0xFFFF,0xFFFF} ;
 	RGBColor		black = { 0,0,0} ;
-//		RGBForeColor( &black ) ;
-//		RGBBackColor( &white ) ;
 		RGBForeColor( &m_textForegroundColour.GetPixel() ) ;
 		RGBBackColor( &m_textBackgroundColour.GetPixel() ) ;
 
@@ -1087,21 +1083,36 @@ bool  wxDC::Blit( long xdest, long ydest, long width, long height,
 		dstrect.left = XLOG2DEV(xdest) ;
 		dstrect.bottom = YLOG2DEV(ydest + height )  ;
 		dstrect.right = XLOG2DEV(xdest + width ) ;
-//		::ClipRect(&m_macClipRect);
+
+    	short  mode = (logical_func == wxCOPY ? srcCopy :
+ //   	logical_func == wxCLEAR ? WHITENESS :
+ //   	logical_func == wxSET ? BLACKNESS :
+   		logical_func == wxINVERT ? hilite :
+  //  	logical_func == wxAND ? MERGECOPY :
+    	logical_func == wxOR ? srcOr :
+    	logical_func == wxSRC_INVERT ? notSrcCopy :
+    	logical_func == wxXOR ? srcXor :
+  //  	logical_func == wxOR_REVERSE ? MERGEPAINT :
+  //  	logical_func == wxAND_REVERSE ? SRCERASE :
+    	logical_func == wxSRC_OR ? srcOr :
+  //  	logical_func == wxSRC_AND ? SRCAND :
+    		srcCopy );
+
+		if ( useMask && source->m_macMask )
+		{
+			wxASSERT( mode == srcCopy ) ;
+			if ( LockPixels( GetGWorldPixMap( source->m_macMask ) ) )
+			{
+				CopyMask( &GrafPtr( sourcePort )->portBits , &GrafPtr( source->m_macMask )->portBits , &GrafPtr( m_macPort )->portBits ,
+					&srcrect, &srcrect , &dstrect ) ;
+				UnlockPixels( GetGWorldPixMap( source->m_macMask )  ) ;
+			}
+		}
+		else
+		{
 		CopyBits( &GrafPtr( sourcePort )->portBits , &GrafPtr( m_macPort )->portBits ,
-			&srcrect, &dstrect, srcCopy, NULL ) ;
-/*
-						if ( m_clipping )
-						{
-							long x1 = XLOG2DEV(m_clipX1);
-							long y1 = YLOG2DEV(m_clipY1);
-							long x2 = XLOG2DEV(m_clipX2);
-							long y2 = YLOG2DEV(m_clipY2);
-	
-							Rect clip = { y1 , x1 , y2 , x2 } ;
-							::ClipRect(&clip);
-						}
-*/
+				&srcrect, &dstrect, mode, NULL ) ;
+		}
 		UnlockPixels( bmappixels ) ;
 	} 
 	

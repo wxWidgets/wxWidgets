@@ -642,9 +642,22 @@ bool wxWindow::Show(bool show)
 	  	UMAHideWindow( m_macWindowData->m_macWindow ) ;
 	  }
 	}
+	MacSuperShown( show ) ;
 	Refresh() ;
 
     return TRUE;
+}
+
+void wxWindow::MacSuperShown( bool show ) 
+{
+	wxNode *node = GetChildren().First();
+	while ( node )
+	{
+		wxWindow *child = (wxWindow *)node->Data();
+		if ( child->m_isShown )
+			child->MacSuperShown( show ) ;
+		node = node->Next();
+	}
 }
 
 int wxWindow::GetCharHeight() const
@@ -912,6 +925,43 @@ void wxWindow::SetScrollPos(int orient, int pos, bool refresh)
 			if ( m_vScrollBar )
 				m_vScrollBar->SetThumbPosition( pos ) ;
 		}
+}
+
+void wxWindow::MacPaint( wxPaintEvent &event ) 
+{
+    wxPaintDC dc(this);
+    PrepareDC(dc);
+
+    if (HasFlag(wxRAISED_BORDER) || HasFlag( wxSUNKEN_BORDER) )
+    {
+    	bool sunken = HasFlag( wxSUNKEN_BORDER ) ;
+
+		wxPen m_penButton3DShadow( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_3DSHADOW ), 1, wxSOLID ) ;
+		wxPen m_penButton3DFace( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_3DFACE ), 1, wxSOLID ) ;
+    	
+		wxPen wxPen1 = sunken ? *wxWHITE_PEN : *wxBLACK_PEN;
+		wxPen wxPen2 = sunken ? m_penButton3DShadow : m_penButton3DShadow;
+		wxPen wxPen3 = sunken ? m_penButton3DFace : m_penButton3DShadow;
+		wxPen wxPen4 = sunken ? *wxBLACK_PEN : *wxWHITE_PEN;
+	
+		dc.SetPen(wxPen1);
+		dc.DrawRectangle(0, 0, m_width, m_height);          // outer - right and button
+	
+	    dc.SetPen(wxPen2);
+		dc.DrawRectangle(1, 1, m_width-1, m_height-1);      // outer - left and top
+	
+	    dc.SetPen(wxPen3);
+		dc.DrawRectangle(0, 0, m_width-2, m_height-2);          // inner - right and button
+	
+	    dc.SetPen(wxPen4);
+		dc.DrawLine(0, 0, m_width-3, 0);                 // inner - left and top
+		dc.DrawLine(0, 0, 0, m_height-3);
+    }
+    else if (HasFlag(wxSIMPLE_BORDER))
+    {
+		dc.SetPen(*wxBLACK_PEN);
+		dc.DrawRectangle(0, 0, m_width, m_height);         
+    }
 }
 
 // New function that will replace some of the above.
@@ -1433,7 +1483,9 @@ void wxWindow::MacRedraw( RgnHandle updatergn , long time)
 	event.m_timeStamp = time ;
 	event.SetEventObject(this);
 	
+	wxPaintEvent event2( event ) ;
 	GetEventHandler()->ProcessEvent(event);
+	MacPaint( event2 ) ;
 	
 	RgnHandle childupdate = NewRgn() ;
 

@@ -22,6 +22,65 @@ IMPLEMENT_DYNAMIC_CLASS(wxStaticText, wxControl)
 
 #include <wx/mac/uma.h>
 
+BEGIN_EVENT_TABLE(wxStaticText, wxControl)
+    EVT_PAINT(wxStaticText::OnPaint)
+END_EVENT_TABLE()
+
+bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
+           const wxString& label,
+           const wxPoint& pos,
+           const wxSize& size,
+           long style,
+           const wxString& name)
+{
+    SetName(name);
+    m_backgroundColour = parent->GetBackgroundColour() ;
+    m_foregroundColour = parent->GetForegroundColour() ;
+
+    if ( id == -1 )
+  	    m_windowId = (int)NewControlId();
+    else
+	    m_windowId = id;
+
+    m_windowStyle = style;
+    m_label = label ;
+
+	bool ret = wxControl::Create( parent, id, pos, size, style , wxDefaultValidator , name );
+	SetSizeOrDefault( size ) ;
+    
+    return ret;
+}
+
+void wxStaticText::OnPaint( wxPaintEvent &event ) 
+{
+    wxPaintDC dc(this);
+    PrepareDC(dc);
+    dc.Clear() ;
+    dc.DrawText( m_label , 0 , 0 ) ;
+}
+
+wxSize wxStaticText::DoGetBestSize() const
+{
+	int x , y  ;
+	GetTextExtent( m_label , &x , &y ) ;
+	return wxSize( x , y ) ;
+}
+
+void wxStaticText::SetLabel(const wxString& st , bool resize )
+{
+	SetTitle( st ) ;
+	m_label = st ;
+	if ( resize )
+		SetSizeOrDefault() ;
+	else
+		Refresh() ;
+}
+/*
+void wxStaticText::SetSize(int x, int y, int width, int height, int sizeFlags)
+{
+    wxControl::SetSize( x , y , width , height , sizeFlags ) ;
+}
+
 bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
            const wxString& label,
            const wxPoint& pos,
@@ -56,4 +115,5 @@ void wxStaticText::SetLabel(const wxString& st , bool resize )
 	::UMASetControlData( m_macControl, kControlLabelPart, kControlStaticTextTextTag , (long) label.Length() , (char*)(const char*) label ) ;
 	Refresh() ;
 }
+*/
 

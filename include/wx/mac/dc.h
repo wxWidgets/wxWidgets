@@ -382,6 +382,7 @@ class WXDLLEXPORT wxDC: public wxObject
 
 //begin wxmac
 	GrafPtr				m_macPort ;
+	GWorldPtr			m_macMask ;
 
 	// in order to preserve the const inheritance of the virtual functions, we have to 
 	// use mutable variables starting from CWPro 5

@@ -70,11 +70,23 @@ int wxMessageDialog::ShowModal()
 	Str255 pascalTitle ;
 	Str255 pascalText ;
 	
-	strcpy( (char*) pascalTitle , m_caption ) ;
+	
+	if (wxApp::s_macDefaultEncodingIsPC)
+	{
+		strcpy( (char*) pascalTitle , wxMacMakeMacStringFromPC( m_caption ) ) ;
+		strcpy( (char*) pascalText , wxMacMakeMacStringFromPC( m_message) ) ;
+	}
+	else
+	{
+		strcpy( (char*) pascalTitle , m_caption ) ;
+		strcpy( (char*) pascalText , m_message ) ;
+	}
+
 	c2pstr( (char*) pascalTitle ) ;
-	strcpy( (char*) pascalText , m_message ) ;
 	wxMacConvertNewlines( (char*)pascalText ,(char*) pascalText) ;
 	c2pstr( (char*) pascalText ) ;
+
+	wxASSERT_MSG( ( m_dialogStyle & 0x3F ) != wxYES , "this style is not supported on mac" ) ;
 
 	if ( !UMAHasAppearance() )
 	{

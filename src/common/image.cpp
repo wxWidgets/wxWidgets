@@ -883,7 +883,12 @@ wxBitmap wxImage::ConvertToBitmap() const
             {
                 for(i=0; i<width; i++ )
                 {
-                    if( (*(ptdata++)!=r) | (*(ptdata++)!=g) | (*(ptdata++)!=b) )
+                    // was causing a code gen bug in cw : if( ( cr !=r) || (cg!=g) || (cb!=b) )
+                	unsigned char cr = (*(ptdata++)) ;
+                	unsigned char cg = (*(ptdata++)) ;
+                	unsigned char cb = (*(ptdata++)) ;
+                	
+                    if( ( cr !=r) || (cg!=g) || (cb!=b) )
                     {
                         *(ptbits++) = one;
                         *(ptbits++) = one;
@@ -1128,6 +1133,12 @@ wxBitmap wxImage::ConvertToBitmap() const
 
    	SetGWorld( origPort , origDevice ) ;
 
+    if ( HasMask() )
+    {
+        wxColour colour( GetMaskRed(), GetMaskGreen(), GetMaskBlue());
+        wxMask *mask = new wxMask( bitmap, colour );
+        bitmap.SetMask( mask );
+    }
     return bitmap;
 
 }

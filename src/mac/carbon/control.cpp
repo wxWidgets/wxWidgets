@@ -18,7 +18,7 @@
 #include "wx/tabctrl.h"
 #include "wx/spinbutt.h"
 
-IMPLEMENT_ABSTRACT_CLASS(wxControl, wxControlBase)
+IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)
 
 BEGIN_EVENT_TABLE(wxControl, wxControlBase)
 	EVT_MOUSE_EVENTS( wxControl::OnMouseEvent ) 
@@ -383,7 +383,6 @@ void wxControl::MacSuperEnabled( bool enabled )
 
 void  wxControl::MacSuperShown( bool show ) 
 {
-	/*
 	if ( m_macControl )
 	{
 		if ( !show )
@@ -392,13 +391,12 @@ void  wxControl::MacSuperShown( bool show )
 		}
 		else
 		{
-			if ( m_macShown )
+			if ( m_isShown )
 				::UMAShowControl( m_macControl ) ;
 		}
 	}
 		
 	wxWindow::MacSuperShown( show ) ;
-	*/
 }
 
 void  wxControl::DoSetSize(int x, int y,

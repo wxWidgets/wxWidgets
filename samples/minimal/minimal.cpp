@@ -140,19 +140,33 @@ bool MyApp::OnInit()
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
        : wxFrame((wxFrame *)NULL, -1, title, pos, size)
 {
+#ifdef __WXMAC__
+	// we need this in order to allow the about menu relocation, since ABOUT is not the default id of the about menu 
+	wxApp::s_macAboutMenuItemId = Minimal_About ;
+#endif
+
     // set the frame icon
     SetIcon(wxICON(mondrian));
 
     // create a menu bar
     wxMenu *menuFile = new wxMenu("", wxMENU_TEAROFF);
 
+#ifdef __WXMAC__
+	// since the about should be in the help menu for auto-relocation we have to do a little more...
+    wxMenu *helpMenu = new wxMenu("", wxMENU_TEAROFF);
+    helpMenu->Append(Minimal_About, "&About...\tCntrl+A", "Show about dialog");
+#else
     menuFile->Append(Minimal_About, "&About...\tCtrl-A", "Show about dialog");
     menuFile->AppendSeparator();
-    menuFile->Append(Minimal_Quit, "E&xit\tAlt-X", "Quit this program");
+#endif
 
+    menuFile->Append(Minimal_Quit, "E&xit\tAlt-X", "Quit this program");
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
     menuBar->Append(menuFile, "&File");
+#ifdef __WXMAC__
+    menuBar->Append(helpMenu, "&Help");
+#endif
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);

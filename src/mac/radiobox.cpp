@@ -418,7 +418,7 @@ void wxRadioBox::SetFocus()
 //-------------------------------------------------------------------------------------
 // Simulates the effect of the user issuing a command to the item
 
-#define RADIO_SIZE 20
+#define RADIO_SIZE 40
 
 void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
@@ -429,6 +429,8 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
 	int x_current, y_current;
 	int x_offset,y_offset;
+    int widthOld, heightOld;
+    GetSize(&widthOld, &heightOld);
 
 	x_offset = x;
 	y_offset = y;
@@ -463,7 +465,24 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 	totHeight = GetNumVer() * (maxHeight + charHeight/2) + charHeight*3/2;
 	totWidth  = GetNumHor() * (maxWidth + charWidth) + charWidth;
 
-	wxControl::DoSetSize(x_offset,y_offset,totWidth,totHeight,wxSIZE_AUTO);
+    // only change our width/height if asked for
+    if ( width == -1 )
+    {
+        if ( sizeFlags & wxSIZE_AUTO_WIDTH )
+            width = totWidth ;
+        else
+            width = widthOld;
+    }
+
+    if ( height == -1 )
+    {
+        if ( sizeFlags & wxSIZE_AUTO_HEIGHT )
+            height = totHeight ;
+        else
+            height = heightOld;
+    }
+
+	wxControl::DoSetSize(x_offset,y_offset,width,height,wxSIZE_AUTO);
 
 // arrange radiobuttons
 

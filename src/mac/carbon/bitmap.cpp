@@ -446,18 +446,14 @@ wxBitmapHandler *wxBitmap::FindHandler(long bitmapType)
 
 wxMask::wxMask()
 {
-/* TODO
     m_maskBitmap = 0;
-*/
 }
 
 // Construct a mask from a bitmap and a colour indicating
 // the transparent area
 wxMask::wxMask(const wxBitmap& bitmap, const wxColour& colour)
 {
-/* TODO
     m_maskBitmap = 0;
-*/
     Create(bitmap, colour);
 }
 
@@ -465,26 +461,24 @@ wxMask::wxMask(const wxBitmap& bitmap, const wxColour& colour)
 // the transparent area
 wxMask::wxMask(const wxBitmap& bitmap, int paletteIndex)
 {
-/* TODO
     m_maskBitmap = 0;
-*/
-
     Create(bitmap, paletteIndex);
 }
 
 // Construct a mask from a mono bitmap (copies the bitmap).
 wxMask::wxMask(const wxBitmap& bitmap)
 {
-/* TODO
     m_maskBitmap = 0;
-*/
-
     Create(bitmap);
 }
 
 wxMask::~wxMask()
 {
-// TODO: delete mask bitmap
+	if ( m_maskBitmap )
+	{
+		wxMacDestroyGWorld( m_maskBitmap ) ;
+		m_maskBitmap = NULL ;
+	}
 }
 
 // Create a mask from a mono bitmap (copies the bitmap).
@@ -506,8 +500,54 @@ bool wxMask::Create(const wxBitmap& bitmap, int paletteIndex)
 // the transparent area
 bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
 {
-// TODO
-    return FALSE;
+	if ( m_maskBitmap )
+	{
+		wxMacDestroyGWorld( m_maskBitmap ) ;
+		m_maskBitmap = NULL ;
+	}
+	wxASSERT( ((wxBitmapRefData*) bitmap.GetRefData())->m_bitmapType == kMacBitmapTypeGrafWorld ) ;
+	// other types would require a temporary bitmap. not yet implemented 
+	
+    if (!bitmap.Ok())
+    {
+        return FALSE;
+    }
+
+	m_maskBitmap = wxMacCreateGWorld( bitmap.GetWidth() , bitmap.GetHeight() , 1 ) ;	
+	RGBColor maskColor = colour.GetPixel() ;
+
+    // this is not very efficient, but I can't think
+    // of a better way of doing it
+	CGrafPtr 	origPort ;
+	GDHandle	origDevice ;
+			
+	GetGWorld( &origPort , &origDevice ) ;
+	for (int w = 0; w < bitmap.GetWidth(); w++)
+    {
+        for (int h = 0; h < bitmap.GetHeight(); h++)
+        {		
+			RGBColor colors[2] = { 
+				{ 0xFFFF , 0xFFFF , 0xFFFF } ,
+				{ 0, 0 , 0 } 
+				} ;
+				
+			SetGWorld( ((wxBitmapRefData*) bitmap.GetRefData())->m_hBitmap , NULL ) ;
+			RGBColor col ;
+			GetCPixel( w , h , &col ) ;
+			SetGWorld( m_maskBitmap , NULL ) ;
+            if (col.red == maskColor.red && col.blue == maskColor.blue && col.green == maskColor.green)
+            {
+				SetCPixel( w , h , &colors[0] ) ;
+            }
+            else
+            {
+				SetCPixel( w , h , &colors[1] ) ;
+            }
+        }
+    }
+	SetGWorld( origPort , origDevice ) ;
+
+    return TRUE;
 }
 
 /*

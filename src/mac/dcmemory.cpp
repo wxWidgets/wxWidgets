@@ -44,6 +44,11 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
 		if ( bmap->m_hBitmap )
 		{
 			m_macPort = (GrafPtr) bmap->m_hBitmap ;
+			wxMask * mask = bitmap.GetMask() ;
+			if ( mask )
+			{
+				m_macMask = mask->GetMaskBitmap() ;
+			}
 			MacSetupPort() ;
  			m_ok = TRUE ;
 			// SetBackground(wxBrush(*wxWHITE, wxSOLID));

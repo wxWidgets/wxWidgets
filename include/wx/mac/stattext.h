@@ -49,6 +49,13 @@ class WXDLLEXPORT wxStaticText: public wxControl
   // operations
   virtual void Command(wxCommandEvent& WXUNUSED(event)) {};
   virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {};
+  // events
+  void OnPaint( wxPaintEvent &event ) ;
+  wxSize DoGetBestSize() const ;
+ private :
+ 	wxString	m_label ;
+
+   DECLARE_EVENT_TABLE()
 };
 
 #endif

@@ -245,10 +245,14 @@ bool wxToolBar::Realize()
 			
 			ControlHandle m_macToolHandle ;
 				
+			SInt16 behaviour = kControlBehaviorOffsetContents ;
+			if ( tool->CanBeToggled() )
+				behaviour += kControlBehaviorToggles ;
+				
 			if ( icon )
 			{
 				m_macToolHandle = UMANewControl( window , &toolrect , "\p" , true , 0 , 
-					kControlBehaviorOffsetContents + kControlContentPictHandle , 0 , kControlBevelButtonNormalBevelProc , (long) this ) ;
+					behaviour + kControlContentPictHandle , 0 , kControlBevelButtonNormalBevelProc , (long) this ) ;
 				ControlButtonContentInfo info ;
 				
 				info.contentType = kControlContentPictHandle ;
@@ -259,7 +263,7 @@ bool wxToolBar::Realize()
 			else
 			{
 						m_macToolHandle = UMANewControl( window , &toolrect , "\p" , true , 0 , 
-						kControlBehaviorOffsetContents  , 0 , kControlBevelButtonNormalBevelProc , (long) this ) ;
+						behaviour  , 0 , kControlBevelButtonNormalBevelProc , (long) this ) ;
 			}
 			m_macToolHandles.Add( m_macToolHandle ) ;
 			UMASetControlFontStyle( m_macToolHandle , &controlstyle ) ;
@@ -353,12 +357,29 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
 void wxToolBar::DoEnableTool(wxToolBarToolBase *t, bool enable)
 {
         wxToolBarTool *tool = (wxToolBarTool *)t;
+        ControlHandle control = (ControlHandle) m_macToolHandles[ tool->m_index ] ;
+		if ( UMAHasAppearance() )
+		{
+			if ( enable )
+				::ActivateControl( control ) ;
+			else
+				::DeactivateControl( control ) ;
+		}
+		else
+		{
+			if ( enable )
+				::HiliteControl( control , 0 ) ;
+			else
+				::HiliteControl( control , 255 ) ;
+		}
 }
 
 void wxToolBar::DoToggleTool(wxToolBarToolBase *t, bool toggle)
 {
        wxToolBarTool *tool = (wxToolBarTool *)t;
-       // TODO: set toggle state
+        
+       ControlHandle control = (ControlHandle) m_macToolHandles[ tool->m_index ] ;
+   		::SetControlValue( control , toggle ) ;
 }
 
 bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos),

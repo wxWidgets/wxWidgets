@@ -236,10 +236,12 @@ public :
 	virtual void						MacFireMouseEvent( EventRecord *ev ) ;
 	virtual bool						MacDispatchMouseEvent(wxMouseEvent& event ) ;
 	virtual void						MacEraseBackground( Rect *rect ) ;
+	virtual void 						MacPaint( wxPaintEvent &event ) ;
 	WindowRef								GetMacRootWindow() const  ;
 
 	virtual ControlHandle 	MacGetContainerForEmbedding() ;
 	virtual void 						MacSuperChangedPosition() ;
+	virtual void						MacSuperShown( bool show ) ;
 
 	bool										MacSetupFocusPort() ;
 	bool										MacSetupDrawingPort() ;
