@@ -2736,7 +2736,7 @@ bool wxWindowGTK::Create( wxWindow *parent,
 wxWindowGTK::~wxWindowGTK()
 {
     // Send destroy event
-    wxWindowDestroyEvent destroyEvent(this);
+    wxWindowDestroyEvent destroyEvent((wxWindow*) this);
     destroyEvent.SetId(GetId());
     GetEventHandler()->ProcessEvent(destroyEvent);
 
