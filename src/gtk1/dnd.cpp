@@ -805,7 +805,7 @@ wxDragResult wxDropSource::DoDragDrop( bool allowMove )
             action |= GDK_ACTION_MOVE;
         GdkDragContext *context = gtk_drag_begin( m_widget,
                 target_list,
-                action,
+                (GdkDragAction)action,
                 button_number,  /* number of mouse button which started drag */
                 (GdkEvent*) &event );
 
