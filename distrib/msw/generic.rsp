@@ -25,7 +25,7 @@ build/bakefiles/formats/*.empy
 build/bakefiles/formats/README
 build/bakefiles/formats/*.bkmanifest
 build/bakefiles/wxpresets/*.bkl
-build/bakefiles/wxpresets/presets
+build/bakefiles/wxpresets/presets/*.bkl
 build/bakefiles/wxpresets/sample/*.bkl
 build/bakefiles/wxpresets/sample/*.in
 build/bakefiles/wxpresets/sample/*.cpp
@@ -329,6 +329,19 @@ samples/db/*.rc
 samples/db/*.wav
 samples/db/*.pro
 samples/db/*.bkl
+
+samples/debugrpt/*.cpp
+samples/debugrpt/*.h
+samples/debugrpt/*.def
+samples/debugrpt/makefile*
+samples/debugrpt/*.xbm
+samples/debugrpt/*.xpm
+samples/debugrpt/*.txt
+samples/debugrpt/*.ico
+samples/debugrpt/*.bmp
+samples/debugrpt/*.rc
+samples/debugrpt/*.pro
+samples/debugrpt/*.bkl
 
 samples/dnd/*.cpp
 samples/dnd/*.h

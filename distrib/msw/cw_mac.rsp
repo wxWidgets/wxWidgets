@@ -50,6 +50,8 @@ samples/controls/*M?.xml
 samples/controls/*.mcp
 samples/db/*M?.xml
 samples/db/*.mcp
+samples/debugrpt/*M?.xml
+samples/debugrpt/*.mcp
 samples/dialogs/*M?.xml
 samples/dialogs/*.mcp
 samples/dialup/*M?.xml

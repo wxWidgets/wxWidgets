@@ -12,6 +12,7 @@ samples/config/Makefile.in
 samples/console/Makefile.in
 samples/controls/Makefile.in
 samples/db/Makefile.in
+samples/debugrpt/Makefile.in
 samples/dialogs/Makefile.in
 samples/dnd/Makefile.in
 samples/docview/Makefile.in

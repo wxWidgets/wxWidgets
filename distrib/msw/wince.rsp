@@ -31,6 +31,9 @@ samples/controls/controls.vcw
 samples/db/db.vcp
 samples/db/db.vcw
 
+samples/debugrpt/debugrpt.vcp
+samples/debugrpt/debugrpt.vcw
+
 samples/dialogs/dialogs.vcp
 samples/dialogs/dialogs.vcw
 

@@ -26,6 +26,7 @@ samples/checklst/*W7.xml
 samples/config/*W7.xml
 samples/controls/*W7.xml
 samples/db/*W7.xml
+samples/debugrpt/*W7.xml
 samples/dialogs/*W7.xml
 samples/dialup/*W7.xml
 samples/dnd/*W7.xml

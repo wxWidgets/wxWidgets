@@ -48,6 +48,7 @@ samples/config/makefile.dmc
 samples/console/makefile.dmc
 samples/controls/makefile.dmc
 samples/db/makefile.dmc
+samples/debugrpt/makefile.dmc
 samples/dialogs/makefile.dmc
 samples/dialup/makefile.dmc
 samples/display/makefile.dmc

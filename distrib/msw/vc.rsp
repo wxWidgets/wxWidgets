@@ -52,6 +52,9 @@ samples/controls/controls.dsw
 samples/db/db.dsp
 samples/db/db.dsw
 
+samples/debugrpt/debugrept.dsp
+samples/debugrpt/debugrept.dsw
+
 samples/dialogs/dialogs.dsp
 samples/dialogs/dialogs.dsw
 
