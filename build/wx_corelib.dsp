@@ -4,7 +4,7 @@
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=corelib - Win32 Static Native Release Unicode
+CFG=corelib - Win32 LIB wxUniv Release Ansi
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
@@ -13,18 +13,18 @@ CFG=corelib - Win32 Static Native Release Unicode
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "wx_corelib.mak" CFG="corelib - Win32 Static Native Release Unicode"
+!MESSAGE NMAKE /f "wx_corelib.mak" CFG="corelib - Win32 LIB wxUniv Release Ansi"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "corelib - Win32 Static Native Release Unicode" (based on "Win32 (x86) Static Library")
-!MESSAGE "corelib - Win32 Static wxUniv Release Unicode" (based on "Win32 (x86) Static Library")
-!MESSAGE "corelib - Win32 Static Native Release Ansi" (based on "Win32 (x86) Static Library")
-!MESSAGE "corelib - Win32 Static Native Debug Unicode" (based on "Win32 (x86) Static Library")
-!MESSAGE "corelib - Win32 Static wxUniv Debug Ansi" (based on "Win32 (x86) Static Library")
-!MESSAGE "corelib - Win32 Static wxUniv Release Ansi" (based on "Win32 (x86) Static Library")
-!MESSAGE "corelib - Win32 Static Native Debug Ansi" (based on "Win32 (x86) Static Library")
-!MESSAGE "corelib - Win32 Static wxUniv Debug Unicode" (based on "Win32 (x86) Static Library")
+!MESSAGE "corelib - Win32 LIB wxUniv Release Ansi" (based on "Win32 (x86) Static Library")
+!MESSAGE "corelib - Win32 LIB Native Release Unicode" (based on "Win32 (x86) Static Library")
+!MESSAGE "corelib - Win32 LIB wxUniv Debug Ansi" (based on "Win32 (x86) Static Library")
+!MESSAGE "corelib - Win32 LIB Native Release Ansi" (based on "Win32 (x86) Static Library")
+!MESSAGE "corelib - Win32 LIB Native Debug Unicode" (based on "Win32 (x86) Static Library")
+!MESSAGE "corelib - Win32 LIB wxUniv Release Unicode" (based on "Win32 (x86) Static Library")
+!MESSAGE "corelib - Win32 LIB wxUniv Debug Unicode" (based on "Win32 (x86) Static Library")
+!MESSAGE "corelib - Win32 LIB Native Debug Ansi" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -34,122 +34,7 @@ CFG=corelib - Win32 Static Native Release Unicode
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\lib\vc_mswu\"
-# PROP BASE Intermediate_Dir "vc_mswu\corelib"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\lib\vc_mswu\"
-# PROP Intermediate_Dir "vc_mswu\corelib"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O1 /I "..\include" /I "..\lib\vc_mswu" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswu\wxmsw25u_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /MD /O1 /I "..\include" /I "..\lib\vc_mswu" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswu\wxmsw25u_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=0 /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\lib\vc_mswu\wxmsw25u_core.lib"
-# ADD LIB32 /nologo /out:"..\lib\vc_mswu\wxmsw25u_core.lib"
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\lib\vc_mswunivu\"
-# PROP BASE Intermediate_Dir "vc_mswunivu\corelib"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\lib\vc_mswunivu\"
-# PROP Intermediate_Dir "vc_mswunivu\corelib"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O1 /I "..\include" /I "..\lib\vc_mswunivu" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswunivu\wxmswuniv25u_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /MD /O1 /I "..\include" /I "..\lib\vc_mswunivu" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswunivu\wxmswuniv25u_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=0 /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\lib\vc_mswunivu\wxmswuniv25u_core.lib"
-# ADD LIB32 /nologo /out:"..\lib\vc_mswunivu\wxmswuniv25u_core.lib"
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\lib\vc_msw\"
-# PROP BASE Intermediate_Dir "vc_msw\corelib"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\lib\vc_msw\"
-# PROP Intermediate_Dir "vc_msw\corelib"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O1 /I "..\include" /I "..\lib\vc_msw" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_msw\wxmsw25_core.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /MD /O1 /I "..\include" /I "..\lib\vc_msw" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_msw\wxmsw25_core.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D wxUSE_BASE=0 /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\lib\vc_msw\wxmsw25_core.lib"
-# ADD LIB32 /nologo /out:"..\lib\vc_msw\wxmsw25_core.lib"
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\lib\vc_mswud\"
-# PROP BASE Intermediate_Dir "vc_mswud\corelib"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\lib\vc_mswud\"
-# PROP Intermediate_Dir "vc_mswud\corelib"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /I "..\include" /I "..\lib\vc_mswud" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Zi /Gm /GZ /Fd..\lib\vc_mswud\wxmsw25ud_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /MDd /Od /I "..\include" /I "..\lib\vc_mswud" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Zi /Gm /GZ /Fd..\lib\vc_mswud\wxmsw25ud_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=0 /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\lib\vc_mswud\wxmsw25ud_core.lib"
-# ADD LIB32 /nologo /out:"..\lib\vc_mswud\wxmsw25ud_core.lib"
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\lib\vc_mswunivd\"
-# PROP BASE Intermediate_Dir "vc_mswunivd\corelib"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\lib\vc_mswunivd\"
-# PROP Intermediate_Dir "vc_mswunivd\corelib"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /I "..\include" /I "..\lib\vc_mswunivd" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Zi /Gm /GZ /Fd..\lib\vc_mswunivd\wxmswuniv25d_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /MDd /Od /I "..\include" /I "..\lib\vc_mswunivd" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Zi /Gm /GZ /Fd..\lib\vc_mswunivd\wxmswuniv25d_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_BASE=0 /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\lib\vc_mswunivd\wxmswuniv25d_core.lib"
-# ADD LIB32 /nologo /out:"..\lib\vc_mswunivd\wxmswuniv25d_core.lib"
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -161,8 +46,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\lib\vc_mswuniv\"
 # PROP Intermediate_Dir "vc_mswuniv\corelib"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O1 /I "..\include" /I "..\lib\vc_mswuniv" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswuniv\wxmswuniv25_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /MD /O1 /I "..\include" /I "..\lib\vc_mswuniv" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswuniv\wxmswuniv25_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_BASE=0 /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswuniv" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswuniv\wxmswuniv25_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswuniv" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswuniv\wxmswuniv25_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_BASE=0 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -172,30 +57,122 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\lib\vc_mswuniv\wxmswuniv25_core.lib"
 # ADD LIB32 /nologo /out:"..\lib\vc_mswuniv\wxmswuniv25_core.lib"
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\lib\vc_mswd\"
-# PROP BASE Intermediate_Dir "vc_mswd\corelib"
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "..\lib\vc_mswu\"
+# PROP BASE Intermediate_Dir "vc_mswu\corelib"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\lib\vc_mswd\"
-# PROP Intermediate_Dir "vc_mswd\corelib"
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "..\lib\vc_mswu\"
+# PROP Intermediate_Dir "vc_mswu\corelib"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /I "..\include" /I "..\lib\vc_mswd" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Zi /Gm /GZ /Fd..\lib\vc_mswd\wxmsw25d_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /MDd /Od /I "..\include" /I "..\lib\vc_mswd" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Zi /Gm /GZ /Fd..\lib\vc_mswd\wxmsw25d_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_BASE=0 /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswu" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswu\wxmsw25u_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswu" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswu\wxmsw25u_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=0 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\lib\vc_mswd\wxmsw25d_core.lib"
-# ADD LIB32 /nologo /out:"..\lib\vc_mswd\wxmsw25d_core.lib"
+# ADD BASE LIB32 /nologo /out:"..\lib\vc_mswu\wxmsw25u_core.lib"
+# ADD LIB32 /nologo /out:"..\lib\vc_mswu\wxmsw25u_core.lib"
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "..\lib\vc_mswunivd\"
+# PROP BASE Intermediate_Dir "vc_mswunivd\corelib"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "..\lib\vc_mswunivd\"
+# PROP Intermediate_Dir "vc_mswunivd\corelib"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\include" /I "..\lib\vc_mswunivd" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Zi /Gm /GZ /Fd..\lib\vc_mswunivd\wxmswuniv25d_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\include" /I "..\lib\vc_mswunivd" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Zi /Gm /GZ /Fd..\lib\vc_mswunivd\wxmswuniv25d_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_BASE=0 /c
+# ADD BASE RSC /l 0x405
+# ADD RSC /l 0x405
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\lib\vc_mswunivd\wxmswuniv25d_core.lib"
+# ADD LIB32 /nologo /out:"..\lib\vc_mswunivd\wxmswuniv25d_core.lib"
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "..\lib\vc_msw\"
+# PROP BASE Intermediate_Dir "vc_msw\corelib"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "..\lib\vc_msw\"
+# PROP Intermediate_Dir "vc_msw\corelib"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_msw" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_msw\wxmsw25_core.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_msw" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_msw\wxmsw25_core.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D wxUSE_BASE=0 /c
+# ADD BASE RSC /l 0x405
+# ADD RSC /l 0x405
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\lib\vc_msw\wxmsw25_core.lib"
+# ADD LIB32 /nologo /out:"..\lib\vc_msw\wxmsw25_core.lib"
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "..\lib\vc_mswud\"
+# PROP BASE Intermediate_Dir "vc_mswud\corelib"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "..\lib\vc_mswud\"
+# PROP Intermediate_Dir "vc_mswud\corelib"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\include" /I "..\lib\vc_mswud" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Zi /Gm /GZ /Fd..\lib\vc_mswud\wxmsw25ud_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\include" /I "..\lib\vc_mswud" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Zi /Gm /GZ /Fd..\lib\vc_mswud\wxmsw25ud_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=0 /c
+# ADD BASE RSC /l 0x405
+# ADD RSC /l 0x405
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\lib\vc_mswud\wxmsw25ud_core.lib"
+# ADD LIB32 /nologo /out:"..\lib\vc_mswud\wxmsw25ud_core.lib"
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "..\lib\vc_mswunivu\"
+# PROP BASE Intermediate_Dir "vc_mswunivu\corelib"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "..\lib\vc_mswunivu\"
+# PROP Intermediate_Dir "vc_mswunivu\corelib"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswunivu" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswunivu\wxmswuniv25u_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswunivu" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswunivu\wxmswuniv25u_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=0 /c
+# ADD BASE RSC /l 0x405
+# ADD RSC /l 0x405
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\lib\vc_mswunivu\wxmswuniv25u_core.lib"
+# ADD LIB32 /nologo /out:"..\lib\vc_mswunivu\wxmswuniv25u_core.lib"
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -207,8 +184,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\lib\vc_mswunivud\"
 # PROP Intermediate_Dir "vc_mswunivud\corelib"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /I "..\include" /I "..\lib\vc_mswunivud" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Zi /Gm /GZ /Fd..\lib\vc_mswunivud\wxmswuniv25ud_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /MDd /Od /I "..\include" /I "..\lib\vc_mswunivud" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Zi /Gm /GZ /Fd..\lib\vc_mswunivud\wxmswuniv25ud_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=0 /c
+# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\include" /I "..\lib\vc_mswunivud" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Zi /Gm /GZ /Fd..\lib\vc_mswunivud\wxmswuniv25ud_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\include" /I "..\lib\vc_mswunivud" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Zi /Gm /GZ /Fd..\lib\vc_mswunivud\wxmswuniv25ud_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=0 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -218,18 +195,41 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\lib\vc_mswunivud\wxmswuniv25ud_core.lib"
 # ADD LIB32 /nologo /out:"..\lib\vc_mswunivud\wxmswuniv25ud_core.lib"
 
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "..\lib\vc_mswd\"
+# PROP BASE Intermediate_Dir "vc_mswd\corelib"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "..\lib\vc_mswd\"
+# PROP Intermediate_Dir "vc_mswd\corelib"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\include" /I "..\lib\vc_mswd" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Zi /Gm /GZ /Fd..\lib\vc_mswd\wxmsw25d_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\include" /I "..\lib\vc_mswd" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Zi /Gm /GZ /Fd..\lib\vc_mswd\wxmsw25d_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_BASE=0 /c
+# ADD BASE RSC /l 0x405
+# ADD RSC /l 0x405
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\lib\vc_mswd\wxmsw25d_core.lib"
+# ADD LIB32 /nologo /out:"..\lib\vc_mswd\wxmsw25d_core.lib"
+
 !ENDIF
 
 # Begin Target
 
-# Name "corelib - Win32 Static Native Release Unicode"
-# Name "corelib - Win32 Static wxUniv Release Unicode"
-# Name "corelib - Win32 Static Native Release Ansi"
-# Name "corelib - Win32 Static Native Debug Unicode"
-# Name "corelib - Win32 Static wxUniv Debug Ansi"
-# Name "corelib - Win32 Static wxUniv Release Ansi"
-# Name "corelib - Win32 Static Native Debug Ansi"
-# Name "corelib - Win32 Static wxUniv Debug Unicode"
+# Name "corelib - Win32 LIB wxUniv Release Ansi"
+# Name "corelib - Win32 LIB Native Release Unicode"
+# Name "corelib - Win32 LIB wxUniv Debug Ansi"
+# Name "corelib - Win32 LIB Native Release Ansi"
+# Name "corelib - Win32 LIB Native Debug Unicode"
+# Name "corelib - Win32 LIB wxUniv Release Unicode"
+# Name "corelib - Win32 LIB wxUniv Debug Unicode"
+# Name "corelib - Win32 LIB Native Debug Ansi"
 # Begin Group "Common Headers"
 
 # PROP Default_Filter ""
@@ -268,10 +268,6 @@ SOURCE=..\include\wx\busyinfo.h
 # Begin Source File
 
 SOURCE=..\include\wx\button.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\calctrl.h
 # End Source File
 # Begin Source File
 
@@ -339,15 +335,7 @@ SOURCE=..\include\wx\dataobj.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\dbgrid.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\dc.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\dcbuffer.h
 # End Source File
 # Begin Source File
 
@@ -467,10 +455,6 @@ SOURCE=..\include\wx\generic\accel.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\generic\calctrl.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\generic\choicdgg.h
 # End Source File
 # Begin Source File
@@ -507,27 +491,7 @@ SOURCE=..\include\wx\generic\fontdlgg.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\generic\grid.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\generic\gridctrl.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\generic\gridsel.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\generic\helpext.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\generic\imaglist.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\generic\laywin.h
 # End Source File
 # Begin Source File
 
@@ -563,19 +527,11 @@ SOURCE=..\include\wx\generic\progdlgg.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\generic\sashwin.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\generic\scrolwin.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\include\wx\generic\spinctlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\generic\splash.h
 # End Source File
 # Begin Source File
 
@@ -603,10 +559,6 @@ SOURCE=..\include\wx\generic\treectlg.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\generic\wizard.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\geometry.h
 # End Source File
 # Begin Source File
@@ -616,10 +568,6 @@ SOURCE=..\include\wx\gifdecod.h
 # Begin Source File
 
 SOURCE=..\include\wx\glcanvas.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\grid.h
 # End Source File
 # Begin Source File
 
@@ -696,10 +644,6 @@ SOURCE=..\include\wx\joystick.h
 # Begin Source File
 
 SOURCE=..\include\wx\layout.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\laywin.h
 # End Source File
 # Begin Source File
 
@@ -1199,10 +1143,6 @@ SOURCE=..\include\wx\renderer.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\sashwin.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\scopeguard.h
 # End Source File
 # Begin Source File
@@ -1236,10 +1176,6 @@ SOURCE=..\include\wx\spinbutt.h
 # Begin Source File
 
 SOURCE=..\include\wx\spinctrl.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\splash.h
 # End Source File
 # Begin Source File
 
@@ -1304,10 +1240,6 @@ SOURCE=..\include\wx\tglbtn.h
 # Begin Source File
 
 SOURCE=..\include\wx\timer.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\tipdlg.h
 # End Source File
 # Begin Source File
 
@@ -1515,10 +1447,6 @@ SOURCE=..\include\wx\window.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\wizard.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\xpmdecod.h
 # End Source File
 # Begin Source File
@@ -1533,33 +1461,33 @@ SOURCE=..\include\wx\xpmhand.h
 
 SOURCE=..\src\generic\accel.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -1570,50 +1498,42 @@ SOURCE=..\src\generic\busyinfo.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\generic\calctrl.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\generic\choicdgg.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\generic\colrdlgg.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\generic\dcbuffer.cpp
 # End Source File
 # Begin Source File
 
@@ -1627,33 +1547,33 @@ SOURCE=..\src\generic\dirctrlg.cpp
 
 SOURCE=..\src\generic\dirdlgg.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -1666,33 +1586,33 @@ SOURCE=..\src\generic\dragimgg.cpp
 
 SOURCE=..\src\generic\fdrepdlg.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -1701,33 +1621,33 @@ SOURCE=..\src\generic\fdrepdlg.cpp
 
 SOURCE=..\src\generic\filedlgg.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -1736,123 +1656,103 @@ SOURCE=..\src\generic\filedlgg.cpp
 
 SOURCE=..\src\generic\fontdlgg.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\generic\grid.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\generic\gridctrl.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\generic\gridsel.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\generic\helpext.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\generic\imaglist.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\generic\laywin.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\generic\listctrl.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -1865,33 +1765,33 @@ SOURCE=..\src\generic\logg.cpp
 
 SOURCE=..\src\generic\mdig.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -1900,33 +1800,33 @@ SOURCE=..\src\generic\mdig.cpp
 
 SOURCE=..\src\generic\msgdlgg.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -1943,33 +1843,33 @@ SOURCE=..\src\generic\panelg.cpp
 
 SOURCE=..\src\generic\prntdlgg.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -1981,10 +1881,6 @@ SOURCE=..\src\generic\progdlgg.cpp
 # Begin Source File
 
 SOURCE=..\src\generic\renderg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\generic\sashwin.cpp
 # End Source File
 # Begin Source File
 
@@ -2000,43 +1896,39 @@ SOURCE=..\src\generic\spinctlg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\generic\splash.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\generic\splitter.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\generic\statusbr.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -2045,33 +1937,33 @@ SOURCE=..\src\generic\statusbr.cpp
 
 SOURCE=..\src\generic\tabg.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -2083,10 +1975,6 @@ SOURCE=..\src\generic\tbarsmpl.cpp
 # Begin Source File
 
 SOURCE=..\src\generic\textdlgg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\generic\tipdlg.cpp
 # End Source File
 # Begin Source File
 
@@ -2104,10 +1992,6 @@ SOURCE=..\src\generic\vlbox.cpp
 
 SOURCE=..\src\generic\vscroll.cpp
 # End Source File
-# Begin Source File
-
-SOURCE=..\src\generic\wizard.cpp
-# End Source File
 # End Group
 # Begin Group "wxUniv Sources"
 
@@ -2116,33 +2000,33 @@ SOURCE=..\src\generic\wizard.cpp
 
 SOURCE=..\src\univ\bmpbuttn.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -2151,33 +2035,33 @@ SOURCE=..\src\univ\bmpbuttn.cpp
 
 SOURCE=..\src\univ\button.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -2186,33 +2070,33 @@ SOURCE=..\src\univ\button.cpp
 
 SOURCE=..\src\univ\checkbox.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -2221,33 +2105,33 @@ SOURCE=..\src\univ\checkbox.cpp
 
 SOURCE=..\src\univ\checklst.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -2256,33 +2140,33 @@ SOURCE=..\src\univ\checklst.cpp
 
 SOURCE=..\src\univ\choice.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -2291,33 +2175,33 @@ SOURCE=..\src\univ\choice.cpp
 
 SOURCE=..\src\univ\colschem.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -2326,33 +2210,33 @@ SOURCE=..\src\univ\colschem.cpp
 
 SOURCE=..\src\univ\combobox.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -2361,33 +2245,33 @@ SOURCE=..\src\univ\combobox.cpp
 
 SOURCE=..\src\univ\control.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -2396,33 +2280,33 @@ SOURCE=..\src\univ\control.cpp
 
 SOURCE=..\src\univ\dialog.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -2431,33 +2315,33 @@ SOURCE=..\src\univ\dialog.cpp
 
 SOURCE=..\src\univ\framuniv.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -2466,33 +2350,33 @@ SOURCE=..\src\univ\framuniv.cpp
 
 SOURCE=..\src\univ\gauge.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -2501,33 +2385,33 @@ SOURCE=..\src\univ\gauge.cpp
 
 SOURCE=..\src\univ\inpcons.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -2536,33 +2420,33 @@ SOURCE=..\src\univ\inpcons.cpp
 
 SOURCE=..\src\univ\inphand.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -2571,33 +2455,33 @@ SOURCE=..\src\univ\inphand.cpp
 
 SOURCE=..\src\univ\listbox.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -2606,33 +2490,33 @@ SOURCE=..\src\univ\listbox.cpp
 
 SOURCE=..\src\univ\menu.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -2641,33 +2525,33 @@ SOURCE=..\src\univ\menu.cpp
 
 SOURCE=..\src\univ\notebook.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -2676,33 +2560,33 @@ SOURCE=..\src\univ\notebook.cpp
 
 SOURCE=..\src\univ\radiobox.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -2711,33 +2595,33 @@ SOURCE=..\src\univ\radiobox.cpp
 
 SOURCE=..\src\univ\radiobut.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -2746,33 +2630,33 @@ SOURCE=..\src\univ\radiobut.cpp
 
 SOURCE=..\src\univ\renderer.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -2781,33 +2665,33 @@ SOURCE=..\src\univ\renderer.cpp
 
 SOURCE=..\src\univ\scrarrow.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -2816,33 +2700,33 @@ SOURCE=..\src\univ\scrarrow.cpp
 
 SOURCE=..\src\univ\scrolbar.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -2851,33 +2735,33 @@ SOURCE=..\src\univ\scrolbar.cpp
 
 SOURCE=..\src\univ\scrthumb.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -2886,33 +2770,33 @@ SOURCE=..\src\univ\scrthumb.cpp
 
 SOURCE=..\src\univ\slider.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -2921,33 +2805,33 @@ SOURCE=..\src\univ\slider.cpp
 
 SOURCE=..\src\univ\spinbutt.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -2956,33 +2840,33 @@ SOURCE=..\src\univ\spinbutt.cpp
 
 SOURCE=..\src\univ\statbmp.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -2991,33 +2875,33 @@ SOURCE=..\src\univ\statbmp.cpp
 
 SOURCE=..\src\univ\statbox.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -3026,33 +2910,33 @@ SOURCE=..\src\univ\statbox.cpp
 
 SOURCE=..\src\univ\statline.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -3061,33 +2945,33 @@ SOURCE=..\src\univ\statline.cpp
 
 SOURCE=..\src\univ\stattext.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -3096,33 +2980,33 @@ SOURCE=..\src\univ\stattext.cpp
 
 SOURCE=..\src\univ\statusbr.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -3131,33 +3015,33 @@ SOURCE=..\src\univ\statusbr.cpp
 
 SOURCE=..\src\univ\textctrl.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -3166,33 +3050,33 @@ SOURCE=..\src\univ\textctrl.cpp
 
 SOURCE=..\src\univ\theme.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -3201,33 +3085,33 @@ SOURCE=..\src\univ\theme.cpp
 
 SOURCE=..\src\univ\themes\gtk.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -3236,33 +3120,33 @@ SOURCE=..\src\univ\themes\gtk.cpp
 
 SOURCE=..\src\univ\themes\metal.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -3271,33 +3155,33 @@ SOURCE=..\src\univ\themes\metal.cpp
 
 SOURCE=..\src\univ\themes\win32.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -3306,33 +3190,33 @@ SOURCE=..\src\univ\themes\win32.cpp
 
 SOURCE=..\src\univ\toolbar.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -3341,33 +3225,33 @@ SOURCE=..\src\univ\toolbar.cpp
 
 SOURCE=..\src\univ\topluniv.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -3376,33 +3260,33 @@ SOURCE=..\src\univ\topluniv.cpp
 
 SOURCE=..\src\univ\winuniv.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -3466,10 +3350,6 @@ SOURCE=..\src\common\ctrlsub.cpp
 # Begin Source File
 
 SOURCE=..\src\common\datacmn.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\common\dbgrid.cpp
 # End Source File
 # Begin Source File
 
@@ -3727,33 +3607,33 @@ SOURCE=..\src\common\xpmdecod.cpp
 
 SOURCE=..\src\msw\accel.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -3770,33 +3650,33 @@ SOURCE=..\src\msw\bitmap.cpp
 
 SOURCE=..\src\msw\bmpbuttn.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -3809,33 +3689,33 @@ SOURCE=..\src\msw\brush.cpp
 
 SOURCE=..\src\msw\button.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -3848,33 +3728,33 @@ SOURCE=..\src\msw\caret.cpp
 
 SOURCE=..\src\msw\checkbox.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -3883,33 +3763,33 @@ SOURCE=..\src\msw\checkbox.cpp
 
 SOURCE=..\src\msw\checklst.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -3918,33 +3798,33 @@ SOURCE=..\src\msw\checklst.cpp
 
 SOURCE=..\src\msw\choice.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -3957,33 +3837,33 @@ SOURCE=..\src\msw\clipbrd.cpp
 
 SOURCE=..\src\msw\colordlg.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -3996,33 +3876,33 @@ SOURCE=..\src\msw\colour.cpp
 
 SOURCE=..\src\msw\combobox.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -4031,33 +3911,33 @@ SOURCE=..\src\msw\combobox.cpp
 
 SOURCE=..\src\msw\control.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -4094,33 +3974,33 @@ SOURCE=..\src\msw\dcscreen.cpp
 
 SOURCE=..\src\msw\dialog.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -4145,33 +4025,33 @@ SOURCE=..\src\msw\display.cpp
 
 SOURCE=..\src\msw\dragimag.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -4194,33 +4074,33 @@ SOURCE=..\src\msw\evtloop.cpp
 
 SOURCE=..\src\msw\fdrepdlg.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -4229,33 +4109,33 @@ SOURCE=..\src\msw\fdrepdlg.cpp
 
 SOURCE=..\src\msw\filedlg.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -4268,33 +4148,33 @@ SOURCE=..\src\msw\font.cpp
 
 SOURCE=..\src\msw\fontdlg.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -4311,33 +4191,33 @@ SOURCE=..\src\msw\fontutil.cpp
 
 SOURCE=..\src\msw\frame.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -4346,33 +4226,33 @@ SOURCE=..\src\msw\frame.cpp
 
 SOURCE=..\src\msw\gauge95.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -4401,33 +4281,33 @@ SOURCE=..\src\msw\icon.cpp
 
 SOURCE=..\src\msw\imaglist.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -4436,33 +4316,33 @@ SOURCE=..\src\msw\imaglist.cpp
 
 SOURCE=..\src\msw\iniconf.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -4475,33 +4355,33 @@ SOURCE=..\src\msw\joystick.cpp
 
 SOURCE=..\src\msw\listbox.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -4510,33 +4390,33 @@ SOURCE=..\src\msw\listbox.cpp
 
 SOURCE=..\src\msw\listctrl.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -4549,33 +4429,33 @@ SOURCE=..\src\msw\main.cpp
 
 SOURCE=..\src\msw\mdi.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -4584,33 +4464,33 @@ SOURCE=..\src\msw\mdi.cpp
 
 SOURCE=..\src\msw\menu.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -4619,33 +4499,33 @@ SOURCE=..\src\msw\menu.cpp
 
 SOURCE=..\src\msw\menuitem.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -4654,33 +4534,33 @@ SOURCE=..\src\msw\menuitem.cpp
 
 SOURCE=..\src\msw\metafile.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -4693,33 +4573,33 @@ SOURCE=..\src\msw\minifram.cpp
 
 SOURCE=..\src\msw\msgdlg.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -4732,33 +4612,33 @@ SOURCE=..\src\msw\mslu.cpp
 
 SOURCE=..\src\msw\nativdlg.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -4767,33 +4647,33 @@ SOURCE=..\src\msw\nativdlg.cpp
 
 SOURCE=..\src\msw\notebook.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -4802,33 +4682,33 @@ SOURCE=..\src\msw\notebook.cpp
 
 SOURCE=..\src\msw\ole\access.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -4861,33 +4741,33 @@ SOURCE=..\src\msw\ole\uuid.cpp
 
 SOURCE=..\src\msw\ownerdrw.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -4904,33 +4784,33 @@ SOURCE=..\src\msw\pen.cpp
 
 SOURCE=..\src\msw\penwin.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -4943,33 +4823,33 @@ SOURCE=..\src\msw\popupwin.cpp
 
 SOURCE=..\src\msw\printdlg.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -4978,33 +4858,33 @@ SOURCE=..\src\msw\printdlg.cpp
 
 SOURCE=..\src\msw\printwin.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -5013,33 +4893,33 @@ SOURCE=..\src\msw\printwin.cpp
 
 SOURCE=..\src\msw\radiobox.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -5048,33 +4928,33 @@ SOURCE=..\src\msw\radiobox.cpp
 
 SOURCE=..\src\msw\radiobut.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -5087,33 +4967,33 @@ SOURCE=..\src\msw\region.cpp
 
 SOURCE=..\src\msw\renderer.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -5122,33 +5002,33 @@ SOURCE=..\src\msw\renderer.cpp
 
 SOURCE=..\src\msw\scrolbar.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -5161,33 +5041,33 @@ SOURCE=..\src\msw\settings.cpp
 
 SOURCE=..\src\msw\slider95.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -5196,33 +5076,33 @@ SOURCE=..\src\msw\slider95.cpp
 
 SOURCE=..\src\msw\spinbutt.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -5231,33 +5111,33 @@ SOURCE=..\src\msw\spinbutt.cpp
 
 SOURCE=..\src\msw\spinctrl.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -5266,33 +5146,33 @@ SOURCE=..\src\msw\spinctrl.cpp
 
 SOURCE=..\src\msw\statbmp.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -5301,33 +5181,33 @@ SOURCE=..\src\msw\statbmp.cpp
 
 SOURCE=..\src\msw\statbox.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -5336,33 +5216,33 @@ SOURCE=..\src\msw\statbox.cpp
 
 SOURCE=..\src\msw\statbr95.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -5371,33 +5251,33 @@ SOURCE=..\src\msw\statbr95.cpp
 
 SOURCE=..\src\msw\statline.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -5406,33 +5286,33 @@ SOURCE=..\src\msw\statline.cpp
 
 SOURCE=..\src\msw\stattext.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -5441,33 +5321,33 @@ SOURCE=..\src\msw\stattext.cpp
 
 SOURCE=..\src\msw\tabctrl.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -5480,33 +5360,33 @@ SOURCE=..\src\msw\taskbar.cpp
 
 SOURCE=..\src\msw\tbar95.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -5515,33 +5395,33 @@ SOURCE=..\src\msw\tbar95.cpp
 
 SOURCE=..\src\msw\textctrl.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -5550,33 +5430,33 @@ SOURCE=..\src\msw\textctrl.cpp
 
 SOURCE=..\src\msw\tglbtn.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -5597,33 +5477,33 @@ SOURCE=..\src\msw\toplevel.cpp
 
 SOURCE=..\src\msw\treectrl.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 
@@ -5636,33 +5516,33 @@ SOURCE=..\src\msw\utilsgui.cpp
 
 SOURCE=..\src\msw\uxtheme.cpp
 
-!IF  "$(CFG)" == "corelib - Win32 Static Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Unicode"
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Release Ansi"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Static wxUniv Debug Unicode"
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
 
 !ENDIF
 

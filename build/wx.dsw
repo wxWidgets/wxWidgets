@@ -2,6 +2,54 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 # WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
 
 ###############################################################################
+Project: "advdll"=wx_advdll.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+Begin Project Dependency
+Project_Dep_Name wxtiff
+End Project Dependency
+Begin Project Dependency
+Project_Dep_Name wxjpeg
+End Project Dependency
+Begin Project Dependency
+Project_Dep_Name wxpng
+End Project Dependency
+Begin Project Dependency
+Project_Dep_Name wxexpat
+End Project Dependency
+Begin Project Dependency
+Project_Dep_Name wxzlib
+End Project Dependency
+Begin Project Dependency
+Project_Dep_Name wxregex
+End Project Dependency
+Begin Project Dependency
+Project_Dep_Name coredll
+End Project Dependency
+Begin Project Dependency
+Project_Dep_Name basedll
+End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "advlib"=wx_advlib.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "basedll"=wx_basedll.dsp - Package Owner=<4>
 
 Package=<5>

@@ -12,6 +12,44 @@ include config.gcc
 
 ### Variables: ###
 
+ADVDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
+	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+	$(__UNICODE_DEFINE_p) -I..\include -I$(LIBDIRNAME) -I..\src\tiff \
+	-I..\src\jpeg -I..\src\png -I..\src\zlib -I..\src\regex -I..\src\expat\lib \
+	-DWXUSINGDLL -DWXMAKINGDLL_ADV $(CXXFLAGS)
+ADVDLL_OBJECTS =  \
+	$(OBJS)\advdll_dummy.o \
+	$(OBJS)\advdll_dbgrid.o \
+	$(OBJS)\advdll_calctrl.o \
+	$(OBJS)\advdll_dcbuffer.o \
+	$(OBJS)\advdll_grid.o \
+	$(OBJS)\advdll_gridctrl.o \
+	$(OBJS)\advdll_gridsel.o \
+	$(OBJS)\advdll_helpext.o \
+	$(OBJS)\advdll_laywin.o \
+	$(OBJS)\advdll_sashwin.o \
+	$(OBJS)\advdll_splash.o \
+	$(OBJS)\advdll_tipdlg.o \
+	$(OBJS)\advdll_wizard.o
+ADVLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
+	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+	$(__UNICODE_DEFINE_p) -I..\include -I$(LIBDIRNAME) -I..\src\tiff \
+	-I..\src\jpeg -I..\src\png -I..\src\zlib -I..\src\regex -I..\src\expat\lib \
+	$(CXXFLAGS)
+ADVLIB_OBJECTS =  \
+	$(OBJS)\advlib_dummy.o \
+	$(OBJS)\advlib_dbgrid.o \
+	$(OBJS)\advlib_calctrl.o \
+	$(OBJS)\advlib_dcbuffer.o \
+	$(OBJS)\advlib_grid.o \
+	$(OBJS)\advlib_gridctrl.o \
+	$(OBJS)\advlib_gridsel.o \
+	$(OBJS)\advlib_helpext.o \
+	$(OBJS)\advlib_laywin.o \
+	$(OBJS)\advlib_sashwin.o \
+	$(OBJS)\advlib_splash.o \
+	$(OBJS)\advlib_tipdlg.o \
+	$(OBJS)\advlib_wizard.o
 BASEDLL_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\include -I$(LIBDIRNAME) -I..\src\tiff \
@@ -809,12 +847,14 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_pen.o \
 	$(OBJS)\monolib_popupwin.o \
 	$(OBJS)\monolib_region.o \
+	$(OBJS)\monolib_renderer.o \
 	$(OBJS)\monolib_settings.o \
 	$(OBJS)\monolib_taskbar.o \
 	$(OBJS)\monolib_timer.o \
 	$(OBJS)\monolib_tooltip.o \
 	$(OBJS)\monolib_toplevel.o \
 	$(OBJS)\monolib_utilsgui.o \
+	$(OBJS)\monolib_uxtheme.o \
 	$(OBJS)\monolib_wave.o \
 	$(OBJS)\monolib_window.o \
 	$(OBJS)\monolib_statusbr.o \
@@ -852,7 +892,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_printwin.o \
 	$(OBJS)\monolib_radiobox.o \
 	$(OBJS)\monolib_radiobut.o \
-	$(OBJS)\monolib_renderer.o \
 	$(OBJS)\monolib_scrolbar.o \
 	$(OBJS)\monolib_slider95.o \
 	$(OBJS)\monolib_spinbutt.o \
@@ -867,7 +906,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_textctrl.o \
 	$(OBJS)\monolib_tglbtn.o \
 	$(OBJS)\monolib_treectrl.o \
-	$(OBJS)\monolib_uxtheme.o \
 	$(OBJS)\monolib_accesscmn.o \
 	$(OBJS)\monolib_appcmn.o \
 	$(OBJS)\monolib_artprov.o \
@@ -882,7 +920,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_ctrlcmn.o \
 	$(OBJS)\monolib_ctrlsub.o \
 	$(OBJS)\monolib_datacmn.o \
-	$(OBJS)\monolib_dbgrid.o \
 	$(OBJS)\monolib_dcbase.o \
 	$(OBJS)\monolib_dlgcmn.o \
 	$(OBJS)\monolib_dndcmn.o \
@@ -941,36 +978,25 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_wincmn.o \
 	$(OBJS)\monolib_xpmdecod.o \
 	$(OBJS)\monolib_busyinfo.o \
-	$(OBJS)\monolib_calctrl.o \
 	$(OBJS)\monolib_choicdgg.o \
-	$(OBJS)\monolib_dcbuffer.o \
 	$(OBJS)\monolib_dcpsg.o \
 	$(OBJS)\monolib_dirctrlg.o \
 	$(OBJS)\monolib_dragimgg.o \
-	$(OBJS)\monolib_grid.o \
-	$(OBJS)\monolib_gridctrl.o \
-	$(OBJS)\monolib_gridsel.o \
-	$(OBJS)\monolib_helpext.o \
-	$(OBJS)\monolib_laywin.o \
 	$(OBJS)\monolib_logg.o \
 	$(OBJS)\monolib_numdlgg.o \
 	$(OBJS)\monolib_panelg.o \
 	$(OBJS)\monolib_progdlgg.o \
 	$(OBJS)\monolib_renderg.o \
-	$(OBJS)\monolib_sashwin.o \
 	$(OBJS)\monolib_scrlwing.o \
 	$(OBJS)\monolib_selstore.o \
 	$(OBJS)\monolib_spinctlg.o \
-	$(OBJS)\monolib_splash.o \
 	$(OBJS)\monolib_splitter.o \
 	$(OBJS)\monolib_tbarsmpl.o \
 	$(OBJS)\monolib_textdlgg.o \
-	$(OBJS)\monolib_tipdlg.o \
 	$(OBJS)\monolib_tipwin.o \
 	$(OBJS)\monolib_treectlg.o \
 	$(OBJS)\monolib_vlbox.o \
-	$(OBJS)\monolib_vscroll.o \
-	$(OBJS)\monolib_wizard.o
+	$(OBJS)\monolib_vscroll.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -1016,12 +1042,14 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_pen.o \
 	$(OBJS)\monolib_popupwin.o \
 	$(OBJS)\monolib_region.o \
+	$(OBJS)\monolib_renderer.o \
 	$(OBJS)\monolib_settings.o \
 	$(OBJS)\monolib_taskbar.o \
 	$(OBJS)\monolib_timer.o \
 	$(OBJS)\monolib_tooltip.o \
 	$(OBJS)\monolib_toplevel.o \
 	$(OBJS)\monolib_utilsgui.o \
+	$(OBJS)\monolib_uxtheme.o \
 	$(OBJS)\monolib_wave.o \
 	$(OBJS)\monolib_window.o \
 	$(OBJS)\monolib_textctrl.o \
@@ -1045,6 +1073,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_colschem.o \
 	$(OBJS)\monolib_combobox.o \
 	$(OBJS)\monolib_control.o \
+	$(OBJS)\monolib_ctrlrend.o \
 	$(OBJS)\monolib_dialog.o \
 	$(OBJS)\monolib_framuniv.o \
 	$(OBJS)\monolib_gauge.o \
@@ -1055,7 +1084,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_notebook.o \
 	$(OBJS)\monolib_radiobox.o \
 	$(OBJS)\monolib_radiobut.o \
-	$(OBJS)\monolib_renderer.o \
 	$(OBJS)\monolib_scrarrow.o \
 	$(OBJS)\monolib_scrolbar.o \
 	$(OBJS)\monolib_scrthumb.o \
@@ -1087,7 +1115,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_ctrlcmn.o \
 	$(OBJS)\monolib_ctrlsub.o \
 	$(OBJS)\monolib_datacmn.o \
-	$(OBJS)\monolib_dbgrid.o \
 	$(OBJS)\monolib_dcbase.o \
 	$(OBJS)\monolib_dlgcmn.o \
 	$(OBJS)\monolib_dndcmn.o \
@@ -1146,36 +1173,25 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_wincmn.o \
 	$(OBJS)\monolib_xpmdecod.o \
 	$(OBJS)\monolib_busyinfo.o \
-	$(OBJS)\monolib_calctrl.o \
 	$(OBJS)\monolib_choicdgg.o \
-	$(OBJS)\monolib_dcbuffer.o \
 	$(OBJS)\monolib_dcpsg.o \
 	$(OBJS)\monolib_dirctrlg.o \
 	$(OBJS)\monolib_dragimgg.o \
-	$(OBJS)\monolib_grid.o \
-	$(OBJS)\monolib_gridctrl.o \
-	$(OBJS)\monolib_gridsel.o \
-	$(OBJS)\monolib_helpext.o \
-	$(OBJS)\monolib_laywin.o \
 	$(OBJS)\monolib_logg.o \
 	$(OBJS)\monolib_numdlgg.o \
 	$(OBJS)\monolib_panelg.o \
 	$(OBJS)\monolib_progdlgg.o \
 	$(OBJS)\monolib_renderg.o \
-	$(OBJS)\monolib_sashwin.o \
 	$(OBJS)\monolib_scrlwing.o \
 	$(OBJS)\monolib_selstore.o \
 	$(OBJS)\monolib_spinctlg.o \
-	$(OBJS)\monolib_splash.o \
 	$(OBJS)\monolib_splitter.o \
 	$(OBJS)\monolib_tbarsmpl.o \
 	$(OBJS)\monolib_textdlgg.o \
-	$(OBJS)\monolib_tipdlg.o \
 	$(OBJS)\monolib_tipwin.o \
 	$(OBJS)\monolib_treectlg.o \
 	$(OBJS)\monolib_vlbox.o \
-	$(OBJS)\monolib_vscroll.o \
-	$(OBJS)\monolib_wizard.o
+	$(OBJS)\monolib_vscroll.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -1221,12 +1237,14 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_pen.o \
 	$(OBJS)\coredll_popupwin.o \
 	$(OBJS)\coredll_region.o \
+	$(OBJS)\coredll_renderer.o \
 	$(OBJS)\coredll_settings.o \
 	$(OBJS)\coredll_taskbar.o \
 	$(OBJS)\coredll_timer.o \
 	$(OBJS)\coredll_tooltip.o \
 	$(OBJS)\coredll_toplevel.o \
 	$(OBJS)\coredll_utilsgui.o \
+	$(OBJS)\coredll_uxtheme.o \
 	$(OBJS)\coredll_wave.o \
 	$(OBJS)\coredll_window.o \
 	$(OBJS)\coredll_statusbr.o \
@@ -1264,7 +1282,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_printwin.o \
 	$(OBJS)\coredll_radiobox.o \
 	$(OBJS)\coredll_radiobut.o \
-	$(OBJS)\coredll_renderer.o \
 	$(OBJS)\coredll_scrolbar.o \
 	$(OBJS)\coredll_slider95.o \
 	$(OBJS)\coredll_spinbutt.o \
@@ -1279,7 +1296,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_textctrl.o \
 	$(OBJS)\coredll_tglbtn.o \
 	$(OBJS)\coredll_treectrl.o \
-	$(OBJS)\coredll_uxtheme.o \
 	$(OBJS)\coredll_accesscmn.o \
 	$(OBJS)\coredll_appcmn.o \
 	$(OBJS)\coredll_artprov.o \
@@ -1294,7 +1310,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_ctrlcmn.o \
 	$(OBJS)\coredll_ctrlsub.o \
 	$(OBJS)\coredll_datacmn.o \
-	$(OBJS)\coredll_dbgrid.o \
 	$(OBJS)\coredll_dcbase.o \
 	$(OBJS)\coredll_dlgcmn.o \
 	$(OBJS)\coredll_dndcmn.o \
@@ -1353,36 +1368,25 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_wincmn.o \
 	$(OBJS)\coredll_xpmdecod.o \
 	$(OBJS)\coredll_busyinfo.o \
-	$(OBJS)\coredll_calctrl.o \
 	$(OBJS)\coredll_choicdgg.o \
-	$(OBJS)\coredll_dcbuffer.o \
 	$(OBJS)\coredll_dcpsg.o \
 	$(OBJS)\coredll_dirctrlg.o \
 	$(OBJS)\coredll_dragimgg.o \
-	$(OBJS)\coredll_grid.o \
-	$(OBJS)\coredll_gridctrl.o \
-	$(OBJS)\coredll_gridsel.o \
-	$(OBJS)\coredll_helpext.o \
-	$(OBJS)\coredll_laywin.o \
 	$(OBJS)\coredll_logg.o \
 	$(OBJS)\coredll_numdlgg.o \
 	$(OBJS)\coredll_panelg.o \
 	$(OBJS)\coredll_progdlgg.o \
 	$(OBJS)\coredll_renderg.o \
-	$(OBJS)\coredll_sashwin.o \
 	$(OBJS)\coredll_scrlwing.o \
 	$(OBJS)\coredll_selstore.o \
 	$(OBJS)\coredll_spinctlg.o \
-	$(OBJS)\coredll_splash.o \
 	$(OBJS)\coredll_splitter.o \
 	$(OBJS)\coredll_tbarsmpl.o \
 	$(OBJS)\coredll_textdlgg.o \
-	$(OBJS)\coredll_tipdlg.o \
 	$(OBJS)\coredll_tipwin.o \
 	$(OBJS)\coredll_treectlg.o \
 	$(OBJS)\coredll_vlbox.o \
-	$(OBJS)\coredll_vscroll.o \
-	$(OBJS)\coredll_wizard.o
+	$(OBJS)\coredll_vscroll.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -1428,12 +1432,14 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_pen.o \
 	$(OBJS)\coredll_popupwin.o \
 	$(OBJS)\coredll_region.o \
+	$(OBJS)\coredll_renderer.o \
 	$(OBJS)\coredll_settings.o \
 	$(OBJS)\coredll_taskbar.o \
 	$(OBJS)\coredll_timer.o \
 	$(OBJS)\coredll_tooltip.o \
 	$(OBJS)\coredll_toplevel.o \
 	$(OBJS)\coredll_utilsgui.o \
+	$(OBJS)\coredll_uxtheme.o \
 	$(OBJS)\coredll_wave.o \
 	$(OBJS)\coredll_window.o \
 	$(OBJS)\coredll_textctrl.o \
@@ -1457,6 +1463,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_colschem.o \
 	$(OBJS)\coredll_combobox.o \
 	$(OBJS)\coredll_control.o \
+	$(OBJS)\coredll_ctrlrend.o \
 	$(OBJS)\coredll_dialog.o \
 	$(OBJS)\coredll_framuniv.o \
 	$(OBJS)\coredll_gauge.o \
@@ -1467,7 +1474,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_notebook.o \
 	$(OBJS)\coredll_radiobox.o \
 	$(OBJS)\coredll_radiobut.o \
-	$(OBJS)\coredll_renderer.o \
 	$(OBJS)\coredll_scrarrow.o \
 	$(OBJS)\coredll_scrolbar.o \
 	$(OBJS)\coredll_scrthumb.o \
@@ -1499,7 +1505,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_ctrlcmn.o \
 	$(OBJS)\coredll_ctrlsub.o \
 	$(OBJS)\coredll_datacmn.o \
-	$(OBJS)\coredll_dbgrid.o \
 	$(OBJS)\coredll_dcbase.o \
 	$(OBJS)\coredll_dlgcmn.o \
 	$(OBJS)\coredll_dndcmn.o \
@@ -1558,36 +1563,25 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_wincmn.o \
 	$(OBJS)\coredll_xpmdecod.o \
 	$(OBJS)\coredll_busyinfo.o \
-	$(OBJS)\coredll_calctrl.o \
 	$(OBJS)\coredll_choicdgg.o \
-	$(OBJS)\coredll_dcbuffer.o \
 	$(OBJS)\coredll_dcpsg.o \
 	$(OBJS)\coredll_dirctrlg.o \
 	$(OBJS)\coredll_dragimgg.o \
-	$(OBJS)\coredll_grid.o \
-	$(OBJS)\coredll_gridctrl.o \
-	$(OBJS)\coredll_gridsel.o \
-	$(OBJS)\coredll_helpext.o \
-	$(OBJS)\coredll_laywin.o \
 	$(OBJS)\coredll_logg.o \
 	$(OBJS)\coredll_numdlgg.o \
 	$(OBJS)\coredll_panelg.o \
 	$(OBJS)\coredll_progdlgg.o \
 	$(OBJS)\coredll_renderg.o \
-	$(OBJS)\coredll_sashwin.o \
 	$(OBJS)\coredll_scrlwing.o \
 	$(OBJS)\coredll_selstore.o \
 	$(OBJS)\coredll_spinctlg.o \
-	$(OBJS)\coredll_splash.o \
 	$(OBJS)\coredll_splitter.o \
 	$(OBJS)\coredll_tbarsmpl.o \
 	$(OBJS)\coredll_textdlgg.o \
-	$(OBJS)\coredll_tipdlg.o \
 	$(OBJS)\coredll_tipwin.o \
 	$(OBJS)\coredll_treectlg.o \
 	$(OBJS)\coredll_vlbox.o \
-	$(OBJS)\coredll_vscroll.o \
-	$(OBJS)\coredll_wizard.o
+	$(OBJS)\coredll_vscroll.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -1633,12 +1627,14 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_pen.o \
 	$(OBJS)\corelib_popupwin.o \
 	$(OBJS)\corelib_region.o \
+	$(OBJS)\corelib_renderer.o \
 	$(OBJS)\corelib_settings.o \
 	$(OBJS)\corelib_taskbar.o \
 	$(OBJS)\corelib_timer.o \
 	$(OBJS)\corelib_tooltip.o \
 	$(OBJS)\corelib_toplevel.o \
 	$(OBJS)\corelib_utilsgui.o \
+	$(OBJS)\corelib_uxtheme.o \
 	$(OBJS)\corelib_wave.o \
 	$(OBJS)\corelib_window.o \
 	$(OBJS)\corelib_statusbr.o \
@@ -1676,7 +1672,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_printwin.o \
 	$(OBJS)\corelib_radiobox.o \
 	$(OBJS)\corelib_radiobut.o \
-	$(OBJS)\corelib_renderer.o \
 	$(OBJS)\corelib_scrolbar.o \
 	$(OBJS)\corelib_slider95.o \
 	$(OBJS)\corelib_spinbutt.o \
@@ -1691,7 +1686,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_textctrl.o \
 	$(OBJS)\corelib_tglbtn.o \
 	$(OBJS)\corelib_treectrl.o \
-	$(OBJS)\corelib_uxtheme.o \
 	$(OBJS)\corelib_accesscmn.o \
 	$(OBJS)\corelib_appcmn.o \
 	$(OBJS)\corelib_artprov.o \
@@ -1706,7 +1700,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_ctrlcmn.o \
 	$(OBJS)\corelib_ctrlsub.o \
 	$(OBJS)\corelib_datacmn.o \
-	$(OBJS)\corelib_dbgrid.o \
 	$(OBJS)\corelib_dcbase.o \
 	$(OBJS)\corelib_dlgcmn.o \
 	$(OBJS)\corelib_dndcmn.o \
@@ -1765,36 +1758,25 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_wincmn.o \
 	$(OBJS)\corelib_xpmdecod.o \
 	$(OBJS)\corelib_busyinfo.o \
-	$(OBJS)\corelib_calctrl.o \
 	$(OBJS)\corelib_choicdgg.o \
-	$(OBJS)\corelib_dcbuffer.o \
 	$(OBJS)\corelib_dcpsg.o \
 	$(OBJS)\corelib_dirctrlg.o \
 	$(OBJS)\corelib_dragimgg.o \
-	$(OBJS)\corelib_grid.o \
-	$(OBJS)\corelib_gridctrl.o \
-	$(OBJS)\corelib_gridsel.o \
-	$(OBJS)\corelib_helpext.o \
-	$(OBJS)\corelib_laywin.o \
 	$(OBJS)\corelib_logg.o \
 	$(OBJS)\corelib_numdlgg.o \
 	$(OBJS)\corelib_panelg.o \
 	$(OBJS)\corelib_progdlgg.o \
 	$(OBJS)\corelib_renderg.o \
-	$(OBJS)\corelib_sashwin.o \
 	$(OBJS)\corelib_scrlwing.o \
 	$(OBJS)\corelib_selstore.o \
 	$(OBJS)\corelib_spinctlg.o \
-	$(OBJS)\corelib_splash.o \
 	$(OBJS)\corelib_splitter.o \
 	$(OBJS)\corelib_tbarsmpl.o \
 	$(OBJS)\corelib_textdlgg.o \
-	$(OBJS)\corelib_tipdlg.o \
 	$(OBJS)\corelib_tipwin.o \
 	$(OBJS)\corelib_treectlg.o \
 	$(OBJS)\corelib_vlbox.o \
-	$(OBJS)\corelib_vscroll.o \
-	$(OBJS)\corelib_wizard.o
+	$(OBJS)\corelib_vscroll.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -1840,12 +1822,14 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_pen.o \
 	$(OBJS)\corelib_popupwin.o \
 	$(OBJS)\corelib_region.o \
+	$(OBJS)\corelib_renderer.o \
 	$(OBJS)\corelib_settings.o \
 	$(OBJS)\corelib_taskbar.o \
 	$(OBJS)\corelib_timer.o \
 	$(OBJS)\corelib_tooltip.o \
 	$(OBJS)\corelib_toplevel.o \
 	$(OBJS)\corelib_utilsgui.o \
+	$(OBJS)\corelib_uxtheme.o \
 	$(OBJS)\corelib_wave.o \
 	$(OBJS)\corelib_window.o \
 	$(OBJS)\corelib_textctrl.o \
@@ -1869,6 +1853,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_colschem.o \
 	$(OBJS)\corelib_combobox.o \
 	$(OBJS)\corelib_control.o \
+	$(OBJS)\corelib_ctrlrend.o \
 	$(OBJS)\corelib_dialog.o \
 	$(OBJS)\corelib_framuniv.o \
 	$(OBJS)\corelib_gauge.o \
@@ -1879,7 +1864,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_notebook.o \
 	$(OBJS)\corelib_radiobox.o \
 	$(OBJS)\corelib_radiobut.o \
-	$(OBJS)\corelib_renderer.o \
 	$(OBJS)\corelib_scrarrow.o \
 	$(OBJS)\corelib_scrolbar.o \
 	$(OBJS)\corelib_scrthumb.o \
@@ -1911,7 +1895,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_ctrlcmn.o \
 	$(OBJS)\corelib_ctrlsub.o \
 	$(OBJS)\corelib_datacmn.o \
-	$(OBJS)\corelib_dbgrid.o \
 	$(OBJS)\corelib_dcbase.o \
 	$(OBJS)\corelib_dlgcmn.o \
 	$(OBJS)\corelib_dndcmn.o \
@@ -1970,36 +1953,25 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_wincmn.o \
 	$(OBJS)\corelib_xpmdecod.o \
 	$(OBJS)\corelib_busyinfo.o \
-	$(OBJS)\corelib_calctrl.o \
 	$(OBJS)\corelib_choicdgg.o \
-	$(OBJS)\corelib_dcbuffer.o \
 	$(OBJS)\corelib_dcpsg.o \
 	$(OBJS)\corelib_dirctrlg.o \
 	$(OBJS)\corelib_dragimgg.o \
-	$(OBJS)\corelib_grid.o \
-	$(OBJS)\corelib_gridctrl.o \
-	$(OBJS)\corelib_gridsel.o \
-	$(OBJS)\corelib_helpext.o \
-	$(OBJS)\corelib_laywin.o \
 	$(OBJS)\corelib_logg.o \
 	$(OBJS)\corelib_numdlgg.o \
 	$(OBJS)\corelib_panelg.o \
 	$(OBJS)\corelib_progdlgg.o \
 	$(OBJS)\corelib_renderg.o \
-	$(OBJS)\corelib_sashwin.o \
 	$(OBJS)\corelib_scrlwing.o \
 	$(OBJS)\corelib_selstore.o \
 	$(OBJS)\corelib_spinctlg.o \
-	$(OBJS)\corelib_splash.o \
 	$(OBJS)\corelib_splitter.o \
 	$(OBJS)\corelib_tbarsmpl.o \
 	$(OBJS)\corelib_textdlgg.o \
-	$(OBJS)\corelib_tipdlg.o \
 	$(OBJS)\corelib_tipwin.o \
 	$(OBJS)\corelib_treectlg.o \
 	$(OBJS)\corelib_vlbox.o \
-	$(OBJS)\corelib_vscroll.o \
-	$(OBJS)\corelib_wizard.o
+	$(OBJS)\corelib_vscroll.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -2045,12 +2017,14 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_pen.o \
 	$(OBJS)\monodll_popupwin.o \
 	$(OBJS)\monodll_region.o \
+	$(OBJS)\monodll_renderer.o \
 	$(OBJS)\monodll_settings.o \
 	$(OBJS)\monodll_taskbar.o \
 	$(OBJS)\monodll_timer.o \
 	$(OBJS)\monodll_tooltip.o \
 	$(OBJS)\monodll_toplevel.o \
 	$(OBJS)\monodll_utilsgui.o \
+	$(OBJS)\monodll_uxtheme.o \
 	$(OBJS)\monodll_wave.o \
 	$(OBJS)\monodll_window.o \
 	$(OBJS)\monodll_statusbr.o \
@@ -2088,7 +2062,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_printwin.o \
 	$(OBJS)\monodll_radiobox.o \
 	$(OBJS)\monodll_radiobut.o \
-	$(OBJS)\monodll_renderer.o \
 	$(OBJS)\monodll_scrolbar.o \
 	$(OBJS)\monodll_slider95.o \
 	$(OBJS)\monodll_spinbutt.o \
@@ -2103,7 +2076,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_textctrl.o \
 	$(OBJS)\monodll_tglbtn.o \
 	$(OBJS)\monodll_treectrl.o \
-	$(OBJS)\monodll_uxtheme.o \
 	$(OBJS)\monodll_accesscmn.o \
 	$(OBJS)\monodll_appcmn.o \
 	$(OBJS)\monodll_artprov.o \
@@ -2118,7 +2090,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_ctrlcmn.o \
 	$(OBJS)\monodll_ctrlsub.o \
 	$(OBJS)\monodll_datacmn.o \
-	$(OBJS)\monodll_dbgrid.o \
 	$(OBJS)\monodll_dcbase.o \
 	$(OBJS)\monodll_dlgcmn.o \
 	$(OBJS)\monodll_dndcmn.o \
@@ -2177,36 +2148,25 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_wincmn.o \
 	$(OBJS)\monodll_xpmdecod.o \
 	$(OBJS)\monodll_busyinfo.o \
-	$(OBJS)\monodll_calctrl.o \
 	$(OBJS)\monodll_choicdgg.o \
-	$(OBJS)\monodll_dcbuffer.o \
 	$(OBJS)\monodll_dcpsg.o \
 	$(OBJS)\monodll_dirctrlg.o \
 	$(OBJS)\monodll_dragimgg.o \
-	$(OBJS)\monodll_grid.o \
-	$(OBJS)\monodll_gridctrl.o \
-	$(OBJS)\monodll_gridsel.o \
-	$(OBJS)\monodll_helpext.o \
-	$(OBJS)\monodll_laywin.o \
 	$(OBJS)\monodll_logg.o \
 	$(OBJS)\monodll_numdlgg.o \
 	$(OBJS)\monodll_panelg.o \
 	$(OBJS)\monodll_progdlgg.o \
 	$(OBJS)\monodll_renderg.o \
-	$(OBJS)\monodll_sashwin.o \
 	$(OBJS)\monodll_scrlwing.o \
 	$(OBJS)\monodll_selstore.o \
 	$(OBJS)\monodll_spinctlg.o \
-	$(OBJS)\monodll_splash.o \
 	$(OBJS)\monodll_splitter.o \
 	$(OBJS)\monodll_tbarsmpl.o \
 	$(OBJS)\monodll_textdlgg.o \
-	$(OBJS)\monodll_tipdlg.o \
 	$(OBJS)\monodll_tipwin.o \
 	$(OBJS)\monodll_treectlg.o \
 	$(OBJS)\monodll_vlbox.o \
-	$(OBJS)\monodll_vscroll.o \
-	$(OBJS)\monodll_wizard.o
+	$(OBJS)\monodll_vscroll.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -2252,12 +2212,14 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_pen.o \
 	$(OBJS)\monodll_popupwin.o \
 	$(OBJS)\monodll_region.o \
+	$(OBJS)\monodll_renderer.o \
 	$(OBJS)\monodll_settings.o \
 	$(OBJS)\monodll_taskbar.o \
 	$(OBJS)\monodll_timer.o \
 	$(OBJS)\monodll_tooltip.o \
 	$(OBJS)\monodll_toplevel.o \
 	$(OBJS)\monodll_utilsgui.o \
+	$(OBJS)\monodll_uxtheme.o \
 	$(OBJS)\monodll_wave.o \
 	$(OBJS)\monodll_window.o \
 	$(OBJS)\monodll_textctrl.o \
@@ -2281,6 +2243,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_colschem.o \
 	$(OBJS)\monodll_combobox.o \
 	$(OBJS)\monodll_control.o \
+	$(OBJS)\monodll_ctrlrend.o \
 	$(OBJS)\monodll_dialog.o \
 	$(OBJS)\monodll_framuniv.o \
 	$(OBJS)\monodll_gauge.o \
@@ -2291,7 +2254,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_notebook.o \
 	$(OBJS)\monodll_radiobox.o \
 	$(OBJS)\monodll_radiobut.o \
-	$(OBJS)\monodll_renderer.o \
 	$(OBJS)\monodll_scrarrow.o \
 	$(OBJS)\monodll_scrolbar.o \
 	$(OBJS)\monodll_scrthumb.o \
@@ -2323,7 +2285,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_ctrlcmn.o \
 	$(OBJS)\monodll_ctrlsub.o \
 	$(OBJS)\monodll_datacmn.o \
-	$(OBJS)\monodll_dbgrid.o \
 	$(OBJS)\monodll_dcbase.o \
 	$(OBJS)\monodll_dlgcmn.o \
 	$(OBJS)\monodll_dndcmn.o \
@@ -2382,41 +2343,42 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_wincmn.o \
 	$(OBJS)\monodll_xpmdecod.o \
 	$(OBJS)\monodll_busyinfo.o \
-	$(OBJS)\monodll_calctrl.o \
 	$(OBJS)\monodll_choicdgg.o \
-	$(OBJS)\monodll_dcbuffer.o \
 	$(OBJS)\monodll_dcpsg.o \
 	$(OBJS)\monodll_dirctrlg.o \
 	$(OBJS)\monodll_dragimgg.o \
-	$(OBJS)\monodll_grid.o \
-	$(OBJS)\monodll_gridctrl.o \
-	$(OBJS)\monodll_gridsel.o \
-	$(OBJS)\monodll_helpext.o \
-	$(OBJS)\monodll_laywin.o \
 	$(OBJS)\monodll_logg.o \
 	$(OBJS)\monodll_numdlgg.o \
 	$(OBJS)\monodll_panelg.o \
 	$(OBJS)\monodll_progdlgg.o \
 	$(OBJS)\monodll_renderg.o \
-	$(OBJS)\monodll_sashwin.o \
 	$(OBJS)\monodll_scrlwing.o \
 	$(OBJS)\monodll_selstore.o \
 	$(OBJS)\monodll_spinctlg.o \
-	$(OBJS)\monodll_splash.o \
 	$(OBJS)\monodll_splitter.o \
 	$(OBJS)\monodll_tbarsmpl.o \
 	$(OBJS)\monodll_textdlgg.o \
-	$(OBJS)\monodll_tipdlg.o \
 	$(OBJS)\monodll_tipwin.o \
 	$(OBJS)\monodll_treectlg.o \
 	$(OBJS)\monodll_vlbox.o \
-	$(OBJS)\monodll_vscroll.o \
-	$(OBJS)\monodll_wizard.o
+	$(OBJS)\monodll_vscroll.o
 endif
 endif
 ifeq ($(USE_GUI),1)
 ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(____CORE_SRC_FILENAMES_1_OBJECTS) \
+	$(OBJS)\monolib_dbgrid.o \
+	$(OBJS)\monolib_calctrl.o \
+	$(OBJS)\monolib_dcbuffer.o \
+	$(OBJS)\monolib_grid.o \
+	$(OBJS)\monolib_gridctrl.o \
+	$(OBJS)\monolib_gridsel.o \
+	$(OBJS)\monolib_helpext.o \
+	$(OBJS)\monolib_laywin.o \
+	$(OBJS)\monolib_sashwin.o \
+	$(OBJS)\monolib_splash.o \
+	$(OBJS)\monolib_tipdlg.o \
+	$(OBJS)\monolib_wizard.o \
 	$(OBJS)\monolib_helpbest.o \
 	$(OBJS)\monolib_helpctrl.o \
 	$(OBJS)\monolib_helpdata.o \
@@ -2443,6 +2405,18 @@ endif
 ifeq ($(USE_GUI),1)
 ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(____CORE_SRC_FILENAMES_OBJECTS) \
+	$(OBJS)\monodll_dbgrid.o \
+	$(OBJS)\monodll_calctrl.o \
+	$(OBJS)\monodll_dcbuffer.o \
+	$(OBJS)\monodll_grid.o \
+	$(OBJS)\monodll_gridctrl.o \
+	$(OBJS)\monodll_gridsel.o \
+	$(OBJS)\monodll_helpext.o \
+	$(OBJS)\monodll_laywin.o \
+	$(OBJS)\monodll_sashwin.o \
+	$(OBJS)\monodll_splash.o \
+	$(OBJS)\monodll_tipdlg.o \
+	$(OBJS)\monodll_wizard.o \
 	$(OBJS)\monodll_helpbest.o \
 	$(OBJS)\monodll_helpctrl.o \
 	$(OBJS)\monodll_helpdata.o \
@@ -2465,6 +2439,22 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_m_tables.o \
 	$(OBJS)\monodll_winpars.o \
 	$(OBJS)\monodll_htmllbox.o
+endif
+ifeq ($(MONOLITHIC),0)
+ifeq ($(SHARED),1)
+ifeq ($(USE_GUI),1)
+__advdll___depname = \
+	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv_gcc$(VENDORTAG).dll
+endif
+endif
+endif
+ifeq ($(MONOLITHIC),0)
+ifeq ($(SHARED),0)
+ifeq ($(USE_GUI),1)
+__advlib___depname = \
+	$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv.a
+endif
+endif
 endif
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
@@ -2579,7 +2569,85 @@ $(OBJS):
 
 ### Targets: ###
 
-all: setup_h $(LIBDIRNAME)\libwxregex$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxzlib$(WXDEBUGFLAG).a $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__gldll___depname) $(__gllib___depname)
+all: setup_h $(LIBDIRNAME)\libwxregex$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxzlib$(WXDEBUGFLAG).a $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__advdll___depname) $(__advlib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__gldll___depname) $(__gllib___depname)
+
+$(OBJS)\advdll_calctrl.o: ..\src\generic\calctrl.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+$(OBJS)\advdll_dbgrid.o: ..\src\common\dbgrid.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+$(OBJS)\advdll_dcbuffer.o: ..\src\generic\dcbuffer.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+$(OBJS)\advdll_dummy.o: ..\src\msw\dummy.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+$(OBJS)\advdll_grid.o: ..\src\generic\grid.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+$(OBJS)\advdll_gridctrl.o: ..\src\generic\gridctrl.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+$(OBJS)\advdll_gridsel.o: ..\src\generic\gridsel.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+$(OBJS)\advdll_helpext.o: ..\src\generic\helpext.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+$(OBJS)\advdll_laywin.o: ..\src\generic\laywin.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+$(OBJS)\advdll_sashwin.o: ..\src\generic\sashwin.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+$(OBJS)\advdll_splash.o: ..\src\generic\splash.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+$(OBJS)\advdll_tipdlg.o: ..\src\generic\tipdlg.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+$(OBJS)\advdll_wizard.o: ..\src\generic\wizard.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+$(OBJS)\advlib_calctrl.o: ..\src\generic\calctrl.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_dbgrid.o: ..\src\common\dbgrid.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_dcbuffer.o: ..\src\generic\dcbuffer.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_dummy.o: ..\src\msw\dummy.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_grid.o: ..\src\generic\grid.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_gridctrl.o: ..\src\generic\gridctrl.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_gridsel.o: ..\src\generic\gridsel.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_helpext.o: ..\src\generic\helpext.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_laywin.o: ..\src\generic\laywin.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_sashwin.o: ..\src\generic\sashwin.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_splash.o: ..\src\generic\splash.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_tipdlg.o: ..\src\generic\tipdlg.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_wizard.o: ..\src\generic\wizard.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\basedll_appbase.o: ..\src\common\appbase.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
@@ -3103,11 +3171,6 @@ endif
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_calctrl.o: ..\src\generic\calctrl.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_caret.o: ..\src\msw\caret.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 endif
@@ -3241,6 +3304,9 @@ $(OBJS)\coredll_ctrlcmn.o: ..\src\common\ctrlcmn.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 endif
 
+$(OBJS)\coredll_ctrlrend.o: ..\src\univ\ctrlrend.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_ctrlsub.o: ..\src\common\ctrlsub.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
@@ -3267,22 +3333,12 @@ $(OBJS)\coredll_dataobj.o: ..\src\msw\ole\dataobj.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_dbgrid.o: ..\src\common\dbgrid.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_dc.o: ..\src\msw\dc.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_dcbase.o: ..\src\common\dcbase.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_dcbuffer.o: ..\src\generic\dcbuffer.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 endif
 
@@ -3538,21 +3594,6 @@ $(OBJS)\coredll_gifdecod.o: ..\src\common\gifdecod.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 endif
 
-ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_grid.o: ..\src\generic\grid.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_gridctrl.o: ..\src\generic\gridctrl.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_gridsel.o: ..\src\generic\gridsel.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
-endif
-
 $(OBJS)\coredll_gtk.o: ..\src\univ\themes\gtk.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -3563,11 +3604,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_helpchm.o: ..\src\msw\helpchm.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_helpext.o: ..\src\generic\helpext.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 endif
 
@@ -3676,11 +3712,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_layout.o: ..\src\common\layout.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_laywin.o: ..\src\generic\laywin.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 endif
 
@@ -3917,17 +3948,8 @@ $(OBJS)\coredll_rendcmn.o: ..\src\common\rendcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-ifeq ($(WXUNIV),1)
-$(OBJS)\coredll_renderer.o: ..\src\univ\renderer.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
-endif
-endif
-
-ifeq ($(USE_GUI),1)
-ifeq ($(WXUNIV),0)
 $(OBJS)\coredll_renderer.o: ..\src\msw\renderer.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
-endif
 endif
 
 ifeq ($(USE_GUI),1)
@@ -3937,11 +3959,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_rgncmn.o: ..\src\common\rgncmn.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_sashwin.o: ..\src\generic\sashwin.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 endif
 
@@ -4017,11 +4034,6 @@ endif
 
 $(OBJS)\coredll_spinctrl.o: ..\src\msw\spinctrl.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_splash.o: ..\src\generic\splash.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
-endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_splitter.o: ..\src\generic\splitter.cpp
@@ -4176,11 +4188,6 @@ $(OBJS)\coredll_timercmn.o: ..\src\common\timercmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_tipdlg.o: ..\src\generic\tipdlg.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_tipwin.o: ..\src\generic\tipwin.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 endif
@@ -4232,8 +4239,10 @@ $(OBJS)\coredll_uuid.o: ..\src\msw\ole\uuid.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 endif
 
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_uxtheme.o: ..\src\msw\uxtheme.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
+endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_valgen.o: ..\src\common\valgen.cpp
@@ -4283,11 +4292,6 @@ endif
 
 $(OBJS)\coredll_winuniv.o: ..\src\univ\winuniv.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_wizard.o: ..\src\generic\wizard.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
-endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_xpmdecod.o: ..\src\common\xpmdecod.cpp
@@ -4387,11 +4391,6 @@ ifeq ($(WXUNIV),0)
 $(OBJS)\corelib_button.o: ..\src\msw\button.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_calctrl.o: ..\src\generic\calctrl.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
 
 ifeq ($(USE_GUI),1)
@@ -4528,6 +4527,9 @@ $(OBJS)\corelib_ctrlcmn.o: ..\src\common\ctrlcmn.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
 
+$(OBJS)\corelib_ctrlrend.o: ..\src\univ\ctrlrend.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_ctrlsub.o: ..\src\common\ctrlsub.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
@@ -4554,22 +4556,12 @@ $(OBJS)\corelib_dataobj.o: ..\src\msw\ole\dataobj.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_dbgrid.o: ..\src\common\dbgrid.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_dc.o: ..\src\msw\dc.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_dcbase.o: ..\src\common\dcbase.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_dcbuffer.o: ..\src\generic\dcbuffer.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
 
@@ -4825,21 +4817,6 @@ $(OBJS)\corelib_gifdecod.o: ..\src\common\gifdecod.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
 
-ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_grid.o: ..\src\generic\grid.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_gridctrl.o: ..\src\generic\gridctrl.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_gridsel.o: ..\src\generic\gridsel.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
-endif
-
 $(OBJS)\corelib_gtk.o: ..\src\univ\themes\gtk.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
@@ -4850,11 +4827,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_helpchm.o: ..\src\msw\helpchm.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_helpext.o: ..\src\generic\helpext.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
 
@@ -4963,11 +4935,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_layout.o: ..\src\common\layout.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_laywin.o: ..\src\generic\laywin.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
 
@@ -5204,17 +5171,8 @@ $(OBJS)\corelib_rendcmn.o: ..\src\common\rendcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-ifeq ($(WXUNIV),1)
-$(OBJS)\corelib_renderer.o: ..\src\univ\renderer.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
-endif
-endif
-
-ifeq ($(USE_GUI),1)
-ifeq ($(WXUNIV),0)
 $(OBJS)\corelib_renderer.o: ..\src\msw\renderer.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
-endif
 endif
 
 ifeq ($(USE_GUI),1)
@@ -5224,11 +5182,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_rgncmn.o: ..\src\common\rgncmn.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_sashwin.o: ..\src\generic\sashwin.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
 
@@ -5304,11 +5257,6 @@ endif
 
 $(OBJS)\corelib_spinctrl.o: ..\src\msw\spinctrl.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_splash.o: ..\src\generic\splash.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
-endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_splitter.o: ..\src\generic\splitter.cpp
@@ -5463,11 +5411,6 @@ $(OBJS)\corelib_timercmn.o: ..\src\common\timercmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_tipdlg.o: ..\src\generic\tipdlg.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_tipwin.o: ..\src\generic\tipwin.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
@@ -5519,8 +5462,10 @@ $(OBJS)\corelib_uuid.o: ..\src\msw\ole\uuid.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
 
+ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_uxtheme.o: ..\src\msw\uxtheme.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
+endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_valgen.o: ..\src\common\valgen.cpp
@@ -5570,11 +5515,6 @@ endif
 
 $(OBJS)\corelib_winuniv.o: ..\src\univ\winuniv.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_wizard.o: ..\src\generic\wizard.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
-endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_xpmdecod.o: ..\src\common\xpmdecod.cpp
@@ -5832,10 +5772,8 @@ $(OBJS)\monodll_button.o: ..\src\msw\button.cpp
 endif
 endif
 
-ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_calctrl.o: ..\src\generic\calctrl.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
-endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_caret.o: ..\src\msw\caret.cpp
@@ -5983,6 +5921,9 @@ $(OBJS)\monodll_ctrlcmn.o: ..\src\common\ctrlcmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 endif
 
+$(OBJS)\monodll_ctrlrend.o: ..\src\univ\ctrlrend.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_ctrlsub.o: ..\src\common\ctrlsub.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -6017,10 +5958,8 @@ $(OBJS)\monodll_datstrm.o: ..\src\common\datstrm.cpp
 $(OBJS)\monodll_db.o: ..\src\common\db.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_dbgrid.o: ..\src\common\dbgrid.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
-endif
 
 $(OBJS)\monodll_dbtable.o: ..\src\common\dbtable.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -6035,10 +5974,8 @@ $(OBJS)\monodll_dcbase.o: ..\src\common\dcbase.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 endif
 
-ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_dcbuffer.o: ..\src\generic\dcbuffer.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
-endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_dcclient.o: ..\src\msw\dcclient.cpp
@@ -6346,20 +6283,14 @@ $(OBJS)\monodll_gifdecod.o: ..\src\common\gifdecod.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 endif
 
-ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_grid.o: ..\src\generic\grid.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
-endif
 
-ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_gridctrl.o: ..\src\generic\gridctrl.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
-endif
 
-ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_gridsel.o: ..\src\generic\gridsel.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
-endif
 
 $(OBJS)\monodll_gsocket.o: ..\src\msw\gsocket.c
 	$(CC) -c -o $@ $(MONODLL_CFLAGS) $<
@@ -6395,10 +6326,8 @@ $(OBJS)\monodll_helpctrl.o: ..\src\html\helpctrl.cpp
 $(OBJS)\monodll_helpdata.o: ..\src\html\helpdata.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_helpext.o: ..\src\generic\helpext.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
-endif
 
 $(OBJS)\monodll_helpfrm.o: ..\src\html\helpfrm.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -6544,10 +6473,8 @@ $(OBJS)\monodll_layout.o: ..\src\common\layout.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 endif
 
-ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_laywin.o: ..\src\generic\laywin.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
-endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_lboxcmn.o: ..\src\common\lboxcmn.cpp
@@ -6854,17 +6781,8 @@ $(OBJS)\monodll_rendcmn.o: ..\src\common\rendcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-ifeq ($(WXUNIV),1)
-$(OBJS)\monodll_renderer.o: ..\src\univ\renderer.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
-endif
-endif
-
-ifeq ($(USE_GUI),1)
-ifeq ($(WXUNIV),0)
 $(OBJS)\monodll_renderer.o: ..\src\msw\renderer.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
-endif
 endif
 
 ifeq ($(USE_GUI),1)
@@ -6877,10 +6795,8 @@ $(OBJS)\monodll_rgncmn.o: ..\src\common\rgncmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 endif
 
-ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_sashwin.o: ..\src\generic\sashwin.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
-endif
 
 $(OBJS)\monodll_sckaddr.o: ..\src\common\sckaddr.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -6973,10 +6889,8 @@ endif
 $(OBJS)\monodll_spinctrl.o: ..\src\msw\spinctrl.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_splash.o: ..\src\generic\splash.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
-endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_splitter.o: ..\src\generic\splitter.cpp
@@ -7154,10 +7068,8 @@ $(OBJS)\monodll_timercmn.o: ..\src\common\timercmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 endif
 
-ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_tipdlg.o: ..\src\generic\tipdlg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
-endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_tipwin.o: ..\src\generic\tipwin.cpp
@@ -7229,8 +7141,10 @@ $(OBJS)\monodll_uuid.o: ..\src\msw\ole\uuid.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 endif
 
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_uxtheme.o: ..\src\msw\uxtheme.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_valgen.o: ..\src\common\valgen.cpp
@@ -7290,10 +7204,8 @@ $(OBJS)\monodll_winpars.o: ..\src\html\winpars.cpp
 $(OBJS)\monodll_winuniv.o: ..\src\univ\winuniv.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_wizard.o: ..\src\generic\wizard.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
-endif
 
 $(OBJS)\monodll_wxchar.o: ..\src\common\wxchar.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -7413,10 +7325,8 @@ $(OBJS)\monolib_button.o: ..\src\msw\button.cpp
 endif
 endif
 
-ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_calctrl.o: ..\src\generic\calctrl.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_caret.o: ..\src\msw\caret.cpp
@@ -7564,6 +7474,9 @@ $(OBJS)\monolib_ctrlcmn.o: ..\src\common\ctrlcmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 endif
 
+$(OBJS)\monolib_ctrlrend.o: ..\src\univ\ctrlrend.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_ctrlsub.o: ..\src\common\ctrlsub.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -7598,10 +7511,8 @@ $(OBJS)\monolib_datstrm.o: ..\src\common\datstrm.cpp
 $(OBJS)\monolib_db.o: ..\src\common\db.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_dbgrid.o: ..\src\common\dbgrid.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-endif
 
 $(OBJS)\monolib_dbtable.o: ..\src\common\dbtable.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -7616,10 +7527,8 @@ $(OBJS)\monolib_dcbase.o: ..\src\common\dcbase.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 endif
 
-ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_dcbuffer.o: ..\src\generic\dcbuffer.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_dcclient.o: ..\src\msw\dcclient.cpp
@@ -7927,20 +7836,14 @@ $(OBJS)\monolib_gifdecod.o: ..\src\common\gifdecod.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 endif
 
-ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_grid.o: ..\src\generic\grid.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-endif
 
-ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_gridctrl.o: ..\src\generic\gridctrl.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-endif
 
-ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_gridsel.o: ..\src\generic\gridsel.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-endif
 
 $(OBJS)\monolib_gsocket.o: ..\src\msw\gsocket.c
 	$(CC) -c -o $@ $(MONOLIB_CFLAGS) $<
@@ -7976,10 +7879,8 @@ $(OBJS)\monolib_helpctrl.o: ..\src\html\helpctrl.cpp
 $(OBJS)\monolib_helpdata.o: ..\src\html\helpdata.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_helpext.o: ..\src\generic\helpext.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-endif
 
 $(OBJS)\monolib_helpfrm.o: ..\src\html\helpfrm.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -8125,10 +8026,8 @@ $(OBJS)\monolib_layout.o: ..\src\common\layout.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 endif
 
-ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_laywin.o: ..\src\generic\laywin.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_lboxcmn.o: ..\src\common\lboxcmn.cpp
@@ -8435,17 +8334,8 @@ $(OBJS)\monolib_rendcmn.o: ..\src\common\rendcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-ifeq ($(WXUNIV),1)
-$(OBJS)\monolib_renderer.o: ..\src\univ\renderer.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-endif
-endif
-
-ifeq ($(USE_GUI),1)
-ifeq ($(WXUNIV),0)
 $(OBJS)\monolib_renderer.o: ..\src\msw\renderer.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-endif
 endif
 
 ifeq ($(USE_GUI),1)
@@ -8458,10 +8348,8 @@ $(OBJS)\monolib_rgncmn.o: ..\src\common\rgncmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 endif
 
-ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_sashwin.o: ..\src\generic\sashwin.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-endif
 
 $(OBJS)\monolib_sckaddr.o: ..\src\common\sckaddr.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -8554,10 +8442,8 @@ endif
 $(OBJS)\monolib_spinctrl.o: ..\src\msw\spinctrl.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_splash.o: ..\src\generic\splash.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_splitter.o: ..\src\generic\splitter.cpp
@@ -8735,10 +8621,8 @@ $(OBJS)\monolib_timercmn.o: ..\src\common\timercmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 endif
 
-ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_tipdlg.o: ..\src\generic\tipdlg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_tipwin.o: ..\src\generic\tipwin.cpp
@@ -8810,8 +8694,10 @@ $(OBJS)\monolib_uuid.o: ..\src\msw\ole\uuid.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 endif
 
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_uxtheme.o: ..\src\msw\uxtheme.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_valgen.o: ..\src\common\valgen.cpp
@@ -8871,10 +8757,8 @@ $(OBJS)\monolib_winpars.o: ..\src\html\winpars.cpp
 $(OBJS)\monolib_winuniv.o: ..\src\univ\winuniv.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_wizard.o: ..\src\generic\wizard.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-endif
 
 $(OBJS)\monolib_wxchar.o: ..\src\common\wxchar.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -9336,6 +9220,26 @@ $(OBJS)\xmllib_xml.o: ..\src\xml\xml.cpp
 
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
+ifeq ($(USE_GUI),1)
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv_gcc$(VENDORTAG).dll: $(ADVDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxzlib$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxregex$(WXDEBUGFLAG).a $(__coredll___depname) $(__basedll___depname)
+	$(CXX) -shared -o $@ $(ADVDLL_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--out-implib,$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv.a  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32  $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.a $(LIBDIRNAME)\libwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).a
+endif
+endif
+endif
+
+ifeq ($(MONOLITHIC),0)
+ifeq ($(SHARED),0)
+ifeq ($(USE_GUI),1)
+$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv.a: $(ADVLIB_OBJECTS)
+	if exist $@ del $@
+	ar rcu $@ $(ADVLIB_OBJECTS)
+	ranlib $@
+endif
+endif
+endif
+
+ifeq ($(MONOLITHIC),0)
+ifeq ($(SHARED),1)
 $(LIBDIRNAME)\wxbase250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gcc$(VENDORTAG).dll: $(BASEDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxzlib$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxregex$(WXDEBUGFLAG).a
 	$(CXX) -shared -o $@ $(BASEDLL_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--out-implib,$(LIBDIRNAME)\libwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).a  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
 endif
@@ -9370,6 +9274,9 @@ clean:
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core_gcc$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core_gcc$(VENDORTAG).dll
 	-if exist $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.a del $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.a
 	-if exist $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.a del $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.a
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv_gcc$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv_gcc$(VENDORTAG).dll
+	-if exist $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv.a del $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv.a
+	-if exist $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv.a del $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv.a
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html_gcc$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html_gcc$(VENDORTAG).dll
 	-if exist $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html.a del $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html.a
 	-if exist $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html.a del $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html.a
