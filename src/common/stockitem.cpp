@@ -35,8 +35,7 @@ wxString wxGetStockItemLabel(wxStockItemID item)
 {
     #define STOCKITEM(stockid, label) \
         case stockid:                 \
-            return label;             \
-            break;
+            return label;
 
     switch (item)
     {
