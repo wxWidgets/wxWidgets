@@ -69,7 +69,7 @@ wxFileOffset wxFileInputStream::GetLength() const
 
 size_t wxFileInputStream::OnSysRead(void *buffer, size_t size)
 {
-    size_t ret = m_file->Read(buffer, size);
+    ssize_t ret = m_file->Read(buffer, size);
 
     // NB: we can't use a switch here because HP-UX CC doesn't allow
     //     switching over long long (which size_t is in 64bit mode)
@@ -79,7 +79,7 @@ size_t wxFileInputStream::OnSysRead(void *buffer, size_t size)
         // nothing read, so nothing more to read
         m_lasterror = wxSTREAM_EOF;
     }
-    else if ( ret == (size_t)wxInvalidOffset )
+    else if ( ret == wxInvalidOffset )
     {
         m_lasterror = wxSTREAM_READ_ERROR;
         ret = 0;
@@ -234,11 +234,11 @@ wxFileOffset wxFFileInputStream::GetLength() const
 
 size_t wxFFileInputStream::OnSysRead(void *buffer, size_t size)
 {
-    size_t ret = m_file->Read(buffer, size);
+    ssize_t ret = m_file->Read(buffer, size);
 
     if (m_file->Eof())
         m_lasterror = wxSTREAM_EOF;
-    if (ret == (size_t)wxInvalidOffset)
+    if (ret == wxInvalidOffset)
     {
         m_lasterror = wxSTREAM_READ_ERROR;
         ret = 0;

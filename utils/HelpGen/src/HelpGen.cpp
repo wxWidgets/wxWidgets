@@ -1417,7 +1417,7 @@ bool DocManager::ParseTeXFile(const wxString& filename)
     char *buf = new char[len + 1];
     buf[len] = '\0';
 
-    if ( file.Read(buf, len) == (size_t)wxInvalidOffset ) {
+    if ( file.Read(buf, len) == wxInvalidOffset ) {
         delete [] buf;
 
         return false;
@@ -1988,7 +1988,7 @@ bool IgnoreNamesHandler::AddNamesFromFile(const wxString& filename)
     char *buf = new char[len + 1];
     buf[len] = '\0';
 
-    if ( file.Read(buf, len) == (size_t)wxInvalidOffset ) {
+    if ( file.Read(buf, len) == wxInvalidOffset ) {
         delete [] buf;
 
         return false;
@@ -2186,6 +2186,9 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.33  2004/11/12 03:30:07  RL
+   Cruft cleanup from MJW, strip the tabs out of sound.cpp
+
    Revision 1.32  2004/11/10 21:02:58  VZ
    new set of fixes for problems due to huge files support: drop wxFileSize_t, use wxFileOffset only, make wxInvalidOffset an int (main part of the patch 1063498)
 

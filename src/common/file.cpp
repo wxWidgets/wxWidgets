@@ -299,7 +299,7 @@ bool wxFile::Close()
 // ----------------------------------------------------------------------------
 
 // read
-size_t wxFile::Read(void *pBuf, size_t nCount)
+ssize_t wxFile::Read(void *pBuf, size_t nCount)
 {
     wxCHECK( (pBuf != NULL) && IsOpened(), 0 );
 
@@ -308,7 +308,7 @@ size_t wxFile::Read(void *pBuf, size_t nCount)
     if ( iRc == -1 )
     {
         wxLogSysError(_("can't read from file descriptor %d"), m_fd);
-        return (size_t)wxInvalidOffset;
+        return wxInvalidOffset;
     }
 
     return iRc;

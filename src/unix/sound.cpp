@@ -6,7 +6,7 @@
 // Created:     25/10/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart, Open Source Applications Foundation
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -55,7 +55,7 @@ static wxMutex gs_soundMutex;
 // ----------------------------------------------------------------------------
 // wxSoundData
 // ----------------------------------------------------------------------------
-  
+
 void wxSoundData::IncRef()
 {
 #if wxUSE_THREADS
@@ -123,7 +123,7 @@ public:
 private:
     int OpenDSP(const wxSoundData *data);
     bool InitDSP(int dev, const wxSoundData *data);
-    
+
     int m_DSPblkSize;        // Size of the DSP buffer
     bool m_needConversion;
 };
@@ -142,7 +142,7 @@ bool wxSoundBackendOSS::Play(wxSoundData *data, unsigned flags,
                              volatile wxSoundPlaybackStatus *status)
 {
     int dev = OpenDSP(data);
-    
+
     if (dev < 0)
         return false;
 
@@ -173,7 +173,7 @@ bool wxSoundBackendOSS::Play(wxSoundData *data, unsigned flags,
             l += i;
         } while (play && l < datasize);
     } while (flags & wxSOUND_LOOP);
-    
+
     close(dev);
     return true;
 }
@@ -181,10 +181,10 @@ bool wxSoundBackendOSS::Play(wxSoundData *data, unsigned flags,
 int wxSoundBackendOSS::OpenDSP(const wxSoundData *data)
 {
     int dev = -1;
-  
+
     if ((dev = open(AUDIODEV, O_WRONLY, 0)) <0)
         return -1;
-  
+
     if (!InitDSP(dev, data) || m_needConversion)
     {
         close(dev);
@@ -207,7 +207,7 @@ bool wxSoundBackendOSS::InitDSP(int dev, const wxSoundData *data)
     }
 
     m_needConversion = false;
-                
+
     tmp = data->m_bitsPerSample;
     if (ioctl(dev, SNDCTL_DSP_SAMPLESIZE, &tmp) < 0)
     {
@@ -220,8 +220,8 @@ bool wxSoundBackendOSS::InitDSP(int dev, const wxSoundData *data)
                    _T("Unable to set DSP sample size to %d (wants %d)"),
                    data->m_bitsPerSample, tmp);
         m_needConversion = true;
-    }        
-        
+    }
+
     unsigned stereo = data->m_channels == 1 ? 0 : 1;
     tmp = stereo;
     if (ioctl(dev, SNDCTL_DSP_STEREO, &tmp) < 0)
@@ -231,7 +231,7 @@ bool wxSoundBackendOSS::InitDSP(int dev, const wxSoundData *data)
     }
     if (tmp != stereo)
     {
-	wxLogTrace(_T("sound"), _T("Unable to set DSP to %s."), stereo?  _T("stereo"):_T("mono"));
+        wxLogTrace(_T("sound"), _T("Unable to set DSP to %s."), stereo?  _T("stereo"):_T("mono"));
         m_needConversion = true;
     }
 
@@ -249,13 +249,13 @@ bool wxSoundBackendOSS::InitDSP(int dev, const wxSoundData *data)
         // problems. Sound cards will sometimes use things like 44101 when you
         // ask for 44100.  No need overriding this and having strange output
         // file rates for something that we can't hear anyways.
-	if (data->m_samplingRate - tmp > (tmp * .01) || 
-	    tmp - data->m_samplingRate > (tmp * .01)) {
-	    wxLogTrace(_T("sound"),
+        if (data->m_samplingRate - tmp > (tmp * .01) ||
+            tmp - data->m_samplingRate > (tmp * .01)) {
+            wxLogTrace(_T("sound"),
                        _T("Unable to set DSP sampling rate to %d (wants %d)"),
                        data->m_samplingRate, tmp);
             m_needConversion = true;
-	}
+        }
     }
 
     // Do this last because some drivers can adjust the buffer sized based on
@@ -267,7 +267,7 @@ bool wxSoundBackendOSS::InitDSP(int dev, const wxSoundData *data)
     }
     return true;
 }
-   
+
 #endif // HAVE_SYS_SOUNDCARD_H
 
 // ----------------------------------------------------------------------------
@@ -287,7 +287,7 @@ public:
                               wxSoundData *data, unsigned flags)
         : wxThread(), m_adapt(adaptor), m_data(data), m_flags(flags) {}
     virtual ExitCode Entry();
-    
+
 protected:
     wxSoundSyncOnlyAdaptor *m_adapt;
     wxSoundData *m_data;
@@ -393,11 +393,11 @@ bool wxSoundSyncOnlyAdaptor::Play(wxSoundData *data, unsigned flags,
 void wxSoundSyncOnlyAdaptor::Stop()
 {
     wxLogTrace(_T("sound"), _T("asking audio to stop"));
-    
+
 #if wxUSE_THREADS
     // tell the player thread (if running) to stop playback ASAP:
     m_status.m_stopRequested = true;
-    
+
     // acquire the mutex to be sure no sound is being played, then
     // release it because we don't need it for anything (the effect of this
     // is that calling thread will wait until playback thread reacts to
@@ -419,7 +419,7 @@ bool wxSoundSyncOnlyAdaptor::IsPlaying() const
 
 
 // ----------------------------------------------------------------------------
-// wxSound 
+// wxSound
 // ----------------------------------------------------------------------------
 
 wxSoundBackend *wxSound::ms_backend = NULL;
@@ -456,16 +456,16 @@ bool wxSound::Create(const wxString& fileName, bool isResource)
 {
     wxASSERT_MSG( !isResource,
              _T("Loading sound from resources is only supported on Windows") );
- 
+
     Free();
-  
+
     wxFile fileWave;
     if (!fileWave.Open(fileName, wxFile::read))
-	{
-            return false;
-	}
+    {
+        return false;
+    }
 
-    size_t len = fileWave.Length();
+    wxFileOffset len = fileWave.Length();
     wxUint8 *data = new wxUint8[len];
     if (fileWave.Read(data, len) != len)
     {
@@ -479,7 +479,7 @@ bool wxSound::Create(const wxString& fileName, bool isResource)
                    fileName.c_str());
         return false;
     }
-    
+
     return true;
 }
 
@@ -569,7 +569,7 @@ bool wxSound::Create(int size, const wxByte* data)
         wxLogTrace(_T("sound"), _T("unloading backend"));
 
         Stop();
- 
+
         delete ms_backend;
         ms_backend = NULL;
 #if wxUSE_LIBSDL && wxUSE_PLUGINS
@@ -610,7 +610,7 @@ void wxSound::Free()
 }
 
 typedef struct
-{ 
+{
     wxUint32      uiSize;
     wxUint16      uiFormatTag;
     wxUint16      uiChannels;
@@ -652,18 +652,18 @@ bool wxSound::LoadWAV(const wxUint8 *data, size_t length, bool copyData)
         return false;
     memcpy(&ul,&data[FMT_INDEX + waveformat.uiSize + 12], 4);
     ul = wxUINT32_SWAP_ON_BE(ul);
-    
+
     //WAS: if (ul + FMT_INDEX + waveformat.uiSize + 16 != length)
     if (ul + FMT_INDEX + waveformat.uiSize + 16 > length)
         return false;
-  
+
     if (waveformat.uiFormatTag != WAVE_FORMAT_PCM)
         return false;
-  
-    if (waveformat.ulSamplesPerSec != 
+
+    if (waveformat.ulSamplesPerSec !=
         waveformat.ulAvgBytesPerSec / waveformat.uiBlockAlign)
         return false;
-    
+
     m_data = new wxSoundData;
     m_data->m_channels = waveformat.uiChannels;
     m_data->m_samplingRate = waveformat.ulSamplesPerSec;
@@ -679,7 +679,7 @@ bool wxSound::LoadWAV(const wxUint8 *data, size_t length, bool copyData)
     else
         m_data->m_dataWithHeader = (wxUint8*)data;
 
-    m_data->m_data = 
+    m_data->m_data =
         (&m_data->m_dataWithHeader[FMT_INDEX + waveformat.uiSize + 8]);
 
     return true;

@@ -94,8 +94,8 @@ public:
   int  fd() const { return m_fd; }
 
   // read/write (unbuffered)
-    // returns number of bytes read or ofsInvalid on error
-  size_t Read(void *pBuf, size_t nCount);
+    // returns number of bytes read or wxInvalidOffset on error
+  ssize_t Read(void *pBuf, size_t nCount);
     // returns the number of bytes written
   size_t Write(const void *pBuf, size_t nCount);
     // returns true on success
