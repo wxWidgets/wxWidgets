@@ -35,6 +35,8 @@ ODBCSETUP=
 # Please keep samples list up-to-date, in alphabetical order
 # not alphabetically organised ; 29 Nov 01
 all:
+        cd $(WXDIR)\samples\artprov
+        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
         cd $(WXDIR)\samples\calendar
         make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
         cd $(WXDIR)\samples\caret

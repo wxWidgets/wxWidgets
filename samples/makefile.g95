@@ -24,6 +24,7 @@ CMDLINE=-f $(MAKEFILE) $(MAKEFLAGS)
 # keep track.
 
 all clean:
+	-$(MAKE) -C artprov $(CMDLINE) $@
 	-$(MAKE) -C calendar $(CMDLINE) $@
 	-$(MAKE) -C caret $(CMDLINE) $@
 	-$(MAKE) -C checklst $(CMDLINE) $@

@@ -36,6 +36,8 @@ MAKEFLAGS=FINAL=$(FINAL) UNICODE=$(UNICODE) WXUSINGDLL=$(WXUSINGDLL)
 # Please keep samples list up-to-date, in alphabetical order
 #
 all:
+        cd $(WXDIR)\samples\artprov
+        nmake -f makefile.vc $(MAKEFLAGS)
         cd $(WXDIR)\samples\calendar
         nmake -f makefile.vc $(MAKEFLAGS)
         cd $(WXDIR)\samples\caret

@@ -652,6 +652,7 @@ ac_given_srcdir=$srcdir
 
 trap 'rm -fr `echo "
             Makefile
+            artprov/Makefile
             caret/Makefile
             calendar/Makefile
             checklst/Makefile
@@ -801,6 +802,7 @@ EOF
 cat >> $CONFIG_STATUS <<EOF
 
 CONFIG_FILES=\${CONFIG_FILES-"Makefile
+            artprov/Makefile
             caret/Makefile
             calendar/Makefile
             checklst/Makefile

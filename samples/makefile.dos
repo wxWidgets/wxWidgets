@@ -32,6 +32,8 @@ COMPIL=1
 # Please keep samples list up-to-date, in alphabetical order
 #
 all:
+        cd $(WXDIR)\samples\artprov
+        nmake -f makefile.dos FINAL=$(FINAL)
         cd $(WXDIR)\samples\bombs
         nmake -f makefile.dos FINAL=$(FINAL)
         cd $(WXDIR)\samples\caret
