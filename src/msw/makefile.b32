@@ -560,7 +560,7 @@ $(CFG): makefile.b32
 -Oxt
 -WE
 
--I$(WXINC);$(BCCDIR)\include;-I$(WXDIR)/src/png;-I$(WXDIR)/src/zlib
+-I$(WXINC);$(BCCDIR)\include;$(WXDIR)/src/png;$(WXDIR)/src/zlib
 -I$(WXDIR)\include\msw\gnuwin32
 
 -L$(BCCDIR)\lib

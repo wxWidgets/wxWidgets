@@ -38,10 +38,14 @@ void WXDLLEXPORT wxFillLogFont(LOGFONT *logFont, wxFont *font);
 wxFont WXDLLEXPORT wxCreateFontFromLogFont(LOGFONT *logFont); // , bool createNew = TRUE);
 
 #ifdef __GNUWIN32__
-#define CASTWNDPROC (long unsigned)
+#  define CASTWNDPROC (long unsigned)
 #else
-typedef long (_stdcall * WndProcCast) (HWND, unsigned int, unsigned int, long);
-#define CASTWNDPROC (WndProcCast)
+#  ifdef __BORLANDC__
+#    define CASTWNDPROC
+#  else
+     typedef long (_stdcall * WndProcCast) (HWND, unsigned int, unsigned int, long);
+#    define CASTWNDPROC (WndProcCast)
+#  endif
 #endif
 
 #if !defined(APIENTRY)	// NT defines APIENTRY, 3.x not
