@@ -899,7 +899,7 @@ struct subre *top;		/* subtree top */
 	case BACKREF:	/* the Feature From The Black Lagoon */
 		INSIST(type != LACON, REG_ESUBREG);
 		INSIST(v->nextvalue < v->nsubs, REG_ESUBREG);
-		INSIST(v->subs[v->nextvalue] != NULL, REG_ESUBREG);
+		INSIST(v->subs[(int)v->nextvalue] != NULL, REG_ESUBREG);
 		NOERR();
 		assert(v->nextvalue > 0);
 		atom = subre(v, 'b', BACKR, lp, rp);
