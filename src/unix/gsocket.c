@@ -117,12 +117,12 @@ GSocket *GSocket_new()
   socket->m_local               = NULL;
   socket->m_peer                = NULL;
   socket->m_error               = GSOCK_NOERROR;
-  socket->m_server		= FALSE;
-  socket->m_stream		= TRUE;
-  socket->m_gui_dependent	= NULL;
-  socket->m_non_blocking	= FALSE;
+  socket->m_server              = FALSE;
+  socket->m_stream              = TRUE;
+  socket->m_gui_dependent       = NULL;
+  socket->m_non_blocking        = FALSE;
   socket->m_timeout             = 10*60*1000;
-                                      /* 10 minutes * 60 sec * 1000 millisec */
+                                /* 10 minutes * 60 sec * 1000 millisec */
   socket->m_establishing        = FALSE;
 
   /* We initialize the GUI specific entries here */
@@ -524,27 +524,71 @@ int GSocket_Write(GSocket *socket, const char *buffer,
     return _GSocket_Send_Dgram(socket, buffer, size);
 }
 
-bool GSocket_DataAvailable(GSocket *socket)
+/* GSocket_Select:
+ *  Polls the socket to determine its status. This function will
+ *  check for the events specified in the 'flags' parameter, and
+ *  it will return a mask indicating which operations can be
+ *  performed. This function won't block, regardless of the
+ *  mode (blocking|nonblocking) of the socket.
+ */
+GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
 {
-  fd_set read_set;
+  fd_set readfds, writefds, exceptfds;
   struct timeval tv;
+  GSocketEventFlags mask;
+  int error, len;
 
   assert(socket != NULL);
 
-  if (socket->m_fd == -1 || socket->m_server) {
+  if (socket->m_fd == -1)
+  {
     socket->m_error = GSOCK_INVSOCK;
     return FALSE;
   }
 
-  FD_ZERO(&read_set);
-  FD_SET(socket->m_fd, &read_set);
+  FD_ZERO(&readfds);
+  FD_ZERO(&writefds);
+  FD_ZERO(&exceptfds);
+  FD_SET(socket->m_fd, &readfds);
+  FD_SET(socket->m_fd, &writefds);
+  FD_SET(socket->m_fd, &exceptfds);
 
   tv.tv_sec = 0;
   tv.tv_usec = 0;
+  select(socket->m_fd + 1, &readfds, &writefds, &exceptfds, &tv);
 
-  select(socket->m_fd+1, &read_set, NULL, NULL, &tv);
+  mask = 0;
 
-  return FD_ISSET(socket->m_fd, &read_set);
+  /* If select() says that the socket is readable, then we have
+   * no way to distinguish if that means 'data available' (to
+   * recv) or 'incoming connection' (to accept). The same goes
+   * for writability: we cannot distinguish between 'you can
+   * send data' and 'connection request completed'. So we will
+   * assume the following: if the flag was set upon entry,
+   * that means that the event was possible.
+   */
+  if (FD_ISSET(socket->m_fd, &readfds))
+  {
+    mask |= (flags & GSOCK_CONNECTION_FLAG);
+    mask |= (flags & GSOCK_INPUT_FLAG);
+  }
+  if (FD_ISSET(socket->m_fd, &writefds))
+  {
+    if (socket->m_establishing)
+    {
+      getsockopt(socket->m_fd, SOL_SOCKET, SO_ERROR, &error, &len);
+
+      if (error)
+        mask |= (flags & GSOCK_LOST_FLAG);
+      else
+        mask |= (flags & GSOCK_CONNECTION_FLAG);
+    }
+    mask |= (flags & GSOCK_OUTPUT_FLAG);
+  }
+  if (FD_ISSET(socket->m_fd, &exceptfds))
+    mask |= (flags & GSOCK_LOST_FLAG);
+
+  return mask;
 }
 
 /* Flags */
@@ -606,7 +650,7 @@ GSocketError GSocket_GetError(GSocket *socket)
    For example: INPUT -> GSocket_Read()
                 CONNECTION -> GSocket_Accept()
 */
-void GSocket_SetCallback(GSocket *socket, GSocketEventFlags event,
+void GSocket_SetCallback(GSocket *socket, GSocketEventFlags flags,
 			 GSocketCallback callback, char *cdata)
 {
   int count;
@@ -616,7 +660,7 @@ void GSocket_SetCallback(GSocket *socket, GSocketEventFlags event,
   for (count=0;count<GSOCK_MAX_EVENT;count++) {
     /* We test each flag and, if it is enabled, we enable the corresponding
        event */
-    if ((event & (1 << count)) != 0) {
+    if ((flags & (1 << count)) != 0) {
       socket->m_cbacks[count] = callback;
       socket->m_data[count] = cdata;
       _GSocket_Enable(socket, count);
@@ -625,17 +669,17 @@ void GSocket_SetCallback(GSocket *socket, GSocketEventFlags event,
 }
 
 /*
-  UnsetCallback will disables all callbacks specified by "event".
-  NOTE: event may be a combination of flags
+  UnsetCallback will disables all callbacks specified by "flags".
+  NOTE: "flags" may be a combination of flags
 */
-void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags event)
+void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags flags)
 {
   int count = 0;
 
   assert(socket != NULL);
 
   for (count=0;count<GSOCK_MAX_EVENT;count++) {
-    if ((event & (1 << count)) != 0) {
+    if ((flags & (1 << count)) != 0) {
       _GSocket_Disable(socket, count);
       socket->m_cbacks[count] = NULL;
     }
