@@ -50,13 +50,13 @@ Destructor.
 
 Returns the \helpref{page setup data}{wxpagesetupdialogdata} associated with the dialog.
 
-\membersection{wxPageSetupDialog::Ok}\label{wxpagesetupdialogok}
-
-\constfunc{bool}{Ok}{\void}
-
-Returns true if the print data associated with the dialog data is valid.
-This can return false on Windows if the current printer is not set, for example.
-On all other platforms, it returns true.
+%\membersection{wxPageSetupDialog::Ok}\label{wxpagesetupdialogok}
+%
+%\constfunc{bool}{Ok}{\void}
+%
+%Returns true if the print data associated with the dialog data is valid.
+%This can return false on Windows if the current printer is not set, for example.
+%On all other platforms, it returns true.
 
 \membersection{wxPageSetupDialog::ShowModal}\label{wxpagesetupdialogshowmodal}
 
@@ -250,7 +250,7 @@ selected printer properties. Windows only. Units are in millimetres
 
 \membersection{wxPageSetupDialogData::SetMarginTopLeft}\label{wxpagesetupdialogdatasetmargintopleft}
 
-\func{void}{GetMarginTopLeft}{\param{const wxPoint\& }{pt}}
+\func{void}{SetMarginTopLeft}{\param{const wxPoint\& }{pt}}
 
 Sets the left (x) and top (y) margins in millimetres.
 
