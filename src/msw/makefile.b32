@@ -1554,7 +1554,6 @@ $(CFG): makefile.b32
 -w-par
 -w-aus
 -w-hid # virtual function A hides virtual function B
--w-inl # functions containing for/while are not inlined
 -tWM
 
 -I$(ARCHINCDIR);$(WXINC);$(BCCDIR)\include;$(WXDIR)/src/generic;$(WXDIR)/src/png;$(WXDIR)/src/jpeg;$(WXDIR)/src/zlib;$(WXDIR)/src/tiff
