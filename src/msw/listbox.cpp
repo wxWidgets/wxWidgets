@@ -668,41 +668,43 @@ wxSize wxListBox::DoGetBestSize() const
 
 bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
+    wxEventType evtType;
     if ( param == LBN_SELCHANGE )
     {
-        wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, m_windowId);
-        event.SetEventObject( this );
-
-        wxArrayInt aSelections;
-        int n, count = GetSelections(aSelections);
-        if ( count > 0 )
-        {
-            n = aSelections[0];
-            if ( HasClientObjectData() )
-                event.SetClientObject( GetClientObject(n) );
-            else if ( HasClientUntypedData() )
-                event.SetClientData( GetClientData(n) );
-            event.SetString( GetString(n) );
-        }
-        else
-        {
-            n = -1;
-        }
-
-        event.m_commandInt = n;
-
-        return GetEventHandler()->ProcessEvent(event);
+        evtType = wxEVT_COMMAND_LISTBOX_SELECTED;
     }
     else if ( param == LBN_DBLCLK )
     {
-        wxCommandEvent event(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, m_windowId);
-        event.SetEventObject( this );
-
-        return GetEventHandler()->ProcessEvent(event);
+        evtType = wxEVT_COMMAND_LISTBOX_DOUBLECLICKED;
     }
-    //else:
+    else
+    {
+        // some event we're not interested in
+        return FALSE;
+    }
 
-    return FALSE;
+    wxCommandEvent event(evtType, m_windowId);
+    event.SetEventObject( this );
+
+    wxArrayInt aSelections;
+    int n, count = GetSelections(aSelections);
+    if ( count > 0 )
+    {
+        n = aSelections[0];
+        if ( HasClientObjectData() )
+            event.SetClientObject( GetClientObject(n) );
+        else if ( HasClientUntypedData() )
+            event.SetClientData( GetClientData(n) );
+        event.SetString( GetString(n) );
+    }
+    else
+    {
+        n = -1;
+    }
+
+    event.m_commandInt = n;
+
+    return GetEventHandler()->ProcessEvent(event);
 }
 
 // ----------------------------------------------------------------------------
