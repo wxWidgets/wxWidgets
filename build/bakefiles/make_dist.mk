@@ -109,7 +109,7 @@ ALL_DIST: distrib_clean
 	cp $(REGEXDIR)/README $(DISTDIR)/src/regex
 	cp $(REGEXDIR)/WHATSNEW $(DISTDIR)/src/regex
 	cp $(REGEXDIR)/mkh $(DISTDIR)/src/regex
-	cp $(REGEXDIR)/tests $(DISTDIR)/src/regex
+#	cp $(REGEXDIR)/tests $(DISTDIR)/src/regex
 	cp -Rf $(EXPATDIR) $(DISTDIR)/src
 	(cd $(DISTDIR)/src/expat ; rm -rf `find -name CVS`)
 	mkdir $(DISTDIR)/src/iodbc
@@ -923,20 +923,6 @@ UTILS_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/utils/HelpGen/src
 	cp $(UTILSDIR)/HelpGen/Makefile.in $(DISTDIR)/utils/HelpGen
 	cp $(UTILSDIR)/HelpGen/src/*.* $(DISTDIR)/utils/HelpGen/src
-
-	mkdir $(DISTDIR)/utils/dialoged
-	mkdir $(DISTDIR)/utils/dialoged/src
-	mkdir $(DISTDIR)/utils/dialoged/src/bitmaps
-	mkdir $(DISTDIR)/utils/dialoged/docs
-	cp $(UTILSDIR)/dialoged/Makefile.in $(DISTDIR)/utils/dialoged
-	cp $(UTILSDIR)/dialoged/src/*.h $(DISTDIR)/utils/dialoged/src
-	cp $(UTILSDIR)/dialoged/src/*.cpp $(DISTDIR)/utils/dialoged/src
-	cp $(UTILSDIR)/dialoged/src/Makefile.in $(DISTDIR)/utils/dialoged/src
-	cp $(UTILSDIR)/dialoged/src/makefile.unx $(DISTDIR)/utils/dialoged/src
-	cp $(UTILSDIR)/dialoged/src/bitmaps/*.xpm $(DISTDIR)/utils/dialoged/src/bitmaps
-	cp $(UTILSDIR)/dialoged/docs/*.tex $(DISTDIR)/utils/dialoged/docs
-	cp $(UTILSDIR)/dialoged/docs/*.ini $(DISTDIR)/utils/dialoged/docs
-	cp $(UTILSDIR)/dialoged/docs/*.gif $(DISTDIR)/utils/dialoged/docs
 
 	mkdir $(DISTDIR)/utils/helpview
 	mkdir $(DISTDIR)/utils/helpview/src
