@@ -616,8 +616,9 @@ bool wxTopLevelWindowMSW::EnableCloseButton(bool enable)
 
     // enabling/disabling the close item from it also automatically
     // disables/enables the close title bar button
-    if ( !::EnableMenuItem(hmenu, SC_CLOSE,
-                           MF_BYCOMMAND | (enable ? MF_ENABLED : MF_GRAYED)) )
+    if ( ::EnableMenuItem(hmenu, SC_CLOSE,
+                          MF_BYCOMMAND |
+                          (enable ? MF_ENABLED : MF_GRAYED)) == -1 )
     {
         wxLogLastError(_T("EnableMenuItem(SC_CLOSE)"));
 
