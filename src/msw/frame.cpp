@@ -744,10 +744,6 @@ long wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             }
             break;
 
-        case WM_INITMENU:
-            processed = HandleInitMenu();
-            break;
-
         case WM_PAINT:
             processed = HandlePaint();
             break;
@@ -762,15 +758,11 @@ long wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
                 processed = HandleMenuSelect(item, flags, hmenu);
             }
             break;
-            
-        // We don't need to send the wxEVT_MENU_OPEN
-        // when we get WM_ENTERMENULOOP now, because we send
-        // it when we get WM_INITMENU.
-#if 0
-        case WM_ENTERMENULOOP:
-            processed = HandleMenuLoop(wxEVT_MENU_OPEN, wParam);
+
+        case WM_INITMENU:
+            processed = HandleInitMenu();
             break;
-#endif
+
         case WM_EXITMENULOOP:
             processed = HandleMenuLoop(wxEVT_MENU_CLOSE, wParam);
             break;
@@ -800,8 +792,6 @@ bool wxFrame::HandleInitMenu()
     event.SetEventObject(this);
 
     return GetEventHandler()->ProcessEvent(event);
-    
-    return TRUE;
 }
 
 
