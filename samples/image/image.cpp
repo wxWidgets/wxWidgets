@@ -6,7 +6,6 @@
  * Copyright: (C) 1998, Robert Roebling
  *
  */
-
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
@@ -340,7 +339,8 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.SetTextForeground( "BLACK" );
     }
 
-
+    // Doesn't work for wxMotif yet
+#ifndef __WXMOTIF__
     wxBitmap mono( 60,50,1 );
     wxMemoryDC memdc;
     memdc.SelectObject( mono );
@@ -376,6 +376,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.DrawBitmap( i.ConvertToBitmap(), 150, 1900, TRUE );
         dc.SetTextForeground( "BLACK" );
     }
+#endif
 
     dc.DrawText("XPM bitmap", 30, 2000);
     if ( m_bmpSmileXpm.Ok() )

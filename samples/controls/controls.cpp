@@ -686,9 +686,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                                         wxPoint(165, 115), wxDefaultSize,
                                         WXSIZEOF(choices10), choices10,
                                         3, wxRA_SPECIFY_COLS);
-    radio2->SetToolTip("Test tooltip");
 
 #if wxUSE_TOOLTIPS
+    radio2->SetToolTip("Test tooltip");
     m_combo->SetToolTip("This is a natural\ncombobox - can you believe me?");
     m_radio->SetToolTip("Ever seen a radiobox?");
 #endif // wxUSE_TOOLTIPS

@@ -1,9 +1,10 @@
 #!/bin/sh
 # tardist: make up a tar.gz distribution of wxWindows 2
 # Supply a source (e.g. ~/wx2) and destination (e.g. ~/wx2/deliver)
+# THIS SCRIPT IS OBSOLETE: USE E.G. TARWXMOTIF INSTEAD
 
 init=""
-WXVER=2.1.16
+WXVER=2.2.1
 if [ $1 = "" ]
 then
   exit

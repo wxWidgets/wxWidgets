@@ -14,6 +14,7 @@ if "%1" == "--help" goto usage
 if "%1" == "/?" goto usage
 if "%1" == "wiseonly" goto dounzip
 if "%1" == "wise" set wise=1
+if "%1" == "tidyup" goto tidyup
 echo About to archive an external wxWindows distribution:
 echo   From   %src
 echo   To     %dest
@@ -201,6 +202,7 @@ start %wisecmd
 pause Press any key to continue with the wxWindows distribution...
 Rem ren %WXWIN\deliver\setup.EXE %WXWIN\deliver\wxMSW-%version%-setup.exe
 
+:tidyup
 cd %dest
 
 Rem tidy up capitalisation of filenames

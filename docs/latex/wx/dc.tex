@@ -377,8 +377,8 @@ Ends a document page (only relevant when outputting to a printer).
 
 \func{void}{FloodFill}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{const wxColour\&}{ colour}, \param{int}{ style=wxFLOOD\_SURFACE}}
 
-Flood fills the device context starting from the given point, in the given colour,
-and using a style:
+Flood fills the device context starting from the given point, using
+the {\it current brush colour}, and using a style:
 
 \begin{itemize}\itemsep=0pt
 \item wxFLOOD\_SURFACE: the flooding occurs until a colour other than the given colour is encountered.

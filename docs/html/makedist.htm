@@ -87,7 +87,7 @@ by projgen).<P>
 <li>Build the WinHelp, HTML, and PDF documentation
 via the VC++ makefile, src/msw/makefile.vc. You can use e.g. the targets <b>cleandocs alldocs</b>. Check the
 output of the Windows Help Compiler for missing links, and edit/recompile the docs if necessary. The PDF documentation is produced from the Word RTF
-document, and read into Word. Apply the wxManual Style Template to improve presentation. Select all, press F9 to reformat the fields. Check the table of contents for
+document, and read into Word. Apply the wxManual Style Template to improve presentation (Format|Style Gallery...). Select all, press F9 to reformat the fields. Check the table of contents for
 overspill from the body of a section into the TOC. If there's a problem, it's due to the lack of a
 blank line at the end of the relevant .tex file. Insert the blank line, regenerate the RTF, and reload into Word.
 Then use Adobe Distiller to generate the PDF.<P>
@@ -109,6 +109,7 @@ e.g. using distrib\msw\makeall.bat.<P>
 to create .tgz files for wxMotif.<P>
 <li>Upload the appropriate files to the SourceGear ftp site.<P>
 <li>Download Robert's wxGTK files and upload to the SourceGear ftp site.<P>
+<li>Update the web site front page, news, download and CD-ROM pages to reflect the new version.<P>
 <li>If updating the CD-ROM hierarchy as well, follow these steps using the CD-ROM makefile:
   <ol>
   <li>Edit WXDISTDIR in the makefile and change to the correct distribution directory for this version.
