@@ -92,14 +92,23 @@ enum wxXmlResourceFlags
 class WXXMLDLLEXPORT wxXmlResource : public wxObject
 {
 public:
-    // Ctor. 
+    // Constructor.
     // Flags: wxXRC_USE_LOCALE
     //              translatable strings will be translated via _()
     //        wxXRC_NO_SUBCLASSING
     //              subclass property of object nodes will be ignored
     //              (useful for previews in XRC editors)
     wxXmlResource(int flags = wxXRC_USE_LOCALE);
+
+    // Constructor.
+    // Flags: wxXRC_USE_LOCALE
+    //              translatable strings will be translated via _()
+    //        wxXRC_NO_SUBCLASSING
+    //              subclass property of object nodes will be ignored
+    //              (useful for previews in XRC editors)
     wxXmlResource(const wxString& filemask, int flags = wxXRC_USE_LOCALE);
+
+    // Destructor.
     ~wxXmlResource();
     
     // Loads resources from XML files that match given filemask.
@@ -108,12 +117,12 @@ public:
 
     // Initialize handlers for all supported controls/windows. This will
     // make the executable quite big because it forces linking against
-    // most of wxWin library
+    // most of the wxWindows library.
     void InitAllHandlers();
 
-    // Initialize only specific handler (or custom handler). Convention says
-    // that handler name is equal to control's name plus 'XmlHandler', e.g.
-    // wxTextCtrlXmlHandler, wxHtmlWindowXmlHandler. XML resource compiler
+    // Initialize only a specific handler (or custom handler). Convention says
+    // that handler name is equal to the control's name plus 'XmlHandler', for example
+    // wxTextCtrlXmlHandler, wxHtmlWindowXmlHandler. The XML resource compiler
     // (xmlres) can create include file that contains initialization code for
     // all controls used within the resource.
     void AddHandler(wxXmlResourceHandler *handler);
@@ -126,45 +135,54 @@ public:
 
     // Loads menubar from resource. Returns NULL on failure.
     wxMenuBar *LoadMenuBar(wxWindow *parent, const wxString& name);
+
+    // Loads menubar from resource. Returns NULL on failure.
     wxMenuBar *LoadMenuBar(const wxString& name) { return LoadMenuBar(NULL, name); }
 
 #if wxUSE_TOOLBAR
-    // Loads toolbar
+    // Loads a toolbar.
     wxToolBar *LoadToolBar(wxWindow *parent, const wxString& name);
 #endif
 
-    // Loads dialog. dlg points to parent window (if any). Second form
+    // Loads a dialog. dlg points to parent window (if any).
+    wxDialog *LoadDialog(wxWindow *parent, const wxString& name);
+
+    // Loads a dialog. dlg points to parent window (if any). This form
     // is used to finish creation of already existing instance (main reason
     // for this is that you may want to use derived class with new event table)
     // Example (typical usage):
     //      MyDialog dlg;
     //      wxTheXmlResource->LoadDialog(&dlg, mainFrame, "my_dialog");
     //      dlg->ShowModal();
-    wxDialog *LoadDialog(wxWindow *parent, const wxString& name);
     bool LoadDialog(wxDialog *dlg, wxWindow *parent, const wxString& name);
 
-    // Loads panel. panel points to parent window (if any). Second form
-    // is used to finish creation of already existing instance.
+    // Loads a panel. panel points to parent window (if any).
     wxPanel *LoadPanel(wxWindow *parent, const wxString& name);
+
+    // Loads a panel. panel points to parent window (if any). This form
+    // is used to finish creation of already existing instance.
     bool LoadPanel(wxPanel *panel, wxWindow *parent, const wxString& name);
 
+    // Loads a frame.
     bool LoadFrame(wxFrame* frame, wxWindow *parent, const wxString& name);
 
-    // Loads bitmap or icon resource from file:
+    // Loads a bitmap resource from a file.
     wxBitmap LoadBitmap(const wxString& name);
+
+    // Loads an icon resource from a file.
     wxIcon LoadIcon(const wxString& name);
 
-    // Attaches unknown control into given panel/window/dialog:
-    // (unknown controls are used in conjunction with <object class="unknown">)
+    // Attaches an unknown control to the given panel/window/dialog.
+    // Unknown controls are used in conjunction with <object class="unknown">.
     bool AttachUnknownControl(const wxString& name, wxWindow *control,
                               wxWindow *parent = NULL);
 
-    // Returns numeric ID that is equivalent to string id used in XML
-    // resource. To be used in event tables
+    // Returns a numeric ID that is equivalent to the string id used in an XML
+    // resource. To be used in event tables.
     // Macro XMLID is provided for convenience
     static int GetXMLID(const wxChar *str_id);
 
-    // Returns version info (a.b.c.d = d+ 256*c + 256^2*b + 256^3*a)
+    // Returns version information (a.b.c.d = d+ 256*c + 256^2*b + 256^3*a).
     long GetVersion() const { return m_version; }
 
     // Compares resources version to argument. Returns -1 if resources version
@@ -173,25 +191,29 @@ public:
         { return GetVersion() -
                  (major*256*256*256 + minor*256*256 + release*256 + revision); }
                  
-    // Singleton accessors:
+//// Singleton accessors.
     
-    // Gets global resources object or create one if none exists
+    // Gets the global resources object or creates one if none exists.
     static wxXmlResource *Get();
-    // Sets global resources object and returns pointer to previous one (may be NULL).
+
+    // Sets the global resources object and returns a pointer to the previous one (may be NULL).
     static wxXmlResource *Set(wxXmlResource *res);
 
 protected:
-    // Scans resources list for unloaded files and loads them. Also reloads
+    // Scans the resources list for unloaded files and loads them. Also reloads
     // files that have been modified since last loading.
     void UpdateResources();
 
-    // Finds resource (calls UpdateResources) and returns node containing it
+    // Finds a resource (calls UpdateResources) and returns a node containing it.
     wxXmlNode *FindResource(const wxString& name, const wxString& classname, bool recursive = FALSE);
+
+    // Helper function: finds a resource (calls UpdateResources) and returns a node containing it.
     wxXmlNode *DoFindResource(wxXmlNode *parent, const wxString& name, const wxString& classname, bool recursive);
 
-    // Creates resource from info in given node:
+    // Creates a resource from information in the given node.
     wxObject *CreateResFromNode(wxXmlNode *node, wxObject *parent, wxObject *instance = NULL);
 
+    // Returns flags, which may be a bitlist of wxXRC_USE_LOCALE and wxXRC_NO_SUBCLASSING.
     int GetFlags() { return m_flags; }
 
 private:
@@ -243,32 +265,37 @@ private:
     ((type*)((window).FindWindow(XMLID(id))))
 #endif
 
+// wxXmlResourceHandler is an abstract base class for resource handlers
+// capable of creating a control from an XML node.
 
 class WXXMLDLLEXPORT wxXmlResourceHandler : public wxObject
 {
 public:
+    // Constructor.
     wxXmlResourceHandler();
+
+    // Destructor.
     virtual ~wxXmlResourceHandler() {}
 
-    // Creates object (menu, dialog, control, ...) from XML node.
+    // Creates an object (menu, dialog, control, ...) from an XML node.
     // Should check for validity.
-    // parent is higher-level object (usually window, dialog or panel)
-    // that is often neccessary to create resource
-    // if instance != NULL it should not create new instance via 'new' but
-    // rather use this one and call its Create method
+    // parent is a higher-level object (usually window, dialog or panel)
+    // that is often neccessary to create the resource.
+    // If instance is non-NULL it should not create a new instance via 'new' but
+    // should rather use this one, and call its Create method.
     wxObject *CreateResource(wxXmlNode *node, wxObject *parent,
                              wxObject *instance);
 
     // This one is called from CreateResource after variables
-    // were filled
+    // were filled.
     virtual wxObject *DoCreateResource() = 0;
 
     // Returns TRUE if it understands this node and can create
-    // resource from it, FALSE otherwise.
+    // a resource from it, FALSE otherwise.
     virtual bool CanHandle(wxXmlNode *node) = 0;
 
+    // Sets the parent resource.
     void SetParentResource(wxXmlResource *res) { m_resource = res; }
-
 
 protected:
     wxXmlResource *m_resource;
@@ -283,76 +310,89 @@ protected:
 
     // --- Handy methods:
 
-    // Returns true if the node has property class equal to classname,
-    // e.g. <object class="wxDialog">
+    // Returns true if the node has a property class equal to classname,
+    // e.g. <object class="wxDialog">.
     bool IsOfClass(wxXmlNode *node, const wxString& classname)
         { return node->GetPropVal(wxT("class"), wxEmptyString) == classname; }
 
     // Gets node content from wxXML_ENTITY_NODE
-    // (the problem is, <tag>content<tag> is represented as
+    // The problem is, <tag>content<tag> is represented as
     // wxXML_ENTITY_NODE name="tag", content=""
     //    |-- wxXML_TEXT_NODE or
     //        wxXML_CDATA_SECTION_NODE name="" content="content"
     wxString GetNodeContent(wxXmlNode *node);
 
-    // Check to see if a param exists
+    // Check to see if a parameter exists.
     bool HasParam(const wxString& param);
 
-    // Finds the node or returns NULL
+    // Finds the node or returns NULL.
     wxXmlNode *GetParamNode(const wxString& param);
+
+    // Finds the parameter value or returns the empty string.
     wxString GetParamValue(const wxString& param);
 
-    // Add style flag (e.g. wxMB_DOCKABLE) to list of flags
-    // understood by this handler
+    // Add a style flag (e.g. wxMB_DOCKABLE) to the list of flags
+    // understood by this handler.
     void AddStyle(const wxString& name, int value);
 
-    // Add styles common to all wxWindow-derived classes
+    // Add styles common to all wxWindow-derived classes.
     void AddWindowStyles();
 
     // Gets style flags from text in form "flag | flag2| flag3 |..."
     // Only understads flags added with AddStyle
     int GetStyle(const wxString& param = wxT("style"), int defaults = 0);
 
-    // Gets text from param and does some convertions:
+    // Gets text from param and does some conversions:
     // - replaces \n, \r, \t by respective chars (according to C syntax)
     // - replaces $ by & and $$ by $ (needed for $File => &File because of XML)
     // - calls wxGetTranslations (unless disabled in wxXmlResource)
     wxString GetText(const wxString& param);
 
-    // Return XMLID
+    // Returns the XMLID.
     int GetID();
+
+    // Returns the resource name.
     wxString GetName();
 
-    // Get bool flag (1,t,yes,on,true are TRUE, everything else is FALSE)
+    // Gets a bool flag (1, t, yes, on, true are TRUE, everything else is FALSE).
     bool GetBool(const wxString& param, bool defaultv = FALSE);
 
-    // Get integer value from param
+    // Gets the integer value from the parameter.
     long GetLong( const wxString& param, long defaultv = 0 );
 
-    // Get colour in HTML syntax (#RRGGBB)
+    // Gets colour in HTML syntax (#RRGGBB).
     wxColour GetColour(const wxString& param);
 
-    // Get size/position (may be in dlg units):
+    // Gets the size (may be in dialog units).
     wxSize GetSize(const wxString& param = wxT("size"));
+
+    // Gets the position (may be in dialog units).
     wxPoint GetPosition(const wxString& param = wxT("pos"));
 
-    // Get dimension (may be in dlg units):
+    // Gets a dimension (may be in dialog units).
     wxCoord GetDimension(const wxString& param, wxCoord defaultv = 0);
 
-    // Get bitmap:
+    // Gets a bitmap.
     wxBitmap GetBitmap(const wxString& param = wxT("bitmap"),
                        wxSize size = wxDefaultSize);
+
+    // Gets an icon.
     wxIcon GetIcon(const wxString& param = wxT("icon"),
                    wxSize size = wxDefaultSize);
 
-    // Get font:
+    // Gets a font.
     wxFont GetFont(const wxString& param = wxT("font"));
 
-    // Sets common window options:
+    // Sets common window options.
     void SetupWindow(wxWindow *wnd);
 
+    // Creates children.
     void CreateChildren(wxObject *parent, bool this_hnd_only = FALSE);
+
+    // Helper function.
     void CreateChildrenPrivately(wxObject *parent, wxXmlNode *rootnode = NULL);
+
+    // Creates a resource from a node.
     wxObject *CreateResFromNode(wxXmlNode *node,
                                 wxObject *parent, wxObject *instance = NULL)
         { return m_resource->CreateResFromNode(node, parent, instance); }
