@@ -76,6 +76,11 @@ int wxChoice::DoAppend(const wxString&)
     return 0;
 }
 
+int wxChoice::DoInsert(const wxString&, int)
+{
+    return 0;
+}
+
 void wxChoice::DoSetItemClientData(int, void*)
 {
 }

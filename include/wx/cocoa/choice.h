@@ -63,6 +63,7 @@ public:
     virtual int FindString(const wxString&) const;
     virtual int GetSelection() const;
     virtual int DoAppend(const wxString&);
+    virtual int DoInsert(const wxString&, int);
     virtual void DoSetItemClientData(int, void*);
     virtual void* DoGetItemClientData(int) const;
     virtual void DoSetItemClientObject(int, wxClientData*);
