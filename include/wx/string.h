@@ -359,6 +359,9 @@ public:
     // from C string (for compilers using unsigned char)
   wxString(const unsigned char* psz, size_t nLength = wxSTRING_MAXLEN)
     { InitWith((const char*)psz, 0, nLength); }
+    // from multibyte string
+  wxString(const char *psz, wxMBConv& WXUNUSED(conv), size_t nLength = wxSTRING_MAXLEN)
+    { InitWith(psz, 0, nLength); }
     // from wide (Unicode) string
   wxString(const wchar_t *pwz);
     // from wxCharBuffer
