@@ -453,6 +453,8 @@ public:
     wxSize GetSize() const;
     void SetSize( const wxSize &s );
 
+    bool IsEmpty() const;
+    
     wxPoint GetTopLeft() const;
     void SetTopLeft(const wxPoint &p);
     wxPoint GetBottomRight() const;
