@@ -1824,7 +1824,7 @@ See also \helpref{wxBusyCursor}{wxbusycursor}.
 
 \membersection{::wxMessageBox}\label{wxmessagebox}
 
-\func{int}{wxMessageBox}{\param{const wxString\& }{message}, \param{const wxString\& }{caption = ``Message"}, \param{int}{ style = wxOK \pipe wxCENTRE},\\
+\func{int}{wxMessageBox}{\param{const wxString\& }{message}, \param{const wxString\& }{caption = ``Message"}, \param{int}{ style = wxOK},\\
  \param{wxWindow *}{parent = NULL}, \param{int}{ x = -1}, \param{int}{ y = -1}}
 
 General purpose message dialog.  {\it style} may be a bit list of the
@@ -1836,7 +1836,6 @@ wxCANCEL.}
 \twocolitem{wxCANCEL}{Puts a Cancel button on the message box. May be combined with
 wxYES\_NO or wxOK.}
 \twocolitem{wxOK}{Puts an Ok button on the message box. May be combined with wxCANCEL.}
-\twocolitem{wxCENTRE}{Centres the text.}
 \twocolitem{wxICON\_EXCLAMATION}{Displays an exclamation mark symbol.}
 \twocolitem{wxICON\_HAND}{Displays an error symbol.}
 \twocolitem{wxICON\_ERROR}{Displays an error symbol - the same as wxICON\_HAND.}
@@ -1859,11 +1858,6 @@ For example:
 
 {\it message} may contain newline characters, in which case the
 message will be split into separate lines, to cater for large messages.
-
-Under Windows, the native MessageBox function is used unless wxCENTRE
-is specified in the style, in which case a generic function is used.
-This is because the native MessageBox function cannot centre text.
-The symbols are not shown when the generic function is used.
 
 \wxheading{Include files}
 
