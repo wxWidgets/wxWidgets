@@ -32,7 +32,11 @@
 
 \func{}{wxURL}{\param{const wxString\&}{ url}}
 
-Constructs an URL object from the string.
+Constructs a URL object from the string.  The URL must be valid according
+to RFC 1738.  In particular, file URLs must be of the format
+'file://hostname/path/to/file'.  It is valid to leave out the hostname
+but slashes must remain in place-- i.e. a file URL without a hostname must
+contain three consecutive slashes.
 
 \wxheading{Parameters}
 
