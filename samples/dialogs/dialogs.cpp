@@ -33,6 +33,7 @@
 #include "wx/tipdlg.h"
 #include "wx/progdlg.h"
 #include "wx/fdrepdlg.h"
+#include "wx/busyinfo.h"
 
 #define wxTEST_GENERIC_DIALOGS_IN_MSW 0
 
@@ -77,9 +78,15 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_CHOOSE_COLOUR_GENERIC,         MyFrame::ChooseColourGeneric)
     EVT_MENU(DIALOGS_CHOOSE_FONT_GENERIC,           MyFrame::ChooseFontGeneric)
 #endif
+
 #if wxUSE_PROGRESSDLG
     EVT_MENU(DIALOGS_PROGRESS,                      MyFrame::ShowProgress)
 #endif // wxUSE_PROGRESSDLG
+
+#if wxUSE_BUSYINFO
+    EVT_MENU(DIALOGS_BUSYINFO,                      MyFrame::ShowBusyInfo)
+#endif // wxUSE_BUSYINFO
+
 #if wxUSE_FINDREPLDLG
     EVT_MENU(DIALOGS_FIND,                          MyFrame::ShowFindDialog)
     EVT_MENU(DIALOGS_REPLACE,                       MyFrame::ShowReplaceDialog)
@@ -154,6 +161,9 @@ bool MyApp::OnInit()
 #if wxUSE_PROGRESSDLG
   file_menu->Append(DIALOGS_PROGRESS, "Pro&gress dialog\tCtrl-G");
 #endif // wxUSE_PROGRESSDLG
+#if wxUSE_BUSYINFO
+  file_menu->Append(DIALOGS_BUSYINFO, "&Busy info dialog\tCtrl-B");
+#endif // wxUSE_BUSYINFO
 #if wxUSE_FINDREPLDLG
   file_menu->Append(DIALOGS_FIND, "&Find dialog\tCtrl-F");
   file_menu->Append(DIALOGS_REPLACE, "Find and &replace dialog\tShift-Ctrl-F");
@@ -626,6 +636,21 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
 }
 
 #endif // wxUSE_PROGRESSDLG
+
+#if wxUSE_BUSYINFO
+
+void MyFrame::ShowBusyInfo(wxCommandEvent& WXUNUSED(event))
+{
+    wxBusyInfo info("Sleep^H^H^H^H^HWorkiing, please wait...\n... a bit more");
+
+    for ( int i = 0; i < 30; i++ )
+    {
+        wxUsleep(100);
+        wxTheApp->Yield();
+    }
+}
+
+#endif // wxUSE_BUSYINFO
 
 #if wxUSE_FINDREPLDLG
 

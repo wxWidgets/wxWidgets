@@ -78,6 +78,9 @@ public:
 #if wxUSE_PROGRESSDLG
     void ShowProgress(wxCommandEvent& event);
 #endif // wxUSE_PROGRESSDLG
+#if wxUSE_BUSYINFO
+    void ShowBusyInfo(wxCommandEvent& event);
+#endif // wxUSE_BUSYINFO
 #if wxUSE_FINDREPLDLG
     void ShowFindDialog(wxCommandEvent& event);
     void ShowReplaceDialog(wxCommandEvent& event);
@@ -138,6 +141,7 @@ enum
     DIALOGS_MODELESS,
     DIALOGS_MODELESS_BTN,
     DIALOGS_PROGRESS,
+    DIALOGS_BUSYINFO,
     DIALOGS_FIND,
     DIALOGS_REPLACE
 };
