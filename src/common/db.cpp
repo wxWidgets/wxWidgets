@@ -3428,7 +3428,7 @@ bool wxDb::Catalog(const wxChar *userID, const wxString &fileName)
     wxChar    typeName[30+1];
     SDWORD    precision, length;
 
-    FILE *fp = wxFopen(fileName.c_str,wxT("wt"));
+    FILE *fp = wxFopen(fileName.c_str(),wxT("wt"));
     if (fp == NULL)
         return false;
 
