@@ -6,7 +6,7 @@
 // Created:     28.12.2000
 // RCS-ID:      $Id$
 // Copyright:   (c) 2000 Robert Roebling
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -92,6 +92,10 @@
 
 #if defined(__WXMAC__)
   #include  "wx/mac/private.h"  // includes mac headers
+#endif
+
+#ifdef __EMX__
+#define __OS2__
 #endif
 
 // utime() is POSIX so should normally be available on all Unices
@@ -594,21 +598,7 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     }
 #endif // Win32/16
 
-#elif defined(__WXPM__)
-    // for now just create a file
-    //
-    // future enhancements can be to set some extended attributes for file
-    // systems OS/2 supports that have them (HPFS, FAT32) and security
-    // (HPFS386)
-    static const wxChar *szMktempSuffix = wxT("XXX");
-    path << dir << _T('/') << name << szMktempSuffix;
-
-    // Temporarily remove - MN
-    #ifndef __WATCOMC__
-        ::DosCreateDir(wxStringBuffer(path, MAX_PATH), NULL);
-    #endif
-
-#else // !Windows, !OS/2
+#else // !Windows
     if ( dir.empty() )
     {
 #if defined(__WXMAC__) && !defined(__DARWIN__)
@@ -623,7 +613,7 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
         if ( dir.empty() )
         {
             // default
-            #ifdef __DOS__
+            #if defined(__DOS__) || defined(__OS2__)
                 dir = _T(".");
             #else
                 dir = _T("/tmp");
@@ -1433,7 +1423,7 @@ wxPathFormat wxFileName::GetFormat( wxPathFormat format )
 {
     if (format == wxPATH_NATIVE)
     {
-#if defined(__WXMSW__) || defined(__WXPM__) || defined(__DOS__)
+#if defined(__WXMSW__) || defined(__OS2__) || defined(__DOS__)
         format = wxPATH_DOS;
 #elif defined(__WXMAC__) && !defined(__DARWIN__)
         format = wxPATH_MAC;

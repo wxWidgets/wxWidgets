@@ -27,6 +27,10 @@
 
 #if wxUSE_FILE
 
+#ifdef __EMX__
+#define __OS2__
+#endif
+
 // standard
 #if defined(__WXMSW__) && !defined(__GNUWIN32__) && !defined(__WXWINE__) && !defined(__WXMICROWIN__)
   #include  <io.h>
@@ -54,6 +58,8 @@
     #define   NOMCX
 #endif
 
+#elif (defined(__OS2__))
+    #include <io.h>
 #elif (defined(__UNIX__) || defined(__GNUWIN32__))
     #include  <unistd.h>
     #ifdef __GNUWIN32__
@@ -69,8 +75,6 @@
     #else
         #error  "Please specify the header with file functions declarations."
     #endif
-#elif (defined(__WXPM__))
-    #include <io.h>
 #elif (defined(__WXSTUBS__))
     // Have to ifdef this for different environments
     #include <io.h>
@@ -523,7 +527,9 @@ bool wxTempFile::Open(const wxString& strName)
 
     if ( chmod( (const char*) m_strTemp.fn_str(), mode) == -1 )
     {
+#ifndef __OS2__
         wxLogSysError(_("Failed to set temporary file permissions"));
+#endif
     }
 #endif // Unix
 

@@ -6,7 +6,7 @@
 // Created:     29/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -65,16 +65,24 @@
     #include <unix.h>
 #endif
 
-#ifdef __UNIX__
+#ifdef __EMX__
+#define __OS2__
+#endif
+
+#ifdef __OS2__
+// need to check for __OS2__ first since currently both
+// __OS2__ and __UNIX__ are defined.
+    #include <process.h>
+    #include "wx/os2/private.h"
+#ifdef __EMX__
+    #include <unistd.h>
+#endif
+#elif defined(__UNIX__)
     #include <unistd.h>
     #include <dirent.h>
     #include <fcntl.h>
 #endif
 
-#ifdef __WXPM__
-    #include <process.h>
-    #include "wx/os2/private.h"
-#endif
 #if defined(__WINDOWS__) && !defined(__WXMICROWIN__) && !defined(__WXWINE__)
 #if !defined( __GNUWIN32__ ) && !defined( __MWERKS__ ) && !defined(__SALFORDC__)
     #include <direct.h>
@@ -211,7 +219,7 @@ void wxPathList::Add (const wxString& path)
 void wxPathList::AddEnvList (const wxString& envVariable)
 {
     static const wxChar PATH_TOKS[] =
-#ifdef __WINDOWS__
+#if defined(__WINDOWS__) || defined(__OS2__)
         /*
         The space has been removed from the tokenizers, otherwise a
         path such as "C:\Program Files" would be split into 2 paths:
@@ -269,7 +277,7 @@ bool wxPathList::Member (const wxString& path)
   {
       wxString path2((wxChar *) node->Data ());
       if (
-#if defined(__WINDOWS__) || defined(__VMS__) || defined (__WXMAC__)
+#if defined(__WINDOWS__) || defined(__OS2__) || defined(__VMS__) || defined (__WXMAC__)
       // Case INDEPENDENT
           path.CompareTo (path2, wxString::ignoreCase) == 0
 #else
@@ -369,7 +377,7 @@ wxIsAbsolutePath (const wxString& filename)
         if ((filename[0] == wxT('[') && filename[1] != wxT('.')))
             return TRUE;
 #endif
-#ifdef __WINDOWS__
+#if defined(__WINDOWS__) || defined(__OS2__)
         // MSDOS like
         if (filename[0] == wxT('\\') || (wxIsalpha (filename[0]) && filename[1] == wxT(':')))
             return TRUE;
@@ -447,7 +455,7 @@ wxChar *wxRealPath (wxChar *path)
                         path[0] = SEP;
                         path[1] = wxT('\0');
                       }
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__OS2__)
                     /* Check that path[2] is NULL! */
                     else if (path[1] == wxT(':') && !path[2])
                       {
@@ -774,7 +782,7 @@ wxPathOnly (wxChar *path)
             i --;
         }
 
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WXMSW__) || defined(__OS2__)
         // Try Drive specifier
         if (wxIsalpha (buf[0]) && buf[1] == wxT(':'))
         {
@@ -830,7 +838,7 @@ wxString wxPathOnly (const wxString& path)
             i --;
         }
 
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WXMSW__) || defined(__OS2__)
         // Try Drive specifier
         if (wxIsalpha (buf[0]) && buf[1] == wxT(':'))
         {
@@ -1055,14 +1063,14 @@ wxDos2UnixFilename (wxChar *s)
 }
 
 void
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WXMSW__) || defined(__OS2__)
 wxUnix2DosFilename (wxChar *s)
 #else
 wxUnix2DosFilename (wxChar *WXUNUSED(s) )
 #endif
 {
 // Yes, I really mean this to happen under DOS only! JACS
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WXMSW__) || defined(__OS2__)
   if (s)
     while (*s)
       {
@@ -1128,7 +1136,7 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
 
         return FALSE;
     }
-#elif defined(__WXPM__)
+#elif defined(__OS2__)
     if ( ::DosCopy(file2, file2, overwrite ? DCPY_EXISTING : 0) != 0 )
         return FALSE;
 #else // !Win32
@@ -1253,9 +1261,9 @@ bool wxMkdir(const wxString& dir, int perm)
 
     // assume mkdir() has 2 args on non Windows-OS/2 platforms and on Windows too
     // for the GNU compiler
-#if (!(defined(__WXMSW__) || defined(__WXPM__) || defined(__DOS__))) || (defined(__GNUWIN32__) && !defined(__MINGW32__)) || defined(__WXWINE__) || defined(__WXMICROWIN__)
+#if (!(defined(__WXMSW__) || defined(__OS2__) || defined(__DOS__))) || (defined(__GNUWIN32__) && !defined(__MINGW32__)) || defined(__WXWINE__) || defined(__WXMICROWIN__)
     if ( mkdir(wxFNCONV(dirname), perm) != 0 )
-#elif defined(__WXPM__)
+#elif defined(__OS2__)
     if (::DosCreateDir((PSZ)dirname, NULL) != 0) // enhance for EAB's??
 #elif defined(__DOS__)
   #if defined(__WATCOMC__)
@@ -1284,7 +1292,7 @@ bool wxRmdir(const wxString& dir, int WXUNUSED(flags))
 {
 #ifdef __VMS__
   return FALSE; //to be changed since rmdir exists in VMS7.x
-#elif defined(__WXPM__)
+#elif defined(__OS2__)
   return (::DosDeleteDir((PSZ)dir.c_str()) == 0);
 #else
 
@@ -1302,7 +1310,7 @@ bool wxPathExists(const wxChar *pszPathName)
 {
     wxString strPath(pszPathName);
 
-#ifdef __WINDOWS__
+#if defined(__WINDOWS__) || defined(__OS2__)
     // Windows fails to find directory named "c:\dir\" even if "c:\dir" exists,
     // so remove all trailing backslashes from the path - but don't do this for
     // the pathes "d:\" (which are different from "d:") nor for just "\"
@@ -1316,6 +1324,12 @@ bool wxPathExists(const wxChar *pszPathName)
     }
 #endif // __WINDOWS__
 
+#ifdef __OS2__
+    // OS/2 can't handle "d:", it wants either "d:\" or "d:."
+    if (strPath.length() == 2 && strPath[1] == _T(':'))
+        strPath << _T('.');
+#endif
+
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
     // stat() can't cope with network paths
     DWORD ret = ::GetFileAttributes(strPath);
@@ -1325,7 +1339,7 @@ bool wxPathExists(const wxChar *pszPathName)
 
     wxStructStat st;
 #ifndef __VISAGECPP__
-    return wxStat(pszPathName, &st) == 0 && ((st.st_mode & S_IFMT) == S_IFDIR);
+    return wxStat(strPath.c_str(), &st) == 0 && ((st.st_mode & S_IFMT) == S_IFDIR);
 #else
     // S_IFMT not supported in VA compilers.. st_mode is a 2byte value only
     return wxStat(pszPathName, &st) == 0 && (st.st_mode == S_IFDIR);
@@ -1485,13 +1499,24 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
         {
             ok = FALSE;
         }
-    #elif defined(__VISAGECPP__) || (defined (__OS2__) && defined (__WATCOMC__))
+    #elif defined(__OS2__)
         APIRET rc;
-        rc = ::DosQueryCurrentDir( 0 // current drive
-                                  ,cbuf
-                                  ,(PULONG)&sz
-                                 );
-        ok = rc != 0;
+        ULONG ulDriveNum = 0;
+        ULONG ulDriveMap = 0;
+	rc = ::DosQueryCurrentDisk(&ulDriveNum, &ulDriveMap);
+        ok = rc == 0;
+	if (ok)
+	{
+	    sz -= 3;
+	    rc = ::DosQueryCurrentDir( 0 // current drive
+                                      ,cbuf + 3
+                                      ,(PULONG)&sz
+                                     );
+            cbuf[0] = 'A' + (ulDriveNum - 1);
+            cbuf[1] = ':';
+            cbuf[2] = '\\';
+            ok = rc == 0;
+        }
     #else // !Win32/VC++ !Mac !OS2
         ok = getcwd(cbuf, sz) != NULL;
     #endif // platform
@@ -1552,10 +1577,10 @@ wxString wxGetCwd()
 
 bool wxSetWorkingDirectory(const wxString& d)
 {
-#if defined(__UNIX__) || defined(__WXMAC__) || defined(__DOS__)
-  return (chdir(wxFNSTRINGCAST d.fn_str()) == 0);
-#elif defined(__WXPM__)
+#if defined(__OS2__)
   return (::DosSetCurrentDir((PSZ)d.c_str()) == 0);
+#elif defined(__UNIX__) || defined(__WXMAC__) || defined(__DOS__)
+  return (chdir(wxFNSTRINGCAST d.fn_str()) == 0);
 #elif defined(__WINDOWS__)
 
 #ifdef __WIN32__
