@@ -170,7 +170,8 @@ and you should be mostly fine.
 
 If you donwloaded wxAll-2.4.2, the directories will contain unix versions
 of all configure scripts which need to be replaced by the OS/2 enhanced
-versions contained in e.g. \wx\wxWindows-2.4.2\docs\os2\os2-specific.zip.
+versions contained in e.g. \wx\wxWindows-2.4.2\docs\os2\os2-specific.zip
+[Warning: If you are using CVS, this file is "hidden" under distrib/os2/].
 For this purpose change into the top level directory (\wx\wxWindows-2.4.2)
 and call "unzip docs\os2\os2-specific.zip" (assuming you have InfoZip's
 unzip installed). Of course, replace \wx\wxWindows-2.4.2 by the path you
