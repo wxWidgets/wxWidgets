@@ -398,6 +398,14 @@ void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
 // dialog window proc
 // ---------------------------------------------------------------------------
 
+BOOL CALLBACK wxRefreshChildProc(HWND hwnd, LPARAM WXUNUSED(lParam))
+{
+    ::InvalidateRect(hwnd, NULL, FALSE /* don't erase bg */);
+
+    // continue enumeration
+    return TRUE;
+}
+
 long wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
     long rc = 0;
@@ -422,7 +430,7 @@ long wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             processed = TRUE;
             if ( !HasFlag(wxNO_FULL_REPAINT_ON_RESIZE) )
             {
-                Refresh();
+                ::EnumChildWindows(GetHwnd(), wxRefreshChildProc, 0);
             }
             break;
 
