@@ -304,6 +304,10 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
                 SetCursor(*m_sashCursorNS);
             }
         }
+        else
+        {
+            SetCursor(* wxSTANDARD_CURSOR);
+        }
     }
     else if ( event.Dragging() &&
               ((m_dragMode == wxSASH_DRAG_DRAGGING) ||
@@ -520,7 +524,7 @@ void wxSashWindow::DrawSash(wxSashEdgePosition edge, wxDC& dc)
                 // Draw a drak grey line on the top to indicate that the
                 // sash is raised
                 dc.SetPen(mediumShadowPen);
-                dc.DrawLine(1, GetEdgeMargin(edge), w, GetEdgeMargin(edge));
+                dc.DrawLine(1, GetEdgeMargin(edge), w-1, GetEdgeMargin(edge));
             }
         }
     }

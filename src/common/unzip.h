@@ -275,7 +275,7 @@ extern int ZEXPORT unzGetLocalExtrafield OF((unzFile file,
 	the error code
 */
 
-#if defined(__VISAGECPP__)
+#if defined(__VISAGECPP__) || defined(__BORLANDC__)
 /*Visualage complains of no prototypes*/
 int unzlocal_getByte(FILE* , int*);
 int strcmpcasenosensitive_internal (const char*, const char*);

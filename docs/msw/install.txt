@@ -211,7 +211,7 @@ Compiling using the makefiles:
 2. Change directory to wx\src\msw. Type 'make -f makefile.b32' to
    make the wxWindows core library. Ignore the warnings about
    'XXX' not found in library.
-3. Change directory to a sample such as minimal, and type
+3. Change directory to a sample or demo such as samples\minimal, and type
   'make -f makefile.b32'.
 4. For release versions, recompile wxWindows and samples using
    'make -f makefile.b32 clean'
@@ -259,11 +259,16 @@ Compiling using the IDE files:
    since some (notably the wxHTML samples) look for files
    relative to the working directory.
 
-Note that to make the png, xpm, zlib and jpeg libraries (needed for
+Note (1): the samples project file contains a selection of
+samples, and not all samples. The remaining samples can be made
+with the makefiles. See also the demos hierarchy which doesn't
+have any BC++ project files yet.
+
+Note (2): to make the png, xpm, zlib, jpeg and tiff libraries (needed for
 some samples) you need to compile them with bc32.ide.
 
-The debug version of the wxWindows library is about 37 MB, and the
-release version is around 3 MB.
+Note (3): the debug version of the wxWindows library is about 40 MB, and the
+release version is around 5 MB.
 
 See also the file bc_ide.txt for further instructions and details
 of how to create your own project files.

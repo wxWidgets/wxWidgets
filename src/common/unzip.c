@@ -144,7 +144,7 @@ typedef struct
 	                                    file if we are decompressing it */
 } unz_s;
 
-#if defined (__VISAGECPP__)
+#if defined (__VISAGECPP__) || defined(__BORLANDC__)
 /* VA always requires prototypes */
 int unzlocal_CheckCurrentFileCoherencyHeader (unz_s*, uInt*, uLong*, uInt*);
 #endif

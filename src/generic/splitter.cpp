@@ -283,9 +283,15 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
                     SetCursor(*m_sashCursorNS);
                 }
         }
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXMSW__)
         else
         {
+            // We must set the normal cursor in MSW, because
+            // if the child window doesn't have a cursor, the
+            // parent's (splitter window) will be used, and this
+            // must be the standard cursor.
+            wxLogDebug("wxSplitterWindow: Setting to standard cursor");
+
             // where else do we unset the cursor?
             SetCursor(* wxSTANDARD_CURSOR);
         }
