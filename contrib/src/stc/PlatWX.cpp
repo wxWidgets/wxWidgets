@@ -575,13 +575,6 @@ void SurfaceImpl::FlushCachedState() {
 
 void SurfaceImpl::SetUnicodeMode(bool unicodeMode_) {
     unicodeMode=unicodeMode_;
-#if wxUSE_UNICODE
-    wxASSERT_MSG(unicodeMode == wxUSE_UNICODE,
-                 wxT("Only unicode may be used when wxUSE_UNICODE is on."));
-#else
-    wxASSERT_MSG(unicodeMode == wxUSE_UNICODE,
-                 wxT("Only non-unicode may be used when wxUSE_UNICODE is off."));
-#endif
 }
 
 void SurfaceImpl::SetDBCSMode(int codePage) {
