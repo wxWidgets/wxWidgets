@@ -40,9 +40,9 @@
 #   endif
 #endif
 
-//#ifdef DBDEBUG_CONSOLE
-    #include <iostream.h>
-//#endif
+#ifdef DBDEBUG_CONSOLE
+    #include "wx/ioswrap.h"
+#endif
 
 #ifdef    __BORLANDC__
     #pragma hdrstop
@@ -258,7 +258,7 @@ wxTable::~wxTable()
         TablesInUse.DeleteContents(TRUE);
         bool found = FALSE;
 
-	wxNode *pNode;
+        wxNode *pNode;
         pNode = TablesInUse.First();
         while (pNode && !found)
         {
@@ -266,7 +266,7 @@ wxTable::~wxTable()
             {
                 found = TRUE;
                 if (!TablesInUse.DeleteNode(pNode))
-                    wxMessageBox (s.GetData(),"Unable to delete node!");
+                    wxLogDebug (s.GetData(),"Unable to delete node!");
             }
             else
                 pNode = pNode->Next();
@@ -275,7 +275,7 @@ wxTable::~wxTable()
         {
             wxString msg;
             msg.sprintf("Unable to find the tableID in the linked\nlist of tables in use.\n\n%s",s.GetData());
-            wxMessageBox (msg.GetData(),"NOTICE...");
+            wxLogDebug (msg.GetData(),"NOTICE...");
         }
     }
 #endif
@@ -582,7 +582,6 @@ bool wxTable::Open(void)
         return FALSE;
 
     int i;
-//    char sqlStmt[DB_MAX_STATEMENT_LEN];
     wxString sqlStmt;
 
     // Verify that the table exists in the database
@@ -1050,10 +1049,9 @@ bool wxTable::DropTable()
 {
     // NOTE: This function returns TRUE if the Table does not exist, but
     //       only for identified databases.  Code will need to be added
-    //          below for any other databases when those databases are defined
+    //       below for any other databases when those databases are defined
     //       to handle this situation consistently
 
-//    char sqlStmt[DB_MAX_STATEMENT_LEN];
     wxString sqlStmt;
 
     sqlStmt.sprintf("DROP TABLE %s", tableName);
@@ -1171,7 +1169,6 @@ bool wxTable::DropIndex(const char * idxName)
     //          below for any other databases when those databases are defined
     //       to handle this situation consistently
 
-//    char sqlStmt[DB_MAX_STATEMENT_LEN];
     wxString sqlStmt;
 
     if (pDb->Dbms() == dbmsACCESS)
@@ -1265,7 +1262,7 @@ bool wxTable::Update(void)
     pDb->WriteSqlLog(sqlStmt);
 
 #ifdef DBDEBUG_CONSOLE
-    cout << endl << sqlStmt.GetData() << endl << endl;
+    cout << endl << sqlStmt << endl << endl;
 #endif
 
     // Execute the SQL UPDATE statement
@@ -1303,7 +1300,7 @@ bool wxTable::UpdateWhere(const char *pWhereClause)
     pDb->WriteSqlLog(sqlStmt);
 
 #ifdef DBDEBUG_CONSOLE
-    cout << endl << sqlStmt.GetData() << endl << endl;
+    cout << endl << sqlStmt << endl << endl;
 #endif
 
     // Execute the SQL UPDATE statement
@@ -1742,8 +1739,6 @@ void wxTable::SetColDefs (int index, const char *fieldName, int dataType, void *
 
 
 /********** wxTable::SetColDef() **********/
-// BJO20000121 : changed prototype in order to return proper pointer on wxColDataPtr's array
-//bool wxTable::SetColDefs(wxColInf *pColInfs, ULONG numCols, wxColDataPtr *pColDataPtrs)
 wxColDataPtr* wxTable::SetColDefs (wxColInf *pColInfs, ULONG numCols)
 {
     assert(pColInfs);
@@ -1758,46 +1753,15 @@ wxColDataPtr* wxTable::SetColDefs (wxColInf *pColInfs, ULONG numCols)
 
         for (index = 0; index < numCols; index++)
         {
-/*
-            wxString title,msg;
-            title.sprintf("Catalog: %s, Schema: %s, Table name: %s",pColInfs[index].catalog,pColInfs[index].schema,pColInfs[index].tableName);
-            msg.sprintf("Column name: %s\nData type: %04d\nType name: %s\nColumn size: %d\nBuffer len: %d\nDecimals:%d\nRadix: %d\nNullable: %d\nRemarks: %s",
-                pColInfs[index].colName,pColInfs[index].sqlDataType,pColInfs[index].typeName,pColInfs[index].columnSize,pColInfs[index].bufferLength,pColInfs[index].decimalDigits,pColInfs[index].numPrecRadix,pColInfs[index].nullable,pColInfs[index].remarks);
-            msg += "                                     \nDB_DATA_TYPE: ";
-            switch(pColInfs[index].dbDataType)
-            {
-                case DB_DATA_TYPE_VARCHAR:
-                    msg += pDb->typeInfVarchar.TypeName; break;
-                case DB_DATA_TYPE_INTEGER:
-                    msg += pDb->typeInfInteger.TypeName; break;
-                case DB_DATA_TYPE_FLOAT:
-                    msg += pDb->typeInfFloat.TypeName; break;
-                case DB_DATA_TYPE_DATE:
-                    msg += pDb->typeInfDate.TypeName; break;
-            }
-            wxMessageBox(msg.GetData(),title.GetData());
-*/
             // Process the fields
             switch (pColInfs[index].dbDataType)
             {
                 case DB_DATA_TYPE_VARCHAR:
                 {
-
-		  // Tentative fix for Access. Relative to UNICODE?
-		  if (pColInfs[index].bufferLength == 2*pColInfs[index].columnSize)
-		    {
-		      pColDataPtrs[index].PtrDataObj = new char[pColInfs[index].columnSize+1];
-		      pColDataPtrs[index].SzDataObj  = pColInfs[index].columnSize;
-		      
-		    }
-		  else
-		    {
-		      // Still needed because iodbc (unix) returns 0 in columnSize
-		      pColDataPtrs[index].PtrDataObj = new char[pColInfs[index].bufferLength+1];
-		      pColDataPtrs[index].SzDataObj  = pColInfs[index].bufferLength; 
-		    }
-		  pColDataPtrs[index].SqlCtype   = SQL_C_CHAR;
-		  break;
+                   pColDataPtrs[index].PtrDataObj = new char[pColInfs[index].bufferLength+1];
+                   pColDataPtrs[index].SzDataObj  = pColInfs[index].columnSize;
+                   pColDataPtrs[index].SqlCtype   = SQL_C_CHAR;
+                   break;
                 }
                 case DB_DATA_TYPE_INTEGER:
                 {
@@ -1864,7 +1828,6 @@ void wxTable::SetCursor(HSTMT *hstmtActivate)
 ULONG wxTable::Count(const char *args)
 {
     ULONG l;
-//    char sqlStmt[DB_MAX_STATEMENT_LEN];
     wxString sqlStmt;
     SDWORD cb;
 
