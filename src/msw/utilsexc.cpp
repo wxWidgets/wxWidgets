@@ -888,11 +888,17 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
         return pi.dwProcessId;
     }
 
-    wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
-    wxCHECK_MSG( traits, -1, _T("no wxAppTraits in wxExecute()?") );
+    wxAppTraits *traits = NULL;
+    void *cookie wxDUMMY_INITIALIZE(NULL);
+    if ( !(flags & wxEXEC_NODISABLE) )
+    {
+        if ( wxTheApp )
+            traits = wxTheApp->GetTraits();
+        wxCHECK_MSG( traits, -1, _T("no wxAppTraits in wxExecute()?") );
 
-    // disable all app windows while waiting for the child process to finish
-    void *cookie = traits->BeforeChildWaitLoop();
+        // disable all app windows while waiting for the child process to finish
+        cookie = traits->BeforeChildWaitLoop();
+    }
 
     // wait until the child process terminates
     while ( data->state )
@@ -910,7 +916,8 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
         traits->AlwaysYield();
     }
 
-    traits->AfterChildWaitLoop(cookie);
+    if ( traits )
+        traits->AfterChildWaitLoop(cookie);
 
     DWORD dwExitCode = data->dwExitCode;
     delete data;

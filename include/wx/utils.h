@@ -173,7 +173,12 @@ enum
 
     // under Unix, if the process is the group leader then passing wxKILL_CHILDREN to wxKill
     // kills all children as well as pid
-    wxEXEC_MAKE_GROUP_LEADER = 4
+    wxEXEC_MAKE_GROUP_LEADER = 4,
+
+    // by default synchronous execution disables all program windows to avoid
+    // that the user interacts with the program while the child process is
+    // running, you can use this flag to prevent this from happening
+    wxEXEC_NODISABLE = 8
 };
 
 // Execute another program.

@@ -1133,10 +1133,12 @@ int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
 {
     wxEndProcessData *endProcData = new wxEndProcessData;
 
+    const int flags = execData.flags;
+
     // wxAddProcessCallback is now (with DARWIN) allowed to call the
     // callback function directly if the process terminates before
     // the callback can be added to the run loop. Set up the endProcData.
-    if ( execData.flags & wxEXEC_SYNC )
+    if ( flags & wxEXEC_SYNC )
     {
         // we may have process for capturing the program output, but it's
         // not used in wxEndProcessData in the case of sync execution
@@ -1167,10 +1169,11 @@ int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
     execData.pipeEndProcDetect.Close();
 #endif // defined(__DARWIN__) && (defined(__WXMAC__) || defined(__WXCOCOA__))
 
-    if ( execData.flags & wxEXEC_SYNC )
+    if ( flags & wxEXEC_SYNC )
     {
         wxBusyCursor bc;
-        wxWindowDisabler wd;
+        wxWindowDisabler *wd = flags & wxEXEC_NODISABLE ? NULL
+                                                        : new wxWindowDisabler;
 
         // endProcData->pid will be set to 0 from GTK_EndProcessDetector when the
         // process terminates
@@ -1204,6 +1207,7 @@ int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
 
         int exitcode = endProcData->exitcode;
 
+        delete wd;
         delete endProcData;
 
         return exitcode;
