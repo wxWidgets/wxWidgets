@@ -684,10 +684,9 @@ bool wxFileConfig::Read(const wxString& key,
   if (pEntry == NULL) {
     return FALSE;
   }
-  else {
-    *pStr = ExpandEnvVars(pEntry->Value());
-    return TRUE;
-  }
+
+  *pStr = ExpandEnvVars(pEntry->Value());
+  return TRUE;
 }
 
 bool wxFileConfig::Read(const wxString& key,
@@ -696,28 +695,31 @@ bool wxFileConfig::Read(const wxString& key,
   wxConfigPathChanger path(this, key);
 
   ConfigEntry *pEntry = m_pCurrentGroup->FindEntry(path.Name());
+  bool ok;
   if (pEntry == NULL) {
     if( IsRecordingDefaults() )
       ((wxFileConfig *)this)->Write(key,defVal);
     *pStr = ExpandEnvVars(defVal);
-    return FALSE;
+    ok = FALSE;
   }
   else {
     *pStr = ExpandEnvVars(pEntry->Value());
-    return TRUE;
+    ok = TRUE;
   }
+
+  return ok;
 }
 
 bool wxFileConfig::Read(const wxString& key, long *pl) const
 {
   wxString str;
-  if ( Read(key, & str) ) {
-    *pl = wxAtol(str);
-    return TRUE;
-  }
-  else {
+  if ( !Read(key, & str) )
+  {
     return FALSE;
   }
+
+  *pl = wxAtol(str);
+  return TRUE;
 }
 
 bool wxFileConfig::Write(const wxString& key, const wxString& szValue)

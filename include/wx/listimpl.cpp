@@ -9,10 +9,10 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#define _DEFINE_LIST(T, name)           \
-    void wx##name##Node::DeleteData()   \
-    {                                   \
-        delete (T *)GetData();          \
+#define _DEFINE_LIST(T, name)                   \
+    inline void wx##name##Node::DeleteData()    \
+    {                                           \
+        delete (T *)GetData();                  \
     }
 
 // redefine the macro so that now it will generate the class implementation

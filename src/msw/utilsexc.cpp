@@ -657,6 +657,8 @@ long wxExecute(char **argv, bool sync, wxProcess *handler)
     return wxExecute(command, sync, handler);
 }
 
+#if wxUSE_GUI
+
 // ----------------------------------------------------------------------------
 // Metafile helpers
 // ----------------------------------------------------------------------------
@@ -690,3 +692,5 @@ extern void HIMETRICToPixel(LONG *x, LONG *y)
     *y *= iHeightPels;
     *y /= (iHeightMM * 100);
 }
+
+#endif // wxUSE_GUI

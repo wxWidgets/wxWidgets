@@ -227,27 +227,23 @@ bool wxFileTypeImpl::GetMimeType(wxString *mimeType) const
     // suppress possible error messages
     wxLogNull nolog;
     wxRegKey key(wxRegKey::HKCR, wxT(".") + m_ext);
-    if ( key.Open() && key.QueryValue(wxT("Content Type"), *mimeType) ) {
-        return TRUE;
-    }
-    else {
-        return FALSE;
-    }
+
+    return key.Open() && key.QueryValue(wxT("Content Type"), *mimeType);
 }
 
 
 bool wxFileTypeImpl::GetMimeTypes(wxArrayString& mimeTypes) const
 {
     wxString s;
-    
-    if (GetMimeType(&s))
+
+    if ( !GetMimeType(&s) )
     {
-        mimeTypes.Clear();
-        mimeTypes.Add(s);
-        return TRUE;
-    }
-    else 
         return FALSE;
+    }
+
+    mimeTypes.Clear();
+    mimeTypes.Add(s);
+    return TRUE;
 }
 
 
@@ -378,18 +374,16 @@ wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ext)
         }
     }
 
-    if ( knownExtension )
-    {
-        wxFileType *fileType = new wxFileType;
-        fileType->m_impl->Init(wxEmptyString, ext);
-
-        return fileType;
-    }
-    else
+    if ( !knownExtension )
     {
         // unknown extension
         return NULL;
     }
+
+    wxFileType *fileType = new wxFileType;
+    fileType->m_impl->Init(wxEmptyString, ext);
+
+    return fileType;
 }
 
 // MIME type -> extension -> file type

@@ -216,6 +216,8 @@ extern LONG APIENTRY _EXPORT
 #define wxZeroMemory(obj)   memset((void*) & obj, 0, sizeof(obj))
 #endif
 
+#if wxUSE_GUI
+
 #include <wx/gdicmn.h>
 
 // make conversion from wxColour and COLORREF a bit less painful
@@ -314,14 +316,11 @@ private:
 #define GetHcursor()            ((HCURSOR)GetHCURSOR())
 #define GetHcursorOf(cursor)    ((HCURSOR)(cursor).GetHCURSOR())
 
+#endif // wxUSE_GUI
+
 // ---------------------------------------------------------------------------
 // global data
 // ---------------------------------------------------------------------------
-
-#if 0 // where is this??
-// The MakeProcInstance version of the function wxSubclassedGenericControlProc
-WXDLLEXPORT_DATA(extern FARPROC) wxGenericControlSubClassProc;
-#endif // 0
 
 WXDLLEXPORT_DATA(extern wxChar*) wxBuffer;
 

@@ -910,8 +910,6 @@ bool wxCheckForInterrupt(wxWindow *wnd)
     return TRUE;
 }
 
-#endif // wxUSE_GUI
-
 // MSW only: get user-defined resource from the .res file.
 // Returns NULL or newly-allocated memory, so use delete[] to clean up.
 
@@ -1051,6 +1049,8 @@ WXWORD WXDLLEXPORT wxGetWindowId(WXHWND hWnd)
     return GetWindowLong((HWND)hWnd, GWL_ID);
 #endif // Win16/32
 }
+
+#endif // wxUSE_GUI
 
 #if 0
 //------------------------------------------------------------------------
@@ -1209,7 +1209,7 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
     return ((*str == '\0') && (*pattern == '\0'));
 };
 
-#endif
+#endif // 0
 
 #if 0
 

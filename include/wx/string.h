@@ -205,6 +205,12 @@ struct WXDLLEXPORT wxStringData
 
   // lock/unlock
   void  Lock()   { if ( !IsEmpty() ) nRefs++;                    }
+
+  // VC++ will refuse to inline this function but profiling shows that it
+  // is wrong
+#if defined(__VISUALC__) && defined(__WIN32__)
+  __forceinline
+#endif
   void  Unlock() { if ( !IsEmpty() && --nRefs == 0) free(this);  }
 
   // if we had taken control over string memory (GetWriteBuf), it's

@@ -1245,7 +1245,7 @@ private:
 
 #include "wx/dynarray.h"
 
-WX_DECLARE_OBJARRAY(wxDateTime, wxDateTimeArray);
+WX_DECLARE_EXPORTED_OBJARRAY(wxDateTime, wxDateTimeArray);
 
 // ----------------------------------------------------------------------------
 // wxDateTimeHolidayAuthority: an object of this class will decide whether a

@@ -59,13 +59,20 @@ bool          wxConfigBase::ms_bAutoCreate = TRUE;
 // wxConfigBase
 // ----------------------------------------------------------------------------
 
-// Not all args will always be used by derived classes, but
-// including them all in each class ensures compatibility.
-wxConfigBase::wxConfigBase(const wxString& appName, const wxString& vendorName,
-    const wxString& WXUNUSED(localFilename), const wxString& WXUNUSED(globalFilename), long style):
-        m_appName(appName), m_vendorName(vendorName), m_style(style)
+// Not all args will always be used by derived classes, but including them all
+// in each class ensures compatibility.
+wxConfigBase::wxConfigBase(const wxString& appName,
+                           const wxString& vendorName,
+                           const wxString& WXUNUSED(localFilename),
+                           const wxString& WXUNUSED(globalFilename),
+                           long style)
+            : m_appName(appName), m_vendorName(vendorName), m_style(style)
 {
     m_bExpandEnvVars = TRUE; m_bRecordDefaults = FALSE;
+}
+
+wxConfigBase::~wxConfigBase()
+{
 }
 
 wxConfigBase *wxConfigBase::Set(wxConfigBase *pConfig)
@@ -130,8 +137,8 @@ bool wxConfigBase::Read(const wxString& key, double* val) const
         *val = wxAtof(str);
         return TRUE;
     }
-    else
-        return FALSE;
+
+    return FALSE;
 }
 
 bool wxConfigBase::Read(const wxString& key, double* val, double defVal) const
@@ -400,7 +407,7 @@ void wxSplitPath(wxArrayString& aParts, const wxChar *sz)
         // could log an error here, but we prefer to ignore extra '/'
 
       if ( *pc == wxT('\0') )
-        return;
+        break;
     }
     else
       strCurrent += *pc;

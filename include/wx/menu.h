@@ -32,8 +32,8 @@ class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxMenuItem;
 
 // pseudo template list classes
-WX_DECLARE_LIST(wxMenu, wxMenuList);
-WX_DECLARE_LIST(wxMenuItem, wxMenuItemList);
+WX_DECLARE_EXPORTED_LIST(wxMenu, wxMenuList);
+WX_DECLARE_EXPORTED_LIST(wxMenuItem, wxMenuItemList);
 
 // ----------------------------------------------------------------------------
 // conditional compilation

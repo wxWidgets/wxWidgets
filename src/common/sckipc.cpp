@@ -220,22 +220,20 @@ bool wxTCPServer::Create(const wxString& serverName)
   // Create a socket listening on the specified port
   m_server = new wxSocketServer(addr, SCKIPC_FLAGS);
 
-  if (m_server->Ok())
-  {
-    m_server->SetEventHandler(*gs_handler, _SERVER_ONREQUEST_ID);
-    m_server->SetClientData(this);
-    m_server->SetNotify(wxSOCKET_CONNECTION_FLAG);
-    m_server->Notify(TRUE);
-
-    return TRUE;
-  }
-  else
+  if (!m_server->Ok())
   {
     m_server->Destroy();
     m_server = NULL;
 
     return FALSE;
   }
+
+  m_server->SetEventHandler(*gs_handler, _SERVER_ONREQUEST_ID);
+  m_server->SetClientData(this);
+  m_server->SetNotify(wxSOCKET_CONNECTION_FLAG);
+  m_server->Notify(TRUE);
+
+  return TRUE;
 }
 
 wxTCPServer::~wxTCPServer()

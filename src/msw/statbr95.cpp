@@ -186,21 +186,21 @@ void wxStatusBar95::CopyFieldsWidth(const int widths[])
 
 void wxStatusBar95::SetFieldsCount(int nFields, const int *widths)
 {
-  // this is Windows limitation
-  wxASSERT_MSG( (nFields > 0) && (nFields < 255), _T("too many fields") );
+    // this is a Windows limitation
+    wxASSERT_MSG( (nFields > 0) && (nFields < 255), _T("too many fields") );
 
-  m_nFields = nFields;
+    m_nFields = nFields;
 
-  CopyFieldsWidth(widths);
-  SetFieldsWidth();
+    CopyFieldsWidth(widths);
+    SetFieldsWidth();
 }
 
 void wxStatusBar95::SetStatusWidths(int n, const int widths[])
 {
-  wxASSERT_MSG( n == m_nFields, _T("field number mismatch") );
+    wxASSERT_MSG( n == m_nFields, _T("field number mismatch") );
 
-  CopyFieldsWidth(widths);
-  SetFieldsWidth();
+    CopyFieldsWidth(widths);
+    SetFieldsWidth();
 }
 
 void wxStatusBar95::SetFieldsWidth()

@@ -200,8 +200,8 @@ private:
 
 // defines a new type safe hash table which stores the elements of type eltype
 // in lists of class listclass
-#define WX_DECLARE_HASH(eltype, listclass, hashclass)                          \
-    class WXDLLEXPORT hashclass : public wxHashTableBase                       \
+#define _WX_DECLARE_HASH(eltype, listclass, hashclass, classexp)               \
+    classexp hashclass : public wxHashTableBase                                \
     {                                                                          \
     public:                                                                    \
         hashclass(wxKeyType keyType = wxKEY_INTEGER,                           \
@@ -257,6 +257,15 @@ private:
             m_count++;                                                         \
         }                                                                      \
     }
+
+// this macro is to be used in the user code
+#define WX_DECLARE_HASH(el, list, hash) \
+    _WX_DECLARE_HASH(el, list, hash, class)
+
+// and this one does exactly the same thing but should be used inside the
+// library
+#define WX_DECLARE_EXPORTED_HASH(el, list, hash)  \
+    _WX_DECLARE_HASH(el, list, hash, class WXDLLEXPORT)
 
 #endif
     // _WX_HASH_H__

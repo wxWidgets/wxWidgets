@@ -709,12 +709,11 @@ bool wxRegKey::HasValue(const wxChar *szValue) const
   wxLogNull nolog;
 
   #ifdef  __WIN32__
-    if ( CONST_CAST Open() ) {
-      return RegQueryValueEx((HKEY) m_hKey, WXSTRINGCAST szValue, RESERVED,
-                             NULL, NULL, NULL) == ERROR_SUCCESS;
-    }
-    else
-      return FALSE;
+    if ( !CONST_CAST Open() )
+        return FALSE;
+
+    return RegQueryValueEx((HKEY) m_hKey, WXSTRINGCAST szValue, RESERVED,
+                           NULL, NULL, NULL) == ERROR_SUCCESS;
   #else   // WIN16
     // only unnamed value exists
     return IsEmpty(szValue);
@@ -751,10 +750,10 @@ bool wxRegKey::HasSubKey(const wxChar *szKey) const
   // this function should be silent, so suppress possible messages from Open()
   wxLogNull nolog;
 
-  if ( CONST_CAST Open() )
-    return KeyExists(m_hKey, szKey);
-  else
+  if ( !CONST_CAST Open() )
     return FALSE;
+
+  return KeyExists(m_hKey, szKey);
 }
 
 wxRegKey::ValueType wxRegKey::GetValueType(const wxChar *szValue) const
