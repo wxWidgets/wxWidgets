@@ -76,6 +76,14 @@ private:
     void Compare();
     void CompareNoCase();
 
+#if wxUSE_WCHAR_T
+    // test if converting s using the given encoding gives ws and vice versa
+    //
+    // if either of the first 2 arguments is NULL, the conversion is supposed
+    // to fail
+    void DoTestConversion(const char *s, const wchar_t *w, wxCSConv& conv);
+#endif // wxUSE_WCHAR_T
+
     DECLARE_NO_COPY_CLASS(StringTestCase)
 };
 
@@ -214,58 +222,78 @@ void StringTestCase::Conversion()
 #endif
 }
 
+void
+StringTestCase::DoTestConversion(const char *s,
+                                 const wchar_t *ws,
+                                 wxCSConv& conv)
+{
+#if wxUSE_UNICODE
+    if ( ws )
+    {
+        wxCharBuffer buf(wxString(ws).mb_str(conv));
+
+        CPPUNIT_ASSERT( strcmp(buf, s) == 0 );
+    }
+#else // wxUSE_UNICODE
+    if ( s )
+    {
+        wxWCharBuffer wbuf(wxString(s).wc_str(conv));
+
+        if ( ws )
+            CPPUNIT_ASSERT( wcscmp(wbuf, ws) == 0 );
+        else
+            CPPUNIT_ASSERT( !*wbuf );
+    }
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
+}
+
+struct StringConversionData
+{
+    const char *str;
+    const wchar_t *wcs;
+};
+
 void StringTestCase::ConversionUTF7()
 {
-    const wchar_t data[] = { 0x00A3, 0x00A3, 0x00A3, 0x00A3, 0 }; // pound signs
+    static const StringConversionData utf7data[] =
+    {
+        { "+-", L"+" },
+        { "+--", L"+-" },
+        { "+AKM-", L"\u00a3" },
 
-    //utf7 and utf7alt are equivelent
-    const char *utf7 = "+AKM-+AKM-+AKM-+AKM-";
-    const char *utf7alt = "+AKMAowCjAKM-";
-
-#if wxUSE_UNICODE
-    wxString str(data);
+        // Windows accepts invalid UTF-7 strings and so does our UTF-7
+        // conversion code -- this is wrong IMO but the way it is for now
+        //
+        // notice that converting "+" still behaves as expected because the
+        // result is just an empty string, i.e. the same as if there were an
+        // error, but converting "a+" results in "a" while it really should
+        // fail
+        { "+", NULL },
+        { "a+", L"a" },
+    };
 
     wxCSConv conv(_T("utf-7"));
-
-    wxCharBuffer theBuffer = str.mb_str(conv);
-
-    CPPUNIT_ASSERT( strcmp(theBuffer, utf7) == 0 || strcmp(theBuffer, utf7alt) == 0);
-#else //ANSI
-    wxString str(utf7);
-
-    wxCSConv conv(_T("utf-7"));
-
-    wxWCharBuffer theWBuffer = str.wc_str(conv);
-
-    CPPUNIT_ASSERT( wxWcslen(theWBuffer) == wxWcslen(data) );
-    CPPUNIT_ASSERT( memcmp(theWBuffer, data, wxWcslen(data) * sizeof(wchar_t)) == 0 );
-
-    wxString stralt(utf7alt);
-
-    wxWCharBuffer theWBufferAlt = stralt.wc_str(conv);
-
-    CPPUNIT_ASSERT( wxWcslen(theWBufferAlt) == wxWcslen(data) );
-    CPPUNIT_ASSERT( memcmp(theWBufferAlt, data, wxWcslen(data) * sizeof(wchar_t)) == 0 );
-
-#endif // wxUSE_UNICODE
+    for ( size_t n = 0; n < WXSIZEOF(utf7data); n++ )
+    {
+        const StringConversionData& d = utf7data[n];
+        DoTestConversion(d.str, d.wcs, conv);
+    }
 }
 
 void StringTestCase::ConversionUTF8()
 {
-    const wchar_t wcs[] = { 0x00A3, 0x00A3, 0x00A3, 0x00A3, 0 }; // pound signs
-    const char *utf8 = "\xc2\xa3\xc2\xa3\xc2\xa3\xc2\xa3";
+    static const StringConversionData utf8data[] =
+    {
+        { "\xc2\xa3", L"\u00a3" },
+        { "\xc2", NULL },
+    };
 
     wxCSConv conv(_T("utf-8"));
-
-#if wxUSE_UNICODE
-    wxCharBuffer buf(wxString(wcs).mb_str(conv));
-
-    CPPUNIT_ASSERT( strcmp(buf, utf8) == 0 );
-#else // !wxUSE_UNICODE
-    wxWCharBuffer wbuf(wxString(utf8).wc_str(conv));
-
-    CPPUNIT_ASSERT( wcscmp(wbuf, wcs) == 0 );
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
+    for ( size_t n = 0; n < WXSIZEOF(utf8data); n++ )
+    {
+        const StringConversionData& d = utf8data[n];
+        DoTestConversion(d.str, d.wcs, conv);
+    }
 }
 
 #endif // wxUSE_WCHAR_T
