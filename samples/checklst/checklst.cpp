@@ -53,13 +53,17 @@ public:
     // notifications
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+
     void OnCheckFirstItem(wxCommandEvent& event);
     void OnUncheckFirstItem(wxCommandEvent& event);
     void OnToggleFirstItem(wxCommandEvent& event);
     void OnToggleSelection(wxCommandEvent& event);
+    void OnAddItems(wxCommandEvent& event);
+
     void OnListboxSelect(wxCommandEvent& event);
     void OnCheckboxToggle(wxCommandEvent& event);
     void OnListboxDblClick(wxCommandEvent& event);
+
     void OnButtonUp(wxCommandEvent& event);
     void OnButtonDown(wxCommandEvent& event);
 
@@ -86,6 +90,7 @@ enum
     Menu_UncheckFirst,
     Menu_ToggleFirst,
     Menu_Selection,
+    Menu_AddItems,
 
     Control_First = 1000,
     Control_Listbox,
@@ -101,6 +106,7 @@ BEGIN_EVENT_TABLE(CheckListBoxFrame, wxFrame)
     EVT_MENU(Menu_UncheckFirst, CheckListBoxFrame::OnUncheckFirstItem)
     EVT_MENU(Menu_ToggleFirst, CheckListBoxFrame::OnToggleFirstItem)
     EVT_MENU(Menu_Selection, CheckListBoxFrame::OnToggleSelection)
+    EVT_MENU(Menu_AddItems, CheckListBoxFrame::OnAddItems)
 
     EVT_LISTBOX(Control_Listbox, CheckListBoxFrame::OnListboxSelect)
     EVT_CHECKLISTBOX(Control_Listbox, CheckListBoxFrame::OnCheckboxToggle)
@@ -152,6 +158,8 @@ CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame,
     menuList->Append(Menu_CheckFirst, _T("Check the first item\tCtrl-C"));
     menuList->Append(Menu_UncheckFirst, _T("Uncheck the first item\tCtrl-U"));
     menuList->Append(Menu_ToggleFirst, _T("Toggle the first item\tCtrl-T"));
+    menuList->AppendSeparator();
+    menuList->AppendCheckItem(Menu_AddItems, _T("Add more items\tCtrl-A"));
     menuList->AppendSeparator();
     menuList->AppendCheckItem(Menu_Selection, _T("Multiple selection\tCtrl-M"));
 
@@ -265,6 +273,17 @@ void CheckListBoxFrame::OnToggleFirstItem(wxCommandEvent& event)
 {
     if ( !m_pListBox->IsEmpty() )
         m_pListBox->Check(0, !m_pListBox->IsChecked(0));
+}
+
+void CheckListBoxFrame::OnAddItems(wxCommandEvent& event)
+{
+    static size_t s_nItem = 0;
+    wxArrayString items;
+    items.Add(wxString::Format(_T("New item %lu"), (unsigned long)++s_nItem));
+    items.Add(wxString::Format(_T("New item %lu"), (unsigned long)++s_nItem));
+    items.Add(wxString::Format(_T("New item %lu"), (unsigned long)++s_nItem));
+
+    m_pListBox->InsertItems(items, 0);//m_pListBox->GetCount());
 }
 
 void CheckListBoxFrame::OnToggleSelection(wxCommandEvent& event)
