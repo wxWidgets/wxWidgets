@@ -1754,7 +1754,7 @@ void wxStdDialogButtonSizer::Realize()
     // do the same thing for GTK1 and Windows platforms
     // and assume any platform not accounted for here will use
     // Windows style
-        Add(0, 0, 0, wxLEFT, 9);
+        // Add(0, 0, 0, wxLEFT, 5); // Not sure what this was for but it unbalances the dialog
         if (m_buttonHelp)
             Add((wxWindow*)m_buttonHelp, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonHelp->ConvertDialogToPixels(wxSize(4, 0)).x);
 
@@ -1773,7 +1773,7 @@ void wxStdDialogButtonSizer::Realize()
         }
 
         if (m_buttonCancel){
-            Add((wxWindow*)m_buttonCancel, 0, wxALIGN_CENTRE | wxLEFT, m_buttonCancel->ConvertDialogToPixels(wxSize(4, 0)).x);
+            Add((wxWindow*)m_buttonCancel, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonCancel->ConvertDialogToPixels(wxSize(4, 0)).x);
             // Cancel or help should be default
             // m_buttonCancel->SetDefaultButton();
         }
