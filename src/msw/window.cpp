@@ -1383,7 +1383,7 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
             bool bForward = TRUE,
                  bWindowChange = FALSE;
 
-            switch ( msg->wParam ) 
+            switch ( msg->wParam )
             {
                 case VK_TAB:
                     if ( lDlgCode & DLGC_WANTTAB ) {
@@ -3093,7 +3093,7 @@ bool wxWindow::MSWOnScroll(int orientation, WXWORD wParam,
             return child->MSWOnScroll(orientation, wParam, pos, control);
     }
 
-    wxScrollEvent event;
+    wxScrollWinEvent event;
     event.SetPosition(pos);
     event.SetOrientation(orientation);
     event.m_eventObject = this;
@@ -3101,32 +3101,32 @@ bool wxWindow::MSWOnScroll(int orientation, WXWORD wParam,
     switch ( wParam )
     {
     case SB_TOP:
-        event.m_eventType = wxEVT_SCROLL_TOP;
+        event.m_eventType = wxEVT_SCROLLWIN_TOP;
         break;
 
     case SB_BOTTOM:
-        event.m_eventType = wxEVT_SCROLL_BOTTOM;
+        event.m_eventType = wxEVT_SCROLLWIN_BOTTOM;
         break;
 
     case SB_LINEUP:
-        event.m_eventType = wxEVT_SCROLL_LINEUP;
+        event.m_eventType = wxEVT_SCROLLWIN_LINEUP;
         break;
 
     case SB_LINEDOWN:
-        event.m_eventType = wxEVT_SCROLL_LINEDOWN;
+        event.m_eventType = wxEVT_SCROLLWIN_LINEDOWN;
         break;
 
     case SB_PAGEUP:
-        event.m_eventType = wxEVT_SCROLL_PAGEUP;
+        event.m_eventType = wxEVT_SCROLLWIN_PAGEUP;
         break;
 
     case SB_PAGEDOWN:
-        event.m_eventType = wxEVT_SCROLL_PAGEDOWN;
+        event.m_eventType = wxEVT_SCROLLWIN_PAGEDOWN;
         break;
 
     case SB_THUMBTRACK:
     case SB_THUMBPOSITION:
-        event.m_eventType = wxEVT_SCROLL_THUMBTRACK;
+        event.m_eventType = wxEVT_SCROLLWIN_THUMBTRACK;
         break;
 
     default:
