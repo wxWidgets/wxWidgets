@@ -347,8 +347,8 @@ IMP_PYCALLBACK_BOOL_STRINGSTRING(wxPyFontEnumerator, wxFontEnumerator, OnFontEnc
 public:
     wxPyFontEnumerator();
     ~wxPyFontEnumerator();
-    void _setCallbackInfo(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxFontEnumerator)"
+    void _setCallbackInfo(PyObject* self, PyObject* _class, bool incref);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxFontEnumerator, 0)"
 
     bool EnumerateFacenames(
         wxFontEncoding encoding = wxFONTENCODING_SYSTEM, // all
@@ -360,12 +360,12 @@ public:
     %addmethods {
         PyObject* GetEncodings() {
             wxArrayString* arr = self->GetEncodings();
-            return wxArrayString2PyList_helper(arr);
+            return wxArrayString2PyList_helper(*arr);
         }
 
         PyObject* GetFacenames() {
             wxArrayString* arr = self->GetFacenames();
-            return wxArrayString2PyList_helper(arr);
+            return wxArrayString2PyList_helper(*arr);
         }
     }
 };

@@ -3037,19 +3037,21 @@ static PyObject *_wrap_delete_wxFontEnumerator(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
-#define wxFontEnumerator__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+#define wxFontEnumerator__setCallbackInfo(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1,_swigarg2))
 static PyObject *_wrap_wxFontEnumerator__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyFontEnumerator * _arg0;
     PyObject * _arg1;
     PyObject * _arg2;
+    bool  _arg3;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
     PyObject * _obj2 = 0;
-    char *_kwnames[] = { "self","self","_class", NULL };
+    int tempbool3;
+    char *_kwnames[] = { "self","self","_class","incref", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxFontEnumerator__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOOi:wxFontEnumerator__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2,&tempbool3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3064,9 +3066,10 @@ static PyObject *_wrap_wxFontEnumerator__setCallbackInfo(PyObject *self, PyObjec
 {
   _arg2 = _obj2;
 }
+    _arg3 = (bool ) tempbool3;
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxFontEnumerator__setCallbackInfo(_arg0,_arg1,_arg2);
+        wxFontEnumerator__setCallbackInfo(_arg0,_arg1,_arg2,_arg3);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -3135,7 +3138,7 @@ static PyObject *_wrap_wxFontEnumerator_EnumerateEncodings(PyObject *self, PyObj
 
 static PyObject * wxPyFontEnumerator_GetEncodings(wxPyFontEnumerator *self) {
             wxArrayString* arr = self->GetEncodings();
-            return wxArrayString2PyList_helper(arr);
+            return wxArrayString2PyList_helper(*arr);
         }
 static PyObject *_wrap_wxFontEnumerator_GetEncodings(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -3167,7 +3170,7 @@ static PyObject *_wrap_wxFontEnumerator_GetEncodings(PyObject *self, PyObject *a
 
 static PyObject * wxPyFontEnumerator_GetFacenames(wxPyFontEnumerator *self) {
             wxArrayString* arr = self->GetFacenames();
-            return wxArrayString2PyList_helper(arr);
+            return wxArrayString2PyList_helper(*arr);
         }
 static PyObject *_wrap_wxFontEnumerator_GetFacenames(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;

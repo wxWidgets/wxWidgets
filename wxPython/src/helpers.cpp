@@ -1306,7 +1306,7 @@ PyObject* wxArrayString2PyList_helper(const wxArrayString& arr) {
     for (size_t i=0; i < arr.GetCount(); i++) {
         PyObject* str = PyString_FromString(arr[i].c_str());
         PyList_Append(list, str);
-        // TODO:  Check refcount on str...
+        Py_DECREF(str);
     }
     return list;
 }
