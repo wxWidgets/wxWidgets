@@ -2145,7 +2145,7 @@ WX_LIBRARY_LINK2_GL="lib${WX_LIBRARY_GL}.${SO_SUFFIX}"
 
 dnl the name of the resources file for wxMac
 WX_RESOURCES_MACOSX="lib${WX_LIBRARY}.rsrc"
-
+WX_RESOURCES_MACOSX_COMPILED="lib${WX_LIBRARY}.r"
 
 dnl --- the marker for quick search, leave it here: SHARED_LIB_SETUP ---
 
@@ -2316,11 +2316,12 @@ fi
 if test "$wxUSE_MAC" = 1; then
     dnl add the resources target for wxMac
     WX_ALL="${WX_ALL} \$(build_libdir)/lib${WX_LIBRARY}.r"
+    WX_ALL_INSTALLED="${WX_ALL_INSTALLED} preinstall_res"
     AC_CHECK_PROG(RESCOMP, Rez, Rez, /Developer/Tools/Rez)
     AC_CHECK_PROG(DEREZ, Derez, Derez, /Developer/Tools/Derez)
     LIBWXMACRES="\$(top_builddir)/lib/lib${WX_LIBRARY}.r"
     LIBWXMACRESCOMP="\$(RESCOMP) Carbon.r -t APPL ${LIBWXMACRES} -o \$(BIN_PROGRAM)"
-    LIBWXMACRESWXCONFIG="${RESCOMP} Carbon.r -t APPL ${LIBWXMACRES} -o"
+    LIBWXMACRESWXCONFIG="${RESCOMP} Carbon.r -t APPL \${prefix}/lib/${WX_RESOURCES_MACOSX_COMPILED} -o"
 fi
 
 dnl ------------------------------------------------------------------------
@@ -4582,6 +4583,7 @@ AC_SUBST(RESCOMP)
 AC_SUBST(RESFLAGS)
 AC_SUBST(RESPROGRAMOBJ)
 AC_SUBST(WX_RESOURCES_MACOSX)
+AC_SUBST(WX_RESOURCES_MACOSX_COMPILED)
 
 dnl additional for Mac OS X
 AC_SUBST(DEREZ)

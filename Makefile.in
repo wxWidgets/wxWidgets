@@ -439,6 +439,13 @@ preinstall: $(build_libdir)/@WX_TARGET_LIBRARY@ $(top_builddir)/wx@TOOLCHAIN_NAM
 	  echo "$(INSTALL_DATA) $(top_srcdir)/locale/$$p.mo $(localedir)/$$p/LC_MESSAGES/wxstd.mo"; \
 	done
 
+preinstall_res: $(build_libdir)/@WX_RESOURCES_MACOSX_COMPILED@
+	@echo " "
+	@echo " Installing wxWindows Mac resource ..."
+	@echo " "
+	@if test ! -d $(libdir); then $(INSTALL) -d $(libdir); fi
+	$(INSTALL_PROGRAM) $(build_libdir)/@WX_RESOURCES_MACOSX_COMPILED@ $(libdir)/@WX_RESOURCES_MACOSX_COMPILED@
+
 preinstall_gl: $(build_libdir)/@WX_TARGET_LIBRARY_GL@
 	@echo " "
 	@echo " Installing wxWindows OpenGl add-on..."
