@@ -183,3 +183,16 @@ Checking in docs/changes.txt;
 new revision: 1.236; previous revision: 1.235
 done
 
+
+15. XRC fixes for <object_ref> and relative file names
+
+Must be modified to be binary compatible before backporting!
+
+Checking in xmlres.cpp;
+/pack/cvsroots/wxwindows/wxWindows/contrib/src/xrc/xmlres.cpp,v  <--  xmlres.cpp
+new revision: 1.27; previous revision: 1.26
+done
+Checking in xmlres.h;
+/pack/cvsroots/wxwindows/wxWindows/contrib/include/wx/xrc/xmlres.h,v  <--  xmlres.h
+new revision: 1.22; previous revision: 1.21
+done
