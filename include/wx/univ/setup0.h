@@ -151,7 +151,9 @@
 // Default is 0
 //
 // Recommended setting: 0 (unless you only plan to use Windows NT/2000/XP)
-#define wxUSE_UNICODE 0
+#ifndef wxUSE_UNICODE
+    #define wxUSE_UNICODE 0
+#endif
 
 // Set wxUSE_UNICODE_MSLU to 1 if you want to compile wxWindows in Unicode mode
 // and be able to run compiled apps under Windows 9x as well as NT/2000/XP. This
