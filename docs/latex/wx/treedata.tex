@@ -1,20 +1,21 @@
 \section{\class{wxTreeItemData}}\label{wxtreeitemdata}
 
 wxTreeItemData is some (arbitrary) user class associated with some item. The
-main advantage of having this class (compared to the old untyped interface) is
-that wxTreeItemData's are destroyed automatically by the tree and, as this
-class has virtual dtor, it means that the memory will be automatically
-freed. We don't just use wxObject instead of wxTreeItemData because
-the size of this class is critical: in any real application, each tree leaf
-will have wxTreeItemData associated with it and number of leaves may be
-quite big.
+main advantage of having this class is that wxTreeItemData objects are
+destroyed automatically by the tree and, as this class has virtual destructor,
+it means that the memory and any other resources associated with a tree item
+will be automatically freed when it is deleted. Note that we don't use wxObject
+as the base class for wxTreeItemData because the size of this class is
+critical: in many applications, each tree leaf will have wxTreeItemData
+associated with it and number of leaves may be quite big.
 
-Because the objects of this class are deleted by the tree, they should
-always be allocated on the heap.
+Also please note that because the objects of this class are deleted by the tree
+using the operator {\tt delete}, they must always be allocated on the heap
+using {\tt new}.
 
 \wxheading{Derived from}
 
-wxTreeItemId
+wxClientData
 
 \wxheading{Include files}
 
