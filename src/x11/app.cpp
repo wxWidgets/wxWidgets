@@ -228,7 +228,6 @@ wxApp::wxApp()
     m_mainColormap = (WXColormap) NULL;
     m_topLevelWidget = (WXWindow) NULL;
     m_maxRequestSize = 0;
-    m_mainLoop = NULL;
     m_showIconic = FALSE;
     m_initialSize = wxDefaultSize;
 
@@ -250,18 +249,6 @@ bool wxApp::Initialized()
         return TRUE;
     else
         return FALSE;
-}
-
-int wxApp::MainLoop()
-{
-    int rt;
-    m_mainLoop = new wxEventLoop;
-
-    rt = m_mainLoop->Run();
-
-    delete m_mainLoop;
-    m_mainLoop = NULL;
-    return rt;
 }
 
 #if !wxUSE_NANOX
@@ -615,83 +602,58 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
             return win->GetEventHandler()->ProcessEvent( wxevent );
         }
         case FocusIn:
-            {
 #if !wxUSE_NANOX
-                if ((event->xfocus.detail != NotifyPointer) &&
-                    (event->xfocus.mode == NotifyNormal))
+            if ((event->xfocus.detail != NotifyPointer) &&
+                (event->xfocus.mode == NotifyNormal))
 #endif
+            {
+                wxLogTrace( _T("focus"), _T("FocusIn from %s of type %s"), win->GetName().c_str(), win->GetClassInfo()->GetClassName() );
+
+                extern wxWindow* g_GettingFocus;
+                if (g_GettingFocus && g_GettingFocus->GetParent() == win)
                 {
-                    wxLogTrace( _T("focus"), _T("FocusIn from %s of type %s"), win->GetName().c_str(), win->GetClassInfo()->GetClassName() );
-
-                    extern wxWindow* g_GettingFocus;
-                    if (g_GettingFocus && g_GettingFocus->GetParent() == win)
-                    {
-                        // Ignore this, this can be a spurious FocusIn
-                        // caused by a child having its focus set.
-                        g_GettingFocus = NULL;
-                        wxLogTrace( _T("focus"), _T("FocusIn from %s of type %s being deliberately ignored"), win->GetName().c_str(), win->GetClassInfo()->GetClassName() );
-                        return TRUE;
-                    }
-                    else
-                    {
-                        wxFocusEvent focusEvent(wxEVT_SET_FOCUS, win->GetId());
-                        focusEvent.SetEventObject(win);
-                        focusEvent.SetWindow( g_prevFocus );
-                        g_prevFocus = NULL;
-
-                        return win->GetEventHandler()->ProcessEvent(focusEvent);
-                    }
+                    // Ignore this, this can be a spurious FocusIn
+                    // caused by a child having its focus set.
+                    g_GettingFocus = NULL;
+                    wxLogTrace( _T("focus"), _T("FocusIn from %s of type %s being deliberately ignored"), win->GetName().c_str(), win->GetClassInfo()->GetClassName() );
+                    return TRUE;
                 }
-                return FALSE;
-                break;
-            }
-        case FocusOut:
-            {
-#if !wxUSE_NANOX
-                if ((event->xfocus.detail != NotifyPointer) &&
-                    (event->xfocus.mode == NotifyNormal))
-#endif
+                else
                 {
-                    wxLogTrace( _T("focus"), _T("FocusOut from %s of type %s"), win->GetName().c_str(), win->GetClassInfo()->GetClassName() );
-
-                    wxFocusEvent focusEvent(wxEVT_KILL_FOCUS, win->GetId());
+                    wxFocusEvent focusEvent(wxEVT_SET_FOCUS, win->GetId());
                     focusEvent.SetEventObject(win);
-                    focusEvent.SetWindow( g_nextFocus );
-                    g_nextFocus = NULL;
+                    focusEvent.SetWindow( g_prevFocus );
+                    g_prevFocus = NULL;
+
                     return win->GetEventHandler()->ProcessEvent(focusEvent);
                 }
-                return FALSE;
-                break;
             }
-        default:
-        {
+            return FALSE;
+
+        case FocusOut:
+#if !wxUSE_NANOX
+            if ((event->xfocus.detail != NotifyPointer) &&
+                (event->xfocus.mode == NotifyNormal))
+#endif
+            {
+                wxLogTrace( _T("focus"), _T("FocusOut from %s of type %s"), win->GetName().c_str(), win->GetClassInfo()->GetClassName() );
+
+                wxFocusEvent focusEvent(wxEVT_KILL_FOCUS, win->GetId());
+                focusEvent.SetEventObject(win);
+                focusEvent.SetWindow( g_nextFocus );
+                g_nextFocus = NULL;
+                return win->GetEventHandler()->ProcessEvent(focusEvent);
+            }
+            return FALSE;
+
 #ifdef __WXDEBUG__
+        default:
             //wxString eventName = wxGetXEventName(XEvent& event);
             //wxLogDebug(wxT("Event %s not handled"), eventName.c_str());
-#endif
-            return FALSE;
-            break;
-        }
+#endif // __WXDEBUG__
     }
+
     return FALSE;
-}
-
-void wxApp::ExitMainLoop()
-{
-    if (m_mainLoop)
-        m_mainLoop->Exit(0);
-}
-
-// Is a message/event pending?
-bool wxApp::Pending()
-{
-    return wxEventLoop::GetActive()->Pending();
-}
-
-// Dispatch a message.
-void wxApp::Dispatch()
-{
-    wxEventLoop::GetActive()->Dispatch();
 }
 
 // This should be redefined in a derived class for
