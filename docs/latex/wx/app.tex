@@ -266,8 +266,10 @@ was used}
 
 \func{int}{OnExit}{\void}
 
-Provide this member function for any processing which needs to be done as
-the application is about to exit.
+Provide this member function for any processing which needs to be
+done as the application is about to exit. OnExit is called after
+destroying all application windows and controls, but before
+wxWindows cleanup.
 
 \membersection{wxApp::OnCmdLineError}\label{wxapponcmdlineerror}
 
@@ -631,4 +633,3 @@ Calling Yield() recursively is normally an error and an assert failure is
 raised in debug build if such situation is detected. However if the the 
 {\it onlyIfNeeded} parameter is {\tt TRUE}, the method will just silently
 return {\tt FALSE} instead.
-
