@@ -1081,6 +1081,7 @@ static void gtk_window_vscroll_callback( GtkWidget *WXUNUSED(widget), wxWindow *
 
     float diff = win->m_vAdjust->value - win->m_oldVerticalPos;
     if (fabs(diff) < 0.2) return;
+    win->m_oldVerticalPos = win->m_vAdjust->value;
 
     wxEventType command = wxEVT_NULL;
 
@@ -1128,6 +1129,7 @@ static void gtk_window_hscroll_callback( GtkWidget *WXUNUSED(widget), wxWindow *
 
     float diff = win->m_hAdjust->value - win->m_oldHorizontalPos;
     if (fabs(diff) < 0.2) return;
+    win->m_oldHorizontalPos = win->m_hAdjust->value;
 
     wxEventType command = wxEVT_NULL;
 
@@ -2835,7 +2837,9 @@ bool wxWindow::IsOwnGtkWindow( GdkWindow *window )
 void wxWindow::SetFont( const wxFont &font )
 {
     wxCHECK_RET( m_widget != NULL, "invalid window" );
-
+    
+    if (m_font == font) return;
+    
     if (((wxFont*)&font)->Ok())
         m_font = font;
     else

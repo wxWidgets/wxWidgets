@@ -62,7 +62,7 @@ wxMenuBar::wxMenuBar()
 
     m_menubar = gtk_menu_bar_new();
 
-        m_widget = GTK_WIDGET(m_menubar);
+    m_widget = GTK_WIDGET(m_menubar);
 
     PostCreation();
 
@@ -494,9 +494,9 @@ void wxMenu::Append( int id, const wxString &text, wxMenu *subMenu, const wxStri
     wxMenuItem *mitem = new wxMenuItem();
     mitem->SetId(id);
     mitem->SetText(text);
+    mitem->SetHelp(helpStr);
 
     GtkWidget *menuItem = gtk_menu_item_new_with_label(mitem->GetText());
-    mitem->SetHelp(helpStr);
     mitem->SetMenuItem(menuItem);
     mitem->SetSubMenu(subMenu);
 
@@ -512,6 +512,43 @@ void wxMenu::Append( int id, const wxString &text, wxMenu *subMenu, const wxStri
     gtk_menu_append( GTK_MENU(m_menu), menuItem );
     gtk_widget_show( menuItem );
     m_items.Append( mitem );
+}
+
+void wxMenu::Append( wxMenuItem *item )
+{
+    m_items.Append( item );
+    
+    GtkWidget *menuItem = (GtkWidget*) NULL;
+
+    if (item->IsSeparator()) 
+        menuItem = gtk_menu_item_new();
+    else if (item->IsSubMenu()) 
+        menuItem = gtk_menu_item_new_with_label(item->GetText());
+    else 
+        menuItem = item->IsCheckable() ? gtk_check_menu_item_new_with_label(item->GetText())
+                                       : gtk_menu_item_new_with_label(item->GetText());
+
+    if (!item->IsSeparator())
+    {
+        gtk_signal_connect( GTK_OBJECT(menuItem), "select",
+                            GTK_SIGNAL_FUNC(gtk_menu_hilight_callback),
+                            (gpointer*)this );
+
+        gtk_signal_connect( GTK_OBJECT(menuItem), "deselect",
+                            GTK_SIGNAL_FUNC(gtk_menu_nolight_callback),
+                            (gpointer*)this );
+			    
+	if (!item->IsSubMenu())
+	{
+            gtk_signal_connect( GTK_OBJECT(menuItem), "activate",
+                                GTK_SIGNAL_FUNC(gtk_menu_clicked_callback),
+                                (gpointer*)this );
+	}
+    }
+    
+    gtk_menu_append( GTK_MENU(m_menu), menuItem );
+    gtk_widget_show( menuItem );
+    item->SetMenuItem(menuItem);
 }
 
 int wxMenu::FindItem( const wxString itemString ) const

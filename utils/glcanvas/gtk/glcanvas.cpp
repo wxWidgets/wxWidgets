@@ -227,6 +227,9 @@ bool wxGLCanvas::Create( wxWindow *parent, wxWindowID id,
     gtk_signal_connect( GTK_OBJECT(m_glWidget), "draw",
       GTK_SIGNAL_FUNC(gtk_window_draw_callback), (gpointer)this );
       
+    /* connect to key press and mouse handlers etc. */  
+    ConnectWidget( m_glWidget );
+    
     gtk_widget_show( m_glWidget );
     
     m_glContext = new wxGLContext( TRUE, this, palette );

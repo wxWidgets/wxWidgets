@@ -33,9 +33,10 @@ static void gtk_spinbutt_callback( GtkWidget *WXUNUSED(widget), wxSpinButton *wi
 { 
     if (!win->HasVMT()) return;
     if (g_blockEventsOnDrag) return;
-  
+
     float diff = win->m_adjust->value - win->m_oldPos;
     if (fabs(diff) < 0.2) return;
+    win->m_oldPos = win->m_adjust->value;
   
     wxEventType command = wxEVT_NULL;
   
@@ -55,7 +56,7 @@ static void gtk_spinbutt_callback( GtkWidget *WXUNUSED(widget), wxSpinButton *wi
     event.SetOrientation( wxVERTICAL );
     event.SetEventObject( win );
   
-    win->ProcessEvent( event );
+    win->GetEventHandler()->ProcessEvent( event );
 }
 
 //-----------------------------------------------------------------------------

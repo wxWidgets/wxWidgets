@@ -98,6 +98,7 @@ public:
               const wxString &helpStr = "", bool checkable = FALSE);
   void Append(int id, const wxString &item,
               wxMenu *subMenu, const wxString &helpStr = "" );
+  void Append(wxMenuItem *pItem);
   void Break() {};
 
     // find item by name/id

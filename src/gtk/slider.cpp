@@ -35,6 +35,7 @@ static void gtk_slider_callback( GtkWidget *WXUNUSED(widget), wxSlider *win )
     
     float diff = win->m_adjust->value - win->m_oldPos;
     if (fabs(diff) < 0.2) return;
+    win->m_oldPos = win->m_adjust->value;
   
     wxEventType command = wxEVT_NULL;
   
@@ -56,11 +57,11 @@ static void gtk_slider_callback( GtkWidget *WXUNUSED(widget), wxSlider *win )
   
     wxScrollEvent event( command, win->GetId(), value, orient );
     event.SetEventObject( win );
-    win->ProcessEvent( event );
+    win->GetEventHandler()->ProcessEvent( event );
   
     wxCommandEvent cevent( wxEVT_COMMAND_SLIDER_UPDATED, win->GetId() );
     cevent.SetEventObject( win );
-    win->ProcessEvent( cevent );
+    win->GetEventHandler()->ProcessEvent( cevent );
 }
 
 //-----------------------------------------------------------------------------

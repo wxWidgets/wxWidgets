@@ -300,6 +300,7 @@ void wxTextCtrl::WriteText( const wxString &text )
     {
         /* this moves the cursor pos to behind the inserted text */
 	gint len = GTK_EDITABLE(m_text)->current_pos;
+	
         gtk_editable_insert_text( GTK_EDITABLE(m_text), text, text.Length(), &len );
 	
 	/* bring editable's cursor uptodate. bug in GTK. */
