@@ -19,6 +19,10 @@ wxGTK:
 
 - fixed wxMenu::Remove (John Skiff and Benjamin Williams)
 
+wxMSW:
+
+- wxStaticBitmap doesn't stretch its bitmap any longer (like other ports)
+
 All:
 
 - Implemented GetEditControl for wxGenericTreeCtrl (Peter
