@@ -4,6 +4,12 @@ A class that can handle events from the windowing system.
 wxWindow (and therefore all window classes) are derived from
 this class.
 
+When events are received, wxEvtHandler invokes the method listed in the
+event table using itself as the object.  When using multiple inheritance
+it is imperative that the wxEvtHandler(-derived) class be the first
+class inherited such that the "this" pointer for the overall object
+will be identical to the "this" pointer for the wxEvtHandler portion.
+
 \wxheading{Derived from}
 
 \helpref{wxObject}{wxobject}
