@@ -817,7 +817,6 @@ wxBitmap wxResourceCreateBitmap(const wxString& resource, wxResourceTable *table
       }
       case wxBITMAP_TYPE_XPM_DATA:
       {
-#if (defined(__WXGTK__)) || (defined(__WXMSW__) && wxUSE_XPM_IN_MSW)
         wxItemResource *item = table->FindResource(name);
         if (!item)
         {
@@ -826,9 +825,6 @@ wxBitmap wxResourceCreateBitmap(const wxString& resource, wxResourceTable *table
           return wxNullBitmap;
         }
         return wxBitmap(item->GetValue1());
-#else
-        wxLogWarning(_("No XPM facility available!"));
-#endif
         break;
       }
       default:
@@ -974,7 +970,6 @@ wxIcon wxResourceCreateIcon(const wxString& resource, wxResourceTable *table)
       {
       // *** XPM ICON NOT YET IMPLEMENTED IN WXWINDOWS ***
 /*
-#if (defined(__WXGTK__)) || (defined(__WXMSW__) && wxUSE_XPM_IN_MSW)
         wxItemResource *item = table->FindResource(name);
         if (!item)
         {
@@ -984,9 +979,6 @@ wxIcon wxResourceCreateIcon(const wxString& resource, wxResourceTable *table)
           return NULL;
         }
         return wxIcon((char **)item->GetValue1());
-#else
-        wxLogWarning(_("No XPM facility available!"));
-#endif
 */
         wxLogWarning(_("No XPM icon facility available!"));
         break;

@@ -42,10 +42,6 @@
 #include "wx/msw/gdiimage.h"
 #include "wx/bitmap.h"
 
-#if 0 // wxUSE_XPM_IN_MSW
-#   include "wx/xpmhand.h"
-#endif // wxUSE_XPM_IN_MSW
-
 #ifdef __WIN16__
 #   include "wx/msw/curico.h"
 #endif // __WIN16__
@@ -301,14 +297,6 @@ void wxGDIImage::InitStandardHandlers()
 {
     AddHandler(new wxBMPResourceHandler);
     AddHandler(new wxBMPFileHandler);
-
-    // GRG: Add these handlers by default if XPM support is enabled
-
-#if 0 // wxUSE_XPM_IN_MSW
-    AddHandler(new wxXPMFileHandler);
-    AddHandler(new wxXPMDataHandler);
-#endif // wxUSE_XPM_IN_MSW
-
     AddHandler(new wxICOResourceHandler);
     AddHandler(new wxICOFileHandler);
 }

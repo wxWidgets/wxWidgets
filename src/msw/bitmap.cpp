@@ -45,6 +45,7 @@
 
 #include "wx/msw/dib.h"
 #include "wx/image.h"
+#include "wx/xpmdecod.h"
 
 // missing from mingw32 header
 #ifndef CLR_INVALID
@@ -283,9 +284,23 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
 // Create from XPM data
 bool wxBitmap::CreateFromXpm(const char **data)
 {
+#if wxUSE_IMAGE && wxUSE_XPM
     Init();
 
-    return Create((void *)data, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
+    wxCHECK_MSG( data != NULL, FALSE, wxT("invalid bitmap data") )
+    
+    wxXPMDecoder decoder;
+    wxImage img = decoder.ReadData(data);
+    wxCHECK_MSG( img.Ok(), FALSE, wxT("invalid bitmap data") )
+    
+    *this = wxBitmap(img);
+    
+    if ( wxTheBitmapList ) wxTheBitmapList->AddBitmap(this);
+
+    return TRUE;
+#else
+	return FALSE;
+#endif
 }
 
 wxBitmap::wxBitmap(int w, int h, int d)

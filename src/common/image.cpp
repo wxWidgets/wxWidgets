@@ -1023,7 +1023,10 @@ wxImageHandler *wxImage::FindHandlerMime( const wxString& mimetype )
 
 void wxImage::InitStandardHandlers()
 {
-  AddHandler( new wxBMPHandler );
+    AddHandler(new wxBMPHandler);
+#if !defined(__WXGTK__) && !defined(__WXMOTIF__)
+    AddHandler(new wxXPMHandler);
+#endif
 }
 
 void wxImage::CleanUpHandlers()
