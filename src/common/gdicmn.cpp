@@ -445,7 +445,6 @@ void wxInitializeStockObjects ()
 #if defined(__WXMAC__)
   static const int sizeFont = 12;
   wxNORMAL_FONT = new wxFont (sizeFont, wxMODERN, wxNORMAL, wxNORMAL);
-<<<<<<< gdicmn.cpp
 #elif defined(__WXPM__)
   static const int sizeFont = 12;
 #else
