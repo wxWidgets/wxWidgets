@@ -473,6 +473,19 @@ wxTopLevelWindowMSW::~wxTopLevelWindowMSW()
     if ( wxModelessWindows.Find(this) )
         wxModelessWindows.DeleteObject(this);
 
+    // after destroying an owned window, Windows activates the next top level
+    // window in Z order but it may be different from our owner (to reproduce
+    // this simply Alt-TAB to another application and back before closing the
+    // owned frame) whereas we always want to yield activation to our parent
+    if ( HasFlag(wxFRAME_FLOAT_ON_PARENT) )
+    {
+        wxWindow *parent = GetParent();
+        if ( parent )
+        {
+            ::BringWindowToTop(GetHwndOf(parent));
+        }
+    }
+
     // If this is the last top-level window, exit.
     if ( wxTheApp && (wxTopLevelWindows.Number() == 0) )
     {
@@ -757,10 +770,13 @@ long wxTopLevelWindowMSW::HandleNcActivate(bool activate)
 long
 wxTopLevelWindowMSW::MSWWindowProc(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
 {
-    if ( msg == WM_NCACTIVATE && HandleNcActivate(wParam != 0) )
+    if ( msg == WM_NCACTIVATE )
     {
-        // we processed WM_NCACTIVATE ourselves
-        return TRUE;
+        if ( HandleNcActivate(wParam != 0) )
+        {
+            // we processed WM_NCACTIVATE ourselves
+            return TRUE;
+        }
     }
 
     return wxTopLevelWindowBase::MSWWindowProc(msg, wParam, lParam);
