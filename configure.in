@@ -1008,12 +1008,7 @@ dnl ---------------------------------------------------------------------------
 WX_ARG_ENABLE(intl,          [  --enable-intl           use internationalization system], wxUSE_INTL)
 WX_ARG_ENABLE(config,        [  --enable-config         use wxConfig (and derived) classes], wxUSE_CONFIG)
 
-dnl can't use sockets without GUI so far
-if test "$wxUSE_GUI" = "yes"; then
 WX_ARG_ENABLE(sockets,       [  --enable-sockets        use socket/network classes], wxUSE_SOCKETS)
-else
-wxUSE_SOCKETS=no
-fi
 
 WX_ARG_ENABLE(dialupman,     [  --enable-dialupman      use dialup network classes], wxUSE_DIALUP_MANAGER)
 WX_ARG_ENABLE(ipc,           [  --enable-ipc            use interprocess communication (wxSocket etc.)], wxUSE_IPC)

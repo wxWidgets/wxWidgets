@@ -732,6 +732,59 @@ static void TestSocketServer()
     {
         puts("ERROR: failed to bind");
     }
+
+    for ( ;; )
+    {
+        puts("Server: waiting for connection...");
+
+        wxSocketBase *socket = server->Accept();
+        if ( !socket )
+        {
+            puts("ERROR: wxSocketServer::Accept() failed.");
+            break;
+        }
+
+        puts("Server: got a client.");
+
+        wxString s;
+        char ch = '\0';
+        for ( ;; )
+        {
+            if ( socket->Read(&ch, sizeof(ch)).Error() )
+            {
+                puts("ERROR: in wxSocket::Read.");
+
+                break;
+            }
+
+            if ( ch == '\r' )
+                continue;
+
+            if ( ch == '\n' )
+                break;
+
+            s += ch;
+        }
+
+        if ( ch != '\n' )
+        {
+            break;
+        }
+
+        printf("Server: got '%s'.\n", s.c_str());
+        if ( s == _T("bye") )
+        {
+            delete socket;
+
+            break;
+        }
+
+        socket->Write(s.MakeUpper().c_str(), s.length());
+        socket->Write("\r\n", 2);
+        printf("Server: wrote '%s'.\n", s.c_str());
+
+        delete socket;
+    }
 }
 
 static void TestSocketClient()
@@ -2553,12 +2606,13 @@ int main(int argc, char **argv)
 #endif // TEST_MIME
 
 #ifdef TEST_SOCKETS
+    if ( 1 )
+        TestSocketServer();
     if ( 0 )
     {
-        TestSocketServer();
         TestSocketClient();
-    }
         TestProtocolFtp();
+    }
 #endif // TEST_SOCKETS
 
 #ifdef TEST_TIMER

@@ -543,7 +543,7 @@ void MyFrame::OnTestURL(wxCommandEvent& WXUNUSED(event))
   m_text->AppendText(_("\n=== URL test begins ===\n"));
   wxString urlname = wxGetTextFromUser(_("Enter an URL to get"),
                                        _("URL:"),
-                                       _("http://localhost"));
+                                       _T("http://localhost"));
 
   // Parse the URL
   wxURL url(urlname);

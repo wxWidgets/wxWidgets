@@ -137,13 +137,13 @@ framecmn.cpp	C
 fs_inet.cpp	C	B
 fs_zip.cpp	C	B
 fs_mem.cpp	C	B
-ftp.cpp	C	S
+ftp.cpp	C	S,B
 gdicmn.cpp	C
 geometry.cpp	C
 gifdecod.cpp	C
 hash.cpp	C	B
 helpbase.cpp	C
-http.cpp	C	S
+http.cpp	C	S,B
 imagbmp.cpp	C
 image.cpp	C
 imagall.cpp	C
@@ -155,7 +155,7 @@ imagpng.cpp	C	32
 imagpnm.cpp	C	32
 init.cpp	B
 intl.cpp	C	B
-ipcbase.cpp	C
+ipcbase.cpp	C	B
 layout.cpp	C
 lboxcmn.cpp	C
 list.cpp	C	B
@@ -172,15 +172,15 @@ odbc.cpp	C	R,X,P
 paper.cpp	C
 prntbase.cpp	C
 process.cpp	C	32,B
-protocol.cpp	C	S
+protocol.cpp	C	S,B
 resource.cpp	C
-sckaddr.cpp	C	S
-sckfile.cpp	C	S
-sckipc.cpp	C	S
-sckstrm.cpp	C	S
+sckaddr.cpp	C	S,B
+sckfile.cpp	C	S,B
+sckipc.cpp	C	S,B
+sckstrm.cpp	C	S,B
 serbase.cpp	C	B
 sizer.cpp	C
-socket.cpp	C	S
+socket.cpp	C	S,B
 stream.cpp	C	B
 strconv.cpp	C	B
 string.cpp	C	B
@@ -191,7 +191,7 @@ timercmn.cpp	C	B
 tokenzr.cpp	C	B
 txtstrm.cpp	C	B
 unzip.c	C	B
-url.cpp	C	S
+url.cpp	C	S,B
 utilscmn.cpp	C	B
 valgen.cpp	C
 validate.cpp	C
@@ -204,7 +204,7 @@ wxexpr.cpp	C
 zipstrm.cpp	C	B
 zstream.cpp	C	B
 
-gsocket.c	M	S
+gsocket.c	M	S,B
 gsockmsw.c	M	S
 accel.cpp	M
 app.cpp	M
@@ -316,7 +316,7 @@ fontutil.cpp	U
 mimetype.cpp	U	B
 threadpsx.cpp	U	B
 utilsunx.cpp	U	B
-gsocket.c	U
+gsocket.c	U	B
 mimetype.cpp	U	B
 
 gsockgtk.c	R
