@@ -87,6 +87,8 @@ utils/HelpGen/Makefile.in
 utils/HelpGen/src/Makefile.in
 utils/Makefile.in
 utils/hhp2cached/Makefile.in
+utils/emulator/Makefile.in
+utils/emulator/src/Makefile.in
 
 contrib/Makefile.in
 contrib/src/Makefile.in

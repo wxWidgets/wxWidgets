@@ -21,15 +21,6 @@ utils/rcparser/src/*.def
 utils/rcparser/src/*.rc
 utils/rcparser/src/*.rh
 
-utils/colours/*.h
-utils/colours/*.cpp
-utils/colours/*.def
-utils/colours/*.rc
-utils/colours/makefile*
-utils/colours/*.xbm
-utils/colours/*.xpm
-utils/colours/*.txt
-
 utils/serialize/*.h
 utils/serialize/*.cpp
 utils/serialize/*.def
@@ -57,4 +48,29 @@ utils/HelpGen/src/makefile*
 utils/HelpGen/src/*.xbm
 utils/HelpGen/src/*.xpm
 utils/HelpGen/src/*.txt
+
+utils/emulator/Makefile.in
+utils/emulator/src/*.cpp
+utils/emulator/src/*.h
+utils/emulator/src/makefile.vc
+utils/emulator/src/makefile.bcc
+utils/emulator/src/makefile.dos
+utils/emulator/src/makefile.b32
+utils/emulator/src/makefile.wat
+utils/emulator/src/makefile.unx
+utils/emulator/src/makefile.vms
+utils/emulator/src/makefile.g95
+utils/emulator/src/*.xbm
+utils/emulator/src/*.xpm
+utils/emulator/src/*.sty
+utils/emulator/src/*.ini
+utils/emulator/src/*.bmp
+utils/emulator/src/*.ico
+utils/emulator/src/*.def
+utils/emulator/src/*.rc
+utils/emulator/src/*.wxe
+utils/emulator/src/*.jpg
+
+utils/emulator/docs/*.txt
+utils/emulator/docs/*.jpg
 

@@ -84,15 +84,16 @@ ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/contr
 tar cvf $2/wxMotif-${WXVER}.tar -T /tmp/wxmotif.txt
 gzip $2/wxMotif-${WXVER}.tar
 
-### wxX: combined wxMotif and wxX11 distributions
-ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/x11.rsp $1/distrib/msw/univ.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp` | uniq > /tmp/wxx.txt
+### wxX11: combined wxMotif and wxX11 distributions
+ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/x11.rsp $1/distrib/msw/univ.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/utils.rsp $1/distrib/msw/xml.rsp` | uniq > /tmp/wxx.txt
+ls `cat $1/distrib/msw/dialoged.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp` | uniq >> /tmp/wxx.txt
 tar cvf $2/wxX11-${WXVER}.tar -T /tmp/wxx.txt
 gzip $2/wxX11-${WXVER}.tar
 
 ### wxMSW
-ls `cat $1/distrib/msw/msw.rsp $1/distrib/msw/vc.rsp $1/distrib/msw/bc.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp` > /tmp/wxmsw.txt
-tar cvf $2/wxMSW-${WXVER}.tar -T /tmp/wxmsw.txt
-gzip $2/wxMSW-${WXVER}.tar
+# ls `cat $1/distrib/msw/msw.rsp $1/distrib/msw/vc.rsp $1/distrib/msw/bc.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp` > /tmp/wxmsw.txt
+# tar cvf $2/wxMSW-${WXVER}.tar -T /tmp/wxmsw.txt
+# gzip $2/wxMSW-${WXVER}.tar
 
 ### Doc sources
 ls `cat $1/distrib/msw/docsrc.rsp` > /tmp/docsrc.txt
@@ -135,20 +136,20 @@ tar cvf $2/tiff-${WXVER}.tar -T /tmp/tiff.txt
 gzip $2/tiff-${WXVER}.tar
 
 # Copy readme and other files
-copy $1/docs/readme.txt $2/readme-${WXVER}.txt
-copy $1/docs/changes.txt $2/changes-${WXVER}.txt
-copy $1/docs/mgl/readme.txt $2/readme_mgl-${WXVER}.txt
-copy $1/docs/mgl/install.txt $2/install_mgl-${WXVER}.txt
-copy $1/docs/x11/readme.txt $2/readme_x11-${WXVER}.txt
-copy $1/docs/x11/readme-nanox.txt $2/readme_nanox-${WXVER}.txt
-copy $1/docs/x11/install.txt $2/install_x11-${WXVER}.txt
-copy $1/docs/motif/readme.txt $2/readme_motif-${WXVER}.txt
-copy $1/docs/motif/install.txt $2/install_motif-${WXVER}.txt
-copy $1/docs/msw/readme.txt $2/readme_msw-${WXVER}.txt
-copy $1/docs/msw/install.txt $2/install_msw-${WXVER}.txt
-copy $1/docs/gtk/readme.txt $2/readme_gtk-${WXVER}.txt
-copy $1/docs/gtk/install.txt $2/install_gtk-${WXVER}.txt
-copy $1/docs/mac/readme.txt $2/readme_mac-${WXVER}.txt
-copy $1/docs/mac/install.txt $2/install_mac-${WXVER}.txt
+cp $1/docs/readme.txt $2/readme-${WXVER}.txt
+cp $1/docs/changes.txt $2/changes-${WXVER}.txt
+cp $1/docs/mgl/readme.txt $2/readme_mgl-${WXVER}.txt
+cp $1/docs/mgl/install.txt $2/install_mgl-${WXVER}.txt
+cp $1/docs/x11/readme.txt $2/readme_x11-${WXVER}.txt
+cp $1/docs/x11/readme-nanox.txt $2/readme_nanox-${WXVER}.txt
+cp $1/docs/x11/install.txt $2/install_x11-${WXVER}.txt
+cp $1/docs/motif/readme.txt $2/readme_motif-${WXVER}.txt
+cp $1/docs/motif/install.txt $2/install_motif-${WXVER}.txt
+cp $1/docs/msw/readme.txt $2/readme_msw-${WXVER}.txt
+cp $1/docs/msw/install.txt $2/install_msw-${WXVER}.txt
+cp $1/docs/gtk/readme.txt $2/readme_gtk-${WXVER}.txt
+cp $1/docs/gtk/install.txt $2/install_gtk-${WXVER}.txt
+cp $1/docs/mac/readme.txt $2/readme_mac-${WXVER}.txt
+cp $1/docs/mac/install.txt $2/install_mac-${WXVER}.txt
 
 echo Done!
