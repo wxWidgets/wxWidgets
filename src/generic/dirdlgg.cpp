@@ -211,8 +211,8 @@ void wxDirCtrl::SetupSections()
   wxGetHomeDir(&home);
   ADD_SECTION(home, _("My Home") )
   ADD_SECTION(wxT("/mnt"), _("Mounted Devices") )
-  ADD_SECTION(wxT("/usr"), _("User") )
   ADD_SECTION(wxT("/usr/local"), _("User Local") )
+  ADD_SECTION(wxT("/usr"), _("User") )
   ADD_SECTION(wxT("/var"), _("Variables") )
   ADD_SECTION(wxT("/etc"), _("Etcetera") )
   ADD_SECTION(wxT("/tmp"), _("Temporary") )
@@ -263,7 +263,7 @@ void wxDirCtrl::OnEndEditItem(wxTreeEvent &event)
     if ((event.GetLabel().IsEmpty()) ||
         (event.GetLabel() == _(".")) ||
         (event.GetLabel() == _("..")) ||
-  (event.GetLabel().First( wxT("/") ) != wxNOT_FOUND))
+        (event.GetLabel().First( wxT("/") ) != wxNOT_FOUND))
     {
         wxMessageDialog dialog(this, _("Illegal directory name."), _("Error"), wxOK | wxICON_ERROR );
         dialog.ShowModal();
@@ -439,18 +439,40 @@ wxDirDialog::wxDirDialog(wxWindow *parent,
 
     Centre( wxBOTH );
 
+    if (m_path == wxT("~"))
+        wxGetHomeDir( &m_path );
+
     // choose the directory corresponding to defaultPath in the tree
     // VZ: using wxStringTokenizer is probably unsafe here (escaped slashes
     //     will not be processed correctly...)
-    wxStringTokenizer tk(defaultPath, wxFILE_SEP_PATH, wxTOKEN_STRTOK);
-
-    // we start from "My Computer" section because we're not sure to find the
-    // path among the predefined ones - ideally, we'd first look there and
-    // then do what we do now, but I don't have time to do it right now (VZ)
-    long cookie;
-    wxTreeItemId item = m_dir->GetFirstChild(m_dir->GetRootItem(), cookie);
+    wxStringTokenizer tk(m_path, wxFILE_SEP_PATH, wxTOKEN_STRTOK);
 
     wxString path;
+
+    long cookie = 0;
+    // default to root dir
+    wxTreeItemId item = m_dir->GetFirstChild(m_dir->GetRootItem(), cookie);
+    
+    if (!m_path.IsEmpty() && (m_path != wxT("/")) && (m_dir->m_paths.Count() > 1))
+    {
+        size_t count = m_dir->m_paths.GetCount();
+        for ( size_t i=1; i<count; i++)
+        {
+            if (m_path.Find( m_dir->m_paths[i] ) == 0)
+            {
+                path = m_dir->m_paths[i];
+                
+                for (size_t j = 0; j < i; j++)
+                   item = m_dir->GetNextChild(m_dir->GetRootItem(), cookie);
+                
+                wxStringTokenizer tk2(path, wxFILE_SEP_PATH, wxTOKEN_STRTOK);
+                for (size_t h = 0; h < tk2.CountTokens(); h++)
+                   tk.GetNextToken();
+                
+                break;
+            }
+        }
+    }
     while ( tk.HasMoreTokens() && item.IsOk() )
     {
         path << wxFILE_SEP_PATH << tk.GetNextToken();

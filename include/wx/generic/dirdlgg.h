@@ -118,6 +118,8 @@ public:
     void OnEndEditItem(wxTreeEvent &event );
 
 protected:
+    friend class wxDirDialog;
+
     void CreateItems(const wxTreeItemId &parent);
     void SetupSections();
     wxArrayString m_paths, m_names;
