@@ -20,12 +20,14 @@
 #include <windows.h>
 #endif
 
+#include "wx/defs.h"
+
 #include "lw.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 
-#if !defined(__WXMAC__) || defined(__DARWIN__)
+#if !defined(__WXMAC__)
 // these must be defined in the precompiled headers under CodeWarrior
 #define wxInt32 int
 #define wxUint32 unsigned int
