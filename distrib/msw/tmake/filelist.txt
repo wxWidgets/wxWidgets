@@ -120,6 +120,7 @@ imagbmp.cpp	C
 image.cpp	C
 imaggif.cpp	C
 imagjpeg.cpp	C
+imagpcx.cpp	C
 imagpng.cpp	C
 imagpnm.cpp	C
 intl.cpp	C
