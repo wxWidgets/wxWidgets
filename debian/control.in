@@ -208,7 +208,7 @@ Package: libwxbase-msw=V-dev
 Architecture: i386
 Section: otherosfs
 Depends: wxwin=V-headers-msw (= ${Source-Version})
-Conflicts: libwxmsw-dev
+Conflicts: libwxbase-msw-dev
 Replaces: libwxbase-msw-dev
 Provides: libwxbase-msw-dev
 Description: wxBase mingw32msvc-cross
