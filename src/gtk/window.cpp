@@ -2483,6 +2483,9 @@ void wxWindowGTK::Init()
 
     m_delayedForegroundColour = FALSE;
     m_delayedBackgroundColour = FALSE;
+    
+    m_oldClientWidth = 0;
+    m_oldClientHeight = 0;
 
 #ifdef __WXGTK20__
     m_imContext = NULL;
