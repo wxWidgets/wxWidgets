@@ -735,6 +735,9 @@ bool wxTextCtrl::Create(wxWindow *parent,
 
     CreateInputHandler(wxINP_HANDLER_TEXTCTRL);
 
+    wxSizeEvent sizeEvent(GetSize(), GetId());
+    GetEventHandler()->ProcessEvent(sizeEvent);
+
     return TRUE;
 }
 
@@ -1864,7 +1867,9 @@ wxPoint wxTextCtrl::GetCaretPosition() const
 // pos may be -1 to show the current position
 void wxTextCtrl::ShowPosition(wxTextPos pos)
 {
-    HideCaret();
+    bool showCaret = GetCaret() && GetCaret()->IsVisible();
+    if (showCaret)
+        HideCaret();
 
     if ( IsSingleLine() )
     {
@@ -1984,7 +1989,8 @@ void wxTextCtrl::ShowPosition(wxTextPos pos)
     }
     //else: multiline but no scrollbars, hence nothing to do
 
-    ShowCaret();
+    if (showCaret)
+        ShowCaret();
 }
 
 // ----------------------------------------------------------------------------
@@ -4179,7 +4185,7 @@ void wxTextCtrl::DoDraw(wxControlRenderer *renderer)
 
     // show caret first time only: we must show it after drawing the text or
     // the display can be corrupted when it's hidden
-    if ( !m_hasCaret && GetCaret() )
+    if ( !m_hasCaret && GetCaret() && (FindFocus() == this) )
     {
         ShowCaret();
 
@@ -4222,7 +4228,10 @@ bool wxTextCtrl::Enable(bool enable)
     if ( !wxTextCtrlBase::Enable(enable) )
         return FALSE;
 
-    ShowCaret(enable);
+    if (FindFocus() == this && GetCaret() &&
+        ((enable && !GetCaret()->IsVisible()) ||
+         (!enable && GetCaret()->IsVisible())))
+        ShowCaret(enable);
 
     return TRUE;
 }
@@ -4258,7 +4267,9 @@ void wxTextCtrl::ShowCaret(bool show)
         caret->Move(GetCaretPosition());
 
         // and show it there
-        caret->Show(show);
+        if ((show && !caret->IsVisible()) ||
+            (!show && caret->IsVisible()))
+            caret->Show(show);
     }
 }
 
@@ -4902,12 +4913,23 @@ bool wxStdTextCtrlInputHandler::HandleMouseMove(wxInputConsumer *consumer,
 
 bool
 wxStdTextCtrlInputHandler::HandleFocus(wxInputConsumer *consumer,
-                                       const wxFocusEvent& WXUNUSED(event))
+                                       const wxFocusEvent& event)
 {
     wxTextCtrl *text = wxStaticCast(consumer->GetInputWindow(), wxTextCtrl);
 
     // the selection appearance changes depending on whether we have the focus
     text->RefreshSelection();
+
+    if (event.GetEventType() == wxEVT_SET_FOCUS)
+    {
+        if (text->GetCaret() && !text->GetCaret()->IsVisible())
+            text->ShowCaret();
+    }
+    else
+    {
+        if (text->GetCaret() && text->GetCaret()->IsVisible())
+            text->HideCaret();
+    }
 
     // never refresh entirely
     return FALSE;

@@ -212,18 +212,23 @@ public:
     wxCaretSuspend(wxWindow *win)
     {
         m_caret = win->GetCaret();
-        if ( m_caret )
+        m_show = FALSE;        
+        if ( m_caret && m_caret->IsVisible() )
+        {
             m_caret->Hide();
+            m_show = TRUE;
+        }
     }
 
     ~wxCaretSuspend()
     {
-        if ( m_caret )
+        if ( m_caret && m_show )
             m_caret->Show();
     }
 
 private:
     wxCaret *m_caret;
+    bool     m_show;
 
     DECLARE_NO_COPY_CLASS(wxCaretSuspend)
 };

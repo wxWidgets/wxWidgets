@@ -324,6 +324,7 @@ wxScrollArrows::Arrow wxScrollBar::HitTest(const wxPoint& pt) const
 void wxScrollBar::OnInternalIdle()
 {
     UpdateThumb();
+    wxControl::OnInternalIdle();
 }
 
 void wxScrollBar::UpdateThumb()

@@ -622,6 +622,7 @@ void wxListBox::OnInternalIdle()
 
         m_updateCount = 0;
     }
+    OnInternalIdle();
 }
 
 // ----------------------------------------------------------------------------
