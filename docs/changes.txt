@@ -200,6 +200,7 @@ Generic:
 Unix:
 
 - Unicode compilation fix in wxDateTime
+- typo in configure which broke AIX build fixed (Swengtoo)
 
 wxMSW:
 

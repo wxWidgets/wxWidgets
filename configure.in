@@ -2990,7 +2990,7 @@ if test "$wxUSE_SHARED" = "yes"; then
             AC_CHECK_PROG(AIX_CXX_LD, makeC++SharedLib,
                           makeC++SharedLib, /usr/lpp/xlC/bin/makeC++SharedLib)
 
-            SHARED_LD="$(AIX_CXX_LD) -p 0 -o"
+            SHARED_LD="$AIX_CXX_LD -p 0 -o"
         fi
       ;;
 
