@@ -99,6 +99,7 @@
         <set var="TOOLKIT_VERSION"/>
         <set var="SAMPLES_RPATH_FLAG"/>
         <set var="EXTRALIBS"/>
+        <set var="EXTRACFLAGS"/>
 
         <set var="SRCDIR">
             <if cond="BUILDING_LIB=='1'">..</if>
@@ -106,5 +107,21 @@
         </set>
         <set var="TOP_SRCDIR">$(SRCDIR)/$(WXTOPDIR)</set>
     </if>
-
+    
+    <if cond="FORMAT=='mingw'">
+        <option name="GCC_VERSION">
+            <values>3 2.95</values>
+            <default-value>3</default-value>
+            <description>
+                Set the version of your Mingw installation here.
+                "3" ...... this is for Mingw 2.0 or newer that cames with gcc3
+                "2.95" ... for Mingw 1.1 or any of the older versions
+            </description>
+        </option>
+        <set var="GCCFLAGS">
+            <if cond="GCC_VERSION=='2.95'">-fvtable-thunks</if>
+        </set>
+        <set var="EXTRACFLAGS">$(GCCFLAGS) -DHAVE_W32API_H</set>
+    </if>
+    
 </makefile>
