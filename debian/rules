@@ -569,9 +569,6 @@ install-common: install-gtk-shared-stamp
 	dh_clean -k
 	dh_installdirs
 
-#	We don't need the afm metrics for gtk2, but we might need them to support
-#	the 2.4 release for a while still and any other ports we might build.
-	dh_install $(objdir_gtk_install)/share/wx	usr/share
 	dh_install $(objdir_gtk_install)/share/aclocal 	usr/share
 	dh_installman debian/wx-config.1
 

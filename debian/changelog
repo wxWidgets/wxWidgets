@@ -1,3 +1,20 @@
+wxwidgets2.5 (2.5.4.0) unstable; urgency=low
+
+  * Experimental snapshot.
+  * More bakefile bogosity manually patched.  Closes: #294998
+  * Fix stray conflicts with 2.4.  Closes: #287623
+  * Fixes lack of version checking in wxPython examples.
+    Closes: #287772
+  * Fixes FTBFS on ppc.  Closes: #285186
+
+ -- Ron Lee <ron@debian.org>  Sun, 13 Feb 2005 16:52:38 +1030
+
+wxwidgets2.5 (2.5.3.3) unstable; urgency=low
+
+  * Experimental snapshot.
+
+ -- Ron Lee <ron@debian.org>  Tue,  8 Feb 2005 12:30:45 +1030
+
 wxwidgets2.5 (2.5.3.2) unstable; urgency=low
 
   * This time, really now.
