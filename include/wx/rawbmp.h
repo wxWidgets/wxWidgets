@@ -388,9 +388,9 @@ struct WXDLLEXPORT wxPixelDataOut<wxImage>
             // -----------
 
             // access to invidividual colour components
-            ChannelType& Red() { return m_ptr[PixelFormat::RED]; }
-            ChannelType& Green() { return m_ptr[PixelFormat::GREEN]; }
-            ChannelType& Blue() { return m_ptr[PixelFormat::BLUE]; }
+            ChannelType& Red() { return m_pRGB[PixelFormat::RED]; }
+            ChannelType& Green() { return m_pRGB[PixelFormat::GREEN]; }
+            ChannelType& Blue() { return m_pRGB[PixelFormat::BLUE]; }
             ChannelType& Alpha() { return *m_pAlpha; }
 
         // private: -- see comment in the beginning of the file
@@ -426,7 +426,7 @@ struct WXDLLEXPORT wxPixelDataOut<wxImage>
         {
             m_stride = Iterator::SizePixel * m_width;
 
-            InitRect(rect.GetPositions(), rect.GetSize());
+            InitRect(rect.GetPosition(), rect.GetSize());
         }
 
         // we evaluate to true only if we could get access to bitmap data
