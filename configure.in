@@ -855,7 +855,7 @@ DEFAULT_wxUSE_TIMEDATE=1
 DEFAULT_wxUSE_INTL=1
 DEFAULT_wxUSE_CONFIG=1
 DEFAULT_wxUSE_STREAMS=1
-DEFAULT_wxUSE_SOCKETS=0
+DEFAULT_wxUSE_SOCKETS=1
 DEFAULT_wxUSE_SERIAL=1
 DEFAULT_wxUSE_DYNLIB_CLASS=1
 
@@ -1338,6 +1338,103 @@ fi
 AC_SUBST(IODBC_C_SRC)
 
 dnl ----------------------------------------------------------------
+dnl thread support
+dnl ----------------------------------------------------------------
+
+dnl   defines UNIX_THREAD it contains the source file to use for threads. (GL)
+dnl   defines THREADS_LINK it contains the thread library to link with. (GL)
+dnl   defines wxUSE_THREADS if thread support is activated. (GL)
+
+THREADS_LINK=""
+UNIX_THREAD=""
+
+if test "$wxUSE_THREADS" = "1"; then
+    dnl find if POSIX threads are available
+
+    dnl standard lib name is pthread
+    dnl We no longer test for pthread-0.7 as it breaks compilation on some
+    dnl glibc2 systems, especially for static linkage.
+    AC_CHECK_LIB(pthread, pthread_create, [
+            UNIX_THREAD="unix/threadpsx.cpp"
+            THREADS_LINK="pthread"
+        ], [
+            dnl thread functions are in libc_r under FreeBSD
+            AC_CHECK_LIB(c_r, pthread_create, [
+                UNIX_THREAD="unix/threadpsx.cpp"
+                THREADS_LINK="c_r"
+            ], [
+                dnl VZ: SGI threads are not supported currently
+                AC_CHECK_HEADER(sys/prctl.h, [
+                    UNIX_THREAD="gtk/threadsgi.cpp"
+                ])
+            ])
+        ])
+    if test "$THREADS_LINK" != ""; then
+        AC_DEFINE(wxUSE_THREADS)
+    else
+        AC_MSG_WARN(No thread support on this system)
+    fi
+fi
+
+if test -z "$UNIX_THREAD"; then
+  wxUSE_THREADS=0
+fi
+
+dnl do other tests only if we are using threads
+if test "$wxUSE_THREADS" = "1"; then
+
+    dnl define autoconf macro to check for given function in both pthread and
+    dnl posix4 libraries
+    dnl usage: AC_FUNC_THREAD(FUNCTION_NAME)
+    dnl VZ: TODO
+    dnl AC_DEFUN(AC_FUNC_THREAD,
+    dnl [
+    dnl     AC_CHECK_LIB($THREADS_LINK, $1,
+    dnl            AC_DEFINE(HAVE_`'translit($1, `A-Z', 'a-z'),
+    dnl            [AC_CHECK_LIB("posix4", $1,
+    dnl                [AC_DEFINE(HAVE_`'translit($1, `A-Z', 'a-z'))
+    dnl                 POSIX4_LINK="-lposix4"
+    dnl             ])
+    dnl            ])
+    dnl ])
+
+  AC_CHECK_HEADERS(sched.h)
+
+  AC_CHECK_LIB($THREADS_LINK, sched_yield,
+               AC_DEFINE(HAVE_SCHED_YIELD),
+               [AC_CHECK_LIB("posix4", sched_yield,
+                   [AC_DEFINE(HAVE_SCHED_YIELD) POSIX4_LINK="-lposix4"],
+                   AC_MSG_WARN(wxThread::Yield() will not work properly)
+                )]
+               )
+
+  dnl VZ: we should be checking for all of the following functions instead:
+  dnl   1. pthread_attr_getschedpolicy
+  dnl   2. sched_get_priority_min and sched_get_priority_max
+  dnl   3. pthread_attr_getschedparam and pthread_attr_setschedparam
+  dnl but it seems that if the first one is there, the other ones are too (of
+  dnl course the proper solution would be to implement AC_FUNC_THREAD above
+  dnl and do test for them all - anyone?)
+  AC_CHECK_LIB($THREADS_LINK, pthread_attr_getschedpolicy,
+               AC_DEFINE(HAVE_THREAD_PRIORITY_FUNCTIONS),
+               [AC_CHECK_LIB("posix4", pthread_attr_getschedpolicy,
+                   [AC_DEFINE(HAVE_THREAD_PRIORITY_FUNCTIONS) POSIX4_LINK="-lposix4"],
+                   AC_MSG_WARN(Setting thread priority will not work)
+                )]
+               )
+
+  AC_CHECK_LIB($THREADS_LINK, pthread_cancel,
+               AC_DEFINE(HAVE_PTHREAD_CANCEL),
+               AC_MSG_WARN(wxThread::Kill() will not work properly))
+
+  THREADS_LINK="-l$THREADS_LINK"
+fi
+
+AC_SUBST(UNIX_THREAD)
+AC_SUBST(THREADS_LINK)
+AC_SUBST(POSIX4_LINK)
+
+dnl ----------------------------------------------------------------
 dnl Register non-GUI class options for makefiles and setup.h
 dnl ----------------------------------------------------------------
 
@@ -1358,7 +1455,12 @@ if test "$wxUSE_STREAMS" = 1 ; then
 fi
 
 if test "$wxUSE_SOCKETS" = 1 ; then
-  AC_DEFINE_UNQUOTED(wxUSE_SOCKETS,$wxUSE_SOCKETS)
+    if test "$wxUSE_THREADS" = 1 ; then
+        AC_DEFINE_UNQUOTED(wxUSE_SOCKETS,$wxUSE_SOCKETS)
+    else
+        AC_MSG_WARN(sockets or only supported with threads)
+	wxUSE_SOCKETS=0
+    fi
 fi
 
 if test "$wxUSE_SERIAL" = 1 ; then
@@ -1492,10 +1594,9 @@ fi
 
 if test "$wxUSE_TOOLTIPS" = 1 ; then
     if test "$wxUSE_MOTIF" = 1; then
-        AC_MSG_WARN(tooltips are not supported yet under Motif, sorry)
+        AC_MSG_WARN(tooltips are not supported yet under Motif)
         wxUSE_TOOLTIPS=0
     fi
-
     AC_DEFINE_UNQUOTED(wxUSE_TOOLTIPS,$wxUSE_TOOLTIPS)
 fi
 
@@ -1503,7 +1604,7 @@ if test "$wxUSE_DRAG_AND_DROP" = 1 ; then
     if test "$WXGTK12" = 1 ; then
         AC_DEFINE_UNQUOTED(wxUSE_DRAG_AND_DROP,$wxUSE_DRAG_AND_DROP)
     else
-        AC_MSG_WARN(drag and drop is only supported under GTK 1.2, sorry)
+        AC_MSG_WARN(drag and drop is only supported under GTK 1.2)
 	wxUSE_DRAG_AND_DROP=0
     fi
 fi
@@ -1518,103 +1619,6 @@ if test "$wxUSE_HELP" = 1 ; then
   AC_DEFINE_UNQUOTED(wxUSE_HELP,$wxUSE_HELP)
 fi
 AC_SUBST(HELP)
-
-dnl ----------------------------------------------------------------
-dnl thread support
-dnl ----------------------------------------------------------------
-
-dnl   defines UNIX_THREAD it contains the source file to use for threads. (GL)
-dnl   defines THREADS_LINK it contains the thread library to link with. (GL)
-dnl   defines wxUSE_THREADS if thread support is activated. (GL)
-
-THREADS_LINK=""
-UNIX_THREAD=""
-
-if test "$wxUSE_THREADS" = "1"; then
-    dnl find if POSIX threads are available
-
-    dnl standard lib name is pthread
-    dnl We no longer test for pthread-0.7 as it breaks compilation on some
-    dnl glibc2 systems, especially for static linkage.
-    AC_CHECK_LIB(pthread, pthread_create, [
-            UNIX_THREAD="unix/threadpsx.cpp"
-            THREADS_LINK="pthread"
-        ], [
-            dnl thread functions are in libc_r under FreeBSD
-            AC_CHECK_LIB(c_r, pthread_create, [
-                UNIX_THREAD="unix/threadpsx.cpp"
-                THREADS_LINK="c_r"
-            ], [
-                dnl VZ: SGI threads are not supported currently
-                AC_CHECK_HEADER(sys/prctl.h, [
-                    UNIX_THREAD="gtk/threadsgi.cpp"
-                ])
-            ])
-        ])
-    if test "$THREADS_LINK" != ""; then
-        AC_DEFINE(wxUSE_THREADS)
-    else
-        AC_MSG_WARN(No thread support on this system)
-    fi
-fi
-
-if test -z "$UNIX_THREAD"; then
-  wxUSE_THREADS=0
-fi
-
-dnl do other tests only if we are using threads
-if test "$wxUSE_THREADS" = "1"; then
-
-    dnl define autoconf macro to check for given function in both pthread and
-    dnl posix4 libraries
-    dnl usage: AC_FUNC_THREAD(FUNCTION_NAME)
-    dnl VZ: TODO
-    dnl AC_DEFUN(AC_FUNC_THREAD,
-    dnl [
-    dnl     AC_CHECK_LIB($THREADS_LINK, $1,
-    dnl            AC_DEFINE(HAVE_`'translit($1, `A-Z', 'a-z'),
-    dnl            [AC_CHECK_LIB("posix4", $1,
-    dnl                [AC_DEFINE(HAVE_`'translit($1, `A-Z', 'a-z'))
-    dnl                 POSIX4_LINK="-lposix4"
-    dnl             ])
-    dnl            ])
-    dnl ])
-
-  AC_CHECK_HEADERS(sched.h)
-
-  AC_CHECK_LIB($THREADS_LINK, sched_yield,
-               AC_DEFINE(HAVE_SCHED_YIELD),
-               [AC_CHECK_LIB("posix4", sched_yield,
-                   [AC_DEFINE(HAVE_SCHED_YIELD) POSIX4_LINK="-lposix4"],
-                   AC_MSG_WARN(wxThread::Yield() will not work properly)
-                )]
-               )
-
-  dnl VZ: we should be checking for all of the following functions instead:
-  dnl   1. pthread_attr_getschedpolicy
-  dnl   2. sched_get_priority_min and sched_get_priority_max
-  dnl   3. pthread_attr_getschedparam and pthread_attr_setschedparam
-  dnl but it seems that if the first one is there, the other ones are too (of
-  dnl course the proper solution would be to implement AC_FUNC_THREAD above
-  dnl and do test for them all - anyone?)
-  AC_CHECK_LIB($THREADS_LINK, pthread_attr_getschedpolicy,
-               AC_DEFINE(HAVE_THREAD_PRIORITY_FUNCTIONS),
-               [AC_CHECK_LIB("posix4", pthread_attr_getschedpolicy,
-                   [AC_DEFINE(HAVE_THREAD_PRIORITY_FUNCTIONS) POSIX4_LINK="-lposix4"],
-                   AC_MSG_WARN(Setting thread priority will not work)
-                )]
-               )
-
-  AC_CHECK_LIB($THREADS_LINK, pthread_cancel,
-               AC_DEFINE(HAVE_PTHREAD_CANCEL),
-               AC_MSG_WARN(wxThread::Kill() will not work properly))
-
-  THREADS_LINK="-l$THREADS_LINK"
-fi
-
-AC_SUBST(UNIX_THREAD)
-AC_SUBST(THREADS_LINK)
-AC_SUBST(POSIX4_LINK)
 
 dnl ------------------------------------------------------------------------
 dnl compiler options for shared libs
