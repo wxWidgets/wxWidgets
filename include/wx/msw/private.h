@@ -173,7 +173,7 @@ WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
 // ---------------------------------------------------------------------------
 
 #define MEANING_CHARACTER '0'
-#define DEFAULT_ITEM_WIDTH  200
+#define DEFAULT_ITEM_WIDTH  100
 #define DEFAULT_ITEM_HEIGHT 80
 
 // Scale font to get edit control height
