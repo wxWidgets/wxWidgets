@@ -2311,7 +2311,7 @@ static PyObject *_wrap_wxSystemSettings_GetSystemColour(PyObject *self, PyObject
         return NULL;
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = new wxColour (wxSystemSettings::GetSystemColour(_arg0));
+        _result = new wxColour (wxSystemSettings::GetColour(_arg0));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2332,7 +2332,7 @@ static PyObject *_wrap_wxSystemSettings_GetSystemFont(PyObject *self, PyObject *
         return NULL;
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = new wxFont (wxSystemSettings::GetSystemFont(_arg0));
+        _result = new wxFont (wxSystemSettings::GetFont(_arg0));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2352,7 +2352,7 @@ static PyObject *_wrap_wxSystemSettings_GetSystemMetric(PyObject *self, PyObject
         return NULL;
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (int )wxSystemSettings::GetSystemMetric(_arg0);
+        _result = (int )wxSystemSettings::GetMetric(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
