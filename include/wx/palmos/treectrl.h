@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -69,7 +69,7 @@ public:
     // --------
     wxTreeCtrl() { Init(); }
 
-    wxTreeCtrl(wxWindow *parent, wxWindowID id = -1,
+    wxTreeCtrl(wxWindow *parent, wxWindowID id = wxID_ANY,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
@@ -81,7 +81,7 @@ public:
 
     virtual ~wxTreeCtrl();
 
-    bool Create(wxWindow *parent, wxWindowID id = -1,
+    bool Create(wxWindow *parent, wxWindowID id = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
@@ -101,7 +101,6 @@ public:
     void SetIndent(unsigned int indent);
 
     // spacing is the number of pixels between the start and the Text
-        // not implemented under wxMSW
     unsigned int GetSpacing() const { return 18; } // return wxGTK default
     void SetSpacing(unsigned int WXUNUSED(spacing)) { }
 
@@ -163,13 +162,13 @@ public:
         // allow the user to expand the items which don't have any children now
         // - but instead add them only when needed, thus minimizing memory
         // usage and loading time.
-    void SetItemHasChildren(const wxTreeItemId& item, bool has = TRUE);
+    void SetItemHasChildren(const wxTreeItemId& item, bool has = true);
 
         // the item will be shown in bold
-    void SetItemBold(const wxTreeItemId& item, bool bold = TRUE);
+    void SetItemBold(const wxTreeItemId& item, bool bold = true);
 
         // the item will be shown with a drop highlight
-    void SetItemDropHighlight(const wxTreeItemId& item, bool highlight = TRUE);
+    void SetItemDropHighlight(const wxTreeItemId& item, bool highlight = true);
 
         // set the items text colour
     void SetItemTextColour(const wxTreeItemId& item, const wxColour& col);
@@ -197,15 +196,15 @@ public:
     // number of children
     // ------------------
 
-        // if 'recursively' is FALSE, only immediate children count, otherwise
+        // if 'recursively' is false, only immediate children count, otherwise
         // the returned number is the number of all items in this branch
     size_t GetChildrenCount(const wxTreeItemId& item,
-                            bool recursively = TRUE) const;
+                            bool recursively = true) const;
 
     // navigation
     // ----------
 
-    // wxTreeItemId.IsOk() will return FALSE if there is no such item
+    // wxTreeItemId.IsOk() will return false if there is no such item
 
         // get the root tree item
     wxTreeItemId GetRootItem() const;
@@ -340,7 +339,7 @@ public:
         // edited simultaneously)
     wxTextCtrl* GetEditControl() const;
         // end editing and accept or discard the changes to item label
-    void EndEditLabel(const wxTreeItemId& item, bool discardChanges = FALSE);
+    void EndEditLabel(const wxTreeItemId& item, bool discardChanges = false);
 
     // sorting
         // this function is called to compare 2 items and should return -1, 0
@@ -371,7 +370,7 @@ public:
         // get the bounding rectangle of the item (or of its label only)
     bool GetBoundingRect(const wxTreeItemId& item,
                          wxRect& rect,
-                         bool textOnly = FALSE) const;
+                         bool textOnly = false) const;
 
     // deprecated
     // ----------
@@ -422,18 +421,13 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
-
-    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
-    virtual bool MSWCommand(WXUINT param, WXWORD id);
-    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
-
     // override some base class virtuals
     virtual bool SetBackgroundColour(const wxColour &colour);
     virtual bool SetForegroundColour(const wxColour &colour);
 
     // get/set the check state for the item (only for wxTR_MULTIPLE)
     bool IsItemChecked(const wxTreeItemId& item) const;
-    void SetItemCheck(const wxTreeItemId& item, bool check = TRUE);
+    void SetItemCheck(const wxTreeItemId& item, bool check = true);
 
     // set/get the item state.image (state == -1 means cycle to the next one)
     void SetState(const wxTreeItemId& node, int state);
@@ -487,7 +481,7 @@ private:
     // the hash storing the items attributes (indexed by item ids)
     wxMapTreeAttr m_attrs;
 
-    // TRUE if the hash above is not empty
+    // true if the hash above is not empty
     bool m_hasAnyAttr;
 
     // used for dragging

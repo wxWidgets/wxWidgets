@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -13,7 +13,7 @@
 #define _WX_PALMOS_APPTBASE_H_
 
 // ----------------------------------------------------------------------------
-// wxAppTraits: the MSW version adds extra hooks needed by MSW-only code
+// wxAppTraits
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_BASE wxAppTraits : public wxAppTraitsBase

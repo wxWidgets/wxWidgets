@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -90,7 +90,7 @@ public:
     wxListCtrl() { Init(); }
 
     wxListCtrl(wxWindow *parent,
-               wxWindowID id = -1,
+               wxWindowID id = wxID_ANY,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = wxLC_ICON,
@@ -105,7 +105,7 @@ public:
     virtual ~wxListCtrl();
 
     bool Create(wxWindow *parent,
-                wxWindowID id = -1,
+                wxWindowID id = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxLC_ICON,
@@ -214,7 +214,7 @@ public:
     long GetTopItem() const ;
 
     // Add or remove a single window style
-    void SetSingleStyle(long style, bool add = TRUE) ;
+    void SetSingleStyle(long style, bool add = true) ;
 
     // Set the whole window style
     void SetWindowStyleFlag(long style) ;
@@ -280,7 +280,7 @@ public:
 
     // Find an item whose label matches this string, starting from the item after 'start'
     // or the beginning if 'start' is -1.
-    long FindItem(long start, const wxString& str, bool partial = FALSE);
+    long FindItem(long start, const wxString& str, bool partial = false);
 
     // Find an item whose data matches this data, starting from the item after 'start'
     // or the beginning if 'start' is -1.
@@ -338,10 +338,6 @@ public:
     // data is arbitrary data to be passed to the sort function.
     bool SortItems(wxListCtrlCompare fn, long data);
 
-    // IMPLEMENTATION
-    virtual bool MSWCommand(WXUINT param, WXWORD id);
-    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
-
     // bring the control in sync with current m_windowStyle value
     void UpdateStyle();
 
@@ -372,10 +368,6 @@ protected:
     // free memory taken by all internal data
     void FreeAllInternalData();
 
-    // convert our styles to Windows
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
-
-
     wxTextCtrl*       m_textCtrl;        // The control used for editing a label
     wxImageList *     m_imageListNormal; // The image list for normal icons
     wxImageList *     m_imageListSmall;  // The image list for small icons
@@ -390,10 +382,10 @@ protected:
                                     // ListView_GetItemCount
     bool              m_ignoreChangeMessages;
 
-    // TRUE if we have any internal data (user data & attributes)
+    // true if we have any internal data (user data & attributes)
     bool m_AnyInternalData;
 
-    // TRUE if we have any items with custom attributes
+    // true if we have any items with custom attributes
     bool m_hasAnyAttr;
 
     // these functions are only used for virtual list view controls, i.e. the

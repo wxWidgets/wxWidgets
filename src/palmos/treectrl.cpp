@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -41,8 +41,6 @@
 #include "wx/dynarray.h"
 #include "wx/imaglist.h"
 #include "wx/settings.h"
-#include "wx/msw/treectrl.h"
-#include "wx/msw/dragimag.h"
 
 #include "wx/palmos/wrapcctl.h"
 
@@ -714,26 +712,6 @@ void wxTreeCtrl::SortChildren(const wxTreeItemId& item)
         tvSort.lParam = (LPARAM)this;
         TreeView_SortChildrenCB(GetHwnd(), &tvSort, 0 /* reserved */);
     }
-}
-
-// ----------------------------------------------------------------------------
-// implementation
-// ----------------------------------------------------------------------------
-
-bool wxTreeCtrl::MSWCommand(WXUINT cmd, WXWORD id)
-{
-    return false;
-}
-
-WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
-{
-    return 0;
-}
-
-// process WM_NOTIFY Windows message
-bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
-{
-    return false;
 }
 
 // ----------------------------------------------------------------------------

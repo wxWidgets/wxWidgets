@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -39,10 +39,6 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent)
 
-#if defined(__WIN95__)
-
-#include "wx/msw/private.h"
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -64,7 +60,7 @@ wxBEGIN_FLAGS( wxSpinButtonStyle )
     wxFLAGS_MEMBER(wxBORDER_RAISED)
     wxFLAGS_MEMBER(wxBORDER_STATIC)
     wxFLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     wxFLAGS_MEMBER(wxSIMPLE_BORDER)
     wxFLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -104,7 +100,7 @@ wxEND_PROPERTIES_TABLE()
 wxBEGIN_HANDLERS_TABLE(wxSpinButton)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_5( wxSpinButton , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle ) 
+wxCONSTRUCTOR_5( wxSpinButton , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle )
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
 #endif
@@ -154,24 +150,6 @@ void wxSpinButton::SetValue(int val)
 void wxSpinButton::SetRange(int minVal, int maxVal)
 {
 }
-
-bool wxSpinButton::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
-                               WXWORD pos, WXHWND control)
-{
-    return false;
-}
-
-bool wxSpinButton::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM *result)
-{
-    return false;
-}
-
-bool wxSpinButton::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD WXUNUSED(id))
-{
-    return false;
-}
-
-#endif // __WIN95__
 
 #endif
     // wxUSE_SPINCTN

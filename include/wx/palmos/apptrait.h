@@ -4,13 +4,13 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSW_APPTRAIT_H_
-#define _WX_MSW_APPTRAIT_H_
+#ifndef _WX_PALM_APPTRAIT_H_
+#define _WX_PALM_APPTRAIT_H_
 
 // ----------------------------------------------------------------------------
 // wxGUI/ConsoleAppTraits: must derive from wxAppTraits, not wxAppTraitsBase
@@ -41,5 +41,5 @@ public:
 
 #endif // wxUSE_GUI
 
-#endif // _WX_MSW_APPTRAIT_H_
+#endif // _WX_PALM_APPTRAIT_H_
 

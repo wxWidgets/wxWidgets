@@ -26,7 +26,7 @@ public:
     wxSpinButton() { }
 
     wxSpinButton(wxWindow *parent,
-                 wxWindowID id = -1,
+                 wxWindowID id = wxID_ANY,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxSP_VERTICAL | wxSP_ARROW_KEYS,
@@ -38,7 +38,7 @@ public:
     virtual ~wxSpinButton();
 
     bool Create(wxWindow *parent,
-                wxWindowID id = -1,
+                wxWindowID id = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxSP_VERTICAL | wxSP_ARROW_KEYS,
@@ -50,14 +50,8 @@ public:
     virtual void SetValue(int val);
     virtual void SetRange(int minVal, int maxVal);
 
-    // implementation
-    virtual bool MSWCommand(WXUINT param, WXWORD id);
-    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
-    virtual bool MSWOnScroll(int orientation, WXWORD wParam,
-                             WXWORD pos, WXHWND control);
-
     // a wxSpinButton can't do anything useful with focus, only wxSpinCtrl can
-    virtual bool AcceptsFocus() const { return FALSE; }
+    virtual bool AcceptsFocus() const { return false; }
 
 protected:
    virtual wxSize DoGetBestSize() const;

@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -94,7 +94,7 @@ wxBEGIN_FLAGS( wxListCtrlStyle )
     wxFLAGS_MEMBER(wxBORDER_RAISED)
     wxFLAGS_MEMBER(wxBORDER_STATIC)
     wxFLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     wxFLAGS_MEMBER(wxSIMPLE_BORDER)
     wxFLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -133,7 +133,7 @@ wxEND_FLAGS( wxListCtrlStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxListCtrl, wxControl,"wx/listctrl.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxListCtrl)
-    wxEVENT_PROPERTY( TextUpdated , wxEVT_COMMAND_TEXT_UPDATED , wxCommandEvent ) 
+    wxEVENT_PROPERTY( TextUpdated , wxEVT_COMMAND_TEXT_UPDATED , wxCommandEvent )
 
     wxPROPERTY_FLAGS( WindowStyle , wxListCtrlStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
@@ -141,7 +141,7 @@ wxEND_PROPERTIES_TABLE()
 wxBEGIN_HANDLERS_TABLE(wxListCtrl)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_5( wxListCtrl , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle ) 
+wxCONSTRUCTOR_5( wxListCtrl , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle )
 
 /*
  TODO : Expose more information of a list's layout etc. via appropriate objects (à la NotebookPageInfo)
@@ -180,11 +180,6 @@ bool wxListCtrl::Create(wxWindow *parent,
                         const wxString& name)
 {
     return false;
-}
-
-WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
-{
-    return 0;
 }
 
 void wxListCtrl::UpdateStyle()
@@ -499,7 +494,7 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
 // End label editing, optionally cancelling the edit
 bool wxListCtrl::EndEditLabel(bool WXUNUSED(cancel))
 {
-    return FALSE;
+    return false;
 }
 
 // Ensures this item is visible
@@ -522,14 +517,14 @@ long wxListCtrl::FindItem(long start, const wxString& str, bool partial)
 //        in a wxListItemInternalData structure refernced by the actual lParam
 long wxListCtrl::FindItem(long start, long data)
 {
-    return -1;
+    return wxNOT_FOUND;
 }
 
 // Find an item nearest this position in the specified direction, starting from
 // the item after 'start' or the beginning if 'start' is -1.
 long wxListCtrl::FindItem(long start, const wxPoint& pt, int direction)
 {
-    return -1;
+    return wxNOT_FOUND;
 }
 
 // Determines which item (if any) is at the specified point,
@@ -581,7 +576,7 @@ long wxListCtrl::InsertColumn(long col,
 // dx is interpreted as number of columns)
 bool wxListCtrl::ScrollList(int dx, int dy)
 {
-    return FALSE;
+    return false;
 }
 
 // Sort items.
@@ -622,7 +617,7 @@ int CALLBACK wxInternalDataCompareFunc(LPARAM lParam1, LPARAM lParam2,  LPARAM l
 
 bool wxListCtrl::SortItems(wxListCtrlCompare fn, long data)
 {
-    return FALSE;
+    return false;
 }
 
 
@@ -630,16 +625,6 @@ bool wxListCtrl::SortItems(wxListCtrlCompare fn, long data)
 // ----------------------------------------------------------------------------
 // message processing
 // ----------------------------------------------------------------------------
-
-bool wxListCtrl::MSWCommand(WXUINT cmd, WXWORD id)
-{
-    return false;
-}
-
-bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
-{
-    return false;
-}
 
 // see comment at the end of wxListCtrl::GetColumn()
 #ifdef NM_CUSTOMDRAW // _WIN32_IE >= 0x0300
@@ -709,31 +694,6 @@ static wxListItemAttr *wxGetInternalDataAttr(wxListCtrl *ctl, long itemId)
 };
 
 static void wxDeleteInternalData(wxListCtrl* ctl, long itemId)
-{
-}
-
-// ----------------------------------------------------------------------------
-// wxWin <-> MSW items conversions
-// ----------------------------------------------------------------------------
-
-static void wxConvertFromMSWListItem(HWND hwndListCtrl,
-                                     wxListItem& info,
-                                     LV_ITEM& lvItem)
-{
-}
-
-static void wxConvertToMSWFlags(long state, long stateMask, LV_ITEM& lvItem)
-{
-}
-
-static void wxConvertToMSWListItem(const wxListCtrl *ctrl,
-                                   const wxListItem& info,
-                                   LV_ITEM& lvItem)
-{
-}
-
-static void wxConvertToMSWListCol(int WXUNUSED(col), const wxListItem& item,
-                                  LV_COLUMN& lvCol)
 {
 }
 

@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -47,7 +47,7 @@ wxBEGIN_FLAGS( wxBitmapButtonStyle )
     wxFLAGS_MEMBER(wxBORDER_RAISED)
     wxFLAGS_MEMBER(wxBORDER_STATIC)
     wxFLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     wxFLAGS_MEMBER(wxSIMPLE_BORDER)
     wxFLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -101,11 +101,6 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id,
 }
 
 #define FOCUS_MARGIN 3
-
-bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
-{
-    return true;
-}
 
 void wxBitmapButton::DrawFace( WXHDC dc, int left, int top,
     int right, int bottom, bool sel )
