@@ -173,12 +173,6 @@
 #define wxODBC_BACKWARD_COMPATABILITY 0
 #define REMOVE_UNUSED_ARG   1
 #define wxUSE_IOSTREAMH     0
-#define wxUSE_LIBPNG        0
-#define wxUSE_LIBJPEG       0
-#define wxUSE_LIBTIFF       0
-#define wxUSE_GIF           0
-#define wxUSE_PNM           0
-#define wxUSE_PCX           0
 
 #define wxUSE_ICO_CUR       1
 
@@ -330,12 +324,6 @@
 #define wxODBC_BACKWARD_COMPATABILITY 0
 #define REMOVE_UNUSED_ARG   1
 #define wxUSE_IOSTREAMH     0
-#define wxUSE_LIBPNG        0
-#define wxUSE_LIBJPEG       0
-#define wxUSE_LIBTIFF       0
-#define wxUSE_GIF           0
-#define wxUSE_PNM           0
-#define wxUSE_PCX           0
 
 #define wxUSE_ICO_CUR       1
 
@@ -512,5 +500,13 @@
 #endif
 
 #define wxUSE_PALETTE 0
+
+#define wxUSE_LIBPNG        0
+#define wxUSE_LIBJPEG       0
+#define wxUSE_LIBTIFF       0
+#define wxUSE_IFF           0
+#define wxUSE_GIF           0
+#define wxUSE_PNM           0
+#define wxUSE_PCX           0
 
 #endif // _WX_UNIV_SETUP_H_
