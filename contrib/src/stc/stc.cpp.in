@@ -143,6 +143,7 @@ wxStyledTextCtrl::wxStyledTextCtrl(wxWindow *parent,
               style | wxVSCROLL | wxHSCROLL | wxWANTS_CHARS | wxCLIP_CHILDREN,
               wxDefaultValidator, name)
 {
+    wxForceScintillaLexers();
     m_swx = new ScintillaWX(this);
     m_stopWatch.Start();
     m_lastKeyDownConsumed = FALSE;

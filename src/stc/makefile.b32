@@ -62,16 +62,18 @@ OBJECTS = \
 	ScintillaWX.obj         \
 	stc.obj                 \
 
+STCCFG = stc.cfg
+STCCPPFLAGS=$(DLL_FLAGS) $(EXTRACPPFLAGS) @$(STCCFG)
 
-!include $(WXDIR)\src\makelib.b32
+default: $(STCCFG) $(LIBTARGET)
 
-CFG = stc.cfg
-CPPFLAGS=$(DLL_FLAGS) $(EXTRACPPFLAGS) @$(CFG)
 
 {$(S)}.cxx.obj:
-	bcc32 $(CPPFLAGS) -P -c {$< }
+	bcc32 $(STCCPPFLAGS) -P -c {$< }
 
-$(CFG): makefile.b32
+
+
+$(STCCFG): makefile.b32
 	copy &&!
 -H=$(WXDIR)\src\msw\wx32.csm
 -3
@@ -97,5 +99,14 @@ $(OPT)
 $(DEBUG_FLAGS)
 $(WIN95FLAG)
 $(STCEXTRACPPFLAGS)
-! $(CFG)
+! $(STCCFG)
+
+
+!include $(WXDIR)\src\makelib.b32
+
+{$(S)}.cpp.obj:
+	bcc32 $(STCCPPFLAGS) -P -c {$< }
+
+.$(SRCSUFF).obj:
+	bcc32 $(STCCPPFLAGS) -c {$< }
 
