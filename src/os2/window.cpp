@@ -214,7 +214,7 @@ void wxWindow::ReleaseMouse()
     // TODO:
 }
 
-void wxWindow::Refresh(bool eraseBack = TRUE, const wxRect *rect = NULL)
+void wxWindow::Refresh(bool eraseBack, const wxRect *rect)
 {
     // TODO:
 }
@@ -245,9 +245,9 @@ int  wxWindow::GetCharWidth() const
 void wxWindow::GetTextExtent( const wxString& string
                              ,int*            x
                              ,int*            y
-                             ,int*            descent = NULL
-                             ,int*            externalLeading = NULL
-                             ,const wxFont*   theFont = NULL
+                             ,int*            descent
+                             ,int*            externalLeading
+                             ,const wxFont*   theFont
                             ) const
 {
     // TODO:
@@ -257,7 +257,7 @@ void wxWindow::SetScrollbar( int  orient
                             ,int  pos
                             ,int  thumbVisible
                             ,int  range
-                            ,bool refresh = TRUE
+                            ,bool refresh
                            )
 {
     // TODO:
@@ -265,7 +265,7 @@ void wxWindow::SetScrollbar( int  orient
 
 void wxWindow::SetScrollPos( int  orient
                             ,int  pos
-                            ,bool refresh = TRUE
+                            ,bool refresh
                            )
 {
     // TODO:
@@ -291,7 +291,7 @@ int  wxWindow::GetScrollThumb(int orient) const
 
 void wxWindow::ScrollWindow( int           dx
                             ,int           dy
-                            ,const wxRect* rect = NULL
+                            ,const wxRect* rect
                            )
 {
     // TODO:
@@ -331,7 +331,7 @@ void wxWindow::DoGetClientSize( int *width, int *height ) const
 
 void wxWindow::DoSetSize(int x, int y,
                          int width, int height,
-                         int sizeFlags = wxSIZE_AUTO)
+                         int sizeFlags)
 {
     // TODO:
 }
@@ -378,8 +378,9 @@ bool wxWindow::Validate()
 
 wxWindow* wxWindow::FindFocus()
 {
+    wxWindow*                       window = NULL;
     // TODO:
-    return(this);
+    return(window);
 }
 
 void wxWindow::DragAcceptFiles(bool accept)
@@ -491,7 +492,7 @@ void wxWindow::UnsetConstraints(wxLayoutConstraints *c)
 wxObject* wxWindow::GetChild(int number) const
 {
     // TODO:
-    return(this);
+    return((wxObject*)this);
 }
 
 void wxWindow::PMDetachWindowMenu()
@@ -500,12 +501,12 @@ void wxWindow::PMDetachWindowMenu()
     {
         HMENU hMenu = (HMENU)m_hMenu;
 
-        int N = ::GetMenuItemCount(hMenu);
+        int N = (int)WinSendMsg(hMenu, MM_QUERYITEMCOUNT, 0, 0);
         int i;
         for (i = 0; i < N; i++)
         {
             wxChar buf[100];
-            int chars = GetMenuString(hMenu, i, buf, 100, MF_BYPOSITION);
+            int chars = (int)WinSendMsg(hMenu, MM_QUERYITEMTEXT, MPFROM2SHORT(i, N), buf);
             if ( !chars )
             {
                 wxLogLastError(_T("GetMenuString"));
@@ -515,13 +516,13 @@ void wxWindow::PMDetachWindowMenu()
 
             if ( wxStrcmp(buf, _T("&Window")) == 0 )
             {
-                RemoveMenu(hMenu, i, MF_BYPOSITION);
-
+                WinSendMsg(hMenu, MM_DELETEITEM, MPFROM2SHORT(i, TRUE), 0);
                 break;
             }
         }
     }
 }
+
 void wxAssociateWinWithHandle(HWND hWnd, wxWindow *win)
 {
     // adding NULL hWnd is (first) surely a result of an error and

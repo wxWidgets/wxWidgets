@@ -267,6 +267,7 @@ pch1:   dirs $(DUMMYOBJ)
 ### Static library
 
 $(WXDIR)\lib\wx.lib: $D\dummy.obj $(OBJECTS) $(PERIPH_LIBS)
+ touch $(LIBTARGET)
  del $(LIBTARGET)
  ilib $(LINKFLAGS) $@ @<<
     $**

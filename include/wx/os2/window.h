@@ -216,6 +216,7 @@ public:
     // on a listbox)
     virtual void OnDefaultAction(wxControl *initiatingItem);
 
+    // EventHandlers
     void OnEraseBackground(wxEraseEvent& event);
     void OnChar(wxKeyEvent& event);
     void OnKeyDown(wxKeyEvent& event);
@@ -283,8 +284,10 @@ public:
 
 DECLARE_EVENT_TABLE()
 private:
-    void Init();
-    void PMDetachWindowMenu();
+    void   Init();
+    void   PMDetachWindowMenu();
+    WXHWND GetHwnd() const { return m_hWnd; }
+    void   SetHwnd(WXHWND hWnd) { m_hWnd = hWnd; }
 };
 
 ////////////////////////////////////////////////////////////////////////
