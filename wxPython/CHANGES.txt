@@ -2,6 +2,12 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
+2.4.0.5
+-------
+A few little but annoying bug fixes.
+
+
+
 2.4.0.4
 -------
 Added missing wxRect methods
