@@ -1845,9 +1845,9 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                         }
                         // FIXME: this should be handled by
                         //        wxNavigationKeyEvent handler and not here!!
-#if wxUSE_BUTTON
                         else
                         {
+#if wxUSE_BUTTON
                             wxButton *btn = wxDynamicCast(GetDefaultItem(),
                                                           wxButton);
                             if ( btn && btn->IsEnabled() )
@@ -1857,11 +1857,15 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
 
                                 return TRUE;
                             }
-                            // else: but if it does not it makes sense to make
-                            //       it work like a TAB - and that's what we do.
-                            //       Note that Ctrl-Enter always works this way.
-                        }
+                            else // no default button
 #endif // wxUSE_BUTTON
+                            {
+                                // no special function for enter and don't even
+                                // let IsDialogMessage() have it: it seems to
+                                // do something really strange with it
+                                return FALSE;
+                            }
+                        }
                     }
                     break;
 
@@ -1882,7 +1886,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                 }
             }
         }
-#else
+#else // 0
         // let ::IsDialogMessage() do almost everything and handle just the
         // things it doesn't here: Ctrl-TAB for switching notebook pages
         if ( msg->message == WM_KEYDOWN )
@@ -1910,7 +1914,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                 }
             }
         }
-#endif // 0
+#endif // 1/0
 
         if ( ::IsDialogMessage(GetHwnd(), msg) )
         {
