@@ -11,10 +11,10 @@ from misc import *
 del wx
 
 
-# Make some to help backawrds compatibility for the old namespace.
-# This is only for code that is using tthe wxPython.wx package and
-# using names and classes in the old way.  New code should use the wx
-# namespace and the new names.
+# Make some aliases to help backawrds compatibility for the old
+# namespace.  This is only for code that is using tthe wxPython.wx
+# package and using names and classes in the old way.  New code should
+# use the wx namespace and the new names.
 
 wxPyDefaultPosition = wxDefaultPosition
 wxPyDefaultSize = wxDefaultSize
