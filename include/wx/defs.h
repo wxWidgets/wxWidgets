@@ -796,7 +796,15 @@ inline wxUIntPtr wxPtrToUInt(const void *p)
 
 inline void *wxUIntToPtr(wxUIntPtr p)
 {
+#ifdef __VISUALC__
+    #pragma warning(disable: 4312) /* conversion to type of greater size */
+#endif
+
     return wx_reinterpret_cast(void *, p);
+
+#ifdef __VISUALC__
+    #pragma warning(default: 4312)
+#endif
 }
 #endif /*__cplusplus*/
 
