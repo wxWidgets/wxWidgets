@@ -40,6 +40,8 @@ from sizers import *
 from filesys import *
 
 from utils import *
+
+from oglbasic import *
 import wx
 class wxDiagramPtr(wxObjectPtr):
     def __init__(self,this):

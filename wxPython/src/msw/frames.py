@@ -99,6 +99,9 @@ class wxFramePtr(wxWindowPtr):
     def ShowFullScreen(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_ShowFullScreen,(self,) + _args, _kwargs)
         return val
+    def IsFullScreen(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_IsFullScreen,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxFrame instance at %s>" % (self.this,)
 class wxFrame(wxFramePtr):

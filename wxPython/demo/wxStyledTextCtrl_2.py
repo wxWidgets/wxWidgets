@@ -12,7 +12,7 @@ demoText = """\
 
 
 """
-wxSTC_CMD_ZOOMIN
+
 #----------------------------------------------------------------------
 
 
@@ -29,8 +29,8 @@ else:
               'mono' : 'Courier',
               'helv' : 'Helvetica',
               'other': 'new century schoolbook',
-              'size' : 11,
-              'size2': 9,
+              'size' : 13,
+              'size2': 11,
              }
 
 
@@ -85,33 +85,33 @@ class PythonSTC(wxStyledTextCtrl):
 
         # Python styles
         # White space
-        self.StyleSetSpec(wxSTC_P_DEFAULT, "fore:#808080")
+        self.StyleSetSpec(wxSTC_P_DEFAULT, "fore:#808080,face:%(helv)s,size:%(size)d" % faces)
         # Comment
-        self.StyleSetSpec(wxSTC_P_COMMENTLINE, "fore:#007F00,face:%(other)s" % faces)
+        self.StyleSetSpec(wxSTC_P_COMMENTLINE, "fore:#007F00,face:%(other)s,size:%(size)d" % faces)
         # Number
-        self.StyleSetSpec(wxSTC_P_NUMBER, "fore:#007F7F")
+        self.StyleSetSpec(wxSTC_P_NUMBER, "fore:#007F7F,size:%(size)d" % faces)
         # String
-        self.StyleSetSpec(wxSTC_P_STRING, "fore:#7F007F,italic,face:%(times)s" % faces)
+        self.StyleSetSpec(wxSTC_P_STRING, "fore:#7F007F,italic,face:%(times)s,size:%(size)d" % faces)
         # Single quoted string
-        self.StyleSetSpec(wxSTC_P_CHARACTER, "fore:#7F007F,italic,face:%(times)s" % faces)
+        self.StyleSetSpec(wxSTC_P_CHARACTER, "fore:#7F007F,italic,face:%(times)s,size:%(size)d" % faces)
         # Keyword
-        self.StyleSetSpec(wxSTC_P_WORD, "fore:#00007F,bold")
+        self.StyleSetSpec(wxSTC_P_WORD, "fore:#00007F,bold,size:%(size)d" % faces)
         # Triple quotes
-        self.StyleSetSpec(wxSTC_P_TRIPLE, "fore:#7F0000")
+        self.StyleSetSpec(wxSTC_P_TRIPLE, "fore:#7F0000,size:%(size)d" % faces)
         # Triple double quotes
-        self.StyleSetSpec(wxSTC_P_TRIPLEDOUBLE, "fore:#7F0000")
+        self.StyleSetSpec(wxSTC_P_TRIPLEDOUBLE, "fore:#7F0000,size:%(size)d" % faces)
         # Class name definition
-        self.StyleSetSpec(wxSTC_P_CLASSNAME, "fore:#0000FF,bold,underline")
+        self.StyleSetSpec(wxSTC_P_CLASSNAME, "fore:#0000FF,bold,underline,size:%(size)d" % faces)
         # Function or method name definition
-        self.StyleSetSpec(wxSTC_P_DEFNAME, "fore:#007F7F,bold")
+        self.StyleSetSpec(wxSTC_P_DEFNAME, "fore:#007F7F,bold,size:%(size)d" % faces)
         # Operators
-        self.StyleSetSpec(wxSTC_P_OPERATOR, "bold")
+        self.StyleSetSpec(wxSTC_P_OPERATOR, "bold,size:%(size)d" % faces)
         # Identifiers
-        #self.StyleSetSpec(wxSTC_P_IDENTIFIER, "bold")#,fore:#FF00FF")
+        self.StyleSetSpec(wxSTC_P_IDENTIFIER, "fore:#808080,face:%(helv)s,size:%(size)d" % faces)
         # Comment-blocks
-        self.StyleSetSpec(wxSTC_P_COMMENTBLOCK, "fore:#7F7F7F")
+        self.StyleSetSpec(wxSTC_P_COMMENTBLOCK, "fore:#7F7F7F,size:%(size)d" % faces)
         # End of line where string is not closed
-        self.StyleSetSpec(wxSTC_P_STRINGEOL, "fore:#000000,face:%(mono)s,back:#E0C0E0,eolfilled" % faces)
+        self.StyleSetSpec(wxSTC_P_STRINGEOL, "fore:#000000,face:%(mono)s,back:#E0C0E0,eolfilled,size:%(size)d" % faces)
 
 
         self.SetCaretForeground("BLUE")

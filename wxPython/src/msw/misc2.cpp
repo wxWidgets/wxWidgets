@@ -119,14 +119,6 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
         return wxSystemSettings::GetSystemMetric(index);
     }
 
-    void wxToolTip_Enable(bool flag) {
-        wxToolTip::Enable(flag);
-    }
-
-    void wxToolTip_SetDelay(long milliseconds) {
-        wxToolTip::SetDelay(milliseconds);
-    }
-
     int wxCaret_GetBlinkTime() {
         return wxCaret::GetBlinkTime();
     }
@@ -1693,44 +1685,6 @@ static PyObject *_wrap_wxSystemSettings_GetSystemMetric(PyObject *self, PyObject
     return _resultobj;
 }
 
-static PyObject *_wrap_wxToolTip_Enable(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _arg0;
-    int tempbool0;
-    char *_kwnames[] = { "flag", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxToolTip_Enable",_kwnames,&tempbool0)) 
-        return NULL;
-    _arg0 = (bool ) tempbool0;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxToolTip_Enable(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-static PyObject *_wrap_wxToolTip_SetDelay(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    long  _arg0;
-    char *_kwnames[] = { "milliseconds", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"l:wxToolTip_SetDelay",_kwnames,&_arg0)) 
-        return NULL;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxToolTip_SetDelay(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 static PyObject *_wrap_wxCaret_GetBlinkTime(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
@@ -2643,6 +2597,44 @@ static PyObject *_wrap_wxToolTip_GetWindow(PyObject *self, PyObject *args, PyObj
 
     wxPy_END_ALLOW_THREADS;
 }{ _resultobj = wxPyMake_wxObject(_result); }
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxToolTip_Enable(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _arg0;
+    int tempbool0;
+    char *_kwnames[] = { "flag", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxToolTip_Enable",_kwnames,&tempbool0)) 
+        return NULL;
+    _arg0 = (bool ) tempbool0;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxToolTip::Enable(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxToolTip_SetDelay(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _arg0;
+    char *_kwnames[] = { "milliseconds", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"l:wxToolTip_SetDelay",_kwnames,&_arg0)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxToolTip::SetDelay(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -7205,6 +7197,8 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxCaret_IsOk", (PyCFunction) _wrap_wxCaret_IsOk, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxCaret", (PyCFunction) _wrap_delete_wxCaret, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxCaret", (PyCFunction) _wrap_new_wxCaret, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolTip_SetDelay", (PyCFunction) _wrap_wxToolTip_SetDelay, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolTip_Enable", (PyCFunction) _wrap_wxToolTip_Enable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolTip_GetWindow", (PyCFunction) _wrap_wxToolTip_GetWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolTip_GetTip", (PyCFunction) _wrap_wxToolTip_GetTip, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolTip_SetTip", (PyCFunction) _wrap_wxToolTip_SetTip, METH_VARARGS | METH_KEYWORDS },
@@ -7237,8 +7231,6 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxSafeYield", (PyCFunction) _wrap_wxSafeYield, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCaret_SetBlinkTime", (PyCFunction) _wrap_wxCaret_SetBlinkTime, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCaret_GetBlinkTime", (PyCFunction) _wrap_wxCaret_GetBlinkTime, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolTip_SetDelay", (PyCFunction) _wrap_wxToolTip_SetDelay, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolTip_Enable", (PyCFunction) _wrap_wxToolTip_Enable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSystemSettings_GetSystemMetric", (PyCFunction) _wrap_wxSystemSettings_GetSystemMetric, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSystemSettings_GetSystemFont", (PyCFunction) _wrap_wxSystemSettings_GetSystemFont, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSystemSettings_GetSystemColour", (PyCFunction) _wrap_wxSystemSettings_GetSystemColour, METH_VARARGS | METH_KEYWORDS },

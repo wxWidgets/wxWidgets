@@ -1067,6 +1067,11 @@ def wxBitmapFromIcon(*_args, **_kwargs):
     if val: val = wxBitmapPtr(val); val.thisown = 1
     return val
 
+def wxBitmapFromBits(*_args, **_kwargs):
+    val = apply(gdic.wxBitmapFromBits,_args,_kwargs)
+    if val: val = wxBitmapPtr(val); val.thisown = 1
+    return val
+
 def wxMaskColour(*_args, **_kwargs):
     val = apply(gdic.wxMaskColour,_args,_kwargs)
     if val: val = wxMaskPtr(val); val.thisown = 1

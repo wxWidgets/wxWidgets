@@ -68,6 +68,7 @@ def crunch_data(data, compressed):
     c = i = 0
     word = ""
     octdigits = "01234567"
+    hexdigits = "0123456789abcdef"
     while i < len(data):
         if data[i] != "\\":
             word = data[i]
@@ -79,9 +80,16 @@ def crunch_data(data, compressed):
                         break
                 word = data[i:i+n]
                 i = i + n
+            elif data[i+1] == 'x':
+                for n in range(2, 5):
+                    if data[i+n] not in hexdigits:
+                        break
+                word = data[i:i+n]
+                i = i + n
             else:
                 word = data[i:i+2]
                 i = i + 2
+
         l = len(word)
         if c + l >= 78-1:
             fp.write("\\\n")

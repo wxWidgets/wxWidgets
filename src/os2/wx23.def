@@ -14344,8 +14344,8 @@ EXPORTS
       wxGetUserName__FPci
       ;wxSleep(int)
       wxSleep__Fi
-      ;wxKill(long,wxSignal,wxKillError*)
-      wxKill__Fl8wxSignalP11wxKillError
+      ;wxKill(long,int)
+      wxKill__Fli
       ;wxGetResource(const wxString&,const wxString&,long*,const wxString&)
       wxGetResource__FRC8wxStringT1PlT1
       ;wxGetOsVersion(int*,int*)

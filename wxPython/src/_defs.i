@@ -228,6 +228,7 @@ enum {
     wxEXT_DIALOG_STYLE,
 
     wxCLIP_CHILDREN,
+    wxCLIP_SIBLINGS,
 
     wxRETAINED,
     wxBACKINGSTORE,
@@ -323,6 +324,7 @@ enum {
     wxLC_MASK_SORT,
     wxLC_HRULES,
     wxLC_VRULES,
+    //wxLC_VIRTUAL,
     wxSP_VERTICAL,
     wxSP_HORIZONTAL,
     wxSP_ARROW_KEYS,

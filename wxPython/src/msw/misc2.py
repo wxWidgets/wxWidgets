@@ -766,10 +766,6 @@ def wxSystemSettings_GetSystemFont(*_args, **_kwargs):
 
 wxSystemSettings_GetSystemMetric = misc2c.wxSystemSettings_GetSystemMetric
 
-wxToolTip_Enable = misc2c.wxToolTip_Enable
-
-wxToolTip_SetDelay = misc2c.wxToolTip_SetDelay
-
 wxCaret_GetBlinkTime = misc2c.wxCaret_GetBlinkTime
 
 wxCaret_SetBlinkTime = misc2c.wxCaret_SetBlinkTime
@@ -843,6 +839,10 @@ def wxWaveData(*_args, **_kwargs):
     val = apply(misc2c.wxWaveData,_args,_kwargs)
     if val: val = wxWavePtr(val); val.thisown = 1
     return val
+
+wxToolTip_Enable = misc2c.wxToolTip_Enable
+
+wxToolTip_SetDelay = misc2c.wxToolTip_SetDelay
 
 wxLog_IsEnabled = misc2c.wxLog_IsEnabled
 

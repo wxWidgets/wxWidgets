@@ -4,10 +4,10 @@ from wxPython.lib.mixins.grid import wxGridAutoEditMixin
 
 #---------------------------------------------------------------------------
 
-class SimpleGrid(wxGrid, wxGridAutoEditMixin):
+class SimpleGrid(wxGrid): ##, wxGridAutoEditMixin):
     def __init__(self, parent, log):
         wxGrid.__init__(self, parent, -1)
-        wxGridAutoEditMixin.__init__(self)
+        ##wxGridAutoEditMixin.__init__(self)
         self.log = log
         self.moveTo = None
 
@@ -69,6 +69,7 @@ class SimpleGrid(wxGrid, wxGridAutoEditMixin):
         EVT_GRID_EDITOR_SHOWN(self, self.OnEditorShown)
         EVT_GRID_EDITOR_HIDDEN(self, self.OnEditorHidden)
         EVT_GRID_EDITOR_CREATED(self, self.OnEditorCreated)
+
 
 
     def OnCellLeftClick(self, evt):

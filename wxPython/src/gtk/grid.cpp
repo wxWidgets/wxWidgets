@@ -7725,6 +7725,34 @@ static PyObject *_wrap_wxGrid_GetBatchCount(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
+#define wxGrid_ForceRefresh(_swigobj)  (_swigobj->ForceRefresh())
+static PyObject *_wrap_wxGrid_ForceRefresh(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_ForceRefresh",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_ForceRefresh. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_ForceRefresh(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxGrid_IsEditable(_swigobj)  (_swigobj->IsEditable())
 static PyObject *_wrap_wxGrid_IsEditable(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -13405,7 +13433,265 @@ static PyObject *_wrap_wxGridRangeSelectEvent_AltDown(PyObject *self, PyObject *
     return _resultobj;
 }
 
+static void *SwigwxGridEditorCreatedEventTowxCommandEvent(void *ptr) {
+    wxGridEditorCreatedEvent *src;
+    wxCommandEvent *dest;
+    src = (wxGridEditorCreatedEvent *) ptr;
+    dest = (wxCommandEvent *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxGridEditorCreatedEventTowxEvent(void *ptr) {
+    wxGridEditorCreatedEvent *src;
+    wxEvent *dest;
+    src = (wxGridEditorCreatedEvent *) ptr;
+    dest = (wxEvent *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxGridEditorCreatedEventTowxObject(void *ptr) {
+    wxGridEditorCreatedEvent *src;
+    wxObject *dest;
+    src = (wxGridEditorCreatedEvent *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxGridEditorCreatedEvent(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5) (new wxGridEditorCreatedEvent(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
+static PyObject *_wrap_new_wxGridEditorCreatedEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGridEditorCreatedEvent * _result;
+    int  _arg0;
+    wxEventType  _arg1;
+    wxObject * _arg2;
+    int  _arg3;
+    int  _arg4;
+    wxControl * _arg5;
+    PyObject * _argo2 = 0;
+    PyObject * _argo5 = 0;
+    char *_kwnames[] = { "id","type","obj","row","col","ctrl", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiOiiO:new_wxGridEditorCreatedEvent",_kwnames,&_arg0,&_arg1,&_argo2,&_arg3,&_arg4,&_argo5)) 
+        return NULL;
+    if (_argo2) {
+        if (_argo2 == Py_None) { _arg2 = NULL; }
+        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxObject_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxGridEditorCreatedEvent. Expected _wxObject_p.");
+        return NULL;
+        }
+    }
+    if (_argo5) {
+        if (_argo5 == Py_None) { _arg5 = NULL; }
+        else if (SWIG_GetPtrObj(_argo5,(void **) &_arg5,"_wxControl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 6 of new_wxGridEditorCreatedEvent. Expected _wxControl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxGridEditorCreatedEvent *)new_wxGridEditorCreatedEvent(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridEditorCreatedEvent_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxGridEditorCreatedEvent_GetRow(_swigobj)  (_swigobj->GetRow())
+static PyObject *_wrap_wxGridEditorCreatedEvent_GetRow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGridEditorCreatedEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGridEditorCreatedEvent_GetRow",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridEditorCreatedEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEditorCreatedEvent_GetRow. Expected _wxGridEditorCreatedEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGridEditorCreatedEvent_GetRow(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEditorCreatedEvent_GetCol(_swigobj)  (_swigobj->GetCol())
+static PyObject *_wrap_wxGridEditorCreatedEvent_GetCol(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGridEditorCreatedEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGridEditorCreatedEvent_GetCol",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridEditorCreatedEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEditorCreatedEvent_GetCol. Expected _wxGridEditorCreatedEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGridEditorCreatedEvent_GetCol(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEditorCreatedEvent_GetControl(_swigobj)  (_swigobj->GetControl())
+static PyObject *_wrap_wxGridEditorCreatedEvent_GetControl(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxControl * _result;
+    wxGridEditorCreatedEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGridEditorCreatedEvent_GetControl",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridEditorCreatedEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEditorCreatedEvent_GetControl. Expected _wxGridEditorCreatedEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxControl *)wxGridEditorCreatedEvent_GetControl(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}{ _resultobj = wxPyMake_wxObject(_result); }
+    return _resultobj;
+}
+
+#define wxGridEditorCreatedEvent_SetRow(_swigobj,_swigarg0)  (_swigobj->SetRow(_swigarg0))
+static PyObject *_wrap_wxGridEditorCreatedEvent_SetRow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGridEditorCreatedEvent * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","row", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGridEditorCreatedEvent_SetRow",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridEditorCreatedEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEditorCreatedEvent_SetRow. Expected _wxGridEditorCreatedEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGridEditorCreatedEvent_SetRow(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGridEditorCreatedEvent_SetCol(_swigobj,_swigarg0)  (_swigobj->SetCol(_swigarg0))
+static PyObject *_wrap_wxGridEditorCreatedEvent_SetCol(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGridEditorCreatedEvent * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","col", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGridEditorCreatedEvent_SetCol",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridEditorCreatedEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEditorCreatedEvent_SetCol. Expected _wxGridEditorCreatedEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGridEditorCreatedEvent_SetCol(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGridEditorCreatedEvent_SetControl(_swigobj,_swigarg0)  (_swigobj->SetControl(_swigarg0))
+static PyObject *_wrap_wxGridEditorCreatedEvent_SetControl(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGridEditorCreatedEvent * _arg0;
+    wxControl * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","ctrl", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGridEditorCreatedEvent_SetControl",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridEditorCreatedEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEditorCreatedEvent_SetControl. Expected _wxGridEditorCreatedEvent_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxControl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGridEditorCreatedEvent_SetControl. Expected _wxControl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGridEditorCreatedEvent_SetControl(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static PyMethodDef gridcMethods[] = {
+	 { "wxGridEditorCreatedEvent_SetControl", (PyCFunction) _wrap_wxGridEditorCreatedEvent_SetControl, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridEditorCreatedEvent_SetCol", (PyCFunction) _wrap_wxGridEditorCreatedEvent_SetCol, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridEditorCreatedEvent_SetRow", (PyCFunction) _wrap_wxGridEditorCreatedEvent_SetRow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridEditorCreatedEvent_GetControl", (PyCFunction) _wrap_wxGridEditorCreatedEvent_GetControl, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridEditorCreatedEvent_GetCol", (PyCFunction) _wrap_wxGridEditorCreatedEvent_GetCol, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridEditorCreatedEvent_GetRow", (PyCFunction) _wrap_wxGridEditorCreatedEvent_GetRow, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxGridEditorCreatedEvent", (PyCFunction) _wrap_new_wxGridEditorCreatedEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGridRangeSelectEvent_AltDown", (PyCFunction) _wrap_wxGridRangeSelectEvent_AltDown, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGridRangeSelectEvent_ShiftDown", (PyCFunction) _wrap_wxGridRangeSelectEvent_ShiftDown, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGridRangeSelectEvent_MetaDown", (PyCFunction) _wrap_wxGridRangeSelectEvent_MetaDown, METH_VARARGS | METH_KEYWORDS },
@@ -13576,6 +13862,7 @@ static PyMethodDef gridcMethods[] = {
 	 { "wxGrid_EnableCellEditControl", (PyCFunction) _wrap_wxGrid_EnableCellEditControl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_EnableEditing", (PyCFunction) _wrap_wxGrid_EnableEditing, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_IsEditable", (PyCFunction) _wrap_wxGrid_IsEditable, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_ForceRefresh", (PyCFunction) _wrap_wxGrid_ForceRefresh, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_GetBatchCount", (PyCFunction) _wrap_wxGrid_GetBatchCount, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_EndBatch", (PyCFunction) _wrap_wxGrid_EndBatch, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_BeginBatch", (PyCFunction) _wrap_wxGrid_BeginBatch, METH_VARARGS | METH_KEYWORDS },
@@ -13776,6 +14063,8 @@ static PyMethodDef gridcMethods[] = {
  * This table is used by the pointer type-checker
  */
 static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
+    { "_wxEvent","_class_wxGridEditorCreatedEvent",SwigwxGridEditorCreatedEventTowxEvent},
+    { "_wxEvent","_wxGridEditorCreatedEvent",SwigwxGridEditorCreatedEventTowxEvent},
     { "_wxEvent","_class_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxEvent},
     { "_wxEvent","_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxEvent},
     { "_wxEvent","_class_wxGridSizeEvent",SwigwxGridSizeEventTowxEvent},
@@ -13814,6 +14103,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_byte","_unsigned_char",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
+    { "_class_wxObject","_class_wxGridEditorCreatedEvent",SwigwxGridEditorCreatedEventTowxObject},
+    { "_class_wxObject","_wxGridEditorCreatedEvent",SwigwxGridEditorCreatedEventTowxObject},
     { "_class_wxObject","_class_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxObject},
     { "_class_wxObject","_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxObject},
     { "_class_wxObject","_class_wxGridSizeEvent",SwigwxGridSizeEventTowxObject},
@@ -13847,12 +14138,16 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_int",0},
     { "_uint","_wxWindowID",0},
     { "_wxChar","_char",0},
+    { "_class_wxEvent","_class_wxGridEditorCreatedEvent",SwigwxGridEditorCreatedEventTowxEvent},
+    { "_class_wxEvent","_wxGridEditorCreatedEvent",SwigwxGridEditorCreatedEventTowxEvent},
     { "_class_wxEvent","_class_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxEvent},
     { "_class_wxEvent","_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxEvent},
     { "_class_wxEvent","_class_wxGridSizeEvent",SwigwxGridSizeEventTowxEvent},
     { "_class_wxEvent","_wxGridSizeEvent",SwigwxGridSizeEventTowxEvent},
     { "_class_wxEvent","_class_wxGridEvent",SwigwxGridEventTowxEvent},
     { "_class_wxEvent","_wxGridEvent",SwigwxGridEventTowxEvent},
+    { "_wxCommandEvent","_class_wxGridEditorCreatedEvent",SwigwxGridEditorCreatedEventTowxCommandEvent},
+    { "_wxCommandEvent","_wxGridEditorCreatedEvent",SwigwxGridEditorCreatedEventTowxCommandEvent},
     { "_wxCommandEvent","_class_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxCommandEvent},
     { "_wxCommandEvent","_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxCommandEvent},
     { "_wxCommandEvent","_class_wxGridSizeEvent",SwigwxGridSizeEventTowxCommandEvent},
@@ -13932,6 +14227,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_unsigned_short","_short",0},
     { "_class_wxWindow","_class_wxGrid",SwigwxGridTowxWindow},
     { "_class_wxWindow","_wxGrid",SwigwxGridTowxWindow},
+    { "_wxObject","_class_wxGridEditorCreatedEvent",SwigwxGridEditorCreatedEventTowxObject},
+    { "_wxObject","_wxGridEditorCreatedEvent",SwigwxGridEditorCreatedEventTowxObject},
     { "_wxObject","_class_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxObject},
     { "_wxObject","_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxObject},
     { "_wxObject","_class_wxGridSizeEvent",SwigwxGridSizeEventTowxObject},
@@ -14028,6 +14325,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxGridCellTextEditor","_wxGridCellFloatEditor",SwigwxGridCellFloatEditorTowxGridCellTextEditor},
     { "_wxGridCellTextEditor","_class_wxGridCellNumberEditor",SwigwxGridCellNumberEditorTowxGridCellTextEditor},
     { "_wxGridCellTextEditor","_wxGridCellNumberEditor",SwigwxGridCellNumberEditorTowxGridCellTextEditor},
+    { "_class_wxCommandEvent","_class_wxGridEditorCreatedEvent",SwigwxGridEditorCreatedEventTowxCommandEvent},
+    { "_class_wxCommandEvent","_wxGridEditorCreatedEvent",SwigwxGridEditorCreatedEventTowxCommandEvent},
     { "_class_wxCommandEvent","_class_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxCommandEvent},
     { "_class_wxCommandEvent","_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxCommandEvent},
     { "_class_wxCommandEvent","_class_wxGridSizeEvent",SwigwxGridSizeEventTowxCommandEvent},
@@ -14084,6 +14383,7 @@ SWIGEXPORT(void) initgridc() {
 	 PyDict_SetItemString(d,"wxEVT_GRID_SELECT_CELL", PyInt_FromLong((long) wxEVT_GRID_SELECT_CELL));
 	 PyDict_SetItemString(d,"wxEVT_GRID_EDITOR_SHOWN", PyInt_FromLong((long) wxEVT_GRID_EDITOR_SHOWN));
 	 PyDict_SetItemString(d,"wxEVT_GRID_EDITOR_HIDDEN", PyInt_FromLong((long) wxEVT_GRID_EDITOR_HIDDEN));
+	 PyDict_SetItemString(d,"wxEVT_GRID_EDITOR_CREATED", PyInt_FromLong((long) wxEVT_GRID_EDITOR_CREATED));
 
     wxClassInfo::CleanUpClasses();
     wxClassInfo::InitializeClasses();

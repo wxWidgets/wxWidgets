@@ -71,7 +71,7 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
     while (pos < lng) 
     {
         if (src[pos] == wxT('<'))   // tag found:
-        {
+	    {
             if (m_CacheSize % CACHE_INCREMENT == 0)
                 m_Cache = (wxHtmlCacheItem*) realloc(m_Cache, (m_CacheSize + CACHE_INCREMENT) * sizeof(wxHtmlCacheItem));
             tg = m_CacheSize++;
@@ -81,7 +81,7 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
                    src[pos] != wxT('>') &&
                    src[pos] != wxT(' ') && src[pos] != wxT('\r') && 
                    src[pos] != wxT('\n') && src[pos] != wxT('\t')) 
-            {
+		    {
                 dummy[i] = src[pos++];
                 if ((dummy[i] >= wxT('a')) && (dummy[i] <= wxT('z'))) dummy[i] -= (wxT('a') - wxT('A'));
                 i++;
@@ -93,19 +93,19 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
             while (pos < lng && src[pos] != wxT('>')) pos++;
 
             if (src[stpos+1] == wxT('/')) // ending tag:
-            {
+    	    {
                 m_Cache[tg].End1 = m_Cache[tg].End2 = -2;
                 // find matching begin tag:
                 for (i = tg; i >= 0; i--)
                     if ((m_Cache[i].End1 == -1) && (wxStrcmp(m_Cache[i].Name, dummy+1) == 0)) 
-                    {
+		            {
                         m_Cache[i].End1 = stpos;
                         m_Cache[i].End2 = pos + 1;
                         break;
                     }
             }
             else 
-            {
+	        {
                 m_Cache[tg].End1 = m_Cache[tg].End2 = -1;
             }
         }
@@ -160,7 +160,7 @@ wxHtmlTag::wxHtmlTag(const wxString& source, int pos, int end_pos, wxHtmlTagsCac
                ((c = source[i++]) != wxT(' ') && c != wxT('\r') && 
                  c != wxT('\n') && c != wxT('\t') &&
                  c != wxT('>'))) 
-    {
+	{
         if ((c >= wxT('a')) && (c <= wxT('z'))) c -= (wxT('a') - wxT('A'));
         m_Name += c;
     }
@@ -170,14 +170,14 @@ wxHtmlTag::wxHtmlTag(const wxString& source, int pos, int end_pos, wxHtmlTagsCac
     // remove whitespaces around '=':
     if (source[i-1] != wxT('>'))
         while ((i < end_pos) && ((c = source[i++]) != wxT('>'))) 
-        {
+	    {
             if ((c >= wxT('a')) && (c <= wxT('z'))) 
                 c -= (wxT('a') - wxT('A'));
             if (c == wxT('\r') || c == wxT('\n') || c == wxT('\t')) 
                 c = wxT(' '); // make future parsing a bit simpler
             m_Params += c;
             if (c == wxT('"')) 
-            {
+	        {
                 // remove spaces around the '=' character:
                 if (m_Params.Length() > 1 && 
                     m_Params[m_Params.Length()-2] == wxT(' '))
@@ -196,7 +196,7 @@ wxHtmlTag::wxHtmlTag(const wxString& source, int pos, int end_pos, wxHtmlTagsCac
                 m_Params += c;
             }
             else if (c == wxT('\'')) 
-            {
+	        {
                 while ((i < end_pos) && ((c = source[i++]) != wxT('\''))) 
                     m_Params += c;
                 m_Params += c;
@@ -221,18 +221,18 @@ bool wxHtmlTag::HasParam(const wxString& par) const
     if (*p == 0) return FALSE;
     for (st2 = st, p2 = p; ; st2++) 
     {
-        if (*p2 == 0 && *st2 == wxT('=')) return TRUE;
+        if (*p2 == 0) return TRUE;
         if (*st2 == 0) return FALSE;
         if (*p2 != *st2) p2 = &invalid;
         if (*p2 == *st2) p2++;
         if (*st2 == wxT(' ')) p2 = p;
         else if (*st2 == wxT('=')) 
-        {
+	    {
             p2 = p;
             while (*st2 != wxT(' ')) 
-            {
+	        {
                 if (*st2 == wxT('"')) 
-                {
+		        {
                     st2++;
                     while (*st2 != wxT('"')) st2++;
                 }
@@ -257,27 +257,27 @@ wxString wxHtmlTag::GetParam(const wxString& par, bool with_commas) const
     if (*p == 0) return wxEmptyString;
     for (st2 = st, p2 = p; ; st2++) 
     {
-        if (*p2 == 0 && *st2 == wxT('='))  // found
-        {
+        if (*p2 == 0)  // found
+	    {
             wxString fnd = wxEmptyString;
             st2++; // '=' character
             comma = FALSE;
-            comma_char = wxT('\0');
+    	    comma_char = wxT('\0');
             if (!with_commas && (*(st2) == wxT('"'))) 
-            {
-                st2++;
-                comma = TRUE; 
-                comma_char = wxT('"');
-            }
-            else if (!with_commas && (*(st2) == wxT('\''))) 
-            {
-                st2++; 
-                comma = TRUE;
-                comma_char = wxT('\'');
-            }
-        
+	        {
+    	        st2++;
+        		comma = TRUE; 
+        		comma_char = wxT('"');
+	        }
+    	    else if (!with_commas && (*(st2) == wxT('\''))) 
+	        {
+    	        st2++; 
+    	    	comma = TRUE;
+        		comma_char = wxT('\'');
+    	    }
+	    
             while (*st2 != 0) 
-            {
+	        {
                 if (comma && *st2 == comma_char) comma = FALSE;
                 else if ((*st2 == wxT(' ')) && (!comma)) break;
                 fnd += (*(st2++));
@@ -290,17 +290,17 @@ wxString wxHtmlTag::GetParam(const wxString& par, bool with_commas) const
         if (*p2 == *st2) p2++;
         if (*st2 == wxT(' ')) p2 = p;
         else if (*st2 == wxT('=')) 
-        {
+	    {
             p2 = p;
             while (*st2 != wxT(' ')) 
-            {
+	        {
                 if (*st2 == wxT('"')) 
-                {
+		        {
                     st2++;
                     while (*st2 != wxT('"')) st2++;
                 }
                 else if (*st2 == wxT('\''))
-                {
+		        {
                     st2++;
                     while (*st2 != wxT('\'')) st2++;
                 }

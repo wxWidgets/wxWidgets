@@ -7725,6 +7725,34 @@ static PyObject *_wrap_wxGrid_GetBatchCount(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
+#define wxGrid_ForceRefresh(_swigobj)  (_swigobj->ForceRefresh())
+static PyObject *_wrap_wxGrid_ForceRefresh(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_ForceRefresh",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_ForceRefresh. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_ForceRefresh(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxGrid_IsEditable(_swigobj)  (_swigobj->IsEditable())
 static PyObject *_wrap_wxGrid_IsEditable(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -13834,6 +13862,7 @@ static PyMethodDef gridcMethods[] = {
 	 { "wxGrid_EnableCellEditControl", (PyCFunction) _wrap_wxGrid_EnableCellEditControl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_EnableEditing", (PyCFunction) _wrap_wxGrid_EnableEditing, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_IsEditable", (PyCFunction) _wrap_wxGrid_IsEditable, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_ForceRefresh", (PyCFunction) _wrap_wxGrid_ForceRefresh, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_GetBatchCount", (PyCFunction) _wrap_wxGrid_GetBatchCount, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_EndBatch", (PyCFunction) _wrap_wxGrid_EndBatch, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_BeginBatch", (PyCFunction) _wrap_wxGrid_BeginBatch, METH_VARARGS | METH_KEYWORDS },

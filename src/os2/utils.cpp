@@ -131,8 +131,7 @@ bool wxGetUserName(
 
 int wxKill(
   long                              lPid
-, wxSignal                          eSig
-, wxKillError*                      peError
+, int                               nSig
 )
 {
     return((int)::DosKillProcess(0, (PID)lPid));

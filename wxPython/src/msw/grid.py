@@ -903,6 +903,9 @@ class wxGridPtr(wxScrolledWindowPtr):
     def GetBatchCount(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_GetBatchCount,(self,) + _args, _kwargs)
         return val
+    def ForceRefresh(self, *_args, **_kwargs):
+        val = apply(gridc.wxGrid_ForceRefresh,(self,) + _args, _kwargs)
+        return val
     def IsEditable(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_IsEditable,(self,) + _args, _kwargs)
         return val

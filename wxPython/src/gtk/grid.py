@@ -59,6 +59,9 @@ def EVT_GRID_EDITOR_SHOWN(win, fn):
 def EVT_GRID_EDITOR_HIDDEN(win, fn):
     win.Connect(-1, -1, wxEVT_GRID_EDITOR_HIDDEN, fn)
 
+def EVT_GRID_EDITOR_CREATED(win, fn):
+    win.Connect(-1, -1, wxEVT_GRID_EDITOR_CREATED, fn)
+
 
 class wxGridCellRendererPtr :
     def __init__(self,this):
@@ -900,6 +903,9 @@ class wxGridPtr(wxScrolledWindowPtr):
     def GetBatchCount(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_GetBatchCount,(self,) + _args, _kwargs)
         return val
+    def ForceRefresh(self, *_args, **_kwargs):
+        val = apply(gridc.wxGrid_ForceRefresh,(self,) + _args, _kwargs)
+        return val
     def IsEditable(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_IsEditable,(self,) + _args, _kwargs)
         return val
@@ -1481,6 +1487,38 @@ class wxGridRangeSelectEvent(wxGridRangeSelectEventPtr):
 
 
 
+class wxGridEditorCreatedEventPtr(wxCommandEventPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def GetRow(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridEditorCreatedEvent_GetRow,(self,) + _args, _kwargs)
+        return val
+    def GetCol(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridEditorCreatedEvent_GetCol,(self,) + _args, _kwargs)
+        return val
+    def GetControl(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridEditorCreatedEvent_GetControl,(self,) + _args, _kwargs)
+        return val
+    def SetRow(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridEditorCreatedEvent_SetRow,(self,) + _args, _kwargs)
+        return val
+    def SetCol(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridEditorCreatedEvent_SetCol,(self,) + _args, _kwargs)
+        return val
+    def SetControl(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridEditorCreatedEvent_SetControl,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxGridEditorCreatedEvent instance at %s>" % (self.this,)
+class wxGridEditorCreatedEvent(wxGridEditorCreatedEventPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(gridc.new_wxGridEditorCreatedEvent,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------
@@ -1522,6 +1560,7 @@ wxEVT_GRID_CELL_CHANGE = gridc.wxEVT_GRID_CELL_CHANGE
 wxEVT_GRID_SELECT_CELL = gridc.wxEVT_GRID_SELECT_CELL
 wxEVT_GRID_EDITOR_SHOWN = gridc.wxEVT_GRID_EDITOR_SHOWN
 wxEVT_GRID_EDITOR_HIDDEN = gridc.wxEVT_GRID_EDITOR_HIDDEN
+wxEVT_GRID_EDITOR_CREATED = gridc.wxEVT_GRID_EDITOR_CREATED
 
 
 #-------------- USER INCLUDE -----------------------
@@ -1533,6 +1572,7 @@ wxEVT_GRID_EDITOR_HIDDEN = gridc.wxEVT_GRID_EDITOR_HIDDEN
 wx.wxGridEventPtr                  = wxGridEventPtr
 wx.wxGridSizeEventPtr              = wxGridSizeEventPtr
 wx.wxGridRangeSelectEventPtr       = wxGridRangeSelectEventPtr
+wx.wxGridEditorCreatedEventPtr     = wxGridEditorCreatedEventPtr
 wx.wxGridCellRendererPtr           = wxGridCellRendererPtr
 wx.wxPyGridCellRendererPtr         = wxPyGridCellRendererPtr
 wx.wxGridCellEditorPtr             = wxGridCellEditorPtr

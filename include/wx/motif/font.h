@@ -16,8 +16,6 @@
     #pragma interface "font.h"
 #endif
 
-class wxXFont;
-
 // Font
 class wxFont : public wxFontBase
 {
@@ -85,8 +83,8 @@ public:
     // of the fonts and a mapping file.
 
     // Return font struct, and optionally the Motif font list
-    wxXFont *GetInternalFont(double scale = 1.0,
-                             WXDisplay* display = NULL) const;
+    class wxXFont* GetInternalFont(double scale = 1.0,
+                                   WXDisplay* display = NULL) const;
 
     // These two are helper functions for convenient access of the above.
     WXFontStructPtr GetFontStruct(double scale = 1.0,

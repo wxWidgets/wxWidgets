@@ -13,10 +13,10 @@ from my_distutils import run_swig, contrib_copy_tree
 # flags and values that affect this script
 #----------------------------------------------------------------------
 
-VERSION          = "2.3.1b1"
+VERSION          = "2.3.1"
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
-AUTHOR_EMAIL     = "robin@alldunn.com"
+AUTHOR_EMAIL     = "Robin Dunn <robin@alldunn.com>"
 URL              = "http://wxPython.org/"
 LICENCE          = "wxWindows (LGPL derivative)"
 LONG_DESCRIPTION = """\
@@ -68,6 +68,13 @@ WXDLLVER = '23_1'  # Version part of DLL name
 
 
 #----------------------------------------------------------------------
+
+def msg(text):
+    if __name__ == "__main__":
+        print text
+
+
+#----------------------------------------------------------------------
 # Some other globals
 #----------------------------------------------------------------------
 
@@ -80,7 +87,7 @@ debug = '--debug' in sys.argv or '-g' in sys.argv
 bcpp_compiling = '-c' in sys.argv and 'my_bcpp' in sys.argv # Bad heuristic
 
 if bcpp_compiling:
-    print "Compiling wxPython by Borland C/C++ Compiler"
+    msg("Compiling wxPython by Borland C/C++ Compiler")
     HYBRID=0
     WXBCPPLIBVER = string.replace(WXDLLVER,"_","")
     # Version part of BCPP build LIBRARY name
@@ -91,8 +98,9 @@ if bcpp_compiling:
 # Check for build flags on the command line
 #----------------------------------------------------------------------
 
-for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'CORE_ONLY',
-             'USE_SWIG', 'IN_CVS_TREE', 'FINAL', 'HYBRID', ]:
+for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'BUILD_XRC',
+             'CORE_ONLY', 'USE_SWIG', 'IN_CVS_TREE',
+             'FINAL', 'HYBRID', ]:
     for x in range(len(sys.argv)):
         if string.find(sys.argv[x], flag) == 0:
             pos = string.find(sys.argv[x], '=') + 1
@@ -115,6 +123,7 @@ if CORE_ONLY:
     BUILD_GLCANVAS = 0
     BUILD_OGL = 0
     BUILD_STC = 0
+    BUILD_XRC = 0
 
 #----------------------------------------------------------------------
 # Setup some platform specific stuff
@@ -268,7 +277,7 @@ swig_deps = ['src/my_typemaps.i']
 #----------------------------------------------------------------------
 
 if not GL_ONLY:
-    print 'Preparing CORE...'
+    msg('Preparing CORE...')
     swig_files = [ 'wx.i', 'windows.i', 'windows2.i', 'windows3.i', 'events.i',
                    'misc.i', 'misc2.i', 'gdi.i', 'mdi.i', 'controls.i',
                    'controls2.i', 'cmndlgs.i', 'stattool.i', 'frames.i', 'image.i',
@@ -373,7 +382,7 @@ if not GL_ONLY:
 #----------------------------------------------------------------------
 
 if BUILD_GLCANVAS or GL_ONLY:
-    print 'Preparing GLCANVAS...'
+    msg('Preparing GLCANVAS...')
     location = 'contrib/glcanvas'
     swig_files = ['glcanvas.i']
     other_sources = []
@@ -413,7 +422,7 @@ if BUILD_GLCANVAS or GL_ONLY:
 #----------------------------------------------------------------------
 
 if not GL_ONLY and BUILD_OGL:
-    print 'Preparing OGL...'
+    msg('Preparing OGL...')
     location = 'contrib/ogl'
     OGLLOC = location + '/contrib/src/ogl'
     OGLINC = location + '/contrib/include'
@@ -462,7 +471,7 @@ if not GL_ONLY and BUILD_OGL:
 #----------------------------------------------------------------------
 
 if not GL_ONLY and BUILD_STC:
-    print 'Preparing STC...'
+    msg('Preparing STC...')
     location = 'contrib/stc'
     STCLOC = location + '/contrib/src/stc'
     STCINC = location + '/contrib/include'
@@ -481,7 +490,7 @@ if not GL_ONLY and BUILD_STC:
                             [STC_H+'/stc.h'])
 
     # copy a project specific py module to the main package dir
-    copy_file(location+'/stc.py', PKGDIR, update=1, verbose=1)
+    copy_file(location+'/stc.py', PKGDIR, update=1, verbose=0)
 
     # add some include dirs to the standard set
     stc_includes = includes[:]
@@ -547,7 +556,7 @@ if not GL_ONLY and BUILD_STC:
 #----------------------------------------------------------------------
 
 if not GL_ONLY and BUILD_IEWIN:
-    print 'Preparing IEWIN...'
+    msg('Preparing IEWIN...')
     location = 'contrib/iewin'
 
     swig_files = ['iewin.i', ]
@@ -577,7 +586,7 @@ if not GL_ONLY and BUILD_IEWIN:
 #----------------------------------------------------------------------
 
 if not GL_ONLY and BUILD_XRC:
-    print 'Preparing XRC...'
+    msg('Preparing XRC...')
     location = 'contrib/xrc'
     XMLLOC = location + '/contrib/src/xrc'
     XMLINC = location + '/contrib/include'
