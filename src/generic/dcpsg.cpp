@@ -1004,11 +1004,11 @@ void wxPostScriptDC::SetFont( const wxFont& font )
     fprintf( m_pstream, " reencodeISO def\n" );
     fprintf( m_pstream, buffer );
     fprintf( m_pstream, " findfont\n" );
-    #ifdef __WXMSW__
-    fprintf( m_pstream, "%d scalefont setfont\n", YLOG2DEVREL(m_font.GetPointSize()) );
-    #else
-    fprintf( m_pstream, "%d scalefont setfont\n", YLOG2DEVREL(m_font.GetPointSize()) );
-    #endif
+
+    fprintf( m_pstream, "%f scalefont setfont\n", YLOG2DEVREL(m_font.GetPointSize() * 1000) / 1000.0F);
+                // this is a hack - we must scale font size (in pts) according to m_scaleY but
+                // YLOG2DEVREL works with wxCoord type (int or longint). Se we first convert font size
+                // to 1/1000th of pt and then back. 
 }
 
 void wxPostScriptDC::SetPen( const wxPen& pen )
@@ -1854,22 +1854,6 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
                    << name << ".afm";
            afmFile = fopen(afmName,"r");
         }
-#if 0        
-        if (afmFile==NULL)
-        {
-            strcpy( afmName, "/usr/local/share/wx/afm/" );
-             strcat(afmName,name);
-             strcat(afmName,".afm");
-             afmFile = fopen(afmName,"r");
-        }
-        if (afmFile==NULL)
-        {
-            strcpy( afmName, "/usr/share/wx/afm/" );
-            strcat(afmName,name);
-            strcat(afmName,".afm");
-            afmFile = fopen(afmName,"r");
-        }
-#endif
 #endif
         
         if (afmFile==NULL)
@@ -1993,11 +1977,11 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         if(lastWidths[*p]== INT_MIN)
         {
             wxLogDebug(wxT("GetTextExtent: undefined width for character '%hc' (%d)\n"), *p,*p);
-            widthSum += /*(wxCoord)*/(lastWidths[' ']/1000.0F * Size); /* assume space */
+            widthSum += (lastWidths[' ']/1000.0F * Size); /* assume space */
         }
         else
         {
-            widthSum += /*(wxCoord)*/((lastWidths[*p]/1000.0F)*Size);
+            widthSum += ((lastWidths[*p]/1000.0F)*Size);
         }
     }
 
