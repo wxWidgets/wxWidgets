@@ -38,6 +38,8 @@
             next;
         }
 
+        $isCFile = $file =~ /\.c$/;
+
         my $isOleObj = $wxMSW{$file} =~ /\bO\b/;
         $file =~ s/cp?p?$/obj/;
         my $obj = "\$(MSWDIR)\\" . $file . " ";
@@ -47,7 +49,7 @@
             #! remember that this file is in ole subdir
             $project{"WXOLEOBJS"} .= $obj;
         }
-
+        $project{"WXCOBJS"} .= $obj if $isCFile;
     }
 #$}
 
@@ -201,7 +203,8 @@ $(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
     foreach (@objs) {
         $text .= $_ . ": ";
         if ( $project{"WXOLEOBJS"} =~ /\Q$_/ ) { s/MSWDIR/OLEDIR/; }
-        s/obj$/\$(SRCSUFF)/;
+        $suffix = $project{"WXCOBJS"} =~ /\Q$_/ ? "c" : '$(SRCSUFF)';
+        s/obj$/$suffix/;
         $text .= $_ . "\n\n";
     }
 #$}

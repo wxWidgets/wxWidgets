@@ -42,8 +42,11 @@
         #! don't take files not appropriate for 16-bit Windows
         next if $wxMSW{$file} =~ /\b(32|O)\b/;
 
+        $isCFile = $file =~ /\.c$/;
         $file =~ s/cp?p?$/obj/;
-        $project{"WXMSWOBJS"} .= "\$(MSWDIR)\\" . $file . " "
+        $obj = "\$(MSWDIR)\\" . $file . " ";
+        $project{"WXMSWOBJS"} .= $obj;
+        $project{"WXCOBJS"} .= $obj if $isCFile;
     }
 #$}
 
@@ -162,7 +165,8 @@ $(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
     my @objs = split;
     foreach (@objs) {
         $text .= $_ . ": ";
-        s/obj/\$(SRCSUFF)/;
+        $suffix = $project{"WXCOBJS"} =~ /\Q$_/ ? "c" : '$(SRCSUFF)';
+        s/obj/$suffix/;
         $text .= $_ . "\n\n";
     }
 #$}
