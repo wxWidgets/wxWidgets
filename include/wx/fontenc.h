@@ -45,14 +45,6 @@ enum wxFontEncoding
     wxFONTENCODING_ALTERNATIVE,     // same as MS-DOS CP866
     wxFONTENCODING_BULGARIAN,       // used under Linux in Bulgaria
 
-    // Chinese
-    wxFONTENCODING_GB2312,          // Simplified Chinese (same as CP936)
-    wxFONTENCODING_BIG5,            // Traditional Chinese (same as CP950)
-
-    // Japanese (see http://zsigri.tripod.com/fontboard/cjk/jis.html)
-    wxFONTENCODING_SHIFT_JIS,       // (same as CP932)
-    wxFONTENCODING_EUC_JP,          // Extended Unix Codepage for Japanese
-
     // what would we do without Microsoft? They have their own encodings
         // for DOS
     wxFONTENCODING_CP437,           // original MS-DOS codepage
@@ -78,6 +70,15 @@ enum wxFontEncoding
 
     wxFONTENCODING_UTF7,            // UTF-7 Unicode encoding
     wxFONTENCODING_UTF8,            // UTF-8 Unicode encoding
+
+    // Far Eastern encodings
+        // Chinese
+    wxFONTENCODING_GB2312 = wxFONTENCODING_CP936, // Simplified Chinese
+    wxFONTENCODING_BIG5 = wxFONTENCODING_CP950,   // Traditional Chinese
+
+        // Japanese (see http://zsigri.tripod.com/fontboard/cjk/jis.html)
+    wxFONTENCODING_SHIFT_JIS = wxFONTENCODING_CP932,  // Shift JIS
+    wxFONTENCODING_EUC_JP,          // Extended Unix Codepage for Japanese
 
     wxFONTENCODING_UNICODE,         // Unicode - currently used only by
                                     // wxEncodingConverter class
