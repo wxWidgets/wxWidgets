@@ -17,10 +17,10 @@
 #endif
 
 #include "wx/defs.h"
-#include "wx/help.h"
 
 #if wxUSE_HELP
 
+#include "wx/help.h"
 #include "wx/bmpbuttn.h"
 
 // ----------------------------------------------------------------------------
@@ -77,8 +77,6 @@ private:
     DECLARE_CLASS(wxContextHelpButton)
     DECLARE_EVENT_TABLE()
 };
-
-#endif // wxUSE_HELP
 
 // ----------------------------------------------------------------------------
 // classes used to implement context help support
@@ -176,6 +174,8 @@ protected:
 
 // Convenience function for turning context id into wxString
 WXDLLEXPORT wxString wxContextId(int id);
+
+#endif // wxUSE_HELP
 
 #endif // _WX_CSHELPH__
 
