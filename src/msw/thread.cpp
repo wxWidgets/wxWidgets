@@ -41,7 +41,7 @@
     #define _MT
 #endif
 
-#ifdef __VISUALC__
+#if defined(__VISUALC__) || (defined(__BORLANDC__) && (__BORLANDC__ >= 0x500))
     #include <process.h>
 #endif
 
@@ -442,7 +442,7 @@ bool wxThreadInternal::Create(wxThread *thread)
     // for compilers which have it, we should use C RTL function for thread
     // creation instead of Win32 API one because otherwise we will have memory
     // leaks if the thread uses C RTL (and most threads do)
-#ifdef __VISUALC__
+#if defined(__VISUALC__) || (defined(__BORLANDC__) && (__BORLANDC__ >= 0x500))
     typedef unsigned (__stdcall *RtlThreadStart)(void *);
 
     m_hThread = (HANDLE)_beginthreadex(NULL, 0,
@@ -912,7 +912,7 @@ void wxThread::Exit(ExitCode status)
         delete this;
     }
 
-#ifdef __VISUALC__
+#if defined(__VISUALC__) || (defined(__BORLANDC__) && (__BORLANDC__ >= 0x500))
     _endthreadex((unsigned)status);
 #else // !VC++
     ::ExitThread((DWORD)status);
