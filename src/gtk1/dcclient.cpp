@@ -500,7 +500,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
 
     wxCHECK_RET( bitmap.Ok(), wxT("invalid bitmap") );
 
-    bool is_mono = (bitmap.GetBitmap());
+    bool is_mono = (bitmap.GetBitmap() != NULL);
 
     /* scale/translate size and position */
 
