@@ -233,7 +233,7 @@ static char wxPostScriptHeaderReencodeISO2[] =
 // wxPostScriptDC
 //-------------------------------------------------------------------------------
 
-float wxPostScriptDC::ms_PSScaleFactor = 1.0;
+float wxPostScriptDC::ms_PSScaleFactor = 10.0;
 
 void wxPostScriptDC::SetResolution(int ppi)
 {
