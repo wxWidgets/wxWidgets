@@ -44,7 +44,8 @@ There are also helper classes which are used together with wxDateTime:
 \helpref{wxDateTimeHolidayAuthority}{wxdatetimeholidayauthority} which is used
 to determine whether a given date is a holiday or not and 
 \helpref{wxDateTimeWorkDays}{wxdatetimeworkdays} which is a derivation of this
-class for which (only) Saturdays and Sundays are the holidays.
+class for which (only) Saturdays and Sundays are the holidays. See more about
+these classes in the discussion of the \helpref{holidays}{tdateholidays}.
 
 Finally, in other parts of this manual you may find mentions of wxDate and
 wxTime classes. \helpref{These classes}{tdatecompatibility} are obsolete and
@@ -110,7 +111,7 @@ also more efficient). However, wxDateSpan may be very useful in situations
 when you do need to understand what does `in a month' mean (of course, it is
 just {\tt wxDateTime::Now() + wxDateSpan::Month()}).
 
-\subsection{Date arithmetics}
+\subsection{Date arithmetics}\label{tdatearithm}
 
 Many different operations may be performed with the dates, however not all of
 them make sense. For example, multiplying date by a number is an invalid
@@ -184,7 +185,7 @@ printf("The time is %s in local time zone", dt.FormatTime().c_str());
 printf("The time is %s in GMT", dt.FormatTime(wxDateTime::GMT).c_str());
 \end{verbatim}
 
-\subsection{Daylight saving time (DST)}
+\subsection{Daylight saving time (DST)}\label{tdatedst}
 
 DST (a.k.a. `summer time') handling is always a delicate task which is better
 left to the operating system which is supposed to be configured by the
@@ -203,6 +204,10 @@ The time zone handling \helpref{methods}{tdatetimezones} use these functions
 too, so they are subject to the same limitations.
 
 % is this really needed? \subsection{Conversion to/from text}
+
+\subsection{wxDateTime and Holidays}\label{tdateholidays}
+
+TODO.
 
 \subsection{Compatibility}\label{tdatecompatibility}
 
