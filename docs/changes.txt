@@ -9,6 +9,10 @@ All:
 
 - wxPathExists deprecated, use wxDirExists instead.
 
+wxMSW:
+
+- fixed static box border when the label is empty
+
 2.5.5
 -----
 
