@@ -453,7 +453,11 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
         // We handle 8-bit bitmaps ourselves using the colour cube, 12-bit 
         // visuals are not supported by GDK so we do these ourselves, too.
         // 15-bit and 16-bit should actually work and 24-bit certainly does.
+#ifdef __sgi
+        if (!image.HasMask() && (bpp > 16))
+#else
         if (!image.HasMask() && (bpp > 12))
+#endif
         {
             static bool s_hasInitialized = FALSE;
 
