@@ -310,6 +310,9 @@
 // text entry dialog and wxGetTextFromUser function
 #define wxUSE_TEXTDLG 1
 
+// use generic wxToolBar class instead of the native one?
+#define wxUSE_TOOLBAR 0
+
 // wxToolBar class
 #define wxUSE_TOOLBAR 1
 

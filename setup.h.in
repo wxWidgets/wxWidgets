@@ -307,6 +307,12 @@
 #define wxUSE_TAB_DIALOG 0
 /* compatibility */
 #define wxUSE_TABDIALOG wxUSE_TAB_DIALOG
+
+/*
+ * Use generic wxToolBar instead of the native one?
+ */
+#define wxUSE_TOOLBAR_SIMPLE 0
+
 /*
  * Use this control
  */
