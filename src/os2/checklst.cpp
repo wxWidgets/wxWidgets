@@ -269,7 +269,7 @@ wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
 
 void wxCheckListBox::Delete(int N)
 {
-    wxCHECK_RET( N >= 0 && N < m_noItems,
+    wxCHECK_RET( N >= 0 && N < m_nNumItems,
                  wxT("invalid index in wxListBox::Delete") );
 
     wxListBox::Delete(N);
@@ -282,7 +282,7 @@ void wxCheckListBox::Delete(int N)
 
 void wxCheckListBox::InsertItems(int nItems, const wxString items[], int pos)
 {
-    wxCHECK_RET( pos >= 0 && pos <= m_noItems,
+    wxCHECK_RET( pos >= 0 && pos <= m_nNumItems,
                  wxT("invalid index in wxCheckListBox::InsertItems") );
 
     wxListBox::InsertItems(nItems, items, pos);
@@ -377,7 +377,7 @@ void wxCheckListBox::OnLeftClick(wxMouseEvent& event)
 */
     size_t nItem = 0;
 
-    if ( nItem < (size_t)m_noItems )
+    if ( nItem < (size_t)m_nNumItems )
       GetItem(nItem)->Toggle();
     //else: it's not an error, just click outside of client zone
   }
