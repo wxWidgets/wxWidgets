@@ -181,6 +181,13 @@
 // global features
 // ----------------------------------------------------------------------------
 
+// Set wxUSE_EXTENDED_RTTI to 1 to use extended RTTI
+//
+// Default is 0
+//
+// Recommended setting: 0
+#define wxUSE_EXTENDED_RTTI 0
+
 // Set wxUSE_STL to 1 to derive wxList(Foo) and wxArray(Foo) from
 // std::list<Foo*> and std::vector<Foo*>, with a compatibility interface,
 // and for wxHashMap to be implemented with templates.
@@ -427,6 +434,14 @@
 // wxWave class
 #define wxUSE_WAVE      1
 
+// XML parsing classes. Note that their API will change in the future, so
+// using wxXmlDocument and wxXmlNode in your app is not recommended.
+//
+// Default is 1
+//
+// Recommended setting: 1 (needed by XRC)
+#define wxUSE_XML       1
+
 // ----------------------------------------------------------------------------
 // Individual GUI controls
 // ----------------------------------------------------------------------------
@@ -527,6 +542,14 @@
 //
 // Recommended setting: 1
 #define wxUSE_NOTEBOOK 1
+
+// wxListbook control is similar to wxNotebook but uses wxListCtrl instead of
+// the tabs
+//
+// Default is 1.
+//
+// Recommended setting: 1
+#define wxUSE_LISTBOOK 1
 
 // wxTabDialog is a generic version of wxNotebook but it is incompatible with
 // the new class. It shouldn't be used in new code.
