@@ -66,43 +66,43 @@ Zip set
 Depending on what you downloaded, you may have one or more of
 these ports. You may unarchive any or all of the ports into
 the same directory hierarchy. The zip archive set comprises the
-following:
+following, where x is the minor version and y the release number:
 
-wx200gen.zip            Generic source code and samples (required)
-wx200msw.zip            Windows-specific source code
-wx200mot.zip            Motif-specific source code
-wx200gtk.zip            GTK-specific source code
-wx200stubs.zip          Stubs ('empty port') source. Needs
-                        wx200gen.zip/tgz.
-wx200doc.zip            Documentation source code (not required)
-wx200hlp.zip            WinHelp documentation
-wx200pdf.zip            Acrobat PDF documentation
-wx200htm.zip            HTML documentation
-wx200vc.zip             MS VC++ 5/6 project files
-wx200bc.zip             Borland C++ 5 project files
-wx200cw.zip             Metrowerks CodeWarrior 4.1 project files
-jpeg.zip                Optional JPEG library
-ogl3.zip                Optional Object Graphics Library
-glcanvas.zip            Optional wxGLCanvas class (Motif, GTK, MSW)
-tex2rtf2.zip            Tex2RTF documentation tool
+wx2_x_y_gen.zip            Generic source code and samples (required)
+wx2_x_y_msw.zip            Windows-specific source code
+wx2_x_y_mot.zip            Motif-specific source code
+wx2_x_y_gtk.zip            GTK-specific source code
+wx2_x_y_stubs.zip          Stubs ('empty port') source. Needs
+                           wx2_x_y_gen.zip/tgz.
+wx2_x_y_doc.zip            Documentation source code (not required)
+wx2_x_y_hlp.zip            WinHelp documentation
+wx2_x_y_pdf.zip            Acrobat PDF documentation
+wx2_x_y_htm.zip            HTML documentation
+wx2_x_y_vc.zip             MS VC++ 5/6 project files
+wx2_x_y_bc.zip             Borland C++ 5 project files
+wx2_x_y_cw.zip             Metrowerks CodeWarrior 4.1 project files
+jpeg.zip                   Optional JPEG library
+ogl3.zip                   Optional Object Graphics Library
+glcanvas.zip               Optional wxGLCanvas class (Motif, GTK, MSW)
+tex2rtf2.zip               Tex2RTF documentation tool
 
 wxWindows for GTK distribution
 ------------------------------
 
-wxGTK-2.x.x.tgz         wxGTK source distribution. You will
-                        need the HTML and/or PDF documentation
-                        from the zip set (above).
+wxGTK-2.x.y.tgz            wxGTK source distribution. You will
+                           need the HTML and/or PDF documentation
+                           from the zip set (above).
 
 wxWindows for Motif distribution
 --------------------------------
 
-wxMotif-2.x.x.tgz       wxMotif source distribution. You will
-                        need the HTML and/or PDF documentation
-   -- OR --             from the zip set (above).
+wxMotif-2.x.y.tgz          wxMotif source distribution. You will
+                           need the HTML and/or PDF documentation
+   -- OR --                from the zip set (above).
 
-wx200gen.zip
-wx200msw.zip
-wx200mot.zip
+wx2_x_y_gen.zip
+wx2_x_y_msw.zip
+wx2_x_y_mot.zip
 jpeg.zip
 
 wxWindows for Windows distribution

@@ -129,6 +129,7 @@ rem Now invoke WISE install on the new wxwin2.wse
 set wisecmd="c:\Program Files\wise\wise32.exe" /C %WXWIN\distrib\msw\wxwin2.wse
 echo Invoking %wisecmd...
 start /w %wisecmd
+Rem ren %WXWIN\deliver\setup.EXE %WXWIN\deliver\setup_%version%.exe
 
 cd %dest
 

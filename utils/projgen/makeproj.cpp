@@ -217,6 +217,7 @@ void MyApp::GenerateSamples(const wxString& dir)
     GenerateSample("DocVwMDIVC", "docview", dir + wxString("/samples/docvwmdi"),
         wxStringList("docview.cpp", "doc.cpp", "view.cpp", "docview.h", "doc.h", "view.h", 0));
     GenerateSample("DynamicVC", "dynamic", dir + wxString("/samples/dynamic"), wxStringList("dynamic.cpp", 0));
+    GenerateSample("DrawingVC", "drawing", dir + wxString("/samples/drawing"), wxStringList("drawing.cpp", 0));
     GenerateSample("FortyVC", "forty", dir + wxString("/samples/forty"),
        wxStringList("forty.cpp", "canvas.cpp", "card.cpp", "game.cpp", "pile.cpp", "playerdg.cpp", "scoredg.cpp", "scorefil.cpp",
        "canvas.h", "forty.h", "card.h", "game.h", "pile.h", "playerdg.h", "scoredg.h", "scorefil.h",

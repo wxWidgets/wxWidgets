@@ -96,6 +96,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
   my_horse_gif = (wxBitmap*) NULL;
   my_horse_bmp = (wxBitmap*) NULL;
   my_horse_pcx = (wxBitmap*) NULL;
+  my_horse_pnm = (wxBitmap*) NULL;
   my_square = (wxBitmap*) NULL;
   my_anti = (wxBitmap*) NULL;
 
@@ -133,26 +134,32 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
       wxLogError("Can't load JPG image");
   else
       my_horse_jpeg = new wxBitmap( image.ConvertToBitmap() );
-  
+
+#if wxUSE_GIF
   if ( !image.LoadFile( dir + wxString("horse.gif") ) )
       wxLogError("Can't load GIF image");
   else
     my_horse_gif = new wxBitmap( image.ConvertToBitmap() );
+#endif
 
+#if wxUSE_PCX
   if ( !image.LoadFile( dir + wxString("horse.pcx"), wxBITMAP_TYPE_PCX ) )
       wxLogError("Can't load PCX image");
   else
     my_horse_pcx = new wxBitmap( image.ConvertToBitmap() );
+#endif
 
   if ( !image.LoadFile( dir + wxString("horse.bmp"), wxBITMAP_TYPE_BMP ) )
       wxLogError("Can't load BMP image");
   else
     my_horse_bmp = new wxBitmap( image.ConvertToBitmap() );
 
+#if wxUSE_PNM
   if ( !image.LoadFile( dir + wxString("horse.pnm"), wxBITMAP_TYPE_PNM ) )
       wxLogError("Can't load PNM image");
   else
     my_horse_pnm = new wxBitmap( image.ConvertToBitmap() );
+#endif
   
   image.LoadFile( dir + wxString("test.png") );
   my_square = new wxBitmap( image.ConvertToBitmap() );
@@ -216,7 +223,7 @@ void MyCanvas::CreateAntiAliasedBitmap()
 
   dc.Clear();
   
-  dc.SetFont( wxFont( 24, wxDECORATIVE, wxDEFAULT, wxDEFAULT ) );
+  dc.SetFont( wxFont( 24, wxDECORATIVE, wxNORMAL, wxNORMAL) );
   dc.SetTextForeground( "RED" );
   dc.DrawText( "This is anti-aliased Text.", 20, 20 );
   dc.DrawText( "And a Rectangle.", 20, 60 );
@@ -317,9 +324,17 @@ bool MyApp::OnInit()
   wxImage::AddHandler( new wxJPEGHandler );
 #endif
 
+#if wxUSE_GIF
   wxImage::AddHandler( new wxGIFHandler );
+#endif
+
+#if wxUSE_PCX
   wxImage::AddHandler( new wxPCXHandler );
+#endif
+
+#if wxUSE_PNM
   wxImage::AddHandler( new wxPNMHandler );
+#endif
 
   wxFrame *frame = new MyFrame();
   frame->Show( TRUE );

@@ -701,11 +701,18 @@ void MyPanel::OnListBox( wxCommandEvent &event )
 
     wxStringClientData *obj = ((wxStringClientData *)event.GetClientObject());
     m_text->AppendText( "ListBox event client data string is: '" );
-    m_text->AppendText( obj ? obj->GetData() : wxString("none"));
+    if (obj) // BC++ doesn't like use of '? .. : .. ' in this context
+    	m_text->AppendText( obj->GetData() );
+    else
+    	m_text->AppendText( wxString("none") );
+
     m_text->AppendText( "'\n" );
     m_text->AppendText( "ListBox control client data string is: '" );
     obj = (wxStringClientData *)listbox->GetClientObject(listbox->GetSelection());
-    m_text->AppendText( obj ? obj->GetData() : wxString("none"));
+    if (obj)
+    	m_text->AppendText( obj->GetData() );
+    else
+    	m_text->AppendText( wxString("none") );
     m_text->AppendText( "'\n" );
 }
 
@@ -793,11 +800,20 @@ void MyPanel::OnChoice( wxCommandEvent &event )
 
     wxStringClientData *obj = ((wxStringClientData *)event.GetClientObject());
     m_text->AppendText( "Choice event client data string is: '" );
-    m_text->AppendText( obj ? obj->GetData() : wxString("none"));
+
+    if (obj)
+       m_text->AppendText( obj->GetData() );
+    else
+       m_text->AppendText( wxString("none") );
+
     m_text->AppendText( "'\n" );
     m_text->AppendText( "Choice control client data string is: '" );
     obj = (wxStringClientData *)choice->GetClientObject(choice->GetSelection());
-    m_text->AppendText( obj ? obj->GetData() : wxString("none"));
+
+    if (obj)
+       m_text->AppendText( obj->GetData() );
+    else
+       m_text->AppendText( wxString("none") );
     m_text->AppendText( "'\n" );
 }
 
