@@ -758,12 +758,18 @@ void wxCSConv::LoadNow()
                 // try to see if it's in the environment variables
                 // (in most cases this won't work, but I was out of ideas)
                 wxChar *lang = wxGetenv(wxT("LC_ALL"));
-                if (!lang) 
-                    lang = wxGetenv(wxT("LC_CTYPE"));
-                if (!lang) 
-                    lang = wxGetenv(wxT("LANG"));
                 wxChar *dot = lang ? wxStrchr(lang, wxT('.')) : (wxChar *)NULL;
-                if (dot) 
+                if (!dot)
+                {
+                    lang = wxGetenv(wxT("LC_CTYPE"));
+                    dot = lang ? wxStrchr(lang, wxT('.')) : (wxChar *)NULL;
+                }
+                if (!dot)
+                {
+                    lang = wxGetenv(wxT("LANG"));
+                    dot = lang ? wxStrchr(lang, wxT('.')) : (wxChar *)NULL;
+                }
+                if (dot)
                     SetName(dot+1);
             }
 #endif
