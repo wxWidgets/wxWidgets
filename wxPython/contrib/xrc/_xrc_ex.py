@@ -2,7 +2,7 @@
 # The global was removed  in favor of static accessor functions.  This is for
 # backwards compatibility:
 
-wxTheXmlResource = wxXmlResource_Get()
+TheXmlResource = XmlResource_Get()
 
 
 #----------------------------------------------------------------------------
@@ -17,9 +17,9 @@ def _my_import(name):
     return mod
 
 
-class wxXmlSubclassFactory_Python(wxXmlSubclassFactory):
+class XmlSubclassFactory_Python(XmlSubclassFactory):
     def __init__(self):
-        wxXmlSubclassFactory.__init__(self)
+        XmlSubclassFactory.__init__(self)
 
     def Create(self, className):
         assert className.find('.') != -1, "Module name must be specified!"
@@ -31,6 +31,6 @@ class wxXmlSubclassFactory_Python(wxXmlSubclassFactory):
         return inst
 
 
-wxXmlResource_AddSubclassFactory(wxXmlSubclassFactory_Python())
+XmlResource_AddSubclassFactory(XmlSubclassFactory_Python())
 
 #----------------------------------------------------------------------------

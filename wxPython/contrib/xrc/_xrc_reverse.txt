@@ -2,3 +2,5 @@
 
 XRCID   = wx.xrc.XRCID
 XRCCTRL = wx.xrc.XRCCTRL
+
+TheXmlResource
