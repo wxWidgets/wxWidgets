@@ -40,5 +40,11 @@ $(MSW_MAKEFILES_DIR)/makefile.g95: filelist.txt wxwin.pro
 $(MSW_MAKEFILES_DIR)/makefile.g295: filelist.txt wxwin.pro g295.t
 	$(TMAKE) -t g295 wxwin.pro -o $@
 
-$(WXDIR)/Makefile.in: filelist.txt wxwin.pro
-	$(TMAKE) -t unx wxwin.pro -o $@
+$(WXDIR)/src/gtk/files.lst: filelist.txt wxwin.pro
+	$(TMAKE) -t gtk wxwin.pro -o $@
+
+$(WXDIR)/src/motif/files.lst: filelist.txt wxwin.pro
+	$(TMAKE) -t motif wxwin.pro -o $@
+
+$(WXDIR)/src/os2/files.lst: filelist.txt wxwin.pro
+	$(TMAKE) -t os2 wxwin.pro -o $@

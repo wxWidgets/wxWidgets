@@ -50,6 +50,7 @@ E:\Perl\5.00471\bin\MSWin32-x86\perl.exe g:\Unix\tmake\bin\tmake -t sc wxwin.pro
 echo Generating for Watcom C++...
 E:\Perl\5.00471\bin\MSWin32-x86\perl.exe g:\Unix\tmake\bin\tmake -t wat wxwin.pro -o %WXDIR%\src\msw\makefile.wat
 echo Generating for Unix and Configure...
-E:\Perl\5.00471\bin\MSWin32-x86\perl.exe g:\Unix\tmake\bin\tmake -t unx wxwin.pro -o %WXDIR%\Makefile.in
-
+E:\Perl\5.00471\bin\MSWin32-x86\perl.exe g:\Unix\tmake\bin\tmake -t gtk wxwin.pro -o %WXDIR%\src\gtk\files.lst
+E:\Perl\5.00471\bin\MSWin32-x86\perl.exe g:\Unix\tmake\bin\tmake -t motif wxwin.pro -o %WXDIR%\src\motif\files.lst
+E:\Perl\5.00471\bin\MSWin32-x86\perl.exe g:\Unix\tmake\bin\tmake -t os2 wxwin.pro -o %WXDIR%\src\os2\files.lst
 :end
