@@ -2128,6 +2128,9 @@ void wxArrayString::Sort(CompareFunction compareFunction)
 
   DoSort();
 
+  // reset it to NULL so that Sort(bool) will work the next time
+  gs_compareFunction = NULL;
+
   END_SORT();
 }
 
