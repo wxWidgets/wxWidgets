@@ -103,70 +103,7 @@ them to the clipboard.
 \item Built-in support for many file formats (BMP, PNG, JPEG, GIF, XPM, PNM, PCX).
 \end{itemize}
 
-\section{Changes from version 1.xx}\label{versionchanges}
-
-These are a few of the major differences between versions 1.xx and 2.0.
-
-Removals:
-
-\begin{itemize}\itemsep=0pt
-\item XView is no longer supported;
-\item all controls (panel items) no longer have labels attached to them;
-\item wxForm has been removed;
-\item wxCanvasDC, wxPanelDC removed (replaced by wxClientDC, wxWindowDC, wxPaintDC which
-can be used for any window);
-\item wxMultiText, wxTextWindow, wxText removed and replaced by wxTextCtrl;
-\item classes no longer divided into generic and platform-specific parts, for efficiency.
-\end{itemize}
-
-Additions and changes:
-
-\begin{itemize}\itemsep=0pt
-\item class hierarchy changed, and restrictions about subwindow nesting lifted;
-\item header files reorganized to conform to normal C++ standards;
-\item classes less dependent on each another, to reduce executable size;
-\item wxString used instead of char* wherever possible;
-\item the number of separate but mandatory utilities reduced;
-\item the event system has been overhauled, with
-virtual functions and callbacks being replaced with MFC-like event tables;
-\item new controls, such as wxTreeCtrl, wxListCtrl, wxSpinButton;
-\item less inconsistency about what events can be handled, so for example
-mouse clicks or key presses on controls can now be intercepted;
-\item the status bar is now a separate class, wxStatusBar, and is
-implemented in generic wxWindows code;
-\item some renaming of controls for greater consistency;
-\item wxBitmap has the notion of bitmap handlers to allow for extension to new formats
-without ifdefing;
-\item new dialogs: wxPageSetupDialog, wxFileDialog, wxDirDialog,
-wxMessageDialog, wxSingleChoiceDialog, wxTextEntryDialog;
-\item GDI objects are reference-counted and are now passed to most functions
-by reference, making memory management far easier;
-\item wxSystemSettings class allows querying for various system-wide properties
-such as dialog font, colours, user interface element sizes, and so on;
-\item better platform look and feel conformance;
-\item toolbar functionality now separated out into a family of classes with the
-same API;
-\item device contexts are no longer accessed using wxWindow::GetDC - they are created
-temporarily with the window as an argument;
-\item events from sliders and scrollbars can be handled more flexibly;
-\item the handling of window close events has been changed in line with the new
-event system;
-\item the concept of {\it validator} has been added to allow much easier coding of
-the relationship between controls and application data;
-\item the documentation has been revised, with more cross-referencing.
-\end{itemize}
-
-Platform-specific changes:
-
-\begin{itemize}\itemsep=0pt
-\item The Windows header file (windows.h) is no longer included by wxWindows headers;
-\item wx.dll supported under Visual C++;
-\item the full range of Windows 95 window decorations are supported, such as modal frame
-borders;
-\item MDI classes brought out of wxFrame into separate classes, and made more flexible.
-\end{itemize}
-
-
+\begin{comment}
 \section{Changes from version 2.0}\label{versionchanges20}
 
 These are a few of the differences between versions 2.0 and 2.2.
@@ -194,7 +131,7 @@ Additions and changes:
 \item Improved support for ODBC databases.
 \item Improved tab traversal in dialogs.
 \end{itemize}
-
+\end{comment}
 
 \section{wxWindows requirements}\label{requirements}
 
@@ -235,14 +172,7 @@ from ftp://www.remstar.com/pub/wxwin and/or http://www.wxwindows.org.}
 from \urlref{ftp://www.remstar.com/pub/wxwin}{ftp://www.remstar.com/pub/wxwin} 
 and/or \urlref{http://www.wxwindows.org}{http://www.wxwindows.org}.}
 
-You can also buy a CD-ROM using the form on the Web site, or by contacting:
-
-Julian Smart\\
-12 North Street West\\
-Uppingham\\
-Rutland\\
-LE15 9SG\\
-julian.smart@btopenworld.com
+You can also buy a CD-ROM using the form on the Web site.
 
 \section{Acknowledgments}
 
@@ -651,29 +581,6 @@ possibilities.
 
 See the separate manual and the directory utils/wxtree.
 
-\section{wxGraphLayout}
-
-The wxGraphLayout class is based on a tool called `graphplace' by Dr.
-Jos T.J. van Eijndhoven of Eindhoven University of Technology. Given a
-(possibly cyclic) directed graph, it does its best to lay out the nodes
-in a sensible manner. There are many applications (such as diagramming)
-where it is required to display a graph with no human intervention. Even
-if manual repositioning is later required, this algorithm can make a good
-first attempt.
-
-See the separate manual and the directory utils/wxgraph. 
-
-\section{Colours}\label{coloursampler}
-
-A colour sampler for viewing colours and their names on each
-platform.
-
-%
-\chapter{Tutorial}\label{tutorial}
-\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
-\setfooter{\thepage}{}{}{}{}{\thepage}%
-
-To be written.
 \end{comment}
 
 \chapter{Programming strategies}\label{strategies}

@@ -4,7 +4,10 @@ wxWindows has an optional {\it resource file} facility,
 which allows separation of dialog, menu, bitmap and icon specifications
 from the application code.
 
-It is similar in principle to the Windows resource file (whose ASCII form is
+{\bf NOTE:} this format is now deprecated in favour of the XML-based \helpref{XRC resource system}{xrcoverview}.
+However it is still available if wxUSE\_RESOURCES is enabled.
+
+The format is similar in principle to the Windows resource file (whose ASCII form is
 suffixed .RC and whose binary form is suffixed .RES). The wxWindows resource
 file is currently ASCII-only, suffixed .WXR. Note that under Windows,
 the .WXR file does not {\it replace} the native Windows resource file,
