@@ -139,6 +139,7 @@ ALL_GUI_DIST: ALL_DIST
 	mkdir $(DISTDIR)/include/wx/protocol
 	mkdir $(DISTDIR)/include/wx/unix
 	mkdir $(DISTDIR)/include/wx/xml
+	mkdir $(DISTDIR)/include/wx/xrc
 	cp $(INCDIR)/wx/*.h $(DISTDIR)/include/wx
 	cp $(INCDIR)/wx/*.inl $(DISTDIR)/include/wx
 	cp $(INCDIR)/wx/*.cpp $(DISTDIR)/include/wx
@@ -146,6 +147,7 @@ ALL_GUI_DIST: ALL_DIST
 	cp $(INCDIR)/wx/html/*.h $(DISTDIR)/include/wx/html
 	cp $(INCDIR)/wx/unix/*.h $(DISTDIR)/include/wx/unix
 	cp $(INCDIR)/wx/xml/*.h $(DISTDIR)/include/wx/xml
+	cp $(INCDIR)/wx/xrc/*.h $(DISTDIR)/include/wx/xrc
 	cp $(INCDIR)/wx/protocol/*.h $(DISTDIR)/include/wx/protocol
 	mkdir $(DISTDIR)/art
 	mkdir $(DISTDIR)/art/gtk
@@ -160,6 +162,8 @@ ALL_GUI_DIST: ALL_DIST
 	mkdir $(DISTDIR)/src/jpeg
 	mkdir $(DISTDIR)/src/tiff
 	mkdir $(DISTDIR)/src/unix
+	mkdir $(DISTDIR)/src/xrc
+	cp $(SRCDIR)/xrc/*.cpp $(DISTDIR)/src/xrc
 	cp $(COMMDIR)/*.cpp $(DISTDIR)/src/common
 	cp $(COMMDIR)/*.c $(DISTDIR)/src/common
 	cp $(COMMDIR)/*.inc $(DISTDIR)/src/common

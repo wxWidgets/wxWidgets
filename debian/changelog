@@ -1,3 +1,9 @@
+wxwidgets2.5 (2.5.2.9) experimental; urgency=low
+
+  * Experimental prerelease.
+
+ -- Ron Lee <ron@debian.org>  Wed, 22 Sep 2004 03:29:56 +0930
+
 wxwidgets2.5 (2.5.2.3) experimental; urgency=low
 
   * Greatly improved concurrent installs.  We can now install
