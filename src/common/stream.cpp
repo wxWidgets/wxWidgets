@@ -95,7 +95,14 @@ wxStreamBuffer::wxStreamBuffer(BufMode mode)
 {
     Init();
 
-    m_stream = new wxStreamBase;
+    wxASSERT_MSG(mode != read_write, wxT("you have to use the other ctor for read_write mode") );
+    if ( mode == read )
+        m_stream = new wxInputStream;
+    else if ( mode == write)
+        m_stream = new wxOutputStream;
+    else
+        m_stream = NULL;
+
     m_mode = mode;
 
     m_flushable = FALSE;
