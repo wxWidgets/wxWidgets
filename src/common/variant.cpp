@@ -991,7 +991,7 @@ bool wxVariantDataWxObjectPtr::Write(wxSTD ostream& str) const
 
 bool wxVariantDataWxObjectPtr::Write(wxString& str) const
 {
-    str.Printf(wxT("%s(%ld)"), GetType().mb_str() ,(long) m_value);
+    str.Printf(wxT("%s(%ld)"), GetType().c_str(), (long) m_value);
     return TRUE;
 }
 
