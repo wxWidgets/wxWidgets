@@ -228,7 +228,8 @@ void XmlResApp::FindFilesInXML(wxXmlNode *node, wxArrayString& flist, const wxSt
             (n->GetType() == wxXML_TEXT_NODE || 
             n->GetType() == wxXML_CDATA_SECTION_NODE) &&
             // ...it is textnode...
-            (node/*not n!*/->GetName() == "bitmap"))
+            ((node/*not n!*/->GetName() == "bitmap") ||
+             (node/*not n!*/->GetName() == "url")))
             // ...and known to contain filename
         {
             wxString fullname;
@@ -439,6 +440,36 @@ wxArrayString XmlResApp::FindStrings()
 
 
 
+static wxString ConvertText(const wxString& str)
+{
+    wxString str2;
+    const wxChar *dt;
+
+    for (dt = str.c_str(); *dt; dt++)
+    {
+        if (*dt == wxT('_'))
+        {
+            if ( *(++dt) == wxT('_') )
+                str2 << wxT('_');
+            else
+                str2 << wxT('&') << *dt;
+        }
+        else 
+        {
+            switch (*dt)
+            {
+                case wxT('\n') : str2 << wxT("\\n"); break;
+                case wxT('\t') : str2 << wxT("\\t"); break;
+                case wxT('\r') : str2 << wxT("\\r"); break;
+                default        : str2 << *dt; break;
+            }
+        }
+    }
+
+    return str2;
+}
+
+
 wxArrayString XmlResApp::FindStrings(wxXmlNode *node)
 {
     wxArrayString arr;
@@ -464,9 +495,9 @@ wxArrayString XmlResApp::FindStrings(wxXmlNode *node)
                 node/*not n!*/->GetName() == _T("htmlcode") ||
                 node/*not n!*/->GetName() == _T("title")
             ))
-            // ...and known to contain filename
+            // ...and known to contain translatable string
         {
-            arr.Add(n->GetContent());
+            arr.Add(ConvertText(n->GetContent()));
         }
         
         // subnodes:
