@@ -60,14 +60,14 @@ private:
 };
 
 // ========================================================================
-// wxWindowCocoaScroller
+// wxWindowCocoaScrollView
 // ========================================================================
-class wxWindowCocoaScroller: protected wxCocoaNSView
+class wxWindowCocoaScrollView: protected wxCocoaNSView
 {
-    DECLARE_NO_COPY_CLASS(wxWindowCocoaScroller)
+    DECLARE_NO_COPY_CLASS(wxWindowCocoaScrollView)
 public:
-    wxWindowCocoaScroller(wxWindow *owner);
-    virtual ~wxWindowCocoaScroller();
+    wxWindowCocoaScrollView(wxWindow *owner);
+    virtual ~wxWindowCocoaScrollView();
     inline WX_NSScrollView GetNSScrollView() { return m_cocoaNSScrollView; }
     void ClientSizeToSize(int &width, int &height);
     void DoGetClientSize(int *x, int *y) const;
@@ -78,7 +78,7 @@ protected:
     WX_NSScrollView m_cocoaNSScrollView;
     virtual void Cocoa_FrameChanged(void);
 private:
-    wxWindowCocoaScroller();
+    wxWindowCocoaScrollView();
 };
 
 // ========================================================================
@@ -151,9 +151,9 @@ bool wxWindowCocoaHider::Cocoa_drawRect(const NSRect& rect)
 @end
 
 // ========================================================================
-// wxWindowCocoaScroller
+// wxWindowCocoaScrollView
 // ========================================================================
-wxWindowCocoaScroller::wxWindowCocoaScroller(wxWindow *owner)
+wxWindowCocoaScrollView::wxWindowCocoaScrollView(wxWindow *owner)
 :   m_owner(owner)
 {
     wxAutoNSAutoreleasePool pool;
@@ -176,7 +176,7 @@ wxWindowCocoaScroller::wxWindowCocoaScroller(wxWindow *owner)
     Encapsulate();
 }
 
-void wxWindowCocoaScroller::Encapsulate()
+void wxWindowCocoaScrollView::Encapsulate()
 {
     // Set the scroll view autoresizingMask to match the current NSView
     [m_cocoaNSScrollView setAutoresizingMask: [m_owner->GetNSView() autoresizingMask]];
@@ -190,7 +190,7 @@ void wxWindowCocoaScroller::Encapsulate()
     // Now it's also retained by the NSScrollView
 }
 
-void wxWindowCocoaScroller::Unencapsulate()
+void wxWindowCocoaScrollView::Unencapsulate()
 {
     [m_cocoaNSScrollView setDocumentView: nil];
     m_owner->CocoaReplaceView(m_cocoaNSScrollView, m_owner->GetNSView());
@@ -198,13 +198,13 @@ void wxWindowCocoaScroller::Unencapsulate()
         [m_owner->GetNSView() setAutoresizingMask: NSViewMinYMargin];
 }
 
-wxWindowCocoaScroller::~wxWindowCocoaScroller()
+wxWindowCocoaScrollView::~wxWindowCocoaScrollView()
 {
     DisassociateNSView(m_cocoaNSScrollView);
     [m_cocoaNSScrollView release];
 }
 
-void wxWindowCocoaScroller::ClientSizeToSize(int &width, int &height)
+void wxWindowCocoaScrollView::ClientSizeToSize(int &width, int &height)
 {
     NSSize frameSize = [NSScrollView
         frameSizeForContentSize: NSMakeSize(width,height)
@@ -215,7 +215,7 @@ void wxWindowCocoaScroller::ClientSizeToSize(int &width, int &height)
     height = (int)frameSize.height;
 }
 
-void wxWindowCocoaScroller::DoGetClientSize(int *x, int *y) const
+void wxWindowCocoaScrollView::DoGetClientSize(int *x, int *y) const
 {
     NSSize nssize = [m_cocoaNSScrollView contentSize];
     if(x)
@@ -224,7 +224,7 @@ void wxWindowCocoaScroller::DoGetClientSize(int *x, int *y) const
         *y = (int)nssize.height;
 }
 
-void wxWindowCocoaScroller::Cocoa_FrameChanged(void)
+void wxWindowCocoaScrollView::Cocoa_FrameChanged(void)
 {
     wxLogTrace(wxTRACE_COCOA,wxT("Cocoa_FrameChanged"));
     wxSizeEvent event(m_owner->GetSize(), m_owner->GetId());
@@ -252,7 +252,7 @@ void wxWindowCocoa::Init()
 {
     m_cocoaNSView = NULL;
     m_cocoaHider = NULL;
-    m_cocoaScroller = NULL;
+    m_wxCocoaScrollView = NULL;
     m_isBeingDeleted = FALSE;
     m_isInPaint = FALSE;
     m_shouldBeEnabled = true;
@@ -294,7 +294,7 @@ wxWindow::~wxWindow()
     if(m_parent && m_parent->GetNSView()==[GetNSViewForSuperview() superview])
         CocoaRemoveFromParent();
     delete m_cocoaHider;
-    delete m_cocoaScroller;
+    delete m_wxCocoaScrollView;
     if(m_cocoaNSView)
         SendDestroyEvent();
     SetNSView(NULL);
@@ -330,15 +330,15 @@ WX_NSView wxWindowCocoa::GetNSViewForSuperview() const
 {
     return m_cocoaHider
         ?   m_cocoaHider->GetNSView()
-        :   m_cocoaScroller
-            ?   m_cocoaScroller->GetNSScrollView()
+        :   m_wxCocoaScrollView
+            ?   m_wxCocoaScrollView->GetNSScrollView()
             :   m_cocoaNSView;
 }
 
 WX_NSView wxWindowCocoa::GetNSViewForHiding() const
 {
-    return m_cocoaScroller
-        ?   m_cocoaScroller->GetNSScrollView()
+    return m_wxCocoaScrollView
+        ?   m_wxCocoaScrollView->GetNSScrollView()
         :   m_cocoaNSView;
 }
 
@@ -742,8 +742,8 @@ void wxWindow::DoClientToScreen(int *x, int *y) const
 void wxWindow::DoGetClientSize(int *x, int *y) const
 {
     wxLogTrace(wxTRACE_COCOA,wxT("DoGetClientSize:"));
-    if(m_cocoaScroller)
-        m_cocoaScroller->DoGetClientSize(x,y);
+    if(m_wxCocoaScrollView)
+        m_wxCocoaScrollView->DoGetClientSize(x,y);
     else
         wxWindowCocoa::DoGetSize(x,y);
 }
@@ -751,8 +751,8 @@ void wxWindow::DoGetClientSize(int *x, int *y) const
 void wxWindow::DoSetClientSize(int width, int height)
 {
     wxLogTrace(wxTRACE_COCOA_Window_Size,wxT("DoSetClientSize=(%d,%d)"),width,height);
-    if(m_cocoaScroller)
-        m_cocoaScroller->ClientSizeToSize(width,height);
+    if(m_wxCocoaScrollView)
+        m_wxCocoaScrollView->ClientSizeToSize(width,height);
     CocoaSetWxWindowSize(width,height);
 }
 
@@ -812,9 +812,9 @@ void wxWindow::SetScrollPos(int orient, int pos, bool refresh)
 
 void wxWindow::CocoaCreateNSScrollView()
 {
-    if(!m_cocoaScroller)
+    if(!m_wxCocoaScrollView)
     {
-        m_cocoaScroller = new wxWindowCocoaScroller(this);
+        m_wxCocoaScrollView = new wxWindowCocoaScrollView(this);
     }
 }
 

@@ -19,7 +19,7 @@
 #endif //def __OBJC__
 
 class wxWindowCocoaHider;
-class wxWindowCocoaScroller;
+class wxWindowCocoaScrollView;
 
 // ========================================================================
 // wxWindowCocoa
@@ -30,7 +30,7 @@ class WXDLLEXPORT wxWindowCocoa: public wxWindowBase, protected wxCocoaNSView
     DECLARE_NO_COPY_CLASS(wxWindowCocoa)
     DECLARE_EVENT_TABLE()
     friend wxWindow *wxWindowBase::GetCapture();
-    friend class wxWindowCocoaScroller;
+    friend class wxWindowCocoaScrollView;
 // ------------------------------------------------------------------------
 // initialization
 // ------------------------------------------------------------------------
@@ -100,7 +100,7 @@ protected:
     void SetNSView(WX_NSView cocoaNSView);
     WX_NSView m_cocoaNSView;
     wxWindowCocoaHider *m_cocoaHider;
-    wxWindowCocoaScroller *m_cocoaScroller;
+    wxWindowCocoaScrollView *m_wxCocoaScrollView;
     bool m_isInPaint;
     static wxWindow *sm_capturedWindow;
     virtual void CocoaReplaceView(WX_NSView oldView, WX_NSView newView);
