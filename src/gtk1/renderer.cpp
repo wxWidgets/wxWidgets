@@ -303,10 +303,13 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
         erase_rect.width = w;
     }
 
-    // we must erase everything first, otherwise the garbage from the old sash
-    // is left when dragging it
-    //
-    // TODO: is this the right way to draw themed background?
+#if 0
+    // RR: After a correction to the orientation of the sash
+    //     this doesn't seem to be required anymore and it
+    //     seems to confuse some themes
+
+    // we must erase everything first, otherwise the garbage
+    // from the old sash is left when dragging it
     gtk_paint_flat_box
     (
         win->m_wxwindow->style,
@@ -315,12 +318,13 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
         GTK_SHADOW_NONE,
         NULL,
         win->m_wxwindow,
-        (char *)"base", // const_cast
+        (char *)"viewportbin", // const_cast
         erase_rect.x,
         erase_rect.y,
         erase_rect.width,
         erase_rect.height
     );
+#endif
 
 #ifdef __WXGTK20__
     gtk_paint_handle
