@@ -56,6 +56,7 @@ OBJECTS = \
 	minifram.obj,\
 	notebook.obj,\
 	pen.obj,\
+	popupwin.obj,\
 	radiobox.obj,\
 	radiobut.obj,\
 	region.obj,\
@@ -117,6 +118,7 @@ SOURCES =\
 	minifram.cpp,\
 	notebook.cpp,\
 	pen.cpp,\
+	popupwin.cpp,\
 	radiobox.cpp,\
 	radiobut.cpp,\
 	region.cpp,\
@@ -181,6 +183,7 @@ menu.obj : menu.cpp
 minifram.obj : minifram.cpp
 notebook.obj : notebook.cpp
 pen.obj : pen.cpp
+popupwin.obj : popupwin.cpp
 radiobox.obj : radiobox.cpp
 radiobut.obj : radiobut.cpp
 region.obj : region.cpp

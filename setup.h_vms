@@ -213,6 +213,11 @@
 #define wxUSE_POPUPWIN 1
 
 /*
+   Use wxTipWindow
+*/
+#define wxUSE_TIPWINDOW 1
+
+/*
  * Use accelerators
  */
 #define wxUSE_ACCEL 1
@@ -241,6 +246,11 @@
  * Use wxMimeTypesManager and related classes
  */
 #define wxUSE_MIMETYPE 1
+
+/*
+ * Use wxSystemOptions
+ */
+#define wxUSE_SYSTEM_OPTIONS 1
 
 /*
  * Use wxMessageDialog (and wxMessageBox)
@@ -520,7 +530,7 @@
 /*
  * Use old log dialog instead of new wxLogGui
  */
-#define wxUSE_LOG_DIALOG 1
+#define wxUSE_LOG_DIALOG 0
 /*
  * Use wxStopWatch
  */
@@ -858,6 +868,12 @@
 /* Define if you have localtime() */
 #define HAVE_LOCALTIME
 
+/* Define if you have the mktemp function.  */
+#define HAVE_MKTEMP 1
+
+/* Define if you have the mkstemp function.  */
+#define HAVE_MKSTEMP 1
+
 /* Define if you have nanosleep() */
 #undef HAVE_NANOSLEEP
 
@@ -901,10 +917,10 @@
 #undef HAVE_VSNPRINTF
 
 /* Define if you have usleep() */
-#define HAVE_USLEEP
+#define HAVE_USLEEP 1
 
 /* Define if you have wcslen function  */
-#define HAVE_WCSLEN
+#define HAVE_WCSLEN 1
 
 /* define if you have vsscanf function */
 #undef HAVE_VSSCANF
@@ -943,10 +959,10 @@
 #define HAVE_DLERROR 1
 
 /* Define if you have the gethostname function.  */
-#define HAVE_GETHOSTNAME
+#define HAVE_GETHOSTNAME 1
 
 /* Define if you have the inet_addr function.  */
-#define HAVE_INET_ADDR
+#define HAVE_INET_ADDR 1
 
 /* Define if you have the inet_aton function.  */
 #undef HAVE_INET_ATON
@@ -964,13 +980,13 @@
 #undef HAVE_THR_SETCONCURRENCY
 
 /* Define if you have the uname function.  */
-#define HAVE_UNAME
+#define HAVE_UNAME 1
 
 /* Define if you have the usleep function.  */
-#define HAVE_USLEEP
+#define HAVE_USLEEP 1
 
 /* Define if you have the vfork function.  */
-#define HAVE_VFORK
+#define HAVE_VFORK 1
 
 /* Define if you have the <X11/XKBlib.h> header file.  */
 #undef HAVE_X11_XKBLIB_H
@@ -988,13 +1004,13 @@
 #undef HAVE_SCHED_H
 
 /* Define if you have the <strings.h> header file.  */
-#define HAVE_STRINGS_H
+#define HAVE_STRINGS_H 1
 
 /* Define if you have the <unistd.h> header file.  */
-#define HAVE_UNISTD_H
+#define HAVE_UNISTD_H 1
 
 /* Define if you have the <wchar.h> header file.  */
-#define HAVE_WCHAR_H
+#define HAVE_WCHAR_H 1
 
 /* Define if you have the <wcstr.h> header file.  */
 #undef HAVE_WCSTR_H

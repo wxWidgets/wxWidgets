@@ -73,10 +73,10 @@ OBJECTS = \
 		filefn.obj,\
 		filesys.obj,\
 		fontcmn.obj,\
-		fontmap.obj
+		fontmap.obj,\
+		framecmn.obj
 
-OBJECTS1=framecmn.obj,\
-		fs_inet.obj,\
+OBJECTS1=fs_inet.obj,\
 		fs_zip.obj,\
 		ftp.obj,\
 		gdicmn.obj,\
@@ -110,6 +110,7 @@ OBJECTS1=framecmn.obj,\
 		object.obj,\
 		objstrm.obj,\
 		paper.obj,\
+		popupcmn.obj,\
 		prntbase.obj,\
 		process.obj,\
 		protocol.obj,\
@@ -224,6 +225,7 @@ SOURCES = \
 		object.cpp,\
 		objstrm.cpp,\
 		paper.cpp,\
+		popupcmn.cpp,\
 		prntbase.cpp,\
 		process.cpp,\
 		protocol.cpp,\
@@ -370,6 +372,7 @@ nbkbase.obj : nbkbase.cpp
 object.obj : object.cpp
 objstrm.obj : objstrm.cpp
 paper.obj : paper.cpp
+popupcmn.obj : popupcmn.cpp
 prntbase.obj : prntbase.cpp
 process.obj : process.cpp
 protocol.obj : protocol.cpp
