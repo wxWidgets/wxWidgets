@@ -144,7 +144,7 @@ public:
     void ChangeToIconMode();
     void ShowHidden( bool show = TRUE );
     long Add( wxFileData *fd, wxListItem &item );
-    void Update();
+    void UpdateFiles();
     virtual void StatusbarText( wxChar *WXUNUSED(text) ) {};
     void MakeDir();
     void GoToParentDir();
@@ -629,31 +629,31 @@ wxFileCtrl::wxFileCtrl(wxWindow *win, wxWindowID id,
     m_dirName = dirName;
     m_wild = wild;
     m_showHidden = FALSE;
-    Update();
+    UpdateFiles();
 }
 
 void wxFileCtrl::ChangeToListMode()
 {
     SetSingleStyle( wxLC_LIST );
-    Update();
+    UpdateFiles();
 }
 
 void wxFileCtrl::ChangeToReportMode()
 {
     SetSingleStyle( wxLC_REPORT );
-    Update();
+    UpdateFiles();
 }
 
 void wxFileCtrl::ChangeToIconMode()
 {
     SetSingleStyle( wxLC_ICON );
-    Update();
+    UpdateFiles();
 }
 
 void wxFileCtrl::ShowHidden( bool show )
 {
     m_showHidden = show;
-    Update();
+    UpdateFiles();
 }
 
 long wxFileCtrl::Add( wxFileData *fd, wxListItem &item )
@@ -680,7 +680,7 @@ long wxFileCtrl::Add( wxFileData *fd, wxListItem &item )
     return ret;
 }
 
-void wxFileCtrl::Update()
+void wxFileCtrl::UpdateFiles()
 {
     wxBusyCursor bcur; // this may take a while...
     
@@ -805,7 +805,7 @@ void wxFileCtrl::Update()
 void wxFileCtrl::SetWild( const wxString &wild )
 {
     m_wild = wild;
-    Update();
+    UpdateFiles();
 }
 
 void wxFileCtrl::MakeDir()
@@ -867,7 +867,7 @@ void wxFileCtrl::GoToParentDir()
         if (m_dirName.IsEmpty()) 
             m_dirName = wxT("/");
 #endif
-        Update();
+        UpdateFiles();
         long id = FindItem( 0, fname );
         if (id != -1)
         {
@@ -886,7 +886,7 @@ void wxFileCtrl::GoToHomeDir()
 void wxFileCtrl::GoToDir( const wxString &dir )
 {
     m_dirName = dir;
-    Update();
+    UpdateFiles();
     SetItemState( 0, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
     EnsureVisible( 0 );
 }
