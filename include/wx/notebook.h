@@ -118,8 +118,16 @@ public:
     // remove one page from the notebook, without deleting it
     virtual bool RemovePage(int nPage) { return DoRemovePage(nPage) != NULL; }
 
+#ifdef __BORLANDC__
+#   pragma option -w-inl
+#endif
+
     // remove all pages and delete them
     virtual bool DeleteAllPages() { WX_CLEAR_ARRAY(m_pages); return TRUE; }
+
+#ifdef __BORLANDC__
+#   pragma option -w.inl
+#endif
 
     // adds a new page to the notebook (it will be deleted by the notebook,
     // don't delete it yourself) and make it the current one if bSelect

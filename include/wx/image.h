@@ -95,9 +95,17 @@ public:
     unsigned long value;
 };
 
+#ifdef __BORLANDC__
+#   pragma option -w-inl
+#endif
+
 WX_DECLARE_EXPORTED_HASH_MAP(unsigned long, wxImageHistogramEntry,
                              wxIntegerHash, wxIntegerEqual,
                              wxImageHistogram);
+
+#ifdef __BORLANDC__
+#   pragma option -w.inl
+#endif
 
 //-----------------------------------------------------------------------------
 // wxImage

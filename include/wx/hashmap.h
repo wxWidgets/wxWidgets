@@ -28,6 +28,10 @@ struct WXDLLEXPORT _wxHashTable_NodeBase
     _wxHashTable_NodeBase* m_nxt;
 };
 
+#ifdef __BORLANDC__
+#   pragma option -w-inl
+#endif
+
 // private
 class WXDLLEXPORT _wxHashTableBase2
 {
@@ -69,6 +73,10 @@ protected:
         return (void **)calloc(sz, sizeof(void*));
     }
 };
+
+#ifdef __BORLANDC__
+#   pragma option -w.inl
+#endif
 
 #define _WX_DECLARE_HASHTABLE( VALUE_T, KEY_T, HASH_T, KEY_EX_T, KEY_EQ_T, CLASSNAME, CLASSEXP, SHOULD_GROW, SHOULD_SHRINK ) \
 CLASSEXP CLASSNAME : protected _wxHashTableBase2 \

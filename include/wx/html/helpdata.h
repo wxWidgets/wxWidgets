@@ -79,6 +79,9 @@ protected:
 
 WX_DECLARE_EXPORTED_OBJARRAY(wxHtmlBookRecord, wxHtmlBookRecArray);
 
+#ifdef __BORLANDC__
+#   pragma option -w-inl
+#endif
 
 struct wxHtmlContentsItem
 {
@@ -91,6 +94,10 @@ struct wxHtmlContentsItem
     // returns full filename of m_Page, i.e. with book's basePath prepended
     wxString GetFullPath() const { return m_Book->GetFullPath(m_Page); }
 };
+
+#ifdef __BORLANDC__
+#   pragma option -w.inl
+#endif
 
 //------------------------------------------------------------------------------
 // wxHtmlSearchEngine

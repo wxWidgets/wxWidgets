@@ -49,7 +49,15 @@ WX_DEFINE_LIST(wxArtProvidersList);
 // Cache class - stores already requested bitmaps
 // ----------------------------------------------------------------------------
 
+#ifdef __BORLANDC__
+#   pragma option -w-inl
+#endif
+
 WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxBitmap, wxArtProviderBitmapsHash);
+
+#ifdef __BORLANDC__
+#   pragma option -w.inl
+#endif
 
 class WXDLLEXPORT wxArtProviderCache
 {

@@ -1418,6 +1418,10 @@ private:
     DECLARE_DYNAMIC_CLASS(wxJoystickEvent)
 };
 
+#ifdef __BORLANDC__
+#   pragma option -w-inl
+#endif
+
 // Drop files event class
 /*
  wxEVT_DROP_FILES
@@ -1470,6 +1474,11 @@ public:
 private:
     DECLARE_DYNAMIC_CLASS(wxDropFilesEvent)
 };
+
+#ifdef __BORLANDC__
+#   pragma option -w.inl
+#endif
+
 
 // Update UI event
 /*

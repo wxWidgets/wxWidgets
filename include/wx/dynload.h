@@ -40,7 +40,16 @@
 
 class WXDLLEXPORT wxPluginLibrary;
 
+#ifdef __BORLANDC__
+#   pragma option -w-inl
+#endif
+
 WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxPluginLibrary *, wxDLManifest);
+
+#ifdef __BORLANDC__
+#   pragma option -w.inl
+#endif
+
 typedef wxDLManifest wxDLImports;
 
 // ----------------------------------------------------------------------------
@@ -97,6 +106,10 @@ enum wxDLFlags
 #endif
 };
 
+
+#ifdef __BORLANDC__
+#   pragma option -w-inl
+#endif
 
 class WXDLLEXPORT wxDynamicLibrary
 {
@@ -170,6 +183,9 @@ protected:
     DECLARE_NO_COPY_CLASS(wxDynamicLibrary)
 };
 
+#ifdef __BORLANDC__
+#   pragma option -w.inl
+#endif
 
 // ---------------------------------------------------------------------------
 // wxPluginLibrary
