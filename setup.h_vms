@@ -192,6 +192,12 @@
  */
 #define wxUSE_REGEX 0
 /*
+ * The built-in regex supports advanced REs in additional to POSIX's basic
+ * and extended. Your system regex probably won't support this, and in this
+ * case WX_NO_REGEX_ADVANCED should be defined.
+ */
+#undef WX_NO_REGEX_ADVANCED
+/*
  * Use XML support
  */
 #define wxUSE_XML 1

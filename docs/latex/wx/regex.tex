@@ -11,14 +11,29 @@
 
 \section{\class{wxRegEx}}\label{wxregex}
 
-wxRegEx represents a regular expression. The regular expressions syntax
-supported is the POSIX one. Both basic and extended regular expressions are
-supported but, unlike POSIX C API, the extended ones are used by default.
+wxRegEx represents a regular expression.  This class provides support
+for regular expressions matching and also replacement.
 
-This class provides support for regular expressions matching and also
-replacement. It is built on top of either the system library (if it has support
-for POSIX regular expressions - which is the case of the most modern Unices) or
-uses a version of Henry Spencer's library from tcl.
+It is built on top of either the system library (if it has support
+for POSIX regular expressions - which is the case of the most modern
+Unices) or uses the built in Henry Spencer's library.  Henry Spencer
+would appreciate being given credit in the documentation of software
+which uses his library, but that is not a requirement.
+
+Regular expressions, as defined by POSIX, come in two flavours: {\it extended}
+and {\it basic}.  The builtin library also adds a third flavour
+of expression \helpref{advanced}{wxresyn}, which is not available
+when using the system library.
+
+Unicode is fully supported only when using the builtin library.
+When using the system library in Unicode mode, the expressions and data
+are translated to the default 8-bit encoding before being passed to
+the library.
+
+On platforms where a system library is available, the default is to use
+the builtin library for Unicode builds, and the system library otherwise.
+It is possible to use the other if preferred by selecting it when building
+the wxWindows.
 
 \wxheading{Derived from}
 
@@ -31,8 +46,13 @@ Flags for regex compilation to be used with \helpref{Compile()}{wxregexcompile}:
 \begin{verbatim}
 enum
 {
-    // use extended regex syntax (default)
+    // use extended regex syntax
     wxRE_EXTENDED = 0,
+    
+    // use advanced RE syntax (built-in regex only)
+#ifdef wxHAS_REGEX_ADVANCED
+    wxRE_ADVANCED = 1,
+#endif
 
     // use basic RE syntax
     wxRE_BASIC    = 2,
