@@ -390,9 +390,9 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
             -wcd=657 <!-- define this function inside its class definition (could have improved code quality) -->
             -wcd=667 <!-- 'va_start' macro will not work without an argument before '...' -->
         </cppflags-watcom>
-        <cppflags-mingw>
+        <cxxflags-mingw>
             -Wno-ctor-dtor-privacy <!-- only defines a private destructor and has no friends -->
-        </cppflags-mingw>
+        </cxxflags-mingw>
     </template>
 
     <!-- for both GUI and wxBase libs/samples: -->
