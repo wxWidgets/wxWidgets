@@ -359,11 +359,7 @@ protected:
     wxCoord GetMaxWidth() const;
 
     // force recalculation of the max line width
-    void RecalcMaxWidth()
-    {
-        m_widthMax = -1;
-        (void)GetMaxWidth();
-    }
+    void RecalcMaxWidth();
 
     // update the max width after the given line was modified
     void UpdateMaxWidth(wxTextCoord line);
@@ -389,10 +385,28 @@ protected:
                                            wxTextCoord *col,
                                            wxTextCoord *row) const;
 
+    // get the height of one line (the same for all lines)
+    wxCoord GetLineHeight() const
+    {
+        // this one should be already precalculated
+        wxASSERT_MSG( m_heightLine != -1, _T("should have line height") );
+
+        return m_heightLine;
+    }
+
+    // recalc the line height (to call when the font changes)
+    void RecalcLineHeight();
+
     // event handlers
     void OnIdle(wxIdleEvent& event);
     void OnChar(wxKeyEvent& event);
     void OnSize(wxSizeEvent& event);
+
+    // return the struct containing control-type dependent data
+    struct wxTextSingleLineData& SData() { return *m_data.sdata; }
+    struct wxTextMultiLineData& MData() { return *m_data.mdata; }
+    const wxTextSingleLineData& SData() const { return *m_data.sdata; }
+    const wxTextMultiLineData& MData() const { return *m_data.mdata; }
 
     // accessors for derived classes (SL stands for single line)
     const wxString& GetSLValue() const
@@ -423,9 +437,6 @@ private:
     // the control text (only used for single line controls)
     wxString m_value;
 
-    // the lines of text (only used for multiline controls)
-    wxArrayString m_lines;
-
     // current position
     wxTextPos m_curPos;
     wxTextCoord m_curCol,
@@ -447,32 +458,17 @@ private:
     // the rectangle (in client coordinates) to draw text inside
     wxRect m_rectText;
 
-    // this section is for the controls without horz scrollbar only
-
-    // the position of the first visible pixel and the first visible column
-    wxCoord m_ofsHorz;
-    wxTextCoord m_colStart;
-
-    // and the last ones (m_posLastVisible is the width but m_colLastVisible
-    // is an absolute value)
-    wxCoord m_posLastVisible;
-    wxTextCoord m_colLastVisible;
-
-    // this section is for the controls with scrollbar(s)
-
-    // the current ranges of the scrollbars
-    int m_scrollRangeX,
-        m_scrollRangeY;
-
-    // should we adjust the horz/vert scrollbar?
-    bool m_updateScrollbarX,
-         m_updateScrollbarY;
-
-    // the max line length in pixels
-    wxCoord m_widthMax;
-
-    // the index of the line which has the length of m_widthMax
-    wxTextCoord m_lineLongest;
+    // the height of one line (cached value of GetCharHeight)
+    wxCoord m_heightLine;
+    
+    // we have some data which depends on the kind of control (single or multi
+    // line)
+    union
+    {
+        wxTextSingleLineData *sdata;
+        wxTextMultiLineData *mdata;
+        void *data;
+    } m_data;
 
     // the object to which we delegate our undo/redo implementation
     wxTextCtrlCommandProcessor *m_cmdProcessor;

@@ -410,25 +410,14 @@ TextTestFrame::TextTestFrame(const wxString& title)
                      );
     wxSizer *sizerMiddle = new wxBoxSizer(wxVERTICAL);
     sizerMiddle->Add(sizerMiddleUp, 0, wxGROW);
-    sizerMiddle->Add(sizerMiddleDown, 0, wxGROW | wxTOP, 5);
-
-    // I don't understand what's going on :-(
-#ifdef __WXGTK__
-    sizerMiddle->SetMinSize(320, 0);
-#endif
+    sizerMiddle->Add(sizerMiddleDown, 1, wxGROW | wxTOP, 5);
 
     // right pane
     wxStaticBox *box3 = new wxStaticBox(m_panel, -1, _T("&Text:"));
     m_sizerText = new wxStaticBoxSizer(box3, wxHORIZONTAL);
     Reset();
     CreateText();
-    m_sizerText->SetMinSize(250,
-#ifdef __WXGTK__
-                            300
-#else
-                            0
-#endif
-                           );
+    m_sizerText->SetMinSize(250, 0);
 
     // the 3 panes panes compose the upper part of the window
     wxSizer *sizerUp = new wxBoxSizer(wxHORIZONTAL);

@@ -28,7 +28,7 @@
 
    1. wxStringTokenize is the slowest part of Replace
    2. GetDC/ReleaseDC are very slow, avoid calling them several times
-   3. GetCharHeight() should be cached too
+  +3. GetCharHeight() should be cached too
    4. wxClientDC construction/destruction in HitTestLine is horribly expensive
 
    For line wrapping controls HitTest2 takes 50% of program time. The results
@@ -181,6 +181,66 @@ static inline void OrderPositions(wxTextPos& from, wxTextPos& to)
 #define wxTEXT_COMMAND_REMOVE _T("remove")
 
 // ----------------------------------------------------------------------------
+// private data of wxTextCtrl
+// ----------------------------------------------------------------------------
+
+struct WXDLLEXPORT wxTextSingleLineData
+{
+    // the position of the first visible pixel and the first visible column
+    wxCoord m_ofsHorz;
+    wxTextCoord m_colStart;
+
+    // and the last ones (m_posLastVisible is the width but m_colLastVisible
+    // is an absolute value)
+    wxCoord m_posLastVisible;
+    wxTextCoord m_colLastVisible;
+
+    // def ctor
+    wxTextSingleLineData()
+    {
+        m_colStart = 0;
+        m_ofsHorz = 0;
+
+        m_colLastVisible = -1;
+        m_posLastVisible = -1;
+    }
+
+};
+
+struct WXDLLEXPORT wxTextMultiLineData
+{
+    // the lines of text
+    wxArrayString m_lines;
+
+    // the current ranges of the scrollbars
+    int m_scrollRangeX,
+        m_scrollRangeY;
+
+    // should we adjust the horz/vert scrollbar?
+    bool m_updateScrollbarX,
+         m_updateScrollbarY;
+
+    // the max line length in pixels
+    wxCoord m_widthMax;
+
+    // the index of the line which has the length of m_widthMax
+    wxTextCoord m_lineLongest;
+
+    // the def ctor
+    wxTextMultiLineData()
+    {
+        m_scrollRangeX =
+        m_scrollRangeY = 0;
+
+        m_updateScrollbarX =
+        m_updateScrollbarY = FALSE;
+
+        m_widthMax = -1;
+        m_lineLongest = 0;
+    }
+};
+
+// ----------------------------------------------------------------------------
 // private classes for undo/redo management
 // ----------------------------------------------------------------------------
 
@@ -327,31 +387,21 @@ void wxTextCtrl::Init()
     m_isModified = FALSE;
     m_isEditable = TRUE;
 
-    m_colStart = 0;
-    m_ofsHorz = 0;
-
-    m_colLastVisible = -1;
-    m_posLastVisible = -1;
-
     m_posLast =
     m_curPos =
     m_curCol =
     m_curRow = 0;
 
-    m_scrollRangeX =
-    m_scrollRangeY = 0;
-
-    m_updateScrollbarX =
-    m_updateScrollbarY = FALSE;
-
-    m_widthMax = -1;
-    m_lineLongest = 0;
+    m_heightLine = -1;
 
     // init wxScrollHelper
     SetWindow(this);
 
     // init the undo manager
     m_cmdProcessor = new wxTextCtrlCommandProcessor(this);
+
+    // no data yet
+    m_data.data = NULL;
 }
 
 bool wxTextCtrl::Create(wxWindow *parent,
@@ -381,11 +431,17 @@ bool wxTextCtrl::Create(wxWindow *parent,
         }
 
         // TODO: support wxTE_NO_VSCROLL (?)
+
+        // create data object for multiline controls
+        m_data.mdata = new wxTextMultiLineData;
     }
     else
     {
         // this doesn't make sense for single line controls
         style &= ~wxHSCROLL;
+
+        // create data object for single line controls
+        m_data.sdata = new wxTextSingleLineData;
     }
 
     if ( !wxControl::Create(parent, id, pos, size, style,
@@ -399,7 +455,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
     if ( style & wxTE_MULTILINE )
     {
         // we should always have at least one line in a multiline control
-        m_lines.Add(wxEmptyString);
+        MData().m_lines.Add(wxEmptyString);
 
         // we might support it but it's quite useless and other ports don't
         // support it anyhow
@@ -407,6 +463,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
                       _T("wxTE_PASSWORD can't be used with multiline ctrls") );
     }
 
+    RecalcLineHeight();
     SetValue(value);
     SetBestSize(size);
 
@@ -425,6 +482,14 @@ bool wxTextCtrl::Create(wxWindow *parent,
 wxTextCtrl::~wxTextCtrl()
 {
     delete m_cmdProcessor;
+
+    if ( m_data.data )
+    {
+        if ( IsSingleLine() )
+            delete m_data.sdata;
+        else
+            delete m_data.mdata;
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -453,13 +518,13 @@ wxString wxTextCtrl::GetValue() const
     }
     else // multiline
     {
-        size_t count = m_lines.GetCount();
+        size_t count = MData().m_lines.GetCount();
         for ( size_t n = 0; n < count; n++ )
         {
             if ( n )
                 value += _T('\n'); // from preceding line
 
-            value += m_lines[n];
+            value += MData().m_lines[n];
         }
     }
 
@@ -529,8 +594,8 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
 
         m_value = valueNew;
 
-        // force m_colLastVisible update
-        m_colLastVisible = -1;
+        // force SData().m_colLastVisible update
+        SData().m_colLastVisible = -1;
 
         // repaint
         RefreshPixelRange(0, startNewText, widthNewText);
@@ -557,12 +622,12 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
                 textOrig += _T('\n');
             }
 
-            textOrig += m_lines[line];
+            textOrig += MData().m_lines[line];
         }
 
         // we need to append the '\n' for the last line unless there is no
         // following line
-        size_t countOld = m_lines.GetCount();
+        size_t countOld = MData().m_lines.GetCount();
 
         // (2) replace text in the combined string
 
@@ -572,7 +637,7 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
         // these values will be used to refresh the changed area below
         wxCoord widthNewText,
                 startNewText = GetTextWidth(textNew);
-        if ( (size_t)colStart == m_lines[lineStart].length() )
+        if ( (size_t)colStart == MData().m_lines[lineStart].length() )
         {
             // text appended, refresh just enough to show the new text
             widthNewText = GetTextWidth(text.BeforeFirst(_T('\n')));
@@ -608,7 +673,7 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
 
         // (3b) special case: if we replace everything till the end we need to
         //      keep an empty line or the lines would disappear completely
-        //      (this also takes care of never leaving m_lines empty)
+        //      (this also takes care of never leaving MData().m_lines empty)
         if ( ((size_t)lineEnd == countOld - 1) && lines.IsEmpty() )
         {
             lines.Add(wxEmptyString);
@@ -625,7 +690,7 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
             if ( nReplaceLine < nReplaceCount )
             {
                 // we have the replacement line for this one
-                m_lines[line] = lines[nReplaceLine];
+                MData().m_lines[line] = lines[nReplaceLine];
 
                 UpdateMaxWidth(line);
             }
@@ -636,13 +701,13 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
                 bool deletedLongestLine = FALSE;
                 for ( wxTextCoord lineDel = lineEnd; lineDel >= line; lineDel-- )
                 {
-                    if ( lineDel == m_lineLongest )
+                    if ( lineDel == MData().m_lineLongest )
                     {
                         // we will need to recalc the max line width
                         deletedLongestLine = TRUE;
                     }
 
-                    m_lines.RemoveAt(lineDel);
+                    MData().m_lines.RemoveAt(lineDel);
                 }
 
                 if ( deletedLongestLine )
@@ -658,7 +723,7 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
         // (4c) insert the new lines
         while ( nReplaceLine < nReplaceCount )
         {
-            m_lines.Insert(lines[nReplaceLine++], ++lineEnd);
+            MData().m_lines.Insert(lines[nReplaceLine++], ++lineEnd);
 
             UpdateMaxWidth(lineEnd);
         }
@@ -694,14 +759,14 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
             }
             //else: refresh all lines we changed (OPT?)
 
-            wxTextCoord lineEnd = m_lines.GetCount() - 1;
+            wxTextCoord lineEnd = MData().m_lines.GetCount() - 1;
             if ( lineStart <= lineEnd )
                 RefreshLineRange(lineStart, lineEnd);
 
             // refresh text rect left below
             if ( rowsNew < rowsOld )
             {
-                wxCoord h = GetCharHeight();
+                wxCoord h = GetLineHeight();
                 wxRect rect;
                 rect.x = 0;
                 rect.width = m_rectText.width;
@@ -711,7 +776,7 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
             }
 
             // the vert scrollbar might [dis]appear
-            m_updateScrollbarY = TRUE;
+            MData().m_updateScrollbarY = TRUE;
         }
     }
 
@@ -828,12 +893,12 @@ wxTextPos wxTextCtrl::GetLastPosition() const
     {
 #ifdef WXDEBUG_TEXT
         pos = 0;
-        size_t nLineCount = m_lines.GetCount();
+        size_t nLineCount = MData().m_lines.GetCount();
         for ( size_t nLine = 0; nLine < nLineCount; nLine++ )
         {
             // +1 is because the positions at the end of this line and of the
             // start of the next one are different
-            pos += m_lines[nLine].length() + 1;
+            pos += MData().m_lines[nLine].length() + 1;
         }
 
         if ( pos > 0 )
@@ -886,22 +951,22 @@ wxString wxTextCtrl::GetSelectionText() const
             // and end line are the same
             if ( lineEnd == lineStart )
             {
-                sel = m_lines[lineStart].Mid(colStart, colEnd - colStart);
+                sel = MData().m_lines[lineStart].Mid(colStart, colEnd - colStart);
             }
             else // sel on multiple lines
             {
                 // take the end of the first line
-                sel = m_lines[lineStart].c_str() + colStart;
+                sel = MData().m_lines[lineStart].c_str() + colStart;
                 sel += _T('\n');
 
                 // all intermediate ones
                 for ( wxTextCoord line = lineStart + 1; line < lineEnd; line++ )
                 {
-                    sel << m_lines[line] << _T('\n');
+                    sel << MData().m_lines[line] << _T('\n');
                 }
 
                 // and the start of the last one
-                sel += m_lines[lineEnd].Left(colEnd);
+                sel += MData().m_lines[lineEnd].Left(colEnd);
             }
         }
     }
@@ -1104,10 +1169,10 @@ int wxTextCtrl::GetLineLength(wxTextCoord line) const
     }
     else // multiline
     {
-        wxCHECK_MSG( (size_t)line < m_lines.GetCount(), -1,
+        wxCHECK_MSG( (size_t)line < MData().m_lines.GetCount(), -1,
                      _T("line index out of range") );
 
-        return m_lines[line].length();
+        return MData().m_lines[line].length();
     }
 }
 
@@ -1121,17 +1186,17 @@ wxString wxTextCtrl::GetLineText(wxTextCoord line) const
     }
     else // multiline
     {
-        wxCHECK_MSG( (size_t)line < m_lines.GetCount(), _T(""),
+        wxCHECK_MSG( (size_t)line < MData().m_lines.GetCount(), _T(""),
                      _T("line index out of range") );
 
-        return m_lines[line];
+        return MData().m_lines[line];
     }
 }
 
 int wxTextCtrl::GetNumberOfLines() const
 {
     // there is always 1 line, even if the text is empty
-    return IsSingleLine() ? 1 : m_lines.GetCount();
+    return IsSingleLine() ? 1 : MData().m_lines.GetCount();
 }
 
 wxTextPos wxTextCtrl::XYToPosition(wxTextCoord x, wxTextCoord y) const
@@ -1144,7 +1209,7 @@ wxTextPos wxTextCtrl::XYToPosition(wxTextCoord x, wxTextCoord y) const
     }
     else // multiline
     {
-        if ( (size_t)y >= m_lines.GetCount() )
+        if ( (size_t)y >= MData().m_lines.GetCount() )
         {
             // this position is below the text
             return GetLastPosition();
@@ -1155,14 +1220,14 @@ wxTextPos wxTextCtrl::XYToPosition(wxTextCoord x, wxTextCoord y) const
         {
             // +1 is because the positions at the end of this line and of the
             // start of the next one are different
-            pos += m_lines[nLine].length() + 1;
+            pos += MData().m_lines[nLine].length() + 1;
         }
 
         // take into account also the position in line
-        if ( (size_t)x > m_lines[y].length() )
+        if ( (size_t)x > MData().m_lines[y].length() )
         {
             // don't return position in the next line
-            x = m_lines[y].length();
+            x = MData().m_lines[y].length();
         }
 
         return pos + x;
@@ -1187,12 +1252,12 @@ bool wxTextCtrl::PositionToXY(wxTextPos pos,
     else // multiline
     {
         wxTextPos posCur = 0;
-        size_t nLineCount = m_lines.GetCount();
+        size_t nLineCount = MData().m_lines.GetCount();
         for ( size_t nLine = 0; nLine < nLineCount; nLine++ )
         {
             // +1 is because the start the start of the next line is one
             // position after the end of this one
-            wxTextPos posNew = posCur + m_lines[nLine].length() + 1;
+            wxTextPos posNew = posCur + MData().m_lines[nLine].length() + 1;
             if ( posNew > pos )
             {
                 // we've found the line, now just calc the column
@@ -1277,7 +1342,7 @@ bool wxTextCtrl::PositionToLogicalXY(wxTextPos pos,
             return FALSE;
     }
 
-    int hLine = GetCharHeight();
+    int hLine = GetLineHeight();
     wxCoord x, y;
     wxString textLine = GetLineText(line);
     if ( IsSingleLine() || !WrapLines() )
@@ -1347,10 +1412,10 @@ bool wxTextCtrl::PositionToDeviceXY(wxTextPos pos,
 
     // finally translate the logical text rect coords into physical client
     // coords
-    CalcScrolledPosition(m_rectText.x + x - m_ofsHorz,
-                         m_rectText.y + y,
-                         xOut,
-                         yOut);
+    if ( IsSingleLine() )
+        x -= SData().m_ofsHorz;
+
+    CalcScrolledPosition(m_rectText.x + x, m_rectText.y + y, xOut, yOut);
 
     return TRUE;
 }
@@ -1375,7 +1440,7 @@ void wxTextCtrl::ShowPosition(wxTextPos pos)
     {
         ShowHorzPosition(GetTextWidth(GetSLValue().Left(pos)));
     }
-    else if ( m_scrollRangeX || m_scrollRangeY ) // multiline with scrollbars
+    else if ( MData().m_scrollRangeX || MData().m_scrollRangeY ) // multiline with scrollbars
     {
         int xStart, yStart;
         GetViewStart(&xStart, &yStart);
@@ -1390,9 +1455,9 @@ void wxTextCtrl::ShowPosition(wxTextPos pos)
 
         // scroll the position vertically into view: if it is currently above
         // it, make it the first one, otherwise the last one
-        if ( m_scrollRangeY )
+        if ( MData().m_scrollRangeY )
         {
-            y /= GetCharHeight();
+            y /= GetLineHeight();
 
             if ( y < yStart )
             {
@@ -1432,7 +1497,7 @@ void wxTextCtrl::ShowPosition(wxTextPos pos)
                 {
                     // finding the last line is easy if each line has exactly
                     // one row
-                    yEnd = yStart + rectText.height / GetCharHeight() - 1;
+                    yEnd = yStart + rectText.height / GetLineHeight() - 1;
                 }
 
                 if ( yEnd < y )
@@ -1445,7 +1510,7 @@ void wxTextCtrl::ShowPosition(wxTextPos pos)
         }
 
         // scroll the position horizontally into view
-        if ( m_scrollRangeX )
+        if ( MData().m_scrollRangeX )
         {
             // unlike for the rows, xStart doesn't correspond to the starting
             // column as they all have different widths, so we need to
@@ -1795,7 +1860,7 @@ wxSize wxTextCtrl::DoGetBestClientSize() const
     GetTextExtent(GetTextToShow(GetLineText(0)), &w, &h);
 
     int wChar = GetCharWidth(),
-        hChar = GetCharHeight();
+        hChar = GetLineHeight();
 
     int widthMin = wxMax(10*wChar, 100);
     if ( w < widthMin )
@@ -1841,16 +1906,16 @@ void wxTextCtrl::UpdateLastVisible()
         return;
 
     // use (efficient) HitTestLine to find the last visible character
-    wxString text = m_value.Mid((size_t)m_colStart /* to the end */);
+    wxString text = m_value.Mid((size_t)SData().m_colStart /* to the end */);
     wxTextCoord col;
     switch ( HitTestLine(text, m_rectText.width, &col) )
     {
         case wxTE_HT_BEYOND:
             // everything is visible
-            m_colLastVisible = text.length();
+            SData().m_colLastVisible = text.length();
 
             // calc it below
-            m_posLastVisible = -1;
+            SData().m_posLastVisible = -1;
             break;
 
            /*
@@ -1867,43 +1932,46 @@ void wxTextCtrl::UpdateLastVisible()
                 // the last entirely seen character is the previous one because
                 // this one is only partly visible - unless the width of the
                 // string is exactly the max width
-                m_posLastVisible = GetTextWidth(text.Truncate(col + 1));
-                if ( m_posLastVisible > m_rectText.width )
+                SData().m_posLastVisible = GetTextWidth(text.Truncate(col + 1));
+                if ( SData().m_posLastVisible > m_rectText.width )
                 {
                     // this character is not entirely visible, take the
                     // previous one
                     col--;
 
                     // recalc it
-                    m_posLastVisible = -1;
+                    SData().m_posLastVisible = -1;
                 }
                 //else: we can just see it
 
-                m_colLastVisible = col;
+                SData().m_colLastVisible = col;
             }
             break;
     }
 
     // calculate the width of the text really shown
-    if ( m_posLastVisible == -1 )
+    if ( SData().m_posLastVisible == -1 )
     {
-        m_posLastVisible = GetTextWidth(text.Truncate(m_colLastVisible + 1));
+        SData().m_posLastVisible = GetTextWidth(text.Truncate(SData().m_colLastVisible + 1));
     }
 
     // current value is relative the start of the string text which starts at
-    // m_colStart, we need an absolute offset into string
-    m_colLastVisible += m_colStart;
+    // SData().m_colStart, we need an absolute offset into string
+    SData().m_colLastVisible += SData().m_colStart;
 
     wxLogTrace(_T("text"), _T("Last visible column/position is %d/%ld"),
-               m_colLastVisible, m_posLastVisible);
+               SData().m_colLastVisible, SData().m_posLastVisible);
 }
 
 void wxTextCtrl::OnSize(wxSizeEvent& event)
 {
     UpdateTextRect();
 
-    m_updateScrollbarX =
-    m_updateScrollbarY = TRUE;
+    if ( !IsSingleLine() )
+    {
+        MData().m_updateScrollbarX =
+        MData().m_updateScrollbarY = TRUE;
+    }
 
     event.Skip();
 }
@@ -1927,7 +1995,7 @@ wxRect wxTextCtrl::GetRealTextArea() const
     // the real text area always holds an entire number of lines, so the only
     // difference with the text area is a narrow strip along the bottom border
     wxRect rectText = m_rectText;
-    int hLine = GetCharHeight();
+    int hLine = GetLineHeight();
     rectText.height = (m_rectText.height / hLine) * hLine;
     return rectText;
 }
@@ -2273,7 +2341,7 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTest2(wxCoord y0,
     if ( colRowStartOut )
         *colRowStartOut = 0;
 
-    int hLine = GetCharHeight();
+    int hLine = GetLineHeight();
     wxTextCoord rowLast = GetNumberOfLines() - 1;
     if ( IsSingleLine() || !WrapLines() )
     {
@@ -2439,18 +2507,18 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTest2(wxCoord y0,
    wxTextCtrl has not one but two scrolling mechanisms: one is semi-automatic
    scrolling in both horizontal and vertical direction implemented using
    wxScrollHelper and the second one is manual scrolling implemented using
-   m_ofsHorz and used by the single line controls without scroll bar.
+   SData().m_ofsHorz and used by the single line controls without scroll bar.
 
    The first version (the standard one) always scrolls by fixed amount which is
    fine for vertical scrolling as all lines have the same height but is rather
    ugly for horizontal scrolling if proportional font is used. This is why we
-   manually update and use m_ofsHorz which contains the length of the string
+   manually update and use SData().m_ofsHorz which contains the length of the string
    which is hidden beyond the left borde. An important property of text
    controls using this kind of scrolling is that an entire number of characters
    is always shown and that parts of characters never appear on display -
    neither in the leftmost nor rightmost positions.
 
-   Once again, for multi line controls m_ofsHorz is always 0 and scrolling is
+   Once again, for multi line controls SData().m_ofsHorz is always 0 and scrolling is
    done as usual for wxScrollWindow.
  */
 
@@ -2458,8 +2526,8 @@ void wxTextCtrl::ShowHorzPosition(wxCoord pos)
 {
     // pos is the logical position to show
 
-    // m_ofsHorz is the fisrt logical position shown
-    if ( pos < m_ofsHorz )
+    // SData().m_ofsHorz is the fisrt logical position shown
+    if ( pos < SData().m_ofsHorz )
     {
         // scroll backwards
         wxTextCoord col;
@@ -2477,8 +2545,8 @@ void wxTextCtrl::ShowHorzPosition(wxCoord pos)
             width = m_rectText.width;
         }
 
-        // m_ofsHorz + width is the last logical position shown
-        if ( pos > m_ofsHorz + width)
+        // SData().m_ofsHorz + width is the last logical position shown
+        if ( pos > SData().m_ofsHorz + width)
         {
             // scroll forward
             wxTextCoord col;
@@ -2500,25 +2568,25 @@ void wxTextCtrl::ScrollText(wxTextCoord col)
         col = 0;
 
     // OPT: could only get the extent of the part of the string between col
-    //      and m_colStart
+    //      and SData().m_colStart
     wxCoord ofsHorz = GetTextWidth(GetLineText(0).Left(col));
 
-    if ( ofsHorz != m_ofsHorz )
+    if ( ofsHorz != SData().m_ofsHorz )
     {
         // what is currently shown?
-        if ( m_colLastVisible == -1 )
+        if ( SData().m_colLastVisible == -1 )
         {
             UpdateLastVisible();
         }
 
         // NB1: to scroll to the right, offset must be negative, hence the
         //      order of operands
-        int dx = m_ofsHorz - ofsHorz;
+        int dx = SData().m_ofsHorz - ofsHorz;
 
         // NB2: we call Refresh() below which results in a call to
-        //      DoDraw(), so we must update m_ofsHorz before calling it
-        m_ofsHorz = ofsHorz;
-        m_colStart = col;
+        //      DoDraw(), so we must update SData().m_ofsHorz before calling it
+        SData().m_ofsHorz = ofsHorz;
+        SData().m_colStart = col;
 
         // scroll only the rectangle inside which there is the text
         if ( dx > 0 )
@@ -2535,11 +2603,11 @@ void wxTextCtrl::ScrollText(wxTextCoord col)
             // before will be refreshed and redrawn
 
             // but we still need to force updating after scrolling
-            m_colLastVisible = -1;
+            SData().m_colLastVisible = -1;
         }
 
         wxRect rect = m_rectText;
-        rect.width = m_posLastVisible;
+        rect.width = SData().m_posLastVisible;
 
         rect = ScrollNoRefresh(dx, 0, &rect);
 
@@ -2572,14 +2640,14 @@ void wxTextCtrl::ScrollText(wxTextCoord col)
             Refresh(TRUE, &rect);
 
             // and now the area on the right
-            rect.x = m_rectText.x + m_posLastVisible;
-            rect.width = m_rectText.width - m_posLastVisible;
+            rect.x = m_rectText.x + SData().m_posLastVisible;
+            rect.width = m_rectText.width - SData().m_posLastVisible;
         }
         else
         {
             // just extend the rect covering the uncovered area to the edge of
             // the text rect
-            rect.width += m_rectText.width - m_posLastVisible;
+            rect.width += m_rectText.width - SData().m_posLastVisible;
         }
 
         Refresh(TRUE, &rect);
@@ -2588,18 +2656,21 @@ void wxTextCtrl::ScrollText(wxTextCoord col)
 
 void wxTextCtrl::CalcUnscrolledPosition(int x, int y, int *xx, int *yy) const
 {
-    wxScrollHelper::CalcUnscrolledPosition(x + m_ofsHorz, y, xx, yy);
+    if ( IsSingleLine() )
+        x += SData().m_ofsHorz;
+
+    wxScrollHelper::CalcUnscrolledPosition(x, y, xx, yy);
 }
 
 void wxTextCtrl::DoPrepareDC(wxDC& dc)
 {
-    // for single line controls we only have to deal with m_ofsHorz and it's
+    // for single line controls we only have to deal with SData().m_ofsHorz and it's
     // useless to call base class version as they don't use normal scrolling
-    if ( m_ofsHorz )
+    if ( IsSingleLine() && SData().m_ofsHorz )
     {
         // adjust the DC origin if the text is shifted
         wxPoint pt = dc.GetDeviceOrigin();
-        dc.SetDeviceOrigin(pt.x - m_ofsHorz, pt.y);
+        dc.SetDeviceOrigin(pt.x - SData().m_ofsHorz, pt.y);
     }
     else
     {
@@ -2610,18 +2681,18 @@ void wxTextCtrl::DoPrepareDC(wxDC& dc)
 void wxTextCtrl::UpdateMaxWidth(wxTextCoord line)
 {
     // check if the max width changes after this line was modified
-    wxCoord widthMaxOld = m_widthMax,
+    wxCoord widthMaxOld = MData().m_widthMax,
             width;
     GetTextExtent(GetLineText(line), &width, NULL);
 
-    if ( line == m_lineLongest )
+    if ( line == MData().m_lineLongest )
     {
         // this line was the longest one, is it still?
-        if ( width > m_widthMax )
+        if ( width > MData().m_widthMax )
         {
-            m_widthMax = width;
+            MData().m_widthMax = width;
         }
-        else if ( width < m_widthMax )
+        else if ( width < MData().m_widthMax )
         {
             // we need to find the new longest line
             RecalcMaxWidth();
@@ -2630,20 +2701,31 @@ void wxTextCtrl::UpdateMaxWidth(wxTextCoord line)
     }
     else // it wasn't the longest line, but maybe it became it?
     {
-        // GetMaxWidth() and not m_widthMax as it might be not calculated yet
+        // GetMaxWidth() and not MData().m_widthMax as it might be not calculated yet
         if ( width > GetMaxWidth() )
         {
-            m_widthMax = width;
-            m_lineLongest = line;
+            MData().m_widthMax = width;
+            MData().m_lineLongest = line;
         }
     }
 
-    m_updateScrollbarX = m_widthMax != widthMaxOld;
+    MData().m_updateScrollbarX = MData().m_widthMax != widthMaxOld;
+}
+
+void wxTextCtrl::RecalcLineHeight()
+{
+    m_heightLine = GetCharHeight();
+}
+
+void wxTextCtrl::RecalcMaxWidth()
+{
+    MData().m_widthMax = -1;
+    (void)GetMaxWidth();
 }
 
 wxCoord wxTextCtrl::GetMaxWidth() const
 {
-    if ( m_widthMax == -1 )
+    if ( MData().m_widthMax == -1 )
     {
         // recalculate it
 
@@ -2653,25 +2735,25 @@ wxCoord wxTextCtrl::GetMaxWidth() const
         wxClientDC dc(self);
         dc.SetFont(GetFont());
 
-        self->m_widthMax = 0;
+        self->MData().m_widthMax = 0;
 
-        size_t count = m_lines.GetCount();
+        size_t count = MData().m_lines.GetCount();
         for ( size_t n = 0; n < count; n++ )
         {
             wxCoord width;
-            dc.GetTextExtent(m_lines[n], &width, NULL);
-            if ( width > m_widthMax )
+            dc.GetTextExtent(MData().m_lines[n], &width, NULL);
+            if ( width > MData().m_widthMax )
             {
                 // remember the width and the line which has it
-                self->m_widthMax = width;
-                self->m_lineLongest = n;
+                self->MData().m_widthMax = width;
+                self->MData().m_lineLongest = n;
             }
         }
     }
 
-    wxASSERT_MSG( m_widthMax != -1, _T("should have at least 1 line") );
+    wxASSERT_MSG( MData().m_widthMax != -1, _T("should have at least 1 line") );
 
-    return m_widthMax;
+    return MData().m_widthMax;
 }
 
 void wxTextCtrl::UpdateScrollbars()
@@ -2680,7 +2762,7 @@ void wxTextCtrl::UpdateScrollbars()
 
     // is our height enough to show all items?
     wxTextCoord nRows = GetNumberOfRowsBefore(GetNumberOfLines());
-    wxCoord lineHeight = GetCharHeight();
+    wxCoord lineHeight = GetLineHeight();
     bool showScrollbarY = !IsSingleLine() && nRows*lineHeight > size.y;
 
     // is our width enough to show the longest line?
@@ -2706,7 +2788,7 @@ void wxTextCtrl::UpdateScrollbars()
                         : 0;
     int scrollRangeY = showScrollbarY ? nRows : 0;
 
-    if ( (scrollRangeY != m_scrollRangeY) || (scrollRangeX != m_scrollRangeX) )
+    if ( (scrollRangeY != MData().m_scrollRangeY) || (scrollRangeX != MData().m_scrollRangeX) )
     {
         int x, y;
         GetViewStart(&x, &y);
@@ -2714,8 +2796,8 @@ void wxTextCtrl::UpdateScrollbars()
                       scrollRangeX, scrollRangeY,
                       x, y);
 
-        m_scrollRangeX = scrollRangeX;
-        m_scrollRangeY = scrollRangeY;
+        MData().m_scrollRangeX = scrollRangeX;
+        MData().m_scrollRangeY = scrollRangeY;
 
         // bring the current position in view
         ShowPosition(-1);
@@ -2725,12 +2807,12 @@ void wxTextCtrl::UpdateScrollbars()
 void wxTextCtrl::OnIdle(wxIdleEvent& event)
 {
     // notice that single line text control never has scrollbars
-    if ( !IsSingleLine() && (m_updateScrollbarX || m_updateScrollbarY) )
+    if ( !IsSingleLine() && (MData().m_updateScrollbarX || MData().m_updateScrollbarY) )
     {
         UpdateScrollbars();
 
-        m_updateScrollbarX =
-        m_updateScrollbarY = FALSE;
+        MData().m_updateScrollbarX =
+        MData().m_updateScrollbarY = FALSE;
     }
 
     event.Skip();
@@ -2747,7 +2829,7 @@ void wxTextCtrl::RefreshLineRange(wxTextCoord lineFirst, wxTextCoord lineLast)
     wxRect rect;
     // rect.x is already 0
     rect.width = m_rectText.width;
-    wxCoord h = GetCharHeight();
+    wxCoord h = GetLineHeight();
     rect.y = GetNumberOfRowsBefore(lineFirst)*h;
 
     wxCoord bottom = GetNumberOfRowsBefore(lineLast + 1)*h;
@@ -2856,7 +2938,7 @@ void wxTextCtrl::RefreshPixelRange(wxTextCoord line,
     }
     //else: just refresh the specified part
 
-    wxCoord h = GetCharHeight();
+    wxCoord h = GetLineHeight();
     wxRect rect;
     rect.x = start;
     rect.y = GetNumberOfRowsBefore(line)*h;
@@ -2904,7 +2986,7 @@ void wxTextCtrl::RefreshTextRect(const wxRect& rectClient)
     if ( IsSingleLine() )
     {
         // account for horz scrolling
-        rect.x -= m_ofsHorz;
+        rect.x -= SData().m_ofsHorz;
     }
     else // multiline
     {
@@ -3037,7 +3119,7 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
     }
 
     // prepare for drawing
-    wxCoord hLine = GetCharHeight();
+    wxCoord hLine = GetLineHeight();
 
     // these vars will be used for hit testing of the current row
     wxCoord y = rectUpdate.y;
@@ -3084,36 +3166,36 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
             continue;
         }
 
-        // don't show the columns which are scrolled out to the left
-        if ( colStart < m_colStart )
-            colStart = m_colStart;
-
-        // colEnd may be less than colStart if colStart was changed by the
-        // assignment above
-        if ( colEnd < colStart )
-            colEnd = colStart;
-
         // for single line controls we may additionally cut off everything
         // which is to the right of the last visible position
         if ( IsSingleLine() )
         {
+            // don't show the columns which are scrolled out to the left
+            if ( colStart < SData().m_colStart )
+                colStart = SData().m_colStart;
+
+            // colEnd may be less than colStart if colStart was changed by the
+            // assignment above
+            if ( colEnd < colStart )
+                colEnd = colStart;
+
             // don't draw the chars beyond the rightmost one
-            if ( m_colLastVisible == -1 )
+            if ( SData().m_colLastVisible == -1 )
             {
                 // recalculate this rightmost column
                 UpdateLastVisible();
             }
 
-            if ( colStart > m_colLastVisible )
+            if ( colStart > SData().m_colLastVisible )
             {
                 // don't bother redrawing something that is beyond the last
                 // visible position
                 continue;
             }
 
-            if ( colEnd > m_colLastVisible )
+            if ( colEnd > SData().m_colLastVisible )
             {
-                colEnd = m_colLastVisible;
+                colEnd = SData().m_colLastVisible;
             }
         }
 
@@ -3244,6 +3326,7 @@ bool wxTextCtrl::SetFont(const wxFont& font)
     // update geometry parameters
     UpdateTextRect();
     UpdateScrollbars();
+    RecalcLineHeight();
     RecalcMaxWidth();
 
     Refresh();
@@ -3268,7 +3351,7 @@ void wxTextCtrl::CreateCaret()
     if ( IsEditable() )
     {
         // FIXME use renderer
-        caret = new wxCaret(this, 1, GetCharHeight());
+        caret = new wxCaret(this, 1, GetLineHeight());
 #ifndef __WXMSW__
         caret->SetBlinkTime(0);
 #endif // __WXMSW__
@@ -3366,7 +3449,7 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
         // the previous line
         wxPoint pt = GetCaretPosition() - m_rectText.GetPosition();
         CalcUnscrolledPosition(pt.x, pt.y, &pt.x, &pt.y);
-        pt.y -= GetCharHeight();
+        pt.y -= GetLineHeight();
 
         wxTextCoord col, row;
         if ( HitTestLogical(pt, &col, &row) != wxTE_HT_BEFORE )
@@ -3379,7 +3462,7 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
         // see comments for wxACTION_TEXT_UP
         wxPoint pt = GetCaretPosition() - m_rectText.GetPosition();
         CalcUnscrolledPosition(pt.x, pt.y, &pt.x, &pt.y);
-        pt.y += GetCharHeight();
+        pt.y += GetLineHeight();
 
         wxTextCoord col, row;
         if ( HitTestLogical(pt, &col, &row) != wxTE_HT_BELOW )
