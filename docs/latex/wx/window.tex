@@ -278,6 +278,16 @@ Note that this is a static function, so it can be called without needing a wxWin
 
 \helpref{wxWindow::SetFocus}{wxwindowsetfocus}
 
+\membersection{wxWindow::FindWindow}\label{wxwindowfindwindow}
+
+\func{wxWindow*}{FindWindow}{\param{long}{ id}}
+
+Find a child of this window, by identifier.
+
+\func{wxWindow*}{FindWindow}{\param{const wxString\&}{ name}}
+
+Find a child of this window, by name.
+
 \membersection{wxWindow::Fit}\label{wxwindowfit}
 
 \func{virtual void}{Fit}{\void}

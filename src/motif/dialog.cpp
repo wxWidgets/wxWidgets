@@ -164,7 +164,7 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
 
     // Can't remember what this was about... but I think it's necessary.
 
-    if (USE_INVISIBLE_RESIZE)
+    if (wxUSE_INVISIBLE_RESIZE)
     {
       if (pos.x > -1)
         XtVaSetValues(dialogShell, XmNx, pos.x,
@@ -216,10 +216,10 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
     // Positioning of the dialog doesn't work properly unless the dialog
     // is managed, so we manage without mapping to the screen.
     // To show, we map the shell (actually it's parent).
-    if (!USE_INVISIBLE_RESIZE)
+    if (!wxUSE_INVISIBLE_RESIZE)
         XtVaSetValues(shell, XmNmappedWhenManaged, FALSE, NULL);
 
-    if (!USE_INVISIBLE_RESIZE)
+    if (!wxUSE_INVISIBLE_RESIZE)
     {
         XtManageChild(dialogShell);
         SetSize(pos.x, pos.y, size.x, size.y);
@@ -252,7 +252,7 @@ void wxDialog::SetModal(bool flag)
 wxDialog::~wxDialog()
 {
     m_modalShowing = FALSE;
-    if (!USE_INVISIBLE_RESIZE && m_mainWidget)
+    if (!wxUSE_INVISIBLE_RESIZE && m_mainWidget)
     {
       XtUnmapWidget((Widget) m_mainWidget);
     }
@@ -426,7 +426,7 @@ bool wxDialog::Show(bool show)
 
     if (show)
     {
-        if (!USE_INVISIBLE_RESIZE)
+        if (!wxUSE_INVISIBLE_RESIZE)
           XtMapWidget(XtParent((Widget) m_mainWidget));
         else
           XtManageChild((Widget) m_mainWidget) ; 
@@ -436,7 +436,7 @@ bool wxDialog::Show(bool show)
     }
     else
     {
-        if (!USE_INVISIBLE_RESIZE)
+        if (!wxUSE_INVISIBLE_RESIZE)
             XtUnmapWidget(XtParent((Widget) m_mainWidget));
         else
             XtUnmanageChild((Widget) m_mainWidget) ;

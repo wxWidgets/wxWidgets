@@ -29,12 +29,19 @@
 #error You must set wxUSE_PRINTING_ARCHITECTURE to 1 in wx_setup.h to compile this demo.
 #endif
 
+// Set this to 1 if you want to test PostScript printing under MSW.
+// However, you'll also need to edit src/msw/makefile.nt.
+#define wxTEST_POSTSCRIPT_IN_MSW 0
+
 #include <ctype.h>
 #include "wx/metafile.h"
 #include "wx/print.h"
 #include "wx/printdlg.h"
+
+#if wxTEST_POSTSCRIPT_IN_MSW
 #include "wx/generic/printps.h"
 #include "wx/generic/prntdlgg.h"
+#endif
 
 #include "printing.h"
 
@@ -84,7 +91,7 @@ bool MyApp::OnInit(void)
   file_menu->Append(WXPRINT_PAGE_SETUP, "Page Set&up...",              "Page setup");
   file_menu->Append(WXPRINT_PREVIEW, "Print Pre&view",              "Preview");
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && wxTEST_POSTSCRIPT_IN_MSW
   file_menu->AppendSeparator();
   file_menu->Append(WXPRINT_PRINT_PS, "Print PostScript...",              "Print (PostScript)");
   file_menu->Append(WXPRINT_PRINT_SETUP_PS, "Print Setup PostScript...",              "Setup printer properties (PostScript)");
@@ -128,11 +135,13 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(WXPRINT_PREVIEW, MyFrame::OnPrintPreview)
     EVT_MENU(WXPRINT_PRINT_SETUP, MyFrame::OnPrintSetup)
     EVT_MENU(WXPRINT_PAGE_SETUP, MyFrame::OnPageSetup)
+    EVT_MENU(WXPRINT_ABOUT, MyFrame::OnPrintAbout)
+#if defined(__WXMSW__) && wxTEST_POSTSCRIPT_IN_MSW
     EVT_MENU(WXPRINT_PRINT_PS, MyFrame::OnPrintPS)
     EVT_MENU(WXPRINT_PREVIEW_PS, MyFrame::OnPrintPreviewPS)
     EVT_MENU(WXPRINT_PRINT_SETUP_PS, MyFrame::OnPrintSetupPS)
     EVT_MENU(WXPRINT_PAGE_SETUP_PS, MyFrame::OnPageSetupPS)
-    EVT_MENU(WXPRINT_ABOUT, MyFrame::OnPrintAbout)
+#endif
 END_EVENT_TABLE()
 
 // Define my frame constructor
@@ -160,15 +169,6 @@ void MyFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
         wxMessageBox("There was a problem printing.\nPerhaps your current printer is not set correctly?", "Printing", wxOK);
 }
 
-void MyFrame::OnPrintPS(wxCommandEvent& WXUNUSED(event))
-{
-      wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
-
-      wxPostScriptPrinter printer;
-      MyPrintout printout("My printout");
-      printer.Print(this, &printout, TRUE);
-}
-
 void MyFrame::OnPrintPreview(wxCommandEvent& WXUNUSED(event))
 {
 #ifdef __WXMSW__
@@ -188,21 +188,6 @@ void MyFrame::OnPrintPreview(wxCommandEvent& WXUNUSED(event))
         return;
       }
       
-      wxPreviewFrame *frame = new wxPreviewFrame(preview, this, "Demo Print Preview", wxPoint(100, 100), wxSize(600, 650));
-      frame->Centre(wxBOTH);
-      frame->Initialize();
-      frame->Show(TRUE);
-}
-
-void MyFrame::OnPrintPreviewPS(wxCommandEvent& WXUNUSED(event))
-{
-      wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
-
-      wxPrintData printData;
-      printData.SetOrientation(orientation);
-
-      // Pass two printout objects: for preview, and possible printing.
-      wxPrintPreview *preview = new wxPrintPreview(new MyPrintout, new MyPrintout, & printData);
       wxPreviewFrame *frame = new wxPreviewFrame(preview, this, "Demo Print Preview", wxPoint(100, 100), wxSize(600, 650));
       frame->Centre(wxBOTH);
       frame->Initialize();
@@ -251,6 +236,31 @@ void MyFrame::OnPageSetup(wxCommandEvent& WXUNUSED(event))
       orientation = data.GetOrientation();
 }
 
+#if defined(__WXMSW__) && wxTEST_POSTSCRIPT_IN_MSW
+void MyFrame::OnPrintPS(wxCommandEvent& WXUNUSED(event))
+{
+      wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
+
+      wxPostScriptPrinter printer;
+      MyPrintout printout("My printout");
+      printer.Print(this, &printout, TRUE);
+}
+
+void MyFrame::OnPrintPreviewPS(wxCommandEvent& WXUNUSED(event))
+{
+      wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
+
+      wxPrintData printData;
+      printData.SetOrientation(orientation);
+
+      // Pass two printout objects: for preview, and possible printing.
+      wxPrintPreview *preview = new wxPrintPreview(new MyPrintout, new MyPrintout, & printData);
+      wxPreviewFrame *frame = new wxPreviewFrame(preview, this, "Demo Print Preview", wxPoint(100, 100), wxSize(600, 650));
+      frame->Centre(wxBOTH);
+      frame->Initialize();
+      frame->Show(TRUE);
+}
+
 void MyFrame::OnPrintSetupPS(wxCommandEvent& WXUNUSED(event))
 {
       wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
@@ -277,6 +287,8 @@ void MyFrame::OnPageSetupPS(wxCommandEvent& WXUNUSED(event))
 
       orientation = pageSetupDialog.GetPageSetupData().GetOrientation();
 }
+#endif
+
 
 void MyFrame::OnPrintAbout(wxCommandEvent& WXUNUSED(event))
 {

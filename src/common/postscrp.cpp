@@ -294,7 +294,7 @@ void wxPostScriptDC::SetClippingRegion (long cx, long cy, long cw, long ch)
   *m_pstream << "gsave\n";
   *m_pstream << "newpath\n";
   *m_pstream << cx << " " << YSCALE (cy) << " moveto\n";
-  *m_pstream << cx + cw << " " << YSCALE (cy) << " lineto\n";
+  *m_pstream << (cx + cw) << " " << YSCALE (cy) << " lineto\n";
   *m_pstream << cx + cw << " " << YSCALE (cy + ch) << " lineto\n";
   *m_pstream << cx << " " << YSCALE (cy + ch) << " lineto\n";
   *m_pstream << "closepath clip newpath\n";
@@ -415,8 +415,8 @@ void wxPostScriptDC::DrawEllipticArc(long x,long y,long w,long h,double sa,doubl
 
       *m_pstream << 
          "newpath\n" <<
-         x+w/2 << " " << YSCALE (y+h/2) << " " <<
-         w/2 << " " << h/2 << " " <<
+         (x+w/2) << " " << YSCALE (y+h/2) << " " <<
+         w/2 << " " << (h/2) << " " <<
          int(sa) <<" "<< int(ea)<<" true ellipticarc\n";
 
       CalcBoundingBox (x , (long)YSCALE (y ));
@@ -428,8 +428,8 @@ void wxPostScriptDC::DrawEllipticArc(long x,long y,long w,long h,double sa,doubl
 
       *m_pstream << 
          "newpath\n" <<
-         x+w/2 << " " << YSCALE (y+h/2) << " " <<
-         w/2 << " " << h/2 << " " <<
+         (x+w/2) << " " << YSCALE (y+h/2) << " " <<
+         (w/2) << " " << (h/2) << " " <<
          int(sa) <<" "<< int(ea)<<" false ellipticarc\n";
 
       CalcBoundingBox (x , (long)YSCALE (y ));
@@ -545,8 +545,8 @@ void wxPostScriptDC::DrawRectangle (long x, long y, long width, long height)
 
       *m_pstream << "newpath\n";
       *m_pstream << x << " " << YSCALE (y) << " moveto\n";
-      *m_pstream << x + width << " " << YSCALE (y) << " lineto\n";
-      *m_pstream << x + width << " " << YSCALE (y + height) << " lineto\n";
+      *m_pstream << (x + width) << " " << YSCALE (y) << " lineto\n";
+      *m_pstream << (x + width) << " " << YSCALE (y + height) << " lineto\n";
       *m_pstream << x << " " << YSCALE (y + height) << " lineto\n";
       *m_pstream << "closepath\n";
       *m_pstream << "fill\n";
@@ -560,8 +560,8 @@ void wxPostScriptDC::DrawRectangle (long x, long y, long width, long height)
 
       *m_pstream << "newpath\n";
       *m_pstream << x << " " << YSCALE (y) << " moveto\n";
-      *m_pstream << x + width << " " << YSCALE (y) << " lineto\n";
-      *m_pstream << x + width << " " << YSCALE (y + height) << " lineto\n";
+      *m_pstream << (x + width) << " " << YSCALE (y) << " lineto\n";
+      *m_pstream << (x + width) << " " << YSCALE (y + height) << " lineto\n";
       *m_pstream << x << " " << YSCALE (y + height) << " lineto\n";
       *m_pstream << "closepath\n";
       *m_pstream << "stroke\n";
@@ -593,19 +593,19 @@ void wxPostScriptDC::DrawRoundedRectangle (long x, long y, long width, long heig
       SetBrush (m_brush);
       // Draw rectangle anticlockwise
       *m_pstream << "newpath\n";
-      *m_pstream << x + radius << " " << YSCALE (y + radius) << " " << radius << " 90 180 arc\n";
+      *m_pstream << (x + radius) << " " << YSCALE (y + radius) << " " << radius << " 90 180 arc\n";
 
       *m_pstream << x << " " << YSCALE (y + radius) << " moveto\n";
 
-      *m_pstream << x + radius << " " << YSCALE (y + height - radius) << " " << radius << " 180 270 arc\n";
-      *m_pstream << x + width - radius << " " << YSCALE (y + height) << " lineto\n";
+      *m_pstream << (x + radius) << " " << YSCALE (y + height - radius) << " " << radius << " 180 270 arc\n";
+      *m_pstream << (x + width - radius) << " " << YSCALE (y + height) << " lineto\n";
 
-      *m_pstream << x + width - radius << " " << YSCALE (y + height - radius) << " " << radius << " 270 0 arc\n";
-      *m_pstream << x + width << " " << YSCALE (y + radius) << " lineto\n";
+      *m_pstream << (x + width - radius) << " " << YSCALE (y + height - radius) << " " << radius << " 270 0 arc\n";
+      *m_pstream << (x + width) << " " << YSCALE (y + radius) << " lineto\n";
 
-      *m_pstream << x + width - radius << " " << YSCALE (y + radius) << " " << radius << " 0 90 arc\n";
+      *m_pstream << (x + width - radius) << " " << YSCALE (y + radius) << " " << radius << " 0 90 arc\n";
 
-      *m_pstream << x + radius << " " << YSCALE (y) << " lineto\n";
+      *m_pstream << (x + radius) << " " << YSCALE (y) << " lineto\n";
 
       *m_pstream << "closepath\n";
 
@@ -619,19 +619,19 @@ void wxPostScriptDC::DrawRoundedRectangle (long x, long y, long width, long heig
       SetPen (m_pen);
       // Draw rectangle anticlockwise
       *m_pstream << "newpath\n";
-      *m_pstream << x + radius << " " << YSCALE (y + radius) << " " << radius << " 90 180 arc\n";
+      *m_pstream << (x + radius) << " " << YSCALE (y + radius) << " " << radius << " 90 180 arc\n";
 
       *m_pstream << x << " " << YSCALE (y + height - radius) << " lineto\n";
 
-      *m_pstream << x + radius << " " << YSCALE (y + height - radius) << " " << radius << " 180 270 arc\n";
-      *m_pstream << x + width - radius << " " << YSCALE (y + height) << " lineto\n";
+      *m_pstream << (x + radius) << " " << YSCALE (y + height - radius) << " " << radius << " 180 270 arc\n";
+      *m_pstream << (x + width - radius) << " " << YSCALE (y + height) << " lineto\n";
 
-      *m_pstream << x + width - radius << " " << YSCALE (y + height - radius) << " " << radius << " 270 0 arc\n";
-      *m_pstream << x + width << " " << YSCALE (y + radius) << " lineto\n";
+      *m_pstream << (x + width - radius) << " " << YSCALE (y + height - radius) << " " << radius << " 270 0 arc\n";
+      *m_pstream << (x + width) << " " << YSCALE (y + radius) << " lineto\n";
 
-      *m_pstream << x + width - radius << " " << YSCALE (y + radius) << " " << radius << " 0 90 arc\n";
+      *m_pstream << (x + width - radius) << " " << YSCALE (y + radius) << " " << radius << " 0 90 arc\n";
 
-      *m_pstream << x + radius << " " << YSCALE (y) << " lineto\n";
+      *m_pstream << (x + radius) << " " << YSCALE (y) << " lineto\n";
 
       *m_pstream << "closepath\n";
 
@@ -651,8 +651,8 @@ void wxPostScriptDC::DrawEllipse (long x, long y, long width, long height)
       SetBrush (m_brush);
 
       *m_pstream << "newpath\n";
-      *m_pstream << x + width / 2 << " " << YSCALE (y + height / 2) << " ";
-      *m_pstream << width / 2 << " " << height / 2 << " 0 360 ellipse\n";
+      *m_pstream << (x + width / 2) << " " << YSCALE (y + height / 2) << " ";
+      *m_pstream << (width / 2) << " " << (height / 2) << " 0 360 ellipse\n";
       *m_pstream << "fill\n";
 
       CalcBoundingBox (x - width, (long)YSCALE (y - height));
@@ -663,8 +663,8 @@ void wxPostScriptDC::DrawEllipse (long x, long y, long width, long height)
       SetPen (m_pen);
 
       *m_pstream << "newpath\n";
-      *m_pstream << x + width / 2 << " " << YSCALE (y + height / 2) << " ";
-      *m_pstream << width / 2 << " " << height / 2 << " 0 360 ellipse\n";
+      *m_pstream << (x + width / 2) << " " << YSCALE (y + height / 2) << " ";
+      *m_pstream << (width / 2) << " " << (height / 2) << " 0 360 ellipse\n";
       *m_pstream << "stroke\n";
 
       CalcBoundingBox (x - width, (long)YSCALE (y - height));
@@ -767,7 +767,7 @@ void wxPostScriptDC::SetFont (const wxFont& the_font)
   strcpy (buf, name);
   strcat (buf, style);
   *m_pstream << buf << " findfont\n";
-  *m_pstream << m_font.GetPointSize() * m_scaleFactor << " scalefont setfont\n";
+  *m_pstream << (m_font.GetPointSize() * m_scaleFactor) << " scalefont setfont\n";
 }
 
 void wxPostScriptDC::SetPen (const wxPen& pen)
@@ -976,7 +976,7 @@ void wxPostScriptDC::DrawText (const wxString& text, long x, long y, bool WXUNUS
       *m_pstream << "gsave " << x << " " << YSCALE (y + size - UnderlinePosition)
                << " moveto\n"
                << UnderlineThickness << " setlinewidth "
-               << x + w << " " << YSCALE (y + size - UnderlinePosition)
+               << (x + w) << " " << YSCALE (y + size - UnderlinePosition)
                << " lineto stroke grestore\n";
   }
   
@@ -1216,7 +1216,7 @@ void wxPostScriptDC::EndDoc (void)
   *m_pstream << "%%BoundingBox: "
       << floor((double)llx) << " " << floor((double)lly) << " "
       << ceil((double)urx)  << " " << ceil((double)ury)  << "\n";
-  *m_pstream << "%%Pages: " << wxPageNumber - 1 << "\n";
+  *m_pstream << "%%Pages: " << (wxPageNumber - 1) << "\n";
   *m_pstream << "%%EndComments\n\n";
 
   // To check the correctness of the bounding box, postscript commands
@@ -1322,7 +1322,7 @@ void wxPostScriptDC::StartPage (void)
 {
   if (!m_pstream)
     return;
-  *m_pstream << "%%Page: " << wxPageNumber++ << "\n";
+  *m_pstream << "%%Page: " << (wxPageNumber++) << "\n";
 //  *m_pstream << "matrix currentmatrix\n";
 
     // Added by Chris Breeze
@@ -1403,8 +1403,6 @@ void wxPostScriptDC::EndPage (void)
 #endif
 }
 
-/* MATTHEW: Implement Blit: */
-/* MATTHEW: [4] Re-wrote to use colormap */
 bool wxPostScriptDC::
 Blit (long xdest, long ydest, long fwidth, long fheight,
       wxDC *source, long xsrc, long ysrc, int WXUNUSED(rop), bool WXUNUSED(useMask))
@@ -1820,7 +1818,7 @@ void wxPostScriptDC::GetTextExtent (const wxString& string, long *x, long *y,
 #endif
 }
 
-void wxPostScriptDC::DrawOpenSpline( wxList *points )
+void wxPostScriptDC::DrawSpline( wxList *points )
 {
 	double		a, b, c, d, x1, y1, x2, y2, x3, y3;
         wxPoint *p, *q;
@@ -1836,7 +1834,7 @@ void wxPostScriptDC::DrawOpenSpline( wxList *points )
         x3 = a = (double)(x1 + c) / 2;
         y3 = b = (double)(y1 + d) / 2;
 
-        *(GetStream()) << "newpath " << x1 << " " << GetYOrigin() - y1 << " moveto " << x3 << " " << GetYOrigin() - y3;
+        *(GetStream()) << "newpath " << x1 << " " << (GetYOrigin() - y1) << " moveto " << x3 << " " << (GetYOrigin() - y3);
         *(GetStream()) << " lineto\n";
         CalcBoundingBox( (long)x1, (long)(GetYOrigin() - y1));
         CalcBoundingBox( (long)x3, (long)(GetYOrigin() - y3));
@@ -1850,8 +1848,8 @@ void wxPostScriptDC::DrawOpenSpline( wxList *points )
 	  c = q->x; d = q->y;
           x3 = (double)(x2 + c) / 2;
           y3 = (double)(y2 + d) / 2;
-          *(GetStream()) << x1 << " " << GetYOrigin() - y1 << " " << x2 << " " << GetYOrigin() - y2 << " ";
-          *(GetStream()) << x3 << " " << GetYOrigin() - y3 << " DrawSplineSection\n";
+          *(GetStream()) << x1 << " " << (GetYOrigin() - y1) << " " << x2 << " " << (GetYOrigin() - y2) << " ";
+          *(GetStream()) << x3 << " " << (GetYOrigin() - y3) << " DrawSplineSection\n";
 
           CalcBoundingBox( (long)x1, (long)(GetYOrigin() - y1));
           CalcBoundingBox( (long)x3, (long)(GetYOrigin() - y3));
@@ -1860,7 +1858,7 @@ void wxPostScriptDC::DrawOpenSpline( wxList *points )
 	* At this point, (x2,y2) and (c,d) are the position of the 
 	* next-to-last and last point respectively, in the point list
 	*/
-        *(GetStream()) << c << " " << GetYOrigin() - d << " lineto stroke\n";
+        *(GetStream()) << c << " " << (GetYOrigin() - d) << " lineto stroke\n";
 }
 
 long wxPostScriptDC::GetCharWidth (void)
@@ -2585,5 +2583,26 @@ wxPrintPaperType *wxPrintPaperDatabase::FindPaperType(const char *name)
   else
     return (wxPrintPaperType *) NULL;
 }
+
+/*
+ * Initialization/cleanup module
+ */
+
+bool wxPostScriptModule::OnInit()
+{
+    wxInitializePrintSetupData();
+    wxThePrintPaperDatabase = new wxPrintPaperDatabase;
+    wxThePrintPaperDatabase->CreateDatabase();
+
+    return TRUE;
+}
+
+void wxPostScriptModule::OnExit()
+{
+    wxInitializePrintSetupData(FALSE);
+    delete wxThePrintPaperDatabase;
+    wxThePrintPaperDatabase = NULL;
+}
+
 
 #endif

@@ -275,6 +275,13 @@ void wxShapeCanvas::OnMouseEvent(wxMouseEvent& event)
         m_draggedShape = NULL;
         m_dragState = NoDragging;
       }
+      else if (event.LeftDClick())
+      {
+        nearest_object->GetEventHandler()->OnLeftDoubleClick((double)x, (double)y, keys, attachment);
+
+        m_draggedShape = NULL;
+        m_dragState = NoDragging;
+      }
       else if (event.RightDown())
       {
         m_draggedShape = nearest_object;

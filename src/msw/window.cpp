@@ -2140,7 +2140,7 @@ void wxWindow::MSWOnLButtonDown(int x, int y, WXUINT flags)
   event.m_leftDown = ((flags & MK_LBUTTON) != 0);
   event.m_middleDown = ((flags & MK_MBUTTON) != 0);
   event.m_rightDown = ((flags & MK_RBUTTON) != 0);
-  event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
+  event.SetTimestamp(wxApp::sm_lastMessageTime);
   event.m_eventObject = this;
 
   m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVENT_TYPE_LEFT_DOWN;
@@ -2159,7 +2159,7 @@ void wxWindow::MSWOnLButtonUp(int x, int y, WXUINT flags)
   event.m_leftDown = ((flags & MK_LBUTTON) != 0);
   event.m_middleDown = ((flags & MK_MBUTTON) != 0);
   event.m_rightDown = ((flags & MK_RBUTTON) != 0);
-  event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
+  event.SetTimestamp(wxApp::sm_lastMessageTime);
   event.m_eventObject = this;
 
   m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVT_LEFT_UP;
@@ -2175,10 +2175,10 @@ void wxWindow::MSWOnLButtonDClick(int x, int y, WXUINT flags)
   event.m_x = x; event.m_y = y;
   event.m_shiftDown = ((flags & MK_SHIFT) != 0);
   event.m_controlDown = ((flags & MK_CONTROL) != 0);
-  event.m_leftDown = ((flags & MK_LBUTTON != 0));
+  event.m_leftDown = ((flags & MK_LBUTTON) != 0);
   event.m_middleDown = ((flags & MK_MBUTTON) != 0);
   event.m_rightDown = ((flags & MK_RBUTTON) != 0);
-  event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
+  event.SetTimestamp(wxApp::sm_lastMessageTime);
   event.m_eventObject = this;
 
   m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVT_LEFT_DCLICK;
@@ -2197,7 +2197,7 @@ void wxWindow::MSWOnMButtonDown(int x, int y, WXUINT flags)
   event.m_leftDown = ((flags & MK_LBUTTON) != 0);
   event.m_middleDown = ((flags & MK_MBUTTON) != 0);
   event.m_rightDown = ((flags & MK_RBUTTON) != 0);
-  event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
+  event.SetTimestamp(wxApp::sm_lastMessageTime);
   event.m_eventObject = this;
 
   m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVT_MIDDLE_DOWN;
@@ -2217,7 +2217,7 @@ void wxWindow::MSWOnMButtonUp(int x, int y, WXUINT flags)
   event.m_leftDown = ((flags & MK_LBUTTON) != 0);
   event.m_middleDown = ((flags & MK_MBUTTON) != 0);
   event.m_rightDown = ((flags & MK_RBUTTON) != 0);
-  event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
+  event.SetTimestamp(wxApp::sm_lastMessageTime);
   event.m_eventObject = this;
 
   m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVT_MIDDLE_UP;
@@ -2236,7 +2236,7 @@ void wxWindow::MSWOnMButtonDClick(int x, int y, WXUINT flags)
   event.m_leftDown = ((flags & MK_LBUTTON) != 0);
   event.m_middleDown = ((flags & MK_MBUTTON) != 0);
   event.m_rightDown = ((flags & MK_RBUTTON) != 0);
-  event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
+  event.SetTimestamp(wxApp::sm_lastMessageTime);
   event.m_eventObject = this;
 
   m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVT_MIDDLE_DCLICK;
@@ -2255,7 +2255,7 @@ void wxWindow::MSWOnRButtonDown(int x, int y, WXUINT flags)
   event.m_leftDown = ((flags & MK_LBUTTON) != 0);
   event.m_middleDown = ((flags & MK_MBUTTON) != 0);
   event.m_rightDown = ((flags & MK_RBUTTON) != 0);
-  event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
+  event.SetTimestamp(wxApp::sm_lastMessageTime);
   event.m_eventObject = this;
 
   m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVT_RIGHT_DOWN;
@@ -2275,7 +2275,7 @@ void wxWindow::MSWOnRButtonUp(int x, int y, WXUINT flags)
   event.m_middleDown = ((flags & MK_MBUTTON) != 0);
   event.m_rightDown = ((flags & MK_RBUTTON) != 0);
   event.m_eventObject = this;
-  event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
+  event.SetTimestamp(wxApp::sm_lastMessageTime);
 
   m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVT_RIGHT_UP;
 
@@ -2293,7 +2293,7 @@ void wxWindow::MSWOnRButtonDClick(int x, int y, WXUINT flags)
   event.m_leftDown = ((flags & MK_LBUTTON) != 0);
   event.m_middleDown = ((flags & MK_MBUTTON) != 0);
   event.m_rightDown = ((flags & MK_RBUTTON) != 0);
-  event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
+  event.SetTimestamp(wxApp::sm_lastMessageTime);
   event.m_eventObject = this;
 
   m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVT_RIGHT_DCLICK;
@@ -2326,7 +2326,7 @@ void wxWindow::MSWOnMouseMove(int x, int y, WXUINT flags)
   event.m_leftDown = ((flags & MK_LBUTTON) != 0);
   event.m_middleDown = ((flags & MK_MBUTTON) != 0);
   event.m_rightDown = ((flags & MK_RBUTTON) != 0);
-  event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
+  event.SetTimestamp(wxApp::sm_lastMessageTime);
   event.m_eventObject = this;
 
   // Window gets a click down message followed by a mouse move
@@ -2358,7 +2358,7 @@ void wxWindow::MSWOnMouseEnter(int x, int y, WXUINT flags)
   event.m_leftDown = ((flags & MK_LBUTTON) != 0);
   event.m_middleDown = ((flags & MK_MBUTTON) != 0);
   event.m_rightDown = ((flags & MK_RBUTTON) != 0);
-  event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
+  event.SetTimestamp(wxApp::sm_lastMessageTime);
   event.m_eventObject = this;
 
   m_lastEvent = wxEVT_ENTER_WINDOW;
@@ -2378,7 +2378,7 @@ void wxWindow::MSWOnMouseLeave(int x, int y, WXUINT flags)
   event.m_leftDown = ((flags & MK_LBUTTON) != 0);
   event.m_middleDown = ((flags & MK_MBUTTON) != 0);
   event.m_rightDown = ((flags & MK_RBUTTON) != 0);
-  event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
+  event.SetTimestamp(wxApp::sm_lastMessageTime);
   event.m_eventObject = this;
 
   m_lastEvent = wxEVT_LEAVE_WINDOW;
@@ -2439,7 +2439,7 @@ void wxWindow::MSWOnChar(WXWORD wParam, WXLPARAM lParam, bool isASCII)
 
     event.m_eventObject = this;
     event.m_keyCode = id;
-    event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
+    event.SetTimestamp(wxApp::sm_lastMessageTime);
 
     POINT pt ;
     GetCursorPos(&pt) ;
@@ -2984,7 +2984,7 @@ int APIENTRY _EXPORT
       event.m_shiftDown = (::GetKeyState(VK_SHIFT)&0x100?TRUE:FALSE);
       event.m_controlDown = (::GetKeyState(VK_CONTROL)&0x100?TRUE:FALSE);
 /* end Albert's fix for control and shift key 26.5 */
-      event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
+      event.SetTimestamp(wxApp::sm_lastMessageTime);
 
         wxWindow *win = wxGetActiveWindow();
         if (win)

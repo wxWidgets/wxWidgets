@@ -177,6 +177,12 @@ void wxShapeEvtHandler::OnLeftClick(double x, double y, int keys, int attachment
     m_previousHandler->OnLeftClick(x, y, keys, attachment);
 }
 
+void wxShapeEvtHandler::OnLeftDoubleClick(double x, double y, int keys, int attachment)
+{
+  if (m_previousHandler)
+    m_previousHandler->OnLeftDoubleClick(x, y, keys, attachment);
+}
+
 void wxShapeEvtHandler::OnRightClick(double x, double y, int keys, int attachment)
 {
   if (m_previousHandler)
@@ -3152,7 +3158,7 @@ void wxShape::OnDrawBranches(wxDC& dc, int attachment, bool erase)
         GetBranchingAttachmentPoint(attachment, i, pt, stemPt);
         dc.DrawLine((long) stemPt.x, (long) stemPt.y, (long) pt.x, (long) pt.y);
 
-        if (GetBranchStyle() & BRANCHING_ATTACHMENT_BLOB)
+        if ((GetBranchStyle() & BRANCHING_ATTACHMENT_BLOB) && (count > 1))
         {
             long blobSize=6;
 //            dc.DrawEllipse((long) (stemPt.x + 0.5 - (blobSize/2.0)), (long) (stemPt.y + 0.5 - (blobSize/2.0)), blobSize, blobSize);

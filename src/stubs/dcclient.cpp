@@ -569,7 +569,7 @@ static void wx_spline_draw_point_array(wxDC *dc)
   }
 }
 
-void wxPaintDC::DrawOpenSpline( wxList *points )
+void wxPaintDC::DrawSpline( wxList *points )
 {
     wxPoint *p;
     double           cx1, cy1, cx2, cy2, cx3, cy3, cx4, cy4;

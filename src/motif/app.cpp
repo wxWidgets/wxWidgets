@@ -33,10 +33,6 @@
 #include "wx/resource.h"
 #endif
 
-#if wxUSE_POSTSCRIPT
-#include "wx/postscrp.h"
-#endif
-
 #include <Xm/Xm.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -91,9 +87,11 @@ bool wxApp::Initialize()
 
   // For PostScript printing
 #if wxUSE_POSTSCRIPT
+/* Done using wxModule now
     wxInitializePrintSetupData();
     wxThePrintPaperDatabase = new wxPrintPaperDatabase;
     wxThePrintPaperDatabase->CreateDatabase();
+*/
 #endif
 
     wxBitmap::InitStandardHandlers();
@@ -137,9 +135,11 @@ void wxApp::CleanUp()
     wxTheColourDatabase = NULL;
 
 #if wxUSE_POSTSCRIPT
+/* Done using wxModule now
     wxInitializePrintSetupData(FALSE);
     delete wxThePrintPaperDatabase;
     wxThePrintPaperDatabase = NULL;
+*/
 #endif
 
     wxBitmap::CleanUpHandlers();

@@ -859,7 +859,7 @@ wxFileConfig::LineList *wxFileConfig::ConfigGroup::GetGroupLine()
     // this group wasn't present in local config file, add it now
     if ( pParent != NULL ) {
       wxString strFullName;
-      strFullName << "[" << GetFullName().c_str() + 1 << "]"; // +1: no '/'
+      strFullName << "[" << (GetFullName().c_str() + 1) << "]"; // +1: no '/'
       m_pLine = m_pConfig->LineListInsert(strFullName,
                                           pParent->GetLastGroupLine());
       pParent->SetLastGroup(this);  // we're surely after all the others

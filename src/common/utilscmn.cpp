@@ -26,6 +26,8 @@
 #include "wx/window.h"
 #include "wx/menu.h"
 #include "wx/frame.h"
+#include "wx/msgdlg.h"
+#include "wx/textdlg.h"
 #endif
 
 #if wxUSE_IOSTREAMH
@@ -739,4 +741,45 @@ whereami(name)
 }
 
 #endif
+
+/*
+ * N.B. these convenience functions must be separate from msgdlgg.cpp, textdlgg.cpp
+ * since otherwise the generic code may be pulled in unnecessarily.
+ */
+
+int wxMessageBox(const wxString& message, const wxString& caption, long style,
+                 wxWindow *parent, int WXUNUSED(x), int WXUNUSED(y) )
+{
+    wxMessageDialog dialog(parent, message, caption, style);
+
+    int ans = dialog.ShowModal();
+    switch ( ans )
+    {
+        case wxID_OK:
+            return wxOK;
+            break;
+        case wxID_YES:
+            return wxYES;
+            break;
+        case wxID_NO:
+            return wxNO;
+            break;
+        default:
+        case wxID_CANCEL:
+            return wxCANCEL;
+            break;
+    }
+    return ans;
+}
+
+wxString wxGetTextFromUser(const wxString& message, const wxString& caption,
+                        const wxString& defaultValue, wxWindow *parent,
+                        int x, int y, bool WXUNUSED(centre) )
+{
+    wxTextEntryDialog dialog(parent, message, caption, defaultValue, wxOK|wxCANCEL, wxPoint(x, y));
+    if (dialog.ShowModal() == wxID_OK)
+        return dialog.GetValue();
+    else
+        return wxString("");
+}
 

@@ -90,7 +90,7 @@ class wxDC: public wxObject
     virtual void DrawEllipse( long x, long y, long width, long height ) = 0;
     
     virtual void DrawSpline( long x1, long y1, long x2, long y2, long x3, long y3 );
-    virtual void DrawSpline( wxList *points );
+    virtual void DrawSpline( wxList *points ) = 0;
     virtual void DrawSpline( int n, wxPoint points[] );
     
     virtual bool CanDrawBitmap(void) const = 0;
@@ -250,7 +250,6 @@ class wxDC: public wxObject
 	    return (long)((double)(y) * m_scaleY - 0.5);
 	}
   
-    virtual void DrawOpenSpline( wxList *points ) = 0;
 	
   public:
     

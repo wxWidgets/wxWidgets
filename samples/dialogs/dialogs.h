@@ -37,7 +37,7 @@ class MyFrame: public wxFrame
     void FileSave(wxCommandEvent& event);
     void DirChoose(wxCommandEvent& event);
 
-#if !defined(__WXMSW__) || wxUSE_GENERIC_DIALOGS_IN_MSW
+#if !defined(__WXMSW__) || wxTEST_GENERIC_DIALOGS_IN_MSW
 	void ChooseColourGeneric(wxCommandEvent& event);
 	void ChooseFontGeneric(wxCommandEvent& event);
 #endif

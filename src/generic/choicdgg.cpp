@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        choicesg.cpp
+// Name:        choicdgg.cpp
 // Purpose:     Choice dialogs
 // Author:      Julian Smart
 // Modified by:
@@ -33,7 +33,38 @@
 
 #include "wx/generic/choicdgg.h"
 
-extern void wxSplitMessage2(const char *message, wxList *messageList, wxWindow *parent, wxRowColSizer *sizer);
+// Split message, using constraints to position controls
+static void wxSplitMessage2(const char *message, wxList *messageList, wxWindow *parent, wxRowColSizer *sizer)
+{
+  char *copyMessage = copystring(message);
+  size_t i = 0;
+  size_t len = strlen(copyMessage);
+  char *currentMessage = copyMessage;
+
+//  wxWindow *lastWindow = parent;
+
+  while (i < len) {
+    while ((i < len) && (copyMessage[i] != '\n')) i++;
+    if (i < len) copyMessage[i] = 0;
+    wxStaticText *mess = new wxStaticText(parent, -1, currentMessage);
+
+/*
+    wxLayoutConstraints *c = new wxLayoutConstraints;
+    c->left.SameAs       	(parent, wxLeft, 10);
+    c->top.SameAs        	(lastWindow, wxBottom, 5);
+    c->right.AsIs      		();
+    c->height.AsIs			();
+
+    mess->SetConstraints(c);
+*/
+    sizer->AddSizerChild(mess);
+
+    messageList->Append(mess);
+
+    currentMessage = copyMessage + i + 1;
+  }
+  delete[] copyMessage;
+}
 
 wxString wxGetSingleChoice( const wxString& message, const wxString& caption, int n, 
                             const wxString *choices, wxWindow *parent,

@@ -18,12 +18,30 @@
 #include "wx/dialog.h"
 #include "wx/filedlg.h"
 #include "wx/intl.h"
+#include "wx/app.h"
 
 #include <Xm/Xm.h>
+#include <Xm/MwmUtil.h>
+#include <Xm/Label.h>
+#include <Xm/BulletinB.h>
+#include <Xm/Frame.h>
+#include <Xm/Text.h>
+#include <Xm/DialogS.h>
+#include <Xm/FileSB.h>
+#include <Xm/RowColumn.h>
+#include <Xm/LabelG.h>
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxFileDialog, wxDialog)
 #endif
+
+#define	DEFAULT_FILE_SELECTOR_SIZE 0
+				    // Let Motif defines the size of File
+				    // Selector Box (if 1), or fix it to
+				    // wxFSB_WIDTH x wxFSB_HEIGHT (if 0)
+#define	wxFSB_WIDTH                600
+#define wxFSB_HEIGHT               500
+
 
 char *wxFileSelector(const char *title,
                      const char *defaultDir, const char *defaultFileName,
@@ -86,104 +104,105 @@ char *wxFileSelectorEx(const char *title,
         return NULL;
 }
 
-// TODO: Motif file selector code
-#if 0
-char *wxFileSelectorAnswer = NULL;
-Bool wxFileSelectorReturned = FALSE;
+wxString wxFileDialog::m_fileSelectorAnswer = "";
+bool wxFileDialog::m_fileSelectorReturned = FALSE;
 
 void wxFileSelCancel(Widget fs, XtPointer client_data, XmFileSelectionBoxCallbackStruct *cbs)
 {
-  wxFileSelectorAnswer = NULL;
-  wxFileSelectorReturned = TRUE;
+  wxFileDialog::m_fileSelectorAnswer = "";
+  wxFileDialog::m_fileSelectorReturned = TRUE;
 }
 
 void wxFileSelOk(Widget fs, XtPointer client_data, XmFileSelectionBoxCallbackStruct *cbs)
 {
   char *filename = NULL;
   if (!XmStringGetLtoR(cbs->value, XmSTRING_DEFAULT_CHARSET, &filename)) {
-    wxFileSelectorAnswer = NULL;
-    wxFileSelectorReturned = TRUE;
+    wxFileDialog::m_fileSelectorAnswer = "";
+    wxFileDialog::m_fileSelectorReturned = TRUE;
   } else {
     if (filename) {
-      if (wxFileSelectorAnswer) delete[] wxFileSelectorAnswer;
-      wxFileSelectorAnswer = copystring(filename);
+      wxFileDialog::m_fileSelectorAnswer = filename;
       XtFree(filename);
     }
-    wxFileSelectorReturned = TRUE;
+    wxFileDialog::m_fileSelectorReturned = TRUE;
   }
 }
 
+wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
+        const wxString& defaultDir, const wxString& defaultFileName, const wxString& wildCard,
+        long style, const wxPoint& pos)
+{
+    m_message = message;
+    m_dialogStyle = style;
+    m_parent = parent;
+    m_path = "";
+    m_fileName = defaultFileName;
+    m_dir = defaultDir;
+    m_wildCard = wildCard;
+    m_filterIndex = 1;
+    m_pos = pos;
+}
 
-char *wxMotifFileSelector(char *message,
-                     char *default_path, char *default_filename, 
-                     char *default_extension, char *wildcard, int flags,
-                     wxWindow *parent, int x, int y)
+int wxFileDialog::ShowModal()
 {
   wxBeginBusyCursor();
+
   static char fileBuf[512];
-  Widget parentWidget = 0;
-  if (parent)
+  Widget parentWidget = (Widget) 0;
+  if (m_parent)
   {
-    if (parent->IsKindOf(CLASSINFO(wxFrame)))
-      parentWidget = ((wxFrame *)parent)->frameShell;
-    else if (parent->IsKindOf(CLASSINFO(wxDialogBox)))
-      parentWidget = ((wxDialogBox *)parent)->dialogShell;
-    else
-      parentWidget = (Widget)parent->handle;
+    parentWidget = (Widget) m_parent->GetTopWidget();
   }
-  else if (wxTheApp->wx_frame)
-    parentWidget = wxTheApp->wx_frame->frameShell;
+  else
+    parentWidget = (Widget) wxTheApp->GetTopLevelWidget();
 
   Widget fileSel = XmCreateFileSelectionDialog(parentWidget, "file_selector", NULL, 0);
   XtUnmanageChild(XmFileSelectionBoxGetChild(fileSel, XmDIALOG_HELP_BUTTON));
 
   Widget shell = XtParent(fileSel);
 
-  if (message)
-    XtVaSetValues(shell, XmNtitle, message, NULL);
+  if (!m_message.IsNull())
+    XtVaSetValues(shell, XmNtitle, (char*) (const char*) m_message, NULL);
 
-  char *entirePath = NULL;
+  wxString entirePath("");
 
-  if (default_path && default_filename)
+  if ((m_dir != "") && (m_fileName != ""))
   {
-    sprintf(wxBuffer, "%s/%s", default_path, default_filename);
-    entirePath = copystring(wxBuffer);
+    entirePath = m_dir + wxString("/") + m_fileName;
   }
-  else if (default_path && !default_filename)
+  else if ((m_dir != "") && (m_fileName == ""))
   {
-    sprintf(wxBuffer, "%s/", default_path);
-    entirePath = copystring(wxBuffer);
+    entirePath = m_dir + wxString("/");
   }
-  else if ((!default_path) && default_filename)
+  else if ((m_dir == "") && (m_fileName != ""))
   {
-    sprintf(wxBuffer, "%s", default_filename);
-    entirePath = copystring(wxBuffer);
+    entirePath = m_fileName;
   }
 
-  if (entirePath)
+  if (entirePath != "")
   {
     Widget selectionWidget = XmFileSelectionBoxGetChild(fileSel, XmDIALOG_TEXT);
-    XmTextSetString(selectionWidget, entirePath);
-    delete[] entirePath;
+    XmTextSetString(selectionWidget, (char*) (const char*) entirePath);
   }
 
-  if (wildcard)
+  if (m_wildCard != "")
   {
-    if (default_path)
-      sprintf(wxBuffer, "%s/%s", default_path, wildcard);
+    wxString filter("");
+    if (m_dir != "")
+      filter = m_dir + wxString("/") + m_wildCard;
     else
-      sprintf(wxBuffer, "%s", wildcard);
+      filter = m_wildCard;
 
     Widget filterWidget = XmFileSelectionBoxGetChild(fileSel, XmDIALOG_FILTER_TEXT);
-    XmTextSetString(filterWidget, wxBuffer);
+    XmTextSetString(filterWidget, (char*) (const char*) filter);
     XmFileSelectionDoSearch(fileSel, NULL);
   }
 
   // Suggested by Terry Gitnick, 16/9/97, because of change in Motif
   // file selector on Solaris 1.5.1.
-  if ( default_path )
+  if ( m_dir != "" )
   {
-      XmString thePath = XmStringCreateLtoR (default_path,
+      XmString thePath = XmStringCreateLtoR ((char*) (const char*) m_dir,
                                            XmSTRING_DEFAULT_CHARSET);
  
       XtVaSetValues (fileSel,
@@ -214,24 +233,20 @@ char *wxMotifFileSelector(char *message,
 
   XtManageChild(fileSel);
 
-  if (wxFileSelectorAnswer)
-    delete[] wxFileSelectorAnswer;
-
-  wxFileSelectorAnswer = NULL;
-  wxFileSelectorReturned = FALSE;
+  m_fileSelectorAnswer = "";
+  m_fileSelectorReturned = FALSE;
 
   wxEndBusyCursor();
 
   XtAddGrab(XtParent(fileSel), TRUE, FALSE);
   XEvent event;
-  while (!wxFileSelectorReturned)
+  while (!m_fileSelectorReturned)
   {
-    XtAppNextEvent(wxTheApp->appContext, &event);
-    XtDispatchEvent(&event);
+    XtAppProcessEvent((XtAppContext) wxTheApp->GetAppContext(), XtIMAll);
   }
   XtRemoveGrab(XtParent(fileSel));
 
-  XmUpdateDisplay(wxTheApp->topLevel); // Experimental
+  XmUpdateDisplay((Widget) wxTheApp->GetTopLevelWidget()); // Experimental
 
 //  XtDestroyWidget(fileSel);
   XtUnmapWidget(XtParent(fileSel));
@@ -239,41 +254,22 @@ char *wxMotifFileSelector(char *message,
 
   // Now process all events, because otherwise
   // this might remain on the screen
-  XSync(XtDisplay(wxTheApp->topLevel), FALSE);
-  while (XtAppPending(wxTheApp->appContext))
+  XSync(XtDisplay((Widget) wxTheApp->GetTopLevelWidget()), FALSE);
+  while (XtAppPending((XtAppContext) wxTheApp->GetAppContext()))
   {
-    XFlush(XtDisplay(wxTheApp->topLevel));
-    XtAppNextEvent(wxTheApp->appContext, &event);
+    XFlush(XtDisplay((Widget) wxTheApp->GetTopLevelWidget()));
+    XtAppNextEvent((XtAppContext) wxTheApp->GetAppContext(), &event);
     XtDispatchEvent(&event);
   }
 
-  if (wxFileSelectorAnswer)
-  {
-    strcpy(fileBuf, wxFileSelectorAnswer);
-    return fileBuf;
-  }
-  else return NULL;
-}
-#endif
+  m_path = m_fileSelectorAnswer;
+  m_fileName = wxFileNameFromPath(m_fileSelectorAnswer);
+  m_dir = wxPathOnly(m_path);
 
-wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
-        const wxString& defaultDir, const wxString& defaultFileName, const wxString& wildCard,
-        long style, const wxPoint& pos)
-{
-    m_message = message;
-    m_dialogStyle = style;
-    m_parent = parent;
-    m_path = "";
-    m_fileName = defaultFileName;
-    m_dir = defaultDir;
-    m_wildCard = wildCard;
-    m_filterIndex = 1;
-}
-
-int wxFileDialog::ShowModal()
-{
-    // TODO
+  if (m_fileName == "")
     return wxID_CANCEL;
+  else
+    return wxID_OK;
 }
 
 // Generic file load/save dialog

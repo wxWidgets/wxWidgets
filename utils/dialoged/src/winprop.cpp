@@ -325,6 +325,26 @@ wxProperty *wxWindowPropertyInfo::GetProperty(wxString& name)
     else
         return NULL;
   }
+  else if (name == "border")
+  {
+    wxString border("");
+    if (propertyWindow->GetWindowStyleFlag() & wxSIMPLE_BORDER)
+      border = "wxSIMPLE_BORDER";
+    else if (propertyWindow->GetWindowStyleFlag() & wxRAISED_BORDER)
+      border = "wxRAISED_BORDER";
+    else if (propertyWindow->GetWindowStyleFlag() & wxSUNKEN_BORDER)
+      border = "wxSUNKEN_BORDER";
+    else if (propertyWindow->GetWindowStyleFlag() & wxDOUBLE_BORDER)
+      border = "wxDOUBLE_BORDER";
+    else if (propertyWindow->GetWindowStyleFlag() & wxSTATIC_BORDER)
+      border = "wxSTATIC_BORDER";
+    else
+      border = "wxNO_BORDER";
+
+    return new wxProperty("border", border, "string",
+       new wxStringListValidator(new wxStringList("wxSIMPLE_BORDER", "wxRAISED_BORDER",
+          "wxSUNKEN_BORDER", "wxDOUBLE_BORDER", "wxSTATIC_BORDER", "wxNO_BORDER", NULL)));
+  }
   else
     return NULL;
 }
@@ -491,6 +511,37 @@ bool wxWindowPropertyInfo::SetProperty(wxString& name, wxProperty *property)
     else
         return FALSE;
   }
+  else if (name == "border")
+  {
+    long borderStyle = wxNO_BORDER;
+    wxString val = property->GetValue().StringValue();
+
+    if (val == "wxSIMPLE_BORDER")
+        borderStyle = wxSIMPLE_BORDER;
+    else if (val == "wxRAISED_BORDER")
+        borderStyle = wxRAISED_BORDER;
+    else if (val == "wxSUNKEN_BORDER")
+        borderStyle = wxSUNKEN_BORDER;
+    else if (val == "wxDOUBLE_BORDER")
+        borderStyle = wxDOUBLE_BORDER;
+    else if (val == "wxSTATIC_BORDER")
+        borderStyle = wxSTATIC_BORDER;
+    else
+        borderStyle = wxNO_BORDER;
+
+    SetWindowStyle(propertyWindow, wxSIMPLE_BORDER, FALSE);
+    SetWindowStyle(propertyWindow, wxRAISED_BORDER, FALSE);
+    SetWindowStyle(propertyWindow, wxSUNKEN_BORDER, FALSE);
+    SetWindowStyle(propertyWindow, wxDOUBLE_BORDER, FALSE);
+    SetWindowStyle(propertyWindow, wxSTATIC_BORDER, FALSE);
+    SetWindowStyle(propertyWindow, wxNO_BORDER, FALSE);
+
+    SetWindowStyle(propertyWindow, borderStyle, TRUE);
+
+    wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(propertyWindow);
+    resource->SetStyle(propertyWindow->GetWindowStyleFlag());
+    return TRUE;
+  }
   else
     return FALSE;
 }
@@ -503,6 +554,7 @@ void wxWindowPropertyInfo::GetPropertyNames(wxStringList& names)
   names.Add("y");
   names.Add("width");
   names.Add("height");
+  names.Add("border");
   if (!propertyWindow->IsKindOf(CLASSINFO(wxControl)))
   {
     names.Add("fontPoints");

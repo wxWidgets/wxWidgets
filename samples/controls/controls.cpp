@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        minimal.cpp
+// Name:        controls.cpp
 // Purpose:     Controls wxWindows sample
 // Author:      Robert Roebling
 // Modified by:
@@ -9,8 +9,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "minimal.cpp"
-#pragma interface "minimal.cpp"
+#pragma implementation "controls.cpp"
+#pragma interface "controls.cpp"
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".

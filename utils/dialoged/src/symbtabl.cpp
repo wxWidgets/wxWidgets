@@ -230,6 +230,10 @@ int wxResourceSymbolTable::FindHighestId()
 
         node = m_hashTable.Next();
     }
+
+    // Make sure we don't clash with future standard wxWindows ids
+    if (highest <= wxID_HIGHEST)
+        highest = wxID_HIGHEST + 1;
     return highest;
 }
 
@@ -245,12 +249,49 @@ struct wxStandardSymbolStruct
 
 static wxStandardSymbolStruct sg_StandardSymbols[] =
 {
-    { "wxID_OK", wxID_OK },
-    { "wxID_CANCEL", wxID_CANCEL },
-    { "wxID_APPLY", wxID_APPLY },
-//    { "wxID_STATIC", wxID_STATIC },
-    { "wxID_YES", wxID_YES },
-    { "wxID_NO", wxID_NO }
+    { "wxID_OK",            wxID_OK },
+    { "wxID_CANCEL",        wxID_CANCEL },
+    { "wxID_APPLY",         wxID_APPLY },
+    { "wxID_HELP",          wxID_HELP },
+    { "wxID_STATIC",        wxID_STATIC },
+    { "wxID_YES",           wxID_YES },
+    { "wxID_NO",            wxID_NO },
+
+    { "wxID_OPEN",          wxID_OPEN },
+    { "wxID_CLOSE",          wxID_CLOSE },
+    { "wxID_NEW",           wxID_NEW },
+    { "wxID_SAVE",          wxID_SAVE },
+    { "wxID_SAVEAS",        wxID_SAVEAS },
+    { "wxID_REVERT",        wxID_REVERT },
+    { "wxID_EXIT",          wxID_EXIT },
+    { "wxID_UNDO",          wxID_UNDO },
+    { "wxID_REDO",          wxID_REDO },
+    { "wxID_PRINT",         wxID_PRINT },
+    { "wxID_PRINT_SETUP",   wxID_PRINT_SETUP },
+    { "wxID_PREVIEW",       wxID_PREVIEW },
+    { "wxID_ABOUT",         wxID_ABOUT },
+    { "wxID_HELP_CONTENTS", wxID_HELP_CONTENTS },
+    { "wxID_HELP_COMMANDS", wxID_HELP_COMMANDS },
+    { "wxID_HELP_PROCEDURES", wxID_HELP_PROCEDURES },
+    { "wxID_HELP_CONTEXT",  wxID_HELP_CONTEXT },
+
+    { "wxID_CUT",           wxID_CUT },
+    { "wxID_COPY",          wxID_COPY },
+    { "wxID_PASTE",         wxID_PASTE },
+    { "wxID_CLEAR",         wxID_CLEAR },
+    { "wxID_FIND",          wxID_FIND },
+    { "wxID_DUPLICATE",     wxID_DUPLICATE },
+
+    { "wxID_FILE1",         wxID_FILE1 },
+    { "wxID_FILE2",         wxID_FILE2 },
+    { "wxID_FILE3",         wxID_FILE3 },
+    { "wxID_FILE4",         wxID_FILE4 },
+    { "wxID_FILE5",         wxID_FILE5 },
+    { "wxID_FILE6",         wxID_FILE6 },
+    { "wxID_FILE7",         wxID_FILE7 },
+    { "wxID_FILE8",         wxID_FILE8 },
+    { "wxID_FILE9",         wxID_FILE9 }
+
 };
 
 static int sg_StandardSymbolSize = (sizeof(sg_StandardSymbols)/sizeof(wxStandardSymbolStruct));

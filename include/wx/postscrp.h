@@ -18,8 +18,21 @@
 
 #include "wx/dc.h"
 #include "wx/dialog.h"
+#include "wx/module.h"
 
 #if wxUSE_POSTSCRIPT
+
+// A module to allow initialization/cleanup of PostScript-related
+// things without calling these functions from app.cpp.
+
+class WXDLLEXPORT wxPostScriptModule: public wxModule
+{
+DECLARE_DYNAMIC_CLASS(wxPostScriptModule)
+public:
+    wxPostScriptModule() {}
+    bool OnInit();
+    void OnExit();
+};
 
 class WXDLLIMPORT ofstream;
 class WXDLLEXPORT wxPostScriptDC: public wxDC
@@ -62,18 +75,7 @@ class WXDLLEXPORT wxPostScriptDC: public wxDC
   void DrawRoundedRectangle(long x, long y, long width, long height, double radius = 20);
   void DrawEllipse(long x, long y, long width, long height);
 
-  // RR: I define these in wxDC, after all they all do the same everywhere
-
-#ifdef __WXMSW__
-  // Splines
-  // 3-point spline
-  void DrawSpline(long x1, long y1, long x2, long y2, long x3, long y3);
-  // Any number of control points - a list of pointers to wxPoints
   void DrawSpline(wxList *points);
-  void DrawSpline(int n, wxPoint points[]);
-#endif
-
-  void DrawOpenSpline(wxList *points);
 
   void DrawIcon(const wxIcon& icon, long x, long y);
 #ifdef __WXGTK__

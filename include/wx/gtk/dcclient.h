@@ -90,7 +90,7 @@ class wxPaintDC: public wxDC
     virtual void SetClippingRegion( long x, long y, long width, long height );
     virtual void DestroyClippingRegion(void);
     
-    virtual void DrawOpenSpline( wxList *points );
+    virtual void DrawSpline( wxList *points );
     
   public: // shouldn't be public
     

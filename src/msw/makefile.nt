@@ -61,21 +61,26 @@ DOCDIR = $(WXDIR)\docs
 
 GENERICOBJS= \
   $(GENDIR)\choicdgg.obj \
-  $(GENDIR)\colrdlgg.obj \
-  $(GENDIR)\fontdlgg.obj \
   $(GENDIR)\gridg.obj \
-  $(GENDIR)\helpxlp.obj \
   $(GENDIR)\laywin.obj \
-  $(GENDIR)\msgdlgg.obj \
   $(GENDIR)\panelg.obj \
-  $(GENDIR)\printps.obj \
-  $(GENDIR)\prntdlgg.obj \
   $(GENDIR)\sashwin.obj \
   $(GENDIR)\scrolwin.obj \
   $(GENDIR)\splitter.obj \
   $(GENDIR)\statusbr.obj \
   $(GENDIR)\tabg.obj \
   $(GENDIR)\textdlgg.obj
+
+# These are generic things that don't need to be compiled on MSW,
+# but sometimes it's useful to do so for testing purposes.
+NONESSENTIALOBJS= \
+  $(GENDIR)\printps.obj \
+  $(GENDIR)\prntdlgg.obj \
+  $(GENDIR)\msgdlgg.obj \
+  $(GENDIR)\helpxlp.obj \
+  $(GENDIR)\colrdlgg.obj \
+  $(GENDIR)\fontdlgg.obj \
+  $(COMMDIR)\postscrp.obj
 
 COMMONOBJS = \
   $(COMMDIR)\cmndata.obj \
@@ -101,7 +106,6 @@ COMMONOBJS = \
   $(COMMDIR)\module.obj \
   $(COMMDIR)\odbc.obj \
   $(COMMDIR)\object.obj \
-  $(COMMDIR)\postscrp.obj \
   $(COMMDIR)\prntbase.obj \
   $(COMMDIR)\resource.obj \
   $(COMMDIR)\tbarbase.obj \
@@ -229,6 +233,7 @@ MSWOBJS = \
   $(OLEDIR)\uuid.obj
 
 
+# Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS)
 
 # Normal, static library

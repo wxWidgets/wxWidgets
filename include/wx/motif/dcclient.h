@@ -91,7 +91,7 @@ class WXDLLEXPORT wxWindowDC: public wxDC
     virtual void SetClippingRegion( long x, long y, long width, long height );
     virtual void DestroyClippingRegion(void);
     
-    virtual void DrawOpenSpline( wxList *points );
+    virtual void DrawSpline( wxList *points );
 
     // Motif-specific
     void SetDCClipping (); // Helper function for setting clipping

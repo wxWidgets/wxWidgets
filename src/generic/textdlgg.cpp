@@ -44,7 +44,38 @@ END_EVENT_TABLE()
 IMPLEMENT_CLASS(wxTextEntryDialog, wxDialog)
 #endif
 
-extern void wxSplitMessage2(const char *message, wxList *messageList, wxWindow *parent, wxRowColSizer *sizer);
+// Split message, using constraints to position controls
+static void wxSplitMessage2(const char *message, wxList *messageList, wxWindow *parent, wxRowColSizer *sizer)
+{
+  char *copyMessage = copystring(message);
+  size_t i = 0;
+  size_t len = strlen(copyMessage);
+  char *currentMessage = copyMessage;
+
+//  wxWindow *lastWindow = parent;
+
+  while (i < len) {
+    while ((i < len) && (copyMessage[i] != '\n')) i++;
+    if (i < len) copyMessage[i] = 0;
+    wxStaticText *mess = new wxStaticText(parent, -1, currentMessage);
+
+/*
+    wxLayoutConstraints *c = new wxLayoutConstraints;
+    c->left.SameAs       	(parent, wxLeft, 10);
+    c->top.SameAs        	(lastWindow, wxBottom, 5);
+    c->right.AsIs      		();
+    c->height.AsIs			();
+
+    mess->SetConstraints(c);
+*/
+    sizer->AddSizerChild(mess);
+
+    messageList->Append(mess);
+
+    currentMessage = copyMessage + i + 1;
+  }
+  delete[] copyMessage;
+}
 
 wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent, const wxString& message, const wxString& caption,
         const wxString& value, long style, const wxPoint& pos):
@@ -128,13 +159,3 @@ void wxTextEntryDialog::OnOK(wxCommandEvent& WXUNUSED(event) )
 	EndModal(wxID_OK);
 }
 
-wxString wxGetTextFromUser(const wxString& message, const wxString& caption,
-                        const wxString& defaultValue, wxWindow *parent,
-                        int x, int y, bool WXUNUSED(centre) )
-{
-    wxTextEntryDialog dialog(parent, message, caption, defaultValue, wxOK|wxCANCEL, wxPoint(x, y));
-    if (dialog.ShowModal() == wxID_OK)
-        return dialog.GetValue();
-    else
-        return wxString("");
-}

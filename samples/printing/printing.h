@@ -43,10 +43,13 @@ class MyFrame: public wxFrame
     void OnPrintPreview(wxCommandEvent& event);
     void OnPrintSetup(wxCommandEvent& event);
     void OnPageSetup(wxCommandEvent& event);
+#if defined(__WXMSW__) && wxTEST_POSTSCRIPT_IN_MSW
     void OnPrintPS(wxCommandEvent& event);
     void OnPrintPreviewPS(wxCommandEvent& event);
     void OnPrintSetupPS(wxCommandEvent& event);
     void OnPageSetupPS(wxCommandEvent& event);
+#endif
+
     void OnExit(wxCommandEvent& event);
     void OnPrintAbout(wxCommandEvent& event);
 DECLARE_EVENT_TABLE()

@@ -142,6 +142,7 @@ class wxShapeEvtHandler: public wxObject
   virtual void OnEraseContents(wxDC& dc);
   virtual void OnHighlight(wxDC& dc);
   virtual void OnLeftClick(double x, double y, int keys = 0, int attachment = 0);
+  virtual void OnLeftDoubleClick(double x, double y, int keys = 0, int attachment = 0);
   virtual void OnRightClick(double x, double y, int keys = 0, int attachment = 0);
   virtual void OnSize(double x, double y);
   virtual bool OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display = TRUE);
@@ -221,6 +222,7 @@ class wxShape: public wxShapeEvtHandler
   virtual void OnEraseContents(wxDC& dc);
   virtual void OnHighlight(wxDC& dc);
   virtual void OnLeftClick(double x, double y, int keys = 0, int attachment = 0);
+  virtual void OnLeftDoubleClick(double x, double y, int keys = 0, int attachment = 0) {}
   virtual void OnRightClick(double x, double y, int keys = 0, int attachment = 0);
   virtual void OnSize(double x, double y);
   virtual bool OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display = TRUE);

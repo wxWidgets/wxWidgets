@@ -164,6 +164,11 @@ public:
     { long l; Read(strKey, &l, defVal); return l; }
 
   // Convenience functions that are built on other forms
+
+  // int
+  virtual bool Read(const wxString& key, int *pi) const;
+  virtual bool Read(const wxString& key, int *pi, int defVal) const;
+
   // double
   virtual bool Read(const wxString& key, double* val) const;
   virtual bool Read(const wxString& key, double* val, double defVal) const;

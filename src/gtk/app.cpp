@@ -15,7 +15,6 @@
 #include "wx/app.h"
 #include "wx/gdicmn.h"
 #include "wx/utils.h"
-#include "wx/postscrp.h"
 #include "wx/intl.h"
 #include "wx/log.h"
 #include "wx/memory.h"
@@ -263,9 +262,11 @@ void wxApp::CommonInit(void)
 
   // For PostScript printing
 #if wxUSE_POSTSCRIPT
+/* Now done in wxPostScriptModule
   wxInitializePrintSetupData();
   wxThePrintPaperDatabase = new wxPrintPaperDatabase;
   wxThePrintPaperDatabase->CreateDatabase();
+ */
 #endif
 
 
@@ -279,8 +280,10 @@ void wxApp::CommonInit(void)
 void wxApp::CommonCleanUp(void)
 {
   wxDELETE(wxTheColourDatabase);
+/* Now done in wxPostScriptModule
   wxDELETE(wxThePrintPaperDatabase);
   wxDELETE(wxThePrintSetupData);
+ */
   wxDELETE(wxTheFontNameDirectory);
   wxDeleteStockObjects();
 

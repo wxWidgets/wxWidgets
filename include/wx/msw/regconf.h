@@ -69,6 +69,10 @@ public:
     { return wxConfigBase::Read(key, defVal); }
   bool Read(const wxString& key, long *pl, long defVal) const
     { return wxConfigBase::Read(key, pl, defVal); }
+  bool Read(const wxString& key, int *pi, int defVal) const
+    { return wxConfigBase::Read(key, pi, defVal); }
+  bool Read(const wxString& key, int *pi) const
+    { return wxConfigBase::Read(key, pi); }
   long Read(const wxString& key, long defVal) const
     { return wxConfigBase::Read(key, defVal); }
   bool Read(const wxString& key, double* val) const

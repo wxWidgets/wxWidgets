@@ -687,8 +687,7 @@ wxFrame *wxResourceManager::OnCreateEditorFrame(const char *title)
 
   frame->SetAutoLayout(TRUE);
 #ifdef __WXMSW__
-  wxIcon *icon = new wxIcon("DIALOGEDICON");
-  frame->SetIcon(icon);
+  frame->SetIcon(wxIcon("DIALOGEDICON"));
 #endif
   return frame;
 }
@@ -893,7 +892,7 @@ void wxResourceManager::AddItemsRecursively(long parent, wxItemResource *resourc
       node = node->Next();
     }
   }
-  m_editorResourceTree->ExpandItem(id, wxTREE_EXPAND_EXPAND);
+//  m_editorResourceTree->ExpandItem(id, wxTREE_EXPAND_EXPAND);
 }
 
 bool wxResourceManager::EditSelectedResource()
@@ -921,8 +920,8 @@ bool wxResourceManager::Edit(wxItemResource *res)
   }
   else
   {
-        long style = res->GetStyle();
-        res->SetStyle(style|wxRAISED_BORDER);
+//        long style = res->GetStyle();
+//        res->SetStyle(style|wxRAISED_BORDER);
         panel = new wxPanel;
         wxResourceEditorDialogHandler *handler = new wxResourceEditorDialogHandler(panel, res, panel->GetEventHandler(),
            this);
@@ -931,7 +930,7 @@ bool wxResourceManager::Edit(wxItemResource *res)
 
         panel->PushEventHandler(handler);
 
-        res->SetStyle(style);
+//        res->SetStyle(style);
 		handler->AddChildHandlers(); // Add event handlers for all controls
         AssociateResource(res, panel);
 

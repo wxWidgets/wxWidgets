@@ -31,7 +31,9 @@
 #include <wx/fontdlg.h>
 #include <wx/choicdlg.h>
 
-#if !defined(__WXMSW__) || wxUSE_GENERIC_DIALOGS_IN_MSW
+#define wxTEST_GENERIC_DIALOGS_IN_MSW 0
+
+#if defined(__WXMSW__) && wxTEST_GENERIC_DIALOGS_IN_MSW
 #include <wx/generic/colrdlgg.h>
 #include <wx/generic/fontdlgg.h>
 #endif
@@ -60,14 +62,14 @@ bool MyApp::OnInit(void)
 
   file_menu->Append(DIALOGS_CHOOSE_COLOUR, "&Choose colour");
 
-#if !defined(__WXMSW__) || wxUSE_GENERIC_DIALOGS_IN_MSW
+#if defined(__WXMSW__) && wxTEST_GENERIC_DIALOGS_IN_MSW
   file_menu->Append(DIALOGS_CHOOSE_COLOUR_GENERIC, "Choose colour (&generic)");
 #endif
 
   file_menu->AppendSeparator();
   file_menu->Append(DIALOGS_CHOOSE_FONT, "Choose &font");
 
-#if !defined(__WXMSW__) || wxUSE_GENERIC_DIALOGS_IN_MSW
+#if defined(__WXMSW__) && wxTEST_GENERIC_DIALOGS_IN_MSW
   file_menu->Append(DIALOGS_CHOOSE_FONT_GENERIC, "Choose f&ont (generic)");
 
 #endif
@@ -147,7 +149,7 @@ void MyFrame::ChooseFont(wxCommandEvent& WXUNUSED(event) )
       dialog->Close();
 }
 
-#if !defined(__WXMSW__) || wxUSE_GENERIC_DIALOGS_IN_MSW
+#if defined(__WXMSW__) && wxTEST_GENERIC_DIALOGS_IN_MSW
 void MyFrame::ChooseColourGeneric(wxCommandEvent& WXUNUSED(event))
 {
       wxColourData data;
@@ -292,7 +294,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 	EVT_MENU(DIALOGS_FILE_OPEN,					MyFrame::FileOpen)
 	EVT_MENU(DIALOGS_FILE_SAVE,					MyFrame::FileSave)
 	EVT_MENU(DIALOGS_DIR_CHOOSE,				MyFrame::DirChoose)
-#if !defined(__WXMSW__) || wxUSE_GENERIC_DIALOGS_IN_MSW
+#if defined(__WXMSW__) && wxTEST_GENERIC_DIALOGS_IN_MSW
 	EVT_MENU(DIALOGS_CHOOSE_COLOUR_GENERIC,		MyFrame::ChooseColourGeneric)
 	EVT_MENU(DIALOGS_CHOOSE_FONT_GENERIC,		MyFrame::ChooseFontGeneric)
 #endif

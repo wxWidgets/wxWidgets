@@ -28,7 +28,7 @@ WXDLLEXPORT_DATA(extern const char*) wxFileSelectorDefaultWildcardStr;
 class WXDLLEXPORT wxFileDialog: public wxDialog
 {
 DECLARE_DYNAMIC_CLASS(wxFileDialog)
-protected:
+public:
     wxString    m_message;
     long        m_dialogStyle;
     wxWindow *  m_parent;
@@ -37,6 +37,12 @@ protected:
     wxString    m_fileName;
     wxString    m_wildCard;
     int         m_filterIndex;
+
+    // For Motif
+    wxPoint     m_pos;
+    static wxString m_fileSelectorAnswer;
+    static bool m_fileSelectorReturned;
+
 public:
     wxFileDialog(wxWindow *parent, const wxString& message = wxFileSelectorPromptStr,
         const wxString& defaultDir = "", const wxString& defaultFile = "", const wxString& wildCard = wxFileSelectorDefaultWildcardStr,

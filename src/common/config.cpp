@@ -179,6 +179,24 @@ bool wxConfigBase::Read(const wxString& key, bool* val, bool defVal) const
 }
 
 // Convenience functions
+
+bool wxConfigBase::Read(const wxString& key, int *pi) const
+{
+    long l;
+    bool ret = Read(key, &l);
+    if (ret)
+        *pi = (int) l;
+    return ret;
+}
+
+bool wxConfigBase::Read(const wxString& key, int *pi, int defVal) const
+{
+    long l;
+    bool ret = Read(key, &l, (long) defVal);
+    *pi = (int) l;
+    return ret;
+}
+
 bool wxConfigBase::Write(const wxString& key, double val)
 {
     wxString str;

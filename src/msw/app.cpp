@@ -36,7 +36,6 @@
 #endif
 
 #include "wx/msw/private.h"
-#include "wx/postscrp.h"
 #include "wx/log.h"
 #include "wx/module.h"
 
@@ -147,13 +146,6 @@ bool wxApp::Initialize()
 
   #if wxUSE_WX_RESOURCES
     wxInitializeResourceSystem();
-  #endif
-
-  // For PostScript printing
-  #if wxUSE_POSTSCRIPT
-    wxInitializePrintSetupData();
-    wxThePrintPaperDatabase = new wxPrintPaperDatabase;
-    wxThePrintPaperDatabase->CreateDatabase();
   #endif
 
   wxBitmap::InitStandardHandlers();
@@ -387,12 +379,13 @@ void wxApp::ConvertToStandardCommandArgs(char* lpCmdLine)
   char* str = buf;
   while (*str)
   {
-    if ( count == WXSIZEOF(command) )
+/*
+	if ( count == WXSIZEOF(command) )
     {
       wxFAIL_MSG("too many command line args.");
       break;
     }
-
+*/
     while ( *str && isspace(*str) )  // skip whitespace
       str++;
 
@@ -455,12 +448,6 @@ void wxApp::CleanUp()
 
   delete wxTheColourDatabase;
   wxTheColourDatabase = NULL;
-
-#if wxUSE_POSTSCRIPT
-  wxInitializePrintSetupData(FALSE);
-  delete wxThePrintPaperDatabase;
-  wxThePrintPaperDatabase = NULL;
-#endif
 
   wxBitmap::CleanUpHandlers();
 
@@ -525,7 +512,7 @@ int wxEntry(WXHINSTANCE hInstance,
             bool enterLoop)
 {
 #ifndef __WXDEBUG__ // take everything into a try-except block in release build
-  __try {
+  try {
 #endif
 
   wxhInstance = (HINSTANCE) hInstance;
@@ -606,7 +593,7 @@ int wxEntry(WXHINSTANCE hInstance,
   return retValue;
 #ifndef __WXDEBUG__ // catch exceptions only in release build
   }
-  __except ( EXCEPTION_EXECUTE_HANDLER ) {
+  except ( EXCEPTION_EXECUTE_HANDLER ) {
     /*
     if ( wxTheApp )
       wxTheApp->OnFatalException();

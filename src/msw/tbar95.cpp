@@ -383,7 +383,7 @@ void wxToolBar95::SetRows(int nRows)
 
 wxSize wxToolBar95::GetMaxSize(void) const
 {
-  if (m_maxWidth == -1 | m_maxHeight == -1)
+  if ((m_maxWidth == -1) || (m_maxHeight == -1))
   {
     RECT rect;
     ::SendMessage((HWND) GetHWND(), TB_SETROWS, MAKEWPARAM(m_maxRows, TRUE), (LPARAM) & rect);
@@ -451,7 +451,7 @@ void wxToolBar95::ClearTools(void)
 wxToolBarTool *wxToolBar95::AddTool(int index, const wxBitmap& bitmap, const wxBitmap& pushedBitmap,
              bool toggle, long xPos, long yPos, wxObject *clientData, const wxString& helpString1, const wxString& helpString2)
 {
-  wxToolBarTool *tool = new wxToolBarTool(index, bitmap, (wxBitmap *)NULL, toggle, xPos, yPos, helpString1, helpString2);
+  wxToolBarTool *tool = new wxToolBarTool(index, bitmap, wxNullBitmap, toggle, xPos, yPos, helpString1, helpString2);
   tool->m_clientData = clientData;
 
   if (xPos > -1)
