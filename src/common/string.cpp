@@ -260,17 +260,18 @@ wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
         if ( !AllocBuffer(nLen) )
         {
             wxFAIL_MSG( _T("out of memory in wxString::wxString") );
-            return;
         }
-
-        // MB2WC wants the buffer size, not the string length
-        if ( conv.MB2WC(m_pchData, psz, nLen + 1) != (size_t)-1 )
+        else
         {
-            // initialized ok
-            m_pchData[nLen] = 0;
-            return;
+            // MB2WC wants the buffer size, not the string length
+            if ( conv.MB2WC(m_pchData, psz, nLen + 1) != (size_t)-1 )
+            {
+                // initialized ok
+                m_pchData[nLen] = 0;
+                return;
+            }
+            //else: the conversion failed -- leave the string empty (what else?)
         }
-        //else: the conversion failed -- leave the string empty (what else?)
     }
 
     Init();
@@ -301,16 +302,17 @@ wxString::wxString(const wchar_t *pwz, wxMBConv& conv, size_t nLength)
         if ( !AllocBuffer(nLen) )
         {
             wxFAIL_MSG( _T("out of memory in wxString::wxString") );
-            return;
         }
-
-        // WC2MB wants the buffer size, not the string length
-        if ( conv.WC2MB(m_pchData, pwz, nLen + 1) != (size_t)-1 )
+        else
         {
-            // initialized ok
-            return;
+            // WC2MB wants the buffer size, not the string length
+            if ( conv.WC2MB(m_pchData, pwz, nLen + 1) != (size_t)-1 )
+            {
+                // initialized ok
+                return;
+            }
+            //else: the conversion failed -- leave the string empty (what else?)
         }
-        //else: the conversion failed -- leave the string empty (what else?)
     }
 
     Init();
