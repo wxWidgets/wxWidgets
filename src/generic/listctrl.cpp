@@ -5168,6 +5168,57 @@ void wxGenericListCtrl::RefreshItems(long itemFrom, long itemTo)
     m_mainWin->RefreshLines(itemFrom, itemTo);
 }
 
+/*
+ * Generic wxListCtrl is more or less a container for two other
+ * windows which drawings are done upon. These are namely
+ * 'm_headerWin' and 'm_mainWin'.
+ * Here we override 'virtual wxWindow::Refresh()' to mimic the
+ * behaviour wxListCtrl has under wxMSW.
+ */
+void wxGenericListCtrl::Refresh(bool eraseBackground, const wxRect *rect)
+{
+    if (!rect)
+    {
+        // The easy case, no rectangle specified.
+        if (m_headerWin)
+            m_headerWin->Refresh(eraseBackground);
+
+        if (m_mainWin)
+            m_mainWin->Refresh(eraseBackground);
+    }
+    else
+    {
+        // Refresh the header window
+        if (m_headerWin)
+        {
+            wxRect rectHeader = m_headerWin->GetRect();
+            rectHeader.Intersect(*rect);
+            if (rectHeader.GetWidth() && rectHeader.GetHeight())
+            {
+                int x, y;
+                m_headerWin->GetPosition(&x, &y);
+                rectHeader.Offset(-x, -y);
+                m_headerWin->Refresh(eraseBackground, &rectHeader);
+            }
+
+        }
+
+        // Refresh the main window
+        if (m_mainWin)
+        {
+            wxRect rectMain = m_mainWin->GetRect();
+            rectMain.Intersect(*rect);
+            if (rectMain.GetWidth() && rectMain.GetHeight())
+            {
+                int x, y;
+                m_mainWin->GetPosition(&x, &y);
+                rectMain.Offset(-x, -y);
+                m_mainWin->Refresh(eraseBackground, &rectMain);
+            }
+        }
+    }
+}
+
 void wxGenericListCtrl::Freeze()
 {
     m_mainWin->Freeze();

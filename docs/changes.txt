@@ -124,6 +124,7 @@ wxGTK:
 - added wxTextCtrl::SetSelection implementation for GTK+ 2
 - fixed wxTextCtrl::IsEditable() for GTK+ 2
 - don't consume 100% CPU when showing a poup menu
+- implemented wxListCtrl::Refresh() (Norbert Berzen)
 
 wxMac:
 
