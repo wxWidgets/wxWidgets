@@ -2021,14 +2021,22 @@ static wxString FilterOutEntryName(const wxString& str)
   strResult.Alloc(str.Len());
 
   for ( const wxChar *pc = str.c_str(); *pc != wxT('\0'); pc++ ) {
-    wxChar c = *pc;
+    const wxChar c = *pc;
 
     // we explicitly allow some of "safe" chars and 8bit ASCII characters
-    // which will probably never have special meaning
+    // which will probably never have special meaning and with which we can't
+    // use isalnum() anyhow (in ASCII built, in Unicode it's just fine)
+    //
     // NB: note that wxCONFIG_IMMUTABLE_PREFIX and wxCONFIG_PATH_SEPARATOR
     //     should *not* be quoted
-    if ( !wxIsalnum(c) && !wxStrchr(wxT("@_/-!.*%"), c) && ((c & 0x80) == 0) )
+    if ( 
+#if !wxUSE_UNICODE
+            (c < 127) &&
+#endif // ANSI
+         !wxIsalnum(c) && !wxStrchr(wxT("@_/-!.*%"), c) )
+    {
       strResult += wxT('\\');
+    }
 
     strResult += c;
   }
