@@ -41,6 +41,12 @@
 
 #include "wx/tokenzr.h"
 
+// If 1, use the screen resolution to calculate font sizes.
+// This is OK for screen fonts but might have implications when the
+// same font is used for printing.
+// If 0, assume 96 DPI.
+#define wxUSE_SCREEN_DPI 1
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -270,9 +276,9 @@ void wxFillLogFont(LOGFONT *logFont, const wxFont *font)
             break;
     }
 
-#if 0
+#if wxUSE_SCREEN_DPI
     HDC dc = ::GetDC(NULL);
-    int ppInch = ::GetDeviceCaps(dc, LOGPIXELSY);
+    static const int ppInch = ::GetDeviceCaps(dc, LOGPIXELSY);
     ::ReleaseDC(NULL, dc);
 #else
     // New behaviour: apparently ppInch varies according to Large/Small Fonts
@@ -392,14 +398,17 @@ wxFont wxCreateFontFromLogFont(const LOGFONT *logFont)
 
     wxString fontFace = logFont->lfFaceName;
 
-    // font size
-    HDC dc = ::GetDC(NULL);
-
     // remember that 1pt = 1/72inch
     int height = abs(logFont->lfHeight);
-    int fontPoints = (int) ((72.0*((double)height))/(double) GetDeviceCaps(dc, LOGPIXELSY) + 0.5);
 
+#if wxUSE_SCREEN_DPI
+    HDC dc = ::GetDC(NULL);
+    static const int ppInch = GetDeviceCaps(dc, LOGPIXELSY);
     ::ReleaseDC(NULL, dc);
+#else
+    static const int ppInch = 96;
+#endif
+    int fontPoints = (int) (((72.0*((double)height))/(double) ppInch) + 0.5);
 
     wxFontEncoding fontEncoding;
     switch ( logFont->lfCharSet )
