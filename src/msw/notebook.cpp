@@ -613,6 +613,16 @@ bool wxNotebook::InsertPage(size_t nPage,
         tcItem.pszText = (wxChar *)strText.c_str(); // const_cast
     }
 
+    // hide the page: unless it is selected, it shouldn't be shown (and if it
+    // is selected it will be shown later)
+    HWND hwnd = GetWinHwnd(pPage);
+    SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_VISIBLE);
+
+    // this updates internal flag too -- otherwise it would get out of sync
+    // with the real state
+    pPage->Show(false);
+
+
     // fit the notebook page to the tab control's display area: this should be
     // done before adding it to the notebook or TabCtrl_InsertItem() will
     // change the notebooks size itself!
@@ -637,16 +647,6 @@ bool wxNotebook::InsertPage(size_t nPage,
     {
         AdjustPageSize(pPage);
     }
-
-    // hide the page: unless it is selected, it shouldn't be shown (and if it
-    // is selected it will be shown later)
-    HWND hwnd = GetWinHwnd(pPage);
-    SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_VISIBLE);
-
-    // this updates internal flag too -- otherwise it would get out of sync
-    // with the real state
-    pPage->Show(false);
-
 
     // now deal with the selection
     // ---------------------------
