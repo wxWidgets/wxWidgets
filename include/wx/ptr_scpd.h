@@ -123,7 +123,7 @@ public:                             \
 #define wxDEFINE_SCOPED_PTR(T, name)\
 name::~name()                       \
 {                                   \
-    wxCHECKED_DELETE(m_ptr)      \
+    wxCHECKED_DELETE(m_ptr);        \
 }
 
 #define wxDECLARE_SCOPED_ARRAY(T, name)\
@@ -162,16 +162,16 @@ public:                             \
 };
 
 #define wxDEFINE_SCOPED_ARRAY(T, name)  \
-name::~name()                       \
-{                                   \
-    wxCHECKED_DELETE_ARRAY(m_ptr)  \
-}                                   \
-void name::reset(T * p){            \
-    if (m_ptr != p)                 \
-    {                               \
-       wxCHECKED_DELETE_ARRAY(m_ptr); \
-       m_ptr = p;                   \
-    }                               \
+name::~name()                           \
+{                                       \
+    wxCHECKED_DELETE_ARRAY(m_ptr);      \
+}                                       \
+void name::reset(T * p){                \
+    if (m_ptr != p)                     \
+    {                                   \
+       wxCHECKED_DELETE_ARRAY(m_ptr);   \
+       m_ptr = p;                       \
+    }                                   \
 }
 
 #endif
