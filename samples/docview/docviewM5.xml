@@ -427,72 +427,6 @@
                 <SETTING><NAME>TempBPFunctionName</NAME><VALUE>main</VALUE></SETTING>
                 <SETTING><NAME>TempBPType</NAME><VALUE>false</VALUE></SETTING>
 
-                <!-- Settings for "68K CodeGen" panel -->
-                <SETTING><NAME>MWCodeGen_68K_codesize</NAME><VALUE>Small</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_structalignment</NAME><VALUE>MC68K</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_fp_mode</NAME><VALUE>SANE</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_code68020</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_profiler</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_mpwc</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_fourbyteints</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_IEEEdoubles</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_fardata</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_farvtables</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_farstrings</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_pcrelstrings</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_macsbug</NAME><VALUE>New</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_a6frames</NAME><VALUE>1</VALUE></SETTING>
-
-                <!-- Settings for "68K Disassembler" panel -->
-                <SETTING><NAME>MWDisassembler_68K_showcode</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWDisassembler_68K_mix</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWDisassembler_68K_nohex</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWDisassembler_68K_showdata</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWDisassembler_68K_showexceptions</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWDisassembler_68K_showsym</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWDisassembler_68K_shownames</NAME><VALUE>1</VALUE></SETTING>
-
-                <!-- Settings for "68K Global Optimizer" panel -->
-                <SETTING><NAME>GlobalOptimizer_68K_optimizationlevel</NAME><VALUE>Level0</VALUE></SETTING>
-                <SETTING><NAME>GlobalOptimizer_68K_optfor</NAME><VALUE>Speed</VALUE></SETTING>
-
-                <!-- Settings for "68K Linker" panel -->
-                <SETTING><NAME>MWLinker_68K_linksym</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_symfullpath</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_linksingle</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_fastlink</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_generateMap</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_nolinkwarnings</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_glueintosegone</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_dontdeadstripinitcode</NAME><VALUE>0</VALUE></SETTING>
-
-                <!-- Settings for "68K Project" panel -->
-                <SETTING><NAME>MWProject_68K_type</NAME><VALUE>Application</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_outfile</NAME><VALUE>a.out</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_symfilename</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_filecreator</NAME><VALUE>1061109567</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_filetype</NAME><VALUE>1095782476</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_size</NAME><VALUE>384</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_flags</NAME><VALUE>22720</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcheader</NAME><VALUE>Standard</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcname</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrctype</NAME><VALUE>1061109567</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcid</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcmulti</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcstore</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcmerge</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcflags</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_a4</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_minsize</NAME><VALUE>384</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcsegtype</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_cfm68kcodegen</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_stacksize</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_thedebugger</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrc_custom</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_is_rseg_app</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_is_pilot_lib</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_pilot_main_entry</NAME><VALUE></VALUE></SETTING>
-
                 <!-- Settings for "C/C++ Compiler" panel -->
                 <SETTING><NAME>MWFrontEnd_C_cplusplus</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_checkprotos</NAME><VALUE>0</VALUE></SETTING>
@@ -536,20 +470,6 @@
                 <SETTING><NAME>MWWarning_C_warn_notinlined</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWWarning_C_warn_structclass</NAME><VALUE>0</VALUE></SETTING>
 
-                <!-- Settings for "CFM68K" panel -->
-                <SETTING><NAME>MWCFM68K_exports</NAME><VALUE>None</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_olddefversion</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_oldimpversion</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_currentversion</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_farthreshold</NAME><VALUE>256</VALUE></SETTING>
-                <SETTING><NAME>PCFM68K_sharedata</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_fragmentname</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_initname</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_mainname</NAME><VALUE>__start</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_termname</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_libfolder</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_alignment</NAME><VALUE>Align_2</VALUE></SETTING>
-
                 <!-- Settings for "MacOS Merge Panel" panel -->
                 <SETTING><NAME>MWMerge_MacOS_projectType</NAME><VALUE>Application</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_outputName</NAME><VALUE>Merge Out</VALUE></SETTING>
@@ -560,13 +480,10 @@
                 <SETTING><NAME>MWMerge_MacOS_copyResources</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>*Ä</VALUE></SETTING>
-                    <SETTING><VALUE>ÕcH</VALUE></SETTING>
-                    <SETTING><VALUE>Õx*</VALUE></SETTING>
+                    <SETTING><VALUE>{ê</VALUE></SETTING>
+                    <SETTING><VALUE>%#H</VALUE></SETTING>
+                    <SETTING><VALUE>%8*</VALUE></SETTING>
                 </SETTING>
-
-                <!-- Settings for "Perl Panel" panel -->
-                <SETTING><NAME>Perl_Prefix_Filename</NAME><VALUE></VALUE></SETTING>
 
                 <!-- Settings for "PPC CodeGen" panel -->
                 <SETTING><NAME>MWCodeGen_PPC_structalignment</NAME><VALUE>PPC</VALUE></SETTING>
@@ -677,13 +594,6 @@
             <FILELIST>
                 <FILE>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>InterfaceLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>wx_PPC.lib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Library</FILEKIND>
@@ -705,13 +615,6 @@
                 </FILE>
                 <FILE>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>MathLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>console.stubs.c</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
@@ -723,13 +626,6 @@
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Library</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>AppearanceLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug, WeakImport</FILEFLAGS>
                 </FILE>
                 <FILE>
                     <PATHTYPE>Name</PATHTYPE>
@@ -740,104 +636,6 @@
                 </FILE>
                 <FILE>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>InternetConfigLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS></FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>ThreadsLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS></FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>ControlsLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>WeakImport</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>DialogsLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>WeakImport</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>WindowsLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>WeakImport</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>MenusLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>WeakImport</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>CursorDevicesGlue.o</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS></FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>PLStringFuncsPPC.lib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS></FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>OpenTransportLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS></FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>OpenTptAppleTalkLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS></FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>OpenTptInternetLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS></FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>OpenTptATalkPPC.o</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS></FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>OpenTransportAppPPC.o</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS></FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>OpenTptInetPPC.o</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS></FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>tiff.lib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Library</FILEKIND>
@@ -880,16 +678,23 @@
                 </FILE>
                 <FILE>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>NavigationLib</PATH>
+                    <PATH>view.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>AppearanceLib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Library</FILEKIND>
                     <FILEFLAGS></FILEFLAGS>
                 </FILE>
                 <FILE>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>view.cpp</PATH>
+                    <PATH>ATSUnicodeLib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
+                    <FILEKIND>Library</FILEKIND>
                     <FILEFLAGS></FILEFLAGS>
                 </FILE>
                 <FILE>
@@ -899,13 +704,155 @@
                     <FILEKIND>Library</FILEKIND>
                     <FILEFLAGS></FILEFLAGS>
                 </FILE>
-            </FILELIST>
-            <LINKORDER>
-                <FILEREF>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>ControlsLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CursorDevicesGlue.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>DialogsLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>DragLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>InterfaceLib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>InternetConfigLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>WindowsLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>MathLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>MenusLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>NavigationLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTptAppleTalkLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTptATalkPPC.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTptInetPPC.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTptInternetLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTransportLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTransportAppPPC.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>PLStringFuncsPPC.lib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>TextEncodingConverter</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>Textension</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>ThreadsLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>UnicodeConverter</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+            </FILELIST>
+            <LINKORDER>
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>wx_PPC.lib</PATH>
@@ -923,11 +870,6 @@
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>MathLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>console.stubs.c</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
@@ -938,82 +880,7 @@
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>AppearanceLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>wx_PPC.rsrc</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>InternetConfigLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>ThreadsLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>ControlsLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>DialogsLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>WindowsLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>MenusLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>CursorDevicesGlue.o</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>PLStringFuncsPPC.lib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>OpenTransportLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>OpenTptAppleTalkLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>OpenTptInternetLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>OpenTptATalkPPC.o</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>OpenTransportAppPPC.o</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>OpenTptInetPPC.o</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
@@ -1048,17 +915,127 @@
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>NavigationLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>view.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
+                    <PATH>AppearanceLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>ATSUnicodeLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>CarbonAccessors.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>ControlsLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CursorDevicesGlue.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>DialogsLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>DragLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>InterfaceLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>InternetConfigLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>WindowsLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>MathLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>MenusLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>NavigationLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTptAppleTalkLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTptATalkPPC.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTptInetPPC.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTptInternetLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTransportLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTransportAppPPC.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>PLStringFuncsPPC.lib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>TextEncodingConverter</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>Textension</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>ThreadsLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>UnicodeConverter</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
@@ -1450,72 +1427,6 @@
                 <SETTING><NAME>TempBPFunctionName</NAME><VALUE>main</VALUE></SETTING>
                 <SETTING><NAME>TempBPType</NAME><VALUE>false</VALUE></SETTING>
 
-                <!-- Settings for "68K CodeGen" panel -->
-                <SETTING><NAME>MWCodeGen_68K_codesize</NAME><VALUE>Small</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_structalignment</NAME><VALUE>MC68K</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_fp_mode</NAME><VALUE>SANE</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_code68020</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_profiler</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_mpwc</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_fourbyteints</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_IEEEdoubles</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_fardata</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_farvtables</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_farstrings</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_pcrelstrings</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_macsbug</NAME><VALUE>New</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_a6frames</NAME><VALUE>1</VALUE></SETTING>
-
-                <!-- Settings for "68K Disassembler" panel -->
-                <SETTING><NAME>MWDisassembler_68K_showcode</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWDisassembler_68K_mix</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWDisassembler_68K_nohex</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWDisassembler_68K_showdata</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWDisassembler_68K_showexceptions</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWDisassembler_68K_showsym</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWDisassembler_68K_shownames</NAME><VALUE>1</VALUE></SETTING>
-
-                <!-- Settings for "68K Global Optimizer" panel -->
-                <SETTING><NAME>GlobalOptimizer_68K_optimizationlevel</NAME><VALUE>Level0</VALUE></SETTING>
-                <SETTING><NAME>GlobalOptimizer_68K_optfor</NAME><VALUE>Speed</VALUE></SETTING>
-
-                <!-- Settings for "68K Linker" panel -->
-                <SETTING><NAME>MWLinker_68K_linksym</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_symfullpath</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_linksingle</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_fastlink</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_generateMap</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_nolinkwarnings</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_glueintosegone</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_dontdeadstripinitcode</NAME><VALUE>0</VALUE></SETTING>
-
-                <!-- Settings for "68K Project" panel -->
-                <SETTING><NAME>MWProject_68K_type</NAME><VALUE>Application</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_outfile</NAME><VALUE>a.out</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_symfilename</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_filecreator</NAME><VALUE>1061109567</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_filetype</NAME><VALUE>1095782476</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_size</NAME><VALUE>384</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_flags</NAME><VALUE>22720</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcheader</NAME><VALUE>Standard</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcname</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrctype</NAME><VALUE>1061109567</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcid</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcmulti</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcstore</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcmerge</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcflags</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_a4</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_minsize</NAME><VALUE>384</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcsegtype</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_cfm68kcodegen</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_stacksize</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_thedebugger</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrc_custom</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_is_rseg_app</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_is_pilot_lib</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_pilot_main_entry</NAME><VALUE></VALUE></SETTING>
-
                 <!-- Settings for "C/C++ Compiler" panel -->
                 <SETTING><NAME>MWFrontEnd_C_cplusplus</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_checkprotos</NAME><VALUE>0</VALUE></SETTING>
@@ -1559,20 +1470,6 @@
                 <SETTING><NAME>MWWarning_C_warn_notinlined</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWWarning_C_warn_structclass</NAME><VALUE>1</VALUE></SETTING>
 
-                <!-- Settings for "CFM68K" panel -->
-                <SETTING><NAME>MWCFM68K_exports</NAME><VALUE>None</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_olddefversion</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_oldimpversion</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_currentversion</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_farthreshold</NAME><VALUE>256</VALUE></SETTING>
-                <SETTING><NAME>PCFM68K_sharedata</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_fragmentname</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_initname</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_mainname</NAME><VALUE>__start</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_termname</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_libfolder</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_alignment</NAME><VALUE>Align_2</VALUE></SETTING>
-
                 <!-- Settings for "MacOS Merge Panel" panel -->
                 <SETTING><NAME>MWMerge_MacOS_projectType</NAME><VALUE>Application</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_outputName</NAME><VALUE>Merge Out</VALUE></SETTING>
@@ -1583,13 +1480,10 @@
                 <SETTING><NAME>MWMerge_MacOS_copyResources</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>*Ä</VALUE></SETTING>
-                    <SETTING><VALUE>ÕcH</VALUE></SETTING>
-                    <SETTING><VALUE>Õx*</VALUE></SETTING>
+                    <SETTING><VALUE>{ê</VALUE></SETTING>
+                    <SETTING><VALUE>%#H</VALUE></SETTING>
+                    <SETTING><VALUE>%8*</VALUE></SETTING>
                 </SETTING>
-
-                <!-- Settings for "Perl Panel" panel -->
-                <SETTING><NAME>Perl_Prefix_Filename</NAME><VALUE></VALUE></SETTING>
 
                 <!-- Settings for "PPC CodeGen" panel -->
                 <SETTING><NAME>MWCodeGen_PPC_structalignment</NAME><VALUE>PPC</VALUE></SETTING>
@@ -1700,13 +1594,6 @@
             <FILELIST>
                 <FILE>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>InterfaceLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>MSL C++.PPC.Lib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Library</FILEKIND>
@@ -1715,13 +1602,6 @@
                 <FILE>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>MSL C.PPC.Lib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>MathLib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Library</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
@@ -1739,13 +1619,6 @@
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Library</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>AppearanceLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug, WeakImport</FILEFLAGS>
                 </FILE>
                 <FILE>
                     <PATHTYPE>Name</PATHTYPE>
@@ -1763,104 +1636,6 @@
                 </FILE>
                 <FILE>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>InternetConfigLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>ThreadsLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>ControlsLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug, WeakImport</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>DialogsLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug, WeakImport</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>WindowsLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug, WeakImport</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>MenusLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug, WeakImport</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>OpenTransportLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>OpenTptAppleTalkLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>OpenTptInternetLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>CursorDevicesGlue.o</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>OpenTptATalkPPC.o</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>OpenTransportAppPPC.o</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>OpenTptInetPPC.o</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>PLStringFuncsPPC.lib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>zlib.lib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Library</FILEKIND>
@@ -1903,16 +1678,23 @@
                 </FILE>
                 <FILE>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>NavigationLib</PATH>
+                    <PATH>view.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>AppearanceLib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Library</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
                 <FILE>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>view.cpp</PATH>
+                    <PATH>ATSUnicodeLib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
+                    <FILEKIND>Library</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
                 <FILE>
@@ -1922,13 +1704,155 @@
                     <FILEKIND>Library</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
-            </FILELIST>
-            <LINKORDER>
-                <FILEREF>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>ControlsLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CursorDevicesGlue.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>DialogsLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>DragLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>InterfaceLib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>InternetConfigLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>WindowsLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>MathLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>MenusLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>NavigationLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTptAppleTalkLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTptATalkPPC.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTptInetPPC.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTptInternetLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTransportLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTransportAppPPC.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>PLStringFuncsPPC.lib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>TextEncodingConverter</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>Textension</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>ThreadsLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>UnicodeConverter</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+            </FILELIST>
+            <LINKORDER>
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>MSL C++.PPC.Lib</PATH>
@@ -1937,11 +1861,6 @@
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>MSL C.PPC.Lib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>MathLib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
@@ -1956,87 +1875,12 @@
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>AppearanceLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>wx_PPC_d.lib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>wx_PPC.rsrc</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>InternetConfigLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>ThreadsLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>ControlsLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>DialogsLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>WindowsLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>MenusLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>OpenTransportLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>OpenTptAppleTalkLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>OpenTptInternetLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>CursorDevicesGlue.o</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>OpenTptATalkPPC.o</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>OpenTransportAppPPC.o</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>OpenTptInetPPC.o</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>PLStringFuncsPPC.lib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
@@ -2071,17 +1915,127 @@
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>NavigationLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>view.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
+                    <PATH>AppearanceLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>ATSUnicodeLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>CarbonAccessors.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>ControlsLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CursorDevicesGlue.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>DialogsLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>DragLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>InterfaceLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>InternetConfigLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>WindowsLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>MathLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>MenusLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>NavigationLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTptAppleTalkLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTptATalkPPC.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTptInetPPC.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTptInternetLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTransportLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTransportAppPPC.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>PLStringFuncsPPC.lib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>TextEncodingConverter</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>Textension</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>ThreadsLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>UnicodeConverter</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
@@ -2465,72 +2419,6 @@
                 <SETTING><NAME>TempBPFunctionName</NAME><VALUE>main</VALUE></SETTING>
                 <SETTING><NAME>TempBPType</NAME><VALUE>false</VALUE></SETTING>
 
-                <!-- Settings for "68K CodeGen" panel -->
-                <SETTING><NAME>MWCodeGen_68K_codesize</NAME><VALUE>Small</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_structalignment</NAME><VALUE>MC68K</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_fp_mode</NAME><VALUE>SANE</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_code68020</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_profiler</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_mpwc</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_fourbyteints</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_IEEEdoubles</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_fardata</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_farvtables</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_farstrings</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_pcrelstrings</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_macsbug</NAME><VALUE>New</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_a6frames</NAME><VALUE>1</VALUE></SETTING>
-
-                <!-- Settings for "68K Disassembler" panel -->
-                <SETTING><NAME>MWDisassembler_68K_showcode</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWDisassembler_68K_mix</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWDisassembler_68K_nohex</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWDisassembler_68K_showdata</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWDisassembler_68K_showexceptions</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWDisassembler_68K_showsym</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWDisassembler_68K_shownames</NAME><VALUE>1</VALUE></SETTING>
-
-                <!-- Settings for "68K Global Optimizer" panel -->
-                <SETTING><NAME>GlobalOptimizer_68K_optimizationlevel</NAME><VALUE>Level0</VALUE></SETTING>
-                <SETTING><NAME>GlobalOptimizer_68K_optfor</NAME><VALUE>Speed</VALUE></SETTING>
-
-                <!-- Settings for "68K Linker" panel -->
-                <SETTING><NAME>MWLinker_68K_linksym</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_symfullpath</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_linksingle</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_fastlink</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_generateMap</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_nolinkwarnings</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_glueintosegone</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_dontdeadstripinitcode</NAME><VALUE>0</VALUE></SETTING>
-
-                <!-- Settings for "68K Project" panel -->
-                <SETTING><NAME>MWProject_68K_type</NAME><VALUE>Application</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_outfile</NAME><VALUE>a.out</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_symfilename</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_filecreator</NAME><VALUE>1061109567</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_filetype</NAME><VALUE>1095782476</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_size</NAME><VALUE>384</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_flags</NAME><VALUE>22720</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcheader</NAME><VALUE>Standard</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcname</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrctype</NAME><VALUE>1061109567</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcid</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcmulti</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcstore</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcmerge</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcflags</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_a4</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_minsize</NAME><VALUE>384</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcsegtype</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_cfm68kcodegen</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_stacksize</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_thedebugger</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrc_custom</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_is_rseg_app</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_is_pilot_lib</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_pilot_main_entry</NAME><VALUE></VALUE></SETTING>
-
                 <!-- Settings for "C/C++ Compiler" panel -->
                 <SETTING><NAME>MWFrontEnd_C_cplusplus</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_checkprotos</NAME><VALUE>0</VALUE></SETTING>
@@ -2574,20 +2462,6 @@
                 <SETTING><NAME>MWWarning_C_warn_notinlined</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWWarning_C_warn_structclass</NAME><VALUE>1</VALUE></SETTING>
 
-                <!-- Settings for "CFM68K" panel -->
-                <SETTING><NAME>MWCFM68K_exports</NAME><VALUE>None</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_olddefversion</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_oldimpversion</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_currentversion</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_farthreshold</NAME><VALUE>256</VALUE></SETTING>
-                <SETTING><NAME>PCFM68K_sharedata</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_fragmentname</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_initname</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_mainname</NAME><VALUE>__start</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_termname</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_libfolder</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_alignment</NAME><VALUE>Align_2</VALUE></SETTING>
-
                 <!-- Settings for "MacOS Merge Panel" panel -->
                 <SETTING><NAME>MWMerge_MacOS_projectType</NAME><VALUE>Application</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_outputName</NAME><VALUE>Merge Out</VALUE></SETTING>
@@ -2598,13 +2472,10 @@
                 <SETTING><NAME>MWMerge_MacOS_copyResources</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>*Ä</VALUE></SETTING>
-                    <SETTING><VALUE>ÕcH</VALUE></SETTING>
-                    <SETTING><VALUE>Õx*</VALUE></SETTING>
+                    <SETTING><VALUE>{ê</VALUE></SETTING>
+                    <SETTING><VALUE>%#H</VALUE></SETTING>
+                    <SETTING><VALUE>%8*</VALUE></SETTING>
                 </SETTING>
-
-                <!-- Settings for "Perl Panel" panel -->
-                <SETTING><NAME>Perl_Prefix_Filename</NAME><VALUE></VALUE></SETTING>
 
                 <!-- Settings for "PPC CodeGen" panel -->
                 <SETTING><NAME>MWCodeGen_PPC_structalignment</NAME><VALUE>PPC</VALUE></SETTING>
@@ -2750,13 +2621,6 @@
                 </FILE>
                 <FILE>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>CarbonLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>wx_CARBON.rsrc</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Resource</FILEKIND>
@@ -2811,6 +2675,13 @@
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CarbonLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -2836,11 +2707,6 @@
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>MSL C.CARBON.Lib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>CarbonLib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
@@ -2881,6 +2747,11 @@
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>view.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CarbonLib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
@@ -3264,72 +3135,6 @@
                 <SETTING><NAME>TempBPFunctionName</NAME><VALUE>main</VALUE></SETTING>
                 <SETTING><NAME>TempBPType</NAME><VALUE>false</VALUE></SETTING>
 
-                <!-- Settings for "68K CodeGen" panel -->
-                <SETTING><NAME>MWCodeGen_68K_codesize</NAME><VALUE>Small</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_structalignment</NAME><VALUE>MC68K</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_fp_mode</NAME><VALUE>SANE</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_code68020</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_profiler</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_mpwc</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_fourbyteints</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_IEEEdoubles</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_fardata</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_farvtables</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_farstrings</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_pcrelstrings</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_macsbug</NAME><VALUE>New</VALUE></SETTING>
-                <SETTING><NAME>MWCodeGen_68K_a6frames</NAME><VALUE>1</VALUE></SETTING>
-
-                <!-- Settings for "68K Disassembler" panel -->
-                <SETTING><NAME>MWDisassembler_68K_showcode</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWDisassembler_68K_mix</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWDisassembler_68K_nohex</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWDisassembler_68K_showdata</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWDisassembler_68K_showexceptions</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWDisassembler_68K_showsym</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWDisassembler_68K_shownames</NAME><VALUE>1</VALUE></SETTING>
-
-                <!-- Settings for "68K Global Optimizer" panel -->
-                <SETTING><NAME>GlobalOptimizer_68K_optimizationlevel</NAME><VALUE>Level0</VALUE></SETTING>
-                <SETTING><NAME>GlobalOptimizer_68K_optfor</NAME><VALUE>Speed</VALUE></SETTING>
-
-                <!-- Settings for "68K Linker" panel -->
-                <SETTING><NAME>MWLinker_68K_linksym</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_symfullpath</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_linksingle</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_fastlink</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_generateMap</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_nolinkwarnings</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_glueintosegone</NAME><VALUE>1</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_68K_dontdeadstripinitcode</NAME><VALUE>0</VALUE></SETTING>
-
-                <!-- Settings for "68K Project" panel -->
-                <SETTING><NAME>MWProject_68K_type</NAME><VALUE>Application</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_outfile</NAME><VALUE>a.out</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_symfilename</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_filecreator</NAME><VALUE>1061109567</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_filetype</NAME><VALUE>1095782476</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_size</NAME><VALUE>384</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_flags</NAME><VALUE>22720</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcheader</NAME><VALUE>Standard</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcname</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrctype</NAME><VALUE>1061109567</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcid</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcmulti</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcstore</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcmerge</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcflags</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_a4</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_minsize</NAME><VALUE>384</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrcsegtype</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_cfm68kcodegen</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_stacksize</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_thedebugger</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_rsrc_custom</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_is_rseg_app</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_is_pilot_lib</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWProject_68K_pilot_main_entry</NAME><VALUE></VALUE></SETTING>
-
                 <!-- Settings for "C/C++ Compiler" panel -->
                 <SETTING><NAME>MWFrontEnd_C_cplusplus</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_checkprotos</NAME><VALUE>0</VALUE></SETTING>
@@ -3373,20 +3178,6 @@
                 <SETTING><NAME>MWWarning_C_warn_notinlined</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWWarning_C_warn_structclass</NAME><VALUE>0</VALUE></SETTING>
 
-                <!-- Settings for "CFM68K" panel -->
-                <SETTING><NAME>MWCFM68K_exports</NAME><VALUE>None</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_olddefversion</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_oldimpversion</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_currentversion</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_farthreshold</NAME><VALUE>256</VALUE></SETTING>
-                <SETTING><NAME>PCFM68K_sharedata</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_fragmentname</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_initname</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_mainname</NAME><VALUE>__start</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_termname</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_libfolder</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWCFM68K_alignment</NAME><VALUE>Align_2</VALUE></SETTING>
-
                 <!-- Settings for "MacOS Merge Panel" panel -->
                 <SETTING><NAME>MWMerge_MacOS_projectType</NAME><VALUE>Application</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_outputName</NAME><VALUE>Merge Out</VALUE></SETTING>
@@ -3397,13 +3188,10 @@
                 <SETTING><NAME>MWMerge_MacOS_copyResources</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>*Ä</VALUE></SETTING>
-                    <SETTING><VALUE>ÕcH</VALUE></SETTING>
-                    <SETTING><VALUE>Õx*</VALUE></SETTING>
+                    <SETTING><VALUE>{ê</VALUE></SETTING>
+                    <SETTING><VALUE>%#H</VALUE></SETTING>
+                    <SETTING><VALUE>%8*</VALUE></SETTING>
                 </SETTING>
-
-                <!-- Settings for "Perl Panel" panel -->
-                <SETTING><NAME>Perl_Prefix_Filename</NAME><VALUE></VALUE></SETTING>
 
                 <!-- Settings for "PPC CodeGen" panel -->
                 <SETTING><NAME>MWCodeGen_PPC_structalignment</NAME><VALUE>PPC</VALUE></SETTING>
@@ -3542,13 +3330,6 @@
                 </FILE>
                 <FILE>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>CarbonLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS></FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>wx_CARBON.lib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Library</FILEKIND>
@@ -3610,6 +3391,13 @@
                     <FILEKIND>Library</FILEKIND>
                     <FILEFLAGS></FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CarbonLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -3630,11 +3418,6 @@
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>MSL C.CARBON.Lib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>CarbonLib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
@@ -3682,6 +3465,11 @@
                     <PATH>png.lib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CarbonLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
             </LINKORDER>
         </TARGET>
     </TARGETLIST>
@@ -3714,15 +3502,9 @@
         </FILEREF>
         <GROUP><NAME>wx</NAME>
             <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
+                <TARGETNAME>Carbon Release</TARGETNAME>
                 <PATHTYPE>Name</PATHTYPE>
-                <PATH>wx_PPC.lib</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Debug</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>wx_PPC_d.lib</PATH>
+                <PATH>wx_CARBON.lib</PATH>
                 <PATHFORMAT>MacOS</PATHFORMAT>
             </FILEREF>
             <FILEREF>
@@ -3732,15 +3514,21 @@
                 <PATHFORMAT>MacOS</PATHFORMAT>
             </FILEREF>
             <FILEREF>
-                <TARGETNAME>Carbon Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>wx_CARBON.lib</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
                 <TARGETNAME>Carbon Debug</TARGETNAME>
                 <PATHTYPE>Name</PATHTYPE>
                 <PATH>wx_CARBON.rsrc</PATH>
+                <PATHFORMAT>MacOS</PATHFORMAT>
+            </FILEREF>
+            <FILEREF>
+                <TARGETNAME>Classic Release</TARGETNAME>
+                <PATHTYPE>Name</PATHTYPE>
+                <PATH>wx_PPC.lib</PATH>
+                <PATHFORMAT>MacOS</PATHFORMAT>
+            </FILEREF>
+            <FILEREF>
+                <TARGETNAME>Classic Debug</TARGETNAME>
+                <PATHTYPE>Name</PATHTYPE>
+                <PATH>wx_PPC_d.lib</PATH>
                 <PATHFORMAT>MacOS</PATHFORMAT>
             </FILEREF>
             <FILEREF>
@@ -3815,11 +3603,43 @@
         <GROUP><NAME>Win32 SDK</NAME>
         </GROUP>
         <GROUP><NAME>MacOS</NAME>
-            <GROUP><NAME>Weak Linked OS</NAME>
+            <GROUP><NAME>Carbon</NAME>
+                <FILEREF>
+                    <TARGETNAME>Carbon Debug</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CarbonLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+            </GROUP>
+            <GROUP><NAME>Classic</NAME>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>AppearanceLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>ATSUnicodeLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CarbonAccessors.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
                 <FILEREF>
                     <TARGETNAME>Classic Release</TARGETNAME>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>ControlsLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CursorDevicesGlue.o</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
@@ -3831,7 +3651,31 @@
                 <FILEREF>
                     <TARGETNAME>Classic Release</TARGETNAME>
                     <PATHTYPE>Name</PATHTYPE>
+                    <PATH>DragLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>InterfaceLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>InternetConfigLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>WindowsLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>MathLib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
@@ -3846,97 +3690,73 @@
                     <PATH>NavigationLib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTptAppleTalkLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTptATalkPPC.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTptInetPPC.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTptInternetLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTransportLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTransportAppPPC.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>PLStringFuncsPPC.lib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>TextEncodingConverter</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>Textension</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>ThreadsLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>UnicodeConverter</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
             </GROUP>
-            <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>InterfaceLib</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Carbon Debug</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>CarbonLib</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>CarbonAccessors.o</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>MathLib</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>AppearanceLib</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>InternetConfigLib</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>ThreadsLib</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>OpenTransportLib</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>OpenTptAppleTalkLib</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>OpenTptInternetLib</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>CursorDevicesGlue.o</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>OpenTptATalkPPC.o</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>OpenTransportAppPPC.o</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>PLStringFuncsPPC.lib</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>OpenTptInetPPC.o</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
         </GROUP>
     </GROUPLIST>
 
