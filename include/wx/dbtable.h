@@ -43,7 +43,7 @@ const int ROWID_LEN = 24;  // 18 is the max, 24 is in case it gets larger
 // source, exchange data between the data source and the C++
 // object, and so on.
 
-class CcolDef
+class WXDLLEXPORT CcolDef
 {
 public:
 	char    ColName[DB_MAX_COLUMN_NAME_LEN+1];	// Column Name  glt 4/19/97 added one for the null terminator
@@ -59,14 +59,14 @@ public:
 };  // CcolDef
 
 // This structure is used when creating secondary indexes.
-class CidxDef
+class WXDLLEXPORT CidxDef
 {
 public:
 	char ColName[DB_MAX_COLUMN_NAME_LEN+1];	// Column Name  glt 4/19/97 added one for the null terminator
 	bool Ascending;
 };  // CidxDef
 
-class wxTable
+class WXDLLEXPORT wxTable
 {
 private:
 

@@ -224,7 +224,7 @@ typedef struct
 	short MaximumScale;
 } SqlTypeInfo;
 
-class CcolInf
+class WXDLLEXPORT CcolInf
 {
 public:
 	char tableName[DB_MAX_TABLE_NAME_LEN+1];
@@ -238,7 +238,7 @@ enum sqlLog
 	sqlLogON
 };
 
-class wxDB
+class WXDLLEXPORT wxDB
 {
 private:
 
