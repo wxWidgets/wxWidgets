@@ -380,8 +380,8 @@ void wxScrolledWindow::AdjustScrollbars()
     }
     else
     {
-        m_hAdjust->upper = (vw+m_xScrollPixelsPerLine-1) / m_xScrollPixelsPerLine;
-        m_hAdjust->page_increment = (w / m_xScrollPixelsPerLine);
+        m_hAdjust->upper = vw / m_xScrollPixelsPerLine;
+        m_hAdjust->page_increment = w / m_xScrollPixelsPerLine;
         m_hAdjust->page_size = m_hAdjust->page_increment;
 
         // If the scrollbar hits the right side, move the window
@@ -408,8 +408,8 @@ void wxScrolledWindow::AdjustScrollbars()
     }
     else
     {
-        m_vAdjust->upper = (vh+m_yScrollPixelsPerLine-1) / m_yScrollPixelsPerLine;
-        m_vAdjust->page_increment = (h / m_yScrollPixelsPerLine);
+        m_vAdjust->upper = vh / m_yScrollPixelsPerLine;
+        m_vAdjust->page_increment = h / m_yScrollPixelsPerLine;
         m_vAdjust->page_size = m_vAdjust->page_increment;
 
         if ((m_vAdjust->value != 0.0) && (m_vAdjust->value + m_vAdjust->page_size > m_vAdjust->upper))
