@@ -204,7 +204,10 @@
 #elif defined(__DMC__) || defined(__WATCOMC__)
 #    undef wxUSE_IOSTREAMH
 #    define wxUSE_IOSTREAMH 1
-#endif /* compilers not supporting iostream.h */
+#elif defined(__MINGW32__)
+#    undef wxUSE_IOSTREAMH
+#    define wxUSE_IOSTREAMH 0
+#endif /* compilers with/without iostream.h */
 
 /*
    old C++ headers (like <iostream.h>) declare classes in the global namespace
