@@ -2018,7 +2018,7 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
             wxTRANSPARENT_PEN;
 
         wxColour colText;
-        if (item->IsSelected() && m_hasFocus)
+        if ( item->IsSelected() )
         {
             colText = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
         }
