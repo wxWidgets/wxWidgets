@@ -194,7 +194,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     
     //SetSize(csize);
     
-    MacPostControlCreate(pos, csize);
+    //MacPostControlCreate(pos, csize);
     SetInitialBestSize(csize);
 
     return TRUE;
