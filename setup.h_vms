@@ -434,7 +434,7 @@
 /*
  * Use wxDisplay class
  */
-#define wxUSE_DISPLAY !
+#define wxUSE_DISPLAY 1
 
 /*
  * Use this control

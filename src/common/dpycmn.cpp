@@ -30,7 +30,7 @@
 
 #include "wx/display.h"
 
-#ifdef wxUSE_DISPLAY
+#if wxUSE_DISPLAY
 
 #include "wx/arrimpl.cpp"
 WX_DEFINE_OBJARRAY(wxArrayVideoModes);
