@@ -39,7 +39,7 @@
 // resources
 // ----------------------------------------------------------------------------
 // the application icon
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
+#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
     #include "rc/appicon.xpm"
 #endif
 

@@ -20,7 +20,7 @@
 #include "simple.h"
 
 // Include icon header
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
+#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
     #include "mondrian.xpm"
 #endif
 
