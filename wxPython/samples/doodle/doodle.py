@@ -56,12 +56,11 @@ class DoodleWindow(wxWindow):
         # and the refresh event
         EVT_PAINT(self, self.OnPaint)
 
+        # When the window is destroyed, clean up resources.
+        EVT_WINDOW_DESTROY(self, self.Cleanup)
 
-    def __del__(self):
-        self.Cleanup()
 
-
-    def Cleanup(self):
+    def Cleanup(self, evt):
         if hasattr(self, "menu"):
             self.menu.Destroy()
             del self.menu

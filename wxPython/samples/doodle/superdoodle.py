@@ -56,13 +56,6 @@ class DoodleFrame(wxFrame):
         self.SetAutoLayout(true)
         self.SetSizer(box)
 
-        EVT_CLOSE(self, self.OnCloseWindow)
-
-
-    def OnCloseWindow(self, event):
-        self.doodle.Cleanup()
-        self.Destroy()
-
 
     def SaveFile(self):
         if self.filename:
