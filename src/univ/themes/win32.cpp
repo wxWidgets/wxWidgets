@@ -33,6 +33,8 @@
     #include "wx/dcmemory.h"
 
     #include "wx/button.h"
+    #include "wx/listbox.h"
+    #include "wx/checklst.h"
     #include "wx/scrolbar.h"
     #include "wx/textctrl.h"
 #endif // WX_PRECOMP
@@ -776,10 +778,14 @@ wxInputHandler *wxWin32Theme::GetInputHandler(const wxString& control)
                                                        GetDefaultInputHandler());
         else if ( control == wxINP_HANDLER_CHECKBOX )
             handler = new wxWin32CheckboxInputHandler(GetDefaultInputHandler());
+#if wxUSE_LISTBOX
         else if ( control == wxINP_HANDLER_LISTBOX )
             handler = new wxStdListboxInputHandler(GetDefaultInputHandler());
+#endif // wxUSE_LISTBOX
+#if wxUSE_CHECKLISTBOX
         else if ( control == wxINP_HANDLER_CHECKLISTBOX )
             handler = new wxStdCheckListboxInputHandler(GetDefaultInputHandler());
+#endif // wxUSE_CHECKLISTBOX
         else if ( control == wxINP_HANDLER_TEXTCTRL )
             handler = new wxWin32TextCtrlInputHandler(GetDefaultInputHandler());
         else

@@ -16,6 +16,8 @@
     #pragma interface "univcheckbox.h"
 #endif
 
+#include "wx/button.h" // for wxStdButtonInputHandler
+
 // ----------------------------------------------------------------------------
 // the actions supported by wxCheckBox
 // ----------------------------------------------------------------------------
@@ -139,6 +141,23 @@ private:
     bool m_isPressed;
 
     DECLARE_DYNAMIC_CLASS(wxCheckBox)
+};
+
+// ----------------------------------------------------------------------------
+// wxStdCheckboxInputHandler: handles the mouse events for the check and radio
+// boxes (handling the keyboard input is simple, but its handling differs a
+// lot between GTK and MSW, so a new class should be derived for this)
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxStdCheckboxInputHandler : public wxStdButtonInputHandler
+{
+public:
+    wxStdCheckboxInputHandler(wxInputHandler *inphand);
+
+    virtual bool HandleMouse(wxControl *control,
+                             const wxMouseEvent& event);
+    virtual bool HandleMouseMove(wxControl *control,
+                                 const wxMouseEvent& event);
 };
 
 #endif // _WX_UNIV_CHECKBOX_H_

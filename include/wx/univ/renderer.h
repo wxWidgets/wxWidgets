@@ -40,29 +40,6 @@ class WXDLLEXPORT wxWindow;
 #include "wx/scrolbar.h"            // for wxScrollBar::Element
 
 // ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-// hit test results
-enum wxHitTest
-{
-    wxHT_NOWHERE,
-
-    // scrollbar
-    wxHT_SCROLLBAR_FIRST = wxHT_NOWHERE,
-    wxHT_SCROLLBAR_ARROW_LINE_1,    // left or upper arrow to scroll by line
-    wxHT_SCROLLBAR_ARROW_LINE_2,    // right or down
-    wxHT_SCROLLBAR_ARROW_PAGE_1,    // left or upper arrow to scroll by page
-    wxHT_SCROLLBAR_ARROW_PAGE_2,    // right or down
-    wxHT_SCROLLBAR_THUMB,           // on the thumb
-    wxHT_SCROLLBAR_BAR_1,           // bar to the left/above the thumb
-    wxHT_SCROLLBAR_BAR_2,           // bar to the right/below the thumb
-    wxHT_SCROLLBAR_LAST,
-
-    wxHT_MAX
-};
-
-// ----------------------------------------------------------------------------
 // wxRenderer: abstract renderers interface
 // ----------------------------------------------------------------------------
 
@@ -446,10 +423,14 @@ public:
     // operations
     void DrawLabel(const wxBitmap& bitmap = wxNullBitmap,
                    wxCoord marginX = 0, wxCoord marginY = 0);
+#if wxUSE_LISTBOX
     void DrawItems(const wxListBox *listbox,
                    size_t itemFirst, size_t itemLast);
+#endif // wxUSE_LISTBOX
+#if wxUSE_CHECKLISTBOX
     void DrawCheckItems(const wxCheckListBox *listbox,
                         size_t itemFirst, size_t itemLast);
+#endif // wxUSE_CHECKLISTBOX
     void DrawButtonBorder();
     // the line must be either horizontal or vertical
     void DrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2);

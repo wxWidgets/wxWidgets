@@ -20,6 +20,10 @@ class WXDLLEXPORT wxControlRenderer;
 class WXDLLEXPORT wxInputHandler;
 class WXDLLEXPORT wxRenderer;
 
+// we must include it as most/all control classes derive their handlers from
+// it
+#include "wx/univ/inphand.h"
+
 // ----------------------------------------------------------------------------
 // wxControlAction: the action is currently just a string which identifies it,
 // later it might become an atom (i.e. an opaque handler to string).

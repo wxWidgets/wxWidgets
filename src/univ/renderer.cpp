@@ -606,16 +606,12 @@ void wxControlRenderer::DrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
         m_renderer->DrawHorizontalLine(m_dc, y1, x1, x2);
 }
 
+#if wxUSE_LISTBOX
+
 void wxControlRenderer::DrawItems(const wxListBox *lbox,
                                   size_t itemFirst, size_t itemLast)
 {
     DoDrawItems(lbox, itemFirst, itemLast);
-}
-
-void wxControlRenderer::DrawCheckItems(const wxCheckListBox *lbox,
-                                       size_t itemFirst, size_t itemLast)
-{
-    DoDrawItems(lbox, itemFirst, itemLast, TRUE);
 }
 
 void wxControlRenderer::DoDrawItems(const wxListBox *lbox,
@@ -660,6 +656,7 @@ void wxControlRenderer::DoDrawItems(const wxListBox *lbox,
         if ( lbox->IsSelected(n) )
             flags |= wxCONTROL_SELECTED;
 
+#if wxUSE_CHECKLISTBOX
         if ( isCheckLbox )
         {
             wxCheckListBox *checklstbox = wxStaticCast(lbox, wxCheckListBox);
@@ -672,6 +669,7 @@ void wxControlRenderer::DoDrawItems(const wxListBox *lbox,
                                       flags);
         }
         else
+#endif // wxUSE_CHECKLISTBOX
         {
             m_renderer->DrawItem(m_dc, lbox->GetString(n), rect, flags);
         }
@@ -679,4 +677,16 @@ void wxControlRenderer::DoDrawItems(const wxListBox *lbox,
         rect.y += lineHeight;
     }
 }
+
+#endif // wxUSE_LISTBOX
+
+#if wxUSE_CHECKLISTBOX
+
+void wxControlRenderer::DrawCheckItems(const wxCheckListBox *lbox,
+                                       size_t itemFirst, size_t itemLast)
+{
+    DoDrawItems(lbox, itemFirst, itemLast, TRUE);
+}
+
+#endif // wxUSE_CHECKLISTBOX
 

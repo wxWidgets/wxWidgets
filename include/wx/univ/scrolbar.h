@@ -16,8 +16,6 @@
     #pragma interface "univscrolbar.h"
 #endif
 
-class WXDLLEXPORT wxInputHandler;
-
 // ----------------------------------------------------------------------------
 // the actions supported by this control
 // ----------------------------------------------------------------------------
@@ -144,6 +142,88 @@ private:
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxScrollBar)
+};
+
+// ----------------------------------------------------------------------------
+// common scrollbar input handler: it manages clicks on the standard scrollbar
+// elements (line arrows, bar, thumb)
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxStdScrollBarInputHandler : public wxStdInputHandler
+{
+public:
+    // constructor takes a renderer (used for scrollbar hit testing) and the
+    // base handler to which all unhandled events are forwarded
+    wxStdScrollBarInputHandler(wxRenderer *renderer,
+                               wxInputHandler *inphand);
+
+    virtual bool HandleKey(wxControl *control,
+                           const wxKeyEvent& event,
+                           bool pressed);
+    virtual bool HandleMouse(wxControl *control,
+                             const wxMouseEvent& event);
+    virtual bool HandleMouseMove(wxControl *control, const wxMouseEvent& event);
+
+    virtual ~wxStdScrollBarInputHandler();
+
+    // this method is called by wxScrollBarTimer only and may be overridden
+    //
+    // return TRUE to continue scrolling, FALSE to stop the timer
+    virtual bool OnScrollTimer(wxScrollBar *scrollbar,
+                               const wxControlAction& action);
+
+protected:
+    // the methods which must be overridden in the derived class
+
+    // return TRUE if the mouse button can be used to activate scrollbar, FALSE
+    // if not (only left mouse button can do it under Windows, any button under
+    // GTK+)
+    virtual bool IsAllowedButton(int button) = 0;
+
+    // set or clear the specified flag on the scrollbar element corresponding
+    // to m_htLast
+    void SetElementState(wxScrollBar *scrollbar, int flag, bool doIt);
+
+    // [un]highlight the scrollbar element corresponding to m_htLast
+    virtual void Highlight(wxScrollBar *scrollbar, bool doIt)
+        { SetElementState(scrollbar, wxCONTROL_CURRENT, doIt); }
+
+    // [un]press the scrollbar element corresponding to m_htLast
+    virtual void Press(wxScrollBar *scrollbar, bool doIt)
+        { SetElementState(scrollbar, wxCONTROL_PRESSED, doIt); }
+
+    // stop scrolling because we reached the end point
+    void StopScrolling(wxScrollBar *scrollbar);
+
+    // get the mouse coordinates in the scrollbar direction from the event
+    wxCoord GetMouseCoord(const wxScrollBar *scrollbar,
+                          const wxMouseEvent& event) const;
+
+    // generate a "thumb move" action for this mouse event
+    void HandleThumbMove(wxScrollBar *scrollbar, const wxMouseEvent& event);
+
+    // the window (scrollbar) which has capture or NULL and the flag telling if
+    // the mouse is inside the element which captured it or not
+    wxWindow *m_winCapture;
+    bool      m_winHasMouse;
+    int       m_btnCapture;  // the mouse button which has captured mouse
+
+    // the position where we started scrolling by page
+    wxPoint m_ptStartScrolling;
+
+    // one of wxHT_SCROLLBAR_XXX value: where has the mouse been last time?
+    wxHitTest m_htLast;
+
+    // the renderer (we use it only for hit testing)
+    wxRenderer *m_renderer;
+
+    // the offset of the top/left of the scrollbar relative to the mouse to
+    // keep during the thumb drag
+    int m_ofsMouse;
+
+    // the timer for generating scroll events when the mouse stays pressed on
+    // a scrollbar
+    class wxTimer *m_timerScroll;
 };
 
 #endif // _WX_UNIV_SCROLBAR_H_

@@ -88,5 +88,21 @@ private:
     DECLARE_DYNAMIC_CLASS(wxCheckListBox)
 };
 
+// ----------------------------------------------------------------------------
+// wxStdCheckListBoxInputHandler
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxStdCheckListboxInputHandler : public wxStdListboxInputHandler
+{
+public:
+    wxStdCheckListboxInputHandler(wxInputHandler *inphand);
+
+    virtual bool HandleKey(wxControl *control,
+                           const wxKeyEvent& event,
+                           bool pressed);
+    virtual bool HandleMouse(wxControl *control,
+                             const wxMouseEvent& event);
+};
+
 #endif // _WX_UNIV_CHECKLST_H_
 

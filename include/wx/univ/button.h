@@ -130,5 +130,31 @@ private:
     DECLARE_DYNAMIC_CLASS(wxButton)
 };
 
+// ----------------------------------------------------------------------------
+// wxStdButtonInputHandler: translates SPACE and ENTER keys and the left mouse
+// click into button press/release actions
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxStdButtonInputHandler : public wxStdInputHandler
+{
+public:
+    wxStdButtonInputHandler(wxInputHandler *inphand);
+
+    virtual bool HandleKey(wxControl *control,
+                           const wxKeyEvent& event,
+                           bool pressed);
+    virtual bool HandleMouse(wxControl *control,
+                             const wxMouseEvent& event);
+    virtual bool HandleMouseMove(wxControl *control, const wxMouseEvent& event);
+    virtual bool HandleFocus(wxControl *control, const wxFocusEvent& event);
+    virtual bool HandleActivation(wxControl *control, bool activated);
+
+private:
+    // the window (button) which has capture or NULL and the flag telling if
+    // the mouse is inside the button which captured it or not
+    wxWindow *m_winCapture;
+    bool      m_winHasMouse;
+};
+
 #endif // _WX_UNIV_BUTTON_H_
 

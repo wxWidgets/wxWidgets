@@ -264,4 +264,38 @@ private:
     DECLARE_DYNAMIC_CLASS(wxListBox)
 };
 
+// ----------------------------------------------------------------------------
+// wxStdListboxInputHandler: handles mouse and kbd in a single or multi
+// selection listbox
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxStdListboxInputHandler : public wxStdInputHandler
+{
+public:
+    // if pressing the mouse button in a multiselection listbox should toggle
+    // the item under mouse immediately, then specify TRUE as the second
+    // parameter (this is the standard behaviour, under GTK the item is toggles
+    // only when the mouse is released in the multi selection listbox)
+    wxStdListboxInputHandler(wxInputHandler *inphand,
+                             bool toggleOnPressAlways = TRUE);
+
+    virtual bool HandleKey(wxControl *control,
+                           const wxKeyEvent& event,
+                           bool pressed);
+    virtual bool HandleMouse(wxControl *control,
+                             const wxMouseEvent& event);
+    virtual bool HandleMouseMove(wxControl *control,
+                                 const wxMouseEvent& event);
+
+protected:
+    // get the listbox item under mouse and return -1 if there is none
+    int HitTest(const wxListBox *listbox, const wxMouseEvent& event);
+
+    wxRenderer *m_renderer;
+
+    wxWindow *m_winCapture;
+    int m_btnCapture;
+    bool m_toggleOnPressAlways;
+};
+
 #endif // _WX_UNIV_LISTBOX_H_
