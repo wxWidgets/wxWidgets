@@ -257,21 +257,26 @@ private:
 
 wxCriticalSection::wxCriticalSection()
 {
-    m_critsect = new wxCriticalSectionInternal;
+    m_critsect = NULL;
 }
 
 wxCriticalSection::~wxCriticalSection()
 {
-    delete m_critsect;
+    if ( m_critsect )
+        delete m_critsect;
 }
 
 void wxCriticalSection::Enter()
 {
+    m_critsect = new wxCriticalSectionInternal;
+
     ::EnterCriticalSection(*m_critsect);
 }
 
 void wxCriticalSection::Leave()
 {
+    wxCHECK_RET( m_critsect, "Leave() without matching Enter()" );
+
     ::LeaveCriticalSection(*m_critsect);
 }
 
