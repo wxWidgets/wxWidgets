@@ -178,6 +178,7 @@ static gint gtk_notebook_key_press_callback( GtkWidget *widget, GdkEventKey *gdk
         /* GDK reports GDK_ISO_Left_Tab for SHIFT-TAB */
         event.SetDirection( (gdk_event->keyval == GDK_Tab) );
         /* CTRL-TAB changes the (parent) window, i.e. switch notebook page */
+        event.SetWindowChange( (gdk_event->state & GDK_CONTROL_MASK) );
         event.SetCurrentFocus( win );
         if (!page->m_client->GetEventHandler()->ProcessEvent( event ))
         {
