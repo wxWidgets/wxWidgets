@@ -75,7 +75,6 @@
 #include "wx/tokenzr.h"
 #include "wx/iconloc.h"
 #include "wx/filename.h"
-#include "wx/fileconf.h"
 
 #include "wx/unix/mimetype.h"
 
@@ -1171,6 +1170,19 @@ void wxMimeTypesManagerImpl::GetKDEMimeInfo(const wxString& sExtraDir)
 {
     wxArrayString dirs;
     wxArrayString icondirs;
+
+    // FIXME: This code is heavily broken. There are three bugs in it:
+    //        1) it uses only KDEDIR, which is deprecated, instead of using
+    //           list of paths from KDEDIRS and using KDEDIR only if KDEDIRS
+    //           is not set
+    //        2) it doesn't look into ~/.kde/share/config/kdeglobals where
+    //           user's settings are stored and thus *ignores* user's settings
+    //           instead of respecting them
+    //        3) it "tries to guess KDEDIR" and "tries a few likely theme
+    //           names", both of which is completely arbitrary; instead, the
+    //           code should give up if KDEDIR(S) is not set and/or the icon
+    //           theme cannot be determined, because it means that the user is
+    //           not using KDE (and thus is not interested in KDE icons anyway)
     
     // the variable $KDEDIR is set when KDE is running
     wxString kdedir = wxGetenv( wxT("KDEDIR") );
@@ -1184,21 +1196,23 @@ void wxMimeTypesManagerImpl::GetKDEMimeInfo(const wxString& sExtraDir)
         configFile.AppendDir( wxT("config") );
         configFile.SetName( wxT("kdeglobals") );
            
-        if (configFile.FileExists())
+        wxTextFile config;
+        if (configFile.FileExists() && config.Open(configFile.GetFullPath()))
         {
-            wxFileConfig config( wxEmptyString, wxEmptyString, configFile.GetFullPath() );
             // $(KDEDIR)/share/config -> $(KDEDIR)/share
             configFile.RemoveDir( configFile.GetDirCount()-1 );
             // $(KDEDIR)/share/ -> $(KDEDIR)/share/icons
             configFile.AppendDir( wxT("icons") );
 
             // Check for entry
-            config.SetPath( wxT("Icons") );
-            wxString theme;
-            if (config.Read( wxT("Theme"), &theme ))
-                configFile.AppendDir( theme );
-            else
-                configFile.AppendDir( wxT("default.kde") );
+            wxString theme(wxT("default.kde"));
+            size_t cnt = config.GetLineCount();
+            for (size_t i = 0; i < cnt; i++)
+            {
+                if (config[i].StartsWith(wxT("Theme="), &theme/*rest*/))
+                    break;
+            }
+            configFile.AppendDir(theme);
         }
         else
         {
