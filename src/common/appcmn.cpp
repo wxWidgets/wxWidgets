@@ -182,6 +182,12 @@ void wxAppBase::SetActive(bool active, wxWindow * WXUNUSED(lastFocus))
 
 #endif // wxUSE_GUI
 
+int wxAppBase::FilterEvent(wxEvent& WXUNUSED(event))
+{
+    // process the events normally by default
+    return -1;
+}
+
 // ----------------------------------------------------------------------------
 // cmd line parsing
 // ----------------------------------------------------------------------------

@@ -85,6 +85,17 @@ This can be used for programming event loops, e.g.
 
 \helpref{wxApp::Pending}{wxapppending}
 
+\membersection{wxApp::FilterEvent}\label{wxappfilterevent}
+
+\func{int}{FilterEvent}{\param{wxEvent\& }{event}}
+
+This function is called before processing any event and allows the application
+to preempt the processing of some events. If this method returns $-1$ the event
+is processed normally, otherwise either {\tt TRUE} or {\tt FALSE} should be
+returned and the event processing stops immediately considering that the event
+had been already processed (for the former return value) or that it is not
+going to be processed at all (for the latter one).
+
 \membersection{wxApp::GetAppName}\label{wxappgetappname}
 
 \constfunc{wxString}{GetAppName}{\void}

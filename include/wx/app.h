@@ -315,6 +315,15 @@ public:
     virtual void SetActive(bool isActive, wxWindow *lastFocus);
 #endif // wxUSE_GUI
 
+    // this method allows to filter all the events processed by the program, so
+    // you should try to return quickly from it to avoid slowing down the
+    // program to the crawl
+    //
+    // return value should be -1 to continue with the normal event processing,
+    // or TRUE or FALSE to stop further processing and pretend that the event
+    // had been already processed or won't be processed at all, respectively
+    virtual int FilterEvent(wxEvent& event);
+
     // debugging support
     // -----------------
 

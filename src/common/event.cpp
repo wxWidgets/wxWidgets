@@ -744,11 +744,31 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
     info = CLASSINFO(wxWindow);
 #endif
 
-    wxASSERT_MSG( m_isWindow == IsKindOf(info),
-                  wxString(GetClassInfo()->GetClassName()) + _T(" should [not] be a window but it is [not]") );
-#endif
+    if ( m_isWindow != IsKindOf(info) )
+    {
+        wxString msg = GetClassInfo()->GetClassName();
+        msg += _T(" should [not] be a window but it is [not]");
+
+        wxFAIL_MSG( msg );
+    }
+
+#endif // __WXDEBUG__
 
 #endif // wxUSE_GUI
+
+    // allow the application to hook into event processing
+    if ( wxTheApp )
+    {
+        int rc = wxTheApp->FilterEvent(event);
+        if ( rc != -1 )
+        {
+            wxASSERT_MSG( rc == 1 || rc == 0,
+                          _T("unexpected wxApp::FilterEvent return value") );
+
+            return rc != 0;
+        }
+        //else: proceed normally
+    }
 
     // An event handler can be enabled or disabled
     if ( GetEvtHandlerEnabled() )
