@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        fstream.h
+// Name:        wfstream.h
 // Purpose:     File stream classes
 // Author:      Guilhem Lavaux
 // Modified by:
@@ -13,7 +13,7 @@
 #define _WX_WXFSTREAM_H__
 
 #ifdef __GNUG__
-#pragma interface "fstream.h"
+#pragma interface "wfstream.h"
 #endif
 
 #include <wx/object.h>
