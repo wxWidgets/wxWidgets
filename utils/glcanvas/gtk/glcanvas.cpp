@@ -326,8 +326,7 @@ void wxGLCanvas::DoSetSize( int x, int y, int width, int height, int sizeFlags )
         if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_maxWidth;
         if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_maxHeight;
 
-        wxPoint pt( m_parent->GetClientAreaOrigin() );
-        gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), m_widget, m_x+pt.x, m_y+pt.y );
+        gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), m_widget, m_x, m_y );
 
         if ((old_width != m_width) || (old_height != m_height))
 	{
