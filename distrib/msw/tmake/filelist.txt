@@ -322,7 +322,7 @@ menu.cpp	MSW
 menuitem.cpp	MSW
 metafile.cpp	MSW
 mimetype.cpp	MSW	Win32Only,Base
-minifram.cpp	MSW
+minifram.cpp	MSW	LowLevel
 msgdlg.cpp	MSW
 mslu.cpp	MSW
 nativdlg.cpp	MSW
