@@ -56,9 +56,6 @@ public:
 #endif // __WXDEBUG__
 
     gint            m_idleTag;
-#if wxUSE_THREADS
-    gint            m_wakeUpTimerTag;
-#endif
     unsigned char  *m_colorCube;
 
     // Used by the the wxGLApp and wxGLCanvas class for GL-based X visual
