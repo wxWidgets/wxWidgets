@@ -72,11 +72,11 @@ public:
     virtual void Layout(int w);
 
     // renders the cell
-    virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
+    virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2) {}
 
     // proceed drawing actions in case the cell is not visible (scrolled out of screen).
     // This is needed to change fonts, colors and so on
-    virtual void DrawInvisible(wxDC& dc, int x, int y);
+    virtual void DrawInvisible(wxDC& dc, int x, int y) {}
 
     // This method returns pointer to the FIRST cell for that
     // the condition
