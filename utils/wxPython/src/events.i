@@ -54,15 +54,12 @@ public:
 
 class wxCloseEvent : public wxEvent {
 public:
-    bool CanVeto();
-// ****    bool GetSessionEnding();
+    void SetLoggingOff(bool loggingOff);
     bool GetLoggingOff();
     void Veto(bool veto = TRUE);
+    bool CanVeto();
     bool GetVeto();
-    void SetForce(bool force);
     void SetCanVeto(bool canVeto);
-    void SetLoggingOff(bool loggingOff);
-    bool GetForce();
 };
 
 //---------------------------------------------------------------------------
@@ -140,9 +137,10 @@ public:
     bool AltDown();
     bool ShiftDown();
     long KeyCode();
-    void Position(float *OUTPUT, float *OUTPUT);
-    float GetX();
-    float GetY();
+
+//  void Position(float *OUTPUT, float *OUTPUT);
+//  float GetX();
+//  float GetY();
 };
 
 //---------------------------------------------------------------------------
@@ -300,6 +298,9 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.6  1999/02/06 22:55:00  RD
+// Follow up for changes in wxWindows to various event classes
+//
 // Revision 1.5  1998/12/15 20:41:17  RD
 // Changed the import semantics from "from wxPython import *" to "from
 // wxPython.wx import *"  This is for people who are worried about

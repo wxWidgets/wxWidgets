@@ -379,24 +379,27 @@ static void *SwigwxCloseEventTowxEvent(void *ptr) {
     return (void *) dest;
 }
 
-#define wxCloseEvent_CanVeto(_swigobj)  (_swigobj->CanVeto())
-static PyObject *_wrap_wxCloseEvent_CanVeto(PyObject *self, PyObject *args) {
+#define wxCloseEvent_SetLoggingOff(_swigobj,_swigarg0)  (_swigobj->SetLoggingOff(_swigarg0))
+static PyObject *_wrap_wxCloseEvent_SetLoggingOff(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
-    bool  _result;
     wxCloseEvent * _arg0;
+    bool  _arg1;
     char * _argc0 = 0;
+    int tempbool1;
 
     self = self;
-    if(!PyArg_ParseTuple(args,"s:wxCloseEvent_CanVeto",&_argc0)) 
+    if(!PyArg_ParseTuple(args,"si:wxCloseEvent_SetLoggingOff",&_argc0,&tempbool1)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxCloseEvent_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCloseEvent_CanVeto. Expected _wxCloseEvent_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCloseEvent_SetLoggingOff. Expected _wxCloseEvent_p.");
         return NULL;
         }
     }
-    _result = (bool )wxCloseEvent_CanVeto(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+    _arg1 = (bool ) tempbool1;
+    wxCloseEvent_SetLoggingOff(_arg0,_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -445,6 +448,27 @@ static PyObject *_wrap_wxCloseEvent_Veto(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxCloseEvent_CanVeto(_swigobj)  (_swigobj->CanVeto())
+static PyObject *_wrap_wxCloseEvent_CanVeto(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxCloseEvent * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxCloseEvent_CanVeto",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxCloseEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCloseEvent_CanVeto. Expected _wxCloseEvent_p.");
+        return NULL;
+        }
+    }
+    _result = (bool )wxCloseEvent_CanVeto(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxCloseEvent_GetVeto(_swigobj)  (_swigobj->GetVeto())
 static PyObject *_wrap_wxCloseEvent_GetVeto(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -463,30 +487,6 @@ static PyObject *_wrap_wxCloseEvent_GetVeto(PyObject *self, PyObject *args) {
     }
     _result = (bool )wxCloseEvent_GetVeto(_arg0);
     _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxCloseEvent_SetForce(_swigobj,_swigarg0)  (_swigobj->SetForce(_swigarg0))
-static PyObject *_wrap_wxCloseEvent_SetForce(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxCloseEvent * _arg0;
-    bool  _arg1;
-    char * _argc0 = 0;
-    int tempbool1;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"si:wxCloseEvent_SetForce",&_argc0,&tempbool1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxCloseEvent_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCloseEvent_SetForce. Expected _wxCloseEvent_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-    wxCloseEvent_SetForce(_arg0,_arg1);
-    Py_INCREF(Py_None);
-    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -511,51 +511,6 @@ static PyObject *_wrap_wxCloseEvent_SetCanVeto(PyObject *self, PyObject *args) {
     wxCloseEvent_SetCanVeto(_arg0,_arg1);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxCloseEvent_SetLoggingOff(_swigobj,_swigarg0)  (_swigobj->SetLoggingOff(_swigarg0))
-static PyObject *_wrap_wxCloseEvent_SetLoggingOff(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxCloseEvent * _arg0;
-    bool  _arg1;
-    char * _argc0 = 0;
-    int tempbool1;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"si:wxCloseEvent_SetLoggingOff",&_argc0,&tempbool1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxCloseEvent_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCloseEvent_SetLoggingOff. Expected _wxCloseEvent_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-    wxCloseEvent_SetLoggingOff(_arg0,_arg1);
-    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxCloseEvent_GetForce(_swigobj)  (_swigobj->GetForce())
-static PyObject *_wrap_wxCloseEvent_GetForce(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxCloseEvent * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxCloseEvent_GetForce",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxCloseEvent_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCloseEvent_GetForce. Expected _wxCloseEvent_p.");
-        return NULL;
-        }
-    }
-    _result = (bool )wxCloseEvent_GetForce(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -1584,89 +1539,6 @@ static PyObject *_wrap_wxKeyEvent_KeyCode(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define wxKeyEvent_Position(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Position(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxKeyEvent_Position(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxKeyEvent * _arg0;
-    float * _arg1;
-    float  temp;
-    float * _arg2;
-    float  temp0;
-    char * _argc0 = 0;
-
-    self = self;
-{
-  _arg1 = &temp;
-}
-{
-  _arg2 = &temp0;
-}
-    if(!PyArg_ParseTuple(args,"s:wxKeyEvent_Position",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxKeyEvent_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxKeyEvent_Position. Expected _wxKeyEvent_p.");
-        return NULL;
-        }
-    }
-    wxKeyEvent_Position(_arg0,_arg1,_arg2);
-    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-{
-    PyObject *o;
-    o = PyFloat_FromDouble((double) (*_arg1));
-    _resultobj = t_output_helper(_resultobj, o);
-}
-{
-    PyObject *o;
-    o = PyFloat_FromDouble((double) (*_arg2));
-    _resultobj = t_output_helper(_resultobj, o);
-}
-    return _resultobj;
-}
-
-#define wxKeyEvent_GetX(_swigobj)  (_swigobj->GetX())
-static PyObject *_wrap_wxKeyEvent_GetX(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    float  _result;
-    wxKeyEvent * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxKeyEvent_GetX",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxKeyEvent_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxKeyEvent_GetX. Expected _wxKeyEvent_p.");
-        return NULL;
-        }
-    }
-    _result = (float )wxKeyEvent_GetX(_arg0);
-    _resultobj = Py_BuildValue("f",_result);
-    return _resultobj;
-}
-
-#define wxKeyEvent_GetY(_swigobj)  (_swigobj->GetY())
-static PyObject *_wrap_wxKeyEvent_GetY(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    float  _result;
-    wxKeyEvent * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxKeyEvent_GetY",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxKeyEvent_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxKeyEvent_GetY. Expected _wxKeyEvent_p.");
-        return NULL;
-        }
-    }
-    _result = (float )wxKeyEvent_GetY(_arg0);
-    _resultobj = Py_BuildValue("f",_result);
-    return _resultobj;
-}
-
 static void *SwigwxMoveEventTowxEvent(void *ptr) {
     wxMoveEvent *src;
     wxEvent *dest;
@@ -2649,9 +2521,6 @@ static PyMethodDef eventscMethods[] = {
 	 { "wxActivateEvent_GetActive", _wrap_wxActivateEvent_GetActive, 1 },
 	 { "wxEraseEvent_GetDC", _wrap_wxEraseEvent_GetDC, 1 },
 	 { "wxMoveEvent_GetPosition", _wrap_wxMoveEvent_GetPosition, 1 },
-	 { "wxKeyEvent_GetY", _wrap_wxKeyEvent_GetY, 1 },
-	 { "wxKeyEvent_GetX", _wrap_wxKeyEvent_GetX, 1 },
-	 { "wxKeyEvent_Position", _wrap_wxKeyEvent_Position, 1 },
 	 { "wxKeyEvent_KeyCode", _wrap_wxKeyEvent_KeyCode, 1 },
 	 { "wxKeyEvent_ShiftDown", _wrap_wxKeyEvent_ShiftDown, 1 },
 	 { "wxKeyEvent_AltDown", _wrap_wxKeyEvent_AltDown, 1 },
@@ -2696,14 +2565,12 @@ static PyMethodDef eventscMethods[] = {
 	 { "wxCommandEvent_GetInt", _wrap_wxCommandEvent_GetInt, 1 },
 	 { "wxCommandEvent_GetExtraLong", _wrap_wxCommandEvent_GetExtraLong, 1 },
 	 { "wxCommandEvent_Checked", _wrap_wxCommandEvent_Checked, 1 },
-	 { "wxCloseEvent_GetForce", _wrap_wxCloseEvent_GetForce, 1 },
-	 { "wxCloseEvent_SetLoggingOff", _wrap_wxCloseEvent_SetLoggingOff, 1 },
 	 { "wxCloseEvent_SetCanVeto", _wrap_wxCloseEvent_SetCanVeto, 1 },
-	 { "wxCloseEvent_SetForce", _wrap_wxCloseEvent_SetForce, 1 },
 	 { "wxCloseEvent_GetVeto", _wrap_wxCloseEvent_GetVeto, 1 },
+	 { "wxCloseEvent_CanVeto", _wrap_wxCloseEvent_CanVeto, 1 },
 	 { "wxCloseEvent_Veto", _wrap_wxCloseEvent_Veto, 1 },
 	 { "wxCloseEvent_GetLoggingOff", _wrap_wxCloseEvent_GetLoggingOff, 1 },
-	 { "wxCloseEvent_CanVeto", _wrap_wxCloseEvent_CanVeto, 1 },
+	 { "wxCloseEvent_SetLoggingOff", _wrap_wxCloseEvent_SetLoggingOff, 1 },
 	 { "wxSizeEvent_GetSize", _wrap_wxSizeEvent_GetSize, 1 },
 	 { "wxEvent_Skip", _wrap_wxEvent_Skip, 1 },
 	 { "wxEvent_SetTimestamp", _wrap_wxEvent_SetTimestamp, 1 },
