@@ -1603,18 +1603,30 @@ if test "$wxUSE_WINE" = 1; then
 fi
 
 if test "$wxUSE_MOTIF" = 1; then
-    dnl find the X11 include and library files
-    dnl   defines x_includes and x_libraries
-    AC_PATH_XTRA
-
-    if test "$no_x" = "yes"; then
-      AC_MSG_ERROR(X11 libraries not found, aborting)
+    AC_MSG_CHECKING(for X11 headers)
+    WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, X11/Intrinsic.h)
+    if test "$ac_find_includes" != "" ; then
+        AC_MSG_RESULT(found $ac_find_includes)
+    else
+        AC_MSG_RESULT(no)
+        AC_MSG_ERROR(please set CFLAGS to contain the location of Xm/Xm.h)
     fi
 
-    TOOLKIT_INCLUDE="$X_CFLAGS"
-    GUI_TK_LIBRARY="$X_LIBS"
+    AC_MSG_CHECKING(for X11 libraries)
+    WX_PATH_FIND_LIBRARIES($SEARCH_LIB, X11)
+    if test "$ac_find_libraries" != "" ; then
+        WX_INCLUDE_PATH_EXIST($ac_find_includes, $TOOLKIT_INCLUDE)
+        WX_LINK_PATH_EXIST($ac_find_libraries, $GUI_TK_LIBRARY)
 
-    AC_MSG_CHECKING(for Motif/Lesstif includes)
+        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
+        TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE $ac_path_to_include"
+        AC_MSG_RESULT(found at $ac_find_libraries)
+    else
+        AC_MSG_RESULT(no)
+        AC_MSG_ERROR(please set LDFLAGS to contain the location of libXm)
+    fi
+
+    AC_MSG_CHECKING(for Motif/Lesstif headers)
     WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, Xm/Xm.h)
     if test "$ac_find_includes" != "" ; then
         AC_MSG_RESULT(found $ac_find_includes)
@@ -1629,7 +1641,7 @@ if test "$wxUSE_MOTIF" = 1; then
         WX_INCLUDE_PATH_EXIST($ac_find_includes, $TOOLKIT_INCLUDE)
         WX_LINK_PATH_EXIST($ac_find_libraries, $GUI_TK_LIBRARY)
 
-        CHECK_LINK="$GUI_TK_LIBRARY $ac_path_to_link"
+        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
         TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE $ac_path_to_include"
         AC_MSG_RESULT(found at $ac_find_libraries)
     else
@@ -1641,7 +1653,7 @@ if test "$wxUSE_MOTIF" = 1; then
     WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xt)
     if test "$ac_find_libraries" != "" ; then
         WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
-        CHECK_LINK="$GUI_TK_LIBRARY $ac_path_to_link"
+        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
         AC_MSG_RESULT(found at $ac_find_libraries)
     else
         AC_MSG_RESULT(no)
@@ -1653,7 +1665,7 @@ if test "$wxUSE_MOTIF" = 1; then
     WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xpm)
     if test "$ac_find_libraries" != "" ; then
         WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
-        CHECK_LINK="$GUI_TK_LIBRARY $ac_path_to_link"
+        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
         XPM_LINK="-lXpm "
         AC_DEFINE(wxHAVE_LIB_XPM)
         AC_MSG_RESULT(found at $ac_find_libraries)
