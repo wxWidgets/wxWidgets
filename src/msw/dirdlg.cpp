@@ -28,8 +28,6 @@
     #pragma hdrstop
 #endif
 
-#include "wx/setup.h"
-
 #if wxUSE_DIRDLG
 
 #if defined(__WIN95__) && !defined(__GNUWIN32_OLD__) && wxUSE_OLE
@@ -43,7 +41,7 @@
 
 #include "wx/msw/private.h"
 
-#include "shlobj.h" // Win95 shell
+#include <shlobj.h> // Win95 shell
 
 // ----------------------------------------------------------------------------
 // constants
@@ -88,7 +86,13 @@ wxDirDialog::wxDirDialog(wxWindow *parent,
     m_message = message;
     m_parent = parent;
     m_path = defaultPath;
-    m_path.Replace(_T("/"), _T("\\")); // SHBrowseForFolder doesn't like '/'s
+
+    // SHBrowseForFolder doesn't like '/'s nor the trailing backslashes
+    m_path.Replace(_T("/"), _T("\\"));
+    if ( *m_path.end() == _T('\\') )
+    {
+        m_path.erase(m_path.length() - 1);
+    }
 }
 
 int wxDirDialog::ShowModal()
