@@ -36,9 +36,22 @@ wxEvtHandler
 
 \membersection{wxHtmlHelpController::wxHtmlHelpController}\label{wxhtmlhelpcontrollerwxhtmlhelpcontroller}
 
-\func{}{wxHtmlHelpController}{\void}
+\func{}{wxHtmlHelpController}{\param{int }{style = wxHF_DEFAULTSTYLE}}
 
 Constructor.
+
+\wxheading{Parameters}
+
+{\it style} is combination of these flags:
+
+\begin{twocollist}
+\twocolitem{\windowstyle{wxHF\_TOOLBAR}}{Help frame has toolbar.}
+\twocolitem{\windowstyle{wxHF\_CONTENTS}}{Help frame has contents panel.}
+\twocolitem{\windowstyle{wxHF\_INDEX}}{Help frame has index panel.}
+\twocolitem{\windowstyle{wxHF\_SEARCH}}{Help frame has search panel.}
+\end{twocollist}
+
+Default value : everything enabled.
 
 \membersection{wxHtmlHelpController::AddBook}\label{wxhtmlhelpcontrolleraddbook}
 
