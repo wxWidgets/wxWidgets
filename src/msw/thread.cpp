@@ -26,6 +26,8 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/intl.h"
+    #include "wx/app.h"
 #endif
 
 #if wxUSE_THREADS
