@@ -16,7 +16,7 @@ Information on how to install can be found in the file
 install.txt, but if you cannot wait, this should work on
 many systems:
 
-./configure --with-x11 --disable-shared --with-x11 --with-debug_flag --enable-log --with-debug_info --enable-debug --without-threads --without-sockets -without-odbc -with-libjpeg --enable-debug_cntxt --disable-no_rtti"
+./configure --with-x11 --disable-shared --enable-log --enable-debug -without-odbc --enable-debug_cntxt
 
 make
 su <type root password>
@@ -28,10 +28,9 @@ When you run into problems, please read the install.txt and
 follow those instructions. If you still don't have any success,
 please send a bug report to one of our mailing lists (see
 the wxWindows homepage) INCLUDING A DESCRIPTION OF YOUR SYSTEM AND
-YOUR PROBLEM, SUCH AS YOUR VERSION OF MOTIF, WXMOTIF, WHAT
-DISTRIBUTION YOU USE AND WHAT ERROR WAS REPORTED.
-Alternatively, you may also use the bug reporting system
-linked from the wxWindows web page.
+YOUR PROBLEM, SUCH AS YOUR VERSION OF X, WHAT DISTRIBUTION YOU USE
+AND WHAT ERROR WAS REPORTED. Alternatively, you may also use the bug
+reporting system linked from the wxWindows web page.
 
 The library produced by the install process will be called 
 libwx_x11univ[d].a (static) and libwx_x11univ[d]-2.3.so.0.0.0
@@ -63,8 +62,7 @@ Some remaining issues:
 - wxToggleButton implementation missing
 - wxSpinCtrl implementation missing
 - tooltips implementation missing
-- code common to the Motif and X11 ports needs to be
-  merged
+- code common to the Motif and X11 ports needs to be merged
 - need thread safety in event loop
 
   Regards,

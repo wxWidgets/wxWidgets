@@ -8,8 +8,8 @@ configure for the first time:
 
 For Bourne shell (sh, ksh, zsh, bash) users:
 
-	export CC=xlc
-	export CXX=xlC
+	CC=xlc ; export CC
+	CXX=xlC ; export CXX
 
 For C shell (csh, tcsh) users:
 

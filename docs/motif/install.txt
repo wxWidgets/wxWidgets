@@ -11,7 +11,7 @@ IMPORTANT NOTE:
   
   When sending bug reports tell us what version of wxWindows you are 
   using (including the beta) and what compiler on what system. One 
-  example: wxMotif 2.3.0, egcs 1.1.1, Redhat 5.0
+  example: wxMotif 2.3.3, gcc 2.95.4, Redhat 6.1
 
 First steps
 -----------
@@ -42,8 +42,8 @@ First steps
 COMPILING USING CONFIGURE
 =========================
 
-* The most simple case
------------------------
+* The simplest case
+-------------------
 
 If you compile wxWindows on Linux for the first time and don't like to read 
 install instructions just do (in the base dir):
@@ -78,10 +78,10 @@ such as for GTK and Motif, you can now build two complete libraries and use
 them concurrently. For this end, you have to create a directory for each build 
 of wxWindows - you may also want to create different versions of wxWindows
 and test them concurrently. Most typically, this would be a version configured 
-with --enable-debug_flag and one without. Note, that only one build can currently 
-be installed, so you'd have to use local version of the library for that purpose.
-For building three versions (one GTK, one Motif and a debug version of the GTK 
-source) you'd do this:
+with --enable-debug_flag and one without. Note, that only one build can
+currently be installed, so you'd have to use local version of the library for
+that purpose.  For building three versions (one GTK, one Motif and a debug
+version of the GTK source) you'd do this:
 
 md buildmotif
 cd buildmotif
@@ -101,45 +101,45 @@ cd buildgtkd
 make
 cd ..
 
-* The most simple errors
-------------------------
+* The simplest errors
+---------------------
 
-You get errors during compilation: The reason is that you probably have a broken 
-compiler, which includes almost everything that is called gcc. If you use gcc 2.8 
-you have to disable optimisation as the compiler will give up with an internal 
-compiler error.
+You get errors during compilation: The reason is that you probably have a
+broken compiler.  GCC 2.8 and earlier versions and egcs are likely to cause
+problems due to incomplete support for C++ and optimisation bugs.  Best to use
+GCC 2.95 or later.
 
-If there is just any way for you to use egcs, use egcs. We cannot fix gcc.
+You get immediate segfault when starting any sample or application: This is
+either due to having compiled the library with different flags or options than
+your program - typically you might have the __WXDEBUG__ option set for the
+library but not for your program - or due to using a compiler with optimisation
+bugs.
 
-You get immediate segfault when starting any sample or application: This is either 
-due to having compiled the library with different flags or options than your program - 
-typically you might have the __WXDEBUG__ option set for the library but not for your 
-program - or due to using a broken compiler (and its optimisation) such as GCC 2.8.
-
-* The most simple program
--------------------------
+* The simplest program
+----------------------
 
 Now create your super-application myfoo.app and compile anywhere with
 
-g++ myfoo.cpp `wx-config --libs --cflags` -o myfoo
+g++ myfoo.cpp `wx-config --libs --cxxflags` -o myfoo
 
 * General
------------------------
+---------
 
-The Unix variants of wxWindows use GNU configure. If you have problems with your 
-make use GNU make instead.
+The Unix variants of wxWindows use GNU configure. If you have problems with
+your make use GNU make instead.
 
-If you have general problems with installation, read my homepage at 
+If you have general problems with installation, see the wxWindows website at 
 
-  http://wesley.informatik.uni-freiburg.de/~wxxt
+  http://www.wxwindows.org/
   
 for newest information. If you still don't have any success, please send a bug 
 report to one of our mailing lists (see my homepage) INCLUDING A DESCRIPTION OF 
-YOUR SYSTEM AND YOUR PROBLEM, SUCH AS YOUR VERSION OF GTK, WXGTK, WHAT DISTRIBUTION 
-YOU USE AND WHAT ERROR WAS REPORTED. I know this has no effect, but I tried...
+YOUR SYSTEM AND YOUR PROBLEM, SUCH AS YOUR VERSION OF MOTIF, WXMOTIF, WHAT
+DISTRIBUTION YOU USE AND WHAT ERROR WAS REPORTED. I know this has no effect,
+but I tried...
 
 * GUI libraries
------------------------
+---------------
 
 wxWindows/Motif requires the Motif library to be installed on your system. As
 an alternative, you may also use the free library "lesstif" which implements
@@ -150,32 +150,30 @@ You can get the newest version of the Lesstif from the lesstif homepage at:
   http://www.lesstif.org
   
 * Additional libraries
------------------------
+----------------------
 
-wxWindows/Motif requires a thread library and X libraries known to work with threads. 
-This is the case on all commercial Unix-Variants and all Linux-Versions that are 
-based on glibc 2 except RedHat 5.0 which is broken in many aspects. As of writing 
-this, these Linux distributions have correct glibc 2 support:
+wxWindows/Motif requires a thread library and X libraries known to work with
+threads.  This is the case on all commercial Unix-Variants and all
+Linux-Versions that are based on glibc 2 except RedHat 5.0 which is broken in
+many aspects. As of writing this, these Linux distributions have correct glibc
+2 support:
 
  - RedHat 5.1
- - Debian 2.0
+ - Debian 2.0 and 3.0
  - Stampede
  - DLD 6.0
  - SuSE 6.0
  
 You can disable thread support by running 
 
-./configure "--disable-threads"
+./configure --disable-threads
 make
 su <type root password>
 make install
 ldconfig
 exit
   
-NB: DO NOT COMPILE WXGTK WITH GCC AND THREADS, SINCE ALL PROGRAMS WILL
-CRASH UPON START-UP! Just always use egcs and be happy.
-
-* Building wxGTK on OS/2
+* Building wxMotif on OS/2
 --------------------------
 
 Please send comments and question about the OS/2 installation
@@ -219,7 +217,7 @@ generate "lex.yy.c", you need to manually change the generated
 makefile.
 
 * Building wxMotif on SGI
---------------------------
+-------------------------
 
 Using the SGI native compilers, it is recommended that you
 also set CFLAGS and CXXFLAGS before running configure. These 
@@ -237,10 +235,10 @@ untested).
 The SGI native compiler support has only been tested on Irix 6.5.
 
 * Create your configuration
------------------------------
+---------------------------
 
 Usage:
-	./configure options
+	./configure [options]
 
 If you want to use system's C and C++ compiler,
 set environment variables CXX and CC as
@@ -280,8 +278,6 @@ in wxWindows snapshot 6, but not yet all (ODBC not).
 You have to add --with-motif on platforms, where Motif is
 not the default (on Linux, configure will default to GTK).
 
-        --without-gtk            Don't use the GIMP ToolKit (GTK)
-	
 	--with-motif             Use either Motif or Lesstif
 	                         Configure will look for both. 
 
@@ -339,7 +335,7 @@ The following options handle the kind of library you want to build.
 				options.
 
 * Feature Options
--------------------
+-----------------
 
 Many of the configure options have been thoroughly tested
 in wxWindows snapshot 6, but not yet all (ODBC not).
@@ -387,9 +383,9 @@ the program of its debugging information resulting in a significant
 reduction in size.
 
 * Compiling
--------------
+-----------
 
-The following must be done in the base directory (e.g. ~/wxGTK
+The following must be done in the base directory (e.g. ~/wxMotif
 or ~/wxWin or whatever)
 
 Now the makefiles are created (by configure) and you can compile 
@@ -423,12 +419,12 @@ object-files:
 in the various directories will do the work for you.
 
 * Creating a new Project
---------------------------
+------------------------
 
 1) The first way uses the installed libraries and header files
 automatically using wx-config
 
-g++ myfoo.cpp `wx-config --libs` `wx-config --cflags` -o myfoo
+g++ myfoo.cpp `wx-config --libs` `wx-config --cxxflags` -o myfoo
 
 Using this way, a make file for the minimal sample would look
 like this
@@ -439,7 +435,7 @@ minimal: minimal.o
     $(CXX) -o minimal minimal.o `wx-config --libs` 
 
 minimal.o: minimal.cpp mondrian.xpm
-    $(CXX) `wx-config --cflags` -c minimal.cpp -o minimal.o
+    $(CXX) `wx-config --cxxflags` -c minimal.cpp -o minimal.o
 
 clean: 
 	rm -f *.o minimal
@@ -482,9 +478,9 @@ and configure before you can type make.
 Troubleshooting
 ---------------
 
-- Solaris compilation with gcc: if the compiler has problems with the variable argument
-  functions, try putting the gcc fixinclude file paths early in the include
-  path.
+- Solaris compilation with gcc: if the compiler has problems with the variable
+  argument functions, try putting the gcc fixinclude file paths early in the
+  include path.
 
 - If you operator-related compile errors or strange memory problems
   (for example in deletion of string arrays), set wxUSE_GLOBAL_MEMORY_OPERATORS

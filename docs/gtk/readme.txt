@@ -33,7 +33,7 @@ support, you need to configure
 ./configure --with-gtk --enable-gtk2 --enable-unicode
 etc.
 
-Sofar, support for GTK 2.0 has only been tested on
+So far, support for GTK 2.0 has only been tested on
 Linux with glibc 2.2.
 
 When you run into problems, please read the INSTALL.txt and 

@@ -1,10 +1,20 @@
+wxWindows 2.3 for GTK installation
+----------------------------------
 
-  !!! When sending bug reports tell us what version of wxWindows you are
-      using (including the beta) and what compiler on what system. One
-      example: wxGTK 2.3.0, egcs 1.1.1, Redhat 6.2 !!!
+IMPORTANT NOTE:
 
-* The most simple case
------------------------
+  If you experience problems installing, please re-read these
+  instructions and other related files (todo.txt, bugs.txt and
+  osname.txt for your platform if it exists) carefully before
+  mailing wxwin-users or the author. Preferably, try to fix the
+  problem first and then send a patch to the author.
+
+  When sending bug reports tell us what version of wxWindows you are
+  using (including the beta) and what compiler on what system. One
+  example: wxGTK 2.3.3, gcc 2.95.4, Redhat 6.2
+
+* The simplest case
+-------------------
 
 If you compile wxWindows on Linux for the first time and don't like to read
 install instructions just do (in the base dir):
@@ -64,8 +74,8 @@ cd buildgtkd
 make
 cd ..
 
-* The most simple errors
-------------------------
+* The simplest errors
+---------------------
 
 For any configure errors: please look at config.log file which was generated
 during configure run, it usually contains some useful information.
@@ -85,43 +95,44 @@ Solaris make. Other versions might work or not (any which don't have VPATH
 support definitely won't).
 
 You get errors during compilation: The reason is that you probably have a
-broken compiler, which includes a lot of old gcc versions. In particular, if
-you use gcc 2.8 you have to disable optimisation as the compiler will give up
-with an internal compiler error.
+broken compiler.  GCC 2.8 and earlier versions and egcs are likely to cause
+problems due to incomplete support for C++ and optimisation bugs.  Best to use
+GCC 2.95 or later.
 
 You get immediate segfault when starting any sample or application: This is
 either due to having compiled the library with different flags or options than
 your program - typically you might have the __WXDEBUG__ option set for the
-library but not for your program - or due to using a broken compiler (and its
-optimisation) such as gcc 2.8.
+library but not for your program - or due to using a compiler with optimisation
+bugs.
 
 Linker complains about missing PROIO_yy_flex_alloc and similar symbols: you
 probably have an old version of flex, 2.5.4 is recommended.
 
-* The most simple program
--------------------------
+* The simplest program
+----------------------
 
-Now create your super-application myfoo.app and compile anywhere with
+Now create your super-application myfoo.cpp and compile anywhere with
 
-gcc myfoo.cpp `wx-config --libs --cflags` -o myfoo
+g++ myfoo.cpp `wx-config --libs --cxxflags` -o myfoo
 
 * General
------------------------
+---------
 
-The Unix variants of wxWindows use GNU configure. If you have problems with your
-make use GNU make instead.
+The Unix variants of wxWindows use GNU configure. If you have problems with
+your make use GNU make instead.
 
 If you have general problems with installation, read my homepage at
 
-  http://wesley.informatik.uni-freiburg.de/~wxxt
+  http://wesley.informatik.uni-freiburg.de/~wxxt/
 
 for newest information. If you still don't have any success, please send a bug
 report to one of our mailing lists (see my homepage) INCLUDING A DESCRIPTION OF
-YOUR SYSTEM AND YOUR PROBLEM, SUCH AS YOUR VERSION OF GTK, WXGTK, WHAT DISTRIBUTION
-YOU USE AND WHAT ERROR WAS REPORTED. I know this has no effect, but I tried...
+YOUR SYSTEM AND YOUR PROBLEM, SUCH AS YOUR VERSION OF GTK, WXGTK, WHAT
+DISTRIBUTION YOU USE AND WHAT ERROR WAS REPORTED. I know this has no effect,
+but I tried...
 
 * GUI libraries
------------------------
+---------------
 
 wxWindows/GTK requires the GTK+ library to be installed on your system. It has
 to be a stable version, preferably version 1.2.10 (at least 1.2.3 is required,
@@ -135,15 +146,16 @@ We also mirror GTK+ at my ftp site. You'll find information about downloading
 at my homepage.
 
 * Additional libraries
------------------------
+----------------------
 
-wxWindows/Gtk requires a thread library and X libraries known to work with threads.
-This is the case on all commercial Unix-Variants and all Linux-Versions that are
-based on glibc 2 except RedHat 5.0 which is broken in many aspects. As of writing
-this, these Linux distributions have correct glibc 2 support:
+wxWindows/Gtk requires a thread library and X libraries known to work with
+threads.  This is the case on all commercial Unix-Variants and all
+Linux-Versions that are based on glibc 2 except RedHat 5.0 which is broken in
+many aspects. As of writing this, these Linux distributions have correct glibc
+2 support:
 
  - RedHat 5.1
- - Debian 2.0
+ - Debian 2.0 and 3.0
  - Stampede
  - DLD 6.0
  - SuSE 6.0
@@ -157,11 +169,8 @@ make install
 ldconfig
 exit
 
-NB: DO NOT COMPILE WXGTK WITH GCC 2.7 AND THREADS, SINCE ALL PROGRAMS WILL CRASH UPON
-START-UP! Just always use egcs and be happy.
-
 * Building wxGTK on OS/2
---------------------------
+------------------------
 
 Please send comments and question about the OS/2 installation
 to Andrea Venturoli <a.ventu@flashnet.it> and patches to
@@ -199,7 +208,7 @@ generate "lex.yy.c", you need to manually change the generated
 makefile.
 
 * Building wxGTK on SGI
---------------------------
+-----------------------
 
 Using the SGI native compilers, it is recommended that you
 also set CFLAGS and CXXFLAGS before running configure. These
@@ -217,7 +226,7 @@ untested).
 The SGI native compiler support has only been tested on Irix 6.5.
 
 * Create your configuration
------------------------------
+---------------------------
 
 Usage:
     ./configure options
@@ -226,8 +235,8 @@ If you want to use system's C and C++ compiler,
 set environment variables CC and CCC as
 
     % setenv CC cc
-    % setenv CCC CC
-    % ./configure options
+    % setenv CXX CC
+    % ./configure [options]
 
 to see all the options please use:
 
@@ -240,7 +249,7 @@ and Motif) simultaneously.
 
 
 * General options
--------------------
+-----------------
 
 Given below are the commands to change the default behaviour,
 i.e. if it says "--disable-threads" it means that threads
@@ -309,7 +318,7 @@ The following options handle the kind of library you want to build.
                             options.
 
 * Feature Options
--------------------
+-----------------
 
 When producing an executable that is linked statically with wxGTK
 you'll be surprised at its immense size. This can sometimes be
@@ -365,7 +374,7 @@ the program of its debugging information resulting in a significant
 reduction in size.
 
 * Compiling
--------------
+-----------
 
 The following must be done in the base directory (e.g. ~/wxGTK
 or ~/wxWin or whatever)
@@ -406,7 +415,7 @@ in the various directories will do the work for you.
 1) The first way uses the installed libraries and header files
 automatically using wx-config
 
-gcc myfoo.cpp `wx-config --cflags --libs` -o myfoo
+g++ myfoo.cpp `wx-config --cxxflags --libs` -o myfoo
 
 Using this way, a make file for the minimal sample would look
 like this
@@ -417,7 +426,7 @@ minimal: minimal.o
 	$(CC) -o minimal minimal.o `wx-config --libs`
 
 minimal.o: minimal.cpp mondrian.xpm
-	$(CC) `wx-config --cflags` -c minimal.cpp -o minimal.o
+	$(CC) `wx-config --cxxflags` -c minimal.cpp -o minimal.o
 
 clean:
 	rm -f *.o minimal

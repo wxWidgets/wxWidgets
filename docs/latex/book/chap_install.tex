@@ -10,7 +10,7 @@ at each major platform in turn.
 
 \section{Unix: GTK+ and Motif}\label{installunix}
 
-\subsection{The most simple case}
+\subsection{The simplest case}
 
 If you are compile wxWindows on Linux for the first time and don't like to read 
 install instructions, just do this in the base directory:
@@ -76,7 +76,7 @@ For building three versions (one for GTK+, one for Motif and a debug GTK+ versio
   cd ..
 \end{verbatim}
 
-\subsection{The most simple errors}
+\subsection{The simplest errors}
 
 \begin{itemize}\itemsep=0pt
 \item Configure reports, that you don't have GTK 1.2 installed although you are 
@@ -86,21 +86,23 @@ versions of glib (and its headers). Also, look for the PATH variable and check
 if it includes the path to the correct gtk-config! The check your LDPATH if it 
 points to the correct library. There is no way to compile wxGTK if configure 
 doesn't pass this test as all this test does is compile and link a GTK program.
-\item You get errors during compilation: The reason is that you probably have a broken 
-compiler, which includes almost everything that is called gcc. If you use gcc 2.8 
-you have to disable optimisation as the compiler will give up with an internal 
-compiler error.You get immediate segfault when starting any sample or application: This is either 
-due to having compiled the library with different flags or options than your program - 
-typically you might have the __WXDEBUG__ option set for the library but not for your 
-program - or due to using a broken compiler (and its optimisation) such as GCC 2.8.
+\item You get errors during compilation: The reason is that you probably have a
+broken compiler.  GCC 2.8 and earlier versions and egcs are likely to cause
+problems due to incomplete support for C++ and optimisation bugs.  Best to use
+GCC 2.95 or later.
+\item You get immediate segfault when starting any sample or application: This is
+either due to having compiled the library with different flags or options than
+your program - typically you might have the \_\_WXDEBUG\_\_ option set for the
+library but not for your program - or due to using a compiler with optimisation
+bugs.
 \end{itemize}
 
-\subsection{The most simple program}
+\subsection{The simplest program}
 
 Now create your super-application myfoo.app and compile anywhere with:
 
 \begin{verbatim}
-  gcc myfoo.cpp `wx-config --libs --cflags` -o myfoo
+  g++ myfoo.cpp `wx-config --libs --cxxflags` -o myfoo
 \end{verbatim}
 
 \wxheading{General}
@@ -135,7 +137,7 @@ this, these Linux distributions have correct glibc 2 support:
 
 \begin{itemize}\itemsep=0pt
 \item RedHat 5.1
-\item Debian 2.0
+\item Debian 2.0 and 3.0
 \item Stampede
 \item DLD 6.0
 \item SuSE 6.0
@@ -144,7 +146,7 @@ this, these Linux distributions have correct glibc 2 support:
 You can disable thread support by running 
 
 \begin{verbatim}
-./configure "--disable-threads"
+./configure --disable-threads
 make
 su <type root password>
 make install
@@ -424,24 +426,24 @@ in the various directories will do the work for you.
 
 \subsubsection{Creating a new Project}
 
-1) The first way uses the installed libraries and header files
+1\ket The first way uses the installed libraries and header files
 automatically using wx-config
 
 \begin{verbatim}
-gcc myfoo.cpp `wx-config --cflags --libs` -o myfoo
+g++ myfoo.cpp `wx-config --cxxflags --libs` -o myfoo
 \end{verbatim}
 
 Using this way, a make file for the minimal sample would look
 like this
 
 \begin{verbatim}
-CC = gcc
+CXX = g++
 
 minimal: minimal.o
-    $(CC) -o minimal minimal.o `wx-config --libs` 
+    $(CXX) -o minimal minimal.o `wx-config --libs` 
 
 minimal.o: minimal.cpp mondrian.xpm
-    $(CC) `wx-config --cflags` -c minimal.cpp -o minimal.o
+    $(CXX) `wx-config --cxxflags` -c minimal.cpp -o minimal.o
 
 clean: 
 	rm -f *.o minimal
@@ -450,7 +452,7 @@ clean:
 This is certain to become the standard way unless we decide
 to stick to tmake.
 
-2) The other way creates a project within the source code 
+2\ket The other way creates a project within the source code 
 directories of wxWindows. For this endeavour, you'll need
 GNU autoconf version 2.14 and add an entry to your Makefile.in
 to the bottom of the configure.in script and run autoconf
