@@ -464,6 +464,7 @@ ListBox::~ListBox() {
 void ListBox::Create(Window &parent, int ctrlID) {
     id = new wxListBox(parent.id, ctrlID, wxDefaultPosition, wxDefaultSize,
                        0, NULL, wxLB_SINGLE | wxLB_SORT);
+    ((wxListBox*)id)->Show(FALSE);
 }
 
 void ListBox::Clear() {

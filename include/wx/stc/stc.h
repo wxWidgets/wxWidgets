@@ -237,6 +237,7 @@ public:
     wxSTC_UndoType GetUndoCollection();
     void     BeginUndoAction();
     void     EndUndoAction();
+    void     SetSavePoint();
 
 
     // Selection and information

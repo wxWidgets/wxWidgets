@@ -333,6 +333,9 @@ void wxStyledTextCtrl::EndUndoAction() {
 }
 
 
+void wxStyledTextCtrl::SetSavePoint() {
+    SendMsg(SCI_SETSAVEPOINT);
+}
 
 
 //----------------------------------------------------------------------
@@ -356,10 +359,11 @@ wxString wxStyledTextCtrl::GetSelectedText() {
 
     GetSelection(&start, &end);
     int   len  = end - start;
-    char* buff = text.GetWriteBuf(len);
-
-    SendMsg(EM_GETSELTEXT, 0, (long)buff);
-    text.UngetWriteBuf();
+    if (len > 0) {
+        char* buff = text.GetWriteBuf(len);
+        SendMsg(EM_GETSELTEXT, 0, (long)buff);
+        text.UngetWriteBuf();
+    }
     return text;
 }
 
@@ -1049,7 +1053,7 @@ void wxStyledTextCtrl::MarkerDeleteAll(int markerNumber) {
 
 
 int wxStyledTextCtrl::MarkerGet(int line) {
-    return SendMsg(SCI_MARKERGET);
+    return SendMsg(SCI_MARKERGET, line);
 }
 
 
@@ -1059,7 +1063,7 @@ int wxStyledTextCtrl::MarkerGetNextLine(int lineStart, int markerMask) {
 
 
 int wxStyledTextCtrl::MarkerGetPrevLine(int lineStart, int markerMask) {
-//    return SendMsg(SCI_MARKERPREV, lineStart, markerMask);
+//   TODO  return SendMsg(SCI_MARKERPREV, lineStart, markerMask);
     return 0;
 }
 
@@ -1140,7 +1144,7 @@ char wxStyledTextCtrl::AutoCompGetSeparator() {
 
 
 void wxStyledTextCtrl::AutoCompSelect(const wxString& stringtoselect) {
-    SendMsg(SCI_AUTOCSELECT, (long)stringtoselect.c_str());
+    SendMsg(SCI_AUTOCSELECT, 0, (long)stringtoselect.c_str());
 }
 
 
