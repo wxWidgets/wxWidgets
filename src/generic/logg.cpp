@@ -59,6 +59,10 @@
   #include  "wx/msw/private.h"
 #endif // Windows
 
+#ifdef  __WXPM__
+  #include <time.h>
+#endif
+
 #if wxUSE_LOG_DIALOG
     #include "wx/listctrl.h"
     #include "wx/imaglist.h"
