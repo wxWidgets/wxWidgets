@@ -112,6 +112,9 @@ public:
 
 #if wxUSE_SPINCTRL
     void OnSpinCtrl(wxSpinEvent& event);
+    void OnSpinCtrlUp(wxSpinEvent& event);
+    void OnSpinCtrlDown(wxSpinEvent& event);
+    void OnSpinCtrlText(wxCommandEvent& event);
 #endif // wxUSE_SPINCTRL
 
     void OnEnableAll(wxCommandEvent& event);
@@ -451,6 +454,9 @@ EVT_BUTTON    (ID_BTNPROGRESS,          MyPanel::OnShowProgress)
 #endif // wxUSE_SPINBTN
 #if wxUSE_SPINCTRL
 EVT_SPINCTRL  (ID_SPINCTRL,             MyPanel::OnSpinCtrl)
+EVT_SPIN_UP   (ID_SPINCTRL,             MyPanel::OnSpinCtrlUp)
+EVT_SPIN_DOWN (ID_SPINCTRL,             MyPanel::OnSpinCtrlDown)
+EVT_TEXT      (ID_SPINCTRL,             MyPanel::OnSpinCtrlText)
 #endif // wxUSE_SPINCTRL
 #if wxUSE_TOGGLEBTN
 EVT_TOGGLEBUTTON(ID_BUTTON_LABEL,       MyPanel::OnUpdateLabel)
@@ -1242,14 +1248,44 @@ void MyPanel::OnSliderUpdate( wxCommandEvent &WXUNUSED(event) )
 
 #if wxUSE_SPINCTRL
 
+void MyPanel::OnSpinCtrlText(wxCommandEvent& event)
+{
+    if ( m_spinctrl )
+    {
+        wxString s;
+        s.Printf(_T("Spin ctrl text changed: now %d (from event: %s)\n"),
+                 m_spinctrl->GetValue(), event.GetString());
+        m_text->AppendText(s);
+    }
+}
+
 void MyPanel::OnSpinCtrl(wxSpinEvent& event)
 {
-    if (!m_spinctrl)
-        return ;
-    wxString s;
-    s.Printf(_T("Spin ctrl changed: now %d (from event: %d)\n"),
-             m_spinctrl->GetValue(), event.GetInt());
-    m_text->AppendText(s);
+    if ( m_spinctrl )
+    {
+        wxString s;
+        s.Printf(_T("Spin ctrl changed: now %d (from event: %d)\n"),
+                 m_spinctrl->GetValue(), event.GetInt());
+        m_text->AppendText(s);
+    }
+}
+
+void MyPanel::OnSpinCtrlUp(wxSpinEvent& event)
+{
+    if ( m_spinctrl )
+    {
+        m_text->AppendText(wxString::Format(_T("Spin up: %d (from event: %d)\n"),
+                           m_spinctrl->GetValue(), event.GetInt()));
+    }
+}
+
+void MyPanel::OnSpinCtrlDown(wxSpinEvent& event)
+{
+    if ( m_spinctrl )
+    {
+        m_text->AppendText(wxString::Format(_T("Spin down: %d (from event: %d)\n"),
+                           m_spinctrl->GetValue(), event.GetInt()));
+    }
 }
 
 #endif // wxUSE_SPINCTRL
