@@ -224,6 +224,7 @@
 %rename(MENU_TEAROFF)                       wxMENU_TEAROFF;
 %rename(MB_DOCKABLE)                        wxMB_DOCKABLE;
 %rename(NO_FULL_REPAINT_ON_RESIZE)          wxNO_FULL_REPAINT_ON_RESIZE;
+%rename(FULL_REPAINT_ON_RESIZE)             wxFULL_REPAINT_ON_RESIZE;
 %rename(LI_HORIZONTAL)                      wxLI_HORIZONTAL;
 %rename(LI_VERTICAL)                        wxLI_VERTICAL;
 %rename(WS_EX_VALIDATE_RECURSIVELY)         wxWS_EX_VALIDATE_RECURSIVELY;

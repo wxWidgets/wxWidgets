@@ -453,7 +453,8 @@ enum {
     wxMENU_TEAROFF,
     wxMB_DOCKABLE,
     wxNO_FULL_REPAINT_ON_RESIZE,
-
+    wxFULL_REPAINT_ON_RESIZE,
+    
     wxLI_HORIZONTAL,
     wxLI_VERTICAL,
 
