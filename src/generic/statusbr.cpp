@@ -68,7 +68,9 @@ wxStatusBarGeneric::~wxStatusBarGeneric()
 {
     // VZ: what is this for? please comment...
 #ifdef __WXMSW__
-    SetFont(wxNullFont);
+    // JACS: commenting out since it causes an assert
+    // and there seems no reason for it.
+    // SetFont(wxNullFont);
 #endif // MSW
 }
 
