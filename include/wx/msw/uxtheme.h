@@ -363,8 +363,9 @@ public:
     {
         wxUxThemeEngine *engine = wxUxThemeEngine::Get();
 
-        m_hTheme = engine ? engine->OpenThemeData(win->GetHWND(), classes)
-                          : NULL;
+        m_hTheme = 
+            engine ? (WXHTHEME)engine->OpenThemeData(win->GetHWND(), classes)
+                   : NULL;
     }
 
     operator WXHTHEME() const { return m_hTheme; }

@@ -26,6 +26,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
+    #include "wx/window.h"
+    #include "wx/dc.h"
 #endif //WX_PRECOMP
 
 #include "wx/renderer.h"
@@ -153,7 +155,7 @@ wxRendererXP::DrawSplitterSash(wxWindow *win,
 
         wxUxThemeEngine::Get()->DrawThemeBackground
                                 (
-                                    hTheme,
+                                    (WXHTHEME)hTheme,
                                     dc.GetHDC(),
                                     3 /* RP_BAND */,
                                     0 /* no state */ ,
