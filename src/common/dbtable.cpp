@@ -566,7 +566,8 @@ bool wxTable::getRec(UWORD fetchType)
 {
 	RETCODE retcode;
 
-#ifndef FWD_ONLY_CURSORS
+#if wxODBC_FWD_ONLY_CURSORS
+
 	// Fetch the NEXT, PREV, FIRST or LAST record, depending on fetchType
 	UDWORD  cRowsFetched;
 	UWORD   rowStatus;
@@ -576,8 +577,8 @@ bool wxTable::getRec(UWORD fetchType)
 		else
 			return(pDb->DispAllErrors(henv, hdbc, hstmt));
 #else
-	// Fetch the next record from the record set
 
+	// Fetch the next record from the record set
 	retcode = SQLFetch(hstmt);
 	if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
 	{
