@@ -11,7 +11,7 @@
 
 # ------------- Turbo C++, Borland C++ -------------
 MODEL=-ml
-CFLAGS=-O2 -Z $(MODEL) -3 -Fs- 
+CFLAGS=-O2 -Z $(MODEL) -3 -Fs-
 CC=bcc
 LD=bcc
 LIB=tlib
