@@ -5,7 +5,8 @@ user in language other than English. Unfortunately many languages use
 different charsets under Unix and Windows (and other platforms, to make
 situation even more complicated). These charsets usually differ in so
 many characters it is impossible to use same texts under all platforms.
-wxWindows provide mechanism that helps you avoid distributing many
+
+wxWindows library provides mechanism that helps you avoid distributing many
 identical, only differently encoded, packages with your application 
 (e.g. help files and menu items in iso8859-13 and windows-1257). Thanks
 to this mechanism you can, for example, distribute only iso8859-13 data 
@@ -31,7 +32,6 @@ A standard .po file begins with a header like this:
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -44,19 +44,17 @@ msgstr ""
 "Content-Transfer-Encoding: ENCODING\n"
 \end{verbatim}
 
-Notice these two lines:
+Notice this particular line:
 
 \begin{verbatim}
-#, fuzzy
 "Content-Type: text/plain; charset=CHARSET\n"
 \end{verbatim}
 
-The first tells the {\it msgfmt} compiler not to include "" (the empty string)
-in compiled .mo catalog. The second one specifies the charset used to write
-translated messages.
+It specifies the charset used by the catalog. All strings in the catalog
+are encoded using this charset.
 
-You have to do two things: fill in proper charset information and delete
-the {\tt fuzzy} line. Your .po file may look like this after doing so:
+You have to fill in proper charset information. Your .po file may look like this
+after doing so: 
 
 \begin{verbatim}
 # SOME DESCRIPTIVE TITLE.
@@ -72,23 +70,25 @@ msgstr ""
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso8859-2\n"
-"Content-Transfer-Encoding: ENCODING\n"
+"Content-Transfer-Encoding: 8bit\n"
 \end{verbatim}
 
+(Make sure that the header is {\bf not} marked as {\it fuzzy}.)
+
 wxWindows is able to use this catalog under any supported platform
-(although iso8859-2 is a Unix encoding and is not understood by Windows).
+(although iso8859-2 is a Unix encoding and is normally not understood by
+Windows).
 
 How is this done? When you tell the wxLocale class to load a message catalog that
-contains the header (msgid ""; normal .mo catalogs do {\bf not} contain it,
-you must remove the line with {\it fuzzy}!), it checks the charset. If the
+contains correct header, it checks the charset. If the
 charset is "alien" on the platform the program is currently running (e.g.
 any of ISO encodings under Windows or CP12XX under Unix) it uses 
 \helpref{wxEncodingConverter::GetPlatformEquivalents}{wxencodingconvertergetplatformequivalents}
 to obtain an encoding that is more common on this platform and converts
 the message catalog to this encoding. Note that it does {\bf not} check
-for presence of this encoding! It only assumes that it is always better to
-have strings in platform native encoding than in an encoding that is rarely
-(if ever) used.
+for presence of fonts in the "platform" encoding! It only assumes that it is
+always better to have strings in platform native encoding than in an encoding
+that is rarely (if ever) used.
 
 The behaviour described above is disabled by default.
 You must set {\it bConvertEncoding} to TRUE in 
@@ -132,7 +132,7 @@ no problem at all. You must only make sure that all the HTML files contain
 the META tag, e.g.
 
 \begin{verbatim}
-<meta http-equiv="Content-Type" content="iso8859-2">
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-2">
 \end{verbatim}
 
 and that the hhp project file contains one additional line in the {\tt OPTIONS}
