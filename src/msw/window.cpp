@@ -1275,40 +1275,54 @@ void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
 void wxWindow::DoSetClientSize(int width, int height)
 {
-    wxWindow *parent = GetParent();
-    HWND hWnd = GetHwnd();
-    HWND hParentWnd = (HWND) 0;
-    if ( parent )
-        hParentWnd = (HWND) parent->GetHWND();
-
-    RECT rect;
-    ::GetClientRect(hWnd, &rect);
-
-    RECT rect2;
-    GetWindowRect(hWnd, &rect2);
-
-    // Find the difference between the entire window (title bar and all)
-    // and the client area; add this to the new client size to move the
-    // window
-    int actual_width = rect2.right - rect2.left - rect.right + width;
-    int actual_height = rect2.bottom - rect2.top - rect.bottom + height;
-
-    // If there's a parent, must subtract the parent's top left corner
-    // since MoveWindow moves relative to the parent
-
-    POINT point;
-    point.x = rect2.left;
-    point.y = rect2.top;
-    if ( parent )
+    // normally this loop shouldn't take more than 2 iterations (usually 1 but
+    // if scrollbars [dis]appear as the result of the first call, then 2) but
+    // just to be on the safe side we check for it instead of making it an
+    // "infinite" loop (i.e. leaving break inside as the only way to get out)
+    for ( int i = 0; i < 3; i++ )
     {
-        ::ScreenToClient(hParentWnd, &point);
+        RECT rectClient;
+        ::GetClientRect(GetHwnd(), &rectClient);
+
+        // if the size is already ok, stop here (rectClient.left = top = 0)
+        if ( rectClient.right == width && rectClient.bottom == height )
+        {
+            break;
+        }
+
+        if ( i == 2 )
+        {
+            // how did it happen? maybe OnSize() handler does something really
+            // strange in this class?
+            wxFAIL_MSG( _T("logic error in DoSetClientSize") );
+
+            break;
+        }
+
+        // Find the difference between the entire window (title bar and all)
+        // and the client area; add this to the new client size to move the
+        // window
+        RECT rectWin;
+        ::GetWindowRect(GetHwnd(), &rectWin);
+
+        int widthClient = rectWin.right - rectWin.left - rectClient.right + width;
+        int heightClient = rectWin.bottom - rectWin.top - rectClient.bottom + height;
+
+        // If there's a parent, must subtract the parent's top left corner
+        // since MoveWindow moves relative to the parent
+
+        POINT point;
+        point.x = rectWin.left;
+        point.y = rectWin.top;
+
+        wxWindow *parent = GetParent();
+        if ( parent )
+        {
+            ::ScreenToClient(GetHwndOf(parent), &point);
+        }
+
+        DoMoveWindow(point.x, point.y, widthClient, heightClient);
     }
-
-    DoMoveWindow(point.x, point.y, actual_width, actual_height);
-
-    wxSizeEvent event(wxSize(width, height), m_windowId);
-    event.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(event);
 }
 
 // For implementation purposes - sometimes decorations make the client area
@@ -3093,17 +3107,18 @@ bool wxWindow::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
     }
 
     wxWindow *win = (wxWindow*) NULL;
-    if ( cmd == 0 || cmd == 1 ) // menu or accel - use id
-    {
-        // must cast to a signed type before comparing with other ids!
-        win = FindItem((signed short)id);
-    }
 
-    if (!win && control)
+    if ( control )
     {
         // find it from HWND - this works even with the broken programs using
         // the same ids for different controls
         win = wxFindWinFromHandle(control);
+    }
+
+    if ( !win && (cmd == 0 || cmd == 1) ) // menu or accel - use id
+    {
+        // must cast to a signed type before comparing with other ids!
+        win = FindItem((signed short)id);
     }
 
     if ( win )

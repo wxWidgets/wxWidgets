@@ -354,8 +354,10 @@ wxGridCellCoords wxGridNoCellCoords( -1, -1 );
 wxRect           wxGridNoCellRect( -1, -1, -1, -1 );
 
 // scroll line size
-// TODO: fixed so far - make configurable later (and also different for x/y)
-static const size_t GRID_SCROLL_LINE = 10;
+// TODO: this doesn't work at all, grid cells have different sizes and approx
+//       calculations don't work as because of the size mismatch scrollbars
+//       sometimes fail to be shown when they should be or vice versa
+static const size_t GRID_SCROLL_LINE = 1;
 
 // the size of hash tables used a bit everywhere (the max number of elements
 // in these hash tables is the number of rows/columns)
@@ -3565,9 +3567,6 @@ void wxGrid::Init()
     m_inOnKeyDown = FALSE;
     m_batchCount = 0;
 
-    m_extraWidth =
-    m_extraHeight = 50;
-
     CalcDimensions();
 }
 
@@ -3650,22 +3649,40 @@ int wxGrid::GetRowBottom(int row) const
 
 void wxGrid::CalcDimensions()
 {
+    // available client size
     int cw, ch;
     GetClientSize( &cw, &ch );
 
-    if ( m_numRows > 0  ||  m_numCols > 0 )
-    {
-        int right = m_numCols > 0 ? GetColRight( m_numCols-1 ) + m_extraWidth : 0;
-        int bottom = m_numRows > 0 ? GetRowBottom( m_numRows-1 ) + m_extraHeight : 0;
+    if ( m_colLabelWin->IsShown() )
+        cw -= m_rowLabelWidth;
+    if ( m_rowLabelWin->IsShown() )
+        ch -= m_colLabelHeight;
 
-        // TODO: restore the scroll position that we had before sizing
-        //
-        int x, y;
-        GetViewStart( &x, &y );
-        SetScrollbars( GRID_SCROLL_LINE, GRID_SCROLL_LINE,
-                       right/GRID_SCROLL_LINE, bottom/GRID_SCROLL_LINE,
-                       x, y );
-    }
+    // grid total size
+    int w = m_numCols > 0 ? GetColRight(m_numCols - 1) : 0;
+    int h = m_numRows > 0 ? GetRowBottom(m_numRows - 1) : 0;
+
+    // maybe we don't need scrollbars at all? and if we do, transform w and h
+    // from pixels into logical units
+    if ( w <= cw )
+        w = 0;
+    else
+        w /= GRID_SCROLL_LINE;
+    if ( h <= ch )
+        h = 0;
+    else
+        h /= GRID_SCROLL_LINE;
+
+    // preserve (more or less) the previous position
+    int x, y;
+    GetViewStart( &x, &y );
+    if ( x > w )
+        x = w;
+    if ( y > h )
+        y = h;
+
+    // do set scrollbar parameters
+    SetScrollbars( GRID_SCROLL_LINE, GRID_SCROLL_LINE, w, h, x, y );
 }
 
 
@@ -8134,7 +8151,7 @@ int wxGrid::SetOrCalcRowSizes(bool calcOnly, bool setAsMin)
 void wxGrid::AutoSize()
 {
     // set the size too
-    SetSize(SetOrCalcColumnSizes(FALSE), SetOrCalcRowSizes(FALSE));
+    SetClientSize(SetOrCalcColumnSizes(FALSE), SetOrCalcRowSizes(FALSE));
 }
 
 wxSize wxGrid::DoGetBestSize() const
