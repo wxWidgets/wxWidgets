@@ -79,6 +79,8 @@ check the source for this sample to see how to implement them.
         menu5.AppendMenu(504, "submenu", menu6)
         menu5.Append(505, "remove this menu")
         menu5.Append(506, "this is updated")
+        menu5.Append(507, "insert after this...")
+        menu5.Append(508, "...and before this")
         menuBar.Append(menu5, "&Fun")
 
         self.SetMenuBar(menuBar)
@@ -109,6 +111,8 @@ check the source for this sample to see how to implement them.
         EVT_MENU(self, 502, self.Menu502)
         EVT_MENU(self, 503, self.TestRemove)
         EVT_MENU(self, 505, self.TestRemove2)
+        EVT_MENU(self, 507, self.TestInsert)
+        EVT_MENU(self, 508, self.TestInsert)
 
         EVT_UPDATE_UI(wxGetApp(), 506, self.TestUpdateUI)
 
@@ -190,12 +194,28 @@ check the source for this sample to see how to implement them.
 
 
     def TestUpdateUI(self, evt):
-        #print 'TestUpdateUI'
         text = time.ctime()
         evt.SetText(text)
 
 
+    def TestInsert(self, evt):
+        # get the menu
+        mb = self.GetMenuBar()
+        menuItem = mb.FindItemById(507)
+        menu = menuItem.GetMenu()
+
+        ID = wxNewId()
+        ##menu.Insert(9, ID, "NewItem " + str(ID))
+        item = wxMenuItem(menu)
+        item.SetId(ID)
+        item.SetText("NewItem " + str(ID))
+        menu.InsertItem(9, item)
+
+
+
 #-------------------------------------------------------------------
+
+wxRegisterId(10000)
 
 def runTest(frame, nb, log):
     win = MyFrame(frame, -1, log)
