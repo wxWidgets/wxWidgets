@@ -135,6 +135,7 @@
 #endif
 
 #ifdef __EMX__
+#include <os2.h>
 #define MAX_PATH _MAX_PATH
 #endif
 
