@@ -74,7 +74,7 @@ public:
                       bool async = TRUE) = 0;
 
     // returns TRUE if (async) dialing is in progress
-    virtual bool IsDialing() const = 0;
+    virtual bool IsDialling() const = 0;
 
     // cancel dialing the number initiated with Dial(async = TRUE)
     // NB: this won't result in DISCONNECTED event being sent

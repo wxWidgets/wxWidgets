@@ -1,5 +1,5 @@
 // -*- c++ -*- ///////////////////////////////////////////////////////////////
-// Name:        unix/dialup.cpp
+// Name:        unix/net.cpp
 // Purpose:     Network related wxWindows classes and functions
 // Author:      Karsten Ballüder
 // Modified by:
@@ -19,23 +19,21 @@
 
 #include "wx/string.h"
 #include "wx/event.h"
-#include "wx/dialup.h"
+#include "wx/net.h"
 #include "wx/timer.h"
 #include "wx/filefn.h"
 #include "wx/utils.h"
 #include "wx/log.h"
 #include "wx/file.h"
-#include "wx/process.h"
-#include "wx/intl.h"
-#include "wx/app.h"
 
 #include <stdlib.h>
-
 #include <signal.h>
 #include <fcntl.h>
 #include <unistd.h>
 #define __STRICT_ANSI__
 #include <sys/socket.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -66,9 +64,15 @@
 class WXDLLEXPORT wxDialUpManagerImpl : public wxDialUpManager
 {
 public:
-   wxDialUpManagerImpl();
-   ~wxDialUpManagerImpl();
-   
+   wxDialUpManagerImpl()
+      {
+         m_IsOnline = -1; // unknown
+         m_timer = NULL;
+         m_CanUseIfconfig = -1; // unknown
+         m_BeaconHost = WXDIALUP_MANAGER_DEFAULT_BEACONHOST;
+         m_BeaconPort = 80;
+      }
+
    /** Could the dialup manager be initialized correctly? If this function
        returns FALSE, no other functions will work neither, so it's a good idea
        to call this function and check its result before calling any other
@@ -87,12 +91,11 @@ public:
    */
    virtual bool Dial(const wxString& nameOfISP,
                      const wxString& WXUNUSED(username),
-                     const wxString& WXUNUSED(password),
-                     bool async);
+                     const wxString& WXUNUSED(password));
 
    /// Hang up the currently active dial up connection.
    virtual bool HangUp();
-
+   
    // returns TRUE if the computer is connected to the network: under Windows,
    // this just means that a RAS connection exists, under Unix we check that
    // the "well-known host" (as specified by SetWellKnownHost) is reachable
@@ -104,14 +107,6 @@ public:
             CheckStatus();
          return m_IsOnline != 0;
       }
-
-   /// returns TRUE if (async) dialing is in progress
-   inline virtual bool IsDialling() const
-      { return m_DialProcess != NULL; }
-
-   // cancel dialing the number initiated with Dial(async = TRUE)
-   // NB: this won't result in DISCONNECTED event being sent
-   virtual bool CancelDialing();
 
    // sometimes the built-in logic for determining the online status may fail,
    // so, in general, the user should be allowed to override it. This function
@@ -150,7 +145,7 @@ public:
 private:
    /// -1: don´t know, 0 = no, 1 = yes
    int m_IsOnline;
-
+   
    ///  Can we use ifconfig to list active devices?
    int m_CanUseIfconfig;
    /// The path to ifconfig
@@ -169,16 +164,10 @@ private:
    wxString m_ISPname;
    /// a timer for regular testing
    class AutoCheckTimer *m_timer;
-   friend class AutoCheckTimer;
 
-   /// a wxProcess for dialling in background
-   class wxDialProcess *m_DialProcess;
-   /// pid of dial process
-   int m_DialPId;
-   friend class wxDialProcess;
-   
+   friend class AutoCheckTimer;
    /// determine status
-   void CheckStatus(bool fromAsync = FALSE) const;
+   void CheckStatus(void) const;
 
    /// real status check
    void CheckStatusInternal(void);
@@ -207,44 +196,10 @@ public:
    wxDialUpManagerImpl *m_dupman;
 };
 
-class wxDialProcess : public wxProcess
-{
-public:
-   wxDialProcess(wxDialUpManagerImpl *dupman)
-      {
-         m_DupMan = dupman;
-      }
-   void OnTerminate(int pid, int status) const
-      {
-         m_DupMan->m_DialProcess = NULL;
-         m_DupMan->CheckStatus(TRUE);
-      }
-private:
-      wxDialUpManagerImpl *m_DupMan;
-};
-
-
-wxDialUpManagerImpl::wxDialUpManagerImpl()
-{
-   m_IsOnline = -1; // unknown
-   m_DialProcess = NULL;
-   m_timer = NULL;
-   m_CanUseIfconfig = -1; // unknown
-   m_BeaconHost = WXDIALUP_MANAGER_DEFAULT_BEACONHOST;
-   m_BeaconPort = 80;
-}
-
-wxDialUpManagerImpl::~wxDialUpManagerImpl()
-{
-   if(m_timer) delete m_timer;
-   if(m_DialProcess) m_DialProcess->Detach();
-}
-
 bool
 wxDialUpManagerImpl::Dial(const wxString &isp,
                           const wxString & WXUNUSED(username),
-                          const wxString & WXUNUSED(password),
-                          bool async)
+                          const wxString & WXUNUSED(password))
 {
    if(m_IsOnline == 1)
       return FALSE;
@@ -255,22 +210,7 @@ wxDialUpManagerImpl::Dial(const wxString &isp,
       cmd.Printf(m_ConnectCommand,m_ISPname.c_str());
    else
       cmd = m_ConnectCommand;
-
-   if ( async )
-   {
-      m_DialProcess = new wxDialProcess(this);
-      m_DialPId = wxExecute(cmd, FALSE, m_DialProcess);
-      if(m_DialPId == 0)
-      {
-         delete m_DialProcess;
-         m_DialProcess = NULL;
-         return FALSE;
-      }
-      else
-         return TRUE;
-   }
-   else
-       return wxExecute(cmd, /* sync */ TRUE) == 0;
+   return wxExecute(cmd, /* sync */ TRUE) == 0;
 }
 
 bool
@@ -278,28 +218,15 @@ wxDialUpManagerImpl::HangUp(void)
 {
    if(m_IsOnline == 0)
       return FALSE;
-   if(IsDialling())
-   {
-      wxLogError(_("Already dialling ISP."));
-      return FALSE;
-   }
    m_IsOnline = -1;
    wxString cmd;
    if(m_HangUpCommand.Find("%s"))
-      cmd.Printf(m_HangUpCommand,m_ISPname.c_str(), m_DialProcess);
+      cmd.Printf(m_HangUpCommand,m_ISPname.c_str());
    else
       cmd = m_HangUpCommand;
    return wxExecute(cmd, /* sync */ TRUE) == 0;
 }
 
-
-bool
-wxDialUpManagerImpl::CancelDialing()
-{
-   if(! IsDialling())
-      return FALSE;
-   return kill(m_DialPId, SIGTERM) > 0;
-}
 
 bool
 wxDialUpManagerImpl::EnableAutoCheckOnlineStatus(size_t nSeconds)
@@ -344,7 +271,7 @@ wxDialUpManagerImpl::SetWellKnownHost(const wxString& hostname, int portno)
 
 
 void
-wxDialUpManagerImpl::CheckStatus(bool fromAsync) const
+wxDialUpManagerImpl::CheckStatus(void) const
 {
    // This function calls the CheckStatusInternal() helper function
    // which is OS - specific and then sends the events.
@@ -355,8 +282,10 @@ wxDialUpManagerImpl::CheckStatus(bool fromAsync) const
    // now send the events as appropriate:
    if(m_IsOnline != oldIsOnline)
    {
-      wxDialUpEvent event(m_IsOnline, ! fromAsync);
-      (void)wxTheApp->ProcessEvent(event);
+      if(m_IsOnline)
+         ; // send ev
+      else
+         ; // send ev
    }
 }
 
@@ -370,7 +299,7 @@ wxDialUpManagerImpl::CheckStatus(bool fromAsync) const
   3. check /proc/net/dev on linux??
      This method should be preferred, if possible. Need to do more
      testing.
-
+    
 */
 
 void
