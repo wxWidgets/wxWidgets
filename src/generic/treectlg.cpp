@@ -1570,6 +1570,8 @@ void wxGenericTreeCtrl::Unselect()
     {
         m_current->SetHilight( FALSE );
         RefreshLine( m_current );
+
+        m_current = NULL;
     }
 }
 
