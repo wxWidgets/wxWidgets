@@ -759,7 +759,7 @@ bool wxWMMEMediaCtrlImpl::Play()
 {
     //the directshow driver ("mpegvideo") will crash if we don't do a playParms here
     MCI_PLAY_PARMS playParms;
-    playParms.dwCallback = (WORD)(HWND)m_ctrl->GetHWND();
+    playParms.dwCallback = (DWORD)(HWND)m_ctrl->GetHWND();
     bool bOK = mciSendCommand(m_hDev, MCI_PLAY, MCI_NOTIFY, (DWORD)(LPVOID)&playParms) == 0;
     return (bOK) ;/*||
            (mciSendCommand(m_hDev, MCI_RESUME, 0, 0) == 0);*/
