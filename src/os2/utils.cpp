@@ -231,6 +231,12 @@ wxMemorySize wxGetFreeMemory()
     return (wxMemorySize)lSize;
 }
 
+// Get Process ID
+unsigned long wxGetProcessId()
+{
+    return (unsigned long)getpid();
+}
+
 // ----------------------------------------------------------------------------
 // env vars
 // ----------------------------------------------------------------------------
