@@ -466,7 +466,21 @@ wxSize wxBitmapButton::DoGetBestSize() const
         best.x = m_bmpNormal.GetWidth() + 2*m_marginX;
         best.y = m_bmpNormal.GetHeight() + 2*m_marginY;
     }
+
+    // all buttons have at least the standard size unless the user explicitly
+    // wants them to be of smaller size and used wxBU_EXACTFIT style when
+    // creating the button
+    if ( !HasFlag(wxBU_EXACTFIT) )
+    {
+        wxSize sz = GetDefaultSize();
+        if (best.x > sz.x)
+            sz.x = best.x;
+        if (best.y > sz.y)
+            sz.y = best.y;
+    }
+
     return best;
 }
 
 #endif // wxUSE_BMPBUTTON
+
