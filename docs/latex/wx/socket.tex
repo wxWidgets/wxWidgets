@@ -612,7 +612,7 @@ default is set to 10 minutes.
 %
 \membersection{wxSocketBase::Peek}\label{wxsocketbasepeek}
 
-\func{wxSocketBase\&}{Peek}{\param{char *}{ buffer}, \param{wxUint32}{ nbytes}}
+\func{wxSocketBase\&}{Peek}{\param{void *}{ buffer}, \param{wxUint32}{ nbytes}}
 
 This function peeks a buffer of {\it nbytes} bytes from the socket.
 Peeking a buffer doesn't delete it from the socket input queue.
@@ -648,7 +648,7 @@ of flags being used. For a detailed explanation, see \helpref{wxSocketBase::SetF
 %
 \membersection{wxSocketBase::Read}\label{wxsocketbaseread}
 
-\func{wxSocketBase\&}{Read}{\param{char *}{ buffer}, \param{wxUint32}{ nbytes}}
+\func{wxSocketBase\&}{Read}{\param{void *}{ buffer}, \param{wxUint32}{ nbytes}}
 
 This function reads a buffer of {\it nbytes} bytes from the socket.
 
@@ -683,7 +683,7 @@ of flags being used. For a detailed explanation, see \helpref{wxSocketBase::SetF
 %
 \membersection{wxSocketBase::ReadMsg}\label{wxsocketbasereadmsg}
 
-\func{wxSocketBase\&}{ReadMsg}{\param{char *}{ buffer}, \param{wxUint32}{ nbytes}}
+\func{wxSocketBase\&}{ReadMsg}{\param{void *}{ buffer}, \param{wxUint32}{ nbytes}}
 
 This function reads a buffer sent by \helpref{WriteMsg}{wxsocketbasewritemsg}
 on a socket. If the buffer passed to the function isn't big enough, the
@@ -724,7 +724,7 @@ For a detailed explanation, see \helpref{wxSocketBase::SetFlags}{wxsocketbaseset
 %
 \membersection{wxSocketBase::Unread}\label{wxsocketbaseunread}
 
-\func{wxSocketBase\&}{Unread}{\param{const char *}{ buffer}, \param{wxUint32}{ nbytes}}
+\func{wxSocketBase\&}{Unread}{\param{const void *}{ buffer}, \param{wxUint32}{ nbytes}}
 
 This function unreads a buffer. That is, the data in the buffer is put back
 in the incoming queue. This function is not affected by wxSocket flags.
@@ -882,7 +882,7 @@ Returns TRUE if the connection was lost, FALSE if the timeout was reached.
 %
 \membersection{wxSocketBase::Write}\label{wxsocketbasewrite}
 
-\func{wxSocketBase\&}{Write}{\param{const char *}{ buffer}, \param{wxUint32}{ nbytes}}
+\func{wxSocketBase\&}{Write}{\param{const void *}{ buffer}, \param{wxUint32}{ nbytes}}
 
 This function writes a buffer of {\it nbytes} bytes to the socket.
 
@@ -917,7 +917,7 @@ of flags being used. For a detailed explanation, see \helpref{wxSocketBase::SetF
 %
 \membersection{wxSocketBase::WriteMsg}\label{wxsocketbasewritemsg}
 
-\func{wxSocketBase\&}{WriteMsg}{\param{const char *}{ buffer}, \param{wxUint32}{ nbytes}}
+\func{wxSocketBase\&}{WriteMsg}{\param{const void *}{ buffer}, \param{wxUint32}{ nbytes}}
 
 This function writes a buffer of {\it nbytes} bytes from the socket, but it
 writes a short header before so that \helpref{ReadMsg}{wxsocketbasereadmsg}
@@ -1126,16 +1126,16 @@ functions that take a wxSocketEvent argument.
 
 Constructor.
 
-\membersection{wxSocketEvent::Socket}\label{wxsocketeventsocket}
+\membersection{wxSocketEvent::GetSocket}\label{wxsocketeventgetsocket}
 
-\constfunc{wxSocketBase *}{Socket}{\void}
+\constfunc{wxSocketBase *}{GetSocket}{\void}
 
 Returns the socket object to which this event refers to. This makes
 it possible to use the same event handler for different sockets.
 
-\membersection{wxSocketEvent::SocketEvent}\label{wxsocketeventsocketevent}
+\membersection{wxSocketEvent::GetSocketEvent}\label{wxsocketeventgetsocketevent}
 
-\constfunc{wxSocketNotify}{SocketEvent}{\void}
+\constfunc{wxSocketNotify}{GetSocketEvent}{\void}
 
 Returns the socket event type.
 
