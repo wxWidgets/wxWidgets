@@ -189,6 +189,14 @@
 #   endif
 #endif /* !defined(wxUSE_HELP) */
 
+#ifndef wxUSE_HTML
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_HTML must be defined."
+#   else
+#       define wxUSE_HTML 0
+#   endif
+#endif /* !defined(wxUSE_HTML) */
+
 #ifndef wxUSE_IMAGLIST
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_IMAGLIST must be defined."
