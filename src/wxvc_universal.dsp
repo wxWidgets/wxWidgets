@@ -967,10 +967,6 @@ SOURCE=.\msw\icon.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\imaglist.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\msw\iniconf.cpp
 # End Source File
 # Begin Source File
