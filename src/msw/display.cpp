@@ -34,199 +34,409 @@
    #include "wx/dynarray.h"
 #endif
 
+#include "wx/dynload.h"
+
 #include "wx/display.h"
 
 // the following define is necessary to access the multi-monitor function
 // declarations in a manner safe to use w/ Windows 95
-// JACS: not used for now until we're clear about the legality
-// of distributing multimon.h. Meanwhile you can download the file
-// yourself from:
-// http://www.microsoft.com/msj/0697/monitor/monitortextfigs.htm#fig4
-
-#if 0
 #define COMPILE_MULTIMON_STUBS
-#include "wx/msw/multimon.h"
+
+// if you don't have multimon.h you can download the file from:
+//
+//  http://www.microsoft.com/msj/0697/monitor/monitortextfigs.htm#fig4
+//
+
+#ifdef _MSC_VER
+    // as (m)any standard header, this one doesn't compile without warnings
+    // with VC++ 6 <sigh>
+    #pragma warning(disable:4706)
 #endif
 
-// ---------------------------------------------------------------------------
-// constants
-// ---------------------------------------------------------------------------
+#include <multimon.h>
 
-// ---------------------------------------------------------------------------
-// private functions
-// ---------------------------------------------------------------------------
+#ifdef _MSC_VER
+    #pragma warning(default:4706)
+#endif
 
-void wxmswInitDisplayRectArray();
+#ifdef _UNICODE
+    #define MAKE_WFUNC(x) #x "W"
+    #define WINFUNC(x)  L ## MAKE_WFUNC(x)
+#else
+    #define WINFUNC(x) #x "A"
+#endif
+
+// ----------------------------------------------------------------------------
+// typedefs
+// ----------------------------------------------------------------------------
+
+typedef LONG (WINAPI *ChangeDisplaySettingsEx_t)(LPCTSTR lpszDeviceName,
+                                                 LPDEVMODE lpDevMode,
+                                                 HWND hwnd,
+                                                 DWORD dwFlags,
+                                                 LPVOID lParam);
 
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
 
-class wxmswDisplayInfo;
-
-WX_DECLARE_OBJARRAY(wxmswDisplayInfo, wxmswDisplayInfoArray);
-
-class wxmswDisplayInfo
+class wxDisplayInfo
 {
 public:
-	HMONITOR m_hmon;
-    DISPLAY_DEVICE m_dd;
+    // handle of this monitor used by MonitorXXX() functions, never NULL
+    HMONITOR m_hmon;
+
+    // the entire area of this monitor in virtual screen coordinates
     wxRect m_rect;
-    int m_depth;
+
+    // the display device name for this monitor, empty initially and retrieved
+    // on demand by DoGetName()
+    wxString m_devName;
+
+    wxDisplayInfo() { m_hmon = NULL; }
 };
 
-wxmswDisplayInfoArray* g_wxmswDisplayInfoArray = 0;
+WX_DECLARE_OBJARRAY(wxDisplayInfo, wxDisplayInfoArray);
+#include "wx/arrimpl.cpp"
+WX_DEFINE_OBJARRAY(wxDisplayInfoArray);
 
-#include <wx/arrimpl.cpp> // this is a magic incantation which must be done!
-WX_DEFINE_OBJARRAY(wxmswDisplayInfoArray);
+// this is not really MT-unsafe as wxDisplay is only going to be used from the
+// main thread, i.e. we consider that it's a GUI class and so don't protect it
+static wxDisplayInfoArray *g_displays = NULL;
+
+
+// this module is used to cleanup g_displays array
+class wxDisplayModule : public wxModule
+{
+public:
+    virtual bool OnInit() { return TRUE; }
+    virtual void OnExit();
+
+    DECLARE_DYNAMIC_CLASS(wxDisplayModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxDisplayModule, wxModule)
 
 // ===========================================================================
 // implementation
 // ===========================================================================
 
-BOOL CALLBACK wxmswMonitorEnumProc (
+// ----------------------------------------------------------------------------
+// local functions
+// ----------------------------------------------------------------------------
+
+static BOOL CALLBACK wxmswMonitorEnumProc (
   HMONITOR hMonitor,  // handle to display monitor
-  HDC hdcMonitor,     // handle to monitor-appropriate device context
+  HDC hdcMonitor,     // handle to monitor-appropriate device context (NULL)
   LPRECT lprcMonitor, // pointer to monitor intersection rectangle
-  LPARAM dwData       // data passed from EnumDisplayMonitors
+  LPARAM dwData       // data passed from EnumDisplayMonitors (unused)
 )
 {
-    wxmswDisplayInfo* info = new wxmswDisplayInfo();
+    wxDisplayInfo* info = new wxDisplayInfo();
+
+    // we need hMonitor to be able to map display id to it which is needed for
+    // MonitorXXX() functions, in particular MonitorFromPoint()
     info->m_hmon = hMonitor;
+
+    // we also store the display geometry
     info->m_rect.SetX ( lprcMonitor->left );
     info->m_rect.SetY ( lprcMonitor->top );
     info->m_rect.SetWidth ( lprcMonitor->right - lprcMonitor->left );
     info->m_rect.SetHeight ( lprcMonitor->bottom - lprcMonitor->top );
+
     // now add this monitor to the array
-    g_wxmswDisplayInfoArray->Add ( info );
+    g_displays->Add(info);
 
-    return TRUE; // continue the enumeration
-}
-
-class wxmswDisplayModule : public wxModule
-{
-    DECLARE_DYNAMIC_CLASS(wxmswDisplayModule)
-public:
-    wxmswDisplayModule() {}
-    bool OnInit();
-    void OnExit();
-};
-
-IMPLEMENT_DYNAMIC_CLASS(wxmswDisplayModule, wxModule)
-
-bool wxmswDisplayModule::OnInit()
-{
-    g_wxmswDisplayInfoArray = new wxmswDisplayInfoArray();
-    if ( !g_wxmswDisplayInfoArray )
-    {
-        wxFAIL_MSG(wxT("Couldn't allocate array for display information"));
-        return FALSE;
-    }
-
-    // Royce3: I'm assuming that the monitor's are enumerated in the same
-    // order as the calls to EnumDisplayDevices below. We shall soon see
-    // if that assumption is correct.
-    if ( !EnumDisplayMonitors ( NULL, NULL, wxmswMonitorEnumProc, 0 ) )
-        wxLogLastError(wxT("EnumDisplayMonitors"));
-
-    size_t iDevNum = 0, count = g_wxmswDisplayInfoArray->Count();
-    while ( iDevNum < count )
-    {
-        wxmswDisplayInfo& info = (*g_wxmswDisplayInfoArray)[iDevNum];
-
-        // MSDN: Before calling EnumDisplayDevices, you must initialize the cb
-        // member of DISPLAY_DEVICE to the size, in bytes, of DISPLAY_DEVICE
-        info.m_dd.cb = sizeof(info.m_dd);
-
-        if ( !EnumDisplayDevices ( NULL, iDevNum, &info.m_dd, 0 ) )
-            wxLogLastError(wxT("EnumDisplayDevices"));
-
-        // get this display's Depth
-        DEVMODE devmode;
-        memset ( &devmode, 0, sizeof(devmode) );
-
-        // MSDN: Before calling EnumDisplaySettings, set the dmSize member to
-        // sizeof(DEVMODE), and set the dmDriverExtra member to indicate the size,
-        // in bytes, of the additional space available to receive private
-        // driver-data.
-        devmode.dmSize = sizeof(devmode);
-        devmode.dmDriverExtra = 0;
-
-        if ( !EnumDisplaySettings ( info.m_dd.DeviceName, ENUM_CURRENT_SETTINGS, &devmode ) )
-        {
-            wxLogLastError(wxT("EnumDisplaySettings"));
-            devmode.dmFields = 0;
-        }
-
-        if ( !(devmode.dmFields&DM_BITSPERPEL) )
-            info.m_depth = -1;
-        else
-            info.m_depth = devmode.dmBitsPerPel;
-
-
-        iDevNum++;
-    }
+    // continue the enumeration
     return TRUE;
 }
 
-void wxmswDisplayModule::OnExit()
+// this function must be called before accessing g_displays array as it
+// creates and initializes it
+static void InitDisplays()
 {
-    size_t count = g_wxmswDisplayInfoArray->Count();
-    while ( count-- )
+    if ( g_displays )
+        return;
+
+    g_displays = new wxDisplayInfoArray();
+
+    // enumerate all displays
+    if ( !::EnumDisplayMonitors(NULL, NULL, wxmswMonitorEnumProc, 0) )
     {
-        wxmswDisplayInfo* info = g_wxmswDisplayInfoArray->Detach ( count );
-        delete info;
+        wxLogLastError(wxT("EnumDisplayMonitors"));
+
+        // TODO: still create at least one (valid) entry in g_displays for the
+        //       primary display!
     }
-    delete g_wxmswDisplayInfoArray;
-    g_wxmswDisplayInfoArray = 0;
+}
+
+// convert a DEVMODE to our wxVideoMode
+wxVideoMode ConvertToVideoMode(const DEVMODE& dm)
+{
+    // note that dmDisplayFrequency may be 0 or 1 meaning "standard one" and
+    // although 0 is ok for us we don't want to return modes with 1hz refresh
+    return wxVideoMode(dm.dmPelsWidth,
+                       dm.dmPelsHeight,
+                       dm.dmBitsPerPel,
+                       dm.dmDisplayFrequency > 1 ? dm.dmDisplayFrequency : 0);
+}
+
+// emulation of ChangeDisplaySettingsEx() for Win95
+LONG WINAPI ChangeDisplaySettingsExForWin95(LPCTSTR WXUNUSED(lpszDeviceName),
+                                            LPDEVMODE lpDevMode,
+                                            HWND WXUNUSED(hwnd),
+                                            DWORD dwFlags,
+                                            LPVOID WXUNUSED(lParam))
+{
+    return ::ChangeDisplaySettings(lpDevMode, dwFlags);
+}
+
+// ----------------------------------------------------------------------------
+// wxDisplayModule
+// ----------------------------------------------------------------------------
+
+void wxDisplayModule::OnExit()
+{
+    delete g_displays;
 }
 
 // ---------------------------------------------------------------------------
 // wxDisplay
 // ---------------------------------------------------------------------------
 
-size_t wxDisplayBase::GetCount()
+// helper of GetFromPoint() and GetFromWindow()
+static int DisplayFromHMONITOR(HMONITOR hmon)
 {
-    return GetSystemMetrics ( SM_CMONITORS );
+    if ( hmon )
+    {
+        const size_t count = wxDisplay::GetCount();
+
+        for ( size_t n = 0; n < count; n++ )
+        {
+            if ( hmon == (*g_displays)[n].m_hmon )
+                return n;
+        }
+    }
+
+    return wxNOT_FOUND;
 }
 
+/* static */
+size_t wxDisplayBase::GetCount()
+{
+    InitDisplays();
+
+    // I'm not sure if they really always return the same thing and if this is
+    // not true I'd like to know in which situation does it happen
+    wxASSERT_MSG( g_displays->GetCount() == (size_t)::GetSystemMetrics(SM_CMONITORS),
+                    _T("So how many displays does this system have?") );
+
+    return g_displays->GetCount();
+}
+
+/* static */
 int wxDisplayBase::GetFromPoint ( const wxPoint& pt )
 {
     POINT pt2;
     pt2.x = pt.x;
     pt2.y = pt.y;
 
-    HMONITOR hmon = MonitorFromPoint ( pt2, 0 );
-    if ( !hmon )
-        return -1;
-    size_t count = wxDisplayBase::GetCount(), index;
-
-    for ( index = 0; index < count; index++ )
-    {
-        if ( hmon == (*g_wxmswDisplayInfoArray)[index].m_hmon )
-            return index;
-    }
-
-    return -1;
+    return DisplayFromHMONITOR(::MonitorFromPoint(pt2, MONITOR_DEFAULTTONULL));
 }
 
-wxDisplay::wxDisplay ( size_t index ) : wxDisplayBase ( index )
+/* static */
+int wxDisplayBase::GetFromWindow(wxWindow *window)
 {
+    return DisplayFromHMONITOR
+           (
+            ::MonitorFromWindow(GetHwndOf(window), MONITOR_DEFAULTTONULL)
+           );
+}
+
+wxDisplay::wxDisplay ( size_t n )
+         : wxDisplayBase ( n )
+{
+    // if we do this in ctor we won't have to call it from all the member
+    // functions
+    InitDisplays();
 }
 
 wxRect wxDisplay::GetGeometry() const
 {
-    return (*g_wxmswDisplayInfoArray)[m_index].m_rect;
-}
-
-int wxDisplay::GetDepth() const
-{
-    return (*g_wxmswDisplayInfoArray)[m_index].m_depth;
+    return (*g_displays)[m_index].m_rect;
 }
 
 wxString wxDisplay::GetName() const
 {
-    return wxString ( (*g_wxmswDisplayInfoArray)[m_index].m_dd.DeviceName );
+    wxDisplayInfo& dpyInfo = (*g_displays)[m_index];
+    if ( dpyInfo.m_devName.empty() )
+    {
+        MONITORINFOEX monInfo;
+        wxZeroMemory(monInfo);
+        monInfo.cbSize = sizeof(monInfo);
+
+        if ( !::GetMonitorInfo(dpyInfo.m_hmon, &monInfo) )
+        {
+            wxLogLastError(_T("GetMonitorInfo"));
+        }
+        else
+        {
+            dpyInfo.m_devName = monInfo.szDevice;
+        }
+    }
+
+    return dpyInfo.m_devName;
 }
 
-#endif//wxUSE_DISPLAY
+wxString wxDisplay::GetNameForEnumSettings() const
+{
+    int major, minor;
+    const bool isWin95 = wxGetOsVersion(&major, &minor) == wxWIN95 &&
+                            major == 4 && minor == 0;
+
+    // the first parameter of EnumDisplaySettings() must be NULL under Win95
+    // according to MSDN but GetMonitorInfo() stub in multimon.h still returns
+    // something even in this case, so we have to correct this manually
+    wxString name;
+    if ( !isWin95 )
+        name = GetName();
+
+    return name;
+}
+
+wxArrayVideoModes wxDisplay::GetModes(const wxVideoMode& modeMatch) const
+{
+    wxArrayVideoModes modes;
+
+    const wxString name = GetNameForEnumSettings();
+
+    const wxChar * const deviceName = name.empty() ? NULL : name.c_str();
+
+    DEVMODE dm;
+    for ( int iModeNum = 0;
+          ::EnumDisplaySettings(deviceName, iModeNum, &dm);
+          iModeNum++ )
+    {
+        const wxVideoMode mode = ConvertToVideoMode(dm);
+        if ( mode.Matches(modeMatch) )
+        {
+            modes.Add(mode);
+        }
+    }
+
+    return modes;
+}
+
+wxVideoMode wxDisplay::GetCurrentMode() const
+{
+    wxVideoMode mode;
+
+    const wxString name = GetNameForEnumSettings();
+
+    DEVMODE dm;
+    if ( !::EnumDisplaySettings(name.empty() ? NULL : name.c_str(),
+                                ENUM_CURRENT_SETTINGS,
+                                &dm) )
+    {
+        wxLogLastError(_T("EnumDisplaySettings(ENUM_CURRENT_SETTINGS)"));
+    }
+    else
+    {
+        mode = ConvertToVideoMode(dm);
+    }
+
+    return mode;
+}
+
+bool wxDisplay::ChangeMode(const wxVideoMode& mode)
+{
+    // prepare ChangeDisplaySettingsEx() parameters
+    DEVMODE dm,
+           *pDevMode;
+    int flags;
+
+    if ( mode == wxDefaultVideoMode )
+    {
+        // reset the video mode to default
+        pDevMode = NULL;
+        flags = 0;
+    }
+    else // change to the given mode
+    {
+        wxCHECK_MSG( mode.w && mode.h, FALSE,
+                        _T("at least the width and height must be specified") );
+
+        wxZeroMemory(dm);
+        dm.dmSize = sizeof(dm);
+        dm.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT;
+        dm.dmPelsWidth = mode.w;
+        dm.dmPelsHeight = mode.h;
+
+        if ( mode.bpp )
+        {
+            dm.dmFields |= DM_BITSPERPEL;
+            dm.dmBitsPerPel = mode.bpp;
+        }
+
+        if ( mode.refresh )
+        {
+            dm.dmFields |= DM_DISPLAYFREQUENCY;
+            dm.dmDisplayFrequency = mode.refresh;
+        }
+
+        pDevMode = &dm;
+
+        flags = CDS_FULLSCREEN;
+    }
+
+
+    // get pointer to the function dynamically
+    //
+    // we're only called from the main thread, so it's ok to use static
+    // variable
+    static ChangeDisplaySettingsEx_t pfnChangeDisplaySettingsEx = NULL;
+    if ( !pfnChangeDisplaySettingsEx )
+    {
+        wxDynamicLibrary dllUser32(_T("user32.dll"));
+        if ( dllUser32.IsLoaded() )
+        {
+            pfnChangeDisplaySettingsEx = (ChangeDisplaySettingsEx_t)
+                dllUser32.GetSymbol(WINFUNC(ChangeDisplaySettingsEx));
+        }
+        //else: huh, no user32.dll??
+
+        if ( !pfnChangeDisplaySettingsEx )
+        {
+            // we must be under Win95 and so there is no multiple monitors
+            // support anyhow
+            pfnChangeDisplaySettingsEx = ChangeDisplaySettingsExForWin95;
+        }
+    }
+
+    // do change the mode
+    switch ( pfnChangeDisplaySettingsEx
+             (
+                GetName(),      // display name
+                pDevMode,       // dev mode or NULL to reset
+                NULL,           // reserved
+                flags,
+                NULL            // pointer to video parameters (not used)
+             ) )
+    {
+        case DISP_CHANGE_SUCCESSFUL:
+            // ok
+            return TRUE;
+
+        case DISP_CHANGE_BADMODE:
+            // don't complain about this, this is the only "expected" error
+            break;
+
+        default:
+            wxFAIL_MSG( _T("unexpected ChangeDisplaySettingsEx() return value") );
+    }
+
+    return FALSE;
+}
+
+#endif // wxUSE_DISPLAY
+
