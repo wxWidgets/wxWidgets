@@ -897,7 +897,7 @@ bool wxImage::SetMaskFromImage(const wxImage& mask,
     // check that the images are the same size
     if ( (M_IMGDATA->m_height != mask.GetHeight() ) || (M_IMGDATA->m_width != mask.GetWidth () ) )
     {
-        wxLogError( _("Image and Mask have different sizes") );
+        wxLogError( _("Image and mask have different sizes.") );
         return false;
     }
 
@@ -905,7 +905,7 @@ bool wxImage::SetMaskFromImage(const wxImage& mask,
     unsigned char r,g,b ;
     if (!FindFirstUnusedColour(&r, &g, &b))
     {
-        wxLogError( _("No Unused Color in image being masked") );
+        wxLogError( _("No unused colour in image being masked.") );
         return false ;
     }
 
@@ -1496,7 +1496,7 @@ wxImageHistogram::FindFirstUnusedColour(unsigned char *r,
                 b2++;
                 if ( b2 >= 255 )
                 {
-                    wxLogError(_("GetUnusedColour:: No Unused Color in image ") );
+                    wxLogError(_("No unused colour in image.") );
                     return false;
                 }
             }
