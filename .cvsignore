@@ -22,8 +22,6 @@ Debug
 ReleaseDLL
 DebugDLL
 robert
-Makefile.in
-setup.h.in
 stamp-h.in
 Makefile
 configure
