@@ -6,7 +6,6 @@
 #! Created: 14.07.99
 #! Version: $Id$
 #!################################################################################
-
 #${
     #! include the code which parses filelist.txt file and initializes
     #! %wxCommon, %wxGeneric, %wxHtml, %wxUnix and %wxGTK hashes.
@@ -26,6 +25,7 @@
     }
 
     foreach $file (sort keys %wxGeneric) {
+        #! skip generic files not required for the wxGTK port
         next if $wxGeneric{$file} =~ /\bR\b/;
 
         $file =~ s/cp?p?$/\o/;
