@@ -989,11 +989,6 @@ public:
     wxWindow *GetAncestorWithCustomPalette() const;
 #endif // wxUSE_PALETTE
 
-protected:
-    // event handling specific to wxWindow
-    virtual bool TryValidator(wxEvent& event);
-    virtual bool TryParent(wxEvent& event);
-
     // inherit the parents visual attributes if they had been explicitly set
     // by the user (i.e. we don't inherit default attributes) and if we don't
     // have our own explicitly set
@@ -1005,6 +1000,11 @@ protected:
     // this just provides a simple way to customize InheritAttributes()
     // behaviour in the most common case
     virtual bool ShouldInheritColours() const { return false; }
+
+protected:
+    // event handling specific to wxWindow
+    virtual bool TryValidator(wxEvent& event);
+    virtual bool TryParent(wxEvent& event);
 
 
 #if wxUSE_CONSTRAINTS
