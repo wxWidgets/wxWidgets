@@ -138,8 +138,8 @@ void wxCursor::CreateFromImage(const wxImage & image)
     int h = image16.GetHeight() ;
     bool bHasMask = image16.HasMask() ;
 
-       int hotSpotX = image16.GetOptionInt(wxCUR_HOTSPOT_X);
-    int hotSpotY = image16.GetOptionInt(wxCUR_HOTSPOT_Y);
+       int hotSpotX = image16.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X);
+    int hotSpotY = image16.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y);
     if (hotSpotX < 0 || hotSpotX >= w)
             hotSpotX = 0;
     if (hotSpotY < 0 || hotSpotY >= h)
@@ -327,8 +327,8 @@ wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int ho
         image.LoadFile( cursor_file , flags ) ;
         if( image.Ok() )
         {
-            image.SetOption(wxCUR_HOTSPOT_X,hotSpotX ) ;
-            image.SetOption(wxCUR_HOTSPOT_Y,hotSpotY ) ;
+            image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X,hotSpotX ) ;
+            image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y,hotSpotY ) ;
             delete m_refData ;
             CreateFromImage(image) ;
         }
