@@ -167,7 +167,7 @@ LockResult wxSingleInstanceCheckerImpl::CreateLockFile()
 
             // use char here, not wxChar!
             char buf[256]; // enough for any PID size
-            int len = sprintf(buf, "%d", m_pidLocker) + 1;
+            int len = sprintf(buf, "%d", (int)m_pidLocker) + 1;
 
             if ( write(m_fdLock, buf, len) != len )
             {
@@ -254,7 +254,7 @@ bool wxSingleInstanceCheckerImpl::Create(const wxString& name)
     }
     else
     {
-        if ( sscanf(buf, "%d", &m_pidLocker) == 1 )
+        if ( sscanf(buf, "%d", (int *)&m_pidLocker) == 1 )
         {
             if ( kill(m_pidLocker, 0) != 0 )
             {
