@@ -382,11 +382,18 @@ public:
         m_propagationLevel = propagationLevel;
     }
 
+#if WXWIN_COMPATIBILITY_2_4
 public:
+#else
+protected:
+#endif
     wxObject*         m_eventObject;
     wxEventType       m_eventType;
     long              m_timeStamp;
     int               m_id;
+
+public:
+    // m_callbackUserData is for internal usage only
     wxObject*         m_callbackUserData;
 
 protected:
@@ -397,7 +404,11 @@ protected:
     // backwards compatibility as it is new
     int               m_propagationLevel;
 
+#if WXWIN_COMPATIBILITY_2_4
 public:
+#else
+protected:
+#endif
     bool              m_skipped;
     bool              m_isCommandEvent;
 
@@ -478,6 +489,27 @@ private:
  wxEVT_COMMAND_TOGGLEBUTTON_CLICKED
 */
 
+#if WXWIN_COMPATIBILITY_2_4
+// Backwards compatibility for wxCommandEvent::m_commandString, will lead to compilation errors in some cases of usage
+class WXDLLIMPEXP_CORE wxCommandEvent;
+
+class wxCommandEventStringHelper
+{
+public:
+    wxCommandEventStringHelper(wxCommandEvent * evt)
+        : m_evt(evt)
+        { }
+
+    void operator=(const wxString &str);
+    operator wxString();
+    const wxChar* c_str() const;
+
+private:
+    wxCommandEvent* m_evt;
+};
+#endif
+
+
 class WXDLLIMPEXP_CORE wxCommandEvent : public wxEvent
 {
 public:
@@ -485,7 +517,10 @@ public:
 
     wxCommandEvent(const wxCommandEvent& event)
         : wxEvent(event),
-          m_commandString(event.m_commandString),
+#if WXWIN_COMPATIBILITY_2_4
+          m_commandString(this),
+#endif
+          m_cmdString(event.m_cmdString),
           m_commandInt(event.m_commandInt),
           m_extraLong(event.m_extraLong),
           m_clientData(event.m_clientData),
@@ -504,8 +539,8 @@ public:
     int GetSelection() const { return m_commandInt; }
 
     // Set/Get listbox/choice selection string
-    void SetString(const wxString& s) { m_commandString = s; }
-    wxString GetString() const { return m_commandString; }
+    void SetString(const wxString& s) { m_cmdString = s; }
+    wxString GetString() const;
 
     // Get checkbox value
     bool IsChecked() const { return m_commandInt != 0; }
@@ -521,8 +556,13 @@ public:
 
     virtual wxEvent *Clone() const { return new wxCommandEvent(*this); }
 
+#if WXWIN_COMPATIBILITY_2_4
 public:
-    wxString          m_commandString; // String event argument
+    wxCommandEventStringHelper m_commandString;
+#else
+protected:
+#endif
+    wxString          m_cmdString;     // String event argument
     int               m_commandInt;
     long              m_extraLong;     // Additional information (e.g. select/deselect)
     void*             m_clientData;    // Arbitrary client data
@@ -531,6 +571,23 @@ public:
 private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxCommandEvent)
 };
+
+#if WXWIN_COMPATIBILITY_2_4
+inline void wxCommandEventStringHelper::operator=(const wxString &str)
+{
+    m_evt->SetString(str);
+}
+
+inline wxCommandEventStringHelper::operator wxString()
+{
+    return m_evt->GetString();
+}
+
+inline const wxChar* wxCommandEventStringHelper::c_str() const
+{
+    return m_evt->GetString().c_str();
+}
+#endif
 
 // this class adds a possibility to react (from the user) code to a control
 // notification: allow or veto the operation being reported.
@@ -623,7 +680,11 @@ public:
 
     virtual wxEvent *Clone() const { return new wxScrollWinEvent(*this); }
 
+#if WXWIN_COMPATIBILITY_2_4
 public:
+#else
+protected:
+#endif
     int               m_commandInt;
     long              m_extraLong;
 
@@ -1024,6 +1085,7 @@ public:
     virtual wxEvent *Clone() const { return new wxSizeEvent(*this); }
 
 public:
+    // For internal usage only. Will be converted to protected members.
     wxSize m_size;
     wxRect m_rect; // Used for wxEVT_SIZING
 
@@ -1061,6 +1123,11 @@ public:
 
     virtual wxEvent *Clone() const { return new wxMoveEvent(*this); }
 
+#if WXWIN_COMPATIBILITY_2_4
+public:
+#else
+protected:
+#endif
     wxPoint m_pos;
     wxRect m_rect;
 
@@ -1148,6 +1215,11 @@ public:
 
     virtual wxEvent *Clone() const { return new wxEraseEvent(*this); }
 
+#if WXWIN_COMPATIBILITY_2_4
+public:
+#else
+protected:
+#endif
     wxDC *m_dc;
 
 private:
@@ -1425,13 +1497,18 @@ enum
 
 class WXDLLIMPEXP_CORE wxJoystickEvent : public wxEvent
 {
+#if WXWIN_COMPATIBILITY_2_4
 public:
+#else
+protected:
+#endif
     wxPoint   m_pos;
     int       m_zPosition;
     int       m_buttonChange;   // Which button changed?
     int       m_buttonState;    // Which buttons are down?
     int       m_joyStick;       // Which joystick?
 
+public:
     wxJoystickEvent(wxEventType type = wxEVT_NULL,
                     int state = 0,
                     int joystick = wxJOYSTICK1,
