@@ -369,8 +369,7 @@ void wxNotebook::MacSetupTabs()
         SetControlData( (ControlHandle) m_macControl, ii+1, kControlTabInfoTag,
             sizeof( ControlTabInfoRec) , (char*) &info ) ;
         SetTabEnabled( (ControlHandle) m_macControl , ii+1 , true ) ;
-        
-#if TARGET_CARBON
+#if 0 // TARGET_CARBON
         if ( GetImageList() && GetPageImage(ii) >= 0 && UMAGetSystemVersion() >= 0x1020 )
         {
             // tab controls only support very specific types of images, therefore we are doing an odyssee
