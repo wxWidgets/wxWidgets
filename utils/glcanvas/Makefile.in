@@ -1,3 +1,0 @@
-all:
-	cd @GL_TOOLKIT_DIR@; make
-	cd samples; make
