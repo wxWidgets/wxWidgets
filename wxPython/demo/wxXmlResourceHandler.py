@@ -29,6 +29,7 @@ class MyBluePanel(wxPanel):
         # silly example.  It could just as easily have been done in
         # the resource.
         self.SetBackgroundColour("BLUE")
+        self.SetForegroundColour("WHITE")
 
 
 # To do it the more complex way, (see below) we need to write the
@@ -43,6 +44,8 @@ class PreMyBluePanel(wxPanel):
     def Create(self, parent, id, pos, size, style, name):
         wxPanel.Create(self, parent, id, pos, size, style, name)
         self.SetBackgroundColour("BLUE")
+        self.SetForegroundColour("WHITE")
+
 
 #----------------------------------------------------------------------
 

@@ -90,7 +90,7 @@ class MyApp(wxApp):
 
             # This inner loop will process any GUI events until there
             # are no more waiting.
-           while self.Pending():
+            while self.Pending():
                 self.Dispatch()
 
             # Send idle events to idle handlers.  You may want to throtle

@@ -128,6 +128,7 @@ class MyParentFrame(wxMDIParentFrame):
 if __name__ == '__main__':
     class MyApp(wxApp):
         def OnInit(self):
+            wxInitAllImageHandlers()
             frame = MyParentFrame()
             frame.Show(true)
             self.SetTopWindow(frame)
