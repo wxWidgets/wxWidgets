@@ -48,7 +48,7 @@ wxGTK:
 - Corrected default button size handling for different themes.
 - Corrected splitter sash size and look for different themes.
 - Fixed keyboard input for dead-keys.
-- Added support for wxTE_LINEWRAP (Mart Raudsepp)
+- Added support for more wrapping styles (Mart Raudsepp)
 
 wxMac:
 
