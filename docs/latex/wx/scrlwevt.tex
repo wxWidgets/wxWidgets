@@ -54,5 +54,8 @@ Returns wxHORIZONTAL or wxVERTICAL, depending on the orientation of the scrollba
 
 \constfunc{int}{GetPosition}{\void}
 
-Returns the position of the scrollbar.
+Returns the position of the scrollbar for the thumb track and release events.
+Note that this field can't be used for the other events, you need to query
+the window itself for the current position in that case.
+
 
