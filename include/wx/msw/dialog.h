@@ -22,6 +22,10 @@ extern WXDLLEXPORT_DATA(const wxChar*) wxDialogNameStr;
 
 class WXDLLEXPORT wxDialogModalData;
 
+#if wxUSE_TOOLBAR && (defined(__SMARTPHONE__) || defined(__POCKETPC__))
+class WXDLLEXPORT wxToolBar;
+#endif
+
 // Dialog boxes
 class WXDLLEXPORT wxDialog : public wxDialogBase
 {
@@ -58,6 +62,20 @@ public:
 
     // may be called to terminate the dialog with the given return code
     virtual void EndModal(int retCode);
+
+#if wxUSE_TOOLBAR && defined(__POCKETPC__)
+    // create main toolbar by calling OnCreateToolBar()
+    virtual wxToolBar* CreateToolBar(long style = -1,
+                                     wxWindowID winid = wxID_ANY,
+                                     const wxString& name = wxToolBarNameStr);
+    // return a new toolbar
+    virtual wxToolBar *OnCreateToolBar(long style,
+                                       wxWindowID winid,
+                                       const wxString& name );
+
+    // get the main toolbar
+    wxToolBar *GetToolBar() const { return m_dialogToolBar; }
+#endif
 
     // implementation only from now on
     // -------------------------------
@@ -123,9 +141,12 @@ private:
     wxWindow*   m_oldFocus;
     bool        m_endModalCalled; // allow for closing within InitDialog
 
+#if wxUSE_TOOLBAR && defined(__POCKETPC__)
+    wxToolBar*  m_dialogToolBar;
+#endif
+
     // this pointer is non-NULL only while the modal event loop is running
     wxDialogModalData *m_modalData;
-
 
     DECLARE_DYNAMIC_CLASS(wxDialog)
     DECLARE_EVENT_TABLE()

@@ -61,6 +61,8 @@ wxWinCE:
 - Sends wxEVT_HIBERNATE event.
 - Now fakes wxEVT_ACTIVATE_APP to be symmetrical with wxEVT_HIBERNATE.
 - Added wxTE_CAPITALIZE for CAPEDIT controls.
+- wxDialog::GetToolBar can be used if you need to add buttons
+  to the dialog's toolbar.
 
 2.5.4
 -----

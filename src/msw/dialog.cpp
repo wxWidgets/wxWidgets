@@ -51,6 +51,10 @@
     #include "wx/msw/wince/resources.h"
 #endif // __SMARTPHONE__ && __WXWINCE__
 
+#if wxUSE_TOOLBAR && defined(__POCKETPC__)
+#include "wx/toolbar.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -160,6 +164,9 @@ void wxDialog::Init()
     m_isShown = false;
     m_modalData = NULL;
     m_endModalCalled = false;
+#if wxUSE_TOOLBAR && defined(__POCKETPC__)
+    m_dialogToolBar = NULL;
+#endif
 }
 
 bool wxDialog::Create(wxWindow *parent,
@@ -186,6 +193,9 @@ bool wxDialog::Create(wxWindow *parent,
 
 #if defined(__SMARTPHONE__) && defined(__WXWINCE__)
     SetLeftMenu(wxID_OK, _("OK"));
+#endif
+#if wxUSE_TOOLBAR && defined(__POCKETPC__)
+    CreateToolBar();
 #endif
 
     return true;
@@ -457,6 +467,25 @@ bool wxDialog::DoOK()
 }
 #endif
 
+#if wxUSE_TOOLBAR && defined(__POCKETPC__)
+// create main toolbar by calling OnCreateToolBar()
+wxToolBar* wxDialog::CreateToolBar(long style, wxWindowID winid, const wxString& name)
+{
+    m_dialogToolBar = OnCreateToolBar(style, winid, name);
+
+    return m_dialogToolBar;
+}
+
+// return a new toolbar
+wxToolBar *wxDialog::OnCreateToolBar(long style,
+                                       wxWindowID winid,
+                                       const wxString& name)
+{
+    return new wxToolMenuBar(this, winid,
+                         wxDefaultPosition, wxDefaultSize,
+                         style, name);
+}                                        
+#endif
 
 // ---------------------------------------------------------------------------
 // dialog window proc

@@ -414,7 +414,7 @@ bool wxToolMenuBar::Realize()
 
                 wxBitmap bmpToUse = bmp;
 
-                if (bmp.GetWidth() < 16 || bmp.GetHeight() < 16)
+                if (bmp.GetWidth() < 16 || bmp.GetHeight() < 16 || bmp.GetMask() != NULL)
                 {
                     wxMemoryDC memDC;
                     wxBitmap b(16,16);

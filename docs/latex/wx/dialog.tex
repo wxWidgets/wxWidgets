@@ -242,6 +242,16 @@ a code to the application.
 
 Returns the title of the dialog box.
 
+\membersection{wxDialog::GetToolBar}\label{wxdialoggettoolbar}
+
+\constfunc{wxToolBar*}{GetToolBar}{\void}
+
+On PocketPC, a dialog is automatically provided with an empty toolbar. GetToolBar
+allows you to access the toolbar and add tools to it. Removing tools and adding
+arbitrary controls are not currently supported.
+
+This function is not available on any other platform.
+
 \membersection{wxDialog::Iconize}\label{wxdialogiconized}
 
 \func{void}{Iconize}{\param{const bool}{ iconize}}

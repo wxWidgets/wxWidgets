@@ -176,7 +176,7 @@ intended to co-exist with the main application frame.
 \wxheading{Menubars and toolbars in PocketPC}
 
 On PocketPC, a frame must always have a menubar, even if it's empty.
-An empty menubar is automatically provided for dialogs, to hide
+An empty menubar/toolbar is automatically provided for dialogs, to hide
 any existing menubar for the duration of the dialog.
 
 Menubars and toolbars are implemented using a combined control,
@@ -193,7 +193,15 @@ formatting toolbar above the menubar as Pocket Word does. But don't assign
 a wxToolBar to a frame using SetToolBar - you should always use CreateToolBar
 for the main frame toolbar.
 \item Deleting and adding tools to wxToolMenuBar is not supported.
+\item For speed, colours are not remapped to the system colours as they are
+in wxMSW. Provide the tool bitmaps either with the correct system button background,
+or with transparency (for example, using XPMs).
 \end{itemize}
+
+Unlike in all other ports, a wxDialog has a wxToolBar, automatically created
+for you. You may either leave it blank, or access it with wxDialog::GetToolBar
+and add buttons, then calling wxToolBar::Realize. You cannot set or recreate
+the toolbar.
 
 \wxheading{Menubars and toolbars in Smartphone}
 
@@ -227,6 +235,32 @@ This section is currently incomplete.
 
 You can use the help controller wxWinceHelpController which controls
 simple {\tt .htm} files, usually installed in the Windows directory.
+See the Windows CE reference for how to format the HTML files.
+
+\subsubsection{Installing your PocketPC and Smartphone applications}
+
+To install your application, you need to build a CAB file using
+the parameters defined in a special .inf file. The CabWiz program
+in your SDK will compile the CAB file from the .inf file and
+files that it specifies.
+
+For delivery, you can simply ask the user to copy the CAB file to the
+device and execute the CAB file using File Explorer. Or, you can
+write a program for the desktop PC that will find the ActiveSync
+Application Manager and install the CAB file on the device,
+which is obviously much easier for the user.
+
+Here are some links that may help.
+
+\itemsep=0pt
+\begin{itemize}
+\item A setup builder that takes CABs and builds a setup program is at \urlref{http://www.eskimo.com/~scottlu/win/index.html}{http://www.eskimo.com/~scottlu/win/index.html}.
+\item Sample installation files can be found in {\tt Windows CE Tools/wce420/POCKET PC 2003/Samples/Win32/AppInst}.
+\item An installer generator using wxPython can be found at \urlref{http://ppcquicksoft.iespana.es/ppcquicksoft/myinstall.html}{http://ppcquicksoft.iespana.es/ppcquicksoft/myinstall.html}.
+\item Miscellaneous Windows CE resources can be found at \urlref{http://www.orbworks.com/pcce/resources.html}{http://www.orbworks.com/pcce/resources.html}.
+\item Installer creation instructions with a setup.exe for installing to PPC can be found at \urlref{http://www.pocketpcdn.com/articles/creatingsetup.html}{http://www.pocketpcdn.com/articles/creatingsetup.html}.
+\item Microsoft instructions are at \urlref{http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnce30/html/appinstall30.asp?frame=true&hidetoc=true}{http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnce30/html/appinstall30.asp?frame=true&hidetoc=true}.
+\end{itemize}
 
 \subsubsection{Remaining issues}
 
@@ -245,7 +279,7 @@ icons, should be implemented. This will be quite straightforward.
 and the remaining area, by calling SHSipInfo. We also may need to be able to show and hide
 the SIP programmatically, with SHSipPreference. See also the {\it Input Dialogs} topic in
 the {\it Programming Windows CE} guide for more on this, and how to have dialogs
-show the SIP automatically using the WC_SIPREF control.
+show the SIP automatically using the WC\_SIPREF control.
 \item {\bf Drawing.} The "Life!" demo shows some droppings being left on the window,
 indicating that drawing works a bit differently between desktop and mobile versions of
 Win32.
