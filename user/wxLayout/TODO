@@ -8,13 +8,14 @@ BUGS
 - word wrap for objects with lots of non-space needs to search in positive
   direction if begin of first object is reached
 
-  - delete in empty line doesn't always work
-  - fix initial scrollbar sizes
-  - fix horiz scrollbar size
-
-
 TODO
 =====================================================================
+
+
+- typedef wxCoords CoordType ??
+
+- merge RecalulateXXX and Layout() into one
+- remove UpdateCursorScreenCoords() which is no longer needed
 
   - UNDO!!
   - replacement of llist in window
@@ -24,11 +25,6 @@ Improve speed! (See layout problem below!)
   - wxlwindow needs to shrink scrollbar range when window contents get removed
   - When selecting with the mouse, scroll window if pointer is outside.
 
-The following two probs can probably be fixed by adding the
-RecalculateLayout() method:
-Funny re-layout shows again in sample text.
-(Gone after calling layout for all objects before drawing one.)
- Printing works again, but layout at begin of new page is corrupted.
 
 
 - The import of a private data object does not work yet, we need to get

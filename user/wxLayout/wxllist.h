@@ -577,12 +577,14 @@ public:
        @param cursorPos if not NULL, set cursor screen position in there
        @param cursorSize if not cursorPos != NULL, set cursor size in there
        @param cx if cursorPos != NULL, the cursor x position
+       @param suppressStyleUpdate FALSe normally, only to suppress updating of m_StyleInfo
    */
    void Layout(wxDC &dc,
                wxLayoutList *llist,
                wxPoint *cursorPos = NULL,
                wxPoint *cursorSize = NULL,
-               int cx = 0);
+               int cx = 0,
+               bool suppressStyleUpdate = FALSE);
    /** This function finds an object belonging to a given cursor
        position. It assumes that Layout() has been called before.
        @param dc the wxDC to use for calculations
@@ -594,6 +596,11 @@ public:
    */
    wxLayoutObject * FindObjectScreen(wxDC &dc, CoordType xpos, bool
                                      *found = NULL);
+   /** This sets the style info for the beginning of this line.
+       @param si styleinfo structure
+    */
+   void ApplyStyle(const wxLayoutStyleInfo &si)
+      {   m_StyleInfo = si; }
 
    //@}
 
@@ -641,11 +648,13 @@ public:
 #ifdef WXLAYOUT_DEBUG
    void Debug(void);
 #endif
-   wxLayoutStyleInfo &GetStyleInfo() { return m_StyleInfo; }
+   wxLayoutStyleInfo const & GetStyleInfo() const { return m_StyleInfo; }
 
    /// Returns dirty state
    bool IsDirty(void) const { return m_Dirty; }
-   /// Marks line as diry.
+   /** Marks this line as diry.
+       @param left xpos from where it is dirty or -1 for all
+   */
    void MarkDirty(CoordType left = -1)
    {
       if ( left != -1 )
@@ -656,6 +665,10 @@ public:
 
       m_Dirty = true;
    }
+   /** Marks the following lines as dirty.
+       @param recurse if -1 recurse to end of list, otherwise depth of recursion.
+   */
+   void MarkNextDirty(int recurse = 0);
    /// Reset the dirty flag
    void MarkClean() { m_Dirty = false; m_updateLeft = -1; }
 
@@ -869,10 +882,10 @@ public:
                 char const *bg = NULL);
    /// changes to the next larger font size
    inline void SetFontLarger(void)
-      { SetFont(-1,(12*m_CurrentSetting.size)/10); }
+      { SetFont(-1,(12*m_CurrentStyleInfo.size)/10); }
    /// changes to the next smaller font size
    inline void SetFontSmaller(void)
-      { SetFont(-1,(10*m_CurrentSetting.size)/12); }
+      { SetFont(-1,(10*m_CurrentStyleInfo.size)/12); }
 
    /// set font family
    inline void SetFontFamily(int family) { SetFont(family); }
@@ -898,8 +911,8 @@ public:
       anywhere.
       @return the default settings of the list
    */
-   wxLayoutStyleInfo *GetDefaults(void) { return &m_DefaultSetting ; }
-   wxLayoutStyleInfo *GetStyleInfo(void) { return &m_CurrentSetting ; }
+   wxLayoutStyleInfo &GetDefaultStyleInfo(void) { return m_DefaultStyleInfo ; }
+   wxLayoutStyleInfo &GetStyleInfo(void) { return m_CurrentStyleInfo ; }
    //@}
 
    /**@name Drawing */
@@ -945,10 +958,12 @@ public:
        @param dc the dc to use for cursor position calculations
        @param resetCursorMovedFlag: if true, reset "cursor moved" flag
        @param translate optional translation of cursor coords on screen
+       
    */
    void UpdateCursorScreenPos(wxDC &dc,
                               bool resetCursorMovedFlag = true,
-                              const wxPoint& translate = wxPoint(0, 0));
+                              const wxPoint& translate = wxPoint(0,
+                                                                 0));
 
    /** Draws the cursor.
        @param active If true, draw a bold cursor to mark window as
@@ -1047,7 +1062,7 @@ public:
    */
    int IsSelected(const wxLayoutLine *line, CoordType *from, CoordType *to);
 
-   void ApplyStyle(wxLayoutStyleInfo *si, wxDC &dc);
+   void ApplyStyle(wxLayoutStyleInfo const &si, wxDC &dc);
 #ifdef WXLAYOUT_DEBUG
    void Debug(void);
 #endif
@@ -1092,9 +1107,9 @@ private:
    /// this object manages the fonts for us
    wxFontCache m_FontCache;
    /// the default setting:
-   wxLayoutStyleInfo m_DefaultSetting;
+   wxLayoutStyleInfo m_DefaultStyleInfo;
    /// the current setting:
-   wxLayoutStyleInfo m_CurrentSetting;
+   wxLayoutStyleInfo m_CurrentStyleInfo;
    //@}
 };
 

@@ -8,10 +8,21 @@
 
 /*
 
+  Some docs:
+
+  Layout() recalculates the objects, sizes, etc.
+  Draw()   just draws them with the current settings, without
+           re-layout()ing them again
+
+  Each line has its own wxLayoutStyleInfo structure which gets updated 
+  from within Layout(). Thanks to this, we don't need to re-layout all 
+  lines if we want to draw one, but can just use its styleinfo to set
+  the right font.
+  
  */
 
 #ifdef __GNUG__
-    #pragma implementation "wxllist.h"
+#   pragma implementation "wxllist.h"
 #endif
 
 #include <wx/wxprec.h>
@@ -87,6 +98,28 @@
 #define WXLO_CURSORCHAR   "E"
 /** @name Helper functions */
 //@{
+/*
+  The following STAY HERE until we have a working wxGTK again!!!
+*/
+/// allows me to compare to wxPoints
+bool operator ==(wxPoint const &p1, wxPoint const &p2)
+{
+   return p1.x == p2.x && p1.y == p2.y;
+}
+
+/// allows me to compare to wxPoints
+bool operator !=(wxPoint const &p1, wxPoint const &p2)
+{
+   return p1.x != p2.x || p1.y != p2.y;
+}
+
+wxPoint & operator += (wxPoint &p1, wxPoint const &p2)
+{
+   p1.x += p2.x;
+   p1.y += p2.y;
+   return p1;
+}
+
 /// allows me to compare to wxPoints
 bool operator <=(wxPoint const &p1, wxPoint const &p2)
 {
@@ -567,7 +600,7 @@ wxLayoutObjectCmd::Draw(wxDC &dc, wxPoint const & /* coords */,
                         CoordType begin, CoordType /* len */)
 {
    wxASSERT(m_StyleInfo);
-   wxllist->ApplyStyle(m_StyleInfo, dc);
+   wxllist->ApplyStyle(*m_StyleInfo, dc);
 }
 
 void
@@ -762,6 +795,11 @@ wxLayoutLine::Insert(CoordType xpos, wxLayoutObject *obj)
 
    MarkDirty(xpos);
 
+   // If we insert a command object, we need to recalculate all lines
+   // to update their styleinfo structure.
+   if(obj->GetType() == WXLO_TYPE_CMD)
+      MarkNextDirty(-1);
+   
    CoordType offset;
    wxLOiterator i = FindObject(xpos, &offset);
    if(i == NULLIT)
@@ -857,6 +895,10 @@ wxLayoutLine::Delete(CoordType xpos, CoordType npos)
          len = (**i).GetLength();
          m_Length -= len;
          npos -= len;
+         // If we delete a command object, we need to recalculate all lines
+         // to update their styleinfo structure.
+         if((**i).GetType() == WXLO_TYPE_CMD)
+            MarkNextDirty(-1);
          m_ObjectList.erase(i);
       }
       else
@@ -891,6 +933,18 @@ wxLayoutLine::Delete(CoordType xpos, CoordType npos)
    }
 
    return npos;
+}
+
+void
+wxLayoutLine::MarkNextDirty(int recurse)
+{
+   wxLayoutLine *line = GetNextLine();
+   while(line && (recurse == -1 || recurse >= 0))
+   {
+      line->MarkDirty();
+      line = line->GetNextLine();
+      if(recurse > 0) recurse --;
+   }
 }
 
 bool
@@ -950,6 +1004,14 @@ wxLayoutLine::DeleteLine(bool update, wxLayoutList *llist)
    {
       m_Next->MoveLines(-1);
       m_Next->RecalculatePositions(1, llist);
+      /* We assume that if we have more than one object in the list,
+         this means that we have a command object, so we need to
+         update the following lines. */
+      if(m_ObjectList.size() > 1 ||
+         ( m_ObjectList.begin() != NULLIT &&
+           (**m_ObjectList.begin()).GetType() == WXLO_TYPE_CMD)
+         )
+         MarkNextDirty(-1);
    }
    wxLayoutLine *next = m_Next;
    delete this;
@@ -970,9 +1032,7 @@ wxLayoutLine::Draw(wxDC &dc,
    CoordType xpos = 0; // cursorpos, lenght of line
 
    CoordType from, to, tempto;
-   //FIXME This doesn't work yet, needs updating afterr default
-   //settings for list or a wxLayoutObjectCmd have changed:
-   //llist->ApplyStyle(&((wxLayoutLine *)this)->m_StyleInfo, dc);
+
    int highlight = llist->IsSelected(this, &from, &to);
 //   WXLO_DEBUG(("highlight=%d",  highlight ));
    if(highlight == 1) // we need to draw the whole line inverted!
@@ -995,12 +1055,18 @@ wxLayoutLine::Draw(wxDC &dc,
    }
 }
 
+/*
+  This function does all the recalculation, that is, it should only be 
+  called from within wxLayoutList::Layout(), as it uses the current
+  list's styleinfo and updates it.
+*/
 void
 wxLayoutLine::Layout(wxDC &dc,
                      wxLayoutList *llist,
                      wxPoint *cursorPos,
                      wxPoint *cursorSize,
-                     int cx)
+                     int cx,
+                     bool suppressSIupdate)
 {
    wxLayoutObjectList::iterator i;
 
@@ -1034,9 +1100,7 @@ wxLayoutLine::Layout(wxDC &dc,
       if(cursorSize) *cursorSize = wxPoint(0,0);
    }
 
-   //FIXME This doesn't work yet, needs updating afterr default
-   //settings for list or a wxLayoutObjectCmd have changed:
-   //llist->ApplyStyle(&m_StyleInfo, dc);
+   m_StyleInfo = llist->GetStyleInfo(); // save current style
    for(i = m_ObjectList.begin(); i != NULLIT; i++)
    {
       wxLayoutObject *obj = *i;
@@ -1152,9 +1216,7 @@ wxLayoutLine::Layout(wxDC &dc,
       if(m_BaseLine >= cursorSize->y) // the normal case anyway
          cursorPos->y += m_BaseLine-cursorSize->y;
    }
-
    RecalculatePositions(1, llist);
-
    MarkClean();
 }
 
@@ -1346,10 +1408,12 @@ wxLayoutLine::Debug(void)
 {
    wxString tmp;
    wxPoint pos = GetPosition();
-   WXLO_DEBUG(("Line %ld, Pos (%ld,%ld), Height %ld",
-              (long int) GetLineNumber(),
-              (long int) pos.x, (long int) pos.y,
-               (long int) GetHeight()));
+   WXLO_DEBUG(("Line %ld, Pos (%ld,%ld), Height %ld, BL %ld, Font: %d",
+               (long int) GetLineNumber(),
+               (long int) pos.x, (long int) pos.y,
+               (long int) GetHeight(),
+               (long int) m_BaseLine,
+               (int) m_StyleInfo.family));
    if(m_ObjectList.begin() != NULLIT)
       (**m_ObjectList.begin()).Debug();
 
@@ -1467,17 +1531,17 @@ wxLayoutList::InternalClear(void)
    m_Selection.m_selecting = false;
    m_Selection.m_valid = false;
 
-   m_DefaultSetting.family = wxSWISS;
-   m_DefaultSetting.size = WXLO_DEFAULTFONTSIZE;
-   m_DefaultSetting.style = wxNORMAL;
-   m_DefaultSetting.weight = wxNORMAL;
-   m_DefaultSetting.underline = 0;
-   m_DefaultSetting.m_fg_valid = TRUE;
-   m_DefaultSetting.m_fg = *wxBLACK;
-   m_DefaultSetting.m_bg_valid = TRUE;
-   m_DefaultSetting.m_bg = *wxWHITE;
+   m_DefaultStyleInfo.family = wxSWISS;
+   m_DefaultStyleInfo.size = WXLO_DEFAULTFONTSIZE;
+   m_DefaultStyleInfo.style = wxNORMAL;
+   m_DefaultStyleInfo.weight = wxNORMAL;
+   m_DefaultStyleInfo.underline = 0;
+   m_DefaultStyleInfo.m_fg_valid = TRUE;
+   m_DefaultStyleInfo.m_fg = *wxBLACK;
+   m_DefaultStyleInfo.m_bg_valid = TRUE;
+   m_DefaultStyleInfo.m_bg = *wxWHITE;
 
-   m_CurrentSetting = m_DefaultSetting;
+   m_CurrentStyleInfo = m_DefaultStyleInfo;
 }
 
 void
@@ -1485,20 +1549,20 @@ wxLayoutList::SetFont(int family, int size, int style, int weight,
                       int underline, wxColour *fg,
                       wxColour *bg)
 {
-   if(family != -1)    m_CurrentSetting.family = family;
-   if(size != -1)      m_CurrentSetting.size = size;
-   if(style != -1)     m_CurrentSetting.style = style;
-   if(weight != -1)    m_CurrentSetting.weight = weight;
-   if(underline != -1) m_CurrentSetting.underline = underline != 0;
-   if(fg) m_CurrentSetting.m_fg = *fg;
-   if(bg) m_CurrentSetting.m_bg = *bg;
+   if(family != -1)    m_CurrentStyleInfo.family = family;
+   if(size != -1)      m_CurrentStyleInfo.size = size;
+   if(style != -1)     m_CurrentStyleInfo.style = style;
+   if(weight != -1)    m_CurrentStyleInfo.weight = weight;
+   if(underline != -1) m_CurrentStyleInfo.underline = underline != 0;
+   if(fg) m_CurrentStyleInfo.m_fg = *fg;
+   if(bg) m_CurrentStyleInfo.m_bg = *bg;
    Insert(
       new wxLayoutObjectCmd(
-         m_CurrentSetting.family,
-         m_CurrentSetting.size,
-         m_CurrentSetting.style,
-         m_CurrentSetting.weight,
-         m_CurrentSetting.underline,
+         m_CurrentStyleInfo.family,
+         m_CurrentStyleInfo.size,
+         m_CurrentStyleInfo.style,
+         m_CurrentStyleInfo.weight,
+         m_CurrentStyleInfo.underline,
          fg, bg));
 }
 
@@ -1524,9 +1588,9 @@ wxLayoutList::Clear(int family, int size, int style, int weight,
                     int underline, wxColour *fg, wxColour *bg)
 {
    InternalClear();
-   m_DefaultSetting = wxLayoutStyleInfo(family, size, style, weight,
+   m_DefaultStyleInfo = wxLayoutStyleInfo(family, size, style, weight,
                                         underline, fg, bg);
-   m_CurrentSetting = m_DefaultSetting;
+   m_CurrentStyleInfo = m_DefaultStyleInfo;
 }
 
 wxPoint
@@ -1830,8 +1894,9 @@ wxLayoutList::LineBreak(void)
 
    wxPoint position(m_CursorLine->GetPosition());
 
-   wxCoord width = m_CursorLine->GetWidth(),
-           height = m_CursorLine->GetHeight();
+   CoordType
+      width = m_CursorLine->GetWidth(),
+      height = m_CursorLine->GetHeight();
 
    m_CursorLine = m_CursorLine->Break(m_CursorPos.x, this);
    if(setFirst) // we were at beginning of first line
@@ -1999,7 +2064,7 @@ wxLayoutList::Recalculate(wxDC &dc, CoordType bottom)
 
    // first, make sure everything is calculated - this might not be
    // needed, optimise it later
-   ApplyStyle(&m_DefaultSetting, dc);
+   ApplyStyle(m_DefaultStyleInfo, dc);
    while(line)
    {
       line->RecalculatePosition(this); // so we don't need to do it all the time
@@ -2014,24 +2079,30 @@ wxLayoutList::UpdateCursorScreenPos(wxDC &dc,
                                     bool resetCursorMovedFlag,
                                     const wxPoint& translate)
 {
+   return;
    wxCHECK_RET( m_CursorLine, "no cursor line" );
 
    if ( m_movedCursor )
    {
+      // we need to save the current style, in case the layout() of
+      // the line changes it
+      wxLayoutStyleInfo SiBackup = m_CurrentStyleInfo;
       m_CursorLine->Layout(dc, this,
                            &m_CursorScreenPos, &m_CursorSize,
-                           m_CursorPos.x);
-
+                           m_CursorPos.x,
+                           /* suppress update */ true);
+      ApplyStyle(SiBackup, dc); // restore it
+      
       if ( resetCursorMovedFlag )
       {
-         #ifdef WXLAYOUT_USE_CARET
+#ifdef WXLAYOUT_USE_CARET
             // adjust the caret position
             wxPoint coords(m_CursorScreenPos);
             coords += translate;
 
             // and set it
             m_caret->Move(coords);
-         #endif // WXLAYOUT_USE_CARET
+#endif // WXLAYOUT_USE_CARET
 
          m_movedCursor = false;
       }
@@ -2059,38 +2130,43 @@ wxLayoutList::Layout(wxDC &dc, CoordType bottom, bool forceAll)
 {
    // first, make sure everything is calculated - this might not be
    // needed, optimise it later
-   ApplyStyle(&m_DefaultSetting, dc);
+   ApplyStyle(m_DefaultStyleInfo, dc);
 
+   // This one we always Layout() to get the current cursor
+   // coordinates on the screen:
+   m_CursorLine->MarkDirty();
    // FIXME this is completely wrong - we should start by first *visible* line
    //       (and stop on the last one) instead of looping over all lines!!
+   bool wasDirty = false;
    wxLayoutLine *line = m_FirstLine;
    while(line)
    {
+      if(! wasDirty)
+         ApplyStyle(line->GetStyleInfo(), dc);
       if(forceAll || line->IsDirty())
       {
-         line->GetStyleInfo() = m_CurrentSetting;
+         // The following Layout() calls will update our
+         // m_CurrentStyleInfo if needed.
          if(line == m_CursorLine)
-            line->Layout(dc, this, (wxPoint *)&m_CursorScreenPos,
+            line->Layout(dc, this,
+                         (wxPoint *)&m_CursorScreenPos,
                          (wxPoint *)&m_CursorSize, m_CursorPos.x);
          else
             line->Layout(dc, this);
 
          // little condition to speed up redrawing:
          if(bottom != -1 && line->GetPosition().y > bottom)
-             break;
+            break;
+         wasDirty = true;
       }
-
       line->RecalculatePositions(1, this);
       line = line->GetNextLine();
    }
 
-///FIXME: disabled for now
-#if 0
    // can only be 0 if we are on the first line and have no next line
    wxASSERT(m_CursorSize.x != 0 || (m_CursorLine &&
                                     m_CursorLine->GetNextLine() == NULL &&
                                     m_CursorLine == m_FirstLine));
-#endif
    AddCursorPosToUpdateRect();
 }
 
@@ -2102,20 +2178,33 @@ wxLayoutList::Draw(wxDC &dc,
 {
    wxLayoutLine *line = m_FirstLine;
 
-   Layout(dc);
-   ApplyStyle(&m_DefaultSetting, dc);
-   wxBrush brush(m_CurrentSetting.m_bg, wxSOLID);
+   /* We need to re-layout all dirty lines to update styleinfos
+      etc. However, somehow we don't find all dirty lines... */
+   Layout(dc); //,-1,true); //FIXME
+   ApplyStyle(m_DefaultStyleInfo, dc);
+   wxBrush brush(m_CurrentStyleInfo.m_bg, wxSOLID);
    dc.SetBrush(brush);
    dc.SetBackgroundMode(wxTRANSPARENT);
 
+   bool style_set = false;
    while(line)
    {
       // only draw if between top and bottom:
-      if((top == -1 || line->GetPosition().y + line->GetHeight() >= top))
+      if((top == -1 ||
+          line->GetPosition().y + line->GetHeight() >= top))
+      {
+//         if(! style_set)
+         {
+            ApplyStyle(line->GetStyleInfo(), dc);
+            style_set = true;
+         }
          line->Draw(dc, this, offset);
-      else
+      }
+#if 0
+         else
          line->Layout(dc, this);
-      // little condition to speed up redrawing:
+#endif
+         // little condition to speed up redrawing:
       if(bottom != -1 && line->GetPosition().y > bottom) break;
       line = line->GetNextLine();
    }
@@ -2136,7 +2225,7 @@ wxLayoutList::FindObjectScreen(wxDC &dc, wxPoint const pos,
    wxLayoutLine *line = m_FirstLine;
    wxPoint p;
 
-   ApplyStyle(&m_DefaultSetting, dc);
+   ApplyStyle(m_DefaultStyleInfo, dc);
    while(line)
    {
       p = line->GetPosition();
@@ -2424,8 +2513,8 @@ void
 wxLayoutList::StartHighlighting(wxDC &dc)
 {
 #if SHOW_SELECTIONS
-   dc.SetTextForeground(m_CurrentSetting.m_bg);
-   dc.SetTextBackground(m_CurrentSetting.m_fg);
+   dc.SetTextForeground(m_CurrentStyleInfo.m_bg);
+   dc.SetTextBackground(m_CurrentStyleInfo.m_fg);
    dc.SetBackgroundMode(wxSOLID);
 #endif
 }
@@ -2435,8 +2524,8 @@ void
 wxLayoutList::EndHighlighting(wxDC &dc)
 {
 #if SHOW_SELECTIONS
-   dc.SetTextForeground(m_CurrentSetting.m_fg);
-   dc.SetTextBackground(m_CurrentSetting.m_bg);
+   dc.SetTextForeground(m_CurrentStyleInfo.m_fg);
+   dc.SetTextBackground(m_CurrentStyleInfo.m_bg);
    dc.SetBackgroundMode(wxTRANSPARENT);
 #endif
 }
@@ -2534,10 +2623,10 @@ wxLayoutList::GetSelection(wxLayoutDataObject *wxlo, bool invalidate)
 
 
 
-#define COPY_SI(what) if(si->what != -1) { m_CurrentSetting.what = si->what; fontChanged = TRUE; }
+#define COPY_SI(what) if(si.what != -1) { m_CurrentStyleInfo.what = si.what; fontChanged = TRUE; }
 
 void
-wxLayoutList::ApplyStyle(wxLayoutStyleInfo *si, wxDC &dc)
+wxLayoutList::ApplyStyle(wxLayoutStyleInfo const &si, wxDC &dc)
 {
    bool fontChanged = FALSE;
    COPY_SI(family);
@@ -2546,17 +2635,17 @@ wxLayoutList::ApplyStyle(wxLayoutStyleInfo *si, wxDC &dc)
    COPY_SI(weight);
    COPY_SI(underline);
    if(fontChanged)
-      dc.SetFont( m_FontCache.GetFont(m_CurrentSetting) );
+      dc.SetFont( m_FontCache.GetFont(m_CurrentStyleInfo) );
 
-   if(si->m_fg_valid)
+   if(si.m_fg_valid)
    {
-      m_CurrentSetting.m_fg = si->m_fg;
-      dc.SetTextForeground(m_CurrentSetting.m_fg);
+      m_CurrentStyleInfo.m_fg = si.m_fg;
+      dc.SetTextForeground(m_CurrentStyleInfo.m_fg);
    }
-   if(si->m_bg_valid)
+   if(si.m_bg_valid)
    {
-      m_CurrentSetting.m_bg = si->m_bg;
-      dc.SetTextBackground(m_CurrentSetting.m_bg);
+      m_CurrentStyleInfo.m_bg = si.m_bg;
+      dc.SetTextBackground(m_CurrentStyleInfo.m_bg);
    }
 }
 

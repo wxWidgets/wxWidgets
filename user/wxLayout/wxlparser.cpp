@@ -164,7 +164,7 @@ wxString wxLayoutExportCmdAsHTML(wxLayoutObjectCmd const & cmd,
 
 wxLayoutExportStatus::wxLayoutExportStatus(wxLayoutList *list)
 {
-   m_si = *list->GetDefaults();
+   m_si = list->GetDefaultStyleInfo();
    m_line = list->GetFirstLine();
    m_iterator = m_line->GetFirstObject();
 }

@@ -100,6 +100,13 @@ END_EVENT_TABLE()
 // implementation
 // ===========================================================================
 
+/* LEAVE IT HERE UNTIL WXGTK WORKS AGAIN!!! */
+/// allows me to compare to wxPoints
+static bool operator != (wxPoint const &p1, wxPoint const &p2)
+{
+   return p1.x != p2.x || p1.y != p2.y;
+}
+
 // ----------------------------------------------------------------------------
 // wxLayoutWindow
 // ----------------------------------------------------------------------------
@@ -108,9 +115,9 @@ wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
               : wxScrolledWindow(parent, -1,
                                  wxDefaultPosition, wxDefaultSize,
                                  wxHSCROLL | wxVSCROLL |
-                                 wxBORDER |
-                                 wxWANTS_CHARS)
-
+                                 wxBORDER
+                                 //FIXME |wxWANTS_CHARS
+                 )
 {
    SetStatusBar(NULL); // don't use statusbar
    m_Editable = false;
@@ -166,11 +173,11 @@ wxLayoutWindow::Clear(int family,
                       wxColour *bg)
 {
    GetLayoutList()->Clear(family,size,style,weight,underline,fg,bg);
-   SetBackgroundColour(GetLayoutList()->GetDefaults()->GetBGColour());
+   SetBackgroundColour(GetLayoutList()->GetDefaultStyleInfo().GetBGColour());
    ResizeScrollbars(true);
    SetDirty();
    SetModified(false);
-
+   wxScrolledWindow::Clear();
    DoPaint((wxRect *)NULL);
 }
 
@@ -658,8 +665,8 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
    }
 
    m_memDC->SetDeviceOrigin(0,0);
-   m_memDC->SetBrush(wxBrush(m_llist->GetDefaults()->GetBGColour(),wxSOLID));
-   m_memDC->SetPen(wxPen(m_llist->GetDefaults()->GetBGColour(),
+   m_memDC->SetBrush(wxBrush(m_llist->GetDefaultStyleInfo().GetBGColour(),wxSOLID));
+   m_memDC->SetPen(wxPen(m_llist->GetDefaultStyleInfo().GetBGColour(),
                          0,wxTRANSPARENT));
    m_memDC->SetLogicalFunction(wxCOPY);
 
@@ -683,7 +690,7 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
       m_memDC->DrawRectangle(0,0,x1, y1);
    }
 
-
+   m_memDC->Clear();
    /* This is the important bit: we tell the list to draw itself: */
 #if WXLO_DEBUG_URECT
    if(updateRect)

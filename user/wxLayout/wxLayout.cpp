@@ -170,7 +170,6 @@ MyFrame::AddSampleText(wxLayoutList *llist)
    llist->Insert("italics ");
    llist->SetFont(-1,-1,wxNORMAL);
    llist->LineBreak();
-
    llist->Insert("and ");
    llist->SetFont(-1,-1,wxSLANT);
    llist->Insert("slanted");
@@ -202,6 +201,12 @@ MyFrame::AddSampleText(wxLayoutList *llist)
    llist->Insert("And here the source for the test program:");
    llist->LineBreak();
    llist->SetFont(wxTELETYPE,16);
+   llist->Insert("And here the source for the test program:");
+   llist->LineBreak();
+   llist->Insert("And here the source for the test program:");
+   llist->LineBreak();
+   llist->Insert("And here the source for the test program:");
+#if 0
    char buffer[1024];
    FILE *in = fopen("wxLayout.cpp","r");
    if(in)
@@ -214,6 +219,7 @@ MyFrame::AddSampleText(wxLayoutList *llist)
          wxLayoutImportText(llist, buffer);
       }
    }
+#endif
    llist->MoveCursorTo(wxPoint(0,0));
    m_lwin->SetDirty();
    m_lwin->Refresh();
