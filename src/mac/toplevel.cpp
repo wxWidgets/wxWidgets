@@ -176,15 +176,17 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
     {
         case kEventRawKeyRepeat :
         case kEventRawKeyDown :
-            WXEVENTREF formerEvent = wxTheApp->MacGetCurrentEvent() ;
-            WXEVENTHANDLERCALLREF formerHandler = wxTheApp->MacGetCurrentEventHandlerCallRef() ;
-            wxTheApp->MacSetCurrentEvent( event , handler ) ;
-            if ( (focus != NULL) && wxTheApp->MacSendKeyDownEvent(
-                focus , message , modifiers , when , point.h , point.v ) )
             {
-                result = noErr ;
+                WXEVENTREF formerEvent = wxTheApp->MacGetCurrentEvent() ;
+                WXEVENTHANDLERCALLREF formerHandler = wxTheApp->MacGetCurrentEventHandlerCallRef() ;
+                wxTheApp->MacSetCurrentEvent( event , handler ) ;
+                if ( (focus != NULL) && wxTheApp->MacSendKeyDownEvent(
+                    focus , message , modifiers , when , point.h , point.v ) )
+                {
+                    result = noErr ;
+                }
+                wxTheApp->MacSetCurrentEvent( formerEvent , formerHandler ) ;
             }
-            wxTheApp->MacSetCurrentEvent( formerEvent , formerHandler ) ;
             break ;
         case kEventRawKeyUp :
             if ( (focus != NULL) && wxTheApp->MacSendKeyUpEvent(
