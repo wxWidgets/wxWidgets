@@ -25,6 +25,7 @@
 #endif
 
 #include "wx/notebook.h"
+#include "wx/imaglist.h"
 
 #ifdef __WXGTK__
 #include "mondrian.xpm"
@@ -45,6 +46,7 @@ class MyPanel: public wxPanel
   public:
  
     MyPanel(wxFrame *frame, int x, int y, int w, int h);
+    virtual ~MyPanel();
     
     void OnSize( wxSizeEvent& event );
     void OnListBox( wxCommandEvent &event );
@@ -196,6 +198,28 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
     "example.",
   };
   
+  // image ids and names
+  enum
+  {
+    Image_List, Image_Choice, Image_Combo, Image_Text, Image_Radio, Image_Max
+  };
+  
+  const char *aIconNames[] =
+  {
+    "list.xpm", "choice.xpm", "combo.xpm", "text.xpm", "radio.xpm"
+  };
+  
+  wxASSERT( WXSIZEOF(aIconNames) == Image_Max ); // keep in sync
+
+  // fill the image list
+  wxString strIconDir = "icons/";
+  wxImageList *imagelist = new wxImageList(32, 32);
+  for ( size_t n = 0; n < Image_Max; n++ ) {
+    imagelist->Add(wxBitmap(strIconDir + aIconNames[n]));
+  }
+
+  m_notebook->SetImageList(imagelist);
+
   wxPanel *panel = new wxPanel(m_notebook);
   m_listbox = new wxListBox( panel, ID_LISTBOX, wxPoint(10,10), wxSize(120,70), 4, choices );
   (void)new wxButton( panel, ID_LISTBOX_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(100,30) );
@@ -203,7 +227,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   (void)new wxButton( panel, ID_LISTBOX_CLEAR, "Clear", wxPoint(180,80), wxSize(100,30) );
   (void)new wxButton( panel, ID_LISTBOX_APPEND, "Append 'Hi!'", wxPoint(300,80), wxSize(100,30) );
   (void)new wxButton( panel, ID_LISTBOX_DELETE, "Delete selected item", wxPoint(180,130), wxSize(140,30) );
-  m_notebook->AddPage(panel, "wxList");
+  m_notebook->AddPage(panel, "wxList", FALSE, Image_List);
   
   panel = new wxPanel(m_notebook);
   m_choice = new wxChoice( panel, ID_CHOICE, wxPoint(10,10), wxSize(120,-1), 4, choices );
@@ -212,7 +236,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   (void)new wxButton( panel, ID_CHOICE_CLEAR, "Clear", wxPoint(180,80), wxSize(100,30) );
   (void)new wxButton( panel, ID_CHOICE_APPEND, "Append 'Hi!'", wxPoint(300,80), wxSize(100,30) );
   (void)new wxButton( panel, ID_CHOICE_DELETE, "Delete selected item", wxPoint(180,130), wxSize(140,30) );
-  m_notebook->AddPage(panel, "wxChoice");
+  m_notebook->AddPage(panel, "wxChoice", FALSE, Image_Choice);
   
   panel = new wxPanel(m_notebook);
   m_combo = new wxComboBox( panel, ID_COMBO, "This", wxPoint(10,10), wxSize(170,-1), 4, choices );
@@ -221,16 +245,16 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   (void)new wxButton( panel, ID_COMBO_CLEAR, "Clear", wxPoint(180,80), wxSize(100,30) );
   (void)new wxButton( panel, ID_COMBO_APPEND, "Append 'Hi!'", wxPoint(300,80), wxSize(100,30) );
   (void)new wxButton( panel, ID_COMBO_DELETE, "Delete selected item", wxPoint(180,130), wxSize(140,30) );
-  m_notebook->AddPage(panel, "wxComboBox");
+  m_notebook->AddPage(panel, "wxComboBox", FALSE, Image_Combo);
   
   wxTextCtrl *text = new wxTextCtrl( m_notebook, ID_TEXT, "Write text here.", wxPoint(10,10), wxSize(120,100), wxTE_MULTILINE );
-  m_notebook->AddPage( text, "wxTextCtrl" );
+  m_notebook->AddPage(text, "wxTextCtrl" , FALSE, Image_Text);
   
   panel = new wxPanel(m_notebook);
   m_radio = new wxRadioBox( panel, ID_RADIOBOX, "This", wxPoint(10,10), wxSize(-1,-1), 4, choices );
   (void)new wxButton( panel, ID_RADIOBOX_SEL_NUM, "Select #2", wxPoint(200,30), wxSize(100,30) );
   (void)new wxButton( panel, ID_RADIOBOX_SEL_STR, "Select 'This'", wxPoint(200,80), wxSize(100,30) );
-  m_notebook->AddPage(panel, "wxRadioBox");
+  m_notebook->AddPage(panel, "wxRadioBox", FALSE, Image_Radio);
 }
 
 void MyPanel::OnSize( wxSizeEvent& WXUNUSED(event) )
@@ -387,6 +411,11 @@ void MyPanel::OnRadioButtons( wxCommandEvent &event )
   }
 }
 
+MyPanel::~MyPanel()
+{
+  delete m_notebook->GetImageList();
+}
+
 //----------------------------------------------------------------------
 // MyFrame
 //----------------------------------------------------------------------
@@ -412,5 +441,3 @@ void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
   wxMessageDialog dialog(this, "This is a control sample", "About Controls", wxOK );
   dialog.ShowModal();
 }
-
-
