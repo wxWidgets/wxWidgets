@@ -41,7 +41,7 @@
 #include "wx/dcprint.h"
 #include "math.h"
 
-#if wxUSE_COMMON_DIALOGS || defined(__WXWINE__)
+#if wxUSE_COMMON_DIALOGS
     #include <commdlg.h>
 #endif
 

@@ -57,8 +57,7 @@
 // FIXME - Mingw32 1.0 has both _getdrive() and _chdrive(). For now, let's assume
 //         older releases don't, but it should be verified and the checks modified
 //         accordingly.
-#if !defined(__WXWINE__) && (!defined(__GNUWIN32__) || \
-    (defined(__MINGW32_MAJOR_VERSION) && __MINGW32_MAJOR_VERSION >= 1))
+#if !defined(__GNUWIN32__) || (defined(__MINGW32_MAJOR_VERSION) && __MINGW32_MAJOR_VERSION >= 1)
   #include <direct.h>
   #include <stdlib.h>
   #include <ctype.h>
@@ -381,8 +380,7 @@ bool wxIsDriveAvailable(const wxString& dirName)
     if (dirName.Len() == 3 && dirName[(size_t)1] == wxT(':'))
     {
         wxString dirNameLower(dirName.Lower());
-#if defined(__WXWINE__) || (defined(__GNUWIN32__) && \
-    !(defined(__MINGW32_MAJOR_VERSION) && __MINGW32_MAJOR_VERSION >= 1))
+#if defined(__GNUWIN32__) && !(defined(__MINGW32_MAJOR_VERSION) && __MINGW32_MAJOR_VERSION >= 1)
         success = wxPathExists(dirNameLower);
 #else
         int currentDrive = _getdrive();

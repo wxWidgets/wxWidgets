@@ -96,7 +96,7 @@ wxAcceleratorTable::wxAcceleratorTable(const wxString& resource)
 extern int wxCharCodeWXToMSW(int id, bool *isVirtual);
 
 // Create from an array
-#if !defined(__WIN16__) && !defined(__TWIN32__) && !defined(__WXWINE__)
+#if !defined(__WIN16__) && !defined(__TWIN32__)
 wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[])
 {
     // Not available in WIN16

@@ -254,7 +254,7 @@ typedef int wxWindowID;
 // ----------------------------------------------------------------------------
 
 // stdcall is used for all functions called by Windows under Windows
-#if defined(__WINDOWS__) && !defined(__WXWINE__)
+#if defined(__WINDOWS__)
     #if defined(__GNUWIN32__)
         #define wxSTDCALL __attribute__((stdcall))
     #else
@@ -1931,7 +1931,7 @@ typedef WXHWND          WXWidget;
 typedef unsigned int    WXWPARAM;
 typedef long            WXLPARAM;
 
-#if !defined(__WIN32__) || defined(__GNUWIN32__) || defined(__WXWINE__) || defined(__WXMICROWIN__)
+#if !defined(__WIN32__) || defined(__GNUWIN32__) || defined(__WXMICROWIN__)
 typedef int             (*WXFARPROC)();
 #else
 typedef int             (__stdcall *WXFARPROC)();

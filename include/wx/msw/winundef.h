@@ -341,7 +341,7 @@
 
 // For WINE
 
-#if defined(GetWindowStyle) || defined(__WXWINE__)
+#if defined(GetWindowStyle)
   #undef GetWindowStyle
 #endif
 

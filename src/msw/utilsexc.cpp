@@ -47,7 +47,7 @@
 
 #include <ctype.h>
 
-#if !defined(__GNUWIN32__) && !defined(__WXWINE__) && !defined(__SALFORDC__) && !defined(__WXMICROWIN__)
+#if !defined(__GNUWIN32__) && !defined(__SALFORDC__) && !defined(__WXMICROWIN__)
     #include <direct.h>
 #ifndef __MWERKS__
     #include <dos.h>
@@ -59,7 +59,7 @@
     #include <sys/stat.h>
 #endif
 
-#if defined(__WIN32__) && !defined(__WXWINE__) && !defined(__WXMICROWIN__)
+#if defined(__WIN32__) && !defined(__WXMICROWIN__)
 #include <io.h>
 
 #ifndef __GNUWIN32__
@@ -347,10 +347,6 @@ wxPipeInputStream::~wxPipeInputStream()
 
 bool wxPipeInputStream::CanRead() const
 {
-    // FIXME
-#ifdef __WXWINE__
-    return FALSE;
-#else // !Wine
     if ( !IsOpened() )
         return FALSE;
 
@@ -387,7 +383,6 @@ bool wxPipeInputStream::CanRead() const
     }
 
     return nAvailable != 0;
-#endif // Wine/!Wine
 }
 
 size_t wxPipeInputStream::OnSysRead(void *buffer, size_t len)

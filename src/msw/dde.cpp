@@ -46,10 +46,6 @@
 #include <windows.h>
 #include <ddeml.h>
 
-#ifdef __WXWINE__
-#define PCONVCONTEXT CONVCONTEXT*
-#endif
-
 #if defined(__TWIN32__) || defined(__GNUWIN32_OLD__)
     #include "wx/msw/gnuwin32/extra.h"
 #endif

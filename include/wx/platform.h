@@ -39,15 +39,9 @@
     #endif
 #endif
 
-#ifdef __WXWINE__
-    #ifndef __WIN32__
-        #define __WIN32__
-    #endif
+#ifdef __WINE__
     #ifndef __WIN95__
         #define __WIN95__
-    #endif
-    #ifndef STRICT
-        #define STRICT
     #endif
 #endif /* WINE */
 

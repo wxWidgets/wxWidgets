@@ -148,14 +148,8 @@ bool wxFontEnumeratorHelper::SetEncoding(wxFontEncoding encoding)
     return TRUE;
 }
 
-#if defined(__WXWINE__)
-    #define wxFONTENUMPROC FONTENUMPROCEX
-#elif (defined(__GNUWIN32__) && !defined(__CYGWIN10__) && !wxCHECK_W32API_VERSION( 1, 1 ))
-    #if wxUSE_NORLANDER_HEADERS
-        #define wxFONTENUMPROC FONTENUMPROC
-    #else
-        #define wxFONTENUMPROC int(*)(ENUMLOGFONTEX *, NEWTEXTMETRICEX*, int, LPARAM)
-    #endif
+#if defined(__GNUWIN32__) && !defined(__CYGWIN10__) && !wxCHECK_W32API_VERSION( 1, 1 ) && !wxUSE_NORLANDER_HEADERS
+    #define wxFONTENUMPROC int(*)(ENUMLOGFONTEX *, NEWTEXTMETRICEX*, int, LPARAM)
 #else
     #define wxFONTENUMPROC FONTENUMPROC
 #endif

@@ -28,7 +28,7 @@
 #if wxUSE_FILE
 
 // standard
-#if defined(__WXMSW__) && !defined(__GNUWIN32__) && !defined(__WXWINE__) && !defined(__WXMICROWIN__)
+#if defined(__WXMSW__) && !defined(__GNUWIN32__) && !defined(__WXMICROWIN__)
   #include  <io.h>
 
 #ifndef __SALFORDC__

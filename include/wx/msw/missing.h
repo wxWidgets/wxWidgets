@@ -243,19 +243,5 @@ struct HH_AKLINK
     #define QS_ALLPOSTMESSAGE    0x0100
 #endif
 
-#ifdef __WXWINE__
-#define LV_ITEMA LVITEMA
-#define LV_ITEMW LVITEMW
-#define LV_DISPINFOA NMLVDISPINFOA
-#define LV_DISPINFOW NMLVDISPINFOW
-
-#if wxUSE_UNICODE
-#define LV_FINDINFO LVFINDINFOW
-#else
-#define LV_FINDINFO LVFINDINFOA
-#endif
-
-#endif
-
 #endif
     // _WX_MISSING_H_

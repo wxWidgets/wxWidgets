@@ -73,7 +73,7 @@ bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *gre
 {
   UnRef();
 
-#if defined(__WXWINE__) || defined(__WXMICROWIN__)
+#if defined(__WXMICROWIN__)
 
   return (FALSE);
 

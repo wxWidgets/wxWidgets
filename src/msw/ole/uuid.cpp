@@ -136,10 +136,6 @@ void Uuid::Create()
 // set the value
 bool Uuid::Set(const wxChar *pc)
 {
-#ifdef __WXWINE__
-    wxFAIL_MSG(_T("UUid::Set not implemented"));
-    return FALSE;
-#else
   // get UUID from string
 #ifdef _UNICODE
   if ( UuidFromString((unsigned short *)pc, &m_uuid) != RPC_S_OK)
@@ -160,7 +156,6 @@ bool Uuid::Set(const wxChar *pc)
   UuidToCForm();
 
   return TRUE;
-#endif
 }
 
 // stores m_uuid in m_pszCForm in a format required by

@@ -48,7 +48,7 @@
 
 #include "wx/timer.h"
 
-#if !defined(__GNUWIN32__) && !defined(__WXWINE__) && !defined(__SALFORDC__) && !defined(__WXMICROWIN__)
+#if !defined(__GNUWIN32__) && !defined(__SALFORDC__) && !defined(__WXMICROWIN__)
     #include <direct.h>
 
     #ifndef __MWERKS__
@@ -78,7 +78,7 @@
     #include <lm.h>
 #endif // USE_NET_API
 
-#if defined(__WIN32__) && !defined(__WXWINE__) && !defined(__WXMICROWIN__)
+#if defined(__WIN32__) && !defined(__WXMICROWIN__)
     #include <io.h>
 
     #ifndef __GNUWIN32__
@@ -887,7 +887,6 @@ bool wxShutdown(wxShutdownFlags wFlags)
         bOK = ::OpenProcessToken(GetCurrentProcess(),
                                  TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                                  &hToken) != 0;
-#ifndef __WXWINE__
         if ( bOK )
         {
             TOKEN_PRIVILEGES tkp; 
@@ -906,7 +905,6 @@ bool wxShutdown(wxShutdownFlags wFlags)
             // Cannot test the return value of AdjustTokenPrivileges. 
             bOK = ::GetLastError() == ERROR_SUCCESS;
         }
-#endif
     }
 
     if ( bOK )

@@ -353,7 +353,7 @@ static HANDLE DibFromBitmap(HBITMAP hbm, DWORD biStyle, WORD biBits, HPALETTE hp
 static DWORD PASCAL lread(int fh, void far *pv, DWORD ul)
 {
         DWORD     ulT = ul;
-#if defined(WINNT) || defined(__WIN32__) || defined(__WIN32__) || defined(__WXWINE__)
+#if defined(WINNT) || defined(__WIN32__) || defined(__WIN32__)
         BYTE *hp = (BYTE *) pv;
 #else
         BYTE huge *hp = (BYTE huge *) pv;
@@ -383,7 +383,7 @@ static DWORD PASCAL lread(int fh, void far *pv, DWORD ul)
 static DWORD PASCAL lwrite(int fh, VOID FAR *pv, DWORD ul)
 {
         DWORD     ulT = ul;
-#if defined(WINNT) || defined(__WIN32__) || defined(__WIN32__) || defined(__WXWINE__)
+#if defined(WINNT) || defined(__WIN32__) || defined(__WIN32__)
         BYTE *hp = (BYTE *) pv;
 #else
         BYTE huge *hp = (BYTE huge *) pv;
@@ -639,9 +639,6 @@ static BOOL PASCAL MakeBitmapAndPalette(HDC hDC, HANDLE hDIB,
  ****************************************************************************/
 HPALETTE wxMakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
 {
-#ifdef __WXWINE__
-        return (FALSE);
-#else
     LPLOGPALETTE npPal;
     RGBQUAD far *lpRGB;
     HPALETTE hLogPal;
@@ -689,8 +686,6 @@ HPALETTE wxMakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
     */
     else
         return((HPALETTE) GetStockObject(DEFAULT_PALETTE));
-#endif
-
 }
 
 bool wxLoadIntoBitmap(wxChar *filename, wxBitmap *bitmap, wxPalette **pal)

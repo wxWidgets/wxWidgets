@@ -119,12 +119,7 @@ private:
 #if wxUSE_WCHAR_T
         if ( (item.mask & LVIF_TEXT) && item.pszText )
         {
-#ifdef __WXWINE__
-            // FIXME
-            m_buf = new wxWC2WXbuf(wxConvLocal.cWC2WX((const __wchar_t* ) item.pszText));
-#else
             m_buf = new wxWC2WXbuf(wxConvLocal.cWC2WX(item.pszText));
-#endif
             m_item->pszText = (wxChar*)m_buf->data();
         }
         else

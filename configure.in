@@ -2358,7 +2358,7 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lwine$mesa_link$xpm_link -lXxf86dga -lXxf86vm -lSM -lICE -lXext -lXmu -lX11 -lncurses"
         TOOLKIT=MSW
         GUIDIST=MSW_DIST
-        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXWINE__"
+        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WINE__"
     fi
 
     if test "$wxUSE_MOTIF" = 1; then

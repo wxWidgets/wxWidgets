@@ -32,12 +32,6 @@
 
 #include "wx/msw/dibutils.h"
 
-#ifdef __WXWINE__
-/* Why module.h? No longer finds this header.
-   #include <module.h>
-*/
-#endif
-
 #if defined(__WIN32__)
 #if !defined(__MWERKS__) && !defined(__SALFORDC__)
     #include <memory.h>             // for _fmemcpy()
@@ -115,11 +109,7 @@ void wxClearSystemPalette(void)
   }
 
   // *** Create, select, realize, deselect, and delete the palette
-#ifdef __WXWINE__
-  ScreenDC = GetDC((HWND)NULL);
-#else
   ScreenDC = GetDC(NULL);
-#endif
   ScreenPalette = CreatePalette((LOGPALETTE *)&Palette);
 
   if (ScreenPalette)
@@ -130,11 +120,7 @@ void wxClearSystemPalette(void)
     bOK = DeleteObject(ScreenPalette);
   }
 
-#ifdef __WXWINE__
-  nOK = ReleaseDC((HWND)NULL, ScreenDC);
-#else
   nOK = ReleaseDC(NULL, ScreenDC);
-#endif
 
   return;
 }
