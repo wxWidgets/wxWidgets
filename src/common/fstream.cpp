@@ -23,14 +23,7 @@
 #pragma hdrstop
 #endif
 
-
 #define BUF_TEMP_SIZE 10000
-
-#if !USE_SHARED_LIBRARY
-IMPLEMENT_CLASS(wxFileInputStream, wxInputStream)
-IMPLEMENT_CLASS(wxFileOutputStream, wxOutputStream)
-IMPLEMENT_CLASS2(wxFileStream, wxInputStream, wxOutputStream)
-#endif
 
 // ----------------------------------------------------------------------------
 // wxFileInputStream

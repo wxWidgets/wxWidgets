@@ -17,7 +17,6 @@
 #include <wx/file.h>
 
 class wxFileInputStream: virtual public wxFile, public wxInputStream {
-  DECLARE_CLASS(wxFileInputStream)
  public:
   wxFileInputStream(const wxString& fileName);
   virtual ~wxFileInputStream();
@@ -41,7 +40,6 @@ class wxFileInputStream: virtual public wxFile, public wxInputStream {
 };
 
 class wxFileOutputStream: virtual wxFile, public wxOutputStream {
-  DECLARE_CLASS(wxFileOutputStream)
  public:
   wxFileOutputStream(const wxString& fileName);
   virtual ~wxFileOutputStream();
@@ -66,7 +64,6 @@ class wxFileOutputStream: virtual wxFile, public wxOutputStream {
 };
 
 class wxFileStream: public wxFileInputStream, public wxFileOutputStream {
-  DECLARE_CLASS(wxFileStream)
  public:
   wxFileStream(const wxString& fileName);
   virtual ~wxFileStream();

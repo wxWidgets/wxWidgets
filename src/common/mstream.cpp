@@ -23,12 +23,6 @@
 #pragma hdrstop
 #endif
 
-#if !USE_SHARED_LIBRARY
-IMPLEMENT_CLASS(wxMemoryInputStream, wxInputStream)
-IMPLEMENT_CLASS(wxMemoryOutputStream, wxOutputStream)
-IMPLEMENT_CLASS2(wxMemoryStream, wxInputStream, wxOutputStream)
-#endif
-
 // ----------------------------------------------------------------------------
 // wxMemoryStreamBase
 // ----------------------------------------------------------------------------

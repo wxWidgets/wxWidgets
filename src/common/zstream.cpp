@@ -23,11 +23,6 @@
 #pragma hdrstop
 #endif
 
-#if !USE_SHARED_LIBRARY
-IMPLEMENT_CLASS(wxZlibInputStream, wxFilterInputStream)
-IMPLEMENT_CLASS(wxZlibOutputStream, wxFilterOutputStream)
-#endif
-
 //////////////////////
 // wxZlibInputStream
 //////////////////////

@@ -21,15 +21,7 @@
 #pragma hdrstop
 #endif
 
-#if !USE_SHARED_LIBRARY
-IMPLEMENT_ABSTRACT_CLASS(wxInputStream, wxObject)
-IMPLEMENT_ABSTRACT_CLASS(wxOutputStream, wxObject)
-IMPLEMENT_CLASS(wxFilterInputStream, wxInputStream)
-IMPLEMENT_CLASS(wxFilterOutputStream, wxOutputStream)
-#endif
-
 wxInputStream::wxInputStream()
-  : wxObject()
 {
 }
 
@@ -53,7 +45,6 @@ wxInputStream& wxInputStream::Read(wxOutputStream& stream_out)
 }
 
 wxOutputStream::wxOutputStream()
-  : wxObject()
 {
 }
 

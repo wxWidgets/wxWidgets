@@ -28,7 +28,6 @@ class wxMemoryStreamBase {
 };
 
 class wxMemoryInputStream: virtual public wxMemoryStreamBase, public wxInputStream {
-  DECLARE_CLASS(wxMemoryInputStream)
  public:
   wxMemoryInputStream(const char *data, size_t length);
   virtual ~wxMemoryInputStream();
@@ -47,7 +46,6 @@ class wxMemoryInputStream: virtual public wxMemoryStreamBase, public wxInputStre
 };
 
 class wxMemoryOutputStream: virtual public wxMemoryStreamBase, public wxOutputStream {
-  DECLARE_CLASS(wxMemoryOutputStream)
  public:
   wxMemoryOutputStream(char *data = NULL, size_t length = 0);
   virtual ~wxMemoryOutputStream();
@@ -69,7 +67,6 @@ class wxMemoryOutputStream: virtual public wxMemoryStreamBase, public wxOutputSt
 };
 
 class wxMemoryStream: public wxMemoryInputStream, public wxMemoryOutputStream {
-  DECLARE_CLASS(wxMemoryStream)
  public:
   wxMemoryStream(char *data = NULL, size_t length = 0);
   virtual ~wxMemoryStream();

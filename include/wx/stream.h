@@ -25,8 +25,7 @@
  * wxStream: base classes
  */
 class wxOutputStream;
-class wxInputStream: virtual public wxObject {
-  DECLARE_ABSTRACT_CLASS(wxInputStream)
+class wxInputStream {
  public:
   wxInputStream();
   virtual ~wxInputStream();
@@ -43,8 +42,7 @@ class wxInputStream: virtual public wxObject {
   wxInputStream& operator>>(wxOutputStream& out) { return Read(out); }
 };
 
-class wxOutputStream: virtual public wxObject {
-  DECLARE_ABSTRACT_CLASS(wxOutputStream)
+class wxOutputStream {
  public:
   wxOutputStream();
   virtual ~wxOutputStream();
@@ -66,7 +64,6 @@ class wxOutputStream: virtual public wxObject {
  */
 
 class wxFilterInputStream: public wxInputStream {
-  DECLARE_CLASS(wxFilterInputStream)
  public:
   wxFilterInputStream(wxInputStream& stream);
   virtual ~wxFilterInputStream();
@@ -86,7 +83,6 @@ class wxFilterInputStream: public wxInputStream {
 };
 
 class wxFilterOutputStream: public wxOutputStream {
-  DECLARE_CLASS(wxFilterOutputStream)
  public:
   wxFilterOutputStream(wxOutputStream& stream);
   virtual ~wxFilterOutputStream();

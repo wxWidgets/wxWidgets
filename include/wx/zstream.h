@@ -19,7 +19,6 @@
 #include "zlib.h"
 
 class wxZlibInputStream: public wxFilterInputStream {
-  DECLARE_CLASS(wxZlibInputStream)
  public:
   wxZlibInputStream(wxInputStream& stream);
   virtual ~wxZlibInputStream();
@@ -40,7 +39,6 @@ class wxZlibInputStream: public wxFilterInputStream {
 };
 
 class wxZlibOutputStream: public wxFilterOutputStream {
-  DECLARE_CLASS(wxZlibOutputStream)
  public:
   wxZlibOutputStream(wxOutputStream& stream);
   virtual ~wxZlibOutputStream();
