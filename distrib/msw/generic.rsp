@@ -66,6 +66,7 @@ src/mkdir
 src/make.env.in
 src/makeprog.env.in
 src/makelib.env.in
+src/files.lst
 
 src/common/*.cpp
 src/common/dosyacc.c
