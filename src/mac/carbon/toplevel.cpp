@@ -43,6 +43,9 @@
 #include "wx/tooltip.h"
 #include "wx/dnd.h"
 
+#include "ToolUtils.h"
+
+
 #define wxMAC_DEBUG_REDRAW 0
 #ifndef wxMAC_DEBUG_REDRAW
 #define wxMAC_DEBUG_REDRAW 0
