@@ -106,6 +106,36 @@ private:
     wxFileTypeImpl *m_impl;
 };
 
+// This class is only used wuth wxMimeTypesManager::AddFallbacks() and is meant
+// just as the container for the wxFileType data.
+class WXDLLEXPORT wxFileTypeInfo
+{
+public:
+    // ctors
+        // a normal item
+    wxFileTypeInfo(const char *mimeType,
+                   const char *openCmd,
+                   const char *printCmd,
+                   const char *desc,
+                   // the other parameters form a NULL terminated list of
+                   // extensions
+                   ...);
+                   
+        // invalid item - use this to terminate the array passed to
+        // wxMimeTypesManager::AddFallbacks
+    wxFileTypeInfo() { }
+
+    bool IsValid() const { return !m_mimeType.IsEmpty(); }
+
+private:
+    wxString m_mimeType,    // the MIME type in "type/subtype" form
+             m_openCmd,     // command to use for opening the file (%s allowed)
+             m_printCmd,    // command to use for printing the file (%s allowed)
+             m_desc;        // a free form description of this file type
+
+    wxArrayString m_exts;   // the extensions which are mapped on this filetype
+};
+
 // This class accesses the information about all known MIME types and allows
 // the application to retrieve information (including how to handle data of
 // given type) about them.
@@ -147,6 +177,17 @@ public:
     bool ReadMailcap(const wxString& filename, bool fallback = FALSE);
         // read in additional file in mime.types format
     bool ReadMimeTypes(const wxString& filename);
+
+    // these functions can be used to provide default values for some of the
+    // MIME types inside the program itself (you may also use
+    // ReadMailcap(filenameWithDefaultTypes, TRUE /* use as fallback */) to
+    // achieve the same goal, but this requires having this info in a file).
+    //
+    // It isn't possible (currently) to provide fallback icons using this
+    // function.
+    //
+    // The filetypes array should be terminated by a NULL entry
+    bool AddFallbacks(const wxFileTypeInfo *filetypes);
 
     // dtor (not virtual, shouldn't be derived from)
     ~wxMimeTypesManager();
