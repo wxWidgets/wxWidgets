@@ -163,14 +163,17 @@ wxFontMapper::~wxFontMapper()
 {
 }
 
+bool wxFontMapper::IsWxFontMapper()
+{   return true; }
+
 /* static */
-// Declared as returning wxFontMapper when wxUSE_GUI=1.  Unfortunately, it's
-// only implemented in wxBase library.  Note that if the last resort
-// is taken and GUI code tries to treat it as a real wxFontMapper
-// then you'd be in trouble.
 wxFontMapper *wxFontMapper::Get()
 {
-    return (wxFontMapper*)wxFontMapperBase::Get();
+    wxFontMapperBase *fontmapper = wxFontMapperBase::Get();
+    wxASSERT_MSG(fontmapper->IsWxFontMapper(), wxT("GUI code requested a wxFontMapper but we only have a wxFontMapperBase."));
+    // Now return it anyway because there's a chance the GUI code might just
+    // only want to call wxFontMapperBase functions.
+    return (wxFontMapper*)fontmapper;
 }
 
 wxFontEncoding

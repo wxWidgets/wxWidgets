@@ -199,7 +199,7 @@ class wxFontMapperModule : public wxModule
 public:
     wxFontMapperModule() : wxModule() { }
     virtual bool OnInit() { return true; }
-    virtual void OnExit() { delete wxFontMapperBase::Set(NULL); }
+    virtual void OnExit() { delete (wxFontMapperBase*)wxFontMapperBase::Set(NULL); }
 
     DECLARE_DYNAMIC_CLASS(wxFontMapperModule)
 };
@@ -233,11 +233,10 @@ wxFontMapperBase::~wxFontMapperBase()
 #endif // wxUSE_CONFIG
 }
 
+bool wxFontMapperBase::IsWxFontMapper()
+{   return false; }
+
 /* static */
-// Declared as returning wxFontMapper when wxUSE_GUI=1.  Unfortunately, it's
-// only implemented in wxBase library.  Note that if the last resort
-// is taken and GUI code tries to treat it as a real wxFontMapper
-// then you'd be in trouble.
 wxFontMapperBase *wxFontMapperBase::Get()
 {
     if ( !sm_instance )

@@ -49,6 +49,8 @@ class WXDLLIMPEXP_CORE wxFontMapper;
 
 class WXDLLIMPEXP_BASE wxFontMapperBase
 {
+    // For IsWxFontMapper()
+    friend class WXDLLIMPEXP_CORE wxFontMapper;
 public:
     // constructtor and such
     // ---------------------
@@ -61,6 +63,8 @@ public:
 
     // return instance of the wxFontMapper singleton
     // wxBase code only cares that it's a wxFontMapperBase
+    // In wxBase, wxFontMapper is only forward declared
+    // so one cannot implicitly cast from it to wxFontMapperBase.
     static wxFontMapperBase *Get();
 
     // set the singleton to 'mapper' instance and return previous one
@@ -156,6 +160,9 @@ protected:
     int NonInteractiveCharsetToEncoding(const wxString& charset);
 
 private:
+    // pseudo-RTTI since we aren't a wxObject.
+    virtual bool IsWxFontMapper();
+
     // the global fontmapper object or NULL
     static wxFontMapper *sm_instance;
 
@@ -252,6 +259,9 @@ protected:
     wxWindow *m_windowParent;
 
 private:
+    // pseudo-RTTI since we aren't a wxObject.
+    virtual bool IsWxFontMapper();
+
     DECLARE_NO_COPY_CLASS(wxFontMapper)
 };
 
