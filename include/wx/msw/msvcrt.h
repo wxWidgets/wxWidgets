@@ -40,7 +40,18 @@
         #undef new
     #endif
 
+    // we need this to show file & line number of the allocation that caused
+    // the leak
+    #define _CRTDBG_MAP_ALLOC
+    #include <stdlib.h>
     #include <crtdbg.h>
+
+    // this define works around a bug with inline declarations of new, see
+    //
+    //      http://support.microsoft.com/support/kb/articles/Q140/8/58.asp
+    //
+    // for the details 
+    #define new  new( _NORMAL_BLOCK, __FILE__, __LINE__)
 
     #define wxCrtSetDbgFlag(flag) \
         _CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) | (flag))
