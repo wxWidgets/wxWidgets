@@ -164,10 +164,10 @@
 #endif
 
 #ifdef __WXMSW__
-    #if defined(_WIN32) || defined(WIN32) || defined(__NT__)
-        #ifndef __WIN32__
-            #define __WIN32__
-        #endif
+
+#if defined(_WIN32) || defined(WIN32) || defined(__NT__)
+    #ifndef __WIN32__
+        #define __WIN32__
     #endif
 #endif
 
