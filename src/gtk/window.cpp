@@ -3365,14 +3365,18 @@ void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
     {
         if (m_wxwindow)
         {
-
-/*
+#if 0
             GtkPizza *pizza = GTK_PIZZA(m_wxwindow);
             gboolean old_clear = pizza->clear_on_draw;
             gtk_pizza_set_clear( pizza, FALSE );
             gtk_widget_draw( m_wxwindow, (GdkRectangle*) NULL );
             gtk_pizza_set_clear( pizza, old_clear );
-*/
+#endif
+
+#if 1
+            // Schedule for later Updating in ::Update() or ::OnInternalIdle().
+            m_updateRegion.Union( 0, 0, m_wxwindow->allocation.width, m_wxwindow->allocation.height );
+#else
             GdkEventExpose gdk_event;
             gdk_event.type = GDK_EXPOSE;
             gdk_event.window = GTK_PIZZA(m_wxwindow)->bin_window;
@@ -3382,6 +3386,7 @@ void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
             gdk_event.area.width = m_wxwindow->allocation.width;
             gdk_event.area.height = m_wxwindow->allocation.height;
             gtk_window_expose_callback( m_wxwindow, &gdk_event, (wxWindow *)this );
+#endif
         }
         else
         {
@@ -3393,7 +3398,7 @@ void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
 
         if (m_wxwindow)
         {
-/*
+#if 0
             GtkPizza *pizza = GTK_PIZZA(m_wxwindow);
             gboolean old_clear = pizza->clear_on_draw;
             gtk_pizza_set_clear( pizza, FALSE );
@@ -3407,7 +3412,12 @@ void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
             gtk_window_draw_callback( m_wxwindow, &gdk_rect, this );
 
             gtk_pizza_set_clear( pizza, old_clear );
-*/
+#endif
+
+#if 1
+            // Schedule for later Updating in ::Update() or ::OnInternalIdle().
+            m_updateRegion.Union( rect->x, rect->y, rect->width, rect->height );
+#else
             GdkEventExpose gdk_event;
             gdk_event.type = GDK_EXPOSE;
             gdk_event.window = GTK_PIZZA(m_wxwindow)->bin_window;
@@ -3417,6 +3427,7 @@ void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
             gdk_event.area.width = rect->width;
             gdk_event.area.height = rect->height;
             gtk_window_expose_callback( m_wxwindow, &gdk_event, (wxWindow *)this );
+#endif
         }
         else
         {
@@ -3434,7 +3445,7 @@ void wxWindowGTK::Update()
 {
     if (!m_updateRegion.IsEmpty())
     {
-        printf( "never gets called\n" );
+        GtkSendPaintEvents();
     }
 }
 
