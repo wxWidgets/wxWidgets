@@ -376,7 +376,8 @@ void MyFrame::OnKill(wxCommandEvent& WXUNUSED(event))
                                    _T("Enter PID:"),
                                    _T("Exec question"),
                                    m_pidLast,
-                                   1, INT_MAX,
+                                   // we need the full unsigned int range
+                                   -INT_MAX, INT_MAX,
                                    this);
     if ( pid == -1 )
     {
