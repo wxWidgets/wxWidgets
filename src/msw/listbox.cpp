@@ -516,12 +516,15 @@ wxListBox::DoInsertItems(const wxArrayString& items, int pos)
         int idx = ListBox_InsertString(GetHwnd(), i + pos, items[i]);
 
 #if wxUSE_OWNER_DRAWN
-        wxOwnerDrawn *pNewItem = CreateItem(idx);
-        pNewItem->SetName(items[i]);
-        pNewItem->SetFont(GetFont());
-        m_aItems.Insert(pNewItem, idx);
+        if ( m_windowStyle & wxLB_OWNERDRAW )
+        {
+            wxOwnerDrawn *pNewItem = CreateItem(idx);
+            pNewItem->SetName(items[i]);
+            pNewItem->SetFont(GetFont());
+            m_aItems.Insert(pNewItem, idx);
 
-        ListBox_SetItemData(GetHwnd(), idx, pNewItem);
+            ListBox_SetItemData(GetHwnd(), idx, pNewItem);
+        }
 #endif // wxUSE_OWNER_DRAWN
     }
 
