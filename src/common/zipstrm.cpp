@@ -77,19 +77,19 @@ wxZipInputStream::~wxZipInputStream()
 
 bool wxZipInputStream::Eof() const
 {
-    wxASSERT_MSG( m_Pos <= (off_t)m_Size,
+    wxASSERT_MSG( m_Pos <= (wxFileOffset)m_Size,
                   _T("wxZipInputStream: invalid current position") );
 
-    return m_Pos >= (off_t)m_Size;
+    return m_Pos >= (wxFileOffset)m_Size;
 }
 
 
 size_t wxZipInputStream::OnSysRead(void *buffer, size_t bufsize)
 {
-    wxASSERT_MSG( m_Pos <= (off_t)m_Size,
+    wxASSERT_MSG( m_Pos <= (wxFileOffset)m_Size,
                   _T("wxZipInputStream: invalid current position") );
 
-    if ( m_Pos >= (off_t)m_Size )
+    if ( m_Pos >= (wxFileOffset)m_Size )
     {
         m_lasterror = wxSTREAM_EOF;
         return 0;
@@ -106,14 +106,14 @@ size_t wxZipInputStream::OnSysRead(void *buffer, size_t bufsize)
 
 
 
-off_t wxZipInputStream::OnSysSeek(off_t seek, wxSeekMode mode)
+wxFileOffset wxZipInputStream::OnSysSeek(wxFileOffset seek, wxSeekMode mode)
 {
     // NB: since ZIP files don't natively support seeking, we have to
     //     implement a brute force workaround -- reading all the data
     //     between current and the new position (or between beginning of
     //     the file and new position...)
 
-    off_t nextpos;
+    wxFileOffset nextpos;
 
     switch ( mode )
     {

@@ -85,12 +85,12 @@ size_t wxMemoryInputStream::OnSysRead(void *buffer, size_t nbytes)
     return m_i_streambuf->GetIntPosition() - pos;
 }
 
-off_t wxMemoryInputStream::OnSysSeek(off_t pos, wxSeekMode mode)
+wxFileOffset wxMemoryInputStream::OnSysSeek(wxFileOffset pos, wxSeekMode mode)
 {
     return m_i_streambuf->Seek(pos, mode);
 }
 
-off_t wxMemoryInputStream::OnSysTell() const
+wxFileOffset wxMemoryInputStream::OnSysTell() const
 {
     return m_i_streambuf->Tell();
 }
@@ -126,12 +126,12 @@ size_t wxMemoryOutputStream::OnSysWrite(const void *buffer, size_t nbytes)
     return newpos - oldpos;
 }
 
-off_t wxMemoryOutputStream::OnSysSeek(off_t pos, wxSeekMode mode)
+wxFileOffset wxMemoryOutputStream::OnSysSeek(wxFileOffset pos, wxSeekMode mode)
 {
     return m_o_streambuf->Seek(pos, mode);
 }
 
-off_t wxMemoryOutputStream::OnSysTell() const
+wxFileOffset wxMemoryOutputStream::OnSysTell() const
 {
     return m_o_streambuf->Tell();
 }

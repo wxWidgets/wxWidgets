@@ -52,13 +52,13 @@ class WXDLLIMPEXP_BASE wxZlibInputStream: public wxFilterInputStream {
 
  protected:
   size_t OnSysRead(void *buffer, size_t size);
-  off_t OnSysTell() const { return m_pos; }
+  wxFileOffset OnSysTell() const { return m_pos; }
 
  protected:
   size_t m_z_size;
   unsigned char *m_z_buffer;
   struct z_stream_s *m_inflate;
-  off_t m_pos;
+  wxFileOffset m_pos;
 #if WXWIN_COMPATIBILITY_2_4
   bool m_24compatibilty;
 #endif
@@ -78,7 +78,7 @@ class WXDLLIMPEXP_BASE wxZlibOutputStream: public wxFilterOutputStream {
 
  protected:
   size_t OnSysWrite(const void *buffer, size_t size);
-  off_t OnSysTell() const { return m_pos; }
+  wxFileOffset OnSysTell() const { return m_pos; }
 
   virtual void DoFlush(bool final);
 
@@ -86,7 +86,7 @@ class WXDLLIMPEXP_BASE wxZlibOutputStream: public wxFilterOutputStream {
   size_t m_z_size;
   unsigned char *m_z_buffer;
   struct z_stream_s *m_deflate;
-  off_t m_pos;
+  wxFileOffset m_pos;
 
   DECLARE_NO_COPY_CLASS(wxZlibOutputStream)
 };

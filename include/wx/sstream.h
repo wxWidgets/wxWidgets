@@ -34,8 +34,8 @@ public:
     virtual size_t GetSize() const { return m_str.length(); }
 
 protected:
-    virtual off_t OnSysSeek(off_t ofs, wxSeekMode mode);
-    virtual off_t OnSysTell() const;
+    virtual wxFileOffset OnSysSeek(wxFileOffset ofs, wxSeekMode mode);
+    virtual wxFileOffset OnSysTell() const;
     virtual size_t OnSysRead(void *buffer, size_t size);
 
 private:
@@ -68,7 +68,7 @@ public:
     const wxString& GetString() const { return *m_str; }
 
 protected:
-    virtual off_t OnSysTell() const;
+    virtual wxFileOffset OnSysTell() const;
     virtual size_t OnSysWrite(const void *buffer, size_t size);
 
 private:

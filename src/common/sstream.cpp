@@ -36,7 +36,7 @@
 // seek/tell
 // ----------------------------------------------------------------------------
 
-off_t wxStringInputStream::OnSysSeek(off_t ofs, wxSeekMode mode)
+wxFileOffset wxStringInputStream::OnSysSeek(wxFileOffset ofs, wxSeekMode mode)
 {
     const size_t ofsMax = m_str.length()*sizeof(wxChar);
 
@@ -67,9 +67,9 @@ off_t wxStringInputStream::OnSysSeek(off_t ofs, wxSeekMode mode)
     return ofs;
 }
 
-off_t wxStringInputStream::OnSysTell() const
+wxFileOffset wxStringInputStream::OnSysTell() const
 {
-    return wx_static_cast(off_t, m_pos);
+    return wx_static_cast(wxFileOffset, m_pos);
 }
 
 // ----------------------------------------------------------------------------
@@ -105,9 +105,9 @@ size_t wxStringInputStream::OnSysRead(void *buffer, size_t size)
 // seek/tell
 // ----------------------------------------------------------------------------
 
-off_t wxStringOutputStream::OnSysTell() const
+wxFileOffset wxStringOutputStream::OnSysTell() const
 {
-    return wx_static_cast(off_t, m_pos);
+    return wx_static_cast(wxFileOffset, m_pos);
 }
 
 // ----------------------------------------------------------------------------

@@ -45,8 +45,8 @@ class WXDLLIMPEXP_BASE wxFileInputStream: public wxInputStream {
   wxFileInputStream();
 
   size_t OnSysRead(void *buffer, size_t size);
-  off_t OnSysSeek(off_t pos, wxSeekMode mode);
-  off_t OnSysTell() const;
+  wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode);
+  wxFileOffset OnSysTell() const;
 
  protected:
   wxFile *m_file;
@@ -75,8 +75,8 @@ class WXDLLIMPEXP_BASE wxFileOutputStream: public wxOutputStream {
   wxFileOutputStream();
 
   size_t OnSysWrite(const void *buffer, size_t size);
-  off_t OnSysSeek(off_t pos, wxSeekMode mode);
-  off_t OnSysTell() const;
+  wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode);
+  wxFileOffset OnSysTell() const;
 
  protected:
   wxFile *m_file;
@@ -114,8 +114,8 @@ class WXDLLIMPEXP_BASE wxFFileInputStream: public wxInputStream {
   wxFFileInputStream();
 
   size_t OnSysRead(void *buffer, size_t size);
-  off_t OnSysSeek(off_t pos, wxSeekMode mode);
-  off_t OnSysTell() const;
+  wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode);
+  wxFileOffset OnSysTell() const;
 
  protected:
   wxFFile *m_file;
@@ -144,8 +144,8 @@ class WXDLLIMPEXP_BASE wxFFileOutputStream: public wxOutputStream {
   wxFFileOutputStream();
 
   size_t OnSysWrite(const void *buffer, size_t size);
-  off_t OnSysSeek(off_t pos, wxSeekMode mode);
-  off_t OnSysTell() const;
+  wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode);
+  wxFileOffset OnSysTell() const;
 
  protected:
   wxFFile *m_file;

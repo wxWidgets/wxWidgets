@@ -35,8 +35,8 @@ protected:
     wxStreamBuffer *m_i_streambuf;
 
     size_t OnSysRead(void *buffer, size_t nbytes);
-    off_t OnSysSeek(off_t pos, wxSeekMode mode);
-    off_t OnSysTell() const;
+    wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode);
+    wxFileOffset OnSysTell() const;
 
 private:
     size_t m_length;
@@ -64,8 +64,8 @@ protected:
 
 protected:
     size_t OnSysWrite(const void *buffer, size_t nbytes);
-    off_t OnSysSeek(off_t pos, wxSeekMode mode);
-    off_t OnSysTell() const;
+    wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode);
+    wxFileOffset OnSysTell() const;
 
     DECLARE_NO_COPY_CLASS(wxMemoryOutputStream)
 };

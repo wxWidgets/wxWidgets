@@ -69,7 +69,7 @@ size_t wxFileInputStream::GetSize() const
 
 size_t wxFileInputStream::OnSysRead(void *buffer, size_t size)
 {
-    off_t ret = m_file->Read(buffer, size);
+    wxFileOffset ret = m_file->Read(buffer, size);
 
     // NB: we can't use a switch here because HP-UX CC doesn't allow
     //     switching over long long (which off_t is in 64bit mode)
@@ -93,12 +93,12 @@ size_t wxFileInputStream::OnSysRead(void *buffer, size_t size)
     return ret;
 }
 
-off_t wxFileInputStream::OnSysSeek(off_t pos, wxSeekMode mode)
+wxFileOffset wxFileInputStream::OnSysSeek(wxFileOffset pos, wxSeekMode mode)
 {
     return m_file->Seek(pos, mode);
 }
 
-off_t wxFileInputStream::OnSysTell() const
+wxFileOffset wxFileInputStream::OnSysTell() const
 {
     return m_file->Tell();
 }
@@ -160,12 +160,12 @@ size_t wxFileOutputStream::OnSysWrite(const void *buffer, size_t size)
     return ret;
 }
 
-off_t wxFileOutputStream::OnSysTell() const
+wxFileOffset wxFileOutputStream::OnSysTell() const
 {
     return m_file->Tell();
 }
 
-off_t wxFileOutputStream::OnSysSeek(off_t pos, wxSeekMode mode)
+wxFileOffset wxFileOutputStream::OnSysSeek(wxFileOffset pos, wxSeekMode mode)
 {
     return m_file->Seek(pos, mode);
 }
@@ -234,7 +234,7 @@ size_t wxFFileInputStream::GetSize() const
 
 size_t wxFFileInputStream::OnSysRead(void *buffer, size_t size)
 {
-    off_t ret;
+    wxFileOffset ret;
 
     ret = m_file->Read(buffer, size);
 
@@ -249,7 +249,7 @@ size_t wxFFileInputStream::OnSysRead(void *buffer, size_t size)
     return ret;
 }
 
-off_t wxFFileInputStream::OnSysSeek(off_t pos, wxSeekMode mode)
+wxFileOffset wxFFileInputStream::OnSysSeek(wxFileOffset pos, wxSeekMode mode)
 {
 #ifdef __VMS
 #pragma message disable intsignchange
@@ -260,7 +260,7 @@ off_t wxFFileInputStream::OnSysSeek(off_t pos, wxSeekMode mode)
 #endif
 }
 
-off_t wxFFileInputStream::OnSysTell() const
+wxFileOffset wxFFileInputStream::OnSysTell() const
 {
     return m_file->Tell();
 }
@@ -323,12 +323,12 @@ size_t wxFFileOutputStream::OnSysWrite(const void *buffer, size_t size)
     return ret;
 }
 
-off_t wxFFileOutputStream::OnSysTell() const
+wxFileOffset wxFFileOutputStream::OnSysTell() const
 {
     return m_file->Tell();
 }
 
-off_t wxFFileOutputStream::OnSysSeek(off_t pos, wxSeekMode mode)
+wxFileOffset wxFFileOutputStream::OnSysSeek(wxFileOffset pos, wxSeekMode mode)
 {
 #ifdef __VMS
 #pragma message disable intsignchange

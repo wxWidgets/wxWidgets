@@ -27,9 +27,9 @@ class WXDLLIMPEXP_NET wxSocketOutputStream : public wxOutputStream
   wxSocketOutputStream(wxSocketBase& s);
   ~wxSocketOutputStream();
 
-  off_t SeekO( off_t WXUNUSED(pos), wxSeekMode WXUNUSED(mode) )
+  wxFileOffset SeekO( wxFileOffset WXUNUSED(pos), wxSeekMode WXUNUSED(mode) )
     { return -1; }
-  off_t TellO() const
+  wxFileOffset TellO() const
     { return -1; }
 
  protected:
@@ -46,9 +46,9 @@ class WXDLLIMPEXP_NET wxSocketInputStream : public wxInputStream
   wxSocketInputStream(wxSocketBase& s);
   ~wxSocketInputStream();
 
-  off_t SeekI( off_t WXUNUSED(pos), wxSeekMode WXUNUSED(mode) )
+  wxFileOffset SeekI( wxFileOffset WXUNUSED(pos), wxSeekMode WXUNUSED(mode) )
     { return -1; }
-  off_t TellI() const
+  wxFileOffset TellI() const
     { return -1; }
 
  protected:

@@ -183,6 +183,8 @@ enum wxSeekMode
 
     // Not all of the Win32 compilers do have huge file support, for example
     // the Digitalmars compiler does not have huge file size support
+    #include "wx/msw/private.h"
+
     #undef __HUGEFILES_SUPPORTED
     #if _INTEGRAL_MAX_BITS >= 64 && !defined(__DMC__)
         #define __HUGEFILES_SUPPORTED 1
@@ -199,7 +201,7 @@ enum wxSeekMode
         typedef wxLongLong_t wxFileOffset;
         #define wxFileOffsetFmtSpec wxLongLongFmtSpec
     #else
-        typedef int wxFileOffset;
+        typedef off_t wxFileOffset;
         #define wxFileOffsetFmtSpec _("")
     #endif
 

@@ -91,8 +91,8 @@ public:
 #endif // WXWIN_COMPATIBILITY_2_2
 
 protected:
-    virtual off_t OnSysSeek(off_t seek, wxSeekMode mode);
-    virtual off_t OnSysTell() const;
+    virtual wxFileOffset OnSysSeek(wxFileOffset seek, wxSeekMode mode);
+    virtual wxFileOffset OnSysTell() const;
 
     size_t m_lastcount;
     wxStreamError m_lasterror;
@@ -192,10 +192,10 @@ public:
     // it)
     //
     // returns wxInvalidOffset on error
-    virtual off_t SeekI(off_t pos, wxSeekMode mode = wxFromStart);
+    virtual wxFileOffset SeekI(wxFileOffset pos, wxSeekMode mode = wxFromStart);
 
     // return the current position of the stream pointer or wxInvalidOffset
-    virtual off_t TellI() const;
+    virtual wxFileOffset TellI() const;
 
 
     // stream-like operators
@@ -250,8 +250,8 @@ public:
     virtual wxOutputStream& Write(const void *buffer, size_t size);
     wxOutputStream& Write(wxInputStream& stream_in);
 
-    virtual off_t SeekO(off_t pos, wxSeekMode mode = wxFromStart);
-    virtual off_t TellO() const;
+    virtual wxFileOffset SeekO(wxFileOffset pos, wxSeekMode mode = wxFromStart);
+    virtual wxFileOffset TellO() const;
 
     virtual size_t LastWrite() const { return wxStreamBase::m_lastcount; }
 
@@ -288,8 +288,8 @@ public:
 
 protected:
     virtual size_t OnSysWrite(const void *buffer, size_t size);
-    virtual off_t OnSysSeek(off_t pos, wxSeekMode mode);
-    virtual off_t OnSysTell() const;
+    virtual wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode);
+    virtual wxFileOffset OnSysTell() const;
 
     size_t m_currentPos;
 
@@ -368,8 +368,8 @@ public:
     virtual char Peek();
     virtual char GetChar();
     virtual void PutChar(char c);
-    virtual off_t Tell() const;
-    virtual off_t Seek(off_t pos, wxSeekMode mode);
+    virtual wxFileOffset Tell() const;
+    virtual wxFileOffset Seek(wxFileOffset pos, wxSeekMode mode);
 
     // Buffer control
     void ResetBuffer();
@@ -475,8 +475,8 @@ public:
     wxInputStream& Read(void *buffer, size_t size);
 
     // Position functions
-    off_t SeekI(off_t pos, wxSeekMode mode = wxFromStart);
-    off_t TellI() const;
+    wxFileOffset SeekI(wxFileOffset pos, wxSeekMode mode = wxFromStart);
+    wxFileOffset TellI() const;
 
     // the buffer given to the stream will be deleted by it
     void SetInputStreamBuffer(wxStreamBuffer *buffer);
@@ -487,8 +487,8 @@ public:
 
 protected:
     virtual size_t OnSysRead(void *buffer, size_t bufsize);
-    virtual off_t OnSysSeek(off_t seek, wxSeekMode mode);
-    virtual off_t OnSysTell() const;
+    virtual wxFileOffset OnSysSeek(wxFileOffset seek, wxSeekMode mode);
+    virtual wxFileOffset OnSysTell() const;
 
     wxStreamBuffer *m_i_streambuf;
 
@@ -510,8 +510,8 @@ public:
     wxOutputStream& Write(const void *buffer, size_t size);
 
     // Position functions
-    off_t SeekO(off_t pos, wxSeekMode mode = wxFromStart);
-    off_t TellO() const;
+    wxFileOffset SeekO(wxFileOffset pos, wxSeekMode mode = wxFromStart);
+    wxFileOffset TellO() const;
 
     void Sync();
 
@@ -526,8 +526,8 @@ public:
 
 protected:
     virtual size_t OnSysWrite(const void *buffer, size_t bufsize);
-    virtual off_t OnSysSeek(off_t seek, wxSeekMode mode);
-    virtual off_t OnSysTell() const;
+    virtual wxFileOffset OnSysSeek(wxFileOffset seek, wxSeekMode mode);
+    virtual wxFileOffset OnSysTell() const;
 
     wxStreamBuffer *m_o_streambuf;
 

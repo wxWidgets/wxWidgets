@@ -551,11 +551,11 @@ size_t wxStreamBuffer::Write(wxStreamBuffer *sbuf)
     return total;
 }
 
-off_t wxStreamBuffer::Seek(off_t pos, wxSeekMode mode)
+wxFileOffset wxStreamBuffer::Seek(wxFileOffset pos, wxSeekMode mode)
 {
-    off_t ret_off, diff;
+    wxFileOffset ret_off, diff;
 
-    off_t last_access = GetLastAccess();
+    wxFileOffset last_access = GetLastAccess();
 
     if ( !m_flushable )
     {
@@ -619,9 +619,9 @@ off_t wxStreamBuffer::Seek(off_t pos, wxSeekMode mode)
     return wxInvalidOffset;
 }
 
-off_t wxStreamBuffer::Tell() const
+wxFileOffset wxStreamBuffer::Tell() const
 {
-    off_t pos;
+    wxFileOffset pos;
 
     // ask the stream for position if we have a real one
     if ( m_stream )
@@ -657,12 +657,12 @@ wxStreamBase::~wxStreamBase()
 {
 }
 
-off_t wxStreamBase::OnSysSeek(off_t WXUNUSED(seek), wxSeekMode WXUNUSED(mode))
+wxFileOffset wxStreamBase::OnSysSeek(wxFileOffset WXUNUSED(seek), wxSeekMode WXUNUSED(mode))
 {
     return wxInvalidOffset;
 }
 
-off_t wxStreamBase::OnSysTell() const
+wxFileOffset wxStreamBase::OnSysTell() const
 {
     return wxInvalidOffset;
 }
@@ -853,7 +853,7 @@ wxInputStream& wxInputStream::Read(wxOutputStream& stream_out)
     return *this;
 }
 
-off_t wxInputStream::SeekI(off_t pos, wxSeekMode mode)
+wxFileOffset wxInputStream::SeekI(wxFileOffset pos, wxSeekMode mode)
 {
     // RR: This code is duplicated in wxBufferedInputStream. This is
     // not really a good design, but buffered stream are different
@@ -887,9 +887,9 @@ off_t wxInputStream::SeekI(off_t pos, wxSeekMode mode)
     return OnSysSeek(pos, mode);
 }
 
-off_t wxInputStream::TellI() const
+wxFileOffset wxInputStream::TellI() const
 {
-    off_t pos = OnSysTell();
+    wxFileOffset pos = OnSysTell();
 
     if (pos != wxInvalidOffset)
         pos -= (m_wbacksize - m_wbackcur);
@@ -933,12 +933,12 @@ wxOutputStream& wxOutputStream::Write(wxInputStream& stream_in)
     return *this;
 }
 
-off_t wxOutputStream::TellO() const
+wxFileOffset wxOutputStream::TellO() const
 {
     return OnSysTell();
 }
 
-off_t wxOutputStream::SeekO(off_t pos, wxSeekMode mode)
+wxFileOffset wxOutputStream::SeekO(wxFileOffset pos, wxSeekMode mode)
 {
     return OnSysSeek(pos, mode);
 }
@@ -972,7 +972,7 @@ size_t wxCountingOutputStream::OnSysWrite(const void *WXUNUSED(buffer),
     return m_currentPos;
 }
 
-off_t wxCountingOutputStream::OnSysSeek(off_t pos, wxSeekMode mode)
+wxFileOffset wxCountingOutputStream::OnSysSeek(wxFileOffset pos, wxSeekMode mode)
 {
     switch ( mode )
     {
@@ -999,7 +999,7 @@ off_t wxCountingOutputStream::OnSysSeek(off_t pos, wxSeekMode mode)
     return m_currentPos;
 }
 
-off_t wxCountingOutputStream::OnSysTell() const
+wxFileOffset wxCountingOutputStream::OnSysTell() const
 {
     return m_currentPos;
 }
@@ -1063,7 +1063,7 @@ wxBufferedInputStream::wxBufferedInputStream(wxInputStream& s,
 
 wxBufferedInputStream::~wxBufferedInputStream()
 {
-    m_parent_i_stream->SeekI(-(off_t)m_i_streambuf->GetBytesLeft(),
+    m_parent_i_stream->SeekI(-(wxFileOffset)m_i_streambuf->GetBytesLeft(),
                              wxFromCurrent);
 
     delete m_i_streambuf;
@@ -1100,7 +1100,7 @@ wxInputStream& wxBufferedInputStream::Read(void *buf, size_t size)
     return *this;
 }
 
-off_t wxBufferedInputStream::SeekI(off_t pos, wxSeekMode mode)
+wxFileOffset wxBufferedInputStream::SeekI(wxFileOffset pos, wxSeekMode mode)
 {
     // RR: Look at wxInputStream for comments.
 
@@ -1120,9 +1120,9 @@ off_t wxBufferedInputStream::SeekI(off_t pos, wxSeekMode mode)
     return m_i_streambuf->Seek(pos, mode);
 }
 
-off_t wxBufferedInputStream::TellI() const
+wxFileOffset wxBufferedInputStream::TellI() const
 {
-    off_t pos = m_i_streambuf->Tell();
+    wxFileOffset pos = m_i_streambuf->Tell();
 
     if (pos != wxInvalidOffset)
         pos -= (m_wbacksize - m_wbackcur);
@@ -1135,12 +1135,12 @@ size_t wxBufferedInputStream::OnSysRead(void *buffer, size_t bufsize)
     return m_parent_i_stream->Read(buffer, bufsize).LastRead();
 }
 
-off_t wxBufferedInputStream::OnSysSeek(off_t seek, wxSeekMode mode)
+wxFileOffset wxBufferedInputStream::OnSysSeek(wxFileOffset seek, wxSeekMode mode)
 {
     return m_parent_i_stream->SeekI(seek, mode);
 }
 
-off_t wxBufferedInputStream::OnSysTell() const
+wxFileOffset wxBufferedInputStream::OnSysTell() const
 {
     return m_parent_i_stream->TellI();
 }
@@ -1186,13 +1186,13 @@ wxOutputStream& wxBufferedOutputStream::Write(const void *buffer, size_t size)
     return *this;
 }
 
-off_t wxBufferedOutputStream::SeekO(off_t pos, wxSeekMode mode)
+wxFileOffset wxBufferedOutputStream::SeekO(wxFileOffset pos, wxSeekMode mode)
 {
     Sync();
     return m_o_streambuf->Seek(pos, mode);
 }
 
-off_t wxBufferedOutputStream::TellO() const
+wxFileOffset wxBufferedOutputStream::TellO() const
 {
     return m_o_streambuf->Tell();
 }
@@ -1208,12 +1208,12 @@ size_t wxBufferedOutputStream::OnSysWrite(const void *buffer, size_t bufsize)
     return m_parent_o_stream->Write(buffer, bufsize).LastWrite();
 }
 
-off_t wxBufferedOutputStream::OnSysSeek(off_t seek, wxSeekMode mode)
+wxFileOffset wxBufferedOutputStream::OnSysSeek(wxFileOffset seek, wxSeekMode mode)
 {
     return m_parent_o_stream->SeekO(seek, mode);
 }
 
-off_t wxBufferedOutputStream::OnSysTell() const
+wxFileOffset wxBufferedOutputStream::OnSysTell() const
 {
     return m_parent_o_stream->TellO();
 }
