@@ -19,11 +19,11 @@
 #include "wx/event.h"
 #include "wx/icon.h"
 
-class WXDLLEXPORT wxFrame;
-class WXDLLEXPORT wxWindow;
-class WXDLLEXPORT wxApp ;
-class WXDLLEXPORT wxKeyEvent;
-class WXDLLEXPORT wxLog;
+class WXDLLIMPEXP_CORE wxFrame;
+class WXDLLIMPEXP_CORE wxWindow;
+class WXDLLIMPEXP_CORE wxApp;
+class WXDLLIMPEXP_CORE wxKeyEvent;
+class WXDLLIMPEXP_BASE wxLog;
 
 // Represents the application. Derive OnInit and declare
 // a new App object to start application

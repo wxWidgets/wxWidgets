@@ -48,11 +48,11 @@ class WXDLLIMPEXP_BASE wxArrayString;
 // Forward declaration
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxProcess;
-class WXDLLIMPEXP_BASE wxFrame;
-class WXDLLIMPEXP_BASE wxWindow;
-class WXDLLIMPEXP_BASE wxWindowList;
-class WXDLLIMPEXP_BASE wxPoint;
+class WXDLLIMPEXP_CORE wxProcess;
+class WXDLLIMPEXP_CORE wxFrame;
+class WXDLLIMPEXP_CORE wxWindow;
+class WXDLLIMPEXP_CORE wxWindowList;
+class WXDLLIMPEXP_CORE wxPoint;
 
 // ----------------------------------------------------------------------------
 // Macros

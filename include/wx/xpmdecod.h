@@ -17,8 +17,8 @@
 #include "wx/setup.h"
 
 
-class WXDLLEXPORT wxImage;
-class WXDLLEXPORT wxInputStream;
+class WXDLLIMPEXP_CORE wxImage;
+class WXDLLIMPEXP_BASE wxInputStream;
 
 // --------------------------------------------------------------------------
 // wxXPMDecoder class

@@ -30,9 +30,9 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTextCtrl;
-class WXDLLEXPORT wxImageList;
-class WXDLLEXPORT wxHashTable;
+class WXDLLIMPEXP_CORE wxTextCtrl;
+class WXDLLIMPEXP_CORE wxImageList;
+class WXDLLIMPEXP_BASE wxHashTable;
 
 //-----------------------------------------------------------------------------
 // Extra styles for wxGenericDirCtrl

@@ -27,8 +27,8 @@
 #include "wx/ctrlsub.h"         // base class
 
 // forward declarations are enough here
-class WXDLLEXPORT wxArrayInt;
-class WXDLLEXPORT wxArrayString;
+class WXDLLIMPEXP_BASE wxArrayInt;
+class WXDLLIMPEXP_BASE wxArrayString;
 
 // ----------------------------------------------------------------------------
 // global data

@@ -30,16 +30,16 @@
 // forward declarations
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxBitmap;
-class WXDLLEXPORT wxBrush;
-class WXDLLEXPORT wxColour;
-class WXDLLEXPORT wxCursor;
-class WXDLLEXPORT wxFont;
-class WXDLLEXPORT wxIcon;
-class WXDLLEXPORT wxPalette;
-class WXDLLEXPORT wxPen;
-class WXDLLEXPORT wxRegion;
-class WXDLLEXPORT wxString;
+class WXDLLIMPEXP_CORE wxBitmap;
+class WXDLLIMPEXP_CORE wxBrush;
+class WXDLLIMPEXP_CORE wxColour;
+class WXDLLIMPEXP_CORE wxCursor;
+class WXDLLIMPEXP_CORE wxFont;
+class WXDLLIMPEXP_CORE wxIcon;
+class WXDLLIMPEXP_CORE wxPalette;
+class WXDLLIMPEXP_CORE wxPen;
+class WXDLLIMPEXP_CORE wxRegion;
+class WXDLLIMPEXP_BASE wxString;
 
 // ---------------------------------------------------------------------------
 // constants
