@@ -111,6 +111,8 @@ Unix (Base/GUI):
 
 All (GUI):
 
+- added wxArtProvider class that can be used to customize the look of standard
+  wxWindows dialogs
 - implemented radio menu items
 - significantly improved native font support
 - wxImage::ComputeHistogram() now uses wxImageHistogram instead of type-unsafe
