@@ -101,8 +101,6 @@ void wxNotebook::Init()
     m_lastVisible = 0;
     m_offset = 0;
 
-    m_sizePad = wxSize(6, 5); // FIXME: hardcoded
-
     m_spinbtn = NULL;
 }
 
@@ -116,6 +114,8 @@ bool wxNotebook::Create(wxWindow *parent,
     if ( !wxControl::Create(parent, id, pos, size, style,
                             wxDefaultValidator, name) )
         return FALSE;
+
+    m_sizePad = GetRenderer()->GetTabPadding();
 
     SetBestSize(size);
 

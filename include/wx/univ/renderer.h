@@ -258,6 +258,9 @@ public:
     // get the overhang of a selected tab
     virtual wxSize GetTabIndent() const = 0;
 
+    // get the padding around the text in a tab
+    virtual wxSize GetTabPadding() const = 0;
+
     // virtual dtor for any base class
     virtual ~wxRenderer();
 
@@ -484,6 +487,7 @@ public:
         { return m_renderer->GetTextClientArea(text, rect, extraSpaceBeyond); }
 
     virtual wxSize GetTabIndent() const { return m_renderer->GetTabIndent(); }
+    virtual wxSize GetTabPadding() const { return m_renderer->GetTabPadding(); }
 
 protected:
     wxRenderer *m_renderer;

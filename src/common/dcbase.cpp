@@ -234,17 +234,18 @@ void wxDCBase::DrawLabel(const wxString& text,
                          wxRect *rectBounding)
 {
     // find the text position
-    wxCoord width, heightText, heightLine;
-    GetMultiLineTextExtent(text, &width, &heightText, &heightLine);
+    wxCoord widthText, heightText, heightLine;
+    GetMultiLineTextExtent(text, &widthText, &heightText, &heightLine);
 
-    wxCoord height;
+    wxCoord width, height;
     if ( bitmap.Ok() )
     {
-        width += bitmap.GetWidth();
+        width = widthText + bitmap.GetWidth();
         height = bitmap.GetHeight();
     }
-    else
+    else // no bitmap
     {
+        width = widthText;
         height = heightText;
     }
 
@@ -276,6 +277,8 @@ void wxDCBase::DrawLabel(const wxString& text,
     }
 
     // draw the bitmap first
+    wxCoord x0 = x,
+            y0 = y;
     if ( bitmap.Ok() )
     {
         DrawBitmap(bitmap, x, y, TRUE /* use mask */);
@@ -339,9 +342,9 @@ void wxDCBase::DrawLabel(const wxString& text,
     // return bounding rect if requested
     if ( rectBounding )
     {
-        *rectBounding = wxRect(x, y, width, height);
+        *rectBounding = wxRect(x, y, widthText, heightText);
     }
 
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x + width, y + height);
+    CalcBoundingBox(x0, y0);
+    CalcBoundingBox(x0 + width, y0 + height);
 }

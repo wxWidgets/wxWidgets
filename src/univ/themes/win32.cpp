@@ -239,6 +239,7 @@ public:
                                      wxCoord *extraSpaceBeyond);
 
     virtual wxSize GetTabIndent() const { return wxSize(2, 2); }
+    virtual wxSize GetTabPadding() const { return wxSize(6, 5); }
 
 protected:
     // common part of DrawLabel() and DrawItem()

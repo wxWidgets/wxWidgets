@@ -198,7 +198,8 @@ public:
                                      const wxRect& rect,
                                      wxCoord *extraSpaceBeyond);
 
-    virtual wxSize GetTabIndent() const { return wxSize(1, 2); }
+    virtual wxSize GetTabIndent() const { return wxSize(2, 2); }
+    virtual wxSize GetTabPadding() const { return wxSize(6, 6); }
 
     // helpers for "wxBitmap wxColourScheme::Get()"
     void DrawCheckBitmap(wxDC& dc, const wxRect& rect);
@@ -607,7 +608,7 @@ wxColour wxGTKColourScheme::Get(wxGTKColourScheme::StdColour col) const
 
         case CONTROL:           return wxColour(0xd6d6d6);
         case CONTROL_PRESSED:   return wxColour(0xc3c3c3);
-        case CONTROL_CURRENT:   return *wxBLUE; //wxColour(0xeaeaea);
+        case CONTROL_CURRENT:   return wxColour(0xeaeaea);
 
         case CONTROL_TEXT:      return *wxBLACK;
         case CONTROL_TEXT_DISABLED:
@@ -1458,13 +1459,134 @@ void wxGTKRenderer::DrawLineWrapMark(wxDC& dc, const wxRect& rect)
 // ----------------------------------------------------------------------------
 
 void wxGTKRenderer::DrawTab(wxDC& dc,
-                            const wxRect& rect,
+                            const wxRect& rectOrig,
                             wxDirection dir,
                             const wxString& label,
                             const wxBitmap& bitmap,
                             int flags,
                             int indexAccel)
 {
+    wxRect rect = rectOrig;
+
+    // the current tab is drawn indented (to the top for default case) and
+    // bigger than the other ones
+    const wxSize indent = GetTabIndent();
+    if ( flags & wxCONTROL_SELECTED )
+    {
+        switch ( dir )
+        {
+            default:
+                wxFAIL_MSG(_T("invaild notebook tab orientation"));
+                // fall through
+
+            case wxTOP:
+                rect.Inflate(indent.x, 0);
+                rect.y -= indent.y;
+                rect.height += indent.y;
+                break;
+
+            case wxBOTTOM:
+                rect.Inflate(indent.x, 0);
+                rect.height += indent.y;
+                break;
+
+            case wxLEFT:
+            case wxRIGHT:
+                wxFAIL_MSG(_T("TODO"));
+                break;
+        }
+    }
+
+    // selected tab has different colour
+    wxColour col = flags & wxCONTROL_SELECTED
+                        ? wxSCHEME_COLOUR(m_scheme, SHADOW_IN)
+                        : wxSCHEME_COLOUR(m_scheme, SCROLLBAR);
+    DoDrawBackground(dc, col, rect);
+
+    // draw the text, image and the focus around them (if necessary)
+    wxRect rectLabel = rect;
+    rectLabel.Deflate(1, 1);
+
+    wxRect rectLabelText;
+    dc.DrawLabel(label, bitmap, rectLabel, wxALIGN_CENTRE,
+                 indexAccel, &rectLabelText);
+    if ( flags & wxCONTROL_FOCUSED )
+    {
+        // draw the focus rect
+        rectLabelText.Inflate(3);
+        DrawRect(dc, &rectLabelText, m_penBlack);
+    }
+
+
+    // now draw the tab itself
+    wxCoord x = rect.x,
+            y = rect.y,
+            x2 = rect.GetRight(),
+            y2 = rect.GetBottom();
+    switch ( dir )
+    {
+        default:
+        case wxTOP:
+            dc.SetPen(m_penHighlight);
+            dc.DrawLine(x, y2, x, y);
+            dc.DrawLine(x + 1, y, x2, y);
+
+            dc.SetPen(m_penBlack);
+            dc.DrawLine(x2, y2, x2, y);
+
+            dc.SetPen(m_penDarkGrey);
+            dc.DrawLine(x2 - 1, y2, x2 - 1, y + 1);
+
+            if ( flags & wxCONTROL_SELECTED )
+            {
+                dc.SetPen(m_penLightGrey);
+
+                // overwrite the part of the border below this tab
+                dc.DrawLine(x + 1, y2 + 1, x2 - 1, y2 + 1);
+
+                // and the shadow of the tab to the left of us
+                dc.DrawLine(x + 1, y + 2, x + 1, y2 + 1);
+            }
+            break;
+
+        case wxBOTTOM:
+            dc.SetPen(m_penHighlight);
+
+            // we need to continue one pixel further to overwrite the corner of
+            // the border for the selected tab
+            dc.DrawLine(x, y - (flags & wxCONTROL_SELECTED ? 1 : 0),
+                        x, y2);
+
+            // erase the corner of the tab to the right
+            dc.DrawPoint(x2, y - 2);
+            dc.DrawPoint(x2 - 1, y - 2);
+            dc.DrawPoint(x2 - 1, y - 1);
+
+            dc.SetPen(m_penBlack);
+            dc.DrawLine(x + 1, y2, x2, y2);
+            dc.DrawLine(x2, y, x2, y2);
+
+            dc.SetPen(m_penDarkGrey);
+            dc.DrawLine(x + 2, y2 - 1, x2 - 1, y2 - 1);
+            dc.DrawLine(x2 - 1, y, x2 - 1, y2);
+
+            if ( flags & wxCONTROL_SELECTED )
+            {
+                dc.SetPen(m_penLightGrey);
+
+                // overwrite the part of the (double!) border above this tab
+                dc.DrawLine(x + 1, y - 1, x2 - 1, y - 1);
+                dc.DrawLine(x + 1, y - 2, x2 - 1, y - 2);
+
+                // and the shadow of the tab to the left of us
+                dc.DrawLine(x + 1, y2 - 1, x + 1, y - 1);
+            }
+            break;
+
+        case wxLEFT:
+        case wxRIGHT:
+            wxFAIL_MSG(_T("TODO"));
+    }
 }
 
 // ----------------------------------------------------------------------------
