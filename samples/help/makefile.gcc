@@ -161,7 +161,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\help.exe data
+all: $(OBJS)\help.exe data data_doc
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
@@ -171,6 +171,10 @@ $(OBJS)\help.exe: $(HELP_OBJECTS) $(OBJS)\help_demo_rc.o
 	$(CXX) -o $@ $(HELP_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
 
 data: 
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %%f in (back.gif books.gif bullet.bmp contents.gif cshelp.txt doc.chm doc.cnt doc.hhc doc.hhk doc.hhp doc.hlp doc.hpj doc.zip forward.gif up.gif) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
+
+data_doc: 
 	if not exist $(OBJS)\doc mkdir $(OBJS)\doc
 	for %%f in (aindex.html ClassGraph.class ClassGraphPanel.class ClassLayout.class down.gif dxxgifs.tex HIER.html HIERjava.html icon1.gif icon2.gif index.html logo.gif NavigatorButton.class USE_HELP.html wx204.htm wx34.htm wxExtHelpController.html wxhelp.map wx.htm) do if not exist $(OBJS)\doc\%%f copy .\doc\%%f $(OBJS)\doc
 
@@ -180,5 +184,4 @@ $(OBJS)\help_demo.o: ./demo.cpp
 $(OBJS)\help_demo_rc.o: ./demo.rc
 	windres --use-temp-file -i$< -o$@  --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
-.PHONY: all clean data
-
+.PHONY: all clean data data_doc

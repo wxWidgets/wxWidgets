@@ -110,7 +110,7 @@ COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 
 ### Targets: ###
 
-all: help$(EXEEXT) $(__help_bundle___depname) data
+all: help$(EXEEXT) $(__help_bundle___depname) data data_doc
 
 install: all
 
@@ -158,15 +158,19 @@ help.app/Contents/PkgInfo: help$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist
 @COND_PLATFORM_MACOSX_1@help_bundle: $(____help_BUNDLE_TGT_REF_DEP)
 
 data: 
+	@mkdir -p .
+	@for f in back.gif books.gif bullet.bmp contents.gif cshelp.txt doc.chm doc.cnt doc.hhc doc.hhk doc.hhp doc.hlp doc.hpj doc.zip forward.gif up.gif; do \
+	if test \( ! -s ./$$f \) -o \( $(srcdir)/$$f -nt ./$$f  \) ; then \
+	cp -pRf $(srcdir)/$$f . ; \
+	fi; \
+	done
+
+data_doc: 
 	@mkdir -p ./doc
 	@for f in aindex.html ClassGraph.class ClassGraphPanel.class ClassLayout.class down.gif dxxgifs.tex HIER.html HIERjava.html icon1.gif icon2.gif index.html logo.gif NavigatorButton.class USE_HELP.html wx204.htm wx34.htm wxExtHelpController.html wxhelp.map wx.htm; do \
-	if test ! -e ./doc/$$f ; \
-	then x=yep ; \
-	else x=`find $(srcdir)/doc/$$f -newer ./doc/$$f -print` ; \
+	if test \( ! -s ./doc/$$f \) -o \( $(srcdir)/doc/$$f -nt ./doc/$$f  \) ; then \
+	cp -pRf $(srcdir)/doc/$$f ./doc ; \
 	fi; \
-	case "$$x" in ?*) \
-	cp -pRf $(srcdir)/doc/$$f ./doc ;; \
-	esac; \
 	done
 
 help_demo.o: $(srcdir)/demo.cpp
@@ -179,4 +183,4 @@ help_demo_rc.o: $(srcdir)/demo.rc
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all install uninstall clean distclean help_bundle data
+.PHONY: all install uninstall clean distclean help_bundle data data_doc
