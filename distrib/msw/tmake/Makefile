@@ -21,38 +21,39 @@ all: $(MSW_MAKEFILES_DIR)/makefile.vc \
      $(WXDIR)/src/motif/files.lst \
      $(WXDIR)/src/os2/files.lst \
 
-$(MSW_MAKEFILES_DIR)/makefile.vc: filelist.txt wxwin.pro
+$(MSW_MAKEFILES_DIR)/makefile.vc: vc.t filelist.txt wxwin.pro
 	$(TMAKE) -t vc wxwin.pro -o $@
 
-$(MSW_MAKEFILES_DIR)/makefile.b32: filelist.txt wxwin.pro
+$(MSW_MAKEFILES_DIR)/makefile.b32: b32.t filelist.txt wxwin.pro
 	$(TMAKE) -t b32 wxwin.pro -o $@
 
-$(MSW_MAKEFILES_DIR)/makefile.dos: filelist.txt wxwin.pro
+$(MSW_MAKEFILES_DIR)/makefile.dos: dos.t filelist.txt wxwin.pro
 	$(TMAKE) -t dos wxwin.pro -o $@
 
-$(MSW_MAKEFILES_DIR)/makefile.bcc: filelist.txt wxwin.pro
+$(MSW_MAKEFILES_DIR)/makefile.bcc: bcc.t filelist.txt wxwin.pro
 	$(TMAKE) -t bcc wxwin.pro -o $@
 
-$(MSW_MAKEFILES_DIR)/makefile.sc: filelist.txt wxwin.pro
+$(MSW_MAKEFILES_DIR)/makefile.sc: sc.t filelist.txt wxwin.pro
 	$(TMAKE) -t sc wxwin.pro -o $@
 
-$(MSW_MAKEFILES_DIR)/makefile.wat: filelist.txt wxwin.pro
+$(MSW_MAKEFILES_DIR)/makefile.wat: wat.t filelist.txt wxwin.pro
 	$(TMAKE) -t wat wxwin.pro -o $@
 
-$(MSW_MAKEFILES_DIR)/makefile.g95: filelist.txt wxwin.pro
+$(MSW_MAKEFILES_DIR)/makefile.g95: g95.t filelist.txt wxwin.pro
 	$(TMAKE) -t g95 wxwin.pro -o $@
 
-$(WXDIR)/src/msw/files.lst: filelist.txt wxwin.pro
+$(WXDIR)/src/msw/files.lst: msw.t filelist.txt wxwin.pro
 	$(TMAKE) -t msw wxwin.pro -o $@
 
-$(WXDIR)/src/gtk/files.lst: filelist.txt wxwin.pro
+$(WXDIR)/src/gtk/files.lst: gtk.t filelist.txt wxwin.pro
 	$(TMAKE) -t gtk wxwin.pro -o $@
 
-$(WXDIR)/src/mac/files.lst: filelist.txt wxwin.pro
+$(WXDIR)/src/mac/files.lst: mac.t filelist.txt wxwin.pro
 	$(TMAKE) -t mac wxwin.pro -o $@
 
-$(WXDIR)/src/motif/files.lst: filelist.txt wxwin.pro
+$(WXDIR)/src/motif/files.lst: motif.t filelist.txt wxwin.pro
 	$(TMAKE) -t motif wxwin.pro -o $@
 
-$(WXDIR)/src/os2/files.lst: filelist.txt wxwin.pro
+$(WXDIR)/src/os2/files.lst: os2.t filelist.txt wxwin.pro
 	$(TMAKE) -t os2 wxwin.pro -o $@
+
