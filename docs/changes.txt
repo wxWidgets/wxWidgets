@@ -186,6 +186,7 @@ All:
 - Spanish translations updated (Javier San Jose)
 - fixed DLL build of db.cpp with some OpenWatcom (ABX)
 - fixed wxZlibOutputStream to properly close zlib stream
+- removed SO_REUSEADDR from wxSocket
 
 All (GUI):
 

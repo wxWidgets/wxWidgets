@@ -669,11 +669,6 @@ GSocketError GSocket_SetNonOriented(GSocket *sck)
   ioctl(sck->m_fd, FIONBIO, &arg);
   _GSocket_Enable_Events(sck);
 
-  /* allow a socket to re-bind if the socket is in the TIME_WAIT
-     state after being previously closed.
-   */
-  setsockopt(sck->m_fd, SOL_SOCKET, SO_REUSEADDR, (const char*)&arg, sizeof(u_long));
-
   /* Bind to the local address,
    * and retrieve the actual address bound.
    */
