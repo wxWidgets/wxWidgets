@@ -4,9 +4,9 @@
 // Author:      Mark Johnson
 // Modified by: 19990929.mj10777 a reuseable DBGrid
 // Created:     19990929
-// RCS-ID:
 // Copyright:   (c)
 // Licence:     wxWindows license
+// RCS-ID:      $Id$
 //---------------------------------------------------------------------------
 //-- all #ifdefs that the whole Project needs. ------------------------------
 //---------------------------------------------------------------------------

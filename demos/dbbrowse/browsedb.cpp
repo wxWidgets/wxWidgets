@@ -6,6 +6,7 @@
 // Created:     19991127.mj10777
 // Copyright:   (c) Mark Johnson
 // Licence:     wxWindows license
+// RCS-ID:      $Id$
 //---------------------------------------------------------------------------
 //-- 1)
 //---------------------------------------------------------------------------
@@ -110,7 +111,7 @@ BEGIN_EVENT_TABLE(UserDialog, wxDialog)
   layout->width.Absolute(75);
   m_OK->SetConstraints(layout);
   
-  m_Label1 = new wxStaticText(this, -1, _("User name:"));
+  m_Label1 = new wxStaticText(this, -1, _("User ID:"));
   layout = new wxLayoutConstraints;
   layout->left.SameAs(m_OK, wxLeft);
   layout->top.SameAs(m_OK, wxBottom, 10);
@@ -207,46 +208,54 @@ bool BrowserDB::OnStartDB(int Quite)
   //---------------------------------------------------------------------------
   // Connect to datasource
   //---------------------------
-  DlgUser p_Dlg(pDoc->p_MainFrame, "Username and Password", wxPoint(100, 100), wxSize(340, 170));
+  DlgUser p_Dlg(pDoc->p_MainFrame, "Username and Password");
   p_Dlg.s_DSN      = ODBCSource;
   p_Dlg.s_User     = UserName;
   p_Dlg.s_Password = Password;
   p_Dlg.OnInit();
+  p_Dlg.Fit();
+
+  bool OK = FALSE;
   if (p_Dlg.ShowModal() == wxID_OK)
     {
       (pDoc->p_DSN+i_Which)->Usr = p_Dlg.s_User;
       (pDoc->p_DSN+i_Which)->Pas = p_Dlg.s_Password;
       UserName  = p_Dlg.s_User;
       Password  = p_Dlg.s_Password;
+      OK = TRUE;
     }
   p_Dlg.Destroy();
-  //---------------------------
-  strcpy(ConnectInf.Dsn, ODBCSource);           // ODBC data source name (created with ODBC Administrator under Win95/NT)
-  strcpy(ConnectInf.Uid, UserName);             // database username - must already exist in the data source
-  strcpy(ConnectInf.AuthStr, Password);         // password database username
-  db_BrowserDB = GetDbConnection(&ConnectInf);
-  // wxLogMessage(">>>%s<<<>>>%s<<<",UserName.c_str(),Password.c_str());
-  if (db_BrowserDB == NULL)
+
+  if (OK)
     {
-      strcpy(ConnectInf.Dsn, "");
-      strcpy(ConnectInf.Uid, "");
-      strcpy(ConnectInf.AuthStr, "");
+      //---------------------------
+      strcpy(ConnectInf.Dsn, ODBCSource);           // ODBC data source name (created with ODBC Administrator under Win95/NT)
+      strcpy(ConnectInf.Uid, UserName);             // database username - must already exist in the data source
+      strcpy(ConnectInf.AuthStr, Password);         // password database username
+      db_BrowserDB = GetDbConnection(&ConnectInf);
+      // wxLogMessage(">>>%s<<<>>>%s<<<",UserName.c_str(),Password.c_str());
+      if (db_BrowserDB == NULL)
+	{
+	  strcpy(ConnectInf.Dsn, "");
+	  strcpy(ConnectInf.Uid, "");
+	  strcpy(ConnectInf.AuthStr, "");
+	  if (!Quite)
+	    {
+	      wxLogMessage(_("\n-E-> BrowserDB::OnConnectDataSource() DB CONNECTION ERROR : Unable to connect to the data source.\n\nCheck the name of your data source to verify it has been correctly entered/spelled.\n\nWith some databases, the user name and password must\nbe created with full rights to the table prior to making a connection\n(using tools provided by the database manufacturer)"));
+	      wxLogMessage(_("-I-> BrowserDB::OnStartDB(%s) : End "),ODBCSource.c_str());
+	    }
+	  return FALSE;
+	}
+      //--------------------------------------------------------------------------
       if (!Quite)
 	{
-	  wxLogMessage(_("\n-E-> BrowserDB::OnConnectDataSource() DB CONNECTION ERROR : Unable to connect to the data source.\n\nCheck the name of your data source to verify it has been correctly entered/spelled.\n\nWith some databases, the user name and password must\nbe created with full rights to the table prior to making a connection\n(using tools provided by the database manufacturer)"));
+	  Temp1 = db_BrowserDB->GetDatabaseName();
+	  Temp2 = db_BrowserDB->GetDataSource();
+	  wxLogMessage(_("-I-> BrowserDB::OnGetDataSourceODBC() - DatabaseName(%s) ; DataSource(%s)"),Temp1.c_str(),Temp2.c_str());
 	  wxLogMessage(_("-I-> BrowserDB::OnStartDB(%s) : End "),ODBCSource.c_str());
 	}
-      return FALSE;
-    }
-  //--------------------------------------------------------------------------
-  if (!Quite)
-    {
-      Temp1 = db_BrowserDB->GetDatabaseName();
-      Temp2 = db_BrowserDB->GetDataSource();
-      wxLogMessage(_("-I-> BrowserDB::OnGetDataSourceODBC() - DatabaseName(%s) ; DataSource(%s)"),Temp1.c_str(),Temp2.c_str());
-      wxLogMessage(_("-I-> BrowserDB::OnStartDB(%s) : End "),ODBCSource.c_str());
-    }
-  return TRUE;
+      return TRUE;
+    } else return FALSE;
 }
 //--------------------------------------------------------------------------------------------
 bool BrowserDB::OnCloseDB(int Quite)

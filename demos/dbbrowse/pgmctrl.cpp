@@ -4,7 +4,7 @@
 // Author:      Mark Johnson
 // Modified by: 19990806.mj10777
 // Created:     19991010
-// RCS-ID:
+// RCS-ID:      $Id$
 // Copyright:   (c) Mark Johnson, Berlin Germany, mj10777@gmx.net
 // Licence:     wxWindows license
 //---------------------------------------------------------------------------
@@ -264,7 +264,7 @@ void PgmCtrl::OnUserPassword()
   // wxMessageBox(SaveDSN);
   int i, rc=0;
   //-------------------------------------------
-  DlgUser p_Dlg(this, "Username and Password", wxPoint(100, 100), wxSize(340, 170));
+  DlgUser p_Dlg(this, "Username and Password");
   //-------------------------------------------
   for (i=0;i<pDoc->i_DSN;i++)
     {
@@ -274,22 +274,26 @@ void PgmCtrl::OnUserPassword()
 	  p_Dlg.s_User     = (pDoc->p_DSN+i)->Usr;
 	  p_Dlg.s_Password = (pDoc->p_DSN+i)->Pas;
 	  p_Dlg.OnInit();
+	  p_Dlg.Fit();
 	  //--------------------
 	  // Temp0.Printf("i(%d) ; s_DSN(%s) ; s_User(%s) ; s_Password(%s)",i,p_Dlg.s_DSN,p_Dlg.s_User,p_Dlg.s_Password);
 	  // wxMessageBox(Temp0);
+	  bool OK = FALSE;
 	  if (p_Dlg.ShowModal() == wxID_OK)
 	    {
 	      (pDoc->p_DSN+i)->Usr = p_Dlg.s_User;
 	      (pDoc->p_DSN+i)->Pas = p_Dlg.s_Password;
 	      (pDoc->db_Br+i)->UserName  = (pDoc->p_DSN+i)->Usr;
 	      (pDoc->db_Br+i)->Password  = (pDoc->p_DSN+i)->Pas;
+	      OK = TRUE;
 	    }
 	  p_Dlg.Destroy();
+	  if (!OK) return;
 	  //--------------------
-	  goto Weiter; // We have what we want, leave
+	  break; // We have what we want, leave
 	}
     }
- Weiter:
+ 
   //-------------------------------------------
   SaveDSN.Empty();
 }

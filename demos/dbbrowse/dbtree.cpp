@@ -4,7 +4,7 @@
 // Author:      Mark Johnson
 // Modified by:
 // Created:     19991129
-// RCS-ID:
+/// RCS-ID:      $Id$
 // Copyright:   (c) Mark Johnson, Berlin Germany, mj10777@gmx.net
 // Licence:     wxWindows license
 //---------------------------------------------------------------------------

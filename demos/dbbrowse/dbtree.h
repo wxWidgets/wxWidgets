@@ -6,6 +6,7 @@
 // Created:     19991129
 // Copyright:   (c) Mark Johnson
 // Licence:     wxWindows license
+// RCS-ID:      $Id$
 //---------------------------------------------------------------------------
 class mjDoc;               // Declared in Doc.h file
 //---------------------------------------------------------------------------

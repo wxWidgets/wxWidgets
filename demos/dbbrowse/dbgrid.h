@@ -4,9 +4,9 @@
 // Author:      Mark Johnson
 // Modified by: 20000126.mj10777
 // Created:
-// RCS-ID:
 // Copyright:   (c) Mark Johnson
 // Licence:     wxWindows license
+// RCS-ID:      $Id$
 //---------------------------------------------------------------------------
 class mjDoc;
 //---------------------------------------------------------------------------

@@ -6,6 +6,7 @@
 // Created:     19991105
 // Copyright:   (c) Mark Johnson
 // Licence:     wxWindows license
+// RCS-ID:      $Id$
 //---------------------------------------------------------------------------
 // DlgUser
 //---------------------------------------------------------------------------
@@ -19,14 +20,18 @@
 class DlgUser: public wxDialog
 {
  public:
- bool canceled;
+// bool canceled;
  wxString s_DSN, s_User, s_Password;
- wxTextCtrl *tc_User, *tc_Password;
+// wxTextCtrl *tc_User, *tc_Password;
+ wxStaticText *m_Label1, *m_Label2;
+ wxTextCtrl *m_UserName, *m_Password;
+ wxButton *m_OK, *m_Cancel;
+
  //---------------------------------------------------------------------------
- DlgUser(wxWindow *parent, const wxString& title, const wxPoint& pos, const wxSize& size,const long style = wxDEFAULT_DIALOG_STYLE);
+ DlgUser(wxWindow *parent, const wxString& title);
  void OnInit();
  void OnOk(wxCommandEvent& event);
- void OnCancel(wxCommandEvent& event);
+// void OnCancel(wxCommandEvent& event);
  //---------------------------------------------------------------------------
   DECLARE_EVENT_TABLE()
 };
