@@ -127,11 +127,12 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
     else if (HasFlag(wxBU_BOTTOM))
         y_alignment = 1.0;
 
-#ifdef __WXGTK20__
+#if GTK_CHECK_VERSION(2,4,0)
     gtk_button_set_alignment(GTK_BUTTON(m_widget), x_alignment, y_alignment);
 #else
-    gtk_misc_set_alignment (GTK_MISC (BUTTON_CHILD (m_widget)),
-                            x_alignment, y_alignment);
+    if (GTK_IS_MISC(BUTTON_CHILD(m_widget)))
+        gtk_misc_set_alignment (GTK_MISC (BUTTON_CHILD (m_widget)),
+                                x_alignment, y_alignment);
 #endif
 
     if (!label.empty())
