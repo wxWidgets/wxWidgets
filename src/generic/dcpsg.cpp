@@ -1099,8 +1099,6 @@ void wxPostScriptDC::SetBrush( const wxBrush& brush )
 #include "wx/gtk/private.h"
 #include "wx/fontutil.h"
 #include "gtk/gtk.h"
-//#include "gtk/gdk/gdkx.h"
-//#include <pango/pangoxft.h>
 #include <pango/pangoft2.h>
 #include <freetype/ftglyph.h>
 
@@ -1113,16 +1111,14 @@ void wxPostScriptDC::SetBrush( const wxBrush& brush )
 
 typedef struct _OutlineInfo OutlineInfo;
 struct _OutlineInfo {
-  FILE *OUT;
-  FT_Vector glyph_origin;
-  int dpi;
+  FILE *file;
 };
 
 static int paps_move_to( FT_Vector* to,
 			 void *user_data)
 {
   OutlineInfo *outline_info = (OutlineInfo*)user_data;
-  fprintf(outline_info->OUT, "%d %d moveto\n",
+  fprintf(outline_info->file, "%d %d moveto\n",
 	  (int)to->x ,
 	  (int)to->y );
   return 0;
@@ -1132,7 +1128,7 @@ static int paps_line_to( FT_Vector*  to,
 			 void *user_data)
 {
   OutlineInfo *outline_info = (OutlineInfo*)user_data;
-  fprintf(outline_info->OUT, "%d %d lineto\n",
+  fprintf(outline_info->file, "%d %d lineto\n",
 	  (int)to->x ,
 	  (int)to->y );
   return 0;
@@ -1143,7 +1139,7 @@ static int paps_conic_to( FT_Vector*  control,
 			  void *user_data)
 {
   OutlineInfo *outline_info = (OutlineInfo*)user_data;
-  fprintf(outline_info->OUT, "%d %d %d %d conicto\n",
+  fprintf(outline_info->file, "%d %d %d %d conicto\n",
 	  (int)control->x  ,
 	  (int)control->y  ,
 	  (int)to->x   ,
@@ -1157,7 +1153,7 @@ static int paps_cubic_to( FT_Vector*  control1,
 			  void *user_data)
 {
   OutlineInfo *outline_info = (OutlineInfo*)user_data;
-  fprintf(outline_info->OUT,
+  fprintf(outline_info->file,
 	  "%d %d %d %d %d %d curveto\n",
 	  (int)control1->x , 
 	  (int)control1->y ,
@@ -1168,18 +1164,17 @@ static int paps_cubic_to( FT_Vector*  control1,
   return 0;
 }
 
-void draw_bezier_outline(FILE *OUT,
-			 int dpi,
+void draw_bezier_outline(FILE *file,
 			 FT_Face face,
 			 FT_UInt glyph_index,
-			 wxCoord pos_x,
-			 wxCoord pos_y
-			 )
+			 int pos_x,
+			 int pos_y,
+             int scale_x,
+             int scale_y )
 {
-  FT_Int load_flags = FT_LOAD_DEFAULT;
+  FT_Int load_flags = FT_LOAD_NO_BITMAP;
   FT_Glyph glyph;
 
-  /* Output outline */
   FT_Outline_Funcs outlinefunc = 
   {
     paps_move_to,
@@ -1187,20 +1182,22 @@ void draw_bezier_outline(FILE *OUT,
     paps_conic_to,
     paps_cubic_to
   };
+  
   OutlineInfo outline_info;
+  outline_info.file = file;
 
-  outline_info.glyph_origin.x = (FT_Pos) pos_x;
-  outline_info.glyph_origin.y = (FT_Pos) pos_y;
-  outline_info.dpi = dpi;
-  outline_info.OUT = OUT;
-
-  fprintf(OUT, "gsave %d %d translate 1.0 72.0 div dup scale 0 0 0 setrgbcolor\n", pos_x, pos_y );
+  fprintf(file, "gsave\n");
+  fprintf(file, "%d %d translate\n", pos_x, pos_y );
+  // FT2 scales outlines to 26.6 pixels so the code below
+  // should read 26600 instead of the 60000.
+  fprintf(file, "%d 60000 div %d 60000 div scale\n", scale_x, scale_y );
+  fprintf(file, "0 0 0 setrgbcolor\n");
 
   FT_Load_Glyph(face, glyph_index, load_flags);
   FT_Get_Glyph (face->glyph, &glyph);
   FT_Outline_Decompose (&(((FT_OutlineGlyph)glyph)->outline),
                         &outlinefunc, &outline_info);
-  fprintf(OUT, "closepath fill grestore \n");
+  fprintf(file, "closepath fill grestore \n");
   
   FT_Done_Glyph (glyph);
 }
@@ -1212,19 +1209,15 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
     wxCHECK_RET( m_ok && m_pstream, wxT("invalid postscript dc") );
 
 #ifdef __WXGTK20__
-
     int dpi = GetResolution();
-    
+    dpi = 300;
     PangoContext *context = pango_ft2_get_context ( dpi, dpi );
 
-    // What are these for?
     pango_context_set_language (context, pango_language_from_string ("en_US"));
     pango_context_set_base_dir (context, PANGO_DIRECTION_LTR );
 
-    // Set the font
     pango_context_set_font_description (context, m_font.GetNativeFontInfo()->description );
 
-    // Create layout 
     PangoLayout *layout = pango_layout_new (context);
 #if wxUSE_UNICODE
     wxCharBuffer buffer = wxConvUTF8.cWC2MB( text );
@@ -1233,13 +1226,15 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
 #endif
 	pango_layout_set_text( layout, (const char*) buffer, strlen(buffer) );
 
-#if 1
-    int xx = LogicalToDeviceX(x);
-    int yy = LogicalToDeviceY(y /*+ bitmap.GetHeight()*/ );
+    PangoRectangle rect;
+    pango_layout_get_extents(layout, NULL, &rect);
     
-    xx *= PANGO_SCALE;
-    yy *= PANGO_SCALE;
-
+    int xx = x * PANGO_SCALE;
+    int yy = y * PANGO_SCALE + (rect.height*2/3);
+    
+    int scale_x = LogicalToDeviceXRel( 1000 );
+    int scale_y = LogicalToDeviceYRel( 1000 );
+    
     // Loop over lines in layout
     int num_lines = pango_layout_get_line_count( layout );
     for (int i = 0; i < num_lines; i++)
@@ -1265,90 +1260,17 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
                 int pos_y = yy - geometry.y_offset;
                 xx += geometry.width;
                 
-                draw_bezier_outline( m_pstream, dpi, ft_face,
+                draw_bezier_outline( m_pstream, ft_face,
 			      (FT_UInt)(glyphs->glyphs[glyph_idx].glyph),
-			      (wxCoord)(pos_x / PANGO_SCALE), (wxCoord)(pos_y / PANGO_SCALE) );
+			      LogicalToDeviceX( pos_x / PANGO_SCALE ), 
+                  LogicalToDeviceY( pos_y / PANGO_SCALE ),
+                  scale_x, scale_y );
             }
             runs_list = runs_list->next;
         }
 	}
-#else    
-    // Find out extent for the bitmap
-    int height = 0;
-    int width = 0;
-    PangoRectangle logical_rect;
-    pango_layout_get_extents (layout, NULL, &logical_rect);
-    height = PANGO_PIXELS (logical_rect.height);
-    width = PANGO_PIXELS (logical_rect.width);
-    
-    // printf( "h %d w %d lh %d lw %d\n", height, width, logical_rect.height, logical_rect.width );
-
-    // Allocate FreeType 2 bitmap
-    int byte_width = (width + 7)/8 * 8;
-    FT_Bitmap bitmap;
-    guchar *buf = (guchar*) g_malloc (byte_width * height);
-    memset (buf, 0x00, byte_width * height);
-    bitmap.rows = height;
-    bitmap.width = byte_width;
-	bitmap.pitch = byte_width;
-	bitmap.buffer = buf;
-	bitmap.num_grays = 256;
-	bitmap.pixel_mode = ft_pixel_mode_grays;
-	
-    // Render bitmap
-	pango_ft2_render_layout (&bitmap, layout, 0, 0);
-
-	// Invert bitmap to get black text on white background
-    for (int pix_idx = 0; pix_idx < width * height; pix_idx++)
-        buf[pix_idx] = 255-buf[pix_idx];
-
-    // Write PS output
-    wxCoord xx = LogicalToDeviceX(x);
-    wxCoord yy = LogicalToDeviceY(y /*+ bitmap.GetHeight()*/ );
-
-    fprintf(m_pstream, "gsave\n");
-    fprintf(m_pstream, "%d %d translate\n", xx, yy);
-    fprintf(m_pstream, "/img_width %d def\n", bitmap.width);
-    fprintf(m_pstream, "/img_height %d def\n", bitmap.rows);
-    fprintf(m_pstream, "/picstr img_width 8 idiv string def\n");
-
-    fprintf(m_pstream,
-	  "  img_width 72 15 div mul\n"
-          "  img_height 72 15 div mul scale\n"
-	  "  0 setgray\n"
-	  "  img_width img_height\n"
-	  "  true\n"
-	  "  [img_width 0 0 img_height neg 0 img_height 0.67 mul]\n"
-	  "  { currentfile\n"
-	  "    picstr readhexstring pop }\n"
-	  "  imagemask"
-	  );
-
-
-    for (int b_idx= 0; b_idx < bitmap.width/8 * bitmap.rows; b_idx++)
-    {
-      guchar packed_b = 0;
-      int bit_idx;
-
-      if (b_idx % (bitmap.width/8) == 0)
-	fprintf(m_pstream, "\n");
-      
-      for (bit_idx = 0; bit_idx < 8; bit_idx++)
-	{
-	  guchar this_bit = bitmap.buffer[b_idx * 8+bit_idx]<128;
-	  packed_b = (packed_b << 1) + this_bit;
-	}
-      fprintf(m_pstream, "%02x", packed_b);
-    }
-  
-    fprintf(m_pstream, "\ngrestore\n" );
-    
-    // Free memory
-    g_free( buf );
-#endif
 
     g_object_unref( G_OBJECT( layout ) );
-    
 #else
     wxCoord text_w, text_h, text_descent;
 
@@ -2027,17 +1949,13 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
     
 #ifdef __WXGTK20__
     int dpi = GetResolution();
-    
     PangoContext *context = pango_ft2_get_context ( dpi, dpi );
     
-    // What are these for?
     pango_context_set_language (context, pango_language_from_string ("en_US"));
     pango_context_set_base_dir (context, PANGO_DIRECTION_LTR );
 
-    // Create layout 
     PangoLayout *layout = pango_layout_new (context);
     
-    // Set Font
     PangoFontDescription *desc = fontToUse->GetNativeFontInfo()->description;
     pango_layout_set_font_description(layout, desc);
 #if wxUSE_UNICODE
@@ -2053,8 +1971,8 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
     PangoRectangle rect;
     pango_layout_line_get_extents(line, NULL, &rect);
     
-    if (x) (*x) = (wxCoord) (rect.width / PANGO_SCALE / ms_PSScaleFactor);
-    if (y) (*y) = (wxCoord) (rect.height / PANGO_SCALE / ms_PSScaleFactor);
+    if (x) (*x) = (wxCoord) ( m_scaleX * rect.width / PANGO_SCALE );
+    if (y) (*y) = (wxCoord) ( m_scaleY * rect.height / PANGO_SCALE );
     if (descent)
     {
         // Do something about metrics here
