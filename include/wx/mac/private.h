@@ -142,7 +142,52 @@ void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bi
 #define MAC_WXPOINTPTR(a) ((Point*)a)
 #define MAC_WXHMENU(a) ((MenuHandle)a)
 
-// string conversions / 
+//---------------------------------------------------------------------------
+// wxMac string conversions
+//---------------------------------------------------------------------------
+
+void wxMacConvertToPC( const char *from , char *to , int len ) ;
+void wxMacConvertFromPC( const char *from , char *to , int len ) ;
+void wxMacConvertToPC( const char *from , char *to , int len ) ;
+
+wxString wxMacMakeMacStringFromPC( const char * p ) ;
+
+wxString wxMacMakePCStringFromMac( const char * p ) ;
+
+
+// converts this c string into a wxString with optional mac 2 pc encoding
+wxString wxMacMakeStringFromMacString( const char* from , bool mac2pcEncoding ) ;
+
+// converts this c string into a wxString with pc 2 mac encoding if s_macDefaultEncodingIsPC
+inline wxString wxMacMakeStringFromMacString( const char* from  ) 
+  { return wxMacMakeStringFromMacString( from , wxApp::s_macDefaultEncodingIsPC ) ; }
+
+// converts this c string into a wxString with pc 2 mac encoding if s_macDefaultEncodingIsPC
+inline wxString wxMacMakeStringFromMacString( const wxString& from  ) 
+  { return wxApp::s_macDefaultEncodingIsPC ? 
+  	wxMacMakeStringFromMacString( from.c_str() , true ) : from ; }
+
+// 
+// Pascal Strings
+//
+
+// converts this string into a pascal with optional pc 2 mac encoding
+void wxMacStringToPascal( const char * from , StringPtr to , bool pc2macEncoding ) ;
+
+// converts this string into a pascal with pc 2 mac encoding if s_macDefaultEncodingIsPC
+inline void wxMacStringToPascal( const char * from , StringPtr to ) 
+  { wxMacStringToPascal( from , to , wxApp::s_macDefaultEncodingIsPC ) ; }
+
+// converts this string into a pascal with optional mac 2 pc encoding
+wxString wxMacMakeStringFromPascal( ConstStringPtr from , bool mac2pcEncoding ) ;
+
+// converts this pascal string into a wxString with pc 2 mac encoding if s_macDefaultEncodingIsPC
+inline wxString wxMacMakeStringFromPascal( ConstStringPtr from  ) 
+  { return wxMacMakeStringFromPascal( from , wxApp::s_macDefaultEncodingIsPC ) ; }
+
+// 
+// CFStringRefs (Carbon only)
+//
 
 #if TARGET_CARBON
 // converts this string into a carbon foundation string with optional pc 2 mac encoding
