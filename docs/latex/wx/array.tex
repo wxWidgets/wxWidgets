@@ -6,8 +6,8 @@ linear in number of container elements as for linked lists). However, these
 arrays are dynamic in the sense that they will automatically allocate more
 memory if there is not enough of it for adding a new element. They also perform
 range checking on the index values but in debug mode only, so please be sure to
-compile your application in debug mode to use it (see \helpref{debugging
-overview}{debuggingoverview} for details). So, unlike the arrays in some other
+compile your application in debug mode to use it (see \helpref{debugging overview}{debuggingoverview} for
+details). So, unlike the arrays in some other
 languages, attempt to access an element beyond the arrays bound doesn't
 automatically expand the array but provokes an assertion failure instead in
 debug build and does nothing (except possibly crashing your program) in the
@@ -18,9 +18,8 @@ run-time speed and memory consumption and the executable size. The speed of
 array item access if, of course, constant (independent of number of elements)
 making them much more efficient than linked lists (\helpref{wxList}{wxlist}).
 Adding items to the arrays is also implemented in more or less constant time -
-but the price is preallocating the memory in advance. In the 
-\helpref{memory management}{wxarraymemorymanagement} section you may find some
-useful hints about optimizing wxArray memory usage. As for executable size, all
+but the price is preallocating the memory in advance. In the \helpref{memory management}{wxarraymemorymanagement} section
+you may find some useful hints about optimizing wxArray memory usage. As for executable size, all
 wxArray functions are inline, so they do not take {\it any space at all}.
 
 wxWindows has three different kinds of array. All of them derive from
@@ -46,7 +45,7 @@ wxSortedArray is a wxArray variant which should be used when searching in the
 array is a frequently used operation. It requires you to define an additional
 function for comparing two elements of the array element type and always stores
 its items in the sorted order (according to this function). Thus, it's 
-\helpref{Index()}{wxarrayindex} function execution time is $O(log(N))$ instead of
+ \helpref{Index()}{wxarrayindex} function execution time is $O(log(N))$ instead of
 $O(N)$ for the usual arrays but the \helpref{Add()}{wxarrayadd} method is
 slower: it is $O(log(N))$ instead of constant time (neglecting time spent in
 memory allocation routine). However, in a usual situation elements are added to
@@ -101,6 +100,7 @@ It is not as elegant as writing
 \begin{verbatim} 
 typedef std::vector<MyDirectory> ArrayOfDirectories;
 \end{verbatim}
+
 but is not that complicated and allows the code to be compiled with any, however
 dumb, C++ compiler in the world.
 
@@ -147,8 +147,8 @@ should avoid deleting wxObjArray through a wxBaseArray pointer (as you would
 never use wxBaseArray anyhow it shouldn't be a problem) and that you should not
 derive your own classes from the array classes.
 
-\helpref{wxArray default constructor}{wxarrayctordef}
-\helpref{wxArray copy constructors and assignment operators}{wxarrayctorcopy}
+\helpref{wxArray default constructor}{wxarrayctordef}\\
+\helpref{wxArray copy constructors and assignment operators}{wxarrayctorcopy}\\
 \helpref{\destruct{wxArray}}{wxarraydtor}
 
 \membersection{Memory management}\label{wxarraymemorymanagement}
@@ -160,7 +160,7 @@ allocated memory it reallocates it adding 50\% of the currently allocated
 amount, but no more than some maximal number which is defined by
 ARRAY\_MAXSIZE\_INCREMENT constant. Of course, this may lead to some memory
 being wasted (ARRAY\_MAXSIZE\_INCREMENT in the worst case, i.e. 4Kb in the
-current implementation), so the \helpref{Shrink()}{wxarrayshrink} function  is
+current implementation), so the \helpref{Shrink()}{wxarrayshrink} function is
 provided to unallocate the extra memory. The \helpref{Alloc()}{wxarrayalloc} 
 function can also be quite useful if you know in advance how many items you are
 going to put in the array and will prevent the array code from reallocating the
@@ -182,16 +182,19 @@ does exactly the same as \helpref{Item()}{wxarrayitem} method.
 \helpref{Last}{wxarraylast}
 
 \membersection{Adding items}
+
 \helpref{Add}{wxarrayadd}\\
 \helpref{Insert}{wxarrayinsert}
 
 \membersection{Removing items}
+
 \helpref{WX\_CLEAR\_ARRAY}{wxcleararray}\\
 \helpref{Empty}{wxarrayempty}\\
 \helpref{Clear}{wxarrayclear}\\
 \helpref{Remove}{wxarrayremove}
 
 \membersection{Searching and sorting}
+
 \helpref{Index}{wxarrayindex}\\
 \helpref{Sort}{wxarraysort}
 
@@ -203,10 +206,12 @@ does exactly the same as \helpref{Item()}{wxarrayitem} method.
 }}
 
 \membersection{WX\_DEFINE\_ARRAY}\label{wxdefinearray}
+
 \func{}{WX\_DEFINE\_ARRAY}{\param{}{T}, \param{name}}
 
 This macro defines a new array class named {\it name} and containing the
 elements of type {\it T}. Example:
+
 \begin{verbatim}
 WX_DEFINE_ARRAY(int, wxArrayInt);
 
@@ -218,10 +223,12 @@ Note that wxWindows predefines the following standard array classes: wxArrayInt,
 wxArrayLong and wxArrayPtrVoid.
 
 \membersection{WX\_DEFINE\_SORTED\_ARRAY}\label{wxdefinesortedarray}
-\func{}{WX\_DEFINE\_SORTED\_ARRAY}{\param{}{T}, \param{name}}
+
+\func{}{WX\_DEFINE\_SORTED\_ARRAY}{\param{}{T}, \param{}{name}}
 
 This macro defines a new sorted array class named {\it name} and containing
 the elements of type {\it T}. Example:
+
 \begin{verbatim}
 WX_DEFINE_SORTED_ARRAY(int, wxArrayInt);
 
@@ -249,7 +256,8 @@ wxArrayOfMyClass another(CompareMyClassObjects);
 \end{verbatim}
 
 \membersection{WX\_DECLARE\_OBJARRAY}\label{wxdeclareobjarray}
-\func{}{WX\_DECLARE\_OBJARRAY}{\param{}{T}, \param{name}}
+
+\func{}{WX\_DECLARE\_OBJARRAY}{\param{}{T}, \param{}{name}}
 
 This macro declares a new object array class named {\it name} and containing
 the elements of type {\it T}. Example:
@@ -261,7 +269,8 @@ You must use \helpref{WX\_DEFINE\_OBJARRAY()}{wxdefineobjarray} macro to define
 the array class - otherwise you would get link errors.
 
 \membersection{WX\_DEFINE\_OBJARRAY}\label{wxdefineobjarray}
-\func{}{WX\_DEFINE\_OBJARRAY}{\param{name}}
+
+\func{}{WX\_DEFINE\_OBJARRAY}{\param{}{name}}
 
 This macro defines the methods of the array class {\it name} not defined by the 
 \helpref{WX\_DECLARE\_OBJARRAY()}{wxdeclareobjarray} macro. You must include the
@@ -273,6 +282,7 @@ objects of the class will not be copied correctly and their real destructor will
 not be called.
 
 Example of usage:
+
 \begin{verbatim}
 // first declare the class!
 class MyClass
@@ -290,6 +300,7 @@ WX_DEFINE_OBJARRAY(wxArrayOfMyClass);
 \end{verbatim}
 
 \membersection{WX\_CLEAR\_ARRAY}\label{wxcleararray}
+
 \func{\void}{WX\_CLEAR\_ARRAY}{\param{wxArray\& }{array}}
 
 This macro may be used to delete all elements of the array before emptying it.
@@ -297,7 +308,9 @@ It can not be used with wxObjArrays - but they will delete their elements anyhow
 when you call Empty().
 
 \membersection{Default constructors}\label{wxarrayctor}
+
 \func{}{wxArray}{}
+
 \func{}{wxObjArray}{}
 
 Default constructor initializes an empty array object.
@@ -311,12 +324,17 @@ should return a negative, zero or positive value according to whether the first
 element passed to it is less than, equal to or greater than the second one.
 
 \membersection{wxArray copy constructor and assignemnt operator}\label{wxarrayctorcopy}
+
 \func{}{wxArray}{\param{const wxArray\& }{array}}
+
 \func{}{wxSortedArray}{\param{const wxSortedArray\& }{array}}
+
 \func{}{wxObjArray}{\param{const wxObjArray\& }{array}}
 
 \func{wxArray\&}{operator=}{\param{const wxArray\& }{array}}
+
 \func{wxSortedArray\&}{operator=}{\param{const wxSortedArray\& }{array}}
+
 \func{wxObjArray\&}{operator=}{\param{const wxObjArray\& }{array}}
 
 The copy constructors and assignment operators perform a shallow array copy
@@ -325,8 +343,11 @@ the items of pointer type) for wxArray and wxSortedArray and a deep copy (i.e.
 the array element are copied too) for wxObjArray.
 
 \membersection{wxArray::\destruct{wxArray}}\label{wxarraydtor}
+
 \func{}{\destruct{wxArray}}{}
+
 \func{}{\destruct{wxSortedArray}}{}
+
 \func{}{\destruct{wxObjArray}}{}
 
 The wxObjArray destructor deletes all the items owned by the array. This is not
@@ -334,8 +355,11 @@ done by wxArray and wxSortedArray versions - you may use
 \helpref{WX\_CLEAR\_ARRAY}{wxcleararray} macro for this.
 
 \membersection{wxArray::Add}\label{wxarrayadd}
+
 \func{\void}{Add}{\param{T }{item}}
+
 \func{\void}{Add}{\param{T *}{item}}
+
 \func{\void}{Add}{\param{T \&}{item}}
 
 Appends a new element to the array (where {\it T} is the type of the array
@@ -350,6 +374,7 @@ ownership of the original item. Once again, it only makes sense for wxObjArrays
 because the other array types never take ownership of their elements.
 
 \membersection{wxArray::Alloc}\label{wxarrayalloc}
+
 \func{\void}{Alloc}{\param{size\_t }{count}}
 
 Preallocates memory for a given number of array elements. It is worth calling
@@ -358,25 +383,30 @@ advance because it will save unneeded memory reallocation. If the array already
 has enough memory for the given number of items, nothing happens.
 
 \membersection{wxArray::Clear}\label{wxarrayclear}
+
 \func{\void}{Clear}{\void}
 
 This function does the same as \helpref{Empty()}{wxarrayempty} and additionally
 frees the memory allocated to the array.
 
 \membersection{wxArray::Count}\label{wxarraycount}
+
 \constfunc{size\_t}{Count}{\void}
 
 Same as \helpref{GetCount()}{wxarraygetcount}. This function is deprecated -
 it exists only for compatibility.
 
 \membersection{wxObjArray::Detach}\label{wxobjarraydetach}
+
 \func{T *}{Detach}{\param{size\_t }{index}}
 
 Removes the element from the array, but, unlike, 
+
 \helpref{Remove()}{wxarrayremove} doesn't delete it. The function returns the
 pointer to the removed element.
 
 \membersection{wxArray::Empty}\label{wxarrayempty}
+
 \func{\void}{Empty}{\void}
 
 Empties the array. For wxObjArray classes, this destroys all of the array
@@ -385,12 +415,15 @@ array of being empty - this function does not free the allocated memory, use
 \helpref{Clear()}{wxarrayclear} for this.
 
 \membersection{wxArray::GetCount}\label{wxarraygetcount}
+
 \constfunc{size\_t}{GetCount}{\void}
 
 Return the number of items in the array.
 
 \membersection{wxArray::Index}\label{wxarrayindex}
+
 \func{int}{Index}{\param{T\& }{item}, \param{bool }{searchFromEnd = FALSE}}
+
 \func{int}{Index}{\param{T\& }{item}}
 
 The first version of the function is for wxArray and wxObjArray, the second is
@@ -406,8 +439,11 @@ in the sorted array is used for wxSortedArray (this is why searchFromEnd
 parameter doesn't make sense for it).
 
 \membersection{wxArray::Insert}\label{wxarrayinsert}
+
 \func{\void}{Insert}{\param{T }{item}, \param{size\_t }{n}}
+
 \func{\void}{Insert}{\param{T *}{item}, \param{size\_t }{n}}
+
 \func{\void}{Insert}{\param{T \&}{item}, \param{size\_t }{n}}
 
 Insert a new item into the array before the item {\it n} - thus, {\it
@@ -418,11 +454,13 @@ Please see \helpref{Add()}{wxarrayadd} for explanation of the differences
 between the overloaded versions of this function.
 
 \membersection{wxArray::IsEmpty}\label{wxarrayisempty}
+
 \constfunc{bool}{IsEmpty}{}
 
 Returns TRUE if the array is empty, FALSE otherwise.
 
 \membersection{wxArray::Item}\label{wxarrayitem}
+
 \constfunc{T\&}{Item}{\param{size\_t }{index}}
 
 Returns the item at the given position in the array. If {\it index} is out of
@@ -433,6 +471,7 @@ The returned value is of type "reference to the array element type" for all of
 the array classes.
 
 \membersection{wxArray::Last}\label{wxarraylast}
+
 \constfunc{T\&}{Last}{\void}
 
 Returns the last element in the array, i.e. is the same as Item(GetCount() - 1).
@@ -442,7 +481,9 @@ The returned value is of type "reference to the array element type" for all of
 the array classes.
 
 \membersection{wxArray::Remove}\label{wxarrayremove}
+
 \func{\void}{Remove}{\param{size\_t }{index}}
+
 \func{\void}{Remove}{\param{T }{item}}
 
 Removes the element from the array either by index or by value. When an element
@@ -450,6 +491,7 @@ is removed from wxObjArray it is deleted by the array - use
 \helpref{Detach()}{wxobjarraydetach} if you don't want this to happen. On the
 other hand, when an object is removed from a wxArray nothing happens - you
 should delete the it manually if required:
+
 \begin{verbatim}
 T *item = array[n];
 delete item;
@@ -460,6 +502,7 @@ See also \helpref{WX\_CLEAR\_ARRAY}{wxcleararray} macro which deletes all
 elements of a wxArray (supposed to contain pointers).
 
 \membersection{wxArray::Shrink}\label{wxarrayshrink}
+
 \func{\void}{Shrink}{\void}
 
 Frees all memory unused by the array. If the program knows that no new items
@@ -468,12 +511,15 @@ However, if a new item is added to the array, some extra memory will be
 allocated again.
 
 \membersection{wxArray::Sort}\label{wxarraysort}
+
 \func{\void}{Sort}{\param{CMPFUNC<T> }{compareFunction}}
 
 The notation CMPFUNC<T> should be read as if we had the following declaration:
+
 \begin{verbatim}
 template int CMPFUNC(T *first, T *second);
 \end{verbatim}
+
 where {\it T} is the type of the array elements. I.e. it is a function returning
 {\it int} which is passed two arguments of type {\it T *}.
 
@@ -482,3 +528,4 @@ return a negative, zero or positive value according to whether the first element
 passed to it is less than, equal to or greater than the second one.
 
 wxSortedArray doesn't have this function because it is always sorted.
+
