@@ -94,10 +94,11 @@ wxImageRefData::wxImageRefData()
 
 wxImageRefData::~wxImageRefData()
 {
-    if ( !m_static )
+    if (!m_static)
+    {
         free( m_data );
-
-    free(m_alpha);
+        free( m_alpha );
+    }
 }
 
 wxList wxImage::sm_handlers;
@@ -118,6 +119,11 @@ wxImage::wxImage( int width, int height, bool clear )
 wxImage::wxImage( int width, int height, unsigned char* data, bool static_data )
 {
     Create( width, height, data, static_data );
+}
+
+wxImage::wxImage( int width, int height, unsigned char* data, unsigned char* alpha, bool static_data )
+{
+    Create( width, height, data, alpha, static_data );
 }
 
 wxImage::wxImage( const wxString& name, long type, int index )
@@ -185,6 +191,24 @@ bool wxImage::Create( int width, int height, unsigned char* data, bool static_da
     m_refData = new wxImageRefData();
 
     M_IMGDATA->m_data = data;
+    M_IMGDATA->m_width = width;
+    M_IMGDATA->m_height = height;
+    M_IMGDATA->m_ok = true;
+    M_IMGDATA->m_static = static_data;
+
+    return true;
+}
+
+bool wxImage::Create( int width, int height, unsigned char* data, unsigned char* alpha, bool static_data )
+{
+    UnRef();
+
+    wxCHECK_MSG( data, false, _T("NULL data in wxImage::Create") );
+
+    m_refData = new wxImageRefData();
+
+    M_IMGDATA->m_data = data;
+    M_IMGDATA->m_alpha = alpha;
     M_IMGDATA->m_width = width;
     M_IMGDATA->m_height = height;
     M_IMGDATA->m_ok = true;
