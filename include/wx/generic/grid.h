@@ -505,8 +505,8 @@ public:
     const wxColour& GetBackgroundColour() const;
     const wxFont& GetFont() const;
     void GetAlignment(int *hAlign, int *vAlign) const;
-    wxGridCellRenderer *GetRenderer(wxGridCellRenderer* def) const;
-    wxGridCellEditor *GetEditor(wxGridCellEditor* def) const;
+    wxGridCellRenderer *GetRenderer(wxGrid* grid, int row, int col) const;
+    wxGridCellEditor *GetEditor(wxGrid* grid, int row, int col) const;
 
     bool IsReadOnly() const { return m_isReadOnly; }
 
@@ -1034,7 +1034,7 @@ public:
     void     SetRowLabelValue( int row, const wxString& );
     void     SetColLabelValue( int col, const wxString& );
     void     SetGridLineColour( const wxColour& );
-    
+
     void     EnableDragRowSize( bool enable = TRUE );
     void     DisableDragRowSize() { EnableDragRowSize( FALSE ); }
     bool     CanDragRowSize() { return m_canDragRowSize; }

@@ -423,7 +423,7 @@ void wxGridCellEditor::SetSize(const wxRect& rect)
 {
     wxASSERT_MSG(m_control,
                  wxT("The wxGridCellEditor must be Created first!"));
-    m_control->SetSize(rect);
+    m_control->SetSize(rect, wxSIZE_ALLOW_MINUS_ONE);
 }
 
 void wxGridCellEditor::HandleReturn(wxKeyEvent& event)
@@ -815,7 +815,7 @@ void wxGridCellBoolEditor::BeginEdit(int row, int col, wxGrid* grid)
     wxASSERT_MSG(m_control,
                  wxT("The wxGridCellEditor must be Created first!"));
 
-    if (grid->GetTable()->CanGetValueAs(row, col, wxT("bool")))
+    if (grid->GetTable()->CanGetValueAs(row, col, wxGRID_VALUE_BOOL))
         m_startValue = grid->GetTable()->GetValueAsBool(row, col);
     else
         m_startValue = !!grid->GetTable()->GetValue(row, col);
@@ -837,7 +837,7 @@ bool wxGridCellBoolEditor::EndEdit(int row, int col,
 
     if ( changed )
     {
-        if (grid->GetTable()->CanGetValueAs(row, col, wxT("bool")))
+        if (grid->GetTable()->CanGetValueAs(row, col, wxGRID_VALUE_BOOL))
             grid->GetTable()->SetValueAsBool(row, col, value);
         else
             grid->GetTable()->SetValue(row, col, value ? _T("1") : wxEmptyString);
@@ -911,11 +911,20 @@ void wxGridCellChoiceEditor::BeginEdit(int row, int col, wxGrid* grid)
     m_startValue = grid->GetTable()->GetValue(row, col);
 
     Combo()->SetValue(m_startValue);
+    size_t count = m_choices.GetCount();
+    for (size_t i=0; i<count; i++)
+    {
+        if (m_startValue == m_choices[i])
+        {
+            Combo()->SetSelection(i);
+            break;
+        }
+    }
     Combo()->SetInsertionPointEnd();
     Combo()->SetFocus();
 }
 
-bool wxGridCellChoiceEditor::EndEdit(int row, int col, 
+bool wxGridCellChoiceEditor::EndEdit(int row, int col,
                                      bool saveValue,
                                      wxGrid* grid)
 {
@@ -1326,40 +1335,48 @@ void wxGridCellAttr::GetAlignment(int *hAlign, int *vAlign) const
 
 
 // GetRenderer and GetEditor use a slightly different decision path about
-// which to use.  If a non-default attr object has one then it is used,
-// otherwise the default editor or renderer passed in is used.  It should be
-// the default for the data type of the cell.  If it is NULL (because the
-// table has a type that the grid does not have in its registry,) then the
-// grid's default editor or renderer is used.
+// which attribute to use.  If a non-default attr object has one then it is
+// used, otherwise the default editor or renderer is fetched from the grid and
+// used.  It should be the default for the data type of the cell.  If it is
+// NULL (because the table has a type that the grid does not have in its
+// registry,) then the grid's default editor or renderer is used.
 
-wxGridCellRenderer* wxGridCellAttr::GetRenderer(wxGridCellRenderer* def) const
+wxGridCellRenderer* wxGridCellAttr::GetRenderer(wxGrid* grid, int row, int col) const
 {
-    if ((m_defGridAttr != this || def == NULL) && HasRenderer())
-        return m_renderer;
-    else if (def)
-        return def;
-    else if (m_defGridAttr != this)
-        return m_defGridAttr->GetRenderer(NULL);
-    else
-    {
+    if ((m_defGridAttr != this || grid == NULL) && HasRenderer())
+        return m_renderer;      // use local attribute
+
+    wxGridCellRenderer* renderer = NULL;
+    if (grid)                   // get renderer for the data type
+        renderer =  grid->GetDefaultRendererForCell(row, col);
+
+    if (! renderer)
+        // if we still don't have one then use the grid default
+        renderer = m_defGridAttr->GetRenderer(NULL,0,0);
+
+    if (! renderer)
         wxFAIL_MSG(wxT("Missing default cell attribute"));
-        return NULL;
-    }
+
+    return renderer;
 }
 
-wxGridCellEditor* wxGridCellAttr::GetEditor(wxGridCellEditor* def) const
+wxGridCellEditor* wxGridCellAttr::GetEditor(wxGrid* grid, int row, int col) const
 {
-    if ((m_defGridAttr != this || def == NULL) && HasEditor())
-        return m_editor;
-    else if (def)
-        return def;
-    else if (m_defGridAttr != this)
-        return m_defGridAttr->GetEditor(NULL);
-    else
-    {
+    if ((m_defGridAttr != this || grid == NULL) && HasEditor())
+        return m_editor;      // use local attribute
+
+    wxGridCellEditor* editor = NULL;
+    if (grid)                   // get renderer for the data type
+        editor =  grid->GetDefaultEditorForCell(row, col);
+
+    if (! editor)
+        // if we still don't have one then use the grid default
+        editor = m_defGridAttr->GetEditor(NULL,0,0);
+
+    if (! editor)
         wxFAIL_MSG(wxT("Missing default cell attribute"));
-        return NULL;
-    }
+
+    return editor;
 }
 
 // ----------------------------------------------------------------------------
@@ -3921,7 +3938,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                         EnableCellEditControl();
 
                         wxGridCellAttr* attr = GetCellAttr(m_currentCellCoords);
-                        attr->GetEditor(GetDefaultEditorForCell(coords.GetRow(), coords.GetCol()))->StartingClick();
+                        attr->GetEditor(this, coords.GetRow(), coords.GetCol())->StartingClick();
                         attr->DecRef();
 
                         m_waitForSlowClick = FALSE;
@@ -4687,7 +4704,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                     int row = m_currentCellCoords.GetRow();
                     int col = m_currentCellCoords.GetCol();
                     wxGridCellAttr* attr = GetCellAttr(row, col);
-                    attr->GetEditor(GetDefaultEditorForCell(row, col))->StartingKey(event);
+                    attr->GetEditor(this, row, col)->StartingKey(event);
                     attr->DecRef();
                 }
                 else
@@ -4719,7 +4736,9 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
          m_currentCellCoords != wxGridNoCellCoords )
     {
         HideCellEditControl();
-        SaveEditControlValue();
+        // RD:  Does disabling this cause any problems?  It's called again
+        //      in DisableCellEditControl...
+        // SaveEditControlValue();
         DisableCellEditControl();
 
         // Clear the old current cell highlight
@@ -4839,14 +4858,13 @@ void wxGrid::DrawCell( wxDC& dc, const wxGridCellCoords& coords )
     // if the editor is shown, we should use it and not the renderer
     if ( isCurrent && IsCellEditControlEnabled() )
     {
-        attr->GetEditor(GetDefaultEditorForCell(row, col))->
-            PaintBackground(rect, attr);
+        attr->GetEditor(this, row, col)->PaintBackground(rect, attr);
     }
     else
     {
         // but all the rest is drawn by the cell renderer and hence may be
         // customized
-        attr->GetRenderer(GetDefaultRendererForCell(row,col))->
+        attr->GetRenderer(this, row, col)->
             Draw(*this, *attr, dc, rect, row, col, IsInSelection(coords));
 
     }
@@ -5354,7 +5372,7 @@ void wxGrid::ShowCellEditControl()
             rect.y--;
 
             wxGridCellAttr* attr = GetCellAttr(row, col);
-            wxGridCellEditor* editor = attr->GetEditor(GetDefaultEditorForCell(row, col));
+            wxGridCellEditor* editor = attr->GetEditor(this, row, col);
             if ( !editor->IsCreated() )
             {
                 editor->Create(m_gridWin, -1,
@@ -5379,7 +5397,7 @@ void wxGrid::HideCellEditControl()
         int col = m_currentCellCoords.GetCol();
 
         wxGridCellAttr* attr = GetCellAttr(row, col);
-        attr->GetEditor(GetDefaultEditorForCell(row, col))->Show( FALSE );
+        attr->GetEditor(this, row, col)->Show( FALSE );
         attr->DecRef();
         m_gridWin->SetFocus();
     }
@@ -5401,7 +5419,7 @@ void wxGrid::SaveEditControlValue()
         int col = m_currentCellCoords.GetCol();
 
         wxGridCellAttr* attr = GetCellAttr(row, col);
-        wxGridCellEditor* editor = attr->GetEditor(GetDefaultEditorForCell(row, col));
+        wxGridCellEditor* editor = attr->GetEditor(this, row, col);
         bool changed = editor->EndEdit(row, col, TRUE, this);
 
         attr->DecRef();
@@ -6334,12 +6352,12 @@ void wxGrid::GetDefaultCellAlignment( int *horiz, int *vert )
 
 wxGridCellRenderer *wxGrid::GetDefaultRenderer() const
 {
-    return m_defaultCellAttr->GetRenderer(NULL);
+    return m_defaultCellAttr->GetRenderer(NULL,0,0);
 }
 
 wxGridCellEditor *wxGrid::GetDefaultEditor() const
 {
-    return m_defaultCellAttr->GetEditor(NULL);
+    return m_defaultCellAttr->GetEditor(NULL,0,0);
 }
 
 // ----------------------------------------------------------------------------
@@ -6380,7 +6398,7 @@ void wxGrid::GetCellAlignment( int row, int col, int *horiz, int *vert )
 wxGridCellRenderer* wxGrid::GetCellRenderer(int row, int col)
 {
     wxGridCellAttr* attr = GetCellAttr(row, col);
-    wxGridCellRenderer* renderer = attr->GetRenderer(GetDefaultRendererForCell(row,col));
+    wxGridCellRenderer* renderer = attr->GetRenderer(this, row, col);
     attr->DecRef();
     return renderer;
 }
@@ -6388,7 +6406,7 @@ wxGridCellRenderer* wxGrid::GetCellRenderer(int row, int col)
 wxGridCellEditor* wxGrid::GetCellEditor(int row, int col)
 {
     wxGridCellAttr* attr = GetCellAttr(row, col);
-    wxGridCellEditor* editor = attr->GetEditor(GetDefaultEditorForCell(row, col));
+    wxGridCellEditor* editor = attr->GetEditor(this, row, col);
     attr->DecRef();
     return editor;
 }
@@ -6757,7 +6775,7 @@ void wxGrid::AutoSizeColumn( int col, bool setAsMin )
     for ( int row = 0; row < m_numRows; row++ )
     {
         wxGridCellAttr* attr = GetCellAttr(row, col);
-        wxGridCellRenderer* renderer = attr->GetRenderer(GetDefaultRendererForCell(row,col));
+        wxGridCellRenderer* renderer = attr->GetRenderer(this, row, col);
         if ( renderer )
         {
             width = renderer->GetBestSize(*this, *attr, dc, row, col).x;
