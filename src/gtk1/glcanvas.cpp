@@ -297,12 +297,11 @@ bool wxGLCanvas::Create( wxWindow *parent,
         // default settings if attriblist = 0
         data[0] = GLX_RGBA;
         data[1] = GLX_DOUBLEBUFFER;
-        data[2] = GLX_DOUBLEBUFFER;
-        data[3] = GLX_DEPTH_SIZE;   data[4] = 1;
-        data[5] = GLX_RED_SIZE;     data[6] = 1;
-        data[7] = GLX_GREEN_SIZE;   data[8] = 1;
-        data[9] = GLX_BLUE_SIZE;    data[10] = 1;
-        data[11] = GLX_ALPHA_SIZE;  data[12] = 0;
+        data[2] = GLX_DEPTH_SIZE;   data[3] = 1;
+        data[4] = GLX_RED_SIZE;     data[5] = 1;
+        data[6] = GLX_GREEN_SIZE;   data[7] = 1;
+        data[8] = GLX_BLUE_SIZE;    data[9] = 1;
+        data[10] = GLX_ALPHA_SIZE;  data[11] = 0;
         data[13] = None;
 
 	attribList = (int*) data;
