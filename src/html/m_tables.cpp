@@ -118,7 +118,8 @@ wxHtmlTableCell::wxHtmlTableCell(wxHtmlContainerCell *parent, const wxHtmlTag& t
  : wxHtmlContainerCell(parent)
 {
     m_PixelScale = pixel_scale;
-    m_HasBorders = (tag.GetParam(wxT("BORDER")) != wxT("0"));
+    m_HasBorders = 
+            (tag.HasParam(wxT("BORDER")) && tag.GetParam(wxT("BORDER")) != wxT("0"));
     m_ColsInfo = NULL;
     m_NumCols = m_NumRows = 0;
     m_CellInfo = NULL;
