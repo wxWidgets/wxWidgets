@@ -360,7 +360,7 @@ class wxPythonDemo(wxFrame):
 
         # Set up a TextCtrl on the Demo Code Notebook page
         self.txt = wxTextCtrl(self.nb, -1,
-                              style = wxTE_MULTILINE|wxTE_READONLY|wxHSCROLL)
+                              style = wxTE_MULTILINE|wxTE_READONLY|wxHSCROLL|wxTE_RICH2)
         self.nb.AddPage(self.txt, "Demo Code")
 
 

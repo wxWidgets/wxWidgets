@@ -49,6 +49,9 @@ class wxPyAppPtr(wxEvtHandlerPtr):
     def __del__(self,wxc=wxc):
         if self.thisown == 1 :
             wxc.delete_wxPyApp(self)
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp__setCallbackInfo,(self,) + _args, _kwargs)
+        return val
     def GetAppName(self, *_args, **_kwargs):
         val = apply(wxc.wxPyApp_GetAppName,(self,) + _args, _kwargs)
         return val
@@ -118,12 +121,20 @@ class wxPyAppPtr(wxEvtHandlerPtr):
     def SetUseBestVisual(self, *_args, **_kwargs):
         val = apply(wxc.wxPyApp_SetUseBestVisual,(self,) + _args, _kwargs)
         return val
+    def GetAssertMode(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp_GetAssertMode,(self,) + _args, _kwargs)
+        return val
+    def SetAssertMode(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp_SetAssertMode,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxPyApp instance at %s>" % (self.this,)
 class wxPyApp(wxPyAppPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(wxc.new_wxPyApp,_args,_kwargs)
         self.thisown = 1
+        self._setCallbackInfo(self, wxPyApp)
+        self._setOORInfo(self)
 
 
 
@@ -926,6 +937,9 @@ __version__ = wxc.__version__
 cvar = wxc.cvar
 wxDefaultPosition = wxPointPtr(wxc.cvar.wxDefaultPosition)
 wxDefaultSize = wxSizePtr(wxc.cvar.wxDefaultSize)
+wxPYAPP_ASSERT_SUPPRESS = wxc.wxPYAPP_ASSERT_SUPPRESS
+wxPYAPP_ASSERT_EXCEPTION = wxc.wxPYAPP_ASSERT_EXCEPTION
+wxPYAPP_ASSERT_DIALOG = wxc.wxPYAPP_ASSERT_DIALOG
 
 
 #-------------- USER INCLUDE -----------------------
@@ -1530,6 +1544,9 @@ wxSystemSettings_GetSystemColour = wxSystemSettings_GetColour
 wxSystemSettings_GetSystemFont   = wxSystemSettings_GetFont
 wxSystemSettings_GetSystemMetric = wxSystemSettings_GetMetric
 
+
+wxPyAssertionError = wxc.wxPyAssertionError
+
 #----------------------------------------------------------------------
 # wxGTK sets the locale when initialized.  Doing this at the Python
 # level should set it up to match what GTK is doing at the C level.
@@ -1539,8 +1556,6 @@ if wxPlatform == "__WXGTK__":
         locale.setlocale(locale.LC_ALL, "")
     except:
         pass
-
-
 
 #----------------------------------------------------------------------
 # wxWindows version numbers.  wxPython version is in __version__.
@@ -1707,6 +1722,7 @@ class wxApp(wxPyApp):
 
         if redirect:
             self.RedirectStdio(filename)
+
         # this initializes wxWindows and then calls our OnInit
         _wxStart(self.OnInit)
 
@@ -1733,7 +1749,7 @@ class wxApp(wxPyApp):
         if filename:
             sys.stdout = sys.stderr = open(filename, 'a')
         else:
-            self.stdioWin = self.outputWindowClass() # wxPyOnDemandOutputWindow
+            self.stdioWin = self.outputWindowClass()
             sys.stdout = sys.stderr = self.stdioWin
 
 

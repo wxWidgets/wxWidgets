@@ -598,6 +598,9 @@ wxSystemSettings_GetSystemColour = wxSystemSettings_GetColour
 wxSystemSettings_GetSystemFont   = wxSystemSettings_GetFont
 wxSystemSettings_GetSystemMetric = wxSystemSettings_GetMetric
 
+
+wxPyAssertionError = wxc.wxPyAssertionError
+
 #----------------------------------------------------------------------
 # wxGTK sets the locale when initialized.  Doing this at the Python
 # level should set it up to match what GTK is doing at the C level.
@@ -607,8 +610,6 @@ if wxPlatform == "__WXGTK__":
         locale.setlocale(locale.LC_ALL, "")
     except:
         pass
-
-
 
 #----------------------------------------------------------------------
 # wxWindows version numbers.  wxPython version is in __version__.
@@ -775,6 +776,7 @@ class wxApp(wxPyApp):
 
         if redirect:
             self.RedirectStdio(filename)
+
         # this initializes wxWindows and then calls our OnInit
         _wxStart(self.OnInit)
 
@@ -801,7 +803,7 @@ class wxApp(wxPyApp):
         if filename:
             sys.stdout = sys.stderr = open(filename, 'a')
         else:
-            self.stdioWin = self.outputWindowClass() # wxPyOnDemandOutputWindow
+            self.stdioWin = self.outputWindowClass()
             sys.stdout = sys.stderr = self.stdioWin
 
 

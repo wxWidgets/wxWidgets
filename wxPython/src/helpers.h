@@ -20,21 +20,7 @@
 
 typedef unsigned char byte;
 
-
-class wxPyApp: public wxApp
-{
-public:
-    wxPyApp();
-    ~wxPyApp();
-    bool OnInit();
-    int  MainLoop();
-};
-
-extern wxPyApp *wxPythonApp;
-
-//----------------------------------------------------------------------
-
-void      __wxPreStart();
+void      __wxPreStart(PyObject*);
 PyObject* __wxStart(PyObject*, PyObject* args);
 void      __wxCleanup();
 
@@ -404,17 +390,57 @@ void wxPyCBH_delete(wxPyCallbackHelper* cbh);
 
 
 //---------------------------------------------------------------------------
+
+// This is used in C++ classes that need to be able to make callback to
+// "overloaded" python methods
+
+#define PYPRIVATE                                                               \
+    void _setCallbackInfo(PyObject* self, PyObject* _class, int incref=1) {     \
+        wxPyCBH_setCallbackInfo(m_myInst, self, _class, incref);                \
+    }                                                                           \
+    private: wxPyCallbackHelper m_myInst
+
+
+//---------------------------------------------------------------------------
+
+enum {
+    wxPYAPP_ASSERT_SUPPRESS  = 1,
+    wxPYAPP_ASSERT_EXCEPTION = 2,
+    wxPYAPP_ASSERT_DIALOG    = 4
+};
+
+class wxPyApp: public wxApp
+{
+    DECLARE_ABSTRACT_CLASS(wxPyApp);
+
+public:
+    wxPyApp();
+    ~wxPyApp();
+    bool OnInit();
+    int  MainLoop();
+
+    int  GetAssertMode() { return m_assertMode; }
+    void SetAssertMode(int mode) { m_assertMode = mode; }
+
+    virtual bool OnInitGui();
+    virtual int OnExit();
+    virtual void OnAssert(const wxChar *file,
+                          int line,
+                          const wxChar *cond,
+                          const wxChar *msg);
+    // virtual int FilterEvent(wxEvent& event); // This one too????
+
+    PYPRIVATE;
+    int m_assertMode;
+};
+
+extern wxPyApp *wxPythonApp;
+
+
+//----------------------------------------------------------------------
 // These macros are used to implement the virtual methods that should
 // redirect to a Python method if one exists.  The names designate the
 // return type, if any, as well as any parameter types.
-//---------------------------------------------------------------------------
-
-#define PYPRIVATE                                                       \
-    void _setCallbackInfo(PyObject* self, PyObject* _class, int incref=1) {     \
-        wxPyCBH_setCallbackInfo(m_myInst, self, _class, incref);                \
-    }                                                                   \
-    private: wxPyCallbackHelper m_myInst
-
 //---------------------------------------------------------------------------
 
 #define DEC_PYCALLBACK__(CBNAME)                        \

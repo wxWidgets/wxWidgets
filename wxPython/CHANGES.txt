@@ -12,6 +12,30 @@ Several bug fixes in wxWindows.
 
 Added wxHtmlFilter.
 
+wxASSERT and related C++ runtime diagnostics are now converted to
+Python exceptions.  When an assert happens a wxPyAssertionError
+(which derives from AssertionError) exception is created and when
+control returns back to the Python code that invoked the C++ API it
+will be raised.  The same exception restrictions are in place as
+before, namely that exceptions can't cross from one Python layer
+through C++ to another Python layer.  That simply means that if you
+want to catch wxPyAssertionError or any other exception that you need
+to do it before control returns to C++ at the end of your event
+handler or callback code.  There is some test code in demo/wxButton.py
+you can use to play with this new feature.
+
+Added some methods to wxApp (SetAssertMode and GetAssertMode) that let
+you control how C++ assertions are processed.  Valid modes are:
+wxPYAPP_ASSERT_SUPPRESS, wxPYAPP_ASSERT_EXCEPTION, and
+wxPYAPP_ASSERT_DIALOG.  Using _SUPPRESS will give you behavior like
+the old "final" builds and the assert will be ignored, _EXCEPTION is
+the new default described above, and _DIALOG is like the default in
+2.3.3.1 and prior "hybrid" builds.  You can also combine _EXCEPTION
+and _DIALOG if you wish, although I don't know why you would.
+
+You can now overload OnInitGui, OnExit and OnAssert in your classes
+derived from wxApp.
+
 
 
 
