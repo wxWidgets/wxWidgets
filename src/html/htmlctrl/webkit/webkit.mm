@@ -9,7 +9,7 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma implementation "webkit.h"
 #endif
 
@@ -57,7 +57,7 @@ wxWebKitStateChangedEvent::wxWebKitStateChangedEvent( wxWindow* win )
 {
     SetEventType( wxEVT_WEBKIT_STATE_CHANGED);
     SetEventObject( win );
-	SetId(win->GetId());
+    SetId(win->GetId());
 }
 
 //---------------------------------------------------------
@@ -96,12 +96,12 @@ inline NSString* wxNSStringWithWxString(const wxString &wxstring)
 // ----------------------------------------------------------------------------
 
 bool wxWebKitCtrl::Create(wxWindow *parent,
-            	                 wxWindowID winID,
+                                 wxWindowID winID,
                                  const wxString& strURL,
                                  const wxPoint& pos,
-            			         const wxSize& size, long style,
-            			         const wxValidator& validator,
-            			         const wxString& name)
+                                 const wxSize& size, long style,
+                                 const wxValidator& validator,
+                                 const wxString& name)
 {
 
     m_currentURL = strURL;
@@ -110,27 +110,27 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
  //still needed for wxCocoa??
 /*
     int width, height;
-	wxSize sizeInstance;
-	if (size.x == -1 || size.y == -1)
-	{
-		m_parent->GetClientSize(&width, &height);
-		sizeInstance.x = width;
-		sizeInstance.y = height;
-	}
-	else
-	{
-		sizeInstance.x = size.x;
-		sizeInstance.y = size.y;
-	}
-*/	
-	// now create and attach WebKit view...
+    wxSize sizeInstance;
+    if (size.x == -1 || size.y == -1)
+    {
+        m_parent->GetClientSize(&width, &height);
+        sizeInstance.x = width;
+        sizeInstance.y = height;
+    }
+    else
+    {
+        sizeInstance.x = size.x;
+        sizeInstance.y = size.y;
+    }
+*/  
+    // now create and attach WebKit view...
 #ifdef __WXCOCOA__
     wxControl::Create(parent, m_windowID, pos, sizeInstance, style , validator , name);
-	SetSize(pos.x, pos.y, sizeInstance.x, sizeInstance.y);
+    SetSize(pos.x, pos.y, sizeInstance.x, sizeInstance.y);
     
     wxTopLevelWindowCocoa *topWin = wxDynamicCast(this, wxTopLevelWindowCocoa);
     NSWindow* nsWin = topWin->GetNSWindow();
-	NSRect rect;
+    NSRect rect;
     rect.origin.x = pos.x;
     rect.origin.y = pos.y;
     rect.size.width = sizeInstance.x;
@@ -155,7 +155,7 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
 
     // Register event listener interfaces
     MyFrameLoadMonitor* myFrameLoadMonitor = [[MyFrameLoadMonitor alloc] initWithWxWindow: (wxWindow*)this];
-	[m_webView setFrameLoadDelegate:myFrameLoadMonitor];
+    [m_webView setFrameLoadDelegate:myFrameLoadMonitor];
     LoadURL(m_currentURL);
     return true;
 }
@@ -262,7 +262,7 @@ void wxWebKitCtrl::SetPageSource(wxString& source, const wxString& baseUrl){
 - initWithWxWindow: (wxWindow*)inWindow
 {
     [super init];
-    webKitWindow = inWindow;	// non retained
+    webKitWindow = inWindow;    // non retained
     return self;
 }
 

@@ -12,7 +12,7 @@
 #ifndef _WX_WEBKIT_H
 #define _WX_WEBKIT_H
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface "webkit.h"
 #endif
 
@@ -32,28 +32,28 @@
 class wxWebKitCtrl : public wxControl
 {
 public:
-	DECLARE_DYNAMIC_CLASS(wxWebKitCtrl)
+    DECLARE_DYNAMIC_CLASS(wxWebKitCtrl)
 
-	wxWebKitCtrl() {};
+    wxWebKitCtrl() {};
     wxWebKitCtrl(wxWindow *parent,
-	                wxWindowID winID,
+                    wxWindowID winID,
                     const wxString& strURL,
                     const wxPoint& pos = wxDefaultPosition,
-			        const wxSize& size = wxDefaultSize, long style = 0,
-			        const wxValidator& validator = wxDefaultValidator,
-			        const wxString& name = wxT("webkitctrl"))
+                    const wxSize& size = wxDefaultSize, long style = 0,
+                    const wxValidator& validator = wxDefaultValidator,
+                    const wxString& name = wxT("webkitctrl"))
     {
         Create(parent, winID, strURL, pos, size, style, validator, name);
     };
-	bool Create(wxWindow *parent,
+    bool Create(wxWindow *parent,
                 wxWindowID winID,
                 const wxString& strURL,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize, long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxT("webkitctrl"));
-	virtual ~wxWebKitCtrl();
-	
+    virtual ~wxWebKitCtrl();
+    
     void LoadURL(const wxString &url);
     
     bool CanGoBack();
@@ -69,7 +69,7 @@ public:
     //we need to resize the webview when the control size changes
     //void OnSize(wxSizeEvent &event);
 protected:
-	DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
 
 private:
     wxWindow *m_parent;
@@ -86,11 +86,11 @@ private:
 // ----------------------------------------------------------------------------
 
 enum {
-	wxWEBKIT_STATE_START = 1,
-	wxWEBKIT_STATE_NEGOTIATING = 2,
-	wxWEBKIT_STATE_REDIRECTING = 4,
-	wxWEBKIT_STATE_TRANSFERRING = 8,
-	wxWEBKIT_STATE_STOP = 16,
+    wxWEBKIT_STATE_START = 1,
+    wxWEBKIT_STATE_NEGOTIATING = 2,
+    wxWEBKIT_STATE_REDIRECTING = 4,
+    wxWEBKIT_STATE_TRANSFERRING = 8,
+    wxWEBKIT_STATE_STOP = 16,
         wxWEBKIT_STATE_FAILED = 32
 };
 
@@ -99,17 +99,17 @@ class wxWebKitStateChangedEvent : public wxCommandEvent
     DECLARE_DYNAMIC_CLASS( wxWebKitStateChangedEvent )
 
 public:
-	int GetState() { return m_state; }
-	void SetState(const int state) { m_state = state; }
-	wxString GetURL() { return m_url; }
-	void SetURL(const wxString& url) { m_url = url; }
+    int GetState() { return m_state; }
+    void SetState(const int state) { m_state = state; }
+    wxString GetURL() { return m_url; }
+    void SetURL(const wxString& url) { m_url = url; }
 
     wxWebKitStateChangedEvent( wxWindow* win = (wxWindow*) NULL );
-	wxEvent *Clone(void) const { return new wxWebKitStateChangedEvent(*this); }
+    wxEvent *Clone(void) const { return new wxWebKitStateChangedEvent(*this); }
 
 protected:
-	int m_state;
-	wxString m_url;
+    int m_state;
+    wxString m_url;
 };
 
 typedef void (wxEvtHandler::*wxWebKitStateChangedEventFunction)(wxWebKitStateChangedEvent&);
