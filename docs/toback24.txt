@@ -15,3 +15,22 @@ When applying, be careful to not pick later revision of font.cpp -- 2.5 doesn't
 have wxFont::GetInternalFont while 2.4 must have it because of binary
 compatibility!
 
+3. Add Windows XP manifests to wx.rc
+
+RCS file: /pack/cvsroots/wxwindows/wxWindows/include/wx/msw/wx.manifest,v
+done
+Checking in wx.manifest;
+/pack/cvsroots/wxwindows/wxWindows/include/wx/msw/wx.manifest,v  <--  wx.manifest
+initial revision: 1.1
+done
+Checking in wx.rc;
+/pack/cvsroots/wxwindows/wxWindows/include/wx/msw/wx.rc,v  <--  wx.rc
+new revision: 1.29; previous revision: 1.28
+done
+
+4. Fix wxLocale::Init with Unicode-only languages (does it work with BCC?)
+
+Checking in intl.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/common/intl.cpp,v  <--  intl.cpp
+new revision: 1.93; previous revision: 1.92
+done
