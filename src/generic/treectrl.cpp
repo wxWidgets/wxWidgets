@@ -3,7 +3,7 @@
 // Purpose:
 // Author:      Robert Roebling
 // Created:     01/02/97
-// Id:
+// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -14,6 +14,7 @@
 
 #include "wx/treectrl.h"
 #include "wx/settings.h"
+#include "wx/log.h"
 
 //-----------------------------------------------------------------------------
 // wxTreeItem
@@ -445,7 +446,7 @@ long wxTreeCtrl::InsertItem( long parent, const wxString& label, int image,
     CalculatePositions();
 
     if (!p->HasChildren()) p->m_hasChildren = TRUE;
-    
+
     int ch = 0;
     GetClientSize( NULL, &ch );
 
@@ -524,7 +525,7 @@ long wxTreeCtrl::InsertItem( long parent, wxTreeItem &info, long WXUNUSED(insert
   if (p)
   {
     CalculatePositions();
-    
+
     if (!p->HasChildren()) p->m_hasChildren = TRUE;
 
     int ch = 0;
@@ -593,7 +594,7 @@ bool wxTreeCtrl::ExpandItem( long item, int action )
       };
 
       CalculatePositions();
-      
+
       i->SendCollapse( this );
       break;
     }
@@ -632,9 +633,9 @@ void wxTreeCtrl::DeleteItem( long item )
 {
   wxGenericTreeItem *pItem = FindItem( item );
   wxCHECK_RET( pItem != NULL, "wxTreeCtrl::DeleteItem: no such pItem." );
-  
+
   pItem->m_parent->m_children.DeleteObject(pItem);
-  
+
   Refresh();
 }
 
@@ -642,9 +643,9 @@ void wxTreeCtrl::DeleteChildren( long item )
 {
   wxGenericTreeItem *pItem = FindItem( item );
   wxCHECK_RET( pItem != NULL, "wxTreeCtrl::DeleteChildren: no such pItem." );
-  
+
   pItem->m_children.Clear();
-  
+
   Refresh();
 }
 
@@ -701,13 +702,40 @@ long wxTreeCtrl::GetRootItem() const
 
 long wxTreeCtrl::GetSelection() const
 {
-  return 0;
+  return m_current ? m_current->GetItemId() : -1;
 };
 
-bool wxTreeCtrl::SelectItem( long WXUNUSED(item) ) const
+bool wxTreeCtrl::SelectItem(long itemId)
 {
-  return FALSE;
+  wxGenericTreeItem *pItem = FindItem(itemId);
+  if ( !pItem ) {
+    wxLogDebug("Can't select an item %d which doesn't exist.", itemId);
+
+    return FALSE;
+  }
+
+  SelectItem(pItem, FALSE /* no events */);
+
+  return TRUE;
 };
+
+void wxTreeCtrl::SelectItem(wxGenericTreeItem *item, bool bDoEvents)
+{
+  if (m_current != item)
+  {
+    if (m_current)
+    {
+      m_current->SetHilight( FALSE );
+      RefreshLine( m_current );
+    };
+    m_current = item;
+    m_current->SetHilight( TRUE );
+    RefreshLine( m_current );
+
+    if ( bDoEvents )
+      m_current->SendSelected( this );
+  }
+}
 
 bool wxTreeCtrl::ItemHasChildren( long item ) const
 {
@@ -811,22 +839,22 @@ void wxTreeCtrl::AdjustMyScrollbars()
 void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxPaintDC &dc, int level, int &y )
 {
   int horizX = level*m_indent;
-  
+
   item->m_x = horizX+33;
   item->m_y = y-m_lineHeight/3;
   item->m_height = m_lineHeight;
-  
+
   item->SetCross( horizX+15, y );
 
   int oldY = y;
-    
+
   if (IsExposed( 0, item->m_y-2, 10000, m_lineHeight+4 ))
   {
     int startX = horizX;
     int endX = horizX + 10;
 
     if (!item->HasChildren()) endX += 20;
-    dc.DrawLine( startX, y, endX, y ); 
+    dc.DrawLine( startX, y, endX, y );
 
       if (item->HasChildren())
       {
@@ -846,24 +874,24 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxPaintDC &dc, int level, 
         long tw, th;
         dc.GetTextExtent( item->m_text, &tw, &th );
         if (m_hasFocus)
-	{
+        {
           dc.SetPen( *wxBLACK_PEN );
           dc.DrawRectangle( item->m_x-2, item->m_y-2, tw+4, th+4 );
-	}
-	else
-	{
-	  dc.SetPen( *wxTRANSPARENT_PEN );
+        }
+        else
+        {
+          dc.SetPen( *wxTRANSPARENT_PEN );
           dc.DrawRectangle( item->m_x-2, item->m_y-2, tw+4, th+4 );
-	}
+        }
         dc.DrawText( item->m_text, item->m_x, item->m_y );
 
         dc.SetPen( *wxBLACK_PEN );
         dc.SetTextForeground( *wxBLACK );
-	dc.SetBrush( *wxWHITE_BRUSH );
+        dc.SetBrush( *wxWHITE_BRUSH );
       }
       else
       {
-	dc.SetPen( *wxTRANSPARENT_PEN );
+        dc.SetPen( *wxTRANSPARENT_PEN );
         long tw, th;
         dc.GetTextExtent( item->m_text, &tw, &th );
         dc.DrawRectangle( item->m_x-2, item->m_y-2, tw+4, th+4 );
@@ -874,8 +902,8 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxPaintDC &dc, int level, 
 
   if (item->NumberOfVisibleChildren() == 0) return;
 
-  int semiOldY = y;    
-  
+  int semiOldY = y;
+
   wxNode *node = item->m_children.First();
   while (node)
   {
@@ -883,9 +911,9 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxPaintDC &dc, int level, 
 
     y += m_lineHeight;
     semiOldY = y;
-    
+
     PaintLevel( child, dc, level+1, y );
-      
+
     node = node->Next();
   };
 
@@ -948,18 +976,7 @@ void wxTreeCtrl::OnMouse( const wxMouseEvent &event )
   if ((flag != wxTREE_HITTEST_ONITEMBUTTON) &&
       (flag != wxTREE_HITTEST_ONITEMLABEL)) return;
 
-  if (m_current != item)
-  {
-    if (m_current)
-    {
-      m_current->SetHilight( FALSE );
-      RefreshLine( m_current );
-    };
-    m_current = item;
-    m_current->SetHilight( TRUE );
-    RefreshLine( m_current );
-    m_current->SendSelected( this );
-  };
+  SelectItem(item);
 
   if (event.LeftDClick())
     m_current->SendKeyDown( this );
@@ -974,18 +991,18 @@ void wxTreeCtrl::OnMouse( const wxMouseEvent &event )
 void wxTreeCtrl::CalculateLevel( wxGenericTreeItem *item, wxPaintDC &dc, int level, int &y )
 {
   int horizX = level*m_indent;
-  
+
   item->m_x = horizX+33;
   item->m_y = y-m_lineHeight/3-2;
   item->m_height = m_lineHeight;
 
   if (item->NumberOfVisibleChildren() == 0) return;
-    
+
   wxNode *node = item->m_children.First();
   while (node)
   {
     wxGenericTreeItem *child = (wxGenericTreeItem *)node->Data();
-    
+
     y += m_lineHeight;
     CalculateLevel( child, dc, level+1, y );
 

@@ -295,7 +295,7 @@ public:
   long GetParent( long item ) const;
   long GetRootItem() const;
   long GetSelection() const;
-  bool SelectItem( long item ) const;
+  bool SelectItem( long item );
   bool ItemHasChildren( long item ) const;
   void SetIndent( int indent );
   int GetIndent() const;
@@ -317,6 +317,10 @@ public:
   void SetImageList(wxImageList *imageList, int which = wxIMAGE_LIST_NORMAL);
 
 private:
+  // set the selection to the specified item generating appropriate event(s) if
+  // not disabled
+  void SelectItem(wxGenericTreeItem *item, bool bDoEvents = TRUE);
+
   wxGenericTreeItem   *m_anchor;
   wxGenericTreeItem   *m_current;
   bool                 m_hasFocus;
