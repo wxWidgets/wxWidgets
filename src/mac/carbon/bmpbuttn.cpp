@@ -64,38 +64,11 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
 	wxASSERT_MSG( (ControlHandle) m_macControl != NULL , "No valid mac control" ) ;
 	
 	ControlButtonContentInfo info ;
-	
-
-	if ( m_buttonBitmap.Ok() )
+	wxMacCreateBitmapButton( &info , m_buttonBitmap ) ;
+	if ( info.contentType != kControlNoContent )
 	{
-		if ( bmap->m_bitmapType == kMacBitmapTypePict ) {
-	    info.contentType = kControlContentPictHandle ;
-			info.u.picture = MAC_WXHMETAFILE( bmap->m_hPict ) ;
-		}
-		else if ( bmap->m_bitmapType == kMacBitmapTypeGrafWorld )
-		{
-			if ( m_buttonBitmap.GetMask() )
-			{
-		    info.contentType = kControlContentCIconHandle ;
-				info.u.cIconHandle = wxMacCreateCIcon( MAC_WXHBITMAP( bmap->m_hBitmap ) , MAC_WXHBITMAP(m_buttonBitmap.GetMask()->GetMaskBitmap()) ,
-				    8 , 16 ) ;
-			}
-			else
-			{
-		    info.contentType = kControlContentCIconHandle ;
-				info.u.cIconHandle = wxMacCreateCIcon( MAC_WXHBITMAP( bmap->m_hBitmap ) , NULL ,
-				    8 , 16 ) ;
-			}
-		}
-		else if ( bmap->m_bitmapType == kMacBitmapTypeIcon )
-		{
-	        info.contentType = kControlContentCIconHandle ;
-	        info.u.cIconHandle = MAC_WXHICON(bmap->m_hIcon) ;
-		}
-	}
-	
-	::SetControlData( (ControlHandle) m_macControl , kControlButtonPart , kControlBevelButtonContentTag , sizeof(info) , (char*) &info ) ;
-
+	    ::SetControlData( (ControlHandle) m_macControl , kControlButtonPart , kControlBevelButtonContentTag , sizeof(info) , (char*) &info ) ;
+    }
 	MacPostControlCreate() ;
 
     return TRUE;
@@ -103,38 +76,12 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
 
 void wxBitmapButton::SetBitmapLabel(const wxBitmap& bitmap)
 {
-	ControlButtonContentInfo info ;
     m_buttonBitmap = bitmap;
 
-	if ( m_buttonBitmap.Ok() )
+	ControlButtonContentInfo info ;
+	wxMacCreateBitmapButton( &info , m_buttonBitmap ) ;
+	if ( info.contentType != kControlNoContent )
 	{
-		wxBitmapRefData * bmap = (wxBitmapRefData*) ( m_buttonBitmap.GetRefData()) ;
-		if ( bmap->m_bitmapType == kMacBitmapTypePict ) {
-	    info.contentType = kControlContentPictHandle ;
-			info.u.picture = MAC_WXHMETAFILE(bmap->m_hPict) ;
-		}
-		else if ( bmap->m_bitmapType == kMacBitmapTypeGrafWorld )
-		{
-			if ( m_buttonBitmap.GetMask() )
-			{
-		    info.contentType = kControlContentCIconHandle ;
-				info.u.cIconHandle = wxMacCreateCIcon( MAC_WXHBITMAP(bmap->m_hBitmap) , MAC_WXHBITMAP(m_buttonBitmap.GetMask()->GetMaskBitmap()) ,
-				    8 , 16 ) ;
-			}
-			else
-			{
-		    info.contentType = kControlContentCIconHandle ;
-				info.u.cIconHandle = wxMacCreateCIcon( MAC_WXHBITMAP(bmap->m_hBitmap) , NULL ,
-				    8 , 16 ) ;
-			}
-		}
-		else if ( bmap->m_bitmapType == kMacBitmapTypeIcon )
-		{
-	        info.contentType = kControlContentCIconHandle ;
-	        info.u.cIconHandle = MAC_WXHICON( bmap->m_hIcon ) ;
-		}
-
-		
 	    ::SetControlData( (ControlHandle) m_macControl , kControlButtonPart , kControlBevelButtonContentTag , sizeof(info) , (char*) &info ) ;
     }
 }

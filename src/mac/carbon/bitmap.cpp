@@ -289,6 +289,57 @@ PicHandle wxMacCreatePict(GWorldPtr wp, GWorldPtr mask)
   return pict;                  
 }
 
+void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bitmap ) 
+{
+    memset( info , 0 , sizeof(ControlButtonContentInfo) ) ;
+    if ( bitmap.Ok() )
+    {
+        wxBitmapRefData * bmap = (wxBitmapRefData*) ( bitmap.GetRefData()) ;
+        if ( bmap == NULL )
+            return ;
+            
+        if ( bmap->m_bitmapType == kMacBitmapTypePict )
+        {
+            info->contentType = kControlContentPictHandle ;
+            info->u.picture = MAC_WXHMETAFILE(bmap->m_hPict) ;
+        }
+        else if ( bmap->m_bitmapType == kMacBitmapTypeGrafWorld )
+        {
+            if ( (bmap->m_width == bmap->m_height) && (bmap->m_width & 0x3 == 0) )
+            {
+                info->contentType = kControlContentCIconHandle ;
+                if ( bitmap.GetMask() )
+                {
+                    info->u.cIconHandle = wxMacCreateCIcon( MAC_WXHBITMAP(bmap->m_hBitmap) , MAC_WXHBITMAP(bitmap.GetMask()->GetMaskBitmap()) ,
+                                                           8 , bmap->m_width ) ;
+                }
+                else
+                {
+                    info->u.cIconHandle = wxMacCreateCIcon( MAC_WXHBITMAP(bmap->m_hBitmap) , NULL ,
+                                                           8 , bmap->m_width ) ;
+                }
+            }
+            else
+            {
+                info->contentType = kControlContentPictHandle ;
+                if ( bitmap.GetMask() )
+                {
+				    info->u.picture = wxMacCreatePict( MAC_WXHBITMAP(bmap->m_hBitmap) , MAC_WXHBITMAP(bitmap.GetMask()->GetMaskBitmap() ) ) ;
+               }
+                else
+                {
+				    info->u.picture = wxMacCreatePict( MAC_WXHBITMAP(bmap->m_hBitmap) , NULL ) ;
+                }
+            }
+        }
+		else if ( bmap->m_bitmapType == kMacBitmapTypeIcon )
+		{
+	        info->contentType = kControlContentCIconHandle ;
+	        info->u.cIconHandle = MAC_WXHICON(bmap->m_hIcon) ;
+		}
+    }
+}
+
 wxBitmapRefData::wxBitmapRefData()
 {
     m_ok = FALSE;

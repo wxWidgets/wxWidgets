@@ -210,37 +210,14 @@ bool wxToolBar::Realize()
             toolrect.bottom = toolrect.top + toolSize.y ;
             
             ControlButtonContentInfo info ;
-            if ( bmap )
-            {
-                if ( bmap->m_bitmapType == kMacBitmapTypePict )
-                {
-                    info.contentType = kControlContentPictHandle ;
-                    info.u.picture = MAC_WXHMETAFILE(bmap->m_hPict) ;
-                }
-                else if ( bmap->m_bitmapType == kMacBitmapTypeGrafWorld )
-                {
-                    if ( tool->GetBitmap1().GetMask() )
-                    {
-                        info.contentType = kControlContentCIconHandle ;
-                        info.u.cIconHandle = wxMacCreateCIcon( MAC_WXHBITMAP(bmap->m_hBitmap) , MAC_WXHBITMAP(tool->GetBitmap1().GetMask()->GetMaskBitmap()) ,
-                                                               8 , 16 ) ;
-                    }
-                    else
-                    {
-                        info.contentType = kControlContentCIconHandle ;
-                        info.u.cIconHandle = wxMacCreateCIcon( MAC_WXHBITMAP(bmap->m_hBitmap) , NULL ,
-                                                               8 , 16 ) ;
-                    }
-                }
-            }
-            
+            wxMacCreateBitmapButton( &info , tool->GetBitmap1() ) ;
             ControlHandle m_macToolHandle ;
             
             SInt16 behaviour = kControlBehaviorOffsetContents ;
             if ( tool->CanBeToggled() )
                 behaviour += kControlBehaviorToggles ;
             
-            if ( info.u.cIconHandle ) // since it is a handle we can use one of them
+            if ( info.contentType != kControlNoContent ) 
             {
                 m_macToolHandle = ::NewControl( window , &toolrect , "\p" , false , 0 , 
                                                 behaviour + info.contentType , 0 , kControlBevelButtonNormalBevelProc , (long) this ) ;
