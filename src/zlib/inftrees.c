@@ -95,7 +95,6 @@ local int huft_build(uIntf* b, uInt n, uInt s, const uIntf* d, const uIntf* e,
                      inflate_huft* FAR *t, uIntf* m, inflate_huft* hp, uInt* hn, uIntf* v)
 #else
 local int huft_build(b, n, s, d, e, t, m, hp, hn, v)
-#endif
 uIntf *b;               /* code lengths in bits (all assumed <= BMAX) */
 uInt n;                 /* number of codes (assumed <= 288) */
 uInt s;                 /* number of simple-valued codes (0..s-1) */
@@ -106,6 +105,7 @@ uIntf *m;               /* maximum lookup bits, returns actual */
 inflate_huft *hp;       /* space for trees */
 uInt *hn;               /* hufts used in space */
 uIntf *v;               /* working area: values in order of bit length */
+#endif
 /* Given a list of code lengths and a maximum table size, make a set of
    tables to decode that set of codes.  Return Z_OK on success, Z_BUF_ERROR
    if the given code set is incomplete (the tables are still built in this
