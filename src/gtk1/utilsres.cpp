@@ -41,8 +41,6 @@
 // so we should use some other strategy!
 #ifdef __SUN__
 #   define DEFAULT_XRESOURCE_DIR wxT("/usr/openwin/lib/app-defaults")
-// prototype missing in header files on Solaris 2.5
-extern "C" { int gethostname(char *name, size_t len); }
 #else
 #   define DEFAULT_XRESOURCE_DIR wxT("/usr/lib/X11/app-defaults")
 #endif
@@ -152,29 +150,15 @@ static void wxXMergeDatabases()
 
     if ((environment = wxGetenv(wxT("XENVIRONMENT"))) == NULL) 
     {
-        size_t len;
-#if wxUSE_UNICODE
-	char hostbuf[1024];
-#endif
         environment = GetIniFile(filename, (const wxChar *) NULL);
-        len = wxStrlen(environment);
-#if !defined(SVR4) || defined(__sgi)
-#if wxUSE_UNICODE
-        (void)gethostname(hostbuf, 1024 - len);
-#else
-        (void)gethostname(environment + len, 1024 - len);
-#endif
-#else
-#if wxUSE_UNICODE
-        (void)sysinfo(SI_HOSTNAME, hostbuf, 1024 - len);
-#else
-        (void)sysinfo(SI_HOSTNAME, environment + len, 1024 - len);
-#endif
-#endif
-#if wxUSE_UNICODE
-	wxStrcat(environment, wxConvCurrent->cMB2WX(hostbuf));
-#endif
+        size_t len = wxStrlen(environment);
+
+        char hostbuf[1024];
+        (void)wxGetHostName(hostbuf, WXSIZEOF(hostbuf) - len);
+
+        wxStrcat(environment, wxConvCurrent->cMB2WX(hostbuf));
     }
+
     if ((homeDB = XrmGetFileDatabase(wxConvCurrent->cWX2MB(environment))))
         XrmMergeDatabases(homeDB, &wxResourceDatabase);
 }
