@@ -622,7 +622,7 @@ bool wxLocale::Init(const wxChar *szName,
   if ( m_strShort.IsEmpty() ) {
     // FIXME I don't know how these 2 letter abbreviations are formed,
     //       this wild guess is surely wrong
-    if ( szLocale[0] )
+    if ( szLocale && szLocale[0] )
     {
         m_strShort += (wxChar)wxTolower(szLocale[0]);
         if ( szLocale[1] )
