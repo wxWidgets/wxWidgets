@@ -291,8 +291,8 @@ private:
 // other
 //----------------------------------------------------------------------
 
-static void SetControlClientData(const wxChar *name,
-                                 wxControlWithItems *control);
+static void SetListboxClientData(const wxChar *name, wxListBox *control);
+static void SetChoiceClientData(const wxChar *name, wxChoice *control);
 
 IMPLEMENT_APP(MyApp)
 
@@ -566,8 +566,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                                      wxPoint(10,90), wxSize(120,70),
                                      5, choices, wxLB_SORT );
 
-    SetControlClientData(wxT("listbox"), m_listbox);
-    SetControlClientData(wxT("listbox"), m_listboxSorted);
+    SetListboxClientData(wxT("listbox"), m_listbox);
+    SetListboxClientData(wxT("listbox"), m_listboxSorted);
 
     m_listbox->SetCursor(*wxCROSS_CURSOR);
 #if wxUSE_TOOLTIPS
@@ -605,8 +605,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_choiceSorted = new wxChoice( panel, ID_CHOICE_SORTED, wxPoint(10,70), wxSize(120,-1),
                                    5, choices, wxCB_SORT );
 
-    SetControlClientData(wxT("choice"), m_choice);
-    SetControlClientData(wxT("choice"), m_choiceSorted);
+    SetChoiceClientData(wxT("choice"), m_choice);
+    SetChoiceClientData(wxT("choice"), m_choiceSorted);
 
     m_choice->SetSelection(2);
     m_choice->SetBackgroundColour( "red" );
@@ -1515,8 +1515,20 @@ void MyComboBox::OnKeyUp(wxKeyEvent& event)
     event.Skip();
 }
 
-static void SetControlClientData(const wxChar *name,
-                                 wxControlWithItems *control)
+static void SetListboxClientData(const wxChar *name, wxListBox *control)
+{
+    size_t count = control->GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        wxString s;
+        s.Printf(wxT("%s client data for '%s'"),
+                 name, control->GetString(n).c_str());
+
+        control->SetClientObject(n, new wxStringClientData(s));
+    }
+}
+
+static void SetChoiceClientData(const wxChar *name, wxChoice *control)
 {
     size_t count = control->GetCount();
     for ( size_t n = 0; n < count; n++ )
