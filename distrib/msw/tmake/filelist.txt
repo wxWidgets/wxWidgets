@@ -1200,7 +1200,6 @@ regconf.h	MSWH
 region.h	MSWH
 registry.h	MSWH
 scrolbar.h	MSWH
-settings.h	MSWH
 setup0.h	MSWH
 slider95.h	MSWH
 slidrmsw.h	MSWH

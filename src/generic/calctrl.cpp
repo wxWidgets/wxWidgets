@@ -169,9 +169,8 @@ void wxCalendarCtrl::Init()
         m_attrs[n] = NULL;
     }
 
-    wxSystemSettings ss;
-    m_colHighlightFg = ss.GetSystemColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
-    m_colHighlightBg = ss.GetSystemColour(wxSYS_COLOUR_HIGHLIGHT);
+    m_colHighlightFg = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+    m_colHighlightBg = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
 
     m_colHolidayFg = *wxRED;
     // don't set m_colHolidayBg - by default, same as our bg colour

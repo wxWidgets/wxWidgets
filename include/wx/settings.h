@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/settings.h
-// Purpose:     wxSystemSettingsBase class
+// Purpose:     wxSystemSettings class
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_SETTINGS_H_BASE_
@@ -73,6 +73,9 @@ enum wxSystemColour
 };
 
 // possible values for wxSystemSettings::GetMetric() parameter
+//
+// NB: update the conversion table in msw/settings.cpp if you change the values
+//     of the elements of this enum
 enum wxSystemMetric
 {
     wxSYS_MOUSE_BUTTONS = 1,
@@ -122,7 +125,7 @@ enum wxSystemFeature
 };
 
 // ----------------------------------------------------------------------------
-// wxSystemSettingsBase: defines the API for wxSystemSettings class
+// wxSystemSettingsNative: defines the API for wxSystemSettings class
 // ----------------------------------------------------------------------------
 
 // this is a namespace rather than a class: it has only non virtual static
@@ -132,8 +135,7 @@ enum wxSystemFeature
 // files (i.e. this is not a real base class as we can't override its virtual
 // functions because it doesn't have any)
 
-#if 0
-class WXDLLEXPORT wxSystemSettingsBase
+class WXDLLEXPORT wxSystemSettingsNative
 {
 public:
     // get a standard system colour
@@ -157,17 +159,14 @@ public:
         { return GetFont((wxSystemFont)index); }
     static int GetSystemMetric(int index)
         { return GetMetric((wxSystemMetric)index); }
-    static bool GetCapability(int index)
-        { return HasFeature((wxSystemFeature)index); }
 };
-#endif
 
 // ----------------------------------------------------------------------------
 // include the declaration of the real platform-dependent class
 // ----------------------------------------------------------------------------
 
 #if defined(__WXMSW__)
-    #include "wx/msw/settings.h"
+    #define wxHAS_SS_NATIVE
 #elif defined(__WXMOTIF__)
     #include "wx/motif/settings.h"
 #elif defined(__WXGTK__)
@@ -179,6 +178,22 @@ public:
 #elif defined(__WXPM__)
     #include "wx/os2/settings.h"
 #endif
+
+// TODO: this should go away once all ports are updated to use wxSSNative
+#ifdef wxHAS_SS_NATIVE
+
+class wxSystemSettings : public wxSystemSettingsNative
+{
+public:
+#ifdef __WXUNIVERSAL__
+    // in wxUniversal we want to use the theme standard colours instead of the
+    // system ones, otherwuse wxSystemSettings is just the same as
+    // wxSystemSettingsNative
+    static wxColour GetColour(wxSystemColour index);
+#endif // __WXUNIVERSAL__
+};
+
+#endif // wxHAS_SS_NATIVE
 
 #endif
     // _WX_SETTINGS_H_BASE_

@@ -79,7 +79,7 @@ bool wxTopLevelWindow::Create(wxWindow *parent,
     if ( ms_drawDecorations == -1 )
     {
         ms_drawDecorations = 
-            !wxSystemSettings::GetCapability(wxSYS_CAN_DRAW_FRAME_DECORATIONS) 
+            !wxSystemSettings::HasFeature(wxSYS_CAN_DRAW_FRAME_DECORATIONS) 
             || wxGetEnv(wxT("WXDECOR"), NULL);
         // FIXME -- wxUniv should provide a way to force non-native decorations!
         //          $WXDECOR is just a hack in absence of better wxUniv solution
@@ -87,7 +87,7 @@ bool wxTopLevelWindow::Create(wxWindow *parent,
 
     if ( ms_canIconize == -1 )
     {
-        ms_canIconize = wxSystemSettings::GetCapability(wxSYS_CAN_ICONIZE_FRAME);
+        ms_canIconize = wxSystemSettings::HasFeature(wxSYS_CAN_ICONIZE_FRAME);
     }
 
     if ( ms_drawDecorations )

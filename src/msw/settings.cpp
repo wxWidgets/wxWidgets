@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        msw/settings.cpp
-// Purpose:     wxSystemSettings
+// Purpose:     wxSystemSettingsNative implementation for MSW
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
@@ -17,28 +17,21 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma implementation "settings.h"
-#endif
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-    #include <stdio.h>
-    #include "wx/defs.h"
-    #include "wx/pen.h"
-    #include "wx/brush.h"
     #include "wx/gdicmn.h"
 #endif
 
 #include "wx/settings.h"
-#include "wx/window.h"
+
 #include "wx/msw/private.h"
+
 #include "wx/module.h"
 #include "wx/fontutil.h"
 
@@ -46,11 +39,10 @@
 // private classes
 // ----------------------------------------------------------------------------
 
-// the module which is used to clean up wxSystemSettings data (this is a
+// the module which is used to clean up wxSystemSettingsNative data (this is a
 // singleton class so it can't be done in the dtor)
 class wxSystemSettingsModule : public wxModule
 {
-    friend class wxSystemSettings;
 public:
     virtual bool OnInit();
     virtual void OnExit();
@@ -63,11 +55,20 @@ private:
 // global data
 // ----------------------------------------------------------------------------
 
+// the font returned by GetFont(wxSYS_DEFAULT_GUI_FONT): it is created when
+// GetFont() is called for the first time and deleted by wxSystemSettingsModule
 static wxFont *gs_fontDefault = NULL;
 
 // ============================================================================
 // implementation
 // ============================================================================
+
+// TODO: see ::SystemParametersInfo for all sorts of Windows settings.
+// Different args are required depending on the id. How does this differ
+// from GetSystemMetric, and should it? Perhaps call it GetSystemParameter
+// and pass an optional void* arg to get further info.
+// Should also have SetSystemParameter.
+// Also implement WM_WININICHANGE (NT) / WM_SETTINGCHANGE (Win95)
 
 // ----------------------------------------------------------------------------
 // wxSystemSettingsModule
@@ -87,29 +88,23 @@ void wxSystemSettingsModule::OnExit()
 }
 
 // ----------------------------------------------------------------------------
-// wxSystemSettings
+// wxSystemSettingsNative
 // ----------------------------------------------------------------------------
 
-// TODO: see ::SystemParametersInfo for all sorts of Windows settings.
-// Different args are required depending on the id. How does this differ
-// from GetSystemMetric, and should it? Perhaps call it GetSystemParameter
-// and pass an optional void* arg to get further info.
-// Should also have SetSystemParameter.
-// Also implement WM_WININICHANGE (NT) / WM_SETTINGCHANGE (Win95)
+// ----------------------------------------------------------------------------
+// colours
+// ----------------------------------------------------------------------------
 
-wxColour wxSystemSettings::GetSystemColour(int index)
+wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 {
-    switch (index)
-    {
-        case wxSYS_COLOUR_LISTBOX:
-            return *wxWHITE;
-
-        default:
-            COLORREF ref = ::GetSysColor(index);
-            wxColour col(GetRValue(ref), GetGValue(ref), GetBValue(ref));
-            return col;
-    }
+    wxColour col;
+    wxRGBToColour(col, ::GetSysColor(index));
+    return col;
 }
+
+// ----------------------------------------------------------------------------
+// fonts
+// ----------------------------------------------------------------------------
 
 wxFont wxCreateFontFromStockObject(int index)
 {
@@ -141,10 +136,11 @@ wxFont wxCreateFontFromStockObject(int index)
     {
         wxFAIL_MSG( _T("stock font not found") );
     }
+
     return font;
 }
 
-wxFont wxSystemSettings::GetSystemFont(int index)
+wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 {
     // wxWindow ctor calls GetSystemFont(wxSYS_DEFAULT_GUI_FONT) so we're
     // called fairly often - this is why we cache this particular font
@@ -165,116 +161,118 @@ wxFont wxSystemSettings::GetSystemFont(int index)
     return font;
 }
 
+// ----------------------------------------------------------------------------
+// system metrics/features
+// ----------------------------------------------------------------------------
+
+// TODO: some of the "metrics" clearly should be features now that we have
+//       HasFeature()!
+
+// the conversion table from wxSystemMetric enum to GetSystemMetrics() param
+//
+// if the constant is not defined, put -1 in the table to indicate that it is
+// unknown
+static const int gs_metricsMap[] =
+{
+#ifdef __WIN32__
+    SM_CMOUSEBUTTONS,
+#else
+    -1,
+#endif
+
+    SM_CXBORDER,
+    SM_CYBORDER,
+    SM_CXCURSOR,
+    SM_CYCURSOR,
+    SM_CXDOUBLECLK,
+    SM_CYDOUBLECLK,
+#if defined(__WIN32__) && defined(SM_CXDRAG)
+    SM_CXDRAG,
+    SM_CYDRAG,
+    SM_CXEDGE,
+    SM_CYEDGE,
+#else
+    -1, -1, -1, -1
+#endif
+    SM_CXHSCROLL,
+    SM_CYHSCROLL,
+    SM_CXHTHUMB,
+    SM_CXICON,
+    SM_CYICON,
+    SM_CXICONSPACING,
+    SM_CYICONSPACING,
+    SM_CXMIN,
+    SM_CYMIN,
+    SM_CXSCREEN,
+    SM_CYSCREEN,
+
+#if defined(__WIN32__) && defined(SM_CXSIZEFRAME)
+    SM_CXSIZEFRAME,
+    SM_CYSIZEFRAME,
+    SM_CXSMICON,
+    SM_CYSMICON,
+#else
+    -1, -1, -1, -1
+#endif
+    SM_CYHSCROLL,
+    SM_CXVSCROLL,
+    SM_CXVSCROLL,
+    SM_CYVSCROLL,
+    SM_CYVTHUMB,
+    SM_CYCAPTION,
+    SM_CYMENU,
+#if defined(__WIN32__) && defined(SM_NETWORK)
+    SM_NETWORK,
+#else
+    -1,
+#endif
+    SM_PENWINDOWS,
+#if defined(__WIN32__) && defined(SM_SHOWSOUNDS)
+    SM_SHOWSOUNDS,
+#else
+    -1,
+#endif
+    SM_SWAPBUTTON,
+};
+
 // Get a system metric, e.g. scrollbar size
-int wxSystemSettings::GetSystemMetric(int index)
+int wxSystemSettingsNative::GetMetric(wxSystemMetric index)
 {
 #ifdef __WXMICROWIN__
     // TODO: probably use wxUniv themes functionality
     return 0;
-#else
-    switch ( index)
+#else // !__WXMICROWIN__
+    wxCHECK_MSG( index < WXSIZEOF(gs_metricsMap), 0, _T("invalid metric") );
+
+    int indexMSW = gs_metricsMap[index];
+    if ( indexMSW == -1 )
     {
-#ifdef __WIN32__
-        case wxSYS_MOUSE_BUTTONS:
-            return ::GetSystemMetrics(SM_CMOUSEBUTTONS);
-#endif
-
-        case wxSYS_BORDER_X:
-            return ::GetSystemMetrics(SM_CXBORDER);
-        case wxSYS_BORDER_Y:
-            return ::GetSystemMetrics(SM_CYBORDER);
-        case wxSYS_CURSOR_X:
-            return ::GetSystemMetrics(SM_CXCURSOR);
-        case wxSYS_CURSOR_Y:
-            return ::GetSystemMetrics(SM_CYCURSOR);
-        case wxSYS_DCLICK_X:
-            return ::GetSystemMetrics(SM_CXDOUBLECLK);
-        case wxSYS_DCLICK_Y:
-            return ::GetSystemMetrics(SM_CYDOUBLECLK);
-#if defined(__WIN32__) && defined(SM_CXDRAG)
-        case wxSYS_DRAG_X:
-            return ::GetSystemMetrics(SM_CXDRAG);
-        case wxSYS_DRAG_Y:
-            return ::GetSystemMetrics(SM_CYDRAG);
-        case wxSYS_EDGE_X:
-            return ::GetSystemMetrics(SM_CXEDGE);
-        case wxSYS_EDGE_Y:
-            return ::GetSystemMetrics(SM_CYEDGE);
-#endif
-        case wxSYS_HSCROLL_ARROW_X:
-            return ::GetSystemMetrics(SM_CXHSCROLL);
-        case wxSYS_HSCROLL_ARROW_Y:
-            return ::GetSystemMetrics(SM_CYHSCROLL);
-        case wxSYS_HTHUMB_X:
-            return ::GetSystemMetrics(SM_CXHTHUMB);
-        case wxSYS_ICON_X:
-            return ::GetSystemMetrics(SM_CXICON);
-        case wxSYS_ICON_Y:
-            return ::GetSystemMetrics(SM_CYICON);
-        case wxSYS_ICONSPACING_X:
-            return ::GetSystemMetrics(SM_CXICONSPACING);
-        case wxSYS_ICONSPACING_Y:
-            return ::GetSystemMetrics(SM_CYICONSPACING);
-        case wxSYS_WINDOWMIN_X:
-            return ::GetSystemMetrics(SM_CXMIN);
-        case wxSYS_WINDOWMIN_Y:
-            return ::GetSystemMetrics(SM_CYMIN);
-        case wxSYS_SCREEN_X:
-            return ::GetSystemMetrics(SM_CXSCREEN);
-        case wxSYS_SCREEN_Y:
-            return ::GetSystemMetrics(SM_CYSCREEN);
-
-#if defined(__WIN32__) && defined(SM_CXSIZEFRAME)
-        case wxSYS_FRAMESIZE_X:
-            return ::GetSystemMetrics(SM_CXSIZEFRAME);
-        case wxSYS_FRAMESIZE_Y:
-            return ::GetSystemMetrics(SM_CYSIZEFRAME);
-        case wxSYS_SMALLICON_X:
-            return ::GetSystemMetrics(SM_CXSMICON);
-        case wxSYS_SMALLICON_Y:
-            return ::GetSystemMetrics(SM_CYSMICON);
-#endif
-        case wxSYS_HSCROLL_Y:
-            return ::GetSystemMetrics(SM_CYHSCROLL);
-        case wxSYS_VSCROLL_X:
-            return ::GetSystemMetrics(SM_CXVSCROLL);
-        case wxSYS_VSCROLL_ARROW_X:
-            return ::GetSystemMetrics(SM_CXVSCROLL);
-        case wxSYS_VSCROLL_ARROW_Y:
-            return ::GetSystemMetrics(SM_CYVSCROLL);
-        case wxSYS_VTHUMB_Y:
-            return ::GetSystemMetrics(SM_CYVTHUMB);
-        case wxSYS_CAPTION_Y:
-            return ::GetSystemMetrics(SM_CYCAPTION);
-        case wxSYS_MENU_Y:
-            return ::GetSystemMetrics(SM_CYMENU);
-#if defined(__WIN32__) && defined(SM_NETWORK)
-        case wxSYS_NETWORK_PRESENT:
-            return ::GetSystemMetrics(SM_NETWORK) & 0x0001;
-#endif
-        case wxSYS_PENWINDOWS_PRESENT:
-            return ::GetSystemMetrics(SM_PENWINDOWS);
-#if defined(__WIN32__) && defined(SM_SHOWSOUNDS)
-        case wxSYS_SHOW_SOUNDS:
-            return ::GetSystemMetrics(SM_SHOWSOUNDS);
-#endif
-        case wxSYS_SWAP_BUTTONS:
-            return ::GetSystemMetrics(SM_SWAPBUTTON);
-        default:
-            return 0;
+        // not supported under current system
+        return 0;
     }
-#endif
-    // __WXMICROWIN__
+
+    int rc = ::GetSystemMetrics(indexMSW);
+    if ( index == wxSYS_NETWORK_PRESENT )
+    {
+        // only the last bit is significant according to the MSDN
+        rc &= 1;
+    }
+
+    return rc;
+#endif // __WXMICROWIN__/!__WXMICROWIN__
 }
 
-bool wxSystemSettings::GetCapability(int index)
+bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
 {
-    switch (index)
+    switch ( index )
     {
-        case wxSYS_CAN_ICONIZE_FRAME: 
+        case wxSYS_CAN_ICONIZE_FRAME:
         case wxSYS_CAN_DRAW_FRAME_DECORATIONS:
             return TRUE;
+
         default:
+            wxFAIL_MSG( _T("unknown system feature") );
+
             return FALSE;
     }
 }

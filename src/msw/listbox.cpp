@@ -145,8 +145,7 @@ bool wxListBox::Create(wxWindow *parent,
     if (parent)
         parent->AddChild(this);
 
-    wxSystemSettings settings;
-    SetBackgroundColour(settings.GetSystemColour(wxSYS_COLOUR_WINDOW));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
     SetForegroundColour(parent->GetForegroundColour());
 
     m_windowId = ( id == -1 ) ? (int)NewControlId() : id;
