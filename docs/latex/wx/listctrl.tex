@@ -549,7 +549,7 @@ method:\par
 
 \membersection{wxListCtrl::OnGetItemAttr}\label{wxlistctrlongetitemattr}
 
-\func{virtual wxString}{OnGetItemAttr}{\param{long }{item}}
+\func{virtual wxListItemAttr *}{OnGetItemAttr}{\param{long }{item}}
 
 This function may be overloaded in the derived class for a control with 
 {\tt wxLC\_VIRTUAL} style. It should return the attribute for the
@@ -565,11 +565,13 @@ The base class version always returns {\tt NULL}.
 
 \membersection{wxListCtrl::OnGetItemImage}\label{wxlistctrlongetitemimage}
 
-\func{virtual wxString}{OnGetItemImage}{\param{long }{item}}
+\func{virtual int}{OnGetItemImage}{\param{long }{item}}
 
-This function may be overloaded in the derived class for a control with 
-{\tt wxLC\_VIRTUAL} style. It should return the index of the items image in the
-controls image list or $-1$ for no image.
+This function must be overloaded in the derived class for a control with 
+{\tt wxLC\_VIRTUAL} style having an \helpref{image list}{wxlistctrlsetimagelist} 
+(if the control doesn't have an image list, it is not necessary to overload
+ it). It should return the index of the items image in the controls image list
+or $-1$ for no image.
 
 The base class version always returns $-1$.
 
