@@ -2394,8 +2394,8 @@ void wxWindowMac::SetScrollbar(int orient, int pos, int thumbVisible,
             {
                 if ( !m_hScrollBar->IsShown() )
                     m_hScrollBar->Show(true) ;
-                m_hScrollBar->SetScrollbar( pos , thumbVisible , range , thumbVisible , refresh ) ;
             }
+            m_hScrollBar->SetScrollbar( pos , thumbVisible , range , thumbVisible , refresh ) ;
         }
     }
     else
@@ -2411,8 +2411,8 @@ void wxWindowMac::SetScrollbar(int orient, int pos, int thumbVisible,
             {
                 if ( !m_vScrollBar->IsShown() )
                     m_vScrollBar->Show(true) ;
-                m_vScrollBar->SetScrollbar( pos , thumbVisible , range , thumbVisible , refresh ) ;
             }
+            m_vScrollBar->SetScrollbar( pos , thumbVisible , range , thumbVisible , refresh ) ;
         }
     }
     MacRepositionScrollBars() ;
