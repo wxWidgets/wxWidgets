@@ -419,6 +419,9 @@ public:
     virtual wxToolBarToolBase *FindToolForPosition(wxCoord x,
                                                    wxCoord y) const = 0;
 
+    // find the tool by id
+    wxToolBarToolBase *FindById(int id) const;
+
     // return TRUE if this is a vertical toolbar, otherwise FALSE
     bool IsVertical() const { return HasFlag(wxTB_VERTICAL); }
 
@@ -576,9 +579,6 @@ protected:
 
     // helper functions
     // ----------------
-
-    // find the tool by id
-    wxToolBarToolBase *FindById(int id) const;
 
     // the list of all our tools
     wxToolBarToolsList m_tools;
