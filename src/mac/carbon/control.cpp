@@ -103,11 +103,11 @@ wxControl::~wxControl()
     m_isBeingDeleted = TRUE;
     // If we delete an item, we should initialize the parent panel,
     // because it could now be invalid.
-    wxPanel *panel = wxDynamicCast(GetParent(), wxPanel);
-    if ( panel )
+    wxWindow *parent = GetParent() ;
+    if ( parent )
     {
-        if (panel->GetDefaultItem() == (wxButton*) this)
-            panel->SetDefaultItem(NULL);
+        if (parent->GetDefaultItem() == (wxButton*) this)
+            parent->SetDefaultItem(NULL);
     }
     if ( m_macControl )
     {

@@ -223,16 +223,10 @@ void wxTextCtrl::Copy()
         TEHandle teH ;
         long size ;
    
-         ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
-        TECopy( teH ) ;
-#if TARGET_CARBON
-        OSStatus err ;
-        err = ClearCurrentScrap( );
-#else
-        OSErr err ;
-        err = ZeroScrap( );
-#endif
-        TEToScrap() ;
+  		  ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+		    TECopy( teH ) ;
+        ClearCurrentScrap();
+		    TEToScrap() ;
     }
 }
 
@@ -243,18 +237,12 @@ void wxTextCtrl::Cut()
         TEHandle teH ;
         long size ;
    
-        ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
-        TECut( teH ) ;
-#if TARGET_CARBON
-        OSStatus err ;
-        err = ClearCurrentScrap( );
-#else
-        OSErr err ;
-        err = ZeroScrap( );
-#endif
-        TEToScrap() ;
-        //  MacInvalidateControl() ;
-    }
+   		  ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+		    TECut( teH ) ;
+        ClearCurrentScrap();
+		    TEToScrap() ;
+		    //	MacInvalidateControl() ;
+	  }
 }
 
 void wxTextCtrl::Paste()
@@ -683,15 +671,12 @@ void wxTextCtrl::OnChar(wxKeyEvent& key_event)
             if ( !(m_windowStyle & wxTE_MULTILINE) )
             {
                 wxWindow *parent = GetParent();
-                wxPanel *panel = wxDynamicCast(parent, wxPanel);
-                while ( parent != NULL && panel == NULL )
-                {
-                    parent = parent->GetParent() ;
-                    panel = wxDynamicCast(parent, wxPanel);
+                while( parent && !parent->IsTopLevel() && parent->GetDefaultItem() == NULL ) {
+                  parent = parent->GetParent() ;
                 }
-                if ( panel && panel->GetDefaultItem() )
+                if ( parent && parent->GetDefaultItem() )
                 {
-                    wxButton *def = wxDynamicCast(panel->GetDefaultItem(),
+                    wxButton *def = wxDynamicCast(parent->GetDefaultItem(),
                                                           wxButton);
                     if ( def && def->IsEnabled() )
                     {
@@ -699,9 +684,9 @@ void wxTextCtrl::OnChar(wxKeyEvent& key_event)
                         event.SetEventObject(def);
                         def->Command(event);
                         return ;
-                   }                              
+                   }
                 }
-                
+               
                 // this will make wxWindows eat the ENTER key so that
                 // we actually prevent line wrapping in a single line
                 // text control
@@ -805,19 +790,7 @@ void wxTextCtrl::OnUpdateRedo(wxUpdateUIEvent& event)
 
 #else
 
-#if !TARGET_CARBON
-#define GetControlOwner( control ) (**control).contrlOwner
-#endif
-
-//todo add access to global event record
-
-EventRecord event ;
-
-static EventRecord *GetCurrentEventRecord()
-{
-  return &event ;
-}
-
+extern wxApp *wxTheApp ;
 // CS:We will replace the TextEdit by using the MultiLanguageTextEngine based on the following code written by apple
 
 /*
@@ -1025,7 +998,7 @@ ControlUserPaneFocusUPP gTPFocusProc = NULL;
 
     /* events handled by our focus advance override routine */
 #if TARGET_CARBON
-static const EventTypeSpec gMLTEEvents[] = { { kEventClassTextInput, kEventUnicodeForKeyEvent } };
+static const EventTypeSpec gMLTEEvents[] = { { kEventClassTextInput, kEventTextInputUnicodeForKeyEvent } };
 #define kMLTEEventCount (sizeof( gMLTEEvents ) / sizeof( EventTypeSpec ))
 #endif
 
@@ -1366,40 +1339,40 @@ bail:
 
 
 /* mUPOpenControl initializes a user pane control so it will be drawn
-    and will behave as a scrolling text edit field inside of a window.
-    This routine performs all of the initialization steps necessary,
-    except it does not create the user pane control itself.  theControl
-    should refer to a user pane control that you have either created
-    yourself or extracted from a dialog's control heirarchy using
-    the GetDialogItemAsControl routine.  */
-OSStatus mUPOpenControl(ControlHandle theControl) {
-    Rect bounds;
-    WindowPtr theWindow;
-    STPTextPaneVars **tpvars, *varsp;
-    OSStatus err;
-    RGBColor rgbWhite = {0xFFFF, 0xFFFF, 0xFFFF};
-    TXNBackground tback;
-    
-        /* set up our globals */
-    if (gTPDrawProc == NULL) gTPDrawProc = NewControlUserPaneDrawUPP(TPPaneDrawProc);
-    if (gTPHitProc == NULL) gTPHitProc = NewControlUserPaneHitTestUPP(TPPaneHitTestProc);
-    if (gTPTrackProc == NULL) gTPTrackProc = NewControlUserPaneTrackingUPP(TPPaneTrackingProc);
-    if (gTPIdleProc == NULL) gTPIdleProc = NewControlUserPaneIdleUPP(TPPaneIdleProc);
-    if (gTPKeyProc == NULL) gTPKeyProc = NewControlUserPaneKeyDownUPP(TPPaneKeyDownProc);
-    if (gTPActivateProc == NULL) gTPActivateProc = NewControlUserPaneActivateUPP(TPPaneActivateProc);
-    if (gTPFocusProc == NULL) gTPFocusProc = NewControlUserPaneFocusUPP(TPPaneFocusProc);
-        
-        /* allocate our private storage */
-    tpvars = (STPTextPaneVars **) NewHandleClear(sizeof(STPTextPaneVars));
-    SetControlReference(theControl, (long) tpvars);
-    HLock((Handle) tpvars);
-    varsp = *tpvars;
-        /* set the initial settings for our private data */
-    varsp->fInFocus = false;
-    varsp->fIsActive = true;
-    varsp->fTEActive = false;
-    varsp->fUserPaneRec = theControl;
-    theWindow = varsp->fOwner = GetControlOwner(theControl);
+	and will behave as a scrolling text edit field inside of a window.
+	This routine performs all of the initialization steps necessary,
+	except it does not create the user pane control itself.  theControl
+	should refer to a user pane control that you have either created
+	yourself or extracted from a dialog's control heirarchy using
+	the GetDialogItemAsControl routine.  */
+OSStatus mUPOpenControl(ControlHandle theControl, bool multiline) {
+	Rect bounds;
+	WindowPtr theWindow;
+	STPTextPaneVars **tpvars, *varsp;
+	OSStatus err;
+	RGBColor rgbWhite = {0xFFFF, 0xFFFF, 0xFFFF};
+	TXNBackground tback;
+	
+		/* set up our globals */
+	if (gTPDrawProc == NULL) gTPDrawProc = NewControlUserPaneDrawUPP(TPPaneDrawProc);
+	if (gTPHitProc == NULL) gTPHitProc = NewControlUserPaneHitTestUPP(TPPaneHitTestProc);
+	if (gTPTrackProc == NULL) gTPTrackProc = NewControlUserPaneTrackingUPP(TPPaneTrackingProc);
+	if (gTPIdleProc == NULL) gTPIdleProc = NewControlUserPaneIdleUPP(TPPaneIdleProc);
+	if (gTPKeyProc == NULL) gTPKeyProc = NewControlUserPaneKeyDownUPP(TPPaneKeyDownProc);
+	if (gTPActivateProc == NULL) gTPActivateProc = NewControlUserPaneActivateUPP(TPPaneActivateProc);
+	if (gTPFocusProc == NULL) gTPFocusProc = NewControlUserPaneFocusUPP(TPPaneFocusProc);
+		
+		/* allocate our private storage */
+	tpvars = (STPTextPaneVars **) NewHandleClear(sizeof(STPTextPaneVars));
+	SetControlReference(theControl, (long) tpvars);
+	HLock((Handle) tpvars);
+	varsp = *tpvars;
+		/* set the initial settings for our private data */
+	varsp->fInFocus = false;
+	varsp->fIsActive = true;
+	varsp->fTEActive = false;
+	varsp->fUserPaneRec = theControl;
+	theWindow = varsp->fOwner = GetControlOwner(theControl);
 #if TARGET_CARBON
     varsp->fDrawingEnvironment = GetWindowPort(varsp->fOwner);
 #else
@@ -1446,7 +1419,6 @@ OSStatus mUPOpenControl(ControlHandle theControl) {
     err = InstallWindowEventHandler( varsp->fOwner, varsp->handlerUPP,
         kMLTEEventCount, gMLTEEvents, tpvars, &varsp->handlerRef );
 #endif
-        
         /* unlock our storage */
     HUnlock((Handle) tpvars);
         /* perform final activations and setup for our text field.  Here,
@@ -1798,8 +1770,8 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     }
 
 
-  if ( style & wxTE_PASSWORD )
-  {
+    if ( style & wxTE_PASSWORD )
+    {
       m_macControl = ::NewControl( parent->GetMacRootWindow() , &bounds , "\p" , true , 0 , 0 , 1, 
         kControlEditTextPasswordProc , (long) this ) ;
     }
@@ -1961,18 +1933,16 @@ void wxTextCtrl::Copy()
             TEHandle teH ;
             long size ;
        
-             ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
-            TECopy( teH ) ;
-    #if TARGET_CARBON
-            OSStatus err ;
-            err = ClearCurrentScrap( );
-    #else
-            OSErr err ;
-            err = ZeroScrap( );
-    #endif
-            TEToScrap() ;
-        }
-    }
+      		 ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+    		TECopy( teH ) ;
+    		ClearCurrentScrap();
+    		TEToScrap() ;
+    	}
+    	else
+    	{
+    	  mUPDoEditCommand( m_macControl , kmUPCopy ) ;
+    	}
+	}
 }
 
 void wxTextCtrl::Cut()
@@ -1984,19 +1954,17 @@ void wxTextCtrl::Cut()
             TEHandle teH ;
             long size ;
        
-            ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
-            TECut( teH ) ;
-    #if TARGET_CARBON
-            OSStatus err ;
-            err = ClearCurrentScrap( );
-    #else
-            OSErr err ;
-            err = ZeroScrap( );
-    #endif
-            TEToScrap() ;
-            //  MacInvalidateControl() ;
+       		::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+    		TECut( teH ) ;
+    		ClearCurrentScrap();
+    		TEToScrap() ;
+    		//	MacInvalidateControl() ;
     }
-    }
+    	else
+    	{
+    	  mUPDoEditCommand( m_macControl , kmUPCut ) ;
+    	}
+	}
 }
 
 void wxTextCtrl::Paste()
@@ -2008,45 +1976,49 @@ void wxTextCtrl::Paste()
             TEHandle teH ;
             long size ;
      
-            ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
-        TEFromScrap() ;
-        TEPaste( teH ) ;
-        WindowRef window = GetMacRootWindow() ;
-        if ( window )
-        {
-            wxWindow* win = wxFindWinFromMacWindow( window ) ;
-            if ( win )
-            {
-                wxMacDrawingHelper help( win ) ;
-                // the mac control manager always assumes to have the origin at 0,0
-                SetOrigin( 0 , 0 ) ;
-                
-                bool            hasTabBehind = false ;
-                wxWindow* parent = GetParent() ;
-                while ( parent )
-                {
-                    if( parent->MacGetWindowData() )
-                    {
-                        UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , kThemeBrushDialogBackgroundActive , false ) ;
-                        break ;
-                    }
-                    
-                    if( parent->IsKindOf( CLASSINFO( wxNotebook ) ) ||  parent->IsKindOf( CLASSINFO( wxTabCtrl ) ))
-                    {
-                        if ( ((wxControl*)parent)->GetMacControl() )
-                            SetUpControlBackground( ((wxControl*)parent)->GetMacControl() , -1 , true ) ;
-                        break ;
-                    }
-                    
-                    parent = parent->GetParent() ;
-                } 
-                
-                UMADrawControl( m_macControl ) ;
-                UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
-            }
-        }
-    }
-    }
+     		::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+  		TEFromScrap() ;
+  		TEPaste( teH ) ;
+  		WindowRef window = GetMacRootWindow() ;
+  		if ( window )
+  		{
+  			wxWindow* win = wxFindWinFromMacWindow( window ) ;
+  			if ( win )
+  			{
+  				wxMacDrawingHelper help( win ) ;
+  				// the mac control manager always assumes to have the origin at 0,0
+  				SetOrigin( 0 , 0 ) ;
+  				
+  				bool			hasTabBehind = false ;
+  				wxWindow* parent = GetParent() ;
+  				while ( parent )
+  				{
+  					if( parent->MacGetWindowData() )
+  					{
+  						::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , kThemeBrushDialogBackgroundActive , false ) ;
+  						break ;
+  					}
+  					
+  					if( parent->IsKindOf( CLASSINFO( wxNotebook ) ) ||  parent->IsKindOf( CLASSINFO( wxTabCtrl ) ))
+  					{
+  						if ( ((wxControl*)parent)->GetMacControl() )
+  							SetUpControlBackground( ((wxControl*)parent)->GetMacControl() , -1 , true ) ;
+  						break ;
+  					}
+  					
+  					parent = parent->GetParent() ;
+  				} 
+  				
+  				UMADrawControl( m_macControl ) ;
+  				::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
+  			}
+  		}
+  	}
+   	else
+   	{
+   	  mUPDoEditCommand( m_macControl , kmUPPaste ) ;
+   	}
+	}
 }
 
 bool wxTextCtrl::CanCopy() const
@@ -2140,6 +2112,25 @@ long wxTextCtrl::GetLastPosition() const
 //   ::GetControlData( m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection , &size ) ;
     return (**teH).teLength ;
   }
+  else
+  {
+     STPTextPaneVars**	tpvars = (STPTextPaneVars **) GetControlReference(m_macControl);
+
+    int actualsize = 0 ;
+  	Handle theText ;
+  	OSErr err = TXNGetDataEncoded( (**tpvars).fTXNRec, kTXNStartOffset, kTXNEndOffset, &theText , kTXNTextData );
+  		/* all done */
+  	if ( err )
+  	{
+  	  actualsize = 0 ;
+  	}
+  	else
+  	{
+  	  actualsize = GetHandleSize( theText ) ;
+  	  DisposeHandle( theText ) ;
+  	}
+  	return actualsize ;
+  }
 }
 
 void wxTextCtrl::Replace(long from, long to, const wxString& value)
@@ -2151,15 +2142,19 @@ void wxTextCtrl::Replace(long from, long to, const wxString& value)
    
     ControlEditTextSelectionRec selection ;
    
-    selection.selStart = from ;
-    selection.selEnd = to ;
-    ::SetControlData( m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
-        ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
-    TESetSelect( from , to  , teH ) ;
-    TEDelete( teH ) ;
-        TEInsert( value , value.Length() , teH ) ;
-    }
-    Refresh() ;
+   	selection.selStart = from ;
+   	selection.selEnd = to ;
+   	::SetControlData( m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
+		::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+   	TESetSelect( from , to  , teH ) ;
+   	TEDelete( teH ) ;
+		TEInsert( value , value.Length() , teH ) ;
+	}
+	else
+	{
+	  // TODO
+	}
+	Refresh() ;
 }
 
 void wxTextCtrl::Remove(long from, long to)
@@ -2171,11 +2166,15 @@ void wxTextCtrl::Remove(long from, long to)
    
     ControlEditTextSelectionRec selection ;
    
-    selection.selStart = from ;
-    selection.selEnd = to ;
-    ::SetControlData( m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
-    ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
-    TEDelete( teH ) ;
+   	selection.selStart = from ;
+   	selection.selEnd = to ;
+   	::SetControlData( m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
+	::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+   	TEDelete( teH ) ;
+  }
+  else
+  {
+    //TODO
   }
     Refresh() ;
 }
@@ -2259,7 +2258,11 @@ void wxTextCtrl::Clear()
 
     ::SetControlData( m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , 0 , (char*) ((const char*)NULL) ) ;
   }
-    Refresh() ;
+  else
+  {
+    mUPDoEditCommand( m_macControl , kmUPClear) ;
+  }
+	Refresh() ;
 }
 
 bool wxTextCtrl::IsModified() const
@@ -2342,19 +2345,16 @@ void wxTextCtrl::DiscardEdits()
 
 int wxTextCtrl::GetNumberOfLines() const
 {
-  if ( m_windowStyle & wxTE_PASSWORD )
-  {
-    Size actualsize;
-    ::GetControlData( m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , 32767 , wxBuffer , &actualsize) ;
-    
-    int count = 1;
-    for (int i = 0; i < actualsize; i++)
-    {
-        if (wxBuffer[i] == '\r') count++;
-    }
-    
-    return count;
-  }
+  // TODO change this if possible to reflect real lines
+  wxString content = GetValue() ;
+	
+	int count = 1;
+	for (int i = 0; i < content.Length() ; i++)
+	{
+	    if (content[i] == '\r') count++;
+	}
+	
+  return count;
 }
 
 long wxTextCtrl::XYToPosition(long x, long y) const
@@ -2375,62 +2375,56 @@ void wxTextCtrl::ShowPosition(long pos)
 
 int wxTextCtrl::GetLineLength(long lineNo) const
 {
-  if ( m_windowStyle & wxTE_PASSWORD )
-  {
-    Size actualsize;
-    ::GetControlData( m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , 32767 , wxBuffer , &actualsize) ;
-    
-    // Find line first
-    int count = 0;
-    for (int i = 0; i < actualsize; i++)
-    {
-        if (count == lineNo)
-        {
-            // Count chars in line then
-            count = 0;
-            for (int j = i; j < actualsize; j++)
-            {
-                count++;
-                if (wxBuffer[j] == '\r') return count;
-            }
-            
-            return count;
-        }
-        if (wxBuffer[i] == '\r') count++;
-    }
-    }
+  // TODO change this if possible to reflect real lines
+  wxString content = GetValue() ;
+	
+	// Find line first
+	int count = 0;
+	for (int i = 0; i < content.Length() ; i++)
+	{
+	    if (count == lineNo)
+	    {
+	        // Count chars in line then
+	    	count = 0;
+	    	for (int j = i; j < content.Length(); j++)
+	    	{
+	    	    count++;
+	    	    if (content[j] == '\r') return count;
+	    	}
+	    	
+	    	return count;
+	    }
+	    if (content[i] == '\r') count++;
+	}
     return 0;
 }
 
 wxString wxTextCtrl::GetLineText(long lineNo) const
 {
-  if ( m_windowStyle & wxTE_PASSWORD )
-  {
-    Size actualsize;
-    ::GetControlData( m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , 32767 , wxBuffer , &actualsize) ;
-    
-    // Find line first
-    int count = 0;
-    for (int i = 0; i < actualsize; i++)
-    {
-        if (count == lineNo)
-        {
-            // Add chars in line then
-            wxString tmp("");
-            
-            for (int j = i; j < actualsize; j++)
-            {
-                if (wxBuffer[j] == '\r')
-                    return tmp;
-                    
-                tmp += wxBuffer[j];
-            }
-            
-            return tmp;
-        }
-        if (wxBuffer[i] == '\r') count++;
-    }
-    }
+  // TODO change this if possible to reflect real lines
+  wxString content = GetValue() ;
+
+	// Find line first
+	int count = 0;
+	for (int i = 0; i < content.Length() ; i++)
+	{
+	    if (count == lineNo)
+	    {
+	        // Add chars in line then
+	    	wxString tmp("");
+	    	
+	    	for (int j = i; j < content.Length(); j++)
+	    	{
+	    	    if (content[j] == '\r')
+	    	        return tmp;
+	    	        
+	    	    tmp += content[j];
+	    	}
+	    	
+	    	return tmp;
+	    }
+	    if (content[i] == '\r') count++;
+	}
     return wxString("");
 }
 
@@ -2468,15 +2462,12 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
             if ( !(m_windowStyle & wxTE_MULTILINE) )
             {
                 wxWindow *parent = GetParent();
-                wxPanel *panel = wxDynamicCast(parent, wxPanel);
-                while ( parent != NULL && panel == NULL )
-                {
-                    parent = parent->GetParent() ;
-                    panel = wxDynamicCast(parent, wxPanel);
+                while( parent && !parent->IsTopLevel() && parent->GetDefaultItem() == NULL ) {
+                  parent = parent->GetParent() ;
                 }
-                if ( panel && panel->GetDefaultItem() )
+                if ( parent && parent->GetDefaultItem() )
                 {
-                    wxButton *def = wxDynamicCast(panel->GetDefaultItem(),
+                    wxButton *def = wxDynamicCast(parent->GetDefaultItem(),
                                                           wxButton);
                     if ( def && def->IsEnabled() )
                     {
