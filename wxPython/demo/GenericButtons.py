@@ -1,7 +1,6 @@
 
 from wxPython.wx import *
-from wxPython.lib.buttons import wxGenButton, wxGenBitmapButton, \
-                                 wxGenToggleButton, wxGenBitmapToggleButton
+from wxPython.lib.buttons import *
 
 import images
 #----------------------------------------------------------------------
@@ -67,6 +66,19 @@ class TestPanel(wxPanel):
         bmp.SetMask(mask)
         b.SetBitmapSelected(bmp)
         b.SetToggle(true)
+        b.SetBestSize()
+
+        b = wxGenBitmapTextButton(self, -1, None, "Bitmapped Text", (220, 230), size = (200, 45))
+        EVT_BUTTON(self, b.GetId(), self.OnButton)
+        bmp = images.getBulb1Bitmap()
+        mask = wxMaskColour(bmp, wxBLUE)
+        bmp.SetMask(mask)
+        b.SetBitmapLabel(bmp)
+        bmp = images.getBulb2Bitmap()
+        mask = wxMaskColour(bmp, wxBLUE)
+        bmp.SetMask(mask)
+        b.SetBitmapSelected(bmp)
+        b.SetUseFocusIndicator(false)
         b.SetBestSize()
 
 
