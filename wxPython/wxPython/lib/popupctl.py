@@ -140,7 +140,7 @@ class PopButton(wxPyControl):
 # Tried to use wxPopupWindow but the control misbehaves on MSW
 class wxPopupDialog(wxDialog):
     def __init__(self,parent,content = None):
-        wxDialog.__init__(self,parent,-1,'', style = wxSTAY_ON_TOP)
+        wxDialog.__init__(self,parent,-1,'', style = wxBORDER_SIMPLE|wxSTAY_ON_TOP)
 
         self.ctrl = parent
         self.win = wxWindow(self,-1,pos = wxPoint(0,0),style = 0)
