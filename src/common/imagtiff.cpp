@@ -193,7 +193,7 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
 
     for (uint32 i = 0; i < h; i++)
     {
-        for (uint32 j = 0; j < h; j++)
+        for (uint32 j = 0; j < w; j++)
         {
             unsigned char alpha = (unsigned char)TIFFGetA(raster[pos]);
             if (alpha < 127)

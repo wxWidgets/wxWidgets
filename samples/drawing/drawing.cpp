@@ -254,9 +254,12 @@ bool MyApp::LoadImages()
     if ( !path )
         return FALSE;
     gs_bmpMask.LoadFile(path, wxBITMAP_TYPE_BMP);
-    gs_bmpMask.SetDepth(1);
+    
+//    This is so wrong, it hurts.
+//    gs_bmpMask.SetDepth(1);
+//    wxMask *mask = new wxMask(gs_bmpMask);
 
-    wxMask *mask = new wxMask(gs_bmpMask);
+    wxMask *mask = new wxMask(gs_bmpMask, *wxBLACK);
     gs_bmpWithMask.SetMask(mask);
 
     mask = new wxMask(gs_bmpWithColMask, *wxWHITE);
@@ -566,13 +569,50 @@ void MyCanvas::DrawDefault(wxDC& dc)
 
     dc.DrawIcon( wxICON(mondrian), 410, 40 );
 
-    // test the rectangle drawing - there should be no pixels between the rect
-    // and the lines
+    dc.SetBrush( *wxBLACK_BRUSH );
     dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.DrawRectangle( 0, 100, 1000, 300 );
+
+    // test the rectangle outline drawing - there should be one pixel between 
+    // the rect and the lines
+    dc.SetPen(*wxWHITE_PEN);
+    dc.SetBrush( *wxTRANSPARENT_BRUSH );
+    dc.DrawRectangle(100, 170, 49, 29);
+    dc.DrawRectangle(150, 170, 49, 29);
+    dc.SetPen(*wxWHITE_PEN);
+    dc.DrawLine(200, 160, 200, 210); 
+    dc.DrawLine(100, 200, 210, 200); 
+    
+    // test the rectangle filled drawing - there should be one pixel between 
+    // the rect and the lines
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.SetBrush( *wxWHITE_BRUSH );
+    dc.DrawRectangle(300, 170, 49, 29);
     dc.DrawRectangle(350, 170, 49, 29);
-    dc.SetPen(*wxRED_PEN);
+    dc.SetPen(*wxWHITE_PEN);
     dc.DrawLine(400, 160, 400, 210); 
-    dc.DrawLine(340, 200, 410, 200); 
+    dc.DrawLine(300, 200, 410, 200); 
+    
+    // test the rectangle outline drawing - there should be one pixel between 
+    // the rect and the lines
+    dc.SetPen(*wxWHITE_PEN);
+    dc.SetBrush( *wxTRANSPARENT_BRUSH );
+    dc.DrawRoundedRectangle(100, 270, 49, 29, 6);
+    dc.DrawRoundedRectangle(150, 270, 49, 29, 6);
+    dc.SetPen(*wxWHITE_PEN);
+    dc.DrawLine(200, 260, 200, 310); 
+    dc.DrawLine(100, 300, 210, 300); 
+    
+    // test the rectangle filled drawing - there should be one pixel between 
+    // the rect and the lines
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.SetBrush( *wxWHITE_BRUSH );
+    dc.DrawRoundedRectangle(300, 270, 49, 29, 6);
+    dc.DrawRoundedRectangle(350, 270, 49, 29, 6);
+    dc.SetPen(*wxWHITE_PEN);
+    dc.DrawLine(400, 260, 400, 310); 
+    dc.DrawLine(300, 300, 410, 300); 
+
 }
 
 void MyCanvas::DrawText(wxDC& dc)

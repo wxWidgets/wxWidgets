@@ -1083,6 +1083,7 @@ SAMPLES_DIST:
 	cp $(SAMPDIR)/image/*.cpp $(DISTDIR)/samples/image
 	cp $(SAMPDIR)/image/horse.* $(DISTDIR)/samples/image
 	cp $(SAMPDIR)/image/smile.xbm $(DISTDIR)/samples/image
+	cp $(SAMPDIR)/image/smile.xpm $(DISTDIR)/samples/image
     
 	mkdir $(DISTDIR)/samples/internat
 	mkdir $(DISTDIR)/samples/internat/de
