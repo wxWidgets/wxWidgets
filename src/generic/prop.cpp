@@ -613,7 +613,7 @@ void wxPropertyValue::operator=(const wxString& val1)
   }
   else if (m_type == wxPropertyValueStringPtr)
   {
-    wxFAIL_MSG( "Shouldn't try to assign a wxString reference to a char* pointer.");
+    wxFAIL_MSG( wxT("Shouldn't try to assign a wxString reference to a char* pointer.") );
     if (val)
       *m_value.stringPtr = copystring(val);
     else

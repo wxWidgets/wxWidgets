@@ -438,7 +438,7 @@ void wxPlotWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         {
             dc.DrawLine( pos.x-15, y, pos.x-7, y );
             wxString label;
-            label.Printf( "%.1f", current );
+            label.Printf( wxT("%.1f"), current );
             dc.DrawText( label, pos.x-45, y-7 );
         }
 
