@@ -536,6 +536,20 @@ The only supported value for {\it cal} parameter is currently {\tt Gregorian}.
 and {\tt GetNumberOfDaysInMonth} in wxPython.}
 
 
+\membersection{wxDateTime::GetTimeNow}\label{wxdatetimegettimenow}
+
+\func{static time\_t}{GetTimeNow}{\void}
+
+Returns the current time.
+
+
+\membersection{wxDateTime::GetTmNow}\label{wxdatetimegettmnow}
+
+\func{static struct tm *}{GetTmNow}{\void}
+
+Returns the current time broken down.
+
+
 \membersection{wxDateTime::GetWeekDayName}\label{wxdatetimegetweekdayname}
 
 \func{static wxString}{GetWeekDayName}{\param{WeekDay }{weekday}, \param{NameFlags }{flags = Name\_Full}}
