@@ -336,19 +336,21 @@ void wxLogGui::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
         case wxLOG_Debug:
             #ifdef __WXDEBUG__
             {
+                wxString str;
+                TimeStamp(&str);
+                str += szString;
+
                 #if defined(__WXMSW__) && !defined(__WXMICROWIN__)
                     // don't prepend debug/trace here: it goes to the
-                    // debug window anyhow, but do put a timestamp
-                    wxString str;
-                    TimeStamp(&str);
-                    str << szString << wxT("\r\n");
+                    // debug window anyhow
+                    str += wxT("\r\n");
                     OutputDebugString(str);
                 #else
                     // send them to stderr
-                    wxFprintf(stderr, wxT("%s: %s\n"),
+                    wxFprintf(stderr, wxT("[%s] %s\n"),
                               level == wxLOG_Trace ? wxT("Trace")
                                                    : wxT("Debug"),
-                              szString);
+                              str.c_str());
                     fflush(stderr);
                 #endif
             }
