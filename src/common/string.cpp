@@ -1456,21 +1456,34 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
 // of them)
 bool wxString::Matches(const wxChar *pszMask) const
 {
-  // check char by char
-  const wxChar *pszTxt;
-  for ( pszTxt = c_str(); *pszMask != wxT('\0'); pszMask++, pszTxt++ ) {
+  // TODO: this is, of course, awfully inefficient...
+
+  // the char currently being checked
+  const wxChar *pszTxt = c_str();
+
+  // the last location where '*' matched
+  const wxChar *pszLastStarInText = NULL;
+  const wxChar *pszLastStarInMask = NULL;
+
+match:
+  for ( ; *pszMask != wxT('\0'); pszMask++, pszTxt++ ) {
     switch ( *pszMask ) {
       case wxT('?'):
         if ( *pszTxt == wxT('\0') )
           return FALSE;
 
-        // pszText and pszMask will be incremented in the loop statement
+        // pszTxt and pszMask will be incremented in the loop statement
 
         break;
 
       case wxT('*'):
         {
+          // remember where we started to be able to backtrack later
+          pszLastStarInText = pszTxt;
+          pszLastStarInMask = pszMask;
+
           // ignore special chars immediately following this one
+          // (should this be an error?)
           while ( *pszMask == wxT('*') || *pszMask == wxT('?') )
             pszMask++;
 
@@ -1510,7 +1523,22 @@ bool wxString::Matches(const wxChar *pszMask) const
   }
 
   // match only if nothing left
-  return *pszTxt == wxT('\0');
+  if ( *pszTxt == wxT('\0') )
+    return TRUE;
+
+  // if we failed to match, backtrack if we can
+  if ( pszLastStarInText ) {
+    pszTxt = pszLastStarInText + 1;
+    pszMask = pszLastStarInMask;
+
+    pszLastStarInText = NULL;
+
+    // don't bother resetting pszLastStarInMask, it's unnecessary
+
+    goto match;
+  }
+
+  return FALSE;
 }
 
 // Count the number of chars

@@ -35,38 +35,38 @@
 
 // what to test (in alphabetic order)?
 
-#define TEST_ARRAYS
-#define TEST_CHARSET
-#define TEST_CMDLINE
-#define TEST_DATETIME
-#define TEST_DIR
-#define TEST_DLLLOADER
-#define TEST_ENVIRON
-#define TEST_EXECUTE
-#define TEST_FILE
-#define TEST_FILECONF
-#define TEST_FILENAME
-#define TEST_FTP
-#define TEST_HASH
-#define TEST_INFO_FUNCTIONS
-#define TEST_LIST
-#define TEST_LOCALE
-#define TEST_LOG
-#define TEST_LONGLONG
-#define TEST_MIME
-#define TEST_PATHLIST
-#define TEST_REGCONF
-#define TEST_REGISTRY
-#define TEST_SNGLINST
-#define TEST_SOCKETS
-#define TEST_STREAMS
+//#define TEST_ARRAYS
+//#define TEST_CHARSET
+//#define TEST_CMDLINE
+//#define TEST_DATETIME
+//#define TEST_DIR
+//#define TEST_DLLLOADER
+//#define TEST_ENVIRON
+//#define TEST_EXECUTE
+//#define TEST_FILE
+//#define TEST_FILECONF
+//#define TEST_FILENAME
+//#define TEST_FTP
+//#define TEST_HASH
+//#define TEST_INFO_FUNCTIONS
+//#define TEST_LIST
+//#define TEST_LOCALE
+//#define TEST_LOG
+//#define TEST_LONGLONG
+//#define TEST_MIME
+//#define TEST_PATHLIST
+//#define TEST_REGCONF
+//#define TEST_REGISTRY
+//#define TEST_SNGLINST
+//#define TEST_SOCKETS
+//#define TEST_STREAMS
 #define TEST_STRINGS
-#define TEST_THREADS
-#define TEST_TIMER
+//#define TEST_THREADS
+//#define TEST_TIMER
 //#define TEST_VCARD            -- don't enable this (VZ)
-#define TEST_WCHAR
-#define TEST_ZIP
-#define TEST_ZLIB
+//#define TEST_WCHAR
+//#define TEST_ZIP
+//#define TEST_ZLIB
 
 #ifdef TEST_SNGLINST
     #include <wx/snglinst.h>
@@ -4547,6 +4547,44 @@ static void TestStringReplace()
     puts("");
 }
 
+static void TestStringMatch()
+{
+    wxPuts(_T("*** Testing wxString::Matches() ***"));
+
+    static const struct StringMatchTestData
+    {
+        const wxChar *text;
+        const wxChar *wildcard;
+        bool matches;
+    } stringMatchTestData[] =
+    {
+        { _T("foobar"), _T("foo*"), 1 },
+        { _T("foobar"), _T("*oo*"), 1 },
+        { _T("foobar"), _T("*bar"), 1 },
+        { _T("foobar"), _T("??????"), 1 },
+        { _T("foobar"), _T("f??b*"), 1 },
+        { _T("foobar"), _T("f?b*"), 0 },
+        { _T("foobar"), _T("*goo*"), 0 },
+        { _T("foobar"), _T("*foo"), 0 },
+        { _T("foobarfoo"), _T("*foo"), 1 },
+        { _T(""), _T("*"), 1 },
+        { _T(""), _T("?"), 0 },
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(stringMatchTestData); n++ )
+    {
+        const StringMatchTestData& data = stringMatchTestData[n];
+        bool matches = wxString(data.text).Matches(data.wildcard);
+        wxPrintf(_T("'%s' %s '%s' (%s)\n"),
+                 data.wildcard,
+                 matches ? _T("matches") : _T("doesn't match"),
+                 data.text,
+                 matches == data.matches ? _T("ok") : _T("ERROR"));
+    }
+
+    wxPuts(_T(""));
+}
+
 #endif // TEST_STRINGS
 
 // ----------------------------------------------------------------------------
@@ -4632,16 +4670,14 @@ int main(int argc, char **argv)
     {
         TestPChar();
         TestString();
-    }
         TestStringSub();
-    if ( 0 )
-    {
         TestStringConstruction();
         TestStringFormat();
         TestStringFind();
         TestStringTokenizer();
         TestStringReplace();
     }
+    TestStringMatch();
 #endif // TEST_STRINGS
 
 #ifdef TEST_ARRAYS
