@@ -112,13 +112,14 @@ explicitly (for instance when combining two data values to form a key).
 
 \membersection{wxHashTable::Next}
 
-\func{wxNode *}{Next}{\void}
+\func{wxHashTable::Node *}{Next}{\void}
 
 If the application wishes to iterate through all the data in the hash
 table, it can call {\it BeginFind} and then loop on {\it Next}. This function
-returns a {\bf wxNode} pointer (or NULL if there are no more nodes).  See the
-description for \helpref{wxNode}{wxnode}. The user will probably only wish to use the
-{\bf wxNode::Data} function to retrieve the data; the node may also be deleted.
+returns a {\bf wxHashTable::Node} pointer (or NULL if there are no more nodes).
+The return value is functionally equivalent to \textbf{wxNode} but might not be
+implemented as a \textbf{wxNode}. The user will probably only wish to use the
+\textbf{GetData} method to retrieve the data; the node may also be deleted.
 
 \membersection{wxHashTable::Put}
 

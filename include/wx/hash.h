@@ -447,6 +447,9 @@ private:
 class WXDLLIMPEXP_BASE wxHashTable : public wxObject
 {
 public:
+    typedef wxNode Node;
+    typedef wxNode* compatibility_iterator;
+
     int n;
     int current_position;
     wxNode *current_node;
@@ -523,7 +526,6 @@ public:
     // Returns number of nodes
     size_t GetCount() const { return m_count; }
 
-    typedef wxNode* compatibility_iterator;
 private:
     size_t m_count;             // number of elements in the hashtable
     bool m_deleteContents;
