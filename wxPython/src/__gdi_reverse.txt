@@ -1,19 +1,6 @@
 # Other names that need to be reverse-renamed for the old namespace
 
 
-DC_old
-MemoryDC_old
-BufferedDC_old
-BufferedPaintDC_old
-ScreenDC_old
-ClientDC_old
-PaintDC_old
-WindowDC_old
-MirrorDC_old
-PostScriptDC_old
-MetaFileDC_old
-PrinterDC_old
-
 MaskColour
 
 

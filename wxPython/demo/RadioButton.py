@@ -30,11 +30,11 @@ class TestPanel( wx.Panel ):
         self.group1_ctrls.append((radio3, text3))
 
         for radio, text in self.group1_ctrls:
-            grid1.AddWindow( radio, 0, wx.ALIGN_CENTRE|wx.LEFT|wx.RIGHT|wx.TOP, 5 )
-            grid1.AddWindow( text, 0, wx.ALIGN_CENTRE|wx.LEFT|wx.RIGHT|wx.TOP, 5 )
+            grid1.Add( radio, 0, wx.ALIGN_CENTRE|wx.LEFT|wx.RIGHT|wx.TOP, 5 )
+            grid1.Add( text, 0, wx.ALIGN_CENTRE|wx.LEFT|wx.RIGHT|wx.TOP, 5 )
 
-        box1.AddSizer( grid1, 0, wx.ALIGN_CENTRE|wx.ALL, 5 )
-        vs.AddSizer( box1, 0, wx.ALIGN_CENTRE|wx.ALL, 5 )
+        box1.Add( grid1, 0, wx.ALIGN_CENTRE|wx.ALL, 5 )
+        vs.Add( box1, 0, wx.ALIGN_CENTRE|wx.ALL, 5 )
 
         box2_title = wx.StaticBox( panel, -1, "Group 2" )
         box2 = wx.StaticBoxSizer( box2_title, wx.VERTICAL )
@@ -53,11 +53,11 @@ class TestPanel( wx.Panel ):
         self.group2_ctrls.append((radio6, text6))
         
         for radio, text in self.group2_ctrls:
-            grid2.AddWindow( radio, 0, wx.ALIGN_CENTRE|wx.LEFT|wx.RIGHT|wx.TOP, 5 )
-            grid2.AddWindow( text, 0, wx.ALIGN_CENTRE|wx.LEFT|wx.RIGHT|wx.TOP, 5 )
+            grid2.Add( radio, 0, wx.ALIGN_CENTRE|wx.LEFT|wx.RIGHT|wx.TOP, 5 )
+            grid2.Add( text, 0, wx.ALIGN_CENTRE|wx.LEFT|wx.RIGHT|wx.TOP, 5 )
 
-        box2.AddSizer( grid2, 0, wx.ALIGN_CENTRE|wx.ALL, 5 )
-        vs.AddSizer( box2, 0, wx.ALIGN_CENTRE|wx.ALL, 5 )
+        box2.Add( grid2, 0, wx.ALIGN_CENTRE|wx.ALL, 5 )
+        vs.Add( box2, 0, wx.ALIGN_CENTRE|wx.ALL, 5 )
 
         panel.SetSizer( vs )
         vs.Fit( panel )

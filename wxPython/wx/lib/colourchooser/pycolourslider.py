@@ -68,7 +68,7 @@ class PyColourSlider(canvas.Canvas):
         """Returns the colour value for a position on the slider. The position
         must be within the valid height of the slider, or results can be
         unpredictable."""
-        return self.buffer.GetPixel((0, pos))
+        return self.buffer.GetPixel(0, pos)
 
     def DrawBuffer(self):
         """Actual implementation of the widget's drawing. We simply draw
@@ -88,5 +88,5 @@ class PyColourSlider(canvas.Canvas):
             r,g,b = [c * 255.0 for c in colorsys.hsv_to_rgb(h,s,v)]
             colour = wx.Colour(int(r), int(g), int(b))
             self.buffer.SetPen(wx.Pen(colour, 1, wx.SOLID))
-            self.buffer.DrawRectangle((0, y_pos), (15, 1))
+            self.buffer.DrawRectangle(0, y_pos, 15, 1)
             v = v - vstep

@@ -13,7 +13,7 @@ class TestPanel(wx.Panel):
         wx.StaticText(self, -1, "This is a wx.StaticBitmap.", (45, 15))
 
         bmp = images.getTest2Bitmap()
-        mask = wx.MaskColour(bmp, wx.BLUE)
+        mask = wx.Mask(bmp, wx.BLUE)
         bmp.SetMask(mask)
         wx.StaticBitmap(self, -1, bmp, (80, 50), (bmp.GetWidth(), bmp.GetHeight()))
 

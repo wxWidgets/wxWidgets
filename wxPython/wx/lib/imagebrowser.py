@@ -82,7 +82,7 @@ class ImageView(wx.Window):
         brush = wx.Brush(wx.NamedColour(self.back_color), wx.SOLID)
         dc.SetBrush(brush)
         dc.SetPen(wx.Pen(wx.NamedColour(self.border_color), 1))
-        dc.DrawRectangle((0, 0), (self.image_sizex, self.image_sizey))
+        dc.DrawRectangle(0, 0, self.image_sizex, self.image_sizey)
 
     def DrawImage(self, dc):
         try:
@@ -113,7 +113,7 @@ class ImageView(wx.Window):
         image.Rescale(iwidth, iheight)      # rescale to fit the window
         image.ConvertToBitmap()
         bmp = image.ConvertToBitmap()
-        dc.DrawBitmap(bmp, (diffx, diffy))        # draw the image to window
+        dc.DrawBitmap(bmp, diffx, diffy)        # draw the image to window
 
 
 class ImageDialog(wx.Dialog):

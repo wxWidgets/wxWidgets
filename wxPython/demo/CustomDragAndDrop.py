@@ -69,7 +69,7 @@ class DoodlePad(wx.Window):
             dc = wx.ClientDC(self)
             dc.BeginDrawing()
             dc.SetPen(wx.Pen(wx.BLUE, 3))
-            coords = ((self.x, self.y), event.GetPositionTuple())
+            coords = (self.x, self.y) + event.GetPositionTuple()
             self.curLine.append(coords)
             dc.DrawLine(*coords)
             self.x, self.y = event.GetPositionTuple()

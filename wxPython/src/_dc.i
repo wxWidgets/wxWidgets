@@ -53,7 +53,7 @@ public:
 
 
 
-#if defined(wxUSE_DC_OLD_METHODS)
+#if 1 // The < 2.4 and > 2.5.1.5 way
 
     bool FloodFill(wxCoord x, wxCoord y, const wxColour& col, int style = wxFLOOD_SURFACE);
     %name(FloodFillPoint) bool FloodFill(const wxPoint& pt, const wxColour& col, int style = wxFLOOD_SURFACE);
@@ -85,25 +85,25 @@ public:
     %name(DrawCheckMarkRect) void DrawCheckMark(const wxRect& rect);
 
     void DrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h, double sa, double ea);
-    %name(DrawEllipticArcPtSz) void DrawEllipticArc(const wxPoint& pt, const wxSize& sz, double sa, double ea);
+    %name(DrawEllipticArcPointSize) void DrawEllipticArc(const wxPoint& pt, const wxSize& sz, double sa, double ea);
 
     void DrawPoint(wxCoord x, wxCoord y);
     %name(DrawPointPoint) void DrawPoint(const wxPoint& pt);
 
     void DrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     %name(DrawRectangleRect)void DrawRectangle(const wxRect& rect);
-    %name(DrawRectanglePtSz) void DrawRectangle(const wxPoint& pt, const wxSize& sz);
+    %name(DrawRectanglePointSize) void DrawRectangle(const wxPoint& pt, const wxSize& sz);
 
     void DrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius);
     %name(DrawRoundedRectangleRect) void DrawRoundedRectangle(const wxRect& r, double radius);
-    %name(DrawRoundedRectanglePtSz) void DrawRoundedRectangle(const wxPoint& pt, const wxSize& sz, double radius);
+    %name(DrawRoundedRectanglePointSize) void DrawRoundedRectangle(const wxPoint& pt, const wxSize& sz, double radius);
 
     void DrawCircle(wxCoord x, wxCoord y, wxCoord radius);
     %name(DrawCirclePoint) void DrawCircle(const wxPoint& pt, wxCoord radius);
 
     void DrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     %name(DrawEllipseRect) void DrawEllipse(const wxRect& rect);
-    %name(DrawEllipsePtSz) void DrawEllipse(const wxPoint& pt, const wxSize& sz);
+    %name(DrawEllipsePointSize) void DrawEllipse(const wxPoint& pt, const wxSize& sz);
 
     void DrawIcon(const wxIcon& icon, wxCoord x, wxCoord y);
     %name(DrawIconPoint) void DrawIcon(const wxIcon& icon, const wxPoint& pt);
@@ -121,14 +121,18 @@ public:
               wxDC *source, wxCoord xsrc, wxCoord ysrc,
               int rop = wxCOPY, bool useMask = False,
               wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
-    %name(BlitPtSz) bool Blit(const wxPoint& destPt, const wxSize& sz,
-                      wxDC *source, const wxPoint& srcPt,
-                      int rop = wxCOPY, bool useMask = False,
-                      const wxPoint& srcPtMask = wxDefaultPosition);
+    %name(BlitPointSize) bool Blit(const wxPoint& destPt, const wxSize& sz,
+                                   wxDC *source, const wxPoint& srcPt,
+                                   int rop = wxCOPY, bool useMask = False,
+                                   const wxPoint& srcPtMask = wxDefaultPosition);
 
 
+    void SetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
+    %name(SetClippingRegionPointSize) void SetClippingRegion(const wxPoint& pt, const wxSize& sz);
+    %name(SetClippingRegionAsRegion) void SetClippingRegion(const wxRegion& region);
+    %name(SetClippingRect) void SetClippingRegion(const wxRect& rect);
 
-#else  // The new way
+#else  // The doomed 2.5.1.5
 
     %name(FloodFillXY) bool FloodFill(wxCoord x, wxCoord y, const wxColour& col, int style = wxFLOOD_SURFACE);
     bool FloodFill(const wxPoint& pt, const wxColour& col, int style = wxFLOOD_SURFACE);
@@ -203,6 +207,12 @@ public:
               int rop = wxCOPY, bool useMask = False,
               const wxPoint& srcPtMask = wxDefaultPosition);
 
+    
+    %name(SetClippingRegionXY)void SetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
+    void SetClippingRegion(const wxPoint& pt, const wxSize& sz);
+    %name(SetClippingRect) void SetClippingRegion(const wxRect& rect);
+    %name(SetClippingRegionAsRegion) void SetClippingRegion(const wxRegion& region);
+
 #endif
 
     void DrawLines(int points, wxPoint* points_array, wxCoord xoffset = 0, wxCoord yoffset = 0);
@@ -265,14 +275,6 @@ public:
     virtual void SetBackgroundMode(int mode);
     virtual void SetPalette(const wxPalette& palette);
 
-
-    // clipping region
-    // ---------------
-
-    %name(SetClippingRegionXY)void SetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
-    void SetClippingRegion(const wxPoint& pt, const wxSize& sz);
-    %name(SetClippingRect) void SetClippingRegion(const wxRect& rect);
-    %name(SetClippingRegionAsRegion) void SetClippingRegion(const wxRegion& region);
 
     virtual void DestroyClippingRegion();
 
@@ -417,8 +419,13 @@ public:
         GetLogicalOriginTuple);
 
     virtual void SetLogicalOrigin(wxCoord x, wxCoord y);
+    %extend {
+        void SetLogicalOriginPoint(const wxPoint& point) {
+            self->SetLogicalOrigin(point.x, point.y);
+        }
+    }
 
-
+    
     wxPoint GetDeviceOrigin() const;
     DocDeclAName(
         void, GetDeviceOrigin(wxCoord *OUTPUT, wxCoord *OUTPUT) const,
@@ -426,6 +433,11 @@ public:
         GetDeviceOriginTuple);
 
     virtual void SetDeviceOrigin(wxCoord x, wxCoord y);
+    %extend {
+        void SetDeviceOriginPoint(const wxPoint& point) {
+            self->SetDeviceOrigin(point.x, point.y);
+        }
+    }
 
     virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
 
@@ -440,6 +452,12 @@ public:
     // ------------
 
     virtual void CalcBoundingBox(wxCoord x, wxCoord y);
+    %extend {
+        void CalcBoundingBoxPoint(const wxPoint& point) {
+            self->CalcBoundingBox(point.x, point.y);
+        }
+    }
+
     void ResetBoundingBox();
 
     // Get the final bounding box of the PostScript or Metafile picture.
@@ -861,6 +879,8 @@ public:
 // compatible with the DC Draw methods in 2.4.  See also wxPython/_wx.py.
 
 
+#if 0
+
 %define MAKE_OLD_DC_CLASS(classname)
     %pythoncode {
     class classname##_old(classname):
@@ -898,5 +918,6 @@ MAKE_OLD_DC_CLASS(PostScriptDC);
 MAKE_OLD_DC_CLASS(MetaFileDC);
 MAKE_OLD_DC_CLASS(PrinterDC);
 
+#endif
 
 //---------------------------------------------------------------------------

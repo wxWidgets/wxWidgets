@@ -19,14 +19,14 @@ class TestPanel(wx.Panel):
 
             try:
                 bmp = wx.Bitmap("nosuchfile.bmp", wx.BITMAP_TYPE_BMP)
-                mask = wx.MaskColour(bmp, wx.BLUE)
+                mask = wx.Mask(bmp, wx.BLUE)
             except wx.PyAssertionError:
                 self.log.write("Caught wx.PyAssertionError!  I will fix the problem.\n")
                 bmp = images.getTest2Bitmap()
                 mask = wx.MaskColour(bmp, wx.BLUE)
         else:
             bmp = images.getTest2Bitmap()
-            mask = wx.MaskColour(bmp, wx.BLUE)
+            mask = wx.Mask(bmp, wx.BLUE)
 
         bmp.SetMask(mask)
         b = wx.BitmapButton(self, 30, bmp, (20, 20),

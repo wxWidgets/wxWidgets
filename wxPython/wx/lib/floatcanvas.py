@@ -450,7 +450,7 @@ class PointSet(draw_object):
                 dc.SetBrush(self.Brush)
                 radius = int(round(self.Diameter/2))
                 for (x,y) in Points:
-                    dc.DrawEllipse(((x - radius), (y - radius)), (self.Diameter, self.Diameter))
+                    dc.DrawEllipse((x - radius), (y - radius), self.Diameter, self.Diameter)
 
 
                     
@@ -486,7 +486,7 @@ class Dot(draw_object):
         dc.SetBrush(self.Brush)
         radius = int(round(self.Diameter/2))
         (X,Y) = WorldToPixel((self.X,self.Y))
-        dc.DrawEllipse(((X - radius), (Y - radius)), (self.Diameter, self.Diameter))
+        dc.DrawEllipse((X - radius), (Y - radius), self.Diameter, self.Diameter)
 
 
 class Rectangle(draw_object):
@@ -513,7 +513,7 @@ class Rectangle(draw_object):
 
         dc.SetPen(self.Pen)
         dc.SetBrush(self.Brush)
-        dc.DrawRectangle((X,Y), (Width,Height))
+        dc.DrawRectangle(X,Y, Width,Height)
 
 class Ellipse(draw_object):
     def __init__(self,x,y,width,height,LineColor,LineStyle,LineWidth,FillColor,FillStyle,Foreground = 0):
@@ -539,7 +539,7 @@ class Ellipse(draw_object):
 
         dc.SetPen(self.Pen)
         dc.SetBrush(self.Brush)
-        dc.DrawEllipse((X,Y), (Width,Height))
+        dc.DrawEllipse(X,Y, Width,Height)
 
 class Circle(draw_object):
     def __init__(self,x,y,Diameter,LineColor,LineStyle,LineWidth,FillColor,FillStyle,Foreground = 0):
@@ -564,7 +564,7 @@ class Circle(draw_object):
 
         dc.SetPen(self.Pen)
         dc.SetBrush(self.Brush)
-        dc.DrawEllipse((X-Diameter/2,Y-Diameter/2), (Diameter,Diameter))
+        dc.DrawEllipse(X-Diameter/2,Y-Diameter/2, Diameter,Diameter)
 
 class Text(draw_object):
     """
@@ -647,7 +647,7 @@ class Text(draw_object):
                     raise "Invalid value for Text Object Position Attribute"
             self.x_shift = x_shift
             self.y_shift = y_shift
-        dc.DrawText(self.String, (X-self.x_shift, Y-self.y_shift))
+        dc.DrawText(self.String, X-self.x_shift, Y-self.y_shift)
 
 
 #---------------------------------------------------------------------------
@@ -870,8 +870,8 @@ class FloatCanvas(wx.Panel):
                     dc.SetBrush(wx.TRANSPARENT_BRUSH)
                     dc.SetLogicalFunction(wx.XOR)
                     if self.PrevRBBox:
-                        dc.DrawRectangleXY(*self.PrevRBBox)
-                    dc.DrawRectangleXY(x_c-w/2,y_c-h/2,w,h)
+                        dc.DrawRectangle(*self.PrevRBBox)
+                    dc.DrawRectangle(x_c-w/2,y_c-h/2,w,h)
                     self.PrevRBBox = (x_c-w/2,y_c-h/2,w,h)
                     dc.EndDrawing()
                     
@@ -909,8 +909,8 @@ class FloatCanvas(wx.Panel):
                     dc.SetBrush(wx.TRANSPARENT_BRUSH)
                     dc.SetLogicalFunction(wx.XOR)
                     if self.PrevMoveBox:
-                        dc.DrawRectangleXY(*self.PrevMoveBox)
-                    dc.DrawRectangleXY(x_tl,y_tl,w,h)
+                        dc.DrawRectangle(*self.PrevMoveBox)
+                    dc.DrawRectangle(x_tl,y_tl,w,h)
                     self.PrevMoveBox = (x_tl,y_tl,w,h)
                     dc.EndDrawing()
                   
@@ -955,7 +955,7 @@ class FloatCanvas(wx.Panel):
     def OnPaint(self, event):
         #dc = wx.BufferedPaintDC(self.DrawPanel, self._Buffer)
         dc = wx.PaintDC(self.DrawPanel)
-        dc.DrawBitmap(self._Buffer, (0,0))
+        dc.DrawBitmap(self._Buffer, 0,0)
 
     def Draw(self):
         """
@@ -991,7 +991,8 @@ class FloatCanvas(wx.Panel):
                             i+=1
                             Object._Draw(dc,self.WorldToPixel,self.ScaleFunction)
                             if i % self.NumBetweenBlits == 0:
-                                ScreenDC.Blit((0, 0), self.PanelSize, dc, (0, 0))
+                                w,h = self.PanelSize
+                                ScreenDC.Blit(0, 0, w,h, dc, 0, 0)
                     dc.EndDrawing()
             else:
                 dc.Clear()
@@ -1006,7 +1007,8 @@ class FloatCanvas(wx.Panel):
                 i+=1
                 Object._Draw(dc,self.WorldToPixel,self.ScaleFunction)
                 if i % self.NumBetweenBlits == 0:
-                    ScreenDC.Blit((0, 0), self.PanelSize, dc, (0, 0))
+                    w, h = self.PanelSize
+                    ScreenDC.Blit(0, 0, w,h, dc, 0, 0)
             dc.EndDrawing()
         else: # not using a Background DC
             dc = wx.MemoryDC()
@@ -1022,25 +1024,27 @@ class FloatCanvas(wx.Panel):
                         i+=1
                         Object._Draw(dc,self.WorldToPixel,self.ScaleFunction)
                         if i % self.NumBetweenBlits == 0:
-                            ScreenDC.Blit((0, 0), self.PanelSize, dc, (0, 0))
+                            w, h = self.PanelSize
+                            ScreenDC.Blit(0, 0, w, h, dc, 0, 0)
                 dc.EndDrawing()
             else:
                 dc.Clear()
         # now refresh the screen
         #ScreenDC.DrawBitmap(self._Buffer,0,0) #NOTE: uisng DrawBitmap didn't work right on MSW
-        ScreenDC.Blit((0, 0), self.PanelSize, dc, (0, 0))
+        w, h = self.PanelSize
+        ScreenDC.Blit(0, 0, w, h, dc, 0, 0)
 
         # If the canvas is in the middle of a zoom or move, the Rubber Band box needs to be re-drawn
         if self.PrevRBBox:
             ScreenDC.SetPen(wx.Pen('WHITE', 2,wx.SHORT_DASH))
             ScreenDC.SetBrush(wx.TRANSPARENT_BRUSH)
             ScreenDC.SetLogicalFunction(wx.XOR)
-            ScreenDC.DrawRectangleXY(*self.PrevRBBox)
+            ScreenDC.DrawRectangle(*self.PrevRBBox)
         elif self.PrevMoveBox:
             ScreenDC.SetPen(wx.Pen('WHITE', 1,))
             ScreenDC.SetBrush(wx.TRANSPARENT_BRUSH)
             ScreenDC.SetLogicalFunction(wx.XOR)
-            ScreenDC.DrawRectangleXY(*self.PrevMoveBox)
+            ScreenDC.DrawRectangle(*self.PrevMoveBox)
         if self.Debug: print "Drawing took %f seconds of CPU time"%(clock()-start)
 
     def BBCheck(self, BB1, BB2):

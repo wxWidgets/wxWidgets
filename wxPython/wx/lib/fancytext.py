@@ -277,15 +277,15 @@ class DCRenderer(Renderer):
 
     def renderCharacterData(self, data, x, y):
         self.dc.SetTextForeground(self.getCurrentColor())
-        self.dc.DrawText(data, (x, y))
+        self.dc.DrawText(data, x, y)
 
     def start_angle(self, attrs):
         self.dc.SetFont(self.getCurrentFont())
         self.dc.SetPen(self.getCurrentPen())
         width, height, descent, leading = self.dc.GetFullTextExtent("M")
         y = self.y + self.offsets[-1]
-        self.dc.DrawLine((iround(self.x), iround(y)), (iround( self.x+width), iround(y))) 
-        self.dc.DrawLine((iround(self.x), iround(y)), (iround(self.x+width), iround(y-width)))
+        self.dc.DrawLine(iround(self.x), iround(y), iround( self.x+width), iround(y))
+        self.dc.DrawLine(iround(self.x), iround(y), iround(self.x+width), iround(y-width))
         self.updateDims(width, height, descent, leading)
       
 
@@ -301,8 +301,8 @@ class DCRenderer(Renderer):
         r = iround( 0.95 * width / 4)
         xc = (2*self.x + width) / 2
         yc = iround(y-1.5*r)
-        self.dc.DrawCircle((xc - r, yc), r)
-        self.dc.DrawCircle((xc + r, yc), r)
+        self.dc.DrawCircle(xc - r, yc, r)
+        self.dc.DrawCircle(xc + r, yc, r)
         self.updateDims(width, height, 0, 0)
 
     def start_times(self, attrs):
@@ -313,8 +313,8 @@ class DCRenderer(Renderer):
         width *= 0.8
         width = iround(width+.5)
         self.dc.SetPen(wx.Pen(self.getCurrentColor(), 1))
-        self.dc.DrawLine((iround(self.x), iround(y-width)), (iround(self.x+width-1), iround(y-1)))
-        self.dc.DrawLine((iround(self.x), iround(y-2)), (iround(self.x+width-1), iround(y-width-1)))
+        self.dc.DrawLine(iround(self.x), iround(y-width), iround(self.x+width-1), iround(y-1))
+        self.dc.DrawLine(iround(self.x), iround(y-2), iround(self.x+width-1), iround(y-width-1))
         self.updateDims(width, height, 0, 0)
 
 

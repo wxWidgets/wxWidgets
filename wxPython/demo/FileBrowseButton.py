@@ -22,12 +22,12 @@ class TestPanel(wx.Panel):
         self.fbbh = filebrowse.FileBrowseButtonWithHistory(
             self, -1, (20, 50), (450, -1),  changeCallback = self.fbbhCallback
             )
-
+            
         self.dbb = filebrowse.DirBrowseButton(
             self, -1, (20, 80), (450, -1), changeCallback = self.dbbCallback
             )
 
-        self.fbbh.SetHistory(['You', 'can', 'put', 'some', 'file', 'names', 'here'])
+        self.fbbh.SetHistory(['You', 'can', 'put', 'some', 'filenames', 'here'])
 
 
     def fbbCallback(self, evt):
@@ -39,8 +39,10 @@ class TestPanel(wx.Panel):
             value = evt.GetString()
             self.log.write('FileBrowseButtonWithHistory: %s\n' % value)
             history = self.fbbh.GetHistory()
-            history.append(value)
-            self.fbbh.SetHistory(history)
+            if value not in history:
+                history.append(value)
+                self.fbbh.SetHistory(history)
+                self.fbbh.GetHistoryControl().SetStringSelection(value)
 
 
     def dbbCallback(self, evt):

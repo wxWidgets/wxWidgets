@@ -73,13 +73,13 @@ class TestValueWindow(gizmos.TreeCompanionWindow):
 
             dc.SetPen(pen)
             dc.SetBrush(wx.Brush(self.GetBackgroundColour(), wx.SOLID))
-            dc.DrawRectangle((rect.x, rect.y), (rect.width+1, rect.height+1))
+            dc.DrawRectangle(rect.x, rect.y, rect.width+1, rect.height+1)
             dc.SetTextForeground("BLACK")
             dc.SetBackgroundMode(wx.TRANSPARENT)
             tw, th = dc.GetTextExtent(text)
             x = 5
             y = rect.y + max(0, (rect.height - th) / 2)
-            dc.DrawText(text, (x, y))
+            dc.DrawText(text, x, y)
 
 
 

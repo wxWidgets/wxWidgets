@@ -104,8 +104,8 @@ class PopButton(wx.PyControl):
         else:
             dc.SetPen(self.shadowPen)
         for i in range(2):
-            dc.DrawLine((x1+i, y1), (x1+i, y2-i))
-            dc.DrawLine((x1, y1+i), (x2-i, y1+i))
+            dc.DrawLine(x1+i, y1, x1+i, y2-i)
+            dc.DrawLine(x1, y1+i, x2-i, y1+i)
 
         # draw the lower right sides
         if self.up:
@@ -113,20 +113,20 @@ class PopButton(wx.PyControl):
         else:
             dc.SetPen(self.highlightPen)
         for i in range(2):
-            dc.DrawLine((x1+i, y2-i), (x2+1, y2-i))
-            dc.DrawLine((x2-i, y1+i), (x2-i, y2))
+            dc.DrawLine(x1+i, y2-i, x2+1, y2-i)
+            dc.DrawLine(x2-i, y1+i, x2-i, y2)
 
     def DrawArrow(self,dc):
         w, h = self.GetSize()
         mx = w / 2
         my = h / 2
         dc.SetPen(self.highlightPen)
-        dc.DrawLine((mx-5,my-5), (mx+5,my-5))
-        dc.DrawLine((mx-5,my-5), (mx,my+5))
+        dc.DrawLine(mx-5,my-5, mx+5,my-5)
+        dc.DrawLine(mx-5,my-5, mx,my+5)
         dc.SetPen(self.shadowPen)
-        dc.DrawLine((mx+4,my-5), (mx,my+5))
+        dc.DrawLine(mx+4,my-5, mx,my+5)
         dc.SetPen(self.blackPen)
-        dc.DrawLine((mx+5,my-5), (mx,my+5))
+        dc.DrawLine(mx+5,my-5, mx,my+5)
 
     def OnPaint(self, event):
         width, height = self.GetClientSize()

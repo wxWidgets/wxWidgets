@@ -13,14 +13,18 @@ the new best size, instead the minsize that the window had when added
 to the sizer (or the size the window was created with) will always be
 used.  When a window is added to a sizer it's initial size, if any, is
 set as the window's minimal size using SetSizeHints if there isn't
-already a minimal size.
-
-Added some convenience methods to wx.Bitmap: SetSize, GetSize, and
-wx.EmptyBitmap can be called with a wx.Size (or a 2-element sequence)
-object too.  Similar changes were done for wx.Image as well.
+already a minimal size.  You can set the window's minimal size (via
+SetSizeHints) to manually control wha tthe sizer will use when
+calculating layout.
 
 Added new MaskedEditControl code from Will Sadkin.  The modules are
 now locaed in their own sub-package, wx.lib.masked.  Demos updated.
+
+The changes that implemented the incompatible wx.DC methods in 2.5.1.5
+have been reverted.  The wx.DC methods are now compatible with the 2.4
+implemetation.  In addition a set of renamed methods have been added
+that take wx.Point and/or wx.Size objects instead of individual
+parameters. 
 
 
 

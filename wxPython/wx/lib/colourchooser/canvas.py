@@ -113,7 +113,7 @@ class Canvas(wx.Window):
         """Performs the blit of the buffer contents on-screen."""
         width, height = self.buffer.GetSize()
         dc.BeginDrawing()
-        dc.Blit((0, 0), (width, height), self.buffer, (0, 0))
+        dc.Blit(0, 0, width, height, self.buffer, 0, 0)
         dc.EndDrawing()
 
     def GetBoundingRect(self):

@@ -155,7 +155,7 @@ class TestPanel(wx.Panel):
         text = wx.StaticText(self, -1, "48x48")
         box.Add(text, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
 
-        fgs.AddSizer(box, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        fgs.Add(box, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
         sizer.Add(fgs, 0, wx.ALL, 5)
         self.SetSizer(sizer)
 

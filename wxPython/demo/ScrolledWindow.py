@@ -20,7 +20,7 @@ class MyCanvas(wx.ScrolledWindow):
         self.SetBackgroundColour("WHITE")
         self.SetCursor(wx.StockCursor(wx.CURSOR_PENCIL))
         bmp = images.getTest2Bitmap()
-        mask = wx.MaskColour(bmp, wx.BLUE)
+        mask = wx.Mask(bmp, wx.BLUE)
         bmp.SetMask(mask)
         self.bmp = bmp
 
@@ -65,19 +65,19 @@ class MyCanvas(wx.ScrolledWindow):
     def DoDrawing(self, dc, printing=False):
         dc.BeginDrawing()
         dc.SetPen(wx.Pen('RED'))
-        dc.DrawRectangle((5, 5), (50, 50))
+        dc.DrawRectangle(5, 5, 50, 50)
 
         dc.SetBrush(wx.LIGHT_GREY_BRUSH)
         dc.SetPen(wx.Pen('BLUE', 4))
-        dc.DrawRectangle((15, 15), (50, 50))
+        dc.DrawRectangle(15, 15, 50, 50)
 
         dc.SetFont(wx.Font(14, wx.SWISS, wx.NORMAL, wx.NORMAL))
         dc.SetTextForeground(wx.Colour(0xFF, 0x20, 0xFF))
         te = dc.GetTextExtent("Hello World")
-        dc.DrawText("Hello World", (60, 65))
+        dc.DrawText("Hello World", 60, 65)
 
         dc.SetPen(wx.Pen('VIOLET', 4))
-        dc.DrawLine((5, 65+te[1]), (60+te[0], 65+te[1]))
+        dc.DrawLine(5, 65+te[1], 60+te[0], 65+te[1])
 
         lst = [(100,110), (150,110), (150,160), (100,160)]
         dc.DrawLines(lst, -60)
@@ -86,13 +86,13 @@ class MyCanvas(wx.ScrolledWindow):
         dc.SetPen(wx.GREEN_PEN)
         dc.DrawSpline(lst+[(100,100)])
 
-        dc.DrawBitmap(self.bmp, (200, 20), True)
+        dc.DrawBitmap(self.bmp, 200, 20, True)
         dc.SetTextForeground(wx.Colour(0, 0xFF, 0x80))
-        dc.DrawText("a bitmap", (200, 85))
+        dc.DrawText("a bitmap", 200, 85)
 
 ##         dc.SetFont(wx.Font(14, wx.SWISS, wx.NORMAL, wx.NORMAL))
 ##         dc.SetTextForeground("BLACK")
-##         dc.DrawText("TEST this STRING", (10, 200))
+##         dc.DrawText("TEST this STRING", 10, 200)
 ##         print dc.GetFullTextExtent("TEST this STRING")
 
         font = wx.Font(20, wx.SWISS, wx.NORMAL, wx.NORMAL)
@@ -100,15 +100,15 @@ class MyCanvas(wx.ScrolledWindow):
         dc.SetTextForeground(wx.BLACK)
 
         for a in range(0, 360, 45):
-            dc.DrawRotatedText("Rotated text...", (300, 300), a)
+            dc.DrawRotatedText("Rotated text...", 300, 300, a)
 
         dc.SetPen(wx.TRANSPARENT_PEN)
         dc.SetBrush(wx.BLUE_BRUSH)
-        dc.DrawRectangle((50,500),(50,50))
-        dc.DrawRectangle((100,500),(50,50))
+        dc.DrawRectangle(50,500, 50,50)
+        dc.DrawRectangle(100,500, 50,50)
 
         dc.SetPen(wx.Pen('RED'))
-        dc.DrawEllipticArc((200, 500), (50, 75), 0, 90)
+        dc.DrawEllipticArc(200,500, 50,75, 0, 90)
 
         if not printing:
             # This has troubles when used on a print preview in wxGTK,
@@ -123,18 +123,18 @@ class MyCanvas(wx.ScrolledWindow):
                     pen.SetDashes([1,2])
                     pen.SetColour("RED")
                 dc.SetPen(pen)
-                dc.DrawLine((300, y), (400, y))
+                dc.DrawLine(300,y, 400,y)
                 y = y + 10
 
         dc.SetBrush(wx.TRANSPARENT_BRUSH)
         dc.SetPen(wx.Pen(wx.Colour(0xFF, 0x20, 0xFF), 1, wx.SOLID))
-        dc.DrawRectangle((450, 50), (100, 100))
+        dc.DrawRectangle(450,50,  100,100)
         old_pen = dc.GetPen()
         new_pen = wx.Pen("BLACK", 5)
         dc.SetPen(new_pen)
-        dc.DrawRectangle((470, 70), (60, 60))
+        dc.DrawRectangle(470,70,  60,60)
         dc.SetPen(old_pen)
-        dc.DrawRectangle((490, 90), (20, 20))
+        dc.DrawRectangle(490,90, 20,20)
 
         self.DrawSavedLines(dc)
         dc.EndDrawing()
@@ -178,9 +178,9 @@ class MyCanvas(wx.ScrolledWindow):
 
             dc.BeginDrawing()
             dc.SetPen(wx.Pen('MEDIUM FOREST GREEN', 4))
-            coords = [(self.x, self.y) , self.ConvertEventCoords(event)]
+            coords = (self.x, self.y) + self.ConvertEventCoords(event)
             self.curLine.append(coords)
-            apply(dc.DrawLine, coords)
+            dc.DrawLine(*coords)
             self.SetXY(event)
             dc.EndDrawing()
 

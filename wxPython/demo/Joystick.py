@@ -95,18 +95,18 @@ class JoyGauge(wx.Panel):
 
         # Restrict our drawing activities to the square defined
         # above.
-        dc.SetClippingRegion((xorigin, yorigin), (edgeSize, edgeSize))
+        dc.SetClippingRegion(xorigin, yorigin, edgeSize, edgeSize)
 
         # Optimize drawing a bit (for Win)
         dc.BeginDrawing()
 
         dc.SetBrush(wx.Brush(wx.Colour(251, 252, 237)))
-        dc.DrawRectangle((xorigin, yorigin), (edgeSize, edgeSize))
+        dc.DrawRectangle(xorigin, yorigin, edgeSize, edgeSize)
 
         dc.SetPen(wx.Pen(wx.BLACK, 1, wx.DOT_DASH))
 
-        dc.DrawLine((xorigin, yorigin + center), (xorigin + edgeSize, yorigin + center))
-        dc.DrawLine((xorigin + center, yorigin), (xorigin + center, yorigin + edgeSize))
+        dc.DrawLine(xorigin, yorigin + center, xorigin + edgeSize, yorigin + center)
+        dc.DrawLine(xorigin + center, yorigin, xorigin + center, yorigin + edgeSize)
 
         if self.stick:
             # Get the joystick position as a float
@@ -239,14 +239,14 @@ class POVGauge(wx.Panel):
 
         # our 'raster'.
         dc.SetBrush(wx.Brush(wx.WHITE))
-        dc.DrawCircle((xcenter, ycenter), diameter/2)
+        dc.DrawCircle(xcenter, ycenter, diameter/2)
         dc.SetBrush(wx.Brush(wx.BLACK))
-        dc.DrawCircle((xcenter, ycenter), 10)
+        dc.DrawCircle(xcenter, ycenter, 10)
 
         # fancy decorations
         dc.SetPen(wx.Pen(wx.BLACK, 1, wx.DOT_DASH))
-        dc.DrawLine((xorigin, ycenter), (xorigin + diameter, ycenter))
-        dc.DrawLine((xcenter, yorigin), (xcenter, yorigin + diameter))
+        dc.DrawLine(xorigin, ycenter, xorigin + diameter, ycenter)
+        dc.DrawLine(xcenter, yorigin, xcenter, yorigin + diameter)
 
         if self.stick:
             if self.avail:
@@ -284,11 +284,11 @@ class POVGauge(wx.Panel):
 
                 # Draw the line
                 dc.SetPen(wx.Pen(wx.BLUE, 2))
-                dc.DrawLine((xcenter, ycenter), (nx, ny))
+                dc.DrawLine(xcenter, ycenter, nx, ny)
 
                 # And a little thing to show the endpoint
                 dc.SetBrush(wx.Brush(wx.BLUE))
-                dc.DrawCircle((nx, ny), 8)
+                dc.DrawCircle(nx, ny, 8)
 
         # Turn off drawing optimization
         dc.EndDrawing()
@@ -462,7 +462,7 @@ class LED(wx.Panel):
         else:
             dc.SetBrush(wx.Brush(wx.BLACK))
 
-        dc.DrawCircle((center, center), bw/2)
+        dc.DrawCircle(center, center, bw/2)
 
         txt = str(self.number)
 
@@ -483,7 +483,7 @@ class LED(wx.Panel):
         # functions. The pseudo-shadow gives the text contrast
         # regardless of whether the bar is under it or not.
         dc.SetTextForeground(wx.WHITE)
-        dc.DrawText(txt, (tx, ty))
+        dc.DrawText(txt, tx, ty)
 
         # Turn off drawing optimization
         dc.EndDrawing()
@@ -709,10 +709,10 @@ class AxisBar(wx.Gauge):
         # functions. The pseudo-shadow gives the text contrast
         # regardless of whether the bar is under it or not.
         dc.SetTextForeground(wx.BLACK)
-        dc.DrawText(txt, (tx, ty))
+        dc.DrawText(txt, tx, ty)
 
         dc.SetTextForeground('white')
-        dc.DrawText(txt, (tx-1, ty-1))
+        dc.DrawText(txt, tx-1, ty-1)
 
 
 #----------------------------------------------------------------------------

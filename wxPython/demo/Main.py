@@ -221,7 +221,7 @@ _treeList = [
         ]),
 
     # need libs not coming with the demo
-    ('Objects using an external library', [
+    ('Samples using an external library', [
         'GLCanvas',
         ]),
 

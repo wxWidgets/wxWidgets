@@ -35,21 +35,3 @@ def wxPyTypeCast(obj, typeStr):
 wxPy_isinstance = isinstance
 
 
-
-# The wx*DC_old classes have Draw* method signatures that are mostly
-# compatible with 2.4, so assign the new classes to wx*DC_new and make
-# the _old classes be the defaults with the normal names.
-
-wxDC_new = wxDC; wxDC = wxDC_old                 
-wxMemoryDC_new = wxMemoryDC; wxMemoryDC = wxMemoryDC_old           
-wxBufferedDC_new = wxBufferedDC; wxBufferedDC = wxBufferedDC_old         
-wxBufferedPaintDC_new = wxBufferedPaintDC; wxBufferedPaintDC = wxBufferedPaintDC_old    
-wxScreenDC_new = wxScreenDC; wxScreenDC = wxScreenDC_old           
-wxClientDC_new = wxClientDC; wxClientDC = wxClientDC_old           
-wxPaintDC_new = wxPaintDC; wxPaintDC = wxPaintDC_old            
-wxWindowDC_new = wxWindowDC; wxWindowDC = wxWindowDC_old           
-wxMirrorDC_new = wxMirrorDC; wxMirrorDC = wxMirrorDC_old           
-wxPostScriptDC_new = wxPostScriptDC; wxPostScriptDC = wxPostScriptDC_old       
-wxMetaFileDC_new = wxMetaFileDC; wxMetaFileDC = wxMetaFileDC_old         
-wxPrinterDC_new = wxPrinterDC; wxPrinterDC = wxPrinterDC_old          
-

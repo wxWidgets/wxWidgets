@@ -978,7 +978,7 @@ class PlotCanvas(wx.Window):
         dc.SetPen(wx.Pen(wx.BLACK))
         dc.SetBrush(wx.Brush( wx.WHITE, wx.TRANSPARENT ) )
         dc.SetLogicalFunction(wx.INVERT)
-        dc.DrawRectangle( (ptx,pty), (rectWidth,rectHeight))
+        dc.DrawRectangle( ptx,pty, rectWidth,rectHeight)
         dc.SetLogicalFunction(wx.COPY)
         dc.EndDrawing()
 
@@ -1204,16 +1204,16 @@ class FloatDCWrapper:
         self.theDC = aDC
 
     def DrawLine(self, x1,y1,x2,y2):
-        self.theDC.DrawLine((int(x1),int(y1)),(int(x2),int(y2)))
+        self.theDC.DrawLine(int(x1),int(y1), int(x2),int(y2))
 
     def DrawText(self, txt, x, y):
-        self.theDC.DrawText(txt, (int(x), int(y)))
+        self.theDC.DrawText(txt, int(x), int(y))
 
     def DrawRotatedText(self, txt, x, y, angle):
-        self.theDC.DrawRotatedText(txt, (int(x), int(y)), angle)
+        self.theDC.DrawRotatedText(txt, int(x), int(y), angle)
 
     def SetClippingRegion(self, x, y, width, height):
-        self.theDC.SetClippingRegion((int(x), int(y)), (int(width), int(height)))
+        self.theDC.SetClippingRegion(int(x), int(y), int(width), int(height))
 
     def SetDeviceOrigin(self, x, y):
         self.theDC.SetDeviceOrigin(int(x), int(y))

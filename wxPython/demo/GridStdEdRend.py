@@ -26,7 +26,7 @@ class MyCustomRenderer(gridlib.PyGridCellRenderer):
 
         for ch in text:
             dc.SetTextForeground(random.choice(colors))
-            dc.DrawText(ch, (x, y))
+            dc.DrawText(ch, x, y)
             w, h = dc.GetTextExtent(ch)
             x = x + w
             if x > rect.right - 5:

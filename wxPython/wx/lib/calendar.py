@@ -359,7 +359,7 @@ class CalDraw:
 
         tw,th = DC.GetTextExtent(month)
         adjust = self.cx_st + (self.sizew-tw)/2
-        DC.DrawText(month, (adjust, self.cy_st + th))
+        DC.DrawText(month, adjust, self.cy_st + th)
 
         year = str(self.year)
         tw,th = DC.GetTextExtent(year)
@@ -369,7 +369,7 @@ class CalDraw:
 
         f = wx.Font(sizef, self.font, wx.NORMAL, self.bold)
         DC.SetFont(f)
-        DC.DrawText(year, (self.cx_st + adjust, self.cy_st + th))
+        DC.DrawText(year, self.cx_st + adjust, self.cy_st + th)
 
     def DrawWeek(self, DC):     # draw the week days
         # increase by 1 to include all gridlines
@@ -431,7 +431,7 @@ class CalDraw:
             else:
                 pen = wx.Pen(MakeColor(self.GetColor(COLOR_BACKGROUND)), 1, wx.SOLID)
             DC.SetPen(pen)
-            DC.DrawRectangle( pointXY, pointWH)
+            DC.DrawRectanglePointSize( pointXY, pointWH)
             
             old_pen = DC.GetPen()
 
@@ -440,12 +440,12 @@ class CalDraw:
             # draw the horizontal hilight
             startPoint = wx.Point(x + 1 , y + 1)
             endPoint   = wx.Point(x + width - 1, y + 1)
-            DC.DrawLine(startPoint, endPoint )
+            DC.DrawLinePoint(startPoint, endPoint )
 
             # draw the vertical hilight
             startPoint = wx.Point(x + 1 , y + 1)
             endPoint   = wx.Point(x + 1, y + height - 2)
-            DC.DrawLine(startPoint, endPoint )
+            DC.DrawLinePoint(startPoint, endPoint )
 
             pen = wx.Pen(MakeColor(self.colors[COLOR_3D_DARK]), 1, wx.SOLID)
             DC.SetPen(pen)
@@ -453,19 +453,19 @@ class CalDraw:
             # draw the horizontal lowlight
             startPoint = wx.Point(x + 1, y + height - 2)
             endPoint   = wx.Point(x + width - 1, y + height - 2)
-            DC.DrawLine(startPoint, endPoint )
+            DC.DrawLinePoint(startPoint, endPoint )
             
             # draw the vertical lowlight
             startPoint = wx.Point(x + width - 2 , y + 2)
             endPoint   = wx.Point(x + width - 2, y + height - 2)
-            DC.DrawLine(startPoint, endPoint )
+            DC.DrawLinePoint(startPoint, endPoint )
 
             pen = wx.Pen(MakeColor(self.colors[COLOR_FONT]), 1, wx.SOLID)
             
             DC.SetPen(pen)
                 
             point = (x+diffx, y+diffy)
-            DC.DrawText(day, point)
+            DC.DrawTextPoint(day, point)
             cnt_x = cnt_x + 1
 
     def _CalcFontSize(self, DC, f):
@@ -536,7 +536,7 @@ class CalDraw:
 
         adj_v = adj_v + self.num_indent_vert
 
-        DC.DrawText(text, (x+adj_h, y+adj_v))
+        DC.DrawTextPoint(text, (x+adj_h, y+adj_v))
         
     def DrawDayText(self, DC, key):
         f = wx.Font(10, self.font, wx.NORMAL, self.bold)      # initial font setting
@@ -589,7 +589,7 @@ class CalDraw:
             nkey = key + self.st_pos -1
             rect = self.rg[nkey]
 
-            DC.DrawRectangle((rect.x, rect.y), (rect.width, rect.height))
+            DC.DrawRectangleRect(rect)
 
     # calculate and draw the grid lines
     def DrawGrid(self, DC):
@@ -611,7 +611,7 @@ class CalDraw:
                 x1 = x1 + self.restW
 
             if self.hide_grid is False:
-                DC.DrawLine((x1, y1), (x1, y2))
+                DC.DrawLinePoint((x1, y1), (x1, y2))
 
             self.gridx.append(x1)
 
@@ -626,7 +626,7 @@ class CalDraw:
                 y1 = y1 + self.restH
 
             if self.hide_grid is False:
-                DC.DrawLine((x1, y1), (x2, y1))
+                DC.DrawLinePoint((x1, y1), (x2, y1))
 
             self.gridy.append(y1)
 
@@ -1019,7 +1019,7 @@ class Calendar( wx.PyControl ):
         DC.SetPen(wx.TRANSPARENT_PEN)
 
         rect = self.rg[key]
-        DC.DrawRectangle((rect.x+1, rect.y+1), (rect.width-2, rect.height-2))
+        DC.DrawRectangle(rect.x+1, rect.y+1, rect.width-2, rect.height-2)
 
         self.caldraw.DrawDayText(DC,key)
 
@@ -1041,7 +1041,7 @@ class Calendar( wx.PyControl ):
             DC.SetPen(wx.Pen(MakeColor(self.GetColor(COLOR_GRID_LINES)), width))
 
         rect = self.rg[key]
-        DC.DrawRectangle((rect.x, rect.y), (rect.width, rect.height))
+        DC.DrawRectangleRect(rect)
 
         DC.EndDrawing()
 

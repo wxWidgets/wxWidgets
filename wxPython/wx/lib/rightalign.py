@@ -89,17 +89,17 @@ class RightTextCtrl(wx.TextCtrl):
         dc.SetTextForeground(fclr)
 
         dc.SetClippingRegion((0, 0), (dcwidth, dcheight))
-        dc.DrawText(text, (x, y))
+        dc.DrawText(text, x, y)
 
         if x < 0:
             toofat = '...'
             markwidth = dc.GetTextExtent(toofat)[0]
             dc.SetPen(wx.Pen(dc.GetBackground().GetColour(), 1, wx.SOLID ))
-            dc.DrawRectangle((0,0), (markwidth, dcheight))
+            dc.DrawRectangle(0,0, markwidth, dcheight)
             dc.SetPen(wx.Pen(wx.RED, 1, wx.SOLID ))
             dc.SetBrush(wx.TRANSPARENT_BRUSH)
-            dc.DrawRectangle((1, 1), (dcwidth-2, dcheight-2))
-            dc.DrawText(toofat, (1, y))
+            dc.DrawRectangle(1, 1, dcwidth-2, dcheight-2)
+            dc.DrawText(toofat, 1, y)
 
 
     def OnKillFocus(self, event):

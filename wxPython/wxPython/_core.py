@@ -645,7 +645,6 @@ wxImageFromMime = wx._core.ImageFromMime
 wxImageFromStream = wx._core.ImageFromStream
 wxImageFromStreamMime = wx._core.ImageFromStreamMime
 wxEmptyImage = wx._core.EmptyImage
-wxEmptyImage = wx._core.EmptyImage
 wxImageFromBitmap = wx._core.ImageFromBitmap
 wxImageFromData = wx._core.ImageFromData
 wxImage_CanRead = wx._core.Image_CanRead

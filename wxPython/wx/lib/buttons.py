@@ -217,8 +217,8 @@ class GenButton(wx.PyControl):
         else:
             dc.SetPen(self.shadowPen)
         for i in range(self.bezelWidth):
-            dc.DrawLine((x1+i, y1), (x1+i, y2-i))
-            dc.DrawLine((x1, y1+i), (x2-i, y1+i))
+            dc.DrawLine(x1+i, y1, x1+i, y2-i)
+            dc.DrawLine(x1, y1+i, x2-i, y1+i)
 
         # draw the lower right sides
         if self.up:
@@ -226,8 +226,8 @@ class GenButton(wx.PyControl):
         else:
             dc.SetPen(self.highlightPen)
         for i in range(self.bezelWidth):
-            dc.DrawLine((x1+i, y2-i), (x2+1, y2-i))
-            dc.DrawLine((x2-i, y1+i), (x2-i, y2))
+            dc.DrawLine(x1+i, y2-i, x2+1, y2-i)
+            dc.DrawLine(x2-i, y1+i, x2-i, y2)
 
 
     def DrawLabel(self, dc, width, height, dw=0, dy=0):
@@ -240,7 +240,7 @@ class GenButton(wx.PyControl):
         tw, th = dc.GetTextExtent(label)
         if not self.up:
             dw = dy = self.labelDelta
-        dc.DrawText(label, ((width-tw)/2+dw, (height-th)/2+dy))
+        dc.DrawText(label, (width-tw)/2+dw, (height-th)/2+dy)
 
 
     def DrawFocusIndicator(self, dc, w, h):
@@ -254,7 +254,7 @@ class GenButton(wx.PyControl):
         dc.SetLogicalFunction(wx.INVERT)
         dc.SetPen(self.focusIndPen)
         dc.SetBrush(wx.TRANSPARENT_BRUSH)
-        dc.DrawRectangle((bw+2,bw+2), (w-bw*2-4, h-bw*2-4))
+        dc.DrawRectangle(bw+2,bw+2,  w-bw*2-4, h-bw*2-4)
         dc.SetLogicalFunction(wx.COPY)
 
 
@@ -419,7 +419,7 @@ class GenBitmapButton(GenButton):
         if not self.up:
             dw = dy = self.labelDelta
         hasMask = bmp.GetMask() != None
-        dc.DrawBitmap(bmp, ((width-bw)/2+dw, (height-bh)/2+dy), hasMask)
+        dc.DrawBitmap(bmp, (width-bw)/2+dw, (height-bh)/2+dy, hasMask)
 
 
 #----------------------------------------------------------------------
@@ -479,10 +479,10 @@ class GenBitmapTextButton(GenBitmapButton):     # generic bitmapped button with 
 
         pos_x = (width-bw-tw)/2+dw      # adjust for bitmap and text to centre
         if bmp !=None:
-            dc.DrawBitmap(bmp, (pos_x, (height-bh)/2+dy), hasMask) # draw bitmap if available
+            dc.DrawBitmap(bmp, pos_x, (height-bh)/2+dy, hasMask) # draw bitmap if available
             pos_x = pos_x + 2   # extra spacing from bitmap
 
-        dc.DrawText(label, (pos_x + dw+bw, (height-th)/2+dy))      # draw the text
+        dc.DrawText(label, pos_x + dw+bw, (height-th)/2+dy)      # draw the text
 
 
 #----------------------------------------------------------------------

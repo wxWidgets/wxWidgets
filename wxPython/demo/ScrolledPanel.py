@@ -84,7 +84,7 @@ class TestPanel(scrolled.ScrolledPanel):
         vbox2.Add((20, 10))
         hbox.Add(vbox2)
 
-        vbox.AddSizer(hbox, 0)
+        vbox.Add(hbox, 0)
         self.SetSizer(vbox)
         self.SetAutoLayout(1)
         self.SetupScrolling()

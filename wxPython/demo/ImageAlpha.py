@@ -22,21 +22,21 @@ class TestPanel(wx.Panel):
 
         dc.SetFont(wx.Font(16, wx.SWISS, wx.NORMAL, wx.BOLD, True))
         dc.DrawText("Bitmap alpha blending (on wxMSW and wxMac only)",
-                    (25,25))
-
+                    25,25)
+        
         bmp = wx.Bitmap(opj('bitmaps/toucan.png'))
         if "__WXGTK__" in wx.PlatformInfo:
             # try to make up for it a bit...
             bmp.SetMaskColour("black")
             
-        dc.DrawBitmap(bmp, (25,100), True)
+        dc.DrawBitmap(bmp, 25,100, True)
 
         dc.SetFont(self.GetFont())
         y = 75
         for line in range(10):
             y += dc.GetCharHeight() + 5
-            dc.DrawText(msg, (200, y))
-        dc.DrawBitmap(bmp, (250,100), True)
+            dc.DrawText(msg, 200, y)
+        dc.DrawBitmap(bmp, 250,100, True)
         
 
 

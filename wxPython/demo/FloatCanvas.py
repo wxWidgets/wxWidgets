@@ -26,8 +26,8 @@ You can get it at:
     overview = ""
 
 else:
-    from wxPython.lib import floatcanvas
-    import wxPython.lib.colourdb
+    from wx.lib import floatcanvas
+    import wx.lib.colourdb
     
     ID_ABOUT_MENU = wx.NewId()          
     ID_EXIT_MENU  = wx.NewId() 
@@ -369,8 +369,8 @@ else:
         
         def OnInit(self):
             global colors
-            wxPython.lib.colourdb.updateColourDB()
-            colors = wxPython.lib.colourdb.getColourList()
+            wx.lib.colourdb.updateColourDB()
+            colors = wx.lib.colourdb.getColourList()
             
             frame = DrawFrame(None, -1, "FloatCanvas Demo App",
                               wx.DefaultPosition, (700,700))
@@ -438,8 +438,8 @@ else:
         this demo with the rest.
         """
         global colors
-        wxPython.lib.colourdb.updateColourDB()
-        colors = wxPython.lib.colourdb.getColourList()
+        wx.lib.colourdb.updateColourDB()
+        colors = wx.lib.colourdb.getColourList()
 
         win = DrawFrame(None, -1, "FloatCanvas Drawing Window",
                         wx.DefaultPosition, (500,500))

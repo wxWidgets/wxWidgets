@@ -131,7 +131,7 @@ class GenStaticText(wx.PyControl):
                 x = width - w
             if style & wx.ALIGN_CENTER:
                 x = (width - w)/2
-            dc.DrawText(line, (x, y))
+            dc.DrawText(line, x, y)
             y += h
 
 

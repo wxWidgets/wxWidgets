@@ -49,7 +49,7 @@ class TestMaskWindow(wx.ScrolledWindow):
         # Now we'll create a mask in a bit of an easier way, by picking a
         # colour in the image that is to be the transparent colour.
         self.bmp_withcolourmask  = images.getTestStar2Bitmap()
-        mask = wx.MaskColour(self.bmp_withcolourmask, wx.WHITE)
+        mask = wx.Mask(self.bmp_withcolourmask, wx.WHITE)
         self.bmp_withcolourmask.SetMask(mask)
 
         self.SetScrollbars(20, 20, 700/20, 460/20)
@@ -66,17 +66,17 @@ class TestMaskWindow(wx.ScrolledWindow):
         # make an interesting background...
         dc.SetPen(wx.MEDIUM_GREY_PEN)
         for i in range(100):
-            dc.DrawLine((0,i*10), (i*10,0))
+            dc.DrawLine(0,i*10, i*10,0)
 
         # draw raw image, mask, and masked images
-        dc.DrawText('original image', (0,0))
-        dc.DrawBitmap(self.bmp_nomask, (0,20), 0)
-        dc.DrawText('with colour mask', (0,100))
-        dc.DrawBitmap(self.bmp_withcolourmask, (0,120), 1)
-        dc.DrawText('the mask image', (0,200))
-        dc.DrawBitmap(self.bmp_themask, (0,220), 0)
-        dc.DrawText('masked image', (0,300))
-        dc.DrawBitmap(self.bmp_withmask, (0,320), 1)
+        dc.DrawText('original image', 0,0)
+        dc.DrawBitmap(self.bmp_nomask, 0,20, 0)
+        dc.DrawText('with colour mask', 0,100)
+        dc.DrawBitmap(self.bmp_withcolourmask, 0,120, 1)
+        dc.DrawText('the mask image', 0,200)
+        dc.DrawBitmap(self.bmp_themask, 0,220, 0)
+        dc.DrawText('masked image', 0,300)
+        dc.DrawBitmap(self.bmp_withmask, 0,320, 1)
 
         cx,cy = self.bmp_themask.GetWidth(), self.bmp_themask.GetHeight()
 
@@ -86,9 +86,9 @@ class TestMaskWindow(wx.ScrolledWindow):
 
         for text, code in logicList:
             x,y = 120+150*(i%4), 20+100*(i/4)
-            dc.DrawText(text, (x, y-20))
+            dc.DrawText(text, x, y-20)
             mdc.SelectObject(self.bmp_withcolourmask)
-            dc.Blit((x,y), (cx,cy), mdc, (0,0), code, True)
+            dc.Blit(x,y, cx,cy, mdc, 0,0, code, True)
             i = i + 1
 
 

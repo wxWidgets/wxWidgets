@@ -47,7 +47,7 @@ class TestPanel( wx.Panel ):
         grid.Add( self.target_ctl, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
 
         outer_box = wx.BoxSizer( wx.VERTICAL )
-        outer_box.AddSizer( grid, 0, wx.ALIGN_CENTRE|wx.ALL, 20 )
+        outer_box.Add( grid, 0, wx.ALIGN_CENTRE|wx.ALL, 20 )
 
         panel.SetAutoLayout( True )
         panel.SetSizer( outer_box )

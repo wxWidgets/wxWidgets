@@ -117,7 +117,8 @@ command_lines = [
     ]
 
 
-for line in command_lines:
-    args = line.split()
-    img2py.main(args)
+if __name__ == "__main__":
+    for line in command_lines:
+        args = line.split()
+        img2py.main(args)
 

@@ -62,26 +62,28 @@ customizations added that I hope to get folded back into the main SWIG
 distribution.)  This has some far reaching ramifications:
 
     All classes derive from object and so all are now "new-style
-    classes"
+    classes."  This also allows you to use mixin classes that are
+    new-style and to use properties, staticmethod, etc.
 
     Public data members of the C++ classes are wrapped as Python
-    properties using property() instead of using __getattr__/__setattr__
-    like before.  Normally you shouldn't notice any difference, but if
-    you were previously doing something with __getattr__/__setattr__
-    in derived classes then you may have to adjust things.
+    properties using property() instead of using
+    __getattr__/__setattr__ hacks like before.  Normally you shouldn't
+    notice any difference, but if you were previously doing something
+    with __getattr__/__setattr__ in derived classes then you may have
+    to adjust things.
 
-    Static C++ methods are wrapped using the staticmethod()
-    feature of Python and so are accessible as ClassName.MethodName
-    as expected.  They are still available as top level functions
+    Static C++ methods are wrapped using the staticmethod() feature of
+    Python and so are accessible as ClassName.MethodName as expected.
+    They are still also available as top level functions named like
     ClassName_MethodName as before.
 
     The relationship between the wxFoo and wxFooPtr classes have
     changed for the better.  Specifically, all instances that you see
-    will be wxFoo even if they are created internally using wxFooPtr,
-    because wxFooPtr.__init__ will change the instance's __class__ as
+    will be wx.Foo even if they are created internally using wx.FooPtr,
+    because wx.FooPtr.__init__ will change the instance's __class__ as
     part of the initialization.  If you have any code that checks
-    class type using something like isinstance(obj, wxFooPtr) you will
-    need to change it to isinstance(obj, wxFoo).
+    class type using something like isinstance(obj, wx.FooPtr) you will
+    need to change it to isinstance(obj, wx.Foo).
 
     
 
@@ -152,7 +154,7 @@ values::
      
 If you create your own custom event types and EVT_* functions, and you
 want to be able to use them with the Bind method above then you should
-change your EVT_* to be an instance of wxPyEventBinder instead of a
+change your EVT_* to be an instance of wx.PyEventBinder instead of a
 function.  For example, if you used to have something like this::
 
     myCustomEventType = wxNewEventType()
@@ -168,6 +170,15 @@ Change it like so::
 The second parameter is an integer in [0, 1, 2] that specifies the
 number of IDs that are needed to be passed to Connect.
 
+**[Changed in 2.5.1.6]** There is also an Unbind method added to
+wx.EvtHandler that can be used to disconenct event handlers.  It looks
+like this::
+
+    def Unbind(self, event, source=None, id=wx.ID_ANY, id2=wx.ID_ANY):
+        """
+        Disconencts the event handler binding for event from self.
+        Returns True if successful.
+        """
 
 
 
@@ -184,12 +195,13 @@ Instead of dynamically changing the names at module load time like in
 2.4, the compatibility modules are generated at build time and contain
 assignment statements like this::
 
-    wxWindow = wx.core.Window
+    wxWindow = wx._core.Window
 
-Don't let the "core" in the name bother you.  That and some other
+Don't let the "_core" in the name bother you.  That and some other
 modules are implementation details, and everything that was in the
 wxPython.wx module before will still be in the wx package namespace
-after this change.  So from your code you would use it as wx.Window.
+after this change.  So from your code you would use it as wx.Window or
+wxWindow if you import from the wxPython.wx module.
 
 A few notes about how all of this was accomplished might be
 interesting...  SWIG is now run twice for each module that it is
@@ -239,125 +251,79 @@ just fine.
 New wx.DC Methods
 -----------------
 
-Many of the Draw methods of wx.DC have alternate forms in C++ that take
-wxPoint or wxSize parameters (let's call these *Type A*) instead of
-the individual x, y, width, height, etc. parameters (and we'll call
-these *Type B*).  In the rest of the library I normally made the *Type
-A* forms of the methods be the default method with the "normal" name,
-and had renamed the *Type B* forms of the methods to some similar
-name.  For example in wx.Window we have these Python methods::
-
-    SetSize(size)               # Type A
-    SetSizeWH(width, height)    # Type B
+**[Changed in 2.5.1.6]** In wxPython 2.5.1.5 there was a new
+implementation of the wx.DC Draw and other methods that broke
+backwards compatibility in the name of consistency.  That change has
+been reverted and the wx.DC Draw methods with 2.4 compatible
+signatures have been restored.  In addition a new set of methods have
+been added that take wx.Point and/or wx.Size parameters instead of
+separate integer parameters.  The Draw and etc. methods now available
+are::
 
 
-For various reasons the new *Type A* methods in wx.DC were never added
-and the existing *Type B* methods were never renamed.  Now that lots
-of other things are also changing in wxPython it has been decided that
-it is a good time to also do the method renaming in wx.DC too in order
-to be consistent with the rest of the library.  The methods in wx.DC
-that are affected are listed here::
+    FloodFill(x, y, colour, style = wx.FLOOD_SURFACE)
+    FoodFillPoint(pt, colour, style = wx.FLOOD_SURFACE)
 
-    FloodFillXY(x, y, colour, style = wx.FLOOD_SURFACE)
-    FloodFill(point, colour,  style = wx.FLOOD_SURFACE)
-
-    GetPixelXY(x, y)
-    GetPixel(point)
-
-    DrawLineXY(x1, y1, x2, y2)
-    DrawLine(point1, point2)
-
-    CrossHairXY(x, y)
-    CrossHair(point)
-
-    DrawArcXY(x1, y1, x2, y2, xc, yc)
-    DrawArc(point1, point2, center)
-
-    DrawCheckMarkXY(x, y, width, height)
-    DrawCheckMark(rect)
-
-    DrawEllipticArcXY(x, y, w, h, start_angle, end_angle)
-    DrawEllipticArc(point, size, start_angle, end_angle)
-
-    DrawPointXY(x, y)
-    DrawPoint(point)
-
-    DrawRectangleXY(x, y, width, height)
-    DrawRectangle(point, size)
-    DrawRectangleRect(rect)
-
-    DrawRoundedRectangleXY(x, y, width, height, radius)
-    DrawRoundedRectangle(point, size, radius)
-    DrawRoundedRectangleRect(rect, radius)
-
-    DrawCircleXY(x, y, radius)
-    DrawCircle(point, radius)
-
-    DrawEllipseXY(x, y, width, height)
-    DrawEllipse(point, size)
-    DrawEllipseRect(rect)
-
-    DrawIconXY(icon, x, y)
-    DrawIcon(icon, point)
-
-    DrawBitmapXY(bmp, x, y, useMask = FALSE)
-    DrawBitmap(bmp, point, useMask = FALSE)
-
-    DrawTextXY(text, x, y)
-    DrawText(text, point)
-
-    DrawRotatedTextXY(text, x, y, angle)
-    DrawRotatedText(text, point, angle)
-
+    GetPixel(x,y)
+    GetPixelPoint(pt) 
     
-    BlitXY(xdest, ydest, width, height, sourceDC, xsrc, ysrc,
-           rop = wxCOPY, useMask = FALSE, xsrcMask = -1, ysrcMask = -1)
-    Blit(destPt, size, sourceDC, srcPt,
-         rop = wxCOPY, useMask = FALSE, srcPtMask = wx.DefaultPosition)
+    DrawLine(x1, y1, x2, y2)
+    DrawLinePoint(pt1, pt2)
 
-    SetClippingRegionXY(x, y, width, height)
-    SetClippingRegion(point, size)
+    CrossHair(x, y)
+    CrossHairPoint(pt)
+
+    DrawArc(x1, y1, x2, y2, xc, yc)
+    DrawArcPoint(pt1, pt2, centre)
+
+    DrawCheckMark(x, y, width, height)
+    DrawCheckMarkRect(rect)
+
+    DrawEllipticArc(x, y, w, h, sa, ea)
+    DrawEllipticArcPointSize(pt, sz, sa, ea)
+
+    DrawPoint(x, y)
+    DrawPointPoint(pt)
+
+    DrawRectangle(x, y, width, height)
+    DrawRectangleRect(rect)
+    DrawRectanglePointSize(pt, sz)
+
+    DrawRoundedRectangle(x, y, width, height, radius)
+    DrawRoundedRectangleRect(r, radius)
+    DrawRoundedRectanglePointSize(pt, sz, radius)
+
+    DrawCircle(x, y, radius)
+    DrawCirclePoint(pt, radius)
+
+    DrawEllipse(x, y, width, height)
+    DrawEllipseRect(rect)
+    DrawEllipsePointSize(pt, sz)
+
+    DrawIcon(icon, x, y)
+    DrawIconPoint(icon, pt)
+
+    DrawBitmap(bmp, x, y, useMask = False)
+    DrawBitmapPoint(bmp, pt, useMask = False)
+
+    DrawText(text, x, y)
+    DrawTextPoint(text, pt)
+
+    DrawRotatedText(text, x, y, angle)
+    DrawRotatedTextPoint(text, pt, angle)
+
+    bool Blit(xdest, ydest, width, height, sourceDC, xsrc, ysrc,
+              rop = wx.COPY, useMask = False, xsrcMask = -1, ysrcMask = -1)
+    BlitPointSize(destPt, sz, sourceDC, srcPt, rop = wx.COPY, 
+                  useMask = False, srcPtMask = wxDefaultPosition)
+
+
+    SetClippingRegion(x, y, width, height)
+    SetClippingRegionPointSize(pt, sz)
+    SetClippingRegionAsRegion(region)
     SetClippingRect(rect)
-    SetClippingRegionAsRegion(region);
 
-	
-If you have code that draws on a DC and you are using the new wx
-namespace then you **will** get errors because of these changes, but
-it should be easy to fix the code.  You can either change the name of
-the *Type B* method called to the names shown above, or just add
-parentheses around the parameters as needed to turn them into tuples
-and let the SWIG typemaps turn them into the wx.Point or wx.Size
-object that is expected.  Then you will be calling the new *Type A*
-method.  For example, if you had this code before::
 
-    dc.DrawRectangle(x, y, width, height)
-
-You could either continue to use the *Type B* method by changing the
-name to DrawRectangleXY, or just change it to the new *Type A* by
-adding some parentheses like this::
-
-    dc.DrawRectangle((x, y), (width, height))
-
-Or if you were already using a point and size like this::
-
-    dc.DrawRectangle(p.x, p.y, s.width, s.height)
-
-Then you can just simplify it like this::
-
-    dc.DrawRectangle(p, s)
-
-Now before you start yelling and screaming at me for breaking all your
-code, take note that up above I said, "...using the new wx
-namespace..."  That's because if you are still importing from
-wxPython.wx then there are some classes defined there with Draw and
-etc. methods that have 2.4 compatible signatures.  Unfortunately there
-is one exception to this behaviour.  If a DC is returned from a
-function or method then an instance of the new class (with the new
-methods described above) will be returned instead of the compatibility
-class.  If/When the old wxPython.wx namespace is removed then these
-compatibility classes will be removed too so you should plan on
-migrating to the new namespace and new DC Draw methods before that
-time.
 
 
 
@@ -432,15 +398,18 @@ Sizers
 
 The hack allowing the old "option" keyword parameter has been removed.
 If you use keyword args with w.xSizer Add, Insert, or Prepend methods
-then you will need to use the ``proportion`` name instead of ``option``.
+then you will need to use the ``proportion`` name instead of
+``option``.  (The ``proportion`` keyword was also allowed in 2.4.2.4.)
 
 When adding a spacer to a sizer you now need to use a wx.Size or a
 2-integer sequence instead of separate width and height parameters.
-This allows for more consistency in how you add the various types of
-items to a sizer.  The first parameter defines the item (instead of
-the possibily first two, depending on if you are doing a spacer or
-not,) and that item can either be a window, a sizer or a spacer (which
-can be a sequence or a wx.Size.)
+This was optionally allowed in 2.4, but now it is required.  This
+allows for more consistency in how you add the various types of items
+to a sizer.  The first parameter defines the item (instead of the
+possibily first two, depending on if you are doing a spacer or not,)
+and that item can either be a window, a sizer or a spacer (which can
+be a sequence or a wx.Size.)  Removing the option for separate width
+and height parameters greatly simplified the wrapper code.
 
 The wx.GridBagSizer class (very similar to the RowColSizer in the
 library) has been added to C++ and wrapped for wxPython.  It can also
@@ -448,7 +417,9 @@ be used from XRC.
 
 You should not use AddWindow, AddSizer, AddSpacer (and similar for
 Insert, Prepend, and etc.) methods any longer.  Just use Add and the
-wrappers will figure out what to do.
+wrappers will figure out what to do.  **[Changed in 2.5.1.6]**
+AddWindow, AddSize, AddSpacer and etc. will now issue a
+DeprecationWarning. 
 
 **[Changed in 2.5.1.6]** wx.ADJUST_MINSIZE is now the default
 behaviour for window items in sizers.  This means that the item's
@@ -459,7 +430,11 @@ call window methods to determine the new best size, instead the
 minsize that the window had when added to the sizer (or the size the
 window was created with) will always be used.  When a window is added
 to a sizer it's initial size, if any, is set as the window's minimal
-size using SetSizeHints if there isn't already a minimal size.
+size using SetSizeHints if there isn't already a minimal size.  If you
+would like the sizer to use something other than the window's initial
+size as the minimum then you can give it a new minimum by calling its
+SetSizeHints method.
+
 
 
 PlatformInfo
@@ -635,8 +610,8 @@ no longer exist:
     * windows3
 
 They have been replaced by the following, but please remember that
-these are just "implementation details" and you shoudl reall be using
-the objects in these modules via the wx or wxPython.wx packages:
+these are just "implementation details" and you should really be using
+the objects in these modules only via the wx or wxPython.wx packages:
 
     * _core
     * _gdi
@@ -667,8 +642,9 @@ FALSE that used to be provided with wxPython.
 Use None instead of the ancient and should have been removed a long
 time ago wx.NULL alias.
 
-wx.TreeCtrl no longer needs to be passed the cookie variable as the
-2nd parameter.  It still returns it though, for use with GetNextChild.
+wx.TreeCtrl.GetFirstChild no longer needs to be passed the cookie
+variable as the 2nd parameter.  It still returns it though, for use
+with GetNextChild.
 
 The wx.NO_FULL_REPAINT_ON_RESIZE style is now the default style for
 all windows.  The name still exists for compatibility, but it is set
@@ -687,15 +663,15 @@ there are compatibility aliases for much of the above items.
 The wxWave class has been renamed to wxSound, and now has a slightly
 different API.
 
-wx.TaskbarIcon works on wxGTK-based platforms now, however you have to
-manage it a little bit more than you did before.  Basically, the app
-will treat it like a top-level frame in that if the wx.TaskBarIcon
-still exists when all the frames are closed then the app will still
-not exit.  You need to ensure that the wx.TaskBarIcon is destroyed
-when your last Frame is closed.  For wxPython apps it is usually
-enough if your main frame object holds the only reference to the
-wx.TaskBarIcon, then when the frame is closed Python reference
-counting takes care of the rest.
+wx.TaskbarIcon works on wxGTK-based platforms (for some window
+managers,) however you have to manage it a little bit more than you
+did before.  Basically, the app will treat it like a top-level frame
+in that if the wx.TaskBarIcon still exists when all the frames are
+closed then the app will still not exit.  You need to ensure that the
+wx.TaskBarIcon is destroyed when your last Frame is closed.  For
+wxPython apps it is usually enough if your main frame object holds the
+only reference to the wx.TaskBarIcon, then when the frame is closed
+Python reference counting takes care of the rest.
 
 Before Python 2.3 it was possible to pass a floating point object as a
 parameter to a function that expected an integer, and the
@@ -703,7 +679,7 @@ PyArg_ParseTuple family of functions would automatically convert to
 integer by truncating the fractional portion of the number.  With
 Python 2.3 that behavior was deprecated and a deprecation warning is
 raised when you pass a floating point value, (for example, calling
-wx.DC.DrawLineXY with floats for the position and size,) and lots of
+wx.DC.DrawLine with floats for the position and size,) and lots of
 developers using wxPython had to scramble to change their code to call
 int() before calling wxPython methods.  Recent changes in SWIG have
 moved the conversion out of PyArg_ParseTuple to custom code that SWIG
@@ -722,3 +698,7 @@ parameters that expect floating point values.
 to their own sub-package, wx.lib.masked.  See the docstrings and demo
 for changes in capabilities, usage, etc.
 
+**[Changed in 2.5.1.6]** wx.MaskColour constructor has been deprecated
+and will raise a DeprecationWarning if used.  The main wx.Mask
+constructor has been modified to be compatible with wx.MaskColour so
+you should use it instead.

@@ -93,7 +93,7 @@ class SplashScreen(wx.Frame):
 
     def OnPaint(self, event):
         dc = wx.PaintDC(self)
-        dc.DrawBitmap(self.bitmap, (0,0), False)
+        dc.DrawBitmap(self.bitmap, 0,0, False)
 
     def OnEraseBG(self, event):
         pass

@@ -214,7 +214,7 @@ class TestWindow(ogl.ShapeCanvas):
             )
 
         bmp = images.getTest2Bitmap()
-        mask = wx.MaskColour(bmp, wx.BLUE)
+        mask = wx.Mask(bmp, wx.BLUE)
         bmp.SetMask(mask)
 
         s = ogl.BitmapShape()

@@ -608,14 +608,14 @@ class TreePainter(Painter):
                 mem_dc.SelectObject(self.GetBuffer())
                 mem_dc.SetPen(self.GetBackgroundPen())
                 mem_dc.SetBrush(self.GetBackgroundBrush())
-                mem_dc.DrawRectangle((0, 0), (size[0], size[1]))
+                mem_dc.DrawRectangle(0, 0, size[0], size[1])
                 mem_dc.SetFont(self.tree.GetFont())
                 self.paintWalk(node, mem_dc)
             else:
                 mem_dc.SelectObject(self.GetBuffer())
             xstart, ystart = self.tree.CalcUnscrolledPosition(0,0)
             size = self.tree.GetClientSizeTuple()
-            dc.Blit((xstart, ystart), (size[0], size[1]), mem_dc, (xstart, ystart))
+            dc.Blit(xstart, ystart, size[0], size[1], mem_dc, xstart, ystart)
         else:
             if node == self.tree.currentRoot:
                 self.knobs = []
@@ -624,7 +624,7 @@ class TreePainter(Painter):
             dc.SetBrush(self.GetBackgroundBrush())
             dc.SetFont(self.tree.GetFont())
             if paintBackground:
-                dc.DrawRectangle((0, 0), (size[0], size[1]))
+                dc.DrawRectangle(0, 0, size[0], size[1])
             if node:
                 #Call with not paintBackground because if we are told not to paint the
                 #whole background, we have to paint in parts to undo selection coloring.
@@ -652,23 +652,23 @@ class TreePainter(Painter):
                 if (not self.tree.model.IsLeaf(kid.data)) or ((kid.expanded or self.tree._assumeChildren) and len(kid.kids)):
                     dc.SetPen(self.linepen)
                     dc.SetBrush(self.bgbrush)
-                    dc.DrawRectangle((px -4, py-4), (9, 9))
+                    dc.DrawRectangle(px -4, py-4, 9, 9)
                     self.knobs.append( (kid, Rect(px -4, py -4, 9, 9)) )
                     dc.SetPen(self.textpen)
                     if not kid.expanded:
-                        dc.DrawLine((px, py -2), (px, py + 3))
-                    dc.DrawLine((px -2, py), (px + 3, py))
+                        dc.DrawLine(px, py -2, px, py + 3)
+                    dc.DrawLine(px -2, py, px + 3, py)
         if node == self.tree.currentRoot:
             px = (node.projx - self.tree.layout.NODE_STEP) + 5
             py = node.projy + node.height/2
             dc.SetPen(self.linepen)
             dc.SetBrush(self.bgbrush)
-            dc.DrawRectangle((px -4, py-4), (9, 9))
+            dc.DrawRectangle(px -4, py-4, 9, 9)
             self.knobs.append( (node, Rect(px -4, py -4, 9, 9)) )
             dc.SetPen(self.textpen)
             if not node.expanded:
-                dc.DrawLine((px, py -2), (px, py + 3))
-            dc.DrawLine((px -2, py), (px + 3, py))
+                dc.DrawLine(px, py -2, px, py + 3)
+            dc.DrawLine(px -2, py, px + 3, py)
         return True
 
     def OnMouse(self, evt):
@@ -684,14 +684,14 @@ class TreeNodePainter(NodePainter):
             dc.SetPen(self.painter.GetLinePen())
             dc.SetBrush(self.painter.GetForegroundBrush())
             dc.SetTextForeground(wx.NamedColour("WHITE"))
-            dc.DrawRectangle((node.projx -1, node.projy -1), (node.width + 3, node.height + 3))
+            dc.DrawRectangle(node.projx -1, node.projy -1, node.width + 3, node.height + 3)
         else:
             if drawRects:
                 dc.SetBrush(self.painter.GetBackgroundBrush())
                 dc.SetPen(self.painter.GetBackgroundPen())
-                dc.DrawRectangle((node.projx -1, node.projy -1), (node.width + 3, node.height + 3))
+                dc.DrawRectangle(node.projx -1, node.projy -1, node.width + 3, node.height + 3)
             dc.SetTextForeground(self.painter.GetTextColour())
-        dc.DrawText(text, (node.projx, node.projy))
+        dc.DrawText(text, node.projx, node.projy)
         self.painter.rectangles.append((node, Rect(node.projx, node.projy, node.width, node.height)))
 
 class TreeLinePainter(LinePainter):
@@ -703,14 +703,14 @@ class TreeLinePainter(LinePainter):
             py = child.projy + self.painter.tree.layout.NODE_HEIGHT/2 -2
             cx = child.projx
             cy = py
-            dc.DrawLine((px, py), (cx, cy))
+            dc.DrawLine(px, py, cx, cy)
         else:
             px = parent.projx + 5
             py = parent.projy + parent.height
             cx = child.projx -5
             cy = child.projy + self.painter.tree.layout.NODE_HEIGHT/2 -3
-            dc.DrawLine((px, py), (px, cy))
-            dc.DrawLine((px, cy), (cx, cy))
+            dc.DrawLine(px, py, px, cy)
+            dc.DrawLine(px, cy, cx, cy)
 
 #>> Event defs
 wxEVT_MVCTREE_BEGIN_EDIT = wx.NewEventType() #Start editing. Vetoable.

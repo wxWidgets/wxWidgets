@@ -109,7 +109,8 @@ class TestPanel(wx.Panel):
         dc = wx.ClientDC(self.win)
         dc.SetPen(wx.Pen("RED"))
         dc.SetBrush(wx.Brush("RED"))
-        dc.DrawCircle(evt.GetPosition(), 4)
+        pos = evt.GetPosition()
+        dc.DrawCircle(pos.x, pos.y, 4)
         
 
 #----------------------------------------------------------------------

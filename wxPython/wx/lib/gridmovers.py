@@ -159,12 +159,12 @@ class ColDragWindow(wx.Window):
     def OnPaint(self,evt):
         dc = wx.PaintDC(self)
         w,h = self.GetSize()
-        dc.DrawBitmap(self.image, (0,0))
+        dc.DrawBitmap(self.image, 0,0)
         dc.SetPen(wx.Pen(wx.BLACK,1,wx.SOLID))
         dc.SetBrush(wx.TRANSPARENT_BRUSH)
-        dc.DrawRectangle((0,0), (w,h))
+        dc.DrawRectangle(0,0, w,h)
         iPos = self.GetInsertionPos()
-        dc.DrawLine((iPos,h - 10), (iPos,h))
+        dc.DrawLine(iPos,h - 10, iPos,h)
 
 
 
@@ -222,12 +222,12 @@ class RowDragWindow(wx.Window):
     def OnPaint(self,evt):
         dc = wx.PaintDC(self)
         w,h = self.GetSize()
-        dc.DrawBitmap(self.image, (0,0))
+        dc.DrawBitmap(self.image, 0,0)
         dc.SetPen(wx.Pen(wx.BLACK,1,wx.SOLID))
         dc.SetBrush(wx.TRANSPARENT_BRUSH)
-        dc.DrawRectangle((0,0), (w,h))
+        dc.DrawRectangle(0,0, w,h)
         iPos = self.GetInsertionPos()
-        dc.DrawLine((w - 10,iPos), (w,iPos))
+        dc.DrawLine(w - 10,iPos, w,iPos)
 
 #----------------------------------------------------------------------------
 
@@ -346,7 +346,7 @@ class GridColMover(wx.EvtHandler):
         memdc = wx.MemoryDC()
         memdc.SelectObject(bmp)
         dc = wx.WindowDC(self.lwin)
-        memdc.Blit((0,0), rect.GetSize(), dc, rect.GetPosition())
+        memdc.Blit(0,0, rect.width, rect.height, dc, rect.x, rect.y)
         memdc.SelectObject(wx.NullBitmap)
         return bmp
 
@@ -469,7 +469,7 @@ class GridRowMover(wx.EvtHandler):
         memdc = wx.MemoryDC()
         memdc.SelectObject(bmp)
         dc = wx.WindowDC(self.lwin)
-        memdc.Blit((0,0), rect.GetSize(), dc, rect.GetPosition())
+        memdc.Blit(0,0, rect.width, rect.height, dc, rect.x, rect.y)
         memdc.SelectObject(wx.NullBitmap)
         return bmp
 

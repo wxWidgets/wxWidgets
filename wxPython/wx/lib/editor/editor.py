@@ -216,7 +216,7 @@ class Editor(wx.ScrolledWindow):
         pass
 
     def DrawEditText(self, t, x, y, dc):
-        dc.DrawText(t, (x * self.fw, y * self.fh))
+        dc.DrawText(t, x * self.fw, y * self.fh)
 
     def DrawLine(self, line, dc):
         if self.IsLine(line):
@@ -264,7 +264,7 @@ class Editor(wx.ScrolledWindow):
         x = 0
         y = (len(self.lines) - self.sy) * self.fh
         hasTransparency = 1
-        dc.DrawBitmap(self.eofMarker, (x, y), hasTransparency)
+        dc.DrawBitmap(self.eofMarker, x, y, hasTransparency)
 
 ##------------------ cursor-related functions
 
@@ -293,7 +293,7 @@ class Editor(wx.ScrolledWindow):
         szy = self.fh
         x = xp * szx
         y = yp * szy
-        dc.Blit((x,y), (szx,szy), dc, (x,y), wx.SRC_INVERT)
+        dc.Blit(x,y, szx,szy, dc, x,y, wx.SRC_INVERT)
         self.sco_x = xp
         self.sco_y = yp
 

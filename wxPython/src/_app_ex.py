@@ -78,40 +78,45 @@ class App(wx.PyApp):
 
     Every application must have a ``wx.App`` instance, and all
     creation of UI objects should be delayed until after the
-    ``wx.App`` object has been created in order to ensure that the
-    gui platform and wxWidgets have been fully initialized.
+    ``wx.App`` object has been created in order to ensure that the gui
+    platform and wxWidgets have been fully initialized.
 
     Normally you would derive from this class and implement an
     ``OnInit`` method that creates a frame and then calls
     ``self.SetTopWindow(frame)``.
 
-    :see: `wx.PySimpleApp` for a simpler app class that can be used directly.
+    :see: `wx.PySimpleApp` for a simpler app class that can be used
+    directly.
     """
     
     outputWindowClass = PyOnDemandOutputWindow
 
-    def __init__(self, redirect=_defRedirect, filename=None, useBestVisual=False):
+    def __init__(self, redirect=_defRedirect, filename=None,
+                 useBestVisual=False, clearSigInt=True):
         """
         Construct a ``wx.App`` object.  
 
-        :param redirect: Should ``sys.stdout`` and ``sys.stderr``
-            be redirected?  Defaults to True on Windows and Mac,
-            False otherwise.  If `filename` is None then output
-            will be redirected to a window that pops up as
-            needed.  (You can control what kind of window is
-            created for the output by resetting the class
-            variable ``outputWindowClass`` to a class of your
-            choosing.)
+        :param redirect: Should ``sys.stdout`` and ``sys.stderr`` be
+            redirected?  Defaults to True on Windows and Mac, False
+            otherwise.  If `filename` is None then output will be
+            redirected to a window that pops up as needed.  (You can
+            control what kind of window is created for the output by
+            resetting the class variable ``outputWindowClass`` to a
+            class of your choosing.)
 
-        :param filename: The name of a file to redirect output
-            to, if redirect is True.
+        :param filename: The name of a file to redirect output to, if
+            redirect is True.
 
         :param useBestVisual: Should the app try to use the best
-            available visual provided by the system (only
-            relevant on systems that have more than one visual.)
-            This parameter must be used instead of calling
-            `SetUseBestVisual` later on because it must be set
-            before the underlying GUI toolkit is initialized.
+            available visual provided by the system (only relevant on
+            systems that have more than one visual.)  This parameter
+            must be used instead of calling `SetUseBestVisual` later
+            on because it must be set before the underlying GUI
+            toolkit is initialized.
+
+        :param clearSigInt: Should SIGINT be cleared?  This allows the
+            app to terminate upon a Ctrl-C in the console like other
+            GUI apps will.
 
         :note: You should override OnInit to do applicaition
             initialization to ensure that the system, toolkit and
@@ -140,11 +145,12 @@ your Mac."""
         # KeyboardInterrupt???)  but will later segfault on exit.  By
         # setting the default handler then the app will exit, as
         # expected (depending on platform.)
-        try:
-            import signal
-            signal.signal(signal.SIGINT, signal.SIG_DFL)
-        except:
-            pass
+        if clearSigInt:
+            try:
+                import signal
+                signal.signal(signal.SIGINT, signal.SIG_DFL)
+            except:
+                pass
 
         # Save and redirect the stdio to a window?
         self.stdioWin = None
@@ -220,11 +226,12 @@ class PySimpleApp(wx.App):
     :see: `wx.App` 
     """
 
-    def __init__(self, redirect=False, filename=None, useBestVisual=False):
+    def __init__(self, redirect=False, filename=None,
+                 useBestVisual=False, clearSigInt=True):
         """
         :see: `wx.App.__init__`
         """
-        wx.App.__init__(self, redirect, filename, useBestVisual)
+        wx.App.__init__(self, redirect, filename, useBestVisual, clearSigInt)
         
     def OnInit(self):
         wx.InitAllImageHandlers()
