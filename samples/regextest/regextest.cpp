@@ -118,7 +118,7 @@ public:
 
 
     MyDialog() : wxFrame(  NULL, -1, _("regextest - wxRegEx Testing App"),
-                            wxPoint(20,20), wxSize(300,400) )
+                            wxPoint(20,20), wxSize(300,400), wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL )
     {
         //Set the background to something light gray-ish
         SetBackgroundColour(wxColour(150,150,150));
