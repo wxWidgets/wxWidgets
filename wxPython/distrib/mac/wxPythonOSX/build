@@ -99,9 +99,10 @@ else
     PYUNICODEOPT=0
 fi
 
-if [ "$HOSTNAME" = "bigmac.alldunn.com" ]; then
-    MAKEJOBS="--jobs=2"
-fi
+#if [ "$HOSTNAME" = "bigmac.alldunn.com" ]; then
+#    MAKEJOBS="--jobs=2"
+#fi
+
 
 if [ -z "$TARBALLDIR" ]; then
     # this is a spot on my fileserver where the tarballs go, adjust
