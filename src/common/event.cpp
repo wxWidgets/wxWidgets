@@ -222,8 +222,8 @@ bool wxMouseEvent::ButtonIsDown(int but) const
 // Find the logical position of the event given the DC
 wxPoint wxMouseEvent::GetLogicalPosition(const wxDC& dc) const
 {
-	wxPoint pt(dc.DeviceToLogicalX(m_x), dc.DeviceToLogicalY(m_y));
-	return pt;
+    wxPoint pt(dc.DeviceToLogicalX(m_x), dc.DeviceToLogicalY(m_y));
+    return pt;
 }
 
 
@@ -305,14 +305,14 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
     // chain of event handlers.
     if (IsKindOf(CLASSINFO(wxWindow)))
     {
-  	  wxWindow *win = (wxWindow *)this;
+        wxWindow *win = (wxWindow *)this;
 
-	  // Can only use the validator of the window which
-	  // is receiving the event
-	  if ( (win == event.GetEventObject()) &&
-	      win->GetValidator() &&
-		  win->GetValidator()->ProcessEvent(event))
-        	return TRUE;
+      // Can only use the validator of the window which
+      // is receiving the event
+      if ( (win == event.GetEventObject()) &&
+          win->GetValidator() &&
+          win->GetValidator()->ProcessEvent(event))
+            return TRUE;
     }
 
     // Search upwards through the inheritance hierarchy
@@ -327,8 +327,8 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
   // Try going down the event handler chain
   if ( GetNextHandler() )
   {
-	    if ( GetNextHandler()->ProcessEvent(event) )
-			return TRUE;
+        if ( GetNextHandler()->ProcessEvent(event) )
+            return TRUE;
   }
 
   // Carry on up the parent-child hierarchy,
@@ -337,7 +337,7 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
   if (IsKindOf(CLASSINFO(wxWindow)) && event.IsKindOf(CLASSINFO(wxCommandEvent)))
   {
     wxWindow *win = (wxWindow *)this;
-	wxWindow *parent = win->GetParent();
+    wxWindow *parent = win->GetParent();
     if (parent && !parent->IsBeingDeleted())
       return win->GetParent()->GetEventHandler()->ProcessEvent(event);
   }
@@ -364,14 +364,14 @@ bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
           (table.entries[i].m_lastId != -1 &&
             (commandId >= table.entries[i].m_id && commandId <= table.entries[i].m_lastId))))
     {
-	  	event.Skip(FALSE);
+          event.Skip(FALSE);
                 event.m_callbackUserData = table.entries[i].m_callbackUserData;
-	
+    
         (this->*((wxEventFunction) (table.entries[i].m_fn)))(event);
 
-		if ( event.GetSkipped() )
-			return FALSE;
-		  else
+        if ( event.GetSkipped() )
+            return FALSE;
+          else
             return TRUE;
     }
     i ++;
@@ -381,8 +381,8 @@ bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
 
 void wxEvtHandler::Connect( int id, int lastId,
                             int eventType,
-		            wxObjectEventFunction func,
-		            wxObject *userData )
+                    wxObjectEventFunction func,
+                    wxObject *userData )
 {
   wxEventTableEntry *entry = new wxEventTableEntry;
   entry->m_id = id;
@@ -418,14 +418,14 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
         (entry->m_lastId != -1 &&
         (commandId >= entry->m_id && commandId <= entry->m_lastId))))
        {
-	  event.Skip(FALSE);
+      event.Skip(FALSE);
           event.m_callbackUserData = entry->m_callbackUserData;
-	
+    
           (this->*((wxEventFunction) (entry->m_fn)))(event);
 
-	  if (event.GetSkipped()) 
-	    return FALSE;
-	  else
+      if (event.GetSkipped()) 
+        return FALSE;
+      else
             return TRUE;
        }
     };

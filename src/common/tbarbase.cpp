@@ -476,7 +476,7 @@ int wxToolBarBase::CalcScrollInc(wxScrollEvent& event)
   int nScrollInc = 0;
   switch (event.GetEventType())
   {
-    case wxEVENT_TYPE_SCROLL_TOP:
+    case wxEVT_SCROLL_TOP:
     {
       if (orient == wxHORIZONTAL)
         nScrollInc = - m_xScrollPosition;
@@ -484,7 +484,7 @@ int wxToolBarBase::CalcScrollInc(wxScrollEvent& event)
         nScrollInc = - m_yScrollPosition;
       break;
     }
-    case wxEVENT_TYPE_SCROLL_BOTTOM:
+    case wxEVT_SCROLL_BOTTOM:
     {
       if (orient == wxHORIZONTAL)
         nScrollInc = m_xScrollLines - m_xScrollPosition;
@@ -492,17 +492,17 @@ int wxToolBarBase::CalcScrollInc(wxScrollEvent& event)
         nScrollInc = m_yScrollLines - m_yScrollPosition;
       break;
     }
-    case wxEVENT_TYPE_SCROLL_LINEUP:
+    case wxEVT_SCROLL_LINEUP:
     {
       nScrollInc = -1;
       break;
     }
-    case wxEVENT_TYPE_SCROLL_LINEDOWN:
+    case wxEVT_SCROLL_LINEDOWN:
     {
       nScrollInc = 1;
       break;
     }
-    case wxEVENT_TYPE_SCROLL_PAGEUP:
+    case wxEVT_SCROLL_PAGEUP:
     {
       if (orient == wxHORIZONTAL)
         nScrollInc = -GetScrollPageSize(wxHORIZONTAL);
@@ -510,7 +510,7 @@ int wxToolBarBase::CalcScrollInc(wxScrollEvent& event)
         nScrollInc = -GetScrollPageSize(wxVERTICAL);
       break;
     }
-    case wxEVENT_TYPE_SCROLL_PAGEDOWN:
+    case wxEVT_SCROLL_PAGEDOWN:
     {
       if (orient == wxHORIZONTAL)
         nScrollInc = GetScrollPageSize(wxHORIZONTAL);
@@ -518,7 +518,7 @@ int wxToolBarBase::CalcScrollInc(wxScrollEvent& event)
         nScrollInc = GetScrollPageSize(wxVERTICAL);
       break;
     }
-    case wxEVENT_TYPE_SCROLL_THUMBTRACK:
+    case wxEVT_SCROLL_THUMBTRACK:
     {
       if (orient == wxHORIZONTAL)
         nScrollInc = pos - m_xScrollPosition;
