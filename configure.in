@@ -6230,11 +6230,8 @@ else
 
 fi
 
+dnl Check to see if the platform always requires NO_GCC_PRAGMA
 GCC_PRAGMA_FLAGS=""
-dnl Find out if we have to define NO_GCC_PRAGMA and WX_PRECOMP:
-if test $GCC_PCH = 1 ; then
-    GCC_PRAGMA_FLAGS="-DWX_PRECOMP -DNO_GCC_PRAGMA"
-else
     case "${host}" in
         powerpc-*-darwin* )
             dnl Some Apple's GCC version are broken and can't handle the
@@ -6279,8 +6276,18 @@ else
             fi
             ;;
     esac
+
+dnl Find out if we have to define NO_GCC_PRAGMA and WX_PRECOMP:
+PCH_FLAGS=""
+if test $GCC_PCH = 1 ; then
+    if test "x$GCC_PRAGMA_FLAGS" = "x"; then
+        PCH_FLAGS="-DWX_PRECOMP -DNO_GCC_PRAGMA"
+    else
+        PCH_FLAGS="-DWX_PRECOMP"
+    fi
 fi
-CPPFLAGS="$GCC_PRAGMA_FLAGS $CPPFLAGS"
+
+CPPFLAGS="$PCH_FLAGS $GCC_PRAGMA_FLAGS $CPPFLAGS"
 
 
 dnl for convenience, sort the samples in alphabetical order

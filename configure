@@ -40202,6 +40202,8 @@ fi
 
 
 
+
+
 BAKEFILE_AUTOCONF_INC_M4_VERSION="0.1.4"
 
 
@@ -40981,9 +40983,6 @@ else
 fi
 
 GCC_PRAGMA_FLAGS=""
-if test $GCC_PCH = 1 ; then
-    GCC_PRAGMA_FLAGS="-DWX_PRECOMP -DNO_GCC_PRAGMA"
-else
     case "${host}" in
         powerpc-*-darwin* )
                                     GCC_PRAGMA_FLAGS="-DNO_GCC_PRAGMA"
@@ -41103,8 +41102,17 @@ rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
             fi
             ;;
     esac
+
+PCH_FLAGS=""
+if test $GCC_PCH = 1 ; then
+    if test "x$GCC_PRAGMA_FLAGS" = "x"; then
+        PCH_FLAGS="-DWX_PRECOMP -DNO_GCC_PRAGMA"
+    else
+        PCH_FLAGS="-DWX_PRECOMP"
+    fi
 fi
-CPPFLAGS="$GCC_PRAGMA_FLAGS $CPPFLAGS"
+
+CPPFLAGS="$PCH_FLAGS $GCC_PRAGMA_FLAGS $CPPFLAGS"
 
 
 SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq | tr '\n' ' '| tr -d '\r'`"
