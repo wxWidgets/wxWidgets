@@ -29,19 +29,32 @@ protected:
     static void *sm_cocoaObserver;
 public:
     virtual void Cocoa_FrameChanged(void) = 0;
-    virtual bool Cocoa_drawRect(const NSRect &rect) = 0;
-    virtual bool Cocoa_mouseDown(WX_NSEvent theEvent) = 0;
-    virtual bool Cocoa_mouseDragged(WX_NSEvent theEvent) = 0;
-    virtual bool Cocoa_mouseUp(WX_NSEvent theEvent) = 0;
-    virtual bool Cocoa_mouseMoved(WX_NSEvent theEvent) = 0;
-    virtual bool Cocoa_mouseEntered(WX_NSEvent theEvent) = 0;
-    virtual bool Cocoa_mouseExited(WX_NSEvent theEvent) = 0;
-    virtual bool Cocoa_rightMouseDown(WX_NSEvent theEvent) = 0;
-    virtual bool Cocoa_rightMouseDragged(WX_NSEvent theEvent) = 0;
-    virtual bool Cocoa_rightMouseUp(WX_NSEvent theEvent) = 0;
-    virtual bool Cocoa_otherMouseDown(WX_NSEvent theEvent) = 0;
-    virtual bool Cocoa_otherMouseDragged(WX_NSEvent theEvent) = 0;
-    virtual bool Cocoa_otherMouseUp(WX_NSEvent theEvent) = 0;
+    virtual bool Cocoa_drawRect(const NSRect &rect)
+    {   return false; }
+    virtual bool Cocoa_mouseDown(WX_NSEvent theEvent)
+    {   return false; }
+    virtual bool Cocoa_mouseDragged(WX_NSEvent theEvent)
+    {   return false; }
+    virtual bool Cocoa_mouseUp(WX_NSEvent theEvent)
+    {   return false; }
+    virtual bool Cocoa_mouseMoved(WX_NSEvent theEvent)
+    {   return false; }
+    virtual bool Cocoa_mouseEntered(WX_NSEvent theEvent)
+    {   return false; }
+    virtual bool Cocoa_mouseExited(WX_NSEvent theEvent)
+    {   return false; }
+    virtual bool Cocoa_rightMouseDown(WX_NSEvent theEvent)
+    {   return false; }
+    virtual bool Cocoa_rightMouseDragged(WX_NSEvent theEvent)
+    {   return false; }
+    virtual bool Cocoa_rightMouseUp(WX_NSEvent theEvent)
+    {   return false; }
+    virtual bool Cocoa_otherMouseDown(WX_NSEvent theEvent)
+    {   return false; }
+    virtual bool Cocoa_otherMouseDragged(WX_NSEvent theEvent)
+    {   return false; }
+    virtual bool Cocoa_otherMouseUp(WX_NSEvent theEvent)
+    {   return false; }
 };
 
 #endif // _WX_COCOA_NSVIEW_H_
