@@ -1583,7 +1583,6 @@ fi
 if test "$wxUSE_RESOURCES" = "yes" ; then
   if test "$wxUSE_PROLOGIO" = "yes" ; then
     AC_DEFINE(wxUSE_RESOURCES)
-    LTLIBOBJS="$LTLIBOBJS resource.lo"
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS resource"
   else
     AC_MSG_WARN([wxWindows ressource system requires PrologIO and can't be compiled without it.])
@@ -1811,7 +1810,7 @@ EXTRA_LIBS="$LIBS $POSIX4_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK $GUILIBS"
 
 dnl all the libraries needed to link wxWindows programs (when the library is not
 dnl yet installed)
-LIBS="\${top_builddir}/src/${WX_LIBRARY_NAME} $EXTRA_LIBS"
+LIBS="\${top_builddir}/src/${TOOLKIT_DIR}/${WX_LIBRARY_NAME} $EXTRA_LIBS"
 
 dnl all -I options we must pass to the compiler
 INCLUDES="-I. -I\${top_builddir}/include -I\${top_srcdir}/include $TOOLKIT_INCLUDE $ZLIB_INCLUDE $LIBPNG_INCLUDE"

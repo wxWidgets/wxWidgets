@@ -21,7 +21,7 @@ libwx_gtk2_la_SOURCES = \
 \
  win_gtk.c \
  extended.c \
- utilsgtk.cpp \
+ parser.c \
 \
  cmndata.cpp \
  dynarray.cpp \
@@ -73,7 +73,6 @@ libwx_gtk2_la_SOURCES = \
  prntbase.cpp \
  process.cpp \
  protocol.cpp \
- resourc2.cpp \
  resource.cpp \
  sckaddr.cpp \
  sckfile.cpp \
@@ -109,7 +108,6 @@ libwx_gtk2_la_SOURCES = \
  laywin.cpp \
  listctrl.cpp \
  msgdlgg.cpp \
- notebook.cpp \
  panelg.cpp \
  printps.cpp \
  prntdlgg.cpp \
@@ -179,7 +177,6 @@ libwx_gtk2_la_SOURCES = \
  textctrl.cpp \
  timer.cpp \
  tooltip.cpp \
- treectrl.cpp \
  utilsgtk.cpp \
  utilsres.cpp \
  wave.cpp \
