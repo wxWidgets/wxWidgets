@@ -604,8 +604,6 @@ void MyFrame::OnToolEnter(wxCommandEvent& event)
 
 void MyFrame::OnToggleFullScreen(wxCommandEvent& event)
 {
-#ifdef __WXMSW__
     ShowFullScreen(!IsFullScreen());
-#endif
 }
 

@@ -286,6 +286,16 @@ Iconizes or restores the frame. Windows only.
 
 \helpref{wxFrame::IsIconized}{wxframeisiconized}, \helpref{wxFrame::Maximize}{wxframemaximize}.
 
+\membersection{wxFrame::IsFullScreen}\label{wxframeisfullscreen}
+
+\func{bool}{IsFullScreen}{\void}
+
+Returns TRUE if the frame is in fullscreen mode.
+
+\wxheading{See also}
+
+\helpref{wxFrame::ShowFullScreen}{wxframeshowfullscreen}
+
 \membersection{wxFrame::IsIconized}\label{wxframeisiconized}
 
 \constfunc{bool}{IsIconized}{\void}
@@ -579,5 +589,8 @@ indicate what elements of the frame to hide in full-screen mode:
 \item wxFULLSCREEN\_ALL (all of the above)
 \end{itemize}
 
-This function only works on Windows and has not been tested with MDI frames.
+This function has not been tested with MDI frames.
 
+\wxheading{See also}
+
+\helpref{wxFrame::IsFullScreen}{wxframeisfullscreen}
