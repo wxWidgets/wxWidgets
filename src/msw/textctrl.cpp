@@ -567,7 +567,7 @@ wxString wxTextCtrl::GetRange(long from, long to) const
                     // this is easy in this case as EOL characters in richedit
                     // version > 1 are just '\r's and so positions map to
                     // string indices one to one (unlike with richedit 1)
-                    str = str.Mid(from, to - from + 1);
+                    str = str.Mid(from, to - from);
                 }
             }
 
