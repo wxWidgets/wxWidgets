@@ -492,6 +492,7 @@ enum {
     wxEXPAND,
 
     wxNB_FIXEDWIDTH,
+    wxNB_TOP,
     wxNB_LEFT,
     wxNB_RIGHT,
     wxNB_BOTTOM,
