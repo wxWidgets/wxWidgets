@@ -279,6 +279,11 @@ wxImage wxImage::ShrinkBy( int xFactor , int yFactor ) const
     unsigned char maskRed = 0;
     unsigned char maskGreen = 0;
     unsigned char maskBlue =0 ;
+
+    unsigned char *source_data = M_IMGDATA->m_data;
+    unsigned char *target_data = data;
+    unsigned char *source_alpha = 0 ;
+    unsigned char *target_alpha = 0 ;
     if (M_IMGDATA->m_hasMask)
     {
         hasMask = true ;
@@ -290,8 +295,15 @@ wxImage wxImage::ShrinkBy( int xFactor , int yFactor ) const
                              M_IMGDATA->m_maskGreen,
                              M_IMGDATA->m_maskBlue );
     }
-    char unsigned *source_data = M_IMGDATA->m_data;
-    char unsigned *target_data = data;
+    else
+    {
+        source_alpha = M_IMGDATA->m_alpha ;
+        if ( source_alpha )
+        {
+            image.SetAlpha() ;
+            target_alpha = image.GetAlpha() ;
+        }
+    }
 
     for (long y = 0; y < height; y++)
     {
@@ -300,6 +312,7 @@ wxImage wxImage::ShrinkBy( int xFactor , int yFactor ) const
             unsigned long avgRed = 0 ;
             unsigned long avgGreen = 0;
             unsigned long avgBlue = 0;
+            unsigned long avgAlpha = 0 ;
             unsigned long counter = 0 ;
             // determine average
             for ( int y1 = 0 ; y1 < yFactor ; ++y1 )
@@ -311,11 +324,18 @@ wxImage wxImage::ShrinkBy( int xFactor , int yFactor ) const
                     unsigned char red = pixel[0] ;
                     unsigned char green = pixel[1] ;
                     unsigned char blue = pixel[2] ;
+                    unsigned char alpha = 255  ;
+                    if ( source_alpha )
+                        alpha = *(source_alpha + y_offset + x * xFactor + x1) ;
                     if ( !hasMask || red != maskRed || green != maskGreen || blue != maskBlue )
                     {
-                        avgRed += red ;
-                        avgGreen += green ;
-                        avgBlue += blue ;
+                        if ( alpha > 0 )
+                        {
+                            avgRed += red ;
+                            avgGreen += green ;
+                            avgBlue += blue ;
+                        }
+                        avgAlpha += alpha ;
                         counter++ ;
                     }
                 }
@@ -328,6 +348,8 @@ wxImage wxImage::ShrinkBy( int xFactor , int yFactor ) const
             }
             else
             {
+                if ( source_alpha )
+                    *(target_alpha++) = (unsigned char)(avgAlpha / counter ) ;
                 *(target_data++) = (unsigned char)(avgRed / counter);
                 *(target_data++) = (unsigned char)(avgGreen / counter);
                 *(target_data++) = (unsigned char)(avgBlue / counter);
