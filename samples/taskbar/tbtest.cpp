@@ -81,14 +81,14 @@ void MyDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 
 void MyDialog::Init(void)
 {
-  (void)new wxStaticText(this, wxID_ANY, _T("Press OK to hide me, Exit to quit."),
+  (void)new wxStaticText(this, wxID_ANY, _T("Press 'Hide me' to hide me, Exit to quit."),
                          wxPoint(10, 20));
 
   (void)new wxStaticText(this, wxID_ANY, _T("Double-click on the taskbar icon to show me again."),
                          wxPoint(10, 40));
 
   (void)new wxButton(this, wxID_EXIT, _T("Exit"), wxPoint(185, 230), wxSize(80, 25));
-  (new wxButton(this, wxID_OK, _T("OK"), wxPoint(100, 230), wxSize(80, 25)))->SetDefault();
+  (new wxButton(this, wxID_OK, _T("Hide me"), wxPoint(100, 230), wxSize(80, 25)))->SetDefault();
   Centre(wxBOTH);
    
   
