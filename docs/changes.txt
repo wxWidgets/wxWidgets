@@ -57,6 +57,7 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
   please fix your code -- it never worked correctly anyhow if you modified the
   objects returned by these methods so you should simply switch to using const
   methods.
+- wxWindow::GetFont() now returns wxFont object instead of reference
 - EVT_XXX macros are now type-safe; code that uses wrong type for event
   handler's argument will no longer compile.
 - Identical functionality of wxFileDialog::ParseWildcard,
