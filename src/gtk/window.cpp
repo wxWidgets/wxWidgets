@@ -1534,8 +1534,8 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
 
     wxEventType event_type = wxEVT_NULL;
 
-    // GdkDisplay is a GTK+ 2.1.0 thing
-#if defined(__WXGTK20__) && GTK_CHECK_VERSION(2, 1, 0)
+    // GdkDisplay is a GTK+ 2.2.0 thing
+#if defined(__WXGTK20__) && GTK_CHECK_VERSION(2, 2, 0)
     if ( gdk_event->type == GDK_2BUTTON_PRESS &&
             gdk_event->button >= 1 && gdk_event->button <= 3 )
     {
