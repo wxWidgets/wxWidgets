@@ -1107,10 +1107,25 @@ void wxMacControl::SetDrawingEnabled( bool enable )
 bool wxMacControl::GetNeedsDisplay() const
 {
 #if TARGET_API_MAC_OSX
-    return HIViewGetNeedsDisplay( m_controlRef ) ;
-#else
-    return false ;
+    if ( m_isCompositing )
+    {
+        return HIViewGetNeedsDisplay( m_controlRef ) ;
+   	}
+   	else
 #endif
+	{
+		if ( !IsVisible() )
+            return false ;
+			
+	    Rect controlBounds ; 
+	    GetControlBounds( m_controlRef, &controlBounds ) ;
+	    RgnHandle rgn = NewRgn() ;
+		GetWindowRegion ( GetControlOwner( m_controlRef ) , kWindowUpdateRgn , rgn ) ;
+		Boolean intersect = RectInRgn ( &controlBounds , rgn ) ;
+		DisposeRgn( rgn ) ;
+		return intersect ;
+	}
+
 }
 #endif
 
@@ -1223,6 +1238,8 @@ void wxMacControl::SetRect( Rect *r )
         
         Rect controlBounds = *r ;
         
+        // since the rect passed in is always (even in non-compositing) relative
+        // to the (native) parent, we have to adjust to window relative here
         wxMacControl* parent = m_peer->GetParent()->GetPeer() ;
         if( parent->m_isRootControl == false )
         {
@@ -1351,12 +1368,30 @@ void wxMacControl::InvalidateWithChildren()
 #endif
 }
 
-void wxMacControl::ScrollRect( const wxRect &r , int dx , int dy )
+void wxMacControl::ScrollRect( wxRect *r , int dx , int dy ) 
 {
+	wxASSERT( r != NULL ) ;
 #if TARGET_API_MAC_OSX
-    HIRect scrollarea = CGRectMake( r.x , r.y , r.width , r.height) ;
-    HIViewScrollRect ( m_controlRef , &scrollarea , dx ,dy ) ;
+	if ( m_isCompositing )
+	{
+		HIRect scrollarea = CGRectMake( r->x , r->y , r->width , r->height) ;
+        HIViewScrollRect ( m_controlRef , &scrollarea , dx ,dy ) ;
+	}
+	else
 #endif
+	{
+		Rect bounds ;
+		GetControlBounds( m_controlRef , &bounds ) ;
+		Point topleft = { bounds.top , bounds.left } ;
+		bounds.left += r->x ;
+		bounds.top += r->y ;
+		bounds.bottom = bounds.top + r->height ;
+		bounds.right = bounds.left + r->width ;
+		wxMacWindowClipper clip( m_peer ) ;
+		RgnHandle updateRgn = NewRgn() ;
+		::ScrollRect( &bounds , dx , dy , updateRgn ) ;
+		InvalWindowRgn( GetControlOwner( m_controlRef )  ,  updateRgn ) ;
+	}
 }
 
 

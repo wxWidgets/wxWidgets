@@ -524,7 +524,8 @@ public :
     // where is in native window relative coordinates
     virtual void SetNeedsDisplay( Rect* where = NULL ) ;
 
-    virtual void ScrollRect( const wxRect &rect , int dx , int dy ) ;
+	// if rect = NULL, entire view
+    virtual void ScrollRect( wxRect *rect , int dx , int dy ) ;
 
     // in native parent window relative coordinates
     virtual void GetRect( Rect *r ) ;

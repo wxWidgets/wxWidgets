@@ -1437,6 +1437,58 @@ wxUint32 wxTopLevelWindowMac::MacGetWindowAttributes() const
     return attr ;
 }
 
+void wxTopLevelWindowMac::MacPerformUpdates() 
+{
+#if TARGET_API_MAC_OSX
+	if ( m_macUsesCompositing )
+	{
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
+	    // for composited windows this also triggers a redraw of all
+	    // invalid views in the window
+	    if( UMAGetSystemVersion() >= 0x1030 )
+	        HIWindowFlush((WindowRef) m_macWindow) ;       
+	    else                   
+#endif
+	    {
+	        // the only way to trigger the redrawing on earlier systems is to call
+	        // ReceiveNextEvent
+
+	        EventRef currentEvent = (EventRef) wxTheApp->MacGetCurrentEvent() ;
+	        UInt32 currentEventClass = 0 ;
+	        UInt32 currentEventKind = 0 ;
+	        if ( currentEvent != NULL )
+	        {
+	            currentEventClass = ::GetEventClass( currentEvent ) ;
+	            currentEventKind = ::GetEventKind( currentEvent ) ;
+	        }       
+	        if ( currentEventClass != kEventClassMenu )
+	        {
+	            // when tracking a menu, strange redraw errors occur if we flush now, so leave..
+	            EventRef theEvent;
+	            OSStatus status = noErr ;
+	            status = ReceiveNextEvent( 0 , NULL , kEventDurationNoWait , false , &theEvent ) ;
+	        }
+	    }
+    }
+    else
+#endif
+    {
+	    BeginUpdate( (WindowRef) m_macWindow ) ;
+
+	    RgnHandle updateRgn = NewRgn();    
+	    if ( updateRgn )
+	    {
+	        GetPortVisibleRegion( GetWindowPort( (WindowRef)m_macWindow ), updateRgn );
+	        UpdateControls(  (WindowRef)m_macWindow , updateRgn ) ;
+	        // if ( !EmptyRgn( updateRgn ) )
+            //	MacDoRedraw( updateRgn , 0 , true) ;
+	        DisposeRgn( updateRgn );
+	    }
+	    EndUpdate( (WindowRef)m_macWindow ) ;
+    	QDFlushPortBuffer( GetWindowPort( (WindowRef)m_macWindow ) , NULL ) ;
+    }
+}
+
 // Attracts the users attention to this window if the application is
 // inactive (should be called when a background event occurs)
 

@@ -2405,12 +2405,11 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
     if( dx == 0 && dy ==0 )
         return ;
 
-
-    {
-
         int width , height ;
         GetClientSize( &width , &height ) ;
 #if TARGET_API_MAC_OSX
+	if ( 1 /* m_peer->IsCompositing() */ )
+	{
         // note there currently is a bug in OSX which makes inefficient refreshes in case an entire control
         // area is scrolled, this does not occur if width and height are 2 pixels less,
         // TODO write optimal workaround
@@ -2428,7 +2427,8 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
             m_peer->SetNeedsDisplay() ;
 #else
             // this would be the preferred version for fast drawing controls
-            if( UMAGetSystemVersion() < 0x1030 )
+
+            if( UMAGetSystemVersion() < 0x1030 || !m_peer->IsCompositing() )
                 Update() ;
             else
                 HIViewRender(m_peer->GetControlRef()) ;
@@ -2436,8 +2436,25 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
         }
         // as the native control might be not a 0/0 wx window coordinates, we have to offset
         scrollrect.Offset( -MacGetLeftBorderSize() , -MacGetTopBorderSize() ) ;
-        m_peer->ScrollRect( scrollrect , dx , dy ) ;
+        m_peer->ScrollRect( (&scrollrect) , dx , dy ) ;
+
+        // becuase HIViewScrollRect does not scroll the already invalidated area we have two options
+        // either immediate redraw or full invalidate
+#if 0
+        // is the better overall solution, as it does not slow down scrolling
+        m_peer->SetNeedsDisplay() ;
 #else
+        // this would be the preferred version for fast drawing controls       
+
+        if( UMAGetSystemVersion() < 0x1030 || !m_peer->IsCompositing()  )
+            Update() ;
+        else
+            HIViewRender(m_peer->GetControlRef()) ;
+#endif
+	}
+	else
+#endif
+	{
 
         wxPoint pos;
         pos.x = pos.y = 0;
@@ -2449,9 +2466,9 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
             wxClientDC dc(this) ;
             wxMacPortSetter helper(&dc) ;
 
-            m_peer->GetRect( &scrollrect ) ;
-            scrollrect.top += MacGetTopBorderSize() ;
-            scrollrect.left += MacGetLeftBorderSize() ;
+            m_peer->GetRectInWindowCoords( &scrollrect ) ;
+            //scrollrect.top += MacGetTopBorderSize() ;
+            //scrollrect.left += MacGetLeftBorderSize() ;
             scrollrect.bottom = scrollrect.top + height ;
             scrollrect.right = scrollrect.left + width ;
 
@@ -2485,7 +2502,7 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
             DisposeRgn( formerUpdateRgn ) ;
             DisposeRgn( scrollRgn ) ;
         }
-#endif
+        Update() ;
     }
 
     for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst(); node; node = node->GetNext())
@@ -2687,39 +2704,7 @@ void wxWindowMac::ClearBackground()
 void wxWindowMac::Update()
 {
 #if TARGET_API_MAC_OSX
-
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
-    WindowRef window = (WindowRef)MacGetTopLevelWindowRef() ;
-
-    // for composited windows this also triggers a redraw of all
-    // invalid views in the window
-    if( UMAGetSystemVersion() >= 0x1030 )
-        HIWindowFlush(window) ;
-    else
-#endif
-    {
-        // the only way to trigger the redrawing on earlier systems is to call
-        // ReceiveNextEvent
-
-        EventRef currentEvent = (EventRef) wxTheApp->MacGetCurrentEvent() ;
-        UInt32 currentEventClass = 0 ;
-        UInt32 currentEventKind = 0 ;
-        if ( currentEvent != NULL )
-        {
-            currentEventClass = ::GetEventClass( currentEvent ) ;
-            currentEventKind = ::GetEventKind( currentEvent ) ;
-        }
-        if ( currentEventClass != kEventClassMenu )
-        {
-            // when tracking a menu, strange redraw errors occur if we flush now, so leave..
-
-            EventRef theEvent;
-            OSStatus status = noErr ;
-            status = ReceiveNextEvent( 0 , NULL , kEventDurationNoWait , false , &theEvent ) ;
-        }
-        else
-            m_peer->SetNeedsDisplay() ;
-    }
+	MacGetTopLevelWindow()->MacPerformUpdates() ;
 #else
     ::Draw1Control( m_peer->GetControlRef() ) ;
 #endif

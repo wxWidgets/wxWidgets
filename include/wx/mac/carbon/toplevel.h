@@ -86,6 +86,7 @@ public:
 
     WXWindow MacGetWindowRef() { return m_macWindow ; }
     virtual void MacActivate( long timestamp , bool inIsActivating ) ;
+    virtual void MacPerformUpdates() ;
 
     virtual void Raise();
     virtual void Lower();
