@@ -417,13 +417,13 @@ void GridFrame::SetGridLineColour( wxCommandEvent& WXUNUSED(ev) )
 
 void GridFrame::InsertRow( wxCommandEvent& WXUNUSED(ev) )
 {
-    grid->InsertRows( 0, 1 );
+    grid->InsertRows( grid->GetGridCursorRow(), 1 );
 }
 
 
 void GridFrame::InsertCol( wxCommandEvent& WXUNUSED(ev) )
 {
-    grid->InsertCols( 0, 1 );
+    grid->InsertCols( grid->GetGridCursorCol(), 1 );
 }
 
 
