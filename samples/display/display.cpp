@@ -296,7 +296,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxNotebookSizer *notebookSizer = new wxNotebookSizer(m_notebook);
     panel->SetSizer(notebookSizer);
     notebookSizer->Fit(this);
-
+    notebookSizer->SetSizeHints(this);
 }
 
 wxString MyFrame::VideoModeToText(const wxVideoMode& mode)
