@@ -9494,8 +9494,13 @@ echo "${ECHO_T}$toolkit_echo" >&6
       fi
     done
 else
-    echo "$as_me:$LINENO: result: base ($host_alias hosted) only" >&5
+    if test "x$host_alias" != "x"; then
+        echo "$as_me:$LINENO: result: base ($host_alias hosted) only" >&5
 echo "${ECHO_T}base ($host_alias hosted) only" >&6
+    else
+        echo "$as_me:$LINENO: result: base only" >&5
+echo "${ECHO_T}base only" >&6
+    fi
 fi
 
 wants_win32=0
@@ -34725,12 +34730,13 @@ fi
           ac_config_commands="$ac_config_commands default"
 
 
+
 if test "$wxUSE_GUI" = "yes"; then
     SUBDIRS="samples demos utils contrib"
 else         SUBDIRS="samples utils"
 fi
 
-for subdir in `echo $SUBDIRS`; do
+for subdir in echo `$SUBDIRS`; do
     if test -d ${srcdir}/${subdir} ; then
         if test "$wxUSE_GUI" = "yes"; then
             makefiles=`(cd $srcdir ; find $subdir -name Makefile.in)`
@@ -34749,6 +34755,7 @@ for subdir in `echo $SUBDIRS`; do
         done
     fi
 done
+
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure

@@ -1186,7 +1186,11 @@ if test "$wxUSE_GUI" = "yes"; then
       fi
     done
 else
-    AC_MSG_RESULT(base ($host_alias hosted) only)
+    if test "x$host_alias" != "x"; then
+        AC_MSG_RESULT(base ($host_alias hosted) only)
+    else
+        AC_MSG_RESULT(base only)
+    fi
 fi
 
 dnl ---------------------------------------------------------------------------
