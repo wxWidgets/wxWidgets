@@ -73,6 +73,12 @@ public:
     bool Create(int size, const wxByte* data);
 
     bool IsOk() const { return m_data != NULL; }
+   
+    // Stop playing any sound
+    static void Stop();
+
+    // Returns true if a sound is being played
+    static bool IsPlaying();
     
     // for internal use
     static void UnloadBackend();
@@ -105,6 +111,16 @@ private:
 // the need for backends. This class is for use by wxWindows and people writing
 // additional backends only, it is _not_ for use by applications! 
 
+// Structure that holds playback status information
+struct wxSoundPlaybackStatus
+{
+    // playback is in progress
+    bool m_playing;
+    // main thread called wxSound::Stop()
+    bool m_stopRequested;
+};
+
+// Audio backend interface
 class wxSoundBackend
 {
 public:
@@ -123,11 +139,23 @@ public:
     // Returns true if the backend is capable of playing sound asynchronously.
     // If false, then wxWindows creates a playback thread and handles async
     // playback, otherwise it is left up to the backend (will usually be more
-    // effective)
+    // effective).
     virtual bool HasNativeAsyncPlayback() const = 0;
+    
+    // Plays the sound. flags are same flags as those passed to wxSound::Play.
+    // The function should periodically check the value of
+    // status->m_stopRequested and terminate if it is set to true (it may
+    // be modified by another thread)
+    virtual bool Play(wxSoundData *data, unsigned flags,
+                      volatile wxSoundPlaybackStatus *status) = 0;
 
-    // Plays the sound. flags are same flags as those passed to wxSound::Play
-    virtual bool Play(wxSoundData *data, unsigned flags) = 0;
+    // Stops playback (if something is played).
+    virtual void Stop() = 0;
+
+    // Returns true if the backend is playing anything at the moment.
+    // (This method is never called for backends that don't support async
+    // playback.)
+    virtual bool IsPlaying() const = 0;
 };
 
 

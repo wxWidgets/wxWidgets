@@ -82,9 +82,12 @@ public:
     int GetPriority() const { return 9; }
     bool IsAvailable() const;
     bool HasNativeAsyncPlayback() const { return true; }
-    bool Play(wxSoundData *data, unsigned flags);
+    bool Play(wxSoundData *data, unsigned flags,
+              volatile wxSoundPlaybackStatus *status);
 
     void FillAudioBuffer(Uint8 *stream, int len);
+    void FinishedPlayback();
+    
     void Stop();
     bool IsPlaying() const { return m_playing; }
     
@@ -113,7 +116,7 @@ private:
     {
         wxLogTrace(_T("sound"),
                    _T("received playback status change notification"));
-        m_backend->Stop();
+        m_backend->FinishedPlayback();
     }
     wxSoundBackendSDL *m_backend;
 
@@ -191,6 +194,12 @@ void wxSoundBackendSDL::FillAudioBuffer(Uint8 *stream, int len)
     }
 }
 
+void wxSoundBackendSDL::FinishedPlayback()
+{
+    if (!m_playing)
+        Stop();
+}
+
 bool wxSoundBackendSDL::OpenAudio()
 {
     if (!m_audioOpen)
@@ -236,7 +245,8 @@ void wxSoundBackendSDL::CloseAudio()
     }
 }
 
-bool wxSoundBackendSDL::Play(wxSoundData *data, unsigned flags)
+bool wxSoundBackendSDL::Play(wxSoundData *data, unsigned flags,
+                             volatile wxSoundPlaybackStatus *WXUNUSED(status))
 {
     Stop();
     
@@ -273,6 +283,7 @@ bool wxSoundBackendSDL::Play(wxSoundData *data, unsigned flags)
     }
     
     SDL_LockAudio();
+    wxLogTrace(_T("sound"), _T("playing new sound"));
     m_playing = true;
     m_pos = 0;
     m_loop = (flags & wxSOUND_LOOP);
@@ -286,7 +297,7 @@ bool wxSoundBackendSDL::Play(wxSoundData *data, unsigned flags)
     if (!(flags & wxSOUND_ASYNC))
     {
         wxLogTrace(_T("sound"), _T("waiting for sample to finish"));
-        while (m_playing)
+        while (m_playing && m_data == data)
         {
 #if wxUSE_THREADS
             // give the playback thread a chance to add event to pending

@@ -30,7 +30,7 @@
 #include <fcntl.h>
 #include <sys/ioctl.h>
 
-#if HAVE_SYS_SOUNDCARD_H
+#ifdef HAVE_SYS_SOUNDCARD_H
 #include <sys/soundcard.h>
 #endif
 
@@ -46,6 +46,39 @@
 #include "wx/sound.h"
 #include "wx/dynlib.h"
 
+
+#if wxUSE_THREADS
+// mutex for all wxSound's synchronization
+static wxMutex gs_soundMutex;
+#endif
+
+// ----------------------------------------------------------------------------
+// wxSoundData
+// ----------------------------------------------------------------------------
+  
+void wxSoundData::IncRef()
+{
+#if wxUSE_THREADS
+    wxMutexLocker locker(gs_soundMutex);
+#endif
+    m_refCnt++;
+}
+
+void wxSoundData::DecRef()
+{
+#if wxUSE_THREADS
+    wxMutexLocker locker(gs_soundMutex);
+#endif
+    if (--m_refCnt == 0)
+        delete this;
+}
+
+wxSoundData::~wxSoundData()
+{
+    delete[] m_dataWithHeader;
+}
+
+
 // ----------------------------------------------------------------------------
 // wxSoundBackendNull, used in absence of audio API or card
 // ----------------------------------------------------------------------------
@@ -57,8 +90,11 @@ public:
     int GetPriority() const { return 0; }
     bool IsAvailable() const { return true; }
     bool HasNativeAsyncPlayback() const { return true; }
-    bool Play(wxSoundData *WXUNUSED(data), unsigned WXUNUSED(flags))
+    bool Play(wxSoundData *WXUNUSED(data), unsigned WXUNUSED(flags),
+              volatile wxSoundPlaybackStatus *WXUNUSED(status))
         { return true; }
+    void Stop() {}
+    bool IsPlaying() const { return false; }
 };
 
 
@@ -79,7 +115,10 @@ public:
     int GetPriority() const { return 10; }
     bool IsAvailable() const;
     bool HasNativeAsyncPlayback() const { return false; }
-    bool Play(wxSoundData *data, unsigned flags);
+    bool Play(wxSoundData *data, unsigned flags,
+              volatile wxSoundPlaybackStatus *status);
+    void Stop() {}
+    bool IsPlaying() const { return false; }
 
 private:
     int OpenDSP(const wxSoundData *data);
@@ -99,7 +138,8 @@ bool wxSoundBackendOSS::IsAvailable() const
     return true;
 }
 
-bool wxSoundBackendOSS::Play(wxSoundData *data, unsigned flags)
+bool wxSoundBackendOSS::Play(wxSoundData *data, unsigned flags,
+                             volatile wxSoundPlaybackStatus *status)
 {
     int dev = OpenDSP(data);
     
@@ -117,6 +157,13 @@ bool wxSoundBackendOSS::Play(wxSoundData *data, unsigned flags)
 
         do
         {
+            if (status->m_stopRequested)
+            {
+                wxLogTrace(_T("sound"), _T("playback stopped"));
+                close(dev);
+                return true;
+            }
+
             i= (int)((l + m_DSPblkSize) < datasize ?
                     m_DSPblkSize : (datasize - l));
             if (write(dev, &data->m_data[l], i) != i)
@@ -128,6 +175,7 @@ bool wxSoundBackendOSS::Play(wxSoundData *data, unsigned flags)
     } while (flags & wxSOUND_LOOP);
 
     close(dev);
+    
     return true;
 }
 
@@ -155,6 +203,7 @@ bool wxSoundBackendOSS::InitDSP(int dev, int iDataBits, int iChannel,
 {
     if (ioctl(dev, SNDCTL_DSP_GETBLKSIZE, &m_DSPblkSize) < 0)
         return false;
+    wxLogTrace(_T("sound"), _T("OSS block size: %i"), m_DSPblkSize);
     if (m_DSPblkSize < 4096 || m_DSPblkSize > 65536)
         return false;
     if (ioctl(dev, SNDCTL_DSP_SAMPLESIZE, &iDataBits) < 0)
@@ -168,61 +217,146 @@ bool wxSoundBackendOSS::InitDSP(int dev, int iDataBits, int iChannel,
 
 #endif // HAVE_SYS_SOUNDCARD_H
 
-
 // ----------------------------------------------------------------------------
-// wxSoundData
-// ----------------------------------------------------------------------------
-  
-void wxSoundData::IncRef()
-{
-    m_refCnt++;
-}
-
-void wxSoundData::DecRef()
-{
-    if (--m_refCnt == 0)
-        delete this;
-}
-
-wxSoundData::~wxSoundData()
-{
-    delete[] m_dataWithHeader;
-}
-
-
-// ----------------------------------------------------------------------------
-// wxSoundAsyncPlaybackThread
+// wxSoundSyncOnlyAdaptor
 // ----------------------------------------------------------------------------
 
 #if wxUSE_THREADS
 
-// mutex for all wxSound's synchronization
-static wxMutex gs_soundMutex;
+class wxSoundSyncOnlyAdaptor;
 
 // this class manages asynchronous playback of audio if the backend doesn't
 // support it natively (e.g. OSS backend)
 class wxSoundAsyncPlaybackThread : public wxThread
 {
 public:
-    wxSoundAsyncPlaybackThread(wxSoundBackend *backend,
+    wxSoundAsyncPlaybackThread(wxSoundSyncOnlyAdaptor *adaptor,
                               wxSoundData *data, unsigned flags)
-        : wxThread(), m_backend(backend), m_data(data), m_flags(flags) {}
-    virtual ExitCode Entry()
-    {
-        m_backend->Play(m_data, m_flags & ~wxSOUND_ASYNC);
-        wxMutexLocker locker(gs_soundMutex);
-        m_data->DecRef();
-        wxLogTrace(_T("sound"), _T("terminated async playback thread"));
-        return 0;
-    }
+        : wxThread(), m_adapt(adaptor), m_data(data), m_flags(flags) {}
+    virtual ExitCode Entry();
     
 protected:
-    wxSoundBackend *m_backend;
+    wxSoundSyncOnlyAdaptor *m_adapt;
     wxSoundData *m_data;
     unsigned m_flags;
 };
 
 #endif // wxUSE_THREADS
+
+// This class turns wxSoundBackend that doesn't support asynchronous playback
+// into one that does
+class wxSoundSyncOnlyAdaptor : public wxSoundBackend
+{
+public:
+    wxSoundSyncOnlyAdaptor(wxSoundBackend *backend)
+        : m_backend(backend), m_playing(false) {}
+    ~wxSoundSyncOnlyAdaptor()
+    {
+        delete m_backend;
+    }
+    wxString GetName() const
+    {
+        return m_backend->GetName();
+    }
+    int GetPriority() const
+    {
+        return m_backend->GetPriority();
+    }
+    bool IsAvailable() const
+    {
+        return m_backend->IsAvailable();
+    }
+    bool HasNativeAsyncPlayback() const
+    {
+        return true;
+    }
+    bool Play(wxSoundData *data, unsigned flags,
+              volatile wxSoundPlaybackStatus *status);
+    void Stop();
+    bool IsPlaying() const;
+
+private:
+    friend class wxSoundAsyncPlaybackThread;
+
+    wxSoundBackend *m_backend;
+    bool m_playing;
+#if wxUSE_THREADS
+    // player thread holds this mutex and releases it after it finishes
+    // playing, so that the main thread knows when it can play sound
+    wxMutex m_mutexRightToPlay;
+    wxSoundPlaybackStatus m_status;
+#endif
+};
+
+
+#if wxUSE_THREADS
+wxThread::ExitCode wxSoundAsyncPlaybackThread::Entry()
+{
+    m_adapt->m_backend->Play(m_data, m_flags & ~wxSOUND_ASYNC,
+                             &m_adapt->m_status);
+
+    m_data->DecRef();
+    m_adapt->m_playing = false;
+    m_adapt->m_mutexRightToPlay.Unlock();
+    wxLogTrace(_T("sound"), _T("terminated async playback thread"));
+    return 0;
+}
+#endif
+
+bool wxSoundSyncOnlyAdaptor::Play(wxSoundData *data, unsigned flags,
+                                  volatile wxSoundPlaybackStatus *status)
+{
+    Stop();
+    if (flags & wxSOUND_ASYNC)
+    {
+#if wxUSE_THREADS
+        m_mutexRightToPlay.Lock();
+        m_status.m_playing = true;
+        m_status.m_stopRequested = false;
+        data->IncRef();
+        wxThread *th = new wxSoundAsyncPlaybackThread(this, data, flags);
+        th->Create();
+        th->Run();
+        wxLogTrace(_T("sound"), _T("launched async playback thread"));
+        return true;
+#else
+        wxLogError(_("Unable to play sound asynchronously."));
+        return false;
+#endif
+    }
+    else
+    {
+#if wxUSE_THREADS
+        m_mutexRightToPlay.Lock();
+#endif
+        bool rv = m_backend->Play(data, flags, status);
+#if wxUSE_THREADS
+        m_mutexRightToPlay.Unlock();
+#endif
+        return rv;
+    }
+}
+
+void wxSoundSyncOnlyAdaptor::Stop()
+{
+    wxLogTrace(_T("sound"), _T("asking audio to stop"));
+    // tell the player thread (if running) to stop playback ASAP:
+    m_status.m_stopRequested = true;
+    
+    // acquire the mutex to be sure no sound is being played, then
+    // release it because we don't need it for anything (the effect of this
+    // is that calling thread will wait until playback thread reacts to
+    // our request to interrupt playback):
+    m_mutexRightToPlay.Lock();
+    m_mutexRightToPlay.Unlock();
+    wxLogTrace(_T("sound"), _T("audio was stopped"));
+}
+
+bool wxSoundSyncOnlyAdaptor::IsPlaying() const
+{
+    return m_status.m_playing;
+}
+
 
 // ----------------------------------------------------------------------------
 // wxSound 
@@ -357,6 +491,9 @@ bool wxSound::Create(int size, const wxByte* data)
         if (!ms_backend)
             ms_backend = new wxSoundBackendNull();
 
+        if (!ms_backend->HasNativeAsyncPlayback())
+            ms_backend = new wxSoundSyncOnlyAdaptor(ms_backend);
+
         wxLogTrace(_T("sound"),
                    _T("using backend '%s'"), ms_backend->GetName().c_str());
     }
@@ -367,6 +504,9 @@ bool wxSound::Create(int size, const wxByte* data)
     if (ms_backend)
     {
         wxLogTrace(_T("sound"), _T("unloading backend"));
+
+        Stop();
+ 
         delete ms_backend;
         ms_backend = NULL;
 #if wxUSE_LIBSDL && wxUSE_PLUGINS
@@ -377,36 +517,33 @@ bool wxSound::Create(int size, const wxByte* data)
 
 bool wxSound::DoPlay(unsigned flags)
 {
+    wxASSERT_MSG( (flags & wxSOUND_LOOP) == 0 || (flags & wxSOUND_ASYNC) != 0,
+                  _T("sound can only be looped asynchronously") );
     wxCHECK_MSG( IsOk(), false, _T("Attempt to play invalid wave data") );
 
     EnsureBackend();
+    wxSoundPlaybackStatus status;
+    status.m_playing = true;
+    status.m_stopRequested = false;
+    return ms_backend->Play(m_data, flags, &status);
+}
 
-    if ((flags & wxSOUND_ASYNC) && !ms_backend->HasNativeAsyncPlayback())
-    {
-#if wxUSE_THREADS
-        wxMutexLocker locker(gs_soundMutex);
-        m_data->IncRef();
-        wxThread *th = new wxSoundAsyncPlaybackThread(ms_backend, m_data, flags);
-        th->Create();
-        th->Run();
-        wxLogTrace(_T("sound"), _T("launched async playback thread"));
-#else
-        wxLogError(_("Unable to play sound asynchronously."));
-        return false;
-#endif
-    }
+/*static*/ void wxSound::Stop()
+{
+    if (ms_backend)
+        ms_backend->Stop();
+}
+
+/*static*/ bool wxSound::IsPlaying()
+{
+    if (ms_backend)
+        return ms_backend->IsPlaying();
     else
-    {
-        ms_backend->Play(m_data, flags);
-    }
-    return true;
+        return false;
 }
 
 void wxSound::Free()
 {
-#if wxUSE_THREADS
-    wxMutexLocker locker(gs_soundMutex);
-#endif
     if (m_data)
         m_data->DecRef();
 }
@@ -420,7 +557,7 @@ typedef struct
     wxUint32      ulAvgBytesPerSec;
     wxUint16      uiBlockAlign;
     wxUint16      uiBitsPerSample;
-} WAVEFORMAT;    
+} WAVEFORMAT;
 
 #define MONO             1  // and stereo is 2 by wav format
 #define WAVE_FORMAT_PCM  1
