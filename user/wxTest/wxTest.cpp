@@ -348,6 +348,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
   wxMemoryDC memDC;
   memDC.SelectObject( *my_backstore );
+  memDC.Clear();
   memDC.SetBrush( *wxBLACK_BRUSH );
   memDC.SetPen( *wxWHITE_PEN );
   memDC.DrawRectangle( 0, 0, 150, 150 );

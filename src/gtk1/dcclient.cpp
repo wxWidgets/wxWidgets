@@ -100,6 +100,9 @@ wxPaintDC::wxPaintDC( wxWindow *window )
     m_cmap = gtk_widget_get_colormap( window->m_wxwindow );
   else
     m_cmap = gtk_widget_get_colormap( window->m_widget );
+    
+  m_isDrawable = TRUE;
+        
   SetUpDC();
   
   long x = 0;
@@ -517,7 +520,18 @@ void wxPaintDC::Clear(void)
   if (!Ok()) return;
   
   DestroyClippingRegion();
-  gdk_window_clear( m_window );
+  
+  if (m_isDrawable)
+  {
+    gdk_window_clear( m_window );
+  }
+  else
+  {
+    int width = 0;
+    int height = 0;
+    GetSize( &width, &height );
+    gdk_draw_rectangle( m_window, m_brushGC, TRUE, 0, 0, width, height );
+  };
 };
 
 void wxPaintDC::SetFont( const wxFont &font )

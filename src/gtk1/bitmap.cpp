@@ -89,6 +89,9 @@ wxBitmapRefData::wxBitmapRefData(void)
   m_height = 0;
   m_bpp = 0;
   m_palette = NULL;
+#ifdef USE_GDK_IMLIB
+  m_image = NULL;
+#endif
 };
 
 wxBitmapRefData::~wxBitmapRefData(void)
@@ -121,7 +124,8 @@ wxBitmap::wxBitmap( int width, int height, int depth )
   M_BMPDATA->m_mask = NULL;
   M_BMPDATA->m_pixmap = 
     gdk_pixmap_new( (GdkWindow*) &gdk_root_parent, width, height, depth );
-  gdk_window_get_size( M_BMPDATA->m_pixmap, &(M_BMPDATA->m_width), &(M_BMPDATA->m_height) );
+  M_BMPDATA->m_width = width;
+  M_BMPDATA->m_height = height;
   M_BMPDATA->m_bpp = depth;
    
   if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
@@ -144,6 +148,8 @@ wxBitmap::wxBitmap( char **bits )
     M_BMPDATA->m_mask->m_bitmap = mask;
   };
   
+  gdk_window_get_size( M_BMPDATA->m_pixmap, &(M_BMPDATA->m_width), &(M_BMPDATA->m_height) );
+  
 #else
 
   M_BMPDATA->m_image = gdk_imlib_create_image_from_xpm_data( bits );
@@ -151,7 +157,6 @@ wxBitmap::wxBitmap( char **bits )
   
 #endif
 				  
-  gdk_window_get_size( M_BMPDATA->m_pixmap, &(M_BMPDATA->m_width), &(M_BMPDATA->m_height) );
   M_BMPDATA->m_bpp = 24; // ?
    
   if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
@@ -184,7 +189,8 @@ wxBitmap::wxBitmap( const char bits[], int width, int height, int WXUNUSED(depth
   M_BMPDATA->m_mask = NULL;
   M_BMPDATA->m_bitmap = 
     gdk_bitmap_create_from_data( (GdkWindow*) &gdk_root_parent, (gchar *) bits, width, height );
-  gdk_window_get_size( M_BMPDATA->m_bitmap, &(M_BMPDATA->m_width), &(M_BMPDATA->m_height) );
+  M_BMPDATA->m_width = width;
+  M_BMPDATA->m_height = height;
   M_BMPDATA->m_bpp = 1;
 
   if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
@@ -377,7 +383,8 @@ void wxBitmap::Render(void)
 #ifdef USE_GDK_IMLIB
 
   gdk_imlib_render( M_BMPDATA->m_image, M_BMPDATA->m_image->rgb_width, M_BMPDATA->m_image->rgb_height );
-  
+  M_BMPDATA->m_width = M_BMPDATA->m_image->rgb_width;
+  M_BMPDATA->m_height = M_BMPDATA->m_image->rgb_height;
   M_BMPDATA->m_pixmap = gdk_imlib_move_image( M_BMPDATA->m_image );
   GdkBitmap *mask = gdk_imlib_move_mask( M_BMPDATA->m_image );
   if (mask)

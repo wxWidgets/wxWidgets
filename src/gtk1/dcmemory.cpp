@@ -51,6 +51,8 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
     }
     
     SetUpDC();
+    
+    m_isDrawable = FALSE;
   }
   else
   {
@@ -59,7 +61,7 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
   };
 };
 
-void wxMemoryDC::GetSize( int *width, int *height )
+void wxMemoryDC::GetSize( int *width, int *height ) const
 {
   if (m_selected.Ok())
   {
