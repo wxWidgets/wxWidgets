@@ -143,18 +143,15 @@ public:
     static wxString FileNameToURL(const wxString& filename);
 
     // Returns the native path for a file URL
-    //static wxFileName URLToFileName(const wxString& url);  *** See below
+    //static wxFileName URLToFileName(const wxString& url);
+    %extend {
+        static wxString URLToFileName(const wxString& url) {
+            wxFileName fname = wxFileSystem::URLToFileName(url);
+            return fname.GetFullPath();
+        }
+    }   
 };
 
-
-// Returns the native path for a file URL
-wxString wxFileSystem_URLToFileName(const wxString& url);
-%{
-    wxString wxFileSystem_URLToFileName(const wxString& url) {
-        wxFileName fname = wxFileSystem::URLToFileName(url);
-        return fname.GetFullPath();
-    }
-%}
 
 
 //---------------------------------------------------------------------------
@@ -201,24 +198,40 @@ public:
 
     void __wxMemoryFSHandler_AddFile_Data(const wxString& filename,
                                           PyObject* data) {
-        wxMemoryFSHandler::AddFile(filename,
-                                   // TODO:  Verify data type
-                                   (void*)PyString_AsString(data),
-                                   (size_t)PyString_Size(data));
+        if (! PyString_Check(data)) {
+            wxPyBLOCK_THREADS(PyErr_SetString(PyExc_TypeError,
+                                              "Expected string object"));
+            return;
+        }
+
+        bool blocked = wxPyBeginBlockThreads();
+        void*  ptr = (void*)PyString_AsString(data);
+        size_t size = PyString_Size(data);
+        wxPyEndBlockThreads(blocked);
+
+        wxMemoryFSHandler::AddFile(filename, ptr, size);
     }
 %}
 
 
 // case switch for overloading
 %pythoncode {
-def MemoryFSHandler_AddFile(filename, a, b=''):
-    if isinstance(a, wx.Image):
-        __wxMemoryFSHandler_AddFile_wxImage(filename, a, b)
-    elif isinstance(a, wx.Bitmap):
-        __wxMemoryFSHandler_AddFile_wxBitmap(filename, a, b)
-    elif type(a) == str:
-        __wxMemoryFSHandler_AddFile_Data(filename, a)
-    else: raise TypeError, 'wx.Image, wx.Bitmap or string expected'
+def MemoryFSHandler_AddFile(filename, dataItem, imgType=-1):
+    """
+    Add 'file' to the memory filesystem.  The dataItem parameter can
+    either be a `wx.Bitmap`, `wx.Image` or a string that can contain
+    arbitrary data.  If a bitmap or image is used then the imgType
+    parameter should specify what kind of image file it should be
+    written as, wx.BITMAP_TYPE_PNG, etc.
+    """
+    if isinstance(dataItem, wx.Image):
+        __wxMemoryFSHandler_AddFile_wxImage(filename, dataItem, imgType)
+    elif isinstance(dataItem, wx.Bitmap):
+        __wxMemoryFSHandler_AddFile_wxBitmap(filename, dataItem, imgType)
+    elif type(dataItem) == str:
+        __wxMemoryFSHandler_AddFile_Data(filename, dataItem)
+    else:
+        raise TypeError, 'wx.Image, wx.Bitmap or string expected'
 }
 
 
