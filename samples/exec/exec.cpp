@@ -192,9 +192,9 @@ public:
                 wxProcess *process);
 
 protected:
-    void OnTextEnter(wxCommandEvent& event) { DoSend(); }
-    void OnBtnSend(wxCommandEvent& event) { DoSend(); }
-    void OnBtnGet(wxCommandEvent& event) { DoGet(); }
+    void OnTextEnter(wxCommandEvent& WXUNUSED(event)) { DoSend(); }
+    void OnBtnSend(wxCommandEvent& WXUNUSED(event)) { DoSend(); }
+    void OnBtnGet(wxCommandEvent& WXUNUSED(event)) { DoGet(); }
 
     void OnClose(wxCloseEvent& event);
 
