@@ -30,24 +30,24 @@ Clear as mud?  Good.  Let's get started.
    you can use whatever you like.  I'll just set a variable to our wx
    prefix to reference later:
 
-	export WXPREF=/usr/lib/wxPython
+        export WXPREF=/usr/lib/wxPython
 
 
 2. Make a build directory and configure wxGTK.
 
-	cd wxPythonGTK-2.3.3   # or whatever the top-level dir is
-	mkdir build
-	cd build
-	../configure --with-gtk \
-		     --prefix=$WXPREF \
-		     --enable-rpath=$WXPREF/lib \
-		     --with-opengl \
-		     --enable-optimise \
-		     --enable-debug_flag \
-		     -with-libjpeg=builtin \
-		     --with-libpng=builtin \
-		     --with-libtiff=builtin \
-		     --with-zlib=builtin
+        cd wxPythonGTK-2.3.3   # or whatever the top-level dir is
+        mkdir build
+        cd build
+        ../configure --with-gtk \
+                     --prefix=$WXPREF \
+                     --enable-rpath=$WXPREF/lib \
+                     --with-opengl \
+                     --enable-optimise \
+                     --enable-debug_flag \
+                     --with-libjpeg=builtin \
+                     --with-libpng=builtin \
+                     --with-libtiff=builtin \
+                     --with-zlib=builtin
 
    You may want to use --enable-debug instead of --enable-optimise if
    you need to run though a debugger and want full debugging symbols.
@@ -56,11 +56,11 @@ Clear as mud?  Good.  Let's get started.
 3. Build and install wxGTK.  (You may need to be root for the last
    step, depending on where your WXPREF is.)
 
-	make
-	cd ../locale
-	make allmo
-	cd ../build
-	make install
+        make
+        cd ../locale
+        make allmo
+        cd ../build
+        make install
 
 4. Build and install wxPython.  If you want to use a different version
    of Python than is found by default on the PATH then specify the
@@ -69,10 +69,10 @@ Clear as mud?  Good.  Let's get started.
    (You will need to be root for the install step unless your Python
    is not in a system location.)
 
-	cd ../wxPython
-	python setup.py \
-	       IN_CVS_TREE=1 WX_CONFIG=$WXPREF/bin/wx-config \
-	       build install
+        cd ../wxPython
+        python setup.py \
+               IN_CVS_TREE=1 WX_CONFIG=$WXPREF/bin/wx-config \
+               build install
 
 5. That's all!
 
