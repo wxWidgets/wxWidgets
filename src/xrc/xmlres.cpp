@@ -142,7 +142,7 @@ bool wxXmlResource::Load(const wxString& filemask)
     }
 #   undef wxXmlFindFirst
 #   undef wxXmlFindNext
-    return rt;
+    return rt && UpdateResources();
 }
 
 
@@ -321,8 +321,9 @@ static void ProcessPlatformProperty(wxXmlNode *node)
 
 
 
-void wxXmlResource::UpdateResources()
+bool wxXmlResource::UpdateResources()
 {
+    bool rt = true;
     bool modif;
 #   if wxUSE_FILESYSTEM
     wxFSFile *file = NULL;
@@ -350,7 +351,10 @@ void wxXmlResource::UpdateResources()
             file = fsys.OpenFile(m_data[i].File);
             modif = file && file->GetModificationTime() > m_data[i].Time;
             if (!file)
+            {
                 wxLogError(_("Cannot open file '%s'."), m_data[i].File.c_str());
+                rt = false;
+            }
             wxDELETE(file);
 #           else
             modif = wxDateTime(wxFileModificationTime(m_data[i].File)) > m_data[i].Time;
@@ -379,11 +383,13 @@ void wxXmlResource::UpdateResources()
                 wxLogError(_("Cannot load resources from file '%s'."),
                            m_data[i].File.c_str());
                 wxDELETE(m_data[i].Doc);
+                rt = false;
             }
             else if (m_data[i].Doc->GetRoot()->GetName() != wxT("resource"))
             {
                 wxLogError(_("Invalid XRC resource '%s': doesn't have root node 'resource'."), m_data[i].File.c_str());
                 wxDELETE(m_data[i].Doc);
+                rt = false;
             }
             else
 			{
@@ -399,7 +405,10 @@ void wxXmlResource::UpdateResources()
                 if (m_version == -1)
                     m_version = version;
                 if (m_version != version)
+                {
                     wxLogError(_("Resource files must have same version number!"));
+                    rt = false;
+                }
 
                 ProcessPlatformProperty(m_data[i].Doc->GetRoot());
 				m_data[i].Time = file->GetModificationTime();
@@ -412,6 +421,8 @@ void wxXmlResource::UpdateResources()
 #           endif
         }
     }
+
+    return rt;
 }
 
 

@@ -237,7 +237,7 @@ public:
 protected:
     // Scans the resources list for unloaded files and loads them. Also reloads
     // files that have been modified since last loading.
-    void UpdateResources();
+    bool UpdateResources();
 
     // Finds a resource (calls UpdateResources) and returns a node containing it.
     wxXmlNode *FindResource(const wxString& name, const wxString& classname, bool recursive = FALSE);
