@@ -144,8 +144,6 @@ void MyCanvas::CreateAntiAliasedBitmap()
   wxMemoryDC dc;
   dc.SelectObject( bitmap );
   
-  dc.SetPen( *wxTRANSPARENT_PEN );
-  
   dc.Clear();
   
   dc.SetFont( wxFont( 24, wxDECORATIVE, wxDEFAULT, wxDEFAULT ) );

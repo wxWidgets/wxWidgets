@@ -96,6 +96,7 @@ wxWindowDC::wxWindowDC()
     m_bgGC = (GdkGC *) NULL;
     m_cmap = (GdkColormap *) NULL;
     m_isMemDC = FALSE;
+    m_owner = (wxWindow *)NULL;
 }
 
 wxWindowDC::wxWindowDC( wxWindow *window )
@@ -105,6 +106,7 @@ wxWindowDC::wxWindowDC( wxWindow *window )
     m_textGC = (GdkGC *) NULL;
     m_bgGC = (GdkGC *) NULL;
     m_cmap = (GdkColormap *) NULL;
+    m_owner = (wxWindow *)NULL;
   
     if (!window) return;
     GtkWidget *widget = window->m_wxwindow;
@@ -119,7 +121,15 @@ wxWindowDC::wxWindowDC( wxWindow *window )
     m_isMemDC = FALSE;
         
     SetUpDC();
+
+    /* this must be done after SetUpDC, bacause SetUpDC calls the
+       repective SetBrush, SetPen, SetBackground etc functions
+       to set up the DC. SetBackground call m_owner->SetBackground
+       and this might not be desired as the standard dc background
+       is white whereas a window might assume gray to be the
+       standard (as e.g. wxStatusBar) */
     
+    m_owner = window;
 }
 
 wxWindowDC::~wxWindowDC()
@@ -758,7 +768,7 @@ void wxWindowDC::DrawText( const wxString &text, long x, long y, bool WXUNUSED(u
     x = XLOG2DEV(x);
     y = YLOG2DEV(y);
 
-    // CMB 21/5/98: draw text background if mode is wxSOLID
+    /* CMB 21/5/98: draw text background if mode is wxSOLID */
     if (m_backgroundMode == wxSOLID)
     {
         long width = gdk_string_width( font, text );
@@ -769,9 +779,9 @@ void wxWindowDC::DrawText( const wxString &text, long x, long y, bool WXUNUSED(u
     }
     gdk_draw_string( m_window, font, m_textGC, x, y + font->ascent, text );
 
-    // CMB 17/7/98: simple underline: ignores scaling and underlying
-    // X font's XA_UNDERLINE_POSITION and XA_UNDERLINE_THICKNESS
-    // properties (see wxXt implementation)
+    /* CMB 17/7/98: simple underline: ignores scaling and underlying
+       X font's XA_UNDERLINE_POSITION and XA_UNDERLINE_THICKNESS
+       properties (see wxXt implementation) */
     if (m_font.GetUnderlined())
     {
         long width = gdk_string_width( font, text );
@@ -941,8 +951,8 @@ void wxWindowDC::SetBrush( const wxBrush &brush )
 
 void wxWindowDC::SetBackground( const wxBrush &brush )
 {
-   // CMB 21/7/98: Added SetBackground. Sets background brush
-   // for Clear() and bg colour for shapes filled with cross-hatch brush
+   /* CMB 21/7/98: Added SetBackground. Sets background brush
+    * for Clear() and bg colour for shapes filled with cross-hatch brush */
    
     wxCHECK_RET( Ok(), "invalid window dc" );
   
@@ -951,6 +961,11 @@ void wxWindowDC::SetBackground( const wxBrush &brush )
     m_backgroundBrush = brush;
   
     if (!m_backgroundBrush.Ok()) return;
+  
+    if (m_owner)
+    {
+        m_owner->SetBackgroundColour( m_backgroundBrush.GetColour() );
+    }
   
     m_backgroundBrush.GetColour().CalcPixel( m_cmap );
     gdk_gc_set_background( m_brushGC, m_backgroundBrush.GetColour().GetColor() );
@@ -961,11 +976,11 @@ void wxWindowDC::SetBackground( const wxBrush &brush )
     GdkFill fillStyle = GDK_SOLID;
     switch (m_backgroundBrush.GetStyle())
     {
-      case wxSOLID:
-      case wxTRANSPARENT:
-        break;
-      default:
-        fillStyle = GDK_STIPPLED;
+        case wxSOLID:
+        case wxTRANSPARENT:
+            break;
+        default:
+            fillStyle = GDK_STIPPLED;
     }
  
     gdk_gc_set_fill( m_bgGC, fillStyle );
@@ -979,7 +994,7 @@ void wxWindowDC::SetBackground( const wxBrush &brush )
     {
         int num = m_backgroundBrush.GetStyle() - wxBDIAGONAL_HATCH;
         gdk_gc_set_stipple( m_bgGC, hatches[num] );
-     }
+    }
 }
 
 void wxWindowDC::SetLogicalFunction( int function )

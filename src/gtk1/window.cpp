@@ -2536,7 +2536,6 @@ void wxWindow::SetBackgroundColour( const wxColour &colour )
         GdkWindow *window = m_wxwindow->window;
         m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
         gdk_window_set_background( window, m_backgroundColour.GetColor() );
-        gdk_window_clear( window );
     }
 
     wxColour sysbg = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );

@@ -101,6 +101,7 @@ public:
   GdkGC        *m_bgGC;
   GdkColormap  *m_cmap;
   bool          m_isMemDC;
+  wxWindow     *m_owner;
 
   void SetUpDC();
   void Destroy();
