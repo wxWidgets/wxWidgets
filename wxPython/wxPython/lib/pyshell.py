@@ -33,7 +33,8 @@ from code import InteractiveInterpreter
 # default styles, etc. to use for the STC
 
 _default_properties = {
-    'marginWidth' : 5,
+    'selMargin'   : 0,
+    'marginWidth' : 1,
     'ps1'         : '>>> ',
     'stdout'      : 'fore:#0000FF',
     'stderr'      : 'fore:#007f00',
@@ -102,11 +103,12 @@ class PyShellWindow(wxStyledTextCtrl, InteractiveInterpreter):
         """
         p = self.props
 
-        self.SetLexer(wxSTC_LEX_PYTHON)
-        self.SetKeywords(0, string.join(keyword.kwlist))
+        #self.SetLexer(wxSTC_LEX_PYTHON)
+        #self.SetKeywords(0, string.join(keyword.kwlist))
 
-        # set the selection margin
-        self.SetMarginWidth(1, p['marginWidth'])
+        # set the selection margin and window margin
+        self.SetMarginWidth(1, p['selMargin'])
+        self.SetMargins(p['marginWidth'], p['marginWidth'])
 
         # styles
         self.StyleSetSpec(_stdout_style, p['stdout'])
