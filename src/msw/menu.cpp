@@ -1014,7 +1014,7 @@ void wxMenuBar::Attach(wxFrame *frame)
 
     m_menuBarFrame = frame;
 
-    // create the accel table - we consider that the toolbar construction is
+    // create the accel table - we consider that the menubar construction is
     // finished
     size_t nAccelCount = 0;
     int i;
@@ -1023,17 +1023,20 @@ void wxMenuBar::Attach(wxFrame *frame)
         nAccelCount += m_menus[i]->GetAccelCount();
     }
 
-    wxAcceleratorEntry *accelEntries = new wxAcceleratorEntry[nAccelCount];
-
-    nAccelCount = 0;
-    for ( i = 0; i < m_menuCount; i++ )
+    if ( nAccelCount )
     {
-        nAccelCount += m_menus[i]->CopyAccels(&accelEntries[nAccelCount]);
+        wxAcceleratorEntry *accelEntries = new wxAcceleratorEntry[nAccelCount];
+
+        nAccelCount = 0;
+        for ( i = 0; i < m_menuCount; i++ )
+        {
+            nAccelCount += m_menus[i]->CopyAccels(&accelEntries[nAccelCount]);
+        }
+
+        m_accelTable = wxAcceleratorTable(nAccelCount, accelEntries);
+
+        delete [] accelEntries;
     }
-
-    m_accelTable = wxAcceleratorTable(nAccelCount, accelEntries);
-
-    delete [] accelEntries;
 }
 
 // ---------------------------------------------------------------------------
