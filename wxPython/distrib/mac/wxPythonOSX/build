@@ -24,7 +24,7 @@ function usage {
     echo "   skiptar        Don't unpack the tarball"
     echo "   use_cvs        Use the CVS workspace instead of a tarfile"
     echo "   skipconfig     Don't run configure"
-    echo "   skipbuild      Don't build wxWindows or wxPython"
+    echo "   skipbuild      Don't build wxWidgets or wxPython"
     echo "   skipinstall    Don't do the installation step"
     echo "   skipdmg        Don't make the package or diskimage"
     echo "   skipclean      Don't do the cleanup at the end"
@@ -70,8 +70,8 @@ PYPREFIX=`$PYTHON -c "import sys; print sys.exec_prefix"`
 PYLIB=$PYPREFIX/lib/python$PYVER
 SITEPACKAGES=$PYLIB/site-packages
 
-SRCDIR=/stuff/Development/wxPython/dist/$VERSION
-TARBALL=$SRCDIR/wxPythonSrc-$VERSION.tar.gz
+TARBALLDIR=/stuff/Development/wxPython/dist/$VERSION
+TARBALL=$TARBALLDIR/wxPythonSrc-$VERSION.tar.gz
 
 PREFIX=/usr/lib/wxPython-$VERSION
 BINPREFIX=/usr/bin
@@ -86,7 +86,7 @@ INSTALLDEVEL=$TMPDIR/install-devel
 DMGDIR=$TMPDIR/dmg
 RESOURCEDIR=$PROGDIR/resources
 DESTDIR=$PWD/dist
-
+SRCROOT=$BUILDROOT/wxPythonSrc-$VERSION
 
 
 #----------------------------------------------------------------------
@@ -96,7 +96,10 @@ mkdir -p $BUILDROOT
 mkdir -p $INSTALLROOT
 #mkdir -p $INSTALLDEVEL
 rm -rf $DMGDIR
-mkdir -p $DMGDIR/root
+mkdir -p $DMGDIR/root/Apps
+mkdir -p $DMGDIR/root/Docs
+mkdir -p $DMGDIR/root/Samples
+
 
 pushd $BUILDROOT
 
@@ -148,7 +151,7 @@ cd $WXDIR/bld
 #----------------------------------------------------------------------
 
 
-# Configure wxWindows
+# Configure wxWidgets
 if [ -z "$skipconfig" ]; then
     ../configure \
 	--prefix=$PREFIX \
@@ -170,10 +173,10 @@ if [ -z "$skipconfig" ]; then
 
 fi
 
-# Build wxWindows and wxPython
+# Build wxWidgets and wxPython
 if [ -z "$skipbuild" ]; then
 
-    # Make wxWindows and some contribs
+    # Make wxWidgets and some contribs
     make 
     make -C contrib/src/gizmos 
     make -C contrib/src/ogl CXXFLAGS="-DwxUSE_DEPRECATED=0"
@@ -205,7 +208,7 @@ fi
 #----------------------------------------------------------------------
 
 if [ -z "$skipinstall" ]; then
-    # Install wxWindows
+    # Install wxWidgets
     cd $WXDIR/bld
     make prefix=$INSTALLROOT$PREFIX install
     make -C contrib/src/gizmos prefix=$INSTALLROOT$PREFIX install
@@ -346,26 +349,35 @@ Everything else here is optional and you can drag them out of the disk
 image and drop them whereever you want.  You do need to install the above
 package before you can use any of the items below.
 
-   docs/                A few readmes, change log, etc.  The full 
-                        documentation is downloadable separately. 
 
-   licence/             License docs.
-
-   demo/                A copy of the wxPython demo source code, 
-                        just open the folder and run demo.py.
-
-   samples/             Several small sample applications that 
-                        demonstrate how to use wxPython.
-
-   wxPython Demo        An application bundle version of the demo.
+   Apps/wxPython Demo   An application bundle version of the demo.
                         (This has it's own copy of the sources within
                         the bundle.)
 
-   XRCed                An application for editing wxPython resource
+   Apps/XRCed           An application for editing wxPython resource
                         files  (XRC files.)
 
-   PyCrust              An application that provides an interactive 
+   Apps/PyCrust         An application that provides an interactive 
                         Python shell and also namespace inspectors.
+
+
+
+   Docs/wxDocs          A folder containing the wxWidgets documentation
+                        bundled in .zip files, and a small wxPython
+                        application that can be used to view the docs.
+                        Just run viewer.pyw.
+
+   Docs/licence         License files.
+
+   Docs/other           A few readmes, change log, etc.  The full 
+                        documentation is downloadable separately. 
+
+
+   Samples/samples      Several small sample applications that 
+                        demonstrate how to use wxPython.
+
+   Samples/demo         A copy of the wxPython demo source code, 
+                        just open the folder and run demo.pyw.
 
 Happy Hacking!
 EOF
@@ -374,21 +386,34 @@ EOF
 #                        file editing capabilities.
 
 
+    # wxDocs
+    pushd $DMGDIR/root/Docs
+    tar xzvf $TARBALLDIR/wxPythonDocs-$VERSION.tar.gz
+    mv wxPython-$VERSION/docs  wxDocs
+    rm -r wxPython-$VERSION
+    mv wxDocs/viewdocs.py wxDocs/viewdocs.pyw
+
     # license files, docs, etc.
-    cp -pR $WXDIR/wxPython/licence $DMGDIR/root
-    rm -rf $WXDIR/wxPython/docs/xml-raw
-    cp -pR $WXDIR/wxPython/docs $DMGDIR/root
-    rm -rf $DMGDIR/root/docs/bin
-
-    # Copy the demo and samples to the disk image
-    cp -pR $WXDIR/wxPython/demo $DMGDIR/root
-    cp -pR $WXDIR/wxPython/samples $DMGDIR/root
-    rm $DMGDIR/root/demo/b
-
+    cp -pR $SRCROOT/wxPython/licence   .
+    cp -pR $SRCROOT/wxPython/docs      .
+    rm -rf docs/bin
+    rm -rf docs/xml-raw
+    mv docs other
+    popd
     
+    # Copy the demo and samples to the disk image from the tarball
+    pushd $DMGDIR/root/Samples
+    tar xzvf $TARBALLDIR/wxPythonDemo-$VERSION.tar.gz
+    mv wxPython-$VERSION/* .
+    rm -rf wxPython-$VERSION
+    rm demo/b demo/.setup.sh
+    mv demo/demo.py demo/demo.pyw
+    popd
+    
+
     # Make an app bundle to launch PyCrust
     $PYTHONW $PROGDIR/../buildapp.py \
-	--builddir=$DMGDIR/root \
+	--builddir=$DMGDIR/root/Apps \
 	--name=PyCrust \
 	--mainprogram=$INSTALLROOT$BINPREFIX/pycrust.py \
 	--iconfile=$PROGDIR/PieShell.icns \
@@ -404,7 +429,7 @@ EOF
 
     # Make an app to launch XRCed
     $PYTHONW $PROGDIR/../buildapp.py \
- 	--builddir=$DMGDIR/root \
+ 	--builddir=$DMGDIR/root/Apps \
  	--name=XRCed \
  	--mainprogram=$INSTALLROOT$BINPREFIX/xrced.py \
  	--iconfile=$PROGDIR/XRCed.icns \
@@ -412,12 +437,12 @@ EOF
 
     # Make an app bundle to run the demo
     $PYTHONW $PROGDIR/../buildapp.py \
- 	--builddir=$DMGDIR/root \
+ 	--builddir=$DMGDIR/root/Apps \
  	--name="wxPython Demo" \
- 	--mainprogram=$DMGDIR/root/demo/demo.py \
+ 	--mainprogram=$DMGDIR/root/Samples/demo/demo.pyw \
  	--iconfile=$PROGDIR/RunDemo.icns \
  	build
-    cp -pR $DMGDIR/root/demo/* "$DMGDIR/root/wxPython Demo.app/Contents/Resources"
+    cp -pR $DMGDIR/root/Samples/demo/* "$DMGDIR/root/Apps/wxPython Demo.app/Contents/Resources"
     
 
     # and then finally make a disk image containing the packages and etc.
