@@ -342,9 +342,12 @@ bool wxThread::TestDestroy()
             usleep(1);
         }
     }
+
+    // VZ: do I understand it correctly that it will terminate the thread all by
+    //     itself if it was cancelled?
     pthread_testcancel();
     
-    return TRUE; /* what is this for? */
+    return FALSE;
 }
 
 bool wxThread::IsMain()
