@@ -96,6 +96,17 @@
 #define wxUSE_CHECKLISTBOX 0
 #endif
 
+#if wxUSE_SPINCTRL
+#   if !wxUSE_SPINBTN
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxSpinCtrl requires wxSpinButton on MSW"
+#       else
+#           undef wxUSE_SPINBTN
+#           define wxUSE_SPINBTN 1
+#       endif
+#   endif
+#endif
+
 #if defined(__BORLANDC__) && (__BORLANDC__ < 0x500)
 /* BC++ 4.0 can't compile JPEG library */
 #undef wxUSE_LIBJPEG

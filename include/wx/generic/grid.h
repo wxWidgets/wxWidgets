@@ -79,7 +79,9 @@ class WXDLLIMPEXP_ADV wxGridSelection;
 class WXDLLEXPORT wxCheckBox;
 class WXDLLEXPORT wxComboBox;
 class WXDLLEXPORT wxTextCtrl;
+#if wxUSE_SPINCTRL
 class WXDLLEXPORT wxSpinCtrl;
+#endif
 
 // ----------------------------------------------------------------------------
 // macros
@@ -460,10 +462,19 @@ public:
     virtual wxString GetValue() const;
 
 protected:
+#if wxUSE_SPINCTRL
     wxSpinCtrl *Spin() const { return (wxSpinCtrl *)m_control; }
+#endif
 
     // if HasRange(), we use wxSpinCtrl - otherwise wxTextCtrl
-    bool HasRange() const { return m_min != m_max; }
+    bool HasRange() const
+    {
+#if wxUSE_SPINCTRL
+        return m_min != m_max;
+#else
+        return false;
+#endif
+    }
 
     // string representation of m_valueOld
     wxString GetString() const

@@ -18,6 +18,8 @@
 
 #include "wx/spinbutt.h"    // the base class
 
+#if wxUSE_SPINCTRL
+
 #include "wx/dynarray.h"
 
 class WXDLLEXPORT wxSpinCtrl;
@@ -115,6 +117,8 @@ private:
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxSpinCtrl)
 };
+
+#endif // wxUSE_SPINCTRL
 
 #endif // _WX_MSW_SPINCTRL_H_
 

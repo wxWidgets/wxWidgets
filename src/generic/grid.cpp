@@ -502,7 +502,7 @@ void wxGridCellEditor::Show(bool show, wxGridCellAttr *attr)
             m_colBgOld = m_control->GetBackgroundColour();
             m_control->SetBackgroundColour(attr->GetBackgroundColour());
 
-	    // Workaround for GTK+1 font setting problem on some platforms
+// Workaround for GTK+1 font setting problem on some platforms
 #if !defined(__WXGTK__) || defined(__WXGTK20__)
             m_fontOld = m_control->GetFont();
             m_control->SetFont(attr->GetFont());
@@ -525,7 +525,7 @@ void wxGridCellEditor::Show(bool show, wxGridCellAttr *attr)
             m_control->SetBackgroundColour(m_colBgOld);
             m_colBgOld = wxNullColour;
         }
-	// Workaround for GTK+1 font setting problem on some platforms
+// Workaround for GTK+1 font setting problem on some platforms
 #if !defined(__WXGTK__) || defined(__WXGTK20__)
         if ( m_fontOld.Ok() )
         {
@@ -802,6 +802,7 @@ void wxGridCellNumberEditor::Create(wxWindow* parent,
                                     wxWindowID id,
                                     wxEvtHandler* evtHandler)
 {
+#if wxUSE_SPINCTRL
     if ( HasRange() )
     {
         // create a spin ctrl
@@ -813,6 +814,7 @@ void wxGridCellNumberEditor::Create(wxWindow* parent,
         wxGridCellEditor::Create(parent, id, evtHandler);
     }
     else
+#endif
     {
         // just a text control
         wxGridCellTextEditor::Create(parent, id, evtHandler);
@@ -835,19 +837,21 @@ void wxGridCellNumberEditor::BeginEdit(int row, int col, wxGrid* grid)
     {
         m_valueOld = 0;
         wxString sValue = table->GetValue(row, col);
-        if (! sValue.ToLong(&m_valueOld) && ! sValue.IsEmpty())
+        if (! sValue.ToLong(&m_valueOld) && ! sValue.empty())
         {
             wxFAIL_MSG( _T("this cell doesn't have numeric value") );
             return;
         }
     }
 
+#if wxUSE_SPINCTRL
     if ( HasRange() )
     {
         Spin()->SetValue((int)m_valueOld);
         Spin()->SetFocus();
     }
     else
+#endif
     {
         DoBeginEdit(GetString());
     }
@@ -860,6 +864,7 @@ bool wxGridCellNumberEditor::EndEdit(int row, int col,
     long value = 0;
     wxString text;
 
+#if wxUSE_SPINCTRL
     if ( HasRange() )
     {
         value = Spin()->GetValue();
@@ -868,9 +873,10 @@ bool wxGridCellNumberEditor::EndEdit(int row, int col,
             text = wxString::Format(wxT("%ld"), value);
     }
     else
+#endif
     {
         text = Text()->GetValue();
-        changed = (text.IsEmpty() || text.ToLong(&value)) && (value != m_valueOld);
+        changed = (text.empty() || text.ToLong(&value)) && (value != m_valueOld);
     }
 
     if ( changed )
@@ -886,11 +892,13 @@ bool wxGridCellNumberEditor::EndEdit(int row, int col,
 
 void wxGridCellNumberEditor::Reset()
 {
+#if wxUSE_SPINCTRL
     if ( HasRange() )
     {
         Spin()->SetValue((int)m_valueOld);
     }
     else
+#endif
     {
         DoReset(GetString());
     }
@@ -992,18 +1000,21 @@ void wxGridCellNumberEditor::SetParameters(const wxString& params)
 // return the value in the spin control if it is there (the text control otherwise)
 wxString wxGridCellNumberEditor::GetValue() const
 {
-  wxString s;
+    wxString s;
 
-  if( HasRange() )
-  {
-    long value = Spin()->GetValue();
-    s.Printf(wxT("%ld"), value);
-  }
-  else
-  {
-    s = Text()->GetValue();
-  }
-  return s;
+#if wxUSE_SPINCTRL
+    if( HasRange() )
+    {
+        long value = Spin()->GetValue();
+        s.Printf(wxT("%ld"), value);
+    }
+    else
+#endif
+    {
+        s = Text()->GetValue();
+    }
+
+    return s;
 }
 
 // ----------------------------------------------------------------------------
@@ -1039,7 +1050,7 @@ void wxGridCellFloatEditor::BeginEdit(int row, int col, wxGrid* grid)
     {
         m_valueOld = 0.0;
         wxString sValue = table->GetValue(row, col);
-        if (! sValue.ToDouble(&m_valueOld) && ! sValue.IsEmpty())
+        if (! sValue.ToDouble(&m_valueOld) && ! sValue.empty())
         {
             wxFAIL_MSG( _T("this cell doesn't have float value") );
             return;
@@ -1055,7 +1066,7 @@ bool wxGridCellFloatEditor::EndEdit(int row, int col,
     double value = 0.0;
     wxString text(Text()->GetValue());
 
-    if ( (text.IsEmpty() || text.ToDouble(&value)) && (value != m_valueOld) )
+    if ( (text.empty() || text.ToDouble(&value)) && (value != m_valueOld) )
     {
         if (grid->GetTable()->CanSetValueAs(row, col, wxGRID_VALUE_FLOAT))
             grid->GetTable()->SetValueAsDouble(row, col, value);
@@ -1188,7 +1199,7 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
                 tmpbuf[0] = (char) keycode;
                 tmpbuf[1] = '\0';
                 wxString strbuf(tmpbuf, *wxConvCurrent);
-                bool is_decimal_point = 
+                bool is_decimal_point =
                     ( strbuf == wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT,
                                                   wxLOCALE_CAT_NUMBER) );
                 if ( (keycode < 128) &&

@@ -1273,7 +1273,7 @@
 #endif /* wxUSE_HELP */
 
 #if wxUSE_WXHTML_HELP
-#   if !wxUSE_HELP || !wxUSE_HTML || !wxUSE_COMBOBOX || !wxUSE_NOTEBOOK
+#   if !wxUSE_HELP || !wxUSE_HTML || !wxUSE_COMBOBOX || !wxUSE_NOTEBOOK || !wxUSE_SPINCTRL
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "Built in help controller can't be compiled"
 #       else
@@ -1285,6 +1285,8 @@
 #           define wxUSE_COMBOBOX 1
 #           undef wxUSE_NOTEBOOK
 #           define wxUSE_NOTEBOOK 1
+#           undef wxUSE_SPINCTRL
+#           define wxUSE_SPINCTRL 1
 #       endif
 #   endif
 #endif /* wxUSE_WXHTML_HELP */
