@@ -9,9 +9,11 @@
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma implementation "dc.h"
 #endif
+
+#include "wx/wxprec.h"
 
 #include "wx/dc.h"
 #include "wx/app.h"
@@ -1676,39 +1678,21 @@ void wxDC::MacInstallFont() const
         Pattern whiteColor ;
         ::BackPat(GetQDGlobalsWhite(&whiteColor));
     }
-    if ( m_font.Ok() )
-    {
-        ::TextFont( m_font.MacGetFontNum() ) ;
-        ::TextSize( (short)(m_scaleY * m_font.MacGetFontSize()) ) ;
-        ::TextFace( m_font.MacGetFontStyle() ) ;
-        m_macFontInstalled = true ;
-        m_macBrushInstalled = false ;
-        m_macPenInstalled = false ;
-        RGBColor forecolor = MAC_WXCOLORREF( m_textForegroundColour.GetPixel());
-        RGBColor backcolor = MAC_WXCOLORREF( m_textBackgroundColour.GetPixel());
-        ::RGBForeColor( &forecolor );
-        ::RGBBackColor( &backcolor );
-    }
-    else
-    {
-        FontFamilyID fontId ;
-        Str255 fontName ;
-        SInt16 fontSize ;
-        Style fontStyle ;
-        GetThemeFont(kThemeSmallSystemFont , GetApplicationScript() , fontName , &fontSize , &fontStyle ) ;
-        GetFNum( fontName, &fontId );
-        ::TextFont( fontId ) ;
-        ::TextSize( short(m_scaleY * fontSize) ) ;
-        ::TextFace( fontStyle ) ;
-        // todo reset after spacing changes - or store the current spacing somewhere
-        m_macFontInstalled = true ;
-        m_macBrushInstalled = false ;
-        m_macPenInstalled = false ;
-        RGBColor forecolor = MAC_WXCOLORREF( m_textForegroundColour.GetPixel());
-        RGBColor backcolor = MAC_WXCOLORREF( m_textBackgroundColour.GetPixel());
-        ::RGBForeColor( &forecolor );
-        ::RGBBackColor( &backcolor );
-    }
+    
+    wxASSERT( m_font.Ok() ) ;
+    
+
+    ::TextFont( m_font.MacGetFontNum() ) ;
+    ::TextSize( (short)(m_scaleY * m_font.MacGetFontSize()) ) ;
+    ::TextFace( m_font.MacGetFontStyle() ) ;
+    m_macFontInstalled = true ;
+    m_macBrushInstalled = false ;
+    m_macPenInstalled = false ;
+    RGBColor forecolor = MAC_WXCOLORREF( m_textForegroundColour.GetPixel());
+    RGBColor backcolor = MAC_WXCOLORREF( m_textBackgroundColour.GetPixel());
+    ::RGBForeColor( &forecolor );
+    ::RGBBackColor( &backcolor );
+
     short mode = patCopy ;
     // todo :
     switch( m_logicalFunction )
@@ -1749,57 +1733,31 @@ void wxDC::MacInstallFont() const
     }
     ::PenMode( mode ) ;
     OSStatus status = noErr ;
+    status = ATSUCreateAndCopyStyle( (ATSUStyle) m_font.MacGetATSUStyle() , (ATSUStyle*) &m_macATSUIStyle ) ;
+    wxASSERT_MSG( status == noErr , wxT("couldn't set create ATSU style") ) ;
+
     Fixed atsuSize = IntToFixed( int(m_scaleY * m_font.MacGetFontSize()) ) ;
-    Style qdStyle = m_font.MacGetATSUAdditionalQDStyles() ;
-    ATSUFontID    atsuFont = m_font.MacGetATSUFontID() ;
-    status = ::ATSUCreateStyle((ATSUStyle *)&m_macATSUIStyle) ;
-    wxASSERT_MSG( status == noErr , wxT("couldn't create ATSU style") ) ;
     ATSUAttributeTag atsuTags[] =
     {
-        kATSUFontTag ,
             kATSUSizeTag ,
-            //        kATSUColorTag ,
-            //        kATSUBaselineClassTag ,
-            kATSUVerticalCharacterTag,
-            kATSUQDBoldfaceTag ,
-            kATSUQDItalicTag ,
-            kATSUQDUnderlineTag ,
-            kATSUQDCondensedTag ,
-            kATSUQDExtendedTag ,
     } ;
     ByteCount atsuSizes[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
     {
-        sizeof( ATSUFontID ) ,
             sizeof( Fixed ) ,
-            //        sizeof( RGBColor ) ,
-            //        sizeof( BslnBaselineClass ) ,
-            sizeof( ATSUVerticalCharacterType),
-            sizeof( Boolean ) ,
-            sizeof( Boolean ) ,
-            sizeof( Boolean ) ,
-            sizeof( Boolean ) ,
-            sizeof( Boolean ) ,
     } ;
     Boolean kTrue = true ;
     Boolean kFalse = false ;
-    //BslnBaselineClass kBaselineDefault = kBSLNHangingBaseline ;
+
     ATSUVerticalCharacterType kHorizontal = kATSUStronglyHorizontal;
     ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
     {
-        &atsuFont ,
             &atsuSize ,
-            //        &MAC_WXCOLORREF( m_textForegroundColour.GetPixel() ) ,
-            //        &kBaselineDefault ,
-            &kHorizontal,
-            (qdStyle & bold) ? &kTrue : &kFalse ,
-            (qdStyle & italic) ? &kTrue : &kFalse ,
-            (qdStyle & underline) ? &kTrue : &kFalse ,
-            (qdStyle & condense) ? &kTrue : &kFalse ,
-            (qdStyle & extend) ? &kTrue : &kFalse ,
     } ;
     status = ::ATSUSetAttributes((ATSUStyle)m_macATSUIStyle, sizeof(atsuTags)/sizeof(ATSUAttributeTag) ,
         atsuTags, atsuSizes, atsuValues);
-    wxASSERT_MSG( status == noErr , wxT("couldn't set create ATSU style") ) ;
+
+    wxASSERT_MSG( status == noErr , wxT("couldn't Modify ATSU style") ) ;
+    
 }
 
 Pattern gPatterns[] =
