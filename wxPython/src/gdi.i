@@ -101,14 +101,6 @@ public:
     void SetQuality(int q);
 #endif
 
-    %pragma(python) addtoclass = "
-    def __del__(self,gdic=gdic):
-        try:
-            if self.thisown == 1 :
-                gdic.delete_wxBitmap(self)
-        except:
-            pass
-"
 };
 
 
@@ -237,14 +229,6 @@ public:
 #endif
     void CopyFromBitmap(const wxBitmap& bmp);
 
-    %pragma(python) addtoclass = "
-    def __del__(self,gdic=gdic):
-        try:
-            if self.thisown == 1 :
-                gdic.delete_wxIcon(self)
-        except:
-            pass
-"
 };
 
 
