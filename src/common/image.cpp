@@ -1390,6 +1390,24 @@ void wxImage::CleanUpHandlers()
 }
 
 
+wxString wxImage::GetImageExtWildcard()
+{
+    wxString fmts;
+
+    wxList& Handlers = wxImage::GetHandlers();
+    wxNode* Node = Handlers.GetFirst();
+    while ( Node )
+    {
+        wxImageHandler* Handler = (wxImageHandler*)Node->GetData();
+        fmts += wxT("*.") + Handler->GetExtension();
+        Node = Node->GetNext();
+        if ( Node ) fmts += wxT(";");
+    }
+
+    return wxT("(") + fmts + wxT(")|") + fmts;
+}
+
+
 //-----------------------------------------------------------------------------
 // wxImageHandler
 //-----------------------------------------------------------------------------

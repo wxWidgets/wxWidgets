@@ -306,6 +306,8 @@ public:
     static wxImageHandler *FindHandler( long imageType );
     static wxImageHandler *FindHandlerMime( const wxString& mimetype );
 
+    static wxString GetImageExtWildcard();
+
     static void CleanUpHandlers();
     static void InitStandardHandlers();
 

@@ -29,7 +29,7 @@ alpha value with \helpref{HasAlpha}{wximagehasalpha}. In fact, currently only
 images loaded from PNG files with transparency information will have alpha
 channel but support for it will be added to the other formats as well (as well
 as support for saving images with alpha channel which is not still implemented
-neither).
+either).
 
 \wxheading{Available image handlers}
 
@@ -350,6 +350,29 @@ Finds the handler associated with the given MIME type.
 \wxheading{Return value}
 
 A pointer to the handler if found, NULL otherwise.
+
+\wxheading{See also}
+
+\helpref{wxImageHandler}{wximagehandler}
+
+\membersection{wxImage::GetImageExtWildcard}
+
+\func{static wxString}{GetImageExtWildcard}{\void}
+
+Iterates all registered wxImageHandler objects, and returns a string containing file extension masks
+suitable for passing to file open/save dialog boxes.
+
+\wxheading{Return value}
+
+The format of the returned string is "(*.ext1;*.ext2)|*.ext1;*.ext2".
+
+It is usually a good idea to prepend a description before passing the result to the dialog.
+
+Example:
+
+\begin{verbatim}
+    wxFileDialog FileDlg( this, "Choose Image", ::wxGetWorkingDirectory(), "", _("Image Files ") + wxImage::GetImageExtWildcard(), wxOPEN );
+\end{verbatim}
 
 \wxheading{See also}
 
