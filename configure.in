@@ -2083,7 +2083,7 @@ if test "$wxUSE_SHARED" = "yes"; then
       *-*-irix5* | *-*-irix6* | \
       *-*-osf* | \
       *-*-dgux5* | \
-      *-*-sysv5* | )
+      *-*-sysv5* )
         dnl defaults are ok
       ;;
       *-*-aix* )

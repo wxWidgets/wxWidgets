@@ -9010,7 +9010,7 @@ if test "$wxUSE_SHARED" = "yes"; then
       *-*-irix5* | *-*-irix6* | \
       *-*-osf* | \
       *-*-dgux5* | \
-      *-*-sysv5* | )
+      *-*-sysv5* )
               ;;
       *-*-aix* )
         SHARED_LD="/usr/lpp/xlC/bin/makeC++SharedLib -p 0 -o"
