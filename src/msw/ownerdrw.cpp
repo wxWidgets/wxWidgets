@@ -147,7 +147,7 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
           *pwidth += adjustedWidth - ms_nDefaultMarginWidth;
 
       // Do we need to widen margin to fit BMP?
-      if ((size_t)GetMarginWidth() < adjustedWidth)
+      if ((size_t)GetMarginWidth() != adjustedWidth)
           SetMarginWidth(adjustedWidth);
   }
 
