@@ -1825,8 +1825,9 @@ bool wxWindowMac::MacIsReallyShown()
 {
     // only under OSX the visibility of the TLW is taken into account
 #if TARGET_API_MAC_OSX
-    return m_peer->IsVisible();
-#else
+    if ( m_peer && m_peer->Ok() )
+        return m_peer->IsVisible();
+#endif
     wxWindow* win = this ;
     while( win->IsShown()  )
     {
@@ -1839,7 +1840,6 @@ bool wxWindowMac::MacIsReallyShown()
             
     } ;
     return false ;
-#endif
 }
 
 bool wxWindowMac::MacIsReallyEnabled() 
