@@ -45,7 +45,7 @@ wxHTTP::wxHTTP()
   m_read = FALSE;
   m_proxy_mode = FALSE;
 
-  SetNotify(GSOCK_LOST_FLAG);
+  SetNotify(wxSOCKET_LOST_FLAG);
 }
 
 wxHTTP::~wxHTTP()
@@ -264,7 +264,8 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
   return ret_value;
 }
 
-class wxHTTPStream : public wxSocketInputStream {
+class wxHTTPStream : public wxSocketInputStream
+{
 public:
   wxHTTP *m_http;
   size_t m_httpsize;
@@ -293,11 +294,7 @@ size_t wxHTTPStream::OnSysRead(void *buffer, size_t bufsize)
 
 bool wxHTTP::Abort(void)
 {
-  bool ret;
-
-  ret = wxSocketClient::Close();
-
-  return ret;
+  return wxSocketClient::Close();
 }
 
 wxInputStream *wxHTTP::GetInputStream(const wxString& path)
@@ -324,7 +321,7 @@ wxInputStream *wxHTTP::GetInputStream(const wxString& path)
   inp_stream->m_read_bytes = 0;
 
   Notify(FALSE);
-  SetFlags(SPEED | WAITALL);
+  SetFlags(wxSOCKET_BLOCK | wxSOCKET_WAITALL);
 
   return inp_stream;
 }
