@@ -887,10 +887,13 @@ int wxMessageBox(const wxString& message, const wxString& caption, long style,
             return wxYES;
         case wxID_NO:
             return wxNO;
-        default:
         case wxID_CANCEL:
             return wxCANCEL;
     }
+
+    wxFAIL_MSG( _T("unexpected return code from wxMessageDialog") );
+
+    return wxCANCEL;
 }
 
 #if wxUSE_TEXTDLG

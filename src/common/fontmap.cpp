@@ -741,8 +741,8 @@ bool wxFontMapper::IsEncodingAvailable(wxFontEncoding encoding,
         info.facename = facename;
         return wxTestFontEncoding(info);
     }
-    else
-        return FALSE;
+
+    return FALSE;
 }
 
 #endif // wxUSE_GUI

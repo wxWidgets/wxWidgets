@@ -87,13 +87,13 @@ RSC=rc.exe
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
-# ADD RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /i "$(wx)\include" /d "NDEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib src\jpeg\Release\jpeg.lib src\tiff\Release\tiff.lib src\png\Release\png.lib src\xpm\Release\xpm.lib src\zlib\Release\zlib.lib /nologo /dll /machine:I386 /out:"ReleaseDll/wxmsw221.dll"
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib winmm.lib src\jpeg\Release\jpeg.lib src\tiff\Release\tiff.lib src\png\Release\png.lib src\xpm\Release\xpm.lib src\zlib\Release\zlib.lib /nologo /dll /machine:I386 /out:"ReleaseDll/wxmsw221.dll"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib src\jpeg\Release\jpeg.lib src\tiff\Release\tiff.lib src\png\Release\png.lib src\xpm\Release\xpm.lib src\zlib\Release\zlib.lib /nologo /dll /machine:I386 /out:"ReleaseDll/wxmsw221.dll"
 
 !ELSEIF  "$(CFG)" == "wxWinDll - Win32 Debug"
 
@@ -113,7 +113,7 @@ LINK32=link.exe
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
-# ADD RSC /l 0x409 /d "_DEBUG"
+# ADD RSC /l 0x409 /i "$(wx)\include" /d "_DEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -152,6 +152,7 @@ SOURCE=.\src\common\y_tab.c
 
 !IF  "$(CFG)" == "wxWinDll - Win32 Release"
 
+# ADD CPP /W1
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ELSEIF  "$(CFG)" == "wxWinDll - Win32 Debug"

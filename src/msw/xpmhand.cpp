@@ -67,7 +67,8 @@ static void XpmToBitmap(wxBitmap *bitmap,
     if (xmask)
     {
         wxMask *mask = new wxMask();
-        mask->SetMaskBitmap((WXHBITMAP) wxInvertMask(xmask->bitmap));
+        mask->SetMaskBitmap((WXHBITMAP) wxInvertMask(xmask->bitmap,
+                                                     bm.bmWidth, bm.bmHeight));
         bitmap->SetMask(mask);
     }
 }

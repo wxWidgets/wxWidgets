@@ -160,7 +160,7 @@ wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
         return s;
     }
 
-    else return doc;
+    return doc;
 }
 
 

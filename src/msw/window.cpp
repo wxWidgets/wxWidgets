@@ -2760,11 +2760,9 @@ bool wxWindow::HandleSetCursor(WXHWND hWnd,
         // cursor set, stop here
         return TRUE;
     }
-    else
-    {
-        // pass up the window chain
-        return FALSE;
-    }
+
+    // pass up the window chain
+    return FALSE;
 }
 
 // ---------------------------------------------------------------------------

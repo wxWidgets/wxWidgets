@@ -558,10 +558,8 @@ void wxMenuBar::Refresh()
 
 WXHMENU wxMenuBar::Create()
 {
-    if (m_hMenu != 0 )
+    if ( m_hMenu != 0 )
         return m_hMenu;
-
-    wxCHECK_MSG( !m_hMenu, TRUE, wxT("menubar already created") );
 
     m_hMenu = (WXHMENU)::CreateMenu();
 

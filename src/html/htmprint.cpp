@@ -485,16 +485,14 @@ bool wxHtmlEasyPrinting::DoPreview(wxHtmlPrintout *printout1, wxHtmlPrintout *pr
         delete preview;
         return FALSE;
     }
-    
-    else {
-        wxPreviewFrame *frame = new wxPreviewFrame(preview, m_Frame, 
-                                                   m_Name + _(" Preview"), 
-                                                   wxPoint(100, 100), wxSize(650, 500));
-        frame -> Centre(wxBOTH);
-        frame -> Initialize();
-        frame -> Show(TRUE);
-        return TRUE;
-    }
+
+    wxPreviewFrame *frame = new wxPreviewFrame(preview, m_Frame, 
+                                               m_Name + _(" Preview"), 
+                                               wxPoint(100, 100), wxSize(650, 500));
+    frame -> Centre(wxBOTH);
+    frame -> Initialize();
+    frame -> Show(TRUE);
+    return TRUE;
 }
 
 
@@ -508,11 +506,9 @@ bool wxHtmlEasyPrinting::DoPrint(wxHtmlPrintout *printout)
     {
         return FALSE;
     }
-    else
-    {
-        (*m_PrintData) = printer.GetPrintDialogData().GetPrintData();
-        return TRUE;
-    }
+
+    (*m_PrintData) = printer.GetPrintDialogData().GetPrintData();
+    return TRUE;
 }
 
 

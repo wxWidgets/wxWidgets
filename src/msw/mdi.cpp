@@ -925,15 +925,17 @@ bool wxMDIChildFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND hwnd)
             return TRUE;
     }
 
+    bool processed;
     if (GetMenuBar() && GetMenuBar()->FindItem(id))
     {
-        ProcessCommand(id);
-        return TRUE;
+        processed = ProcessCommand(id);
     }
     else
-        return FALSE;
+    {
+        processed = FALSE;
+    }
 
-    return TRUE;
+    return processed;
 }
 
 bool wxMDIChildFrame::HandleMDIActivate(long WXUNUSED(activate),

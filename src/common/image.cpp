@@ -662,9 +662,9 @@ bool wxImage::SaveFile( const wxString& filename, int type )
         wxBufferedOutputStream bstream( stream );
         return SaveFile(bstream, type);
     }
-    else
 #endif // wxUSE_STREAMS
-        return FALSE;
+
+    return FALSE;
 }
 
 bool wxImage::SaveFile( const wxString& filename, const wxString& mimetype )
@@ -677,9 +677,9 @@ bool wxImage::SaveFile( const wxString& filename, const wxString& mimetype )
         wxBufferedOutputStream bstream( stream );
         return SaveFile(bstream, mimetype);
     }
-    else
 #endif // wxUSE_STREAMS
-        return FALSE;
+
+    return FALSE;
 }
 
 bool wxImage::CanRead( const wxString &name )

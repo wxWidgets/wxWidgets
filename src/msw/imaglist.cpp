@@ -64,7 +64,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxImageList, wxObject)
 
 // returns the mask if it's valid, otherwise the bitmap mask and, if it's not
 // valid neither, a "solid" mask (no transparent zones at all)
-static wxBitmap GetMaskForImage(const wxBitmap& bitmap, const wxBitmap& mask);
+static HBITMAP GetMaskForImage(const wxBitmap& bitmap, const wxBitmap& mask);
 
 // ============================================================================
 // implementation
@@ -144,8 +144,7 @@ bool wxImageList::GetSize(int WXUNUSED(index), int &width, int &height) const
 // 'bitmap' and 'mask'.
 int wxImageList::Add(const wxBitmap& bitmap, const wxBitmap& mask)
 {
-    wxBitmap bmpMask = GetMaskForImage(bitmap, mask);
-    HBITMAP hbmpMask = wxInvertMask(GetHbitmapOf(bmpMask));
+    HBITMAP hbmpMask = GetMaskForImage(bitmap, mask);
 
     int index = ImageList_Add(GetHImageList(), GetHbitmapOf(bitmap), hbmpMask);
     if ( index == -1 )
@@ -201,8 +200,7 @@ bool wxImageList::Replace(int index,
     wxFAIL_MSG(_T("ImageList_Replace not implemented in TWIN32"));
     return FALSE;
 #else
-    wxBitmap bmpMask = GetMaskForImage(bitmap, mask);
-    HBITMAP hbmpMask = wxInvertMask(GetHbitmapOf(bmpMask));
+    HBITMAP hbmpMask = GetMaskForImage(bitmap, mask);
 
     bool ok = ImageList_Replace(GetHImageList(), index,
                                 GetHbitmapOf(bitmap), hbmpMask) != 0;
@@ -314,36 +312,42 @@ bool wxImageList::Draw(int index,
 // helpers
 // ----------------------------------------------------------------------------
 
-static wxBitmap GetMaskForImage(const wxBitmap& bitmap, const wxBitmap& mask)
+static HBITMAP GetMaskForImage(const wxBitmap& bitmap, const wxBitmap& mask)
 {
-    wxBitmap bmpMask;
+    HBITMAP hbmpMask;
+    wxBitmap *bmpMask = NULL;
 
     if ( mask.Ok() )
     {
-        bmpMask = mask;
+        hbmpMask = GetHbitmapOf(mask);
     }
     else
     {
         wxMask *pMask = bitmap.GetMask();
         if ( pMask )
         {
-            bmpMask.SetHBITMAP(pMask->GetMaskBitmap());
+            hbmpMask = (HBITMAP)pMask->GetMaskBitmap();
+        }
+        else
+        {
+            // create a non transparent mask - apparently, this is needed under
+            // Win9x (it doesn't behave correctly if it's passed 0 mask)
+            bmpMask = new wxBitmap(bitmap.GetWidth(), bitmap.GetHeight(), 1);
+
+            wxMemoryDC dcMem;
+            dcMem.SelectObject(*bmpMask);
+            dcMem.Clear();
+            dcMem.SelectObject(wxNullBitmap);
+
+            hbmpMask = GetHbitmapOf(*bmpMask);
         }
     }
 
-    if ( !bmpMask.Ok() )
-    {
-        // create a non transparent mask - apparently, this is needed under
-        // Win9x (it doesn't behave correctly if it's passed 0 mask)
-        bmpMask.Create(bitmap.GetWidth(), bitmap.GetHeight(), 1);
+    // windows mask convention is opposite to the wxWindows one
+    HBITMAP hbmpMaskInv = wxInvertMask(hbmpMask);
+    delete bmpMask;
 
-        wxMemoryDC dcMem;
-        dcMem.SelectObject(bmpMask);
-        dcMem.Clear();
-        dcMem.SelectObject(wxNullBitmap);
-    }
-
-    return bmpMask;
+    return hbmpMaskInv;
 }
 
 #endif // Win95
