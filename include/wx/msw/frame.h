@@ -112,6 +112,10 @@ public:
     void SetToolTipCtrl(WXHWND hwndTT) { m_hwndToolTip = hwndTT; }
 #endif // tooltips
 
+    // a MSW only function which sends a size event to the window using its
+    // current size - this has an effect of refreshing the window layout
+    void SendSizeEvent();
+
 protected:
     // common part of all ctors
     void Init();

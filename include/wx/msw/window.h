@@ -163,7 +163,10 @@ public:
 
     // a MSW only function which sends a size event to the window using its
     // current size - this has an effect of refreshing the window layout
+/*
+FUNCTION IS NOW A MEMBER OF wxFrame - gt
     void SendSizeEvent();
+*/
 
     // implementation from now on
     // --------------------------
@@ -259,7 +262,7 @@ public:
                           WXWORD *item, WXWORD *flags, WXHMENU *hmenu);
 
     // ------------------------------------------------------------------------
-    // internal handlers for MSW messages: all handlers return a boolen value:
+    // internal handlers for MSW messages: all handlers return a boolean value:
     // TRUE means that the handler processed the event and FALSE that it didn't
     // ------------------------------------------------------------------------
 
