@@ -114,8 +114,8 @@ public:
     virtual int           FindString(const wxString& rsString) const;
 
     virtual bool          IsSelected(int n) const;
-    virtual void          SetSelection( int  n
-                                       ,bool bSelect = TRUE
+    virtual void          DoSetSelection( int  n
+                                       ,bool bSelect
                                       );
     virtual int           GetSelection(void) const;
     virtual int           GetSelections(wxArrayInt& raSelections) const;

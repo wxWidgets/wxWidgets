@@ -337,7 +337,7 @@ void wxListBox::Clear()
     m_noItems = 0;
 }
 
-void wxListBox::SetSelection(int N, bool select)
+void wxListBox::DoSetSelection(int N, bool select)
 {
     m_inSetValue = true;
     if (select)

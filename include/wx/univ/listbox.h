@@ -112,7 +112,7 @@ public:
 
     virtual bool IsSelected(int n) const
         { return m_selections.Index(n) != wxNOT_FOUND; }
-    virtual void SetSelection(int n, bool select = true);
+    virtual void DoSetSelection(int n, bool select);
     virtual int GetSelection() const;
     virtual int GetSelections(wxArrayInt& aSelections) const;
 

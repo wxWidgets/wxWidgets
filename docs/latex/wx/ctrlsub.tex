@@ -269,6 +269,15 @@ the new code. This method is only available if wxWidgets was compiled with
 future versions.
 
 
+\membersection{wxControlWithItems::Select}\label{wxcontrolwithitemsselect}
+
+\func{void}{Select}{\param{int}{ n}}
+
+This is the same as \helpref{SetSelection}{wxcontrolwithitemssetselection} and
+exists only because it is slightly more natural for controls which support
+multiple selection.
+
+
 \membersection{wxControlWithItems::SetClientData}\label{wxcontrolwithitemssetclientdata}
 
 \func{void}{SetClientData}{\param{int}{ n}, \param{void *}{data}}
@@ -310,7 +319,8 @@ pointers had been associated with the control items before.
 Sets the selection to the given item \arg{n} or removes the selection entirely
 if \arg{n} $==$ {\tt wxNOT\_FOUND}.
 
-Note that this does not cause any command events to be emitted.
+Note that this does not cause any command events to be emitted nor does it
+deselect any other items in the controls which support multiple selections.
 
 \wxheading{Parameters}
 

@@ -415,7 +415,7 @@ void wxListBox::Clear()
     m_nNumItems = 0;
 } // end of wxListBox::Clear
 
-void wxListBox::SetSelection(
+void wxListBox::DoSetSelection(
   int                               N
 , bool                              bSelect
 )

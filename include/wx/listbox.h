@@ -65,12 +65,16 @@ public:
 
     // multiple selection logic
     virtual bool IsSelected(int n) const = 0;
-    virtual void SetSelection(int n, bool select = true) = 0;
-    virtual void Select(int n) { SetSelection(n, true); }
-    void Deselect(int n) { SetSelection(n, false); }
+    virtual void SetSelection(int n) { DoSetSelection(n, true); }
+    void SetSelection(int n, bool select) { DoSetSelection(n, select); }
+    void Deselect(int n) { DoSetSelection(n, false); }
     void DeselectAll(int itemToLeaveSelected = -1);
 
-    virtual bool SetStringSelection(const wxString& s, bool select = true);
+    virtual bool SetStringSelection(const wxString& s, bool select);
+    virtual bool SetStringSelection(const wxString& s)
+    {
+        return SetStringSelection(s, true);
+    }
 
     // works for single as well as multiple selection listboxes (unlike
     // GetSelection which only works for listboxes with single selection)
@@ -118,6 +122,9 @@ protected:
     virtual void DoSetItems(const wxArrayString& items, void **clientData) = 0;
 
     virtual void DoSetFirstItem(int n) = 0;
+
+    virtual void DoSetSelection(int n, bool select) = 0;
+
 
     DECLARE_NO_COPY_CLASS(wxListBoxBase)
 };

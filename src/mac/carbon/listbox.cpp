@@ -42,15 +42,15 @@ const short kTextColumnId = 1024 ;
 
 // new databrowserbased version
 // because of the limited insert
-// functionality of DataBrowser, 
+// functionality of DataBrowser,
 // we just introduce id s corresponding
 // to the line number
 
 #if TARGET_API_MAC_OSX
-static pascal void DataBrowserItemNotificationProc(ControlRef browser, DataBrowserItemID itemID, 
+static pascal void DataBrowserItemNotificationProc(ControlRef browser, DataBrowserItemID itemID,
     DataBrowserItemNotification message, DataBrowserItemDataRef itemData)
 #else
-static pascal  void DataBrowserItemNotificationProc(ControlRef browser, DataBrowserItemID itemID, 
+static pascal  void DataBrowserItemNotificationProc(ControlRef browser, DataBrowserItemID itemID,
     DataBrowserItemNotification message)
 #endif
 {
@@ -92,25 +92,25 @@ static pascal  void DataBrowserItemNotificationProc(ControlRef browser, DataBrow
                 event.SetExtraLong( list->HasMultipleSelection() ? message == kDataBrowserItemSelected : TRUE );
                 wxPostEvent( list->GetEventHandler() , event ) ;
                 // direct notification is not always having the listbox GetSelection() having in synch with event
-                // list->GetEventHandler()->ProcessEvent(event) ; 
-            } 
+                // list->GetEventHandler()->ProcessEvent(event) ;
+            }
         }
     }
 }
 
-static pascal OSStatus ListBoxGetSetItemData(ControlRef browser, 
-    DataBrowserItemID itemID, DataBrowserPropertyID property, 
+static pascal OSStatus ListBoxGetSetItemData(ControlRef browser,
+    DataBrowserItemID itemID, DataBrowserPropertyID property,
     DataBrowserItemDataRef itemData, Boolean changeValue)
 {
 	OSStatus err = errDataBrowserPropertyNotSupported;
-	
+
 	if ( ! changeValue )
-	{ 	
+	{
     	switch (property)
     	{
-    		
+
     	    case kTextColumnId:
-    		{	
+    		{
     		    long ref = GetControlReference( browser ) ;
     		    if ( ref )
     		    {
@@ -123,15 +123,15 @@ static pascal OSStatus ListBoxGetSetItemData(ControlRef browser,
 		                err = noErr ;
 		            }
     			}
-    		}	
+    		}
     		break;
-    				
+
     		default:
-    		
+
     		break;
     	}
 	}
-	
+
 	return err;
 }
 
@@ -171,7 +171,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 
     wxASSERT_MSG( !(style & wxLB_MULTIPLE) || !(style & wxLB_EXTENDED),
                   _T("only one of listbox selection modes can be specified") );
-    
+
     if ( !wxListBoxBase::Create(parent, id, pos, size, style & ~(wxHSCROLL|wxVSCROLL), validator, name) )
         return false;
 
@@ -196,21 +196,21 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     {
         options += kDataBrowserSelectOnlyOne ;
     }
-    verify_noerr(m_peer->SetSelectionFlags( options ) ); 
+    verify_noerr(m_peer->SetSelectionFlags( options ) );
 
     DataBrowserListViewColumnDesc columnDesc ;
     columnDesc.headerBtnDesc.titleOffset = 0;
 	columnDesc.headerBtnDesc.version = kDataBrowserListViewLatestHeaderDesc;
-		
-	columnDesc.headerBtnDesc.btnFontStyle.flags	= 
+
+	columnDesc.headerBtnDesc.btnFontStyle.flags	=
 		kControlUseFontMask | kControlUseJustMask;
-	
+
 	columnDesc.headerBtnDesc.btnContentInfo.contentType = kControlNoContent;
 	columnDesc.propertyDesc.propertyType = kDataBrowserTextType;
 	columnDesc.headerBtnDesc.btnFontStyle.just = teFlushDefault;
 	columnDesc.headerBtnDesc.minimumWidth = 0;
 	columnDesc.headerBtnDesc.maximumWidth = 10000;
-	
+
 	columnDesc.headerBtnDesc.btnFontStyle.font = kControlFontViewSystemFont;
 	columnDesc.headerBtnDesc.btnFontStyle.style = normal;
 	columnDesc.headerBtnDesc.titleString = NULL ; // CFSTR( "" );
@@ -219,25 +219,25 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 	columnDesc.propertyDesc.propertyType = kDataBrowserTextType;
 	columnDesc.propertyDesc.propertyFlags =
 #if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
-	 kDataBrowserListViewTypeSelectColumn | 
+	 kDataBrowserListViewTypeSelectColumn |
 #endif
 	 kDataBrowserTableViewSelectionColumn ;
 
-	
+
 	verify_noerr(m_peer->AddListViewColumn( &columnDesc, kDataBrowserListViewAppendColumn) ) ;
     verify_noerr(m_peer->AutoSizeListViewColumns() ) ;
     verify_noerr(m_peer->SetHasScrollBars(false , true ) ) ;
     verify_noerr(m_peer->SetTableViewHiliteStyle(kDataBrowserTableViewFillHilite  ) ) ;
     verify_noerr(m_peer->SetListViewHeaderBtnHeight( 0 ) ) ;
     DataBrowserCallbacks callbacks ;
-    
+
     callbacks.version = kDataBrowserLatestCallbacks;
-    
+
     InitDataBrowserCallbacks(&callbacks);
-    
-    callbacks.u.v1.itemDataCallback = 
+
+    callbacks.u.v1.itemDataCallback =
         NewDataBrowserItemDataUPP(ListBoxGetSetItemData);
-	
+
 	callbacks.u.v1.itemNotificationCallback =
 #if TARGET_API_MAC_OSX
 	    (DataBrowserItemNotificationUPP) NewDataBrowserItemNotificationWithItemUPP(DataBrowserItemNotificationProc) ;
@@ -259,7 +259,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     }
 
     SetBestSize(size);   // Needed because it is a wxControlWithItems
-    
+
     return TRUE;
 }
 
@@ -349,7 +349,7 @@ void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
 {
     Clear() ;
     int n = choices.GetCount();
-    
+
     for( int i = 0 ; i < n ; ++i )
     {
         if ( clientData )
@@ -364,7 +364,7 @@ void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
         else
             Append( choices[i] ) ;
     }
-    
+
 #if wxUSE_OWNER_DRAWN
     if ( m_windowStyle & wxLB_OWNERDRAW ) {
         // first delete old items
@@ -374,7 +374,7 @@ void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
             m_aItems[ui] = NULL;
         }
         m_aItems.Empty();
-        
+
         // then create new ones
         for ( ui = 0; ui < (size_t)m_noItems; ui++ ) {
             wxOwnerDrawn *pNewItem = CreateItem(ui);
@@ -387,14 +387,14 @@ void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
 
 int wxListBox::FindString(const wxString& s) const
 {
-    
+
     if ( s.Right(1) == wxT("*") )
     {
         wxString search = s.Left( s.Length() - 1 ) ;
         int len = search.Length() ;
         Str255 s1 , s2 ;
         wxMacStringToPascal( search , s2 ) ;
-        
+
         for ( int i = 0 ; i < m_noItems ; ++ i )
         {
         	wxMacStringToPascal( m_stringArray[i].Left( len ) , s1 ) ;
@@ -412,14 +412,14 @@ int wxListBox::FindString(const wxString& s) const
                     return i ;
             }
         }
-        
+
     }
     else
     {
         Str255 s1 , s2 ;
-        
+
         wxMacStringToPascal( s , s2 ) ;
-        
+
         for ( int i = 0 ; i < m_noItems ; ++ i )
         {
         	wxMacStringToPascal( m_stringArray[i] , s1 ) ;
@@ -440,11 +440,11 @@ void wxListBox::Clear()
     MacClear() ;
 }
 
-void wxListBox::SetSelection(int N, bool select)
+void wxListBox::DoSetSelection(int N, bool select)
 {
     wxCHECK_RET( N == wxNOT_FOUND || (N >= 0 && N < m_noItems) ,
         wxT("invalid index in wxListBox::SetSelection") );
-        
+
     if ( N == wxNOT_FOUND )
         MacDeselectAll() ;
     else
@@ -455,7 +455,7 @@ bool wxListBox::IsSelected(int N) const
 {
     wxCHECK_MSG( N >= 0 && N < m_noItems, FALSE,
         wxT("invalid index in wxListBox::Selected") );
-    
+
     return MacIsSelected( N ) ;
 }
 
@@ -463,7 +463,7 @@ void *wxListBox::DoGetItemClientData(int N) const
 {
     wxCHECK_MSG( N >= 0 && N < m_noItems, NULL,
         wxT("invalid index in wxListBox::GetClientData"));
-    
+
     return (void *)m_dataArray[N];
 }
 
@@ -476,7 +476,7 @@ void wxListBox::DoSetItemClientData(int N, void *Client_data)
 {
     wxCHECK_RET( N >= 0 && N < m_noItems,
         wxT("invalid index in wxListBox::SetClientData") );
-    
+
 #if wxUSE_OWNER_DRAWN
     if ( m_windowStyle & wxLB_OWNERDRAW )
     {
@@ -486,7 +486,7 @@ void wxListBox::DoSetItemClientData(int N, void *Client_data)
     }
 #endif // wxUSE_OWNER_DRAWN
     wxASSERT_MSG( m_dataArray.GetCount() >= (size_t) N , wxT("invalid client_data array") ) ;
-    
+
     if ( m_dataArray.GetCount() > (size_t) N )
     {
         m_dataArray[N] = (char*) Client_data ;
@@ -524,11 +524,11 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
 {
     wxCHECK_RET( pos >= 0 && pos <= m_noItems,
         wxT("invalid index in wxListBox::InsertItems") );
-    
+
     InvalidateBestSize();
 
     int nItems = items.GetCount();
-    
+
     for ( int i = 0 ; i < nItems ; i++ )
     {
         m_stringArray.Insert( items[i] , pos + i ) ;
@@ -551,8 +551,8 @@ wxSize wxListBox::DoGetBestSize() const
     int wLine;
 
     {
-        wxMacPortStateHelper st( UMAGetWindowPort( (WindowRef) MacGetTopLevelWindowRef() ) ) ; 
-        
+        wxMacPortStateHelper st( UMAGetWindowPort( (WindowRef) MacGetTopLevelWindowRef() ) ) ;
+
         if ( m_font.Ok() )
         {
             ::TextFont( m_font.MacGetFontNum() ) ;
@@ -565,7 +565,7 @@ wxSize wxListBox::DoGetBestSize() const
             ::TextSize( 9  );
             ::TextFace( 0 ) ;
         }
-        
+
         // Find the widest line
         for(int i = 0; i < GetCount(); i++) {
             wxString str(GetString(i));
@@ -584,15 +584,15 @@ wxSize wxListBox::DoGetBestSize() const
         #endif
             lbWidth = wxMax(lbWidth, wLine);
         }
-        
+
         // Add room for the scrollbar
         lbWidth += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
-        
+
         // And just a bit more
         int cy = 12 ;
         int cx = ::TextWidth( "X" , 0 , 1 ) ;
         lbWidth += cx ;
-        
+
         // don't make the listbox too tall (limit height to around 10 items) but don't
         // make it too small neither
         lbHeight = (cy+4) * wxMin(wxMax(GetCount(), 3), 10);
@@ -666,7 +666,7 @@ void wxListBox::MacDelete( int n )
         else if ( current > n )
         {
             // something behind the deleted item was selected -> move up
-            MacSetSelection( current - 1 , true ) ;            
+            MacSetSelection( current - 1 , true ) ;
             MacSetSelection( current , false ) ;
         }
     }
@@ -687,7 +687,7 @@ void wxListBox::MacInsert( int n , const wxString& text)
         int current = selectionBefore[i] ;
         if ( current >= n )
         {
-            MacSetSelection( current + 1 , true ) ;            
+            MacSetSelection( current + 1 , true ) ;
             MacSetSelection( current , false ) ;
         }
     }
@@ -708,7 +708,7 @@ void wxListBox::MacClear()
     verify_noerr( m_peer->RemoveItems( kDataBrowserNoItem , 0 , NULL , kDataBrowserItemNoProperty ) ) ;
 }
 
-void wxListBox::MacDeselectAll() 
+void wxListBox::MacDeselectAll()
 {
     bool former = MacSuppressSelection( true ) ;
     verify_noerr(m_peer->SetSelectedItems( 0 , NULL , kDataBrowserItemsRemove ) ) ;
@@ -731,7 +731,7 @@ void wxListBox::MacSetSelection( int n , bool select )
     MacSuppressSelection( former ) ;
 }
 
-bool  wxListBox::MacSuppressSelection( bool suppress ) 
+bool  wxListBox::MacSuppressSelection( bool suppress )
 {
 	bool former = m_suppressSelection ;
 	m_suppressSelection = suppress ;
@@ -758,9 +758,9 @@ int wxListBox::MacGetSelection() const
 int wxListBox::MacGetSelections( wxArrayInt& aSelections ) const
 {
     int no_sel = 0 ;
-    
+
     aSelections.Empty();
-    
+
     UInt32 first , last ;
     m_peer->GetSelectionAnchor( &first , &last ) ;
     if ( first != kDataBrowserNoItem )
@@ -797,13 +797,13 @@ void wxListBox::OnChar(wxKeyEvent& event)
     // todo trigger proper events here
     event.Skip() ;
     return ;
-    
+
     if ( event.GetKeyCode() == WXK_RETURN || event.GetKeyCode() == WXK_NUMPAD_ENTER)
     {
         wxWindow* parent = GetParent() ;
         while( parent  && !parent->IsTopLevel() && parent->GetDefaultItem() == NULL )
             parent = parent->GetParent() ;
-        
+
         if ( parent && parent->GetDefaultItem() )
         {
             wxButton *def = wxDynamicCast(parent->GetDefaultItem(),
@@ -845,10 +845,10 @@ void wxListBox::OnChar(wxKeyEvent& event)
     {
         // perform the default key handling first
         wxControl::OnKeyDown( event ) ;
-        
+
         wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, m_windowId);
         event.SetEventObject( this );
-        
+
         wxArrayInt aSelections;
         int n, count = GetSelections(aSelections);
         if ( count > 0 )
@@ -864,9 +864,9 @@ void wxListBox::OnChar(wxKeyEvent& event)
         {
             n = -1;
         }
-        
+
         event.SetInt(n);
-        
+
         GetEventHandler()->ProcessEvent(event);
     }
     else
@@ -885,20 +885,20 @@ void wxListBox::OnChar(wxKeyEvent& event)
                 SetSelection(line) ;
                 wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, m_windowId);
                 event.SetEventObject( this );
-                
+
                 if ( HasClientObjectData() )
                     event.SetClientObject( GetClientObject( line ) );
                 else if ( HasClientUntypedData() )
                     event.SetClientData( GetClientData(line) );
                 event.SetString( GetString(line) );
-                
+
                 event.SetInt(line);
-                
+
                 GetEventHandler()->ProcessEvent(event);
             }
         }
     }
 }
 
-#endif
+#endif // !TARGET_API_MAC_OSX
 

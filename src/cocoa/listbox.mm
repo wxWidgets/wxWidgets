@@ -117,7 +117,7 @@ bool wxListBox::IsSelected(int n) const
     return [GetNSTableView() isRowSelected: n];
 }
 
-void wxListBox::SetSelection(int n, bool select)
+void wxListBox::DoSetSelection(int n, bool select)
 {
     if(select)
         [GetNSTableView() selectRow: n byExtendingSelection:NO];
@@ -197,7 +197,7 @@ int wxListBox::FindString(const wxString& s) const
 }
 
     // selection
-void wxListBox::Select(int n)
+void wxListBox::SetSelection(int n)
 {
 }
 

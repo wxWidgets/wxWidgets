@@ -1006,7 +1006,7 @@ bool wxListBox::IsSelected( int n ) const
     return (GTK_WIDGET(target->data)->state == GTK_STATE_SELECTED) ;
 }
 
-void wxListBox::SetSelection( int n, bool select )
+void wxListBox::DoSetSelection( int n, bool select )
 {
     wxCHECK_RET( m_list != NULL, wxT("invalid listbox") );
 

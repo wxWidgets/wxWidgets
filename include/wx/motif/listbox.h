@@ -84,7 +84,7 @@ public:
     virtual wxString GetString(int n) const;
 
     // implementation of wxListBoxbase
-    virtual void SetSelection(int n, bool select = true);
+    virtual void DoSetSelection(int n, bool select);
     virtual void DoInsertItems(const wxArrayString& items, int pos);
     virtual void DoSetItems(const wxArrayString& items, void **clientData);
     virtual void DoSetFirstItem(int n);

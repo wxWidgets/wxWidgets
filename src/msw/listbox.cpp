@@ -390,7 +390,7 @@ void wxListBox::Free()
     }
 }
 
-void wxListBox::SetSelection(int N, bool select)
+void wxListBox::DoSetSelection(int N, bool select)
 {
     wxCHECK_RET( N == wxNOT_FOUND ||
                     (N >= 0 && N < m_noItems),

@@ -42,12 +42,6 @@ public:
 
     // all generic methods are in wxControlWithItems
 
-    // single selection logic
-    virtual void SetSelection(int n) = 0;
-
-    // don't override this
-    virtual void Select(int n) { SetSelection(n); }
-
     // set/get the number of columns in the control (as they're not supported on
     // most platforms, they do nothing by default)
     virtual void SetColumns(int WXUNUSED(n) = 1 ) { }

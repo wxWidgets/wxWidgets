@@ -207,7 +207,7 @@ void wxListBox::Free()
 {
 }
 
-void wxListBox::SetSelection(int N, bool select)
+void wxListBox::DoSetSelection(int N, bool select)
 {
 }
 

@@ -88,7 +88,6 @@ public:
     virtual wxString GetString(int) const;
     virtual void SetString(int, const wxString&);
     virtual int FindString(const wxString&) const;
-    virtual void Select(int) {}
     virtual int GetSelection() const;
     virtual int DoAppend(const wxString&);
     virtual int DoInsert(const wxString&, int);

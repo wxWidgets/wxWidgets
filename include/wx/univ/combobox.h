@@ -301,9 +301,8 @@ public:
     virtual wxString GetString(int n) const;
     virtual void SetString(int n, const wxString& s);
     virtual int FindString(const wxString& s) const;
-    virtual void Select(int n);
+    virtual void SetSelection(int n);
     virtual int GetSelection() const;
-    void SetSelection(int n) { Select(n); }
 
     wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
 

@@ -76,7 +76,7 @@ public:
     // selection
     // ---------
 
-    virtual void Select(int n) = 0;
+    virtual void SetSelection(int n) = 0;
     virtual int GetSelection() const = 0;
 
     // set selection to the specified string, return false if not found
@@ -84,6 +84,10 @@ public:
 
     // return the selected string or empty string if none
     wxString GetStringSelection() const;
+
+    // this is the same as SetSelection( for single-selection controls but
+    // reads better for multi-selection ones
+    void Select(int n) { SetSelection(n); }
 
     // misc
     // ----
@@ -171,6 +175,20 @@ protected:
 private:
     DECLARE_NO_COPY_CLASS(wxControlWithItems)
 };
+
+
+// ----------------------------------------------------------------------------
+// inline functions
+// ----------------------------------------------------------------------------
+
+#if WXWIN_COMPATIBILITY_2_2
+
+inline int wxItemContainer::Number() const
+{
+    return GetCount();
+}
+
+#endif // WXWIN_COMPATIBILITY_2_2
 
 #endif // wxUSE_CONTROLS
 

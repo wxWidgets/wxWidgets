@@ -82,12 +82,12 @@ protected:
 public:
 // pure virtuals from wxListBoxBase
     virtual bool IsSelected(int n) const;
-    virtual void SetSelection(int n, bool select = TRUE);
     virtual int GetSelections(wxArrayInt& aSelections) const;
 protected:
     virtual void DoInsertItems(const wxArrayString& items, int pos);
     virtual void DoSetItems(const wxArrayString& items, void **clientData);
     virtual void DoSetFirstItem(int n);
+    virtual void DoSetSelection(int n, bool select);
 
 // pure virtuals from wxItemContainer
 public:
@@ -100,7 +100,6 @@ public:
     virtual void SetString(int n, const wxString& s);
     virtual int FindString(const wxString& s) const;
     // selection
-    virtual void Select(int n);
     virtual int GetSelection() const;
 protected:
     virtual int DoAppend(const wxString& item);

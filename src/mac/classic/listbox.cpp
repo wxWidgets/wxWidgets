@@ -515,7 +515,7 @@ void wxListBox::Clear()
     MacClear() ;
 }
 
-void wxListBox::SetSelection(int N, bool select)
+void wxListBox::DoSetSelection(int N, bool select)
 {
     wxCHECK_RET( N >= 0 && N < m_noItems,
         wxT("invalid index in wxListBox::SetSelection") );

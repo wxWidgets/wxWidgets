@@ -421,7 +421,7 @@ wxClientData* wxListBox::DoGetItemClientObject(int n) const
 // selection
 // ----------------------------------------------------------------------------
 
-void wxListBox::SetSelection(int n, bool select)
+void wxListBox::DoSetSelection(int n, bool select)
 {
     if ( select )
     {

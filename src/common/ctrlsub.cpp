@@ -64,7 +64,7 @@ bool wxItemContainer::SetStringSelection(const wxString& s)
     if ( sel == wxNOT_FOUND )
         return false;
 
-    Select(sel);
+    SetSelection(sel);
 
     return true;
 }
@@ -166,14 +166,5 @@ wxControlWithItems::~wxControlWithItems()
 {
     // this destructor is required for Darwin
 }
-
-#if WXWIN_COMPATIBILITY_2_2
-
-int wxItemContainer::Number() const
-{
-    return GetCount();
-}
-
-#endif // WXWIN_COMPATIBILITY_2_2
 
 #endif // wxUSE_CONTROLS
