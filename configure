@@ -24312,7 +24312,22 @@ rm -f conftest.$ac_objext conftest.$ac_ext
     fi
 
     if test "$wxUSE_MAC" = 1; then
-        CPPFLAGS="$CPPFLAGS -fpascal-strings -I\${top_srcdir}/src/mac/morefilex -I/Developer/Headers/FlatCarbon"
+        echo "$as_me:$LINENO: checking for compiler syntax to enable Pascal strings" >&5
+echo $ECHO_N "checking for compiler syntax to enable Pascal strings... $ECHO_C" >&6
+        if test "$GCC" = yes; then
+            echo "$as_me:$LINENO: result: gcc" >&5
+echo "${ECHO_T}gcc" >&6
+            CPPFLAGS_PASCAL="-fpascal-strings"
+        elif test "`echo $CXX | sed -e 's@.*/@@'`" = "xlC"; then
+            echo "$as_me:$LINENO: result: xlc" >&5
+echo "${ECHO_T}xlc" >&6
+            CPPFLAGS_PASCAL="-qmacpstr"
+        else
+            echo "$as_me:$LINENO: result: none" >&5
+echo "${ECHO_T}none" >&6
+        fi
+
+        CPPFLAGS="$CPPFLAGS $CPPFLAGS_PASCAL -I\${top_srcdir}/src/mac/morefilex -I/Developer/Headers/FlatCarbon"
 
         TOOLKIT_VPATH="\${top_srcdir}/src/mac${PATH_IFS}\${top_srcdir}/src/mac/morefilex"
         TOOLKIT=MAC

@@ -2796,7 +2796,18 @@ equivalent variable and GTK+ is version 1.2.3 or above.
     fi
 
     if test "$wxUSE_MAC" = 1; then
-        CPPFLAGS="$CPPFLAGS -fpascal-strings -I\${top_srcdir}/src/mac/morefilex -I/Developer/Headers/FlatCarbon"
+        AC_MSG_CHECKING([for compiler syntax to enable Pascal strings])
+        if test "$GCC" = yes; then
+            AC_MSG_RESULT([gcc])
+            CPPFLAGS_PASCAL="-fpascal-strings"
+        elif test "`echo $CXX | sed -e 's@.*/@@'`" = "xlC"; then
+            AC_MSG_RESULT([xlc])
+            CPPFLAGS_PASCAL="-qmacpstr"
+        else
+            AC_MSG_RESULT([none])
+        fi
+
+        CPPFLAGS="$CPPFLAGS $CPPFLAGS_PASCAL -I\${top_srcdir}/src/mac/morefilex -I/Developer/Headers/FlatCarbon"
 
         TOOLKIT_VPATH="\${top_srcdir}/src/mac${PATH_IFS}\${top_srcdir}/src/mac/morefilex"
         TOOLKIT=MAC
