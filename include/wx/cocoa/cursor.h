@@ -18,7 +18,7 @@
 
 #include "wx/bitmap.h"
 
-class WXDLLEXPORT wxCursorRefData: public wxBitmapRefData
+class WXDLLEXPORT wxCursorRefData: public wxObjectRefData
 {
     DECLARE_NO_COPY_CLASS(wxCursorRefData)
         
@@ -29,6 +29,7 @@ public:
     ~wxCursorRefData();
 
 protected:
+    int m_width, m_height;
 };
 
 #define M_CURSORDATA ((wxCursorRefData *)m_refData)
