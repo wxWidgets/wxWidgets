@@ -19373,7 +19373,7 @@ echo "${ECHO_T}$wx_cv_w32api_win32_ie" >&6
         CPPFLAGS="$CPPFLAGS -D_WIN32_IE=0x400"
     fi
 
-            LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lctl3d32 -ladvapi32 -lwsock32"
+            LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lctl3d32 -ladvapi32 -lwsock32 -lgdi32"
 
     if test "$wxUSE_ACCESSIBILITY" = "yes" ; then
         LIBS="$LIBS -loleacc"
@@ -19381,7 +19381,7 @@ echo "${ECHO_T}$wx_cv_w32api_win32_ie" >&6
 
     case "${host}" in
         *-*-cygwin* )
-                        LIBS="$LIBS -lkernel32 -luser32 -lgdi32 -lcomdlg32"
+                        LIBS="$LIBS -lkernel32 -luser32 -lcomdlg32"
             TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WIN95__"
     esac
 
