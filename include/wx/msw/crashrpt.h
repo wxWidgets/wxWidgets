@@ -26,15 +26,21 @@ enum
     wxCRASH_REPORT_LOCATION = 0,
 
     // if this flag is given, the call stack is dumped
+    //
+    // this results in dump/crash report as small as possible, this is the
+    // default flag
     wxCRASH_REPORT_STACK = 1,
 
     // if this flag is given, the values of the local variables are dumped
+    //
+    // note that this will result in huge file containing the dump of the
+    // entire process memory space when using mini dumps!
     wxCRASH_REPORT_LOCALS = 2,
 
     // if this flag is given, the values of all global variables are dumped
     //
-    // WARNING: this may take a very long time and generate megabytes of output
-    //          in a big program, this is why it is off by default
+    // this creates a much larger mini dump and also takes more time to
+    // generate if our own crash reporting code is used
     wxCRASH_REPORT_GLOBALS = 4
 };
 
@@ -54,8 +60,7 @@ struct WXDLLIMPEXP_BASE wxCrashReport
     // write the exception report to the file, return true if it could be done
     // or false otherwise
     static bool Generate(int flags = wxCRASH_REPORT_LOCATION |
-                                     wxCRASH_REPORT_STACK |
-                                     wxCRASH_REPORT_LOCALS);
+                                     wxCRASH_REPORT_STACK);
 };
 
 #endif // wxUSE_ON_FATAL_EXCEPTION

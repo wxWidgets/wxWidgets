@@ -77,7 +77,7 @@
 //
 // in any case, the user may override by defining wxUSE_DBGHELP himself
 #ifndef wxUSE_DBGHELP
-    #ifdef DBHLPAPI  
+    #ifdef DBHLPAPI
         #define wxUSE_DBGHELP 1
     #else
         #define wxUSE_DBGHELP 0
@@ -171,6 +171,29 @@ enum SymbolTag
 // ----------------------------------------------------------------------------
 // classes
 // ----------------------------------------------------------------------------
+
+// low level wxBusyCursor replacement: we use Win32 API directly here instead
+// of going through wxWindows calls as this could be dangerous
+class BusyCursor
+{
+public:
+    BusyCursor()
+    {
+        HCURSOR hcursorBusy = ::LoadCursor(NULL, IDC_WAIT);
+        m_hcursorOld = ::SetCursor(hcursorBusy);
+    }
+
+    ~BusyCursor()
+    {
+        if ( m_hcursorOld )
+        {
+            ::SetCursor(m_hcursorOld);
+        }
+    }
+
+private:
+    HCURSOR m_hcursorOld;
+};
 
 // the real crash report generator
 class wxCrashReportImpl
@@ -1066,14 +1089,7 @@ wxString wxCrashReportImpl::GetExceptionString(DWORD dwCode)
 
 #endif // wxUSE_DBGHELP
 
-// Remove warning
-#if wxUSE_DBGHELP && !wxUSE_MINIDUMP
-    #define WXUNUSED_LOCAL(x) x
-#else
-    #define WXUNUSED_LOCAL WXUNUSED
-#endif
-
-bool wxCrashReportImpl::Generate(int WXUNUSED_LOCAL(flags))
+bool wxCrashReportImpl::Generate(int flags)
 {
     if ( m_hFile == INVALID_HANDLE_VALUE )
         return false;
@@ -1092,6 +1108,25 @@ bool wxCrashReportImpl::Generate(int WXUNUSED_LOCAL(flags))
     HANDLE hModuleCrash = OutputBasicContext(pExceptionRecord, pCtx);
 #endif // !wxUSE_MINIDUMP
 
+    // show to the user that we're doing something...
+    BusyCursor busyCursor;
+
+    // user-specified crash report flags override those specified by the
+    // programmer
+    TCHAR envFlags[64];
+    DWORD dwLen = ::GetEnvironmentVariable
+                    (
+                        _T("WX_CRASH_FLAGS"),
+                        envFlags,
+                        WXSIZEOF(envFlags)
+                    );
+
+    int flagsEnv;
+    if ( dwLen && dwLen < WXSIZEOF(envFlags) &&
+            wxSscanf(envFlags, _T("%d"), &flagsEnv) == 1 )
+    {
+        flags = flagsEnv;
+    }
 
     // for everything else we need dbghelp.dll
     wxDynamicLibrary dllDbgHelp(_T("dbghelp.dll"), wxDL_VERBATIM);
@@ -1107,12 +1142,31 @@ bool wxCrashReportImpl::Generate(int WXUNUSED_LOCAL(flags))
             minidumpExcInfo.ClientPointers = FALSE; // in our own address space
 
             // do generate the dump
+            MINIDUMP_TYPE dumpFlags;
+            if ( flags & wxCRASH_REPORT_LOCALS )
+            {
+                // the only way to get local variables is to dump the entire
+                // process memory space -- but this makes for huge (dozens or
+                // even hundreds of Mb) files
+                dumpFlags = MiniDumpWithFullMemory;
+            }
+            else if ( flags & wxCRASH_REPORT_GLOBALS )
+            {
+                // MiniDumpWriteDump() has the option for dumping just the data
+                // segment which contains all globals -- exactly what we need
+                dumpFlags = MiniDumpWithDataSegs;
+            }
+            else // minimal dump
+            {
+                dumpFlags = MiniDumpNormal;
+            }
+
             if ( !MiniDumpWriteDump
                   (
                     ::GetCurrentProcess(),
                     ::GetCurrentProcessId(),
                     m_hFile,                    // file to write to
-                    MiniDumpNormal,             // just the minimum
+                    dumpFlags,                  // kind of dump to craete
                     &minidumpExcInfo,
                     NULL,                       // no extra user-defined data
                     NULL                        // no callbacks
