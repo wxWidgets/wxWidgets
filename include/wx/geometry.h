@@ -18,10 +18,6 @@
 
 #include "wx/defs.h"
 
-#ifndef wxUSE_GEOMETRY
-    #define wxUSE_GEOMETRY 0
-#endif
-
 #if wxUSE_GEOMETRY
 
 #include "wx/utils.h"
