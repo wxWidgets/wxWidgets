@@ -23,7 +23,7 @@
 #define wxControlNameStr _T("control")
 
 // General item class
-class WXDLLEXPORT wxControl: public wxWindow
+class WXDLLEXPORT wxControl: public wxControlBase
 {
     DECLARE_ABSTRACT_CLASS(wxControl)
 
@@ -35,7 +35,16 @@ public:
                const wxSize &size = wxDefaultSize,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString &name = wxControlNameStr );
+               const wxString &name = wxControlNameStr )
+    {
+        Create(parent, id, pos, size, style, validator, name);
+    }
+
+    bool Create(wxWindow *parent, wxWindowID id,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize, long style = 0,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxControlNameStr);
 
     ~wxControl();
 
