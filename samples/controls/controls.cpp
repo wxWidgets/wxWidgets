@@ -398,18 +398,6 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxButton( panel, ID_CHOICE_FONT, "Set Italic font", wxPoint(340,130), wxSize(140,30) );
     (void)new wxCheckBox( panel, ID_CHOICE_ENABLE, "Disable", wxPoint(20,130), wxSize(140,30) );
 
-/*
-    wxIcon icon = wxTheApp->GetStdIcon(wxICON_INFORMATION);
-    wxSize sizeIcon = wxSize(icon.GetWidth(), icon.GetHeight());
-    (void)new wxStaticBitmap( panel, -1, icon, wxPoint(50, 60), sizeIcon);
-    wxStaticBitmap *bitmap = new wxStaticBitmap( panel, -1, wxNullBitmap, wxPoint(10, 60), sizeIcon);
-    bitmap->SetBitmap(icon);
-*/
-    wxIcon icon = wxTheApp->GetStdIcon(wxICON_INFORMATION);
-    (void)new wxStaticBitmap( panel, -1, icon, wxPoint(50, 60) );
-    wxStaticBitmap *bitmap = new wxStaticBitmap( panel, -1, wxNullBitmap, wxPoint(10, 60) );
-    bitmap->SetBitmap(icon);
-
     m_notebook->AddPage(panel, "wxChoice", FALSE, Image_Choice);
 
     panel = new wxPanel(m_notebook);
@@ -478,6 +466,32 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                                   wxPoint(208, 159) );
 #endif
     m_notebook->AddPage(panel, "wxGauge", FALSE, Image_Gauge);
+
+    panel = new wxPanel(m_notebook);
+    wxIcon icon = wxTheApp->GetStdIcon(wxICON_INFORMATION);
+    wxStaticBitmap *bmpStatic = new wxStaticBitmap(panel, -1, icon, wxPoint(10, 10));
+
+    bmpStatic = new wxStaticBitmap(panel, -1, wxNullIcon, wxPoint(50, 10));
+    bmpStatic->SetIcon(wxTheApp->GetStdIcon(wxICON_QUESTION));
+
+    wxBitmap bitmap( 100, 100 );
+    wxMemoryDC dc;
+    dc.SelectObject( bitmap );
+    dc.SetPen(*wxGREEN_PEN);
+    dc.DrawEllipse(5, 5, 90, 90);
+    dc.DrawText("Bitmap", 20, 20);
+    dc.SelectObject( wxNullBitmap );
+
+    wxBitmapButton *bmpBtn = new wxBitmapButton
+                                 (
+                                  panel,
+                                  -1,
+                                  bitmap,
+                                  wxPoint(100, 20)
+                                 );
+    bmpBtn = NULL; // suppress warning
+
+    m_notebook->AddPage(panel, "wxBitmapXXX");
 }
 
 void MyPanel::OnSize( wxSizeEvent& WXUNUSED(event) )
@@ -492,9 +506,8 @@ void MyPanel::OnSize( wxSizeEvent& WXUNUSED(event) )
 
 void MyPanel::OnPageChanging( wxNotebookEvent &event )
 {
-    int selNew = event.GetSelection(),
-        selOld = event.GetOldSelection();
-    if ( selOld == 2 && selNew == 4 )
+    int selOld = event.GetOldSelection();
+    if ( selOld == 2 )
     {
         wxMessageBox("This demonstrates how a program may prevent the "
                      "page change from taking place - \n the current page will "
@@ -502,12 +515,11 @@ void MyPanel::OnPageChanging( wxNotebookEvent &event )
                      wxICON_INFORMATION | wxOK);
 
         event.Veto();
+
+        return;
     }
-    else
-    {
-        *m_text << "Notebook selection is being changed from "
-                << selOld << " to " << selNew << "\n";
-    }
+
+    *m_text << "Notebook selection is being changed from " << selOld << "\n";
 }
 
 void MyPanel::OnPageChanged( wxNotebookEvent &event )
