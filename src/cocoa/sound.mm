@@ -55,7 +55,6 @@ bool isLastSoundInScope = false;
     else if (!isLastSoundInScope)
     {
         [lastSound release];
-        [self release];
     }
 }
 
