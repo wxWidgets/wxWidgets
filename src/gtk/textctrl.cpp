@@ -1517,15 +1517,8 @@ bool wxTextCtrl::SetStyle( long start, long end, const wxTextAttr& style )
 
 void wxTextCtrl::ApplyWidgetStyle()
 {
-//     if (m_windowStyle & wxTE_MULTILINE)
-//     {
-//         // how ?
-//     }
-//     else
-    {
-        SetWidgetStyle();
-        gtk_widget_set_style( m_text, m_widgetStyle );
-    }
+    SetWidgetStyle();
+    gtk_widget_set_style( m_text, m_widgetStyle );
 }
 
 void wxTextCtrl::OnCut(wxCommandEvent& WXUNUSED(event))
