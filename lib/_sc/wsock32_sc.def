@@ -21,6 +21,7 @@ EXPORTS
     _select@20 = select
     _WSAGetLastError@0 = WSAGetLastError
     _getsockname@12 = getsockname
+    _getsockopt@20 = getsockopt
     _bind@12 = bind
     _ioctlsocket@12 = ioctlsocket
     _socket@12 = socket

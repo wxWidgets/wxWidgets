@@ -43,6 +43,7 @@ GENERICOBJS= $(GENDIR)\busyinfo.obj \
 		$(GENDIR)\numdlgg.obj \
 		$(GENDIR)\panelg.obj \
 		$(GENDIR)\progdlgg.obj \
+		$(GENDIR)\renderg.obj \
 		$(GENDIR)\sashwin.obj \
 		$(GENDIR)\scrlwing.obj \
 		$(GENDIR)\selstore.obj \
@@ -61,6 +62,7 @@ COMMONOBJS = $(COMMDIR)\accesscmn.obj \
 		$(COMMDIR)\appcmn.obj \
 		$(COMMDIR)\artprov.obj \
 		$(COMMDIR)\artstd.obj \
+                $(COMMDIR)\bookctrl.obj \
 		$(COMMDIR)\choiccmn.obj \
 		$(COMMDIR)\clipcmn.obj \
 		$(COMMDIR)\clntdata.obj \
@@ -156,6 +158,7 @@ COMMONOBJS = $(COMMDIR)\accesscmn.obj \
 		$(COMMDIR)\quantize.obj \
 		$(COMMDIR)\radiocmn.obj \
 		$(COMMDIR)\regex.obj \
+		$(COMMDIR)\rendcmn.obj  \
 		$(COMMDIR)\rgncmn.obj \
 		$(COMMDIR)\sckaddr.obj \
 		$(COMMDIR)\sckfile.obj \
@@ -298,6 +301,7 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\radiobut.obj \
 		$(MSWDIR)\regconf.obj \
 		$(MSWDIR)\region.obj \
+		$(MSWDIR)\renderer.obj \
 		$(MSWDIR)\registry.obj \
 		$(MSWDIR)\scrolbar.obj \
 		$(MSWDIR)\settings.obj \
@@ -343,8 +347,8 @@ MAKEARCHDIR:
 
 #build our own copies of missing libraries
 MAKELIBS:
-      implib  /s $(LIBDIR)\$(SHELLLIB) $(LIBDIR)\$(SC_SUFFIX)\$(SHELLLIB).def
-      implib  /s $(LIBDIR)\$(WINSOCKLIB) $(LIBDIR)\$(SC_SUFFIX)\$(WINSOCKLIB).def
+      dimplib  /s $(LIBDIR)\$(SHELLLIB) $(LIBDIR)\$(SC_SUFFIX)\$(SHELLLIB).def
+      dimplib  /s $(LIBDIR)\$(WINSOCKLIB) $(LIBDIR)\$(SC_SUFFIX)\$(WINSOCKLIB).def
 
 $(LIBTARGET): $(OBJECTS)
 	-del $(LIBTARGET)
