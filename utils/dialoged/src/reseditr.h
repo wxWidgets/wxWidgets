@@ -26,6 +26,7 @@
 #include "wx/imaglist.h"
 #include "wx/treectrl.h"
 #include "wx/proplist.h"
+#include "wx/txtstrm.h"
 #include "symbtabl.h"
 #include "winstyle.h"
 
@@ -117,7 +118,7 @@ class wxResourceTableWithSaving: public wxResourceTable
     m_styleTable.Init();
   }
   virtual bool Save(const wxString& filename);
-  virtual bool SaveResource(ostream& stream, wxItemResource* item, wxItemResource* parentItem);
+  virtual bool SaveResource(wxTextOutputStream& stream, wxItemResource* item, wxItemResource* parentItem);
 
   void GeneratePanelStyleString(long windowStyle, char *buf);
   void GenerateDialogStyleString(long windowStyle, char *buf);
@@ -144,7 +145,7 @@ class wxResourceTableWithSaving: public wxResourceTable
   bool GenerateStyle(char *buf, long windowStyle, long flag, char *strStyle);
 */
 
-  void OutputFont(ostream& stream, const wxFont& font);
+  void OutputFont(wxTextOutputStream& stream, const wxFont& font);
   wxControl *CreateItem(wxPanel *panel, const wxItemResource *childResource, const wxItemResource* parentResource);
 
 protected:

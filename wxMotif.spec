@@ -9,7 +9,7 @@ Version: %{ver}
 Release: %{rel}
 Copyright: wxWindows Licence
 Group: X11/Libraries
-Source: ftp://wesley.informatik.uni-freiburg.de/pub/linux/wxxt/source/wxMotif-2.1.0-b7.tgz
+Source: ftp://wesley.informatik.uni-freiburg.de/pub/linux/wxxt/source/wxMotif-2.1.0-b8.tgz
 URL: http://wesley.informatik.uni-freiburg.de/~wxxt/docs.html
 Packager: Robert Roebling <roebling@ruf.uni-freiburg.de>
 BuildRoot: /tmp/wxmotif_root
@@ -26,7 +26,7 @@ Motif/LessTif, MS Windows, Mac) from the same source code.
 
 %prep
 %setup -n wxMotif
-./configure --prefix=%{pref}
+./configure --prefix=%{pref} --disable-threads --disable-std_iostreams
 
 %build
 cd src && make

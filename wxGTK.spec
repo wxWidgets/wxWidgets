@@ -9,7 +9,7 @@ Version: %{ver}
 Release: %{rel}
 Copyright: wxWindows Licence
 Group: X11/Libraries
-Source: ftp://wesley.informatik.uni-freiburg.de/pub/linux/wxxt/source/wxGTK-2.1.0-b7.tgz
+Source: ftp://wesley.informatik.uni-freiburg.de/pub/linux/wxxt/source/wxGTK-2.1.0-b8.tgz
 URL: http://wesley.informatik.uni-freiburg.de/~wxxt/docs.html
 Packager: Robert Roebling <roebling@ruf.uni-freiburg.de>
 Requires: gtk+ >= 1.2.1
@@ -27,7 +27,7 @@ Motif/LessTif, MS Windows, Mac) from the same source code.
 
 %prep
 %setup -n wxGTK
-./configure --prefix=%{pref} --enable-threads
+./configure --prefix=%{pref} --enable-threads --disable-std_iostreams
 
 %build
 cd src && make

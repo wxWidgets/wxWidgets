@@ -88,10 +88,10 @@ class WXDLLEXPORT wxItemResource: public wxObject
   inline long GetStyle() const { return m_windowStyle; }
   inline int GetId() const { return m_windowId; }
 
-  inline long GetValue1() const { return m_value1; }
-  inline long GetValue2() const { return m_value2; }
-  inline long GetValue3() const { return m_value3; }
-  inline long GetValue5() const { return m_value5; }
+  inline wxInt32 GetValue1() const { return m_value1; }
+  inline wxInt32 GetValue2() const { return m_value2; }
+  inline wxInt32 GetValue3() const { return m_value3; }
+  inline wxInt32 GetValue5() const { return m_value5; }
   inline wxString GetValue4() const { return m_value4; }
   inline wxList& GetChildren() const { return (wxList&) m_children; }
   inline wxStringList& GetStringValues() const { return (wxStringList&) m_stringValues; }
@@ -105,7 +105,7 @@ class WXDLLEXPORT wxItemResource: public wxObject
   inline wxColour& GetButtonColour() const { return (wxColour&) m_buttonColour; }
 
   inline void SetResourceStyle(long style) { m_exStyle = style; }
-  inline long GetResourceStyle() const { return m_exStyle; }
+  inline wxInt32 GetResourceStyle() const { return m_exStyle; }
 
  protected:
   wxList        m_children;

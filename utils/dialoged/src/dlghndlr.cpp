@@ -29,16 +29,6 @@
 #include <math.h>
 #include <string.h>
 
-#if wxUSE_IOSTREAMH
-#if defined(__WXMSW__) && !defined(__GNUWIN32__)
-#include <strstrea.h>
-#else
-#include <strstream.h>
-#endif
-#else
-#include <strstream>
-#endif
-
 #include "reseditr.h"
 #include "winprop.h"
 #include "dlghndlr.h"

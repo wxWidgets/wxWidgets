@@ -414,14 +414,6 @@ bool wxApp::ProcessIdle()
     event.SetEventObject( this );
     ProcessEvent( event );
 
-    wxWindowList::Node* node = wxTopLevelWindows.GetFirst();
-    while (node)
-    {
-        wxWindow* win = node->GetData();
-        win->OnInternalIdle();
-        node = node->GetNext();
-    }
-
     return event.MoreRequested();
 }
 
@@ -485,6 +477,8 @@ bool wxApp::SendIdleEvents( wxWindow* win )
 
     win->ProcessEvent(event);
 
+    win->OnInternalIdle();
+    
     if (event.MoreRequested())
         needMore = TRUE;
 

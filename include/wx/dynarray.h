@@ -174,9 +174,11 @@ class WXDLLEXPORT name : public wxBaseArray                         \
 {                                                                   \
 public:                                                             \
   name()                                                            \
-  { size_t type = sizeof(T);                                        \
+  {                                                                 \
+    size_t type = sizeof(T);                                        \
     size_t sizelong = sizeof(long);                                 \
-    wxASSERT( type <= sizelong );                                   \
+    if ( type <= sizelong )                                         \
+      { wxFAIL_MSG( _T("illegal use of DEFINE_ARRAY") ); }          \
   }                                                                 \
                                                                     \
   name& operator=(const name& src)                                  \
@@ -237,7 +239,8 @@ public:                                                             \
   name(SCMPFUNC##T fn)                                              \
   { size_t type = sizeof(T);                                        \
     size_t sizelong = sizeof(long);                                 \
-    wxASSERT( type <= sizelong );                                   \
+    if ( type <= sizelong )                                         \
+      { wxFAIL_MSG( _T("illegal use of DEFINE_ARRAY") ); }          \
     m_fnCompare = fn;                                               \
   }                                                                 \
                                                                     \

@@ -29,21 +29,10 @@
 #include <math.h>
 #include <string.h>
 
-#if wxUSE_IOSTREAMH
-#if defined(__WXMSW__) && !defined(__GNUWIN32__)
-#include <strstrea.h>
-#include <fstream.h>
-#else
-#include <strstream.h>
-#include <fstream.h>
-#endif
-#else
-#include <strstream>
-#include <fstream>
-#endif
-
 #include "wx/scrolbar.h"
 #include "wx/string.h"
+#include "wx/wfstream.h"
+#include "wx/txtstrm.h"
 
 #include "reseditr.h"
 
@@ -60,7 +49,7 @@ wxControl *wxResourceTableWithSaving::CreateItem(wxPanel *panel, const wxItemRes
   return item;
 }
 
-void wxResourceTableWithSaving::OutputFont(ostream& stream, const wxFont& font)
+void wxResourceTableWithSaving::OutputFont(wxTextOutputStream& stream, const wxFont& font)
 {
   stream << "[" << font.GetPointSize() << ", '";
   stream << font.GetFamilyString() << "', '";
@@ -78,9 +67,11 @@ void wxResourceTableWithSaving::OutputFont(ostream& stream, const wxFont& font)
  
 bool wxResourceTableWithSaving::Save(const wxString& filename)
 {
-  ofstream stream(((wxString &) filename).GetData());
-  if (stream.bad())
+  wxFileOutputStream file_output( filename.fn_str() );
+  if (file_output.LastError())
     return FALSE;
+    
+  wxTextOutputStream stream( file_output );
     
   BeginFind();
   wxNode *node = NULL;
@@ -98,7 +89,7 @@ bool wxResourceTableWithSaving::Save(const wxString& filename)
   return TRUE;
 }
 
-bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource* item, wxItemResource* parentItem)
+bool wxResourceTableWithSaving::SaveResource(wxTextOutputStream& stream, wxItemResource* item, wxItemResource* parentItem)
 {
   char styleBuf[400];
   wxString itemType(item->GetType());
