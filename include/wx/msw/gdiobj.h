@@ -48,7 +48,7 @@ DECLARE_DYNAMIC_CLASS(wxGDIObject)
   // Frees the resource
   virtual bool FreeResource(bool WXUNUSED(force) = FALSE) { return FALSE; };
 
-  virtual bool IsFree(void) { return FALSE; };
+  virtual bool IsFree(void) const { return FALSE; };
 
   inline bool IsNull(void) const { return (m_refData == 0); }
 

@@ -70,6 +70,7 @@ GENERICOBJS= \
   ..\generic\$D\gridg.obj \
   ..\generic\$D\laywin.obj \
   ..\generic\$D\panelg.obj \
+  ..\generic\$D\progdlgg.obj \
   ..\generic\$D\prop.obj \
   ..\generic\$D\propform.obj \
   ..\generic\$D\proplist.obj \

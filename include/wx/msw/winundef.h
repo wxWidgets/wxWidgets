@@ -20,6 +20,7 @@
     #undef GetCharWidth
 #endif
 
+#ifndef __WIN16__
 inline BOOL  GetCharWidth(HDC dc, UINT first, UINT last, LPINT buffer)
 {
 #ifdef _UNICODE
@@ -28,6 +29,7 @@ inline BOOL  GetCharWidth(HDC dc, UINT first, UINT last, LPINT buffer)
    return GetCharWidthA(dc, first, last, buffer);
 #endif
 }
+#endif
 
 // FindWindow
 
@@ -35,6 +37,7 @@ inline BOOL  GetCharWidth(HDC dc, UINT first, UINT last, LPINT buffer)
     #undef FindWindow
 #endif
 
+#ifndef __WIN16__
 #ifdef _UNICODE
 inline HWND FindWindow(LPCWSTR classname, LPCWSTR windowname)
 {
@@ -46,6 +49,7 @@ inline HWND FindWindow(LPCSTR classname, LPCSTR windowname)
    return FindWindowA(classname, windowname);
 }
 #endif
+#endif
 
 // GetClassName
 
@@ -53,6 +57,7 @@ inline HWND FindWindow(LPCSTR classname, LPCSTR windowname)
     #undef GetClassName
 #endif
 
+#ifndef __WIN16__
 #ifdef _UNICODE
 inline int GetClassName(HWND h, LPWSTR classname, int maxcount)
 {
@@ -64,6 +69,7 @@ inline int GetClassName(HWND h, LPSTR classname, int maxcount)
    return GetClassNameA(h, classname, maxcount);
 }
 #endif
+#endif
 
 // GetClassInfo
 
@@ -71,6 +77,7 @@ inline int GetClassName(HWND h, LPSTR classname, int maxcount)
     #undef GetClassInfo
 #endif
 
+#ifndef __WIN16__
 #ifdef _UNICODE
 inline BOOL GetClassInfo(HINSTANCE h, LPCWSTR name, LPWNDCLASSW winclass)
 {
@@ -82,6 +89,7 @@ inline BOOL GetClassInfo(HINSTANCE h, LPCSTR name, LPWNDCLASSA winclass)
    return GetClassInfoA(h, name, winclass);
 }
 #endif
+#endif
 
 // LoadAccelerators
 
@@ -89,6 +97,7 @@ inline BOOL GetClassInfo(HINSTANCE h, LPCSTR name, LPWNDCLASSA winclass)
     #undef LoadAccelerators
 #endif
 
+#ifndef __WIN16__
 #ifdef _UNICODE
 inline HACCEL LoadAccelerators(HINSTANCE h, LPCWSTR name)
 {
@@ -100,7 +109,7 @@ inline HACCEL LoadAccelerators(HINSTANCE h, LPCSTR name)
    return LoadAcceleratorsA(h, name);
 }
 #endif
-
+#endif
 
 // GetWindowProc... this isn't a Windows API function?!?!
 //ifdef GetWindowProc
@@ -114,6 +123,7 @@ inline HACCEL LoadAccelerators(HINSTANCE h, LPCSTR name)
     #undef DrawText
 #endif
 
+#ifndef __WIN16__
 #ifdef _UNICODE
 inline int DrawText(HDC h, LPCWSTR str, int count, LPRECT rect, UINT format)
 {
@@ -125,6 +135,7 @@ inline int DrawText(HDC h, LPCSTR str, int count, LPRECT rect, UINT format)
    return DrawTextA(h, str, count, rect, format);
 }
 #endif
+#endif
 
 // StartDoc
 
@@ -132,6 +143,7 @@ inline int DrawText(HDC h, LPCSTR str, int count, LPRECT rect, UINT format)
     #undef StartDoc
 #endif
 
+#ifndef __WIN16__
 #ifdef _UNICODE
 inline int StartDoc(HDC h, CONST DOCINFOW* info)
 {
@@ -142,6 +154,7 @@ inline int StartDoc(HDC h, CONST DOCINFOA* info)
 {
    return StartDocA(h, info);
 }
+#endif
 #endif
 
 // GetFirstChild... not a Windows API Function!?!?!
@@ -163,6 +176,7 @@ inline int StartDoc(HDC h, CONST DOCINFOA* info)
     #undef GetObject
 #endif
 
+#ifndef __WIN16__
 inline int GetObject(HGDIOBJ h, int i, LPVOID buffer)
 {
 #ifdef _UNICODE
@@ -171,5 +185,6 @@ inline int GetObject(HGDIOBJ h, int i, LPVOID buffer)
    return GetObjectA(h, i, buffer);
 #endif   
 }
+#endif
 
 #endif // _WX_WINUNDEF_H_

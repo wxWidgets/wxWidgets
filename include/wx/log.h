@@ -449,7 +449,7 @@ DECLARE_LOG_FUNCTION2(SysError, long lErrCode);
     #define __TFILE__ __XFILE__(__FILE__)
 #endif
 
-#if __WXDEBUG__
+#ifdef __WXDEBUG__
     // make life easier for people using VC++ IDE: clicking on the message
     // will take us immediately to the place of the failed API
 #ifdef __VISUALC__

@@ -59,6 +59,7 @@ GENERICOBJS= \
   $(GENDIR)/gridg.$(OBJSUFF) \
   $(GENDIR)/laywin.$(OBJSUFF) \
   $(GENDIR)/panelg.$(OBJSUFF) \
+  $(GENDIR)/progdlgg.$(OBJSUFF) \
   $(GENDIR)/prop.$(OBJSUFF) \
   $(GENDIR)/propform.$(OBJSUFF) \
   $(GENDIR)/proplist.$(OBJSUFF) \

@@ -26,6 +26,7 @@ GENERICOBJS= \
   $(GENDIR)\gridg.obj \
   $(GENDIR)\laywin.obj \
   $(GENDIR)\panelg.obj \
+  $(GENDIR)\progdlgg.obj \
   $(GENDIR)\prop.obj \
   $(GENDIR)\propform.obj \
   $(GENDIR)\proplist.obj \

@@ -79,6 +79,7 @@ GENERICOBJS= \
   $(MSWDIR)\listctrl.obj \
   $(MSWDIR)\notebook.obj \
   $(MSWDIR)\panelg.obj \
+  $(MSWDIR)\progdlgg.obj \
   $(MSWDIR)\prop.obj \
   $(MSWDIR)\propform.obj \
   $(MSWDIR)\proplist.obj \
@@ -618,6 +619,8 @@ $(MSWDIR)\panelg.obj:     $(GENDIR)\panelg.$(SRCSUFF)
 $(MSWDIR)\printps.obj:     $(GENDIR)\printps.$(SRCSUFF)
 
 $(MSWDIR)\prntdlgg.obj:     $(GENDIR)\prntdlgg.$(SRCSUFF)
+
+$(MSWDIR)\progdlgg.obj:     $(GENDIR)\progdlgg.$(SRCSUFF)
 
 $(MSWDIR)\prop.obj:     $(GENDIR)\prop.$(SRCSUFF)
 

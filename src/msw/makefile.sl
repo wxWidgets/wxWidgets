@@ -22,6 +22,7 @@ GENERICOBJS= choicdgg.obj \
   laywin.obj \
   panelg.obj \
   prop.obj \
+  progdlgg.obj \
   propform.obj \
   proplist.obj \
   sashwin.obj \
@@ -736,6 +737,9 @@ panelg.obj:     $(GENDIR)\panelg.cpp
 
 printps.obj:     $(GENDIR)\printps.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(GENDIR)\printps.cpp /BINARY printps.obj
+
+progdlgg.obj:     $(GENDIR)\progdlgg.cpp
+  $(CCC) $(CPPFLAGS) $(IFLAGS) $(GENDIR)\progdlgg.cpp /BINARY progdlgg.obj
 
 prop.obj:     $(GENDIR)\prop.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(GENDIR)\prop.cpp /BINARY prop.obj

@@ -79,8 +79,7 @@ bool MyApp::OnInit()
   frame->Fit();
 
   wxString server = "4242";
-  wxString hostName;
-  wxGetHostName(hostName);
+  wxString hostName = wxGetHostName();
 
   if (argc > 1)
     server = argv[1];

@@ -91,6 +91,12 @@ all:
         cd $(WXDIR)\samples\dde
         nmake -f client.vc FINAL=$(FINAL)
         nmake -f server.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\caret
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\drawing
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\scroll
+        nmake -f makefile.vc FINAL=$(FINAL)
 #        cd $(WXDIR)\samples\regtest
 #        nmake -f makefile.vc FINAL=$(FINAL)
 
@@ -162,5 +168,11 @@ clean:
         cd $(WXDIR)\samples\dde
         nmake -f client.vc clean
         nmake -f server.vc clean
+        cd $(WXDIR)\samples\caret
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\drawing
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\scroll
+        nmake -f makefile.vc clean
         cd $(WXDIR)\samples
 

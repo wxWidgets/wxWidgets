@@ -179,7 +179,7 @@ bool wxBrush::FreeResource(bool WXUNUSED(force))
   else return FALSE;
 }
 
-bool wxBrush::IsFree(void)
+bool wxBrush::IsFree() const
 {
   return (M_BRUSHDATA && (M_BRUSHDATA->m_hBrush == 0));
 }

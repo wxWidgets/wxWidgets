@@ -232,7 +232,7 @@ WXHANDLE wxFont::GetResourceHandle()
     return (WXHANDLE)M_FONTDATA->m_hFont ;
 }
 
-bool wxFont::IsFree()
+bool wxFont::IsFree() const
 {
   return (M_FONTDATA && (M_FONTDATA->m_hFont == 0));
 }

@@ -70,7 +70,7 @@ public:
   bool RealizeResource(void);
   WXHANDLE GetResourceHandle(void) ;
   bool FreeResource(bool force = FALSE);
-  bool IsFree(void);
+  bool IsFree() const;
   void Unshare();
 };
 

@@ -405,7 +405,7 @@ public:
     void Unselect();
     void UnselectAll();
         // select this item
-    void SelectItem(const wxTreeItemId& item, bool unselect_others=true, bool extended_select=false);
+    void SelectItem(const wxTreeItemId& item, bool unselect_others=TRUE, bool extended_select=FALSE);
         // make sure this item is visible (expanding the parent item and/or
         // scrolling to this item if necessary)
     void EnsureVisible(const wxTreeItemId& item);

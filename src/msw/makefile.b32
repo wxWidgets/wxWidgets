@@ -76,6 +76,7 @@ GENERICOBJS= \
   $(MSWDIR)\gridg.obj \
   $(MSWDIR)\laywin.obj \
   $(MSWDIR)\panelg.obj \
+  $(MSWDIR)\progdlgg.obj \
   $(MSWDIR)\prop.obj \
   $(MSWDIR)\proplist.obj \
   $(MSWDIR)\propform.obj \
@@ -642,6 +643,8 @@ $(MSWDIR)\msgdlgg.obj:     $(GENDIR)\msgdlgg.$(SRCSUFF)
 
 $(MSWDIR)\panelg.obj:     $(GENDIR)\panelg.$(SRCSUFF)
 
+$(MSWDIR)\progdlgg.obj:     $(GENDIR)\progdlgg.$(SRCSUFF)
+
 $(MSWDIR)\prop.obj:     $(GENDIR)\prop.$(SRCSUFF)
 
 $(MSWDIR)\proplist.obj:     $(GENDIR)\proplist.$(SRCSUFF)
@@ -728,6 +731,7 @@ $(CFG): makefile.b32
 -X
 -w-par
 -w-aus
+-w-hid # virtual function A hides virtual function B
 -WE
 -tWM
 

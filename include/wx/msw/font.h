@@ -68,7 +68,7 @@ public:
   virtual bool ReleaseResource(void);
 */
 
-  virtual bool IsFree(void);
+  virtual bool IsFree() const;
   virtual bool Ok(void) const { return (m_refData != NULL) ; }
 
   inline int GetPointSize(void) const { return M_FONTDATA->m_pointSize; }
