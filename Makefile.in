@@ -167,26 +167,27 @@ XMLLIB_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 @COND_USE_GUI_1_WXUNIV_0@	wx/bitmap.h wx/busyinfo.h wx/calctrl.h wx/caret.h \
 @COND_USE_GUI_1_WXUNIV_0@	wx/clipbrd.h wx/cmdproc.h wx/colordlg.h \
 @COND_USE_GUI_1_WXUNIV_0@	wx/colour.h wx/cshelp.h wx/dataobj.h wx/dbgrid.h \
-@COND_USE_GUI_1_WXUNIV_0@	wx/dcbuffer.h wx/dcps.h wx/dialup.h wx/dirctrl.h \
-@COND_USE_GUI_1_WXUNIV_0@	wx/display.h wx/dnd.h wx/docmdi.h wx/docview.h \
-@COND_USE_GUI_1_WXUNIV_0@	wx/dragimag.h wx/effects.h wx/evtloop.h \
-@COND_USE_GUI_1_WXUNIV_0@	wx/fdrepdlg.h wx/fmappriv.h wx/font.h wx/fontdlg.h \
-@COND_USE_GUI_1_WXUNIV_0@	wx/fontenum.h wx/fontutil.h wx/gdiobj.h \
-@COND_USE_GUI_1_WXUNIV_0@	wx/geometry.h wx/gifdecod.h wx/glcanvas.h \
-@COND_USE_GUI_1_WXUNIV_0@	wx/grid.h wx/help.h wx/helpbase.h wx/helpwin.h \
-@COND_USE_GUI_1_WXUNIV_0@	wx/iconbndl.h wx/imagbmp.h wx/image.h wx/imaggif.h \
-@COND_USE_GUI_1_WXUNIV_0@	wx/imagiff.h wx/imagjpeg.h wx/imaglist.h \
-@COND_USE_GUI_1_WXUNIV_0@	wx/imagpcx.h wx/imagpng.h wx/imagpnm.h \
-@COND_USE_GUI_1_WXUNIV_0@	wx/imagtiff.h wx/imagxpm.h wx/joystick.h \
-@COND_USE_GUI_1_WXUNIV_0@	wx/laywin.h wx/listbase.h wx/listctrl.h \
-@COND_USE_GUI_1_WXUNIV_0@	wx/matrix.h wx/menuitem.h wx/metafile.h \
-@COND_USE_GUI_1_WXUNIV_0@	wx/minifram.h wx/notebook.h wx/ownerdrw.h \
-@COND_USE_GUI_1_WXUNIV_0@	wx/paper.h wx/popupwin.h wx/print.h wx/printdlg.h \
-@COND_USE_GUI_1_WXUNIV_0@	wx/prntbase.h wx/progdlg.h wx/ptr_scpd.h \
-@COND_USE_GUI_1_WXUNIV_0@	wx/quantize.h wx/rawbmp.h wx/region.h wx/sashwin.h \
-@COND_USE_GUI_1_WXUNIV_0@	wx/scopeguard.h wx/spinbutt.h wx/spinctrl.h \
-@COND_USE_GUI_1_WXUNIV_0@	wx/splash.h wx/splitter.h wx/stack.h wx/statline.h \
-@COND_USE_GUI_1_WXUNIV_0@	wx/tab.h wx/tabctrl.h wx/taskbar.h wx/tbarbase.h \
+@COND_USE_GUI_1_WXUNIV_0@	wx/dcbuffer.h wx/dcmirror.h wx/dcps.h wx/dialup.h \
+@COND_USE_GUI_1_WXUNIV_0@	wx/dirctrl.h wx/display.h wx/dnd.h wx/docmdi.h \
+@COND_USE_GUI_1_WXUNIV_0@	wx/docview.h wx/dragimag.h wx/effects.h \
+@COND_USE_GUI_1_WXUNIV_0@	wx/evtloop.h wx/fdrepdlg.h wx/fmappriv.h wx/font.h \
+@COND_USE_GUI_1_WXUNIV_0@	wx/fontdlg.h wx/fontenum.h wx/fontutil.h \
+@COND_USE_GUI_1_WXUNIV_0@	wx/gdiobj.h wx/geometry.h wx/gifdecod.h \
+@COND_USE_GUI_1_WXUNIV_0@	wx/glcanvas.h wx/grid.h wx/help.h wx/helpbase.h \
+@COND_USE_GUI_1_WXUNIV_0@	wx/helpwin.h wx/iconbndl.h wx/imagbmp.h wx/image.h \
+@COND_USE_GUI_1_WXUNIV_0@	wx/imaggif.h wx/imagiff.h wx/imagjpeg.h \
+@COND_USE_GUI_1_WXUNIV_0@	wx/imaglist.h wx/imagpcx.h wx/imagpng.h \
+@COND_USE_GUI_1_WXUNIV_0@	wx/imagpnm.h wx/imagtiff.h wx/imagxpm.h \
+@COND_USE_GUI_1_WXUNIV_0@	wx/joystick.h wx/laywin.h wx/listbase.h \
+@COND_USE_GUI_1_WXUNIV_0@	wx/listctrl.h wx/matrix.h wx/menuitem.h \
+@COND_USE_GUI_1_WXUNIV_0@	wx/metafile.h wx/minifram.h wx/notebook.h \
+@COND_USE_GUI_1_WXUNIV_0@	wx/ownerdrw.h wx/paper.h wx/popupwin.h wx/print.h \
+@COND_USE_GUI_1_WXUNIV_0@	wx/printdlg.h wx/prntbase.h wx/progdlg.h \
+@COND_USE_GUI_1_WXUNIV_0@	wx/ptr_scpd.h wx/quantize.h wx/rawbmp.h \
+@COND_USE_GUI_1_WXUNIV_0@	wx/region.h wx/sashwin.h wx/scopeguard.h \
+@COND_USE_GUI_1_WXUNIV_0@	wx/spinbutt.h wx/spinctrl.h wx/splash.h \
+@COND_USE_GUI_1_WXUNIV_0@	wx/splitter.h wx/stack.h wx/statline.h wx/tab.h \
+@COND_USE_GUI_1_WXUNIV_0@	wx/tabctrl.h wx/taskbar.h wx/tbarbase.h \
 @COND_USE_GUI_1_WXUNIV_0@	wx/tbarsmpl.h wx/tglbtn.h wx/tipdlg.h wx/tipwin.h \
 @COND_USE_GUI_1_WXUNIV_0@	wx/tooltip.h wx/toplevel.h wx/treebase.h \
 @COND_USE_GUI_1_WXUNIV_0@	wx/treectrl.h wx/valgen.h wx/vlbox.h \
@@ -228,26 +229,27 @@ XMLLIB_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 @COND_USE_GUI_1_WXUNIV_1@	wx/bitmap.h wx/busyinfo.h wx/calctrl.h wx/caret.h \
 @COND_USE_GUI_1_WXUNIV_1@	wx/clipbrd.h wx/cmdproc.h wx/colordlg.h \
 @COND_USE_GUI_1_WXUNIV_1@	wx/colour.h wx/cshelp.h wx/dataobj.h wx/dbgrid.h \
-@COND_USE_GUI_1_WXUNIV_1@	wx/dcbuffer.h wx/dcps.h wx/dialup.h wx/dirctrl.h \
-@COND_USE_GUI_1_WXUNIV_1@	wx/display.h wx/dnd.h wx/docmdi.h wx/docview.h \
-@COND_USE_GUI_1_WXUNIV_1@	wx/dragimag.h wx/effects.h wx/evtloop.h \
-@COND_USE_GUI_1_WXUNIV_1@	wx/fdrepdlg.h wx/fmappriv.h wx/font.h wx/fontdlg.h \
-@COND_USE_GUI_1_WXUNIV_1@	wx/fontenum.h wx/fontutil.h wx/gdiobj.h \
-@COND_USE_GUI_1_WXUNIV_1@	wx/geometry.h wx/gifdecod.h wx/glcanvas.h \
-@COND_USE_GUI_1_WXUNIV_1@	wx/grid.h wx/help.h wx/helpbase.h wx/helpwin.h \
-@COND_USE_GUI_1_WXUNIV_1@	wx/iconbndl.h wx/imagbmp.h wx/image.h wx/imaggif.h \
-@COND_USE_GUI_1_WXUNIV_1@	wx/imagiff.h wx/imagjpeg.h wx/imaglist.h \
-@COND_USE_GUI_1_WXUNIV_1@	wx/imagpcx.h wx/imagpng.h wx/imagpnm.h \
-@COND_USE_GUI_1_WXUNIV_1@	wx/imagtiff.h wx/imagxpm.h wx/joystick.h \
-@COND_USE_GUI_1_WXUNIV_1@	wx/laywin.h wx/listbase.h wx/listctrl.h \
-@COND_USE_GUI_1_WXUNIV_1@	wx/matrix.h wx/menuitem.h wx/metafile.h \
-@COND_USE_GUI_1_WXUNIV_1@	wx/minifram.h wx/notebook.h wx/ownerdrw.h \
-@COND_USE_GUI_1_WXUNIV_1@	wx/paper.h wx/popupwin.h wx/print.h wx/printdlg.h \
-@COND_USE_GUI_1_WXUNIV_1@	wx/prntbase.h wx/progdlg.h wx/ptr_scpd.h \
-@COND_USE_GUI_1_WXUNIV_1@	wx/quantize.h wx/rawbmp.h wx/region.h wx/sashwin.h \
-@COND_USE_GUI_1_WXUNIV_1@	wx/scopeguard.h wx/spinbutt.h wx/spinctrl.h \
-@COND_USE_GUI_1_WXUNIV_1@	wx/splash.h wx/splitter.h wx/stack.h wx/statline.h \
-@COND_USE_GUI_1_WXUNIV_1@	wx/tab.h wx/tabctrl.h wx/taskbar.h wx/tbarbase.h \
+@COND_USE_GUI_1_WXUNIV_1@	wx/dcbuffer.h wx/dcmirror.h wx/dcps.h wx/dialup.h \
+@COND_USE_GUI_1_WXUNIV_1@	wx/dirctrl.h wx/display.h wx/dnd.h wx/docmdi.h \
+@COND_USE_GUI_1_WXUNIV_1@	wx/docview.h wx/dragimag.h wx/effects.h \
+@COND_USE_GUI_1_WXUNIV_1@	wx/evtloop.h wx/fdrepdlg.h wx/fmappriv.h wx/font.h \
+@COND_USE_GUI_1_WXUNIV_1@	wx/fontdlg.h wx/fontenum.h wx/fontutil.h \
+@COND_USE_GUI_1_WXUNIV_1@	wx/gdiobj.h wx/geometry.h wx/gifdecod.h \
+@COND_USE_GUI_1_WXUNIV_1@	wx/glcanvas.h wx/grid.h wx/help.h wx/helpbase.h \
+@COND_USE_GUI_1_WXUNIV_1@	wx/helpwin.h wx/iconbndl.h wx/imagbmp.h wx/image.h \
+@COND_USE_GUI_1_WXUNIV_1@	wx/imaggif.h wx/imagiff.h wx/imagjpeg.h \
+@COND_USE_GUI_1_WXUNIV_1@	wx/imaglist.h wx/imagpcx.h wx/imagpng.h \
+@COND_USE_GUI_1_WXUNIV_1@	wx/imagpnm.h wx/imagtiff.h wx/imagxpm.h \
+@COND_USE_GUI_1_WXUNIV_1@	wx/joystick.h wx/laywin.h wx/listbase.h \
+@COND_USE_GUI_1_WXUNIV_1@	wx/listctrl.h wx/matrix.h wx/menuitem.h \
+@COND_USE_GUI_1_WXUNIV_1@	wx/metafile.h wx/minifram.h wx/notebook.h \
+@COND_USE_GUI_1_WXUNIV_1@	wx/ownerdrw.h wx/paper.h wx/popupwin.h wx/print.h \
+@COND_USE_GUI_1_WXUNIV_1@	wx/printdlg.h wx/prntbase.h wx/progdlg.h \
+@COND_USE_GUI_1_WXUNIV_1@	wx/ptr_scpd.h wx/quantize.h wx/rawbmp.h \
+@COND_USE_GUI_1_WXUNIV_1@	wx/region.h wx/sashwin.h wx/scopeguard.h \
+@COND_USE_GUI_1_WXUNIV_1@	wx/spinbutt.h wx/spinctrl.h wx/splash.h \
+@COND_USE_GUI_1_WXUNIV_1@	wx/splitter.h wx/stack.h wx/statline.h wx/tab.h \
+@COND_USE_GUI_1_WXUNIV_1@	wx/tabctrl.h wx/taskbar.h wx/tbarbase.h \
 @COND_USE_GUI_1_WXUNIV_1@	wx/tbarsmpl.h wx/tglbtn.h wx/tipdlg.h wx/tipwin.h \
 @COND_USE_GUI_1_WXUNIV_1@	wx/tooltip.h wx/toplevel.h wx/treebase.h \
 @COND_USE_GUI_1_WXUNIV_1@	wx/treectrl.h wx/valgen.h wx/vlbox.h \
@@ -3584,9 +3586,6 @@ coredll_combobox_native.o: $(srcdir)/src/motif/combobox_native.cpp
 @COND_TOOLKIT_GTK_USE_GUI_1@coredll_dcmemory.o: $(srcdir)/src/gtk/dcmemory.cpp
 @COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_dcmemory.o: $(srcdir)/src/cocoa/dcmemory.cpp
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
 @COND_TOOLKIT_X11_USE_GUI_1@coredll_dcmemory.o: $(srcdir)/src/x11/dcmemory.cpp
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -3595,6 +3594,9 @@ coredll_combobox_native.o: $(srcdir)/src/motif/combobox_native.cpp
 
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_dcmemory.o: $(srcdir)/src/mgl/dcmemory.cpp
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_dcmemory.o: $(srcdir)/src/cocoa/dcmemory.mm
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@coredll_dcmemory.o: $(srcdir)/src/os2/dcmemory.cpp
 @COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
@@ -5722,9 +5724,6 @@ corelib_combobox_native.o: $(srcdir)/src/motif/combobox_native.cpp
 @COND_TOOLKIT_GTK_USE_GUI_1@corelib_dcmemory.o: $(srcdir)/src/gtk/dcmemory.cpp
 @COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_dcmemory.o: $(srcdir)/src/cocoa/dcmemory.cpp
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
 @COND_TOOLKIT_X11_USE_GUI_1@corelib_dcmemory.o: $(srcdir)/src/x11/dcmemory.cpp
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
@@ -5733,6 +5732,9 @@ corelib_combobox_native.o: $(srcdir)/src/motif/combobox_native.cpp
 
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_dcmemory.o: $(srcdir)/src/mgl/dcmemory.cpp
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_dcmemory.o: $(srcdir)/src/cocoa/dcmemory.mm
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@corelib_dcmemory.o: $(srcdir)/src/os2/dcmemory.cpp
 @COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
@@ -8215,9 +8217,6 @@ monodll_dbtable.o: $(srcdir)/src/common/dbtable.cpp
 @COND_TOOLKIT_GTK_USE_GUI_1@monodll_dcmemory.o: $(srcdir)/src/gtk/dcmemory.cpp
 @COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_dcmemory.o: $(srcdir)/src/cocoa/dcmemory.cpp
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_dcmemory.o: $(srcdir)/src/x11/dcmemory.cpp
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -8226,6 +8225,9 @@ monodll_dbtable.o: $(srcdir)/src/common/dbtable.cpp
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_dcmemory.o: $(srcdir)/src/mgl/dcmemory.cpp
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_dcmemory.o: $(srcdir)/src/cocoa/dcmemory.mm
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@monodll_dcmemory.o: $(srcdir)/src/os2/dcmemory.cpp
 @COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -10719,9 +10721,6 @@ monolib_dbtable.o: $(srcdir)/src/common/dbtable.cpp
 @COND_TOOLKIT_GTK_USE_GUI_1@monolib_dcmemory.o: $(srcdir)/src/gtk/dcmemory.cpp
 @COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_dcmemory.o: $(srcdir)/src/cocoa/dcmemory.cpp
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_dcmemory.o: $(srcdir)/src/x11/dcmemory.cpp
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
@@ -10730,6 +10729,9 @@ monolib_dbtable.o: $(srcdir)/src/common/dbtable.cpp
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_dcmemory.o: $(srcdir)/src/mgl/dcmemory.cpp
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_dcmemory.o: $(srcdir)/src/cocoa/dcmemory.mm
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@monolib_dcmemory.o: $(srcdir)/src/os2/dcmemory.cpp
 @COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<

@@ -500,6 +500,7 @@
     wx/dataobj.h
     wx/dbgrid.h
     wx/dcbuffer.h
+    wx/dcmirror.h
     wx/dcps.h
     wx/dialup.h
     wx/dirctrl.h
