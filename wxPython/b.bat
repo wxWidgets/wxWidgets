@@ -33,6 +33,11 @@ elseiff "%1" == "i" then
 	shift
 	set CMD=%SETUP% build install
 
+rem "r" --> make installer
+elseiff "%1" == "r" then
+	shift
+	set CMD=%PYTHON% distrib\make_installer.py
+
 rem "s" --> source dist
 elseiff "%1" == "s" then
 	shift

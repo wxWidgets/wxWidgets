@@ -15,6 +15,7 @@ mkdir _distrib_tgz
 mkdir _distrib_tgz/wxPython-$1
 
 cp -R demo _distrib_tgz/wxPython-$1
+cp -R samples _distrib_tgz/wxPython-$1
 
 # do some cleanup
 rm -rf `find _distrib_tgz/wxPython-$1 -name CVS`

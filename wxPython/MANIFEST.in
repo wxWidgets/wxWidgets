@@ -14,6 +14,11 @@ include demo/bitmaps/*.ico
 include demo/bitmaps/*.gif
 include demo/bitmaps/*.png
 include demo/bitmaps/*.jpg
+include demo/bmp_source/*.bmp
+include demo/bmp_source/*.ico
+include demo/bmp_source/*.gif
+include demo/bmp_source/*.png
+include demo/bmp_source/*.jpg
 include demo/README.txt
 include demo/*.xml
 include demo/data/*.png
@@ -32,6 +37,7 @@ include samples/stxview/*.txt
 include samples/stxview/*.py
 include samples/stxview/*.stx
 include samples/stxview/StructuredText/*.py
+include samples/stxview/StructuredText/*.txt
 include samples/wxProject/*.txt
 include samples/wxProject/*.py
 
