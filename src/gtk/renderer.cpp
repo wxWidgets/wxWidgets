@@ -48,6 +48,10 @@
 class WXDLLEXPORT wxRendererGTK : public wxDelegateRendererNative
 {
 public:
+
+    // used by DrawHeaderButton and DrawComboBoxDropButton
+    void PrepareButtonDraw();
+
     // draw the header control button (used by wxListCtrl)
     virtual void DrawHeaderButton(wxWindow *win,
                                   wxDC& dc,
@@ -94,6 +98,27 @@ wxRendererNative& wxRendererNative::GetDefault()
 }
 
 // ----------------------------------------------------------------------------
+// common code
+// ----------------------------------------------------------------------------
+
+static GtkWidget *gs_button = NULL;
+static GtkWidget *gs_window = NULL;
+
+void
+wxRendererGTK::PrepareButtonDraw()
+{
+    // prepares gs_button and gs_window which are used when
+    // drawing button based elements.
+    wxASSERT ( !gs_button );
+
+    gs_window = gtk_window_new( GTK_WINDOW_POPUP );
+    gtk_widget_realize( gs_window );
+    gs_button = gtk_button_new();
+    gtk_container_add( GTK_CONTAINER(gs_window), gs_button );
+    gtk_widget_realize( gs_button );
+}
+
+// ----------------------------------------------------------------------------
 // list/tree controls drawing
 // ----------------------------------------------------------------------------
 
@@ -104,25 +129,19 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
                                 int flags)
 {
 
-    static GtkWidget *s_button = NULL;
-    static GtkWidget *s_window = NULL;
-    if (s_button == NULL)
-    {
-        s_window = gtk_window_new( GTK_WINDOW_POPUP );
-        gtk_widget_realize( s_window );
-        s_button = gtk_button_new();
-        gtk_container_add( GTK_CONTAINER(s_window), s_button );
-        gtk_widget_realize( s_button );
-    }
+    if (gs_button == NULL)
+        PrepareButtonDraw();
 
     gtk_paint_box
     (
-        s_button->style,
+        gs_button->style,
+        // FIXME: I suppose GTK_PIZZA(win->m_wxwindow)->bin_window doesn't work with wxMemoryDC.
+        //   Maybe use code similar as in DrawComboBoxDropButton below?
         GTK_PIZZA(win->m_wxwindow)->bin_window,
         flags & wxCONTROL_DISABLED ? GTK_STATE_INSENSITIVE : GTK_STATE_NORMAL,
         GTK_SHADOW_OUT,
         NULL,
-        s_button,
+        gs_button,
         "button",
         dc.XLOG2DEV(rect.x) -1, rect.y -1, rect.width +2, rect.height +2
     );
@@ -352,26 +371,63 @@ void wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
                                             const wxRect& rect,
                                             int flags)
 {
-    dc.SetBrush(wxBrush(win->GetBackgroundColour()));
-    dc.SetPen(wxPen(win->GetBackgroundColour()));
-    dc.DrawRectangle(rect);
+    if (gs_button == NULL)
+        PrepareButtonDraw();
 
-    int x = (rect.GetWidth()-9)   / 2;
-    int y = (rect.GetHeight()-10) / 2;
+    // device context must inherit from wxWindowDC
+    // (so it must be wxClientDC, wxMemoryDC or wxPaintDC)
+    wxWindowDC& wdc = (wxWindowDC&)dc;
 
-    wxPoint pt[] =
-    {
-        wxPoint(x+2, y+3),
-        wxPoint(x+6, y+3),
-        wxPoint(x+6, y+6),
-        wxPoint(x+8, y+6),
-        wxPoint(x+4, y+10),
-        wxPoint(x+0, y+6),
-        wxPoint(x+2, y+6)
-    };
-    dc.SetBrush(wxBrush(win->GetForegroundColour()));
-    dc.SetPen(wxPen(win->GetForegroundColour()));
-    dc.DrawLine(x, y, x+9, y);
-    dc.DrawPolygon(WXSIZEOF(pt), pt, rect.x, rect.y);
+    // only doing debug-time checking here (it should probably be enough)
+    wxASSERT ( wdc.IsKindOf(CLASSINFO(wxWindowDC)) );
+
+    GtkStateType state = GTK_STATE_NORMAL;
+    GtkShadowType shadow = GTK_SHADOW_OUT;
+
+    if ( flags & wxCONTROL_PRESSED )
+        shadow = GTK_SHADOW_IN;
+    else if ( flags & wxCONTROL_CURRENT )
+        state = GTK_STATE_PRELIGHT;
+    else if ( flags & wxCONTROL_DISABLED )
+        state = GTK_STATE_INSENSITIVE;
+
+    gtk_paint_box
+    (
+        gs_button->style,
+        //GTK_PIZZA(wdc->m_window)->bin_window,
+        wdc.m_window,
+        state,
+        shadow,
+        NULL,
+        gs_button,
+        "button",
+        dc.XLOG2DEV(rect.x), rect.y, rect.width, rect.height
+    );
+
+    // draw arrow on button
+
+    int arr_wid = rect.width/2;
+    int arr_hei = rect.height/2;
+    arr_wid += arr_wid & 1;
+    arr_hei += arr_hei & 1;
+
+    gtk_paint_arrow
+    (
+        gs_button->style,
+        //GTK_PIZZA(wdc->m_window)->bin_window,
+        wdc.m_window,
+        state,
+        shadow,
+        NULL,
+        gs_button,
+        "arrow",
+        GTK_ARROW_DOWN,
+        TRUE,
+        dc.XLOG2DEV(rect.x) + (rect.width/2-arr_wid/2) + 1,
+        rect.y + (rect.height/2-arr_hei/2) + 1,
+        arr_wid,
+        arr_hei
+    );
+
 }
 
