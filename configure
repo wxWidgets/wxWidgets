@@ -15592,10 +15592,17 @@ EOF
 fi
 
 if test "$wxUSE_TOGGLEBTN" = "yes"; then
-  cat >> confdefs.h <<\EOF
+    if test "$wxUSE_MAC" = 1; then
+        echo "configure: warning: Toggle button is not yet supported under Mac OS X" 1>&2
+        wxUSE_TOGGLEBTN=no
+    fi
+
+    if test "$wxUSE_TOGGLEBTN" = "yes"; then
+        cat >> confdefs.h <<\EOF
 #define wxUSE_TOGGLEBTN 1
 EOF
 
+    fi
 fi
 
 if test "$wxUSE_TOOLBAR_SIMPLE" = "yes"; then
@@ -15909,7 +15916,7 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:15913: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:15920: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6

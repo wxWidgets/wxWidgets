@@ -3929,7 +3929,14 @@ if test "$wxUSE_TABDIALOG" = "yes"; then
 fi
 
 if test "$wxUSE_TOGGLEBTN" = "yes"; then
-  AC_DEFINE(wxUSE_TOGGLEBTN)
+    if test "$wxUSE_MAC" = 1; then
+        AC_MSG_WARN([Toggle button is not yet supported under Mac OS X])
+        wxUSE_TOGGLEBTN=no
+    fi
+
+    if test "$wxUSE_TOGGLEBTN" = "yes"; then
+        AC_DEFINE(wxUSE_TOGGLEBTN)
+    fi
 fi
 
 if test "$wxUSE_TOOLBAR_SIMPLE" = "yes"; then
