@@ -582,15 +582,15 @@ wxMask::~wxMask()
 // Create a mask from a mono bitmap (copies the bitmap).
 bool wxMask::Create(const wxBitmap& bitmap)
 {
+    wxCHECK_MSG( bitmap.Ok() && bitmap.GetDepth() == 1, FALSE,
+                 _T("can't create mask from invalid or not monochrome bitmap") );
+
     if ( m_maskBitmap )
     {
         ::DeleteObject((HBITMAP) m_maskBitmap);
         m_maskBitmap = 0;
     }
-    if (!bitmap.Ok() || bitmap.GetDepth() != 1)
-    {
-        return FALSE;
-    }
+
     m_maskBitmap = (WXHBITMAP) CreateBitmap(
                                             bitmap.GetWidth(),
                                             bitmap.GetHeight(),

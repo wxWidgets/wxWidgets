@@ -748,7 +748,7 @@ bool wxWindowBase::TransferDataToWindow()
 
         if ( recurse )
         {
-            if ( !child->TransferToWindow() )
+            if ( !child->TransferDataToWindow() )
             {
                 // warning already given
                 return FALSE;
@@ -780,7 +780,7 @@ bool wxWindowBase::TransferDataFromWindow()
 
         if ( recurse )
         {
-            if ( !child->TransferFromWindow() )
+            if ( !child->TransferDataFromWindow() )
             {
                 // warning already given
                 return FALSE;

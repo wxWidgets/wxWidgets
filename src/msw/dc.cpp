@@ -23,7 +23,6 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-#include "wx/msw/private.h" // needs to be before #include <commdlg.h>
 
 #ifdef __BORLANDC__
     #pragma hdrstop
@@ -46,6 +45,8 @@
 #include <string.h>
 #include <math.h>
 
+#include "wx/msw/private.h" // needs to be before #include <commdlg.h>
+
 #if wxUSE_COMMON_DIALOGS
 #if wxUSE_NORLANDER_HEADERS
     #include <windows.h>
@@ -57,7 +58,7 @@
     #include <print.h>
 #endif
 
-    IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
 
 // ---------------------------------------------------------------------------
 // constants
@@ -1254,7 +1255,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
         const wxBitmap& bmp = source->m_selectedBitmap;
         mask = bmp.GetMask();
 
-        wxCHECK_MSG( bmp.Ok() && mask, FALSE,
+        wxCHECK_MSG( bmp.Ok() && mask && mask->GetMaskBitmap(), FALSE,
                      _T("can't blit with mask without mask") );
     }
 
@@ -1288,16 +1289,24 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
     if (useMask)
     {
 #ifdef __WIN32__
-        if ( ::MaskBlt(GetHdc(), xdest, ydest,
-                       (int)width, (int)height,
-                       GetHdcOf(*source), xsrc, ysrc,
-                       (HBITMAP) mask->GetMaskBitmap(),
-                       0, 0, MAKEROP4(SRCCOPY, PATCOPY)) != 0 )
-        {
-            // Success
-            success = TRUE;
-        }
-        else
+        HBITMAP hbmpMask = wxInvertMask((HBITMAP)mask->GetMaskBitmap());
+
+        // we want the part of the image corresponding to the mask to be
+        // transparent, i.e. do PATCOPY there and apply dwRop elsewhere
+        const wxColour& colBg = m_backgroundBrush.GetColour();
+        HBRUSH hbrBg = (HBRUSH)::CreateSolidBrush(wxColourToRGB(colBg));
+        HBRUSH hbrOld = (HBRUSH)::SelectObject(GetHdc(), hbrBg);
+
+        success = ::MaskBlt(GetHdc(), xdest, ydest, width, height,
+                            GetHdcOf(*source), xsrc, ysrc,
+                            hbmpMask, 0, 0,
+                            MAKEROP4(PATCOPY, dwRop)) != 0;
+
+        (void)::SelectObject(GetHdc(), hbrOld);
+        ::DeleteObject(hbrOld);
+        ::DeleteObject(hbmpMask);
+
+        if ( !success )
 #endif // Win32
         {
             // Blit bitmap with mask
