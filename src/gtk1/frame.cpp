@@ -246,7 +246,7 @@ gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *ev
 /* we cannot MWM hints and icons before the widget has been realized,
    so we do this directly after realization */
 
-static gint
+static void
 gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget), wxFrame *win )
 {
     if (g_isIdle)
@@ -321,8 +321,26 @@ gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget), wxFrame *win )
 
         node = node->GetNext();
     }
+}
 
-    return FALSE;
+//-----------------------------------------------------------------------------
+// "map_event" from m_widget
+//-----------------------------------------------------------------------------
+
+static void
+gtk_frame_map_callback( GtkWidget * WXUNUSED(widget), wxFrame *win )
+{
+    win->m_isIconized = FALSE;
+}
+
+//-----------------------------------------------------------------------------
+// "unmap_event" from m_widget
+//-----------------------------------------------------------------------------
+
+static void
+gtk_frame_unmap_callback( GtkWidget * WXUNUSED(widget), wxFrame *win )
+{
+    win->m_isIconized = TRUE;
 }
 
 // ----------------------------------------------------------------------------
@@ -398,6 +416,8 @@ void wxFrame::Init()
     m_menuBarDetached = FALSE;
     m_toolBarDetached = FALSE;
     m_insertInClientArea = TRUE;
+    m_isIconized = FALSE;
+    m_fsIsShowing = FALSE;
 }
 
 bool wxFrame::Create( wxWindow *parent,
@@ -411,7 +431,6 @@ bool wxFrame::Create( wxWindow *parent,
     wxTopLevelWindows.Append( this );
 
     m_needParent = FALSE;
-    m_fsIsShowing = FALSE;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
@@ -486,6 +505,16 @@ bool wxFrame::Create( wxWindow *parent,
         been realized, so we do this directly after realization */
     gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
                         GTK_SIGNAL_FUNC(gtk_frame_realized_callback), (gpointer) this );
+
+    /* the only way to get the window size is to connect to this event */
+    gtk_signal_connect( GTK_OBJECT(m_widget), "configure_event",
+        GTK_SIGNAL_FUNC(gtk_frame_configure_callback), (gpointer)this );
+
+    /* map and unmap for iconized state */
+    gtk_signal_connect( GTK_OBJECT(m_widget), "map_event",
+        GTK_SIGNAL_FUNC(gtk_frame_map_callback), (gpointer)this );
+    gtk_signal_connect( GTK_OBJECT(m_widget), "unmap_event",
+        GTK_SIGNAL_FUNC(gtk_frame_unmap_callback), (gpointer)this );
 
     /* the only way to get the window size is to connect to this event */
     gtk_signal_connect( GTK_OBJECT(m_widget), "configure_event",
@@ -1129,5 +1158,5 @@ void wxFrame::Iconize( bool iconize )
 
 bool wxFrame::IsIconized() const
 {
-    return FALSE;
+    return m_isIconized;
 }
