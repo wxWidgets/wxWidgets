@@ -586,6 +586,8 @@ private:
             { wxNodeBase::SetData(data); }                                  \
                                                                             \
         virtual void DeleteData();                                          \
+                                                                            \
+        DECLARE_NO_COPY_CLASS(nodetype)                                     \
     };                                                                      \
                                                                             \
     classexp name : public wxListBase                                       \
