@@ -113,7 +113,7 @@ to use them.
 
 Added the wxValidator class, and created a class named wxPyValidator
 that should be used for the base class of any Python validators.  See
-the demo for an example.  Please not that you MUST implement a Clone
+the demo for an example.  Please note that you MUST implement a Clone
 method in your validator classes because of the way some things work
 in the underlying C++ library.  I did not add wxTextValidator because
 of some issues of how it transfers data to and from a wxString, which
@@ -129,7 +129,7 @@ object?  Well now you can leave it out or explicitly set it to a true
 value.  This value now controls what is to be done with sys.stdout and
 sys.stderr.  A false value leaves them alone, and a true value sets
 them to an instance of wxPyOnDemandOutputWindow.  (On windows the
-default is true, on other platforms the default is false.)  This class
+default is true, on unix platforms the default is false.)  This class
 creates a frame containing a wxTextCtrl as soon as anything is written
 to sys.stdout or sys.stderr.  If you close the window it will come
 back again the next time something is written.  (You can call
@@ -152,6 +152,17 @@ Please see the implementation of wxPyOnDemandOutputWindow and wxApp in
 wx.py for more details.  A few words of caution:  if you are running
 your app in a debugger, changing sys.stdout and sys.stderr is likely
 to really screw things up.
+
+Added wxCaret.  Unfortunately it's author has still not documented it
+in the wxWindows docs...
+
+Some new 3rd party contributions in wxPython.lib.  PyShell, in
+shell.py is an interesting implementaion of an interactive Python
+shell in wxWindows.  floatbar.py has a class derived from wxTooBar
+that can sense mouse drags and then reparent itself into another
+frame. Moving the new frame close to where it came from puts the tool
+bar back into the original parent.
+
 
 
 

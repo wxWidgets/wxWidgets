@@ -1,17 +1,22 @@
 
 from   wxPython.wx import *
+
 import ColorPanel
+import wxGrid
+import wxListCtrl
+import wxScrolledWindow
 
 #----------------------------------------------------------------------------
 
 def runTest(frame, nb, log):
 
-    testWin = wxNotebook(nb, -1)
+    testWin = wxNotebook(nb, -1, style=wxNB_BOTTOM)
 
     win = ColorPanel.ColoredPanel(testWin, wxBLUE)
     testWin.AddPage(win, "Blue")
     st = wxStaticText(win, -1,
-                      "You can put nearly any type of window here!",
+                      "You can put nearly any type of window here,\n"
+                      "and the tabs can be on any side... (look below.)",
                       wxPoint(10, 10))
     st.SetForegroundColour(wxWHITE)
     st.SetBackgroundColour(wxBLUE)
@@ -19,8 +24,17 @@ def runTest(frame, nb, log):
     win = ColorPanel.ColoredPanel(testWin, wxRED)
     testWin.AddPage(win, "Red")
 
+    win = wxScrolledWindow.MyCanvas(testWin)
+    testWin.AddPage(win, 'ScrolledWindow')
+
     win = ColorPanel.ColoredPanel(testWin, wxGREEN)
     testWin.AddPage(win, "Green")
+
+    win = wxGrid.TestGrid(testWin, log)
+    testWin.AddPage(win, "Grid")
+
+    win = wxListCtrl.TestListCtrlPanel(testWin, log)
+    testWin.AddPage(win, 'List')
 
     win = ColorPanel.ColoredPanel(testWin, wxCYAN)
     testWin.AddPage(win, "Cyan")

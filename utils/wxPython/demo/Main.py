@@ -42,7 +42,8 @@ _treeList = [
                        'wxImage', 'PrintFramework', 'wxOGL']),
 
     ('wxPython Library', ['OldSizers', 'Layoutf', 'wxScrolledMessageDialog',
-                          'wxMultipleChoiceDialog', 'wxPlotCanvas']),
+                          'wxMultipleChoiceDialog', 'wxPlotCanvas', 'wxFloatBar',
+                          'PyShell']),
 
     ('Cool Contribs', ['pyTree', 'hangman', 'SlashDot', 'XMLtreeview']),
 
@@ -73,7 +74,7 @@ class wxPythonDemo(wxFrame):
         self.mainmenu = wxMenuBar()
         menu = wxMenu()
         exitID = wxNewId()
-        menu.Append(exitID, 'E&xit\tCtrl-X', 'Get the heck outta here!')
+        menu.Append(exitID, 'E&xit\tAlt-X', 'Get the heck outta here!')
         EVT_MENU(self, exitID, self.OnFileExit)
         self.mainmenu.Append(menu, '&File')
 
@@ -98,7 +99,7 @@ class wxPythonDemo(wxFrame):
         self.SetMenuBar(self.mainmenu)
 
         # set the menu accellerator table...
-        aTable = wxAcceleratorTable([(wxACCEL_CTRL, ord('X'), exitID),
+        aTable = wxAcceleratorTable([(wxACCEL_ALT,  ord('X'), exitID),
                                      (wxACCEL_CTRL, ord('H'), helpID)])
         self.SetAcceleratorTable(aTable)
 
@@ -118,7 +119,6 @@ class wxPythonDemo(wxFrame):
         EVT_TREE_ITEM_EXPANDED   (self.tree, tID, self.OnItemExpanded)
         EVT_TREE_ITEM_COLLAPSED  (self.tree, tID, self.OnItemCollapsed)
         EVT_TREE_SEL_CHANGED     (self.tree, tID, self.OnSelChanged)
-        ###EVT_TREE_SEL_CHANGING    (self.tree, tID, self.OnSelChanging)
 
         # Create a Notebook
         self.nb = wxNotebook(splitter2, -1)
@@ -196,7 +196,6 @@ class wxPythonDemo(wxFrame):
     def OnSelChanged(self, event):
         if self.dying:
             return
-        ###print 'OnSelChanged entry'
 
         if self.nb.GetPageCount() == 3:
             if self.nb.GetSelection() == 2:
@@ -209,9 +208,7 @@ class wxPythonDemo(wxFrame):
         if itemText == 'Overview':
             self.GetDemoFile('Main.py')
             self.SetOverview('Overview', overview)
-            #self.nb.ResizeChildren();
             self.nb.Refresh();
-            #wxYield()
             self.window = None
 
         else:
@@ -227,18 +224,14 @@ class wxPythonDemo(wxFrame):
                 self.window = module.runTest(self, self.nb, self)
                 if self.window:
                     self.nb.AddPage(self.window, 'Demo')
+                    self.nb.ResizeChildren()
                     self.nb.SetSelection(2)
-                    self.nb.ResizeChildren();
 
             else:
                 self.ovr.Clear()
                 self.txt.Clear()
                 self.window = None
 
-        ###print 'OnSelChanged exit: ', itemText
-
-    ###def OnSelChanging(self, event):
-    ###    print 'OnSelChanging'
 
 
     #---------------------------------------------
@@ -305,10 +298,8 @@ class wxPythonDemo(wxFrame):
         except:
             selectedDemo = None
         if selectedDemo:
-            ###print "---- start ----"
             self.tree.SelectItem(selectedDemo)
             self.tree.EnsureVisible(selectedDemo)
-            ###print "---- end   ----"
 
 
 #---------------------------------------------------------------------------

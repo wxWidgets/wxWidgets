@@ -6,10 +6,10 @@ from wxPython.wx import *
 class TestLayoutConstraints(wxWindow):
     def __init__(self, parent):
         wxWindow.__init__(self, parent, -1)
-        self.SetBackgroundColour(wxNamedColour("MEDIUM ORCHID"))
-
         self.SetAutoLayout(true)
         EVT_BUTTON(self, 100, self.OnButton)
+
+        self.SetBackgroundColour(wxNamedColour("MEDIUM ORCHID"))
 
         self.panelA = wxWindow(self, -1, wxDefaultPosition, wxDefaultSize,
                                wxSIMPLE_BORDER)
@@ -84,6 +84,8 @@ class TestLayoutConstraints(wxWindow):
         lc.height.SameAs    (b, wxHeight)
         lc.width.SameAs     (b, wxWidth)
         self.panelD.SetConstraints(lc);
+
+
 
 
     def OnButton(self, event):

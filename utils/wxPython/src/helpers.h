@@ -624,6 +624,29 @@ private:
 
 //---------------------------------------------------------------------------
 
+#define DEC_PYCALLBACK_BOOL_STRINGSTRING(CBNAME)              \
+    bool CBNAME(const wxString& a, const wxString& b);        \
+    bool base_##CBNAME(const wxString& a, const wxString& b);
+
+
+#define IMP_PYCALLBACK_BOOL_STRINGSTRING(CLASS, PCLASS, CBNAME)                 \
+    bool CLASS::CBNAME(const wxString& a, const wxString& b) {                  \
+        bool rval;                                                              \
+        bool doSave = wxPyRestoreThread();                                      \
+        if (m_myInst.findCallback(#CBNAME))                                     \
+            rval = m_myInst.callCallback(Py_BuildValue("(ss)",                  \
+                                                       a.c_str(), b.c_str()));  \
+        else                                                                    \
+            rval = PCLASS::CBNAME(a, b);                                        \
+        wxPySaveThread(doSave);                                                 \
+        return rval;                                                            \
+    }                                                                           \
+    bool CLASS::base_##CBNAME(const wxString& a, const wxString& b) {           \
+        return PCLASS::CBNAME(a, b);                                            \
+    }
+
+//---------------------------------------------------------------------------
+
 #define DEC_PYCALLBACK_STRING_(CBNAME)                  \
     wxString CBNAME();                                  \
     wxString base_##CBNAME();

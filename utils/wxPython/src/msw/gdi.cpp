@@ -135,6 +135,14 @@ static char* wxStringErrorMsg = "string type is required for parameter";
     wxCursor* wxPyStockCursor(int id) {
         return new wxCursor(id);
     }
+
+    wxFontEncoding wxFont_GetDefaultEncoding() {
+        return wxFont::GetDefaultEncoding();
+    }
+
+    void wxFont_SetDefaultEncoding(wxFontEncoding encoding) {
+        wxFont::SetDefaultEncoding(encoding);
+    }
                                       // Alternate 'constructor'
     wxColour* wxNamedColour(const wxString& colorName) {
         return new wxColour(colorName);
@@ -338,6 +346,41 @@ static PyObject *_wrap_wxStockCursor(PyObject *self, PyObject *args, PyObject *k
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxFont_GetDefaultEncoding(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFontEncoding  _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxFont_GetDefaultEncoding",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxFontEncoding )wxFont_GetDefaultEncoding();
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxFont_SetDefaultEncoding(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFontEncoding  _arg0;
+    char *_kwnames[] = { "encoding", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxFont_SetDefaultEncoding",_kwnames,&_arg0)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxFont_SetDefaultEncoding(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -2033,7 +2076,7 @@ static PyObject *_wrap_wxCursor_Ok(PyObject *self, PyObject *args, PyObject *kwa
     return _resultobj;
 }
 
-static wxFont *new_wxFont(int pointSize,int family,int style,int weight,int underline,char *faceName) {
+static wxFont *new_wxFont(int pointSize,int family,int style,int weight,int underline,char *faceName,wxFontEncoding encoding) {
 
             return wxTheFontList->FindOrCreateFont(pointSize, family, style, weight,
                                                    underline, faceName);
@@ -2048,15 +2091,16 @@ static PyObject *_wrap_new_wxFont(PyObject *self, PyObject *args, PyObject *kwar
     int  _arg3;
     int  _arg4 = (int ) FALSE;
     char * _arg5 = (char *) "";
-    char *_kwnames[] = { "pointSize","family","style","weight","underline","faceName", NULL };
+    wxFontEncoding  _arg6 = (wxFontEncoding ) (wxFONTENCODING_DEFAULT);
+    char *_kwnames[] = { "pointSize","family","style","weight","underline","faceName","encoding", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiii|is:new_wxFont",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiii|isi:new_wxFont",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_arg6)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxFont *)new_wxFont(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5);
+        _result = (wxFont *)new_wxFont(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,_arg6);
 
     wxPy_END_ALLOW_THREADS;
 }    if (_result) {
@@ -2263,6 +2307,33 @@ static PyObject *_wrap_wxFont_GetWeight(PyObject *self, PyObject *args, PyObject
     return _resultobj;
 }
 
+#define wxFont_GetEncoding(_swigobj)  (_swigobj->GetEncoding())
+static PyObject *_wrap_wxFont_GetEncoding(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFontEncoding  _result;
+    wxFont * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFont_GetEncoding",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFont_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFont_GetEncoding. Expected _wxFont_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxFontEncoding )wxFont_GetEncoding(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxFont_SetFaceName(_swigobj,_swigarg0)  (_swigobj->SetFaceName(_swigarg0))
 static PyObject *_wrap_wxFont_SetFaceName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2442,6 +2513,130 @@ static PyObject *_wrap_wxFont_SetWeight(PyObject *self, PyObject *args, PyObject
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxFont_SetEncoding(_swigobj,_swigarg0)  (_swigobj->SetEncoding(_swigarg0))
+static PyObject *_wrap_wxFont_SetEncoding(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFont * _arg0;
+    wxFontEncoding  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","encoding", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxFont_SetEncoding",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFont_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFont_SetEncoding. Expected _wxFont_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxFont_SetEncoding(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxFont_GetFamilyString(_swigobj)  (_swigobj->GetFamilyString())
+static PyObject *_wrap_wxFont_GetFamilyString(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxFont * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFont_GetFamilyString",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFont_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFont_GetFamilyString. Expected _wxFont_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxFont_GetFamilyString(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxFont_GetStyleString(_swigobj)  (_swigobj->GetStyleString())
+static PyObject *_wrap_wxFont_GetStyleString(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxFont * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFont_GetStyleString",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFont_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFont_GetStyleString. Expected _wxFont_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxFont_GetStyleString(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxFont_GetWeightString(_swigobj)  (_swigobj->GetWeightString())
+static PyObject *_wrap_wxFont_GetWeightString(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxFont * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFont_GetWeightString",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFont_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFont_GetWeightString. Expected _wxFont_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxFont_GetWeightString(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+}
+{
+    delete _result;
+}
     return _resultobj;
 }
 
@@ -7036,12 +7231,17 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxColour_Red", (PyCFunction) _wrap_wxColour_Red, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxColour", (PyCFunction) _wrap_delete_wxColour, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxColour", (PyCFunction) _wrap_new_wxColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFont_GetWeightString", (PyCFunction) _wrap_wxFont_GetWeightString, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFont_GetStyleString", (PyCFunction) _wrap_wxFont_GetStyleString, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFont_GetFamilyString", (PyCFunction) _wrap_wxFont_GetFamilyString, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFont_SetEncoding", (PyCFunction) _wrap_wxFont_SetEncoding, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFont_SetWeight", (PyCFunction) _wrap_wxFont_SetWeight, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFont_SetUnderlined", (PyCFunction) _wrap_wxFont_SetUnderlined, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFont_SetStyle", (PyCFunction) _wrap_wxFont_SetStyle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFont_SetPointSize", (PyCFunction) _wrap_wxFont_SetPointSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFont_SetFamily", (PyCFunction) _wrap_wxFont_SetFamily, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFont_SetFaceName", (PyCFunction) _wrap_wxFont_SetFaceName, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFont_GetEncoding", (PyCFunction) _wrap_wxFont_GetEncoding, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFont_GetWeight", (PyCFunction) _wrap_wxFont_GetWeight, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFont_GetUnderlined", (PyCFunction) _wrap_wxFont_GetUnderlined, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFont_GetStyle", (PyCFunction) _wrap_wxFont_GetStyle, METH_VARARGS | METH_KEYWORDS },
@@ -7083,6 +7283,8 @@ static PyMethodDef gdicMethods[] = {
 	 { "new_wxBitmap", (PyCFunction) _wrap_new_wxBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMemoryDCFromDC", (PyCFunction) _wrap_wxMemoryDCFromDC, METH_VARARGS | METH_KEYWORDS },
 	 { "wxNamedColour", (PyCFunction) _wrap_wxNamedColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFont_SetDefaultEncoding", (PyCFunction) _wrap_wxFont_SetDefaultEncoding, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFont_GetDefaultEncoding", (PyCFunction) _wrap_wxFont_GetDefaultEncoding, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStockCursor", (PyCFunction) _wrap_wxStockCursor, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMaskColour", (PyCFunction) _wrap_wxMaskColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBitmapFromData", (PyCFunction) _wrap_wxBitmapFromData, METH_VARARGS | METH_KEYWORDS },
@@ -7266,6 +7468,35 @@ SWIGEXPORT(void) initgdic() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("gdic", gdicMethods);
 	 d = PyModule_GetDict(m);
+	 PyDict_SetItemString(d,"wxFONTENCODING_SYSTEM", PyInt_FromLong((long) wxFONTENCODING_SYSTEM));
+	 PyDict_SetItemString(d,"wxFONTENCODING_DEFAULT", PyInt_FromLong((long) wxFONTENCODING_DEFAULT));
+	 PyDict_SetItemString(d,"wxFONTENCODING_ISO8859_1", PyInt_FromLong((long) wxFONTENCODING_ISO8859_1));
+	 PyDict_SetItemString(d,"wxFONTENCODING_ISO8859_2", PyInt_FromLong((long) wxFONTENCODING_ISO8859_2));
+	 PyDict_SetItemString(d,"wxFONTENCODING_ISO8859_3", PyInt_FromLong((long) wxFONTENCODING_ISO8859_3));
+	 PyDict_SetItemString(d,"wxFONTENCODING_ISO8859_4", PyInt_FromLong((long) wxFONTENCODING_ISO8859_4));
+	 PyDict_SetItemString(d,"wxFONTENCODING_ISO8859_5", PyInt_FromLong((long) wxFONTENCODING_ISO8859_5));
+	 PyDict_SetItemString(d,"wxFONTENCODING_ISO8859_6", PyInt_FromLong((long) wxFONTENCODING_ISO8859_6));
+	 PyDict_SetItemString(d,"wxFONTENCODING_ISO8859_7", PyInt_FromLong((long) wxFONTENCODING_ISO8859_7));
+	 PyDict_SetItemString(d,"wxFONTENCODING_ISO8859_8", PyInt_FromLong((long) wxFONTENCODING_ISO8859_8));
+	 PyDict_SetItemString(d,"wxFONTENCODING_ISO8859_9", PyInt_FromLong((long) wxFONTENCODING_ISO8859_9));
+	 PyDict_SetItemString(d,"wxFONTENCODING_ISO8859_10", PyInt_FromLong((long) wxFONTENCODING_ISO8859_10));
+	 PyDict_SetItemString(d,"wxFONTENCODING_ISO8859_11", PyInt_FromLong((long) wxFONTENCODING_ISO8859_11));
+	 PyDict_SetItemString(d,"wxFONTENCODING_ISO8859_12", PyInt_FromLong((long) wxFONTENCODING_ISO8859_12));
+	 PyDict_SetItemString(d,"wxFONTENCODING_ISO8859_13", PyInt_FromLong((long) wxFONTENCODING_ISO8859_13));
+	 PyDict_SetItemString(d,"wxFONTENCODING_ISO8859_14", PyInt_FromLong((long) wxFONTENCODING_ISO8859_14));
+	 PyDict_SetItemString(d,"wxFONTENCODING_ISO8859_15", PyInt_FromLong((long) wxFONTENCODING_ISO8859_15));
+	 PyDict_SetItemString(d,"wxFONTENCODING_KOI8", PyInt_FromLong((long) wxFONTENCODING_KOI8));
+	 PyDict_SetItemString(d,"wxFONTENCODING_ALTERNATIVE", PyInt_FromLong((long) wxFONTENCODING_ALTERNATIVE));
+	 PyDict_SetItemString(d,"wxFONTENCODING_BULGARIAN", PyInt_FromLong((long) wxFONTENCODING_BULGARIAN));
+	 PyDict_SetItemString(d,"wxFONTENCODING_CP437", PyInt_FromLong((long) wxFONTENCODING_CP437));
+	 PyDict_SetItemString(d,"wxFONTENCODING_CP850", PyInt_FromLong((long) wxFONTENCODING_CP850));
+	 PyDict_SetItemString(d,"wxFONTENCODING_CP852", PyInt_FromLong((long) wxFONTENCODING_CP852));
+	 PyDict_SetItemString(d,"wxFONTENCODING_CP855", PyInt_FromLong((long) wxFONTENCODING_CP855));
+	 PyDict_SetItemString(d,"wxFONTENCODING_CP866", PyInt_FromLong((long) wxFONTENCODING_CP866));
+	 PyDict_SetItemString(d,"wxFONTENCODING_CP1250", PyInt_FromLong((long) wxFONTENCODING_CP1250));
+	 PyDict_SetItemString(d,"wxFONTENCODING_CP1251", PyInt_FromLong((long) wxFONTENCODING_CP1251));
+	 PyDict_SetItemString(d,"wxFONTENCODING_CP1252", PyInt_FromLong((long) wxFONTENCODING_CP1252));
+	 PyDict_SetItemString(d,"wxFONTENCODING_MAX", PyInt_FromLong((long) wxFONTENCODING_MAX));
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxNORMAL_FONT",_wrap_wxNORMAL_FONT_get, _wrap_wxNORMAL_FONT_set);
 	 SWIG_addvarlink(SWIG_globals,"wxSMALL_FONT",_wrap_wxSMALL_FONT_get, _wrap_wxSMALL_FONT_set);

@@ -17,7 +17,7 @@ item: Global
   Patch Flags=0000000000001001
   Patch Threshold=85
   Patch Memory=4000
-  EXE Filename=wxPython-2.1b3.exe
+  EXE Filename=wxPython-2.1.4.exe
   FTP Cluster Size=20
   Per-User Version ID=1
   Dialogs Version=6
@@ -904,10 +904,28 @@ item: Install File
   Description=Demos
   Flags=0000000010000010
 end
+item: Install File
+  Source=e:\Projects\wx\utils\wxPython\demo\data\*.htm
+  Destination=%MAINDIR%\wxPython\demo\data
+  Description=Demos
+  Flags=0000000010000010
+end
+item: Install File
+  Source=e:\Projects\wx\utils\wxPython\demo\data\*.png
+  Destination=%MAINDIR%\wxPython\demo\data
+  Description=Demos
+  Flags=0000000010000010
+end
 item: Remark
 end
 item: Install File
   Source=E:\PROJECTS\wx\docs\html\wx\wx.chm
+  Destination=%MAINDIR%\wxPython\docs\wx.chm
+  Description=wxPython documentation
+  Flags=0000000010000010
+end
+item: Install File
+  Source=E:\PROJECTS\wx\docs\html\ogl\ogl.chm
   Destination=%MAINDIR%\wxPython\docs\wx.chm
   Description=wxPython documentation
   Flags=0000000010000010
@@ -1130,6 +1148,13 @@ item: Create Shortcut
   Source=%MAINDIR%\wxPython\docs\wx.chm
   Destination=%CGROUPDIR%\%CGROUP_SAVE%\wxWindows User Guide.lnk
   Icon Number=0
+end
+item: Create Shortcut
+  Source=%MAINDIR%\wxPython\docs\ogl.chm
+  Destination=%CGROUPDIR%\%CGROUP_SAVE%\wxOGL User Guide.lnk
+  Icon Number=0
+  Key Type=1536
+  Flags=00000001
 end
 item: Else Statement
 end

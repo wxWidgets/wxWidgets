@@ -23,7 +23,6 @@ class TestPanel(wxPanel):
     def OnClick(self, event):
         self.log.WriteText("Click! (%d)\n" % event.GetId())
 
-
 #----------------------------------------------------------------------
 
 def runTest(frame, nb, log):

@@ -263,6 +263,7 @@ class BuildConfig:
             self.OVERRIDEFLAGS = '/GX-'
             self.RMCMD  = '-erase '
             self.WXPSRCDIR = os.path.normpath(self.WXPSRCDIR)
+            self.CRTFLAG = ''
 
 
         else:
@@ -526,6 +527,8 @@ EXTRAFLAGS = $(CFLAGS) %(OTHERCFLAGS)s
 
 LFLAGS = %(LFLAGS)s %(OTHERLFLAGS)s
 EXTRALIBS = %(LIBS)s %(OTHERLIBS)s
+
+CRTFLAG=%(CRTFLAG)s
 
 #----------------------------------------------------------------------
 

@@ -142,8 +142,8 @@ public:
             PyObject* tup = PyTuple_New(4);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
-            PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->width));
-            PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->height));
+            PyTuple_SET_ITEM(tup, 2, PyInt_FromLong(self->width));
+            PyTuple_SET_ITEM(tup, 3, PyInt_FromLong(self->height));
             return tup;
         }
     }

@@ -226,6 +226,7 @@ enum {
     wxTB_HORIZONTAL,
     wxTB_VERTICAL,
     wxTB_FLAT,
+    wxTB_DOCKABLE,
     wxCOLOURED,
     wxFIXED_LENGTH,
     wxALIGN_LEFT,
@@ -458,6 +459,9 @@ enum {
     wxEXPAND,
 
     wxNB_FIXEDWIDTH,
+    wxNB_LEFT,
+    wxNB_RIGHT,
+    wxNB_BOTTOM,
 
     wxLI_HORIZONTAL,
     wxLI_VERTICAL,

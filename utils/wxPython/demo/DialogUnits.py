@@ -46,8 +46,8 @@ class MyFrame(wxFrame):
                                   wxDLG_SZE(panel, wxSize(36, -1)),
                                   wxTE_READONLY)
 
-        print wxDLG_PNT(panel, wxPoint(24, 4)), wxDLG_SZE(panel, wxSize(36, -1))
-        print wxDLG_PNT(panel, wxPoint(24, 16)),wxDLG_SZE(panel, wxSize(36, -1))
+        #print wxDLG_PNT(panel, wxPoint(24, 4)), wxDLG_SZE(panel, wxSize(36, -1))
+        #print wxDLG_PNT(panel, wxPoint(24, 16)),wxDLG_SZE(panel, wxSize(36, -1))
 
 
     # This method is called automatically when the CLOSE event is

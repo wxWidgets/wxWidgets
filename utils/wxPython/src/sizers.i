@@ -6,7 +6,7 @@
 //
 // Created:     18-Sept-1999
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998 by Total Control Software
+// Copyright:   (c) 1999 by Total Control Software
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 

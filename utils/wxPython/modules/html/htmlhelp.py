@@ -30,6 +30,8 @@ from windows3 import *
 from image import *
 
 from printfw import *
+
+from sizers import *
 class wxHtmlHelpFrameCfgPtr :
     def __init__(self,this):
         self.this = this
