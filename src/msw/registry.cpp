@@ -1231,7 +1231,7 @@ wxString wxRegKey::FormatValue(const wxString& name) const
                 if ( !QueryValue(name, &value) )
                     break;
 
-                rhs.Printf(_T("dword:%08x"), value);
+                rhs.Printf(_T("dword:%08x"), (unsigned int)value);
             }
             break;
 

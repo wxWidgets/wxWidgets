@@ -84,6 +84,7 @@ void wxColour::Init()
 }
 
 wxColour::wxColour(const wxColour& col)
+         :wxObject()
 {
     *this = col;
 }

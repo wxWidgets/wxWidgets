@@ -103,7 +103,8 @@ wxBrushRefData::wxBrushRefData(const wxBitmap& stipple)
 }
 
 wxBrushRefData::wxBrushRefData(const wxBrushRefData& data)
-              : m_stipple(data.m_stipple),
+              : wxGDIRefData(),
+                m_stipple(data.m_stipple),
                 m_colour(data.m_colour)
 {
     m_style = data.m_style;

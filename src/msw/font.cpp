@@ -132,7 +132,7 @@ public:
         Init(info, hFont);
     }
 
-    wxFontRefData(const wxFontRefData& data)
+    wxFontRefData(const wxFontRefData& data) : wxGDIRefData()
     {
         if ( data.m_nativeFontInfoOk )
         {

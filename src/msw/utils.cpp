@@ -895,7 +895,8 @@ int wxKillAllChildren(long pid, wxSignal sig, wxKillError *krc)
     }
 
     //Fill in the size of the structure before using it.
-    PROCESSENTRY32 pe = {0};
+    PROCESSENTRY32 pe;
+    wxZeroMemory(pe);
     pe.dwSize = sizeof(PROCESSENTRY32);
 
     // Walk the snapshot of the processes, and for each process,
@@ -1305,9 +1306,9 @@ extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding)
     // There don't seem to be symbolic names for
     // these under Windows so I just copied the
     // values from MSDN.
-    
+
     unsigned int ret;
-    
+
     switch (encoding)
     {
         case wxFONTENCODING_ISO8859_1:      ret = 28591; break;
@@ -1322,7 +1323,7 @@ extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding)
         case wxFONTENCODING_ISO8859_10:     ret = 28600; break;
         case wxFONTENCODING_ISO8859_11:     ret = 28601; break;
         // case wxFONTENCODING_ISO8859_12,      // doesn't exist currently, but put it
-        case wxFONTENCODING_ISO8859_13:     ret = 28603; break;      
+        case wxFONTENCODING_ISO8859_13:     ret = 28603; break;
         case wxFONTENCODING_ISO8859_14:     ret = 28604; break;
         case wxFONTENCODING_ISO8859_15:     ret = 28605; break;
         case wxFONTENCODING_KOI8:           ret = 20866; break;
@@ -1364,10 +1365,10 @@ extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding)
         case wxFONTENCODING_UTF8:           ret = 65001; break;
         default:                            return -1;
     }
-    
+
     if (::IsValidCodePage(ret) == 0)
         return -1;
-    
+
     CPINFO info;
     if (::GetCPInfo(ret, &info) == 0)
         return -1;

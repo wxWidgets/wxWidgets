@@ -48,7 +48,7 @@ public:
         m_region = 0;
     }
 
-    wxRegionRefData(const wxRegionRefData& data)
+    wxRegionRefData(const wxRegionRefData& data) : wxGDIRefData()
     {
 #if defined(__WIN32__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
         DWORD noBytes = ::GetRegionData(data.m_region, 0, NULL);
