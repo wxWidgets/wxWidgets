@@ -21,7 +21,12 @@
 
 #if wxUSE_DATETIME
 
+#ifndef __WXWINCE__
 #include <time.h>
+#else
+#include "wx/msw/wince/time.h"
+#endif
+
 #include <limits.h>             // for INT_MIN
 
 #include "wx/longlong.h"
@@ -323,6 +328,12 @@ public:
         // day or not
         //
         // TODO move this to intl.h
+
+// Required for WinCE
+#ifdef USA
+#undef USA
+#endif
+
     enum Country
     {
         Country_Unknown, // no special information for this country
@@ -342,10 +353,8 @@ public:
         Country_WesternEurope_End = UK,
 
         Russia,
-
         USA
     };
-
         // symbolic names for the months
     enum Month
     {

@@ -339,8 +339,12 @@
         #define  wxRemove    wxMSLU__tremove
         #define  wxRename    wxMSLU__trename
     #else
-        #define  wxRemove    _tremove
-        #define  wxRename    _trename
+        #ifdef __WXWINCE__
+            #define  wxRemove    DeleteFile
+        #else
+            #define  wxRemove    _tremove
+            #define  wxRename    _trename
+        #endif
     #endif
 
     // stdlib.h functions

@@ -339,5 +339,23 @@
     #endif
 #endif
 
+/*
+ * Define symbols that are not yet in
+ * configure or possibly some setup.h files.
+ * They will need to be added.
+ */
+
+#ifndef wxUSE_FILECONFIG
+    #if wxUSE_CONFIG
+        #define wxUSE_FILECONFIG 1
+    #else
+        #define wxUSE_FILECONFIG 0
+    #endif
+#endif
+
+#ifndef wxUSE_HOTKEY
+    #define wxUSE_HOTKEY 0
+#endif
+
 #endif /* _WX_PLATFORM_H_ */
 

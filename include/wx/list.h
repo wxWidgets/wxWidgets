@@ -54,6 +54,7 @@
 // type of compare function for list sort operation (as in 'qsort'): it should
 // return a negative value, 0 or positive value if the first element is less
 // than, equal or greater than the second
+
 extern "C"
 {
 typedef int (* LINKAGEMODE wxSortCompareFunction)(const void *elem1, const void *elem2);

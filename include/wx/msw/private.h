@@ -552,10 +552,54 @@ WXDLLEXPORT extern wxWindow* wxFindWinFromHandle(WXHWND hWnd);
 // returns the wxWindow corresponding to the given HWND or NULL.
 WXDLLEXPORT extern wxWindow *wxGetWindowFromHWND(WXHWND hwnd);
 
-
 // Get the size of an icon
 WXDLLEXPORT extern wxSize wxGetHiconSize(HICON hicon);
 
+// LocalAlloc should be used on WinCE
+#ifdef __WXWINCE__
+#include <winbase.h>
+
+#define GlobalAlloc LocalAlloc
+#define GlobalFree LocalFree
+#define GlobalLock(mem) mem
+#define GlobalUnlock(mem)
+#define GPTR LPTR
+
+#if 0
+
+HLOCAL
+WINAPI
+LocalAlloc (
+    UINT fuFlags,
+    UINT cbBytes
+    );
+
+HLOCAL
+WINAPI
+LocalFree (
+    HLOCAL hMem
+    );
+
+#ifndef LMEM_FIXED
+#define LMEM_FIXED          0x0000
+#define LMEM_MOVEABLE       0x0002
+#define LMEM_NOCOMPACT      0x0010       /**** Used for Moveable Memory  ***/
+#define LMEM_NODISCARD      0x0020       /**** Ignored *****/
+#define LMEM_ZEROINIT       0x0040
+#define LMEM_MODIFY         0x0080       /*** Used only in LocalReAlloc() **/
+#define LMEM_DISCARDABLE    0x0F00       /**** Ignored ****/
+#define LMEM_VALID_FLAGS    0x0F72
+#define LMEM_INVALID_HANDLE 0x8000
+
+#define LHND                (LMEM_MOVEABLE | LMEM_ZEROINIT)
+#define LPTR                (LMEM_FIXED | LMEM_ZEROINIT)
+#endif
+
+#endif
+    // 0
+
+#endif
+    // __WXWINCE__
 #endif // wxUSE_GUI
 
 #endif
