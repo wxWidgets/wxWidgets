@@ -137,7 +137,7 @@ wxImage wxXPMDecoder::ReadFile(wxInputStream& stream)
     size_t i;
 
     if ( stream.Read(xpm_buffer, length).LastError() == wxSTREAM_READ_ERROR )
-        return FALSE;
+        return wxNullImage;
 
     /*
      *  Remove comments from the file:
@@ -201,6 +201,12 @@ wxImage wxXPMDecoder::ReadFile(wxInputStream& stream)
     {
         if ( *p == '\n' )
             lines_cnt++;
+    }
+
+    if ( !lines_cnt )
+    {
+        // this doesn't really look an XPM image
+        return wxNullImage;
     }
 
     xpm_lines = new const char*[lines_cnt];
