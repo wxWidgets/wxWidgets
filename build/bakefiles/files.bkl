@@ -1295,8 +1295,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <!-- Files used only by desktop MSW port, but *not* WindowsCE one: -->
 <set var="MSW_ONLY_SRC" hints="files">
-    src/generic/colrdlgg.cpp
-    src/generic/fontdlgg.cpp
     src/msw/fdrepdlg.cpp
     src/msw/fontdlg.cpp
     src/msw/helpchm.cpp
