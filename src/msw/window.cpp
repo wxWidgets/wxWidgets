@@ -1887,7 +1887,7 @@ static void wxYieldForCommandsOnly()
     {
         wxTheApp->DoMessage((WXMSG *)&msg);
     }
-    
+
     // If we retrieved a WM_QUIT, insert back into the message queue.
     if (msg.message == WM_QUIT)
         ::PostQuitMessage(0);
@@ -3325,8 +3325,7 @@ bool wxWindowMSW::HandleCreate(WXLPCREATESTRUCT cs, bool *mayCreate)
 
 bool wxWindowMSW::HandleDestroy()
 {
-    wxWindowDestroyEvent event((wxWindow *)this);
-    (void)GetEventHandler()->ProcessEvent(event);
+    SendDestroyEvent();
 
     // delete our drop target if we've got one
 #if wxUSE_DRAG_AND_DROP

@@ -3513,9 +3513,7 @@ bool wxWindowOS2::HandleCreate(
 
 bool wxWindowOS2::HandleDestroy()
 {
-    wxWindowDestroyEvent            vEvent((wxWindow*)this);
-
-    (void)GetEventHandler()->ProcessEvent(vEvent);
+    SendDestroyEvent();
 
     //
     // Delete our drop target if we've got one

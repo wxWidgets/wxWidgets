@@ -58,7 +58,7 @@
 #endif // wxUSE_DRAG_AND_DROP
 
 #if wxUSE_ACCESSIBILITY
-    #include "wx/access.h"    
+    #include "wx/access.h"
 #endif
 
 #if wxUSE_HELP
@@ -2076,6 +2076,15 @@ void wxWindowBase::ReleaseMouse()
     wxLogTrace(_T("mousecapture"),
                _T("After ReleaseMouse() mouse is captured by %p"),
                GetCapture());
+}
+
+
+void wxWindowBase::SendDestroyEvent()
+{
+    wxWindowDestroyEvent event;
+    event.SetEventObject(this);
+    event.SetId(GetId());
+    GetEventHandler()->ProcessEvent(event);
 }
 
 // ----------------------------------------------------------------------------

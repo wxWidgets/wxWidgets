@@ -133,6 +133,8 @@ void wxWindowMac::Init()
 // Destructor
 wxWindowMac::~wxWindowMac()
 {
+    SendDestroyEvent();
+
     // deleting a window while it is shown invalidates the region
     if ( IsShown() ) {
         wxWindowMac* iter = this ;
@@ -169,7 +171,7 @@ wxWindowMac::~wxWindowMac()
     {
         s_lastMouseWindow = NULL ;
     }
-    
+
     wxFrame* frame = wxDynamicCast( wxGetTopLevelParent( this ) , wxFrame ) ;
     if ( frame )
     {
@@ -628,7 +630,7 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
 
         if ( HasFlag(wxNO_FULL_REPAINT_ON_RESIZE) )
         {
-            wxPoint oldPos( m_x , m_y ) ; 
+            wxPoint oldPos( m_x , m_y ) ;
             wxPoint newPos( actualX , actualY ) ;
             MacWindowToRootWindow( &oldPos.x , &oldPos.y ) ;
             MacWindowToRootWindow( &newPos.x , &newPos.y ) ;
@@ -1264,7 +1266,7 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
         if (child == m_vScrollBar) continue;
         if (child == m_hScrollBar) continue;
         if (child->IsTopLevel()) continue;
-        
+
         int x,y;
         child->GetPosition( &x, &y );
         int w,h;
@@ -1499,15 +1501,15 @@ bool wxWindowMac::MacGetWindowFromPoint( const wxPoint &screenpoint , wxWindowMa
 
 static wxWindow *gs_lastWhich = NULL;
 
-bool wxWindowMac::MacSetupCursor( const wxPoint& pt) 
+bool wxWindowMac::MacSetupCursor( const wxPoint& pt)
 {
     // first trigger a set cursor event
-    
+
     wxPoint clientorigin = GetClientAreaOrigin() ;
     wxSize clientsize = GetClientSize() ;
     wxCursor cursor ;
     if ( wxRect2DInt( clientorigin.x , clientorigin.y , clientsize.x , clientsize.y ).Contains( wxPoint2DInt( pt ) ) )
-    {  
+    {
         wxSetCursorEvent event( pt.x , pt.y );
 
         bool processedEvtSetCursor = GetEventHandler()->ProcessEvent(event);
@@ -1517,7 +1519,7 @@ bool wxWindowMac::MacSetupCursor( const wxPoint& pt)
         }
         else
         {
-            
+
             // the test for processedEvtSetCursor is here to prevent using m_cursor
             // if the user code caught EVT_SET_CURSOR() and returned nothing from
             // it - this is a way to say that our cursor shouldn't be used for this
@@ -1682,9 +1684,9 @@ const wxRegion& wxWindowMac::MacGetVisibleRegion( bool respectChildrenAndSibling
       parent->MacWindowToRootWindow( &x, &y ) ;
       MacRootWindowToWindow( &x , &y ) ;
 
-      SetRectRgn( tempRgn , 
-      	x + parent->MacGetLeftBorderSize() , y + parent->MacGetTopBorderSize() , 
-      	x + size.x - parent->MacGetRightBorderSize(), 
+      SetRectRgn( tempRgn ,
+      	x + parent->MacGetLeftBorderSize() , y + parent->MacGetTopBorderSize() ,
+      	x + size.x - parent->MacGetRightBorderSize(),
       	y + size.y - parent->MacGetBottomBorderSize()) ;
 
       SectRgn( visRgn , tempRgn , visRgn ) ;
@@ -1784,7 +1786,7 @@ void wxWindowMac::MacRedraw( WXHRGN updatergnr , long time, bool erase)
         if ( erase && !EmptyRgn(ownUpdateRgn) )
         {
           wxWindowDC dc(this);
-          if (!EmptyRgn(ownUpdateRgn)) 
+          if (!EmptyRgn(ownUpdateRgn))
               dc.SetClippingRegion(wxRegion(ownUpdateRgn));
           wxEraseEvent eevent( GetId(), &dc );
           eevent.SetEventObject( this );

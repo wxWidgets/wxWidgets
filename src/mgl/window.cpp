@@ -64,9 +64,9 @@
 winmng_t *g_winMng = NULL;
 MGLDevCtx *g_displayDC = NULL;
 
-// the window that has keyboard focus: 
+// the window that has keyboard focus:
 static wxWindowMGL *gs_focusedWindow = NULL;
-// the window that is about to be focused after currently focused 
+// the window that is about to be focused after currently focused
 // one looses focus:
 static wxWindow *gs_toBeFocusedWindow = NULL;
 // the window that is currently under mouse cursor:
@@ -81,7 +81,7 @@ static wxWindowMGL *gs_activeFrame = NULL;
 // constants
 // ---------------------------------------------------------------------------
 
-// Custom identifiers used to distinguish between various event handlers 
+// Custom identifiers used to distinguish between various event handlers
 // and capture handlers passed to MGL_wm
 enum
 {
@@ -113,22 +113,22 @@ static void wxCaptureScreenshot(bool activeWindowOnly)
 #endif
     static int screenshot_num = 0;
     wxString screenshot;
-    
-    do 
+
+    do
     {
         screenshot.Printf(SCREENSHOT_FILENAME, screenshot_num++);
     } while ( wxFileExists(screenshot) && screenshot_num < 1000 );
-    
+
     wxRect r(0, 0, g_displayDC->sizex(), g_displayDC->sizey());
 
     if ( activeWindowOnly && gs_activeFrame )
     {
         r.Intersect(gs_activeFrame->GetRect());
     }
-    
-    g_displayDC->savePNGFromDC(screenshot.mb_str(), 
+
+    g_displayDC->savePNGFromDC(screenshot.mb_str(),
                                r.x, r. y, r.x+r.width, r.y+r.height);
-    
+
     wxMessageBox(wxString::Format(_T("Screenshot captured: %s"),
                                   screenshot.c_str()));
 }
@@ -140,7 +140,7 @@ static void wxCaptureScreenshot(bool activeWindowOnly)
 static void MGLAPI wxWindowPainter(window_t *wnd, MGLDC *dc)
 {
     wxWindowMGL *w = (wxWindow*) wnd->userData;
-    
+
     if ( w && !(w->GetWindowStyle() & wxTRANSPARENT_WINDOW) )
     {
         MGLDevCtx ctx(dc);
@@ -153,18 +153,18 @@ static ibool MGLAPI wxWindowMouseHandler(window_t *wnd, event_t *e)
     wxWindowMGL *win = (wxWindowMGL*)MGL_wmGetWindowUserData(wnd);
     wxPoint orig(win->GetClientAreaOrigin());
     wxPoint where;
-    
-    MGL_wmCoordGlobalToLocal(win->GetHandle(), 
+
+    MGL_wmCoordGlobalToLocal(win->GetHandle(),
                              e->where_x, e->where_y, &where.x, &where.y);
 
     for (wxWindowMGL *w = win; w; w = w->GetParent())
     {
-        if ( !w->IsEnabled() ) 
+        if ( !w->IsEnabled() )
             return FALSE;
         if ( w->IsTopLevel() )
             break;
     }
-    
+
     wxEventType type = wxEVT_NULL;
     wxMouseEvent event;
     event.SetEventObject(win);
@@ -178,7 +178,7 @@ static ibool MGLAPI wxWindowMouseHandler(window_t *wnd, event_t *e)
     event.m_leftDown = e->modifiers & EVT_LEFTBUT;
     event.m_middleDown = e->modifiers & EVT_MIDDLEBUT;
     event.m_rightDown = e->modifiers & EVT_RIGHTBUT;
-   
+
     switch (e->what)
     {
         case EVT_MOUSEDOWN:
@@ -224,8 +224,8 @@ static ibool MGLAPI wxWindowMouseHandler(window_t *wnd, event_t *e)
                     if ( gs_windowUnderMouse )
                     {
                         wxMouseEvent event2(event);
-                        MGL_wmCoordGlobalToLocal(gs_windowUnderMouse->GetHandle(), 
-                                                 e->where_x, e->where_y, 
+                        MGL_wmCoordGlobalToLocal(gs_windowUnderMouse->GetHandle(),
+                                                 e->where_x, e->where_y,
                                                  &event2.m_x, &event2.m_y);
 
                         wxPoint orig(gs_windowUnderMouse->GetClientAreaOrigin());
@@ -246,28 +246,28 @@ static ibool MGLAPI wxWindowMouseHandler(window_t *wnd, event_t *e)
             }
             else // gs_mouseCapture
             {
-                bool inside = (where.x >= 0 && 
+                bool inside = (where.x >= 0 &&
                                where.y >= 0 &&
                                where.x < win->GetSize().x &&
                                where.y < win->GetSize().y);
                 if ( (inside && gs_windowUnderMouse != win) ||
                      (!inside && gs_windowUnderMouse == win) )
                 {
-                    wxMouseEvent evt(inside ? 
+                    wxMouseEvent evt(inside ?
                                      wxEVT_ENTER_WINDOW : wxEVT_LEAVE_WINDOW);
                     evt.SetEventObject(win);
                     win->GetEventHandler()->ProcessEvent(evt);
                     gs_windowUnderMouse = inside ? win : NULL;
                 }
             }
-            
+
             type = wxEVT_MOTION;
             break;
 
         default:
             break;
     }
-    
+
     if ( type == wxEVT_NULL )
     {
         return FALSE;
@@ -293,11 +293,11 @@ static long wxScanToKeyCode(event_t *event, bool translate)
           break;
     #else
       #define KEY(mgl_key,wx_key) \
-        case mgl_key: key = wx_key; break; 
+        case mgl_key: key = wx_key; break;
     #endif
 
     long key = 0;
-    
+
     if ( translate )
     {
         switch ( EVT_scanCode(event->message) )
@@ -371,7 +371,7 @@ static long wxScanToKeyCode(event_t *event, bool translate)
             default: break;
         }
     }
-    
+
     if ( key == 0 )
     {
         switch ( EVT_scanCode(event->message) )
@@ -415,10 +415,10 @@ static long wxScanToKeyCode(event_t *event, bool translate)
             KEY (KB_esc,            WXK_ESCAPE)
             KEY (KB_backspace,      WXK_BACK)
             KEY (KB_tab,            WXK_TAB)
-            KEY (KB_enter,          WXK_RETURN) 
+            KEY (KB_enter,          WXK_RETURN)
 
-            default:                  
-                key = EVT_asciiCode(event->message); 
+            default:
+                key = EVT_asciiCode(event->message);
                 break;
         }
     }
@@ -433,15 +433,15 @@ static bool wxHandleSpecialKeys(wxKeyEvent& event)
     // Add an easy way to capture screenshots:
     if ( event.m_keyCode == WXK_SNAPSHOT
     #ifdef __WXDEBUG__ // FIXME_MGL - remove when KB_sysReq works in MGL!
-         || (event.m_keyCode == WXK_F1 && 
-            event.m_shiftDown && event.m_controlDown) 
+         || (event.m_keyCode == WXK_F1 &&
+            event.m_shiftDown && event.m_controlDown)
     #endif
        )
     {
         wxCaptureScreenshot(event.m_altDown/*only active wnd?*/);
         return TRUE;
     }
-   
+
     return FALSE;
 }
 
@@ -452,9 +452,9 @@ static ibool MGLAPI wxWindowKeybHandler(window_t *wnd, event_t *e)
     if ( !win->IsEnabled() ) return FALSE;
 
     wxPoint where;
-    MGL_wmCoordGlobalToLocal(win->GetHandle(), 
+    MGL_wmCoordGlobalToLocal(win->GetHandle(),
                              e->where_x, e->where_y, &where.x, &where.y);
-    
+
     wxKeyEvent event;
     event.SetEventObject(win);
     event.SetTimestamp(e->when);
@@ -479,7 +479,7 @@ static ibool MGLAPI wxWindowKeybHandler(window_t *wnd, event_t *e)
 
         event.SetEventType(wxEVT_KEY_DOWN);
         event2 = event;
-    
+
         ret = win->GetEventHandler()->ProcessEvent(event);
 
         // wxMSW doesn't send char events with Alt pressed
@@ -491,7 +491,7 @@ static ibool MGLAPI wxWindowKeybHandler(window_t *wnd, event_t *e)
             event2.SetEventType(wxEVT_CHAR);
             ret = win->GetEventHandler()->ProcessEvent(event2);
         }
-        
+
         // Synthetize navigation key event, but do it only if the TAB key
         // wasn't handled yet:
         if ( !ret && event.m_keyCode == WXK_TAB &&
@@ -506,12 +506,12 @@ static ibool MGLAPI wxWindowKeybHandler(window_t *wnd, event_t *e)
             navEvent.SetCurrentFocus(wxStaticCast(win, wxWindow));
             ret = win->GetParent()->GetEventHandler()->ProcessEvent(navEvent);
         }
-        
-        // Finally, process special meaning keys that are usually 
+
+        // Finally, process special meaning keys that are usually
         // a responsibility of OS or window manager:
         if ( !ret )
             ret = wxHandleSpecialKeys(event);
-        
+
         return ret;
     }
 }
@@ -563,6 +563,8 @@ void wxWindowMGL::Init()
 // Destructor
 wxWindowMGL::~wxWindowMGL()
 {
+    SendDestroyEvent();
+
     m_isBeingDeleted = TRUE;
 
     if ( gs_mouseCapture == this )
@@ -583,7 +585,7 @@ wxWindowMGL::~wxWindowMGL()
             win->SetFocus();
         }
     }
-    
+
     if ( gs_focusedWindow == this )
         KillFocus();
 
@@ -625,7 +627,7 @@ bool wxWindowMGL::Create(wxWindow *parent,
     AdjustForParentClientOrigin(x, y, 0);
     w = WidthDefault(size.x);
     h = HeightDefault(size.y);
-    
+
     long mgl_style = 0;
     window_t *wnd_parent = parent ? parent->GetHandle() : NULL;
 
@@ -649,7 +651,7 @@ bool wxWindowMGL::Create(wxWindow *parent,
 
     MGL_wmSetWindowFlags(wnd, mgl_style);
     MGL_wmShowWindow(wnd, m_isShown);
-    
+
     SetMGLwindow_t(wnd);
 
     return TRUE;
@@ -662,7 +664,7 @@ void wxWindowMGL::SetMGLwindow_t(struct window_t *wnd)
 
     m_wnd = wnd;
     if ( !m_wnd ) return;
-    
+
     m_isShown = m_wnd->visible;
 
     MGL_wmSetWindowUserData(m_wnd, (void*) this);
@@ -692,9 +694,9 @@ void wxWindowMGL::SetFocus()
         gs_focusedWindow->KillFocus();
         gs_toBeFocusedWindow = NULL;
     }
-    
+
     gs_focusedWindow = this;
-    
+
     MGL_wmCaptureEvents(GetHandle(), EVT_KEYEVT, wxMGL_CAPTURE_KEYB);
 
     wxWindowMGL *active = wxGetTopLevelParent(this);
@@ -712,7 +714,7 @@ void wxWindowMGL::SetFocus()
         event.SetEventObject(gs_activeFrame);
         gs_activeFrame->GetEventHandler()->ProcessEvent(event);
     }
-    
+
     wxFocusEvent event(wxEVT_SET_FOCUS, GetId());
     event.SetEventObject(this);
     event.SetWindow((wxWindow*)oldFocusedWindow);
@@ -732,7 +734,7 @@ void wxWindowMGL::KillFocus()
     gs_focusedWindow = NULL;
 
     if ( m_isBeingDeleted ) return;
-    
+
     MGL_wmUncaptureEvents(GetHandle(), wxMGL_CAPTURE_KEYB);
 
 #if wxUSE_CARET
@@ -763,7 +765,7 @@ bool wxWindowMGL::Show(bool show)
         return FALSE;
 
     MGL_wmShowWindow(m_wnd, show);
-    
+
     if (!show && gs_activeFrame == this)
     {
         // activate next frame in Z-order:
@@ -810,7 +812,7 @@ void wxWindowMGL::DoCaptureMouse()
 void wxWindowMGL::DoReleaseMouse()
 {
     wxASSERT_MSG( gs_mouseCapture == this, wxT("attempt to release mouse, but this window hasn't captured it") );
-    
+
     MGL_wmUncaptureEvents(m_wnd, wxMGL_CAPTURE_MOUSE);
     gs_mouseCapture = NULL;
 }
@@ -850,7 +852,7 @@ void wxWindowMGL::WarpPointer(int x, int y)
         x = w-1;
     if ( y >= h )
         y = h-1;
-    
+
     EVT_setMousePos(x, y);
 }
 
@@ -936,7 +938,7 @@ void wxWindowMGL::DragAcceptFiles(bool accept)
 void wxWindowMGL::DoGetSize(int *x, int *y) const
 {
     wxASSERT_MSG( m_wnd, wxT("invalid window") );
-    
+
     if (x) *x = m_wnd->width;
     if (y) *y = m_wnd->height;
 }
@@ -946,7 +948,7 @@ void wxWindowMGL::DoGetPosition(int *x, int *y) const
     wxASSERT_MSG( m_wnd, wxT("invalid window") );
 
     int pX = 0, pY = 0;
-    AdjustForParentClientOrigin(pX, pY, 0);   
+    AdjustForParentClientOrigin(pX, pY, 0);
 
     if (x) *x = m_wnd->x - pX;
     if (y) *y = m_wnd->y - pY;
@@ -1027,7 +1029,7 @@ void wxWindowMGL::DoSetSize(int x, int y, int width, int height, int sizeFlags)
             width = currentW;
         }
     }
-    
+
     if ( height == -1 )
     {
         if ( sizeFlags & wxSIZE_AUTO_HEIGHT )
@@ -1046,18 +1048,18 @@ void wxWindowMGL::DoSetSize(int x, int y, int width, int height, int sizeFlags)
             height = currentH;
         }
     }
-    
+
     int maxWidth = GetMaxWidth(),
-        minWidth = GetMinWidth(),    
+        minWidth = GetMinWidth(),
         maxHeight = GetMaxHeight(),
         minHeight = GetMinHeight();
-        
+
     if ( minWidth != -1 && width < minWidth ) width = minWidth;
     if ( maxWidth != -1 && width > maxWidth ) width = maxWidth;
     if ( minHeight != -1 && height < minHeight ) height = minHeight;
     if ( maxHeight != -1 && height > maxHeight ) height = maxHeight;
 
-    if ( m_wnd->x != x || m_wnd->y != y || 
+    if ( m_wnd->x != x || m_wnd->y != y ||
          (int)m_wnd->width != width || (int)m_wnd->height != height )
     {
         DoMoveWindow(x, y, width, height);
@@ -1164,7 +1166,7 @@ void wxWindowMGL::Refresh(bool eraseBack, const wxRect *rect)
         m_eraseBackground = eraseBack;
     else
         m_eraseBackground |= eraseBack;
-        
+
     if ( rect )
     {
         rect_t r;
@@ -1199,12 +1201,12 @@ void wxWindowMGL::HandlePaint(MGLDevCtx *dc)
 {
     if ( m_frozen )
     {
-        // Don't paint anything if the window is frozen. 
+        // Don't paint anything if the window is frozen.
         m_refreshAfterThaw = TRUE;
         return;
     }
-    
-#ifdef __WXDEBUG__ 
+
+#ifdef __WXDEBUG__
     // FIXME_MGL -- debugging stuff, to be removed!
     static int debugPaintEvents = -1;
     if ( debugPaintEvents == -1 )
@@ -1241,7 +1243,7 @@ void wxWindowMGL::HandlePaint(MGLDevCtx *dc)
     wxNcPaintEvent eventNc(GetId());
     eventNc.SetEventObject(this);
     GetEventHandler()->ProcessEvent(eventNc);
-    
+
     wxPaintEvent eventPt(GetId());
     eventPt.SetEventObject(this);
     GetEventHandler()->ProcessEvent(eventPt);

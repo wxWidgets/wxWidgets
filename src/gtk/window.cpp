@@ -1912,7 +1912,7 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
 
     wxLogTrace(TRACE_FOCUS,
                _T("%s: focus in"), win->GetName().c_str());
-    
+
 #ifdef HAVE_XIM
     if (win->m_ic)
         gdk_im_begin(win->m_ic, win->m_wxwindow->window);
@@ -2275,21 +2275,6 @@ wxWindow *wxWindowBase::FindFocus()
     return (wxWindow *)g_focusWindow;
 }
 
-//-----------------------------------------------------------------------------
-// "destroy" event
-//-----------------------------------------------------------------------------
-
-// VZ: Robert commented the code using out so it generates warnings: should
-//     be either fixed or removed completely
-#if 0
-
-static void gtk_window_destroy_callback( GtkWidget* widget, wxWindow *win )
-{
-    wxWindowDestroyEvent event(win);
-    win->GetEventHandler()->ProcessEvent(event);
-}
-
-#endif // 0
 
 //-----------------------------------------------------------------------------
 // "realize" from m_widget
@@ -2735,6 +2720,8 @@ bool wxWindowGTK::Create( wxWindow *parent,
 
 wxWindowGTK::~wxWindowGTK()
 {
+    SendDestroyEvent();
+
     if (g_focusWindow == this)
         g_focusWindow = NULL;
 
@@ -2940,11 +2927,6 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 
     gtk_signal_connect( GTK_OBJECT(widget), "leave_notify_event",
       GTK_SIGNAL_FUNC(gtk_window_leave_callback), (gpointer)this );
-
-    // This keeps crashing on me. RR.
-    //
-    // gtk_signal_connect( GTK_OBJECT(widget), "destroy",
-    //  GTK_SIGNAL_FUNC(gtk_window_destroy_callback), (gpointer)this );
 }
 
 bool wxWindowGTK::Destroy()
@@ -3438,7 +3420,7 @@ int wxWindowGTK::GetCharHeight() const
     pango_layout_line_get_extents(line, NULL, &rect);
 
     g_object_unref( G_OBJECT( layout ) );
-    
+
     return (int) (rect.height / PANGO_SCALE);
 #else
     GdkFont *font = m_font.GetInternalFont( 1.0 );
@@ -3471,7 +3453,7 @@ int wxWindowGTK::GetCharWidth() const
     pango_layout_line_get_extents(line, NULL, &rect);
 
     g_object_unref( G_OBJECT( layout ) );
-    
+
     return (int) (rect.width / PANGO_SCALE);
 #else
     GdkFont *font = m_font.GetInternalFont( 1.0 );

@@ -891,6 +891,9 @@ protected:
     void SatisfyConstraints();
 #endif // wxUSE_CONSTRAINTS
 
+    // Send the wxWindowDestroyEvent
+    void SendDestroyEvent();
+
     // the window id - a number which uniquely identifies a window among
     // its siblings unless it is -1
     wxWindowID           m_windowId;
