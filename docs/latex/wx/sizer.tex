@@ -425,3 +425,91 @@ Returns true if the child item was found, false otherwise.
 Note that this only works with wxBoxSizer and wxFlexGridSizer, since they
 are the only two sizer classes that can size rows/columns independently.
 
+
+
+
+\section{\class{wxSizerFlags}}\label{wxsizerflags}
+
+Normally, when you add something to a sizer via \helpref{wxSizer::Add}{wxsizeradd}, you have to specify a lot of flags and parameters.  This can be unwieldy.
+
+This is where wxSizerFlags comes in.  Instead of a bunch of flags and other stuff, you can use wxSizerFlags, which is a convenient class for doing so.
+
+Note that by specification, all methods that are not accessors of wxSizerFlags return the wxSizerFlags object itself to ease the calling of multiple methods at a time.
+
+\membersection{wxSizer::wxSizer}\label{wxsizerflagsctor}
+
+\func{}{wxSizerFlags}{\param{int }{proportion = 0}}
+
+Creates the wxSizer with the proportion specified by \tt{proportion}.
+
+
+\membersection{wxSizer::Align}\label{wxsizerflagsalign}
+
+\func{wxSizerFlags\& }{Align}{\param{int }{align = 0}}
+
+Sets the alignment of this wxSizerFlags to \tt{align}.
+
+Note that if this method is not called, the wxSizerFlags has no specified alignment.
+
+
+\membersection{wxSizer::Border}\label{wxsizerflagsborder}
+
+\func{wxSizerFlags\& }{Border}{\param{int }{direction}, \param{int }{borderinpixels}}
+
+Sets the wxSizerFlags to have a border of a number of pixels specified by \tt{borderinpixels} with the directions specified by \tt{direction}.
+
+\func{wxSizerFlags\& }{Border}{\param{int }{direction = wxALL}}
+
+Sets the wxSizerFlags to have a border of a default size with the directions specified by \tt{direction}.
+
+
+\membersection{wxSizer::Center}\label{wxsizerflagscenter}
+
+\func{wxSizerFlags\& }{Center}{\void}
+
+Sets the object of the wxSizerFlags to center itself in the area it is given.
+
+
+\membersection{wxSizer::Centre}\label{wxsizerflagscentre}
+
+\func{wxSizerFlags\& }{Centre}{\void}
+
+\helpref{wxSizerFlags::Center}{wxsizerflagscenter} for people with the other dialect of english.
+
+
+\membersection{wxSizer::Expand}\label{wxsizerflagsexpand}
+
+\func{wxSizerFlags\& }{Align}{\void}
+
+Sets the object of the wxSizerFlags to expand to fill as much area as it can.
+
+
+\membersection{wxSizer::GetBorderInPixels}\label{wxsizerflagsgetborderinpixels}
+
+\func{int }{GetProportion}{\void}
+
+Obtains the number of pixels assigned to this wxSizerFlags border.
+
+
+\membersection{wxSizer::GetFlags}\label{wxsizerflagsgetflags}
+
+\func{int }{GetFlags}{\void}
+
+Gets the flag value you would pass to a wxSizer method.
+
+
+\membersection{wxSizer::GetProportion}\label{wxsizerflagsgetproportion}
+
+\func{int }{GetProportion}{\void}
+
+Gets the amount of proportion given to this wxSizerFlags.
+
+
+\membersection{wxSizer::Proportion}\label{wxsizerflagsproportion}
+
+\func{wxSizerFlags\& }{Proportion}{\param{int }{proportion = 0}}
+
+Sets the proportion of this wxSizerFlags to \tt{proportion}
+
+
+
