@@ -417,7 +417,7 @@ void wxNotebook::MacSetupTabs()
         SetControlData( (ControlHandle) m_macControl, ii+1, kControlTabInfoTag,
             sizeof( ControlTabInfoRec) , (char*) &info ) ;
         SetTabEnabled( (ControlHandle) m_macControl , ii+1 , true ) ;
-#if 0 // TARGET_CARBON
+#if TARGET_CARBON
         if ( GetImageList() && GetPageImage(ii) >= 0 && UMAGetSystemVersion() >= 0x1020 )
         {
             // tab controls only support very specific types of images, therefore we are doing an odyssee
@@ -430,15 +430,15 @@ void wxNotebook::MacSetupTabs()
             wxMacCreateBitmapButton( &info , *GetImageList()->GetBitmap( GetPageImage(ii ) ) , kControlContentPictHandle) ;
             IconFamilyHandle iconFamily = (IconFamilyHandle) NewHandle(0) ;
             OSErr err = SetIconFamilyData( iconFamily, 'PICT' , (Handle) info.u.picture ) ;
-            wxASSERT_MSG( err == noErr , "Error when adding bitmap" ) ;
+            wxASSERT_MSG( err == noErr , wxT("Error when adding bitmap") ) ;
             IconRef iconRef ;
             err = RegisterIconRefFromIconFamily( 'WXNG' , (OSType) 1 , iconFamily, &iconRef ) ;
-            wxASSERT_MSG( err == noErr , "Error when adding bitmap" ) ;
+            wxASSERT_MSG( err == noErr , wxT("Error when adding bitmap") ) ;
             info.contentType = kControlContentIconRef ;
             info.u.iconRef = iconRef ;
             SetControlData( (ControlHandle) m_macControl, ii+1,kControlTabImageContentTag,
                 sizeof( info ), (Ptr)&info );
-            wxASSERT_MSG( err == noErr , "Error when setting icon on tab" ) ;
+            wxASSERT_MSG( err == noErr , wxT("Error when setting icon on tab") ) ;
                UnregisterIconRef( 'WXNG' , (OSType) 1 ) ;
             ReleaseIconRef( iconRef ) ;
             DisposeHandle( (Handle) iconFamily ) ;

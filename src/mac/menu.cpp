@@ -74,7 +74,7 @@ void wxMenu::Init()
 
     if ( !m_hMenu )
     {
-        wxLogLastError("UMANewMenu failed");
+        wxLogLastError(wxT("UMANewMenu failed"));
     }
 
     // if we have a title, insert it in the beginning of the menu
