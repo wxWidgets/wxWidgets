@@ -1002,6 +1002,33 @@ wxColour wxNotebook::MSWGetBgColourForChild(wxWindow *win)
     return c == CLR_INVALID ? wxNullColour : wxRGBToColour(c);
 }
 
+bool
+wxNotebook::MSWPrintChild(wxWindow *win,
+                          WXWPARAM wParam,
+                          WXLPARAM WXUNUSED(lParam))
+{
+    RECT rc;
+    ::GetClientRect(GetHwnd(), &rc);
+    TabCtrl_AdjustRect(GetHwnd(), true, &rc);
+    ::MapWindowPoints(GetHwnd(), GetHwndOf(win), (POINT *)&rc, 2);
+
+    wxUxThemeHandle theme(win, L"TAB");
+    if ( theme )
+    {
+        wxUxThemeEngine::Get()->DrawThemeBackground
+        (
+            theme,
+            (WXHDC)wParam,
+            9 /* TABP_PANE */,
+            0,
+            &rc,
+            NULL
+        );
+    }
+
+    return true;
+}
+
 #endif // wxUSE_UXTHEME
 
 // Windows only: attempts to get colour for UX theme page background

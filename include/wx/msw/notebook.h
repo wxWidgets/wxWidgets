@@ -212,6 +212,9 @@ protected:
 
   // creates the brush to be used for drawing the tab control background
   void UpdateBgBrush();
+
+  // paint themed children background here
+  virtual bool MSWPrintChild(wxWindow *win, WXWPARAM wParam, WXLPARAM lParam);
 #endif // wxUSE_UXTHEME
 
   // the current selection (-1 if none)

@@ -398,6 +398,16 @@ public:
     // windows via their MSWGetBgBrushForChild() recursively
     WXHBRUSH MSWGetBgBrush(WXHDC hDC);
 
+    // overriding this method gives the parent window the opportunity to
+    // process WM_PRINTCLIENT for its children: this is currently used by
+    // wxNotebook to draw themed background for them
+    //
+    // return true if the message was processed or false to use default logic
+    // for it (currently this means handling it just as WM_PAINT i.e. render
+    // the control into the provided DC)
+    virtual bool MSWPrintChild(wxWindow *win, WXWPARAM wParam, WXLPARAM lParam);
+
+
     // Responds to colour changes: passes event on to children.
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 

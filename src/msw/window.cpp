@@ -2312,12 +2312,21 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             }
 
 #ifdef WM_PRINT
+        case WM_PRINTCLIENT:
+            if ( GetParent() &&
+                    GetParent()->MSWPrintChild(this, wParam, lParam) )
+            {
+                processed = true;
+            }
+            break;
+
         case WM_PRINT:
             {
                 if ( lParam & PRF_ERASEBKGND )
                     HandleEraseBkgnd((WXHDC)(HDC)wParam);
 
                 wxPaintDCEx dc((wxWindow *)this, (WXHDC)wParam);
+
                 processed = HandlePaint();
             }
             break;
@@ -4033,6 +4042,14 @@ WXHBRUSH wxWindowMSW::MSWGetBgBrush(WXHDC hDC)
     }
 
     return 0;
+}
+
+bool
+wxWindowMSW::MSWPrintChild(wxWindow * WXUNUSED(win),
+                           WXWPARAM WXUNUSED(wParam),
+                           WXLPARAM WXUNUSED(lParam))
+{
+    return false;
 }
 
 // ---------------------------------------------------------------------------
