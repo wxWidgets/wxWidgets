@@ -3,9 +3,12 @@
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 exec_prefix_set=no
+CC="@CC@"
+CXX="@CXX@"
+LD="@SHARED_LD@"
 
 usage="\
-Usage: wx-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--version] [--libs] [--cflags]"
+Usage: wx-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--version] [--libs] [--cflags] [--cc] [--cxx] [--ld]"
 
 if test $# -eq 0; then
       echo "${usage}" 1>&2
@@ -52,6 +55,15 @@ while test $# -gt 0; do
         libs="-L@libdir@"
       fi
       echo $libs -l@WX_LIBRARY@ @EXTRA_LIBS@
+      ;;
+    --cc)
+      echo $CC
+      ;;
+    --cxx)
+      echo $CXX
+      ;;
+    --ld)
+      echo $LD
       ;;
     *)
       echo "${usage}" 1>&2
