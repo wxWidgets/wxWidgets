@@ -25,8 +25,10 @@
 #endif
 
 #include <ctype.h>
+
 #include "wx/sizer.h"
 #include "wx/statline.h"
+#include "wx/notebook.h"
 
 #include "layout.h"
 
@@ -40,7 +42,7 @@ MyApp::MyApp()
 {
 }
 
-bool MyApp::OnInit(void)
+bool MyApp::OnInit()
 {
   // Create the main frame window
   frame = new MyFrame((MyFrame *) NULL, (char *) "wxWindows Layout Demo", 0, 0, 550, 500);
@@ -54,7 +56,8 @@ bool MyApp::OnInit(void)
   wxMenu *file_menu = new wxMenu;
 
   file_menu->Append(LAYOUT_LOAD_FILE, "&Load file",      "Load a text file");
-  file_menu->Append(LAYOUT_TEST_NEW, "&Test new sizers",      "Test new sizer code");
+  file_menu->Append(LAYOUT_TEST_SIZER, "&Test sizers",      "Test sizer");
+  file_menu->Append(LAYOUT_TEST_NB, "&Test notebook sizers",      "Test notebook sizer");
 
   file_menu->AppendSeparator();
   file_menu->Append(LAYOUT_QUIT, "E&xit",                "Quit program");
@@ -171,7 +174,8 @@ MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h):
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(LAYOUT_LOAD_FILE, MyFrame::LoadFile)
   EVT_MENU(LAYOUT_QUIT, MyFrame::Quit)
-  EVT_MENU(LAYOUT_TEST_NEW, MyFrame::TestNewSizers)
+  EVT_MENU(LAYOUT_TEST_SIZER, MyFrame::TestSizers)
+  EVT_MENU(LAYOUT_TEST_NB, MyFrame::TestNotebookSizers)
   EVT_MENU(LAYOUT_ABOUT, MyFrame::About)
   EVT_SIZE(MyFrame::OnSize)
 END_EVENT_TABLE()
@@ -190,18 +194,65 @@ void MyFrame::LoadFile(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::Quit(wxCommandEvent& WXUNUSED(event) )
 {
-      this->Close(TRUE);
+    this->Close(TRUE);
 }
 
-void MyFrame::TestNewSizers(wxCommandEvent& WXUNUSED(event) )
+void MyFrame::TestSizers(wxCommandEvent& WXUNUSED(event) )
 {
-  NewSizerFrame *newFrame = new NewSizerFrame((MyFrame *) NULL, "Sizer Test Frame", 50, 50 );
-  newFrame->Show(TRUE);
+    MySizerFrame *newFrame = new MySizerFrame((MyFrame *) NULL, "Sizer Test Frame", 50, 50 );
+    newFrame->Show(TRUE);
 }
+
+void MyFrame::TestNotebookSizers(wxCommandEvent& WXUNUSED(event) )
+{
+    wxDialog dialog( this, -1, "Notebook Sizer Test Dialog"  );
+
+    // Begin with first hierarchy: a notebook at the top and
+    // and OK button at the bottom.
+
+    wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
+    
+    wxNotebook *notebook = new wxNotebook( &dialog, -1 );
+    wxNotebookSizer *nbs = new wxNotebookSizer( notebook );
+    topsizer->Add( nbs, 1, wxGROW );
+    
+    wxButton *button = new wxButton( &dialog, wxID_OK, "OK" );
+    topsizer->Add( button, 0, wxALIGN_RIGHT | wxALL, 10 );
+
+    // First page: one big text ctrl
+    wxTextCtrl *multi = new wxTextCtrl( notebook, -1, "TextCtrl.", wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
+    notebook->AddPage( multi, "Page One" );
+    
+    // Second page: a text ctrl and a button
+    wxPanel *panel = new wxPanel( notebook, -1 );
+    notebook->AddPage( panel, "Page Two" );
+    
+    wxBoxSizer *panelsizer = new wxBoxSizer( wxVERTICAL );
+    
+    wxTextCtrl *text = new wxTextCtrl( panel, -1, "TextLine 1.", wxDefaultPosition, wxSize(250,-1) );
+    panelsizer->Add( text, 0, wxGROW|wxALL, 30 );
+    text = new wxTextCtrl( panel, -1, "TextLine 2.", wxDefaultPosition, wxSize(250,-1) );
+    panelsizer->Add( text, 0, wxGROW|wxALL, 30 );
+    wxButton *button2 = new wxButton( panel, -1, "Hallo" );
+    panelsizer->Add( button2, 0, wxALIGN_RIGHT | wxLEFT|wxRIGHT|wxBOTTOM, 30 );
+    
+    panel->SetAutoLayout( TRUE );
+    panel->SetSizer( panelsizer );
+    
+    // Tell dialog to use sizer
+    
+    dialog.SetAutoLayout( TRUE );
+    topsizer->Fit( &dialog );  
+    topsizer->SetSizeHints( &dialog );  
+    dialog.SetSizer( topsizer );
+    
+    dialog.ShowModal();
+}
+
 
 void MyFrame::About(wxCommandEvent& WXUNUSED(event) )
 {
-      (void)wxMessageBox("wxWindows GUI library layout demo\n",
+    (void)wxMessageBox("wxWindows GUI library layout demo\n",
             "About Layout Demo", wxOK|wxCENTRE);
 }
 
@@ -245,7 +296,7 @@ MyWindow::MyWindow(wxFrame *frame, int x, int y, int w, int h, long style):
 {
 }
 
-MyWindow::~MyWindow(void)
+MyWindow::~MyWindow()
 {
 }
 
@@ -257,10 +308,10 @@ void MyWindow::OnPaint(wxPaintEvent& WXUNUSED(event) )
 }
 
 //-----------------------------------------------------------------
-//  NewSizerFrame
+//  MySizerFrame
 //-----------------------------------------------------------------
 
-NewSizerFrame::NewSizerFrame(wxFrame *frame, char *title, int x, int y ):
+MySizerFrame::MySizerFrame(wxFrame *frame, char *title, int x, int y ):
   wxFrame(frame, -1, title, wxPoint(x, y) )
 {
   // we want to get a dialog that is stretchable because it

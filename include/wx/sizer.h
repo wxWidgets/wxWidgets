@@ -27,6 +27,7 @@
 //---------------------------------------------------------------------------
 
 class wxStaticBox;
+class wxNotebook;
 
 class wxSizerItem;
 class wxSizer;
@@ -191,6 +192,26 @@ public:
 
 protected:
    wxStaticBox   *m_staticBox;
+};
+
+//---------------------------------------------------------------------------
+// wxNotebookSizer
+//---------------------------------------------------------------------------
+
+class WXDLLEXPORT wxNotebookSizer: public wxSizer
+{
+    DECLARE_CLASS(wxNotebookSizer);
+public:
+   wxNotebookSizer( wxNotebook *nb );
+
+   void RecalcSizes();
+   wxSize CalcMin();
+
+   wxNotebook *GetNotebook()
+     { return m_notebook; }
+
+protected:
+   wxNotebook   *m_notebook;
 };
 
 #endif

@@ -23,6 +23,7 @@
 #include "wx/sizer.h"
 #include "wx/utils.h"
 #include "wx/statbox.h"
+#include "wx/notebook.h"
 
 //---------------------------------------------------------------------------
 
@@ -30,6 +31,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxSizerItem, wxObject);
 IMPLEMENT_ABSTRACT_CLASS(wxSizer, wxObject);
 IMPLEMENT_ABSTRACT_CLASS(wxBoxSizer, wxSizer);
 IMPLEMENT_ABSTRACT_CLASS(wxStaticBoxSizer, wxBoxSizer);
+IMPLEMENT_ABSTRACT_CLASS(wxNotebookSizer, wxSizer);
 
 //---------------------------------------------------------------------------
 // wxSizerItem
@@ -542,9 +544,10 @@ void wxStaticBoxSizer::RecalcSizes()
 
 wxSize wxStaticBoxSizer::CalcMin()
 {
-    // this will have to be done platform by platform
+    // This will have to be done platform by platform
     // as there is no way to guess the thickness of
-    // a wxStaticBox border
+    // a wxStaticBox border.
+    
     int top_border = 15;
     if (m_staticBox->GetLabel().IsEmpty()) top_border = 5;
     int other_border = 5;
@@ -555,3 +558,65 @@ wxSize wxStaticBoxSizer::CalcMin()
 
     return ret;
 }
+
+//---------------------------------------------------------------------------
+// wxNotebookSizer
+//---------------------------------------------------------------------------
+
+wxNotebookSizer::wxNotebookSizer( wxNotebook *nb )
+{
+    wxASSERT_MSG( nb, wxT("wxNotebookSizer needs a notebook") );
+    
+    m_notebook = nb;
+}
+
+void wxNotebookSizer::RecalcSizes()
+{
+    m_notebook->SetSize( m_position.x, m_position.y, m_size.x, m_size.y );
+}
+
+wxSize wxNotebookSizer::CalcMin()
+{
+    // This will have to be done platform by platform
+    // as there is no way to guess the thickness of
+    // the wxNotebook tabs and border.
+    
+    int borderX = 5;
+    int borderY = 5;
+    if ((m_notebook->HasFlag(wxNB_RIGHT)) ||
+        (m_notebook->HasFlag(wxNB_LEFT)))
+    {
+        borderX += 70; // improvements later..
+    }
+    else
+    {
+        borderY += 35; // improvements later..
+    }
+    
+    if (m_notebook->GetChildren().GetCount() == 0)
+        return wxSize(borderX + 10, borderY + 10);
+
+    int maxX = 0;
+    int maxY = 0;
+
+    wxWindowList::Node *node = m_notebook->GetChildren().GetFirst();
+    while (node)
+    {
+        wxWindow *item = node->GetData();
+	wxSizer *itemsizer = item->GetSizer();
+	
+	if (itemsizer)
+	{
+            wxSize subsize( itemsizer->CalcMin() );
+	
+	    if (subsize.x > maxX) maxX = subsize.x;
+	    if (subsize.y > maxY) maxY = subsize.y;
+	}
+
+	node = node->GetNext();
+    }
+
+    return wxSize( borderX + maxX, borderY + maxY );
+}
+
+
