@@ -63,7 +63,7 @@ bool wxToggleButton::MSWCommand(WXUINT WXUNUSED(param), WXWORD WXUNUSED(id))
    event.SetInt(GetValue());
    event.SetEventObject(this);
    ProcessCommand(event);
-   return TRUE;
+   return true;
 }
 
 // Single check box item
@@ -75,12 +75,12 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
                             const wxString& name)
 {
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
-        return FALSE;
-    
+        return false;
+
     if ( !MSWCreateControl(wxT("BUTTON"), label, pos, size) )
-      return FALSE;
-    
-    return TRUE;
+      return false;
+
+    return true;
 }
 
 wxBorder wxToggleButton::GetDefaultBorder() const
@@ -140,7 +140,7 @@ wxSize wxToggleButton::DoGetBestSize() const
 
 void wxToggleButton::SetValue(bool val)
 {
-   SendMessage(GetHwnd(), BM_SETCHECK, val, 0);
+   ::SendMessage(GetHwnd(), BM_SETCHECK, val, 0);
 }
 
 #ifndef BST_CHECKED
@@ -150,9 +150,9 @@ void wxToggleButton::SetValue(bool val)
 bool wxToggleButton::GetValue() const
 {
 #ifdef __WIN32__
-   return (SendMessage(GetHwnd(), BM_GETCHECK, 0, 0) == BST_CHECKED);
+   return (::SendMessage(GetHwnd(), BM_GETCHECK, 0, 0) == BST_CHECKED);
 #else
-   return ((0x001 & SendMessage(GetHwnd(), BM_GETCHECK, 0, 0)) == 0x001);
+   return ((0x001 & ::SendMessage(GetHwnd(), BM_GETCHECK, 0, 0)) == 0x001);
 #endif
 }
 

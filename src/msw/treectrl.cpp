@@ -902,7 +902,7 @@ bool wxTreeCtrl::SetBackgroundColour(const wxColour &colour)
     if ( !wxWindowBase::SetBackgroundColour(colour) )
         return false;
 
-    SendMessage(GetHwnd(), TVM_SETBKCOLOR, 0, colour.GetPixel());
+    ::SendMessage(GetHwnd(), TVM_SETBKCOLOR, 0, colour.GetPixel());
 #endif
 
     return true;
@@ -914,7 +914,7 @@ bool wxTreeCtrl::SetForegroundColour(const wxColour &colour)
     if ( !wxWindowBase::SetForegroundColour(colour) )
         return false;
 
-    SendMessage(GetHwnd(), TVM_SETTEXTCOLOR, 0, colour.GetPixel());
+    ::SendMessage(GetHwnd(), TVM_SETTEXTCOLOR, 0, colour.GetPixel());
 #endif
 
     return true;
@@ -1369,7 +1369,7 @@ void wxTreeCtrl::SetItemFont(const wxTreeItemId& item, const wxFont& font)
 
 bool wxTreeCtrl::IsVisible(const wxTreeItemId& item) const
 {
-    wxCHECK_MSG( item.IsOk(), FALSE, wxT("invalid tree item") );
+    wxCHECK_MSG( item.IsOk(), false, wxT("invalid tree item") );
 
     if ( item == wxTreeItemId(TVI_ROOT) )
     {
@@ -1400,7 +1400,7 @@ bool wxTreeCtrl::IsVisible(const wxTreeItemId& item) const
 
 bool wxTreeCtrl::ItemHasChildren(const wxTreeItemId& item) const
 {
-    wxCHECK_MSG( item.IsOk(), FALSE, wxT("invalid tree item") );
+    wxCHECK_MSG( item.IsOk(), false, wxT("invalid tree item") );
 
     wxTreeViewItem tvItem(item, TVIF_CHILDREN);
     DoGetItem(&tvItem);
@@ -1410,7 +1410,7 @@ bool wxTreeCtrl::ItemHasChildren(const wxTreeItemId& item) const
 
 bool wxTreeCtrl::IsExpanded(const wxTreeItemId& item) const
 {
-    wxCHECK_MSG( item.IsOk(), FALSE, wxT("invalid tree item") );
+    wxCHECK_MSG( item.IsOk(), false, wxT("invalid tree item") );
 
     wxTreeViewItem tvItem(item, TVIF_STATE, TVIS_EXPANDED);
     DoGetItem(&tvItem);
@@ -1420,7 +1420,7 @@ bool wxTreeCtrl::IsExpanded(const wxTreeItemId& item) const
 
 bool wxTreeCtrl::IsSelected(const wxTreeItemId& item) const
 {
-    wxCHECK_MSG( item.IsOk(), FALSE, wxT("invalid tree item") );
+    wxCHECK_MSG( item.IsOk(), false, wxT("invalid tree item") );
 
     wxTreeViewItem tvItem(item, TVIF_STATE, TVIS_SELECTED);
     DoGetItem(&tvItem);
@@ -1430,7 +1430,7 @@ bool wxTreeCtrl::IsSelected(const wxTreeItemId& item) const
 
 bool wxTreeCtrl::IsBold(const wxTreeItemId& item) const
 {
-    wxCHECK_MSG( item.IsOk(), FALSE, wxT("invalid tree item") );
+    wxCHECK_MSG( item.IsOk(), false, wxT("invalid tree item") );
 
     wxTreeViewItem tvItem(item, TVIF_STATE, TVIS_BOLD);
     DoGetItem(&tvItem);
@@ -1588,7 +1588,7 @@ wxTreeItemId wxTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const
 
 bool wxTreeCtrl::IsItemChecked(const wxTreeItemId& item) const
 {
-    wxCHECK_MSG( item.IsOk(), FALSE, wxT("invalid tree item") );
+    wxCHECK_MSG( item.IsOk(), false, wxT("invalid tree item") );
 
     // receive the desired information.
     wxTreeViewItem tvItem(item, TVIF_STATE, TVIS_STATEIMAGEMASK);

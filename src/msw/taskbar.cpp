@@ -81,11 +81,11 @@ class wxTaskBarIconWindow : public wxFrame
 {
 public:
     wxTaskBarIconWindow(wxTaskBarIcon *icon)
-        : wxFrame(NULL, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0),
+        : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0),
           m_icon(icon)
     {
     }
-    
+
     WXLRESULT MSWWindowProc(WXUINT msg,
                             WXWPARAM wParam, WXLPARAM lParam)
     {
@@ -103,7 +103,7 @@ private:
     wxTaskBarIcon *m_icon;
 };
 
-    
+
 // ----------------------------------------------------------------------------
 // NotifyIconData: wrapper around NOTIFYICONDATA
 // ----------------------------------------------------------------------------
@@ -209,7 +209,7 @@ bool wxTaskBarIcon::PopupMenu(wxMenu *menu)
     wxGetMousePosition(&x, &y);
 
     m_win->Move(x, y);
-    
+
     m_win->PushEventHandler(this);
 
     menu->UpdateUI();
@@ -260,7 +260,7 @@ void wxTaskBarIcon::RegisterWindowMessages()
     static bool s_registered = false;
 
     if ( !s_registered )
-    {   
+    {
         // Taskbar restart msg will be sent to us if the icon needs to be redrawn
         gs_msgRestartTaskbar = RegisterWindowMessage(wxT("TaskbarCreated"));
 

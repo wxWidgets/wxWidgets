@@ -22,11 +22,11 @@ friend void wxProcessTimer(wxTimer& timer);
 
 public:
     wxTimer() { Init(); }
-    wxTimer(wxEvtHandler *owner, int id = -1) : wxTimerBase(owner, id)
+    wxTimer(wxEvtHandler *owner, int id = wxID_ANY) : wxTimerBase(owner, id)
         { Init(); }
     ~wxTimer();
 
-    virtual bool Start(int milliseconds = -1, bool oneShot = FALSE);
+    virtual bool Start(int milliseconds = -1, bool oneShot = false);
     virtual void Stop();
 
     virtual bool IsRunning() const { return m_id != 0; }

@@ -50,9 +50,9 @@ public:
     virtual ~wxTopLevelWindowMSW();
 
     // implement base class pure virtuals
-    virtual void Maximize(bool maximize = TRUE);
+    virtual void Maximize(bool maximize = true);
     virtual bool IsMaximized() const;
-    virtual void Iconize(bool iconize = TRUE);
+    virtual void Iconize(bool iconize = true);
     virtual bool IsIconized() const;
     virtual void SetIcon(const wxIcon& icon);
     virtual void SetIcons(const wxIconBundle& icons );
@@ -62,14 +62,14 @@ public:
     virtual bool SetShape(const wxRegion& region);
 #endif // __WXWINCE__
 
-    virtual bool Show(bool show = TRUE);
+    virtual bool Show(bool show = true);
 
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
     virtual bool IsFullScreen() const { return m_fsIsShowing; }
 
-    // wxMSW only: EnableCloseButton(FALSE) may be used to remove the "Close"
+    // wxMSW only: EnableCloseButton(false) may be used to remove the "Close"
     // button from the title bar
-    bool EnableCloseButton(bool enable = TRUE);
+    bool EnableCloseButton(bool enable = true);
 
     // implementation from now on
     // --------------------------
@@ -91,13 +91,13 @@ protected:
     // common part of all ctors
     void Init();
 
-    // create a new frame, return FALSE if it couldn't be created
+    // create a new frame, return false if it couldn't be created
     bool CreateFrame(const wxString& title,
                      const wxPoint& pos,
                      const wxSize& size);
 
     // create a new dialog using the given dialog template from resources,
-    // return FALSE if it couldn't be created
+    // return false if it couldn't be created
     bool CreateDialog(const void *dlgTemplate,
                       const wxString& title,
                       const wxPoint& pos,
@@ -136,8 +136,8 @@ protected:
         ButtonMenu();
         ~ButtonMenu();
 
-        void SetButton(int id = wxID_ANY, 
-                       const wxString& label  = wxEmptyString, 
+        void SetButton(int id = wxID_ANY,
+                       const wxString& label  = wxEmptyString,
                        wxMenu *subMenu = NULL);
 
         bool IsAssigned() const {return m_assigned;}

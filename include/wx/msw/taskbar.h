@@ -78,7 +78,7 @@ protected:
 #endif
 };
 
-#if WXWIN_COMPATIBILITY_2_4    
+#if WXWIN_COMPATIBILITY_2_4
 inline bool wxTaskBarIcon::IsOK() const { return IsOk(); }
 #endif
 

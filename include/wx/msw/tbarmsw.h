@@ -61,7 +61,7 @@ public:
                                        const wxBitmap& pushedBitmap,
                                        bool toggle,
                                        wxCoord xPos,
-                                       wxCoord yPos = -1,
+                                       wxCoord yPos = wxDefaultCoord,
                                        wxObject *clientData = NULL,
                                        const wxString& helpString1 = wxEmptyString,
                                        const wxString& helpString2 = wxEmptyString);

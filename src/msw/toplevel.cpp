@@ -71,8 +71,8 @@
 
 #ifdef __WXMICROWIN__
 
-// static inline bool IsIconic(HWND WXUNUSED(hwnd)) { return FALSE; }
-static inline bool IsZoomed(HWND WXUNUSED(hwnd)) { return FALSE; }
+// static inline bool IsIconic(HWND WXUNUSED(hwnd)) { return false; }
+static inline bool IsZoomed(HWND WXUNUSED(hwnd)) { return false; }
 
 #endif // __WXMICROWIN__
 
@@ -134,13 +134,13 @@ END_EVENT_TABLE()
 void wxTopLevelWindowMSW::Init()
 {
     m_iconized =
-    m_maximizeOnShow = FALSE;
+    m_maximizeOnShow = false;
 
     // Data to save/restore when calling ShowFullScreen
     m_fsStyle = 0;
     m_fsOldWindowStyle = 0;
-    m_fsIsMaximized = FALSE;
-    m_fsIsShowing = FALSE;
+    m_fsIsMaximized = false;
+    m_fsIsShowing = false;
 
     m_winLastFocused = (wxWindow *)NULL;
 
@@ -342,7 +342,7 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
 
         wxLogSysError(wxT("Can't create dialog using memory template"));
 
-        return FALSE;
+        return false;
     }
 
     WXDWORD exflags;
@@ -406,7 +406,7 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
 
     SubclassWin(m_hWnd);
 
-    return TRUE;
+    return true;
 #endif // __WXMICROWIN__/!__WXMICROWIN__
 }
 
@@ -453,7 +453,7 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
 
     SetName(name);
 
-    m_windowId = id == -1 ? NewControlId() : id;
+    m_windowId = id == wxID_ANY ? NewControlId() : id;
 
     wxTopLevelWindows.Append(this);
 
@@ -511,7 +511,7 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
     // fix we have
     if ( ret )
     {
-        SendMessage
+        ::SendMessage
         (
             GetHwnd(),
             WM_UPDATEUISTATE,
@@ -566,7 +566,7 @@ bool wxTopLevelWindowMSW::Show(bool show)
 {
     // don't use wxWindow version as we want to call DoShowWindow() ourselves
     if ( !wxWindowBase::Show(show) )
-        return FALSE;
+        return false;
 
     int nShowCmd;
     if ( show )
@@ -581,7 +581,7 @@ bool wxTopLevelWindowMSW::Show(bool show)
             DoShowWindow(SW_SHOW);
 #endif
 
-            m_maximizeOnShow = FALSE;
+            m_maximizeOnShow = false;
         }
         else // just show
         {
@@ -609,7 +609,7 @@ bool wxTopLevelWindowMSW::Show(bool show)
     {
         ::BringWindowToTop(GetHwnd());
 
-        wxActivateEvent event(wxEVT_ACTIVATE, TRUE, m_windowId);
+        wxActivateEvent event(wxEVT_ACTIVATE, true, m_windowId);
         event.SetEventObject( this );
         GetEventHandler()->ProcessEvent(event);
     }
@@ -624,7 +624,7 @@ bool wxTopLevelWindowMSW::Show(bool show)
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -649,7 +649,7 @@ void wxTopLevelWindowMSW::Maximize(bool maximize)
 bool wxTopLevelWindowMSW::IsMaximized() const
 {
 #ifdef __WXWINCE__
-    return FALSE;
+    return false;
 #else
     return ::IsZoomed(GetHwnd()) != 0;
 #endif
@@ -663,7 +663,7 @@ void wxTopLevelWindowMSW::Iconize(bool iconize)
 bool wxTopLevelWindowMSW::IsIconized() const
 {
 #ifdef __WXWINCE__
-    return FALSE;
+    return false;
 #else
     // also update the current state
     ((wxTopLevelWindowMSW *)this)->m_iconized = ::IsIconic(GetHwnd()) != 0;
@@ -686,7 +686,7 @@ bool wxTopLevelWindowMSW::ShowFullScreen(bool show, long style)
     if ( show == IsFullScreen() )
     {
         // nothing to do
-        return TRUE;
+        return true;
     }
 
     m_fsIsShowing = show;
@@ -786,7 +786,7 @@ bool wxTopLevelWindowMSW::ShowFullScreen(bool show, long style)
             m_fsOldSize.width, m_fsOldSize.height, SWP_FRAMECHANGED);
     }
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -823,7 +823,7 @@ bool wxTopLevelWindowMSW::EnableCloseButton(bool enable)
 {
 #if !defined(__WXMICROWIN__)
     // get system (a.k.a. window) menu
-    HMENU hmenu = GetSystemMenu(GetHwnd(), FALSE /* get it */);
+    HMENU hmenu = ::GetSystemMenu(GetHwnd(), FALSE /* get it */);
     if ( !hmenu )
     {
         // no system menu at all -- ok if we want to remove the close button
@@ -839,7 +839,7 @@ bool wxTopLevelWindowMSW::EnableCloseButton(bool enable)
     {
         wxLogLastError(_T("EnableMenuItem(SC_CLOSE)"));
 
-        return FALSE;
+        return false;
     }
 #ifndef __WXWINCE__
     // update appearance immediately
@@ -850,14 +850,14 @@ bool wxTopLevelWindowMSW::EnableCloseButton(bool enable)
 #endif
 #endif // !__WXMICROWIN__
 
-    return TRUE;
+    return true;
 }
 
 #ifndef __WXWINCE__
 
 bool wxTopLevelWindowMSW::SetShape(const wxRegion& region)
 {
-    wxCHECK_MSG( HasFlag(wxFRAME_SHAPED), FALSE,
+    wxCHECK_MSG( HasFlag(wxFRAME_SHAPED), false,
                  _T("Shaped windows must be created with the wxFRAME_SHAPED style."));
 
     // The empty region signifies that the shape should be removed from the
@@ -867,9 +867,9 @@ bool wxTopLevelWindowMSW::SetShape(const wxRegion& region)
         if (::SetWindowRgn(GetHwnd(), NULL, TRUE) == 0)
         {
             wxLogLastError(_T("SetWindowRgn"));
-            return FALSE;
+            return false;
         }
-        return TRUE;
+        return true;
     }
 
     // Windows takes ownership of the region, so
@@ -894,9 +894,9 @@ bool wxTopLevelWindowMSW::SetShape(const wxRegion& region)
     if (::SetWindowRgn(GetHwnd(), hrgn, TRUE) == 0)
     {
         wxLogLastError(_T("SetWindowRgn"));
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 #endif // !__WXWINCE__
@@ -1010,7 +1010,7 @@ bool wxTLWHiddenParentModule::OnInit()
     ms_hwnd = NULL;
     ms_className = NULL;
 
-    return TRUE;
+    return true;
 }
 
 void wxTLWHiddenParentModule::OnExit()
