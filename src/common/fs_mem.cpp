@@ -70,7 +70,6 @@ wxHashTable *wxMemoryFSHandler::m_Hash = NULL;
 
 wxMemoryFSHandler::wxMemoryFSHandler() : wxFileSystemHandler()
 {
-    m_Hash = NULL;
 }
 
 
