@@ -112,7 +112,7 @@ public:
     wxWindow *GetWindow() const
         { return m_window; }
     void SetWindow( wxWindow *window )
-        { m_window = window; }
+        { m_window = window; m_minSize = window->GetSize(); }
     wxSizer *GetSizer() const
         { return m_sizer; }
     void SetSizer( wxSizer *sizer )
