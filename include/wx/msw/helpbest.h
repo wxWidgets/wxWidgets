@@ -71,7 +71,7 @@ public:
     }
 
     virtual bool KeywordSearch(const wxString& k,
-                               wxHelpSearchMode mode = wxHELP_SEARCH_ALL);
+                               wxHelpSearchMode mode = wxHELP_SEARCH_ALL)
     {
         return m_helpController->KeywordSearch( k, mode );
     }
