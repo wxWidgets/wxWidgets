@@ -55,7 +55,7 @@
 
 #ifdef __DARWIN__
 #  include <CoreServices/CoreServices.h>
-#  if defined(WXMAKINGDLL)
+#  if defined(WXMAKINGDLL_CORE)
 #    include <mach-o/dyld.h>
 #  endif
 #else
@@ -470,7 +470,7 @@ DEFINE_ONE_SHOT_HANDLER_GETTER( wxAppEventHandler )
 
 #endif
 
-#if defined(WXMAKINGDLL) && !defined(__DARWIN__)
+#if defined(WXMAKINGDLL_CORE) && !defined(__DARWIN__)
 // we know it's there ;-)
 WXIMPORT char std::__throws_bad_alloc ;
 #endif
@@ -485,7 +485,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     SetEventMask( everyEvent ) ;
     UMAShowWatchCursor() ;
 
-#if defined(WXMAKINGDLL) && defined(__DARWIN__)
+#if defined(WXMAKINGDLL_CORE) && defined(__DARWIN__)
     // open shared library resources from here since we don't have
     //   __wxinitialize in Mach-O shared libraries
     wxStAppResource::OpenSharedLibraryResource(NULL);
@@ -656,7 +656,7 @@ void wxApp::CleanUp()
 #  endif
 #endif
 
-#if defined(WXMAKINGDLL) && defined(__DARWIN__)
+#if defined(WXMAKINGDLL_CORE) && defined(__DARWIN__)
     // close shared library resources from here since we don't have
     //   __wxterminate in Mach-O shared libraries
     wxStAppResource::CloseSharedLibraryResource();
@@ -683,9 +683,9 @@ void wxApp::CleanUp()
 // need to be able to find it with NSLookupAndBindSymbol
 short gSharedLibraryResource = kResFileNotOpened ;
 
-#if defined(WXMAKINGDLL) && defined(__DARWIN__)
+#if defined(WXMAKINGDLL_CORE) && defined(__DARWIN__)
 CFBundleRef gSharedLibraryBundle = NULL;
-#endif /* WXMAKINGDLL && __DARWIN__ */
+#endif /* WXMAKINGDLL_CORE && __DARWIN__ */
 
 wxStAppResource::wxStAppResource()
 {
@@ -708,7 +708,7 @@ void wxStAppResource::OpenSharedLibraryResource(const void *initBlock)
 {
     gSharedLibraryResource = kResFileNotOpened;
 
-#ifdef WXMAKINGDLL
+#ifdef WXMAKINGDLL_CORE
     if ( initBlock != NULL ) {
         const CFragInitBlock *theInitBlock = (const CFragInitBlock *)initBlock;
         FSSpec *fileSpec = NULL;
@@ -741,9 +741,8 @@ void wxStAppResource::OpenSharedLibraryResource(const void *initBlock)
         else {
             // wxWindows is a simple dynamic shared library
             //   load the resources from the data fork of a separate resource file
-            char  *theResPath;
-            char  *theName;
-            char  *theExt;
+            wxString theResPath;
+            wxString theName;
             FSRef  theResRef;
             OSErr  theErr = noErr;
 
@@ -763,27 +762,24 @@ void wxStAppResource::OpenSharedLibraryResource(const void *initBlock)
 #endif
 
             // allocate copy to replace .dylib.* extension with .rsrc
-            theResPath = strdup(theLibPath);
-            if (theResPath != NULL) {
-                theName = strrchr(theResPath, '/');
-                if (theName == NULL) {
-                    // no directory elements in path
-                    theName = theResPath;
-                }
-                // find ".dylib" shared library extension
-                theExt = strstr(theName, ".dylib");
-                // overwrite extension with ".rsrc"
-                strcpy(theExt, ".rsrc");
+            if (theLibPath != NULL) {
+                theResPath = theLibPath;
+                // replace '_core' with '' in case of multi-lib build
+                theResPath.Replace(wxT("_core"), wxEmptyString);
+                // replace ".dylib" shared library extension with ".rsrc"
+                theResPath.Replace(wxT(".dylib"), wxT(".rsrc"));
+                // Find the begining of the filename
+                theName = theResPath.AfterLast('/');
 
 #if 0
                 wxLogDebug( wxT("wxMac resources file name is '%s'"),
-                            theResPath );
+                            theResPath.mb_str() );
 #endif
 
-                theErr = FSPathMakeRef((UInt8 *) theResPath, &theResRef, false);
+                theErr = FSPathMakeRef((UInt8 *) theResPath.mb_str(), &theResRef, false);
                 if (theErr != noErr) {
                     // try in current directory (using name only)
-                    theErr = FSPathMakeRef((UInt8 *) theName, &theResRef, false);
+                    theErr = FSPathMakeRef((UInt8 *) theName.mb_str(), &theResRef, false);
                 }
 
                 // open the resource file
@@ -795,22 +791,20 @@ void wxStAppResource::OpenSharedLibraryResource(const void *initBlock)
 #ifdef __WXDEBUG__
                     fprintf(stderr,
                             wxT("unable to open wxMac resource file '%s'\n"),
-                            theResPath );
+                            theResPath.mb_str() );
 #endif // __WXDEBUG__
                 }
 
-                // free duplicated resource file path
-                free(theResPath);
             }
         }
 #endif /* __DARWIN__ */
     }
-#endif /* WXMAKINGDLL */
+#endif /* WXMAKINGDLL_CORE */
 }
 
 void wxStAppResource::CloseSharedLibraryResource()
 {
-#ifdef WXMAKINGDLL
+#ifdef WXMAKINGDLL_CORE
     // Close the shared library resource file
     if (gSharedLibraryResource != kResFileNotOpened) {
 #ifdef __DARWIN__
@@ -826,10 +820,10 @@ void wxStAppResource::CloseSharedLibraryResource()
         }
         gSharedLibraryResource = kResFileNotOpened;
     }
-#endif /* WXMAKINGDLL */
+#endif /* WXMAKINGDLL_CORE */
 }
 
-#if defined(WXMAKINGDLL) && !defined(__DARWIN__)
+#if defined(WXMAKINGDLL_CORE) && !defined(__DARWIN__)
 
 // for shared libraries we have to manually get the correct resource
 // ref num upon initializing and releasing when terminating, therefore
@@ -853,7 +847,7 @@ pascal void __wxterminate(void)
     __terminate() ;
 }
 
-#endif /* WXMAKINGDLL && !__DARWIN__ */
+#endif /* WXMAKINGDLL_CORE && !__DARWIN__ */
 
 #if TARGET_CARBON
 
@@ -1022,7 +1016,7 @@ void wxApp::Dispatch()
 void wxApp::OnIdle(wxIdleEvent& event)
 {
     wxAppBase::OnIdle(event);
-    
+
     // If they are pending events, we must process them: pending events are
     // either events to the threads other than main or events posted with
     // wxPostEvent() functions
@@ -1150,7 +1144,7 @@ void wxApp::MacSuspend( bool convertClipboard )
 #if TARGET_CARBON
 #if 0 //  having problems right now with that
         if (!win->HasFlag(wxSTAY_ON_TOP))
-#endif  
+#endif
 #endif
             win->MacActivate( ((EventRecord*) MacGetCurrentEvent())->when , false ) ;
 
