@@ -1194,6 +1194,8 @@ void wxApp::MacHandleMouseDownEvent( EventRecord *ev )
 					}
 					else
 					{
+						if ( win )
+							win->MacMouseDown( ev , windowPart ) ;
 						UMASelectWindow( window ) ;
 					}
 				}
