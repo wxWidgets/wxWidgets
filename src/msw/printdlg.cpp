@@ -146,7 +146,7 @@ bool wxWindowsPrintNativeData::Ok() const
     return (m_devMode != NULL) ;
 }
 
-bool wxWindowsPrintNativeData::ConvertTo( wxPrintData &data )
+bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
 {
     HGLOBAL hDevMode = (HGLOBAL)(DWORD) m_devMode;
     HGLOBAL hDevNames = (HGLOBAL)(DWORD) m_devNames;
@@ -308,7 +308,7 @@ bool wxWindowsPrintNativeData::ConvertTo( wxPrintData &data )
     return true;
 }
 
-bool wxWindowsPrintNativeData::ConvertFrom( const wxPrintData &data )
+bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
 {
     HGLOBAL hDevMode = (HGLOBAL)(DWORD) m_devMode;
     HGLOBAL hDevNames = (HGLOBAL)(DWORD) m_devNames;

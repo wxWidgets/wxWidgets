@@ -240,7 +240,7 @@ void wxPrintData::operator=(const wxPrintData& data)
 // Is this data OK for showing the print dialog?
 bool wxPrintData::Ok() const
 {
-    m_nativeData->ConvertFrom( *this );
+    m_nativeData->TransferFrom( *this );
 
     return m_nativeData->Ok();
 }
@@ -318,7 +318,7 @@ void wxPrintDialogData::ConvertToNative()
 {
     wxWindowsPrintNativeData *data =
         (wxWindowsPrintNativeData *) m_printData.GetNativeData();
-    data->ConvertFrom( m_printData );
+    data->TransferFrom( m_printData );
 
     PRINTDLG *pd = (PRINTDLG*) m_printDlgData;
 
@@ -356,16 +356,16 @@ void wxPrintDialogData::ConvertToNative()
         GlobalFree(pd->hDevNames);
     }
 
-    pd->hDevMode = (HGLOBAL)(DWORD) data->GetNativeData();
+    pd->hDevMode = (HGLOBAL)(DWORD) data->GetDevMode();
 
-    data->SetNativeData((void*) NULL);
+    data->SetDevMode( (void*) NULL);
 
     // Shouldn't assert; we should be able to test Ok-ness at a higher level
     //wxASSERT_MSG( (pd->hDevMode), wxT("hDevMode must be non-NULL in ConvertToNative!"));
 
-    pd->hDevNames = (HGLOBAL)(DWORD) data->GetNativeDataDevNames();
+    pd->hDevNames = (HGLOBAL)(DWORD) data->GetDevNames();
 
-    data->SetNativeDataDevNames((void*) NULL);
+    data->SetDevNames( (void*) NULL);
 
     pd->hDC = (HDC) NULL;
     pd->nFromPage = (WORD)m_printFromPage;
@@ -427,30 +427,30 @@ void wxPrintDialogData::ConvertFromNative()
     // Pass the devmode data back to the wxPrintData structure where it really belongs.
     if (pd->hDevMode)
     {
-        if (data->GetNativeData())
+        if (data->GetDevMode())
         {
             // Make sure we don't leak memory
-            GlobalFree( (HGLOBAL)(DWORD) data->GetNativeData() );
+            GlobalFree( (HGLOBAL)(DWORD) data->GetDevMode() );
         }
-        data->SetNativeData( (void*)(long) pd->hDevMode );
+        data->SetDevMode( (void*)(long) pd->hDevMode );
         pd->hDevMode = NULL;
     }
 
     // Pass the devnames data back to the wxPrintData structure where it really belongs.
     if (pd->hDevNames)
     {
-        if (data->GetNativeDataDevNames())
+        if (data->GetDevNames())
         {
             // Make sure we don't leak memory
-            GlobalFree((HGLOBAL)(DWORD) data->GetNativeDataDevNames());
+            GlobalFree((HGLOBAL)(DWORD) data->GetDevNames());
         }
-        data->SetNativeDataDevNames((void*)(long) pd->hDevNames);
+        data->SetDevNames((void*)(long) pd->hDevNames);
         pd->hDevNames = NULL;
     }
 
     // Now convert the DEVMODE object, passed down from the PRINTDLG object,
     // into wxWidgets form.
-    data->ConvertTo( m_printData );
+    data->TransferTo( m_printData );
 
     m_printFromPage = pd->nFromPage;
     m_printToPage = pd->nToPage;
@@ -648,7 +648,7 @@ void wxPageSetupDialogData::ConvertToNative()
 {
     wxWindowsPrintNativeData *data =
         (wxWindowsPrintNativeData *) m_printData.GetNativeData();
-    data->ConvertFrom( m_printData );
+    data->TransferFrom( m_printData );
 
     PAGESETUPDLG *pd = (PAGESETUPDLG*) m_pageSetupData;
 
@@ -670,9 +670,9 @@ void wxPageSetupDialogData::ConvertToNative()
         pd->hDevMode = NULL;
     }
 
-    pd->hDevMode = (HGLOBAL) data->GetNativeData();
+    pd->hDevMode = (HGLOBAL) data->GetDevMode();
 
-    data->SetNativeData((void*) NULL);
+    data->SetDevMode( (void*) NULL );
 
     // Shouldn't assert; we should be able to test Ok-ness at a higher level
     //wxASSERT_MSG( (pd->hDevMode), wxT("hDevMode must be non-NULL in ConvertToNative!"));
@@ -687,9 +687,9 @@ void wxPageSetupDialogData::ConvertToNative()
         pd->hDevNames = NULL;
     }
 
-    pd->hDevNames = (HGLOBAL) data->GetNativeDataDevNames();
+    pd->hDevNames = (HGLOBAL) data->GetDevNames();
 
-    data->SetNativeDataDevNames((void*) NULL);
+    data->SetDevNames((void*) NULL);
 
 //        pd->hDevMode = GlobalAlloc(GMEM_MOVEABLE, sizeof(DEVMODE));
 
@@ -762,30 +762,30 @@ void wxPageSetupDialogData::ConvertFromNative()
     // Pass the devmode data back to the wxPrintData structure where it really belongs.
     if (pd->hDevMode)
     {
-        if (data->GetNativeData())
+        if (data->GetDevMode())
         {
             // Make sure we don't leak memory
-            GlobalFree((HGLOBAL) data->GetNativeData());
+            GlobalFree((HGLOBAL) data->GetDevMode());
         }
-        data->SetNativeData((void*) pd->hDevMode);
+        data->SetDevMode( (void*) pd->hDevMode );
         pd->hDevMode = NULL;
     }
 
-    data->ConvertTo( m_printData );
+    data->TransferTo( m_printData );
 
     // Pass the devnames data back to the wxPrintData structure where it really belongs.
     if (pd->hDevNames)
     {
-        if (data->GetNativeDataDevNames())
+        if (data->GetDevNames())
         {
             // Make sure we don't leak memory
-            GlobalFree((HGLOBAL) data->GetNativeDataDevNames());
+            GlobalFree((HGLOBAL) data->GetDevNames());
         }
-        data->SetNativeDataDevNames((void*) pd->hDevNames);
+        data->SetDevNames((void*) pd->hDevNames);
         pd->hDevNames = NULL;
     }
 
-    data->ConvertTo( m_printData );
+    data->TransferTo( m_printData );
 
     pd->Flags = PSD_MARGINS|PSD_MINMARGINS;
 

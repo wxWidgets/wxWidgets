@@ -286,7 +286,7 @@ WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
     wxWindowsPrintNativeData *data =
         (wxWindowsPrintNativeData *) printDataConst.GetNativeData();
         
-    data->ConvertFrom( printDataConst );
+    data->TransferFrom( printDataConst );
 
     wxChar* driverName = (wxChar*) NULL;
 
@@ -301,7 +301,7 @@ WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
 
     LPDEVMODE lpDevMode = (LPDEVMODE) NULL;
 
-    HGLOBAL hDevMode = (HGLOBAL)(DWORD) data->GetNativeData();
+    HGLOBAL hDevMode = (HGLOBAL)(DWORD) data->GetDevMode();
 
     if ( hDevMode )
         lpDevMode = (DEVMODE*) GlobalLock(hDevMode);

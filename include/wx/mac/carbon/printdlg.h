@@ -33,8 +33,8 @@ public:
     wxMacPrintNativeData() {};
     virtual ~wxMacPrintNativeData() {};
     
-    virtual bool ConvertTo( wxPrintData &data ) { return true; }
-    virtual bool ConvertFrom( const wxPrintData &data ) { return true; }
+    virtual bool TransferTo( wxPrintData &data ) { return true; }
+    virtual bool TransferFrom( const wxPrintData &data ) { return true; }
     
     virtual bool Ok() const { return true; }
 };

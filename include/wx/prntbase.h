@@ -121,8 +121,8 @@ public:
     wxPrintNativeDataBase();
     virtual ~wxPrintNativeDataBase() {}
     
-    virtual bool ConvertTo( wxPrintData &data ) = 0;
-    virtual bool ConvertFrom( const wxPrintData &data ) = 0; 
+    virtual bool TransferTo( wxPrintData &data ) = 0;
+    virtual bool TransferFrom( const wxPrintData &data ) = 0; 
     
     virtual bool Ok() const = 0;
     

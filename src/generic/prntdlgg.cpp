@@ -113,12 +113,12 @@ wxPostScriptPrintNativeData::~wxPostScriptPrintNativeData()
 {
 }
 
-bool wxPostScriptPrintNativeData::ConvertTo( wxPrintData &data )
+bool wxPostScriptPrintNativeData::TransferTo( wxPrintData &data )
 {
     return true;
 }
 
-bool wxPostScriptPrintNativeData::ConvertFrom( const wxPrintData &data )
+bool wxPostScriptPrintNativeData::TransferFrom( const wxPrintData &data )
 {
     return true;
 }
@@ -253,18 +253,16 @@ int wxGenericPrintDialog::ShowModal()
         // present, but there might be in future.
         // TransferDataFromWindow();
 
-        wxGenericPrintSetupDialog *genericPrintSetupDialog =
-            new wxGenericPrintSetupDialog(this, & m_printDialogData.GetPrintData());
-        int ret = genericPrintSetupDialog->ShowModal();
-        if ( ret != wxID_CANCEL )
+        wxGenericPrintSetupDialog genericPrintSetupDialog( this, &m_printDialogData.GetPrintData() );
+        int ret = genericPrintSetupDialog.ShowModal();
+        if (ret != wxID_CANCEL)
         {
             // Transfer settings to  the print dialog's print data.
-            m_printDialogData.GetPrintData() = genericPrintSetupDialog->GetPrintData();
+            m_printDialogData.GetPrintData() = genericPrintSetupDialog.GetPrintData();
         }
-        // genericPrintSetupDialog->Destroy();
 
-        // Restore the wxPrintData settings again (uncomment if any settings become common
-        // to both dialogs)
+        // Restore the wxPrintData settings again (uncomment if any settings become
+        // common to both dialogs)
         // TransferDataToWindow();
 
         return ret;

@@ -85,8 +85,8 @@ public:
     wxPostScriptPrintNativeData();
     virtual ~wxPostScriptPrintNativeData();
     
-    virtual bool ConvertTo( wxPrintData &data );
-    virtual bool ConvertFrom( const wxPrintData &data );
+    virtual bool TransferTo( wxPrintData &data );
+    virtual bool TransferFrom( const wxPrintData &data );
     
     virtual bool Ok() const { return true; }
     
