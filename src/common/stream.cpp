@@ -803,6 +803,9 @@ wxBufferedInputStream::wxBufferedInputStream(wxInputStream& s)
 
 wxBufferedInputStream::~wxBufferedInputStream()
 {
+  off_t unused_bytes=m_i_streambuf->GetBufferPos()-m_i_streambuf->GetBufferEnd();
+  m_parent_i_stream->SeekI(unused_bytes,wxFromCurrent);
+
   delete m_i_streambuf;
 }
 
