@@ -22,6 +22,8 @@
 
 #include "wx/file.h"
 
+#include "smile.xbm"
+
 // derived classes
 
 class MyFrame;
@@ -45,6 +47,7 @@ public:
     wxBitmap  *my_horse_pcx;
     wxBitmap  *my_horse_pnm;
     wxBitmap  *my_horse_tiff;
+    wxBitmap  *my_smile_xbm;
     wxBitmap  *my_square;
     wxBitmap  *my_anti;
 
@@ -101,6 +104,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     my_horse_pcx = (wxBitmap*) NULL;
     my_horse_pnm = (wxBitmap*) NULL;
     my_horse_tiff = (wxBitmap*) NULL;
+    my_smile_xbm = (wxBitmap*) NULL;
     my_square = (wxBitmap*) NULL;
     my_anti = (wxBitmap*) NULL;
 
@@ -176,6 +180,9 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     my_square = new wxBitmap( image.ConvertToBitmap() );
 
     CreateAntiAliasedBitmap();
+
+    my_smile_xbm = new wxBitmap( (const char*)smile_bits, smile_width,
+                                 smile_height, 1 );
 }
 
 MyCanvas::~MyCanvas()
@@ -187,6 +194,7 @@ MyCanvas::~MyCanvas()
     delete my_horse_bmp;
     delete my_horse_pcx;
     delete my_horse_tiff;
+    delete my_smile_xbm;
     delete my_square;
     delete my_anti;
 }
@@ -226,6 +234,15 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
   
   dc.DrawText( "TIFF handler", 30, 1515 );
   if (my_horse_tiff && my_horse_tiff->Ok()) dc.DrawBitmap( *my_horse_pnm, 30, 1530 );
+
+  dc.DrawText( "XBM bitmap", 30, 1745 );
+  dc.SetPen( *wxRED_PEN );
+  if (my_smile_xbm && my_smile_xbm->Ok()) {
+    dc.DrawBitmap( *my_smile_xbm, 30, 1760 );
+    dc.DrawText( "..after wxImage conversion", 150, 1745 );
+    wxImage i( *my_smile_xbm );
+    dc.DrawBitmap( i.ConvertToBitmap(), 150, 1760 );
+  }
 }
 
 void MyCanvas::CreateAntiAliasedBitmap()
@@ -308,8 +325,8 @@ MyFrame::MyFrame()
 
   m_canvas = new MyCanvas( this, -1, wxPoint(0,0), wxSize(10,10) );
 
-  // 500 width * 1300 height
-  m_canvas->SetScrollbars( 10, 10, 50, 180 );
+  // 500 width * 1900 height
+  m_canvas->SetScrollbars( 10, 10, 50, 190 );
 }
 
 void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
