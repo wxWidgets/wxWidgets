@@ -82,7 +82,7 @@ private:
       Finished             // finished, waiting to be removed from screen
    } m_state;
    /// the abort button (or NULL if none)
-   wxButton *m_btnAbort;
+   class wxButton *m_btnAbort;
    /// the maximum value
    int m_maximum;
 

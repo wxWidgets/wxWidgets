@@ -176,9 +176,7 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
        printout->GetTitle(),
        _("Printing..."),
        totalPages,
-       parent,
-       /* disable parent only */ true,
-       /* show abort button */ true);
+       parent );
     
     printout->OnBeginPrinting();
 
