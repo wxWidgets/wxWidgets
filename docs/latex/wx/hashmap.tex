@@ -135,6 +135,8 @@ map; it is similar to a {\tt value\_type*}}
 \twocolitem{wxHashMap::const\_iterator}{Used to enumerate all the elements
 in a constant hash map; it is similar to a {\tt const value\_type*}}
 \twocolitem{wxHashMap::size\_type}{Used for sizes}
+\twocolitem{wxHashMap::Insert\_Result}{The return value for
+\helpref{insert()}{wxhashmapinsert}}
 \end{twocollist}
 
 \wxheading{Iterators}
@@ -226,9 +228,12 @@ is returned (i.e. hashmap.find( non\_existent\_key ) == hashmap.end()).
 
 \membersection{wxHashMap::insert}\label{wxhashmapinsert}
 
-\func{void}{insert}{\param{const value\_type\&}{ v}}
+\func{Insert\_Result}{insert}{\param{const value\_type\&}{ v}}
 
-Inserts the given value in the hash map.
+Inserts the given value in the hash map. The return value is
+equivalent to a \texttt{std::pair<wxHashMap::iterator, bool>};
+the iterator points to the inserted element, the boolean value
+is \texttt{true} if \texttt{v} was actually inserted.
 
 \membersection{wxHashMap::operator[]}\label{wxhashmapbracket}
 
