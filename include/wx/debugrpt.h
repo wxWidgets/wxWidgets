@@ -54,11 +54,13 @@ public:
     // description is shown to the user in the report summary
     virtual void AddFile(const wxString& name, const wxString& description);
 
+#if wxUSE_STACKWALKER
     // add an XML file containing the current or exception context and the
     // stack trace
     bool AddCurrentContext() { return AddContext(Context_Current); }
     bool AddExceptionContext() { return AddContext(Context_Exception); }
     virtual bool AddContext(Context ctx);
+#endif
 
 #if wxUSE_CRASHREPORT
     // add a file with crash report
@@ -90,11 +92,13 @@ public:
     void RemoveFile(const wxString& name);
 
 protected:
+#if wxUSE_STACKWALKER
     // used by AddContext()
     virtual bool DoAddSystemInfo(wxXmlNode *nodeSystemInfo);
     virtual bool DoAddLoadedModules(wxXmlNode *nodeModules);
     virtual bool DoAddExceptionInfo(wxXmlNode *nodeContext);
     virtual void DoAddCustomContext(wxXmlNode * WXUNUSED(nodeRoot)) { }
+#endif
 
     // used by Process()
     virtual bool DoProcess();
