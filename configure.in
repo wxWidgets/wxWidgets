@@ -2314,17 +2314,24 @@ if test "$wxUSE_OPENGL" = "yes"; then
 
         AC_CHECK_HEADER(GL/gl.h,
             [
+                AC_MSG_CHECKING([for -lGL])
                 WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],[GL])
                 if test "$ac_find_libraries" != "" ; then
                     WX_LINK_PATH_EXIST([$ac_find_libraries],[$LDFLAGS])
                     LDFLAGS_GL="$LDFLAGS$ac_path_to_link"
                     OPENGL_LIBS="-lGL -lGLU"
+                    AC_MSG_RESULT([yes])
                 else
+                    AC_MSG_RESULT([no])
+                    AC_MSG_CHECKING([for -lMesaGL])
                     WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],[MesaGL])
                     if test "$ac_find_libraries" != "" ; then
                         WX_LINK_PATH_EXIST([$ac_find_libraries],[$LDFLAGS])
                         LDFLAGS_GL="$LDFLAGS$ac_path_to_link"
                         OPENGL_LIBS="-lMesaGL -lMesaGLU"
+                        AC_MSG_RESULT([yes])
+                    else
+                        AC_MSG_RESULT([no])
                     fi
                 fi
             ])
