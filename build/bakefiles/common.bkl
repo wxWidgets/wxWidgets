@@ -96,7 +96,7 @@
     <set var="LIBDIRNAME">
         <if cond="FORMAT=='autoconf'">$(top_builddir)lib</if>
         <if cond="FORMAT!='autoconf'">
-            $(WXTOPDIR)$(DIRSEP)lib$(DIRSEP)$(COMPILER)
+            $(WXTOPDIR)lib$(DIRSEP)$(COMPILER)
         </if>
     </set>
 
@@ -123,7 +123,7 @@
         <set var="wxid">$(wxwin.mk_wxid(id))</set>
         <define>__WX$(TOOLKIT)__</define>
         <define>$(WXUNIV_DEFINE)</define>
-        <include>$(SRCDIR)$(WXTOPDIR)/include</include>
+        <include>$(SRCDIR)/$(WXTOPDIR)include</include>
         <lib-path>$(LIBDIRNAME)</lib-path>
     </template>
 

@@ -76,7 +76,7 @@ def onSubmakefile(type, dirname, names):
     prefix = ''.join(['../' for i in range(0,depth)])
 
     args = {
-        'all':'-DWXTOPDIR=/%s..' % prefix,
+        'all':'-DWXTOPDIR=%s../' % prefix,
         'autoconf':'-DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4',
     }
     
