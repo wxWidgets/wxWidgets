@@ -3499,6 +3499,8 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
 
     if ( hcursor )
     {
+//        wxLogDebug("HandleSetCursor: Setting cursor %ld", (long) hcursor);
+
         ::SetCursor(hcursor);
 
         // cursor set, stop here
