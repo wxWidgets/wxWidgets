@@ -73,22 +73,6 @@ public:
 };
 
 //-----------------------------------------------------------------------------
-// wxVoidClientData
-//-----------------------------------------------------------------------------
-
-class wxVoidClientData : public wxClientData
-{
-public:
-    wxVoidClientData() { m_data = NULL; }
-    wxVoidClientData( void *data ) { m_data = data; }
-    void SetData( void* data ) { m_data = data; }
-    void *GetData() const { return m_data; }
-    
-private:
-    void  *m_data;
-};
-
-//-----------------------------------------------------------------------------
 // wxStringClientData
 //-----------------------------------------------------------------------------
 
@@ -195,7 +179,6 @@ public:
     
   virtual void SetClientData( void *data );
   virtual void *GetClientData();
-
   
   virtual void SetAcceleratorTable( const wxAcceleratorTable& accel );
   virtual wxAcceleratorTable *GetAcceleratorTable() { return &m_acceleratorTable; }
@@ -334,7 +317,8 @@ public:
   bool                 m_isEnabled;
   wxString             m_windowName;
   wxAcceleratorTable   m_acceleratorTable;
-  wxClientData        *m_clientData;
+  wxClientData        *m_clientObject;
+  void                *m_clientData;
 
   GtkWidget           *m_widget;
   GtkWidget           *m_wxwindow;

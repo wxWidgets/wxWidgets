@@ -86,7 +86,8 @@ public:
     
 // implementation
     
-  wxList  m_clientDataList;
+  wxList   m_clientDataList;
+  wxList   m_clientObjectList;
 
   void AppendCommon( const wxString &item );
   void ApplyWidgetStyle();

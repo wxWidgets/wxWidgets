@@ -296,6 +296,8 @@ public:
  wxEVT_COMMAND_COMBOBOX_SELECTED
 */
 
+class WXDLLEXPORT wxClientData;
+
 class WXDLLEXPORT wxCommandEvent: public wxEvent
 {
   DECLARE_DYNAMIC_CLASS(wxCommandEvent)
@@ -308,9 +310,13 @@ class WXDLLEXPORT wxCommandEvent: public wxEvent
    *
    */
 
-  // Set/Get listbox/choice client data
+  // Set/Get client data from controls
   inline void SetClientData(void* clientData) { m_clientData = clientData; }
   inline void *GetClientData() const { return m_clientData; }
+
+  // Set/Get client object from controls
+  inline void SetClientObject(wxClientData* clientObject) { m_clientObject = clientObject; }
+  inline void *GetClientObject() const { return m_clientObject; }
 
   // Get listbox selection if single-choice
   inline int GetSelection() const { return m_commandInt; }
@@ -334,8 +340,9 @@ class WXDLLEXPORT wxCommandEvent: public wxEvent
  public:
   char*             m_commandString; // String event argument
   int               m_commandInt;
-  long              m_extraLong;      // Additional information (e.g. select/deselect)
+  long              m_extraLong;     // Additional information (e.g. select/deselect)
   void*             m_clientData;    // Arbitrary client data
+  wxClientData*     m_clientObject;  // Arbitrary client object
 };
 
 // Scroll event class
@@ -979,7 +986,7 @@ public:
   // the child which has the focus currently (may be NULL - use 
   // wxWindow::FindFocus then)
   wxWindow* GetCurrentFocus() const { return (wxWindow *)m_clientData; }
-  void SetCurrentFocus(wxWindow *win) { m_clientData = (char *)win; }
+  void SetCurrentFocus(wxWindow *win) { m_clientData = (void *)win; }
 };
 
 /* TODO
@@ -1042,9 +1049,6 @@ class WXDLLEXPORT wxEvtHandler: public wxObject
 
   virtual bool OnClose(void);
 
-  inline char *GetClientData(void) const { return m_clientData; }
-  inline void SetClientData(char *clientData) { m_clientData = clientData; }
-  
   virtual bool ProcessEvent(wxEvent& event);
   virtual bool SearchEventTable(wxEventTable& table, wxEvent& event);
   
@@ -1063,7 +1067,6 @@ protected:
 protected:
     wxEvtHandler*     m_nextHandler;
     wxEvtHandler*     m_previousHandler;
-    char*             m_clientData;                   // Any user client data
     bool              m_enabled;                      // Is event handler enabled?
     wxList*           m_dynamicEvents;
 

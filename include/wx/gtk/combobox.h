@@ -106,6 +106,7 @@ public:
     
   bool     m_alreadySent;
   wxList   m_clientDataList;
+  wxList   m_clientObjectList;
 
   void AppendCommon( const wxString &item );
   GtkWidget* GetConnectWidget();

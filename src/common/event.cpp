@@ -104,6 +104,7 @@ wxCommandEvent::wxCommandEvent(wxEventType commandType, int theId)
 {
   m_eventType = commandType;
   m_clientData = (char *) NULL;
+  m_clientObject = (wxClientData *) NULL;
   m_extraLong = 0;
   m_commandInt = 0;
   m_id = theId;
@@ -262,7 +263,6 @@ wxKeyEvent::wxKeyEvent(wxEventType type)
 
 wxEvtHandler::wxEvtHandler(void)
 {
-  m_clientData = (char *) NULL;
   m_nextHandler = (wxEvtHandler *) NULL;
   m_previousHandler = (wxEvtHandler *) NULL;
   m_enabled = TRUE;

@@ -82,6 +82,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
         GtkWidget *list_item = gtk_list_item_new_with_label( choices[i] ); 
   
         m_clientDataList.Append( (wxObject*)NULL );
+        m_clientObjectList.Append( (wxObject*)NULL );
     
         gtk_container_add( GTK_CONTAINER(list), list_item );
     
@@ -148,24 +149,24 @@ void wxComboBox::AppendCommon( const wxString &item )
 
 void wxComboBox::Append( const wxString &item )
 {
-    m_clientDataList.Append( (wxObject*)NULL );
+    m_clientDataList.Append( (wxObject*) NULL );
+    m_clientObjectList.Append( (wxObject*) NULL );
   
     AppendCommon( item );
 }
 
 void wxComboBox::Append( const wxString &item, void *clientData )
 {
-    if (clientData)
-        m_clientDataList.Append( (wxObject*) new wxVoidClientData( clientData ) );
-    else
-        m_clientDataList.Append( (wxObject*)NULL );
+    m_clientDataList.Append( (wxObject*) clientData );
+    m_clientObjectList.Append( (wxObject*)NULL );
   
     AppendCommon( item );
 }
 
 void wxComboBox::Append( const wxString &item, wxClientData *clientData )
 {
-    m_clientDataList.Append( (wxObject*) clientData );
+    m_clientDataList.Append( (wxObject*) NULL );
+    m_clientObjectList.Append( (wxObject*) clientData );
   
     AppendCommon( item );
 }
@@ -177,13 +178,7 @@ void wxComboBox::SetClientData( int n, void* clientData )
     wxNode *node = m_clientDataList.Nth( n );
     if (!node) return;
   
-    wxClientData *cd = (wxClientData*) node->Data();
-    if (cd) delete cd;
-  
-    if (clientData)
-        node->SetData( (wxObject*) new wxVoidClientData(clientData) );
-    else
-        node->SetData( (wxObject*) NULL );
+    node->SetData( (wxObject*) clientData );
 }
 
 void* wxComboBox::GetClientData( int n )
@@ -193,23 +188,19 @@ void* wxComboBox::GetClientData( int n )
     wxNode *node = m_clientDataList.Nth( n );
     if (!node) return NULL;
     
-    wxVoidClientData *cd = (wxVoidClientData*) node->Data();
-    if (cd)
-        return cd->GetData();
-    else
-        return (void*) NULL;  
+    return node->Data();
 }
 
 void wxComboBox::SetClientObject( int n, wxClientData* clientData )
 {
     wxCHECK_RET( m_widget != NULL, "invalid combobox" );
     
-    wxNode *node = m_clientDataList.Nth( n );
+    wxNode *node = m_clientObjectList.Nth( n );
     if (!node) return;
   
     wxClientData *cd = (wxClientData*) node->Data();
     if (cd) delete cd;
-  
+    
     node->SetData( (wxObject*) clientData );
 }
 
@@ -230,13 +221,15 @@ void wxComboBox::Clear()
     GtkWidget *list = GTK_COMBO(m_widget)->list;
     gtk_list_clear_items( GTK_LIST(list), 0, Number() );
   
-    wxNode *node = m_clientDataList.First();
+    wxNode *node = m_clientObjectList.First();
     while (node)
     {
         wxClientData *cd = (wxClientData*)node->Data();
         if (cd) delete cd;
         node = node->Next();
     }
+    m_clientObjectList.Clear();
+    
     m_clientDataList.Clear();
 }
 
@@ -258,15 +251,17 @@ void wxComboBox::Delete( int n )
     gtk_list_remove_items( listbox, list );
     g_list_free( list );
   
-    wxNode *node = m_clientDataList.Nth( n );
-    if (!node)
-    {
-        wxFAIL_MSG( "wrong index" );
-    }
-    else
+    wxNode *node = m_clientObjectList.Nth( n );
+    if (node)
     {
         wxClientData *cd = (wxClientData*)node->Data();
         if (cd) delete cd;
+        m_clientObjectList.DeleteNode( node );
+    }
+    
+    node = m_clientDataList.Nth( n );
+    if (node)
+    {
         m_clientDataList.DeleteNode( node );
     }
 }

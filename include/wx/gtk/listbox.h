@@ -101,7 +101,8 @@ public:
   void ApplyWidgetStyle();
     
   GtkList   *m_list;
-  wxList     m_clientDataList;
+  wxList   m_clientDataList;
+  wxList   m_clientObjectList;
 };
 
 #endif // __GTKLISTBOXH__

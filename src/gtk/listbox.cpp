@@ -101,6 +101,9 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
     for (int i = 0; i < n; i++)
     {
+        m_clientDataList.Append( (wxObject*) NULL );
+        m_clientObjectList.Append( (wxObject*) NULL );
+  
         GtkWidget *list_item;
         list_item = gtk_list_item_new_with_label( choices[i] );
 
@@ -115,8 +118,6 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
         ConnectWidget( list_item );	
 	
-        m_clientDataList.Append( (wxObject*)NULL );
-
         gtk_widget_show( list_item );
     }
 
@@ -138,14 +139,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
 wxListBox::~wxListBox()
 {
-    wxNode *node = m_clientDataList.First();
-    while (node)
-    {
-        wxClientData *cd = (wxClientData*)node->Data();
-        if (cd) delete cd;
-        node = node->Next();
-    }
-    m_clientDataList.Clear();
+  Clear();
 }
 
 void wxListBox::AppendCommon( const wxString &item )
@@ -174,24 +168,24 @@ void wxListBox::AppendCommon( const wxString &item )
 
 void wxListBox::Append( const wxString &item )
 {
-    m_clientDataList.Append( (wxObject*)NULL );
+    m_clientDataList.Append( (wxObject*) NULL );
+    m_clientObjectList.Append( (wxObject*) NULL );
   
     AppendCommon( item );
 }
 
 void wxListBox::Append( const wxString &item, void *clientData )
 {
-    if (clientData)
-        m_clientDataList.Append( (wxObject*) new wxVoidClientData( clientData ) );
-    else
-        m_clientDataList.Append( (wxObject*)NULL );
+    m_clientDataList.Append( (wxObject*) clientData );
+    m_clientObjectList.Append( (wxObject*) NULL );
   
     AppendCommon( item );
 }
 
 void wxListBox::Append( const wxString &item, wxClientData *clientData )
 {
-    m_clientDataList.Append( (wxObject*) clientData );
+    m_clientObjectList.Append( (wxObject*) clientData );
+    m_clientDataList.Append( (wxObject*) NULL );
   
     AppendCommon( item );
 }
@@ -203,13 +197,7 @@ void wxListBox::SetClientData( int n, void* clientData )
     wxNode *node = m_clientDataList.Nth( n );
     if (!node) return;
   
-    wxClientData *cd = (wxClientData*) node->Data();
-    if (cd) delete cd;
-  
-    if (clientData)
-        node->SetData( (wxObject*) new wxVoidClientData(clientData) );
-    else
-        node->SetData( (wxObject*) NULL );
+    node->SetData( (wxObject*) clientData );
 }
 
 void* wxListBox::GetClientData( int n )
@@ -219,18 +207,14 @@ void* wxListBox::GetClientData( int n )
     wxNode *node = m_clientDataList.Nth( n );
     if (!node) return NULL;
     
-    wxVoidClientData *cd = (wxVoidClientData*) node->Data();
-    if (cd)
-        return cd->GetData();
-    else
-        return (void*) NULL;  
+    return node->Data();
 }
 
 void wxListBox::SetClientObject( int n, wxClientData* clientData )
 {
     wxCHECK_RET( m_widget != NULL, "invalid combobox" );
     
-    wxNode *node = m_clientDataList.Nth( n );
+    wxNode *node = m_clientObjectList.Nth( n );
     if (!node) return;
   
     wxClientData *cd = (wxClientData*) node->Data();
@@ -243,7 +227,7 @@ wxClientData* wxListBox::GetClientObject( int n )
 {
     wxCHECK_MSG( m_widget != NULL, (wxClientData*)NULL, "invalid combobox" );
   
-    wxNode *node = m_clientDataList.Nth( n );
+    wxNode *node = m_clientObjectList.Nth( n );
     if (!node) return (wxClientData*) NULL;
     
     return (wxClientData*) node->Data();
@@ -255,13 +239,15 @@ void wxListBox::Clear()
 
     gtk_list_clear_items( m_list, 0, Number() );
 
-    wxNode *node = m_clientDataList.First();
+    wxNode *node = m_clientObjectList.First();
     while (node)
     {
         wxClientData *cd = (wxClientData*)node->Data();
         if (cd) delete cd;
         node = node->Next();
     }
+    m_clientObjectList.Clear();
+    
     m_clientDataList.Clear();
 }
 
@@ -281,15 +267,17 @@ void wxListBox::Delete( int n )
     gtk_list_remove_items( m_list, list );
     g_list_free( list );
 
-    wxNode *node = m_clientDataList.Nth( n );
-    if (!node)
-    {
-        wxFAIL_MSG( "wrong index" );
-    }
-    else
+    wxNode *node = m_clientObjectList.Nth( n );
+    if (node)
     {
         wxClientData *cd = (wxClientData*)node->Data();
         if (cd) delete cd;
+        m_clientObjectList.DeleteNode( node );
+    }
+    
+    node = m_clientDataList.Nth( n );
+    if (node)
+    {
         m_clientDataList.DeleteNode( node );
     }
 }
