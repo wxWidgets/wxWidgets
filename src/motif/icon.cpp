@@ -49,6 +49,11 @@ wxIcon::wxIcon(char **data)
     (void) Create((void*) data, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
 }
 
+wxIcon::wxIcon(const char **data)
+{
+    (void) Create((void*) data, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
+}
+
 wxIcon::wxIcon(const wxString& icon_file, long flags,
                int desiredWidth, int desiredHeight)
                
