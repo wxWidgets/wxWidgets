@@ -59,3 +59,9 @@ bool wxStaticLine::Create( wxWindow *parent,
 
     return TRUE;
 }
+
+
+WXWidget wxStaticLine::GetMainWidget() const
+{
+    return m_statbox->GetMainWidget();
+}

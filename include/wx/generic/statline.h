@@ -46,6 +46,11 @@ public:
                  long style = wxLI_HORIZONTAL,
                  const wxString &name = wxStaticTextNameStr );
 
+    // it's necessary to override this wxWindow function because we
+    // will want to return the main widget for m_statbox
+    //
+    WXWidget GetMainWidget() const;
+        
 protected:
     // we implement the static line using a static box
     wxStaticBox *m_statbox;
