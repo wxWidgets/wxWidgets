@@ -410,7 +410,7 @@ bool wxGenericValidator::TransferFromWindow(void)
     wxSlider* pControl = (wxSlider*) m_validatorWindow;
     if (m_pInt)
     {
-      pControl->SetValue(*m_pInt) ;
+      *m_pInt = pControl->GetValue() ;
       return TRUE;
     }
   } else
