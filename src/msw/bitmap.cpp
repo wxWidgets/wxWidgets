@@ -1209,6 +1209,14 @@ void wxBitmap::UngetRawData(wxRawBitmapData *data)
 {
     wxCHECK_RET( data, _T("NULL pointer in wxBitmap::UngetRawData()") );
 
+    if ( !*data )
+    {
+        // invalid data, don't crash -- but don't assert neither as we're
+        // called automatically from wxRawBitmapData dtor and so there is no
+        // way to prevent this from happening
+        return;
+    }
+
     // AlphaBlend() wants to have premultiplied source alpha but wxRawBitmap
     // API uses normal, not premultiplied, colours, so adjust them here now
     wxRawBitmapIterator p(*data);
@@ -1224,9 +1232,9 @@ void wxBitmap::UngetRawData(wxRawBitmapData *data)
         {
             const unsigned alpha = p.Alpha();
 
-            p.Red() = (p.Red() * alpha) / 255;
-            p.Blue() = (p.Blue() * alpha) / 255;
-            p.Green() = (p.Green() * alpha) / 255;
+            p.Red() = (p.Red() * alpha + 127) / 255;
+            p.Blue() = (p.Blue() * alpha + 127) / 255;
+            p.Green() = (p.Green() * alpha + 127) / 255;
 
             ++p;
         }
