@@ -1,6 +1,10 @@
 #pragma once
 
-#include <Lists.h>
+#if defined(__UNIX__)
+  #include <HIToolbox/lists.h>
+#else
+  #include <Lists.h>
+#endif
 #include <stdlib.h> 
 
 #define kExtLDEFID 128	// resource id of our LDEF resource

@@ -45,6 +45,9 @@ class WXDLLEXPORT wxListBoxBase : public wxControlWithItems
 public:
     // all generic methods are in wxControlWithItems, except for the following
     // ones which are not yet implemented by wxChoice/wxCombobox
+#ifdef __WXMAC_X__
+    virtual ~wxListBoxBase() {}  // Added min for Mac X
+#endif
 
     void Insert(const wxString& item, int pos)
         { DoInsert(item, pos); }

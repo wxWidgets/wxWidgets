@@ -13,6 +13,7 @@
 #pragma implementation "bitmap.h"
 #endif
 
+#include "wx/wx.h"
 #include "wx/setup.h"
 #include "wx/utils.h"
 #include "wx/palette.h"
@@ -22,7 +23,11 @@
 
 extern "C" 
 {
+#ifdef __UNIX__
+    #include "xpm/xpm.h"
+#else
 	#include "xpm.h"
+#endif
 } ;
 
 #if !USE_SHARED_LIBRARIES
@@ -30,12 +35,16 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxGDIObject)
 IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
 #endif
 
-#include <PictUtils.h>
+#ifdef __UNIX__
+    #include <QD/PictUtils.h>
+#else
+    #include <PictUtils.h>
+#endif
 
 CTabHandle wxMacCreateColorTable( int numColors )
 {
 	CTabHandle newColors; /* Handle to the new color table */
-	short index; /* Index into the table of colors */
+	
 	/* Allocate memory for the color table */
 	newColors = (CTabHandle)NewHandleClear( sizeof (ColorTable) +
 	sizeof (ColorSpec) * (numColors - 1) );
@@ -63,11 +72,11 @@ void wxMacSetColorTableEntry( CTabHandle newColors , int index , int red , int g
 	(**newColors).ctTable[index].rgb.blue = 0 ; // someBlueValue;
 }
 
-GWorldPtr wxMacCreateGWorld( int height , int width , int depth )
+GWorldPtr wxMacCreateGWorld( int width , int height , int depth )
 {
 	OSErr err = noErr ;
 	GWorldPtr port ;
-	Rect rect = { 0 , 0 , width , height } ;
+	Rect rect = { 0 , 0 , height , width } ;
 	
 	if ( depth < 0 )
 	{
@@ -80,7 +89,7 @@ GWorldPtr wxMacCreateGWorld( int height , int width , int depth )
 		return port ;
 	}
 	return NULL ;
-} 
+}
 
 void wxMacDestroyGWorld( GWorldPtr gw )
 {
@@ -127,7 +136,7 @@ wxBitmapRefData::~wxBitmapRefData()
 		default :
 			// unkown type ?
 			break ;
-	} ;
+	}
 	
   if (m_bitmapMask)
   {
@@ -162,8 +171,8 @@ wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits
     M_BITMAPDATA->m_numColors = 0;
 		if ( no_bits == 1 )
 		{
-	    M_BITMAPDATA->m_bitmapType = kMacBitmapTypeGrafWorld ;
-	    M_BITMAPDATA->m_hBitmap = wxMacCreateGWorld( the_width , the_height , no_bits ) ;
+	    	M_BITMAPDATA->m_bitmapType = kMacBitmapTypeGrafWorld ;
+	    	M_BITMAPDATA->m_hBitmap = wxMacCreateGWorld( the_width , the_height , no_bits ) ;
 			M_BITMAPDATA->m_ok = (M_BITMAPDATA->m_hBitmap != NULL ) ;
 	
 			CGrafPtr 	origPort ;
@@ -180,16 +189,16 @@ wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits
 			if ( the_width % 16 )
 			{
 				linesize += 2 ;
-			} ;
+			}
 			
 			RGBColor colors[2] = { 
 				{ 0xFFFF , 0xFFFF , 0xFFFF } ,
 				{ 0, 0 , 0 } 
 				} ;
 			
-			for( int y = 0 ; y < the_height ; ++y , linestart += linesize )
+			for ( int y = 0 ; y < the_height ; ++y , linestart += linesize )
 			{
-				for( int x = 0 ; x < the_width ; ++x )
+				for ( int x = 0 ; x < the_width ; ++x )
 				{
 					int index = x / 8 ;
 					int bit = x % 8 ;
@@ -211,7 +220,7 @@ wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits
 	   }
 	   else
 	   {
-				//multicolor BITMAPs not yet implemented
+         wxFAIL_MSG(wxT("multicolor BITMAPs not yet implemented"));
 	   }
 
     if ( wxTheBitmapList )
@@ -243,6 +252,11 @@ wxBitmap::wxBitmap(const wxString& filename, long type)
 }
 
 wxBitmap::wxBitmap(const char **data)
+{
+    (void) Create((void *)data, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
+}
+
+wxBitmap::wxBitmap(char **data)
 {
     (void) Create((void *)data, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
 }
@@ -596,8 +610,12 @@ bool  wxPICTResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, lo
 {
 	Str255 theName ;
 	
-	strcpy( (char*) theName , name ) ;
-	c2pstr( (char*) theName ) ;
+#if TARGET_CARBON
+	c2pstrcpy( (StringPtr) theName , name ) ;
+#else
+	strcpy( (char *) theName , name ) ;
+	c2pstr( (char *)theName ) ;
+#endif
 	
 	PicHandle thePict = (PicHandle ) GetNamedResource( 'PICT' , theName ) ;
 	if ( thePict )

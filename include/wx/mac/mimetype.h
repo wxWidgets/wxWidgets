@@ -25,6 +25,7 @@ public :
 
     // implement containing class functions
     wxFileType *GetFileTypeFromExtension(const wxString& ext);
+    wxFileType *GetOrAllocateFileTypeFromExtension(const wxString& ext) ;
     wxFileType *GetFileTypeFromMimeType(const wxString& mimeType);
 
     size_t EnumAllFileTypes(wxArrayString& mimetypes);
@@ -34,6 +35,12 @@ public :
     bool ReadMimeTypes(const wxString& filename) { return TRUE; }
 
     void AddFallback(const wxFileTypeInfo& ft) { m_fallbacks.Add(ft); }
+
+    // create a new filetype association
+    wxFileType *Associate(const wxFileTypeInfo& ftInfo);
+
+    // create a new filetype with the given name and extension
+    wxFileType *CreateFileType(const wxString& filetype, const wxString& ext);
 
 private:
     wxArrayFileTypeInfo m_fallbacks;
@@ -60,6 +67,11 @@ public:
     bool GetPrintCommand(wxString *printCmd,
                          const wxFileType::MessageParameters&) const
         { return GetCommand(printCmd, "print"); }
+
+    size_t GetAllCommands(wxArrayString * verbs, wxArrayString * commands,
+                          const wxFileType::MessageParameters& params) const;
+
+    bool Unassociate();
 
 private:
     // helper function

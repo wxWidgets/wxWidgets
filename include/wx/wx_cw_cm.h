@@ -25,7 +25,7 @@
 			#endif
 			*/
 	#else
-    #define	USE_PRECOMPILED_MAC_HEADERS	1  /*Set to 0 if you don't want to use precompiled MacHeaders*/		
+        #define	USE_PRECOMPILED_MAC_HEADERS	1  /*Set to 0 if you don't want to use precompiled MacHeaders*/		
     #endif
 // automatically includes MacHeaders
 #elif (__MWERKS__ >= 0x0900) && __INTEL__

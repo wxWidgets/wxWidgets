@@ -22,8 +22,10 @@
 #pragma implementation "menuitem.h"
 #endif
 
+#include "wx/app.h"
 #include "wx/menu.h"
 #include "wx/menuitem.h"
+#include "wx/window.h"
 #include "wx/log.h"
 #include "wx/utils.h"
 
@@ -362,7 +364,7 @@ wxWindow *wxMenu::GetWindow() const
     if ( m_invokingWindow != NULL )
         return m_invokingWindow;
     else if ( m_menuBar != NULL)
-        return m_menuBar->GetFrame();
+        return (wxWindow *) m_menuBar->GetFrame();
 
     return NULL;
 }
@@ -460,6 +462,7 @@ bool wxMenu::MacMenuSelect( wxEvtHandler* handler, long when , int macMenuId, in
 			return true ;
 		}
 	}
+#ifndef __WXMAC_X__
 	else if ( macMenuId == kHMHelpMenuID )
 	{
 		int menuItem = formerHelpMenuItems ;
@@ -508,6 +511,7 @@ bool wxMenu::MacMenuSelect( wxEvtHandler* handler, long when , int macMenuId, in
 			}
 	  }
 	}
+#endif // __WXMAC_X__
 
   for (pos = 0, node = GetMenuItems().First(); node; node = node->Next(), pos++) 
   {	
@@ -902,8 +906,11 @@ void wxMenuBar::MacMenuSelect(wxEvtHandler* handler, long when , int macMenuId, 
 	{		
 	  for (int i = 0; i < m_menus.GetCount() ; i++)
 	  {
-	  	if ( m_menus[i]->MacGetMenuId() == macMenuId || 
+	  	if ( m_menus[i]->MacGetMenuId() == macMenuId
+#ifndef __WXMAC_X__
+		     || 
 	  		( macMenuId == kHMHelpMenuID && ( m_titles[i] == "?" || m_titles[i] == "&?"  || m_titles[i] == wxApp::s_macHelpMenuTitleName ) )
+#endif
 	  		)
 	  	{
 	  		if ( m_menus[i]->MacMenuSelect( handler , when , macMenuId , macMenuItemNum ) )

@@ -14,6 +14,7 @@
 #endif
 
 #include "wx/stubs/textctrl.h"
+#include "wx/treebase.h"
 #include "wx/stubs/treectrl.h"
 
 #if !USE_SHARED_LIBRARY

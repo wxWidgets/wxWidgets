@@ -36,14 +36,15 @@
 #include "wx/dir.h"
 #include "wx/filefn.h"          // for wxPathExists()
 
-#include <windows.h>
+#ifndef __WXMAC_X__
+  #include <windows.h>
+#endif
 
-#ifdef __WXMAC__
-
-#include "morefile.h"
-#include "moreextr.h"
-#include "fullpath.h"
-#include "fspcompa.h"
+#if defined(__WXMAC__) && !defined(__UNIX__)
+  #include "morefile.h"
+  #include "moreextr.h"
+  #include "fullpath.h"
+  #include "fspcompa.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -116,8 +117,12 @@ wxDirData::wxDirData(const wxString& dirname)
 	m_CPB.hFileInfo.ioVRefNum = fsspec.vRefNum ;
 	m_CPB.hFileInfo.ioNamePtr = m_name ;
 	m_index = 0 ;
-	
+
+#ifdef __WXMAC_X__
+	// TODO: what are we supposed to do for Mac OS X
+#else
 	FSpGetDirectoryID( &fsspec , &m_dirId , &m_isDir ) ;
+#endif
 }
 
 wxDirData::~wxDirData()
@@ -131,9 +136,12 @@ void wxDirData::Rewind()
 
 bool wxDirData::Read(wxString *filename)
 {
-	if ( !m_isDir )
-		return FALSE ;
+    if ( !m_isDir )
+        return FALSE ;
 		
+#if TARGET_CARBON
+	char c_name[256] ;
+#endif
     wxString result;
 
 	short err = noErr ;
@@ -146,8 +154,13 @@ bool wxDirData::Read(wxString *filename)
 		err = PBGetCatInfoSync((CInfoPBPtr)&m_CPB);
 		if ( err != noErr )
 			break ;
-			
+
+#if TARGET_CARBON
+		p2cstrcpy( c_name, m_name ) ;
+		strcpy( (char *)m_name, c_name);
+#else
 		p2cstr( m_name ) ;
+#endif
 		if ( ( m_CPB.dirInfo.ioFlAttrib & ioDirMask) != 0 && (m_flags & wxDIR_DIRS) ) //  we have a directory
 			break ;
 			

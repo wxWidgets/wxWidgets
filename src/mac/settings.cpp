@@ -14,6 +14,7 @@
 #endif
 
 #include "wx/settings.h"
+#include "wx/gdicmn.h"
 
 wxColour wxSystemSettings::GetSystemColour(int index)
 {

@@ -21,11 +21,13 @@
 #include "wx/colour.h"
 #include "wx/gdicmn.h"
 
-#if defined( __WXMAC__  ) && defined( TARGET_CARBON )
-#include <PMApplication.h>
+#if defined(__WXMAC__) && defined(TARGET_CARBON)
+  #if !defined(__UNIX__)
+    #include <PMApplication.h>
+  #endif
 #endif
 
-#if (defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXPM__)) && wxUSE_POSTSCRIPT
+#if (defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXPM__) || defined(__WXMAC__)) && wxUSE_POSTSCRIPT
 class WXDLLEXPORT wxPrintSetupData;
 #endif
 
@@ -169,7 +171,7 @@ class WXDLLEXPORT wxPrintData: public wxObject
     void operator=(const wxPrintData& data);
 
     // For compatibility
-#if (defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXPM__)) && wxUSE_POSTSCRIPT
+#if (defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXPM__) || defined(__WXMAC__)) && wxUSE_POSTSCRIPT
     void operator=(const wxPrintSetupData& setupData);
 #endif
 
@@ -181,7 +183,7 @@ class WXDLLEXPORT wxPrintData: public wxObject
     void SetNativeData(void* data) { m_devMode = data; }
     void* GetNativeDataDevNames() const { return m_devNames; }
     void SetNativeDataDevNames(void* data) { m_devNames = data; }
-#elif defined( __WXMAC__)
+#elif defined(__WXMAC__)
   void ConvertToNative();
   void ConvertFromNative();
 #endif
@@ -286,7 +288,7 @@ class WXDLLEXPORT wxPrintDialogData: public wxObject
     void ConvertFromNative();
     void SetOwnerWindow(wxWindow* win);
     void* GetNativeData() const { return m_printDlgData; }
-#elif defined( __WXMAC__)
+#elif defined(__WXMAC__)
   void ConvertToNative();
   void ConvertFromNative();
 #endif
@@ -375,7 +377,7 @@ public:
     void ConvertFromNative();
     void SetOwnerWindow(wxWindow* win);
     void* GetNativeData() const { return m_pageSetupData; }
-#elif defined( __WXMAC__)
+#elif defined(__WXMAC__)
   void ConvertToNative();
   void ConvertFromNative();
 #endif

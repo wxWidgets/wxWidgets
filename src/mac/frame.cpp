@@ -14,7 +14,7 @@
 #endif
 
 #include "wx/frame.h"
-#include "wx/mac/statusbr.h"
+#include "wx/statusbr.h"
 #include "wx/toolbar.h"
 #include "wx/menuitem.h"
 #include "wx/menu.h"

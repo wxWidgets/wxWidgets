@@ -22,6 +22,9 @@
 class WXDLLEXPORT wxDialogBase : public wxPanel
 {
 public:
+#ifdef __WXMAC_X__
+    ~wxDialogBase() {}  // Added min for Mac X
+#endif
     // the modal dialogs have a return code - usually the id of the last
     // pressed button
     void SetReturnCode(int returnCode) { m_returnCode = returnCode; }

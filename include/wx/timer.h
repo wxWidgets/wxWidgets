@@ -49,6 +49,10 @@ public:
     void SetOwner(wxEvtHandler *owner, int id = -1)
         { m_owner = owner; m_idTimer = id; }
 
+#ifdef __WXMAC_X__
+    virtual ~wxTimerBase() {} // Added min for Mac X
+#endif
+
     // working with the timer
     // ----------------------
 

@@ -102,7 +102,8 @@ bool wxFontEnumeratorHelper::SetEncoding(wxFontEncoding encoding)
 void wxFontEnumeratorHelper::DoEnumerate()
 {
 	MenuHandle	menu ;
-	Str255		name ;
+	Str255		p_name ;
+	char        c_name[256] ;
 	short 		lines ;
 	
 	menu = NewMenu( 32000 , "\pFont" )  ;
@@ -111,11 +112,16 @@ void wxFontEnumeratorHelper::DoEnumerate()
 
 	for ( int i = 1 ; i < lines+1  ; i ++ )
 	{
-		GetMenuItemText( menu , i , name ) ;
-		p2cstr( name ) ;
-		/*
-		
-		    if ( m_fixedOnly )
+	    GetMenuItemText( menu , i , p_name ) ;
+#if TARGET_CARBON
+	    p2cstrcpy( c_name, p_name ) ;
+#else
+		p2cstr( p_name ) ;
+	    strcpy( c_name, (char *)p_name ) ;
+#endif
+	    /*
+	      
+	      if ( m_fixedOnly )
 	    {
 	        // check that it's a fixed pitch font (there is *no* error here, the
 	        // flag name is misleading!)
@@ -136,7 +142,7 @@ void wxFontEnumeratorHelper::DoEnumerate()
 	    }
 	
 		*/
-		m_fontEnum->OnFacename( name ) ;
+		m_fontEnum->OnFacename( c_name ) ;
 	}
 	DisposeMenu( menu ) ;
 }

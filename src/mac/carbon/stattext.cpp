@@ -15,6 +15,8 @@
 
 #include "wx/app.h"
 #include "wx/stattext.h"
+#include "wx/dc.h"
+#include "wx/dcclient.h"
 
 #include <stdio.h>
 

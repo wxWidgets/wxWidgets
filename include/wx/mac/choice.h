@@ -49,6 +49,9 @@ class WXDLLEXPORT wxChoice: public wxControl
            const wxString& name = wxChoiceNameStr);
 
   virtual void Append(const wxString& item);
+  // Added min Append and GetClientData
+  virtual void Append(const wxString& item, void *client_data);
+  virtual void *GetClientData(int index) const;
   virtual void Delete(int n);
   virtual void Clear();
   virtual int GetSelection() const ;

@@ -13,6 +13,7 @@
 #pragma implementation "app.h"
 #endif
 
+#include "wx/window.h"
 #include "wx/frame.h"
 #include "wx/app.h"
 #include "wx/utils.h"
@@ -29,6 +30,7 @@
 #include "wx/module.h"
 #include "wx/memory.h"
 #include "wx/tooltip.h"
+#include "wx/menu.h"
 #if wxUSE_WX_RESOURCES
 #include "wx/resource.h"
 #endif
@@ -37,18 +39,24 @@
 
 // mac
 
-#if __option(profile)
+#ifndef __UNIX__
+  #if __option(profile)
 	#include <profiler.h>
+  #endif
 #endif
 
 #include "apprsrc.h"
 
-#include <wx/mac/uma.h>
-#include <wx/mac/macnotfy.h>
+#include "wx/mac/uma.h"
+#include "wx/mac/macnotfy.h"
 
 #if wxUSE_SOCKETS
-#include <OpenTransport.h>
-#include <OpenTptInternet.h>
+    #ifdef __APPLE__
+        #include <OT/OpenTransport.h>
+    #else
+        #include <OpenTransport.h>
+        #include <OpenTptInternet.h>
+    #endif
 #endif
 
 extern char *wxBuffer;
@@ -327,10 +335,25 @@ bool wxApp::Initialize()
   UMAInitToolbox( 4 ) ;
 	UMAShowWatchCursor() ;
 
-	AEInstallEventHandler( kCoreEventClass , kAEOpenDocuments , NewAEEventHandlerProc(AEHandleODoc) , (long) wxTheApp , FALSE ) ;
-	AEInstallEventHandler( kCoreEventClass , kAEOpenApplication , NewAEEventHandlerProc(AEHandleOApp) , (long) wxTheApp , FALSE ) ;
-	AEInstallEventHandler( kCoreEventClass , kAEPrintDocuments , NewAEEventHandlerProc(AEHandlePDoc) , (long) wxTheApp , FALSE ) ;
-	AEInstallEventHandler( kCoreEventClass , kAEQuitApplication , NewAEEventHandlerProc(AEHandleQuit) , (long) wxTheApp  , FALSE ) ;
+#ifdef __UNIX__
+    AEInstallEventHandler( kCoreEventClass , kAEOpenDocuments ,   AEHandleODoc ,
+                           (long) wxTheApp , FALSE ) ;
+    AEInstallEventHandler( kCoreEventClass , kAEOpenApplication , AEHandleOApp ,
+                           (long) wxTheApp , FALSE ) ;
+    AEInstallEventHandler( kCoreEventClass , kAEPrintDocuments ,  AEHandlePDoc ,
+                           (long) wxTheApp , FALSE ) ;
+    AEInstallEventHandler( kCoreEventClass , kAEQuitApplication , AEHandleQuit ,
+                           (long) wxTheApp , FALSE ) ;
+#else
+	AEInstallEventHandler( kCoreEventClass , kAEOpenDocuments ,   NewAEEventHandlerProc(AEHandleODoc) ,
+						   (long) wxTheApp , FALSE ) ;
+	AEInstallEventHandler( kCoreEventClass , kAEOpenApplication , NewAEEventHandlerProc(AEHandleOApp) ,
+						   (long) wxTheApp , FALSE ) ;
+	AEInstallEventHandler( kCoreEventClass , kAEPrintDocuments ,  NewAEEventHandlerProc(AEHandlePDoc) ,
+						   (long) wxTheApp , FALSE ) ;
+	AEInstallEventHandler( kCoreEventClass , kAEQuitApplication , NewAEEventHandlerProc(AEHandleQuit) ,
+						   (long) wxTheApp , FALSE ) ;
+#endif
 
 
   // test the minimal configuration necessary
@@ -384,13 +407,17 @@ bool wxApp::Initialize()
 	  return FALSE ;
   }
 
-#if __option(profile)
+#ifndef __UNIX__
+  #if __option(profile)
 	ProfilerInit( collectDetailed, bestTimeBase , 20000 , 40 ) ;
+  #endif
 #endif
 
   // now avoid exceptions thrown for new (bad_alloc)
 
+#ifndef __UNIX__
   std::__throws_bad_alloc = FALSE ;
+#endif
 
 	s_macCursorRgn = ::NewRgn() ;
 
@@ -422,8 +449,9 @@ bool wxApp::Initialize()
   wxBitmap::InitStandardHandlers();
 
   wxModule::RegisterModules();
-  if (!wxModule::InitializeModules())
+  if (!wxModule::InitializeModules()) {
      return FALSE;
+  }
 
   wxWinMacWindowList = new wxList(wxKEY_INTEGER);
   wxWinMacControlList = new wxList(wxKEY_INTEGER);
@@ -483,9 +511,11 @@ void wxApp::CleanUp()
 
   wxClassInfo::CleanUpClasses();
 
-#if __option(profile)
-	ProfilerDump( "\papp.prof" ) ;
-	ProfilerTerm() ;
+#ifndef __UNIX__
+  #if __option(profile)
+  ProfilerDump( "\papp.prof" ) ;
+  ProfilerTerm() ;
+  #endif
 #endif
 
   delete wxTheApp;
@@ -532,8 +562,9 @@ int wxEntry( int argc, char *argv[] , bool enterLoop )
     wxDebugContext::SetCheckpoint();
 #endif
 #endif
-    if (!wxApp::Initialize())
+    if (!wxApp::Initialize()) {
         return 0;
+    }
    // create the application object or ensure that one already exists
     if (!wxTheApp)
     {
@@ -601,7 +632,7 @@ int wxEntry( int argc, char *argv[] , bool enterLoop )
 	wxApp::CleanUp();
 	
 	return retValue;
-};
+}
 
 // Static member initialization
 wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NULL;
@@ -1038,6 +1069,7 @@ void wxApp::MacHandleMouseDownEvent( EventRecord *ev )
 			s_lastMouseDown = 0;
 			break;
 		case inGrow:
+		  {
 				int growResult = GrowWindow(window , ev->where, &screenBits.bounds);
 				if (growResult != 0)
 				{
@@ -1057,6 +1089,7 @@ void wxApp::MacHandleMouseDownEvent( EventRecord *ev )
 					}
 				}
 				s_lastMouseDown = 0;
+		  }
 			break;
 		case inZoomIn:
 		case inZoomOut:
@@ -1464,7 +1497,8 @@ void wxApp::MacHandleOSEvent( EventRecord *ev )
 
 				wxWindow* currentMouseWindow = NULL ;
 
-				MacGetWindowFromPoint( wxPoint( ev->where.h , ev->where.v ) , &currentMouseWindow ) ;
+				wxWindow::MacGetWindowFromPoint( wxPoint( ev->where.h , ev->where.v ) ,
+												 &currentMouseWindow ) ;
 
 				if ( currentMouseWindow != wxWindow::s_lastMouseWindow )
 				{

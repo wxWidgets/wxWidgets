@@ -78,6 +78,9 @@ class WXDLLEXPORT wxFontBase : public wxGDIObject
 {
 public:
     // creator function
+#ifdef __WXMAC_X__
+    virtual ~wxFontBase() {}  // Added min for Mac X
+#endif
 
     // from the font components
     static wxFont *New(

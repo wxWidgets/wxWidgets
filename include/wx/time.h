@@ -123,17 +123,16 @@ public:
             { _T("%H:%M:%S"),    _T("%H:%M")    }   // wx24h
         };
 
-        static wxChar s_bufTime[128];
+        wxStrncpy(ms_bufTime, m_time.Format(formats[ms_Format][ms_Precision]),
+                  WXSIZEOF(ms_bufTime));
 
-        wxStrncpy(s_bufTime, m_time.Format(formats[ms_Format][ms_Precision]),
-                  WXSIZEOF(s_bufTime));
-
-        return s_bufTime;
+        return ms_bufTime;
     }
 
 private:
     static tFormat      ms_Format;
     static tPrecision   ms_Precision;
+    static wxChar       ms_bufTime[128];
 
 #if 0 // old wxTime members unused any more
     clockTy    sec;        /* seconds since 1/1/1901 */

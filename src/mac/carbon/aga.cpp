@@ -1,5 +1,5 @@
-#include <wx/mac/uma.h>
-#include <wx/mac/aga.h>
+#include "wx/mac/uma.h"
+#include "wx/mac/aga.h"
 
 #if !TARGET_CARBON
 
@@ -13,26 +13,27 @@ pascal SInt32 AGAListControlDefProc (SInt16 procID, ControlHandle theControl, Co
 pascal SInt32 AGAEditTextDefProc (SInt16 procID, ControlHandle theControl, ControlDefProcMessage message, SInt32 param) ;
 pascal SInt32 AGAStaticGroupBoxTextDefProc (SInt16 procID, ControlHandle theControl, ControlDefProcMessage message, SInt32 param) ;
 
-#define B														13
-#define	W														0
+#define B   13
+#define	W   0
 
 SInt16 kAGARootControlProcID ;
 int gAGABackgroundColor = 0 ;
 
-const RGBColor gAGAColorArray[] = {	{0xFFFF, 0xFFFF, 0xFFFF},		//	W
-					{0xEEEE, 0xEEEE, 0xEEEE}, 	//	1
-					{0xDDDD, 0xDDDD, 0xDDDD}, 	//	2
-					{0xCCCC, 0xCCCC, 0xCCCC}, 	//	3
-					{0xBBBB, 0xBBBB, 0xBBBB}, 	//	4
-					{0xAAAA, 0xAAAA, 0xAAAA}, 	//	5
-					{0x9999, 0x9999, 0x9999}, 	//	6
-					{0x8888, 0x8888, 0x8888},		//	7
-					{0x7777, 0x7777, 0x7777},		//	8
-					{0x6666, 0x6666, 0x6666},		//	9
-					{0x5555, 0x5555, 0x5555},		//	10
-					{0x4444, 0x4444, 0x4444},		//	11
-					{0x2222, 0x2222, 0x2222},		//	12
-					{0x0000, 0x0000, 0x0000}		//	B
+const RGBColor gAGAColorArray[] = {
+  {0xFFFF, 0xFFFF, 0xFFFF},	//	W
+  {0xEEEE, 0xEEEE, 0xEEEE}, 	//	1
+  {0xDDDD, 0xDDDD, 0xDDDD}, 	//	2
+  {0xCCCC, 0xCCCC, 0xCCCC}, 	//	3
+  {0xBBBB, 0xBBBB, 0xBBBB}, 	//	4
+  {0xAAAA, 0xAAAA, 0xAAAA}, 	//	5
+  {0x9999, 0x9999, 0x9999}, 	//	6
+  {0x8888, 0x8888, 0x8888},	//	7
+  {0x7777, 0x7777, 0x7777},	//	8
+  {0x6666, 0x6666, 0x6666},	//	9
+  {0x5555, 0x5555, 0x5555},	//	10
+  {0x4444, 0x4444, 0x4444},	//	11
+  {0x2222, 0x2222, 0x2222},	//	12
+  {0x0000, 0x0000, 0x0000}	//	B
 };
 
 char LAGADefaultOutline_mCorners[4][5][5] =	{
@@ -2552,7 +2553,8 @@ void AGAApplyThemeBackground(ThemeBackgroundKind 	inKind,
 {
 }
 
-#endif
+#endif // !TARGET_CARBON
+
 AGAPortHelper::AGAPortHelper( GrafPtr newport) 
 {
 	GetPort( &port ) ;

@@ -21,12 +21,15 @@
 #define UMA_USE_8_6 1 
 #endif
 
-#if defined(__POWERPC__) || defined(__MACH__)
-#define UMA_USE_APPEARANCE 1
-#define UMA_USE_WINDOWMGR 1
+#if defined(__POWERPC__) || defined(__APPLE__)
+    #define UMA_USE_APPEARANCE 1
+    #define UMA_USE_WINDOWMGR 1
+    #if defined(__APPLE__)
+        #include <Carbon/Carbon.h>
+    #endif
 #else
-#define UMA_USE_APPEARANCE 0
-#define UMA_USE_WINDOWMGR 0
+    #define UMA_USE_APPEARANCE 0
+    #define UMA_USE_WINDOWMGR 0
 #endif
 
 #if !UMA_USE_8_6 && UMA_USE_WINDOWMGR

@@ -58,6 +58,9 @@ class WXDLLEXPORT wxFrameBase : public wxWindow
 public:
     // construction
     wxFrameBase();
+#ifdef __WXMAC_X__
+    virtual ~wxFrameBase() {}  // Added min for Mac X
+#endif
 
     wxFrame *New(wxWindow *parent,
                  wxWindowID id,

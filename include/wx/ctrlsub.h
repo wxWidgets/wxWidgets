@@ -29,6 +29,9 @@ class WXDLLEXPORT wxControlWithItems : public wxControl
 {
 public:
     wxControlWithItems() { m_clientDataItemsType = ClientData_None; }
+#ifdef __WXMAC_X__
+    virtual ~wxControlWithItems() {}  // Added min for Mac X
+#endif
 
     // adding items
     // ------------

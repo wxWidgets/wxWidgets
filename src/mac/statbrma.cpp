@@ -17,7 +17,9 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include "wx/mac/statusbr.h"
+#include "wx/statusbr.h"
+#include "wx/dc.h"
+#include "wx/dcclient.h"
 
 #if     !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxStatusBarMac, wxStatusBarGeneric);
@@ -33,7 +35,7 @@ END_EVENT_TABLE()
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// wxStatusBarXX class
+// wxStatusBarMac class
 // ----------------------------------------------------------------------------
 
 wxStatusBarMac::wxStatusBarMac()

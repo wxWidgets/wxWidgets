@@ -14,6 +14,7 @@
 #endif
 
 #include "wx/button.h"
+#include "wx/panel.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
@@ -53,15 +54,33 @@ void wxButton::SetDefault()
         btnOldDefault = panel->GetDefaultItem();
         panel->SetDefaultItem(this);
     }
-  
-  if ( btnOldDefault && btnOldDefault->m_macControl )
-  {
-		UMASetControlData( btnOldDefault->m_macControl , kControlButtonPart , kControlPushButtonDefaultTag , sizeof( Boolean ) , (char*)((Boolean)0) ) ;
-  }
-  if ( m_macControl )
-  {
-		UMASetControlData( m_macControl , kControlButtonPart , kControlPushButtonDefaultTag , sizeof( Boolean ) , (char*)((Boolean)1) ) ;
-  }
+
+#ifdef __UNIX__
+	Boolean inData;
+	if ( btnOldDefault && btnOldDefault->m_macControl )
+	{
+  		inData = 0;
+		UMASetControlData( btnOldDefault->m_macControl , kControlButtonPart ,
+						   kControlPushButtonDefaultTag , sizeof( Boolean ) , (char*)(&inData) ) ;
+	}
+	if ( m_macControl )
+	{
+  		inData = 1;
+		UMASetControlData( m_macControl , kControlButtonPart ,
+						   kControlPushButtonDefaultTag , sizeof( Boolean ) , (char*)(&inData) ) ;
+	}
+#else
+	if ( btnOldDefault && btnOldDefault->m_macControl )
+	{
+		UMASetControlData( btnOldDefault->m_macControl , kControlButtonPart ,
+						   kControlPushButtonDefaultTag , sizeof( Boolean ) , (char*)((Boolean)0) ) ;
+	}
+	if ( m_macControl )
+	{
+		UMASetControlData( m_macControl , kControlButtonPart ,
+						   kControlPushButtonDefaultTag , sizeof( Boolean ) , (char*)((Boolean)1) ) ;
+	}
+#endif
 }
 
 wxSize wxButton::DoGetBestSize() const

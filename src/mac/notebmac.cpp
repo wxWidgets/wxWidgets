@@ -260,8 +260,12 @@ bool wxNotebook::InsertPage(int nPage,
 		
 		tie.version = 0 ;
 		tie.iconSuiteID = 0 ;
-		strcpy( (char*) tie.name , strText ) ;
-		c2pstr( (char*) tie.name ) ;	
+#if TARGET_CARBON
+		c2pstrcpy( (StringPtr) tie.name , strText ) ;
+#else
+		strcpy( (char *) tie.name , strText ) ;
+		c2pstr( (char *) tie.name ) ;
+#endif
 		SetControlData( m_macControl, nPage + 1, kControlTabInfoTag , sizeof( ControlTabInfoRec) , (char*) &tie ) ;
 		SetControlData( m_macControl, m_nSelection + 1, kControlTabEnabledFlagTag, sizeof( Boolean ), (Ptr)&enabled );
 

@@ -1,8 +1,12 @@
-#include <wx/mac/uma.h>
-#include <wx/mac/aga.h>
+#include "wx/defs.h"
+#include "wx/mac/uma.h"
+#include "wx/mac/aga.h"
 
-
-#include "Navigation.h"
+#ifdef __UNIX__
+  #include <NavigationServices/Navigation.h>
+#else
+  #include <Navigation.h>
+#endif
 
 // init
 
@@ -75,10 +79,12 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls )
 #endif // UMA_USE_WINDOWMGR
 #endif
 		
+#ifndef __UNIX__
 	if ( sUMAHasWindowManager )
 		InitFloatingWindows() ;
 	else
 		InitWindows();
+#endif
 
 	if ( NavServicesAvailable() )
 	{
@@ -387,13 +393,22 @@ void 			UMASetWTitleC( WindowRef inWindowRef , const char *title )
 	Str255	ptitle ;
 	strncpy( (char*)ptitle , title , 96 ) ;
 	ptitle[96] = 0 ;
+#if TARGET_CARBON
+	c2pstrcpy( ptitle, (char *)ptitle ) ;
+#else
 	c2pstr( (char*)ptitle ) ;
+#endif
 	SetWTitle( inWindowRef , ptitle ) ;
 }
+
 void 			UMAGetWTitleC( WindowRef inWindowRef , char *title ) 
 {
 	GetWTitle( inWindowRef , (unsigned char*)title ) ;
+#if TARGET_CARBON
+	p2cstrcpy( title, (unsigned char *)title ) ;
+#else
 	p2cstr( (unsigned char*)title ) ;
+#endif
 }
 
 void			UMAShowWindow( WindowRef inWindowRef ) 
@@ -1354,18 +1369,18 @@ void UMAHighlightAndActivateWindow( WindowRef inWindowRef , bool inActivate )
 OSStatus UMADrawThemePlacard( const Rect *inRect , ThemeDrawState inState ) 
 {
 #if UMA_USE_APPEARANCE
-	if ( UMAHasAppearance() )
-	{
-   		::DrawThemePlacard( inRect , inState ) ;
-   }
-   else
+  if ( UMAHasAppearance() )
+  {
+    ::DrawThemePlacard( inRect , inState ) ;
+  }
+  else
 #endif
 #if !TARGET_CARBON
-   {
-   }
+  {
+  }
 #else
-	{
-	}
+  {
+  }
 #endif
 }
 

@@ -27,6 +27,9 @@
 #include <string.h>
 #include <stdarg.h>
 
+#ifndef __UNIX__
+// defined in unix/utilsunx.cpp for Mac OS X
+
 // get full hostname (with domain name if possible)
 bool wxGetFullHostName(wxChar *buf, int maxSize)
 {
@@ -123,6 +126,7 @@ void wxFatalError(const wxString& msg, const wxString& title)
 {
     // TODO
 }
+#endif // !__UNIX__
 
 // Emit a beeeeeep
 void wxBell()
@@ -275,11 +279,13 @@ wxString wxMacFindFolder( short 					vol,
 	return strDir ;
 }
 
+#ifndef __UNIX__
 char *wxGetUserHome (const wxString& user)
 {
     // TODO
     return NULL;
 }
+#endif
 
 // Check whether this window wants to process messages, e.g. Stop button
 // in long calculations.
@@ -328,13 +334,13 @@ void wxDisplaySize(int *width, int *height)
 
     *width = screenBits.bounds.right - screenBits.bounds.left  ;
     *height = screenBits.bounds.bottom - screenBits.bounds.top ; 
- #if TARGET_CARBON
+#if TARGET_CARBON
  	SInt16 mheight ;
  	GetThemeMenuBarHeight( &mheight ) ;
      *height -= mheight ;
 #else
      *height -= LMGetMBarHeight() ;
- #endif
+#endif
 }
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)

@@ -72,7 +72,7 @@ wxTipWindow::wxTipWindow(wxWindow *parent,
 {
     // set colours
     SetForegroundColour(*wxBLACK);
-#if !defined(__WXPM__)
+#if !defined(__WXPM__) && !defined(__WXMAC__)
     SetBackgroundColour(wxColour(0xc3ffff));
 #else
     // What is 0xc3ffff, try some legable documentation for those of us who don't memorize hex codes??

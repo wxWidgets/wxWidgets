@@ -484,6 +484,9 @@ class WXDLLEXPORT wxList : public wxObjectList
 {
 public:
     wxList(int key_type = wxKEY_NONE) : wxObjectList((wxKeyType)key_type) { }
+#ifdef __WXMAC_X__
+   ~wxList() {}   // Added min for Mac X
+#endif
 
     wxList& operator=(const wxList& list)
         { return (wxList&)wxListBase::operator=(list); }

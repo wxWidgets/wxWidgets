@@ -7,6 +7,8 @@
 #include "wx/gtk/wave.h"
 #elif defined(__WXQT__)
 #include "wx/qt/wave.h"
+#elif defined(__WXMAC__)
+#include "wx/mac/wave.h"
 #elif defined(__WXPM__)
 #include "wx/os2/wave.h"
 #elif defined(__WXMAC__)

@@ -19,6 +19,27 @@
 
 #if wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__)
 
+#define OTUNIXERRORS 1
+#ifdef __UNIX__
+  #include <CarbonCore/CarbonCore.h>
+  #include <OT/OpenTransport.h>
+  #include <OT/OpenTransportProviders.h>
+
+  #ifndef FALSE
+    #define FALSE 0
+  #endif
+  #ifndef TRUE
+    #define TRUE 1
+  #endif
+#else
+  #include <OpenTransport.h>
+  #include <OpenTransportProviders.h>
+  #include <OpenTptInternet.h>
+#endif
+#if TARGET_CARBON
+  #define OTAssert( str , cond ) /* does not exists in Carbon */
+#endif
+
 #include <assert.h>
 #include <errno.h>
 #include <string.h>
@@ -27,13 +48,6 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <ctype.h>
-#define OTUNIXERRORS 1
-#include <OpenTransport.h>
-#include <OpenTransportProviders.h>
-#include <OpenTptInternet.h>
-#if TARGET_CARBON
-	#define OTAssert( str , cond ) /* does not exists in Carbon */
-#endif
 #include <utime.h>
 
 /*
@@ -68,7 +82,9 @@ void wxCYield() ;
 #define qDebug2 1
 extern pascal void OTDebugStr(const char* str);
 #endif
-#include <OTDebug.h>
+#ifndef __UNIX__
+  #include <OTDebug.h>
+#endif
 InetSvcRef gInetSvcRef = 0 ;
 
 
@@ -353,7 +369,6 @@ GSocketError GSocket_SetPeer(GSocket *socket, GAddress *address)
 GAddress *GSocket_GetLocal(GSocket *socket)
 {
   GAddress *address = NULL ;
-  InetAddress addr;
   GSocketError err;
   InetAddress loc ;
 
@@ -1588,6 +1603,15 @@ void _GSocket_Internal_Proc(unsigned long e , void* d )
     if (cback2 != NULL)
       (cback2)(socket, event2, data2);
 
+}
+
+/* Hack added for Mac OS X */
+GSocketError GAddress_UNIX_GetPath(GAddress *addr, char *path, size_t buf)
+{
+}
+
+GSocketError GAddress_UNIX_SetPath(GAddress *addr, const char *path)
+{
 }
 
 #endif  /* wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__) */

@@ -14,10 +14,18 @@
 #endif
 
 #include "wx/control.h"
+#include "wx/panel.h"
+#include "wx/app.h"
 #include "wx/notebook.h"
 #include "wx/tabctrl.h"
 #include "wx/radiobox.h"
 #include "wx/spinbutt.h"
+#include "wx/scrolbar.h"
+#include "wx/button.h"
+#include "wx/dialog.h"
+#include "wx/statbox.h"
+#include "wx/sizer.h"
+#include "wx/stattext.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)
@@ -61,7 +69,11 @@ wxControl::wxControl()
 
 	if ( wxMacLiveScrollbarActionUPP == NULL )
 	{
+#ifdef __UNIX__
+        wxMacLiveScrollbarActionUPP = NewControlActionUPP( wxMacLiveScrollbarActionProc );
+#else
 		wxMacLiveScrollbarActionUPP = NewControlActionProc( wxMacLiveScrollbarActionProc ) ;
+#endif
 	}
 }
 
@@ -115,9 +127,12 @@ void wxControl::SetLabel(const wxString& title)
 		else
 			label = title ;
 		
-		strcpy( (char*) maclabel , label ) ;
-		c2pstr( (char*) maclabel ) ;
-	
+#if TARGET_CARBON
+		c2pstrcpy( (StringPtr) maclabel , label ) ;
+#else
+		strcpy( (char *) maclabel , label ) ;
+		c2pstr( (char *) maclabel ) ;
+#endif
 		::SetControlTitle( m_macControl , maclabel ) ;
 	}
 }
@@ -209,13 +224,19 @@ void wxControl::MacPreControlCreate( wxWindow *parent, wxWindowID id, wxString l
 	outBounds->bottom = outBounds->top + m_height - 2 * m_macVerticalBorder;
 	outBounds->right = outBounds->left + m_width - 2 * m_macHorizontalBorder ;
 
-	strcpy( (char*) maclabel , label ) ;
+	char c_text[255];
+	strcpy( c_text , label ) ;
 	if( wxApp::s_macDefaultEncodingIsPC )
 	{
-		wxMacConvertFromPCForControls( (char*) maclabel ) ;
+		wxMacConvertFromPCForControls( c_text ) ;
 	}
 
-	c2pstr( (char*) maclabel ) ;
+#if TARGET_CARBON
+	c2pstrcpy( (StringPtr) maclabel , c_text ) ;
+#else
+	strcpy( (char *) maclabel , c_text ) ;
+	c2pstr( (char *) maclabel ) ;
+#endif
 }
 
 void wxControl::MacPostControlCreate()

@@ -24,9 +24,9 @@
 #endif
 
 #include "wx/dcprint.h"
-#include "math.h"
+#include "wx/msgdlg.h"
+#include <math.h>
 #include "wx/mac/uma.h"
-
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxPrinterDC, wxDC)

@@ -44,6 +44,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxTime, wxObject)
 
 wxTime::tFormat    wxTime::ms_Format    = wxTime::wx12h;
 wxTime::tPrecision wxTime::ms_Precision  = wxTime::wxStdMinSec;
+wxChar             wxTime::ms_bufTime[128];
 #endif
 
 IMPLEMENT_ABSTRACT_CLASS(wxVariantData, wxObject)

@@ -7,6 +7,7 @@
  * -------------------------------------------------------------------------
  */
 
+#include "wx/wx.h"
 #include "wx/mac/macnotfy.h"
 
 const short kMaxEvents = 1000 ;

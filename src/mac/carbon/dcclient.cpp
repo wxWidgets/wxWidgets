@@ -16,6 +16,7 @@
 #include "wx/dcclient.h"
 #include "wx/dcmemory.h"
 #include "wx/region.h"
+#include "wx/window.h"
 #include <math.h>
 
 //-----------------------------------------------------------------------------
@@ -113,7 +114,7 @@ wxPaintDC::wxPaintDC(wxWindow *window)
 	m_macPort = UMAGetWindowPort( windowref ) ;
 	MacSetupPort() ;
  	m_ok = TRUE ;
-	long x , y ,w , h ;
+	wxCoord x , y ,w , h ;
 	window->GetUpdateRegion().GetBox( x , y , w , h ) ;
 	m_minY = m_minX =  0;
 	wxSize size = window->GetSize() ;

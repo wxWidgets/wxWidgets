@@ -116,6 +116,8 @@ extern const wxChar WXDLLEXPORT *wxEmptyString = &g_strEmpty.dummy;
     #if defined(__VISUALC__) || (defined(__MINGW32__) && wxUSE_NORLANDER_HEADERS)
         #define wxVsnprintfA     _vsnprintf
     #endif
+#elif defined(__WXMAC__)
+    #define wxVsnprintfA       vsnprintf
 #else   // !Windows
     #ifdef HAVE_VSNPRINTF
         #define wxVsnprintfA       vsnprintf
@@ -130,9 +132,7 @@ extern const wxChar WXDLLEXPORT *wxEmptyString = &g_strEmpty.dummy;
 
     #if defined(__VISUALC__)
         #pragma message("Using sprintf() because no snprintf()-like function defined")
-    #elif defined(__GNUG__) && !defined(__UNIX__)
-        #warning "Using sprintf() because no snprintf()-like function defined"
-    #elif defined(__MWERKS__)
+    #elif defined(__GNUG__)
         #warning "Using sprintf() because no snprintf()-like function defined"
     #endif //compiler
 #endif // no vsnprintf
@@ -1410,7 +1410,7 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
 
   // NB: wxVsnprintf() may return either less than the buffer size or -1 if
   //     there is not enough place depending on implementation
-  int iLen = wxVsnprintfA(szScratch, WXSIZEOF(szScratch), pszFormat, argptr);
+  int iLen = wxVsnprintfA(szScratch, WXSIZEOF(szScratch), (char *)pszFormat, argptr);
   if ( iLen != -1 ) {
     // the whole string is in szScratch
     *this = szScratch;

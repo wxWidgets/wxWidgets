@@ -15,6 +15,7 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/choice.h"
+#include "wx/menu.h"
 #include "wx/mac/uma.h"
 
 #if !USE_SHARED_LIBRARY
@@ -32,8 +33,8 @@ wxChoice::~wxChoice()
 bool wxChoice::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos,
            const wxSize& size,
-		   		int n, const wxString choices[],
-		   		long style,
+		   int n, const wxString choices[],
+		   long style,
            const wxValidator& validator,
            const wxString& name)
 {
@@ -73,6 +74,15 @@ void wxChoice::Append(const wxString& item)
 	AppendMenu( m_macPopUpMenuHandle , label ) ;
 	m_strings.Add( item ) ;
 	SetControlMaximum( m_macControl , Number()) ;
+}
+
+void wxChoice::Append(const wxString &item, void *client_data)
+{
+}
+
+void *wxChoice::GetClientData(int index) const
+{
+   return NULL;
 }
 
 void wxChoice::Delete(int n)

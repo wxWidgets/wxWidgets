@@ -14,6 +14,7 @@
 #endif
 
 #include "wx/combobox.h"
+#include "wx/menu.h"
 #include "wx/mac/uma.h"
 
 #if !USE_SHARED_LIBRARY
@@ -176,10 +177,16 @@ int wxComboBox::FindString(const wxString& s) const
 
 wxString wxComboBox::GetString(int n) const
 {
-	Str255 text ;
-    ::GetMenuItemText( m_macPopUpMenuHandle , n+1 , text ) ;
-    p2cstr( text ) ;
-    return wxString( text );
+    Str255 p_text ;
+    char   c_text[255];
+    ::GetMenuItemText( m_macPopUpMenuHandle , n+1 , p_text ) ;
+#if TARGET_CARBON
+    p2cstrcpy( c_text, p_text ) ;
+#else
+	p2cstr( p_text ) ;
+    strcpy( c_text, (char *) p_text ) ;
+#endif
+    return wxString( c_text );
 }
 
 wxString wxComboBox::GetStringSelection() const

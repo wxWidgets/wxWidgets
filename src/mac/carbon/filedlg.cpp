@@ -19,7 +19,9 @@
 #include "wx/filedlg.h"
 #include "wx/intl.h"
 
-#include "PLStringFuncs.h"
+#if !defined(__UNIX__)
+  #include "PLStringFuncs.h"
+#endif
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxFileDialog, wxDialog)
@@ -27,13 +29,19 @@ IMPLEMENT_CLASS(wxFileDialog, wxDialog)
 
 // begin wxmac
 
-#include "Navigation.h"
+#if defined(__UNIX__)
+  #include <NavigationServices/Navigation.h>
+#else
+  #include <Navigation.h>
+#endif
 
-#include "morefile.h"
-#include "moreextr.h"
-#include "fullpath.h"
-#include "fspcompa.h"
-#include "PLStringFuncs.h"
+#ifndef __UNIX__
+  #include "morefile.h"
+  #include "moreextr.h"
+  #include "fullpath.h"
+  #include "fspcompa.h"
+  #include "PLStringFuncs.h"
+#endif
 
 extern bool gUseNavServices ;
 
@@ -497,11 +505,19 @@ int wxFileDialog::ShowModal()
 		Str255				prompt ;
 		Str255				filename ;
 
+#if TARGET_CARBON
+		c2pstrcpy((StringPtr)prompt, m_message) ;
+#else
 		strcpy((char *)prompt, m_message) ;
 		c2pstr((char *)prompt ) ;
-	
+#endif
+#if TARGET_CARBON
+		c2pstrcpy((StringPtr)filename, m_fileName) ;
+#else
 		strcpy((char *)filename, m_fileName) ;
 		c2pstr((char *)filename ) ;
+#endif
+
 		#if !TARGET_CARBON
 		
 		StandardPutFile( prompt , filename , &reply ) ;
@@ -525,11 +541,18 @@ int wxFileDialog::ShowModal()
 		Str255				prompt ;
 		Str255				path ;
 
+#if TARGET_CARBON
+		c2pstrcpy((StringPtr)prompt, m_message) ;
+#else
 		strcpy((char *)prompt, m_message) ;
 		c2pstr((char *)prompt ) ;
-	
-			strcpy((char *)path, m_dir ) ;
+#endif
+#if TARGET_CARBON
+		c2pstrcpy((StringPtr)path, m_dir ) ;
+#else
+		strcpy((char *)path, m_dir ) ;
 		c2pstr((char *)path ) ;
+#endif
 
 		StandardFileReply	reply ;
 		FileFilterYDUPP crossPlatformFileFilterUPP = 0 ;
@@ -601,11 +624,18 @@ int wxFileDialog::ShowModal()
 			}
 		}
 		
+#if TARGET_CARBON
+		c2pstrcpy((StringPtr)mNavOptions.message, m_message) ;
+#else
 		strcpy((char *)mNavOptions.message, m_message) ;
 		c2pstr((char *)mNavOptions.message ) ;
-
+#endif
+#if TARGET_CARBON
+		c2pstrcpy((StringPtr)mNavOptions.savedFileName, m_fileName) ;
+#else
 		strcpy((char *)mNavOptions.savedFileName, m_fileName) ;
 		c2pstr((char *)mNavOptions.savedFileName ) ;
+#endif
 
 		if ( m_dialogStyle & wxSAVE )
 		{

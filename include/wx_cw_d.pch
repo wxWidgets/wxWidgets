@@ -17,6 +17,7 @@
 #define __WXDEBUG__ 1
 #define wxUSE_GUI 1
 #define OLDP2C 1
+#define ACCESSOR_CALLS_ARE_FUNCTIONS 1
 #include "wx/wx_cw_cm.h"
 #ifdef __WXMSW__
     #include <windows.h>

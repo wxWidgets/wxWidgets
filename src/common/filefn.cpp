@@ -114,11 +114,11 @@
 
 extern wxChar *wxBuffer;
 
-#ifdef __WXMAC__
-#include "morefile.h"
-#include "moreextr.h"
-#include "fullpath.h"
-#include "fspcompa.h"
+#if defined(__WXMAC__) && !defined(__UNIX__)
+    #include "morefile.h"
+    #include "moreextr.h"
+    #include "fullpath.h"
+    #include "fspcompa.h"
 #endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxPathList, wxStringList)
@@ -817,7 +817,7 @@ wxString wxPathOnly (const wxString& path)
 // and back again - or we get nasty problems with delimiters.
 // Also, convert to lower case, since case is significant in UNIX.
 
-#ifdef __WXMAC__
+#if defined(__WXMAC__) && !defined(__UNIX__)
 
 static char sMacFileNameConversion[ 1000 ] ;
 
@@ -1058,7 +1058,7 @@ wxCopyFile (const wxString& file1, const wxString& file2)
             return FALSE;
     }
 
-#ifndef __VISAGECPP__
+#if !defined(__VISAGECPP__) && !defined(__WXMAC__)
 // no chmod in VA.  SHould be some permission API for HPFS386 partitions however
     if ( chmod(file2, fbuf.st_mode) != 0 )
     {

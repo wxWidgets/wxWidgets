@@ -40,15 +40,15 @@ class wxPNGReader
 protected:
   int filetype;
   char filename[255];
-  ImagePointerType RawImage;  		//  Image data
+  ImagePointerType RawImage;  	//  Image data
 
-  int Width, Height;   		//  Dimensions
-  int Depth;	 				// (bits x pixel)
-  int ColorType;				// Bit 1 = Palette used
-									// Bit 2 = Color used
-									// Bit 3 = Alpha used
+  int Width, Height;   	        //  Dimensions
+  int Depth;	 		// (bits x pixel)
+  int ColorType;		// Bit 1 = Palette used
+				// Bit 2 = Color used
+				// Bit 3 = Alpha used
 
-  long EfeWidth;	 			// Efective Width
+  long EfeWidth;	 	// Efective Width
 
   GWorldPtr lpbi;
   int bgindex;
@@ -58,7 +58,7 @@ friend class wxPNGReaderIter;
 public:
   wxPNGReader(void);
   wxPNGReader (char* ImageFileName);     // Read an image file
-  ~wxPNGReader ();
+  virtual ~wxPNGReader ();
 
   void Create(int width, int height, int deep, int colortype=-1);
 

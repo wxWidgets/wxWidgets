@@ -398,7 +398,7 @@ wxLogStderr::wxLogStderr(FILE *fp)
         m_fp = fp;
 }
 
-#if defined(__WXMAC__) 
+#if defined(__WXMAC__) && !defined(__UNIX__)
 #define kDebuggerSignature		'MWDB'
 
 static Boolean FindProcessBySignature(OSType signature, ProcessInfoRec* info)
@@ -494,7 +494,7 @@ void wxLogStderr::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
     str += wxT("\r\n") ;
     OutputDebugString(str.c_str());
 #endif // MSW
-#if defined(__WXMAC__) && wxUSE_GUI
+#if defined(__WXMAC__) && !defined(__WXMAC_X__) && wxUSE_GUI
 	Str255 pstr ;
 	strcpy( (char*) pstr , str.c_str() ) ;
 	strcat( (char*) pstr , ";g" ) ;
@@ -525,7 +525,7 @@ void wxLogStderr::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 		DebugStr(pstr);
 	#endif
 	}
-#endif // MSW
+#endif // Mac
 }
 
 // ----------------------------------------------------------------------------

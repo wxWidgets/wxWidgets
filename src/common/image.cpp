@@ -1398,12 +1398,16 @@ wxImage::wxImage( const wxBitmap &bitmap )
 
 #ifdef __WXMAC__
 
-#include <PictUtils.h>
+#ifdef __UNIX__
+  #include <QD/PictUtils.h>
+#else
+  #include <PictUtils.h>
+#endif
 
 extern CTabHandle wxMacCreateColorTable( int numColors ) ;
 extern void wxMacDestroyColorTable( CTabHandle colors ) ;
 extern void wxMacSetColorTableEntry( CTabHandle newColors , int index , int red , int green ,  int blue ) ;
-extern GWorldPtr wxMacCreateGWorld( int height , int width , int depth ) ;
+extern GWorldPtr wxMacCreateGWorld( int width , int height , int depth ) ;
 extern void wxMacDestroyGWorld( GWorldPtr gw ) ;
 
 wxBitmap wxImage::ConvertToBitmap() const

@@ -164,6 +164,7 @@ private:
 //    { ((wxBaseArray *)this)->operator=((const wxBaseArray&)src);
 // so using a temporary variable instead.
 // ----------------------------------------------------------------------------
+// __MAC_X__ added min ~name() below for compiling Mac X
 #define  _WX_DEFINE_ARRAY(T, name, classexp)                        \
 typedef int (CMPFUNC_CONV *CMPFUNC##T)(T *pItem1, T *pItem2);       \
 classexp name : public wxBaseArray                                  \
@@ -176,6 +177,7 @@ public:                                                             \
     if ( type > sizelong )                                          \
       { wxFAIL_MSG( _WX_ERROR_SIZEOF ); }                           \
   }                                                                 \
+  ~name() {}                                                        \
                                                                     \
   name& operator=(const name& src)                                  \
     { wxBaseArray* temp = (wxBaseArray*) this;                      \

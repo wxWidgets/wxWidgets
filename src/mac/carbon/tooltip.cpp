@@ -15,8 +15,10 @@
 
 #if wxUSE_TOOLTIPS
 
+#include "wx/app.h"
 #include "wx/window.h"
 #include "wx/tooltip.h"
+#include "wx/timer.h"
 #include "wx/geometry.h"
 #include "wx/mac/aga.h"
 #include "wx/mac/uma.h"

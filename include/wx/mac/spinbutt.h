@@ -33,7 +33,7 @@ class WXDLLEXPORT wxSpinButton : public wxSpinButtonBase
 {
 public:
     // construction
-    wxSpinButton() { }
+    wxSpinButton();
 
     wxSpinButton(wxWindow *parent,
                  wxWindowID id = -1,
@@ -56,6 +56,8 @@ public:
 
 
     // accessors
+    virtual int GetMin() const;
+    virtual int GetMax() const;
     virtual int GetValue() const;
     virtual void SetValue(int val);
     virtual void SetRange(int minVal, int maxVal);

@@ -76,6 +76,15 @@
         else
             return (void *)0;
     }
+#elif defined(__APPLE__) && defined(__UNIX__)
+char *dlopen(char *path, int mode /* mode is ignored */);
+void *dlsym(void *handle, char *symbol);
+int   dlclose(void *handle);
+char *dlerror();
+
+#   define wxDllOpen(lib)                dlopen(lib.fn_str(), 0)
+#   define wxDllGetSymbol(handle, name)  dlsym(handle, name)
+#   define wxDllClose                    dlclose
 #elif defined(__WINDOWS__)
     // using LoadLibraryEx under Win32 to avoid name clash with LoadLibrary
 #   ifdef __WIN32__
@@ -221,7 +230,7 @@ wxDllLoader::LoadLibrary(const wxString & libname, bool *success)
 {
     wxDllType handle;
 
-#if defined(__WXMAC__)
+#if defined(__WXMAC__) && !defined(__UNIX__)
     FSSpec myFSSpec ;
     Ptr myMainAddr ;
     Str255 myErrName ;
@@ -294,13 +303,17 @@ wxDllLoader::GetSymbol(wxDllType dllHandle, const wxString &name)
 {
     void *symbol = NULL;    // return value
 
-#if defined( __WXMAC__ )
+#if defined(__WXMAC__) && !defined(__UNIX__)
     Ptr symAddress ;
     CFragSymbolClass symClass ;
     Str255 symName ;
 
-    strcpy( (char*) symName , name ) ;
-    c2pstr( (char*) symName ) ;
+#if TARGET_CARBON
+    c2pstrcpy( (StringPtr) symName , name ) ;
+#else
+    strcpy( (char *) symName , name ) ;
+	c2pstr( (char *) symName ) ;
+#endif
 
     if ( FindSymbol( dllHandle , symName , &symAddress , &symClass ) == noErr )
         symbol = (void *)symAddress ;

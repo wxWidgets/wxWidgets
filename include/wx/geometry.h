@@ -31,7 +31,11 @@
 #ifdef __WXMSW__
     #define wxMulDivInt32( a , b , c ) ::MulDiv( a , b , c )
 #elif defined( __WXMAC__ )
+    #ifdef __WXMAC_X__
+    #include <CarbonCore/Math64.h>
+    #else
     #include "Math64.h"
+    #endif
     #define wxMulDivInt32( a , b , c ) S32Set( S64Div( S64Multiply( S64Set(a) , S64Set(b) ) , S64Set(c) ) )
 #else
     #define wxMulDivInt32( a , b , c ) ((wxInt32)((a)*(((wxDouble)b)/((wxDouble)c))))

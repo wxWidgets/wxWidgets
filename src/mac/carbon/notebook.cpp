@@ -41,6 +41,9 @@ const short kwxMacTabBottomMargin = 16 ;
 // event table
 // ----------------------------------------------------------------------------
 
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING)
+
 BEGIN_EVENT_TABLE(wxNotebook, wxControl)
     EVT_NOTEBOOK_PAGE_CHANGED(-1, wxNotebook::OnSelChange)
 
@@ -254,8 +257,7 @@ bool wxNotebook::InsertPage(int nPage,
 		
 		tie.version = 0 ;
 		tie.iconSuiteID = 0 ;
-		strcpy( (char*) tie.name , strText ) ;
-		c2pstr( (char*) tie.name ) ;	
+		c2pstrcpy( (StringPtr) tie.name , strText ) ;
 		SetControlData( m_macControl, nPage + 1, kControlTabInfoTag , sizeof( ControlTabInfoRec) , (char*) &tie ) ;
 		SetControlData( m_macControl, m_nSelection + 1, kControlTabEnabledFlagTag, sizeof( Boolean ), (Ptr)&enabled );
 

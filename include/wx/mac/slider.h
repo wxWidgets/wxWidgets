@@ -17,6 +17,8 @@
 #endif
 
 #include "wx/control.h"
+#include "wx/slider.h"
+#include "wx/stattext.h"
 
 WXDLLEXPORT_DATA(extern const char*) wxSliderNameStr;
 

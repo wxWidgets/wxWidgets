@@ -67,7 +67,7 @@ wxPrintDialog::~wxPrintDialog()
 int wxPrintDialog::ShowModal()
 {
 	int result = wxID_CANCEL ;
-	#if !TARGET_CARBON
+#if !TARGET_CARBON
 	
 	OSErr err ;
 	wxString message ;
@@ -90,9 +90,13 @@ int wxPrintDialog::ShowModal()
 		wxMessageDialog dialog( NULL , message  , "", wxICON_HAND | wxOK) ;
 	}
 	::UMAPrClose() ;
-	#else
-	#pragma warning "TODO:Printing for carbon"
-	#endif
+#else
+  #if __UNIX__
+    #warning "TODO:Printing for carbon"
+  #else
+    #pragma warning "TODO:Printing for carbon"
+  #endif
+#endif
 	return result ;
 }
 
@@ -158,7 +162,11 @@ int wxPageSetupDialog::ShowModal()
 	}
 	::UMAPrClose() ;
 #else
-#pragma warning "TODO:printing for carbon"
+  #if __UNIX__
+    #warning "TODO:Printing for carbon"
+  #else
+    #pragma warning "TODO:Printing for carbon"
+  #endif
 #endif
 	return result ;
 }

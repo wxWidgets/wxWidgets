@@ -102,8 +102,13 @@ bool  wxICONResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, lo
 	Str255 theName ;
 	short theId ;
 	OSType theType ;
-	strcpy( (char*) theName , name ) ;
-	c2pstr( (char*) theName ) ;
+
+#if TARGET_CARBON
+	c2pstrcpy( (StringPtr) theName , name ) ;
+#else
+	strcpy( (char *) theName , name ) ;
+	c2pstr( (char *) theName ) ;
+#endif
 	
 	Handle resHandle = GetNamedResource( 'cicn' , theName ) ;
 	if ( resHandle != 0L )

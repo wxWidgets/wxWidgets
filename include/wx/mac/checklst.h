@@ -19,7 +19,7 @@
 
 #include "wx/listbox.h"
 
-#if !defined(__MWERKS__) && !defined(__MACH__)
+#if !defined(__MWERKS__) && !defined(__UNIX__)
 typedef   unsigned int  size_t;
 #endif
 

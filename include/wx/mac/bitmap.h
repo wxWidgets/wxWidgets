@@ -28,10 +28,10 @@ class WXDLLEXPORT wxBitmapHandler;
 class WXDLLEXPORT wxIcon;
 class WXDLLEXPORT wxCursor;
 
-GWorldPtr 	wxMacCreateGWorld( int height , int widtdh , int depth ) ;
-void 				wxMacDestroyGWorld( GWorldPtr gw ) ;
+GWorldPtr 	wxMacCreateGWorld( int width , int height , int depth ) ;
+void 		wxMacDestroyGWorld( GWorldPtr gw ) ;
 PicHandle 	wxMacCreatePict( GWorldPtr gw , GWorldPtr mask = NULL ) ;
-void 				wxMacSetColorTableEntry( CTabHandle newColors , int index , int red , int green ,  int blue ) ;
+void 		wxMacSetColorTableEntry( CTabHandle newColors , int index , int red , int green ,  int blue ) ;
 CTabHandle 	wxMacCreateColorTable( int numColors ) ;
 
 // A mask is a mono bitmap used for drawing bitmaps
@@ -100,6 +100,9 @@ class WXDLLEXPORT wxBitmapHandler: public wxObject
   DECLARE_DYNAMIC_CLASS(wxBitmapHandler)
 public:
   wxBitmapHandler() { m_name = ""; m_extension = ""; m_type = 0; };
+#ifdef __WXMAC_X__
+  virtual ~wxBitmapHandler() {}  // Added min for Mac X
+#endif
 
   virtual bool Create(wxBitmap *bitmap, void *data, long flags, int width, int height, int depth = 1);
   virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
@@ -138,6 +141,7 @@ public:
 
   // Initialize with XPM data
   wxBitmap(const char **data);
+  wxBitmap(char **data);
 
   // Load a file or resource
   wxBitmap(const wxString& name, long type = wxBITMAP_TYPE_PICT_RESOURCE);
@@ -193,6 +197,7 @@ protected:
 public:
   void SetHBITMAP(WXHBITMAP bmp);
   inline WXHBITMAP GetHBITMAP() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_hBitmap : 0); }
+  
   bool FreeResource(bool force = FALSE);
 };
 #endif

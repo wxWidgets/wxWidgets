@@ -23,6 +23,8 @@
 #include "wx/layout.h"
 #include "wx/dialog.h"
 #include "wx/listbox.h"
+#include "wx/scrolbar.h"
+#include "wx/statbox.h"
 #include "wx/button.h"
 #include "wx/settings.h"
 #include "wx/msgdlg.h"
@@ -31,7 +33,7 @@
 #include "wx/tabctrl.h"
 #include "wx/tooltip.h"
 // TODO remove the line below, just for lookup-up convenience CS
-#include "wx/mac/window.h"
+#include "wx/window.h"
 
 #include "wx/menuitem.h"
 #include "wx/log.h"
@@ -999,8 +1001,8 @@ void  wxWindow::MacCreateRealWindow( const wxString& title,
 
 	// translate the window attributes in the appropriate window class and attributes
 
-	WindowClass wclass  ;
-	WindowAttributes attr  ;
+	WindowClass wclass = 0;
+	WindowAttributes attr = kWindowNoAttributes ;
 	
 	if ( HasFlag(wxTINY_CAPTION_HORIZ) ||  HasFlag(wxTINY_CAPTION_VERT) )
 	{
@@ -1036,8 +1038,6 @@ void  wxWindow::MacCreateRealWindow( const wxString& title,
 	{
 		wclass = kModalWindowClass ;
 	}
-	
-	attr = kWindowNoAttributes ;
 	
 	if ( HasFlag( wxMINIMIZE_BOX ) || HasFlag( wxMAXIMIZE_BOX ) )
 	{

@@ -20,7 +20,11 @@
 
 #include "wx/cmndata.h"
 
-#include "Navigation.h"
+#if defined(__UNIX__)
+  #include <NavigationServices/Navigation.h>
+#else
+  #include <Navigation.h>
+#endif
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxDirDialog, wxDialog)
@@ -457,11 +461,18 @@ int wxDirDialog::ShowModal()
 		Str255				prompt ;
 		Str255				path ;
 
+#if TARGET_CARBON
+		c2pstrcpy((StringPtr)prompt, m_message) ;
+#else
 		strcpy((char *)prompt, m_message) ;
 		c2pstr((char *)prompt ) ;
-	
+#endif
+#if TARGET_CARBON
+		c2pstrcpy((StringPtr)path, m_path ) ;
+#else
 		strcpy((char *)path, m_path ) ;
 		c2pstr((char *)path ) ;
+#endif
 
 		StandardFileReply	reply ;
 		FileFilterYDUPP 	invisiblesExcludedCustomFilterUPP = 0 ;

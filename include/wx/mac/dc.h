@@ -297,65 +297,65 @@ class WXDLLEXPORT wxDC: public wxDCBase
   public:
   
     
-    long XDEV2LOG(long x) const
+    wxCoord XDEV2LOG(wxCoord x) const
 	{
 	  long new_x = x - m_deviceOriginX;
 	  if (new_x > 0) 
-	    return (long)((double)(new_x) / m_scaleX + 0.5) * m_signX + m_logicalOriginX;
+	    return (wxCoord)((double)(new_x) / m_scaleX + 0.5) * m_signX + m_logicalOriginX;
 	  else
-	    return (long)((double)(new_x) / m_scaleX - 0.5) * m_signX + m_logicalOriginX;
+	    return (wxCoord)((double)(new_x) / m_scaleX - 0.5) * m_signX + m_logicalOriginX;
 	}
-    long XDEV2LOGREL(long x) const
+    wxCoord XDEV2LOGREL(wxCoord x) const
 	{ 
 	  if (x > 0) 
-	    return (long)((double)(x) / m_scaleX + 0.5);
+	    return (wxCoord)((double)(x) / m_scaleX + 0.5);
 	  else
-	    return (long)((double)(x) / m_scaleX - 0.5);
+	    return (wxCoord)((double)(x) / m_scaleX - 0.5);
 	}
-    long YDEV2LOG(long y) const
+    wxCoord YDEV2LOG(wxCoord y) const
 	{
 	  long new_y = y - m_deviceOriginY;
 	  if (new_y > 0)
-	    return (long)((double)(new_y) / m_scaleY + 0.5) * m_signY + m_logicalOriginY;
+	    return (wxCoord)((double)(new_y) / m_scaleY + 0.5) * m_signY + m_logicalOriginY;
 	  else
-	    return (long)((double)(new_y) / m_scaleY - 0.5) * m_signY + m_logicalOriginY;
+	    return (wxCoord)((double)(new_y) / m_scaleY - 0.5) * m_signY + m_logicalOriginY;
 	}
-    long YDEV2LOGREL(long y) const
+    wxCoord YDEV2LOGREL(wxCoord y) const
 	{ 
 	  if (y > 0)
-	    return (long)((double)(y) / m_scaleY + 0.5);
+	    return (wxCoord)((double)(y) / m_scaleY + 0.5);
 	  else
-	    return (long)((double)(y) / m_scaleY - 0.5);
+	    return (wxCoord)((double)(y) / m_scaleY - 0.5);
 	}
-    long XLOG2DEV(long x) const
+    wxCoord XLOG2DEV(wxCoord x) const
 	{ 
 	  long new_x = x - m_logicalOriginX;
 	  if (new_x > 0)
-	    return (long)((double)(new_x) * m_scaleX + 0.5) * m_signX + m_deviceOriginX;
+	    return (wxCoord)((double)(new_x) * m_scaleX + 0.5) * m_signX + m_deviceOriginX;
 	  else
-	    return (long)((double)(new_x) * m_scaleX - 0.5) * m_signX + m_deviceOriginX;
+	    return (wxCoord)((double)(new_x) * m_scaleX - 0.5) * m_signX + m_deviceOriginX;
 	}
-    long XLOG2DEVREL(long x) const
+    wxCoord XLOG2DEVREL(wxCoord x) const
 	{ 
 	  if (x > 0)
-	    return (long)((double)(x) * m_scaleX + 0.5);
+	    return (wxCoord)((double)(x) * m_scaleX + 0.5);
 	  else
-	    return (long)((double)(x) * m_scaleX - 0.5);
+	    return (wxCoord)((double)(x) * m_scaleX - 0.5);
 	}
-    long YLOG2DEV(long y) const
+    wxCoord YLOG2DEV(wxCoord y) const
 	{
 	  long new_y = y - m_logicalOriginY;
 	  if (new_y > 0)
-	    return (long)((double)(new_y) * m_scaleY + 0.5) * m_signY + m_deviceOriginY;
+	    return (wxCoord)((double)(new_y) * m_scaleY + 0.5) * m_signY + m_deviceOriginY;
 	  else
-	    return (long)((double)(new_y) * m_scaleY - 0.5) * m_signY + m_deviceOriginY;
+	    return (wxCoord)((double)(new_y) * m_scaleY - 0.5) * m_signY + m_deviceOriginY;
 	}
-    long YLOG2DEVREL(long y) const
+    wxCoord YLOG2DEVREL(wxCoord y) const
 	{ 
 	  if (y > 0)
-	    return (long)((double)(y) * m_scaleY + 0.5);
+	    return (wxCoord)((double)(y) * m_scaleY + 0.5);
 	  else
-	    return (long)((double)(y) * m_scaleY - 0.5);
+	    return (wxCoord)((double)(y) * m_scaleY - 0.5);
 	}
   
 //
@@ -495,7 +495,7 @@ protected:
 	GrafPtr				m_macOrigPort ;
 	Rect					m_macClipRect ;
 	Point					m_macLocalOrigin ;
-	AGAPortHelper			m_macPortHelper ;
+	mutable AGAPortHelper	m_macPortHelper ;
 	void					MacSetupPort() const ;
 	void					MacVerifySetup() const { if ( m_macPortId != m_macCurrentPortId ) MacSetupPort() ; } 
 

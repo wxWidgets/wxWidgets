@@ -13,13 +13,18 @@
 #pragma implementation "listbox.h"
 #endif
 
+#include "wx/app.h"
 #include "wx/listbox.h"
 #include "wx/settings.h"
 #include "wx/dynarray.h"
 #include "wx/log.h"
 
 #include "wx/utils.h"
-#include "extldef.h"
+#ifdef __UNIX__
+  #include "ldef/extldef.h"
+#else
+  #include "extldef.h"
+#endif
 
 #if !USE_SHARED_LIBRARY
   IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
@@ -246,13 +251,23 @@ int wxListBox::FindString(const wxString& st) const
 	{
 		wxString search = s.Left( s.Length() - 1 ) ;
 		int len = search.Length() ;
-    	Str255 s1 , s2 ;
-	    strcpy( (char*) s2 , search.c_str() ) ;
-	    c2pstr( (char*) s2 ) ;
+		Str255 s1 , s2 ;
+
+#if TARGET_CARBON
+		c2pstrcpy( (StringPtr) s2 , search.c_str() ) ;
+#else
+		strcpy( (char *) s2 , search.c_str() ) ;
+		c2pstr( (char *) s2 ) ;
+#endif
+
     	for ( int i = 0 ; i < m_noItems ; ++ i )
 	    {
-	    	strcpy( (char*) s1 , m_stringArray[i].Left( len ).c_str() ) ;
-	    	c2pstr( (char*) s1 ) ;
+#if TARGET_CARBON
+	    	c2pstrcpy( (StringPtr) s1 , m_stringArray[i].Left( len ).c_str() ) ;
+#else
+	    	strcpy( (char *) s1 , m_stringArray[i].Left( len ).c_str() ) ;
+			c2pstr( (char *) s1 ) ;
+#endif
 	    	if ( EqualString( s1 , s2 , false , false ) )
 	    		return i ;
 	    }
@@ -270,12 +285,22 @@ int wxListBox::FindString(const wxString& st) const
 	else
 	{
     	Str255 s1 , s2 ;
-	    strcpy( (char*) s2 , s.c_str() ) ;
-	    c2pstr( (char*) s2 ) ;
+
+#if TARGET_CARBON
+		c2pstrcpy( (StringPtr) s2 , s.c_str() ) ;
+#else
+		strcpy( (char *) s2 , s.c_str() ) ;
+		c2pstr( (char *) s2 ) ;
+#endif
+
 	    for ( int i = 0 ; i < m_noItems ; ++ i )
 	    {
-	    	strcpy( (char*) s1 , m_stringArray[i].c_str() ) ;
-	    	c2pstr( (char*) s1 ) ;
+#if TARGET_CARBON
+	    	c2pstrcpy( (StringPtr) s1 , m_stringArray[i].c_str() ) ;
+#else
+	    	strcpy( (char *) s1 , m_stringArray[i].c_str() ) ;
+			c2pstr( (char *) s1 ) ;
+#endif
 	    	if ( EqualString( s1 , s2 , false , false ) )
 	    		return i ;
 	    }
@@ -480,7 +505,6 @@ void wxListBox::MacDelete( int N )
 {
 	ListHandle list ;
 	long	result ;
-	Cell cell = { 0 , 0 } ;
 	UMAGetControlData( m_macControl , kControlNoPart , kControlListBoxListHandleTag , sizeof( ListHandle ) , (char*) &list  , &result ) ;
 	LDelRow( 1 , N , list ) ;
 }

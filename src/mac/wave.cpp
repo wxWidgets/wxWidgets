@@ -15,15 +15,15 @@
 
 #include "wx/object.h"
 #include "wx/string.h"
-#include "wx/mac/wave.h"
+#include "wx/wave.h"
 
 wxWave::wxWave()
-  : m_hSnd(NULL), m_waveLength(0), m_isResource(true), m_sndChan(0)
+  : m_sndChan(0), m_hSnd(NULL), m_waveLength(0), m_isResource(true)
 {
 }
 
 wxWave::wxWave(const wxString& sFileName, bool isResource)
-  : m_hSnd(NULL), m_waveLength(0), m_isResource(true), m_sndChan(0)
+  : m_sndChan(0), m_hSnd(NULL), m_waveLength(0), m_isResource(true)
 {
     Create(sFileName, isResource);
 }

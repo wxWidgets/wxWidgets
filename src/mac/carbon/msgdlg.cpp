@@ -13,6 +13,7 @@
 #pragma implementation "msgdlg.h"
 #endif
 
+#include "wx/app.h"
 #include "wx/msgdlg.h"
 #include "wx/mac/uma.h"
 
@@ -71,21 +72,36 @@ int wxMessageDialog::ShowModal()
 	short result ;
 	Str255 pascalTitle ;
 	Str255 pascalText ;
+	char   cText[256] ;
 	
 	if (wxApp::s_macDefaultEncodingIsPC)
 	{
-		strcpy( (char*) pascalTitle , wxMacMakeMacStringFromPC( m_caption ) ) ;
-		strcpy( (char*) pascalText , wxMacMakeMacStringFromPC( m_message) ) ;
+#if TARGET_CARBON
+		c2pstrcpy( (StringPtr) pascalTitle , wxMacMakeMacStringFromPC( m_caption ) ) ;
+#else
+		strcpy( (char *) pascalTitle , wxMacMakeMacStringFromPC( m_caption ) ) ;
+		c2pstr( (char *) pascalTitle ) ;
+#endif
+		strcpy(cText , wxMacMakeMacStringFromPC( m_message) ) ;
 	}
 	else
 	{
-		strcpy( (char*) pascalTitle , m_caption ) ;
-		strcpy( (char*) pascalText , m_message ) ;
+#if TARGET_CARBON
+		c2pstrcpy( (StringPtr) pascalTitle , m_caption ) ;
+#else
+		strcpy( (char *) pascalTitle , m_caption ) ;
+		c2pstr( (char *) pascalTitle ) ;
+#endif
+		strcpy( cText , m_message ) ;
 	}
 
-	c2pstr( (char*) pascalTitle ) ;
-	wxMacConvertNewlines( (char*)pascalText ,(char*) pascalText) ;
-	c2pstr( (char*) pascalText ) ;
+	wxMacConvertNewlines( cText , cText ) ;
+#if TARGET_CARBON
+	c2pstrcpy( (StringPtr) pascalText , cText ) ;
+#else
+	strcpy( (char *) pascalText , cText ) ;
+	c2pstr( (char *) pascalText ) ;
+#endif
 
 	wxASSERT_MSG( ( m_dialogStyle & 0x3F ) != wxYES , "this style is not supported on mac" ) ;
 

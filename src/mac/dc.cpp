@@ -14,6 +14,7 @@
 #endif
 
 #include "wx/dc.h"
+#include "wx/app.h"
 #include "wx/mac/uma.h"
 
 #if __MSL__ >= 0x6000
@@ -161,7 +162,7 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
     {
 			if ( bmap->m_bitmapType == kMacBitmapTypePict )
 			{ 
-    		Rect bitmaprect = { 0 , 0 , bmap->m_height * scale , bmap->m_width * scale} ;
+    		Rect bitmaprect = { 0 , 0 , int(bmap->m_height * scale) , int(bmap->m_width * scale)} ;
 				::OffsetRect( &bitmaprect , xx1 , yy1 ) ;
 				::DrawPicture( bmap->m_hPict , &bitmaprect ) ;
 			}
@@ -592,19 +593,19 @@ void  wxDC::DoDrawLines(int n, wxPoint points[],
   if (m_pen.GetStyle() == wxTRANSPARENT) 
   	return;
 
-	MacInstallPen() ;
+  MacInstallPen() ;
   
-	int offset = (m_pen.GetWidth()	- 1 ) / 2 ;	
+  int offset = (m_pen.GetWidth() - 1 ) / 2 ;	
   long x1, x2 , y1 , y2 ;
   x1 = XLOG2DEV(points[0].x + xoffset);
-	y1 = YLOG2DEV(points[0].y + yoffset);   
-	::MoveTo(x1 - offset ,y1 - offset );
+  y1 = YLOG2DEV(points[0].y + yoffset);   
+  ::MoveTo(x1 - offset ,y1 - offset );
   
   for (int i = 0; i < n-1; i++)
   {
-    long x2 = XLOG2DEV(points[i+1].x + xoffset);
-    long y2 = YLOG2DEV(points[i+1].y + yoffset);
-		::LineTo(x2 - offset  , y2 - offset );
+    x2 = XLOG2DEV(points[i+1].x + xoffset);
+    y2 = YLOG2DEV(points[i+1].y + yoffset);
+    ::LineTo(x2 - offset  , y2 - offset );
   }
 }
 
@@ -619,14 +620,14 @@ void  wxDC::DoDrawPolygon(int n, wxPoint points[],
   PolyHandle polygon = OpenPoly() ;
   long x1, x2 , y1 , y2 ;
   x1 = XLOG2DEV(points[0].x + xoffset);
-	y1 = YLOG2DEV(points[0].y + yoffset);   
-	::MoveTo(x1,y1);
+  y1 = YLOG2DEV(points[0].y + yoffset);   
+  ::MoveTo(x1,y1);
   
   for (int i = 0; i < n-1; i++)
   {
-    long x2 = XLOG2DEV(points[i+1].x + xoffset);
-    long y2 = YLOG2DEV(points[i+1].y + yoffset);
-		::LineTo(x2, y2);
+    x2 = XLOG2DEV(points[i+1].x + xoffset);
+    y2 = YLOG2DEV(points[i+1].y + yoffset);
+    ::LineTo(x2, y2);
   }
 
   ClosePoly() ;
@@ -725,13 +726,13 @@ void  wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
 	if (m_brush.GetStyle() != wxTRANSPARENT) 
 	{
 		MacInstallBrush() ;
-		::PaintRoundRect( &rect , radius * 2 , radius * 2 ) ;
+		::PaintRoundRect( &rect , int(radius * 2) , int(radius * 2) ) ;
 	};
 	
 	if (m_pen.GetStyle() != wxTRANSPARENT) 
 	{
 		MacInstallPen() ;
-		::FrameRoundRect( &rect , radius * 2 , radius * 2 ) ;
+		::FrameRoundRect( &rect , int(radius * 2) , int(radius * 2) ) ;
 	};
 }
 
@@ -959,10 +960,12 @@ bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
 
 	CGrafPtr			sourcePort = (CGrafPtr) source->m_macPort ;
 	PixMapHandle	bmappixels =  GetGWorldPixMap( sourcePort ) ; 
-	RGBColor		white = { 0xFFFF, 0xFFFF,0xFFFF} ;
-	RGBColor		black = { 0,0,0} ;
-	RGBForeColor( &m_textForegroundColour.GetPixel() ) ;
-	RGBBackColor( &m_textBackgroundColour.GetPixel() ) ;
+	RGBColor	white = { 0xFFFF, 0xFFFF,0xFFFF} ;
+	RGBColor	black = { 0,0,0} ;
+	RGBColor        forecolor = m_textForegroundColour.GetPixel();
+	RGBColor        backcolor = m_textBackgroundColour.GetPixel();
+	RGBForeColor( &forecolor ) ;
+	RGBBackColor( &backcolor ) ;
 
 	if ( LockPixels(bmappixels) )
 	{
@@ -1240,15 +1243,17 @@ void wxDC::MacInstallFont() const
 	if ( font )
 	{
 		::TextFont( font->m_macFontNum ) ;
-		::TextSize( m_scaleY * font->m_macFontSize ) ;
+		::TextSize( short(m_scaleY * font->m_macFontSize) ) ;
 		::TextFace( font->m_macFontStyle ) ;
 	
 		m_macFontInstalled = true ;
 		m_macBrushInstalled = false ;
 		m_macPenInstalled = false ;
-	
-		::RGBForeColor(&m_textForegroundColour.GetPixel() );
-		::RGBBackColor(&m_textBackgroundColour.GetPixel() );
+
+		RGBColor forecolor = m_textForegroundColour.GetPixel();
+		RGBColor backcolor = m_textBackgroundColour.GetPixel();
+		::RGBForeColor( &forecolor );
+		::RGBBackColor( &backcolor );
 	}
 	else
 	{
@@ -1256,7 +1261,7 @@ void wxDC::MacInstallFont() const
 		
 		GetFNum( "\pGeneva" , &fontnum ) ;
 		::TextFont( fontnum ) ;
-		::TextSize( m_scaleY * 10 ) ;
+		::TextSize( short(m_scaleY * 10) ) ;
 		::TextFace( 0 ) ;
 	
 		// todo reset after spacing changes - or store the current spacing somewhere
@@ -1264,10 +1269,12 @@ void wxDC::MacInstallFont() const
 		m_macFontInstalled = true ;
 		m_macBrushInstalled = false ;
 		m_macPenInstalled = false ;
-		::RGBForeColor( &(m_textForegroundColour.GetPixel()) );
-		::RGBBackColor(&m_textBackgroundColour.GetPixel() );
-	}
 
+		RGBColor forecolor = m_textForegroundColour.GetPixel();
+		RGBColor backcolor = m_textBackgroundColour.GetPixel();
+		::RGBForeColor( &forecolor );
+		::RGBBackColor( &backcolor );
+	}
 
 	short mode = patCopy ;
 
@@ -1354,8 +1361,10 @@ void wxDC::MacInstallPen() const
 	if ( m_macPenInstalled )
 		return ;
 
-	::RGBForeColor(&m_pen.GetColour().GetPixel() );
-	::RGBBackColor(&m_backgroundBrush.GetColour().GetPixel() );
+	RGBColor forecolor = m_pen.GetColour().GetPixel();
+	RGBColor backcolor = m_backgroundBrush.GetColour().GetPixel();
+	::RGBForeColor( &forecolor );
+	::RGBBackColor( &backcolor );
 	
 	::PenNormal() ;
 	int penWidth = m_pen.GetWidth();
@@ -1364,7 +1373,9 @@ void wxDC::MacInstallPen() const
 	int penStyle = m_pen.GetStyle();
 	
 	if (penStyle == wxSOLID)
+	{
 		::PenPat(GetQDGlobalsBlack(&blackColor));
+	}
 	else if (IS_HATCH(penStyle))
 	{
 		Pattern pat ;
@@ -1433,8 +1444,10 @@ void wxDC::MacInstallBrush() const
 
 	// foreground
 
-	::RGBForeColor(&m_brush.GetColour().GetPixel() );
-	::RGBBackColor(&m_backgroundBrush.GetColour().GetPixel() );
+	RGBColor forecolor = m_brush.GetColour().GetPixel();
+	RGBColor backcolor = m_backgroundBrush.GetColour().GetPixel();
+	::RGBForeColor( &forecolor );
+	::RGBBackColor( &backcolor );
 
 	int brushStyle = m_brush.GetStyle();
 	if (brushStyle == wxSOLID)

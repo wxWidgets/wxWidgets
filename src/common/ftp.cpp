@@ -50,7 +50,7 @@
 #include "wx/protocol/ftp.h"
 
 #if defined(__WXMAC__)
-    #include "/wx/mac/macsock.h"
+    #include "wx/mac/macsock.h"
 #endif
 
 #ifndef __MWERKS__

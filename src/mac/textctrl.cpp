@@ -13,27 +13,26 @@
 #pragma implementation "textctrl.h"
 #endif
 
-#ifndef __WXMAC__
-#include <sys/types.h>
-#include <sys/stat.h>
+#ifdef __UNIX__
+  #include <sys/types.h>
+  #include <sys/stat.h>
 #else
-#include <stat.h>
+  #include <stat.h>
 #endif
 #include <fstream.h>
 
+#include "wx/app.h"
+#include "wx/button.h"
+#include "wx/panel.h"
 #include "wx/textctrl.h"
 #include "wx/settings.h"
 #include "wx/filefn.h"
 #include "wx/utils.h"
 
 #if defined(__BORLANDC__) && !defined(__WIN32__)
-#include <alloc.h>
-#else
-#ifndef __MWERKS__
-#ifndef __GNUWIN32__
-#include <malloc.h>
-#endif
-#endif
+  #include <alloc.h>
+#elif !defined(__MWERKS__) && !defined(__GNUWIN32) && !defined(__WXMAC_X__)
+  #include <malloc.h>
 #endif
 
 #include "wx/mac/uma.h"

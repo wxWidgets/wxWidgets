@@ -24,6 +24,9 @@ class wxDataObject : public wxDataObjectBase
 {
 public:
     wxDataObject();
+#ifdef __WXMAC_X__
+    ~wxDataObject() {}  // Added min for Mac X
+#endif
 
     virtual bool IsSupportedFormat( const wxDataFormat& format, Direction dir = Get ) const;
 };

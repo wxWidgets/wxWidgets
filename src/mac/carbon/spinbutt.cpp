@@ -11,6 +11,7 @@
 
 #ifdef __GNUG__
 #pragma implementation "spinbutt.h"
+#pragma implementation "spinbuttbase.h"
 #endif
 
 #include "wx/spinbutt.h"
@@ -28,6 +29,11 @@
     IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
     IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent);
 #endif
+
+wxSpinButton::wxSpinButton()
+   : wxSpinButtonBase()
+{
+}
 
 bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
             long style, const wxString& name)
@@ -60,6 +66,16 @@ wxSpinButton::~wxSpinButton()
 // Attributes
 ////////////////////////////////////////////////////////////////////////////
 
+int wxSpinButton::GetMin() const
+{
+   return m_min;
+}
+
+int wxSpinButton::GetMax() const
+{
+   return m_max;
+}
+
 int wxSpinButton::GetValue() const
 {
     return m_value;
@@ -87,7 +103,7 @@ void wxSpinButton::MacHandleControlClick( ControlHandle control , SInt16 control
 		return ;
 	
   wxEventType scrollEvent = wxEVT_NULL;
-  int nScrollInc;
+  int nScrollInc = 0;
 
 	switch( controlpart )
 	{

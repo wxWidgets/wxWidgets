@@ -24,6 +24,7 @@
 #define WX_PRECOMP
 #define wxUSE_GUI 1
 #define OLDP2C 1
+#define ACCESSOR_CALLS_ARE_FUNCTIONS 1
 #include "wx/wx_cw_cm.h"
 #ifdef WX_PRECOMP
    #include "wx/wxprec.h"

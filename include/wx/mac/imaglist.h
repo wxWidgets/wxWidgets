@@ -72,6 +72,8 @@ class WXDLLEXPORT wxImageList: public wxObject
 
   // Returns the number of images in the image list.
   int GetImageCount() const;
+  
+  bool GetSize(int index, int&width, int &height) const;
 
   // Operations
   ////////////////////////////////////////////////////////////////////////////
