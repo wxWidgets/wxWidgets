@@ -21,8 +21,8 @@
 /*      so don't change its format too much or they could break */
 #define wxMAJOR_VERSION    2
 #define wxMINOR_VERSION    5
-#define wxRELEASE_NUMBER   2
-#define wxVERSION_STRING   _T("wxWindows 2.5.2")
+#define wxRELEASE_NUMBER   1
+#define wxVERSION_STRING   _T("wxWidgets 2.5.1")
 
 /*  nothing to update below this line when updating the version */
 /*  ---------------------------------------------------------------------------- */
