@@ -128,18 +128,16 @@ extern wxCursor *g_globalCursor;
 MSG s_currentMsg;
 wxApp *wxTheApp = NULL;
 
-// FIXME why not const? and not static?
-
 // NB: all "NoRedraw" classes must have the same names as the "normal" classes
 //     with NR suffix - wxWindow::MSWCreate() supposes this
-wxChar wxFrameClassName[]         = wxT("wxFrameClass");
-wxChar wxFrameClassNameNoRedraw[] = wxT("wxFrameClassNR");
-wxChar wxMDIFrameClassName[]      = wxT("wxMDIFrameClass");
-wxChar wxMDIFrameClassNameNoRedraw[] = wxT("wxMDIFrameClassNR");
-wxChar wxMDIChildFrameClassName[] = wxT("wxMDIChildFrameClass");
-wxChar wxMDIChildFrameClassNameNoRedraw[] = wxT("wxMDIChildFrameClassNR");
-wxChar wxPanelClassName[]         = wxT("wxPanelClass");
-wxChar wxCanvasClassName[]        = wxT("wxCanvasClass");
+const wxChar *wxFrameClassName         = wxT("wxFrameClass");
+const wxChar *wxFrameClassNameNoRedraw = wxT("wxFrameClassNR");
+const wxChar *wxMDIFrameClassName      = wxT("wxMDIFrameClass");
+const wxChar *wxMDIFrameClassNameNoRedraw = wxT("wxMDIFrameClassNR");
+const wxChar *wxMDIChildFrameClassName = wxT("wxMDIChildFrameClass");
+const wxChar *wxMDIChildFrameClassNameNoRedraw = wxT("wxMDIChildFrameClassNR");
+const wxChar *wxPanelClassName         = wxT("wxPanelClass");
+const wxChar *wxCanvasClassName        = wxT("wxCanvasClass");
 
 HICON wxSTD_FRAME_ICON = (HICON) NULL;
 HICON wxSTD_MDICHILDFRAME_ICON = (HICON) NULL;

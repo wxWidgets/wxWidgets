@@ -62,7 +62,7 @@
 
 extern wxWindowList wxModelessWindows;
 extern wxList WXDLLEXPORT wxPendingDelete;
-extern wxChar *wxFrameClassName;
+extern const wxChar *wxFrameClassName;
 extern wxMenu *wxCurrentPopupMenu;
 
 // ----------------------------------------------------------------------------

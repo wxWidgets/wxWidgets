@@ -119,7 +119,7 @@ extern MSG s_currentMsg;
 
 wxMenu *wxCurrentPopupMenu = NULL;
 extern wxList WXDLLEXPORT wxPendingDelete;
-extern wxChar *wxCanvasClassName;
+extern const wxChar *wxCanvasClassName;
 
 // ---------------------------------------------------------------------------
 // private functions
