@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------------
 // Name:        dbbrowse.cpp
 // Purpose:     Through ODBC - Databases Browsen
-// Author:      Mark Johnson, mj10777@gmx.net
+// Author:      Mark Johnson
 // Modified by:
 // BJO        : Bart A.M. JOURQUIN
 // Created:     19991127
@@ -309,7 +309,7 @@ void MainFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MainFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString Temp0, Temp1;
-    Temp0.Printf(_("%s\nMark Johnson\nBerlin, Germany\nmj10777@gmx.net\n (c) 2000"),p_ProgramCfg->GetAppName().c_str());
+    Temp0.Printf(_("%s\nMark Johnson\nBerlin, Germany\nwxWindows@mj10777.de\n (c) 2000"),p_ProgramCfg->GetAppName().c_str());
     Temp1.Printf(_("About %s"),p_ProgramCfg->GetAppName().c_str());
     wxMessageDialog dialog(this, Temp0,Temp1,wxOK|wxCANCEL);
     dialog.ShowModal();

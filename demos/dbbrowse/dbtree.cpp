@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     19991129
 // RCS-ID:      $Id$
-// Copyright:   (c) Mark Johnson, Berlin Germany, mj10777@gmx.net
+// Copyright:   (c) Mark Johnson, Berlin Germany
 // Licence:     wxWindows license
 //----------------------------------------------------------------------------------------
 //-- all #ifdefs that the whole Project needs. -------------------------------------------

@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------------------------------
 // Name:        doc.h
 // Purpose:     a non-MFC Document (a do-it-yourself document)
-// Author:      Mark Johnson, mj10777@gmx.net
+// Author:      Mark Johnson
 // Modified by: 19990808.mj10777
 // Created:     19990808
 // Copyright:   (c) Mark Johnson

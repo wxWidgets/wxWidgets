@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------------
 // Name:        doc.cpp
 // Purpose:     Holds information for DBBrowser - (a do-it-yourself document)
-// Author:      Mark Johnson, mj10777@gmx.net
+// Author:      Mark Johnson
 // Modified by: 19990808.mj10777
 // BJO        : Bart A.M. JOURQUIN
 // Created:     19990808

@@ -5,7 +5,7 @@
 // Modified by: 19990806.mj10777
 // Created:     19991010
 // RCS-ID:      $Id$
-// Copyright:   (c) Mark Johnson, Berlin Germany, mj10777@gmx.net
+// Copyright:   (c) Mark Johnson, Berlin Germany
 // Licence:     wxWindows license
 
 //----------------------------------------------------------------------------------------

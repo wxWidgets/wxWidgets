@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------------
 // Name:        DlgUser.h,cpp
 // Purpose:     Dialog mit Variable Gestaltung durch DlgUser.wxr
-// Author:      Mark Johnson, mj10777@gmx.net
+// Author:      Mark Johnson
 // Modified by: 19991105.mj10777
 // Created:     19991105
 // Copyright:   (c) Mark Johnson

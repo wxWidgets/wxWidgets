@@ -2,12 +2,12 @@
 // Name:        No names yet.
 // Purpose:     Contrib. demo
 // Author:      Aleksandras Gluchovas
-// Modified by: 19990908 : mj10777@gmx.net
+// Modified by: 19990908 : mj
 //              19990909 :
 //              - rename to tabpgwin
 //              - restruction of Variable declaration
 //              - to prevent Warnings under MingGW32
-// Modified by: 19990909 : mj10777@gmx.net
+// Modified by: 19990909 : mj
 //              - mNoVertScroll TRUE = no / FALSE = Original Code
 //                the Original Code Paints a Vertical Scroll in wxPagedWindow
 //                which is not needed in this Version. Use TRUE for this.

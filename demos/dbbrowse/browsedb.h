@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------------
 // Name:        browsedb.h
 // Purpose:     a wxDb class
-// Author:      Mark Johnson, mj10777@gmx.net
+// Author:      Mark Johnson
 // Modified by:
 // Created:     19991127.mj10777
 // Copyright:   (c) Mark Johnson
