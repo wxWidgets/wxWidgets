@@ -621,7 +621,7 @@ class wxGrid : public wxPanel
     void     SetDefaultCellAlignment( int horiz, int vert );
     void     SetCellAlignment( int row, int col, int horiz, int vert );
 
-    
+
     // ------ cell value accessors
     //
     wxString GetCellValue( int row, int col )
@@ -856,6 +856,14 @@ class wxGrid : public wxPanel
     bool GetEditInPlace() { return IsCellEditControlEnabled(); }
     void SetEditInPlace(bool edit = TRUE) { EnableCellEditControl( edit ); }
 
+    void SetCellAlignment( int align, int row, int col)
+    { SetCellAlignment(row, col, align, wxCENTER); }
+    void SetCellAlignment( int WXUNUSED(align) ) {}
+    void SetCellBitmap(wxBitmap *WXUNUSED(bitmap), int WXUNUSED(row), int WXUNUSED(col))
+    { }
+    void SetDividerPen(const wxPen& WXUNUSED(pen)) { }
+    wxPen& GetDividerPen() const { return wxNullPen; }
+    void OnActivate(bool WXUNUSED(active)) {}
             
     // ******** End of compatibility functions **********
 

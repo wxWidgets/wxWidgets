@@ -10,7 +10,7 @@ Classes: \helpref{wxDataObject}{wxdataobject},
 It has to be noted that the API for drag and drop in wxWindows is not
 yet finished which is mostly due to the fact that DnD support under
 GTK 1.0 is very rudimentary and entirely different from the XDnD
-protocoll used by GTK 1.2. This also entails that not all of the documentation
+protocol used by GTK 1.2. This also entails that not all of the documentation
 concerning DnD might be correct and some of the code might get broken
 in the future. The next release of wxWindows will be based on GTK 1.2
 and will hopefully include a much improved DnD support. The general
@@ -44,7 +44,6 @@ initialized with the data you wish to drag. For example:
 \begin{verbatim}
 	wxDataObject *my_data = new wxTextDataObject data("This string will be dragged.");
 \end{verbatim}
-
 \item{\bf Drag start:} To start dragging process (typically in response to a
 mouse click) you must call \helpref{DoDragDrop}{wxdropsourcedodragdrop} function
 of wxDropSource object which should be constructed like this:
@@ -53,14 +52,12 @@ of wxDropSource object which should be constructed like this:
 	wxDropSource dragSource( this );
 	dragSource.SetData( my_data );
 \end{verbatim}
-
 \item {\bf Dragging:} The call to DoDragDrop() blocks until the user release the
 mouse button (unless you override \helpref{GiveFeedback}{wxdropsourcegivefeedback} function
 to do something special). When the mouse moves in a window of a program which understands the
 same drag-and-drop protocol (any program under Windows or any program supporting GTK 1.0
 DnD protocol under X Windows), the corresponding \helpref{wxDropTarget}{wxdroptarget} methods
 are called - see below.
-
 \item {\bf Processing the result:} DoDragDrop() returns an {\it effect code} which
 is one of the values of \helpref{wxDragResult}{wxdropsource} enum. Codes
 of wxDragError, wxDragNone and wxDragCancel have the obvious meaning and mean
@@ -84,7 +81,6 @@ wxDropTarget and override its pure virtual methods. Alternatively, you may
 derive from \helpref{wxTextDropTarget}{wxtextdroptarget} or
 \helpref{wxFileDropTarget}{wxfiledroptarget} and override their OnDropText()
 or OnDropFiles() method.
-
 \item {\bf Drop:} When the user releases the mouse over a window, wxWindows
 queries the associated wxDropTarget object if it accepts the data. For
 this, \helpref{GetFormatCount}{wxdroptargetgetformatcount} and \helpref{GetFormat}{wxdroptargetgetformat} are
@@ -93,7 +89,6 @@ supported (i.e. is one of returned by GetFormat()),
 then \helpref{OnDrop}{wxdroptargetondrop} is called. 
 Otherwise, wxDragNone is returned by DoDragDrop() and
 nothing happens.
-
 \item {\bf The end:} After processing the data, DoDragDrop() returns either
 wxDragCopy or wxDragMove depending on the state of the keys (<Ctrl>, <Shift>
 and <Alt>) at the moment of drop. There is currently no way for the drop

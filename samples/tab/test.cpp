@@ -240,7 +240,7 @@ void MyFrame::OnSize(wxSizeEvent& event)
   
         m_view->SetViewRect(rect);
 
-        m_view->Layout();
+        m_view->LayoutTabs();
 
         // Need to do it a 2nd time to get the tab height with
         // the new view width
@@ -252,7 +252,7 @@ void MyFrame::OnSize(wxSizeEvent& event)
   
         m_view->SetViewRect(rect);
 
-        m_view->Layout();
+        m_view->LayoutTabs();
 
         // Move all the panels to the new view position and size
         wxNode* node = m_view->GetWindows().First();

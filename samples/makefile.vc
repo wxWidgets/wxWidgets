@@ -26,7 +26,7 @@ NOMAKE=1
 # Misc. compilation errors
 COMPIL=1
 # Need PNG
-PNGSETUP=1
+PNGSETUP=
 
 !include $(WXDIR)\src\makemsc.env
 
@@ -44,10 +44,8 @@ all:
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\controls
         nmake -f makefile.vc FINAL=$(FINAL)
-!if "$(COMPIL)"==""
         cd $(WXDIR)\samples\db
         nmake -f makefile.vc FINAL=$(FINAL)
-!endif
         cd $(WXDIR)\samples\dde
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\dialogs
@@ -67,6 +65,8 @@ all:
         cd $(WXDIR)\samples\fractal
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\grid
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\newgrid
         nmake -f makefile.vc FINAL=$(FINAL)
 !if "$(COMPIL)"==""
         cd $(WXDIR)\samples\help
@@ -114,10 +114,8 @@ all:
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\proplist
         nmake -f makefile.vc FINAL=$(FINAL)
-!if "$(COMPIL)"==""
         cd $(WXDIR)\samples\regtest
         nmake -f makefile.vc FINAL=$(FINAL)
-!endif
         cd $(WXDIR)\samples\resource
         nmake -f makefile.vc FINAL=$(FINAL)
 !if "$(COMPIL)"==""
@@ -130,12 +128,10 @@ all:
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\splitter
         nmake -f makefile.vc FINAL=$(FINAL)
-!if "$(COMPIL)"==""
         cd $(WXDIR)\samples\tab
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\taskbar
         nmake -f makefile.vc FINAL=$(FINAL)
-!endif
         cd $(WXDIR)\samples\text
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\thread
@@ -144,22 +140,16 @@ all:
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\treectrl
         nmake -f makefile.vc FINAL=$(FINAL)
-!if "$(COMPIL)"==""
         cd $(WXDIR)\samples\typetest
         nmake -f makefile.vc FINAL=$(FINAL)
-!endif
         cd $(WXDIR)\samples\validate
         nmake -f makefile.vc FINAL=$(FINAL)
-!if "$(NOMAKE)"==""
         cd $(WXDIR)\samples\wizard
         nmake -f makefile.vc FINAL=$(FINAL)
-!endif
         cd $(WXDIR)\samples\wxpoem
         nmake -f makefile.vc FINAL=$(FINAL)
-!if "$(COMPIL)"==""
         cd $(WXDIR)\samples\wxsocket
         nmake -f makefile.vc FINAL=$(FINAL)
-!endif
 
 clean:
         cd $(WXDIR)\samples\bombs
@@ -193,6 +183,8 @@ clean:
         cd $(WXDIR)\samples\fractal
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\grid
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\newgrid
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\help
         nmake -f makefile.vc clean

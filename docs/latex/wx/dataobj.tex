@@ -8,14 +8,14 @@ There are several predefined data object classes, such as \helpref{wxFileDataObj
 can be used without change or can be altered (by deriving a new class from them) in order to deliver
 data and data size on-demand. There is no need to ever use wxDataObject itself or derive directly from it.
 
-You may also derive your own data object classes from \helpref{wxPrivateDataObject}{wxprivatedataobject}
+You may also derive your own data object classes from \helpref{wxPrivateDataObject}{wxprivatedataobject} 
 for user-defined types. The format of user-defined data is given as mime-type string literal, 
 such as "application/word" or "image/png". These strings are used as they are under Unix (so 
 far only GTK) to identify a format and are translated into their Windows equivalent under 
 Win32 (using the OLE IDataObject for data exchange to and from the clipboard and for Drag'n'Drop).
 Note that the format string translation under Windows is not yet finnished.
 
-As mentioned above, data may be placed into the \helpref{wxClipboard}{wxclipboard}
+As mentioned above, data may be placed into the \helpref{wxClipboard}{wxclipboard} 
 or a \helpref{wxDropSource}{wxdropsource} instance either directly or on-demand. 
 As long as only one format is offerred, putting data directly into the clipboard may 
 be sufficient. But imagine that you paste a large piece of text to the clipboard and 
@@ -31,10 +31,10 @@ having pressed "Copy" - in reality it is only declared to be available.
 
 Let's assume that you have written an HTML editor and want it to paste contents
 in the formats "text/plain" and "text/html" to the clipboard. For offering
-data on-demand in "text/plain" you would derive your class from \helpref{wxTextDataObject}{wxtextdataobject}
-and for offering data on-demand in "text/html" you would derive your own class from
+data on-demand in "text/plain" you would derive your class from \helpref{wxTextDataObject}{wxtextdataobject} 
+and for offering data on-demand in "text/html" you would derive your own class from 
 \helpref{wxPrivateDataObject}{wxprivatedataobject} and set its ID string
-identifying the format to "text/html" using \helpref{wxPrivateDataObject::SetId}{wxprivatedataobjectsetid}.
+identifying the format to "text/html" using \helpref{wxPrivateDataObject::SetId}{wxprivatedataobjectsetid}. 
 In your two derived classed you'd then have a pointer or reference to the central
 data container and you'd override the methods returning the size of the
 available data and the WriteData() methods in both classes.

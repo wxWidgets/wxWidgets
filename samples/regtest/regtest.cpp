@@ -529,7 +529,7 @@ void RegTreeCtrl::OnChar(wxKeyEvent& event)
   if ( event.KeyCode() == WXK_DELETE )
     DeleteSelected();
   else
-    wxTreeCtrl::OnChar(event);
+    event.Skip();
 }
 
 void RegTreeCtrl::OnSelChanged(wxTreeEvent& event)
