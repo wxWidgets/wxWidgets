@@ -270,9 +270,7 @@ wxPaintDC::wxPaintDC(
     }
     else // not in cache, create a new one
     {
-        SIZEL                       vSizl = { 0,0};
         HPS                         hPS;
-        HRGN                        hRgn;
 
         hPS = ::WinBeginPaint( GetWinHwnd(m_pCanvas)
                               ,NULLHANDLE
@@ -280,6 +278,10 @@ wxPaintDC::wxPaintDC(
                              );
         if(hPS)
         {
+            POINTL                          vPoint[2];
+            LONG                            lControl;
+            LONG                            lColor;
+
             m_hOldPS = m_hPS;
             m_hPS = hPS;
             ::GpiCreateLogColorTable( m_hPS
@@ -296,6 +298,8 @@ wxPaintDC::wxPaintDC(
                                      ,0L
                                      ,NULL
                                     );
+
+            ::WinFillRect(hPS, &g_paintStruct,  m_pCanvas->GetBackgroundColour().GetPixel());
         }
 
         m_bIsPaintTime   = TRUE;

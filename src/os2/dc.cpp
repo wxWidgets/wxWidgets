@@ -147,6 +147,7 @@ wxDC::wxDC(void)
     m_hOldPS       = NULL;
     m_hPS          = NULL;
     m_bIsPaintTime = FALSE; // True at Paint Time
+    m_brush.GetColour().Set("WHITE");
 }
 
 wxDC::~wxDC(void)
@@ -226,9 +227,9 @@ void wxDC::DoSetClippingRegion(
 
     m_clipping    = TRUE;
     vRect.xLeft   = XLOG2DEV(x);
-    vRect.yTop    = YLOG2DEV(y + height);
+    vRect.yTop    = YLOG2DEV(m_vRclPaint.yTop - y);
     vRect.xRight  = XLOG2DEV(x + width);
-    vRect.yBottom = YLOG2DEV(y);
+    vRect.yBottom = YLOG2DEV(m_vRclPaint.yTop - (y + height));
     ::GpiIntersectClipRectangle(m_hPS, &vRect);
     DO_SET_CLIPPING_BOX()
 } // end of wxDC::DoSetClippingRegion
@@ -360,9 +361,9 @@ void wxDC::DoDrawLine(
     POINTL                          vPoint[2];
 
     vPoint[0].x = vX1;
-    vPoint[0].y = vY1;
+    vPoint[0].y = m_vRclPaint.yTop - vY1;
     vPoint[1].x = vX2;
-    vPoint[1].y = vY2;
+    vPoint[1].y = m_vRclPaint.yTop - vY2;
     ::GpiMove(m_hPS, &vPoint[0]);
     ::GpiLine(m_hPS, &vPoint[1]);
 }
@@ -506,7 +507,7 @@ void wxDC::DoDrawPoint(
     POINTL                          vPoint;
 
     vPoint.x = vX;
-    vPoint.y = vY;
+    vPoint.y = m_vRclPaint.yTop - vY;
     ::GpiSetPel(m_hPS, &vPoint);
 }
 
@@ -621,9 +622,9 @@ void wxDC::DoDrawRectangle(
     int                             nIsTRANSPARENT = 0;
 
     vPoint[0].x = vX;
-    vPoint[0].y = vY;
+    vPoint[0].y = m_vRclPaint.yTop - (vY + vHeight);
     vPoint[1].x = vX + vWidth;
-    vPoint[1].y = vY - vHeight;
+    vPoint[1].y = m_vRclPaint.yTop - vY;
     ::GpiMove(m_hPS, &vPoint[0]);
     lColor       = m_brush.GetColour().GetPixel();
     lBorderColor = m_pen.GetColour().GetPixel();
@@ -635,7 +636,7 @@ void wxDC::DoDrawRectangle(
         if(m_brush.GetStyle() == wxTRANSPARENT)
             lControl = DRO_OUTLINE;
 
-        ::GpiSetColor(m_hPS, CLR_GREEN);
+        ::GpiSetColor(m_hPS, lColor);
         ::GpiBox( m_hPS       // handle to a presentation space
                  ,lControl   // draw the box outline ? or ?
                  ,&vPoint[1]  // address of the corner
@@ -659,6 +660,11 @@ void wxDC::DoDrawRectangle(
         ::GpiSetColor( m_hPS
                       ,lColor
                      );
+        vPoint[0].x = vX + 1;
+        vPoint[0].y = m_vRclPaint.yTop - (vY + vHeight) + 1;
+        vPoint[1].x = vX + vWidth - 2;
+        vPoint[1].y = m_vRclPaint.yTop - (vY + 2);
+        ::GpiMove(m_hPS, &vPoint[0]);
         ::GpiBox( m_hPS
                  ,lControl
                  ,&vPoint[1]
@@ -680,9 +686,9 @@ void wxDC::DoDrawRoundedRectangle(
     LONG                            lControl;
 
     vPoint[0].x = vX;
-    vPoint[0].y = vY;
+    vPoint[0].y = YLOG2DEV(vY) - vHeight;
     vPoint[1].x = vX + vWidth;
-    vPoint[1].y = vY + vHeight;
+    vPoint[1].y = vY;
     ::GpiMove(m_hPS, &vPoint[0]);
 
     lControl = DRO_OUTLINEFILL; //DRO_FILL;
@@ -1241,10 +1247,15 @@ void wxDC::SetLogicalOrigin( wxCoord x, wxCoord y )
     // TODO:
 };
 
-void wxDC::SetDeviceOrigin( wxCoord x, wxCoord y )
+void wxDC::SetDeviceOrigin(
+  wxCoord                           x
+, wxCoord                           y
+)
 {
     RECTL                           vRect;
 
+    m_deviceOriginX = x;
+    m_deviceOriginY = y;
     ::GpiQueryPageViewport( m_hPS
                            ,&vRect
                           );

@@ -984,6 +984,22 @@ bool wxFrame::OS2Create(
     wxAssociateWinWithHandle(m_hWnd, this);
     wxAssociateWinWithHandle(m_hFrame, this);
 
+    m_backgroundColour.Set(wxString("GREY"));
+
+    LONG                            lColor = (LONG)m_backgroundColour.GetPixel();
+
+    if (!::WinSetPresParam( m_hWnd
+                           ,PP_BACKGROUNDCOLOR
+                           ,sizeof(LONG)
+                           ,(PVOID)&lColor
+                          ))
+    {
+        vError = ::WinGetLastError(vHabmain);
+        sError = wxPMErrorToStr(vError);
+        wxLogError("Error creating frame. Error: %s\n", sError);
+        return FALSE;
+    }
+
     //
     // Now need to subclass window.  Instead of calling the SubClassWin in wxWindow
     // we manually subclass here because we don't want to use the main wxWndProc
@@ -1276,8 +1292,7 @@ bool wxFrame::HandlePaint()
         }
         else
         {
-            wxWindow::HandlePaint();
-            return TRUE;
+            return(wxWindow::HandlePaint());
         }
     }
     else
@@ -1585,23 +1600,22 @@ MRESULT wxFrame::OS2WindowProc(
             break;
 
         case WM_PAINT:
-            {
-                HPS                             hPS;
-                RECTL                           vRect;
-                wxPaintEvent                    vEvent;
-
-                hPS = WinBeginPaint(m_hWnd, 0L, &vRect);
-                ::WinFillRect(hPS, &vRect,  CLR_BLUE  /* SYSCLR_WINDOW */);
-                ::WinEndPaint(hPS);
-
-                mRc = (MRESULT)FALSE;
-                vEvent.SetEventObject(this);
-                GetEventHandler()->ProcessEvent(vEvent);
-                bProcessed = TRUE;
-            }
+            bProcessed = HandlePaint();
+            mRc = (MRESULT)FALSE;
             break;
 
-        case WM_COMMAND:
+         case WM_ERASEBACKGROUND:
+            //
+            // Returning TRUE to requests PM to paint the window background
+            // in SYSCLR_WINDOW. We capture this here because the PS returned
+            // in Frames is the PS for the whole frame, which we can't really
+            // use at all. If you want to paint a different background, do it
+            // in an OnPaint using a wxPaintDC.
+            //
+            mRc = (MRESULT)(TRUE);
+            break;
+
+      case WM_COMMAND:
             {
                 WORD                wId;
                 WORD                wCmd;
@@ -1654,15 +1668,6 @@ MRESULT wxFrame::OS2WindowProc(
             }
             bProcessed = HandleSize(LOWORD(lParam), HIWORD(lParam), (WXUINT)wParam);
             mRc = (MRESULT)FALSE;
-            break;
-
-        case WM_ERASEBACKGROUND:
-            //
-            // Return TRUE to request PM to paint the window background
-            // in SYSCLR_WINDOW.
-            //
-            bProcessed = TRUE;
-            mRc = (MRESULT)(TRUE);
             break;
 
         case CM_QUERYDRAGIMAGE:

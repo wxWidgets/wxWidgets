@@ -2106,6 +2106,15 @@ MRESULT wxWindow::OS2WindowProc(
             }
             break;
 #endif
+        case WM_ERASEBACKGROUND:
+            //
+            // Returning TRUE to requestw PM to paint the window background
+            // in SYSCLR_WINDOW. We don't really want that
+            //
+            bProcessed = HandleEraseBkgnd((WXHDC)(HPS)wParam);
+            mResult = (MRESULT)(FALSE);
+            break;
+
         //
         // Instead of CTLCOLOR messages PM sends QUERYWINDOWPARAMS to
         // things such as colors and fonts and such
@@ -2133,17 +2142,6 @@ MRESULT wxWindow::OS2WindowProc(
             bProcessed = HandlePresParamChanged(wParam);
             break;
 
-        // move this to wxFrame
-        case WM_ERASEBACKGROUND:
-            bProcessed = HandleEraseBkgnd((WXHDC)(HDC)wParam);
-            if (bProcessed)
-            {
-                //
-                // We processed the message, i.e. erased the background
-                //
-                mResult = (MRESULT)TRUE;
-            }
-            break;
 
         // move all drag and drops to wxDrg
         case WM_ENDDRAG:
@@ -2844,47 +2842,36 @@ bool wxWindow::HandlePaint()
          wxLogLastError("CreateRectRgn");
          return FALSE;
     }
-    //
-    // Debug code
-    //
-#ifdef __WXDEBUG__
-    {
-        HWND                        hWnd;
-        HWND                        hWnd0 = NULLHANDLE;
-
-        hWnd = GetHwnd();
-        if(hWnd != hWnd0)
-            printf("HandlePaint hWnd=%x  ",hWnd);
-    }
-#endif
 
     m_updateRegion = wxRegion(hRgn);
     vEvent.SetEventObject(this);
     return (GetEventHandler()->ProcessEvent(vEvent));
 } // end of wxWindow::HandlePaint
 
-bool wxWindow::HandleEraseBkgnd(WXHDC hdc)
+bool wxWindow::HandleEraseBkgnd(
+  WXHDC                             hDC
+)
 {
-    // TODO:  will have to worry about this later as part of
-    //        the handling of changed presentation parameters
-    /*
-    if ( ::IsIconic(GetHwnd()) )
+    SWP                             vSwp;
+
+    ::WinQueryWindowPos(GetHwnd(), &vSwp);
+    if (vSwp.fl & SWP_MINIMIZE)
         return TRUE;
 
-    wxDC dc;
+    wxDC                            vDC;
 
-    dc.SetHDC(hdc);
-    dc.SetWindow(this);
-    dc.BeginDrawing();
+    vDC.m_hPS = (HPS)hDC; // this is really a PS
+    vDC.SetWindow(this);
+    vDC.BeginDrawing();
 
-    wxEraseEvent event(m_windowId, &dc);
-    event.SetEventObject(this);
-    bool rc = GetEventHandler()->ProcessEvent(event);
+    wxEraseEvent                    vEvent(m_windowId, &vDC);
 
-    dc.EndDrawing();
-    dc.SelectOldObjects(hdc);
-    dc.SetHDC((WXHDC) NULL);
-    */
+    vEvent.SetEventObject(this);
+
+    bool                            rc = GetEventHandler()->ProcessEvent(vEvent);
+
+    vDC.EndDrawing();
+    vDC.m_hPS = NULLHANDLE;
     return TRUE;
 } // end of wxWindow::HandleEraseBkgnd
 
@@ -2892,7 +2879,11 @@ void wxWindow::OnEraseBackground(
   wxEraseEvent&                     rEvent
 )
 {
-    // TODO:
+    RECTL                           vRect;
+    HPS                             hPS = rEvent.m_dc->m_hPS;
+
+    ::WinQueryWindowRect(GetHwnd(), &vRect);
+    ::WinFillRect(hPS, &vRect,  m_backgroundColour.GetPixel());
 }  // end of wxWindow::OnEraseBackground
 
 // ---------------------------------------------------------------------------

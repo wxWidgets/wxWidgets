@@ -263,7 +263,7 @@ bool wxPen::RealizeResource()
         }
 
         m_vAreaBundle.lColor        = vPmColour;
-        m_vAreaBundle.lBackColor    = CLR_DEFAULT;
+        m_vAreaBundle.lBackColor    = RGB_WHITE;
         m_vAreaBundle.usMixMode     = FM_OVERPAINT;
         m_vAreaBundle.usBackMixMode = BM_OVERPAINT;
 

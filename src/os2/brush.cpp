@@ -204,7 +204,7 @@ bool wxBrush::RealizeResource()
         if (M_BRUSHDATA->m_hBrush==NULL) wxError("Cannot create brush","Internal error") ;
 #endif
         M_BRUSHDATA->m_vBundle.lColor        = vPmColour;
-        M_BRUSHDATA->m_vBundle.lBackColor    = CLR_DEFAULT;
+        M_BRUSHDATA->m_vBundle.lBackColor    = RGB_WHITE;
         M_BRUSHDATA->m_vBundle.usMixMode     = FM_OVERPAINT;
         M_BRUSHDATA->m_vBundle.usBackMixMode = BM_OVERPAINT;
 
