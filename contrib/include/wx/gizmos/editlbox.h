@@ -33,7 +33,8 @@ public:
     wxEditableListBox(wxWindow *parent, wxWindowID id,
                       const wxString& label,
                       const wxPoint& pos = wxDefaultPosition,
-                      const wxSize& size = wxDefaultSize);
+                      const wxSize& size = wxDefaultSize,
+                      const wxString& name = wxT("editableListBox"));
 
     void SetStrings(const wxArrayString& strings);
     void GetStrings(wxArrayString& strings);
