@@ -1831,7 +1831,7 @@ typedef unsigned short  WORD;
 // WIN32 graphics types for OS/2 GPI
 
 // RGB under OS2 is more like a PALETTEENTRY struct under Windows so we need a real RGB def
-#define OS2RGB(r,g,b) ((DWORD ((BYTE) (r) | ((WORD) (g) << 8)) | (((DWORD)(BYTE)(b)) << 16)))
+#define OS2RGB(r,g,b) ((DWORD ((BYTE) (b) | ((WORD) (g) << 8)) | (((DWORD)(BYTE)(r)) << 16)))
 
 typedef unsigned long COLORREF;
 #define GetBValue(rgb) ((BYTE)((rgb) >> 16))
