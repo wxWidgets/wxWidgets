@@ -146,7 +146,7 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
 
     // spin ctrl
     wxString valStr;
-    valStr.Printf("%lu", m_value);
+    valStr.Printf(_T("%lu"), m_value);
     m_spinctrl = new wxTextCtrl(this, -1, valStr,
                                 wxPoint(x + wPrompt + LAYOUT_X_MARGIN, y),
                                 wxSize(wText, hText));
@@ -168,7 +168,7 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
 
 void wxNumberEntryDialog::OnOK(wxCommandEvent& event)
 {
-    if ( (sscanf(m_spinctrl->GetValue(), "%lu", &m_value) != 1) ||
+    if ( (wxSscanf(m_spinctrl->GetValue(), _T("%lu"), &m_value) != 1) ||
          (m_value < m_min) || (m_value > m_max) )
     {
         // not a number or out of range
