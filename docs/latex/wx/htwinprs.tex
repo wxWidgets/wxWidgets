@@ -5,16 +5,16 @@
 
 \section{\class{wxHtmlWinParser}}\label{wxhtmlwinparser}
 
-This class is derived from \helpref{wxHtmlParser}{wxhtmlparser} and 
+This class is derived from \helpref{wxHtmlParser}{wxhtmlparser} and
 its mail goal is to parse HTML input so that it can be displayed in
-\helpref{wxHtmlWindow}{wxhtmlwindow}. It uses special 
+\helpref{wxHtmlWindow}{wxhtmlwindow}. It uses special
 \helpref{wxHtmlWinTagHandler}{wxhtmlwintaghandler}.
 
 \wxheading{Notes}
 
 \begin{enumerate}
 \item Product of parsing is wxHtmlCell (resp. wxHtmlContainer) object.
-\item This parser produces temporary data! You should call 
+\item This parser produces temporary data! You should call
 \helpref{delete GetTempData()}{wxhtmlparsergettempdata}!
 \end{enumerate}
 
@@ -54,7 +54,7 @@ and returns pointer to it (see \helpref{Overview}{cells}).
 
 \func{virtual wxFont*}{CreateCurrentFont}{\void}
 
-Creates font based on current setting (see 
+Creates font based on current setting (see
 \helpref{SetFontSize}{wxhtmlwinparsersetfontsize},
 \helpref{SetFontBold}{wxhtmlwinparsersetfontbold},
 \helpref{SetFontItalic}{wxhtmlwinparsersetfontitalic},
@@ -63,7 +63,7 @@ Creates font based on current setting (see
 and returns pointer to it.
 (If the font was already created only a pointer is returned.)
 
-Fonts created during parsing are temporary data and are not freed on DoneParser. 
+Fonts created during parsing are temporary data and are not freed on DoneParser.
 You must call \helpref{delete myparser->GetTempData();}{wxhtmlparsergettempdata}
 to free the memory!
 
@@ -149,10 +149,10 @@ Returns TRUE if actual font is underlined, FALSE otherwise.
 
 \constfunc{const wxHtmlLinkInfo\&}{GetLink}{\void}
 
-Returns actual hypertext link. (This value has non-empty 
-\helpref{Href}{wxhtmllinkinfogethref}} string
+Returns actual hypertext link. (This value has non-empty
+\helpref{Href}{wxhtmllinkinfogethref} string
 if the parser is between {\tt <A>} and {\tt </A>} tags,
-wxEmptyString otherwise.
+wxEmptyString otherwise.)
 
 
 \membersection{wxHtmlWinParser::GetLinkColor}\label{wxhtmlwinparsergetlinkcolor}
@@ -181,14 +181,15 @@ Opens new container and returns pointer to it (see \helpref{Overview}{cells}).
 
 \func{void}{SetActualColor}{\param{const wxColour\& }{clr}}
 
-Sets actual text color. Note: this DOESN'T change the color! 
+Sets actual text color. Note: this DOESN'T change the color!
 You must create \helpref{wxHtmlColourCell}{wxhtmlcolourcell} yourself.
 
 \membersection{wxHtmlWinParser::SetAlign}\label{wxhtmlwinparsersetalign}
 
 \func{void}{SetAlign}{\param{int }{a}}
 
-Sets default horizontal alignment (see \helpref{wxHtmlContainerCell::SetAlignHor}{wxhtmlcontainercellsetalignhor}.
+Sets default horizontal alignment (see
+\helpref{wxHtmlContainerCell::SetAlignHor}{wxhtmlcontainercellsetalignhor}.)
 Alignment of newly opened container is set to this value.
 
 %\membersection{wxHtmlWinParser::SetContainer}\label{wxhtmlwinparsersetcontainer}
@@ -201,9 +202,9 @@ Alignment of newly opened container is set to this value.
 
 \membersection{wxHtmlWinParser::SetDC}\label{wxhtmlwinparsersetdc}
 
-\func{virtual void}{SetDC}{\param{wxDC }{*dc}, \param{double }{pixel_scale = 1.0}
+\func{virtual void}{SetDC}{\param{wxDC }{*dc}, \param{double }{pixel_scale = 1.0}}
 
-Sets the DC. This must be called before \helpref{Parse}{wxhtmlparserparse}! {\it pixel_scale} 
+Sets the DC. This must be called before \helpref{Parse}{wxhtmlparserparse}! {\it pixel_scale}
 can be used when rendering to high-resolution DCs (e.g. printer) to adjust size of pixel metrics.
 (Many dimensions in HTML are given in pixels - e.g. image sizes. 300x300 image would be only one
 inch wide on typical printer. With pixel_scale = 3.0 it would be 3 inches.)
@@ -249,7 +250,7 @@ Sets fonts. This method is identical to \helpref{wxHtmlWindow::SetFonts}{wxhtmlw
 \func{void}{SetLink}{\param{const wxHtmlLinkInfo\& }{link}}
 
 Sets actual hypertext link. Empty link is represented
-by \helpref{wxHtmlLinkInfo}{wxhtmllinkinfo} with {\it Href} equal 
+by \helpref{wxHtmlLinkInfo}{wxhtmllinkinfo} with {\it Href} equal
 to wxEmptyString.
 
 \membersection{wxHtmlWinParser::SetLinkColor}\label{wxhtmlwinparsersetlinkcolor}
@@ -257,4 +258,5 @@ to wxEmptyString.
 \func{void}{SetLinkColor}{\param{const wxColour\& }{clr}}
 
 Sets color of hypertext link.
+
 
