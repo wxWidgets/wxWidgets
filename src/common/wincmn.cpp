@@ -2408,7 +2408,7 @@ bool wxWindowBase::TryParent(wxEvent& event)
 }
 
 // ----------------------------------------------------------------------------
-// navigation
+// keyboard navigation
 // ----------------------------------------------------------------------------
 
 // Navigates in the specified direction.
@@ -2422,6 +2422,30 @@ bool wxWindowBase::Navigate(int flags)
         return true;
     }
     return false;
+}
+
+void wxWindowBase::DoMoveInTabOrder(wxWindow *win, MoveKind move)
+{
+    // check that we're not a top level window
+    wxCHECK_RET( GetParent(),
+                    _T("MoveBefore/AfterInTabOrder() don't work for TLWs!") );
+
+    // find the target window in the siblings list
+    wxWindowList& siblings = GetParent()->GetChildren();
+    wxWindowList::compatibility_iterator i = siblings.Find(win);
+    wxCHECK_RET( i, _T("MoveBefore/AfterInTabOrder(): win is not a sibling") );
+
+    // unfortunately, when wxUSE_STL == 1 DetachNode() is not implemented so we
+    // can't just move the node around
+    siblings.DeleteObject(this);
+    if ( move == MoveBefore || ((i = i->GetNext()) != NULL) )
+    {
+        siblings.Insert(i, this);
+    }
+    else // MoveAfter and win was the last sibling
+    {
+        siblings.Append(this);
+    }
 }
 
 // ----------------------------------------------------------------------------

@@ -1461,6 +1461,34 @@ implements the following methods:\par
 \end{twocollist}}
 }
 
+
+\membersection{wxWindow::MoveAfterInTabOrder}\label{wxwindowmoveafterintaborder}
+
+\func{void}{MoveAfterInTabOrder}{\param{wxWindow *}{win}}
+
+Moves this window in the tab navigation order after the specified \arg{win}.
+This means that when the user presses \texttt{TAB} key on that other window,
+the focus switches to this window.
+
+Default tab order is the same as creation order, this function and 
+\helpref{MoveBeforeInTabOrder()}{wxwindowmovebeforeintaborder} allow to change
+it after creating all the windows.
+
+\wxheading{Parameters}
+
+\docparam{win}{A sibling of this window which should precede it in tab order,
+must not be NULL}
+
+
+\membersection{wxWindow::MoveBeforeInTabOrder}\label{wxwindowmovebeforeintaborder}
+
+\func{void}{MoveBeforeInTabOrder}{\param{wxWindow *}{win}}
+
+Same as \helpref{MoveAfterInTabOrder}{wxwindowmoveafterintaborder} except that
+it inserts this window just before \arg{win} instead of putting it right after
+it.
+
+
 \membersection{wxWindow::Navigate}\label{wxwindownavigate}
 
 \func{bool}{Navigate}{\param{int}{ flags = wxNavigationKeyEvent::IsForward}}

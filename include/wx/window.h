@@ -513,8 +513,16 @@ public:
         // set this child as temporary default
     virtual void SetTmpDefaultItem(wxWindow * WXUNUSED(win)) { }
 
-        // Navigates in the specified direction by sending a wxNavigationKeyEvent
+        // navigates in the specified direction by sending a wxNavigationKeyEvent
     virtual bool Navigate(int flags = wxNavigationKeyEvent::IsForward);
+
+        // move this window just before/after the specified one in tab order
+        // (the other window must be our sibling!)
+    void MoveBeforeInTabOrder(wxWindow *win)
+        { DoMoveInTabOrder(win, MoveBefore); }
+    void MoveAfterInTabOrder(wxWindow *win)
+        { DoMoveInTabOrder(win, MoveAfter); }
+
 
     // parent/children relations
     // -------------------------
@@ -1031,6 +1039,13 @@ protected:
     virtual bool TryValidator(wxEvent& event);
     virtual bool TryParent(wxEvent& event);
 
+    // common part of MoveBefore/AfterInTabOrder()
+    enum MoveKind
+    {
+        MoveBefore,     // insert before the given window
+        MoveAfter       // insert after the given window
+    };
+    virtual void DoMoveInTabOrder(wxWindow *win, MoveKind move);
 
 #if wxUSE_CONSTRAINTS
     // satisfy the constraints for the windows but don't set the window sizes
