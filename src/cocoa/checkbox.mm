@@ -75,7 +75,8 @@ void wxCheckBox::DoSet3StateValue(wxCheckBoxState state)
         cocoaState = NSOnState;
         break;
     case wxCHK_UNDETERMINED:
-        wxASSERT_MSG(Is3State(),"Use the wxCHK_3STATE style flag");
+        // Base class would have already set state to wxCHK_UNCHECKED
+//        wxASSERT_MSG(Is3State(),"Use the wxCHK_3STATE style flag");
         cocoaState = NSMixedState;
         break;
     default:
@@ -90,7 +91,7 @@ bool wxCheckBox::GetValue() const
     int state = [GetNSButton() state];
     wxASSERT_MSG(state!=NSMixedState || Is3State(),
         wxT("NSMixedState returned from a 2-state checkbox"));
-    return state==NSOnState;
+    return state!=NSOffState;
 }
 
 wxCheckBoxState wxCheckBox::DoGet3StateValue() const
@@ -104,7 +105,8 @@ wxCheckBoxState wxCheckBox::DoGet3StateValue() const
     default:
         wxFAIL_MSG(wxT("[NSButton -state] returned an invalid state!"));
     case NSMixedState:
-        wxASSERT_MSG(Is3State(),wxT("NSMixedState returned from a 2-state checkbox"));
+        // Base class handles this assertion for us
+//        wxASSERT_MSG(Is3State(),wxT("NSMixedState returned from a 2-state checkbox"));
         return wxCHK_UNDETERMINED;
     }
 }
