@@ -24,7 +24,7 @@
 #include <wx/wx.h>
 #include <wx/dnd.h>
 
-#ifndef SWIG
+
 #ifdef WXMAKINGDLL_STC
     #define WXDLLIMPEXP_STC WXEXPORT
 #elif defined(WXUSINGDLL)
@@ -32,7 +32,6 @@
 #else // not making nor using DLL
     #define WXDLLIMPEXP_STC
 #endif
-#endif // SWIG
 
 
 // SWIG can't handle "#if" type of conditionals, only "#ifdef"
@@ -80,31 +79,34 @@ class  WXDLLIMPEXP_STC wxStyledTextEvent;
 
 //----------------------------------------------------------------------
 
-#ifndef SWIG
 class WXDLLIMPEXP_STC wxStyledTextCtrl : public wxControl {
-#else
-class wxStyledTextCtrl : public wxControl {
-#endif
 public:
 
 #ifdef SWIG
+    %%addtofunc wxStyledTextCtrl   "self._setOORInfo(self)"
+    %%addtofunc wxStyledTextCtrl() ""
+
     wxStyledTextCtrl(wxWindow *parent, wxWindowID id,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize, long style = 0,
                      const wxString& name = wxPySTCNameStr);
-    %%pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-
+    %%name(PreStyledTextCtrl) wxStyledTextCtrl();
+    
 #else
     wxStyledTextCtrl(wxWindow *parent, wxWindowID id,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize, long style = 0,
                      const wxString& name = wxSTCNameStr);
-#endif
-
-
-#ifndef SWIG
+    wxStyledTextCtrl() { m_swx = NULL; }
     ~wxStyledTextCtrl();
+    
 #endif
+
+    void Create(wxWindow *parent, wxWindowID id,
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize& size = wxDefaultSize, long style = 0,
+                     const wxString& name = wxSTCNameStr);
+
 
 //----------------------------------------------------------------------
 // BEGIN generated section.  The following code is automatically generated
@@ -260,11 +262,7 @@ protected:
 
 //----------------------------------------------------------------------
 
-#ifndef SWIG
 class WXDLLIMPEXP_STC wxStyledTextEvent : public wxCommandEvent {
-#else
-class wxStyledTextEvent : public wxCommandEvent {
-#endif
 public:
     wxStyledTextEvent(wxEventType commandType=0, int id=0);
 #ifndef SWIG

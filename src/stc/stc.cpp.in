@@ -136,11 +136,24 @@ wxStyledTextCtrl::wxStyledTextCtrl(wxWindow *parent,
                                    const wxPoint& pos,
                                    const wxSize& size,
                                    long style,
-                                   const wxString& name) :
-    wxControl(parent, id, pos, size,
-              style | wxVSCROLL | wxHSCROLL | wxWANTS_CHARS | wxCLIP_CHILDREN,
-              wxDefaultValidator, name)
+                                   const wxString& name)
 {
+    m_swx = NULL;
+    Create(parent, id, pos, size, style, name);
+}
+
+
+void wxStyledTextCtrl::Create(wxWindow *parent,
+                                   wxWindowID id,
+                                   const wxPoint& pos,
+                                   const wxSize& size,
+                                   long style,
+                                   const wxString& name)
+{
+    wxControl::Create(parent, id, pos, size,
+              style | wxVSCROLL | wxHSCROLL | wxWANTS_CHARS | wxCLIP_CHILDREN,
+              wxDefaultValidator, name);
+
 #ifdef LINK_LEXERS
     Scintilla_LinkLexers();
 #endif
@@ -406,8 +419,10 @@ void wxStyledTextCtrl::OnScroll(wxScrollEvent& evt) {
 }
 
 void wxStyledTextCtrl::OnSize(wxSizeEvent& WXUNUSED(evt)) {
-    wxSize sz = GetClientSize();
-    m_swx->DoSize(sz.x, sz.y);
+    if (m_swx) {
+        wxSize sz = GetClientSize();
+        m_swx->DoSize(sz.x, sz.y);
+    }
 }
 
 void wxStyledTextCtrl::OnMouseLeftDown(wxMouseEvent& evt) {
