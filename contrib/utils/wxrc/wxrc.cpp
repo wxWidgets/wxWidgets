@@ -87,7 +87,7 @@ int XmlResApp::OnRun()
         { wxCMD_LINE_SWITCH, "v", "verbose", "be verbose" },
         { wxCMD_LINE_SWITCH, "c", "cpp-code",  "output C++ source rather than .rsc file" },
         { wxCMD_LINE_SWITCH, "u", "uncompressed",  "do not compress .xml files (C++ only)" },
-        { wxCMD_LINE_SWITCH, "g", "gettext",  "output .po catalog (to stdout or file if -o used)" },
+        { wxCMD_LINE_SWITCH, "g", "gettext",  "output list of translatable strings (to stdout or file if -o used)" },
         { wxCMD_LINE_OPTION, "n", "function",  "C++ function name (with -c) [InitXmlResource]" },
         { wxCMD_LINE_OPTION, "o", "output",  "output file [resource.xrs/cpp]" },
         { wxCMD_LINE_OPTION, "l", "list-of-handlers",  "output list of neccessary handlers to this file" },
@@ -210,8 +210,9 @@ wxArrayString XmlResApp::PrepareTempFiles()
 
         FindFilesInXML(doc.GetRoot(), flist, path);
 
-        doc.Save(parOutputPath + "/" + name + ".xrc", flagCompress ? wxXML_IO_BINZ : wxXML_IO_BIN);
-        flist.Add(name + ".xrc");
+        doc.Save(parOutputPath + "/" + name + ".xmlbin", 
+                 flagCompress ? wxXML_IO_BINZ : wxXML_IO_BIN);
+        flist.Add(name + ".xmlbin");
     }
     
     return flist;
@@ -393,10 +394,10 @@ void " + parFuncname + "()\n\
         wxString name, ext, path;
         wxSplitPath(parFiles[i], &path, &name, &ext);
         file.Write("    wxXmlResource::Get()->Load(\"memory:xml_resource/" + 
-                   name + ".xrc" + "\");\n");
+                   name + ".xmlbin" + "\");\n");
     }
     
-    file.Write("\n}\n");
+    file.Write("}\n");
 
 
 }
@@ -412,7 +413,7 @@ void XmlResApp::OutputGettext()
     else fout.Open(parOutput, _T("wt"));
     
     for (size_t i = 0; i < str.GetCount(); i++)
-        fout.Write(_T("msgid \"") + str[i] + _T("\"\nmsgstr \"\"\n\n"));
+        fout.Write(_T("_(\"") + str[i] + _T("\")\n"));
     
     if (!parOutput) fout.Detach();
 }
