@@ -103,7 +103,7 @@ Clear as mud?  Good.  Let's get started.
    site-packages directory (such as to your home directory) then you
    can add "--root=<path>" after the "install" command.  To use
    wxPython like this you'll need to ensure that the directory
-   containing wxPyrthon is contained in in the PYTHONPATH environment
+   containing wxPython is contained in the PYTHONPATH environment
    variable.
 
 
