@@ -87,7 +87,6 @@ WX_IMPLEMENT_POSER(wxPoserNSApplication);
 {
     wxASSERT(wxTheApp);
     wxASSERT(wxMenuBarManager::GetInstance());
-    wxMenuBarManager::GetInstance()->CocoaInternalIdle();
     wxLogDebug("doIdle called");
 #ifdef __WXDEBUG__
     if(wxTheApp->IsInAssert())
