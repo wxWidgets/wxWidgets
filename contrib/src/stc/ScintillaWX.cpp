@@ -428,6 +428,12 @@ void ScintillaWX::DoAddChar(char ch) {
 }
 
 int  ScintillaWX::DoKeyDown(int key, bool shift, bool ctrl, bool alt, bool* consumed) {
+#ifdef __WXGTK__
+    // Ctrl chars (A-Z) end up with the wrong keycode on wxGTK...
+    if (ctrl && key >= 1 && key <= 26)
+        key += 'A' - 1;
+#endif
+
     switch (key) {
     case WXK_DOWN: key = SCK_DOWN; break;
     case WXK_UP: key = SCK_UP; break;
