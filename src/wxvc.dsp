@@ -878,6 +878,11 @@ SOURCE=.\msw\gsocket.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\gsockmsw.c
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\helpwin.cpp
 # End Source File
 # Begin Source File
