@@ -26,6 +26,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/cursor.h"
+    #include "wx/window.h"
     #include "wx/utils.h"
 #endif //WX_PRECOMP
 
