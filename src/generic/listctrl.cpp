@@ -2403,7 +2403,7 @@ void wxListMainWindow::RefreshLines( size_t lineFrom, size_t lineTo )
         rect.x = 0;
         rect.y = GetLineY(lineFrom);
         rect.width = GetClientSize().x;
-        rect.height = GetLineY(lineTo) - rect.y;
+        rect.height = GetLineY(lineTo) - rect.y + GetLineHeight();
 
         CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
         RefreshRect( rect );
@@ -2486,11 +2486,15 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         CalcUnscrolledPosition(0, 0, &xOrig, &yOrig);
 
         // tell the caller cache to cache the data
-        wxListEvent evCache(wxEVT_COMMAND_LIST_CACHE_HINT, GetParent()->GetId());
-        evCache.SetEventObject( GetParent() );
-        evCache.m_oldItemIndex = visibleFrom;
-        evCache.m_itemIndex = visibleTo;
-        GetParent()->GetEventHandler()->ProcessEvent( evCache );
+        if ( IsVirtual() )
+        {
+            wxListEvent evCache(wxEVT_COMMAND_LIST_CACHE_HINT,
+                                GetParent()->GetId());
+            evCache.SetEventObject( GetParent() );
+            evCache.m_oldItemIndex = visibleFrom;
+            evCache.m_itemIndex = visibleTo;
+            GetParent()->GetEventHandler()->ProcessEvent( evCache );
+        }
 
         for ( size_t line = visibleFrom; line <= visibleTo; line++ )
         {
@@ -2608,7 +2612,12 @@ void wxListMainWindow::SendNotify( size_t line,
     if ( point != wxDefaultPosition )
         le.m_pointDrag = point;
 
-    GetLine(line)->GetItem( 0, le.m_item );
+    if ( command != wxEVT_COMMAND_LIST_DELETE_ITEM )
+    {
+        GetLine(line)->GetItem( 0, le.m_item );
+    }
+    //else: there may be no more such item
+
     GetParent()->GetEventHandler()->ProcessEvent( le );
 }
 
@@ -3796,19 +3805,11 @@ void wxListMainWindow::DeleteItem( long lindex )
 
     size_t index = (size_t)lindex;
 
-    m_dirty = TRUE;
-
     // select the next item when the selected one is deleted
-    if ( m_current == index )
+    if ( m_current >= index )
     {
-        // the last valid index after deleting the item will be count-2
-        if ( m_current == count - 1 )
-        {
-            m_current--;
-        }
+        m_current--;
     }
-
-    SendNotify( index, wxEVT_COMMAND_LIST_DELETE_ITEM );
 
     if ( InReportView() )
     {
@@ -3827,6 +3828,9 @@ void wxListMainWindow::DeleteItem( long lindex )
     }
 
     m_dirty = TRUE;
+
+    SendNotify( index, wxEVT_COMMAND_LIST_DELETE_ITEM );
+
     RefreshAfter(index);
 }
 

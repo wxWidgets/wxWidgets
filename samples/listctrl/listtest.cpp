@@ -681,9 +681,20 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
             break;
 
         case WXK_DELETE:
-            DeleteItem(event.GetIndex());
+            {
+                long item = GetNextItem(-1,
+                                        wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+                while ( item != -1 )
+                {
+                    DeleteItem(item);
 
-            wxLogMessage(_T("Item %d deleted"), event.GetIndex());
+                    wxLogMessage(_T("Item %ld deleted"), item);
+
+                    // -1 because the indices were shifted by DeleteItem()
+                    item = GetNextItem(item - 1,
+                                       wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+                }
+            }
             break;
 
         case WXK_INSERT:
