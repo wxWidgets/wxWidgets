@@ -27,30 +27,17 @@
 #endif
 
 #include "wx/cmdline.h"
-#include "wx/xrc/xml.h"
+#include "wx/xml/xml.h"
 #include "wx/ffile.h"
 #include "wx/filename.h"
 #include "wx/wfstream.h"
 
 
-
-
-
-/*
-#if wxUSE_GUI
-#error "You must compile the resource compiler with wxBase!"
-#endif
-*/
-
-class XmlResApp : public wxApp
+class XmlResApp : public wxAppConsole
 {
 public:
 
-#if wxUSE_GUI
-    bool OnInit();
-#else
     virtual int OnRun();
-#endif
     
 private:
     
@@ -77,11 +64,7 @@ private:
 
 IMPLEMENT_APP(XmlResApp)
 
-#if wxUSE_GUI
-bool XmlResApp::OnInit()
-#else
 int XmlResApp::OnRun()
-#endif
 {
     static const wxCmdLineEntryDesc cmdLineDesc[] =
     {
@@ -118,19 +101,11 @@ int XmlResApp::OnRun()
                 OutputGettext();
             else
                 CompileRes();
-#if wxUSE_GUI
-            return FALSE;
-#else
             return retCode;
-#endif
             break;
 
         default:
-#if wxUSE_GUI
-            return FALSE;
-#else
             return 1;
-#endif
             break;
     }
 }

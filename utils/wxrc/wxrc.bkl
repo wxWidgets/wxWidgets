@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <include file="../../../build/bakefiles/common_samples.bkl"/>
+    <include file="../../../build/bakefiles/common_contrib.bkl"/>
+
+    <exe id="wxrc" template="wx_util_console" template_append="wx_append">
+        <define>wxUSE_GUI=0</define>
+        <sources>wxrc.cpp</sources>
+        <wx-lib>xml</wx-lib>
+        <wx-lib>base</wx-lib>
+    </exe>
+
+</makefile>
