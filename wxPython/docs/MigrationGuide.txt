@@ -401,4 +401,7 @@ default) then you need to use the new wx.FULL_REPAINT_ON_RESIZE style
 flag otherwise only the freshly exposed areas of the window will be
 refreshed.
 
+wxPyTypeCast has been removed.  Since we've had the OOR (Original
+Object Return) for a couple years now there should be no need to use
+wxPyTypeCast at all.
 
