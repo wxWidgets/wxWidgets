@@ -34,9 +34,9 @@ void WXDLLEXPORT wxSplitPath(const char *pszFileName,
 {
   wxCHECK_RET( pszFileName, _("NULL file name in wxSplitPath") );
 
-  const char *pDot = strrchr(pszFileName, FILE_SEP_EXT);
-  const char *pSepUnix = strrchr(pszFileName, FILE_SEP_PATH_UNIX);
-  const char *pSepDos = strrchr(pszFileName, FILE_SEP_PATH_DOS);
+  const char *pDot = strrchr(pszFileName, wxFILE_SEP_EXT);
+  const char *pSepUnix = strrchr(pszFileName, wxFILE_SEP_PATH_UNIX);
+  const char *pSepDos = strrchr(pszFileName, wxFILE_SEP_PATH_DOS);
 
   // take the last of the two
   size_t nPosUnix = pSepUnix ? pSepUnix - pszFileName : 0;

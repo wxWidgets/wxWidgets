@@ -42,7 +42,7 @@ protected:
 	char*  cur;
 
 	// about the current class
-	bool   mIsVirtaul;
+	bool   mIsVirtual;
 	bool   mIsTemplate;
 	size_t mNestingLevel;
 

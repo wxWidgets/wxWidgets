@@ -414,7 +414,11 @@ void spClass::SortMembers()
 spOperation::spOperation()
 
 	: mHasDefinition( FALSE )
-{}
+{
+    mIsConstant =
+    mIsVirtual =
+    mHasDefinition = false;
+}
 
 string spOperation::GetFullName(MarkupTagsT tags)
 {

@@ -923,7 +923,7 @@ static bool is_keyword( char* cur )
 	// restore original character suppresed by terminating zero
 	*(cur + len) = tmp;
 	
-	return ( i != __gMultiLangMap.end() );
+    return i == __gMultiLangMap.end() ? false : true;
 }
 
 static inline void get_string_between( char* start, char* end, 
@@ -979,7 +979,7 @@ spFile* CJSourceParser::Parse( char* start, char* end )
 	spFile* pTopCtx = new spFile();
 	mpCurCtx        = pTopCtx;
 
-	mIsVirtaul    = 0;
+	mIsVirtual    = 0;
 	mIsTemplate   = 0;
 	mNestingLevel = 0;
 
@@ -1008,7 +1008,7 @@ spFile* CJSourceParser::Parse( char* start, char* end )
 				   ) == 0 
 			)
 		{
-			int o;
+			int o = 0;
 			++o;
 		}
 
@@ -1047,7 +1047,8 @@ spFile* CJSourceParser::Parse( char* start, char* end )
 			default: break;
 		}
 
-		if ( is_keyword( cur ) )
+        // 'const' is a part of the return type, not a keyword here
+		if ( strncmp(cur, "const", 5) != 0 && is_keyword( cur ) )
 		{
 			// parses, token, if token identifies
 			// the container context (e.g. class/namespace)
@@ -1445,7 +1446,7 @@ void CJSourceParser::ParseKeyword( char*& cur )
 	if ( cmp_tokens_fast( cur, "virtual", len  ) )
 	{
 		// probably the virtual method is in front of us;
-		mIsVirtaul = 1;
+		mIsVirtual = 1;
 		skip_token( cur );
 		return;
 	}
@@ -1480,8 +1481,12 @@ bool CJSourceParser::ParseNameAndRetVal( char*& cur, bool& isAMacro )
 
 	char* start = cur;
 
+    bool isVirtual = false;
 	while( *cur != '(' )
 	{
+        if ( get_token_str( cur ) == "virtual" )
+            isVirtual = true;
+
 		skip_token( cur );
 		if ( !get_next_token( cur ) ) return FALSE;
 	}
@@ -1524,6 +1529,7 @@ bool CJSourceParser::ParseNameAndRetVal( char*& cur, bool& isAMacro )
 
 	mpCurCtx->AddMember( pOp );
 	pOp->mVisibility = mCurVis;
+    pOp->mIsVirtual = isVirtual;
 
 	// add comments about operation
 	AttachComments( *pOp, cur );
@@ -1610,7 +1616,8 @@ bool CJSourceParser::ParseArguments( char*& cur )
 		if ( blocksSkipped == 0 )
 		{
 			if ( *cur == 10 ) ++_gLineNo;
-			++cur;
+			++cur; // skip ')'
+
 			break; // function without paramters
 		}
 
@@ -1674,6 +1681,10 @@ bool CJSourceParser::ParseArguments( char*& cur )
 
 	} while(1);
 
+    // skip possible whitespace between ')' and following "const"
+    while ( isspace(*cur) )
+        cur++;
+
 	// check if it was really a function not a macro,
 	// if so, than it should be terminated with semicolon ';'
 	// or opening implemenetaton bracket '{'
@@ -1710,6 +1721,8 @@ bool CJSourceParser::ParseArguments( char*& cur )
 
 		if ( cmp_tokens_fast( tok, "const", 5 ) )
 		{
+            ((spOperation*)mpCurCtx)->mIsConstant = true;
+
 			skip_token(tok);
 			if ( !get_next_token(tok) ) return FALSE;
 			continue;

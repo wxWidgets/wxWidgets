@@ -13,7 +13,7 @@
    TODO (+ means fixed)
 
    (i) small fixes in the current version
-   
+
    +1. Quote special TeX characters like '&' and '_' (=> derive from wxFile)
     2. Document typedefs
     3. Document global variables
@@ -23,7 +23,7 @@
    (ii) plans for version 2
     1. Use wxTextFile for direct file access to avoid one scan method problems
     2. Use command line parsrer class for the options
-   
+
 */
 
 // =============================================================================
@@ -84,7 +84,7 @@ static const char *GetCurrentTime(const char *timeFormat);
 class wxTeXFile : public wxFile
 {
 public:
-    wxTeXFile() : wxFile() { }
+    wxTeXFile() { }
 
     bool WriteTeX(const wxString& s)
     {
@@ -93,19 +93,26 @@ public:
 
         return wxFile::Write(t);
     }
+
+private:
+    wxTeXFile(const wxTeXFile&);
+    wxTeXFile& operator=(const wxTeXFile&);
 };
 
 class HelpGenVisitor : public spVisitor
 {
 public:
     // ctor
-    HelpGenVisitor();
+    HelpGenVisitor(const wxString& directoryOut) : m_directoryOut(directoryOut)
+    {
+        Reset();
+    }
 
     virtual void VisitFile( spFile& fl );
     virtual void VisitClass( spClass& cl );
     virtual void VisitEnumeration( spEnumeration& en );
     virtual void VisitTypeDef( spTypeDef& td );
-	virtual void VisitPreprocessorLine( spPreprocessorLine& pd );
+    virtual void VisitPreprocessorLine( spPreprocessorLine& pd );
     virtual void VisitAttribute( spAttribute& attr );
     virtual void VisitOperation( spOperation& op );
     virtual void VisitParameter( spParameter& param );
@@ -127,11 +134,12 @@ protected:
     // write the headers for corresponding sections (only once)
     void InsertDataStructuresHeader();
     void InsertMethodsHeader();
-    
+
     // terminate the function documentation if it was started
     void CloseFunction();
 
-    wxTeXFile m_file;  // file we're writing to now
+    wxString  m_directoryOut;   // directory for the output
+    wxTeXFile m_file;           // file we're writing to now
 
     // state variables
     bool m_inClass,         // TRUE after file successfully opened
@@ -145,8 +153,12 @@ protected:
              m_textStoredTypedefs,
              m_textStoredFunctionComment;
 
-    // headers included by this file             
+    // headers included by this file
     wxArrayString m_headers;
+
+private:
+    HelpGenVisitor(const HelpGenVisitor&);
+    HelpGenVisitor& operator=(const HelpGenVisitor&);
 };
 
 // -----------------------------------------------------------------------------
@@ -160,7 +172,7 @@ protected:
 // this function never returns
 static void usage()
 {
-    wxLogError("usage: HelpGen [-q|-v] <header files...>\n");
+    wxLogError("usage: HelpGen [-q|-v] [-o outdir] <header files...>\n");
 
     exit(1);
 }
@@ -171,27 +183,63 @@ int main(int argc, char **argv)
         usage();
     }
 
+    wxString directoryOut;
+
     int first;
     for ( first = 1; (first < argc) && argv[first][0] == '-'; first++ ) {
-        switch ( argv[first][1] ) {
-            case 'v':
-                // be verbose
-                wxLog::GetActiveTarget()->SetVerbose();
-                break;
+        // all options have one letter
+        if ( argv[first][2] == '\0' ) {
+            switch ( argv[first][1] ) {
+                case 'v':
+                    // be verbose
+                    wxLog::GetActiveTarget()->SetVerbose();
+                    continue;
 
-            case 'q':
-                // be quiet
-                wxLog::GetActiveTarget()->SetVerbose(false);
-                break;
+                case 'q':
+                    // be quiet
+                    wxLog::GetActiveTarget()->SetVerbose(false);
+                    continue;
 
-            default:
-                usage();
+                case 'o':
+                    first++;
+                    if ( first >= argc ) {
+                        wxLogError("-o option requires an argument.");
+
+                        break;
+                    }
+
+                    directoryOut = argv[first];
+                    if ( !!directoryOut ) {
+                        // terminate with a '/' if it doesn't have it
+                        switch ( directoryOut.Last() ) {
+                            case '/':
+#ifdef __WXMSW__
+                            case '\\':
+#endif
+                                break;
+
+                            default:
+                                directoryOut += '/';
+                        }
+                    }
+                    //else: it's empty, do nothing
+
+                    continue;
+
+                default:
+                    break;
+            }
         }
+
+        // only get here after a break from switch or from else branch of if
+        wxLogError("unknown option '%s'", argv[first]);
+
+        usage();
     }
 
     // create a parser object and a visitor derivation
     CJSourceParser parser;
-    HelpGenVisitor visitor;
+    HelpGenVisitor visitor(directoryOut);
 
     // parse all files
     for ( int i = first; i < argc; i++ ) {
@@ -212,11 +260,6 @@ int main(int argc, char **argv)
 // -----------------------------------------------------------------------------
 // HelpGenVisitor implementation
 // -----------------------------------------------------------------------------
-
-HelpGenVisitor::HelpGenVisitor()
-{
-    Reset();
-}
 
 void HelpGenVisitor::Reset()
 {
@@ -301,9 +344,12 @@ void HelpGenVisitor::VisitClass( spClass& cl )
 
     // the file name is built from the class name by removing the leading "wx"
     // if any and converting it to the lower case
-    wxString filename = name;
-    if ( filename(0, 2) == "wx" ) {
-        filename.erase(0, 2);
+    wxString filename = m_directoryOut;
+    if ( name(0, 2) == "wx" ) {
+        filename << name.c_str() + 2;
+    }
+    else {
+        filename << name;
     }
 
     filename.MakeLower();
@@ -329,7 +375,12 @@ void HelpGenVisitor::VisitClass( spClass& cl )
     // write out the header
     {
         wxString header;
-        header.Printf("% automatically generated by HelpGen from %s at %s\n"
+        header.Printf("%%\n"
+                      "%% automatically generated by HelpGen from\n"
+                      "%% %s at %s\n"
+                      "%%\n"
+                      "\n"
+                      "\n"
                       "\\section{\\class{%s}}\\label{%s}\n",
                       filename.c_str(), GetCurrentTime("%d/%b/%y %H:%M:%S"),
                       name.c_str(), wxString(name).MakeLower().c_str());
@@ -346,7 +397,7 @@ void HelpGenVisitor::VisitClass( spClass& cl )
             "defs",
             "string",
             "dynarray",
-            "file",    
+            "file",
             "time",
         };
 
@@ -430,7 +481,7 @@ void HelpGenVisitor::VisitClass( spClass& cl )
 
             wxString baseclass = *i;
             derived << "\\helpref{" << baseclass << "}";
-			derived << "{" << baseclass.MakeLower()  << "}";
+            derived << "{" << baseclass.MakeLower()  << "}";
         }
     }
     totalText << derived << "\n\n";
@@ -566,7 +617,7 @@ void HelpGenVisitor::VisitOperation( spOperation& op )
     wxString totalText;
     const char *funcname = op.GetName().c_str();
     const char *classname = op.GetClass().GetName().c_str();
-               
+
     // check for the special case of dtor
     wxString dtor;
     if ( (funcname[0] == '~') && (strcmp(funcname + 1, classname) == 0) ) {
@@ -574,7 +625,9 @@ void HelpGenVisitor::VisitOperation( spOperation& op )
         funcname = dtor;
     }
 
-    totalText.Printf("\\membersection{%s::%s}\\label{%s}\n\n"
+    totalText.Printf("\n"
+                     "\\membersection{%s::%s}\\label{%s}\n"
+                     "\n"
                      "\\%sfunc{%s%s}{%s}{",
                      classname, funcname,
                      MakeLabel(classname, funcname).c_str(),
@@ -598,13 +651,13 @@ void HelpGenVisitor::VisitParameter( spParameter& param )
     else {
         totalText << ", ";
     }
-    
+
     totalText << "\\param{" << param.mType << " }{" << param.GetName();
     wxString defvalue = param.mInitVal;
     if ( !defvalue.IsEmpty() ) {
         totalText << " = " << defvalue;
     }
-    
+
     totalText << '}';
 
     m_file.WriteTeX(totalText);
@@ -622,7 +675,7 @@ static wxString MakeLabel(const char *classname, const char *funcname)
         // but may be later others will be added
         static const char *macros[] = { "destruct" };
         static const char *replacement[] = { "dtor" };
-        
+
         size_t n;
         for ( n = 0; n < WXSIZEOF(macros); n++ ) {
             if ( strncmp(funcname + 1, macros[n], strlen(macros[n])) == 0 ) {
@@ -665,15 +718,23 @@ static void TeXFilter(wxString* str)
 
 static wxString GetAllComments(const spContext& ctx)
 {
-    wxString comment;
-    const MCommentListT& comments = ctx.GetCommentList();
-    for ( MCommentListT::const_iterator i = comments.begin();
-            i != comments.end();
-            i++ ) {
-        comment << (*i)->GetText();
+    wxString comments;
+    const MCommentListT& commentsList = ctx.GetCommentList();
+    for ( MCommentListT::const_iterator i = commentsList.begin();
+          i != commentsList.end();
+          i++ ) {
+        wxString comment = (*i)->GetText();
+
+        // don't take comments like "// ----------" &c
+        comment.Trim(FALSE);
+        if ( !!comment &&
+              comment == wxString(comment[0u], comment.length() - 1) + '\n' )
+            comments << "\n";
+        else
+            comments << comment;
     }
 
-    return comment;
+    return comments;
 }
 
 static const char *GetCurrentTime(const char *timeFormat)
