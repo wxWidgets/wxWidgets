@@ -181,7 +181,7 @@ public:
 	bool	DeleteCursor(HSTMT *hstmtDel);
 	void	SetCursor(HSTMT *hstmtActivate = (void **) DEFAULT_CURSOR);
 	HSTMT GetCursor(void) { return(hstmt); }
-	ULONG Count(void);
+	ULONG Count(const char *args="*");
 	int   DB_STATUS(void) { return(pDb->DB_STATUS); }
 	bool	Refresh(void);
 	bool	SetNull(int colNo);
