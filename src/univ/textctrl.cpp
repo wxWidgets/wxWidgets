@@ -695,7 +695,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
         // create data object for single line controls
         m_data.sdata = new wxTextSingleLineData;
     }
-    
+
 #if wxUSE_TWO_WINDOWS
     if ((style & wxBORDER_MASK) == 0)
         style |= wxBORDER_SUNKEN;
@@ -1650,7 +1650,7 @@ wxString wxTextCtrl::GetLineText(wxTextCoord line) const
     {
         //this is called during DoGetBestSize
         if (line == 0 && GetLineCount() == 0) return wxEmptyString ;
-       
+
         wxCHECK_MSG( (size_t)line < GetLineCount(), _T(""),
                      _T("line index out of range") );
 
@@ -2360,7 +2360,7 @@ wxSize wxTextCtrl::DoGetBestClientSize() const
 
 void wxTextCtrl::UpdateTextRect()
 {
-    wxRect rectTotal(wxPoint(0, 0), GetClientSize());
+    wxRect rectTotal(GetClientSize());
     wxCoord *extraSpace = WrapLines() ? &WData().m_widthMark : NULL;
     m_rectText = GetRenderer()->GetTextClientArea(this, rectTotal, extraSpace);
 
@@ -4146,7 +4146,7 @@ void wxTextCtrl::DoDraw(wxControlRenderer *renderer)
     // the update region is in window coords and text area is in the client
     // ones, so it must be shifted before computing intersection
     wxRegion rgnUpdate = GetUpdateRegion();
-    
+
     wxRect rectTextArea = GetRealTextArea();
     wxPoint pt = GetClientAreaOrigin();
     wxRect rectTextAreaAdjusted = rectTextArea;
