@@ -1,12 +1,14 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        sckipc.h
-// Purpose:     Interprocess communication
-// Author:      Julian Smart/Guilhem Lavaux (big rewrite)
-// Modified by: Guilhem Lavaux 1997
+// Purpose:     Interprocess communication implementation (wxSocket version)
+// Author:      Julian Smart
+// Modified by: Guilhem Lavaux (big rewrite) May 1997, 1998
+//              Guillermo Rodriguez (updated for wxSocket v2) Jan 2000
 // Created:     1993
 // RCS-ID:      $Id$
-// Copyright:   (c) 1993 Julian Smart
-//              (c) 1997, 1998 Guilhem Lavaux
+// Copyright:   (c) Julian Smart 1993
+//              (c) Guilhem Lavaux 1997, 1998
+//              (c) 2000 Guillermo Rodriguez <guille@iies.es>
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 #ifndef _WX_SCKIPC_H
@@ -73,30 +75,38 @@ public:
   virtual ~wxTCPConnection();
 
   // Calls that CLIENT can make
-  bool Execute(const wxChar *data, int size = -1,
-               wxIPCFormat format = wxIPC_TEXT);
-  char *Request(const wxString& item, int *size = NULL,
-                wxIPCFormat format = wxIPC_TEXT);
-  bool Poke(const wxString& item, wxChar *data, int size = -1,
-            wxIPCFormat format = wxIPC_TEXT);
-  bool StartAdvise(const wxString& item);
-  bool StopAdvise(const wxString& item);
+  virtual bool Execute(const wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT);
+  virtual bool Execute(const wxString& str) { return Execute(str, -1, wxIPC_TEXT); }
+  virtual char *Request(const wxString& item, int *size = NULL, wxIPCFormat format = wxIPC_TEXT);
+  virtual bool Poke(const wxString& item, wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT);
+  virtual bool StartAdvise(const wxString& item);
+  virtual bool StopAdvise(const wxString& item);
 
   // Calls that SERVER can make
-  bool Advise(const wxString& item, wxChar *data, int size = -1,
-              wxIPCFormat format = wxIPC_TEXT);
+  virtual bool Advise(const wxString& item, wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT);
 
   // Calls that both can make
-  bool Disconnect();
+  virtual bool Disconnect(void);
 
-  // Called when we lost the peer.
-  bool OnDisconnect() { return TRUE; }
+  // Callbacks to SERVER - override at will
+  virtual bool OnExecute(const wxString& topic, char *data, int size, wxIPCFormat format) { return FALSE; };
+  virtual char *OnRequest(const wxString& topic, const wxString& item, int *size, wxIPCFormat format) { return NULL; };
+  virtual bool OnPoke(const wxString& topic, const wxString& item, char *data, int size, wxIPCFormat format) { return FALSE; };
+  virtual bool OnStartAdvise(const wxString& topic, const wxString& item) { return FALSE; };
+  virtual bool OnStopAdvise(const wxString& topic, const wxString& item) { return FALSE; };
+
+  // Callbacks to CLIENT - override at will
+  virtual bool OnAdvise(const wxString& topic, const wxString& item, char *data, int size, wxIPCFormat format) { return FALSE; };
+
+  // Callbacks to BOTH
+
+  // Default behaviour is to delete connection and return TRUE
+  virtual bool OnDisconnect(void) { delete this; return TRUE; }
 
   // To enable the compressor
   void Compress(bool on);
+
 private:
-  // to prevent virtual function hiding warnings
-  virtual bool Execute(const wxString& str) { return(wxConnectionBase::Execute(str)); };
 };
 
 class wxTCPServer: public wxServerBase
@@ -123,8 +133,8 @@ public:
   virtual ~wxTCPClient();
 
   virtual bool ValidHost(const wxString& host);
-    // Call this to make a connection.
-    // Returns NULL if cannot.
+  // Call this to make a connection.
+  // Returns NULL if cannot.
   virtual wxConnectionBase *MakeConnection(const wxString& host,
                                            const wxString& server,
                                            const wxString& topic);
