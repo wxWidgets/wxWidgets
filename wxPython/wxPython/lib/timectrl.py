@@ -68,15 +68,18 @@ class wxTimeCtrl(wxTextCtrl):
                 spinButton = None,
                 style = wxTE_PROCESS_TAB, name = "time"
         ):
-        self.__fmt24hr = fmt24hr
-        if size == wxDefaultSize:
-            # set appropriate default sizes depending on format:
-            if self.__fmt24hr: size = wxSize(52, -1)
-            else:              size = wxSize(70, -1)
-
         wxTextCtrl.__init__(self, parent, id, value='',
                             pos=pos, size=size, style=style, name=name)
 
+        self.__fmt24hr = fmt24hr
+        if size == wxDefaultSize:
+            # set appropriate default sizes depending on format:
+            if self.__fmt24hr:
+                testText = '00:00:00 '
+            else:
+                testText = '00:00:00 XXX'
+            w, h = self.GetTextExtent(testText)
+            self.SetClientSize( (w+4, -1) )
 
         # Set up all the positions of the cells in the wxTimeCtrl (once):
         # Format of control is:
@@ -634,52 +637,49 @@ class wxTimeCtrl(wxTextCtrl):
         self.SetValue(newtext)
         self.SetInsertionPoint(pos+1)
 
-
-class TestPanel(wxPanel):
-    def __init__(self, parent, id,
-        pos = wxPyDefaultPosition, size = wxPyDefaultSize,
-        fmt24hr = 0, test_mx = 0,
-        style = wxTAB_TRAVERSAL ):
-
-        self.test_mx = test_mx
-        wxPanel.__init__(self, parent, id, pos, size, style)
-
-        sizer = wxBoxSizer( wxHORIZONTAL )
-        self.tc = wxTimeCtrl(self, 10, fmt24hr = fmt24hr)
-        sizer.AddWindow( self.tc, 0, wxALIGN_CENTRE|wxLEFT|wxTOP|wxBOTTOM, 5 )
-        sb = wxSpinButton( self, 20, wxDefaultPosition, wxSize(-1,20), 0 )
-        self.tc.BindSpinButton(sb)
-        sizer.AddWindow( sb, 0, wxALIGN_CENTRE|wxRIGHT|wxTOP|wxBOTTOM, 5 )
-
-        self.SetAutoLayout( true )
-        self.SetSizer( sizer )
-        sizer.Fit( self )
-        sizer.SetSizeHints( self )
-
-        EVT_TIMEUPDATE(self, self.tc.GetId(), self.OnTimeChange)
-
-    def OnTimeChange(self, event):
-        _dbg('OnTimeChange: value = ', event.GetValue())
-        wxdt = self.tc.GetWxDateTime()
-        _dbg('wxdt =', wxdt.GetHour(), wxdt.GetMinute(), wxdt.GetSecond())
-        if self.test_mx:
-            mxdt = self.tc.GetMxDateTime()
-            _dbg('mxdt =', mxdt.hour, mxdt.minute, mxdt.second)
-
-
 #----------------------------------------------------------------------------
 
 
 if __name__ == '__main__':
     import traceback
 
-    class MyApp(wxApp):
+    class TestPanel(wxPanel):
+        def __init__(self, parent, id,
+                     pos = wxPyDefaultPosition, size = wxPyDefaultSize,
+                     fmt24hr = 0, test_mx = 0,
+                     style = wxTAB_TRAVERSAL ):
 
+            self.test_mx = test_mx
+            wxPanel.__init__(self, parent, id, pos, size, style)
+
+            sizer = wxBoxSizer( wxHORIZONTAL )
+            self.tc = wxTimeCtrl(self, 10, fmt24hr = fmt24hr)
+            sizer.AddWindow( self.tc, 0, wxALIGN_CENTRE|wxLEFT|wxTOP|wxBOTTOM, 5 )
+            sb = wxSpinButton( self, 20, wxDefaultPosition, wxSize(-1,20), 0 )
+            self.tc.BindSpinButton(sb)
+            sizer.AddWindow( sb, 0, wxALIGN_CENTRE|wxRIGHT|wxTOP|wxBOTTOM, 5 )
+
+            self.SetAutoLayout( true )
+            self.SetSizer( sizer )
+            sizer.Fit( self )
+            sizer.SetSizeHints( self )
+
+            EVT_TIMEUPDATE(self, self.tc.GetId(), self.OnTimeChange)
+
+        def OnTimeChange(self, event):
+            _dbg('OnTimeChange: value = ', event.GetValue())
+            wxdt = self.tc.GetWxDateTime()
+            _dbg('wxdt =', wxdt.GetHour(), wxdt.GetMinute(), wxdt.GetSecond())
+            if self.test_mx:
+                mxdt = self.tc.GetMxDateTime()
+                _dbg('mxdt =', mxdt.hour, mxdt.minute, mxdt.second)
+
+
+    class MyApp(wxApp):
         def OnInit(self):
             import sys
             fmt24hr = '24' in sys.argv
             test_mx = 'mx' in sys.argv
-
             try:
                 frame = wxFrame(NULL, -1, "Junk", wxPoint(20,20), wxSize(100,100) )
                 panel = TestPanel(frame, -1, wxPoint(-1,-1), fmt24hr=fmt24hr, test_mx = test_mx)
@@ -687,7 +687,6 @@ if __name__ == '__main__':
             except:
                 traceback.print_exc()
                 return false
-
             return true
 
     try:
