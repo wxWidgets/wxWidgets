@@ -184,7 +184,7 @@ int wxNotebook::GetSelection() const
     node = node->Next();
   };
 
-  wxCHECK_MSG( node != NULL, -1, _("wxNotebook: no selection?"));
+  wxCHECK_MSG( node != NULL, -1, "wxNotebook: no selection?" );
 
   return page->m_id;
 };
@@ -230,7 +230,7 @@ wxNotebookPage* wxNotebook::GetNotebookPage(int page) const
     node = node->Next();
   };
 
-  wxLogDebug( _("Notebook page %d not found!"), page );
+  wxLogDebug( "Notebook page %d not found!", page );
 
   return NULL;
 };

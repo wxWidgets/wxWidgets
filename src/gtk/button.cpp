@@ -89,9 +89,8 @@ void wxButton::SetDefault(void)
 void wxButton::SetLabel( const wxString &label )
 {
   wxControl::SetLabel( label );
+  GtkBin *bin = GTK_BIN( m_widget );
+  GtkLabel *g_label = GTK_LABEL( bin->child );
+  gtk_label_set( g_label, GetLabel() );
 };
 
-wxString wxButton::GetLabel(void) const
-{
-  return wxControl::GetLabel();
-};

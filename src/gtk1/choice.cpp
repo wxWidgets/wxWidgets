@@ -122,11 +122,17 @@ int wxChoice::FindString( const wxString &string ) const
     GtkBin *bin = GTK_BIN( child->data );
     GtkLabel *label = NULL;
     if (bin->child) label = GTK_LABEL(bin->child);
+    
+    wxASSERT_MSG( label != NULL , "wxChoice: invalid label" );
+    
     if (!label) label = GTK_LABEL( GTK_BUTTON(m_widget)->child );
     if (string == label->label) return count;
     child = child->next;
     count++;
   };
+  
+  wxFAIL_MSG( "wxChoice: string not found" );
+  
   return -1;
 };
 
@@ -147,6 +153,9 @@ int wxChoice::GetSelection(void)
     child = child->next;
     count++;
   };
+  
+  wxFAIL_MSG( "wxChoice: no selection" );
+  
   return -1;
 };
 
@@ -162,18 +171,27 @@ wxString wxChoice::GetString( int n ) const
     {
       GtkLabel *label = NULL;
       if (bin->child) label = GTK_LABEL(bin->child);
+      
+      wxASSERT_MSG( label != NULL , "wxChoice: invalid label" );
+      
       if (!label) label = GTK_LABEL( GTK_BUTTON(m_widget)->child );
       return label->label;
     };
     child = child->next;
     count++;
   };
+  
+  wxFAIL_MSG( "wxChoice: string not found" );
+  
   return "";
 };
 
 wxString wxChoice::GetStringSelection(void) const
 {
   GtkLabel *label = GTK_LABEL( GTK_BUTTON(m_widget)->child );
+  
+  wxASSERT_MSG( label != NULL , "wxChoice: invalid label" );
+  
   return label->label;
 };
 

@@ -279,16 +279,62 @@ void wxPaintDC::DrawLines( wxList *points, long xoffset, long yoffset )
   };
 };
 
-void wxPaintDC::DrawPolygon( int WXUNUSED(n), wxPoint WXUNUSED(points)[], 
-  long WXUNUSED(xoffset), long WXUNUSED(yoffset), int WXUNUSED(fillStyle) )
-{
-  if (!Ok()) return;
+void wxPaintDC::DrawPolygon( int n, wxPoint points[], 
+  long xoffset, long yoffset, int WXUNUSED(fillStyle) )
+ {
+   if (!Ok()) return;
+   if (!n) return;    // Nothing to draw
+   GdkPoint *gdkpoints = new GdkPoint[n+1];
+   int i;
+   for (i = 0 ; i < n ; i++)
+     {
+       gdkpoints[i].x = XLOG2DEV(points[i].x + xoffset);
+       gdkpoints[i].y = YLOG2DEV(points[i].y + yoffset);
+     }
+   if (m_brush.GetStyle() != wxTRANSPARENT)
+     gdk_draw_polygon (m_window, m_brushGC, TRUE, gdkpoints, n);
+   // To do: Fillstyle
+   if (m_pen.GetStyle() != wxTRANSPARENT)
+     for (i = 0 ; i < n ; i++)
+       gdk_draw_line( m_window, m_penGC, 
+ 		     gdkpoints[i%n].x,
+ 		     gdkpoints[i%n].y,
+ 		     gdkpoints[(i+1)%n].x,
+ 		     gdkpoints[(i+1)%n].y);
+   delete[] gdkpoints;
 };
 
-void wxPaintDC::DrawPolygon( wxList *WXUNUSED(lines), long WXUNUSED(xoffset), 
-                             long WXUNUSED(yoffset), int WXUNUSED(fillStyle) )
-{
-  if (!Ok()) return;
+void wxPaintDC::DrawPolygon( wxList *lines, long xoffset, 
+                              long yoffset, int WXUNUSED(fillStyle))
+ {
+   int n = lines->Number();
+ 
+   if (!Ok()) return;
+   GdkPoint *gdkpoints = new GdkPoint[n];
+   wxNode *node = lines->First();
+   int cnt=0;
+   while (node)
+     {
+       wxPoint *p = (wxPoint *) node->Data();
+       gdkpoints[cnt].x = XLOG2DEV(p->x + xoffset);
+       gdkpoints[cnt].y = YLOG2DEV(p->y + yoffset);
+       node = node->Next();
+       cnt++;
+     }
+   if (m_brush.GetStyle() != wxTRANSPARENT)
+     gdk_draw_polygon (m_window, m_brushGC, TRUE, gdkpoints, n);
+   // To do: Fillstyle
+   if (m_pen.GetStyle() != wxTRANSPARENT)
+     {
+       int i;
+       for (i = 0 ; i < n ; i++)
+ 	gdk_draw_line( m_window, m_penGC, 
+ 		       gdkpoints[i%n].x,
+ 		       gdkpoints[i%n].y,
+ 		       gdkpoints[(i+1)%n].x,
+ 		       gdkpoints[(i+1)%n].y);
+     }
+   delete[] gdkpoints;
 };
 
 void wxPaintDC::DrawRectangle( long x, long y, long width, long height )

@@ -52,7 +52,6 @@ class wxButton: public wxControl
       long style = 0, const wxString &name = wxButtonNameStr  );
     void SetDefault(void);
     void SetLabel( const wxString &label );
-    wxString GetLabel(void) const;
 };
 
 #endif // __GTKBUTTONH__

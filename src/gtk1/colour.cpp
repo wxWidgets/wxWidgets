@@ -93,6 +93,7 @@ wxColour::wxColour( const wxString &colourName )
     m_refData = new wxColourRefData();
     if (!gdk_color_parse( colourName, &M_COLDATA->m_color ))
     {
+      wxFAIL_MSG( "wxColour: couldn't find colour" );
       delete m_refData;
       m_refData = NULL;
     };
@@ -134,6 +135,7 @@ wxColour& wxColour::operator = ( const wxString& colourName )
     m_refData = new wxColourRefData();
     if (!gdk_color_parse( colourName, &M_COLDATA->m_color ))
     {
+      wxFAIL_MSG( "wxColour: couldn't find colour" );
       delete m_refData;
       m_refData = NULL;
     };

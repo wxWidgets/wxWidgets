@@ -235,12 +235,14 @@ class wxDropSource: public wxObject
 
   protected:
   
+    friend void gtk_drag_callback( GtkWidget *widget, GdkEvent *event, wxDropSource *source );
+  
     void RegisterWindow(void);
     void UnregisterWindow(void);
   
     GtkWidget     *m_widget;
     wxWindow      *m_window;
-    
+    DragResult     m_retValue;
     wxDataObject  *m_data;
     
     wxCursor      m_defaultCursor;

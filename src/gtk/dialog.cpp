@@ -107,6 +107,7 @@ wxDialog::~wxDialog(void)
 void wxDialog::SetTitle(const wxString& title )
 {
   m_title = title;
+  if (m_title.IsNull()) m_title = "";
   gtk_window_set_title( GTK_WINDOW(m_widget), m_title );
 };
 
@@ -219,7 +220,12 @@ void wxDialog::EndModal( int retCode )
 {
   SetReturnCode( retCode );
   
-  if (!m_modalShowing) return;
+  if (!m_modalShowing)
+  {
+     wxFAIL_MSG( "wxDialog: called EndModal twice" );
+     return;
+  };
+  
   m_modalShowing = FALSE;
   
   gtk_main_quit();

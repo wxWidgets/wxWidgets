@@ -156,7 +156,7 @@ void wxComboBox::Delete( int n )
   wxNode *node = m_clientData.Nth( n );
   if (!node)
   {
-    wxFAIL_MSG(_("wxComboBox::Delete wrong index"));
+    wxFAIL_MSG( "wxComboBox: wrong index" );
   }
   else
     m_clientData.DeleteNode( node );
@@ -176,6 +176,9 @@ int wxComboBox::FindString( const wxString &item )
     count++;
     child = child->next;
   };
+  
+  wxFAIL_MSG( "wxComboBox: string not found" );
+  
   return -1;
 };
 
@@ -183,6 +186,9 @@ char* wxComboBox::GetClientData( int n )
 {
   wxNode *node = m_clientData.Nth( n );
   if (node) return (char*)node->Data();
+  
+  wxFAIL_MSG( "wxComboBox: wrong index" );
+  
   return NULL;
 };
 
@@ -190,6 +196,8 @@ void wxComboBox::SetClientData( int n, char * clientData )
 {
   wxNode *node = m_clientData.Nth( n );
   if (node) node->SetData( (wxObject*) clientData );
+  
+  wxFAIL_MSG( "wxComboBox: wrong index" );
 };
 
 int wxComboBox::GetSelection(void) const
@@ -208,6 +216,9 @@ int wxComboBox::GetSelection(void) const
       child = child->next;
     };
   };
+  
+  wxFAIL_MSG( "wxComboBox: no selection" );
+  
   return -1;
 };
 
@@ -222,6 +233,9 @@ wxString wxComboBox::GetString( int n ) const
     GtkLabel *label = GTK_LABEL( bin->child );
     return label->label;
   };
+  
+  wxFAIL_MSG( "wxComboBox: wrong index" );
+  
   return "";
 };
 
@@ -236,6 +250,9 @@ wxString wxComboBox::GetStringSelection(void) const
     wxString tmp = GTK_LABEL( bin->child )->label;
     return tmp;
   };
+  
+  wxFAIL_MSG( "wxComboBox: no selection" );
+  
   return "";
 };
 

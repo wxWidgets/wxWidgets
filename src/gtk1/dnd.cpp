@@ -144,9 +144,11 @@ wxDataFormat wxFileDropTarget::GetFormat(size_t WXUNUSED(n)) const
 //-----------------------------------------------------------------------------
 // drag request
 
-void gtk_drag_callback( GtkWidget *widget, GdkEvent *event, wxDataObject *data )
+void gtk_drag_callback( GtkWidget *widget, GdkEvent *event, wxDropSource *source )
 {
   printf( "Data requested for dropping.\n" );
+  
+  wxDataObject *data = source->m_data;
   
   uint size = data->GetDataSize();
   char *ptr = new char[size];
@@ -155,6 +157,8 @@ void gtk_drag_callback( GtkWidget *widget, GdkEvent *event, wxDataObject *data )
   gtk_widget_dnd_data_set( widget, event, ptr, size );
   
   delete ptr;
+  
+  source->m_retValue = wxDropSource::Copy;
 };
 
 wxDropSource::wxDropSource( wxWindow *win )
@@ -165,7 +169,8 @@ wxDropSource::wxDropSource( wxWindow *win )
   m_widget = win->m_widget;
   if (win->m_wxwindow) m_widget = win->m_wxwindow;
   
-  m_data = NULL;  
+  m_data = NULL;
+  m_retValue = Cancel;
 
   m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
   m_goaheadCursor = wxCursor( wxCURSOR_HAND );
@@ -178,6 +183,7 @@ wxDropSource::wxDropSource( wxDataObject &data, wxWindow *win )
   m_window = win;
   m_widget = win->m_widget;
   if (win->m_wxwindow) m_widget = win->m_wxwindow;
+  m_retValue = Cancel;
   
   m_data = &data;
 
@@ -201,6 +207,8 @@ wxDropSource::DragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
 {
   if (gdk_dnd.dnd_grabbed) return None;
   if (gdk_dnd.drag_really) return None;
+  
+  wxASSERT_MSG( data, "wxDragSource: no data" );
   
   if (!m_data) return None;
   if (m_data->GetDataSize() == 0) return None;
@@ -255,7 +263,7 @@ wxDropSource::DragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
   
   UnregisterWindow();
   
-  return Copy;
+  return m_retValue;
 };
 
 void wxDropSource::RegisterWindow(void)
@@ -283,7 +291,7 @@ void wxDropSource::RegisterWindow(void)
   gtk_widget_dnd_drag_set( m_widget, TRUE, &str, 1 );
 
   gtk_signal_connect( GTK_OBJECT(m_widget), "drag_request_event",
-    GTK_SIGNAL_FUNC(gtk_drag_callback), (gpointer)m_data );
+    GTK_SIGNAL_FUNC(gtk_drag_callback), (gpointer)this );
 };
 
 void wxDropSource::UnregisterWindow(void)
@@ -292,5 +300,5 @@ void wxDropSource::UnregisterWindow(void)
   
   gtk_widget_dnd_drag_set( m_widget, FALSE, NULL, 0 );
   
-  gtk_signal_disconnect_by_data( GTK_OBJECT(m_widget), (gpointer)m_data );
+  gtk_signal_disconnect_by_data( GTK_OBJECT(m_widget), (gpointer)this );
 };

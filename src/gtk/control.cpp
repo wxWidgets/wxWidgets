@@ -47,6 +47,7 @@ void wxControl::SetLabel( const wxString &label )
 #endif
     }
 
+    m_label = "";
     m_label << *pc;
   }
 };
