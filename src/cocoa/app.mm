@@ -9,14 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-// ============================================================================
-// declarations
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// headers
-// ----------------------------------------------------------------------------
-
 #include "wx/wxprec.h"
 #ifndef WX_PRECOMP
     #include "wx/defs.h"
@@ -45,12 +37,14 @@
 #import <Foundation/NSThread.h>
 #import <AppKit/NSEvent.h>
 
-// ----------------------------------------------------------------------------
-// globals
-// ----------------------------------------------------------------------------
-
+// ========================================================================
+// wxPoseAsInitializer
+// ========================================================================
 wxPoseAsInitializer *wxPoseAsInitializer::sm_first = NULL;
 
+// ========================================================================
+// wxPoserNSApplication
+// ========================================================================
 @interface wxPoserNSApplication : NSApplication
 {
 }
@@ -59,6 +53,8 @@ wxPoseAsInitializer *wxPoseAsInitializer::sm_first = NULL;
 - (void)sendEvent: (NSEvent*)anEvent;
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication;
 @end // wxPoserNSApplication
+
+WX_IMPLEMENT_POSER(wxPoserNSApplication);
 
 @implementation wxPoserNSApplication : NSApplication
 
@@ -110,40 +106,24 @@ wxPoseAsInitializer *wxPoseAsInitializer::sm_first = NULL;
 }
 
 @end // wxPoserNSApplication
-WX_IMPLEMENT_POSER(wxPoserNSApplication);
 
-// ============================================================================
-// functions
-// ============================================================================
-
-void wxApp::Exit()
-{
-    wxApp::CleanUp();
-
-    wxAppConsole::Exit();
-}
-
-// ============================================================================
-// wxApp implementation
-// ============================================================================
+// ========================================================================
+// wxApp
+// ========================================================================
 
 // ----------------------------------------------------------------------------
 // wxApp Static member initialization
 // ----------------------------------------------------------------------------
-
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
 BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
     EVT_IDLE(wxAppBase::OnIdle)
 //    EVT_END_SESSION(wxApp::OnEndSession)
 //    EVT_QUERY_END_SESSION(wxApp::OnQueryEndSession)
 END_EVENT_TABLE()
-#endif
 
 // ----------------------------------------------------------------------------
 // wxApp initialization/cleanup
 // ----------------------------------------------------------------------------
-
 bool wxApp::Initialize(int& argc, wxChar **argv)
 {
     wxAutoNSAutoreleasePool pool;
@@ -180,7 +160,6 @@ void wxApp::CleanUp()
 // ----------------------------------------------------------------------------
 // wxApp creation
 // ----------------------------------------------------------------------------
-
 wxApp::wxApp()
 {
     m_topWindow = NULL;
@@ -259,6 +238,13 @@ bool wxApp::Initialized()
     return FALSE;
 }
 
+void wxApp::Exit()
+{
+    wxApp::CleanUp();
+
+    wxAppConsole::Exit();
+}
+
 int wxApp::MainLoop()
 {
     [m_cocoaApp run];
@@ -292,7 +278,6 @@ void wxApp::Dispatch()
 }
 
 // Yield to other processes
-
 bool wxApp::Yield(bool onlyIfNeeded)
 {
     // MT-FIXME
