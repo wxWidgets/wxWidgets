@@ -4,7 +4,7 @@
 #if defined(__WXMSW__)
 #include "wx/msw/dirdlg.h"
 #elif defined(__WXMOTIF__)
-#include "wx/motif/dirdlg.h"
+#include "wx/generic/dirdlgg.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/dirdlg.h"
 #elif defined(__WXQT__)
