@@ -423,7 +423,7 @@ WXIDISPATCH* wxAutomationObject::GetDispatchProperty(const wxString& property, i
 	wxVariant retVariant;
 	if (Invoke(property, DISPATCH_PROPERTYGET, retVariant, noArgs, args))
 	{
-		if (retVariant.GetType() == "void*")
+		if (retVariant.GetType() == _T("void*"))
 		{
 			return (WXIDISPATCH*) retVariant.GetVoidPtr();
 		}
@@ -459,23 +459,23 @@ bool wxAutomationObject::GetInstance(const wxString& classId) const
 	CLSID clsId;
 	IUnknown * pUnk = NULL;
 
-	BasicString unicodeName((const char*) classId);
+	BasicString unicodeName(classId.mb_str());
 	
 	if (FAILED(CLSIDFromProgID((BSTR) unicodeName, &clsId))) 
 	{
-		wxLogWarning("Cannot obtain CLSID from ProgID");
+		wxLogWarning(_T("Cannot obtain CLSID from ProgID"));
 		return FALSE;
 	}
 
 	if (FAILED(GetActiveObject(clsId, NULL, &pUnk)))
 	{
-		wxLogWarning("Cannot find an active object");
+		wxLogWarning(_T("Cannot find an active object"));
 		return FALSE;
 	}
 	
 	if (pUnk->QueryInterface(IID_IDispatch, (LPVOID*) &m_dispatchPtr) != S_OK)
 	{
-		wxLogWarning("Cannot find IDispatch interface");
+		wxLogWarning(_T("Cannot find IDispatch interface"));
 		return FALSE;
 	}
 
@@ -491,18 +491,18 @@ bool wxAutomationObject::CreateInstance(const wxString& classId) const
 
 	CLSID clsId;
 
-	BasicString unicodeName((const char*) classId);
+	BasicString unicodeName(classId.mb_str());
 	
 	if (FAILED(CLSIDFromProgID((BSTR) unicodeName, &clsId))) 
 	{
-		wxLogWarning("Cannot obtain CLSID from ProgID");
+		wxLogWarning(_T("Cannot obtain CLSID from ProgID"));
 		return FALSE;
 	}
 
 	// start a new copy of Excel, grab the IDispatch interface
 	if (FAILED(CoCreateInstance(clsId, NULL, CLSCTX_LOCAL_SERVER, IID_IDispatch, (void**)&m_dispatchPtr))) 
 	{
-		wxLogWarning("Cannot start an instance of this class.");
+		wxLogWarning(_T("Cannot start an instance of this class."));
 		return FALSE;
 	}
 	
@@ -521,17 +521,17 @@ bool ConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
 
     wxString type(variant.GetType());
 
-    if (type == "long")
+    if (type == _T("long"))
     {
         oleVariant.vt = VT_I4;
         oleVariant.lVal = variant.GetLong() ;
     }
-    else if (type == "double")
+    else if (type == _T("double"))
     {
         oleVariant.vt = VT_R8;
         oleVariant.dblVal = variant.GetDouble();
     }
-    else if (type == "bool")
+    else if (type == _T("bool"))
     {
         oleVariant.vt = VT_BOOL;
         // 'bool' required for VC++ 4 apparently
@@ -541,13 +541,13 @@ bool ConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
         oleVariant.boolVal = variant.GetBool();
 #endif
     }
-    else if (type == "string")
+    else if (type == _T("string"))
     {
         wxString str( variant.GetString() );
         oleVariant.vt = VT_BSTR;
         oleVariant.bstrVal = ConvertStringToOle(str);
     }
-    else if (type == "date")
+    else if (type == _T("date"))
     {
         wxDate date( variant.GetDate() );
         oleVariant.vt = VT_DATE;
@@ -556,7 +556,7 @@ bool ConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
 				0, 0, 0, oleVariant.date))
 			return FALSE;
     }
-    else if (type == "time")
+    else if (type == _T("time"))
     {
         wxTime time( variant.GetTime() );
         oleVariant.vt = VT_DATE;
@@ -565,12 +565,12 @@ bool ConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
 			time.GetHour(), time.GetMinute(), time.GetSecond(), oleVariant.date))
 			return FALSE;
     }
-    else if (type == "void*")
+    else if (type == _T("void*"))
     {
         oleVariant.vt = VT_DISPATCH;
         oleVariant.pdispVal = (IDispatch*) variant.GetVoidPtr();
     }
-    else if (type == "list" || type == "stringlist")
+    else if (type == _T("list") || type == _T("stringlist"))
     {
         oleVariant.vt = VT_VARIANT | VT_ARRAY;
 
@@ -724,7 +724,7 @@ bool ConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
 		}
 	default:
 		{
-			wxLogError("wxAutomationObject::ConvertOleToVariant: Unknown variant value type");
+			wxLogError(_T("wxAutomationObject::ConvertOleToVariant: Unknown variant value type"));
 			return FALSE;
 		}
 	}
@@ -741,7 +741,7 @@ static BSTR ConvertStringToOle(const wxString& str)
 	for (i=0; i < len; i++)
 		s[i*2] = str[i];
 */
-	BasicString bstr((const char*) str);
+	BasicString bstr(str.mb_str());
 	return bstr.Get();
 }
 
@@ -1057,7 +1057,7 @@ static void ReleaseVariant(VARIANTARG *pvarg)
 		}
 		else 
 		{
-			wxLogWarning("ReleaseVariant: Array contains non-variant type");
+			wxLogWarning(_T("ReleaseVariant: Array contains non-variant type"));
 		}
 		
 		// Free the array itself.
@@ -1084,7 +1084,7 @@ static void ReleaseVariant(VARIANTARG *pvarg)
 				break;
 				
 			default:
-				wxLogWarning("ReleaseVariant: Unknown type");
+				wxLogWarning(_T("ReleaseVariant: Unknown type"));
 				break;
 		}
 	}
