@@ -22,7 +22,7 @@
 // wxStaticBitmap
 // ----------------------------------------------------------------------------
 
-class wxStaticBitmap : public wxStaticBitmapBase
+class WXDLLEXPORT wxStaticBitmap : public wxStaticBitmapBase
 {
 public:
     wxStaticBitmap()
