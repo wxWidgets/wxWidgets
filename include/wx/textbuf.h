@@ -145,6 +145,9 @@ public:
     // delete one line
     void RemoveLine(size_t n) { m_aLines.RemoveAt(n); m_aTypes.RemoveAt(n); }
 
+    // remove all lines
+    void Clear() { m_aLines.Clear(); m_nCurLine = 0; }
+    
     // change the buffer (default argument means "don't change type")
     // possibly in another format
     bool Write(wxTextFileType typeNew = wxTextFileType_None,
