@@ -25,6 +25,16 @@
 #include "wx/statbox.h"
 #include "wx/notebook.h"
 
+static bool IsSizerNode(wxXmlNode *node)
+{
+    return (node->GetName() == _T("boxsizer")) ||
+           (node->GetName() == _T("staticboxsizer")) ||
+           (node->GetName() == _T("gridsizer")) ||
+           (node->GetName() == _T("flexgridsizer"));
+}
+
+
+
 wxSizerXmlHandler::wxSizerXmlHandler() 
 : wxXmlResourceHandler(), m_IsInside(FALSE), m_ParentSizer(NULL)
 {
@@ -72,9 +82,12 @@ wxObject *wxSizerXmlHandler::DoCreateResource()
             if (n->GetType() == wxXML_ELEMENT_NODE)
             {        
                 bool old_ins = m_IsInside;
+                wxSizer *old_par = m_ParentSizer;
                 m_IsInside = FALSE;
+                if (!IsSizerNode(n)) m_ParentSizer = NULL;
                 wxObject *item = CreateResFromNode(n, m_Parent, NULL);
                 m_IsInside = old_ins;
+                m_ParentSizer = old_par;
                 wxSizer *sizer = wxDynamicCast(item, wxSizer);
                 wxWindow *wnd = wxDynamicCast(item, wxWindow);
                 
@@ -104,35 +117,7 @@ wxObject *wxSizerXmlHandler::DoCreateResource()
         return NULL;
     }
     
-#if wxUSE_NOTEBOOK
-    else if (m_Node->GetName() == _T("notebooksizer"))
-    {
-        wxCHECK_MSG(m_ParentSizer, NULL, _T("Incorrect syntax of XML resource: notebooksizer not within sizer!"));        
 
-        wxSizer *old_par = m_ParentSizer;
-        m_ParentSizer = NULL;
-
-        wxNotebook *nb = NULL;
-        wxObject *item;
-        wxXmlNode *n = GetParamNode(_T("window"))->GetChildren();
-        while (n)
-        {
-            if (n->GetType() == wxXML_ELEMENT_NODE)
-            {        
-                item = CreateResFromNode(n, m_Parent, NULL);
-                nb = wxDynamicCast(item, wxNotebook);
-                break;
-            }
-            n = n->GetNext();
-        }
-
-        m_ParentSizer = old_par;
-        
-        wxCHECK_MSG(nb, NULL, _T("Incorrect syntax of XML resource: notebooksizer must contain a notebook!"));
-        return new wxNotebookSizer(nb);
-    }
-#endif
-    
     else {
         wxSizer *sizer = NULL;
         
@@ -193,13 +178,7 @@ wxObject *wxSizerXmlHandler::DoCreateResource()
 
 bool wxSizerXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return ((!m_IsInside && node->GetName() == _T("boxsizer")) ||
-            (!m_IsInside && node->GetName() == _T("staticboxsizer")) ||
-            (!m_IsInside && node->GetName() == _T("gridsizer")) ||
-            (!m_IsInside && node->GetName() == _T("flexgridsizer")) ||
-#if wxUSE_NOTEBOOK
-            (!m_IsInside && node->GetName() == _T("notebooksizer")) ||
-#endif
+    return ((!m_IsInside && IsSizerNode(node)) ||
             (m_IsInside && node->GetName() == _T("sizeritem")) ||
             (m_IsInside && node->GetName() == _T("spacer")));
 }

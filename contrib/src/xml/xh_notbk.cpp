@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xh_notbk.cpp
-// Purpose:     XML resource for wxBoxSizer
+// Purpose:     XML resource for wxNotebook
 // Author:      Vaclav Slavik
 // Created:     2000/03/21
 // RCS-ID:      $Id$
@@ -25,6 +25,7 @@
 
 #include "wx/log.h"
 #include "wx/notebook.h"
+#include "wx/sizer.h"
 
 wxNotebookXmlHandler::wxNotebookXmlHandler() 
 : wxXmlResourceHandler(), m_IsInside(FALSE), m_Notebook(NULL)
@@ -39,13 +40,13 @@ wxNotebookXmlHandler::wxNotebookXmlHandler()
 
 wxObject *wxNotebookXmlHandler::DoCreateResource()
 { 
-    if (m_Node->GetName() == _T("page"))
+    if (m_Node->GetName() == _T("notebookpage"))
     {
-        wxXmlNode *n = GetParamNode(_T("child"))->GetChildren();
+        wxXmlNode *n = GetParamNode(_T("window"))->GetChildren();
         while (n)
         {
             if (n->GetType() == wxXML_ELEMENT_NODE)
-            {        
+            {
                 bool old_ins = m_IsInside;
                 m_IsInside = FALSE;
                 m_IsInside = old_ins;
@@ -53,7 +54,7 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
                 wxWindow *wnd = wxDynamicCast(item, wxWindow);
                 
                 if (wnd)
-                    m_Notebook->AddPage(wnd, GetText(_T("label")), 
+                    m_Notebook->AddPage(wnd, GetText(_T("label")),
                                              GetBool(_T("selected"), 0));
                 else 
                     wxLogError(_T("Error in resource."));              
@@ -79,8 +80,11 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
         CreateChildren(m_Notebook, TRUE/*only this handler*/);
         m_IsInside = old_ins;
         m_Notebook = old_par;
-        
-        return nb;
+
+        if (GetBool(_T("usenotebooksizer"), FALSE))
+            return new wxNotebookSizer(nb);
+        else
+            return nb;
     }
 }
 
@@ -89,7 +93,7 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
 bool wxNotebookXmlHandler::CanHandle(wxXmlNode *node)
 {
     return ((!m_IsInside && node->GetName() == _T("notebook")) ||
-            (m_IsInside && node->GetName() == _T("page")));
+            (m_IsInside && node->GetName() == _T("notebookpage")));
 }
 
 #endif
