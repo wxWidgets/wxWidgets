@@ -336,7 +336,9 @@ public:
     wxTextCtrl& operator<<(const wxChar c);
 
     // do the window-specific processing after processing the update event
-    virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) ;
+    virtual void DoUpdateWindowUI(wxUpdateUIEvent& event);
+
+    virtual bool ShouldInheritColours() const { return false; }
 
 protected:
     // the name of the last file loaded with LoadFile() which will be used by

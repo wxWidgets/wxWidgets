@@ -150,6 +150,10 @@ public:
     // this
     wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
 
+    // usually the controls like list/combo boxes have their own background
+    // colour
+    virtual bool ShouldInheritColours() const { return false; }
+
 private:
     DECLARE_NO_COPY_CLASS(wxControlWithItems)
 };

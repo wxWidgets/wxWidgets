@@ -54,6 +54,11 @@ public:
     // get the control alignment (left/right/centre, top/bottom/centre)
     int GetAlignment() const { return m_windowStyle & wxALIGN_MASK; }
 
+    // controls by default inherit the colours of their parents, if a
+    // particular control class doesn't want to do it, it can override
+    // ShouldInheritColours() to return false
+    virtual bool ShouldInheritColours() const { return true; }
+
 protected:
     // creates the control (calls wxWindowBase::CreateBase inside) and adds it
     // to the list of parents children

@@ -353,6 +353,7 @@ public:
     // Necessary for drawing hrules and vrules, if specified
     void OnPaint(wxPaintEvent& event);
 
+    virtual bool ShouldInheritColours() const { return false; }
 
     // obsolete stuff, for compatibility only -- don't use
     wxDEPRECATED( int GetItemSpacing(bool isSmall) const);

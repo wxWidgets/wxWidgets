@@ -119,17 +119,17 @@ public:
     // deleting the window
     // -------------------
 
-        // ask the window to close itself, return TRUE if the event handler
+        // ask the window to close itself, return true if the event handler
         // honoured our request
-    bool Close( bool force = FALSE );
+    bool Close( bool force = false );
 
         // the following functions delete the C++ objects (the window itself
         // or its children) as well as the GUI windows and normally should
         // never be used directly
 
-        // delete window unconditionally (dangerous!), returns TRUE if ok
+        // delete window unconditionally (dangerous!), returns true if ok
     virtual bool Destroy();
-        // delete all children of this window, returns TRUE if ok
+        // delete all children of this window, returns true if ok
     bool DestroyChildren();
 
         // is the window being deleted?
@@ -358,14 +358,14 @@ public:
     // window state
     // ------------
 
-        // returns TRUE if window was shown/hidden, FALSE if the nothing was
+        // returns true if window was shown/hidden, false if the nothing was
         // done (window was already shown/hidden)
-    virtual bool Show( bool show = TRUE );
-    bool Hide() { return Show(FALSE); }
+    virtual bool Show( bool show = true );
+    bool Hide() { return Show(false); }
 
-        // returns TRUE if window was enabled/disabled, FALSE if nothing done
-    virtual bool Enable( bool enable = TRUE );
-    bool Disable() { return Enable(FALSE); }
+        // returns true if window was enabled/disabled, false if nothing done
+    virtual bool Enable( bool enable = true );
+    bool Disable() { return Enable(false); }
 
     bool IsShown() const { return m_isShown; }
     bool IsEnabled() const { return m_isEnabled; }
@@ -388,10 +388,15 @@ public:
     long GetExtraStyle() const { return m_exStyle; }
 
         // make the window modal (all other windows unresponsive)
-    virtual void MakeModal(bool modal = TRUE);
+    virtual void MakeModal(bool modal = true);
 
     virtual void SetThemeEnabled(bool enableTheme) { m_themeEnabled = enableTheme; }
     virtual bool GetThemeEnabled() const { return m_themeEnabled; }
+
+        // returns true if this window should inherit its parent colours on
+        // creation
+    virtual bool ShouldInheritColours() const { return false; }
+
 
     // focus and keyboard handling
     // ---------------------------
@@ -446,8 +451,8 @@ public:
 
         // it doesn't really change parent, use ReParent() instead
     void SetParent( wxWindowBase *parent ) { m_parent = (wxWindow *)parent; }
-        // change the real parent of this window, return TRUE if the parent
-        // was changed, FALSE otherwise (error or newParent == oldParent)
+        // change the real parent of this window, return true if the parent
+        // was changed, false otherwise (error or newParent == oldParent)
     virtual bool Reparent( wxWindowBase *newParent );
 
         // implementation mostly
@@ -482,11 +487,11 @@ public:
         // push/pop event handler: allows to chain a custom event handler to
         // alreasy existing ones
     void PushEventHandler( wxEvtHandler *handler );
-    wxEvtHandler *PopEventHandler( bool deleteHandler = FALSE );
+    wxEvtHandler *PopEventHandler( bool deleteHandler = false );
 
         // find the given handler in the event handler chain and remove (but
-        // not delete) it from the event handler chain, return TRUE if it was
-        // found and FALSE otherwise (this also results in an assert failure so
+        // not delete) it from the event handler chain, return true if it was
+        // found and false otherwise (this also results in an assert failure so
         // this function should only be called when the handler is supposed to
         // be there)
     bool RemoveEventHandler(wxEvtHandler *handler);
@@ -505,7 +510,7 @@ public:
     // dialog oriented functions
     // -------------------------
 
-        // validate the correctness of input, return TRUE if ok
+        // validate the correctness of input, return true if ok
     virtual bool Validate();
 
         // transfer data between internal and GUI representations
@@ -577,11 +582,11 @@ public:
 
         // mark the specified rectangle (or the whole window) as "dirty" so it
         // will be repainted
-    virtual void Refresh( bool eraseBackground = TRUE,
+    virtual void Refresh( bool eraseBackground = true,
                           const wxRect *rect = (const wxRect *) NULL ) = 0;
 
         // a less awkward wrapper for Refresh
-    void RefreshRect(const wxRect& rect) { Refresh(TRUE, &rect); }
+    void RefreshRect(const wxRect& rect) { Refresh(true, &rect); }
 
         // repaint all invalid areas of the window immediately
     virtual void Update() { }
@@ -620,20 +625,20 @@ public:
     // --------------------------
 
         // set/retrieve the window colours (system defaults are used by
-        // default): Set functions return TRUE if colour was changed
+        // default): Set functions return true if colour was changed
     virtual bool SetBackgroundColour( const wxColour &colour );
     virtual bool SetForegroundColour( const wxColour &colour );
 
     wxColour GetBackgroundColour() const { return m_backgroundColour; }
     wxColour GetForegroundColour() const { return m_foregroundColour; }
 
-        // set/retrieve the cursor for this window (SetCursor() returns TRUE
+        // set/retrieve the cursor for this window (SetCursor() returns true
         // if the cursor was really changed)
     virtual bool SetCursor( const wxCursor &cursor );
     const wxCursor& GetCursor() const { return m_cursor; }
     wxCursor& GetCursor() { return m_cursor; }
 
-        // set/retrieve the font for the window (SetFont() returns TRUE if the
+        // set/retrieve the font for the window (SetFont() returns true if the
         // font really changed)
     virtual bool SetFont( const wxFont &font ) = 0;
     const wxFont& GetFont() const { return m_font; }
@@ -703,7 +708,7 @@ public:
     // get border for the flags of this window
     wxBorder GetBorder() const { return GetBorder(GetWindowStyleFlag()); }
 
-    // send wxUpdateUIEvents to this window, and children if recurse is TRUE
+    // send wxUpdateUIEvents to this window, and children if recurse is true
     virtual void UpdateWindowUI(long flags = wxUPDATE_UI_NONE);
 
     // do the window-specific processing after processing the update event
@@ -731,8 +736,8 @@ public:
                                int pos,
                                int thumbvisible,
                                int range,
-                               bool refresh = TRUE ) = 0;
-    virtual void SetScrollPos( int orient, int pos, bool refresh = TRUE ) = 0;
+                               bool refresh = true ) = 0;
+    virtual void SetScrollPos( int orient, int pos, bool refresh = true ) = 0;
     virtual int GetScrollPos( int orient ) const = 0;
     virtual int GetScrollThumb( int orient ) const = 0;
     virtual int GetScrollRange( int orient ) const = 0;
@@ -743,9 +748,9 @@ public:
 
         // scrolls window by line/page: note that not all controls support this
         //
-        // return TRUE if the position changed, FALSE otherwise
-    virtual bool ScrollLines(int WXUNUSED(lines)) { return FALSE; }
-    virtual bool ScrollPages(int WXUNUSED(pages)) { return FALSE; }
+        // return true if the position changed, false otherwise
+    virtual bool ScrollLines(int WXUNUSED(lines)) { return false; }
+    virtual bool ScrollPages(int WXUNUSED(pages)) { return false; }
 
         // convenient wrappers for ScrollLines/Pages
     bool LineUp() { return ScrollLines(-1); }
@@ -807,7 +812,7 @@ public:
     void ResetConstraints();
 
         // these methods may be overriden for special layout algorithms
-    virtual void SetConstraintSizes(bool recurse = TRUE);
+    virtual void SetConstraintSizes(bool recurse = true);
     virtual bool LayoutPhase1(int *noChanges);
     virtual bool LayoutPhase2(int *noChanges);
     virtual bool DoPhase(int phase);
@@ -831,8 +836,8 @@ public:
     virtual bool Layout();
 
         // sizers
-    void SetSizer(wxSizer *sizer, bool deleteOld = TRUE );
-    void SetSizerAndFit( wxSizer *sizer, bool deleteOld = TRUE );
+    void SetSizer(wxSizer *sizer, bool deleteOld = true );
+    void SetSizerAndFit( wxSizer *sizer, bool deleteOld = true );
 
     wxSizer *GetSizer() const { return m_windowSizer; }
 
@@ -1326,7 +1331,7 @@ public:
         // Gets a variant representing the selected children
         // of this object.
         // Acceptable values:
-        // - a null variant (IsNull() returns TRUE)
+        // - a null variant (IsNull() returns true)
         // - a list variant (GetType() == wxT("list")
         // - an integer representing the selected child element,
         //   or 0 if this object is selected (GetType() == wxT("long")

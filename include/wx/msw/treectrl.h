@@ -403,6 +403,8 @@ public:
                                             long& cookie) const );
 #endif // WXWIN_COMPATIBILITY_2_4
 
+    virtual bool ShouldInheritColours() const { return false; }
+
     // implementation
     // --------------
 

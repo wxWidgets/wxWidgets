@@ -193,6 +193,7 @@ public:
 
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
 
+    virtual bool ShouldInheritColours() const { return false; }
     virtual void SetFocus();
 
     // implementation
