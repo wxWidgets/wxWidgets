@@ -71,7 +71,11 @@
 // static data
 // ----------------------------------------------------------------------------
 
+#if defined(__WXPM__)
+int wxWindowBase::ms_lastControlId = 2000;
+#else
 int wxWindowBase::ms_lastControlId = -200;
+#endif
 
 IMPLEMENT_ABSTRACT_CLASS(wxWindowBase, wxEvtHandler)
 
@@ -1972,7 +1976,7 @@ void wxWindowBase::CaptureMouse()
     if ( winOld )
     {
         ((wxWindowBase*) winOld)->DoReleaseMouse();
-	
+
         // save it on stack
         wxWindowNext *item = new wxWindowNext;
         item->win = winOld;
@@ -1995,7 +1999,7 @@ void wxWindowBase::ReleaseMouse()
     if ( ms_winCaptureNext )
     {
         ((wxWindowBase*)ms_winCaptureNext->win)->DoCaptureMouse();
-	
+
         wxWindowNext *item = ms_winCaptureNext;
         ms_winCaptureNext = item->next;
         delete item;
