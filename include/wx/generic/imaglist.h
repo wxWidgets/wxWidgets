@@ -47,7 +47,7 @@ enum {
     wxIMAGE_LIST_STATE   // State icons: unimplemented (see WIN32 documentation)
 };
 
-class wxImageList: public wxObject
+class WXDLLEXPORT wxImageList: public wxObject
 {
 public:
     wxImageList() { }

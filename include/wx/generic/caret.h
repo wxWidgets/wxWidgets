@@ -20,7 +20,7 @@
 
 class wxCaret;
 
-class wxCaretTimer : public wxTimer
+class WXDLLEXPORT wxCaretTimer : public wxTimer
 {
 public:
     wxCaretTimer(wxCaret *caret);
