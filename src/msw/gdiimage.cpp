@@ -110,14 +110,14 @@ public:
                         int WXUNUSED(height),
                         int WXUNUSED(depth) = 1)
     {
-        return FALSE;
+        return false;
     }
 
     virtual bool Save(wxGDIImage *WXUNUSED(image),
                       const wxString& WXUNUSED(name),
                       int WXUNUSED(type))
     {
-        return FALSE;
+        return false;
     }
 
     virtual bool Load(wxGDIImage *image,
@@ -126,7 +126,7 @@ public:
                       int desiredWidth, int desiredHeight)
     {
         wxIcon *icon = wxDynamicCast(image, wxIcon);
-        wxCHECK_MSG( icon, FALSE, _T("wxIconHandler only works with icons") );
+        wxCHECK_MSG( icon, false, _T("wxIconHandler only works with icons") );
 
         return LoadIcon(icon, name, flags, desiredWidth, desiredHeight);
     }
@@ -205,7 +205,7 @@ bool wxGDIImage::FreeResource(bool WXUNUSED(force))
         GetGDIImageData()->m_handle = 0;
     }
 
-    return TRUE;
+    return true;
 }
 
 WXHANDLE wxGDIImage::GetResourceHandle() const
@@ -233,21 +233,21 @@ bool wxGDIImage::RemoveHandler(const wxString& name)
     if ( handler )
     {
         ms_handlers.DeleteObject(handler);
-        return TRUE;
+        return true;
     }
     else
-        return FALSE;
+        return false;
 }
 
 wxGDIImageHandler *wxGDIImage::FindHandler(const wxString& name)
 {
-    wxNode *node = ms_handlers.First();
+    wxNode *node = ms_handlers.GetFirst();
     while ( node )
     {
-        wxGDIImageHandler *handler = (wxGDIImageHandler *)node->Data();
+        wxGDIImageHandler *handler = (wxGDIImageHandler *)node->GetData();
         if ( handler->GetName() == name )
             return handler;
-        node = node->Next();
+        node = node->GetNext();
     }
 
     return NULL;
@@ -256,31 +256,31 @@ wxGDIImageHandler *wxGDIImage::FindHandler(const wxString& name)
 wxGDIImageHandler *wxGDIImage::FindHandler(const wxString& extension,
                                            long type)
 {
-    wxNode *node = ms_handlers.First();
+    wxNode *node = ms_handlers.GetFirst();
     while ( node )
     {
-        wxGDIImageHandler *handler = (wxGDIImageHandler *)node->Data();
+        wxGDIImageHandler *handler = (wxGDIImageHandler *)node->GetData();
         if ( (handler->GetExtension() = extension) &&
              (type == -1 || handler->GetType() == type) )
         {
             return handler;
         }
 
-        node = node->Next();
+        node = node->GetNext();
     }
     return NULL;
 }
 
 wxGDIImageHandler *wxGDIImage::FindHandler(long type)
 {
-    wxNode *node = ms_handlers.First();
+    wxNode *node = ms_handlers.GetFirst();
     while ( node )
     {
-        wxGDIImageHandler *handler = (wxGDIImageHandler *)node->Data();
+        wxGDIImageHandler *handler = (wxGDIImageHandler *)node->GetData();
         if ( handler->GetType() == type )
             return handler;
 
-        node = node->Next();
+        node = node->GetNext();
     }
 
     return NULL;
@@ -288,11 +288,11 @@ wxGDIImageHandler *wxGDIImage::FindHandler(long type)
 
 void wxGDIImage::CleanUpHandlers()
 {
-    wxNode *node = ms_handlers.First();
+    wxNode *node = ms_handlers.GetFirst();
     while ( node )
     {
-        wxGDIImageHandler *handler = (wxGDIImageHandler *)node->Data();
-        wxNode *next = node->Next();
+        wxGDIImageHandler *handler = (wxGDIImageHandler *)node->GetData();
+        wxNode *next = node->GetNext();
         delete handler;
         delete node;
         node = next;
@@ -329,7 +329,7 @@ bool wxBMPResourceHandler::LoadFile(wxBitmap *bitmap,
         wxLogError(wxT("Can't load bitmap '%s' from resources! Check .rc file."),
                    name.c_str());
 
-        return FALSE;
+        return false;
     }
 
     BITMAP bm;
@@ -342,7 +342,7 @@ bool wxBMPResourceHandler::LoadFile(wxBitmap *bitmap,
     bitmap->SetHeight(bm.bmHeight);
     bitmap->SetDepth(bm.bmBitsPixel);
 
-    return TRUE;
+    return true;
 }
 
 bool wxBMPFileHandler::LoadFile(wxBitmap *bitmap,
@@ -366,7 +366,7 @@ bool wxBMPFileHandler::LoadFile(wxBitmap *bitmap,
 
     return success;
 #else
-    return FALSE;
+    return false;
 #endif
 }
 
@@ -387,7 +387,7 @@ bool wxBMPFileHandler::SaveFile(wxBitmap *bitmap,
 
     return wxSaveBitmap(WXSTRINGCAST name, bitmap, actualPalette) != 0;
 #else
-    return FALSE;
+    return false;
 #endif
 }
 
@@ -482,7 +482,7 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
         wxLogSysError(_T("Failed to load icon from the file '%s'"),
                       name.c_str());
 
-        return FALSE;
+        return false;
     }
 
     size = wxGetHiconSize(hicon);
@@ -496,13 +496,13 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
          (desiredHeight != -1 && desiredHeight != size.y) )
     {
         wxLogTrace(_T("iconload"),
-                   _T("Returning FALSE from wxICOFileHandler::Load because of the size mismatch: actual (%d, %d), requested (%d, %d)"),
+                   _T("Returning false from wxICOFileHandler::Load because of the size mismatch: actual (%d, %d), requested (%d, %d)"),
                    size.x, size.y,
                    desiredWidth, desiredHeight);
 
         ::DestroyIcon(hicon);
 
-        return FALSE;
+        return false;
     }
 
     icon->SetHICON((WXHICON)hicon);
@@ -510,7 +510,7 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
 
     return icon->Ok();
 #else
-    return FALSE;
+    return false;
 #endif
 }
 
