@@ -452,7 +452,7 @@ wxUint32 wxSocketBase::DeferWrite(const char *buffer, wxUint32 nbytes)
   m_defering = NO_DEFER;
 
   wxString s;
-  s.Printf("Saliendo de DeferWrite: total %d bytes", nbytes-m_defer_nbytes);
+  s.Printf(wxT("Saliendo de DeferWrite: total %d bytes"), nbytes-m_defer_nbytes);
   //wxLogMessage(s);
 
   return nbytes-m_defer_nbytes;
