@@ -246,6 +246,12 @@ lead.  Boa needs them to help keep track of what kind of item is being
 managed by the sizer.  They are now just simple compatibility aliases
 for Add, and etc.
 
+The old C++ version of the OGL lib is no longer built by default.  Use
+the Python version in the wx.lib.ogl package instead.
+
+The wx.iewin module is no longer built by default.  You can use the
+wx.lib.iewin version instead.
+
 
 
 

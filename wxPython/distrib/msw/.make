@@ -115,12 +115,12 @@ if [ ! $? = 0 ]; then error; fi
 cd -
 
 
-echo ------------------
-echo cd ../../contrib/build/ogl
-cd ../../contrib/build/ogl
-$WXWIN/build/msw/.mymake $BUILD_TYPE CPPFLAGS="-DwxUSE_DEPRECATED=0" $@
-if [ ! $? = 0 ]; then error; fi
-cd -
+# echo ------------------
+# echo cd ../../contrib/build/ogl
+# cd ../../contrib/build/ogl
+# $WXWIN/build/msw/.mymake $BUILD_TYPE CPPFLAGS="-DwxUSE_DEPRECATED=0" $@
+# if [ ! $? = 0 ]; then error; fi
+# cd -
 
 
 

@@ -40,7 +40,7 @@ VER_MAJOR        = 2      # The first three must match wxWidgets
 VER_MINOR        = 5
 VER_RELEASE      = 4
 VER_SUBREL       = 1      # wxPython release num for x.y.z release of wxWidgets
-VER_FLAGS        = "rc1"     # release flags, such as prerelease num, unicode, etc.
+VER_FLAGS        = "pre"     # release flags, such as prerelease num, unicode, etc.
 
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
@@ -79,14 +79,14 @@ Topic :: Software Development :: User Interfaces
 # Config values below this point can be reset on the setup.py command line.
 
 BUILD_GLCANVAS = 1 # If true, build the contrib/glcanvas extension module
-BUILD_OGL = 1      # If true, build the contrib/ogl extension module
+BUILD_OGL = 0      # If true, build the contrib/ogl extension module
 BUILD_STC = 1      # If true, build the contrib/stc extension module
 BUILD_GIZMOS = 1   # Build a module for the gizmos contrib library
 BUILD_DLLWIDGET = 0# Build a module that enables unknown wx widgets
                    # to be loaded from a DLL and to be used from Python.
 
                    # Internet Explorer wrapper (experimental)
-BUILD_IEWIN = (os.name == 'nt')
+BUILD_IEWIN = 0 #(os.name == 'nt')
 BUILD_ACTIVEX = (os.name == 'nt')  # new version of IEWIN and more
 
 

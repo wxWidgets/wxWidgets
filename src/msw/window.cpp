@@ -3576,7 +3576,7 @@ wxWindowMSW::MSWOnDrawItem(int WXUNUSED_UNLESS_ODRAWN(id),
     if ( id == 0 && pDrawStruct->CtlType == ODT_MENU )
     {
         wxMenuItem *pMenuItem = (wxMenuItem *)(pDrawStruct->itemData);
-
+        if (!pMenuItem) return false;
         wxCHECK_MSG( pMenuItem && pMenuItem->IsKindOf(CLASSINFO(wxMenuItem)),
                          false, _T("MSWOnDrawItem: bad wxMenuItem pointer") );
 

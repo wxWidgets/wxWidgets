@@ -89,9 +89,9 @@ Source: "wx\_html.pyd";                        DestDir: "{app}\%(PKGDIR)s\wx"; C
 Source: "wx\_wizard.pyd";                      DestDir: "{app}\%(PKGDIR)s\wx"; Components: core
 Source: "wx\_gizmos.pyd";                      DestDir: "{app}\%(PKGDIR)s\wx"; Components: core
 Source: "wx\_glcanvas.pyd";                    DestDir: "{app}\%(PKGDIR)s\wx"; Components: core
-Source: "wx\_iewin.pyd";                       DestDir: "{app}\%(PKGDIR)s\wx"; Components: core
+;;Source: "wx\_iewin.pyd";                       DestDir: "{app}\%(PKGDIR)s\wx"; Components: core
 Source: "wx\_activex.pyd";                     DestDir: "{app}\%(PKGDIR)s\wx"; Components: core
-Source: "wx\_ogl.pyd";                         DestDir: "{app}\%(PKGDIR)s\wx"; Components: core
+;;Source: "wx\_ogl.pyd";                         DestDir: "{app}\%(PKGDIR)s\wx"; Components: core
 Source: "wx\_stc.pyd";                         DestDir: "{app}\%(PKGDIR)s\wx"; Components: core
 Source: "wx\_xrc.pyd";                         DestDir: "{app}\%(PKGDIR)s\wx"; Components: core
 
@@ -390,7 +390,7 @@ Source: "demo\data\*.swf";                  DestDir: "{app}\demo\data";
 
 Source: "licence\*.txt";                    DestDir: "{app}\docs\licence"; 
 Source: "%(WXDIR)s\docs\htmlhelp\wx.chm";   DestDir: "{app}\docs"; 
-Source: "%(WXDIR)s\docs\htmlhelp\ogl.chm";  DestDir: "{app}\docs"; 
+;;Source: "%(WXDIR)s\docs\htmlhelp\ogl.chm";  DestDir: "{app}\docs"; 
 Source: "docs\README.txt";                  DestDir: "{app}\docs";  Flags: isreadme; 
 Source: "docs\*.txt";                       DestDir: "{app}\docs"; 
 Source: "docs\*.css";                       DestDir: "{app}\docs"; 
