@@ -1752,7 +1752,7 @@ void wxArrayString::Copy(const wxArrayString& src)
 void wxArrayString::Grow(size_t nIncrement)
 {
   // only do it if no more place
-  if ( m_nCount == m_nSize ) {
+  if ( (m_nSize - m_nCount) < nIncrement ) {
     // if ARRAY_DEFAULT_INITIAL_SIZE were set to 0, the initially empty would
     // be never resized!
     #if ARRAY_DEFAULT_INITIAL_SIZE == 0
