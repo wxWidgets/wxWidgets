@@ -786,7 +786,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
     int i;
     for (i = 0; i < 2; i++)
     {
-        bool s_inYield = FALSE;
+        static bool s_inYield = FALSE;
 
         if ( s_inYield )
         {

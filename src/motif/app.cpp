@@ -304,7 +304,7 @@ void wxApp::SetTopLevelWidget(WXDisplay* display, WXWidget widget)
 
 bool wxApp::Yield(bool onlyIfNeeded)
 {
-    bool s_inYield = FALSE;
+    static bool s_inYield = FALSE;
 
     if ( s_inYield )
     {
