@@ -773,6 +773,7 @@ AC_ARG_WITH(x11,           [  --with-x11              use X11], [wxUSE_X11="$wit
 WX_ARG_ENABLE(nanox,       [  --enable-nanox          use NanoX], wxUSE_NANOX)
 
 WX_ARG_ENABLE(gtk2,        [  --enable-gtk2           use GTK+ 2.0 if available (EXPERIMENTAL)], wxUSE_GTK2)
+WX_ARG_ENABLE(gpe,         [  --enable-gpe            use GNOME PDA Environment features if possible], wxUSE_GPE)
 
 WX_ARG_SYS_WITH(libpng,    [  --with-libpng           use libpng (PNG image format)], wxUSE_LIBPNG)
 WX_ARG_SYS_WITH(libjpeg,   [  --with-libjpeg          use libjpeg (JPEG file format)], wxUSE_LIBJPEG)
@@ -1845,6 +1846,8 @@ SEARCH_INCLUDE="\
     /usr/include/qt           \
     /usr/local/include/qt     \
                               \
+    /usr/local/arm/3.3.2/include     \
+                              \
     /usr/include/windows      \
     /usr/include/wine         \
     /usr/local/include/wine   \
@@ -2329,6 +2332,7 @@ if test "$wxUSE_GUI" = "yes"; then
     WXGTK12=
     WXGTK127=
     WXGTK20=
+    WXGPE=
 
     if test "$wxUSE_MSW" = 1 ; then
         TOOLKIT=MSW
@@ -2445,6 +2449,33 @@ equivalent variable and GTK+ is version 1.2.3 or above.
 
         dnl test for XIM support in libgdk
         AC_CHECK_LIB(gdk, gdk_im_open, AC_DEFINE(HAVE_XIM))
+        
+        
+        dnl test for external libxpm if we're configured to use it
+        if test "$wxUSE_GPE" = "yes"; then
+            AC_MSG_CHECKING(for gpewidget library)
+            WX_PATH_FIND_LIBRARIES($SEARCH_LIB,gpewidget)
+            if test "$ac_find_libraries" != "" ; then
+                WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
+                dnl -lgpewidget must be before all GTK libs and
+                dnl we guess its path from the prefix
+                GUI_TK_LIBRARY="-L${prefix}/lib -lgpewidget $GUI_TK_LIBRARY"
+                WXGPE=1
+                AC_MSG_RESULT(found at $ac_find_libraries)
+            else
+                AC_MSG_RESULT(not found)
+            fi
+
+            dnl AC_MSG_CHECKING(for gpe library)
+            dnl WX_PATH_FIND_LIBRARIES($SEARCH_LIB,gpe)
+            dnl if test "$ac_find_libraries" != "" ; then
+            dnl     WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
+            dnl     GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lgpe"
+            dnl     AC_MSG_RESULT(found at $ac_find_libraries)
+            dnl else
+            dnl     AC_MSG_RESULT(not found)
+            dnl fi
+        fi
     fi
 
     if test "$wxUSE_MGL" = 1; then
@@ -4254,6 +4285,10 @@ fi
 
 if test "$WXGTK127" = 1 ; then
   AC_DEFINE_UNQUOTED(__WXGTK127__,$WXGTK127)
+fi
+
+if test "$WXGPE" = 1 ; then
+  AC_DEFINE_UNQUOTED(__WXGPE__,$WXGPE)
 fi
 
 WXDEBUG=
