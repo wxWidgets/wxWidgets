@@ -4100,7 +4100,7 @@ void wxWindowMSW::OnEraseBackground(wxEraseEvent& event)
     RECT rect;
     ::GetClientRect(GetHwnd(), &rect);
     
-    wxColour backgroundColour( /*m_backgroundColour*/ GetBackgroundColour());
+    wxColour backgroundColour( GetBackgroundColour());
     COLORREF ref = PALETTERGB(backgroundColour.Red(),
                               backgroundColour.Green(),
                               backgroundColour.Blue());
