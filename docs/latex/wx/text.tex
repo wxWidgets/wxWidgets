@@ -280,11 +280,11 @@ streambuf\\
 \twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\windowstyle{wxTE\_PROCESS\_ENTER}}{The control will generate
-the message wxEVENT\_TYPE\_TEXT\_ENTER\_COMMAND (otherwise pressing Enter key
+the event wxEVT\_COMMAND\_TEXT\_ENTER (otherwise pressing Enter key
 is either processed internally by the control or used for navigation between
 dialog controls).}
 \twocolitem{\windowstyle{wxTE\_PROCESS\_TAB}}{The control will receive
-EVT\_CHAR messages for TAB pressed - normally, TAB is used for passing to the
+wxEVT\_CHAR events for TAB pressed - normally, TAB is used for passing to the
 next control in a dialog instead. For the control created with this style,
 you can still use Ctrl-Enter to pass to the next control from the keyboard.}
 \twocolitem{\windowstyle{wxTE\_MULTILINE}}{The text control allows multiple lines.}

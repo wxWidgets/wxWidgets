@@ -32,7 +32,7 @@ appropriately for text, and calls \helpref{wxTextDropTarget::OnDropText}{wxtextd
 
 \membersection{wxTextDropTarget::OnDropText}\label{wxtextdroptargetondroptext}
 
-\func{virtual bool}{OnDropText}{\param{long }{x}, \param{long }{y}, \param{const char }{*data}}
+\func{virtual bool}{OnDropText}{\param{wxCoord }{x}, \param{wxCoord }{y}, \param{const wxString\&}{ data}}
 
 Override this function to receive dropped text.
 
@@ -42,7 +42,7 @@ Override this function to receive dropped text.
 
 \docparam{y}{The y coordinate of the mouse.}
 
-\docparam{data}{The data being dropped: a NULL-terminated string.}
+\docparam{data}{The data being dropped: a wxString.}
 
 \wxheading{Return value}
 
