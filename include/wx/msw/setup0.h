@@ -664,6 +664,9 @@
 // number entry dialog
 #define wxUSE_NUMBERDLG 1
 
+// splash screen class
+#define wxUSE_SPLASH 1
+
 // wizards
 #define wxUSE_WIZARDDLG 1
 
