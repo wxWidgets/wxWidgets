@@ -298,6 +298,12 @@ bool wxQTMediaBackend::Load(const wxString& fileName)
     short movieResFile;
     FSSpec sfFile;
     
+    //FIXME:wxMacFilename2FSSpec crashes on empty string - 
+    //does it crash on other strings too and should this
+    //"fix" be put in the carbon wxSound?
+    if (fileName.empty())
+        return false;
+    
     wxMacFilename2FSSpec( fileName , &sfFile );
     
     if (OpenMovieFile (&sfFile, &movieResFile, fsRdPerm) != noErr)
