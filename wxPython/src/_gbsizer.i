@@ -40,11 +40,19 @@
 %{
 bool wxGBPosition_helper(PyObject* source, wxGBPosition** obj)
 {
+    if (source == Py_None) {
+        **obj = wxGBPosition(-1,-1);
+        return True;
+    }
     return wxPyTwoIntItem_helper(source, obj, wxT("wxGBPosition"));
 }
 
 bool wxGBSpan_helper(PyObject* source, wxGBSpan** obj)
 {
+    if (source == Py_None) {
+        **obj = wxGBSpan(-1,-1);
+        return True;
+    }
     return wxPyTwoIntItem_helper(source, obj, wxT("wxGBSpan"));
 }
 
@@ -64,12 +72,15 @@ public:
     int GetCol() const;
     void SetRow(int row);
     void SetCol(int col);
-    
-    %extend {
-        bool __eq__(const wxGBPosition* other) { return other ? (*self == *other) : False; }
-        bool __ne__(const wxGBPosition* other) { return other ? (*self != *other) : True;  }
-    }
 
+//     %extend {
+//         bool __eq__(const wxGBPosition* other) { return other ? (*self == *other) : False; }
+//         bool __ne__(const wxGBPosition* other) { return other ? (*self != *other) : True;  }
+//     }
+
+    bool operator==(const wxGBPosition& other);
+    bool operator!=(const wxGBPosition& other);
+    
     %extend {
         void Set(int row=0, int col=0) {
             self->SetRow(row);
@@ -119,10 +130,13 @@ public:
     void SetRowspan(int rowspan);
     void SetColspan(int colspan);
     
-    %extend {
-        bool __eq__(const wxGBSpan* other) { return other ? (*self == *other) : False; }
-        bool __ne__(const wxGBSpan* other) { return other ? (*self != *other) : True;  }
-    }
+//     %extend {
+//         bool __eq__(const wxGBSpan* other) { return other ? (*self == *other) : False; }
+//         bool __ne__(const wxGBSpan* other) { return other ? (*self != *other) : True;  }
+//     }
+    bool operator==(const wxGBSpan& other);
+    bool operator!=(const wxGBSpan& other);
+    
 
     %extend {
         void Set(int rowspan=1, int colspan=1) {
