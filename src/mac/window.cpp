@@ -77,6 +77,7 @@ BEGIN_EVENT_TABLE(wxWindowMac, wxWindowBase)
   EVT_INIT_DIALOG(wxWindowMac::OnInitDialog)
   EVT_IDLE(wxWindowMac::OnIdle)
   EVT_SET_FOCUS(wxWindowMac::OnSetFocus)
+  EVT_MOUSE_EVENTS(wxWindowMac::OnMouseEvent)
 END_EVENT_TABLE()
 
 #endif
@@ -192,9 +193,6 @@ wxWindowMac::~wxWindowMac()
 
     if ( m_parent )
         m_parent->RemoveChild(this);
-
-    wxWindowDestroyEvent event((wxWindow *)this);
-    (void)GetEventHandler()->ProcessEvent(event);
 
     // delete our drop target if we've got one
 #if wxUSE_DRAG_AND_DROP
@@ -388,20 +386,61 @@ bool wxWindowMac::DoPopupMenu(wxMenu *menu, int x, int y)
     menu->UpdateUI();
     ClientToScreen( &x , &y ) ;
 
+	wxArrayPtrVoid submenus ;
+    wxMenuItemList::Node *node;
+    wxMenuItem *item;
+    int pos ;
+	for (pos = 0, node = menu->GetMenuItems().GetFirst(); node; node = node->GetNext(), pos++) 
+	{
+		item = (wxMenuItem *)node->GetData();
+		wxMenu* subMenu = item->GetSubMenu() ;
+		if (subMenu)             
+		{
+			submenus.Add(subMenu) ;
+		}
+	}
+
     ::InsertMenu( (MenuHandle) menu->GetHMenu() , -1 ) ;
+
+	for ( size_t i = 0 ; i < submenus.GetCount() ; ++i )
+	{
+		wxMenu* submenu = (wxMenu*) submenus[i] ;
+		wxMenuItemList::Node *subnode;
+		wxMenuItem *subitem;
+		int subpos ;
+		for ( subpos = 0 , subnode = submenu->GetMenuItems().GetFirst(); subnode; subnode = subnode->GetNext(), subpos++) 
+		{
+			subitem = (wxMenuItem *)subnode->GetData();
+			wxMenu* itsSubMenu = subitem->GetSubMenu() ;
+			if (itsSubMenu)             
+			{
+				submenus.Add(itsSubMenu) ;
+			}                  
+		}
+		::InsertMenu( MAC_WXHMENU(submenu->GetHMenu()) , -1 ) ;
+	}
+
     long menuResult = ::PopUpMenuSelect((MenuHandle) menu->GetHMenu() ,y,x, 0) ;
     if ( HiWord(menuResult) != 0 )
     {
         MenuCommand id ;
         GetMenuItemCommandID( GetMenuHandle(HiWord(menuResult)) , LoWord(menuResult) , &id ) ;
-
-        wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, id );
-        event.m_timeStamp =  TickCount() ;
-        event.SetEventObject(this->GetEventHandler());
-        event.SetInt( id );
-        GetEventHandler()->ProcessEvent(event);
+        wxMenuItem* item = NULL ;
+        wxMenu* realmenu ;
+        item = menu->FindItem(id, &realmenu) ;
+        if (item->IsCheckable())
+        {
+            item->Check( !item->IsChecked() ) ;
+        }        
+        menu->SendEvent( id , item->IsCheckable() ? item->IsChecked() : -1 ) ;
     }
     ::DeleteMenu( menu->MacGetMenuId() ) ;
+	for ( size_t i = 0 ; i < submenus.GetCount() ; ++i )
+	{
+		wxMenu* submenu = (wxMenu*) submenus[i] ;
+		::DeleteMenu( submenu->MacGetMenuId() ) ;
+	}
+
     menu->SetInvokingWindow(NULL);
 
   return TRUE;
@@ -2076,5 +2115,27 @@ wxPoint wxGetMousePosition()
     int x, y;
     wxGetMousePosition(& x, & y);
     return wxPoint(x, y);
+}
+
+void wxWindowMac::OnMouseEvent( wxMouseEvent &event ) 
+{
+	if ( event.GetEventType() == wxEVT_RIGHT_DOWN )
+	{
+		// copied from wxGTK : CS
+        // generate a "context menu" event: this is similar to wxEVT_RIGHT_UP
+        // except that:
+        //
+        // (a) it's a command event and so is propagated to the parent
+        // (b) under MSW it can be generated from kbd too
+        // (c) it uses screen coords (because of (a))
+        wxContextMenuEvent evtCtx(wxEVT_CONTEXT_MENU,
+                                  this->GetId(),
+                                  this->ClientToScreen(event.GetPosition()));
+        this->GetEventHandler()->ProcessEvent(evtCtx);
+	}
+	else
+	{
+		event.Skip() ;
+	}
 }
 
