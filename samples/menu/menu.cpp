@@ -419,7 +419,7 @@ wxMenu *MyFrame::CreateDummyMenu(wxString *title)
 
     if ( title )
     {
-        title->Printf(wxT("Dummy menu &%d"), ++m_countDummy);
+        title->Printf(wxT("Dummy menu &%u"), (unsigned)++m_countDummy);
     }
 
     return menu;
