@@ -166,10 +166,16 @@ bool wxTaskBarIcon::PopupMenu(wxMenu *menu) //, int x, int y);
     win = new wxFrame(NULL, -1, "", wxPoint(x,y), wxSize(-1,-1), 0);
     win->PushEventHandler(this);
 
+    // Remove from record of top-level windows, or will confuse wxWindows
+    // if we try to exit right now.
+    wxTopLevelWindows.DeleteObject(win);
+
     rval = win->PopupMenu(menu, 0, 0);
 
     win->PopEventHandler(FALSE);
     win->Destroy();
+    delete win;
+
     return rval;
 }
 

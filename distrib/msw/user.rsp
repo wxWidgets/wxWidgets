@@ -3,25 +3,15 @@ user/Makefile
 user/wxConvert/*.cpp
 user/wxConvert/*.h
 user/wxConvert/Makefile
-user/wxConvert/Makefile.in
 
 user/wxFile/*.cpp
 user/wxFile/*.h
 user/wxFile/Makefile
-user/wxFile/Makefile.in
 user/wxFile/*.xpm
 
 user/wxTest/*.cpp
 user/wxTest/*.h
 user/wxTest/Makefile
-user/wxTest/Makefile.in
 user/wxTest/*.xpm
 user/wxTest/*.png
-
-user/wxLayout/*.cpp
-user/wxLayout/*.h
-user/wxLayout/Makefile
-user/wxLayout/Makefile.in
-user/wxLayout/*.xpm
-user/wxLayout/*.png
 

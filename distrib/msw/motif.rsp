@@ -15,7 +15,6 @@ src/makeprog.env
 src/makelib.env
 
 src/Makefile
-src/Makefile.in
 src/motif.inc
 
 src/motif/*.cpp

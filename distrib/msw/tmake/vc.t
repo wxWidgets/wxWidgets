@@ -361,10 +361,14 @@ clean: $(PERIPH_CLEAN_TARGET) clean_png clean_zlib clean_jpeg clean_xpm
         -erase $(OLEDIR)\$D\*.obj
         -erase $(OLEDIR)\$D\*.sbr
         -erase $(OLEDIR)\$D\*.pdb
+        -erase $(HTMLDIR)\$D\*.obj
+        -erase $(HTMLDIR)\$D\*.sbr
+        -erase $(HTMLDIR)\$D\*.pdb
         -rmdir $(D)
         -rmdir ole\$(D)
         -rmdir ..\generic\$(D)
         -rmdir ..\common\$(D)
+        -rmdir ..\html\$(D)
 
 cleanall: clean
 

@@ -47,6 +47,7 @@ bool MyApp::OnInit(void)
 BEGIN_EVENT_TABLE(MyDialog, wxDialog)
     EVT_BUTTON(wxID_OK, MyDialog::OnOK)
     EVT_BUTTON(wxID_EXIT, MyDialog::OnExit)
+    EVT_CLOSE(MyDialog::OnCloseWindow)
 END_EVENT_TABLE()
 
 

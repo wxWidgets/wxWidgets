@@ -20,10 +20,14 @@ cd %src
 echo Zipping...
 
 zip32 -@ %dest\wx200gen.zip < %src\distrib\msw\generic.rsp
+zip32 -@ -u %dest\wx200gen.zip < %src\distrib\msw\makefile.rsp
 zip32 -@ %dest\wx200msw.zip < %src\distrib\msw\msw.rsp
+zip32 -@ -u %dest\wx200msw.zip < %src\distrib\msw\makefile.rsp
 zip32 -@ %dest\wx200gtk.zip < %src\distrib\msw\gtk.rsp
+zip32 -@ -u %dest\wx200gtk.zip < %src\distrib\msw\makefile.rsp
 zip32 -@ %dest\wx200stubs.zip < %src\distrib\msw\stubs.rsp
 zip32 -@ %dest\wx200mot.zip < %src\distrib\msw\motif.rsp
+zip32 -@ -u %dest\wx200mot.zip < %src\distrib\msw\makefile.rsp
 zip32 -@ %dest\wx200user.zip < %src\distrib\msw\user.rsp
 
 zip32 -@ %dest\wx200doc.zip < %src\distrib\msw\docsrc.rsp

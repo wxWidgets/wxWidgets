@@ -12,12 +12,12 @@ include/install-sh
 include/wx/install-sh
 
 src/Makefile
-src/Makefile.in
 src/gtk.inc
 src/make.env
 src/makelib.env
 src/makeprog.env
 
+src/gtk/Makefile
 src/gtk/*.cpp
 src/gtk/*.c
 src/gtk/*.inc

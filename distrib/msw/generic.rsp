@@ -39,6 +39,7 @@ docs/html/*.gif
 
 src/*.inc
 src/mkdir
+src/Makefile
 
 src/common/*.cpp
 src/common/dosyacc.c
@@ -46,6 +47,8 @@ src/common/doslex.c
 src/common/vmsyacc.c
 src/common/vmslex.c
 src/common/extended.c
+src/common/unzip.c
+src/common/unzip.h
 src/common/*.l
 src/common/*.y
 src/common/*.inc
@@ -91,6 +94,10 @@ include/wx/wx_setup.vms
 include/wx/common/*.h
 include/wx/generic/*.h
 include/wx/unix/*.h
+include/wx/html/*.h
+include/wx/html/msw/*.bmp
+include/wx/html/msw/*.ico
+include/wx/html/msw/*.rc
 lib/dummy
 
 bin/*.*

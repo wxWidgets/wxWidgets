@@ -822,7 +822,7 @@ void wxWindow::UnsubclassWin()
     {
         m_hWnd = 0;
 
-        wxCHECK_RET( ::IsWindow(hwnd), _T("invalid HWND in SubclassWin") );
+        wxCHECK_RET( ::IsWindow(hwnd), _T("invalid HWND in UnsubclassWin") );
 
         FARPROC farProc = (FARPROC) GetWindowLong(hwnd, GWL_WNDPROC);
         if ( (m_oldWndProc != 0) && (farProc != (FARPROC) m_oldWndProc) )
