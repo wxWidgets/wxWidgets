@@ -98,7 +98,7 @@ DLL_EXTRA_LIBS = $(WXDIR)/lib/libzlib.a \
 	              $(WXDIR)/lib/libxpm.a $(WXDIR)/lib/libtiff.a
 DLL_LDFLAGS = -L$(WXDIR)/lib
 DLL_LDLIBS = -mwindows -lcomctl32 -lctl3d32 -lole32 -loleaut32 \
-             -luuid -lrpcrt4 -lodbc32 -lwinmm \
+             -luuid -lrpcrt4 -lodbc32 -lwinmm -lopengl32 \
              -lwsock32 $(DLL_EXTRA_LIBS) \
 	          -lstdc++
 endif
