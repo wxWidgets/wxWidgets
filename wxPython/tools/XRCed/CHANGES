@@ -1,3 +1,32 @@
+0.0.7
+-----
+
+Some command-line arguments.
+
+"Test window" command and toolbar button.
+
+New panel interphace (wxHTMLWindow is not used anymore).
+
+Toggling between embedded and detached panel.
+
+Cache for already used windows.
+
+Current top-level control is bold, if test window shown.
+
+Undo/redo broken.
+
+CheckListBox does not work unless wxXRC source fixed (in both wxPytnon and
+wxWin):
+
+contrib/src/xrc/xmlrsall.cpp
+45,46c45,46
+<     AddHandler(new wxListCtrlXmlHandler);
+< #if CHECKLISTBOX
+---
+>     AddHandler(new wxListCtrlXmlHandler);    
+> #if wxUSE_CHECKLISTBOX
+
+
 0.0.6
 -----
 

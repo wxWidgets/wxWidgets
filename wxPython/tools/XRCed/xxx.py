@@ -51,7 +51,7 @@ class xxxParamContent:
                     text = n.childNodes[0] # first child must be text node
                     assert text.nodeType == minidom.Node.TEXT_NODE
                 l.append(text)
-                data.append(text.data)
+                data.append(str(text.data))
             else:                       # remove other
                 node.removeChild(n)
                 n.unlink()
@@ -61,7 +61,8 @@ class xxxParamContent:
     def update(self, value):
         # If number if items is not the same, recreate children
         if len(value) != len(self.l):   # remove first if number of items has changed
-            for n in self.node.childNodes:
+            childNodes = self.node.childNodes[:]
+            for n in childNodes:
                 self.node.removeChild(n)
             l = []
             for str in value:
@@ -70,9 +71,57 @@ class xxxParamContent:
                 itemElem.appendChild(itemText)
                 self.node.appendChild(itemElem)
                 l.append(itemText)
+            self.l = l
         else:
             for i in range(len(value)):
                 self.l[i].data = value[i]
+        self.data = value
+
+# Content parameter for checklist
+class xxxParamContentCheckList:
+    def __init__(self, node):
+        self.node = node
+        data, l = [], []                # data is needed to quicker value retrieval
+        nodes = node.childNodes[:]      # make a copy of the child list
+        for n in nodes:
+            if n.nodeType == minidom.Node.ELEMENT_NODE:
+                assert n.tagName == 'item', 'bad content content'
+                checked = n.getAttribute('checked')
+                if not n.hasChildNodes():
+                    # If does not have child nodes, create empty text node
+                    text = tree.dom.createTextNode('')
+                    node.appendChild(text)
+                else:
+                    # !!! normalize?
+                    text = n.childNodes[0] # first child must be text node
+                    assert text.nodeType == minidom.Node.TEXT_NODE
+                l.append((text, n))
+                data.append((str(text.data), int(checked)))
+            else:                       # remove other
+                node.removeChild(n)
+                n.unlink()
+        self.l, self.data = l, data
+    def value(self):
+        return self.data
+    def update(self, value):
+        # If number if items is not the same, recreate children
+        if len(value) != len(self.l):   # remove first if number of items has changed
+            childNodes = self.node.childNodes[:]
+            for n in childNodes:
+                self.node.removeChild(n)
+            l = []
+            for (s,ch) in value:
+                itemElem = tree.dom.createElement('item')
+                itemElem.setAttribute('checked', str(ch))
+                itemText = tree.dom.createTextNode(s)
+                itemElem.appendChild(itemText)
+                self.node.appendChild(itemElem)
+                l.append((itemText, itemElem))
+            self.l = l
+#        else:
+#            for i in range(len(value)):
+#                self.l[i][0].data = value[i]
+#                self.l[i][1].setAttributedata = value[i]
         self.data = value
 
 ################################################################################
@@ -84,6 +133,7 @@ class xxxObject:
     hasStyle = true                     # almost everyone
     hasName = true                      # has name attribute?
     isSizer = hasChild = false
+    allParams = None                    # Some nodes have no parameters
     # Style parameters (all optional)
     styles = ['fg', 'bg', 'font', 'enabled', 'focused', 'hidden', 'tooltip']
     # Special parameters
@@ -121,7 +171,10 @@ class xxxObject:
                 elif tag in self.specials:
                     self.special(tag, node)
                 elif tag == 'content':
-                    self.params[tag] = xxxParamContent(node)
+                    if self.className == 'wxCheckList':
+                        self.params[tag] = xxxParamContentCheckList(node)
+                    else:
+                        self.params[tag] = xxxParamContent(node)
                 elif tag == 'font': # has children
                     self.params[tag] = xxxParamFont(self, node)
                 else:                   # simple parameter
@@ -130,52 +183,6 @@ class xxxObject:
                 # Remove all other nodes
                 element.removeChild(node)
                 node.unlink()
-    # Generate HTML
-    def generateHtml(self, prefix=''):
-        SetCurrentXXX(self)
-        html = '<table cellspacing=0 cellpadding=0><tr><td width=120>\
-<font size="+1"><b>%s</b></font></td>' % self.className
-        # Has id (name) attribute
-        if self.hasName:
-            html += """\
-<td><wxp module="xxx" class="ParamText" width=150>
-<param name="name" value="data_name">
-</wxp></td>"""
-        html += '</table><p>'
-        html += '<table cellspacing=0 cellpadding=0>\n'
-        # Add required parameters
-        for param in self.allParams:
-            # Add checkbox or just text
-            if param in self.required:
-                html += '<tr><td width=20></td><td width=100>%s: </td>' % param
-            else:                       # optional parameter
-                html += """\
-<tr><td width=20><wxp class="wxCheckBox">
-<param name="id" value="%d">
-<param name="size" value="(20,-1)">
-<param name="name" value="%s">
-<param name="label" value=("")>
-</wxp></td><td width=100>%s: </td>
-""" % (paramIDs[param], prefix + 'check_' + param, param)
-            # Get parameter type
-            try:
-                # Local or overriden type
-                typeClass = self.paramDict[param].__name__
-            except KeyError:
-                try:
-                    # Standart type
-                    typeClass = paramDict[param].__name__
-                except KeyError:
-                    # Default
-                    typeClass = 'ParamText'
-            html += """\
-<td><wxp module="xxx" class="%s">
-<param name="id" value="%d">
-<param name="name" value="%s">
-</wxp></td>
-""" % (typeClass, -1, prefix + 'data_' + param)
-        html += '</table>\n'
-        return html
     # Returns real tree object
     def treeObject(self):
         if self.hasChild: return self.child
@@ -229,8 +236,12 @@ class xxxParamFont(xxxParam):
 class xxxContainer(xxxObject):
     hasChildren = true
 
+# Special class for root node
+class xxxMainNode(xxxContainer):
+    hasStyle = hasName = false
+
 ################################################################################
-# Top-level windwos
+# Top-level windwows
 
 class xxxPanel(xxxContainer):
     allParams = ['pos', 'size', 'style']
@@ -347,9 +358,6 @@ class xxxListCtrl(xxxObject):
               'wxLC_USER_TEXT', 'wxLC_EDIT_LABELS', 'wxLC_NO_HEADER',
               'wxLC_SINGLE_SEL', 'wxLC_SORT_ASCENDING', 'wxLC_SORT_DESCENDING']
 
-# !!! temporary
-xxxCheckList = xxxListCtrl
-
 class xxxTreeCtrl(xxxObject):
     allParams = ['pos', 'size', 'style']
     winStyles = ['wxTR_HAS_BUTTONS', 'wxTR_NO_LINES', 'wxTR_LINES_AT_ROOT',
@@ -422,6 +430,15 @@ class xxxListBox(xxxObject):
     winStyles = ['wxLB_SINGLE', 'wxLB_MULTIPLE', 'wxLB_EXTENDED', 'wxLB_HSCROLL',
               'wxLB_ALWAYS_SB', 'wxLB_NEEDED_SB', 'wxLB_SORT']
 
+class xxxCheckList(xxxObject):
+    allParams = ['content', 'pos', 'size', 'style']
+    required = ['content']
+    winStyles = ['wxLC_LIST', 'wxLC_REPORT', 'wxLC_ICON', 'wxLC_SMALL_ICON',
+              'wxLC_ALIGN_TOP', 'wxLC_ALIGN_LEFT', 'wxLC_AUTOARRANGE',
+              'wxLC_USER_TEXT', 'wxLC_EDIT_LABELS', 'wxLC_NO_HEADER',
+              'wxLC_SINGLE_SEL', 'wxLC_SORT_ASCENDING', 'wxLC_SORT_DESCENDING']
+    paramDict = {'content': ParamContentCheckList}
+    
 ################################################################################
 # Sizers
 
@@ -507,16 +524,13 @@ class xxxChildContainer(xxxObject):
                 element.removeChild(node)
                 node.unlink()
         assert 0, 'no child found'
-    def generateHtml(self):
-        return xxxObject.generateHtml(self, '_') + '<hr>\n' + \
-               self.child.generateHtml()
 
 class xxxSizerItem(xxxChildContainer):
     allParams = ['option', 'flag', 'border']
     paramDict = {'option': ParamInt}
     def __init__(self, parent, element):
         xxxChildContainer.__init__(self, parent, element)
-        # Remove pos parameter - unnecessary for sizeritems
+        # Remove pos parameter - not needed for sizeritems
         if 'pos' in self.child.allParams:
             self.child.allParams = self.child.allParams[:]
             self.child.allParams.remove('pos')
@@ -556,7 +570,6 @@ class xxxMenuItem(xxxObject):
 
 class xxxSeparator(xxxObject):
     hasName = hasStyle = false
-    allParams = []
 
 ################################################################################
 
@@ -616,9 +629,10 @@ paramIDs = {'fg': wxNewId(), 'bg': wxNewId(), 'exstyle': wxNewId(), 'font': wxNe
             'tooltip': wxNewId()
             }
 for cl in xxxDict.values():
-    for param in cl.allParams + cl.paramDict.keys():
-        if not paramIDs.has_key(param):
-            paramIDs[param] = wxNewId()
+    if cl.allParams:
+        for param in cl.allParams + cl.paramDict.keys():
+            if not paramIDs.has_key(param):
+                paramIDs[param] = wxNewId()
 
 ################################################################################
 # Helper functions
@@ -633,7 +647,7 @@ def MakeXXXFromDOM(parent, element):
         return xxxDict[element.getAttribute('class')](parent, element)
     except KeyError:
         # Verify that it's not recursive exception
-        if element.getAttribute('class') not in xxxDict.keys():
+        if element.getAttribute('class') not in xxxDict:
             print 'ERROR: unknown class:', element.getAttribute('class')
         raise
 
