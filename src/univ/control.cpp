@@ -271,7 +271,7 @@ void wxControl::OnFocus(wxFocusEvent& event)
 
 wxInputHandler *wxControl::CreateInputHandler() const
 {
-    return wxTheme::Get()->GetInputHandler(GetName());
+    return wxTheme::Get()->GetInputHandler(GetClassInfo()->GetClassName());
 }
 
 void wxControl::OnKeyDown(wxKeyEvent& event)

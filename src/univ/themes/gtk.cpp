@@ -281,9 +281,9 @@ wxInputHandler *wxGTKTheme::GetInputHandler(const wxString& control)
         // create a new handler
         n = m_handlerNames.Add(control);
 
-        if ( control == wxButtonNameStr )
+        if ( control == _T("wxButton") )
             handler = new wxGTKButtonInputHandler(m_renderer);
-        else if ( control == wxScrollBarNameStr )
+        else if ( control == _T("wxScrollBar") )
             handler = new wxGTKScrollBarInputHandler(m_renderer);
         else
             handler = new wxGTKInputHandler(m_renderer);
@@ -884,60 +884,7 @@ void wxGTKRenderer::DrawScrollbar(wxDC& dc,
 wxHitTest wxGTKRenderer::HitTestScrollbar(wxScrollBar *scrollbar,
                                           const wxPoint& pt) const
 {
-    // we only need to work with tiehr x or y coord depending on the
-    // orientation, choose one
-    wxCoord coord, sizeArrow, sizeTotal;
-    if ( scrollbar->GetWindowStyle() & wxVERTICAL )
-    {
-        coord = pt.y;
-        sizeArrow = m_sizeScrollbarArrow.y;
-        sizeTotal = scrollbar->GetSize().y;
-    }
-    else // horizontal
-    {
-        coord = pt.x;
-        sizeArrow = m_sizeScrollbarArrow.x;
-        sizeTotal = scrollbar->GetSize().x;
-    }
-
-    // test for the arrows first as it's faster
-    if ( coord < sizeArrow )
-    {
-        return wxHT_SCROLLBAR_ARROW_LINE_1;
-    }
-    else if ( coord > sizeTotal - sizeArrow )
-    {
-        return wxHT_SCROLLBAR_ARROW_LINE_2;
-    }
-    else
-    {
-        // calculate the thumb position in pixels
-        sizeTotal -= 2*sizeArrow;
-        wxCoord thumbStart, thumbEnd;
-        int range = scrollbar->GetRange();
-        if ( !range )
-        {
-            thumbStart =
-            thumbEnd = 0;
-        }
-        else
-        {
-            int posThumb = scrollbar->GetThumbPosition(),
-                sizeThumb = scrollbar->GetThumbSize();
-
-            thumbStart = (sizeTotal*posThumb) / range;
-            thumbEnd = (sizeTotal*(posThumb + sizeThumb)) / range;
-        }
-
-        // now compare with the thumb position
-        coord -= sizeArrow;
-        if ( coord < thumbStart )
-            return wxHT_SCROLLBAR_BAR_1;
-        else if ( coord > thumbEnd )
-            return wxHT_SCROLLBAR_BAR_2;
-        else
-            return wxHT_SCROLLBAR_THUMB;
-    }
+    return StandardHitTestScrollbar(scrollbar, pt, m_sizeScrollbarArrow);
 }
 
 // ----------------------------------------------------------------------------

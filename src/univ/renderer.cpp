@@ -43,6 +43,71 @@
 // implementation
 // ============================================================================
 
+// ----------------------------------------------------------------------------
+// wxRenderer
+// ----------------------------------------------------------------------------
+
+/* static */
+wxHitTest wxRenderer::StandardHitTestScrollbar(wxScrollBar *scrollbar,
+                                               const wxPoint& pt,
+                                               const wxSize& sizeArrowSB)
+{
+    // we only need to work with tiehr x or y coord depending on the
+    // orientation, choose one
+    wxCoord coord, sizeArrow, sizeTotal;
+    if ( scrollbar->GetWindowStyle() & wxVERTICAL )
+    {
+        coord = pt.y;
+        sizeArrow = sizeArrowSB.y;
+        sizeTotal = scrollbar->GetSize().y;
+    }
+    else // horizontal
+    {
+        coord = pt.x;
+        sizeArrow = sizeArrowSB.x;
+        sizeTotal = scrollbar->GetSize().x;
+    }
+
+    // test for the arrows first as it's faster
+    if ( coord < sizeArrow )
+    {
+        return wxHT_SCROLLBAR_ARROW_LINE_1;
+    }
+    else if ( coord > sizeTotal - sizeArrow )
+    {
+        return wxHT_SCROLLBAR_ARROW_LINE_2;
+    }
+    else
+    {
+        // calculate the thumb position in pixels
+        sizeTotal -= 2*sizeArrow;
+        wxCoord thumbStart, thumbEnd;
+        int range = scrollbar->GetRange();
+        if ( !range )
+        {
+            thumbStart =
+            thumbEnd = 0;
+        }
+        else
+        {
+            int posThumb = scrollbar->GetThumbPosition(),
+                sizeThumb = scrollbar->GetThumbSize();
+
+            thumbStart = (sizeTotal*posThumb) / range;
+            thumbEnd = (sizeTotal*(posThumb + sizeThumb)) / range;
+        }
+
+        // now compare with the thumb position
+        coord -= sizeArrow;
+        if ( coord < thumbStart )
+            return wxHT_SCROLLBAR_BAR_1;
+        else if ( coord > thumbEnd )
+            return wxHT_SCROLLBAR_BAR_2;
+        else
+            return wxHT_SCROLLBAR_THUMB;
+    }
+}
+
 wxRenderer::~wxRenderer()
 {
 }

@@ -170,17 +170,22 @@ private:
 class wxWin32InputHandler : public wxInputHandler
 {
 public:
+    wxWin32InputHandler(wxWin32Renderer *renderer);
+
     virtual wxControlActions Map(wxControl *control,
                                  const wxKeyEvent& event,
                                  bool pressed);
     virtual wxControlActions Map(wxControl *control,
                                  const wxMouseEvent& event);
+
+protected:
+    wxWin32Renderer *m_renderer;
 };
 
 class wxWin32ButtonInputHandler : public wxWin32InputHandler
 {
 public:
-    wxWin32ButtonInputHandler();
+    wxWin32ButtonInputHandler(wxWin32Renderer *renderer);
 
     virtual wxControlActions Map(wxControl *control,
                                  const wxKeyEvent& event,
@@ -190,6 +195,25 @@ public:
 
 private:
     wxWindow *m_winCapture;
+};
+
+class wxWin32ScrollBarInputHandler : public wxWin32InputHandler
+{
+public:
+    wxWin32ScrollBarInputHandler(wxWin32Renderer *renderer);
+
+    virtual wxControlActions Map(wxControl *control,
+                                 const wxKeyEvent& event,
+                                 bool pressed);
+    virtual wxControlActions Map(wxControl *control,
+                                 const wxMouseEvent& event);
+
+private:
+    void Press(wxScrollBar *scrollbar, bool doIt) { }
+
+    wxWindow *m_winCapture;
+    int m_btnCapture;
+    wxHitTest m_htLast;
 };
 
 // ----------------------------------------------------------------------------
@@ -264,12 +288,12 @@ wxInputHandler *wxWin32Theme::GetInputHandler(const wxString& control)
         // create a new handler
         n = m_handlerNames.Add(control);
 
-        if ( control == wxButtonNameStr )
-            handler = new wxWin32ButtonInputHandler;
-        else if ( control == wxScrollBarNameStr )
-            handler = new wxWin32InputHandler; // TODO
+        if ( control == _T("wxButton") )
+            handler = new wxWin32ButtonInputHandler(m_renderer);
+        else if ( control == _T("wxScrollBar") )
+            handler = new wxWin32ScrollBarInputHandler(m_renderer);
         else
-            handler = new wxWin32InputHandler;
+            handler = new wxWin32InputHandler(m_renderer);
 
         m_handlers.Insert(handler, n);
     }
@@ -965,7 +989,7 @@ void wxWin32Renderer::DrawScrollbar(wxDC& dc,
 wxHitTest wxWin32Renderer::HitTestScrollbar(wxScrollBar *scrollbar,
                                             const wxPoint& pt) const
 {
-    return wxHT_NOWHERE;
+    return StandardHitTestScrollbar(scrollbar, pt, m_sizeScrollbarArrow);
 }
 
 // ----------------------------------------------------------------------------
@@ -1031,6 +1055,11 @@ void wxWin32Renderer::AdjustSize(wxSize *size, const wxWindow *window)
 // wxWin32InputHandler
 // ----------------------------------------------------------------------------
 
+wxWin32InputHandler::wxWin32InputHandler(wxWin32Renderer *renderer)
+{
+    m_renderer = renderer;
+}
+
 wxControlActions wxWin32InputHandler::Map(wxControl *control,
                                           const wxKeyEvent& event,
                                           bool pressed)
@@ -1048,7 +1077,8 @@ wxControlActions wxWin32InputHandler::Map(wxControl *control,
 // wxWin32ButtonInputHandler
 // ----------------------------------------------------------------------------
 
-wxWin32ButtonInputHandler::wxWin32ButtonInputHandler()
+wxWin32ButtonInputHandler::wxWin32ButtonInputHandler(wxWin32Renderer *renderer)
+                         : wxWin32InputHandler(renderer)
 {
     m_winCapture = NULL;
 }
@@ -1082,6 +1112,137 @@ wxControlActions wxWin32ButtonInputHandler::Map(wxControl *control,
         }
 
         return wxACTION_BUTTON_TOGGLE;
+    }
+
+    return wxWin32InputHandler::Map(control, event);
+}
+
+// ----------------------------------------------------------------------------
+// wxWin32ScrollBarInputHandler
+// ----------------------------------------------------------------------------
+
+wxWin32ScrollBarInputHandler::wxWin32ScrollBarInputHandler(wxWin32Renderer *renderer)
+                            : wxWin32InputHandler(renderer)
+{
+    m_winCapture = NULL;
+    m_htLast = wxHT_NOWHERE;
+}
+
+wxControlActions wxWin32ScrollBarInputHandler::Map(wxControl *control,
+                                                   const wxKeyEvent& event,
+                                                   bool pressed)
+{
+    // we only react to the key presses here
+    if ( pressed )
+    {
+        switch ( event.GetKeyCode() )
+        {
+            case WXK_DOWN:
+            case WXK_RIGHT:     return wxACTION_SCROLL_LINE_DOWN;
+            case WXK_UP:
+            case WXK_LEFT:      return wxACTION_SCROLL_LINE_UP;
+            case WXK_HOME:      return wxACTION_SCROLL_START;
+            case WXK_END:       return wxACTION_SCROLL_END;
+            case WXK_PRIOR:     return wxACTION_SCROLL_PAGE_UP;
+            case WXK_NEXT:      return wxACTION_SCROLL_PAGE_DOWN;
+        }
+    }
+
+    return wxWin32InputHandler::Map(control, event, pressed);
+}
+
+wxControlActions wxWin32ScrollBarInputHandler::Map(wxControl *control,
+                                                   const wxMouseEvent& event)
+{
+    if ( event.IsButton() )
+    {
+        // determine which part of the window mouse is in
+        wxScrollBar *scrollbar = wxStaticCast(control, wxScrollBar);
+        wxHitTest ht = m_renderer->HitTestScrollbar
+                                   (
+                                    scrollbar,
+                                    event.GetPosition()
+                                   );
+
+        // when the mouse is pressed on any scrollbar element, we capture it
+        // and hold capture until the same mouse button is released
+        if ( event.ButtonDown() )
+        {
+            if ( !m_winCapture )
+            {
+                m_btnCapture = -1;
+                for ( int i = 1; i <= 3; i++ )
+                {
+                    if ( event.ButtonDown(i) )
+                    {
+                        m_btnCapture = i;
+                        break;
+                    }
+                }
+
+                wxASSERT_MSG( m_btnCapture != -1, _T("unknown mouse button") );
+
+                m_winCapture = control;
+                m_winCapture->CaptureMouse();
+
+                // generate the command
+                bool hasAction = TRUE;
+                wxControlAction action;
+                switch ( ht )
+                {
+                    case wxHT_SCROLLBAR_ARROW_LINE_1:
+                        action = wxACTION_SCROLL_LINE_UP;
+                        break;
+
+                    case wxHT_SCROLLBAR_ARROW_LINE_2:
+                        action = wxACTION_SCROLL_LINE_DOWN;
+                        break;
+
+                    case wxHT_SCROLLBAR_BAR_1:
+                        action = wxACTION_SCROLL_PAGE_UP;
+                        break;
+
+                    case wxHT_SCROLLBAR_BAR_2:
+                        action = wxACTION_SCROLL_PAGE_DOWN;
+                        break;
+
+                    default:
+                        hasAction = FALSE;
+                }
+
+                if ( hasAction )
+                {
+                    control->PerformAction(action, event);
+                }
+
+                // remove highlighting and press the arrow instead
+                m_htLast = ht;
+                Press(scrollbar, TRUE);
+            }
+            //else: mouse already captured, nothing to do
+        }
+        // release mouse if the *same* button went up
+        else if ( event.ButtonUp(m_btnCapture) )
+        {
+            if ( m_winCapture )
+            {
+                m_winCapture->ReleaseMouse();
+                m_winCapture = NULL;
+
+                // unpress the arrow and highlight the current element
+                Press(scrollbar, TRUE);
+                m_htLast = ht;
+
+                control->Refresh();
+            }
+            else
+            {
+                // this is not supposed to happen as the button can't go up
+                // without going down previously and then we'd have
+                // m_winCapture by now
+                wxFAIL_MSG( _T("logic error in mouse capturing code") );
+            }
+        }
     }
 
     return wxWin32InputHandler::Map(control, event);

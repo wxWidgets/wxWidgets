@@ -13,6 +13,12 @@
    wxRenderer class is used to draw all wxWindows controls. This is an ABC and
    the look of the application is determined by the concrete derivation of
    wxRenderer used in the program.
+
+   It also contains a few static methods which may be used by the concrete
+   renderers and provide the functionality which is often similar or identical
+   in all renderers (using inheritance here would be more restrictive as the
+   given concrete renderer may need an arbitrary subset of the base class
+   methods)
  */
 
 #ifdef __GNUG__
@@ -131,6 +137,14 @@ public:
 
     // virtual dtor for any base class
     virtual ~wxRenderer();
+
+protected:
+    // standard scrollbar hit testing: this assumes that it only has 2 arrows
+    // and a thumb, so the themes which have more complicated scrollbars (e.g.
+    // BeOS) can't use this method
+    static wxHitTest StandardHitTestScrollbar(wxScrollBar *scrollbar,
+                                              const wxPoint& pt,
+                                              const wxSize& sizeArrow);
 };
 
 // ----------------------------------------------------------------------------
