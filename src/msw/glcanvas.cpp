@@ -278,7 +278,7 @@ bool wxGLCanvas::Create(wxWindow *parent,
     {
         wxLogLastError(wxT("RegisterClass(wxGLCanvasClassNameNoRedraw)"));
 
-        ::UnregisterClass(wxGLCanvasClassName, wxhInstance());
+        ::UnregisterClass(wxGLCanvasClassName, wxhInstance);
 
         return FALSE;
     }
