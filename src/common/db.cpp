@@ -92,7 +92,7 @@
 
 DbList WXDLLEXPORT *PtrBegDbList = 0;
 
-#if __WXDEBUG__ > 0
+#ifdef __WXDEBUG__
 	extern wxList TablesInUse;
 #endif
 
@@ -763,7 +763,7 @@ void wxDB::Close(void)
 	// There should be zero Ctable objects still connected to this db object
 	assert(nTables == 0);
 
-#if __WXDEBUG__ > 0
+#ifdef __WXDEBUG__
 	CstructTablesInUse *tiu;
 	wxNode *pNode;
 	pNode = TablesInUse.First();

@@ -95,7 +95,7 @@
 ULONG lastTableID = 0;
 
 
-#if __WXDEBUG__ > 0
+#ifdef __WXDEBUG__
 	wxList TablesInUse;
 #endif
 
@@ -144,7 +144,7 @@ wxTable::wxTable(wxDB *pwxDB, const char *tblName, const int nCols,
 	tableID = ++lastTableID;
 	sprintf(s, "wxTable constructor (%-20s) tableID:[%6lu] pDb:[%p]", tblName,tableID,pDb);
 
-#if __WXDEBUG__ > 0
+#ifdef __WXDEBUG__
 	CstructTablesInUse *tableInUse;
 	tableInUse = new CstructTablesInUse();
 	tableInUse->tableName = tblName;
@@ -250,8 +250,7 @@ wxTable::~wxTable()
 		pDb->WriteSqlLog(s);
 	}
 
-#ifndef PROGRAM_FP4UPG
-#if __WXDEBUG__ > 0
+#ifdef __WXDEBUG__
 	if (tableID)
 	{
 		bool found = FALSE;
@@ -276,7 +275,7 @@ wxTable::~wxTable()
 		}
 	}
 #endif
-#endif
+
 	// Decrement the wxDB table count
 	if (pDb)
 		pDb->nTables--;
