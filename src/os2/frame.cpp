@@ -1553,13 +1553,6 @@ MRESULT EXPENTRY wxFrameWndProc(
     // When we get the first message for the HWND we just created, we associate
     // it with wxWindow stored in wxWndHook
     //
-//    if (!pWnd && wxWndHook)
-//    {
-//        wxAssociateWinWithHandle(hWnd, wxWndHook);
-//        pWnd = wxWndHook;
-//        wxWndHook = NULL;
-//        pWnd->SetHWND((WXHWND)hWnd);
-//    }
 
     MRESULT                         rc = (MRESULT)0;
     bool                            bProcessed = FALSE;
@@ -1575,87 +1568,10 @@ MRESULT EXPENTRY wxFrameWndProc(
     }
     else
     {
-        switch (ulMsg)
-        {
-            case WM_CLOSE:
-                //
-                // If we can't close, tell the system that we processed the
-                // message - otherwise it would close us
-                //
-                bProcessed = !pWnd->Close();
-                break;
-
-            case WM_PAINT:
-                {
-                    HPS                             hPS;
-                    RECTL                           vRect;
-
-                    hPS = WinBeginPaint(hWnd, 0L, &vRect);
-                    WinFillRect(hPS, &vRect,  CLR_BLUE  /* SYSCLR_WINDOW */);
-                    WinEndPaint(hPS);
-                    rc = FALSE;
-                    break;
-                }
-                break;
-
-            case WM_COMMAND:
-                {
-                    WORD                wId;
-                    WORD                wCmd;
-                    WXHWND              hWnd;
-
-                    pWnd->UnpackCommand( (WXWPARAM)wParam
-                                        ,(WXLPARAM)lParam
-                                        ,&wId
-                                        ,&hWnd
-                                        ,&wCmd
-                                       );
-                    rc = (MRESULT) pWnd->HandleCommand( wId
-                                                       ,wCmd
-                                                       ,(WXHWND)hWnd
-                                                      );
-                }
-                break;
-
-            case WM_MENUSELECT:
-                {
-                    WXWORD              wItem;
-                    WXWORD              wFlags;
-                    WXHMENU             hMenu;
-
-                    pWnd->UnpackMenuSelect( wParam
-                                           ,lParam
-                                           ,&wItem
-                                           ,&wFlags
-                                           ,&hMenu
-                                          );
-                    bProcessed = pWnd->HandleMenuSelect( wItem
-                                                        ,wFlags
-                                                        ,hMenu
-                                                       );
-                    rc = (MRESULT)TRUE;
-                }
-                break;
-
-            case WM_SIZE:
-                {
-                    SHORT           nScxold = SHORT1FROMMP(wParam); // Old horizontal size.
-                    SHORT           nScyold = SHORT2FROMMP(wParam); // Old vertical size.
-                    SHORT           nScxnew = SHORT1FROMMP(lParam); // New horizontal size.
-                    SHORT           nScynew = SHORT2FROMMP(lParam); // New vertical size.
-
-                    lParam = MRFROM2SHORT( nScxnew - 20
-                                          ,nScynew - 30
-                                         );
-                }
-
-                bProcessed = pWnd->HandleSize(LOWORD(lParam), HIWORD(lParam), (WXUINT)wParam);
-                rc = (MRESULT)FALSE;
-                break;
-
-            default:
-                rc = ::WinDefWindowProc(hWnd, ulMsg, wParam, lParam);
-        }
+        if (pWnd)
+            rc = pWnd->OS2WindowProc(ulMsg, wParam, lParam);
+        else
+            rc = ::WinDefWindowProc(hWnd, ulMsg, wParam, lParam);
     }
     return rc;
 } // end of wxFrameWndProc
@@ -1679,6 +1595,20 @@ MRESULT wxFrame::OS2WindowProc(
             bProcessed = !Close();
             break;
 
+        case WM_PAINT:
+            {
+                HPS                             hPS;
+                RECTL                           vRect;
+
+                hPS = WinBeginPaint(m_hWnd, 0L, &vRect);
+                ::WinFillRect(hPS, &vRect,  CLR_BLUE  /* SYSCLR_WINDOW */);
+                ::WinEndPaint(hPS);
+
+                mRc = (MRESULT)FALSE;
+                bProcessed = TRUE;
+            }
+            break;
+
         case WM_COMMAND:
             {
                 WORD                wId;
@@ -1686,11 +1616,11 @@ MRESULT wxFrame::OS2WindowProc(
                 WXHWND              hWnd;
 
                 UnpackCommand( (WXWPARAM)wParam
-                            ,(WXLPARAM)lParam
-                            ,&wId
-                            ,&hWnd
-                            ,&wCmd
-                           );
+                              ,(WXLPARAM)lParam
+                              ,&wId
+                              ,&hWnd
+                              ,&wCmd
+                             );
 
                 bProcessed = HandleCommand( wId
                                            ,wCmd
@@ -1719,8 +1649,19 @@ MRESULT wxFrame::OS2WindowProc(
             }
             break;
 
-        case WM_PAINT:
-            bProcessed = HandlePaint();
+        case WM_SIZE:
+            {
+                SHORT               nScxold = SHORT1FROMMP(wParam); // Old horizontal size.
+                SHORT               nScyold = SHORT2FROMMP(wParam); // Old vertical size.
+                SHORT               nScxnew = SHORT1FROMMP(lParam); // New horizontal size.
+                SHORT               nScynew = SHORT2FROMMP(lParam); // New vertical size.
+
+                lParam = MRFROM2SHORT( nScxnew - 20
+                                      ,nScynew - 30
+                                     );
+            }
+            bProcessed = HandleSize(LOWORD(lParam), HIWORD(lParam), (WXUINT)wParam);
+            mRc = (MRESULT)FALSE;
             break;
 
         case WM_ERASEBACKGROUND:
@@ -1742,91 +1683,6 @@ MRESULT wxFrame::OS2WindowProc(
                     hIcon = (HPOINTER)m_hDefaultIcon;
                 mRc = (MRESULT)hIcon;
                 bProcessed = mRc != 0;
-            }
-            break;
-
-        case WM_SIZE:
-            bProcessed = HandleSize(LOWORD(lParam), HIWORD(lParam), (WXUINT)wParam);
-            break;
-
-        case WM_QUERYFRAMECTLCOUNT:
-            {
-                USHORT itemCount = SHORT1FROMMR(OS2GetOldWndProc()(GetHWND(), uMessage, wParam, lParam));
-#if wxUSE_STATUSBAR
-                if(m_frameStatusBar)
-                   ++itemCount;
-#endif //wxUSE_STATUSBAR
-
-                bProcessed = TRUE;
-                mRc = MRFROMSHORT( itemCount );
-            }
-            break;
-
-        case WM_FORMATFRAME:
-            {
-                PSWP   pSWP     = 0;
-                USHORT usClient = 0;
-                SWP    swp;
-                USHORT itemCount;
-                char   s[128];
-
-                itemCount = SHORT1FROMMR(OS2GetOldWndProc()(GetHWND(), uMessage, wParam, lParam));
-                pSWP = (PSWP)PVOIDFROMMP( wParam );
-
-                while(pSWP[usClient].hwnd != WinWindowFromID(GetHWND(), FID_CLIENT)
-                     && usClient < itemCount)
-                    usClient++;
-
-#if wxUSE_STATUSBAR
-                if(m_frameStatusBar)
-                {
-                   int height;
-
-                   m_frameStatusBar->GetSize(NULL, &height);
-
-                   if(usClient == itemCount)
-                   {
-                      // frame has no client window
-                      // using another method of calculation
-                      RECTL wRectl;
-
-                      ::WinQueryWindowRect(GetHWND(), &wRectl);
-                      ::WinMapWindowPoints(GetHWND(), HWND_DESKTOP, (PPOINTL)&wRectl, 2);
-                      ::WinCalcFrameRect(GetHWND(), &wRectl, TRUE);
-                      ::WinMapWindowPoints(HWND_DESKTOP, GetHWND(), (PPOINTL)&wRectl, 2);
-
-                      pSWP[itemCount].x    = wRectl.xLeft;
-                      pSWP[itemCount].y    = wRectl.yBottom;
-                      pSWP[itemCount].cx   = wRectl.xRight - wRectl.xLeft - 1;
-                      pSWP[itemCount].cy   = height;
-                      pSWP[itemCount].fl   = SWP_SIZE |
-                                             SWP_MOVE |
-                                             SWP_SHOW;
-                      pSWP[itemCount].hwnd = m_frameStatusBar->GetHWND();
-                      pSWP[itemCount].hwndInsertBehind = HWND_TOP;
-                      ++itemCount;
-                   }
-                   else
-                   {
-                       pSWP[itemCount].x    = pSWP[usClient].x;
-                       pSWP[itemCount].y    = pSWP[usClient].y;
-                       pSWP[itemCount].cx   = pSWP[usClient].cx;
-                       pSWP[itemCount].cy   = height;
-                       pSWP[itemCount].fl   = SWP_SIZE |
-                                              SWP_MOVE |
-                                              SWP_SHOW;
-                       pSWP[itemCount].hwnd = m_frameStatusBar->GetHWND();
-                       pSWP[itemCount].hwndInsertBehind = HWND_TOP;
-                       pSWP[usClient].cy -= height;
-                       pSWP[usClient].y  += height;
-
-                       ++itemCount;
-                   }
-                }
-#endif //wxUSE_STATUSBAR
-
-                bProcessed = TRUE;
-                mRc = MRFROMSHORT(itemCount);
             }
             break;
     }

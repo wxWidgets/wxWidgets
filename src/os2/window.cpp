@@ -2206,14 +2206,16 @@ DEBUG_PRINTF(WM_COMMAND-out)
             }
             break;
     }
-
     if (!bProcessed)
     {
 #ifdef __WXDEBUG__
         wxLogTrace(wxTraceMessages, wxT("Forwarding %s to DefWindowProc."),
                    wxGetMessageName(uMsg));
 #endif // __WXDEBUG__
-        mResult = OS2DefWindowProc(uMsg, wParam, lParam);
+        if (IsKindOf(CLASSINFO(wxFrame)))
+            mResult = ::WinDefWindowProc(m_hWnd, uMsg, wParam, lParam);
+        else
+            mResult = OS2DefWindowProc(uMsg, wParam, lParam);
     }
     return mResult;
 } // end of wxWindow::OS2WindowProc
