@@ -129,6 +129,12 @@ wxMSW:
   or if user's default locale is Unicode-only
 - Improved border handling so it no longer shows a thin and
   sunken border under XP
+- partial fix for wxNotebook pages looking bad under XP: wxUSE_UXTHEME
+  enables XP theme engine code, and wxUSE_UXTHEME_AUTO tells
+  wxWindows to use the theme tab colour for control backgrounds.
+  Proper XP theme support is planned for 2.6
+- disable wxNB_RIGHT, wxNB_LEFT, wxNB_BOTTOM notebook styles
+  if the version of CommCtl doesn't support it (XP)
 
 wxMotif:
 
