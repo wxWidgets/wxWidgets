@@ -133,6 +133,18 @@ gtk_dialog_realized_callback( GtkWidget *widget, wxDialog *win )
 }
     
 //-----------------------------------------------------------------------------
+// "map" from m_widget
+//-----------------------------------------------------------------------------
+
+static gint 
+gtk_dialog_map_callback( GtkWidget *widget, wxDialog *win )
+{
+    gtk_widget_set_uposition( widget, win->m_x, win->m_y );
+    
+    return FALSE;
+}
+    
+//-----------------------------------------------------------------------------
 // wxDialog
 //-----------------------------------------------------------------------------
 
@@ -197,7 +209,12 @@ bool wxDialog::Create( wxWindow *parent,
         been realized, so we do this directly after realization */
     gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
 			GTK_SIGNAL_FUNC(gtk_dialog_realized_callback), (gpointer) this );
-    
+
+    /* we set the position of the window after the map event. setting it
+       before has no effect (with KWM) */
+    gtk_signal_connect( GTK_OBJECT(m_widget), "map",
+			GTK_SIGNAL_FUNC(gtk_dialog_map_callback), (gpointer) this );
+
     /* the user resized the frame by dragging etc. */
     gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
         GTK_SIGNAL_FUNC(gtk_dialog_size_callback), (gpointer)this );
@@ -390,13 +407,16 @@ void wxDialog::DoSetSize( int x, int y, int width, int height, int sizeFlags )
     {
         if ((m_x != old_x) || (m_y != old_y))
 	{
-            /* m_sizeSet = FALSE; */
+	    /* we set the position here and when showing the dialog
+	       for the first time in idle time */
             gtk_widget_set_uposition( m_widget, m_x, m_y );
 	}
     }
 
     if ((m_width != old_width) || (m_height != old_height))
     {
+        /* actual resizing is deferred to GtkOnSize in idle time and
+	   when showing the dialog */
         m_sizeSet = FALSE;
     }
 
@@ -466,7 +486,17 @@ bool wxDialog::Show( bool show )
         GtkOnSize( m_x, m_y, m_width, m_height );
     }
 
-    wxWindow::Show( show );
+    if (show != m_isShown)
+    {
+        if (show)
+	{
+	    gtk_widget_show( m_widget );
+	}
+        else
+            gtk_widget_hide( m_widget );
+	    
+        m_isShown = show;
+    }
 
     if (show) InitDialog();
 

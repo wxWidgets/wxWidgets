@@ -1363,6 +1363,7 @@ bool wxSizer::LayoutPhase1(int *noChanges)
       // Find the bounding box and set own size
       int maxX = 0;
       int maxY = 0;
+      
       wxNode *node = GetChildren().First();
       while (node)
       {
@@ -1374,10 +1375,11 @@ bool wxSizer::LayoutPhase1(int *noChanges)
           maxX = (x + width);
         if ((y+height) > maxY)
           maxY = (y + height);
+	  
         node = node->Next();
       }
       SetSize(GetBorderX(), GetBorderY(), maxX, maxY);
-
+      
 	  // If this is the only sizer for the parent, size the parent to this sizer.
 	  if ( m_sizerParent && (m_sizerParent->GetSizer() == this) )
 		m_sizerParent->SetClientSize(maxX + 2*GetBorderX(), maxY + 2*GetBorderY());
@@ -1555,7 +1557,7 @@ bool wxRowColSizer::LayoutPhase1(int *noChanges)
     int currentY = borderY;
     int maxX = currentX;
     int maxY = currentY;
-    
+
     wxNode *node = GetChildren().First();
     while (node)
     {

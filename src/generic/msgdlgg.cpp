@@ -98,6 +98,7 @@ wxGenericMessageDialog::wxGenericMessageDialog(wxWindow *parent, const wxString&
     wxSizer *topSizer = new wxSizer(this, wxSizerShrink);
     topSizer->SetBorder(10, 10);
 
+    // message sizer at the top
     wxRowColSizer *messageSizer = new wxRowColSizer(topSizer, wxSIZER_COLS, 100);
     messageSizer->SetName(_T("messageSizer"));
 
@@ -106,10 +107,11 @@ wxGenericMessageDialog::wxGenericMessageDialog(wxWindow *parent, const wxString&
     wxList messageList;
     wxSplitMessage2(message, &messageList, this, messageSizer);
 
-    // Insert a spacer
+    // spacer size in the middle
     wxSpacingSizer *spacingSizer = new wxSpacingSizer(topSizer, wxBelow, messageSizer, 20);
 
-    wxRowColSizer *buttonSizer = new wxRowColSizer(topSizer, wxSIZER_ROWS);
+    // row size at the bottom
+    wxRowColSizer *buttonSizer = new wxRowColSizer(topSizer, wxSIZER_ROWS );
     buttonSizer->SetName(_T("buttonSizer"));
     buttonSizer->SetSpacing(12,0);
 
@@ -118,9 +120,10 @@ wxGenericMessageDialog::wxGenericMessageDialog(wxWindow *parent, const wxString&
     c->width.AsIs		();
     c->height.AsIs		();
     c->top.Below		(spacingSizer);
-    c->centreX.SameAs	(spacingSizer, wxCentreX);
+    c->left.Absolute            (10);
+//    c->centreX.SameAs	(spacingSizer, wxCentreX);
     buttonSizer->SetConstraints(c);
-
+    
     wxButton *ok = (wxButton *) NULL;
     wxButton *cancel = (wxButton *) NULL;
     wxButton *yes = (wxButton *) NULL;
@@ -156,6 +159,7 @@ wxGenericMessageDialog::wxGenericMessageDialog(wxWindow *parent, const wxString&
     }
 
     Layout();
+    
     Centre(wxBOTH);
 
     wxEndBusyCursor();

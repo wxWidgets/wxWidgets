@@ -190,9 +190,13 @@ void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event) )
   	"Message box text", wxYES_NO|wxCANCEL);
 
   dialog.ShowModal();
-#endif
+  
  ::wxMessageBox("MsgBox with a really long long string", 
     "this is the text", wxYES_NO|wxICON_EXCLAMATION);
+    
+#endif
+ ::wxMessageBox("Short", 
+    "This is the text", wxYES_NO|wxICON_EXCLAMATION);
 }
 
 void MyFrame::TextEntry(wxCommandEvent& WXUNUSED(event) )

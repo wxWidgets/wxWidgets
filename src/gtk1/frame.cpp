@@ -193,15 +193,17 @@ gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
 	win->SetIcon( icon );
     }
     
-    if (!win->m_sizeSet)
-    {
-        /* by calling GtkOnSize here, we don't have to call
-           either after showing the frame, which would entail
-           much ugly flicker or from within the size_allocate
-           handler, because GTK 1.1.X forbids that. */
+    return FALSE;
+}
+    
+//-----------------------------------------------------------------------------
+// "map" from m_widget
+//-----------------------------------------------------------------------------
 
-        win->GtkOnSize( win->m_x, win->m_y, win->m_width, win->m_height );
-    }
+static gint
+gtk_frame_map_callback( GtkWidget *widget, wxFrame *win )
+{
+    gtk_widget_set_uposition( widget, win->m_x, win->m_y );
     
     return FALSE;
 }
@@ -356,6 +358,11 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
     gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
 			GTK_SIGNAL_FUNC(gtk_frame_realized_callback), (gpointer) this );
     
+    /* we set the position of the window after the map event. setting it
+       before has no effect (with KWM) */
+    gtk_signal_connect( GTK_OBJECT(m_widget), "map",
+			GTK_SIGNAL_FUNC(gtk_frame_map_callback), (gpointer) this );
+
     /* the user resized the frame by dragging etc. */
     gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
         GTK_SIGNAL_FUNC(gtk_frame_size_callback), (gpointer)this );
@@ -391,7 +398,6 @@ bool wxFrame::Show( bool show )
 {
     wxASSERT_MSG( (m_widget != NULL), _T("invalid frame") );
 
-#if 0
     if (show && !m_sizeSet)
     {
         /* by calling GtkOnSize here, we don't have to call
@@ -401,7 +407,6 @@ bool wxFrame::Show( bool show )
 
         GtkOnSize( m_x, m_y, m_width, m_height );
     }
-#endif
 
     return wxWindow::Show( show );
 }
@@ -465,8 +470,8 @@ void wxFrame::DoSetSize( int x, int y, int width, int height, int sizeFlags )
     {
         if ((m_x != old_x) || (m_y != old_y))
         {
-            /* m_sizeSet = FALSE; */
-            gtk_widget_set_uposition( m_widget, m_x, m_y );
+            /* we set the size here and in gtk_frame_map_callback */
+	    gtk_widget_set_uposition( m_widget, m_x, m_y );
         }
     }
 
