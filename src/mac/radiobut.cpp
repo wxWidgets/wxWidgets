@@ -37,7 +37,7 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 	
 	MacPostControlCreate() ;
 
-  m_cycle = NULL ;
+  m_cycle = this ;
   
   if (HasFlag(wxRB_GROUP))
   {
