@@ -24,8 +24,8 @@ people can do imports without "import *" and can use names like
 wx.Frame instead of wx.wxFrame.  This is phase 1 of a full transition
 to the new namespace.
 
-Updated Scintilla to 1.51.  I also changed it to use wxListCtrl
-instead of wxLIstBox for the AutoComplete window, added the ability to
+Updated Scintilla to 1.52.  I also changed it to use wxListCtrl
+instead of wxListBox for the AutoComplete window, added the ability to
 use custom bitmaps in the margin and in the AutoComplete windows, and
 worked out how to do proper clipping of child windows on wxGTK.
 
@@ -49,6 +49,8 @@ passed back and forth on wxPython-users a while back.
 Added masked edit controls (wxPython.lib.maskededit) by Jeff Childers
 and Will Sadkin.  Updated wxTimeCtrl to use MaskedEdit.
 
+When the __class__ of a dead object is replaced with _wxPyDeadObject
+the __del__ of the original class is now called first.
 
 
 

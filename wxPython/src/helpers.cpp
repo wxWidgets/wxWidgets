@@ -591,20 +591,36 @@ void wxPyOORClientData_dtor(wxPyOORClientData* self) {
         Py_INCREF(deadObjectClass);
     }
 
-    // TODO:  If wxPyDOingCleanup, should we skip the code below?
 
-    // Clear the instance's dictionary, put the name of the old class into the
-    // instance, and then reset the class to be the dead class.
-    if (self->m_obj->ob_refcnt > 1) {  // but only if there is more than one reference
+    // Only if there is more than one reference to the object
+    if ( !wxPyDoingCleanup && self->m_obj->ob_refcnt > 1 ) {
         wxASSERT_MSG(PyInstance_Check(self->m_obj), wxT("m_obj not an instance!?!?!"));
+
+        // Call __del__, if there is one.
+        PyObject* func = PyObject_GetAttrString(self->m_obj, "__del__");
+        if (func) {
+            PyObject* rv = PyObject_CallMethod(self->m_obj, "__del__", NULL);
+            Py_XDECREF(rv);
+            Py_DECREF(func);
+        }
+        if (PyErr_Occurred())
+            PyErr_Clear();      // just ignore it for now
+
+        // Clear the instance's dictionary
         PyInstanceObject* inst = (PyInstanceObject*)self->m_obj;
         PyDict_Clear(inst->in_dict);
+
+        // put the name of the old class into the instance, and then reset the
+        // class to be the dead class.
         PyDict_SetItemString(inst->in_dict, "_name", inst->in_class->cl_name);
         inst->in_class = (PyClassObject*)deadObjectClass;
         Py_INCREF(deadObjectClass);
     }
+
+    // m_obj is DECREF's in the base class dtor...
     wxPyEndBlockThreads();
 }
+
 
 //---------------------------------------------------------------------------
 // Stuff used by OOR to find the right wxPython class type to return and to
