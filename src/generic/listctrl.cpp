@@ -565,6 +565,9 @@ public:
     void RefreshLine( size_t line );
     void RefreshLines( size_t lineFrom, size_t lineTo );
 
+    // refresh all selected items
+    void RefreshSelected();
+
     // refresh all lines below the given one: the difference with
     // RefreshLines() is that the index here might not be a valid one (happens
     // when the last line is deleted)
@@ -700,6 +703,12 @@ public:
     // get the y position of the given line (only for report view)
     wxCoord GetLineY(size_t line) const;
 
+    // get the brush to use for the item highlighting
+    wxBrush *GetHighlightBrush() const
+    {
+        return m_hasFocus ? m_highlightBrush : m_highlightUnfocusedBrush;
+    }
+
 //protected:
     // the array of all line objects for a non virtual list control
     wxListLineDataArray  m_lines;
@@ -724,7 +733,6 @@ public:
     // call
     bool                 m_dirty;
 
-    wxBrush             *m_highlightBrush;
     wxColour            *m_highlightColour;
     int                  m_xScroll,
                          m_yScroll;
@@ -822,6 +830,10 @@ private:
     // use GetVisibleLinesRange() above instead
     size_t m_lineFrom,
            m_lineTo;
+
+    // the brushes to use for item highlighting when we do/don't have focus
+    wxBrush *m_highlightBrush,
+            *m_highlightUnfocusedBrush;
 
     DECLARE_DYNAMIC_CLASS(wxListMainWindow);
     DECLARE_EVENT_TABLE()
@@ -1585,7 +1597,7 @@ bool wxListLineData::SetAttributes(wxDC *dc,
     {
         if ( highlighted )
         {
-            dc->SetBrush( *m_owner->m_highlightBrush );
+            dc->SetBrush( *m_owner->GetHighlightBrush() );
         }
         else
         {
@@ -2172,7 +2184,8 @@ wxListMainWindow::wxListMainWindow()
 {
     Init();
 
-    m_highlightBrush = (wxBrush *) NULL;
+    m_highlightBrush =
+    m_highlightUnfocusedBrush = (wxBrush *) NULL;
 
     m_xScroll =
     m_yScroll = 0;
@@ -2189,7 +2202,24 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent,
 {
     Init();
 
-    m_highlightBrush = new wxBrush( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHT), wxSOLID );
+    m_highlightBrush = new wxBrush
+                           (
+                            wxSystemSettings::GetSystemColour
+                            (
+                                wxSYS_COLOUR_HIGHLIGHT
+                            ),
+                            wxSOLID
+                           );
+
+    m_highlightUnfocusedBrush = new wxBrush
+                                    (
+                                       wxSystemSettings::GetSystemColour
+                                       (
+                                           wxSYS_COLOUR_BTNSHADOW
+                                       ),
+                                       wxSOLID
+                                    );
+
     wxSize sz = size;
     sz.y = 25;
 
@@ -2204,6 +2234,7 @@ wxListMainWindow::~wxListMainWindow()
     DoDeleteAllItems();
 
     delete m_highlightBrush;
+    delete m_highlightUnfocusedBrush;
 
     delete m_renameTimer;
 }
@@ -2411,7 +2442,7 @@ bool wxListMainWindow::HighlightLine( size_t line, bool highlight )
     else // !virtual
     {
         wxListLineData *ld = GetLine(line);
-        wxCHECK_MSG( ld, FALSE, _T("invalid index in IsHighlighted") );
+        wxCHECK_MSG( ld, FALSE, _T("invalid index in HighlightLine") );
 
         changed = ld->Highlight(highlight);
     }
@@ -2507,6 +2538,37 @@ void wxListMainWindow::RefreshAfter( size_t lineFrom )
     }
 }
 
+void wxListMainWindow::RefreshSelected()
+{
+    if ( IsEmpty() )
+        return;
+
+    size_t from, to;
+    if ( InReportView() )
+    {
+        GetVisibleLinesRange(&from, &to);
+    }
+    else // !virtual
+    {
+        from = 0;
+        to = GetItemCount() - 1;
+    }
+
+    if ( HasCurrent() && m_current > from && m_current <= to )
+    {
+        RefreshLine(m_current);
+    }
+
+    for ( size_t line = from; line <= to; line++ )
+    {
+        // NB: the test works as expected even if m_current == -1
+        if ( line != m_current && IsHighlighted(line) )
+        {
+            RefreshLine(line);
+        }
+    }
+}
+
 void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     // Note: a wxPaintDC must be constructed even if no drawing is
@@ -2570,7 +2632,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             GetLine(line)->DrawInReportMode( &dc,
                                              rectLine,
                                              GetLineHighlightRect(line),
-                                             m_hasFocus && IsHighlighted(line) );
+                                             IsHighlighted(line) );
         }
 
         if ( HasFlag(wxLC_HRULES) )
@@ -2630,10 +2692,13 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     if ( HasCurrent() )
     {
         // don't draw rect outline under Max if we already have the background
-        // color
+        // color but under other platforms only draw it if we do: it is a bit
+        // silly to draw "focus rect" if we don't have focus!
 #ifdef __WXMAC__
         if ( !m_hasFocus )
-#endif // !__WXMAC__
+#else // !__WXMAC__
+        if ( m_hasFocus )
+#endif // __WXMAC__/!__WXMAC__
         {
             dc.SetPen( *wxBLACK_PEN );
             dc.SetBrush( *wxTRANSPARENT_BRUSH );
@@ -3226,11 +3291,10 @@ void wxListMainWindow::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
 {
     m_hasFocus = TRUE;
 
-    if ( HasCurrent() )
-        RefreshLine( m_current );
-
     if (!GetParent())
         return;
+
+    RefreshSelected();
 
 #ifdef __WXGTK__
     g_focusWindow = GetParent();
@@ -3245,8 +3309,7 @@ void wxListMainWindow::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
 {
     m_hasFocus = FALSE;
 
-    if ( HasCurrent() )
-        RefreshLine( m_current );
+    RefreshSelected();
 }
 
 void wxListMainWindow::DrawImage( int index, wxDC *dc, int x, int y )
