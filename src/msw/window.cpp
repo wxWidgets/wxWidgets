@@ -4138,9 +4138,17 @@ WXHBRUSH wxWindowMSW::MSWGetSolidBgBrushForChild(wxWindow *child)
 
 wxColour wxWindowMSW::MSWGetBgColourForChild(wxWindow *child)
 {
-    return m_inheritBgCol || (m_hasBgCol && child == this)
-                ? GetBackgroundColour()
-                : wxNullColour;
+    if ( m_hasBgCol )
+    {
+        if ( m_inheritBgCol ||
+                child == this ||
+                    child->HasTransparentBackground() )
+        {
+            return GetBackgroundColour();
+        }
+    }
+
+    return wxNullColour;
 }
 
 WXHBRUSH wxWindowMSW::MSWGetBgBrushForSelf(wxWindow *parent, WXHDC hDC)
