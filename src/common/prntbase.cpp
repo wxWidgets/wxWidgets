@@ -438,8 +438,6 @@ void wxPreviewControlBar::CreateButtons()
 
     wxBoxSizer *item0 = new wxBoxSizer( wxHORIZONTAL );
 
-    int smallButtonWidth = 45;
-
     m_closeButton = new wxButton( this, wxID_PREVIEW_CLOSE, _("&Close"), wxDefaultPosition, wxDefaultSize, 0 );
     item0->Add( m_closeButton, 0, wxALIGN_CENTRE|wxALL, 5 );
 
@@ -451,25 +449,25 @@ void wxPreviewControlBar::CreateButtons()
 
     if (m_buttonFlags & wxPREVIEW_FIRST)
     {
-        m_firstPageButton = new wxButton( this, wxID_PREVIEW_FIRST, _("|<<"), wxDefaultPosition, wxSize(smallButtonWidth,-1), 0 );
+        m_firstPageButton = new wxButton( this, wxID_PREVIEW_FIRST, _("|<<"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
         item0->Add( m_firstPageButton, 0, wxALIGN_CENTRE|wxALL, 5 );
     }
 
     if (m_buttonFlags & wxPREVIEW_PREVIOUS)
     {
-        m_previousPageButton = new wxButton( this, wxID_PREVIEW_PREVIOUS, _("<<"), wxDefaultPosition, wxSize(smallButtonWidth,-1), 0 );
+        m_previousPageButton = new wxButton( this, wxID_PREVIEW_PREVIOUS, _("<<"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
         item0->Add( m_previousPageButton, 0, wxALIGN_CENTRE|wxRIGHT|wxTOP|wxBOTTOM, 5 );
     }
 
     if (m_buttonFlags & wxPREVIEW_NEXT)
     {
-        m_nextPageButton = new wxButton( this, wxID_PREVIEW_NEXT, _(">>"), wxDefaultPosition, wxSize(smallButtonWidth,-1), 0 );
+        m_nextPageButton = new wxButton( this, wxID_PREVIEW_NEXT, _(">>"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
         item0->Add( m_nextPageButton, 0, wxALIGN_CENTRE|wxRIGHT|wxTOP|wxBOTTOM, 5 );
     }
 
     if (m_buttonFlags & wxPREVIEW_LAST)
     {
-        m_lastPageButton = new wxButton( this, wxID_PREVIEW_LAST, _(">>|"), wxDefaultPosition, wxSize(smallButtonWidth,-1), 0 );
+        m_lastPageButton = new wxButton( this, wxID_PREVIEW_LAST, _(">>|"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
         item0->Add( m_lastPageButton, 0, wxALIGN_CENTRE|wxRIGHT|wxTOP|wxBOTTOM, 5 );
     }
 
