@@ -21,6 +21,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/defs.h"
     #include "wx/utils.h"
     #include "wx/dialog.h"
