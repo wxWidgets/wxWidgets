@@ -51,8 +51,6 @@ wxPython/distrib/mac
 wxPython/distrib/mac/wxPythonOSX
 wxPython/distrib/mac/wxPythonOSX/resources
 wxPython/distrib/msw
-wxPython/distutils
-wxPython/distutils/command
 wxPython/docs
 wxPython/docs/bin
 wxPython/docs/screenshots
