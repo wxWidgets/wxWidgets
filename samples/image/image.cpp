@@ -135,11 +135,15 @@ public:
         SetClientSize(bitmap.GetWidth(), bitmap.GetHeight());
     }
 
+    void OnEraseBackground(wxEraseEvent& WXUNUSED(event))
+    {
+        // do nothing here to be able to see how transparent images are shown
+    }
+
     void OnPaint(wxPaintEvent& WXUNUSED(event))
     {
         wxPaintDC dc( this );
-        //TRUE for masked images
-        dc.DrawBitmap( m_bitmap, 0, 0, TRUE );
+        dc.DrawBitmap( m_bitmap, 0, 0, TRUE /* use mask */ );
     }
 
     void OnSave(wxMouseEvent& WXUNUSED(event))
@@ -237,8 +241,9 @@ IMPLEMENT_APP(MyApp)
 IMPLEMENT_DYNAMIC_CLASS(MyCanvas, wxScrolledWindow)
 
 BEGIN_EVENT_TABLE(MyImageFrame, wxFrame)
-  EVT_PAINT(MyImageFrame::OnPaint)
-  EVT_LEFT_DCLICK(MyImageFrame::OnSave)
+    EVT_ERASE_BACKGROUND(MyImageFrame::OnEraseBackground)
+    EVT_PAINT(MyImageFrame::OnPaint)
+    EVT_LEFT_DCLICK(MyImageFrame::OnSave)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
