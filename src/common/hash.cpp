@@ -143,6 +143,11 @@ void wxHashTableLong::Init(size_t size)
     m_count = 0;
 }
 
+void wxHashTableLong::Create(size_t size)
+{
+    Init(size);
+}
+
 void wxHashTableLong::Destroy()
 {
     for ( size_t n = 0; n < m_hashSize; n++ )
