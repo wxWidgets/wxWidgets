@@ -91,7 +91,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
-    #define TEST_DIR
+    #define TEST_FILENAME
 
     static const bool TEST_ALL = FALSE;
 #endif
@@ -866,6 +866,7 @@ static struct FileNameInfo
     { _T("c:\\foo.bar"), _T("c"), _T("\\"), _T("foo"), _T("bar"), TRUE, wxPATH_DOS },
     { _T("c:\\Windows\\command.com"), _T("c"), _T("\\Windows"), _T("command"), _T("com"), TRUE, wxPATH_DOS },
     { _T("\\\\server\\foo.bar"), _T("server"), _T("\\"), _T("foo"), _T("bar"), TRUE, wxPATH_DOS },
+    { _T("\\\\server\\dir\\foo.bar"), _T("server"), _T("\\dir"), _T("foo"), _T("bar"), TRUE, wxPATH_DOS },
 
     // wxFileName support for Mac file names is broken currently
 #if 0
@@ -5896,7 +5897,7 @@ int main(int argc, char **argv)
 #endif // TEST_FILE
 
 #ifdef TEST_FILENAME
-    if ( 1 )
+    if ( 0 )
     {
         wxFileName fn;
         fn.Assign("c:\\foo", "bar.baz");
@@ -5905,6 +5906,7 @@ int main(int argc, char **argv)
         DumpFileName(fn);
     }
 
+    TestFileNameConstruction();
     if ( TEST_ALL )
     {
         TestFileNameConstruction();
