@@ -300,12 +300,14 @@ void wxFileName::Assign( const wxFileName &filepath )
     m_name = filepath.GetName();
     m_ext = filepath.GetExt();
     m_relative = filepath.m_relative;
+    m_hasExt = filepath.m_hasExt;
 }
 
 void wxFileName::Assign(const wxString& volume,
                         const wxString& path,
                         const wxString& name,
                         const wxString& ext,
+                        bool hasExt,
                         wxPathFormat format )
 {
     SetPath( path, format );
@@ -313,6 +315,8 @@ void wxFileName::Assign(const wxString& volume,
     m_volume = volume;
     m_ext = ext;
     m_name = name;
+
+    m_hasExt = hasExt;
 }
 
 void wxFileName::SetPath( const wxString& pathOrig, wxPathFormat format )
@@ -411,9 +415,10 @@ void wxFileName::Assign(const wxString& fullpath,
                         wxPathFormat format)
 {
     wxString volume, path, name, ext;
-    SplitPath(fullpath, &volume, &path, &name, &ext, format);
+    bool hasExt;
+    SplitPath(fullpath, &volume, &path, &name, &ext, &hasExt, format);
 
-    Assign(volume, path, name, ext, format);
+    Assign(volume, path, name, ext, hasExt, format);
 }
 
 void wxFileName::Assign(const wxString& fullpathOrig,
@@ -429,15 +434,16 @@ void wxFileName::Assign(const wxString& fullpathOrig,
     }
 
     wxString volume, path, name, ext;
+    bool hasExt;
 
     // do some consistency checks in debug mode: the name should be really just
     // the filename and the path should be really just a path
 #ifdef __WXDEBUG__
-    wxString pathDummy, nameDummy, extDummy;
+    wxString volDummy, pathDummy, nameDummy, extDummy;
 
-    SplitPath(fullname, &pathDummy, &name, &ext, format);
+    SplitPath(fullname, &volDummy, &pathDummy, &name, &ext, &hasExt, format);
 
-    wxASSERT_MSG( pathDummy.empty(),
+    wxASSERT_MSG( volDummy.empty() && pathDummy.empty(),
                   _T("the file name shouldn't contain the path") );
 
     SplitPath(fullpath, &volume, &path, &nameDummy, &extDummy, format);
@@ -446,11 +452,11 @@ void wxFileName::Assign(const wxString& fullpathOrig,
                   _T("the path shouldn't contain file name nor extension") );
 
 #else // !__WXDEBUG__
-    SplitPath(fullname, NULL /* no path */, &name, &ext, format);
+    SplitPath(fullname, NULL /* no path */, &name, &ext, &hasExt, format);
     SplitPath(fullpath, &volume, &path, NULL, NULL, format);
 #endif // __WXDEBUG__/!__WXDEBUG__
 
-    Assign(volume, path, name, ext, format);
+    Assign(volume, path, name, ext, hasExt, format);
 }
 
 void wxFileName::Assign(const wxString& pathOrig,
@@ -480,6 +486,9 @@ void wxFileName::Clear()
 
     // we don't have any absolute path for now
     m_relative = true;
+
+    // nor any extension
+    m_hasExt = false;
 }
 
 /* static */
@@ -1352,13 +1361,14 @@ void wxFileName::RemoveDir(size_t pos)
 
 void wxFileName::SetFullName(const wxString& fullname)
 {
-    SplitPath(fullname, NULL /* no path */, &m_name, &m_ext);
+    SplitPath(fullname, NULL /* no volume */, NULL /* no path */,
+                        &m_name, &m_ext, &m_hasExt);
 }
 
 wxString wxFileName::GetFullName() const
 {
     wxString fullname = m_name;
-    if ( !m_ext.empty() )
+    if ( m_hasExt )
     {
         fullname << wxFILE_SEP_EXT << m_ext;
     }
@@ -1720,6 +1730,7 @@ void wxFileName::SplitPath(const wxString& fullpathWithVolume,
                            wxString *pstrPath,
                            wxString *pstrName,
                            wxString *pstrExt,
+                           bool *hasExt,
                            wxPathFormat format)
 {
     format = GetFormat(format);
@@ -1806,18 +1817,25 @@ void wxFileName::SplitPath(const wxString& fullpathWithVolume,
         *pstrName = fullpath.Mid(nStart, count);
     }
 
-    if ( pstrExt )
+    // finally deal with the extension here: we have an added complication that
+    // extension may be empty (but present) as in "foo." where trailing dot
+    // indicates the empty extension at the end -- and hence we must remember
+    // that we have it independently of pstrExt
+    if ( posLastDot == wxString::npos )
     {
-        if ( posLastDot == wxString::npos )
-        {
-            // no extension
-            pstrExt->Empty();
-        }
-        else
-        {
-            // take everything after the dot
+        // no extension
+        if ( pstrExt )
+            pstrExt->clear();
+        if ( hasExt )
+            *hasExt = false;
+    }
+    else
+    {
+        // take everything after the dot
+        if ( pstrExt )
             *pstrExt = fullpath.Mid(posLastDot + 1);
-        }
+        if ( hasExt )
+            *hasExt = true;
     }
 }
 

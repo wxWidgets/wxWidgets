@@ -148,6 +148,10 @@ void FileNameTestCase::TestSplit()
         CPPUNIT_ASSERT( name == fni.name );
         CPPUNIT_ASSERT( ext == fni.ext );
     }
+
+    // special case of empty extension
+    wxFileName fn(_T("foo."));
+    CPPUNIT_ASSERT( fn.GetFullPath() == _T("foo.") );
 }
 
 void FileNameTestCase::TestSetPath()

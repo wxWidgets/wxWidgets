@@ -197,6 +197,8 @@ assert failure in debug build).
 
 \func{void}{Assign}{\param{const wxString\& }{fullpath}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
+\func{void}{Assign}{\param{const wxString\& }{volume}, \param{const wxString\& }{path}, \param{const wxString\& }{name}, \param{const wxString\& }{ext}, \param{bool }{hasExt}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
+
 \func{void}{Assign}{\param{const wxString\& }{volume}, \param{const wxString\& }{path}, \param{const wxString\& }{name}, \param{const wxString\& }{ext}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
 \func{void}{Assign}{\param{const wxString\& }{path}, \param{const wxString\& }{name}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
@@ -785,6 +787,8 @@ Sets the volume specifier.
 
 \membersection{wxFileName::SplitPath}\label{wxfilenamesplitpath}
 
+\func{static void}{SplitPath}{\param{const wxString\& }{fullpath}, \param{wxString* }{volume}, \param{wxString* }{path}, \param{wxString* }{name}, \param{wxString* }{ext}, \param{bool }{*hasExt = \texttt{NULL}}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
+
 \func{static void}{SplitPath}{\param{const wxString\& }{fullpath}, \param{wxString* }{volume}, \param{wxString* }{path}, \param{wxString* }{name}, \param{wxString* }{ext}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
 \func{static void}{SplitPath}{\param{const wxString\& }{fullpath}, \param{wxString* }{path}, \param{wxString* }{name}, \param{wxString* }{ext}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
@@ -800,6 +804,10 @@ On return, {\it path} contains the file path (without the trailing separator),
 without leading dot. All three of them may be empty if the corresponding
 component is. The old contents of the strings pointed to by these parameters
 will be overwritten in any case (if the pointers are not {\tt NULL}).
+
+Note that for a filename ``foo.'' the extension is present, as indicated by the
+trailing dot, but empty. If you need to cope with such cases, you should use 
+\arg{hasExt} instead of relying on testing whether \arg{ext} is empty or not.
 
 
 \membersection{wxFileName::SplitVolume}\label{wxfilenamesplitvolume}

@@ -142,7 +142,15 @@ public:
                 const wxString& path,
                 const wxString& name,
                 const wxString& ext,
+                bool hasExt,
                 wxPathFormat format = wxPATH_NATIVE);
+
+    void Assign(const wxString& volume,
+                const wxString& path,
+                const wxString& name,
+                const wxString& ext,
+                wxPathFormat format = wxPATH_NATIVE)
+        { Assign(volume, path, name, ext, !ext.empty(), format); }
 
     void Assign(const wxString& path,
                 const wxString& name,
@@ -178,7 +186,8 @@ public:
     bool IsOk() const
     {
         // we're fine if we have the path or the name or if we're a root dir
-        return m_dirs.size() != 0 || !m_name.IsEmpty() || !m_relative;
+        return m_dirs.size() != 0 || !m_name.IsEmpty() || !m_relative ||
+                !m_ext.empty() || m_hasExt;
     }
 
         // does the file with this name exists?
@@ -407,9 +416,20 @@ public:
                           wxString *path,
                           wxString *name,
                           wxString *ext,
+                          bool *hasExt = NULL,
                           wxPathFormat format = wxPATH_NATIVE);
 
-        // compatibility version
+    static void SplitPath(const wxString& fullpath,
+                          wxString *volume,
+                          wxString *path,
+                          wxString *name,
+                          wxString *ext,
+                          wxPathFormat format = wxPATH_NATIVE)
+    {
+        SplitPath(fullpath, volume, path, name, ext, NULL, format);
+    }
+
+        // compatibility version: volume is part of path
     static void SplitPath(const wxString& fullpath,
                           wxString *path,
                           wxString *name,
@@ -455,6 +475,13 @@ private:
     // NB: the path is not absolute just because m_relative is false, it still
     //     needs the drive (i.e. volume) in some formats (Windows)
     bool            m_relative;
+
+    // when m_ext is empty, it may be because we don't have any extension or
+    // because we have an empty extension
+    //
+    // the difference is important as file with name "foo" and without
+    // extension has full name "foo" while with empty extension it is "foo."
+    bool            m_hasExt;
 };
 
 #endif // _WX_FILENAME_H_
