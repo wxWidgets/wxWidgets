@@ -428,6 +428,8 @@ WX_DEFINE_ARRAY(void *, wxArrayPtrVoid);
         {                                                                     \
             delete array[n];                                                  \
         }                                                                     \
+                                                                              \
+        array.Empty();                                                        \
     }
 #endif // _DYNARRAY_H
 
