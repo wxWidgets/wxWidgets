@@ -120,7 +120,7 @@ bool wxTimer::Start(int milliseconds,bool mode)
     m_info->m_timer = this ;
     InsXTime((QElemPtr) &m_info->m_task ) ;
     PrimeTime( (QElemPtr) &m_info->m_task , m_milli ) ;
-    return FALSE;
+    return TRUE;
 }
 
 void wxTimer::Stop()
