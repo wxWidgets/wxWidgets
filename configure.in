@@ -1238,6 +1238,10 @@ if test "$wxUSE_STREAMS" = 1 ; then
   AC_DEFINE_UNQUOTED(wxUSE_STREAMS,$wxUSE_STREAMS)
 fi
 
+if test "$wxUSE_SOCKETS" = 1 ; then
+  AC_DEFINE_UNQUOTED(wxUSE_SOCKETS,$wxUSE_SOCKETS)
+fi
+
 if test "$wxUSE_SERIAL" = 1 ; then
   AC_DEFINE_UNQUOTED(wxUSE_SERIAL,$wxUSE_SERIAL)
 fi
