@@ -26,6 +26,8 @@ IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxObject)
 #include <Timer.h>
 #endif
 
+#include "wx/dynarray.h"
+
 typedef struct MacTimerInfo
 {
     TMTask m_task;
@@ -41,20 +43,33 @@ static pascal void MacTimerProc( TMTask * t )
 	wxMacAddEvent( tm->m_table , wxProcessTimer, 0 , (void*) tm->m_timer , TRUE ) ;
 }
 
+wxArrayPtrVoid gTimersInProcess ;
+
 static void wxProcessTimer( unsigned long event , void *data )
 {
 	if ( !data )
 		return ;
 		
 	wxTimer* timer = (wxTimer*) data ;
+	
 	if ( timer->IsOneShot() )
 		timer->Stop() ;
 		
+	gTimersInProcess.Add( timer ) ;
+	 
     timer->Notify();
 
-    if ( timer->m_info->m_task.tmAddr && !timer->IsOneShot() )
+    int index = gTimersInProcess.Index( timer ) ;
+    
+    if ( index != wxNOT_FOUND )
     {
-	    PrimeTime( (QElemPtr)  &timer->m_info->m_task , timer->GetInterval() ) ;
+        gTimersInProcess.RemoveAt( index ) ;
+        
+        if ( !timer->IsOneShot() && timer->m_info->m_task.tmAddr )
+        {
+    	    PrimeTime( (QElemPtr)  &timer->m_info->m_task , timer->GetInterval() ) ;
+        }
+    
     }
 }
 
@@ -79,6 +94,9 @@ wxTimer::~wxTimer()
     Stop();
     delete m_info ;
     m_info = NULL ;
+    int index = gTimersInProcess.Index( this ) ;
+    if ( index != wxNOT_FOUND )
+        gTimersInProcess.RemoveAt( index ) ;  
 }
 
 bool wxTimer::Start(int milliseconds,bool mode)
