@@ -14,6 +14,7 @@
 
 #include "wx/event.h"
 #include "wx/datetime.h"
+#include "wx/window.h"
 
 // ----------------------------------------------------------------------------
 // wxDateEvent: used by wxCalendarCtrl and wxDatePickerCtrl
