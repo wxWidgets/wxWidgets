@@ -138,14 +138,7 @@ public:
     // Plays sound from filename:
     %Rename(PlaySound,  static bool, Play(const wxString& filename, unsigned flags = wxSOUND_ASYNC));
 
-#ifndef __WXMAC__
     static void Stop();
-#else
-    %extend {
-        static void Stop()
-            { wxPyRaiseNotImplemented(); }
-    }
-#endif
 
     %pythoncode { def __nonzero__(self): return self.IsOk() }
 };
