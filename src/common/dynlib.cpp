@@ -54,7 +54,11 @@
     // behaviour (Win won't let you load a library with missing symbols) and
     // RTLD_GLOBAL because it is needed sometimes and probably doesn't hurt
     // otherwise
-#   define wxDllOpen(lib)                dlopen(lib.fn_str(), RTLD_LAZY | RTLD_GLOBAL)
+#   if defined( __osf__ )
+#       define wxDllOpen(lib)                dlopen(lib.fn_str(), RTLD_LAZY )
+#   else
+#       define wxDllOpen(lib)                dlopen(lib.fn_str(), RTLD_LAZY | RTLD_GLOBAL)
+#   endif
 #   define wxDllGetSymbol(handle, name)  dlsym(handle, name)
 #   define wxDllClose                    dlclose
 #elif defined(HAVE_SHL_LOAD)
