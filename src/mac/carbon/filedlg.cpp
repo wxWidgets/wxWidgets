@@ -417,7 +417,6 @@ int wxFileDialog::ShowModal()
             if (err != noErr)
                 break;
 
-            CFURLRef fullURLRef = 0 ;
             if (m_dialogStyle & wxSAVE)
                 thePath = wxMacFSRefToPath( &theFSRef , navReply.saveFileName ) ;
             else

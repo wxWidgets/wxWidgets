@@ -479,7 +479,7 @@ pascal OSErr wxMacWindowDragTrackingHandler(DragTrackingMessage theMessage, Wind
             
 //            if (attributes & kDragHasLeftSenderWindow) 
             {
-                wxPoint point(localMouse.h , localMouse.v) ;
+//                wxPoint point(localMouse.h , localMouse.v) ;
                 wxWindow *win = NULL ;
                 ControlPartCode controlPart ;
                 ControlRef control = wxMacFindControlUnderMouse( localMouse ,
