@@ -46,6 +46,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <signal.h>             // for kill()
+#include <errno.h>
 
 #ifdef HAVE_FCNTL
     #include <fcntl.h>
@@ -57,14 +58,27 @@
 #endif // fcntl()/flock()
 
 // ----------------------------------------------------------------------------
-// private functions: (exclusively) lock/unlock the file
+// constants
 // ----------------------------------------------------------------------------
 
+// argument of wxLockFile()
 enum LockOperation
 {
     LOCK,
     UNLOCK
 };
+
+// return value of CreateLockFile()
+enum LockResult
+{
+    LOCK_ERROR = -1,
+    LOCK_EXISTS,
+    LOCK_CREATED
+};
+
+// ----------------------------------------------------------------------------
+// private functions: (exclusively) lock/unlock the file
+// ----------------------------------------------------------------------------
 
 #ifdef HAVE_FCNTL
 
@@ -115,7 +129,7 @@ public:
 
 private:
     // try to create and lock the file
-    bool CreateLockFile();
+    LockResult CreateLockFile();
 
     // unlock and remove the lock file
     void Unlock();
@@ -134,7 +148,7 @@ private:
 // wxSingleInstanceCheckerImpl implementation
 // ============================================================================
 
-bool wxSingleInstanceCheckerImpl::CreateLockFile()
+LockResult wxSingleInstanceCheckerImpl::CreateLockFile()
 {
     // try to open the file
     m_fdLock = open(m_nameLock,
@@ -144,7 +158,8 @@ bool wxSingleInstanceCheckerImpl::CreateLockFile()
     if ( m_fdLock != -1 )
     {
         // try to lock it
-        if ( wxLockFile(m_fdLock, LOCK) == 0 )
+        int rc = wxLockFile(m_fdLock, LOCK);
+        if ( rc == 0 )
         {
             // fine, we have the exclusive lock to the file, write our PID
             // into it
@@ -161,33 +176,55 @@ bool wxSingleInstanceCheckerImpl::CreateLockFile()
 
                 Unlock();
 
-                return FALSE;
+                return LOCK_ERROR;
             }
 
             fsync(m_fdLock);
 
-            return TRUE;
+            return LOCK_CREATED;
         }
+        else // failure: see what exactly happened
+        {
+            close(m_fdLock);
+            m_fdLock = -1;
 
-        // couldn't lock: this might have happened because of a race
-        // condition: maybe another instance opened and locked the file
-        // between our calls to open() and flock()
-        close(m_fdLock);
-        m_fdLock = -1;
+            if ( rc != EACCES && rc != EAGAIN )
+            {
+                wxLogSysError(_("Failed to lock the lock file '%s'"),
+                              m_nameLock.c_str());
+
+                unlink(m_nameLock);
+
+                return LOCK_ERROR;
+            }
+            //else: couldn't lock because the lock is held by another process:
+            //      this might have happened because of a race condition:
+            //      maybe another instance opened and locked the file between
+            //      our calls to open() and flock(), so don't give an error
+        }
     }
 
     // we didn't create and lock the file
-    return FALSE;
+    return LOCK_EXISTS;
 }
 
 bool wxSingleInstanceCheckerImpl::Create(const wxString& name)
 {
     m_nameLock = name;
 
-    if ( CreateLockFile() )
+    switch ( CreateLockFile() )
     {
-        // nothing more to do
-        return TRUE;
+        case LOCK_EXISTS:
+            // there is a lock file, check below if it is still valid
+            break;
+
+        case LOCK_CREATED:
+            // nothing more to do
+            return TRUE;
+
+        case LOCK_ERROR:
+            // oops...
+            return FALSE;
     }
 
     // try to open the file for reading and get the PID of the process
@@ -241,7 +278,7 @@ bool wxSingleInstanceCheckerImpl::Create(const wxString& name)
         }
         else
         {
-            wxLogWarning(_("Invalid lock file '%s'."));
+            wxLogWarning(_("Invalid lock file '%s'."), name.c_str());
         }
     }
 

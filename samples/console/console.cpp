@@ -4562,17 +4562,24 @@ int main(int argc, char **argv)
     }
 
 #ifdef TEST_SNGLINST
-    wxSingleInstanceChecker checker(_T(".wxconsole.lock"));
-    if ( checker.IsAnotherRunning() )
+    wxSingleInstanceChecker checker;
+    if ( checker.Create(_T(".wxconsole.lock")) )
     {
-        wxPrintf(_T("Another instance of the program is running, exiting.\n"));
+        if ( checker.IsAnotherRunning() )
+        {
+            wxPrintf(_T("Another instance of the program is running, exiting.\n"));
 
-        return 1;
+            return 1;
+        }
+
+        // wait some time to give time to launch another instance
+        wxPrintf(_T("Press \"Enter\" to continue..."));
+        wxFgetc(stdin);
     }
-
-    // wait some time to give time to launch another instance
-    wxPrintf(_T("Press \"Enter\" to continue..."));
-    wxFgetc(stdin);
+    else // failed to create
+    {
+        wxPrintf(_T("Failed to init wxSingleInstanceChecker.\n"));
+    }
 #endif // TEST_SNGLINST
 
 #ifdef TEST_CHARSET
