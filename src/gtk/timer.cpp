@@ -41,12 +41,7 @@ extern "C" gint timeout_callback( gpointer data )
     gdk_threads_leave();
 
     if ( timer->IsOneShot() )
-    {
-        // This sets m_tag to -1
-        timer->Stop();
-        
         return FALSE;
-    }
 
     return TRUE;
 }
