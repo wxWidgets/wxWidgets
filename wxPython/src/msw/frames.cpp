@@ -999,35 +999,6 @@ static PyObject *_wrap_wxFrame_GetMenuBar(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
-#define wxFrame_Command(_swigobj,_swigarg0)  (_swigobj->Command(_swigarg0))
-static PyObject *_wrap_wxFrame_Command(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxFrame * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","id", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxFrame_Command",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFrame_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFrame_Command. Expected _wxFrame_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxFrame_Command(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
 #define wxFrame_ProcessCommand(_swigobj,_swigarg0)  (_swigobj->ProcessCommand(_swigarg0))
 static PyObject *_wrap_wxFrame_ProcessCommand(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2663,7 +2634,6 @@ static PyMethodDef framescMethods[] = {
 	 { "wxFrame_GetStatusBar", (PyCFunction) _wrap_wxFrame_GetStatusBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_CreateStatusBar", (PyCFunction) _wrap_wxFrame_CreateStatusBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_ProcessCommand", (PyCFunction) _wrap_wxFrame_ProcessCommand, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFrame_Command", (PyCFunction) _wrap_wxFrame_Command, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_GetMenuBar", (PyCFunction) _wrap_wxFrame_GetMenuBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_SetMenuBar", (PyCFunction) _wrap_wxFrame_SetMenuBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_GetClientAreaOrigin", (PyCFunction) _wrap_wxFrame_GetClientAreaOrigin, METH_VARARGS | METH_KEYWORDS },
