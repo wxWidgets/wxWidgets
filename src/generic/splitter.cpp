@@ -107,8 +107,8 @@ void wxSplitterWindow::Init()
     m_oldY = 0;
     m_firstX = 0;
     m_firstY = 0;
-    m_sashSize = 7;
-    m_borderSize = 2;
+    m_sashSize = 3;
+    m_borderSize = 0;
     m_sashPosition = m_requestedSashPosition = 0;
     m_minimumPaneSize = 0;
     m_sashCursorWE = wxCursor(wxCURSOR_SIZEWE);
@@ -120,9 +120,6 @@ void wxSplitterWindow::Init()
     m_faceBrush = (wxBrush *) NULL;
     m_facePen = (wxPen *) NULL;
     m_hilightPen = (wxPen *) NULL;
-
-    m_borderSize = 0;
-    m_sashSize = 3;
 
     InitColours();
 
@@ -213,6 +210,12 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
         // We can stop dragging now and see what we've got.
         m_dragMode = wxSPLIT_DRAG_NONE;
         ReleaseMouse();
+
+        // exit if unsplit after doubleclick
+        if ( !IsSplit() )
+        {
+            return;
+        }
 
         // Erase old tracker
         if ( !isLive )
@@ -754,7 +757,8 @@ void wxSplitterWindow::SizeWindows()
             DoSetSashPosition(newSashPosition);
         }
 
-        if ( newSashPosition == m_sashPosition )
+        if ( newSashPosition <= m_sashPosition
+            && newSashPosition >= m_sashPosition - GetBorderSize() )
         {
             // don't update it any more
             m_requestedSashPosition = INT_MAX;
