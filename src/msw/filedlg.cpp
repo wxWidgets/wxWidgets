@@ -264,6 +264,30 @@ int wxFileDialog::ShowModal()
     of.lpstrFile = fileNameBuffer;  // holds returned filename
     of.nMaxFile  = wxMAXPATH;
 
+    // we must set the default extension because otherwise Windows would check
+    // for the existing of a wrong file with wxOVERWRITE_PROMPT (i.e. if the
+    // user types "foo" and the default extension is ".bar" we should force it
+    // to check for "foo.bar" existence and not "foo")
+    wxString defextBuffer; // we need it to be alive until GetSaveFileName()!
+    if (m_dialogStyle & wxSAVE)
+    {
+        const wxChar* extension = filterBuffer;
+        int maxFilter = (int)(of.nFilterIndex*2L) - 1;
+
+        for( int i = 0; i < maxFilter; i++ )           // get extension
+            extension = extension + wxStrlen( extension ) + 1;
+
+        // use dummy name a to avoid assert in AppendExtension
+        defextBuffer = AppendExtension(wxT("a"), extension);
+        if (defextBuffer.StartsWith(wxT("a.")))
+        {
+            defextBuffer.Mid(2);
+            of.lpstrDefExt = defextBuffer.c_str();
+        }
+    }
+ 
+     //== Execute FileDialog >>=================================================
+
     //== Execute FileDialog >>=================================================
 
     bool success = (m_dialogStyle & wxSAVE ? GetSaveFileName(&of)
