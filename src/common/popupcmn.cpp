@@ -201,7 +201,6 @@ void wxPopupTransientWindow::PopHandlers()
             m_handlerPopup = NULL;
         }
 
-        // m_child->ReleaseMouse();
         m_child = NULL;
     }
 
@@ -248,7 +247,6 @@ void wxPopupTransientWindow::Popup(wxWindow *winFocus)
     delete m_handlerPopup;
     m_handlerPopup = new wxPopupWindowHandler(this);
 
-    // m_child->CaptureMouse();
     m_child->PushEventHandler(m_handlerPopup);
 
     m_focus = winFocus ? winFocus : this;
