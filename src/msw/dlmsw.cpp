@@ -121,8 +121,10 @@ HMODULE wxGetModuleHandle(const char *name, void *addr)
             return hmod;
     }
 
-    // if failed, try by name
-    return ::GetModuleHandleA(name);
+    // Windows CE only has Unicode API, so even we have an ANSI string here, we
+    // still need to use GetModuleHandleW() there and so do it everywhere to
+    // avoid #ifdefs -- this code is not performance-critical anyhow...
+    return ::GetModuleHandle(wxString::FromAscii((char *)name));
 }
 
 // ============================================================================
