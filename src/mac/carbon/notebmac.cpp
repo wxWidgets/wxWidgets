@@ -62,7 +62,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxCommandEvent)
 // mode, or inset.  I think edge to edge conforms better to the other ports,
 // and inset mode is better accomplished with space around the wxNotebook rather
 // than within it.    --Robin
-#define wxMAC_EDGE_TO_EDGE 1
+
+// CS : had to switch off tight spacing due to 10.3 problems
+#define wxMAC_EDGE_TO_EDGE 0
 
 static inline int wxMacTabMargin(long nbStyle, long side)
 {
