@@ -1760,7 +1760,7 @@ void DnDShapeFrame::OnDrop(wxCoord x, wxCoord y, DnDShape *shape)
     wxPoint pt(x, y);
 
     wxString s;
-    s.Printf(wxT("Shape dropped at (%ld, %ld)"), pt.x, pt.y);
+    s.Printf(wxT("Shape dropped at (%d, %d)"), pt.x, pt.y);
     SetStatusText(s);
 
     shape->Move(pt);
