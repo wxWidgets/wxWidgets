@@ -1430,7 +1430,7 @@ size_t wxPyCBInputStream::OnSysWrite(const void *buffer, size_t bufsize) {
 
 wxFileOffset wxPyCBInputStream::OnSysSeek(wxFileOffset off, wxSeekMode mode) {
     bool blocked = wxPyBeginBlockThreads();
-#if defined( __WINCE__) || defined(_LARGE_FILES) || defined(__HUGEFILES_SUPPORTED)
+#if defined( __WINCE__) || defined(_LARGE_FILES) || wxHAS_HUGE_FILES
     // wxFileOffset is a 64-bit value...
     PyObject* arglist = Py_BuildValue("(Li)", off, mode);
 #else
@@ -1451,7 +1451,7 @@ wxFileOffset wxPyCBInputStream::OnSysTell() const {
     Py_DECREF(arglist);
     wxFileOffset o = 0;
     if (result != NULL) {
-#if defined( __WINCE__) || defined(_LARGE_FILES) || defined(__HUGEFILES_SUPPORTED)
+#if defined( __WINCE__) || defined(_LARGE_FILES) || wxHAS_HUGE_FILES
         if (PyLong_Check(result))
             o = PyLong_AsLongLong(result);
         else
