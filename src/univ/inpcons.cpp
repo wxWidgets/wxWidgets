@@ -80,7 +80,8 @@ void wxInputConsumer::OnMouse(wxMouseEvent& event)
 {
     if ( m_inputHandler )
     {
-        if ( event.Moving() || event.Entering() || event.Leaving() )
+        if ( event.Moving() || event.Dragging() ||
+                event.Entering() || event.Leaving() )
         {
             if ( m_inputHandler->HandleMouseMove(this, event) )
                 return;

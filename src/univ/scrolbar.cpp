@@ -849,7 +849,7 @@ bool wxStdScrollBarInputHandler::HandleMouseMove(wxInputConsumer *consumer,
 
     if ( m_winCapture )
     {
-        if ( (m_htLast == wxHT_SCROLLBAR_THUMB) && event.Moving() )
+        if ( (m_htLast == wxHT_SCROLLBAR_THUMB) && event.Dragging() )
         {
             // make the thumb follow the mouse by keeping the same offset
             // between the mouse position and the top/left of the thumb
@@ -864,7 +864,7 @@ bool wxStdScrollBarInputHandler::HandleMouseMove(wxInputConsumer *consumer,
 
     bool isArrow = scrollbar->GetArrows().HandleMouseMove(event);
 
-    if ( event.Moving() )
+    if ( event.Dragging() )
     {
         wxHitTest ht = m_renderer->HitTestScrollbar
                                    (
