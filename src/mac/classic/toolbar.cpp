@@ -401,7 +401,7 @@ void wxToolBar::MacHandleControlClick( WXWidget control , wxInt16 controlpart , 
         wxToolBarTool* tool = (wxToolBarTool*) node->GetData() ; 
         if ( tool->IsButton() )
         {
-           if( tool->GetControlHandle() == control ) 
+           if( (WXWidget) tool->GetControlHandle() == control ) 
            {
                 if ( tool->CanBeToggled() )
                 {
@@ -611,7 +611,7 @@ void  wxToolBar::OnMouse( wxMouseEvent &event )
                     wxTheApp->s_lastMouseDown = 0 ;
                     if ( control && controlpart != kControlNoPart ) // otherwise we will get the event twice
                     {
-                        MacHandleControlClick( control , controlpart , false /* not down anymore */ ) ;
+                        MacHandleControlClick( (WXWidget) control , controlpart , false /* not down anymore */ ) ;
                     }
                 }
             }

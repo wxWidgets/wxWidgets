@@ -265,7 +265,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 
     long    result ;
     wxStAppResource resload ;
-    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false ,
+    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false ,
                   (style & wxLB_HSCROLL) ? kwxMacListWithVerticalAndHorizontalScrollbar : kwxMacListWithVerticalScrollbar , 
                   0 , 0, kControlListBoxProc , (long) this ) ;
     ::GetControlData( (ControlHandle) m_macControl , kControlNoPart , kControlListBoxListHandleTag ,

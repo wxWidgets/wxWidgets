@@ -432,7 +432,7 @@ pascal OSErr wxMacWindowDragTrackingHandler(DragTrackingMessage theMessage, Wind
     Point mouse, localMouse;
     DragAttributes attributes;
     GetDragAttributes(theDrag, &attributes);
-    wxTopLevelWindowMac* toplevel = wxFindWinFromMacWindow( theWindow ) ; 
+    wxTopLevelWindowMac* toplevel = wxFindWinFromMacWindow( (WXWindow) theWindow ) ; 
 
     KeyMap keymap;
     GetKeys(keymap);

@@ -47,7 +47,7 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
     
     MacPreControlCreate( parent , id ,  label , pos , size ,style, wxDefaultValidator , name , &bounds , title ) ;
     
-    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
+    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
         kControlGroupBoxTextTitleProc , (long) this ) ;
     
     MacPostControlCreate() ;

@@ -977,7 +977,7 @@ const wxBrush& wxWindowMac::MacGetBackgroundBrush()
         wxWindowMac* parent = GetParent() ;
         while( parent )
         {
-            if ( parent->MacGetRootWindow() != window )
+            if ( parent->MacGetRootWindow() != (WXWindow) window )
             {
                 // we are in a different window on the mac system
                 parent = NULL ;
@@ -1427,7 +1427,7 @@ bool wxWindowMac::MacGetWindowFromPointSub( const wxPoint &point , wxWindowMac**
     {
         wxWindowMac *child = node->GetData();
         // added the m_isShown test --dmazzoni
-        if ( child->MacGetRootWindow() == window && child->m_isShown )
+        if ( child->MacGetRootWindow() == (WXWindow) window && child->m_isShown )
         {
             if (child->MacGetWindowFromPointSub(newPoint , outWin ))
                 return TRUE;
@@ -1446,7 +1446,7 @@ bool wxWindowMac::MacGetWindowFromPoint( const wxPoint &screenpoint , wxWindowMa
     if ( ::FindWindow( pt , &window ) == 3 )
     {
 
-        wxWindowMac* win = wxFindWinFromMacWindow( window ) ;
+        wxWindowMac* win = wxFindWinFromMacWindow( (WXWindow) window ) ;
         if ( win )
         {
             // No, this yields the CLIENT are, we need the whole frame. RR.
@@ -1531,7 +1531,7 @@ bool wxWindowMac::MacDispatchMouseEvent(wxMouseEvent& event)
     for (wxWindowListNode *node = GetChildren().GetFirst(); node; node = node->GetNext())
     {
         wxWindowMac *child = node->GetData();
-        if ( child->MacGetRootWindow() == window && child->IsShown() && child->IsEnabled() )
+        if ( child->MacGetRootWindow() == (WXWindow) window && child->IsShown() && child->IsEnabled() )
         {
             if (child->MacDispatchMouseEvent(event))
                 return TRUE;
@@ -1634,7 +1634,7 @@ wxTopLevelWindowMac* wxWindowMac::MacGetTopLevelWindow() const
     WindowRef window = (WindowRef) MacGetRootWindow() ;
     if ( window )
     {
-        win = wxFindWinFromMacWindow( window ) ;
+        win = wxFindWinFromMacWindow( (WXWindow) window ) ;
     }
     return win ;
 }
@@ -1797,7 +1797,7 @@ void wxWindowMac::MacRedraw( WXHRGN updatergnr , long time, bool erase)
             {
                 wxControl *child = wxDynamicCast( ( wxWindow*)node->GetData() , wxControl ) ;
 
-                if ( child && child->MacGetRootWindow() == window && child->IsShown() && child->GetMacControl() )
+                if ( child && child->MacGetRootWindow() == (WXWindow) window && child->IsShown() && child->GetMacControl() )
                 {
                     SetControlVisibility( (ControlHandle) child->GetMacControl() , false , false ) ;
                     hiddenWindows.Append( child ) ;
@@ -1832,7 +1832,7 @@ void wxWindowMac::MacRedraw( WXHRGN updatergnr , long time, bool erase)
         SetRectRgn( childupdate , child->m_x , child->m_y , child->m_x + child->m_width ,  child->m_y + child->m_height ) ;
         SectRgn( childupdate , updatergn , childupdate ) ;
         OffsetRgn( childupdate , -child->m_x , -child->m_y ) ;
-        if ( child->MacGetRootWindow() == window && child->IsShown() && !EmptyRgn( childupdate ) )
+        if ( child->MacGetRootWindow() == (WXWindow) window && child->IsShown() && !EmptyRgn( childupdate ) )
         {
             // because dialogs may also be children
             child->MacRedraw( childupdate , time , erase ) ;
@@ -1843,7 +1843,7 @@ void wxWindowMac::MacRedraw( WXHRGN updatergnr , long time, bool erase)
 
 }
 
-WXHWND wxWindowMac::MacGetRootWindow() const
+WXWindow wxWindowMac::MacGetRootWindow() const
 {
     wxWindowMac *iter = (wxWindowMac*)this ;
 

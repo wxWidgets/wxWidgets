@@ -774,7 +774,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     wxMacConvertNewlines13To10( &st ) ;
     if ( !m_macUsesTXN )
     {
-        m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , "\p" , false , 0 , 0 , 1,
+        m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , "\p" , false , 0 , 0 , 1,
             (style & wxTE_PASSWORD) ? kControlEditTextPasswordProc : kControlEditTextProc , (long) this ) ;
         long size ;
         ::GetControlData((ControlHandle)  m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*)((TEHandle *)&m_macTE) , &size ) ;
@@ -788,7 +788,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
                 | kControlWantsActivate | kControlHandlesTracking | kControlHasSpecialBackground
                 | kControlGetsFocusOnClick | kControlSupportsLiveFeedback;
             /* create the control */
-        m_macControl = NewControl(MAC_WXHWND(parent->MacGetRootWindow()), &bounds, "\p", false , featurSet, 0, featurSet, kControlUserPaneProc, 0);
+        m_macControl = (WXWidget) ::NewControl(MAC_WXHWND(parent->MacGetRootWindow()), &bounds, "\p", false , featurSet, 0, featurSet, kControlUserPaneProc, 0);
             /* set up the mUP specific features and data */
         mUPOpenControl((ControlHandle) m_macControl, m_windowStyle );
     }

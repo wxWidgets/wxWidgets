@@ -138,7 +138,6 @@ extern WXDLLEXPORT_DATA(wxWindowList) wxModelessWindows;
 // associate mac windows with wx counterparts
 
 wxTopLevelWindowMac* wxFindWinFromMacWindow( WXWindow inWindow ) ;
-void wxAssociateWinWithMacWindow(WXWindow inWindow, wxTopLevelWindowMac *win) ;
 void wxRemoveMacWindowAssociation(wxTopLevelWindowMac *win) ;
 
 

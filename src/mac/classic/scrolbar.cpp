@@ -48,7 +48,7 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
 
     MacPreControlCreate( parent , id ,  wxEmptyString , pos , size ,style, validator , name , &bounds , title ) ;
 
-    m_macControl = ::NewControl(MAC_WXHWND(parent->MacGetRootWindow()) ,
+    m_macControl = (WXWidget) ::NewControl(MAC_WXHWND(parent->MacGetRootWindow()) ,
                                 &bounds , title , false , 0 , 0 , 100, 
                                 kControlScrollBarLiveProc , (long) this) ;
 

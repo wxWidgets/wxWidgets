@@ -479,7 +479,8 @@ wxTopLevelWindowMac *wxFindWinFromMacWindow(WXWindow inWindowRef)
     return (wxTopLevelWindowMac *)node->GetData();
 }
 
-void wxAssociateWinWithMacWindow(WXWindow inWindowRef, wxTopLevelWindowMac *win)
+void wxAssociateWinWithMacWindow(WindowRef inWindowRef, wxTopLevelWindowMac *win);
+void wxAssociateWinWithMacWindow(WindowRef inWindowRef, wxTopLevelWindowMac *win)
 {
     // adding NULL WindowRef is (first) surely a result of an error and
     // (secondly) breaks menu command processing
@@ -499,7 +500,7 @@ void wxRemoveMacWindowAssociation(wxTopLevelWindowMac *win)
 // wxTopLevelWindowMac creation
 // ----------------------------------------------------------------------------
 
-WXHWND wxTopLevelWindowMac::s_macWindowInUpdate = NULL;
+WXWindow wxTopLevelWindowMac::s_macWindowInUpdate = NULL;
 wxTopLevelWindowMac *wxTopLevelWindowMac::s_macDeactivateWindow = NULL;
 bool wxTopLevelWindowMac::s_macWindowCompositing = FALSE;
 
@@ -774,7 +775,7 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     }
 
     wxCHECK_RET( err == noErr, wxT("Mac OS error when trying to create new window") );
-    wxAssociateWinWithMacWindow( m_macWindow , this ) ;
+    wxAssociateWinWithMacWindow( (WindowRef) m_macWindow , this ) ;
     UMASetWTitle( (WindowRef)m_macWindow , title , m_font.GetEncoding() ) ;
     if ( wxTopLevelWindowMac::s_macWindowCompositing )
     {
@@ -812,7 +813,7 @@ bool wxTopLevelWindowMac::MacEnableCompositing( bool useCompositing )
     return oldval; 
 }
 
-void wxTopLevelWindowMac::MacGetPortParams(WXPOINTPTR localOrigin, WXRECTPTR clipRect, WXHWND *window  , wxWindowMac** rootwin)
+void wxTopLevelWindowMac::MacGetPortParams(WXPOINTPTR localOrigin, WXRECTPTR clipRect, WXWindow *window  , wxWindowMac** rootwin)
 {
     ((Point*)localOrigin)->h = 0;
     ((Point*)localOrigin)->v = 0;

@@ -58,7 +58,7 @@ bool wxStaticLine::Create( wxWindow *parent,
     
     MacPreControlCreate( parent , id ,  wxEmptyString , pos , size ,style, wxDefaultValidator , name , &bounds , title ) ;
 
-    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
+    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
           kControlSeparatorLineProc , (long) this ) ;
     
     MacPostControlCreate() ;

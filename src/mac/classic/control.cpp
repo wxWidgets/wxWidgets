@@ -78,7 +78,7 @@ pascal void wxMacLiveScrollbarActionProc( ControlHandle control , ControlPartCod
         wxControl*  wx = (wxControl*) GetControlReference( control ) ;
         if ( wx )
         {
-            wx->MacHandleControlClick( control , partCode , true /* stillDown */ ) ;
+            wx->MacHandleControlClick( (WXWidget) control , partCode , true /* stillDown */ ) ;
         }
     }
 }
@@ -727,7 +727,7 @@ void  wxControl::OnMouseEvent( wxMouseEvent &event )
                     wxTheApp->s_lastMouseDown = 0 ;
                     if ( control && controlpart != kControlNoPart ) 
                     {
-                        MacHandleControlClick( control , controlpart , false /* mouse not down anymore */ ) ;
+                        MacHandleControlClick( (WXWidget) control , controlpart , false /* mouse not down anymore */ ) ;
                     }
                 }
             }
@@ -770,7 +770,7 @@ void wxControl::DoSetWindowVariant( wxWindowVariant variant )
     // and make this NORMAL later, but first 
     // we have a few calculations that we must fix
 
-    if ( variant == wxWINDOW_VARIANT_DEFAULT )
+    if ( variant == wxWINDOW_VARIANT_NORMAL )
     {
         if ( IsKindOf( CLASSINFO( wxScrollBar ) ) )
             variant  = wxWINDOW_VARIANT_NORMAL ;

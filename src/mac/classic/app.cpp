@@ -1533,7 +1533,7 @@ void wxApp::MacHandleMouseDownEvent( WXEVENTREF evr )
         ::GetWindowAttributes( frontWindow , &frontWindowAttributes ) ;
 
     short windowPart = ::FindWindow(ev->where, &window);
-    wxTopLevelWindowMac* win = wxFindWinFromMacWindow( window ) ;
+    wxTopLevelWindowMac* win = wxFindWinFromMacWindow( (WXWindow) window ) ;
     if ( wxPendingDelete.Member(win) )
         return ;
 
@@ -1707,7 +1707,7 @@ void wxApp::MacHandleMouseUpEvent( WXEVENTREF evr )
             break ;
         default:
             {
-                wxTopLevelWindowMac* win = wxFindWinFromMacWindow( window ) ;
+                wxTopLevelWindowMac* win = wxFindWinFromMacWindow( (WXWindow) window ) ;
                 if ( win )
                     win->MacMouseUp( ev , windowPart ) ;
             }
@@ -2025,7 +2025,7 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
     {
           // if window is not having a focus still testing for default enter or cancel
           // TODO add the UMA version for ActiveNonFloatingWindow
-          wxWindow* focus = wxFindWinFromMacWindow( FrontWindow() ) ;
+          wxWindow* focus = wxFindWinFromMacWindow( (WXWindow) FrontWindow() ) ;
           if ( focus )
           {
             if ( keyval == WXK_RETURN )
@@ -2109,7 +2109,7 @@ void wxApp::MacHandleActivateEvent( WXEVENTREF evr )
             // if it is a floater we activate/deactivate the front non-floating window instead
             window = ::FrontNonFloatingWindow() ;
         }
-        wxTopLevelWindowMac* win = wxFindWinFromMacWindow( window ) ;
+        wxTopLevelWindowMac* win = wxFindWinFromMacWindow( (WXWindow) window ) ;
         if ( win )
             win->MacActivate( ev->when , activate ) ;
     }
@@ -2119,7 +2119,7 @@ void wxApp::MacHandleUpdateEvent( WXEVENTREF evr )
 {
     EventRecord* ev = (EventRecord*) evr ;
     WindowRef window = (WindowRef) ev->message ;
-    wxTopLevelWindowMac * win = wxFindWinFromMacWindow( window ) ;
+    wxTopLevelWindowMac * win = wxFindWinFromMacWindow( (WXWindow) window ) ;
     if ( win )
     {
         if ( !wxPendingDelete.Member(win) )
@@ -2177,13 +2177,13 @@ void wxApp::MacHandleOSEvent( WXEVENTREF evr )
 
                     if ( oldFrontWindow )
                     {
-                        wxTopLevelWindowMac* win = wxFindWinFromMacWindow( oldFrontWindow ) ;
+                        wxTopLevelWindowMac* win = wxFindWinFromMacWindow( (WXWindow) oldFrontWindow ) ;
                         if ( win )
                             win->MacActivate( ev->when , false ) ;
                     }
                     if ( newFrontWindow )
                     {
-                        wxTopLevelWindowMac* win = wxFindWinFromMacWindow( newFrontWindow ) ;
+                        wxTopLevelWindowMac* win = wxFindWinFromMacWindow( (WXWindow) newFrontWindow ) ;
                         if ( win )
                             win->MacActivate( ev->when , true ) ;
                     }
@@ -2265,7 +2265,7 @@ void wxApp::MacHandleOSEvent( WXEVENTREF evr )
                 {
                     case inContent :
                         {
-                            wxTopLevelWindowMac* win = wxFindWinFromMacWindow( window ) ;
+                            wxTopLevelWindowMac* win = wxFindWinFromMacWindow( (WXWindow) window ) ;
                             if ( win )
                                 win->MacMouseMoved( ev , windowPart ) ;
                             else

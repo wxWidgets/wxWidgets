@@ -67,7 +67,7 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
     Str255 title ;
 
     MacPreControlCreate( parent , id ,  wxEmptyString , pos , size ,style, validator , name , &bounds , title ) ;
-    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , -12345 , 0 ,
+    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , -12345 , 0 ,
         kControlPopupButtonProc + kControlPopupFixedWidthVariant , (long) this ) ;
 
     m_macPopUpMenuHandle =  NewUniqueMenu() ;

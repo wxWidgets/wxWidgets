@@ -44,7 +44,7 @@ END_EVENT_TABLE()
 
 #endif
 
-wxDialog::Init()
+void wxDialog::Init()
 {
     m_isModalStyle = false;
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
