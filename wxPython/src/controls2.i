@@ -395,9 +395,10 @@ public:
     // or small icon view)
     int GetCountPerPage() const;
 
+#ifdef __WXMSW__
     // Gets the edit control for editing labels.
     wxTextCtrl* GetEditControl() const;
-
+#endif
 
     //bool GetItem(wxListItem& info) const ;
     %addmethods {
@@ -540,11 +541,13 @@ public:
     // Clears items, and columns if there are any.
     void ClearAll();
 
+#ifdef __WXMSW__
     // Edit the label
     wxTextCtrl* EditLabel(long item /*, wxClassInfo* textControlClass = CLASSINFO(wxTextCtrl)*/);
 
     // End label editing, optionally cancelling the edit
     bool EndEditLabel(bool cancel);
+#endif
 
     // Ensures this item is visible
     bool EnsureVisible(long item) ;

@@ -6514,6 +6514,153 @@ static PyObject *_wrap_wxTimerEvent_GetInterval(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
+static void *SwigwxTextUrlEventTowxCommandEvent(void *ptr) {
+    wxTextUrlEvent *src;
+    wxCommandEvent *dest;
+    src = (wxTextUrlEvent *) ptr;
+    dest = (wxCommandEvent *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxTextUrlEventTowxEvent(void *ptr) {
+    wxTextUrlEvent *src;
+    wxEvent *dest;
+    src = (wxTextUrlEvent *) ptr;
+    dest = (wxEvent *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxTextUrlEventTowxObject(void *ptr) {
+    wxTextUrlEvent *src;
+    wxObject *dest;
+    src = (wxTextUrlEvent *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxTextUrlEvent(_swigarg0,_swigarg1,_swigarg2,_swigarg3) (new wxTextUrlEvent(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
+static PyObject *_wrap_new_wxTextUrlEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTextUrlEvent * _result;
+    int  _arg0;
+    wxMouseEvent * _arg1;
+    long  _arg2;
+    long  _arg3;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "id","evtMouse","start","end", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iOll:new_wxTextUrlEvent",_kwnames,&_arg0,&_argo1,&_arg2,&_arg3)) 
+        return NULL;
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxMouseEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxTextUrlEvent. Expected _wxMouseEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxTextUrlEvent *)new_wxTextUrlEvent(_arg0,*_arg1,_arg2,_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxTextUrlEvent_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxTextUrlEvent_GetMouseEvent(_swigobj)  (_swigobj->GetMouseEvent())
+static PyObject *_wrap_wxTextUrlEvent_GetMouseEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxMouseEvent * _result;
+    wxTextUrlEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextUrlEvent_GetMouseEvent",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextUrlEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextUrlEvent_GetMouseEvent. Expected _wxTextUrlEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        const wxMouseEvent & _result_ref = wxTextUrlEvent_GetMouseEvent(_arg0);
+    _result = (wxMouseEvent *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}{ _resultobj = wxPyMake_wxObject(_result); }
+    return _resultobj;
+}
+
+#define wxTextUrlEvent_GetURLStart(_swigobj)  (_swigobj->GetURLStart())
+static PyObject *_wrap_wxTextUrlEvent_GetURLStart(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    wxTextUrlEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextUrlEvent_GetURLStart",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextUrlEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextUrlEvent_GetURLStart. Expected _wxTextUrlEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (long )wxTextUrlEvent_GetURLStart(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+#define wxTextUrlEvent_GetURLEnd(_swigobj)  (_swigobj->GetURLEnd())
+static PyObject *_wrap_wxTextUrlEvent_GetURLEnd(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    wxTextUrlEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextUrlEvent_GetURLEnd",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextUrlEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextUrlEvent_GetURLEnd. Expected _wxTextUrlEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (long )wxTextUrlEvent_GetURLEnd(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
 static void *SwigwxPyEventTowxEvent(void *ptr) {
     wxPyEvent *src;
     wxEvent *dest;
@@ -6800,6 +6947,10 @@ static PyMethodDef eventscMethods[] = {
 	 { "wxPyEvent_SetSelf", (PyCFunction) _wrap_wxPyEvent_SetSelf, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxPyEvent", (PyCFunction) _wrap_delete_wxPyEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPyEvent", (PyCFunction) _wrap_new_wxPyEvent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextUrlEvent_GetURLEnd", (PyCFunction) _wrap_wxTextUrlEvent_GetURLEnd, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextUrlEvent_GetURLStart", (PyCFunction) _wrap_wxTextUrlEvent_GetURLStart, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextUrlEvent_GetMouseEvent", (PyCFunction) _wrap_wxTextUrlEvent_GetMouseEvent, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxTextUrlEvent", (PyCFunction) _wrap_new_wxTextUrlEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTimerEvent_GetInterval", (PyCFunction) _wrap_wxTimerEvent_GetInterval, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxTimerEvent", (PyCFunction) _wrap_new_wxTimerEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindowDestroyEvent_GetWindow", (PyCFunction) _wrap_wxWindowDestroyEvent_GetWindow, METH_VARARGS | METH_KEYWORDS },
@@ -7014,6 +7165,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxEvent","_wxPyCommandEvent",SwigwxPyCommandEventTowxEvent},
     { "_wxEvent","_class_wxPyEvent",SwigwxPyEventTowxEvent},
     { "_wxEvent","_wxPyEvent",SwigwxPyEventTowxEvent},
+    { "_wxEvent","_class_wxTextUrlEvent",SwigwxTextUrlEventTowxEvent},
+    { "_wxEvent","_wxTextUrlEvent",SwigwxTextUrlEventTowxEvent},
     { "_wxEvent","_class_wxTimerEvent",SwigwxTimerEventTowxEvent},
     { "_wxEvent","_wxTimerEvent",SwigwxTimerEventTowxEvent},
     { "_wxEvent","_class_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxEvent},
@@ -7091,6 +7244,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxObject","_wxPyCommandEvent",SwigwxPyCommandEventTowxObject},
     { "_class_wxObject","_class_wxPyEvent",SwigwxPyEventTowxObject},
     { "_class_wxObject","_wxPyEvent",SwigwxPyEventTowxObject},
+    { "_class_wxObject","_class_wxTextUrlEvent",SwigwxTextUrlEventTowxObject},
+    { "_class_wxObject","_wxTextUrlEvent",SwigwxTextUrlEventTowxObject},
     { "_class_wxObject","_class_wxTimerEvent",SwigwxTimerEventTowxObject},
     { "_class_wxObject","_wxTimerEvent",SwigwxTimerEventTowxObject},
     { "_class_wxObject","_class_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxObject},
@@ -7172,6 +7327,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxEvent","_wxPyCommandEvent",SwigwxPyCommandEventTowxEvent},
     { "_class_wxEvent","_class_wxPyEvent",SwigwxPyEventTowxEvent},
     { "_class_wxEvent","_wxPyEvent",SwigwxPyEventTowxEvent},
+    { "_class_wxEvent","_class_wxTextUrlEvent",SwigwxTextUrlEventTowxEvent},
+    { "_class_wxEvent","_wxTextUrlEvent",SwigwxTextUrlEventTowxEvent},
     { "_class_wxEvent","_class_wxTimerEvent",SwigwxTimerEventTowxEvent},
     { "_class_wxEvent","_wxTimerEvent",SwigwxTimerEventTowxEvent},
     { "_class_wxEvent","_class_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxEvent},
@@ -7234,6 +7391,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxEvent","_wxSizeEvent",SwigwxSizeEventTowxEvent},
     { "_wxCommandEvent","_class_wxPyCommandEvent",SwigwxPyCommandEventTowxCommandEvent},
     { "_wxCommandEvent","_wxPyCommandEvent",SwigwxPyCommandEventTowxCommandEvent},
+    { "_wxCommandEvent","_class_wxTextUrlEvent",SwigwxTextUrlEventTowxCommandEvent},
+    { "_wxCommandEvent","_wxTextUrlEvent",SwigwxTextUrlEventTowxCommandEvent},
     { "_wxCommandEvent","_class_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxCommandEvent},
     { "_wxCommandEvent","_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxCommandEvent},
     { "_wxCommandEvent","_class_wxWindowCreateEvent",SwigwxWindowCreateEventTowxCommandEvent},
@@ -7267,6 +7426,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxObject","_wxPyCommandEvent",SwigwxPyCommandEventTowxObject},
     { "_wxObject","_class_wxPyEvent",SwigwxPyEventTowxObject},
     { "_wxObject","_wxPyEvent",SwigwxPyEventTowxObject},
+    { "_wxObject","_class_wxTextUrlEvent",SwigwxTextUrlEventTowxObject},
+    { "_wxObject","_wxTextUrlEvent",SwigwxTextUrlEventTowxObject},
     { "_wxObject","_class_wxTimerEvent",SwigwxTimerEventTowxObject},
     { "_wxObject","_wxTimerEvent",SwigwxTimerEventTowxObject},
     { "_wxObject","_class_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxObject},
@@ -7380,6 +7541,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_wxPrintQuality",0},
     { "_class_wxCommandEvent","_class_wxPyCommandEvent",SwigwxPyCommandEventTowxCommandEvent},
     { "_class_wxCommandEvent","_wxPyCommandEvent",SwigwxPyCommandEventTowxCommandEvent},
+    { "_class_wxCommandEvent","_class_wxTextUrlEvent",SwigwxTextUrlEventTowxCommandEvent},
+    { "_class_wxCommandEvent","_wxTextUrlEvent",SwigwxTextUrlEventTowxCommandEvent},
     { "_class_wxCommandEvent","_class_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxCommandEvent},
     { "_class_wxCommandEvent","_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxCommandEvent},
     { "_class_wxCommandEvent","_class_wxWindowCreateEvent",SwigwxWindowCreateEventTowxCommandEvent},
