@@ -55,6 +55,10 @@
 
 #include "wx/msw/dib.h"
 
+#ifdef __WXWINE__
+#define LPDROPFILES DROPFILES*
+#endif
+
 #ifndef CFSTR_SHELLURL
 #define CFSTR_SHELLURL _T("UniformResourceLocator")
 #endif

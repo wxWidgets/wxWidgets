@@ -39,7 +39,8 @@
 #include "wx/fontdlg.h"
 
 #if !defined(__WIN32__) || defined(__SALFORDC__) || defined(__WXWINE__)
-    #include <commdlg.h>
+#include <windows.h>
+#include <commdlg.h>
 #endif
 
 #include "wx/msw/private.h"

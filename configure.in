@@ -353,6 +353,8 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_FONTMAP=no
   DEFAULT_wxUSE_STREAMS=no
   DEFAULT_wxUSE_SOCKETS=no
+  DEFAULT_wxUSE_OLE=no
+  DEFAULT_wxUSE_DATAOBJ=no
   DEFAULT_wxUSE_DIALUP_MANAGER=no
   DEFAULT_wxUSE_JOYSTICK=no
   DEFAULT_wxUSE_DYNLIB_CLASS=no
@@ -526,6 +528,8 @@ else
   DEFAULT_wxUSE_FONTMAP=yes
   DEFAULT_wxUSE_STREAMS=yes
   DEFAULT_wxUSE_SOCKETS=yes
+  DEFAULT_wxUSE_OLE=yes
+  DEFAULT_wxUSE_DATAOBJ=yes
   DEFAULT_wxUSE_DIALUP_MANAGER=yes
   DEFAULT_wxUSE_JOYSTICK=yes
   DEFAULT_wxUSE_DYNLIB_CLASS=yes
@@ -755,6 +759,8 @@ WX_ARG_ENABLE(ftp,           [  --enable-ftp            use wxFTP (requires wxPr
 WX_ARG_ENABLE(http,          [  --enable-http           use wxHTTP (requires wxProtocol], wxUSE_PROTOCOL_HTTP)
 WX_ARG_ENABLE(fileproto,     [  --enable-fileproto      use wxFileProto class (requires wxProtocol], wxUSE_PROTOCOL_FILE)
 WX_ARG_ENABLE(sockets,       [  --enable-sockets        use socket/network classes], wxUSE_SOCKETS)
+WX_ARG_ENABLE(ole,           [  --enable-ole            use OLE classes], wxUSE_OLE)
+WX_ARG_ENABLE(dataobj,       [  --enable-dataobj        use data object classes], wxUSE_DATAOBJ)
 
 WX_ARG_ENABLE(ipc,           [  --enable-ipc            use interprocess communication (wxSocket etc.)], wxUSE_IPC)
 
@@ -2174,7 +2180,9 @@ equivalent variable and GTK+ is version 1.2.3 or above.
             mesa_link=" -lMesaGL"
             AC_MSG_RESULT(found at $ac_find_libraries)
         else
-            AC_MSG_ERROR(no)
+            mesa_link=""
+            AC_MSG_RESULT(no)
+            AC_MSG_WARN(library will be compiled without Mesa support)
         fi
 
         GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lwine$mesa_link$xpm_link -lXxf86dga -lXxf86vm -lSM -lICE -lXext -lXmu -lX11 -lncurses"
@@ -3903,7 +3911,7 @@ dnl ------------------------------------------------------------------------
 dnl wxSocket
 dnl ------------------------------------------------------------------------
 
-dnl VZ: the GUI hooks wxSocket needs are not implemented yet in wxX11
+dnl VZ: the GUI hooks wxSocket needs are not implemented yet in wxMGL
 if test "$wxUSE_SOCKETS" = "yes"; then
     if test "$wxUSE_MGL" = "1"; then
         AC_MSG_WARN([wxSocket not yet supported under MGL... disabled])
@@ -4244,6 +4252,7 @@ dnl check for ole headers and disable a few features requiring it if not
 dnl present (earlier versions of mingw32 don't have ole2.h)
 if test "$wxUSE_MSW" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
                           -o "$wxUSE_CLIPBOARD"     = "yes" \
+                          -o "$wxUSE_OLE"     = "yes" \
                           -o "$wxUSE_DRAG_AND_DROP" = "yes" \) ; then
     AC_CHECK_HEADERS(ole2.h)
 
@@ -4274,6 +4283,51 @@ if test "$wxUSE_MSW" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
         wxUSE_CLIPBOARD=no
         wxUSE_DRAG_AND_DROP=no
         wxUSE_DATAOBJ=no
+        wxUSE_OLE=no
+    fi
+
+    if test "$wxUSE_METAFILE" = "yes"; then
+        AC_DEFINE(wxUSE_METAFILE)
+
+        dnl this one should probably be made separately configurable
+        AC_DEFINE(wxUSE_ENH_METAFILE)
+    fi
+fi
+
+if test "$wxUSE_WINE" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
+                          -o "$wxUSE_CLIPBOARD"     = "yes" \
+                          -o "$wxUSE_OLE"     = "yes" \
+                          -o "$wxUSE_DRAG_AND_DROP" = "yes" \) ; then
+    AC_CHECK_HEADERS(ole2.h)
+
+    if test "$ac_cv_header_ole2_h" = "yes" ; then
+        if test "$GCC" = yes ; then
+            AC_LANG_SAVE
+            AC_LANG_CPLUSPLUS
+
+            AC_MSG_CHECKING([if g++ requires -fvtable-thunks])
+            AC_TRY_COMPILE([#include <windows.h>
+                            #include <ole2.h>],
+                           [],
+                           [AC_MSG_RESULT(no)],
+                           [AC_MSG_RESULT(yes)
+                            CODE_GEN_FLAGS_CXX="$CODE_GEN_FLAGS_CXX -fvtable-thunks"])
+            AC_LANG_RESTORE
+            ALL_OBJECTS="$ALL_OBJECTS \$(OLEOBJS)"
+            LIBS=" -lwine_uuid$LIBS"
+            AC_DEFINE(wxUSE_OLE)
+
+        fi
+
+        dnl for OLE clipboard and dnd
+        AC_DEFINE(wxUSE_DATAOBJ)
+    else
+        AC_MSG_WARN([Some features disabled because OLE headers not found])
+
+        wxUSE_CLIPBOARD=no
+        wxUSE_DRAG_AND_DROP=no
+        wxUSE_DATAOBJ=no
+        wxUSE_OLE=no
     fi
 
     if test "$wxUSE_METAFILE" = "yes"; then

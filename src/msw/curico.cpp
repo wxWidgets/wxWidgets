@@ -16,7 +16,14 @@
 #pragma hdrstop
 #endif
 
+#ifndef __WXWINE__
 #include <io.h>
+#endif
+
+#ifdef __WXWINE__
+#define NPSTR LPVOID
+#endif
+
 #include <windows.h>
 
 #if defined(__MWERKS__)

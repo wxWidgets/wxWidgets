@@ -75,7 +75,7 @@
     #include <process.h>
     #include "wx/os2/private.h"
 #endif
-#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
+#if defined(__WINDOWS__) && !defined(__WXMICROWIN__) && !defined(__WXWINE__)
 #if !defined( __GNUWIN32__ ) && !defined( __MWERKS__ ) && !defined(__SALFORDC__)
     #include <direct.h>
     #include <dos.h>

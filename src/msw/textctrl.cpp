@@ -553,6 +553,15 @@ DWORD CALLBACK wxRichEditStreamIn(DWORD dwCookie, BYTE *buf, LONG cb, LONG *pcb)
 
 extern long wxEncodingToCodepage(wxFontEncoding encoding); // from utils.cpp
 
+#ifdef __WXWINE__
+bool wxTextCtrl::StreamIn(const wxString& value,
+                          wxFontEncoding WXUNUSED(encoding),
+                          bool selectionOnly)
+{
+    return FALSE;
+}
+#else
+
 #if wxUSE_UNICODE_MSLU
 bool wxTextCtrl::StreamIn(const wxString& value,
                           wxFontEncoding WXUNUSED(encoding),
@@ -617,6 +626,9 @@ bool wxTextCtrl::StreamIn(const wxString& value,
     return TRUE;
 }
 
+#endif
+    // __WXWINE__
+ 
 #endif // wxUSE_RICHEDIT
 
 void wxTextCtrl::WriteText(const wxString& value)
@@ -654,7 +666,7 @@ void wxTextCtrl::DoWriteText(const wxString& value, bool selectionOnly)
         }
 #endif // wxUSE_UNICODE_MSLU
 
-#if !wxUSE_UNICODE
+#if !wxUSE_UNICODE && !defined(__WXWINE__)
         // next check if the text we're inserting must be shown in a non
         // default charset -- this only works for RichEdit > 1.0
         if ( GetRichVersion() > 1 )
@@ -1538,10 +1550,11 @@ void wxTextCtrl::OnUpdateRedo(wxUpdateUIEvent& event)
 
 bool wxTextCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 {
+#ifndef __WXWINE__
     NMHDR *hdr = (NMHDR* )lParam;
     switch ( hdr->code )
     {
-        case EN_MSGFILTER:
+       case EN_MSGFILTER:
             {
                 const MSGFILTER *msgf = (MSGFILTER *)lParam;
                 UINT msg = msgf->msg;
@@ -1624,7 +1637,8 @@ bool wxTextCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             }
             return TRUE;
     }
-
+#endif
+    
     // not processed, leave it to the base class
     return wxTextCtrlBase::MSWOnNotify(idCtrl, lParam, result);
 }
@@ -1681,6 +1695,9 @@ bool wxTextCtrl::SetForegroundColour(const wxColour& colour)
 
 bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
 {
+#ifdef __WXWINE__
+    return FALSE;
+#else
     if ( !IsRich() )
     {
         // can't do it with normal text control
@@ -1810,6 +1827,7 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
     }
 
     return ok;
+#endif
 }
 
 bool wxTextCtrl::SetDefaultStyle(const wxTextAttr& style)

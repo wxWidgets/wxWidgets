@@ -883,6 +883,7 @@ bool wxShutdown(wxShutdownFlags wFlags)
         bOK = ::OpenProcessToken(GetCurrentProcess(),
                                  TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                                  &hToken) != 0;
+#ifndef __WXWINE__
         if ( bOK )
         {
             TOKEN_PRIVILEGES tkp; 
@@ -901,6 +902,7 @@ bool wxShutdown(wxShutdownFlags wFlags)
             // Cannot test the return value of AdjustTokenPrivileges. 
             bOK = ::GetLastError() == ERROR_SUCCESS;
         }
+#endif
     }
 
     if ( bOK )

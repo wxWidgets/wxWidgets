@@ -858,6 +858,7 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                             WXLPARAM lParam,
                             WXLPARAM *WXUNUSED(result))
 {
+#if wxUSE_TOOLTIPS
     // First check if this applies to us
     NMHDR *hdr = (NMHDR *)lParam;
 
@@ -879,6 +880,9 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
         return FALSE;
 
     return HandleTooltipNotify(code, lParam, tool->GetShortHelp());
+#else
+    return FALSE;
+#endif
 }
 
 // ----------------------------------------------------------------------------

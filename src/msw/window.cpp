@@ -1457,11 +1457,15 @@ void wxWindowMSW::Refresh(bool eraseBack, const wxRect *rect)
 
 void wxWindowMSW::Update()
 {
+#ifdef __WXWINE__
+    ::UpdateWindow(GetHwnd());
+#else
     if ( !::UpdateWindow(GetHwnd()) )
     {
         wxLogLastError(_T("UpdateWindow"));
     }
-
+#endif
+    
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
     // just calling UpdateWindow() is not enough, what we did in our WM_PAINT
     // handler needs to be really drawn right now

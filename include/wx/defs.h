@@ -251,7 +251,7 @@ typedef int wxWindowID;
 // ----------------------------------------------------------------------------
 
 // stdcall is used for all functions called by Windows under Windows
-#ifdef __WINDOWS__
+#if defined(__WINDOWS__) && !defined(__WXWINE__)
     #if defined(__GNUWIN32__)
         #define wxSTDCALL __attribute__((stdcall))
     #else

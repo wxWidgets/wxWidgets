@@ -110,7 +110,12 @@ private:
         m_item = new LV_ITEM((LV_ITEM&)item);
         if ( (item.mask & LVIF_TEXT) && item.pszText )
         {
+#ifdef __WXWINE__
+            // FIXME
+            m_buf = new wxWC2WXbuf(wxConvLocal.cWC2WX((const __wchar_t* ) item.pszText));
+#else
             m_buf = new wxWC2WXbuf(wxConvLocal.cWC2WX(item.pszText));
+#endif
             m_item->pszText = (wxChar*)m_buf->data();
         }
         else
@@ -970,11 +975,7 @@ bool wxListCtrl::GetItemRect(long item, wxRect& rect, int code) const
         codeWin = LVIR_BOUNDS;
     }
 
-#ifdef __WXWINE__
-    bool success = ListView_GetItemRect(GetHwnd(), (int) item, &rectWin ) != 0;
-#else
     bool success = ListView_GetItemRect(GetHwnd(), (int) item, &rectWin, codeWin) != 0;
-#endif
 
     rect.x = rectWin.left;
     rect.y = rectWin.top;

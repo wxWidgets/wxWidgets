@@ -341,6 +341,10 @@ wxPipeInputStream::~wxPipeInputStream()
 
 bool wxPipeInputStream::IsAvailable() const
 {
+    // FIXME
+#ifdef __WXWINE__
+    return FALSE;
+#else
     if ( !IsOpened() )
         return FALSE;
 
@@ -374,6 +378,7 @@ bool wxPipeInputStream::IsAvailable() const
     }
 
     return nAvailable != 0;
+#endif
 }
 
 size_t wxPipeInputStream::OnSysRead(void *buffer, size_t len)

@@ -33,7 +33,9 @@
 #include "wx/msw/dibutils.h"
 
 #ifdef __WXWINE__
-  #include <module.h>
+/* Why module.h? No longer finds this header.
+   #include <module.h>
+*/
 #endif
 
 #if defined(__WIN32__)

@@ -193,8 +193,15 @@ wxEnhMetaFileDC::wxEnhMetaFileDC(const wxString& filename,
         rect.bottom = height;
 
         // CreateEnhMetaFile() wants them in HIMETRIC
+#ifdef __WXWINE__
+        LONG r, b;
+        PixelToHIMETRIC(&r, &b);
+        rect.right = r;
+        rect.bottom = b;
+#else
         PixelToHIMETRIC(&rect.right, &rect.bottom);
-
+#endif
+        
         pRect = &rect;
     }
     else
@@ -294,6 +301,10 @@ bool wxEnhMetaFileDataObject::GetDataHere(const wxDataFormat& format, void *buf)
     }
     else
     {
+#ifdef __WXWINE__
+        wxFAIL_MSG( _T("unsupported format") );
+        return FALSE;
+#else
         wxASSERT_MSG( format == wxDF_METAFILE, _T("unsupported format") );
 
         // convert to WMF
@@ -335,6 +346,7 @@ bool wxEnhMetaFileDataObject::GetDataHere(const wxDataFormat& format, void *buf)
         mfpict->yExt = sizeMF.y;
 
         PixelToHIMETRIC(&mfpict->xExt, &mfpict->yExt);
+#endif
     }
 
     return TRUE;

@@ -55,6 +55,12 @@
 #include <commctrl.h>
 #endif
 
+// Wine doesn't have this yet
+#ifndef ListView_CreateDragImage
+#define ListView_CreateDragImage(hwnd, i, lpptUpLeft) \
+    (HIMAGELIST)SNDMSG((hwnd), LVM_CREATEDRAGIMAGE, (WPARAM)(int)(i), (LPARAM)(LPPOINT)(lpptUpLeft))
+#endif
+
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------

@@ -308,8 +308,6 @@ void wxMetafileDC::SetMapMode(int mode)
                 break;
             }
     }
-    m_windowExtX = 100;
-    m_windowExtY = 100;
 }
 
 // ----------------------------------------------------------------------------

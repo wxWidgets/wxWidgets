@@ -57,6 +57,11 @@
     #include <print.h>
 #endif
 
+/* Quaternary raster codes */
+#ifndef MAKEROP4
+#define MAKEROP4(fore,back) (DWORD)((((back) << 8) & 0xFF000000) | (fore))
+#endif
+
 IMPLEMENT_ABSTRACT_CLASS(wxDC, wxDCBase)
 
 // ---------------------------------------------------------------------------

@@ -26,7 +26,6 @@
 #  pragma warning(disable:4100)
 #endif /* _MSC_VER */
 
-
 #ifndef __GSOCKET_STANDALONE__
 #  include "wx/defs.h"
 #  include "wx/setup.h"
@@ -49,7 +48,6 @@
 #  define _GSocket_Enable_Events(socket)
 #  define _GSocket_Disable_Events(socket)
 #endif /* wxUSE_GUI */
-
 
 #include <assert.h>
 #include <string.h>

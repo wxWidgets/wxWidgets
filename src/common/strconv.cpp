@@ -779,7 +779,11 @@ public:
     size_t MB2WC(wchar_t *buf, const char *psz, size_t n)
     {
         size_t len =
+#ifdef __WXWINE__
+            MultiByteToWideChar(m_CodePage, 0, psz, -1, (WCHAR*) buf, buf ? n : 0);
+#else
             MultiByteToWideChar(m_CodePage, 0, psz, -1, buf, buf ? n : 0);
+#endif
         //VS: returns # of written chars for buf!=NULL and *size*
         //    needed buffer for buf==NULL
         return len ? (buf ? len : len-1) : (size_t)-1;
@@ -787,8 +791,13 @@ public:
 
     size_t WC2MB(char *buf, const wchar_t *psz, size_t n)
     {
+#ifdef __WXWINE__
+        size_t len = WideCharToMultiByte(m_CodePage, 0, (const WCHAR*) psz, -1, buf,
+                                         buf ? n : 0, NULL, NULL);
+#else
         size_t len = WideCharToMultiByte(m_CodePage, 0, psz, -1, buf,
                                          buf ? n : 0, NULL, NULL);
+#endif
         //VS: returns # of written chars for buf!=NULL and *size*
         //    needed buffer for buf==NULL
         return len ? (buf ? len : len-1) : (size_t)-1;

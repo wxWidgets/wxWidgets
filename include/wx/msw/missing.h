@@ -103,6 +103,26 @@ typedef struct _LVITEMW {
 typedef LV_ITEM LV_ITEMA;
 #endif
 
+#ifndef ListView_GetColumnWidth
+#define ListView_GetColumnWidth(hwnd, iCol) \
+    (int)SNDMSG((hwnd), LVM_GETCOLUMNWIDTH, (WPARAM)(int)(iCol), 0)
+#endif
+
+#ifndef ListView_SetColumnWidth
+#define ListView_SetColumnWidth(hwnd, iCol, cx) \
+    (BOOL)SNDMSG((hwnd), LVM_SETCOLUMNWIDTH, (WPARAM)(int)(iCol), MAKELPARAM((cx), 0))
+#endif
+
+#ifndef ListView_GetTextColor
+#define ListView_GetTextColor(hwnd)  \
+    (COLORREF)SNDMSG((hwnd), LVM_GETTEXTCOLOR, 0, 0L)
+#endif
+
+#ifndef ListView_FindItem
+#define ListView_FindItem(hwnd, iStart, plvfi) \
+    (int)SNDMSG((hwnd), LVM_FINDITEM, (WPARAM)(int)(iStart), (LPARAM)(const LV_FINDINFO FAR*)(plvfi))
+#endif
+
 #if defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 0, 5 )
 #ifndef LV_DISPINFOA
 typedef struct tagNMLVDISPINFOA {
@@ -193,6 +213,19 @@ struct HH_AKLINK
     #define QS_ALLPOSTMESSAGE    0x0100
 #endif
 
+#ifdef __WXWINE__
+#define LV_ITEMA LVITEMA
+#define LV_ITEMW LVITEMW
+#define LV_DISPINFOA NMLVDISPINFOA
+#define LV_DISPINFOW NMLVDISPINFOW
+
+#if wxUSE_UNICODE
+#define LV_FINDINFO LVFINDINFOW
+#else
+#define LV_FINDINFO LVFINDINFOA
+#endif
+
+#endif
 
 #endif
     // _WX_MISSING_H_
