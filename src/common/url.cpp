@@ -162,9 +162,6 @@ bool wxURL::ParseURL()
 #if wxUSE_PROTOCOL_HTTP
   if (m_useProxy)
   {
-    // destroy the previously created protocol as we'll be using m_proxy
-    delete m_protocol;
-
     // Third, we rebuild the URL.
     m_url = m_scheme + wxT(":");
     if (m_protoinfo->m_needhost)
