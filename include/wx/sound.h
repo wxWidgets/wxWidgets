@@ -43,7 +43,7 @@
 #endif
 
 // Base class for wxSound implementations
-class wxSoundBase : public wxObject
+class WXDLLIMPEXP_ADV wxSoundBase : public wxObject
 {
 public:
     // Play the sound:
