@@ -5764,7 +5764,7 @@ class StandardPaths(object):
         """
         Get() -> StandardPaths
 
-        Return the global standard paths object
+        Return the global standard paths singleton
         """
         return _misc_.StandardPaths_Get(*args, **kwargs)
 
@@ -5774,7 +5774,7 @@ class StandardPaths(object):
         GetConfigDir(self) -> String
 
         Return the directory with system config files: /etc under Unix,
-        c:\Documents and Settings\All Users\Application Data under Windows,
+        'c:\Documents and Settings\All Users\Application Data' under Windows,
         /Library/Preferences for Mac
         """
         return _misc_.StandardPaths_GetConfigDir(*args, **kwargs)
@@ -5784,7 +5784,7 @@ class StandardPaths(object):
         GetUserConfigDir(self) -> String
 
         Return the directory for the user config files: $HOME under Unix,
-        c:\Documents and Settings\username under Windows,
+        'c:\Documents and Settings\username' under Windows, and 
         ~/Library/Preferences under Mac
             
         Only use this if you have a single file to put there, otherwise
@@ -5798,7 +5798,7 @@ class StandardPaths(object):
 
         Return the location of the application's global, (i.e. not
         user-specific,) data files: prefix/share/appname under Unix,
-        c:\Program Filesppname under Windows,
+        'c:\Program Files\appname' under Windows,
         appname.app/Contents/SharedSupport app bundle directory under Mac.
         """
         return _misc_.StandardPaths_GetDataDir(*args, **kwargs)
@@ -5819,7 +5819,7 @@ class StandardPaths(object):
 
         Return the directory for the user-dependent application data files:
         $HOME/.appname under Unix, c:\Documents and
-        Settings\username\Application Datappname under Windows and
+        Settings\username\Application Data\appname under Windows and
         ~/Library/Application Support/appname under Mac
         """
         return _misc_.StandardPaths_GetUserDataDir(*args, **kwargs)
@@ -5832,7 +5832,7 @@ class StandardPaths(object):
         with the other machines
 
         Same as `GetUserDataDir` for all platforms except Windows where it is
-        the 'Local Settings\Application Datappname' directory.
+        the 'Local Settings\Application Data\appname' directory.
         """
         return _misc_.StandardPaths_GetUserLocalDataDir(*args, **kwargs)
 
@@ -5866,7 +5866,7 @@ def StandardPaths_Get(*args, **kwargs):
     """
     StandardPaths_Get() -> StandardPaths
 
-    Return the global standard paths object
+    Return the global standard paths singleton
     """
     return _misc_.StandardPaths_Get(*args, **kwargs)
 

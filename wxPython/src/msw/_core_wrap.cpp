@@ -6003,6 +6003,31 @@ static PyObject *_wrap_new_InputStream(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
+static PyObject *_wrap_delete_InputStream(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyInputStream *arg1 = (wxPyInputStream *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:delete_InputStream",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPyInputStream,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        delete arg1;
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_InputStream_close(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyInputStream *arg1 = (wxPyInputStream *) 0 ;
@@ -9753,6 +9778,46 @@ static PyObject *_wrap_Image_ConvertAlphaToMask(PyObject *, PyObject *args, PyOb
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)(arg1)->ConvertAlphaToMask(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Image_ConvertColourToAlpha(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxImage *arg1 = (wxImage *) 0 ;
+    unsigned char arg2 ;
+    unsigned char arg3 ;
+    unsigned char arg4 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "r",(char *) "g",(char *) "b", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:Image_ConvertColourToAlpha",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxImage,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (unsigned char)SWIG_As_unsigned_SS_char(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
+    arg3 = (unsigned char)SWIG_As_unsigned_SS_char(obj2); 
+    if (PyErr_Occurred()) SWIG_fail;
+    arg4 = (unsigned char)SWIG_As_unsigned_SS_char(obj3); 
+    if (PyErr_Occurred()) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->ConvertColourToAlpha(arg2,arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -41412,6 +41477,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Point2D_Get", (PyCFunction) _wrap_Point2D_Get, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Point2D_swigregister", Point2D_swigregister, METH_VARARGS, NULL },
 	 { (char *)"new_InputStream", (PyCFunction) _wrap_new_InputStream, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"delete_InputStream", (PyCFunction) _wrap_delete_InputStream, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"InputStream_close", (PyCFunction) _wrap_InputStream_close, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"InputStream_flush", (PyCFunction) _wrap_InputStream_flush, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"InputStream_eof", (PyCFunction) _wrap_InputStream_eof, METH_VARARGS | METH_KEYWORDS, NULL },
@@ -41520,6 +41586,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Image_HasAlpha", (PyCFunction) _wrap_Image_HasAlpha, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Image_FindFirstUnusedColour", (PyCFunction) _wrap_Image_FindFirstUnusedColour, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Image_ConvertAlphaToMask", (PyCFunction) _wrap_Image_ConvertAlphaToMask, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Image_ConvertColourToAlpha", (PyCFunction) _wrap_Image_ConvertColourToAlpha, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Image_SetMaskFromImage", (PyCFunction) _wrap_Image_SetMaskFromImage, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Image_CanRead", (PyCFunction) _wrap_Image_CanRead, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Image_GetImageCount", (PyCFunction) _wrap_Image_GetImageCount, METH_VARARGS | METH_KEYWORDS, NULL },

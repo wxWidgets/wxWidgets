@@ -11,6 +11,7 @@ BU_LEFT = _controls_.BU_LEFT
 BU_TOP = _controls_.BU_TOP
 BU_RIGHT = _controls_.BU_RIGHT
 BU_BOTTOM = _controls_.BU_BOTTOM
+BU_ALIGN_MASK = _controls_.BU_ALIGN_MASK
 BU_EXACTFIT = _controls_.BU_EXACTFIT
 BU_AUTODRAW = _controls_.BU_AUTODRAW
 class Button(_core.Control):
@@ -2790,6 +2791,10 @@ class BookCtrl(_core.Control):
     def GetPage(*args, **kwargs):
         """GetPage(self, size_t n) -> Window"""
         return _controls_.BookCtrl_GetPage(*args, **kwargs)
+
+    def GetCurrentPage(*args, **kwargs):
+        """GetCurrentPage(self) -> Window"""
+        return _controls_.BookCtrl_GetCurrentPage(*args, **kwargs)
 
     def GetSelection(*args, **kwargs):
         """GetSelection(self) -> int"""

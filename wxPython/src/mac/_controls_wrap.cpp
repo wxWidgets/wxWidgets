@@ -14279,6 +14279,34 @@ static PyObject *_wrap_BookCtrl_GetPage(PyObject *, PyObject *args, PyObject *kw
 }
 
 
+static PyObject *_wrap_BookCtrl_GetCurrentPage(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxBookCtrl *arg1 = (wxBookCtrl *) 0 ;
+    wxWindow *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:BookCtrl_GetCurrentPage",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxBookCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxWindow *)((wxBookCtrl const *)arg1)->GetCurrentPage();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = wxPyMake_wxObject(result, 0); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_BookCtrl_GetSelection(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxBookCtrl *arg1 = (wxBookCtrl *) 0 ;
@@ -31970,6 +31998,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ToggleButton_swigregister", ToggleButton_swigregister, METH_VARARGS, NULL },
 	 { (char *)"BookCtrl_GetPageCount", (PyCFunction) _wrap_BookCtrl_GetPageCount, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"BookCtrl_GetPage", (PyCFunction) _wrap_BookCtrl_GetPage, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"BookCtrl_GetCurrentPage", (PyCFunction) _wrap_BookCtrl_GetCurrentPage, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"BookCtrl_GetSelection", (PyCFunction) _wrap_BookCtrl_GetSelection, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"BookCtrl_SetPageText", (PyCFunction) _wrap_BookCtrl_SetPageText, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"BookCtrl_GetPageText", (PyCFunction) _wrap_BookCtrl_GetPageText, METH_VARARGS | METH_KEYWORDS, NULL },
@@ -33711,6 +33740,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"BU_TOP", SWIG_From_int((int)wxBU_TOP));
     PyDict_SetItemString(d,"BU_RIGHT", SWIG_From_int((int)wxBU_RIGHT));
     PyDict_SetItemString(d,"BU_BOTTOM", SWIG_From_int((int)wxBU_BOTTOM));
+    PyDict_SetItemString(d,"BU_ALIGN_MASK", SWIG_From_int((int)wxBU_ALIGN_MASK));
     PyDict_SetItemString(d,"BU_EXACTFIT", SWIG_From_int((int)wxBU_EXACTFIT));
     PyDict_SetItemString(d,"BU_AUTODRAW", SWIG_From_int((int)wxBU_AUTODRAW));
     SWIG_addvarlink(SWIG_globals,(char*)"CheckBoxNameStr",_wrap_CheckBoxNameStr_get, _wrap_CheckBoxNameStr_set);

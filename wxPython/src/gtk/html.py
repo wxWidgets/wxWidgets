@@ -1615,7 +1615,7 @@ HF_BOOKMARKS = _html.HF_BOOKMARKS
 HF_OPENFILES = _html.HF_OPENFILES
 HF_PRINT = _html.HF_PRINT
 HF_DEFAULTSTYLE = _html.HF_DEFAULTSTYLE
-class HtmlHelpController(_core.EvtHandler):
+class HtmlHelpController(_core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlHelpController instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1624,8 +1624,6 @@ class HtmlHelpController(_core.EvtHandler):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
-        self._setOORInfo(self)
-
     def __del__(self, destroy=_html.delete_HtmlHelpController):
         """__del__(self)"""
         try:

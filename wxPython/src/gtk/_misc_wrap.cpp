@@ -1772,6 +1772,9 @@ PyObject *wxDisplay_GetModes(wxDisplay *self,wxVideoMode const &mode){
 
 #include <wx/stdpaths.h>
 
+wxStandardPaths *StandardPaths_Get(){
+            return (wxStandardPaths*) &wxStandardPaths::Get();
+        }
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -28546,10 +28549,7 @@ static PyObject *_wrap_StandardPaths_Get(PyObject *, PyObject *args, PyObject *k
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":StandardPaths_Get",kwnames)) goto fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        {
-            wxStandardPaths &_result_ref = wxStandardPaths::Get();
-            result = (wxStandardPaths *) &_result_ref;
-        }
+        result = (wxStandardPaths *)StandardPaths_Get();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;

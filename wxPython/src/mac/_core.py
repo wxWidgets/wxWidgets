@@ -1520,6 +1520,12 @@ class InputStream(object):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
+    def __del__(self, destroy=_core_.delete_InputStream):
+        """__del__(self)"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
     def close(*args, **kwargs):
         """close(self)"""
         return _core_.InputStream_close(*args, **kwargs)
@@ -2124,6 +2130,20 @@ class Image(Object):
         nothing.
         """
         return _core_.Image_ConvertAlphaToMask(*args, **kwargs)
+
+    def ConvertColourToAlpha(*args, **kwargs):
+        """
+        ConvertColourToAlpha(self, unsigned char r, unsigned char g, unsigned char b) -> bool
+
+        This method converts an image where the original alpha information is
+        only available as a shades of a colour (actually shades of grey)
+        typically when you draw anti-aliased text into a bitmap. The DC
+        drawing routines draw grey values on the black background although
+        they actually mean to draw white with differnt alpha values.  This
+        method reverses it, assuming a black (!) background and white text.
+        The method will then fill up the whole image with the colour given.
+        """
+        return _core_.Image_ConvertColourToAlpha(*args, **kwargs)
 
     def SetMaskFromImage(*args, **kwargs):
         """SetMaskFromImage(self, Image mask, byte mr, byte mg, byte mb) -> bool"""
@@ -5305,6 +5325,9 @@ your Mac."""
         self.saveStdio = (_sys.stdout, _sys.stderr)
         if redirect:
             self.RedirectStdio(filename)
+
+        # Use Python's install prefix as the default  
+        wx.StandardPaths.Get().SetInstallPrefix(_sys.prefix)
 
         # This finishes the initialization of wxWindows and then calls
         # the OnInit that should be present in the derived class
