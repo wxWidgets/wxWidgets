@@ -121,17 +121,29 @@ bool wxWindow::Create(wxWindow *parent,
                       long style,
                       const wxString& name)
 {
+    long actualStyle = style;
+    
+    // FIXME: may need this on other platforms
+#ifdef __WXMSW__
+    actualStyle &= ~wxVSCROLL;
+    actualStyle &= ~wxHSCROLL;
+#endif    
+    
     // we add wxCLIP_CHILDREN to get the same ("natural") behaviour under MSW
     // as under the other platforms
     if ( !wxWindowNative::Create(parent, id, pos, size,
-                                 style | wxCLIP_CHILDREN,
+                                 actualStyle | wxCLIP_CHILDREN,
                                  name) )
     {
         return FALSE;
     }
 
-    // if we should always have the scrollbar, do show it
-    if ( GetWindowStyle() & wxALWAYS_SHOW_SB )
+    // Set full style again, including those we didn't want present
+    // when calling the base window Create().
+    wxWindowBase::SetWindowStyleFlag(style);
+
+    // if we should always have a vertical scrollbar, do show it
+    if ( style & wxALWAYS_SHOW_SB )
     {
 #if wxUSE_TWO_WINDOWS
         SetInsertIntoMain( TRUE );
@@ -142,8 +154,25 @@ bool wxWindow::Create(wxWindow *parent,
 #if wxUSE_TWO_WINDOWS
         SetInsertIntoMain( FALSE );
 #endif
+    }
 
-        // and position it
+    // if we should always have a horizontal scrollbar, do show it
+    if ( style & wxHSCROLL )
+    {
+#if wxUSE_TWO_WINDOWS
+        SetInsertIntoMain( TRUE );
+#endif
+        m_scrollbarHorz = new wxScrollBar(this, -1,
+                                          wxDefaultPosition, wxDefaultSize,
+                                          wxSB_HORIZONTAL);
+#if wxUSE_TWO_WINDOWS
+        SetInsertIntoMain( FALSE );
+#endif
+    }
+    
+    if (m_scrollbarHorz || m_scrollbarVert)
+    {
+        // position it/them
         PositionScrollbars();
     }
 
