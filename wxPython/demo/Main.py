@@ -15,6 +15,8 @@ import sys, os, time, string
 from   wxPython.wx import *
 from   wxPython.html import wxHtmlWindow
 
+from wxPython.stc import *
+
 import images
 
 #---------------------------------------------------------------------------
@@ -628,7 +630,7 @@ def main():
         os.chdir(demoPath)
     except:
         pass
-    app = MyApp(0)
+    app = MyApp(wxPlatform == "__WXMAC__")
     app.MainLoop()
 
 
