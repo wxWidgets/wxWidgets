@@ -338,7 +338,8 @@ struct WinStruct : public T
 {
     WinStruct()
     {
-        ::ZeroMemory(this, cbSize = sizeof(T));
+        ::ZeroMemory(this, sizeof(T));
+        cbSize = sizeof(T);
     }
 };
 
