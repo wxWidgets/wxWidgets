@@ -55,7 +55,7 @@ wxToolBarTool::wxToolBarTool(wxToolBar *owner, int theIndex,
                     const wxBitmap& theBitmap1, const  wxBitmap& theBitmap2,
             bool toggle, wxObject *clientData,
                  const wxString& helpS1, const wxString& helpS2,
-                    GtkWidget *item  )
+                    GtkWidget *pixmap  )
 #else
 wxToolBarTool::wxToolBarTool(int theIndex,
                     const wxBitmap& theBitmap1, const wxBitmap& theBitmap2, bool toggle,
@@ -65,7 +65,8 @@ wxToolBarTool::wxToolBarTool(int theIndex,
   m_toolStyle = wxTOOL_STYLE_BUTTON;
 #ifdef __WXGTK__
   m_owner = owner;
-  m_item = item;
+  m_pixmap = pixmap;
+  m_item = (GtkWidget*) NULL;
   m_clientData = clientData;
   m_x = 0;
   m_y = 0;

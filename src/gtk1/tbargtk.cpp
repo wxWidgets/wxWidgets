@@ -42,7 +42,23 @@ static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget), wxToolBarTool *to
     if (g_blockEventsOnDrag) return;
     if (!tool->m_enabled) return;
 
-    if (tool->m_isToggle) tool->m_toggleState = !tool->m_toggleState;
+    if (tool->m_isToggle)
+    { 
+        tool->m_toggleState = !tool->m_toggleState;
+	
+	if (tool->m_bitmap2.Ok())
+	{
+	    wxBitmap bitmap = tool->m_bitmap1;
+	    if (tool->m_toggleState) bitmap = tool->m_bitmap2;
+	    
+            GtkPixmap *pixmap = GTK_PIXMAP( tool->m_pixmap );
+	    
+            GdkBitmap *mask = (GdkBitmap *) NULL;
+            if (bitmap.GetMask()) mask = bitmap.GetMask()->GetBitmap();
+  
+            gtk_pixmap_set( pixmap, bitmap.GetPixmap(), mask );
+	}
+    }
 
     tool->m_owner->OnLeftClick( tool->m_index, tool->m_toggleState );
 }

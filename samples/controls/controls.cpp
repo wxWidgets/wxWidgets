@@ -126,6 +126,8 @@ public:
     wxGauge       *m_gauge;
     wxSlider      *m_slider;
     wxButton      *m_fontButton;
+    wxButton      *m_lbSelectNum;
+    wxButton      *m_lbSelectThis;
 #ifndef wxUSE_SPINBUTTON
     wxSpinButton  *m_spinbutton;
     wxButton      *m_btnProgress;
@@ -600,8 +602,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_listbox->SetToolTip( "This is a list box" );
 #endif // wxUSE_TOOLTIPS
 
-    (void)new wxButton( panel, ID_LISTBOX_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
-    (void)new wxButton( panel, ID_LISTBOX_SEL_STR, "Select 'This'", wxPoint(340,30), wxSize(140,30) );
+    m_lbSelectNum = new wxButton( panel, ID_LISTBOX_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
+    m_lbSelectThis = new wxButton( panel, ID_LISTBOX_SEL_STR, "Select 'This'", wxPoint(340,30), wxSize(140,30) );
     (void)new wxButton( panel, ID_LISTBOX_CLEAR, "Clear", wxPoint(180,80), wxSize(140,30) );
     (void)new wxButton( panel, ID_LISTBOX_APPEND, "Append 'Hi!'", wxPoint(340,80), wxSize(140,30) );
     (void)new wxButton( panel, ID_LISTBOX_DELETE, "Delete selected item", wxPoint(180,130), wxSize(140,30) );
@@ -900,11 +902,13 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
         case ID_LISTBOX_SEL_NUM:
             {
                 m_listbox->SetSelection( 2 );
+		m_lbSelectThis->WarpPointer( 40, 14 );
                 break;
             }
         case ID_LISTBOX_SEL_STR:
             {
                 m_listbox->SetStringSelection( "This" );
+		m_lbSelectNum->WarpPointer( 40, 14 );
                 break;
             }
         case ID_LISTBOX_CLEAR:

@@ -37,15 +37,18 @@ You may also create a toolbar that is managed by the frame, by
 calling \helpref{wxFrame::CreateToolBar}{wxframecreatetoolbar}.
 
 {\bf wxToolBar95:} Note that this toolbar paints tools to reflect user-selected colours.
-The toolbar orientation must always be {\bf wxVERTICAL}.
+The toolbar orientation must always be {\bf wxHORIZONTAL}.
+
+{\bf wxToolBarGtk:}  The toolbar orientation is ignored and is always {\bf wxHORIZONTAL}.
 
 \wxheading{Window styles}
 
 \twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{\windowstyle{wxTB\_FLAT}}{Gives the toolbar a flat look ('coolbar' or 'flatbar' style). Windows 95 only.}
+\twocolitem{\windowstyle{wxTB\_FLAT}}{Gives the toolbar a flat look ('coolbar' or 'flatbar' style). Windows 95 and GTK 1.2 only.}
+\twocolitem{\windowstyle{wxTB\_DOCKABLE}}{Makes the toolbar floatable and dockable. GTK only.}
 \twocolitem{\windowstyle{wxTB\_HORIZONTAL}}{Specifies horizontal layout.}
-\twocolitem{\windowstyle{wxTB\_VERTICAL}}{Specifies vertical layout (not available for the Windows 95
+\twocolitem{\windowstyle{wxTB\_VERTICAL}}{Specifies vertical layout (not available for the GTK and Windows 95
 toolbar).}
 \twocolitem{\windowstyle{wxTB\_3DBUTTONS}}{Gives wxToolBarSimple a mild 3D look to its buttons.}
 \end{twocollist}
@@ -170,11 +173,10 @@ two states, whereas a non-toggle tool is just a button.}
 \docparam{bitmap1}{The primary tool bitmap for toggle and button tools.}
 
 \docparam{bitmap2}{The second bitmap specifies the on-state bitmap for a toggle
-tool. If this is NULL, either an inverted version of the primary bitmap is
+tool. If this is wxNullBitmap, either an inverted version of the primary bitmap is
 used for the on-state of a toggle tool (monochrome displays) or a black
-border is drawn around the tool (colour displays). Note that to pass a NULL value,
-you need to cast it to (wxBitmap *) so that C++ can construct an appropriate temporary
-wxBitmap object.}
+border is drawn around the tool (colour displays) or the pixmap is shown
+as a pressed button (GTK). }
 
 \docparam{xPos}{Specifies the x position of the tool if automatic layout is not suitable.}
 

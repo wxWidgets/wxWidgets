@@ -44,9 +44,7 @@
 #include "gdk/gdkkeysyms.h"
 #include "wx/gtk/win_gtk.h"
 
-#if (GTK_MINOR_VERSION == 0)
 #include "gdk/gdkx.h"
-#endif
 
 //-----------------------------------------------------------------------------
 // documentation on internals
@@ -178,6 +176,32 @@ void debug_focus_in( GtkWidget* widget, const wxChar* name, const wxChar *window
 }
 
 #endif // Debug
+
+//-----------------------------------------------------------------------------
+// missing gdk functions
+//-----------------------------------------------------------------------------
+
+void
+gdk_window_warp_pointer (GdkWindow      *window,
+			 gint            x,
+			 gint            y)
+{
+  GdkWindowPrivate *priv;
+  
+  if (!window)
+    window = (GdkWindow*) &gdk_root_parent;
+  
+  priv = (GdkWindowPrivate*) window;
+  
+  if (!priv->destroyed)
+  {
+      XWarpPointer (priv->xdisplay, 
+                    None,              /* not source window -> move from anywhere */
+		    priv->xwindow,  /* dest window */
+                    0, 0, 0, 0,        /* not source window -> move from anywhere */
+		    x, y );
+  }
+}
 
 //-----------------------------------------------------------------------------
 // idle system
@@ -2430,9 +2454,17 @@ bool wxWindow::SetCursor( const wxCursor &cursor )
     return TRUE;
 }
 
-void wxWindow::WarpPointer( int WXUNUSED(x), int WXUNUSED(y) )
+void wxWindow::WarpPointer( int x, int y )
 {
-    // TODO
+    wxCHECK_RET( (m_widget != NULL), _T("invalid window") );
+
+    GtkWidget *connect_widget = GetConnectWidget();
+    if (connect_widget->window)
+    {
+        /* we provide this function ourselves as it is
+	   missing in GDK */
+        gdk_window_warp_pointer( connect_widget->window, x, y );
+    }
 }
 
 void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )

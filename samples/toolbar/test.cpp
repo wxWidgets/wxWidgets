@@ -139,7 +139,7 @@ bool MyApp::InitToolbar(wxToolBar* toolBar)
   toolBar->AddTool(wxID_PRINT, *(toolBarBitmaps[6]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Print");
   currentX += width + 5;
   toolBar->AddSeparator();
-  toolBar->AddTool(wxID_HELP, *(toolBarBitmaps[7]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Help");
+  toolBar->AddTool(wxID_HELP, *(toolBarBitmaps[7]), *(toolBarBitmaps[6]), TRUE, currentX, -1, (wxObject *) NULL, "Help");
   
   toolBar->EnableTool( wxID_PRINT, FALSE );
 

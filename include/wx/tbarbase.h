@@ -44,7 +44,7 @@ class WXDLLEXPORT wxToolBarTool: public wxObject
                 int theIndex = 0, const wxBitmap& bitmap1 = wxNullBitmap, const wxBitmap& bitmap2 = wxNullBitmap,
                 bool toggle = FALSE, wxObject *clientData = (wxObject *) NULL, 
                 const wxString& shortHelpString = "", const wxString& longHelpString = "",
-                GtkWidget *item = (GtkWidget *) NULL );
+                GtkWidget *pixmap = (GtkWidget *) NULL );
 #else
   wxToolBarTool(int theIndex, const wxBitmap& bitmap1 = wxNullBitmap, const wxBitmap& bitmap2 = wxNullBitmap,
                 bool toggle = FALSE, long xPos = -1, long yPos = -1,
@@ -75,6 +75,7 @@ public:
 #ifdef __WXGTK__
   wxToolBar            *m_owner;
   GtkWidget            *m_item;
+  GtkWidget            *m_pixmap;
 #endif
 };
 
