@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mmstream.cpp
+// Name:        mstream.cpp
 // Purpose:     "Memory stream" classes
 // Author:      Guilhem Lavaux
 // Modified by:
@@ -10,12 +10,12 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "mmstream.h"
+#pragma implementation "mstream.h"
 #endif
 
 #include <stdlib.h>
 #include <wx/stream.h>
-#include <wx/mmstream.h>
+#include <wx/mstream.h>
 
 wxMemoryStreamBase::wxMemoryStreamBase(char *data, size_t length, int iolimit)
 {
