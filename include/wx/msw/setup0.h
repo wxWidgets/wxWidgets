@@ -650,7 +650,7 @@
 
 #undef wxUSE_OWNER_DRAWN
 #define wxUSE_OWNER_DRAWN 0
-#endif
+#endif // __SALFORDC__
 
 #ifdef __TWIN32__
 
@@ -660,7 +660,7 @@
 #undef wxUSE_ODBC
 #define wxUSE_ODBC 0
 
-#endif
+#endif // __TWIN32__
 
 // BC++/Win16 can't cope with the amount of data in resource.cpp
 #if defined(__WIN16__) && defined(__BORLANDC__)
@@ -729,7 +729,31 @@
 #undef wxUSE_GLCANVAS
 #define wxUSE_GLCANVAS 0
 
+#endif // Win16
+
+// ----------------------------------------------------------------------------
+// check the settings consistency: do it here to abort compilation immediately
+// and not almost in the very end when the relevant file fails to compile and
+// you need to modify setup.h and rebuild everything
+// ----------------------------------------------------------------------------
+
+#if wxUSE_TIMEDATE && !wxUSE_LONGLONG
+    #error wxDateTime requires wxLongLong
 #endif
+
+#if wxUSE_TEXTFILE && !wxUSE_FILE
+    #error You cannot compile wxTextFile without wxFile
+#endif
+
+#if wxUSE_FILESYSTEM && !wxUSE_STREAMS
+    #error You cannot compile virtual file systems without wxUSE_STREAMS
+#endif
+
+#if wxUSE_HTML && !wxUSE_FILESYSTEM
+    #error You cannot compile wxHTML without virtual file systems
+#endif
+
+// add more tests here...
 
 #endif
     // _WX_SETUP_H_
