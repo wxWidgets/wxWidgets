@@ -3968,6 +3968,11 @@ use it on the same line in two different source files. In this case you may
 either change the line in which either of them appears on or use the
 \helpref{wxCOMPILE\_TIME\_ASSERT2}{wxcompiletimeassert2} macro.
 
+Also note that Microsoft Visual C++ has a bug which results in compiler errors
+if you use this macro with ``Program Database For Edit And Continue''
+(\texttt{/ZI}) option, so you shouldn't use it (``Program Database''
+(\texttt{/Zi}) is ok though) for the code making use of this macro.
+
 \wxheading{See also}
 
 \helpref{wxASSERT\_MSG}{wxassertmsg},\\
