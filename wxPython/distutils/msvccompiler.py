@@ -310,7 +310,7 @@ class MSVCCompiler (CCompiler) :
                 input_opt = src
                 output_opt = "/fo" + obj
                 try:
-                    self.spawn ([self.rc] + pp_opts +       # Robin added pp_opts
+                    self.spawn ([self.rc] + pp_opts +
                                 [output_opt] + [input_opt])
                 except DistutilsExecError, msg:
                     raise CompileError, msg
