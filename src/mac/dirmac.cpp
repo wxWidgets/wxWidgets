@@ -81,6 +81,7 @@ public:
     void Rewind() ;
 
     const wxString& GetName() const { return m_dirname; }
+    bool Ok() const { return m_ok; }
 
 private:
     CInfoPBRec            m_CPB ;
@@ -93,6 +94,7 @@ private:
     wxString m_filespec;
 
     int      m_flags;
+    bool     m_ok;
 };
 
 // ============================================================================
@@ -106,6 +108,8 @@ private:
 wxDirData::wxDirData(const wxString& dirname)
          : m_dirname(dirname)
 {
+    m_ok = false;
+    
     OSErr err;
     
     // throw away the trailing slashes
@@ -133,7 +137,11 @@ wxDirData::wxDirData(const wxString& dirname)
 
     err = FSpGetDirectoryID( &fsspec , &m_dirId , &m_isDir ) ;
 #endif
-    wxASSERT_MSG( (err == noErr) || (err == nsvErr) , wxT("Error accessing directory " + m_dirname)) ;
+    //wxASSERT_MSG( (err == noErr) || (err == nsvErr) , wxT("Error accessing directory " + m_dirname)) ;
+    if ( (err == noErr) || (err == nsvErr))
+        m_ok = true;
+    else
+        wxLogError(wxString(wxT("Error accessing directory ")) + m_dirname);
 
     m_CPB.hFileInfo.ioNamePtr = m_name ;
     m_index = 0 ;
@@ -247,8 +255,14 @@ bool wxDir::Open(const wxString& dirname)
 {
     delete M_DIR;
     m_data = new wxDirData(dirname);
-
-    return TRUE;
+    if (m_data->Ok())
+        return TRUE;
+    else
+    {
+        delete m_data;
+        m_data = NULL;
+        return FALSE;
+    }
 }
 
 bool wxDir::IsOpened() const
