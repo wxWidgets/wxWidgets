@@ -1,19 +1,18 @@
-#!/bin/bash
+#! /bin/bash
 
-mkdir -p $WXWIN/lib/vc_lib/msw/wx
 nmake -f .makesetup.mk $WXWIN/lib/vc_lib/msw/wx/setup.h 
 nmake -f makefile.vc BUILD=release $@
 
-cd $WXWIN/contrib/build/xrc
-nmake -f makefile.vc BUILD=release $@
-
-cd $WXWIN/contrib/utils/wxrc
-nmake -f makefile.vc BUILD=release $@
-cp vc_msw/wxrc.exe $WXWIN/lib/vc_dll/wxrc.exe
-
-
-# cd $WXWIN/utils/tex2rtf/src
+# cd $WXWIN/contrib/build/xrc
 # nmake -f makefile.vc BUILD=release $@
-# cp vc_msw/tex2rtf.exe $WXWIN/lib/vc_dll/tex2rtf.exe
+
+# cd $WXWIN/utils/wxrc
+# nmake -f makefile.vc BUILD=release $@
+# cp vc_msw/wxrc.exe $WXWIN/lib/vc_dll/wxrc.exe
+
+
+cd $WXWIN/utils/tex2rtf/src
+echo nmake -f makefile.vc BUILD=release $@
+echo cp vc_msw/tex2rtf.exe $WXWIN/lib/vc_dll/tex2rtf.exe
 
 

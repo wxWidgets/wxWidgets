@@ -79,12 +79,8 @@ fi
 
 
 echo ------------------
-WXWIN=`cygpath -m $WXWIN`
+echo cd $WXWIN/build/msw
 cd $WXWIN/build/msw
-
-echo mkdir -p $WXWIN/lib/vc_dll/$WXLIBDIR/wx
-mkdir -p $WXWIN/lib/vc_dll/$WXLIBDIR/wx
-echo nmake -f .makesetup.mk $WXWIN/lib/vc_dll/$WXLIBDIR/wx/setup.h
 nmake -f .makesetup.mk $WXWIN/lib/vc_dll/$WXLIBDIR/wx/setup.h
 
 
@@ -103,12 +99,12 @@ if [ ! $? = 0 ]; then error; fi
 cd -
 
 
-echo ------------------
-echo cd ../../contrib/build/xrc
-cd ../../contrib/build/xrc
-$WXWIN/build/msw/.mymake $BUILD_TYPE $@
-if [ ! $? = 0 ]; then error; fi
-cd -
+# #echo ------------------
+# echo cd ../../contrib/build/xrc
+# cd ../../contrib/build/xrc
+# $WXWIN/build/msw/.mymake $BUILD_TYPE $@
+# if [ ! $? = 0 ]; then error; fi
+# cd -
 
 
 echo ------------------
@@ -131,6 +127,9 @@ cd -
 echo -----------------
 echo --   SUCCESS!  --
 echo -----------------
+# copy DLLs to a dir on the PATH
+# copy /U $WXWIN/lib/vc_dll/*.dll $WXWIN/BIN
+# copy /U $WXWIN/lib/vc_dll/*.pdb $WXWIN/BIN
 exit 0
 
 
