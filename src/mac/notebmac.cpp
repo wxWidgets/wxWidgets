@@ -143,6 +143,41 @@ wxNotebook::~wxNotebook()
 	m_macControl = NULL ;
 }
 
+wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage)
+{
+    wxSize sizeTotal = sizePage;
+    
+    int major,minor;
+    wxGetOsVersion( &major, &minor );
+    
+    // Mac has large notebook borders. Aqua even more so.
+
+    if ( HasFlag(wxNB_LEFT) || HasFlag(wxNB_RIGHT) )
+    {
+        sizeTotal.x += 90;
+        
+        if (major >= 10)
+            sizeTotal.y += 28;
+        else
+            sizeTotal.y += 20;
+    }
+    else
+    {
+        if (major >= 10)
+        {
+            sizeTotal.x += 34;
+            sizeTotal.y += 46;
+        }
+        else
+        {
+            sizeTotal.x += 22;
+            sizeTotal.y += 44;
+        }
+    }
+
+    return sizeTotal;
+}
+
 // ----------------------------------------------------------------------------
 // wxNotebook accessors
 // ----------------------------------------------------------------------------
