@@ -468,6 +468,7 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
       }
     }
     else {                        // a key
+      size_t count = 0;
       const wxChar *pEnd = pStart;
       while ( *pEnd != wxT('=') && !wxIsspace(*pEnd) ) {
         if ( *pEnd == wxT('\\') ) {
@@ -476,10 +477,11 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
           pEnd++;
         }
 
+        count++;
         pEnd++;
       }
 
-      wxString strKey(FilterInEntryName(wxString(pStart, pEnd)));
+      wxString strKey(FilterInEntryName(wxString(pStart, count)));
 
       // skip whitespace
       while ( isspace(*pEnd) )
