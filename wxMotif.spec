@@ -8,7 +8,7 @@
 %define rel 1
 
 Summary: The Motif/Lesstif port of the wxWindows library
-Name: wxMOTIF
+Name: wxMotif
 Version: %{ver}
 Release: %{rel}
 Copyright: wxWindows Licence
@@ -31,22 +31,29 @@ Motif/LessTif, MS Windows, Mac) from the same source code.
 %package devel
 Summary: The Motif/Lesstif port of the wxWindows library
 Group: X11/Libraries
-Requires: wxMotif
+Requires: wxMotif = %{ver}
 
 %description devel
 Header files for wxMotif, the Motif/Lesstif port of the wxWindows library.
 
 %package gl
-Summary: The Motif/Lesstif port of the wxWindows library, OpenGl add-on.
+Summary: The Motif/Lesstif port of the wxWindows library, OpenGL add-on.
 Group: X11/Libraries
-Requires: wxMotif
+Requires: wxMotif = %{ver}
 
 %description gl
-OpenGl add-on library for wxMotif, the Motif/Lesstif port of the wxWindows library.
+OpenGL add-on library for wxMotif, the Motif/Lesstif port of the wxWindows library.
+
+%package static
+Summary: wxMotif static libraries
+Group: Development/Libraries
+
+%description static
+Static libraries for wxMotif. You need them if you want to link statically against wxMotif.
+
 
 %prep
-%setup
-./configure --prefix=%{pref} --enable-soname --with-odbc --with-opengl --with-motif
+%setup -n wxMOTIF-%{ver}
 
 %build
 if [ "$SMP" != "" ]; then
@@ -54,12 +61,25 @@ if [ "$SMP" != "" ]; then
 else
   export MAKE="make"
 fi
+
+(cd locale; make allmo)
+
+mkdir obj-shared
+cd obj-shared
+../configure --prefix=%{pref} --enable-soname --with-odbc --with-opengl --with-motif
 $MAKE
-(cd locale ; make allmo)
+cd ..
+
+mkdir obj-static
+cd obj-static
+../configure --prefix=%{pref} --disable-shared --with-odbc --with-opengl --with-motif
+$MAKE
+cd ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
-make prefix=$RPM_BUILD_ROOT%{pref} install
+(cd obj-static; make prefix=$RPM_BUILD_ROOT%{pref} install)
+(cd obj-shared; make prefix=$RPM_BUILD_ROOT%{pref} install)
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -113,3 +133,7 @@ fi
 %files gl
 %defattr(-,root,root)
 %{_libdir}/libwx_motif_gl*
+
+%files static
+%defattr (-,root,root)
+%{_libdir}/lib*.a
