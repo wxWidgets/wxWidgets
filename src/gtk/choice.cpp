@@ -227,18 +227,49 @@ void wxChoice::Delete( int n )
     wxCHECK_RET( m_widget != NULL, wxT("invalid choice") );
 
     // VZ: apparently GTK+ doesn't have a built-in function to do it (not even
-    //     in 2.0), hence this dump implementation - still better than nothing
+    //     in 2.0), hence this dumb implementation -- still better than nothing
     int i,
         count = GetCount();
 
     wxCHECK_RET( n >= 0 && n < count, _T("invalid index in wxChoice::Delete") );
 
+    const bool hasClientData = m_clientDataItemsType != wxClientData_None;
+    const bool hasObjectData = m_clientDataItemsType == wxClientData_Object;
+
+    wxList::compatibility_iterator node = m_clientList.GetFirst();
+
     wxArrayString items;
+    wxArrayPtrVoid itemsData;
     items.Alloc(count);
     for ( i = 0; i < count; i++ )
     {
         if ( i != n )
+        {
             items.Add(GetString(i));
+            if ( hasClientData )
+            {
+                // also save the client data
+                itemsData.Add(node->GetData());
+            }
+        }
+        else // need to delete the client object too
+        {
+            if ( hasObjectData )
+            {
+                delete (wxClientData *)node->GetData();
+            }
+        }
+
+        if ( hasClientData )
+        {
+            node = node->GetNext();
+        }
+    }
+
+    if ( hasObjectData )
+    {
+        // prevent Clear() from destroying all client data
+        m_clientDataItemsType = wxClientData_None;
     }
 
     Clear();
@@ -246,6 +277,11 @@ void wxChoice::Delete( int n )
     for ( i = 0; i < count - 1; i++ )
     {
         Append(items[i]);
+
+        if ( hasObjectData )
+            SetClientObject(i, (wxClientData *)itemsData[i]);
+        else if ( hasClientData )
+            SetClientDate(i, itemsData[i]);
     }
 }
 
@@ -269,7 +305,7 @@ int wxChoice::FindString( const wxString &string ) const
             label = GTK_LABEL( BUTTON_CHILD(m_widget) );
 
         wxASSERT_MSG( label != NULL , wxT("wxChoice: invalid label") );
-        
+
 #ifdef __WXGTK20__
          wxString tmp( wxGTK_CONV_BACK( gtk_label_get_text( label) ) );
 #else
@@ -288,15 +324,15 @@ int wxChoice::FindString( const wxString &string ) const
 int wxChoice::GetSelection() const
 {
     wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid choice") );
-    
+
 #ifdef __WXGTK20__
 
     return gtk_option_menu_get_history( GTK_OPTION_MENU(m_widget) );
-    
+
 #else
     GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
     int count = 0;
-    
+
     GList *child = menu_shell->children;
     while (child)
     {
