@@ -9551,7 +9551,7 @@ static PyObject *_wrap_Process_GetInputStream(PyObject *, PyObject *args, PyObje
         if (result) {
             _ptr = new wxPyInputStream(result);
         }
-        resultobj = wxPyConstructObject(_ptr, wxT("wxPyInputStream"), true);
+        resultobj = wxPyConstructObject(_ptr, wxT("wxPyInputStream"), 0);
     }
     return resultobj;
     fail:
@@ -9584,7 +9584,7 @@ static PyObject *_wrap_Process_GetErrorStream(PyObject *, PyObject *args, PyObje
         if (result) {
             _ptr = new wxPyInputStream(result);
         }
-        resultobj = wxPyConstructObject(_ptr, wxT("wxPyInputStream"), true);
+        resultobj = wxPyConstructObject(_ptr, wxT("wxPyInputStream"), 0);
     }
     return resultobj;
     fail:
