@@ -147,10 +147,12 @@ wxHtmlContainerCell::wxHtmlContainerCell(wxHtmlContainerCell *parent) : wxHtmlCe
 
 wxHtmlContainerCell::~wxHtmlContainerCell()
 {
-    if (m_Cells) 
+    wxHtmlCell *cell = m_Cells;
+    while ( cell )
     {
-        for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
-            delete cell;
+        wxHtmlCell *cellNext = cell->GetNext();
+        delete cell;
+        cell = cellNext;
     }
 }
 
