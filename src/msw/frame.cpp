@@ -106,9 +106,12 @@ void wxFrame::Init()
     m_fsStatusBarFields = 0;
     m_fsStatusBarHeight = 0;
     m_fsToolBarHeight = 0;
-//    m_fsMenu = 0;
+//  m_fsMenu = 0;
     m_fsIsMaximized = FALSE;
     m_fsIsShowing = FALSE;
+
+    // unlike (almost?) all other windows, frames are created hidden
+    m_isShown = FALSE;
 }
 
 bool wxFrame::Create(wxWindow *parent,
@@ -154,9 +157,6 @@ bool wxFrame::Create(wxWindow *parent,
             x, y, width, height, style);
 
   wxModelessWindows.Append(this);
-
-  // unlike (almost?) all other windows, frames are created hidden
-  m_isShown = FALSE;
 
   return TRUE;
 }
@@ -517,8 +517,8 @@ bool wxFrame::ShowFullScreen(bool show, long style)
         m_fsIsShowing = TRUE;
         m_fsStyle = style;
 
-	     wxToolBar *theToolBar = GetToolBar();
-	     wxStatusBar *theStatusBar = GetStatusBar();
+        wxToolBar *theToolBar = GetToolBar();
+        wxStatusBar *theStatusBar = GetStatusBar();
 
         int dummyWidth;
 
@@ -543,7 +543,7 @@ bool wxFrame::ShowFullScreen(bool show, long style)
         {
             m_fsStatusBarFields = theStatusBar->GetFieldsCount();
             SetStatusBar((wxStatusBar*) NULL);
-	         delete theStatusBar;
+            delete theStatusBar;
         }
         else
             m_fsStatusBarFields = 0;
@@ -553,11 +553,11 @@ bool wxFrame::ShowFullScreen(bool show, long style)
         // save the 'normal' window style
         m_fsOldWindowStyle = GetWindowLong((HWND)GetHWND(), GWL_STYLE);
 
-	    // save the old position, width & height, maximize state
+        // save the old position, width & height, maximize state
         m_fsOldSize = GetRect();
-	     m_fsIsMaximized = IsMaximized();
+        m_fsIsMaximized = IsMaximized();
 
-	    // decide which window style flags to turn off
+        // decide which window style flags to turn off
         LONG newStyle = m_fsOldWindowStyle;
         LONG offFlags = 0;
 
