@@ -6,6 +6,19 @@ generalization of the C locale concept.
 In wxWindows this class manages message catalogs which contain the translations
 of the strings used to the current language.
 
+\perlnote{In wxPerl the {\tt Wx} module exports a '_' function
+that corresponds to the '_' C++ macro.
+\begin{verbatim}
+  use Wx qw(_);
+
+  # ....
+
+  print _( ``Panic!'' );
+
+  my( \$button ) = Wx::Button->new( \$window, -1, _( ``Label'' ) );
+\end{verbatim}
+}
+
 \wxheading{Derived from}
 
 No base class

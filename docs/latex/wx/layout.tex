@@ -26,6 +26,14 @@ width and height will be used, to be compatible with panel items which often
 have take a default size. If the constraint is wxAsIs, the dimension will
 not be changed.
 
+\perlnote{In wxPerl the constraints are accessed as
+\begin{verbatim}
+  my( \$constraint ) = Wx::LayoutConstraints->new();
+  \$constraint->centreX->AsIs();
+  \$constraint->centreY->Unconstrained();
+\end{verbatim}
+}
+
 \wxheading{Derived from}
 
 \helpref{wxObject}{wxobject}

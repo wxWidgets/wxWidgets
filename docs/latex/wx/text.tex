@@ -315,6 +315,9 @@ no selection.
 \pythonnote{The wxPython version of this method returns a tuple
 consisting of the from and to values.}
 
+\perlnote{In wxPerl this method takes no parameter and returns a
+2-element list {\tt ( from, to )}.}
+
 \membersection{wxTextCtrl::GetValue}\label{wxtextctrlgetvalue}
 
 \constfunc{wxString}{GetValue}{\void}
@@ -422,6 +425,9 @@ parameter).
 \pythonnote{In Python, PositionToXY() returns a tuple containing the x and
 y values, so (x,y) = PositionToXY() is equivalent to the call described
 above.}
+
+\perlnote{In wxPerl this method only takes the {\tt pos} parameter, and
+returns a 2-element list {\tt ( x, y )}.}
 
 \membersection{wxTextCtrl::Redo}\label{wxtextctrlredo}
 

@@ -234,6 +234,10 @@ Finds the menu item id for a menu item string.
 Finds the menu item object associated with the given menu item identifier and,
 optionally, the (sub)menu it belongs to.
 
+\perlnote{In wxPerl this method takes just the {\tt id} parameter;
+in scalar context it returns the associated {\tt Wx::MenuItem}, in list
+context it returns a two element list ( item, submenu )}
+
 \wxheading{Parameters}
 
 \docparam{itemString}{Menu item string to find.}
@@ -506,6 +510,9 @@ menu bar.}
 
 \pythonnote{Only the default constructor is supported in wxPython.
 Use wxMenuBar.Append instead.}
+
+\perlnote{wxPerl only supports the first contructor: 
+use {\tt Append} instead.}
 
 \membersection{wxMenuBar::\destruct{wxMenuBar}}
 

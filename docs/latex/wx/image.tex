@@ -145,6 +145,15 @@ platform-dependent bitmap}
 \end{twocollist}}
 }
 
+\perlnote{Constructors supported by wxPerl are:\par
+\begin{itemize}
+\item{Wx::Image->new( bitmap )}
+\item{Wx::Image->new( width, height )}
+\item{Wx::Image->new( name, type )}
+\item{Wx::Image->new( name, mimetype )}
+\end{itemize}
+}
+
 \membersection{wxImage::\destruct{wxImage}}
 
 \func{}{\destruct{wxImage}}{\void}
@@ -471,6 +480,13 @@ mimetype from a file}
 \end{twocollist}}
 }
 
+\perlnote{Methods supported by wxPerl are:\par
+\begin{itemize}
+\item{\$bitmap->LoadFile( name, type )}
+\item{\$bitmap->LoadFile( name, mimetype )}
+\end{itemize}
+}
+
 
 \membersection{wxImage::Ok}\label{wximageok}
 
@@ -547,6 +563,13 @@ type to the named file}
 \twocolitem{{\bf SaveMimeFile(filename, mimetype)}}{Saves the image using the given
 mimetype to the named file}
 \end{twocollist}}
+}
+
+\perlnote{Methods supported by wxPerl are:\par
+\begin{itemize}
+\item{\$bitmap->SaveFile( name, type )}
+\item{\$bitmap->SaveFile( name, mimetype )}
+\end{itemize}
 }
 
 \membersection{wxImage::Mirror}\label{wximagemirror}
