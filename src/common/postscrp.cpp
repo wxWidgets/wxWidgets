@@ -2553,6 +2553,14 @@ wxPrintPaperType::~wxPrintPaperType()
   delete[] pageName;
 }
 
+/*
+ * Print paper database for PostScript
+ */
+
+#if !USE_SHARED_LIBRARIES
+IMPLEMENT_DYNAMIC_CLASS(wxPrintPaperDatabase, wxList)
+#endif
+
 wxPrintPaperDatabase::wxPrintPaperDatabase():wxList(wxKEY_STRING)
 {
   DeleteContents(TRUE);

@@ -849,7 +849,14 @@ void wxExpr::WriteLispExpr(ostream& stream)
   }
 }
 
-// wxExpr 'database' (list of expressions)
+/*
+ * wxExpr 'database' (list of expressions)
+ */
+ 
+#if !USE_SHARED_LIBRARIES
+IMPLEMENT_DYNAMIC_CLASS(wxExprDatabase, wxList)
+#endif
+
 wxExprDatabase::wxExprDatabase(wxExprErrorHandler handler)
 {
   position = NULL;
