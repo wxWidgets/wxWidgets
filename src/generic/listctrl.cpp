@@ -2417,6 +2417,12 @@ bool wxListMainWindow::HighlightLine( size_t line, bool highlight )
 
 void wxListMainWindow::RefreshLine( size_t line )
 {
+    size_t visibleFrom, visibleTo;
+    GetVisibleLinesRange(&visibleFrom, &visibleTo);
+
+    if ( line < visibleFrom || line > visibleTo )
+        return;
+
     wxRect rect = GetLineRect(line);
 
     CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
@@ -2656,7 +2662,11 @@ void wxListMainWindow::SendNotify( size_t line,
     if ( point != wxDefaultPosition )
         le.m_pointDrag = point;
 
-    if ( command != wxEVT_COMMAND_LIST_DELETE_ITEM )
+    // don't try to get the line info for virtual list controls: the main
+    // program has it anyhow and if we did it would result in accessing all
+    // the lines, even those which are not visible now and this is precisely
+    // what we're trying to avoid
+    if ( !IsVirtual() && (command != wxEVT_COMMAND_LIST_DELETE_ITEM) )
     {
         GetLine(line)->GetItem( 0, le.m_item );
     }
