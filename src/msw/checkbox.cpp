@@ -220,7 +220,7 @@ void wxCheckBox::SetValue(bool val)
 
 bool wxCheckBox::GetValue() const
 {
-    return (Get3StateValue() != 0);
+    return (Get3StateValue() != wxCHK_UNCHECKED);
 }
 
 void wxCheckBox::Command(wxCommandEvent& event)
