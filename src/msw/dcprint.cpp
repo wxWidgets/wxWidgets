@@ -309,15 +309,10 @@ WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
     {
         // Retrieve the default device name
         wxString portName;
-#ifdef  __WXDEBUG__
-        bool ret =
-#else   // !Debug
-        (void)
-#endif // Debug/Release
-        wxGetDefaultDeviceName(devNameStr, portName);
-
-        wxASSERT_MSG( ret, wxT("Could not get default device name.") );
-
+        if ( !wxGetDefaultDeviceName(devNameStr, portName) )
+        {
+            return 0; // Could not get default device name
+        }
         deviceName = devNameStr.c_str();
     }
 
