@@ -35,11 +35,11 @@ Tags of the following form are recognised:
 where modulename is the name of a module (possibly in package
 notation) to import and classname is the name of a class in that
 module to create an instance of.  If the module tag-attribute is not
-given or is an empty string, then wxPython.wx is used.  The width and
-height attributes are expected to be integers and will be passed to
-the __init__ method of the class as a wxSize object named size.
-However, if the width attribute ends with the percent (%) symbol then
-the value will be used as a percentage of the available width and the
+given or is an empty string, then wx is used.  The width and height
+attributes are expected to be integers and will be passed to the
+__init__ method of the class as a wxSize object named size.  However,
+if the width attribute ends with the percent (%) symbol then the value
+will be used as a percentage of the available width and the
 wxHtmlWindow will manage the size.
 
 The name-value pairs in all the nested PARAM tags are packaged up as
