@@ -34,52 +34,53 @@ WX_DECLARE_OBJARRAY(wxPaintDCInfo, wxArrayDCInfo);
 
 class WXDLLEXPORT wxWindowDC : public wxDC
 {
-    DECLARE_DYNAMIC_CLASS(wxWindowDC)
-
 public:
     wxWindowDC();
 
     // Create a DC corresponding to the whole window
-    wxWindowDC(wxWindow *win);
+    wxWindowDC(wxWindow* pWin);
 
-    virtual ~wxWindowDC();
+protected:
+    void InitDC(void);
 
 private:
-    HAB                     m_hab;
     SIZEL                   m_PageSize;
-};
+    DECLARE_DYNAMIC_CLASS(wxWindowDC)
+}; // end of CLASS wxWindowDC
 
 class WXDLLEXPORT wxClientDC : public wxWindowDC
 {
-    DECLARE_DYNAMIC_CLASS(wxClientDC)
-
 public:
     wxClientDC();
 
     // Create a DC corresponding to the client area of the window
     wxClientDC(wxWindow *win);
 
-    virtual ~wxClientDC();
-};
+private:
+    DECLARE_DYNAMIC_CLASS(wxClientDC)
+}; // end of CLASS wxClientDC
 
 class WXDLLEXPORT wxPaintDC : public wxWindowDC
 {
-    DECLARE_DYNAMIC_CLASS(wxPaintDC)
-
 public:
     wxPaintDC();
 
     // Create a DC corresponding for painting the window in OnPaint()
-    wxPaintDC(wxWindow *win);
+    wxPaintDC(wxWindow* pWin);
 
     virtual ~wxPaintDC();
+
+    // find the entry for this DC in the cache (keyed by the window)
+    static WXHDC FindDCInCache(wxWindow* pWin);
 
 protected:
     static wxArrayDCInfo ms_cache;
 
     // find the entry for this DC in the cache (keyed by the window)
-    wxPaintDCInfo *FindInCache(size_t *index = NULL) const;
-};
+    wxPaintDCInfo* FindInCache(size_t* pIndex = NULL) const;
+private:
+    DECLARE_DYNAMIC_CLASS(wxPaintDC)
+}; // end of wxPaintDC
 
 #endif
     // _WX_DCCLIENT_H_

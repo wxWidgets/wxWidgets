@@ -20,29 +20,50 @@
 class WXDLLEXPORT wxPrinterDC: public wxDC
 {
  public:
-  DECLARE_CLASS(wxPrinterDC)
+    // Create a printer DC [obsolete]
+    wxPrinterDC( const wxString& rsDriver
+                ,const wxString& rsDevice
+                ,const wxString& rsOutput
+                ,bool            bInteractive = TRUE
+                ,int             nOrientation = wxPORTRAIT
+               );
 
-   // Create a printer DC [obsolete]
-   wxPrinterDC(const wxString& driver, const wxString& device, const wxString& output, bool interactive = TRUE, int orientation = wxPORTRAIT);
+    // Create from print data
+    wxPrinterDC(const wxPrintData& rData);
+    wxPrinterDC(WXHDC hTheDC);
 
-   // Create from print data
-   wxPrinterDC(const wxPrintData& data);
-
-   wxPrinterDC(WXHDC theDC);
-
-   ~wxPrinterDC();
-
-    bool StartDoc(const wxString& message);
+    bool StartDoc(const wxString& rsMessage);
     void EndDoc(void);
     void StartPage(void);
     void EndPage(void);
 
 protected:
-    wxPrintData         m_printData;
-};
+    virtual void DoDrawBitmap( const wxBitmap& rBmp
+                              ,wxCoord         vX
+                              ,wxCoord         vY
+                              ,bool            bUseMask = FALSE
+                             );
+    virtual bool DoBlit( wxCoord vXdest
+                        ,wxCoord vYdest
+                        ,wxCoord vWidth
+                        ,wxCoord vHeight
+                        ,wxDC*   pSource
+                        ,wxCoord vXsrc
+                        ,wxCoord vYsrc
+                        ,int     nRop = wxCOPY
+                        ,bool    bUseMask = FALSE
+                       );
+
+    // init the dc
+    void Init(void);
+
+    wxPrintData                     m_printData;
+private:
+    DECLARE_CLASS(wxPrinterDC)
+}; // end of CLASS wxPrinterDC
 
 // Gets an HDC for the specified printer configuration
-WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& data);
+WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& rData);
 
 #endif // wxUSE_PRINTING_ARCHITECTURE
 
