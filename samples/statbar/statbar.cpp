@@ -47,6 +47,7 @@
     #include "wx/sizer.h"
     #include "wx/stattext.h"
     #include "wx/bmpbuttn.h"
+    #include "wx/dcmemory.h"
 #endif
 
 #include "wx/datetime.h"
