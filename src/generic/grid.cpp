@@ -2398,6 +2398,8 @@ void wxGrid::Init()
 
     m_cursorMode  = WXGRID_CURSOR_SELECT_CELL;
     m_winCapture = (wxWindow *)NULL;
+    m_canDragRowSize = TRUE;
+    m_canDragColSize = TRUE;
     m_dragLastPos  = -1;
     m_dragRowOrCol = -1;
     m_isDragging = FALSE;
@@ -2974,7 +2976,8 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
         {
             // starting to drag-resize a row
             //
-            ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW, m_rowLabelWin);
+            if ( CanDragRowSize() )
+                ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW, m_rowLabelWin);
         }
     }
 
@@ -3044,7 +3047,8 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
             if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
             {
                 // don't capture the mouse yet
-                ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW, m_rowLabelWin, FALSE);
+                if ( CanDragRowSize() )
+                    ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW, m_rowLabelWin, FALSE);
             }
         }
         else if ( m_cursorMode != WXGRID_CURSOR_SELECT_CELL )
@@ -3139,7 +3143,8 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
         {
             // starting to drag-resize a col
             //
-            ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL, m_colLabelWin);
+            if ( CanDragColSize() )
+                ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL, m_colLabelWin);
         }
     }
 
@@ -3209,7 +3214,8 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
             if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
             {
                 // don't capture the cursor yet
-                ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL, m_colLabelWin, FALSE);
+                if ( CanDragColSize() )
+                    ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL, m_colLabelWin, FALSE);
             }
         }
         else if ( m_cursorMode != WXGRID_CURSOR_SELECT_CELL )
@@ -3590,7 +3596,8 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
 
                 if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
                 {
-                    ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW);
+                    if ( CanDragRowSize() )
+                        ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW);
                 }
 
                 return;
@@ -3602,7 +3609,8 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
 
                 if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
                 {
-                    ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL);
+                    if ( CanDragColSize() )
+                        ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL);
                 }
 
                 return;
@@ -6220,6 +6228,18 @@ wxGridCellRenderer* wxGrid::GetDefaultRendererForType(const wxString& typeName)
 // ----------------------------------------------------------------------------
 // row/col size
 // ----------------------------------------------------------------------------
+
+void wxGrid::EnableDragRowSize( bool enable )
+{
+    m_canDragRowSize = enable;
+}
+
+
+void wxGrid::EnableDragColSize( bool enable )
+{
+    m_canDragColSize = enable;
+}
+
 
 void wxGrid::SetDefaultRowSize( int height, bool resizeExistingRows )
 {

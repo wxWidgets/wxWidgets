@@ -839,6 +839,13 @@ public:
     void     SetRowLabelValue( int row, const wxString& );
     void     SetColLabelValue( int col, const wxString& );
     void     SetGridLineColour( const wxColour& );
+    
+    void     EnableDragRowSize( bool enable = TRUE );
+    void     DisableDragRowSize() { EnableDragRowSize( FALSE ); }
+    bool     CanDragRowSize() { return m_canDragRowSize; }
+    void     EnableDragColSize( bool enable = TRUE );
+    void     DisableDragColSize() { EnableDragColSize( FALSE ); }
+    bool     CanDragColSize() { return m_canDragColSize; }
 
     // this sets the specified attribute for all cells in this row/col
     void     SetRowAttr(int row, wxGridCellAttr *attr);
@@ -1319,6 +1326,8 @@ protected:
     wxWindow *m_winCapture;     // the window which captured the mouse
     CursorMode m_cursorMode;
 
+    bool    m_canDragRowSize;
+    bool    m_canDragColSize;
     int     m_dragLastPos;
     int     m_dragRowOrCol;
     bool    m_isDragging;
