@@ -85,7 +85,7 @@ BEGIN_DECLARE_EVENT_TYPES()
 END_DECLARE_EVENT_TYPES()
 
 #define wxTaskBarIconEventHandler(func) \
-    (wxObjectEventFunction)wxStaticCastEvent(wxTaskBarIconEventFunction, &func)
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxTaskBarIconEventFunction, &func)
 
 #define wx__DECLARE_TASKBAREVT(evt, fn) \
     wx__DECLARE_EVT0(wxEVT_TASKBAR_ ## evt, wxTaskBarIconEventHandler(fn))

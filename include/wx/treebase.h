@@ -284,7 +284,7 @@ public:
         // Set the tooltip for the item (for EVT\_TREE\_ITEM\_GETTOOLTIP events)
     void SetToolTip(const wxString& toolTip) { m_label = toolTip; }
     wxString GetToolTip() { return m_label; }
-    
+
 #if WXWIN_COMPATIBILITY_2_2
     // for compatibility only, don't use
     wxDEPRECATED( int GetCode() const);
@@ -336,7 +336,7 @@ BEGIN_DECLARE_EVENT_TYPES()
 END_DECLARE_EVENT_TYPES()
 
 #define wxTreeEventHandler(func) \
-    (wxObjectEventFunction)wxStaticCastEvent(wxTreeEventFunction, &func)
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxTreeEventFunction, &func)
 
 #define wx__DECLARE_TREEEVT(evt, id, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_TREE_ ## evt, id, wxTreeEventHandler(fn))

@@ -190,7 +190,7 @@ private:
 typedef void (wxEvtHandler::*wxTimerEventFunction)(wxTimerEvent&);
 
 #define wxTimerEventHandler(func) \
-    (wxObjectEventFunction)wxStaticCastEvent(wxTimerEventFunction, &func)
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxTimerEventFunction, &func)
 
 #define EVT_TIMER(timerid, func) \
     wx__DECLARE_EVT1(wxEVT_TIMER, timerid, wxTimerEventHandler(func))

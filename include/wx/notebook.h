@@ -123,7 +123,7 @@ END_DECLARE_EVENT_TYPES()
 typedef void (wxEvtHandler::*wxNotebookEventFunction)(wxNotebookEvent&);
 
 #define wxNotebookEventHandler(func) \
-    (wxObjectEventFunction)wxStaticCastEvent(wxNotebookEventFunction, &func)
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxNotebookEventFunction, &func)
 
 #define EVT_NOTEBOOK_PAGE_CHANGED(winid, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, winid, wxNotebookEventHandler(fn))

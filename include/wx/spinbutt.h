@@ -111,7 +111,7 @@ private:
 typedef void (wxEvtHandler::*wxSpinEventFunction)(wxSpinEvent&);
 
 #define wxSpinEventHandler(func) \
-    (wxObjectEventFunction)wxStaticCastEvent(wxSpinEventFunction, &func)
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxSpinEventFunction, &func)
 
 // macros for handling spin events
 #define EVT_SPIN_UP(winid, func) \

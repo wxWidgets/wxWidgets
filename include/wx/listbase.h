@@ -444,7 +444,7 @@ END_DECLARE_EVENT_TYPES()
 typedef void (wxEvtHandler::*wxListEventFunction)(wxListEvent&);
 
 #define wxListEventHandler(func) \
-    (wxObjectEventFunction)wxStaticCastEvent(wxListEventFunction, &func)
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxListEventFunction, &func)
 
 #define wx__DECLARE_LISTEVT(evt, id, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_LIST_ ## evt, id, wxListEventHandler(fn))

@@ -214,7 +214,7 @@ END_DECLARE_EVENT_TYPES()
 typedef void (wxEvtHandler::*wxCalendarEventFunction)(wxCalendarEvent&);
 
 #define wxCalendarEventHandler(func) \
-    (wxObjectEventFunction)wxStaticCastEvent(wxCalendarEventFunction, &func)
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxCalendarEventFunction, &func)
 
 #define wx__DECLARE_CALEVT(evt, id, fn) \
     wx__DECLARE_EVT1(wxEVT_CALENDAR_ ## evt, id, wxCalendarEventHandler(fn))

@@ -297,7 +297,7 @@ END_DECLARE_EVENT_TYPES()
 typedef void (wxEvtHandler::*wxWizardEventFunction)(wxWizardEvent&);
 
 #define wxWizardEventHandler(func) \
-    (wxObjectEventFunction)wxStaticCastEvent(wxWizardEventFunction, &func)
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxWizardEventFunction, &func)
 
 #define wx__DECLARE_WIZARDEVT(evt, id, fn) \
     wx__DECLARE_EVT1(wxEVT_WIZARD_ ## evt, id, wxWizardEventHandler(fn))

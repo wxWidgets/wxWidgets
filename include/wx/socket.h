@@ -321,7 +321,7 @@ public:
 typedef void (wxEvtHandler::*wxSocketEventFunction)(wxSocketEvent&);
 
 #define wxSocketEventHandler(func) \
-    (wxObjectEventFunction)wxStaticCastEvent(wxSocketEventFunction, &func)
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxSocketEventFunction, &func)
 
 #define EVT_SOCKET(id, func) \
     wx__DECLARE_EVT1(wxEVT_SOCKET, id, wxSocketEventHandler(func))
