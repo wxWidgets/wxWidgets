@@ -3210,6 +3210,13 @@ bool wxDb::Catalog(const wxChar *userID, const wxString &fileName)
         if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
             break;
 
+        GetData(3,SQL_C_CHAR,  (UCHAR *) tblName,     DB_MAX_TABLE_NAME_LEN+1, &cb);
+        GetData(4,SQL_C_CHAR,  (UCHAR *) colName,     DB_MAX_COLUMN_NAME_LEN+1,&cb);
+        GetData(5,SQL_C_SSHORT,(UCHAR *)&sqlDataType, 0,                       &cb);
+        GetData(6,SQL_C_CHAR,  (UCHAR *) typeName,    sizeof(typeName),        &cb);
+        GetData(7,SQL_C_SLONG, (UCHAR *)&precision,   0,                       &cb);
+        GetData(8,SQL_C_SLONG, (UCHAR *)&length,      0,                       &cb);
+
         if (wxStrcmp(tblName, tblNameSave.c_str()))
         {
             if (cnt)
@@ -3229,13 +3236,6 @@ bool wxDb::Catalog(const wxChar *userID, const wxString &fileName)
             wxFputs(wxT("=========\n"), fp);
             tblNameSave = tblName;
         }
-
-      GetData(3,SQL_C_CHAR,  (UCHAR *) tblName,     DB_MAX_TABLE_NAME_LEN+1, &cb);
-      GetData(4,SQL_C_CHAR,  (UCHAR *) colName,     DB_MAX_COLUMN_NAME_LEN+1,&cb);
-      GetData(5,SQL_C_SSHORT,(UCHAR *)&sqlDataType, 0,                       &cb);
-      GetData(6,SQL_C_CHAR,  (UCHAR *) typeName,    sizeof(typeName),        &cb);
-      GetData(7,SQL_C_SLONG, (UCHAR *)&precision,   0,                       &cb);
-      GetData(8,SQL_C_SLONG, (UCHAR *)&length,      0,                       &cb);
 
         outStr.Printf(wxT("%-32s %-32s (%04d)%-15s %9ld %9ld\n"),
             tblName, colName, sqlDataType, typeName, precision, length);
