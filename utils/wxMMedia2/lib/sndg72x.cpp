@@ -107,12 +107,16 @@ bool wxSoundFormatG72X::operator !=(const wxSoundFormatBase& frmt2) const
 // --------------------------------------------------------------------------
 // wxSoundStreamG72X
 // --------------------------------------------------------------------------
+
+// This fixes a bug in Mingw95
+typedef struct g72x_state g7s;
+
 wxSoundStreamG72X::wxSoundStreamG72X(wxSoundStream& sndio)
  : wxSoundStreamCodec(sndio)
 {
   // PCM converter
   m_router = new wxSoundRouterStream(sndio);
-  m_state  = new struct g72x_state;
+  m_state  = new g7s;
   g72x_init_state(m_state);
 }
 
