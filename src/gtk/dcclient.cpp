@@ -1560,6 +1560,11 @@ void wxWindowDC::Clear()
 
     if (!m_window) return;
 
+    // VZ: the code below results in infinite recursion and crashes when
+    //     dc.Clear() is done from OnPaint() so I disable it for now.
+    //     I don't know what the correct fix is but Clear() surely should not
+    //     reenter OnPaint()!
+#if 0
     /* - we either are a memory dc or have a window as the
        owner. anything else shouldn't happen.
        - we don't use gdk_window_clear() as we don't set
@@ -1580,6 +1585,11 @@ void wxWindowDC::Clear()
         gdk_draw_rectangle( m_window, m_bgGC, TRUE, 0, 0, width, height );
         return;
     }
+#else // 1
+    int width,height;
+    GetSize( &width, &height );
+    gdk_draw_rectangle( m_window, m_bgGC, TRUE, 0, 0, width, height );
+#endif // 0/1
 }
 
 void wxWindowDC::SetFont( const wxFont &font )
