@@ -77,6 +77,9 @@
     <set var="WXLIB_CORE">
         <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('core')))</if>
     </set>
+    <set var="WXLIB_HTML">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('core')))</if>
+    </set>
 
     <set var="WXLIB_MONO">
         <if cond="MONOLITHIC=='1'">$(mk.evalExpr(wxwin.mkLibName('mono')))</if>
@@ -129,29 +132,23 @@
         <sys-lib>$(LIB_REGEX)</sys-lib>
     </template>
 
-    <template id="wx_lib" template="wx" template_append="wx_append">
+    <template id="wx_lib_b" template="wx">
         <set var="WXLIBNAME">$(wxwin.mkLibName(wxid))</set>
         <dirname>$(LIBDIRNAME)</dirname>
         <libname>$(WXLIBNAME)</libname>
         <install-to>$(LIBDIR)</install-to>
     </template>
     
-    <template id="wx_dll" template="wx_lib">
+    <template id="wx_dll_b" template="wx_lib_b">
         <set var="WXDLLNAME">$(wxwin.mkDllName(wxid))</set>
         <dllname>$(WXDLLNAME)</dllname>
         <version>$(WX_VERSION)</version>
         <so_version>$(WXSOVERSION)</so_version>
         <mac_version>$(WXMACVERSION)</mac_version>
     </template>
-    
-    
-    <!-- =============================================================== -->
-    <!--                       Contrib helpers:                          -->
-    <!-- =============================================================== -->
 
-    <template id="contrib">
-        <include>$(SRCDIR)/../../include</include>
-    </template>
+    <template id="wx_lib" template="wx_lib_b"/>
+    <template id="wx_dll" template="wx_dll_b" template_append="wx_append"/>
     
     <!-- =============================================================== -->
     <!--               Support for wxWindows samples and contrib:        -->
