@@ -635,9 +635,12 @@ void wxGridCellNumberEditor::BeginEdit(int row, int col, wxGrid* grid)
     }
     else
     {
-        wxFAIL_MSG( _T("this cell doesn't have numeric value") );
-
-        return;
+        wxString sValue = table->GetValue(row, col);
+        if (! sValue.ToLong(&m_valueOld))
+        {
+            wxFAIL_MSG( _T("this cell doesn't have numeric value") );
+            return;
+        }
     }
 
     if ( HasRange() )
@@ -668,7 +671,10 @@ bool wxGridCellNumberEditor::EndEdit(int row, int col,
 
     if ( changed )
     {
-        grid->GetTable()->SetValueAsLong(row, col, value);
+        if (grid->GetTable()->CanSetValueAs(row, col, wxGRID_VALUE_NUMBER))
+            grid->GetTable()->SetValueAsLong(row, col, value);
+        else
+            grid->GetTable()->SetValue(row, col, wxString::Format("%ld", value));
     }
 
     return changed;
@@ -728,9 +734,12 @@ void wxGridCellFloatEditor::BeginEdit(int row, int col, wxGrid* grid)
     }
     else
     {
-        wxFAIL_MSG( _T("this cell doesn't have float value") );
-
-        return;
+        wxString sValue = table->GetValue(row, col);
+        if (! sValue.ToDouble(&m_valueOld))
+        {
+            wxFAIL_MSG( _T("this cell doesn't have float value") );
+            return;
+        }
     }
 
     DoBeginEdit(GetString());
@@ -742,7 +751,10 @@ bool wxGridCellFloatEditor::EndEdit(int row, int col,
     double value;
     if ( Text()->GetValue().ToDouble(&value) && (value != m_valueOld) )
     {
-        grid->GetTable()->SetValueAsDouble(row, col, value);
+        if (grid->GetTable()->CanSetValueAs(row, col, wxGRID_VALUE_FLOAT))
+            grid->GetTable()->SetValueAsDouble(row, col, value);
+        else
+            grid->GetTable()->SetValue(row, col, wxString::Format("%f", value));
 
         return TRUE;
     }
@@ -898,11 +910,16 @@ void wxGridCellChoiceEditor::Create(wxWindow* parent,
     wxGridCellEditor::Create(parent, id, evtHandler);
 }
 
-void wxGridCellChoiceEditor::PaintBackground(const wxRect& WXUNUSED(rectCell),
-                                             wxGridCellAttr * WXUNUSED(attr))
+void wxGridCellChoiceEditor::PaintBackground(const wxRect& rectCell,
+                                             wxGridCellAttr * attr)
 {
     // as we fill the entire client area, don't do anything here to minimize
     // flicker
+
+    // TODO: It doesn't actually fill the client area since the height of a
+    // combo always defaults to the standard...  Until someone has time to
+    // figure out the right rectangle to paint, just do it the normal way...
+    wxGridCellEditor::PaintBackground(rectCell, attr);
 }
 
 void wxGridCellChoiceEditor::BeginEdit(int row, int col, wxGrid* grid)
@@ -2586,10 +2603,10 @@ void wxGridWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     wxRegion reg = GetUpdateRegion();
     m_owner->CalcCellsExposed( reg );
     m_owner->DrawGridCellArea( dc );
-    m_owner->DrawGridSpace( dc );
 #if WXGRID_DRAW_LINES
     m_owner->DrawAllGridLines( dc, reg );
 #endif
+    m_owner->DrawGridSpace( dc );
     m_owner->DrawHighlight( dc );
 }
 
@@ -3803,7 +3820,10 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
             // Hide the edit control, so it
             // won't interfer with drag-shrinking.
             if ( IsCellEditControlEnabled() )
+            {
                 HideCellEditControl();
+                SaveEditControlValue();
+            }
 
             // Have we captured the mouse yet?
             if (! m_winCapture)
@@ -3873,206 +3893,200 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
     m_isDragging = FALSE;
     m_startDragPos = wxDefaultPosition;
 
-//      if ( coords == wxGridNoCellCoords && m_cursorMode != WXGRID_CURSOR_SELECT_CELL )
-//      {
-//          ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
-//      }
-
-//      if ( coords != wxGridNoCellCoords )
-//      {
-        // VZ: if we do this, the mode is reset to WXGRID_CURSOR_SELECT_CELL
-        //     immediately after it becomes WXGRID_CURSOR_RESIZE_ROW/COL under
-        //     wxGTK
+    // VZ: if we do this, the mode is reset to WXGRID_CURSOR_SELECT_CELL
+    //     immediately after it becomes WXGRID_CURSOR_RESIZE_ROW/COL under
+    //     wxGTK
 #if 0
-        if ( event.Entering() || event.Leaving() )
-        {
-            ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
-            m_gridWin->SetCursor( *wxSTANDARD_CURSOR );
-        }
-        else
+    if ( event.Entering() || event.Leaving() )
+    {
+        ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
+        m_gridWin->SetCursor( *wxSTANDARD_CURSOR );
+    }
+    else
 #endif // 0
 
-        // ------------ Left button pressed
-        //
-        if ( event.LeftDown() && coords != wxGridNoCellCoords )
+    // ------------ Left button pressed
+    //
+    if ( event.LeftDown() && coords != wxGridNoCellCoords )
+    {
+        if ( event.ShiftDown() )
         {
-            DisableCellEditControl();
-            if ( event.ShiftDown() )
+            SelectBlock( m_currentCellCoords, coords );
+        }
+        else if ( XToEdgeOfCol(x) < 0  &&
+                  YToEdgeOfRow(y) < 0 )
+        {
+            if ( !SendEvent( wxEVT_GRID_CELL_LEFT_CLICK,
+                             coords.GetRow(),
+                             coords.GetCol(),
+                             event ) )
             {
-                SelectBlock( m_currentCellCoords, coords );
-            }
-            else if ( XToEdgeOfCol(x) < 0  &&
-                      YToEdgeOfRow(y) < 0 )
-            {
-                if ( !SendEvent( wxEVT_GRID_CELL_LEFT_CLICK,
-                                 coords.GetRow(),
-                                 coords.GetCol(),
-                                 event ) )
+                DisableCellEditControl();
+                MakeCellVisible( coords );
+
+                // if this is the second click on this cell then start
+                // the edit control
+                if ( m_waitForSlowClick &&
+                     (coords == m_currentCellCoords) &&
+                     CanEnableCellControl())
                 {
-                    MakeCellVisible( coords );
+                    EnableCellEditControl();
 
-                    // if this is the second click on this cell then start
-                    // the edit control
-                    if ( m_waitForSlowClick &&
-                         (coords == m_currentCellCoords) &&
-                         CanEnableCellControl())
-                    {
-                        EnableCellEditControl();
+                    wxGridCellAttr* attr = GetCellAttr(m_currentCellCoords);
+                    attr->GetEditor(this, coords.GetRow(), coords.GetCol())->StartingClick();
+                    attr->DecRef();
 
-                        wxGridCellAttr* attr = GetCellAttr(m_currentCellCoords);
-                        attr->GetEditor(this, coords.GetRow(), coords.GetCol())->StartingClick();
-                        attr->DecRef();
-
-                        m_waitForSlowClick = FALSE;
-                    }
-                    else
-                    {
-                        SetCurrentCell( coords );
-                        m_waitForSlowClick = TRUE;
-                    }
+                    m_waitForSlowClick = FALSE;
+                }
+                else
+                {
+                    SetCurrentCell( coords );
+                    m_waitForSlowClick = TRUE;
                 }
             }
         }
+    }
 
 
-        // ------------ Left double click
-        //
-        else if ( event.LeftDClick() && coords != wxGridNoCellCoords )
+    // ------------ Left double click
+    //
+    else if ( event.LeftDClick() && coords != wxGridNoCellCoords )
+    {
+        DisableCellEditControl();
+
+        if ( XToEdgeOfCol(x) < 0  &&  YToEdgeOfRow(y) < 0 )
         {
-            DisableCellEditControl();
-            if ( XToEdgeOfCol(x) < 0  &&  YToEdgeOfRow(y) < 0 )
+            SendEvent( wxEVT_GRID_CELL_LEFT_DCLICK,
+                       coords.GetRow(),
+                       coords.GetCol(),
+                       event );
+        }
+    }
+
+
+    // ------------ Left button released
+    //
+    else if ( event.LeftUp() )
+    {
+        if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
+        {
+            if ( IsSelection() )
             {
-                SendEvent( wxEVT_GRID_CELL_LEFT_DCLICK,
-                           coords.GetRow(),
-                           coords.GetCol(),
-                           event );
+                if (m_winCapture)
+                {
+                    m_winCapture->ReleaseMouse();
+                    m_winCapture = NULL;
+                }
+                SendEvent( wxEVT_GRID_RANGE_SELECT, -1, -1, event );
             }
+
+            // Show the edit control, if it has been hidden for
+            // drag-shrinking.
+            ShowCellEditControl();
+        }
+        else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW )
+        {
+            ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
+            DoEndDragResizeRow();
+
+            // Note: we are ending the event *after* doing
+            // default processing in this case
+            //
+            SendEvent( wxEVT_GRID_ROW_SIZE, m_dragRowOrCol, -1, event );
+        }
+        else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_COL )
+        {
+            ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
+            DoEndDragResizeCol();
+
+            // Note: we are ending the event *after* doing
+            // default processing in this case
+            //
+            SendEvent( wxEVT_GRID_COL_SIZE, -1, m_dragRowOrCol, event );
         }
 
+        m_dragLastPos = -1;
+    }
 
-        // ------------ Left button released
-        //
-        else if ( event.LeftUp() )
+
+    // ------------ Right button down
+    //
+    else if ( event.RightDown() && coords != wxGridNoCellCoords )
+    {
+        DisableCellEditControl();
+        if ( !SendEvent( wxEVT_GRID_CELL_RIGHT_CLICK,
+                         coords.GetRow(),
+                         coords.GetCol(),
+                         event ) )
         {
+            // no default action at the moment
+        }
+    }
+
+
+    // ------------ Right double click
+    //
+    else if ( event.RightDClick() && coords != wxGridNoCellCoords )
+    {
+        DisableCellEditControl();
+        if ( !SendEvent( wxEVT_GRID_CELL_RIGHT_DCLICK,
+                         coords.GetRow(),
+                         coords.GetCol(),
+                         event ) )
+        {
+            // no default action at the moment
+        }
+    }
+
+    // ------------ Moving and no button action
+    //
+    else if ( event.Moving() && !event.IsButton() )
+    {
+        int dragRow = YToEdgeOfRow( y );
+        int dragCol = XToEdgeOfCol( x );
+
+        // Dragging on the corner of a cell to resize in both
+        // directions is not implemented yet...
+        //
+        if ( dragRow >= 0  &&  dragCol >= 0 )
+        {
+            ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
+            return;
+        }
+
+        if ( dragRow >= 0 )
+        {
+            m_dragRowOrCol = dragRow;
+
             if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
             {
-                if ( IsSelection() )
-                {
-                    if (m_winCapture)
-                    {
-                        m_winCapture->ReleaseMouse();
-                        m_winCapture = NULL;
-                    }
-                    SendEvent( wxEVT_GRID_RANGE_SELECT, -1, -1, event );
-                }
-
-                // Show the edit control, if it has been hidden for
-                // drag-shrinking.
-                ShowCellEditControl();
-            }
-            else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW )
-            {
-                ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
-                DoEndDragResizeRow();
-
-                // Note: we are ending the event *after* doing
-                // default processing in this case
-                //
-                SendEvent( wxEVT_GRID_ROW_SIZE, m_dragRowOrCol, -1, event );
-            }
-            else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_COL )
-            {
-                ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
-                DoEndDragResizeCol();
-
-                // Note: we are ending the event *after* doing
-                // default processing in this case
-                //
-                SendEvent( wxEVT_GRID_COL_SIZE, -1, m_dragRowOrCol, event );
+                if ( CanDragRowSize() && CanDragGridSize() )
+                    ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW);
             }
 
-            m_dragLastPos = -1;
+            return;
         }
 
-
-        // ------------ Right button down
-        //
-        else if ( event.RightDown() && coords != wxGridNoCellCoords )
+        if ( dragCol >= 0 )
         {
-            DisableCellEditControl();
-            if ( !SendEvent( wxEVT_GRID_CELL_RIGHT_CLICK,
-                             coords.GetRow(),
-                             coords.GetCol(),
-                             event ) )
+            m_dragRowOrCol = dragCol;
+
+            if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
             {
-                // no default action at the moment
+                if ( CanDragColSize() && CanDragGridSize() )
+                    ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL);
             }
+
+            return;
         }
 
-
-        // ------------ Right double click
+        // Neither on a row or col edge
         //
-        else if ( event.RightDClick() && coords != wxGridNoCellCoords )
+        if ( m_cursorMode != WXGRID_CURSOR_SELECT_CELL )
         {
-            DisableCellEditControl();
-            if ( !SendEvent( wxEVT_GRID_CELL_RIGHT_DCLICK,
-                             coords.GetRow(),
-                             coords.GetCol(),
-                             event ) )
-            {
-                // no default action at the moment
-            }
+            ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
         }
-
-        // ------------ Moving and no button action
-        //
-        else if ( event.Moving() && !event.IsButton() )
-        {
-            int dragRow = YToEdgeOfRow( y );
-            int dragCol = XToEdgeOfCol( x );
-
-            // Dragging on the corner of a cell to resize in both
-            // directions is not implemented yet...
-            //
-            if ( dragRow >= 0  &&  dragCol >= 0 )
-            {
-                ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
-                return;
-            }
-
-            if ( dragRow >= 0 )
-            {
-                m_dragRowOrCol = dragRow;
-
-                if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
-                {
-                    if ( CanDragRowSize() && CanDragGridSize() )
-                        ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW);
-                }
-
-                return;
-            }
-
-            if ( dragCol >= 0 )
-            {
-                m_dragRowOrCol = dragCol;
-
-                if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
-                {
-                    if ( CanDragColSize() && CanDragGridSize() )
-                        ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL);
-                }
-
-                return;
-            }
-
-            // Neither on a row or col edge
-            //
-            if ( m_cursorMode != WXGRID_CURSOR_SELECT_CELL )
-            {
-                ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
-            }
-        }
+    }
 }
 
 
@@ -4091,6 +4105,7 @@ void wxGrid::DoEndDragResizeRow()
         dc.SetLogicalFunction( wxINVERT );
         dc.DrawLine( left, m_dragLastPos, left+cw, m_dragLastPos );
         HideCellEditControl();
+        SaveEditControlValue();
 
         int rowTop = GetRowTop(m_dragRowOrCol);
         SetRowSize( m_dragRowOrCol,
@@ -4129,6 +4144,7 @@ void wxGrid::DoEndDragResizeCol()
         dc.SetLogicalFunction( wxINVERT );
         dc.DrawLine( m_dragLastPos, top, m_dragLastPos, top+ch );
         HideCellEditControl();
+        SaveEditControlValue();
 
         int colLeft = GetColLeft(m_dragRowOrCol);
         SetColSize( m_dragRowOrCol,
@@ -4826,11 +4842,11 @@ void wxGrid::DrawGridSpace( wxDC& dc )
             dc.SetPen( *wxTRANSPARENT_PEN );
 
             if ( right > GetColRight(m_numCols-1) )
-                dc.DrawRectangle( GetColRight(m_numCols-1)+1, top,
+                dc.DrawRectangle( GetColRight(m_numCols-1), top,
                                   right - GetColRight(m_numCols-1), ch );
 
             if ( bottom > GetRowBottom(m_numRows-1) )
-                dc.DrawRectangle( left, GetRowBottom(m_numRows-1)+1,
+                dc.DrawRectangle( left, GetRowBottom(m_numRows-1),
                                   cw, bottom - GetRowBottom(m_numRows-1) );
         }
     }
