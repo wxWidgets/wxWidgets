@@ -30,6 +30,19 @@ the platform.
 
 (only available if \texttt{wxUSE\_DATEPICKCTRL} is set to $1$)
 
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxDP\_SPIN}}{Creates a control without month calendar
+drop down but with spin control-like arrows to change individual date
+components. This style is not supported by the generic version.}
+\twocolitem{\windowstyle{wxDP\_DROPDOWN}}{Creates a control with a month
+calendar drop down part from which the user can select a date.}
+\twocolitem{\windowstyle{wxDP\_DEFAULT}}{Creates a control with default style
+which is the best supported for the current platform.}
+\end{twocollist}
+
 \wxheading{Event handling}
 
 \twocolwidtha{7cm}%
@@ -53,7 +66,7 @@ changes the current selection in the control.}
 \param{const wxDateTime\& }{dt = wxDefaultDateTime},\rtfsp
 \param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
 \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
-\param{long}{ style = 0},\rtfsp
+\param{long}{ style = wxDP\_DEFAULT},\rtfsp
 \param{const wxValidator\& }{validator = wxDefaultValidator},
 \param{const wxString\& }{name = ``datectrl"}}
 
@@ -68,7 +81,7 @@ all the parameters.
 \param{const wxDateTime\& }{dt = wxDefaultDateTime},\rtfsp
 \param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
 \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
-\param{long}{ style = 0},\rtfsp
+\param{long}{ style = wxDP\_DEFAULT},\rtfsp
 \param{const wxValidator\& }{validator = wxDefaultValidator},
 \param{const wxString\& }{name = ``datectrl"}}
 

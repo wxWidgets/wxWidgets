@@ -100,9 +100,11 @@ WXDWORD wxDatePickerCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
     WXDWORD styleMSW = wxDatePickerCtrlBase::MSWGetStyle(style, exstyle);
 
-    // for now this is unconditional, but we should support drop down control
-    // style as well later
-    styleMSW |= DTS_UPDOWN | DTS_SHORTDATEFORMAT;
+    if ( style & wxDP_SPIN )
+        styleMSW |= DTS_UPDOWN;
+    //else: drop down by default
+
+    styleMSW |= DTS_SHORTDATEFORMAT;
 
     return styleMSW;
 }
@@ -226,3 +228,4 @@ wxDatePickerCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 }
 
 #endif // wxUSE_DATEPICKCTRL
+

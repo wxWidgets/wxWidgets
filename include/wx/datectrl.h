@@ -17,6 +17,19 @@
 
 #define wxDatePickerCtrlNameStr _T("datectrl")
 
+// wxDatePickerCtrl styles
+enum
+{
+    // default style on this platform, either wxDP_SPIN or wxDP_DROPDOWN
+    wxDP_DEFAULT = 0,
+
+    // a spin control-like date picker (not supported in generic version)
+    wxDP_SPIN = 1,
+
+    // a combobox-like date picker (not supported in mac version)
+    wxDP_DROPDOWN = 2
+};
+
 // ----------------------------------------------------------------------------
 // wxDatePickerCtrl: allow the user to enter the date
 // ----------------------------------------------------------------------------
@@ -33,7 +46,7 @@ public:
                     const wxDateTime& dt = wxDefaultDateTime,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
-                    long style = 0,
+                    long style = wxDP_DEFAULT,
                     const wxValidator& validator = wxDefaultValidator,
                     const wxString& name = wxDatePickerCtrlNameStr);
      */

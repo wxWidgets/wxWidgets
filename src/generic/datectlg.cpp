@@ -79,6 +79,9 @@ bool wxDatePickerCtrl::Create(wxWindow *parent,
                             long style,
                             const wxString& name)
 {
+    wxASSERT_MSG( !(style & wxDP_SPIN),
+                  _T("wxDP_SPIN style not supported, use wxDP_DEFAULT") );
+
     wxString txt;
     if (date.IsValid())
         txt = date.FormatDate();
