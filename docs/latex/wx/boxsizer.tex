@@ -44,8 +44,9 @@ a sizer and its children can be controlled by the three parameters of the Add() 
 // we want to get a dialog that is stretchable because it
 // has a text ctrl at the top and two buttons at the bottom
 
-MyDialog::MyDialog(wxFrame *parent, wxWindowID id, const wxString &title ) :
-  wxDialog( parent, id, title, wxDefaultPosition, wxDefaultSize, wxDIALOG_STYLE | wxRESIZE_BORDER )
+MyDialog::MyDialog(wxFrame *parent, wxWindowID id, const wxString &title )
+        : wxDialog(parent, id, title, wxDefaultPosition, wxDefaultSize,
+                   wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
 {
   wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
