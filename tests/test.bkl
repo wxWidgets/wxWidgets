@@ -26,6 +26,7 @@
             streams/ffilestream.cpp
             streams/filestream.cpp
             streams/memstream.cpp
+            streams/sstream.cpp
             streams/zlibstream.cpp
             fontmap/fontmap.cpp
             datetime/datetime.cpp

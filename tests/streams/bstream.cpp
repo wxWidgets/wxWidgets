@@ -51,6 +51,7 @@ Test *StreamCase::suite()
      */
     
     STREAM_REGISTER_SUB_SUITE(memStream);
+    STREAM_REGISTER_SUB_SUITE(strStream);
     STREAM_REGISTER_SUB_SUITE(fileStream);
     STREAM_REGISTER_SUB_SUITE(ffileStream);
     STREAM_REGISTER_SUB_SUITE(zlibStream);
