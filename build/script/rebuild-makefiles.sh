@@ -1,19 +1,20 @@
 #!/bin/sh
 
 CURDATE=`date -I`
+WORKDIR=/home/bake/bkl-cronjob
+FTPDIR=/home/ftp/pub
 
 update_from_cvs()
 {
     (
-    cd /home/bake/bkl-cronjob/wxWidgets &&  cvs -z3 update -P -d
+    cd ${WORKDIR}/wxWidgets &&  cvs -z3 update -P -d
     )
 }
 
 
 regenerate_makefiles()
 {
-    BAKEFILE_GEN="python -O /home/bake/bkl-cronjob/bakefile/bin/bakefile_gen"
-    (cd /home/bake/bkl-cronjob/wxWidgets/build/bakefiles && nice $BAKEFILE_GEN)
+    (cd ${WORKDIR}/wxWidgets/build/bakefiles && nice python -O ${WORKDIR}/bakefile/bin/bakefile_gen)
 }
 
 
@@ -23,9 +24,9 @@ do_package()
     format=$2
     shift ; shift
 
-    rm -f /home/bake/bkl-cronjob/archives/wx-mk-${format}-*
+    rm -f ${WORKDIR}/archives/wx-mk-${format}-*
 
-    cd /home/bake/bkl-cronjob/wxWidgets
+    cd ${WORKDIR}/wxWidgets
 
     files=""
     for i in $* ; do
@@ -43,8 +44,8 @@ do_package()
 
 package_cvs()
 {
-    rm -f /home/bake/bkl-cronjob/archives/wx-cvs-*
-    cd /home/bake/bkl-cronjob/
+    rm -f ${WORKDIR}/archives/wx-cvs-*
+    cd ${WORKDIR}/
     tar jcf ./archives/wx-cvs-${CURDATE}.tar.bz2 ./wxWidgets
 }
 
@@ -65,27 +66,28 @@ copy_files ()
 {
 ##delete old files and then copy new ones, add a symlink
 ## CVS
-find /home/ftp/pub/CVS_HEAD/files -type f -name wx-cvs\*.tar.bz2 -mtime +6 | xargs rm -rf
-cp  /home/bake/bkl-cronjob/archives/wx-cvs-* /home/ftp/pub/CVS_HEAD/files
+find ${FTPDIR}/CVS_HEAD/files -type f -name wx-cvs\*.tar.bz2 -mtime +6 | xargs rm -rf
+cp  ${WORKDIR}/archives/wx-cvs-* ${FTPDIR}/CVS_HEAD/files
 
-rm /home/ftp/pub/CVS_HEAD/wx-cvs.tar.bz2
-ln -s  /home/ftp/pub/CVS_HEAD/files/wx-cvs-${CURDATE}.tar.bz2  /home/ftp/pub/CVS_HEAD/wx-cvs.tar.bz2
-
-echo cvs checkout done at  `date` > /home/ftp/pub/CVS_HEAD/updated_at.txt
+rm ${FTPDIR}/CVS_HEAD/wx-cvs.tar.bz2
+ln -s  ${FTPDIR}/CVS_HEAD/files/wx-cvs-${CURDATE}.tar.bz2  ${FTPDIR}/CVS_HEAD/wx-cvs.tar.bz2
+## make sure updated at is really last
+sleep 10
+echo cvs checkout done at  `date -u` > ${FTPDIR}/CVS_HEAD/updated_at.txt
 
 ## Makefiles
-find /home/ftp/pub/CVS_Makefiles/files -type f -name wx-mk\* -mtime +3 | xargs rm -rf
-cp  /home/bake/bkl-cronjob/archives/wx-mk-* /home/ftp/pub/CVS_Makefiles/files
+find ${FTPDIR}/CVS_Makefiles/files -type f -name wx-mk\* -mtime +3 | xargs rm -rf
+cp  ${WORKDIR}/archives/wx-mk-* ${FTPDIR}/CVS_Makefiles/files
 
-rm /home/ftp/pub/CVS_Makefiles/wx*
+rm ${FTPDIR}/CVS_Makefiles/wx*
 ##there musrt be an easier way of doing these links...
-for f in `find /home/ftp/pub/CVS_Makefiles/files -type f -name wx-mk\* -mmin -601` ; do
+for f in `find ${FTPDIR}/CVS_Makefiles/files -type f -name wx-mk\* -mmin -601` ; do
        ln -s $f `echo $f | sed -e "s/-${CURDATE}//" | sed -e "s|/files||" `
 #      echo $f      
 #      echo $f | sed -e "s/-${CURDATE}//" | sed -e "s|/files||"
 done
-
-echo CVS Makefiles generated from bakefiles last updated at `date` > /home/ftp/pub/CVS_Makefiles/updated_at.txt
+sleep 10
+echo CVS Makefiles generated from bakefiles last updated at `date -u` > ${FTPDIR}/CVS_Makefiles/updated_at.txt
 }
 
 
