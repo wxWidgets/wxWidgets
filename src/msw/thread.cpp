@@ -1046,6 +1046,12 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
                 case WAIT_OBJECT_0 + 1:
                     // new message arrived, process it
                     {
+                        // it looks that sometimes WAIT_OBJECT_0 + 1 is
+                        // returned but there are no messages in the thread
+                        // queue -- prevent DoMessageFromThreadWait() from
+                        // blocking inside ::GetMessage() forever in this case
+                        ::PostMessage(NULL, WM_NULL, 0, 0);
+
                         wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits()
                                                        : NULL;
 
