@@ -596,6 +596,8 @@ void ShowOptions(void)
     OnInform("    -charset <pc | pca | ansi | mac> (default ansi)");
     OnInform("    -twice");
     OnInform("    -sync");
+    OnInform("    -checkcurleybraces");
+    OnInform("    -checksyntax");
     OnInform("    -macros <filename>");
     OnInform("    -winhelp");
     OnInform("    -rtf");
@@ -1046,7 +1048,9 @@ bool Go(void)
   TexCleanUp();
   startedSections = FALSE;
 
+#ifndef NO_GUI
   frame->SetStatusText("Aborted by user.");
+#endif // GUI
 
   OnInform("Sorry, unsuccessful.");
   OkToClose = TRUE;
