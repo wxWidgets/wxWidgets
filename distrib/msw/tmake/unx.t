@@ -780,47 +780,54 @@ SAMPLES_DIST:
 	cp $(SAMPDIR)/Makefile.in $(DISTDIR)/samples
 	mkdir $(DISTDIR)/samples/bombs
 	cp $(SAMPDIR)/bombs/Makefile.in $(DISTDIR)/samples/bombs
-	cp $(SAMPDIR)/bombs/Makefile $(DISTDIR)/samples/bombs
+	cp $(SAMPDIR)/bombs/makefile.unx $(DISTDIR)/samples/bombs
 	cp $(SAMPDIR)/bombs/*.cpp $(DISTDIR)/samples/bombs
 	cp $(SAMPDIR)/bombs/*.h $(DISTDIR)/samples/bombs
 	cp $(SAMPDIR)/bombs/*.xpm $(DISTDIR)/samples/bombs
 	cp $(SAMPDIR)/bombs/readme.txt $(DISTDIR)/samples/bombs
 	mkdir $(DISTDIR)/samples/caret
 	cp $(SAMPDIR)/caret/Makefile.in $(DISTDIR)/samples/caret
+	cp $(SAMPDIR)/caret/makefile.unx $(DISTDIR)/samples/caret
 	cp $(SAMPDIR)/caret/*.cpp $(DISTDIR)/samples/caret
 	cp $(SAMPDIR)/caret/*.xpm $(DISTDIR)/samples/caret
 	mkdir $(DISTDIR)/samples/config
 	cp $(SAMPDIR)/config/Makefile.in $(DISTDIR)/samples/config
+	cp $(SAMPDIR)/config/makefile.unx $(DISTDIR)/samples/config
 	cp $(SAMPDIR)/config/*.cpp $(DISTDIR)/samples/config
 	mkdir $(DISTDIR)/samples/controls
 	mkdir $(DISTDIR)/samples/controls/icons
 	cp $(SAMPDIR)/controls/Makefile.in $(DISTDIR)/samples/controls
-	cp $(SAMPDIR)/controls/Makefile $(DISTDIR)/samples/controls
+	cp $(SAMPDIR)/controls/makefile.unx $(DISTDIR)/samples/controls
 	cp $(SAMPDIR)/controls/*.cpp $(DISTDIR)/samples/controls
 	cp $(SAMPDIR)/controls/*.xpm $(DISTDIR)/samples/controls
 	cp $(SAMPDIR)/controls/icons/*.??? $(DISTDIR)/samples/controls/icons
 	mkdir $(DISTDIR)/samples/checklst
 	cp $(SAMPDIR)/checklst/Makefile.in $(DISTDIR)/samples/checklst
+	cp $(SAMPDIR)/checklst/makefile.unx $(DISTDIR)/samples/checklst
 	cp $(SAMPDIR)/checklst/*.cpp $(DISTDIR)/samples/checklst
 	cp $(SAMPDIR)/checklst/*.xpm $(DISTDIR)/samples/checklst
 	mkdir $(DISTDIR)/samples/printing
 	cp $(SAMPDIR)/printing/Makefile.in $(DISTDIR)/samples/printing
+	cp $(SAMPDIR)/printing/makefile.unx $(DISTDIR)/samples/printing
 	cp $(SAMPDIR)/printing/*.cpp $(DISTDIR)/samples/printing
 	cp $(SAMPDIR)/printing/*.h $(DISTDIR)/samples/printing
 	cp $(SAMPDIR)/printing/*.xpm $(DISTDIR)/samples/printing
 	cp $(SAMPDIR)/printing/*.xbm $(DISTDIR)/samples/printing
 	mkdir $(DISTDIR)/samples/db
 	cp $(SAMPDIR)/db/Makefile.in $(DISTDIR)/samples/db
+	cp $(SAMPDIR)/db/makefile.unx $(DISTDIR)/samples/db
 	cp $(SAMPDIR)/db/*.cpp $(DISTDIR)/samples/db
 	cp $(SAMPDIR)/db/*.h $(DISTDIR)/samples/db
 	cp $(SAMPDIR)/db/*.xpm $(DISTDIR)/samples/db
 	mkdir $(DISTDIR)/samples/dialogs
 	cp $(SAMPDIR)/dialogs/Makefile.in $(DISTDIR)/samples/dialogs
+	cp $(SAMPDIR)/dialogs/makefile.unx $(DISTDIR)/samples/dialogs
 	cp $(SAMPDIR)/dialogs/*.cpp $(DISTDIR)/samples/dialogs
 	cp $(SAMPDIR)/dialogs/*.h $(DISTDIR)/samples/dialogs
 	cp $(SAMPDIR)/dialogs/*.txt $(DISTDIR)/samples/dialogs
 	mkdir $(DISTDIR)/samples/dnd
 	cp $(SAMPDIR)/dnd/Makefile.in $(DISTDIR)/samples/dnd
+	cp $(SAMPDIR)/dnd/makefile.unx $(DISTDIR)/samples/dnd
 	cp $(SAMPDIR)/dnd/*.wxr $(DISTDIR)/samples/dnd
 	cp $(SAMPDIR)/dnd/*.cpp $(DISTDIR)/samples/dnd
 	cp $(SAMPDIR)/dnd/*.xpm $(DISTDIR)/samples/dnd

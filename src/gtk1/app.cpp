@@ -125,9 +125,12 @@ unsigned char g_palette[64*3] =
 extern void wxFlushResources();
 
 /* forward declaration */
-gint        wxapp_idle_callback( gpointer WXUNUSED(data) );
-void        wxapp_install_idle_handler();
-static gint wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) );
+gint   wxapp_idle_callback( gpointer WXUNUSED(data) );
+void   wxapp_install_idle_handler();
+
+#if wxUSE_THREADS
+gint   wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) );
+#endif
 
 //-----------------------------------------------------------------------------
 // wxExit
@@ -248,7 +251,7 @@ void wxapp_uninstall_thread_wakeup()
     wxTheApp->m_wakeUpTimerTag = 0;
 }
 
-static gint wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) )
+gint wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) )
 {
     wxapp_uninstall_thread_wakeup();
 

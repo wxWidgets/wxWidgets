@@ -97,18 +97,6 @@ DbList WXDLLEXPORT *PtrBegDbList = 0;
 #endif
 
 
-#ifdef __MWERKS__
-#ifdef __WXMSW__
-#define stricmp _stricmp
-#define strnicmp _strnicmp
-#else //__WXMSW_
-int strcasecmp(const char *str_1, const char *str_2) ;
-int strncasecmp(const char *str_1, const char *str_2, size_t maxchar) ;
-#define stricmp strcasecmp
-#define strnicmp strncasecmp
-#endif
-#endif //__MWERKS__
-
 // SQL Log defaults to be used by GetDbConnection
 enum sqlLog SQLLOGstate				= sqlLogOFF;
 
