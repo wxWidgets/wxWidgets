@@ -11489,6 +11489,10 @@ SWIGEXPORT(void) initgdic() {
 	 PyDict_SetItemString(d,"wxFONTENCODING_CP855", PyInt_FromLong((long) wxFONTENCODING_CP855));
 	 PyDict_SetItemString(d,"wxFONTENCODING_CP866", PyInt_FromLong((long) wxFONTENCODING_CP866));
 	 PyDict_SetItemString(d,"wxFONTENCODING_CP874", PyInt_FromLong((long) wxFONTENCODING_CP874));
+	 PyDict_SetItemString(d,"wxFONTENCODING_CP932", PyInt_FromLong((long) wxFONTENCODING_CP932));
+	 PyDict_SetItemString(d,"wxFONTENCODING_CP936", PyInt_FromLong((long) wxFONTENCODING_CP936));
+	 PyDict_SetItemString(d,"wxFONTENCODING_CP949", PyInt_FromLong((long) wxFONTENCODING_CP949));
+	 PyDict_SetItemString(d,"wxFONTENCODING_CP950", PyInt_FromLong((long) wxFONTENCODING_CP950));
 	 PyDict_SetItemString(d,"wxFONTENCODING_CP1250", PyInt_FromLong((long) wxFONTENCODING_CP1250));
 	 PyDict_SetItemString(d,"wxFONTENCODING_CP1251", PyInt_FromLong((long) wxFONTENCODING_CP1251));
 	 PyDict_SetItemString(d,"wxFONTENCODING_CP1252", PyInt_FromLong((long) wxFONTENCODING_CP1252));

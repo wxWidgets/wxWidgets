@@ -44,7 +44,7 @@ _treeList = [
                  'wxStatusBar', 'wxNotebook',
                  'wxHtmlWindow',
                  'wxStyledTextCtrl_1', 'wxStyledTextCtrl_2',
-                 ##'wxPopupWindow',
+                 'wxPopupWindow',
                  ]),
 
     ('Common Dialogs', ['wxColourDialog', 'wxDirDialog', 'wxFileDialog',

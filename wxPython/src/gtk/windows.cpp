@@ -446,6 +446,14 @@ static void  wxEvtHandler_Connect(wxEvtHandler *self,int  id,int  lastId,int  ev
                           (wxObjectEventFunction) &wxPyCallback::EventThunker,
                           new wxPyCallback(func));
             }
+            else if (func == Py_None) {
+                self->Disconnect(id, lastId, eventType,
+                                 (wxObjectEventFunction)
+                                 &wxPyCallback::EventThunker);
+            }
+            else {
+                PyErr_SetString(PyExc_TypeError, "Expected callable object or None.");
+            }
         }
 static PyObject *_wrap_wxEvtHandler_Connect(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;

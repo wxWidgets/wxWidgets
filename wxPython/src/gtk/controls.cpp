@@ -5896,6 +5896,34 @@ static PyObject *_wrap_wxTextAttr_GetFont(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
+#define wxTextAttr_IsDefault(_swigobj)  (_swigobj->IsDefault())
+static PyObject *_wrap_wxTextAttr_IsDefault(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTextAttr * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextAttr_IsDefault",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextAttr_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextAttr_IsDefault. Expected _wxTextAttr_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxTextAttr_IsDefault(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static void *SwigwxTextCtrlTowxControl(void *ptr) {
     wxTextCtrl *src;
     wxControl *dest;
@@ -6088,171 +6116,88 @@ static PyObject *_wrap_wxTextCtrl_Create(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
-#define wxTextCtrl_Clear(_swigobj)  (_swigobj->Clear())
-static PyObject *_wrap_wxTextCtrl_Clear(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxTextCtrl_GetValue(_swigobj)  (_swigobj->GetValue())
+static PyObject *_wrap_wxTextCtrl_GetValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
+    wxString * _result;
     wxTextCtrl * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_Clear",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_GetValue",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_Clear. Expected _wxTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_GetValue. Expected _wxTextCtrl_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxTextCtrl_Clear(_arg0);
+        _result = new wxString (wxTextCtrl_GetValue(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxTextCtrl_SetValue(_swigobj,_swigarg0)  (_swigobj->SetValue(_swigarg0))
+static PyObject *_wrap_wxTextCtrl_SetValue(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTextCtrl * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","value", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTextCtrl_SetValue",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_SetValue. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_SetValue(_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxTextCtrl_Copy(_swigobj)  (_swigobj->Copy())
-static PyObject *_wrap_wxTextCtrl_Copy(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_Copy",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_Copy. Expected _wxTextCtrl_p.");
-        return NULL;
-        }
-    }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxTextCtrl_Copy(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
+    if (_obj1)
+        delete _arg1;
 }
-
-#define wxTextCtrl_Cut(_swigobj)  (_swigobj->Cut())
-static PyObject *_wrap_wxTextCtrl_Cut(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_Cut",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_Cut. Expected _wxTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxTextCtrl_Cut(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxTextCtrl_DiscardEdits(_swigobj)  (_swigobj->DiscardEdits())
-static PyObject *_wrap_wxTextCtrl_DiscardEdits(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_DiscardEdits",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_DiscardEdits. Expected _wxTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxTextCtrl_DiscardEdits(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxTextCtrl_GetInsertionPoint(_swigobj)  (_swigobj->GetInsertionPoint())
-static PyObject *_wrap_wxTextCtrl_GetInsertionPoint(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    long  _result;
-    wxTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_GetInsertionPoint",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_GetInsertionPoint. Expected _wxTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (long )wxTextCtrl_GetInsertionPoint(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("l",_result);
-    return _resultobj;
-}
-
-#define wxTextCtrl_GetLastPosition(_swigobj)  (_swigobj->GetLastPosition())
-static PyObject *_wrap_wxTextCtrl_GetLastPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    long  _result;
-    wxTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_GetLastPosition",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_GetLastPosition. Expected _wxTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (long )wxTextCtrl_GetLastPosition(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("l",_result);
     return _resultobj;
 }
 
@@ -6347,39 +6292,6 @@ static PyObject *_wrap_wxTextCtrl_GetNumberOfLines(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
-#define wxTextCtrl_GetValue(_swigobj)  (_swigobj->GetValue())
-static PyObject *_wrap_wxTextCtrl_GetValue(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxString * _result;
-    wxTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_GetValue",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_GetValue. Expected _wxTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxString (wxTextCtrl_GetValue(_arg0));
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}{
-    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
-}
-{
-    delete _result;
-}
-    return _resultobj;
-}
-
 #define wxTextCtrl_IsModified(_swigobj)  (_swigobj->IsModified())
 static PyObject *_wrap_wxTextCtrl_IsModified(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -6408,157 +6320,102 @@ static PyObject *_wrap_wxTextCtrl_IsModified(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
-#define wxTextCtrl_LoadFile(_swigobj,_swigarg0)  (_swigobj->LoadFile(_swigarg0))
-static PyObject *_wrap_wxTextCtrl_LoadFile(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxTextCtrl_IsEditable(_swigobj)  (_swigobj->IsEditable())
+static PyObject *_wrap_wxTextCtrl_IsEditable(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxTextCtrl * _arg0;
-    wxString * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","filename", NULL };
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTextCtrl_LoadFile",_kwnames,&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_IsEditable",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_LoadFile. Expected _wxTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_IsEditable. Expected _wxTextCtrl_p.");
         return NULL;
         }
     }
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg1 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
-#endif
-}
-{
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxTextCtrl_LoadFile(_arg0,*_arg1);
+        _result = (bool )wxTextCtrl_IsEditable(_arg0);
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxTextCtrl_GetSelection(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetSelection(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxTextCtrl_GetSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTextCtrl * _arg0;
+    long * _arg1;
+    long  temp;
+    long * _arg2;
+    long  temp0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
 {
-    if (_obj1)
-        delete _arg1;
+  _arg1 = &temp;
+}
+{
+  _arg2 = &temp0;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_GetSelection",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_GetSelection. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_GetSelection(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg1));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
 }
     return _resultobj;
 }
 
-#define wxTextCtrl_Paste(_swigobj)  (_swigobj->Paste())
-static PyObject *_wrap_wxTextCtrl_Paste(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxTextCtrl_Clear(_swigobj)  (_swigobj->Clear())
+static PyObject *_wrap_wxTextCtrl_Clear(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxTextCtrl * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_Paste",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_Clear",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_Paste. Expected _wxTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_Clear. Expected _wxTextCtrl_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxTextCtrl_Paste(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxTextCtrl_PositionToXY(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->PositionToXY(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_wxTextCtrl_PositionToXY(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxTextCtrl * _arg0;
-    long  _arg1;
-    long * _arg2;
-    long  temp;
-    long * _arg3;
-    long  temp0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","pos", NULL };
-
-    self = self;
-{
-  _arg2 = &temp;
-}
-{
-  _arg3 = &temp0;
-}
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxTextCtrl_PositionToXY",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_PositionToXY. Expected _wxTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxTextCtrl_PositionToXY(_arg0,_arg1,_arg2,_arg3);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-{
-    PyObject *o;
-    o = PyInt_FromLong((long) (*_arg2));
-    _resultobj = t_output_helper(_resultobj, o);
-}
-{
-    PyObject *o;
-    o = PyInt_FromLong((long) (*_arg3));
-    _resultobj = t_output_helper(_resultobj, o);
-}
-    return _resultobj;
-}
-
-#define wxTextCtrl_Remove(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Remove(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxTextCtrl_Remove(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxTextCtrl * _arg0;
-    long  _arg1;
-    long  _arg2;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","from","to", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oll:wxTextCtrl_Remove",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_Remove. Expected _wxTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxTextCtrl_Remove(_arg0,_arg1,_arg2);
+        wxTextCtrl_Clear(_arg0);
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
@@ -6621,18 +6478,100 @@ static PyObject *_wrap_wxTextCtrl_Replace(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
-#define wxTextCtrl_SaveFile(_swigobj,_swigarg0)  (_swigobj->SaveFile(_swigarg0))
-static PyObject *_wrap_wxTextCtrl_SaveFile(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxTextCtrl_Remove(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Remove(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxTextCtrl_Remove(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTextCtrl * _arg0;
+    long  _arg1;
+    long  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","from","to", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oll:wxTextCtrl_Remove",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_Remove. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_Remove(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTextCtrl_LoadFile(_swigobj,_swigarg0)  (_swigobj->LoadFile(_swigarg0))
+static PyObject *_wrap_wxTextCtrl_LoadFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxTextCtrl * _arg0;
     wxString * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","filename", NULL };
+    char *_kwnames[] = { "self","file", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTextCtrl_SaveFile",_kwnames,&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTextCtrl_LoadFile",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_LoadFile. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxTextCtrl_LoadFile(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxTextCtrl_SaveFile(_swigobj,_swigarg0)  (_swigobj->SaveFile(_swigarg0))
+static PyObject *_wrap_wxTextCtrl_SaveFile(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTextCtrl * _arg0;
+    wxString * _arg1 = (wxString *) &wxEmptyString;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","file", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:wxTextCtrl_SaveFile",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6641,6 +6580,7 @@ static PyObject *_wrap_wxTextCtrl_SaveFile(PyObject *self, PyObject *args, PyObj
         return NULL;
         }
     }
+    if (_obj1)
 {
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
@@ -6673,86 +6613,26 @@ static PyObject *_wrap_wxTextCtrl_SaveFile(PyObject *self, PyObject *args, PyObj
     return _resultobj;
 }
 
-#define wxTextCtrl_SetEditable(_swigobj,_swigarg0)  (_swigobj->SetEditable(_swigarg0))
-static PyObject *_wrap_wxTextCtrl_SetEditable(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxTextCtrl * _arg0;
-    bool  _arg1;
-    PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","editable", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxTextCtrl_SetEditable",_kwnames,&_argo0,&tempbool1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_SetEditable. Expected _wxTextCtrl_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxTextCtrl_SetEditable(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxTextCtrl_SetInsertionPoint(_swigobj,_swigarg0)  (_swigobj->SetInsertionPoint(_swigarg0))
-static PyObject *_wrap_wxTextCtrl_SetInsertionPoint(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxTextCtrl * _arg0;
-    long  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","pos", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxTextCtrl_SetInsertionPoint",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_SetInsertionPoint. Expected _wxTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxTextCtrl_SetInsertionPoint(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxTextCtrl_SetInsertionPointEnd(_swigobj)  (_swigobj->SetInsertionPointEnd())
-static PyObject *_wrap_wxTextCtrl_SetInsertionPointEnd(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxTextCtrl_DiscardEdits(_swigobj)  (_swigobj->DiscardEdits())
+static PyObject *_wrap_wxTextCtrl_DiscardEdits(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxTextCtrl * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_SetInsertionPointEnd",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_DiscardEdits",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_SetInsertionPointEnd. Expected _wxTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_DiscardEdits. Expected _wxTextCtrl_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxTextCtrl_SetInsertionPointEnd(_arg0);
+        wxTextCtrl_DiscardEdits(_arg0);
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
@@ -6761,109 +6641,27 @@ static PyObject *_wrap_wxTextCtrl_SetInsertionPointEnd(PyObject *self, PyObject 
     return _resultobj;
 }
 
-#define wxTextCtrl_SetSelection(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetSelection(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxTextCtrl_SetSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxTextCtrl_SetMaxLength(_swigobj,_swigarg0)  (_swigobj->SetMaxLength(_swigarg0))
+static PyObject *_wrap_wxTextCtrl_SetMaxLength(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxTextCtrl * _arg0;
-    long  _arg1;
-    long  _arg2;
+    unsigned long  _arg1;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","from","to", NULL };
+    char *_kwnames[] = { "self","len", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oll:wxTextCtrl_SetSelection",_kwnames,&_argo0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxTextCtrl_SetMaxLength",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_SetSelection. Expected _wxTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_SetMaxLength. Expected _wxTextCtrl_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxTextCtrl_SetSelection(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxTextCtrl_SetValue(_swigobj,_swigarg0)  (_swigobj->SetValue(_swigarg0))
-static PyObject *_wrap_wxTextCtrl_SetValue(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxTextCtrl * _arg0;
-    wxString * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","value", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTextCtrl_SetValue",_kwnames,&_argo0,&_obj1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_SetValue. Expected _wxTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg1 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
-#endif
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxTextCtrl_SetValue(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-{
-    if (_obj1)
-        delete _arg1;
-}
-    return _resultobj;
-}
-
-#define wxTextCtrl_ShowPosition(_swigobj,_swigarg0)  (_swigobj->ShowPosition(_swigarg0))
-static PyObject *_wrap_wxTextCtrl_ShowPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxTextCtrl * _arg0;
-    long  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","pos", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxTextCtrl_ShowPosition",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_ShowPosition. Expected _wxTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxTextCtrl_ShowPosition(_arg0,_arg1);
+        wxTextCtrl_SetMaxLength(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
@@ -6973,308 +6771,6 @@ static PyObject *_wrap_wxTextCtrl_AppendText(PyObject *self, PyObject *args, PyO
     if (_obj1)
         delete _arg1;
 }
-    return _resultobj;
-}
-
-#define wxTextCtrl_XYToPosition(_swigobj,_swigarg0,_swigarg1)  (_swigobj->XYToPosition(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxTextCtrl_XYToPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    long  _result;
-    wxTextCtrl * _arg0;
-    long  _arg1;
-    long  _arg2;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","x","y", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oll:wxTextCtrl_XYToPosition",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_XYToPosition. Expected _wxTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (long )wxTextCtrl_XYToPosition(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("l",_result);
-    return _resultobj;
-}
-
-#define wxTextCtrl_CanCopy(_swigobj)  (_swigobj->CanCopy())
-static PyObject *_wrap_wxTextCtrl_CanCopy(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_CanCopy",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_CanCopy. Expected _wxTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxTextCtrl_CanCopy(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxTextCtrl_CanCut(_swigobj)  (_swigobj->CanCut())
-static PyObject *_wrap_wxTextCtrl_CanCut(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_CanCut",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_CanCut. Expected _wxTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxTextCtrl_CanCut(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxTextCtrl_CanPaste(_swigobj)  (_swigobj->CanPaste())
-static PyObject *_wrap_wxTextCtrl_CanPaste(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_CanPaste",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_CanPaste. Expected _wxTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxTextCtrl_CanPaste(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxTextCtrl_CanRedo(_swigobj)  (_swigobj->CanRedo())
-static PyObject *_wrap_wxTextCtrl_CanRedo(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_CanRedo",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_CanRedo. Expected _wxTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxTextCtrl_CanRedo(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxTextCtrl_CanUndo(_swigobj)  (_swigobj->CanUndo())
-static PyObject *_wrap_wxTextCtrl_CanUndo(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_CanUndo",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_CanUndo. Expected _wxTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxTextCtrl_CanUndo(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxTextCtrl_GetSelection(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetSelection(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxTextCtrl_GetSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxTextCtrl * _arg0;
-    long * _arg1;
-    long  temp;
-    long * _arg2;
-    long  temp0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-{
-  _arg1 = &temp;
-}
-{
-  _arg2 = &temp0;
-}
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_GetSelection",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_GetSelection. Expected _wxTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxTextCtrl_GetSelection(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-{
-    PyObject *o;
-    o = PyInt_FromLong((long) (*_arg1));
-    _resultobj = t_output_helper(_resultobj, o);
-}
-{
-    PyObject *o;
-    o = PyInt_FromLong((long) (*_arg2));
-    _resultobj = t_output_helper(_resultobj, o);
-}
-    return _resultobj;
-}
-
-#define wxTextCtrl_IsEditable(_swigobj)  (_swigobj->IsEditable())
-static PyObject *_wrap_wxTextCtrl_IsEditable(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_IsEditable",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_IsEditable. Expected _wxTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxTextCtrl_IsEditable(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxTextCtrl_Undo(_swigobj)  (_swigobj->Undo())
-static PyObject *_wrap_wxTextCtrl_Undo(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_Undo",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_Undo. Expected _wxTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxTextCtrl_Undo(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxTextCtrl_Redo(_swigobj)  (_swigobj->Redo())
-static PyObject *_wrap_wxTextCtrl_Redo(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_Redo",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_Redo. Expected _wxTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxTextCtrl_Redo(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -7390,27 +6886,588 @@ static PyObject *_wrap_wxTextCtrl_GetDefaultStyle(PyObject *self, PyObject *args
     return _resultobj;
 }
 
-#define wxTextCtrl_SetMaxLength(_swigobj,_swigarg0)  (_swigobj->SetMaxLength(_swigarg0))
-static PyObject *_wrap_wxTextCtrl_SetMaxLength(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxTextCtrl_XYToPosition(_swigobj,_swigarg0,_swigarg1)  (_swigobj->XYToPosition(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxTextCtrl_XYToPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
+    long  _result;
     wxTextCtrl * _arg0;
-    unsigned long  _arg1;
+    long  _arg1;
+    long  _arg2;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","len", NULL };
+    char *_kwnames[] = { "self","x","y", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxTextCtrl_SetMaxLength",_kwnames,&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oll:wxTextCtrl_XYToPosition",_kwnames,&_argo0,&_arg1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_SetMaxLength. Expected _wxTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_XYToPosition. Expected _wxTextCtrl_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxTextCtrl_SetMaxLength(_arg0,_arg1);
+        _result = (long )wxTextCtrl_XYToPosition(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+#define wxTextCtrl_PositionToXY(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->PositionToXY(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxTextCtrl_PositionToXY(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTextCtrl * _arg0;
+    long  _arg1;
+    long * _arg2;
+    long  temp;
+    long * _arg3;
+    long  temp0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","pos", NULL };
+
+    self = self;
+{
+  _arg2 = &temp;
+}
+{
+  _arg3 = &temp0;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxTextCtrl_PositionToXY",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_PositionToXY. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxTextCtrl_PositionToXY(_arg0,_arg1,_arg2,_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg3));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+    return _resultobj;
+}
+
+#define wxTextCtrl_ShowPosition(_swigobj,_swigarg0)  (_swigobj->ShowPosition(_swigarg0))
+static PyObject *_wrap_wxTextCtrl_ShowPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTextCtrl * _arg0;
+    long  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","pos", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxTextCtrl_ShowPosition",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_ShowPosition. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_ShowPosition(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTextCtrl_Copy(_swigobj)  (_swigobj->Copy())
+static PyObject *_wrap_wxTextCtrl_Copy(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_Copy",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_Copy. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_Copy(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTextCtrl_Cut(_swigobj)  (_swigobj->Cut())
+static PyObject *_wrap_wxTextCtrl_Cut(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_Cut",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_Cut. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_Cut(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTextCtrl_Paste(_swigobj)  (_swigobj->Paste())
+static PyObject *_wrap_wxTextCtrl_Paste(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_Paste",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_Paste. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_Paste(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTextCtrl_CanCopy(_swigobj)  (_swigobj->CanCopy())
+static PyObject *_wrap_wxTextCtrl_CanCopy(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_CanCopy",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_CanCopy. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxTextCtrl_CanCopy(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxTextCtrl_CanCut(_swigobj)  (_swigobj->CanCut())
+static PyObject *_wrap_wxTextCtrl_CanCut(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_CanCut",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_CanCut. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxTextCtrl_CanCut(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxTextCtrl_CanPaste(_swigobj)  (_swigobj->CanPaste())
+static PyObject *_wrap_wxTextCtrl_CanPaste(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_CanPaste",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_CanPaste. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxTextCtrl_CanPaste(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxTextCtrl_Undo(_swigobj)  (_swigobj->Undo())
+static PyObject *_wrap_wxTextCtrl_Undo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_Undo",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_Undo. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_Undo(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTextCtrl_Redo(_swigobj)  (_swigobj->Redo())
+static PyObject *_wrap_wxTextCtrl_Redo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_Redo",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_Redo. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_Redo(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTextCtrl_CanUndo(_swigobj)  (_swigobj->CanUndo())
+static PyObject *_wrap_wxTextCtrl_CanUndo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_CanUndo",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_CanUndo. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxTextCtrl_CanUndo(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxTextCtrl_CanRedo(_swigobj)  (_swigobj->CanRedo())
+static PyObject *_wrap_wxTextCtrl_CanRedo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_CanRedo",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_CanRedo. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxTextCtrl_CanRedo(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxTextCtrl_SetInsertionPoint(_swigobj,_swigarg0)  (_swigobj->SetInsertionPoint(_swigarg0))
+static PyObject *_wrap_wxTextCtrl_SetInsertionPoint(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTextCtrl * _arg0;
+    long  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","pos", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxTextCtrl_SetInsertionPoint",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_SetInsertionPoint. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_SetInsertionPoint(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTextCtrl_SetInsertionPointEnd(_swigobj)  (_swigobj->SetInsertionPointEnd())
+static PyObject *_wrap_wxTextCtrl_SetInsertionPointEnd(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_SetInsertionPointEnd",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_SetInsertionPointEnd. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_SetInsertionPointEnd(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTextCtrl_GetInsertionPoint(_swigobj)  (_swigobj->GetInsertionPoint())
+static PyObject *_wrap_wxTextCtrl_GetInsertionPoint(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    wxTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_GetInsertionPoint",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_GetInsertionPoint. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (long )wxTextCtrl_GetInsertionPoint(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+#define wxTextCtrl_GetLastPosition(_swigobj)  (_swigobj->GetLastPosition())
+static PyObject *_wrap_wxTextCtrl_GetLastPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    wxTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_GetLastPosition",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_GetLastPosition. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (long )wxTextCtrl_GetLastPosition(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+#define wxTextCtrl_SetSelection(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetSelection(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxTextCtrl_SetSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTextCtrl * _arg0;
+    long  _arg1;
+    long  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","from","to", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oll:wxTextCtrl_SetSelection",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_SetSelection. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_SetSelection(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTextCtrl_SelectAll(_swigobj)  (_swigobj->SelectAll())
+static PyObject *_wrap_wxTextCtrl_SelectAll(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_SelectAll",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_SelectAll. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_SelectAll(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTextCtrl_SetEditable(_swigobj,_swigarg0)  (_swigobj->SetEditable(_swigarg0))
+static PyObject *_wrap_wxTextCtrl_SetEditable(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTextCtrl * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","editable", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxTextCtrl_SetEditable",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_SetEditable. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_SetEditable(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
@@ -11004,48 +11061,50 @@ static PyMethodDef controlscMethods[] = {
 	 { "new_wxPreScrollBar", (PyCFunction) _wrap_new_wxPreScrollBar, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxScrollBar", (PyCFunction) _wrap_new_wxScrollBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_write", (PyCFunction) _wrap_wxTextCtrl_write, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTextCtrl_SetMaxLength", (PyCFunction) _wrap_wxTextCtrl_SetMaxLength, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTextCtrl_GetDefaultStyle", (PyCFunction) _wrap_wxTextCtrl_GetDefaultStyle, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTextCtrl_SetDefaultStyle", (PyCFunction) _wrap_wxTextCtrl_SetDefaultStyle, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTextCtrl_SetStyle", (PyCFunction) _wrap_wxTextCtrl_SetStyle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_SetEditable", (PyCFunction) _wrap_wxTextCtrl_SetEditable, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_SelectAll", (PyCFunction) _wrap_wxTextCtrl_SelectAll, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_SetSelection", (PyCFunction) _wrap_wxTextCtrl_SetSelection, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_GetLastPosition", (PyCFunction) _wrap_wxTextCtrl_GetLastPosition, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_GetInsertionPoint", (PyCFunction) _wrap_wxTextCtrl_GetInsertionPoint, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_SetInsertionPointEnd", (PyCFunction) _wrap_wxTextCtrl_SetInsertionPointEnd, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_SetInsertionPoint", (PyCFunction) _wrap_wxTextCtrl_SetInsertionPoint, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_CanRedo", (PyCFunction) _wrap_wxTextCtrl_CanRedo, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_CanUndo", (PyCFunction) _wrap_wxTextCtrl_CanUndo, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_Redo", (PyCFunction) _wrap_wxTextCtrl_Redo, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_Undo", (PyCFunction) _wrap_wxTextCtrl_Undo, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTextCtrl_IsEditable", (PyCFunction) _wrap_wxTextCtrl_IsEditable, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTextCtrl_GetSelection", (PyCFunction) _wrap_wxTextCtrl_GetSelection, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTextCtrl_CanUndo", (PyCFunction) _wrap_wxTextCtrl_CanUndo, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTextCtrl_CanRedo", (PyCFunction) _wrap_wxTextCtrl_CanRedo, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_CanPaste", (PyCFunction) _wrap_wxTextCtrl_CanPaste, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_CanCut", (PyCFunction) _wrap_wxTextCtrl_CanCut, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_CanCopy", (PyCFunction) _wrap_wxTextCtrl_CanCopy, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_Paste", (PyCFunction) _wrap_wxTextCtrl_Paste, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_Cut", (PyCFunction) _wrap_wxTextCtrl_Cut, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_Copy", (PyCFunction) _wrap_wxTextCtrl_Copy, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_ShowPosition", (PyCFunction) _wrap_wxTextCtrl_ShowPosition, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_PositionToXY", (PyCFunction) _wrap_wxTextCtrl_PositionToXY, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_XYToPosition", (PyCFunction) _wrap_wxTextCtrl_XYToPosition, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_GetDefaultStyle", (PyCFunction) _wrap_wxTextCtrl_GetDefaultStyle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_SetDefaultStyle", (PyCFunction) _wrap_wxTextCtrl_SetDefaultStyle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_SetStyle", (PyCFunction) _wrap_wxTextCtrl_SetStyle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_AppendText", (PyCFunction) _wrap_wxTextCtrl_AppendText, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_WriteText", (PyCFunction) _wrap_wxTextCtrl_WriteText, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTextCtrl_ShowPosition", (PyCFunction) _wrap_wxTextCtrl_ShowPosition, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTextCtrl_SetValue", (PyCFunction) _wrap_wxTextCtrl_SetValue, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTextCtrl_SetSelection", (PyCFunction) _wrap_wxTextCtrl_SetSelection, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTextCtrl_SetInsertionPointEnd", (PyCFunction) _wrap_wxTextCtrl_SetInsertionPointEnd, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTextCtrl_SetInsertionPoint", (PyCFunction) _wrap_wxTextCtrl_SetInsertionPoint, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTextCtrl_SetEditable", (PyCFunction) _wrap_wxTextCtrl_SetEditable, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_SetMaxLength", (PyCFunction) _wrap_wxTextCtrl_SetMaxLength, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_DiscardEdits", (PyCFunction) _wrap_wxTextCtrl_DiscardEdits, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_SaveFile", (PyCFunction) _wrap_wxTextCtrl_SaveFile, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTextCtrl_Replace", (PyCFunction) _wrap_wxTextCtrl_Replace, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTextCtrl_Remove", (PyCFunction) _wrap_wxTextCtrl_Remove, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTextCtrl_PositionToXY", (PyCFunction) _wrap_wxTextCtrl_PositionToXY, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTextCtrl_Paste", (PyCFunction) _wrap_wxTextCtrl_Paste, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_LoadFile", (PyCFunction) _wrap_wxTextCtrl_LoadFile, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_Remove", (PyCFunction) _wrap_wxTextCtrl_Remove, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_Replace", (PyCFunction) _wrap_wxTextCtrl_Replace, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_Clear", (PyCFunction) _wrap_wxTextCtrl_Clear, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_GetSelection", (PyCFunction) _wrap_wxTextCtrl_GetSelection, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_IsEditable", (PyCFunction) _wrap_wxTextCtrl_IsEditable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_IsModified", (PyCFunction) _wrap_wxTextCtrl_IsModified, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTextCtrl_GetValue", (PyCFunction) _wrap_wxTextCtrl_GetValue, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_GetNumberOfLines", (PyCFunction) _wrap_wxTextCtrl_GetNumberOfLines, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_GetLineText", (PyCFunction) _wrap_wxTextCtrl_GetLineText, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_GetLineLength", (PyCFunction) _wrap_wxTextCtrl_GetLineLength, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTextCtrl_GetLastPosition", (PyCFunction) _wrap_wxTextCtrl_GetLastPosition, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTextCtrl_GetInsertionPoint", (PyCFunction) _wrap_wxTextCtrl_GetInsertionPoint, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTextCtrl_DiscardEdits", (PyCFunction) _wrap_wxTextCtrl_DiscardEdits, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTextCtrl_Cut", (PyCFunction) _wrap_wxTextCtrl_Cut, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTextCtrl_Copy", (PyCFunction) _wrap_wxTextCtrl_Copy, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTextCtrl_Clear", (PyCFunction) _wrap_wxTextCtrl_Clear, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_SetValue", (PyCFunction) _wrap_wxTextCtrl_SetValue, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_GetValue", (PyCFunction) _wrap_wxTextCtrl_GetValue, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_Create", (PyCFunction) _wrap_wxTextCtrl_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreTextCtrl", (PyCFunction) _wrap_new_wxPreTextCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxTextCtrl", (PyCFunction) _wrap_new_wxTextCtrl, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextAttr_IsDefault", (PyCFunction) _wrap_wxTextAttr_IsDefault, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextAttr_GetFont", (PyCFunction) _wrap_wxTextAttr_GetFont, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextAttr_GetBackgroundColour", (PyCFunction) _wrap_wxTextAttr_GetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextAttr_GetTextColour", (PyCFunction) _wrap_wxTextAttr_GetTextColour, METH_VARARGS | METH_KEYWORDS },

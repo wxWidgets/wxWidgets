@@ -234,11 +234,12 @@ public:
         : wxPopupTransientWindow(parent, style) {}
 
     DEC_PYCALLBACK_BOOL_ME(ProcessLeftDown);
+    DEC_PYCALLBACK__(OnDismiss);
     PYPRIVATE;
 };
 
 IMP_PYCALLBACK_BOOL_ME(wxPyPopupTransientWindow, wxPopupTransientWindow, ProcessLeftDown);
-
+IMP_PYCALLBACK__(wxPyPopupTransientWindow, wxPopupTransientWindow, OnDismiss);
 %}
 
 

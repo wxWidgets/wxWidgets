@@ -34,7 +34,10 @@ class TestPopup(wxPopupWindow):
 
     def OnMouseLeftDown(self, evt):
         self.ldPos = evt.GetEventObject().ClientToScreen(evt.GetPosition())
-        self.wPos = self.GetParent().ClientToScreen(self.GetPosition())
+        if wxPlatform == "__WXMSW__":   # this is weird...
+            self.wPos = self.GetParent().ClientToScreen(self.GetPosition())
+        else:
+            self.wPos = self.GetPosition()
         self.CaptureMouse()
 
     def OnMouseMotion(self, evt):
@@ -47,7 +50,6 @@ class TestPopup(wxPopupWindow):
     def OnMouseLeftUp(self, evt):
         self.ReleaseMouse()
 
-
     def OnRightUp(self, evt):
         self.Show(false)
         self.Destroy()
@@ -55,10 +57,12 @@ class TestPopup(wxPopupWindow):
 
 class TestTransientPopup(wxPopupTransientWindow):
     """Adds a bit of text and mouse movement to the wxPopupWindow"""
-    def __init__(self, parent, style):
+    def __init__(self, parent, style, log):
         wxPopupTransientWindow.__init__(self, parent, style)
-        self.SetBackgroundColour("#FFB6C1")
-        st = wxStaticText(self, -1,
+        self.log = log
+        panel = wxPanel(self, -1)
+        panel.SetBackgroundColour("#FFB6C1")
+        st = wxStaticText(panel, -1,
                           "wxPopupTransientWindow is a\n"
                           "wxPopupWindow which disappears\n"
                           "automatically when the user\n"
@@ -67,8 +71,20 @@ class TestTransientPopup(wxPopupTransientWindow):
                           ,
                           pos=(10,10))
         sz = st.GetBestSize()
-        self.SetSize( (sz.width+20, sz.height+20) )
+        panel.SetSize( (sz.width+20, sz.height+20) )
+        self.SetSize(panel.GetSize())
+##         self.SetBackgroundColour("#FFB6C1")
+##         b = wxButton(self, -1, "this is a Button", (10,10))
+##         sz = b.GetBestSize()
+##         self.SetSize( (sz.width+20, sz.height+20) )
 
+
+    def ProcessLeftDown(self, evt):
+        self.log.write("ProcessLeftDown\n")
+        return false
+
+    def OnDismiss(self):
+        self.log.write("OnDismiss\n")
 
 
 class TestPanel(wxPanel):
@@ -97,15 +113,16 @@ class TestPanel(wxPanel):
 
 
     def OnShowPopupTransient(self, evt):
-        win = TestTransientPopup(self, wxSIMPLE_BORDER)
+        win = TestTransientPopup(self, wxSIMPLE_BORDER, self.log)
 
-        # show the popup right below or above the button
+        # Show the popup right below or above the button
+        # depending on available screen space...
         btn = evt.GetEventObject()
         pos = btn.ClientToScreen( (0,0) )
         sz =  btn.GetSize()
         win.Position(pos, (0, sz.height))
 
-        win.Popup(btn)
+        win.Popup()
 
 
 

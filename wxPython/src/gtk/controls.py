@@ -585,6 +585,9 @@ class wxTextAttrPtr :
         val = apply(controlsc.wxTextAttr_GetFont,(self,) + _args, _kwargs)
         if val: val = wxFontPtr(val) 
         return val
+    def IsDefault(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextAttr_IsDefault,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxTextAttr instance at %s>" % (self.this,)
 class wxTextAttr(wxTextAttrPtr):
@@ -602,23 +605,11 @@ class wxTextCtrlPtr(wxControlPtr):
     def Create(self, *_args, **_kwargs):
         val = apply(controlsc.wxTextCtrl_Create,(self,) + _args, _kwargs)
         return val
-    def Clear(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_Clear,(self,) + _args, _kwargs)
+    def GetValue(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_GetValue,(self,) + _args, _kwargs)
         return val
-    def Copy(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_Copy,(self,) + _args, _kwargs)
-        return val
-    def Cut(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_Cut,(self,) + _args, _kwargs)
-        return val
-    def DiscardEdits(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_DiscardEdits,(self,) + _args, _kwargs)
-        return val
-    def GetInsertionPoint(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_GetInsertionPoint,(self,) + _args, _kwargs)
-        return val
-    def GetLastPosition(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_GetLastPosition,(self,) + _args, _kwargs)
+    def SetValue(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_SetValue,(self,) + _args, _kwargs)
         return val
     def GetLineLength(self, *_args, **_kwargs):
         val = apply(controlsc.wxTextCtrl_GetLineLength,(self,) + _args, _kwargs)
@@ -629,83 +620,41 @@ class wxTextCtrlPtr(wxControlPtr):
     def GetNumberOfLines(self, *_args, **_kwargs):
         val = apply(controlsc.wxTextCtrl_GetNumberOfLines,(self,) + _args, _kwargs)
         return val
-    def GetValue(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_GetValue,(self,) + _args, _kwargs)
-        return val
     def IsModified(self, *_args, **_kwargs):
         val = apply(controlsc.wxTextCtrl_IsModified,(self,) + _args, _kwargs)
         return val
-    def LoadFile(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_LoadFile,(self,) + _args, _kwargs)
+    def IsEditable(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_IsEditable,(self,) + _args, _kwargs)
         return val
-    def Paste(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_Paste,(self,) + _args, _kwargs)
+    def GetSelection(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_GetSelection,(self,) + _args, _kwargs)
         return val
-    def PositionToXY(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_PositionToXY,(self,) + _args, _kwargs)
-        return val
-    def Remove(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_Remove,(self,) + _args, _kwargs)
+    def Clear(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_Clear,(self,) + _args, _kwargs)
         return val
     def Replace(self, *_args, **_kwargs):
         val = apply(controlsc.wxTextCtrl_Replace,(self,) + _args, _kwargs)
         return val
+    def Remove(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_Remove,(self,) + _args, _kwargs)
+        return val
+    def LoadFile(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_LoadFile,(self,) + _args, _kwargs)
+        return val
     def SaveFile(self, *_args, **_kwargs):
         val = apply(controlsc.wxTextCtrl_SaveFile,(self,) + _args, _kwargs)
         return val
-    def SetEditable(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_SetEditable,(self,) + _args, _kwargs)
+    def DiscardEdits(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_DiscardEdits,(self,) + _args, _kwargs)
         return val
-    def SetInsertionPoint(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_SetInsertionPoint,(self,) + _args, _kwargs)
-        return val
-    def SetInsertionPointEnd(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_SetInsertionPointEnd,(self,) + _args, _kwargs)
-        return val
-    def SetSelection(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_SetSelection,(self,) + _args, _kwargs)
-        return val
-    def SetValue(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_SetValue,(self,) + _args, _kwargs)
-        return val
-    def ShowPosition(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_ShowPosition,(self,) + _args, _kwargs)
+    def SetMaxLength(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_SetMaxLength,(self,) + _args, _kwargs)
         return val
     def WriteText(self, *_args, **_kwargs):
         val = apply(controlsc.wxTextCtrl_WriteText,(self,) + _args, _kwargs)
         return val
     def AppendText(self, *_args, **_kwargs):
         val = apply(controlsc.wxTextCtrl_AppendText,(self,) + _args, _kwargs)
-        return val
-    def XYToPosition(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_XYToPosition,(self,) + _args, _kwargs)
-        return val
-    def CanCopy(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_CanCopy,(self,) + _args, _kwargs)
-        return val
-    def CanCut(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_CanCut,(self,) + _args, _kwargs)
-        return val
-    def CanPaste(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_CanPaste,(self,) + _args, _kwargs)
-        return val
-    def CanRedo(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_CanRedo,(self,) + _args, _kwargs)
-        return val
-    def CanUndo(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_CanUndo,(self,) + _args, _kwargs)
-        return val
-    def GetSelection(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_GetSelection,(self,) + _args, _kwargs)
-        return val
-    def IsEditable(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_IsEditable,(self,) + _args, _kwargs)
-        return val
-    def Undo(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_Undo,(self,) + _args, _kwargs)
-        return val
-    def Redo(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_Redo,(self,) + _args, _kwargs)
         return val
     def SetStyle(self, *_args, **_kwargs):
         val = apply(controlsc.wxTextCtrl_SetStyle,(self,) + _args, _kwargs)
@@ -717,8 +666,65 @@ class wxTextCtrlPtr(wxControlPtr):
         val = apply(controlsc.wxTextCtrl_GetDefaultStyle,(self,) + _args, _kwargs)
         if val: val = wxTextAttrPtr(val) 
         return val
-    def SetMaxLength(self, *_args, **_kwargs):
-        val = apply(controlsc.wxTextCtrl_SetMaxLength,(self,) + _args, _kwargs)
+    def XYToPosition(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_XYToPosition,(self,) + _args, _kwargs)
+        return val
+    def PositionToXY(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_PositionToXY,(self,) + _args, _kwargs)
+        return val
+    def ShowPosition(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_ShowPosition,(self,) + _args, _kwargs)
+        return val
+    def Copy(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_Copy,(self,) + _args, _kwargs)
+        return val
+    def Cut(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_Cut,(self,) + _args, _kwargs)
+        return val
+    def Paste(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_Paste,(self,) + _args, _kwargs)
+        return val
+    def CanCopy(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_CanCopy,(self,) + _args, _kwargs)
+        return val
+    def CanCut(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_CanCut,(self,) + _args, _kwargs)
+        return val
+    def CanPaste(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_CanPaste,(self,) + _args, _kwargs)
+        return val
+    def Undo(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_Undo,(self,) + _args, _kwargs)
+        return val
+    def Redo(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_Redo,(self,) + _args, _kwargs)
+        return val
+    def CanUndo(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_CanUndo,(self,) + _args, _kwargs)
+        return val
+    def CanRedo(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_CanRedo,(self,) + _args, _kwargs)
+        return val
+    def SetInsertionPoint(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_SetInsertionPoint,(self,) + _args, _kwargs)
+        return val
+    def SetInsertionPointEnd(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_SetInsertionPointEnd,(self,) + _args, _kwargs)
+        return val
+    def GetInsertionPoint(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_GetInsertionPoint,(self,) + _args, _kwargs)
+        return val
+    def GetLastPosition(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_GetLastPosition,(self,) + _args, _kwargs)
+        return val
+    def SetSelection(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_SetSelection,(self,) + _args, _kwargs)
+        return val
+    def SelectAll(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_SelectAll,(self,) + _args, _kwargs)
+        return val
+    def SetEditable(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_SetEditable,(self,) + _args, _kwargs)
         return val
     def write(self, *_args, **_kwargs):
         val = apply(controlsc.wxTextCtrl_write,(self,) + _args, _kwargs)
