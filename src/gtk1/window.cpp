@@ -1082,7 +1082,7 @@ wxWindow::~wxWindow()
     if (m_wxwindow) gtk_widget_destroy( m_wxwindow );
 
     if (m_widget) gtk_widget_destroy( m_widget );
-
+    
     if (m_cursor) delete m_cursor;
 
     DeleteRelatedConstraints();
@@ -1315,56 +1315,64 @@ void wxWindow::SetSize( int x, int y, int width, int height, int sizeFlags )
     wxASSERT_MSG( (m_widget != NULL), "invalid window" );
     wxASSERT_MSG( (m_parent != NULL), "wxWindow::SetSize requires parent.\n" );
   
-    // Don't do anything for children of wxNotebook
-    if (m_parent->m_wxwindow == NULL) return;
-
     if (m_resizing) return; // I don't like recursions
     m_resizing = TRUE;
 
-    int old_width = m_width;
-    int old_height = m_height;
-  
-    if ((sizeFlags & wxSIZE_USE_EXISTING) == wxSIZE_USE_EXISTING)
+    if (m_parent->m_wxwindow == NULL) // i.e. wxNotebook
     {
-        if (x != -1) m_x = x;
-        if (y != -1) m_y = y;
-        if (width != -1) m_width = width;
-        if (height != -1) m_height = height;
-    }
-    else
-    {
+        // don't set the size for children of wxNotebook, just take the values.
         m_x = x;
         m_y = y;
         m_width = width;
-       m_height = height;
+        m_height = height;
     }
-
-    if ((sizeFlags & wxSIZE_AUTO_WIDTH) == wxSIZE_AUTO_WIDTH)
+    else
     {
-        if (width == -1) m_width = 80;
-    }
-
-    if ((sizeFlags & wxSIZE_AUTO_HEIGHT) == wxSIZE_AUTO_HEIGHT)
-    {
-        if (height == -1) m_height = 26;
-    }
+        int old_width = m_width;
+        int old_height = m_height;
   
-    if ((m_minWidth != -1) && (m_width < m_minWidth)) m_width = m_minWidth;
-    if ((m_minHeight != -1) && (m_height < m_minHeight)) m_height = m_minHeight;
-    if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_minWidth;
-    if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_minHeight;
+        if ((sizeFlags & wxSIZE_USE_EXISTING) == wxSIZE_USE_EXISTING)
+        {
+            if (x != -1) m_x = x;
+            if (y != -1) m_y = y;
+            if (width != -1) m_width = width;
+            if (height != -1) m_height = height;
+        }
+        else
+        {
+            m_x = x;
+            m_y = y;
+            m_width = width;
+            m_height = height;
+        }
 
-    wxPoint pt( m_parent->GetClientAreaOrigin() );
-    gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), m_widget, m_x+pt.x, m_y+pt.y );
+        if ((sizeFlags & wxSIZE_AUTO_WIDTH) == wxSIZE_AUTO_WIDTH)
+        {
+             if (width == -1) m_width = 80;
+        }
+
+        if ((sizeFlags & wxSIZE_AUTO_HEIGHT) == wxSIZE_AUTO_HEIGHT)
+        {
+             if (height == -1) m_height = 26;
+        }
   
-    if ((old_width != m_width) || (old_height != m_height))
-        gtk_widget_set_usize( m_widget, m_width, m_height );
+        if ((m_minWidth != -1) && (m_width < m_minWidth)) m_width = m_minWidth;
+        if ((m_minHeight != -1) && (m_height < m_minHeight)) m_height = m_minHeight;
+        if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_minWidth;
+        if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_minHeight;
+
+        wxPoint pt( m_parent->GetClientAreaOrigin() );
+        gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), m_widget, m_x+pt.x, m_y+pt.y );
+  
+        if ((old_width != m_width) || (old_height != m_height))
+             gtk_widget_set_usize( m_widget, m_width, m_height );
+    }
   
     m_sizeSet = TRUE;
 
     wxSizeEvent event( wxSize(m_width,m_height), GetId() );
     event.SetEventObject( this );
-    ProcessEvent( event );
+    GetEventHandler()->ProcessEvent( event );
 
     m_resizing = FALSE;
 }

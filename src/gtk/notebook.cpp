@@ -73,8 +73,6 @@ static void gtk_notebook_page_change_callback(GtkNotebook *WXUNUSED(widget),
 
 static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxWindow *win )
 {
-  if (win->GetAutoLayout()) win->Layout();
-
   if ((win->m_x == alloc->x) &&
       (win->m_y == alloc->y) &&
       (win->m_width == alloc->width) &&
@@ -82,7 +80,7 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
   {
     return;
   }
-
+  
   win->SetSize( alloc->x, alloc->y, alloc->width, alloc->height );
 }
 
@@ -168,12 +166,10 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
 
   gtk_notebook_set_scrollable( GTK_NOTEBOOK(m_widget), 1 );
 
-  m_idHandler = gtk_signal_connect
-                (
+  m_idHandler = gtk_signal_connect (
                   GTK_OBJECT(m_widget), "switch_page",
                   GTK_SIGNAL_FUNC(gtk_notebook_page_change_callback),
-                  (gpointer)this
-                );
+                  (gpointer)this );
 
   m_parent->AddChild( this );
 
@@ -193,6 +189,7 @@ int wxNotebook::GetSelection() const
   if (m_pages.Number() == 0) return -1;
 
   GtkNotebookPage *g_page = GTK_NOTEBOOK(m_widget)->cur_page;
+  if (!g_page) return -1;
 
   wxNotebookPage *page = (wxNotebookPage *) NULL;
 
@@ -200,8 +197,15 @@ int wxNotebook::GetSelection() const
   while (node)
   {
     page = (wxNotebookPage*)node->Data();
-    if (page->m_page == g_page)
-      break;
+    
+    if ((page->m_page == g_page) || (page->m_page == (GtkNotebookPage*)NULL))  
+    {
+        // page->m_page is NULL directly after gtk_notebook_append. gtk emits
+	// "switch_page" then and we ask for GetSelection() in the handler for
+	// "switch_page". otherwise m_page should never be NULL. all this
+	// might also be wrong.
+        break;
+    }
     node = node->Next();
   }
 

@@ -38,7 +38,8 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
   if ((win->m_x == alloc->x) &&
       (win->m_y == alloc->y) &&
       (win->m_width == alloc->width) &&
-      (win->m_height == alloc->height))
+      (win->m_height == alloc->height) &&
+      (win->m_sizeSet))
   {
     return;
   }

@@ -186,15 +186,6 @@ bool wxFrame::Show( bool show )
   
     if (show && !m_sizeSet)
     {
-        // this yield call is required for a configure event
-        // to be sent by GTK to its windows. this will among
-	// others prompt all GtkScrolledWidgets to calculate
-	// if they need scrollbars which in turn is required
-	// for wxWindows to calculate the client size of its
-	// windows.
-	
-        wxYield();
-	
 	// by calling GtkOnSize here, we don't have to call
 	// either after showing the frame, which would entail
 	// much ugly flicker nor from within the size_allocate
