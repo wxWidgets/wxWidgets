@@ -2183,7 +2183,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         </if>
     </set>
 
-    <set var="ALL_HEADERS" hints="files">
+    <set var="ALL_HEADERS" make_var="1" hints="files">
         $(BASE_CMN_HDR) $(BASE_PLATFORM_HDR)
         $(NET_CMN_HDR) $(NET_PLATFORM_HDR)
         $(ALL_GUI_HEADERS)
