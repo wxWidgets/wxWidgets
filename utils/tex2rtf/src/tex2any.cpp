@@ -443,7 +443,7 @@ bool read_a_line(wxChar *buf)
   int ch = -2;
   unsigned long bufIndex = 0;
   buf[0] = 0;
-  char lastChar = _T(' ');
+  int lastChar;
 
   while (ch != EOF && ch != 10)
   {
