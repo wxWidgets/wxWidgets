@@ -24,6 +24,7 @@
 
 #ifdef M_BASEDIR
 #   include "gui/wxllist.h"
+#   include "gui/wxlparser.h"
 #   define  SHOW_SELECTIONS 1
 #else
 #   include "wxllist.h"
@@ -37,6 +38,7 @@
 #   include   <wx/dcps.h>
 #   include   <wx/print.h>
 #   include   <wx/log.h>
+#   include   <wx/filefn.h>
 #endif
 
 #include <ctype.h>
@@ -118,6 +120,45 @@ bool Contains(const wxRect &r, const wxPoint &p)
 
 //@}
 
+
+void ReadString(wxString &to, wxString &from)
+{
+   to = "";
+   const char *cptr = from.c_str();
+   while(*cptr && *cptr != '\n')
+      to += *cptr++;
+   if(*cptr) cptr++;
+   from = cptr;
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+
+   wxLayoutObject
+
+   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+/* static */
+wxLayoutObject *
+wxLayoutObject::Read(wxString &istr)
+{
+   wxString tmp;
+   ReadString(tmp, istr);
+   int type = -1;
+   sscanf(tmp.c_str(),"%d", &type);
+   
+   switch(type)
+   {
+   case WXLO_TYPE_TEXT:
+      return wxLayoutObjectText::Read(istr);
+   case WXLO_TYPE_CMD:
+      return wxLayoutObjectCmd::Read(istr);
+   case WXLO_TYPE_ICON:
+      return wxLayoutObjectIcon::Read(istr);
+   default:
+      return NULL;
+   }
+}
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 
    wxLayoutObjectText
@@ -145,6 +186,23 @@ wxLayoutObjectText::Copy(void)
    return obj;
 }
 
+
+void
+wxLayoutObjectText::Write(wxString &ostr)
+{
+   ostr << (int) WXLO_TYPE_TEXT << '\n' 
+        << m_Text << '\n';
+}
+/* static */
+wxLayoutObjectText *
+wxLayoutObjectText::Read(wxString &istr)
+{
+   wxString text;
+   ReadString(text, istr);
+   
+   return new wxLayoutObjectText(text);
+}
+
 wxPoint
 wxLayoutObjectText::GetSize(CoordType *top, CoordType *bottom) const
 {
@@ -158,7 +216,7 @@ wxLayoutObjectText::Draw(wxDC &dc, wxPoint const &coords,
                          wxLayoutList *wxllist,
                          CoordType begin, CoordType end)
 {
-   if(begin == -1)
+   if( end <= 0)
       dc.DrawText(m_Text, coords.x, coords.y-m_Top);
    else
    {
@@ -168,6 +226,10 @@ wxLayoutObjectText::Draw(wxDC &dc, wxPoint const &coords,
          xpos = coords.x,
          ypos = coords.y-m_Top;
       long width, height, descent;
+
+      if(begin < 0) begin = 0;
+      if(end > m_Text.Length()) end = m_Text.Length();
+      
       
       str = m_Text.Mid(0, begin);
       dc.DrawText(str, xpos, ypos);
@@ -219,6 +281,7 @@ wxLayoutObjectText::Layout(wxDC &dc, class wxLayoutList * )
    m_Top = m_Height - m_Bottom;
 }
 
+
 #ifdef WXLAYOUT_DEBUG
 void
 wxLayoutObjectText::Debug(void)
@@ -237,6 +300,38 @@ wxLayoutObjectText::Debug(void)
 wxLayoutObjectIcon::wxLayoutObjectIcon(wxBitmap const &icon)
 {
    m_Icon = new wxBitmap(icon);
+}
+
+
+void
+wxLayoutObjectIcon::Write(wxString &ostr)
+{
+   /* Exports icon through a temporary file. */
+
+   wxString file = wxGetTempFileName("wxloexport");
+
+   ostr << WXLO_TYPE_ICON << '\n'
+        << file << '\n';
+   m_Icon->SaveFile(file, WXLO_BITMAP_FORMAT);
+}
+/* static */
+wxLayoutObjectIcon *
+wxLayoutObjectIcon::Read(wxString &istr)
+{
+   wxString file;
+   ReadString(file, istr);
+   
+   if(! wxFileExists(file))
+      return NULL;
+   wxLayoutObjectIcon *obj = new wxLayoutObjectIcon;
+   
+   if(!obj->m_Icon->LoadFile(file, WXLO_BITMAP_FORMAT))
+   {
+      delete obj;
+      return NULL;
+   }
+   else
+      return obj;
 }
 
 wxLayoutObject *
@@ -348,6 +443,76 @@ wxLayoutObjectCmd::Copy(void)
       m_StyleInfo->m_bg_valid ?
       &m_StyleInfo->m_bg : NULL);
    obj->SetUserData(m_UserData);
+   return obj;
+}
+
+void
+wxLayoutObjectCmd::Write(wxString &ostr)
+{
+   ostr << WXLO_TYPE_CMD << '\n'
+        << m_StyleInfo->size << '\n'
+        << m_StyleInfo->family << '\n'
+        << m_StyleInfo->style << '\n'
+        << m_StyleInfo->weight << '\n'
+        << m_StyleInfo->underline << '\n'
+        << m_StyleInfo->m_fg_valid << '\n'
+        << m_StyleInfo->m_bg_valid << '\n';
+   if(m_StyleInfo->m_fg_valid)
+   {
+      ostr << m_StyleInfo->m_fg.Red() << '\n'
+           << m_StyleInfo->m_fg.Green() << '\n'
+           << m_StyleInfo->m_fg.Blue() << '\n';
+   }
+   if(m_StyleInfo->m_bg_valid)
+   {
+      ostr << m_StyleInfo->m_bg.Red() << '\n'
+           << m_StyleInfo->m_bg.Green() << '\n'
+           << m_StyleInfo->m_bg.Blue() << '\n';
+   }
+}
+/* static */
+wxLayoutObjectCmd *
+wxLayoutObjectCmd::Read(wxString &istr)
+{
+   wxLayoutObjectCmd *obj = new wxLayoutObjectCmd;
+
+   wxString tmp;
+   ReadString(tmp, istr);
+   sscanf(tmp.c_str(),"%d", &obj->m_StyleInfo->size);
+   ReadString(tmp, istr);
+   sscanf(tmp.c_str(),"%d", &obj->m_StyleInfo->family);
+   ReadString(tmp, istr);
+   sscanf(tmp.c_str(),"%d", &obj->m_StyleInfo->style);
+   ReadString(tmp, istr);
+   sscanf(tmp.c_str(),"%d", &obj->m_StyleInfo->weight);
+   ReadString(tmp, istr);
+   sscanf(tmp.c_str(),"%d", &obj->m_StyleInfo->underline);
+   ReadString(tmp, istr);
+   sscanf(tmp.c_str(),"%d", &obj->m_StyleInfo->m_fg_valid);
+   ReadString(tmp, istr);
+   sscanf(tmp.c_str(),"%d", &obj->m_StyleInfo->m_bg_valid);
+   if(obj->m_StyleInfo->m_fg_valid)
+   {
+      int red, green, blue;
+      ReadString(tmp, istr);
+      sscanf(tmp.c_str(),"%d", &red);
+      ReadString(tmp, istr);
+      sscanf(tmp.c_str(),"%d", &green);
+      ReadString(tmp, istr);
+      sscanf(tmp.c_str(),"%d", &blue);
+      obj->m_StyleInfo->m_fg = wxColour(red, green, blue);
+   }
+   if(obj->m_StyleInfo->m_bg_valid)
+   {
+      int red, green, blue;
+      ReadString(tmp, istr);
+      sscanf(tmp.c_str(),"%d", &red);
+      ReadString(tmp, istr);
+      sscanf(tmp.c_str(),"%d", &green);
+      ReadString(tmp, istr);
+      sscanf(tmp.c_str(),"%d", &blue);
+      obj->m_StyleInfo->m_bg = wxColour(red, green, blue);
+   }
    return obj;
 }
 
@@ -765,6 +930,7 @@ wxLayoutLine::Draw(wxDC &dc,
       {
          // parts of the line need highlighting
          tempto = xpos+(**i).GetLength();
+#if 0
          if(tempto >= from && xpos <= to)
          {
             tempto = to-xpos;
@@ -772,13 +938,16 @@ wxLayoutLine::Draw(wxDC &dc,
                tempto = (**i).GetLength();
             CoordType tmp = from-xpos;
             if(tmp < 0) tmp = 0;
-            (**i).Draw(dc, pos, llist, from-xpos, tempto);
+#endif
+            (**i).Draw(dc, pos, llist, from-xpos, to-xpos);
+#if 0
          }
          else
          {
             llist->EndHighlighting(dc); // FIXME! inefficient
             (**i).Draw(dc, pos, llist);
          }
+#endif
       }
       else
          (**i).Draw(dc, pos, llist);
@@ -916,8 +1085,11 @@ wxLayoutLine::Break(CoordType xpos, wxLayoutList *llist)
    wxASSERT(xpos >= 0);
    //FIXME: this could be optimised, for now be prudent:
    m_Dirty = true;
-   
-   if(xpos == 0)
+
+   /* If we are at the begin of a line, we want to move all other
+      lines down and stay with the cursor where we are. However, if we 
+      are in an empty line, we want to move down with it. */
+   if(xpos == 0 && GetLength() > 0)
    { // insert an empty line before this one
       wxLayoutLine *prev = new wxLayoutLine(m_Previous, llist);
       if(m_Previous == NULL)
@@ -925,12 +1097,11 @@ wxLayoutLine::Break(CoordType xpos, wxLayoutList *llist)
          // before this.
          prev->m_Next = this;
          m_Previous = prev;
-         m_Previous->m_Height = GetHeight(); // this is a wild guess
+         m_Previous->m_Height = 0; // this is a wild guess
       }
-      MoveLines(+1);
       if(m_Next)
          m_Next->RecalculatePositions(1, llist);
-      return this;
+      return m_Previous;
    }
    
    CoordType offset;
@@ -1126,6 +1297,7 @@ wxLayoutLine::Copy(wxLayoutList *llist,
          llist->Insert( (**last).Copy() );
    }
 }
+
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    
@@ -1399,6 +1571,29 @@ wxLayoutList::Insert(wxLayoutObject *obj)
 }
 
 bool
+wxLayoutList::Insert(wxLayoutList *llist)
+{
+   wxASSERT(llist);
+   bool rc = TRUE;
+   
+   for(wxLayoutLine *line = llist->GetFirstLine();
+       line;
+       line = line->GetNextLine()
+      )
+   {
+      for(wxLOiterator i = line->GetFirstObject();
+          i != NULLIT;
+          i++)
+         rc |= Insert(*i);
+      LineBreak();
+   }
+   return rc;
+}
+
+
+
+
+bool
 wxLayoutList::LineBreak(void)
 {
    wxASSERT(m_CursorLine);
@@ -1408,7 +1603,8 @@ wxLayoutList::LineBreak(void)
    m_CursorLine = m_CursorLine->Break(m_CursorPos.x, this);
    if(setFirst) // we were at beginning of first line
       m_FirstLine = m_CursorLine->GetPreviousLine();
-   m_CursorPos.y++;
+   if(m_CursorPos.x != 0)
+      m_CursorPos.y++;
    m_CursorPos.x = 0;
 // doesn't help   m_CursorLine.MarkDirty();
    m_CursorLine->RecalculatePositions(true, this); //FIXME needed?
@@ -1560,10 +1756,10 @@ wxLayoutList::Layout(wxDC &dc, CoordType bottom, bool forceAll)
                          (wxPoint *)&m_CursorSize, m_CursorPos.x);
          else
             line->Layout(dc, this);
-         line->RecalculatePosition(this);
          // little    condition to speed up redrawing:
          if(bottom != -1 && line->GetPosition().y > bottom) break;
       }
+      line->RecalculatePosition(this);
       line = line->GetNextLine();
    }
 
@@ -1596,6 +1792,8 @@ wxLayoutList::Draw(wxDC &dc,
       // only draw if between top and bottom:
       if((top == -1 || line->GetPosition().y + line->GetHeight() >= top))
          line->Draw(dc, this, offset);
+      else
+         line->Layout(dc, this);
       // little condition to speed up redrawing:
       if(bottom != -1 && line->GetPosition().y > bottom) break;
       line = line->GetNextLine();
@@ -1720,22 +1918,29 @@ wxLayoutList::SetUpdateRect(CoordType x, CoordType y)
 }
 
 void
-wxLayoutList::StartSelection(void)
+wxLayoutList::StartSelection(wxPoint cpos)
 {
-   WXLO_DEBUG(("Starting selection at %ld/%ld", m_CursorPos.x, m_CursorPos.y));
-   m_Selection.m_CursorA = m_CursorPos;
-   m_Selection.m_CursorB = m_CursorPos;
+   if(cpos.x == -1)
+      cpos = m_CursorPos;
+   WXLO_DEBUG(("Starting selection at %ld/%ld", cpos.x, cpos.y));
+   m_Selection.m_CursorA = cpos;
+   m_Selection.m_CursorB = cpos;
    m_Selection.m_selecting = true;
    m_Selection.m_valid = false;
 }
 
 void
-wxLayoutList::ContinueSelection(void)
+wxLayoutList::ContinueSelection(wxPoint cpos)
 {
+   if(cpos.x == -1)
+      cpos = m_CursorPos;
    wxASSERT(m_Selection.m_selecting == true);
    wxASSERT(m_Selection.m_valid == false);
-   WXLO_DEBUG(("Continuing selection at %ld/%ld", m_CursorPos.x, m_CursorPos.y));
-   m_Selection.m_CursorB = m_CursorPos;
+   WXLO_DEBUG(("Continuing selection at %ld/%ld", cpos.x, cpos.y));
+   if(m_Selection.m_CursorB <= cpos)
+      m_Selection.m_CursorB = cpos;
+   else
+      m_Selection.m_CursorA = cpos;
    // We always want m_CursorA <= m_CursorB!
    if(! (m_Selection.m_CursorA <= m_Selection.m_CursorB))
    {
@@ -1746,10 +1951,12 @@ wxLayoutList::ContinueSelection(void)
 }
 
 void
-wxLayoutList::EndSelection(void)
+wxLayoutList::EndSelection(wxPoint cpos)
 {
-   ContinueSelection();
-   WXLO_DEBUG(("Ending selection at %ld/%ld", m_CursorPos.x, m_CursorPos.y));
+   if(cpos.x == -1)
+      cpos = m_CursorPos;
+   ContinueSelection(cpos);
+   WXLO_DEBUG(("Ending selection at %ld/%ld", cpos.x, cpos.y));
    m_Selection.m_selecting = false;
    m_Selection.m_valid = true;
 }
@@ -1943,7 +2150,7 @@ wxLayoutList::Copy(const wxPoint &from,
 }
 
 wxLayoutList *
-wxLayoutList::GetSelection(void)
+wxLayoutList::GetSelection(wxLayoutDataObject *wxlo, bool invalidate)
 {
    if(! m_Selection.m_valid)
    {
@@ -1953,8 +2160,28 @@ wxLayoutList::GetSelection(void)
          return NULL;
    }
    
-   m_Selection.m_valid = false;
-   return Copy( m_Selection.m_CursorA, m_Selection.m_CursorB );
+   if(invalidate) m_Selection.m_valid = false;
+
+   wxLayoutList *llist = Copy( m_Selection.m_CursorA,
+                               m_Selection.m_CursorB );
+
+   if(wxlo) // export as data object, too
+   {
+      wxString string;
+
+      wxLayoutExportObject *export;
+      wxLayoutExportStatus status(llist);
+      while((export = wxLayoutExport( &status, WXLO_EXPORT_AS_OBJECTS)) != NULL)
+      {
+         if(export->type == WXLO_EXPORT_EMPTYLINE)
+            ; //FIXME missing support for linebreaks in string format
+         else
+            export->content.object->Write(string);
+         delete export;
+      }
+      wxlo->SetData(string.c_str(), string.Length()+1);
+   }
+   return llist;
 }
 
 

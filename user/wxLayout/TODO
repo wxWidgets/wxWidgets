@@ -16,8 +16,8 @@ BUGS
 TODO
 =====================================================================
 
-Inserting NL in empty line sometimes doesn't move cursor down.
-Line numbers go a bit berserk, too. :-)
+  - UNDO!!
+  - replacement of llist in window
 
 The following two probs can probably be fixed by adding the
 RecalculateLayout() method:
@@ -25,11 +25,8 @@ RecalculateLayout() method:
  Printing works again, but layout at begin of new page is corrupted.
 
 
-Selections:
-  - moving in negative direction doesn't work
-  - selection state not properly reset, only works once
-  - selecting non-text objects is strange
-
+- The import of a private data object does not work yet, we need to get
+  the objects back from the string.
 - Changing default settings in Clear() or changing/inserting/deleting
   a wxLayoutObject needs to update the m_StyleInfo in all lines, only
   then can we start using that one.
@@ -39,8 +36,6 @@ Selections:
       some code bits are commented out in wxlwindow.cpp
       offset handling seems a bit dodgy, white shadow to top/left of cursor
 
-  - replacement of llist in window
-  - UNDO
   - DragNDrop
 
   - Update docs, do full rtf/html editing. 

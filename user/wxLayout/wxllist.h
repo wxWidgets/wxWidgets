@@ -21,6 +21,7 @@
 #include   "wx/printdlg.h"
 #include   "wx/generic/printps.h"
 #include   "wx/generic/prntdlgg.h"
+#include   "wx/dataobj.h"
 
 // skip the following defines if embedded in M application
 #ifndef   M_BASEDIR
@@ -44,6 +45,12 @@
 
 #ifndef WXLO_DEFAULTFONTSIZE
 #   define WXLO_DEFAULTFONTSIZE 12
+#endif
+
+#ifdef __WXMSW__
+#   define WXLO_BITMAP_FORMAT wxBITMAP_TYPE_BMP
+#else
+#   define WXLO_BITMAP_FORMAT wxBITMAP_TYPE_PNG
 #endif
 
 
@@ -160,7 +167,8 @@ public:
          if(m_UserData)
             m_UserData->DecRef();
          m_UserData = data;
-         m_UserData->IncRef();
+         if(m_UserData)
+            m_UserData->IncRef();
       }
    
    /** Return the user data. */
@@ -169,6 +177,18 @@ public:
    /** Makes a copy of this object.
     */
    virtual wxLayoutObject *Copy(void) = 0;
+
+   /** Clipboard support function. Read and write objects to
+       strings. */
+   //@{
+   /// Writes the object to the string.
+   virtual void Write(wxString &ostr) = 0;
+   /** Reads an object.
+       @param str stream to read from, will bee changed
+       @return true on success
+   */
+   static wxLayoutObject *Read(wxString &istr);
+   //@}
 protected:
    /// optional data for application's use
    UserData *m_UserData;
@@ -192,8 +212,8 @@ KBLIST_DEFINE(wxLayoutObjectList, wxLayoutObject);
 class wxLayoutObjectText : public wxLayoutObject
 {
 public:
-   wxLayoutObjectText(const wxString &txt);
-
+   wxLayoutObjectText(const wxString &txt = "");
+   
    virtual wxLayoutObjectType GetType(void) const { return WXLO_TYPE_TEXT; }
    virtual void Layout(wxDC &dc, class wxLayoutList *llist);
    virtual void Draw(wxDC &dc, wxPoint const &coords,
@@ -216,6 +236,8 @@ public:
    */
    virtual CoordType GetOffsetScreen(wxDC &dc, CoordType xpos) const;
 
+   virtual void Write(wxString &ostr);
+   static wxLayoutObjectText *Read(wxString &istr);
 
 #ifdef WXLAYOUT_DEBUG
    virtual void Debug(void);
@@ -249,10 +271,10 @@ private:
 class wxLayoutObjectIcon : public wxLayoutObject
 {
 public:
-   wxLayoutObjectIcon(wxBitmap *icon);
+   wxLayoutObjectIcon(wxBitmap *icon = NULL);
    wxLayoutObjectIcon(wxBitmap const &icon);
 
-   ~wxLayoutObjectIcon() { delete m_Icon; }
+   ~wxLayoutObjectIcon() { if(m_Icon) delete m_Icon; }
 
    virtual wxLayoutObjectType GetType(void) const { return WXLO_TYPE_ICON; }
    virtual void Layout(wxDC &dc, class wxLayoutList *llist);
@@ -274,6 +296,8 @@ public:
    /** Makes a copy of this object.
     */
    virtual wxLayoutObject *Copy(void);
+   virtual void Write(wxString &ostr);
+   static wxLayoutObjectIcon *Read(wxString &istr);
 private:
    wxBitmap *m_Icon;
 };
@@ -299,7 +323,7 @@ struct wxLayoutStyleInfo
    int  size, family, style, weight, underline;
    /// Colours
    wxColour m_bg, m_fg;
-   bool m_fg_valid, m_bg_valid;
+   int m_fg_valid, m_bg_valid; // bool, but must be int!
 };
 
 
@@ -376,6 +400,8 @@ public:
    /** Makes a copy of this object.
     */
    virtual wxLayoutObject *Copy(void);
+   virtual void Write(wxString &ostr);
+   static wxLayoutObjectCmd *Read(wxString &istr);
 private:
    wxLayoutStyleInfo *m_StyleInfo;
 };
@@ -732,6 +758,9 @@ public:
    bool Insert(wxString const &text);
    /// Insert some other object at current cursor position.
    bool Insert(wxLayoutObject *obj);
+   /// Inserts objects at current cursor positions
+   bool Insert(wxLayoutList *llist);
+   
    /// Inserts a linebreak at current cursor position.
    bool LineBreak(void);
    /** Wraps the current line. Searches to the left of the cursor to
@@ -925,23 +954,26 @@ public:
    //@}
 
    /// Begin selecting text.
-   void StartSelection(void);
+   void StartSelection(wxPoint cpos = wxPoint(-1,-1));
    // Continue selecting text
-   void ContinueSelection(void);
+   void ContinueSelection(wxPoint cpos = wxPoint(-1,-1));
    /// End selecting text.
-   void EndSelection(void);
+   void EndSelection(wxPoint cpos = wxPoint(-1,-1));
    /// Are we still selecting text?
    bool IsSelecting(void);
    bool IsSelected(const wxPoint &cursor);
 
-   /// Return the selection as a wxLayoutList:
-   wxLayoutList *GetSelection(void);
+   /** Return the selection as a wxLayoutList.
+       @param invalidate if true, the selection will be invalidated after this and can no longer be used.
+       @return Another layout list object holding the selection, must be freed by caller
+   */
+   wxLayoutList *GetSelection(class wxLayoutDataObject *wxldo = NULL, bool invalidate = TRUE);
    /// Delete selected bit
    void DeleteSelection(void);
    
    wxLayoutList *Copy(const wxPoint &from = wxPoint(0,0),
                       const wxPoint &to = wxPoint(-1,-1));
-   
+
    /// starts highlighting of text for selections
    void StartHighlighting(wxDC &dc);
    /// ends highlighting of text for selections
@@ -1007,7 +1039,21 @@ private:
 };
 
 
-
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+   
+   The wxLayoutDataObject for exporting data to the clipboard in our
+   own format.
+   
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+class wxLayoutDataObject : public wxPrivateDataObject
+{
+public:
+   wxLayoutDataObject(void)
+      {
+         SetId("application/wxlayoutlist");
+         m_format.SetAtom((GdkAtom) 222222);
+      }
+};
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    

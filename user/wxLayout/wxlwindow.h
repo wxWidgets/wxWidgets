@@ -22,6 +22,9 @@
 #   define WXLOWIN_MENU_FIRST 12000
 #endif
 
+
+#define wxUSE_PRIVATE_CLIPBOARD_FORMAT 0
+
 enum
 {
    WXLOWIN_MENU_LARGER = WXLOWIN_MENU_FIRST,
@@ -78,10 +81,21 @@ public:
    void SetEditable(bool toggle) { m_Editable = toggle; }
    /// Query whether list can be edited by user.
    bool IsEditable(void) const { return m_Editable; }
+   /** Sets cursor visibility, visible=1, invisible=0,
+       visible-on-demand=-1, to hide it until moved.
+       @param visibility -1,0 or 1
+       @return the old visibility
+   */
+   inline int SetCursorVisibility(int visibility = -1)
+      { int v =m_CursorVisibility;
+      m_CursorVisibility = visibility; return v;}
+   
    /// Pastes text from clipboard.
    void Paste(void);
-   /// Copies selection to clipboard.
-   bool Copy(void);
+   /** Copies selection to clipboard.
+       @param invalidate used internally, see wxllist.h for details
+   */
+   bool Copy(bool invalidate = true);
    /// Copies selection to clipboard and deletes it.
    bool Cut(void);
    //@}
@@ -100,7 +114,7 @@ public:
        Internally, this stores the parameter and calls a refresh on
        wxMSW, draws directly on wxGTK.
    */
-   void DoPaint(const wxRect *updateRect);
+   void DoPaint(const wxRect *updateRect = NULL);
 
 #ifdef __WXMSW__
    virtual long MSWGetDlgCode();
@@ -177,6 +191,10 @@ protected:
    int m_maxx;
    int m_maxy;
    int m_lineHeight;
+   /** Visibility parameter for cursor. 0/1 as expected, -1: visible
+       on demand.
+   */
+   int m_CursorVisibility;
 private:
    /// The layout list to be displayed.
    wxLayoutList *m_llist;

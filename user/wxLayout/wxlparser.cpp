@@ -237,11 +237,9 @@ wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
          *str += ((wxLayoutObjectText *)*status->m_iterator)->GetText();
          break;
       case WXLO_TYPE_CMD:
-         wxASSERT_MSG( mode == WXLO_EXPORT_AS_HTML,
-                       "reached cmd object in text mode" );
-         
-         *str += wxLayoutExportCmdAsHTML(*(wxLayoutObjectCmd const
-                                           *)*status->m_iterator, & status->m_si);
+         if(mode == WXLO_EXPORT_AS_HTML)
+            *str += wxLayoutExportCmdAsHTML(*(wxLayoutObjectCmd const
+                                              *)*status->m_iterator, & status->m_si);
          break;
       default:  // ignore icons
          ;

@@ -92,6 +92,7 @@ wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
    EnableScrolling(true,true);
    m_maxx = max.x; m_maxy = max.y;
    m_Selecting = false;
+   SetCursorVisibility(-1); 
    SetCursor(wxCURSOR_IBEAM);
    SetDirty();
 }
@@ -177,6 +178,26 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
             SetCursor(wxCURSOR_IBEAM);
          m_HandCursor = FALSE;
       }
+      if(event.LeftIsDown())
+      {
+         if(! m_Selecting)
+         {
+            m_llist->StartSelection();
+            m_Selecting = true;
+            DoPaint(FALSE); 
+         }
+         else
+         {
+            m_llist->ContinueSelection(cursorPos);
+            DoPaint(FALSE); 
+         }      
+      }
+      if(m_Selecting && ! event.LeftIsDown())
+      {
+         m_llist->EndSelection(cursorPos);
+         m_Selecting = false;
+         DoPaint(FALSE); 
+      }
       return;
    }
 
@@ -184,8 +205,10 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
    if(obj && eventId == WXLOWIN_MENU_LCLICK)
    {
       m_llist->MoveCursorTo(cursorPos);
+      if(m_CursorVisibility == -1)
+         m_CursorVisibility = 1;
       ScrollToCursor();
-      Refresh(FALSE); // DoPaint suppresses flicker under GTK
+      DoPaint(FALSE); // DoPaint suppresses flicker under GTK
    }
    if(!m_doSendEvents) // nothing to do
       return;
@@ -245,6 +268,10 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
       }
    }
 
+   // If needed, make cursor visible:
+   if(m_CursorVisibility == -1)
+      m_CursorVisibility = 1;
+   
    /* These two nested switches work like this:
       The first one processes all non-editing keycodes, to move the
       cursor, etc. It's default will process all keycodes causing
@@ -469,11 +496,14 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
    if(x1 > m_maxx) m_maxx = x1;  
    if(y1 > m_maxy) m_maxy = y1;
 
-   WXLO_DEBUG(("Update rect: %ld,%ld / %ld,%ld",
-               updateRect->x, updateRect->y,
-               updateRect->x+updateRect->width,
-               updateRect->y+updateRect->height));
 
+   if(updateRect)
+   {
+      WXLO_DEBUG(("Update rect: %ld,%ld / %ld,%ld",
+                  updateRect->x, updateRect->y,
+                  updateRect->x+updateRect->width,
+                  updateRect->y+updateRect->height));
+   }
    if(IsDirty())
    {
       m_llist->Layout(dc);
@@ -522,10 +552,13 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
    
    /* This is the important bit: we tell the list to draw itself: */
 #if WXLO_DEBUG_URECT
-   WXLO_DEBUG(("Update rect: %ld,%ld / %ld,%ld",
-               updateRect->x, updateRect->y,
-               updateRect->x+updateRect->width,
-               updateRect->y+updateRect->height)); 
+   if(updateRect)
+   {
+      WXLO_DEBUG(("Update rect: %ld,%ld / %ld,%ld",
+                  updateRect->x, updateRect->y,
+                  updateRect->x+updateRect->width,
+                  updateRect->y+updateRect->height)); 
+   }
 #endif
    
    // Device origins on the memDC are suspect, we translate manually
@@ -538,10 +571,11 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
    // update rectangle (although they are drawn on the memDC, this is
    // needed to erase it):
    m_llist->InvalidateUpdateRect(); 
-   m_llist->DrawCursor(*m_memDC,
-                       m_HaveFocus && IsEditable(), // draw a thick
-                       // cursor for editable windows with focus
-                       offset);
+   if(m_CursorVisibility == 1)
+      m_llist->DrawCursor(*m_memDC,
+                          m_HaveFocus && IsEditable(), // draw a thick
+                          // cursor for    editable windows with focus
+                          offset);
 
 // Now copy everything to the screen:
 #if 0
@@ -600,16 +634,29 @@ wxLayoutWindow::ResizeScrollbars(bool exact)
 void
 wxLayoutWindow::Paste(void)
 {
-   wxString text;
    // Read some text
    if (wxTheClipboard->Open())
    {
-      wxTextDataObject data;
-      if (wxTheClipboard->IsSupported( data.GetFormat() ))
+#if wxUSE_PRIVATE_CLIPBOARD_FORMAT
+      wxLayoutDataObject wxldo;
+      if (wxTheClipboard->IsSupported( wxldo.GetFormat() ))
       {
-         wxTheClipboard->GetData(&data);
-         text += data.GetText();
+         wxTheClipboard->GetData(&wxldo);
+         {
+         }
+         //FIXME: missing functionality m_llist->Insert(wxldo.GetList());
       }  
+      else
+#endif
+      {
+         wxTextDataObject data;
+         if (wxTheClipboard->IsSupported( data.GetFormat() ))
+         {
+            wxTheClipboard->GetData(&data);
+            wxString text = data.GetText();
+            wxLayoutImportText( m_llist, text);
+         }
+      }
       wxTheClipboard->Close();
    }
 #if 0
@@ -622,11 +669,10 @@ wxLayoutWindow::Paste(void)
       text += tmp_tctrl.GetValue();
    }
 #endif
-   wxLayoutImportText( m_llist, text);
 }
 
 bool
-wxLayoutWindow::Copy(void)
+wxLayoutWindow::Copy(bool invalidate)
 {
    // Calling GetSelection() will automatically do an EndSelection()
    // on the list, but we need to take a note of it, too:
@@ -635,10 +681,12 @@ wxLayoutWindow::Copy(void)
       m_Selecting = false;
       m_llist->EndSelection();
    }
-   wxLayoutList *llist = m_llist->GetSelection();
+
+   wxLayoutDataObject wldo;
+   wxLayoutList *llist = m_llist->GetSelection(&wldo, invalidate);
    if(! llist)
       return FALSE;
-
+   // Export selection as text:
    wxString text;
    wxLayoutExportObject *export;
    wxLayoutExportStatus status(llist);
@@ -660,11 +708,14 @@ wxLayoutWindow::Copy(void)
          text = text.Mid(0,len-1);
    }
    
-   // Read some text
+
    if (wxTheClipboard->Open())
    {
       wxTextDataObject *data = new wxTextDataObject( text );
       bool  rc = wxTheClipboard->SetData( data );
+#if wxUSE_PRIVATE_CLIPBOARD_FORMAT
+      rc |= wxTheClipboard->AddData( &wldo );
+#endif
       wxTheClipboard->Close();
       return rc;
    }
@@ -674,7 +725,7 @@ wxLayoutWindow::Copy(void)
 bool
 wxLayoutWindow::Cut(void)
 {
-   if(Copy())
+   if(Copy(false)) // do not invalidate selection after copy
    {
       m_llist->DeleteSelection();
       return TRUE;

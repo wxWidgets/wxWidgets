@@ -126,7 +126,7 @@ MyFrame::AddSampleText(wxLayoutList *llist)
    llist->SetFont(wxROMAN,16,wxNORMAL,wxNORMAL, false);
    llist->Insert("--");
    llist->LineBreak();
-
+   
    llist->SetFont(wxROMAN);
    llist->Insert("The quick brown fox jumps over the lazy dog.");
    llist->LineBreak();
