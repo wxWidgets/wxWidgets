@@ -191,7 +191,7 @@ wxSize wxWizardSizer::GetMaxChildSize()
 #endif
 
     wxSize maxOfMin;
-    wxSizerItemList::Node *childNode;
+    wxSizerItemList::compatibility_iterator childNode;
 
     for(childNode = m_children.GetFirst(); childNode;
         childNode = childNode->GetNext())
