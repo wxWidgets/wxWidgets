@@ -119,6 +119,7 @@ long wxDialogBase::CreateTextMessage(const wxArrayString& lines,
 
 wxSize wxDialogBase::GetStandardButtonSize(bool hasCancel)
 {
+#if 0
     int wButton = 0;
     GetTextExtent(_("OK"), &wButton, NULL);
 
@@ -145,6 +146,9 @@ wxSize wxDialogBase::GetStandardButtonSize(bool hasCancel)
     int hButton = (wButton * 23) / 75;
 
     return wxSize(wButton, hButton);
+#else
+    return wxButton::GetDefaultSize();
+#endif
 }
 
 void wxDialogBase::CreateStandardButtons(long wDialog,

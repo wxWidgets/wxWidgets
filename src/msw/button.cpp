@@ -136,15 +136,26 @@ wxSize wxButton::DoGetBestSize()
 /* static */
 wxSize wxButton::GetDefaultSize()
 {
-    // the base unit is the height of the system GUI font
-    int wChar, hChar;
-    wxGetCharSize(0, &wChar, &hChar, NULL);
+    static wxSize s_sizeBtn;
 
-    // the button height is proportional to the height of the font used
-    int hBtn = BUTTON_HEIGHT_FROM_CHAR_HEIGHT(hChar);
+    if ( s_sizeBtn.x == 0 )
+    {
+        wxScreenDC dc;
+        dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
 
-    // and the width/height ration is 75/23
-    return wxSize((75 * hBtn) / 23, hBtn);
+        // the size of a standard button in the dialog units is 50x14,
+        // translate this to pixels
+        // NB1: the multipliers come from the Windows convention
+        // NB2: the extra +1/+2 were needed to get the size be the same as the
+        //      size of the buttons in the standard dialog - I don't know how
+        //      this happens, but on my system this size is 75x23 in pixels and
+        //      23*8 isn't even divisible by 14... Would be nice to understand
+        //      why these constants are needed though!
+        s_sizeBtn.x = (50 * (dc.GetCharWidth() + 1))/4;
+        s_sizeBtn.y = ((14 * dc.GetCharHeight()) + 2)/8;
+    }
+
+    return s_sizeBtn;
 }
 
 // ----------------------------------------------------------------------------

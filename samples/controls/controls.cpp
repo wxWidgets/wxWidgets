@@ -84,6 +84,8 @@ public:
     void OnPageChanging( wxNotebookEvent &event );
     void OnSliderUpdate( wxCommandEvent &event );
 #ifndef wxUSE_SPINBUTTON
+    void OnSpinUp( wxSpinEvent &event );
+    void OnSpinDown( wxSpinEvent &event );
     void OnSpinUpdate( wxSpinEvent &event );
     void OnUpdateShowProgress( wxUpdateUIEvent& event );
     void OnShowProgress( wxCommandEvent &event );
@@ -279,6 +281,8 @@ EVT_BUTTON    (ID_SET_FONT,             MyPanel::OnSetFont)
 EVT_SLIDER    (ID_SLIDER,               MyPanel::OnSliderUpdate)
 #ifndef wxUSE_SPINBUTTON
 EVT_SPIN      (ID_SPIN,                 MyPanel::OnSpinUpdate)
+EVT_SPIN_UP   (ID_SPIN,                 MyPanel::OnSpinUp)
+EVT_SPIN_DOWN (ID_SPIN,                 MyPanel::OnSpinDown)
 EVT_UPDATE_UI (ID_BTNPROGRESS,          MyPanel::OnUpdateShowProgress)
 EVT_BUTTON    (ID_BTNPROGRESS,          MyPanel::OnShowProgress)
 #endif
@@ -452,15 +456,18 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                             "\n"
                             "This is also supposed to demonstrate how\n"
                             "to use static controls.\n",
-			    wxPoint(228,25),
-			    wxSize(240, 110)
+                            wxPoint(228,25),
+                            wxSize(240, 110)
                           );
 #endif
-    m_spintext = new wxTextCtrl( panel, -1, "-5", wxPoint(20,160), wxSize(80,-1) );
+    int initialSpinValue = -5;
+    wxString s;
+    s << initialSpinValue;
+    m_spintext = new wxTextCtrl( panel, -1, s, wxPoint(20,160), wxSize(80,-1) );
 #ifndef wxUSE_SPINBUTTON
     m_spinbutton = new wxSpinButton( panel, ID_SPIN, wxPoint(103,159), wxSize(-1,-1) );
     m_spinbutton->SetRange(-10,30);
-    m_spinbutton->SetValue(-5);
+    m_spinbutton->SetValue(initialSpinValue);
 
     m_btnProgress = new wxButton( panel, ID_BTNPROGRESS, "Show progress dialog",
                                   wxPoint(208, 159) );
@@ -511,14 +518,16 @@ void MyPanel::OnPageChanging( wxNotebookEvent &event )
     int selOld = event.GetOldSelection();
     if ( selOld == 2 )
     {
-        wxMessageBox("This demonstrates how a program may prevent the "
-                     "page change from taking place - \n the current page will "
-                     "stay the third one", "Control sample",
-                     wxICON_INFORMATION | wxOK);
+        if ( wxMessageBox("This demonstrates how a program may prevent the "
+                          "page change from taking place - if you select "
+                          "[No] the current page will stay the third one",
+                          "Control sample",
+                          wxICON_QUESTION | wxYES_NO) != wxYES )
+        {
+            event.Veto();
 
-        event.Veto();
-
-        return;
+            return;
+        }
     }
 
     *m_text << "Notebook selection is being changed from " << selOld << "\n";
@@ -566,13 +575,13 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
         case ID_LISTBOX_SEL_NUM:
             {
                 m_listbox->SetSelection( 2 );
-		m_lbSelectThis->WarpPointer( 40, 14 );
+                m_lbSelectThis->WarpPointer( 40, 14 );
                 break;
             }
         case ID_LISTBOX_SEL_STR:
             {
                 m_listbox->SetStringSelection( "This" );
-		m_lbSelectNum->WarpPointer( 40, 14 );
+                m_lbSelectNum->WarpPointer( 40, 14 );
                 break;
             }
         case ID_LISTBOX_CLEAR:
@@ -752,6 +761,38 @@ void MyPanel::OnSliderUpdate( wxCommandEvent &WXUNUSED(event) )
 }
 
 #ifndef wxUSE_SPINBUTTON
+void MyPanel::OnSpinUp( wxSpinEvent &event )
+{
+    wxString value;
+    value.Printf( _T("Spin control up: current = %d\n"),
+                 m_spinbutton->GetValue());
+
+    if ( m_spinbutton->GetValue() > 17 )
+    {
+        value += _T("Preventing the spin button from going above 17.\n");
+
+        event.Veto();
+    }
+
+    m_text->AppendText(value);
+}
+
+void MyPanel::OnSpinDown( wxSpinEvent &event )
+{
+    wxString value;
+    value.Printf( _T("Spin control down: current = %d\n"),
+                 m_spinbutton->GetValue());
+
+    if ( m_spinbutton->GetValue() < -17 )
+    {
+        value += _T("Preventing the spin button from going below -17.\n");
+
+        event.Veto();
+    }
+
+    m_text->AppendText(value);
+}
+
 void MyPanel::OnSpinUpdate( wxSpinEvent &event )
 {
     wxString value;
@@ -777,7 +818,11 @@ void MyPanel::OnShowProgress( wxCommandEvent& WXUNUSED(event) )
                             "An informative message",
                             max,    // range
                             this,   // parent
-                            wxPD_CAN_ABORT | wxPD_APP_MODAL | wxPD_ELAPSED_TIME | wxPD_ESTIMATED_TIME | wxPD_REMAINING_TIME);
+                            wxPD_CAN_ABORT |
+                            wxPD_APP_MODAL |
+                            wxPD_ELAPSED_TIME |
+                            wxPD_ESTIMATED_TIME |
+                            wxPD_REMAINING_TIME);
 
 
     bool cont = TRUE;

@@ -65,7 +65,7 @@ bool wxExtDialog::Create( wxWindow *parent, wxWindowID id,
 {
     if (!wxDialog::Create( parent, id, title, pos, size, style, name ))
       return FALSE;
-      
+
     m_extraStyle = extraStyle;
     
     m_clientWindowMargin = 10;
