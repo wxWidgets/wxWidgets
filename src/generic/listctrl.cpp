@@ -2335,14 +2335,23 @@ long wxListMainWindow::GetNextItem( long item,
                                     int WXUNUSED(geometry),
                                     int state )
 {
-    long ret = item;
-    wxCHECK_MSG( (ret == -1) || ((int)ret < GetItemCount()), -1,
+    long ret = item,
+         max = GetItemCount();
+    wxCHECK_MSG( (ret == -1) || (ret < max), -1,
                  _T("invalid listctrl index in GetNextItem()") );
 
     // notice that we start with the next item (or the first one if item == -1)
     // and this is intentional to allow writing a simple loop to iterate over
     // all selected items
-    wxNode *node = m_lines.Nth( (size_t)++ret );
+    ret++;
+    if ( ret == max )
+    {
+        // this is not an error because the index was ok initially, just no
+        // such item
+        return -1;
+    }
+
+    wxNode *node = m_lines.Nth( (size_t)ret );
     while (node)
     {
         wxListLineData *line = (wxListLineData*)node->Data();
