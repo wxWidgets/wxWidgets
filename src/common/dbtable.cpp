@@ -137,7 +137,7 @@ wxTable::wxTable(wxDB *pwxDB, const char *tblName, const int nCols,
 
 	char s[200];
 	tableID = ++lastTableID;
-	sprintf(s, "wxTable constructor (%-20s) tableID:[%6lu] pDb:[%lu]", tblName,tableID,pDb);
+	sprintf(s, "wxTable constructor (%-20s) tableID:[%6lu] pDb:[%p]", tblName,tableID,pDb);
 
 #if __WXDEBUG__ > 0
 	CstructTablesInUse *tableInUse;
@@ -241,7 +241,7 @@ wxTable::~wxTable()
 	char s[80];
 	if (pDb)
 	{
-		sprintf(s, "wxTable destructor (%-20s) tableID:[%6lu] pDb:[%lu]", tableName,tableID,pDb);
+		sprintf(s, "wxTable destructor (%-20s) tableID:[%6lu] pDb:[%p]", tableName,tableID,pDb);
 		pDb->WriteSqlLog(s);
 	}
 
