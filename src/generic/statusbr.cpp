@@ -140,10 +140,10 @@ void wxStatusBarGeneric::SetFieldsCount(int number, const int *widths)
     for (i = m_nFields - 1; i >= number; --i)
         m_statusStrings.RemoveAt(i);
 
-    wxStatusBarBase::SetFieldsCount(number, widths);
-
     // forget the old cached pixel widths
     m_widthsAbs.Empty();
+
+    wxStatusBarBase::SetFieldsCount(number, widths);
 
     wxASSERT_MSG( m_nFields == (int)m_statusStrings.GetCount(),
                   _T("This really should never happen, can we do away with m_nFields here?") );
