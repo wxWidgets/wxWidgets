@@ -208,6 +208,13 @@
 // Recommended setting: 1 (always)
 #define wxUSE_LOG_DIALOG 1
 
+// Support for command line parsing using wxCmdLineParser class.
+//
+// Default is 1
+//
+// Recommended setting: 1 (can be set to 0 if you don't use the cmd line)
+#define wxUSE_CMDLINE_PARSER 1
+
 // Support for multithreaded applications: if 1, compile in thread classes
 // (thread.h) and make the library a bit more thread safe. Although thread
 // support is quite stable by now, you may still consider recompiling the
