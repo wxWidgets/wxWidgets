@@ -2423,6 +2423,9 @@ if test "$wxUSE_SHARED" = "yes"; then
         dnl http://fink.sourceforge.net/doc/porting/porting.html
         CFLAGS="$CFLAGS -fno-common -DDYLIB_INIT"
         CXXFLAGS="$CXXFLAGS -fno-common -DDYLIB_INIT"
+        dnl Executables must necessarily fully bind the wxWindows library at
+        dnl program launch otherwise lazy binding breaks RTTI class info
+        LDFLAGS="$LDFLAGS -Wl,-bind_at_load"
         SHARED_LD="$CXX -dynamiclib -init _wxWindowsDylibInit -o"
         PIC_FLAG="-dynamic -fPIC"
         SONAME_FLAGS="-compatibility_version ${WX_RELEASE} -current_version ${WX_VERSION}"
