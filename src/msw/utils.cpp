@@ -830,7 +830,11 @@ static void InitToolHelp32()
     lpfProcess32First = NULL;
     lpfProcess32Next = NULL;
     
+#ifdef __WXWINCE__
+    HINSTANCE hInstLib = LoadLibrary( wxT("Kernel32.DLL") ) ;
+#else
     HINSTANCE hInstLib = LoadLibraryA( "Kernel32.DLL" ) ;
+#endif
     if( hInstLib == NULL )
         return ;
     
