@@ -202,10 +202,10 @@ bool wxToolBarSimple::DoInsertTool(size_t WXUNUSED(pos),
     if ( tool->IsButton() )
     {
         // Calculate reasonable max size in case Layout() not called
-        if ((tool->m_x + tool->GetBitmap1().GetWidth() + m_xMargin) > m_maxWidth)
+        if ((tool->m_x + tool->GetNormalBitmap().GetWidth() + m_xMargin) > m_maxWidth)
             m_maxWidth = (wxCoord)((tool->m_x + tool->GetWidth() + m_xMargin));
 
-        if ((tool->m_y + tool->GetBitmap1().GetHeight() + m_yMargin) > m_maxHeight)
+        if ((tool->m_y + tool->GetNormalBitmap().GetHeight() + m_yMargin) > m_maxHeight)
             m_maxHeight = (wxCoord)((tool->m_y + tool->GetHeight() + m_yMargin));
     }
 
@@ -573,14 +573,14 @@ void wxToolBarSimple::DrawTool(wxDC& dc, wxToolBarToolBase *toolBase)
 
         if (!drawBorder)
         {
-            memDC.SelectObject(tool->GetBitmap1());
+            memDC.SelectObject(tool->GetNormalBitmap());
             dc.Blit(tool->m_x, tool->m_y, tool->GetWidth(), tool->GetHeight(),
                     &memDC, 0, 0, wxSRC_INVERT);
             memDC.SelectObject(wxNullBitmap);
         }
         else
         {
-            bitmap = tool->GetBitmap1();
+            bitmap = tool->GetNormalBitmap();
 
             if (m_windowStyle & wxTB_3DBUTTONS)
             {

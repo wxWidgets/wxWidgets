@@ -448,12 +448,12 @@ bool wxToolBar::Realize()
         wxToolBarToolBase *tool = node->GetData();
         if ( tool->IsButton() )
         {
-            const wxBitmap& bmp = tool->GetBitmap1();
+            const wxBitmap& bmp = tool->GetNormalBitmap();
             if ( bmp.Ok() )
             {
 #if USE_BITMAP_MASKS
                 // notice the last parameter: do use mask
-                dcAllButtons.DrawBitmap(tool->GetBitmap1(), x, 0, TRUE);
+                dcAllButtons.DrawBitmap(bmp, x, 0, TRUE);
 #else // !USE_BITMAP_MASKS
                 HBITMAP hbmp = GetHbitmapOf(bmp);
                 HBITMAP oldBitmap2 = (HBITMAP)::SelectObject(memoryDC2, hbmp);
