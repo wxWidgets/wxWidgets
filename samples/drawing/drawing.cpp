@@ -815,7 +815,7 @@ void MyCanvas::DrawText(wxDC& dc)
     dc.SetFont( *wxNORMAL_FONT );
 
     wxString text;
-    dc. SetBackgroundMode(wxTRANSPARENT);
+    dc.SetBackgroundMode(wxTRANSPARENT);
 
     for ( int n = -180; n < 180; n += 30 )
     {
@@ -840,16 +840,22 @@ void MyCanvas::DrawText(wxDC& dc)
     dc.DrawRectangle( 100, 40, 4, height );
 
     // test the logical function effect
+    wxCoord y = 150;
     dc.SetLogicalFunction(wxINVERT);
-    dc.DrawText( "not inverted", 110, 150 );
-    dc.DrawRectangle( 110, 160, 100, height );
+    dc.DrawText( "There should be no text below", 110, 150 );
+    dc.DrawRectangle( 110, y, 100, height );
 
     // twice drawn inverted should result in invisible
-    dc.DrawText( "should be invisible", 110, 170 );
-    dc.DrawRectangle( 110, 200, 100, height );
-    dc.DrawText( "should be invisible", 110, 170 );
-    dc.DrawRectangle( 110, 200, 100, height );
+    y += height;
+    dc.DrawText( "Invisible text", 110, y );
+    dc.DrawRectangle( 110, y, 100, height );
+    dc.DrawText( "Invisible text", 110, y );
+    dc.DrawRectangle( 110, y, 100, height );
     dc.SetLogicalFunction(wxCOPY);
+
+    y += height;
+    dc.DrawRectangle( 110, y, 100, height );
+    dc.DrawText( "Visible text", 110, y );
 }
 
 static const struct
