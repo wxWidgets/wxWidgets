@@ -64,6 +64,11 @@
 
 #endif
 
+#ifdef __WXGTK__
+#include "gtk/gtk.h"
+#include "gdk/gdk.h"
+#endif
+
 //-----------------------------------------------------------------------------
 // start and end of document/page
 //-----------------------------------------------------------------------------
@@ -1465,20 +1470,41 @@ void wxPostScriptDC::EndPage ()
     *m_pstream << "showpage\n";
 }
 
-bool wxPostScriptDC::Blit( long WXUNUSED(xdest), long WXUNUSED(ydest), 
-                           long WXUNUSED(fwidth), long WXUNUSED(fheight),
-                           wxDC *WXUNUSED(source), 
-               long WXUNUSED(xsrc), long WXUNUSED(ysrc), 
-               int WXUNUSED(rop), bool WXUNUSED(useMask) )
+bool wxPostScriptDC::Blit( long xdest, long ydest, 
+                           long fwidth, long fheight,
+                           wxDC *source, 
+                           long xsrc, long ysrc, 
+                           int WXUNUSED(rop), bool WXUNUSED(useMask) )
 {
     wxCHECK_MSG( m_ok && m_pstream, FALSE, "invalid postscript dc" );
     
-    wxFAIL_MSG( "wxPostScriptDC::Blit no yet implemented." );
+    wxCHECK_MSG( source, FALSE, "invalid source dc" );
+    
+    wxClientDC *srcDC = (wxClientDC*)source;
+  
+    wxBitmap bitmap( fwidth, fheight );
+
+#ifdef __WXGTK__
+    /* just take any GC so we don't have to create our own. */
+
+    GtkStyle *style = gtk_widget_get_default_style ();
+    GdkGC *gc = style->white_gc;	
+
+    /* copy from either window or bitmap */
+
+    gdk_window_copy_area( bitmap.GetPixmap(), gc, 0, 0, 
+                          srcDC->GetWindow(),
+	                  xsrc, ysrc, fwidth, fheight );
+#endif
+
+    /* draw bitmap. scaling and positioning is done there */
+
+    DrawBitmap( bitmap, xdest, ydest );
     
     return TRUE;
 }
 
-long wxPostScriptDC::GetCharHeight ()
+long wxPostScriptDC::GetCharHeight()
 {
     if (m_font.Ok())
         return  m_font.GetPointSize();
@@ -1600,7 +1626,7 @@ void wxPostScriptDC::GetTextExtent (const wxString& string, long *x, long *y,
 		     if ((Style == wxITALIC) && (Weight == wxBOLD)) name = "HelvBoO";
 		else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = "HelvBo";
 		else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "Helv0";
-		else if ((Style != wxITALIC) && (Weight != wxBOLD)) name = "Helv";
+		else name = "Helv";
 	    }
 	    break;
 	}

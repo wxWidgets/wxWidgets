@@ -58,14 +58,16 @@ wxDC::wxDC()
     m_scaleY = 1.0;
   
     m_mappingMode = MM_TEXT;
-    m_needComputeScaleX = FALSE;
-    m_needComputeScaleY = FALSE;
+    m_needComputeScaleX = FALSE; /* not used yet */
+    m_needComputeScaleY = FALSE; /* not used yet */
   
-    m_signX = 1;  // default x-axis left to right
-    m_signY = 1;  // default y-axis top down
+    m_signX = 1;  /* default x-axis left to right */
+    m_signY = 1;  /* default y-axis top down. -1 in postscript. */
 
-    m_maxX = m_maxY = -100000;
-    m_minY = m_minY =  100000;
+    m_maxX = 0;
+    m_maxY = 0;
+    m_minX = 0;
+    m_minY = 0;
 
     m_logicalFunction = wxCOPY;
 //  m_textAlignment = wxALIGN_TOP_LEFT;
@@ -78,7 +80,7 @@ wxDC::wxDC()
     m_brush = *wxTRANSPARENT_BRUSH;
     m_backgroundBrush = *wxWHITE_BRUSH;
   
-//  m_palette = wxAPP_COLOURMAP;
+//  m_palette = wxAPP_COLOURMAP; /* I'll learn to handle palettes later in my life */
 }
 
 wxDC::~wxDC()

@@ -68,8 +68,8 @@ wxDC::wxDC(void)
     m_signX = 1;  // default x-axis left to right
     m_signY = 1;  // default y-axis top down
     
-    m_maxX = m_maxY = -100000;
-    m_minY = m_minY =  100000;
+    m_maxX = m_maxY = 0;
+    m_minX = m_minY = 0;
     
     m_logicalFunction = wxCOPY;
     //  m_textAlignment = wxALIGN_TOP_LEFT;
