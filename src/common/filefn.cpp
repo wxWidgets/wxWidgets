@@ -294,7 +294,7 @@ wxString wxPathList::FindValidPath (const wxString& file)
         wxStrcat (wxFileFunctionsBuffer, wxT("/"));
       wxStrcat (wxFileFunctionsBuffer, filename);
 #ifdef __WINDOWS__
-      Unix2DosFilename (wxFileFunctionsBuffer);
+      wxUnix2DosFilename (wxFileFunctionsBuffer);
 #endif
       if (wxFileExists (wxFileFunctionsBuffer))
       {
@@ -411,7 +411,7 @@ wxChar *wxRealPath (wxChar *path)
 {
 #ifdef __WXMSW__
   static const wxChar SEP = wxT('\\');
-  Unix2DosFilename(path);
+  wxUnix2DosFilename(path);
 #else
   static const wxChar SEP = wxT('/');
 #endif
@@ -667,7 +667,7 @@ wxContractPath (const wxString& filename, const wxString& envname, const wxStrin
 
   wxStrcpy (dest, WXSTRINGCAST filename);
 #ifdef __WXMSW__
-  Unix2DosFilename(dest);
+  wxUnix2DosFilename(dest);
 #endif
 
   // Handle environment
