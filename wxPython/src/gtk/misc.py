@@ -2012,43 +2012,69 @@ EVT_JOYSTICK_EVENTS = wx.PyEventBinder([ wxEVT_JOY_BUTTON_DOWN,
 
 #---------------------------------------------------------------------------
 
-class Wave(object):
+SOUND_SYNC = _misc.SOUND_SYNC
+SOUND_ASYNC = _misc.SOUND_ASYNC
+SOUND_LOOP = _misc.SOUND_LOOP
+class Sound(object):
     def __repr__(self):
-        return "<%s.%s; proxy of C++ wxWave instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
-        """__init__(String fileName, bool isResource=False) -> Wave"""
-        newobj = _misc.new_Wave(*args, **kwargs)
+        return "<%s.%s; proxy of C++ wxSound instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args):
+        """
+        __init__() -> Sound
+        __init__(String fileName, bool isResource=false) -> Sound
+        __init__(int size, wxByte data) -> Sound
+        """
+        newobj = _misc.new_Sound(*args)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
-    def __del__(self, destroy=_misc.delete_Wave):
+    def __del__(self, destroy=_misc.delete_Sound):
         """__del__()"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
+    def Create(*args):
+        """
+        Create(String fileName, bool isResource=false) -> bool
+        Create(int size, wxByte data) -> bool
+        """
+        return _misc.Sound_Create(*args)
+
     def IsOk(*args, **kwargs):
         """IsOk() -> bool"""
-        return _misc.Wave_IsOk(*args, **kwargs)
+        return _misc.Sound_IsOk(*args, **kwargs)
 
-    def Play(*args, **kwargs):
-        """Play(bool async=True, bool looped=False) -> bool"""
-        return _misc.Wave_Play(*args, **kwargs)
+    def Play(*args):
+        """Play(unsigned int flags=SOUND_ASYNC) -> bool"""
+        return _misc.Sound_Play(*args)
 
+    def PlaySound(*args):
+        """PlaySound(String filename, unsigned int flags=SOUND_ASYNC) -> bool"""
+        return _misc.Sound_PlaySound(*args)
+
+    PlaySound = staticmethod(PlaySound)
+    def Stop(*args, **kwargs):
+        """Stop()"""
+        return _misc.Sound_Stop(*args, **kwargs)
+
+    Stop = staticmethod(Stop)
     def __nonzero__(self): return self.IsOk() 
 
-class WavePtr(Wave):
+class SoundPtr(Sound):
     def __init__(self, this):
         self.this = this
         if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = Wave
-_misc.Wave_swigregister(WavePtr)
+        self.__class__ = Sound
+_misc.Sound_swigregister(SoundPtr)
 
-def WaveData(*args, **kwargs):
-    """WaveData(String data) -> Wave"""
-    val = _misc.new_WaveData(*args, **kwargs)
-    val.thisown = 1
-    return val
+def Sound_PlaySound(*args):
+    """Sound_PlaySound(String filename, unsigned int flags=SOUND_ASYNC) -> bool"""
+    return _misc.Sound_PlaySound(*args)
+
+def Sound_Stop(*args, **kwargs):
+    """Sound_Stop()"""
+    return _misc.Sound_Stop(*args, **kwargs)
 
 #---------------------------------------------------------------------------
 

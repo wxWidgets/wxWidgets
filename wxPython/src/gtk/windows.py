@@ -1861,8 +1861,8 @@ class MultiChoiceDialog(Dialog):
         return "<%s.%s; proxy of C++ wxMultiChoiceDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, String message, String caption, int LCOUNT, 
-            String choices, long style=CHOICEDLG_STYLE, 
+        __init__(Window parent, String message, String caption, int choices=0, 
+            String choices_array, long style=CHOICEDLG_STYLE, 
             Point pos=DefaultPosition) -> MultiChoiceDialog
         """
         newobj = _windows.new_MultiChoiceDialog(*args, **kwargs)

@@ -244,16 +244,15 @@ SWIGIMPORT(float)          SWIG_PyObj_AsFloatConv(PyObject *obj,  py_objasdbl_co
 #define  SWIGTYPE_p_wxXmlNode swig_types[11] 
 #define  SWIGTYPE_p_wxInputStream swig_types[12] 
 #define  SWIGTYPE_p_wxOutputStream swig_types[13] 
-#define  SWIGTYPE_p_wxString swig_types[14] 
-#define  SWIGTYPE_p_wxPyXmlResourceHandler swig_types[15] 
-#define  SWIGTYPE_p_wxFileSystem swig_types[16] 
-#define  SWIGTYPE_p_wxXmlProperty swig_types[17] 
-#define  SWIGTYPE_p_wxFont swig_types[18] 
-#define  SWIGTYPE_p_wxXmlResource swig_types[19] 
+#define  SWIGTYPE_p_wxPyXmlResourceHandler swig_types[14] 
+#define  SWIGTYPE_p_wxFileSystem swig_types[15] 
+#define  SWIGTYPE_p_wxXmlProperty swig_types[16] 
+#define  SWIGTYPE_p_wxFont swig_types[17] 
+#define  SWIGTYPE_p_wxXmlResource swig_types[18] 
+#define  SWIGTYPE_p_wxXmlDocument swig_types[19] 
 #define  SWIGTYPE_p_wxPanel swig_types[20] 
-#define  SWIGTYPE_p_wxXmlDocument swig_types[21] 
-#define  SWIGTYPE_p_wxSize swig_types[22] 
-static swig_type_info *swig_types[24];
+#define  SWIGTYPE_p_wxSize swig_types[21] 
+static swig_type_info *swig_types[23];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -325,15 +324,6 @@ SWIG_PyObj_AsInt(PyObject *obj)
 { 
   return numeric_cast(int,
     SWIG_PyObj_AsLongInRange(obj, "int", INT_MIN, INT_MAX));
-}
-
-
-SWIGSTATIC(PyObject*)
-SWIG_PyObj_FromBool(bool value)
-{
-  PyObject *obj = value ? Py_True : Py_False;
-  Py_INCREF(obj);
-  return obj;
 }
 
 bool wxXmlResource_LoadFromString(wxXmlResource *self,wxString const &data){
@@ -504,7 +494,7 @@ SWIG_PyObj_AsLong(PyObject * obj)
 #ifdef __cplusplus
 extern "C" {
 #endif
-static int _wrap_UTF8String_set(PyObject *) {
+static int _wrap_UTF8String_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable UTF8String is read-only.");
     return 1;
 }
@@ -524,7 +514,7 @@ static PyObject *_wrap_UTF8String_get() {
 }
 
 
-static int _wrap_StyleString_set(PyObject *) {
+static int _wrap_StyleString_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable StyleString is read-only.");
     return 1;
 }
@@ -544,7 +534,7 @@ static PyObject *_wrap_StyleString_get() {
 }
 
 
-static int _wrap_SizeString_set(PyObject *) {
+static int _wrap_SizeString_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable SizeString is read-only.");
     return 1;
 }
@@ -564,7 +554,7 @@ static PyObject *_wrap_SizeString_get() {
 }
 
 
-static int _wrap_PosString_set(PyObject *) {
+static int _wrap_PosString_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable PosString is read-only.");
     return 1;
 }
@@ -584,7 +574,7 @@ static PyObject *_wrap_PosString_get() {
 }
 
 
-static int _wrap_BitmapString_set(PyObject *) {
+static int _wrap_BitmapString_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable BitmapString is read-only.");
     return 1;
 }
@@ -604,7 +594,7 @@ static PyObject *_wrap_BitmapString_get() {
 }
 
 
-static int _wrap_IconString_set(PyObject *) {
+static int _wrap_IconString_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable IconString is read-only.");
     return 1;
 }
@@ -624,7 +614,7 @@ static PyObject *_wrap_IconString_get() {
 }
 
 
-static int _wrap_FontString_set(PyObject *) {
+static int _wrap_FontString_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable FontString is read-only.");
     return 1;
 }
@@ -770,7 +760,7 @@ static PyObject *_wrap_XmlResource_Load(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp2)
         delete arg2;
@@ -811,7 +801,7 @@ static PyObject *_wrap_XmlResource_LoadFromString(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp2)
         delete arg2;
@@ -1206,7 +1196,7 @@ static PyObject *_wrap_XmlResource_LoadOnDialog(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp4)
         delete arg4;
@@ -1297,7 +1287,7 @@ static PyObject *_wrap_XmlResource_LoadOnPanel(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp4)
         delete arg4;
@@ -1390,7 +1380,7 @@ static PyObject *_wrap_XmlResource_LoadOnFrame(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp4)
         delete arg4;
@@ -1507,7 +1497,7 @@ static PyObject *_wrap_XmlResource_LoadOnObject(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp4)
         delete arg4;
@@ -1654,7 +1644,7 @@ static PyObject *_wrap_XmlResource_AttachUnknownControl(PyObject *self, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp2)
         delete arg2;
@@ -2463,7 +2453,7 @@ static PyObject *_wrap_XmlNode_RemoveChild(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -2579,7 +2569,7 @@ static PyObject *_wrap_XmlNode_DeleteProperty(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp2)
         delete arg2;
@@ -2870,7 +2860,7 @@ static PyObject *_wrap_XmlNode_HasProp(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp2)
         delete arg2;
@@ -3317,7 +3307,7 @@ static PyObject *_wrap_XmlDocument_Load(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp2)
         delete arg2;
@@ -3387,7 +3377,7 @@ static PyObject *_wrap_XmlDocument_LoadFromStream(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (created2)
         delete arg2;
@@ -3436,7 +3426,7 @@ static PyObject *_wrap_XmlDocument_Save(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp2)
         delete arg2;
@@ -3475,7 +3465,7 @@ static PyObject *_wrap_XmlDocument_SaveToStream(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -3500,7 +3490,7 @@ static PyObject *_wrap_XmlDocument_IsOk(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -4041,7 +4031,7 @@ static PyObject *_wrap_XmlResourceHandler_IsOfClass(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp3)
         delete arg3;
@@ -4116,7 +4106,7 @@ static PyObject *_wrap_XmlResourceHandler_HasParam(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp2)
         delete arg2;
@@ -4486,7 +4476,7 @@ static PyObject *_wrap_XmlResourceHandler_GetBool(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp2)
         delete arg2;
@@ -5464,14 +5454,13 @@ static swig_type_info _swigt__p_wxPoint[] = {{"_p_wxPoint", 0, "wxPoint *", 0},{
 static swig_type_info _swigt__p_wxXmlNode[] = {{"_p_wxXmlNode", 0, "wxXmlNode *", 0},{"_p_wxXmlNode"},{0}};
 static swig_type_info _swigt__p_wxInputStream[] = {{"_p_wxInputStream", 0, "wxInputStream *", 0},{"_p_wxInputStream"},{0}};
 static swig_type_info _swigt__p_wxOutputStream[] = {{"_p_wxOutputStream", 0, "wxOutputStream *", 0},{"_p_wxOutputStream"},{0}};
-static swig_type_info _swigt__p_wxString[] = {{"_p_wxString", 0, "wxString *", 0},{"_p_wxString"},{0}};
 static swig_type_info _swigt__p_wxPyXmlResourceHandler[] = {{"_p_wxPyXmlResourceHandler", 0, "wxPyXmlResourceHandler *", 0},{"_p_wxPyXmlResourceHandler"},{0}};
 static swig_type_info _swigt__p_wxFileSystem[] = {{"_p_wxFileSystem", 0, "wxFileSystem *", 0},{"_p_wxFileSystem"},{0}};
 static swig_type_info _swigt__p_wxXmlProperty[] = {{"_p_wxXmlProperty", 0, "wxXmlProperty *", 0},{"_p_wxXmlProperty"},{0}};
 static swig_type_info _swigt__p_wxFont[] = {{"_p_wxFont", 0, "wxFont *", 0},{"_p_wxFont"},{0}};
 static swig_type_info _swigt__p_wxXmlResource[] = {{"_p_wxXmlResource", 0, "wxXmlResource *", 0},{"_p_wxXmlResource"},{0}};
-static swig_type_info _swigt__p_wxPanel[] = {{"_p_wxPanel", 0, "wxPanel *", 0},{"_p_wxPanel"},{0}};
 static swig_type_info _swigt__p_wxXmlDocument[] = {{"_p_wxXmlDocument", 0, "wxXmlDocument *", 0},{"_p_wxXmlDocument"},{0}};
+static swig_type_info _swigt__p_wxPanel[] = {{"_p_wxPanel", 0, "wxPanel *", 0},{"_p_wxPanel"},{0}};
 static swig_type_info _swigt__p_wxSize[] = {{"_p_wxSize", 0, "wxSize *", 0},{"_p_wxSize"},{0}};
 
 static swig_type_info *swig_types_initial[] = {
@@ -5489,14 +5478,13 @@ _swigt__p_wxPoint,
 _swigt__p_wxXmlNode, 
 _swigt__p_wxInputStream, 
 _swigt__p_wxOutputStream, 
-_swigt__p_wxString, 
 _swigt__p_wxPyXmlResourceHandler, 
 _swigt__p_wxFileSystem, 
 _swigt__p_wxXmlProperty, 
 _swigt__p_wxFont, 
 _swigt__p_wxXmlResource, 
-_swigt__p_wxPanel, 
 _swigt__p_wxXmlDocument, 
+_swigt__p_wxPanel, 
 _swigt__p_wxSize, 
 0
 };
