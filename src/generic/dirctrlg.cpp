@@ -50,10 +50,14 @@
 #ifdef __WXMSW__
 #include <windows.h>
 
-#ifndef __GNUWIN32__
-#include <direct.h>
-#include <stdlib.h>
-#include <ctype.h>
+// FIXME - Mingw32 1.0 has both _getdrive() and _chdrive(). For now, let's assume
+//         older releases don't, but it should be verified and the checks modified
+//         accordingly.
+#if !defined(__GNUWIN32__) || \
+    (defined(__MINGW32_MAJOR_VERSION) && __MINGW32_MAJOR_VERSION >= 1)
+  #include <direct.h>
+  #include <stdlib.h>
+  #include <ctype.h>
 #endif
 
 #endif
@@ -310,9 +314,13 @@ static const int ID_CANCEL = 1003;
 static const int ID_NEW = 1004;
 //static const int ID_CHECK = 1005;
 
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WXMSW__) || defined(__WXPM__) || defined(__DOS__)
 int setdrive(int drive)
 {
+#if defined(__GNUWIN32__) && \
+    (defined(__MINGW32_MAJOR_VERSION) && __MINGW32_MAJOR_VERSION >= 1)
+    return _chdrive(drive);
+#else
 	wxChar  newdrive[3];
 
 	if (drive < 1 || drive > 31)
@@ -333,6 +341,7 @@ int setdrive(int drive)
 		return 0;
 	else
 		return -1;
+#endif // !GNUWIN32
 }
 
 static bool wxIsDriveAvailable(const wxString dirName)
@@ -347,7 +356,8 @@ static bool wxIsDriveAvailable(const wxString dirName)
     if (dirName.Len() == 3 && dirName[(size_t)1] == wxT(':'))
     {
         wxString dirNameLower(dirName.Lower());
-#if defined(__GNUWIN32__)
+#if defined(__GNUWIN32__) && \
+    !(defined(__MINGW32_MAJOR_VERSION) && __MINGW32_MAJOR_VERSION >= 1)
         success = wxPathExists(dirNameLower);
 #else
         int currentDrive = _getdrive();
