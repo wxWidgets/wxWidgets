@@ -3156,6 +3156,7 @@ void wxWindow::InitMouseEvent(wxMouseEvent& event, int x, int y, WXUINT flags)
     event.m_leftDown = ((flags & MK_LBUTTON) != 0);
     event.m_middleDown = ((flags & MK_MBUTTON) != 0);
     event.m_rightDown = ((flags & MK_RBUTTON) != 0);
+    event.m_altDown = ::GetKeyState(VK_MENU) & 0x80000000;
     event.SetTimestamp(s_currentMsg.time);
     event.m_eventObject = this;
 
