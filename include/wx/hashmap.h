@@ -374,7 +374,6 @@ public: \
     typedef const VALUE_T const_t2; \
  \
     CLASSNAME( const const_t1& f, const const_t2& s ):first(t1(f)),second(t2(s)) {} \
-    CLASSNAME( const const_t1& f ):first(t1(f)),second(t2()) {} \
  \
     t1 first; \
     t2 second; \
@@ -517,7 +516,7 @@ public: \
  \
     mapped_type& operator[]( const const_key_type& key ) \
     { \
-        return GetOrCreateNode( CLASSNAME##_wxImplementation_Pair( key ) )->m_value.second; \
+        return GetOrCreateNode( CLASSNAME##_wxImplementation_Pair( key, mapped_type() ) )->m_value.second; \
     } \
  \
     const_iterator find( const const_key_type& key ) const \
