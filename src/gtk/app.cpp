@@ -93,16 +93,16 @@ bool wxYield()
     while (gtk_events_pending())
         gtk_main_iteration();
 
-    /* it's necessary to call ProcessIdle() to update the frames sizes which
-       might have been changed (it also will update other things set from
-       OnUpdateUI() which is a nice (and desired) side effect) */
-    while (wxTheApp->ProcessIdle()) { }
-
     if (has_idle)
     {
         /* re-add idle handler */
         wxTheApp->m_idleTag = gtk_idle_add( wxapp_idle_callback, (gpointer) NULL );
     }
+
+    /* it's necessary to call ProcessIdle() to update the frames sizes which
+       might have been changed (it also will update other things set from
+       OnUpdateUI() which is a nice (and desired) side effect) */
+    while (wxTheApp->ProcessIdle()) { }
 
     return TRUE;
 }
