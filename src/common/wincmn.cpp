@@ -194,7 +194,7 @@ wxWindowBase::wxWindowBase()
 bool wxWindowBase::CreateBase(wxWindowBase *parent,
                               wxWindowID id,
                               const wxPoint& WXUNUSED(pos),
-                              const wxSize& WXUNUSED(size),
+                              const wxSize& size,
                               long style,
                               const wxValidator& wxVALIDATOR_PARAM(validator),
                               const wxString& name)
@@ -223,6 +223,14 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
     SetWindowStyleFlag(style);
     SetParent(parent);
 
+    // Set the minsize to be the size passed to the ctor (if any) for
+    // non-TLWs.  This is so items used in a sizer will use this explicitly
+    // set size for layout, instead of falling back the (probably smaller)
+    // bestsize.
+    if (! IsTopLevel())
+        SetSizeHints(size);
+
+    
 #if wxUSE_VALIDATORS
     SetValidator(validator);
 #endif // wxUSE_VALIDATORS
