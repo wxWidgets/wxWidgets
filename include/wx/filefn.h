@@ -133,12 +133,27 @@ bool WXDLLEXPORT wxRmdir(const wxString& dir, int flags = 0);
   #define PATH_SEP          PATH_SEP_DOS
 #endif  // Unix/Windows
 
+// this is useful for wxString::IsSameAs(): to compare two file names use
+// filename1.IsSameAs(filename2, wxARE_FILENAMES_CASE_SENSITIVE)
+#ifdef  __UNIX__
+  #define wxARE_FILENAMES_CASE_SENSITIVE  TRUE
+#else   // Windows
+  #define wxARE_FILENAMES_CASE_SENSITIVE  FALSE
+#endif  // Unix/Windows
+
 // is the char a path separator?
 inline bool wxIsPathSeparator(char c)
   { return c == FILE_SEP_PATH_DOS || c == FILE_SEP_PATH_UNIX; }
 
 // does the string ends with path separator?
 bool WXDLLEXPORT wxEndsWithPathSeparator(const char *pszFileName);
+
+// split the full path into path (including drive for DOS), name and extension
+// (understands both '/' and '\\')
+void WXDLLEXPORT wxSplitPath(const char *pszFileName,
+                             wxString *pstrPath,
+                             wxString *pstrName,
+                             wxString *pstrExt);
 
 // find a file in a list of directories, returns false if not found
 bool WXDLLEXPORT wxFindFileInPath(wxString *pStr, const char *pszPath, const char *pszFile);
