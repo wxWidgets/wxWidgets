@@ -133,7 +133,7 @@ wxString wxGetSingleChoice( const wxString& message,
 // Overloaded for backward compatibility
 wxString wxGetSingleChoice( const wxString& message,
                             const wxString& caption,
-                            int n, char *choices[],
+                            int n, wxChar *choices[],
                             wxWindow *parent,
                             int x, int y, bool centre,
                             int width, int height )
