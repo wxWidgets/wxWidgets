@@ -398,40 +398,6 @@ void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
 // dialog window proc
 // ---------------------------------------------------------------------------
 
-// the DialogProc for all wxWindows dialogs
-LONG APIENTRY _EXPORT
-wxDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    switch ( message )
-    {
-#if 0
-        case WM_ACTIVATE:
-        case WM_SHOWWINDOW:
-            // DefDlgProc() has a bug which makes it enter an infinite loop
-            // when a dialog containing a notebook whose children have
-            // WS_EX_CONTROLPARENT (automatically set for the windows with
-            // wxTAB_TRAVERSAL style as it's needed to get it right) is
-            // deactivated or hidden -- simply remove this code to see this
-            // happen in the notebook sample
-            //
-            // The only way I found to prevent this from happening is to never
-            // let it process these messages at all.
-            if ( !wParam )
-                return TRUE;
-#endif
-
-        case WM_INITDIALOG:
-            // for this message, returning TRUE tells system to set focus to
-            // the first control in the dialog box, but as we set the focus
-            // ourselves, we return FALSE from here as well, so fall through
-
-        default:
-            // for all the other ones, FALSE means that we didn't process the
-            // message
-            return FALSE;
-    }
-}
-
 long wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
     long rc = 0;
