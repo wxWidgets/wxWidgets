@@ -1447,6 +1447,26 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
 */
     }
 
+    // GDK sends surplus button down event
+    // before a double click event. We
+    // need to filter these out.
+    if (gdk_event->type == GDK_BUTTON_PRESS)
+    {
+        GdkEvent *peek_event = gdk_event_peek();
+        if (peek_event)
+        {
+            if (peek_event->type == GDK_2BUTTON_PRESS)
+            {
+                gdk_event_free( peek_event );
+                return TRUE;
+            }
+            else
+            {
+                gdk_event_free( peek_event );
+            }
+        }
+    }
+    
     wxEventType event_type = wxEVT_NULL;
 
     if (gdk_event->button == 1)
@@ -1476,6 +1496,7 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
             default:  break;
         }
     }
+    
 
     if ( event_type == wxEVT_NULL )
     {
