@@ -1120,7 +1120,7 @@ $(CFG): makefile.b32
 -w-hid # virtual function A hides virtual function B
 -tWM
 
--I$(ARCHINCDIR);-I$(WXINC);$(BCCDIR)\include;$(WXDIR)/src/generic;$(WXDIR)/src/png;$(WXDIR)/src/jpeg;$(WXDIR)/src/zlib;$(WXDIR)/src/tiff
+-I$(ARCHINCDIR);$(WXINC);$(BCCDIR)\include;$(WXDIR)/src/generic;$(WXDIR)/src/png;$(WXDIR)/src/jpeg;$(WXDIR)/src/zlib;$(WXDIR)/src/tiff
 -I$(WXDIR)\include\wx\msw\gnuwin32
 
 -L$(BCCDIR)\lib;$(BCCDIR)\lib\psdk
