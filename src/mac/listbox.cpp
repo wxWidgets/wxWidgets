@@ -842,13 +842,51 @@ static long sLastTypeIn = 0 ;
 
 void wxListBox::OnChar(wxKeyEvent& event)
 {
-	EventRecord *ev = (EventRecord*) (wxTheApp->MacGetCurrentEvent() ) ;
-	short keycode ;
-	short keychar ;
-	keychar = short(ev->message & charCodeMask);
-	keycode = short(ev->message & keyCodeMask) >> 8 ;
-	if ( event.KeyCode() == WXK_SPACE )
+    if ( event.KeyCode() == WXK_RETURN || event.KeyCode() == WXK_NUMPAD_ENTER)
+    {
+    	wxWindow* parent = GetParent() ;
+    	while( parent  && !parent->IsTopLevel() && parent->GetDefaultItem() == NULL )
+    		parent = parent->GetParent() ;
+    		
+    	if ( parent && parent->GetDefaultItem() )
+    	{
+        	wxButton *def = wxDynamicCast(parent->GetDefaultItem(),
+                                               wxButton);
+	        if ( def && def->IsEnabled() )
+	        {
+	             wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, def->GetId() );
+	             event.SetEventObject(def);
+	             def->Command(event);
+	             return ;
+	        }
+	    }
+	    event.Skip() ;
+    }
+    /* generate wxID_CANCEL if command-. or <esc> has been pressed (typically in dialogs) */
+    else if (event.KeyCode() == WXK_ESCAPE || (event.KeyCode() == '.' && event.MetaDown() ) )
+    {
+    	wxWindow* win = GetParent()->FindWindow( wxID_CANCEL ) ;
+        wxCommandEvent new_event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_CANCEL);
+        new_event.SetEventObject( win );
+        win->GetEventHandler()->ProcessEvent( new_event );
+    }
+    else if ( event.KeyCode() == WXK_TAB )
+    {
+        wxNavigationKeyEvent new_event;
+        new_event.SetEventObject( this );
+        new_event.SetDirection( !event.ShiftDown() );
+        /* CTRL-TAB changes the (parent) window, i.e. switch notebook page */
+        new_event.SetWindowChange( event.ControlDown() );
+        new_event.SetCurrentFocus( this );
+        if ( !GetEventHandler()->ProcessEvent( new_event ) )
+        	event.Skip() ;
+    }
+	else if ( event.KeyCode() == WXK_SPACE || event.KeyCode() == WXK_DOWN || event.KeyCode() == WXK_UP )
 	{
+		// perform the default key handling first
+		if ( event.KeyCode() == WXK_DOWN || event.KeyCode() == WXK_UP )
+			wxControl::OnKeyDown( event ) ;
+			
         wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, m_windowId);
         event.SetEventObject( this );
 
@@ -872,24 +910,33 @@ void wxListBox::OnChar(wxKeyEvent& event)
 
         GetEventHandler()->ProcessEvent(event);
 	}
-	else if ( event.KeyCode() == WXK_DOWN || event.KeyCode() == WXK_UP )
-	{
-	    // default handling
-	    event.Skip() ;
-//	  ::HandleControlKey( (ControlHandle) m_macControl , keycode , keychar , ev->modifiers ) ;
-	} 
 	else
 	{
-	  if ( ev->when > m_lastTypeIn + 60 )
+	  if ( event.GetTimestamp() > m_lastTypeIn + 60 )
 	  {
 	    m_typeIn = "" ;
 	  }
-	  m_lastTypeIn = ev->when ;
+	  m_lastTypeIn = event.GetTimestamp() ;
 	  m_typeIn += (char) event.KeyCode() ;
 	  int line = FindString("*"+m_typeIn+"*") ;
 	  if ( line >= 0 )
 	  {
-	    SetSelection(line) ;
+	  	if ( GetSelection() != line )
+	  	{
+	    	SetSelection(line) ;
+	        wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, m_windowId);
+	        event.SetEventObject( this );
+
+            if ( HasClientObjectData() )
+              event.SetClientObject( GetClientObject( line ) );
+          	else if ( HasClientUntypedData() )
+              event.SetClientData( GetClientData(line) );
+          	event.SetString( GetString(line) );
+
+	        event.m_commandInt = line ;
+
+	        GetEventHandler()->ProcessEvent(event);
+	    }
 	  }
 	}
 }
