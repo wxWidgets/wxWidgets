@@ -47,8 +47,7 @@ bool GridApp::OnInit()
 BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_TOGGLEROWLABELS,  GridFrame::ToggleRowLabels )
     EVT_MENU( ID_TOGGLECOLLABELS,  GridFrame::ToggleColLabels )    
-    EVT_MENU( ID_TOGGLECONTROLPANEL, GridFrame::ToggleControlPanel )
-    EVT_MENU( ID_TOGGLECELLEDIT, GridFrame::ToggleCellEdit )
+    EVT_MENU( ID_TOGGLEEDIT, GridFrame::ToggleEditing )
     EVT_MENU( ID_SETLABELCOLOUR, GridFrame::SetLabelColour )    
     EVT_MENU( ID_SETLABELTEXTCOLOUR, GridFrame::SetLabelTextColour )    
     EVT_MENU( ID_ROWLABELHORIZALIGN, GridFrame::SetRowLabelHorizAlignment )    
@@ -58,9 +57,10 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_GRIDLINECOLOUR, GridFrame::SetGridLineColour )
     EVT_MENU( ID_INSERTROW, GridFrame::InsertRow )
     EVT_MENU( ID_INSERTCOL, GridFrame::InsertCol )
-    EVT_MENU( ID_DELETEROW, GridFrame::DeleteRow )
-    EVT_MENU( ID_DELETECOL, GridFrame::DeleteCol )
+    EVT_MENU( ID_DELETEROW, GridFrame::DeleteSelectedRows )
+    EVT_MENU( ID_DELETECOL, GridFrame::DeleteSelectedCols )
     EVT_MENU( ID_CLEARGRID, GridFrame::ClearGrid )
+    
     EVT_MENU( ID_ABOUT, GridFrame::About )
     EVT_MENU( wxID_EXIT, GridFrame::OnQuit )
 
@@ -71,6 +71,7 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_GRID_SELECT_CELL( GridFrame::OnSelectCell )
     EVT_GRID_RANGE_SELECT( GridFrame::OnRangeSelected )
     EVT_GRID_CELL_CHANGE( GridFrame::OnCellValueChanged )
+    
 END_EVENT_TABLE()
 
     
@@ -88,8 +89,7 @@ GridFrame::GridFrame()
     wxMenu *viewMenu = new wxMenu;
     viewMenu->Append( ID_TOGGLEROWLABELS,  "&Row labels", "", TRUE );
     viewMenu->Append( ID_TOGGLECOLLABELS,  "&Col labels", "", TRUE );
-    viewMenu->Append( ID_TOGGLECONTROLPANEL,  "To&p controls", "", TRUE );
-    viewMenu->Append( ID_TOGGLECELLEDIT,  "&In-place editing", "", TRUE );
+    viewMenu->Append( ID_TOGGLEEDIT,  "&Editable", "", TRUE );
     viewMenu->Append( ID_SETLABELCOLOUR, "Set &label colour" );
     viewMenu->Append( ID_SETLABELTEXTCOLOUR, "Set label &text colour" );
     
@@ -116,8 +116,8 @@ GridFrame::GridFrame()
     wxMenu *editMenu = new wxMenu;
     editMenu->Append( ID_INSERTROW, "Insert &row" );
     editMenu->Append( ID_INSERTCOL, "Insert &column" );
-    editMenu->Append( ID_DELETEROW, "Delete ro&w" );
-    editMenu->Append( ID_DELETECOL, "Delete co&l" );
+    editMenu->Append( ID_DELETEROW, "Delete selected ro&ws" );
+    editMenu->Append( ID_DELETECOL, "Delete selected co&ls" );
     editMenu->Append( ID_CLEARGRID, "Cl&ear grid cell contents" );
     
     wxMenu *helpMenu = new wxMenu;
@@ -152,8 +152,6 @@ GridFrame::GridFrame()
     //
     grid->CreateGrid( 100, 100 );
 
-    grid->EnableTopEditControl( TRUE );
-    
     grid->SetRowSize( 0, 60 );
     grid->SetCellValue( 0, 0, "Ctrl+Home\nwill go to\nthis cell" );
     
@@ -164,7 +162,7 @@ GridFrame::GridFrame()
 
     grid->SetRowSize( 99, 60 );
     grid->SetCellValue( 99, 99, "Ctrl+End\nwill go to\nthis cell" );
-    
+
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
     topSizer->Add( grid,
                    1,
@@ -189,12 +187,12 @@ GridFrame::~GridFrame()
 {
 }
 
+
 void GridFrame::SetDefaults()
 {
     GetMenuBar()->Check( ID_TOGGLEROWLABELS, TRUE );
     GetMenuBar()->Check( ID_TOGGLECOLLABELS, TRUE );
-    GetMenuBar()->Check( ID_TOGGLECONTROLPANEL, TRUE );
-    GetMenuBar()->Check( ID_TOGGLECELLEDIT, TRUE );
+    GetMenuBar()->Check( ID_TOGGLEEDIT, TRUE );
 }
 
 
@@ -224,16 +222,10 @@ void GridFrame::ToggleColLabels( wxCommandEvent& WXUNUSED(ev) )
 }
 
 
-void GridFrame::ToggleControlPanel( wxCommandEvent& WXUNUSED(ev) )
+void GridFrame::ToggleEditing( wxCommandEvent& WXUNUSED(ev) )
 {
-    grid->EnableTopEditControl(GetMenuBar()->IsChecked(ID_TOGGLECONTROLPANEL));
-}
-
-
-void GridFrame::ToggleCellEdit( wxCommandEvent& WXUNUSED(ev) )
-{
-    grid->EnableCellEditControl(
-        GetMenuBar()->IsChecked( ID_TOGGLECELLEDIT ) );
+    grid->EnableEditing(
+        GetMenuBar()->IsChecked( ID_TOGGLEEDIT ) );
 }
 
 
@@ -386,56 +378,31 @@ void GridFrame::InsertCol( wxCommandEvent& WXUNUSED(ev) )
 }
 
 
-void GridFrame::DeleteRow( wxCommandEvent& WXUNUSED(ev) )
+void GridFrame::DeleteSelectedRows( wxCommandEvent& WXUNUSED(ev) )
 {
-    grid->DeleteRows( 0, 1 );
+    if ( grid->IsSelection() )
+    {
+        int topRow, bottomRow, leftCol, rightCol;
+        grid->GetSelection( &topRow, &leftCol, &bottomRow, &rightCol );
+        grid->DeleteRows( topRow, bottomRow - topRow + 1 );
+    }
 }
 
 
-void GridFrame::DeleteCol( wxCommandEvent& WXUNUSED(ev) )
+void GridFrame::DeleteSelectedCols( wxCommandEvent& WXUNUSED(ev) )
 {
-    grid->DeleteCols( 0, 1 );
+    if ( grid->IsSelection() )
+    {
+        int topRow, bottomRow, leftCol, rightCol;
+        grid->GetSelection( &topRow, &leftCol, &bottomRow, &rightCol );
+        grid->DeleteCols( leftCol, rightCol - leftCol + 1 );
+    }
 }
 
 
 void GridFrame::ClearGrid( wxCommandEvent& WXUNUSED(ev) )
 {
     grid->ClearGrid();
-}
-
-
-void GridFrame::About(  wxCommandEvent& WXUNUSED(ev) )
-{
-    (void)wxMessageBox( "\n\nwxGrid demo \n\n"
-                        "Michael Bedward \n"
-                        "mbedward@ozemail.com.au \n\n",
-                        "About",
-                        wxOK );
-}
-
-
-void GridFrame::OnSize( wxSizeEvent& WXUNUSED(ev) )
-{
-    if ( grid && logWin )
-    {
-        int cw, ch;
-        GetClientSize( &cw, &ch );
-    
-        int gridH = ch - 90;
-        int logH  = 80;
-        if ( gridH < 0 )
-        {
-            gridH = ch;
-        }
-        
-        grid->SetSize( 0, 0, cw, gridH );
-        logWin->SetSize( 0, gridH + 10, cw, logH );
-    }
-}
-
-void GridFrame::OnQuit( wxCommandEvent& WXUNUSED(ev) )
-{
-    Close( TRUE );
 }
 
 
@@ -535,4 +502,19 @@ void GridFrame::OnCellValueChanged( wxGridEvent& ev )
     ev.Skip();
 }
 
+
+void GridFrame::About(  wxCommandEvent& WXUNUSED(ev) )
+{
+    (void)wxMessageBox( "\n\nwxGrid demo \n\n"
+                        "Michael Bedward \n"
+                        "mbedward@ozemail.com.au \n\n",
+                        "About",
+                        wxOK );
+}
+
+
+void GridFrame::OnQuit( wxCommandEvent& WXUNUSED(ev) )
+{
+    Close( TRUE );
+}
 

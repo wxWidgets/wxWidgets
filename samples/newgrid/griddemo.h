@@ -30,10 +30,10 @@ class GridFrame : public wxFrame
     wxString       logBuf;
 
     void SetDefaults();
+
     void ToggleRowLabels( wxCommandEvent& );
     void ToggleColLabels( wxCommandEvent& );
-    void ToggleControlPanel( wxCommandEvent& );
-    void ToggleCellEdit( wxCommandEvent& );
+    void ToggleEditing( wxCommandEvent& );
     void SetLabelColour( wxCommandEvent& );
     void SetLabelTextColour( wxCommandEvent& );
     void SetRowLabelHorizAlignment( wxCommandEvent& );
@@ -44,12 +44,10 @@ class GridFrame : public wxFrame
 
     void InsertRow( wxCommandEvent& );    
     void InsertCol( wxCommandEvent& );    
-    void DeleteRow( wxCommandEvent& );    
-    void DeleteCol( wxCommandEvent& );    
+    void DeleteSelectedRows( wxCommandEvent& );    
+    void DeleteSelectedCols( wxCommandEvent& );    
     void ClearGrid( wxCommandEvent& );
 
-    void About( wxCommandEvent& );
-    
     void OnLabelLeftClick( wxGridEvent& );
     void OnCellLeftClick( wxGridEvent& );
     void OnRowSize( wxGridSizeEvent& );
@@ -62,13 +60,12 @@ class GridFrame : public wxFrame
     GridFrame();
     ~GridFrame();
 
-    void OnSize( wxSizeEvent& );
     void OnQuit( wxCommandEvent& );
+    void About( wxCommandEvent& );
 
     enum { ID_TOGGLEROWLABELS = 100,
            ID_TOGGLECOLLABELS,
-           ID_TOGGLECONTROLPANEL,
-           ID_TOGGLECELLEDIT,
+           ID_TOGGLEEDIT,
            ID_SETLABELCOLOUR,
            ID_SETLABELTEXTCOLOUR,
            ID_ROWLABELALIGN,
