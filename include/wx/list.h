@@ -34,7 +34,6 @@
 // -----------------------------------------------------------------------------
 
 #include "wx/defs.h"
-#include "wx/debug.h"
 #include "wx/object.h"
 #include "wx/string.h"
 

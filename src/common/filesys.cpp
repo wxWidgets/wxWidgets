@@ -89,14 +89,13 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
     }
 
     ft = wxTheMimeTypesManager -> GetFileTypeFromExtension(ext);
-    if (ft && (ft -> GetMimeType(&mime))) {
-        delete ft; 
-        return mime;
+    if ( !ft || !ft -> GetMimeType(&mime) ) {
+        mime = wxEmptyString;
     }
-    else {
-        delete ft;
-        return wxEmptyString;
-    }
+
+    delete ft;
+
+    return mime;
 }
 
 
@@ -186,13 +185,15 @@ bool wxLocalFSHandler::CanOpen(const wxString& location)
 wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& location)
 {
     wxString right = GetRightLocation(location);
-    if (wxFileExists(right))
-        return new wxFSFile(new wxFileInputStream(right),
-                            right,
-                            GetMimeTypeFromExt(location),
-                            GetAnchor(location),
-                            wxDateTime(wxFileModificationTime(right)));
-    else return (wxFSFile*) NULL;
+    if (!wxFileExists(right))
+        return (wxFSFile*) NULL;
+
+    return new wxFSFile(new wxFileInputStream(right),
+                        right,
+                        GetMimeTypeFromExt(location),
+                        GetAnchor(location),
+                        wxDateTime(wxFileModificationTime(right)));
+
 }
 
 wxString wxLocalFSHandler::FindFirst(const wxString& spec, int flags)

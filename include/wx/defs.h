@@ -455,8 +455,12 @@ class WXDLLEXPORT wxEvent;
 #define wxNOT_FOUND       (-1)
 
 // ----------------------------------------------------------------------------
-/** @name Very common macros */
+// Very common macros
 // ----------------------------------------------------------------------------
+
+// everybody gets the assert and other debug macros
+#include "wx/debug.h"
+
 //@{
 /// delete pointer if it is not NULL and NULL it afterwards
 // (checking that it's !NULL before passing it to delete is just a
@@ -487,10 +491,6 @@ class WXDLLEXPORT wxEvent;
 
 /// size of statically declared array
 #define WXSIZEOF(array)   (sizeof(array)/sizeof(array[0]))
-
-// Use of these suppresses some compiler warnings
-WXDLLEXPORT_DATA(extern const bool) wxTrue;
-WXDLLEXPORT_DATA(extern const bool) wxFalse;
 
 // ----------------------------------------------------------------------------
 // compiler specific settings

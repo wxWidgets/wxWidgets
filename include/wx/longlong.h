@@ -21,7 +21,6 @@
 
 #include "wx/defs.h"
 #include "wx/wxchar.h"
-#include "wx/debug.h"
 
 #include <limits.h>     // for LONG_MAX
 

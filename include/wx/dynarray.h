@@ -17,7 +17,6 @@
 #endif
 
 #include "wx/defs.h"
-#include "wx/debug.h"
 
 /** @name Dynamic arrays and object arrays (array which own their elements)
     @memo Arrays which grow on demand and do range checking (only in debug)

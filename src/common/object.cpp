@@ -48,6 +48,11 @@ wxClassInfo wxObject::sm_classwxObject((wxChar *) wxT("wxObject"), (wxChar *) NU
 wxClassInfo* wxClassInfo::sm_first = (wxClassInfo *) NULL;
 wxHashTable* wxClassInfo::sm_classTable = (wxHashTable*) NULL;
 
+// These are here so we can avoid 'always true/false' warnings
+// by referring to these instead of TRUE/FALSE
+const bool wxTrue = TRUE;
+const bool wxFalse = FALSE;
+
 /*
  * wxWindows root object.
  */
@@ -379,8 +384,3 @@ wxObjectRefData::wxObjectRefData(void) : m_count(1)
 wxObjectRefData::~wxObjectRefData()
 {
 }
-
-// These are here so we can avoid 'always true/false' warnings
-// by referring to these instead of TRUE/FALSE
-const bool wxTrue = TRUE;
-const bool wxFalse = FALSE;

@@ -94,8 +94,8 @@ bool wxInternetFSHandler::CanOpen(const wxString& location)
         wxURL url(p + wxT(":") + StripProtocolAnchor(location));
         return (url.GetError() == wxURL_NOERR);
     }
-    else 
-        return FALSE;
+
+    return FALSE;
 }
 
 
@@ -140,15 +140,14 @@ wxFSFile* wxInternetFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxStri
 
     // Load item from cache:
     s = new wxFileInputStream(info->GetTemp());
-    if (s)
-    {
-        return new wxFSFile(s,
-                            right,
-                            info->GetMime(),
-                            GetAnchor(location),
-                            wxDateTime::Now());
-    }
-    else return (wxFSFile*) NULL;
+    if (!s)
+        return (wxFSFile*) NULL;
+
+    return new wxFSFile(s,
+                        right,
+                        info->GetMime(),
+                        GetAnchor(location),
+                        wxDateTime::Now());
 }
 
 

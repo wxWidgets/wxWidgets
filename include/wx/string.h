@@ -66,7 +66,6 @@
 #endif // AIX
 
 #include "wx/defs.h"        // everybody should include this
-#include "wx/debug.h"       // for wxASSERT()
 #include "wx/wxchar.h"      // for wxChar
 #include "wx/buffer.h"      // for wxCharBuffer
 #include "wx/strconv.h"     // for wxConvertXXX() macros and wxMBConv classes
