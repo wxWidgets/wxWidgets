@@ -121,6 +121,6 @@ itself, namely:
                                                                  Vadim Zeitlin
 
 
-This file is accurate for the version 2.3.4 of wxUniversal. It was last
+This file is accurate for the version 2.4.0 of wxUniversal. It was last
 modified on Apr 15, 2002.
 
