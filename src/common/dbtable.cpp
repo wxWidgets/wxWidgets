@@ -2118,6 +2118,9 @@ void wxDbTable::SetColDefs(UWORD index, const wxString &fieldName, int dataType,
                            SWORD cType, int size, bool keyField, bool upd,
                            bool insAllow, bool derivedCol)
 {
+    wxASSERT_MSG( index < noCols,
+                  _T("Specified column index exceeds the maximum number of columns for this table.") );
+
     if (!colDefs)  // May happen if the database connection fails
         return;
 
