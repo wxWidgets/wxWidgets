@@ -764,7 +764,7 @@ bool wxPNGReader::SaveXPM(wxChar *filename, wxChar *name)
 
 IMPLEMENT_DYNAMIC_CLASS(wxPNGFileHandler, wxBitmapHandler)
 
-bool wxPNGFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
+bool wxPNGFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, HPS hPs, long flags,
     int desiredWidth, int desiredHeight)
 {
     wxPNGReader reader;

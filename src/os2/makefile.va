@@ -175,7 +175,6 @@ COMMONOBJS = \
   ..\common\$D\config.obj \
   ..\common\$D\ctrlcmn.obj \
   ..\common\$D\ctrlsub.obj \
-  ..\common\$D\date.obj \
   ..\common\$D\datetime.obj \
   ..\common\$D\datstrm.obj \
   ..\common\$D\db.obj \
@@ -245,7 +244,6 @@ COMMONOBJS = \
   ..\common\$D\tbarbase.obj \
   ..\common\$D\textcmn.obj \
   ..\common\$D\textfile.obj \
-  ..\common\$D\time.obj \
   ..\common\$D\timercmn.obj \
   ..\common\$D\tokenzr.obj \
   ..\common\$D\txtstrm.obj \
@@ -272,7 +270,6 @@ COMLIBOBJS1 = \
   config.obj \
   ctrlcmn.obj \
   ctrlsub.obj \
-  date.obj \
   datetime.obj \
   datstrm.obj \
   db.obj \
@@ -308,10 +305,10 @@ COMLIBOBJS1 = \
   imagjpeg.obj \
   imagpcx.obj \
   imagpng.obj \
-  imagpnm.obj
+  imagpnm.obj \
+  intl.obj
 
 COMLIBOBJS2 = \
-  intl.obj \
   ipcbase.obj \
   layout.obj \
   lboxcmn.obj \
@@ -344,7 +341,6 @@ COMLIBOBJS2 = \
   tbarbase.obj \
   textcmn.obj \
   textfile.obj \
-  time.obj \
   timercmn.obj \
   tokenzr.obj \
   txtstrm.obj \
@@ -352,11 +348,11 @@ COMLIBOBJS2 = \
   url.obj \
   utilscmn.obj \
   valgen.obj \
-  validate.obj 
+  validate.obj \
+  valtext.obj \
+  variant.obj
 
 COMLIBOBJS3 = \
-  valtext.obj \
-  variant.obj \
   wfstream.obj \
   wincmn.obj \
   wxchar.obj \
@@ -579,7 +575,6 @@ $(COMLIBOBJS1):
   copy ..\common\$D\config.obj
   copy ..\common\$D\ctrlcmn.obj
   copy ..\common\$D\ctrlsub.obj
-  copy ..\common\$D\date.obj
   copy ..\common\$D\datetime.obj
   copy ..\common\$D\datstrm.obj
   copy ..\common\$D\db.obj
@@ -616,9 +611,9 @@ $(COMLIBOBJS1):
   copy ..\common\$D\imagpcx.obj
   copy ..\common\$D\imagpng.obj
   copy ..\common\$D\imagpnm.obj
+  copy ..\common\$D\intl.obj
 
 $(COMLIBOBJS2):
-  copy ..\common\$D\intl.obj
   copy ..\common\$D\ipcbase.obj
   copy ..\common\$D\layout.obj
   copy ..\common\$D\lboxcmn.obj
@@ -651,7 +646,6 @@ $(COMLIBOBJS2):
   copy ..\common\$D\tbarbase.obj
   copy ..\common\$D\textcmn.obj
   copy ..\common\$D\textfile.obj
-  copy ..\common\$D\time.obj
   copy ..\common\$D\timercmn.obj
   copy ..\common\$D\tokenzr.obj
   copy ..\common\$D\txtstrm.obj
@@ -660,10 +654,10 @@ $(COMLIBOBJS2):
   copy ..\common\$D\utilscmn.obj
   copy ..\common\$D\valgen.obj
   copy ..\common\$D\validate.obj
-
-$(COMLIBOBJS3):
   copy ..\common\$D\valtext.obj
   copy ..\common\$D\variant.obj
+
+$(COMLIBOBJS3):
   copy ..\common\$D\wfstream.obj
   copy ..\common\$D\wincmn.obj
   copy ..\common\$D\wxchar.obj
