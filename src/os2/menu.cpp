@@ -52,7 +52,12 @@ static const int                    idMenuTitle = -2;
 //
 // The unique ID for Menus
 //
-static USHORT			    wxMenu::m_nextMenuId = 0;
+#ifdef __VISAGECPP__
+USHORT                              wxMenu::m_nextMenuId = 0;
+#else
+static USHORT                       wxMenu::m_nextMenuId = 0;
+#endif
+
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
@@ -278,7 +283,7 @@ bool wxMenu::DoInsertOrAppend(
         pSubmenu->SetParent(this);
         rItem.afStyle |= MIS_SUBMENU | MIS_TEXT;
     }
-        
+
     //
     // If "Break" has just been called, insert a menu break before this item
     // (and don't forget to reset the flag)
