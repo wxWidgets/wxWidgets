@@ -127,7 +127,7 @@ LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
 // ---------------------------------------------------------------------------
 
 // the pointer to standard radio button wnd proc
-static WXFARPROC gs_wndprocEdit = (WXFARPROC)NULL;
+static WNDPROC gs_wndprocEdit = (WNDPROC)NULL;
 
 // ============================================================================
 // implementation
@@ -409,12 +409,8 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     // edit control, we must subclass it as well
     if ( !(style & wxCB_READONLY) )
     {
-        gs_wndprocEdit = (WXFARPROC)::SetWindowLong
-                                      (
-                                        (HWND)GetEditHWND(),
-                                        GWL_WNDPROC,
-                                        (LPARAM)wxComboEditWndProc
-                                      );
+        gs_wndprocEdit = wxSetWindowProc((HWND)GetEditHWND(),
+                                         wxComboEditWndProc);
     }
 
     // and finally, show the control

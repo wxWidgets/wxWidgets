@@ -149,7 +149,7 @@ LRESULT APIENTRY _EXPORT wxBuddyTextWndProc(HWND hwnd,
                                             WPARAM wParam,
                                             LPARAM lParam)
 {
-    wxSpinCtrl *spin = (wxSpinCtrl *)::GetWindowLong(hwnd, GWL_USERDATA);
+    wxSpinCtrl *spin = (wxSpinCtrl *)wxGetWindowUserData(hwnd);
 
     // forward some messages (the key and focus ones only so far) to
     // the spin ctrl
@@ -170,7 +170,7 @@ LRESULT APIENTRY _EXPORT wxBuddyTextWndProc(HWND hwnd,
             spin->MSWWindowProc(message, wParam, lParam);
 
             // The control may have been deleted at this point, so check.
-            if (!(::IsWindow(hwnd) && ((wxSpinCtrl *)::GetWindowLong(hwnd, GWL_USERDATA)) == spin))
+            if ( !::IsWindow(hwnd) || wxGetWindowUserData(hwnd) != spin )
                 return 0;
             break;
 
@@ -186,8 +186,7 @@ LRESULT APIENTRY _EXPORT wxBuddyTextWndProc(HWND hwnd,
 /* static */
 wxSpinCtrl *wxSpinCtrl::GetSpinForTextCtrl(WXHWND hwndBuddy)
 {
-    wxSpinCtrl *spin = (wxSpinCtrl *)::GetWindowLong((HWND)hwndBuddy,
-                                                     GWL_USERDATA);
+    wxSpinCtrl *spin = (wxSpinCtrl *)wxGetWindowUserData((HWND)hwndBuddy);
 
     int i = ms_allSpins.Index(spin);
 
@@ -363,9 +362,9 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     SetValue(initial);
 
     // subclass the text ctrl to be able to intercept some events
-    m_wndProcBuddy = (WXFARPROC)::GetWindowLong(GetBuddyHwnd(), GWL_WNDPROC);
-    ::SetWindowLong(GetBuddyHwnd(), GWL_USERDATA, (LONG)this);
-    ::SetWindowLong(GetBuddyHwnd(), GWL_WNDPROC, (LONG)wxBuddyTextWndProc);
+    wxSetWindowUserData(GetBuddyHwnd(), this);
+    m_wndProcBuddy = (WXFARPROC)wxSetWindowProc(GetBuddyHwnd(),
+                                                wxBuddyTextWndProc);
 
     // should have the same font as the other controls
     SetFont(GetParent()->GetFont());

@@ -974,13 +974,13 @@ void wxWindowMSW::SubclassWin(WXHWND hWnd)
 
     wxAssociateWinWithHandle(hwnd, this);
 
-    m_oldWndProc = (WXFARPROC)::GetWindowLong((HWND)hWnd, GWL_WNDPROC);
+    m_oldWndProc = (WXFARPROC)wxGetWindowProc((HWND)hWnd);
 
     // we don't need to subclass the window of our own class (in the Windows
     // sense of the word)
 	if ( !wxCheckWindowWndProc(hWnd, (WXFARPROC)wxWndProc) )
     {
-        ::SetWindowLong(hwnd, GWL_WNDPROC, (LONG) wxWndProc);
+        wxSetWindowProc(hwnd, wxWndProc);
     }
     else
     {
@@ -1008,7 +1008,7 @@ void wxWindowMSW::UnsubclassWin()
         {
             if ( !wxCheckWindowWndProc((WXHWND)hwnd, m_oldWndProc) )
             {
-                ::SetWindowLong(hwnd, GWL_WNDPROC, (LONG) m_oldWndProc);
+                wxSetWindowProc(hwnd, (WNDPROC)m_oldWndProc);
             }
 
             m_oldWndProc = NULL;
@@ -3678,8 +3678,13 @@ wxWindowMSW::MSWOnMeasureItem(int WXUNUSED_UNLESS_ODRAWN(id),
 
         wxCHECK( pMenuItem->IsKindOf(CLASSINFO(wxMenuItem)), FALSE );
 
-        return pMenuItem->OnMeasureItem(&pMeasureStruct->itemWidth,
-                                        &pMeasureStruct->itemHeight);
+        size_t w, h;
+        bool rc = pMenuItem->OnMeasureItem(&w, &h);
+
+        pMeasureStruct->itemWidth = w;
+        pMeasureStruct->itemHeight = h;
+
+        return rc;
     }
 
     wxControl *item = wxDynamicCast(FindItem(id), wxControl);
@@ -5103,7 +5108,7 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
             // do it as well, win would be already non NULL
             if ( ::SendMessage(hwnd, WM_GETDLGCODE, 0, 0) & DLGC_RADIOBUTTON )
             {
-                win = (wxWindow *)::GetWindowLong(hwnd, GWL_USERDATA);
+                win = (wxWindow *)wxGetWindowUserData(hwnd);
             }
             //else: it's a wxRadioButton, not a radiobutton from wxRadioBox
 #endif // wxUSE_RADIOBOX

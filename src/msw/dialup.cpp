@@ -1073,13 +1073,7 @@ bool wxDialUpManagerMSW::EnableAutoCheckOnlineStatus(size_t nSeconds)
         }
 
         // and subclass it
-        FARPROC windowProc = MakeProcInstance
-                             (
-                              (FARPROC)wxRasStatusWindowProc,
-                              wxGetInstance()
-                             );
-
-        ::SetWindowLong(ms_hwndRas, GWL_WNDPROC, (LONG) windowProc);
+        wxSetWindowProc(ms_hwndRas, wxRasStatusWindowProc);
     }
 
     m_data.hWnd = ms_hwndRas;

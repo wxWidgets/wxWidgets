@@ -782,10 +782,10 @@ void wxRadioBox::SubclassRadioButton(WXHWND hWndBtn)
     HWND hwndBtn = (HWND)hWndBtn;
 
     if ( !s_wndprocRadioBtn )
-        s_wndprocRadioBtn = (WXFARPROC)::GetWindowLong(hwndBtn, GWL_WNDPROC);
+        s_wndprocRadioBtn = (WXFARPROC)wxGetWindowProc(hwndBtn);
 
-    ::SetWindowLong(hwndBtn, GWL_WNDPROC, (long)wxRadioBtnWndProc);
-    ::SetWindowLong(hwndBtn, GWL_USERDATA, (long)this);
+    wxSetWindowProc(hwndBtn, wxRadioBtnWndProc);
+    wxSetWindowUserData(hwndBtn, this);
 }
 
 void wxRadioBox::SendNotificationEvent()
@@ -933,8 +933,8 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
                 NMHDR* hdr = (NMHDR *)lParam;
                 if ( hdr->code == TTN_NEEDTEXT )
                 {
-                    wxRadioBox *radiobox = (wxRadioBox *)
-                        ::GetWindowLong(hwnd, GWL_USERDATA);
+                    wxRadioBox *
+                        radiobox = (wxRadioBox *)wxGetWindowUserData(hwnd);
 
                     wxCHECK_MSG( radiobox, 0,
                                  wxT("radio button without radio box?") );
@@ -955,8 +955,7 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
 
         case WM_KEYDOWN:
             {
-                wxRadioBox *radiobox = (wxRadioBox *)
-                    ::GetWindowLong(hwnd, GWL_USERDATA);
+                wxRadioBox *radiobox = (wxRadioBox *)wxGetWindowUserData(hwnd);
 
                 wxCHECK_MSG( radiobox, 0, wxT("radio button without radio box?") );
 
@@ -1015,8 +1014,7 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
         case WM_SETFOCUS:
         case WM_KILLFOCUS:
             {
-                wxRadioBox *radiobox = (wxRadioBox *)
-                    ::GetWindowLong(hwnd, GWL_USERDATA);
+                wxRadioBox *radiobox = (wxRadioBox *)wxGetWindowUserData(hwnd);
 
                 wxCHECK_MSG( radiobox, 0, wxT("radio button without radio box?") );
 
@@ -1034,8 +1032,7 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
 #ifdef __WIN32__
         case WM_HELP:
             {
-                wxRadioBox *radiobox = (wxRadioBox *)
-                        ::GetWindowLong(hwnd, GWL_USERDATA);
+                wxRadioBox *radiobox = (wxRadioBox *)wxGetWindowUserData(hwnd);
 
                 wxCHECK_MSG( radiobox, 0, wxT("radio button without radio box?") );
 

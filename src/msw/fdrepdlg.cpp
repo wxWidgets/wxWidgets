@@ -50,10 +50,10 @@
 LRESULT APIENTRY wxFindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
                                        WPARAM wParam, LPARAM lParam);
 
-UINT CALLBACK wxFindReplaceDialogHookProc(HWND hwnd,
-                                          UINT uiMsg,
-                                          WPARAM wParam,
-                                          LPARAM lParam);
+UINT_PTR CALLBACK wxFindReplaceDialogHookProc(HWND hwnd,
+                                              UINT uiMsg,
+                                              WPARAM wParam,
+                                              LPARAM lParam);
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -201,14 +201,11 @@ void wxFindReplaceDialogImpl::SubclassDialog(HWND hwnd)
     // as then we'd have infinite recursion in wxFindReplaceWindowProc
     if ( !wxCheckWindowWndProc((WXHWND)hwnd, (WXFARPROC)wxFindReplaceWindowProc) )
     {
-        WNDPROC oldParentWndProc = (WNDPROC)::GetWindowLong(hwnd, GWL_WNDPROC);
-        // save old wnd proc elsewhere to access it from
-        // wxFindReplaceWindowProc
-        m_oldParentWndProc = oldParentWndProc;
-        (void)::SetWindowLong(hwnd, GWL_USERDATA, (LONG)oldParentWndProc);
+        // set the new one and save the old as user data to allow access to it
+        // from wxFindReplaceWindowProc
+        m_oldParentWndProc = wxSetWindowProc(hwnd, wxFindReplaceWindowProc);
 
-        // and set the new one
-        (void)::SetWindowLong(hwnd, GWL_WNDPROC, (LONG)wxFindReplaceWindowProc);
+        wxSetWindowUserData(hwnd, m_oldParentWndProc);
     }
 }
 
@@ -219,7 +216,8 @@ wxFindReplaceDialogImpl::~wxFindReplaceDialogImpl()
 
     if ( m_hwndOwner )
     {
-        ::SetWindowLong(m_hwndOwner, GWL_WNDPROC, (LONG)m_oldParentWndProc);
+        // undo subclassing
+        wxSetWindowProc(m_hwndOwner, m_oldParentWndProc);
     }
 }
 
@@ -327,7 +325,7 @@ LRESULT APIENTRY wxFindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
         s_lastMsgFlags = 0;
 #endif // wxUSE_UNICODE_MSLU
 
-    WNDPROC wndProc = (WNDPROC)::GetWindowLong(hwnd, GWL_USERDATA);
+    WNDPROC wndProc = (WNDPROC)wxGetWindowUserData(hwnd);
 
     // sanity check
     wxASSERT_MSG( wndProc != wxFindReplaceWindowProc,
@@ -340,10 +338,11 @@ LRESULT APIENTRY wxFindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
 // Find/replace dialog hook proc
 // ----------------------------------------------------------------------------
 
-UINT CALLBACK wxFindReplaceDialogHookProc(HWND hwnd,
-                                          UINT uiMsg,
-                                          WPARAM WXUNUSED(wParam),
-                                          LPARAM lParam)
+UINT_PTR CALLBACK
+wxFindReplaceDialogHookProc(HWND hwnd,
+                            UINT uiMsg,
+                            WPARAM WXUNUSED(wParam),
+                            LPARAM lParam)
 {
     if ( uiMsg == WM_INITDIALOG )
     {

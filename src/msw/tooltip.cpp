@@ -217,8 +217,7 @@ WXHWND wxToolTip::GetToolTipCtrl()
 
 #if wxUSE_TTM_WINDOWFROMPOINT
            // subclass the newly created control
-           gs_wndprocToolTip = (WNDPROC)::GetWindowLong(hwnd, GWL_WNDPROC);
-           ::SetWindowLong(hwnd, GWL_WNDPROC, (long)wxToolTipWndProc);
+           gs_wndprocToolTip = wxSetWindowProc(hwnd, wxToolTipWndProc);
 #endif // wxUSE_TTM_WINDOWFROMPOINT
        }
     }

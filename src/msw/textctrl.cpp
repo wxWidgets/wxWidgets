@@ -688,7 +688,7 @@ struct wxStreamOutData
 };
 
 DWORD CALLBACK
-wxRichEditStreamOut(DWORD dwCookie, BYTE *buf, LONG cb, LONG *pcb)
+wxRichEditStreamOut(DWORD_PTR dwCookie, BYTE *buf, LONG cb, LONG *pcb)
 {
     *pcb = 0;
 

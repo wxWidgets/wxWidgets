@@ -902,7 +902,7 @@ bool wxThread::SetConcurrency(size_t level)
 
     // get system affinity mask first
     HANDLE hProcess = ::GetCurrentProcess();
-    DWORD dwProcMask, dwSysMask;
+    DWORD_PTR dwProcMask, dwSysMask;
     if ( ::GetProcessAffinityMask(hProcess, &dwProcMask, &dwSysMask) == 0 )
     {
         wxLogLastError(_T("GetProcessAffinityMask"));
@@ -983,7 +983,8 @@ bool wxThread::SetConcurrency(size_t level)
 
         return false;
     }
-#endif
+#endif // !__WXWINCE__
+
     return true;
 }
 

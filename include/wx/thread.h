@@ -249,7 +249,11 @@ private:
     // finally, we need this typedef instead of declaring m_buffer directly
     // because otherwise the assert mentioned above wouldn't compile with some
     // compilers (notably CodeWarrior 8)
+#ifdef __WIN64__
+    typedef char wxCritSectBuffer[40];
+#else // __WIN32__
     typedef char wxCritSectBuffer[24];
+#endif
     union
     {
         unsigned long m_dummy1;

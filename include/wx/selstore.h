@@ -18,11 +18,14 @@
 // wxSelectedIndices is just a sorted array of indices
 // ----------------------------------------------------------------------------
 
-inline int CMPFUNC_CONV wxSizeTCmpFn(size_t n1, size_t n2) { return n1 - n2; }
+inline int CMPFUNC_CONV wxSizeTCmpFn(size_t n1, size_t n2)
+{
+    return (int)(n1 - n2);
+}
 
-WX_DEFINE_SORTED_EXPORTED_ARRAY_CMP_LONG(size_t,
-                                         wxSizeTCmpFn,
-                                         wxSelectedIndices);
+WX_DEFINE_SORTED_EXPORTED_ARRAY_CMP_SIZE_T(size_t,
+                                           wxSizeTCmpFn,
+                                           wxSelectedIndices);
 
 // ----------------------------------------------------------------------------
 // wxSelectionStore is used to store the selected items in the virtual
