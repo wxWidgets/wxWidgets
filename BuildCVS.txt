@@ -78,9 +78,6 @@ d) Borland (including free command line tools)
    See docs/msw/install.txt for details; in brief
 
 -> type set WXWIN=c:\wxwindows
--> type set BCCDIR=c:\progra~1\borland\cb4
--> type cd %WXWIN%\include\wx
--> type copy msw\setup0.h setup.h
 -> type cd %WXWIN%\src\msw
 -> type make -f makefile.b32
 

@@ -219,11 +219,6 @@ Compiling using the makefiles:
    set WXWIN=c:\wxwindows
    to your autoexec.bat file], and that it uses the FAT (short
    name) form with no spaces.
-   Make sure your BCCDIR variable is set [e.g add
-   set BCCDIR=c:\progra~1\borland\bcc
-   to your autoexec.bat file], and that it points to the root directory of 
-   your Borland C++ installation, and it uses the FAT (short
-   name) form with no spaces.
    Reboot if needed for the changes to autoexec.bat to take effect.   
 2. Change directory to src\msw. Type 'make -f makefile.b32' to
    make the wxWindows core library. Ignore the warnings about
@@ -242,31 +237,38 @@ Compiling using the makefiles:
    Please note that the samples have not been exhaustively tested
    with this configuration.
 
-Note (1): the wxWindows library and (some) samples compile in 16-bit mode
+Note (1): In Borland 4.5 and earleir, using bcc.exe you also need to define BCCDIR
+in the autoexec.bat file; like this:
+   set BCCDIR=c:\progra~1\borland\bcc
+   so that it points to the root directory of 
+   your Borland C++ installation, and it uses the FAT (short
+   name) form with no spaces.
+
+
+Note (2): the wxWindows library and (some) samples compile in 16-bit mode
 using makefile.bcc, but at present the wxWindows resource system is switched
 off in this mode. See issues.txt for details.
 
-Note (2): unfortunately most samples won't link in 16-bit mode,
+Note (3): unfortunately most samples won't link in 16-bit mode,
 because the automatic data segment exceeds 64K. The minimal
 sample links and runs, however.
 
-Note (3): the wxWindows makefiles assume byte structure alignment. Please
+Note (4): the wxWindows makefiles assume byte structure alignment. Please
 make sure that your own project or makefile settings use the
 same alignment, or you could experience mysterious crashes. To
 change the alignment, add a suitable option to the $(CFG) target code
 in src/msw/makefile.b32.
 
-Note (4): if you get undefined _SQL... symbols at link time,
+Note (5): if you get undefined _SQL... symbols at link time,
 either install odbc32.lib from the BC++ CD-ROM into your BC++ lib
 directory, or set wxUSE_ODBC to 0 in include\wx\msw\setup.h and
 recompile wxWindows. The same applies if compiling using the IDE.
 
-Note (5): BC++ 4.5 (not 5.0) trips up over jdmerge.c in the JPEG folder;
+Note (6): BC++ 4.5 (not 5.0) trips up over jdmerge.c in the JPEG folder;
 you will therefore need to set wxUSE_LIBJPEG to 0 in setup.h and remove
 the jpeg target from src\msw\makefile.b32, and remove jpeg from
 src\makeprog.b32.
 
-Note (6): [obsolete]
 
 Note (7): If you wish debug messages to be sent to the console in
 debug mode, edit src\makeb32.env and change /aa to /Tpe in

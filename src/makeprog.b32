@@ -8,7 +8,8 @@
 # Include file for samples and utilities. Set TARGET and OBJECTS
 # before including this file.
 
-# WXWIN and BCCDIR are set by parent make
+# WXWIN  set by parent make
+# BCCDIR set in makeb32.env
 
 WXDIR = $(WXWIN)
 !include $(WXDIR)\src\makeb32.env

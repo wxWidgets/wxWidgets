@@ -78,9 +78,7 @@
 # Makefile : Builds wxWindows library wx.lib for MS Windows,
 # and Borland C++ (32-bit).
 
-!if "$(BCCDIR)" == ""
-!error You must define the BCCDIR variable in autoexec.bat, e.g. BCCDIR=d:\bc4
-!endif
+# BCCDIR now defined in ../makeb32.env
 
 !if "$(WXWIN)" == ""
 !error You must define the WXWIN variable in autoexec.bat, e.g. WXWIN=c:\wx
