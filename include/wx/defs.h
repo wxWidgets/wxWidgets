@@ -745,6 +745,7 @@ typedef  wxUint16        wxWord;
 #define wxSP_3D             0x0004
 #define wxSP_BORDER         0x0008
 #define wxSP_PERMIT_UNSPLIT 0x0010
+#define wxSP_LIVE_UPDATE    0x0020
 
 /*
  * wxFrame extra flags

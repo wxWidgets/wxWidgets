@@ -35,7 +35,8 @@ public:
 class MySplitterWindow : public wxSplitterWindow
 {
 public:
-  MySplitterWindow(wxFrame *parent, wxWindowID id) : wxSplitterWindow(parent, id)
+  MySplitterWindow(wxFrame *parent, wxWindowID id) 
+    : wxSplitterWindow(parent, id, wxDefaultPosition, wxDefaultSize, wxSP_3D | wxSP_LIVE_UPDATE)
   {
     m_frame = parent;
   }

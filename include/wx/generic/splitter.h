@@ -160,6 +160,9 @@ public:
     // Adjusts the panes
     void OnSize(wxSizeEvent& event);
 
+    // In live mode, resize child windows in idle time
+    void OnIdle(wxIdleEvent& event);
+
     // Draws borders
     void DrawBorders(wxDC& dc);
 
@@ -189,6 +192,7 @@ protected:
 
     int         m_splitMode;
     bool        m_permitUnsplitAlways;
+    bool        m_needUpdating; // when in live mode, set the to TRUE to resize children in idle
     wxWindow*   m_windowOne;
     wxWindow*   m_windowTwo;
     int         m_dragMode;

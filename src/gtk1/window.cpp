@@ -131,7 +131,7 @@ extern wxList     wxPendingDelete;
 extern bool       g_blockEventsOnDrag;
 extern bool       g_blockEventsOnScroll;
 extern wxCursor   g_globalCursor;
-static bool       g_capturing = FALSE;
+static wxWindow  *g_captureWindow = (wxWindow*) NULL;
 static wxWindow  *g_focusWindow = (wxWindow*) NULL;
 
 /* hack: we need something to pass to gtk_menu_popup, so we store the time of
@@ -899,7 +899,7 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
     // Some control don't have their own X window and thus cannot get
     // any events.
 
-    if (!g_capturing)
+    if (!g_captureWindow)
     {
         wxNode *node = win->GetChildren().First();
         while (node)
@@ -1009,7 +1009,7 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
     // Some control don't have their own X window and thus cannot get
     // any events.
 
-    if (!g_capturing)
+    if (!g_captureWindow)
     {
         wxNode *node = win->GetChildren().First();
         while (node)
@@ -1120,7 +1120,7 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
     // Some control don't have their own X window and thus cannot get
     // any events.
 
-    if (!g_capturing)
+    if (!g_captureWindow)
     {
         wxNode *node = win->GetChildren().First();
         while (node)
@@ -2063,18 +2063,18 @@ void wxWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 
 void wxWindow::OnInternalIdle()
 {
-    GdkWindow *window = GetConnectWidget()->window;
-    if (window)
-    {
-        wxCursor cursor = m_cursor;
-        if (g_globalCursor.Ok()) cursor = g_globalCursor;
+        GdkWindow *window = GetConnectWidget()->window;
+        if (window)
+        {
+            wxCursor cursor = m_cursor;
+            if (g_globalCursor.Ok()) cursor = g_globalCursor;
 	
-	if (m_currentGdkCursor != cursor)
-	{
-	    gdk_window_set_cursor( window, cursor.GetCursor() );
-	    m_currentGdkCursor = cursor;
+	    if (m_currentGdkCursor != cursor)
+	    {
+	        gdk_window_set_cursor( window, cursor.GetCursor() );
+	        m_currentGdkCursor = cursor;
+	    }
 	}
-    }
 
     UpdateWindowUI();
 }
@@ -2803,35 +2803,33 @@ void wxWindow::CaptureMouse()
 {
     wxCHECK_RET( m_widget != NULL, _T("invalid window") );
 
-    wxCHECK_RET( g_capturing == FALSE, _T("CaptureMouse called twice") );
+    wxCHECK_RET( g_captureWindow == NULL, _T("CaptureMouse called twice") );
 
     GtkWidget *connect_widget = GetConnectWidget();
     if (!connect_widget->window) return;
     
-    gtk_grab_add( connect_widget );
     gdk_pointer_grab( connect_widget->window, FALSE,
                       (GdkEventMask)
                          (GDK_BUTTON_PRESS_MASK |
                           GDK_BUTTON_RELEASE_MASK |
                           GDK_POINTER_MOTION_MASK),
                       (GdkWindow *) NULL,
-                      (GdkCursor *) NULL,
+                      m_cursor.GetCursor(),
                       GDK_CURRENT_TIME );
-    g_capturing = TRUE;
+    g_captureWindow = this;
 }
 
 void wxWindow::ReleaseMouse()
 {
     wxCHECK_RET( m_widget != NULL, _T("invalid window") );
 
-    wxCHECK_RET( g_capturing == TRUE, _T("ReleaseMouse called twice") );
+    wxCHECK_RET( g_captureWindow, _T("ReleaseMouse called twice") );
 
     GtkWidget *connect_widget = GetConnectWidget();
     if (!connect_widget->window) return;
     
-    gtk_grab_remove( connect_widget );
     gdk_pointer_ungrab ( GDK_CURRENT_TIME );
-    g_capturing = FALSE;
+    g_captureWindow = (wxWindow*) NULL;
 }
 
 bool wxWindow::IsRetained() const

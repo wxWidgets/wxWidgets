@@ -37,6 +37,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxSplitterEvent, wxCommandEvent)
 BEGIN_EVENT_TABLE(wxSplitterWindow, wxWindow)
     EVT_PAINT(wxSplitterWindow::OnPaint)
     EVT_SIZE(wxSplitterWindow::OnSize)
+    EVT_IDLE(wxSplitterWindow::OnIdle)
     EVT_MOUSE_EVENTS(wxSplitterWindow::OnMouseEvent)
 
     EVT_SPLITTER_SASH_POS_CHANGED(-1, wxSplitterWindow::OnSashPosChanged)
@@ -72,6 +73,7 @@ wxSplitterWindow::wxSplitterWindow()
     m_facePen = (wxPen *) NULL;
     m_hilightPen = (wxPen *) NULL;
     m_minimumPaneSize = 0;
+    m_needUpdating = FALSE;
 }
 
 wxSplitterWindow::wxSplitterWindow(wxWindow *parent, wxWindowID id,
@@ -125,6 +127,8 @@ wxSplitterWindow::wxSplitterWindow(wxWindow *parent, wxWindowID id,
 
     // For debugging purposes, to see the background.
 //    SetBackground(wxBLUE_BRUSH);
+
+    m_needUpdating = FALSE;
 }
 
 wxSplitterWindow::~wxSplitterWindow()
@@ -149,6 +153,11 @@ void wxSplitterWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
     DrawSash(dc);
 }
 
+void wxSplitterWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
+{
+    if (m_needUpdating)
+        SizeWindows();
+}
 
 void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
 {
@@ -163,15 +172,6 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
     SetCursor(wxCursor());
 #endif
 
-    // under wxGTK the method above causes the mouse
-    // to flicker so we set the standard cursor only
-    // when leaving the window and when moving over
-    // non-sash parts of the window. this should work
-    // on the other platforms as well, but who knows.
-#ifdef __WXGTK__
-    if (event.Leaving())
-        SetCursor(* wxSTANDARD_CURSOR);
-#endif
 
     if (event.LeftDown())
     {
@@ -181,7 +181,11 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
 
             m_dragMode = wxSPLIT_DRAG_DRAGGING;
 
-            DrawSashTracker(x, y);
+            if ((GetWindowStyleFlag() & wxSP_LIVE_UPDATE) == 0)
+	    {
+	        DrawSashTracker(x, y);
+	    }
+	    
             m_oldX = x;
             m_oldY = y;
             return;
@@ -194,7 +198,10 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
         ReleaseMouse();
 
         // Erase old tracker
-        DrawSashTracker(m_oldX, m_oldY);
+        if ((GetWindowStyleFlag() & wxSP_LIVE_UPDATE) == 0)
+	{
+            DrawSashTracker(m_oldX, m_oldY);
+	}
 
         // Obtain window size. We are only interested in the dimension the sash
         // splits up
@@ -293,7 +300,10 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
         }
 
         // Erase old tracker
-        DrawSashTracker(m_oldX, m_oldY);
+        if ((GetWindowStyleFlag() & wxSP_LIVE_UPDATE) == 0)
+	{
+            DrawSashTracker(m_oldX, m_oldY);
+	}
 
         if (m_splitMode == wxSPLIT_VERTICAL)
             x = new_sash_position;
@@ -321,7 +331,15 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
 #endif // __WXMSW__
 
         // Draw new one
-        DrawSashTracker(m_oldX, m_oldY);
+        if ((GetWindowStyleFlag() & wxSP_LIVE_UPDATE) == 0)
+	{
+            DrawSashTracker(m_oldX, m_oldY);
+	}
+	else
+	{
+            m_sashPosition = new_sash_position;
+	    m_needUpdating = TRUE;
+	}
     }
     else if ( event.LeftDClick() )
     {
