@@ -25,13 +25,13 @@ extern void wxAppRemoveSocketHandler(int handle);
 static void _GSocket_PM_Input(void *data)
 {
     GSocket *socket = (GSocket *) data;
-    _GSocket_Detected_Read(socket);
+    socket->m_functions->Detected_Read(socket);
 }
 
 static void _GSocket_PM_Output(void *data)
 {
     GSocket *socket = (GSocket *) data;
-    _GSocket_Detected_Write(socket);
+    socket->m_functions->Detected_Write(socket);
 }
 
 int _GSocket_GUI_Init(void)
