@@ -61,7 +61,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __WIN32__
-# define wxMAXPATH   65536
+# define wxMAXPATH   65534
 #else
 # define wxMAXPATH   1024
 #endif
