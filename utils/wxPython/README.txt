@@ -49,6 +49,15 @@ Or you can send mail directly to the list using this address:
 What's new in 2.1.4
 --------------------
 
+This release is NOT syncronized with a snapshot release of wxGTK or
+wxMSW.  For MSW this isn't much of a problem since you can get the
+binaries from the web site.  For other platforms you'll have to build
+wxGTK from CVS.  (See http://web.ukonline.co.uk/julian.smart/wxwin/cvs.htm)
+To get the same set of sources from CVS that I used, checkout using
+the wxPy-2-1-4 tag.
+
+Now back to what's new...
+
 Much more support for event-less callbacks and add-on modules.
 
 Created add-on module with wxOGL classes.
