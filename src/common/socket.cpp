@@ -893,13 +893,16 @@ void wxSocketBase::OnRequest(wxSocketNotify notification)
 
   // Schedule the event
 
-  wxSocketEventFlags flag = -1;
+  wxSocketEventFlags flag = 0;
   switch (notification)
   {
     case GSOCK_INPUT:      flag = GSOCK_INPUT_FLAG; break;
     case GSOCK_OUTPUT:     flag = GSOCK_OUTPUT_FLAG; break;
     case GSOCK_CONNECTION: flag = GSOCK_CONNECTION_FLAG; break;
     case GSOCK_LOST:       flag = GSOCK_LOST_FLAG; break;
+    default:
+      wxLogWarning( _("wxSocket: unknown event!."));
+      return;
   }
 
   if (((m_eventmask & flag) == flag) && m_notify)
