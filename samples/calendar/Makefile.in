@@ -1,7 +1,7 @@
 # Purpose: makefile for calendar example (UNIX).
 # Created: 2000-01-03
 
-top_srcdir = @top_srcdir@
+top_srcdir = @top_srcdir@/..
 top_builddir = ../..
 program_dir = samples/calendar
 

@@ -8,7 +8,7 @@
 # "%W% %G%"
 #
 
-top_srcdir = @top_srcdir@
+top_srcdir = @top_srcdir@/..
 top_builddir = ../../..
 
 VPATH= $(top_srcdir)/utils/glcanvas/win

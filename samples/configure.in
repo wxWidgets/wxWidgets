@@ -1,0 +1,62 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_REVISION($Id$)dnl
+
+AC_INIT(Makefile.in)
+
+AC_OUTPUT([
+            Makefile
+            caret/Makefile
+            calendar/Makefile
+            checklst/Makefile
+            config/Makefile
+            controls/Makefile
+            console/Makefile
+            db/Makefile
+            dialogs/Makefile
+            docview/Makefile
+            docvwmdi/Makefile
+            dnd/Makefile
+            drawing/Makefile
+            exec/Makefile
+            font/Makefile
+            grid/Makefile
+            help/Makefile
+            image/Makefile
+            internat/Makefile
+            ipc/Makefile
+            layout/Makefile
+            listctrl/Makefile
+            mdi/Makefile
+            minifram/Makefile
+            minimal/Makefile
+            dialup/Makefile
+            newgrid/Makefile
+            notebook/Makefile
+            png/Makefile
+            printing/Makefile
+            proplist/Makefile
+            propsize/Makefile
+            richedit/Makefile
+            resource/Makefile
+            sashtest/Makefile
+            scroll/Makefile
+            scrollsub/Makefile
+            splitter/Makefile
+            text/Makefile
+            thread/Makefile
+            toolbar/Makefile
+            treectrl/Makefile
+            typetest/Makefile
+            validate/Makefile
+            sockets/Makefile
+            wizard/Makefile
+            html/Makefile
+            html/about/Makefile
+            html/help/Makefile
+            html/printing/Makefile
+            html/helpview/Makefile
+            html/test/Makefile
+            html/zip/Makefile
+            html/virtual/Makefile
+            html/widget/Makefile
+        ])

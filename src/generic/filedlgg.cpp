@@ -36,7 +36,7 @@
 #include "wx/image.h"
 #include "wx/module.h"
 #include "wx/config.h"
-
+#include "wx/imaglist.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
@@ -67,7 +67,7 @@ class wxFileIconEntry : public wxObject
 {
     public:
         wxFileIconEntry(int i) { id = i; }
-    
+
         int id;
 };
 
@@ -77,11 +77,11 @@ class wxFileIconsTable
     public:
 
         wxFileIconsTable();
-        
+
         int GetIconID(const wxString& extension, const wxString& mime = wxEmptyString);
         wxImageList *GetImageList() { return &m_ImageList; }
 
-    protected:        
+    protected:
         wxImageList m_ImageList;
         wxHashTable m_HashTable;
 };
@@ -99,9 +99,9 @@ wxFileIconsTable::wxFileIconsTable() :
     m_HashTable.DeleteContents(TRUE);
     m_ImageList.Add(wxBitmap(folder_xpm));  // FI_FOLDER
     m_ImageList.Add(wxBitmap(deffile_xpm)); // FI_UNKNOWN
-    if (GetIconID(wxEmptyString, _T("application/x-executable")) == FI_UNKNOWN) 
+    if (GetIconID(wxEmptyString, _T("application/x-executable")) == FI_UNKNOWN)
     {                                       // FI_EXECUTABLE
-        m_ImageList.Add(wxBitmap(exefile_xpm)); 
+        m_ImageList.Add(wxBitmap(exefile_xpm));
         m_HashTable.Delete(_T("exe"));
         m_HashTable.Put(_T("exe"), new wxFileIconEntry(FI_EXECUTABLE));
     }
@@ -116,16 +116,16 @@ static wxBitmap CreateAntialiasedBitmap(const wxImage& img)
 {
     wxImage small(16, 16);
     unsigned char *p1, *p2, *ps;
-    unsigned char mr = img.GetMaskRed(), 
-                  mg = img.GetMaskGreen(), 
+    unsigned char mr = img.GetMaskRed(),
+                  mg = img.GetMaskGreen(),
                   mb = img.GetMaskBlue();
-    
+
     unsigned x, y;
     unsigned sr, sg, sb, smask;
-    
+
     p1 = img.GetData(), p2 = img.GetData() + 3 * 32, ps = small.GetData();
     small.SetMaskColour(mr, mr, mr);
-    
+
     for (y = 0; y < 16; y++)
     {
         for (x = 0; x < 16; x++)
@@ -147,8 +147,8 @@ static wxBitmap CreateAntialiasedBitmap(const wxImage& img)
                 sr += p2[0], sg += p2[1], sb += p2[2];
             else smask++;
             p2 += 3;
-            
-            if (smask > 2) 
+
+            if (smask > 2)
                 ps[0] = ps[1] = ps[2] = mr;
             else
                 ps[0] = sr >> 2, ps[1] = sg >> 2, ps[2] = sb >> 2;
@@ -164,18 +164,18 @@ static wxBitmap CreateAntialiasedBitmap(const wxImage& img)
 // finds empty borders and return non-empty area of image:
 static wxImage CutEmptyBorders(const wxImage& img)
 {
-    unsigned char mr = img.GetMaskRed(), 
-                  mg = img.GetMaskGreen(), 
+    unsigned char mr = img.GetMaskRed(),
+                  mg = img.GetMaskGreen(),
                   mb = img.GetMaskBlue();
     unsigned char *dt = img.GetData(), *dttmp;
     unsigned w = img.GetWidth(), h = img.GetHeight();
-    
+
     unsigned top, bottom, left, right, i;
     bool empt;
 
 #define MK_DTTMP(x,y)      dttmp = dt + ((x + y * w) * 3)
 #define NOEMPTY_PIX(empt)  if (dttmp[0] != mr || dttmp[1] != mg || dttmp[2] != mb) {empt = FALSE; break;}
-    
+
     for (empt = TRUE, top = 0; empt && top < h; top++)
     {
         MK_DTTMP(0, top);
@@ -215,7 +215,7 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
         if (entry) return (entry -> id);
     }
 
-    wxFileType *ft = (mime.IsEmpty()) ? 
+    wxFileType *ft = (mime.IsEmpty()) ?
                    wxTheMimeTypesManager -> GetFileTypeFromExtension(extension) :
                    wxTheMimeTypesManager -> GetFileTypeFromMimeType(mime);
     wxIcon ic;
@@ -227,7 +227,7 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
     }
     wxImage img(ic);
     delete ft;
-    
+
     int id = m_ImageList.GetImageCount();
     if (img.GetWidth() == 16 && img.GetHeight() == 16)
         m_ImageList.Add(img.ConvertToBitmap());
@@ -419,10 +419,10 @@ void wxFileData::MakeItem( wxListItem &item )
     item.ClearAttributes();
     if (IsExe()) item.SetTextColour(*wxRED);
     if (IsDir()) item.SetTextColour(*wxBLUE);
-    
+
     if (IsDir())
         item.m_image = FI_FOLDER;
-    else if (IsExe()) 
+    else if (IsExe())
         item.m_image = FI_EXECUTABLE;
     else if (m_name.Find(wxT('.')) != wxNOT_FOUND)
         item.m_image = g_IconsTable -> GetIconID(m_name.AfterLast(wxT('.')));
@@ -524,7 +524,7 @@ void wxFileCtrl::Update()
         if (GetColumnCount() > 0)
             name_col_width = GetColumnWidth( 0 );
     }
-    
+
     ClearAll();
     if (my_style & wxLC_REPORT)
     {
@@ -873,10 +873,10 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
 
     if (m_dialogStyle & wxMULTIPLE)
         m_list = new wxFileCtrl( this, ID_LIST_CTRL, m_dir, firstWild, wxDefaultPosition,
-	                         wxSize(440,180), s_lastViewStyle | wxSUNKEN_BORDER );
+                                 wxSize(440,180), s_lastViewStyle | wxSUNKEN_BORDER );
     else
         m_list = new wxFileCtrl( this, ID_LIST_CTRL, m_dir, firstWild, wxDefaultPosition,
-	                         wxSize(440,180), s_lastViewStyle | wxSUNKEN_BORDER | wxLC_SINGLE_SEL );
+                                 wxSize(440,180), s_lastViewStyle | wxSUNKEN_BORDER | wxLC_SINGLE_SEL );
     m_list -> ShowHidden(s_lastShowHidden);
     mainsizer->Add( m_list, 1, wxEXPAND | wxLEFT|wxRIGHT, 10 );
 
@@ -909,7 +909,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
 
     mainsizer->Fit( this );
     mainsizer->SetSizeHints( this );
-    
+
     Centre( wxBOTH );
 
     if (m_fileName.IsEmpty())

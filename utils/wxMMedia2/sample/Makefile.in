@@ -9,7 +9,7 @@
 #
 # Makefile for wxsocket example (UNIX).
 
-top_srcdir = @top_srcdir@
+top_srcdir = @top_srcdir@/..
 top_builddir = ../../..
 program_dir = utils/wxMMedia2/sample
 # the comment at the end of the next line is needed because otherwise autoconf

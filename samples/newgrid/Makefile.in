@@ -9,7 +9,7 @@
 #
 # Makefile for new wxGrid example (UNIX).
 
-top_srcdir = @top_srcdir@
+top_srcdir = @top_srcdir@/..
 top_builddir = ../..
 program_dir = samples/newgrid
 
