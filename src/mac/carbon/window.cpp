@@ -201,7 +201,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 RgnHandle updateRgn = NULL ;
                 RgnHandle allocatedRgn = NULL ;
                 wxRegion visRegion = thisWindow->MacGetVisibleRegion() ;
-                if ( thisWindow->MacGetTopLevelWindow()->MacUsesCompositing() == false || cEvent.GetParameter<RgnHandle>(kEventParamRgnHandle, &updateRgn) != noErr )
+                if ( cEvent.GetParameter<RgnHandle>(kEventParamRgnHandle, &updateRgn) != noErr )
                 {
                     updateRgn = (RgnHandle) visRegion.GetWXHRGN() ;
                 }
@@ -2199,9 +2199,11 @@ void wxWindowMac::Refresh(bool eraseBack, const wxRect *rect)
     bool isCompositing = MacGetTopLevelWindow()->MacUsesCompositing() ;
 //    if ( isCompositing )
     {
+#ifdef __WXMAC_OSX__
         if ( rect == NULL && isCompositing )
             m_peer->SetNeedsDisplay( true ) ;
         else
+#endif
         {
             
             Rect controlBounds ; 
