@@ -78,7 +78,7 @@ bool MyApp::OnInit(void)
     (void) new wxDocTemplate(m_docManager, _T("Drawing"), _T("*.drw"), _T(""), _T("drw"), _T("Drawing Doc"), _T("Drawing View"),
         CLASSINFO(DrawingDocument), CLASSINFO(DrawingView));
 #ifdef __WXMAC__
-    wxFileName::MacRegisterDefaultTypeAndCreator( "drw" , 'WXMB' , 'WXMA' ) ;
+    wxFileName::MacRegisterDefaultTypeAndCreator( wxT("drw") , 'WXMB' , 'WXMA' ) ;
 #endif
     
     if (singleWindowMode)
@@ -94,7 +94,7 @@ bool MyApp::OnInit(void)
         (void) new wxDocTemplate(m_docManager, _T("Text"), _T("*.txt;*.text"), _T(""), _T("txt;text"), _T("Text Doc"), _T("Text View"),
         CLASSINFO(TextEditDocument), CLASSINFO(TextEditView));
 #ifdef __WXMAC__
-        wxFileName::MacRegisterDefaultTypeAndCreator( "txt" , 'TEXT' , 'WXMA' ) ;
+        wxFileName::MacRegisterDefaultTypeAndCreator( wxT("txt") , 'TEXT' , 'WXMA' ) ;
 #endif
     }
     
