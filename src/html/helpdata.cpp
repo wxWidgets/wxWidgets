@@ -171,114 +171,150 @@ bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
             m_Name = tag.GetParam(wxT("VALUE"));
             if (m_Name.Find(wxT('&')) != -1) 
             {
-        #define ESCSEQ(escape, subst)  \
-                          { _T("&") _T(escape) _T(";"), _T("&") _T(escape) _T(" "), _T(subst) } 
-                static wxChar* substitutions[][3] = 
+#define ESCSEQ(escape, subst)  \
+                  { _T("&") _T(escape) _T(";"), _T("&") _T(escape) _T(" "), _T("&") _T(escape), _T(subst) }
+        static wxChar* substitutions[][4] =
                         {
-                        ESCSEQ("quot", "\""),
-                        ESCSEQ("lt", "<"),
-                        ESCSEQ("gt", ">"),
+                ESCSEQ("quot", "\""),
+                ESCSEQ("#34", "\""),
+                ESCSEQ("lt", "<"),
+                ESCSEQ("#60", "<"),
+                ESCSEQ("gt", ">"),
+                ESCSEQ("#62", ">"),
 
-                        ESCSEQ("nbsp", " "),
-                        ESCSEQ("iexcl", "!"),
-                        ESCSEQ("cent", "\242"/* ¢ */),
+                ESCSEQ("#94", "^"), /* ^ */
+    
+                ESCSEQ("nbsp", " "),
+                ESCSEQ("#32", " "),
+                ESCSEQ("iexcl", "!"),
+                ESCSEQ("#33", "!"),
+                ESCSEQ("cent", "¢"/* ¢ */),
+                ESCSEQ("#162", "¢"/* ¢ */),
+    
+                ESCSEQ("trade", "(TM)"),
+                ESCSEQ("#153", "(TM)"),
 
-                        ESCSEQ("yen", " "),
-                        ESCSEQ("brkbar", " "),
-                        ESCSEQ("sect", " "),
-                        ESCSEQ("uml", " "),
+                ESCSEQ("yen", "¥"),
+                ESCSEQ("#165", "¥"),
+                ESCSEQ("brkbar", "¦"),
+                ESCSEQ("#166", "¦"),
+                ESCSEQ("sect", "§"),
+                ESCSEQ("#167", "§"),
+                ESCSEQ("uml", "¨"),
+                ESCSEQ("#168", "¨"),
+    
+                ESCSEQ("copy", "©"), /* © */
+                ESCSEQ("#169", "©"),
+                ESCSEQ("ordf", "ª"),
+                ESCSEQ("#170", "ª"),
+                ESCSEQ("laquo", "«"), /* « */
+                ESCSEQ("#171", "«"),
+                ESCSEQ("not", "¬"),
+                ESCSEQ("#172", "¬"),
+    
+                ESCSEQ("reg", "®"), /* ® */
+                ESCSEQ("#174", "®"),
+    
+                ESCSEQ("deg", "°"), /* ° */
+                ESCSEQ("#176", "°"),
+                ESCSEQ("plusm", "±"), /* ± */
+                ESCSEQ("#177", "±"),
+    
+                ESCSEQ("acute", "´"),
+                ESCSEQ("#180", "´"),
+                ESCSEQ("macron", "¯"),
+                ESCSEQ("#175", "¯"),
+                ESCSEQ("micro", "µ"), /* µ */
+                ESCSEQ("#181", "µ"),
+                ESCSEQ("para", "¶"), /* ¶ */
+                ESCSEQ("#182", "¶"),
+    
+                ESCSEQ("ordm", "º"), /* º */
+                ESCSEQ("#186", "º"),
+                ESCSEQ("raquo", "»"), /* » */
+                ESCSEQ("#187", "»"),
+    
+                ESCSEQ("iquest", "¿"), /* ¿ */
+                ESCSEQ("#191", "¿"),
+                ESCSEQ("Agrave", "\300"/* À */),
+                ESCSEQ("#193", "\300"/* À */),
+    
+                ESCSEQ("Acirc", "\302"/* Â */),
+                ESCSEQ("Atilde", "\303"/* Ã */),
+                ESCSEQ("Auml", "\304"/* Ä */),
+                ESCSEQ("Aring", " "),
+                ESCSEQ("AElig", " "),
+                ESCSEQ("Ccedil", "\347"/* ç */),
+                ESCSEQ("Egrave", "\310"/* È */),
+                ESCSEQ("Eacute", "\311"/* É */),
+                ESCSEQ("Ecirc", "\312"/* Ê */),
+                ESCSEQ("Euml", "\313"/* Ë */),
+                ESCSEQ("Igrave", "\314"/* Ì */),
 
-                        ESCSEQ("copy", "(c)"),
-                        ESCSEQ("ordf", " "),
-                        ESCSEQ("laquo", " "),
-                        ESCSEQ("not", " "),
+                ESCSEQ("Icirc", "\316"/* Î */),
+                ESCSEQ("Iuml", "\317"/* Ï */),
+    
+                ESCSEQ("Ntilde", "\321"/* Ñ */),
+                ESCSEQ("Ograve", "\322"/* Ò */),
+    
+                ESCSEQ("Ocirc", "\324"/* Ô */),
+                ESCSEQ("Otilde", "\325"/* Õ */),
+                ESCSEQ("Ouml", "\326"/* Ö */),
+    
+                ESCSEQ("Oslash", " "),
+                ESCSEQ("Ugrave", "\331"/* Ù */),
+    
+                ESCSEQ("Ucirc", " "),
+                ESCSEQ("Uuml", "\334"/* Ü */),
+    
+                ESCSEQ("szlig", "\247"/* § */),
+                ESCSEQ("agrave;","à"),
+                ESCSEQ("aacute", "\341"/* á */),
+                ESCSEQ("acirc", "\342"/* â */),
+                ESCSEQ("atilde", "\343"/* ã */),
+                ESCSEQ("auml", "\344"/* ä */),
+                ESCSEQ("aring", "a"),
+                ESCSEQ("aelig", "ae"),
+                ESCSEQ("ccedil", "\347"/* ç */),
+                ESCSEQ("egrave", "\350"/* è */),
+                ESCSEQ("eacute", "\351"/* é */),
+                ESCSEQ("ecirc", "\352"/* ê */),
+                ESCSEQ("euml", "\353"/* ë */),
+                ESCSEQ("igrave", "\354"/* ì */),
+                ESCSEQ("iacute", "\355"/* í */),
+                ESCSEQ("icirc", " "),
+                ESCSEQ("iuml", "\357"/* ï */),
+                ESCSEQ("eth", " "),
+                ESCSEQ("ntilde", "\361"/* ñ */),
+                ESCSEQ("ograve", "\362"/* ò */),
+                ESCSEQ("oacute", "\363"/* ó */),
+                ESCSEQ("ocirc", "\364"/* ô */),
+                ESCSEQ("otilde", "\365"/* õ */),
+                ESCSEQ("ouml", "\366"/* ö */),
+                ESCSEQ("divide", " "),
+                ESCSEQ("oslash", " "),
+                ESCSEQ("ugrave", "\371"/* ù */),
+                ESCSEQ("uacute", "\372"/* ú */),
+                ESCSEQ("ucirc", "\373"/* û */),
+                ESCSEQ("uuml", "\374"/* ü */),
+    
+                ESCSEQ("yuml", ""),
 
-                        ESCSEQ("reg", "(r)"),
+                ESCSEQ("#60", "<"),
+                ESCSEQ("#62", ">"),
 
-                        ESCSEQ("deg", " "),
-                        ESCSEQ("plusm", " "),
+                /* this one should ALWAYS stay the last one!!! */
+                ESCSEQ("amp", "&"),
+                ESCSEQ("#38", "&"),
 
-                        ESCSEQ("acute", " "),
-                        ESCSEQ("micro", " "),
-                        ESCSEQ("para", " "),
+                { NULL, NULL, NULL }
+                };
 
-                        ESCSEQ("ordm", " "),
-                        ESCSEQ("raquo", " "),
-
-                        ESCSEQ("iquest", " "),
-                        ESCSEQ("Agrave", "\300"/* À */),
-
-                        ESCSEQ("Acirc", "\302"/* Â */),
-                        ESCSEQ("Atilde", "\303"/* Ã */),
-                        ESCSEQ("Auml", "\304"/* Ä */),
-                        ESCSEQ("Aring", " "),
-                        ESCSEQ("AElig", " "),
-                        ESCSEQ("Ccedil", "\347"/* ç */),
-                        ESCSEQ("Egrave", "\310"/* È */),
-                        ESCSEQ("Eacute", "\311"/* É */),
-                        ESCSEQ("Ecirc", "\312"/* Ê */),
-                        ESCSEQ("Euml", "\313"/* Ë */),
-                        ESCSEQ("Igrave", "\314"/* Ì */),
-
-                        ESCSEQ("Icirc", "\316"/* Î */),
-                        ESCSEQ("Iuml", "\317"/* Ï */),
-
-                        ESCSEQ("Ntilde", "\321"/* Ñ */),
-                        ESCSEQ("Ograve", "\322"/* Ò */),
-
-                        ESCSEQ("Ocirc", "\324"/* Ô */),
-                        ESCSEQ("Otilde", "\325"/* Õ */),
-                        ESCSEQ("Ouml", "\326"/* Ö */),
-
-                        ESCSEQ("Oslash", " "),
-                        ESCSEQ("Ugrave", "\331"/* Ù */),
-
-                        ESCSEQ("Ucirc", " "),
-                        ESCSEQ("Uuml", "\334"/* Ü */),
-
-                        ESCSEQ("szlig", "\247"/* § */),
-                        ESCSEQ("agrave;","à"),
-                        ESCSEQ("aacute", "\341"/* á */),
-                        ESCSEQ("acirc", "\342"/* â */),
-                        ESCSEQ("atilde", "\343"/* ã */),
-                        ESCSEQ("auml", "\344"/* ä */),
-                        ESCSEQ("aring", "a"),
-                        ESCSEQ("aelig", "ae"),
-                        ESCSEQ("ccedil", "\347"/* ç */),
-                        ESCSEQ("egrave", "\350"/* è */),
-                        ESCSEQ("eacute", "\351"/* é */),
-                        ESCSEQ("ecirc", "\352"/* ê */),
-                        ESCSEQ("euml", "\353"/* ë */),
-                        ESCSEQ("igrave", "\354"/* ì */),
-                        ESCSEQ("iacute", "\355"/* í */),
-                        ESCSEQ("icirc", " "),
-                        ESCSEQ("iuml", "\357"/* ï */),
-                        ESCSEQ("eth", " "),
-                        ESCSEQ("ntilde", "\361"/* ñ */),
-                        ESCSEQ("ograve", "\362"/* ò */),
-                        ESCSEQ("oacute", "\363"/* ó */),
-                        ESCSEQ("ocirc", "\364"/* ô */),
-                        ESCSEQ("otilde", "\365"/* õ */),
-                        ESCSEQ("ouml", "\366"/* ö */),
-                        ESCSEQ("divide", " "),
-                        ESCSEQ("oslash", " "),
-                        ESCSEQ("ugrave", "\371"/* ù */),
-                        ESCSEQ("uacute", "\372"/* ú */),
-                        ESCSEQ("ucirc", "\373"/* û */),
-                        ESCSEQ("uuml", "\374"/* ü */),
-
-                        ESCSEQ("yuml", ""),
-
-                        /* this one should ALWAYS stay the last one!!! */
-                        ESCSEQ("amp", "&"),
-
-                        { NULL, NULL, NULL }
-                        };
-
-                for (int i = 0; substitutions[i][0] != NULL; i++) 
+                for (int i = 0; substitutions[i][0] != NULL; i++)
                 {
-                    m_Name.Replace(substitutions[i][0], substitutions[i][2], TRUE);
-                    m_Name.Replace(substitutions[i][1], substitutions[i][2], TRUE);
+                    m_Name.Replace(substitutions[i][0], substitutions[i][3], TRUE);
+                    m_Name.Replace(substitutions[i][1], substitutions[i][3], TRUE);
+                    m_Name.Replace(substitutions[i][2], substitutions[i][3], TRUE);
                 }
             }
         }

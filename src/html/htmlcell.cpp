@@ -135,41 +135,72 @@ wxHtmlWordCell::wxHtmlWordCell(const wxString& word, wxDC& dc) : wxHtmlCell()
     if (m_Word.Find(wxT('&')) != -1) 
     {
 #define ESCSEQ(escape, subst)  \
-                  { _T("&") _T(escape) _T(";"), _T("&") _T(escape) _T(" "), _T(subst) } 
-        static wxChar* substitutions[][3] = 
+                  { _T("&") _T(escape) _T(";"), _T("&") _T(escape) _T(" "), _T("&") _T(escape), _T(subst) }
+        static wxChar* substitutions[][4] =
                 {
                 ESCSEQ("quot", "\""),
+                ESCSEQ("#34", "\""),
                 ESCSEQ("lt", "<"),
+                ESCSEQ("#60", "<"),
                 ESCSEQ("gt", ">"),
+                ESCSEQ("#62", ">"),
+
+                ESCSEQ("#94", "^"), /* ^ */
     
                 ESCSEQ("nbsp", " "),
+                ESCSEQ("#32", " "),
                 ESCSEQ("iexcl", "!"),
-                ESCSEQ("cent", "\242"/* ¢ */),
+                ESCSEQ("#33", "!"),
+                ESCSEQ("cent", "¢"/* ¢ */),
+                ESCSEQ("#162", "¢"/* ¢ */),
     
-                ESCSEQ("yen", " "),
-                ESCSEQ("brkbar", " "),
-                ESCSEQ("sect", " "),
-                ESCSEQ("uml", " "),
+                ESCSEQ("trade", "(TM)"),
+                ESCSEQ("#153", "(TM)"),
+
+                ESCSEQ("yen", "¥"),
+                ESCSEQ("#165", "¥"),
+                ESCSEQ("brkbar", "¦"),
+                ESCSEQ("#166", "¦"),
+                ESCSEQ("sect", "§"),
+                ESCSEQ("#167", "§"),
+                ESCSEQ("uml", "¨"),
+                ESCSEQ("#168", "¨"),
     
-                ESCSEQ("copy", "(c)"),
-                ESCSEQ("ordf", " "),
-                ESCSEQ("laquo", " "),
-                ESCSEQ("not", " "),
+                ESCSEQ("copy", "©"), /* © */
+                ESCSEQ("#169", "©"),
+                ESCSEQ("ordf", "ª"),
+                ESCSEQ("#170", "ª"),
+                ESCSEQ("laquo", "«"), /* « */
+                ESCSEQ("#171", "«"),
+                ESCSEQ("not", "¬"),
+                ESCSEQ("#172", "¬"),
     
-                ESCSEQ("reg", "(r)"),
+                ESCSEQ("reg", "®"), /* ® */
+                ESCSEQ("#174", "®"),
     
-                ESCSEQ("deg", " "),
-                ESCSEQ("plusm", " "),
+                ESCSEQ("deg", "°"), /* ° */
+                ESCSEQ("#176", "°"),
+                ESCSEQ("plusm", "±"), /* ± */
+                ESCSEQ("#177", "±"),
     
-                ESCSEQ("acute", " "),
-                ESCSEQ("micro", " "),
-                ESCSEQ("para", " "),
+                ESCSEQ("acute", "´"),
+                ESCSEQ("#180", "´"),
+                ESCSEQ("macron", "¯"),
+                ESCSEQ("#175", "¯"),
+                ESCSEQ("micro", "µ"), /* µ */
+                ESCSEQ("#181", "µ"),
+                ESCSEQ("para", "¶"), /* ¶ */
+                ESCSEQ("#182", "¶"),
     
-                ESCSEQ("ordm", " "),
-                ESCSEQ("raquo", " "),
+                ESCSEQ("ordm", "º"), /* º */
+                ESCSEQ("#186", "º"),
+                ESCSEQ("raquo", "»"), /* » */
+                ESCSEQ("#187", "»"),
     
-                ESCSEQ("iquest", " "),
+                ESCSEQ("iquest", "¿"), /* ¿ */
+                ESCSEQ("#191", "¿"),
                 ESCSEQ("Agrave", "\300"/* À */),
+                ESCSEQ("#193", "\300"/* À */),
     
                 ESCSEQ("Acirc", "\302"/* Â */),
                 ESCSEQ("Atilde", "\303"/* Ã */),
@@ -232,16 +263,21 @@ wxHtmlWordCell::wxHtmlWordCell(const wxString& word, wxDC& dc) : wxHtmlCell()
     
                 ESCSEQ("yuml", ""),
 
+                ESCSEQ("#60", "<"),
+                ESCSEQ("#62", ">"),
+
                 /* this one should ALWAYS stay the last one!!! */
                 ESCSEQ("amp", "&"),
+                ESCSEQ("#38", "&"),
 
                 { NULL, NULL, NULL }
                 };
 
         for (int i = 0; substitutions[i][0] != NULL; i++) 
         {
-            m_Word.Replace(substitutions[i][0], substitutions[i][2], TRUE);
-            m_Word.Replace(substitutions[i][1], substitutions[i][2], TRUE);
+            m_Word.Replace(substitutions[i][0], substitutions[i][3], TRUE);
+            m_Word.Replace(substitutions[i][1], substitutions[i][3], TRUE);
+            m_Word.Replace(substitutions[i][2], substitutions[i][3], TRUE);
         }
     }
 
