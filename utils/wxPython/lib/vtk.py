@@ -35,7 +35,17 @@ class wxVTKRenderWindow(wxScrolledWindow):
 
         self.renderWindow = vtkRenderWindow()
 
-        EVT_WINDOW_CREATE(self, self.OnCreateWindow)
+        if wxPlatform != '__WXMSW__':
+            # We can't get the handle in wxGTK until after the widget
+            # is created, the window create event happens later so we'll
+            # catch it there
+            EVT_WINDOW_CREATE(self, self.OnCreateWindow)
+        else:
+            # but in MSW, the window create event happens durring the above
+            # call to __init__ so we have to do it here.
+            hdl = self.GetHandle()
+            self.renderWindow.SetWindowInfo(str(hdl))
+
 
         EVT_LEFT_DOWN  (self, self.SaveClick)
         EVT_MIDDLE_DOWN(self, self.SaveClick)
