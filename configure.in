@@ -673,6 +673,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_CONFIG=no
   DEFAULT_wxUSE_STREAMS=no
   DEFAULT_wxUSE_SOCKETS=no
+  DEFAULT_wxUSE_DIALUP_MANAGER=no
   DEFAULT_wxUSE_SERIAL=no
   DEFAULT_wxUSE_JOYSTICK=no
   DEFAULT_wxUSE_DYNLIB_CLASS=no
@@ -783,6 +784,7 @@ else
   DEFAULT_wxUSE_CONFIG=yes
   DEFAULT_wxUSE_STREAMS=yes
   DEFAULT_wxUSE_SOCKETS=yes
+  DEFAULT_wxUSE_DIALUP_MANAGER=yes
   DEFAULT_wxUSE_SERIAL=yes
   DEFAULT_wxUSE_JOYSTICK=yes
   DEFAULT_wxUSE_DYNLIB_CLASS=yes
@@ -943,6 +945,7 @@ dnl ---------------------------------------------------------------------------
 WX_ARG_ENABLE(intl,          [  --enable-intl           use internationalization system], wxUSE_INTL)
 WX_ARG_ENABLE(config,        [  --enable-config         use wxConfig (and derived) classes], wxUSE_CONFIG)
 WX_ARG_ENABLE(sockets,       [  --enable-sockets        use socket/network classes], wxUSE_SOCKETS)
+WX_ARG_ENABLE(dialupman,     [  --enable-dialupman      use dialup network classes], wxUSE_DIALUP_MANAGER)
 WX_ARG_ENABLE(ipc,           [  --enable-ipc            use interprocess communication (wxSocket etc.)], wxUSE_IPC)
 WX_ARG_ENABLE(apple_ieee,    [  --enable-apple_ieee     use the Apple IEEE codec], wxUSE_APPLE_IEEE)
 WX_ARG_ENABLE(timedate,      [  --enable-timedate       use date/time classes], wxUSE_TIMEDATE)
@@ -2226,6 +2229,10 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
         AC_MSG_WARN(Socket classes require --with-threads and won't be compiled without it)
         wxUSE_SOCKETS=0
     fi
+fi
+
+if test "$wxUSE_DIALUP_MANAGER" = "yes" ; then
+  AC_DEFINE(wxUSE_DIALUP_MANAGER)
 fi
 
 if test "$wxUSE_STREAMS" = "yes" ; then

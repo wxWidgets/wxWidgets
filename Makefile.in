@@ -190,6 +190,7 @@ WX_HEADERS = \
 		gifdecod.h \
 		grid.h \
 		gsocket.h \
+		net.h \
 		hash.h \
 		help.h \
 		helpbase.h \
@@ -838,6 +839,7 @@ GTK_GUIOBJS = \
 		gauge.o \
 		gdiobj.o \
 		gsockgtk.o \
+		net.o \
 		icon.o \
 		listbox.o \
 		main.o \
@@ -1551,6 +1553,7 @@ MSW_GUIOBJS = \
 		gauge95.o \
 		gdiobj.o \
 		gsocket.o \
+		net.o \
 		helpwin.o \
 		icon.o \
 		imaglist.o \
@@ -1637,6 +1640,7 @@ MSW_GUIDEPS = \
 		gauge95.d \
 		gdiobj.d \
 		gsocket.d \
+		net.d \
 		helpwin.d \
 		icon.d \
 		imaglist.d \
@@ -1729,11 +1733,13 @@ HTMLDEPS = \
 
 UNIXOBJS = \
 		gsocket.o \
+		net.o \
 		threadpsx.o \
 		utilsunx.o
 
 UNIXDEPS = \
 		gsocket.d \
+		net.d \
 		threadpsx.d \
 		utilsunx.d
 

@@ -338,6 +338,10 @@
  */
 #define wxUSE_SOCKETS 0
 /*
+ * Use dialup manager
+ */
+#define wxUSE_DIALUP_MANAGER 0
+/*
  * Use standard C++ streams if 1. If 0, use wxWin
  * streams implementation.
  */

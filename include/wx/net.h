@@ -37,19 +37,15 @@
  *    main thread?
  */
 
+#define WXDIALUP_MANAGER_DEFAULT_BEACONHOST  "www.yahoo.com"
+
 class WXDLLEXPORT wxDialUpManager
 {
 public:
-    // get the pointer to the global wxDialUpManager object
-    static wxDialUpManager *Get()
-    {
-        if ( !ms_dialUpManager )
-        {
-            ms_dialUpManager = Create();
-        }
-
-        return ms_dialUpManager;
-    }
+    // this function should create and return the object of the
+    // platform-specific class derived from wxDialUpManager. It's implemented
+    // in the platform-specific source files.
+    static wxDialUpManager *Create();
 
     // could the dialup manager be initialized correctly? If this function
     // returns FALSE, no other functions will work neither, so it's a good idea
@@ -67,9 +63,9 @@ public:
     // ISP (exact meaning of the parameter depends on the platform), returns
     // TRUE on success or FALSE on failure and logs the appropriate error
     // message in the latter case.
-    virtual bool Dial(const wxString& nameOfISP,
-                      const wxString& username,
-                      const wxString& password) = 0;
+    virtual bool Dial(const wxString& nameOfISP = "",
+                      const wxString& username = "",
+                      const wxString& password = "") = 0;
 
     // hang up the currently active dial up connection
     virtual bool HangUp() = 0;
@@ -80,7 +76,7 @@ public:
     // returns TRUE if the computer is connected to the network: under Windows,
     // this just means that a RAS connection exists, under Unix we check that
     // the "well-known host" (as specified by SetWellKnownHost) is reachable
-    virtual bool IsOnline() = 0;
+    virtual bool IsOnline() const = 0;
 
     // sometimes the built-in logic for determining the online status may fail,
     // so, in general, the user should be allowed to override it. This function
@@ -107,28 +103,14 @@ public:
     // under Unix, the value of well-known host is used to check whether we're
     // connected to the internet. It's unused under Windows, but this function
     // is always safe to call. The default value is www.yahoo.com.
-    virtual void SetWellKnownHost(const wxString& hostname) = 0;
-
-private:
-    friend class WXDLLEXPORT wxApp;
-
-    // only for wxApp usage: clean up.
-    static void Delete()
-    {
-        if ( ms_dialUpManager )
-        {
-            delete ms_dialUpManager;
-            ms_dialUpManager = (wxDialUpManager *)NULL;
-        }
-    }
-
-    // this function should create and return the object of the
-    // platform-specific class derived from wxDialUpManager. It's implemented
-    // in the platform-specific source files.
-    static wxDialUpManager *Create();
-
-    // the unique instance of this class 
-    static wxDialUpManager *ms_dialUpManager;
+    virtual void SetWellKnownHost(const wxString& hostname,
+                                  int portno = 80) = 0;
+    /** Sets the commands to start up the network and to hang up
+        again. Used by the Unix implementations only.
+    */
+    virtual void SetConnectCommand(const wxString &command = "/usr/bin/pon",
+                                   const wxString &hupcmd = "/usr/bin/poff")
+      { }
 };
 
 // ----------------------------------------------------------------------------
