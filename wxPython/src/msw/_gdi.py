@@ -4068,7 +4068,7 @@ class BufferedDC(MemoryDC):
         return "<%s.%s; proxy of C++ wxBufferedDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args):
         """
-        __init__(self, DC dc, Bitmap buffer, int style=BUFFER_CLIENT_AREA) -> BufferedDC
+        __init__(self, DC dc, Bitmap buffer=NullBitmap, int style=BUFFER_CLIENT_AREA) -> BufferedDC
         __init__(self, DC dc, Size area, int style=BUFFER_CLIENT_AREA) -> BufferedDC
 
         Constructs a buffered DC.
