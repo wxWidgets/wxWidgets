@@ -106,6 +106,9 @@ public:
   virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE );
   virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
   virtual bool CanRead( wxInputStream& stream );
+private:
+   // hiding base class virtuals again!
+  inline bool CanRead( const wxString& name ) { return(wxImageHandler::CanRead(name)); };
 #endif
 };
 #endif
@@ -133,6 +136,9 @@ public:
   virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE );
   virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
   virtual bool CanRead( wxInputStream& stream );
+private:
+   // hiding base class virtuals again!
+  inline bool CanRead( const wxString& name ) { return(wxImageHandler::CanRead(name)); };
 #endif
 };
 #endif
@@ -158,6 +164,9 @@ public:
 #if wxUSE_STREAMS
   virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE );
   virtual bool CanRead( wxInputStream& stream );
+private:
+   // hiding base class virtuals again!
+  inline bool CanRead( const wxString& name ) { return(wxImageHandler::CanRead(name)); };
 #endif
 };
 
@@ -166,7 +175,6 @@ public:
 //-----------------------------------------------------------------------------
 
 #if wxUSE_LIBGIF
-
 class WXDLLEXPORT wxGIFHandler : public wxImageHandler
 {
   DECLARE_DYNAMIC_CLASS(wxGIFHandler)
@@ -185,6 +193,9 @@ public:
   virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE );
   virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
   virtual bool CanRead( wxInputStream& stream );
+private:
+   // hiding base class virtuals again!
+  inline bool CanRead( const wxString& name ) { return(wxImageHandler::CanRead(name)); };
 #endif
 };
 #endif
@@ -212,6 +223,9 @@ public:
   virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE );
   virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
   virtual bool CanRead( wxInputStream& stream );
+private:
+   // hiding base class virtuals again!
+  inline bool CanRead( const wxString& name ) { return(wxImageHandler::CanRead(name)); };
 #endif
 };
 #endif

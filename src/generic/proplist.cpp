@@ -433,7 +433,7 @@ bool wxPropertyListView::CreateControls()
 //  panel->SetClientData((char *)this);
 
     wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );
-    
+
     // top row with optional buttons and input line
 
     wxBoxSizer *topsizer = new wxBoxSizer( wxHORIZONTAL );
@@ -456,11 +456,11 @@ bool wxPropertyListView::CreateControls()
 	topsizer->Add( m_cancelButton, 0, wxLEFT|wxTOP|wxBOTTOM | wxEXPAND, buttonborder );
     }
 
-    m_valueText = new wxPropertyTextEdit(this, panel, wxID_PROP_TEXT, "", 
+    m_valueText = new wxPropertyTextEdit(this, panel, wxID_PROP_TEXT, "",
        wxPoint(-1, -1), wxSize(-1, smallButtonSize.y), wxPROCESS_ENTER);
     m_valueText->Enable(FALSE);
     topsizer->Add( m_valueText, 1, wxALL | wxEXPAND, buttonborder );
-    
+
     if (m_buttonFlags & wxPROP_PULLDOWN)
     {
         m_editButton = new wxButton(panel, wxID_PROP_EDIT, "...",  wxPoint(-1, -1), smallButtonSize);
@@ -481,7 +481,7 @@ bool wxPropertyListView::CreateControls()
     m_propertyScrollingList->SetFont(* boringFont);
     m_middleSizer->Add( m_propertyScrollingList, 1, wxALL|wxEXPAND, buttonborder );
 
-    mainsizer->Add( m_middleSizer, 1, wxEXPAND );    
+    mainsizer->Add( m_middleSizer, 1, wxEXPAND );
 
     // bottom row with buttons
 
@@ -492,7 +492,7 @@ bool wxPropertyListView::CreateControls()
     {
         wxBoxSizer *bottomsizer = new wxBoxSizer( wxHORIZONTAL );
         buttonborder = 5;
-    
+
         if (m_buttonFlags & wxPROP_BUTTON_OK)
         {
             m_windowCloseButton = new wxButton(panel, wxID_OK, _("OK"), wxPoint(-1, -1), largeButtonSize );
@@ -533,16 +533,16 @@ void wxPropertyListView::ShowTextControl(bool show)
 void wxPropertyListView::ShowListBoxControl(bool show)
 {
     if (!m_valueList) return;
-    
+
     m_valueList->Show(show);
-    
+
     if (m_buttonFlags & wxPROP_DYNAMIC_VALUE_FIELD)
     {
         if (show)
 	    m_middleSizer->Prepend( m_valueList, 0, wxTOP|wxLEFT|wxRIGHT | wxEXPAND, 3 );
 	else
 	    m_middleSizer->Remove( 0 );
-      
+
         m_propertyWindow->Layout();
     }
 }
@@ -1840,7 +1840,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPropertyModule,wxModule)
 
 bool wxPropertyModule::OnInit()
 {
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXOS2__)
     gs_tickBitmap = new wxBitmap("tick_bmp", wxBITMAP_TYPE_RESOURCE);
     gs_crossBitmap =  new wxBitmap("cross_bmp", wxBITMAP_TYPE_RESOURCE);
 #else

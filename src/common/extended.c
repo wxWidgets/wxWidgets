@@ -1,4 +1,6 @@
+#if !defined(__VISAGECPP__)
 #   pragma warning(disable:4001)    /* non standard extension used: single line comment */
+#endif
 #include "wx/setup.h"
 #include <math.h>
 

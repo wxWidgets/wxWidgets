@@ -78,7 +78,7 @@ static void LINKAGEMODE _PNG_stream_writer( png_structp png_ptr, png_bytep data,
 // from pngerror.c
 // so that the libpng doesn't send anything on stderr
 void
-png_silent_error(png_structp png_ptr, png_const_charp WXUNUSED(message))
+LINKAGEMODE png_silent_error(png_structp png_ptr, png_const_charp WXUNUSED(message))
 {
 #ifdef USE_FAR_KEYWORD
    {
@@ -92,7 +92,7 @@ png_silent_error(png_structp png_ptr, png_const_charp WXUNUSED(message))
 }
 
 void
-png_silent_warning(png_structp WXUNUSED(png_ptr), png_const_charp WXUNUSED(message))
+LINKAGEMODE png_silent_warning(png_structp WXUNUSED(png_ptr), png_const_charp WXUNUSED(message))
 {
 }
 
@@ -349,8 +349,8 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
 bool wxPNGHandler::CanRead( wxInputStream& stream )
 {
     unsigned char hdr[4];
-    
-    stream.Read(&hdr, 4);    
+
+    stream.Read(&hdr, 4);
     stream.SeekI(-4, wxFromCurrent);
     return (hdr[0] == 0x89 && hdr[1] == 'P' && hdr[2] == 'N' && hdr[3] == 'G');
 }
