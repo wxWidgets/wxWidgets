@@ -25,6 +25,7 @@ _treeList = [
                                 'wxImageFromStream',
                                 'RowColSizer',
                                 'Unicode',
+                                'wxFileHistory',
                                 ]),
 
     ('Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame',
@@ -64,7 +65,7 @@ _treeList = [
                         'ActiveXWrapper_Acrobat', 'ActiveXWrapper_IE',
                         'wxDragImage', "wxProcess", "FancyText", "OOR", "wxWave",
                         'wxJoystick', 'DrawXXXList', 'ErrorDialogs', 'wxMimeTypesManager',
-                        'ContextHelp', 'SplitTree', 'Unicode',
+                        'ContextHelp', 'SplitTree', 'Unicode', 'wxFileHistory',
                         ]),
 
     ('wxPython Library', ['Layoutf', 'wxScrolledMessageDialog',
