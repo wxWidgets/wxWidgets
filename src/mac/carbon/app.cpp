@@ -399,7 +399,7 @@ bool wxApp::Initialize()
     //   __wxinitialize in Mach-O shared libraries
     wxStAppResource::OpenSharedLibraryResource(NULL);
 #endif
-    
+
 #if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
     AEInstallEventHandler( kCoreEventClass , kAEOpenDocuments ,
                            NewAEEventHandlerUPP(AEHandleODoc) ,
@@ -496,7 +496,7 @@ bool wxApp::Initialize()
     s_macCursorRgn = ::NewRgn() ;
 
     wxBuffer = new char[BUFSIZ + 512];
-  
+
     wxClassInfo::InitializeClasses();
 
 #if wxUSE_RESOURCES
@@ -506,7 +506,7 @@ bool wxApp::Initialize()
 #if wxUSE_THREADS
     wxPendingEventsLocker = new wxCriticalSection;
 #endif
-    
+
     wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
     wxTheColourDatabase->Initialize();
 
@@ -592,7 +592,7 @@ void wxApp::CleanUp()
         delete wxWinMacControlList ;
     }
     delete wxPendingEvents;
-    
+
 #if wxUSE_THREADS
     delete wxPendingEventsLocker;
     // If we don't do the following, we get an apparent memory leak.
@@ -635,12 +635,12 @@ void wxApp::CleanUp()
     //   __wxterminate in Mach-O shared libraries
     wxStAppResource::CloseSharedLibraryResource();
 #endif
-    
+
     UMACleanupToolbox() ;
     if (s_macCursorRgn) {
         ::DisposeRgn((RgnHandle)s_macCursorRgn);
     }
-    
+
     #if 0
         TerminateAE() ;
     #endif
@@ -683,14 +683,14 @@ void wxStAppResource::OpenSharedLibraryResource(const void *initBlock)
     if ( initBlock != NULL ) {
         const CFragInitBlock *theInitBlock = (const CFragInitBlock *)initBlock;
         FSSpec *fileSpec = NULL;
-        
+
         if (theInitBlock->fragLocator.where == kDataForkCFragLocator) {
             fileSpec = theInitBlock->fragLocator.u.onDisk.fileSpec;
         }
         else if (theInitBlock->fragLocator.where == kResourceCFragLocator) {
             fileSpec = theInitBlock->fragLocator.u.inSegs.fileSpec;
         }
-        
+
         if (fileSpec != NULL) {
             gSharedLibraryResource =  FSpOpenResFile(fileSpec, fsRdPerm);
         }
@@ -701,12 +701,12 @@ void wxStAppResource::OpenSharedLibraryResource(const void *initBlock)
         NSSymbol    theSymbol;
         NSModule    theModule;
         const char *theLibPath;
-        
+
         gSharedLibraryBundle = CFBundleGetBundleWithIdentifier(CFSTR("com.wxwindows.wxWindows"));
         if (gSharedLibraryBundle != NULL) {
             // wxWindows has been bundled into a framework
             //   load the framework resources
-            
+
             gSharedLibraryResource = CFBundleOpenBundleResourceMap(gSharedLibraryBundle);
         }
         else {
@@ -717,7 +717,7 @@ void wxStAppResource::OpenSharedLibraryResource(const void *initBlock)
             char  *theExt;
             FSRef  theResRef;
             OSErr  theErr = noErr;
-            
+
             // get the library path
             theSymbol = NSLookupAndBindSymbol("_gSharedLibraryResource");
             theModule = NSModuleForSymbol(theSymbol);
@@ -735,7 +735,7 @@ void wxStAppResource::OpenSharedLibraryResource(const void *initBlock)
                 theExt = strstr(theName, ".dylib");
                 // overwrite extension with ".rsrc"
                 strcpy(theExt, ".rsrc");
-                
+
                 wxLogDebug( theResPath );
 
                 theErr = FSPathMakeRef((UInt8 *) theResPath, &theResRef, false);
@@ -743,7 +743,7 @@ void wxStAppResource::OpenSharedLibraryResource(const void *initBlock)
                     // try in current directory (using name only)
                     theErr = FSPathMakeRef((UInt8 *) theName, &theResRef, false);
                 }
-                
+
                 // free duplicated resource file path
                 free(theResPath);
 
@@ -776,7 +776,7 @@ void wxStAppResource::CloseSharedLibraryResource()
             CloseResFile(gSharedLibraryResource);
         }
         gSharedLibraryResource = kResFileNotOpened;
-    }    
+    }
 #endif /* WXMAKINGDLL */
 }
 
@@ -860,12 +860,12 @@ int wxEntry( int argc, char *argv[] , bool enterLoop )
     if (argc > 1) {
         char theArg[6] = "";
         strncpy(theArg, argv[1], 5);
-        
+
         if (strcmp(theArg, "-psn_") == 0) {
             // assume the argument is always the only one and remove it
             --argc;
         }
-    }    
+    }
 #else
     argc = 0 ; // currently we don't support files as parameters
 #endif
@@ -932,7 +932,7 @@ bool wxMacConvertEventToRecord( EventRef event , EventRecord *rec)
             case kEventClassKeyboard :
             {
                 converted = true ;
-                switch( GetEventKind(event) ) 
+                switch( GetEventKind(event) )
                 {
                     case kEventRawKeyDown :
                         rec->what = keyDown ;
@@ -995,14 +995,14 @@ bool wxMacConvertEventToRecord( EventRef event , EventRecord *rec)
             break ;
         }
     }
-    
+
     return converted ;
 }
 
 pascal OSStatus wxMacApplicationEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
     OSStatus result = eventNotHandledErr ;
-    
+
     EventRecord rec ;
     switch ( GetEventClass( event ) )
     {
@@ -1034,20 +1034,20 @@ bool wxApp::OnInit()
 {
     if ( ! wxAppBase::OnInit() )
         return FALSE ;
-    
+
 #if 0 // TARGET_CARBON
-	static const EventTypeSpec eventList[] = 
+	static const EventTypeSpec eventList[] =
 	{
 	    { kEventClassKeyboard, kEventRawKeyDown } ,
 	    { kEventClassKeyboard, kEventRawKeyRepeat } ,
 	    { kEventClassKeyboard, kEventRawKeyUp } ,
 	    { kEventClassKeyboard, kEventRawKeyModifiersChanged } ,
-	    
+
 	    { kEventClassTextInput , kEventTextInputUnicodeForKeyEvent } ,
 	} ;
-	
+
 	InstallApplicationEventHandler(NewEventHandlerUPP(wxMacApplicationEventHandler)
-	    , WXSIZEOF(eventList), eventList, this, NULL);    
+	    , WXSIZEOF(eventList), eventList, this, NULL);
 #endif
     return TRUE ;
 }
@@ -1067,7 +1067,7 @@ wxApp::wxApp()
   argv = NULL;
 
   m_printMode = wxPRINT_WINDOWS;
-  m_exitOnFrameDelete = TRUE;
+  SetExitOnFrameDelete(TRUE);
   m_auto3D = TRUE;
 }
 
@@ -1302,13 +1302,13 @@ void wxApp::MacSuspend( bool convertClipboard )
 
         node = node->Next();
     }
-    
+
     s_lastMouseDown = 0 ;
     if( convertClipboard )
     {
         MacConvertPrivateToPublicScrap() ;
     }
-    
+
     ::HideFloatingWindows() ;
 }
 
@@ -1321,9 +1321,9 @@ void wxApp::MacResume( bool convertClipboard )
     {
         MacConvertPublicToPrivateScrap() ;
     }
-    
+
     ::ShowFloatingWindows() ;
-    
+
     // raise modal dialogs in case a non modal window was selected to activate the app
 
     wxNode* node = wxModalDialogs.First();
@@ -1331,7 +1331,7 @@ void wxApp::MacResume( bool convertClipboard )
     {
         wxDialog* dialog = (wxDialog *) node->Data();
         dialog->Raise();
-        
+
         node = node->Next();
     }
 }
@@ -1402,23 +1402,23 @@ void wxApp::MacHandleModifierEvents( WXEVENTREF evr )
         event.m_timeStamp = ev->when;
         wxWindow* focus = wxWindow::FindFocus() ;
         event.SetEventObject(focus);
-        
+
         if ( (ev->modifiers ^ s_lastModifiers ) & controlKey )
         {
             event.m_keyCode = WXK_CONTROL ;
-            event.SetEventType( ( ev->modifiers & controlKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;  
+            event.SetEventType( ( ev->modifiers & controlKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
             focus->GetEventHandler()->ProcessEvent( event ) ;
         }
         if ( (ev->modifiers ^ s_lastModifiers ) & shiftKey )
         {
             event.m_keyCode = WXK_SHIFT ;
-            event.SetEventType( ( ev->modifiers & shiftKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;  
+            event.SetEventType( ( ev->modifiers & shiftKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
             focus->GetEventHandler()->ProcessEvent( event ) ;
         }
         if ( (ev->modifiers ^ s_lastModifiers ) & optionKey )
         {
             event.m_keyCode = WXK_ALT ;
-            event.SetEventType( ( ev->modifiers & optionKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;  
+            event.SetEventType( ( ev->modifiers & optionKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
             focus->GetEventHandler()->ProcessEvent( event ) ;
         }
         s_lastModifiers = ev->modifiers ;
@@ -1656,7 +1656,7 @@ void wxApp::MacHandleMouseUpEvent( WXEVENTREF evr )
 	{
 		window = (WindowRef) s_captureWindow->MacGetRootWindow() ;
 		windowPart = inContent ;
-	} 
+	}
 	else
 	{
 		windowPart = ::FindWindow(ev->where, &window) ;
@@ -2119,14 +2119,14 @@ void wxApp::MacHandleOSEvent( WXEVENTREF evr )
                     event.m_y = ev->where.v;
                     event.m_timeStamp = ev->when;
                     event.SetEventObject(this);
-                    
+
                     if ( wxWindow::s_lastMouseWindow )
                     {
                         wxMouseEvent eventleave(event);
                         eventleave.SetEventType( wxEVT_LEAVE_WINDOW );
                         wxWindow::s_lastMouseWindow->ScreenToClient( &eventleave.m_x, &eventleave.m_y );
                         eventleave.SetEventObject( wxWindow::s_lastMouseWindow ) ;
-                        
+
                         wxWindow::s_lastMouseWindow->GetEventHandler()->ProcessEvent(eventleave);
                     }
                     if ( currentMouseWindow )
