@@ -15,7 +15,7 @@ expandlines()
     rm -f $outputfile
     touch $outputfile
     for line in `cat $toexpand` ; do
-      if [ $line != "" ]; then
+      if [ "$line" != "" ]; then
         ls $line >> $outputfile
       fi
     done
@@ -23,16 +23,25 @@ expandlines()
 
 
 init=""
-WXVER=2.2.0
-if [ $1 = "" ]
+if [ "$1" = "" ]
 then
+  echo Usage: tardist wx-dir output-dir version
   exit
 fi
 
-if [ $2 = "" ]
+if [ "$2" = "" ]
 then
+  echo Usage: tardist wx-dir output-dir version
   exit
 fi
+
+if [ "$3" = "" ]
+then
+  echo Usage: tardist wx-dir output-dir version
+  exit
+fi
+
+WXVER=$3
 
 echo About to archive wxWindows:
 echo   From   $1
@@ -45,7 +54,7 @@ cd $1
 echo Removing backup files...
 rm *~ */*~ */*/*~ */*/*/*~ */*/*/*/*~
 
-rm -f $2/wx${WXVER}*.tgz
+rm -f $2/wxWindows-${WXVER}*.tgz
 rm -f $2/tex2rtf2.tgz
 rm -f $2/ogl3.tgz
 rm -f $2/jpeg.tgz
@@ -54,46 +63,46 @@ rm -f $2/tiff.tgz
 echo Tarring...
 
 ### Generic
-ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/makefile.rsp` > /tmp/wxgen.txt
-tar cvf $2/wx${WXVER}gen.tar -T /tmp/wxgen.txt
-gzip $2/wx${WXVER}gen.tar
-mv $2/wx${WXVER}gen.tar.gz $2/wx${WXVER}gen.tgz
+ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/makefile.rsp` > /tmp/wxgen.txt
+tar cvf $2/wxWindows-${WXVER}-gen.tar -T /tmp/wxgen.txt
+gzip $2/wxWindows-${WXVER}-gen.tar
+mv $2/wxWindows-${WXVER}-gen.tar.gz $2/wxWindows-${WXVER}-gen.tgz
 
 ### wxGTK
-ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/gtk.rsp $1/distrib/msw/makefile.rsp` > /tmp/wxgtk.txt
-tar cvf $2/wx${WXVER}gtk.tar -T /tmp/wxgtk.txt
-gzip $2/wx${WXVER}gtk.tar
-mv $2/wx${WXVER}gtk.tar.gz $2/wx${WXVER}gtk.tgz
+ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/gtk.rsp $1/distrib/msw/makefile.rsp` > /tmp/wxgtk.txt
+tar cvf $2/wxWindows-${WXVER}-gtk.tar -T /tmp/wxgtk.txt
+gzip $2/wxWindows-${WXVER}-gtk.tar
+mv $2/wxWindows-${WXVER}-gtk.tar.gz $2/wxWindows-${WXVER}-gtk.tgz
 
 ### wxMotif
-ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/makefile.rsp` > /tmp/wxmotif.txt
-tar cvf $2/wx${WXVER}mot.tar -T /tmp/wxmotif.txt
-gzip $2/wx${WXVER}mot.tar
-mv $2/wx${WXVER}mot.tar.gz $2/wx${WXVER}mot.tgz
+ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/makefile.rsp` > /tmp/wxmotif.txt
+tar cvf $2/wxWindows-${WXVER}-mot.tar -T /tmp/wxmotif.txt
+gzip $2/wxWindows-${WXVER}-mot.tar
+mv $2/wxWindows-${WXVER}-mot.tar.gz $2/wxWindows-${WXVER}-mot.tgz
 
 ### Doc sources
 ls `cat $1/distrib/msw/docsrc.rsp` > /tmp/docsrc.txt
-tar cvf $2/wx${WXVER}doc.tar -T /tmp/docsrc.txt
-gzip $2/wx${WXVER}doc.tar
-mv $2/wx${WXVER}doc.tar.gz $2/wx${WXVER}doc.tgz
+tar cvf $2/wxWindows-${WXVER}-doc.tar -T /tmp/docsrc.txt
+gzip $2/wxWindows-${WXVER}-doc.tar
+mv $2/wxWindows-${WXVER}-doc.tar.gz $2/wxWindows-${WXVER}-doc.tgz
 
 ### HTML docs
 ls `cat $1/distrib/msw/wx_html.rsp` > /tmp/html.txt
-tar cvf $2/wx${WXVER}htm.tar -T /tmp/html.txt
-gzip $2/wx${WXVER}htm.tar
-mv $2/wx${WXVER}htm.tar.gz $2/wx${WXVER}htm.tgz
+tar cvf $2/wxWindows-${WXVER}-htm.tar -T /tmp/html.txt
+gzip $2/wxWindows-${WXVER}-htm.tar
+mv $2/wxWindows-${WXVER}-htm.tar.gz $2/wxWindows-${WXVER}-htm.tgz
 
 ### PDF docs
 ls `cat $1/distrib/msw/wx_pdf.rsp` > /tmp/pdf.txt
-tar cvf $2/wx${WXVER}pdf.tar -T /tmp/pdf.txt
-gzip $2/wx${WXVER}pdf.tar
-mv $2/wx${WXVER}pdf.tar.gz $2/wx${WXVER}pdf.tgz
+tar cvf $2/wxWindows-${WXVER}-pdf.tar -T /tmp/pdf.txt
+gzip $2/wxWindows-${WXVER}-pdf.tar
+mv $2/wxWindows-${WXVER}-pdf.tar.gz $2/wxWindows-${WXVER}-pdf.tgz
 
 ### Stubs files
 ls `cat $1/distrib/msw/stubs.rsp` > /tmp/stubs.txt
-tar cvf $2/wx${WXVER}stubs.tar -T /tmp/stubs.txt
-gzip $2/wx${WXVER}stubs.tar
-mv $2/wx${WXVER}stubs.tar.gz $2/wx${WXVER}stubs.tgz
+tar cvf $2/wxWindows-${WXVER}-stubs.tar -T /tmp/stubs.txt
+gzip $2/wxWindows-${WXVER}-stubs.tar
+mv $2/wxWindows-${WXVER}-stubs.tar.gz $2/wxWindows-${WXVER}-stubs.tgz
 
 ### Tex2RTF
 ls `cat $1/distrib/msw/tex2rtf.rsp` > /tmp/tex2rtf.txt

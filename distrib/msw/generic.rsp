@@ -96,7 +96,11 @@ src/png/TODO
 src/png/*.1
 src/png/*.3
 src/png/*.5
-src/png/scripts/*
+src/png/scripts/*.ppc
+src/png/scripts/*.bat
+src/png/scripts/makefile*
+src/png/scripts/*.com
+src/png/scripts/*.def
 
 src/zlib/*.c
 src/zlib/*.h
@@ -1116,3 +1120,4 @@ demos/dbbrowse/help.std/*.htm
 demos/dbbrowse/help.std/*.hhc
 demos/dbbrowse/help.std/*.hhp
 demos/dbbrowse/help.std/*.hhk
+

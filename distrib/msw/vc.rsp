@@ -298,3 +298,21 @@ contrib/utils/convertrc/ConvertVC.dsw
 contrib/utils/wxrcedit/wxrceditVC.dsp
 contrib/utils/wxrcedit/wxrceditVC.dsw
 
+contrib/src/canvas/CanvasVC.dsp
+contrib/src/canvas/CanvasVC.dsw
+contrib/samples/canvas/simple/SimpleVC.dsp
+contrib/samples/canvas/simple/SimpleVC.dsw
+contrib/samples/canvas/test/TestVC.dsp
+contrib/samples/canvas/test/TestVC.dsw
+
+contrib/src/plot/PlotVC.dsp
+contrib/src/plot/PlotVC.dsw
+contrib/samples/plot/PlotVC.dsp
+contrib/samples/plot/PlotVC.dsw
+
+contrib/src/gizmos/GizmosVC.dsp
+contrib/src/gizmos/GizmosVC.dsw
+contrib/samples/gizmos/multicell/MulticellVC.dsp
+contrib/samples/gizmos/multicell/MulticellVC.dsw
+contrib/samples/gizmos/splittree/TreeVC.dsp
+contrib/samples/gizmos/splittree/TreeVC.dsw
