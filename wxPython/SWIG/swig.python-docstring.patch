@@ -1,10 +1,10 @@
 Index: Source/Modules/python.cxx
 ===================================================================
 RCS file: /cvsroot/SWIG/Source/Modules/python.cxx,v
-retrieving revision 1.39
-diff -u -4 -r1.39 python.cxx
---- Source/Modules/python.cxx	22 Jan 2004 22:42:17 -0000	1.39
-+++ Source/Modules/python.cxx	24 Jan 2004 00:18:12 -0000
+retrieving revision 1.40
+diff -u -4 -r1.40 python.cxx
+--- Source/Modules/python.cxx	24 Jan 2004 00:25:31 -0000	1.40
++++ Source/Modules/python.cxx	30 Jan 2004 22:22:16 -0000
 @@ -50,8 +50,17 @@
  static  int       have_constructor;
  static  int       have_repr;
@@ -301,7 +301,7 @@ diff -u -4 -r1.39 python.cxx
     *    Check if there is a %addtofunc directive and it has text
     * ------------------------------------------------------------ */
  
-@@ -1698,9 +1953,11 @@
+@@ -1731,9 +1986,11 @@
  	  Printf(f_shadow, modern ? "(object)" : "(_object)");
  	}
        }
@@ -314,7 +314,7 @@ diff -u -4 -r1.39 python.cxx
          Printv(f_shadow,tab4,"__swig_setmethods__ = {}\n",NIL);
          if (Len(base_class)) {
            Printf(f_shadow,"%sfor _s in [%s]: __swig_setmethods__.update(_s.__swig_setmethods__)\n",tab4,base_class);
-@@ -1833,16 +2090,22 @@
+@@ -1866,16 +2123,22 @@
  	  Delete(pyaction);
  	  Printv(f_shadow,pycode,"\n",NIL);
  	} else {
@@ -344,7 +344,7 @@ diff -u -4 -r1.39 python.cxx
          }
  
        }
-@@ -1857,14 +2120,20 @@
+@@ -1890,14 +2153,20 @@
    virtual int staticmemberfunctionHandler(Node *n) {
      String *symname = Getattr(n,"sym:name");
      Language::staticmemberfunctionHandler(n);
@@ -369,7 +369,7 @@ diff -u -4 -r1.39 python.cxx
                 " = staticmethod(", symname, ")\n", NIL);
  
          if (!modern) {
-@@ -1949,8 +2218,10 @@
+@@ -1982,8 +2251,10 @@
   	    }
  
              Printv(f_shadow, tab4, "def __init__(self, *args",
@@ -380,7 +380,7 @@ diff -u -4 -r1.39 python.cxx
              if (!modern) {
                Printv(f_shadow, tab8, "_swig_setattr(self, ", rclassname, ", 'this', ", 
                       funcCallHelper(Swig_name_construct(symname), allow_kwargs), ")\n", NIL);
-@@ -1964,9 +2235,9 @@
+@@ -1997,9 +2268,9 @@
                Printv(f_shadow, tab8, "self.thisown = 1\n", NIL);
                Printv(f_shadow, tab8, "del newobj.thisown\n", NIL);
              }
@@ -391,7 +391,7 @@ diff -u -4 -r1.39 python.cxx
    	  }
  	  have_constructor = 1;
  	} else {
-@@ -1982,8 +2253,10 @@
+@@ -2015,8 +2286,10 @@
  	  } else {
  
              Printv(f_shadow_stubs, "\ndef ", symname, "(*args",
@@ -402,7 +402,7 @@ diff -u -4 -r1.39 python.cxx
                     funcCallHelper(Swig_name_construct(symname), allow_kwargs), "\n", NIL);
  	    Printv(f_shadow_stubs, tab4, "val.thisown = 1\n", NIL);
              if ( have_addtofunc(n) )
-@@ -2015,13 +2288,15 @@
+@@ -2048,13 +2321,15 @@
  	Delete(pyaction);
  	Printv(f_shadow,pycode,"\n", NIL);
        } else {

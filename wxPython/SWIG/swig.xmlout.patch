@@ -1,10 +1,10 @@
 Index: Source/Swig/swig.h
 ===================================================================
 RCS file: /cvsroot/SWIG/Source/Swig/swig.h,v
-retrieving revision 1.80
-diff -u -4 -r1.80 swig.h
---- Source/Swig/swig.h	22 Jan 2004 22:42:18 -0000	1.80
-+++ Source/Swig/swig.h	22 Jan 2004 22:51:44 -0000
+retrieving revision 1.81
+diff -u -4 -r1.81 swig.h
+--- Source/Swig/swig.h	27 Jan 2004 23:39:35 -0000	1.81
++++ Source/Swig/swig.h	30 Jan 2004 22:22:10 -0000
 @@ -364,8 +364,10 @@
  extern void Swig_print_tags(File *obj, Node *root);
  extern void Swig_print_tree(Node *obj);
@@ -22,7 +22,7 @@ RCS file: /cvsroot/SWIG/Source/Modules/main.cxx,v
 retrieving revision 1.33
 diff -u -4 -r1.33 main.cxx
 --- Source/Modules/main.cxx	22 Jan 2004 22:42:15 -0000	1.33
-+++ Source/Modules/main.cxx	22 Jan 2004 22:51:45 -0000
++++ Source/Modules/main.cxx	30 Jan 2004 22:22:11 -0000
 @@ -91,15 +91,17 @@
                               -w+321,401,-402 \n\
                                               \n\
@@ -90,7 +90,7 @@ RCS file: /cvsroot/SWIG/Source/Modules/xml.cxx,v
 retrieving revision 1.10
 diff -u -4 -r1.10 xml.cxx
 --- Source/Modules/xml.cxx	22 Jan 2004 22:42:18 -0000	1.10
-+++ Source/Modules/xml.cxx	22 Jan 2004 22:51:45 -0000
++++ Source/Modules/xml.cxx	30 Jan 2004 22:22:11 -0000
 @@ -197,18 +197,19 @@
  					Replaceall( o, "&", "&amp;" );
  					Replaceall( o, "<", "&lt;" );
