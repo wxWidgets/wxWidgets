@@ -385,7 +385,6 @@ static wxWindowGTK* wxGetTopLevelParent(wxWindowGTK *win)
     return p;
 }
 
-
 static void draw_frame( GtkWidget *widget, wxWindowGTK *win )
 {
     // wxUniversal widgets draw the borders and scrollbars themselves
@@ -488,10 +487,14 @@ gint gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_even
 // "draw" of m_widget
 //-----------------------------------------------------------------------------
 
+#ifndef __WXGTK20__
+
 static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNUSED(rect), wxWindowGTK *win )
 {
     draw_frame( widget, win );
 }
+
+#endif
 
 //-----------------------------------------------------------------------------
 // key code mapping routines
@@ -766,6 +769,10 @@ static void gtk_window_size_request_callback( GtkWidget *widget, GtkRequisition 
 // "expose_event" of m_wxwindow
 //-----------------------------------------------------------------------------
 
+#ifdef __WXGTK20__
+extern GtkContainerClass *pizza_parent_class;
+#endif
+
 static int gtk_window_expose_callback( GtkWidget *widget,
                                        GdkEventExpose *gdk_event,
                                        wxWindow *win )
@@ -817,6 +824,12 @@ static int gtk_window_expose_callback( GtkWidget *widget,
 
     // Actual redrawing takes place in idle time.
     win->Update();
+    
+#ifdef __WXGTK20__
+
+    (* GTK_WIDGET_CLASS (pizza_parent_class)->expose_event) (widget, gdk_event);
+    
+#endif    
 
     return TRUE;
 }
@@ -848,8 +861,10 @@ gint gtk_window_event_event_callback( GtkWidget *widget,
 // "draw" of m_wxwindow
 //-----------------------------------------------------------------------------
 
+#ifndef __WXGTK20__
+
 // This callback is a complete replacement of the gtk_pizza_draw() function,
-// which disabled.
+// which is disabled.
 
 static void gtk_window_draw_callback( GtkWidget *widget,
                                       GdkRectangle *rect,
@@ -933,6 +948,8 @@ static void gtk_window_draw_callback( GtkWidget *widget,
     }
 #endif
 }
+
+#endif
 
 //-----------------------------------------------------------------------------
 // "key_press_event" from any window
@@ -2536,7 +2553,7 @@ void wxWindowGTK::PostCreation()
 #endif
         }
 
-        // these are called when the "sunken" or "raised" borders are drawn */
+        // these are called when the "sunken" or "raised" borders are drawn
         gtk_signal_connect( GTK_OBJECT(m_widget), "expose_event",
           GTK_SIGNAL_FUNC(gtk_window_own_expose_callback), (gpointer)this );
 
@@ -2704,12 +2721,14 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
         int border = 0;
         int bottom_border = 0;
 
+#ifndef __WXGTK__
         if (GTK_WIDGET_CAN_DEFAULT(m_widget))
         {
             /* the default button has a border around it */
             border = 6;
             bottom_border = 5;
         }
+#endif
 
         DoMoveWindow( m_x-border,
                       m_y-border,

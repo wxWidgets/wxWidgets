@@ -23,12 +23,16 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#ifndef __WXGTK20__
+
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
 
 #define IS_ONSCREEN(x,y) ((x >= G_MINSHORT) && (x <= G_MAXSHORT) && \
                           (y >= G_MINSHORT) && (y <= G_MAXSHORT))
+
+#endif
 
 typedef struct _GtkPizzaAdjData  GtkPizzaAdjData;
 
@@ -64,11 +68,12 @@ static void gtk_pizza_forall        (GtkContainer     *container,
                                      gboolean          include_internals,
                                      GtkCallback       callback,
                                      gpointer          callback_data);
+static void     gtk_pizza_allocate_child     (GtkPizza      *pizza,
+                                              GtkPizzaChild *child);
 
 static void     gtk_pizza_position_child     (GtkPizza      *pizza,
                                               GtkPizzaChild *child);
-static void     gtk_pizza_allocate_child     (GtkPizza      *pizza,
-                                              GtkPizzaChild *child);
+#ifndef __WXGTK20__
 static void     gtk_pizza_position_children  (GtkPizza      *pizza);
 
 static void     gtk_pizza_adjust_allocations_recurse (GtkWidget *widget,
@@ -76,26 +81,13 @@ static void     gtk_pizza_adjust_allocations_recurse (GtkWidget *widget,
 static void     gtk_pizza_adjust_allocations         (GtkPizza  *pizza,
                                                       gint       dx,
                                                       gint       dy);
-
-
-/* unused */
-#if 0
-static void     gtk_pizza_expose_area        (GtkPizza       *pizza,
-                                              gint            x,
-                                              gint            y,
-                                              gint            width,
-                                              gint            height);
-static void     gtk_pizza_adjustment_changed (GtkAdjustment  *adjustment,
-                                              GtkPizza       *pizza);
-#endif
-
 static GdkFilterReturn gtk_pizza_filter      (GdkXEvent      *gdk_xevent,
                                               GdkEvent       *event,
                                               gpointer        data);
 static GdkFilterReturn gtk_pizza_main_filter (GdkXEvent      *gdk_xevent,
                                               GdkEvent       *event,
                                               gpointer        data);
-
+#endif /* __WXGTK20__ */
 
 static GtkType gtk_pizza_child_type (GtkContainer     *container);
 
@@ -104,7 +96,12 @@ static void  gtk_pizza_scroll_set_adjustments (GtkPizza      *pizza,
                                                GtkAdjustment *vadj);
 
 
-static GtkContainerClass *parent_class = NULL;
+#ifdef __WXGTK20__
+       GtkContainerClass *pizza_parent_class = NULL;
+#else
+static GtkContainerClass *pizza_parent_class = NULL;
+#endif
+
 static gboolean gravity_works;
 
 guint
@@ -114,18 +111,35 @@ gtk_pizza_get_type ()
 
     if (!pizza_type)
     {
+    
+#ifdef __WXGTK20__
+        static const GTypeInfo pizza_info =
+        {
+            sizeof (GtkPizzaClass),
+            NULL,           /* base_init */
+            NULL,           /* base_finalize */
+            (GClassInitFunc) gtk_pizza_class_init,
+            NULL,           /* class_finalize */
+            NULL,           /* class_data */
+            sizeof (GtkPizza),
+            16,             /* n_preallocs */
+            (GInstanceInitFunc) gtk_pizza_init,
+        };
+        pizza_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkPizza", &pizza_info, 0);
+#else
         GtkTypeInfo pizza_info =
         {
-           "GtkPizza",
-           sizeof (GtkPizza),
-           sizeof (GtkPizzaClass),
-           (GtkClassInitFunc) gtk_pizza_class_init,
-           (GtkObjectInitFunc) gtk_pizza_init,
-           /* reserved_1 */ NULL,
-           /* reserved_2 */ NULL,
-           (GtkClassInitFunc) NULL,
+            "GtkPizza",
+            sizeof (GtkPizza),
+            sizeof (GtkPizzaClass),
+            (GtkClassInitFunc) gtk_pizza_class_init,
+            (GtkObjectInitFunc) gtk_pizza_init,
+            /* reserved_1 */ NULL,
+            /* reserved_2 */ NULL,
+            (GtkClassInitFunc) NULL,
         };
         pizza_type = gtk_type_unique (gtk_container_get_type (), &pizza_info);
+#endif
     }
 
     return pizza_type;
@@ -141,7 +155,7 @@ gtk_pizza_class_init (GtkPizzaClass *klass)
     object_class = (GtkObjectClass*) klass;
     widget_class = (GtkWidgetClass*) klass;
     container_class = (GtkContainerClass*) klass;
-    parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
+    pizza_parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
 
     widget_class->map = gtk_pizza_map;
     widget_class->realize = gtk_pizza_realize;
@@ -308,22 +322,7 @@ gtk_pizza_put (GtkPizza   *pizza,
        GTK_PRIVATE_SET_FLAG (widget, GTK_IS_OFFSCREEN);
 #endif
 
-/*
-    if (GTK_WIDGET_REALIZED (pizza))
-        gtk_widget_realize (widget);
-*/
-
     gtk_widget_set_usize (widget, width, height);
-
-/*
-    if (GTK_WIDGET_VISIBLE (pizza) && GTK_WIDGET_VISIBLE (widget))
-    {
-        if (GTK_WIDGET_MAPPED (pizza))
-            gtk_widget_map (widget);
-
-        gtk_widget_queue_resize (widget);
-    }
-*/
 }
 
 void
@@ -514,7 +513,6 @@ gtk_pizza_realize (GtkWidget *widget)
     g_return_if_fail (GTK_IS_PIZZA (widget));
 
     pizza = GTK_PIZZA (widget);
-
     GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
 
     attributes.window_type = GDK_WINDOW_CHILD;
@@ -567,6 +565,9 @@ gtk_pizza_realize (GtkWidget *widget)
 
     attributes.event_mask = gtk_widget_get_events (widget);
     attributes.event_mask |= GDK_EXPOSURE_MASK              |
+#ifdef __WXGTK20__
+                             GDK_SCROLL_MASK                |
+#endif
                              GDK_POINTER_MOTION_MASK        |
                              GDK_POINTER_MOTION_HINT_MASK   |
                              GDK_BUTTON_MOTION_MASK         |
@@ -594,9 +595,11 @@ gtk_pizza_realize (GtkWidget *widget)
     gdk_window_set_back_pixmap( pizza->bin_window, NULL, FALSE );
 */
 
+#ifndef __WXGTK20__
     /* add filters for intercepting visibility and expose events */
     gdk_window_add_filter (widget->window, gtk_pizza_main_filter, pizza);
     gdk_window_add_filter (pizza->bin_window, gtk_pizza_filter, pizza);
+#endif
 
     /* we NEED gravity or we'll give up */
     gravity_works = gdk_window_set_static_gravities (pizza->bin_window, TRUE);
@@ -626,8 +629,8 @@ gtk_pizza_unrealize (GtkWidget *widget)
     gdk_window_destroy (pizza->bin_window);
     pizza->bin_window = NULL;
 
-    if (GTK_WIDGET_CLASS (parent_class)->unrealize)
-       (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
+    if (GTK_WIDGET_CLASS (pizza_parent_class)->unrealize)
+       (* GTK_WIDGET_CLASS (pizza_parent_class)->unrealize) (widget);
 }
 
 static void
@@ -766,18 +769,20 @@ gtk_pizza_expose (GtkWidget      *widget,
 
     pizza = GTK_PIZZA (widget);
 
-#ifdef __WXGTK20__
+    if (event->window != pizza->bin_window)
+        return FALSE;
 
-    (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
-    
-#else
-
-    /* Sometimes, We handle all expose events in window.cpp now. */
+    /* We handle all expose events in window.cpp now. */
     if (pizza->external_expose)
         return FALSE;
 
-    if (event->window != pizza->bin_window)
-        return FALSE;
+#ifdef __WXGTK20__
+
+    (* GTK_WIDGET_CLASS (pizza_parent_class)->expose_event) (widget, event);
+    
+    return FALSE;
+    
+#else
 
     children = pizza->children;
     while (children)
@@ -794,9 +799,10 @@ gtk_pizza_expose (GtkWidget      *widget,
             gtk_widget_event (child->widget, (GdkEvent*) &child_event);
         }
     }
-#endif
-
+    
     return TRUE;
+    
+#endif
 }
 
 static void
@@ -880,46 +886,6 @@ gtk_pizza_forall (GtkContainer *container,
     }
 }
 
-
-/* Operations on children
- */
-
-static void
-gtk_pizza_position_child (GtkPizza      *pizza,
-                          GtkPizzaChild *child)
-{
-    gint x;
-    gint y;
-
-    x = child->x - pizza->xoffset;
-    y = child->y - pizza->yoffset;
-
-    if (IS_ONSCREEN (x,y))
-    {
-        if (GTK_WIDGET_MAPPED (pizza) &&
-          GTK_WIDGET_VISIBLE (child->widget))
-        {
-            if (!GTK_WIDGET_MAPPED (child->widget))
-                gtk_widget_map (child->widget);
-        }
-
-#ifndef __WXGTK20__
-        if (GTK_WIDGET_IS_OFFSCREEN (child->widget))
-            GTK_PRIVATE_UNSET_FLAG (child->widget, GTK_IS_OFFSCREEN);
-#endif
-    }
-    else
-    {
-#ifndef __WXGTK20__
-        if (!GTK_WIDGET_IS_OFFSCREEN (child->widget))
-            GTK_PRIVATE_SET_FLAG (child->widget, GTK_IS_OFFSCREEN);
-#endif
-
-        if (GTK_WIDGET_MAPPED (child->widget))
-            gtk_widget_unmap (child->widget);
-    }
-}
-
 static void
 gtk_pizza_allocate_child (GtkPizza      *pizza,
                           GtkPizzaChild *child)
@@ -935,6 +901,42 @@ gtk_pizza_allocate_child (GtkPizza      *pizza,
 
     gtk_widget_size_allocate (child->widget, &allocation);
 }
+
+static void
+gtk_pizza_position_child (GtkPizza      *pizza,
+                          GtkPizzaChild *child)
+{
+    gint x;
+    gint y;
+
+    x = child->x - pizza->xoffset;
+    y = child->y - pizza->yoffset;
+
+#ifndef __WXGTK20__
+    if (IS_ONSCREEN (x,y))
+    {
+        if (GTK_WIDGET_MAPPED (pizza) &&
+          GTK_WIDGET_VISIBLE (child->widget))
+        {
+            if (!GTK_WIDGET_MAPPED (child->widget))
+                gtk_widget_map (child->widget);
+        }
+
+        if (GTK_WIDGET_IS_OFFSCREEN (child->widget))
+            GTK_PRIVATE_UNSET_FLAG (child->widget, GTK_IS_OFFSCREEN);
+    }
+    else
+    {
+        if (!GTK_WIDGET_IS_OFFSCREEN (child->widget))
+            GTK_PRIVATE_SET_FLAG (child->widget, GTK_IS_OFFSCREEN);
+
+        if (GTK_WIDGET_MAPPED (child->widget))
+            gtk_widget_unmap (child->widget);
+    }
+#endif
+}
+
+#ifndef __WXGTK20__
 
 static void
 gtk_pizza_position_children (GtkPizza *pizza)
@@ -998,39 +1000,7 @@ gtk_pizza_adjust_allocations (GtkPizza *pizza,
     }
 }
 
-/* Callbacks */
-
-/* unused */
-#if 0
-/* Send a synthetic expose event to the widget
- */
-static void
-gtk_pizza_expose_area (GtkPizza    *pizza,
-                        gint x, gint y, gint width, gint height)
-{
-    if (pizza->visibility == GDK_VISIBILITY_UNOBSCURED)
-    {
-        GdkEventExpose event;
-
-        event.type = GDK_EXPOSE;
-        event.send_event = TRUE;
-        event.window = pizza->bin_window;
-        event.count = 0;
-
-        event.area.x = x;
-        event.area.y = y;
-        event.area.width = width;
-        event.area.height = height;
-
-        gdk_window_ref (event.window);
-        gtk_widget_event (GTK_WIDGET (pizza), (GdkEvent *)&event);
-        gdk_window_unref (event.window);
-    }
-}
-#endif /* unused */
-
-/* This function is used to find events to process while scrolling
- */
+/* This function is used to find events to process while scrolling */
 
 static Bool
 gtk_pizza_expose_predicate (Display *display,
@@ -1280,6 +1250,8 @@ gtk_pizza_main_filter (GdkXEvent *gdk_xevent,
 
     return GDK_FILTER_CONTINUE;
 }
+
+#endif /* __WXGTK20__ */
 
 
 #ifdef __cplusplus
