@@ -299,6 +299,8 @@ void wxApp::MacNewFile()
 
         { kEventClassMouse , kEventMouseDown } ,
         { kEventClassMouse , kEventMouseMoved } ,
+        { kEventClassMouse , kEventMouseUp } ,
+        { kEventClassMouse , kEventMouseDragged } ,
         { 'WXMC' , 'WXMC' }
     } ;
 
@@ -337,6 +339,8 @@ MenuEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 // but have to use ReceiveNextEvent dealing with events manually, therefore we also have
 // deal with clicks in the menu bar explicitely
 
+pascal OSStatus wxMacWindowEventHandler( EventHandlerCallRef handler , EventRef event , void *data ) ;
+
 static pascal OSStatus MouseEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
     OSStatus result = eventNotHandledErr ;
@@ -374,6 +378,13 @@ static pascal OSStatus MouseEventHandler( EventHandlerCallRef handler , EventRef
             }
         }
         break ;
+        case kEventMouseDragged :
+        case kEventMouseUp :
+        {
+            if ( wxTheApp->s_captureWindow )
+                wxMacWindowEventHandler( handler , event , (void*) wxTheApp->s_captureWindow->MacGetTopLevelWindow() ) ;
+        }
+        break ;
         case kEventMouseMoved :
         {
             wxTheApp->MacHandleMouseMovedEvent( point.h , point.v , modifiers , EventTimeToTicks( GetEventTime( event ) ) ) ;
@@ -404,7 +415,15 @@ static pascal OSStatus CommandEventHandler( EventHandlerCallRef handler , EventR
     wxMenuItem* item = NULL ;
 
     if ( mbar )
+    {
         item = mbar->FindItem( id , &menu ) ;
+        // it is not 100 % sure that an menu of id 0 is really ours, safety check
+        if ( id == 0 && menu != NULL && menu->GetHMenu() != command.menu.menuRef )
+        {
+            item = NULL ;
+            menu = NULL ;
+        }
+    }
 
     if ( item == NULL || menu == NULL || mbar == NULL )
         return result ;
@@ -424,7 +443,7 @@ static pascal OSStatus CommandEventHandler( EventHandlerCallRef handler , EventR
                break ;
         case kEventCommandUpdateStatus:
             // eventually trigger an updateui round
-                result = noErr ;
+            result = noErr ;
             break ;
            default :
                break ;
