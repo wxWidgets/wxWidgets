@@ -19,6 +19,7 @@ swig.xmlout.patch	     Fixes a couple problems in the XML output
 			     newlines in attribute values were changed
 			     to the #10; entity reference so they will
 			     be preserved by parsers.
+			     See SF Patch #883402
 
 			     Also, added options for dumping or
 			     writing to a file the XML of the parse
@@ -30,8 +31,8 @@ swig.xmlout.patch	     Fixes a couple problems in the XML output
 
 
 ------------------------------------------------------------------------
-These patches have already been checked in to SWIG's CVS and will be
-in the 1.3.20 release.
+These patches have already been checked in to SWIG's CVS and are in
+the 1.3.20 release.
 ------------------------------------------------------------------------
 
 swig.SplitLines.patch	    Adds a new SplitLines function to the DOH
