@@ -162,9 +162,6 @@ public:
     // Adds HTML processor to wxHtmlWindow class as whole:
     static void AddGlobalProcessor(wxHtmlProcessor *processor);
 
-    // what would we do with it?
-    virtual bool AcceptsFocusFromKeyboard() const { return FALSE; }
-
     // -- Callbacks --
 
     // Sets the title of the window
