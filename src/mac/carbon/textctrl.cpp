@@ -421,27 +421,27 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         style |= wxTE_PROCESS_ENTER ;
     }
 
-#ifdef __WXMAC_OSX__
-#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
-
-    bool tryHIView = UMAGetSystemVersion() >= 0x1030 ;
+    bool forceMLTE = false ;
 #if wxUSE_SYSTEM_OPTIONS
     if ( (wxSystemOptions::HasOption(wxMAC_TEXTCONTROL_USE_MLTE) ) && ( wxSystemOptions::GetOptionInt( wxMAC_TEXTCONTROL_USE_MLTE ) == 1) )
     {
-        tryHIView = false ;
+        forceMLTE = true ;
     }
 #endif
-    if ( tryHIView )
+
+#ifdef __WXMAC_OSX__
+#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
+    if ( UMAGetSystemVersion() >= 0x1030 && forceMLTE == false )
     {
-        m_peer = new wxMacMLTEHIViewControl( this , str , pos , size , style ) ;
+        if ( m_windowStyle & wxTE_MULTILINE )
+            m_peer = new wxMacMLTEHIViewControl( this , str , pos , size , style ) ;
     }
 #endif
-#if !wxMAC_AWAYS_USE_MLTE
     if ( !m_peer )
     {
-        m_peer = new wxMacUnicodeTextControl( this , str , pos , size , style ) ;
+        if ( !(m_windowStyle & wxTE_MULTILINE) && forceMLTE == false )
+            m_peer = new wxMacUnicodeTextControl( this , str , pos , size , style ) ;
     }
-#endif
 #endif
     if ( !m_peer )
     {
@@ -1489,7 +1489,7 @@ TXNFrameOptions wxMacMLTEControl::FrameOptionsFromWXStyle( long wxStyle )
 {
     TXNFrameOptions frameOptions =
         kTXNDontDrawCaretWhenInactiveMask ;
-        
+
     if ( ! ( wxStyle & wxTE_NOHIDESEL ) )
         frameOptions |= kTXNDontDrawSelectionWhenInactiveMask ;
 
@@ -1878,7 +1878,9 @@ void wxMacMLTEControl::ShowPosition( long pos )
             SInt32 dh = desired.h - current.h ;
             TXNShowSelection( m_txn , true ) ;
             theErr = TXNScroll( m_txn, kTXNScrollUnitsInPixels , kTXNScrollUnitsInPixels , &dv , &dh );
-            wxASSERT_MSG( theErr == noErr, _T("TXNScroll returned an error!") );
+            // there will be an error returned for classic mlte implementation when the control is
+            // invisible, but HITextView works correctly, so we don't assert that one
+            // wxASSERT_MSG( theErr == noErr, _T("TXNScroll returned an error!") );
         }
     }
 #endif
