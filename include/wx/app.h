@@ -423,6 +423,8 @@ protected:
         #include "wx/x11/app.h"
     #elif defined(__WXMAC__)
         #include "wx/mac/app.h"
+    #elif defined(__WXCOCOA__)
+        #include "wx/cocoa/app.h"
     #elif defined(__WXPM__)
         #include "wx/os2/app.h"
     #endif
@@ -528,7 +530,7 @@ public:
 // be in your main program (e.g. hello.cpp). Now IMPLEMENT_APP should add this
 // code if required.
 
-#if !wxUSE_GUI || defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXPM__) || defined(__WXMGL__)
+#if !wxUSE_GUI || defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXPM__) || defined(__WXMGL__) || defined(__WXCOCOA__)
     #define IMPLEMENT_WXWIN_MAIN \
         extern int wxEntry( int argc, char **argv ); \
         int main(int argc, char **argv) { return wxEntry(argc, argv); }
