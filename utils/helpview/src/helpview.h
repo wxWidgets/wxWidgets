@@ -12,7 +12,9 @@
 #ifndef _WX_HELPVIEW_H_
 #define _WX_HELPVIEW_H_
 
+#ifdef __GNUG__
 #pragma interface "help.cpp"
+#endif
 
 // Define a new application type, each program should derive a class from wxApp
 class hvApp : public wxApp

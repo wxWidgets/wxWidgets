@@ -34,6 +34,8 @@
 #include "wx/artprov.h"
 #include "wx/filedlg.h"
 
+#include "helpview.h"
+
 class AlternateArtProvider : public wxArtProvider
 {
 protected:
