@@ -128,7 +128,7 @@ Left/right/tab keys to switch cells within a wxTimeCtrl, and the up/down arrows 
 like a spin control.  wxTimeCtrl also allows for an actual spin button to be attached
 to the control, so that it acts like the up/down arrow keys.
 <P>
-The <B>!</B> key sets the value of the control to <B><I>now!</I></B>
+The <B>!</B> or <B>c</B> key sets the value of the control to <B><I>now.</I></B>
 <P>
 Here's the API for wxTimeCtrl:
 <DL><PRE>
