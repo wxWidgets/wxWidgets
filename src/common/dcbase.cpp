@@ -984,38 +984,3 @@ void wxDCBase::CalculateEllipticPoints( wxList* points,
 
 #endif
 
-bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
-                   const wxColour& col, int style)
-{
-#if wxUSE_IMAGE
-    if (dc->GetBrush().GetStyle() == wxTRANSPARENT)
-        return true;
-
-    int height = 0;
-    int width  = 0;
-    dc->GetSize(&width, &height);
-
-    //it would be nice to fail if we don't get a sensible size...
-    wxCHECK_MSG(width >= 1 && height >= 1, false,
-                wxT("In FloodFill, dc.GetSize routine failed, method not supported by this DC"));
-
-    //this is much faster than doing the individual pixels
-    wxMemoryDC memdc;
-    wxBitmap bitmap(width, height);
-    memdc.SelectObject(bitmap);
-    memdc.Blit(0, 0, width, height, dc, 0, 0);
-    memdc.SelectObject(wxNullBitmap);
-
-    wxImage image = bitmap.ConvertToImage();
-    wxImageFloodFill(&image, x,y, dc->GetBrush(), col, style,
-                     dc->GetLogicalFunction());
-    bitmap = wxBitmap(image);
-    memdc.SelectObject(bitmap);
-    dc->Blit(0, 0, width, height, &memdc, 0, 0);
-    memdc.SelectObject(wxNullBitmap);
-
-    return true;
-#else
-    return false;
-#endif
-}
