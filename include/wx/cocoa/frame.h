@@ -54,11 +54,12 @@ public:
     virtual wxMenuBar* GetAppMenuBar(wxCocoaNSWindow *win);
     // Returns the NSView for non-client drawing
     virtual WX_NSView GetNonClientNSView();
-protected:
-    virtual void CocoaSetWxWindowSize(int width, int height);
 
     // Helper function to position status/tool bars
+    // Also called by native toolbar to force a size update
     void UpdateFrameNSView();
+protected:
+    virtual void CocoaSetWxWindowSize(int width, int height);
 
     virtual void CocoaReplaceView(WX_NSView oldView, WX_NSView newView);
     // frameNSView is used whenever a statusbar/generic toolbar are present
