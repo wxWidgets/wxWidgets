@@ -141,8 +141,10 @@ WX\_DECLARE\_OBJARRAY macros and must be fully declared before you use
 WX\_DEFINE\_OBJARRAY macro.
 
 \helpref{WX\_DEFINE\_ARRAY}{wxdefinearray}\\
+\helpref{WX\_DEFINE\_EXPORTED\_ARRAY}{wxdefinearray}\\
 \helpref{WX\_DEFINE\_SORTED\_ARRAY}{wxdefinesortedarray}\\
-\helpref{WX\_DECLARE\_OBJARRAY}{wxdeclareobjarray}\\
+\helpref{WX\_DEFINE\_SORTED\_EXPORTED\_ARRAY}{wxdefinesortedarray}\\
+\helpref{WX\_DECLARE\_EXPORTED\_OBJARRAY}{wxdeclareobjarray}\\
 \helpref{WX\_DEFINE\_OBJARRAY}{wxdefineobjarray}
 
 \membersection{Constructors and destructors}
@@ -220,8 +222,12 @@ does exactly the same as \helpref{Item()}{wxarrayitem} method.
 
 \func{}{WX\_DEFINE\_ARRAY}{\param{}{T}, \param{}{name}}
 
+\func{}{WX\_DEFINE\_EXPORTED\_ARRAY}{\param{}{T}, \param{}{name}}
+
 This macro defines a new array class named {\it name} and containing the
-elements of type {\it T}. Example:
+elements of type {\it T}. The second form is used when compiling DLL
+under Windows and array needs to be visible outside the DLL.
+Example:
 
 \begin{verbatim}
 WX_DEFINE_ARRAY(int, wxArrayInt);
@@ -237,8 +243,14 @@ wxArrayLong and wxArrayPtrVoid.
 
 \func{}{WX\_DEFINE\_SORTED\_ARRAY}{\param{}{T}, \param{}{name}}
 
+\func{}{WX\_DEFINE\_SORTED\_EXPORTED\_ARRAY}{\param{}{T}, \param{}{name}}
+
 This macro defines a new sorted array class named {\it name} and containing
-the elements of type {\it T}. Example:
+the elements of type {\it T}. The second form is used when compiling DLL
+under Windows and array needs to be visible outside the DLL.
+
+
+Example:
 
 \begin{verbatim}
 WX_DEFINE_SORTED_ARRAY(int, wxSortedArrayInt);
@@ -270,8 +282,13 @@ wxArrayOfMyClass another(CompareMyClassObjects);
 
 \func{}{WX\_DECLARE\_OBJARRAY}{\param{}{T}, \param{}{name}}
 
+\func{}{WX\_DECLARE\_EXPORTED\_OBJARRAY}{\param{}{T}, \param{}{name}}
+
 This macro declares a new object array class named {\it name} and containing
-the elements of type {\it T}. Example:
+the elements of type {\it T}. The second form is used when compiling DLL
+under Windows and array needs to be visible outside the DLL.
+
+Example:
 
 \begin{verbatim}
 class MyClass;
