@@ -117,9 +117,16 @@ static const int LINE_SPACING = 0;
 static const int EXTRA_WIDTH = 3;
 static const int EXTRA_HEIGHT = 4;
 
+// margin between the window and the items
+static const int EXTRA_BORDER_X = 2;
+static const int EXTRA_BORDER_Y = 2;
+
 // offset for the header window
 static const int HEADER_OFFSET_X = 1;
 static const int HEADER_OFFSET_Y = 1;
+
+// margin between rows of icons in [small] icon view
+static const int MARGIN_BETWEEN_ROWS = 6;
 
 // when autosizing the columns, add some slack
 static const int AUTOSIZE_COL_MARGIN = 10;
@@ -305,7 +312,7 @@ public:
     void CalculateSize( wxDC *dc, int spacing );
 
     // remember the position this line appears at
-    void SetPosition( int x, int y,  int window_width, int spacing );
+    void SetPosition( int x, int y, int spacing );
 
     // wxListCtrl API
 
@@ -724,8 +731,6 @@ public:
     bool                 m_dirty;
 
     wxColour            *m_highlightColour;
-    int                  m_xScroll,
-                         m_yScroll;
     wxImageListType         *m_small_image_list;
     wxImageListType         *m_normal_image_list;
     int                  m_small_spacing;
@@ -752,9 +757,6 @@ protected:
 
     // common part of all ctors
     void Init();
-
-    // intiialize m_[xy]Scroll
-    void InitScrolling();
 
     // get the line data for the given index
     wxListLineData *GetLine(size_t n) const
@@ -1214,9 +1216,7 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
     }
 }
 
-void wxListLineData::SetPosition( int x, int y,
-                                  int WXUNUSED(window_width),
-                                  int spacing )
+void wxListLineData::SetPosition( int x, int y, int spacing )
 {
     wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
     wxCHECK_RET( node, _T("no subitems at all??") );
@@ -2139,29 +2139,12 @@ void wxListMainWindow::Init()
     m_freezeCount = 0;
 }
 
-void wxListMainWindow::InitScrolling()
-{
-    if ( HasFlag(wxLC_REPORT) )
-    {
-        m_xScroll = SCROLL_UNIT_X;
-        m_yScroll = SCROLL_UNIT_Y;
-    }
-    else
-    {
-        m_xScroll = SCROLL_UNIT_Y;
-        m_yScroll = 0;
-    }
-}
-
 wxListMainWindow::wxListMainWindow()
 {
     Init();
 
     m_highlightBrush =
     m_highlightUnfocusedBrush = (wxBrush *) NULL;
-
-    m_xScroll =
-    m_yScroll = 0;
 }
 
 wxListMainWindow::wxListMainWindow( wxWindow *parent,
@@ -2196,8 +2179,7 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent,
     wxSize sz = size;
     sz.y = 25;
 
-    InitScrolling();
-    SetScrollbars( m_xScroll, m_yScroll, 0, 0, 0, 0 );
+    SetScrollbars( SCROLL_UNIT_X, SCROLL_UNIT_Y, 0, 0, 0, 0 );
 
     SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOX ) );
 }
@@ -3048,8 +3030,8 @@ void wxListMainWindow::MoveToItem(size_t item)
     int client_w, client_h;
     GetClientSize( &client_w, &client_h );
 
-    int view_x = m_xScroll*GetScrollPos( wxHORIZONTAL );
-    int view_y = m_yScroll*GetScrollPos( wxVERTICAL );
+    int view_x = SCROLL_UNIT_X*GetScrollPos( wxHORIZONTAL );
+    int view_y = SCROLL_UNIT_Y*GetScrollPos( wxVERTICAL );
 
     if ( HasFlag(wxLC_REPORT) )
     {
@@ -3058,16 +3040,16 @@ void wxListMainWindow::MoveToItem(size_t item)
         ResetVisibleLinesRange();
 
         if (rect.y < view_y )
-            Scroll( -1, rect.y/m_yScroll );
+            Scroll( -1, rect.y/SCROLL_UNIT_Y );
         if (rect.y+rect.height+5 > view_y+client_h)
-            Scroll( -1, (rect.y+rect.height-client_h+SCROLL_UNIT_Y)/m_yScroll );
+            Scroll( -1, (rect.y+rect.height-client_h+SCROLL_UNIT_Y)/SCROLL_UNIT_Y );
     }
     else // !report
     {
         if (rect.x-view_x < 5)
-            Scroll( (rect.x-5)/m_xScroll, -1 );
+            Scroll( (rect.x-5)/SCROLL_UNIT_X, -1 );
         if (rect.x+rect.width-5 > view_x+client_w)
-            Scroll( (rect.x+rect.width-client_w+SCROLL_UNIT_X)/m_xScroll, -1 );
+            Scroll( (rect.x+rect.width-client_w+SCROLL_UNIT_X)/SCROLL_UNIT_X, -1 );
     }
 }
 
@@ -3801,8 +3783,8 @@ wxRect wxListMainWindow::GetViewRect() const
     }
 
     // some fudge needed to make it look prettier
-    xMax += EXTRA_WIDTH;
-    yMax += EXTRA_HEIGHT;
+    xMax += 2*EXTRA_BORDER_X;
+    yMax += 2*EXTRA_BORDER_Y;
 
     // account for the scrollbars if necessary
     const wxSize sizeAll = GetClientSize();
@@ -3851,6 +3833,8 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
     wxClientDC dc( this );
     dc.SetFont( GetFont() );
 
+    const size_t count = GetItemCount();
+
     int iconSpacing;
     if ( HasFlag(wxLC_ICON) )
         iconSpacing = m_normal_spacing;
@@ -3881,104 +3865,146 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
 
     if ( HasFlag(wxLC_REPORT) )
     {
-        // all lines have the same height
+        // all lines have the same height and we scroll one line per step
         int lineHeight = GetLineHeight();
 
-        // scroll one line per step
-        m_yScroll = lineHeight;
-
-        size_t lineCount = GetItemCount();
-        int entireHeight = lineCount*lineHeight + LINE_SPACING;
+        int entireHeight = count*lineHeight + LINE_SPACING;
 
         m_linesPerPage = clientHeight / lineHeight;
 
         ResetVisibleLinesRange();
 
-        SetScrollbars( m_xScroll, m_yScroll,
-                       GetHeaderWidth() / m_xScroll,
-                       (entireHeight + m_yScroll - 1)/m_yScroll,
+        SetScrollbars( SCROLL_UNIT_X, lineHeight,
+                       GetHeaderWidth() / SCROLL_UNIT_X,
+                       (entireHeight + lineHeight - 1) / lineHeight,
                        GetScrollPos(wxHORIZONTAL),
                        GetScrollPos(wxVERTICAL),
                        TRUE );
     }
     else // !report
     {
-        // at first we try without any scrollbar. if the items don't
-        // fit into the window, we recalculate after subtracting an
-        // approximated 15 pt for the horizontal scrollbar
-
-        int entireWidth = 0;
-
-        for (int tries = 0; tries < 2; tries++)
+        // we have 3 different layout strategies: either layout all items
+        // horizontally/vertically (wxLC_ALIGN_XXX styles explicitly given) or
+        // to arrange them in top to bottom, left to right (don't ask me why
+        // not the other way round...) order
+        if ( HasFlag(wxLC_ALIGN_LEFT | wxLC_ALIGN_TOP) )
         {
-            // We start with 4 for the border around all items
-            entireWidth = 4;
+            int x = EXTRA_BORDER_X;
+            int y = EXTRA_BORDER_Y;
 
-            if (tries == 1)
+            for ( size_t i = 0; i < count; i++ )
             {
-                // Now we have decided that the items do not fit into the
-                // client area. Unfortunately, wxWindows sometimes thinks
-                // that it does fit and therefore NO horizontal scrollbar
-                // is inserted. This looks ugly, so we fudge here and make
-                // the calculated width bigger than was actually has been
-                // calculated. This ensures that wxScrolledWindows puts
-                // a scrollbar at the bottom of its client area.
-                entireWidth += SCROLL_UNIT_X;
-            }
-
-            // Start at 2,2 so the text does not touch the border
-            int x = 2;
-            int y = 2;
-            int maxWidth = 0;
-            m_linesPerPage = 0;
-            int currentlyVisibleLines = 0;
-
-            size_t count = GetItemCount();
-            for (size_t i = 0; i < count; i++)
-            {
-                currentlyVisibleLines++;
                 wxListLineData *line = GetLine(i);
                 line->CalculateSize( &dc, iconSpacing );
-                line->SetPosition( x, y, clientWidth, iconSpacing );  // Why clientWidth? (FIXME)
+                line->SetPosition( x, y, iconSpacing );
 
                 wxSize sizeLine = GetLineSize(i);
 
-                if ( maxWidth < sizeLine.x )
-                    maxWidth = sizeLine.x;
-
-                y += sizeLine.y;
-                if (currentlyVisibleLines > m_linesPerPage)
-                    m_linesPerPage = currentlyVisibleLines;
-
-                // Assume that the size of the next one is the same... (FIXME)
-                if ( y + sizeLine.y >= clientHeight )
+                if ( HasFlag(wxLC_ALIGN_TOP) )
                 {
-                    currentlyVisibleLines = 0;
-                    y = 2;
-                    x += maxWidth+6;
-                    entireWidth += maxWidth+6;
-                    maxWidth = 0;
+                    y += sizeLine.y;
                 }
-
-                // We have reached the last item.
-                if ( i == count - 1 )
-                    entireWidth += maxWidth;
-
-                if ( (tries == 0) && (entireWidth+SCROLL_UNIT_X > clientWidth) )
+                else // wxLC_ALIGN_LEFT
                 {
-                    clientHeight -= 15; // We guess the scrollbar height. (FIXME)
-                    m_linesPerPage = 0;
-                    currentlyVisibleLines = 0;
-                    break;
+                    x += sizeLine.x + MARGIN_BETWEEN_ROWS;
                 }
-
-                if ( i == count - 1 )
-                    tries = 1;  // Everything fits, no second try required.
             }
-        }
 
-        int scroll_pos = GetScrollPos( wxHORIZONTAL );
-        SetScrollbars( m_xScroll, m_yScroll, (entireWidth+SCROLL_UNIT_X) / m_xScroll, 0, scroll_pos, 0, TRUE );
+            SetScrollbars
+            (
+                SCROLL_UNIT_X,
+                SCROLL_UNIT_Y,
+                (x + SCROLL_UNIT_X) / SCROLL_UNIT_X,
+                (y + SCROLL_UNIT_Y) / SCROLL_UNIT_Y,
+                GetScrollPos( wxHORIZONTAL ),
+                GetScrollPos( wxVERTICAL ),
+                TRUE
+            );
+        }
+        else // "flowed" arrangement, the most complicated case
+        {
+            // at first we try without any scrollbars, if the items don't fit into
+            // the window, we recalculate after subtracting the space taken by the
+            // scrollbar
+
+            int entireWidth = 0,
+                entireHeight = 0;
+
+            for (int tries = 0; tries < 2; tries++)
+            {
+                entireWidth = 2*EXTRA_BORDER_X;
+                entireHeight = 2*EXTRA_BORDER_Y;
+
+                if (tries == 1)
+                {
+                    // Now we have decided that the items do not fit into the
+                    // client area, so we need a scrollbar
+                    entireWidth += SCROLL_UNIT_X;
+                }
+
+                int x = EXTRA_BORDER_X;
+                int y = EXTRA_BORDER_Y;
+                int maxWidthInThisRow = 0;
+
+                m_linesPerPage = 0;
+                int currentlyVisibleLines = 0;
+
+                for (size_t i = 0; i < count; i++)
+                {
+                    currentlyVisibleLines++;
+                    wxListLineData *line = GetLine(i);
+                    line->CalculateSize( &dc, iconSpacing );
+                    line->SetPosition( x, y, iconSpacing );
+
+                    wxSize sizeLine = GetLineSize(i);
+
+                    if ( maxWidthInThisRow < sizeLine.x )
+                        maxWidthInThisRow = sizeLine.x;
+
+                    y += sizeLine.y;
+                    if (currentlyVisibleLines > m_linesPerPage)
+                        m_linesPerPage = currentlyVisibleLines;
+
+                    if ( y + sizeLine.y >= clientHeight )
+                    {
+                        currentlyVisibleLines = 0;
+                        y = EXTRA_BORDER_Y;
+                        maxWidthInThisRow += MARGIN_BETWEEN_ROWS;
+                        x += maxWidthInThisRow;
+                        entireWidth += maxWidthInThisRow;
+                        maxWidthInThisRow = 0;
+                    }
+
+                    // We have reached the last item.
+                    if ( i == count - 1 )
+                        entireWidth += maxWidthInThisRow;
+
+                    if ( (tries == 0) &&
+                            (entireWidth + SCROLL_UNIT_X > clientWidth) )
+                    {
+                        clientHeight -= wxSystemSettings::
+                                            GetMetric(wxSYS_HSCROLL_Y);
+                        m_linesPerPage = 0;
+                        currentlyVisibleLines = 0;
+                        break;
+                    }
+
+                    if ( i == count - 1 )
+                        tries = 1;  // Everything fits, no second try required.
+                }
+            }
+
+            SetScrollbars
+            (
+                SCROLL_UNIT_X,
+                SCROLL_UNIT_Y,
+                (entireWidth + SCROLL_UNIT_X) / SCROLL_UNIT_X,
+                0,
+                GetScrollPos( wxHORIZONTAL ),
+                0,
+                TRUE
+            );
+        }
     }
 
     if ( !noRefresh )
