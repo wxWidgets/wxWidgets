@@ -103,7 +103,7 @@ void wxHtmlCell::GetHorizontalConstraints(int *left, int *right) const
     if (left)
         *left = m_PosX;
     if (right)
-        *right = m_PosX + m_Width - 1;
+        *right = m_PosX + m_Width;
 }
 
 
@@ -233,10 +233,22 @@ bool wxHtmlContainerCell::AdjustPagebreak(int *pagebreak) const
 
 void wxHtmlContainerCell::Layout(int w)
 {
-    if (m_LastLayout == w)
+    wxHtmlCell::Layout(w);
+
+    if (m_LastLayout == w) return;
+    
+    // VS: Any attempt to layout with negative or zero width leads to hell,
+    // but we can't ignore such attempts completely, since it sometimes
+    // happen (e.g. when trying how small a table can be). The best thing we
+    // can do is to set the width of child cells to zero
+    if (w < 1) 
     {
-        wxHtmlCell::Layout(w);
-        return;
+       m_Width = 0;
+       for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
+            cell->Layout(0);
+            // this does two things: it recursively calls this code on all child 
+            // contrainers and resets children's position to (0,0)
+       return;
     }
 
     wxHtmlCell *cell = m_Cells, *line = m_Cells;
@@ -378,8 +390,6 @@ void wxHtmlContainerCell::Layout(int w)
     if (m_Width < MaxLineWidth) m_Width = MaxLineWidth;
 
     m_LastLayout = w;
-
-    wxHtmlCell::Layout(w);
 }
 
 
@@ -575,6 +585,9 @@ void wxHtmlContainerCell::GetHorizontalConstraints(int *left, int *right) const
         if (r > cright)
             cright = r;
     }  
+
+    cleft -= (m_IndentLeft < 0) ? (-m_IndentLeft * m_Width / 100) : m_IndentLeft;
+    cright += (m_IndentRight < 0) ? (-m_IndentRight * m_Width / 100) : m_IndentRight;
 
     if (left)
         *left = cleft;

@@ -343,8 +343,6 @@ void wxHtmlTableCell::ComputeMinMaxWidths()
     
     int left, right, width;
 
-    m_ColsInfo[0].minWidth = 0; // avoid recursion
-    Layout(1);
     for (int c = 0; c < m_NumCols; c++)
     {
         for (int r = 0; r < m_NumRows; r++)
@@ -352,12 +350,13 @@ void wxHtmlTableCell::ComputeMinMaxWidths()
             cellStruct& cell = m_CellInfo[r][c];
             if (cell.flag == cellUsed)
             {
+                cell.cont->Layout(2*m_Padding + 1);
                 cell.cont->GetHorizontalConstraints(&left, &right);
-                width = right - left + 1;
+                width = right - left;
+                width -= (cell.colspan-1) * m_Spacing;
                 // HTML 4.0 says it is acceptable to distribute min/max
                 // width of spanning cells evently
                 width /= cell.colspan;
-                width += m_Spacing + 2*m_Padding;
                 for (int j = 0; j < cell.colspan; j++)
                     if (width > m_ColsInfo[c+j].minWidth)
                         m_ColsInfo[c+j].minWidth = width;
@@ -373,6 +372,8 @@ void wxHtmlTableCell::ComputeMinMaxWidths()
 void wxHtmlTableCell::Layout(int w)
 {
     ComputeMinMaxWidths();
+    
+    wxHtmlCell::Layout(w);
 
     /*
 
