@@ -544,7 +544,7 @@ long wxExecute(wxChar **argv,
     wxChar **mb_argv = argv;
 #endif // Unicode/ANSI
 
-#if wxUSE_GUI && !defined(__DARWIN__)
+#if wxUSE_GUI && !(defined(__DARWIN__) && defined(__WXMAC__))
     // create pipes
     wxPipe pipeEndProcDetect;
     if ( !pipeEndProcDetect.Create() )
@@ -555,7 +555,7 @@ long wxExecute(wxChar **argv,
 
         return ERROR_RETURN_CODE;
     }
-#endif // wxUSE_GUI && !defined(__DARWIN__)
+#endif // wxUSE_GUI && !(defined(__DARWIN__) && defined(__WXMAC__))
 
     // pipes for inter process communication
     wxPipe pipeIn,      // stdin
@@ -606,9 +606,9 @@ long wxExecute(wxChar **argv,
                 if ( fd == pipeIn[wxPipe::Read]
                         || fd == pipeOut[wxPipe::Write]
                         || fd == pipeErr[wxPipe::Write]
-#if wxUSE_GUI && !defined(__DARWIN__)
+#if wxUSE_GUI && !(defined(__DARWIN__) && defined(__WXMAC__))
                         || fd == pipeEndProcDetect[wxPipe::Write]
-#endif // wxUSE_GUI && !defined(__DARWIN__)
+#endif // wxUSE_GUI && !(defined(__DARWIN__) && defined(__WXMAC__))
                    )
                 {
                     // don't close this one, we still need it
@@ -630,12 +630,12 @@ long wxExecute(wxChar **argv,
         }
 #endif // !__VMS
 
-#if wxUSE_GUI && !defined(__DARWIN__)
+#if wxUSE_GUI && !(defined(__DARWIN__) && defined(__WXMAC__))
         // reading side can be safely closed but we should keep the write one
         // opened
         pipeEndProcDetect.Detach(wxPipe::Write);
         pipeEndProcDetect.Close();
-#endif // wxUSE_GUI && !defined(__DARWIN__)
+#endif // wxUSE_GUI && !(defined(__DARWIN__) && defined(__WXMAC__))
 
         // redirect stdin, stdout and stderr
         if ( pipeIn.IsOk() )
@@ -736,7 +736,7 @@ long wxExecute(wxChar **argv,
         }
 
 
-#if defined(__DARWIN__)
+#if defined(__DARWIN__) && defined(__WXMAC__)
         data->tag = wxAddProcessCallbackForPid(data,pid);
 #else
         data->tag = wxAddProcessCallback
@@ -746,7 +746,7 @@ long wxExecute(wxChar **argv,
                     );
 
         pipeEndProcDetect.Close();
-#endif // defined(__DARWIN__)
+#endif // defined(__DARWIN__) && defined(__WXMAC__)
 
         if ( flags & wxEXEC_SYNC )
         {
