@@ -373,7 +373,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/carbon/gsocket.cpp
 </set>
 <set var="NET_MAC_CARBONLIB_HDR" hints="files">
-    include/wx/mac/carbon/gsockmac.h
+    wx/mac/carbon/gsockmac.h
 </set>
 
 <set var="NET_CMN_SRC" hints="files">
@@ -2077,8 +2077,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/statusbr.h
     wx/generic/tabg.h
     <!-- Shared wxMac and wxCocoa files -->
-    include/wx/mac/corefoundation/cfstring.h
-    include/wx/mac/corefoundation/stdpaths.h
+    wx/mac/corefoundation/cfstring.h
+    wx/mac/corefoundation/stdpaths.h
 </set>
 
 
@@ -2268,7 +2268,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/taskbarcmn.cpp
 </set>
 <set var="ADVANCED_COCOA_HDR" hints="files">
-    include/wx/cocoa/taskbar.h
+    wx/cocoa/taskbar.h
 </set>
 
 <set var="ADVANCED_OS2_SRC" hints="files">
@@ -2324,7 +2324,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 	src/mac/carbon/mediactrl.cpp
 </set>
 <set var="MEDIA_MAC_HDR" hints="files">
-    include/mac/carbon/mediactrl.h
+    wx/mac/carbon/mediactrl.h
 </set>
 
 <set var="MEDIA_COCOA_SRC" hints="files">
