@@ -283,9 +283,21 @@ static bool wxGetDefaultDeviceName(wxString& deviceName, wxString& portName)
 // Gets an HDC for the specified printer configuration
 WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
 {
+#if defined(__WXUNIVERSAL__) && (!defined(__WXMSW__) || wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW)
+
+#if 0
+    wxPostScriptPrintNativeData *data =
+        (wxPostScriptPrintNativeData *) printDataConst.GetNativeData();
+    // FIXME: how further ???
+#else
+    return 0;
+#endif
+
+#else // Postscript vs. native Windows
+
     wxWindowsPrintNativeData *data =
         (wxWindowsPrintNativeData *) printDataConst.GetNativeData();
-        
+
     data->TransferFrom( printDataConst );
 
     wxChar* driverName = (wxChar*) NULL;
@@ -327,6 +339,7 @@ WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
         GlobalUnlock(hDevMode);
 
     return (WXHDC) hDC;
+#endif
 }
 
 // ----------------------------------------------------------------------------
