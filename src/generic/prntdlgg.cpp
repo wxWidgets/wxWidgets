@@ -110,12 +110,12 @@ wxPostScriptPrintNativeData::~wxPostScriptPrintNativeData()
 {
 }
 
-bool wxPostScriptPrintNativeData::TransferTo( wxPrintData &data )
+bool wxPostScriptPrintNativeData::TransferTo( wxPrintData &WXUNUSED(data) )
 {
     return true;
 }
 
-bool wxPostScriptPrintNativeData::TransferFrom( const wxPrintData &data )
+bool wxPostScriptPrintNativeData::TransferFrom( const wxPrintData &WXUNUSED(data) )
 {
     return true;
 }

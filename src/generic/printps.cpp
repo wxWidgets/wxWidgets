@@ -255,7 +255,7 @@ wxDC* wxPostScriptPrinter::PrintDialog(wxWindow *parent)
     return dc;
 }
 
-bool wxPostScriptPrinter::Setup(wxWindow *parent)
+bool wxPostScriptPrinter::Setup(wxWindow *WXUNUSED(parent))
 {
 #if 0
     wxGenericPrintDialog* dialog = new wxGenericPrintDialog(parent, & m_printDialogData);
@@ -273,7 +273,7 @@ bool wxPostScriptPrinter::Setup(wxWindow *parent)
     return (ret == wxID_OK);
 #endif
 
-    return wxID_CANCEL;
+    return false;
 }
 
 // ----------------------------------------------------------------------------
