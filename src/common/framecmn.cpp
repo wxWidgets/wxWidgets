@@ -416,7 +416,7 @@ void wxFrameBase::DoMenuUpdates(wxMenu* menu, wxWindow* focusWin)
             }
 
             if (item->GetSubMenu())
-                DoMenuUpdates(item->GetSubMenu(), (wxWindow*) NULL);
+                DoMenuUpdates(item->GetSubMenu(), focusWin);
         }
         node = node->GetNext();
     }
