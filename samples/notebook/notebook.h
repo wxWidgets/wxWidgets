@@ -48,9 +48,15 @@ public:
     void OnDeleteLastPage(wxCommandEvent& event);
     void OnNextPage(wxCommandEvent& event);
 
+#if wxUSE_NOTEBOOK
     void OnNotebook(wxNotebookEvent& event);
+#endif
+#if wxUSE_CHOICEBOOK
     void OnChoicebook(wxChoicebookEvent& event);
+#endif
+#if wxUSE_LISTBOOK
     void OnListbook(wxListbookEvent& event);
+#endif
 
     void OnIdle(wxIdleEvent& event);
 
@@ -73,9 +79,15 @@ private:
 
     wxPanel *m_panel; // Panel containing notebook and other controls
 
+#if wxUSE_NOTEBOOK
     wxNotebook   *m_notebook;
+#endif
+#if wxUSE_CHOICEBOOK
     wxChoicebook *m_choicebook;
+#endif
+#if wxUSE_LISTBOOK
     wxListbook   *m_listbook;
+#endif
 
 #if USE_LOG
     // Log window

@@ -238,9 +238,15 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
     // books creation
 
     m_panel      = (wxPanel *)      NULL;
+#if wxUSE_NOTEBOOK
     m_notebook   = (wxNotebook *)   NULL;
+#endif
+#if wxUSE_CHOICEBOOK
     m_choicebook = (wxChoicebook *) NULL;
+#endif
+#if wxUSE_LISTBOOK
     m_listbook   = (wxListbook *)   NULL;
+#endif
 
     // create a dummy image list with a few icons
     wxSize imageSize(32, 32);
@@ -406,9 +412,15 @@ int MyFrame::SelectFlag(int id, int nb, int lb, int chb)
 
 void MyFrame::RecreateBooks()
 {
+#if wxUSE_NOTEBOOK
     RECREATE( wxNotebook   , ID_NOTEBOOK   , notebook   , m_notebook );
+#endif
+#if wxUSE_LISTBOOK
     RECREATE( wxListbook   , ID_LISTBOOK   , listbook   , m_listbook );
+#endif
+#if wxUSE_CHOICEBOOK
     RECREATE( wxChoicebook , ID_CHOICEBOOK , choicebook , m_choicebook );
+#endif
 
     ShowCurrentBook();
 }
@@ -417,9 +429,15 @@ wxBookCtrl *MyFrame::GetCurrentBook()
 {
     switch (m_type)
     {
+#if wxUSE_NOTEBOOK
         case ID_BOOK_NOTEBOOK:   return m_notebook;
+#endif
+#if wxUSE_LISTBOOK
         case ID_BOOK_LISTBOOK:   return m_listbook;
+#endif
+#if wxUSE_CHOICEBOOK
         case ID_BOOK_CHOICEBOOK: return m_choicebook;
+#endif
     }
     return NULL;
 }
@@ -428,9 +446,15 @@ void MyFrame::ShowCurrentBook()
 {
     switch(m_type)
     {
+#if wxUSE_NOTEBOOK
         case ID_BOOK_NOTEBOOK:   if(m_notebook)   m_sizerFrame->Show(m_notebook);   break;
+#endif
+#if wxUSE_LISTBOOK
         case ID_BOOK_LISTBOOK:   if(m_listbook)   m_sizerFrame->Show(m_listbook);   break;
+#endif
+#if wxUSE_CHOICEBOOK
         case ID_BOOK_CHOICEBOOK: if(m_choicebook) m_sizerFrame->Show(m_choicebook); break;
+#endif
     }
 
     m_sizerFrame->Layout();
@@ -452,12 +476,18 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_NEXT_PAGE, MyFrame::OnNextPage)
 
     // Book controls
+#if wxUSE_NOTEBOOK
     EVT_NOTEBOOK_PAGE_CHANGED(ID_NOTEBOOK, MyFrame::OnNotebook)
     EVT_NOTEBOOK_PAGE_CHANGING(ID_NOTEBOOK, MyFrame::OnNotebook)
+#endif
+#if wxUSE_LISTBOOK
     EVT_LISTBOOK_PAGE_CHANGED(ID_LISTBOOK, MyFrame::OnListbook)
     EVT_LISTBOOK_PAGE_CHANGING(ID_LISTBOOK, MyFrame::OnListbook)
+#endif
+#if wxUSE_CHOICEBOOK
     EVT_CHOICEBOOK_PAGE_CHANGED(ID_CHOICEBOOK, MyFrame::OnChoicebook)
     EVT_CHOICEBOOK_PAGE_CHANGING(ID_CHOICEBOOK, MyFrame::OnChoicebook)
+#endif
 
     // Update title in idle time
     EVT_IDLE(MyFrame::OnIdle)
@@ -660,6 +690,12 @@ void MyFrame::OnBook(wxBookEvent& event)                                        
     event.Skip();                                                                          \
 }
 
+#if wxUSE_NOTEBOOK
 BOOKEVENT(OnNotebook,wxNotebookEvent,"wxNotebook",wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING,s_numNotebookEvents)
+#endif
+#if wxUSE_CHOICEBOOK
 BOOKEVENT(OnChoicebook,wxChoicebookEvent,"wxChoicebook",wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED,wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING,s_numChoicebookEvents)
+#endif
+#if wxUSE_LISTBOOK
 BOOKEVENT(OnListbook,wxListbookEvent,"wxListbook",wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED,wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING,s_numListbookEvents)
+#endif
