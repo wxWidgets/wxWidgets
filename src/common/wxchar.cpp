@@ -1009,7 +1009,8 @@ int WXDLLEXPORT wxStricmp(const wxChar *psz1, const wxChar *psz2)
 #ifndef wxStricmp
 int WXDLLEXPORT wxStrnicmp(const wxChar *s1, const wxChar *s2, size_t n)
 {
-  register wxChar c1, c2;
+  // initialize the variables just to suppress stupid gcc warning
+  register wxChar c1 = 0, c2 = 0;
   while (n && ((c1 = wxTolower(*s1)) == (c2 = wxTolower(*s2)) ) && c1) n--, s1++, s2++;
   if (n) {
     if (c1 < c2) return -1;
