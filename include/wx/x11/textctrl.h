@@ -249,6 +249,8 @@ public:
     void OnMouse( wxMouseEvent &event );
     void OnChar( wxKeyEvent &event );
     void OnIdle( wxIdleEvent &event );
+    void OnSetFocus( wxFocusEvent& event );
+    void OnKillFocus( wxFocusEvent& event );
     
     void RefreshLine( int n );
     void RefreshDown( int n );

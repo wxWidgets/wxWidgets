@@ -135,6 +135,8 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_CHAR(wxTextCtrl::OnChar)
     EVT_MOUSE_EVENTS(wxTextCtrl::OnMouse)
     EVT_IDLE(wxTextCtrl::OnIdle)
+    EVT_KILL_FOCUS(wxTextCtrl::OnKillFocus)
+    EVT_SET_FOCUS(wxTextCtrl::OnSetFocus)
     
     EVT_MENU(wxID_CUT, wxTextCtrl::OnCut)
     EVT_MENU(wxID_COPY, wxTextCtrl::OnCopy)
@@ -214,7 +216,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
     if ((style & wxTE_MULTILINE) != 0)
         style |= wxALWAYS_SHOW_SB;
         
-    wxTextCtrlBase::Create( parent, id, wxDefaultPosition, size,
+    wxTextCtrlBase::Create( parent, id, pos /* wxDefaultPosition */, size,
                               style|wxVSCROLL|wxHSCROLL|wxNO_FULL_REPAINT_ON_RESIZE );
                               
     SetBackgroundColour( *wxWHITE );
@@ -270,6 +272,13 @@ wxString wxTextCtrl::GetValue() const
 void wxTextCtrl::SetValue(const wxString& value)
 {
     m_modified = TRUE;
+
+    if ((GetWindowStyle() & wxTE_MULTILINE) == 0)
+    {
+        if (value == GetValue())
+            return;
+    }
+    
     m_cursorX = 0;
     m_cursorY = 0;
     ClearSelection();
@@ -1854,9 +1863,10 @@ void wxTextCtrl::OnPaint( wxPaintEvent &event )
             DrawLine( dc, 0+2, i*m_lineHeight+2, m_lines[i].m_text, i );
     }
     
-    if (m_editable)
+    if (m_editable && (FindFocus() == this))
     {
-        dc.SetBrush( *wxRED_BRUSH );
+        ///dc.SetBrush( *wxRED_BRUSH );
+        dc.SetBrush( *wxBLACK_BRUSH );
         // int xx = m_cursorX*m_charWidth;
         int xx = PosToPixel( m_cursorY, m_cursorX );
         dc.DrawRectangle( xx+2, m_cursorY*m_lineHeight+2, 2, m_lineHeight );
@@ -2353,14 +2363,18 @@ void wxTextCtrl::MoveCursor( int new_x, int new_y, bool shift, bool centre )
         m_cursorY = new_y;
     
         Refresh( TRUE, &rect );
-        
-        wxClientDC dc(this);
-        PrepareDC( dc );
-        dc.SetPen( *wxTRANSPARENT_PEN );
-        dc.SetBrush( *wxRED_BRUSH );
-        // int xx = m_cursorX*m_charWidth;
-        int xx = PosToPixel( m_cursorY, m_cursorX );
-        dc.DrawRectangle( xx+2, m_cursorY*m_lineHeight+2, 2, m_lineHeight );
+
+        if (FindFocus() == this)
+        {
+            wxClientDC dc(this);
+            PrepareDC( dc );
+            dc.SetPen( *wxTRANSPARENT_PEN );
+            //dc.SetBrush( *wxRED_BRUSH );
+            dc.SetBrush( *wxBLACK_BRUSH );
+            // int xx = m_cursorX*m_charWidth;
+            int xx = PosToPixel( m_cursorY, m_cursorX );
+            dc.DrawRectangle( xx+2, m_cursorY*m_lineHeight+2, 2, m_lineHeight );
+        }
     }
     
     int size_x = 0;
@@ -2500,6 +2514,18 @@ void wxTextCtrl::Freeze()
 
 void wxTextCtrl::Thaw()
 {
+}
+
+void wxTextCtrl::OnSetFocus( wxFocusEvent& event )
+{
+    // To hide or show caret, as appropriate
+    Refresh();
+}
+
+void wxTextCtrl::OnKillFocus( wxFocusEvent& event )
+{
+    // To hide or show caret, as appropriate
+    Refresh();
 }
 
 // ----------------------------------------------------------------------------
