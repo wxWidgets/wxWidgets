@@ -43,7 +43,7 @@ Returns the stream buffer associated with the output stream.
 
 \membersection{wxOutputStream::LastWrite}
 
-\constfunc{size_t}{LastWrite}{\void}
+\constfunc{size\_t}{LastWrite}{\void}
 
 \membersection{wxOutputStream::PutC}
 
@@ -54,19 +54,19 @@ stream position.
 
 \membersection{wxOutputStream::SeekO}
 
-\func{off_t}{SeekO}{\param{off_t}{ pos}, \param{wxSeekMode}{ mode}}
+\func{off\_t}{SeekO}{\param{off\_t}{ pos}, \param{wxSeekMode}{ mode}}
 
 Changes the stream current position.
 
 \membersection{wxOutputStream::TellO}
 
-\constfunc{off_t}{TellO}{\void}
+\constfunc{off\_t}{TellO}{\void}
 
 Returns the current stream position.
 
 \membersection{wxOutputStream::Write}
 
-\func{wxOutputStream\&}{Write}{\param{const void *}{buffer}, \param{size_t}{ size}}
+\func{wxOutputStream\&}{Write}{\param{const void *}{buffer}, \param{size\_t}{ size}}
 
 Writes the specified amount of bytes using the data of \it{buffer}. 
 \it{WARNING!} The buffer absolutely needs to have at least the specified size.
@@ -74,7 +74,7 @@ Writes the specified amount of bytes using the data of \it{buffer}.
 This function returns a reference on the current object, so the user can test
 any states of the stream right away.
 
-\func{wxOutputStream\&}{Write}{\param{wxInputStream\&}{ stream_in}}
+\func{wxOutputStream\&}{Write}{\param{wxInputStream\&}{ stream\_in}}
 
 Reads data from the specified input stream and stores them 
 in the current stream. The data is read until an error is raised
