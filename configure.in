@@ -3422,6 +3422,11 @@ EOF
         TOOLCHAIN_DLL_DEFS="${TOOLCHAIN_DLL_DEFS} -DWXUSINGDLL=1"
 	;;
       
+      *-*-hpux* )
+        SAMPLES_RPATH_FLAG="-Wl,+b,\$(top_builddir)lib"
+        WXCONFIG_RPATH="-Wl,+b,\$libdir"
+	;;
+        
     esac
 
     if test $wxUSE_RPATH = "no"; then
@@ -3652,8 +3657,8 @@ if test "$wx_cv_sizeof_wchar_t" != "0"; then
         AC_DEFINE(HAVE_WCSLEN)
     fi
 
-    dnl HP-UX aCC needs this define to find mbstrtowcs() &c
-    if test "$USE_HPUX" = 1 -a "x$GCC" != "xyes"; then
+    dnl on HP-UX aCC and g++ need this define to find mbstrtowcs() &c
+    if test "$USE_HPUX" = 1; then
         CPPFLAGS="$CPPFLAGS -D_INCLUDE__STDC_A1_SOURCE "
     fi
 
