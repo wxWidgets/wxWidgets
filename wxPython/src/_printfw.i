@@ -40,7 +40,10 @@ enum wxPrintMode
 
 class wxPrintData : public wxObject {
 public:
+    %nokwargs wxPrintData;
     wxPrintData();
+    wxPrintData(const wxPrintData& data);  // for making copies
+    
     ~wxPrintData();
 
     int GetNoCopies();
@@ -103,7 +106,9 @@ public:
 
 class wxPageSetupDialogData : public wxObject {
 public:
+    %nokwargs wxPageSetupDialogData;
     wxPageSetupDialogData();
+    wxPageSetupDialogData(const wxPageSetupDialogData& data);  // for making copies
     ~wxPageSetupDialogData();
 
     void EnableHelp(bool flag);
@@ -168,7 +173,7 @@ class wxPrintDialogData : public wxObject {
 public:
     %nokwargs wxPrintDialogData;
     wxPrintDialogData();
-    wxPrintDialogData(const wxPrintData& printData);
+    wxPrintDialogData(const wxPrintData& printData);  // for making copies
     ~wxPrintDialogData();
 
     int GetFromPage() const;

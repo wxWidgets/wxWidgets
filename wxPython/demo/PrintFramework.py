@@ -130,7 +130,12 @@ class TestPrintPanel(wx.Panel):
         printerDialog = wx.PrintDialog(self, data)
         printerDialog.GetPrintDialogData().SetSetupDialog(True)
         printerDialog.ShowModal();
-        self.printData = printerDialog.GetPrintDialogData().GetPrintData()
+
+        # this makes a copy of the wx.PrintData instead of just saving
+        # a reference to the one inside the printDialogData that will
+        # be destroyed
+        self.printData = wx.PrintData( printerDialog.GetPrintDialogData().GetPrintData() )
+        
         printerDialog.Destroy()
 
 
@@ -163,7 +168,7 @@ class TestPrintPanel(wx.Panel):
         if not printer.Print(self.frame, printout, True):
             wx.MessageBox("There was a problem printing.\nPerhaps your current printer is not set correctly?", "Printing", wx.OK)
         else:
-            self.printData = printer.GetPrintDialogData().GetPrintData()
+            self.printData = wx.PrintData( printer.GetPrintDialogData().GetPrintData() )
         printout.Destroy()
 
 
