@@ -134,7 +134,7 @@
 #               define wxUSE_SCROLLBAR 1
 #           endif
 #       endif /* wxUSE_SCROLLBAR */
-#   endif
+#   endif /* __WXUNIVERSAL__ */
 #endif /* wxUSE_RADIOBTN */
 
 /* I wonder if we shouldn't just remove all occurrences of
@@ -174,4 +174,14 @@
 #       define wxUSE_DATAOBJ
 #   endif
 #endif /* wxUSE_CLIPBOARD */
+
+#if defined(__WXUNIVERSAL__) && \
+    (wxUSE_COMBOBOX || wxUSE_MENUS) && !wxUSE_POPUPWIN
+#   if wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_POPUPWIN must be defined to use comboboxes/menus"
+#   else
+#       undef wxUSE_POPUPWIN
+#       define wxUSE_POPUPWIN
+#   endif
+#endif // wxUSE_POPUPWIN
 

@@ -526,6 +526,27 @@ void wxWindow::DoSetClientSize(int width, int height)
     wxWindowNative::DoSetClientSize(width, height);
 }
 
+wxHitTest wxWindow::DoHitTest(wxCoord x, wxCoord y) const
+{
+    wxHitTest ht = wxWindowNative::DoHitTest(x, y);
+    if ( ht == wxHT_WINDOW_INSIDE )
+    {
+        if ( m_scrollbarVert && x > m_scrollbarVert->GetPosition().x )
+        {
+            // it can still be changed below because it may also be the corner
+            ht = wxHT_WINDOW_VERT_SCROLLBAR;
+        }
+
+        if ( m_scrollbarHorz && y > m_scrollbarHorz->GetPosition().y )
+        {
+            ht = ht == wxHT_WINDOW_VERT_SCROLLBAR ? wxHT_WINDOW_CORNER
+                                                  : wxHT_WINDOW_HORZ_SCROLLBAR;
+        }
+    }
+
+    return ht;
+}
+
 // ----------------------------------------------------------------------------
 // scrolling: we implement it entirely ourselves except for ScrollWindow()
 // function which is supposed to be (efficiently) implemented by the native

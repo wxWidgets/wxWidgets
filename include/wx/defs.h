@@ -1375,6 +1375,13 @@ enum wxHitTest
     wxHT_SCROLLBAR_BAR_2,           // bar to the right/below the thumb
     wxHT_SCROLLBAR_LAST,
 
+    // window
+    wxHT_WINDOW_OUTSIDE,            // not in this window at all
+    wxHT_WINDOW_INSIDE,             // in the client area
+    wxHT_WINDOW_VERT_SCROLLBAR,     // on the vertical scrollbar
+    wxHT_WINDOW_HORZ_SCROLLBAR,     // on the horizontal scrollbar
+    wxHT_WINDOW_CORNER,             // on the corner between 2 scrollbars
+
     wxHT_MAX
 };
 
@@ -2053,7 +2060,7 @@ typedef struct _PangoFontDescription PangoFontDescription;
 #define DECLARE_NO_COPY_CLASS(classname)        \
     private:                                    \
         classname(const classname&);            \
-        classname& operator=(const classname&)
+        classname& operator=(const classname&);
 
 #endif
     // _WX_DEFS_H_

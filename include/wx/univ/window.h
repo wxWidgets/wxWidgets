@@ -184,6 +184,7 @@ protected:
     // we deal with the scrollbars in these functions
     virtual void DoSetClientSize(int width, int height);
     virtual void DoGetClientSize(int *width, int *height) const;
+    virtual wxHitTest DoHitTest(wxCoord x, wxCoord y) const;
 
     // event handlers
     void OnSize(wxSizeEvent& event);

@@ -40,6 +40,8 @@
     #include "wx/validate.h"
 #endif
 
+#include "wx/popupwin.h"
+
 #include "wx/univ/renderer.h"
 #include "wx/univ/inphand.h"
 #include "wx/univ/theme.h"
@@ -105,34 +107,25 @@ protected:
 };
 
 // ----------------------------------------------------------------------------
-// wxComboPopupEventHandler hides the popup if the mouse is clicked outside it
+// wxComboTextCtrl is a simple text ctrl which forwards
+// wxEVT_COMMAND_TEXT_UPDATED events to the combobox
 // ----------------------------------------------------------------------------
 
-class wxComboPopupEventHandler : public wxEvtHandler
+class wxComboTextCtrl : public wxTextCtrl
 {
 public:
-    wxComboPopupEventHandler(wxComboControl *combo) { m_combo = combo; }
+    wxComboTextCtrl(wxComboControl *combo,
+                    const wxString& value,
+                    long style,
+                    const wxValidator& validator);
 
-    virtual bool ProcessEvent(wxEvent& event);
+protected:
+    void OnText(wxCommandEvent& event);
 
 private:
     wxComboControl *m_combo;
-};
 
-// ----------------------------------------------------------------------------
-// wxComboTextEventHandler forwards wxEVT_COMMAND_TEXT_UPDATED events to the
-// combobox from its text control
-// ----------------------------------------------------------------------------
-
-class wxComboTextEventHandler : public wxEvtHandler
-{
-public:
-    wxComboTextEventHandler(wxComboControl *combo) { m_combo = combo; }
-
-    virtual bool ProcessEvent(wxEvent& event);
-
-private:
-    wxComboControl *m_combo;
+    DECLARE_EVENT_TABLE()
 };
 
 // ----------------------------------------------------------------------------
@@ -166,6 +159,10 @@ END_EVENT_TABLE()
 BEGIN_EVENT_TABLE(wxComboControl, wxControl)
 END_EVENT_TABLE()
 
+BEGIN_EVENT_TABLE(wxComboTextCtrl, wxTextCtrl)
+    EVT_TEXT(-1, wxComboTextCtrl::OnText)
+END_EVENT_TABLE()
+
 IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl);
 
 // ============================================================================
@@ -179,6 +176,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl);
 void wxComboControl::Init()
 {
     m_popup = (wxComboPopup *)NULL;
+    m_winPopup = (wxPopupComboWindow *)NULL;
 }
 
 bool wxComboControl::Create(wxWindow *parent,
@@ -200,15 +198,12 @@ bool wxComboControl::Create(wxWindow *parent,
     // create the text control and the button as our siblings (*not* children),
     // don't care about size/position here - they will be set in DoMoveWindow()
     m_btn = new wxComboButton(this);
-    m_text = new wxTextCtrl(parent, -1, value,
-                            wxDefaultPosition, wxDefaultSize,
-                            wxBORDER_NONE |
-                            (style & wxCB_READONLY ? wxTE_READONLY : 0),
-                            validator);
+    m_text = new wxComboTextCtrl(this,
+                                 value,
+                                 style & wxCB_READONLY ? wxTE_READONLY : 0,
+                                 validator);
 
-    m_text->PushEventHandler(new wxComboTextEventHandler(this));
-
-    // for compatibility with the otherp orts, the height specified is the
+    // for compatibility with the other ports, the height specified is the
     // combined height of the combobox itself and the popup
     if ( size.y == -1 )
     {
@@ -222,6 +217,11 @@ bool wxComboControl::Create(wxWindow *parent,
 
     DoSetSize(pos.x, pos.y, size.x, size.y);
 
+    // create the popup window immediately here to allow creating the controls
+    // with parent == GetPopupWindow() from the derived class ctor
+    m_winPopup = new wxPopupComboWindow(this);
+    m_winPopup->Hide();
+
     // have to disable this window to avoid interfering it with message
     // processing to the text and the button... but pretend it is enabled to
     // make IsEnabled() return TRUE
@@ -233,8 +233,6 @@ bool wxComboControl::Create(wxWindow *parent,
 
 wxComboControl::~wxComboControl()
 {
-    m_text->PopEventHandler(TRUE /* delete it */);
-    RemoveEventHandler();
 }
 
 // ----------------------------------------------------------------------------
@@ -298,24 +296,9 @@ bool wxComboControl::Show(bool show)
 // popup window handling
 // ----------------------------------------------------------------------------
 
-void wxComboControl::RemoveEventHandler()
-{
-    if ( m_popup )
-    {
-        // remove our event handler from it as it won't be used with a combobox
-        // any longer
-        m_popup->GetControl()->PopEventHandler(TRUE /* delete it */);
-    }
-}
-
 void wxComboControl::SetPopupControl(wxComboPopup *popup)
 {
-    RemoveEventHandler();
-
     m_popup = popup;
-    wxControl *control = m_popup->GetControl();
-    control->PushEventHandler(new wxComboPopupEventHandler(this));
-    control->Hide();
 }
 
 void wxComboControl::ShowPopup()
@@ -324,36 +307,32 @@ void wxComboControl::ShowPopup()
 
     wxControl *control = m_popup->GetControl();
 
-    // position the control below the combo
-    wxPoint ptCombo = ClientToScreen(wxPoint(0, 0));
-    wxSize sizeCombo = GetSize();
+    // size and position the popup window correctly
+    m_winPopup->SetClientSize(GetSize().x,
+                              m_heightPopup == -1 ? control->GetBestSize().y
+                                                  : m_heightPopup);
+    m_winPopup->Position();
 
-    // FIXME: should check that the combo doesn't popup beyond the screen
-    //        (can we share this code with menus? we should...)
-    control->SetSize(ptCombo.x, ptCombo.y + sizeCombo.y,
-                     sizeCombo.x, m_heightPopup);
+    wxSize sizePopup = m_winPopup->GetSize();
+    control->SetSize(0, 0, sizePopup.x, sizePopup.y);
 
     // show it
-    control->Show();
-    control->SetFocus();
-    control->CaptureMouse();
     m_popup->SetSelection(m_text->GetValue());
+    m_winPopup->Popup();
 }
 
 void wxComboControl::HidePopup()
 {
     wxCHECK_RET( m_popup, _T("no popup to hide in wxComboControl") );
 
-    wxControl *control = m_popup->GetControl();
-    control->ReleaseMouse();
-    control->Hide();
+    m_winPopup->Dismiss();
 }
 
 void wxComboControl::OnSelect(const wxString& value)
 {
-    HidePopup();
     m_text->SetValue(value);
-    m_text->SetFocus();
+
+    OnDismiss();
 }
 
 void wxComboControl::OnDismiss()
@@ -363,73 +342,33 @@ void wxComboControl::OnDismiss()
 }
 
 // ----------------------------------------------------------------------------
-// wxComboPopupEventHandler
+// wxComboTextCtrl
 // ----------------------------------------------------------------------------
 
-bool wxComboPopupEventHandler::ProcessEvent(wxEvent& event)
+wxComboTextCtrl::wxComboTextCtrl(wxComboControl *combo,
+                                 const wxString& value,
+                                 long style,
+                                 const wxValidator& validator)
+               : wxTextCtrl(combo->GetParent(), -1, value,
+                            wxDefaultPosition, wxDefaultSize,
+                            wxBORDER_NONE | style,
+                            validator)
 {
-    bool dismiss;
-
-    switch ( event.GetEventType() )
-    {
-        case wxEVT_LEFT_DOWN:
-            // clicking outside the popup window makesi t disappear
-            {
-                wxCoord x, y;
-                ((wxMouseEvent &)event).GetPosition(&x, &y);
-
-                dismiss = (x < 0) || (y < 0);
-                if ( !dismiss )
-                {
-                    // check the right/bottom bounds too
-                    wxCoord w, h;
-                    ((wxWindow *)event.GetEventObject())->GetSize(&w, &h);
-                    dismiss = (x > w) || (y > h);
-                }
-            }
-            break;
-
-        case wxEVT_KILL_FOCUS:
-            // as well as losing the focus in any other way (i.e. using
-            // keyboard)
-            dismiss = TRUE;
-            break;
-
-        default:
-            dismiss = FALSE;
-    }
-
-    if ( dismiss )
-    {
-        // clicking outside the window dismisses the popup
-        m_combo->OnDismiss();
-
-        return TRUE;
-    }
-
-    event.Skip();
-
-    return wxEvtHandler::ProcessEvent(event);
+    m_combo = combo;
 }
 
-// ----------------------------------------------------------------------------
-// wxComboTextEventHandler
-// ----------------------------------------------------------------------------
-
-bool wxComboTextEventHandler::ProcessEvent(wxEvent& event)
+void wxComboTextCtrl::OnText(wxCommandEvent& event)
 {
-    bool res = wxEvtHandler::ProcessEvent(event);
+    // there is a small incompatibility with wxMSW here: the combobox gets the
+    // event before the text control in our case which corresponds to SMW
+    // CBN_EDITUPDATE notification and not CBN_EDITCHANGE one wxMSW currently
+    // uses
+    //
+    // if this is really a problem, we can play games with the event handlers
+    // to circumvent this
+    (void)m_combo->ProcessEvent(event);
 
-    if ( event.GetEventType() == wxEVT_COMMAND_TEXT_UPDATED )
-    {
-        // let the combo have it: we do it after processing the event normally
-        // for compatibility with wxMSW port, if it ever changes to use
-        // CBN_EDITUPDATE instead of CBN_EDITCHANGE it currently uses, we
-        // could change it here as well
-        (void)m_combo->ProcessEvent(event);
-    }
-
-    return res;
+    event.Skip();
 }
 
 // ----------------------------------------------------------------------------
@@ -456,10 +395,10 @@ bool wxComboLboxEventHandler::ProcessEvent(wxEvent& event)
 // ----------------------------------------------------------------------------
 
 wxComboListBox::wxComboListBox(wxComboControl *combo)
-              : wxListBox(combo->GetParent(), -1,
+              : wxListBox(combo->GetPopupWindow(), -1,
                           wxDefaultPosition, wxDefaultSize,
                           0, NULL,
-                          wxBORDER_SIMPLE | wxPOPUP_WINDOW),
+                          wxBORDER_SIMPLE),
                 wxComboPopup(combo)
 {
 }

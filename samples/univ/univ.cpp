@@ -232,7 +232,7 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
            : wxFrame(NULL, -1, title,
                      wxDefaultPosition,
 #ifndef TEST_TEXT_ONLY
-                     wxSize(700, 700)
+                     wxSize(140, 100)//wxSize(700, 700)
 #else
                      wxSize(240, 300)
 #endif
@@ -413,9 +413,21 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 #endif // TEST_CHECKLISTBOX
 
 #ifdef TEST_COMBO
+    static const wxString choicesCombo[] =
+    {
+        _T("This"),
+        _T("is one of my"),
+        _T("really"),
+        _T("wonderful"),
+        _T("examples"),
+        _T("more of"),
+        _T("them"),
+        _T("and even more"),
+        _T("of examples"),
+    };
     wxComboBox *combo = new wxComboBox(this, -1, _T("Initial value"),
-                                       wxPoint(300, 300), wxDefaultSize,
-                                       WXSIZEOF(choices), choices);
+                                       wxPoint(0, 50), wxDefaultSize,
+                                       WXSIZEOF(choicesCombo), choicesCombo);
     combo->SetSelection(1);
 #endif // TEST_COMBO
 

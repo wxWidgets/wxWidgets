@@ -191,6 +191,11 @@
 #define wxUSE_CONTROLS 0
 
 /*
+   Use wxPopupWindow (useful in wxUniv only for now)
+*/
+#define wxUSE_POPUPWIN 0
+
+/*
  * Use accelerators
  */
 #define wxUSE_ACCEL 0

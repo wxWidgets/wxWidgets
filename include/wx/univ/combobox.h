@@ -42,6 +42,7 @@
 
 class WXDLLEXPORT wxComboControl;
 class WXDLLEXPORT wxListBox;
+class WXDLLEXPORT wxPopupComboWindow;
 
 // ----------------------------------------------------------------------------
 // the actions supported by this control
@@ -132,6 +133,9 @@ public:
     void ShowPopup();
     void HidePopup();
 
+    // get the popup window containing the popup control
+    wxPopupComboWindow *GetPopupWindow() const { return m_winPopup; }
+
     // implementation only from now on
     // -------------------------------
 
@@ -162,10 +166,6 @@ protected:
     // access the control components
     wxTextCtrl *GetText() const { return m_text; }
 
-    // remove the combobox event handler from m_popup (ok to call if m_popup ==
-    // NULL)
-    void RemoveEventHandler();
-
 private:
     // the text control and button we show all the time
     wxTextCtrl *m_text;
@@ -173,6 +173,9 @@ private:
 
     // the popup control
     wxComboPopup *m_popup;
+
+    // and the popup window containing it
+    wxPopupComboWindow *m_winPopup;
 
     // the height of the combobox popup as calculated in Create()
     wxCoord m_heightPopup;

@@ -68,6 +68,7 @@
 #define wxUSE_MIMETYPE 0
 
 #define wxUSE_CONTROLS     1
+#define wxUSE_POPUPWIN     1
 #define wxUSE_BUTTON       1
 #define wxUSE_BMPBUTTON    1
 #define wxUSE_CARET        1

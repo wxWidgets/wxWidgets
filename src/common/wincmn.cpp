@@ -1498,3 +1498,23 @@ wxBorder wxWindowBase::GetDefaultBorder() const
     return wxBORDER_NONE;
 }
 
+// ----------------------------------------------------------------------------
+// hit testing
+// ----------------------------------------------------------------------------
+
+wxHitTest wxWindowBase::DoHitTest(wxCoord x, wxCoord y) const
+{
+    // here we just check if the point is inside the window or not
+
+    // check the top and left border first
+    bool outside = x < 0 || y < 0;
+    if ( !outside )
+    {
+        // check the right and bottom borders too
+        wxSize size = GetSize();
+        outside = x > size.x || y > size.y;
+    }
+
+    return outside ? wxHT_WINDOW_OUTSIDE : wxHT_WINDOW_INSIDE;
+}
+

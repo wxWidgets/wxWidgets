@@ -376,7 +376,19 @@ void wxWindowMSW::SetFocus()
 {
     HWND hWnd = GetHwnd();
     if ( hWnd )
-        ::SetFocus(hWnd);
+    {
+        ::SetLastError(0);
+
+        if ( !::SetFocus(hWnd) )
+        {
+            // was there really an error?
+            DWORD dwRes = ::GetLastError();
+            if ( dwRes )
+            {
+                wxLogApiError(_T("SetFocus"), dwRes);
+            }
+        }
+    }
 }
 
 // Get the window with the focus
