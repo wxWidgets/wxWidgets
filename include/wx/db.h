@@ -326,7 +326,7 @@ private:
 	bool getDbInfo(void);
 	bool getDataTypeInfo(SWORD fSqlType, SqlTypeInfo &structSQLTypeInfo);
 	bool setConnectionOptions(void);
-	void logError(char *errMsg, char *SQLState);
+	void logError(const char *errMsg, const char *SQLState);
 
 public:
 
@@ -401,15 +401,15 @@ public:
 	bool		 DispAllErrors(HENV aHenv, HDBC aHdbc = SQL_NULL_HDBC, HSTMT aHstmt = SQL_NULL_HSTMT);
 	bool		 GetNextError(HENV aHenv, HDBC aHdbc = SQL_NULL_HDBC, HSTMT aHstmt = SQL_NULL_HSTMT);
 	void		 DispNextError(void);
-	bool		 CreateView(char *viewName, char *colList, char *pSqlStmt, bool attemptDrop=TRUE);
-	bool		 DropView(char *viewName);
-	bool		 ExecSql(char *pSqlStmt);
+	bool		 CreateView(const char *viewName, const char *colList, const char *pSqlStmt, bool attemptDrop=TRUE);
+	bool		 DropView(const char *viewName);
+	bool		 ExecSql(const char *pSqlStmt);
 	bool		 GetNext(void);
 	bool		 GetData(UWORD colNo, SWORD cType, PTR pData, SDWORD maxLen, SDWORD FAR *cbReturned);
-	bool	    Grant(int privileges, char *tableName, char *userList = "PUBLIC");
-	int	    TranslateSqlState(char *SQLState);
-	bool		 Catalog(char *userID, char *fileName = "Catalog.txt");
-	CcolInf	*GetColumns(char *tableName[], char *userID=NULL);
+	bool	    Grant(int privileges, const char *tableName, const char *userList = "PUBLIC");
+	int	    TranslateSqlState(const char *SQLState);
+	bool		 Catalog(const char *userID, const char *fileName = "Catalog.txt");
+	CcolInf	*GetColumns(char *tableName[], const char *userID=NULL);
 	char		*GetDatabaseName(void)	{return dbInf.dbmsName;}
 	char		*GetDataSource(void)		{return dsn;}
 	char		*GetUsername(void)			{return uid;}
@@ -418,10 +418,10 @@ public:
 	HENV		 GetHENV(void)				{return henv;}
 	HDBC		 GetHDBC(void)				{return hdbc;}
 	HSTMT		 GetHSTMT(void)				{return hstmt;}
-	bool		 TableExists(char *tableName, char *userID=NULL, char *path=NULL);  // Table name can refer to a table, view, alias or synonym
-	void		 LogError(char *errMsg, char *SQLState = 0) {logError(errMsg, SQLState);}
-	bool		 SqlLog(enum sqlLog state, char *filename = "sqllog.txt", bool append = FALSE);
-	bool		 WriteSqlLog(char *logMsg);
+	bool		 TableExists(const char *tableName, const char *userID=NULL, const char *path=NULL);  // Table name can refer to a table, view, alias or synonym
+	void		 LogError(const char *errMsg, const char *SQLState = 0) {logError(errMsg, SQLState);}
+	bool		 SqlLog(enum sqlLog state, const char *filename = "sqllog.txt", bool append = FALSE);
+	bool		 WriteSqlLog(const char *logMsg);
 	DBMS		 Dbms(void);
 
 };  // wxDB
@@ -462,13 +462,13 @@ void  WXDLLEXPORT CloseDbConnections(void);
 int   WXDLLEXPORT NumberDbConnectionsInUse(void);
 
 // This function sets the sql log state for all open wxDB objects
-bool SqlLog(enum sqlLog state, char *filename = "sqllog.txt");
+bool SqlLog(enum sqlLog state, const char *filename = "sqllog.txt");
 
 // This routine allows you to query a driver manager
 // for a list of available datasources.  Call this routine
 // the first time using SQL_FETCH_FIRST.  Continue to call it
 // using SQL_FETCH_NEXT until you've exhausted the list.
-bool WXDLLEXPORT GetDataSource(HENV henv, char *Dsn, SWORD DsnMax, char *DsDesc, SWORD DsDescMax,
+bool WXDLLEXPORT GetDataSource(HENV henv, const char *Dsn, SWORD DsnMax, const char *DsDesc, SWORD DsDescMax,
 						 UWORD direction = SQL_FETCH_NEXT);
 
 #endif

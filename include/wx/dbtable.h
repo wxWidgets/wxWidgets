@@ -95,8 +95,8 @@ private:
 	bool bindUpdateParams(void);
 	bool bindCols(HSTMT cursor);
 	bool getRec(UWORD fetchType);
-	bool execDelete(char *pSqlStmt);
-	bool execUpdate(char *pSqlStmt);
+	bool execDelete(const char *pSqlStmt);
+	bool execUpdate(const char *pSqlStmt);
 	bool query(int queryType, bool forUpdate, bool distinct, char *pSqlStmt = 0);
 
 public:
@@ -136,20 +136,20 @@ public:
 
 	// Public member functions
 	wxTable(wxDB *pwxDB, const char *tblName, const int nCols,
-		const char *qryTblName = 0, bool qryOnly = !QUERY_ONLY, char *tblPath=NULL);
+		const char *qryTblName = 0, bool qryOnly = !QUERY_ONLY, const char *tblPath=NULL);
 	virtual ~wxTable();
 	bool	Open(void);
 	bool	CreateTable(bool attemptDrop=TRUE);
 	bool	DropTable(void);
-	bool	CreateIndex(char * idxName, bool unique, int noIdxCols, CidxDef *pIdxDefs, bool attemptDrop=TRUE);
-	bool	DropIndex(char * idxName);
+	bool	CreateIndex(const char * idxName, bool unique, int noIdxCols, CidxDef *pIdxDefs, bool attemptDrop=TRUE);
+	bool	DropIndex(const char * idxName);
 	bool	CloseCursor(HSTMT cursor);
 	int   Insert(void);
 	bool	Update(void);
-	bool	Update(char *pSqlStmt);
-	bool	UpdateWhere(char *pWhereClause);
+	bool	Update(const char *pSqlStmt);
+	bool	UpdateWhere(const char *pWhereClause);
 	bool	Delete(void);
-	bool	DeleteWhere(char *pWhereClause);
+	bool	DeleteWhere(const char *pWhereClause);
 	bool	DeleteMatching(void);
 	virtual bool Query(bool forUpdate = FALSE, bool distinct = FALSE);
 	bool	QueryBySqlStmt(char *pSqlStmt);
@@ -167,14 +167,14 @@ public:
 	bool	IsColNull(int colNo);
 	UWORD GetRowNum(void);
 	void  GetSelectStmt(char *pSqlStmt, int typeOfSelect, bool distinct);
-	void  GetDeleteStmt(char *pSqlStmt, int typeOfDel, char *pWhereClause = 0);
-	void  GetUpdateStmt(char *pSqlStmt, int typeOfUpd, char *pWhereClause = 0);
-	void  GetWhereClause(char *pWhereClause, int typeOfWhere, char *qualTableName = 0);
+	void  GetDeleteStmt(char *pSqlStmt, int typeOfDel, const char *pWhereClause = 0);
+	void  GetUpdateStmt(char *pSqlStmt, int typeOfUpd, const char *pWhereClause = 0);
+	void  GetWhereClause(char *pWhereClause, int typeOfWhere, const char *qualTableName = 0);
 	bool	CanSelectForUpdate(void);
 	bool	CanUpdByROWID(void);
 	void  ClearMemberVars(void);
 	bool	SetQueryTimeout(UDWORD nSeconds);
-	void  SetColDefs (int index, char *fieldName, int dataType, void *pData, int cType,
+	void  SetColDefs (int index, const char *fieldName, int dataType, void *pData, int cType,
 							int size, bool keyField = FALSE, bool upd = TRUE,
 							bool insAllow = TRUE, bool derivedCol = FALSE);
 	HSTMT *NewCursor(bool setCursor = FALSE, bool bindColumns = TRUE);
@@ -185,7 +185,7 @@ public:
 	int   DB_STATUS(void) { return(pDb->DB_STATUS); }
 	bool	Refresh(void);
 	bool	SetNull(int colNo);
-	bool	SetNull(char *colName);
+	bool	SetNull(const char *colName);
 
 #ifdef __WXDEBUG__
 	ULONG	GetTableID() { return tableID; };
