@@ -50,9 +50,6 @@ class wxSizePtr :
     def asTuple(self, *_args, **_kwargs):
         val = apply(miscc.wxSize_asTuple,(self,) + _args, _kwargs)
         return val
-    def __cmp__(self, *_args, **_kwargs):
-        val = apply(miscc.wxSize___cmp__,(self,) + _args, _kwargs)
-        return val
     def __eq__(self, *_args, **_kwargs):
         val = apply(miscc.wxSize___eq__,(self,) + _args, _kwargs)
         return val
@@ -125,9 +122,6 @@ class wxRealPointPtr :
         val = apply(miscc.wxRealPoint___sub__,(self,) + _args, _kwargs)
         if val: val = wxRealPointPtr(val) ; val.thisown = 1
         return val
-    def __cmp__(self, *_args, **_kwargs):
-        val = apply(miscc.wxRealPoint___cmp__,(self,) + _args, _kwargs)
-        return val
     def __eq__(self, *_args, **_kwargs):
         val = apply(miscc.wxRealPoint___eq__,(self,) + _args, _kwargs)
         return val
@@ -189,9 +183,6 @@ class wxPointPtr :
     def __sub__(self, *_args, **_kwargs):
         val = apply(miscc.wxPoint___sub__,(self,) + _args, _kwargs)
         if val: val = wxPointPtr(val) ; val.thisown = 1
-        return val
-    def __cmp__(self, *_args, **_kwargs):
-        val = apply(miscc.wxPoint___cmp__,(self,) + _args, _kwargs)
         return val
     def __eq__(self, *_args, **_kwargs):
         val = apply(miscc.wxPoint___eq__,(self,) + _args, _kwargs)
@@ -316,9 +307,6 @@ class wxRectPtr :
         val = apply(miscc.wxRect___add__,(self,) + _args, _kwargs)
         if val: val = wxRectPtr(val) ; val.thisown = 1
         return val
-    def __cmp__(self, *_args, **_kwargs):
-        val = apply(miscc.wxRect___cmp__,(self,) + _args, _kwargs)
-        return val
     def __eq__(self, *_args, **_kwargs):
         val = apply(miscc.wxRect___eq__,(self,) + _args, _kwargs)
         return val
@@ -407,6 +395,131 @@ class wxRect(wxRectPtr):
         self.thisown = 1
 
 
+
+
+class wxPoint2DDoublePtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def GetFloor(self, *_args, **_kwargs):
+        val = apply(miscc.wxPoint2DDouble_GetFloor,(self,) + _args, _kwargs)
+        return val
+    def GetRounded(self, *_args, **_kwargs):
+        val = apply(miscc.wxPoint2DDouble_GetRounded,(self,) + _args, _kwargs)
+        return val
+    def GetVectorLength(self, *_args, **_kwargs):
+        val = apply(miscc.wxPoint2DDouble_GetVectorLength,(self,) + _args, _kwargs)
+        return val
+    def GetVectorAngle(self, *_args, **_kwargs):
+        val = apply(miscc.wxPoint2DDouble_GetVectorAngle,(self,) + _args, _kwargs)
+        return val
+    def SetVectorLength(self, *_args, **_kwargs):
+        val = apply(miscc.wxPoint2DDouble_SetVectorLength,(self,) + _args, _kwargs)
+        return val
+    def SetVectorAngle(self, *_args, **_kwargs):
+        val = apply(miscc.wxPoint2DDouble_SetVectorAngle,(self,) + _args, _kwargs)
+        return val
+    def GetDistance(self, *_args, **_kwargs):
+        val = apply(miscc.wxPoint2DDouble_GetDistance,(self,) + _args, _kwargs)
+        return val
+    def GetDistanceSquare(self, *_args, **_kwargs):
+        val = apply(miscc.wxPoint2DDouble_GetDistanceSquare,(self,) + _args, _kwargs)
+        return val
+    def GetDotProduct(self, *_args, **_kwargs):
+        val = apply(miscc.wxPoint2DDouble_GetDotProduct,(self,) + _args, _kwargs)
+        return val
+    def GetCrossProduct(self, *_args, **_kwargs):
+        val = apply(miscc.wxPoint2DDouble_GetCrossProduct,(self,) + _args, _kwargs)
+        return val
+    def __neg__(self, *_args, **_kwargs):
+        val = apply(miscc.wxPoint2DDouble___neg__,(self,) + _args, _kwargs)
+        if val: val = wxPoint2DDoublePtr(val) ; val.thisown = 1
+        return val
+    def __iadd__(self, *_args, **_kwargs):
+        val = apply(miscc.wxPoint2DDouble___iadd__,(self,) + _args, _kwargs)
+        if val: val = wxPoint2DDoublePtr(val) 
+        return val
+    def __isub__(self, *_args, **_kwargs):
+        val = apply(miscc.wxPoint2DDouble___isub__,(self,) + _args, _kwargs)
+        if val: val = wxPoint2DDoublePtr(val) 
+        return val
+    def __imul__(self, *_args, **_kwargs):
+        val = apply(miscc.wxPoint2DDouble___imul__,(self,) + _args, _kwargs)
+        if val: val = wxPoint2DDoublePtr(val) 
+        return val
+    def __idiv__(self, *_args, **_kwargs):
+        val = apply(miscc.wxPoint2DDouble___idiv__,(self,) + _args, _kwargs)
+        if val: val = wxPoint2DDoublePtr(val) 
+        return val
+    def __eq__(self, *_args, **_kwargs):
+        val = apply(miscc.wxPoint2DDouble___eq__,(self,) + _args, _kwargs)
+        return val
+    def __ne__(self, *_args, **_kwargs):
+        val = apply(miscc.wxPoint2DDouble___ne__,(self,) + _args, _kwargs)
+        return val
+    def asTuple(self, *_args, **_kwargs):
+        val = apply(miscc.wxPoint2DDouble_asTuple,(self,) + _args, _kwargs)
+        return val
+    def __setattr__(self,name,value):
+        if name == "m_x" :
+            miscc.wxPoint2DDouble_m_x_set(self,value)
+            return
+        if name == "m_y" :
+            miscc.wxPoint2DDouble_m_y_set(self,value)
+            return
+        if name == "x" :
+            miscc.wxPoint2DDouble_x_set(self,value)
+            return
+        if name == "y" :
+            miscc.wxPoint2DDouble_y_set(self,value)
+            return
+        self.__dict__[name] = value
+    def __getattr__(self,name):
+        if name == "m_x" : 
+            return miscc.wxPoint2DDouble_m_x_get(self)
+        if name == "m_y" : 
+            return miscc.wxPoint2DDouble_m_y_get(self)
+        if name == "x" : 
+            return miscc.wxPoint2DDouble_x_get(self)
+        if name == "y" : 
+            return miscc.wxPoint2DDouble_y_get(self)
+        raise AttributeError,name
+    def __repr__(self):
+        return "<C wxPoint2DDouble instance at %s>" % (self.this,)
+    
+    def SetPolarCoordinates(self, angle, length):
+        self.SetVectorLength(length)
+        self.SetVectorAngle(angle)
+    def Normalize(self):
+        self.SetVectorLength(1.0)
+    
+    
+    def __str__(self):                   return str(self.asTuple())
+    def __repr__(self):                  return str(self.asTuple())
+    def __len__(self):                   return len(self.asTuple())
+    def __getitem__(self, index):        return self.asTuple()[index]
+    def __setitem__(self, index, val):
+        if index == 0: self.m_x = val
+        elif index == 1: self.m_yt = val
+        else: raise IndexError
+    def __nonzero__(self):      return self.asTuple() != (0.0, 0.0)
+
+class wxPoint2DDouble(wxPoint2DDoublePtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(miscc.new_wxPoint2DDouble,_args,_kwargs)
+        self.thisown = 1
+
+
+
+def wxPoint2DDoubleCopy(*_args,**_kwargs):
+    val = wxPoint2DDoublePtr(apply(miscc.new_wxPoint2DDoubleCopy,_args,_kwargs))
+    val.thisown = 1
+    return val
+
+def wxPoint2DDoubleFromPoint(*_args,**_kwargs):
+    val = wxPoint2DDoublePtr(apply(miscc.new_wxPoint2DDoubleFromPoint,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 class wxIndividualLayoutConstraintPtr(wxObjectPtr):

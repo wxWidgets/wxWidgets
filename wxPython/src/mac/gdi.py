@@ -760,7 +760,7 @@ class wxDCPtr(wxObjectPtr):
     def DrawPointList(self, points, pens=None):
         if pens is None:
            pens = []
-        elif isinstance(pens, wxPenPtr):
+        elif wx.wxPy_isinstance(pens, (wxPen, wxPenPtr)):
            pens = [pens]
         elif len(pens) != len(points):
            raise ValueError('points and pens must have same length')
@@ -769,7 +769,7 @@ class wxDCPtr(wxObjectPtr):
     def DrawLineList(self, lines, pens=None):
         if pens is None:
            pens = []
-        elif isinstance(pens, wxPenPtr):
+        elif wx.wxPy_isinstance(pens, (wxPen, wxPenPtr)):
            pens = [pens]
         elif len(pens) != len(lines):
            raise ValueError('lines and pens must have same length')
