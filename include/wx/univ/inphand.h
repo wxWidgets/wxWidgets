@@ -37,6 +37,7 @@
 #define wxINP_HANDLER_SPINBTN           _T("spinbtn")
 #define wxINP_HANDLER_STATUSBAR         _T("statusbar")
 #define wxINP_HANDLER_TEXTCTRL          _T("textctrl")
+#define wxINP_HANDLER_TOOLBAR           _T("toolbar")
 #define wxINP_HANDLER_TOPLEVEL          _T("toplevel")
 
 // ----------------------------------------------------------------------------

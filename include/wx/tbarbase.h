@@ -132,11 +132,13 @@ public:
     bool CanBeToggled() const { return m_isToggle; }
 
     // attributes
-    const wxBitmap& GetBitmap1() const { return m_bitmap1; }
-    const wxBitmap& GetBitmap2() const { return m_bitmap2; }
+    const wxBitmap& GetNormalBitmap() const { return m_bitmap1; }
+    const wxBitmap& GetDisabledBitmap() const { return m_bitmap2; }
 
     const wxBitmap& GetBitmap() const
-        { return IsToggled() ? m_bitmap2 : m_bitmap1; }
+        { return IsEnabled() ? GetNormalBitmap() : GetDisabledBitmap(); }
+
+    wxString GetLabel() const { return m_label; }
 
     wxString GetShortHelp() const { return m_shortHelpString; }
     wxString GetLongHelp() const { return m_longHelpString; }
@@ -162,8 +164,10 @@ public:
 
     void Toggle() { Toggle(!IsToggled()); }
 
-    void SetBitmap1(const wxBitmap& bmp) { m_bitmap1 = bmp; }
-    void SetBitmap2(const wxBitmap& bmp) { m_bitmap2 = bmp; }
+    void SetNormalBitmap(const wxBitmap& bmp) { m_bitmap1 = bmp; }
+    void SetDisabledBitmap(const wxBitmap& bmp) { m_bitmap2 = bmp; }
+
+    void SetLabel(const wxString& label) { m_label = label; }
 
     void SetClientData(wxObject *clientData)
     {
@@ -180,6 +184,15 @@ public:
     // add tool to/remove it from a toolbar
     virtual void Detach() { m_tbar = (wxToolBarBase *)NULL; }
     virtual void Attach(wxToolBarBase *tbar) { m_tbar = tbar; }
+
+    // compatibility only, don't use
+#if WXWIN_COMPATIBILITY_2_2
+    const wxBitmap& GetBitmap1() const { return GetNormalBitmap(); }
+    const wxBitmap& GetBitmap2() const { return GetDisabledBitmap(); }
+
+    void SetBitmap1(const wxBitmap& bmp) { SetNormalBitmap(bmp); }
+    void SetBitmap2(const wxBitmap& bmp) { SetDisabledBitmap(bmp); }
+#endif // WXWIN_COMPATIBILITY_2_2
 
 protected:
     wxToolBarBase *m_tbar;  // the toolbar to which we belong (may be NULL)
@@ -199,9 +212,12 @@ protected:
     bool m_isToggle;
     bool m_enabled;
 
-    // normal and toggles bitmaps
+    // normal and disabled bitmaps
     wxBitmap m_bitmap1;
     wxBitmap m_bitmap2;
+
+    // the button label
+    wxString m_label;
 
     // short and long help strings
     wxString m_shortHelpString;
@@ -373,6 +389,9 @@ public:
     // there is no tool at this point (corrdinates are client)
     virtual wxToolBarToolBase *FindToolForPosition(wxCoord x,
                                                    wxCoord y) const = 0;
+
+    // return TRUE if this is a vertical toolbar, otherwise FALSE
+    bool IsVertical() const { return HasFlag(wxTB_VERTICAL); }
 
     // event handlers
     // --------------

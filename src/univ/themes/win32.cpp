@@ -38,6 +38,7 @@
     #include "wx/scrolbar.h"
     #include "wx/slider.h"
     #include "wx/textctrl.h"
+    #include "wx/toolbar.h"
 
     #ifdef __WXMSW__
         // for COLOR_* constants
@@ -228,6 +229,11 @@ public:
                                  int flags = 0,
                                  wxAlignment align = wxALIGN_LEFT,
                                  int indexAccel = -1);
+    virtual void DrawToolBarButton(wxDC& dc,
+                                   const wxString& label,
+                                   const wxBitmap& bitmap,
+                                   const wxRect& rect,
+                                   int flags);
     virtual void DrawTextLine(wxDC& dc,
                               const wxString& text,
                               const wxRect& rect,
@@ -346,11 +352,16 @@ public:
     virtual wxCoord GetCheckItemMargin() const
         { return 0; }
 
+    virtual wxSize GetToolBarButtonSize(wxCoord *separator) const
+        { if ( separator ) *separator = 5; return wxSize(16, 15); }
+    virtual wxSize GetToolBarMargin() const
+        { return wxSize(6, 6); }
+
     virtual wxRect GetTextTotalArea(const wxTextCtrl *text,
-                                    const wxRect& rect);
+                                    const wxRect& rect) const;
     virtual wxRect GetTextClientArea(const wxTextCtrl *text,
                                      const wxRect& rect,
-                                     wxCoord *extraSpaceBeyond);
+                                     wxCoord *extraSpaceBeyond) const;
 
     virtual wxSize GetTabIndent() const { return wxSize(2, 2); }
     virtual wxSize GetTabPadding() const { return wxSize(6, 5); }
@@ -1226,6 +1237,10 @@ wxInputHandler *wxWin32Theme::GetInputHandler(const wxString& control)
         else if ( control == wxINP_HANDLER_STATUSBAR )
             handler = new wxWin32StatusBarInputHandler(GetDefaultInputHandler());
 #endif // wxUSE_STATUSBAR
+#if wxUSE_TOOLBAR
+        else if ( control == wxINP_HANDLER_TOOLBAR )
+            handler = new wxStdToolbarInputHandler(GetDefaultInputHandler());
+#endif // wxUSE_TOOLBAR
         else if ( control == wxINP_HANDLER_TOPLEVEL )
             handler = new wxWin32FrameInputHandler(GetDefaultInputHandler());
         else
@@ -2330,6 +2345,34 @@ void wxWin32Renderer::DrawCheckButton(wxDC& dc,
                            bmp,
                            rect, flags, align, indexAccel,
                            0); // no focus rect offset for checkboxes
+}
+
+void wxWin32Renderer::DrawToolBarButton(wxDC& dc,
+                                        const wxString& label,
+                                        const wxBitmap& bitmap,
+                                        const wxRect& rectOrig,
+                                        int flags)
+{
+    if ( !label.empty() || bitmap.Ok() )
+    {
+        wxRect rect = rectOrig;
+        rect.Deflate(BORDER_THICKNESS);
+
+        if ( flags & wxCONTROL_PRESSED )
+        {
+            DrawBorder(dc, wxBORDER_SUNKEN, rect, flags);
+        }
+        else if ( flags & wxCONTROL_CURRENT )
+        {
+            DrawBorder(dc, wxBORDER_RAISED, rect, flags);
+        }
+
+        dc.DrawLabel(label, bitmap, rect, wxALIGN_CENTRE);
+    }
+    else // a separator
+    {
+        // TODO
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -3829,7 +3872,7 @@ static inline int GetTextBorderWidth()
 }
 
 wxRect wxWin32Renderer::GetTextTotalArea(const wxTextCtrl *text,
-                                         const wxRect& rect)
+                                         const wxRect& rect) const
 {
     wxRect rectTotal = rect;
 
@@ -3844,7 +3887,7 @@ wxRect wxWin32Renderer::GetTextTotalArea(const wxTextCtrl *text,
 
 wxRect wxWin32Renderer::GetTextClientArea(const wxTextCtrl *text,
                                           const wxRect& rect,
-                                          wxCoord *extraSpaceBeyond)
+                                          wxCoord *extraSpaceBeyond) const
 {
     wxRect rectText = rect;
 

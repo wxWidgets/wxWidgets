@@ -38,11 +38,6 @@
 #include "wx/image.h"
 #include "wx/settings.h"
 
-// For ::UpdateWindow
-#ifdef __WXMSW__
-#include <windows.h>
-#endif
-
 #include "wx/tbarbase.h"
 
 // ----------------------------------------------------------------------------
@@ -79,7 +74,9 @@ bool wxToolBarToolBase::Enable(bool enable)
 
 bool wxToolBarToolBase::Toggle(bool toggle)
 {
-    wxASSERT_MSG( m_isToggle, _T("can't toggle this tool") );
+    // wxUniv toolbar toggles even non-checkable tools temporarily - should we
+    // change the code there or just allow doing it?
+    //wxASSERT_MSG( m_isToggle, _T("can't toggle this tool") );
 
     if ( m_toggled == toggle )
         return FALSE;

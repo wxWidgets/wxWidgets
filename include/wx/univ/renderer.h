@@ -188,6 +188,14 @@ public:
                                  wxAlignment align = wxALIGN_LEFT,
                                  int indexAccel = -1) = 0;
 
+    // draw a toolbar button (label may be empty, bitmap may be invalid, if
+    // both conditions are true this function draws a separator)
+    virtual void DrawToolBarButton(wxDC& dc,
+                                   const wxString& label,
+                                   const wxBitmap& bitmap,
+                                   const wxRect& rect,
+                                   int flags = 0) = 0;
+
     // draw a (part of) line in the text control
     virtual void DrawTextLine(wxDC& dc,
                               const wxString& text,
@@ -356,15 +364,22 @@ public:
     virtual wxSize GetRadioBitmapSize() const = 0;
     virtual wxCoord GetCheckItemMargin() const = 0;
 
+    // get the standard size of a toolbar button and also return the size of
+    // a toolbar separator in the provided pointer
+    virtual wxSize GetToolBarButtonSize(wxCoord *separator) const = 0;
+
+    // get the margins between/around the toolbar buttons
+    virtual wxSize GetToolBarMargin() const = 0;
+
     // convert between text rectangle and client rectangle for text controls:
     // the former is typicall smaller to leave margins around text
     virtual wxRect GetTextTotalArea(const wxTextCtrl *text,
-                                    const wxRect& rectText) = 0;
+                                    const wxRect& rectText) const = 0;
 
     // extra space is for line indicators
     virtual wxRect GetTextClientArea(const wxTextCtrl *text,
                                      const wxRect& rectTotal,
-                                     wxCoord *extraSpaceBeyond) = 0;
+                                     wxCoord *extraSpaceBeyond) const = 0;
 
     // get the overhang of a selected tab
     virtual wxSize GetTabIndent() const = 0;
@@ -591,6 +606,12 @@ public:
                                  int indexAccel = -1)
         { m_renderer->DrawRadioButton(dc, label, bitmap, rect,
                                       flags, align, indexAccel); }
+    virtual void DrawToolBarButton(wxDC& dc,
+                                   const wxString& label,
+                                   const wxBitmap& bitmap,
+                                   const wxRect& rect,
+                                   int flags = 0)
+        { m_renderer->DrawToolBarButton(dc, label, bitmap, rect, flags); }
     virtual void DrawTextLine(wxDC& dc,
                               const wxString& text,
                               const wxRect& rect,
@@ -731,11 +752,17 @@ public:
     virtual wxCoord GetCheckItemMargin() const
         { return m_renderer->GetCheckItemMargin(); }
 
-    virtual wxRect GetTextTotalArea(const wxTextCtrl *text, const wxRect& rect)
+    virtual wxSize GetToolBarButtonSize(wxCoord *separator) const
+        { return m_renderer->GetToolBarButtonSize(separator); }
+    virtual wxSize GetToolBarMargin() const
+        { return m_renderer->GetToolBarMargin(); }
+
+    virtual wxRect GetTextTotalArea(const wxTextCtrl *text,
+                                    const wxRect& rect) const
         { return m_renderer->GetTextTotalArea(text, rect); }
     virtual wxRect GetTextClientArea(const wxTextCtrl *text,
                                      const wxRect& rect,
-                                     wxCoord *extraSpaceBeyond)
+                                     wxCoord *extraSpaceBeyond) const
         { return m_renderer->GetTextClientArea(text, rect, extraSpaceBeyond); }
 
     virtual wxSize GetTabIndent() const { return m_renderer->GetTabIndent(); }

@@ -1,8 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/univ/toolbar.cpp
-// Author:      Robert Roebling
+// Purpose:     implementation of wxToolBar for wxUniversal
+// Author:      Robert Roebling, Vadim Zeitlin (universalization)
+// Modified by:
+// Created:     20.02.02
 // Id:          $Id$
-// Copyright:   (c) 2001 Robert Roebling
+// Copyright:   (c) 2001 Robert Roebling,
+//              (c) 2002 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -28,113 +32,201 @@
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/app.h"
+
+    #include "wx/univ/renderer.h"
 #endif
 
 #include "wx/toolbar.h"
 #include "wx/image.h"
 
-//-----------------------------------------------------------------------------
-// wxToolBar
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxToolBar,wxToolBarBase)
-    EVT_MOUSE_EVENTS( wxToolBar::OnMouse )
-    EVT_PAINT( wxToolBar::OnPaint )
-    EVT_SIZE( wxToolBar::OnSize )
-    EVT_ENTER_WINDOW( wxToolBar::OnEnter )
-    EVT_LEAVE_WINDOW( wxToolBar::OnLeave )
-END_EVENT_TABLE()
+// value meaning that m_widthSeparator is not initialized
+static const wxCoord INVALID_WIDTH = -1;
 
-bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
-                 const wxPoint& pos, const wxSize& size,
-                 long style, const wxString& name )
+// ----------------------------------------------------------------------------
+// wxToolBarTool: our implementation of wxToolBarToolBase
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxToolBarTool : public wxToolBarToolBase
 {
-    bool ret = wxToolBarBase::Create( parent, id, pos, size, style, wxDefaultValidator, name );
-    
-    return ret;
-}
+public:
+    wxToolBarTool( wxToolBarBase *tbar = (wxToolBarBase *)NULL,
+                   int id = wxID_SEPARATOR,
+                   const wxBitmap& bitmap1 = wxNullBitmap,
+                   const wxBitmap& bitmap2 = wxNullBitmap,
+                   bool toggle = FALSE,
+                   wxObject *clientData = (wxObject *) NULL,
+                   const wxString& shortHelpString = wxEmptyString,
+                   const wxString& longHelpString = wxEmptyString )
+        : wxToolBarToolBase(tbar, id, bitmap1, bitmap2, toggle, clientData,
+                            shortHelpString, longHelpString)
+    {
+        // no position yet
+        m_x =
+        m_y = -1;
+    }
+
+public:
+    // the tool position (the size is known by the toolbar itself)
+    int m_x,
+        m_y;
+};
+
+// ============================================================================
+// wxToolBar implementation
+// ============================================================================
+
+IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl);
+
+// ----------------------------------------------------------------------------
+// wxToolBar creation
+// ----------------------------------------------------------------------------
 
 void wxToolBar::Init()
 {
-    // TODO: this is from tbarbase.cpp, but should be in
-    // wxToolbarBase::Init
-    // the list owns the pointers
-    m_tools.DeleteContents(TRUE);
-    m_xMargin = m_yMargin = 0;
-    m_maxRows = m_maxCols = 0;
-    // End TODO
+    // no tools yet
+    m_needsLayout = FALSE;
 
-    m_maxWidth = 0;
+    // unknown widths for the tools and separators
+    m_widthSeparator = INVALID_WIDTH;
+
+    m_maxWidth =
     m_maxHeight = 0;
 
-    m_captured = NULL;
-    m_underMouse = NULL;
-    
-    SetToolBitmapSize( wxSize(16,15) );
+    m_toolPressed =
+    m_toolCurrent = NULL;
+
+    wxRenderer *renderer = GetRenderer();
+
+    SetToolBitmapSize(renderer->GetToolBarButtonSize(&m_widthSeparator));
+    SetMargins(renderer->GetToolBarMargin());
 }
 
-wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
+bool wxToolBar::Create(wxWindow *parent,
+                       wxWindowID id,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style,
+                       const wxString& name)
 {
-    return NULL;
-}
+    if ( !wxToolBarBase::Create(parent, id, pos, size, style,
+                                wxDefaultValidator, name) )
+    {
+        return FALSE;
+    }
 
-void wxToolBar::SetToolShortHelp(int id, const wxString& helpString)
-{
-}
+    CreateInputHandler(wxINP_HANDLER_TOOLBAR);
 
-bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *tool)
-{
+    SetBestSize(size);
+
     return TRUE;
 }
 
-bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
+wxToolBar::~wxToolBar()
 {
+}
+
+// ----------------------------------------------------------------------------
+// wxToolBar tool-related methods
+// ----------------------------------------------------------------------------
+
+wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
+{
+    // check the "other" direction first: it must be inside the toolbar or we
+    // don't risk finding anything
+    if ( IsVertical() )
+    {
+        if ( x < 0 || x > m_maxWidth )
+            return NULL;
+
+        // we always use x, even for a vertical toolbar, this makes the code
+        // below simpler
+        x = y;
+    }
+    else // horizontal
+    {
+        if ( y < 0 || y > m_maxHeight )
+            return NULL;
+    }
+
+    for ( wxToolBarToolsList::Node *node = m_tools.GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxToolBarToolBase *tool =  node->GetData();
+        wxRect rectTool = GetToolRect(tool);
+
+        wxCoord startTool, endTool;
+        GetRectLimits(rectTool, &startTool, &endTool);
+
+        if ( x >= startTool && x <= endTool )
+        {
+            // don't return the separators from here, they don't accept any
+            // input anyhow
+            return tool->IsSeparator() ? NULL : tool;
+        }
+    }
+
+    return NULL;
+}
+
+void wxToolBar::SetToolShortHelp(int id, const wxString& help)
+{
+    wxToolBarToolBase *tool = FindById(id);
+
+    wxCHECK_RET( tool, _T("SetToolShortHelp: no such tool") );
+
+    tool->SetShortHelp(help);
+}
+
+bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos),
+                             wxToolBarToolBase * WXUNUSED(tool))
+{
+    // recalculate the toolbar geometry before redrawing it the next time
+    m_needsLayout = TRUE;
+
+    // and ensure that we indeed are going to redraw
+    Refresh();
+
+    return TRUE;
+}
+
+bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos),
+                             wxToolBarToolBase * WXUNUSED(tool))
+{
+    // as above
+    m_needsLayout = TRUE;
+
+    Refresh();
+
     return TRUE;
 }
 
 void wxToolBar::DoEnableTool(wxToolBarToolBase *tool, bool enable)
 {
-    // Comment this out if you don't want the disabled look,
-    // which currently acts weirdly for the scissors icon
-    // in the toolbar sample. See src/common/tbarbase.cpp
-    // for the wxCreateGreyedImage function.
-#if 1
-    // Created disabled-state bitmap on demand
-    if (!enable && !tool->GetBitmap2().Ok())
+    // created disabled-state bitmap on demand
+    if ( !enable && !tool->GetDisabledBitmap().Ok() )
     {
-        wxImage image( tool->GetBitmap1() );
+        wxImage image( tool->GetNormalBitmap() );
 
+        // TODO: don't hardcode 180
         unsigned char bg_red = 180;
         unsigned char bg_green = 180;
         unsigned char bg_blue = 180;
-        
+
         unsigned char mask_red = image.GetMaskRed();
         unsigned char mask_green = image.GetMaskGreen();
         unsigned char mask_blue = image.GetMaskBlue();
-        
+
         bool has_mask = image.HasMask();
-        
+
         int x,y;
         for (y = 0; y < image.GetHeight(); y++)
         {
-            for (x = 0; x < image.GetWidth(); x++) 
-            {
-                unsigned char red = image.GetRed(x,y);
-                unsigned char green = image.GetGreen(x,y);
-                unsigned char blue = image.GetBlue(x,y);
-                if (!has_mask || red != mask_red || green != mask_green || blue != mask_blue)
-                {
-                    red = (((wxInt32) red  - bg_red) >> 1) + bg_red;
-                    green = (((wxInt32) green  - bg_green) >> 1) + bg_green;
-                    blue = (((wxInt32) blue  - bg_blue) >> 1) + bg_blue;
-                    image.SetRGB( x, y, red, green, blue );                
-                }
-            }
-        }
-
-        for (y = 0; y < image.GetHeight(); y++)
-        {
-            for (x = y % 2; x < image.GetWidth(); x += 2) 
+            for (x = 0; x < image.GetWidth(); x++)
             {
                 unsigned char red = image.GetRed(x,y);
                 unsigned char green = image.GetGreen(x,y);
@@ -149,304 +241,421 @@ void wxToolBar::DoEnableTool(wxToolBarToolBase *tool, bool enable)
             }
         }
 
-        tool->SetBitmap2( image.ConvertToBitmap() );
+        for (y = 0; y < image.GetHeight(); y++)
+        {
+            for (x = y % 2; x < image.GetWidth(); x += 2)
+            {
+                unsigned char red = image.GetRed(x,y);
+                unsigned char green = image.GetGreen(x,y);
+                unsigned char blue = image.GetBlue(x,y);
+                if (!has_mask || red != mask_red || green != mask_green || blue != mask_blue)
+                {
+                    red = (((wxInt32) red  - bg_red) >> 1) + bg_red;
+                    green = (((wxInt32) green  - bg_green) >> 1) + bg_green;
+                    blue = (((wxInt32) blue  - bg_blue) >> 1) + bg_blue;
+                    image.SetRGB( x, y, red, green, blue );
+                }
+            }
+        }
+
+        tool->SetDisabledBitmap( image.ConvertToBitmap() );
     }
-    
-    RefreshTool((wxToolBarTool*) tool);
-#endif
+
+    RefreshTool(tool);
 }
 
-void wxToolBar::DoToggleTool(wxToolBarToolBase *tool, bool toggle)
+void wxToolBar::DoToggleTool(wxToolBarToolBase *tool, bool WXUNUSED(toggle))
 {
-    wxToolBarTool *my_tool = (wxToolBarTool*) tool;
-    
-    bool refresh = (my_tool->IsToggled() != toggle);
-    
-    my_tool->m_isDown = toggle;
-    
-    if (refresh)
-        RefreshTool( my_tool );
+    // note that if we're called the tool did change state (the base class
+    // checks for it), so it's not necessary to check for this again here
+    RefreshTool(tool);
 }
 
-void wxToolBar::DoSetToggle(wxToolBarToolBase *tool, bool toggle)
+void wxToolBar::DoSetToggle(wxToolBarToolBase *tool, bool WXUNUSED(toggle))
 {
+    RefreshTool(tool);
 }
 
 wxToolBarToolBase *wxToolBar::CreateTool(int id,
-                                          const wxBitmap& bitmap1,
-                                          const wxBitmap& bitmap2,
-                                          bool toggle,
-                                          wxObject *clientData,
-                                          const wxString& shortHelpString,
-                                          const wxString& longHelpString)
+                                         const wxBitmap& bitmap1,
+                                         const wxBitmap& bitmap2,
+                                         bool toggle,
+                                         wxObject *clientData,
+                                         const wxString& shortHelpString,
+                                         const wxString& longHelpString)
 {
     return new wxToolBarTool( this, id, bitmap1, bitmap2, toggle,
                               clientData, shortHelpString, longHelpString);
 }
-                                          
+
 wxToolBarToolBase *wxToolBar::CreateTool(wxControl *control)
 {
-    wxFAIL_MSG( wxT("Toolbar doesn't support controls yet.") );
-    
+    wxFAIL_MSG( wxT("Toolbar doesn't support controls yet (TODO)") );
+
     return NULL;
 }
 
-void wxToolBar::RefreshTool( wxToolBarTool *tool )
-{
-    wxRect rect( tool->m_x, tool->m_y, m_defaultWidth+6, m_defaultHeight+6 );
-    Refresh( TRUE, &rect );
-}
+// ----------------------------------------------------------------------------
+// wxToolBar geometry
+// ----------------------------------------------------------------------------
 
-void wxToolBar::DrawToolBarTool( wxToolBarTool *tool, wxDC &dc, bool down )
+wxRect wxToolBar::GetToolRect(wxToolBarToolBase *toolBase) const
 {
-    const wxBitmap& bitmap = (tool->IsEnabled() || !tool->GetBitmap2().Ok()) ? tool->GetBitmap1() : tool->GetBitmap2() ;
-    
-    if (HasFlag(wxTB_FLAT) && (tool != m_underMouse))
-    {
-        if (down)
-            dc.DrawBitmap( bitmap, tool->m_x+4, tool->m_y+4, TRUE );
-        else
-            dc.DrawBitmap( bitmap, tool->m_x+3, tool->m_y+3, TRUE );
-            
-        return;
-    }
-    
-    if (down)
-    {
-        dc.DrawBitmap( bitmap, tool->m_x+4, tool->m_y+4, TRUE );
-        
-        dc.SetPen( *wxGREY_PEN );
-        dc.DrawLine( tool->m_x, tool->m_y, tool->m_x+m_defaultWidth+5, tool->m_y );
-        dc.DrawLine( tool->m_x, tool->m_y, tool->m_x, tool->m_y+m_defaultHeight+5 );
-        
-        dc.SetPen( *wxBLACK_PEN );
-        dc.DrawLine( tool->m_x+1, tool->m_y+1, tool->m_x+m_defaultWidth+4, tool->m_y+1 );
-        dc.DrawLine( tool->m_x+1, tool->m_y+1, tool->m_x+1, tool->m_y+m_defaultHeight+4 );
-        
-        dc.SetPen( *wxWHITE_PEN );
-        dc.DrawLine( tool->m_x, tool->m_y+m_defaultHeight+5, tool->m_x+m_defaultWidth+6, tool->m_y+m_defaultHeight+5 );
-        dc.DrawLine( tool->m_x+m_defaultWidth+5, tool->m_y, tool->m_x+m_defaultWidth+5, tool->m_y+m_defaultHeight+6 );
-    }
-    else
-    {
-        dc.DrawBitmap( bitmap, tool->m_x+3, tool->m_y+3, TRUE );
-        
-        dc.SetPen( *wxWHITE_PEN );
-        dc.DrawLine( tool->m_x, tool->m_y, tool->m_x+m_defaultWidth+5, tool->m_y );
-        dc.DrawLine( tool->m_x, tool->m_y, tool->m_x, tool->m_y+m_defaultHeight+5 );
-        dc.DrawLine( tool->m_x+m_defaultWidth+4, tool->m_y, tool->m_x+m_defaultWidth+4, tool->m_y+2 );
-        dc.DrawLine( tool->m_x, tool->m_y+m_defaultHeight+4, tool->m_x+2, tool->m_y+m_defaultHeight+4 );
-        
-        dc.SetPen( *wxBLACK_PEN );
-        dc.DrawLine( tool->m_x, tool->m_y+m_defaultHeight+5, tool->m_x+m_defaultWidth+6, tool->m_y+m_defaultHeight+5 );
-        dc.DrawLine( tool->m_x+m_defaultWidth+5, tool->m_y, tool->m_x+m_defaultWidth+5, tool->m_y+m_defaultHeight+6 );
-        
-        dc.SetPen( *wxGREY_PEN );
-        dc.DrawLine( tool->m_x+1, tool->m_y+m_defaultHeight+4, tool->m_x+m_defaultWidth+5, tool->m_y+m_defaultHeight+4 );
-        dc.DrawLine( tool->m_x+m_defaultWidth+4, tool->m_y+1, tool->m_x+m_defaultWidth+4, tool->m_y+m_defaultHeight+5 );
-    }
-}
+    const wxToolBarTool *tool = (wxToolBarTool *)toolBase;
 
-void wxToolBar::OnPaint(wxPaintEvent &event)
-{
-    wxPaintDC dc(this);
-    
-    wxSize clientSize = GetClientSize();
-    dc.SetPen( *wxBLACK_PEN );
-    dc.DrawLine( 0,0, clientSize.x,0 );
-    
-    for ( wxToolBarToolsList::Node *node = m_tools.GetFirst();
-          node;
-          node = node->GetNext() )
+    wxRect rect;
+
+    wxCHECK_MSG( tool, rect, _T("GetToolRect: NULL tool") );
+
+    // ensure that we always have the valid tool position
+    if ( m_needsLayout )
     {
-        wxToolBarTool *tool = (wxToolBarTool*) node->Data();
-        
-        if (tool->GetId() == -1) continue;
-        
-        DrawToolBarTool( tool, dc, tool->m_isDown );
+        wxConstCast(this, wxToolBar)->DoLayout();
     }
+
+    rect.x = tool->m_x - m_xMargin;
+    rect.y = tool->m_y - m_yMargin;
+
+    if ( IsVertical() )
+    {
+        rect.width = m_defaultWidth;
+        rect.height = tool->IsSeparator() ? m_widthSeparator : m_defaultHeight;
+    }
+    else // horizontal
+    {
+        rect.width = tool->IsSeparator() ? m_widthSeparator : m_defaultWidth;
+        rect.height = m_defaultHeight;
+    }
+
+    rect.width += 2*m_xMargin;
+    rect.height += 2*m_yMargin;
+
+    return rect;
 }
 
 bool wxToolBar::Realize()
 {
-    if (!wxToolBarBase::Realize())
+    if ( !wxToolBarBase::Realize() )
         return FALSE;
 
-    int x;
-    int y;
-    
-    if (GetWindowStyleFlag() & wxTB_VERTICAL)
-    {
-        m_xMargin += 1;   // Cannot help it, but otherwise it look ugly
-        
-        x = m_xMargin;
-        y = 5;
-    }
-    else
-    {
-        m_yMargin += 1;   // Cannot help it, but otherwise it look ugly
-        
-        y = m_yMargin;
-        x = 5;
-    }
+    m_needsLayout = TRUE;
+    DoLayout();
 
-    for ( wxToolBarToolsList::Node *node = m_tools.GetFirst();
-          node;
-          node = node->GetNext() )
-    {
-        wxToolBarTool *tool = (wxToolBarTool*) node->Data();
-        
-        if (GetWindowStyleFlag() & wxTB_VERTICAL)
-        {
-            if (tool->GetId() == -1)
-            {
-                y += 6;
-                continue;
-            }
-            tool->m_x = m_xMargin;
-            tool->m_y = y;
-            y += m_defaultHeight + 6;
-
-            // Calculate the maximum height or width (depending on style)
-            // so we know how to size the toolbar in Realize.
-            // We could get the size of the tool instead of the
-            // default bitmap size
-            if (m_maxWidth < (m_defaultWidth + 2*(m_xMargin + 2)))
-                m_maxWidth = (m_defaultWidth + 2*(m_xMargin + 2)) ;
-        }
-        else
-        {
-            if (tool->GetId() == -1)
-            {
-                x += 6;
-                continue;
-            }
-            tool->m_x = x;
-            tool->m_y = m_yMargin;
-            x += m_defaultWidth + 6;
-
-            // Calculate the maximum height or width (depending on style)
-            // so we know how to size the toolbar in Realize.
-            // We could get the size of the tool instead of the
-            // default bitmap size
-            if (m_maxHeight < (m_defaultHeight + 2*(m_yMargin + 2)))
-                m_maxHeight = (m_defaultHeight + 2*(m_yMargin + 2)) ;
-        }
-        
-    }
-
-    wxSize sz = GetSize();
-    if (GetWindowStyleFlag() & wxTB_VERTICAL)
-    {
-        SetSize(m_maxWidth, sz.y);
-    }
-    else
-    {
-        SetSize(sz.x, m_maxHeight);
-    }
+    SetBestSize(wxDefaultSize);
 
     return TRUE;
 }
 
-void wxToolBar::OnLeave(wxMouseEvent &event)
+void wxToolBar::DoLayout()
 {
-    if (HasFlag( wxTB_FLAT ))
-    {
-        wxToolBarTool *oldMouseUnder = m_underMouse;
-        if (m_underMouse)
-        {
-            m_underMouse = NULL;
-            RefreshTool( oldMouseUnder );
-        }
-    }
-}
+    wxASSERT_MSG( m_needsLayout, _T("why are we called?") );
 
-void wxToolBar::OnEnter(wxMouseEvent &event)
-{
-}
+    m_needsLayout = FALSE;
 
-void wxToolBar::OnMouse(wxMouseEvent &event)
-{
-    wxToolBarTool *hit = NULL;
-    int x = event.GetX();
-    int y = event.GetY();
-    
+    wxCoord x = m_xMargin,
+            y = m_yMargin;
+
+    const wxCoord widthTool = IsVertical() ? m_defaultHeight : m_defaultWidth;
+    wxCoord margin = IsVertical() ? m_xMargin : m_yMargin,
+           *pCur = IsVertical() ? &y : &x;
+
+    // calculate the positions of all elements
     for ( wxToolBarToolsList::Node *node = m_tools.GetFirst();
           node;
           node = node->GetNext() )
     {
-        wxToolBarTool *tool = (wxToolBarTool*) node->Data();
-        
-        if ((x > tool->m_x) && (x < tool->m_x+m_defaultWidth+5)  &&
-            (y > tool->m_y) && (y < tool->m_y+m_defaultHeight+5))
+        wxToolBarTool *tool = (wxToolBarTool *) node->GetData();
+
+        tool->m_x = x;
+        tool->m_y = y;
+
+        *pCur += (tool->IsSeparator() ? m_widthSeparator : widthTool) + margin;
+    }
+
+    // calculate the total toolbar size
+    wxCoord xMin = m_defaultWidth + 2*m_xMargin,
+            yMin = m_defaultHeight + 2*m_yMargin;
+
+    m_maxWidth = x < xMin ? xMin : x;
+    m_maxHeight = y < yMin ? yMin : y;
+}
+
+wxSize wxToolBar::DoGetBestClientSize() const
+{
+    return wxSize(m_maxWidth, m_maxHeight);
+}
+
+// ----------------------------------------------------------------------------
+// wxToolBar drawing
+// ----------------------------------------------------------------------------
+
+void wxToolBar::RefreshTool(wxToolBarToolBase *tool)
+{
+    RefreshRect(GetToolRect(tool));
+}
+
+void wxToolBar::GetRectLimits(const wxRect& rect,
+                              wxCoord *start,
+                              wxCoord *end) const
+{
+    wxCHECK_RET( start && end, _T("NULL pointer in GetRectLimits") );
+
+    if ( IsVertical() )
+    {
+        *start = rect.GetTop();
+        *end = rect.GetBottom();
+    }
+    else // horizontal
+    {
+        *start = rect.GetLeft();
+        *end = rect.GetRight();
+    }
+}
+
+void wxToolBar::DoDraw(wxControlRenderer *renderer)
+{
+    // prepare the variables used below
+    wxDC& dc = renderer->GetDC();
+    wxRenderer *rend = renderer->GetRenderer();
+    // dc.SetFont(GetFont()); -- uncomment when we support labels
+
+    // draw the border separating us from the menubar (if there is no menubar
+    // we probably shouldn't draw it?)
+    if ( !IsVertical() )
+    {
+        rend->DrawHorizontalLine(dc, 0, 0, GetClientSize().x);
+    }
+
+    // get the update rect and its limits depending on the orientation
+    wxRect rectUpdate = GetUpdateClientRect();
+    wxCoord start, end;
+    GetRectLimits(rectUpdate, &start, &end);
+
+    // and redraw all the tools intersecting it
+    for ( wxToolBarToolsList::Node *node = m_tools.GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxToolBarToolBase *tool = node->GetData();
+        wxRect rectTool = GetToolRect(tool);
+        wxCoord startTool, endTool;
+        GetRectLimits(rectTool, &startTool, &endTool);
+
+        if ( endTool < start )
         {
-            hit = tool;
+            // we're still to the left of the area to redraw
+            continue;
+        }
+
+        if ( startTool > end )
+        {
+            // we're beyond the area to redraw, nothing left to do
             break;
         }
-    }
-    
-    wxToolBarTool *oldMouseUnder = m_underMouse;
-    if (HasFlag( wxTB_FLAT))
-    {
-        if (m_underMouse && (m_underMouse != hit))
+
+        // deal with the flags
+        int flags = 0;
+
+        if ( tool->IsEnabled() )
         {
-            m_underMouse = NULL;
-            RefreshTool( oldMouseUnder );
+            // the toolbars without wxTB_FLAT don't react to the mouse hovering
+            if ( HasFlag(wxTB_FLAT) && (tool == m_toolCurrent) )
+                flags |= wxCONTROL_CURRENT;
         }
-        m_underMouse = hit;
-    }
-    
-    if (event.LeftDown() && (hit) && hit->IsEnabled())
-    {
-        CaptureMouse();
-        m_captured = hit;
-        
-        m_captured->m_isDown = TRUE;
-        RefreshTool( m_captured );
-        
-        return;
-    }
-    
-    if (event.Dragging() && (m_captured))
-    {
-        bool is_down = (hit == m_captured);
-        if (is_down != m_captured->m_isDown)
+        else // disabled tool
         {
-            m_captured->m_isDown = is_down;
-            RefreshTool( m_captured );
+            flags |= wxCONTROL_DISABLED;
         }
-        
-        return;
-    }
-    
-    if (event.LeftUp() && (m_captured))
-    {
-        ReleaseMouse();
-        
-        m_captured->m_isDown = FALSE;
-        
-        // Bad trick...
-        m_underMouse = NULL;
-        
-        RefreshTool( m_captured );
-        
-        if (hit == m_captured)
+
+        if ( tool->IsToggled() )
+            flags |= wxCONTROL_PRESSED;
+
+        wxString label;
+        wxBitmap bitmap;
+        if ( !tool->IsSeparator() )
         {
-            wxCommandEvent cevent( wxEVT_COMMAND_TOOL_CLICKED, m_captured->GetId() );
-            cevent.SetEventObject( this );
-            // cevent.SetExtraLong((long) toggleDown);
-            GetEventHandler()->ProcessEvent( cevent );
+            label = tool->GetLabel();
+            bitmap = tool->GetBitmap();
         }
-        
-        m_captured = NULL;
-        
-        return;
+        //else: leave both the label and the bitmap invalid to draw a separator
+
+        rend->DrawToolBarButton(dc, label, bitmap, rectTool, flags);
     }
-    
-    if (HasFlag(wxTB_FLAT))
+}
+
+// ----------------------------------------------------------------------------
+// wxToolBar actions
+// ----------------------------------------------------------------------------
+
+void wxToolBar::Press()
+{
+    wxCHECK_RET( m_toolCurrent, _T("no tool to press?") );
+
+    m_toolPressed = m_toolCurrent;
+    if ( !m_toolPressed->IsToggled() )
     {
-        if (m_underMouse && (m_underMouse != oldMouseUnder))
-            RefreshTool( m_underMouse );
+        m_toolPressed->Toggle(TRUE);
+
+        RefreshTool(m_toolPressed);
     }
+}
+
+void wxToolBar::Release()
+{
+    wxCHECK_RET( m_toolPressed, _T("no tool to release?") );
+
+    if ( m_toolPressed->IsToggled() )
+    {
+        m_toolPressed->Toggle(FALSE);
+
+        RefreshTool(m_toolPressed);
+
+        m_toolPressed = NULL;
+    }
+}
+
+void wxToolBar::Toggle()
+{
+    wxCHECK_RET( m_toolPressed, _T("no tool to toggle?") );
+
+    // the togglable tools should keep their state when the mouse is released
+    if ( !m_toolPressed->CanBeToggled() )
+    {
+        m_toolPressed->Toggle();
+    }
+
+    RefreshTool(m_toolPressed);
+
+    m_toolCurrent = m_toolPressed;
+    m_toolPressed = NULL;
+
+    Click();
+}
+
+void wxToolBar::Click()
+{
+    wxCHECK_RET( m_toolCurrent, _T("no tool to click?") );
+
+    OnLeftClick(m_toolCurrent->GetId(), m_toolCurrent->IsToggled());
+}
+
+bool wxToolBar::PerformAction(const wxControlAction& action,
+                              long numArg,
+                              const wxString& strArg)
+{
+    if ( action == wxACTION_TOOLBAR_TOGGLE )
+        Toggle();
+    else if ( action == wxACTION_TOOLBAR_PRESS )
+        Press();
+    else if ( action == wxACTION_TOOLBAR_RELEASE )
+        Release();
+    else if ( action == wxACTION_TOOLBAR_CLICK )
+        Click();
+    else if ( action == wxACTION_TOOLBAR_ENTER )
+    {
+        wxToolBarToolBase *toolCurrentOld = m_toolCurrent;
+        m_toolCurrent = FindById((int)numArg);
+
+        if ( m_toolCurrent != toolCurrentOld )
+        {
+            // the appearance of the current tool only changes for the flat
+            // toolbars
+            if ( HasFlag(wxTB_FLAT) )
+            {
+                // and only if the tool was/is enabled
+                if ( toolCurrentOld && toolCurrentOld->IsEnabled() )
+                    RefreshTool(toolCurrentOld);
+
+                if ( m_toolCurrent )
+                {
+                    if ( m_toolCurrent->IsEnabled() )
+                        RefreshTool(m_toolCurrent);
+                }
+                else
+                {
+                    wxFAIL_MSG( _T("no current tool in wxACTION_TOOLBAR_ENTER?") );
+                }
+            }
+        }
+    }
+    else if ( action == wxACTION_TOOLBAR_LEAVE )
+    {
+        if ( m_toolCurrent )
+        {
+            wxToolBarToolBase *toolCurrentOld = m_toolCurrent;
+            m_toolCurrent = NULL;
+
+            RefreshTool(toolCurrentOld);
+        }
+    }
+    else
+        return wxControl::PerformAction(action, numArg, strArg);
+
+    return TRUE;
+}
+
+// ============================================================================
+// wxStdToolbarInputHandler implementation
+// ============================================================================
+
+wxStdToolbarInputHandler::wxStdToolbarInputHandler(wxInputHandler *handler)
+                        : wxStdButtonInputHandler(handler)
+{
+}
+
+bool wxStdToolbarInputHandler::HandleKey(wxInputConsumer *consumer,
+                                         const wxKeyEvent& event,
+                                         bool pressed)
+{
+    // TODO: when we have a current button we should allow the arrow
+    //       keys to move it
+    return wxStdInputHandler::HandleKey(consumer, event, pressed);
+}
+
+bool wxStdToolbarInputHandler::HandleMouseMove(wxInputConsumer *consumer,
+                                               const wxMouseEvent& event)
+{
+    if ( !wxStdButtonInputHandler::HandleMouseMove(consumer, event) )
+    {
+        wxToolBarToolBase *tool;
+
+        if ( event.Leaving() )
+        {
+            tool = NULL;
+        }
+        else
+        {
+            wxToolBar *tbar = wxStaticCast(consumer->GetInputWindow(), wxToolBar);
+            tool = tbar->FindToolForPosition(event.GetX(), event.GetY());
+        }
+
+        if ( tool )
+            consumer->PerformAction(wxACTION_TOOLBAR_ENTER, tool->GetId());
+        else
+            consumer->PerformAction(wxACTION_TOOLBAR_LEAVE);
+
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+bool wxStdToolbarInputHandler::HandleFocus(wxInputConsumer *consumer,
+                                           const wxFocusEvent& event)
+{
+    // we shouldn't be left with a highlighted button
+    consumer->PerformAction(wxACTION_TOOLBAR_LEAVE);
+
+    return TRUE;
+}
+
+bool wxStdToolbarInputHandler::HandleActivation(wxInputConsumer *consumer,
+                                                bool activated)
+{
+    // as above
+    if ( !activated )
+        consumer->PerformAction(wxACTION_TOOLBAR_LEAVE);
+
+    return TRUE;
 }
 

@@ -39,6 +39,7 @@
     #include "wx/scrolbar.h"
     #include "wx/slider.h"
     #include "wx/textctrl.h"
+    #include "wx/toolbar.h"
 #endif // WX_PRECOMP
 
 #include "wx/notebook.h"
@@ -151,6 +152,12 @@ public:
                                  int flags = 0,
                                  wxAlignment align = wxALIGN_LEFT,
                                  int indexAccel = -1);
+
+    virtual void DrawToolBarButton(wxDC& dc,
+                                   const wxString& label,
+                                   const wxBitmap& bitmap,
+                                   const wxRect& rect,
+                                   int flags);
 
     virtual void DrawTextLine(wxDC& dc,
                               const wxString& text,
@@ -275,11 +282,16 @@ public:
     virtual wxCoord GetCheckItemMargin() const
         { return 2; }
 
+    virtual wxSize GetToolBarButtonSize(wxCoord *separator) const
+        { if ( separator ) *separator = 5; return wxSize(16, 15); }
+    virtual wxSize GetToolBarMargin() const
+        { return wxSize(6, 6); }
+
     virtual wxRect GetTextTotalArea(const wxTextCtrl *text,
-                                    const wxRect& rect);
+                                    const wxRect& rect) const;
     virtual wxRect GetTextClientArea(const wxTextCtrl *text,
                                      const wxRect& rect,
-                                     wxCoord *extraSpaceBeyond);
+                                     wxCoord *extraSpaceBeyond) const;
 
     virtual wxSize GetTabIndent() const { return wxSize(2, 2); }
     virtual wxSize GetTabPadding() const { return wxSize(6, 6); }
@@ -385,7 +397,7 @@ protected:
     }
 
     // get the line wrap indicator bitmap
-    wxBitmap GetLineWrapBitmap();
+    wxBitmap GetLineWrapBitmap() const;
 
     // DrawCheckBitmap and DrawRadioBitmap helpers
 
@@ -678,6 +690,10 @@ wxInputHandler *wxGTKTheme::GetInputHandler(const wxString& control)
         else if ( control == wxINP_HANDLER_NOTEBOOK )
             handler = new wxStdNotebookInputHandler(GetDefaultInputHandler());
 #endif // wxUSE_NOTEBOOK
+#if wxUSE_TOOLBAR
+        else if ( control == wxINP_HANDLER_TOOLBAR )
+            handler = new wxStdToolbarInputHandler(GetDefaultInputHandler());
+#endif // wxUSE_TOOLBAR
         else if ( control == wxINP_HANDLER_TOPLEVEL )
             handler = new wxStdFrameInputHandler(GetDefaultInputHandler());
         else
@@ -1424,7 +1440,7 @@ wxBitmap wxGTKRenderer::GetCheckBitmap(int flags)
     return m_bitmapsCheckbox[row][col];
 }
 
-wxBitmap wxGTKRenderer::GetLineWrapBitmap()
+wxBitmap wxGTKRenderer::GetLineWrapBitmap() const
 {
     if ( !m_bmpLineWrap.Ok() )
     {
@@ -1443,7 +1459,7 @@ wxBitmap wxGTKRenderer::GetLineWrapBitmap()
         }
         else
         {
-            m_bmpLineWrap = bmpLineWrap;
+            wxConstCast(this, wxGTKRenderer)->m_bmpLineWrap = bmpLineWrap;
         }
     }
 
@@ -1552,12 +1568,37 @@ void wxGTKRenderer::DrawRadioButton(wxDC& dc,
                              flags, align, indexAccel);
 }
 
+void wxGTKRenderer::DrawToolBarButton(wxDC& dc,
+                                      const wxString& label,
+                                      const wxBitmap& bitmap,
+                                      const wxRect& rectOrig,
+                                      int flags)
+{
+    // we don't draw the separators at all
+    if ( !label.empty() || bitmap.Ok() )
+    {
+        wxRect rect = rectOrig;
+        rect.Deflate(BORDER_THICKNESS);
+
+        if ( flags & wxCONTROL_PRESSED )
+        {
+            DrawBorder(dc, wxBORDER_SUNKEN, rect, flags);
+        }
+        else if ( flags & wxCONTROL_CURRENT )
+        {
+            DrawBorder(dc, wxBORDER_RAISED, rect, flags);
+        }
+
+        dc.DrawLabel(label, bitmap, rect, wxALIGN_CENTRE);
+    }
+}
+
 // ----------------------------------------------------------------------------
 // text control
 // ----------------------------------------------------------------------------
 
 wxRect wxGTKRenderer::GetTextTotalArea(const wxTextCtrl *text,
-                                       const wxRect& rect)
+                                       const wxRect& rect) const
 {
     wxRect rectTotal = rect;
     rectTotal.Inflate(2*BORDER_THICKNESS);
@@ -1566,7 +1607,7 @@ wxRect wxGTKRenderer::GetTextTotalArea(const wxTextCtrl *text,
 
 wxRect wxGTKRenderer::GetTextClientArea(const wxTextCtrl *text,
                                         const wxRect& rect,
-                                        wxCoord *extraSpaceBeyond)
+                                        wxCoord *extraSpaceBeyond) const
 {
     wxRect rectText = rect;
     rectText.Deflate(2*BORDER_THICKNESS);

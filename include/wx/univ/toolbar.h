@@ -16,48 +16,36 @@
     #pragma interface "univtoolbar.h"
 #endif
 
-#include "wx/window.h"
+#include "wx/button.h"      // for wxStdButtonInputHandler
+
+class WXDLLEXPORT wxToolBarTool;
 
 // ----------------------------------------------------------------------------
-// wxToolbar
+// the actions supported by this control
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxToolBarTool : public wxToolBarToolBase
-{
-public:
-    wxToolBarTool( wxToolBarBase *tbar = (wxToolBarBase *)NULL,
-                   int id = wxID_SEPARATOR,
-                   const wxBitmap& bitmap1 = wxNullBitmap,
-                   const wxBitmap& bitmap2 = wxNullBitmap,
-                   bool toggle = FALSE,
-                   wxObject *clientData = (wxObject *) NULL,
-                   const wxString& shortHelpString = wxEmptyString,
-                   const wxString& longHelpString = wxEmptyString ) :
-        wxToolBarToolBase( tbar, id, bitmap1, bitmap2, toggle, clientData,
-                           shortHelpString, longHelpString )
-    {
-        m_isDown = FALSE;
-        m_x = -1;
-        m_y = -1;
-    }
+#define wxACTION_TOOLBAR_TOGGLE  wxACTION_BUTTON_TOGGLE
+#define wxACTION_TOOLBAR_PRESS   wxACTION_BUTTON_PRESS
+#define wxACTION_TOOLBAR_RELEASE wxACTION_BUTTON_RELEASE
+#define wxACTION_TOOLBAR_CLICK   wxACTION_BUTTON_CLICK
+#define wxACTION_TOOLBAR_ENTER   _T("enter")     // highlight the tool
+#define wxACTION_TOOLBAR_LEAVE   _T("leave")     // unhighlight the tool
 
-public:
-    bool        m_isDown;
-    int         m_x;
-    int         m_y;
-};
+// ----------------------------------------------------------------------------
+// wxToolBar
+// ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxToolBar: public wxToolBarBase
+class WXDLLEXPORT wxToolBar : public wxToolBarBase
 {    
 public:
     // construction/destruction
     wxToolBar() { Init(); }
-    wxToolBar( wxWindow *parent,
-               wxWindowID id,
-               const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize,
-               long style = 0,
-               const wxString& name = wxToolBarNameStr )
+    wxToolBar(wxWindow *parent,
+              wxWindowID id,
+              const wxPoint& pos = wxDefaultPosition,
+              const wxSize& size = wxDefaultSize,
+              long style = 0,
+              const wxString& name = wxToolBarNameStr)
     {
         Init();
 
@@ -71,9 +59,7 @@ public:
                  long style = 0,
                  const wxString& name = wxToolBarNameStr );
                  
-#ifdef __DARWIN__
-    virtual ~wxToolBar() { }
-#endif
+    virtual ~wxToolBar();
 
     virtual bool Realize();
 
@@ -102,21 +88,72 @@ protected:
                                           const wxString& longHelpString);
     virtual wxToolBarToolBase *CreateTool(wxControl *control);
 
-private:
-    wxToolBarTool    *m_captured;
-    wxToolBarTool    *m_underMouse;
-    wxCoord           m_maxWidth, m_maxHeight;
+    // implement wxUniversal methods
+    virtual bool PerformAction(const wxControlAction& action,
+                               long numArg = -1,
+                               const wxString& strArg = wxEmptyString);
+    virtual wxSize DoGetBestClientSize() const;
+    virtual void DoDraw(wxControlRenderer *renderer);
+
+    // get the bounding rect for the given tool
+    wxRect GetToolRect(wxToolBarToolBase *tool) const;
+
+    // redraw the given tool
+    void RefreshTool(wxToolBarToolBase *tool);
+
+    // (re)calculate the tool positions, should only be called if it is
+    // necessary to do it, i.e. m_needsLayout == TRUE
+    void DoLayout();
     
-private:
-    void OnMouse( wxMouseEvent &event );
-    void OnEnter( wxMouseEvent &event );
-    void OnLeave( wxMouseEvent &event );
-    void RefreshTool( wxToolBarTool *tool );
-    void DrawToolBarTool( wxToolBarTool *tool, wxDC &dc, bool down );
-    void OnPaint( wxPaintEvent &event );
+    // get the rect limits depending on the orientation: top/bottom for a
+    // vertical toolbar, left/right for a horizontal one
+    void GetRectLimits(const wxRect& rect, wxCoord *start, wxCoord *end) const;
+
+    // wxButton actions: all these use m_toolPressed and can only be called if
+    // we have one
+    void Toggle();
+    void Press();
+    void Release();
+
+    // this one used m_toolCurrent
+    void Click();
 
 private:
-    DECLARE_EVENT_TABLE()
+    // have we calculated the positions of our tools?
+    bool m_needsLayout;
+
+    // the width of a separator
+    wxCoord m_widthSeparator;
+
+    // the total size of all toolbar elements
+    wxCoord m_maxWidth,
+            m_maxHeight;
+    
+    // the current tool or NULL
+    wxToolBarToolBase *m_toolCurrent;
+
+    // the currently pressed tool or NULL
+    wxToolBarToolBase *m_toolPressed;
+
+    DECLARE_DYNAMIC_CLASS(wxToolBar)
+};
+
+// ----------------------------------------------------------------------------
+// wxStdToolbarInputHandler: translates SPACE and ENTER keys and the left mouse
+// click into button press/release actions
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxStdToolbarInputHandler : public wxStdButtonInputHandler
+{
+public:
+    wxStdToolbarInputHandler(wxInputHandler *inphand);
+
+    virtual bool HandleKey(wxInputConsumer *consumer,
+                           const wxKeyEvent& event,
+                           bool pressed);
+    virtual bool HandleMouseMove(wxInputConsumer *consumer, const wxMouseEvent& event);
+    virtual bool HandleFocus(wxInputConsumer *consumer, const wxFocusEvent& event);
+    virtual bool HandleActivation(wxInputConsumer *consumer, bool activated);
 };
 
 #endif // _WX_UNIV_TOOLBAR_H_
