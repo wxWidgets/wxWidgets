@@ -262,7 +262,7 @@ private:
 /////////////////////////////////////////////////////////////////////////////
 // wxZipOutputStream 
 
-WX_DECLARE_LIST_WITH_DECL(wxZipEntry, _wxZipEntryList, class WXDLLIMPEXP_BASE);
+WX_DECLARE_LIST_WITH_DECL(wxZipEntry, wx__ZipEntryList, class WXDLLIMPEXP_BASE);
 
 class WXDLLIMPEXP_BASE wxZipOutputStream : public wxArchiveOutputStream
 {
@@ -320,7 +320,7 @@ private:
     class wxStoredOutputStream *m_store;
     class wxZlibOutputStream2 *m_deflate;
     class wxZipStreamLink *m_backlink;
-    _wxZipEntryList m_entries;
+    wx__ZipEntryList m_entries;
     char *m_initialData;
     size_t m_initialSize;
     wxZipEntry *m_pending;
@@ -347,7 +347,11 @@ public:
     typedef wxZipEntry entry_type;
 
     wxZipInputStream(wxInputStream& stream, wxMBConv& conv = wxConvLocal);
+
+#if 1 //WXWIN_COMPATIBILITY_2_6
     wxZipInputStream(const wxString& archive, const wxString& file);
+#endif
+
     virtual ~wxZipInputStream();
 
     bool OpenEntry(wxZipEntry& entry)   { return DoOpen(&entry); }
@@ -363,8 +367,12 @@ public:
 protected:
     size_t OnSysRead(void *buffer, size_t size);
     wxFileOffset OnSysTell() const { return m_decomp ? m_decomp->TellI() : 0; }
-    wxFileOffset OnSysSeek(wxFileOffset seek, wxSeekMode mode);
 
+#if 1 //WXWIN_COMPATIBILITY_2_6
+    wxFileOffset OnSysSeek(wxFileOffset seek, wxSeekMode mode);
+#endif
+
+    // this protected interface isn't yet finalised
     virtual wxInputStream *OpenDecompressor(wxInputStream& stream);
     virtual bool CloseDecompressor(wxInputStream *decomp);
 
@@ -414,6 +422,11 @@ private:
                     wxZipEntry *entry, wxZipInputStream& inputStream);
     friend bool wxZipOutputStream::CopyArchiveMetaData(
                     wxZipInputStream& inputStream);
+
+#if 1 //WXWIN_COMPATIBILITY_2_6
+    bool m_allowSeeking;
+    friend class wxZipFSInputStream;
+#endif
 
     DECLARE_NO_COPY_CLASS(wxZipInputStream)
 };
