@@ -81,10 +81,20 @@ wxClassInfo wxObject::ms_classInfo( wxT("wxObject"), 0, 0,
 wxClassInfo* wxClassInfo::sm_first = NULL;
 wxHashTable* wxClassInfo::sm_classTable = NULL;
 
+// when using XTI, this method is already implemented inline inside
+// DECLARE_DYNAMIC_CLASS but otherwise we intentionally make this function
+// non-inline because this allows us to have a non-inline virtual function in
+// all wx classes and this solves linking problems for HP-UX native toolchain
+// and possibly others (we could make dtor non-inline as well but it's more
+// useful to keep it inline than this function)
+#if !wxUSE_EXTENDED_RTTI
+
 wxClassInfo *wxObject::GetClassInfo() const
 {
     return &wxObject::ms_classInfo;
 }
+
+#endif // wxUSE_EXTENDED_RTTI
 
 // These are here so we can avoid 'always true/false' warnings
 // by referring to these instead of true/false
