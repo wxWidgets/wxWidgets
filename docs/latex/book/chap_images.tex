@@ -3,5 +3,60 @@
 \setheader{{\it CHAPTER \thechapter: IMAGES AND BITMAPS}}{}{}{}{}{{\it CHAPTER \thechapter: IMAGES AND BITMAPS}}%
 \setfooter{\thepage}{}{}{}{}{\thepage}%
 
-wxImage and wxBitmap unravelled.
+\section{The basics of images and bitmaps}
+
+Both wxImage and wxBitmap represent what would commonly be referred as
+a photo with a given number of pixels - in contrast to a drawing consisting
+of a collection of lines, curves, circles, squares etc.
+
+The difference between a wxImage and a wxBitmap is that wxImage is a
+platform and screen independent representation of an image - every
+pixel is always represented by three bytes, one for red, one for green
+and one for blue, thus yielding the classical RGB acronym. Due to the
+simplicity of wxImage, you will do all kinds of image manipulation
+with this class, this includes loading images in various formats
+such as GIF, TIFF or JPEG (these and some more are supported by wxWindows 
+without further work), analyizing the image in terms of colour usage etc
+and applying filters to the image for higher-level manipulation, such
+as blurring, sharpening etc.
+
+The problem with wxImage is that you cannot draw it, i.e. its destiny
+is to live its shadow life in memory, without ever being seen by man.
+If you ever want to draw an image to screen, you have to convert it
+to a wxBitmap first, typically, this will look like this:
+
+\begin{verbatim}
+    wxImage image( 200, 200 );
+    wxBitmap bitmap( image.ConvertToBitmap() );
+    
+    wxClientDC dc( this )
+    dc.DrawBitmap( bitmap );
+\end{verbatim}
+
+Note, that such as image conversion is an extremely expensive operation
+and you are very well advised to avoid having to call this routine
+more than absolutely required. In practice, you should not do this
+in a paint event handler, for instance.
+
+There is one more thing you can do with a wxBitmap: you can draw into
+it like you would do with a window. All you need to do is set up a
+proper device context (DC) for it and ensure that you clean up the
+DC correctly afterwards:
+
+\begin{verbatim}
+    wxBitmap bitmap( 200, 200 );
+    
+    wxMemoryDC dc;
+    dc.SelectObject( bitmap );
+    
+    dc.SetPen( *wxBLACK_PEN );
+    dc.DrawLine( 0, 0, 199, 199 );
+    
+    dc.SelectObject( wxNullBitmap );
+\end{verbatim}
+
+\section{wxImage built-in features}
+
+You can save it, load it, get access to it, assign it a mask colour,
+turn it around, mirror it.
 
