@@ -35,7 +35,7 @@ wxFrameXmlHandler::wxFrameXmlHandler() : wxXmlResourceHandler()
     XRC_ADD_STYLE(wxSYSTEM_MENU);
     XRC_ADD_STYLE(wxRESIZE_BORDER);
     XRC_ADD_STYLE(wxRESIZE_BOX);
-    XRC_ADD_STYLE(wxCLOSE);
+    XRC_ADD_STYLE(wxCLOSE_BOX);
 
     XRC_ADD_STYLE(wxFRAME_TOOL_WINDOW);
     XRC_ADD_STYLE(wxFRAME_FLOAT_ON_PARENT);
