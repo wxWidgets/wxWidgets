@@ -3091,7 +3091,7 @@ class MaskedEditMixin:
     def _OnCtrl_A(self,event=None):
         """ Handles ctrl-a keypress in control. Should return False to skip other processing. """
         end = self._goEnd(getPosOnly=True)
-        if not event or event.ShiftDown():
+        if not event or (isinstance(event, wx.KeyEvent) and event.ShiftDown()):
             wx.CallAfter(self._SetInsertionPoint, 0)
             wx.CallAfter(self._SetSelection, 0, self._masklength)
         else:
