@@ -93,7 +93,7 @@ DO:
   \end{verbatim} block
 
 - check that your changes/additions to any TEX documentation 
-  compiles before checking it in!  Use the '-checkcurleybrace' 
+  compiles before checking it in!  Use the '-checkcurleybraces' 
   and '-checksyntax' commandline parameters (or the OPTIONS menu 
   if running in GUI mode) to check for some of the more common 
   mistakes.  See TROUBLESHOOTING below for more details
@@ -238,7 +238,7 @@ of possible values.}
 
 \wxheading{Return value}
 
-TRUE if the call succeeded, FALSE otherwise.
+{\tt true} if the call succeeded, {\tt false} otherwise.
 
 \wxheading{Remarks}
 
