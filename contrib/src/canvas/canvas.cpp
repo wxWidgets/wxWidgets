@@ -218,7 +218,7 @@ void wxCanvasLine::Render( int clip_x, int clip_y, int clip_width, int clip_heig
     wxImage *image = m_owner->GetBuffer();
     int buffer_x = m_owner->GetBufferX();
     int buffer_y = m_owner->GetBufferY();
-
+    
     if ((m_area.width == 0) && (m_area.height == 0))
     {
         image->SetRGB( m_area.x-buffer_x, m_area.y-buffer_y, m_red, m_green, m_blue );
@@ -248,8 +248,8 @@ void wxCanvasLine::Render( int clip_x, int clip_y, int clip_width, int clip_heig
 
             while (ii != x1)
             {
-                if ((ii >= clip_x) && (ii <= clip_x+clip_width) &&
-                    (jj >= clip_y) && (jj <= clip_y+clip_height))
+                if ((ii >= clip_x) && (ii < clip_x+clip_width) &&
+                    (jj >= clip_y) && (jj < clip_y+clip_height))
                 {
                     image->SetRGB( ii-buffer_x, jj-buffer_y, m_red, m_blue, m_green );
                 }
@@ -269,8 +269,8 @@ void wxCanvasLine::Render( int clip_x, int clip_y, int clip_width, int clip_heig
 
             while (jj != y1)
             {
-                if ((ii >= clip_x) && (ii <= clip_x+clip_width) &&
-                    (jj >= clip_y) && (jj <= clip_y+clip_height))
+                if ((ii >= clip_x) && (ii < clip_x+clip_width) &&
+                    (jj >= clip_y) && (jj < clip_y+clip_height))
                 {
                     image->SetRGB( ii-buffer_x, jj-buffer_y, m_red, m_blue, m_green );
                 }
@@ -555,6 +555,7 @@ BEGIN_EVENT_TABLE(wxCanvas,wxScrolledWindow)
     EVT_MOUSE_EVENTS( wxCanvas::OnMouse )
     EVT_SET_FOCUS( wxCanvas::OnSetFocus )
     EVT_KILL_FOCUS( wxCanvas::OnKillFocus )
+    EVT_ERASE_BACKGROUND( wxCanvas::OnEraseBackground )
 END_EVENT_TABLE()
 
 wxCanvas::wxCanvas( wxWindow *parent, wxWindowID id,
@@ -596,6 +597,8 @@ void wxCanvas::SetColour( unsigned char red, unsigned char green, unsigned char 
     m_red = red;
     m_green = green;
     m_blue = blue;
+
+    SetBackgroundColour( wxColour( red, green, blue ) );
 
     if (m_frozen) return;
 
@@ -803,6 +806,8 @@ void wxCanvas::BlitBuffer( wxDC &dc )
 
 void wxCanvas::UpdateNow()
 {
+    if (m_frozen) return;
+
     if (!m_needUpdate) return;
 
     wxClientDC dc( this );
@@ -928,8 +933,12 @@ void wxCanvas::OnPaint(wxPaintEvent &event)
 
 void wxCanvas::ScrollWindow( int dx, int dy, const wxRect* rect )
 {
+    // If any updates are pending, do them now since they will
+    // expect the previous m_bufferX and m_bufferY values.
     UpdateNow();
 
+    // The buffer always starts at the top left corner of the
+    // client area. Indeed, it is the client area.
     CalcUnscrolledPosition( 0, 0, &m_bufferX, &m_bufferY );
 
     unsigned char* data = m_buffer.GetData();
@@ -943,6 +952,9 @@ void wxCanvas::ScrollWindow( int dx, int dy, const wxRect* rect )
             size_t count = (size_t) (m_buffer.GetWidth() * 3 * (m_buffer.GetHeight()-dy));
             memmove( dest, source, count );
             
+            // We update the new buffer area, but there is no need to
+            // blit (last param FALSE) since the ensuing paint event will
+            // do that anyway.
             Update( m_bufferX, m_bufferY, m_buffer.GetWidth(), dy, FALSE );
         }
         else
@@ -952,12 +964,45 @@ void wxCanvas::ScrollWindow( int dx, int dy, const wxRect* rect )
             size_t count = (size_t) (m_buffer.GetWidth() * 3 * (m_buffer.GetHeight()+dy));
             memmove( dest, source, count );
             
+            // We update the new buffer area, but there is no need to
+            // blit (last param FALSE) since the ensuing paint event will
+            // do that anyway.
             Update( m_bufferX, m_bufferY+m_buffer.GetHeight()+dy, m_buffer.GetWidth(), -dy, FALSE );
         }
     }
     
     if (dx != 0)
     {
+        if (dx > 0)
+        {
+            unsigned char *source = data;
+            for (int y = 0; y < m_buffer.GetHeight(); y++)
+            {
+                unsigned char *dest = source + dx*3;
+                memmove( dest, source, (m_buffer.GetWidth()-dx) * 3 );
+                source += m_buffer.GetWidth()*3;
+            }
+            
+            // We update the new buffer area, but there is no need to
+            // blit (last param FALSE) since the ensuing paint event will
+            // do that anyway.
+            Update( m_bufferX, m_bufferY, dx, m_buffer.GetHeight(), FALSE );
+        }
+        else
+        {
+            unsigned char *dest = data;
+            for (int y = 0; y < m_buffer.GetHeight(); y++)
+            {
+                unsigned char *source = dest - dx*3;
+                memmove( dest, source, (m_buffer.GetWidth()+dx) * 3 );
+                dest += m_buffer.GetWidth()*3;
+            }
+            
+            // We update the new buffer area, but there is no need to
+            // blit (last param FALSE) since the ensuing paint event will
+            // do that anyway.
+            Update( m_bufferX+m_buffer.GetWidth()+dx, m_bufferY, -dx, m_buffer.GetHeight(), FALSE );
+        }
     }
 
     wxWindow::ScrollWindow( dx, dy, rect );
@@ -1094,6 +1139,10 @@ void wxCanvas::OnKillFocus(wxFocusEvent &event)
 void wxCanvas::OnChar(wxKeyEvent &event)
 {
     event.Skip();
+}
+
+void wxCanvas::OnEraseBackground(wxEraseEvent &event)
+{
 }
 
 //--------------------------------------------------------------------

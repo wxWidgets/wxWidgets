@@ -155,7 +155,7 @@ MyFrame::MyFrame()
 
     m_canvas = new wxCanvas( this, -1, wxPoint(0,0), wxSize(10,10) );
 
-    m_canvas->SetArea( 400, 600 );
+    m_canvas->SetArea( 1400, 600 );
     m_canvas->SetColour( 255, 255, 255 );
 
     wxBitmap bitmap( smile_xpm );
@@ -163,7 +163,7 @@ MyFrame::MyFrame()
 
     m_sm1 = new wxCanvasImage( image, 0,70,16,16 );
     m_canvas->Append( m_sm1 );
-
+    
     int i;
     for (i = 10; i < 300; i+=10)
         m_canvas->Append( new wxCanvasRect( i,50,3,140, 255,0,0 ) );
@@ -186,11 +186,11 @@ MyFrame::MyFrame()
     for (i = 10; i < 300; i+=10)
         m_canvas->Append( new wxCanvasLine( 10,-15,i,300, 0,255,0 ) );
 
-//    m_canvas->Append( new wxCanvasLine( 10,-1500e6,50,300000e6, 0,255,0 ) );
-//    m_canvas->Append( new wxCanvasLine( 10,-150000,50,300000, 0,255,0 ) );
-
     m_sm4 = new MywxCanvasImage( image, 0,270,64,32 );
     m_canvas->Append( m_sm4 );
+
+//    m_canvas->Append( new wxCanvasLine( 10,-1500e6,50,300000e6, 0,255,0 ) );
+//    m_canvas->Append( new wxCanvasLine( 10,-150000,50,300000, 0,255,0 ) );
 
     m_log = new wxTextCtrl( this, -1, "", wxPoint(0,0), wxSize(100,100), wxTE_MULTILINE );
     wxLog *old_log = wxLog::SetActiveTarget( new wxLogTextCtrl( m_log ) );

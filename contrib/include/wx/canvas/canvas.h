@@ -281,6 +281,7 @@ private:
     void OnIdle( wxIdleEvent &event );
     void OnSetFocus( wxFocusEvent &event );
     void OnKillFocus( wxFocusEvent &event );
+    void OnEraseBackground( wxEraseEvent &event );
 
 private:
     DECLARE_CLASS(wxCanvas)
