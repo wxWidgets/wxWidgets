@@ -3180,7 +3180,11 @@ if test "$TOOLKIT" != "MSW"; then
                 dnl and finally the userland threads
                 THREAD_OPTS="-kthread lthread $THREAD_OPTS c_r"
                 ;;
-          *-*-aix* )
+          *-*-darwin*)
+                dnl Darwin / Mac OS X just uses -lpthread tested below
+                THREAD_OPTS=""
+                ;;
+          *-*-aix*)
                 dnl AIX calls the library libpthreads - thanks IBM!
                 THREAD_OPTS="pthreads"
                 ;;
