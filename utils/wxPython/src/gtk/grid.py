@@ -898,6 +898,9 @@ class wxGridPtr(wxScrolledWindowPtr):
     def IsCellEditControlEnabled(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_IsCellEditControlEnabled,(self,) + _args, _kwargs)
         return val
+    def IsCellEditControlShown(self, *_args, **_kwargs):
+        val = apply(gridc.wxGrid_IsCellEditControlShown,(self,) + _args, _kwargs)
+        return val
     def IsCurrentCellReadOnly(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_IsCurrentCellReadOnly,(self,) + _args, _kwargs)
         return val

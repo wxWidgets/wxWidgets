@@ -484,11 +484,12 @@ static PyObject *_wrap_wxButton_SetBackgroundColour(PyObject *self, PyObject *ar
     wxButton * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","colour", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxButton_SetBackgroundColour",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxButton_SetBackgroundColour",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -497,13 +498,11 @@ static PyObject *_wrap_wxButton_SetBackgroundColour(PyObject *self, PyObject *ar
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxButton_SetBackgroundColour. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxButton_SetBackgroundColour(_arg0,*_arg1);
@@ -520,11 +519,12 @@ static PyObject *_wrap_wxButton_SetForegroundColour(PyObject *self, PyObject *ar
     wxButton * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","colour", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxButton_SetForegroundColour",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxButton_SetForegroundColour",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -533,13 +533,11 @@ static PyObject *_wrap_wxButton_SetForegroundColour(PyObject *self, PyObject *ar
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxButton_SetForegroundColour. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxButton_SetForegroundColour(_arg0,*_arg1);

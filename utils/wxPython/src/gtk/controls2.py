@@ -485,6 +485,9 @@ class wxTreeItemIdPtr :
     def IsOk(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeItemId_IsOk,(self,) + _args, _kwargs)
         return val
+    def __cmp__(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeItemId___cmp__,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxTreeItemId instance at %s>" % (self.this,)
 class wxTreeItemId(wxTreeItemIdPtr):
