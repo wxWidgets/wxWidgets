@@ -164,7 +164,7 @@ wxString wxDisplay::GetName() const
 //free private data common to x (usually s3) servers
 #define wxClearXVM(vm)  if(vm.privsize) XFree(vm.c_private)
 
-//Correct res rate from GLFW, which probably has the perfect license :)
+// Correct res rate from GLFW
 #define wxCRR2(v,dc) (int) (((1000.0f * (float) dc) /*PIXELS PER SECOND */) / ((float) v.htotal * v.vtotal /*PIXELS PER FRAME*/) + 0.5f)
 #define wxCRR(v) wxCRR2(v,v.dotclock)
 #define wxCVM2(v, dc) wxVideoMode(v.hdisplay, v.vdisplay, DefaultDepth((Display*)wxGetDisplay(), DefaultScreen((Display*)wxGetDisplay())), wxCRR2(v,dc))
@@ -216,53 +216,48 @@ wxVideoMode wxDisplay::GetCurrentMode() const
 
 bool wxDisplay::ChangeMode(const wxVideoMode& mode)
 {
-    //This gets kind of tricky AND complicated :) :\ :( :)
+    XF86VidModeModeInfo** ppXModes; //Enumerated Modes (Don't forget XFree() :))
+    int nNumModes; //Number of modes enumerated....
+
+    if( !XF86VidModeGetAllModeLines((Display*)wxGetDisplay(), DefaultScreen((Display*)wxGetDisplay()), &nNumModes, &ppXModes) )
     {
-        bool bRet = false;
-        //Some variables..
-        XF86VidModeModeInfo** ppXModes; //Enumerated Modes (Don't forget XFree() :))
-        int nNumModes; //Number of modes enumerated....
+        wxLogSysError(_("Failed to change video mode"));
+        return false;
+    }
 
-        if(XF86VidModeGetAllModeLines((Display*)wxGetDisplay(), DefaultScreen((Display*)wxGetDisplay()), &nNumModes, &ppXModes) == TRUE)
+    bool bRet = false;
+    if (mode == wxDefaultVideoMode)
+    {
+        bRet = XF86VidModeSwitchToMode((Display*)wxGetDisplay(), DefaultScreen((Display*)wxGetDisplay()),
+                     ppXModes[0]) == TRUE;
+
+        for (int i = 0; i < nNumModes; ++i)
         {
-            if (mode == wxDefaultVideoMode)
-            {
-                bRet = XF86VidModeSwitchToMode((Display*)wxGetDisplay(), DefaultScreen((Display*)wxGetDisplay()),
-                             ppXModes[0]) == TRUE;
-
-                for (int i = 0; i < nNumModes; ++i)
-                {
-                    wxClearXVM((*ppXModes[i]));
-                //  XFree(ppXModes[i]); //supposed to free?
-                }
-                XFree(ppXModes);
-
-                return bRet;
-            }
-            for (int i = 0; i < nNumModes; ++i)
-            {
-                if (!bRet &&
-                    ppXModes[i]->hdisplay == mode.w &&
-                    ppXModes[i]->vdisplay == mode.h &&
-                    wxCRR((*ppXModes[i])) == mode.refresh)
-                {
-                    //switch!
-                    bRet = XF86VidModeSwitchToMode((Display*)wxGetDisplay(), DefaultScreen((Display*)wxGetDisplay()),
-                             ppXModes[i]) == TRUE;
-                }
-                wxClearXVM((*ppXModes[i]));
-            //  XFree(ppXModes[i]); //supposed to free?
-            }
-            XFree(ppXModes);
-
-            return bRet;
-        }
-        else //OOPS!
-        {
-            wxLogSysError(_("Failed to change video mode"));
-            return false;
+            wxClearXVM((*ppXModes[i]));
+        //  XFree(ppXModes[i]); //supposed to free?
         }
     }
+    else
+    {
+        for (int i = 0; i < nNumModes; ++i)
+        {
+            if (!bRet &&
+                ppXModes[i]->hdisplay == mode.w &&
+                ppXModes[i]->vdisplay == mode.h &&
+                wxCRR((*ppXModes[i])) == mode.refresh)
+            {
+                //switch!
+                bRet = XF86VidModeSwitchToMode((Display*)wxGetDisplay(), DefaultScreen((Display*)wxGetDisplay()),
+                         ppXModes[i]) == TRUE;
+            }
+            wxClearXVM((*ppXModes[i]));
+        //  XFree(ppXModes[i]); //supposed to free?
+        }
+    }
+
+    XFree(ppXModes);
+
+    return bRet;
 }
 
 
