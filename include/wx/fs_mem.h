@@ -28,9 +28,9 @@
     class WXDLLIMPEXP_CORE wxImage;
 #endif // wxUSE_GUI
 
-//--------------------------------------------------------------------------------
-// wxMemoryFSHandler
-//--------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// wxMemoryFSHandlerBase
+// ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_BASE wxMemoryFSHandlerBase : public wxFileSystemHandler
 {
@@ -57,16 +57,35 @@ protected:
     static wxHashTable *m_Hash;
 };
 
-class wxMemoryFSHandler : public wxMemoryFSHandlerBase
+// ----------------------------------------------------------------------------
+// wxMemoryFSHandler
+// ----------------------------------------------------------------------------
+
+#if wxUSE_GUI
+
+// add GUI-only operations to the base class
+class WXDLLIMPEXP_CORE wxMemoryFSHandler : public wxMemoryFSHandlerBase
 {
 public:
-#if wxUSE_GUI
+    // bring the base class versions into the scope, otherwise they would be
+    // inaccessible in wxMemoryFSHandler
+    using wxMemoryFSHandlerBase::AddFile;
+
 #if wxUSE_IMAGE
     static void AddFile(const wxString& filename, wxImage& image, long type);
 #endif // wxUSE_IMAGE
+
     static void AddFile(const wxString& filename, const wxBitmap& bitmap, long type);
-#endif // wxUSE_GUI
 };
+
+#else // !wxUSE_GUI
+
+// just the same thing as the base class in wxBase
+class WXDLLIMPEXP_BASE wxMemoryFSHandler : public wxMemoryFSHandlerBase
+{
+};
+
+#endif // wxUSE_GUI/!wxUSE_GUI
 
 #endif // wxUSE_FILESYSTEM
 
