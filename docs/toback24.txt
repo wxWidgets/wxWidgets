@@ -389,3 +389,17 @@ Checking in src/motif/dcclient.cpp;
 new revision: 1.47; previous revision: 1.46
 done
 
+
+31. [wxHTML] Fix parsing of CDATA tags and ignore <script>
+
+CVS: [VS] wxWindows/src/html htmlpars.cpp,1.29,1.30 htmltag.cpp,1.31,1.32
+CVS: [VS] wxWindows/src/html m_layout.cpp,1.17,1.18
+
+
+32. Fix wxFileConfig behaviour in Unicode mode
+
+Note: this must be done a bit differently, w/o wxFileConfig::m_conv!
+CVS: [VS] wxWindows/include/wx fileconf.h,1.39,1.40
+CVS: [VS] wxWindows/src/common fileconf.cpp,1.93,1.94
+CVS: [VS] wxWindows/include/wx strconv.h,1.12,1.13
+CVS: [VS] wxWindows/src/common strconv.cpp,1.71,1.72
