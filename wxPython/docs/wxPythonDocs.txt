@@ -19,6 +19,15 @@ wxPython Manual
 .. _The wxPython Manual: wxPythonManual.html
 
 
+wxPython Developer Reference
+============================
+
+`The wxPython source code documentation`_ is for developers, and was
+created using the Epydoc tool.
+
+.. _The wxPython source code documentation: wx/epydoc/
+
+
 wxPython Tutorial
 =================
 
@@ -57,3 +66,12 @@ code modules, including:
 * PyWrap
 
 .. _The Py Manual: PyManual.html
+
+
+Py Developer Reference
+======================
+
+`The Py source code documentation`_ is for developers, and was created
+using the Epydoc tool.
+
+.. _The Py source code documentation: wx/epydoc/public/wx.py-module.html
