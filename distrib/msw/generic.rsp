@@ -1131,6 +1131,19 @@ samples/wizard/*.ico
 samples/wizard/*.txt
 samples/wizard/*.pro
 
+samples/wxtest/*.cpp
+samples/wxtest/*.h
+samples/wxtest/makefile*
+samples/wxtest/*.rc
+samples/wxtest/*.def
+samples/wxtest/*.bmp
+samples/wxtest/*.xpm
+samples/wxtest/*.xbm
+samples/wxtest/*.png
+samples/wxtest/*.ico
+samples/wxtest/*.txt
+samples/wxtest/*.pro
+
 demos/makefile*
 demos/configure
 demos/configure.in

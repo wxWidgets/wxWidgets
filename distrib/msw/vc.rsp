@@ -99,6 +99,9 @@ samples/grid/griddemo.dsw
 samples/help/help.dsp
 samples/help/help.dsw
 
+samples/htlbox/htlbox.dsp
+samples/htlbox/htlbox.dsw
+
 samples/html/about/about.dsp
 samples/html/about/about.dsw
 samples/html/help/help.dsp
@@ -238,8 +241,14 @@ samples/typetest/typetest.dsw
 samples/validate/validate.dsp
 samples/validate/validate.dsw
 
+samples/vscroll/vscroll.dsp
+samples/vscroll/vscroll.dsw
+
 samples/wizard/wizard.dsp
 samples/wizard/wizard.dsw
+
+samples/wxtest/wxtest.dsp
+samples/wxtest/wxtest.dsw
 
 samples/widgets/widgets.dsp
 samples/widgets/widgets.dsw
