@@ -1,6 +1,1 @@
-mondrian ICON   "mondrian.ico"
-bell BITMAP "bell.bmp"
-sound BITMAP "sound.bmp"
-nosound BITMAP "nosound.bmp"
 #include "wx/msw/wx.rc"
-

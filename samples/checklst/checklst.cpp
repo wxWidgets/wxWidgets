@@ -2,7 +2,7 @@
 // Name:        checklst.cpp
 // Purpose:     wxCheckListBox sample
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     13.11.97
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -57,8 +57,8 @@ private:
   wxCheckListBox *m_pListBox;
 };
 
-enum 
-{ 
+enum
+{
   Menu_Quit = 1,
   Control_First = 1000,
   Control_Listbox, Control_Listbox2,
@@ -102,11 +102,11 @@ CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame, char *title, int x, int y, 
   SetMenuBar(menu_bar);
 
   // make a panel with some controls
-  wxPanel *pPanel = new wxPanel(this, -1, wxPoint(0, 0), 
+  wxPanel *pPanel = new wxPanel(this, -1, wxPoint(0, 0),
                                 wxSize(400, 200), wxTAB_TRAVERSAL);
 
   // check list box
-  static const char* aszChoices[] = { "Hello", "world", "and", 
+  static const char* aszChoices[] = { "Hello", "world", "and",
                                       "goodbye", "cruel", "world",
                                       "-------", "owner-drawn", "listbox" };
 
@@ -116,15 +116,15 @@ CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame, char *title, int x, int y, 
     astrChoices[ui] = aszChoices[ui];
 
   m_pListBox = new wxCheckListBox
-                   (                                             
-                     pPanel,             // parent               
-                     Control_Listbox,    // control id           
-                     wxPoint(10, 10),    // listbox poistion     
+                   (
+                     pPanel,             // parent
+                     Control_Listbox,    // control id
+                     wxPoint(10, 10),    // listbox poistion
                      wxSize(400, 200),   // listbox size
-                     WXSIZEOF(aszChoices), // number of strings    
+                     WXSIZEOF(aszChoices), // number of strings
                      astrChoices         // array of strings
-                   );                                            
-                                                                            
+                   );
+
   delete [] astrChoices;
 
   for ( ui = 0; ui < WXSIZEOF(aszChoices); ui += 2 ) {
@@ -179,8 +179,7 @@ void CheckListBoxFrame::OnCheckboxToggle(wxCommandEvent& event)
 {
   wxString strSelection;
   unsigned int nItem = event.GetInt();
-  if(event.GetInt()==-1)
-	  return;
+
   strSelection.sprintf("item %d was %schecked", nItem,
                        m_pListBox->IsChecked(nItem) ? "" : "un");
   SetStatusText(strSelection);

@@ -1,3 +1,11 @@
 mondrian ICON "mondrian.ico"
-#include "wx/msw/wx.rc"
 
+/*
+list	ICON "icons/list.ico"
+choice	ICON "icons/choice.ico"
+combo	ICON "icons/combo.ico"
+text	ICON "icons/text.ico"
+radio	ICON "icons/radio.ico"
+*/
+
+#include "wx/msw/wx.rc"

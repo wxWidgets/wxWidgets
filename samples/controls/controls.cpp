@@ -5,7 +5,7 @@
 // Modified by:
 // RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling, Julian Smart
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -26,13 +26,14 @@
 #include "wx/spinbutt.h"
 #include "wx/notebook.h"
 #include "wx/imaglist.h"
+#include "wx/spinbutt.h"
 #include "wx/clipbrd.h"
 #include "wx/checklst.h"
 
 // XPM doesn't seem to work under Windows at present. Or, wxNotebook images
 // aren't working.
 // Uncomment this line and comment out the next to try it.
-// #if defined(__WXGTK__) || defined(__WXMOTIF__) || (defined(__WXMSW__) && wxUSE_XPM_IN_MSW)
+//#if defined(__WXGTK__) || defined(__WXMOTIF__) || (defined(__WXMSW__) && wxUSE_XPM_IN_MSW)
 #if defined(__WXGTK__) || defined(__WXMOTIF__)
 #define USE_XPM
 #endif
@@ -52,7 +53,7 @@
 //----------------------------------------------------------------------
 
 class MyApp: public wxApp
-{ 
+{
   public:
     bool OnInit(void);
 };
@@ -60,10 +61,10 @@ class MyApp: public wxApp
 class MyPanel: public wxPanel
 {
   public:
- 
+
     MyPanel(wxFrame *frame, int x, int y, int w, int h);
     virtual ~MyPanel();
-    
+
     void OnSize( wxSizeEvent& event );
     void OnListBox( wxCommandEvent &event );
     void OnListBoxButtons( wxCommandEvent &event );
@@ -79,7 +80,7 @@ class MyPanel: public wxPanel
     void OnSpinUpdate( wxSpinEvent &event );
     void OnPasteFromClipboard( wxCommandEvent &event );
     void OnCopyToClipboard( wxCommandEvent &event );
-    
+
     wxListBox     *m_listbox;
     wxChoice      *m_choice;
     wxComboBox    *m_combo;
@@ -91,26 +92,26 @@ class MyPanel: public wxPanel
     wxTextCtrl    *m_spintext;
     wxTextCtrl    *m_multitext;
     wxCheckBox    *m_checkbox;
-    
+
     wxTextCtrl    *m_text;
-    wxNotebook    *m_notebook;    
-  
-  DECLARE_EVENT_TABLE() 
+    wxNotebook    *m_notebook;
+
+  DECLARE_EVENT_TABLE()
 };
 
 class MyFrame: public wxFrame
 {
   public:
-  
+
     MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h);
-    
+
   public:
-  
+
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
     bool OnClose(void) { return TRUE; }
-    
-  DECLARE_EVENT_TABLE()    
+
+  DECLARE_EVENT_TABLE()
 };
 
 //----------------------------------------------------------------------
@@ -130,12 +131,14 @@ const   int MINIMAL_ABOUT  = 102;
 bool MyApp::OnInit(void)
 {
   // Create the main frame window
-  MyFrame *frame = new MyFrame((wxFrame *) NULL, (char *) "Controls wxWindows App", 50, 50, 530, 420 );
-  
+  MyFrame *frame = new MyFrame((wxFrame *) NULL,
+                               "Controls wxWindows App",
+                               50, 50, 530, 420);
+
   // Give it an icon
   // The wxICON() macros loads an icon from a resource under Windows
   // and uses an #included XPM image under GTK+ and Motif
-  
+
   frame->SetIcon( wxICON(mondrian) );
 
   wxMenu *file_menu = new wxMenu;
@@ -147,7 +150,7 @@ bool MyApp::OnInit(void)
   frame->SetMenuBar(menu_bar);
 
   frame->Show(TRUE);
-  
+
   SetTopWindow(frame);
 
   return TRUE;
@@ -211,7 +214,7 @@ const int  ID_CHECKLIST         = 190;
 
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
   EVT_SIZE      (                         MyPanel::OnSize)
-  EVT_NOTEBOOK_PAGE_CHANGED(ID_NOTEBOOK,  MyPanel::OnPageChanged)  
+  EVT_NOTEBOOK_PAGE_CHANGED(ID_NOTEBOOK,  MyPanel::OnPageChanged)
   EVT_LISTBOX   (ID_LISTBOX,              MyPanel::OnListBox)
   EVT_BUTTON    (ID_LISTBOX_SEL_NUM,      MyPanel::OnListBoxButtons)
   EVT_BUTTON    (ID_LISTBOX_SEL_STR,      MyPanel::OnListBoxButtons)
@@ -251,13 +254,13 @@ END_EVENT_TABLE()
 MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   wxPanel( frame, -1, wxPoint(x, y), wxSize(w, h) )
 {
-//  SetBackgroundColour("cadet blue");
+  SetBackgroundColour("cadet blue");
 
   m_text = new wxTextCtrl( this, -1, "This is the log window.\n", wxPoint(0,50), wxSize(100,50), wxTE_MULTILINE );
-//  m_text->SetBackgroundColour("wheat");
-  
+  m_text->SetBackgroundColour("wheat");
+
   m_notebook = new wxNotebook( this, ID_NOTEBOOK, wxPoint(0,0), wxSize(200,150) );
-  
+
   wxString choices[] =
   {
     "This",
@@ -266,14 +269,14 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
     "wonderful",
     "examples.",
   };
-  
+
 #ifdef USE_XPM
   // image ids and names
   enum
   {
     Image_List, Image_Choice, Image_Combo, Image_Text, Image_Radio, Image_Gauge, Image_Max
   };
-  
+
   // fill the image list
   wxImageList *imagelist = new wxImageList(32, 32);
 
@@ -299,29 +302,29 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
 
   wxButton *button = (wxButton*)NULL;
 
-//  m_notebook->SetBackgroundColour("cadet blue");
+  m_notebook->SetBackgroundColour("cadet blue");
 
   wxPanel *panel = (wxPanel*) NULL;
   panel = new wxPanel(m_notebook);
-//  panel->SetBackgroundColour("cadet blue");
-//  panel->SetForegroundColour("blue");
+  panel->SetBackgroundColour("cadet blue");
+  panel->SetForegroundColour("blue");
   m_listbox = new wxListBox( panel, ID_LISTBOX, wxPoint(10,10), wxSize(120,70), 5, choices );
-//  m_listbox->SetBackgroundColour("wheat");
+  m_listbox->SetBackgroundColour("wheat");
   (void)new wxButton( panel, ID_LISTBOX_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_LISTBOX_SEL_STR, "Select 'This'", wxPoint(340,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_LISTBOX_CLEAR, "Clear", wxPoint(180,80), wxSize(140,30) );
   (void)new wxButton( panel, ID_LISTBOX_APPEND, "Append 'Hi!'", wxPoint(340,80), wxSize(140,30) );
   (void)new wxButton( panel, ID_LISTBOX_DELETE, "Delete selected item", wxPoint(180,130), wxSize(140,30) );
   button = new wxButton( panel, ID_LISTBOX_FONT, "Set Italic font", wxPoint(340,130), wxSize(140,30) );
-//  button->SetForegroundColour( "red" );
+  button->SetForegroundColour( "red" );
   m_checkbox = new wxCheckBox( panel, ID_LISTBOX_ENABLE, "Disable", wxPoint(20,130), wxSize(140,30) );
   m_notebook->AddPage(panel, "wxList", FALSE, Image_List);
-  
+
   panel = new wxPanel(m_notebook);
-//  panel->SetBackgroundColour("cadet blue");
-//  panel->SetForegroundColour("blue");
+  panel->SetBackgroundColour("cadet blue");
+  panel->SetForegroundColour("blue");
   m_choice = new wxChoice( panel, ID_CHOICE, wxPoint(10,10), wxSize(120,-1), 5, choices );
-//  m_choice->SetBackgroundColour("wheat");
+  m_choice->SetBackgroundColour("wheat");
   (void)new wxButton( panel, ID_CHOICE_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_CHOICE_SEL_STR, "Select 'This'", wxPoint(340,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_CHOICE_CLEAR, "Clear", wxPoint(180,80), wxSize(140,30) );
@@ -330,12 +333,12 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   (void)new wxButton( panel, ID_CHOICE_FONT, "Set Italic font", wxPoint(340,130), wxSize(140,30) );
   (void)new wxCheckBox( panel, ID_CHOICE_ENABLE, "Disable", wxPoint(20,130), wxSize(140,30) );
   m_notebook->AddPage(panel, "wxChoice", FALSE, Image_Choice);
-  
+
   panel = new wxPanel(m_notebook);
-//  panel->SetBackgroundColour("cadet blue");
-//  panel->SetForegroundColour("blue");
+  panel->SetBackgroundColour("cadet blue");
+  panel->SetForegroundColour("blue");
   m_combo = new wxComboBox( panel, ID_COMBO, "This", wxPoint(10,10), wxSize(120,-1), 5, choices );
-//  m_combo->SetBackgroundColour("wheat");
+  m_combo->SetBackgroundColour("wheat");
   (void)new wxButton( panel, ID_COMBO_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_COMBO_SEL_STR, "Select 'This'", wxPoint(340,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_COMBO_CLEAR, "Clear", wxPoint(180,80), wxSize(140,30) );
@@ -344,34 +347,34 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   (void)new wxButton( panel, ID_COMBO_FONT, "Set Italic font", wxPoint(340,130), wxSize(140,30) );
   (void)new wxCheckBox( panel, ID_COMBO_ENABLE, "Disable", wxPoint(20,130), wxSize(140,30) );
   m_notebook->AddPage(panel, "wxComboBox", FALSE, Image_Combo);
-  
+
   panel = new wxPanel(m_notebook);
-//  panel->SetBackgroundColour("cadet blue");
-//  panel->SetForegroundColour("blue");
+  panel->SetBackgroundColour("cadet blue");
+  panel->SetForegroundColour("blue");
   wxTextCtrl *tc = new wxTextCtrl( panel, ID_TEXT, "Write text here.", wxPoint(10,10), wxSize(320,28));
   (*tc) << " More text.";
-//  tc->SetBackgroundColour("wheat");
+  tc->SetBackgroundColour("wheat");
   m_multitext = new wxTextCtrl( panel, ID_TEXT, "And here.", wxPoint(10,50), wxSize(320,160), wxTE_MULTILINE  );
   (*m_multitext) << " More text.";
-//  m_multitext->SetBackgroundColour("wheat");
+  m_multitext->SetBackgroundColour("wheat");
   (void)new wxStaticBox( panel, -1, "wxClipboard", wxPoint(345,50), wxSize(160,145) );
   (void)new wxButton( panel, ID_COPY_TEXT, "Copy line 1", wxPoint(370,80), wxSize(110,30) );
   (void)new wxButton( panel, ID_PASTE_TEXT, "Paste text", wxPoint(370,140), wxSize(110,30) );
   m_notebook->AddPage(panel, "wxTextCtrl" , FALSE, Image_Text);
-  
+
   wxString choices2[] =
   {
     "Wonderful",
     "examples.",
   };
-  
+
   panel = new wxPanel(m_notebook);
-//  panel->SetBackgroundColour("cadet blue");
-//  panel->SetForegroundColour("blue");
+  panel->SetBackgroundColour("cadet blue");
+  panel->SetForegroundColour("blue");
   m_radio = new wxRadioBox( panel, ID_RADIOBOX, "That", wxPoint(10,160), wxSize(-1,-1), 2, choices2, 1, wxRA_VERTICAL );
-//  m_radio->SetBackgroundColour("wheat");
+  m_radio->SetBackgroundColour("wheat");
   m_radio = new wxRadioBox( panel, ID_RADIOBOX, "This", wxPoint(10,10), wxSize(-1,-1), 5, choices, 1, wxRA_HORIZONTAL );
-//  m_radio->SetBackgroundColour("wheat");
+  m_radio->SetBackgroundColour("wheat");
   (void)new wxButton( panel, ID_RADIOBOX_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_RADIOBOX_SEL_STR, "Select 'This'", wxPoint(180,80), wxSize(140,30) );
   m_fontButton = new wxButton( panel, ID_SET_FONT, "Set more Italic font", wxPoint(340,30), wxSize(140,30) );
@@ -382,36 +385,37 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   rb->SetValue( FALSE );
   (void)new wxRadioButton( panel, ID_RADIOBUTTON_2, "Radiobutton2", wxPoint(340,170), wxSize(110,30) );
   m_notebook->AddPage(panel, "wxRadioBox", FALSE, Image_Radio);
-  
+
   panel = new wxPanel(m_notebook);
-//  panel->SetBackgroundColour("cadet blue");
-//  panel->SetForegroundColour("blue");
+  panel->SetBackgroundColour("cadet blue");
+  panel->SetForegroundColour("blue");
   (void)new wxStaticBox( panel, -1, "wxGauge and wxSlider", wxPoint(10,10), wxSize(180,130) );
   m_gauge = new wxGauge( panel, -1, 200, wxPoint(18,50), wxSize(155,-1) );
-//  m_gauge->SetBackgroundColour("wheat");
+  m_gauge->SetBackgroundColour("wheat");
   m_slider = new wxSlider( panel, ID_SLIDER, 0, 0, 200, wxPoint(18,90), wxSize(155,-1) );
-//  m_slider->SetBackgroundColour("wheat");
+  m_slider->SetBackgroundColour("wheat");
   (void)new wxStaticBox( panel, -1, "Explanation", wxPoint(200,10), wxSize(290,130) );
-  (void)new wxStaticText( panel, -1, 
-    "In order see the gauge (aka progress bar)\n" 
-    "control do something you have to drag the\n" 
+  (void)new wxStaticText( panel, -1,
+    "In order see the gauge (aka progress bar)\n"
+    "control do something you have to drag the\n"
     "handle of the slider to the right.\n"
     "\n"
     "This is also supposed to demonstrate how\n"
     "to use static controls.\n",
-    wxPoint(208,25) );
+    wxPoint(208,25), wxSize(200, 100) );
   m_spintext = new wxTextCtrl( panel, -1, "0", wxPoint(20,160), wxSize(80,-1) );
-//  m_spintext->SetBackgroundColour("wheat");
+  m_spintext->SetBackgroundColour("wheat");
   m_spinbutton = new wxSpinButton( panel, ID_SPIN, wxPoint(103,159), wxSize(-1,-1) );
-//  m_spinbutton->SetBackgroundColour("wheat");
-  m_spinbutton->SetRange(0,100); 
+  m_spinbutton->SetBackgroundColour("wheat");
+  m_spinbutton->SetRange(0,100);
+
   m_notebook->AddPage(panel, "wxGauge", FALSE, Image_Gauge);
-  
+
   panel = new wxPanel(m_notebook);
-//  panel->SetBackgroundColour("cadet blue");
-//  panel->SetForegroundColour("blue");
+  panel->SetBackgroundColour("cadet blue");
+  panel->SetForegroundColour("blue");
   m_listbox = new wxCheckListBox( panel, ID_CHECKLIST, wxPoint(10,10), wxSize(160,70), 5, choices );
-//  m_listbox->SetBackgroundColour("wheat");
+  m_listbox->SetBackgroundColour("wheat");
   button = new wxButton( panel, ID_LISTBOX_FONT, "Set Italic font", wxPoint(340,130), wxSize(140,30) );
   m_notebook->AddPage(panel, "wxCheckListBox", FALSE, Image_List);
 }
@@ -423,14 +427,14 @@ void MyPanel::OnPasteFromClipboard( wxCommandEvent &WXUNUSED(event) )
   if (!wxTheClipboard->IsSupportedFormat( wxDF_TEXT ))
   {
      *m_text << "The clipboard doesn't contain any data in the requested format." << "\n";
-     
+
      return;
   }
 
   if (!wxTheClipboard->Open())
   {
      *m_text << "Error opening the clipboard." << "\n";
-     
+
      return;
   }
   else
@@ -439,7 +443,7 @@ void MyPanel::OnPasteFromClipboard( wxCommandEvent &WXUNUSED(event) )
   }
 
   wxTextDataObject *data = new wxTextDataObject();
-  
+
   if (wxTheClipboard->GetData( data ))
   {
      *m_text << "Successfully retrieved data from the clipboard." << "\n";
@@ -449,11 +453,11 @@ void MyPanel::OnPasteFromClipboard( wxCommandEvent &WXUNUSED(event) )
   {
      *m_text << "Error getting data from the clipboard." << "\n";
   }
-     
+
   wxTheClipboard->Close();
-  
+
   *m_text << "Closed the clipboard." << "\n";
-  
+
   delete data;
 
 #endif
@@ -462,17 +466,17 @@ void MyPanel::OnPasteFromClipboard( wxCommandEvent &WXUNUSED(event) )
 void MyPanel::OnCopyToClipboard( wxCommandEvent &WXUNUSED(event) )
 {
 #ifdef __WXGTK__
-  
+
   wxString text( m_multitext->GetLineText(0) );
 
   if (text.IsEmpty()) return;
-  
+
   wxTextDataObject *data = new wxTextDataObject( text );
-  
+
   if (!wxTheClipboard->Open())
   {
      *m_text << "Error opening the clipboard." << "\n";
-     
+
      return;
   }
   else
@@ -490,9 +494,9 @@ void MyPanel::OnCopyToClipboard( wxCommandEvent &WXUNUSED(event) )
   }
 
   wxTheClipboard->Close();
-  
+
   *m_text << "Closed the clipboard." << "\n";
-  
+
 #endif
 }
 
@@ -501,7 +505,7 @@ void MyPanel::OnSize( wxSizeEvent& WXUNUSED(event) )
   int x = 0;
   int y = 0;
   GetClientSize( &x, &y );
-  
+
   if (m_notebook) m_notebook->SetSize( 2, 2, x-4, y*2/3-4 );
   if (m_text) m_text->SetSize( 2, y*2/3+2, x-4, y/3-4 );
 }
@@ -524,7 +528,7 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
   {
     case ID_LISTBOX_ENABLE:
     {
-      m_listbox->Enable( !((bool)event.GetInt()) );
+      m_listbox->Enable( event.GetInt() == 0 );
       break;
     }
     case ID_LISTBOX_SEL_NUM:
@@ -575,7 +579,7 @@ void MyPanel::OnChoiceButtons( wxCommandEvent &event )
   {
     case ID_CHOICE_ENABLE:
     {
-      m_choice->Enable( !((bool)event.GetInt()) );
+      m_choice->Enable( event.GetInt() == 0 );
       break;
     }
     case ID_CHOICE_SEL_NUM:
@@ -625,7 +629,7 @@ void MyPanel::OnComboButtons( wxCommandEvent &event )
   {
     case ID_COMBO_ENABLE:
     {
-      m_combo->Enable( !((bool)event.GetInt()) );
+      m_combo->Enable( event.GetInt() == 0 );
       break;
     }
     case ID_COMBO_SEL_NUM:
@@ -675,7 +679,7 @@ void MyPanel::OnRadioButtons( wxCommandEvent &event )
   {
     case ID_RADIOBOX_ENABLE:
     {
-      m_radio->Enable( !((bool)event.GetInt()) );
+      m_radio->Enable( event.GetInt() == 0 );
       break;
     }
     case ID_RADIOBOX_SEL_NUM:
