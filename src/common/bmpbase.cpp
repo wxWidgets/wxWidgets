@@ -19,6 +19,8 @@
     #pragma hdrstop
 #endif
 
+#if defined(__WXMGL__) || defined(__WXMAC__)
+
 #include "wx/wx.h"
 #include "wx/setup.h"
 #include "wx/utils.h"
@@ -119,3 +121,6 @@ public:
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapBaseModule, wxModule)
+
+#endif // defined(__WXMGL__) || defined(__WXMAC__)
+
