@@ -451,9 +451,8 @@ void wxWindowBase::Centre(int direction)
     yNew += posParent.y;
 
     // Base size of the visible dimensions of the display
-    // to take into account the taskbar
-    wxRect rect = wxGetClientDisplayRect();
-    wxSize size (rect.width,rect.height);
+    // to take into account the taskbar. And the Mac menu bar at top.
+    wxRect clientrect = wxGetClientDisplayRect();
 
     // NB: in wxMSW, negative position may not neccessary mean "out of screen",
     //     but it may mean that the window is placed on other than the main
@@ -461,21 +460,21 @@ void wxWindowBase::Centre(int direction)
     //     if the parent is at least partially present here.
     if (posParent.x + widthParent >= 0)  // if parent is (partially) on the main display
     {
-        if (xNew < 0)
-            xNew = 0;
-        else if (xNew+width > size.x)
-            xNew = size.x-width-1;
+        if (xNew < clientrect.GetLeft())
+            xNew = clientrect.GetLeft();
+        else if (xNew + width > clientrect.GetRight())
+            xNew = clientrect.GetRight() - width;
     }
     if (posParent.y + heightParent >= 0)  // if parent is (partially) on the main display
     {
-        if (yNew+height > size.y)
-            yNew = size.y-height-1;
+        if (yNew + height > clientrect.GetBottom())
+            yNew = clientrect.GetBottom() - height;
 
         // Make certain that the title bar is initially visible
         // always, even if this would push the bottom of the
-        // dialog of the visible area of the display
-        if (yNew < 0)
-            yNew = 0;
+        // dialog off the visible area of the display
+        if (yNew < clientrect.GetTop())
+            yNew = clientrect.GetTop();
     }
 
     // move the window to this position (keeping the old size but using
