@@ -2052,28 +2052,39 @@ void wxWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 
             if ((old_width != m_width) || (old_height != m_height))
 	    {
-/*
-                wxPrintf( _T("On DoSetSize from ") );
-                wxPrintf( GetClassInfo()->GetClassName() );
-                wxPrintf( _T(": %d %d.\n"), m_width, m_height );
-*/	
-	    
                 gtk_widget_set_usize( m_widget, m_width, m_height );
 		
-		/* this is the result of hours of debugging: the followomg code
+		/* this is the result of hours of debugging: the following code
 		   means that if we have a m_wxwindow and we set the size of
 		   m_widget, m_widget (which is a GtkScrolledWindow) does NOT
 		   automatically propagate its size down to its m_wxwindow,
 		   which is its client area. therefore, we have to tell the
-		   client area directly that it has to get resize itself */
-		GtkAllocation alloc;
-		alloc.x = m_x;
-		alloc.y = m_y;
-		alloc.width = m_width;
-		alloc.height = m_height;
-		gtk_widget_size_allocate( m_widget, &alloc );
+		   client area directly that it has to resize itself.
+		   this will lead to that m_widget (GtkScrolledWindow) will
+		   calculate how much size it needs for scrollbars etc and
+		   it will then call XXX_size_allocate of its child, which
+		   is m_wxwindow. m_wxwindow in turn will do the same with its
+		   children and so on. problems can arise if this happens
+		   before all the children have been realized as some widgets
+		   stupidy need to be realized during XXX_size_allocate (e.g.
+		   GtkNotebook) and they will segv if called otherwise. this
+		   emergency is tested in gtk_myfixed_size_allocate. Normally
+		   this shouldn't be needed and only gtk_widget_queue_resize()
+		   should be enough to provoke a resize at the next appropriate
+		   moment, but this seems to fail, e.g. when a wxNotebook contains
+		   a wxSplitterWindow: the splitter window's children won't
+		   show up properly resized then. */
+		   
+		if (m_wxwindow)
+		{
+		    GtkAllocation alloc;
+		    alloc.x = m_x;
+		    alloc.y = m_y;
+		    alloc.width = m_width;
+		    alloc.height = m_height;
+		    gtk_widget_size_allocate( m_widget, &alloc );
+		}
 	    }
-	    
 	}
     }
 

@@ -110,7 +110,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     if (newSize.x == -1)
         newSize.x = 100;
     if (newSize.y == -1)
-        newSize.y = 26;
+        newSize.y = 22;
     SetSize( newSize.x, newSize.y );
 
     GtkWidget *list = GTK_COMBO(m_widget)->list;
@@ -584,13 +584,11 @@ void wxComboBox::OnSize( wxSizeEvent &event )
 {
     wxControl::OnSize( event );
 
-/*
     int w = 21;
     gtk_widget_set_usize( GTK_COMBO(m_widget)->entry, m_width-w-1, m_height );
 
     gtk_widget_set_uposition( GTK_COMBO(m_widget)->button, m_x+m_width-w, m_y );
     gtk_widget_set_usize( GTK_COMBO(m_widget)->button, w, m_height );
-*/
 }
 
 void wxComboBox::ApplyWidgetStyle()

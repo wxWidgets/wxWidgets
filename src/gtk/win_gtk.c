@@ -447,8 +447,10 @@ gtk_myfixed_size_allocate (GtkWidget     *widget,
     {
       child = children->data;
       children = children->next;
-      
-      if (GTK_WIDGET_VISIBLE (child->widget))
+ 
+      /* please look at the text in wxWindow::DoSetSize() on why the
+         test GTK_WIDGET_REALIZED() has to be here */
+      if (GTK_WIDGET_VISIBLE (child->widget) && GTK_WIDGET_REALIZED(child->widget) )
 	{
 	  child_allocation.x = child->x;
 	  child_allocation.y = child->y;

@@ -708,9 +708,6 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
         int client_w = m_width - 2*m_miniEdge;
 	int client_h = m_height - client_area_y_offset- 2*m_miniEdge - m_miniTitle;
         gtk_widget_set_usize( m_wxwindow, client_w, client_h );
-	GtkAllocation alloc; 
-	alloc.x = client_x; alloc.y = client_y; alloc.width = client_w; alloc.height = client_h;
-	gtk_widget_size_allocate( m_wxwindow, &alloc );
     }
     else
     {
